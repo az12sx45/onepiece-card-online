@@ -1,0 +1,12 @@
+{
+  "name": "偉大航道爭霸戰",
+  "short_name": "航道爭霸戰",
+  "start_url": "./start.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#121315",
+  "icons": [
+    { "src": "images/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "images/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

@@ -1,0 +1,2134 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>偉大航道爭霸戰｜正式對戰</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <style>
+    html,body{height:100%;background:#0f1113;color:#eaecee}
+    .card{ background: rgba(16,20,24,.80);              /* 微透明面板色：#101418 / 80% */
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);                   /* 玻璃毛玻璃效果 */
+  border: 1px solid rgba(255,255,255,.06);      /* 邊線調淡，跟整體更搭 */
+  border-radius: 16px; }
+    .thumb{ width:68px; aspect-ratio:1242/1863; object-fit:cover; border-radius:10px; border:1px solid #2f353c; background:#0a0d10 }
+    .thumb-sm{ width:42px; aspect-ratio:1242/1863; object-fit:cover; border-radius:8px; border:1px solid #2f353c; background:#0a0d10 }
+    .deck{ position:relative; width:120px; aspect-ratio:1242/1863; border-radius:14px; border:1px solid #2a2f35; overflow:hidden; box-shadow:0 12px 28px rgba(0,0,0,.45) }
+    .deck > img{ width:100%; height:100%; object-fit:cover; background:#0a0d10 }
+    .deck .cnt{ position:absolute; right:-8px; top:-8px; background:#facc15; color:#111; border-radius:999px; padding:.15rem .45rem; font-size:12px; border:1px solid #caa902 }
+    .modal{ position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,.55); z-index:50 }
+
+    /* === FX: Glow / Flip / Shake / Pulse === */
+    @keyframes fx-glow { 0% { box-shadow: 0 0 0 rgba(250, 204, 21, 0); } 50% { box-shadow: 0 0 24px rgba(250, 204, 21, .6); } 100% { box-shadow: 0 0 0 rgba(250, 204, 21, 0); } }
+    .fx-glow { animation: fx-glow .8s ease-out 1; }
+    @keyframes fx-flip { 0%{ transform: rotateY(0deg) scale(0.9); filter: brightness(1.1); } 50%{ transform: rotateY(90deg) scale(1.05); filter: brightness(1.3); } 100%{ transform: rotateY(180deg) scale(1.0); filter: brightness(1.0);} }
+    .fx-flip { transform-style: preserve-3d; animation: fx-flip .45s ease-out 1; }
+    @keyframes fx-shake { 0%,100%{ transform: translateX(0);} 20%{ transform: translateX(-6px);} 40%{ transform: translateX(5px);} 60%{ transform: translateX(-4px);} 80%{ transform: translateX(3px);} }
+    .fx-shake { animation: fx-shake .45s ease-out 1; }
+    @keyframes fx-pulse { 0%{ transform: scale(1);} 40%{ transform: scale(1.15);} 100%{ transform: scale(1);} }
+    .fx-pulse { animation: fx-pulse .45s ease-out 1; }
+
+    /* === Duel Overlay === */
+    #duelFx { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: radial-gradient(60% 60% at 50% 50%, rgba(0,0,0,.75), rgba(0,0,0,.9)); z-index: 80; }
+    #duelFx.show { display: flex; }
+    #duelFx .arena { position: relative; width: min(1000px, 92vw); height: min(460px, 64vh); border-radius: 16px; border: 1px solid #2b3138; background: linear-gradient(180deg,#0f1317,#0b0e11); box-shadow: 0 12px 40px rgba(0,0,0,.55) inset; overflow: hidden; }
+    #duelFx .slot { position: absolute; top: 50%; width: 40%; max-width: 360px; aspect-ratio: 1242/1863; transform: translateY(-50%) translateX(0); display: flex; flex-direction: column; gap: 10px; align-items: center; }
+    #duelFx .slot.left { left: 8%; }
+    #duelFx .slot.right{ right: 8%; }
+    #duelFx .cardimg { width: 100%; height: 100%; border-radius: 14px; border: 1px solid #2f353c; background:#0a0d10; box-shadow: 0 18px 36px rgba(0,0,0,.45); transform-origin: center; }
+    #duelFx .meta { display:flex; align-items:center; gap:10px; padding: 6px 10px; border:1px solid #2b3138; border-radius: 999px; background:#12171c; color:#e6e9ee; font-size: 14px; }
+    #duelFx .meta img { width:28px; height:28px; border-radius:999px; border:1px solid #2b3138; }
+    #duelFx .pid{ opacity:.9; font-weight:600; }
+    #duelFx .vs { position:absolute; left:50%; top:50%; transform: translate(-50%,-50%) scale(0.8); font-weight: 900; letter-spacing:.05em; font-size: clamp(48px, 9vw, 110px); color: #f5d15a; text-shadow: 0 0 30px rgba(245,209,90,.85), 0 0 8px rgba(0,0,0,.6); opacity: 0; transition: opacity .25s ease, transform .25s ease. }
+    #duelFx .arena.spread .slot.left  { transform: translateY(-50%) translateX(-12%); }
+    #duelFx .arena.spread .slot.right { transform: translateY(-50%) translateX( 12%); }
+    #duelFx .arena.spread .vs { opacity:1; transform: translate(-50%,-50%) scale(1); }
+    #duelFx .arena.collide .slot.left, #duelFx .arena.collide .slot.right { transform: translateY(-50%) translateX(0) scale(1.05); }
+    #duelFx .arena.collide .vs { opacity:0; transform: translate(-50%,-50%) scale(0.9); }
+
+    @keyframes burn { 0%{ filter: brightness(1) saturate(1); box-shadow: 0 0 0 rgba(255,120,0,0); transform: none; opacity:1; } 30%{ filter: brightness(1.25) saturate(1.5); box-shadow: 0 0 26px rgba(255,140,0,.65);} 60%{ filter: brightness(1.5) saturate(2) hue-rotate(-12deg); transform: rotate(-2deg) scale(1.06);} 100%{ opacity:0; transform: translateY(-24px) scale(0.9); filter: brightness(1.6) saturate(2.2);} }
+    @keyframes flame { 0%,100%{ opacity:.35; transform: translate(-50%,-55%) scale(1); filter:hue-rotate(-10deg) saturate(1.5);} 50%{ opacity:.65; transform: translate(-50%,-60%) scale(1.08); filter:hue-rotate(-18deg) saturate(2);} }
+    .burning .cardimg { position: relative; animation: burn .9s ease-out forwards; }
+    .burning .cardimg::after{ content:''; position:absolute; left:50%; top:50%; width: 140%; height: 140%; background: radial-gradient(35% 25% at 50% 30%, rgba(255,230,120,.85), transparent 60%), radial-gradient(50% 40% at 50% 60%, rgba(255,120,0,.55), transparent 70%); mix-blend-mode: screen; pointer-events: none; transform: translate(-50%,-55%); animation: flame .9s ease-out forwards; }
+
+    /* 強化特效：光球 */
+    .fx-orb { position: fixed; width: 14px; height: 14px; border-radius: 999px;
+      background: radial-gradient(circle at 40% 40%, #fff, #facc15 55%, rgba(250,204,21,.2) 70%);
+      box-shadow: 0 0 16px rgba(250,204,21,.9), 0 0 36px rgba(250,204,21,.55);
+      pointer-events:none; z-index: 90; opacity:.95;
+      transition: transform .6s cubic-bezier(.2,.7,.1,1), opacity .2s ease .5s;
+    }
+
+    /* === 擲硬幣 Overlay & 動畫框 === */
+    #coinOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,.7);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s ease;
+    }
+    #coinOverlay.show { opacity: 1; pointer-events: auto; }
+
+    #coinFrame {
+      background: radial-gradient(circle at 50% 40%,rgba(24,28,32,0.9) 0%,rgba(12,14,16,0.92) 60%,rgba(0,0,0,0.0) 100%);
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 24px 48px rgba(0,0,0,.8), 0 2px 4px rgba(0,0,0,.6), 0 0 1px rgba(255,255,255,.08) inset, 0 0 30px rgba(0,0,0,.6) inset;
+      padding: 16px;
+      width: 400px; max-width: 90vw; max-height: 90vh;
+      display: flex; align-items: center; justify-content: center;
+      transform: scale(.9); transition: transform .3s ease;
+    }
+    #coinOverlay.show #coinFrame { transform: scale(1); }
+    #coinFrame video { width: 100%; height: auto; max-height: 70vh; border-radius: 12px; box-shadow: 0 12px 28px rgba(0,0,0,.6); outline: none; }
+    #coinOverlay video { outline: none; }
+
+    /* === 打出卡片「快閃」Overlay（新增） === */
+    #playedOverlay{ position:fixed; inset:0; z-index: ninetyfive; z-index:95; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,.72); opacity:0; pointer-events:none; transition:opacity .25s ease; }
+    #playedOverlay.show{ opacity:1; pointer-events:auto; }
+    #playedFrame{ display:flex; flex-direction:column; gap:10px; align-items:center; }
+    #playedImg{ width:min(40vw,320px); height:auto; border-radius:14px; border:1px solid #2f353c; box-shadow:0 18px 36px rgba(0,0,0,.45); }
+    #playedMeta{ font-size:14px; color:#cbd5e1; opacity:.95; }
+
+    
+/* === 場地背景直接掛在 body（v2） === */
+:root{
+  --venue-bg-url: none;  /* 由 JS 動態設定 */
+}
+
+/* 預設你的原本背景 */
+body{
+  background:
+    radial-gradient(1200px 800px at 10% 20%, rgba(255,184,77,.06), transparent 60%),
+    radial-gradient(1200px 800px at 90% 80%, rgba(0,158,255,.05), transparent 60%),
+    linear-gradient(180deg,#0f1113 0%,#14171a 100%);
+  transition: background-image .25s ease, background-size .25s ease, background-position .25s ease;
+}
+
+/* 啟用場地背景時：把圖片疊在最底層，再覆一點淡淡的遮罩，維持可讀性 */
+body.venue-on{
+  background-image:
+    var(--venue-bg-url), /* 場地圖片（最底層） */
+    radial-gradient(1200px 800px at 10% 20%, rgba(0,0,0,.18), transparent 60%),
+    radial-gradient(1200px 800px at 90% 80%, rgba(0,0,0,.18), transparent 60%),
+    linear-gradient(180deg,#0f1113 0%,#14171a 100%);
+  background-size: cover, auto, auto, auto;
+  background-position: center, center, center, center;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+  background-attachment: fixed, fixed, fixed, fixed; /* 滑動時更穩定 */
+}
+
+/* 玩家小框：背景完全透明（移除毛玻璃、保留邊線） */
+#players .border,
+#players .border-amber-400,
+#players [class*="bg-\\[\\#12161b\\]"],
+#players .card{
+  background: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;  /* 若原本有陰影想清掉 */
+}
+
+/*（可選）目前回合框仍給一點金色輪廓，背景保持透明 */
+#players .current{
+  background: transparent !important;
+  box-shadow: 0 0 0 1px rgba(255,200,80,.35) !important;
+}
+
+/*（可選）讓玩家卡文字在任何底圖上都清楚些 */
+#players .card, 
+#players .card *{
+  text-shadow: 0 1px 1px rgba(0,0,0,.35);
+}
+/* === 玩家框架視覺統一 === */
+
+/* 預設：所有玩家小框 全透明底 + 白色半透明輪框 */
+#players .card,
+#players .border,
+#players .border-amber-400,
+#players [class*="bg-\\[\\#12161b\\]"]{
+  background: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  border: 1.5px solid rgba(255,255,255,.25) !important; /* 白色半透明邊線 */
+  border-radius: 14px;
+  box-shadow: none !important;
+  transition: border-color .25s ease, box-shadow .25s ease;
+}
+
+/* 當前回合的玩家（保持金邊或亮邊） */
+#players .current,
+#players .is-turn,
+#players .active{
+  border: 1.8px solid rgba(255,200,80,.85) !important;  /* 金色亮邊 */
+  box-shadow: 0 0 10px rgba(255,200,80,.4) !important;
+}
+
+/* 被淘汰或無法行動的玩家（灰邊、降低透明度） */
+#players .eliminated,
+#players .disabled{
+  opacity: .55;
+  border-color: rgba(255,255,255,.1) !important;
+}
+
+/* 讓玩家名稱、金幣數在任何背景上都清楚 */
+#players .card *,
+#players .border *,
+#players .border-amber-400 *{
+  text-shadow: 0 1px 2px rgba(0,0,0,.5);
+}
+
+/* === 只移除玩家頭像的邊框/外框/陰影 === */
+#players .avatar,
+#players .avatar img,
+#players img.avatar,
+#players img.rounded-full,
+#players .player-avatar,
+#players .player-avatar img {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* 如果你的頭像外面還包了一層有邊框的容器（常見 avatar-wrap/container） */
+#players .avatar-wrap,
+#players .avatar-container {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* 保險：玩家卡中的所有 img 都不加邊框（不影響外層卡片邊框） */
+#players .card img {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* 1) 把原本 body 的背景交給一個固定圖層處理 */
+html, body{
+  min-height: 100%;
+  background: none !important;   /* 先清掉原本會捲動的背景 */
+}
+
+body{
+  position: relative;             /* 讓 ::before 可以正常疊底 */
+  --venue-bg-url: none;           /* 由 JS 設定 url("...") 或 none */
+}
+
+/* 2) 固定在視窗底下的背景圖層（不跟著捲動） */
+body::before{
+  content: '';
+  position: fixed;
+  inset: 0;                       /* 佔滿視窗 */
+  z-index: -1;                    /* 永遠在所有內容之下 */
+  background:
+    var(--venue-bg-url),                                              /* 場地圖 */
+    radial-gradient(1200px 800px at 10% 20%, rgba(0,0,0,.18), transparent 60%),
+    radial-gradient(1200px 800px at 90% 80%, rgba(0,0,0,.18), transparent 60%),
+    linear-gradient(180deg,#0f1113 0%,#14171a 100%);                  /* 原本的漸層底 */
+  background-size: cover, auto, auto, auto;
+  background-position: center, center, center, center;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+  /* 不用 background-attachment，因為本身就是 fixed 層 */
+}
+
+/* 3) 把會擋住的主容器改成透明（避免「黑色東西」往上蓋） */
+#app, .table, .board, main, .page, .wrap{
+  background: transparent !important;
+}
+
+
+/* ===== BGM 播放條：白色半透明按鈕 & 清單 ===== */
+#bgmBar{
+  border-color: rgba(255,255,255,.12) !important;
+  background: rgba(20,24,28,.65) !important;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+#bgmBar button{
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.06);
+  border-radius: 10px;
+  padding: 6px 10px;
+  line-height: 1;
+  user-select: none;
+  transition: background .2s ease, border-color .2s ease, transform .05s ease;
+}
+#bgmBar button:hover{
+  background: rgba(255,255,255,.12);
+  border-color: rgba(255,255,255,.28);
+}
+#bgmBar button:active{
+  transform: translateY(1px);
+}
+#bgmBar button:focus{ outline: none; box-shadow: none; }
+
+/* 隨機開啟的狀態 */
+#bgmBar .is-active{
+  background: rgba(255,255,255,.18);
+  border-color: rgba(255,255,255,.38);
+  font-weight: 600;
+}
+
+/* 曲目清單彈層 */
+#bgmMenu{
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  width: min(72vw, 420px);
+  max-height: 52vh;
+  overflow: auto;
+  padding: 8px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(16,20,24,.88);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-radius: 14px;
+  box-shadow: 0 10px 32px rgba(0,0,0,.45);
+  z-index: 60;
+}
+#bgmMenu .item{
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px; border-radius: 10px; cursor: pointer;
+  color: #fff; font-size: 13px;
+  border: 1px solid transparent;
+}
+#bgmMenu .item:hover{
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.12);
+}
+#bgmMenu .item.active{
+  background: rgba(255,255,255,.14);
+  border-color: rgba(255,255,255,.28);
+  font-weight: 600;
+}
+
+/* === BGM 圓角 SVG 按鈕 === */
+#bgmBar .icon-btn{
+  width: 36px; height: 36px;
+  border-radius: 12px;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.06);
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background .18s ease, transform .06s ease, border-color .18s ease, box-shadow .18s ease;
+}
+#bgmBar .icon-btn:hover{
+  background: rgba(255,255,255,.12);
+  border-color: rgba(255,255,255,.28);
+  box-shadow: 0 6px 18px rgba(0,0,0,.25);
+}
+#bgmBar .icon-btn:active{ transform: translateY(1px); }
+#bgmBar .icon-btn.big{ width: 40px; height: 40px; font-weight: 700; }
+
+/* 隨機啟動時有亮度（沿用 is-active） */
+#bgmShuffle.is-active{
+  background: rgba(255,255,255,.18);
+  border-color: rgba(255,255,255,.38);
+}
+
+/* SVG 統一尺寸（不用每個都設） */
+#bgmBar .icon-btn svg{ width: 18px; height: 18px; fill: currentColor; }
+#bgmBar .icon-btn.big svg{ width: 20px; height: 20px; }
+
+/* 曲名依舊可點展開清單 */
+#bgmTitle{ cursor: pointer; }
+
+#bgmMenu .dot{ width: 8px; height: 8px; border-radius: 50%; background: currentColor; opacity:.8; }
+
+/* BGM 播放器條：改為完全透明底（不影響按鈕外觀） */
+#bgmBar{
+  background: transparent !important;
+  border-color: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+  padding-left: 0 !important;  /* 可選：讓條更貼合右側 */
+  padding-right: 0 !important; /* 可選 */
+}
+
+/* 若想保留一點細線輪廓，改用這一行取代上面的 border-color 設定 */
+// #bgmBar{ border-color: rgba(255,255,255,.10) !important; }
+
+
+/* === LAW & LUFFY modals visibility === */
+#lawSwapModal.hidden, #luffyBoostModal.hidden { display:none; }
+
+.deck .cnt{ display:none !important; }
+
+/* === 牌堆外圈紅色呼吸光（不動圖片本體） === */
+@keyframes deckHaloBreath {
+  0%,100% { opacity: .28; box-shadow:
+      0 0 0 2px rgba(239,68,68,.35),
+      0 0 18px 6px rgba(239,68,68,.25); }
+  50%     { opacity: .95; box-shadow:
+      0 0 0 3px rgba(239,68,68,.55),
+      0 0 30px 12px rgba(239,68,68,.38); }
+}
+
+#btnDraw.hot{
+  position: relative;
+  overflow: visible;              /* 讓外圈不被裁切 */
+  border-radius: 12px;            /* 外圈圓角，對齊你原本按鈕 */
+}
+
+/* 只做外圈光暈：放在 ::after，不影響點擊 */
+#btnDraw.hot::after{
+  content: '';
+  position: absolute;
+  inset: -8px;                    /* 外圈距離，調大可更外擴 */
+  border-radius: 16px;
+  pointer-events: none;
+  animation: deckHaloBreath 2.2s ease-in-out infinite;
+}
+
+/* 保證圖片本體不被改動（避免之前的樣式殘留） */
+#btnDraw #deckImg{
+  outline: none !important;
+  box-shadow: none !important;
+  animation: none !important;
+}
+
+/* 尊重「減少動態」偏好：保留靜態描邊、停用動畫 */
+@media (prefers-reduced-motion: reduce){
+  #btnDraw.hot::after{ animation: none !important; }
+}
+
+
+</style>
+</head>
+<body>
+<header class="sticky top-0 z-40 bg-[#101418]/80 backdrop-blur border-b border-[#1c2229]">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
+    <!-- 左側標題 -->
+    <div class="font-semibold tracking-wide">偉大航道爭霸戰</div>
+
+    <!-- 房號/連線：留著給程式用，但畫面隱藏 -->
+    <div class="hidden text-xs px-2 py-1 rounded border border-neutral-700">房號：<span id="roomLbl">—</span></div>
+    <div class="hidden text-xs px-2 py-1 rounded border border-neutral-700">連線：<span id="connLbl" class="text-red-400">disconnected</span></div>
+
+    <!-- 保留寶箱（可見） -->
+    <div class="text-xs px-2 py-1 rounded border border-neutral-700">寶箱剩餘：<span id="chestLbl">0</span> 枚</div>
+
+    <!-- 拉到最右邊：音樂條 -->
+    <div class="ml-auto flex items-center gap-2 w-full sm:w-auto">
+      <div id="bgmBar" class="flex items-center gap-2 px-2 py-1 rounded-lg border border-[#2a2f35] bg-[#14181c]/80">
+        <!-- 控制鈕 -->
+       <button id="bgmPrev" class="icon-btn" title="上一首" aria-label="上一首">
+  <!-- 上一首：|◀ -->
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M7 12L18 5v14L7 12zM6 5h2v14H6z"/>
+  </svg>
+</button>
+
+<button id="bgmPlay" class="icon-btn big" title="播放/暫停" aria-label="播放/暫停">
+  <!-- ▶ -->
+  <svg id="iconPlay" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M8 5v14l11-7z"/>
+  </svg>
+  <!-- ⏸（預設隱藏，播放時顯示） -->
+  <svg id="iconPause" class="hidden" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M6 5h4v14H6zm8 0h4v14h-4z"/>
+  </svg>
+</button>
+
+<button id="bgmNext" class="icon-btn" title="下一首" aria-label="下一首">
+  <!-- ▶| -->
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M6 6l11 6-11 6V6zm12 0h2v12h-2z"/>
+  </svg>
+</button>
+
+<button id="bgmShuffle" class="icon-btn" title="隨機播放" aria-label="隨機播放">
+  <!-- 交錯箭頭 -->
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M17 3h4v4h-2V6h-2.17l-3.9 3.9 1.41 1.41L18.83 8H19v2h2V6a3 3 0 0 0-4-3zM4 6h5.17l3.9 3.9-1.41 1.41L7.17 8H4V6zm0 12h3.17l3.9-3.9 1.41 1.41L8.83 20H4v-2zm17-2v4h-4a3 3 0 0 1-3-3v-.17l-2.1-2.1 1.41-1.41 2.69 2.69c.24.24.57.39.91.39H19v-2h2z"/>
+  </svg>
+</button>
+
+        <!-- 音量 -->
+        <div class="flex items-center gap-1 ml-1">
+          <span class="text-xs opacity-70">🔊</span>
+          <input id="bgmVol" type="range" min="0" max="1" step="0.01" value="0.7"
+                 class="w-24 accent-amber-300" />
+        </div>
+
+        <!-- 曲名 -->
+        <div id="bgmTitle"
+             class="text-xs sm:max-w-[280px] md:max-w-[360px] truncate ml-2 opacity-90">
+          未播放
+        </div>
+
+        <!-- 隱藏 audio 元件 -->
+        <audio id="bgmAudio" preload="auto"></audio>
+      </div>
+    </div>
+
+    <!-- 這三個輸入留著但隱藏，避免打壞你現有 JS 綁定 -->
+    <input id="inpName" class="hidden w-40 px-2 py-1.5 rounded-lg border border-neutral-700 bg-[#14181c]" placeholder="暱稱"/>
+    <input id="inpRoom" class="hidden w-28 px-2 py-1.5 rounded-lg border border-neutral-700 bg-[#14181c]" placeholder="房號"/>
+    <button id="btnJoin" class="hidden px-3 py-1.5 rounded-lg border border-neutral-700 bg-[#14181c] hover:bg-[#192028]">加入</button>
+  </div>
+</header>
+
+  <main class="max-w-7xl mx-auto px-3 md:px-4 py-4 grid gap-4 lg:grid-cols-[1.2fr_.8fr]">
+    <section class="space-y-3">
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+        <div class="card p-3 md:col-span-2">
+          <div class="text-sm mb-2 opacity-80">本局場地</div>
+          <div id="venues" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2"></div>
+        </div>
+        <div class="card p-3 flex items-center justify-between gap-3">
+  <div class="text-sm opacity-80">
+    牌堆
+    <span id="deckCnt" class="ml-2 px-1.5 py-0.5 rounded border border-[#2a2f35] text-amber-300 font-semibold">0</span>
+  </div>
+  <button id="btnDraw" class="deck">
+    <img id="deckImg" src="images/cards/back.png" alt="deck"/>
+    <!-- 已移除舊的 .cnt 徽章 -->
+  </button>
+</div>
+
+        <div class="card p-3 md:col-span-3">
+          <div class="flex items-center justify-between mb-2">
+            <div class="text-sm opacity-80">棄牌</div>
+            <button id="btnNextRound" class="hidden px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black text-sm">下一局 ▶</button>
+          </div>
+            <div id="discard" class="flex gap-2 overflow-x-auto"></div>
+        </div>
+      </div>
+
+      <div id="myPlayZone" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <button id="playHand" class="border border-[#2f353c] rounded-xl overflow-hidden"><img id="imgHand" src=""/></button>
+        <button id="playDrawn" class="border border-[#2f353c] rounded-xl overflow-hidden"><img id="imgDrawn" src=""/></button>
+      </div>
+
+      <div class="card p-3">
+        <div class="flex items-center justify-between mb-2">
+          <div class="text-sm opacity-80">對局日誌</div>
+          <div class="text-xs text-neutral-400">輪到：<span id="turnLbl">—</span>｜階段：<span id="stepLbl">—</span></div>
+        </div>
+        <ol id="logBox" class="text-sm space-y-1 list-decimal pl-5 max-h-72 overflow-auto"></ol>
+      </div>
+    </section>
+
+    <aside class="space-y-3">
+      <div class="card p-3">
+        <div class="text-sm mb-2 opacity-80">玩家</div>
+        <div id="players" class="grid gap-2"></div>
+      </div>
+      <!-- 訊息面板已移除 -->
+    </aside>
+  </main>
+
+  <div id="modal" class="modal hidden"><div class="card w-[min(92vw,680px)] p-4"></div></div>
+
+  <!-- Duel Overlay -->
+  <div id="duelFx">
+    <div class="arena">
+      <div class="slot left">
+        <img class="cardimg" src="images/cards/back.png" alt="left"/>
+        <div class="meta">
+          <img class="ava" src="images/avatars/1.png" alt="ava"/>
+          <span class="pid">P1</span>
+        </div>
+      </div>
+      <div class="slot right">
+        <img class="cardimg" src="images/cards/back.png" alt="right"/>
+        <div class="meta">
+          <img class="ava" src="images/avatars/2.png" alt="ava"/>
+          <span class="pid">P2</span>
+        </div>
+      </div>
+      <div class="vs">VS</div>
+    </div>
+  </div>
+
+  <!-- 擲硬幣動畫（只有本機播放） -->
+  <div id="coinOverlay" class="hidden">
+    <div id="coinFrame">
+      <video id="coinVideo" src="videos/coin.mp4" playsinline preload="auto"></video>
+    </div>
+  </div>
+
+  <!-- 打出卡片「快閃」Overlay（新增） -->
+  <div id="playedOverlay" class="hidden">
+    <div id="playedFrame">
+      <img id="playedImg" src="images/cards/back.png" alt="played"/>
+      <div id="playedMeta" class="text-sm"></div>
+    </div>
+  </div>
+
+  <!-- 強化技能影片（全體播放） -->
+  <div id="enhOverlay" class="hidden fixed inset-0 z-[140] flex items-center justify-center bg-black/70">
+    <video id="enhVideo" playsinline preload="auto" class="max-w-[80vw] max-h-[80vh] rounded-xl shadow-2xl"></video>
+  </div>
+
+
+  <!-- === 羅（強化）查看後的交換詢問框 === -->
+  <div id="lawSwapModal" class="hidden fixed inset-0 z-[90] flex items-center justify-center bg-black/70">
+    <div class="w-[min(560px,92vw)] rounded-2xl border border-neutral-700/70 bg-neutral-900/80 backdrop-blur p-5">
+      <div class="text-lg font-bold mb-3">ROOM・SCAN</div>
+      <div class="flex items-center gap-4 mb-4">
+        <img id="lawTargetImg" class="w-40 h-56 object-contain rounded-lg border border-white/10" />
+        <div class="text-sm opacity-80">
+          <div class="mb-2">目標玩家：<span id="lawTargetName" class="font-semibold"></span></div>
+          <div>你要和他的手牌交換嗎？</div>
+        </div>
+      </div>
+      <div class="flex justify-end gap-2">
+        <button id="lawSwapCancel" class="px-3 py-1.5 rounded-lg border border-white/20 bg-white/10 hover:bg-white/20">取消</button>
+        <button id="lawSwapOk" class="px-3 py-1.5 rounded-lg border border-white/20 bg-white/10 hover:bg-white/20">交換</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- === 魯夫（強化）發動確認框 === -->
+  <div id="luffyBoostModal" class="hidden fixed inset-0 z-[90] flex items-center justify-center bg-black/70">
+    <div class="w-[min(520px,92vw)] rounded-2xl border border-neutral-700/70 bg-neutral-900/80 backdrop-blur p-5">
+      <div class="text-lg font-extrabold mb-3">發動</div>
+      <div class="text-sm opacity-80 mb-4">魯夫強化：是否發動？</div>
+      <div class="flex justify-end">
+        <button id="luffyBoostGo" class="px-4 py-2 rounded-lg border border-white/20 bg-white/10 hover:bg-white/20">
+          猿王群鴉炮
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+<script>
+/* === 路徑工具 === */
+const CARD     = id => `images/cards/${id}.png`;
+const CARD_ENH = id => `images/cards/enh/${id}.png`; // ★ 強化卡面
+const VEN      = name => `images/venues/${name}.png`;
+const AVA      = a => `images/avatars/${a||1}.png`;
+
+const el = {
+  conn: document.getElementById('connLbl'),
+  roomLbl: document.getElementById('roomLbl'),
+  name: document.getElementById('inpName'),
+  room: document.getElementById('inpRoom'),
+  join: document.getElementById('btnJoin'),
+  venues: document.getElementById('venues'),
+  discard: document.getElementById('discard'),
+  deckCnt: document.getElementById('deckCnt'),
+  deckBtn: document.getElementById('btnDraw'),
+  imgHand: document.getElementById('imgHand'),
+  imgDrawn: document.getElementById('imgDrawn'),
+  playZone: document.getElementById('myPlayZone'),
+  playHand: document.getElementById('playHand'),
+  playDrawn: document.getElementById('playDrawn'),
+  players: document.getElementById('players'),
+  log: document.getElementById('logBox'),
+  /* msg: 已移除 */
+  turnLbl: document.getElementById('turnLbl'),
+  stepLbl: document.getElementById('stepLbl'),
+  modal: document.getElementById('modal'),
+  chestLbl: document.getElementById('chestLbl'),
+  nextRound: document.getElementById('btnNextRound'),
+};
+
+
+// === BGM 播放清單（照你提供的 20 首） ===
+const BGM_LIST = [
+  { title: "OP 01 – ウィーアー!(We Are)", src: "audio/bgm/track01.mp3" },
+  { title: "OP 02 – Believe", src: "audio/bgm/track02.mp3" },
+  { title: "OP 03 – ヒカリへ", src: "audio/bgm/track03.mp3" },
+  { title: "OP 04 – BON VOYAGE!", src: "audio/bgm/track04.mp3" },
+  { title: "OP 05 – ココロのちず", src: "audio/bgm/track05.mp3" },
+  { title: "OP 06 – BRAND NEW WORLD", src: "audio/bgm/track06.mp3" },
+  { title: "OP 07 – ウィーアー!～7人の麥わら海賊団篇～", src: "audio/bgm/track07.mp3" },
+  { title: "OP 08 – Crazy Rainbow", src: "audio/bgm/track08.mp3" },
+  { title: "OP 09 – Jungle P", src: "audio/bgm/track09.mp3" },
+  { title: "OP 10 – ウィーアー!～アニメーションワンピース10週年", src: "audio/bgm/track10.mp3" },
+  { title: "OP 11 – Share The World", src: "audio/bgm/track11.mp3" },
+  { title: "OP 12 – 風をさがして", src: "audio/bgm/track12.mp3" },
+  { title: "OP 13 – One day", src: "audio/bgm/track13.mp3" },
+  { title: "OP 14 – Fight Together", src: "audio/bgm/track14.mp3" },
+  { title: "OP 15 – We Go!", src: "audio/bgm/track15.mp3" },
+  { title: "OP 16 – Hands Up!", src: "audio/bgm/track16.mp3" },
+  { title: "OP 17 – Wake up!", src: "audio/bgm/track17.mp3" },
+  { title: "OP 18 – Hard Knock Days", src: "audio/bgm/track18.mp3" },
+  { title: "OP 19 – We Can!", src: "audio/bgm/track19.mp3" },
+  { title: "OP 20 – Hope", src: "audio/bgm/track20.mp3" }
+];
+
+// === 取得 DOM ===
+const bgmAudio   = document.getElementById('bgmAudio');
+const bgmTitleEl = document.getElementById('bgmTitle');
+const bgmPlayBtn = document.getElementById('bgmPlay');
+const bgmPrevBtn = document.getElementById('bgmPrev');
+const bgmNextBtn = document.getElementById('bgmNext');
+const bgmVol     = document.getElementById('bgmVol');
+const bgmShuffle = document.getElementById('bgmShuffle');
+const iconPlay  = document.querySelector('#bgmPlay #iconPlay');
+const iconPause = document.querySelector('#bgmPlay #iconPause');
+
+function setPlayVisual(isPlaying){
+  if (!iconPlay || !iconPause) return;
+  if (isPlaying){
+    iconPlay.classList.add('hidden');
+    iconPause.classList.remove('hidden');
+  }else{
+    iconPause.classList.add('hidden');
+    iconPlay.classList.remove('hidden');
+  }
+}
+
+
+// 讓曲名可當「展開清單」的切換鈕
+let bgmMenu = document.getElementById('bgmMenu');
+if (!bgmMenu) {
+  // 建立彈層容器（放在 header 裡、靠右對齊）
+  const header = document.querySelector('header .max-w-7xl') || document.querySelector('header > div');
+  const anchor = header.querySelector('#bgmBar') || header;
+  const wrap = document.createElement('div');
+  wrap.style.position = 'relative';
+  anchor.parentNode.insertBefore(wrap, anchor);
+  wrap.appendChild(anchor);
+
+  bgmMenu = document.createElement('div');
+  bgmMenu.id = 'bgmMenu';
+  bgmMenu.classList.add('hidden');
+  wrap.appendChild(bgmMenu);
+}
+
+// === 狀態 ===
+let bgmIndex   = Number(localStorage.getItem('bgm_index') || '0') % BGM_LIST.length;
+let isShuffle  = localStorage.getItem('bgm_shuffle') === '1';
+let userInteracted = false; // 解除瀏覽器自動播放限制
+let wasPlayingBeforeDuck = false; // 影片介入前是否在播放
+let duckSet = new Set(); // 正在播放中的影片集合（同時多段也能正確回復）
+
+// ===== UI 繪製 =====
+function paintTitle(){ bgmTitleEl.textContent = BGM_LIST[bgmIndex]?.title || '未播放'; }
+function paintShuffleBtn(){
+  if (isShuffle) bgmShuffle.classList.add('is-active');
+  else bgmShuffle.classList.remove('is-active');
+}
+function renderMenu(){
+  const cur = bgmIndex;
+  const html = BGM_LIST.map((t,i)=>`
+    <div class="item ${i===cur?'active':''}" data-i="${i}">
+      <span class="dot" style="opacity:${i===cur?1:.35}"></span>
+      <span class="title" style="flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${t.title}</span>
+      <span class="sec" style="opacity:.7; font-size:12px;">${String(i+1).padStart(2,'0')}</span>
+    </div>
+  `).join('');
+  bgmMenu.innerHTML = html || '<div class="text-xs opacity-70 p-2">（沒有曲目）</div>';
+}
+
+paintTitle(); paintShuffleBtn(); renderMenu();
+
+// ===== 基本控制 =====
+function loadTrack(i, {autoPlay=false} = {}){
+  if (!Number.isInteger(i)) return;
+  bgmIndex = (i + BGM_LIST.length) % BGM_LIST.length;
+  localStorage.setItem('bgm_index', String(bgmIndex));
+  const item = BGM_LIST[bgmIndex]; if (!item) return;
+
+  if (bgmAudio.getAttribute('src') !== item.src) {
+    bgmAudio.setAttribute('src', item.src);
+    try { bgmAudio.load(); } catch(e){}
+  }
+  paintTitle(); renderMenu();
+
+   if (autoPlay && userInteracted) {
+   bgmAudio.play().then(()=> setPlayVisual(true))
+     .catch(()=> setPlayVisual(false));
+ } else {
+   setPlayVisual(false);
+ }
+
+}
+
+function nextIndex(){
+  if (!isShuffle) return (bgmIndex + 1) % BGM_LIST.length;
+  if (BGM_LIST.length <= 1) return bgmIndex;
+  let j = bgmIndex;
+  while (j === bgmIndex) j = Math.floor(Math.random()*BGM_LIST.length);
+  return j;
+}
+function prevIndex(){
+  if (!isShuffle) return (bgmIndex - 1 + BGM_LIST.length) % BGM_LIST.length;
+  return nextIndex();
+}
+
+// ===== 事件：控制鈕 =====
+bgmPlayBtn.addEventListener('click', ()=>{
+  userInteracted = true;
+  if (bgmAudio.paused) {
+    if (!bgmAudio.getAttribute('src')) loadTrack(bgmIndex);
+    bgmAudio.play().then(()=> setPlayVisual(true));
+  } else {
+    bgmAudio.pause(); setPlayVisual(false);
+  }
+});
+
+
+bgmNextBtn.addEventListener('click', ()=>{
+  userInteracted = true; loadTrack(nextIndex(), {autoPlay:true});
+});
+bgmPrevBtn.addEventListener('click', ()=>{
+  userInteracted = true; loadTrack(prevIndex(), {autoPlay:true});
+});
+bgmShuffle.addEventListener('click', ()=>{
+  isShuffle = !isShuffle;
+  localStorage.setItem('bgm_shuffle', isShuffle ? '1' : '0');
+  paintShuffleBtn();
+});
+bgmVol.addEventListener('input', ()=>{
+  const v = Number(bgmVol.value || '0.7');
+  bgmAudio.volume = Math.max(0, Math.min(1, v));
+  localStorage.setItem('bgm_vol', String(bgmAudio.volume));
+});
+
+// ===== 曲名 → 展開/收合清單 =====
+function openMenu(){ bgmMenu.classList.remove('hidden'); }
+function closeMenu(){ bgmMenu.classList.add('hidden'); }
+function toggleMenu(){ bgmMenu.classList.toggle('hidden'); }
+bgmTitleEl.style.cursor = 'pointer';
+bgmTitleEl.title = '點我展開曲目清單';
+bgmTitleEl.addEventListener('click', ()=>{ toggleMenu(); });
+
+// 清單點擊
+bgmMenu.addEventListener('click', (ev)=>{
+  const it = ev.target.closest('.item'); if (!it) return;
+  const i = Number(it.getAttribute('data-i'));
+  userInteracted = true;
+  loadTrack(i, {autoPlay:true});
+  closeMenu();
+});
+// 點外面關閉
+document.addEventListener('click', (ev)=>{
+  const bar = document.getElementById('bgmBar');
+  if (!bar) return;
+  if (!bar.contains(ev.target) && !bgmMenu.contains(ev.target)) closeMenu();
+});
+document.addEventListener('keydown', (ev)=>{ if (ev.key === 'Escape') closeMenu(); });
+
+// ===== 音量初始化 =====
+(function initVolume(){
+  const saved = Number(localStorage.getItem('bgm_vol'));
+  if (Number.isFinite(saved) && saved >= 0 && saved <= 1) {
+    bgmVol.value = String(saved); bgmAudio.volume = saved;
+  } else {
+    bgmVol.value = '0.7'; bgmAudio.volume = 0.7;
+  }
+})();
+
+// 播完自動下一首
+bgmAudio.addEventListener('ended', ()=>{ loadTrack(nextIndex(), {autoPlay:true}); });
+bgmAudio.addEventListener('play',  ()=> setPlayVisual(true));
+bgmAudio.addEventListener('pause', ()=> setPlayVisual(false));
+bgmAudio.addEventListener('ended', ()=>{ setPlayVisual(false); loadTrack(nextIndex(), {autoPlay:true}); });
+
+
+// 初始載入一次（不自動播）
+loadTrack(bgmIndex, {autoPlay:false});
+
+// ===================================================
+//    🔇 自動 Duck：任何 <video> 播放就暫停 BGM
+//    全部影片結束後（duckSet 清空）自動續播
+// ===================================================
+function duckOn(videoEl){
+  if (!duckSet.has(videoEl)) {
+    duckSet.add(videoEl);
+    // 第一次被 duck 時，記住原本是否在播
+    if (duckSet.size === 1) {
+      wasPlayingBeforeDuck = !bgmAudio.paused && !bgmAudio.ended;
+      if (wasPlayingBeforeDuck) {
+        try{ bgmAudio.pause(); }catch(e){}
+         setPlayVisual(false);
+      }
+    }
+  }
+}
+function duckOff(videoEl){
+  if (duckSet.has(videoEl)) {
+    duckSet.delete(videoEl);
+    if (duckSet.size === 0 && wasPlayingBeforeDuck) {
+      // 全部影片都停了 → 自動續播
+      bgmAudio.play().then(()=> setPlayVisual(true))
+  .catch(()=>{ /* 可能被擋，維持暫停外觀 */ });
+      wasPlayingBeforeDuck = false;
+    }
+  }
+}
+function attachDuck(video){
+  if (!video || video.__duckBound) return;
+  video.__duckBound = true;
+  video.addEventListener('play',  ()=>duckOn(video));
+  // 影片可能提早 pause、或正常 ended
+  video.addEventListener('pause', ()=>duckOff(video));
+  video.addEventListener('ended', ()=>duckOff(video));
+}
+// 先綁目前頁面上已存在的所有影片
+document.querySelectorAll('video').forEach(attachDuck);
+// 再用 MutationObserver 綁後續動態插入的影片（例如 overlay 裡新建）
+const mo = new MutationObserver((ms)=>{
+  for (const m of ms){
+    m.addedNodes && m.addedNodes.forEach(node=>{
+      if (node instanceof HTMLVideoElement) attachDuck(node);
+      if (node.querySelectorAll){
+        node.querySelectorAll('video').forEach(attachDuck);
+      }
+    });
+  }
+});
+mo.observe(document.documentElement, {subtree:true, childList:true});
+
+
+
+
+const sp = new URLSearchParams(location.search);
+const presetRoom   = sp.get('room') || '';
+el.room.value = presetRoom; el.roomLbl.textContent = presetRoom || '—';
+const presetName   = sp.get('name') || '';
+el.name.value = presetName;
+const presetAvatar = Number(sp.get('avatar') || '1') || 1;
+const presetN      = Math.max(2, Math.min(8, Number(sp.get('n') || '4') || 4));
+
+const serverURL = sp.get('server') || undefined;
+const socket = io(serverURL, { transports:['websocket'] });
+let me = { roomId: presetRoom || 'op-001', playerId: null, secret: localStorage.getItem('opSecret')||'' };
+let state = null;
+
+/* === 新增：快閃狀態全域變數 === */
+let _flashBusy = false;       // 正在顯示快閃中
+let _deferEnhCardId = null;   // 延後播放影片的 cardId（等快閃結束再播）
+let _silentDiscards = [];
+let _enhSignal = null;    // EMIT enh_fx 訊號：只在此卡被打出時才允許播強化影片
+
+// === 事件流（日誌） ===
+let feed = [];          // 這個陣列就是畫面上顯示的對局日誌
+let _seenRound = null;  // 已顯示的輪次
+let _seenSrvLen = 0;    // 已同步的 server log 行數
+
+let localPending = null; // ★ 本地暫存
+
+// === 簡易特效工具 ===
+function onceFx(dom, cls, delay=0){
+  if(!dom) return;
+  setTimeout(()=>{
+    dom.classList.remove(cls);
+    void dom.offsetWidth;
+    dom.classList.add(cls);
+  }, delay);
+}
+
+/* === 擲硬幣影片播放（本機，附框+淡入淡出） === */
+/* === 擲硬幣影片播放（穩定版：處理自動播放被擋 + 逾時關閉） === */
+let _coinPlaying = false;
+function playCoinFx(){
+  const ov  = document.getElementById('coinOverlay');
+  const vid = document.getElementById('coinVideo');
+  if (!ov || !vid) return;
+  if (_coinPlaying) return;
+  _coinPlaying = true;
+
+  // 顯示 overlay
+  ov.classList.remove('hidden');
+  ov.classList.add('show');
+
+  // 先確保從頭播、音量回到正常
+  try { vid.currentTime = 0; } catch(e){}
+  vid.volume = 1.0;         // ← 要正常音量就 1.0
+  vid.muted  = false;       // ← 先嘗試有聲播放
+
+  // 監聽一次 ended：正常播完自動關閉
+  const onEnded = ()=>{
+    cleanup();
+  };
+  vid.addEventListener('ended', onEnded, { once:true });
+
+  // 如果被瀏覽器擋下（例如沒有「手勢」），就 fallback：
+  // 1) 先嘗試有聲播放；失敗 → 2) 無聲播放（確保畫面能走完），畫面點一下可立刻關閉。
+  const startTs = Date.now();
+  const tryPlay = ()=>{
+    vid.play().then(()=>{
+      // 已開始播放，加一個安全逾時（避免影片檔壞掉沒觸發 ended）
+      armFailsafe();
+    }).catch(()=>{
+      // 有聲被擋 → 改成靜音播放
+      vid.muted = true;
+      vid.play().then(()=>{
+        // 允許用戶點一下就關閉（避免一直卡 overlay）
+        ov.addEventListener('click', cleanup, { once:true });
+        armFailsafe();
+      }).catch(()=>{
+        // 連靜音也失敗 → 直接關閉，不阻塞遊戲流程
+        cleanup();
+      });
+    });
+  };
+
+  // failsafe：不論如何，最長 N 秒就關閉 overlay，避免卡住
+  let failTimer = null;
+  function armFailsafe(){
+    clearTimeout(failTimer);
+    // 若能讀到長度就用 duration + 緩衝，否則 4000ms
+    const dur = Number.isFinite(vid.duration) && vid.duration > 0 ? vid.duration*1000 : 4000;
+    failTimer = setTimeout(()=> cleanup(), dur + 500);
+  }
+
+  function cleanup(){
+    clearTimeout(failTimer);
+    ov.classList.remove('show');
+    setTimeout(()=>{ ov.classList.add('hidden'); _coinPlaying = false; }, 300);
+    vid.pause();
+    try { vid.currentTime = 0; } catch(e){}
+    vid.removeEventListener('ended', onEnded);
+    ov.replaceWith(ov.cloneNode(true)); // 快速移除殘留的 click 監聽（若有）
+  }
+
+  tryPlay();
+}
+
+/* === 強化影片（全體同步播放） === */
+// 20 張卡的強化影片路徑（0.mp4 ~ 19.mp4；若你有自訂，改這裡即可）
+const ENH_VID = Array.from({length:20}, (_,i)=> `videos/enh/${i}.mp4`);
+
+// 播放指定卡的強化影片（全體）
+function playEnhFxFor(cardId){
+  const ov  = document.getElementById('enhOverlay');
+  const vid = document.getElementById('enhVideo');
+  if (!ov || !vid) return;
+
+  const src = ENH_VID[cardId] || ENH_VID[0];
+  if (vid.getAttribute('src') !== src) {
+    vid.setAttribute('src', src);
+    try { vid.load(); } catch(e){}
+  }
+
+  // 顯示 overlay
+  ov.classList.remove('hidden');
+
+  // 從頭 + 正常音量嘗試
+  try { vid.currentTime = 0; } catch(e){}
+  vid.volume = 1.0;
+  vid.muted  = false;
+
+  // 播完或逾時都會關閉
+  const onEnded = ()=> cleanup();
+  vid.addEventListener('ended', onEnded, { once:true });
+
+  let failTimer = null;
+  function armFailsafe(){
+    clearTimeout(failTimer);
+    const dur = Number.isFinite(vid.duration) && vid.duration > 0 ? vid.duration*1000 : 5000;
+    failTimer = setTimeout(()=> cleanup(), dur + 600);
+  }
+  function cleanup(){
+    clearTimeout(failTimer);
+    ov.classList.add('hidden');
+    try { vid.pause(); vid.currentTime = 0; } catch(e){}
+    vid.removeEventListener('ended', onEnded);
+    // 移除點擊關閉監聽（若有）
+    const newOv = ov.cloneNode(true);
+    ov.replaceWith(newOv);
+  }
+
+  // 先嘗試有聲播放；若被瀏覽器擋，改用靜音播放 + 允許點一下關閉
+  vid.play().then(()=>{
+    armFailsafe();
+  }).catch(()=>{
+    vid.muted = true;
+    vid.play().then(()=>{
+      // 使用者點一下也能提早關（避免卡住）
+      ov.addEventListener('click', cleanup, { once:true });
+      armFailsafe();
+    }).catch(()=>{
+      // 連靜音也失敗 → 直接收掉，避免流程阻塞
+      cleanup();
+    });
+  });
+}
+/* === 強化特效工具（光球）與播放記錄 === */
+const _enhPlayed = new Set();
+let _lastRoundNo = null;
+
+function playEnhanceFx(venueName, targetImg, cardId, key){
+  if (!venueName || !targetImg) return;
+  const venImg = document.querySelector(`#venues img[data-name="${venueName}"]`);
+  if (!venImg) { targetImg.src = CARD_ENH(cardId); _enhPlayed.add(key); return; }
+
+  const vr = venImg.getBoundingClientRect();
+  const tr = targetImg.getBoundingClientRect();
+  const sx = vr.left + vr.width/2,  sy = vr.top + vr.height/2;
+  const tx = tr.left + tr.width/2,  ty = tr.top + tr.height/2;
+
+  const orb = document.createElement('div');
+  orb.className = 'fx-orb';
+  orb.style.transform = `translate(${sx}px, ${sy}px) scale(1)`;
+  document.body.appendChild(orb);
+
+  requestAnimationFrame(()=>{
+    orb.style.transform = `translate(${tx}px, ${ty}px) scale(1.2)`;
+    setTimeout(()=>{
+      targetImg.src = CARD_ENH(cardId);
+      onceFx(targetImg, 'fx-glow');
+      orb.style.opacity = '0';
+      setTimeout(()=>{ orb.remove(); }, 220);
+      _enhPlayed.add(key);
+    }, 620);
+  });
+}
+
+// 上一次渲染的快照
+let _prev = { chest: null, discardLen: 0, aliveMap: {} };
+
+/* ========= 名字工具 ========= */
+function pname(i){
+  const p = state?.players?.[i];
+  if (!p) return `P${(i??0)+1}`;
+  const nm = p.client?.displayName || p.displayName || '';
+  return nm || `P${i+1}`;
+}
+function pnameBy(p){
+  if (!p) return 'P?';
+  const nm = p.client?.displayName || p.displayName || '';
+  return nm || `P${(p.id??0)+1}`;
+}
+
+/* ========= 卡牌→場地對照與強化判斷 ========= */
+const CARD_VENUE = {
+  0:"德雷斯羅薩鬥技場", 1:"艾尼艾斯大廳", 2:"阿拉巴斯坦", 3:"巴拉蒂", 4:"佐烏",
+  5:"和之國", 6:"龐克哈薩德", 7:"維薩利亞", 8:"魚人島", 9:"九蛇島",
+  10:"鬼島", 11:"夏波帝諸島", 12:"鬼島", 13:"夏波帝諸島",
+  14:"萬國", 15:"萬國", 16:"蜂巢島", 17:"蜂巢島", 18:"奧羅傑克森號", 19:"奧羅傑克森號"
+};
+function isEnhancedNow(cardId){
+  if (cardId==null || !state?.venues) return false;
+  const vn = CARD_VENUE[cardId];
+  return !!state.venues.find(v=>v.name===vn);
+}
+
+/* ========= 場地 → 背景圖片對照 & 切換工具 ========= */
+/** 場地 → 背景圖片對照（檔案放 public/images/venues/xxx.jpg/png 自行準備） */
+const VENUE_BG = {
+  "德雷斯羅薩鬥技場": "images/venues/dressrosa.jpg",
+  "艾尼艾斯大廳":     "images/venues/enieslobby.jpg",
+  "阿拉巴斯坦":       "images/venues/alabasta.jpg",
+  "巴拉蒂":           "images/venues/baratie.jpg",
+  "佐烏":             "images/venues/zou.jpg",
+  "和之國":           "images/venues/wano.jpg",
+  "龐克哈薩德":       "images/venues/punkhazard.jpg",
+  "維薩利亞":         "images/venues/weatheria.jpg",
+  "魚人島":           "images/venues/fishmanisland.jpg",
+  "九蛇島":           "images/venues/amazonlily.jpg",
+  "鬼島":             "images/venues/onigashima.jpg",
+  "夏波帝諸島":       "images/venues/sabaody.jpg",
+  "萬國":             "images/venues/wholecake.jpg",
+  "蜂巢島":           "images/venues/hachinosu.jpg",
+  "奧羅傑克森號":     "images/venues/oro-jackson.jpg"
+};
+/** 若上面沒對到，就用場地名轉 slug 當作檔名（保底） */
+function venueFallbackURL(name){
+  const slug = String(name||"").normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^\w\u4e00-\u9fff]+/g, '-')
+    .replace(/-+/g,'-').replace(/^-|-$/g,'')
+    .toLowerCase();
+  return `images/venues/${slug}.jpg`;
+}
+/** 目前套用的場地名（存在 body 的 data-venue 上） */
+
+function getCurrentVenueName(){
+  return document.body.getAttribute('data-venue') || '';
+}
+
+/** v2：把圖片設進 body 的 CSS 變數，完全不影響前景互動 */
+function toggleVenueBackground(venueName){
+  const current = getCurrentVenueName();
+
+  if (current === venueName){
+    // 再點同一張 → 關閉，恢復原本純背景
+    document.body.removeAttribute('data-venue');
+    document.body.classList.remove('venue-on');
+    document.body.style.setProperty('--venue-bg-url', 'none');
+    return;
+  }
+
+  // 切到新場地
+  const url = VENUE_BG[venueName] || venueFallbackURL(venueName);
+  document.body.style.setProperty('--venue-bg-url', `url("${url}")`);
+  document.body.setAttribute('data-venue', venueName);
+  document.body.classList.add('venue-on');
+}
+
+/** 仍保留狀態校正：換局後如果這張場地不在清單，就自動關掉背景 */
+function reconcileVenueBackground(validVenuesArray){
+  const chosen = getCurrentVenueName();
+  if(!chosen) return;
+  const stillValid = Array.isArray(validVenuesArray) && validVenuesArray.some(v => (v && (v.name === chosen || v.title === chosen)));
+  if(!stillValid){
+    // 用 chosen 呼叫一次會進到「關閉」分支
+    toggleVenueBackground(chosen);
+  }
+}
+
+/** 場地卡點擊入口 */
+function onVenueClick(venueName){
+  toggleVenueBackground(venueName);
+}
+
+
+/* ========= 日誌 formatter ========= */
+function formatLogWithNames(line){
+  if(!state?.players) return line;
+  return String(line).replace(/P(\d+)/g, (m, numStr)=>{
+    const i = Number(numStr) - 1;
+    const nm = state.players?.[i]?.client?.displayName || state.players?.[i]?.displayName;
+    return nm ? `P${numStr} ${nm}` : `P${numStr}`;
+  });
+}
+
+/* ========= A-1：遮罩決鬥資訊 ========= */
+function stripDuelPoints(line){
+  if (!line) return line;
+  let s = String(line);
+  s = s.replace(/（[^）]*(尾數|點數|數字)[^）]*）/g, '');
+  s = s.replace(/\b尾數\s*\d+\s*(?:[>＜<≥≤=]|vs|VS)\s*\d+\b/g, '');
+  s = s.replace(/\b\d+\s*(?:[>＜<≥≤=]|vs|VS)\s*\d+\b/g, '');
+  return s.replace(/\s{2,}/g, ' ').trim();
+}
+
+/* ===== EMIT 事件轉字串 ===== */
+function msgToLogLine(e){
+  if (!e) return null;
+  switch(e.type){
+    case 'log': return null;
+    case 'duel_log': {
+      const loser = (typeof e.loserId === 'number') ? pname(e.loserId) : '未知玩家';
+      const card  = (typeof e.cardId  === 'number') ? `卡 ${e.cardId}` : '未知卡牌';
+      return `擊敗：${loser} 的 ${card}`;
+    }
+    case 'duel': {
+      const L = (typeof e.leftId  === 'number') ? pname(e.leftId)  : '？';
+      const R = (typeof e.rightId === 'number') ? pname(e.rightId) : '？';
+      return `決鬥：${L} vs ${R}`;
+    }
+    case 'robin_view': {
+      const t = (typeof e.targetId === 'number') ? pname(e.targetId) : '未知玩家';
+      const c = (typeof e.cardId  === 'number') ? `卡 ${e.cardId}` : '未知牌';
+      return `（出牌者可見）羅賓：你查看了 ${t} 的 ${c}`;
+    }
+    case 'teach_cover': {
+      const arr = Array.isArray(e.cards) ? e.cards : [];
+      const list = arr.length ? arr.map(id=>`卡 ${id}`).join('、') : '（空）';
+      return `（出牌者可見）黑鬍子：你覆蓋了 ${list}`;
+    }
+    case 'kata_peek': {
+      const arr = Array.isArray(e.cards) ? e.cards : [];
+      const list = arr.length ? arr.map(id=>`卡 ${id}`).join('、') : '（空）';
+      return `（出牌者可見）卡塔庫栗：你看到頂牌 → ${list}`;
+    }
+    case 'kata_order_done': {
+      const arr = Array.isArray(e.order) ? e.order : [];
+      const list = arr.length ? arr.map(id=>`卡 ${id}`).join('、') : '（空）';
+      return `（出牌者可見）卡塔庫栗：你已將頂牌排序為 → ${list}`;
+    }
+    case 'usopp_miss': {
+      const caster = (typeof e.casterId  === 'number') ? pname(e.casterId)  : '未知玩家';
+      const target = (typeof e.targetId  === 'number') ? pname(e.targetId)  : '未知玩家';
+      const d = (typeof e.digit === 'number') ? e.digit : '?';
+      return `騙人布：${caster} 猜 ${target} 的尾數為「${d}」→ 猜錯`;
+    }
+    default: return null;
+  }
+}
+
+/* ===== 去重推入（改為推到 feed） ===== */
+function pushLogUnique(line){
+  if (!line) return;
+  const pretty = stripDuelPoints(formatLogWithNames(line));
+  if (feed[feed.length - 1] !== pretty) feed.push(pretty);
+}
+
+/* ===== Socket 連線狀態 ===== */
+socket.on('connect', ()=>{ el.conn.textContent='connected'; el.conn.classList.replace('text-red-400','text-green-400'); });
+socket.on('disconnect', ()=>{ el.conn.textContent='disconnected'; el.conn.classList.replace('text-green-400','text-red-400'); });
+socket.on('connect_error', (e)=>{ el.conn.textContent='error'; el.conn.classList.replace('text-green-400','text-red-400'); console.error(e); });
+
+function sendAction(type, payload={}){
+  if(me.playerId==null) return;
+  socket.emit('ACTION', { type, payload, roomId: me.roomId, playerId: me.playerId, secret: me.secret });
+}
+
+
+el.join.onclick = ()=>{
+  me.roomId = (el.room.value || 'op-001').trim();
+  try { sessionStorage.setItem('op_room', me.roomId); } catch {}
+  const displayName = (el.name.value || presetName || 'P') + Math.floor(Math.random()*100);
+  el.roomLbl.textContent = me.roomId;
+  socket.emit('JOIN_ROOM', { roomId: me.roomId, displayName, avatar: presetAvatar, secret: me.secret, playerCount: presetN });
+};
+
+
+if (presetRoom) {
+  try { sessionStorage.setItem('op_room', presetRoom); } catch {}
+  setTimeout(()=>{
+    socket.emit('JOIN_ROOM', { roomId: me.roomId, displayName: presetName || 'P', avatar: presetAvatar, secret: me.secret, playerCount: presetN });
+  }, 80);
+}
+
+
+const socketOnJoined = ({ playerId, secret })=>{
+  me.playerId = playerId;
+  me.secret = secret;
+  localStorage.setItem('opSecret', secret);
+
+  // ★ 新增：記錄自己在本局的 playerId，供 result.html 用
+  try {
+    sessionStorage.setItem('op_pid', playerId);
+    console.log('[SESSION]', 'op_pid =', playerId);
+  } catch(e){
+    console.warn('sessionStorage set op_pid failed', e);
+  }
+};
+socket.on('JOINED', socketOnJoined);
+
+
+// ★ 新增：記錄自己在本局的 playerId，供 result.html 用
+socket.on('JOINED', ({ playerId })=>{
+  try {
+    sessionStorage.setItem('op_pid', playerId);
+    console.log('[SESSION]', 'op_pid=', playerId);
+  } catch(e){
+    console.warn('sessionStorage set op_pid failed', e);
+  }
+});
+
+/* ===== 新增：showPlayedFlash（支援強化卡面 + 結束回呼） ===== */
+function showPlayedFlash(cardId, byIndex, opt={}){
+  
+// 若這張是靜默棄牌 → 不做快閃，也不排程影片
+if (Array.isArray(_silentDiscards) && _silentDiscards.includes(cardId)) {
+  _silentDiscards = _silentDiscards.filter(x => x !== cardId);
+  try { if (typeof opt === 'object' && typeof opt.onDone === 'function') opt.onDone(); } catch { }
+  return;
+}
+const ov   = document.getElementById('playedOverlay');
+  const img  = document.getElementById('playedImg');
+  const meta = document.getElementById('playedMeta');
+  if (!ov || !img) return;
+
+  const isEnh = isEnhancedNow(cardId);
+  img.src = isEnh ? CARD_ENH(cardId) : CARD(cardId);
+
+  if (meta && typeof byIndex === 'number') {
+    meta.textContent = `${pname(byIndex)} 打出`;
+  }
+
+  ov.classList.remove('hidden');
+  requestAnimationFrame(()=> ov.classList.add('show'));
+
+  setTimeout(()=>{
+    ov.classList.remove('show');
+    setTimeout(()=>{
+      ov.classList.add('hidden');
+      if (typeof opt.onDone === 'function') opt.onDone();
+    }, 250);
+  }, 2000);
+}
+
+/* ====== C. STATE：同步 server 的新行、偵測新局並清空 + 偵測新棄牌 → 強化先快閃後播片 ====== */
+socket.on('STATE', (s)=>{
+  const prevTurnIndex  = (state && typeof state.turnIndex === 'number') ? state.turnIndex : null;
+  const prevDiscardLen = Array.isArray(state?.discard) ? state.discard.length : 0;
+
+  state = s;
+
+  
+// ★ 寶箱為 0 → 引擎會附帶 state.final
+if (state && state.final) {
+  try {
+    sessionStorage.setItem('op_room', me.roomId || '');
+    sessionStorage.setItem('op_final', JSON.stringify(state.final)); // ★ 存整份資料
+  } catch(e) { console.warn('sessionStorage failed', e); }
+
+        // ✅ 改用 URL 物件，帶上本人的 playerId
+      const url = new URL('result.html', location.origin);
+      url.searchParams.set('room', me.roomId || '');
+      if (typeof me.playerId === 'number') url.searchParams.set('pid', String(me.playerId));
+      location.href = url.toString();
+
+  return;
+}
+
+// 1) 新局偵測：roundNo 變了 → 清空 feed、重置指標
+  if (_seenRound !== state.roundNo) {
+    _seenRound   = state.roundNo;
+    _seenSrvLen  = 0;
+    feed = []; // 清空對局日誌
+  }
+
+  // 2) 把這次 STATE 裡「server 新增的行」接到 feed 後面
+  const srvLog = state.log || [];
+  if (_seenSrvLen < srvLog.length) {
+    for (let i = _seenSrvLen; i < srvLog.length; i++) {
+      const pretty = stripDuelPoints(formatLogWithNames(srvLog[i]));
+      if (feed[feed.length - 1] !== pretty) feed.push(pretty);
+    }
+    _seenSrvLen = srvLog.length;
+  }
+
+  // 3) 偵測新棄牌
+  const newDiscardLen = Array.isArray(state.discard) ? state.discard.length : 0;
+  if (newDiscardLen > prevDiscardLen) {
+    const last = state.discard[newDiscardLen - 1];
+    const isBack = last && typeof last === 'object' && last.back === true;
+    if (!isBack && typeof last === 'number') {
+      if (isEnhancedNow(last)) {
+        
+if (_enhSignal && _enhSignal.cardId === last) {
+  _flashBusy = true;
+  showPlayedFlash(last, prevTurnIndex, {
+    onDone: ()=>{
+      if (typeof playEnhFxFor === 'function') {
+        playEnhFxFor(last);
+      } else if (typeof playEnhFx === 'function') {
+        playEnhFx();
+      }
+      _flashBusy = false;
+      _enhSignal = null;
+    }
+  });
+} else {
+  // 非打出卡（例如索隆逼棄、覆蓋頂牌）或沒有 enh_fx 訊號 → 僅快閃卡面，不播影片
+  showPlayedFlash(last, prevTurnIndex);
+}
+} else {
+        showPlayedFlash(last, prevTurnIndex);
+      }
+    }
+  }
+
+  // ★ 新增：收到新狀態後校正背景（若選的場地已不在本局場地清單就自動關閉）
+  reconcileVenueBackground(s.venues);
+
+  render();
+});
+
+/* ====== B. EMIT：私訊/特效也進 feed（含 enh_fx 抑制/延後） ====== */
+function playDuel({ leftId, rightId, leftAvatar, rightAvatar, winnerId }){
+  const fx = document.getElementById('duelFx');
+  const arena = fx.querySelector('.arena');
+  const L = fx.querySelector('.slot.left');
+  const R = fx.querySelector('.slot.right');
+
+  L.querySelector('.ava').src = AVA(leftAvatar  ?? state?.players?.[leftId ]?.client?.avatar ?? state?.players?.[leftId ]?.avatar ?? 1);
+  R.querySelector('.ava').src = AVA(rightAvatar ?? state?.players?.[rightId]?.client?.avatar ?? state?.players?.[rightId]?.avatar ?? 1);
+  L.querySelector('.pid').textContent = pname(leftId ?? 0);
+  R.querySelector('.pid').textContent = pname(rightId ?? 1);
+
+  L.classList.remove('burning'); R.classList.remove('burning');
+  arena.classList.remove('spread','collide');
+  fx.classList.add('show');
+
+  setTimeout(()=> arena.classList.add('spread'), 50);
+  setTimeout(()=>{
+    arena.classList.add('collide');
+    const loserIsLeft = (winnerId === rightId);
+    (loserIsLeft ? L : R).classList.add('burning');
+  }, 850);
+  setTimeout(()=>{
+    fx.classList.remove('show');
+    arena.classList.remove('spread','collide');
+    L.classList.remove('burning'); R.classList.remove('burning');
+  }, 1850);
+}
+
+socket.on('EMIT', (e)=>{
+  
+
+if (e.type === 'silent_discard' && Array.isArray(e.cards)) {
+  _silentDiscards.push(...e.cards);
+  return;
+}
+// 記錄強化影片觸發信號（只對「有人打出的那張」）
+if (e.type === 'enh_fx' && typeof e.cardId === 'number') {
+  _enhSignal = { cardId: e.cardId, at: Date.now() };
+  return;
+}
+if (!e) return;
+
+  // 全體強化影片：伺服器廣播 e.cardId → 若正在快閃且同牌，改由快閃 onDone 播；否則立即播
+  // 一律忽略，在 STATE → showPlayedFlash 的 onDone 播
+  if (e.type === 'enh_fx') {
+    return;
+  }
+
+  // coin_fx：伺服器只丟給「該按的人」
+  if (e.type === 'coin_fx') {
+    playCoinFx();
+    return;
+  }
+
+  // 決鬥動畫
+  if (e.type === 'duel') {
+    playDuel({ leftId: e.leftId, rightId: e.rightId, winnerId: e.winnerId });
+  }
+
+  const line = msgToLogLine(e);
+  if (line) {
+    const pretty = stripDuelPoints(formatLogWithNames(line));
+    if (feed[feed.length - 1] !== pretty) feed.push(pretty);
+    render();
+  }
+});
+
+
+// ====== LAW & LUFFY UI helpers and socket events (added) ======
+const $ = (sel)=>document.querySelector(sel);
+
+// Local UI state for law swap
+let _lawTargetId   = null;
+let _lawTargetName = '';
+let _lawTargetCard = null;
+
+// Project card image resolver
+function cardImageURL(cardId){
+  return (typeof CARD_IMG === 'function')
+    ? CARD_IMG(cardId)
+    : (typeof CARD === 'function' ? CARD(cardId) : `images/cards/${cardId}.png`);
+}
+
+// Open/Close modals
+function openLawSwap(targetId, cardId){
+  _lawTargetId   = targetId;
+  _lawTargetCard = cardId;
+
+  const nameEl = $('#lawTargetName');
+  if (nameEl){
+    // Prefer state.players nickname if available
+    if (Array.isArray(state?.players) && state.players[targetId]) {
+      const nm = state.players[targetId].client?.displayName || state.players[targetId].displayName;
+      nameEl.textContent = nm ? `P${targetId+1} ${nm}` : `P${targetId+1}`;
+    } else {
+      nameEl.textContent = `P${(targetId+1)}`;
+    }
+  }
+
+  const img = $('#lawTargetImg');
+  if (img) img.src = cardImageURL(cardId);
+
+  $('#lawSwapModal')?.classList.remove('hidden');
+}
+function closeLawSwap(){
+  $('#lawSwapModal')?.classList.add('hidden');
+  _lawTargetId = null; _lawTargetCard = null;
+}
+
+function openLuffyBoost(){
+  $('#luffyBoostModal')?.classList.remove('hidden');
+}
+function closeLuffyBoost(){
+  $('#luffyBoostModal')?.classList.add('hidden');
+}
+
+// Bind buttons
+$('#lawSwapCancel')?.addEventListener('click', ()=>{
+  closeLawSwap();
+  // cancel → PICK_CANCEL
+  socket.emit('ACTION', {
+    roomId: me.roomId, playerId: me.playerId, secret: me.secret,
+    type: 'PICK_CANCEL'
+  });
+});
+$('#lawSwapOk')?.addEventListener('click', ()=>{
+  const target = _lawTargetId;
+  closeLawSwap();
+  // confirm swap → PICK_TARGET with swap:true
+  socket.emit('ACTION', {
+    roomId: me.roomId, playerId: me.playerId, secret: me.secret,
+    type: 'PICK_TARGET',
+    payload: { target, swap: true }
+  });
+});
+$('#luffyBoostGo')?.addEventListener('click', ()=>{
+  closeLuffyBoost();
+  // commit boost
+  socket.emit('ACTION', {
+    roomId: me.roomId, playerId: me.playerId, secret: me.secret,
+    type: 'LUFFY_BOOST_COMMIT',
+    payload: { go: true }
+  });
+});
+
+// Extra EMIT hooks
+socket.on('EMIT', (e)=>{
+  if (!e) return;
+  // Law (boosted) view result → prompt swap (only caster receives)
+  if (e.type === 'law_view' && e.cardId != null && e.targetId != null){
+    openLawSwap(e.targetId, e.cardId);
+    return;
+  }
+  // Luffy (boost) prompt
+  if (e.type === 'luffy_boost_prompt'){
+    openLuffyBoost();
+    return;
+  }
+});
+
+
+/* ========= 渲染 ========= */
+function render(){
+  if(!state) return;
+
+  const left = state.deck?.length ?? 0;
+el.deckCnt.textContent = left;
+
+ // 少於 14 → 讓牌堆按鈕紅光微閃；反之移除
+ if (el.deckBtn) {
+   if (left < 14) el.deckBtn.classList.add('hot');
+   else           el.deckBtn.classList.remove('hot');
+ }
+
+// 想要數字變動時有小彈跳效果，可加上這行（可選）
+onceFx?.(el.deckCnt, 'fx-pulse');
+
+  el.turnLbl.textContent = (state.turnIndex!=null) ? `P${state.turnIndex+1}` : '—';
+  el.stepLbl.textContent = state.turnStep || '—';
+
+  // 寶箱金幣顯示（優先 chestCoins）
+  let chest = state.chestCoins;
+  if (typeof chest !== 'number') {
+    const cands = [ state.chestLeft, state.chest, state.treasure, state.bank, state.pot, state.meta?.chest, state.meta?.treasure, state.meta?.bank, state.meta?.pot ];
+    for (const v of cands){
+      if (typeof v === 'number') { chest = v; break; }
+      if (v && typeof v.coins  === 'number') { chest = v.coins;  break; }
+      if (v && typeof v.amount === 'number') { chest = v.amount; break; }
+      if (v && typeof v.value  === 'number') { chest = v.value;  break; }
+    }
+    if (typeof chest !== 'number') chest = 0;
+  }
+  if (el.chestLbl) el.chestLbl.textContent = chest;
+  if (_prev.chest !== null && _prev.chest !== chest) onceFx(el.chestLbl, 'fx-pulse');
+  _prev.chest = chest;
+
+  // 場地（改：外層綁 onclick → onVenueClick('場地名')）
+  el.venues.innerHTML='';
+  (state.venues||[]).forEach(v=>{
+    const d=document.createElement('div');
+    d.className='venue-card rounded overflow-hidden border border-[#2a2f35] cursor-pointer';
+    d.setAttribute('data-venue', v.name);
+    d.setAttribute('onclick', `onVenueClick('${v.name}')`);
+    const im=document.createElement('img');
+    im.src=VEN(v.name); im.alt=v.name; im.dataset.name = v.name;
+    d.appendChild(im);
+    el.venues.appendChild(d);
+  });
+
+  // 棄牌（秘密棄牌＝卡背）
+  el.discard.innerHTML='';
+  (state.discard||[]).forEach(item=>{
+    const im=document.createElement('img');
+    im.className='thumb';
+    const isBack = (item && typeof item === 'object' && item.back === true);
+    im.src = isBack ? 'images/cards/back.png' : CARD(item);
+    el.discard.appendChild(im);
+  });
+  const nowLen = (state.discard || []).length;
+  if (nowLen > _prev.discardLen) {
+    const imgs = el.discard.querySelectorAll('img');
+    const last = imgs[imgs.length - 1];
+    onceFx(last, 'fx-flip');
+  }
+  _prev.discardLen = nowLen;
+
+  // 玩家
+  el.players.innerHTML='';
+  (state.players||[]).forEach((p)=>{
+    const isTurn = state.turnIndex===p.id; const isMe = me.playerId===p.id;
+    const box = document.createElement('div');
+    box.className = `p-3 rounded-xl border ${isTurn?'border-amber-400':'border-[#2a2f35]'} bg-[#12161b] ${isTurn?' current':''}`;
+    box.innerHTML = `
+      <div class="flex items-center gap-3">
+        <img class="w-12 h-12 rounded-full border border-[#2a2f35]" src="${AVA(p?.client?.avatar ?? p?.avatar)}"/>
+        <div class="grow">
+          <div class="flex items-center justify-between">
+            <div class="font-semibold">
+              ${pnameBy(p)}
+              ${!p.alive ? '<span class="ml-1 text-neutral-400">（出局）</span>' : ''}
+            </div>
+            <div class="text-xs text-neutral-400">金幣 <span class="text-amber-300 font-bold">${p.gold||0}</span></div>
+          </div>
+          <div class="flex gap-1 mt-1 text-[11px] text-neutral-300">
+            ${p.protected?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">🛡 保護</span>':''}
+            ${p.dodging?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">🌀 閃避</span>':''}
+            ${p.frozen?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">❄ 凍結</span>':''}
+            ${p.skipNext?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">⚡ 麻痺</span>':''}
+            ${p.iceArmed?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">🧊 檢查</span>':''}
+            ${(!p.protected&&!p.dodging&&!p.frozen&&!p.skipNext&&!p.iceArmed)?'<span class="opacity-50">—</span>':''}
+          </div>
+          ${isMe? `<div class="mt-2 flex items-center gap-1 text-[11px] text-neutral-400">
+             ${p.hand!=null?`<img class="thumb-sm" src="${isEnhancedNow(p.hand)? CARD_ENH(p.hand) : CARD(p.hand)}"/>`:''}
+             ${p.tempDraw!=null?`<span>/</span><img class="thumb-sm" src="${isEnhancedNow(p.tempDraw)? CARD_ENH(p.tempDraw) : CARD(p.tempDraw)}"/>`:''}
+          </div>`:''}
+        </div>
+      </div>`;
+    el.players.appendChild(box);
+
+    const wasAlive = _prev.aliveMap[p.id];
+    if (typeof wasAlive === 'boolean' && wasAlive && !p.alive) onceFx(box, 'fx-shake');
+    _prev.aliveMap[p.id] = !!p.alive;
+  });
+
+  // 自己的出牌區
+  const my = state.players?.[me.playerId];
+  const canDraw = state.turnStep==='draw' && state.turnIndex===me.playerId;
+  el.deckBtn.disabled = !canDraw; el.deckBtn.style.opacity = canDraw?1:.6;
+
+  const canChoose = state.turnStep==='choose' && state.turnIndex===me.playerId && my;
+  el.playZone.classList.toggle('hidden', !canChoose);
+  if (canChoose) {
+    if (_lastRoundNo !== state.roundNo) { _enhPlayed.clear(); _lastRoundNo = state.roundNo; }
+
+    if (my.hand != null) {
+      const key = `${state.roundNo}:${me.playerId}:hand:${my.hand}`;
+      const enhanced = isEnhancedNow(my.hand);
+      el.imgHand.src = (enhanced && _enhPlayed.has(key)) ? CARD_ENH(my.hand) : CARD(my.hand);
+      if (enhanced && !_enhPlayed.has(key)) {
+        const vn = CARD_VENUE[my.hand];
+        setTimeout(()=> playEnhanceFx(vn, el.imgHand, my.hand, key), 120);
+      }
+    } else {
+      el.imgHand.src = '';
+    }
+
+    if (my.tempDraw != null) {
+      const key2 = `${state.roundNo}:${me.playerId}:drawn:${my.tempDraw}`;
+      const enhanced2 = isEnhancedNow(my.tempDraw);
+      el.imgDrawn.src = (enhanced2 && _enhPlayed.has(key2)) ? CARD_ENH(my.tempDraw) : CARD(my.tempDraw);
+      if (enhanced2 && !_enhPlayed.has(key2)) {
+        const vn2 = CARD_VENUE[my.tempDraw];
+        setTimeout(()=> playEnhanceFx(vn2, el.imgDrawn, my.tempDraw, key2), 180);
+      }
+    } else {
+      el.imgDrawn.src = '';
+    }
+  }
+
+  /* ====== D. render()：用 feed 畫畫面 ====== */
+  el.log.innerHTML = '';
+  feed.forEach(line=>{
+    const li = document.createElement('li');
+    li.textContent = line;
+    el.log.appendChild(li);
+  });
+
+  // 下一局按鈕（依 viewerCanNext）
+  el.nextRound.classList.toggle('hidden', !(state.allowNextRound && state.viewerCanNext === true));
+
+  renderPending();
+}
+
+/* ===== 兼容：若外部還調用 addMsg()，沿用 feed ===== */
+function addMsg(e){
+  if (!e || e.type === 'peek' || e.type === 'toast') return;
+  const line = msgToLogLine(e);
+  if (!line) return;
+  pushLogUnique(line);
+  render();
+}
+
+/* =======================
+   PENDING（含騙人布修正 & 魯夫/羅/基拉/大媽流程）
+   ======================= */
+function renderPending(){
+  const srvP = state?.pending;
+  if (!srvP){ localPending = null; hideModal(); return; }
+
+  let actorId = state.turnIndex;
+  if ((srvP.action === 'bigmom-pay' || srvP.action === 'queen') && typeof srvP.target === 'number') {
+    actorId = srvP.target;
+  }
+  if (actorId !== me.playerId){ localPending = null; hideModal(); return; }
+
+  // USOPP
+  if (srvP.action === 'usopp') {
+    if (srvP.extra?.target != null) {
+      localPending = null;
+      return showDigits('選擇尾數（不能選 1）', (d)=>{
+        sendAction('PICK_DIGIT',{ digit:d });
+        localPending = null;
+      }, { ban:[1] });
+    }
+    if (localPending && localPending.action==='usopp' && localPending.stage==='digit' && Number.isInteger(localPending.target)) {
+      return showDigits('選擇尾數（不能選 1）', (d)=>{
+        sendAction('PICK_DIGIT',{ digit:d });
+        localPending = null;
+      }, { ban:[1] });
+    }
+    return showTarget('選擇要猜的對象', (i)=>{
+      sendAction('PICK_TARGET',{ target:i });
+      localPending = { action:'usopp', stage:'digit', target:i, at:Date.now() };
+      showDigits('選擇尾數（不能選 1）', (d)=>{
+        sendAction('PICK_DIGIT',{ digit:d });
+        localPending = null;
+      }, { ban:[1] });
+    }, { allowSelf:false });
+  }
+
+  // 魯夫
+  if (srvP.action === 'luffy') {
+    const firstDone = !!(srvP.extra && srvP.extra.firstDone);
+    if (!firstDone) {
+      return showTarget('選擇第一位對象', (i)=>{ sendAction('PICK_TARGET', { target:i }); }, { allowSelf:false });
+    }
+    return showTargetWithCancel('再選一位（或取消略過）', (i)=>{
+      sendAction('LUFFY_SECOND', { target:i });
+    }, ()=>{ sendAction('LUFFY_SECOND', { target:-1 }); }, { allowSelf:false });
+  }
+
+ // 羅（Law）
+if (srvP.action === 'law') {
+  const boosted = !!(srvP.extra && srvP.extra.boost);
+  if (boosted) {
+    // 第二階段：已選好對象 → 顯示對方手牌 + 是否交換
+    if (localPending && localPending.action === 'law' && localPending.stage === 'confirm' && Number.isInteger(localPending.target)) {
+      const tid = localPending.target;
+      const tp = state.players?.[tid];
+      const tcard = (tp && typeof tp.hand === 'number') ? tp.hand : null;
+      const img = tcard != null ? (isEnhancedNow(tcard) ? CARD_ENH(tcard) : CARD(tcard)) : 'images/cards/back.png';
+      const html = `
+        <div class="text-lg font-semibold mb-3">你查看了 ${pname(tid)} 的手牌</div>
+        <div class="flex justify-center mb-4">
+          <img src="${img}" alt="hand" class="w-[min(40vw,260px)] rounded-lg border border-[#2a2f35] shadow-xl"/>
+        </div>
+        <div class="text-base mb-3">要與 ${pname(tid)} 交換手牌嗎？</div>
+        <div class="flex justify-end gap-2">
+          <button id="noBtn" class="px-3 py-1.5 rounded-lg border border-[#2a2f35]">不交換</button>
+          <button id="yesBtn" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black">交換</button>
+        </div>`;
+      showModal(html);
+      const yesBtn = el.modal.querySelector('#yesBtn');
+      const noBtn  = el.modal.querySelector('#noBtn');
+      yesBtn.onclick = ()=>{ sendAction('PICK_TARGET', { target: tid, swap: true }); localPending = null; hideModal(); };
+      noBtn.onclick  = ()=>{ sendAction('PICK_CANCEL'); localPending = null; hideModal(); };
+      return;
+    }
+
+    // 第一階段：選擇查看目標
+    return showTarget('選擇要查看/可選擇交換的對象', (i)=>{
+      sendAction('PICK_TARGET', { target: i });
+      localPending = { action:'law', stage:'confirm', target:i, at:Date.now() };
+      const tp = state.players?.[i];
+      const tcard = (tp && typeof tp.hand === 'number') ? tp.hand : null;
+      const img = tcard != null ? (isEnhancedNow(tcard) ? CARD_ENH(tcard) : CARD(tcard)) : 'images/cards/back.png';
+      const html = `
+        <div class="text-lg font-semibold mb-3">你查看了 ${pname(i)} 的手牌</div>
+        <div class="flex justify-center mb-4">
+          <img src="${img}" alt="hand" class="w-[min(40vw,260px)] rounded-lg border border-[#2a2f35] shadow-xl"/>
+        </div>
+        <div class="text-base mb-3">要與 ${pname(i)} 交換手牌嗎？</div>
+        <div class="flex justify-end gap-2">
+          <button id="noBtn" class="px-3 py-1.5 rounded-lg border border-[#2a2f35]">不交換</button>
+          <button id="yesBtn" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black">交換</button>
+        </div>`;
+      showModal(html);
+      const yesBtn = el.modal.querySelector('#yesBtn');
+      const noBtn  = el.modal.querySelector('#noBtn');
+      yesBtn.onclick = ()=>{ sendAction('PICK_TARGET', { target: i, swap: true }); localPending = null; hideModal(); };
+      noBtn.onclick  = ()=>{ sendAction('PICK_CANCEL'); localPending = null; hideModal(); };
+    }, { allowSelf:false });
+  }
+
+  // 非強化羅（普通交換）
+  return showTarget('選擇交換對象', (i)=> sendAction('PICK_TARGET', { target:i }), { allowSelf:false });
+}
+
+
+  // 基拉（Killer）
+  if (srvP.action === 'killer') {
+    const boosted = !!(srvP.extra && srvP.extra.boost);
+
+    if (boosted) {
+      if (
+        localPending &&
+        localPending.action === 'killer' &&
+        localPending.stage === 'confirm' &&
+        Number.isInteger(localPending.target)
+      ) {
+        const tid = localPending.target;
+        const tp = state.players?.[tid];
+        const stillDef = !!(tp && (tp.protected || tp.dodging));
+
+        return showYesNo(
+          stillDef
+            ? `要與 ${pname(tid)} 決鬥嗎？（他原本有防禦，已嘗試解除）`
+            : `要與 ${pname(tid)} 決鬥嗎？（目前看不到保護/閃避）`,
+          '決鬥',
+          '不決鬥',
+          ()=>{
+            sendAction('PICK_TARGET', { target: tid, duel: true });
+            localPending = null;
+            hideModal();
+          },
+          ()=>{
+            sendAction('PICK_CANCEL');
+            localPending = null;
+            hideModal();
+          }
+        );
+      }
+
+      return showTarget(
+        '選擇對象（將先解除其保護/閃避，然後可選擇是否決鬥）',
+        (i)=>{
+          sendAction('PICK_TARGET', { target: i });
+          localPending = { action:'killer', stage:'confirm', target:i, at:Date.now() };
+
+          const tp = state.players?.[i];
+          const stillDef = !!(tp && (tp.protected || tp.dodging));
+
+          showYesNo(
+            stillDef
+              ? `要與 ${pname(i)} 決鬥嗎？（他原本有防禦，已嘗試解除）`
+              : `要與 ${pname(i)} 決鬥嗎？（目前看不到保護/閃避）`,
+            '決鬥',
+            '不決鬥',
+            ()=>{
+              sendAction('PICK_TARGET', { target: i, duel: true });
+              localPending = null;
+              hideModal();
+            },
+            ()=>{
+              sendAction('PICK_CANCEL');
+              localPending = null;
+              hideModal();
+            }
+          );
+        },
+        { allowSelf:false }
+      );
+    }
+
+    return showTarget(
+      '選擇對象（將解除其保護/閃避）',
+      (i)=>{
+        sendAction('PICK_TARGET', { target:i });
+        hideModal();
+      },
+      { allowSelf:false }
+    );
+  }
+
+  // 大媽（強化）— 先由出牌者選目標
+  if (srvP.action === 'bigmom') {
+    return showTarget('選擇一位玩家（交 1 金幣或淘汰由對方決定）', (i)=>{ sendAction('PICK_TARGET', { target: i }); }, { allowSelf: false });
+  }
+
+  // 大媽（強化）— 目標的最終選擇
+  if (srvP.action === 'bigmom-pay') {
+    const target = srvP.target;
+    const isMe = (me.playerId === target);
+    if (!isMe) { hideModal(); return; }
+    const my = state.players?.[me.playerId];
+    const canPay = (my && (my.gold || 0) > 0);
+
+    let html = `<div class="text-lg font-semibold mb-2">大媽（萬國）：選擇交出 1 金幣，或直接淘汰</div>
+      <div class="flex justify-end gap-2">
+        <button id="dieBtn" class="px-3 py-1.5 rounded-lg border border-[#2a2f35]">淘汰</button>
+        <button id="payBtn" class="px-3 py-1.5 rounded-lg border ${canPay?'border-amber-400 bg-amber-300 text-black':'border-[#22272d] opacity-40 cursor-not-allowed'}" ${canPay?'':'disabled'}>交出 1 金幣</button>
+      </div>`;
+    showModal(html);
+    const payBtn = el.modal.querySelector('#payBtn');
+    const dieBtn = el.modal.querySelector('#dieBtn');
+    if (payBtn) payBtn.onclick = ()=>{ if (!canPay) return; sendAction('BIGMOM_CHOICE', { choice:'pay' }); hideModal(); };
+    if (dieBtn) dieBtn.onclick = ()=>{ sendAction('BIGMOM_CHOICE', { choice:'die' }); hideModal(); };
+    return;
+  }
+
+  if(['robin','sanji','zoro','nami','kaido','aokiji','roger'].includes(srvP.action)){
+    return showTarget('選擇對象', (i)=> sendAction('PICK_TARGET',{target:i}), {allowSelf:false});
+  }
+
+  if(srvP.action==='queen'){
+    return showConfirm(`替 ${pname(srvP.target)} 擲硬幣`, ()=> sendAction('QUEEN_COIN'));
+  }
+
+  if(srvP.action==='bigmom-coin'){
+    return showConfirm('大媽・擲硬幣', ()=> sendAction('BIGMOM_COIN'));
+  }
+
+  if(srvP.action==='kata-order'){
+    const labels=(srvP.cards||[]).map(id=>({id,label:`卡 ${id}`}));
+    return showOrder('卡塔庫栗：排序頂牌', labels, (arr)=> sendAction('ORDER_COMMIT',{order:arr.map(x=>x.id)}));
+  }
+
+  if(srvP.action==='teach-multipick'){
+    const labels=(srvP.cards||[]).map((id,i)=>({id,label:`(頂${i+1}) ${id}`}));
+    return showMulti('黑鬍子：覆蓋哪些？', labels, (picked)=> sendAction('MULTIPICK_COMMIT',{pickedIndices:[...picked]}));
+  }
+
+  hideModal();
+}
+
+/* ====== Modal helpers ====== */
+function hideModal(){ el.modal.classList.add('hidden'); el.modal.querySelector('.card').innerHTML=''; }
+function showModal(inner){ el.modal.querySelector('.card').innerHTML = inner; el.modal.classList.remove('hidden'); }
+
+/* ====== 多目標（保留原樣） ====== */
+function showMultiTargets(title, opt, onDone){
+  const { allowSelf=false, max=2 } = opt||{};
+  let html = `<div class="text-lg font-semibold mb-2">${title}</div><div class="grid grid-cols-3 gap-2" id="mtGrid">`;
+  (state.players||[]).forEach((p,i)=>{
+    const enabled = p.alive && (allowSelf || i!==me.playerId);
+    html+=`<button ${enabled?'':'disabled'} data-i="${i}" class="px-3 py-2 rounded-lg border ${enabled?'border-[#2a2f35] hover:bg-[#192028]':'border-[#22272d] opacity-40 cursor-not-allowed'}">P${i+1} ${p.protected?'🛡':''} ${p.dodging?'🌀':''} ${!p.alive?'✖':''}</button>`;
+  });
+  html+=`</div>
+    <div class="flex justify-end gap-2 mt-3">
+      <button class="px-3 py-1.5 rounded-lg border border-[#2a2f35]" onclick="document.getElementById('modal').classList.add('hidden')">取消</button>
+      <button id="mtDone" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black" disabled>完成</button>
+    </div>`;
+  showModal(html);
+
+  const picked = new Set();
+  const grid = el.modal.querySelector('#mtGrid');
+  const done = el.modal.querySelector('#mtDone');
+
+  grid.querySelectorAll('button[data-i]').forEach(b=>{
+    b.onclick = ()=>{
+      const i = Number(b.dataset.i);
+      if (picked.has(i)) { picked.delete(i); b.classList.remove('border-amber-400'); }
+      else { if (picked.size >= max) return; picked.add(i); b.classList.add('border-amber-400'); }
+      done.disabled = (picked.size < 1);
+    };
+  });
+
+  done.onclick = ()=>{ onDone([...picked]); hideModal(); };
+}
+
+/* ====== 選人面板（顯示 P? 名字） ====== */
+function showTarget(title, onPick, opt={}){ 
+  const allowSelf=!!opt.allowSelf;
+  let html=`<div class="text-lg font-semibold mb-2">${title}</div><div class="grid grid-cols-3 gap-2">`;
+  (state.players||[]).forEach((p,i)=>{
+    const en=p.alive && (allowSelf || i!==me.playerId);
+    html+=`<button ${en?'':'disabled'} data-i="${i}" class="px-3 py-2 rounded-lg border ${en?'border-[#2a2f35] hover:bg-[#192028]':'border-[#22272d] opacity-40 cursor-not-allowed'}">${pname(i)} ${p.protected?'🛡':''} ${p.dodging?'🌀':''} ${!p.alive?'✖':''}</button>`;
+  });
+  html+=`</div>`;
+  showModal(html);
+  let locked = false;
+  el.modal.querySelectorAll('button[data-i]').forEach(b=> b.onclick = ()=>{
+    if (locked) return; locked = true; b.disabled = true; onPick(Number(b.dataset.i));
+  });
+}
+
+/* ====== 可取消選人面板 ====== */
+function showTargetWithCancel(title, onPick, onCancel, opt={}){
+  const allowSelf=!!opt.allowSelf;
+  let html=`<div class="text-lg font-semibold mb-2">${title}</div><div class="grid grid-cols-3 gap-2">`;
+  (state.players||[]).forEach((p,i)=>{
+    const en=p.alive && (allowSelf || i!==me.playerId);
+    html+=`<button ${en?'':'disabled'} data-i="${i}" class="px-3 py-2 rounded-lg border ${en?'border-[#2a2f35] hover:bg-[#192028]':'border-[#22272d] opacity-40 cursor-not-allowed'}">${pname(i)} ${p.protected?'🛡':''} ${p.dodging?'🌀':''} ${!p.alive?'✖':''}</button>`;
+  });
+  html+=`</div>
+    <div class="flex justify-end gap-2 mt-3">
+      <button id="btnCancel" class="px-3 py-1.5 rounded-lg border border-[#2a2f35]">取消</button>
+    </div>`;
+  showModal(html);
+  let locked = false;
+  el.modal.querySelectorAll('button[data-i]').forEach(b=> b.onclick = ()=>{
+    if (locked) return; locked = true; b.disabled = true; onPick(Number(b.dataset.i));
+  });
+  el.modal.querySelector('#btnCancel').onclick = ()=>{ onCancel && onCancel(); hideModal(); };
+}
+
+function showDigits(title, onPick, opt={}){
+  const ban=new Set(opt.ban||[]);
+  let html=`<div class="text-lg font-semibold mb-2">${title}</div><div class="grid grid-cols-10 gap-1">`;
+  for(let n=0;n<10;n++){
+    const dis=ban.has(n);
+    html+=`<button ${dis?'disabled':''} data-d="${n}" class="px-2 py-2 rounded-lg border ${dis?'border-[#22272d] opacity-40 cursor-not-allowed':'border-[#2a2f35] hover:bg-[#192028]'}">${n}</button>`;
+  }
+  html+=`</div>`;
+  showModal(html);
+  let locked = false;
+  el.modal.querySelectorAll('button[data-d]').forEach(b=> b.onclick = ()=>{
+    if (locked) return; locked = true; b.disabled = true; onPick(Number(b.dataset.d));
+  });
+}
+
+function showConfirm(title, onOk){
+  let html=`<div class="text-lg font-semibold mb-2">${title}</div>`
+    +`<div class="flex justify-end gap-2"><button class="px-3 py-1.5 rounded-lg border border-[#2a2f35]" onclick="document.getElementById('modal').classList.add('hidden')">取消</button>`
+    +`<button id="okBtn" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black">確定</button></div>`;
+  showModal(html);
+  el.modal.querySelector('#okBtn').onclick = ()=>{ onOk(); hideModal(); };
+}
+
+function showYesNo(title, yesText, noText, onYes, onNo){
+  let html =
+    `<div class="text-lg font-semibold mb-2">${title}</div>`+
+    `<div class="flex justify-end gap-2">`+
+      `<button id="noBtn" class="px-3 py-1.5 rounded-lg border border-[#2a2f35]">${noText}</button>`+
+      `<button id="yesBtn" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black">${yesText}</button>`+
+    `</div>`;
+  showModal(html);
+
+  const yesBtn = el.modal.querySelector('#yesBtn');
+  const noBtn  = el.modal.querySelector('#noBtn');
+
+  if (yesBtn) yesBtn.onclick = ()=>{ if (onYes) onYes(); };
+  if (noBtn)  noBtn.onclick  = ()=>{ if (onNo) onNo(); };
+}
+
+function showOrder(title, cards, onCommit){
+  let html=`<div class="text-lg font-semibold mb-2">${title}</div><div class="space-y-2" id="list">`;
+  cards.forEach((c,i)=>{
+    html+=`<div class="flex items-center gap-2"><div class="px-2 py-1 rounded border border-[#2a2f35] grow">${c.label}</div>`
+      +`<button class="px-2 py-1 rounded-lg border border-[#2a2f35]" data-up="${i}">上移</button>`
+      +`<button class="px-2 py-1 rounded-lg border border-[#2a2f35]" data-down="${i}">下移</button></div>`;
+  });
+  html+=`</div><div class="flex justify-end gap-2 mt-3"><button class="px-3 py-1.5 rounded-lg border border-[#2a2f35]" onclick="document.getElementById('modal').classList.add('hidden')">取消</button>`
+    +`<button id="okOrder" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black">確定排序</button></div>`;
+  showModal(html);
+  const list=cards.slice();
+  el.modal.querySelectorAll('[data-up]').forEach(btn=> btn.onclick=()=>{
+    const i=Number(btn.dataset.up); if(i===0) return; [list[i-1],list[i]]=[list[i],list[i-1]]; showOrder(title, list, onCommit);
+  });
+  el.modal.querySelectorAll('[data-down]').forEach(btn=> btn.onclick=()=>{
+    const i=Number(btn.dataset.down); if(i===list.length-1) return; [list[i+1],list[i]]=[list[i],list[i+1]]; showOrder(title, list, onCommit);
+  });
+  el.modal.querySelector('#okOrder').onclick=()=>{ onCommit(list); hideModal(); };
+}
+
+function showMulti(title, cards, onCommit){
+  let html=`<div class="text-lg font-semibold mb-2">${title}</div><div class="space-y-2">`;
+  cards.forEach((c,i)=>{
+    html+=`<label class="flex items-center gap-2 p-2 rounded-lg border border-[#2a2f35]"><input type="checkbox" data-i="${i}"/> <span class="px-2 py-1 rounded border border-[#2a2f35] grow">${c.label}</span></label>`;
+  });
+  html+=`</div><div class="flex justify-end gap-2 mt-3"><button class="px-3 py-1.5 rounded-lg border border-[#2a2f35]" onclick="document.getElementById('modal').classList.add('hidden')">取消</button>`
+    +`<button id="okM" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black">覆蓋所選</button></div>`;
+  showModal(html);
+  el.modal.querySelector('#okM').onclick=()=>{
+    const picked=new Set();
+    el.modal.querySelectorAll('input[type="checkbox"][data-i]').forEach(ch=>{
+      if(ch.checked) picked.add(Number(ch.dataset.i));
+    });
+    onCommit(picked); hideModal();
+  };
+}
+
+// 綁定
+el.deckBtn.onclick   = ()=> sendAction('DRAW');
+el.playHand.onclick  = ()=> sendAction('PLAY_CARD',{which:'hand'});
+el.playDrawn.onclick = ()=> sendAction('PLAY_CARD',{which:'drawn'});
+el.nextRound.onclick = ()=> sendAction('NEXT_ROUND');
+</script>
+</body>
+</html>
