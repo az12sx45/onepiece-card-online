@@ -1,7 +1,5 @@
 {
   "name": "onepiece-card-online",
-  "version": "1.0.0",
-  "description": "One Piece card game online",
   "type": "commonjs",
   "scripts": {
     "start": "node server/index.js"
@@ -10,7 +8,5 @@
     "express": "^4.19.2",
     "socket.io": "^4.7.5"
   },
-  "engines": {
-    "node": ">=18"
-  }
+  "engines": { "node": "20.x" }
 }
