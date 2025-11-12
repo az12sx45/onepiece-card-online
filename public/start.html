@@ -131,23 +131,36 @@
       // 輪詢保險：就算 storage 事件沒觸發也會跳
       useEffect(()=>{ const tm=setInterval(()=>{ const r=getRoom(roomId); if(r?.status==="started"){ onStart(r); } }, 1000); return ()=> clearInterval(tm); }, [roomId]);
       // 監聽導航旗標（房主寫入），任何人讀到就跳
-      useEffect(()=>{ const tryNav = ()=>{
-  const val = localStorage.getItem(key);
-  if(!val) return;
-  // ✅ 一律用 Render 當後端；game.html 仍從目前前端網域載入
-  const RENDER_SERVER = 'https://onepiece-card-online.onrender.com';
-  const url = new URL('/game.html', location.origin);
-  url.searchParams.set('room', roomId);
-  url.searchParams.set('server', RENDER_SERVER);
+     // 監聽導航旗標（房主寫入），任何人讀到就跳
+useEffect(()=>{
+  const key = `op_rooms_nav_${roomId}`;
 
-  // （可選）如果你要沿用 URL 帶入名字/頭像，保留這兩行；若不想被覆蓋就刪掉：
-  if (profile?.playerName)   url.searchParams.set('name',   profile.playerName);
-  if (profile?.playerAvatar) url.searchParams.set('avatar', String(profile.playerAvatar));
+  const tryNav = ()=>{
+    const val = localStorage.getItem(key);
+    if(!val) return;
 
-  const r=getRoom(roomId);
-  url.searchParams.set('n', String(r?.players?.length || 4));
-  window.location.href = url.toString();
-};
+    // 固定後端走 Render；前端頁仍用目前網域載入 game.html
+    const RENDER_SERVER = 'https://onepiece-card-online.onrender.com';
+    const url = new URL('/game.html', location.origin);
+    url.searchParams.set('room', roomId);
+    url.searchParams.set('server', RENDER_SERVER);
+
+    // 若你想用 URL 帶名字/頭像，放開下面兩行；不想互相覆蓋就註解掉：
+    // if (profile?.playerName)   url.searchParams.set('name',   profile.playerName);
+    // if (profile?.playerAvatar) url.searchParams.set('avatar', String(profile.playerAvatar));
+
+    const r = getRoom(roomId);
+    url.searchParams.set('n', String(r?.players?.length || 4));
+
+    window.location.href = url.toString();
+  };
+
+  tryNav(); // 先試一次（房主已經寫過旗標時，直接跳）
+  const onStorage=(e)=>{ if(e.key===key) tryNav(); };
+  window.addEventListener('storage', onStorage);
+  return ()=> window.removeEventListener('storage', onStorage);
+}, [roomId, profile?.playerName, profile?.playerAvatar]);
+
 
 
       if(!room){ return (<div className="card w-[min(820px,96vw)] p-6"><div className="text-lg font-bold mb-2">房間不存在或已關閉</div><button className="btn" onClick={onLeave}>返回</button></div>); }
@@ -156,20 +169,24 @@
       function toggleReady(){ const r=getRoom(room.id); if(!r) return; const me=r.players.find(p=>p.pid===meId); if(!me) return; me.ready=!me.ready; me.ts=Date.now(); upsertRoom(r); setRoom(r); }
       function leaveRoom(){ const r=getRoom(room.id); if(!r){ onLeave(); return; } r.players = r.players.filter(p=>p.pid!==meId); if(r.players.length===0){ deleteRoom(r.id); onLeave(); return; } if(r.hostId===meId){ r.hostId = r.players[0].pid; } upsertRoom(r); onLeave(); }
       function startGame(){
-  if(!amHost || !canStart) return;
-  const r=getRoom(room.id); if(!r) return;
-  r.status="started"; upsertRoom(r); // 廣播
+  // 必須是房主且可開始
+  const r = getRoom(room.id); 
+  if (!amHost || !canStart || !r) return;
 
-  // ✅ 導航旗標：固定後端為 Render，game.html 用前端網域載入
+  r.status = "started";
+  upsertRoom(r); // 廣播
+
+  // 寫入導航旗標（所有分頁/裝置會一起跳到同一個 game.html）
   const flagKey = `op_rooms_nav_${r.id}`;
   const RENDER_SERVER = 'https://onepiece-card-online.onrender.com';
-  const nav = new URL('/game.html', location.origin); // 前端頁面在你現在的網域
+  const nav = new URL('/game.html', location.origin);
   nav.searchParams.set('room', r.id);
-  nav.searchParams.set('server', RENDER_SERVER);      // 後端固定指向 Render
+  nav.searchParams.set('server', RENDER_SERVER);
   localStorage.setItem(flagKey, nav.toString());
 
   onStart(r);
 }
+
 
       return (<div className="card w-[min(980px,96vw)] p-6">
         <div className="flex flex-wrap items-center justify-between gap-3"><div><div className="text-xs text-neutral-400">房號</div><div className="text-2xl font-extrabold tracking-widest">{room.id}</div></div><div className="flex gap-2"><button className="btn" onClick={copyId}>複製房號</button><button className="btn" onClick={leaveRoom}>離開房間</button>{amHost && (<button className={`btn-primary ${canStart? "":"opacity-50 cursor-not-allowed"}`} onClick={startGame} disabled={!canStart} title={canStart? "開始遊戲":"至少 2 人且全部準備才可開始"}>開始遊戲</button>)}</div></div>
@@ -185,17 +202,20 @@
         {stage==="profile" && <NameAvatar defaultName={profile?.playerName} onDone={(p,i)=>{ setProfile(p); setIntent(i||{}); setStage("choice"); }} />}
         {stage==="choice"  && profile && (<RoomChoice profile={profile} intent={intent} onEnter={enterRoom}/>)}
         {stage==="waiting" && roomInfo && profile && (<WaitingRoom roomId={roomInfo.id} meId={meId} profile={profile} host={roomInfo.host} onLeave={()=>{ setStage("profile"); }} onStart={(room)=>{
-          // 導向正式遊戲頁 game.html，攜帶 name/avatar/n
-          window.__OPAudio?.mute?.();
-          const serverURL = location.origin; // 若後端不同網域，改成固定網址
-          const url = new URL('/game.html', serverURL);
-          url.searchParams.set('room', room.id);
-          url.searchParams.set('server', serverURL);
-          if (profile?.playerName)  url.searchParams.set('name', profile.playerName);
-          if (profile?.playerAvatar)url.searchParams.set('avatar', String(profile.playerAvatar));
-          url.searchParams.set('n', String(room.players?.length || 4));
-          window.location.href = url.toString();
-        }} />)}
+  window.__OPAudio?.mute?.();
+
+  const RENDER_SERVER = 'https://onepiece-card-online.onrender.com';
+  const url = new URL('/game.html', location.origin);
+  url.searchParams.set('room', room.id);
+  url.searchParams.set('server', RENDER_SERVER);
+
+  // （同上）若需要用 URL 帶名字/頭像才打開，不然交給各裝置自己的 localStorage
+  // if (profile?.playerName)   url.searchParams.set('name', profile.playerName);
+  // if (profile?.playerAvatar) url.searchParams.set('avatar', String(profile.playerAvatar));
+
+  url.searchParams.set('n', String(room.players?.length || 4));
+  window.location.href = url.toString();
+}} />)}
       </div></div>); }
 
     ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
