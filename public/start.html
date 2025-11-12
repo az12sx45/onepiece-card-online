@@ -158,15 +158,17 @@
         {stage==="choice"  && profile && (<RoomChoice profile={profile} intent={intent} onEnter={enterRoom}/>)}
         {stage==="waiting" && roomInfo && profile && (<WaitingRoom roomId={roomInfo.id} meId={meId} profile={profile} host={roomInfo.host} onLeave={()=>{ setStage("profile"); }} onStart={(room)=>{
           // 導向正式遊戲頁 game.html，攜帶 name/avatar/n
-          window.__OPAudio?.mute?.();
-          const serverURL = location.origin; // 若後端不同網域，改成固定網址
-          const url = new URL('/game.html', serverURL);
-          url.searchParams.set('room', room.id);
-          url.searchParams.set('server', serverURL);
-          if (profile?.playerName)  url.searchParams.set('name', profile.playerName);
-          if (profile?.playerAvatar)url.searchParams.set('avatar', String(profile.playerAvatar));
-          url.searchParams.set('n', String(room.players?.length || 4));
-          window.location.href = url.toString();
+window.__OPAudio?.mute?.();
+// ★ 改為你的 Render 後端完整網域
+const serverURL = "https://onepiece-card-online.onrender.com";
+const url = new URL('/game.html', serverURL);
+url.searchParams.set('room', room.id);
+url.searchParams.set('server', serverURL);
+if (profile?.playerName)  url.searchParams.set('name', profile.playerName);
+if (profile?.playerAvatar)url.searchParams.set('avatar', String(profile.playerAvatar));
+url.searchParams.set('n', String(room.players?.length || 4));
+window.location.href = url.toString();
+
         }} />)}
       </div></div>); }
 
