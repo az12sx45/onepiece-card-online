@@ -111,14 +111,86 @@
         <div className="mt-5 flex flex-col sm:flex-row gap-3"><button className="btn-primary btn grow" type="submit">創建房間</button><button className="btn grow" type="button" onClick={()=>{ const safe=(name||"").trim()||"無名航海士"; const data={ playerName:safe, playerAvatar:pick, avatarUrl:avatars[pick-1] }; localStorage.setItem("op_player_profile", JSON.stringify(data)); onDone(data,{join:true}); }}>加入房間</button></div>
       </form>); }
 
-    function RoomChoice({profile, intent, onEnter}){ const [joinCode,setJoinCode]=useState(""); const meId=getMeId();
-      function createRoom(){ const id=genRoomId(); const room={ id, createdAt:Date.now(), status:"waiting", hostId:meId, players:[{ pid:meId, name:profile.playerName, avatar:profile.playerAvatar, avatarUrl:profile.avatarUrl, ready:false, ts:Date.now() }]}; upsertRoom(room); onEnter(room.id,{host:true}); }
-      function tryJoin(){ const code=(joinCode||"").toUpperCase().replace(/\s+/g,""); const room=getRoom(code); if(!room){ alert("找不到此房號，請確認後再試"); return; } room.players = room.players.filter(p=>p.pid!==meId); room.players.push({ pid:meId, name:profile.playerName, avatar:profile.playerAvatar, avatarUrl:profile.avatarUrl, ready:false, ts:Date.now() }); if(!room.players.find(p=>p.pid===room.hostId)){ room.hostId = meId; } upsertRoom(room); onEnter(room.id,{host:room.hostId===meId}); }
-      return (<div className="card w-[min(820px,96vw)] p-6 space-y-5">
-        <div className="flex items-center gap-3"><div className="avatar is-active"><img src={profile.avatarUrl} alt=""/></div><div><div className="text-sm text-neutral-400">玩家</div><div className="text-lg font-bold">{profile.playerName}</div></div></div>
-        {!intent?.join ? (<div className="grid sm:grid-cols-2 gap-3"><button className="btn-primary btn" onClick={createRoom}>建立房間</button><button className="btn" onClick={()=>window.location.reload()}>返回重選</button></div>) : (<><div><div className="text-sm text-neutral-300 mb-1">輸入房號加入</div><div className="flex gap-2"><input className="rounded-lg bg-neutral-900 border border-neutral-700 px-3 py-2 outline-none focus:border-amber-400 uppercase tracking-widest" placeholder="例如 ABC123" maxLength={8} value={joinCode} onChange={e=>setJoinCode(e.target.value)} /><button className="btn-primary btn" onClick={tryJoin}>加入房間</button></div></div><div className="flex gap-3"><button className="btn" onClick={()=>window.location.reload()}>返回重選</button></div></>)}
-        <div className="text-xs text-neutral-400">之後可將此步驟串接你的後端 API（建立/加入房間）。</div>
-      </div>); }
+  function RoomChoice({profile, intent, onEnter}){
+  const [joinCode, setJoinCode] = React.useState("");
+  const meId = getMeId();
+
+  // 你的前端（GitHub Pages） → 自動用目前網域
+  const clientBase = location.origin;
+
+  // 你的後端（Render）
+  const apiBase = "https://onepiece-card-online.onrender.com";
+
+  function goToGame(roomId, playersCountEstimate){
+    // 直接導向 game.html，由後端處理跨裝置同步
+    const url = new URL('/game.html', clientBase);
+    url.searchParams.set('room', roomId);
+    url.searchParams.set('server', apiBase);
+    if (profile?.playerName)   url.searchParams.set('name', profile.playerName);
+    if (profile?.playerAvatar) url.searchParams.set('avatar', String(profile.playerAvatar));
+    // 預估人數只是 UI 初始值，不影響伺服器，以 4 為保守值
+    url.searchParams.set('n', String(playersCountEstimate || 4));
+    window.location.href = url.toString();
+  }
+
+  function createRoom(){
+    // 直接產生 6 碼房號，**不寫 localStorage**，也不需要等候室
+    const id = genRoomId();
+    goToGame(id, 4);
+  }
+
+  function tryJoin(){
+    const code = (joinCode || "").toUpperCase().replace(/\s+/g, "");
+    if (!code || code.length < 4) { alert("請輸入有效房號"); return; }
+    // 不再檢查 localStorage 的房間（那只限同裝置）
+    // 直接跳去 game.html，由後端決定房間是否存在/可加入
+    goToGame(code, 4);
+  }
+
+  return (
+    <div className="card w-[min(820px,96vw)] p-6 space-y-5">
+      <div className="flex items-center gap-3">
+        <div className="avatar is-active"><img src={profile.avatarUrl} alt=""/></div>
+        <div>
+          <div className="text-sm text-neutral-400">玩家</div>
+          <div className="text-lg font-bold">{profile.playerName}</div>
+        </div>
+      </div>
+
+      {/* 不是加入 → 顯示建立/返回；是加入 → 顯示輸入房號 */}
+      {!intent?.join ? (
+        <div className="grid sm:grid-cols-2 gap-3">
+          <button className="btn-primary btn" onClick={createRoom}>建立房間</button>
+          <button className="btn" onClick={()=>window.location.reload()}>返回重選</button>
+        </div>
+      ) : (
+        <>
+          <div>
+            <div className="text-sm text-neutral-300 mb-1">輸入房號加入</div>
+            <div className="flex gap-2">
+              <input
+                className="rounded-lg bg-neutral-900 border border-neutral-700 px-3 py-2 outline-none focus:border-amber-400 uppercase tracking-widest"
+                placeholder="例如 ABC123"
+                maxLength={8}
+                value={joinCode}
+                onChange={e=>setJoinCode(e.target.value)}
+              />
+              <button className="btn-primary btn" onClick={tryJoin}>加入房間</button>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <button className="btn" onClick={()=>window.location.reload()}>返回重選</button>
+          </div>
+        </>
+      )}
+
+      <div className="text-xs text-neutral-400">
+        已改為由後端負責房間與同步，跨裝置可直接加入同一房號。
+      </div>
+    </div>
+  );
+}
+
 
     function WaitingRoom({roomId, meId, profile, host, onLeave, onStart}){
   // ✅ 正確：先建立 room 狀態
@@ -188,32 +260,41 @@ nav.searchParams.set('server', apiBase); // 關鍵
         <div className="text-xs text-neutral-400 mt-4">小提示：兩個分頁都用 <code>http://localhost:8787/start.html</code> 開，不要混用 file:// 與 http://，才能互相同步。</div>
       </div>); }
 
-    function App(){ const [stage,setStage]=useState("press"); const [profile,setProfile]=useState(null); const [intent,setIntent]=useState(null); const [roomInfo,setRoomInfo]=useState(null); const meId=getMeId();
-      useEffect(()=>{ const cached=localStorage.getItem("op_player_profile"); if(cached){ try{ setProfile(JSON.parse(cached)); }catch{} } },[]);
-      function enterRoom(id, extra){ setRoomInfo({id, host: !!extra?.host}); setStage("waiting"); }
-      return (<div className="w-full max-w-[1200px] mx-auto"><div className="min-h-dvh flex items-center justify-center">
+    function App(){
+  const [stage,setStage] = React.useState("press");
+  const [profile,setProfile] = React.useState(null);
+  const [intent,setIntent] = React.useState(null);
+  const meId = getMeId();
+
+  React.useEffect(()=>{
+    const cached = localStorage.getItem("op_player_profile");
+    if (cached){ try{ setProfile(JSON.parse(cached)); }catch{} }
+  },[]);
+
+  return (
+    <div className="w-full max-w-[1200px] mx-auto">
+      <div className="min-h-dvh flex items-center justify-center">
         {stage==="press"   && <PressAnyKey onProceed={()=>setStage("profile")} />}
-        {stage==="profile" && <NameAvatar defaultName={profile?.playerName} onDone={(p,i)=>{ setProfile(p); setIntent(i||{}); setStage("choice"); }} />}
-        {stage==="choice"  && profile && (<RoomChoice profile={profile} intent={intent} onEnter={enterRoom}/>)}
-        {stage==="waiting" && roomInfo && profile && (<WaitingRoom roomId={roomInfo.id} meId={meId} profile={profile} host={roomInfo.host} onLeave={()=>{ setStage("profile"); }} onStart={(room)=>{
-          // 導向正式遊戲頁 game.html，攜帶 name/avatar/n
-window.__OPAudio?.mute?.();
-// 導向正式遊戲頁（前端照舊走 GitHub Pages；後端放在 ?server）
-window.__OPAudio?.mute?.();
-const clientBase = location.origin; // 你的前端（GitHub Pages）的網域
-const apiBase = "https://onepiece-card-online.onrender.com"; // Render 後端
 
-const url = new URL('/game.html', clientBase);
-url.searchParams.set('room', room.id);
-url.searchParams.set('server', apiBase); // 關鍵：把後端塞在 ?server
-if (profile?.playerName)   url.searchParams.set('name', profile.playerName);
-if (profile?.playerAvatar) url.searchParams.set('avatar', String(profile.playerAvatar));
-url.searchParams.set('n', String(room.players?.length || 4));
-window.location.href = url.toString();
+        {stage==="profile" && (
+          <NameAvatar
+            defaultName={profile?.playerName}
+            onDone={(p,i)=>{ setProfile(p); setIntent(i||{}); setStage("choice"); }}
+          />
+        )}
 
+        {stage==="choice"  && profile && (
+          <RoomChoice
+            profile={profile}
+            intent={intent}
+            onEnter={()=>{}}
+          />
+        )}
+      </div>
+    </div>
+  );
+}
 
-        }} />)}
-      </div></div>); }
 
     ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
   </script>
