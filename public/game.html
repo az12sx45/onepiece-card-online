@@ -6,6 +6,7 @@
   <title>偉大航道爭霸戰｜正式對戰</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script src="https://onepiece-card-online.onrender.com/socket.io/socket.io.js"></script>
   <style>
     html,body{height:100%;background:#0f1113;color:#eaecee}
     .card{ background: rgba(16,20,24,.80);              /* 微透明面板色：#101418 / 80% */
@@ -899,8 +900,13 @@ el.name.value = presetName;
 const presetAvatar = Number(sp.get('avatar') || '1') || 1;
 const presetN      = Math.max(2, Math.min(8, Number(sp.get('n') || '4') || 4));
 
-const serverURL = sp.get('server') || undefined;
-const socket = io(serverURL, { transports:['websocket'] });
+// ★ 先吃 URL ?server，沒有就用你的 Render 網域當預設
+const serverURL = new URLSearchParams(location.search).get('server')
+  || "https://onepiece-card-online.onrender.com";
+
+// ★ 明確以後端網域建立連線（HTTPS 會自動升級為 wss）
+const socket = io(serverURL, { transports: ['websocket'] });
+
 let me = { roomId: presetRoom || 'op-001', playerId: null, secret: localStorage.getItem('opSecret')||'' };
 let state = null;
 
