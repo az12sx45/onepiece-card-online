@@ -15,8 +15,8 @@ const {
 const app = express();
 app.use(express.static(path.join(__dirname, "..", "public")));
 // 根路徑給 Render 面板點擊時用
-app.get("/", (_req, res) => {
-  res.type("text").send("OK");
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "public", "start.html"));
 });
 
 // 你原本已經有的
