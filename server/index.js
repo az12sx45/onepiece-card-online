@@ -1,277 +1,336 @@
-<!doctype html>
-<html lang="zh-Hant">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-  <title>onepiece 偉大航道爭霸戰 — 啟動流程（影片版 + 等待室 + 音效）</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <style>
-    :root{ --bg:#121315; --ink:#eaecee; --brand:#ffb84d; --cover:url("images/cover.jpg"); }
-    html,body{height:100%;}
-    body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC",system-ui,-apple-system,Segoe UI,Roboto,"PingFang TC","Noto Sans CJK TC",sans-serif;}
-    .bg-anim{ position:fixed; inset:0; overflow:hidden; z-index:-1; background: radial-gradient(1200px 800px at 10% 20%, rgba(255,184,77,.08), transparent 60%), radial-gradient(1200px 800px at 90% 80%, rgba(0,158,255,.07), transparent 60%), linear-gradient(180deg,#0f1113 0%,#14171a 100%); }
-    .bg-video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; opacity:.35; filter:contrast(108%) saturate(108%) brightness(95%); pointer-events:none; }
-    body.no-video .bg-anim::after{ content:""; position:absolute; inset:-5%; background-image:var(--cover); background-size:cover; background-position:center; opacity:.28; filter:contrast(110%) saturate(110%) blur(.4px); animation:kenburns 18s ease-in-out infinite alternate; mix-blend-mode:screen; }
-    @keyframes kenburns{ 0%{transform:scale(1)} 100%{transform:scale(1.08) translate3d(0,-1.2%,0)} }
-    .blink{ animation:blink 1.2s ease-in-out infinite; } @keyframes blink{ 0%,100%{opacity:.35} 50%{opacity:1} }
-    .card{ background:#0f1113cc; border:1px solid #2a2e33; border-radius:16px; }
-    .btn{ padding:.65rem .9rem; border-radius:.8rem; border:1px solid #2a2e33; background:#171a1e; } .btn:hover{ background:#1e2227; }
-    .btn-primary{ background:var(--brand); color:#111; border-color:var(--brand); } .btn-primary:hover{ filter:brightness(1.05); }
-    .avatar{ width:72px; height:72px; border-radius:999px; overflow:hidden; border:2px solid rgba(255,255,255,.08); background:#0c0e10; flex:none; }
-    .avatar, .avatar img{ aspect-ratio:1/1; } .avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
-    .avatar.is-active{ border-color:#ffd36a; box-shadow:0 0 0 3px rgba(255,184,77,.25); }
-    .avatar:hover{ border-color:#6b7280; }
-    .mono{ display:flex; align-items:center; justify-content:center; font-weight:700; font-size:28px; color:#111; background:#ffd36a; }
-    .title-wrap{ display:inline-block; perspective:1000px; }
-    .title-main, .title-sub{ will-change: transform, opacity, filter; text-shadow: 0 2px 12px rgba(0,0,0,.45), 0 0 1px rgba(0,0,0,.35); }
-    @keyframes tiltDrop{ 0%{opacity:0; transform:rotateX(18deg) translateY(-12px) scale(.98)} 100%{opacity:1; transform:rotateX(0) translateY(0) scale(1)} }
-    .fx-tiltDrop{ transform-origin:50% 80%; animation:tiltDrop .8s cubic-bezier(.2,.9,.2,1) .1s both; }
-    .fx-shine{ position:relative; overflow:hidden; }
-    .fx-shine::after{ content:""; position:absolute; inset:0; background:linear-gradient(120deg, transparent 0%, rgba(255,255,255,.0) 35%, rgba(255,211,106,.65) 50%, rgba(255,255,255,.0) 65%, transparent 100%); transform:translateX(-120%); animation:shineSweep 1.6s ease-out .5s both; mix-blend-mode:screen; pointer-events:none; }
-    @keyframes shineSweep{ to{ transform:translateX(120%);} }
-    @keyframes fadeUp{ 0%{opacity:0; transform:translateY(12px)} 100%{opacity:1; transform:translateY(0)} } .fx-fadeUp{ animation:fadeUp .7s ease-out .15s both; }
-    .wave{ --stagger:.06s; --dur:1.4s; --amp:8px; --delayStart:1.2s; }
-    .wave .char{ display:inline-block; transform:translateY(0); animation: waveBounce var(--dur) ease-in-out infinite; animation-delay: calc(var(--i) * var(--stagger) + var(--delayStart)); }
-    @keyframes waveBounce{ 0%,100%{transform:translateY(0)} 35%{transform:translateY(calc(-1 * var(--amp)))} 70%{transform:translateY(0)} }
-    .wave-sm{ --amp:5px; --dur:1.6s; --stagger:.055s; }
-    .lock-overlay{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.72); color:#fff; z-index:50; text-align:center; padding:24px; backdrop-filter: blur(6px); }
-    .lock-overlay .panel{ background:rgba(17,17,17,.85); border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:18px 20px; max-width:420px; }
-    .lock-overlay .icon{ font-size:40px; line-height:1; margin-bottom:10px; }
-    @media (orientation: portrait){ .lock-overlay{ display:flex; } body.lock-scroll{ overflow:hidden; } }
-    @media (orientation: landscape){ .card{ max-height:86vh; overflow:auto; } .avatar{ width:64px; height:64px; } }
-    @media (max-height: 420px) and (orientation: landscape){ .title-main{ font-size: clamp(28px, 6vw, 48px); } .title-sub{ font-size: clamp(18px, 3.6vw, 28px); } .avatar{ width:56px; height:56px; } }
-    @media (min-width: 768px) and (max-width: 1024px){ .title-main{ font-size: clamp(48px, 6.4vw, 92px); letter-spacing:.01em; } .title-sub{ font-size: clamp(28px, 3.8vw, 52px); } .wave{ --amp: 8px; } .wave-sm{ --amp: 5px; } }
-    @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape){ .title-main{ font-size: clamp(44px, 5.8vw, 86px); } .title-sub{ font-size: clamp(26px, 3.4vw, 48px); } }
-    @media (min-width: 1024px){ .wave{ --amp: 9px; } .wave-sm{ --amp: 6px; } } @media (min-width: 1536px){ .wave{ --amp: 10px; } .wave-sm{ --amp: 7px; }
-    }
-    .audio-toggle{ position: fixed; right: 12px; bottom: 12px; z-index: 30; display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,.45); border: 1px solid rgba(255,255,255,.12); border-radius: 999px; padding: 6px 10px; backdrop-filter: blur(6px); }
-    .audio-toggle button{ display:flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:999px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.16); }
-    .audio-toggle button:hover{ background: rgba(255,255,255,.1); }
-    .audio-toggle .vol{ appearance:none; width:120px; height:4px; border-radius:999px; background:#444; }
-    .audio-toggle .vol::-webkit-slider-thumb{ appearance:none; width:14px; height:14px; border-radius:999px; background:#ffd36a; border:1px solid #b3831b; }
-    @media (max-width: 640px){ .audio-toggle{ gap:6px; padding:6px 8px; } .audio-toggle .vol{ width:86px; }
-    }
-  </style>
-</head>
-<body class="no-video">
-  <div class="lock-overlay" id="lockOverlay"><div class="panel"><div class="icon">🔄</div><div class="text-lg font-semibold mb-1">請將手機旋轉至橫向以獲得最佳體驗</div><div class="text-sm opacity-80">若仍無法旋轉，請解鎖畫面旋轉或從瀏覽器選單開啟「允許旋轉」。</div></div></div>
-  <div class="bg-anim"><video id="bgVideo" class="bg-video" autoplay muted loop playsinline preload="auto" poster="images/cover.jpg"><source src="videos/start.webm" type="video/webm"><source src="videos/start.mp4" type="video/mp4"></video></div>
-  <div id="root" class="min-h-dvh flex items-center justify-center p-6"></div>
-  <script>
-    (function initBGVideo(){ const v = document.getElementById('bgVideo'); if(!v) return; const enableVideo = ()=> document.body.classList.remove('no-video'); const fallback = ()=> document.body.classList.add('no-video'); v.addEventListener('loadeddata', enableVideo, {once:true}); v.addEventListener('canplay', enableVideo, {once:true}); v.addEventListener('error', fallback, {once:true}); const tryPlay = ()=> v.play().then(enableVideo).catch(fallback); window.addEventListener('pointerdown', tryPlay, {once:true}); window.addEventListener('keydown', tryPlay, {once:true}); tryPlay(); })();
-    (function orientationGate(){ const overlay = document.getElementById('lockOverlay'); function apply(){ const isPortrait = window.matchMedia("(orientation: portrait)").matches; document.body.classList.toggle('lock-scroll', isPortrait); if(overlay){ overlay.style.display = isPortrait ? 'flex' : 'none'; } } window.addEventListener('resize', apply); window.addEventListener('orientationchange', apply); apply(); })();
-    async function tryLockLandscape(){ try{ if(screen.orientation && screen.orientation.lock){ await screen.orientation.lock('landscape'); } }catch(e){} }
-  </script>
-<!-- 將這個 URL 換成你的後端網域 -->
-<script src="https://onepiece-card-online.onrender.com/socket.io/socket.io.js"></script>
+// server/index.js — 靜態檔 + Socket.IO（/lobby 等待室 + / 遊戲本體）
+const path = require("path");
+const express = require("express");
+const http = require("http");
+const { Server } = require("socket.io");
+const crypto = require("crypto");
 
-  <script type="text/babel" data-presets="env,react">
-    const {useState, useEffect, useMemo} = React;
-    const ROOMS_KEY = "op_rooms"; const ME_KEY = "op_me_id"; const MIN_PLAYERS = 2;
-    function uid(){ return Math.random().toString(36).slice(2,10); }
-    function genRoomId(){ const letters = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; let s=""; for(let i=0;i<6;i++) s += letters[Math.floor(Math.random()*letters.length)]; return s; }
-    function loadRooms(){ try{ return JSON.parse(localStorage.getItem(ROOMS_KEY)||"{}"); }catch{ return {}; } }
-    function saveRooms(obj){ localStorage.setItem(ROOMS_KEY, JSON.stringify(obj)); }
-    function getRoom(id){ return loadRooms()[id]||null; }
-    function upsertRoom(room){ const all = loadRooms(); all[room.id] = room; saveRooms(all); localStorage.setItem("op_rooms_broadcast", JSON.stringify({ts:Date.now(), id:room.id})); }
-    function deleteRoom(id){ const all = loadRooms(); delete all[id]; saveRooms(all); localStorage.setItem("op_rooms_broadcast", JSON.stringify({ts:Date.now(), id})); }
-    function getMeId(){ let me = sessionStorage.getItem(ME_KEY); if(!me){ me = "me_" + uid(); sessionStorage.setItem(ME_KEY, me); } return me; }
-// 讀 URL 參數中的 server；沒有就用目前來源（前後端同域時可行）
-function pickServerURL(){
-  const u = new URL(location.href);
-  return u.searchParams.get('server') || location.origin;
+// 引擎：純函式
+const {
+  createInitialState,
+  applyAction,
+  getVisibleState,
+} = require("./engine.js");
+
+// === 1) HTTP 靜態檔 ===
+const app = express();
+app.use(express.static(path.join(__dirname, "..", "public")));
+app.get("/", (_req, res) => res.redirect("/start.html"));
+
+const server = http.createServer(app);
+
+// === 2) Socket.IO（允許跨網域前端） ===
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+});
+
+// -------------------------------
+// A. 等待室（/lobby）
+// -------------------------------
+const lobby = io.of("/lobby");
+
+/**
+ * roomsLobby: Map<roomId, {
+ *   players: Map<socketId, { pid: string, name: string, avatar: number, seat: number }>
+ *   hostSid: string|null
+ *   createdAt: number
+ * }>
+ *
+ * 備註：
+ * - seat 從 0 開始，先到先拿空位（供導頁到 game.html 時參考）
+ * - 這份只是等待室資料；遊戲開始後，實際的 playerId 由遊戲 namespace 分派
+ */
+const roomsLobby = new Map();
+
+function nextFreeSeat(room) {
+  // 連續座位 0..N，取目前未被占用的最小 seat
+  const used = new Set([...room.players.values()].map((p) => p.seat));
+  let s = 0;
+  while (used.has(s)) s++;
+  return s;
 }
 
-    function WaveText({ text, className="", small=false }){ const chars = Array.from(text); const waveClass = small ? "wave wave-sm" : "wave"; return (<span className={`${waveClass} ${className}`}>{chars.map((ch, idx) => (<span className="char" style={{["--i"]: idx}} key={idx}>{ch === " " ? "\u00A0" : ch}</span>))}</span>); }
-
-    function PressAnyKey({onProceed}){ useEffect(()=>{ const h=(e)=>{ e.preventDefault(); onProceed(); tryLockLandscape(); window.__OPAudio?.startAudio(); }; window.addEventListener('keydown', h, {once:true}); window.addEventListener('pointerdown', h, {once:true}); return ()=>{ window.removeEventListener('keydown', h); window.removeEventListener('pointerdown', h); }; }, [onProceed]); return (
-      <div className="relative w-full min-h-[92vh] select-none">
-        <div className="absolute left-1/2 -translate-x-1/2 top-[60vh] md:top-[58vh] text-center space-y-2">
-          <div className="title-wrap">
-            <div className="title-main font-black tracking-tight whitespace-nowrap fx-tiltDrop fx-shine text-[clamp(28px,8.2vw,48px)] [@media(orientation:landscape)]:text-[clamp(24px,6.6vw,44px)] md:text-[clamp(52px,5.2vw,96px)] lg:text-[clamp(60px,4.6vw,110px)] xl:text-[clamp(68px,4vw,128px)]"><WaveText text="ONE PIECE" /></div>
-            <div className="title-sub font-extrabold text-amber-300 mt-2 fx-fadeUp whitespace-nowrap text-[clamp(16px,5.2vw,28px)] [@media(orientation:landscape)]:text-[clamp(16px,3.6vw,24px)] md:text-[clamp(30px,3.2vw,56px)] lg:text-[clamp(34px,2.8vw,64px)] xl:text-[clamp(38px,2.4vw,72px)]"><WaveText text="偉大航道爭霸戰" small /></div>
-          </div>
-        </div>
-        <div className="absolute left-1/2 -translate-x-1/2 text-sm md:text-base text-neutral-200 blink md:bottom-8" style={{bottom:"calc(env(safe-area-inset-bottom, 0px) - 10px)", paddingBottom:0}}>按任意鍵開始 / Press any key</div>
-      </div> ); }
-
-    function NameAvatar({defaultName, onDone}){ const [name,setName]=useState(defaultName||""); const [pick,setPick]=useState(1); const avatars=useMemo(()=> Array.from({length:30},(_,i)=>`images/avatars/${i+1}.png`), []);
-      function handleSubmit(e){ e.preventDefault(); const safe=(name||"").trim()||"無名航海士"; const data={ playerName:safe, playerAvatar:pick, avatarUrl:avatars[pick-1] }; localStorage.setItem("op_player_profile", JSON.stringify(data)); onDone(data); }
-      return (<form onSubmit={handleSubmit} className="card w-[min(980px,96vw)] p-5 md:p-6">
-        <div className="flex items-center justify-between gap-3 flex-wrap"><h2 className="text-xl font-bold">創建角色</h2><div className="text-xs text-neutral-400">資料會暫存於本機（localStorage）</div></div>
-        <div className="grid [@media(orientation:landscape)]:grid-cols-2 md:grid-cols-3 gap-5 mt-4">
-          <div className="md:col-span-1">
-            <div className="flex items-center gap-3">
-              <div className={"avatar "+(pick?"is-active":"")}><img src={avatars[pick-1]} alt="" onError={(e)=>{ e.currentTarget.replaceWith(Object.assign(document.createElement('div'),{className:'mono avatar',innerText:(name||'').slice(0,1)||'你'})); }} /></div>
-              <div><div className="text-sm text-neutral-400">玩家名稱</div><input className="mt-1 w-56 rounded-lg bg-neutral-900 border border-neutral-700 px-3 py-2 outline-none focus:border-amber-400" maxLength={16} placeholder="輸入你的名字" value={name} onChange={(e)=>setName(e.target.value)} /></div>
-            </div>
-            <div className="text-xs text-neutral-400 mt-2">* 名稱最多 16 字；可稍後在設定中修改。</div>
-          </div>
-          <div className="md:col-span-2">
-            <div className="flex items中心 justify-between"><div className="font-semibold">選擇頭像（30）</div><div className="text-xs text-neutral-400">路徑：<code>images/avatars/1.png ~ 30.png</code></div></div>
-            <div className="mt-2 grid grid-cols-5 sm:grid-cols-6 md:grid-cols-7 lg:grid-cols-8 gap-3">{avatars.map((src,idx)=>(<button key={idx} type="button" onClick={()=>setPick(idx+1)} className={"avatar "+(pick===idx+1?"is-active":"")}> <img src={src} alt={"avatar-"+(idx+1)} /> </button>))}</div>
-          </div>
-        </div>
-        <div className="mt-5 flex flex-col sm:flex-row gap-3"><button className="btn-primary btn grow" type="submit">創建房間</button><button className="btn grow" type="button" onClick={()=>{ const safe=(name||"").trim()||"無名航海士"; const data={ playerName:safe, playerAvatar:pick, avatarUrl:avatars[pick-1] }; localStorage.setItem("op_player_profile", JSON.stringify(data)); onDone(data,{join:true}); }}>加入房間</button></div>
-      </form>); }
-
-    function RoomChoice({profile, intent, onEnter}){ const [joinCode,setJoinCode]=useState(""); const meId=getMeId();
-      function createRoom(){ const id=genRoomId(); const room={ id, createdAt:Date.now(), status:"waiting", hostId:meId, players:[{ pid:meId, name:profile.playerName, avatar:profile.playerAvatar, avatarUrl:profile.avatarUrl, ready:false, ts:Date.now() }]}; upsertRoom(room); onEnter(room.id,{host:true}); }
-      function tryJoin(){ const code=(joinCode||"").toUpperCase().replace(/\s+/g,""); const room=getRoom(code); if(!room){ alert("找不到此房號，請確認後再試"); return; } room.players = room.players.filter(p=>p.pid!==meId); room.players.push({ pid:meId, name:profile.playerName, avatar:profile.playerAvatar, avatarUrl:profile.avatarUrl, ready:false, ts:Date.now() }); if(!room.players.find(p=>p.pid===room.hostId)){ room.hostId = meId; } upsertRoom(room); onEnter(room.id,{host:room.hostId===meId}); }
-      return (<div className="card w-[min(820px,96vw)] p-6 space-y-5">
-        <div className="flex items-center gap-3"><div className="avatar is-active"><img src={profile.avatarUrl} alt=""/></div><div><div className="text-sm text-neutral-400">玩家</div><div className="text-lg font-bold">{profile.playerName}</div></div></div>
-        {!intent?.join ? (<div className="grid sm:grid-cols-2 gap-3"><button className="btn-primary btn" onClick={createRoom}>建立房間</button><button className="btn" onClick={()=>window.location.reload()}>返回重選</button></div>) : (<><div><div className="text-sm text-neutral-300 mb-1">輸入房號加入</div><div className="flex gap-2"><input className="rounded-lg bg-neutral-900 border border-neutral-700 px-3 py-2 outline-none focus:border-amber-400 uppercase tracking-widest" placeholder="例如 ABC123" maxLength={8} value={joinCode} onChange={e=>setJoinCode(e.target.value)} /><button className="btn-primary btn" onClick={tryJoin}>加入房間</button></div></div><div className="flex gap-3"><button className="btn" onClick={()=>window.location.reload()}>返回重選</button></div></>)}
-        <div className="text-xs text-neutral-400">之後可將此步驟串接你的後端 API（建立/加入房間）。</div>
-      </div>); }
-
-    function WaitingRoom({roomId, meId, profile, host, onLeave, onStart}){
-      const [room,setRoom]=useState(()=> getRoom(roomId));
-      const [tick,setTick]=useState(0);
-      // 每秒 refresh 自己心跳 & 讀取房間
-      useEffect(()=>{ const i=setInterval(()=> setTick(t=>t+1), 1000); const onStorage=(e)=>{ if(e.key==="op_rooms" || e.key==="op_rooms_broadcast"){ const r=getRoom(roomId); if(r) setRoom(r); } }; window.addEventListener('storage', onStorage); return ()=>{ clearInterval(i); window.removeEventListener('storage', onStorage); }; }, [roomId]);
-      useEffect(()=>{ const r=getRoom(roomId); if(!r) return; const me=r.players.find(p=>p.pid===meId); if(me){ me.ts=Date.now(); upsertRoom(r); setRoom(r); } }, [tick, roomId, meId]);
-      // 狀態變 started → 直接導向
-      useEffect(()=>{ if(room?.status === "started"){ onStart(room); } }, [room?.status]);
-      // 輪詢保險：就算 storage 事件沒觸發也會跳
-      useEffect(()=>{ const tm=setInterval(()=>{ const r=getRoom(roomId); if(r?.status==="started"){ onStart(r); } }, 1000); return ()=> clearInterval(tm); }, [roomId]);
-      // 監聽導航旗標（房主寫入），任何人讀到就跳
-      useEffect(()=>{ const key = `op_rooms_nav_${roomId}`; const tryNav = ()=>{ const val=localStorage.getItem(key); if(val){ const serverURL = new URL(val, location.origin).origin || location.origin; const url = new URL('/game.html', serverURL); url.searchParams.set('room', roomId); url.searchParams.set('server', serverURL); if (profile?.playerName)  url.searchParams.set('name', profile.playerName); if (profile?.playerAvatar) url.searchParams.set('avatar', String(profile.playerAvatar)); const r=getRoom(roomId); url.searchParams.set('n', String(r?.players?.length || 4)); window.location.href = url.toString(); } }; tryNav(); const onStorage=(e)=>{ if(e.key===key) tryNav(); }; window.addEventListener('storage', onStorage); return ()=> window.removeEventListener('storage', onStorage); }, [roomId, profile?.playerName, profile?.playerAvatar]);
-
-// ===（新增）等待室：連到後端 /lobby，並在開始時讓所有裝置導頁 ===
-const [lobbySock, setLobbySock] = useState(null);
-
-useEffect(()=>{
-  // 1) 連線到等待室 namespace
-  const serverURL = pickServerURL();
-  const sock = io(serverURL + '/lobby', { transports:['websocket'] });
-  setLobbySock(sock);
-
-  // 2) 進入等待室（註冊玩家：房號、pid、名字、頭像）
-  sock.emit('LOBBY_ENTER', {
-    roomId, pid: meId,
-    name: profile?.playerName || '',
-    avatar: Number(profile?.playerAvatar) || 1
-  });
-
-  // （可選）同步伺服器版狀態
-  sock.on('LOBBY_STATE', (s)=>{
-    // 可對照本地 room.players 與 s.players
-    // console.log('[server lobby]', s);
-  });
-
-  // 3) 後端廣播開始 → 導頁至 game.html（帶 name/avatar/server/room）
-  sock.on('LOBBY_NAV', ({roomId, serverURL, name, avatar})=>{
-    const base = serverURL || pickServerURL();
-    const url  = new URL('/game.html', base);
-    url.searchParams.set('room', roomId);
-    url.searchParams.set('server', base);
-    if (name)   url.searchParams.set('name', name);
-    if (avatar) url.searchParams.set('avatar', String(avatar));
-    window.location.href = url.toString();
-  });
-
-  // 4) 離開時告知伺服器
-  return ()=> {
-    try { sock.emit('LOBBY_LEAVE', { roomId, pid: meId }); } catch(e){}
-    try { sock.close(); } catch(e){}
-  };
-}, [roomId, meId, profile?.playerName, profile?.playerAvatar]);
-
-
-      if(!room){ return (<div className="card w-[min(820px,96vw)] p-6"><div className="text-lg font-bold mb-2">房間不存在或已關閉</div><button className="btn" onClick={onLeave}>返回</button></div>); }
-      const amHost = room.hostId===meId; const canStart = room.players.length>=MIN_PLAYERS && room.players.every(p=>p.ready);
-      function copyId(){ navigator.clipboard?.writeText(room.id); alert("已複製房號："+room.id); }
-     function toggleReady(){
-  const r=getRoom(room.id); if(!r) return;
-  const me=r.players.find(p=>p.pid===meId); if(!me) return;
-  me.ready=!me.ready; me.ts=Date.now();
-  upsertRoom(r); setRoom(r);
-
-  // ▲ 新增：告訴伺服器我改變準備狀態
-  lobbySock?.emit('LOBBY_READY', { roomId: room.id, pid: meId, ready: me.ready });
-}
-
-    function leaveRoom(){
-  const r=getRoom(room.id);
-  if(!r){ onLeave(); return; }
-
-  r.players = r.players.filter(p=>p.pid!==meId);
-  if(r.players.length===0){
-    deleteRoom(r.id); onLeave(); return;
+function getLobbyRoom(roomId) {
+  if (!roomsLobby.has(roomId)) {
+    roomsLobby.set(roomId, {
+      players: new Map(),
+      hostSid: null,
+      createdAt: Date.now(),
+    });
   }
-  if(r.hostId===meId){ r.hostId = r.players[0].pid; }
-  upsertRoom(r); onLeave();
-
-  // ▲ 新增：告訴伺服器我離開等待室
-  lobbySock?.emit('LOBBY_LEAVE', { roomId: room.id, pid: meId });
+  return roomsLobby.get(roomId);
 }
 
-      function startGame(){
-  const amHost = room.hostId===meId;
-  const canStart = room.players.length>=MIN_PLAYERS && room.players.every(p=>p.ready);
-  if(!amHost || !canStart) return;
-
-  // 舊作法（localStorage 廣播）拿掉，改成通知伺服器開始
-  const serverURL = pickServerURL();
-  lobbySock?.emit('LOBBY_START', { roomId: room.id, pid: meId, serverURL });
-
-  // 仍可保留本地狀態更新，避免極端情況
-  const r=getRoom(room.id); if(r){ r.status="started"; upsertRoom(r); }
+function broadcastLobbyState(roomId) {
+  const r = roomsLobby.get(roomId);
+  if (!r) return;
+  const list = [...r.players.entries()].map(([sid, p]) => ({
+    sid,
+    pid: p.pid,
+    name: p.name,
+    avatar: p.avatar,
+    seat: p.seat,
+    isHost: r.hostSid === sid,
+  }));
+  lobby.to(roomId).emit("LOBBY_STATE", {
+    roomId,
+    players: list,
+    hostSid: r.hostSid,
+  });
 }
 
+lobby.on("connection", (socket) => {
+  let joinedRoomId = null;
 
-      return (<div className="card w-[min(980px,96vw)] p-6">
-        <div className="flex flex-wrap items-center justify-between gap-3"><div><div className="text-xs text-neutral-400">房號</div><div className="text-2xl font-extrabold tracking-widest">{room.id}</div></div><div className="flex gap-2"><button className="btn" onClick={copyId}>複製房號</button><button className="btn" onClick={leaveRoom}>離開房間</button>{amHost && (<button className={`btn-primary ${canStart? "":"opacity-50 cursor-not-allowed"}`} onClick={startGame} disabled={!canStart} title={canStart? "開始遊戲":"至少 2 人且全部準備才可開始"}>開始遊戲</button>)}</div></div>
-        <div className="mt-5"><div className="text-sm text-neutral-300 mb-2">玩家（{room.players.length}）</div><div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">{room.players.map(p=> (<div key={p.pid} className="flex items-center justify-between gap-3 rounded-xl border border-neutral-700/60 bg黑/30 px-3 py-2"><div className="flex items-center gap-3"><div className={"avatar "+(p.pid===room.hostId?"is-active":"")}><img src={p.avatarUrl} alt=""/></div><div><div className="font-semibold leading-tight">{p.name}</div><div className="text-xs text-neutral-400 flex items-center gap-2">{p.pid===room.hostId ? <span className="px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-200 border border-amber-400/30">房主</span> : <span className="opacity-60">玩家</span>}{p.ready ? <span className="px-1.5 py-0.5 rounded bg-emerald-400/15 text-emerald-200 border border-emerald-400/30">已準備</span> : <span className="px-1.5 py-0.5 rounded bg-neutral-600/20 text-neutral-200 border border-neutral-600/40">未準備</span>}</div></div></div>{p.pid===meId && (<button className="btn" onClick={toggleReady}>{p.ready?"取消準備":"準備"}</button>)}</div>))}</div></div>
-        <div className="text-xs text-neutral-400 mt-4">小提示：兩個分頁都用 <code>http://localhost:8787/start.html</code> 開，不要混用 file:// 與 http://，才能互相同步。</div>
-      </div>); }
+  socket.on("LOBBY_ENTER", ({ roomId, pid, name, avatar }) => {
+    if (!roomId || !pid) return;
+    joinedRoomId = roomId;
+    socket.join(roomId);
 
-    function App(){ const [stage,setStage]=useState("press"); const [profile,setProfile]=useState(null); const [intent,setIntent]=useState(null); const [roomInfo,setRoomInfo]=useState(null); const meId=getMeId();
-      useEffect(()=>{ const cached=localStorage.getItem("op_player_profile"); if(cached){ try{ setProfile(JSON.parse(cached)); }catch{} } },[]);
-      function enterRoom(id, extra){ setRoomInfo({id, host: !!extra?.host}); setStage("waiting"); }
-      return (<div className="w-full max-w-[1200px] mx-auto"><div className="min-h-dvh flex items-center justify-center">
-        {stage==="press"   && <PressAnyKey onProceed={()=>setStage("profile")} />}
-        {stage==="profile" && <NameAvatar defaultName={profile?.playerName} onDone={(p,i)=>{ setProfile(p); setIntent(i||{}); setStage("choice"); }} />}
-        {stage==="choice"  && profile && (<RoomChoice profile={profile} intent={intent} onEnter={enterRoom}/>)}
-        {stage==="waiting" && roomInfo && profile && (<WaitingRoom roomId={roomInfo.id} meId={meId} profile={profile} host={roomInfo.host} onLeave={()=>{ setStage("profile"); }} onStart={(room)=>{
-          // 導向正式遊戲頁 game.html，攜帶 name/avatar/n
-          window.__OPAudio?.mute?.();
-          const serverURL = location.origin; // 若後端不同網域，改成固定網址
-          const url = new URL('/game.html', serverURL);
-          url.searchParams.set('room', room.id);
-          url.searchParams.set('server', serverURL);
-          if (profile?.playerName)  url.searchParams.set('name', profile.playerName);
-          if (profile?.playerAvatar)url.searchParams.set('avatar', String(profile.playerAvatar));
-          url.searchParams.set('n', String(room.players?.length || 4));
-          window.location.href = url.toString();
-        }} />)}
-      </div></div>); }
+    const r = getLobbyRoom(roomId);
+    if (!r.hostSid) r.hostSid = socket.id;
 
-    ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
-  </script>
+    const seat = nextFreeSeat(r);
+    r.players.set(socket.id, {
+      pid: String(pid),
+      name: String(name || ""),
+      avatar: Number(avatar) || 1,
+      seat,
+    });
 
-  <audio id="sfxIntro" src="audio/intro.mp3" preload="auto" loop autoplay></audio>
-  <audio id="bgm" src="audio/bgm.mp3" preload="auto" loop autoplay></audio>
-  <div class="audio-toggle" id="audioCtrl" style="display:none"><button id="btnMute" title="靜音/取消靜音" aria-label="Mute/Unmute"><svg id="icoVol" width="16" height="16" viewBox="0 0 24 24" fill="#ffd36a"><path d="M4 9v6h4l5 4V5L8 9H4z"></path><path id="wave" d="M16 8c1.5 1.5 1.5 6.5 0 8" stroke="#ffd36a" stroke-width="2" fill="none"/></svg></button><input id="rngVol" class="vol" type="range" min="0" max="100" step="1" value="65" /></div>
+    broadcastLobbyState(roomId);
+  });
 
-<script>
-(function(){
-  const S={ muteKey:"op_audio_mute", volKey:"op_audio_vol", hasStarted:false, fadeTimer:null, autoTried:false };
-  const $intro=document.getElementById('sfxIntro'); const $bgm=document.getElementById('bgm'); const $wrap=document.getElementById('audioCtrl'); const $btn=document.getElementById('btnMute'); const $ico=document.getElementById('icoVol'); const $wave=document.getElementById('wave'); const $rng=document.getElementById('rngVol');
-  const savedMute=localStorage.getItem(S.muteKey); const savedVol=localStorage.getItem(S.volKey); let muted=savedMute==="1"; let vol=isNaN(+savedVol)?20:Math.max(0,Math.min(100,+savedVol)); setVolume(vol); applyMuteUI(); $wrap.style.display='flex';
-  function setVolume(v){ vol=v; $rng.value=String(v); const gain=muted?0:(v/100); $bgm.volume=Math.min(1,Math.max(0,gain)); if($intro) $intro.volume=Math.min(1,Math.max(0,Math.min(0.9,gain*1.2))); localStorage.setItem(S.volKey,String(v)); }
-  function fade(el,target,ms){ clearInterval(S.fadeTimer); const stepMs=40, steps=Math.max(1,Math.round(ms/stepMs)); const start=el.volume; let n=0; S.fadeTimer=setInterval(()=>{ n++; const t=n/steps; el.volume=start+(target-start)*t; if(n>=steps){ clearInterval(S.fadeTimer); el.volume=target; }}, stepMs); }
-  function applyMuteUI(){ const on=!muted; $ico.setAttribute('fill', on?'#ffd36a':'#bbb'); $wave.setAttribute('stroke', on?'#ffd36a':'#bbb'); }
-  async function tryAutoStart(){ if(S.autoTried||S.hasStarted) return; S.autoTried=true; try{ setVolume(vol); await $bgm.play(); if(!muted) $bgm.volume=Math.min(1,vol/100); S.hasStarted=true; }catch(e){ S.hasStarted=false; } }
-  async function startAudioAfterGesture(){ if(S.hasStarted) return; S.hasStarted=true; try{ $bgm.volume=0; await $bgm.play().catch(()=>{}); if($intro && $intro.src){ $intro.currentTime=0; $intro.volume=Math.min(1,(vol/100)*0.9); await $intro.play().catch(()=>{}); $intro.onended=()=>{ if(!muted) fade($bgm, Math.min(1, vol/100), 1200); }; }else{ if(!muted) fade($bgm, Math.min(1, vol/100), 800); } }catch(e){ S.hasStarted=false; } }
-  $btn.addEventListener('click', ()=>{ muted=!muted; localStorage.setItem(S.muteKey, muted?"1":"0"); applyMuteUI(); if(muted){ fade($bgm,0,250); if($intro && !$intro.paused) fade($intro,0,150); }else{ setVolume(vol); if($bgm.paused){ $bgm.play().catch(()=>{}); } fade($bgm, Math.min(1, vol/100), 250); } });
-  $rng.addEventListener('input', (e)=> setVolume(+e.target.value));
-  document.addEventListener('DOMContentLoaded', tryAutoStart);
-  window.__OPAudio = { startAudio: startAudioAfterGesture, setVolume, mute: ()=>{ if(!muted) $btn.click(); }, unmute: ()=>{ if(muted) $btn.click(); } };
-})();
-</script>
-</body>
-</html>
+  socket.on("LOBBY_READY", ({ roomId /*, pid, ready*/ }) => {
+    // 這版等待室只同步名單；是否準備交給前端本地顯示即可
+    // 若要後端強制檢查 ready，可再擴充此資料結構
+    if (!roomId) return;
+    broadcastLobbyState(roomId);
+  });
+
+  socket.on("LOBBY_LEAVE", ({ roomId }) => {
+    const r = roomsLobby.get(roomId);
+    if (!r) return;
+    r.players.delete(socket.id);
+    if (r.players.size === 0) {
+      roomsLobby.delete(roomId);
+    } else if (r.hostSid === socket.id) {
+      const firstSid = r.players.keys().next().value || null;
+      r.hostSid = firstSid;
+    }
+    broadcastLobbyState(roomId);
+  });
+
+  socket.on("LOBBY_START", ({ roomId, pid, serverURL }) => {
+    const r = roomsLobby.get(roomId);
+    if (!r) return;
+    if (r.hostSid !== socket.id) return; // 只有房主能開始
+
+    // 廣播導頁：每個人各自帶自己的名字/頭像（前端會直接跳 /game.html）
+    for (const [sid, p] of r.players.entries()) {
+      lobby.to(sid).emit("LOBBY_NAV", {
+        roomId,
+        serverURL,
+        name: p.name,
+        avatar: p.avatar,
+        seat: p.seat, // 給前端參考（非必要）
+      });
+    }
+    // 是否要清空等待室，視情況；這裡保留，以便中途有人斷線還能看名單
+  });
+
+  socket.on("disconnect", () => {
+    if (!joinedRoomId) return;
+    const r = roomsLobby.get(joinedRoomId);
+    if (!r) return;
+    r.players.delete(socket.id);
+    if (r.players.size === 0) {
+      roomsLobby.delete(joinedRoomId);
+    } else if (r.hostSid === socket.id) {
+      const firstSid = r.players.keys().next().value || null;
+      r.hostSid = firstSid;
+    }
+    broadcastLobbyState(joinedRoomId);
+  });
+});
+
+// -------------------------------
+// B. 遊戲本體（/）
+// -------------------------------
+
+/**
+ * rooms: Map<roomId, {
+ *   state: StateObject,
+ *   maxPlayers: number,
+ *   claims: boolean[],                // 哪些 playerId 已經被占用
+ *   sockets: Map<socketId, { playerId: number, secret: string }>,
+ *   createdAt: number
+ * }>
+ *
+ * JOIN_ROOM 流程：
+ *  - 若 room 不存在 → 以「等待室人數」優先，否則以 client 傳的 playerCount 建 state
+ *  - 該玩家取得第一個未被占用的 playerId
+ *  - 立刻把 displayName / avatar 寫入 state.players[playerId]
+ *  - 回傳 JOINED { playerId, secret }
+ *  - 廣播 STATE（每人用 getVisibleState 遮蔽）
+ */
+const rooms = new Map();
+
+function makeSecret() {
+  return crypto.randomBytes(12).toString("hex");
+}
+
+function broadcastState(roomId) {
+  const room = rooms.get(roomId);
+  if (!room) return;
+  const st = room.state;
+
+  // 依照每個 socket 的 playerId，送出各自可見的 STATE
+  for (const [sid, meta] of room.sockets.entries()) {
+    const vis = getVisibleState(st, meta.playerId);
+    io.to(sid).emit("STATE", vis);
+  }
+}
+
+io.on("connection", (socket) => {
+  let joinedRoom = null;
+  let myPlayerId = null;
+
+  socket.on("JOIN_ROOM", ({ roomId, displayName, avatar, playerCount }) => {
+    if (!roomId) return;
+
+    // 1) 建立 / 取得房間
+    if (!rooms.has(roomId)) {
+      // 優先用等待室的人數（跨裝置從 start.html 進來會有），否則用前端傳的 playerCount
+      const rLobby = roomsLobby.get(roomId);
+      const n =
+        (rLobby && rLobby.players.size) ||
+        Number(playerCount) ||
+        4; // 最低 4 位，避免 0
+
+      const st = createInitialState(n);
+      rooms.set(roomId, {
+        state: st,
+        maxPlayers: n,
+        claims: Array(n).fill(false),
+        sockets: new Map(),
+        createdAt: Date.now(),
+      });
+
+      // 若有等待室，試著把名字/頭像帶進 state
+      if (rLobby) {
+        for (const p of rLobby.players.values()) {
+          const seat = Math.min(Math.max(0, Number(p.seat) || 0), n - 1);
+          st.players[seat].displayName = p.name || st.players[seat].displayName;
+          st.players[seat].avatar = Number(p.avatar) || st.players[seat].avatar;
+        }
+      }
+    }
+
+    const room = rooms.get(roomId);
+    if (!room) return;
+
+    // 2) 指派 playerId：取第一個空位
+    let pid = room.claims.findIndex((v) => !v);
+    if (pid === -1) {
+      // 滿員就拒絕（也可以改成觀戰）
+      socket.emit("ERROR", { message: "Room is full" });
+      return;
+    }
+
+    room.claims[pid] = true;
+    joinedRoom = roomId;
+    myPlayerId = pid;
+
+    // 3) 寫入該玩家的顯示名與頭像（立刻反映在 state）
+    try {
+      const p = room.state.players[pid];
+      if (displayName) p.displayName = String(displayName);
+      if (avatar != null) p.avatar = Number(avatar) || p.avatar;
+      // 額外保留 client 欄位（引擎有些 log 會取 p.client.displayName）
+      p.client = { displayName: p.displayName, avatar: p.avatar };
+    } catch (_) {}
+
+    // 4) 建立私密 secret，回覆 JOINED
+    const secret = makeSecret();
+    room.sockets.set(socket.id, { playerId: pid, secret });
+    socket.emit("JOINED", { playerId: pid, secret });
+
+    // 5) 廣播 STATE（每人不同）
+    broadcastState(roomId);
+  });
+
+  socket.on("ACTION", ({ type, roomId, playerId, payload, secret }) => {
+    const room = rooms.get(roomId);
+    if (!room) return;
+
+    const meta = room.sockets.get(socket.id);
+    if (!meta) return;
+
+    // 安全檢查：playerId 與 secret 必須相符
+    if (meta.playerId !== Number(playerId)) return;
+    if (meta.secret !== String(secret || "")) return;
+
+    // 交由引擎處理
+    const action = {
+      type: String(type),
+      roomId,
+      playerId: meta.playerId,
+      payload: payload || {},
+    };
+
+    const { state: newState, emits } = applyAction(room.state, action);
+    room.state = newState;
+
+    // 處理引擎的「一對多 / 一對一」事件
+    if (Array.isArray(emits)) {
+      for (const e of emits) {
+        if (!e) continue;
+        if (e.to === "all") {
+          io.to([...room.sockets.keys()]).emit("EMIT", e);
+        } else if (typeof e.to === "number") {
+          // 發給特定玩家（找他的 socket）
+          for (const [sid, m] of room.sockets.entries()) {
+            if (m.playerId === e.to) {
+              io.to(sid).emit("EMIT", e);
+            }
+          }
+        }
+      }
+    }
+
+    // 最後廣播 STATE（遮蔽視野）
+    broadcastState(roomId);
+  });
+
+  socket.on("disconnect", () => {
+    if (!joinedRoom) return;
+
+    const room = rooms.get(joinedRoom);
+    if (!room) return;
+
+    const meta = room.sockets.get(socket.id);
+    room.sockets.delete(socket.id);
+
+    if (meta && typeof meta.playerId === "number") {
+      room.claims[meta.playerId] = false;
+      // （不自動改名/清人，保留原座位給重連；若想釋放座位，可在此重排）
+    }
+
+    // 若完全無人連線，可以選擇回收（避免佔記憶體）
+    if (room.sockets.size === 0) {
+      // 保留 30 分鐘，以便中途重連；你也可改成立即刪除
+      const TTL = 30 * 60 * 1000;
+      if (Date.now() - room.createdAt > TTL) {
+        rooms.delete(joinedRoom);
+      }
+    }
+  });
+});
+
+// === 3) 監聽埠（Render 會注入 PORT） ===
+const PORT = process.env.PORT || 8787;
+server.listen(PORT, () => console.log("Server listening on", PORT));
