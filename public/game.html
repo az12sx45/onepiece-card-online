@@ -1,15 +1,11 @@
 <!doctype html>
 <html lang="zh-Hant">
 <head>
-<script>
-  // 固定指向 Render 後端
-  window.DEFAULT_SERVER = 'https://onepiece-card-online.onrender.com';
-</script>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>偉大航道爭霸戰｜正式對戰</title>
   <script src="https://cdn.tailwindcss.com"></script>
- <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
   <style>
     html,body{height:100%;background:#0f1113;color:#eaecee}
     .card{ background: rgba(16,20,24,.80);              /* 微透明面板色：#101418 / 80% */
@@ -904,13 +900,7 @@ const presetAvatar = Number(sp.get('avatar') || '1') || 1;
 const presetN      = Math.max(2, Math.min(8, Number(sp.get('n') || '4') || 4));
 
 const serverURL = sp.get('server') || undefined;
-const sp = new URLSearchParams(location.search);
-// 若 URL 有 ?server=... 就用它；否則用 DEFAULT_SERVER（Render）
-const serverURL = sp.get('server') || window.DEFAULT_SERVER;
-
-// 強制使用 websocket 可避免平板長輪詢問題
-const socket = io(serverURL, { transports: ['websocket'] });
-
+const socket = io(serverURL, { transports:['websocket'] });
 let me = { roomId: presetRoom || 'op-001', playerId: null, secret: localStorage.getItem('opSecret')||'' };
 let state = null;
 
