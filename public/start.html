@@ -1,3 +1,4 @@
+<!-- /start.html -->
 <!doctype html>
 <html lang="zh-Hant">
 <head>
@@ -7,6 +8,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <!-- (1) 在 React 之後加入 Socket.IO -->
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
     :root{ --bg:#121315; --ink:#eaecee; --brand:#ffb84d; --cover:url("images/cover.jpg"); }
@@ -65,25 +68,51 @@
     (function orientationGate(){ const overlay = document.getElementById('lockOverlay'); function apply(){ const isPortrait = window.matchMedia("(orientation: portrait)").matches; document.body.classList.toggle('lock-scroll', isPortrait); if(overlay){ overlay.style.display = isPortrait ? 'flex' : 'none'; } } window.addEventListener('resize', apply); window.addEventListener('orientationchange', apply); apply(); })();
     async function tryLockLandscape(){ try{ if(screen.orientation && screen.orientation.lock){ await screen.orientation.lock('landscape'); } }catch(e){} }
   </script>
-<!-- 將這個 URL 換成你的後端網域 -->
-<script src="https://onepiece-card-online.onrender.com/socket.io/socket.io.js"></script>
 
   <script type="text/babel" data-presets="env,react">
+    // === (2) 連線與全域參數：置於 React 程式碼最上方 ===
+    const SERVER_URL = 'https://onepiece-card-online.onrender.com';
+    const socket = io(SERVER_URL, { transports: ['websocket'] });
+
+    // === 等待室本地狀態（非必須存在於 localStorage）
+    let __lobby = {
+      roomId:'',
+      me:{ playerId:null, secret: localStorage.getItem('opSecret')||'', name:'', avatar:1 },
+      snapshot:null
+    };
+
+    // 伺服器回覆：拿到自己的 playerId / secret
+    socket.on('JOINED', ({ playerId, secret })=>{
+      __lobby.me.playerId = playerId;
+      __lobby.me.secret   = secret;
+      try { localStorage.setItem('opSecret', secret); } catch {}
+    });
+
+    // 伺服器廣播等待室快照或導向遊戲
+    socket.on('EMIT', (e)=>{
+      if (e?.type === 'lobby'){
+        __lobby.snapshot = e.lobby; // {roomId, host, players[]}
+        window.__setLobby && window.__setLobby(e.lobby); // 觸發 React 重繪
+      }
+      if (e?.type === 'nav_game'){
+        try{ socket.close(); }catch{}
+        const url = new URL('game.html', location.origin);
+        url.searchParams.set('server', SERVER_URL);
+        url.searchParams.set('room',   __lobby.roomId);
+        url.searchParams.set('name',   __lobby.me.name || 'P');
+        url.searchParams.set('avatar', String(__lobby.me.avatar || 1));
+        url.searchParams.set('n', String(__lobby.snapshot?.players?.length || 4));
+        location.href = url.toString();
+      }
+    });
+
+    // === 原常數/工具：保留必要者 ===
     const {useState, useEffect, useMemo} = React;
-    const ROOMS_KEY = "op_rooms"; const ME_KEY = "op_me_id"; const MIN_PLAYERS = 2;
+    const MIN_PLAYERS = 2; // 開局最低人數
+
     function uid(){ return Math.random().toString(36).slice(2,10); }
     function genRoomId(){ const letters = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; let s=""; for(let i=0;i<6;i++) s += letters[Math.floor(Math.random()*letters.length)]; return s; }
-    function loadRooms(){ try{ return JSON.parse(localStorage.getItem(ROOMS_KEY)||"{}"); }catch{ return {}; } }
-    function saveRooms(obj){ localStorage.setItem(ROOMS_KEY, JSON.stringify(obj)); }
-    function getRoom(id){ return loadRooms()[id]||null; }
-    function upsertRoom(room){ const all = loadRooms(); all[room.id] = room; saveRooms(all); localStorage.setItem("op_rooms_broadcast", JSON.stringify({ts:Date.now(), id:room.id})); }
-    function deleteRoom(id){ const all = loadRooms(); delete all[id]; saveRooms(all); localStorage.setItem("op_rooms_broadcast", JSON.stringify({ts:Date.now(), id})); }
-    function getMeId(){ let me = sessionStorage.getItem(ME_KEY); if(!me){ me = "me_" + uid(); sessionStorage.setItem(ME_KEY, me); } return me; }
-// 讀 URL 參數中的 server；沒有就用目前來源（前後端同域時可行）
-function pickServerURL(){
-  const u = new URL(location.href);
-  return u.searchParams.get('server') || location.origin;
-}
+    function getMeId(){ let me = sessionStorage.getItem("op_me_id"); if(!me){ me = "me_" + uid(); sessionStorage.setItem("op_me_id", me); } return me; }
 
     function WaveText({ text, className="", small=false }){ const chars = Array.from(text); const waveClass = small ? "wave wave-sm" : "wave"; return (<span className={`${waveClass} ${className}`}>{chars.map((ch, idx) => (<span className="char" style={{["--i"]: idx}} key={idx}>{ch === " " ? "\u00A0" : ch}</span>))}</span>); }
 
@@ -118,137 +147,192 @@ function pickServerURL(){
         <div className="mt-5 flex flex-col sm:flex-row gap-3"><button className="btn-primary btn grow" type="submit">創建房間</button><button className="btn grow" type="button" onClick={()=>{ const safe=(name||"").trim()||"無名航海士"; const data={ playerName:safe, playerAvatar:pick, avatarUrl:avatars[pick-1] }; localStorage.setItem("op_player_profile", JSON.stringify(data)); onDone(data,{join:true}); }}>加入房間</button></div>
       </form>); }
 
-    function RoomChoice({profile, intent, onEnter}){ const [joinCode,setJoinCode]=useState(""); const meId=getMeId();
-      function createRoom(){ const id=genRoomId(); const room={ id, createdAt:Date.now(), status:"waiting", hostId:meId, players:[{ pid:meId, name:profile.playerName, avatar:profile.playerAvatar, avatarUrl:profile.avatarUrl, ready:false, ts:Date.now() }]}; upsertRoom(room); onEnter(room.id,{host:true}); }
-      function tryJoin(){ const code=(joinCode||"").toUpperCase().replace(/\s+/g,""); const room=getRoom(code); if(!room){ alert("找不到此房號，請確認後再試"); return; } room.players = room.players.filter(p=>p.pid!==meId); room.players.push({ pid:meId, name:profile.playerName, avatar:profile.playerAvatar, avatarUrl:profile.avatarUrl, ready:false, ts:Date.now() }); if(!room.players.find(p=>p.pid===room.hostId)){ room.hostId = meId; } upsertRoom(room); onEnter(room.id,{host:room.hostId===meId}); }
+    function RoomChoice({profile, intent, onEnter}){
+      const [joinCode,setJoinCode]=useState("");
+      const meId=getMeId(); // 僅用於本機識別，不影響後端
+
+      // === (3A) 建立房：emit JOIN_ROOM，先切 UI ===
+      function createRoom(){
+        const id = genRoomId();
+        __lobby.roomId = id;
+        __lobby.me.name   = profile.playerName;
+        __lobby.me.avatar = profile.playerAvatar;
+        socket.emit('JOIN_ROOM', {
+          roomId: id,
+          displayName: profile.playerName,
+          avatar: profile.playerAvatar,
+          secret: __lobby.me.secret,
+          playerCount: 4
+        });
+        onEnter(id, { host: true });
+      }
+
+      // === (3B) 加入房：emit JOIN_ROOM，先切 UI ===
+      function tryJoin(){
+        const code = (joinCode||"").toUpperCase().replace(/\s+/g,"");
+        if(!code){ alert("請輸入房號"); return; }
+        __lobby.roomId = code;
+        __lobby.me.name   = profile.playerName;
+        __lobby.me.avatar = profile.playerAvatar;
+        socket.emit('JOIN_ROOM', {
+          roomId: code,
+          displayName: profile.playerName,
+          avatar: profile.playerAvatar,
+          secret: __lobby.me.secret
+        });
+        onEnter(code, { host:false });
+      }
+
       return (<div className="card w-[min(820px,96vw)] p-6 space-y-5">
         <div className="flex items-center gap-3"><div className="avatar is-active"><img src={profile.avatarUrl} alt=""/></div><div><div className="text-sm text-neutral-400">玩家</div><div className="text-lg font-bold">{profile.playerName}</div></div></div>
-        {!intent?.join ? (<div className="grid sm:grid-cols-2 gap-3"><button className="btn-primary btn" onClick={createRoom}>建立房間</button><button className="btn" onClick={()=>window.location.reload()}>返回重選</button></div>) : (<><div><div className="text-sm text-neutral-300 mb-1">輸入房號加入</div><div className="flex gap-2"><input className="rounded-lg bg-neutral-900 border border-neutral-700 px-3 py-2 outline-none focus:border-amber-400 uppercase tracking-widest" placeholder="例如 ABC123" maxLength={8} value={joinCode} onChange={e=>setJoinCode(e.target.value)} /><button className="btn-primary btn" onClick={tryJoin}>加入房間</button></div></div><div className="flex gap-3"><button className="btn" onClick={()=>window.location.reload()}>返回重選</button></div></>)}
-        <div className="text-xs text-neutral-400">之後可將此步驟串接你的後端 API（建立/加入房間）。</div>
-      </div>); }
+        {!intent?.join ? (
+          <div className="grid sm:grid-cols-2 gap-3">
+            <button className="btn-primary btn" onClick={createRoom}>建立房間</button>
+            <button className="btn" onClick={()=>window.location.reload()}>返回重選</button>
+          </div>
+        ) : (
+          <>
+            <div>
+              <div className="text-sm text-neutral-300 mb-1">輸入房號加入</div>
+              <div className="flex gap-2">
+                <input className="rounded-lg bg-neutral-900 border border-neutral-700 px-3 py-2 outline-none focus:border-amber-400 uppercase tracking-widest" placeholder="例如 ABC123" maxLength={8} value={joinCode} onChange={e=>setJoinCode(e.target.value)} />
+                <button className="btn-primary btn" onClick={tryJoin}>加入房間</button>
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <button className="btn" onClick={()=>window.location.reload()}>返回重選</button>
+            </div>
+          </>
+        )}
+        <div className="text-xs text-neutral-400">已切到後端真房：建立/加入皆透過 Socket.IO。</div>
+      </div>);
+    }
 
-    function WaitingRoom({roomId, meId, profile, host, onLeave, onStart}){
-      const [room,setRoom]=useState(()=> getRoom(roomId));
-      const [tick,setTick]=useState(0);
-      // 每秒 refresh 自己心跳 & 讀取房間
-      useEffect(()=>{ const i=setInterval(()=> setTick(t=>t+1), 1000); const onStorage=(e)=>{ if(e.key==="op_rooms" || e.key==="op_rooms_broadcast"){ const r=getRoom(roomId); if(r) setRoom(r); } }; window.addEventListener('storage', onStorage); return ()=>{ clearInterval(i); window.removeEventListener('storage', onStorage); }; }, [roomId]);
-      useEffect(()=>{ const r=getRoom(roomId); if(!r) return; const me=r.players.find(p=>p.pid===meId); if(me){ me.ts=Date.now(); upsertRoom(r); setRoom(r); } }, [tick, roomId, meId]);
-      // 狀態變 started → 直接導向
-      useEffect(()=>{ if(room?.status === "started"){ onStart(room); } }, [room?.status]);
-      // 輪詢保險：就算 storage 事件沒觸發也會跳
-      useEffect(()=>{ const tm=setInterval(()=>{ const r=getRoom(roomId); if(r?.status==="started"){ onStart(r); } }, 1000); return ()=> clearInterval(tm); }, [roomId]);
-      // 監聽導航旗標（房主寫入），任何人讀到就跳
-      useEffect(()=>{ const key = `op_rooms_nav_${roomId}`; const tryNav = ()=>{ const val=localStorage.getItem(key); if(val){ const serverURL = new URL(val, location.origin).origin || location.origin; const url = new URL('/game.html', serverURL); url.searchParams.set('room', roomId); url.searchParams.set('server', serverURL); if (profile?.playerName)  url.searchParams.set('name', profile.playerName); if (profile?.playerAvatar) url.searchParams.set('avatar', String(profile.playerAvatar)); const r=getRoom(roomId); url.searchParams.set('n', String(r?.players?.length || 4)); window.location.href = url.toString(); } }; tryNav(); const onStorage=(e)=>{ if(e.key===key) tryNav(); }; window.addEventListener('storage', onStorage); return ()=> window.removeEventListener('storage', onStorage); }, [roomId, profile?.playerName, profile?.playerAvatar]);
+    // === (4) 等待室：全面使用 __lobby.snapshot ===
+    function WaitingRoom({roomId, profile, onLeave}){
+      const [lobby, setLobby] = useState(()=> __lobby.snapshot);
+      const mePid = __lobby.me.playerId;
 
-// ===（新增）等待室：連到後端 /lobby，並在開始時讓所有裝置導頁 ===
-const [lobbySock, setLobbySock] = useState(null);
+      useEffect(()=>{
+        window.__setLobby = setLobby;
+        return ()=>{ window.__setLobby = null; };
+      }, []);
 
-useEffect(()=>{
-  // 1) 連線到等待室 namespace
-  const serverURL = pickServerURL();
-  const sock = io(serverURL + '/lobby', { transports:['websocket'] });
-  setLobbySock(sock);
+      const players = lobby?.players||[];
+      // 後端欄位防呆：支援 playerId/id, displayName/name
+      function pidOf(p){ return p.playerId ?? p.pid ?? p.id; }
+      function nameOf(p){ return p.displayName ?? p.name ?? 'P'; }
+      function avatarOf(p){ return p.avatar ?? 1; }
 
-  // 2) 進入等待室（註冊玩家：房號、pid、名字、頭像）
-  sock.emit('LOBBY_ENTER', {
-    roomId, pid: meId,
-    name: profile?.playerName || '',
-    avatar: Number(profile?.playerAvatar) || 1
-  });
+      const amHost = lobby && (lobby.host === mePid);
+      const canStart = players.length>=MIN_PLAYERS && players.every(p=> !!p.ready);
 
-  // （可選）同步伺服器版狀態
-  sock.on('LOBBY_STATE', (s)=>{
-    // 可對照本地 room.players 與 s.players
-    // console.log('[server lobby]', s);
-  });
+      function copyId(){ if(!lobby?.roomId) return; navigator.clipboard?.writeText(lobby.roomId); alert("已複製房號："+lobby.roomId); }
 
-  // 3) 後端廣播開始 → 導頁至 game.html（帶 name/avatar/server/room）
-  sock.on('LOBBY_NAV', ({roomId, serverURL, name, avatar})=>{
-    const base = serverURL || pickServerURL();
-    const url  = new URL('/game.html', base);
-    url.searchParams.set('room', roomId);
-    url.searchParams.set('server', base);
-    if (name)   url.searchParams.set('name', name);
-    if (avatar) url.searchParams.set('avatar', String(avatar));
-    window.location.href = url.toString();
-  });
+      // 切換準備
+      function toggleReady(willReady){
+        socket.emit('ACTION', {
+          roomId: __lobby.roomId,
+          playerId: __lobby.me.playerId,
+          secret: __lobby.me.secret,
+          type: willReady ? 'LOBBY_READY' : 'LOBBY_UNREADY'
+        });
+      }
 
-  // 4) 離開時告知伺服器
-  return ()=> {
-    try { sock.emit('LOBBY_LEAVE', { roomId, pid: meId }); } catch(e){}
-    try { sock.close(); } catch(e){}
-  };
-}, [roomId, meId, profile?.playerName, profile?.playerAvatar]);
-
-
-      if(!room){ return (<div className="card w-[min(820px,96vw)] p-6"><div className="text-lg font-bold mb-2">房間不存在或已關閉</div><button className="btn" onClick={onLeave}>返回</button></div>); }
-      const amHost = room.hostId===meId; const canStart = room.players.length>=MIN_PLAYERS && room.players.every(p=>p.ready);
-      function copyId(){ navigator.clipboard?.writeText(room.id); alert("已複製房號："+room.id); }
-     function toggleReady(){
-  const r=getRoom(room.id); if(!r) return;
-  const me=r.players.find(p=>p.pid===meId); if(!me) return;
-  me.ready=!me.ready; me.ts=Date.now();
-  upsertRoom(r); setRoom(r);
-
-  // ▲ 新增：告訴伺服器我改變準備狀態
-  lobbySock?.emit('LOBBY_READY', { roomId: room.id, pid: meId, ready: me.ready });
-}
-
-    function leaveRoom(){
-  const r=getRoom(room.id);
-  if(!r){ onLeave(); return; }
-
-  r.players = r.players.filter(p=>p.pid!==meId);
-  if(r.players.length===0){
-    deleteRoom(r.id); onLeave(); return;
-  }
-  if(r.hostId===meId){ r.hostId = r.players[0].pid; }
-  upsertRoom(r); onLeave();
-
-  // ▲ 新增：告訴伺服器我離開等待室
-  lobbySock?.emit('LOBBY_LEAVE', { roomId: room.id, pid: meId });
-}
-
+      // 房主開局
       function startGame(){
-  const amHost = room.hostId===meId;
-  const canStart = room.players.length>=MIN_PLAYERS && room.players.every(p=>p.ready);
-  if(!amHost || !canStart) return;
+        if(!amHost) return;
+        socket.emit('ACTION', {
+          roomId: __lobby.roomId,
+          playerId: __lobby.me.playerId,
+          secret: __lobby.me.secret,
+          type: 'START_GAME'
+        });
+      }
 
-  // 舊作法（localStorage 廣播）拿掉，改成通知伺服器開始
-  const serverURL = pickServerURL();
-  lobbySock?.emit('LOBBY_START', { roomId: room.id, pid: meId, serverURL });
+      // 我的 ready 狀態
+      const me = players.find(p=> pidOf(p)===mePid);
+      const myReady = !!me?.ready;
 
-  // 仍可保留本地狀態更新，避免極端情況
-  const r=getRoom(room.id); if(r){ r.status="started"; upsertRoom(r); }
-}
-
+      if(!lobby){
+        return (<div className="card w=[min(820px,96vw)] p-6">
+          <div className="text-lg font-bold mb-2">正在連線等待室...</div>
+          <button className="btn" onClick={onLeave}>返回</button>
+        </div>);
+      }
 
       return (<div className="card w-[min(980px,96vw)] p-6">
-        <div className="flex flex-wrap items-center justify-between gap-3"><div><div className="text-xs text-neutral-400">房號</div><div className="text-2xl font-extrabold tracking-widest">{room.id}</div></div><div className="flex gap-2"><button className="btn" onClick={copyId}>複製房號</button><button className="btn" onClick={leaveRoom}>離開房間</button>{amHost && (<button className={`btn-primary ${canStart? "":"opacity-50 cursor-not-allowed"}`} onClick={startGame} disabled={!canStart} title={canStart? "開始遊戲":"至少 2 人且全部準備才可開始"}>開始遊戲</button>)}</div></div>
-        <div className="mt-5"><div className="text-sm text-neutral-300 mb-2">玩家（{room.players.length}）</div><div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">{room.players.map(p=> (<div key={p.pid} className="flex items-center justify-between gap-3 rounded-xl border border-neutral-700/60 bg黑/30 px-3 py-2"><div className="flex items-center gap-3"><div className={"avatar "+(p.pid===room.hostId?"is-active":"")}><img src={p.avatarUrl} alt=""/></div><div><div className="font-semibold leading-tight">{p.name}</div><div className="text-xs text-neutral-400 flex items-center gap-2">{p.pid===room.hostId ? <span className="px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-200 border border-amber-400/30">房主</span> : <span className="opacity-60">玩家</span>}{p.ready ? <span className="px-1.5 py-0.5 rounded bg-emerald-400/15 text-emerald-200 border border-emerald-400/30">已準備</span> : <span className="px-1.5 py-0.5 rounded bg-neutral-600/20 text-neutral-200 border border-neutral-600/40">未準備</span>}</div></div></div>{p.pid===meId && (<button className="btn" onClick={toggleReady}>{p.ready?"取消準備":"準備"}</button>)}</div>))}</div></div>
-        <div className="text-xs text-neutral-400 mt-4">小提示：兩個分頁都用 <code>http://localhost:8787/start.html</code> 開，不要混用 file:// 與 http://，才能互相同步。</div>
-      </div>); }
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <div className="text-xs text-neutral-400">房號</div>
+            <div className="text-2xl font-extrabold tracking-widest">{lobby.roomId}</div>
+          </div>
+          <div className="flex gap-2">
+            <button className="btn" onClick={copyId}>複製房號</button>
+            <button className="btn" onClick={onLeave}>離開房間</button>
+            {amHost && (
+              <button className={`btn-primary ${canStart? "": "opacity-50 cursor-not-allowed"}`} onClick={startGame} disabled={!canStart} title={canStart? "開始遊戲":"至少 2 人且全部準備才可開始"}>開始遊戲</button>
+            )}
+          </div>
+        </div>
 
-    function App(){ const [stage,setStage]=useState("press"); const [profile,setProfile]=useState(null); const [intent,setIntent]=useState(null); const [roomInfo,setRoomInfo]=useState(null); const meId=getMeId();
+        <div className="mt-5">
+          <div className="text-sm text-neutral-300 mb-2">玩家（{players.length}）</div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {players.map(p=> {
+              const pid = pidOf(p);
+              const isHost = lobby.host === pid;
+              const isMe   = pid === mePid;
+              const ready  = !!p.ready;
+              const avatarUrl = `images/avatars/${avatarOf(p)}.png`;
+              return (
+                <div key={pid} className="flex items-center justify-between gap-3 rounded-xl border border-neutral-700/60 bg黑/30 px-3 py-2">
+                  <div className="flex items-center gap-3">
+                    <div className={"avatar "+(isHost?"is-active":"")}><img src={avatarUrl} alt=""/></div>
+                    <div>
+                      <div className="font-semibold leading-tight">{nameOf(p)}</div>
+                      <div className="text-xs text-neutral-400 flex items-center gap-2">
+                        {isHost ? <span className="px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-200 border border-amber-400/30">房主</span> : <span className="opacity-60">玩家</span>}
+                        {ready ? <span className="px-1.5 py-0.5 rounded bg-emerald-400/15 text-emerald-200 border border-emerald-400/30">已準備</span> : <span className="px-1.5 py-0.5 rounded bg-neutral-600/20 text-neutral-200 border border-neutral-600/40">未準備</span>}
+                      </div>
+                    </div>
+                  </div>
+                  {isMe && (
+                    <button className="btn" onClick={()=>toggleReady(!myReady)}>{myReady?"取消準備":"準備"}</button>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="text-xs text-neutral-400 mt-4">此等待室已綁定後端快照；準備/開局皆透過 Socket.IO。</div>
+      </div>);
+    }
+
+    function App(){
+      const [stage,setStage]=useState("press");
+      const [profile,setProfile]=useState(null);
+      const [intent,setIntent]=useState(null);
+      const [roomInfo,setRoomInfo]=useState(null);
+      getMeId(); // 產生一次本機識別
+
       useEffect(()=>{ const cached=localStorage.getItem("op_player_profile"); if(cached){ try{ setProfile(JSON.parse(cached)); }catch{} } },[]);
       function enterRoom(id, extra){ setRoomInfo({id, host: !!extra?.host}); setStage("waiting"); }
+
       return (<div className="w-full max-w-[1200px] mx-auto"><div className="min-h-dvh flex items-center justify-center">
         {stage==="press"   && <PressAnyKey onProceed={()=>setStage("profile")} />}
         {stage==="profile" && <NameAvatar defaultName={profile?.playerName} onDone={(p,i)=>{ setProfile(p); setIntent(i||{}); setStage("choice"); }} />}
         {stage==="choice"  && profile && (<RoomChoice profile={profile} intent={intent} onEnter={enterRoom}/>)}
-        {stage==="waiting" && roomInfo && profile && (<WaitingRoom roomId={roomInfo.id} meId={meId} profile={profile} host={roomInfo.host} onLeave={()=>{ setStage("profile"); }} onStart={(room)=>{
-          // 導向正式遊戲頁 game.html，攜帶 name/avatar/n
-          window.__OPAudio?.mute?.();
-          const serverURL = location.origin; // 若後端不同網域，改成固定網址
-          const url = new URL('/game.html', serverURL);
-          url.searchParams.set('room', room.id);
-          url.searchParams.set('server', serverURL);
-          if (profile?.playerName)  url.searchParams.set('name', profile.playerName);
-          if (profile?.playerAvatar)url.searchParams.set('avatar', String(profile.playerAvatar));
-          url.searchParams.set('n', String(room.players?.length || 4));
-          window.location.href = url.toString();
-        }} />)}
-      </div></div>); }
+        {stage==="waiting" && roomInfo && profile && (
+          <WaitingRoom
+            roomId={roomInfo.id}
+            profile={profile}
+            onLeave={()=>{ setStage("profile"); __lobby = { roomId:'', me:{ playerId:__lobby.me.playerId, secret:__lobby.me.secret, name:'', avatar:1 }, snapshot:null }; }}
+          />
+        )}
+      </div></div>);
+    }
 
     ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
   </script>
@@ -257,21 +341,21 @@ useEffect(()=>{
   <audio id="bgm" src="audio/bgm.mp3" preload="auto" loop autoplay></audio>
   <div class="audio-toggle" id="audioCtrl" style="display:none"><button id="btnMute" title="靜音/取消靜音" aria-label="Mute/Unmute"><svg id="icoVol" width="16" height="16" viewBox="0 0 24 24" fill="#ffd36a"><path d="M4 9v6h4l5 4V5L8 9H4z"></path><path id="wave" d="M16 8c1.5 1.5 1.5 6.5 0 8" stroke="#ffd36a" stroke-width="2" fill="none"/></svg></button><input id="rngVol" class="vol" type="range" min="0" max="100" step="1" value="65" /></div>
 
-<script>
-(function(){
-  const S={ muteKey:"op_audio_mute", volKey:"op_audio_vol", hasStarted:false, fadeTimer:null, autoTried:false };
-  const $intro=document.getElementById('sfxIntro'); const $bgm=document.getElementById('bgm'); const $wrap=document.getElementById('audioCtrl'); const $btn=document.getElementById('btnMute'); const $ico=document.getElementById('icoVol'); const $wave=document.getElementById('wave'); const $rng=document.getElementById('rngVol');
-  const savedMute=localStorage.getItem(S.muteKey); const savedVol=localStorage.getItem(S.volKey); let muted=savedMute==="1"; let vol=isNaN(+savedVol)?20:Math.max(0,Math.min(100,+savedVol)); setVolume(vol); applyMuteUI(); $wrap.style.display='flex';
-  function setVolume(v){ vol=v; $rng.value=String(v); const gain=muted?0:(v/100); $bgm.volume=Math.min(1,Math.max(0,gain)); if($intro) $intro.volume=Math.min(1,Math.max(0,Math.min(0.9,gain*1.2))); localStorage.setItem(S.volKey,String(v)); }
-  function fade(el,target,ms){ clearInterval(S.fadeTimer); const stepMs=40, steps=Math.max(1,Math.round(ms/stepMs)); const start=el.volume; let n=0; S.fadeTimer=setInterval(()=>{ n++; const t=n/steps; el.volume=start+(target-start)*t; if(n>=steps){ clearInterval(S.fadeTimer); el.volume=target; }}, stepMs); }
-  function applyMuteUI(){ const on=!muted; $ico.setAttribute('fill', on?'#ffd36a':'#bbb'); $wave.setAttribute('stroke', on?'#ffd36a':'#bbb'); }
-  async function tryAutoStart(){ if(S.autoTried||S.hasStarted) return; S.autoTried=true; try{ setVolume(vol); await $bgm.play(); if(!muted) $bgm.volume=Math.min(1,vol/100); S.hasStarted=true; }catch(e){ S.hasStarted=false; } }
-  async function startAudioAfterGesture(){ if(S.hasStarted) return; S.hasStarted=true; try{ $bgm.volume=0; await $bgm.play().catch(()=>{}); if($intro && $intro.src){ $intro.currentTime=0; $intro.volume=Math.min(1,(vol/100)*0.9); await $intro.play().catch(()=>{}); $intro.onended=()=>{ if(!muted) fade($bgm, Math.min(1, vol/100), 1200); }; }else{ if(!muted) fade($bgm, Math.min(1, vol/100), 800); } }catch(e){ S.hasStarted=false; } }
-  $btn.addEventListener('click', ()=>{ muted=!muted; localStorage.setItem(S.muteKey, muted?"1":"0"); applyMuteUI(); if(muted){ fade($bgm,0,250); if($intro && !$intro.paused) fade($intro,0,150); }else{ setVolume(vol); if($bgm.paused){ $bgm.play().catch(()=>{}); } fade($bgm, Math.min(1, vol/100), 250); } });
-  $rng.addEventListener('input', (e)=> setVolume(+e.target.value));
-  document.addEventListener('DOMContentLoaded', tryAutoStart);
-  window.__OPAudio = { startAudio: startAudioAfterGesture, setVolume, mute: ()=>{ if(!muted) $btn.click(); }, unmute: ()=>{ if(muted) $btn.click(); } };
-})();
-</script>
+  <script>
+  (function(){
+    const S={ muteKey:"op_audio_mute", volKey:"op_audio_vol", hasStarted:false, fadeTimer:null, autoTried:false };
+    const $intro=document.getElementById('sfxIntro'); const $bgm=document.getElementById('bgm'); const $wrap=document.getElementById('audioCtrl'); const $btn=document.getElementById('btnMute'); const $ico=document.getElementById('icoVol'); const $wave=document.getElementById('wave'); const $rng=document.getElementById('rngVol');
+    const savedMute=localStorage.getItem(S.muteKey); const savedVol=localStorage.getItem(S.volKey); let muted=savedMute==="1"; let vol=isNaN(+savedVol)?20:Math.max(0,Math.min(100,+savedVol)); setVolume(vol); applyMuteUI(); $wrap.style.display='flex';
+    function setVolume(v){ vol=v; $rng.value=String(v); const gain=muted?0:(v/100); $bgm.volume=Math.min(1,Math.max(0,gain)); if($intro) $intro.volume=Math.min(1,Math.max(0,Math.min(0.9,gain*1.2))); localStorage.setItem(S.volKey,String(v)); }
+    function fade(el,target,ms){ clearInterval(S.fadeTimer); const stepMs=40, steps=Math.max(1,Math.round(ms/stepMs)); const start=el.volume; let n=0; S.fadeTimer=setInterval(()=>{ n++; const t=n/steps; el.volume=start+(target-start)*t; if(n>=steps){ clearInterval(S.fadeTimer); el.volume=target; }}, stepMs); }
+    function applyMuteUI(){ const on=!muted; $ico.setAttribute('fill', on?'#ffd36a':'#bbb'); $wave.setAttribute('stroke', on?'#ffd36a':'#bbb'); }
+    async function tryAutoStart(){ if(S.autoTried||S.hasStarted) return; S.autoTried=true; try{ setVolume(vol); await $bgm.play(); if(!muted) $bgm.volume=Math.min(1,vol/100); S.hasStarted=true; }catch(e){ S.hasStarted=false; } }
+    async function startAudioAfterGesture(){ if(S.hasStarted) return; S.hasStarted=true; try{ $bgm.volume=0; await $bgm.play().catch(()=>{}); if($intro && $intro.src){ $intro.currentTime=0; $intro.volume=Math.min(1,(vol/100)*0.9); await $intro.play().catch(()=>{}); $intro.onended=()=>{ if(!muted) fade($bgm, Math.min(1, vol/100), 1200); }; }else{ if(!muted) fade($bgm, Math.min(1, vol/100), 800); } }catch(e){ S.hasStarted=false; } }
+    $btn.addEventListener('click', ()=>{ muted=!muted; localStorage.setItem(S.muteKey, muted?"1":"0"); applyMuteUI(); if(muted){ fade($bgm,0,250); if($intro && !$intro.paused) fade($intro,0,150); }else{ setVolume(vol); if($bgm.paused){ $bgm.play().catch(()=>{}); } fade($bgm, Math.min(1, vol/100), 250); } });
+    $rng.addEventListener('input', (e)=> setVolume(+e.target.value));
+    document.addEventListener('DOMContentLoaded', tryAutoStart);
+    window.__OPAudio = { startAudio: startAudioAfterGesture, setVolume, mute: ()=>{ if(!muted) $btn.click(); }, unmute: ()=>{ if(muted) $btn.click(); } };
+  })();
+  </script>
 </body>
 </html>
