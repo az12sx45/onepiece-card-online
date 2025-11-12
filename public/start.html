@@ -90,19 +90,22 @@
 
     // 伺服器廣播等待室快照或導向遊戲
     socket.on('EMIT', (e)=>{
-      if (e?.type === 'lobby'){
-        __lobby.snapshot = e.lobby; // {roomId, host, players[]}
-        window.__setLobby && window.__setLobby(e.lobby); // 觸發 React 重繪
-      }
-      if (e?.type === 'nav_game'){
-        try{ socket.close(); }catch{}
-        const url = new URL('game.html', location.origin);
-        url.searchParams.set('server', SERVER_URL);
-        url.searchParams.set('room',   __lobby.roomId);
-        url.searchParams.set('name',   __lobby.me.name || 'P');
-        url.searchParams.set('avatar', String(__lobby.me.avatar || 1));
-        location.href = url.toString();
-      }
+     if (e?.type === 'nav_game'){
+  try{ socket.close(); }catch{}
+  const url = new URL('game.html', location.origin);
+  url.searchParams.set('server', SERVER_URL);
+  url.searchParams.set('room',   __lobby.roomId);
+  url.searchParams.set('name',   __lobby.me.name || 'P');
+  url.searchParams.set('avatar', String(__lobby.me.avatar || 1));
+
+  const count = Array.isArray(__lobby.snapshot?.players)
+    ? Math.max(1, __lobby.snapshot.players.length)
+    : 1;
+  url.searchParams.set('n', String(count));      // ✅ 不再預設 4
+
+  location.href = url.toString();
+}
+
     });
 
     // === 原常數/工具：保留必要者 ===
@@ -161,7 +164,7 @@
           displayName: profile.playerName,
           avatar: profile.playerAvatar,
           secret: __lobby.me.secret,
-        });
+       });
         onEnter(id, { host: true });
       }
 
