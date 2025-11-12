@@ -269,5 +269,6 @@ io.on('connection', (socket)=>{
 });
 
 const PORT = process.env.PORT || 8787;
-app.get('/', (req,res)=> res.sendFile(path.join(__dirname, '..', 'public', 'start.html')));
-server.listen(PORT, ()=> console.log('Server listening on', PORT));
+server.listen(PORT, '0.0.0.0', () => {
+  console.log('Server listening on', PORT);
+});
