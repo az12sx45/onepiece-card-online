@@ -230,7 +230,6 @@ io.on("connection", (socket) => {
 });
 
 const PORT = process.env.PORT || 8787;
-const path = require('path'); // 檔案頂部若尚未引入就加這行
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'start.html'));
