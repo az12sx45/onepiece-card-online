@@ -13,7 +13,8 @@ const {
 
 // === HTTP + 靜態檔 ===
 const app = express();
-app.use(express.static(path.join(__dirname, "..", "public")));
+app.use(express.static(path.join(__dirname, "..", "public")))
+app.get("/", (_req, res) => res.redirect(302, "/start.html"));
 app.get("/health", (_req, res) => res.json({ ok: true, ts: Date.now() }));
 
 const server = http.createServer(app);
