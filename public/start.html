@@ -113,7 +113,48 @@
 
     function RoomChoice({profile, intent, onEnter}){ const [joinCode,setJoinCode]=useState(""); const meId=getMeId();
       function createRoom(){ const id=genRoomId(); const room={ id, createdAt:Date.now(), status:"waiting", hostId:meId, players:[{ pid:meId, name:profile.playerName, avatar:profile.playerAvatar, avatarUrl:profile.avatarUrl, ready:false, ts:Date.now() }]}; upsertRoom(room); onEnter(room.id,{host:true}); }
-      function tryJoin(){ const code=(joinCode||"").toUpperCase().replace(/\s+/g,""); const room=getRoom(code); if(!room){ alert("找不到此房號，請確認後再試"); return; } room.players = room.players.filter(p=>p.pid!==meId); room.players.push({ pid:meId, name:profile.playerName, avatar:profile.playerAvatar, avatarUrl:profile.avatarUrl, ready:false, ts:Date.now() }); if(!room.players.find(p=>p.pid===room.hostId)){ room.hostId = meId; } upsertRoom(room); onEnter(room.id,{host:room.hostId===meId}); }
+      function tryJoin(){
+  const code = (joinCode || "").toUpperCase().replace(/\s+/g, "");
+  if (!code || code.length < 4) { 
+    alert("請輸入有效房號"); 
+    return; 
+  }
+
+  const meId = getMeId();
+  let room = getRoom(code);
+
+  if (!room) {
+    // 本機沒有 → 建一個「影子房間」讓你能進等待室
+    room = {
+      id: code,
+      createdAt: Date.now(),
+      status: "waiting",
+      hostId: null, // 不是房主
+      players: []
+    };
+  } else {
+    // 清掉同 pid，避免重覆
+    room.players = Array.isArray(room.players) ? room.players.filter(p => p.pid !== meId) : [];
+  }
+
+  // 把自己加入
+  room.players.push({
+    pid: meId,
+    name: profile.playerName,
+    avatar: profile.playerAvatar,
+    avatarUrl: profile.avatarUrl,
+    ready: false,
+    ts: Date.now()
+  });
+
+  // 如果這個本機影子房間沒有 hostId，就不要搶房主
+  // 真正誰是房主，等進 game.html 後由後端決定
+  upsertRoom(room);
+
+  // 進入等待室（保留你的原流程）
+  onEnter(room.id, { host: room.hostId === meId });
+}
+
       return (<div className="card w-[min(820px,96vw)] p-6 space-y-5">
         <div className="flex items-center gap-3"><div className="avatar is-active"><img src={profile.avatarUrl} alt=""/></div><div><div className="text-sm text-neutral-400">玩家</div><div className="text-lg font-bold">{profile.playerName}</div></div></div>
         {!intent?.join ? (<div className="grid sm:grid-cols-2 gap-3"><button className="btn-primary btn" onClick={createRoom}>建立房間</button><button className="btn" onClick={()=>window.location.reload()}>返回重選</button></div>) : (<><div><div className="text-sm text-neutral-300 mb-1">輸入房號加入</div><div className="flex gap-2"><input className="rounded-lg bg-neutral-900 border border-neutral-700 px-3 py-2 outline-none focus:border-amber-400 uppercase tracking-widest" placeholder="例如 ABC123" maxLength={8} value={joinCode} onChange={e=>setJoinCode(e.target.value)} /><button className="btn-primary btn" onClick={tryJoin}>加入房間</button></div></div><div className="flex gap-3"><button className="btn" onClick={()=>window.location.reload()}>返回重選</button></div></>)}
