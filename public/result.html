@@ -330,7 +330,7 @@ body{
     </div>
   </div>
 
-<script src="/socket.io/socket.io.js"></script>
+<script src="https://onepiece-card-online.onrender.com/socket.io/socket.io.js"></script>
 <script>
 /* ====== 全域狀態 ====== */
 const RESUME = true;
@@ -546,7 +546,10 @@ function renderFinal(final){
 
   if(!RESUME) return;
 
-  const socket=io({transports:['websocket']});
+  const serverURL = new URLSearchParams(location.search).get('server')
+  || "https://onepiece-card-online.onrender.com";
+const socket = io(serverURL, { transports: ['websocket'] });
+
   socket.on('connect', ()=>{
     socket.emit('JOIN', { roomId, resume:true, pid:MY_PID });
   });
