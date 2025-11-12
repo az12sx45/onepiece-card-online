@@ -228,7 +228,18 @@ socket.on('EMIT', (e)=>{
         return ()=>{ window.__setLobby = null; };
       }, []);
 
-      const players = lobby?.players||[];
+      // 僅顯示「已加入」玩家：排除預設占位 P2/P3/P4…（非我本人且沒有 ready 訊號）
+const raw = lobby?.players || [];
+const players = raw.filter(p => {
+  const pid = pidOf(p);
+  const nm  = nameOf(p) || '';
+  const isMe = pid === mePid;
+  const readyKnown = typeof p.ready === 'boolean';
+  const looksPlaceholder = nm === `P${pid+1}`; // 例如 id=1 → 'P2'
+  // 我本人一定顯示；有 ready 訊號（任一 true/false）也顯示；否則若只是預設 P# 就不顯示
+  return isMe || readyKnown || !looksPlaceholder;
+});
+
       // 後端欄位防呆：支援 playerId/id, displayName/name
       function pidOf(p){ return p.playerId ?? p.pid ?? p.id; }
       function nameOf(p){ return p.displayName ?? p.name ?? 'P'; }
