@@ -113,23 +113,18 @@
 
   function RoomChoice({ profile, intent, onEnter }){
   const [joinCode, setJoinCode] = React.useState("");
-  const apiBase = "https://onepiece-card-online.onrender.com";
 
-  // 建立房：改成 → 先進「等待室」
   function createRoom(){
-    const id = genRoomId();                 // 你原本的房號產生器
-    // 同機廣播（保留原 UX）
-    try { localStorage.setItem(`op_rooms_nav_${id}`, JSON.stringify({ go: true, t: Date.now() })); } catch {}
-
-    // 通知上層切到等待室，並把 profile 帶上
-    onEnter?.('waiting', { roomId: id, profile, apiBase });
+    const id = genRoomId(); // 你原本的房號產生器
+    // 保留同機廣播（讓同裝置其它分頁能自動移動）
+    try { localStorage.setItem(`op_rooms_nav_${id}`, JSON.stringify({ go: false, t: Date.now() })); } catch {}
+    onEnter?.('waiting', { roomId: id });
   }
 
-  // 加入房：進等待室（在等待室按「進入遊戲」才真正導向 game.html）
   function tryJoin(){
     const code = (joinCode || "").toUpperCase().replace(/\s+/g, "");
     if (!code || code.length < 4) { alert("請輸入有效房號"); return; }
-    onEnter?.('waiting', { roomId: code, profile, apiBase });
+    onEnter?.('waiting', { roomId: code });
   }
 
   return (
@@ -167,28 +162,19 @@
           </div>
         </>
       )}
-
-      <div className="text-xs text-neutral-400">
-        等待室保留：同裝置自動導頁；跨裝置請用「邀請連結」或輸入房號加入。
-      </div>
     </div>
   );
 }
 
 
-
-    function WaitingRoom({ roomId, profile, apiBase }){
-  const [copied, setCopied] = React.useState(false);
-
-  // 同機自動導頁（保留原行為）
+    function WaitingRoom({ roomId, profile }){
+  // 同機自動導頁：別的分頁把 go 設為 true，就自動跳轉
   React.useEffect(()=>{
     function onStorage(e){
       if (e.key === `op_rooms_nav_${roomId}`){
         try {
           const v = JSON.parse(e.newValue||"{}");
-          if (v && v.go){
-            goGame(); // 同機其他分頁發出 go → 直接開遊戲
-          }
+          if (v && v.go){ goGame(); }
         } catch {}
       }
     }
@@ -196,25 +182,17 @@
     return ()=> window.removeEventListener('storage', onStorage);
   }, [roomId]);
 
-  // 邀請連結（跨裝置用）
-  function buildInviteURL(){
+  function goGame(){
+    // 你原本的導頁方式：帶房號與後端網址（不帶 name/avatar，避免覆蓋）
     const url = new URL('/game.html', location.origin);
     url.searchParams.set('room', roomId);
-    url.searchParams.set('server', apiBase || 'https://onepiece-card-online.onrender.com');
-    if (profile?.playerName)   url.searchParams.set('name', profile.playerName);
-    if (profile?.playerAvatar) url.searchParams.set('avatar', String(profile.playerAvatar));
-    url.searchParams.set('n', '4');
-    return url.toString();
+    url.searchParams.set('server', 'https://onepiece-card-online.onrender.com');
+    location.href = url.toString();
   }
 
-  async function copy(text){
-    try { await navigator.clipboard.writeText(text); setCopied(true); setTimeout(()=>setCopied(false), 1200); }
-    catch { prompt('複製這段文字', text); }
-  }
-
-  function goGame(){
-    // 真的進入對戰頁（跨裝置也是走這條）
-    location.href = buildInviteURL();
+  function startForAllTabs(){
+    try { localStorage.setItem(`op_rooms_nav_${roomId}`, JSON.stringify({ go: true, t: Date.now() })); } catch {}
+    goGame(); // 自己這頁也一起進
   }
 
   return (
@@ -224,45 +202,42 @@
       <div className="flex items-center gap-2">
         <div className="text-sm text-neutral-300">房號：</div>
         <div className="px-3 py-2 rounded-lg bg-neutral-900 border border-neutral-700 tracking-widest font-mono">{roomId}</div>
-        <button className="btn" onClick={()=>copy(roomId)}>{copied ? '已複製' : '複製房號'}</button>
-      </div>
-
-      <div className="flex items-center gap-2">
-        <div className="text-sm text-neutral-300">邀請連結：</div>
-        <div className="w-full px-3 py-2 rounded-lg bg-neutral-900 border border-neutral-700 text-xs break-all">{buildInviteURL()}</div>
-        <button className="btn" onClick={()=>copy(buildInviteURL())}>複製連結</button>
       </div>
 
       <div className="grid sm:grid-cols-2 gap-3">
-        <button className="btn-primary btn" onClick={goGame}>進入遊戲</button>
+        <button className="btn-primary btn" onClick={startForAllTabs}>開始對戰</button>
         <button className="btn" onClick={()=>location.reload()}>返回重選</button>
       </div>
 
       <div className="text-xs text-neutral-400">
-        提示：同裝置的其他分頁若建立/加入同房，會自動開啟遊戲；不同裝置請用上面的連結或房號加入。
+        提示：同一台裝置開多個分頁會自動收到開始訊號並一起進入遊戲。
       </div>
     </div>
   );
 }
 
 
+
    function App(){
   const cached = localStorage.getItem("op_player_profile");
-  const [stage, setStage]   = React.useState(cached ? "choice" : "profile");
+  const [stage, setStage] = React.useState(cached ? "choice" : "press");
   const [profile, setProfile] = React.useState(cached ? JSON.parse(cached) : null);
   const [intent, setIntent] = React.useState(null);
   const [roomId, setRoomId] = React.useState("");
-  const [apiBase, setApiBase] = React.useState("https://onepiece-card-online.onrender.com");
 
   return (
     <div className="w-full max-w-[1200px] mx-auto">
       <div className="min-h-dvh flex items-center justify-center">
+        {stage==="press" && <PressAnyKey onProceed={()=>setStage("profile")} />}
+
         {stage==="profile" && (
           <NameAvatar
             defaultName={profile?.playerName}
             onDone={(p,i)=>{
-              setProfile(p); localStorage.setItem("op_player_profile", JSON.stringify(p));
-              setIntent(i||{}); setStage("choice");
+              setProfile(p);
+              localStorage.setItem("op_player_profile", JSON.stringify(p));
+              setIntent(i||{});
+              setStage("choice");
             }}
           />
         )}
@@ -274,8 +249,6 @@
             onEnter={(nextStage, payload)=>{
               if (nextStage==='waiting'){
                 setRoomId(payload.roomId);
-                setApiBase(payload.apiBase || apiBase);
-                setProfile(payload.profile || profile);
                 setStage('waiting');
               }
             }}
@@ -283,12 +256,13 @@
         )}
 
         {stage==="waiting" && (
-          <WaitingRoom roomId={roomId} profile={profile} apiBase={apiBase} />
+          <WaitingRoom roomId={roomId} profile={profile} />
         )}
       </div>
     </div>
   );
 }
+
 
 
 
