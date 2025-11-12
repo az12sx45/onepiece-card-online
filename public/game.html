@@ -1279,7 +1279,7 @@ el.join.onclick = ()=>{
 if (presetRoom) {
   try { sessionStorage.setItem('op_room', presetRoom); } catch {}
   setTimeout(()=>{
-    socket.emit('JOIN_ROOM', { roomId: me.roomId, displayName: presetName || 'P', avatar: presetAvatar, secret: me.secret, });
+    socket.emit('JOIN_ROOM', { roomId: me.roomId, displayName: presetName || 'P', avatar: presetAvatar, secret: me.secret, playerCount: presetN });
   }, 80);
 }
 
