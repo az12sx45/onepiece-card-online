@@ -486,15 +486,25 @@ function endOrNext(st){
 }
 
 // ---------------------------------------------------------------
-// 導出：建立初始局面
-function createInitialState(playerCount=4){
-  const st = baseState(playerCount);
-  if(st.deck.length<=st.HOT){
+// 導出：建立初始局面（允許動態玩家人數）
+function createInitialState(playerCount=1){
+  // playerCount 改為 1 → 不預塞 4 人
+  const st = baseState(Math.max(1, playerCount || 1));
+
+  // 為了與動態等待室相容，先清空所有玩家 client
+  st.players.forEach(p => {
+    p.client = null;
+    p.displayName = `P${p.id + 1}`;
+    p.avatar = (p.id % 8) + 1;
+  });
+
+  if(st.deck.length <= st.HOT){
     st._hotNotified = true;
     st.log.push(`⚠ 戰局進入白熱化：牌堆剩 ${st.deck.length}（紅髮可啟動）`);
   }
   return st;
 }
+
 
 // ---------------------------------------------------------------
 // 導出：資訊遮蔽（③ 調整這段）
