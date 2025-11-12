@@ -17,6 +17,112 @@ app.use(express.static(path.join(__dirname, "..", "public")))
 app.get("/", (_req, res) => res.redirect(302, "/start.html"));
 app.get("/health", (_req, res) => res.json({ ok: true, ts: Date.now() }));
 
+// ===== 等待室 namespace：/lobby =====
+const lobby = io.of('/lobby');
+
+// 房間資料結構（等待室用）
+/** roomsLobby: Map<roomId, { players: Map<pid, {pid,name,avatar,ready,sid}>, hostPid: string|null }> */
+const roomsLobby = new Map();
+
+function getLobbyRoom(roomId){
+  if (!roomsLobby.has(roomId)) {
+    roomsLobby.set(roomId, { players: new Map(), hostPid: null });
+  }
+  return roomsLobby.get(roomId);
+}
+
+function broadcastLobbyState(roomId){
+  const r = roomsLobby.get(roomId);
+  if (!r) return;
+  const players = [...r.players.values()].map(p => ({
+    pid: p.pid,
+    name: p.name,
+    avatar: p.avatar,
+    ready: !!p.ready,
+    isHost: r.hostPid === p.pid
+  }));
+  lobby.to(roomId).emit('LOBBY_STATE', { roomId, players, hostPid: r.hostPid });
+}
+
+lobby.on('connection', (socket)=>{
+  // 進入等待室
+  socket.on('LOBBY_ENTER', ({ roomId, pid, name, avatar })=>{
+    if (!roomId || !pid) return;
+    socket.join(roomId);
+
+    const r = getLobbyRoom(roomId);
+    if (!r.hostPid) r.hostPid = pid; // 第一個進來者是房主
+    r.players.set(pid, { pid, name: name||'', avatar: Number(avatar)||1, ready:false, sid: socket.id });
+
+    broadcastLobbyState(roomId);
+  });
+
+  // 切換準備
+  socket.on('LOBBY_READY', ({ roomId, pid, ready })=>{
+    const r = roomsLobby.get(roomId); if (!r) return;
+    const p = r.players.get(pid);     if (!p) return;
+    p.ready = !!ready;
+    broadcastLobbyState(roomId);
+  });
+
+  // 離開等待室
+  socket.on('LOBBY_LEAVE', ({ roomId, pid })=>{
+    const r = roomsLobby.get(roomId); if (!r) return;
+    const wasHost = (r.hostPid === pid);
+    r.players.delete(pid);
+
+    if (r.players.size === 0) {
+      roomsLobby.delete(roomId);
+    } else if (wasHost) {
+      // 交接房主
+      const first = r.players.values().next().value;
+      r.hostPid = first ? first.pid : null;
+    }
+    broadcastLobbyState(roomId);
+  });
+
+  // 房主按開始 → 廣播導頁到 game.html（每人帶自己的名/頭像）
+  socket.on('LOBBY_START', ({ roomId, pid, serverURL })=>{
+    const r = roomsLobby.get(roomId); if (!r) return;
+    if (r.hostPid !== pid) return; // 只有房主能開始
+
+    const allReady = [...r.players.values()].every(p => p.ready);
+    if (!allReady) return;
+
+    for (const p of r.players.values()){
+      lobby.to(p.sid).emit('LOBBY_NAV', {
+        roomId,
+        serverURL,           // 例如 https://onepiece-card-online.onrender.com
+        name: p.name,
+        avatar: p.avatar
+      });
+    }
+
+    // 可選：開始後清掉等待室（改用遊戲 namespace 接手）
+    // roomsLobby.delete(roomId);
+  });
+
+  // 連線中斷 → 自動從等待室移除
+  socket.on('disconnect', ()=>{
+    for (const [roomId, r] of roomsLobby) {
+      let removedPid = null;
+      for (const [pid, p] of r.players) {
+        if (p.sid === socket.id) { removedPid = pid; r.players.delete(pid); break; }
+      }
+      if (removedPid) {
+        if (r.players.size === 0) {
+          roomsLobby.delete(roomId);
+        } else if (r.hostPid === removedPid) {
+          const first = r.players.values().next().value;
+          r.hostPid = first ? first.pid : null;
+        }
+        broadcastLobbyState(roomId);
+      }
+    }
+  });
+});
+
+
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
 
