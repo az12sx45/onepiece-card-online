@@ -1,83 +1,72 @@
-// server/index.js — 動態人數/無佔位 + 正確對齊 playerId + 開局即廣播 STATE
-const path = require("path");
-const express = require("express");
-const http = require("http");
-const { Server } = require("socket.io");
-const {
-  createInitialState,
-  applyAction,
-  getVisibleState,
-  isRoundEnded,
-  nextRound
-} = require("./engine.js");
+// /server/index.js
+const path   = require('path');
+const express= require('express');
+const http   = require('http');
+const { Server } = require('socket.io');
+
+const { createInitialState, applyAction, getVisibleState, isRoundEnded, nextRound } = require('./engine');
 
 const app = express();
-app.use(express.static(path.join(__dirname, "..", "public")));
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "public", "start.html"));
-});
-app.get("/health", (_req, res) => res.json({ ok: true, ts: Date.now() }));
-
 const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: "*" } });
+const io  = new Server(server, { cors: { origin: '*' } });
 
-// room = { state, sockets: Map<sid,{playerId,secret,displayName,avatar}>, host, lobbyReady }
+app.use(express.static(path.join(__dirname, '..', 'public')));
+
+// ===== 房間結構 =====
+// rooms: Map<roomId, {
+//   sockets: Map<socketId, { playerId:number, secret:string }>
+//   host: number|null,
+//   state: GameState|null,
+//   lobbyReady: { [playerId]: true },
+//   secrets: Map<secret, playerId>   // 讓玩家重連時能接回
+// }>
 const rooms = new Map();
 
-// ——— 視圖小工具：統一 chestCoins 並加上 viewerCanNext ———
-function injectChestCoins(vis){
-  const cands = [
-    vis.chestCoins, vis.chestLeft, vis.chest, vis.treasure, vis.bank, vis.pot,
-    vis.meta?.chest, vis.meta?.treasure, vis.meta?.bank, vis.meta?.pot,
-  ];
-  let chest;
-  for (const v of cands){
-    if (typeof v === "number") { chest = v; break; }
-    if (v && typeof v.coins  === "number") { chest = v.coins;  break; }
-    if (v && typeof v.amount === "number") { chest = v.amount; break; }
-    if (v && typeof v.value  === "number") { chest = v.value;  break; }
+function ensureRoom(roomId){
+  if (!rooms.has(roomId)){
+    rooms.set(roomId, {
+      sockets: new Map(),
+      host: null,
+      state: null,
+      lobbyReady: {},
+      secrets: new Map()
+    });
   }
-  if (typeof chest !== "number") chest = 0;
-  vis.chestCoins = chest;
-
-  if (vis.turnStep){
-    const ended = (vis.turnStep === "ended" || vis.turnStep === "end" || vis.turnStep === "score");
-    vis.roundEnded = !!ended;
-    vis.allowNextRound = ended && (typeof vis.chestLeft === "number" ? vis.chestLeft > 0 : true);
-  }
-  return vis;
+  return rooms.get(roomId);
 }
 
-function broadcastState(room){
-  const st = room.state;
-  const ended = (st?.turnStep === "ended" || st?.turnStep === "end" || st?.turnStep === "score");
-  const winners = ended ? new Set(st.players.filter(p => p.alive).map(p => p.id)) : new Set();
-
-  for (const [sid, meta] of room.sockets){
-    const vis = injectChestCoins(getVisibleState(st, meta.playerId));
-    vis.viewerCanNext = (room.host === meta.playerId) || winners.has(meta.playerId);
-    io.to(sid).emit("STATE", vis);
-  }
-}
-
+// === 等待室快照 ===
 function broadcastLobby(roomId){
-  const room = rooms.get(roomId);
-  if (!room) return;
-  const st = room.state;
+  const room = rooms.get(roomId); if (!room) return;
   const ready = room.lobbyReady || {};
-  const joinedIds = new Set([...room.sockets.values()].map(m => m.playerId));
+  // 目前「線上座位」= 這個房間的 sockets 裡的 playerId（去重後排序）
+  const joined = [...room.sockets.values()]
+    .map(m => m.playerId)
+    .filter(v => typeof v === 'number' && v >= 0);
+  const uniq = Array.from(new Set(joined)).sort((a,b)=>a-b);
+
+  // 若尚未開局，用 uniq 長度作為等待室玩家數；名字/頭像暫放 client 欄位
+  let players = [];
+  if (!room.state){
+    players = uniq.map(pid => ({
+      id: pid,
+      name: `P${pid+1}`,
+      avatar: 1,
+      ready: !!ready[pid]
+    }));
+  }else{
+    players = room.state.players.map(p => ({
+      id: p.id,
+      name: p.client?.displayName || `P${p.id+1}`,
+      avatar: p.client?.avatar || 1,
+      ready: true
+    }));
+  }
 
   const payload = {
     roomId,
     host: room.host,
-    players: st.players
-      .filter(p => joinedIds.has(p.id))
-      .map(p => ({
-        id: p.id,
-        name: p.client?.displayName || p.displayName || `P${p.id+1}`,
-        avatar: p.client?.avatar ?? p.avatar ?? 1,
-        ready: !!ready[p.id],
-      }))
+    players
   };
 
   for (const [sid] of room.sockets){
@@ -85,208 +74,183 @@ function broadcastLobby(roomId){
   }
 }
 
-// ——— Socket.IO ———
-io.on("connection", (socket) => {
+// === 依 viewer 發送可見狀態 ===
+function broadcastState(room){
+  if (!room || !room.state) return;
+  for (const [sid, meta] of room.sockets){
+    const st = getVisibleState(room.state, meta.playerId);
+    io.to(sid).emit('STATE', st);
+  }
+}
+
+io.on('connection', (socket)=>{
   let joinedRoom = null;
 
-  socket.on("JOIN_ROOM", (payload = {}) => {
-    const { roomId, displayName = "", avatar = 1, secret = "", pid } = payload;
+  socket.on('JOIN_ROOM', ({ roomId, displayName='P', avatar=1, secret='' })=>{
     if (!roomId) return;
-
-    // 建房：暫給 1 位座位（真正開始時會重建）
-    let room = rooms.get(roomId);
-    if (!room) {
-      room = { state: createInitialState(1), sockets: new Map(), host: null, lobbyReady: {} };
-      rooms.set(roomId, room);
-    }
-
-    // 找第一個未綁 client 的位置；若都滿就新增一格座位
-    let myId = null;
-    for (const p of room.state.players) {
-      if (!p.client) { myId = p.id; break; }
-    }
-    if (myId == null) {
-      myId = room.state.players.length;
-      room.state.players.push({
-        id: myId, alive:true, protected:false, dodging:false, frozen:false,
-        hand:null, tempDraw:null, gold:0, skipNext:false
-      });
-    }
-
-    // 寫入玩家 meta（state 端）
-    const p = room.state.players[myId];
-    p.client = { displayName, avatar, pid };
-    p.displayName = displayName;
-    p.avatar = avatar;
-
-    // 第一位為房主
-    if (room.host == null) room.host = myId;
-
-    // 建 socket meta（※ 這裡要把名字/頭像也存進來，之後 START_GAME 會用）
-    const sec = secret || Math.random().toString(36).slice(2);
-    room.sockets.set(socket.id, {
-      playerId: myId,
-      secret: sec,
-      displayName: (displayName||'').trim() || `P${myId+1}`,
-      avatar: Number(avatar)||1,
-    });
-
+    const room = ensureRoom(roomId);
     joinedRoom = roomId;
+
+    // 1) 判斷他是「回到舊座位 / 新人 / 觀戰」
+    // 若已有 state：優先用 secret 找回原座位；找不到就當觀戰 (playerId = -1)
+    // 若尚未有 state：分配下一個 playerId
+    let playerId = -1;
+
+    if (room.state){
+      // 已開局
+      if (secret && room.secrets.has(secret)){
+        playerId = room.secrets.get(secret); // 接回
+      } else {
+        playerId = -1; // 觀戰
+      }
+    } else {
+      // 尚未開局：用目前 socket 裡已存在的座位 + 不補空位
+      const taken = new Set([...room.sockets.values()].map(m=>m.playerId).filter(i=>i>=0));
+      // 優先用舊 secret 的座位
+      if (secret && room.secrets.has(secret)) {
+        playerId = room.secrets.get(secret);
+      } else {
+        // 找最小未使用整數作為新座位
+        let i = 0; while (taken.has(i)) i++;
+        playerId = i;
+      }
+      if (secret) room.secrets.set(secret, playerId);
+      // 第一個進來的人就是房主
+      if (room.host == null) room.host = playerId;
+    }
+
+    // 登記 socket → 房間
+    room.sockets.set(socket.id, { playerId, secret: secret||'' });
     socket.join(roomId);
-    socket.emit("JOINED", { playerId: myId, secret: sec });
 
-    // 等待室 ready 狀態
-    room.lobbyReady[myId] = false;
+    // 回覆本人座位
+    socket.emit('JOINED', { playerId, secret });
 
-    broadcastLobby(roomId);
-    broadcastState(room);
+    // 如果尚未開局，廣播等待室；已開局則同步狀態給他
+    if (!room.state) {
+      broadcastLobby(roomId);
+    } else {
+      // 已開局：立刻送他能看的 STATE
+      const st = getVisibleState(room.state, playerId);
+      socket.emit('STATE', st);
+    }
   });
 
-  socket.on("ACTION", (action = {}) => {
-    const { roomId, playerId, secret, type } = action;
+  socket.on('ACTION', (action)=>{
+    const roomId = action.roomId;
     const room = rooms.get(roomId);
     if (!room) return;
 
-    // 驗章
-    const ok = Array.from(room.sockets.values()).some(m => m.playerId === playerId && m.secret === secret);
-    if (!ok) return socket.emit("ERROR", { message: "驗證失敗" });
+    const playerId = action.playerId;
+    const type = action.type;
 
-    // 等待室：準備 / 取消
+    // === 等待室：切換準備 ===
     if (type === 'LOBBY_READY' || type === 'LOBBY_UNREADY'){
-      room.lobbyReady = room.lobbyReady || {};
-      room.lobbyReady[playerId] = (type === 'LOBBY_READY');
+      if (room.state){ return; } // 開局後忽略
+      const will = (type === 'LOBBY_READY');
+      room.lobbyReady[playerId] = will;
       broadcastLobby(roomId);
       return;
     }
 
-    // 等待室：房主開始 → 重建 state、對齊 playerId、廣播 nav_game
+    // === 開始遊戲：只有房主可以，且所有在線玩家都 ready，且人數≥2 ===
     if (type === 'START_GAME'){
-      if (room.host !== playerId) {
+      if (room.host !== playerId){
         io.to(socket.id).emit('EMIT', { type:'toast', text:'只有房主可以開始遊戲' });
         return;
       }
+      const joinedIds = Array.from(new Set(
+        [...room.sockets.values()].map(m=>m.playerId).filter(i=>i>=0)
+      )).sort((a,b)=>a-b);
 
-      // 以「socket 的加入順序」作為座位順序；同時帶出名稱/頭像
-      const entries = [...room.sockets.entries()]; // [ [sid, meta], ... ] 依插入順序
-      const joined = entries.map(([sid, m]) => ({
-        sid,
-        oldId: m.playerId,
-        name: m.displayName || `P${m.playerId+1}`,
-        avatar: m.avatar || 1,
-        secret: m.secret
-      }));
-      const n = joined.length;
-      if (n < 2){
+      if (joinedIds.length < 2){
         io.to(socket.id).emit('EMIT', { type:'toast', text:'至少需要 2 名玩家才能開始' });
         return;
       }
-
-      // 必須全員 ready（用 oldId 檢查）
-      const allReady = joined.every(j => room.lobbyReady?.[j.oldId] === true);
+      const allReady = joinedIds.every(id => room.lobbyReady?.[id] === true);
       if (!allReady){
         io.to(socket.id).emit('EMIT', { type:'toast', text:'尚有人未準備' });
         return;
       }
 
-      // ① 依實際人數建立全新 state（會自動發手牌 / 建牌堆 / 場地）
+      // 建立初始 state（玩家數 = 實際在線的人數）
+      const n = joinedIds.length;
       const st = createInitialState(n);
 
-      // ② 把名字/頭像寫進 players（同時也寫頂層，以兼容前端）
-      for (let i = 0; i < n; i++){
-        const j = joined[i];
-        const p = st.players[i];
-        if (!p.client) p.client = {};
-        p.client.displayName = j.name;
-        p.client.avatar = j.avatar;
-        p.displayName = j.name;
-        p.avatar = j.avatar;
+      // 把等待室的暱稱/頭像寫到 players.client，上桌次序 = joinedIds 的順序
+      for (let i=0;i<n;i++){
+        const pid = joinedIds[i];
+        // 把所有屬於此 pid 的 socket，座位改成「i」（正式座位）
+        for (const [sid, meta] of room.sockets){
+          if (meta.playerId === pid){
+            meta.playerId = i;
+          }
+        }
+        // secret 對應也改成新座位 i（讓重整可接回）
+        for (const [sec, old] of room.secrets){
+          if (old === pid) room.secrets.set(sec, i);
+        }
+        st.players[i].id = i;
+        st.players[i].client = st.players[i].client || {};
+        st.players[i].client.displayName = `P${i+1}`;
+        st.players[i].client.avatar = 1;
       }
 
-      // ③ 重新對齊 socket 的 playerId（oldId → 新座位 i），並回傳新的 JOINED
-      const newSockets = new Map();
-      for (let i = 0; i < joined.length; i++){
-        const { sid, secret: sec } = joined[i];
-        const oldMeta = room.sockets.get(sid) || {};
-        newSockets.set(sid, { ...oldMeta, playerId: i });
-        io.to(sid).emit('JOINED', { playerId: i, secret: sec });
-      }
-      room.sockets = newSockets;
-
-      // ④ host 也改成新座位（原 host 是某個 oldId，轉成對應的新 i；若找不到就 0）
-      const remap = new Map(joined.map((j, i) => [j.oldId, i]));
-      const newHost = remap.get(room.host);
-      room.host = (newHost != null ? newHost : 0);
-
-      // ⑤ 清空等待室 ready，寫回狀態並先廣播一版 STATE
+      // 設房主為 0（第一個）
+      room.host = 0;
       room.lobbyReady = {};
       room.state = st;
-      broadcastState(room);
 
-      // ⑥ 導頁到 game.html
+      // 導向 game.html（仍保留）
       for (const [sid] of room.sockets){
         io.to(sid).emit('EMIT', { type:'nav_game' });
       }
+
+      // 首次廣播狀態（每個人看到自己的手牌）
+      broadcastState(room);
       return;
     }
 
-    // 下一局（房主或本局勝者）
-    if (type === "NEXT_ROUND"){
+    // === 下一局（房主或本局勝者） ===
+    if (type === 'NEXT_ROUND'){
       const st = room.state;
-      const ended = typeof isRoundEnded === "function"
+      const ended = typeof isRoundEnded === 'function'
         ? isRoundEnded(st)
-        : (st?.turnStep === "ended" || st?.turnStep === "end" || st?.turnStep === "score");
+        : (st?.turnStep === 'ended' || st?.turnStep === 'end' || st?.turnStep === 'score');
 
       if (!ended) {
-        socket.emit("EMIT", { type:'toast', text:'本局尚未結束' });
+        socket.emit('EMIT', { type:'toast', text:'本局尚未結束' });
         return;
       }
-
-      const winners = new Set(st.players.filter(p => p.alive).map(p => p.id));
+      const winners = new Set(st.players.filter(p=>p.alive).map(p=>p.id));
       const can = (room.host === playerId) || winners.has(playerId);
       if (!can) {
-        socket.emit("EMIT", { type:'toast', text:'只有房主或本局勝者可以開始下一局' });
+        socket.emit('EMIT', { type:'toast', text:'只有房主或本局勝者可以開始下一局' });
         return;
       }
 
-      if (typeof nextRound === "function"){
-        room.state = nextRound(st);
-      } else {
-        const n = st.players.length;
-        const gold = st.players.map(p => p.gold || 0);
-        const ns = createInitialState(n);
-        ns.players.forEach((p, i) => p.gold = gold[i] || 0);
-        ns.roundNo   = (st.roundNo || 0) + 1;
-        ns.chestLeft = st.chestLeft;
-        ns.chestTotal= st.chestTotal;
-
-        // 沿用名字/頭像
-        for (let i=0;i<n;i++){
-          const src = st.players[i]?.client || {};
-          if (!ns.players[i].client) ns.players[i].client = {};
-          ns.players[i].client.displayName = src.displayName;
-          ns.players[i].client.avatar = src.avatar;
-          ns.players[i].displayName = src.displayName;
-          ns.players[i].avatar = src.avatar;
-        }
-
-        room.state = ns;
-      }
+      room.state = (typeof nextRound === 'function')
+        ? nextRound(st)
+        : (()=>{ const ns = createInitialState(st.players.length); return ns; })();
 
       broadcastState(room);
       return;
     }
 
-    // 遊戲內其他行為 → 交給引擎
+    // === 交給引擎 ===
+    if (!room.state) return;
     const res = applyAction(room.state, action);
     room.state = res.state;
 
-    // EMIT 單播/群播
+    // 逐個單播 EMIT
     for (const e of (res.emits || [])) {
-      if (e.to === "all") {
-        for (const [sid] of room.sockets) io.to(sid).emit("EMIT", e);
+      if (e.to === 'all') {
+        for (const [sid, meta] of room.sockets){
+          io.to(sid).emit('EMIT', e);
+        }
       } else {
-        for (const [sid, meta] of room.sockets) {
-          if (meta.playerId === e.to) io.to(sid).emit("EMIT", e);
+        for (const [sid, meta] of room.sockets){
+          if (meta.playerId === e.to) io.to(sid).emit('EMIT', e);
         }
       }
     }
@@ -294,25 +258,16 @@ io.on("connection", (socket) => {
     broadcastState(room);
   });
 
-  socket.on("disconnect", () => {
+  socket.on('disconnect', ()=>{
     if (!joinedRoom) return;
     const room = rooms.get(joinedRoom);
     if (!room) return;
-
-    const meta = room.sockets.get(socket.id);
     room.sockets.delete(socket.id);
-
-    if (meta && room.lobbyReady) delete room.lobbyReady[meta.playerId];
-
-    // 房主斷線 → 交棒給目前第一位
-    if (room.host != null){
-      const all = [...room.sockets.values()];
-      if (all.length) room.host = all[0].playerId;
-    }
-
-    broadcastLobby(joinedRoom);
+    // 還沒開局 → 更新等待室
+    if (!room.state) broadcastLobby(joinedRoom);
   });
 });
 
 const PORT = process.env.PORT || 8787;
-server.listen(PORT, () => console.log("Server listening on", PORT));
+app.get('/', (req,res)=> res.sendFile(path.join(__dirname, '..', 'public', 'start.html')));
+server.listen(PORT, ()=> console.log('Server listening on', PORT));
