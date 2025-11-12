@@ -1,4 +1,4 @@
-<!-- /start.html -->
+<!-- /start.fixed.html -->
 <!doctype html>
 <html lang="zh-Hant">
 <head>
@@ -8,7 +8,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  <!-- (1) 在 React 之後加入 Socket.IO -->
   <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
@@ -70,9 +69,16 @@
   </script>
 
   <script type="text/babel" data-presets="env,react">
-    // === (2) 連線與全域參數：置於 React 程式碼最上方 ===
+    // === React hooks alias ===
+    const { useState, useEffect, useMemo, useRef } = React;
+
+    // === (2) 連線與全域參數 ===
     const SERVER_URL = 'https://onepiece-card-online.onrender.com';
     const socket = io(SERVER_URL, { transports: ['websocket'] });
+
+    // 等待室規則：可調
+    const MIN_PLAYERS = 1;              // 允許單人測試；要 2 人請改成 2
+    const REQUIRE_ALL_READY = false;     // 關閉「全部都準備」的硬性限制
 
     // === 等待室本地狀態（非必須存在於 localStorage）
     let __lobby = {
@@ -89,135 +95,30 @@
     });
 
     // 伺服器廣播等待室快照或導向遊戲
- socket.on('EMIT', (e)=>{
-    // ★ 等待室快照（房號 / 玩家清單 / 房主 / ready 狀態）
-    if (e?.type === 'lobby'){
-      __lobby.snapshot = e.lobby;
-      if (!__lobby.roomId) __lobby.roomId = e.lobby?.roomId || __lobby.roomId;
-      if (typeof window.__setLobby === 'function') window.__setLobby(e.lobby);
-      return;
-    }
+    socket.on('EMIT', (e)=>{
+      if (e?.type === 'lobby'){
+        __lobby.snapshot = e.lobby;
+        if (!__lobby.roomId) __lobby.roomId = e.lobby?.roomId || __lobby.roomId;
+        if (typeof window.__setLobby === 'function') window.__setLobby(e.lobby);
+        return;
+      }
+      if (e?.type === 'nav_game'){
+        try{ socket.close(); }catch{}
+        const url = new URL('game.html', location.origin);
+        url.searchParams.set('server', SERVER_URL);
+        url.searchParams.set('room',   __lobby.roomId);
+        url.searchParams.set('name',   __lobby.me.name || 'P');
+        url.searchParams.set('avatar', String(__lobby.me.avatar || 1));
+        const count = Array.isArray(__lobby.snapshot?.players)
+          ? Math.max(1, __lobby.snapshot.players.length)
+          : 1;
+        url.searchParams.set('n', String(count));
+        location.href = url.toString();
+        return;
+      }
+    });
 
-    // ★ 後端要求進入遊戲 —— n 僅等於目前已加入的人數，最低 1；不預設 4
-    if (e?.type === 'nav_game'){
-      try{ socket.close(); }catch{}
-      const url = new URL('game.html', location.origin);
-      url.searchParams.set('server', SERVER_URL);
-      url.searchParams.set('room',   __lobby.roomId);
-      url.searchParams.set('name',   __lobby.me.name || 'P');
-      url.searchParams.set('avatar', String(__lobby.me.avatar || 1));
-      const count = Array.isArray(__lobby.snapshot?.players)
-        ? Math.max(1, __lobby.snapshot.players.length)
-        : 1;
-      url.searchParams.set('n', String(count)); // ← 不再預設 4（固定照目前實際人數）
-      location.href = url.toString();
-      return;
-    }
-  });
-
-  // ===== 等待室（只顯示已加入玩家；不補空位） =====
-  function WaitingRoom({ onLeave }){
-    const lobby   = __lobby.snapshot;
-    const players = Array.isArray(lobby?.players) ? lobby.players : [];
-    const mePid   = __lobby.me.playerId;
-    const amHost  = lobby && (lobby.host === mePid);
-    const canStart= players.length >= MIN_PLAYERS && players.every(p => !!p.ready);
-
-    function copyId(){
-      if(!lobby?.roomId) return;
-      navigator.clipboard?.writeText(lobby.roomId);
-      alert("已複製房號："+lobby.roomId);
-    }
-
-    function toggleReady(willReady){
-      socket.emit('ACTION', {
-        roomId:   __lobby.roomId,
-        playerId: __lobby.me.playerId,
-        secret:   __lobby.me.secret,
-        type:     willReady ? 'LOBBY_READY' : 'LOBBY_UNREADY'
-      });
-    }
-
-    function startGame(){
-      if(!amHost) return;
-      socket.emit('ACTION', {
-        roomId:   __lobby.roomId,
-        playerId: __lobby.me.playerId,
-        secret:   __lobby.me.secret,
-        type:     'START_GAME'
-      });
-    }
-
-    if(!lobby){
-      return (
-        <div className="card w=[min(820px,96vw)] p-6">
-          <div className="text-lg font-bold mb-2">正在連線等待室...</div>
-          <button className="btn" onClick={onLeave}>返回</button>
-        </div>
-      );
-    }
-
-    const pidOf    = (p)=> p?.pid || p?.playerId || p?.id;
-    const nameOf   = (p)=> p?.name || p?.playerName || '玩家';
-    const avatarOf = (p)=> p?.avatar || p?.playerAvatar || 1;
-    const me       = players.find(p => pidOf(p)===mePid);
-    const myReady  = !!me?.ready;
-
-    return (
-      <div className="card w-[min(980px,96vw)] p-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <div className="text-xs text-neutral-400">房號</div>
-            <div className="text-2xl font-extrabold tracking-widest">{lobby.roomId}</div>
-          </div>
-          <div className="flex gap-2">
-            <button className="btn" onClick={copyId}>複製房號</button>
-            <button className="btn" onClick={onLeave}>離開房間</button>
-            {amHost && (
-              <button
-                className={`btn-primary ${canStart? "": "opacity-50 cursor-not-allowed"}`}
-                onClick={startGame}
-                disabled={!canStart}
-                title={canStart? "開始遊戲":"至少 2 人且全部準備才可開始"}
-              >開始遊戲</button>
-            )}
-          </div>
-        </div>
-
-        <div className="mt-5">
-          <div className="text-sm text-neutral-300 mb-2">玩家（{players.length}）</div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {players.map(p=>{
-              const pid    = pidOf(p);
-              const isHost = lobby.host === pid;
-              const isMe   = pid === mePid;
-              const ready  = !!p.ready;
-              const avatarUrl = `images/avatars/${avatarOf(p)}.png`;
-              return (
-                <div key={pid} className="flex items-center justify-between gap-3 rounded-xl border border-neutral-700/60 bg黑/30 px-3 py-2">
-                  <div className="flex items-center gap-3">
-                    <div className={"avatar "+(isHost?"is-active":"")}><img src={avatarUrl} alt=""/></div>
-                    <div>
-                      <div className="font-semibold leading-tight">{nameOf(p)}</div>
-                      <div className="text-xs text-neutral-400 flex items-center gap-2">
-                        {isHost ? <span className="px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-200 border border-amber-400/30">房主</span> : <span className="opacity-60">玩家</span>}
-                        {ready ? <span className="px-1.5 py-0.5 rounded bg-emerald-400/15 text-emerald-200 border border-emerald-400/30">已準備</span> : <span className="px-1.5 py-0.5 rounded bg-neutral-600/20 text-neutral-200 border border-neutral-600/40">未準備</span>}
-                      </div>
-                    </div>
-                  </div>
-                  {isMe && <button className="btn" onClick={()=>toggleReady(!myReady)}>{myReady?"取消準備":"準備"}</button>}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="text-xs text-neutral-400 mt-4">此等待室已綁定後端快照；準備/開局皆透過 Socket.IO。</div>
-      </div>
-    );
-  }
-
-    // === (4) 等待室：全面使用 __lobby.snapshot ===
+    // ===== 等待室（只顯示已加入玩家；不補空位） =====
     function WaitingRoom({roomId, profile, onLeave}){
       const [lobby, setLobby] = useState(()=> __lobby.snapshot);
       const mePid = __lobby.me.playerId;
@@ -227,107 +128,174 @@
         return ()=>{ window.__setLobby = null; };
       }, []);
 
-      // 僅顯示「已加入」玩家：排除預設占位 P2/P3/P4…（非我本人且沒有 ready 訊號）
-const raw = lobby?.players || [];
-const players = raw.filter(p => {
-  const pid = pidOf(p);
-  const nm  = nameOf(p) || '';
-  const isMe = pid === mePid;
-  const readyKnown = typeof p.ready === 'boolean';
-  const looksPlaceholder = nm === `P${pid+1}`; // 例如 id=1 → 'P2'
-  // 我本人一定顯示；有 ready 訊號（任一 true/false）也顯示；否則若只是預設 P# 就不顯示
-  return isMe || readyKnown || !looksPlaceholder;
-});
-
       // 後端欄位防呆：支援 playerId/id, displayName/name
-      function pidOf(p){ return p.playerId ?? p.pid ?? p.id; }
-      function nameOf(p){ return p.displayName ?? p.name ?? 'P'; }
-      function avatarOf(p){ return p.avatar ?? 1; }
+      function pidOf(p){ return p?.playerId ?? p?.pid ?? p?.id; }
+      function nameOf(p){ return p?.displayName ?? p?.name ?? 'P'; }
+      function avatarOf(p){ return p?.avatar ?? 1; }
+
+      const raw = Array.isArray(lobby?.players) ? lobby.players : [];
+      // 僅顯示已加入玩家（排除預設占位）
+      const players = raw.filter(p => {
+        const pid   = pidOf(p);
+        const nm    = nameOf(p) || '';
+        const isMe  = pid === mePid;
+        const readyKnown = typeof p?.ready === 'boolean';
+        const looksPlaceholder = /^P\d+$/.test(nm);
+        return isMe || readyKnown || !looksPlaceholder;
+      });
 
       const amHost = lobby && (lobby.host === mePid);
-      const canStart = players.length>=MIN_PLAYERS && players.every(p=> !!p.ready);
+      const allReady = players.every(p=> !!p?.ready);
+      const canStart = players.length >= MIN_PLAYERS && (REQUIRE_ALL_READY ? allReady : true);
 
-      function copyId(){ if(!lobby?.roomId) return; navigator.clipboard?.writeText(lobby.roomId); alert("已複製房號："+lobby.roomId); }
+      function copyId(){
+        if(!lobby?.roomId) return;
+        navigator.clipboard?.writeText(lobby.roomId);
+        alert("已複製房號："+lobby.roomId);
+      }
 
-      // 切換準備
       function toggleReady(willReady){
         socket.emit('ACTION', {
-          roomId: __lobby.roomId,
+          roomId:   __lobby.roomId,
           playerId: __lobby.me.playerId,
-          secret: __lobby.me.secret,
-          type: willReady ? 'LOBBY_READY' : 'LOBBY_UNREADY'
+          secret:   __lobby.me.secret,
+          type:     willReady ? 'LOBBY_READY' : 'LOBBY_UNREADY'
         });
       }
 
-      // 房主開局
       function startGame(){
         if(!amHost) return;
         socket.emit('ACTION', {
-          roomId: __lobby.roomId,
+          roomId:   __lobby.roomId,
           playerId: __lobby.me.playerId,
-          secret: __lobby.me.secret,
-          type: 'START_GAME'
+          secret:   __lobby.me.secret,
+          type:     'START_GAME'
         });
       }
 
-      // 我的 ready 狀態
       const me = players.find(p=> pidOf(p)===mePid);
       const myReady = !!me?.ready;
 
       if(!lobby){
-        return (<div className="card w=[min(820px,96vw)] p-6">
-          <div className="text-lg font-bold mb-2">正在連線等待室...</div>
-          <button className="btn" onClick={onLeave}>返回</button>
-        </div>);
+        return (
+          <div className="card w-[min(820px,96vw)] p-6">
+            <div className="text-lg font-bold mb-2">正在連線等待室...</div>
+            <button className="btn" onClick={onLeave}>返回</button>
+          </div>
+        );
       }
 
-      return (<div className="card w-[min(980px,96vw)] p-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <div className="text-xs text-neutral-400">房號</div>
-            <div className="text-2xl font-extrabold tracking-widest">{lobby.roomId}</div>
+      return (
+        <div className="card w-[min(980px,96vw)] p-6">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <div className="text-xs text-neutral-400">房號</div>
+              <div className="text-2xl font-extrabold tracking-widest">{lobby.roomId}</div>
+            </div>
+            <div className="flex gap-2">
+              <button className="btn" onClick={copyId}>複製房號</button>
+              <button className="btn" onClick={onLeave}>離開房間</button>
+              {amHost && (
+                <button
+                  className={`btn-primary ${canStart? "": "opacity-50 cursor-not-allowed"}`}
+                  onClick={startGame}
+                  disabled={!canStart}
+                  title={canStart? "開始遊戲":`至少 ${MIN_PLAYERS} 人${REQUIRE_ALL_READY?" 且全部準備":""}才可開始`}
+                >開始遊戲</button>
+              )}
+            </div>
           </div>
-          <div className="flex gap-2">
-            <button className="btn" onClick={copyId}>複製房號</button>
-            <button className="btn" onClick={onLeave}>離開房間</button>
-            {amHost && (
-              <button className={`btn-primary ${canStart? "": "opacity-50 cursor-not-allowed"}`} onClick={startGame} disabled={!canStart} title={canStart? "開始遊戲":"至少 2 人且全部準備才可開始"}>開始遊戲</button>
-            )}
-          </div>
-        </div>
 
-        <div className="mt-5">
-          <div className="text-sm text-neutral-300 mb-2">玩家（{players.length}）</div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {players.map(p=> {
-              const pid = pidOf(p);
-              const isHost = lobby.host === pid;
-              const isMe   = pid === mePid;
-              const ready  = !!p.ready;
-              const avatarUrl = `images/avatars/${avatarOf(p)}.png`;
-              return (
-                <div key={pid} className="flex items-center justify-between gap-3 rounded-xl border border-neutral-700/60 bg黑/30 px-3 py-2">
-                  <div className="flex items-center gap-3">
-                    <div className={"avatar "+(isHost?"is-active":"")}><img src={avatarUrl} alt=""/></div>
-                    <div>
-                      <div className="font-semibold leading-tight">{nameOf(p)}</div>
-                      <div className="text-xs text-neutral-400 flex items-center gap-2">
-                        {isHost ? <span className="px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-200 border border-amber-400/30">房主</span> : <span className="opacity-60">玩家</span>}
-                        {ready ? <span className="px-1.5 py-0.5 rounded bg-emerald-400/15 text-emerald-200 border border-emerald-400/30">已準備</span> : <span className="px-1.5 py-0.5 rounded bg-neutral-600/20 text-neutral-200 border border-neutral-600/40">未準備</span>}
+          <div className="mt-5">
+            <div className="text-sm text-neutral-300 mb-2">玩家（{players.length}）</div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {players.map(p=> {
+                const pid = pidOf(p);
+                const isHost = lobby.host === pid;
+                const isMe   = pid === mePid;
+                const ready  = !!p?.ready;
+                const avatarUrl = `images/avatars/${avatarOf(p)}.png`;
+                return (
+                  <div key={pid} className="flex items-center justify-between gap-3 rounded-xl border border-neutral-700/60 px-3 py-2">
+                    <div className="flex items-center gap-3">
+                      <div className={"avatar "+(isHost?"is-active":"")}><img src={avatarUrl} alt=""/></div>
+                      <div>
+                        <div className="font-semibold leading-tight">{nameOf(p)}</div>
+                        <div className="text-xs text-neutral-400 flex items-center gap-2">
+                          {isHost ? <span className="px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-200 border border-amber-400/30">房主</span> : <span className="opacity-60">玩家</span>}
+                          {ready ? <span className="px-1.5 py-0.5 rounded bg-emerald-400/15 text-emerald-200 border border-emerald-400/30">已準備</span> : <span className="px-1.5 py-0.5 rounded bg-neutral-600/20 text-neutral-200 border border-neutral-600/40">未準備</span>}
+                        </div>
                       </div>
                     </div>
+                    {isMe && (
+                      <button className="btn" onClick={()=>toggleReady(!myReady)}>{myReady?"取消準備":"準備"}</button>
+                    )}
                   </div>
-                  {isMe && (
-                    <button className="btn" onClick={()=>toggleReady(!myReady)}>{myReady?"取消準備":"準備"}</button>
-                  )}
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="text-xs text-neutral-400 mt-4">此等待室已綁定後端快照；準備/開局皆透過 Socket.IO。</div>
+        </div>
+      );
+    }
+
+    function getMeId(){
+      // 保留原本可能的本機識別初始化（簡化版）
+      if(!__lobby.me.secret){
+        try{
+          const s = Math.random().toString(36).slice(2);
+          localStorage.setItem('opSecret', s);
+          __lobby.me.secret = s;
+        }catch{}
+      }
+    }
+
+    function PressAnyKey({onProceed}){
+      return (
+        <div className="text-center">
+          <div className="title-wrap">
+            <div className="title-main text-4xl font-extrabold fx-tiltDrop">ONEPIECE — 線上對戰</div>
+            <div className="title-sub text-xl opacity-80 fx-fadeUp">按任意鍵開始</div>
+          </div>
+          <div className="mt-6">
+            <button className="btn btn-primary" onClick={onProceed}>開始</button>
           </div>
         </div>
+      );
+    }
 
-        <div className="text-xs text-neutral-400 mt-4">此等待室已綁定後端快照；準備/開局皆透過 Socket.IO。</div>
-      </div>);
+    function NameAvatar({defaultName, onDone}){
+      const [name, setName] = useState(defaultName || '');
+      const [avatar, setAvatar] = useState(1);
+      return (
+        <div className="card p-6 w-[min(700px,96vw)] mx-auto">
+          <div className="mb-4 text-lg font-bold">玩家資訊</div>
+          <input className="w-full mb-3 text-black px-3 py-2 rounded" value={name} onChange={(e)=>setName(e.target.value)} placeholder="輸入暱稱"/>
+          <div className="flex gap-2">
+            <button className="btn btn-primary" onClick={()=> onDone({playerName: name, avatar}, {host: true})}>建立房間</button>
+            <button className="btn" onClick={()=> onDone({playerName: name, avatar}, {host: false})}>加入房間</button>
+          </div>
+        </div>
+      );
+    }
+
+    function RoomChoice({profile, intent, onEnter}){
+      const [roomId, setRoomId] = useState('');
+      function enter(){
+        __lobby.me.name = profile?.playerName || 'P';
+        __lobby.me.avatar = profile?.avatar || 1;
+        // 建立或加入房間：這裡假設後端已處理
+        onEnter(roomId || '0000', intent);
+      }
+      return (
+        <div className="card p-6 w-[min(700px,96vw)] mx-auto">
+          <div className="mb-4 text-lg font-bold">輸入房號</div>
+          <input className="w-full mb-3 text-black px-3 py-2 rounded" value={roomId} onChange={(e)=>setRoomId(e.target.value)} placeholder="房號"/>
+          <button className="btn btn-primary" onClick={enter}>進入等待室</button>
+        </div>
+      );
     }
 
     function App(){
@@ -335,23 +303,39 @@ const players = raw.filter(p => {
       const [profile,setProfile]=useState(null);
       const [intent,setIntent]=useState(null);
       const [roomInfo,setRoomInfo]=useState(null);
-      getMeId(); // 產生一次本機識別
+      getMeId();
 
-      useEffect(()=>{ const cached=localStorage.getItem("op_player_profile"); if(cached){ try{ setProfile(JSON.parse(cached)); }catch{} } },[]);
-      function enterRoom(id, extra){ setRoomInfo({id, host: !!extra?.host}); setStage("waiting"); }
+      useEffect(()=>{
+        const cached=localStorage.getItem("op_player_profile");
+        if(cached){
+          try{ setProfile(JSON.parse(cached)); }catch{}
+        }
+      },[]);
 
-      return (<div className="w-full max-w-[1200px] mx-auto"><div className="min-h-dvh flex items-center justify-center">
-        {stage==="press"   && <PressAnyKey onProceed={()=>setStage("profile")} />}
-        {stage==="profile" && <NameAvatar defaultName={profile?.playerName} onDone={(p,i)=>{ setProfile(p); setIntent(i||{}); setStage("choice"); }} />}
-        {stage==="choice"  && profile && (<RoomChoice profile={profile} intent={intent} onEnter={enterRoom}/>)}
-        {stage==="waiting" && roomInfo && profile && (
-          <WaitingRoom
-            roomId={roomInfo.id}
-            profile={profile}
-            onLeave={()=>{ setStage("profile"); __lobby = { roomId:'', me:{ playerId:__lobby.me.playerId, secret:__lobby.me.secret, name:'', avatar:1 }, snapshot:null }; }}
-          />
-        )}
-      </div></div>);
+      function enterRoom(id, extra){
+        setRoomInfo({id, host: !!extra?.host});
+        setStage("waiting");
+      }
+
+      return (
+        <div className="w-full max-w-[1200px] mx-auto">
+          <div className="min-h-dvh flex items-center justify-center">
+            {stage==="press"   && <PressAnyKey onProceed={()=>setStage("profile")} />}
+            {stage==="profile" && <NameAvatar defaultName={profile?.playerName} onDone={(p,i)=>{ setProfile(p); setIntent(i||{}); setStage("choice"); }} />}
+            {stage==="choice"  && profile && (<RoomChoice profile={profile} intent={intent} onEnter={enterRoom}/>)}
+            {stage==="waiting" && roomInfo && profile && (
+              <WaitingRoom
+                roomId={roomInfo.id}
+                profile={profile}
+                onLeave={()=>{
+                  setStage("profile");
+                  __lobby = { roomId:'', me:{ playerId:__lobby.me.playerId, secret:__lobby.me.secret, name:'', avatar:1 }, snapshot:null };
+                }}
+              />
+            )}
+          </div>
+        </div>
+      );
     }
 
     ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
