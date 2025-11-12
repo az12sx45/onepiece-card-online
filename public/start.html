@@ -101,7 +101,6 @@
         url.searchParams.set('room',   __lobby.roomId);
         url.searchParams.set('name',   __lobby.me.name || 'P');
         url.searchParams.set('avatar', String(__lobby.me.avatar || 1));
-        url.searchParams.set('n', String(__lobby.snapshot?.players?.length || ));
         location.href = url.toString();
       }
     });
