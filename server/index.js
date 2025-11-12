@@ -14,6 +14,14 @@ const {
 // === HTTP + 靜態檔 ===
 const app = express();
 app.use(express.static(path.join(__dirname, "..", "public")));
+// 根路徑給 Render 面板點擊時用
+app.get("/", (_req, res) => {
+  res.type("text").send("OK");
+});
+
+// 你原本已經有的
+app.get("/health", (_req, res) => res.json({ ok: true, ts: Date.now() }));
+
 app.get("/health", (_req, res) => res.json({ ok: true, ts: Date.now() }));
 
 const server = http.createServer(app);
@@ -74,14 +82,18 @@ function broadcastLobby(roomId){
   if (!room) return;
   const st = room.state;
   const ready = room.lobbyReady || {};
+  const joinedIds = new Set([...room.sockets.values()].map(m => m.playerId));
   const payload = {
     roomId,
     host: room.host,
-    players: st.players.map(p => ({
+    players: st.players
+     .filter(p => joinedIds.has(p.id))         // ← 關鍵：只保留已加入的人
+     .map(p => ({
       id: p.id,
       name: p.client?.displayName || `P${p.id+1}`,
       avatar: p.client?.avatar || 1,
       ready: !!ready[p.id],
+
     }))
   };
   for (const [sid] of room.sockets){
@@ -100,7 +112,7 @@ io.on("connection", (socket) => {
     // 建房
     let room = rooms.get(roomId);
     if (!room) {
-      const n = Number(playerCount) || 4;
+      const n = 6;
       room = { state: createInitialState(n), sockets: new Map(), host: null }; // ★ 加 host
       rooms.set(roomId, room);
     }
@@ -159,11 +171,33 @@ io.on("connection", (socket) => {
 
     // === 等待室：房主開局（同步導航到 game.html） ===
     if (type === 'START_GAME'){
-      for (const [sid] of room.sockets){
-        io.to(sid).emit('EMIT', { type:'nav_game' });
-      }
+    // 只允許房主按「開始」
+    if (room.host !== playerId) {
+      io.to(socket.id).emit('EMIT', { type:'toast', text:'只有房主可以開始遊戲' });
       return;
     }
+ 
+    // 取得實際已加入的人（在線座位）
+    const joinedIds = [...room.sockets.values()].map(m => m.playerId);
+    const playerCount = joinedIds.length;
+    if (playerCount < 2){
+      io.to(socket.id).emit('EMIT', { type:'toast', text:'至少需要 2 名玩家才能開始' });
+      return;
+    }
+ 
+    // 檢查全員都已按準備
+    const allReady = joinedIds.every(id => room.lobbyReady?.[id] === true);
+    if (!allReady){
+      io.to(socket.id).emit('EMIT', { type:'toast', text:'尚有人未準備' });
+      return;
+    }
+ 
+    // 條件符合 → 同步導向 game.html
+    for (const [sid] of room.sockets){
+      io.to(sid).emit('EMIT', { type:'nav_game' });
+    }
+    return;
+  }
 
     // ★ NEXT_ROUND 權限：只有房主或本局勝者能啟動
     if (type === "NEXT_ROUND"){
