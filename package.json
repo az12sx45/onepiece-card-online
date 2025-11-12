@@ -1,12 +1,20 @@
 {
-  "name": "onepiece-card-online",
+  "name": "op-server",
   "version": "1.0.0",
+  "type": "commonjs",
   "main": "server/index.js",
   "scripts": {
-    "start": "node server/index.js"
+    "start": "node server/index.js",
+    "dev": "nodemon server/index.js"
   },
   "dependencies": {
     "express": "^4.19.2",
     "socket.io": "^4.7.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "engines": {
+    "node": "20.x"
   }
 }
