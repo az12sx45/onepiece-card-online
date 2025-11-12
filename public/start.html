@@ -121,28 +121,51 @@
       </div>); }
 
     function WaitingRoom({roomId, meId, profile, host, onLeave, onStart}){
-      const [room,setRoom]=useState(()=> getRoom(roomId));
-      const [tick,setTick]=useState(0);
-      // 每秒 refresh 自己心跳 & 讀取房間
-      useEffect(()=>{ const i=setInterval(()=> setTick(t=>t+1), 1000); const onStorage=(e)=>{ if(e.key==="op_rooms" || e.key==="op_rooms_broadcast"){ const r=getRoom(roomId); if(r) setRoom(r); } }; window.addEventListener('storage', onStorage); return ()=>{ clearInterval(i); window.removeEventListener('storage', onStorage); }; }, [roomId]);
-      useEffect(()=>{ const r=getRoom(roomId); if(!r) return; const me=r.players.find(p=>p.pid===meId); if(me){ me.ts=Date.now(); upsertRoom(r); setRoom(r); } }, [tick, roomId, meId]);
-      // 狀態變 started → 直接導向
-      useEffect(()=>{ if(room?.status === "started"){ onStart(room); } }, [room?.status]);
-      // 輪詢保險：就算 storage 事件沒觸發也會跳
-      useEffect(()=>{ const tm=setInterval(()=>{ const r=getRoom(roomId); if(r?.status==="started"){ onStart(r); } }, 1000); return ()=> clearInterval(tm); }, [roomId]);
-      // 監聽導航旗標（房主寫入），任何人讀到就跳
-      useEffect(()=>{ const key = `op_rooms_nav_${roomId}`; const tryNav = ()=>{ const val=localStorage.getItem(key); if(val){ const got = new URL(val, location.origin);
-const clientBase = location.origin; // 仍用目前頁面的 GitHub 網域當 base
-const apiBase = got.searchParams.get('server') || "https://onepiece-card-online.onrender.com";
+  // ✅ 正確：先建立 room 狀態
+  const [room, setRoom] = React.useState(getRoom(roomId));
 
-const url = new URL('/game.html', clientBase);
-url.searchParams.set('room', roomId);
-url.searchParams.set('server', apiBase); // 關鍵
-if (profile?.playerName)  url.searchParams.set('name', profile.playerName);
-if (profile?.playerAvatar)url.searchParams.set('avatar', String(profile.playerAvatar));
-const r=getRoom(roomId);
-url.searchParams.set('n', String(r?.players?.length || 4));
-window.location.href = url.toString();
+  // （A）同步本地儲存的房間資料變動（別人按準備、離開等）
+  React.useEffect(()=>{
+    const refresh = ()=> {
+      const r = getRoom(roomId);
+      if (r) setRoom(r);
+    };
+    const tm = setInterval(refresh, 800);
+    const onStorage = (e)=> {
+      if (e.key === 'op_rooms' || e.key === 'op_rooms_broadcast') refresh();
+    };
+    window.addEventListener('storage', onStorage);
+    refresh();
+    return ()=>{ clearInterval(tm); window.removeEventListener('storage', onStorage); };
+  }, [roomId]);
+
+  // （B）讀「導航旗標」並跳往 game.html（host 開始後，所有客端自動導頁）
+  React.useEffect(()=>{
+    const key = `op_rooms_nav_${roomId}`;
+    const tryNav = ()=>{
+      const val = localStorage.getItem(key);
+      if (!val) return;
+
+      const got = new URL(val, location.origin);
+      const clientBase = location.origin; // 前端（GitHub Pages）
+      const apiBase = got.searchParams.get('server') || "https://onepiece-card-online.onrender.com";
+
+      const url = new URL('/game.html', clientBase);
+      url.searchParams.set('room', roomId);
+      url.searchParams.set('server', apiBase);
+      if (profile?.playerName)   url.searchParams.set('name', profile.playerName);
+      if (profile?.playerAvatar) url.searchParams.set('avatar', String(profile.playerAvatar));
+      const r = getRoom(roomId);
+      url.searchParams.set('n', String(r?.players?.length || 4));
+      window.location.href = url.toString();
+    };
+    const tm = setInterval(tryNav, 600);
+    const onStorage = (e)=>{ if (e.key === key) tryNav(); };
+    window.addEventListener('storage', onStorage);
+    tryNav();
+    return ()=>{ clearInterval(tm); window.removeEventListener('storage', onStorage); };
+  }, [roomId, profile]);
+
 
       if(!room){ return (<div className="card w-[min(820px,96vw)] p-6"><div className="text-lg font-bold mb-2">房間不存在或已關閉</div><button className="btn" onClick={onLeave}>返回</button></div>); }
       const amHost = room.hostId===meId; const canStart = room.players.length>=MIN_PLAYERS && room.players.every(p=>p.ready);
