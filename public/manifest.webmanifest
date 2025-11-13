@@ -1,6 +1,6 @@
 {
   "name": "偉大航道爭霸戰",
-  "short_name": "航道爭霸戰",
+  "short_name": "偉大航道爭霸戰",
   "start_url": "./start.html",
   "display": "standalone",
   "background_color": "#000000",
