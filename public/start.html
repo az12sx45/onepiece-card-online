@@ -57,6 +57,36 @@
     .audio-toggle .vol::-webkit-slider-thumb{ appearance:none; width:14px; height:14px; border-radius:999px; background:#ffd36a; border:1px solid #b3831b; }
     @media (max-width: 640px){ .audio-toggle{ gap:6px; padding:6px 8px; } .audio-toggle .vol{ width:86px; }
     }
+    /* === 一鍵下載進度條 === */
+    #preloadBox{
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    .preload-track{
+      margin-top: 6px;
+      width: 100%;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(15,23,42,.9);
+      border: 1px solid rgba(148,163,184,.7);
+      overflow: hidden;
+    }
+    .preload-bar{
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg,#fde68a,#facc15,#f97316);
+      transition: width .18s ease-out;
+    }
+    #preloadStatus{
+      margin-top: 4px;
+      font-size: 12px;
+      color: #e5e7eb;
+      text-align: center;
+    }
+    #btnPreloadAll[disabled]{
+      opacity: .55;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 <body class="no-video">
@@ -346,9 +376,73 @@ socket.on('EMIT', (e)=>{
 
     ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
   </script>
-
+<!-- === 一鍵下載全部資源 (UI) === -->
+  <div id="preloadBox" class="mt-4 text-center" style="padding:16px;">
+    <button id="btnPreloadAll" class="btn btn-primary">
+      📦 一次下載全部資源（建議 Wi-Fi）
+    </button>
+    <div class="preload-track">
+      <div id="preloadBarInner" class="preload-bar"></div>
+    </div>
+    <div id="preloadStatus" class="text-sm text-neutral-300 mt-2"></div>
+  </div>
   <audio id="sfxIntro" src="audio/intro.mp3" preload="auto" loop autoplay></audio>
   <audio id="bgm" src="audio/bgm.mp3" preload="auto" loop autoplay></audio>
+  <!-- === 一鍵下載全部資源：邏輯 === -->
+  <script>
+    // 要預先下載的資源清單
+    // （這裡我先幫你列出 BGM + 影片，你之後可以依 sw.js 再加 / 改）
+    const PRELOAD_ASSETS = [
+      'images/cover.jpg',
+      // 頭像（1~30）
+      ...Array.from({length:30}, (_,i)=>`images/avatars/${i+1}.png`),
+      // BGM：track01 ~ track20
+      ...Array.from({length:20}, (_,i)=>`audio/bgm/track${String(i+1).padStart(2,'0')}.mp3`),
+      // 影片
+      'videos/start.mp4',
+      'videos/coin.mp4',
+      // 強化影片 0~19
+      ...Array.from({length:20}, (_,i)=>`videos/enh/${i}.mp4`),
+    ];
+
+    async function preloadAllAssets() {
+      const btn  = document.getElementById('btnPreloadAll');
+      const info = document.getElementById('preloadStatus');
+      const bar  = document.getElementById('preloadBarInner');
+
+      if (!btn || !info) return;
+
+      btn.disabled = true;
+      let ok = 0, fail = 0;
+      const total = PRELOAD_ASSETS.length;
+
+      info.textContent = `開始下載（0 / ${total}）...`;
+      if (bar) bar.style.width = '0%';
+
+      for (const url of PRELOAD_ASSETS) {
+        try {
+          await fetch(url, { cache: "reload" });
+          ok++;
+        } catch(err) {
+          console.warn("下載失敗：", url, err);
+          fail++;
+        }
+        const done = ok + fail;
+        const pct  = Math.round(done / total * 100);
+        info.textContent = `下載中... ${done} / ${total}（${pct}%）`;
+        if (bar) bar.style.width = `${pct}%`;
+      }
+
+      info.textContent = `完成！成功 ${ok} 項，失敗 ${fail} 項。`;
+      if (bar) bar.style.width = '100%';
+      btn.disabled = false;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const btn = document.getElementById('btnPreloadAll');
+      if (btn) btn.addEventListener('click', preloadAllAssets);
+    });
+  </script>
   <div class="audio-toggle" id="audioCtrl" style="display:none"><button id="btnMute" title="靜音/取消靜音" aria-label="Mute/Unmute"><svg id="icoVol" width="16" height="16" viewBox="0 0 24 24" fill="#ffd36a"><path d="M4 9v6h4l5 4V5L8 9H4z"></path><path id="wave" d="M16 8c1.5 1.5 1.5 6.5 0 8" stroke="#ffd36a" stroke-width="2" fill="none"/></svg></button><input id="rngVol" class="vol" type="range" min="0" max="100" step="1" value="65" /></div>
 
   <script>
