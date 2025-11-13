@@ -24,6 +24,14 @@ const io = new Server(server, { cors: { origin: "*" } });
 // room = { state, sockets: Map<sid,{playerId,secret,displayName,avatar}>, host, lobbyReady }
 const rooms = new Map();
 
+// 🔧 房間清理工具：當房間沒人時，從記憶體移除
+function cleanupRoom(roomId) {
+  const room = rooms.get(roomId);
+  if (!room) return;
+  rooms.delete(roomId);
+  console.log(`🧹 cleanupRoom: room ${roomId} removed`);
+}
+
 // ——— 視圖小工具：統一 chestCoins 並加上 viewerCanNext ———
 function injectChestCoins(vis){
   const cands = [
@@ -89,7 +97,7 @@ function broadcastLobby(roomId){
 io.on("connection", (socket) => {
   let joinedRoom = null;
 
-   socket.on("JOIN_ROOM", (payload = {}) => {
+  socket.on("JOIN_ROOM", (payload = {}) => {
     const { roomId, displayName = "", avatar = 1, secret = "", pid } = payload;
     if (!roomId) return;
 
@@ -183,7 +191,7 @@ io.on("connection", (socket) => {
       return;
     }
 
-   // 等待室：房主開始 → 重建 state、對齊 playerId、廣播 nav_game
+    // 等待室：房主開始 → 重建 state、對齊 playerId、廣播 nav_game
     if (type === 'START_GAME'){
       if (room.host !== playerId) {
         io.to(socket.id).emit('EMIT', { type:'toast', text:'只有房主可以開始遊戲' });
@@ -332,6 +340,13 @@ io.on("connection", (socket) => {
     room.sockets.delete(socket.id);
 
     if (meta && room.lobbyReady) delete room.lobbyReady[meta.playerId];
+
+    // ✅ 無人在線 → 清掉整個房（避免記憶體一直累積）
+    if (room.sockets.size === 0) {
+      cleanupRoom(joinedRoom);
+      joinedRoom = null;
+      return;
+    }
 
     // 房主斷線 → 交棒給目前第一位
     if (room.host != null){
