@@ -984,13 +984,30 @@ function playCoinFx(){
 
   function cleanup(){
     clearTimeout(failTimer);
+
+    // 隱藏 overlay
     ov.classList.remove('show');
-    setTimeout(()=>{ ov.classList.add('hidden'); _coinPlaying = false; }, 300);
-    vid.pause();
-    try { vid.currentTime = 0; } catch(e){}
+    setTimeout(()=>{
+      ov.classList.add('hidden');
+      _coinPlaying = false;
+    }, 300);
+
+    // 停止影片、回到開頭
+    try {
+      vid.pause();
+      vid.currentTime = 0;
+    } catch(e){}
+
+    // 移除 ended 監聽
     vid.removeEventListener('ended', onEnded);
-    ov.replaceWith(ov.cloneNode(true)); // 快速移除殘留的 click 監聽（若有）
+
+    // ⭐ 關鍵：告訴 BGM「這個 video 不在播放了」，讓 duckSet 清乾淨
+    duckOff(vid);
+
+    // ❌ 這行會讓 duckSet 裡還記著舊的 video → BGM 以為還在播所以不回來
+    // ov.replaceWith(ov.cloneNode(true));
   }
+
 
   tryPlay();
 }
