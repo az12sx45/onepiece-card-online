@@ -371,5 +371,19 @@ socket.on('EMIT', (e)=>{
     window.__OPAudio = { startAudio: startAudioAfterGesture, setVolume, mute: ()=>{ if(!muted) $btn.click(); }, unmute: ()=>{ if(muted) $btn.click(); } };
   })();
   </script>
+<script>
+  // PWA：註冊 service worker，幫忙快取遊戲資源
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => {
+          console.log('ServiceWorker registered:', reg.scope);
+        })
+        .catch(err => {
+          console.warn('ServiceWorker registration failed:', err);
+        });
+    });
+  }
+</script>
 </body>
 </html>
