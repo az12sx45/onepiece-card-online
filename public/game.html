@@ -553,6 +553,22 @@ body::before{
     </div>
   </div>
 
+  <!-- 寶箱清空 → 結算前 7 秒圖片 -->
+  <div id="finalOverlay" class="hidden fixed inset-0 z-[220] flex items-center justify-center bg-black/80">
+    <div class="relative">
+      <!-- 上方文字 -->
+      <div class="absolute left-1/2 -translate-x-1/2 top-4 sm:top-6
+                  text-white text-xl sm:text-2xl font-bold tracking-wide
+                  drop-shadow-[0_0_10px_rgba(0,0,0,0.9)]">
+        寶箱已空，等待結算...
+      </div>
+      <!-- 中間圖片：換成你自己的圖檔路徑 -->
+      <img src="images/final_ready.png"
+           alt="寶箱已空，等待結算"
+           class="max-h-[80vh] rounded-2xl shadow-2xl border border-white/20">
+    </div>
+  </div>
+
   <!-- 擲硬幣動畫（只有本機播放） -->
   <div id="coinOverlay" class="hidden">
     <div id="coinFrame">
@@ -903,6 +919,7 @@ const serverURL = sp.get('server') || undefined;
 const socket = io(serverURL, { transports:['websocket'] });
 let me = { roomId: presetRoom || 'op-001', playerId: null, secret: localStorage.getItem('opSecret')||'' };
 let state = null;
+let _finalRedirecting = false; 
 
 /* === 新增：快閃狀態全域變數 === */
 let _flashBusy = false;       // 正在顯示快閃中
@@ -1376,21 +1393,44 @@ socket.on('STATE', (s)=>{
   state = s;
 
   
-// ★ 寶箱為 0 → 引擎會附帶 state.final
-if (state && state.final) {
-  try {
-    sessionStorage.setItem('op_room', me.roomId || '');
-    sessionStorage.setItem('op_final', JSON.stringify(state.final)); // ★ 存整份資料
-  } catch(e) { console.warn('sessionStorage failed', e); }
+ // ★ 寶箱為 0 → 引擎會附帶 state.final
+  if (state && state.final) {
+    // 已經處理過 final 就不要重複
+    if (_finalRedirecting) return;
+    _finalRedirecting = true;
 
-        // ✅ 改用 URL 物件，帶上本人的 playerId
+    // 先把 final 資料存起來，result.html 會用
+    try {
+      sessionStorage.setItem('op_room', me.roomId || '');
+      sessionStorage.setItem('op_final', JSON.stringify(state.final)); // ★ 存整份資料
+    } catch(e) {
+      console.warn('sessionStorage failed', e);
+    }
+
+    const ov = document.getElementById('finalOverlay');
+    if (ov) {
+      // 顯示「寶箱已空，等待結算...＋圖片」
+      ov.classList.remove('hidden');
+
+      // 7 秒後再跳到結算頁
+      setTimeout(()=>{
+        const url = new URL('result.html', location.origin);
+        url.searchParams.set('room', me.roomId || '');
+        if (typeof me.playerId === 'number') {
+          url.searchParams.set('pid', String(me.playerId));
+        }
+        location.href = url.toString();
+      }, 7000);
+    } else {
+      // 找不到 overlay 就直接跳（保險）
       const url = new URL('result.html', location.origin);
       url.searchParams.set('room', me.roomId || '');
       if (typeof me.playerId === 'number') url.searchParams.set('pid', String(me.playerId));
       location.href = url.toString();
+    }
 
-  return;
-}
+    return;
+  }
 
 // 1) 新局偵測：roundNo 變了 → 清空 feed、重置指標
   if (_seenRound !== state.roundNo) {
