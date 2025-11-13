@@ -1,123 +1,76 @@
-// sw.js —— 偉大航道爭霸戰 PWA 快取（強化版）
+// sw.js —— 偉大航道爭霸戰 PWA 快取
 const CACHE_NAME = 'op-card-v2';
 
-// 核心頁面 & 設定
-const CORE_ASSETS = [
+// 基本頁面 + manifest + icon
+const CORE = [
   './',
   './start.html',
   './game.html',
   './result.html',
   './manifest.webmanifest',
-
-  // icon（跟 manifest 裡的要對得起來）
   './images/icon-180.png',
   './images/icon-192.png',
   './images/icon-512.png',
+  './images/wanted.png',
+  './images/cover.jpg',
 ];
 
-// 頭像（30 個）
-const AVATAR_ASSETS = Array.from({ length: 30 }, (_, i) =>
+// 頭像 1~30
+const AVATARS = Array.from({ length: 30 }, (_, i) =>
   `./images/avatars/${i + 1}.png`
 );
 
-// 卡面（根據你現在的路徑填，這裡先照你 sw.js 的註解走）
-const CARD_ASSETS = [
-  './images/cards/0.png',
-  './images/cards/1.png',
-  './images/cards/2.png',
-  './images/cards/3.png',
-  './images/cards/4.png',
-  './images/cards/5.png',
-  './images/cards/6.png',
-  './images/cards/7.png',
-  './images/cards/8.png',
-  './images/cards/9.png',
-  './images/cards/10.png',
-  './images/cards/11.png',
-  './images/cards/12.png',
-  './images/cards/13.png',
-  './images/cards/14.png',
-  './images/cards/15.png',
-  './images/cards/16.png',
-  './images/cards/17.png',
-  './images/cards/18.png',
-  './images/cards/19.png',
-  './images/cards/back.png',
-];
+// 卡面 0~19 + 卡背
+const CARDS = Array.from({ length: 20 }, (_, i) =>
+  `./images/cards/${i}.png`
+).concat([
+  './images/cards/back.png'
+]);
 
-// 強化卡圖
-const ENH_CARD_ASSETS = Array.from({ length: 20 }, (_, i) =>
+// 強化卡面 0~19
+const CARDS_ENH = Array.from({ length: 20 }, (_, i) =>
   `./images/cards/enh/${i}.png`
 );
 
-// 場地背景（照你註解的路徑）
-const VENUE_ASSETS = [
-  './images/venues/alabasta.jpg',
-  './images/venues/amazonlily.jpg',
-  './images/venues/baratie.jpg',
-  './images/venues/dressrosa.jpg',
-  './images/venues/enieslobby.jpg',
-  './images/venues/fishmanisland.jpg',
-  './images/venues/hachinosu.jpg',
-  './images/venues/onigashima.jpg',
-  './images/venues/oro-jackson.jpg',
-  './images/venues/punkhazard.jpg',
-  './images/venues/sabaody.jpg',
-  './images/venues/wano.jpg',
-  './images/venues/weatheria.jpg',
-  './images/venues/wholecake.jpg',
-  './images/venues/zou.jpg',
+// 場地背景（照你現有 jpg 檔名）
+const VENUES = [
+  'alabasta','amazonlily','baratie','dressrosa','enieslobby',
+  'fishmanisland','hachinosu','onigashima','oro-jackson','punkhazard',
+  'sabaody','wano','weatheria','wholecake','zou'
+].map(n => `./images/venues/${n}.jpg`);
 
-  // 你有用到的中文檔名也可以放進來（如果還在用）
-  './images/venues/九蛇島.png',
-  './images/venues/佐烏.png',
-  './images/venues/和之國.png',
-  './images/venues/夏波帝諸島.png',
-  './images/venues/奧羅傑克森號.png',
-  './images/venues/巴拉蒂.png',
-  './images/venues/德雷斯羅薩鬥技場.png',
-  './images/venues/維薩利亞.png',
-  './images/venues/艾尼艾斯大廳.png',
-  './images/venues/萬國.png',
-  './images/venues/蜂巢島.png',
-  './images/venues/阿拉巴斯坦.png',
-  './images/venues/鬼島.png',
-  './images/venues/魚人島.png',
-  './images/venues/龐克哈薩德.png',
-];
-
-// BGM / 音效（看你實際檔案路徑，先放最常用的）
-const AUDIO_ASSETS = [
-  './audio/bgm.mp3',
-  './audio/intro.mp3',
-];
-
-// 影片（硬幣 + 開場 + 強化）
-const VIDEO_ASSETS = [
-  './videos/coin.mp4',
-  './videos/start.mp4',
-  // 如果有 webm 版也一起放
+// 影片
+const VIDEOS = [
   './videos/start.webm',
+  './videos/start.mp4',
+  './videos/coin.mp4',
   // 強化影片 0~19
-  ...Array.from({ length: 20 }, (_, i) => `./videos/enh/${i}.mp4`),
+  ...Array.from({ length: 20 }, (_, i) =>
+    `./videos/enh/${i}.mp4`
+  ),
 ];
 
+// BGM（依你實際的路徑改名）
+const BGM = [
+  './audio/bgm.mp3',
+  // 或 ./audio/bgm/track01.mp3 ... track20.mp3 這樣列
+];
+
+// 最終要預先載入的清單
 const ASSETS = [
-  ...CORE_ASSETS,
-  ...AVATAR_ASSETS,
-  ...CARD_ASSETS,
-  ...ENH_CARD_ASSETS,
-  ...VENUE_ASSETS,
-  ...AUDIO_ASSETS,
-  ...VIDEO_ASSETS,
+  ...CORE,
+  ...AVATARS,
+  ...CARDS,
+  ...CARDS_ENH,
+  ...VENUES,
+  ...VIDEOS,
+  ...BGM,
 ];
 
 // 安裝：預先快取所有資源
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(ASSETS))
-      .then(() => self.skipWaiting()) // 安裝後直接啟用新版 SW
+    caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
   );
 });
 
@@ -130,7 +83,7 @@ self.addEventListener('activate', event => {
           if (key !== CACHE_NAME) return caches.delete(key);
         })
       )
-    ).then(() => self.clients.claim())
+    )
   );
 });
 
