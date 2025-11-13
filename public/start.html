@@ -348,6 +348,14 @@ socket.on('EMIT', (e)=>{
       </div></div>);
     }
 
+<!-- === 一鍵下載全部資源 (UI) === -->
+<div id="preloadBox" class="mt-4 text-center" style="padding:16px;">
+  <button id="btnPreloadAll" class="btn btn-primary">
+    📦 一次下載全部資源（建議 Wi-Fi）
+  </button>
+  <div id="preloadStatus" class="text-sm text-neutral-300 mt-2"></div>
+</div>
+
     ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
   </script>
 
@@ -371,6 +379,94 @@ socket.on('EMIT', (e)=>{
     window.__OPAudio = { startAudio: startAudioAfterGesture, setVolume, mute: ()=>{ if(!muted) $btn.click(); }, unmute: ()=>{ if(muted) $btn.click(); } };
   })();
   </script>
+<script>
+// === 一鍵下載全部資源（與 sw.js 路徑一致） ===
+
+// 頭像
+const PRE_AVATARS = Array.from({ length: 30 }, (_, i) =>
+  `./images/avatars/${i+1}.png`
+);
+
+// 卡片
+const PRE_CARDS = Array.from({ length: 20 }, (_, i) =>
+  `./images/cards/${i}.png`
+).concat([
+  './images/cards/back.png'
+]);
+
+// 強化卡
+const PRE_CARDS_ENH = Array.from({ length: 20 }, (_, i) =>
+  `./images/cards/enh/${i}.png`
+);
+
+// 場地
+const PRE_VENUES = [
+  'alabasta','amazonlily','baratie','dressrosa','enieslobby',
+  'fishmanisland','hachinosu','onigashima','oro-jackson','punkhazard',
+  'sabaody','wano','weatheria','wholecake','zou'
+].map(n => `./images/venues/${n}.jpg`);
+
+// 影片
+const PRE_VIDEOS = [
+  './videos/start.webm',
+  './videos/start.mp4',
+  './videos/coin.mp4',
+  ...Array.from({ length: 20 }, (_, i) => `./videos/enh/${i}.mp4`)
+];
+
+// 音樂
+const PRE_BGM = [
+  './audio/intro.mp3',
+  './audio/bgm.mp3',
+  ...Array.from({ length: 20 }, (_, i) => `./audio/op${i+1}.mp3`)
+];
+
+const PRELOAD_ASSETS = [
+  './game.html',
+  './result.html',
+  './images/cover.jpg',
+  './images/wanted.png',
+  ...PRE_AVATARS,
+  ...PRE_CARDS,
+  ...PRE_CARDS_ENH,
+  ...PRE_VENUES,
+  ...PRE_VIDEOS,
+  ...PRE_BGM
+];
+
+async function preloadAllAssets() {
+  const btn  = document.getElementById('btnPreloadAll');
+  const info = document.getElementById('preloadStatus');
+
+  btn.disabled = true;
+  let ok = 0, fail = 0;
+  const total = PRELOAD_ASSETS.length;
+
+  info.textContent = `開始下載（0 / ${total}）...`;
+
+  for (const url of PRELOAD_ASSETS) {
+    try {
+      await fetch(url, { cache: "reload" });
+      ok++;
+    } catch(err) {
+      console.warn("下載失敗：", url, err);
+      fail++;
+    }
+    const done = ok + fail;
+    const pct  = Math.round(done / total * 100);
+    info.textContent = `下載中... ${done} / ${total}（${pct}%）`;
+  }
+
+  info.textContent = `完成！成功 ${ok} 項，失敗 ${fail} 項。`;
+  btn.disabled = false;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById('btnPreloadAll');
+  if (btn) btn.addEventListener('click', preloadAllAssets);
+});
+</script>
+
 <script>
   // PWA：註冊 service worker，幫忙快取遊戲資源
   if ('serviceWorker' in navigator) {
