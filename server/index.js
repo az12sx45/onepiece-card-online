@@ -89,7 +89,7 @@ function broadcastLobby(roomId){
 io.on("connection", (socket) => {
   let joinedRoom = null;
 
-  socket.on("JOIN_ROOM", (payload = {}) => {
+   socket.on("JOIN_ROOM", (payload = {}) => {
     const { roomId, displayName = "", avatar = 1, secret = "", pid } = payload;
     if (!roomId) return;
 
@@ -100,47 +100,71 @@ io.on("connection", (socket) => {
       rooms.set(roomId, room);
     }
 
-    // 找第一個未綁 client 的位置；若都滿就新增一格座位
+    const st = room.state;
+    let sec = secret || "";
+
+    // ★ 0) 若帶有 secret，且 state 裡已有同 secret 的玩家 → 視為「重連」
     let myId = null;
-    for (const p of room.state.players) {
-      if (!p.client) { myId = p.id; break; }
+    if (sec) {
+      const found = (st.players || []).find(p => p && p.secret === sec);
+      if (found) myId = found.id;
     }
+
+    // ★ 1) 沒找到舊座位時：找第一個未綁 client 的位置
     if (myId == null) {
-      myId = room.state.players.length;
-      room.state.players.push({
-        id: myId, alive:true, protected:false, dodging:false, frozen:false,
-        hand:null, tempDraw:null, gold:0, skipNext:false
+      for (const p of st.players) {
+        if (!p.client) { myId = p.id; break; }
+      }
+    }
+
+    // ★ 2) 若都滿就新增一格座位（等待室用）
+    if (myId == null) {
+      myId = st.players.length;
+      st.players.push({
+        id: myId,
+        alive: true,
+        protected: false,
+        dodging: false,
+        frozen: false,
+        hand: null,
+        tempDraw: null,
+        gold: 0,
+        skipNext: false
       });
     }
 
-    // 寫入玩家 meta（state 端）
-    const p = room.state.players[myId];
+    // ★ 若這次才產生 secret → 給一個新的
+    if (!sec) sec = Math.random().toString(36).slice(2);
+
+    // 寫入玩家 meta（state 端），順便記住 secret
+    const p = st.players[myId];
     p.client = { displayName, avatar, pid };
     p.displayName = displayName;
     p.avatar = avatar;
+    p.secret = sec;             // ← 關鍵：把 secret 綁到這個玩家
 
     // 第一位為房主
     if (room.host == null) room.host = myId;
 
-    // 建 socket meta（※ 這裡要把名字/頭像也存進來，之後 START_GAME 會用）
-    const sec = secret || Math.random().toString(36).slice(2);
+    // 建 socket meta（之後驗章 / START_GAME 會用）
     room.sockets.set(socket.id, {
       playerId: myId,
       secret: sec,
-      displayName: (displayName||'').trim() || `P${myId+1}`,
-      avatar: Number(avatar)||1,
+      displayName: (displayName || "").trim() || `P${myId + 1}`,
+      avatar: Number(avatar) || 1,
     });
 
     joinedRoom = roomId;
     socket.join(roomId);
     socket.emit("JOINED", { playerId: myId, secret: sec });
 
-    // 等待室 ready 狀態
-    room.lobbyReady[myId] = false;
+    // 等待室 ready 狀態（預設未準備）
+    room.lobbyReady[myId] = room.lobbyReady[myId] ?? false;
 
     broadcastLobby(roomId);
     broadcastState(room);
   });
+
 
   socket.on("ACTION", (action = {}) => {
     const { roomId, playerId, secret, type } = action;
