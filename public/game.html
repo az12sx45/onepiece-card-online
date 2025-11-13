@@ -928,50 +928,96 @@ function onceFx(dom, cls, delay=0){
 }
 
 /* === 擲硬幣影片播放（本機，附框+淡入淡出） === */
-/* === 擲硬幣影片播放（穩定版：處理自動播放被擋 + 逾時關閉） === */
+/* === 擲硬幣影片播放（穩定版：處理 BGM & 自動播放） === */
 let _coinPlaying = false;
 function playCoinFx(){
   const ov  = document.getElementById('coinOverlay');
   const vid = document.getElementById('coinVideo');
   if (!ov || !vid) return;
-  if (_coinPlaying) return;
+  if (_coinPlaying) return;          // 避免重複觸發
   _coinPlaying = true;
+
+  // 👉 開始播之前，先記錄「當下 BGM 是否正在播放」
+  const bgmWasPlaying =
+    typeof bgmAudio !== 'undefined' &&
+    bgmAudio &&
+    !bgmAudio.paused &&
+    !bgmAudio.ended;
 
   // 顯示 overlay
   ov.classList.remove('hidden');
   ov.classList.add('show');
 
-  // 先確保從頭播、音量回到正常
+  // 影片從頭、正常音量
   try { vid.currentTime = 0; } catch(e){}
-  vid.volume = 1.0;         // ← 要正常音量就 1.0
-  vid.muted  = false;       // ← 先嘗試有聲播放
+  vid.volume = 1.0;
+  vid.muted  = false;
 
-  // 監聽一次 ended：正常播完自動關閉
-  const onEnded = ()=>{
-    cleanup();
-  };
+  // 若當時 BGM 有在播，先暫停一下（保險，多一層而已）
+  if (bgmWasPlaying && bgmAudio) {
+    try { bgmAudio.pause(); } catch(e){}
+  }
+
+  // 正常播完 → cleanup
+  const onEnded = ()=> cleanup();
   vid.addEventListener('ended', onEnded, { once:true });
 
-  // 如果被瀏覽器擋下（例如沒有「手勢」），就 fallback：
-  // 1) 先嘗試有聲播放；失敗 → 2) 無聲播放（確保畫面能走完），畫面點一下可立刻關閉。
-  const startTs = Date.now();
-  const tryPlay = ()=>{
+  let failTimer = null;
+  function armFailsafe(){
+    clearTimeout(failTimer);
+    const dur = Number.isFinite(vid.duration) && vid.duration > 0
+      ? vid.duration * 1000
+      : 4000; // 沒讀到長度就抓 4 秒
+    failTimer = setTimeout(()=> cleanup(), dur + 500);
+  }
+
+  function cleanup(){
+    clearTimeout(failTimer);
+
+    // 關閉 overlay
+    ov.classList.remove('show');
+    setTimeout(()=>{
+      ov.classList.add('hidden');
+      _coinPlaying = false;
+    }, 300);
+
+    // 停止影片
+    try {
+      vid.pause();
+      vid.currentTime = 0;
+    } catch(e){}
+
+    // 清掉事件
+    vid.removeEventListener('ended', onEnded);
+
+    // 告訴 duck 系統：這支 video 不算在「正在播放」裡了
+    try {
+      if (typeof duckOff === 'function') duckOff(vid);
+    } catch(e){}
+
+    // ⭐ 關鍵：如果一開始 BGM 有在播，就幫你續播
+    if (bgmWasPlaying && bgmAudio) {
+      bgmAudio.play().catch(()=> {
+        // 有些瀏覽器可能擋自動播放，就算了，不再報錯
+      });
+    }
+  }
+
+  // 嘗試播放影片
+  vid.play().then(()=>{
+    armFailsafe();
+  }).catch(()=>{
+    // 若有聲播放被瀏覽器擋掉，改用靜音播放 + 點擊關閉
+    vid.muted = true;
     vid.play().then(()=>{
-      // 已開始播放，加一個安全逾時（避免影片檔壞掉沒觸發 ended）
+      ov.addEventListener('click', ()=> cleanup(), { once:true });
       armFailsafe();
     }).catch(()=>{
-      // 有聲被擋 → 改成靜音播放
-      vid.muted = true;
-      vid.play().then(()=>{
-        // 允許用戶點一下就關閉（避免一直卡 overlay）
-        ov.addEventListener('click', cleanup, { once:true });
-        armFailsafe();
-      }).catch(()=>{
-        // 連靜音也失敗 → 直接關閉，不阻塞遊戲流程
-        cleanup();
-      });
+      // 連靜音都播不動 → 直接關掉，不影響遊戲流程
+      cleanup();
     });
-  };
+  });
+};
 
   // failsafe：不論如何，最長 N 秒就關閉 overlay，避免卡住
   let failTimer = null;
