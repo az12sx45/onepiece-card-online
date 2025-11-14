@@ -2129,12 +2129,20 @@ function showDigits(title, onPick, opt={}){
 }
 
 function showConfirm(title, onOk){
-  let html=`<div class="text-lg font-semibold mb-2">${title}</div>`
-    +`<div class="flex justify-end gap-2"><button class="px-3 py-1.5 rounded-lg border border-[#2a2f35]" onclick="document.getElementById('modal').classList.add('hidden')">取消</button>`
-    +`<button id="okBtn" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black">確定</button></div>`;
+  let html =
+    `<div class="text-lg font-semibold mb-2">${title}</div>` +
+    `<div class="flex justify-end gap-2 mt-3">` +
+      `<button id="okBtn" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black">確定</button>` +
+    `</div>`;
   showModal(html);
-  el.modal.querySelector('#okBtn').onclick = ()=>{ onOk(); hideModal(); };
-}
+
+  const okBtn = el.modal.querySelector('#okBtn');
+  if (okBtn) {
+    okBtn.onclick = () => {
+      onOk();
+      hideModal();
+    };
+  }
 
 function showYesNo(title, yesText, noText, onYes, onNo){
   let html =
