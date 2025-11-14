@@ -1351,6 +1351,34 @@ socket.on('JOINED', ({ playerId })=>{
     console.warn('sessionStorage set op_pid failed', e);
   }
 });
+/* === 打出牌快閃：排隊系統（避免上一張卡蓋到下一張） === */
+let _flashQueue   = [];   // 要播放的快閃工作
+let _flashPlaying = false;
+
+function enqueueFlashTask(task){
+  // task 是一個函式：(done)=>{ ...; done(); }
+  _flashQueue.push(task);
+  if (!_flashPlaying) runNextFlashTask();
+}
+
+function runNextFlashTask(){
+  if (_flashQueue.length === 0){
+    _flashPlaying = false;
+    return;
+  }
+  _flashPlaying = true;
+  const task = _flashQueue.shift();
+  try{
+    task(function done(){
+      _flashPlaying = false;
+      runNextFlashTask();
+    });
+  } catch (err){
+    console.error('[flashTask error]', err);
+    _flashPlaying = false;
+    runNextFlashTask();
+  }
+}
 
 /* ===== 新增：showPlayedFlash（支援強化卡面 + 結束回呼） ===== */
 function showPlayedFlash(cardId, byIndex, opt={}){
@@ -1449,36 +1477,48 @@ socket.on('STATE', (s)=>{
     _seenSrvLen = srvLog.length;
   }
 
-  // 3) 偵測新棄牌
-  const newDiscardLen = Array.isArray(state.discard) ? state.discard.length : 0;if (newDiscardLen > prevDiscardLen) {
-  const last = state.discard[newDiscardLen - 1];
-  const isBack = last && typeof last === 'object' && last.back === true;
+   // 3) 偵測新棄牌（用排隊系統，避免上一張卡閃一下又被換掉）
+  const newDiscardLen = Array.isArray(state.discard) ? state.discard.length : 0;
+  if (newDiscardLen > prevDiscardLen) {
+    const last = state.discard[newDiscardLen - 1];
+    const isBack = last && typeof last === 'object' && last.back === true;
 
-  if (!isBack && typeof last === 'number') {
-    // ⭐ 延後到下一幀，確保 discard DOM 已經更新好
-    requestAnimationFrame(()=>{
-      if (isEnhancedNow(last)) {
+    if (!isBack && typeof last === 'number') {
+      const cardId      = last;
+      const byIndex     = prevTurnIndex;          // 出牌的是上一個回合的玩家
+      const isEnhNow    = isEnhancedNow(cardId);  // 這張現在有沒有強化
+      const shouldEnhFx = isEnhNow && _enhSignal && _enhSignal.cardId === cardId;
 
-        if (_enhSignal && _enhSignal.cardId === last) {
-          _flashBusy = true;
-          showPlayedFlash(last, prevTurnIndex, {
-            onDone: ()=>{
-              playEnhFxFor(last);
-              _flashBusy = false;
-              _enhSignal = null;
-            }
-          });
-        } else {
-          showPlayedFlash(last, prevTurnIndex);
-        }
-
-      } else {
-        showPlayedFlash(last, prevTurnIndex);
-      }
-    });
-
+      // 丟進排隊：每次只處理一張卡，上一張 2 秒播完才輪到下一張
+      enqueueFlashTask((done)=>{
+        // 先讓畫面把棄牌區 render 完，再決定要閃哪張
+        requestAnimationFrame(()=>{
+          if (shouldEnhFx) {
+            showPlayedFlash(cardId, byIndex, {
+              onDone: ()=>{
+                try{
+                  if (typeof playEnhFxFor === 'function') {
+                    playEnhFxFor(cardId);
+                  } else if (typeof playEnhFx === 'function') {
+                    playEnhFx();
+                  }
+                } finally {
+                  _enhSignal = null;
+                  done();  // 這張快閃 + 強化影片結束 → 換下一張
+                }
+              }
+            });
+          } else {
+            // 一般打出卡：只快閃 2 秒
+            showPlayedFlash(cardId, byIndex, {
+              onDone: done
+            });
+          }
+        });
+      });
+    }
   }
-}
+
 
 
   // ★ 新增：收到新狀態後校正背景（若選的場地已不在本局場地清單就自動關閉）
@@ -1656,9 +1696,9 @@ function render(){
   const left = state.deck?.length ?? 0;
 el.deckCnt.textContent = left;
 
- // 少於 14 → 讓牌堆按鈕紅光微閃；反之移除
+ // 少於 15 → 讓牌堆按鈕紅光微閃；反之移除
  if (el.deckBtn) {
-   if (left < 14) el.deckBtn.classList.add('hot');
+   if (left < 15) el.deckBtn.classList.add('hot');
    else           el.deckBtn.classList.remove('hot');
  }
 
