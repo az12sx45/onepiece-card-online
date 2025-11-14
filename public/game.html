@@ -1450,35 +1450,36 @@ socket.on('STATE', (s)=>{
   }
 
   // 3) 偵測新棄牌
-  const newDiscardLen = Array.isArray(state.discard) ? state.discard.length : 0;
-  if (newDiscardLen > prevDiscardLen) {
-    const last = state.discard[newDiscardLen - 1];
-    const isBack = last && typeof last === 'object' && last.back === true;
-    if (!isBack && typeof last === 'number') {
+  const newDiscardLen = Array.isArray(state.discard) ? state.discard.length : 0;if (newDiscardLen > prevDiscardLen) {
+  const last = state.discard[newDiscardLen - 1];
+  const isBack = last && typeof last === 'object' && last.back === true;
+
+  if (!isBack && typeof last === 'number') {
+    // ⭐ 延後到下一幀，確保 discard DOM 已經更新好
+    requestAnimationFrame(()=>{
       if (isEnhancedNow(last)) {
-        
-if (_enhSignal && _enhSignal.cardId === last) {
-  _flashBusy = true;
-  showPlayedFlash(last, prevTurnIndex, {
-    onDone: ()=>{
-      if (typeof playEnhFxFor === 'function') {
-        playEnhFxFor(last);
-      } else if (typeof playEnhFx === 'function') {
-        playEnhFx();
-      }
-      _flashBusy = false;
-      _enhSignal = null;
-    }
-  });
-} else {
-  // 非打出卡（例如索隆逼棄、覆蓋頂牌）或沒有 enh_fx 訊號 → 僅快閃卡面，不播影片
-  showPlayedFlash(last, prevTurnIndex);
-}
-} else {
+
+        if (_enhSignal && _enhSignal.cardId === last) {
+          _flashBusy = true;
+          showPlayedFlash(last, prevTurnIndex, {
+            onDone: ()=>{
+              playEnhFxFor(last);
+              _flashBusy = false;
+              _enhSignal = null;
+            }
+          });
+        } else {
+          showPlayedFlash(last, prevTurnIndex);
+        }
+
+      } else {
         showPlayedFlash(last, prevTurnIndex);
       }
-    }
+    });
+
   }
+}
+
 
   // ★ 新增：收到新狀態後校正背景（若選的場地已不在本局場地清單就自動關閉）
   reconcileVenueBackground(s.venues);
