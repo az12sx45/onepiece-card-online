@@ -581,7 +581,7 @@ body::before{
          playsinline
          preload="auto"
          class="hidden"
-         src="videos/game start.mp4">
+         src="videos/gamestart.mp4">
   </video>
 
   <!-- 打出卡片「快閃」Overlay（新增） -->
@@ -745,25 +745,37 @@ function unlockMediaOnce(){
     _mediaUnlocked = true;
     return;
   }
-  _mediaUnlocked = true;   // 先標記避免重複觸發
+let _mediaUnlocked = false;
 
-  try {
-    v.currentTime = 0;
-  } catch(e){}
+function unlockMediaOnce(){
+  if (_mediaUnlocked) return;
+  const v = document.getElementById('mediaUnlocker');
+  if (!v) {
+    // 沒這支影片就算了，當作已解鎖（避免一直 retry）
+    _mediaUnlocked = true;
+    return;
+  }
+
+  try { v.currentTime = 0; } catch(e){}
 
   // 超小聲、有聲播放（解除封印），時間拉很短
   v.muted  = false;
   v.volume = 0.05;
 
   v.play().then(()=>{
+    // ✅ 只有真的開始播了，才算解鎖成功
+    _mediaUnlocked = true;
+
     // 播一下就好（約 0.2 秒）
     setTimeout(()=>{
       try { v.pause(); } catch(e){}
     }, 200);
   }).catch(err=>{
     console.warn('media unlock failed', err);
+    // ❌ 播失敗不要把 _mediaUnlocked 設成 true，這樣下次點畫面還能再試
   });
 }
+
 
 // 玩家第一次點畫面 → 同時標記互動 + 解鎖影音
 function bindFirstInteractionUnlock(){
