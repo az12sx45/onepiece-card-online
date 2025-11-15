@@ -576,6 +576,14 @@ body::before{
     </div>
   </div>
 
+  <!-- 一次性「影音解鎖」隱藏影片（iOS 用） -->
+  <video id="mediaUnlocker"
+         playsinline
+         preload="auto"
+         class="hidden"
+         src="videos/game start.mp4">
+  </video>
+
   <!-- 打出卡片「快閃」Overlay（新增） -->
   <div id="playedOverlay" class="hidden">
     <div id="playedFrame">
@@ -588,6 +596,7 @@ body::before{
   <div id="enhOverlay" class="hidden fixed inset-0 z-[140] flex items-center justify-center bg-black/70">
     <video id="enhVideo" playsinline preload="auto" class="max-w-[80vw] max-h-[80vh] rounded-xl shadow-2xl"></video>
   </div>
+
 
 
   <!-- === 羅（強化）查看後的交換詢問框 === -->
@@ -725,6 +734,53 @@ let isShuffle  = localStorage.getItem('bgm_shuffle') === '1';
 let userInteracted = false; // 解除瀏覽器自動播放限制
 let wasPlayingBeforeDuck = false; // 影片介入前是否在播放
 let duckSet = new Set(); // 正在播放中的影片集合（同時多段也能正確回復）
+
+// === iOS / Safari 影音解鎖：隱藏影片播一下就解鎖後續有聲播放 ===
+let _mediaUnlocked = false;
+
+function unlockMediaOnce(){
+  if (_mediaUnlocked) return;
+  const v = document.getElementById('mediaUnlocker');
+  if (!v) {
+    _mediaUnlocked = true;
+    return;
+  }
+  _mediaUnlocked = true;   // 先標記避免重複觸發
+
+  try {
+    v.currentTime = 0;
+  } catch(e){}
+
+  // 超小聲、有聲播放（解除封印），時間拉很短
+  v.muted  = false;
+  v.volume = 0.05;
+
+  v.play().then(()=>{
+    // 播一下就好（約 0.2 秒）
+    setTimeout(()=>{
+      try { v.pause(); } catch(e){}
+    }, 200);
+  }).catch(err=>{
+    console.warn('media unlock failed', err);
+  });
+}
+
+// 玩家第一次點畫面 → 同時標記互動 + 解鎖影音
+function bindFirstInteractionUnlock(){
+  const handler = ()=>{
+    userInteracted = true;     // 跟 BGM 那個邏輯共用
+    unlockMediaOnce();
+    window.removeEventListener('pointerdown', handler);
+    window.removeEventListener('touchstart', handler);
+    window.removeEventListener('click', handler);
+  };
+  window.addEventListener('pointerdown', handler, { passive:true });
+  window.addEventListener('touchstart', handler, { passive:true });
+  window.addEventListener('click', handler, { passive:true });
+}
+
+// 載入腳本就綁定一次
+bindFirstInteractionUnlock();
 
 // ===== UI 繪製 =====
 function paintTitle(){ bgmTitleEl.textContent = BGM_LIST[bgmIndex]?.title || '未播放'; }
