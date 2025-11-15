@@ -642,16 +642,25 @@ body::before{
          src="videos/coin.mp4">
   </video>
 
-  <!-- 打出卡片「快閃」Overlay（新增） -->
+   <!-- 打出卡片「快閃」Overlay（新增） -->
   <div id="playedOverlay" class="hidden">
-    ...
+    <div id="playedFrame">
+      <img id="playedImg"
+           src="images/cards/back.png"
+           alt="played card">
+      <div id="playedMeta"></div>
+    </div>
   </div>
 
   <!-- 強化技能影片（全體播放） -->
-  <div id="enhOverlay" class="hidden fixed inset-0 ...
-    <video id="enhVideo" playsinline preload="auto" class="max-w-[80vw] ..."></video>
+  <div id="enhOverlay"
+       class="hidden fixed inset-0 z-[120] flex items-center justify-center bg-black/80">
+    <video id="enhVideo"
+           playsinline
+           preload="auto"
+           class="max-w-[80vw] max-h-[80vh] rounded-2xl shadow-2xl border border-white/20 bg-black">
+    </video>
   </div>
-
 
 
 
@@ -828,12 +837,10 @@ if (mediaGate && mediaStartBtn){
   });
 }
 
-
-// 玩家第一次點畫面 → 同時標記互動 + 解鎖影音
+// （備用）首次互動就標記 userInteracted，避免 iOS 擋掉音訊。
 function bindFirstInteractionUnlock(){
   const handler = ()=>{
-    userInteracted = true;     // 跟 BGM 那個邏輯共用
-    unlockMediaOnce();
+    userInteracted = true;
     window.removeEventListener('pointerdown', handler);
     window.removeEventListener('touchstart', handler);
     window.removeEventListener('click', handler);
