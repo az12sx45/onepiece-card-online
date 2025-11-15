@@ -1070,6 +1070,7 @@ function playCoinFx(){
       });
     }
   }
+
 /* === ✅ 洗牌影片播放（本機播放） === */
 let _shufflePlaying = false;
 function playShuffleFx(){
@@ -1114,13 +1115,15 @@ function playShuffleFx(){
     vid.removeEventListener('ended', onEnded);
   }
 
+
+  // 嘗試播放影片
   vid.play().then(()=>{
     armFailsafe();
   }).catch(()=>{
-    // 若有聲被擋，就改靜音播，點畫面可以提前關
+    // 若有聲播放被瀏覽器擋掉，改用靜音播放 + 點擊關閉
     vid.muted = true;
     vid.play().then(()=>{
-      ov.addEventListener('click', cleanup, { once:true });
+      ov.addEventListener('click', ()=> cleanup(), { once:true });
       armFailsafe();
     }).catch(()=>{
       // 連靜音都播不動 → 直接關掉，不影響遊戲流程
