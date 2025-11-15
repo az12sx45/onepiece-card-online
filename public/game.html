@@ -403,68 +403,10 @@ body::before{
   #btnDraw.hot::after{ animation: none !important; }
 }
 
-/* === 一次性開啟聲音覆蓋層（iPad / iPhone 用） === */
-#mediaGate{
-  position: fixed;
-  inset: 0;
-  z-index: 999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0,0,0,.85);
-}
-#mediaGate.hidden{
-  display: none;
-}
-.mediaGate-panel{
-  padding: 16px 22px;
-  border-radius: 16px;
-  background: rgba(15,18,22,.96);
-  border: 1px solid rgba(255,255,255,.16);
-  box-shadow: 0 18px 45px rgba(0,0,0,.65);
-  text-align: center;
-  max-width: 320px;
-}
-.mediaGate-panel h2{
-  font-size: 18px;
-  margin-bottom: 6px;
-}
-.mediaGate-panel p{
-  font-size: 13px;
-  opacity: .85;
-  margin-bottom: 12px;
-}
-.mediaGate-btn{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 20px;
-  border-radius: 999px;
-  border: none;
-  font-size: 14px;
-  font-weight: 600;
-  background: linear-gradient(135deg,#fbbf24,#f97316);
-  color: #0b0e12;
-  cursor: pointer;
-}
-.mediaGate-btn:active{
-  transform: scale(.97);
-}
-
 
 </style>
 </head>
 <body>
-
- <!-- 一次性開啟聲音提示（特別給行動裝置） -->
-  <div id="mediaGate" class="fixed inset-0 z-[999] flex items-center justify-center bg-black/80">
-    <div class="mediaGate-panel">
-      <h2>開啟聲音與動畫</h2>
-      <p>點一下「開始遊戲」，讓本局可以播放音樂與強化動畫的音效。</p>
-      <button id="btnMediaStart" class="mediaGate-btn">開始遊戲</button>
-    </div>
-  </div>
-
 <header class="sticky top-0 z-40 bg-[#101418]/80 backdrop-blur border-b border-[#1c2229]">
   <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
     <!-- 左側標題 -->
@@ -627,41 +569,25 @@ body::before{
     </div>
   </div>
 
-   <!-- 擲硬幣動畫（只有本機播放） -->
+  <!-- 擲硬幣動畫（只有本機播放） -->
   <div id="coinOverlay" class="hidden">
     <div id="coinFrame">
       <video id="coinVideo" src="videos/coin.mp4" playsinline preload="auto"></video>
     </div>
   </div>
 
-  <!-- 一次性「影音解鎖」隱藏影片（iOS 用） -->
-  <video id="mediaUnlocker"
-         playsinline
-         preload="auto"
-         class="hidden"
-         src="videos/coin.mp4">
-  </video>
-
-   <!-- 打出卡片「快閃」Overlay（新增） -->
+  <!-- 打出卡片「快閃」Overlay（新增） -->
   <div id="playedOverlay" class="hidden">
     <div id="playedFrame">
-      <img id="playedImg"
-           src="images/cards/back.png"
-           alt="played card">
-      <div id="playedMeta"></div>
+      <img id="playedImg" src="images/cards/back.png" alt="played"/>
+      <div id="playedMeta" class="text-sm"></div>
     </div>
   </div>
 
   <!-- 強化技能影片（全體播放） -->
-  <div id="enhOverlay"
-       class="hidden fixed inset-0 z-[120] flex items-center justify-center bg-black/80">
-    <video id="enhVideo"
-           playsinline
-           preload="auto"
-           class="max-w-[80vw] max-h-[80vh] rounded-2xl shadow-2xl border border-white/20 bg-black">
-    </video>
+  <div id="enhOverlay" class="hidden fixed inset-0 z-[140] flex items-center justify-center bg-black/70">
+    <video id="enhVideo" playsinline preload="auto" class="max-w-[80vw] max-h-[80vh] rounded-xl shadow-2xl"></video>
   </div>
-
 
 
   <!-- === 羅（強化）查看後的交換詢問框 === -->
@@ -799,59 +725,6 @@ let isShuffle  = localStorage.getItem('bgm_shuffle') === '1';
 let userInteracted = false; // 解除瀏覽器自動播放限制
 let wasPlayingBeforeDuck = false; // 影片介入前是否在播放
 let duckSet = new Set(); // 正在播放中的影片集合（同時多段也能正確回復）
-
-// === 一次性聲音／動畫啟動覆蓋層（特別給行動裝置） ===
-const mediaGate      = document.getElementById('mediaGate');
-const mediaStartBtn  = document.getElementById('btnMediaStart');
-const mediaUnlocker  = document.getElementById('mediaUnlocker');
-
-if (mediaGate && mediaStartBtn){
-  mediaStartBtn.addEventListener('click', ()=>{
-    // 這次點擊當成「使用者同意播放有聲媒體」
-    userInteracted = true;
-
-    (async ()=>{
-      // 1) 播一小段隱藏影片，解鎖「有聲影片」權限
-      try{
-        if (mediaUnlocker){
-          try { mediaUnlocker.currentTime = 0; } catch(e){}
-          mediaUnlocker.muted  = false;
-          mediaUnlocker.volume = 0.05;
-          await mediaUnlocker.play();
-          setTimeout(()=>{
-            try{
-              mediaUnlocker.pause();
-              mediaUnlocker.currentTime = 0;
-            }catch(e){}
-          }, 200); // 播 0.2 秒就好，玩家幾乎感覺不到
-        }
-      }catch(e){
-        console.warn('media unlocker play failed', e);
-      }
-
-      // 這裡如果你想一按就開始 BGM，可以在這裡呼叫你控制 BGM 的函式
-      // 例如：startBgmIfNeeded();（目前先不強制播）
-
-      mediaGate.classList.add('hidden');
-    })();
-  });
-}
-
-// （備用）首次互動就標記 userInteracted，避免 iOS 擋掉音訊。
-function bindFirstInteractionUnlock(){
-  const handler = ()=>{
-    userInteracted = true;
-    window.removeEventListener('pointerdown', handler);
-    window.removeEventListener('touchstart', handler);
-    window.removeEventListener('click', handler);
-  };
-  window.addEventListener('pointerdown', handler, { passive:true });
-  window.addEventListener('touchstart', handler, { passive:true });
-  window.addEventListener('click', handler, { passive:true });
-}
-
-// 載入腳本就綁定一次
-bindFirstInteractionUnlock();
 
 // ===== UI 繪製 =====
 function paintTitle(){ bgmTitleEl.textContent = BGM_LIST[bgmIndex]?.title || '未播放'; }
