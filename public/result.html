@@ -53,14 +53,14 @@ body{
 /* 左：玩家清單 */
 .player-item{
   display:grid;
-  grid-template-columns: 28px minmax(0, 240px) 1fr;  /* rank | avatar+稱號(固定寬) | 名字 */
+  grid-template-columns: 28px minmax(0, 260px) 1fr;  /* rank | avatar+稱號(更寬) | 名字 */
   align-items:start;
   gap:10px;
   padding:10px;
   border:1px solid rgba(255,255,255,.06);
   border-radius:12px;
   background:rgba(255,255,255,.03);
-  overflow:hidden;                        /* 防止稱號特效跑出格子 */
+  overflow:hidden;
 }
 
 .player-item.top1{
@@ -81,7 +81,7 @@ body{
   align-items:center;
   gap:4px;
   min-width:0;
-  width:100%;             /* 把整個 240px 欄位吃滿，方便下面的框固定寬 */
+  width:100%;
 }
 
 .avatar{
@@ -105,7 +105,7 @@ body{
 .player-bounty{
   font-size:10px;
   line-height:1.2;
-  max-width:120px;        /* 限制寬度，避免撐爆 */
+  max-width:120px;
   text-align:center;
 }
 .player-bounty-amt{
@@ -132,8 +132,8 @@ body{
   text-align:center;
   white-space:nowrap;
 
-  width:100%;             /* 吃滿 avatar-col 那一欄 */
-  max-width:240px;        /* 上限 240px，比外框再短一點點 */
+  width:100%;
+  max-width:260px;
   box-sizing:border-box;
   margin-left:auto;
   margin-right:auto;
@@ -150,10 +150,8 @@ body{
 .player-title-badge .text{
   display:inline-block;
   max-width:100%;
-  overflow:hidden;
-  text-overflow:ellipsis;
+  overflow:hidden;   /* 防止跑出框；JS 會縮字 */
 }
-
 
 /* 基礎動畫 */
 @keyframes float{
@@ -836,6 +834,30 @@ function getTitleInfoForRow(row, playerCount){
   };
 }
 
+/* ====== 稱號框：自動縮小字體，直到塞進框裡 ====== */
+function adjustTitleFontSizes(){
+  const nodes = document.querySelectorAll('.player-title-badge .text');
+  nodes.forEach(el=>{
+    if (!el.textContent) return;
+    el.style.fontSize = '';                    // 重設
+    const badge = el.closest('.player-title-badge');
+    if (!badge) return;
+    const maxWidth = badge.clientWidth;
+    if (!maxWidth) return;
+
+    let fs = parseFloat(getComputedStyle(el).fontSize) || 11;
+    const minFs = 8;
+    let guard = 0;
+
+    // 為了可讀性，向下取整 0.5px（避免子像素抖動）
+    while (el.scrollWidth > badge.clientWidth && fs > minFs && guard < 30){
+      fs -= 0.5;
+      el.style.fontSize = fs + 'px';
+      guard++;
+    }
+  });
+}
+
 /* 左欄玩家清單 */
 function renderPlayersLeft(final, myId){
   const el = document.getElementById('playerList');
@@ -910,7 +932,10 @@ function renderPlayersLeft(final, myId){
     `;
   }).join('');
 
-  // 綁定：只有「自己」的頭像能打開雷達圖
+  /* 生成完稱號框之後，調整稱號字體大小 */
+  adjustTitleFontSizes();
+
+  // 綁定：只有「自己」的頭像能打開雷達圖（保持不動）
   el.querySelectorAll('img.avatar.me').forEach(img=>{
     img.addEventListener('click', ()=>{
       const myIdResolved = Number(img.getAttribute('data-id'));
@@ -1386,12 +1411,12 @@ function renderRadar(baseRow, oppRow){
       ctx.fillStyle = color;
       ctx.fill();
 
-      // 數字（沿軸線往外推一點，避免重疊）
+      // 數字（沿軸線往外推一點）
       const [tx,ty] = polar(cx, cy, Math.hypot(p.x-cx, p.y-cy) + (pushOut||12), p.rad);
       ctx.textAlign = (Math.cos(p.rad)>0.35) ? 'left' : (Math.cos(p.rad)<-0.35 ? 'right':'center');
       ctx.textBaseline = (Math.sin(p.rad)>0.35) ? 'top' : (Math.sin(p.rad)<-0.35 ? 'bottom':'middle');
 
-      // 先描邊再填色，提升對比
+      // 先描邊再填色
       const label = String(p.val);
       ctx.lineWidth = 3;
       ctx.strokeStyle = 'rgba(0,0,0,.55)';
@@ -1405,11 +1430,11 @@ function renderRadar(baseRow, oppRow){
   const mePts  = makePoints(baseRow);
   const opPts  = oppRow ? makePoints(oppRow) : null;
 
-  // 先畫對手，再畫自己（避免把我被蓋住）
+  // 先畫對手，再畫自己
   if(opPts){ strokeFill(opPts, OP_COLOR_FILL, OP_COLOR_LINE); }
   if(mePts){ strokeFill(mePts, ME_COLOR_FILL, ME_COLOR_LINE); }
 
-  // 標記 + 數字：我（推 12px）、對手（推 22px，減少重疊）
+  // 標記 + 數字：我（推 12px）、對手（推 22px）
   if(mePts){ drawMarkersWithValues(mePts, ME_COLOR_LINE, 12); }
   if(opPts){ drawMarkersWithValues(opPts, OP_COLOR_LINE, 22); }
 
