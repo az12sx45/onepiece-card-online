@@ -1470,7 +1470,7 @@ if(p.action==='zoro'){
     }
   }
 
-  if(type==='LUFFY_SECOND'){
+ if(type==='LUFFY_SECOND'){
     const p = st.pending;
     if(!p || p.action!=='luffy') return { state: st, emits };
 
@@ -1506,6 +1506,82 @@ if(p.action==='zoro'){
       scoreDefense(st, idx, p.extra.keep); // ★ 被擋
     }
     st.pending=null;
+    endOrNext(st);
+    return { state: st, emits };
+  }
+
+  // ===== 魯夫（魚人島強化）：猿王群鴉炮 =====
+  if (type === 'LUFFY_BOOST_COMMIT') {
+    const p = st.pending;
+    if (!p || p.action !== 'luffy-boost') return { state: st, emits };
+
+    // 只允許當前出牌的人操作
+    if (action.playerId !== st.turnIndex) {
+      emits.push({ to: action.playerId, type:'toast', text:'不是你在發動魯夫強化' });
+      return { state: st, emits };
+    }
+
+    const meIdx = st.turnIndex;
+    const me = st.players[meIdx];
+    const keepId = p.extra?.keep;
+
+    if (typeof keepId !== 'number') {
+      st.pending = null;
+      endOrNext(st);
+      return { state: st, emits };
+    }
+
+    const myTail = tail(keepId);
+    const threshold = myTail - 3;  // 可為負數
+    pushLog(st, `魯夫（魚人島）：以尾數 ${myTail}−3 = ${threshold} 做全場比尾數`, emits);
+
+    let victims = 0;
+
+    st.players.forEach((pp, i) => {
+      if (!pp.alive || i === meIdx) return;
+
+      const g = effectGuard(st, i, {});  // 正常保護 / 閃避
+      if (g.blocked) {
+        // 被保護/閃避擋掉 → 加防禦分（以魯夫這張卡計）
+        scoreDefense(st, i, keepId);
+        return;
+      }
+
+      const oppId = pp.hand;
+      if (oppId == null) return;
+      const oppTail = tail(oppId);
+
+      // 尾數低於 threshold 的玩家被淘汰
+      if (oppTail < threshold) {
+        victims++;
+        doEliminate(st, i, '魯夫（魚人島）：尾數比武失敗', meIdx, emits);
+      }
+    });
+
+    // 攻擊分：max(0, threshold) × 同時被淘汰人數
+    if (victims > 0) {
+      const base = Math.max(0, threshold);
+      const total = base * victims;
+      addStat(st, meIdx, 'atkScore', total);
+    }
+
+    // 用來比尾數那張牌：丟進棄牌堆，但不觸發任何「進棄牌堆就有效果」的技能
+    if (me.hand === keepId) {
+      me.hand = null;
+      st.discard.push(keepId);
+      emits.push({ to:'all', type:'silent_discard', by: meIdx, cards:[keepId] });
+    }
+
+    // 補抽一張牌
+    if (st.deck.length > 0) {
+      me.hand = st.deck.pop() ?? null;
+      checkHot(st);
+      pushLog(st, '魯夫（魚人島）：比完尾數後補 1 張牌', emits);
+    } else {
+      pushLog(st, '魯夫（魚人島）：牌堆已空，無法補牌', emits);
+    }
+
+    st.pending = null;
     endOrNext(st);
     return { state: st, emits };
   }
