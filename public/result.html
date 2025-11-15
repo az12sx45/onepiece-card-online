@@ -53,64 +53,68 @@ body{
 /* 左：玩家清單 */
 .player-list{ display:flex; flex-direction:column; gap:10px; }
 .player-item{
-  display:grid; grid-template-columns: 28px 44px 1fr auto; align-items:center;
-  gap:10px; padding:10px; border:1px solid rgba(255,255,255,.06);
-  border-radius:12px; background:rgba(255,255,255,.03);
+  display:grid;
+  grid-template-columns: 28px auto 1fr;  /* rank | avatar+稱號 | 名字 */
+  align-items:start;
+  gap:10px;
+  padding:10px;
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:12px;
+  background:rgba(255,255,255,.03);
+  overflow:hidden;                        /* 防止稱號特效跑出格子 */
 }
-.player-item.top1{ border-color: rgba(255,211,107,.45); background: rgba(255,211,107,.06); }
+.player-item.top1{
+  border-color: rgba(255,211,107,.45);
+  background: rgba(255,211,107,.06);
+}
 .rank-dot{
   width:26px;height:26px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
-  font-weight:800;font-size:12px;color:#0a0d10;background:var(--accent);
+  font-weight:800;font-size:12px;
+  color:#0a0d10;background:var(--accent);
+}
+
+/* 頭像＋金幣＋懸賞＋稱號都放這一欄（縱向） */
+.avatar-col{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  min-width:0;
 }
 .avatar{
   width:44px;height:44px;border-radius:50%;
-  object-fit:cover;background:#2a333d;border:1px solid rgba(255,255,255,.18);
+  object-fit:cover;
+  background:#2a333d;
+  border:1px solid rgba(255,255,255,.18);
 }
-.pinfo{ line-height:1.2 }
-.pname{ font-weight:700 }
-.pid{ font-size:12px;color:var(--muted) }
-
-/* 金幣 + 懸賞 + 稱號區塊（右側） */
-.coins-block{
-  text-align:right;
+.avatar-meta{
   display:flex;
   flex-direction:column;
-  align-items:flex-end;
+  align-items:center;
   gap:2px;
 }
 .coins{
   color:var(--accent);
   font-weight:800;
   font-variant-numeric:tabular-nums;
-  font-size:15px;
+  font-size:13px;
 }
 .player-bounty{
-  font-size:11px;
-  line-height:1.3;
-  max-width:160px;
+  font-size:10px;
+  line-height:1.2;
+  max-width:120px;        /* 限制寬度，避免撐爆 */
+  text-align:center;
 }
 .player-bounty-amt{
   font-weight:700;
   letter-spacing:.5px;
   white-space:nowrap;
 }
-.player-title-badge{
-  margin-top:2px;
-  padding:2px 6px;
-  border-radius:999px;
-  font-size:10px;
-  display:inline-flex;
-  align-items:center;
-  gap:4px;
-  border:1px solid rgba(255,255,255,.18);
-  background:rgba(15,18,22,.9);
-  box-shadow:0 0 0 1px rgba(0,0,0,.6);
-}
-.player-title-tag{
-  font-size:9px;
-  opacity:.85;
-}
+
+/* 名字在右側獨立一欄 */
+.pinfo{ line-height:1.2; display:flex; align-items:center; height:100%; }
+.pname{ font-weight:700; }
 
 /* ===== 稱號框基礎樣式（配合示範檔 v3） ===== */
 .player-title-badge{
@@ -118,8 +122,8 @@ body{
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  padding:6px 20px;
-  font-size:12px;
+  padding:4px 16px;       /* 縮小一點好塞進欄位 */
+  font-size:11px;
   font-weight:800;
   letter-spacing:.5px;
   margin-top:2px;
@@ -858,26 +862,31 @@ function renderPlayersLeft(final, myId){
     return `
       <div class="player-item ${highlight ? 'top1' : ''} ${p.tierClass}">
         <div class="rank-dot">${p.idx}</div>
-        <img class="avatar ${isMe?'me':''}" data-id="${p.id}"
-             ${isMe?'title="點我看雷達圖"':''}
-             src="${avatarUrl(p.ava)}" alt="">
+
+        <div class="avatar-col">
+          <img class="avatar ${isMe?'me':''}"
+               data-id="${p.id}"
+               ${isMe?'title="點我看雷達圖"':''}
+               src="${avatarUrl(p.ava)}" alt="">
+          <div class="avatar-meta">
+            <div class="coins">${p.coins}</div>
+            <div class="player-bounty">
+              <div class="player-bounty-amt">懸賞金 ${p.bountyStr}</div>
+              ${titleText ? `
+                <div class="player-title-badge">
+                  <!-- Tier 6 會用到的裝飾元素，其他 tier 也沒關係 -->
+                  <div class="glow"></div>
+                  <span class="crown">👑</span>
+                  <span class="text">${titleText}</span>
+                  <div class="pendant"></div>
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        </div>
+
         <div class="pinfo">
           <div class="pname">${p.name}</div>
-        </div>
-        <div class="coins-block">
-          <div class="coins">${p.coins}</div>
-          <div class="player-bounty">
-            <div class="player-bounty-amt">懸賞金 ${p.bountyStr}</div>
-            ${titleText ? `
-              <div class="player-title-badge">
-                <!-- Tier 6 會用到的裝飾元素，其他 tier 也沒關係 -->
-                <div class="glow"></div>
-                <span class="crown">👑</span>
-                <span class="text">${titleText}</span>
-                <div class="pendant"></div>
-              </div>
-            ` : ''}
-          </div>
         </div>
       </div>
     `;
