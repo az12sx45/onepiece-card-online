@@ -51,10 +51,9 @@ body{
 .section-title{ font-weight:800; font-size:18px; margin-bottom:8px; }
 
 /* 左：玩家清單 */
-.player-list{ display:flex; flex-direction:column; gap:10px; }
 .player-item{
   display:grid;
-  grid-template-columns: 28px auto 1fr;  /* rank | avatar+稱號 | 名字 */
+  grid-template-columns: 28px minmax(0, 240px) 1fr;  /* rank | avatar+稱號(固定寬) | 名字 */
   align-items:start;
   gap:10px;
   padding:10px;
@@ -63,6 +62,7 @@ body{
   background:rgba(255,255,255,.03);
   overflow:hidden;                        /* 防止稱號特效跑出格子 */
 }
+
 .player-item.top1{
   border-color: rgba(255,211,107,.45);
   background: rgba(255,211,107,.06);
@@ -81,7 +81,9 @@ body{
   align-items:center;
   gap:4px;
   min-width:0;
+  width:100%;             /* 把整個 240px 欄位吃滿，方便下面的框固定寬 */
 }
+
 .avatar{
   width:44px;height:44px;border-radius:50%;
   object-fit:cover;
@@ -122,20 +124,36 @@ body{
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  padding:4px 16px;       /* 縮小一點好塞進欄位 */
+  padding:4px 16px;
   font-size:11px;
   font-weight:800;
   letter-spacing:.5px;
-  margin-top:2px;
+  margin-top:4px;
   text-align:center;
   white-space:nowrap;
+
+  width:100%;             /* 吃滿 avatar-col 那一欄 */
+  max-width:240px;        /* 上限 240px，比外框再短一點點 */
+  box-sizing:border-box;
+  margin-left:auto;
+  margin-right:auto;
 }
+
 .player-title-badge span,
 .player-title-badge .text{
   position:relative;
   z-index:3;
-  white-space:nowrap; /* 稱號絕對不換行 */
+  white-space:nowrap;
 }
+
+/* 讓文字在固定框裡，太長就用 ... 不要把框撐壞 */
+.player-title-badge .text{
+  display:inline-block;
+  max-width:100%;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
 
 /* 基礎動畫 */
 @keyframes float{
