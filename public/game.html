@@ -90,6 +90,42 @@
     #coinFrame video { width: 100%; height: auto; max-height: 70vh; border-radius: 12px; box-shadow: 0 12px 28px rgba(0,0,0,.6); outline: none; }
     #coinOverlay video { outline: none; }
 
+/* === ✅ 洗牌 Overlay & 動畫框（同擲硬幣風格） === */
+#shuffleOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,.7);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s ease;
+}
+#shuffleOverlay.show { opacity: 1; pointer-events: auto; }
+
+#shuffleFrame {
+  background: radial-gradient(circle at 50% 40%,rgba(24,28,32,0.9) 0%,rgba(12,14,16,0.92) 60%,rgba(0,0,0,0.0) 100%);
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 24px 48px rgba(0,0,0,.8), 0 2px 4px rgba(0,0,0,.6), 0 0 1px rgba(255,255,255,.08) inset, 0 0 30px rgba(0,0,0,.6) inset;
+  padding: 16px;
+  width: 400px; max-width: 90vw; max-height: 90vh;
+  display: flex; align-items: center; justify-content: center;
+  transform: scale(.9); transition: transform .3s ease;
+}
+#shuffleOverlay.show #shuffleFrame { transform: scale(1); }
+#shuffleFrame video {
+  width: 100%;
+  height: auto;
+  max-height: 70vh;
+  border-radius: 12px;
+  box-shadow: 0 12px 28px rgba(0,0,0,.6);
+  outline: none;
+}
+#shuffleOverlay video { outline: none; }
+
     /* === 打出卡片「快閃」Overlay（新增） === */
     #playedOverlay{ position:fixed; inset:0; z-index: ninetyfive; z-index:95; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,.72); opacity:0; pointer-events:none; transition:opacity .25s ease; }
     #playedOverlay.show{ opacity:1; pointer-events:auto; }
@@ -488,15 +524,20 @@ body::before{
           <div id="venues" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2"></div>
         </div>
         <div class="card p-3 flex items-center justify-between gap-3">
-  <div class="text-sm opacity-80">
-    牌堆
-    <span id="deckCnt" class="ml-2 px-1.5 py-0.5 rounded border border-[#2a2f35] text-amber-300 font-semibold">0</span>
+  <div class="flex items-center gap-2 text-sm opacity-80">
+    <span>牌堆</span>
+    <span id="deckCnt" class="px-1.5 py-0.5 rounded border border-[#2a2f35] text-amber-300 font-semibold">0</span>
+    <!-- ✅ 新增：洗牌按鈕 -->
+    <button id="btnShuffle"
+            class="px-2 py-1 rounded-lg border border-[#2a2f35] text-xs bg-black/30 hover:bg-black/50">
+      洗牌
+    </button>
   </div>
   <button id="btnDraw" class="deck">
     <img id="deckImg" src="images/cards/back.png" alt="deck"/>
-    <!-- 已移除舊的 .cnt 徽章 -->
   </button>
 </div>
+
 
         <div class="card p-3 md:col-span-3">
           <div class="flex items-center justify-between mb-2">
@@ -576,6 +617,16 @@ body::before{
     </div>
   </div>
 
+<!-- ✅ 洗牌動畫（只有本機播放） -->
+  <div id="shuffleOverlay" class="hidden">
+    <div id="shuffleFrame">
+      <video id="shuffleVideo"
+             src="videos/shuffle.mp4"
+             playsinline
+             preload="auto"></video>
+    </div>
+  </div>
+
   <!-- 打出卡片「快閃」Overlay（新增） -->
   <div id="playedOverlay" class="hidden">
     <div id="playedFrame">
@@ -639,6 +690,7 @@ const el = {
   discard: document.getElementById('discard'),
   deckCnt: document.getElementById('deckCnt'),
   deckBtn: document.getElementById('btnDraw'),
+  shuffleBtn: document.getElementById('btnShuffle'),
   imgHand: document.getElementById('imgHand'),
   imgDrawn: document.getElementById('imgDrawn'),
   playZone: document.getElementById('myPlayZone'),
@@ -1018,6 +1070,64 @@ function playCoinFx(){
       });
     }
   }
+
+/* === ✅ 洗牌影片播放（本機播放） === */
+let _shufflePlaying = false;
+function playShuffleFx(){
+  const ov  = document.getElementById('shuffleOverlay');
+  const vid = document.getElementById('shuffleVideo');
+  if (!ov || !vid) return;
+  if (_shufflePlaying) return;          // 避免連點重複觸發
+  _shufflePlaying = true;
+
+  ov.classList.remove('hidden');
+  ov.classList.add('show');
+
+  try { vid.currentTime = 0; } catch(e){}
+  vid.volume = 1.0;
+  vid.muted  = false;
+
+  const onEnded = ()=> cleanup();
+  vid.addEventListener('ended', onEnded, { once:true });
+
+  let failTimer = null;
+  function armFailsafe(){
+    clearTimeout(failTimer);
+    const dur = Number.isFinite(vid.duration) && vid.duration > 0
+      ? vid.duration * 1000
+      : 5000;
+    failTimer = setTimeout(()=> cleanup(), dur + 600);
+  }
+
+  function cleanup(){
+    clearTimeout(failTimer);
+    ov.classList.remove('show');
+    setTimeout(()=>{
+      ov.classList.add('hidden');
+      _shufflePlaying = false;
+    }, 300);
+
+    try {
+      vid.pause();
+      vid.currentTime = 0;
+    } catch(e){}
+
+    vid.removeEventListener('ended', onEnded);
+  }
+
+  vid.play().then(()=>{
+    armFailsafe();
+  }).catch(()=>{
+    // 若有聲被擋，就改靜音播，點畫面可以提前關
+    vid.muted = true;
+    vid.play().then(()=>{
+      ov.addEventListener('click', cleanup, { once:true });
+      armFailsafe();
+    }).catch(()=>{
+      cleanup();
+    });
+  });
+}
 
   // 嘗試播放影片
   vid.play().then(()=>{
@@ -2244,6 +2354,16 @@ el.deckBtn.onclick   = ()=> sendAction('DRAW');
 el.playHand.onclick  = ()=> sendAction('PLAY_CARD',{which:'hand'});
 el.playDrawn.onclick = ()=> sendAction('PLAY_CARD',{which:'drawn'});
 el.nextRound.onclick = ()=> sendAction('NEXT_ROUND');
+
+// ✅ 洗牌按鈕：按一次就消失，只播一遍動畫
+if (el.shuffleBtn) {
+  el.shuffleBtn.addEventListener('click', ()=>{
+    // 先把按鈕藏起來（之後整局不再出現）
+    el.shuffleBtn.style.display = 'none';      // 或：el.shuffleBtn.classList.add('hidden');
+    // 再播放洗牌動畫
+    playShuffleFx();
+  }, { once: true }); // 保險：事件也只跑一次
+}
 </script>
 </body>
 </html>
