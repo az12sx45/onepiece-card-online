@@ -1647,6 +1647,75 @@ if(p.action==='zoro'){
     const p = st.pending;
     if(!p || p.action!=='teach-multipick') return { state: st, emits };
 
+  // ===== 魯夫強化（魚人島）：尾數-3 比大小，全場斬人 =====
+  if (type === 'LUFFY_BOOST_COMMIT') {
+    const p = st.pending;
+    if (!p || p.action !== 'luffy-boost') return { state: st, emits };
+
+    const go = !!action.payload?.go;
+    // 之後如果要做「取消」按鈕，可以用 go=false 當跳過
+    if (!go) {
+      st.pending = null;
+      endOrNext(st);
+      return { state: st, emits };
+    }
+
+    const meIdx  = st.turnIndex;
+    const me     = st.players[meIdx];
+    const keepId = p.extra?.keep;
+
+    const baseTail  = tail(keepId);
+    const threshold = baseTail - 3; // 可為負，用來判定誰被殺
+
+    let victims = 0;
+    let skippedProtect = 0;
+    let dodged = 0;
+
+    st.players.forEach((pl, idx) => {
+      if (!pl.alive) return;
+      if (idx === meIdx) return; // 自己不會被這招淘汰
+
+      const g = effectGuard(st, idx, {}); // 正常吃保護/閃避
+      if (g.blocked) {
+        if (g.reason === 'protected') skippedProtect++;
+        if (g.reason === 'dodged')    dodged++;
+        return;
+      }
+
+      const oppTail = tail(pl.hand);
+      if (oppTail < threshold) {
+        victims++;
+        doEliminate(st, idx, '魯夫（魚人島）：尾數比武失敗', meIdx, emits);
+      }
+    });
+
+    // ★ 攻擊分： (尾數-3, 至少0) × 同時淘汰人數
+    if (victims > 0) {
+      const scoreBase = Math.max(0, threshold);
+      const gain = scoreBase * victims;
+      addStat(st, meIdx, 'atkScore', gain);
+    }
+
+    // ★ 技能用掉的那張「保留牌」→ 丟棄＋抽1，不觸發任何進棄牌效果
+    if (typeof keepId === 'number' && me.hand === keepId) {
+      st.discard.push(keepId);
+      const draw = st.deck.pop() ?? null;
+      me.hand = (typeof draw === 'number') ? draw : null;
+      checkHot(st);
+    }
+
+    pushLog(
+      st,
+      `魯夫（魚人島）：尾數 ${baseTail} → 門檻 ${threshold}；淘汰 ${victims} 人（保護免疫×${skippedProtect}；閃避抵消×${dodged}）`,
+      emits
+    );
+
+    st.pending = null;
+    endOrNext(st);
+    return { state: st, emits };
+  }
+
+
     const pickedIndices = action.payload?.pickedIndices;
     if(!Array.isArray(pickedIndices)) return { state: st, emits };
 
