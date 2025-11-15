@@ -53,18 +53,11 @@ body{
 /* 左：玩家清單 */
 .player-list{ display:flex; flex-direction:column; gap:10px; }
 .player-item{
-  display:grid;
-  grid-template-columns: 28px 44px 1fr auto;
-  align-items:center;
-  gap:10px; padding:10px;
-  border:1px solid rgba(255,255,255,.06);
-  border-radius:12px;
-  background:rgba(255,255,255,.03);
+  display:grid; grid-template-columns: 28px 44px 1fr auto; align-items:center;
+  gap:10px; padding:10px; border:1px solid rgba(255,255,255,.06);
+  border-radius:12px; background:rgba(255,255,255,.03);
 }
-.player-item.top1{
-  border-color: rgba(255,211,107,.45);
-  background: rgba(255,211,107,.06);
-}
+.player-item.top1{ border-color: rgba(255,211,107,.45); background: rgba(255,211,107,.06); }
 .rank-dot{
   width:26px;height:26px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
@@ -72,13 +65,13 @@ body{
 }
 .avatar{
   width:44px;height:44px;border-radius:50%;
-  object-fit:cover;background:#2a333d;
-  border:1px solid rgba(255,255,255,.18);
+  object-fit:cover;background:#2a333d;border:1px solid rgba(255,255,255,.18);
 }
 .pinfo{ line-height:1.2 }
 .pname{ font-weight:700 }
+.pid{ font-size:12px;color:var(--muted) }
 
-/* 金幣＋懸賞＋稱號框 */
+/* 金幣 + 懸賞 + 稱號區塊（右側） */
 .coins-block{
   text-align:right;
   display:flex;
@@ -90,11 +83,12 @@ body{
   color:var(--accent);
   font-weight:800;
   font-variant-numeric:tabular-nums;
+  font-size:15px;
 }
 .player-bounty{
   font-size:11px;
   line-height:1.3;
-  max-width:170px;
+  max-width:160px;
 }
 .player-bounty-amt{
   font-weight:700;
@@ -103,117 +97,291 @@ body{
 }
 .player-title-badge{
   margin-top:2px;
-  padding:2px 8px;
+  padding:2px 6px;
   border-radius:999px;
   font-size:10px;
   display:inline-flex;
   align-items:center;
-  justify-content:center;
+  gap:4px;
   border:1px solid rgba(255,255,255,.18);
   background:rgba(15,18,22,.9);
   box-shadow:0 0 0 1px rgba(0,0,0,.6);
 }
-.player-title-badge span{
-  white-space:nowrap; /* 称號不換行 */
+.player-title-tag{
+  font-size:9px;
+  opacity:.85;
 }
 
-/* 稱號框等級樣式（Tier 1–6） */
-.tier-1 .player-bounty-amt{
-  color:#cbd5f5;
+/* ===== 稱號框基礎樣式（配合示範檔 v3） ===== */
+.player-title-badge{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:6px 20px;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.5px;
+  margin-top:2px;
+  text-align:center;
+  white-space:nowrap;
 }
+.player-title-badge span,
+.player-title-badge .text{
+  position:relative;
+  z-index:3;
+  white-space:nowrap; /* 稱號絕對不換行 */
+}
+
+/* 基礎動畫 */
+@keyframes float{
+  0%,100%{transform:translateY(0px);}
+  50%{transform:translateY(-3px);}
+}
+@keyframes pulse{
+  0%,100%{filter:brightness(1);}
+  50%{filter:brightness(1.18);}
+}
+@keyframes softGlow{
+  0%,100%{opacity:.5;}
+  50%{opacity:.95;}
+}
+@keyframes shine{
+  0%{transform:translateX(-130%);opacity:0;}
+  20%{opacity:0;}
+  40%{transform:translateX(130%);opacity:1;}
+  60%{opacity:0;}
+  100%{transform:translateX(130%);opacity:0;}
+}
+
+/* Tier 1：普通圓角長方形 */
 .tier-1 .player-title-badge{
-  border-color:rgba(148,163,184,.7);
-  background:linear-gradient(135deg,rgba(15,23,42,.96),rgba(30,41,59,.96));
-  box-shadow:0 0 0 1px rgba(15,23,42,.9);
+  border-radius:8px;
+  border:1px solid #777c84;
+  background:linear-gradient(135deg,#333842,#171920);
+  color:#d0d3d8;
+  text-shadow:0 0 6px rgba(0,0,0,.8);
 }
 
-.tier-2 .player-bounty-amt{
-  color:#a5f3fc;
-}
+/* Tier 2：兩側斜切標籤 */
 .tier-2 .player-title-badge{
-  border-color:rgba(56,189,248,.85);
-  background:radial-gradient(circle at 0 0,rgba(56,189,248,.25),rgba(15,23,42,.96));
-  box-shadow:0 0 6px rgba(56,189,248,.45);
+  border-radius:999px;
+  padding:6px 24px;
+  border:1px solid #63d2ff;
+  background:linear-gradient(135deg,#1b4d7e,#63d2ff);
+  color:#e8f9ff;
+  box-shadow:0 0 10px rgba(99,210,255,.6);
+  overflow:visible;
+}
+.tier-2 .player-title-badge::before,
+.tier-2 .player-title-badge::after{
+  content:"";
+  position:absolute;
+  top:0; bottom:0;
+  width:14px;
+  background:inherit;
+}
+.tier-2 .player-title-badge::before{
+  left:-8px;
+  transform:skewX(-24deg);
+}
+.tier-2 .player-title-badge::after{
+  right:-8px;
+  transform:skewX(24deg);
 }
 
-.tier-3 .player-bounty-amt{
-  color:#bef264;
-}
+/* Tier 3：鍊甲牌（六角） */
 .tier-3 .player-title-badge{
-  border-color:rgba(132,204,22,.85);
-  background:radial-gradient(circle at 0 0,rgba(190,242,100,.35),rgba(21,30,21,.96));
-  box-shadow:0 0 7px rgba(190,242,100,.4);
-}
-
-.tier-4 .player-bounty-amt{
-  color:#facc15;
-}
-.tier-4 .player-title-badge{
-  border-color:rgba(250,204,21,.9);
-  background:linear-gradient(135deg,rgba(24,20,8,.98),rgba(120,53,15,.98));
-  box-shadow:0 0 8px rgba(250,204,21,.5);
-}
-
-.tier-5 .player-bounty-amt{
-  color:#fed7aa;
-}
-.tier-5 .player-title-badge{
-  border-color:rgba(251,146,60,.95);
+  padding:7px 22px;
+  color:#ffe4c4;
   background:
-    radial-gradient(circle at 0 0,rgba(254,215,170,.5),transparent 55%),
-    linear-gradient(135deg,rgba(30,64,175,.98),rgba(180,83,9,.98));
+    radial-gradient(circle at 0 0,rgba(255,255,255,.12) 0,transparent 55%),
+    radial-gradient(circle at 100% 100%,rgba(255,120,60,.25) 0,transparent 55%),
+    linear-gradient(135deg,#3a0f18,#8b1c24);
+  border:2px solid #f48c2b;
   box-shadow:
-    0 0 10px rgba(251,146,60,.7),
-    0 0 18px rgba(59,130,246,.45);
+    0 0 0 1px rgba(0,0,0,.6),
+    0 0 18px rgba(244,140,43,.9);
+  clip-path:polygon(8% 0,92% 0,100% 50%,92% 100%,8% 100%,0 50%);
+}
+.tier-3 .player-title-badge::before{
+  content:"";
+  position:absolute;
+  inset:2px;
+  border-radius:10px;
+  border:1px dashed rgba(255,223,186,.35);
+  opacity:.7;
 }
 
-/* Tier 6：金光爆棚 */
-.tier-6 .coins{
-  color:#ffe29f;
+/* Tier 4：王家盾徽 */
+.tier-4 .player-title-badge{
+  padding:8px 24px 10px;
+  color:#f9f0ff;
+  background:radial-gradient(circle at top,#5c35b5,#1e1032);
+  border:2px solid #e1c4ff;
+  box-shadow:
+    0 0 0 1px rgba(90,40,200,.6),
+    0 0 22px rgba(147,96,255,1);
+  border-radius:16px 16px 10px 10px;
+  overflow:visible;
+  animation:float 5s ease-in-out infinite;
 }
+.tier-4 .player-title-badge::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:-10px;
+  transform:translateX(-50%);
+  width:60%;
+  height:16px;
+  background:linear-gradient(to bottom,#e1c4ff,#6e3bd1);
+  clip-path:polygon(50% 100%,0 0,100% 0);
+  box-shadow:0 4px 10px rgba(0,0,0,.6);
+}
+
+/* Tier 5：王座雙翼徽章 */
+.tier-5 .player-title-badge{
+  padding:8px 30px;
+  color:#fff9e0;
+  background:linear-gradient(135deg,#5a2400,#ffcf66);
+  border-radius:999px;
+  border:3px solid #ffe08a;
+  box-shadow:
+    0 0 0 1px rgba(255,224,138,.55),
+    0 0 26px rgba(255,204,110,1);
+  overflow:visible;
+  animation:float 4.5s ease-in-out infinite, pulse 3.8s ease-in-out infinite;
+}
+.tier-5 .player-title-badge::before,
+.tier-5 .player-title-badge::after{
+  content:"";
+  position:absolute;
+  top:50%;
+  width:26px;
+  height:16px;
+  background:radial-gradient(circle at 0 50%,rgba(255,255,255,.95) 0,rgba(255,224,138,.1) 70%);
+  transform:translateY(-50%);
+  filter:drop-shadow(0 0 8px rgba(255,224,138,.9));
+}
+.tier-5 .player-title-badge::before{
+  left:-16px;
+  clip-path:polygon(100% 0,0 50%,100% 100%);
+}
+.tier-5 .player-title-badge::after{
+  right:-16px;
+  clip-path:polygon(0 0,100% 50%,0 100%);
+}
+.tier-5 .player-title-badge .text::after{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  background:linear-gradient(120deg,transparent 0,rgba(255,255,255,.9) 45%,transparent 75%);
+  mix-blend-mode:screen;
+  transform:translateX(-130%);
+  animation:shine 3.6s ease-in-out infinite;
+}
+
+/* Tier 6：罪金碧輝煌・傳說皇冠紋章 */
 .tier-6 .player-bounty-amt{
   color:#fff4cf;
   text-shadow:0 0 6px rgba(255,215,128,.9);
 }
 .tier-6 .player-title-badge{
-  position:relative;
-  border-radius:999px;
-  border:1px solid rgba(255,230,170,.95);
+  padding:9px 38px;
+  color:#fffdf5;
   background:
-    radial-gradient(circle at 0 0,rgba(255,249,196,.75),transparent 55%),
-    radial-gradient(circle at 100% 0,rgba(254,249,195,.55),transparent 55%),
-    linear-gradient(135deg,#3b1f10,#7c5312,#c59a28,#facc15);
+    radial-gradient(circle at 20% 0,rgba(255,255,255,.4) 0,transparent 55%),
+    radial-gradient(circle at 80% 100%,rgba(255,210,120,.7) 0,transparent 55%),
+    linear-gradient(135deg,#4b2a00,#c68b00,#ffe7a3);
+  border-radius:999px;
+  border:4px solid #ffe9c4;
   box-shadow:
-    0 0 10px rgba(250,204,21,.9),
-    0 0 22px rgba(251,191,36,.8);
-  overflow:hidden;
+    0 0 0 1px rgba(255,255,255,.45),
+    0 0 0 6px rgba(158,106,32,.75),
+    0 0 38px rgba(255,243,196,1);
+  overflow:visible;
+  position:relative;
+  text-shadow:
+    0 0 8px rgba(0,0,0,1),
+    0 0 22px rgba(255,245,210,1);
+  animation:float 4.2s ease-in-out infinite, pulse 3.4s ease-in-out infinite;
 }
+
+/* 內層浮雕框 */
 .tier-6 .player-title-badge::before{
-  content:'';
+  content:"";
   position:absolute;
-  inset:-2px;
-  border-radius:inherit;
-  background:conic-gradient(from 180deg,rgba(255,255,255,.45),transparent,rgba(255,255,255,.1),transparent);
-  mix-blend-mode:soft-light;
-  opacity:.55;
-  pointer-events:none;
+  inset:4px;
+  border-radius:999px;
+  border:2px solid rgba(255,252,230,.85);
+  box-shadow:
+    inset 0 0 8px rgba(255,255,255,.7),
+    0 0 16px rgba(255,252,210,.7);
+  opacity:.98;
+  z-index:1;
 }
+
+/* 周圍寶石光點 */
 .tier-6 .player-title-badge::after{
-  content:'';
+  content:"";
   position:absolute;
-  inset:1px;
-  border-radius:inherit;
-  border:1px solid rgba(133,77,14,.85);
-  box-shadow:0 0 0 1px rgba(0,0,0,.6) inset;
+  inset:0;
   pointer-events:none;
+  background:
+    radial-gradient(circle at 12% 50%,#fff 0,rgba(255,255,255,0) 55%),
+    radial-gradient(circle at 88% 50%,#fff 0,rgba(255,255,255,0) 55%),
+    radial-gradient(circle at 50% -10%,#fff 0,rgba(255,255,255,0) 60%);
+  mix-blend-mode:screen;
+  opacity:.75;
+  z-index:1;
 }
-@keyframes tier6Glow{
-  0%{ box-shadow:0 0 10px rgba(250,204,21,.7),0 0 22px rgba(251,191,36,.6); }
-  50%{ box-shadow:0 0 16px rgba(250,250,180,.95),0 0 30px rgba(251,191,36,1); }
-  100%{ box-shadow:0 0 10px rgba(250,204,21,.7),0 0 22px rgba(251,191,36,.6); }
+
+/* 皇冠 + 吊墜 + 中央光暈 */
+.tier-6 .player-title-badge .crown{
+  position:absolute;
+  top:-16px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:15px;
+  text-shadow:
+    0 0 10px #ffffff,
+    0 0 18px rgba(255,230,160,1);
+  z-index:4;
 }
-.tier-6 .player-title-badge{
-  animation:tier6Glow 2.3s ease-in-out infinite;
+.tier-6 .player-title-badge .pendant{
+  position:absolute;
+  bottom:-14px;
+  left:50%;
+  transform:translateX(-50%);
+  width:18px;
+  height:18px;
+  background:radial-gradient(circle,#fff7d0 0,#f0b400 45%,#8b4c00 100%);
+  border-radius:50%;
+  box-shadow:
+    0 4px 8px rgba(0,0,0,.8),
+    0 0 10px rgba(255,230,170,1);
+  z-index:2;
+}
+.tier-6 .player-title-badge .pendant::before{
+  content:"";
+  position:absolute;
+  top:-6px;
+  left:50%;
+  transform:translateX(-50%);
+  width:9px;
+  height:5px;
+  border-radius:999px;
+  background:radial-gradient(circle,#fffbe6 0,#b57a1f 100%);
+}
+.tier-6 .player-title-badge .glow{
+  position:absolute;
+  inset:-30%;
+  background:radial-gradient(circle,rgba(255,255,255,.45) 0,透明 60%);
+  background:radial-gradient(circle,rgba(255,255,255,.45) 0,transparent 60%);
+  mix-blend-mode:screen;
+  opacity:.65;
+  z-index:0;
+  animation:softGlow 4.4s ease-in-out infinite;
 }
 
 /* 中：指標勾選 */
@@ -229,20 +397,14 @@ body{
 .metric.active{ border-color:rgba(255,211,107,.45); background:rgba(255,211,107,.06); }
 .small{ font-size:13px; color:var(--muted) }
 
-/* 右：統一清單表（頭像顯示一次；勾選項目→同一欄內並列多條） */
+/* 右：統一清單表（頭像/ID顯示一次；勾選項目→同一欄內並列多條） */
 .table{ width:100%; border-collapse:collapse; }
-.table th,.table td{
-  padding:10px;
-  border-bottom:1px solid rgba(255,255,255,.06);
-  text-align:left; vertical-align:middle;
-}
+.table th,.table td{ padding:10px; border-bottom:1px solid rgba(255,255,255,.06); text-align:left; vertical-align:middle; }
 .table thead th{ color:var(--muted); font-weight:600; }
 .cell-player{ display:flex; align-items:center; gap:10px; }
-.cell-player .avatar{
-  width:36px; height:36px; border-radius:50%;
-  border:1px solid rgba(255,255,255,.15)
-}
+.cell-player .avatar{ width:36px; height:36px; border-radius:50%; border:1px solid rgba(255,255,255,.15) }
 .cell-player .name{ font-weight:700 }
+.cell-player .pid{ font-size:12px; color:var(--muted) }
 
 /* 並列多條（每個指標一條） */
 .metrics-cell{ display:flex; flex-direction:column; gap:6px; }
@@ -255,28 +417,10 @@ body{
 
 /* 細長條（10px）＋ 末端數字 */
 .bar-wrap{ flex:1; position:relative; height:10px; }
-.bar{
-  position:absolute; inset:0;
-  background:#2b333b;
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:999px;
-  overflow:hidden;
-}
-.fill{
-  position:absolute; left:0; top:0; bottom:0;
-  background:linear-gradient(90deg,var(--accent),var(--accent2));
-}
-.val-in{
-  position:absolute; right:6px; top:50%;
-  transform:translateY(-50%);
-  font-size:12px; color:#fff;
-  font-variant-numeric:tabular-nums;
-}
-.val-out{
-  margin-left:6px;
-  font-size:12px; color:#fff;
-  font-variant-numeric:tabular-nums;
-}
+.bar{ position:absolute; inset:0; background:#2b333b; border:1px solid rgba(255,255,255,.08); border-radius:999px; overflow:hidden; }
+.fill{ position:absolute; left:0; top:0; bottom:0; background:linear-gradient(90deg,var(--accent),var(--accent2)); }
+.val-in{ position:absolute; right:6px; top:50%; transform:translateY(-50%); font-size:12px; color:#fff; font-variant-numeric:tabular-nums; }
+.val-out{ margin-left:6px; font-size:12px; color:#fff; font-variant-numeric:tabular-nums; }
 
 /* 小工具 */
 .badge{
@@ -313,22 +457,20 @@ body{
 @media (max-width:860px){ .help-grid{ grid-template-columns:1fr; } }
 .help-box{
   border:1px solid rgba(255,255,255,.08);
-  border-radius:14px;padding:12px;
-  background:rgba(255,255,255,.03);
+  border-radius:14px;padding:12px;background:rgba(255,255,255,.03);
 }
 .help-box h4{ font-size:15px;font-weight:800;margin-bottom:6px; }
 .help-box ul{ margin-left:1em; }
 .help-box li{ margin:4px 0; color:#cfd7e2; }
 .help-math{
   margin-top:6px;padding:8px;border-radius:10px;
-  background:rgba(255,255,255,.04);
-  border:1px dashed rgba(255,255,255,.12);
+  background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.12);
   font-family: ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   font-size:13px;color:#dfe7f3;
 }
 .help-note{ font-size:12px;color:var(--muted);margin-top:6px; }
 
-/* ===== 雷達圖彈窗 ===== */
+/* ===== 雷達圖彈窗（新增） ===== */
 #radarModal.hidden{ display:none !important; }
 #radarModal{
   position: fixed; inset: 0; z-index: 210;
@@ -344,28 +486,16 @@ body{
   border-radius: 18px; padding: 16px;
   backdrop-filter: blur(8px);
 }
-.radar-head{
-  display:flex; align-items:center;
-  justify-content:space-between;
-  gap:10px; margin-bottom:6px;
-}
-.radar-legend{
-  display:flex; align-items:center;
-  gap:12px; font-size:13px; color:var(--muted);
-}
+.radar-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:6px; }
+.radar-legend{ display:flex; align-items:center; gap:12px; font-size:13px; color:var(--muted); }
 .radar-dot{ width:10px; height:10px; border-radius:50%; display:inline-block; }
 .radar-canvas-wrap{ display:flex; align-items:center; justify-content:center; }
 .radar-side{ display:flex; flex-direction:column; gap:10px; }
 .radar-side .btn{ width:100%; }
 
 /* 讓「自己的頭像」有可點提示 */
-.player-list .avatar.me{
-  cursor:pointer;
-  outline:2px solid rgba(255,211,107,.35);
-}
-.player-list .avatar.me:hover{
-  outline-color: rgba(255,211,107,.8);
-}
+.player-list .avatar.me{ cursor:pointer; outline:2px solid rgba(255,211,107,.35); }
+.player-list .avatar.me:hover{ outline-color: rgba(255,211,107,.8); }
 </style>
 </head>
 <body>
@@ -414,7 +544,7 @@ body{
     </main>
   </div>
 
-  <!-- === 懸賞金彈窗 === -->
+  <!-- === 懸賞金彈窗（修正：bg-black/70） === -->
   <div id="bountyModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-black/70">
     <div class="relative">
       <canvas id="bountyCanvas" width="768" height="1152"></canvas>
@@ -422,8 +552,8 @@ body{
     </div>
   </div>
 
-  <!-- === 說明面板 === -->
-  <div id="helpModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-black/70">
+  <!-- === 說明面板（新） === -->
+  <div id="helpModal" class="hidden fixed inset-0 z-[200] flex items-center justify-content-center bg-black/70">
     <div class="help-sheet">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px">
         <div>
@@ -483,15 +613,13 @@ body{
 
       <div class="help-box" style="margin-top:12px">
         <h4>懸賞金（最後換算）</h4>
-        <div class="help-math">
-          懸賞金 ＝ 金幣 × 200,000,000 ＋ (攻擊＋命中) × 10,000,000 ＋ (防禦＋偵查＋生存) × 5,000,000，再乘上玩家數修正係數 (6 / 玩家數)。
-        </div>
-        <div class="help-note">※ 玩家越多，係數越小，避免人多房懸賞金爆炸；不同房仍可以互相比較。</div>
+        <div class="help-math">懸賞金 ＝ 金幣 × 200,000,000 ＋ (攻擊＋命中) × 10,000,000 ＋ (防禦＋偵查＋生存) × 5,000,000，再乘上玩家數平衡係數 (6 / 玩家數)。</div>
+        <div class="help-note">※ 玩家越多，係數越小，避免人多房的懸賞金爆炸；不同房仍可以互相比較。</div>
       </div>
     </div>
   </div>
 
-  <!-- === 雷達圖（我的 vs. 單一對手） === -->
+  <!-- === 雷達圖（我的 vs. 單一對手）【新增】 === -->
   <div id="radarModal" class="hidden">
     <div class="radar-sheet">
       <div>
@@ -527,7 +655,7 @@ const qs = new URLSearchParams(location.search);
 const roomId = qs.get('room') || sessionStorage.getItem('op_room') || '—';
 document.getElementById('roomLbl').textContent = '房號 ' + roomId;
 
-/* avatar 路徑修正（供列表 / 懸賞海報共用） */
+/* avatar 路徑修正 */
 function avatarUrl(v){
   if(v==null) return '';
   if(typeof v === 'number') return `images/avatars/${v}.png`;
@@ -549,7 +677,16 @@ const METRICS = [
   { key:'survivalScore', title:'生存' }
 ];
 
-/* 各項目、各區間的稱號表（1–6 對應六個懸賞區間） */
+/* 對應：key → 中文名稱（給稱號顯示用） */
+const METRIC_NAME_MAP = {
+  atkScore: '攻擊',
+  hitScore: '命中',
+  defScore: '防禦',
+  intelScore: '偵查',
+  survivalScore: '生存'
+};
+
+/* 各項目、各區間的稱號表（1–6 對應你的區間） */
 const TITLE_TABLE = {
   atkScore: {
     1:'斬斷鋼鐵的力量',
@@ -597,7 +734,7 @@ let ORDERED_IDS = []; // 依金幣排名
 let ROWS = [];        // 每位玩家的分數
 let ACTIVE = new Set(['coinScore']); // 預設顯示：金幣
 
-/* ===== 懸賞計算工具（與海報公式一致） ===== */
+/* ===== 懸賞計算工具（與海報同公式） ===== */
 function computeBountyFromScore(score, playerCount){
   const s = score || {};
   const coins = +s.coinScore || 0;
@@ -617,15 +754,16 @@ function computeBountyFromScore(score, playerCount){
   );
 }
 
+/* 把懸賞金換算成「幾億」（字串） */
 function formatBountyYi(bounty){
   if(!bounty || bounty <= 0) return '0 億';
-  const yi = bounty / 100000000; // 1 億
+  const yi = bounty / 100000000; // 1 億 = 1e8
   let s = yi >= 10 ? yi.toFixed(0) : yi.toFixed(1);
   s = s.replace(/\.0$/,'');
   return s + ' 億';
 }
 
-/* 六個懸賞區間 → tier 1~6 */
+/* 依 6 個區間，決定 tier（1~6） */
 function decideTierByBounty(bounty){
   if (bounty <   1000000000) return 1; // <10 億
   if (bounty <   3000000000) return 2; // 10–30 億
@@ -635,7 +773,7 @@ function decideTierByBounty(bounty){
   return 6;                             // 60 億以上
 }
 
-/* 本局哪個項目最高（ATK/HIT/DEF/INTEL/SURV） */
+/* 找出這位玩家本次「哪個項目最高」→ atk / hit / def / intel / survival */
 function pickMainMetricKey(row){
   const keys = ['atkScore','hitScore','defScore','intelScore','survivalScore'];
   let bestKey = keys[0];
@@ -650,7 +788,7 @@ function pickMainMetricKey(row){
   return bestKey;
 }
 
-/* 綜合：算懸賞、決定 tier、抓稱號文字 */
+/* 依懸賞區間 + 主項目，決定稱號文字與 tier */
 function getTitleInfoForRow(row, playerCount){
   const score = {
     coinScore: row.coinScore,
@@ -661,24 +799,32 @@ function getTitleInfoForRow(row, playerCount){
     survivalScore: row.survivalScore
   };
   const bounty = computeBountyFromScore(score, playerCount);
-  const tier   = decideTierByBounty(bounty);
+  const tier = decideTierByBounty(bounty);
   const mainKey = pickMainMetricKey(row);
-  const tByTier = TITLE_TABLE[mainKey] || {};
-  const label = tByTier[tier] || '';
-  return { bounty, tier, label, mainKey };
+  const tableByKey = TITLE_TABLE[mainKey] || {};
+  const label = tableByKey[tier] || '';
+  const metricName = METRIC_NAME_MAP[mainKey] || '';
+
+  return {
+    bounty,
+    tier,
+    mainKey,
+    metricName,
+    label
+  };
 }
 
-/* 左欄玩家清單（加上懸賞金＋稱號框） */
+/* 左欄玩家清單 */
 function renderPlayersLeft(final, myId){
   const el = document.getElementById('playerList');
-  const playerCount = final.playerCount ||
+  const playerCount = (final.playerCount) ||
     Object.keys(final.playersMeta || {}).length ||
     (final.ranking ? final.ranking.length : 4);
 
   const list = (final.ranking||[]).map((r,idx)=>{
     const pm = final.playersMeta?.[r.id] || {};
     const name = r.name || pm.name || ('P'+(r.id+1));
-    const pid  = (r.pid != null ? r.pid : pm.pid) ?? ''; // 用來判斷「我」，不顯示
+    const pid  = (r.pid != null ? r.pid : pm.pid) ?? '';
     const ava  = (r.avatar != null ? r.avatar : pm.avatar) ?? '';
     const coins = r.coins || 0;
 
@@ -686,7 +832,8 @@ function renderPlayersLeft(final, myId){
       coinScore:coins, atkScore:0, defScore:0, hitScore:0, intelScore:0, survivalScore:0
     };
     const info = getTitleInfoForRow(row, playerCount);
-    const bountyYi = formatBountyYi(info.bounty);
+    const rawBounty = Math.floor(info.bounty || 0);
+    const bountyStr = rawBounty.toLocaleString('en-US'); // 詳細數字＋千分位
     const tierClass = info.tier ? ('tier-'+info.tier) : 'tier-1';
 
     return {
@@ -697,17 +844,16 @@ function renderPlayersLeft(final, myId){
       ava,
       coins,
       tierClass,
-      bountyYi,
+      bountyStr,
       titleLabel: info.label
     };
   });
-
   ORDERED_IDS = list.map(p=>p.id);
 
   el.innerHTML = list.map((p,i)=>{
-    const isMe = (myId != null && p.id === myId) ||
-                 (MY_PID != null && String(p.pid) === String(MY_PID));
+    const isMe = (myId != null && p.id === myId) || (MY_PID != null && String(p.pid) === String(MY_PID));
     const highlight = (myId != null || MY_PID != null) ? isMe : (i === 0);
+    const titleText = p.titleLabel ? `${p.titleLabel}` : '';
 
     return `
       <div class="player-item ${highlight ? 'top1' : ''} ${p.tierClass}">
@@ -721,12 +867,16 @@ function renderPlayersLeft(final, myId){
         <div class="coins-block">
           <div class="coins">${p.coins}</div>
           <div class="player-bounty">
-            <div class="player-bounty-amt">懸賞金 ${p.bountyYi}</div>
-            ${p.titleLabel ? `
+            <div class="player-bounty-amt">懸賞金 ${p.bountyStr}</div>
+            ${titleText ? `
               <div class="player-title-badge">
-                <span>${p.titleLabel}</span>
-              </div>` : ''
-            }
+                <!-- Tier 6 會用到的裝飾元素，其他 tier 也沒關係 -->
+                <div class="glow"></div>
+                <span class="crown">👑</span>
+                <span class="text">${titleText}</span>
+                <div class="pendant"></div>
+              </div>
+            ` : ''}
           </div>
         </div>
       </div>
@@ -830,6 +980,12 @@ function renderFinal(final){
   document.getElementById('seasonLbl').textContent = 'Season ' + (final.seasonNo||1);
   LAST_FINAL = final;
 
+  const playerCount = final.playerCount ||
+    Object.keys(final.playersMeta || {}).length ||
+    (final.ranking ? final.ranking.length : 4);
+
+  MY_ID = guessMyId(final, MY_PID);
+
   const names={}, avatars={}, pids={};
   (final.ranking||[]).forEach(r=>{
     const pm = final.playersMeta?.[r.id] || {};
@@ -840,15 +996,11 @@ function renderFinal(final){
   if(final.playersMeta){
     for(const [k,pm] of Object.entries(final.playersMeta)){
       const i = +k;
-      if(!names[i])   names[i]   = pm.name || ('P'+(i+1));
+      if(!names[i])   names[i] = pm.name || ('P'+(i+1));
       if(!avatars[i]) avatars[i] = pm.avatar ?? '';
       if(typeof pids[i]==='undefined') pids[i] = pm.pid ?? '';
     }
   }
-
-  const playerCount = final.playerCount ||
-    Object.keys(final.playersMeta || {}).length ||
-    (final.ranking ? final.ranking.length : 4);
 
   ROWS = Object.keys(final.scoreboard||{}).map(k=>{
     const id = +k; const s = final.scoreboard[id]||{};
@@ -864,22 +1016,22 @@ function renderFinal(final){
       intelScore:s.intelScore||0,
       survivalScore:s.survivalScore||0
     };
-    // 順便把懸賞資訊塞進 row（之後要用也方便）
+
     const info = getTitleInfoForRow(row, playerCount);
     row.bounty = info.bounty;
     row.titleTier = info.tier;
+    row.mainMetricKey = info.mainKey;
+    row.mainMetricName = info.metricName;
     row.titleLabel = info.label;
     return row;
   });
-
-  MY_ID = guessMyId(final, MY_PID);
 
   renderPlayersLeft(final, MY_ID);
   buildMetricPanel();
   renderDetailTable();
 }
 
-/* ===== 啟動階段：載入快取 + 接續監看 ===== */
+/* ====== 啟動階段：載入快取 +（可選）接續監看 ====== */
 (function init(){
   const pidUrl   = qs.get('pid');
   const pidSS    = sessionStorage.getItem('op_pid');
@@ -895,7 +1047,7 @@ function renderFinal(final){
   if(!RESUME) return;
 
   const serverURL = new URLSearchParams(location.search).get('server')
-    || "https://onepiece-card-online.onrender.com";
+  || "https://onepiece-card-online.onrender.com";
   const socket = io(serverURL, { transports: ['websocket'] });
 
   socket.on('connect', ()=>{
@@ -918,7 +1070,7 @@ function renderFinal(final){
   });
 })();
 
-/* ===== 懸賞金：pid -> id 對應與按鈕觸發 ===== */
+/* ====== 懸賞金：pid -> id 對應與按鈕觸發 ====== */
 function fallbackId(final){
   if (Array.isArray(final?.ranking) && final.ranking.length) return final.ranking[0].id;
   if (final?.playersMeta){
@@ -1076,7 +1228,7 @@ async function showBounty(final, myId){
   ctx.strokeText(nameTxt, cx, nameY);
   ctx.fillText(nameTxt,   cx, nameY);
 
-  // 懸賞金額
+  // 懸賞金額（完整數字）
   const bountyStr = Number(bounty).toLocaleString('en-US');
 
   ctx.save();
@@ -1106,7 +1258,7 @@ document.getElementById('bountyModal').addEventListener('click',(e)=>{
 </script>
 
 <script>
-/* ===== 雷達圖繪製與互動 ===== */
+/* ===== 雷達圖繪製與互動（新增） ===== */
 function rowById(pid){
   return ROWS.find(r => r.id === pid);
 }
