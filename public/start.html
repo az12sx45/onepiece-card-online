@@ -387,6 +387,13 @@ socket.on('EMIT', (e)=>{
     <div id="preloadStatus" class="text-sm text-neutral-300 mt-2"></div>
   </div>
 
+<!-- ▶ 播放一次影片（用來先解鎖 iPad 聲音） -->
+  <div id="videoPlayBox" class="mt-2 text-center" style="padding:0 16px 16px;">
+    <button id="btnPlayIntro" class="btn">
+      ▶ 播放影片一次（測試用）
+    </button>
+  </div>
+
  <!-- 影片覆蓋層 -->
   <div id="introVideoOverlay"
        class="fixed inset-0 bg-black/80 flex items-center justify-center z-40 hidden">
