@@ -92,7 +92,10 @@
 </head>
 <body class="no-video">
   <div class="lock-overlay" id="lockOverlay"><div class="panel"><div class="icon">🔄</div><div class="text-lg font-semibold mb-1">請將手機旋轉至橫向以獲得最佳體驗</div><div class="text-sm opacity-80">若仍無法旋轉，請解鎖畫面旋轉或從瀏覽器選單開啟「允許旋轉」。</div></div></div>
-  <div class="bg-anim"><video id="bgVideo" class="bg-video" autoplay muted loop playsinline preload="auto" poster="images/cover.jpg"><source src="videos/start.webm" type="video/webm"><source src="videos/start.mp4" type="video/mp4"></video></div>
+  <div class="bg-anim"><video id="bgVideo" class="bg-video" autoplay muted loop playsinline preload="auto" poster="images/cover.jpg">
+  <source src="videos/start.mp4" type="video/mp4">
+</video>
+</div>
   <div id="root" class="min-h-dvh flex items-center justify-center p-6"></div>
   <script>
     (function initBGVideo(){ const v = document.getElementById('bgVideo'); if(!v) return; const enableVideo = ()=> document.body.classList.remove('no-video'); const fallback = ()=> document.body.classList.add('no-video'); v.addEventListener('loadeddata', enableVideo, {once:true}); v.addEventListener('canplay', enableVideo, {once:true}); v.addEventListener('error', fallback, {once:true}); const tryPlay = ()=> v.play().then(enableVideo).catch(fallback); window.addEventListener('pointerdown', tryPlay, {once:true}); window.addEventListener('keydown', tryPlay, {once:true}); tryPlay(); })();
