@@ -1,5 +1,5 @@
 // sw.js — 偉大航道爭霸戰（正確 cards 版）
-const CACHE_NAME = 'op-card-v7';
+const CACHE_NAME = 'op-card-v6';
 
 // === 基本檔案 ===
 const CORE = [
@@ -41,7 +41,6 @@ const VENUES = [
 
 // === 主要影片 ===
 const VIDEOS = [
-  './videos/start.webm',
   './videos/start.mp4',
   './videos/coin.mp4',
 ];
@@ -55,8 +54,11 @@ const VIDEOS_ENH = Array.from({ length: 20 }, (_, i) =>
 const BGM = [
   './audio/intro.mp3',
   './audio/bgm.mp3',
-  ...Array.from({ length: 20 }, (_, i) => `./audio/op${i+1}.mp3`)
+  ...Array.from({ length: 20 }, (_, i) =>
+    `./audio/bgm/track${String(i+1).padStart(2,'0')}.mp3`
+  )
 ];
+
 
 // === 最終清單 ===
 const ASSETS = [
@@ -94,4 +96,3 @@ self.addEventListener('fetch', e => {
     caches.match(e.request).then(res => res || fetch(e.request))
   );
 });
-
