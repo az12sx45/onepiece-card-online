@@ -386,6 +386,18 @@ socket.on('EMIT', (e)=>{
     </div>
     <div id="preloadStatus" class="text-sm text-neutral-300 mt-2"></div>
   </div>
+
+ <!-- 影片覆蓋層 -->
+  <div id="introVideoOverlay"
+       class="fixed inset-0 bg-black/80 flex items-center justify-center z-40 hidden">
+    <video id="introVideo"
+           class="max-w-[90vw] max-h-[90vh] rounded-xl border border-neutral-700 shadow-xl"
+           preload="auto">
+      <!-- 這裡先用 coin.mp4，之後要改成洗牌動畫就改 src 即可 -->
+      <source src="videos/coin.mp4" type="video/mp4">
+    </video>
+  </div>
+
   <audio id="sfxIntro" src="audio/intro.mp3" preload="auto" loop autoplay></audio>
   <audio id="bgm" src="audio/bgm.mp3" preload="auto" loop autoplay></audio>
   <!-- === 一鍵下載全部資源：邏輯 === -->
@@ -437,11 +449,54 @@ socket.on('EMIT', (e)=>{
       if (bar) bar.style.width = '100%';
       btn.disabled = false;
     }
-
     document.addEventListener('DOMContentLoaded', () => {
+      // 一鍵下載
       const btn = document.getElementById('btnPreloadAll');
       if (btn) btn.addEventListener('click', preloadAllAssets);
+
+      // ▶ 播放測試影片（洗牌 / 硬幣 etc.）
+      const overlay = document.getElementById('introVideoOverlay');
+      const video   = document.getElementById('introVideo');
+      const btnPlay = document.getElementById('btnPlayIntro');
+
+      if (overlay && video && btnPlay) {
+        // 點按鈕 → 出現覆蓋層 + 播影片
+        btnPlay.addEventListener('click', () => {
+          overlay.classList.remove('hidden');
+          overlay.style.display = 'flex';
+
+          // 盡量鎖橫向（沿用你原本的工具）
+          tryLockLandscape?.();
+
+          // 播影片時先把 BGM 關小聲（如果你有用音樂系統）
+          if (window.__OPAudio && window.__OPAudio.mute) {
+            window.__OPAudio.mute();
+          }
+
+          video.currentTime = 0;
+          video.muted = false;
+          video.play().catch(() => {});
+        });
+
+        // 關閉覆蓋層（點黑幕 或 影片播完）
+        const closeOverlay = () => {
+          try { video.pause(); } catch(e){}
+          overlay.classList.add('hidden');
+          overlay.style.display = 'none';
+
+          // 影片結束後把音樂打開
+          if (window.__OPAudio && window.__OPAudio.unmute) {
+            window.__OPAudio.unmute();
+          }
+        };
+
+        overlay.addEventListener('click', (e) => {
+          if (e.target === overlay) closeOverlay();
+        });
+        video.addEventListener('ended', closeOverlay);
+      }
     });
+
   </script>
   <div class="audio-toggle" id="audioCtrl" style="display:none"><button id="btnMute" title="靜音/取消靜音" aria-label="Mute/Unmute"><svg id="icoVol" width="16" height="16" viewBox="0 0 24 24" fill="#ffd36a"><path d="M4 9v6h4l5 4V5L8 9H4z"></path><path id="wave" d="M16 8c1.5 1.5 1.5 6.5 0 8" stroke="#ffd36a" stroke-width="2" fill="none"/></svg></button><input id="rngVol" class="vol" type="range" min="0" max="100" step="1" value="65" /></div>
 
