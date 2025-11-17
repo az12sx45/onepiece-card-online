@@ -860,24 +860,22 @@ bgmAudio.addEventListener('pause', ()=> setPlayVisual(false));
 bgmAudio.addEventListener('ended', ()=>{ setPlayVisual(false); loadTrack(nextIndex(), {autoPlay:true}); });
 
 
-// 初始載入一次（不自動播）
-loadTrack(bgmIndex, {autoPlay:false});
-
 // ===================================================
 //    🔇 自動 Duck：任何 <video> 播放就暫停 BGM
+//    ★ 抽牌動畫 drawVideo 不 Duck，讓音樂照播
 //    全部影片結束後（duckSet 清空）自動續播
 // ===================================================
 function duckOn(videoEl){
-  // ⭐ 抽牌動畫的影片不要 Duck，音樂照播
+  // 抽牌動畫：不要動 BGM
   if (!videoEl || videoEl.id === 'drawVideo') return;
 
   if (!duckSet.has(videoEl)) {
     duckSet.add(videoEl);
     // 第一次被 duck 時，記住原本是否在播
-    if (duckSet.size === 1) {
+    if (duckSet.size === 1 && typeof bgmAudio !== 'undefined' && bgmAudio) {
       wasPlayingBeforeDuck = !bgmAudio.paused && !bgmAudio.ended;
       if (wasPlayingBeforeDuck) {
-        try{ bgmAudio.pause(); }catch(e){}
+        try { bgmAudio.pause(); } catch(e){}
         setPlayVisual(false);
       }
     }
@@ -885,26 +883,31 @@ function duckOn(videoEl){
 }
 
 function duckOff(videoEl){
+  // 抽牌動畫本來就沒被加入 duckSet，這裡也直接略過
+  if (!videoEl || videoEl.id === 'drawVideo') return;
+
   if (duckSet.has(videoEl)) {
     duckSet.delete(videoEl);
-    if (duckSet.size === 0 && wasPlayingBeforeDuck) {
-      // 全部影片都停了 → 自動續播
+    if (duckSet.size === 0 && wasPlayingBeforeDuck && typeof bgmAudio !== 'undefined' && bgmAudio) {
+      // 全部影片都停了 → 若一開始有在播，就幫你續播
       bgmAudio.play().then(()=> setPlayVisual(true))
-  .catch(()=>{ /* 可能被擋，維持暫停外觀 */ });
+        .catch(()=>{ /* 可能被瀏覽器擋，維持暫停外觀即可 */ });
       wasPlayingBeforeDuck = false;
     }
   }
 }
+
 function attachDuck(video){
   if (!video || video.__duckBound) return;
   video.__duckBound = true;
-  video.addEventListener('play',  ()=>duckOn(video));
-  // 影片可能提早 pause、或正常 ended
-  video.addEventListener('pause', ()=>duckOff(video));
-  video.addEventListener('ended', ()=>duckOff(video));
+  video.addEventListener('play',  ()=> duckOn(video));
+  video.addEventListener('pause', ()=> duckOff(video));
+  video.addEventListener('ended', ()=> duckOff(video));
 }
+
 // 先綁目前頁面上已存在的所有影片
 document.querySelectorAll('video').forEach(attachDuck);
+
 // 再用 MutationObserver 綁後續動態插入的影片（例如 overlay 裡新建）
 const mo = new MutationObserver((ms)=>{
   for (const m of ms){
@@ -918,8 +921,36 @@ const mo = new MutationObserver((ms)=>{
 });
 mo.observe(document.documentElement, {subtree:true, childList:true});
 
+// === iOS / Safari 媒體預熱：第一次點畫面時，偷偷幫 enhVideo 解鎖有聲播放 ===
+let _iosPrimed = false;
+function primeIOSMediaOnce(){
+  if (_iosPrimed) return;
+  _iosPrimed = true;
 
+  const enh = document.getElementById('enhVideo');
+  if (!enh) return;
 
+  try{
+    // 播一小段有聲影片，讓 Safari 覺得這支影片是「使用者同意過」的
+    enh.muted  = false;
+    enh.volume = 0.1;          // 很小聲，幾乎不會察覺
+    enh.play().then(()=>{
+      setTimeout(()=>{
+        try{
+          enh.pause();
+          enh.currentTime = 0;
+          enh.volume = 1.0;    // 還原正常音量
+        }catch(e){}
+      }, 200);                 // 大約 0.2 秒
+    }).catch(()=>{
+      // 失敗就算了，不打斷遊戲
+    });
+  }catch(e){}
+}
+
+// 玩家第一次 click / touchstart 就觸發一次預熱
+document.addEventListener('click',      primeIOSMediaOnce, { once:true });
+document.addEventListener('touchstart', primeIOSMediaOnce, { once:true });
 
 const sp = new URLSearchParams(location.search);
 const presetRoom   = sp.get('room') || '';
