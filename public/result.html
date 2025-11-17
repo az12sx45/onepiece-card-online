@@ -561,7 +561,7 @@ body.view-rank .layout > aside.card:first-child{
         <div class="badge" id="seasonLbl">Season —</div>
         <button class="btn" id="openHelp">📖 說明</button>
         <button class="btn" onclick="fireBounty()">📜 本次懸賞單</button>
-        <button class="btn" onclick="location.href='start.html'">返回等待房</button>
+        <button class="btn" onclick="location.href='start.html'">返回主畫面</button>
       </div>
     </div>
   </div>
@@ -678,6 +678,41 @@ body.view-rank .layout > aside.card:first-child{
       </div>
     </div>
   </div>
+
+<div class="help-box" style="margin-top:12px">
+  <h4>稱號系統（如何拿到那些帥稱號？）</h4>
+  <ul>
+    <li><b>1️⃣ 先算出個人懸賞金</b>：用上面那個懸賞金公式，再依照玩家人數做平衡。</li>
+    <li><b>2️⃣ 用懸賞金決定等級（Tier 1～6）</b>：</li>
+  </ul>
+  <div class="help-math">
+    <div>Tier 1：懸賞金 &lt; 10 億</div>
+    <div>Tier 2：10 億 ～ &lt; 30 億</div>
+    <div>Tier 3：30 億 ～ &lt; 40 億</div>
+    <div>Tier 4：40 億 ～ &lt; 50 億</div>
+    <div>Tier 5：50 億 ～ &lt; 60 億</div>
+    <div>Tier 6：60 億以上（傳說級）</div>
+  </div>
+
+  <ul style="margin-top:6px">
+    <li><b>3️⃣ 看你本場最突出的能力項目</b>：在「攻擊 / 命中 / 防禦 / 偵查 / 生存」五項裡，<b>哪一項分數最高，就用那一項當主屬性</b>。</li>
+    <li><b>4️⃣ 用「主屬性 + Tier」對應到稱號文字</b>：</li>
+  </ul>
+
+  <div class="help-math">
+    <div><b>攻擊</b>：斬斷鋼鐵的力量 → 世界最強生物</div>
+    <div><b>命中</b>：騙人布橡皮筋 → 我能打中螞蟻的眉心</div>
+    <div><b>防禦</b>：六式 鐵塊 → 屏障果實能力者</div>
+    <div><b>偵查</b>：航海士見習生 → 世界經濟新聞報社社長</div>
+    <div><b>生存</b>：騙人布的生存之道 → 不死神之騎士團</div>
+  </div>
+
+  <div class="help-note">
+    ※ 例如：你的「攻擊分」在全場最高，最後懸賞金落在 40～50 億，就會拿到「攻擊・Tier 4」對應的稱號「鐵拳」。<br/>
+    ※ 只有 <b>Tier 6</b>（60 億以上）的稱號，會在結算畫面顯示<b>皇冠特效</b>。
+  </div>
+</div>
+
 
   <!-- === 雷達圖（我的 vs. 單一對手）【新增】 === -->
   <div id="radarModal" class="hidden">
@@ -928,19 +963,15 @@ function renderPlayersLeft(final, myId){
             <div class="coins">${p.coins}</div>
             <div class="player-bounty">
               <div class="player-bounty-amt">懸賞金 ${p.bountyStr}</div>
-             ${titleText ? `
-  <div class="player-title-badge">
-    ${p.tierClass === 'tier-6' ? `
-      <div class="glow"></div>
-      <span class="crown">👑</span>
-      <span class="text">${titleText}</span>
-      <div class="pendant"></div>
-    ` : `
-      <span class="text">${titleText}</span>
-    `}
-  </div>
-` : ''}
-
+              ${titleText ? `
+                <div class="player-title-badge">
+                  <!-- Tier 6 會用到的裝飾元素，其他 tier 也沒關係 -->
+                  <div class="glow"></div>
+                  <span class="crown">👑</span>
+                  <span class="text">${titleText}</span>
+                  <div class="pendant"></div>
+                </div>
+              ` : ''}
             </div>
           </div>
         </div>
