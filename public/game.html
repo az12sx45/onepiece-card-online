@@ -90,6 +90,41 @@
     #coinFrame video { width: 100%; height: auto; max-height: 70vh; border-radius: 12px; box-shadow: 0 12px 28px rgba(0,0,0,.6); outline: none; }
     #coinOverlay video { outline: none; }
 
+    /* === 抽牌 Overlay & 動畫框（跟擲硬幣一樣風格） === */
+    #drawOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,.7);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s ease;
+    }
+    #drawOverlay.show { opacity: 1; pointer-events: auto; }
+
+    #drawFrame {
+      background: radial-gradient(circle at 50% 40%,rgba(24,28,32,0.9) 0%,rgba(12,14,16,0.92) 60%,rgba(0,0,0,0.0) 100%);
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 24px 48px rgba(0,0,0,.8), 0 2px 4px rgba(0,0,0,.6), 0 0 1px rgba(255,255,255,.08) inset, 0 0 30px rgba(0,0,0,.6) inset;
+      padding: 16px;
+      width: 400px; max-width: 90vw; max-height: 90vh;
+      display: flex; align-items: center; justify-content: center;
+      transform: scale(.9); transition: transform .3s ease;
+    }
+    #drawOverlay.show #drawFrame { transform: scale(1); }
+    #drawFrame video {
+      width: 100%; height: auto; max-height: 70vh;
+      border-radius: 12px;
+      box-shadow: 0 12px 28px rgba(0,0,0,.6);
+      outline: none;
+    }
+    #drawOverlay video { outline: none; }
+
+
     /* === 打出卡片「快閃」Overlay（新增） === */
     #playedOverlay{ position:fixed; inset:0; z-index: ninetyfive; z-index:95; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,.72); opacity:0; pointer-events:none; transition:opacity .25s ease; }
     #playedOverlay.show{ opacity:1; pointer-events:auto; }
@@ -483,20 +518,29 @@ body::before{
   <main class="max-w-7xl mx-auto px-3 md:px-4 py-4 grid gap-4 lg:grid-cols-[1.2fr_.8fr]">
     <section class="space-y-3">
       <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-        <div class="card p-3 md:col-span-2">
+               <div class="card p-3 md:col-span-2">
           <div class="text-sm mb-2 opacity-80">本局場地</div>
           <div id="venues" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2"></div>
         </div>
+
+        <!-- 牌堆 + 洗牌按鈕 -->
         <div class="card p-3 flex items-center justify-between gap-3">
-  <div class="text-sm opacity-80">
-    牌堆
-    <span id="deckCnt" class="ml-2 px-1.5 py-0.5 rounded border border-[#2a2f35] text-amber-300 font-semibold">0</span>
-  </div>
-  <button id="btnDraw" class="deck">
-    <img id="deckImg" src="images/cards/back.webp" alt="deck"/>
-    <!-- 已移除舊的 .cnt 徽章 -->
-  </button>
-</div>
+          <div class="flex items-center gap-2 text-sm opacity-80">
+            <span>牌堆</span>
+            <span id="deckCnt"
+                  class="px-1.5 py-0.5 rounded border border-[#2a2f35] text-amber-300 font-semibold">0</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="btnShuffleIntro"
+                    class="px-3 py-1.5 rounded-lg border border-[#2a2f35] text-xs text-amber-200 hover:bg-white/5">
+              洗牌
+            </button>
+            <button id="btnDraw" class="deck">
+              <img id="deckImg" src="images/cards/back.webp" alt="deck"/>
+            </button>
+          </div>
+        </div>
+
 
         <div class="card p-3 md:col-span-3">
           <div class="flex items-center justify-between mb-2">
@@ -576,6 +620,14 @@ body::before{
     </div>
   </div>
 
+  <!-- 抽牌動畫（只有本機播放） -->
+  <div id="drawOverlay" class="hidden">
+    <div id="drawFrame">
+      <!-- 抽牌影片：請放在 public/videos/draw.mp4 -->
+      <video id="drawVideo" src="videos/draw.mp4" playsinline preload="auto"></video>
+    </div>
+  </div>
+
   <!-- 打出卡片「快閃」Overlay（新增） -->
   <div id="playedOverlay" class="hidden">
     <div id="playedFrame">
@@ -588,6 +640,14 @@ body::before{
   <div id="enhOverlay" class="hidden fixed inset-0 z-[140] flex items-center justify-center bg-black/70">
     <video id="enhVideo" playsinline preload="auto" class="max-w-[80vw] max-h-[80vh] rounded-xl shadow-2xl"></video>
   </div>
+
+  <!-- 開局洗牌影片（本機，無遮罩） -->
+  <video id="gameStartVideo"
+         src="videos/gamestart.mp4"
+         playsinline
+         preload="auto"
+         class="hidden fixed left-1/2 top-1/2 z-[130] -translate-x-1/2 -translate-y-1/2 max-w-[80vw] max-h-[80vh] rounded-xl shadow-2xl">
+  </video>
 
 
   <!-- === 羅（強化）查看後的交換詢問框 === -->
@@ -639,6 +699,8 @@ const el = {
   discard: document.getElementById('discard'),
   deckCnt: document.getElementById('deckCnt'),
   deckBtn: document.getElementById('btnDraw'),
+  shuffleIntro: document.getElementById('btnShuffleIntro'),
+  gameStartVideo: document.getElementById('gameStartVideo'),
   imgHand: document.getElementById('imgHand'),
   imgDrawn: document.getElementById('imgDrawn'),
   playZone: document.getElementById('myPlayZone'),
@@ -952,6 +1014,108 @@ function playCoinFx(){
   if (!ov || !vid) return;
   if (_coinPlaying) return;          // 避免重複觸發
   _coinPlaying = true;
+
+/* === 開局洗牌影片（本機，無遮罩） === */
+function playGameStartVideoOnce(){
+  const btn = el.shuffleIntro || document.getElementById('btnShuffleIntro');
+  const vid = el.gameStartVideo || document.getElementById('gameStartVideo');
+  if (!btn || !vid) return;
+
+  // 只讓它生效一次
+  if (btn.dataset.used === '1') return;
+  btn.dataset.used = '1';
+
+  // 按了之後就消失
+  btn.disabled = true;
+  btn.classList.add('hidden');
+
+  // 準備影片
+  try { vid.currentTime = 0; } catch(e){}
+  vid.classList.remove('hidden');
+
+  const cleanup = ()=>{
+    vid.classList.add('hidden');
+    vid.removeEventListener('ended', cleanup);
+    vid.removeEventListener('error', cleanup);
+  };
+
+  vid.addEventListener('ended', cleanup);
+  vid.addEventListener('error', cleanup);
+
+  // 開始播放（失敗就直接收掉）
+  vid.play().catch(err=>{
+    console.error('gameStartVideo play failed', err);
+    cleanup();
+  });
+}
+
+/* === 抽牌影片播放（本機，附框+淡入淡出） === */
+let _drawPlaying = false;
+function playDrawFx(){
+  const ov  = document.getElementById('drawOverlay');
+  const vid = document.getElementById('drawVideo');
+  if (!ov || !vid) return;
+  if (_drawPlaying) return;          // 避免重複觸發
+  _drawPlaying = true;
+
+  // 顯示 overlay
+  ov.classList.remove('hidden');
+  // 讓 transition 有機會吃到
+  requestAnimationFrame(()=> ov.classList.add('show'));
+
+  // 影片從頭
+  try { vid.currentTime = 0; } catch(e){}
+  vid.muted  = false;
+  vid.volume = 1.0;
+
+  const cleanup = ()=>{
+    // 淡出 overlay
+    ov.classList.remove('show');
+    setTimeout(()=>{
+      ov.classList.add('hidden');
+      _drawPlaying = false;
+    }, 300);
+
+    // 停止影片，回到開頭
+    try {
+      vid.pause();
+      vid.currentTime = 0;
+    } catch(e){}
+
+    // 告訴 duck 系統：這支 video 不算在「正在播放」裡
+    try {
+      if (typeof duckOff === 'function') duckOff(vid);
+    } catch(e){}
+  };
+
+  const onEnded = ()=> cleanup();
+  vid.addEventListener('ended', onEnded, { once:true });
+
+  let failTimer = null;
+  function armFailsafe(){
+    clearTimeout(failTimer);
+    const dur = Number.isFinite(vid.duration) && vid.duration > 0
+      ? vid.duration * 1000
+      : 3000; // 沒讀到長度就抓 3 秒
+    failTimer = setTimeout(()=> cleanup(), dur + 500);
+  }
+
+  // 嘗試正常播放
+  vid.play().then(()=>{
+    armFailsafe();
+  }).catch(()=>{
+    // 若有聲播放被瀏覽器擋掉，改用靜音播放 + 點擊關閉
+    vid.muted = true;
+    vid.play().then(()=>{
+      ov.addEventListener('click', ()=> cleanup(), { once:true });
+      armFailsafe();
+    }).catch(()=>{
+      // 連靜音都播不動 → 直接關掉，不影響遊戲流程
+      cleanup();
+    });
+  });
+}
+
 
   // 👉 開始播之前，先記錄「當下 BGM 是否正在播放」
   const bgmWasPlaying =
@@ -2199,10 +2363,21 @@ function showMulti(title, cards, onCommit){
 }
 
 // 綁定
-el.deckBtn.onclick   = ()=> sendAction('DRAW');
+
+// 開局洗牌影片：只在玩家自己按的時候播一次，不影響其他玩家
+if (el.shuffleIntro) {
+  el.shuffleIntro.addEventListener('click', playGameStartVideoOnce);
+}
+
+el.deckBtn.onclick   = ()=>{
+  playDrawFx();             // 先播抽牌動畫（本機）
+  sendAction('DRAW');       // 再送抽牌指令給後端
+};
+
 el.playHand.onclick  = ()=> sendAction('PLAY_CARD',{which:'hand'});
 el.playDrawn.onclick = ()=> sendAction('PLAY_CARD',{which:'drawn'});
 el.nextRound.onclick = ()=> sendAction('NEXT_ROUND');
+
 </script>
 </body>
 </html>
