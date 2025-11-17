@@ -1016,6 +1016,67 @@ function playCoinFx(){
     try { bgmAudio.pause(); } catch(e){}
   }
 
+  // 正常播完 → cleanup
+  const onEnded = ()=> cleanup();
+  vid.addEventListener('ended', onEnded, { once:true });
+
+  let failTimer = null;
+  function armFailsafe(){
+    clearTimeout(failTimer);
+    const dur = Number.isFinite(vid.duration) && vid.duration > 0
+      ? vid.duration * 1000
+      : 4000; // 沒讀到長度就抓 4 秒
+    failTimer = setTimeout(()=> cleanup(), dur + 500);
+  }
+
+  function cleanup(){
+    clearTimeout(failTimer);
+
+    // 關閉 overlay
+    ov.classList.remove('show');
+    setTimeout(()=>{
+      ov.classList.add('hidden');
+      _coinPlaying = false;
+    }, 300);
+
+    // 停止影片
+    try {
+      vid.pause();
+      vid.currentTime = 0;
+    } catch(e){}
+
+    // 清掉事件
+    vid.removeEventListener('ended', onEnded);
+
+    // 告訴 duck 系統：這支 video 不算在「正在播放」裡了
+    try {
+      if (typeof duckOff === 'function') duckOff(vid);
+    } catch(e){}
+
+    // ⭐ 關鍵：如果一開始 BGM 有在播，就幫你續播
+    if (bgmWasPlaying && bgmAudio) {
+      bgmAudio.play().catch(()=> {
+        // 有些瀏覽器可能擋自動播放，就算了，不再報錯
+      });
+    }
+  }
+
+  // 嘗試播放影片
+  vid.play().then(()=>{
+    armFailsafe();
+  }).catch(()=>{
+    // 若有聲播放被瀏覽器擋掉，改用靜音播放 + 點擊關閉
+    vid.muted = true;
+    vid.play().then(()=>{
+      ov.addEventListener('click', ()=> cleanup(), { once:true });
+      armFailsafe();
+    }).catch(()=>{
+      // 連靜音都播不動 → 直接關掉，不影響遊戲流程
+      cleanup();
+    });
+  });
+}
+
 /* === 抽牌影片播放（本機，附框+淡入淡出） === */
 let _drawPlaying = false;
 function playDrawFx(){
@@ -1082,6 +1143,7 @@ function playDrawFx(){
     });
   });
 }
+
 
 
   // 正常播完 → cleanup
