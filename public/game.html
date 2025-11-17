@@ -576,6 +576,16 @@ body::before{
     </div>
   </div>
 
+  <!-- 抽牌動畫（只有本機播放，播完才真正抽牌） -->
+  <div id="drawOverlay" class="hidden fixed inset-0 z-[105] flex items-center justify-center bg-black/80">
+    <video id="drawVideo"
+           src="videos/draw.mp4"
+           playsinline
+           preload="auto"
+           class="max-w-[90vw] max-h-[90vh] rounded-xl shadow-2xl"></video>
+  </div>
+
+
   <!-- 打出卡片「快閃」Overlay（新增） -->
   <div id="playedOverlay" class="hidden">
     <div id="playedFrame">
@@ -1035,7 +1045,71 @@ function playCoinFx(){
   });
 }
 
-/* === 強化影片（全體同步播放） === */
+/* === 抽牌前播放 draw.mp4，播完才真正送 DRAW === */
+let _drawPlaying = false;
+function playDrawFxThenDraw(){
+  const ov  = document.getElementById('drawOverlay');
+  const vid = document.getElementById('drawVideo');
+
+  // 萬一沒有這兩個 DOM，就直接抽牌，不擋流程
+  if (!ov || !vid) {
+    sendAction('DRAW');
+    return;
+  }
+  // 影片正在播時，不要重複觸發
+  if (_drawPlaying) return;
+  _drawPlaying = true;
+
+  // 顯示 overlay
+  ov.classList.remove('hidden');
+
+  // 重置影片狀態
+  try { vid.currentTime = 0; } catch(e){}
+  vid.muted  = false;
+  vid.volume = 1.0;
+
+  // 清理 + 真正抽牌
+  function cleanup(){
+    try {
+      vid.pause();
+      vid.currentTime = 0;
+    } catch(e){}
+    ov.classList.add('hidden');
+    _drawPlaying = false;
+
+    // ⭐ 真正送抽牌指令在這裡
+    sendAction('DRAW');
+  }
+
+  // 影片播完 → cleanup
+  const onEnded = ()=> cleanup();
+  vid.addEventListener('ended', onEnded, { once:true });
+
+  let failTimer = null;
+  function armFailsafe(){
+    clearTimeout(failTimer);
+    const dur = Number.isFinite(vid.duration) && vid.duration > 0
+      ? vid.duration * 1000
+      : 3000;  // 讀不到長度就抓 3 秒
+    failTimer = setTimeout(()=> cleanup(), dur + 600);
+  }
+
+  // 嘗試正常有聲播放
+  vid.play().then(()=>{
+    armFailsafe();
+  }).catch(()=>{
+    // 若被瀏覽器擋，改靜音播放，點畫面也可跳過
+    vid.muted = true;
+    vid.play().then(()=>{
+      ov.addEventListener('click', ()=> cleanup(), { once:true });
+      armFailsafe();
+    }).catch(()=>{
+      // 連靜音都播不了 → 直接抽牌，不卡住流程
+      cleanup();
+    });
+  });
+}
+
 
 /* === 強化影片（全體同步播放） === */
 // 20 張卡的強化影片路徑（0.mp4 ~ 19.mp4；若你有自訂，改這裡即可）
@@ -2199,10 +2273,12 @@ function showMulti(title, cards, onCommit){
 }
 
 // 綁定
-el.deckBtn.onclick   = ()=> sendAction('DRAW');
+// 綁定
+el.deckBtn.onclick   = ()=> playDrawFxThenDraw();
 el.playHand.onclick  = ()=> sendAction('PLAY_CARD',{which:'hand'});
 el.playDrawn.onclick = ()=> sendAction('PLAY_CARD',{which:'drawn'});
 el.nextRound.onclick = ()=> sendAction('NEXT_ROUND');
+
 </script>
 </body>
 </html>
