@@ -965,6 +965,7 @@ const socket = io(serverURL, { transports:['websocket'] });
 let me = { roomId: presetRoom || 'op-001', playerId: null, secret: localStorage.getItem('opSecret')||'' };
 let _autoSkipKey = null;   // 麻痺自動跳過用的防呆 key
 let state = null;
+let _enhFxForceTimer = null;  // 強化影片的保險計時器
 let _finalRedirecting = false; 
 
 /* === 新增：快閃狀態全域變數 === */
@@ -1163,48 +1164,54 @@ function playEnhFxFor(cardId){
     try { vid.load(); } catch(e){}
   }
 
+  // 先清掉上一輪的強制計時器 & 舊事件
+  if (_enhFxForceTimer) {
+    clearTimeout(_enhFxForceTimer);
+    _enhFxForceTimer = null;
+  }
+  const onEnded = ()=> cleanup();
+  const onClick = ()=> cleanup();
+  vid.removeEventListener('ended', onEnded);
+  ov.removeEventListener('click', onClick);
+
   // 顯示 overlay
   ov.classList.remove('hidden');
 
-  // 從頭 + 正常音量嘗試
+  // 從頭開始
   try { vid.currentTime = 0; } catch(e){}
-  vid.volume = 1.0;
   vid.muted  = false;
+  vid.volume = 1.0;
 
-  // 播完或逾時都會關閉
-  const onEnded = ()=> cleanup();
-  vid.addEventListener('ended', onEnded, { once:true });
 
-  let failTimer = null;
-  function armFailsafe(){
-    clearTimeout(failTimer);
-    const dur = Number.isFinite(vid.duration) && vid.duration > 0 ? vid.duration*1000 : 5000;
-    failTimer = setTimeout(()=> cleanup(), dur + 600);
-  }
-  function cleanup(){
-    clearTimeout(failTimer);
-    ov.classList.add('hidden');
-    try { vid.pause(); vid.currentTime = 0; } catch(e){}
-    vid.removeEventListener('ended', onEnded);
-    // 移除點擊關閉監聽（若有）
-    const newOv = ov.cloneNode(true);
-    ov.replaceWith(newOv);
-  }
+  // ⭐ 超保險：不管影片有沒有成功播，8 秒內一定自動關掉
+  _enhFxForceTimer = setTimeout(()=>{
+    cleanup();
+  }, 8000);
 
-  // 先嘗試有聲播放；若被瀏覽器擋，改用靜音播放 + 允許點一下關閉
-  vid.play().then(()=>{
-    armFailsafe();
-  }).catch(()=>{
+  // 嘗試播放：如果有聲被擋就改靜音；再失敗就交給 timeout / 點擊關掉
+  vid.play().catch(()=>{
     vid.muted = true;
-    vid.play().then(()=>{
-      // 使用者點一下也能提早關（避免卡住）
-      ov.addEventListener('click', cleanup, { once:true });
-      armFailsafe();
-    }).catch(()=>{
-      // 連靜音也失敗 → 直接收掉，避免流程阻塞
-      cleanup();
+    vid.play().catch(()=>{
+      // 什麼都播不了：就讓 8 秒 timeout / 點擊收尾
     });
   });
+
+  function cleanup(){
+    if (!ov || ov.classList.contains('hidden')) return;
+    if (_enhFxForceTimer) {
+      clearTimeout(_enhFxForceTimer);
+      _enhFxForceTimer = null;
+    }
+    ov.classList.add('hidden');
+    try {
+      vid.pause();
+      vid.currentTime = 0;
+    } catch(e){}
+    vid.removeEventListener('ended', onEnded);
+    ov.removeEventListener('click', onClick);
+  }
+}
+
 }
 /* === 強化特效工具（光球）與播放記錄 === */
 const _enhPlayed = new Set();
