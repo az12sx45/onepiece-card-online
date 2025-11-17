@@ -1,5 +1,5 @@
 // sw.js — 偉大航道爭霸戰（正確 cards 版）
-const CACHE_NAME = 'op-card-v7';
+const CACHE_NAME = 'op-card-v6';
 
 // === 基本檔案 ===
 const CORE = [
@@ -8,10 +8,10 @@ const CORE = [
   './game.html',
   './result.html',
   './manifest.webmanifest',
-  './images/icon-180.webp',
-  './images/icon-192.webp',
-  './images/icon-512.webp',
-  './images/wanted.webp',
+  './images/icon-180.png',
+  './images/icon-192.png',
+  './images/icon-512.png',
+  './images/wanted.png',
   './images/cover.jpg',
 ];
 
@@ -96,4 +96,3 @@ self.addEventListener('fetch', e => {
     caches.match(e.request).then(res => res || fetch(e.request))
   );
 });
-
