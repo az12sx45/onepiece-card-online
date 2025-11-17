@@ -963,6 +963,7 @@ const presetN      = Math.max(2, Math.min(8, Number(sp.get('n') || '4') || 4));
 const serverURL = sp.get('server') || undefined;
 const socket = io(serverURL, { transports:['websocket'] });
 let me = { roomId: presetRoom || 'op-001', playerId: null, secret: localStorage.getItem('opSecret')||'' };
+let _autoSkipKey = null;   // 麻痺自動跳過用的防呆 key
 let state = null;
 let _finalRedirecting = false; 
 
@@ -1860,12 +1861,37 @@ onceFx?.(el.deckCnt, 'fx-pulse');
     _prev.aliveMap[p.id] = !!p.alive;
   });
 
-  // 自己的出牌區
+    // 自己的出牌區
   const my = state.players?.[me.playerId];
-  const canDraw = state.turnStep==='draw' && state.turnIndex===me.playerId;
-  el.deckBtn.disabled = !canDraw; el.deckBtn.style.opacity = canDraw?1:.6;
+  const isMyTurn = state.turnIndex === me.playerId;
 
-  const canChoose = state.turnStep==='choose' && state.turnIndex===me.playerId && my;
+  // ① 正常情況：只有「抽牌階段」而且沒被麻痺，才可以按牌堆
+  const canDraw =
+    state.turnStep === 'draw' &&
+    isMyTurn &&
+    !(my && my.skipNext === true);
+
+  el.deckBtn.disabled = !canDraw;
+  el.deckBtn.style.opacity = canDraw ? 1 : 0.6;
+
+  // ② 被麻痺（skipNext=true）：自動幫你送一次 DRAW，當成「跳過抽牌」
+  if (
+    state.turnStep === 'draw' &&
+    isMyTurn &&
+    my &&
+    my.skipNext === true
+  ) {
+    // 用 season + round + playerId 當 key，避免同一回合重複送
+    const key = `${state.seasonNo || 0}-${state.roundNo || 0}-${me.playerId}`;
+    if (_autoSkipKey !== key) {
+      _autoSkipKey = key;
+      // 直接送出 DRAW，但不播抽牌影片
+      sendAction('DRAW');
+    }
+  }
+
+  const canChoose = state.turnStep === 'choose' && state.turnIndex === me.playerId && my;
+
   el.playZone.classList.toggle('hidden', !canChoose);
   if (canChoose) {
     if (_lastRoundNo !== state.roundNo) { _enhPlayed.clear(); _lastRoundNo = state.roundNo; }
