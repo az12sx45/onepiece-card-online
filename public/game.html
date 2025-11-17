@@ -483,29 +483,20 @@ body::before{
   <main class="max-w-7xl mx-auto px-3 md:px-4 py-4 grid gap-4 lg:grid-cols-[1.2fr_.8fr]">
     <section class="space-y-3">
       <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-               <div class="card p-3 md:col-span-2">
+        <div class="card p-3 md:col-span-2">
           <div class="text-sm mb-2 opacity-80">本局場地</div>
           <div id="venues" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2"></div>
         </div>
-
-        <!-- 牌堆 + 洗牌按鈕 -->
         <div class="card p-3 flex items-center justify-between gap-3">
-          <div class="flex items-center gap-2 text-sm opacity-80">
-            <span>牌堆</span>
-            <span id="deckCnt"
-                  class="px-1.5 py-0.5 rounded border border-[#2a2f35] text-amber-300 font-semibold">0</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <button id="btnShuffleIntro"
-                    class="px-3 py-1.5 rounded-lg border border-[#2a2f35] text-xs text-amber-200 hover:bg-white/5">
-              洗牌
-            </button>
-            <button id="btnDraw" class="deck">
-              <img id="deckImg" src="images/cards/back.webp" alt="deck"/>
-            </button>
-          </div>
-        </div>
-
+  <div class="text-sm opacity-80">
+    牌堆
+    <span id="deckCnt" class="ml-2 px-1.5 py-0.5 rounded border border-[#2a2f35] text-amber-300 font-semibold">0</span>
+  </div>
+  <button id="btnDraw" class="deck">
+    <img id="deckImg" src="images/cards/back.webp" alt="deck"/>
+    <!-- 已移除舊的 .cnt 徽章 -->
+  </button>
+</div>
 
         <div class="card p-3 md:col-span-3">
           <div class="flex items-center justify-between mb-2">
@@ -598,14 +589,6 @@ body::before{
     <video id="enhVideo" playsinline preload="auto" class="max-w-[80vw] max-h-[80vh] rounded-xl shadow-2xl"></video>
   </div>
 
-  <!-- 開局洗牌影片（本機，無遮罩） -->
-  <video id="gameStartVideo"
-         src="videos/gamestart.mp4"
-         playsinline
-         preload="auto"
-         class="hidden fixed left-1/2 top-1/2 z-[130] -translate-x-1/2 -translate-y-1/2 max-w-[80vw] max-h-[80vh] rounded-xl shadow-2xl">
-  </video>
-
 
   <!-- === 羅（強化）查看後的交換詢問框 === -->
   <div id="lawSwapModal" class="hidden fixed inset-0 z-[90] flex items-center justify-center bg-black/70">
@@ -656,8 +639,6 @@ const el = {
   discard: document.getElementById('discard'),
   deckCnt: document.getElementById('deckCnt'),
   deckBtn: document.getElementById('btnDraw'),
-  shuffleIntro: document.getElementById('btnShuffleIntro'),
-  gameStartVideo: document.getElementById('gameStartVideo'),
   imgHand: document.getElementById('imgHand'),
   imgDrawn: document.getElementById('imgDrawn'),
   playZone: document.getElementById('myPlayZone'),
@@ -971,41 +952,6 @@ function playCoinFx(){
   if (!ov || !vid) return;
   if (_coinPlaying) return;          // 避免重複觸發
   _coinPlaying = true;
-
-/* === 開局洗牌影片（本機，無遮罩） === */
-function playGameStartVideoOnce(){
-  const btn = el.shuffleIntro || document.getElementById('btnShuffleIntro');
-  const vid = el.gameStartVideo || document.getElementById('gameStartVideo');
-  if (!btn || !vid) return;
-
-  // 只讓它生效一次
-  if (btn.dataset.used === '1') return;
-  btn.dataset.used = '1';
-
-  // 按了之後就消失
-  btn.disabled = true;
-  btn.classList.add('hidden');
-
-  // 準備影片
-  try { vid.currentTime = 0; } catch(e){}
-  vid.classList.remove('hidden');
-
-  const cleanup = ()=>{
-    vid.classList.add('hidden');
-    vid.removeEventListener('ended', cleanup);
-    vid.removeEventListener('error', cleanup);
-  };
-
-  vid.addEventListener('ended', cleanup);
-  vid.addEventListener('error', cleanup);
-
-  // 開始播放（失敗就直接收掉）
-  vid.play().catch(err=>{
-    console.error('gameStartVideo play failed', err);
-    cleanup();
-  });
-}
-
 
   // 👉 開始播之前，先記錄「當下 BGM 是否正在播放」
   const bgmWasPlaying =
@@ -2253,17 +2199,10 @@ function showMulti(title, cards, onCommit){
 }
 
 // 綁定
-
-// 開局洗牌影片：只在玩家自己按的時候播一次，不影響其他玩家
-if (el.shuffleIntro) {
-  el.shuffleIntro.addEventListener('click', playGameStartVideoOnce);
-}
-
 el.deckBtn.onclick   = ()=> sendAction('DRAW');
 el.playHand.onclick  = ()=> sendAction('PLAY_CARD',{which:'hand'});
 el.playDrawn.onclick = ()=> sendAction('PLAY_CARD',{which:'drawn'});
 el.nextRound.onclick = ()=> sendAction('NEXT_ROUND');
-
 </script>
 </body>
 </html>
