@@ -333,10 +333,6 @@ io.on("connection", (socket) => {
       return;
     }
 
-    // 遊戲內其他行為 → 交給引擎
-    const res = applyAction(room.state, action);
-    room.state = res.state;
-
 
     // 遊戲內其他行為 → 交給引擎
     const res = applyAction(room.state, action);
