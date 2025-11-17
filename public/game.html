@@ -868,6 +868,9 @@ loadTrack(bgmIndex, {autoPlay:false});
 //    全部影片結束後（duckSet 清空）自動續播
 // ===================================================
 function duckOn(videoEl){
+  // ⭐ 抽牌動畫的影片不要 Duck，音樂照播
+  if (!videoEl || videoEl.id === 'drawVideo') return;
+
   if (!duckSet.has(videoEl)) {
     duckSet.add(videoEl);
     // 第一次被 duck 時，記住原本是否在播
@@ -875,11 +878,12 @@ function duckOn(videoEl){
       wasPlayingBeforeDuck = !bgmAudio.paused && !bgmAudio.ended;
       if (wasPlayingBeforeDuck) {
         try{ bgmAudio.pause(); }catch(e){}
-         setPlayVisual(false);
+        setPlayVisual(false);
       }
     }
   }
 }
+
 function duckOff(videoEl){
   if (duckSet.has(videoEl)) {
     duckSet.delete(videoEl);
