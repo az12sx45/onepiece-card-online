@@ -407,7 +407,19 @@ body::before{
 </style>
 </head>
 <body>
+<div id="introOverlay" class="fixed inset-0 z-[300] flex flex-col items-center justify-center bg-black text-white">
+  <div class="mb-6 text-xl tracking-wide">開局洗牌</div>
+  <button id="introShuffleBtn" class="px-8 py-3 rounded-full bg-amber-400 text-black text-xl font-bold shadow-lg hover:bg-amber-300 active:scale-95 transition transform">
+    洗牌
+  </button>
+  <p id="introStatus" class="mt-3 text-sm opacity-80">按「洗牌」開始開局動畫</p>
+  <video id="introVideo"
+         class="mt-6 max-w-[92vw] max-h-[70vh] rounded-lg shadow-2xl hidden"
+         playsinline webkit-playsinline></video>
+</div>
+
 <header class="sticky top-0 z-40 bg-[#101418]/80 backdrop-blur border-b border-[#1c2229]">
+
   <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
     <!-- 左側標題 -->
     <div class="font-semibold tracking-wide">偉大航道爭霸戰</div>
@@ -652,7 +664,12 @@ const el = {
   modal: document.getElementById('modal'),
   chestLbl: document.getElementById('chestLbl'),
   nextRound: document.getElementById('btnNextRound'),
+  introOverlay: document.getElementById('introOverlay'),
+  introShuffleBtn: document.getElementById('introShuffleBtn'),
+  introStatus: document.getElementById('introStatus'),
+  introVideo: document.getElementById('introVideo'),
 };
+
 
 
 // === BGM 播放清單（照你提供的 20 首） ===
@@ -926,6 +943,11 @@ let _flashBusy = false;       // 正在顯示快閃中
 let _deferEnhCardId = null;   // 延後播放影片的 cardId（等快閃結束再播）
 let _silentDiscards = [];
 let _enhSignal = null;    // EMIT enh_fx 訊號：只在此卡被打出時才允許播強化影片
+
+// 開局洗牌影片狀態
+let _introLocalDone = false;  // 我自己已經看完影片並上傳完成
+let _introAllDone   = false;  // 伺服器確認所有玩家都完成
+
 
 // === 事件流（日誌） ===
 let feed = [];          // 這個陣列就是畫面上顯示的對局日誌
@@ -1304,9 +1326,33 @@ socket.on('disconnect', ()=>{ el.conn.textContent='disconnected'; el.conn.classL
 socket.on('connect_error', (e)=>{ el.conn.textContent='error'; el.conn.classList.replace('text-green-400','text-red-400'); console.error(e); });
 
 function sendAction(type, payload={}){
-  if(me.playerId==null) return;
-  socket.emit('ACTION', { type, payload, roomId: me.roomId, playerId: me.playerId, secret: me.secret });
+  if (me.playerId == null) return;
+
+  // 開局洗牌未完成時，先禁止一般行為（避免有人偷跑）
+  if (!_introAllDone) {
+    // 少數特殊型別仍允許（目前沒用到，但先預留）
+    const whitelist = new Set(['GAME_INTRO_DONE']);
+    if (!whitelist.has(type)) {
+      // 預防性提示一下（不影響後端）
+      try {
+        const tip = document.getElementById('introStatus');
+        if (tip && !tip.textContent.includes('等待')) {
+          tip.textContent = '等待所有玩家看完開局洗牌動畫...';
+        }
+      } catch(e){}
+      return;
+    }
+  }
+
+  socket.emit('ACTION', {
+    type,
+    payload,
+    roomId: me.roomId,
+    playerId: me.playerId,
+    secret: me.secret
+  });
 }
+
 
 
 el.join.onclick = ()=>{
@@ -1340,6 +1386,60 @@ const socketOnJoined = ({ playerId, secret })=>{
   }
 };
 socket.on('JOINED', socketOnJoined);
+
+// 開局洗牌影片：前端控制（全畫面遮罩 + 按鈕 + 影片）
+function setupGameIntroOverlay(){
+  const overlay = el.introOverlay;
+  const btn     = el.introShuffleBtn;
+  const status  = el.introStatus;
+  const video   = el.introVideo;
+  if (!overlay || !btn || !video) return;
+
+  // 讓影片也能自動 duck BGM
+  try { attachDuck(video); } catch(e){}
+
+  btn.addEventListener('click', ()=>{
+    if (_introLocalDone) return;
+    btn.disabled = true;
+    btn.classList.add('opacity-60','cursor-default');
+    if (status) status.textContent = '正在播放開局洗牌動畫...';
+
+    try {
+      if (!video.src) video.src = 'videos/gamestart.mp4';
+      video.classList.remove('hidden');
+      const p = video.play();
+      if (p && typeof p.catch === 'function') {
+        p.catch(err=>{
+          console.warn('intro video play blocked', err);
+          btn.disabled = false;
+          btn.classList.remove('opacity-60','cursor-default');
+          if (status) status.textContent = '影片被瀏覽器擋住，請再點一次「洗牌」';
+        });
+      }
+    } catch(err){
+      console.error(err);
+    }
+  });
+
+  video.addEventListener('ended', ()=>{
+    if (_introLocalDone) return;
+    _introLocalDone = true;
+    if (status) status.textContent = '等待其他玩家看完...';
+
+    // 通知後端：我看完了
+    socket.emit('ACTION', {
+      type: 'GAME_INTRO_DONE',
+      payload: {},
+      roomId: me.roomId,
+      playerId: me.playerId,
+      secret: me.secret,
+    });
+  });
+}
+
+// 一進到 game.html 就先啟動開局洗牌遮罩
+setupGameIntroOverlay();
+
 
 
 // ★ 新增：記錄自己在本局的 playerId，供 result.html 用
@@ -1529,11 +1629,22 @@ if (e.type === 'enh_fx' && typeof e.cardId === 'number') {
 }
 if (!e) return;
 
+  // 所有人都看完開局洗牌影片 → 解除遮罩、開放遊戲行為
+  if (e.type === 'game_intro_all_done') {
+    _introAllDone = true;
+    const ov  = el.introOverlay;
+    const tip = el.introStatus;
+    if (ov) ov.classList.add('hidden');
+    if (tip) tip.textContent = '所有玩家都已準備，就緒！';
+    return;
+  }
+
   // 全體強化影片：伺服器廣播 e.cardId → 若正在快閃且同牌，改由快閃 onDone 播；否則立即播
   // 一律忽略，在 STATE → showPlayedFlash 的 onDone 播
   if (e.type === 'enh_fx') {
     return;
   }
+
 
   // coin_fx：伺服器只丟給「該按的人」
   if (e.type === 'coin_fx') {
