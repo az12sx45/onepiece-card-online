@@ -1,5 +1,5 @@
 // sw.js — 偉大航道爭霸戰（正確 cards 版）
-const CACHE_NAME = 'op-card-v6';
+const CACHE_NAME = 'op-card-v7';
 
 // === 基本檔案 ===
 const CORE = [
