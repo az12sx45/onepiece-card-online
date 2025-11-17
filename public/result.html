@@ -928,15 +928,19 @@ function renderPlayersLeft(final, myId){
             <div class="coins">${p.coins}</div>
             <div class="player-bounty">
               <div class="player-bounty-amt">懸賞金 ${p.bountyStr}</div>
-              ${titleText ? `
-                <div class="player-title-badge">
-                  <!-- Tier 6 會用到的裝飾元素，其他 tier 也沒關係 -->
-                  <div class="glow"></div>
-                  <span class="crown">👑</span>
-                  <span class="text">${titleText}</span>
-                  <div class="pendant"></div>
-                </div>
-              ` : ''}
+             ${titleText ? `
+  <div class="player-title-badge">
+    ${p.tierClass === 'tier-6' ? `
+      <div class="glow"></div>
+      <span class="crown">👑</span>
+      <span class="text">${titleText}</span>
+      <div class="pendant"></div>
+    ` : `
+      <span class="text">${titleText}</span>
+    `}
+  </div>
+` : ''}
+
             </div>
           </div>
         </div>
