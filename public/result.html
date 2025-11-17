@@ -30,44 +30,6 @@ body{
   display:grid; gap:18px;
   grid-template-columns: 280px 220px 1fr;
 }
-/* 分頁切換按鈕 */
-.view-tabs{
-  margin:10px 0 6px;
-  display:inline-flex;
-  gap:6px;
-  padding:4px;
-  border-radius:999px;
-  background:rgba(20,24,28,.9);
-  border:1px solid rgba(255,255,255,.08);
-}
-.tab-btn{
-  border:none;
-  border-radius:999px;
-  padding:6px 14px;
-  font-size:13px;
-  cursor:pointer;
-  background:transparent;
-  color:var(--muted);
-}
-.tab-btn.active{
-  background:linear-gradient(135deg,#ffd36b,#ffb84a);
-  color:#1b1408;
-  font-weight:700;
-}
-
-/* 分頁版型：
-   view-rank：只顯示玩家清單，讓左邊卡片變寬
-   view-detail：顯示原本三欄（採用 .layout 原本設定） */
-body.view-rank .layout{
-  grid-template-columns: minmax(0, 520px); /* 左邊卡片變寬 */
-}
-body.view-rank .metrics,
-body.view-rank .tablewrap{
-  display:none;
-}
-body.view-rank .layout > aside.card:first-child{
-  grid-column: 1 / -1; /* 讓玩家清單卡片佔滿整列 */
-}
 @media (max-width: 1180px){
   .layout{ grid-template-columns: 280px 1fr; }
   .metrics{ order:2; }
@@ -91,14 +53,14 @@ body.view-rank .layout > aside.card:first-child{
 /* 左：玩家清單 */
 .player-item{
   display:grid;
-  grid-template-columns:  28px minmax(0, 340px) 1fr;  /* rank | avatar+稱號(更寬) | 名字 */
+  grid-template-columns: 28px minmax(0, 260px) 1fr;  /* rank | avatar+稱號(更寬) | 名字 */
   align-items:start;
   gap:10px;
   padding:10px;
   border:1px solid rgba(255,255,255,.06);
   border-radius:12px;
   background:rgba(255,255,255,.03);
-  /* overflow:hidden;  <- 已移除，避免高階框被裁 */
+  overflow:hidden;
 }
 
 .player-item.top1{
@@ -143,6 +105,7 @@ body.view-rank .layout > aside.card:first-child{
 .player-bounty{
   font-size:10px;
   line-height:1.2;
+  max-width:120px;
   text-align:center;
 }
 .player-bounty-amt{
@@ -168,7 +131,12 @@ body.view-rank .layout > aside.card:first-child{
   margin-top:4px;
   text-align:center;
   white-space:nowrap;
+
+  width:100%;
+  max-width:260px;
   box-sizing:border-box;
+  margin-left:auto;
+  margin-right:auto;
 }
 
 .player-title-badge span,
@@ -182,7 +150,7 @@ body.view-rank .layout > aside.card:first-child{
 .player-title-badge .text{
   display:inline-block;
   max-width:100%;
-  overflow:hidden;   /* 防止跑出框；JS 會縮字（已移除縮字函式，不影響擴張） */
+  overflow:hidden;   /* 防止跑出框；JS 會縮字 */
 }
 
 /* 基礎動畫 */
@@ -550,7 +518,7 @@ body.view-rank .layout > aside.card:first-child{
 .player-list .avatar.me:hover{ outline-color: rgba(255,211,107,.8); }
 </style>
 </head>
-<body class="view-rank">
+<body>
   <div class="header">
     <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
       <div>
@@ -563,14 +531,6 @@ body.view-rank .layout > aside.card:first-child{
         <button class="btn" onclick="fireBounty()">📜 本次懸賞單</button>
         <button class="btn" onclick="location.href='start.html'">返回等待房</button>
       </div>
-    </div>
-  </div>
-
-  <!-- 分頁切換：玩家排名 / 詳細數據 -->
-  <div class="wrap">
-    <div class="view-tabs">
-      <button class="tab-btn active" id="btnViewRank">玩家排名</button>
-      <button class="tab-btn" id="btnViewDetail">詳細數據</button>
     </div>
   </div>
 
@@ -718,7 +678,7 @@ document.getElementById('roomLbl').textContent = '房號 ' + roomId;
 /* avatar 路徑修正 */
 function avatarUrl(v){
   if(v==null) return '';
-  if(typeof v === 'number') return `images/avatars/${v}.png`;
+  if(typeof v === 'number') return `images/avatars/${v}.webp`;
   if(/^https?:\/\//i.test(v)) return v;
   if(typeof v === 'string'){
     if(v.includes('/')) return v;
@@ -874,6 +834,30 @@ function getTitleInfoForRow(row, playerCount){
   };
 }
 
+/* ====== 稱號框：自動縮小字體，直到塞進框裡 ====== */
+function adjustTitleFontSizes(){
+  const nodes = document.querySelectorAll('.player-title-badge .text');
+  nodes.forEach(el=>{
+    if (!el.textContent) return;
+    el.style.fontSize = '';                    // 重設
+    const badge = el.closest('.player-title-badge');
+    if (!badge) return;
+    const maxWidth = badge.clientWidth;
+    if (!maxWidth) return;
+
+    let fs = parseFloat(getComputedStyle(el).fontSize) || 11;
+    const minFs = 8;
+    let guard = 0;
+
+    // 為了可讀性，向下取整 0.5px（避免子像素抖動）
+    while (el.scrollWidth > badge.clientWidth && fs > minFs && guard < 30){
+      fs -= 0.5;
+      el.style.fontSize = fs + 'px';
+      guard++;
+    }
+  });
+}
+
 /* 左欄玩家清單 */
 function renderPlayersLeft(final, myId){
   const el = document.getElementById('playerList');
@@ -947,6 +931,9 @@ function renderPlayersLeft(final, myId){
       </div>
     `;
   }).join('');
+
+  /* 生成完稱號框之後，調整稱號字體大小 */
+  adjustTitleFontSizes();
 
   // 綁定：只有「自己」的頭像能打開雷達圖（保持不動）
   el.querySelectorAll('img.avatar.me').forEach(img=>{
@@ -1124,36 +1111,15 @@ function renderFinal(final){
   });
 
   // 說明面板
-  document.getElementById('openHelp')?.addEventListener('click', ()=>{
+  document.getElementById('openHelp')?.addEventListener('click', ()=> {
     document.getElementById('helpModal')?.classList.remove('hidden');
   });
-  document.getElementById('closeHelp')?.addEventListener('click', ()=>{
+  document.getElementById('closeHelp')?.addEventListener('click', ()=> {
     document.getElementById('helpModal')?.classList.add('hidden');
   });
-  document.getElementById('helpModal')?.addEventListener('click', (e)=>{
+  document.getElementById('helpModal')?.addEventListener('click', (e)=> {
     if(e.target.id==='helpModal') e.currentTarget.classList.add('hidden');
   });
-
-  // === 分頁切換：玩家排名 / 詳細數據 ===（搬到最外層）
-  const btnRank   = document.getElementById('btnViewRank');
-  const btnDetail = document.getElementById('btnViewDetail');
-
-  function setView(view){
-    if(view === 'detail'){
-      document.body.classList.remove('view-rank');
-      document.body.classList.add('view-detail');
-      btnRank?.classList.remove('active');
-      btnDetail?.classList.add('active');
-    }else{
-      document.body.classList.remove('view-detail');
-      document.body.classList.add('view-rank');
-      btnRank?.classList.add('active');
-      btnDetail?.classList.remove('active');
-    }
-  }
-
-  btnRank?.addEventListener('click', ()=> setView('rank'));
-  btnDetail?.addEventListener('click', ()=> setView('detail'));
 })();
 
 /* ====== 懸賞金：pid -> id 對應與按鈕觸發 ====== */
@@ -1247,7 +1213,7 @@ function loadImage(src){
 
 function avatarUrl(v){
   if(v==null) return '';
-  if(typeof v === 'number') return `images/avatars/${v}.png`;
+  if(typeof v === 'number') return `images/avatars/${v}.webp`;
   if(/^https?:\/\//i.test(v)) return v;
   if(typeof v === 'string'){
     if(v.includes('/')) return v;
@@ -1282,7 +1248,7 @@ async function showBounty(final, myId){
   // === 載圖 ===
   const bg = await loadImage('images/wanted.png');
   const fallbackAvatarIdx = (myId % 8) + 1;
-  const avaUrl = avatarUrl(me.avatar) || `images/avatars/${fallbackAvatarIdx}.png`;
+  const avaUrl = avatarUrl(me.avatar) || `images/avatars/${fallbackAvatarIdx}.webp`;
   const avatar = await loadImage(avaUrl);
 
   // 先畫頭像（在下層，做圓形裁切）
