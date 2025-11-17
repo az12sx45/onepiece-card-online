@@ -576,6 +576,16 @@ body::before{
     </div>
   </div>
 
+  <!-- 抽牌動畫（只有本機播放，播完才真正抽牌） -->
+  <div id="drawOverlay" class="hidden fixed inset-0 z-[105] flex items-center justify-center bg-black/80">
+    <video id="drawVideo"
+           src="videos/draw.mp4"
+           playsinline
+           preload="auto"
+           class="max-w-[90vw] max-h-[90vh] rounded-xl shadow-2xl"></video>
+  </div>
+
+
   <!-- 打出卡片「快閃」Overlay（新增） -->
   <div id="playedOverlay" class="hidden">
     <div id="playedFrame">
@@ -850,47 +860,54 @@ bgmAudio.addEventListener('pause', ()=> setPlayVisual(false));
 bgmAudio.addEventListener('ended', ()=>{ setPlayVisual(false); loadTrack(nextIndex(), {autoPlay:true}); });
 
 
-// 初始載入一次（不自動播）
-loadTrack(bgmIndex, {autoPlay:false});
-
 // ===================================================
 //    🔇 自動 Duck：任何 <video> 播放就暫停 BGM
+//    ★ 抽牌動畫 drawVideo 不 Duck，讓音樂照播
 //    全部影片結束後（duckSet 清空）自動續播
 // ===================================================
 function duckOn(videoEl){
+  // 抽牌動畫：不要動 BGM
+  if (!videoEl || videoEl.id === 'drawVideo') return;
+
   if (!duckSet.has(videoEl)) {
     duckSet.add(videoEl);
     // 第一次被 duck 時，記住原本是否在播
-    if (duckSet.size === 1) {
+    if (duckSet.size === 1 && typeof bgmAudio !== 'undefined' && bgmAudio) {
       wasPlayingBeforeDuck = !bgmAudio.paused && !bgmAudio.ended;
       if (wasPlayingBeforeDuck) {
-        try{ bgmAudio.pause(); }catch(e){}
-         setPlayVisual(false);
+        try { bgmAudio.pause(); } catch(e){}
+        setPlayVisual(false);
       }
     }
   }
 }
+
 function duckOff(videoEl){
+  // 抽牌動畫本來就沒被加入 duckSet，這裡也直接略過
+  if (!videoEl || videoEl.id === 'drawVideo') return;
+
   if (duckSet.has(videoEl)) {
     duckSet.delete(videoEl);
-    if (duckSet.size === 0 && wasPlayingBeforeDuck) {
-      // 全部影片都停了 → 自動續播
+    if (duckSet.size === 0 && wasPlayingBeforeDuck && typeof bgmAudio !== 'undefined' && bgmAudio) {
+      // 全部影片都停了 → 若一開始有在播，就幫你續播
       bgmAudio.play().then(()=> setPlayVisual(true))
-  .catch(()=>{ /* 可能被擋，維持暫停外觀 */ });
+        .catch(()=>{ /* 可能被瀏覽器擋，維持暫停外觀即可 */ });
       wasPlayingBeforeDuck = false;
     }
   }
 }
+
 function attachDuck(video){
   if (!video || video.__duckBound) return;
   video.__duckBound = true;
-  video.addEventListener('play',  ()=>duckOn(video));
-  // 影片可能提早 pause、或正常 ended
-  video.addEventListener('pause', ()=>duckOff(video));
-  video.addEventListener('ended', ()=>duckOff(video));
+  video.addEventListener('play',  ()=> duckOn(video));
+  video.addEventListener('pause', ()=> duckOff(video));
+  video.addEventListener('ended', ()=> duckOff(video));
 }
+
 // 先綁目前頁面上已存在的所有影片
 document.querySelectorAll('video').forEach(attachDuck);
+
 // 再用 MutationObserver 綁後續動態插入的影片（例如 overlay 裡新建）
 const mo = new MutationObserver((ms)=>{
   for (const m of ms){
@@ -904,8 +921,36 @@ const mo = new MutationObserver((ms)=>{
 });
 mo.observe(document.documentElement, {subtree:true, childList:true});
 
+// === iOS / Safari 媒體預熱：第一次點畫面時，偷偷幫 enhVideo 解鎖有聲播放 ===
+let _iosPrimed = false;
+function primeIOSMediaOnce(){
+  if (_iosPrimed) return;
+  _iosPrimed = true;
 
+  const enh = document.getElementById('enhVideo');
+  if (!enh) return;
 
+  try{
+    // 播一小段有聲影片，讓 Safari 覺得這支影片是「使用者同意過」的
+    enh.muted  = false;
+    enh.volume = 0.1;          // 很小聲，幾乎不會察覺
+    enh.play().then(()=>{
+      setTimeout(()=>{
+        try{
+          enh.pause();
+          enh.currentTime = 0;
+          enh.volume = 1.0;    // 還原正常音量
+        }catch(e){}
+      }, 200);                 // 大約 0.2 秒
+    }).catch(()=>{
+      // 失敗就算了，不打斷遊戲
+    });
+  }catch(e){}
+}
+
+// 玩家第一次 click / touchstart 就觸發一次預熱
+document.addEventListener('click',      primeIOSMediaOnce, { once:true });
+document.addEventListener('touchstart', primeIOSMediaOnce, { once:true });
 
 const sp = new URLSearchParams(location.search);
 const presetRoom   = sp.get('room') || '';
@@ -918,6 +963,7 @@ const presetN      = Math.max(2, Math.min(8, Number(sp.get('n') || '4') || 4));
 const serverURL = sp.get('server') || undefined;
 const socket = io(serverURL, { transports:['websocket'] });
 let me = { roomId: presetRoom || 'op-001', playerId: null, secret: localStorage.getItem('opSecret')||'' };
+let _autoSkipKey = null;   // 麻痺自動跳過用的防呆 key
 let state = null;
 let _finalRedirecting = false; 
 
@@ -1035,7 +1081,71 @@ function playCoinFx(){
   });
 }
 
-/* === 強化影片（全體同步播放） === */
+/* === 抽牌前播放 draw.mp4，播完才真正送 DRAW === */
+let _drawPlaying = false;
+function playDrawFxThenDraw(){
+  const ov  = document.getElementById('drawOverlay');
+  const vid = document.getElementById('drawVideo');
+
+  // 萬一沒有這兩個 DOM，就直接抽牌，不擋流程
+  if (!ov || !vid) {
+    sendAction('DRAW');
+    return;
+  }
+  // 影片正在播時，不要重複觸發
+  if (_drawPlaying) return;
+  _drawPlaying = true;
+
+  // 顯示 overlay
+  ov.classList.remove('hidden');
+
+  // 重置影片狀態
+  try { vid.currentTime = 0; } catch(e){}
+  vid.muted  = false;
+  vid.volume = 1.0;
+
+  // 清理 + 真正抽牌
+  function cleanup(){
+    try {
+      vid.pause();
+      vid.currentTime = 0;
+    } catch(e){}
+    ov.classList.add('hidden');
+    _drawPlaying = false;
+
+    // ⭐ 真正送抽牌指令在這裡
+    sendAction('DRAW');
+  }
+
+  // 影片播完 → cleanup
+  const onEnded = ()=> cleanup();
+  vid.addEventListener('ended', onEnded, { once:true });
+
+  let failTimer = null;
+  function armFailsafe(){
+    clearTimeout(failTimer);
+    const dur = Number.isFinite(vid.duration) && vid.duration > 0
+      ? vid.duration * 1000
+      : 3000;  // 讀不到長度就抓 3 秒
+    failTimer = setTimeout(()=> cleanup(), dur + 600);
+  }
+
+  // 嘗試正常有聲播放
+  vid.play().then(()=>{
+    armFailsafe();
+  }).catch(()=>{
+    // 若被瀏覽器擋，改靜音播放，點畫面也可跳過
+    vid.muted = true;
+    vid.play().then(()=>{
+      ov.addEventListener('click', ()=> cleanup(), { once:true });
+      armFailsafe();
+    }).catch(()=>{
+      // 連靜音都播不了 → 直接抽牌，不卡住流程
+      cleanup();
+    });
+  });
+}
+
 
 /* === 強化影片（全體同步播放） === */
 // 20 張卡的強化影片路徑（0.mp4 ~ 19.mp4；若你有自訂，改這裡即可）
@@ -1751,12 +1861,37 @@ onceFx?.(el.deckCnt, 'fx-pulse');
     _prev.aliveMap[p.id] = !!p.alive;
   });
 
-  // 自己的出牌區
+    // 自己的出牌區
   const my = state.players?.[me.playerId];
-  const canDraw = state.turnStep==='draw' && state.turnIndex===me.playerId;
-  el.deckBtn.disabled = !canDraw; el.deckBtn.style.opacity = canDraw?1:.6;
+  const isMyTurn = state.turnIndex === me.playerId;
 
-  const canChoose = state.turnStep==='choose' && state.turnIndex===me.playerId && my;
+  // ① 正常情況：只有「抽牌階段」而且沒被麻痺，才可以按牌堆
+  const canDraw =
+    state.turnStep === 'draw' &&
+    isMyTurn &&
+    !(my && my.skipNext === true);
+
+  el.deckBtn.disabled = !canDraw;
+  el.deckBtn.style.opacity = canDraw ? 1 : 0.6;
+
+  // ② 被麻痺（skipNext=true）：自動幫你送一次 DRAW，當成「跳過抽牌」
+  if (
+    state.turnStep === 'draw' &&
+    isMyTurn &&
+    my &&
+    my.skipNext === true
+  ) {
+    // 用 season + round + playerId 當 key，避免同一回合重複送
+    const key = `${state.seasonNo || 0}-${state.roundNo || 0}-${me.playerId}`;
+    if (_autoSkipKey !== key) {
+      _autoSkipKey = key;
+      // 直接送出 DRAW，但不播抽牌影片
+      sendAction('DRAW');
+    }
+  }
+
+  const canChoose = state.turnStep === 'choose' && state.turnIndex === me.playerId && my;
+
   el.playZone.classList.toggle('hidden', !canChoose);
   if (canChoose) {
     if (_lastRoundNo !== state.roundNo) { _enhPlayed.clear(); _lastRoundNo = state.roundNo; }
@@ -2199,10 +2334,12 @@ function showMulti(title, cards, onCommit){
 }
 
 // 綁定
-el.deckBtn.onclick   = ()=> sendAction('DRAW');
+// 綁定
+el.deckBtn.onclick   = ()=> playDrawFxThenDraw();
 el.playHand.onclick  = ()=> sendAction('PLAY_CARD',{which:'hand'});
 el.playDrawn.onclick = ()=> sendAction('PLAY_CARD',{which:'drawn'});
 el.nextRound.onclick = ()=> sendAction('NEXT_ROUND');
+
 </script>
 </body>
 </html>
