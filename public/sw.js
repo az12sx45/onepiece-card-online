@@ -1,4 +1,4 @@
-// sw.js — 偉大航道爭霸戰（正確 v7 版）
+// sw.js — 偉大航道爭霸戰（正確 cards 版）
 const CACHE_NAME = 'op-card-v7';
 
 // === 基本檔案 ===
@@ -24,7 +24,7 @@ const AVATARS = Array.from({ length: 30 }, (_, i) =>
 const CARDS = Array.from({ length: 20 }, (_, i) =>
   `./images/cards/${i}.webp`
 ).concat([
-  './images/cards/back.webp',
+  './images/cards/back.webp'
 ]);
 
 // === 強化卡面 ===
@@ -36,13 +36,14 @@ const CARDS_ENH = Array.from({ length: 20 }, (_, i) =>
 const VENUES = [
   'alabasta','amazonlily','baratie','dressrosa','enieslobby',
   'fishmanisland','hachinosu','onigashima','oro-jackson','punkhazard',
-  'sabaody','wano','weatheria','wholecake','zou',
+  'sabaody','wano','weatheria','wholecake','zou'
 ].map(n => `./images/venues/${n}.jpg`);
 
 // === 主要影片 ===
 const VIDEOS = [
   './videos/start.mp4',
   './videos/coin.mp4',
+ './videos/gamestart.mp4',
 ];
 
 // === 強化影片 ===
@@ -55,9 +56,10 @@ const BGM = [
   './audio/intro.mp3',
   './audio/bgm.mp3',
   ...Array.from({ length: 20 }, (_, i) =>
-    `./audio/bgm/track${String(i + 1).padStart(2, '0')}.mp3`
-  ),
+    `./audio/bgm/track${String(i+1).padStart(2,'0')}.mp3`
+  )
 ];
+
 
 // === 最終清單 ===
 const ASSETS = [
@@ -72,28 +74,26 @@ const ASSETS = [
 ];
 
 // === 安裝：快取所有 ===
-self.addEventListener('install', (e) => {
-  // 讓新的 SW 立刻接管（不用等舊版關掉）
-  self.skipWaiting();
+self.addEventListener('install', e => {
   e.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
+    caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
   );
 });
 
 // === 啟用：刪舊快取 ===
-self.addEventListener('activate', (e) => {
+self.addEventListener('activate', e => {
   e.waitUntil(
-    caches.keys().then((keys) =>
+    caches.keys().then(keys =>
       Promise.all(
-        keys.map((k) => (k !== CACHE_NAME ? caches.delete(k) : null))
+        keys.map(k => k !== CACHE_NAME ? caches.delete(k) : null)
       )
-    ).then(() => self.clients.claim())
+    )
   );
 });
 
-// === 使用快取（Cache first）===
-self.addEventListener('fetch', (e) => {
+// === 使用快取 ===
+self.addEventListener('fetch', e => {
   e.respondWith(
-    caches.match(e.request).then((res) => res || fetch(e.request))
+    caches.match(e.request).then(res => res || fetch(e.request))
   );
 });
