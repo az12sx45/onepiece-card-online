@@ -493,7 +493,7 @@ body::before{
     <span id="deckCnt" class="ml-2 px-1.5 py-0.5 rounded border border-[#2a2f35] text-amber-300 font-semibold">0</span>
   </div>
   <button id="btnDraw" class="deck">
-    <img id="deckImg" src="images/cards/back.png" alt="deck"/>
+    <img id="deckImg" src="images/cards/back.webp" alt="deck"/>
     <!-- 已移除舊的 .cnt 徽章 -->
   </button>
 </div>
@@ -536,16 +536,16 @@ body::before{
   <div id="duelFx">
     <div class="arena">
       <div class="slot left">
-        <img class="cardimg" src="images/cards/back.png" alt="left"/>
+        <img class="cardimg" src="images/cards/back.webp" alt="left"/>
         <div class="meta">
-          <img class="ava" src="images/avatars/1.png" alt="ava"/>
+          <img class="ava" src="images/avatars/1.webp" alt="ava"/>
           <span class="pid">P1</span>
         </div>
       </div>
       <div class="slot right">
-        <img class="cardimg" src="images/cards/back.png" alt="right"/>
+        <img class="cardimg" src="images/cards/back.webp" alt="right"/>
         <div class="meta">
-          <img class="ava" src="images/avatars/2.png" alt="ava"/>
+          <img class="ava" src="images/avatars/2.webp" alt="ava"/>
           <span class="pid">P2</span>
         </div>
       </div>
@@ -579,7 +579,7 @@ body::before{
   <!-- 打出卡片「快閃」Overlay（新增） -->
   <div id="playedOverlay" class="hidden">
     <div id="playedFrame">
-      <img id="playedImg" src="images/cards/back.png" alt="played"/>
+      <img id="playedImg" src="images/cards/back.webp" alt="played"/>
       <div id="playedMeta" class="text-sm"></div>
     </div>
   </div>
@@ -624,10 +624,10 @@ body::before{
 
 <script>
 /* === 路徑工具 === */
-const CARD     = id => `images/cards/${id}.png`;
-const CARD_ENH = id => `images/cards/enh/${id}.png`; // ★ 強化卡面
-const VEN      = name => `images/venues/${name}.png`;
-const AVA      = a => `images/avatars/${a||1}.png`;
+const CARD     = id => `images/cards/${id}.webp`;
+const CARD_ENH = id => `images/cards/enh/${id}.webp`; // ★ 強化卡面
+const VEN      = name => `images/venues/${name}.webp`;
+const AVA      = a => `images/avatars/${a||1}.webp`;
 
 const el = {
   conn: document.getElementById('connLbl'),
@@ -1157,7 +1157,7 @@ function isEnhancedNow(cardId){
 }
 
 /* ========= 場地 → 背景圖片對照 & 切換工具 ========= */
-/** 場地 → 背景圖片對照（檔案放 public/images/venues/xxx.jpg/png 自行準備） */
+/** 場地 → 背景圖片對照（檔案放 public/images/venues/xxx.jpg/webp 自行準備） */
 const VENUE_BG = {
   "德雷斯羅薩鬥技場": "images/venues/dressrosa.jpg",
   "艾尼艾斯大廳":     "images/venues/enieslobby.jpg",
@@ -1567,7 +1567,7 @@ let _lawTargetCard = null;
 function cardImageURL(cardId){
   return (typeof CARD_IMG === 'function')
     ? CARD_IMG(cardId)
-    : (typeof CARD === 'function' ? CARD(cardId) : `images/cards/${cardId}.png`);
+    : (typeof CARD === 'function' ? CARD(cardId) : `images/cards/${cardId}.webp`);
 }
 
 // Open/Close modals
@@ -1702,7 +1702,7 @@ onceFx?.(el.deckCnt, 'fx-pulse');
     const im=document.createElement('img');
     im.className='thumb';
     const isBack = (item && typeof item === 'object' && item.back === true);
-    im.src = isBack ? 'images/cards/back.png' : CARD(item);
+    im.src = isBack ? 'images/cards/back.webp' : CARD(item);
     el.discard.appendChild(im);
   });
   const nowLen = (state.discard || []).length;
@@ -1867,7 +1867,7 @@ if (srvP.action === 'law') {
       const tid = localPending.target;
       const tp = state.players?.[tid];
       const tcard = (tp && typeof tp.hand === 'number') ? tp.hand : null;
-      const img = tcard != null ? (isEnhancedNow(tcard) ? CARD_ENH(tcard) : CARD(tcard)) : 'images/cards/back.png';
+      const img = tcard != null ? (isEnhancedNow(tcard) ? CARD_ENH(tcard) : CARD(tcard)) : 'images/cards/back.webp';
       const html = `
         <div class="text-lg font-semibold mb-3">你查看了 ${pname(tid)} 的手牌</div>
         <div class="flex justify-center mb-4">
@@ -1892,7 +1892,7 @@ if (srvP.action === 'law') {
       localPending = { action:'law', stage:'confirm', target:i, at:Date.now() };
       const tp = state.players?.[i];
       const tcard = (tp && typeof tp.hand === 'number') ? tp.hand : null;
-      const img = tcard != null ? (isEnhancedNow(tcard) ? CARD_ENH(tcard) : CARD(tcard)) : 'images/cards/back.png';
+      const img = tcard != null ? (isEnhancedNow(tcard) ? CARD_ENH(tcard) : CARD(tcard)) : 'images/cards/back.webp';
       const html = `
         <div class="text-lg font-semibold mb-3">你查看了 ${pname(i)} 的手牌</div>
         <div class="flex justify-center mb-4">
