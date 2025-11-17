@@ -8,28 +8,28 @@ const CORE = [
   './game.html',
   './result.html',
   './manifest.webmanifest',
-  './images/icon-180.png',
-  './images/icon-192.png',
-  './images/icon-512.png',
-  './images/wanted.png',
+  './images/icon-180.webp',
+  './images/icon-192.webp',
+  './images/icon-512.webp',
+  './images/wanted.webp',
   './images/cover.jpg',
 ];
 
 // === 頭像（1~30）===
 const AVATARS = Array.from({ length: 30 }, (_, i) =>
-  `./images/avatars/${i + 1}.png`
+  `./images/avatars/${i + 1}.webp`
 );
 
 // === 卡片（正確在 images/cards/）===
 const CARDS = Array.from({ length: 20 }, (_, i) =>
-  `./images/cards/${i}.png`
+  `./images/cards/${i}.webp`
 ).concat([
-  './images/cards/back.png'
+  './images/cards/back.webp'
 ]);
 
 // === 強化卡面 ===
 const CARDS_ENH = Array.from({ length: 20 }, (_, i) =>
-  `./images/cards/enh/${i}.png`
+  `./images/cards/enh/${i}.webp`
 );
 
 // === 場地背景 ===
