@@ -656,6 +656,8 @@ const el = {
   discard: document.getElementById('discard'),
   deckCnt: document.getElementById('deckCnt'),
   deckBtn: document.getElementById('btnDraw'),
+  shuffleIntro: document.getElementById('btnShuffleIntro'),
+  gameStartVideo: document.getElementById('gameStartVideo'),
   imgHand: document.getElementById('imgHand'),
   imgDrawn: document.getElementById('imgDrawn'),
   playZone: document.getElementById('myPlayZone'),
@@ -969,6 +971,41 @@ function playCoinFx(){
   if (!ov || !vid) return;
   if (_coinPlaying) return;          // 避免重複觸發
   _coinPlaying = true;
+
+/* === 開局洗牌影片（本機，無遮罩） === */
+function playGameStartVideoOnce(){
+  const btn = el.shuffleIntro || document.getElementById('btnShuffleIntro');
+  const vid = el.gameStartVideo || document.getElementById('gameStartVideo');
+  if (!btn || !vid) return;
+
+  // 只讓它生效一次
+  if (btn.dataset.used === '1') return;
+  btn.dataset.used = '1';
+
+  // 按了之後就消失
+  btn.disabled = true;
+  btn.classList.add('hidden');
+
+  // 準備影片
+  try { vid.currentTime = 0; } catch(e){}
+  vid.classList.remove('hidden');
+
+  const cleanup = ()=>{
+    vid.classList.add('hidden');
+    vid.removeEventListener('ended', cleanup);
+    vid.removeEventListener('error', cleanup);
+  };
+
+  vid.addEventListener('ended', cleanup);
+  vid.addEventListener('error', cleanup);
+
+  // 開始播放（失敗就直接收掉）
+  vid.play().catch(err=>{
+    console.error('gameStartVideo play failed', err);
+    cleanup();
+  });
+}
+
 
   // 👉 開始播之前，先記錄「當下 BGM 是否正在播放」
   const bgmWasPlaying =
@@ -2216,10 +2253,17 @@ function showMulti(title, cards, onCommit){
 }
 
 // 綁定
+
+// 開局洗牌影片：只在玩家自己按的時候播一次，不影響其他玩家
+if (el.shuffleIntro) {
+  el.shuffleIntro.addEventListener('click', playGameStartVideoOnce);
+}
+
 el.deckBtn.onclick   = ()=> sendAction('DRAW');
 el.playHand.onclick  = ()=> sendAction('PLAY_CARD',{which:'hand'});
 el.playDrawn.onclick = ()=> sendAction('PLAY_CARD',{which:'drawn'});
 el.nextRound.onclick = ()=> sendAction('NEXT_ROUND');
+
 </script>
 </body>
 </html>
