@@ -1164,15 +1164,15 @@ function playEnhFxFor(cardId){
     try { vid.load(); } catch(e){}
   }
 
-  // 先清掉上一輪的強制計時器 & 舊事件
+  // 清掉上一輪的計時器
   if (_enhFxForceTimer) {
     clearTimeout(_enhFxForceTimer);
     _enhFxForceTimer = null;
   }
-  const onEnded = ()=> cleanup();
-  const onClick = ()=> cleanup();
-  vid.removeEventListener('ended', onEnded);
-  ov.removeEventListener('click', onClick);
+
+  // 先移除舊的事件（用 stored handler，避免殘留）
+  if (vid.__enhOnEnded)  vid.removeEventListener('ended', vid.__enhOnEnded);
+  if (ov.__enhOnClick)   ov.removeEventListener('click', ov.__enhOnClick);
 
   // 顯示 overlay
   ov.classList.remove('hidden');
@@ -1182,28 +1182,56 @@ function playEnhFxFor(cardId){
   vid.muted  = false;
   vid.volume = 1.0;
 
-  // 嘗試播放：如果有聲被擋就改靜音；再失敗就交給 timeout / 點擊關掉
-  vid.play().catch(()=>{
-    vid.muted = true;
-    vid.play().catch(()=>{
-      // 什麼都播不了：就讓 8 秒 timeout / 點擊收尾
-    });
-  });
+  let failTimer = null;
+  function armFailsafe(){
+    clearTimeout(failTimer);
+    const dur = (Number.isFinite(vid.duration) && vid.duration > 0)
+      ? vid.duration * 1000
+      : 8000; // 沒讀到長度就抓 8 秒當保險，但不會截斷真正影片（因為通常 duration <= 這個值）
+    failTimer = setTimeout(()=> cleanup(), dur + 800);
+    _enhFxForceTimer = failTimer;
+  }
 
   function cleanup(){
     if (!ov || ov.classList.contains('hidden')) return;
+
+    clearTimeout(failTimer);
     if (_enhFxForceTimer) {
       clearTimeout(_enhFxForceTimer);
       _enhFxForceTimer = null;
     }
+
     ov.classList.add('hidden');
     try {
       vid.pause();
       vid.currentTime = 0;
     } catch(e){}
-    vid.removeEventListener('ended', onEnded);
-    ov.removeEventListener('click', onClick);
+
+    // 移除事件綁定
+    if (vid.__enhOnEnded)  vid.removeEventListener('ended', vid.__enhOnEnded);
+    if (ov.__enhOnClick)   ov.removeEventListener('click', ov.__enhOnClick);
+    vid.__enhOnEnded = null;
+    ov.__enhOnClick  = null;
   }
+
+  // 設定事件 handler 並記住參考，方便下次移除
+  vid.__enhOnEnded = ()=> cleanup();
+  ov.__enhOnClick  = ()=> cleanup();
+  vid.addEventListener('ended', vid.__enhOnEnded);
+  ov.addEventListener('click', ov.__enhOnClick);
+
+  // 嘗試播放：如果有聲被擋就改靜音；再失敗就直接關掉，不卡流程
+  vid.play().then(()=>{
+    armFailsafe();
+  }).catch(()=>{
+    vid.muted = true;
+    vid.play().then(()=>{
+      armFailsafe();
+    }).catch(()=>{
+      // 什麼都播不了 → 直接關掉 overlay，避免整場卡死
+      cleanup();
+    });
+  });
 }
 
 /* === 強化特效工具（光球）與播放記錄 === */
