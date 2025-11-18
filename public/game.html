@@ -1492,7 +1492,7 @@ const ov   = document.getElementById('playedOverlay');
       ov.classList.add('hidden');
       if (typeof opt.onDone === 'function') opt.onDone();
     }, 250);
-  }, 4000);
+  }, 3000);
 }
 
 /* ====== C. STATE：同步 server 的新行、偵測新局並清空 + 偵測新棄牌 → 強化先快閃後播片 ====== */
@@ -1921,19 +1921,19 @@ onceFx?.(el.deckCnt, 'fx-pulse');
     }
   }
 
-  /* ====== D. render()：用 feed 畫畫面 ====== */
+/* ====== D. render()：用 feed 畫畫面 ====== */
 const logBox = el.log;
-logBox.innerHTML = '';
 
-// 反過來畫：最後一行在最上面
-feed.slice().reverse().forEach(line=>{
+// 重新生成列表
+logBox.innerHTML = '';
+feed.forEach(line=>{
   const li = document.createElement('li');
   li.textContent = line;
   logBox.appendChild(li);
 });
 
-// 可選：強制捲到最上方（最新訊息）
-logBox.scrollTop = 0;
+// ⭐ 每次更新後，自動拉到最下面（看到最新一行）
+logBox.scrollTop = logBox.scrollHeight;
 
 
   // 下一局按鈕（依 viewerCanNext）
