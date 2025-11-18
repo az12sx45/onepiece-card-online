@@ -1182,12 +1182,6 @@ function playEnhFxFor(cardId){
   vid.muted  = false;
   vid.volume = 1.0;
 
-
-  // ⭐ 超保險：不管影片有沒有成功播，8 秒內一定自動關掉
-  _enhFxForceTimer = setTimeout(()=>{
-    cleanup();
-  }, 8000);
-
   // 嘗試播放：如果有聲被擋就改靜音；再失敗就交給 timeout / 點擊關掉
   vid.play().catch(()=>{
     vid.muted = true;
@@ -1498,7 +1492,7 @@ const ov   = document.getElementById('playedOverlay');
       ov.classList.add('hidden');
       if (typeof opt.onDone === 'function') opt.onDone();
     }, 250);
-  }, 2000);
+  }, 4000);
 }
 
 /* ====== C. STATE：同步 server 的新行、偵測新局並清空 + 偵測新棄牌 → 強化先快閃後播片 ====== */
@@ -1928,12 +1922,19 @@ onceFx?.(el.deckCnt, 'fx-pulse');
   }
 
   /* ====== D. render()：用 feed 畫畫面 ====== */
-  el.log.innerHTML = '';
-  feed.forEach(line=>{
-    const li = document.createElement('li');
-    li.textContent = line;
-    el.log.appendChild(li);
-  });
+const logBox = el.log;
+logBox.innerHTML = '';
+
+// 反過來畫：最後一行在最上面
+feed.slice().reverse().forEach(line=>{
+  const li = document.createElement('li');
+  li.textContent = line;
+  logBox.appendChild(li);
+});
+
+// 可選：強制捲到最上方（最新訊息）
+logBox.scrollTop = 0;
+
 
   // 下一局按鈕（依 viewerCanNext）
   el.nextRound.classList.toggle('hidden', !(state.allowNextRound && state.viewerCanNext === true));
