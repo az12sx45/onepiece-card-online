@@ -1294,6 +1294,162 @@ function isEnhancedNow(cardId){
   return !!state.venues.find(v=>v.name===vn);
 }
 
+/* ========= 卡牌說明（基本 / 強化） ========= */
+/** 0–19：名字 + 基本/強化技能敘述（來源：docx 正式版） */
+const CARD_TEXT = {
+  0: {
+    name: "薩波",
+    baseTitle: "火焰龍王",
+    base: "所有人將手牌洗回牌堆後各重抽1張。",
+    enhTitle: "火焰龍之息",
+    enh: "洗回手牌後重抽，本回合打出7以上角色卡技能無效。"
+  },
+  1: {
+    name: "騙人布",
+    baseTitle: "必殺・殺手彈星",
+    base: "猜一名玩家手牌（不能猜1），猜中淘汰對方。",
+    enhTitle: "必殺・連擊彈星",
+    enh: "猜中可連猜至錯為止，每猜中一次重複發動淘汰效果。"
+  },
+  2: {
+    name: "羅賓",
+    baseTitle: "眼花撩亂",
+    base: "偷看一名玩家的手牌。",
+    enhTitle: "千花繚亂・身體開花",
+    enh: "查看所有玩家的手牌。"
+  },
+  3: {
+    name: "香吉士",
+    baseTitle: "惡魔風腳",
+    base: "與一名玩家比大小，低者淘汰。",
+    enhTitle: "魔神風腳",
+    enh: "指定一位玩家比大小，我方攻擊力+1。"
+  },
+  4: {
+    name: "喬巴",
+    baseTitle: "皮毛強化",
+    base: "自身獲得保護狀態一回合。",
+    enhTitle: "柔力強化",
+    enh: "獲得閃避效果，下一次被影響技能無效化。"
+  },
+  5: {
+    name: "索隆",
+    baseTitle: "一刀流・獅子歌歌",
+    base: "指定一位玩家棄牌並重抽一張。",
+    enhTitle: "鬼氣九刀流・阿修羅",
+    enh: "指定一位玩家棄牌，偶數則淘汰，奇數則抽一張牌。"
+  },
+  6: {
+    name: "羅",
+    baseTitle: "ROOM・SHAMBLES",
+    base: "與一名玩家交換手牌。",
+    enhTitle: "ROOM・SCAN",
+    enh: "偷看一名玩家手牌後可選擇是否交換。"
+  },
+  7: {
+    name: "娜美",
+    baseTitle: "天候危機",
+    base: "若手牌同時持有6或8，必須打出娜美。",
+    enhTitle: "忍法雷霆",
+    enh: "打出娜美時，可指定一名玩家「麻痺」，使其跳過下回合行動。"
+  },
+  8: {
+    name: "魯夫",
+    baseTitle: "橡膠橡膠象槍",
+    base: "可挑戰1～2位玩家比大小，輸了會被淘汰。",
+    enhTitle: "四檔 猿王群鴉砲",
+    enh: "跟每位玩家比大小，攻擊力-3，自身輸了也不會被淘汰。"
+  },
+  9: {
+    name: "女帝漢考克",
+    baseTitle: "戀愛即是風暴",
+    base: "打出此牌立即淘汰自己（若無場地效果）。",
+    enhTitle: "我做什麼都會被原諒吧？",
+    enh: "打出女帝時不會自殺，並獲得保護（本回合免疫所有卡牌效果）。"
+  },
+  10: {
+    name: "凱多",
+    baseTitle: "雷鳴八卦",
+    base: "無視防禦與閃避，指定一位玩家比大小，輸者淘汰。",
+    enhTitle: "霸海",
+    enh: "若手牌同時擁有凱多與大媽，可無視閃避與保護，直接淘汰全場其他玩家。"
+  },
+  11: {
+    name: "基德",
+    baseTitle: "磁氣‧弦",
+    base: "將棄排堆洗牌抽出一張家加入手牌，在從手牌中打出一張執行效果。",
+    enhTitle: "磁力風暴",
+    enh: "所有玩家將手牌逆時針傳遞。"
+  },
+  12: {
+    name: "奎因",
+    baseTitle: "疫災彈",
+    base: "下一位玩家擲硬幣，反面麻痺一回合，延續到擲出正面的玩家或打出此卡的玩家為止。",
+    enhTitle: "疫災彈-冰鬼",
+    enh: "本回合打出奇數牌的玩家獲得冰鬼狀態卡，下回合再打出奇數牌則直接淘汰。"
+  },
+  13: {
+    name: "基拉",
+    baseTitle: "刃‧音擊",
+    base: "可以解除一位玩家的保護/閃避狀態。",
+    enhTitle: "巨鐮迴轉音速切割",
+    enh: "可以解除一位玩家的保護/閃避狀態，再決定是否與他決鬥。"
+  },
+  14: {
+    name: "大媽",
+    baseTitle: "狂暴與暴食",
+    base: "擲銅板，正面保護、反面閃避。",
+    enhTitle: "Soul or Life?",
+    enh: "指定一位玩家，讓對方選擇被淘汰或交出一個勝利指示物。"
+  },
+  15: {
+    name: "卡塔庫栗",
+    baseTitle: "見聞色霸氣",
+    base: "可以觀看牌堆上前三張卡片。",
+    enhTitle: "10秒後的未來",
+    enh: "可以觀看剩餘玩家數÷2的牌堆卡片，並自由排序放回牌堆。"
+  },
+  16: {
+    name: "庫山（青雉）",
+    baseTitle: "冰球",
+    base: "指定一名玩家手牌凍結，下一次出牌只能打剛抽的那張。",
+    enhTitle: "冰河時代",
+    enh: "全場玩家手牌凍結，下一次出牌只能打剛抽的那張。"
+  },
+  17: {
+    name: "黑鬍子",
+    baseTitle: "暗水",
+    base: "查看牌堆最上面一張卡並覆蓋（其他人不可查看）進棄牌堆。",
+    enhTitle: "暗穴道",
+    enh: "查看剩餘玩家數÷2張牌，任選張數覆蓋（其他人不可查看）進棄牌堆。"
+  },
+  18: {
+    name: "紅髮香克斯",
+    baseTitle: "我是來終結這場戰爭的",
+    base: "牌堆剩一半以下時可直接進入手牌比大小階段。",
+    enhTitle: "給我個面子吧",
+    enh: "牌堆剩一半以下時可直接進入手牌比大小階段，自身手牌數值+1（只在比牌時生效）。"
+  },
+  19: {
+    name: "哥爾羅傑",
+    baseTitle: "一切的開始",
+    base: "打出後淘汰自己，成為下一局起始玩家。",
+    enhTitle: "那一天我們知道了世界的真相",
+    enh: "打出不淘汰，可預測一位玩家是否為本局贏家，成功則獲得與勝利玩家同數量的金幣。"
+  }
+};
+
+/** 把卡片變成簡短文字（會自動判斷是否強化） */
+function cardLine(cardId){
+  const meta = CARD_TEXT[cardId];
+  if (!meta) return "";
+  const enhanced = isEnhancedNow(cardId);
+  const tag = enhanced ? "【強化】" : "【基本】";
+  const title = enhanced && meta.enhTitle ? meta.enhTitle : meta.baseTitle;
+  const text  = enhanced && meta.enh ? meta.enh : meta.base;
+  return `${meta.name} ${tag}${title}：${text}`;
+}
+
 /* ========= 場地 → 背景圖片對照 & 切換工具 ========= */
 /** 場地 → 背景圖片對照（檔案放 public/images/venues/xxx.jpg/webp 自行準備） */
 const VENUE_BG = {
@@ -1876,10 +2032,28 @@ onceFx?.(el.deckCnt, 'fx-pulse');
             ${p.iceArmed?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">🧊 檢查</span>':''}
             ${(!p.protected&&!p.dodging&&!p.frozen&&!p.skipNext&&!p.iceArmed)?'<span class="opacity-50">—</span>':''}
           </div>
-          ${isMe? `<div class="mt-2 flex items-center gap-1 text-[11px] text-neutral-400">
-             ${p.hand!=null?`<img class="thumb-sm" src="${isEnhancedNow(p.hand)? CARD_ENH(p.hand) : CARD(p.hand)}"/>`:''}
-             ${p.tempDraw!=null?`<span>/</span><img class="thumb-sm" src="${isEnhancedNow(p.tempDraw)? CARD_ENH(p.tempDraw) : CARD(p.tempDraw)}"/>`:''}
-          </div>`:''}
+          ${isMe? `<div class="mt-2 flex items-start gap-2">
+  <!-- 左邊：自己的小卡圖（跟原本一樣，只是加上 shrink-0 ） -->
+  <div class="flex items-center gap-1 text-[11px] text-neutral-400 shrink-0">
+    ${p.hand!=null
+      ? `<img class="thumb-sm" src="${isEnhancedNow(p.hand)? CARD_ENH(p.hand) : CARD(p.hand)}"/>`
+      : ''}
+    ${p.tempDraw!=null
+      ? `<span>/</span><img class="thumb-sm" src="${isEnhancedNow(p.tempDraw)? CARD_ENH(p.tempDraw) : CARD(p.tempDraw)}"/>`
+      : ''}
+  </div>
+
+  <!-- 右邊：卡片文字敘述（會自動判斷基本/強化） -->
+  <div class="flex-1 min-w-0 text-[10px] leading-tight text-neutral-300 space-y-0.5">
+    ${p.hand!=null
+      ? `<div>${cardLine(p.hand)}</div>`
+      : ''}
+    ${p.tempDraw!=null
+      ? `<div>${cardLine(p.tempDraw)}</div>`
+      : ''}
+  </div>
+</div>`:''}
+
         </div>
       </div>`;
     el.players.appendChild(box);
