@@ -43,7 +43,7 @@ const VENUES = [
 const VIDEOS = [
   './videos/start.mp4',
   './videos/coin.mp4',
- './videos/gamestart.mp4',
+ './videos/draw.mp4',
 ];
 
 // === 強化影片 ===
