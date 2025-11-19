@@ -89,7 +89,7 @@ function broadcastLobby(roomId){
 io.on("connection", (socket) => {
   let joinedRoom = null;
 
-    socket.on("JOIN_ROOM", (payload = {}) => {
+  socket.on("JOIN_ROOM", (payload = {}) => {
     const { roomId, displayName = "", avatar = 1, secret = "", pid } = payload;
     if (!roomId) return;
 
@@ -193,6 +193,7 @@ io.on("connection", (socket) => {
     broadcastLobby(roomId);
     broadcastState(room);
   });
+
 
 
     // 第一位為房主
