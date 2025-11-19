@@ -89,35 +89,64 @@ function broadcastLobby(roomId){
 io.on("connection", (socket) => {
   let joinedRoom = null;
 
-   socket.on("JOIN_ROOM", (payload = {}) => {
+    socket.on("JOIN_ROOM", (payload = {}) => {
     const { roomId, displayName = "", avatar = 1, secret = "", pid } = payload;
     if (!roomId) return;
 
     // 建房：暫給 1 位座位（真正開始時會重建）
     let room = rooms.get(roomId);
     if (!room) {
-      room = { state: createInitialState(1), sockets: new Map(), host: null, lobbyReady: {} };
+      room = {
+        state: createInitialState(1),
+        sockets: new Map(),
+        host: null,
+        lobbyReady: {}
+      };
       rooms.set(roomId, room);
     }
 
-    const st = room.state;
-    let sec = secret || "";
+    const st  = room.state;
+    let   sec = secret || "";
 
-    // ★ 0) 若帶有 secret，且 state 裡已有同 secret 的玩家 → 視為「重連」
+    // === 判斷目前是不是「遊戲中」 ===
+    const inGame = (st.roundNo && st.roundNo > 0);   // roundNo > 0 視為已開局
+
+    // ★ 0) 先用 secret 找舊座位 → 正常重連
     let myId = null;
     if (sec) {
       const found = (st.players || []).find(p => p && p.secret === sec);
       if (found) myId = found.id;
     }
 
-    // ★ 1) 沒找到舊座位時：找第一個未綁 client 的位置
+    // ★ 0.5) secret 沒命中：用名字 +「目前沒有 socket 正在用那個座位」來當重連備援
+    if (myId == null && displayName) {
+      const takenIds = new Set(Array.from(room.sockets.values()).map(m => m.playerId));
+      const byName = (st.players || []).find(p =>
+        p &&
+        (p.client?.displayName === displayName || p.displayName === displayName) &&
+        !takenIds.has(p.id)
+      );
+      if (byName) {
+        myId = byName.id;
+        // 如果舊座位本來就有 secret，沿用它，避免重發新的導致之後又對不上
+        if (!sec && byName.secret) sec = byName.secret;
+      }
+    }
+
+    // ★ 遊戲進行中：只允許「找到舊座位的重連」，不再新增新玩家
+    if (inGame && myId == null) {
+      socket.emit("ERROR", { message: "本局遊戲已在進行中，無法加入新的玩家（請回到等待室重新開局）" });
+      return;
+    }
+
+    // ★ 1)（等待室用）沒找到舊座位時：找第一個未綁 client 的位置
     if (myId == null) {
       for (const p of st.players) {
         if (!p.client) { myId = p.id; break; }
       }
     }
 
-    // ★ 2) 若都滿就新增一格座位（等待室用）
+    // ★ 2)（等待室用）若都滿就新增一格座位
     if (myId == null) {
       myId = st.players.length;
       st.players.push({
@@ -140,8 +169,31 @@ io.on("connection", (socket) => {
     const p = st.players[myId];
     p.client = { displayName, avatar, pid };
     p.displayName = displayName;
-    p.avatar = avatar;
-    p.secret = sec;             // ← 關鍵：把 secret 綁到這個玩家
+    p.avatar      = avatar;
+    p.secret      = sec; // 把 secret 綁到這個玩家
+
+    // 第一位為房主
+    if (room.host == null) room.host = myId;
+
+    // 建 socket meta（之後驗章 / START_GAME 會用）
+    room.sockets.set(socket.id, {
+      playerId: myId,
+      secret: sec,
+      displayName: (displayName || "").trim() || `P${myId + 1}`,
+      avatar: Number(avatar) || 1,
+    });
+
+    joinedRoom = roomId;
+    socket.join(roomId);
+    socket.emit("JOINED", { playerId: myId, secret: sec });
+
+    // 等待室 ready 狀態（預設未準備）
+    room.lobbyReady[myId] = room.lobbyReady[myId] ?? false;
+
+    broadcastLobby(roomId);
+    broadcastState(room);
+  });
+
 
     // 第一位為房主
     if (room.host == null) room.host = myId;
