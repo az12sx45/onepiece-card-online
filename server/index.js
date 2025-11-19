@@ -293,6 +293,7 @@ io.on("connection", (socket) => {
       }
       room.sockets = newSockets;
 
+
       // ⑥ host 也改成新座位（原 host 是某個 oldId）
       const remap = new Map(joined.map((j, i) => [j.oldId, i]));
       const newHost = remap.get(room.host);
