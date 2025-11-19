@@ -165,6 +165,50 @@ io.on("connection", (socket) => {
     broadcastState(room);
   });
 
+  // === 新增：JOIN（遊戲中／重整／結果畫面接續用，不再新增玩家） ===
+  socket.on("JOIN", ({ roomId, resume, pid }) => {
+    const room = rooms.get(roomId);
+    if (!room || !room.state) {
+      return socket.emit("ERROR", { message: "找不到此房號或遊戲尚未開始" });
+    }
+
+    const st = room.state;
+    joinedRoom = roomId;
+    socket.join(roomId);
+
+    // 如果有帶 pid，就當成要「接回原本那個玩家」
+    if (typeof pid === "number" && st.players && st.players[pid]) {
+      const p = st.players[pid];
+
+      // 確保這個玩家有 secret
+      let sec = p.secret;
+      if (!sec) sec = Math.random().toString(36).slice(2);
+      p.secret = sec;
+
+      // 在 room.sockets 登記這個連線，之後 ACTION 驗章會用到
+      room.sockets.set(socket.id, {
+        playerId: pid,
+        secret: sec,
+        displayName:
+          (p.client && p.client.displayName) ||
+          p.displayName ||
+          `P${pid + 1}`,
+        avatar: Number(
+          (p.client && p.client.avatar) ??
+          p.avatar ??
+          1
+        ),
+      });
+
+      // 回傳 JOINED，前端會更新 me.playerId / me.secret / op_pid
+      socket.emit("JOINED", { playerId: pid, secret: sec });
+    }
+
+    // 把目前遊戲狀態丟給這個 socket（不去動其他人）
+    socket.emit("STATE", st);
+  });
+
+
 
   socket.on("ACTION", (action = {}) => {
     const { roomId, playerId, secret, type } = action;
