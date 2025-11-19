@@ -736,6 +736,35 @@ let userInteracted = false; // 解除瀏覽器自動播放限制
 let wasPlayingBeforeDuck = false; // 影片介入前是否在播放
 let duckSet = new Set(); // 正在播放中的影片集合（同時多段也能正確回復）
 
+// === iOS 用：需要續播 BGM 的旗標 ===
+let needBgmResume = false;
+
+// 統一的「請嘗試續播 BGM」工具
+function requestBgmResume(){
+  if (!bgmAudio) return;
+
+  bgmAudio.play().then(()=>{
+    // 播放成功
+    setPlayVisual(true);
+    needBgmResume = false;
+    if (bgmPlayBtn) bgmPlayBtn.classList.remove('need-resume');
+  }).catch(()=>{
+    // iOS 可能覺得現在不是使用者手動觸發 → 先記旗標
+    needBgmResume = true;
+    if (bgmPlayBtn) bgmPlayBtn.classList.add('need-resume');
+  });
+}
+
+// 任何一次點擊 / 觸控，只要還需要續播，就再試一次
+document.addEventListener('touchend', ()=>{
+  if (needBgmResume) requestBgmResume();
+}, { passive:true });
+
+document.addEventListener('click', ()=>{
+  if (needBgmResume) requestBgmResume();
+});
+
+
 // ===== UI 繪製 =====
 function paintTitle(){ bgmTitleEl.textContent = BGM_LIST[bgmIndex]?.title || '未播放'; }
 function paintShuffleBtn(){
@@ -890,9 +919,8 @@ function duckOff(videoEl){
   if (duckSet.has(videoEl)) {
     duckSet.delete(videoEl);
     if (duckSet.size === 0 && wasPlayingBeforeDuck && typeof bgmAudio !== 'undefined' && bgmAudio) {
-      // 全部影片都停了 → 若一開始有在播，就幫你續播
-      bgmAudio.play().then(()=> setPlayVisual(true))
-        .catch(()=>{ /* 可能被瀏覽器擋，維持暫停外觀即可 */ });
+      // 全部影片都停了 → 若一開始有在播，就請求續播（iOS 可能要等下一次點擊）
+      requestBgmResume();
       wasPlayingBeforeDuck = false;
     }
   }
@@ -1059,13 +1087,11 @@ function playCoinFx(){
       if (typeof duckOff === 'function') duckOff(vid);
     } catch(e){}
 
-    // ⭐ 關鍵：如果一開始 BGM 有在播，就幫你續播
-    if (bgmWasPlaying && bgmAudio) {
-      bgmAudio.play().catch(()=> {
-        // 有些瀏覽器可能擋自動播放，就算了，不再報錯
-      });
-    }
+    // ⭐ 如果一開始 BGM 有在播 → 請求續播
+  if (bgmWasPlaying && bgmAudio) {
+    requestBgmResume();
   }
+}
 
   // 嘗試播放影片
   vid.play().then(()=>{
@@ -1207,6 +1233,13 @@ function playEnhFxFor(cardId){
       vid.pause();
       vid.currentTime = 0;
     } catch(e){}
+
+  // 若強化影片播放前有 BGM，在這裡請求續播
+  if (wasPlayingBeforeDuck && typeof bgmAudio !== 'undefined' && bgmAudio) {
+    requestBgmResume();
+    wasPlayingBeforeDuck = false;
+  }
+
 
     // 移除事件綁定
     if (vid.__enhOnEnded)  vid.removeEventListener('ended', vid.__enhOnEnded);
