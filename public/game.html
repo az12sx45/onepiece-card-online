@@ -1645,64 +1645,37 @@ function sendAction(type, payload={}){
 }
 
 
-// 手動按「加入」按鈕（除錯用）：還是用 JOIN_ROOM
 el.join.onclick = ()=>{
   me.roomId = (el.room.value || 'op-001').trim();
   try { sessionStorage.setItem('op_room', me.roomId); } catch {}
   const displayName = (el.name.value || presetName || 'P') + Math.floor(Math.random()*100);
   el.roomLbl.textContent = me.roomId;
-  socket.emit('JOIN_ROOM', {
-    roomId: me.roomId,
-    displayName,
-    avatar: presetAvatar,
-    secret: me.secret,
-    playerCount: presetN
-  });
+  socket.emit('JOIN_ROOM', { roomId: me.roomId, displayName, avatar: presetAvatar, secret: me.secret, playerCount: presetN });
 };
 
-// 讀取前一局在這個房間的 playerId（有就代表是「重整 / 重連」）
-let prevPid = null;
-try {
-  const v = sessionStorage.getItem('op_pid');
-  if (v != null && v !== '' && !Number.isNaN(Number(v))) {
-    prevPid = Number(v);
-  }
-} catch (e) {
-  console.warn('read op_pid failed', e);
-}
 
-// 從等待室跳進來會帶 ?room=...，這裡自動加入 / 接續
 if (presetRoom) {
   try { sessionStorage.setItem('op_room', presetRoom); } catch {}
-  el.roomLbl.textContent = presetRoom;
-
   setTimeout(()=>{
-    if (prevPid != null) {
-      // ✅ 已經玩過這局 → 用 JOIN 接續，不再新增一個玩家
-      socket.emit('JOIN', {
-        roomId: me.roomId,
-        resume: true,
-        pid: prevPid
-      });
-    } else {
-      // ✅ 第一次進這個房 → 正常加入，建立座位
-      socket.emit('JOIN_ROOM', {
-        roomId: me.roomId,
-        displayName: presetName || 'P',
-        avatar: presetAvatar,
-        secret: me.secret,
-        playerCount: presetN
-      });
-    }
+    socket.emit('JOIN_ROOM', { roomId: me.roomId, displayName: presetName || 'P', avatar: presetAvatar, secret: me.secret, playerCount: presetN });
   }, 80);
 }
-
 
 
 const socketOnJoined = ({ playerId, secret })=>{
   me.playerId = playerId;
   me.secret = secret;
   localStorage.setItem('opSecret', secret);
+
+  // ★ 新增：記錄自己在本局的 playerId，供 result.html 用
+  try {
+    sessionStorage.setItem('op_pid', playerId);
+    console.log('[SESSION]', 'op_pid =', playerId);
+  } catch(e){
+    console.warn('sessionStorage set op_pid failed', e);
+  }
+};
+socket.on('JOINED', socketOnJoined);
 
 
 // ★ 新增：記錄自己在本局的 playerId，供 result.html 用
@@ -1752,17 +1725,6 @@ const ov   = document.getElementById('playedOverlay');
 socket.on('STATE', (s)=>{
   const prevTurnIndex  = (state && typeof state.turnIndex === 'number') ? state.turnIndex : null;
   const prevDiscardLen = Array.isArray(state?.discard) ? state.discard.length : 0;
-
-  // ✅ 若是用 JOIN 重連，這裡從 server 給的 myPlayerId 補回 me.playerId
-  if (me.playerId == null && typeof s.myPlayerId === 'number') {
-    me.playerId = s.myPlayerId;
-    try {
-      sessionStorage.setItem('op_pid', me.playerId);
-      console.log('[STATE] restore me.playerId =', me.playerId);
-    } catch (e) {
-      console.warn('sessionStorage set op_pid failed', e);
-    }
-  }
 
   state = s;
 
