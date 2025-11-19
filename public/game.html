@@ -931,21 +931,31 @@ function attachDuck(video){
   video.addEventListener('ended', ()=> duckOff(video));
 }
 
-// 先綁目前頁面上已存在的所有影片
-document.querySelectorAll('video').forEach(attachDuck);
+// 先綁目前頁面上已存在的所有影片（排除抽牌影片）
+document.querySelectorAll('video').forEach(v=>{
+  if (v.id === 'drawVideo') return;   // ⭐ 抽牌影片不要 duck
+  attachDuck(v);
+});
 
 // 再用 MutationObserver 綁後續動態插入的影片（例如 overlay 裡新建）
 const mo = new MutationObserver((ms)=>{
   for (const m of ms){
     m.addedNodes && m.addedNodes.forEach(node=>{
-      if (node instanceof HTMLVideoElement) attachDuck(node);
+      if (node instanceof HTMLVideoElement) {
+        if (node.id === 'drawVideo') return;  // ⭐ 一樣排除
+        attachDuck(node);
+      }
       if (node.querySelectorAll){
-        node.querySelectorAll('video').forEach(attachDuck);
+        node.querySelectorAll('video').forEach(v=>{
+          if (v.id === 'drawVideo') return;   // ⭐ 一樣排除
+          attachDuck(v);
+        });
       }
     });
   }
 });
 mo.observe(document.documentElement, {subtree:true, childList:true});
+
 
 // === iOS / Safari 媒體預熱：第一次點畫面時，偷偷幫 enhVideo 解鎖有聲播放 ===
 let _iosPrimed = false;
