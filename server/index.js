@@ -260,6 +260,37 @@ io.on("connection", (socket) => {
       return;
     }
 
+    // 遊戲中：下一局（只有房主或本局勝利玩家可以按）
+    if (type === 'NEXT_ROUND') {
+      const st = room.state;
+
+      // 先確認這一局真的結束了
+      const ended = typeof isRoundEnded === "function"
+        ? isRoundEnded(st)
+        : (st?.turnStep === "ended" || st?.turnStep === "end" || st?.turnStep === "score");
+
+      if (!ended) {
+        socket.emit('EMIT', { type: 'toast', text: '本局尚未結束' });
+        return;
+      }
+
+      // 找出這一局的勝利玩家（還活著的）
+      const winners = new Set(st.players.filter(p => p.alive).map(p => p.id));
+
+      // 只有房主或本局勝利者可以開下一局
+      const can = (room.host === playerId) || winners.has(playerId);
+      if (!can) {
+        socket.emit('EMIT', { type: 'toast', text: '只有房主或本局勝者可以開始下一局' });
+        return;
+      }
+
+      // 正式進入下一局
+      const ns = nextRound(st);
+      room.state = ns;
+      broadcastState(room);
+      return;
+    }
+
     // 遊戲內其他行為 → 交給引擎
     const res = applyAction(room.state, action);
     room.state = res.state;
@@ -277,15 +308,6 @@ io.on("connection", (socket) => {
 
     // 廣播 STATE
     broadcastState(room);
-
-    // 檢查一輪是否結束
-    if (typeof isRoundEnded === "function"
-        ? isRoundEnded(room.state)
-        : false) {
-      const ns = nextRound(room.state);
-      room.state = ns;
-      broadcastState(room);
-    }
   });
 
 
