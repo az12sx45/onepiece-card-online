@@ -866,12 +866,12 @@ bgmAudio.addEventListener('ended', ()=>{ setPlayVisual(false); loadTrack(nextInd
 //    全部影片結束後（duckSet 清空）自動續播
 // ===================================================
 function duckOn(videoEl){
-  // 抽牌動畫：不要動 BGM
+  // 抽牌影片不要參與 duck，避免干擾 BGM
   if (!videoEl || videoEl.id === 'drawVideo') return;
 
   if (!duckSet.has(videoEl)) {
     duckSet.add(videoEl);
-    // 第一次被 duck 時，記住原本是否在播
+    // 第一次有影片開始播放 → 記錄當時是否有在播 BGM，順便暫停
     if (duckSet.size === 1 && typeof bgmAudio !== 'undefined' && bgmAudio) {
       wasPlayingBeforeDuck = !bgmAudio.paused && !bgmAudio.ended;
       if (wasPlayingBeforeDuck) {
@@ -881,6 +881,7 @@ function duckOn(videoEl){
     }
   }
 }
+
 
 function duckOff(videoEl){
   // 抽牌動畫本來就沒被加入 duckSet，這裡也直接略過
@@ -1219,6 +1220,14 @@ function playEnhFxFor(cardId){
   ov.__enhOnClick  = ()=> cleanup();
   vid.addEventListener('ended', vid.__enhOnEnded);
   ov.addEventListener('click', ov.__enhOnClick);
+
+  // ⭐ 強化影片播完 → 若一開始 BGM 有在播，就幫你續播（雙保險）
+  if (typeof bgmAudio !== 'undefined' && bgmAudio && wasPlayingBeforeDuck) {
+    bgmAudio.play().then(()=> setPlayVisual(true))
+      .catch(()=>{ /* iOS 可能擋自動播放，就不報錯 */ });
+    wasPlayingBeforeDuck = false;
+  }
+
 
   // 嘗試播放：如果有聲被擋就改靜音；再失敗就直接關掉，不卡流程
   vid.play().then(()=>{
