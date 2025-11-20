@@ -2131,17 +2131,34 @@ function playDuel(opts){
   const lineVs  = root.querySelector('.line-vs');
   const lineWin = root.querySelector('.line-win');
 
-  // 從最近一次 view 拿玩家名稱
-  const viewPlayers = (window._lastView && window._lastView.players) || [];
-  const lp = viewPlayers[leftId]  || {};
-  const rp = viewPlayers[rightId] || {};
-  const leftName  = lp.name  || `P${(leftId ?? 0)+1}`;
-  const rightName = rp.name || `P${(rightId ?? 1)+1}`;
+   // 從目前的 state.players 取得名字與頭像
+  const players = (window.state && window.state.players) || [];
+  const lp = players[leftId]  || {};
+  const rp = players[rightId] || {};
 
-  // 幫 avatar 設定圖片（沒圖就用 a1/a2）
+  const leftName =
+    lp.client?.displayName ??
+    lp.displayName ??
+    lp.name ??
+    lp.nick ??
+    `P${(leftId ?? 0) + 1}`;
+
+  const rightName =
+    rp.client?.displayName ??
+    rp.displayName ??
+    rp.name ??
+    rp.nick ??
+    `P${(rightId ?? 1) + 1}`;
+
+  // 頭像：優先用參數，其次用玩家身上的 avatar / client.avatar，最後預設 1
+  const leftAvaNum =
+    (typeof leftAvatar === 'number' ? leftAvatar : (lp.avatar ?? lp.client?.avatar ?? 1));
+  const rightAvaNum =
+    (typeof rightAvatar === 'number' ? rightAvatar : (rp.avatar ?? rp.client?.avatar ?? 1));
+
   const avaSrc = (n)=> `images/avatars/a${(n || 1)}.webp`;
-  if (lAva) lAva.src = avaSrc(leftAvatar);
-  if (rAva) rAva.src = avaSrc(rightAvatar);
+  if (lAva) lAva.src = avaSrc(leftAvaNum);
+  if (rAva) rAva.src = avaSrc(rightAvaNum);
 
   if (lNameEl) lNameEl.textContent = leftName;
   if (rNameEl) rNameEl.textContent = rightName;
