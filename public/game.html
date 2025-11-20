@@ -403,10 +403,81 @@ body::before{
   #btnDraw.hot::after{ animation: none !important; }
 }
 
+  /* === 騙人布猜數字：漫畫爆炸提示框（亮色版） === */
+  #usoppLayer{
+    position:fixed;
+    inset-inline:0;
+    top:16px;
+    display:flex;
+    justify-content:center;
+    pointer-events:none;
+    z-index:90;
+  }
+  .usopp-toast{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:8px 14px;
+    font-size:14px;
+    font-weight:900;
+    letter-spacing:.05em;
+    background:#fff;
+    color:#000;
+    border:3px solid #000;
+    border-radius:4px;
+    box-shadow:
+      3px 3px 0 #000,
+      0 10px 28px rgba(0,0,0,.8);
+    opacity:0;
+    transform:translateY(-20px);
+    transition:opacity .25s ease, transform .25s ease;
+    pointer-events:auto;
+    white-space:nowrap;
+  }
+  .usopp-toast::after{
+    content:"";
+    position:absolute;
+    left:22%;
+    top:100%;
+    width:14px;
+    height:14px;
+    background:#fff;
+    border-left:3px solid #000;
+    border-bottom:3px solid #000;
+    transform:translateY(-5px) rotate(45deg);
+  }
+  .usopp-toast.hit{
+    background:#fef9c3;
+  }
+  .usopp-toast.miss{
+    background:#fee2e2;
+  }
+  .usopp-icon{
+    font-size:20px;
+  }
+  @keyframes usoppHitPulse{
+    0%{ transform:translateY(0) scale(1); }
+    30%{ transform:translateY(2px) scale(1.06); }
+    100%{ transform:translateY(0) scale(1); }
+  }
+  @keyframes usoppMissShake{
+    0%,100%{ transform:translateX(0); }
+    25%{ transform:translateX(-4px); }
+    50%{ transform:translateX(3px); }
+    75%{ transform:translateX(-2px); }
+  }
+  .usopp-toast.hit.show{
+    animation:usoppHitPulse .3s ease-out;
+  }
+  .usopp-toast.miss.show{
+    animation:usoppMissShake .32s ease-out;
+  }
 
 </style>
 </head>
 <body>
+<div id="usoppLayer"></div>
 <header class="sticky top-0 z-40 bg-[#101418]/80 backdrop-blur border-b border-[#1c2229]">
   <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
     <!-- 左側標題 -->
@@ -1617,6 +1688,12 @@ function msgToLogLine(e){
       const list = arr.length ? arr.map(id=>`卡 ${id}`).join('、') : '（空）';
       return `（出牌者可見）卡塔庫栗：你已將頂牌排序為 → ${list}`;
     }
+    case 'usopp_hit': {
+      const caster = (typeof e.casterId  === 'number') ? pname(e.casterId)  : '未知玩家';
+      const target = (typeof e.targetId  === 'number') ? pname(e.targetId)  : '未知玩家';
+      const d = (typeof e.digit === 'number') ? e.digit : '?';
+      return `騙人布：${caster} 猜 ${target} 的尾數為「${d}」→ 猜中！`;
+    }
     case 'usopp_miss': {
       const caster = (typeof e.casterId  === 'number') ? pname(e.casterId)  : '未知玩家';
       const target = (typeof e.targetId  === 'number') ? pname(e.targetId)  : '未知玩家';
@@ -1624,6 +1701,7 @@ function msgToLogLine(e){
       return `騙人布：${caster} 猜 ${target} 的尾數為「${d}」→ 猜錯`;
     }
     default: return null;
+
   }
 }
 
@@ -1851,6 +1929,43 @@ function playDuel({ leftId, rightId, leftAvatar, rightAvatar, winnerId }){
   }, 1850);
 }
 
+// === 騙人布：猜數字提示框 ===
+function showUsoppToast(opts){
+  if(!opts) return;
+  const layer = document.getElementById('usoppLayer');
+  if(!layer) return;
+  const box = document.createElement('div');
+  const isHit = !!opts.isHit;
+  box.className = 'usopp-toast ' + (isHit ? 'hit' : 'miss');
+
+  const icon = document.createElement('span');
+  icon.className = 'usopp-icon';
+  icon.textContent = isHit ? '🎯' : '❌';
+
+  const text = document.createElement('span');
+  text.textContent = isHit
+    ? `${opts.caster} 打出了騙人布，狙擊 ${opts.target}（${opts.digit} 號）→ 🎯 猜中！`
+    : `${opts.caster} 打出了騙人布，狙擊 ${opts.target}（${opts.digit} 號）→ ❌ 猜錯`;
+
+  box.appendChild(icon);
+  box.appendChild(text);
+  layer.appendChild(box);
+
+  requestAnimationFrame(()=>{
+    box.style.opacity = '1';
+    box.style.transform = 'translateY(0)';
+    box.classList.add('show');
+  });
+
+  const ttl = isHit ? 2600 : 2000;
+  setTimeout(()=>{
+    box.style.opacity = '0';
+    box.style.transform = 'translateY(-20px)';
+    box.classList.remove('show');
+    setTimeout(()=> box.remove(), 250);
+  }, ttl);
+}
+
 socket.on('EMIT', (e)=>{
   
 
@@ -1882,7 +1997,17 @@ if (!e) return;
     playDuel({ leftId: e.leftId, rightId: e.rightId, winnerId: e.winnerId });
   }
 
+  // 騙人布：猜數字（命中 / 失誤）提示框
+  if (e.type === 'usopp_hit' || e.type === 'usopp_miss') {
+    const caster = (typeof e.casterId === 'number') ? pname(e.casterId) : '未知玩家';
+    const target = (typeof e.targetId === 'number') ? pname(e.targetId) : '未知玩家';
+    const d = (typeof e.digit === 'number') ? e.digit : '?';
+    showUsoppToast({ caster, target, digit: d, isHit: e.type === 'usopp_hit' });
+    // 不 return，讓文字也進 feed
+  }
+
   const line = msgToLogLine(e);
+
   if (line) {
     const pretty = stripDuelPoints(formatLogWithNames(line));
     if (feed[feed.length - 1] !== pretty) feed.push(pretty);
