@@ -57,12 +57,12 @@
 #duelFx .slot{
   position:absolute;
   top:50%;
-  width:min(320px,36vw);
+  width:min(280px, 36vw);   /* 比原本 40% 再小一點，留邊界 */
   transform:translateY(-50%);
   display:flex;
   flex-direction:column;
-  align-items:center;
   gap:10px;
+  align-items:center;
 }
 #duelFx .slot.left{ left:8%; }
 #duelFx .slot.right{ right:8%; }
@@ -78,17 +78,18 @@
   box-shadow:0 16px 32px rgba(0,0,0,.7);
 }
 
+/* 卡片：照原圖比例塞進去，不拉扁也不切掉 */
 #duelFx .cardimg{
-  position:absolute;
-  inset:6px;
-  width:calc(100% - 12px);
-  height:calc(100% - 12px);
+  display:block;
+  width:100%;
+  height:auto;
+  max-height:260px;         /* 避免太高撞到上面文字，可視情況調整 */
   border-radius:14px;
   border:1px solid #2f353c;
-  object-fit:contain;           /* ★ 不裁切，整張塞進去 */
   background:#0a0d10;
+  box-shadow:0 18px 36px rgba(0,0,0,.45);
+  object-fit:contain;
   transform-origin:center;
-  transition:transform .25s ease, filter .25s ease, opacity .25s ease, box-shadow .25s ease;
 }
 
 /* ★ 輸家卡片被翻出來的效果 */
@@ -178,7 +179,7 @@
 /* ★ 輸家燃燒破掉 */
 .burning .cardimg{
   position:relative;
-  animation:burn .6s ease-out forwards;
+  animation:burn 2.9s ease-out forwards;
 }
 .burning .cardimg::after{
   content:'';
@@ -211,7 +212,7 @@
 }
 
     @keyframes flame { 0%,100%{ opacity:.35; transform: translate(-50%,-55%) scale(1); filter:hue-rotate(-10deg) saturate(1.5);} 50%{ opacity:.65; transform: translate(-50%,-60%) scale(1.08); filter:hue-rotate(-18deg) saturate(2);} }
-    .burning .cardimg { position: relative; animation: burn .9s ease-out forwards; }
+    .burning .cardimg { position: relative; animation: burn 2.9s ease-out forwards; }
     .burning .cardimg::after{ content:''; position:absolute; left:50%; top:50%; width: 140%; height: 140%; background: radial-gradient(35% 25% at 50% 30%, rgba(255,230,120,.85), transparent 60%), radial-gradient(50% 40% at 50% 60%, rgba(255,120,0,.55), transparent 70%); mix-blend-mode: screen; pointer-events: none; transform: translate(-50%,-55%); animation: flame .9s ease-out forwards; }
 
     /* 強化特效：光球 */
@@ -2081,97 +2082,63 @@ if (_enhSignal && _enhSignal.cardId === last) {
 });
 
 /* ====== B. EMIT：私訊/特效也進 feed（含 enh_fx 抑制/延後） ====== */
-function playDuel({ leftId, rightId, leftAvatar, rightAvatar, winnerId, loserSide, loserCardId }){
-  const fx    = document.getElementById('duelFx');
+function playDuel({ leftId, rightId, leftAvatar, rightAvatar, winnerId }){
+  const fx = document.getElementById('duelFx');
   if (!fx) return;
 
   const arena = fx.querySelector('.arena');
-  const L     = fx.querySelector('.slot.left');
-  const R     = fx.querySelector('.slot.right');
+  const L = fx.querySelector('.slot.left');
+  const R = fx.querySelector('.slot.right');
 
-  const imgL  = L.querySelector('.cardimg');
-  const imgR  = R.querySelector('.cardimg');
-
-  // 頭像
+  // 頭像＆名稱（沿用你原本的邏輯）
   L.querySelector('.ava').src = AVA(
     leftAvatar  ?? state?.players?.[leftId ]?.client?.avatar ?? state?.players?.[leftId ]?.avatar ?? 1
   );
   R.querySelector('.ava').src = AVA(
     rightAvatar ?? state?.players?.[rightId]?.client?.avatar ?? state?.players?.[rightId]?.avatar ?? 1
   );
+  L.querySelector('.pid').textContent = pname(leftId  ?? 0);
+  R.querySelector('.pid').textContent = pname(rightId ?? 1);
 
-  const nameL = pname(leftId  ?? 0);
-  const nameR = pname(rightId ?? 1);
-  L.querySelector('.pid').textContent = nameL;
-  R.querySelector('.pid').textContent = nameR;
-
-  // 先都顯示卡背
-  if (imgL) imgL.src = 'images/cards/back.webp';
-  if (imgR) imgR.src = 'images/cards/back.webp';
-  imgL?.classList.remove('front-reveal');
-  imgR?.classList.remove('front-reveal');
-
-  // 底部文字
-  const capVs  = fx.querySelector('.caption .line-vs');
-  const capWin = fx.querySelector('.caption .line-win');
-  if (capVs)  capVs.textContent  = `${nameL} vs ${nameR}`;
-  if (capWin) {
-    if (typeof winnerId === 'number') {
-      capWin.textContent = `勝者：${pname(winnerId)}`;
-    } else {
-      capWin.textContent = '';
-    }
-  }
-
-  // 輸家在左還右？
-  let loserSlot = null;
-  if (loserSide === 'left')  loserSlot = L;
-  if (loserSide === 'right') loserSlot = R;
-  const loserImg = loserSlot ? loserSlot.querySelector('.cardimg') : null;
-
-  // 重置動畫狀態
+  // 重置狀態
   L.classList.remove('burning');
   R.classList.remove('burning');
   arena.classList.remove('spread','collide');
 
   fx.classList.add('show');
 
+  // 統一把所有時間拉長（可以自己再調整）
+  const spreadDelay  = 1300;   // 展開
+  const collideDelay = 2200;  // 衝撞
+  const burnDelay    = 2900;  // 開始燃燒
+  const hideDelay    = 4600;  // 關掉整個 overlay
+
   // 1. 展開
-  setTimeout(()=> arena.classList.add('spread'), 50);
+  setTimeout(() => {
+    arena.classList.add('spread');
+  }, spreadDelay);
 
   // 2. 撞擊
-  setTimeout(()=>{
+  setTimeout(() => {
     arena.classList.add('collide');
-  }, 700);
+  }, collideDelay);
 
-  // 3. 顯示輸家的卡片正面
-  if (loserImg && typeof loserCardId === 'number') {
-    setTimeout(()=>{
-      try{
-        loserImg.src = CARD(loserCardId);   // 用一般卡面圖
-      }catch(_){}
-      loserImg.classList.add('front-reveal');
-    }, 900);
-  }
+  // 3. 輸家開始燃燒（火焰動畫）
+  setTimeout(() => {
+    const loserIsLeft = (typeof winnerId === 'number' && winnerId === rightId);
+    const loserSlot = loserIsLeft ? L : R;
+    loserSlot.classList.add('burning');
+  }, burnDelay);
 
-  // 4. 再讓輸家那張卡燃燒破掉
-  setTimeout(()=>{
-    const loserIsLeft =
-      (typeof winnerId === 'number' && winnerId === rightId); // 右邊贏 → 左邊輸
-
-    (loserIsLeft ? L : R).classList.add('burning');
-  }, 1200);
-
-  // 5. 收尾關掉 overlay
-  setTimeout(()=>{
+  // 4. 收尾關掉 overlay
+  setTimeout(() => {
     fx.classList.remove('show');
     arena.classList.remove('spread','collide');
     L.classList.remove('burning');
     R.classList.remove('burning');
-    imgL?.classList.remove('front-reveal');
-    imgR?.classList.remove('front-reveal');
-  }, 2600);  // 想更久就改 3000
+  }, hideDelay);
 }
+
 
 
 // === 騙人布：猜數字提示框 ===
