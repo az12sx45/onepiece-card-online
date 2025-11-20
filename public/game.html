@@ -30,23 +30,132 @@
     @keyframes fx-pulse { 0%{ transform: scale(1);} 40%{ transform: scale(1.15);} 100%{ transform: scale(1);} }
     .fx-pulse { animation: fx-pulse .45s ease-out 1; }
 
-    /* === Duel Overlay === */
-    #duelFx { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: radial-gradient(60% 60% at 50% 50%, rgba(0,0,0,.75), rgba(0,0,0,.9)); z-index: 80; }
-    #duelFx.show { display: flex; }
-    #duelFx .arena { position: relative; width: min(1000px, 92vw); height: min(460px, 64vh); border-radius: 16px; border: 1px solid #2b3138; background: linear-gradient(180deg,#0f1317,#0b0e11); box-shadow: 0 12px 40px rgba(0,0,0,.55) inset; overflow: hidden; }
-    #duelFx .slot { position: absolute; top: 50%; width: 40%; max-width: 360px; aspect-ratio: 1242/1863; transform: translateY(-50%) translateX(0); display: flex; flex-direction: column; gap: 10px; align-items: center; }
-    #duelFx .slot.left { left: 8%; }
-    #duelFx .slot.right{ right: 8%; }
-    #duelFx .cardimg { width: 100%; height: 100%; border-radius: 14px; border: 1px solid #2f353c; background:#0a0d10; box-shadow: 0 18px 36px rgba(0,0,0,.45); transform-origin: center; }
-    #duelFx .meta { display:flex; align-items:center; gap:10px; padding: 6px 10px; border:1px solid #2b3138; border-radius: 999px; background:#12171c; color:#e6e9ee; font-size: 14px; }
-    #duelFx .meta img { width:28px; height:28px; border-radius:999px; border:1px solid #2b3138; }
-    #duelFx .pid{ opacity:.9; font-weight:600; }
-    #duelFx .vs { position:absolute; left:50%; top:50%; transform: translate(-50%,-50%) scale(0.8); font-weight: 900; letter-spacing:.05em; font-size: clamp(48px, 9vw, 110px); color: #f5d15a; text-shadow: 0 0 30px rgba(245,209,90,.85), 0 0 8px rgba(0,0,0,.6); opacity: 0; transition: opacity .25s ease, transform .25s ease. }
-    #duelFx .arena.spread .slot.left  { transform: translateY(-50%) translateX(-12%); }
-    #duelFx .arena.spread .slot.right { transform: translateY(-50%) translateX( 12%); }
-    #duelFx .arena.spread .vs { opacity:1; transform: translate(-50%,-50%) scale(1); }
-    #duelFx .arena.collide .slot.left, #duelFx .arena.collide .slot.right { transform: translateY(-50%) translateX(0) scale(1.05); }
-    #duelFx .arena.collide .vs { opacity:0; transform: translate(-50%,-50%) scale(0.9); }
+/* === Duel Overlay === */
+#duelFx {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(60% 60% at 50% 50%, rgba(0,0,0,.75), rgba(0,0,0,.9));
+  z-index: 80;
+}
+#duelFx.show { display: flex; }
+
+#duelFx .arena {
+  position: relative;
+  width: min(1000px, 92vw);
+  height: min(460px, 64vh);
+  border-radius: 16px;
+  border: 1px solid #2b3138;
+  background: linear-gradient(180deg,#0f1317,#0b0e11);
+  box-shadow: 0 12px 40px rgba(0,0,0,.55) inset;
+  overflow: hidden;
+}
+
+#duelFx .slot {
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  max-width: 360px;
+  aspect-ratio: 1242/1863;
+  transform: translateY(-50%) translateX(0);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+#duelFx .slot.left  { left: 8%; }
+#duelFx .slot.right { right: 8%; }
+
+/* 卡片不要被裁切：改用 object-fit: contain */
+#duelFx .cardimg {
+  width: 100%;
+  height: 100%;
+  border-radius: 14px;
+  border: 1px solid #2f353c;
+  background:#0a0d10;
+  box-shadow: 0 18px 36px rgba(0,0,0,.45);
+  transform-origin: center;
+  object-fit: contain;
+}
+
+#duelFx .meta {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding: 6px 10px;
+  border:1px solid #2b3138;
+  border-radius: 999px;
+  background:#12171c;
+  color:#e6e9ee;
+  font-size: 14px;
+}
+#duelFx .meta img {
+  width:28px;
+  height:28px;
+  border-radius:999px;
+  border:1px solid #2b3138;
+}
+#duelFx .pid{ opacity:.9; font-weight:600; }
+
+#duelFx .vs {
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform: translate(-50%,-50%) scale(0.8);
+  font-weight: 900;
+  letter-spacing:.05em;
+  font-size: clamp(48px, 9vw, 110px);
+  color: #f5d15a;
+  text-shadow: 0 0 30px rgba(245,209,90,.85), 0 0 8px rgba(0,0,0,.6);
+  opacity: 0;
+  transition: opacity .25s ease, transform .25s ease;
+}
+
+#duelFx .arena.spread .slot.left  { transform: translateY(-50%) translateX(-12%); }
+#duelFx .arena.spread .slot.right { transform: translateY(-50%) translateX( 12%); }
+#duelFx .arena.spread .vs {
+  opacity:1;
+  transform: translate(-50%,-50%) scale(1);
+}
+#duelFx .arena.collide .slot.left,
+#duelFx .arena.collide .slot.right {
+  transform: translateY(-50%) translateX(0) scale(1.05);
+}
+#duelFx .arena.collide .vs {
+  opacity:0;
+  transform: translate(-50%,-50%) scale(0.9);
+}
+
+/* ★ 新增：底部「誰 vs 誰 / 誰贏」文字框 */
+#duelFx .caption {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: rgba(0,0,0,.7);
+  border: 1px solid rgba(250,204,21,.7);
+  color: #fef9c3;
+  font-size: 13px;
+  line-height: 1.35;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  text-shadow: 0 0 8px rgba(0,0,0,.8);
+  white-space: nowrap;
+}
+#duelFx .caption .line-vs {
+  font-weight: 600;
+}
+#duelFx .caption .line-win {
+  font-size: 12px;
+  opacity: .9;
+}
+
 
     @keyframes burn { 0%{ filter: brightness(1) saturate(1); box-shadow: 0 0 0 rgba(255,120,0,0); transform: none; opacity:1; } 30%{ filter: brightness(1.25) saturate(1.5); box-shadow: 0 0 26px rgba(255,140,0,.65);} 60%{ filter: brightness(1.5) saturate(2) hue-rotate(-12deg); transform: rotate(-2deg) scale(1.06);} 100%{ opacity:0; transform: translateY(-24px) scale(0.9); filter: brightness(1.6) saturate(2.2);} }
     @keyframes flame { 0%,100%{ opacity:.35; transform: translate(-50%,-55%) scale(1); filter:hue-rotate(-10deg) saturate(1.5);} 50%{ opacity:.65; transform: translate(-50%,-60%) scale(1.08); filter:hue-rotate(-18deg) saturate(2);} }
@@ -603,26 +712,33 @@ body::before{
 
   <div id="modal" class="modal hidden"><div class="card w-[min(92vw,680px)] p-4"></div></div>
 
-  <!-- Duel Overlay -->
-  <div id="duelFx">
-    <div class="arena">
-      <div class="slot left">
-        <img class="cardimg" src="images/cards/back.webp" alt="left"/>
-        <div class="meta">
-          <img class="ava" src="images/avatars/1.webp" alt="ava"/>
-          <span class="pid">P1</span>
-        </div>
+<!-- Duel Overlay -->
+<div id="duelFx">
+  <div class="arena">
+    <div class="slot left">
+      <img class="cardimg" src="images/cards/back.webp" alt="left"/>
+      <div class="meta">
+        <img class="ava" src="images/avatars/1.webp" alt="ava"/>
+        <span class="pid">P1</span>
       </div>
-      <div class="slot right">
-        <img class="cardimg" src="images/cards/back.webp" alt="right"/>
-        <div class="meta">
-          <img class="ava" src="images/avatars/2.webp" alt="ava"/>
-          <span class="pid">P2</span>
-        </div>
+    </div>
+    <div class="slot right">
+      <img class="cardimg" src="images/cards/back.webp" alt="right"/>
+      <div class="meta">
+        <img class="ava" src="images/avatars/2.webp" alt="ava"/>
+        <span class="pid">P2</span>
       </div>
-      <div class="vs">VS</div>
+    </div>
+    <div class="vs">VS</div>
+
+    <!-- ★ 新增：誰 vs 誰 / 誰贏誰輸 -->
+    <div class="caption">
+      <div class="line-vs">P1 vs P2</div>
+      <div class="line-win">勝者：P1</div>
     </div>
   </div>
+</div>
+
 
   <!-- 寶箱清空 → 結算前 7 秒圖片 -->
   <div id="finalOverlay" class="hidden fixed inset-0 z-[220] flex items-center justify-center bg-black/80">
@@ -1907,32 +2023,62 @@ if (_enhSignal && _enhSignal.cardId === last) {
 
 /* ====== B. EMIT：私訊/特效也進 feed（含 enh_fx 抑制/延後） ====== */
 function playDuel({ leftId, rightId, leftAvatar, rightAvatar, winnerId }){
-  const fx = document.getElementById('duelFx');
+  const fx    = document.getElementById('duelFx');
+  if (!fx) return;
+
   const arena = fx.querySelector('.arena');
-  const L = fx.querySelector('.slot.left');
-  const R = fx.querySelector('.slot.right');
+  const L     = fx.querySelector('.slot.left');
+  const R     = fx.querySelector('.slot.right');
 
-  L.querySelector('.ava').src = AVA(leftAvatar  ?? state?.players?.[leftId ]?.client?.avatar ?? state?.players?.[leftId ]?.avatar ?? 1);
-  R.querySelector('.ava').src = AVA(rightAvatar ?? state?.players?.[rightId]?.client?.avatar ?? state?.players?.[rightId]?.avatar ?? 1);
-  L.querySelector('.pid').textContent = pname(leftId ?? 0);
-  R.querySelector('.pid').textContent = pname(rightId ?? 1);
+  // 兩邊頭像＆名稱
+  L.querySelector('.ava').src = AVA(
+    leftAvatar  ?? state?.players?.[leftId ]?.client?.avatar ?? state?.players?.[leftId ]?.avatar ?? 1
+  );
+  R.querySelector('.ava').src = AVA(
+    rightAvatar ?? state?.players?.[rightId]?.client?.avatar ?? state?.players?.[rightId]?.avatar ?? 1
+  );
 
-  L.classList.remove('burning'); R.classList.remove('burning');
+  const nameL = pname(leftId  ?? 0);
+  const nameR = pname(rightId ?? 1);
+  L.querySelector('.pid').textContent = nameL;
+  R.querySelector('.pid').textContent = nameR;
+
+  // ★ 底部文字框
+  const capVs  = fx.querySelector('.caption .line-vs');
+  const capWin = fx.querySelector('.caption .line-win');
+  if (capVs)  capVs.textContent  = `${nameL} vs ${nameR}`;
+  if (capWin) {
+    if (typeof winnerId === 'number') {
+      capWin.textContent = `勝者：${pname(winnerId)}`;
+    } else {
+      capWin.textContent = '';
+    }
+  }
+
+  // 重置動畫狀態
+  L.classList.remove('burning');
+  R.classList.remove('burning');
   arena.classList.remove('spread','collide');
+
   fx.classList.add('show');
 
+  // 展開 → 撞擊 → 燒掉輸家
   setTimeout(()=> arena.classList.add('spread'), 50);
   setTimeout(()=>{
     arena.classList.add('collide');
-    const loserIsLeft = (winnerId === rightId);
+    const loserIsLeft = (typeof winnerId === 'number' && winnerId === rightId);
     (loserIsLeft ? L : R).classList.add('burning');
   }, 850);
+
+  // ★ 顯示時間拉長一點（原本 1850ms → 改 2600ms）
   setTimeout(()=>{
     fx.classList.remove('show');
     arena.classList.remove('spread','collide');
-    L.classList.remove('burning'); R.classList.remove('burning');
-  }, 1850);
+    L.classList.remove('burning');
+    R.classList.remove('burning');
+  }, 3000);
 }
+
 
 // === 騙人布：猜數字提示框 ===
 function showUsoppToast(opts){
