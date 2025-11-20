@@ -2131,25 +2131,17 @@ function playDuel(opts){
   const lineVs  = root.querySelector('.line-vs');
   const lineWin = root.querySelector('.line-win');
 
-  // 從目前的 state.players 取得名字與頭像（注意：state 是全域 let，不在 window 上）
-  const players = (state && state.players) || [];
-  const lp = players[leftId]  || {};
-  const rp = players[rightId] || {};
+  // 從最近一次 view 拿玩家名稱
+  const viewPlayers = (window._lastView && window._lastView.players) || [];
+  const lp = viewPlayers[leftId]  || {};
+  const rp = viewPlayers[rightId] || {};
+  const leftName  = lp.name  || `P${(leftId ?? 0)+1}`;
+  const rightName = rp.name || `P${(rightId ?? 1)+1}`;
 
-  // 名稱統一用 pname()，跟其他地方顯示一致
-  const leftName  = (typeof leftId  === 'number') ? pname(leftId)  : `P${(leftId  ?? 0) + 1}`;
-  const rightName = (typeof rightId === 'number') ? pname(rightId) : `P${(rightId ?? 1) + 1}`;
-
-
-  // 頭像：優先用參數，其次用玩家身上的 avatar / client.avatar，最後預設 1
-  const leftAvaNum =
-    (typeof leftAvatar === 'number' ? leftAvatar : (lp.avatar ?? lp.client?.avatar ?? 1));
-  const rightAvaNum =
-    (typeof rightAvatar === 'number' ? rightAvatar : (rp.avatar ?? rp.client?.avatar ?? 1));
-
+  // 幫 avatar 設定圖片（沒圖就用 a1/a2）
   const avaSrc = (n)=> `images/avatars/a${(n || 1)}.webp`;
-  if (lAva) lAva.src = avaSrc(leftAvaNum);
-  if (rAva) rAva.src = avaSrc(rightAvaNum);
+  if (lAva) lAva.src = avaSrc(leftAvatar);
+  if (rAva) rAva.src = avaSrc(rightAvatar);
 
   if (lNameEl) lNameEl.textContent = leftName;
   if (rNameEl) rNameEl.textContent = rightName;
@@ -3067,7 +3059,6 @@ function showMulti(title, cards, onCommit){
   };
 }
 
-// 綁定
 // 綁定
 el.deckBtn.onclick   = ()=> playDrawFxThenDraw();
 el.playHand.onclick  = ()=> sendAction('PLAY_CARD',{which:'hand'});
