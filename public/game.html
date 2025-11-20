@@ -1944,8 +1944,8 @@ function showUsoppToast(opts){
 
   const text = document.createElement('span');
   text.textContent = isHit
-    ? `${opts.caster} 打出了騙人布，狙擊 ${opts.target}（${opts.digit} 號）→ 🎯 猜中！`
-    : `${opts.caster} 打出了騙人布，狙擊 ${opts.target}（${opts.digit} 號）→ ❌ 猜錯`;
+    ? `${opts.caster} 狙擊 ${opts.target}（${opts.digit} 號）→ 🎯 猜中！`
+    : `${opts.caster} 狙擊 ${opts.target}（${opts.digit} 號）→ ❌ 猜錯`;
 
   box.appendChild(icon);
   box.appendChild(text);
@@ -1957,7 +1957,7 @@ function showUsoppToast(opts){
     box.classList.add('show');
   });
 
-  const ttl = isHit ? 2600 : 2000;
+  const ttl = isHit ? 4000;
   setTimeout(()=>{
     box.style.opacity = '0';
     box.style.transform = 'translateY(-20px)';
