@@ -187,15 +187,47 @@ function guessLoserCardId(st, loserId){
   return null;
 }
 
-function pushDuelLog(emits, st, challengerId, loserId){
+// 決鬥日誌 + 決鬥特效
+function pushDuelLog(emits, st, challengerId, loserId, opponentId){
   const cardId = guessLoserCardId(st, loserId);
-  const challenger = st.players[challengerId];
-  const loser = st.players[loserId];
-  const challengerName = challenger?.client?.displayName || challenger?.displayName || `P${challengerId+1}`;
-  const loserName = loser?.client?.displayName || loser?.displayName || `P${loserId+1}`;
-  const line = `決鬥：${challengerName} vs ${loserName} → ${loserName} 的卡 ${cardId} 被擊敗`;
-  emits.push({ to:"all", type:"log", text: line });
-  emits.push({ to:"all", type:"duel_log", loserId, cardId });
+
+  const chIdx = challengerId;
+  const opIdx = (typeof opponentId === 'number')
+    ? opponentId
+    : ((loserId === challengerId) ? null : loserId); // 沒給就盡量猜
+
+  const challenger = st.players[chIdx];
+  const opponent   = (opIdx != null) ? st.players[opIdx] : null;
+  const loser      = st.players[loserId];
+
+  const chName = challenger?.client?.displayName || challenger?.displayName || `P${chIdx+1}`;
+  const opName = opponent?.client?.displayName   || opponent?.displayName   || (opIdx!=null ? `P${opIdx+1}` : '對手');
+  const loName = loser?.client?.displayName      || loser?.displayName      || `P${loserId+1}`;
+
+  // 輸家是 challenger → 贏家就是對手；反之贏家就是 challenger
+  const winnerId = (loserId === chIdx) ? opIdx : chIdx;
+  const winnerName =
+    (winnerId != null && winnerId === chIdx) ? chName :
+    (winnerId != null && winnerId === opIdx) ? opName :
+    '勝者';
+
+  // 伺服器 log：完整一句話
+  const line = `決鬥：${chName} vs ${opName} → 勝者 ${winnerName}（${loName} 的卡 ${cardId} 被擊敗）`;
+  emits.push({ to:'all', type:'log', text: line });
+
+  // 給前端特效用（#duelFx）
+  if (winnerId != null && opIdx != null){
+    emits.push({
+      to: 'all',
+      type: 'duel',
+      leftId: chIdx,
+      rightId: opIdx,
+      winnerId
+    });
+  }
+
+  // 目前你已經有在用的簡短行：擊敗誰的哪張卡
+  emits.push({ to:'all', type:'duel_log', loserId, cardId });
 }
 
 // ---------------------------------------------------------------
@@ -1121,11 +1153,11 @@ case 0: { // 薩波
         if(my>opp){
           scoreDuelAttack(st, meIdx, p.extra.keep, st.players[idx].hand, { sanjiBoost: !!p.extra.boost }); // ★
           doEliminate(st, idx, '惡魔風腳', meIdx, emits);
-          pushDuelLog(emits, st, meIdx, idx);
+                pushDuelLog(emits, st, meIdx, idx, idx);
         } else if(my<opp){
           scoreDefenseReversal(st, idx, st.players[idx].hand, p.extra.keep, { sanjiBoost: !!p.extra.boost });
           doEliminate(st, st.turnIndex, '惡魔風腳反噬', meIdx, emits);
-          pushDuelLog(emits, st, meIdx, meIdx);
+                pushDuelLog(emits, st, meIdx, meIdx, idx);
         } else {
           pushLog(st,'平手',emits);
         }
@@ -1289,11 +1321,11 @@ if(p.action==='zoro'){
         if(my>opp){
           scoreDuelAttack(st, st.turnIndex, p.extra.keep, st.players[idx].hand, {}); // ★
           doEliminate(st, idx, '魯夫擊倒', meIdx, emits);
-          pushDuelLog(emits, st, meIdx, idx);
+                pushDuelLog(emits, st, meIdx, idx, idx);
         } else if(my<opp){
           scoreDefenseReversal(st, idx, st.players[idx].hand, p.extra.keep, {});
           doEliminate(st, st.turnIndex, '魯夫失敗', meIdx, emits);
-          pushDuelLog(emits, st, meIdx, meIdx);
+      pushDuelLog(emits, st, meIdx, meIdx, idx);
         } else {
           pushLog(st,'平手',emits);
         }
@@ -1324,11 +1356,11 @@ if(p.action==='zoro'){
         if(my>opp){
           scoreDuelAttack(st, meIdx, st.players[st.turnIndex].hand, st.players[idx].hand, { ignoreDefOrDodge: true }); // ★
           doEliminate(st, idx, '雷鳴八卦', meIdx, emits);
-          pushDuelLog(emits, st, meIdx, idx);
+                pushDuelLog(emits, st, meIdx, idx, idx);
         } else if(my<opp){
           scoreDefenseReversal(st, idx, st.players[idx].hand, st.players[st.turnIndex].hand, { ignoreDefOrDodge:true });
           doEliminate(st, st.turnIndex, '被反殺', meIdx, emits);
-          pushDuelLog(emits, st, meIdx, meIdx);
+          pushDuelLog(emits, st, meIdx, meIdx, idx);
         } else {
           pushLog(st,'平手',emits);
         }
@@ -1349,15 +1381,16 @@ if(p.action==='zoro'){
           const my  = tail(p.extra.keep);
           const opp = tail(st.players[idx].hand);
 
-          if (my > opp) {
-            scoreDuelAttack(st, meIdx, p.extra.keep, st.players[idx].hand, { ignoreDefOrDodge: true }); // ★
-            doEliminate(st, idx, '基拉擊倒', meIdx, emits);
-            pushDuelLog(emits, st, meIdx, idx);
-          } else if (my < opp) {
-            scoreDefenseReversal(st, idx, st.players[idx].hand, p.extra.keep, { ignoreDefOrDodge:true });
-            doEliminate(st, st.turnIndex, '決鬥失敗', meIdx, emits);
-            pushDuelLog(emits, st, meIdx, meIdx);
-          } else {
+         if (my > opp) {
+  // challenger 勝
+        pushDuelLog(emits, st, meIdx, idx, idx);
+  doEliminate(st, idx, `基拉決鬥輸了，尾數 ${my} > ${opp}`);
+} else if (my < opp) {
+  // challenger 敗
+        pushDuelLog(emits, st, meIdx, meIdx, idx);
+  doEliminate(st, meIdx, `基拉決鬥輸了，尾數 ${my} < ${opp}`);
+}
+ else {
             pushLog(st,'平手',emits);
           }
 
@@ -1498,11 +1531,11 @@ if(p.action==='zoro'){
       if(my>opp){
         scoreDuelAttack(st, st.turnIndex, p.extra.keep, st.players[idx].hand, {}); // ★
         doEliminate(st, idx, '魯夫擊倒', st.turnIndex, emits);
-        pushDuelLog(emits, st, st.turnIndex, idx);
+              pushDuelLog(emits, st, st.turnIndex, idx, idx);
       } else if(my<opp){
         scoreDefenseReversal(st, idx, st.players[idx].hand, p.extra.keep, {});
         doEliminate(st, st.turnIndex, '魯夫失敗', st.turnIndex, emits);
-        pushDuelLog(emits, st, st.turnIndex, st.turnIndex);
+      pushDuelLog(emits, st, st.turnIndex, st.turnIndex, idx);
       } else {
         pushLog(st,'平手',emits);
       }
