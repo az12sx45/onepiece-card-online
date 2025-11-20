@@ -1663,11 +1663,16 @@ function msgToLogLine(e){
       const card  = (typeof e.cardId  === 'number') ? `卡 ${e.cardId}` : '未知卡牌';
       return `擊敗：${loser} 的 ${card}`;
     }
-    case 'duel': {
-      const L = (typeof e.leftId  === 'number') ? pname(e.leftId)  : '？';
-      const R = (typeof e.rightId === 'number') ? pname(e.rightId) : '？';
-      return `決鬥：${L} vs ${R}`;
-    }
+case 'duel': {
+  const L = (typeof e.leftId  === 'number') ? pname(e.leftId)  : '？';
+  const R = (typeof e.rightId === 'number') ? pname(e.rightId) : '？';
+  const winId = (typeof e.winnerId === 'number') ? e.winnerId : null;
+  const W = (winId != null) ? pname(winId) : null;
+  return W
+    ? `決鬥：${L} vs ${R} → 勝者：${W}`
+    : `決鬥：${L} vs ${R}`;
+}
+
     case 'robin_view': {
       const t = (typeof e.targetId === 'number') ? pname(e.targetId) : '未知玩家';
       const c = (typeof e.cardId  === 'number') ? `卡 ${e.cardId}` : '未知牌';
