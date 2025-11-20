@@ -2321,47 +2321,47 @@ if (!e) return;
 
 // 決鬥：先記錄，等 duel_log 帶卡片 id 再一起播
 if (e.type === 'duel') {
-  _pendingDuel = e;
-}
+  const root = document.getElementById('duelFx');
+  const arena = root.querySelector('.arena');
 
-// duel_log：除了寫日誌，也觸發決鬥動畫（帶輸家卡片）
-if (e.type === 'duel_log') {
-  if (_pendingDuel && typeof e.loserId === 'number' && typeof e.cardId === 'number') {
-    const d = _pendingDuel;
-    const loserSide =
-      (e.loserId === d.leftId)  ? 'left' :
-      (e.loserId === d.rightId) ? 'right' : null;
+  const leftSlot  = root.querySelector('.slot.left');
+  const rightSlot = root.querySelector('.slot.right');
 
-// 用卡片 id 找正面圖片路徑
-function cardImageURL(id){
-  if (id == null) return 'images/cards/back.png';
+  const leftNameEl  = leftSlot.querySelector('.pname');
+  const rightNameEl = rightSlot.querySelector('.pname');
 
-  // 若前端有 CARD_TEXT（有些版本是這樣）
-  if (window.CARD_TEXT && window.CARD_TEXT[id] && window.CARD_TEXT[id].img){
-    return window.CARD_TEXT[id].img;
+  const leftAvatar  = leftSlot.querySelector('.avatar');
+  const rightAvatar = rightSlot.querySelector('.avatar');
+
+  const leftId  = e.leftId;
+  const rightId = e.rightId;
+
+  // 填入名字
+  leftNameEl.textContent  = pname(leftId);
+  rightNameEl.textContent = pname(rightId);
+
+  // 填入頭像（你的 avatar 是 1~8）
+  leftAvatar.src  = `images/avatars/${state.players[leftId].avatar}.png`;
+  rightAvatar.src = `images/avatars/${state.players[rightId].avatar}.png`;
+
+  // 判斷勝負顏色
+  const leftIsWinner = (e.winnerId === leftId);
+
+  if (leftIsWinner) {
+    leftSlot.classList.add('winner');
+    rightSlot.classList.add('loser');
+  } else {
+    leftSlot.classList.add('loser');
+    rightSlot.classList.add('winner');
   }
 
-  // 若有 CARDS 清單（有些版本是這樣）
-  if (window.CARDS && Array.isArray(window.CARDS)){
-    const found = window.CARDS.find(c => c.id === id || c.cid === id);
-    if (found && found.image) return found.image;
-  }
+  // 先清楚移除 hidden 再顯示
+  root.classList.remove('hidden');
+  requestAnimationFrame(()=> root.classList.add('show'));
 
-  // 預設就用 images/cards/ID.webp 的命名
-  return `images/cards/${id}.webp`;
+  return;
 }
 
-    playDuel({
-      leftId: d.leftId,
-      rightId: d.rightId,
-      winnerId: d.winnerId,
-      loserSide,
-      loserCardId: e.cardId
-    });
-
-    _pendingDuel = null;
-  }
-}
 
 
   // 騙人布：猜數字（命中 / 失誤）提示框
