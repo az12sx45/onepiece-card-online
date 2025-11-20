@@ -1437,7 +1437,7 @@ if(p.action==='zoro'){
         return { state: st, emits };
       }
       const tgt = p.extra.target;
-      const g = effectGuard(st, tgt, {});
+           const g = effectGuard(st, tgt, {});
       if(!g.blocked){
         const th = st.players[tgt].hand;
         if(th!=null && tail(th)===d){
@@ -1445,6 +1445,8 @@ if(p.action==='zoro'){
           const streak = Math.max(1, (p.extra.streak||1));
           scoreUsoppHit(st, st.turnIndex, th, streak);
           doEliminate(st, tgt, `被猜中尾數 ${d}`, st.turnIndex, emits);
+          // 新增：命中時廣播一個 usopp_hit 給所有人
+          emits.push({ to:'all', type:'usopp_hit', casterId: st.turnIndex, targetId: tgt, digit: d });
 
           if(p.extra.chain){
             const any = st.players.some((pp,i)=> i!==st.turnIndex && pp.alive);
@@ -1453,7 +1455,8 @@ if(p.action==='zoro'){
               endOrNext(st);
               return { state: st, emits };
             }
-            st.pending = { action:'usopp', extra:{ chain:true, target:null, streak: streak+1 } }; // ★ 連擊+1
+            st.pending = { action:'usopp', extra:{ chain:true, target:null, streak: streak+1 } }; 
+            // ★ 連擊+1
             return { state: st, emits };
           }
         } else {
@@ -1464,6 +1467,7 @@ if(p.action==='zoro'){
       else {
         scoreDefense(st, tgt, 1); // 騙人布1被擋 → 防禦+1
       }
+
       st.pending=null;
       endOrNext(st);
       return { state: st, emits };
