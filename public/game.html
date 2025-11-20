@@ -2131,12 +2131,10 @@ function playDuel(opts){
   const lineVs  = root.querySelector('.line-vs');
   const lineWin = root.querySelector('.line-win');
 
-  // 從最近一次 view 拿玩家名稱
-  const viewPlayers = (window._lastView && window._lastView.players) || [];
-  const lp = viewPlayers[leftId]  || {};
-  const rp = viewPlayers[rightId] || {};
-  const leftName  = lp.name  || `P${(leftId ?? 0)+1}`;
-  const rightName = rp.name || `P${(rightId ?? 1)+1}`;
+  // 直接用前面定義好的 pname()，會優先顯示玩家暱稱，沒有才退回 P1 / P2
+  const leftName  = (typeof leftId  === 'number') ? pname(leftId)  : `P${(leftId ?? 0)+1}`;
+  const rightName = (typeof rightId === 'number') ? pname(rightId) : `P${(rightId ?? 1)+1}`;
+
 
   // 幫 avatar 設定圖片（沒圖就用 a1/a2）
   const avaSrc = (n)=> `images/avatars/a${(n || 1)}.webp`;
@@ -3059,6 +3057,7 @@ function showMulti(title, cards, onCommit){
   };
 }
 
+// 綁定
 // 綁定
 el.deckBtn.onclick   = ()=> playDrawFxThenDraw();
 el.playHand.onclick  = ()=> sendAction('PLAY_CARD',{which:'hand'});
