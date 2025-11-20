@@ -2131,24 +2131,15 @@ function playDuel(opts){
   const lineVs  = root.querySelector('.line-vs');
   const lineWin = root.querySelector('.line-win');
 
-   // 從目前的 state.players 取得名字與頭像
-  const players = (window.state && window.state.players) || [];
+  // 從目前的 state.players 取得名字與頭像（注意：state 是全域 let，不在 window 上）
+  const players = (state && state.players) || [];
   const lp = players[leftId]  || {};
   const rp = players[rightId] || {};
 
-  const leftName =
-    lp.client?.displayName ??
-    lp.displayName ??
-    lp.name ??
-    lp.nick ??
-    `P${(leftId ?? 0) + 1}`;
+  // 名稱統一用 pname()，跟其他地方顯示一致
+  const leftName  = (typeof leftId  === 'number') ? pname(leftId)  : `P${(leftId  ?? 0) + 1}`;
+  const rightName = (typeof rightId === 'number') ? pname(rightId) : `P${(rightId ?? 1) + 1}`;
 
-  const rightName =
-    rp.client?.displayName ??
-    rp.displayName ??
-    rp.name ??
-    rp.nick ??
-    `P${(rightId ?? 1) + 1}`;
 
   // 頭像：優先用參數，其次用玩家身上的 avatar / client.avatar，最後預設 1
   const leftAvaNum =
