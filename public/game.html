@@ -2240,6 +2240,12 @@ function playDuel(opts){
     playSfx('duelHitSfx');           // ⭐ 撞擊音效
   }, clashDelay);
 
+ // ⭐ 平手：兩邊卡片一起晃動，讓玩家感覺有「撞到但沒分勝負」
+    if (isDraw) {
+      onceFx(lCard, 'fx-shake');
+      onceFx(rCard, 'fx-shake');
+    }
+  }, clashDelay);
 
   // 3) 輸家卡片翻面成正面
   setTimeout(()=>{
