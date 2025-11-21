@@ -1544,6 +1544,15 @@ function playEnhFxFor(cardId){
   });
 }
 
+/* === 簡易音效工具（決鬥用） === */
+function playSfx(id){
+  const a = document.getElementById(id);
+  if (!a) return;
+  try { a.currentTime = 0; } catch(e){}
+  a.play().catch(()=>{ /* iOS 被擋就算了，不影響流程 */ });
+}
+
+
 /* === 強化特效工具（光球）與播放記錄 === */
 const _enhPlayed = new Set();
 let _lastRoundNo = null;
@@ -2114,6 +2123,8 @@ function playDuel(opts){
     loserCardId   // 這就是輸家的卡片 id（來自 duel_log）
   } = opts || {};
 
+  const isDraw = !(typeof winnerId === 'number'); // ⭐ 沒有 winnerId 就視為平手
+
   const root = document.getElementById('duelFx');
   if (!root) return;
 
@@ -2153,9 +2164,15 @@ function playDuel(opts){
 
   // 說明文字
   if (lineVs)  lineVs.textContent  = `${leftName} VS ${rightName}`;
-  const winnerName = (winnerId === leftId) ? leftName : rightName;
-  const loserName  = (winnerId === leftId) ? rightName : leftName;
-  if (lineWin) lineWin.textContent = `${winnerName} 勝利，${loserName} 落敗`;
+
+  if (isDraw) {
+    if (lineWin) lineWin.textContent = `平手！${leftName} 與 ${rightName} 難分勝負`;
+  } else {
+    const winnerName = (winnerId === leftId) ? leftName : rightName;
+    const loserName  = (winnerId === leftId) ? rightName : leftName;
+    if (lineWin) lineWin.textContent = `${winnerName} 勝利，${loserName} 落敗`;
+  }
+
 
   // 先全部重置狀態
   root.classList.remove('hidden');
@@ -2176,8 +2193,12 @@ function playDuel(opts){
   // 標出 winner / loser（先用 class，等等 burn 會用到）
   const leftIsWinner  = (winnerId === leftId);
   const rightIsWinner = (winnerId === rightId);
-  if (leftSlot)  leftSlot.classList.add(leftIsWinner  ? 'winner' : 'loser');
-  if (rightSlot) rightSlot.classList.add(rightIsWinner ? 'winner' : 'loser');
+
+  if (!isDraw) {
+    if (leftSlot)  leftSlot.classList.add(leftIsWinner  ? 'winner' : 'loser');
+    if (rightSlot) rightSlot.classList.add(rightIsWinner ? 'winner' : 'loser');
+  }
+
 
   // 計算輸家 slot（照後端傳來的 loserSide 優先）
   let loserIsLeft;
@@ -2205,22 +2226,30 @@ function playDuel(opts){
   // 2) 中間撞擊（牌稍微往中間衝一下）
   setTimeout(()=>{
     arena.classList.add('clash');
+    playSfx('duelHitSfx');           // ⭐ 撞擊音效
   }, clashDelay);
+
 
   // 3) 輸家卡片翻面成正面
   setTimeout(()=>{
+    if (isDraw) return;              // 平手不翻牌、不顯示哪一張輸
     if (!loserCardImg) return;
     if (typeof loserCardId === 'number') {
       loserCardImg.src = cardImageURL(loserCardId);
     }
     loserCardImg.classList.add('fx-flip','front-reveal');
+    playSfx('duelFlipSfx');          // ⭐ 翻牌音效（可選）
   }, flipDelay);
+
 
   // 4) 翻完後開始燃燒特效
   setTimeout(()=>{
+    if (isDraw) return;              // 平手不燒牌
     if (!loserSlot || !loserCardImg) return;
     loserSlot.classList.add('burning');
+    playSfx('duelBurnSfx');          // ⭐ 燒牌音效
   }, burnDelay);
+
 
   // 5) 全部收掉
   setTimeout(()=>{
@@ -2312,7 +2341,18 @@ if (!e) return;
 // 決鬥：先記錄，等 duel_log 帶卡片 id 再一起播
 if (e.type === 'duel') {
   _pendingDuel = e;
+
+  // ⭐ winnerId 不存在 → 當成平手，直接播一個「沒有燒牌」的決鬥動畫
+  if (typeof e.winnerId !== 'number') {
+    playDuel({
+      leftId:  e.leftId,
+      rightId: e.rightId,
+      winnerId: null   // 用 null 讓 playDuel 判斷是平手
+    });
+    _pendingDuel = null;
+  }
 }
+
 
 // duel_log：除了寫日誌，也觸發決鬥動畫（帶輸家卡片）
 if (e.type === 'duel_log') {
