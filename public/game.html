@@ -2165,13 +2165,19 @@ function playDuel(opts){
   // 說明文字
   if (lineVs)  lineVs.textContent  = `${leftName} VS ${rightName}`;
 
+  // 先把勝負名字算好，但「不是平手的情況先不要顯示」
+  let winnerName = null;
+  let loserName  = null;
+
   if (isDraw) {
+    // 平手就直接顯示平手訊息（因為沒有翻牌／燒牌）
     if (lineWin) lineWin.textContent = `平手！${leftName} 與 ${rightName} 難分勝負`;
   } else {
-    const winnerName = (winnerId === leftId) ? leftName : rightName;
-    const loserName  = (winnerId === leftId) ? rightName : leftName;
-    if (lineWin) lineWin.textContent = `${winnerName} 勝利，${loserName} 落敗`;
+    winnerName = (winnerId === leftId) ? leftName : rightName;
+    loserName  = (winnerId === leftId) ? rightName : leftName;
+    if (lineWin) lineWin.textContent = '';  // 等等翻牌完再顯示
   }
+
 
 
   // 先全部重置狀態
@@ -2238,8 +2244,14 @@ function playDuel(opts){
       loserCardImg.src = cardImageURL(loserCardId);
     }
     loserCardImg.classList.add('fx-flip','front-reveal');
-    playSfx('duelFlipSfx');          // ⭐ 翻牌音效（可選）
+    playSfx('duelFlipSfx');          // ⭐ 翻牌音效
+
+    // ⭐ 翻牌完成的同時，再顯示「誰勝利、誰落敗」
+    if (lineWin && winnerName && loserName) {
+      lineWin.textContent = `${winnerName} 勝利，${loserName} 落敗`;
+    }
   }, flipDelay);
+
 
 
   // 4) 翻完後開始燃燒特效
