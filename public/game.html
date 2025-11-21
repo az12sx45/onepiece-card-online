@@ -2136,13 +2136,20 @@ function playDuel(opts){
   const rightName = (typeof rightId === 'number') ? pname(rightId) : `P${(rightId ?? 1)+1}`;
 
 
-  // 幫 avatar 設定圖片（沒圖就用 a1/a2）
-  const avaSrc = (n)=> `images/avatars/a${(n || 1)}.webp`;
-  if (lAva) lAva.src = avaSrc(leftAvatar);
-  if (rAva) rAva.src = avaSrc(rightAvatar);
+  // 幫 avatar 設定圖片：優先用實際玩家的 avatar，沒有再退回預設 a1 / a2
+  const lp = (typeof leftId  === 'number') ? state?.players?.[leftId]  : null;
+  const rp = (typeof rightId === 'number') ? state?.players?.[rightId] : null;
+
+  // 從 state 取出 avatar 編號（你在玩家列表那邊也是用這兩個欄位）
+  const leftAvatarId  = lp?.client?.avatar  ?? lp?.avatar  ?? 1;
+  const rightAvatarId = rp?.client?.avatar ?? rp?.avatar ?? 2;
+
+  if (lAva) lAva.src = AVA(leftAvatarId);
+  if (rAva) rAva.src = AVA(rightAvatarId);
 
   if (lNameEl) lNameEl.textContent = leftName;
   if (rNameEl) rNameEl.textContent = rightName;
+;
 
   // 說明文字
   if (lineVs)  lineVs.textContent  = `${leftName} VS ${rightName}`;
