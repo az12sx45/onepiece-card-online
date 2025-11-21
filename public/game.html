@@ -2128,7 +2128,10 @@ function playDuel(opts){
     loserCardId   // 這就是輸家的卡片 id（來自 duel_log）
   } = opts || {};
 
-  const isDraw = !(typeof winnerId === 'number'); // ⭐ 沒有 winnerId 就視為平手
+  // winnerId 是「0,1,2…」才算真的有贏家；負數或不是數字都當平手
+const hasWinner = (typeof winnerId === 'number' && winnerId >= 0);
+const isDraw = !hasWinner;
+
 
   const root = document.getElementById('duelFx');
   if (!root) return;
@@ -2364,8 +2367,11 @@ if (!e) return;
 if (e.type === 'duel') {
   _pendingDuel = e;
 
-  // ⭐ winnerId 不存在 → 當成平手，直接播一個「沒有燒牌」的決鬥動畫
-  if (typeof e.winnerId !== 'number') {
+  // winnerId 只有在 0,1,2… 這種正常玩家編號時才算「有勝利者」
+  const hasWinner = (typeof e.winnerId === 'number' && e.winnerId >= 0);
+
+  // ⭐ 沒有正常 winner → 當成平手，直接播一個「沒有燒牌」的決鬥動畫
+  if (!hasWinner) {
     playDuel({
       leftId:  e.leftId,
       rightId: e.rightId,
@@ -2374,6 +2380,7 @@ if (e.type === 'duel') {
     _pendingDuel = null;
   }
 }
+
 
 
 // duel_log：除了寫日誌，也觸發決鬥動畫（帶輸家卡片）
