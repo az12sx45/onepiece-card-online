@@ -2188,12 +2188,14 @@ function playDuel(opts){
   const loserSlot = loserIsLeft ? leftSlot : rightSlot;
   const loserCardImg = loserIsLeft ? lCard : rCard;
 
-  // 動畫時間軸
-  const spreadDelay = 800;   // 展開兩邊
-  const clashDelay  = 1600;  // 中間碰撞
-  const flipDelay   = 2500;  // 輸家卡翻到正面
-  const burnDelay   = 3000;  // 火焰開始燒
-  const hideDelay   = 4800;  // 整個特效收掉
+
+  // 動畫時間軸（加長版）
+  const spreadDelay = 1000;  // 原 800ms → 1.0s：左右先慢慢展開
+  const clashDelay  = 2200;  // 原 1.6s → 2.2s：中間碰撞晚一點
+  const flipDelay   = 3400;  // 原 2.5s → 3.4s：輸家卡再晚一點翻正面
+  const burnDelay   = 4300;  // 原 3.0s → 4.3s：火焰特效開始時間也往後
+  const hideDelay   = 6500;  // 原 4.8s → 6.5s：整體停留久一點再收掉
+
 
   // 1) 兩邊展開
   setTimeout(()=>{
