@@ -230,6 +230,31 @@ function pushDuelLog(emits, st, challengerId, loserId, opponentId){
   emits.push({ to:'all', type:'duel_log', loserId, cardId });
 }
 
+/** ✨ 決鬥平手：只播動畫，不燒牌、不傳 duel_log */
+function pushDuelDraw(emits, st, challengerId, opponentId){
+  const chIdx = challengerId;
+  const opIdx = opponentId;
+  if (chIdx == null || opIdx == null) return;
+
+  const challenger = st.players[chIdx];
+  const opponent   = st.players[opIdx];
+
+  const chName = challenger?.client?.displayName || challenger?.displayName || `P${chIdx+1}`;
+  const opName = opponent?.client?.displayName   || opponent?.displayName   || `P${opIdx+1}`;
+
+  const line = `決鬥：${chName} vs ${opName} → 平手`;
+  emits.push({ to:'all', type:'log', text: line });
+
+  // winnerId: null → 前端當平手處理（不翻牌、不燒牌）
+  emits.push({
+    to: 'all',
+    type: 'duel',
+    leftId: chIdx,
+    rightId: opIdx,
+    winnerId: null
+  });
+}
+
 // ---------------------------------------------------------------
 // 狀態建模
 function initialPlayers(n){
@@ -1160,6 +1185,7 @@ case 0: { // 薩波
                 pushDuelLog(emits, st, meIdx, meIdx, idx);
         } else {
           pushLog(st,'平手',emits);
+          pushDuelDraw(emits, st, meIdx, idx);
         }
       } else {
         // ★ 防禦分：對手擋下攻擊
@@ -1328,6 +1354,7 @@ if(p.action==='zoro'){
       pushDuelLog(emits, st, meIdx, meIdx, idx);
         } else {
           pushLog(st,'平手',emits);
+          pushDuelDraw(emits, st, meIdx, idx);
         }
       } else {
         scoreDefense(st, idx, p.extra.keep); // ★ 被擋
@@ -1363,6 +1390,7 @@ if(p.action==='zoro'){
           pushDuelLog(emits, st, meIdx, meIdx, idx);
         } else {
           pushLog(st,'平手',emits);
+          pushDuelDraw(emits, st, meIdx, idx);
         }
       }
       st.pending=null;
@@ -1392,6 +1420,7 @@ if(p.action==='zoro'){
 }
  else {
             pushLog(st,'平手',emits);
+            pushDuelDraw(emits, st, meIdx, idx);
           }
 
           st.pending = null;
@@ -1538,6 +1567,8 @@ if(p.action==='zoro'){
       pushDuelLog(emits, st, st.turnIndex, st.turnIndex, idx);
       } else {
         pushLog(st,'平手',emits);
+        pushDuelDraw(emits, st, meIdx, idx);
+     pushDuelDraw(emits, st, meIdx, idx);
       }
     } else {
       scoreDefense(st, idx, p.extra.keep); // ★ 被擋
