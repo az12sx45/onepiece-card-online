@@ -79,20 +79,30 @@ function isEnhancedNow(st, cardId){
   if (!vn || !Array.isArray(st.venues)) return false;
   return !!st.venues.find(v => v && (v.name === vn));
 }
+
 // 統一推送強化影片事件（避免每張卡重覆寫）
 // ★ 凱多（10）：只有同時握有「大媽(14)」且在強化場地時才廣播影片
+// ★ 紅髮（18）：只有牌堆卡數 ≤ HOT(預設 14) 時才廣播影片
 function pushEnhFxIfAny(emits, st, cardId){
   if (!isEnhancedNow(st, cardId)) return;
 
-  // 凱多特殊條件：必須與大媽同握才算成功發動
+  // 凱多特殊條件
   if (cardId === 10) {
     const me = st.players?.[st.turnIndex];
     const hasBigMomInHandNow = (me && me.hand === 14);
     if (!hasBigMomInHandNow) return; // 不廣播，前端就不會播放強化影片
   }
 
+  // 紅髮特殊條件：牌堆要先「白熱化」才給面子播影片
+  if (cardId === 18) {
+    const hot = st.HOT ?? 14;              // 你現在 HOT 預設是 14
+    const deckLen = st.deck?.length ?? 999;
+    if (deckLen > hot) return;             // 牌堆還太厚，不播強化影片
+  }
+
   emits.push({ to: "all", type: "enh_fx", cardId });
- }
+}
+
 
 // ======== 統計：資料容器與工具 ========
 function ensureStats(st){
@@ -1108,11 +1118,7 @@ case 0: { // 薩波
   const venueActive = st.venues.some(v => v.name === '奧羅傑克森號');
 
   if (st.deck.length <= hot) {
-    if (venueActive) {
-      // ★ 只有在奧羅傑克森號場地且成功觸發時播放強化影片
-      pushEnhFxIfAny(emits, st, 18);
-    }
-
+    // 影片是否播放交給 pushEnhFxIfAny 的特殊條件處理
     st.shanksBonusUid = venueActive ? st.turnIndex : null;
     pushLog(st, `紅髮：牌堆 ≤ ${hot} → 直接比牌${venueActive ? '（你算完 +1）' : ''}`, emits);
     showdown(st);
@@ -1123,6 +1129,7 @@ case 0: { // 薩波
   endOrNext(st);
   return { state: st, emits };
 }
+
 
       case 19: { // 羅傑
         if(st.venues.some(v=>v.name==='奧羅傑克森號')){
