@@ -694,6 +694,58 @@ body::before{
     animation:usoppMissShake .32s ease-out;
   }
 
+/* === 語音台詞泡泡（顯示在「打出卡圖」上方） === */
+.voice-bubble{
+  position:absolute;
+  left:50%;
+  bottom:100%;
+  transform:translate(-50%, -8px);
+  max-width:220px;
+  padding:6px 10px;
+  font-size:13px;
+  line-height:1.4;
+  color:#111827;
+  pointer-events:none;
+  z-index:10;
+}
+
+.voice-bubble__inner{
+  position:relative;
+  background:#fff;
+  border-radius:999px;
+  padding:4px 10px;
+  border:2px solid #111827;
+  box-shadow:0 4px 10px rgba(0,0,0,.35);
+}
+
+.voice-bubble__tail{
+  position:absolute;
+  left:50%;
+  bottom:-7px;
+  width:14px;
+  height:14px;
+  background:#fff;
+  border-left:2px solid #111827;
+  border-bottom:2px solid #111827;
+  transform:translateX(-50%) rotate(45deg);
+}
+
+/* 樣式 1：經典漫畫白泡泡 */
+.voice-bubble.voice-bubble--1{
+  animation:voicePop .18s ease-out,voiceFade .35s linear 3.3s forwards;
+}
+
+@keyframes voicePop{
+  0%{transform:translate(-50%,6px) scale(.8);opacity:0;}
+  80%{transform:translate(-50%,-6px) scale(1.03);opacity:1;}
+  100%{transform:translate(-50%,-8px) scale(1);opacity:1;}
+}
+
+@keyframes voiceFade{
+  0%{opacity:1;}
+  100%{opacity:0;}
+}
+
 </style>
 </head>
 <body>
@@ -841,6 +893,9 @@ body::before{
 <audio id="duelHitSfx"  src="audio/sfx/duel_hit.mp3"  preload="auto"></audio>
 <audio id="duelFlipSfx" src="audio/sfx/duel_flip.mp3" preload="auto"></audio>
 <audio id="duelBurnSfx" src="audio/sfx/duel_burn.mp3" preload="auto"></audio>
+
+ <!-- 角色語音：只給自己聽 -->
+      <audio id="voiceAudio" preload="auto"></audio>
 
       <div class="vs-tag">VS</div>
 
