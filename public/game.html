@@ -274,7 +274,15 @@
     /* === 打出卡片「快閃」Overlay（新增） === */
     #playedOverlay{ position:fixed; inset:0; z-index: ninetyfive; z-index:95; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,.72); opacity:0; pointer-events:none; transition:opacity .25s ease; }
     #playedOverlay.show{ opacity:1; pointer-events:auto; }
-    #playedFrame{ display:flex; flex-direction:column; gap:10px; align-items:center; }
+
+  #playedFrame{
+    position:relative;                 /* ⭐ 讓語音泡泡可以絕對定位在這個框上 */
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    align-items:center;
+  }
+
     #playedImg{ width:min(40vw,320px); height:auto; border-radius:14px; border:1px solid #2f353c; box-shadow:0 18px 36px rgba(0,0,0,.45); }
     #playedMeta{ font-size:14px; color:#cbd5e1; opacity:.95; }
 
@@ -1943,30 +1951,53 @@ function resolveVoiceLine(playedId, otherId){
 /** 在打出卡圖上顯示台詞泡泡（1 號樣式） */
 function showVoiceCaption(text){
   if (!text) return;
-  const img = document.getElementById('playedImg');
-  if (!img) return;
 
+  const frame = document.getElementById('playedFrame');
+  const img   = document.getElementById('playedImg');
+  if (!frame || !img) return;
+
+  // 確保容器可以當定位基準
+  frame.style.position = 'relative';
+
+  // 先找舊的泡泡，沒有就新建一個
   let cap = document.getElementById('voiceCaption');
   if (!cap){
     cap = document.createElement('div');
     cap.id = 'voiceCaption';
     cap.className = 'voice-bubble voice-bubble--1';
-    img.style.position = 'relative';  // 確保絕對定位有依附點
-    img.appendChild(cap);
+
+    // 內部結構要配合 CSS：inner + tail
+    const inner = document.createElement('div');
+    inner.className = 'voice-bubble__inner';
+
+    const tail = document.createElement('div');
+    tail.className = 'voice-bubble__tail';
+
+    cap.appendChild(inner);
+    cap.appendChild(tail);
+
+    frame.appendChild(cap);
   }
 
-  cap.textContent = text;
-  cap.style.opacity = 0;
+  const innerEl = cap.querySelector('.voice-bubble__inner');
+  if (innerEl) innerEl.textContent = text;
+  else cap.textContent = text;  // 保底，不會壞掉
 
-  requestAnimationFrame(()=>{
-    cap.style.opacity = 1;
-  });
+  // 重新觸發動畫與淡出
+  cap.style.opacity = '1';
 
-  // 約 3.6 秒後淡出（打出卡顯示 4 秒）
+  // 先移除再重加 class，讓動畫每次都從頭播
+  cap.classList.remove('voice-bubble--1');
+  // 強制 reflow
+  void cap.offsetWidth;
+  cap.classList.add('voice-bubble--1');
+
+  // 約 3.6 秒後開始淡出（打出卡片顯示 4 秒）
   setTimeout(()=>{
-    cap.style.opacity = 0;
+    cap.style.opacity = '0';
   }, 3600);
 }
+
 
 /** 播放角色語音 + 顯示台詞泡泡（只自己聽得到） */
 function playVoiceFor(playedId, otherId){
