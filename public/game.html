@@ -2598,7 +2598,7 @@ function showRobinToast({ caster, target, all }) {
   const targetName = all ? '全體玩家' : (target || '未知玩家');
 
   // 只有一行主文字，不要副文字
-  main.textContent = `🔍 ${casterName} 偵察了 ${targetName} 的手牌。`;
+  main.textContent = ` ${casterName} 偵察了 ${targetName} 的手牌🔍。`;
 
   box.appendChild(main);
 
