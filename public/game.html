@@ -721,11 +721,21 @@ body::before{
   z-index:10;
 }
 
+/* === 語音台詞泡泡：顯示在卡圖「上方」 === */
+.voice-bubble{
+  position:relative;
+  display:flex;
+  justify-content:center;
+  margin-bottom:8px;        /* 和卡圖中間留一點距離 */
+  pointer-events:none;
+  z-index:10;
+}
+
 /* 文字真正待的地方 */
 .voice-bubble__inner{
   position:relative;
   display:inline-block;
-  max-width:100%;
+  max-width:min(260px, 80vw);
   padding:4px 10px;
   font-size:12px;
   line-height:1.4;
@@ -754,6 +764,7 @@ body::before{
 .voice-bubble.voice-bubble--1{
   animation:voicePop .18s ease-out,voiceFade .35s linear 3.3s forwards;
 }
+
 
 @keyframes voicePop{
   0%{transform:translate(-50%,6px) scale(.8);opacity:0;}
@@ -973,14 +984,23 @@ body::before{
            class="max-w-[90vw] max-h-[90vh] rounded-xl shadow-2xl"></video>
   </div>
 
-
   <!-- 打出卡片「快閃」Overlay（新增） -->
   <div id="playedOverlay" class="hidden">
     <div id="playedFrame">
+      <!-- 👇 語音台詞泡泡：固定在圖片「上方」 -->
+      <div id="voiceCaption" class="voice-bubble voice-bubble--1 hidden">
+        <div class="voice-bubble__inner"></div>
+        <div class="voice-bubble__tail"></div>
+      </div>
+
+      <!-- 卡圖本體 -->
       <img id="playedImg" src="images/cards/back.webp" alt="played"/>
+
+      <!-- 下方小字：誰打出的 -->
       <div id="playedMeta" class="text-sm"></div>
     </div>
   </div>
+
 
   <!-- 強化技能影片（全體播放） -->
   <div id="enhOverlay" class="hidden fixed inset-0 z-[140] flex items-center justify-center bg-black/70">
@@ -1965,46 +1985,31 @@ function resolveVoiceLine(playedId, otherId){
 function showVoiceCaption(text){
   if (!text) return;
 
-  const img = document.getElementById('playedImg');
-  if (!img) return;
+  const frame = document.getElementById('playedFrame');
+  if (!frame) return;
 
-  // 確保卡圖可以當定位基準
-  img.style.position = img.style.position || 'relative';
-
-  // 先找舊的泡泡，沒有就新建一個
-  let cap = document.getElementById('voiceCaption');
-  if (!cap){
-    cap = document.createElement('div');
-    cap.id = 'voiceCaption';
-    cap.className = 'voice-bubble voice-bubble--1';
-
-    const inner = document.createElement('div');
-    inner.className = 'voice-bubble__inner';
-    const tail = document.createElement('div');
-    tail.className = 'voice-bubble__tail';
-
-    cap.appendChild(inner);
-    cap.appendChild(tail);
-
-    img.appendChild(cap);   // ⭐ 直接掛在卡圖上
-  }
+  const cap = document.getElementById('voiceCaption');
+  if (!cap) return;
 
   const innerEl = cap.querySelector('.voice-bubble__inner');
   if (innerEl) innerEl.textContent = text;
-  else cap.textContent = text;  // 保底
+  else cap.textContent = text;   // 保底
 
-  // 重新觸發動畫
+  // 顯示泡泡
+  cap.classList.remove('hidden');
   cap.style.opacity = '1';
+
+  // 重跑動畫
   cap.classList.remove('voice-bubble--1');
-  void cap.offsetWidth;    // 強制 reflow
+  void cap.offsetWidth;          // 強制重排，確保動畫重啟
   cap.classList.add('voice-bubble--1');
 
-
-  // 約 3.6 秒後開始淡出（打出卡片顯示 4 秒）
+  // 約 3.6 秒後開始淡出（跟快閃 4 秒差不多）
   setTimeout(()=>{
     cap.style.opacity = '0';
   }, 3600);
 }
+
 
 
 /** 播放角色語音 + 顯示台詞泡泡（只自己聽得到） */
