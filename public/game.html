@@ -274,64 +274,9 @@
     /* === 打出卡片「快閃」Overlay（新增） === */
     #playedOverlay{ position:fixed; inset:0; z-index: ninetyfive; z-index:95; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,.72); opacity:0; pointer-events:none; transition:opacity .25s ease; }
     #playedOverlay.show{ opacity:1; pointer-events:auto; }
-
-  #playedFrame{
-    position:relative;                 /* ⭐ 讓語音泡泡可以絕對定位在這個框上 */
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-    align-items:center;
-  }
-
-    #playedImg{
-  position:relative;  /* ⭐ 泡泡會以這張圖當基準 */
-  width:min(40vw,320px);
-  height:auto;
-  border-radius:14px;
-  border:1px solid #2f353c;
-  box-shadow:0 18px 36px rgba(0,0,0,.45);
-}
-
+    #playedFrame{ display:flex; flex-direction:column; gap:10px; align-items:center; }
+    #playedImg{ width:min(40vw,320px); height:auto; border-radius:14px; border:1px solid #2f353c; box-shadow:0 18px 36px rgba(0,0,0,.45); }
     #playedMeta{ font-size:14px; color:#cbd5e1; opacity:.95; }
-
-  /* === 打出卡片上的語音台詞框（1 號漫畫泡泡） === */
-  .voice-bubble{
-    position:absolute;
-    top:8px;
-    left:50%;
-    transform:translateX(-50%);
-    max-width:90%;
-    padding:6px 10px;
-    font-size:13px;
-    line-height:1.35;
-    text-align:center;
-    pointer-events:none;
-    white-space:normal;
-    word-break:break-word;
-    opacity:0;
-    transition:opacity .2s ease;
-    z-index:10;
-  }
-  .voice-bubble--1{
-    background:#ffffff;
-    color:#111827;
-    border:2px solid #111827;
-    border-radius:12px;
-    box-shadow:2px 2px 0 rgba(0,0,0,.9);
-  }
-  .voice-bubble--1::after{
-    content:'';
-    position:absolute;
-    left:50%;
-    bottom:-7px;
-    width:12px;
-    height:12px;
-    background:#ffffff;
-    border-bottom:2px solid #111827;
-    border-right:2px solid #111827;
-    transform:translateX(-50%) rotate(45deg);
-  }
-
 
     
 /* === 場地背景直接掛在 body（v2） === */
@@ -710,75 +655,6 @@ body::before{
     animation:usoppMissShake .32s ease-out;
   }
 
-/* === 語音台詞泡泡：固定在卡圖「上面」 === */
-.voice-bubble{
-  position:absolute;
-  left:50%;
-  bottom:100%;                 /* ⭐ 泡泡的底部貼齊卡片上緣 */
-  transform:translate(-50%, -6px);  /* 往上再拉一點，留空隙 */
-  max-width:min(260px, 80vw);
-  pointer-events:none;
-  z-index:10;
-}
-
-/* === 語音台詞泡泡：顯示在卡圖「上方」 === */
-.voice-bubble{
-  position:relative;
-  display:flex;
-  justify-content:center;
-  margin-bottom:8px;        /* 和卡圖中間留一點距離 */
-  pointer-events:none;
-  z-index:10;
-}
-
-/* 文字真正待的地方 */
-.voice-bubble__inner{
-  position:relative;
-  display:inline-block;
-  max-width:min(260px, 80vw);
-  padding:4px 10px;
-  font-size:12px;
-  line-height:1.4;
-  white-space:normal;
-  word-break:break-word;
-  background:#fff;
-  color:#111827;
-  border-radius:999px;
-  border:2px solid #111827;
-  box-shadow:0 4px 10px rgba(0,0,0,.35);
-}
-
-.voice-bubble__tail{
-  position:absolute;
-  left:50%;
-  bottom:-7px;
-  width:14px;
-  height:14px;
-  background:#fff;
-  border-left:2px solid #111827;
-  border-bottom:2px solid #111827;
-  transform:translateX(-50%) rotate(45deg);
-}
-
-/* 樣式 1：經典漫畫白泡泡 */
-.voice-bubble.voice-bubble--1{
-  animation:voicePop .18s ease-out,voiceFade .35s linear 3.3s forwards;
-}
-
-
-@keyframes voicePop{
-  0%{transform:translate(-50%,6px) scale(.8);opacity:0;}
-  80%{transform:translate(-50%,-4px) scale(1.03);opacity:1;}
-  100%{transform:translate(-50%,-6px) scale(1);opacity:1;}
-}
-
-@keyframes voiceFade{
-  0%{opacity:1;}
-  100%{opacity:0;}
-}
-
-
-
 </style>
 </head>
 <body>
@@ -927,9 +803,6 @@ body::before{
 <audio id="duelFlipSfx" src="audio/sfx/duel_flip.mp3" preload="auto"></audio>
 <audio id="duelBurnSfx" src="audio/sfx/duel_burn.mp3" preload="auto"></audio>
 
- <!-- 角色語音：只給自己聽 -->
-      <audio id="voiceAudio" preload="auto"></audio>
-
       <div class="vs-tag">VS</div>
 
       <div class="slot slot-right">
@@ -984,23 +857,14 @@ body::before{
            class="max-w-[90vw] max-h-[90vh] rounded-xl shadow-2xl"></video>
   </div>
 
+
   <!-- 打出卡片「快閃」Overlay（新增） -->
   <div id="playedOverlay" class="hidden">
     <div id="playedFrame">
-      <!-- 👇 語音台詞泡泡：固定在圖片「上方」 -->
-      <div id="voiceCaption" class="voice-bubble voice-bubble--1 hidden">
-        <div class="voice-bubble__inner"></div>
-        <div class="voice-bubble__tail"></div>
-      </div>
-
-      <!-- 卡圖本體 -->
       <img id="playedImg" src="images/cards/back.webp" alt="played"/>
-
-      <!-- 下方小字：誰打出的 -->
       <div id="playedMeta" class="text-sm"></div>
     </div>
   </div>
-
 
   <!-- 強化技能影片（全體播放） -->
   <div id="enhOverlay" class="hidden fixed inset-0 z-[140] flex items-center justify-center bg-black/70">
@@ -1409,9 +1273,7 @@ const socket = io(serverURL, { transports:['websocket'] });
 let me = { roomId: presetRoom || 'op-001', playerId: null, secret: localStorage.getItem('opSecret')||'' };
 let _autoSkipKey = null;   // 麻痺自動跳過用的防呆 key
 let state = null;
-let prevState = null;      // 🔊 上一個狀態（用來判斷另一張手牌）
 let _pendingDuel = null;   // 等待補上卡片資訊的決鬥事件
-
 let _enhFxForceTimer = null;  // 強化影片的保險計時器
 let _finalRedirecting = false; 
 
@@ -1912,154 +1774,6 @@ function cardLine(cardId){
   return `${meta.name} ${tag}${title}：${text}`;
 }
 
-/* ========= 角色語音設定（只自己聽得到） ========= */
-
-const VOICE_BASE_PATH = "audio/voice";
-
-const VOICE_DATA = {
-  0: {
-    base: { file: "0.mp3", text: "要燃起革命的燈火" },
-    combos: {
-      8: { file: "0-8.mp3", text: "真的很感謝你還活著，魯夫" }
-    }
-  },
-  1: {
-    base: { file: "1.mp3", text: "我..我要..我要成為勇敢的海上戰士" },
-    combos: {
-      8: { file: "1-8.mp3", text: "蒙其.D.魯夫...來和我決鬥吧!!" }
-    }
-  },
-  2: {
-    base: { file: "2.mp3", text: "歷史雖然會重演，人卻無法回到過去" },
-    combos: {
-      8: { file: "2-8.mp3", text: "想活下去!!把我也一起帶出海吧" }
-    }
-  },
-  3: {
-    base: { file: "3.mp3", text: "我要找到蔚藍海域(All Blue)" },
-    combos: {
-      2: { file: "3-2.mp3", text: "羅賓小姐~" },
-      7: { file: "3-7.mp3", text: "娜美小姐~" }
-    }
-  },
-  4: {
-    base: { file: "4.mp3", text: "你這麼誇獎我我也不會高興的，你這個討厭鬼~~" },
-    combos: {}
-  },
-  5: {
-    base: { file: "5.mp3", text: "我要成為世界第一的大劍豪" },
-    combos: {
-      8: { file: "5-8.mp3", text: "再打敗他成為大劍豪以前，我永遠不會再輸了!你有意見嗎?海賊王" }
-    }
-  },
-  6: {
-    base: { file: "6.mp3", text: "Room" },
-    combos: {}
-  },
-  7: {
-    base: { file: "7.mp3", text: "我要畫出全世界的航海圖" },
-    combos: {}
-  },
-  8: {
-    base: { file: "8.mp3", text: "我是蒙其D魯夫，是要超越你們，成為海賊王的人" },
-    combos: {
-      1: { file: "8-1.mp3", text: "狙擊王，給我打穿那面旗子" },
-      3: { file: "8-3.mp3", text: "沒有你在的話，我是無法成為海賊王的" },
-      4: { file: "8-4.mp3", text: "少囉嗦，一起走吧~" },
-      7: { file: "8-7.mp3", text: "不准弄哭我的航海士" }
-    }
-  }
-};
-
-/** 根據打出的卡 + 另一張手牌，決定要播哪一個語音 */
-function resolveVoiceLine(playedId, otherId){
-  const cfg = VOICE_DATA[playedId];
-  if (!cfg) return null;
-
-  if (typeof otherId === 'number' && cfg.combos && cfg.combos[otherId]) {
-    return cfg.combos[otherId];
-  }
-  return cfg.base || null;
-}
-/** 在打出卡圖上方顯示台詞泡泡（1 號樣式） */
-function showVoiceCaption(text){
-  if (!text) return;
-
-  const frame = document.getElementById('playedFrame');
-  if (!frame) return;
-
-  const cap = document.getElementById('voiceCaption');
-  if (!cap) return;
-
-  const innerEl = cap.querySelector('.voice-bubble__inner');
-  if (innerEl) innerEl.textContent = text;
-  else cap.textContent = text;   // 保底
-
-  // 顯示泡泡
-  cap.classList.remove('hidden');
-  cap.style.opacity = '1';
-
-  // 重跑動畫
-  cap.classList.remove('voice-bubble--1');
-  void cap.offsetWidth;          // 強制重排，確保動畫重啟
-  cap.classList.add('voice-bubble--1');
-
-  // 約 3.6 秒後開始淡出（跟快閃 4 秒差不多）
-  setTimeout(()=>{
-    cap.style.opacity = '0';
-  }, 3600);
-}
-
-
-
-/** 播放角色語音 + 顯示台詞泡泡（只自己聽得到） */
-function playVoiceFor(playedId, otherId){
-  const info = resolveVoiceLine(playedId, otherId);
-  if (!info) return;
-
-  const a = document.getElementById('voiceAudio');
-  if (a){
-    const src = `${VOICE_BASE_PATH}/${info.file}`;
-    if (a.getAttribute('src') !== src) {
-      a.setAttribute('src', src);
-      try{ a.load(); }catch(e){}
-    }
-    try{ a.currentTime = 0; }catch(e){}
-    a.play().catch(()=>{ /* iOS 被擋就算了，不影響流程 */ });
-  }
-
-  showVoiceCaption(info.text);
-}
-
-/** 從前一個 state 推出「另一張手牌是誰」，只在自己打牌時呼叫 */
-function handleLocalVoiceOnDiscard(cardId, byIndex){
-  // 👉 如果這張牌是引擎標記的「靜默棄牌」（例如決鬥被翻掉、被逼棄等），就不要播語音
-  if (Array.isArray(_silentDiscards) && _silentDiscards.includes(cardId)) {
-    // 用過就從清單移掉，免得影響下一張
-    _silentDiscards = _silentDiscards.filter(x => x !== cardId);
-    return;
-  }
-
-  if (byIndex !== me.playerId) return;
-  if (!prevState || !Array.isArray(prevState.players)) return;
-  const pPrev = prevState.players[me.playerId];
-  if (!pPrev) return;
-
-  const prevHand = pPrev.hand;
-  const prevDraw = pPrev.tempDraw;
-  let otherId = null;
-
-  if (prevHand === cardId && typeof prevDraw === 'number') {
-    otherId = prevDraw;
-  } else if (prevDraw === cardId && typeof prevHand === 'number') {
-    otherId = prevHand;
-  }
-
-  playVoiceFor(cardId, otherId);
-}
-
-
-
 /* ========= 場地 → 背景圖片對照 & 切換工具 ========= */
 /** 場地 → 背景圖片對照（檔案放 public/images/venues/xxx.jpg/webp 自行準備） */
 const VENUE_BG = {
@@ -2298,13 +2012,11 @@ const ov   = document.getElementById('playedOverlay');
       ov.classList.add('hidden');
       if (typeof opt.onDone === 'function') opt.onDone();
     }, 250);
-  }, 4000);
+  }, 3000);
 }
 
 /* ====== C. STATE：同步 server 的新行、偵測新局並清空 + 偵測新棄牌 → 強化先快閃後播片 ====== */
 socket.on('STATE', (s)=>{
-  prevState = state;  // 🔊 記錄上一個狀態（給語音用）
-
   const prevTurnIndex  = (state && typeof state.turnIndex === 'number') ? state.turnIndex : null;
   const prevDiscardLen = Array.isArray(state?.discard) ? state.discard.length : 0;
 
@@ -2372,30 +2084,27 @@ socket.on('STATE', (s)=>{
   if (newDiscardLen > prevDiscardLen) {
     const last = state.discard[newDiscardLen - 1];
     const isBack = last && typeof last === 'object' && last.back === true;
-
     if (!isBack && typeof last === 'number') {
-      // ✅ 只有「真正有人打出牌」時，而且是自己打的，才觸發語音（不經過 socket）
-      handleLocalVoiceOnDiscard(last, prevTurnIndex);
-
       if (isEnhancedNow(last)) {
-        if (_enhSignal && _enhSignal.cardId === last) {
-          _flashBusy = true;
-          showPlayedFlash(last, prevTurnIndex, {
-            onDone: ()=>{
-              if (typeof playEnhFxFor === 'function') {
-                playEnhFxFor(last);
-              } else if (typeof playEnhFx === 'function') {
-                playEnhFx();
-              }
-              _flashBusy = false;
-              _enhSignal = null;
-            }
-          });
-        } else {
-          // 非打出卡（例如索隆逼棄、覆蓋頂牌）或沒有 enh_fx 訊號 → 僅快閃卡面，不播影片
-          showPlayedFlash(last, prevTurnIndex);
-        }
-      } else {
+        
+if (_enhSignal && _enhSignal.cardId === last) {
+  _flashBusy = true;
+  showPlayedFlash(last, prevTurnIndex, {
+    onDone: ()=>{
+      if (typeof playEnhFxFor === 'function') {
+        playEnhFxFor(last);
+      } else if (typeof playEnhFx === 'function') {
+        playEnhFx();
+      }
+      _flashBusy = false;
+      _enhSignal = null;
+    }
+  });
+} else {
+  // 非打出卡（例如索隆逼棄、覆蓋頂牌）或沒有 enh_fx 訊號 → 僅快閃卡面，不播影片
+  showPlayedFlash(last, prevTurnIndex);
+}
+} else {
         showPlayedFlash(last, prevTurnIndex);
       }
     }
