@@ -1877,9 +1877,6 @@ const VOICE_MAP = {
   }
 };
 
-// ⭐ 新增這一行：記錄「這次打牌有沒有準備語音＋台詞」
-let _voiceArmed = false;
-
 /** 根據主角卡＋另一張卡，決定要播放哪一條語音 */
 function getVoiceData(mainId, otherId){
   const conf = VOICE_MAP[mainId];
@@ -1890,50 +1887,35 @@ function getVoiceData(mainId, otherId){
   return conf.base || null;
 }
 
-/** 播放語音＋準備泡泡（只在自己出牌時被呼叫） */
+/** 播放語音＋顯示泡泡（只在本機觸發） */
 function playVoiceLineFor(mainId, otherId){
-  const bubble  = document.getElementById('voiceBubble');
-  const textSpan= document.getElementById('voiceText');
+  const data = getVoiceData(mainId, otherId);
+  const bubble = document.getElementById('voiceBubble');
+  const textSpan = document.getElementById('voiceText');
   const audioEl = document.getElementById('voiceAudio');
 
-  // 👉 強化技能卡：完全不播語音、不顯示台詞
-  if (isEnhancedNow(mainId)) {
-    _voiceArmed = false;
-    if (bubble)  bubble.classList.add('hidden');
-    if (audioEl) {
-      try { audioEl.pause(); audioEl.currentTime = 0; } catch(e){}
-    }
-    return;
-  }
-
-  const data = getVoiceData(mainId, otherId);
-
-  // 沒對應台詞 → 關掉泡泡＆語音
+  // 沒對應台詞就什麼都不做
   if (!data) {
-    _voiceArmed = false;
-    if (bubble)  bubble.classList.add('hidden');
+    if (bubble) bubble.classList.add('hidden');
     if (audioEl) {
       try { audioEl.pause(); audioEl.currentTime = 0; } catch(e){}
     }
     return;
   }
 
-  // 設定這次要顯示的台詞文字（先不顯示泡泡，等快閃遮罩出現時才決定要不要秀出）
-  if (textSpan) {
+  // 顯示泡泡文字
+  if (bubble && textSpan) {
     textSpan.textContent = data.text;
+    bubble.classList.remove('hidden');
   }
-  _voiceArmed = true;
 
-  // 語音 mp3 直接開始播放（就算超過 3～4 秒也會播到底）
+  // 播放 mp3（長度超過 4 秒沒關係，會自己播完）
   if (audioEl) {
     audioEl.src = data.file;
     try { audioEl.currentTime = 0; } catch(e){}
-    audioEl.play().catch(()=>{
-      // iOS 被擋就算了，不影響遊戲流程
-    });
+    audioEl.play().catch(()=>{ /* iOS 被擋就算了，不影響遊戲 */ });
   }
 }
-
 
 /* ========= 場地 → 背景圖片對照 & 切換工具 ========= */
 /** 場地 → 背景圖片對照（檔案放 public/images/venues/xxx.jpg/webp 自行準備） */
@@ -2144,24 +2126,37 @@ socket.on('JOINED', ({ playerId })=>{
 });
 
 /* ===== 新增：showPlayedFlash（支援強化卡面 + 結束回呼） ===== */
-function showPlayedFlash(cardId, byIndex, opt={}){
-  
-// 若這張是靜默棄牌 → 不做快閃，也不排程影片
-if (Array.isArray(_silentDiscards) && _silentDiscards.includes(cardId)) {
-  _silentDiscards = _silentDiscards.filter(x => x !== cardId);
-  try { if (typeof opt === 'object' && typeof opt.onDone === 'function') opt.onDone(); } catch { }
-  return;
-}
-const ov   = document.getElementById('playedOverlay');
-  const img  = document.getElementById('playedImg');
-  const meta = document.getElementById('playedMeta');
+function showPlayedFlash(cardId, byIndex, opt = {}){
+  // 若這張是靜默棄牌 → 不做快閃，也不排程影片
+  if (Array.isArray(_silentDiscards) && _silentDiscards.includes(cardId)) {
+    _silentDiscards = _silentDiscards.filter(x => x !== cardId);
+    try {
+      if (typeof opt === 'object' && typeof opt.onDone === 'function') opt.onDone();
+    } catch {}
+    return;
+  }
+
+  const ov       = document.getElementById('playedOverlay');
+  const img      = document.getElementById('playedImg');
+  const meta     = document.getElementById('playedMeta');
+  const bubble   = document.getElementById('voiceBubble');
+  const bubbleTx = document.getElementById('voiceText');
   if (!ov || !img) return;
 
   const isEnh = isEnhancedNow(cardId);
   img.src = isEnh ? CARD_ENH(cardId) : CARD(cardId);
 
+  // 誰打出的提示
   if (meta && typeof byIndex === 'number') {
     meta.textContent = `${pname(byIndex)} 打出`;
+  }
+
+  // 只有「自己打出的牌」才允許保留語音泡泡，
+  // 其他玩家打牌時，強制關掉泡泡（只顯示卡圖）
+  const isMePlay = (typeof byIndex === 'number' && byIndex === me.playerId);
+  if (!isMePlay && bubble) {
+    bubble.classList.add('hidden');
+    if (bubbleTx) bubbleTx.textContent = '';
   }
 
   ov.classList.remove('hidden');
@@ -2171,10 +2166,18 @@ const ov   = document.getElementById('playedOverlay');
     ov.classList.remove('show');
     setTimeout(()=>{
       ov.classList.add('hidden');
+
+      // 關掉 overlay 時順便把泡泡也收掉，避免殘留到下一張牌
+      if (bubble) {
+        bubble.classList.add('hidden');
+        if (bubbleTx) bubbleTx.textContent = '';
+      }
+
       if (typeof opt.onDone === 'function') opt.onDone();
     }, 250);
   }, 3000);
 }
+
 
 /* ====== C. STATE：同步 server 的新行、偵測新局並清空 + 偵測新棄牌 → 強化先快閃後播片 ====== */
 socket.on('STATE', (s)=>{
@@ -3279,7 +3282,7 @@ function showOrder(title, cards, onCommit){
   el.modal.querySelector('#okOrder').onclick=()=>{ onCommit(list); hideModal(); };
 }
 
-/** 只在自己從手牌點出「打出」時觸發語音＋泡泡 */
+/** 只在自己從手牌點出「打出」時觸發語音＋泡泡（而且僅限非強化） */
 function handlePlayCard(which){
   const my = state?.players?.[me.playerId];
   if (!my) {
@@ -3293,8 +3296,8 @@ function handlePlayCard(which){
   const mainId  = (which === 'hand') ? my.hand    : my.tempDraw;
   const otherId = (which === 'hand') ? my.tempDraw : my.hand;
 
-  // 只有是「自己手牌打出的角色卡」才播語音
-  if (typeof mainId === 'number') {
+  // 只有是「自己手牌打出的角色卡」才播語音，而且不能是強化狀態
+  if (typeof mainId === 'number' && !isEnhancedNow(mainId)) {
     const other = (typeof otherId === 'number') ? otherId : null;
     playVoiceLineFor(mainId, other);
   }
@@ -3302,6 +3305,7 @@ function handlePlayCard(which){
   // 真正通知伺服器這張牌被打出
   sendAction('PLAY_CARD', { which });
 }
+
 
 function showMulti(title, cards, onCommit){
   let html=`<div class="text-lg font-semibold mb-2">${title}</div><div class="space-y-2">`;
