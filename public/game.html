@@ -283,7 +283,15 @@
     align-items:center;
   }
 
-    #playedImg{ width:min(40vw,320px); height:auto; border-radius:14px; border:1px solid #2f353c; box-shadow:0 18px 36px rgba(0,0,0,.45); }
+    #playedImg{
+  position:relative;  /* ⭐ 泡泡會以這張圖當基準 */
+  width:min(40vw,320px);
+  height:auto;
+  border-radius:14px;
+  border:1px solid #2f353c;
+  box-shadow:0 18px 36px rgba(0,0,0,.45);
+}
+
     #playedMeta{ font-size:14px; color:#cbd5e1; opacity:.95; }
 
   /* === 打出卡片上的語音台詞框（1 號漫畫泡泡） === */
@@ -702,26 +710,30 @@ body::before{
     animation:usoppMissShake .32s ease-out;
   }
 
-/* === 語音台詞泡泡（顯示在「打出卡圖」上方） === */
+/* === 語音台詞泡泡：固定在卡圖「上面」 === */
 .voice-bubble{
   position:absolute;
   left:50%;
-  bottom:100%;
-  transform:translate(-50%, -8px);
-  max-width:220px;
-  padding:6px 10px;
-  font-size:13px;
-  line-height:1.4;
-  color:#111827;
+  bottom:100%;                 /* ⭐ 泡泡的底部貼齊卡片上緣 */
+  transform:translate(-50%, -6px);  /* 往上再拉一點，留空隙 */
+  max-width:min(260px, 80vw);
   pointer-events:none;
   z-index:10;
 }
 
+/* 文字真正待的地方 */
 .voice-bubble__inner{
   position:relative;
-  background:#fff;
-  border-radius:999px;
+  display:inline-block;
+  max-width:100%;
   padding:4px 10px;
+  font-size:12px;
+  line-height:1.4;
+  white-space:normal;
+  word-break:break-word;
+  background:#fff;
+  color:#111827;
+  border-radius:999px;
   border:2px solid #111827;
   box-shadow:0 4px 10px rgba(0,0,0,.35);
 }
@@ -745,14 +757,16 @@ body::before{
 
 @keyframes voicePop{
   0%{transform:translate(-50%,6px) scale(.8);opacity:0;}
-  80%{transform:translate(-50%,-6px) scale(1.03);opacity:1;}
-  100%{transform:translate(-50%,-8px) scale(1);opacity:1;}
+  80%{transform:translate(-50%,-4px) scale(1.03);opacity:1;}
+  100%{transform:translate(-50%,-6px) scale(1);opacity:1;}
 }
 
 @keyframes voiceFade{
   0%{opacity:1;}
   100%{opacity:0;}
 }
+
+
 
 </style>
 </head>
@@ -1947,17 +1961,15 @@ function resolveVoiceLine(playedId, otherId){
   }
   return cfg.base || null;
 }
-
-/** 在打出卡圖上顯示台詞泡泡（1 號樣式） */
+/** 在打出卡圖上方顯示台詞泡泡（1 號樣式） */
 function showVoiceCaption(text){
   if (!text) return;
 
-  const frame = document.getElementById('playedFrame');
-  const img   = document.getElementById('playedImg');
-  if (!frame || !img) return;
+  const img = document.getElementById('playedImg');
+  if (!img) return;
 
-  // 確保容器可以當定位基準
-  frame.style.position = 'relative';
+  // 確保卡圖可以當定位基準
+  img.style.position = img.style.position || 'relative';
 
   // 先找舊的泡泡，沒有就新建一個
   let cap = document.getElementById('voiceCaption');
@@ -1966,31 +1978,27 @@ function showVoiceCaption(text){
     cap.id = 'voiceCaption';
     cap.className = 'voice-bubble voice-bubble--1';
 
-    // 內部結構要配合 CSS：inner + tail
     const inner = document.createElement('div');
     inner.className = 'voice-bubble__inner';
-
     const tail = document.createElement('div');
     tail.className = 'voice-bubble__tail';
 
     cap.appendChild(inner);
     cap.appendChild(tail);
 
-    frame.appendChild(cap);
+    img.appendChild(cap);   // ⭐ 直接掛在卡圖上
   }
 
   const innerEl = cap.querySelector('.voice-bubble__inner');
   if (innerEl) innerEl.textContent = text;
-  else cap.textContent = text;  // 保底，不會壞掉
+  else cap.textContent = text;  // 保底
 
-  // 重新觸發動畫與淡出
+  // 重新觸發動畫
   cap.style.opacity = '1';
-
-  // 先移除再重加 class，讓動畫每次都從頭播
   cap.classList.remove('voice-bubble--1');
-  // 強制 reflow
-  void cap.offsetWidth;
+  void cap.offsetWidth;    // 強制 reflow
   cap.classList.add('voice-bubble--1');
+
 
   // 約 3.6 秒後開始淡出（打出卡片顯示 4 秒）
   setTimeout(()=>{
@@ -2020,6 +2028,13 @@ function playVoiceFor(playedId, otherId){
 
 /** 從前一個 state 推出「另一張手牌是誰」，只在自己打牌時呼叫 */
 function handleLocalVoiceOnDiscard(cardId, byIndex){
+  // 👉 如果這張牌是引擎標記的「靜默棄牌」（例如決鬥被翻掉、被逼棄等），就不要播語音
+  if (Array.isArray(_silentDiscards) && _silentDiscards.includes(cardId)) {
+    // 用過就從清單移掉，免得影響下一張
+    _silentDiscards = _silentDiscards.filter(x => x !== cardId);
+    return;
+  }
+
   if (byIndex !== me.playerId) return;
   if (!prevState || !Array.isArray(prevState.players)) return;
   const pPrev = prevState.players[me.playerId];
@@ -2037,6 +2052,7 @@ function handleLocalVoiceOnDiscard(cardId, byIndex){
 
   playVoiceFor(cardId, otherId);
 }
+
 
 
 /* ========= 場地 → 背景圖片對照 & 切換工具 ========= */
