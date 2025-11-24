@@ -854,7 +854,7 @@ case 0: { // 薩波
         st.pending = { action:'usopp', extra:{ chain:venueActive, target:null } };
         return { state: st, emits };
       }
-      case 2: { // 羅賓
+case 2: { // 羅賓
         if(venueActive){
           const lines=[];
           st.players.forEach((pp,i)=>{
@@ -883,7 +883,23 @@ case 0: { // 薩波
               lines.push(`P${i+1}：${label}`);
             }
           });
+
+          // 出牌者自己看的總覽
           emits.push({ to: action.playerId, type:'peek', lines });
+
+          // 全體用的事件：偵察全場（不含任何卡號）
+          emits.push({
+            to: 'all',
+            type: 'robin_peek',
+            casterId: st.turnIndex,
+            targetId: -1,
+            all: true
+          });
+
+          // 對局日誌也順便寫一行
+          const casterName = pname(st, st.turnIndex);
+          pushLog(st, `${casterName} 偵察了全體玩家的手牌`, emits);
+
           endOrNext(st);
           return { state: st, emits };
         } else {
@@ -891,6 +907,7 @@ case 0: { // 薩波
           return { state: st, emits };
         }
       }
+
       case 3: { // 香吉士
         st.pending = { action:'sanji', extra:{ keep: keepId, boost: venueActive } };
         return { state: st, emits };
@@ -1162,11 +1179,28 @@ case 0: { // 薩波
       const g = effectGuard(st, idx, {});
       if(!g.blocked){
         const th = st.players[idx].hand;
-        const line = (th != null) ? `你偷看了 ${pname(st, idx)}：${cardLabel(th)}` : `你偷看了 ${pname(st, idx)}：（無牌）`;
+        const line = (th != null)
+          ? `你偷看了 ${pname(st, idx)}：${cardLabel(th)}`
+          : `你偷看了 ${pname(st, idx)}：（無牌）`;
+
+        // 只給出牌者看的詳細偷看內容
         emits.push({ to: action.playerId, type:'peek', lines:[line] });
         if (th != null) scorePeek(st, action.playerId, th); // ★ 偵查分
         emits.push({ to: action.playerId, type:'robin_view', casterId: st.turnIndex, targetId: idx, cardId: th });
-        pushLog(st, `羅賓：查看了 ${pname(st, idx)}`, emits);
+
+        // 全體用的事件：給前端做浮動 Toast 用（不含任何卡號）
+        emits.push({
+          to: 'all',
+          type: 'robin_peek',
+          casterId: st.turnIndex,
+          targetId: idx,
+          all: false
+        });
+
+        // 對局日誌（也不含卡號）
+        const casterName = pname(st, st.turnIndex);
+        const targetName = pname(st, idx);
+        pushLog(st, `${casterName} 偵察了 ${targetName} 的手牌`, emits);
       } else {
         scoreDefense(st, idx, 2); // 羅賓2看牌被擋 → 防禦+2
       }
@@ -1174,6 +1208,7 @@ case 0: { // 薩波
       endOrNext(st);
       return { state: st, emits };
     }
+
 
     if(p.action==='sanji'){
       const g = effectGuard(st, idx, {});
