@@ -1877,6 +1877,9 @@ const VOICE_MAP = {
   }
 };
 
+// ⭐ 新增這一行：記錄「這次打牌有沒有準備語音＋台詞」
+let _voiceArmed = false;
+
 /** 根據主角卡＋另一張卡，決定要播放哪一條語音 */
 function getVoiceData(mainId, otherId){
   const conf = VOICE_MAP[mainId];
@@ -1887,35 +1890,50 @@ function getVoiceData(mainId, otherId){
   return conf.base || null;
 }
 
-/** 播放語音＋顯示泡泡（只在本機觸發） */
+/** 播放語音＋準備泡泡（只在自己出牌時被呼叫） */
 function playVoiceLineFor(mainId, otherId){
-  const data = getVoiceData(mainId, otherId);
-  const bubble = document.getElementById('voiceBubble');
-  const textSpan = document.getElementById('voiceText');
+  const bubble  = document.getElementById('voiceBubble');
+  const textSpan= document.getElementById('voiceText');
   const audioEl = document.getElementById('voiceAudio');
 
-  // 沒對應台詞就什麼都不做
-  if (!data) {
-    if (bubble) bubble.classList.add('hidden');
+  // 👉 強化技能卡：完全不播語音、不顯示台詞
+  if (isEnhancedNow(mainId)) {
+    _voiceArmed = false;
+    if (bubble)  bubble.classList.add('hidden');
     if (audioEl) {
       try { audioEl.pause(); audioEl.currentTime = 0; } catch(e){}
     }
     return;
   }
 
-  // 顯示泡泡文字
-  if (bubble && textSpan) {
-    textSpan.textContent = data.text;
-    bubble.classList.remove('hidden');
+  const data = getVoiceData(mainId, otherId);
+
+  // 沒對應台詞 → 關掉泡泡＆語音
+  if (!data) {
+    _voiceArmed = false;
+    if (bubble)  bubble.classList.add('hidden');
+    if (audioEl) {
+      try { audioEl.pause(); audioEl.currentTime = 0; } catch(e){}
+    }
+    return;
   }
 
-  // 播放 mp3（長度超過 4 秒沒關係，會自己播完）
+  // 設定這次要顯示的台詞文字（先不顯示泡泡，等快閃遮罩出現時才決定要不要秀出）
+  if (textSpan) {
+    textSpan.textContent = data.text;
+  }
+  _voiceArmed = true;
+
+  // 語音 mp3 直接開始播放（就算超過 3～4 秒也會播到底）
   if (audioEl) {
     audioEl.src = data.file;
     try { audioEl.currentTime = 0; } catch(e){}
-    audioEl.play().catch(()=>{ /* iOS 被擋就算了，不影響遊戲 */ });
+    audioEl.play().catch(()=>{
+      // iOS 被擋就算了，不影響遊戲流程
+    });
   }
 }
+
 
 /* ========= 場地 → 背景圖片對照 & 切換工具 ========= */
 /** 場地 → 背景圖片對照（檔案放 public/images/venues/xxx.jpg/webp 自行準備） */
