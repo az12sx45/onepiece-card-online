@@ -692,10 +692,82 @@ body::before{
     animation:usoppMissShake .32s ease-out;
   }
 
+/* === 羅賓：偵察提示框（6 號樣式） === */
+#robinLayer {
+  position: fixed;
+  top: 76px;            /* 在 header 上緣稍微往下 */
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  z-index: 180;         /* 比 header 大，就會浮在最上面 */
+}
+
+.robin-toast {
+  pointer-events: auto;
+  max-width: 620px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(255,255,255,0.16), transparent 55%),
+    linear-gradient(120deg, rgba(188,160,255,0.96), rgba(79,57,135,0.98));
+  border: 1px solid rgba(230,212,255,0.9);
+  box-shadow:
+    0 0 0 1px rgba(120,90,200,0.45),
+    0 18px 32px rgba(0,0,0,0.4);
+  color: #f8f4ff;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transform: translateY(-24px) scale(0.96);
+  opacity: 0;
+  transition:
+    opacity .28s ease-out,
+    transform .28s ease-out,
+    box-shadow .28s ease-out;
+  backdrop-filter: blur(18px);
+}
+
+.robin-toast::before {
+  content: '';
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  border-radius: 999px;
+  border: 1px solid rgba(242,232,255,0.9);
+  box-shadow: inset 0 0 0 1px rgba(176,140,255,0.6);
+  background:
+    radial-gradient(circle at 30% 30%, #fff 0, #fff 18%, transparent 19%),
+    radial-gradient(circle at 65% 60%, rgba(255,216,255,0.85) 0, rgba(255,216,255,0.0) 55%),
+    conic-gradient(from -45deg, #764ea5, #f1a8ff, #7fd0ff, #764ea5);
+}
+
+.robin-toast .label-main {
+  font-weight: 600;
+}
+
+.robin-toast .label-sub {
+  opacity: .85;
+  font-size: 12px;
+}
+
+.robin-toast.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  box-shadow:
+    0 0 0 1px rgba(213,187,255,0.75),
+    0 20px 40px rgba(0,0,0,0.55);
+}
+
+
 </style>
 </head>
 <body>
 <div id="usoppLayer"></div>
+<div id="robinLayer"></div>
 <header class="sticky top-0 z-40 bg-[#101418]/80 backdrop-blur border-b border-[#1c2229]">
   <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
     <!-- 左側標題 -->
@@ -2027,6 +2099,16 @@ case 'duel': {
     : `決鬥：${L} vs ${R}`;
 }
 
+// 羅賓：偵察手牌（全體可見播報）
+    case 'robin_peek': {
+      const caster = (typeof e.casterId === 'number') ? pname(e.casterId) : '未知玩家';
+      const target = e.all
+        ? '全體玩家'
+        : (typeof e.targetId === 'number') ? pname(e.targetId) : '未知玩家';
+      // ★ 這裡也完全不顯示任何卡片號碼
+      return `${caster} 偵察了 ${target} 的手牌`;
+    }
+
     case 'robin_view': {
       const t = (typeof e.targetId === 'number') ? pname(e.targetId) : '未知玩家';
       const c = (typeof e.cardId  === 'number') ? `卡 ${e.cardId}` : '未知牌';
@@ -2501,6 +2583,52 @@ function showUsoppToast(opts){
   }, ttl);
 }
 
+// 羅賓小框：偵察手牌提示（6 號樣式）
+function showRobinToast({ caster, target, all }) {
+  const layer = document.getElementById('robinLayer');
+  if (!layer) return;
+
+  const box  = document.createElement('div');
+  box.className = 'robin-toast';
+
+  const main = document.createElement('div');
+  main.className = 'label-main';
+
+  const sub  = document.createElement('div');
+  sub.className  = 'label-sub';
+
+  const casterName = caster || '未知玩家';
+  const targetName = all ? '全體玩家' : (target || '未知玩家');
+
+  // ★ 這裡只講「手牌」，完全不顯示任何卡號
+  main.textContent = `${casterName} 偵察了 ${targetName} 的手牌`;
+
+  sub.textContent = all
+    ? '（所有人的手牌，都悄悄被她看過一眼。）'
+    : '（卡片內容只有羅賓自己看得見。）';
+
+  box.appendChild(main);
+  box.appendChild(sub);
+
+  // 只保留一個框
+  layer.innerHTML = '';
+  layer.appendChild(box);
+
+  // 出場動畫
+  requestAnimationFrame(() => {
+    box.classList.add('show');
+  });
+
+  // 顯示時間（約 3.6 秒）
+  const ttl = 3600;
+  setTimeout(() => {
+    box.classList.remove('show');
+    setTimeout(() => {
+      if (box.parentNode === layer) box.parentNode.removeChild(box);
+    }, 260);
+  }, ttl);
+}
+
 socket.on('EMIT', (e)=>{
   
 
@@ -2586,6 +2714,22 @@ function cardImageURL(id){
   }
 }
 
+  // 羅賓：偵察手牌提示框
+  if (e.type === 'robin_peek') {
+    const caster = (typeof e.casterId === 'number') ? pname(e.casterId) : '未知玩家';
+
+    const isAll = !!e.all;
+    const target = isAll
+      ? '全體玩家'
+      : (typeof e.targetId === 'number') ? pname(e.targetId) : '未知玩家';
+
+    showRobinToast({
+      caster,
+      target,
+      all: isAll
+    });
+    // 不 return，讓它一樣進 feed → 下面 msgToLogLine 會再產生一條文字
+  }
 
   // 騙人布：猜數字（命中 / 失誤）提示框
   if (e.type === 'usopp_hit' || e.type === 'usopp_miss') {
