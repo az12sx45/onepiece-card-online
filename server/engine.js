@@ -1524,42 +1524,60 @@ if(p.action==='zoro'){
       return { state: st, emits };
     }
 
-    if(p.action==='killer'){
-      st.players[idx].protected = false;
-      st.players[idx].dodging   = false;
-      pushLog(st, `基拉：解除 ${pname(st, idx)} 的保護/閃避`, emits);
+if (p.action === 'killer') {
+  // 先解除目標的保護 / 閃避
+  st.players[idx].protected = false;
+  st.players[idx].dodging   = false;
 
-      if (p.extra.boost) {
-        if (action.payload?.duel === true) {
-          pushLog(st, `基拉：向 ${pname(st, idx)} 發起決鬥`, emits);
-          const my  = tail(p.extra.keep);
-          const opp = tail(st.players[idx].hand);
+  const casterName = pname(st, st.turnIndex);
+  const targetName = pname(st, idx);
 
-         if (my > opp) {
-  // challenger 勝
+  // 日誌
+  pushLog(st, `基拉：解除 ${targetName} 的保護/閃避`, emits);
+
+  // ⭐ 新增：給前端播報用事件（不帶任何卡號）
+  emits.push({
+    to: 'all',
+    type: 'killer_disarm',
+    casterId: st.turnIndex,
+    targetId: idx,
+    casterName,
+    targetName
+  });
+
+  // 強化版：還可以進入決鬥流程
+  if (p.extra.boost) {
+    if (action.payload?.duel === true) {
+      pushLog(st, `基拉：向 ${pname(st, idx)} 發起決鬥`, emits);
+      const my  = tail(p.extra.keep);
+      const opp = tail(st.players[idx].hand);
+
+      if (my > opp) {
+        // 挑戰者勝
         pushDuelLog(emits, st, meIdx, idx, idx);
-  doEliminate(st, idx, `基拉決鬥輸了，尾數 ${my} > ${opp}`);
-} else if (my < opp) {
-  // challenger 敗
+        doEliminate(st, idx, `基拉決鬥輸了，尾數 ${my} > ${opp}`);
+      } else if (my < opp) {
+        // 挑戰者敗
         pushDuelLog(emits, st, meIdx, meIdx, idx);
-  doEliminate(st, meIdx, `基拉決鬥輸了，尾數 ${my} < ${opp}`);
-}
- else {
-            pushLog(st,'平手',emits);
-            pushDuelDraw(emits, st, meIdx, idx);
-          }
-
-          st.pending = null;
-          endOrNext(st);
-          return { state: st, emits };
-        }
-        return { state: st, emits }; // 等前端選擇
+        doEliminate(st, meIdx, `基拉決鬥輸了，尾數 ${my} < ${opp}`);
+      } else {
+        pushLog(st, '平手', emits);
+        pushDuelDraw(emits, st, meIdx, idx);
       }
 
       st.pending = null;
       endOrNext(st);
       return { state: st, emits };
     }
+    // 強化但尚未選擇是否決鬥 → 等前端操作
+    return { state: st, emits };
+  }
+
+  // 一般版：只解除保護/閃避就結束
+  st.pending = null;
+  endOrNext(st);
+  return { state: st, emits };
+}
 
     if(p.action==='aokiji'){
       const g = effectGuard(st, idx, {});
