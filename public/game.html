@@ -692,6 +692,93 @@ body::before{
     animation:usoppMissShake .32s ease-out;
   }
 
+/* === 娜美：麻痺提示框（8 號 橘子＆金幣樣式） === */
+#namiLayer {
+  position: fixed;
+  top: 76px;          /* 跟羅賓 / 喬巴同一高度 */
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  z-index: 186;       /* 比 header 再高一點，蓋在最上層 */
+}
+
+/* 主框：直接用 demo 的 v8 當樣式 */
+.nami-v8 {
+  position: relative;
+  max-width: 620px;
+  padding: 9px 16px 11px 44px;
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(251,146,60,0.65), transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(245,158,11,0.55), transparent 60%),
+    #022c22;
+  border: 1px solid rgba(251,191,36,0.95);
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,1),
+    0 16px 32px rgba(15,23,42,0.95),
+    0 0 24px rgba(251,191,36,0.9);
+  color: #fffbeb;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+  transform: translateY(-24px) scale(0.96);
+  opacity: 0;
+  transition:
+    opacity .28s ease-out,
+    transform .28s ease-out,
+    box-shadow .28s ease-out;
+}
+
+/* 左邊橘子＋錢幣圖示 */
+.nami-v8::before {
+  content: "🍊";
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-60%);
+  font-size: 18px;
+  filter: drop-shadow(0 0 6px rgba(251,146,60,1));
+}
+
+.nami-v8::after {
+  content: "฿";
+  position: absolute;
+  left: 24px;
+  top: 50%;
+  transform: translateY(10%);
+  font-weight: 800;
+  font-size: 11px;
+  color: #fef9c3;
+  text-shadow: 0 0 6px rgba(250,250,210,1);
+}
+
+/* 文字本體 */
+.nami-text {
+  position: relative;
+  z-index: 3;
+  line-height: 1.6;
+  text-shadow: 0 0 6px rgba(0,0,0,0.85);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.03em;
+}
+
+.nami-text b {
+  color: #fbbf24; /* 玩家名字：金黃 */
+}
+
+/* 出場動畫用 .show */
+.nami-v8.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  box-shadow:
+    0 0 0 1px rgba(251,191,36,0.85),
+    0 20px 40px rgba(0,0,0,0.75);
+}
+
 /* === 羅賓：偵察提示框（6 號樣式） === */
 #robinLayer {
   position: fixed;
@@ -1034,6 +1121,7 @@ body::before{
 <div id="robinLayer"></div>
 <div id="zoroLayer"></div>
 <div id="lawLayer"></div> 
+<div id="namiLayer"></div>
 <div id="chopperLayer"></div>
 <header class="sticky top-0 z-40 bg-[#101418]/80 backdrop-blur border-b border-[#1c2229]">
   <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
@@ -2984,6 +3072,47 @@ function showChopperToast({ caster, status }) {
   }, ttl);
 }
 
+// === 娜美：麻痺提示框（8 號 橘子＆金幣樣式） ===
+function showNamiToast({ caster, target }) {
+  const layer = document.getElementById('namiLayer');
+  if (!layer) return;
+
+  const box = document.createElement('div');
+  // 使用剛才 CSS 裡的 8 號樣式
+  box.className = 'nami-v8';
+
+  const text = document.createElement('div');
+  text.className = 'nami-text';
+
+  const casterName = caster || 'P?';
+  const targetName = target || 'P?';
+
+  // 文字格式：(打出玩家名) 麻痺了 (被選的玩家名)
+  text.innerHTML = `<b>${casterName}</b> 麻痺了 <b>${targetName}</b>`;
+
+  box.appendChild(text);
+
+  // 同時間只顯示一個娜美框
+  layer.innerHTML = '';
+  layer.appendChild(box);
+
+  // 出場動畫
+  requestAnimationFrame(() => {
+    box.classList.add('show');
+  });
+
+  // 顯示時間（可跟羅賓差不多）
+  const ttl = 4000;
+  setTimeout(() => {
+    box.classList.remove('show');
+    setTimeout(() => {
+      if (box.parentNode === layer) {
+        layer.removeChild(box);
+      }
+    }, 260);
+  }, ttl);
+}
+
 // === 索隆：棄牌提示框（使用 demo 樣式 3） ===
 function showZoroToast({ caster, target }) {
   const layer = document.getElementById('zoroLayer');
@@ -3137,6 +3266,20 @@ function cardImageURL(id){
       caster: casterName,
       status
     });
+    // 一樣不 return，讓伺服器的文字訊息照常進 feed
+  }
+
+  // 娜美：麻痺提示框
+  if (e.type === 'nami_paralyze') {
+    const caster = (typeof e.casterId === 'number')
+      ? pname(e.casterId)
+      : (e.casterName || 'P?');
+
+    const target = (typeof e.targetId === 'number')
+      ? pname(e.targetId)
+      : (e.targetName || 'P?');
+
+    showNamiToast({ caster, target });
     // 一樣不 return，讓伺服器的文字訊息照常進 feed
   }
 
