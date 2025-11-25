@@ -2221,14 +2221,18 @@ case 'duel': {
     case 'chopper_state': {
       const caster = (typeof e.casterId === 'number') ? pname(e.casterId) : '未知玩家';
       if (e.status === 'dodge') {
+        // 閃避
         return `✨ ${caster} 獲得了閃避狀態！`;
       } else {
+        // 保護
         return `🛡️ ${caster} 獲得了保護狀態！`;
       }
+    }  // ★★ 這一行是你之前少寫的，用來關閉 case 'chopper_state' 的 block
 
-    default: return null;
-
+    default:
+      return null;
   }
+
 }
 
 /* ===== 去重推入（改為推到 feed） ===== */
