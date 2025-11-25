@@ -762,12 +762,93 @@ body::before{
     0 20px 40px rgba(0,0,0,0.55);
 }
 
+/* === 喬巴：保護 / 閃避狀態提示框（2 號樣式） === */
+#chopperLayer {
+  position: fixed;
+  top: 76px;          /* 跟羅賓差不多高度，飄在 header 下方 */
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 185;       /* 比 header 大一點，比一般 UI 高 */
+}
+
+.chopper-toast {
+  min-width: 260px;
+  max-width: 520px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(255,255,255,0.22), transparent 55%),
+    linear-gradient(120deg, rgba(248,187,208,0.98), rgba(129,230,217,0.96)); /* 粉 + 薄荷漸層 */
+  border: 1px solid rgba(255,255,255,0.9);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.55),
+    0 18px 38px rgba(0,0,0,0.55);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  color: #111827;
+  transform: translateY(-12px) scale(.96);
+  opacity: 0;
+  transition: all .35s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+.chopper-toast .chopper-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 0 0 2px rgba(249,250,251,0.9);
+  background:
+    radial-gradient(circle at 30% 0%, #f9fafb, transparent 65%),
+    linear-gradient(135deg, #f472b6, #fb7185); /* 預設粉色：治療感 */
+}
+
+.chopper-toast .chopper-text {
+  flex: 1;
+  font-weight: 700;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+}
+
+/* 保護 / 閃避 不同顏色 */
+.chopper-toast.protect .chopper-icon {
+  background:
+    radial-gradient(circle at 30% 0%, #f9fafb, transparent 65%),
+    linear-gradient(135deg, #93c5fd, #a5b4fc); /* 藍紫：護盾感 */
+}
+
+.chopper-toast.dodge .chopper-icon {
+  background:
+    radial-gradient(circle at 30% 0%, #f9fafb, transparent 65%),
+    linear-gradient(135deg, #6ee7b7, #22c55e); /* 綠色：閃避感 */
+}
+
+.chopper-toast.show {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .chopper-toast {
+    transition: none;
+    transform: translateY(0) scale(1);
+  }
+}
+
 
 </style>
 </head>
 <body>
 <div id="usoppLayer"></div>
 <div id="robinLayer"></div>
+<div id="chopperLayer"></div>
 <header class="sticky top-0 z-40 bg-[#101418]/80 backdrop-blur border-b border-[#1c2229]">
   <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
     <!-- 左側標題 -->
@@ -2583,6 +2664,53 @@ function showUsoppToast(opts){
   }, ttl);
 }
 
+// === 喬巴：保護 / 閃避狀態提示框（2 號樣式） ===
+function showChopperToast({ caster, status }) {
+  const layer = document.getElementById('chopperLayer');
+  if (!layer) return;
+
+  const mode = (status === 'dodge') ? 'dodge' : 'protect';
+  const box  = document.createElement('div');
+  box.className = 'chopper-toast ' + mode;
+
+  const icon = document.createElement('div');
+  icon.className = 'chopper-icon';
+  // 保護 / 閃避用不同符號
+  icon.textContent = (mode === 'dodge') ? '✨' : '🩺';
+
+  const text = document.createElement('div');
+  text.className = 'chopper-text';
+
+  const casterName = caster || '未知玩家';
+  const statusText = (mode === 'dodge') ? '閃避狀態' : '保護狀態';
+
+  // ✅ 只有一行主文字，不要副文字
+  text.textContent = `${casterName} 獲得了${statusText}`;
+
+  box.appendChild(icon);
+  box.appendChild(text);
+
+  // 只保留一個框
+  layer.innerHTML = '';
+  layer.appendChild(box);
+
+  // 出場動畫
+  requestAnimationFrame(() => {
+    box.classList.add('show');
+  });
+
+  // 顯示時間（約 3.8 秒）
+  const ttl = 3800;
+  setTimeout(() => {
+    box.classList.remove('show');
+    setTimeout(() => {
+      if (box.parentNode === layer) {
+        layer.removeChild(box);
+      }
+    }, 260);
+  }, ttl);
+}
+
 // 羅賓小框：偵察手牌提示（6 號樣式，只有主文字）
 function showRobinToast({ caster, target, all }) {
   const layer = document.getElementById('robinLayer');
@@ -2722,6 +2850,25 @@ function cardImageURL(id){
     });
     // 不 return，讓它一樣進 feed → 下面 msgToLogLine 會再產生一條文字
   }
+
+  // 喬巴：獲得保護 / 閃避狀態提示框
+  if (e.type === 'chopper_status') {
+    const casterName =
+      (typeof e.casterId === 'number') ? pname(e.casterId) :
+      (e.casterName || '未知玩家');
+
+    const status =
+      (e.status === 'dodge' || e.status === 'protect')
+        ? e.status
+        : 'protect';
+
+    showChopperToast({
+      caster: casterName,
+      status
+    });
+    // 一樣不 return，讓伺服器的文字訊息照常進 feed
+  }
+
 
   // 騙人布：猜數字（命中 / 失誤）提示框
   if (e.type === 'usopp_hit' || e.type === 'usopp_miss') {
