@@ -2709,7 +2709,7 @@ function showChopperToast({ caster, status }) {
   const icon = document.createElement('div');
   icon.className = 'chopper-icon';
   // 保護 / 閃避用不同符號
-  icon.textContent = (mode === 'dodge') ? '✨' : '🩺';
+  icon.textContent = (mode === 'dodge') ? '🌀' : '🛡';
 
   const text = document.createElement('div');
   text.className = 'chopper-text';
@@ -2733,7 +2733,7 @@ function showChopperToast({ caster, status }) {
   });
 
   // 顯示時間（約 3.8 秒）
-  const ttl = 4000;
+  const ttl = 7000;
   setTimeout(() => {
     box.classList.remove('show');
     setTimeout(() => {
