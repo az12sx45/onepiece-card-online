@@ -762,6 +762,102 @@ body::before{
     0 20px 40px rgba(0,0,0,0.55);
 }
 
+/* === 羅：交換手牌提示框（Style 5 藍光版） === */
+#lawLayer {
+  position: fixed;
+  top: 76px;          /* 放在索隆下面一點點，免得撞在一起 */
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  z-index: 188;
+}
+
+/* 共用：外框容器 */
+.law-toast {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: min(90vw, 480px);
+}
+
+/* 共用：文字樣式 */
+.law-text {
+  position: relative;
+  z-index: 3;
+  line-height: 1.5;
+  text-align: center;
+  text-shadow: 0 0 6px rgba(0,0,0,0.9);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+}
+
+.law-text b {
+  color: #f9f871; /* 名字黃一點比較跳 */
+}
+
+/* Style 5 · 交換卡片 UI 面板（藍光加強版） */
+.law-v5 {
+  position: relative;
+  padding: 11px 24px 13px;
+  border-radius: 18px;
+  background:
+    /* 中央大塊手術藍光 */
+    radial-gradient(circle at 50% 50%, rgba(59,130,246,0.40), transparent 68%),
+    /* 左下亮一點 */
+    radial-gradient(circle at 0% 100%, rgba(56,189,248,0.55), transparent 65%),
+    /* 右上亮一點 */
+    radial-gradient(circle at 100% 0%, rgba(37,99,235,0.50), transparent 65%),
+    #020617;
+  border: 1px solid rgba(148,163,184,0.9);
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,1),         /* 外框邊線 */
+    0 20px 38px rgba(15,23,42,0.95),    /* 下方陰影 */
+    0 0 32px rgba(56,189,248,0.95);     /* 整體藍色外光暈（加強） */
+  color: #e5f2ff;
+  overflow: hidden;
+
+  /* 進場動畫初始狀態 */
+  opacity: 0;
+  transform: translateY(-18px) scale(.96);
+  transition:
+    opacity .28s ease-out,
+    transform .28s ease-out,
+    box-shadow .28s ease-out;
+}
+
+/* 顯示時 */
+.law-v5.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* 左右兩張正在交換的卡片輪廓 */
+.law-v5::before,
+.law-v5::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  width: 22px;
+  height: 30px;
+  border-radius: 4px;
+  border: 1px solid rgba(148,163,184,0.8);
+  box-shadow: 0 0 8px rgba(148,163,184,0.8);
+  opacity: 0.75;
+}
+
+.law-v5::before {
+  left: 10px;
+  transform: rotate(-8deg);
+}
+
+.law-v5::after {
+  right: 10px;
+  transform: rotate(8deg);
+}
+
 /* === 喬巴：狀態提示框（2 號糖果護盾樣式） === */
 #chopperLayer {
   position: fixed;
@@ -937,6 +1033,7 @@ body::before{
 <div id="usoppLayer"></div>
 <div id="robinLayer"></div>
 <div id="zoroLayer"></div>
+<div id="lawLayer"></div> 
 <div id="chopperLayer"></div>
 <header class="sticky top-0 z-40 bg-[#101418]/80 backdrop-blur border-b border-[#1c2229]">
   <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
@@ -2311,6 +2408,16 @@ case 'duel': {
       const d = (typeof e.digit === 'number') ? e.digit : '?';
       return `騙人布：${caster} 猜 ${target} 的尾數為「${d}」→ 猜錯`;
     }
+    case 'law_swap': {
+      const caster = (typeof e.casterId === 'number')
+        ? pname(e.casterId)
+        : (e.casterName || '未知玩家');
+      const target = (typeof e.targetId === 'number')
+        ? pname(e.targetId)
+        : (e.targetName || '未知玩家');
+      return `${caster} 交換了 ${target} 的手牌`;
+    }
+
     default: return null;
 
   }
@@ -2791,6 +2898,45 @@ function showRobinToast({ caster, target, all }) {
   }, ttl);
 }
 
+// === 羅：交換手牌提示框（Style 5 藍光版） ===
+function showLawToast({ caster, target }) {
+  const layer = document.getElementById('lawLayer');
+  if (!layer) return;
+
+  const box = document.createElement('div');
+  box.className = 'law-toast law-v5';
+
+  const text = document.createElement('div');
+  text.className = 'law-text';
+
+  const casterName = caster || 'P?';
+  const targetName = target || 'P?';
+
+  // 照你指定的格式：(打出玩家名)交換了(被選的玩家名)的手牌
+  text.innerHTML = `<b>${casterName}</b> 交換了 <b>${targetName}</b> 的手牌`;
+
+  box.appendChild(text);
+
+  // 只顯示一個框
+  layer.innerHTML = '';
+  layer.appendChild(box);
+
+  // 啟動進場動畫
+  requestAnimationFrame(() => {
+    box.classList.add('show');
+  });
+
+  const ttl = 4000; // 顯示約 4 秒
+  setTimeout(() => {
+    box.classList.remove('show');
+    setTimeout(() => {
+      if (box.parentNode === layer) {
+        layer.removeChild(box);
+      }
+    }, 260);
+  }, ttl);
+}
+
 // === 喬巴：保護 / 閃避狀態提示框（2 號樣式） ===
 function showChopperToast({ caster, status }) {
   const layer = document.getElementById('chopperLayer');
@@ -3005,6 +3151,20 @@ function cardImageURL(id){
 
     showZoroToast({ caster, target });
   }
+// 羅：交換手牌播報
+if (e.type === 'law_swap') {
+  const caster = (typeof e.casterId === 'number')
+    ? pname(e.casterId)
+    : (e.casterName || 'P?');
+
+  const target = (typeof e.targetId === 'number')
+    ? pname(e.targetId)
+    : (e.targetName || 'P?');
+
+  showLawToast({ caster, target });
+}
+
+
 
   // 騙人布：猜數字（命中 / 失誤）提示框
   if (e.type === 'usopp_hit' || e.type === 'usopp_miss') {
