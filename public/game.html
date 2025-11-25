@@ -621,6 +621,116 @@ body::before{
   #btnDraw.hot::after{ animation: none !important; }
 }
 
+/* === 基拉：解除武裝提示框（2 號面具樣式） === */
+#killerLayer {
+  position: fixed;
+  top: 16px;           /* ← 跟騙人布一樣高 */
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  z-index: 188;
+}
+
+/* 容器 */
+.killer-v2 {
+  position: relative;
+  max-width: 620px;
+  padding: 10px 18px 12px 64px;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(59,130,246,0.65), transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(148,163,184,0.8), transparent 60%),
+    #020617;
+  border: 1px solid rgba(148,163,184,0.9);
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,1),
+    0 16px 36px rgba(15,23,42,0.9),
+    0 0 22px rgba(59,130,246,0.95);
+  color: #e5e7eb;
+  display: inline-flex;
+  align-items: center;
+  font-size: 15px;
+  line-height: 1.4;
+  letter-spacing: 0.03em;
+  transform: translateY(-20px) scale(0.96);
+  opacity: 0;
+  transition:
+    opacity 0.26s ease-out,
+    transform 0.26s ease-out,
+    box-shadow 0.26s ease-out;
+}
+
+/* 顯示時的動畫狀態（JS 會加 show 類別） */
+.killer-v2.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  box-shadow:
+    0 0 0 1px rgba(191,219,254,1),
+    0 18px 40px rgba(15,23,42,1),
+    0 0 30px rgba(59,130,246,1);
+}
+
+/* 文字區域 */
+.killer-text {
+  position: relative;
+  z-index: 1;
+}
+
+.killer-name {
+  font-weight: 700;
+  color: #f97316; /* 橘色點亮角色名字 */
+  text-shadow: 0 0 8px rgba(248,250,252,0.75);
+}
+
+/* 面具＋黑點造型 */
+.killer-v2::before {
+  content: "";
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background:
+    /* 上面兩排大孔 */
+    radial-gradient(circle at 28% 28%, #020617 0 4px, transparent 4px),
+    radial-gradient(circle at 72% 28%, #020617 0 4px, transparent 4px),
+    radial-gradient(circle at 28% 72%, #020617 0 4px, transparent 4px),
+    radial-gradient(circle at 72% 72%, #020617 0 4px, transparent 4px),
+    /* 中間幾顆小孔 */
+    radial-gradient(circle at 50% 20%, #020617 0 3px, transparent 3px),
+    radial-gradient(circle at 18% 50%, #020617 0 3px, transparent 3px),
+    radial-gradient(circle at 82% 50%, #020617 0 3px, transparent 3px),
+    radial-gradient(circle at 40% 88%, #020617 0 3px, transparent 3px),
+    radial-gradient(circle at 60% 88%, #020617 0 3px, transparent 3px),
+    #e5e7eb;
+  border: 1px solid rgba(15,23,42,0.95);
+  box-shadow:
+    0 0 6px rgba(248,250,252,0.9),
+    0 0 16px rgba(59,130,246,0.9);
+  transform: translateY(-50%);
+}
+
+/* 面具背後藍色噴光＋髮型感 */
+.killer-v2::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  width: 52px;
+  height: 46px;
+  border-radius: 40% 40% 60% 60%;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(59,130,246,0.9), transparent 65%),
+    linear-gradient(135deg, rgba(15,23,42,0.1), rgba(15,23,42,1));
+  opacity: 0.95;
+  filter: drop-shadow(0 0 10px rgba(59,130,246,1));
+  transform: translateY(-50%);
+  z-index: 0;
+}
+
   /* === 騙人布猜數字：漫畫爆炸提示框（亮色版） === */
   #usoppLayer{
     position:fixed;
@@ -1122,6 +1232,7 @@ body::before{
 <div id="zoroLayer"></div>
 <div id="lawLayer"></div> 
 <div id="namiLayer"></div>
+<div id="killerLayer"></div>
 <div id="chopperLayer"></div>
 <header class="sticky top-0 z-40 bg-[#101418]/80 backdrop-blur border-b border-[#1c2229]">
   <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
@@ -2505,6 +2616,12 @@ case 'duel': {
         : (e.targetName || '未知玩家');
       return `${caster} 交換了 ${target} 的手牌`;
     }
+    case 'killer_disarm': {
+      // 後端已經把 casterName / targetName 丟過來了
+      showKillerToast(e.casterName, e.targetName);
+      break;
+    }
+
 
     default: return null;
 
@@ -3113,6 +3230,43 @@ function showNamiToast({ caster, target }) {
   }, ttl);
 }
 
+// === 基拉 解除武裝 播報 ===
+const killerLayer = document.getElementById('killerLayer');
+
+function showKillerToast(casterName, targetName) {
+  if (!killerLayer) return;
+
+  killerLayer.innerHTML = '';
+
+  const box = document.createElement('div');
+  box.className = 'killer-v2';  // 待會再加 show
+
+  const text = document.createElement('div');
+  text.className = 'killer-text';
+  text.innerHTML = `
+    <span class="killer-name">${casterName}</span>
+    解除了
+    <span class="killer-name">${targetName}</span>
+    的武裝狀態
+  `;
+
+  box.appendChild(text);
+  killerLayer.appendChild(box);
+
+  // 小延遲讓 CSS transition 吃到
+  requestAnimationFrame(() => {
+    box.classList.add('show');
+  });
+
+  // 顯示約 3 秒
+  setTimeout(() => {
+    box.classList.remove('show');
+    setTimeout(() => {
+      killerLayer.innerHTML = '';
+    }, 260);
+  }, 4000);
+}
+
 // === 索隆：棄牌提示框（使用 demo 樣式 3） ===
 function showZoroToast({ caster, target }) {
   const layer = document.getElementById('zoroLayer');
@@ -3294,6 +3448,7 @@ function cardImageURL(id){
 
     showZoroToast({ caster, target });
   }
+
 // 羅：交換手牌播報
 if (e.type === 'law_swap') {
   const caster = (typeof e.casterId === 'number')
