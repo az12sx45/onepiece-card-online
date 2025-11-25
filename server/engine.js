@@ -1627,6 +1627,10 @@ if(p.action==='zoro'){
         pushLog(st,'平手',emits);
         pushDuelDraw(emits, st, meIdx, idx);
      pushDuelDraw(emits, st, meIdx, idx);
++     p.extra.firstDone = true;   // ⭐ 第二次不會再進 firstDone block
++     st.pending = null;          // ⭐ 必加！避免卡死
++     endOrNext(st);
++     return { state: st, emits };
       }
     } else {
       scoreDefense(st, idx, p.extra.keep); // ★ 被擋
