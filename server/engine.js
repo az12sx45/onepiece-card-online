@@ -913,16 +913,32 @@ case 2: { // 羅賓
         return { state: st, emits };
       }
       case 4: { // 喬巴
-        if(venueActive){
-          me.dodging=true;
+        let status = 'protect';
+
+        if (venueActive) {
+          me.dodging = true;
+          status = 'dodge';
           pushLog(st, '喬巴（強化）：獲得閃避', emits);
         } else {
-          me.protected=true;
+          me.protected = true;
+          status = 'protect';
           pushLog(st, '喬巴：獲得保護', emits);
         }
+
+        // ⭐ 新增：給全體玩家的喬巴狀態提示事件（不含任何卡號）
+        const casterName = pname(st, st.turnIndex);
+        emits.push({
+          to: 'all',
+          type: 'chopper_status',
+          casterId: st.turnIndex,
+          casterName,
+          status   // 'protect' 或 'dodge'
+        });
+
         endOrNext(st);
         return { state: st, emits };
       }
+
       case 5: { // 索隆
         st.pending = { action:'zoro' };
         return { state: st, emits };
