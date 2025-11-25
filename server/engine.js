@@ -1359,41 +1359,70 @@ if(p.action==='zoro'){
           return { state: st, emits };
         }
 
-        if(action.payload?.swap===true){
-          const gSwap = effectGuard(st, idx, {});
-          if(!gSwap.blocked){
-            const t = st.players[idx];
-            const tmp = t.hand;
-            t.hand = me.hand;
-            me.hand = tmp;
-            pushLog(st,'羅（強化）：完成交換',emits);
-          } else {
-            scoreDefense(st, idx, 6); // 羅6交換被擋 → 防禦+6
-            pushLog(st, `羅（強化）：對 ${pname(st, idx)} 的交換被保護/閃避抵銷`, emits);
-          }
-          st.pending = null;
-          endOrNext(st);
-          return { state: st, emits };
-        }
+ if (action.payload?.swap === true) {
+  const gSwap = effectGuard(st, idx, {});
+  if (!gSwap.blocked) {
+    const t = st.players[idx];
+    const tmp = t.hand;
+    t.hand = me.hand;
+    me.hand = tmp;
+
+    const casterName = pname(st, st.turnIndex);
+    const targetName = pname(st, idx);
+
+    // 日誌也改成「誰交換了誰」
+    pushLog(st, `${casterName} 交換了 ${targetName} 的手牌`, emits);
+
+    // ⭐ 給前端的播報事件
+    emits.push({
+      to: 'all',
+      type: 'law_swap',
+      casterId: st.turnIndex,
+      targetId: idx,
+      casterName,
+      targetName
+    });
+  } else {
+    scoreDefense(st, idx, 6); // 羅6交換被擋 → 防禦+6
+    pushLog(st, `羅（強化）：對 ${pname(st, idx)} 的交換被保護/閃避抵銷`, emits);
+  }
+  st.pending = null;
+  endOrNext(st);
+  return { state: st, emits };
+}
+
 
         return { state: st, emits };
-      } else {
-        const gSwap = effectGuard(st, idx, {});
-        if(!gSwap.blocked){
-          const t = st.players[idx];
-          const tmp = t.hand;
-          t.hand = me.hand;
-          me.hand = tmp;
-          pushLog(st,'羅：完成交換',emits);
-        } else {
-          scoreDefense(st, idx, 6); // 羅6交換被擋 → 防禦+6
-          pushLog(st, `羅：對 ${pname(st, idx)} 的交換被保護/閃避抵銷`, emits);
-        }
-        st.pending=null;
-        endOrNext(st);
-        return { state: st, emits };
-      }
-    }
+  } else {
+  const gSwap = effectGuard(st, idx, {});
+  if (!gSwap.blocked) {
+    const t = st.players[idx];
+    const tmp = t.hand;
+    t.hand = me.hand;
+    me.hand = tmp;
+
+    const casterName = pname(st, st.turnIndex);
+    const targetName = pname(st, idx);
+
+    pushLog(st, `${casterName} 交換了 ${targetName} 的手牌`, emits);
+
+    // ⭐ 一般版一樣丟播報事件
+    emits.push({
+      to: 'all',
+      type: 'law_swap',
+      casterId: st.turnIndex,
+      targetId: idx,
+      casterName,
+      targetName
+    });
+  } else {
+    scoreDefense(st, idx, 6); // 羅6交換被擋 → 防禦+6
+    pushLog(st, `羅：對 ${pname(st, idx)} 的交換被保護/閃避抵銷`, emits);
+  }
+  st.pending = null;
+  endOrNext(st);
+  return { state: st, emits };
+}
 
     if(p.action==='nami'){
       const g = effectGuard(st, idx, {});
