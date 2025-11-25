@@ -837,12 +837,101 @@ body::before{
   transform: translateY(0) scale(1);
 }
 
+/* === 索隆：棄牌提示框（刀光金屬風） === */
+#zoroLayer {
+  position: fixed;
+  top: 110px;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  z-index: 185;
+}
+
+/* 外框：圓弧金屬護手 + 綠色刀氣 */
+.zoro-toast {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  min-width: 260px;
+  max-width: min(80vw, 420px);
+  background:
+    radial-gradient(circle at 0 0, rgba(74,222,128,0.28) 0, transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(34,197,94,0.28) 0, transparent 60%),
+    linear-gradient(135deg,#020617,#020617 40%,#111827 100%);
+  border-radius: 999px;
+  border: 1px solid rgba(163,230,53,0.7);
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,0.9),
+    0 18px 40px rgba(0,0,0,0.8);
+  color: #e5e7eb;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .05em;
+  text-shadow: 0 0 6px rgba(0,0,0,0.8);
+  opacity: 0;
+  transform: translateY(-18px);
+  transition: opacity .22s ease-out, transform .22s ease-out;
+  pointer-events: auto;
+}
+
+/* 左邊圓形「刀光」icon */
+.zoro-toast::before {
+  content: '';
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  border: 1px solid rgba(190,242,100,.9);
+  box-shadow:
+    0 0 0 1px rgba(21,128,61,.7),
+    0 0 14px rgba(22,163,74,.9);
+  background:
+    conic-gradient(from 210deg,
+      rgba(190,242,100,1) 0deg,
+      rgba(190,242,100,.2) 90deg,
+      rgba(15,23,42,1) 180deg,
+      rgba(190,242,100,.4) 270deg,
+      rgba(190,242,100,1) 360deg);
+}
+
+/* 文字本體 */
+.zoro-text {
+  padding-left: 4px;
+}
+
+/* 上緣金屬高光 */
+.zoro-toast::after {
+  content: '';
+  position: absolute;
+  inset-inline: 12px;
+  top: 1px;
+  height: 1px;
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg,
+      transparent,
+      rgba(209,250,229,0.9),
+      rgba(74,222,128,0.6),
+      transparent);
+  opacity: .8;
+}
+
+/* 顯示動畫狀態 */
+.zoro-toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 
 </style>
 </head>
 <body>
 <div id="usoppLayer"></div>
 <div id="robinLayer"></div>
+<div id="zoroLayer"></div>
 <div id="chopperLayer"></div>
 <header class="sticky top-0 z-40 bg-[#101418]/80 backdrop-blur border-b border-[#1c2229]">
   <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
@@ -2744,6 +2833,39 @@ function showChopperToast({ caster, status }) {
   }, ttl);
 }
 
+// === 索隆：棄牌提示框 ===
+function showZoroToast({ caster, target }) {
+  const layer = document.getElementById('zoroLayer');
+  if (!layer) return;
+
+  const box = document.createElement('div');
+  box.className = 'zoro-toast';
+
+  const text = document.createElement('div');
+  text.className = 'zoro-text';
+
+  const casterName = caster || 'P?';
+  const targetName = target || 'P?';
+  // ★ 播報文字格式：(打出玩家名)棄掉了(被選的玩家名)的手牌
+  text.textContent = `${casterName} 棄掉了 ${targetName} 的手牌`;
+
+  box.appendChild(text);
+  layer.innerHTML = '';
+  layer.appendChild(box);
+
+  // 進場動畫
+  requestAnimationFrame(() => box.classList.add('show'));
+
+  // 停留時間（可自行調整，這裡約 4 秒）
+  const ttl = 4000;
+  setTimeout(() => {
+    box.classList.remove('show');
+    setTimeout(() => {
+      if (box.parentNode === layer) layer.removeChild(box);
+    }, 250);
+  }, ttl);
+}
+
 
 socket.on('EMIT', (e)=>{
   
@@ -2865,6 +2987,17 @@ function cardImageURL(id){
     // 一樣不 return，讓伺服器的文字訊息照常進 feed
   }
 
+// ★ 新增：索隆 5 號棄牌提示
+  if (e.type === 'zoro_discard') {
+    const caster = (typeof e.casterId === 'number')
+      ? pname(e.casterId)
+      : (e.casterName || 'P?');
+    const target = (typeof e.targetId === 'number')
+      ? pname(e.targetId)
+      : (e.targetName || 'P?');
+
+    showZoroToast({ caster, target });
+  }
 
   // 騙人布：猜數字（命中 / 失誤）提示框
   if (e.type === 'usopp_hit' || e.type === 'usopp_miss') {
