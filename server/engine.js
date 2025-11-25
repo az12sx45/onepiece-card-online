@@ -1594,51 +1594,51 @@ if(p.action==='zoro'){
     }
   }
 
- if(type==='LUFFY_SECOND'){
+  // ===== 魯夫第二次決鬥 =====
+  if (type === 'LUFFY_SECOND') {
     const p = st.pending;
-    if(!p || p.action!=='luffy') return { state: st, emits };
+    if (!p || p.action !== 'luffy') return { state: st, emits };
 
     const idx = action.payload?.target;
-    if(typeof idx !== 'number'){
-      st.pending=null;
-      endOrNext(st);
-      return { state: st, emits };
-    }
-    if(idx===-1){
-      st.pending=null;
+    // -1 或沒給目標 → 視為放棄第二次決鬥，直接下一位
+    if (typeof idx !== 'number' || idx === -1) {
+      st.pending = null;
       endOrNext(st);
       return { state: st, emits };
     }
 
+    const meIdx = st.turnIndex;
     const g = effectGuard(st, idx, {});
-    if(!g.blocked){
+    if (!g.blocked) {
       pushLog(st, `魯夫：向 ${pname(st, idx)} 發起第二次決鬥`, emits);
-      const my=tail(p.extra.keep);
-      const opp=tail(st.players[idx].hand);
-      if(my>opp){
-        scoreDuelAttack(st, st.turnIndex, p.extra.keep, st.players[idx].hand, {}); // ★
-        doEliminate(st, idx, '魯夫擊倒', st.turnIndex, emits);
-              pushDuelLog(emits, st, st.turnIndex, idx, idx);
-      } else if(my<opp){
+      const my  = tail(p.extra.keep);
+      const opp = tail(st.players[idx].hand);
+
+      if (my > opp) {
+        // 我贏
+        scoreDuelAttack(st, meIdx, p.extra.keep, st.players[idx].hand, {});
+        doEliminate(st, idx, '魯夫擊倒', meIdx, emits);
+        pushDuelLog(emits, st, meIdx, idx, idx);
+      } else if (my < opp) {
+        // 我輸
         scoreDefenseReversal(st, idx, st.players[idx].hand, p.extra.keep, {});
-        doEliminate(st, st.turnIndex, '魯夫失敗', st.turnIndex, emits);
-      pushDuelLog(emits, st, st.turnIndex, st.turnIndex, idx);
+        doEliminate(st, meIdx, '魯夫失敗', meIdx, emits);
+        pushDuelLog(emits, st, meIdx, meIdx, idx);
       } else {
-        pushLog(st,'平手',emits);
+        // ⭐ 第二次也是平手 → 播動畫後直接換下一位，不再卡住
+        pushLog(st, '平手', emits);
         pushDuelDraw(emits, st, meIdx, idx);
-     pushDuelDraw(emits, st, meIdx, idx);
-+     p.extra.firstDone = true;   // ⭐ 第二次不會再進 firstDone block
-+     st.pending = null;          // ⭐ 必加！避免卡死
-+     endOrNext(st);
-+     return { state: st, emits };
       }
     } else {
-      scoreDefense(st, idx, p.extra.keep); // ★ 被擋
+      // 被保護 / 閃避擋下 → 給防禦分
+      scoreDefense(st, idx, p.extra.keep);
     }
-    st.pending=null;
+
+    st.pending = null;
     endOrNext(st);
     return { state: st, emits };
   }
+
 
   // ===== 魯夫（魚人島強化）：猿王群鴉炮 =====
   if (type === 'LUFFY_BOOST_COMMIT') {
