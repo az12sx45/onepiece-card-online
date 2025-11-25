@@ -1265,6 +1265,18 @@ if(p.action==='zoro'){
     }
     t.hand=null;
 
+    // ★ 新增：索隆 5 號棄牌播報（不帶任何卡號資訊）
+    const casterName = pname(st, st.turnIndex);
+    const targetName = pname(st, idx);
+    emits.push({
+      to: 'all',
+      type: 'zoro_discard',
+      casterId: st.turnIndex,
+      targetId: idx,
+      casterName,
+      targetName
+    });
+
     if (thrown === 9 || thrown === 19) {
       if (st.saboSilenceOn && isHighTail(thrown)) {
         pushLog(st,'【靜默】薩波：丟出尾數≥7 → 該牌效果不發動',emits);
