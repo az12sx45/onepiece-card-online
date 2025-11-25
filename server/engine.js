@@ -1431,18 +1431,38 @@ if(p.action==='zoro'){
     }
 
 
-    if(p.action==='nami'){
+    if (p.action === 'nami') {
       const g = effectGuard(st, idx, {});
-      if(!g.blocked){
-        st.players[idx].skipNext=true;
-        pushLog(st, `雷霆：${pname(st, idx)} 下回合跳過`, emits);
+      if (!g.blocked) {
+        // 麻痺成功 → 目標下回合跳過
+        st.players[idx].skipNext = true;
+
+        const casterId   = st.turnIndex;
+        const casterName = pname(st, casterId);
+        const targetName = pname(st, idx);
+
+        // 日誌
+        pushLog(st, `雷霆：${targetName} 下回合跳過`, emits);
+
+        // 丟給前端的娜美播報事件
+        emits.push({
+          to: 'all',
+          type: 'nami_paralyze',
+          casterId,
+          targetId: idx,
+          casterName,
+          targetName
+        });
       } else {
+        // 被保護 / 閃避擋掉
         scoreDefense(st, idx, 7); // 娜美7被擋 → 防禦+7
       }
-      st.pending=null;
+
+      st.pending = null;
       endOrNext(st);
       return { state: st, emits };
     }
+
 
     if(p.action==='luffy'){
       const g = effectGuard(st, idx, {});
