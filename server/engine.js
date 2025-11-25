@@ -778,7 +778,6 @@ function applyAction(state, action){
       return { state: st, emits };
     }
 
-    emits.push({ to: action.playerId, type:'toast', cardId: playId });
     me.hand = keepId;
     me.tempDraw = null;
     st.discard.push(playId);
@@ -821,6 +820,8 @@ function applyAction(state, action){
         pushLog(st, '冰鬼：本回合出偶數 → 解除', emits);
       }
     }
+
+     emits.push({ to: action.playerId, type:'toast', cardId: playId });
 
     // === 卡牌結算 ===
     switch(playId){
