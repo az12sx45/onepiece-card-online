@@ -765,7 +765,7 @@ body::before{
 /* === 喬巴：狀態提示框（2 號糖果護盾樣式） === */
 #chopperLayer {
   position: fixed;
-  top: 80px;          /* 在 header 下面一點 */
+  top: 76px;          /* 在 header 下面一點 */
   left: 0;
   right: 0;
   padding: 0 16px;
@@ -775,7 +775,7 @@ body::before{
   z-index: 180;
 }
 
-.chop-toast {
+.chopper-toast {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -800,7 +800,7 @@ body::before{
 }
 
 /* 尾巴（小小下巴） */
-.chop-toast::after {
+.chopper-toast::after {
   content: "";
   position: absolute;
   right: 16px;
@@ -813,7 +813,7 @@ body::before{
 }
 
 /* Icon 圓形（喬巴十字 / 閃光） */
-.chop-icon {
+.chopper-icon {
   width: 26px;
   height: 26px;
   border-radius: 999px;
@@ -827,12 +827,12 @@ body::before{
     0 0 12px rgba(248,113,113,.7);
 }
 
-.chop-text {
+.chopper-text {
   letter-spacing: .04em;
 }
 
 /* 顯示時 */
-.chop-toast.show {
+.chopper-toast.show {
   opacity: 1;
   transform: translateY(0) scale(1);
 }
