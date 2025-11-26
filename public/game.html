@@ -3788,51 +3788,41 @@ if (canChoose) {
   } else {
     el.imgDrawn.src = '';
   }
+  // ======= 正確的冰凍與娜美規則 =======
 
-   // ======= 正確的冰凍與娜美規則（只凍不能打的那張） =======
-
-  // 先清除舊狀態
+  // 清除舊狀態
   el.playHand.classList.remove("card-frozen");
   el.playDrawn.classList.remove("card-frozen");
   el.playHand.disabled = false;
   el.playDrawn.disabled = false;
 
-  const h = my.hand;       // 手牌
-  const d = my.tempDraw;   // 抽到的牌
+  const h = my.hand;
+  const d = my.tempDraw;
 
-  // ------------------------------
-  // 1️⃣ 青雉凍結：只能打抽牌 tempDraw（所以凍 hand）
-  // ------------------------------
+  // 1️青雉凍結：只能打抽牌 tempDraw（所以凍 hand）
   if (my.frozen) {
     if (h != null) {
       el.playHand.classList.add("card-frozen");
       el.playHand.disabled = true;
     }
-    // 抽牌 d 可正常點（不凍結）
   }
 
-  // ------------------------------
-  // 2️⃣ 娜美：同時持有 7 + (6/8) → 必須打 7
-  // 只凍住「不是 7」的那張
-  // ------------------------------
+  // 2️娜美規則：7 + (6/8) → 必須打 7
   const has7 = (h === 7 || d === 7);
   const has68 = (h === 6 || h === 8 || d === 6 || d === 8);
 
   if (!my.frozen && has7 && has68) {
-
-    // A：手牌是 7 → 抽牌是 6 或 8 → 冰抽到的那張
     if (h === 7 && (d === 6 || d === 8)) {
       el.playDrawn.classList.add("card-frozen");
       el.playDrawn.disabled = true;
     }
-
-    // B：抽到的是 7 → 手牌是 6 或 8 → 冰手牌
     if (d === 7 && (h === 6 || h === 8)) {
       el.playHand.classList.add("card-frozen");
       el.playHand.disabled = true;
     }
   }
 
+ 
 
 
 /* ====== D. render()：用 feed 畫畫面 ====== */
