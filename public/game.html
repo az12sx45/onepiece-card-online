@@ -642,7 +642,7 @@ body::before{
   #btnDraw.hot::after{ animation: none !important; }
 }
 
-/* === 基拉：解除武裝提示框（2 號面具樣式） === */
+/* === 基拉：解除武裝提示框（2 號面具樣式 · demo 完整版） === */
 #killerLayer {
   position: fixed;
   top: 16px;           /* ← 跟騙人布一樣高 */
@@ -658,7 +658,7 @@ body::before{
 .killer-v2 {
   position: relative;
   max-width: min(92vw, 560px);
-  padding: 9px 18px 11px 62px;
+  padding: 9px 18px 11px 62px;  /* 左邊留位置給面具 */
   border-radius: 16px;
   background:
     radial-gradient(circle at 0% 0%, rgba(37,99,235,0.45), transparent 60%),
@@ -713,12 +713,37 @@ body::before{
   text-shadow: 0 0 8px rgba(15,23,42,0.92);
 }
 
-/* 左邊的圓形面具本體＋黑洞排布 */
+/* 左邊圓形面具：藍白直條紋（demo ::before） */
 .killer-v2::before {
   content: "";
   position: absolute;
-  left: 16px;
+  left: 10px;
   top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  /* 藍白直條 */
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #1d4ed8 0,
+      #1d4ed8 7px,
+      #e5e7eb 7px,
+      #e5e7eb 14px
+    );
+  box-shadow:
+    0 0 0 2px #020617,
+    0 0 10px rgba(59,130,246,1);
+}
+
+/* 面具上的黑洞排布（demo ::after，多黑點） */
+.killer-v2::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
   width: 42px;
   height: 42px;
   border-radius: 50%;
@@ -735,33 +760,14 @@ body::before{
     radial-gradient(circle at 50% 63%, #020617 0 2px, transparent 3px),
     radial-gradient(circle at 80% 65%, #020617 0 2px, transparent 3px),
 
-    radial-gradient(circle at 50% 88%, #020617 0 2px, transparent 3px),
-    #e5e7eb;
-  border: 1px solid rgba(15,23,42,0.95);
-  box-shadow:
-    0 0 6px rgba(248,250,252,0.9),
-    0 0 16px rgba(59,130,246,0.9);
-  transform: translateY(-50%);
-}
-
-/* 面具背後藍色噴光＋髮型感（demo 同款） */
-.killer-v2::after {
-  content: "";
-  position: absolute;
-  left: 8px;
-  top: 50%;
-  width: 52px;
-  height: 46px;
-  border-radius: 40% 40% 60% 60%;
-  background:
-    radial-gradient(circle at 0% 50%, rgba(56,189,248,0.85), transparent 65%),
-    radial-gradient(circle at 90% 0%, rgba(37,99,235,0.8), transparent 60%),
-    linear-gradient(135deg, rgba(15,23,42,0.9), rgba(15,23,42,0.0));
-  filter: blur(0.6px);
-  transform: translateY(-50%);
+    radial-gradient(circle at 50% 88%, #020617 0 2px, transparent 3px);
+  /* 只保留在圓形中心，邊緣淡掉 */
+  mask-image: radial-gradient(circle, #000 60%, transparent 62%);
+  -webkit-mask-image: radial-gradient(circle, #000 60%, transparent 62%);
   opacity: 0.95;
   pointer-events: none;
 }
+
 
   /* === 騙人布猜數字：漫畫爆炸提示框（亮色版） === */
   #usoppLayer{
