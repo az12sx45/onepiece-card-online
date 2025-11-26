@@ -3789,54 +3789,50 @@ if (canChoose) {
     el.imgDrawn.src = '';
   }
 
- // ======= 正確的結冰判斷（符合青雉＆娜美規則） =======
+   // ======= 正確的冰凍與娜美規則（只凍不能打的那張） =======
 
-// 清除所有凍結樣式
-el.playHand.classList.remove("card-frozen");
-el.playDrawn.classList.remove("card-frozen");
-el.playHand.disabled = false;
-el.playDrawn.disabled = false;
+  // 先清除舊狀態
+  el.playHand.classList.remove("card-frozen");
+  el.playDrawn.classList.remove("card-frozen");
+  el.playHand.disabled = false;
+  el.playDrawn.disabled = false;
 
-// 取出手牌與抽牌
-const h = my.hand;
-const d = my.tempDraw;
+  const h = my.hand;       // 手牌
+  const d = my.tempDraw;   // 抽到的牌
 
-// ------------------------------
-// 1️⃣ 青雉凍結：只能打「抽到的那張」tempDraw
-// ------------------------------
-if (my.frozen) {
-  // 手牌 h 不能打 → 凍結手牌
-  if (h != null) {
-    el.playHand.classList.add("card-frozen");
-    el.playHand.disabled = true;
-  }
-  // 抽到那張 d 可正常打 → 不凍結
-}
-
-// ------------------------------
-// 2️⃣ 娜美強制 7 規則
-// 只有不是「7」的那張不能打 → 只凍結那張
-// ------------------------------
-const has7   = (h === 7 || d === 7);
-const has68  = (h === 6 || d === 6 || h === 8 || d === 8);
-
-// 只有在非凍結情況下才判斷娜美規則（因為凍結優先）
-if (!my.frozen && has7 && has68) {
-  // 情況 A：手牌是 7 → 抽到的是 6 或 8 → 抽到的那張不能打
-  if (h === 7 && (d === 6 || d === 8)) {
-    el.playDrawn.classList.add("card-frozen");
-    el.playDrawn.disabled = true;
+  // ------------------------------
+  // 1️⃣ 青雉凍結：只能打抽牌 tempDraw（所以凍 hand）
+  // ------------------------------
+  if (my.frozen) {
+    if (h != null) {
+      el.playHand.classList.add("card-frozen");
+      el.playHand.disabled = true;
+    }
+    // 抽牌 d 可正常點（不凍結）
   }
 
-  // 情況 B：抽到的是 7 → 手牌是 6 或 8 → 手牌不能打
-  if (d === 7 && (h === 6 || h === 8)) {
-    el.playHand.classList.add("card-frozen");
-    el.playHand.disabled = true;
-  }
-}
+  // ------------------------------
+  // 2️⃣ 娜美：同時持有 7 + (6/8) → 必須打 7
+  // 只凍住「不是 7」的那張
+  // ------------------------------
+  const has7 = (h === 7 || d === 7);
+  const has68 = (h === 6 || h === 8 || d === 6 || d === 8);
 
+  if (!my.frozen && has7 && has68) {
+
+    // A：手牌是 7 → 抽牌是 6 或 8 → 冰抽到的那張
+    if (h === 7 && (d === 6 || d === 8)) {
+      el.playDrawn.classList.add("card-frozen");
+      el.playDrawn.disabled = true;
+    }
+
+    // B：抽到的是 7 → 手牌是 6 或 8 → 冰手牌
+    if (d === 7 && (h === 6 || h === 8)) {
+      el.playHand.classList.add("card-frozen");
+      el.playHand.disabled = true;
+    }
   }
-}
+
 
 
 /* ====== D. render()：用 feed 畫畫面 ====== */
