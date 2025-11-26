@@ -2914,8 +2914,18 @@ case 'duel': {
       return `${caster} 交換了 ${target} 的手牌`;
     }
     case 'killer_disarm': {
-      // 後端已經把 casterName / targetName 丟過來了
-      showKillerToast(e.casterName, e.targetName);
+      // 為了不要出現「P1（名字）」這種格式，前端自己用 index 算名稱
+      const casterName =
+        (typeof e.casterId === 'number')
+          ? pname(e.casterId)
+          : (e.casterName || '未知玩家');
+
+      const targetName =
+        (typeof e.targetId === 'number')
+          ? pname(e.targetId)
+          : (e.targetName || '未知玩家');
+
+      showKillerToast(casterName, targetName);
       break;
     }
 
