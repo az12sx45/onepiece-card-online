@@ -1099,9 +1099,12 @@ case 2: { // 羅賓
           endOrNext(st);
           return { state: st, emits };
         }
-      }case 16: { // 青雉
+      }
+
+case 16: { // 青雉
   if (venueActive) {
     let affected = 0, skippedProtect = 0, dodged = 0;
+    const frozenIdxs = [];
 
     st.players.forEach((p, i) => {
       if (!p.alive || i === st.turnIndex) return;
@@ -1118,9 +1121,29 @@ case 2: { // 羅賓
 
       p.frozen = true;   // 其餘玩家被凍結
       affected++;
+      frozenIdxs.push(i);
     });
 
-    pushLog(st, `青雉（強化）：全場凍結（不含自己；保護免疫×${skippedProtect}；閃避抵消×${dodged}；凍結×${affected}）`, emits);
+    // ★ 新增：丟給前端的「青雉全體凍結播報」事件
+    const casterId   = st.turnIndex;
+    const casterName = pname(st, casterId);
+
+    emits.push({
+      to: 'all',
+      type: 'aokiji_freeze',   // 前端就用這個 type 來畫播報框
+      mode: 'all',             // 區分全體 or 單體
+      casterId,
+      casterName,
+      target: 'all',           // 給前端文字用：全體玩家
+      frozenIdxs               // 有需要也可以用來做特效（非必須）
+    });
+
+    pushLog(
+      st,
+      `青雉（強化）：全場凍結（不含自己；保護免疫×${skippedProtect}；閃避抵消×${dodged}；凍結×${affected}）`,
+      emits
+    );
+
     endOrNext(st);
     return { state: st, emits };
   } else {
@@ -1128,6 +1151,7 @@ case 2: { // 羅賓
     return { state: st, emits };
   }
 }
+
 
       case 17: { // 黑鬍子
         if(venueActive){
@@ -1587,18 +1611,34 @@ if (p.action === 'killer') {
   return { state: st, emits };
 }
 
-    if(p.action==='aokiji'){
-      const g = effectGuard(st, idx, {});
-      if(!g.blocked){
-        st.players[idx].frozen=true;
-        pushLog(st, `青雉：${pname(st, idx)} 凍結`, emits);
-      } else {
-        scoreDefense(st, idx, 16); // 青雉16被擋 → 防禦+6
-      }
-      st.pending=null;
-      endOrNext(st);
-      return { state: st, emits };
-    }
+if (p.action === 'aokiji') {
+  const g = effectGuard(st, idx, {});
+  if (!g.blocked) {
+    st.players[idx].frozen = true;
+
+    const casterId   = st.turnIndex;
+    const casterName = pname(st, casterId);
+    const targetName = pname(st, idx);
+
+    // ★ 新增：單體凍結播報事件
+    emits.push({
+      to: 'all',
+      type: 'aokiji_freeze',   // 跟強化版同一種事件 type
+      mode: 'single',          // 單體模式
+      casterId,
+      targetId: idx,
+      casterName,
+      targetName
+    });
+
+    pushLog(st, `青雉：${targetName} 凍結`, emits);
+  } else {
+    scoreDefense(st, idx, 16); // 青雉16被擋 → 防禦+6
+  }
+  st.pending = null;
+  endOrNext(st);
+  return { state: st, emits };
+}
 
    if(p.action==='roger'){
      // ★ 改：若是「被索隆丟出」觸發，by 應該是 p.caster（羅傑持有者），
