@@ -1856,20 +1856,7 @@ if (p.action === 'killer') {
     return { state: st, emits };
   }
 
-  // ===== 大媽擲幣 =====
-  if(type==='BIGMOM_COIN'){
-    const p = st.pending;
-    if(!p || p.action!=='bigmom-coin') return { state: st, emits };
-
-    if (action.playerId !== st.turnIndex) {
-      emits.push({ to: action.playerId, type:'toast', text:'不是你要擲硬幣' });
-      return { state: st, emits };
-    }
-
-    const g = effectGuard(st, st.turnIndex, {});
-    if (g.blocked) {
-      scoreDefense(st, st.turnIndex, 14); // 大媽14擲幣被擋 → 防禦+4
-      if (st.players[st.turnIndex].dodging){ st.players  // ===== 大媽擲幣 =====
+ // ===== 大媽擲幣 =====
   if (type === 'BIGMOM_COIN') {
     const p = st.pending;
     if (!p || p.action !== 'bigmom-coin') return { state: st, emits };
