@@ -777,11 +777,10 @@ function applyAction(state, action){
     st.discard.push(playId);
     pushLog(st, `${pname(st, st.turnIndex)} 打出 ${cardLabel(playId)}`, emits);
 
-// 若此卡在當前場地為強化版 → 廣播強化影片（凱多改由技能結算時處理）
+   // 若此卡在當前場地為強化版 → 廣播強化影片（凱多改由技能結算時處理）
 if (playId !== 10) {
   pushEnhFxIfAny(emits, st, playId);
 }
-
 
     // 冰鬼標記
     if(st.iceWindowOn && st.turnIndex !== st.iceWindowOwner){
@@ -973,7 +972,7 @@ case 2: { // 羅賓
         endOrNext(st);
         return { state: st, emits };
       }
-      case 10: { // 凱多
+     case 10: { // 凱多
   const hasBigMom = (me.hand === 14 || keepId === 14);
 
   if (venueActive) {
@@ -1878,31 +1877,18 @@ if (p.action === 'killer') {
 
     emits.push({ to: action.playerId, type:'coin_fx' });
     const face = (Math.random() < 0.5) ? 'H' : 'T';
-
-    let status = 'protect';
-    if (face === 'H') {
-      me.protected = true;
-      status = 'protect';
+    if(face==='H'){
+      me.protected=true;
       pushLog(st,'大媽：擲到正面 → 獲得保護',emits);
     } else {
-      me.dodging = true;
-      status = 'dodge';
+      me.dodging=true;
       pushLog(st,'大媽：擲到反面 → 獲得閃避',emits);
     }
 
-    // ⭐ 新增：給全體玩家的大媽狀態提示事件
-    const casterName = pname(st, st.turnIndex);
-    emits.push({
-      to: 'all',
-      type: 'bigmom_status',
-      casterId: st.turnIndex,
-      casterName,
-      status   // 'protect' 或 'dodge'
-    });
-
-    st.pending = null;
+    st.pending=null;
     endOrNext(st);
     return { state: st, emits };
+  }
 
   // ===== 大媽強化：被點名者的最終選擇 =====
   if (type === 'BIGMOM_CHOICE') {
