@@ -3875,13 +3875,14 @@ if (e.type === 'aokiji_freeze') {
   let all = false;
 
   // 如果後端有帶 all=true，就顯示「全體玩家」
-  if (e.all === true) {
-    all = true;
-  } else {
-    target = (typeof e.targetId === 'number')
-      ? pname(e.targetId)
-      : (e.targetName || 'P?');
-  }
+if (e.mode === 'all') {
+  all = true;                 // 全體凍結
+  target = '全體玩家';
+} else {
+  target = (typeof e.targetId === 'number')
+    ? pname(e.targetId)
+    : (e.targetName || 'P?');
+}
 
   showAokijiToast({ caster, target, all });
 }
