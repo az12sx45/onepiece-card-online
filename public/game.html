@@ -242,6 +242,27 @@
       transition: transform .6s cubic-bezier(.2,.7,.1,1), opacity .2s ease .5s;
     }
 
+/* === 手牌結冰遮罩（冰花覆蓋） === */
+.card-frozen{
+  position: relative;
+  cursor: not-allowed;
+}
+
+.card-frozen::after{
+  content:'';
+  position:absolute;
+  inset:0;                     /* 等同 top/right/bottom/left = 0 */
+  background:url("images/freeze-mask.png") center/cover no-repeat;
+  opacity:0.9;                 /* 透明度你可以自己調整 0~1 */
+  pointer-events:none;         /* 視覺用就好，真正禁止點擊用 disabled */
+}
+
+/* 冰住時，底下卡圖再稍微灰一點 */
+.card-frozen img{
+  filter: grayscale(.25) brightness(.9);
+}
+
+
     /* === 擲硬幣 Overlay & 動畫框 === */
     #coinOverlay {
       position: fixed;
@@ -3737,36 +3758,83 @@ onceFx?.(el.deckCnt, 'fx-pulse');
     }
   }
 
-  const canChoose = state.turnStep === 'choose' && state.turnIndex === me.playerId && my;
+const canChoose = state.turnStep === 'choose' && state.turnIndex === me.playerId && my;
 
-  el.playZone.classList.toggle('hidden', !canChoose);
-  if (canChoose) {
-    if (_lastRoundNo !== state.roundNo) { _enhPlayed.clear(); _lastRoundNo = state.roundNo; }
+el.playZone.classList.toggle('hidden', !canChoose);
+if (canChoose) {
+  if (_lastRoundNo !== state.roundNo) { _enhPlayed.clear(); _lastRoundNo = state.roundNo; }
 
-    if (my.hand != null) {
-      const key = `${state.roundNo}:${me.playerId}:hand:${my.hand}`;
-      const enhanced = isEnhancedNow(my.hand);
-      el.imgHand.src = (enhanced && _enhPlayed.has(key)) ? CARD_ENH(my.hand) : CARD(my.hand);
-      if (enhanced && !_enhPlayed.has(key)) {
-        const vn = CARD_VENUE[my.hand];
-        setTimeout(()=> playEnhanceFx(vn, el.imgHand, my.hand, key), 120);
-      }
-    } else {
-      el.imgHand.src = '';
+  // 先照原本邏輯把兩張卡圖畫出來
+  if (my.hand != null) {
+    const key = `${state.roundNo}:${me.playerId}:hand:${my.hand}`;
+    const enhanced = isEnhancedNow(my.hand);
+    el.imgHand.src = (enhanced && _enhPlayed.has(key)) ? CARD_ENH(my.hand) : CARD(my.hand);
+    if (enhanced && !_enhPlayed.has(key)) {
+      const vn = CARD_VENUE[my.hand];
+      setTimeout(()=> playEnhanceFx(vn, el.imgHand, my.hand, key), 120);
     }
+  } else {
+    el.imgHand.src = '';
+  }
 
+  if (my.tempDraw != null) {
+    const key2 = `${state.roundNo}:${me.playerId}:drawn:${my.tempDraw}`;
+    const enhanced2 = isEnhancedNow(my.tempDraw);
+    el.imgDrawn.src = (enhanced2 && _enhPlayed.has(key2)) ? CARD_ENH(my.tempDraw) : CARD(my.tempDraw);
+    if (enhanced2 && !_enhPlayed.has(key2)) {
+      const vn2 = CARD_VENUE[my.tempDraw];
+      setTimeout(()=> playEnhanceFx(vn2, el.imgDrawn, my.tempDraw, key2), 180);
+    }
+  } else {
+    el.imgDrawn.src = '';
+  }
+
+  // ======= 新增：結冰判斷（凍結＋娜美規則） =======
+
+  // 先全部恢復成可點的狀態
+  el.playHand.classList.remove('card-frozen');
+  el.playDrawn.classList.remove('card-frozen');
+  el.playHand.disabled = false;
+  el.playDrawn.disabled = false;
+
+  // 1) 若自己是「凍結」狀態，兩張牌都冰起來，整回合不能打
+  if (my.frozen) {
+    if (my.hand != null) {
+      el.playHand.classList.add('card-frozen');
+      el.playHand.disabled = true;
+    }
     if (my.tempDraw != null) {
-      const key2 = `${state.roundNo}:${me.playerId}:drawn:${my.tempDraw}`;
-      const enhanced2 = isEnhancedNow(my.tempDraw);
-      el.imgDrawn.src = (enhanced2 && _enhPlayed.has(key2)) ? CARD_ENH(my.tempDraw) : CARD(my.tempDraw);
-      if (enhanced2 && !_enhPlayed.has(key2)) {
-        const vn2 = CARD_VENUE[my.tempDraw];
-        setTimeout(()=> playEnhanceFx(vn2, el.imgDrawn, my.tempDraw, key2), 180);
+      el.playDrawn.classList.add('card-frozen');
+      el.playDrawn.disabled = true;
+    }
+  } else {
+    // 2) 娜美規則：同時持有娜美 + (6 或 8)，只允許打出娜美
+
+    const h = my.hand;
+    const d = my.tempDraw;
+
+    const hasNamiHand  = (h === 7);             // 7：娜美
+    const hasNamiDrawn = (d === 7);
+    const otherIs68ForHand  = (d === 6 || d === 8); // 抽到的是 6 or 8
+    const otherIs68ForDraw  = (h === 6 || h === 8); // 原手牌是 6 or 8
+
+    // 情況 A：手牌是娜美，抽到的是 6/8 → 只能打出手牌（playHand）
+    if (hasNamiHand && otherIs68ForHand) {
+      if (my.tempDraw != null) {
+        el.playDrawn.classList.add('card-frozen');  // 把抽到的那張冰住
+        el.playDrawn.disabled = true;
       }
-    } else {
-      el.imgDrawn.src = '';
+    }
+    // 情況 B：抽到的是娜美，手牌是 6/8 → 只能打出抽到的那張（playDrawn）
+    else if (hasNamiDrawn && otherIs68ForDraw) {
+      if (my.hand != null) {
+        el.playHand.classList.add('card-frozen');   // 把原本手牌冰住
+        el.playHand.disabled = true;
+      }
     }
   }
+}
+
 
 /* ====== D. render()：用 feed 畫畫面 ====== */
 const logBox = el.log;
