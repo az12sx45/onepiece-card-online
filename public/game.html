@@ -927,6 +927,164 @@ body::before{
     0 20px 40px rgba(0,0,0,0.75);
 }
 
+/* === 青雉 16：凍結手牌播報（樣式 1-2） === */
+#aokijiLayer {
+  position: fixed;
+  top: 76px;          /* 跟羅賓/喬巴/娜美一樣高度 */
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  z-index: 187;       /* 比 header 再高一點，蓋在最上層 */
+}
+
+/* 外框冰風格：對應 demo 的 .style1-v2 */
+.style1-v2 {
+  position: relative;
+  padding: 16px 22px;
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 0 0, rgba(178, 232, 255, 0.6), transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(18, 59, 104, 0.96), #020814 80%);
+  border: 1px solid rgba(204, 239, 255, 0.95);
+  box-shadow:
+    0 0 28px rgba(176, 229, 255, 0.95),
+    inset 0 0 18px rgba(120, 196, 255, 0.7);
+  backdrop-filter: blur(8px);
+}
+
+/* 斜線冰紋 + 亮點 */
+.style1-v2::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(240, 250, 255, 0.28) 0,
+      rgba(240, 250, 255, 0.28) 1px,
+      transparent 1px,
+      transparent 6px
+    ),
+    radial-gradient(circle at 20% 30%, rgba(255,255,255,0.4) 0, transparent 35%),
+    radial-gradient(circle at 80% 70%, rgba(226,244,255,0.4) 0, transparent 35%);
+  mix-blend-mode: screen;
+  opacity: 0.75;
+}
+
+/* 下方冰刺 */
+.style1-v2::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: -8px;
+  height: 18px;
+  background:
+    linear-gradient(180deg, rgba(199,236,255,0.95), rgba(126,201,252,0.95));
+  clip-path: polygon(
+    0 0,
+    10% 100%,
+    25% 0,
+    40% 100%,
+    55% 0,
+    70% 100%,
+    85% 0,
+    100% 100%
+  );
+  box-shadow: 0 0 14px rgba(181,230,255,1);
+  opacity: 0.9;
+}
+
+/* 內層文字框：對應 demo 的 .aokiji-frame */
+.aokiji-frame {
+  position: relative;
+  width: 100%;
+  min-height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #f5fcff;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
+  overflow: visible;
+
+  /* 出場動畫預設狀態 */
+  transform: translateY(-24px) scale(0.96);
+  opacity: 0;
+  transition:
+    opacity .28s ease-out,
+    transform .28s ease-out,
+    box-shadow .28s ease-out;
+}
+
+/* 文字本體：對應 demo 的 .aokiji-text */
+.aokiji-text {
+  position: relative;
+  z-index: 20;
+  padding: 0 18px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.aokiji-text b {
+  color: #c4f0ff; /* 名字稍微亮一點 */
+}
+
+/* 兩側直立冰塊：跟 demo 一樣的效果 */
+.aokiji-frame::before,
+.style1-v2 .aokiji-frame::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  bottom: 16px;
+  width: 32px;
+  background:
+    linear-gradient(145deg,#f8feff,#d7f1ff 30%,#9adfff 70%,#f3fdff 100%);
+  clip-path: polygon(0 0, 100% 20%, 85% 100%, 10% 70%);
+  box-shadow:
+    0 0 14px rgba(190,236,255,1),
+    inset 0 0 8px rgba(117,202,255,1);
+  mix-blend-mode: screen;
+  opacity: 0.96;
+  z-index: 15;
+  pointer-events: none;
+}
+
+.aokiji-frame::before {
+  left: -8px;
+  transform: scaleX(-1);
+}
+
+.aokiji-frame::after {
+  right: -8px;
+}
+
+/* 出場時加上的 .show：讓整塊冰框浮起來 */
+.aokiji-frame.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  box-shadow:
+    0 0 0 1px rgba(204,239,255,0.9),
+    0 20px 40px rgba(0,0,0,0.8);
+}
+
+/* 手機版：字稍微縮小，框高一點 */
+@media (max-width: 640px) {
+  .aokiji-text {
+    font-size: 13px;
+    white-space: normal;
+  }
+  .aokiji-frame {
+    min-height: 88px;
+  }
+}
+
+
 /* === 羅賓：偵察提示框（6 號樣式） === */
 #robinLayer {
   position: fixed;
@@ -3409,6 +3567,53 @@ function showNamiToast({ caster, target }) {
   }, ttl);
 }
 
+// === 青雉：凍結手牌 播報（16 號卡，樣式 1-2） ===
+function showAokijiToast({ caster, target, all }) {
+  const layer = document.getElementById('aokijiLayer');
+  if (!layer) return;
+
+  // 外層冰框
+  const wrap = document.createElement('div');
+  wrap.className = 'style1-v2';
+
+  // 內層文字框
+  const frame = document.createElement('div');
+  frame.className = 'aokiji-frame';
+
+  const text = document.createElement('div');
+  text.className = 'aokiji-text';
+
+  const casterName = caster || 'P?';
+  const targetName = all ? '全體玩家' : (target || 'P?');
+
+  // 文字：(打出玩家) 凍結了 (被選玩家或全體玩家) 的手牌
+  text.innerHTML = `<b>${casterName}</b> 凍結了 <b>${targetName}</b> 的手牌`;
+
+  frame.appendChild(text);
+  wrap.appendChild(frame);
+
+  // 同時間只顯示一個青雉框
+  layer.innerHTML = '';
+  layer.appendChild(wrap);
+
+  // 出場動畫：加上 .show
+  requestAnimationFrame(() => {
+    frame.classList.add('show');
+  });
+
+  // 顯示時間（大約 4 秒，可以自己調）
+  const ttl = 4000;
+  setTimeout(() => {
+    frame.classList.remove('show');
+    setTimeout(() => {
+      if (wrap.parentNode === layer) {
+        layer.removeChild(wrap);
+      }
+    }, 260);
+  }, ttl);
+}
+
+
 // === 基拉 解除武裝 播報 ===
 const killerLayer = document.getElementById('killerLayer');
 
@@ -3660,6 +3865,26 @@ if (e.type === 'law_swap') {
   showLawToast({ caster, target });
 }
 
+// 青雉：凍結手牌播報
+if (e.type === 'aokiji_freeze') {
+  const caster = (typeof e.casterId === 'number')
+    ? pname(e.casterId)
+    : (e.casterName || 'P?');
+
+  let target = null;
+  let all = false;
+
+  // 如果後端有帶 all=true，就顯示「全體玩家」
+  if (e.all === true) {
+    all = true;
+  } else {
+    target = (typeof e.targetId === 'number')
+      ? pname(e.targetId)
+      : (e.targetName || 'P?');
+  }
+
+  showAokijiToast({ caster, target, all });
+}
 
 
   // 騙人布：猜數字（命中 / 失誤）提示框
