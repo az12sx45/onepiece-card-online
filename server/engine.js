@@ -1878,18 +1878,31 @@ if (p.action === 'killer') {
 
     emits.push({ to: action.playerId, type:'coin_fx' });
     const face = (Math.random() < 0.5) ? 'H' : 'T';
-    if(face==='H'){
-      me.protected=true;
+
+    let status = 'protect';
+    if (face === 'H') {
+      me.protected = true;
+      status = 'protect';
       pushLog(st,'大媽：擲到正面 → 獲得保護',emits);
     } else {
-      me.dodging=true;
+      me.dodging = true;
+      status = 'dodge';
       pushLog(st,'大媽：擲到反面 → 獲得閃避',emits);
     }
 
-    st.pending=null;
+    // ⭐ 新增：給全體玩家的大媽狀態提示事件
+    const casterName = pname(st, st.turnIndex);
+    emits.push({
+      to: 'all',
+      type: 'bigmom_status',
+      casterId: st.turnIndex,
+      casterName,
+      status   // 'protect' 或 'dodge'
+    });
+
+    st.pending = null;
     endOrNext(st);
     return { state: st, emits };
-  }
 
   // ===== 大媽強化：被點名者的最終選擇 =====
   if (type === 'BIGMOM_CHOICE') {
