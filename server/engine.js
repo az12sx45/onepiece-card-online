@@ -86,12 +86,6 @@ function isEnhancedNow(st, cardId){
 function pushEnhFxIfAny(emits, st, cardId){
   if (!isEnhancedNow(st, cardId)) return;
 
-  // 凱多特殊條件
-  if (cardId === 10) {
-    const me = st.players?.[st.turnIndex];
-    const hasBigMomInHandNow = (me && me.hand === 14);
-    if (!hasBigMomInHandNow) return; // 不廣播，前端就不會播放強化影片
-  }
 
   // 紅髮特殊條件：牌堆要先「白熱化」才給面子播影片
   if (cardId === 18) {
@@ -783,8 +777,11 @@ function applyAction(state, action){
     st.discard.push(playId);
     pushLog(st, `${pname(st, st.turnIndex)} 打出 ${cardLabel(playId)}`, emits);
 
-    // 若此卡在當前場地為強化版 → 廣播強化影片
-    pushEnhFxIfAny(emits, st, playId);
+// 若此卡在當前場地為強化版 → 廣播強化影片（凱多改由技能結算時處理）
+if (playId !== 10) {
+  pushEnhFxIfAny(emits, st, playId);
+}
+
 
     // 冰鬼標記
     if(st.iceWindowOn && st.turnIndex !== st.iceWindowOwner){
@@ -977,37 +974,47 @@ case 2: { // 羅賓
         return { state: st, emits };
       }
       case 10: { // 凱多
-        const hasBigMom = (me.hand===14 || keepId===14);
-        if(venueActive){
-          if(hasBigMom){
-            // ★ 群體攻擊分：尾數加權總和 *2（無視防禦/閃避）再 * 同時數量
-            const victims = [];
-            for(let i=0;i<st.players.length;i++){
-              if(i!==st.turnIndex && st.players[i].alive){
-                victims.push(i);
-              }
-            }
-            if (victims.length){
-              let sumTail = 0;
-              victims.forEach(i => { sumTail += (tail(st.players[i].hand)||0); });
-              const total = (sumTail * 2) * victims.length;
-              addStat(st, st.turnIndex, 'atkScore', total);
-            }
-            victims.forEach(i=>{
-              doEliminate(st,i,'霸海：清場', st.turnIndex, emits);
-            });
-            endOrNext(st);
-            return { state: st, emits };
-          } else {
-            pushLog(st, '凱多（鬼島）：未與大媽同握，本回合無效果', emits);
-            endOrNext(st);
-            return { state: st, emits };
-          }
-        } else {
-          st.pending = { action:'kaido', extra:{ keep: keepId } };
-          return { state: st, emits };
+  const hasBigMom = (me.hand === 14 || keepId === 14);
+
+  if (venueActive) {
+    if (hasBigMom) {
+
+      // ★ 鬼島 + 同時握有大媽 → 播凱多強化影片
+      pushEnhFxIfAny(emits, st, 10);
+
+      // ★ 群體攻擊分：尾數加權總和 *2（無視防禦/閃避）再 * 同時數量
+      const victims = [];
+      for (let i = 0; i < st.players.length; i++) {
+        if (i !== st.turnIndex && st.players[i].alive) {
+          victims.push(i);
         }
       }
+
+      if (victims.length) {
+        let sumTail = 0;
+        victims.forEach(i => { sumTail += (tail(st.players[i].hand) || 0); });
+        const total = (sumTail * 2) * victims.length;
+        addStat(st, st.turnIndex, 'atkScore', total);
+      }
+
+      victims.forEach(i => {
+        doEliminate(st, i, '霸海：清場', st.turnIndex, emits);
+      });
+
+      endOrNext(st);
+      return { state: st, emits };
+    } else {
+
+      pushLog(st, '凱多（鬼島）：未與大媽同握，本回合無效果', emits);
+      endOrNext(st);
+      return { state: st, emits };
+    }
+  } else {
+    st.pending = { action:'kaido', extra:{ keep: keepId } };
+    return { state: st, emits };
+  }
+}
+
       case 11: { // 基德
         if(venueActive){
           const allAlive = st.players.map((_,i)=>i).filter(i=>st.players[i].alive);
