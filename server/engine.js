@@ -777,10 +777,11 @@ function applyAction(state, action){
     st.discard.push(playId);
     pushLog(st, `${pname(st, st.turnIndex)} 打出 ${cardLabel(playId)}`, emits);
 
-   // 若此卡在當前場地為強化版 → 廣播強化影片（凱多改由技能結算時處理）
+// 若此卡在當前場地為強化版 → 廣播強化影片（凱多改由技能結算時處理）
 if (playId !== 10) {
   pushEnhFxIfAny(emits, st, playId);
 }
+
 
     // 冰鬼標記
     if(st.iceWindowOn && st.turnIndex !== st.iceWindowOwner){
@@ -972,7 +973,7 @@ case 2: { // 羅賓
         endOrNext(st);
         return { state: st, emits };
       }
-     case 10: { // 凱多
+      case 10: { // 凱多
   const hasBigMom = (me.hand === 14 || keepId === 14);
 
   if (venueActive) {
@@ -1868,27 +1869,62 @@ if (p.action === 'killer') {
     const g = effectGuard(st, st.turnIndex, {});
     if (g.blocked) {
       scoreDefense(st, st.turnIndex, 14); // 大媽14擲幣被擋 → 防禦+4
-      if (st.players[st.turnIndex].dodging){ st.players[st.turnIndex].dodging = false; }
-      pushLog(st, `大媽：已被保護/閃避覆蓋 → 不擲硬幣，效果結束`, emits);
-      st.pending=null;
+      if (st.players[st.turnIndex].dodging){ st.players  // ===== 大媽擲幣 =====
+  if (type === 'BIGMOM_COIN') {
+    const p = st.pending;
+    if (!p || p.action !== 'bigmom-coin') return { state: st, emits };
+
+    // 只能是現在輪到的大媽玩家按下擲幣
+    if (action.playerId !== st.turnIndex) {
+      emits.push({ to: action.playerId, type: 'toast', text: '不是你要擲硬幣' });
+      return { state: st, emits };
+    }
+
+    const me = st.players[st.turnIndex];
+
+    // 檢查是否被保護 / 閃避擋掉
+    const g = effectGuard(st, st.turnIndex, {});
+    if (g.blocked) {
+      scoreDefense(st, st.turnIndex, 14); // 大媽14擲幣被擋 → 防禦+4
+      if (me.dodging) me.dodging = false;
+      pushLog(st, '大媽：已被保護/閃避覆蓋 → 不擲硬幣，效果結束', emits);
+      st.pending = null;
       endOrNext(st);
       return { state: st, emits };
     }
 
-    emits.push({ to: action.playerId, type:'coin_fx' });
+    // 播放硬幣特效
+    emits.push({ to: action.playerId, type: 'coin_fx' });
+
+    // 擲幣判定
     const face = (Math.random() < 0.5) ? 'H' : 'T';
-    if(face==='H'){
-      me.protected=true;
-      pushLog(st,'大媽：擲到正面 → 獲得保護',emits);
+
+    let status = 'protect';
+    if (face === 'H') {
+      me.protected = true;
+      status = 'protect';
+      pushLog(st, '大媽：擲到正面 → 獲得保護', emits);
     } else {
-      me.dodging=true;
-      pushLog(st,'大媽：擲到反面 → 獲得閃避',emits);
+      me.dodging = true;
+      status = 'dodge';
+      pushLog(st, '大媽：擲到反面 → 獲得閃避', emits);
     }
 
-    st.pending=null;
+    // 給前端 demo-mom 播報框用的事件
+    const casterName = pname(st, st.turnIndex);
+    emits.push({
+      to: 'all',
+      type: 'bigmom_status',
+      casterId: st.turnIndex,
+      casterName,
+      status   // 'protect' 或 'dodge'
+    });
+
+    st.pending = null;
     endOrNext(st);
     return { state: st, emits };
   }
+
 
   // ===== 大媽強化：被點名者的最終選擇 =====
   if (type === 'BIGMOM_CHOICE') {
