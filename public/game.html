@@ -1168,6 +1168,105 @@ body::before{
   transform: translateY(0) scale(1);
 }
 
+/* === 大媽：保護 / 閃避狀態提示框（demo-mom 3 號蛋糕樣式） === */
+#momLayer {
+  position: fixed;
+  top: 76px;          /* 跟喬巴差不多高度，在 header 下面 */
+  left: 0;
+  right: 0;
+  padding: 0 16px;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 181;       /* 比喬巴略高一點，避免被蓋住 */
+}
+
+/* 外層 toast：負責進場動畫 */
+.bigmom-toast {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: min(92vw, 580px);
+  text-align: center;
+  margin-top: 4px;
+  opacity: 0;
+  transform: translateY(-16px) scale(.96);
+  transition:
+    opacity .24s ease-out,
+    transform .24s ease-out;
+}
+
+/* 顯示時加上 .show */
+.bigmom-toast.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* demo-mom 的 3 號蛋糕樣式本體 */
+.bigmom-v3 {
+  position: relative;
+  padding: 10px 20px 12px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 0% 50%, rgba(244,114,182,0.65), transparent 60%),
+    radial-gradient(circle at 100% 50%, rgba(249,168,212,0.55), transparent 60%),
+    #4c0519;
+  border: 1px solid rgba(251,113,133,0.95);
+  box-shadow:
+    0 0 0 2px #020617,
+    0 18px 32px rgba(15,23,42,0.96),
+    0 0 28px rgba(251,113,133,0.95);
+  color: #ffe4e6;
+  overflow: hidden;
+}
+
+/* 左蛋糕（原本是 ❤） */
+.bigmom-v3::before {
+  content: "🍰";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-55%);
+  font-size: 20px;
+  text-shadow:
+    0 0 6px rgba(248,113,113,1),
+    0 0 14px rgba(244,114,182,1);
+}
+
+/* 右蛋糕（原本是 🛡） */
+.bigmom-v3::after {
+  content: "🍰";
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  text-shadow:
+    0 0 6px rgba(254,249,195,1),
+    0 0 12px rgba(250,250,210,1);
+}
+
+/* 文字區 */
+.bigmom-text {
+  position: relative;
+  z-index: 3;
+  line-height: 1.6;
+  text-shadow: 0 0 6px rgba(0,0,0,0.85);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.03em;
+  padding: 0 30px 0 30px;  /* 兩側讓位給蛋糕 icon */
+}
+
+.bigmom-text b {
+  color: #f97316;   /* 打出玩家名 → 橘金色 */
+}
+
+.bigmom-key {
+  color: #f9a8d4;   /* 「保護 / 閃避」關鍵字 → 粉色 */
+}
+
+
 /* === 索隆：棄牌提示框（刀光金屬風） === */
 #zoroLayer {
   position: fixed;
@@ -1270,6 +1369,7 @@ body::before{
 <div id="zoroLayer"></div>
 <div id="lawLayer"></div> 
 <div id="namiLayer"></div>
+<div id="momLayer"></div>
 <div id="killerLayer"></div>
 <div id="chopperLayer"></div>
 <header class="sticky top-0 z-40 bg-[#101418]/80 backdrop-blur border-b border-[#1c2229]">
@@ -3180,6 +3280,47 @@ function showLawToast({ caster, target }) {
   }, ttl);
 }
 
+// === 大媽：保護 / 閃避狀態提示框（demo-mom 3 號蛋糕樣式） ===
+function showBigMomToast({ caster, status }) {
+  const layer = document.getElementById('momLayer');
+  if (!layer) return;
+
+  const mode = (status === 'dodge') ? '閃避' : '保護';
+  const box  = document.createElement('div');
+  box.className = 'bigmom-toast bigmom-v3';
+
+  const text = document.createElement('div');
+  text.className = 'bigmom-text';
+
+  const casterName = caster || '未知玩家';
+
+  // 文字格式：(打出玩家名) 獲得了 保護 / 閃避 狀態
+  text.innerHTML = `<b>${casterName}</b> 獲得了 <span class="bigmom-key">${mode}</span> 狀態`;
+
+  box.appendChild(text);
+
+  // 同時間只顯示一個大媽框
+  layer.innerHTML = '';
+  layer.appendChild(box);
+
+  // 出場動畫
+  requestAnimationFrame(() => {
+    box.classList.add('show');
+  });
+
+  // 顯示時間（你可以改長一點，這裡先用 4 秒）
+  const ttl = 4000;
+  setTimeout(() => {
+    box.classList.remove('show');
+    setTimeout(() => {
+      if (box.parentNode === layer) {
+        layer.removeChild(box);
+      }
+    }, 260);
+  }, ttl);
+}
+
+
 // === 喬巴：保護 / 閃避狀態提示框（2 號樣式） ===
 function showChopperToast({ caster, status }) {
   const layer = document.getElementById('chopperLayer');
@@ -3460,6 +3601,25 @@ function cardImageURL(id){
     });
     // 一樣不 return，讓伺服器的文字訊息照常進 feed
   }
+
+  // 大媽：獲得保護 / 閃避狀態提示框
+  if (e.type === 'bigmom_status') {
+    const casterName =
+      (typeof e.casterId === 'number') ? pname(e.casterId) :
+      (e.casterName || '未知玩家');
+
+    const status =
+      (e.status === 'dodge' || e.status === 'protect')
+        ? e.status
+        : 'protect';
+
+    showBigMomToast({
+      caster: casterName,
+      status
+    });
+    // 一樣不 return，讓伺服器文字照常進 feed
+  }
+
 
   // 娜美：麻痺提示框
   if (e.type === 'nami_paralyze') {
