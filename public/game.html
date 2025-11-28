@@ -3311,18 +3311,16 @@ const isDraw = !hasWinner;
 
   // 說明文字
   if (lineVs)  lineVs.textContent  = `${leftName} VS ${rightName}`;
+  // ⭐ 一開始不顯示任何結果，等撞擊 / 翻牌後再改
+  if (lineWin) lineWin.textContent = '';
 
-  // 先把勝負名字算好，但「不是平手的情況先不要顯示」
+  // 先把勝負名字算好，晚點再用在結果文字上（平手時維持 null）
   let winnerName = null;
   let loserName  = null;
 
-  if (isDraw) {
-    // 平手就直接顯示平手訊息（因為沒有翻牌／燒牌）
-    if (lineWin) lineWin.textContent = `平手！${leftName} 與 ${rightName} 難分勝負`;
-  } else {
+  if (!isDraw) {
     winnerName = (winnerId === leftId) ? leftName : rightName;
     loserName  = (winnerId === leftId) ? rightName : leftName;
-    if (lineWin) lineWin.textContent = '';  // 等等翻牌完再顯示
   }
 
 
@@ -3335,7 +3333,9 @@ const isDraw = !hasWinner;
   [leftSlot, rightSlot].forEach(s=>{
     if (!s) return;
     s.classList.remove('winner','loser','burning');
+    if (s.dataset) delete s.dataset.duelRole;  // ⭐ 同步清掉上一局紀錄
   });
+
   [lCard, rCard].forEach(img=>{
     if (!img) return;
     img.classList.remove('fx-flip','front-reveal');
@@ -3343,14 +3343,19 @@ const isDraw = !hasWinner;
     img.src = 'images/cards/back.png';
   });
 
-  // 標出 winner / loser（先用 class，等等 burn 會用到）
+  // 標出 winner / loser（先記在 dataset，等等翻牌後才套樣式）
   const leftIsWinner  = (winnerId === leftId);
   const rightIsWinner = (winnerId === rightId);
 
   if (!isDraw) {
-    if (leftSlot)  leftSlot.classList.add(leftIsWinner  ? 'winner' : 'loser');
-    if (rightSlot) rightSlot.classList.add(rightIsWinner ? 'winner' : 'loser');
+    if (leftSlot && leftSlot.dataset) {
+      leftSlot.dataset.duelRole = leftIsWinner ? 'winner' : 'loser';
+    }
+    if (rightSlot && rightSlot.dataset) {
+      rightSlot.dataset.duelRole = rightIsWinner ? 'winner' : 'loser';
+    }
   }
+
 
 
   // 計算輸家 slot（照後端傳來的 loserSide 優先）
@@ -3376,7 +3381,7 @@ const isDraw = !hasWinner;
     arena.classList.add('spread');
   }, spreadDelay);
 
-  // 2) 中間撞擊（牌稍微往中間衝一下）
+   // 2) 中間撞擊（牌稍微往中間衝一下）
   setTimeout(()=>{
     arena.classList.add('clash');
     playSfx('duelHitSfx');           // ⭐ 撞擊音效
@@ -3385,8 +3390,14 @@ const isDraw = !hasWinner;
     if (isDraw) {
       onceFx(lCard, 'fx-shake');
       onceFx(rCard, 'fx-shake');
+
+      // ⭐ 平手文字：等「撞擊」發生後才顯示
+      if (lineWin) {
+        lineWin.textContent = `平手！${leftName} 與 ${rightName} 難分勝負`;
+      }
     }
   }, clashDelay);
+
 
   // 3) 輸家卡片翻面成正面
   setTimeout(()=>{
@@ -3402,6 +3413,16 @@ const isDraw = !hasWinner;
     if (lineWin && winnerName && loserName) {
       lineWin.textContent = `${winnerName} 勝利，${loserName} 落敗`;
     }
+
+    // ⭐ 同一個時間點才把 winner / loser 外框點亮
+    [leftSlot, rightSlot].forEach(s=>{
+      if (!s) return;
+      s.classList.remove('winner','loser');
+      const role = s.dataset?.duelRole;
+      if (!role) return;
+      if (role === 'winner') s.classList.add('winner');
+      if (role === 'loser')  s.classList.add('loser');
+    });
   }, flipDelay);
 
 
