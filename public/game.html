@@ -2656,11 +2656,7 @@ function cardLine(cardId){
 
 /* ========= 角色語音對照 ========= */
 /*
-  檔案請放：audio/voice/
-  例如：
-   0.mp3, 0-8.mp3, 1.mp3, 1-8.mp3 ...
-*/
-const VOICE_MAP = {
+ VOICE_MAP = {
   0: {
     base: { text: '要燃起革命的燈火', file: 'audio/voice/0.mp3' },
     combos: {
@@ -2683,7 +2679,8 @@ const VOICE_MAP = {
     base: { text: '我要找到蔚藍海域(All Blue)', file: 'audio/voice/3.mp3' },
     combos: {
       2: { text: '羅賓小姐~', file: 'audio/voice/3-2.mp3' },
-      7: { text: '娜美小姐~', file: 'audio/voice/3-7.mp3' }
+      7: { text: '娜美小姐~', file: 'audio/voice/3-7.mp3' },
+      12:{ text: '男人不能打女人，奎因，你這個混帳', file: 'audio/voice/3-12.mp3' }
     }
   },
   4: {
@@ -2702,15 +2699,106 @@ const VOICE_MAP = {
     base: { text: '我要畫出全世界的航海圖', file: 'audio/voice/7.mp3' }
   },
   8: {
-    base: { text: '我是蒙其D魯夫，是要超越你們，成為海賊王的人', file: 'audio/voice/8.mp3' },
+    base: { text: '我是魯夫，是要成為海賊王的人', file: 'audio/voice/8.mp3' },
     combos: {
-      1: { text: '狙擊王，給我打穿那面旗子', file: 'audio/voice/8-1.mp3' },
-      3: { text: '沒有你在的話，我是無法成為海賊王的', file: 'audio/voice/8-3.mp3' },
-      4: { text: '少囉嗦，一起走吧~', file: 'audio/voice/8-4.mp3' },
-      7: { text: '不准弄哭我的航海士', file: 'audio/voice/8-7.mp3' }
+      1:  { text: '狙擊王，給我打穿那面旗子', file: 'audio/voice/8-1.mp3' },
+      3:  { text: '沒有你在的話，我是無法成為海賊王的', file: 'audio/voice/8-3.mp3' },
+      4:  { text: '少囉嗦，一起走吧~', file: 'audio/voice/8-4.mp3' },
+      7:  { text: '不准弄哭我的航海士', file: 'audio/voice/8-7.mp3' },
+      // 8-10-14：另一張是 10 或 14 時用這條
+      10: { text: '我是蒙其D魯夫，是要超越你們，成為海賊王的人', file: 'audio/voice/8-10-14.mp3' },
+      14: { text: '我是蒙其D魯夫，是要超越你們，成為海賊王的人', file: 'audio/voice/8-10-14.mp3' }
     }
+  },
+
+  // 9：波妮
+  9: {
+    base: { text: '迷戀甘風', file: 'audio/voice/9.mp3' },
+    combos: {
+      8: { text: '看到你，妾身已心滿意足了', file: 'audio/voice/9-8.mp3' }
+    }
+  },
+
+  // 10：凱多
+  10: {
+    base: { text: 'ウオロロロ(笑)', file: 'audio/voice/10.mp3' },
+    combos: {
+      8: { text: '你說你要當甚麼王啊? 臭小鬼', file: 'audio/voice/10-8.mp3' }
+    }
+  },
+
+  // 11：赤犬
+  11: {
+    base: { text: '非生即死，連這點覺悟都沒有嗎?', file: 'audio/voice/11.mp3' },
+    combos: {
+      8:  { text: '我馬上去取你的首級，草帽小子', file: 'audio/voice/11-8.mp3' },
+      13: { text: '嘲笑你的傢伙，都由我來送下地獄', file: 'audio/voice/11-13.mp3' }
+    }
+  },
+
+  // 12：伽治
+  12: {
+    base: { text: '我的科學是無敵的，最強，最棒，世界第一', file: 'audio/voice/12.mp3' },
+    combos: {
+      3: { text: '你們這群枷治的兔崽子', file: 'audio/voice/12-3.mp3' }
+    }
+  },
+
+  // 13：基拉
+  13: {
+    base: { text: '刃 音擊', file: 'audio/voice/13.mp3' }
+  },
+
+  // 14：大媽
+  14: {
+    base: { text: 'ママママママ(笑)', file: 'audio/voice/14.mp3' },
+    combos: {
+      10: { text: '別忘了你還欠我一個人情，那可是一輩子的恩情', file: 'audio/voice/14-10.mp3' }
+    }
+  },
+
+  // 15：卡塔克利
+  15: {
+    base: { text: '讓你知道什麼叫人外有人，天外有天', file: 'audio/voice/15.mp3' },
+    combos: {
+      8: { text: '你看到了相當遙遠的未來啊!', file: 'audio/voice/15-8.mp3' }
+    }
+  },
+
+  // 16：青雉
+  16: {
+    base: { text: '唉呀呀～', file: 'audio/voice/16.mp3' },
+    combos: {
+      2: { text: '終於，你也找到棲身之所了，那就好好的活下去', file: 'audio/voice/16-2.mp3' }
+    }
+  },
+
+  // 17：黑鬍子
+  17: {
+    base: { text: 'ゼハハハハ！(笑)', file: 'audio/voice/17.mp3' },
+    combos: {
+      // 17-5-7-8：另一張是 5/7/8 都用同一條語音
+      5: { text: '人類的夢想是永遠不會結束的！', file: 'audio/voice/17-5-7-8.mp3' },
+      7: { text: '人類的夢想是永遠不會結束的！', file: 'audio/voice/17-5-7-8.mp3' },
+      8: { text: '人類的夢想是永遠不會結束的！', file: 'audio/voice/17-5-7-8.mp3' },
+      18:{ text: '越來越霸道了啊!紅髮，跟你的疤真搭', file: 'audio/voice/17-18.mp3' }
+    }
+  },
+
+  // 18：紅髮
+  18: {
+    base: { text: '差不多該去拿下了吧! ONE PIECE', file: 'audio/voice/18.mp3' },
+    combos: {
+      8: { text: '我把這頂帽子留給你，等到你成為一位偉大的海賊再拿給我', file: 'audio/voice/18-8.mp3' }
+    }
+  },
+
+  // 19：羅傑
+  19: {
+    base: { text: '想要我的財寶嗎？去找吧！我把世界上的一切都放在那裡了！', file: 'audio/voice/19.mp3' }
   }
 };
+
 
 /** 根據主角卡＋另一張卡，決定要播放哪一條語音 */
 function getVoiceData(mainId, otherId){
