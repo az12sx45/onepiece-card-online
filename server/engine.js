@@ -963,16 +963,25 @@ case 2: { // 羅賓
           return { state: st, emits };
         }
       }
-      case 9: { // 女帝
-        if(venueActive){
-          me.protected=true;
-          pushLog(st, '女帝（九蛇島）：獲得保護', emits);
-        } else {
-          doEliminate(st, st.turnIndex, '女帝自我了斷', st.turnIndex, emits);
-        }
-        endOrNext(st);
-        return { state: st, emits };
-      }
+case 9: { // 女帝
+  // ⭐ 先告訴前端「播放卡圖 + 台詞」
+  emits.push({
+    to:'all',
+    type:'play_fx',
+    cardId: 9,
+    playerId: st.turnIndex
+  });
+
+  if(venueActive){
+    me.protected=true;
+    pushLog(st, '女帝（九蛇島）：獲得保護', emits);
+  } else {
+    doEliminate(st, st.turnIndex, '女帝自我了斷', st.turnIndex, emits);
+  }
+  endOrNext(st);
+  return { state: st, emits };
+}
+
       case 10: { // 凱多
   const hasBigMom = (me.hand === 14 || keepId === 14);
 
@@ -1196,17 +1205,26 @@ case 16: { // 青雉
 }
 
 
-      case 19: { // 羅傑
-        if(st.venues.some(v=>v.name==='奧羅傑克森號')){
-          st.pending = { action:'roger' };
-          return { state: st, emits };
-        } else {
-          doEliminate(st, st.turnIndex, '羅傑：為下一局起始', st.turnIndex, emits);
-          st.nextRoundStart = st.turnIndex;
-          endOrNext(st);
-          return { state: st, emits };
-        }
-      }
+case 19: { // 羅傑
+  // ⭐ 播卡圖 + 台詞
+  emits.push({
+    to:'all',
+    type:'play_fx',
+    cardId: 19,
+    playerId: st.turnIndex
+  });
+
+  if(st.venues.some(v=>v.name==='奧羅傑克森號')){
+    st.pending = { action:'roger' };
+    return { state: st, emits };
+  } else {
+    doEliminate(st, st.turnIndex, '羅傑：為下一局起始', st.turnIndex, emits);
+    st.nextRoundStart = st.turnIndex;
+    endOrNext(st);
+    return { state: st, emits };
+  }
+}
+
     }
   }
 
