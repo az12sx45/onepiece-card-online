@@ -4595,30 +4595,6 @@ if (srvP.action === 'law') {
     return showTarget('選擇對象', (i)=> sendAction('PICK_TARGET',{target:i}), {allowSelf:false});
   }
 
-if (srvP.action === 'kid_confirm') {
-  let html = `
-    <div class="text-lg font-semibold mb-3">
-      基德：將棄牌堆洗混並抽取 1 張
-    </div>
-    <div class="text-base mb-4 text-[#cbd5e1]">
-      按下「抽取」後才會正式執行基德的效果。
-    </div>
-    <div class="flex justify-end gap-3">
-      <button id="kidDo" class="px-4 py-2 rounded-lg bg-purple-500 hover:bg-purple-600 text-white">
-        抽取
-      </button>
-    </div>
-  `;
-  showModal(html);
-
-  const btn = el.modal.querySelector('#kidDo');
-  btn.onclick = ()=>{
-    sendAction('PLAY_CARD', { which: 'drawn' }); 
-    hideModal();
-  };
-  return;
-}
-
 
   if(srvP.action==='queen'){
     return showConfirm(`替 ${pname(srvP.target)} 擲硬幣`, ()=> sendAction('QUEEN_COIN'));
@@ -4744,6 +4720,46 @@ function showConfirm(title, onOk){
   }
 }
 
+function showKidConfirm(which){
+  const html = `
+    <div class="text-lg font-semibold mb-3">
+      基德：洗混並抽取棄牌堆的卡
+    </div>
+    <div class="text-base mb-4 text-[#cbd5e1]">
+      按下「抽取」後才會正式執行基德的效果。
+    </div>
+    <div class="flex justify-end gap-3">
+      <button id="kidCancel"
+              class="px-3 py-1.5 rounded-lg border border-[#2a2f35]">
+        取消
+      </button>
+      <button id="kidDo"
+              class="px-4 py-2 rounded-lg bg-purple-500 hover:bg-purple-600 text-white">
+        抽取
+      </button>
+    </div>
+  `;
+  showModal(html);
+
+  const cancelBtn = el.modal.querySelector('#kidCancel');
+  const okBtn     = el.modal.querySelector('#kidDo');
+
+  if (cancelBtn) {
+    cancelBtn.onclick = ()=>{
+      // 什麼都不送，回合維持原樣
+      hideModal();
+    };
+  }
+
+  if (okBtn) {
+    okBtn.onclick = ()=>{
+      // 關閉視窗後，才真正送 PLAY_CARD，後端照現在的基德效果走
+      hideModal();
+      sendAction('PLAY_CARD', { which });
+    };
+  }
+}
+
 function showYesNo(title, yesText, noText, onYes, onNo){
   let html =
     `<div class="text-lg font-semibold mb-2">${title}</div>`+
@@ -4800,9 +4816,18 @@ function handlePlayCard(which){
     playVoiceLineFor(mainId, other);
   }
 
-  // 真正通知伺服器這張牌被打出
+  // ⭐ 基德（一般版）特別處理：
+  // 打出時先播完上面那個語音＋台詞框，然後跳確認框
+  // 按「抽取」才真的送 PLAY_CARD 給後端
+  if (mainId === 11 && !isEnhancedNow(mainId)) {
+    showKidConfirm(which);
+    return; // 不要立刻送 PLAY_CARD
+  }
+
+  // 其他卡維持原本流程，直接出牌
   sendAction('PLAY_CARD', { which });
 }
+
 
 
 function showMulti(title, cards, onCommit){
