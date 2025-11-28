@@ -3183,29 +3183,67 @@ socket.on('STATE', (s)=>{
   // 3) 偵測新棄牌
   const newDiscardLen = Array.isArray(state.discard) ? state.discard.length : 0;
   if (newDiscardLen > prevDiscardLen) {
-    const last = state.discard[newDiscardLen - 1];
-    const isBack = last && typeof last === 'object' && last.back === true;
-    if (!isBack && typeof last === 'number') {
-      if (isEnhancedNow(last)) {
-        
-if (_enhSignal && _enhSignal.cardId === last) {
-  _flashBusy = true;
-  showPlayedFlash(last, prevTurnIndex, {
-    onDone: ()=>{
-      if (typeof playEnhFxFor === 'function') {
-        playEnhFxFor(last);
-      } else if (typeof playEnhFx === 'function') {
-        playEnhFx();
+    // 這次「新增到棄牌堆」的所有卡（可能不只 1 張）
+    const added = state.discard.slice(prevDiscardLen, newDiscardLen);
+
+    // 從後往前找「最後一張不是靜默棄牌」的卡，才拿來做快閃
+    let last = null;
+
+    for (let i = added.length - 1; i >= 0; i--) {
+      const c = added[i];
+      let id = null;
+
+      if (typeof c === 'number') {
+        id = c;
+      } else if (c && typeof c === 'object') {
+        // 新格式：{ id, by, coverBy, back? ... }
+        if (c.back === true) {
+          // 純卡背直接略過
+          continue;
+        }
+        if (typeof c.id === 'number') {
+          id = c.id;
+        }
       }
-      _flashBusy = false;
-      _enhSignal = null;
+
+      if (id == null) continue;
+
+      // 如果是「靜默棄牌」（例如被淘汰時自動丟手牌），就消耗掉一次，不當成快閃目標
+      if (Array.isArray(_silentDiscards) && _silentDiscards.includes(id)) {
+        _silentDiscards = _silentDiscards.filter(x => x !== id);
+        continue;
+      }
+
+      // 找到真正要快閃的那張（通常就是玩家剛打出的那張牌）
+      last = id;
+      break;
     }
-  });
-} else {
-  // 非打出卡（例如索隆逼棄、覆蓋頂牌）或沒有 enh_fx 訊號 → 僅快閃卡面，不播影片
-  showPlayedFlash(last, prevTurnIndex);
-}
-} else {
+
+    // 沒有適合快閃的牌，就什麼都不做
+    if (last == null) {
+      // 這種情況通常是：只有靜默棄牌（例如被教學覆蓋、被淘汰丟手牌）才會發生
+    } else {
+      // 下面沿用原本的強化判定 + 影片邏輯，只是把 last 換成我們挑出來的那張
+      if (isEnhancedNow(last)) {
+        if (_enhSignal && _enhSignal.cardId === last) {
+          _flashBusy = true;
+          showPlayedFlash(last, prevTurnIndex, {
+            onDone: () => {
+              if (typeof playEnhFxFor === 'function') {
+                playEnhFxFor(last);
+              } else if (typeof playEnhFx === 'function') {
+                playEnhFx();
+              }
+              _flashBusy = false;
+              _enhSignal = null;
+            }
+          });
+        } else {
+          // 非打出卡（例如索隆逼棄、覆蓋頂牌）或沒有 enh_fx 訊號 → 僅快閃卡面，不播影片
+          showPlayedFlash(last, prevTurnIndex);
+        }
+      } else {
+        // 一般非強化牌 → 就快閃卡面
         showPlayedFlash(last, prevTurnIndex);
       }
     }
