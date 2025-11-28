@@ -1055,6 +1055,10 @@ emits.push({
           endOrNext(st);
           return { state: st, emits };
         } else {
+
+              st.pending = { action: 'kid_confirm' };
+  return { state: st, emits };
+}
           if(st.discard.length===0){
             pushLog(st, '基德：棄牌堆為空，技能失效', emits);
             endOrNext(st);
