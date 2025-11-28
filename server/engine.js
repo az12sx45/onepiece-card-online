@@ -1024,22 +1024,29 @@ case 9: { // 女帝
   }
 }
 
-      case 11: { // 基德
+            case 11: { // 基德
+        // ⭐ 播放卡圖 + 台詞
+        emits.push({
+          to: 'all',
+          type: 'play_fx',
+          cardId: 11,
+          playerId: st.turnIndex
+        });
 
-// ⭐ 播放卡圖 + 台詞
-emits.push({
-  to:'all',
-  type:'play_fx',
-  cardId: 11,
-  playerId: st.turnIndex
-});
+        if (venueActive) {
+          const allAlive = st.players
+            .map((_, i) => i)
+            .filter(i => st.players[i].alive);
 
-        if(venueActive){
-          const allAlive = st.players.map((_,i)=>i).filter(i=>st.players[i].alive);
           const passIdxs = allAlive.filter(i => !st.players[i].protected && !st.players[i].dodging);
           const dodgedIdxs = allAlive.filter(i => st.players[i].dodging);
-          dodgedIdxs.forEach(i => { st.players[i].dodging = false; });
 
+          // 消耗掉所有閃避
+          dodgedIdxs.forEach(i => {
+            st.players[i].dodging = false;
+          });
+
+          // 至少 2 人才有傳遞意義
           if (passIdxs.length >= 2) {
             const hands = passIdxs.map(i => st.players[i].hand);
             for (let k = 0; k < passIdxs.length; k++) {
@@ -1048,38 +1055,48 @@ emits.push({
             }
           }
 
-          const skipped = allAlive.length - passIdxs.length;
-          const dodgeUsed = dodgedIdxs.length;
-          pushLog(st, `基德（強化）：已逆時針傳遞（略過 ${skipped} 人：保護/閃避，消耗閃避 ${dodgeUsed}）`, emits);
+          const skipped = allAlive.length - passIdxs.length;   // 被保護/閃避略過的人
+          const dodgeUsed = dodgedIdxs.length;                 // 消耗掉的閃避數
+
+          pushLog(
+            st,
+            `基德（強化）：已逆時針傳遞（略過 ${skipped} 人：保護/閃避，消耗閃避 ${dodgeUsed}）`,
+            emits
+          );
 
           endOrNext(st);
           return { state: st, emits };
         } else {
+          // 一般版：從棄牌堆洗牌抽 1（排除基德本人），再讓你重新選牌
 
-              st.pending = { action: 'kid_confirm' };
-  return { state: st, emits };
-}
-          if(st.discard.length===0){
+          if (st.discard.length === 0) {
             pushLog(st, '基德：棄牌堆為空，技能失效', emits);
             endOrNext(st);
             return { state: st, emits };
           }
+
+          // 把棄牌堆轉成 {id, idx}，排除 11（基德）
           const pool = st.discard
-            .map((x,idx)=>({ id: (typeof x==='number'? x : x?.id), idx }))
-            .filter(x=>x.id!==11); // 相容 teach 物件
-          if(pool.length===0){
+            .map((x, idx) => ({ id: (typeof x === 'number' ? x : x?.id), idx }))
+            .filter(x => x.id !== 11); // 相容 teach 物件
+
+          if (pool.length === 0) {
             pushLog(st, '基德：棄牌堆只有基德，技能失效', emits);
             endOrNext(st);
             return { state: st, emits };
           }
-          const pick = pool[Math.floor(Math.random()*pool.length)];
+
+          // 隨機抽 1 張
+          const pick = pool[Math.floor(Math.random() * pool.length)];
           me.tempDraw = pick.id;
-          st.discard.splice(pick.idx,1);
+          st.discard.splice(pick.idx, 1);
+
           pushLog(st, '基德：棄牌堆洗牌抽 1（排除基德），請再打一次', emits);
-          st.turnStep='choose';
+          st.turnStep = 'choose';
           return { state: st, emits };
         }
       }
+
       case 12: { // 奎因
         if(venueActive){
           st.iceWindowOn = true;
