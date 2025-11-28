@@ -1025,6 +1025,15 @@ case 9: { // 女帝
 }
 
       case 11: { // 基德
+
+// ⭐ 播放卡圖 + 台詞
+emits.push({
+  to:'all',
+  type:'play_fx',
+  cardId: 11,
+  playerId: st.turnIndex
+});
+
         if(venueActive){
           const allAlive = st.players.map((_,i)=>i).filter(i=>st.players[i].alive);
           const passIdxs = allAlive.filter(i => !st.players[i].protected && !st.players[i].dodging);
