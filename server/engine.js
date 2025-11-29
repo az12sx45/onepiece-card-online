@@ -102,18 +102,18 @@ function pushEnhFxIfAny(emits, st, cardId){
 function ensureStats(st){
   if (!st.stats) st.stats = {};
   if (!Array.isArray(st.players)) return st.stats;
-  for (let i=0;i<st.players.length;i++){
+  for (let i = 0; i < st.players.length; i++) {
     if (!st.stats[i]) {
       st.stats[i] = {
-        coinScore: 0,   // 金幣分
-        atkScore: 0,    // 攻擊分
-        defScore: 0,    // 防禦分
-        hitScore: 0,    // 命中分
-        intelScore: 0,  // 偵查分
-        survivalTurns: 0, // 生存：輪到自己的次數
+        coinScore: 0,      // 金幣分
+        atkScore: 0,       // 攻擊分
+        defScore: 0,       // 防禦分
+        hitScore: 0,       // 命中分
+        intelScore: 0,     // 偵查分
+        survivalTurns: 0,  // 生存：輪到自己的次數
         reachedFinal: false,
-        wonFinal: false
-        finalTail: 0 
+        wonFinal: false,   // ← 這裡一定要有逗號
+        finalTail: 0       // ← 你新增的欄位
       };
     }
   }
