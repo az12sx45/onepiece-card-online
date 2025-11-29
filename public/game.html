@@ -1517,6 +1517,18 @@ body::before{
   100% { transform: scale(1); }
 }
 
+/* === 卡組總覽 overlay 小調整 === */
+#cardPoolOverlay {
+  backdrop-filter: blur(2px);
+}
+
+#cardPoolGrid::-webkit-scrollbar {
+  width: 6px;
+}
+#cardPoolGrid::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.7);
+  border-radius: 999px;
+}
 
 
 </style>
@@ -1541,7 +1553,16 @@ body::before{
     <div class="hidden text-xs px-2 py-1 rounded border border-neutral-700">連線：<span id="connLbl" class="text-red-400">disconnected</span></div>
 
     <!-- 保留寶箱（可見） -->
-    <div class="text-xs px-2 py-1 rounded border border-neutral-700">寶箱剩餘：<span id="chestLbl">0</span> 枚</div>
+    <div class="text-xs px-2 py-1 rounded border border-neutral-700">寶箱金幣剩餘：<span id="chestLbl">0</span> 枚</div>
+
+ <!-- 👇 這一顆就是你要新增的按鈕，跟寶箱排在一起 -->
+    <button
+      id="cardPoolBtn"
+      class="text-xs px-2 py-1 rounded border border-amber-400 text-amber-300 bg-[#14181c]/80 hover:bg-amber-500/10 transition"
+      type="button"
+    >
+      卡片總數
+    </button>
 
     <!-- 拉到最右邊：音樂條 -->
     <div class="ml-auto flex items-center gap-2 w-full sm:w-auto">
@@ -1783,6 +1804,34 @@ body::before{
     </div>
   </div>
 
+<!-- === 全卡組總覽 Overlay === -->
+<div id="cardPoolOverlay" class="fixed inset-0 hidden items-center justify-center bg-black/70 z-[300]">
+  <div class="relative bg-slate-900/95 border border-slate-600 rounded-2xl max-w-5xl w-[96vw] max-h-[90vh] p-4 flex flex-col">
+    <!-- 關閉按鈕 -->
+    <button type="button" id="cardPoolClose"
+      class="absolute right-3 top-3 text-slate-300 hover:text-white text-xl">
+      ✕
+    </button>
+
+    <h2 class="text-lg font-bold mb-3 text-amber-200">
+      卡片總覽（點小圖可以看大圖）
+    </h2>
+
+    <!-- 卡片縮圖＋數量 -->
+    <div id="cardPoolGrid"
+      class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 overflow-y-auto pr-1">
+      <!-- 由 JS 動態塞入 -->
+    </div>
+
+    <!-- 大圖區 -->
+    <div id="cardPoolBig" class="mt-3 flex justify-center">
+      <img id="cardPoolBigImg"
+        class="max-h-[40vh] rounded-xl shadow-xl border border-slate-600 hidden"
+        src="" alt="">
+    </div>
+  </div>
+</div>
+
 
 <script>
 /* === 路徑工具 === */
@@ -1811,9 +1860,18 @@ const el = {
   /* msg: 已移除 */
   turnLbl: document.getElementById('turnLbl'),
   stepLbl: document.getElementById('stepLbl'),
-  modal: document.getElementById('modal'),
+    modal: document.getElementById('modal'),
   chestLbl: document.getElementById('chestLbl'),
-  nextRound: document.getElementById('btnNextRound'),
+  nextRound: document.getElementById('nextRoundBtn'),
+
+  // === 卡組總覽相關 ===
+  cardPoolOverlay: document.getElementById('cardPoolOverlay'),
+  cardPoolClose: document.getElementById('cardPoolClose'),
+  cardPoolGrid: document.getElementById('cardPoolGrid'),
+  cardPoolBig: document.getElementById('cardPoolBig'),
+  cardPoolBigImg: document.getElementById('cardPoolBigImg'),
+  cardPoolBtn: document.getElementById('cardPoolBtn'),
+
 };
 
 
@@ -2643,6 +2701,30 @@ const CARD_TEXT = {
   }
 };
 
+// === 卡片總張數（先填你目前的牌組數量） ===
+const CARD_COUNTS = {
+  0: 1,
+  1: 5,
+  2: 2,
+  3: 2,
+  4: 2,
+  5: 2,
+  6: 1,
+  7: 1,
+  8: 1,
+  9: 1,
+  10: 1,
+  11: 1,
+  12: 1,
+  13: 1,
+  14: 1,
+  15: 1,
+  16: 1,
+  17: 1,
+  18: 1,
+  19: 1,
+};
+
 /** 把卡片變成簡短文字（會自動判斷是否強化） */
 function cardLine(cardId){
   const meta = CARD_TEXT[cardId];
@@ -2912,6 +2994,102 @@ function reconcileVenueBackground(validVenuesArray){
 function onVenueClick(venueName){
   toggleVenueBackground(venueName);
 }
+
+/* ========= 卡片總覽資料（照後端 COUNTS 抄一份） ========= */
+const CARD_POOL_DATA = [
+  { id: 0,  name: '薩波',           total: 1 },
+  { id: 1,  name: '騙人布',         total: 5 },
+  { id: 2,  name: '羅賓',           total: 2 },
+  { id: 3,  name: '香吉士',         total: 2 },
+  { id: 4,  name: '索隆',           total: 2 },
+  { id: 5,  name: '托拉法爾加・羅', total: 2 },
+  { id: 6,  name: '喬巴',           total: 1 },
+  { id: 7,  name: '娜美',           total: 1 },
+  { id: 8,  name: '黑鬍子',         total: 1 },
+  { id: 9,  name: '蒙其・D・魯夫', total: 1 },
+  { id: 10, name: '凱多',           total: 1 },
+  { id: 11, name: '尤斯塔斯・基德', total: 1 },
+  { id: 12, name: '奎因',           total: 1 },
+  { id: 13, name: '殺戮武士・基拉', total: 1 },
+  { id: 14, name: '大媽',           total: 1 },
+  { id: 15, name: '卡塔庫栗',       total: 1 },
+  { id: 16, name: '庫山（青雉）',   total: 1 },
+  { id: 17, name: '波特卡斯・D・艾斯', total: 1 },
+  { id: 18, name: '紅髮香克斯',     total: 1 },
+  { id: 19, name: '哥爾・D・羅傑', total: 1 },
+];
+
+/* ========= 卡片總覽 UI 建立 & 事件 ========= */
+function setupCardPool(){
+  if (!el.cardPoolOverlay || !el.cardPoolGrid) return;
+
+  // 1. 建出卡片清單
+  const frag = document.createDocumentFragment();
+  CARD_POOL_DATA.forEach(info => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className =
+      'flex flex-col items-center gap-1 p-2 rounded-lg border border-slate-600 ' +
+      'bg-slate-800/80 hover:bg-slate-700 transition text-xs text-center';
+
+    btn.innerHTML = `
+      <img src="${CARD(info.id)}"
+           alt="${info.name}"
+           class="w-20 rounded shadow-md mb-1" />
+      <div class="text-amber-200 font-semibold">${info.name}</div>
+      <div class="text-slate-100">總數：${info.total} 張</div>
+    `;
+
+    // 點小卡 → 顯示大圖
+    btn.addEventListener('click', () => {
+      if (!el.cardPoolBig || !el.cardPoolBigImg) return;
+      el.cardPoolBigImg.src = CARD(info.id);
+      el.cardPoolBig.classList.remove('hidden');
+    });
+
+    frag.appendChild(btn);
+  });
+
+  el.cardPoolGrid.innerHTML = '';
+  el.cardPoolGrid.appendChild(frag);
+
+  // 2. 開/關視窗
+  function openPool(){
+    el.cardPoolOverlay.classList.remove('hidden');
+    if (el.cardPoolBig) {
+      el.cardPoolBig.classList.add('hidden'); // 先隱藏大圖區
+    }
+  }
+  function closePool(){
+    el.cardPoolOverlay.classList.add('hidden');
+    if (el.cardPoolBig) {
+      el.cardPoolBig.classList.add('hidden');
+    }
+    if (el.cardPoolBigImg) {
+      el.cardPoolBigImg.src = '';
+    }
+  }
+
+  // 寶箱旁邊那顆按鈕 → 打開
+  if (el.cardPoolBtn) {
+    el.cardPoolBtn.addEventListener('click', openPool);
+  }
+
+  // X 按鈕關閉
+  if (el.cardPoolClose) {
+    el.cardPoolClose.addEventListener('click', closePool);
+  }
+
+  // 點背景空白處也關閉
+  el.cardPoolOverlay.addEventListener('click', (e) => {
+    if (e.target === el.cardPoolOverlay) {
+      closePool();
+    }
+  });
+}
+
+// 因為 <script> 放在 body 最後，這裡直接呼叫就行
+setupCardPool();
 
 
 /* ========= 日誌 formatter ========= */
