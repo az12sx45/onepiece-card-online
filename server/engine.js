@@ -113,6 +113,7 @@ function ensureStats(st){
         survivalTurns: 0, // 生存：輪到自己的次數
         reachedFinal: false,
         wonFinal: false
+        finalTail: 0 
       };
     }
   }
@@ -386,17 +387,30 @@ if (st.chestLeft === 0) {
   const board = {};
   for (let i = 0; i < st.players.length; i++) {
     const s = st.stats[i] || {};
-    const survivalScore =
-      (s.survivalTurns || 0) * (s.reachedFinal ? 2 : 1) * (s.wonFinal ? 2 : 1);
+const playerCount = st.players.length;
+const baseTurns   = s.survivalTurns || 0;
+const reached     = !!s.reachedFinal;
+const won         = !!s.wonFinal;
+const tail        = (typeof s.finalTail === 'number' ? s.finalTail : 0);
 
-    board[i] = {
-      coinScore: s.coinScore || 0,   // 金幣分（累計獲得金幣數）
-      atkScore: s.atkScore || 0,     // 攻擊分
-      defScore: s.defScore || 0,     // 防禦分（保護/閃避成功）
-      hitScore: s.hitScore || 0,     // 命中分（指向/擊中成效）
-      intelScore: s.intelScore || 0, // 情報分（偷看/探測等）
-      survivalScore                  // 生存分（回合數與是否到/贏最終）
-    };
+// ★ 新生存分規則：
+//   生存分 = 生存回合數
+//          + (有活到 final ? 總玩家人數 : 0)
+//          + (有贏 final ? 最終比牌那張牌的尾數 : 0)
+const survivalScore =
+  baseTurns +
+  (reached ? playerCount : 0) +
+  (won ? tail : 0);
+
+board[i] = {
+  coinScore: s.coinScore || 0,
+  atkScore: s.atkScore || 0,
+  defScore: s.defScore || 0,
+  hitScore: s.hitScore || 0,
+  intelScore: s.intelScore || 0,
+  survivalScore
+};
+
   }
 
  // 2) 帶出玩家的 meta（名字、pid、頭像），供結果頁顯示
@@ -481,17 +495,26 @@ function showdown(st){
     }
 
     const {cands, bestVal, bestPri} = computeBest();
-    if(cands.length===1){
-      const w=cands[0];
-      const wId = w.hand;
-      const wVal = showVal(wId) + ((st.shanksBonusUid!=null && w.id===st.shanksBonusUid)?1:0);
-      st.log.push(`★ 比牌結果：P${w.id+1} 最高 → 值 ${wVal}${isCore09(wId)?'（0–9 方）':''}${tieBonus>0?`（累積平手 +${tieBonus}）`:''}`);
-      setFlag(st, w.id, 'wonFinal', true); // ★ 贏下最終
-      awardRound(st, w, tieBonus);
-      st.turnStep='ended';
-      st.shanksBonusUid = null;
-      break;
-    }
+  if(cands.length===1){
+  const w = cands[0];
+  const wId = w.hand;
+  const wVal = showVal(wId) + ((st.shanksBonusUid!=null && w.id===st.shanksBonusUid)?1:0);
+  st.log.push(`★ 比牌結果：P${w.id+1} 最高 → 值 ${wVal}${isCore09(wId)?'（0–9 方）':''}${tieBonus>0?`（累積平手 +${tieBonus}）`:''}`);
+
+  // ★ 標記：贏下最終
+  setFlag(st, w.id, 'wonFinal', true);
+
+  // ★ 記錄：最終比牌那張牌的尾數（0~9）
+  ensureStats(st);
+  if (!st.stats[w.id]) st.stats[w.id] = {};
+  st.stats[w.id].finalTail = (wId != null ? (wId % 10) : 0);
+
+  awardRound(st, w, tieBonus);
+  st.turnStep = 'ended';
+  st.shanksBonusUid = null;
+  break;
+}
+
 
     st.log.push(`★ 比牌平手（同最高值${bestVal}${bestPri===1?'，且皆為 0–9 方':''}）。將所有牌洗回，存活者各抽 1 → 重比。`);
     tieBonus += 1;
