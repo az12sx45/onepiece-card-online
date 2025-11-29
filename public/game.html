@@ -4815,14 +4815,34 @@ function handlePlayCard(which){
     const other = (typeof otherId === 'number') ? otherId : null;
     playVoiceLineFor(mainId, other);
   }
+  if (mainId === 11) {
+    // 基德：先播卡圖 + 語音 + 台詞框，再跳確認框
 
-  // ⭐ 基德（一般版）特別處理：
-  // 打出時先播完上面那個語音＋台詞框，然後跳確認框
-  // 按「抽取」才真的送 PLAY_CARD 給後端
-  if (mainId === 11 && !isEnhancedNow(mainId)) {
+    // 1) 播原本設定的基德語音 + 台詞泡泡
+    playVoiceLineFor(mainId, {
+      mainPlayerIndex: me.playerId,
+      otherPlayerIndex: null
+    });
+
+    // 2) 立刻手動播一次基德的「打出快閃卡圖」
+    //    （這個畫面就是你說的廣播圖面）
+    if (typeof showPlayedFlash === 'function') {
+      showPlayedFlash(mainId, me.playerId);
+    }
+
+    // 3) 等下真正送 PLAY_CARD 給後端時，
+    //    會再把 11 丟進棄牌堆一次。
+    //    為了避免再被偵測成「新棄牌」再播一次快閃 → 把 11 加進靜默棄牌名單。
+    if (!Array.isArray(_silentDiscards)) {
+      _silentDiscards = [];
+    }
+    _silentDiscards.push(mainId);
+
+    // 4) 最後再跳出「洗混並抽取棄牌堆的卡」確認框
     showKidConfirm(which);
-    return; // 不要立刻送 PLAY_CARD
+    return;
   }
+
 
   // 其他卡維持原本流程，直接出牌
   sendAction('PLAY_CARD', { which });
