@@ -1541,7 +1541,13 @@ body::before{
     <div class="hidden text-xs px-2 py-1 rounded border border-neutral-700">連線：<span id="connLbl" class="text-red-400">disconnected</span></div>
 
     <!-- 保留寶箱（可見） -->
-    <div class="text-xs px-2 py-1 rounded border border-neutral-700">寶箱剩餘：<span id="chestLbl">0</span> 枚</div>
+    <div class="text-xs px-2 py-1 rounded border border-neutral-700">寶箱剩餘金幣：<span id="chestLbl">0</span> 枚</div>
+
+<button id="btnCardList"
+  class="px-2 py-1.5 rounded-lg border border-[#2a2f35] hover:bg-[#192028] text-sm">
+  📘 卡片圖鑑
+</button>
+
 
     <!-- 拉到最右邊：音樂條 -->
     <div class="ml-auto flex items-center gap-2 w-full sm:w-auto">
@@ -1655,6 +1661,11 @@ body::before{
   </main>
 
   <div id="modal" class="modal hidden"><div class="card w-[min(92vw,680px)] p-4"></div></div>
+
+<div id="cardListModal" class="modal hidden">
+  <div class="card w-[min(92vw,700px)] p-4 max-h-[80vh] overflow-y-auto"></div>
+</div>
+
 
 <!-- 決鬥特效 -->
 <div id="duelFx" class="hidden">
@@ -4860,6 +4871,78 @@ el.deckBtn.onclick   = ()=> playDrawFxThenDraw();
 el.playHand.onclick  = ()=> handlePlayCard('hand');
 el.playDrawn.onclick = ()=> handlePlayCard('drawn');
 el.nextRound.onclick = ()=> sendAction('NEXT_ROUND');
+
+// ===== 卡片圖鑑功能 =====
+
+// 全卡列表（你已經在 CARD(id) / CARD_ENH(id) 有定義圖檔）
+const TOTAL_CARDS = 20;
+
+// 點寶箱旁邊按鈕 -> 開啟卡片圖鑑
+document.getElementById('btnCardList').onclick = showCardList;
+
+// 讀你現有 state 裡的場上資訊
+function countCardsFromState() {
+  const cnt = {};
+  for (let i = 0; i < TOTAL_CARDS; i++) cnt[i] = 0;
+
+  // 牌堆
+  (state.deck || []).forEach(id => cnt[id]++);
+
+  // 棄牌
+  (state.discard || []).forEach(id => {
+    if (typeof id === 'number') cnt[id]++;
+  });
+
+  // 玩家手牌
+  (state.players || []).forEach(p => {
+    if (typeof p.hand === 'number') cnt[p.hand]++;
+    if (typeof p.tempDraw === 'number') cnt[p.tempDraw]++;
+  });
+
+  return cnt;
+}
+
+function showCardList() {
+  const cnt = countCardsFromState();
+
+  let html = `
+    <div class="text-lg font-semibold mb-3">卡片圖鑑（基本版 + 強化版）</div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+  `;
+
+  for (let id = 0; id < TOTAL_CARDS; id++) {
+    html += `
+      <div class="border border-[#2a2f35] rounded-lg p-2 text-center bg-[#12161b]">
+        <div class="text-sm mb-1 opacity-80">#${id}（共 ${cnt[id]} 張）</div>
+        <img src="${CARD(id)}" class="w-full rounded cursor-pointer"
+             onclick="showCardBig(${id}, false)"/>
+
+        <div class="text-xs mt-1 opacity-60">強化版</div>
+        <img src="${CARD_ENH(id)}" class="w-full rounded cursor-pointer"
+             onclick="showCardBig(${id}, true)"/>
+      </div>
+    `;
+  }
+
+  html += `</div>`;
+
+  const modal = document.querySelector('#cardListModal .card');
+  modal.innerHTML = html;
+  document.getElementById('cardListModal').classList.remove('hidden');
+}
+
+// 顯示大圖（用你現有 showModal 作法）
+function showCardBig(id, isEnh) {
+  const img = isEnh ? CARD_ENH(id) : CARD(id);
+
+  const html = `
+    <div class="text-lg font-semibold mb-3">#${id} 卡片大圖</div>
+    <img src="${img}" class="w-[min(70vw,400px)] mx-auto rounded-xl shadow-xl"/>
+  `;
+
+  showModal(html);
+}
+
 </script>
 
 <!-- 角色語音（只有本機播放） -->
