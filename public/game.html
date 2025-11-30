@@ -1617,67 +1617,77 @@ body::before{
     <div class="hidden text-xs px-2 py-1 rounded border border-neutral-700">連線：<span id="connLbl" class="text-red-400">disconnected</span></div>
 
     <!-- 保留寶箱（可見） -->
-    <div class="text-xs px-2 py-1 rounded border border-neutral-700">
-      寶箱金幣剩餘：<span id="chestLbl">0</span> 枚
+    <div class="text-xs px-2 py-1 rounded border border-neutral-700">寶箱金幣剩餘：<span id="chestLbl">0</span> 枚</div>
+
+ <!-- ★ 新增：卡片圖鑑按鈕 -->
+      <button id="cardDexBtn"
+              class="px-2 py-1 rounded border border-[#374151] bg-[#111827]/80
+                     text-[11px] tracking-wide hover:bg-[#020617] hover:border-[#f97373]
+                     hover:text-[#fee2e2] transition-colors duration-150">
+        圖鑑
+      </button>
     </div>
 
-    <!-- ★ 卡片圖鑑按鈕 -->
-    <button id="cardDexBtn"
-            class="px-2 py-1 rounded border border-[#374151] bg-[#111827]/80
-                   text-[11px] tracking-wide hover:bg-[#020617] hover:border-[#f97373]
-                   hover:text-[#fee2e2] transition-colors duration-150">
-      圖鑑
-    </button>
-
-    <!-- 拉到最右邊：音樂條（放在同一個 flex 裡，加 ml-auto 撐開） -->
-    <div class="ml-auto flex items-center gap-2 w-full sm:w-auto">
+    <!-- 拉到最右邊：音樂條 -->
+    <div class="ml-auto flex items-center gap-2">
       <div id="bgmBar" class="flex items-center gap-2 px-2 py-1 rounded-lg border border-[#2a2f35] bg-[#14181c]/80">
         <!-- 控制鈕 -->
-        <button id="bgmPrev" class="icon-btn" title="上一首" aria-label="上一首">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M7 12L18 5v14L7 12zM6 5h2v14H6z"/>
-          </svg>
-        </button>
+       <button id="bgmPrev" class="icon-btn" title="上一首" aria-label="上一首">
+  <!-- 上一首：|◀ -->
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M7 12L18 5v14L7 12zM6 5h2v14H6z"/>
+  </svg>
+</button>
 
-        <button id="bgmPlay" class="icon-btn big" title="播放 / 暫停" aria-label="播放 / 暫停">
-          <span id="iconPlay">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M8 5v14l11-7z"/>
-            </svg>
-          </span>
-          <span id="iconPause" class="hidden">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M6 5h4v14H6zM14 5h4v14h-4z"/>
-            </svg>
-          </span>
-        </button>
+<button id="bgmPlay" class="icon-btn big" title="播放/暫停" aria-label="播放/暫停">
+  <!-- ▶ -->
+  <svg id="iconPlay" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M8 5v14l11-7z"/>
+  </svg>
+  <!-- ⏸（預設隱藏，播放時顯示） -->
+  <svg id="iconPause" class="hidden" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M6 5h4v14H6zm8 0h4v14h-4z"/>
+  </svg>
+</button>
 
-        <button id="bgmNext" class="icon-btn" title="下一首" aria-label="下一首">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M6 5l11 7-11 7V5zm12 0h-2v14h2z"/>
-          </svg>
-        </button>
+<button id="bgmNext" class="icon-btn" title="下一首" aria-label="下一首">
+  <!-- ▶| -->
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M6 6l11 6-11 6V6zm12 0h2v12h-2z"/>
+  </svg>
+</button>
+
+<button id="bgmShuffle" class="icon-btn" title="隨機播放" aria-label="隨機播放">
+  <!-- 交錯箭頭 -->
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M17 3h4v4h-2V6h-2.17l-3.9 3.9 1.41 1.41L18.83 8H19v2h2V6a3 3 0 0 0-4-3zM4 6h5.17l3.9 3.9-1.41 1.41L7.17 8H4V6zm0 12h3.17l3.9-3.9 1.41 1.41L8.83 20H4v-2zm17-2v4h-4a3 3 0 0 1-3-3v-.17l-2.1-2.1 1.41-1.41 2.69 2.69c.24.24.57.39.91.39H19v-2h2z"/>
+  </svg>
+</button>
+
+        <!-- 音量 -->
+        <div class="flex items-center gap-1 ml-1">
+          <span class="text-xs opacity-70">🔊</span>
+          <input id="bgmVol" type="range" min="0" max="1" step="0.01" value="0.7"
+                 class="w-24 accent-amber-300" />
+        </div>
 
         <!-- 曲名 -->
-        <div class="ml-1 mr-2 text-xs sm:text-sm max-w-[26vw] sm:max-w-[220px] truncate" id="bgmTitle">
+        <div id="bgmTitle"
+             class="text-xs sm:max-w-[280px] md:max-w-[360px] truncate ml-2 opacity-90">
           未播放
         </div>
 
-        <!-- 音量 -->
-        <input id="bgmVol" type="range" min="0" max="1" step="0.01"
-               class="w-16 sm:w-24 accent-[#facc15]" />
-
-        <!-- 隨機播放 -->
-        <button id="bgmShuffle" class="icon-btn" title="隨機播放" aria-label="隨機播放">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M4 4h2.5l3.5 5-3.5 5H4l4-5-4-5zm9 0h2l5 4-5 4h-2l3-4-3-4zm0 7h2l5 4-5 4h-2l3-4-3-4z"/>
-          </svg>
-        </button>
+        <!-- 隱藏 audio 元件 -->
+        <audio id="bgmAudio" preload="auto"></audio>
       </div>
     </div>
+
+    <!-- 這三個輸入留著但隱藏，避免打壞你現有 JS 綁定 -->
+    <input id="inpName" class="hidden w-40 px-2 py-1.5 rounded-lg border border-neutral-700 bg-[#14181c]" placeholder="暱稱"/>
+    <input id="inpRoom" class="hidden w-28 px-2 py-1.5 rounded-lg border border-neutral-700 bg-[#14181c]" placeholder="房號"/>
+    <button id="btnJoin" class="hidden px-3 py-1.5 rounded-lg border border-neutral-700 bg-[#14181c] hover:bg-[#192028]">加入</button>
   </div>
 </header>
-
 
   <main class="max-w-7xl mx-auto px-3 md:px-4 py-4 grid gap-4 lg:grid-cols-[1.2fr_.8fr]">
     <section class="space-y-3">
