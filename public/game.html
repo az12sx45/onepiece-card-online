@@ -4047,155 +4047,7 @@ if (e.type === 'duel_log') {
       (e.loserId === d.leftId)  ? 'left' :
       (e.loserId === d.rightId) ? 'right' : null;
 
-// 用卡片 id 找正面圖片路徑
-function cardImageURL(id){
-  if (id == null) return 'images/cards/back.png';
 
-  // 若前端有 CARD_TEXT（有些版本是這樣）
-  if (window.CARD_TEXT && window.CARD_TEXT[id] && window.CARD_TEXT[id].img){
-    return window.CARD_TEXT[id].img;
-  }
-
-// === 卡片圖鑑：DOM 參照 ===
-const cardGallery           = document.getElementById('cardGallery');
-const cardGalleryGrid       = document.getElementById('cardGalleryGrid');
-const cardGalleryClose      = document.getElementById('cardGalleryClose');
-const cardGalleryBtn        = document.getElementById('btnCardGallery');
-const cardGalleryDetail     = document.getElementById('cardGalleryDetail');
-const cardGalleryBaseImg    = document.getElementById('cardGalleryBaseImg');
-const cardGalleryEnhImg     = document.getElementById('cardGalleryEnhImg');
-const cardGalleryDetailName = document.getElementById('cardGalleryDetailName');
-const cardGalleryDetailInfo = document.getElementById('cardGalleryDetailInfo');
-
-/**
- * 建立 / 更新圖鑑列表
- * - 每局打開前都會重新跑一次，確保「強化場地」紅黑光是最新的
- */
-function buildCardGallery(){
-  if (!cardGalleryGrid) return;
-
-  cardGalleryGrid.innerHTML = '';
-
-  // 依卡號排序 0～19
-  const ids = Object.keys(CARD_TEXT).map(Number).sort((a,b)=>a-b);
-
-  ids.forEach(id => {
-    const meta = CARD_TEXT[id] || {};
-    const total = CARD_COUNTS[id] ?? 0;
-    const enhanced = isEnhancedNow(id);   // 這局有被強化場地的卡 → 紅黑光
-
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'carddex-item group relative rounded-xl overflow-hidden border border-[#252b33] bg-black/40 shadow-sm hover:border-amber-400/80 hover:bg-amber-500/5 transition';
-    if (enhanced) {
-      btn.classList.add('dex-enhanced');
-    }
-    btn.dataset.id = String(id);
-
-    btn.innerHTML = `
-      <div class="relative aspect-[3/4] w-full overflow-hidden">
-        <img src="${cardImageURL(id,false)}" alt="${meta.name || ''}" class="w-full h-full object-cover" />
-        <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-80"></div>
-      </div>
-
-      <div class="absolute left-1.5 top-1 text-[10px] px-1.5 py-0.5 rounded-full bg-black/70 border border-white/20 font-semibold tracking-wide text-slate-100">
-        #${id}
-      </div>
-
-      <div class="absolute right-1.5 top-1 text-[10px] px-1.5 py-0.5 rounded-full bg-amber-500/80 text-black font-semibold tracking-wide">
-        ×${total}
-      </div>
-
-      <div class="absolute inset-x-0 bottom-0 px-1.5 pb-1.5 text-[11px] leading-tight text-slate-100 drop-shadow">
-        <div class="font-semibold truncate">${meta.name || ('卡片 ' + id)}</div>
-        <div class="text-[10px] text-slate-300 truncate">
-          ${(meta.baseTitle || meta.enhTitle || '')}
-        </div>
-      </div>
-    `;
-
-    btn.addEventListener('click', () => openCardDetail(id));
-    cardGalleryGrid.appendChild(btn);
-  });
-}
-
-/**
- * 打開單張卡片的大圖視窗（基本 + 強化）
- */
-function openCardDetail(id){
-  if (!cardGalleryDetail) return;
-
-  const meta  = CARD_TEXT[id] || {};
-  const total = CARD_COUNTS[id] ?? 0;
-  const enhOn = isEnhancedNow(id);
-
-  if (cardGalleryBaseImg) {
-    cardGalleryBaseImg.src = cardImageURL(id, false);
-  }
-  if (cardGalleryEnhImg) {
-    cardGalleryEnhImg.src  = cardImageURL(id, true);
-  }
-  if (cardGalleryDetailName) {
-    cardGalleryDetailName.textContent = meta.name || `卡片 ${id}`;
-  }
-  if (cardGalleryDetailInfo) {
-    cardGalleryDetailInfo.textContent =
-      `本局總數：${total} 張` + (enhOn ? ' ｜ 本局有強化場地' : '');
-  }
-
-  cardGalleryDetail.classList.remove('hidden');
-}
-
-/** 關閉整個圖鑑（包括大圖層） */
-function closeCardGallery(){
-  if (cardGallery) {
-    cardGallery.classList.add('hidden');
-  }
-  if (cardGalleryDetail) {
-    cardGalleryDetail.classList.add('hidden');
-  }
-}
-
-/** 綁定按鈕與關閉事件 */
-if (cardGalleryBtn && cardGallery) {
-  cardGalleryBtn.addEventListener('click', () => {
-    buildCardGallery();                    // 每次打開都重建，更新紅黑光
-    cardGallery.classList.remove('hidden');
-  });
-}
-
-if (cardGalleryClose) {
-  cardGalleryClose.addEventListener('click', () => {
-    closeCardGallery();
-  });
-}
-
-// 點擊圖鑑背景（空白處）關閉整個圖鑑
-if (cardGallery) {
-  cardGallery.addEventListener('click', (e) => {
-    if (e.target === cardGallery) {
-      closeCardGallery();
-    }
-  });
-}
-
-// 點大圖層任一處關閉大圖（圖鑑本身不關）
-if (cardGalleryDetail) {
-  cardGalleryDetail.addEventListener('click', () => {
-    cardGalleryDetail.classList.add('hidden');
-  });
-}
-
-
-  // 若有 CARDS 清單（有些版本是這樣）
-  if (window.CARDS && Array.isArray(window.CARDS)){
-    const found = window.CARDS.find(c => c.id === id || c.cid === id);
-    if (found && found.image) return found.image;
-  }
-
-  // 預設就用 images/cards/ID.webp 的命名
-  return `images/cards/${id}.webp`;
-}
 
     playDuel({
       leftId: d.leftId,
@@ -4435,6 +4287,149 @@ socket.on('EMIT', (e)=>{
     return;
   }
 });
+
+// === 卡片圖鑑：DOM 參照 ===
+const cardGallery           = document.getElementById('cardGallery');
+const cardGalleryGrid       = document.getElementById('cardGalleryGrid');
+const cardGalleryClose      = document.getElementById('cardGalleryClose');
+const cardGalleryBtn        = document.getElementById('btnCardGallery');
+const cardGalleryDetail     = document.getElementById('cardGalleryDetail');
+const cardGalleryBaseImg    = document.getElementById('cardGalleryBaseImg');
+const cardGalleryEnhImg     = document.getElementById('cardGalleryEnhImg');
+const cardGalleryDetailName = document.getElementById('cardGalleryDetailName');
+const cardGalleryDetailInfo = document.getElementById('cardGalleryDetailInfo');
+
+/**
+ * 建立 / 更新圖鑑列表
+ * - 每次打開都重建，確保「強化場地」紅黑光是最新的
+ */
+function buildCardGallery(){
+  if (!cardGalleryGrid || !window.CARD_TEXT) return;
+
+  cardGalleryGrid.innerHTML = '';
+
+  // 依卡號排序 0～19
+  const ids = Object.keys(CARD_TEXT).map(Number).sort((a,b)=>a-b);
+
+  ids.forEach(id => {
+    const meta     = CARD_TEXT[id] || {};
+    const total    = (window.CARD_COUNTS && window.CARD_COUNTS[id] != null)
+      ? window.CARD_COUNTS[id]
+      : 0;
+    const enhanced = (typeof isEnhancedNow === 'function')
+      ? isEnhancedNow(id)
+      : false;   // 這局有被強化場地的卡 → 紅黑光
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'carddex-item group relative rounded-xl overflow-hidden border border-[#252b33] bg-black/40 shadow-sm hover:border-amber-400/80 hover:bg-amber-500/5 transition';
+    if (enhanced) {
+      btn.classList.add('dex-enhanced');
+    }
+    btn.dataset.id = String(id);
+
+    // 卡圖用現有工具：優先 CARD_IMG / CARD()
+    const imgSrc = cardImageURL(id);
+
+    btn.innerHTML = `
+      <div class="relative aspect-[3/4] w-full overflow-hidden">
+        <img src="${imgSrc}" alt="${meta.name || ''}" class="w-full h-full object-cover" />
+        <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-80"></div>
+      </div>
+
+      <div class="absolute left-1.5 top-1 text-[10px] px-1.5 py-0.5 rounded-full bg-black/70 border border-white/20 font-semibold tracking-wide text-slate-100">
+        #${id}
+      </div>
+
+      <div class="absolute right-1.5 top-1 text-[10px] px-1.5 py-0.5 rounded-full bg-amber-500/80 text-black font-semibold tracking-wide">
+        ×${total}
+      </div>
+
+      <div class="absolute inset-x-0 bottom-0 px-1.5 pb-1.5 text-[11px] leading-tight text-slate-100 drop-shadow">
+        <div class="font-semibold truncate">${meta.name || ('卡片 ' + id)}</div>
+        <div class="text-[10px] text-slate-300 truncate">
+          ${(meta.baseTitle || meta.enhTitle || '')}
+        </div>
+      </div>
+    `;
+
+    btn.addEventListener('click', () => openCardDetail(id));
+    cardGalleryGrid.appendChild(btn);
+  });
+}
+
+/**
+ * 打開單張卡片的大圖視窗（基本 + 強化）
+ */
+function openCardDetail(id){
+  if (!cardGalleryDetail) return;
+
+  const meta  = (window.CARD_TEXT && CARD_TEXT[id]) || {};
+  const total = (window.CARD_COUNTS && CARD_COUNTS[id] != null)
+    ? CARD_COUNTS[id]
+    : 0;
+  const enhOn = (typeof isEnhancedNow === 'function')
+    ? isEnhancedNow(id)
+    : false;
+
+  // 大圖：用你原本的 CARD / CARD_ENH 幫你帶圖
+  if (cardGalleryBaseImg && typeof CARD === 'function') {
+    cardGalleryBaseImg.src = CARD(id);
+  }
+  if (cardGalleryEnhImg && typeof CARD_ENH === 'function') {
+    cardGalleryEnhImg.src  = CARD_ENH(id);
+  }
+
+  if (cardGalleryDetailName) {
+    cardGalleryDetailName.textContent = meta.name || `卡片 ${id}`;
+  }
+  if (cardGalleryDetailInfo) {
+    cardGalleryDetailInfo.textContent =
+      `本局總數：${total} 張` + (enhOn ? ' ｜ 本局有強化場地' : '');
+  }
+
+  cardGalleryDetail.classList.remove('hidden');
+}
+
+/** 關閉整個圖鑑（包括大圖層） */
+function closeCardGallery(){
+  if (cardGallery) {
+    cardGallery.classList.add('hidden');
+  }
+  if (cardGalleryDetail) {
+    cardGalleryDetail.classList.add('hidden');
+  }
+}
+
+/** 綁定按鈕與關閉事件 */
+if (cardGalleryBtn && cardGallery) {
+  cardGalleryBtn.addEventListener('click', () => {
+    buildCardGallery();                 // 每次打開都重建，更新紅黑光
+    cardGallery.classList.remove('hidden');
+  });
+}
+
+if (cardGalleryClose) {
+  cardGalleryClose.addEventListener('click', () => {
+    closeCardGallery();
+  });
+}
+
+// 點擊圖鑑背景（空白處）關閉整個圖鑑
+if (cardGallery) {
+  cardGallery.addEventListener('click', (e) => {
+    if (e.target === cardGallery) {
+      closeCardGallery();
+    }
+  });
+}
+
+// 點大圖層任一處關閉大圖（圖鑑本身不關）
+if (cardGalleryDetail) {
+  cardGalleryDetail.addEventListener('click', () => {
+    cardGalleryDetail.classList.add('hidden');
+  });
+}
 
 
 /* ========= 渲染 ========= */
