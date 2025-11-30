@@ -1540,13 +1540,17 @@ body::before{
     <div class="hidden text-xs px-2 py-1 rounded border border-neutral-700">房號：<span id="roomLbl">—</span></div>
     <div class="hidden text-xs px-2 py-1 rounded border border-neutral-700">連線：<span id="connLbl" class="text-red-400">disconnected</span></div>
 
-    <!-- 保留寶箱（可見） -->
-    <div class="text-xs px-2 py-1 rounded border border-neutral-700">寶箱剩餘金幣：<span id="chestLbl">0</span> 枚</div>
-
-<button id="btnCardList"
-  class="px-2 py-1.5 rounded-lg border border-[#2a2f35] hover:bg-[#192028] text-sm">
-  📘 卡片圖鑑
-</button>
+     <!-- 保留寶箱（可見）＋ 圖鑑按鈕 -->
+    <div class="flex items-center gap-2 text-xs px-2 py-1 rounded border border-neutral-700">
+      <span>寶箱剩餘：<span id="chestLbl">0</span> 枚</span>
+      <button
+        id="btnDex"
+        type="button"
+        class="px-2 py-0.5 rounded-lg border border-[#2a2f35] bg-[#14181c] hover:bg-[#1f2937] text-[11px] text-amber-200 whitespace-nowrap"
+      >
+        圖鑑
+      </button>
+    </div>
 
 
     <!-- 拉到最右邊：音樂條 -->
@@ -1662,11 +1666,6 @@ body::before{
 
   <div id="modal" class="modal hidden"><div class="card w-[min(92vw,680px)] p-4"></div></div>
 
-<div id="cardListModal" class="modal hidden">
-  <div class="card w-[min(92vw,700px)] p-4 max-h-[80vh] overflow-y-auto"></div>
-</div>
-
-
 <!-- 決鬥特效 -->
 <div id="duelFx" class="hidden">
   <div class="overlay">
@@ -1762,6 +1761,42 @@ body::before{
     <video id="enhVideo" playsinline preload="auto" class="max-w-[80vw] max-h-[80vh] rounded-xl shadow-2xl"></video>
   </div>
 
+  <!-- 卡片圖鑑（按 header 的「圖鑑」按鈕開啟） -->
+  <div id="dexOverlay" class="hidden fixed inset-0 z-[150] flex items-center justify-center bg-black/75">
+    <div class="relative max-w-5xl w-[min(96vw,1120px)] max-h-[90vh] bg-[#05070a]/95 border border-[#2a2f35] rounded-2xl shadow-2xl overflow-hidden">
+      <!-- 標題列 -->
+      <div class="flex items-center justify-between px-4 py-3 border-b border-[#1f2933] bg-gradient-to-r from-[#020617] via-[#020a12] to-[#020617]">
+        <div class="text-sm font-semibold tracking-wide text-sky-100">
+          卡牌圖鑑
+        </div>
+        <button
+          id="dexClose"
+          type="button"
+          class="px-2.5 py-1 text-xs rounded-lg border border-[#374151] bg-[#111827] hover:bg-[#1f2937] text-neutral-200"
+        >
+          關閉 ✕
+        </button>
+      </div>
+
+      <!-- 內容區：左邊列表 / 右邊預覽 -->
+      <div class="flex flex-col md:flex-row max-h-[calc(90vh-3.25rem)]">
+        <!-- 左邊：所有卡牌＋總張數 -->
+        <div class="md:w-1/2 border-b md:border-b-0 md:border-r border-[#1f2933] overflow-y-auto bg-[#05070a]">
+          <div id="dexList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 p-3"></div>
+        </div>
+
+        <!-- 右邊：大圖＋強化圖 -->
+        <div class="md:w-1/2 flex items-center justify-center p-4 bg-[#020617]">
+          <div id="dexPreview" class="flex flex-col items-center gap-3 text-neutral-200 text-sm">
+            <div class="text-xs text-neutral-400">
+              點左邊的卡片可以查看大圖與強化版本
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <!-- === 羅（強化）查看後的交換詢問框 === -->
   <div id="lawSwapModal" class="hidden fixed inset-0 z-[90] flex items-center justify-center bg-black/70">
@@ -1825,7 +1860,37 @@ const el = {
   modal: document.getElementById('modal'),
   chestLbl: document.getElementById('chestLbl'),
   nextRound: document.getElementById('btnNextRound'),
+  // 新增：卡片圖鑑相關元素
+  dexBtn: document.getElementById('btnDex'),
+  dexOverlay: document.getElementById('dexOverlay'),
+  dexList: document.getElementById('dexList'),
+  dexPreview: document.getElementById('dexPreview'),
 };
+
+// === 卡片圖鑑事件綁定 ===
+if (el.dexBtn) {
+  el.dexBtn.addEventListener('click', () => {
+    openDex();
+  });
+}
+
+// 點黑色背景關閉
+if (el.dexOverlay) {
+  el.dexOverlay.addEventListener('click', (e) => {
+    if (e.target === el.dexOverlay) {
+      closeDex();
+    }
+  });
+}
+
+// 右上角關閉按鈕
+const dexCloseBtn = document.getElementById('dexClose');
+if (dexCloseBtn) {
+  dexCloseBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeDex();
+  });
+}
 
 
 // === BGM 播放清單（照你提供的 20 首） ===
@@ -2664,6 +2729,121 @@ function cardLine(cardId){
   const text  = enhanced && meta.enh ? meta.enh : meta.base;
   return `${meta.name} ${tag}${title}：${text}`;
 }
+
+
+/** 把卡片變成簡短文字（會自動判斷是否強化） */
+function cardLine(cardId){
+  const meta = CARD_TEXT[cardId];
+  if (!meta) return "";
+  const enhanced = isEnhancedNow(cardId);
+  const tag = enhanced ? "【強化】" : "【基本】";
+  const title = enhanced && meta.enhTitle ? meta.enhTitle : meta.baseTitle;
+  const text  = enhanced && meta.enh ? meta.enh : meta.base;
+  return `${meta.name} ${tag}${title}：${text}`;
+}
+
+/* === 卡片圖鑑（總數＋大圖預覽） === */
+
+// ⭐ 這裡先全部寫 4 張，你可以照實際牌組把數字改掉
+// 例如魯夫只有 3 張，就把 8: 4 改成 8: 3
+const CARD_TOTALS = {
+  0: 1, 1: 5, 2: 2, 3: 2,
+  4: 2, 5: 2, 6: 1, 7: 1,
+  8: 1, 9: 1, 10: 1, 11: 1,
+  12: 1, 13: 1, 14: 1, 15: 1,
+  16: 1, 17: 1, 18: 1, 19: 1,
+};
+
+let _dexBuilt = false;
+
+// 建一次左邊圖鑑清單
+function buildDexOnce(){
+  if (_dexBuilt || !el || !el.dexList) return;
+
+  // 依 CARD_TEXT 有哪些卡來跑（保險）
+  const ids = Object.keys(CARD_TEXT || {})
+    .map(n => Number(n))
+    .filter(n => Number.isFinite(n))
+    .sort((a, b) => a - b);
+
+  ids.forEach(id => {
+    const meta  = CARD_TEXT[id] || {};
+    const total = CARD_TOTALS[id] ?? 0;
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.dataset.id = String(id);
+    btn.className =
+      'text-left rounded-xl bg-[#0b1016] border border-[#1f2933] ' +
+      'hover:border-amber-400/80 hover:bg-[#111827] p-2 flex flex-col gap-1 shadow-sm';
+
+    btn.innerHTML = `
+      <div class="relative">
+        <img src="${CARD(id)}"
+             alt="${meta.name || '卡牌'}"
+             class="w-full rounded-lg border border-[#2a2f35] shadow-md">
+        <div class="absolute bottom-1 right-1 px-1.5 py-0.5 text-[10px]
+                    rounded-full bg-black/75 text-amber-200 font-semibold">
+          x${total}
+        </div>
+      </div>
+      <div class="mt-0.5 text-[11px] text-neutral-200 truncate">
+        ${id}. ${meta.name || ''}
+      </div>
+    `;
+
+    btn.addEventListener('click', () => showDexPreview(id));
+    el.dexList.appendChild(btn);
+  });
+
+  _dexBuilt = true;
+  if (ids.length) showDexPreview(ids[0]);
+}
+
+// 右邊顯示：大圖＋強化圖
+function showDexPreview(id){
+  if (!el || !el.dexPreview) return;
+
+  const meta  = CARD_TEXT[id] || {};
+  const total = CARD_TOTALS[id] ?? 0;
+
+  el.dexPreview.innerHTML = `
+    <div class="flex flex-col items-center gap-3 w-full">
+      <div class="text-sm font-semibold text-amber-100 tracking-wide">
+        ${id}. ${meta.name || '卡牌'}
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3 w-full">
+        <img src="${CARD(id)}"
+             alt="${meta.name || '卡牌'}"
+             class="max-h-[260px] rounded-xl border border-[#374151] shadow-2xl">
+        <img src="${CARD_ENH(id)}"
+             alt="${meta.name || '卡牌強化'}"
+             class="max-h-[260px] rounded-xl border border-amber-500/60 shadow-2xl">
+      </div>
+
+      <div class="text-xs text-neutral-300 mt-1">
+        總數：<span class="text-amber-300 font-semibold">${total}</span> 張
+      </div>
+
+      <div class="mt-1 text-[11px] text-neutral-400 text-center leading-snug max-w-sm">
+        ${meta.baseTitle ? `基本：${meta.baseTitle}` : ''}
+        ${meta.enhTitle  ? `<br>強化：${meta.enhTitle}` : ''}
+      </div>
+    </div>
+  `;
+}
+
+// 開 / 關 圖鑑
+function openDex(){
+  buildDexOnce();
+  if (el.dexOverlay) el.dexOverlay.classList.remove('hidden');
+}
+
+function closeDex(){
+  if (el.dexOverlay) el.dexOverlay.classList.add('hidden');
+}
+
 
 /* ========= 角色語音對照 ========= */
 const VOICE_MAP = {
@@ -4871,78 +5051,6 @@ el.deckBtn.onclick   = ()=> playDrawFxThenDraw();
 el.playHand.onclick  = ()=> handlePlayCard('hand');
 el.playDrawn.onclick = ()=> handlePlayCard('drawn');
 el.nextRound.onclick = ()=> sendAction('NEXT_ROUND');
-
-// ===== 卡片圖鑑功能 =====
-
-// 全卡列表（你已經在 CARD(id) / CARD_ENH(id) 有定義圖檔）
-const TOTAL_CARDS = 20;
-
-// 點寶箱旁邊按鈕 -> 開啟卡片圖鑑
-document.getElementById('btnCardList').onclick = showCardList;
-
-// 讀你現有 state 裡的場上資訊
-function countCardsFromState() {
-  const cnt = {};
-  for (let i = 0; i < TOTAL_CARDS; i++) cnt[i] = 0;
-
-  // 牌堆
-  (state.deck || []).forEach(id => cnt[id]++);
-
-  // 棄牌
-  (state.discard || []).forEach(id => {
-    if (typeof id === 'number') cnt[id]++;
-  });
-
-  // 玩家手牌
-  (state.players || []).forEach(p => {
-    if (typeof p.hand === 'number') cnt[p.hand]++;
-    if (typeof p.tempDraw === 'number') cnt[p.tempDraw]++;
-  });
-
-  return cnt;
-}
-
-function showCardList() {
-  const cnt = countCardsFromState();
-
-  let html = `
-    <div class="text-lg font-semibold mb-3">卡片圖鑑（基本版 + 強化版）</div>
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-  `;
-
-  for (let id = 0; id < TOTAL_CARDS; id++) {
-    html += `
-      <div class="border border-[#2a2f35] rounded-lg p-2 text-center bg-[#12161b]">
-        <div class="text-sm mb-1 opacity-80">#${id}（共 ${cnt[id]} 張）</div>
-        <img src="${CARD(id)}" class="w-full rounded cursor-pointer"
-             onclick="showCardBig(${id}, false)"/>
-
-        <div class="text-xs mt-1 opacity-60">強化版</div>
-        <img src="${CARD_ENH(id)}" class="w-full rounded cursor-pointer"
-             onclick="showCardBig(${id}, true)"/>
-      </div>
-    `;
-  }
-
-  html += `</div>`;
-
-  const modal = document.querySelector('#cardListModal .card');
-  modal.innerHTML = html;
-  document.getElementById('cardListModal').classList.remove('hidden');
-}
-
-// 顯示大圖（用你現有 showModal 作法）
-function showCardBig(id, isEnh) {
-  const img = isEnh ? CARD_ENH(id) : CARD(id);
-
-  const html = `
-    <div class="text-lg font-semibold mb-3">#${id} 卡片大圖</div>
-    <img src="${img}" class="w-[min(70vw,400px)] mx-auto rounded-xl shadow-xl"/>
-  `;
-
-  showModal(html);
-}
-
 </script>
 
 <!-- 角色語音（只有本機播放） -->
