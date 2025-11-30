@@ -2837,32 +2837,6 @@ const VENUE_BG = {
   "蜂巢島":           "images/venues/hachinosu.jpg",
   "奧羅傑克森號":     "images/venues/oro-jackson.jpg"
 };
-
-// 場地 → 說明文字（像玩家框裡的卡片說明一樣）
-const VENUE_TEXT = {
- "德雷斯羅薩鬥技場": "0-薩波變為強化技能",
-  "艾尼艾斯大廳":     "1-騙人布變為強化技能",
-  "阿拉巴斯坦":       "2-羅賓變為強化技能",
-  "巴拉蒂":           "3-香吉士變為強化技能",
-  "佐烏":             "4-喬巴變為強化技能",
-  "和之國":           "5-索隆變為強化技能",
-  "龐克哈薩德":       "6-羅變為強化技能",
-  "維薩利亞":         "7-娜美變為強化技能",
-  "魚人島":           "8-魯夫變為強化技能",
-  "九蛇島":           "9-女帝變為強化技能",
-  "鬼島":             "10-凱多12-奎因變為強化技能",
-  "夏波帝諸島":       "11-基德13-基拉變為強化技能",
-  "萬國":             "14-大媽15-卡塔克利變為強化技能",
-  "蜂巢島":           "16-庫山17-黑鬍子變為強化技能",
-  "奧羅傑克森號":     "18-紅髮19-哥爾羅傑變為強化技能"
-};
-
-// 取場地說明的小工具（有定義才顯示）
-function venueDesc(name){
-  return VENUE_TEXT[name] || "";
-}
-
-
 /** 若上面沒對到，就用場地名轉 slug 當作檔名（保底） */
 function venueFallbackURL(name){
   const slug = String(name||"").normalize('NFKD')
@@ -4198,38 +4172,17 @@ onceFx?.(el.deckCnt, 'fx-pulse');
   _prev.chest = chest;
 
   // 場地（改：外層綁 onclick → onVenueClick('場地名')）
-  // 場地（改：外層綁 onclick → onVenueClick('場地名')）
-el.venues.innerHTML = '';
-(state.venues || []).forEach(v => {
-  const d = document.createElement('div');
-  d.className = 'venue-card rounded overflow-hidden border border-[#2a2f35] cursor-pointer bg-[#05070b]/70';
-  d.setAttribute('data-venue', v.name);
-  d.setAttribute('onclick', `onVenueClick('${v.name}')`);
-
-  // 場地圖片
-  const im = document.createElement('img');
-  im.src = VEN(v.name);
-  im.alt = v.name;
-  im.dataset.name = v.name;
-  im.className = 'w-full block';
-  d.appendChild(im);
-
-  // 場地名稱 + 說明（像玩家框裡的卡片說明）
-  const desc = venueDesc(v.name);
-  if (desc) {
-    const textWrap = document.createElement('div');
-    textWrap.className = 'px-2 pt-1 pb-1.5 text-[11px] leading-snug text-slate-300/85 bg-black/40';
-
-    textWrap.innerHTML =
-      `<div class="font-semibold text-[11px] mb-0.5">${v.name}</div>` +
-      `<div class="text-[10px]">${desc}</div>`;
-
-    d.appendChild(textWrap);
-  }
-
-  el.venues.appendChild(d);
-});
-
+  el.venues.innerHTML='';
+  (state.venues||[]).forEach(v=>{
+    const d=document.createElement('div');
+    d.className='venue-card rounded overflow-hidden border border-[#2a2f35] cursor-pointer';
+    d.setAttribute('data-venue', v.name);
+    d.setAttribute('onclick', `onVenueClick('${v.name}')`);
+    const im=document.createElement('img');
+    im.src=VEN(v.name); im.alt=v.name; im.dataset.name = v.name;
+    d.appendChild(im);
+    el.venues.appendChild(d);
+  });
 
   // 棄牌（秘密棄牌＝卡背）
   el.discard.innerHTML='';
