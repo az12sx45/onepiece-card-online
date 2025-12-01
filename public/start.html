@@ -272,185 +272,290 @@
       );
     }
 
-    // === 遊戲規則彈窗 ===
-    function RuleModal({ show, onClose }) {
-      if (!show) return null;
+  // === 遊戲規則彈窗（新版） ===
+function RuleModal({ show, onClose }) {
+  if (!show) return null;
 
-      return (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="card w-[min(820px,95vw)] p-6 space-y-5 max-h-[90vh] overflow-y-auto text-sm leading-relaxed text-neutral-200">
-            <h2 className="text-xl font-bold text-amber-300 mb-1">📘 遊戲規則 & 介面說明</h2>
+  return (
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="card w-[min(820px,95vw)] p-6 space-y-5 max-h-[90vh] overflow-y-auto text-sm leading-relaxed text-neutral-200">
+        <h2 className="text-xl font-bold text-amber-300 mb-1">📘 遊戲規則 & 介面說明</h2>
 
-            {/* 一、遊戲目標 */}
-            <section className="space-y-1.5">
-              <h3 className="font-semibold text-amber-300">一、遊戲目標</h3>
-              <p>
-                《偉大航道爭霸戰》是一款「最後存活」＋「比牌」型的多人對戰卡牌遊戲。
-                每位玩家手上都只有 1 張牌，透過抽牌、出牌和角色技能，相互擊倒或干擾其他人，
-                直到只剩一人存活，或牌堆打完進入比牌。
-              </p>
-              <ul className="list-disc ml-5 space-y-1">
-                <li>贏下每一局可從「寶箱」裡拿金幣。</li>
-                <li>寶箱金幣被拿光時，會進入「賽季結算」，依各種分數排名。</li>
-              </ul>
-            </section>
+        {/* 一、遊戲目標 */}
+        <section className="space-y-1.5">
+          <h3 className="font-semibold text-amber-300">一、遊戲目標</h3>
+          <p>
+            《偉大航道爭霸戰》是一款<strong>簡易策略類型</strong>的多人對戰卡牌遊戲。
+            開局每位玩家手上都只有 1 張牌，透過抽牌、出牌和角色技能，相互擊倒或干擾其他人，
+            直到只剩一人存活，或牌堆打完進入比牌。
+          </p>
+          <ul className="list-disc ml-5 space-y-1">
+            <li>
+              贏下每一局可從「寶箱」裡拿金幣，<strong>寶箱內的金幣總數 = 玩家數 × 5</strong>。
+            </li>
+            <li>
+              當寶箱金幣被拿光時，進入<strong>「最終結算」</strong>，依各玩家
+              <span className="px-1 mx-1 rounded bg-black/40 border border-amber-400/30 text-amber-200">
+                獲得的金幣數
+              </span>
+              排名。
+            </li>
+          </ul>
+        </section>
 
-            {/* 二、一局流程 */}
-            <section className="space-y-1.5">
-              <h3 className="font-semibold text-amber-300">二、一局流程（實際對局時畫面會長這樣走）</h3>
-              <ol className="list-decimal ml-5 space-y-1">
-                <li>所有玩家各獲得 1 張起始手牌（不公開）。</li>
-                <li>畫面上方會顯示「第 X 局」「本局場地」「寶箱金幣剩餘」等資訊。</li>
-                <li>輪到你時，回合分成兩個階段：
-                  <ul className="list-disc ml-5 mt-1 space-y-0.5">
-                    <li><span className="font-semibold">抽牌階段（DRAW）</span>：點中間的牌堆抽 1 張牌。</li>
-                    <li><span className="font-semibold">選牌階段（CHOOSE）</span>：下方會出現兩張牌（原本手牌 + 新抽的牌），選 1 張打出。</li>
-                  </ul>
-                </li>
-                <li>你打出的角色會立刻觸發技能（攻擊、偵查、控制、保護、比牌…等）。</li>
-                <li>若有玩家死亡（HP 歸零 / 被判定出局），畫面會標示該玩家灰暗或打叉，並從回合輪替中移除。</li>
+        {/* 二、一局流程 */}
+        <section className="space-y-1.5">
+          <h3 className="font-semibold text-amber-300">二、一局流程（實際對局時畫面會長這樣走）</h3>
+          <ol className="list-decimal ml-5 space-y-1">
+            <li>
+              所有玩家各獲得 1 張<strong>起始手牌</strong>（不公開、只有本人可見）。
+            </li>
+            <li>
+              畫面上方會顯示：
+              <span className="px-1 mx-1 rounded bg-black/40 border border-amber-400/30 text-amber-200">
+                本局場地
+              </span>
+              以及
+              <span className="px-1 mx-1 rounded bg-black/40 border border-amber-400/30 text-amber-200">
+                寶箱金幣剩餘
+              </span>
+              等資訊。
+            </li>
+            <li>
+              輪到你時，回合分成兩個階段：
+              <ul className="list-disc ml-5 mt-1 space-y-0.5">
                 <li>
-                  本局結束條件：
-                  <ul className="list-disc ml-5 mt-1 space-y-0.5">
-                    <li><span className="font-semibold">只剩 1 人存活</span> → 直接獲勝，從寶箱拿金幣。</li>
-                    <li><span className="font-semibold">牌堆被抽完</span> → 存活者公開手牌「比點數」決定勝負。</li>
-                  </ul>
-                </li>
-              </ol>
-            </section>
-
-            {/* 三、介面說明（對應遊戲內畫面） */}
-            <section className="space-y-1.5">
-              <h3 className="font-semibold text-amber-300">三、介面說明（對應遊戲內畫面）</h3>
-
-              {/* A. 上方資訊列 */}
-              <div>
-                <p className="font-semibold">A. 上方資訊列</p>
-                <ul className="list-disc ml-5 space-y-0.5">
-                  <li><span className="font-semibold">局數 / 當前玩家</span>：顯示「第 X 局」與目前輪到哪位玩家。</li>
-                  <li>
-                    <span className="font-semibold">寶箱金幣</span>：文字類似
-                    <span className="px-1 mx-1 rounded bg-black/40 border border-amber-400/30 text-amber-200">
-                      寶箱金幣剩餘：10 枚
-                    </span>
-                    ，數字會跟著遊戲更新。
-                  </li>
-                  <li>
-                    <span className="font-semibold">場地卡區</span>：上方會橫向排出本局抽到的<strong>場地卡</strong>，
-                    每張寫著場地名稱（德雷斯羅薩鬥技場、艾尼艾斯大廳…），下面有簡短說明：
-                    哪些角色在這裡會變成強化技能（例如「5-索隆變為強化技能」）。
-                  </li>
-                  <li>點場地卡可以切換背景、感受該場地的氣氛（不影響實際規則，純畫面效果）。</li>
-                </ul>
-              </div>
-
-              {/* B. 左右玩家資訊框 */}
-              <div>
-                <p className="font-semibold mt-2">B. 左右玩家資訊框</p>
-                <ul className="list-disc ml-5 space-y-0.5">
-                  <li>每位玩家都有一個框：顯示「頭像」「名字」「目前金幣」。</li>
-                  <li>玩家死亡時會變成灰暗 / 打叉，表示已出局，不再輪到他行動。</li>
-                  <li>
-                    玩家名字旁邊會有「狀態標籤」，例如：
-                    <ul className="list-disc ml-5 mt-1 space-y-0.5">
-                      <li><span className="font-semibold">保護</span>：受到一次攻擊時不會受傷。</li>
-                      <li><span className="font-semibold">閃避</span>：有機會直接閃掉一次攻擊。</li>
-                      <li><span className="font-semibold">凍結</span>：手牌被冰起來，只能打指定那張牌。</li>
-                      <li><span className="font-semibold">麻痺</span>：下個回合會被「跳過抽牌」，等於少一次行動。</li>
-                    </ul>
-                  </li>
-                </ul>
-              </div>
-
-              {/* C. 中央戰場區 */}
-              <div>
-                <p className="font-semibold mt-2">C. 中央戰場區</p>
-                <ul className="list-disc ml-5 space-y-0.5">
-                  <li><span className="font-semibold">牌堆 / 棄牌堆</span>：你點的就是這裡的牌堆按鈕，抽出的牌會暫時放在你下方的區域。</li>
-                  <li>
-                    <span className="font-semibold">最近打出的卡牌</span>：
-                    中央會跳出一張大卡圖，顯示「誰打出了什麼牌」，搭配那張卡的插圖，
-                    部分角色還會有專屬影片或特效（例如強化場地時的光球飛過去）。
-                  </li>
-                  <li>
-                    <span className="font-semibold">播報框</span>：
-                    某些角色（騙人布、羅賓、喬巴、索隆、羅、娜美、基拉、大媽…）打出時，
-                    會在畫面上方跳出特殊造型的提示框，顯示：
-                    <span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
-                      （打出玩家）對（目標玩家）做了什麼
-                    </span>
-                  </li>
-                  <li>
-                    <span className="font-semibold">戰報 / 日誌</span>：
-                    畫面下方會有一條「文字紀錄」，象徵
-                    <span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
-                      P1 魯夫 攻擊了 P3
-                    </span>
-                    或
-                    <span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
-                      本局強化場地：XXX…
-                    </span>
-                    方便回顧發生過什麼事。
-                  </li>
-                </ul>
-              </div>
-
-              {/* D. 下方「你的操作區」 */}
-              <div>
-                <p className="font-semibold mt-2">D. 下方「你的操作區」（只會在輪到你時出現）</p>
-                <ul className="list-disc ml-5 space-y-0.5">
-                  <li>
-                    在「抽牌階段」時，下方只有簡單提示：
-                    <span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
-                      請點牌堆抽牌
-                    </span>。
-                  </li>
-                  <li>
-                    在「選牌階段」時，下方會出現兩張卡：
-                    <ul className="list-disc ml-5 mt-1 space-y-0.5">
-                      <li><span className="font-semibold">左邊</span>：你原本的手牌。</li>
-                      <li><span className="font-semibold">右邊</span>：剛抽到的那張牌。</li>
-                    </ul>
-                  </li>
-                  <li>
-                    若有特殊限制（例如青雉凍結、娜美 7+6/8 規則），
-                    不能打的牌會被一層「冰凍效果」覆蓋，看起來像整張卡被冰起來且無法點擊，
-                    你只會剩下合法的那張可以選。
-                  </li>
-                </ul>
-              </div>
-            </section>
-
-            {/* 四、特殊狀況與結算 */}
-            <section className="space-y-1.5">
-              <h3 className="font-semibold text-amber-300">四、特殊狀況與結算</h3>
-              <ul className="list-disc ml-5 space-y-0.5">
-                <li>
-                  <span className="font-semibold">牌堆被抽光</span>：
-                  存活者會進入「比牌」，點數大的玩家獲勝；比牌的結果也會紀錄在賽季統計裡。
+                  <span className="font-semibold">抽牌階段（DRAW）</span>：
+                  點中央的牌堆抽 1 張牌。
                 </li>
                 <li>
-                  <span className="font-semibold">寶箱金幣用完</span>：
-                  畫面會出現「寶箱已空，等待結算」提示，然後跳到
-                  <span className="px-1 mx-1 rounded bg-black/40 border border-amber-400/40 text-amber-200">
-                    結算畫面
-                  </span>
-                  ，顯示每位玩家的金幣、攻擊分、防禦分、命中分、偵查分、生存分和對應稱號。
-                </li>
-                <li>
-                  <span className="font-semibold">下一局開始</span>：
-                  系統會自動重新發牌、重抽場地卡，保留你之前累積的金幣與賽季分數。
+                  <span className="font-semibold">選牌階段（CHOOSE）</span>：
+                  下方會出現兩張牌（原本手牌 + 新抽的牌），選擇 1 張打出。
                 </li>
               </ul>
-            </section>
+            </li>
+            <li>
+              你打出的角色會立刻觸發技能（攻擊、偵查、控制、保護、決鬥…等）。
+            </li>
+            <li>
+              若有玩家出局，畫面右側會標示該玩家
+              <span className="px-1 mx-1 rounded bg-black/40 border border-red-400/40 text-red-200">
+                已出局
+              </span>
+              ，並從回合輪替中移除。
+            </li>
+            <li>
+              本局結束條件：
+              <ul className="list-disc ml-5 mt-1 space-y-0.5">
+                <li>
+                  <span className="font-semibold">只剩 1 人存活</span>
+                  ：直接獲勝，從寶箱拿金幣。
+                </li>
+                <li>
+                  <span className="font-semibold">牌堆被抽完</span>
+                  ：存活者公開手牌「比點數」決定勝負（規則見第四章）。
+                </li>
+              </ul>
+            </li>
+          </ol>
+        </section>
 
-            <button className="btn-primary btn w-full mt-2" onClick={onClose}>
-              關閉
-            </button>
+        {/* 三、介面說明（對應遊戲內畫面） */}
+        <section className="space-y-1.5">
+          <h3 className="font-semibold text-amber-300">三、介面說明</h3>
+
+          {/* A. 上方資訊列 */}
+          <div>
+            <p className="font-semibold">A. 上方資訊列</p>
+            <ul className="list-disc ml-5 space-y-0.5">
+              <li>
+                <span className="font-semibold">寶箱金幣</span>：
+                文字類似
+                <span className="px-1 mx-1 rounded bg-black/40 border border-amber-400/30 text-amber-200">
+                  寶箱金幣剩餘：10 枚
+                </span>
+                ，數字會跟著遊戲更新。
+              </li>
+              <li>
+                <span className="font-semibold">場地卡區</span>：
+                上方會橫向排出本局抽到的
+                <strong>場地卡</strong>，每張寫著場地名稱（德雷斯羅薩鬥技場、艾尼艾斯大廳…），
+                下面有簡短說明：哪些角色在這裡會變成<strong>強化技能</strong>（例如「5-索隆變為強化技能」）。
+              </li>
+              <li>
+                <span className="font-semibold">卡片圖鑑</span>：
+                可隨時點開查看所有號碼（0–19 號）的卡牌詳細資訊與每一號卡片的張數。
+                當前局數中變成<strong>強化技能</strong>的卡片，會在圖鑑中以
+                <span className="px-1 mx-1 rounded bg-black/40 border border-red-400/50 text-red-200">
+                  紅色邊框
+                </span>
+                標示，方便玩家快速找到。
+              </li>
+              <li>
+                點場地卡可以切換背景、感受該場地的氣氛（不影響實際規則，純畫面效果）。
+              </li>
+            </ul>
           </div>
-        </div>
-      );
-    }
+
+          {/* B. 左右玩家資訊框 */}
+          <div>
+            <p className="font-semibold mt-2">B. 左右玩家資訊框</p>
+            <ul className="list-disc ml-5 space-y-0.5">
+              <li>
+                每位玩家都有一個框：顯示
+                <strong>頭像、名字、目前金幣</strong>。
+              </li>
+              <li>
+                玩家出局後，右方會標示
+                <span className="px-1 mx-1 rounded bg-black/40 border border-red-400/40 text-red-200">
+                  已出局
+                </span>
+                ，不再輪到他行動。
+              </li>
+              <li>
+                玩家名字旁邊會有「狀態標籤」，例如：
+                <ul className="list-disc ml-5 mt-1 space-y-0.5">
+                  <li>
+                    <span className="font-semibold">保護</span>：
+                    一回合內<strong>不受任何技能影響</strong>（從獲得開始至自己下一次行動前）。
+                  </li>
+                  <li>
+                    <span className="font-semibold">閃避</span>：
+                    下一次對你造成影響的技能<strong>完全無效化</strong>，觸發後解除；
+                    若一直沒被指定，就會持續保留。
+                  </li>
+                  <li>
+                    <span className="font-semibold">凍結</span>：
+                    手牌被冰起來一回合，只能打<strong>當回合新抽到的那張牌</strong>。
+                  </li>
+                  <li>
+                    <span className="font-semibold">麻痺</span>：
+                    下個回合會被
+                    <span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
+                      跳過抽牌
+                    </span>
+                    ，等於少一次行動。
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+
+          {/* C. 中央戰場區 */}
+          <div>
+            <p className="font-semibold mt-2">C. 中央戰場區</p>
+            <ul className="list-disc ml-5 space-y-0.5">
+              <li>
+                <span className="font-semibold">棄牌堆</span>：
+                顯示已打出的卡牌，以及被淘汰玩家的手牌。
+                可以用來推理、猜測其他玩家可能持有的手牌號碼。
+              </li>
+              <li>
+                <span className="font-semibold">戰報 / 日誌</span>：
+                畫面下方會有遊戲進行的「文字紀錄」，例如誰對誰使用了什麼技能、
+                哪些人出局、目前場地效果等，方便玩家回顧發生過什麼事。
+              </li>
+            </ul>
+          </div>
+
+          {/* D. 下方「你的操作區」 */}
+          <div>
+            <p className="font-semibold mt-2">D. 下方「你的操作區」（只會在輪到你時出現）</p>
+            <ul className="list-disc ml-5 space-y-0.5">
+              <li>
+                在<strong>抽牌階段</strong>時，下方只有簡單提示：
+                <span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
+                  請點牌堆抽牌
+                </span>
+                。
+              </li>
+              <li>
+                在<strong>選牌階段</strong>時，下方會出現兩張卡：
+                <ul className="list-disc ml-5 mt-1 space-y-0.5">
+                  <li><span className="font-semibold">左邊</span>：你原本的手牌。</li>
+                  <li><span className="font-semibold">右邊</span>：剛抽到的那張牌。</li>
+                </ul>
+              </li>
+              <li>
+                若技能文字提到「挑戰」或「比大小」，是比較
+                <strong>你手中最後剩下的那張牌的數值</strong>。
+                <span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
+                  10 以上的卡片在這種比較中「只看尾數」
+                </span>
+                ，例如：
+                <span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
+                  12 視為 2
+                </span>
+                、<span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
+                  18 視為 8
+                </span>。
+              </li>
+              <li>
+                若有特殊限制（例如青雉凍結、娜美 7+6/8 規則），
+                不能打的牌會被一層<strong>冰凍效果</strong>覆蓋，看起來像整張卡被冰起來且無法點擊，
+                你只會剩下合法的那張可以選。
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        {/* 四、特殊狀況與結算 */}
+        <section className="space-y-1.5">
+          <h3 className="font-semibold text-amber-300">四、特殊狀況與結算</h3>
+          <ul className="list-disc ml-5 space-y-0.5">
+            <li>
+              <span className="font-semibold">當牌堆全部抽完後</span>：
+              <ul className="list-disc ml-5 mt-1 space-y-0.5">
+                <li>先把該回合打完。</li>
+                <li>
+                  接著所有<strong>存活玩家公開手牌</strong>，比數值最大的玩家勝出。
+                </li>
+                <li>
+                  在這個「最終比牌」階段，<strong>10 以上的卡片改用「各位數字相加」</strong>：
+                  例如
+                  <span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
+                    18 → 1+8 = 9
+                  </span>。
+                </li>
+                <li>
+                  若「相加結果」剛好等於「某張個位數牌」，
+                  則<strong>個位數牌獲勝</strong>。
+                  例如：
+                  <span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
+                    18（1+8=9）
+                  </span>
+                  會贏
+                  <span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
+                    8 號牌
+                  </span>
+                  ，但會輸給
+                  <span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
+                    9 號牌
+                  </span>
+                  。
+                </li>
+              </ul>
+            </li>
+            <li>
+              <span className="font-semibold">寶箱金幣用完</span>：
+              畫面會出現
+              <span className="px-1 mx-1 rounded bg-black/40 border border-amber-400/40 text-amber-200">
+                寶箱已空，等待結算
+              </span>
+              提示，然後跳到<strong>最終結算畫面</strong>，
+              顯示每位玩家的<strong>總金幣</strong>作為排名依據。
+            </li>
+          </ul>
+        </section>
+
+        <button className="btn-primary btn w-full mt-2" onClick={onClose}>
+          關閉
+        </button>
+      </div>
+    </div>
+  );
+}
+
 
     function NameAvatar({defaultName, onDone}){
       const [name,setName]=useState(defaultName||"");
