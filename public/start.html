@@ -1,4 +1,3 @@
-<!-- /start.html -->
 <!doctype html>
 <html lang="zh-Hant">
 <head>
@@ -91,16 +90,51 @@
   </style>
 </head>
 <body class="no-video">
-  <div class="lock-overlay" id="lockOverlay"><div class="panel"><div class="icon">🔄</div><div class="text-lg font-semibold mb-1">請將手機旋轉至橫向以獲得最佳體驗</div><div class="text-sm opacity-80">若仍無法旋轉，請解鎖畫面旋轉或從瀏覽器選單開啟「允許旋轉」。</div></div></div>
-  <div class="bg-anim"><video id="bgVideo" class="bg-video" autoplay muted loop playsinline preload="auto" poster="images/cover.jpg">
-  <source src="videos/start.mp4" type="video/mp4">
-</video>
-</div>
+  <div class="lock-overlay" id="lockOverlay">
+    <div class="panel">
+      <div class="icon">🔄</div>
+      <div class="text-lg font-semibold mb-1">請將手機旋轉至橫向以獲得最佳體驗</div>
+      <div class="text-sm opacity-80">若仍無法旋轉，請解鎖畫面旋轉或從瀏覽器選單開啟「允許旋轉」。</div>
+    </div>
+  </div>
+  <div class="bg-anim">
+    <video id="bgVideo" class="bg-video" autoplay muted loop playsinline preload="auto" poster="images/cover.jpg">
+      <source src="videos/start.mp4" type="video/mp4">
+    </video>
+  </div>
   <div id="root" class="min-h-dvh flex items-center justify-center p-6"></div>
   <script>
-    (function initBGVideo(){ const v = document.getElementById('bgVideo'); if(!v) return; const enableVideo = ()=> document.body.classList.remove('no-video'); const fallback = ()=> document.body.classList.add('no-video'); v.addEventListener('loadeddata', enableVideo, {once:true}); v.addEventListener('canplay', enableVideo, {once:true}); v.addEventListener('error', fallback, {once:true}); const tryPlay = ()=> v.play().then(enableVideo).catch(fallback); window.addEventListener('pointerdown', tryPlay, {once:true}); window.addEventListener('keydown', tryPlay, {once:true}); tryPlay(); })();
-    (function orientationGate(){ const overlay = document.getElementById('lockOverlay'); function apply(){ const isPortrait = window.matchMedia("(orientation: portrait)").matches; document.body.classList.toggle('lock-scroll', isPortrait); if(overlay){ overlay.style.display = isPortrait ? 'flex' : 'none'; } } window.addEventListener('resize', apply); window.addEventListener('orientationchange', apply); apply(); })();
-    async function tryLockLandscape(){ try{ if(screen.orientation && screen.orientation.lock){ await screen.orientation.lock('landscape'); } }catch(e){} }
+    (function initBGVideo(){
+      const v = document.getElementById('bgVideo');
+      if(!v) return;
+      const enableVideo = ()=> document.body.classList.remove('no-video');
+      const fallback = ()=> document.body.classList.add('no-video');
+      v.addEventListener('loadeddata', enableVideo, {once:true});
+      v.addEventListener('canplay', enableVideo, {once:true});
+      v.addEventListener('error', fallback, {once:true});
+      const tryPlay = ()=> v.play().then(enableVideo).catch(fallback);
+      window.addEventListener('pointerdown', tryPlay, {once:true});
+      window.addEventListener('keydown', tryPlay, {once:true});
+      tryPlay();
+    })();
+    (function orientationGate(){
+      const overlay = document.getElementById('lockOverlay');
+      function apply(){
+        const isPortrait = window.matchMedia("(orientation: portrait)").matches;
+        document.body.classList.toggle('lock-scroll', isPortrait);
+        if(overlay){ overlay.style.display = isPortrait ? 'flex' : 'none'; }
+      }
+      window.addEventListener('resize', apply);
+      window.addEventListener('orientationchange', apply);
+      apply();
+    })();
+    async function tryLockLandscape(){
+      try{
+        if(screen.orientation && screen.orientation.lock){
+          await screen.orientation.lock('landscape');
+        }
+      }catch(e){}
+    }
   </script>
 
   <script type="text/babel" data-presets="env,react">
@@ -123,33 +157,32 @@
     });
 
     // 伺服器廣播等待室快照或導向遊戲
-socket.on('EMIT', (e)=>{
-  // ★ 等待室快照（房號 / 玩家清單 / 房主 / ready 狀態）
-  if (e?.type === 'lobby'){
-    __lobby.snapshot = e.lobby;
-    if (!__lobby.roomId) __lobby.roomId = e.lobby?.roomId || __lobby.roomId;
-    // 通知 WaitingRoom 立即重繪
-    if (typeof window.__setLobby === 'function') window.__setLobby(e.lobby);
-    return;
-  }
+    socket.on('EMIT', (e)=>{
+      // ★ 等待室快照（房號 / 玩家清單 / 房主 / ready 狀態）
+      if (e?.type === 'lobby'){
+        __lobby.snapshot = e.lobby;
+        if (!__lobby.roomId) __lobby.roomId = e.lobby?.roomId || __lobby.roomId;
+        // 通知 WaitingRoom 立即重繪
+        if (typeof window.__setLobby === 'function') window.__setLobby(e.lobby);
+        return;
+      }
 
-  // ★ 後端要求進入遊戲
-  if (e?.type === 'nav_game'){
-    try{ socket.close(); }catch{}
-    const url = new URL('game.html', location.origin);
-    url.searchParams.set('server', SERVER_URL);
-    url.searchParams.set('room',   __lobby.roomId);
-    url.searchParams.set('name',   __lobby.me.name || 'P');
-    url.searchParams.set('avatar', String(__lobby.me.avatar || 1));
-    const count = Array.isArray(__lobby.snapshot?.players)
-      ? Math.max(1, __lobby.snapshot.players.length)
-      : 1;
-    url.searchParams.set('n', String(count));    // ← 不再預設 4
-    location.href = url.toString();
-    return;
-  }
-});
-
+      // ★ 後端要求進入遊戲
+      if (e?.type === 'nav_game'){
+        try{ socket.close(); }catch{}
+        const url = new URL('game.html', location.origin);
+        url.searchParams.set('server', SERVER_URL);
+        url.searchParams.set('room',   __lobby.roomId);
+        url.searchParams.set('name',   __lobby.me.name || 'P');
+        url.searchParams.set('avatar', String(__lobby.me.avatar || 1));
+        const count = Array.isArray(__lobby.snapshot?.players)
+          ? Math.max(1, __lobby.snapshot.players.length)
+          : 1;
+        url.searchParams.set('n', String(count));    // ← 不再預設 4
+        location.href = url.toString();
+        return;
+      }
+    });
 
     // === 原常數/工具：保留必要者 ===
     const {useState, useEffect, useMemo} = React;
@@ -159,38 +192,227 @@ socket.on('EMIT', (e)=>{
     function genRoomId(){ const letters = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; let s=""; for(let i=0;i<6;i++) s += letters[Math.floor(Math.random()*letters.length)]; return s; }
     function getMeId(){ let me = sessionStorage.getItem("op_me_id"); if(!me){ me = "me_" + uid(); sessionStorage.setItem("op_me_id", me); } return me; }
 
-    function WaveText({ text, className="", small=false }){ const chars = Array.from(text); const waveClass = small ? "wave wave-sm" : "wave"; return (<span className={`${waveClass} ${className}`}>{chars.map((ch, idx) => (<span className="char" style={{["--i"]: idx}} key={idx}>{ch === " " ? "\u00A0" : ch}</span>))}</span>); }
+    function WaveText({ text, className="", small=false }){
+      const chars = Array.from(text);
+      const waveClass = small ? "wave wave-sm" : "wave";
+      return (
+        <span className={`${waveClass} ${className}`}>
+          {chars.map((ch, idx) => (
+            <span className="char" style={{["--i"]: idx}} key={idx}>
+              {ch === " " ? "\u00A0" : ch}
+            </span>
+          ))}
+        </span>
+      );
+    }
 
-    function PressAnyKey({onProceed}){ useEffect(()=>{ const h=(e)=>{ e.preventDefault(); onProceed(); tryLockLandscape(); window.__OPAudio?.startAudio(); }; window.addEventListener('keydown', h, {once:true}); window.addEventListener('pointerdown', h, {once:true}); return ()=>{ window.removeEventListener('keydown', h); window.removeEventListener('pointerdown', h); }; }, [onProceed]); return (
-      <div className="relative w-full min-h-[92vh] select-none">
-        <div className="absolute left-1/2 -translate-x-1/2 top-[60vh] md:top-[58vh] text-center space-y-2">
-          <div className="title-wrap">
-            <div className="title-main font-black tracking-tight whitespace-nowrap fx-tiltDrop fx-shine text-[clamp(28px,8.2vw,48px)] [@media(orientation:landscape)]:text-[clamp(24px,6.6vw,44px)] md:text-[clamp(52px,5.2vw,96px)] lg:text-[clamp(60px,4.6vw,110px)] xl:text-[clamp(68px,4vw,128px)]"><WaveText text="ONE PIECE" /></div>
-            <div className="title-sub font-extrabold text-amber-300 mt-2 fx-fadeUp whitespace-nowrap text-[clamp(16px,5.2vw,28px)] [@media(orientation:landscape)]:text-[clamp(16px,3.6vw,24px)] md:text-[clamp(30px,3.2vw,56px)] lg:text-[clamp(34px,2.8vw,64px)] xl:text-[clamp(38px,2.4vw,72px)]"><WaveText text="偉大航道爭霸戰" small /></div>
-          </div>
-        </div>
-        <div className="absolute left-1/2 -translate-x-1/2 text-sm md:text-base text-neutral-200 blink md:bottom-8" style={{bottom:"calc(env(safe-area-inset-bottom, 0px) - 10px)", paddingBottom:0}}>按任意鍵開始 / Press any key</div>
-      </div> ); }
-
-    function NameAvatar({defaultName, onDone}){ const [name,setName]=useState(defaultName||""); const [pick,setPick]=useState(1); const avatars=useMemo(()=> Array.from({length:30},(_,i)=>`images/avatars/${i+1}.webp`), []);
-      function handleSubmit(e){ e.preventDefault(); const safe=(name||"").trim()||"無名航海士"; const data={ playerName:safe, playerAvatar:pick, avatarUrl:avatars[pick-1] }; localStorage.setItem("op_player_profile", JSON.stringify(data)); onDone(data); }
-      return (<form onSubmit={handleSubmit} className="card w-[min(980px,96vw)] p-5 md:p-6">
-        <div className="flex items-center justify-between gap-3 flex-wrap"><h2 className="text-xl font-bold">創建角色</h2><div className="text-xs text-neutral-400">資料會暫存於本機（localStorage）</div></div>
-        <div className="grid [@media(orientation:landscape)]:grid-cols-2 md:grid-cols-3 gap-5 mt-4">
-          <div className="md:col-span-1">
-            <div className="flex items-center gap-3">
-              <div className={"avatar "+(pick?"is-active":"")}><img src={avatars[pick-1]} alt="" onError={(e)=>{ e.currentTarget.replaceWith(Object.assign(document.createElement('div'),{className:'mono avatar',innerText:(name||'').slice(0,1)||'你'})); }} /></div>
-              <div><div className="text-sm text-neutral-400">玩家名稱</div><input className="mt-1 w-56 rounded-lg bg-neutral-900 border border-neutral-700 px-3 py-2 outline-none focus:border-amber-400" maxLength={16} placeholder="輸入你的名字" value={name} onChange={(e)=>setName(e.target.value)} /></div>
+    function PressAnyKey({onProceed}){
+      useEffect(()=>{
+        const h=(e)=>{
+          e.preventDefault();
+          onProceed();
+          tryLockLandscape();
+          window.__OPAudio?.startAudio();
+        };
+        window.addEventListener('keydown', h, {once:true});
+        window.addEventListener('pointerdown', h, {once:true});
+        return ()=>{
+          window.removeEventListener('keydown', h);
+          window.removeEventListener('pointerdown', h);
+        };
+      }, [onProceed]);
+      return (
+        <div className="relative w-full min-h-[92vh] select-none">
+          <div className="absolute left-1/2 -translate-x-1/2 top-[60vh] md:top-[58vh] text-center space-y-2">
+            <div className="title-wrap">
+              <div className="title-main font-black tracking-tight whitespace-nowrap fx-tiltDrop fx-shine text-[clamp(28px,8.2vw,48px)] [@media(orientation:landscape)]:text-[clamp(24px,6.6vw,44px)] md:text-[clamp(52px,5.2vw,96px)] lg:text-[clamp(60px,4.6vw,110px)] xl:text-[clamp(68px,4vw,128px)]">
+                <WaveText text="ONE PIECE" />
+              </div>
+              <div className="title-sub font-extrabold text-amber-300 mt-2 fx-fadeUp whitespace-nowrap text-[clamp(16px,5.2vw,28px)] [@media(orientation:landscape)]:text-[clamp(16px,3.6vw,24px)] md:text-[clamp(30px,3.2vw,56px)] lg:text-[clamp(34px,2.8vw,64px)] xl:text-[clamp(38px,2.4vw,72px)]">
+                <WaveText text="偉大航道爭霸戰" small />
+              </div>
             </div>
-            <div className="text-xs text-neutral-400 mt-2">* 名稱最多 16 字；可稍後在設定中修改。</div>
           </div>
-          <div className="md:col-span-2">
-            <div className="flex items中心 justify-between"><div className="font-semibold">選擇頭像（30）</div><div className="text-xs text-neutral-400">路徑：<code>images/avatars/1.webp ~ 30.webp</code></div></div>
-            <div className="mt-2 grid grid-cols-5 sm:grid-cols-6 md:grid-cols-7 lg:grid-cols-8 gap-3">{avatars.map((src,idx)=>(<button key={idx} type="button" onClick={()=>setPick(idx+1)} className={"avatar "+(pick===idx+1?"is-active":"")}> <img src={src} alt={"avatar-"+(idx+1)} /> </button>))}</div>
+          <div
+            className="absolute left-1/2 -translate-x-1/2 text-sm md:text-base text-neutral-200 blink md:bottom-8"
+            style={{bottom:"calc(env(safe-area-inset-bottom, 0px) - 10px)", paddingBottom:0}}
+          >
+            按任意鍵開始 / Press any key
           </div>
         </div>
-        <div className="mt-5 flex flex-col sm:flex-row gap-3"><button className="btn-primary btn grow" type="submit">創建房間</button><button className="btn grow" type="button" onClick={()=>{ const safe=(name||"").trim()||"無名航海士"; const data={ playerName:safe, playerAvatar:pick, avatarUrl:avatars[pick-1] }; localStorage.setItem("op_player_profile", JSON.stringify(data)); onDone(data,{join:true}); }}>加入房間</button></div>
-      </form>); }
+      );
+    }
+
+    // === 主選單：開始遊戲 / 遊戲規則 ===
+    function MainMenu({ onStart, onRule }) {
+      return (
+        <div className="card w-[min(480px,90vw)] p-6 text-center space-y-6">
+          <h1 className="text-2xl font-bold tracking-wide text-amber-300">
+            偉大航道爭霸戰
+          </h1>
+
+          <button
+            className="btn-primary btn w-full text-lg py-3"
+            onClick={onStart}
+          >
+            🏁 開始遊戲
+          </button>
+
+          <button
+            className="btn w-full text-lg py-3"
+            onClick={onRule}
+          >
+            📘 遊戲規則
+          </button>
+
+          <div className="text-xs text-neutral-400 mt-2">
+            ONE PIECE ｜ 卡牌對戰 ｜ PVP 多人遊戲
+          </div>
+        </div>
+      );
+    }
+
+    // === 遊戲規則彈窗 ===
+    function RuleModal({ show, onClose }) {
+      if (!show) return null;
+      return (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="card w-[min(680px,95vw)] p-6 space-y-4 max-h-[85vh] overflow-y-auto">
+            <h2 className="text-xl font-bold text-amber-300">📘 遊戲規則</h2>
+
+            <div className="text-sm leading-relaxed space-y-3 text-neutral-200 text-left">
+              <p>
+                《偉大航道爭霸戰》是一款以「航海王 One Piece」為主題的多人卡牌對戰遊戲，
+                每張角色卡都有原作對應的特色技能。
+              </p>
+
+              <p>
+                每局開始時所有玩家都會獲得 1 張手牌，並依序輪到你的回合。
+              </p>
+
+              <p className="font-semibold text-amber-300">基本流程：</p>
+              <ul className="list-disc ml-5 space-y-1">
+                <li>輪到你時抽 1 張卡</li>
+                <li>從手牌選擇 1 張打出</li>
+                <li>卡牌會立即觸發角色技能（攻擊、防禦、偵查、控制等）</li>
+                <li>若你被擊倒 / 自爆 → 本局淘汰，等待下一局</li>
+              </ul>
+
+              <p className="font-semibold text-amber-300">勝利方式：</p>
+              <ul className="list-disc ml-5 space-y-1">
+                <li>若只剩你一人存活 → 贏得該局金幣</li>
+                <li>若牌堆打完 → 存活者「公開手牌比點數」決定勝者</li>
+                <li>寶箱金幣全被拿完 → 進入「賽季結算」，依各種分數排名</li>
+              </ul>
+
+              <p className="font-semibold text-amber-300">特色系統：</p>
+              <ul className="list-disc ml-5 space-y-1">
+                <li>每局會抽出數張「強化場地」，對應角色在該場地會變成強化技能</li>
+                <li>狀態包含：保護、閃避、凍結、麻痺、冰鬼標記…等等</li>
+                <li>部分角色會觸發動畫或影片（例如凱多、紅髮、羅傑 等）</li>
+                <li>連續擊倒、預測、偵查、比牌，都會在賽季結算中獲得額外分數</li>
+              </ul>
+
+              <p>
+                更完整的角色技能與細節，之後可以另外做一個「詳細規則」頁面，
+                或直接在牌局中透過提示與說明框慢慢熟悉。
+              </p>
+            </div>
+
+            <button className="btn-primary btn w-full" onClick={onClose}>
+              關閉
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    function NameAvatar({defaultName, onDone}){
+      const [name,setName]=useState(defaultName||"");
+      const [pick,setPick]=useState(1);
+      const avatars=useMemo(()=> Array.from({length:30},(_,i)=>`images/avatars/${i+1}.webp`), []);
+      function handleSubmit(e){
+        e.preventDefault();
+        const safe=(name||"").trim()||"無名航海士";
+        const data={ playerName:safe, playerAvatar:pick, avatarUrl:avatars[pick-1] };
+        localStorage.setItem("op_player_profile", JSON.stringify(data));
+        onDone(data);
+      }
+      return (
+        <form onSubmit={handleSubmit} className="card w-[min(980px,96vw)] p-5 md:p-6">
+          <div className="flex items-center justify-between gap-3 flex-wrap">
+            <h2 className="text-xl font-bold">創建角色</h2>
+            <div className="text-xs text-neutral-400">資料會暫存於本機（localStorage）</div>
+          </div>
+          <div className="grid [@media(orientation:landscape)]:grid-cols-2 md:grid-cols-3 gap-5 mt-4">
+            <div className="md:col-span-1">
+              <div className="flex items-center gap-3">
+                <div className={"avatar "+(pick?"is-active":"")}>
+                  <img
+                    src={avatars[pick-1]}
+                    alt=""
+                    onError={(e)=>{
+                      e.currentTarget.replaceWith(Object.assign(
+                        document.createElement('div'),
+                        {className:'mono avatar',innerText:(name||'').slice(0,1)||'你'}
+                      ));
+                    }}
+                  />
+                </div>
+                <div>
+                  <div className="text-sm text-neutral-400">玩家名稱</div>
+                  <input
+                    className="mt-1 w-56 rounded-lg bg-neutral-900 border border-neutral-700 px-3 py-2 outline-none focus:border-amber-400"
+                    maxLength={16}
+                    placeholder="輸入你的名字"
+                    value={name}
+                    onChange={(e)=>setName(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="text-xs text-neutral-400 mt-2">
+                * 名稱最多 16 字；可稍後在設定中修改。
+              </div>
+            </div>
+            <div className="md:col-span-2">
+              <div className="flex items-center justify-between">
+                <div className="font-semibold">選擇頭像（30）</div>
+                <div className="text-xs text-neutral-400">
+                  路徑：<code>images/avatars/1.webp ~ 30.webp</code>
+                </div>
+              </div>
+              <div className="mt-2 grid grid-cols-5 sm:grid-cols-6 md:grid-cols-7 lg:grid-cols-8 gap-3">
+                {avatars.map((src,idx)=>(
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={()=>setPick(idx+1)}
+                    className={"avatar "+(pick===idx+1?"is-active":"")}
+                  >
+                    <img src={src} alt={"avatar-"+(idx+1)} />
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="mt-5 flex flex-col sm:flex-row gap-3">
+            <button className="btn-primary btn grow" type="submit">創建房間</button>
+            <button
+              className="btn grow"
+              type="button"
+              onClick={()=>{
+                const safe=(name||"").trim()||"無名航海士";
+                const data={ playerName:safe, playerAvatar:pick, avatarUrl:avatars[pick-1] };
+                localStorage.setItem("op_player_profile", JSON.stringify(data));
+                onDone(data,{join:true});
+              }}
+            >
+              加入房間
+            </button>
+          </div>
+        </form>
+      );
+    }
 
     function RoomChoice({profile, intent, onEnter}){
       const [joinCode,setJoinCode]=useState("");
@@ -207,7 +429,7 @@ socket.on('EMIT', (e)=>{
           displayName: profile.playerName,
           avatar: profile.playerAvatar,
           secret: __lobby.me.secret,
-       });
+        });
         onEnter(id, { host: true });
       }
 
@@ -227,29 +449,45 @@ socket.on('EMIT', (e)=>{
         onEnter(code, { host:false });
       }
 
-      return (<div className="card w-[min(820px,96vw)] p-6 space-y-5">
-        <div className="flex items-center gap-3"><div className="avatar is-active"><img src={profile.avatarUrl} alt=""/></div><div><div className="text-sm text-neutral-400">玩家</div><div className="text-lg font-bold">{profile.playerName}</div></div></div>
-        {!intent?.join ? (
-          <div className="grid sm:grid-cols-2 gap-3">
-            <button className="btn-primary btn" onClick={createRoom}>建立房間</button>
-            <button className="btn" onClick={()=>window.location.reload()}>返回重選</button>
-          </div>
-        ) : (
-          <>
+      return (
+        <div className="card w-[min(820px,96vw)] p-6 space-y-5">
+          <div className="flex items-center gap-3">
+            <div className="avatar is-active"><img src={profile.avatarUrl} alt=""/></div>
             <div>
-              <div className="text-sm text-neutral-300 mb-1">輸入房號加入</div>
-              <div className="flex gap-2">
-                <input className="rounded-lg bg-neutral-900 border border-neutral-700 px-3 py-2 outline-none focus:border-amber-400 uppercase tracking-widest" placeholder="例如 ABC123" maxLength={8} value={joinCode} onChange={e=>setJoinCode(e.target.value)} />
-                <button className="btn-primary btn" onClick={tryJoin}>加入房間</button>
-              </div>
+              <div className="text-sm text-neutral-400">玩家</div>
+              <div className="text-lg font-bold">{profile.playerName}</div>
             </div>
-            <div className="flex gap-3">
+          </div>
+          {!intent?.join ? (
+            <div className="grid sm:grid-cols-2 gap-3">
+              <button className="btn-primary btn" onClick={createRoom}>建立房間</button>
               <button className="btn" onClick={()=>window.location.reload()}>返回重選</button>
             </div>
-          </>
-        )}
-        <div className="text-xs text-neutral-400">已切到後端真房：建立/加入皆透過 Socket.IO。</div>
-      </div>);
+          ) : (
+            <>
+              <div>
+                <div className="text-sm text-neutral-300 mb-1">輸入房號加入</div>
+                <div className="flex gap-2">
+                  <input
+                    className="rounded-lg bg-neutral-900 border border-neutral-700 px-3 py-2 outline-none focus:border-amber-400 uppercase tracking-widest"
+                    placeholder="例如 ABC123"
+                    maxLength={8}
+                    value={joinCode}
+                    onChange={e=>setJoinCode(e.target.value)}
+                  />
+                  <button className="btn-primary btn" onClick={tryJoin}>加入房間</button>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <button className="btn" onClick={()=>window.location.reload()}>返回重選</button>
+              </div>
+            </>
+          )}
+          <div className="text-xs text-neutral-400">
+            已切到後端真房：建立/加入皆透過 Socket.IO。
+          </div>
+        </div>
+      );
     }
 
     // === (4) 等待室：全面使用 __lobby.snapshot ===
@@ -271,7 +509,11 @@ socket.on('EMIT', (e)=>{
       const amHost = lobby && (lobby.host === mePid);
       const canStart = players.length>=MIN_PLAYERS && players.every(p=> !!p.ready);
 
-      function copyId(){ if(!lobby?.roomId) return; navigator.clipboard?.writeText(lobby.roomId); alert("已複製房號："+lobby.roomId); }
+      function copyId(){
+        if(!lobby?.roomId) return;
+        navigator.clipboard?.writeText(lobby.roomId);
+        alert("已複製房號："+lobby.roomId);
+      }
 
       // 切換準備
       function toggleReady(willReady){
@@ -299,88 +541,158 @@ socket.on('EMIT', (e)=>{
       const myReady = !!me?.ready;
 
       if(!lobby){
-        return (<div className="card w=[min(820px,96vw)] p-6">
-          <div className="text-lg font-bold mb-2">正在連線等待室...</div>
-          <button className="btn" onClick={onLeave}>返回</button>
-        </div>);
+        return (
+          <div className="card w=[min(820px,96vw)] p-6">
+            <div className="text-lg font-bold mb-2">正在連線等待室...</div>
+            <button className="btn" onClick={onLeave}>返回</button>
+          </div>
+        );
       }
 
-      return (<div className="card w-[min(980px,96vw)] p-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <div className="text-xs text-neutral-400">房號</div>
-            <div className="text-2xl font-extrabold tracking-widest">{lobby.roomId}</div>
+      return (
+        <div className="card w-[min(980px,96vw)] p-6">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <div className="text-xs text-neutral-400">房號</div>
+              <div className="text-2xl font-extrabold tracking-widest">{lobby.roomId}</div>
+            </div>
+            <div className="flex gap-2">
+              <button className="btn" onClick={copyId}>複製房號</button>
+              <button className="btn" onClick={onLeave}>離開房間</button>
+              {amHost && (
+                <button
+                  className={`btn-primary ${canStart? "": "opacity-50 cursor-not-allowed"}`}
+                  onClick={startGame}
+                  disabled={!canStart}
+                  title={canStart? "開始遊戲":"至少 2 人且全部準備才可開始"}
+                >
+                  開始遊戲
+                </button>
+              )}
+            </div>
           </div>
-          <div className="flex gap-2">
-            <button className="btn" onClick={copyId}>複製房號</button>
-            <button className="btn" onClick={onLeave}>離開房間</button>
-            {amHost && (
-              <button className={`btn-primary ${canStart? "": "opacity-50 cursor-not-allowed"}`} onClick={startGame} disabled={!canStart} title={canStart? "開始遊戲":"至少 2 人且全部準備才可開始"}>開始遊戲</button>
-            )}
-          </div>
-        </div>
 
-        <div className="mt-5">
-          <div className="text-sm text-neutral-300 mb-2">玩家（{players.length}）</div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {players.map(p=> {
-              const pid = pidOf(p);
-              const isHost = lobby.host === pid;
-              const isMe   = pid === mePid;
-              const ready  = !!p.ready;
-              const avatarUrl = `images/avatars/${avatarOf(p)}.webp`;
-              return (
-                <div key={pid} className="flex items-center justify-between gap-3 rounded-xl border border-neutral-700/60 bg黑/30 px-3 py-2">
-                  <div className="flex items-center gap-3">
-                    <div className={"avatar "+(isHost?"is-active":"")}><img src={avatarUrl} alt=""/></div>
-                    <div>
-                      <div className="font-semibold leading-tight">{nameOf(p)}</div>
-                      <div className="text-xs text-neutral-400 flex items-center gap-2">
-                        {isHost ? <span className="px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-200 border border-amber-400/30">房主</span> : <span className="opacity-60">玩家</span>}
-                        {ready ? <span className="px-1.5 py-0.5 rounded bg-emerald-400/15 text-emerald-200 border border-emerald-400/30">已準備</span> : <span className="px-1.5 py-0.5 rounded bg-neutral-600/20 text-neutral-200 border border-neutral-600/40">未準備</span>}
+          <div className="mt-5">
+            <div className="text-sm text-neutral-300 mb-2">玩家（{players.length}）</div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {players.map(p=> {
+                const pid = pidOf(p);
+                const isHost = lobby.host === pid;
+                const isMe   = pid === mePid;
+                const ready  = !!p.ready;
+                const avatarUrl = `images/avatars/${avatarOf(p)}.webp`;
+                return (
+                  <div
+                    key={pid}
+                    className="flex items-center justify-between gap-3 rounded-xl border border-neutral-700/60 bg-black/30 px-3 py-2"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={"avatar "+(isHost?"is-active":"")}><img src={avatarUrl} alt=""/></div>
+                      <div>
+                        <div className="font-semibold leading-tight">{nameOf(p)}</div>
+                        <div className="text-xs text-neutral-400 flex items-center gap-2">
+                          {isHost
+                            ? <span className="px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-200 border border-amber-400/30">房主</span>
+                            : <span className="opacity-60">玩家</span>}
+                          {ready
+                            ? <span className="px-1.5 py-0.5 rounded bg-emerald-400/15 text-emerald-200 border border-emerald-400/30">已準備</span>
+                            : <span className="px-1.5 py-0.5 rounded bg-neutral-600/20 text-neutral-200 border border-neutral-600/40">未準備</span>}
+                        </div>
                       </div>
                     </div>
+                    {isMe && (
+                      <button className="btn" onClick={()=>toggleReady(!myReady)}>
+                        {myReady?"取消準備":"準備"}
+                      </button>
+                    )}
                   </div>
-                  {isMe && (
-                    <button className="btn" onClick={()=>toggleReady(!myReady)}>{myReady?"取消準備":"準備"}</button>
-                  )}
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="text-xs text-neutral-400 mt-4">
+            此等待室已綁定後端快照；準備/開局皆透過 Socket.IO。
           </div>
         </div>
-
-        <div className="text-xs text-neutral-400 mt-4">此等待室已綁定後端快照；準備/開局皆透過 Socket.IO。</div>
-      </div>);
+      );
     }
 
     function App(){
-      const [stage,setStage]=useState("press");
+      const [stage,setStage]=useState("press");   // press → menu → profile → choice → waiting
       const [profile,setProfile]=useState(null);
       const [intent,setIntent]=useState(null);
       const [roomInfo,setRoomInfo]=useState(null);
       getMeId(); // 產生一次本機識別
 
-      useEffect(()=>{ const cached=localStorage.getItem("op_player_profile"); if(cached){ try{ setProfile(JSON.parse(cached)); }catch{} } },[]);
-      function enterRoom(id, extra){ setRoomInfo({id, host: !!extra?.host}); setStage("waiting"); }
+      useEffect(()=>{
+        const cached=localStorage.getItem("op_player_profile");
+        if(cached){
+          try{ setProfile(JSON.parse(cached)); }catch{}
+        }
+      },[]);
 
-      return (<div className="w-full max-w-[1200px] mx-auto"><div className="min-h-dvh flex items-center justify-center">
-        {stage==="press"   && <PressAnyKey onProceed={()=>setStage("profile")} />}
-        {stage==="profile" && <NameAvatar defaultName={profile?.playerName} onDone={(p,i)=>{ setProfile(p); setIntent(i||{}); setStage("choice"); }} />}
-        {stage==="choice"  && profile && (<RoomChoice profile={profile} intent={intent} onEnter={enterRoom}/>)}
-        {stage==="waiting" && roomInfo && profile && (
-          <WaitingRoom
-            roomId={roomInfo.id}
-            profile={profile}
-            onLeave={()=>{ setStage("profile"); __lobby = { roomId:'', me:{ playerId:__lobby.me.playerId, secret:__lobby.me.secret, name:'', avatar:1 }, snapshot:null }; }}
-          />
-        )}
-      </div></div>);
+      function enterRoom(id, extra){
+        setRoomInfo({id, host: !!extra?.host});
+        setStage("waiting");
+      }
+
+      return (
+        <div className="w-full max-w-[1200px] mx-auto">
+          <div className="min-h-dvh flex items-center justify-center">
+            {stage==="press"   && <PressAnyKey onProceed={()=>setStage("menu")} />}
+            {stage==="menu"    && (
+              <MainMenu
+                onStart={()=>setStage("profile")}
+                onRule={()=>setStage("rule")}
+              />
+            )}
+            {stage==="profile" && (
+              <NameAvatar
+                defaultName={profile?.playerName}
+                onDone={(p,i)=>{
+                  setProfile(p);
+                  setIntent(i||{});
+                  setStage("choice");
+                }}
+              />
+            )}
+            {stage==="choice"  && profile && (
+              <RoomChoice
+                profile={profile}
+                intent={intent}
+                onEnter={enterRoom}
+              />
+            )}
+            {stage==="waiting" && roomInfo && profile && (
+              <WaitingRoom
+                roomId={roomInfo.id}
+                profile={profile}
+                onLeave={()=>{
+                  setStage("profile");
+                  __lobby = {
+                    roomId:'',
+                    me:{ playerId:__lobby.me.playerId, secret:__lobby.me.secret, name:'', avatar:1 },
+                    snapshot:null
+                  };
+                }}
+              />
+            )}
+
+            {/* 遊戲規則彈窗，覆蓋所有 stage */}
+            <RuleModal
+              show={stage==="rule"}
+              onClose={()=>setStage("menu")}
+            />
+          </div>
+        </div>
+      );
     }
 
     ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
   </script>
-<!-- === 一鍵下載全部資源 (UI) === -->
+
+  <!-- === 一鍵下載全部資源 (UI) === -->
   <div id="preloadBox" class="mt-4 text-center" style="padding:16px;">
     <button id="btnPreloadAll" class="btn btn-primary">
       📦 一次下載全部資源（建議 Wi-Fi）
@@ -447,22 +759,117 @@ socket.on('EMIT', (e)=>{
       if (btn) btn.addEventListener('click', preloadAllAssets);
     });
   </script>
-  <div class="audio-toggle" id="audioCtrl" style="display:none"><button id="btnMute" title="靜音/取消靜音" aria-label="Mute/Unmute"><svg id="icoVol" width="16" height="16" viewBox="0 0 24 24" fill="#ffd36a"><path d="M4 9v6h4l5 4V5L8 9H4z"></path><path id="wave" d="M16 8c1.5 1.5 1.5 6.5 0 8" stroke="#ffd36a" stroke-width="2" fill="none"/></svg></button><input id="rngVol" class="vol" type="range" min="0" max="100" step="1" value="65" /></div>
+
+  <div class="audio-toggle" id="audioCtrl" style="display:none">
+    <button id="btnMute" title="靜音/取消靜音" aria-label="Mute/Unmute">
+      <svg id="icoVol" width="16" height="16" viewBox="0 0 24 24" fill="#ffd36a">
+        <path d="M4 9v6h4l5 4V5L8 9H4z"></path>
+        <path id="wave" d="M16 8c1.5 1.5 1.5 6.5 0 8" stroke="#ffd36a" stroke-width="2" fill="none"></path>
+      </svg>
+    </button>
+    <input id="rngVol" class="vol" type="range" min="0" max="100" step="1" value="65" />
+  </div>
 
   <script>
   (function(){
     const S={ muteKey:"op_audio_mute", volKey:"op_audio_vol", hasStarted:false, fadeTimer:null, autoTried:false };
-    const $intro=document.getElementById('sfxIntro'); const $bgm=document.getElementById('bgm'); const $wrap=document.getElementById('audioCtrl'); const $btn=document.getElementById('btnMute'); const $ico=document.getElementById('icoVol'); const $wave=document.getElementById('wave'); const $rng=document.getElementById('rngVol');
-    const savedMute=localStorage.getItem(S.muteKey); const savedVol=localStorage.getItem(S.volKey); let muted=savedMute==="1"; let vol=isNaN(+savedVol)?20:Math.max(0,Math.min(100,+savedVol)); setVolume(vol); applyMuteUI(); $wrap.style.display='flex';
-    function setVolume(v){ vol=v; $rng.value=String(v); const gain=muted?0:(v/100); $bgm.volume=Math.min(1,Math.max(0,gain)); if($intro) $intro.volume=Math.min(1,Math.max(0,Math.min(0.9,gain*1.2))); localStorage.setItem(S.volKey,String(v)); }
-    function fade(el,target,ms){ clearInterval(S.fadeTimer); const stepMs=40, steps=Math.max(1,Math.round(ms/stepMs)); const start=el.volume; let n=0; S.fadeTimer=setInterval(()=>{ n++; const t=n/steps; el.volume=start+(target-start)*t; if(n>=steps){ clearInterval(S.fadeTimer); el.volume=target; }}, stepMs); }
-    function applyMuteUI(){ const on=!muted; $ico.setAttribute('fill', on?'#ffd36a':'#bbb'); $wave.setAttribute('stroke', on?'#ffd36a':'#bbb'); }
-    async function tryAutoStart(){ if(S.autoTried||S.hasStarted) return; S.autoTried=true; try{ setVolume(vol); await $bgm.play(); if(!muted) $bgm.volume=Math.min(1,vol/100); S.hasStarted=true; }catch(e){ S.hasStarted=false; } }
-    async function startAudioAfterGesture(){ if(S.hasStarted) return; S.hasStarted=true; try{ $bgm.volume=0; await $bgm.play().catch(()=>{}); if($intro && $intro.src){ $intro.currentTime=0; $intro.volume=Math.min(1,(vol/100)*0.9); await $intro.play().catch(()=>{}); $intro.onended=()=>{ if(!muted) fade($bgm, Math.min(1, vol/100), 1200); }; }else{ if(!muted) fade($bgm, Math.min(1, vol/100), 800); } }catch(e){ S.hasStarted=false; } }
-    $btn.addEventListener('click', ()=>{ muted=!muted; localStorage.setItem(S.muteKey, muted?"1":"0"); applyMuteUI(); if(muted){ fade($bgm,0,250); if($intro && !$intro.paused) fade($intro,0,150); }else{ setVolume(vol); if($bgm.paused){ $bgm.play().catch(()=>{}); } fade($bgm, Math.min(1, vol/100), 250); } });
+    const $intro=document.getElementById('sfxIntro');
+    const $bgm=document.getElementById('bgm');
+    const $wrap=document.getElementById('audioCtrl');
+    const $btn=document.getElementById('btnMute');
+    const $ico=document.getElementById('icoVol');
+    const $wave=document.getElementById('wave');
+    const $rng=document.getElementById('rngVol');
+    const savedMute=localStorage.getItem(S.muteKey);
+    const savedVol=localStorage.getItem(S.volKey);
+    let muted=savedMute==="1";
+    let vol=isNaN(+savedVol)?20:Math.max(0,Math.min(100,+savedVol));
+    setVolume(vol);
+    applyMuteUI();
+    $wrap.style.display='flex';
+    function setVolume(v){
+      vol=v;
+      $rng.value=String(v);
+      const gain=muted?0:(v/100);
+      $bgm.volume=Math.min(1,Math.max(0,gain));
+      if($intro) $intro.volume=Math.min(1,Math.max(0,Math.min(0.9,gain*1.2)));
+      localStorage.setItem(S.volKey,String(v));
+    }
+    function fade(el,target,ms){
+      clearInterval(S.fadeTimer);
+      const stepMs=40, steps=Math.max(1,Math.round(ms/stepMs));
+      const start=el.volume;
+      let n=0;
+      S.fadeTimer=setInterval(()=>{
+        n++;
+        const t=n/steps;
+        el.volume=start+(target-start)*t;
+        if(n>=steps){
+          clearInterval(S.fadeTimer);
+          el.volume=target;
+        }
+      }, stepMs);
+    }
+    function applyMuteUI(){
+      const on=!muted;
+      $ico.setAttribute('fill', on?'#ffd36a':'#bbb');
+      $wave.setAttribute('stroke', on?'#ffd36a':'#bbb');
+    }
+    async function tryAutoStart(){
+      if(S.autoTried||S.hasStarted) return;
+      S.autoTried=true;
+      try{
+        setVolume(vol);
+        await $bgm.play();
+        if(!muted) $bgm.volume=Math.min(1,vol/100);
+        S.hasStarted=true;
+      }catch(e){
+        S.hasStarted=false;
+      }
+    }
+    async function startAudioAfterGesture(){
+      if(S.hasStarted) return;
+      S.hasStarted=true;
+      try{
+        $bgm.volume=0;
+        await $bgm.play().catch(()=>{});
+        if($intro && $intro.src){
+          $intro.currentTime=0;
+          $intro.volume=Math.min(1,(vol/100)*0.9);
+          await $intro.play().catch(()=>{});
+          $intro.onended=()=>{
+            if(!muted) fade($bgm, Math.min(1, vol/100), 1200);
+          };
+        }else{
+          if(!muted) fade($bgm, Math.min(1, vol/100), 800);
+        }
+      }catch(e){
+        S.hasStarted=false;
+      }
+    }
+    $btn.addEventListener('click', ()=>{
+      muted=!muted;
+      localStorage.setItem(S.muteKey, muted?"1":"0");
+      applyMuteUI();
+      if(muted){
+        fade($bgm,0,250);
+        if($intro && !$intro.paused) fade($intro,0,150);
+      }else{
+        setVolume(vol);
+        if($bgm.paused){
+          $bgm.play().catch(()=>{});
+        }
+        fade($bgm, Math.min(1, vol/100), 250);
+      }
+    });
     $rng.addEventListener('input', (e)=> setVolume(+e.target.value));
     document.addEventListener('DOMContentLoaded', tryAutoStart);
-    window.__OPAudio = { startAudio: startAudioAfterGesture, setVolume, mute: ()=>{ if(!muted) $btn.click(); }, unmute: ()=>{ if(muted) $btn.click(); } };
+    window.__OPAudio = {
+      startAudio: startAudioAfterGesture,
+      setVolume,
+      mute: ()=>{ if(!muted) $btn.click(); },
+      unmute: ()=>{ if(muted) $btn.click(); }
+    };
   })();
   </script>
 </body>
