@@ -3308,10 +3308,64 @@ function pushLogUnique(line){
   if (feed[feed.length - 1] !== pretty) feed.push(pretty);
 }
 
-/* ===== Socket 連線狀態 ===== */
-socket.on('connect', ()=>{ el.conn.textContent='connected'; el.conn.classList.replace('text-red-400','text-green-400'); });
-socket.on('disconnect', ()=>{ el.conn.textContent='disconnected'; el.conn.classList.replace('text-green-400','text-red-400'); });
-socket.on('connect_error', (e)=>{ el.conn.textContent='error'; el.conn.classList.replace('text-green-400','text-red-400'); console.error(e); });
+/* ===== Socket 連線狀態 + 自動重進房 ===== */
+socket.on('connect', () => {
+  el.conn.textContent = 'connected';
+  el.conn.classList.replace('text-red-400', 'text-green-400');
+
+  // === 自動重連進房 ===
+  // 1) 嘗試從目前記憶裡抓房間與 secret
+  let roomId = me.roomId;
+  if (!roomId) {
+    try {
+      roomId = sessionStorage.getItem('op_room') || '';
+    } catch {}
+  }
+
+  let secret = me.secret;
+  if (!secret) {
+    try {
+      secret = localStorage.getItem('opSecret') || '';
+    } catch {}
+  }
+
+  // 沒有房號或沒有 secret => 表示這個頁面還沒真的加入過房間，就不用自動重連
+  if (!roomId || !secret) return;
+
+  // 2) 視覺上把房號補回去
+  me.roomId = roomId;
+  if (el.roomLbl) el.roomLbl.textContent = roomId;
+
+  // 3) 把暱稱盡量抓回來（沒有就隨便給一個）
+  let displayName = '';
+  try {
+    displayName = sessionStorage.getItem('op_name') || '';
+  } catch {}
+  if (!displayName) {
+    displayName = (el.name.value || presetName || 'P') + Math.floor(Math.random() * 100);
+  }
+
+  // 4) 用舊的 secret / 房間資訊再送一次 JOIN_ROOM
+  socket.emit('JOIN_ROOM', {
+    roomId,
+    displayName,
+    avatar: presetAvatar,
+    secret,
+    playerCount: presetN,
+  });
+});
+
+socket.on('disconnect', () => {
+  el.conn.textContent = 'disconnected';
+  el.conn.classList.replace('text-green-400', 'text-red-400');
+});
+
+socket.on('connect_error', (e) => {
+  el.conn.textContent = 'error';
+  el.conn.classList.replace('text-green-400', 'text-red-400');
+  console.error(e);
+});
+
 
 function sendAction(type, payload={}){
   if(me.playerId==null) return;
@@ -3319,21 +3373,48 @@ function sendAction(type, payload={}){
 }
 
 
-el.join.onclick = ()=>{
+el.join.onclick = () => {
   me.roomId = (el.room.value || 'op-001').trim();
   try { sessionStorage.setItem('op_room', me.roomId); } catch {}
-  const displayName = (el.name.value || presetName || 'P') + Math.floor(Math.random()*100);
+
+  const displayName = (el.name.value || presetName || 'P') + Math.floor(Math.random() * 100);
+  try { sessionStorage.setItem('op_name', displayName); } catch {}
+
   el.roomLbl.textContent = me.roomId;
-  socket.emit('JOIN_ROOM', { roomId: me.roomId, displayName, avatar: presetAvatar, secret: me.secret, playerCount: presetN });
+
+  socket.emit('JOIN_ROOM', {
+    roomId: me.roomId,
+    displayName,
+    avatar: presetAvatar,
+    secret: me.secret,
+    playerCount: presetN,
+  });
 };
 
 
+
 if (presetRoom) {
-  try { sessionStorage.setItem('op_room', presetRoom); } catch {}
-  setTimeout(()=>{
-    socket.emit('JOIN_ROOM', { roomId: me.roomId, displayName: presetName || 'P', avatar: presetAvatar, secret: me.secret, playerCount: presetN });
+  me.roomId = presetRoom;
+  try {
+    sessionStorage.setItem('op_room', presetRoom);
+  } catch {}
+
+  const displayName = presetName || 'P';
+  try {
+    sessionStorage.setItem('op_name', displayName);
+  } catch {}
+
+  setTimeout(() => {
+    socket.emit('JOIN_ROOM', {
+      roomId: me.roomId,
+      displayName,
+      avatar: presetAvatar,
+      secret: me.secret,
+      playerCount: presetN,
+    });
   }, 80);
 }
+
 
 
 const socketOnJoined = ({ playerId, secret })=>{
