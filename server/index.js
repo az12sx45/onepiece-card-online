@@ -94,44 +94,64 @@ io.on("connection", (socket) => {
     if (!roomId) return;
 
     // 建房：暫給 1 位座位（真正開始時會重建）
-    let room = rooms.get(roomId);
-    if (!room) {
-      room = { state: createInitialState(1), sockets: new Map(), host: null, lobbyReady: {} };
-      rooms.set(roomId, room);
-    }
+let room = rooms.get(roomId);
+if (!room) {
+  room = {
+    state: createInitialState(1),
+    sockets: new Map(),
+    host: null,
+    lobbyReady: {},
+    phase: 'lobby',          // ★ 新增：目前還在等待室階段
+  };
+  rooms.set(roomId, room);
+}
+
 
     const st = room.state;
-    let sec = secret || "";
+let sec = secret || "";
 
-    // ★ 0) 若帶有 secret，且 state 裡已有同 secret 的玩家 → 視為「重連」
-    let myId = null;
-    if (sec) {
-      const found = (st.players || []).find(p => p && p.secret === sec);
-      if (found) myId = found.id;
-    }
+// ★ 0) 若帶有 secret，且 state 裡已有同 secret 的玩家 → 視為「重連」
+let myId = null;
+if (sec) {
+  const found = (st.players || []).find(p => p && p.secret === sec);
+  if (found) myId = found.id;
+}
 
-    // ★ 1) 沒找到舊座位時：找第一個未綁 client 的位置
-    if (myId == null) {
-      for (const p of st.players) {
-        if (!p.client) { myId = p.id; break; }
-      }
-    }
+// ★ 判斷房間是否已經在遊戲中
+const gameStarted = (room.phase === 'playing');
 
-    // ★ 2) 若都滿就新增一格座位（等待室用）
-    if (myId == null) {
-      myId = st.players.length;
-      st.players.push({
-        id: myId,
-        alive: true,
-        protected: false,
-        dodging: false,
-        frozen: false,
-        hand: null,
-        tempDraw: null,
-        gold: 0,
-        skipNext: false
-      });
-    }
+// ★ 如果遊戲已經開始，而且沒找到舊座位，就拒絕中途加入
+if (gameStarted && myId == null) {
+  io.to(socket.id).emit('EMIT', {
+    type: 'toast',
+    text: '本局已經開始，無法中途加入，請等下一局。'
+  });
+  return;
+}
+
+// ★ 1) 沒找到舊座位時：找第一個未綁 client 的位置（只會在 lobby 階段發生）
+if (myId == null) {
+  for (const p of st.players) {
+    if (!p.client) { myId = p.id; break; }
+  }
+}
+
+// ★ 2) 若都滿就新增一格座位（等待室用）
+if (myId == null) {
+  myId = st.players.length;
+  st.players.push({
+    id: myId,
+    alive: true,
+    protected: false,
+    dodging: false,
+    frozen: false,
+    hand: null,
+    tempDraw: null,
+    gold: 0,
+    skipNext: false
+  });
+}
+
 
     // ★ 若這次才產生 secret → 給一個新的
     if (!sec) sec = Math.random().toString(36).slice(2);
@@ -268,6 +288,7 @@ io.on("connection", (socket) => {
       // ⑦ 清空等待室 ready，寫回狀態並先廣播一版 STATE
       room.lobbyReady = {};
       room.state = st;
+      room.phase = 'playing';
       broadcastState(room);
 
       // ⑧ 導頁到 game.html
