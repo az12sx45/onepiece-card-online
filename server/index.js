@@ -146,6 +146,23 @@ io.on("connection", (socket) => {
     // 第一位為房主
     if (room.host == null) room.host = myId;
 
+    // 先把「同一個玩家 + 同一個 secret」舊的 socket 清掉
+    // 避免一個人重連後房間裡還掛著多個連線
+    for (const [sid, meta] of room.sockets) {
+      if (meta.playerId === myId && meta.secret === sec) {
+        room.sockets.delete(sid);
+      }
+    }
+
+    // 建 socket meta（之後驗章 / START_GAME 會用）
+    room.sockets.set(socket.id, {
+      playerId: myId,
+      secret: sec,
+      displayName: (displayName || "").trim() || `P${myId + 1}`,
+      avatar: Number(avatar) || 1,
+    });
+
+
     // 建 socket meta（之後驗章 / START_GAME 會用）
     room.sockets.set(socket.id, {
       playerId: myId,
