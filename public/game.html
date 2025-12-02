@@ -4741,7 +4741,7 @@ el.venues.innerHTML = '';
             ${p.dodging?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">🌀 閃避</span>':''}
             ${p.frozen?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">❄ 凍結</span>':''}
             ${p.skipNext?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">⚡ 麻痺</span>':''}
-            ${p.iceArmed?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">🧊 檢查</span>':''}
+            ${(p.iceInfected || p.iceArmed)?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">🧊 檢查</span>':''}
             ${(!p.protected&&!p.dodging&&!p.frozen&&!p.skipNext&&!p.iceArmed)?'<span class="opacity-50">—</span>':''}
           </div>
           ${isMe? `<div class="mt-2 flex items-start gap-2">
