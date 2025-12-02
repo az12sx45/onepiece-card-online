@@ -67,18 +67,20 @@ function broadcastLobby(roomId){
   const ready = room.lobbyReady || {};
   const joinedIds = new Set([...room.sockets.values()].map(m => m.playerId));
 
-  const payload = {
-    roomId,
-    host: room.host,
-    players: st.players
-      .filter(p => joinedIds.has(p.id))
-      .map(p => ({
-        id: p.id,
-        name: p.client?.displayName || p.displayName || `P${p.id+1}`,
-        avatar: p.client?.avatar ?? p.avatar ?? 1,
-        ready: !!ready[p.id],
-      }))
-  };
+const payload = {
+  roomId,
+  host: room.host,
+  cpuCount: room.cpuCount || 0,   // ← 新增：房間有幾個 CPU
+  players: st.players
+    .filter(p => joinedIds.has(p.id))
+    .map(p => ({
+      id: p.id,
+      name: p.client?.displayName || p.displayName || `P${p.id+1}`,
+      avatar: p.client?.avatar ?? p.avatar ?? 1,
+      ready: !!ready[p.id],
+    }))
+};
+
 
   for (const [sid] of room.sockets){
     io.to(sid).emit('EMIT', { type:'lobby', lobby: payload });
@@ -89,19 +91,32 @@ function broadcastLobby(roomId){
 io.on("connection", (socket) => {
   let joinedRoom = null;
 
-  socket.on("JOIN_ROOM", (payload = {}) => {
-    const { roomId, displayName = "", avatar = 1, secret = "", pid } = payload;
+socket.on("JOIN_ROOM", (payload = {}) => {
+  const {
+    roomId,
+    displayName = "",
+    avatar = 1,
+    secret = "",
+    pid,
+    cpuCount,        // ← 接收從前端傳來的 CPU 數量
+  } = payload;
+
     if (!roomId) return;
 
-    // 建房：暫給 1 位座位（真正開始時會重建）
+// 建房：暫給 1 位座位（真正開始時會重建）
 let room = rooms.get(roomId);
 if (!room) {
+  const safeCpu = typeof cpuCount === "number"
+    ? Math.max(0, Math.min(3, cpuCount))  // 限制在 0~3
+    : 0;
+
   room = {
     state: createInitialState(1),
     sockets: new Map(),
     host: null,
     lobbyReady: {},
-    phase: 'lobby',          // ★ 新增：目前還在等待室階段
+    phase: 'lobby',          // 目前還在等待室階段
+    cpuCount: safeCpu,       // ← 新增：這個房間預計的 CPU 人數
   };
   rooms.set(roomId, room);
 }
