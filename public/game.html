@@ -1698,16 +1698,25 @@ body::before{
           <div class="text-sm mb-2 opacity-80">本局場地</div>
           <div id="venues" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2"></div>
         </div>
-        <div class="card p-3 flex items-center justify-between gap-3">
-  <div class="text-sm opacity-80">
-    牌堆
-    <span id="deckCnt" class="ml-2 px-1.5 py-0.5 rounded border border-[#2a2f35] text-amber-300 font-semibold">0</span>
+      <div class="card p-3">
+  <div class="flex items-center justify-between gap-3">
+    <div class="text-sm opacity-80">
+      牌堆
+      <span id="deckCnt" class="ml-2 px-1.5 py-0.5 rounded border border-[#2a2f35] text-amber-300 font-semibold">0</span>
+    </div>
+    <button id="btnDraw" class="deck">
+      <img id="deckImg" src="images/cards/back.webp" alt="deck"/>
+      <!-- 已移除舊的 .cnt 徽章 -->
+    </button>
   </div>
-  <button id="btnDraw" class="deck">
-    <img id="deckImg" src="images/cards/back.webp" alt="deck"/>
-    <!-- 已移除舊的 .cnt 徽章 -->
-  </button>
+
+  <!-- ⭐ 新增：抽牌提示文字（預設隱藏，由 JS 控制顯示） -->
+  <div id="drawHint"
+       class="mt-2 text-[11px] text-amber-300 font-semibold hidden">
+    輪到你的回合，請抽牌
+  </div>
 </div>
+
 
         <div class="card p-3 md:col-span-3">
           <div class="flex items-center justify-between mb-2">
@@ -1946,6 +1955,7 @@ const el = {
   discard: document.getElementById('discard'),
   deckCnt: document.getElementById('deckCnt'),
   deckBtn: document.getElementById('btnDraw'),
+  drawHint: document.getElementById('drawHint'), 
   imgHand: document.getElementById('imgHand'),
   imgDrawn: document.getElementById('imgDrawn'),
   playZone: document.getElementById('myPlayZone'),
@@ -4719,28 +4729,48 @@ el.venues.innerHTML = '';
     _prev.aliveMap[p.id] = !!p.alive;
   });
 
-    // 自己的出牌區
-  const my = state.players?.[me.playerId];
-  const isMyTurn = state.turnIndex === me.playerId;
+// 自己的出牌區
+const my = state.players?.[me.playerId];
+const isMyTurn = state.turnIndex === me.playerId;
 
-  // ① 正常情況：只有「抽牌階段」而且沒被麻痺，才可以按牌堆
-  const canDraw =
-    state.turnStep === 'draw' &&
-    isMyTurn &&
-    !(my && my.skipNext === true);
+// ① 正常情況：只有「抽牌階段」而且沒被麻痺，才可以按牌堆
+const canDraw =
+  state.turnStep === 'draw' &&
+  isMyTurn &&
+  !(my && my.skipNext === true);
 
-  el.deckBtn.disabled = !canDraw;
-  el.deckBtn.style.opacity = canDraw ? 1 : 0.6;
-  // ② 被麻痺（skipNext=true）：自動幫你送一次 DRAW，當成「跳過抽牌」
-  if (
-    state.turnStep === 'draw' &&
-    isMyTurn &&
-    my &&
-    my.skipNext === true
-  ) {
-    // 直接送出 DRAW；伺服器會把這回合跳過並換人
-    sendAction('DRAW');
+// 控制牌堆按鈕狀態
+el.deckBtn.disabled = !canDraw;
+el.deckBtn.style.opacity = canDraw ? 1 : 0.6;
+
+// ⭐ 能抽牌時：啟用紅色呼吸光 + 顯示提示文字
+if (canDraw) {
+  el.deckBtn.classList.add('hot');  // 啟用你原本寫好的紅色外圈動畫（CSS 已經在上面）
+
+  if (el.drawHint) {
+    el.drawHint.textContent = '輪到你的回合，請抽牌';
+    el.drawHint.classList.remove('hidden');
   }
+} else {
+  el.deckBtn.classList.remove('hot');
+
+  if (el.drawHint) {
+    el.drawHint.textContent = '';
+    el.drawHint.classList.add('hidden');
+  }
+}
+
+// ② 被麻痺（skipNext=true）：自動幫你送一次 DRAW，當成「跳過抽牌」
+if (
+  state.turnStep === 'draw' &&
+  isMyTurn &&
+  my &&
+  my.skipNext === true
+) {
+  // 直接送出 DRAW；伺服器會把這回合跳過並換人
+  sendAction('DRAW');
+}
+
 
 
 const canChoose = state.turnStep === 'choose' && state.turnIndex === me.playerId && my;
