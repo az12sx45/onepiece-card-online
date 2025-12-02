@@ -637,6 +637,57 @@ body::before{
   animation: none !important;
 }
 
+/* === 抽牌階段提示泡泡（👉 + 請抽牌，黃光） === */
+@keyframes drawHintPulse {
+  0%,100% {
+    transform: translateX(0);
+    box-shadow:
+      0 0 0 0 rgba(250,204,21,.0),
+      0 0 12px 0 rgba(250,204,21,.0);
+  }
+  50% {
+    transform: translateX(-4px);
+    box-shadow:
+      0 0 0 1px rgba(250,204,21,.65),
+      0 0 20px 6px rgba(250,204,21,.75);
+  }
+}
+
+.draw-hint{
+  position: absolute;
+  right: 70px;          /* 大約在牌堆左邊，你可自己微調 */
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  line-height: 1.1;
+  background: radial-gradient(circle at 0 0, rgba(250,250,210,.22), transparent 60%),
+              radial-gradient(circle at 100% 100%, rgba(180,83,9,.60), transparent 65%),
+              rgba(15,23,42,.92);
+  border: 1px solid rgba(250,204,21,.85);
+  color: #fefce8;
+  text-shadow: 0 1px 2px rgba(0,0,0,.7);
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,.85),
+    0 0 12px 4px rgba(250,204,21,.55);
+  pointer-events: none;          /* 不擋你點牌堆 */
+  animation: drawHintPulse 1.6s ease-in-out infinite;
+  z-index: 5;
+}
+
+.draw-hint .emoji{
+  font-size: 16px;
+}
+
+.draw-hint .txt{
+  letter-spacing: .08em;
+}
+
+
 /* 尊重「減少動態」偏好：保留靜態描邊、停用動畫 */
 @media (prefers-reduced-motion: reduce){
   #btnDraw.hot::after{ animation: none !important; }
@@ -1698,22 +1749,20 @@ body::before{
           <div class="text-sm mb-2 opacity-80">本局場地</div>
           <div id="venues" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2"></div>
         </div>
-      <div class="card p-3">
-  <div class="flex items-center justify-between gap-3">
-    <div class="text-sm opacity-80">
-      牌堆
-      <span id="deckCnt" class="ml-2 px-1.5 py-0.5 rounded border border-[#2a2f35] text-amber-300 font-semibold">0</span>
-    </div>
-    <button id="btnDraw" class="deck">
-      <img id="deckImg" src="images/cards/back.webp" alt="deck"/>
-      <!-- 已移除舊的 .cnt 徽章 -->
-    </button>
+      <div class="card p-3 flex items-center justify-between gap-3 relative">
+  <div class="text-sm opacity-80">
+    牌堆
+    <span id="deckCnt" class="ml-2 px-1.5 py-0.5 rounded border border-[#2a2f35] text-amber-300 font-semibold">0</span>
   </div>
 
-  <!-- ⭐ 新增：抽牌提示文字（預設隱藏，由 JS 控制顯示） -->
-  <div id="drawHint"
-       class="mt-2 text-[11px] text-amber-300 font-semibold hidden">
-    輪到你的回合，請抽牌
+  <button id="btnDraw" class="deck">
+    <img id="deckImg" src="images/cards/back.webp" alt="deck"/>
+  </button>
+
+  <!-- ★ 抽牌提示泡泡：預設 hidden，JS 會在可抽牌時打開 -->
+  <div id="drawHint" class="draw-hint hidden select-none">
+    <span class="emoji">👉</span>
+    <span class="txt">請抽牌</span>
   </div>
 </div>
 
@@ -1955,7 +2004,7 @@ const el = {
   discard: document.getElementById('discard'),
   deckCnt: document.getElementById('deckCnt'),
   deckBtn: document.getElementById('btnDraw'),
-  drawHint: document.getElementById('drawHint'), 
+  deckHint: document.getElementById('drawHint'),
   imgHand: document.getElementById('imgHand'),
   imgDrawn: document.getElementById('imgDrawn'),
   playZone: document.getElementById('myPlayZone'),
@@ -4729,48 +4778,53 @@ el.venues.innerHTML = '';
     _prev.aliveMap[p.id] = !!p.alive;
   });
 
-// 自己的出牌區
-const my = state.players?.[me.playerId];
-const isMyTurn = state.turnIndex === me.playerId;
+    // 自己的出牌區
+  const my = state.players?.[me.playerId];
+  const isMyTurn = state.turnIndex === me.playerId;
 
-// ① 正常情況：只有「抽牌階段」而且沒被麻痺，才可以按牌堆
-const canDraw =
-  state.turnStep === 'draw' &&
-  isMyTurn &&
-  !(my && my.skipNext === true);
+  // ① 正常情況：只有「抽牌階段」而且沒被麻痺，才可以按牌堆
+  const canDraw =
+    state.turnStep === 'draw' &&
+    isMyTurn &&
+    !(my && my.skipNext === true);
 
-// 控制牌堆按鈕狀態
-el.deckBtn.disabled = !canDraw;
-el.deckBtn.style.opacity = canDraw ? 1 : 0.6;
+  el.deckBtn.disabled = !canDraw;
+  el.deckBtn.style.opacity = canDraw ? 1 : 0.6;
 
-// ⭐ 能抽牌時：啟用紅色呼吸光 + 顯示提示文字
-if (canDraw) {
-  el.deckBtn.classList.add('hot');  // 啟用你原本寫好的紅色外圈動畫（CSS 已經在上面）
+  el.deckBtn.disabled = !canDraw;
+  el.deckBtn.style.opacity = canDraw ? 1 : 0.6;
 
-  if (el.drawHint) {
-    el.drawHint.textContent = '輪到你的回合，請抽牌';
-    el.drawHint.classList.remove('hidden');
+  // ★ 抽牌提示泡泡：只有「自己回合 + 抽牌階段 + 沒麻痺」才顯示
+  if (el.deckHint) {
+    if (canDraw) {
+      el.deckHint.classList.remove('hidden');
+    } else {
+      el.deckHint.classList.add('hidden');
+    }
   }
-} else {
-  el.deckBtn.classList.remove('hot');
 
-  if (el.drawHint) {
-    el.drawHint.textContent = '';
-    el.drawHint.classList.add('hidden');
+  // ② 被麻痺（skipNext=true）：自動幫你送一次 DRAW，當成「跳過抽牌」
+  if (
+    state.turnStep === 'draw' &&
+    isMyTurn &&
+    my &&
+    my.skipNext === true
+  ) {
+    // 直接送出 DRAW；伺服器會把這回合跳過並換人
+    sendAction('DRAW');
   }
-}
 
-// ② 被麻痺（skipNext=true）：自動幫你送一次 DRAW，當成「跳過抽牌」
-if (
-  state.turnStep === 'draw' &&
-  isMyTurn &&
-  my &&
-  my.skipNext === true
-) {
-  // 直接送出 DRAW；伺服器會把這回合跳過並換人
-  sendAction('DRAW');
-}
 
+  // ② 被麻痺（skipNext=true）：自動幫你送一次 DRAW，當成「跳過抽牌」
+  if (
+    state.turnStep === 'draw' &&
+    isMyTurn &&
+    my &&
+    my.skipNext === true
+  ) {
+    // 直接送出 DRAW；伺服器會把這回合跳過並換人
+    sendAction('DRAW');
+  }
 
 
 const canChoose = state.turnStep === 'choose' && state.turnIndex === me.playerId && my;
