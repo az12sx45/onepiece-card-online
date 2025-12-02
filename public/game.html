@@ -3468,7 +3468,7 @@ socket.on('JOINED', ({ playerId })=>{
   }
 });
 
-/* ===== 新增：showPlayedFlash（支援強化卡面 + 結束回呼） ===== */
+/* ===== 新增：showPlayedFlash（支援強化卡面 + 結束回呼，支援點擊關閉） ===== */
 function showPlayedFlash(cardId, byIndex, opt = {}){
   // 若這張是靜默棄牌 → 不做快閃，也不排程影片
   if (Array.isArray(_silentDiscards) && _silentDiscards.includes(cardId)) {
@@ -3502,24 +3502,59 @@ function showPlayedFlash(cardId, byIndex, opt = {}){
     if (bubbleTx) bubbleTx.textContent = '';
   }
 
-  ov.classList.remove('hidden');
-  requestAnimationFrame(()=> ov.classList.add('show'));
+  // 先清掉前一次的計時器與點擊事件，避免殘留
+  if (ov.__flashTimer) {
+    clearTimeout(ov.__flashTimer);
+    ov.__flashTimer = null;
+  }
+  if (ov.__flashOnClick) {
+    ov.removeEventListener('click', ov.__flashOnClick);
+    ov.__flashOnClick = null;
+  }
 
-  setTimeout(()=>{
+  // 真正關閉 overlay 的共用函式
+  function finalize(){
+    ov.classList.add('hidden');
+
+    // 關掉 overlay 時順便把泡泡也收掉，避免殘留到下一張牌
+    if (bubble) {
+      bubble.classList.add('hidden');
+      if (bubbleTx) bubbleTx.textContent = '';
+    }
+
+    if (typeof opt.onDone === 'function') {
+      try { opt.onDone(); } catch(e){}
+    }
+  }
+
+  function startHide(){
     ov.classList.remove('show');
-    setTimeout(()=>{
-      ov.classList.add('hidden');
+    setTimeout(finalize, 250);
+  }
 
-      // 關掉 overlay 時順便把泡泡也收掉，避免殘留到下一張牌
-      if (bubble) {
-        bubble.classList.add('hidden');
-        if (bubbleTx) bubbleTx.textContent = '';
-      }
+  // 點擊整個 overlay 立刻關閉
+  ov.__flashOnClick = ()=> {
+    if (ov.__flashTimer) {
+      clearTimeout(ov.__flashTimer);
+      ov.__flashTimer = null;
+    }
+    startHide();
+  };
+  ov.addEventListener('click', ov.__flashOnClick);
 
-      if (typeof opt.onDone === 'function') opt.onDone();
-    }, 250);
-  }, 3000);
+  // 顯示 overlay
+  ov.classList.remove('hidden');
+  requestAnimationFrame(()=>{
+    ov.classList.add('show');
+
+    // 3 秒自動關閉（如果中間沒有被點擊關閉的話）
+    ov.__flashTimer = setTimeout(()=>{
+      ov.__flashTimer = null;
+      startHide();
+    }, 3000);
+  });
 }
+
 
 
 /* ====== C. STATE：同步 server 的新行、偵測新局並清空 + 偵測新棄牌 → 強化先快閃後播片 ====== */
