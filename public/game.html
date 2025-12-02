@@ -2339,6 +2339,9 @@ let _pendingDuel = null;   // 等待補上卡片資訊的決鬥事件
 let _enhFxForceTimer = null;  // 強化影片的保險計時器
 let _finalRedirecting = false; 
 
+let hasJoinedOnce = false;   // 記錄「這個頁面有沒有加入過某個房間」
+
+
 /* === 新增：快閃狀態全域變數 === */
 let _flashBusy = false;       // 正在顯示快閃中
 let _deferEnhCardId = null;   // 延後播放影片的 cardId（等快閃結束再播）
@@ -2434,6 +2437,61 @@ function playCoinFx(){
     requestBgmResume();
   }
 }
+
+// === 畫面被切到背景時，強制把各種 overlay 收掉，避免回來時卡在畫面 ===
+document.addEventListener('visibilitychange', ()=>{
+  if (!document.hidden) return;  // 只在「被隱藏」那一瞬間處理
+
+  // 1) 打出卡片快閃 overlay
+  const playedOv = document.getElementById('playedOverlay');
+  if (playedOv) {
+    playedOv.classList.remove('show');
+    playedOv.classList.add('hidden');
+  }
+
+  // 2) 強化影片 overlay
+  const enhOv  = document.getElementById('enhOverlay');
+  const enhVid = document.getElementById('enhVideo');
+  if (enhOv)  enhOv.classList.add('hidden');
+  if (enhVid) {
+    try {
+      enhVid.pause();
+      enhVid.currentTime = 0;
+    } catch(e){}
+  }
+  if (_enhFxForceTimer) {
+    clearTimeout(_enhFxForceTimer);
+    _enhFxForceTimer = null;
+  }
+
+  // 3) 擲硬幣 overlay
+  const coinOv  = document.getElementById('coinOverlay');
+  const coinVid = document.getElementById('coinVideo');
+  if (coinOv) {
+    coinOv.classList.remove('show');
+    coinOv.classList.add('hidden');
+  }
+  if (coinVid) {
+    try {
+      coinVid.pause();
+      coinVid.currentTime = 0;
+    } catch(e){}
+  }
+  if (typeof _coinPlaying !== 'undefined') {
+    _coinPlaying = false;
+  }
+
+  // 4) 決鬥動畫
+  const duelRoot = document.getElementById('duelFx');
+  if (duelRoot) {
+    duelRoot.classList.remove('show');
+  }
+
+  // 5) 重置快閃狀態，避免覺得「還在播快閃」而跳過後面動畫
+  _flashBusy = false;
+  _enhSignal = null;
+});
+
 
   // 嘗試播放影片
   vid.play().then(()=>{
@@ -3308,64 +3366,10 @@ function pushLogUnique(line){
   if (feed[feed.length - 1] !== pretty) feed.push(pretty);
 }
 
-/* ===== Socket 連線狀態 + 自動重進房 ===== */
-socket.on('connect', () => {
-  el.conn.textContent = 'connected';
-  el.conn.classList.replace('text-red-400', 'text-green-400');
-
-  // === 自動重連進房 ===
-  // 1) 嘗試從目前記憶裡抓房間與 secret
-  let roomId = me.roomId;
-  if (!roomId) {
-    try {
-      roomId = sessionStorage.getItem('op_room') || '';
-    } catch {}
-  }
-
-  let secret = me.secret;
-  if (!secret) {
-    try {
-      secret = localStorage.getItem('opSecret') || '';
-    } catch {}
-  }
-
-  // 沒有房號或沒有 secret => 表示這個頁面還沒真的加入過房間，就不用自動重連
-  if (!roomId || !secret) return;
-
-  // 2) 視覺上把房號補回去
-  me.roomId = roomId;
-  if (el.roomLbl) el.roomLbl.textContent = roomId;
-
-  // 3) 把暱稱盡量抓回來（沒有就隨便給一個）
-  let displayName = '';
-  try {
-    displayName = sessionStorage.getItem('op_name') || '';
-  } catch {}
-  if (!displayName) {
-    displayName = (el.name.value || presetName || 'P') + Math.floor(Math.random() * 100);
-  }
-
-  // 4) 用舊的 secret / 房間資訊再送一次 JOIN_ROOM
-  socket.emit('JOIN_ROOM', {
-    roomId,
-    displayName,
-    avatar: presetAvatar,
-    secret,
-    playerCount: presetN,
-  });
-});
-
-socket.on('disconnect', () => {
-  el.conn.textContent = 'disconnected';
-  el.conn.classList.replace('text-green-400', 'text-red-400');
-});
-
-socket.on('connect_error', (e) => {
-  el.conn.textContent = 'error';
-  el.conn.classList.replace('text-green-400', 'text-red-400');
-  console.error(e);
-});
-
+/* ===== Socket 連線狀態 ===== */
+socket.on('connect', ()=>{ el.conn.textContent='connected'; el.conn.classList.replace('text-red-400','text-green-400'); });
+socket.on('disconnect', ()=>{ el.conn.textContent='disconnected'; el.conn.classList.replace('text-green-400','text-red-400'); });
+socket.on('connect_error', (e)=>{ el.conn.textContent='error'; el.conn.classList.replace('text-green-400','text-red-400'); console.error(e); });
 
 function sendAction(type, payload={}){
   if(me.playerId==null) return;
@@ -3373,12 +3377,13 @@ function sendAction(type, payload={}){
 }
 
 
-el.join.onclick = () => {
+// 共用：實際送 JOIN_ROOM 的函式
+function doJoin(displayNameOverride){
   me.roomId = (el.room.value || 'op-001').trim();
   try { sessionStorage.setItem('op_room', me.roomId); } catch {}
 
-  const displayName = (el.name.value || presetName || 'P') + Math.floor(Math.random() * 100);
-  try { sessionStorage.setItem('op_name', displayName); } catch {}
+  const baseName = el.name.value || presetName || 'P';
+  const displayName = displayNameOverride || (baseName + Math.floor(Math.random()*100));
 
   el.roomLbl.textContent = me.roomId;
 
@@ -3387,34 +3392,54 @@ el.join.onclick = () => {
     displayName,
     avatar: presetAvatar,
     secret: me.secret,
-    playerCount: presetN,
+    pid: me.playerId   // 多帶一個 pid 給後端記錄（結果頁也會用到）
   });
+
+  hasJoinedOnce = true;
+}
+
+// 按「加入房間」按鈕
+el.join.onclick = ()=> {
+  doJoin();   // 用隨機尾碼
 };
 
-
-
+// 若 URL 有帶 ?room= → 自動加入
 if (presetRoom) {
-  me.roomId = presetRoom;
-  try {
-    sessionStorage.setItem('op_room', presetRoom);
-  } catch {}
+  try { sessionStorage.setItem('op_room', presetRoom); } catch {}
+  setTimeout(()=>{
+    // 自動加入時不用亂數尾碼，以免每刷新名稱看起來都不一樣
+    doJoin(presetName || 'P');
+  }, 80);
+}
 
-  const displayName = presetName || 'P';
-  try {
-    sessionStorage.setItem('op_name', displayName);
-  } catch {}
+// === socket 連線 / 斷線事件 ===
+socket.on('connect', ()=>{
+  console.log('[socket] connected', socket.id);
 
-  setTimeout(() => {
+  // 若這個頁面之前有加入過房間（hasJoinedOnce === true），
+  // 而且記得 roomId，就自動用同一組 secret 重連。
+  if (hasJoinedOnce && me.roomId) {
+    const baseName = el.name.value || presetName || 'P';
+    const displayName = baseName;   // 重連不用再加亂數
+
     socket.emit('JOIN_ROOM', {
       roomId: me.roomId,
       displayName,
       avatar: presetAvatar,
-      secret: me.secret,
-      playerCount: presetN,
+      secret: me.secret,   // ★ 關鍵：帶同一組 secret，後端會視為「同一個位置重連」
+      pid: me.playerId
     });
-  }, 80);
-}
+  }
+});
 
+socket.on('disconnect', ()=>{
+  console.log('[socket] disconnected');
+  try {
+    if (window.showToast) {
+      showToast('連線中斷，正在嘗試重新連線…');
+    }
+  } catch(e){}
+});
 
 
 const socketOnJoined = ({ playerId, secret })=>{
