@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-  <title>onepiece 偉大航道爭霸戰 — 主畫面</title>
+  <title>onepiece 偉大航道爭霸戰 — 啟動流程（影片版 + 等待室 + 音效）</title>
   <link rel="manifest" href="manifest.webmanifest">
   <script src="https://cdn.tailwindcss.com"></script>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
@@ -255,14 +255,14 @@
             className="btn-primary btn w-full text-lg py-3"
             onClick={onStart}
           >
-            開始遊戲
+            🏁 開始遊戲
           </button>
 
           <button
             className="btn w-full text-lg py-3"
             onClick={onRule}
           >
-            遊戲規則
+            📘 遊戲規則
           </button>
 
           <div className="text-xs text-neutral-400 mt-2">
@@ -272,8 +272,8 @@
       );
     }
 
-  // === 遊戲規則彈窗（新版） ===
-function RuleModal({ show, onClose }) {
+    // === 遊戲規則彈窗 ===
+   function RuleModal({ show, onClose }) {
   if (!show) return null;
 
   return (
@@ -285,21 +285,13 @@ function RuleModal({ show, onClose }) {
         <section className="space-y-1.5">
           <h3 className="font-semibold text-amber-300">一、遊戲目標</h3>
           <p>
-            《偉大航道爭霸戰》是一款<strong>簡易策略類型</strong>的多人對戰卡牌遊戲。
-            開局每位玩家手上都只有 1 張牌，透過抽牌、出牌和角色技能，相互擊倒或干擾其他人，
+            《偉大航道爭霸戰》是一款「最後存活」＋「比牌」型的多人對戰卡牌遊戲。
+            每位玩家手上都只有 1 張牌，透過抽牌、出牌和角色技能，相互擊倒或干擾其他人，
             直到只剩一人存活，或牌堆打完進入比牌。
           </p>
           <ul className="list-disc ml-5 space-y-1">
-            <li>
-              贏下每一局可從「寶箱」裡拿金幣，<strong>寶箱內的金幣總數 = 玩家數 × 5</strong>。
-            </li>
-            <li>
-              當寶箱金幣被拿光時，進入<strong>「最終結算」</strong>，依各玩家
-              <span className="px-1 mx-1 rounded bg-black/40 border border-amber-400/30 text-amber-200">
-                獲得的金幣數
-              </span>
-              排名。
-            </li>
+            <li>贏下每一局可從「寶箱」裡拿金幣。</li>
+            <li>寶箱金幣被拿光時，會進入「賽季結算」，依各種分數排名。</li>
           </ul>
         </section>
 
@@ -307,54 +299,21 @@ function RuleModal({ show, onClose }) {
         <section className="space-y-1.5">
           <h3 className="font-semibold text-amber-300">二、一局流程（實際對局時畫面會長這樣走）</h3>
           <ol className="list-decimal ml-5 space-y-1">
-            <li>
-              所有玩家各獲得 1 張<strong>起始手牌</strong>（不公開、只有本人可見）。
-            </li>
-            <li>
-              畫面上方會顯示：
-              <span className="px-1 mx-1 rounded bg-black/40 border border-amber-400/30 text-amber-200">
-                本局場地
-              </span>
-              以及
-              <span className="px-1 mx-1 rounded bg-black/40 border border-amber-400/30 text-amber-200">
-                寶箱金幣剩餘
-              </span>
-              等資訊。
-            </li>
-            <li>
-              輪到你時，回合分成兩個階段：
+            <li>所有玩家各獲得 1 張起始手牌（不公開）。</li>
+            <li>畫面上方會顯示「第 X 局」「本局場地」「寶箱金幣剩餘」等資訊。</li>
+            <li>輪到你時，回合分成兩個階段：
               <ul className="list-disc ml-5 mt-1 space-y-0.5">
-                <li>
-                  <span className="font-semibold">抽牌階段（DRAW）</span>：
-                  點中央的牌堆抽 1 張牌。
-                </li>
-                <li>
-                  <span className="font-semibold">選牌階段（CHOOSE）</span>：
-                  下方會出現兩張牌（原本手牌 + 新抽的牌），選擇 1 張打出。
-                </li>
+                <li><span className="font-semibold">抽牌階段（DRAW）</span>：點中間的牌堆抽 1 張牌。</li>
+                <li><span className="font-semibold">選牌階段（CHOOSE）</span>：下方會出現兩張牌（原本手牌 + 新抽的牌），選 1 張打出。</li>
               </ul>
             </li>
-            <li>
-              你打出的角色會立刻觸發技能（攻擊、偵查、控制、保護、決鬥…等）。
-            </li>
-            <li>
-              若有玩家出局，畫面右側會標示該玩家
-              <span className="px-1 mx-1 rounded bg-black/40 border border-red-400/40 text-red-200">
-                已出局
-              </span>
-              ，並從回合輪替中移除。
-            </li>
+            <li>你打出的角色會立刻觸發技能（攻擊、偵查、控制、保護、比牌…等）。</li>
+            <li>若有玩家死亡（HP 歸零 / 被判定出局），畫面會標示該玩家灰暗或打叉，並從回合輪替中移除。</li>
             <li>
               本局結束條件：
               <ul className="list-disc ml-5 mt-1 space-y-0.5">
-                <li>
-                  <span className="font-semibold">只剩 1 人存活</span>
-                  ：直接獲勝，從寶箱拿金幣。
-                </li>
-                <li>
-                  <span className="font-semibold">牌堆被抽完</span>
-                  ：存活者公開手牌「比點數」決定勝負（規則見第四章）。
-                </li>
+                <li><span className="font-semibold">只剩 1 人存活</span> → 直接獲勝，從寶箱拿金幣。</li>
+                <li><span className="font-semibold">牌堆被抽完</span> → 存活者公開手牌「比點數」決定勝負。</li>
               </ul>
             </li>
           </ol>
@@ -362,38 +321,26 @@ function RuleModal({ show, onClose }) {
 
         {/* 三、介面說明（對應遊戲內畫面） */}
         <section className="space-y-1.5">
-          <h3 className="font-semibold text-amber-300">三、介面說明</h3>
+          <h3 className="font-semibold text-amber-300">三、介面說明（對應遊戲內畫面）</h3>
 
           {/* A. 上方資訊列 */}
           <div>
             <p className="font-semibold">A. 上方資訊列</p>
             <ul className="list-disc ml-5 space-y-0.5">
+              <li><span className="font-semibold">局數 / 當前玩家</span>：顯示「第 X 局」與目前輪到哪位玩家。</li>
               <li>
-                <span className="font-semibold">寶箱金幣</span>：
-                文字類似
+                <span className="font-semibold">寶箱金幣</span>：文字類似
                 <span className="px-1 mx-1 rounded bg-black/40 border border-amber-400/30 text-amber-200">
                   寶箱金幣剩餘：10 枚
                 </span>
                 ，數字會跟著遊戲更新。
               </li>
               <li>
-                <span className="font-semibold">場地卡區</span>：
-                上方會橫向排出本局抽到的
-                <strong>場地卡</strong>，每張寫著場地名稱（德雷斯羅薩鬥技場、艾尼艾斯大廳…），
-                下面有簡短說明：哪些角色在這裡會變成<strong>強化技能</strong>（例如「5-索隆變為強化技能」）。
+                <span className="font-semibold">場地卡區</span>：上方會橫向排出本局抽到的<strong>場地卡</strong>，
+                每張寫著場地名稱（德雷斯羅薩鬥技場、艾尼艾斯大廳…），下面有簡短說明：
+                哪些角色在這裡會變成強化技能（例如「5-索隆變為強化技能」）。
               </li>
-              <li>
-                <span className="font-semibold">卡片圖鑑</span>：
-                可隨時點開查看所有號碼（0–19 號）的卡牌詳細資訊與每一號卡片的張數。
-                當前局數中變成<strong>強化技能</strong>的卡片，會在圖鑑中以
-                <span className="px-1 mx-1 rounded bg-black/40 border border-red-400/50 text-red-200">
-                  紅色邊框
-                </span>
-                標示，方便玩家快速找到。
-              </li>
-              <li>
-                點場地卡可以切換背景、感受該場地的氣氛（不影響實際規則，純畫面效果）。
-              </li>
+              <li>點場地卡可以切換背景、感受該場地的氣氛（不影響實際規則，純畫面效果）。</li>
             </ul>
           </div>
 
@@ -401,41 +348,15 @@ function RuleModal({ show, onClose }) {
           <div>
             <p className="font-semibold mt-2">B. 左右玩家資訊框</p>
             <ul className="list-disc ml-5 space-y-0.5">
-              <li>
-                每位玩家都有一個框：顯示
-                <strong>頭像、名字、目前金幣</strong>。
-              </li>
-              <li>
-                玩家出局後，右方會標示
-                <span className="px-1 mx-1 rounded bg-black/40 border border-red-400/40 text-red-200">
-                  已出局
-                </span>
-                ，不再輪到他行動。
-              </li>
+              <li>每位玩家都有一個框：顯示「頭像」「名字」「目前金幣」。</li>
+              <li>玩家死亡時會變成灰暗 / 打叉，表示已出局，不再輪到他行動。</li>
               <li>
                 玩家名字旁邊會有「狀態標籤」，例如：
                 <ul className="list-disc ml-5 mt-1 space-y-0.5">
-                  <li>
-                    <span className="font-semibold">保護</span>：
-                    一回合內<strong>不受任何技能影響</strong>（從獲得開始至自己下一次行動前）。
-                  </li>
-                  <li>
-                    <span className="font-semibold">閃避</span>：
-                    下一次對你造成影響的技能<strong>完全無效化</strong>，觸發後解除；
-                    若一直沒被指定，就會持續保留。
-                  </li>
-                  <li>
-                    <span className="font-semibold">凍結</span>：
-                    手牌被冰起來一回合，只能打<strong>當回合新抽到的那張牌</strong>。
-                  </li>
-                  <li>
-                    <span className="font-semibold">麻痺</span>：
-                    下個回合會被
-                    <span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
-                      跳過抽牌
-                    </span>
-                    ，等於少一次行動。
-                  </li>
+                  <li><span className="font-semibold">保護</span>：受到一次攻擊時不會受傷。</li>
+                  <li><span className="font-semibold">閃避</span>：有機會直接閃掉一次攻擊。</li>
+                  <li><span className="font-semibold">凍結</span>：手牌被冰起來，只能打指定那張牌。</li>
+                  <li><span className="font-semibold">麻痺</span>：下個回合會被「跳過抽牌」，等於少一次行動。</li>
                 </ul>
               </li>
             </ul>
@@ -445,15 +366,31 @@ function RuleModal({ show, onClose }) {
           <div>
             <p className="font-semibold mt-2">C. 中央戰場區</p>
             <ul className="list-disc ml-5 space-y-0.5">
+              <li><span className="font-semibold">牌堆 / 棄牌堆</span>：你點的就是這裡的牌堆按鈕，抽出的牌會暫時放在你下方的區域。</li>
               <li>
-                <span className="font-semibold">棄牌堆</span>：
-                顯示已打出的卡牌，以及被淘汰玩家的手牌。
-                可以用來推理、猜測其他玩家可能持有的手牌號碼。
+                <span className="font-semibold">最近打出的卡牌</span>：
+                中央會跳出一張大卡圖，顯示「誰打出了什麼牌」，搭配那張卡的插圖，
+                部分角色還會有專屬影片或特效（例如強化場地時的光球飛過去）。
+              </li>
+              <li>
+                <span className="font-semibold">播報框</span>：
+                某些角色（騙人布、羅賓、喬巴、索隆、羅、娜美、基拉、大媽…）打出時，
+                會在畫面上方跳出特殊造型的提示框，顯示：
+                <span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
+                  （打出玩家）對（目標玩家）做了什麼
+                </span>
               </li>
               <li>
                 <span className="font-semibold">戰報 / 日誌</span>：
-                畫面下方會有遊戲進行的「文字紀錄」，例如誰對誰使用了什麼技能、
-                哪些人出局、目前場地效果等，方便玩家回顧發生過什麼事。
+                畫面下方會有一條「文字紀錄」，象徵
+                <span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
+                  P1 魯夫 攻擊了 P3
+                </span>
+                或
+                <span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
+                  本局強化場地：XXX…
+                </span>
+                方便回顧發生過什麼事。:contentReference[oaicite:2]{index=2}
               </li>
             </ul>
           </div>
@@ -463,37 +400,22 @@ function RuleModal({ show, onClose }) {
             <p className="font-semibold mt-2">D. 下方「你的操作區」（只會在輪到你時出現）</p>
             <ul className="list-disc ml-5 space-y-0.5">
               <li>
-                在<strong>抽牌階段</strong>時，下方只有簡單提示：
+                在「抽牌階段」時，下方只有簡單提示：
                 <span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
                   請點牌堆抽牌
-                </span>
-                。
+                </span>。
               </li>
               <li>
-                在<strong>選牌階段</strong>時，下方會出現兩張卡：
+                在「選牌階段」時，下方會出現兩張卡：
                 <ul className="list-disc ml-5 mt-1 space-y-0.5">
                   <li><span className="font-semibold">左邊</span>：你原本的手牌。</li>
                   <li><span className="font-semibold">右邊</span>：剛抽到的那張牌。</li>
                 </ul>
               </li>
               <li>
-                若技能文字提到「挑戰」或「比大小」，是比較
-                <strong>你手中最後剩下的那張牌的數值</strong>。
-                <span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
-                  10 以上的卡片在這種比較中「只看尾數」
-                </span>
-                ，例如：
-                <span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
-                  12 視為 2
-                </span>
-                、<span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
-                  18 視為 8
-                </span>。
-              </li>
-              <li>
                 若有特殊限制（例如青雉凍結、娜美 7+6/8 規則），
-                不能打的牌會被一層<strong>冰凍效果</strong>覆蓋，看起來像整張卡被冰起來且無法點擊，
-                你只會剩下合法的那張可以選。
+                不能打的牌會被一層「冰凍效果」覆蓋，看起來像整張卡被冰起來且無法點擊，
+                你只會剩下合法的那張可以選。:contentReference[oaicite:3]{index=3}
               </li>
             </ul>
           </div>
@@ -504,46 +426,20 @@ function RuleModal({ show, onClose }) {
           <h3 className="font-semibold text-amber-300">四、特殊狀況與結算</h3>
           <ul className="list-disc ml-5 space-y-0.5">
             <li>
-              <span className="font-semibold">當牌堆全部抽完後</span>：
-              <ul className="list-disc ml-5 mt-1 space-y-0.5">
-                <li>先把該回合打完。</li>
-                <li>
-                  接著所有<strong>存活玩家公開手牌</strong>，比數值最大的玩家勝出。
-                </li>
-                <li>
-                  在這個「最終比牌」階段，<strong>10 以上的卡片改用「各位數字相加」</strong>：
-                  例如
-                  <span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
-                    18 → 1+8 = 9
-                  </span>。
-                </li>
-                <li>
-                  若「相加結果」剛好等於「某張個位數牌」，
-                  則<strong>個位數牌獲勝</strong>。
-                  例如：
-                  <span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
-                    18（1+8=9）
-                  </span>
-                  會贏
-                  <span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
-                    8 號牌
-                  </span>
-                  ，但會輸給
-                  <span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
-                    9 號牌
-                  </span>
-                  。
-                </li>
-              </ul>
+              <span className="font-semibold">牌堆被抽光</span>：
+              存活者會進入「比牌」，點數大的玩家獲勝；比牌的結果也會紀錄在賽季統計裡。
             </li>
             <li>
               <span className="font-semibold">寶箱金幣用完</span>：
-              畫面會出現
+              畫面會出現「寶箱已空，等待結算」提示，然後跳到
               <span className="px-1 mx-1 rounded bg-black/40 border border-amber-400/40 text-amber-200">
-                寶箱已空，等待結算
+                結算畫面
               </span>
-              提示，然後跳到<strong>最終結算畫面</strong>，
-              顯示每位玩家的<strong>總金幣</strong>作為排名依據。
+              ，顯示每位玩家的金幣、攻擊分、防禦分、命中分、偵查分、生存分和對應稱號。
+            </li>
+            <li>
+              <span className="font-semibold">下一局開始</span>：
+              系統會自動重新發牌、重抽場地卡，保留你之前累積的金幣與賽季分數。:contentReference[oaicite:5]{index=5}
             </li>
           </ul>
         </section>
@@ -644,209 +540,176 @@ function RuleModal({ show, onClose }) {
       );
     }
 
-    function RoomChoice({profile, intent, onEnter}){
-      const [joinCode,setJoinCode]=useState("");
-      const meId=getMeId(); // 僅用於本機識別，不影響後端
+function RoomChoice({ profile, intent, onEnter }) {
+  const [joinCode, setJoinCode] = useState("");
+  const [cpuCount, setCpuCount] = useState(() => {
+    // 從 localStorage 讀取上一次的 CPU 設定（預設 0）
+    try {
+      const v = Number(localStorage.getItem("op_cpu_count") || "0");
+      if (Number.isNaN(v)) return 0;
+      return Math.min(3, Math.max(0, v));
+    } catch {
+      return 0;
+    }
+  });
 
-      // === (3A) 建立房：emit JOIN_ROOM，先切 UI ===
-      function createRoom(){
-        const id = genRoomId();
-        __lobby.roomId = id;
-        __lobby.me.name   = profile.playerName;
-        __lobby.me.avatar = profile.playerAvatar;
-        socket.emit('JOIN_ROOM', {
-          roomId: id,
-          displayName: profile.playerName,
-          avatar: profile.playerAvatar,
-          secret: __lobby.me.secret,
-        });
-        onEnter(id, { host: true });
-      }
+  const meId = getMeId(); // 僅用於本機識別，不影響後端
 
-      // === (3B) 加入房：emit JOIN_ROOM，先切 UI ===
-      function tryJoin(){
-        const code = (joinCode||"").toUpperCase().replace(/\s+/g,"");
-        if(!code){ alert("請輸入房號"); return; }
-        __lobby.roomId = code;
-        __lobby.me.name   = profile.playerName;
-        __lobby.me.avatar = profile.playerAvatar;
-        socket.emit('JOIN_ROOM', {
-          roomId: code,
-          displayName: profile.playerName,
-          avatar: profile.playerAvatar,
-          secret: __lobby.me.secret
-        });
-        onEnter(code, { host:false });
-      }
+  // === 建立房：emit JOIN_ROOM，帶入 CPU 設定 ===
+  function createRoom() {
+    const id = genRoomId();
+    __lobby.roomId = id;
+    __lobby.me.name = profile.playerName;
+    __lobby.me.avatar = profile.playerAvatar;
+    __lobby.cpuCount = cpuCount; // 先存在本地，全域記錄，之後後端 / AI 會用到
 
-      return (
-        <div className="card w-[min(820px,96vw)] p-6 space-y-5">
-          <div className="flex items-center gap-3">
-            <div className="avatar is-active"><img src={profile.avatarUrl} alt=""/></div>
-            <div>
-              <div className="text-sm text-neutral-400">玩家</div>
-              <div className="text-lg font-bold">{profile.playerName}</div>
-            </div>
-          </div>
-          {!intent?.join ? (
-            <div className="grid sm:grid-cols-2 gap-3">
-              <button className="btn-primary btn" onClick={createRoom}>建立房間</button>
-              <button className="btn" onClick={()=>window.location.reload()}>返回重選</button>
-            </div>
-          ) : (
-            <>
-              <div>
-                <div className="text-sm text-neutral-300 mb-1">輸入房號加入</div>
-                <div className="flex gap-2">
-                  <input
-                    className="rounded-lg bg-neutral-900 border border-neutral-700 px-3 py-2 outline-none focus:border-amber-400 uppercase tracking-widest"
-                    placeholder="例如 ABC123"
-                    maxLength={8}
-                    value={joinCode}
-                    onChange={e=>setJoinCode(e.target.value)}
-                  />
-                  <button className="btn-primary btn" onClick={tryJoin}>加入房間</button>
-                </div>
-              </div>
-              <div className="flex gap-3">
-                <button className="btn" onClick={()=>window.location.reload()}>返回重選</button>
-              </div>
-            </>
-          )}
-          <div className="text-xs text-neutral-400">
-            已切到後端真房：建立/加入皆透過 Socket.IO。
+    // 記住 CPU 設定（下次開遊戲會自動帶出）
+    try {
+      localStorage.setItem("op_cpu_count", String(cpuCount));
+    } catch (e) {}
+
+    socket.emit("JOIN_ROOM", {
+      roomId: id,
+      displayName: profile.playerName,
+      avatar: profile.playerAvatar,
+      secret: __lobby.me.secret,
+    });
+
+    // onEnter 第二個參數帶出 host / cpuCount 等資訊給 WaitingRoom 使用
+    onEnter(id, { host: true, cpuCount });
+  }
+
+  // === 加入房：保持原本邏輯 ===
+  function tryJoin() {
+    const code = (joinCode || "").toUpperCase().replace(/\s+/g, "");
+    if (!code) {
+      alert("請輸入房號");
+      return;
+    }
+    __lobby.roomId = code;
+    __lobby.me.name = profile.playerName;
+    __lobby.me.avatar = profile.playerAvatar;
+
+    socket.emit("JOIN_ROOM", {
+      roomId: code,
+      displayName: profile.playerName,
+      avatar: profile.playerAvatar,
+      secret: __lobby.me.secret,
+    });
+
+    onEnter(code, { host: false });
+  }
+
+  return (
+    <div className="card w-[min(980px,96vw)] p-5 md:p-6 space-y-6">
+      {/* 標題列 */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        <div>
+          <div className="text-sm text-neutral-400">房間模式</div>
+          <div className="text-xl font-bold text-amber-300">
+            建立房間 / 加入房間
           </div>
         </div>
-      );
-    }
-
-    // === (4) 等待室：全面使用 __lobby.snapshot ===
-    function WaitingRoom({roomId, profile, onLeave}){
-      const [lobby, setLobby] = useState(()=> __lobby.snapshot);
-      const mePid = __lobby.me.playerId;
-
-      useEffect(()=>{
-        window.__setLobby = setLobby;
-        return ()=>{ window.__setLobby = null; };
-      }, []);
-
-      const players = lobby?.players||[];
-      // 後端欄位防呆：支援 playerId/id, displayName/name
-      function pidOf(p){ return p.playerId ?? p.pid ?? p.id; }
-      function nameOf(p){ return p.displayName ?? p.name ?? 'P'; }
-      function avatarOf(p){ return p.avatar ?? 1; }
-
-      const amHost = lobby && (lobby.host === mePid);
-      const canStart = players.length>=MIN_PLAYERS && players.every(p=> !!p.ready);
-
-      function copyId(){
-        if(!lobby?.roomId) return;
-        navigator.clipboard?.writeText(lobby.roomId);
-        alert("已複製房號："+lobby.roomId);
-      }
-
-      // 切換準備
-      function toggleReady(willReady){
-        socket.emit('ACTION', {
-          roomId: __lobby.roomId,
-          playerId: __lobby.me.playerId,
-          secret: __lobby.me.secret,
-          type: willReady ? 'LOBBY_READY' : 'LOBBY_UNREADY'
-        });
-      }
-
-      // 房主開局
-      function startGame(){
-        if(!amHost) return;
-        socket.emit('ACTION', {
-          roomId: __lobby.roomId,
-          playerId: __lobby.me.playerId,
-          secret: __lobby.me.secret,
-          type: 'START_GAME'
-        });
-      }
-
-      // 我的 ready 狀態
-      const me = players.find(p=> pidOf(p)===mePid);
-      const myReady = !!me?.ready;
-
-      if(!lobby){
-        return (
-          <div className="card w=[min(820px,96vw)] p-6">
-            <div className="text-lg font-bold mb-2">正在連線等待室...</div>
-            <button className="btn" onClick={onLeave}>返回</button>
+        <div className="flex items-center gap-3">
+          <div className="avatar is-active">
+            <img src={profile.avatarUrl} alt="" />
           </div>
-        );
-      }
+          <div className="text-sm text-right">
+            <div className="text-neutral-300">{profile.playerName}</div>
+            <div className="text-xs text-neutral-500">玩家 ID：{meId}</div>
+          </div>
+        </div>
+      </div>
 
-      return (
-        <div className="card w-[min(980px,96vw)] p-6">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <div className="text-xs text-neutral-400">房號</div>
-              <div className="text-2xl font-extrabold tracking-widest">{lobby.roomId}</div>
-            </div>
-            <div className="flex gap-2">
-              <button className="btn" onClick={copyId}>複製房號</button>
-              <button className="btn" onClick={onLeave}>離開房間</button>
-              {amHost && (
-                <button
-                  className={`btn-primary ${canStart? "": "opacity-50 cursor-not-allowed"}`}
-                  onClick={startGame}
-                  disabled={!canStart}
-                  title={canStart? "開始遊戲":"至少 2 人且全部準備才可開始"}
-                >
-                  開始遊戲
-                </button>
-              )}
-            </div>
+      {/* 左右兩欄：建立房、加入房 */}
+      <div className="grid md:grid-cols-2 gap-6">
+        {/* 左：建立房間 */}
+        <div className="space-y-4 border border-neutral-700/70 rounded-xl p-4 bg-black/20">
+          <div className="flex items-center justify-between">
+            <div className="font-semibold">建立房間</div>
+            <span className="text-[11px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-400/40">
+              房主
+            </span>
           </div>
 
-          <div className="mt-5">
-            <div className="text-sm text-neutral-300 mb-2">玩家（{players.length}）</div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {players.map(p=> {
-                const pid = pidOf(p);
-                const isHost = lobby.host === pid;
-                const isMe   = pid === mePid;
-                const ready  = !!p.ready;
-                const avatarUrl = `images/avatars/${avatarOf(p)}.webp`;
+          {/* CPU 人數選擇 */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium text-amber-200">
+                加入 CPU 人數
+              </label>
+              <span className="text-[11px] text-neutral-400">
+                之後會自動填進房間（暫定 0–3 人）
+              </span>
+            </div>
+            <div className="grid grid-cols-4 gap-2">
+              {[0, 1, 2, 3].map((n) => {
+                const active = cpuCount === n;
                 return (
-                  <div
-                    key={pid}
-                    className="flex items-center justify-between gap-3 rounded-xl border border-neutral-700/60 bg-black/30 px-3 py-2"
+                  <button
+                    key={n}
+                    type="button"
+                    onClick={() => setCpuCount(n)}
+                    className={
+                      "btn text-sm py-1.5 " +
+                      (active
+                        ? "bg-amber-400 text-black border-amber-300 shadow"
+                        : "")
+                    }
                   >
-                    <div className="flex items-center gap-3">
-                      <div className={"avatar "+(isHost?"is-active":"")}><img src={avatarUrl} alt=""/></div>
-                      <div>
-                        <div className="font-semibold leading-tight">{nameOf(p)}</div>
-                        <div className="text-xs text-neutral-400 flex items-center gap-2">
-                          {isHost
-                            ? <span className="px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-200 border border-amber-400/30">房主</span>
-                            : <span className="opacity-60">玩家</span>}
-                          {ready
-                            ? <span className="px-1.5 py-0.5 rounded bg-emerald-400/15 text-emerald-200 border border-emerald-400/30">已準備</span>
-                            : <span className="px-1.5 py-0.5 rounded bg-neutral-600/20 text-neutral-200 border border-neutral-600/40">未準備</span>}
-                        </div>
-                      </div>
-                    </div>
-                    {isMe && (
-                      <button className="btn" onClick={()=>toggleReady(!myReady)}>
-                        {myReady?"取消準備":"準備"}
-                      </button>
-                    )}
-                  </div>
+                    {n} 人
+                  </button>
                 );
               })}
             </div>
+            <div className="text-xs text-neutral-500">
+              * 目前先提供選項與記錄，之後會接上電腦玩家自動行動邏輯。
+            </div>
           </div>
 
-          <div className="text-xs text-neutral-400 mt-4">
-            此等待室已綁定後端快照；準備/開局皆透過 Socket.IO。
-          </div>
+          <button
+            type="button"
+            onClick={createRoom}
+            className="btn-primary btn w-full mt-2 py-2.5 text-base"
+          >
+            🏴‍☠️ 建立新房間
+          </button>
         </div>
-      );
-    }
+
+        {/* 右：加入房間 */}
+        <div className="space-y-4 border border-neutral-700/70 rounded-xl p-4 bg-black/10">
+          <div className="font-semibold">加入朋友的房間</div>
+          <div className="space-y-2">
+            <label className="text-sm text-neutral-300">輸入房號</label>
+            <input
+              className="w-full rounded-lg bg-neutral-900 border border-neutral-700 px-3 py-2 text-sm outline-none focus:border-amber-400"
+              placeholder="例如：AB2D9F"
+              value={joinCode}
+              onChange={(e) => setJoinCode(e.target.value)}
+              maxLength={8}
+            />
+            <div className="text-[11px] text-neutral-500">
+              * 房號由房主提供，大寫 / 小寫不影響。
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={tryJoin}
+            className="btn w-full mt-2 py-2.5 text-base"
+          >
+            🔑 加入房間
+          </button>
+        </div>
+      </div>
+
+      <div className="text-xs text-neutral-500 text-right">
+        建議 2–4 名真人玩家一同遊玩，CPU 數量之後可搭配調整。
+      </div>
+    </div>
+  );
+}
+
 
     function App(){
       const [stage,setStage]=useState("press");   // press → menu → profile → choice → waiting
