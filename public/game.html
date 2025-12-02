@@ -655,7 +655,7 @@ body::before{
 
 .draw-hint{
   position: absolute;
-  right: 150px;          /* 大約在牌堆左邊，你可自己微調 */
+  right: 150px;          /* 桌機你現在覺得 OK，就先維持 */
   top: 20%;
   transform: translateY(-50%);
   display: inline-flex;
@@ -677,15 +677,12 @@ body::before{
   pointer-events: none;          /* 不擋你點牌堆 */
   animation: drawHintPulse 1.6s ease-in-out infinite;
   z-index: 5;
+
+  /* 這兩行是關鍵：避免平板自動換行或亂調整字體大小 */
+  white-space: nowrap;
+  -webkit-text-size-adjust: 100%;
 }
 
-.draw-hint .emoji{
-  font-size: 16px;
-}
-
-.draw-hint .txt{
-  letter-spacing: .08em;
-}
 
 
 /* 尊重「減少動態」偏好：保留靜態描邊、停用動畫 */
