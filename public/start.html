@@ -670,6 +670,7 @@
       displayName: profile.playerName,
       avatar: profile.playerAvatar,
       secret: __lobby.me.secret,
+      cpuCount, // ← 新增：這一房預計加入幾個 CPU 玩家
     });
 
     // onEnter 第二個參數帶出 host / cpuCount 等資訊給 WaitingRoom 使用
@@ -824,6 +825,9 @@
       function nameOf(p){ return p.displayName ?? p.name ?? 'P'; }
       function avatarOf(p){ return p.avatar ?? 1; }
 
+  const cpuCount = lobby?.cpuCount ?? 0;  // 從伺服器拿到的 CPU 數量
+
+
       const amHost = lobby && (lobby.host === mePid);
       const canStart = players.length>=MIN_PLAYERS && players.every(p=> !!p.ready);
 
@@ -889,6 +893,17 @@
               )}
             </div>
           </div>
+
+    {cpuCount > 0 && (
+      <div className="mt-3 text-xs text-amber-200 flex items-center gap-2">
+        <span className="px-2 py-0.5 rounded-full border border-amber-400/40 bg-amber-500/10">
+          CPU 玩家：{cpuCount} 人
+        </span>
+        <span className="text-[11px] text-neutral-400">
+          開始遊戲後會自動加入對局
+        </span>
+      </div>
+    )}
 
           <div className="mt-5">
             <div className="text-sm text-neutral-300 mb-2">玩家（{players.length}）</div>
