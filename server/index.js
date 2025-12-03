@@ -109,7 +109,7 @@ function applyAndBroadcast(room, action, io){
   broadcastState(room);
 }
 
-// 判斷目前是否輪到 CPU
+// 判斷目前是否輪到 CPU（原本那個保留即可）
 function isCpuTurn(room){
   const st = room.state;
   if (!st) return false;
@@ -118,39 +118,59 @@ function isCpuTurn(room){
   return !!(p && p.isCPU && p.alive);
 }
 
-// 讓 CPU 一口氣把「抽牌 / 出牌」做完
-function runCpuLoop(room, io){
-  let guard = 0;
-  while (guard++ < 50 && isCpuTurn(room)) {
-    const st = room.state;
-    const meIdx = st.turnIndex;
-    const me = st.players[meIdx];
-    if (!me) break;
+// 讓 CPU 動作：抽牌 → 等 2 秒 → 出牌 → 等 4 秒 → 看下一個是不是 CPU
+function runCpuLoop(roomId){
+  const room = rooms.get(roomId);
+  if (!room) return;
 
+  const step = () => {
+    const roomNow = rooms.get(roomId);
+    if (!roomNow) return;
+
+    const st = roomNow.state;
+    if (!st) return;
+
+    const meIdx = st.turnIndex;
+    const me = st.players && st.players[meIdx];
+    if (!me || !me.isCPU || !me.alive) {
+      // 不是 CPU / 已死亡 → 不再自動動作
+      return;
+    }
+
+    // ① CPU 抽牌：馬上送 DRAW，前端會自己跑抽牌動畫（約 2 秒）
     if (st.turnStep === 'draw') {
-      // 抽牌（包含冰鬼檢查、娜美規則等都在 engine.js 裡處理）
-      applyAndBroadcast(room, {
+      applyAndBroadcast(roomNow, {
         type: 'DRAW',
         playerId: meIdx,
       }, io);
-      continue;
+
+      // 等 2 秒再來看要不要出牌
+      setTimeout(step, 2000);
+      return;
     }
 
+    // ② CPU 選牌出牌：用 pickCpuCardSmart 決定打 hand 還是 drawn
     if (st.turnStep === 'choose') {
-      // 用你寫好的 AI 選要打 hand 還是 drawn
-      const which = pickCpuCardSmart(st, meIdx);
-      applyAndBroadcast(room, {
+      const which = pickCpuCardSmart(st, meIdx);  // 'hand' 或 'drawn'
+      applyAndBroadcast(roomNow, {
         type: 'PLAY_CARD',
         playerId: meIdx,
         payload: { which },
       }, io);
-      continue;
+
+      // 出牌後前端會展示那張牌 4 秒 → 4 秒後再檢查下一位是不是 CPU
+      setTimeout(step, 4000);
+      return;
     }
 
-    // 其他階段（之後有做 CPU 的 PICK_TARGET / PICK_DIGIT 再往下擴充）
-    break;
-  }
+    // ③ 其他階段（選目標 / 擲硬幣 / 比牌等）暫時先不自動動作
+    //    之後如果有幫 CPU 做 PICK_TARGET / PICK_DIGIT，可以在這裡再往下寫。
+  };
+
+  // 立刻啟動一次檢查（第一步不用 delay）
+  step();
 }
+
 
 
 // ——— Socket.IO ———
@@ -393,8 +413,9 @@ if (myId == null) {
       room.phase = 'playing';
       broadcastState(room);
 
-   // ★ 如果一開始就輪到 CPU，直接讓 CPU 先抽牌/出牌
-      runCpuLoop(room, io);
+      // ★ 如果一開始就輪到 CPU，直接讓 CPU 先開始（含 2 秒 / 4 秒延遲）
+      runCpuLoop(roomId);
+
 
       // ⑧ 導頁到 game.html（只會導真人的頁面，CPU 沒 socket）
       for (const [sid] of room.sockets){
@@ -430,20 +451,22 @@ if (myId == null) {
       }
 
       // 正式進入下一局
-      const ns = nextRound(st);
+       const ns = nextRound(st);
       room.state = ns;
       broadcastState(room);
 
-      // ★ 如果下一局起始玩家是 CPU，一樣讓 CPU 先動
-      runCpuLoop(room, io);
+      // ★ 如果下一局起始玩家是 CPU，一樣讓 CPU 先動（含延遲）
+      runCpuLoop(roomId);
       return;
+
     }   // ★★★ 多這一行，把 NEXT_ROUND 的 if 收起來
 
     // 遊戲內其他行為 → 交給引擎（統一用 helper）
+     // 遊戲內其他行為 → 交給引擎（統一用 helper）
     applyAndBroadcast(room, action, io);
 
-    // ★ 玩家行動結束後，如果接下來輪到的是 CPU，就讓 CPU 自動連續行動
-    runCpuLoop(room, io);
+    // ★ 玩家行動結束後，如果接下來輪到的是 CPU，就讓 CPU 自動行動（含 2 秒 / 4 秒延遲）
+    runCpuLoop(roomId);
   });
 
 
