@@ -235,14 +235,14 @@ if (myId == null) {
       return;
     }
 
-       // 等待室：房主開始 → 重建 state、對齊 playerId、廣播 nav_game
+     // 等待室：房主開始 → 重建 state、對齊 playerId、廣播 nav_game
     if (type === 'START_GAME'){
       if (room.host !== playerId) {
         io.to(socket.id).emit('EMIT', { type:'toast', text:'只有房主可以開始遊戲' });
         return;
       }
 
-      // ① 以「socket 的加入順序」作為座位順序；同時帶出名稱/頭像/secret
+      // ① 以「socket 的加入順序」作為座位順序；同時帶出名稱/頭像/secret（真人）
       const entries = Array.from(room.sockets.entries()); // [ [sid, meta], ... ]
       const joined = entries.map(([sid, m]) => ({
         sid,
@@ -252,9 +252,9 @@ if (myId == null) {
         secret: m.secret,
       }));
 
-      const nHuman = joined.length;
-      const cpu = room.cpuCount || 0;
-      const total = nHuman + cpu;
+      const nHuman = joined.length;       // 真人數
+      const cpu = room.cpuCount || 0;     // 等待室設定的 CPU 數
+      const total = nHuman + cpu;         // 總人數 = 真人 + CPU
 
       // ★ 最低人數判斷：真人 + CPU 一起算
       if (total < 2){
@@ -265,17 +265,18 @@ if (myId == null) {
         return;
       }
 
-      // ② 必須全員 ready（用 oldId 檢查真人）
+      // ② 必須全員 ready（只檢查真人，CPU 視為一開始就準備好）
       const notReady = joined.filter(j => !room.lobbyReady[j.oldId]);
       if (notReady.length){
         io.to(socket.id).emit('EMIT', { type:'toast', text:'還有玩家尚未準備' });
         return;
       }
 
-      // ③ 依「真人人數」重建 state（CPU 之後會再補進去）
-      const st = createInitialState(nHuman);
+      // ③ 依「總人數」重建 state
+      const st = createInitialState(total);
+      st.cpuCount = cpu;   // 之後如果要給引擎用，可以參考這個欄位
 
-      // ④ 把名字/頭像/secret 寫進 players（真人）
+      // ④ 把名字/頭像/secret 寫進 players（真人部分：0 ~ nHuman-1）
       for (let i = 0; i < nHuman; i++){
         const j = joined[i];
         const p = st.players[i];
@@ -289,14 +290,35 @@ if (myId == null) {
         p.secret = j.secret;    // ← 把 secret 帶到新 state
       }
 
-      // ⑤ 重新對齊 socket 的 playerId（oldId → 新座位 i），並回傳新的 JOINED
+      // ④-2 把 CPU 玩家塞到 players 尾巴（nHuman ~ total-1）
+      for (let k = 0; k < cpu; k++){
+        const idx = nHuman + k;
+        const p = st.players[idx];
+
+        // 讓 CPU 名稱看起來好辨識，頭像暫時用 1~3 對應，之後前端要換成 cpu1.webp/cpu2.webp 再調整
+        const cpuIdx = (k % 3) + 1;        // 1,2,3 循環
+        const name = `CPU ${cpuIdx}`;
+
+        p.client = {
+          displayName: name,
+          avatar: cpuIdx,
+          pid: null,
+          isCpu: true,
+        };
+        p.displayName = name;
+        p.avatar = cpuIdx;
+        p.isCpu = true;
+        // p.secret 不需要，因為不會用 secret 重連
+      }
+
+      // ⑤ 重新對齊 socket 的 playerId（oldId → 新座位 i），並回傳新的 JOINED（只針對真人）
       const newSockets = new Map();
       for (let i = 0; i < joined.length; i++){
         const { sid, secret: sec } = joined[i];
         const oldMeta = room.sockets.get(sid) || {};
         newSockets.set(sid, {
           ...oldMeta,
-          playerId: i,
+          playerId: i,    // 新座位就是 i
           secret: sec,
         });
         io.to(sid).emit('JOINED', { playerId: i, secret: sec });
@@ -314,12 +336,13 @@ if (myId == null) {
       room.phase = 'playing';
       broadcastState(room);
 
-      // ⑧ 導頁到 game.html
+      // ⑧ 導頁到 game.html（只會導真人的頁面，CPU 沒 socket）
       for (const [sid] of room.sockets){
         io.to(sid).emit('EMIT', { type:'nav_game' });
       }
       return;
     }
+
 
 
     // 遊戲中：下一局（只有房主或本局勝利玩家可以按）
