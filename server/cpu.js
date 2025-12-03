@@ -100,17 +100,28 @@ const BASE_CARD_SCORE = {
 function cardBaseScore(cardId){
   return BASE_CARD_SCORE[cardId] ?? 10;
 }
-
 // 專門負責「抽完牌後，決定打 hand 還是 drawn」
+// st: 現在局面
+// meIdx: 我是第幾號玩家
 function pickCpuCardSmart(st, meIdx){
   const me = st.players[meIdx];
   const a = me.hand;
   const b = me.tempDraw;
 
+  // 兩種可能：
+  //  - 打原本手牌（hand），留下剛抽的（drawn）
+  //  - 打剛抽的（drawn），留下原本手牌（hand）
   const options = [
     { which: 'hand',  playId: a, keepId: b },
     { which: 'drawn', playId: b, keepId: a },
   ];
+
+  // ★ 需要靠「留下來那張牌」決鬥 / 比牌的卡
+  //   3：香吉士（以 keepId 的尾數去比）
+  //   8：魯夫（兩次決鬥 / 魚人島強化也是看 keepId 尾數）
+  //   10：凱多（普通版決鬥；強化版你之後要不要再細調都可以）
+  //   13：基拉強化決鬥（看 keepId 尾數）
+  const duelCards = [3, 8, 10, 13];
 
   function scoreOption(opt){
     const { which, playId } = opt;
@@ -125,13 +136,17 @@ function pickCpuCardSmart(st, meIdx){
 
     // === 規則 2：娜美 7 + 6/8 強制打 7（在不是凍結的情況下）===
     const has7 = (a === 7 || b === 7);
-    const has68 = [a,b].some(x => x === 6 || x === 8);
+    const has68 = [a, b].some(x => x === 6 || x === 8);
     if (!wasFrozen && has7 && has68 && playId !== 7) {
       return -99999;
     }
 
     // 先給一個「單純看自己手牌」的基礎分
     let s = 0;
+
+    const aliveCount = st.players.filter(p => p.alive).length;
+    const deckLeft   = st.deck?.length ?? 99;
+    const isDuelCard = duelCards.includes(playId);
 
     // 1) 卡片固有強度
     s += cardBaseScore(playId) * 5;
@@ -140,9 +155,6 @@ function pickCpuCardSmart(st, meIdx){
     s += tail(playId) * 4;
 
     // 3) 局面相關調整
-    const aliveCount = st.players.filter(p => p.alive).length;
-    const deckLeft   = st.deck?.length ?? 99;
-
     //   3-1) 人越少越偏向打「終結型」卡（索隆、魯夫、騙人布…）
     const finisherSet = new Set([1,5,7,8,10,12,16,17]);
     if (aliveCount <= 3 && finisherSet.has(playId)){
@@ -166,18 +178,42 @@ function pickCpuCardSmart(st, meIdx){
       s -= 20;
     }
 
-    // 4) 目前手牌留著的價值（保留更好的那張）
+    // 4) 目前手牌「留著」的價值（保留更好的那張）
     if (opt.keepId != null){
-      s += tail(opt.keepId) * 2;             // 留大尾數的牌比較好
-      s += cardBaseScore(opt.keepId) * 1.5;  // 留功能卡也不錯
+      s += tail(opt.keepId) * 2;            // 留大尾數的牌比較好
+      s += cardBaseScore(opt.keepId) * 1.5; // 留功能卡也不錯
     }
 
-    // 5) 避免打會卡死的牌（之後還沒寫 CPU 目標/猜數字邏輯時，可以暫時拉低）
-    //    例如還沒做 PICK_TARGET AI 前，你可以在這裡對 1,2,5,6,7,13 等扣一點分，
-    //    等你把「選目標 AI」也做好，再把這個扣分拿掉。
+    // 4.5) ★ 決鬥 / 比牌牌：要確保「留下來那張」夠大
+    if (isDuelCard && opt.keepId != null){
+      const kt = tail(opt.keepId);
+
+      // 尾數很大（7/8/9），拿來決鬥超香 → 大加分
+      if (kt >= 7){
+        // 7 → +25，8 → +50，9 → +75
+        s += (kt - 6) * 25;
+      }
+
+      // 尾數很小（0/1/2），等於是把自己送去決鬥 → 強烈扣分
+      if (kt <= 2){
+        // 2 → -40，1 → -80，0 → -120
+        s -= (3 - kt) * 40;
+      }
+    }
+
+    // 4.6) ★ 同時也偏好「把大尾數決鬥牌留下來」，不要丟掉
+    if (opt.keepId != null && duelCards.includes(opt.keepId)){
+      const kt = tail(opt.keepId);
+      if (kt >= 7){
+        // 這張本身就是很好的決鬥核心牌 → 再加一點分，讓 AI 比較願意把它留著
+        s += (kt - 6) * 15;
+      }
+    }
+
+    // 5) 避免打會卡死的牌（之後目標 / 猜數字 AI 完整後可以調回來）
     const needTarget = new Set([1,2,5,6,7,9,13,16,17,19]);
     if (needTarget.has(playId)){
-      s -= 5; // 之後可以調成 0 或改加分
+      s -= 5;
     }
 
     return s;
@@ -197,53 +233,79 @@ function pickCpuCardSmart(st, meIdx){
   return best.which; // 'hand' 或 'drawn'
 }
 
-// CPU 選「攻擊/偵查目標」
-//   目前會看：
-//   - 活著的玩家
-//   - 盡量避開保護 / 閃避（如果有 avoidProtected / avoidDodging）
-//   - 偷窺真實手牌，挑「尾數大、功能分高」的目標（所以會超強）
+
+// CPU 選「攻擊 / 偵查目標」
+// 共通規則：
+//   1. 只在「活著 & 不是自己」的人裡面選
+//   2. 一般情況：優先沒保護、沒閃避 → 再看金幣最多 → 同金幣隨機
+//   3. 基拉 13（for: 'killer'）：改成「優先有保護或有閃避」→ 再看金幣最多 → 同金幣隨機
 function pickCpuTargetSmart(st, meIdx, opts = {}){
   const me = st.players[meIdx];
   if (!me) return null;
 
+  // 1) 所有活著的敵人
   let enemies = st.players
     .map((p, i) => ({ p, i }))
     .filter(({ p, i }) => i !== meIdx && p && p.alive);
 
   if (!enemies.length) return null;
 
-  // 可選：盡量避免打到保護/閃避
-  if (opts.avoidProtected) {
-    const f = enemies.filter(({ p }) => !p.protected);
-    if (f.length) enemies = f;
-  }
-  if (opts.avoidDodging) {
-    const f = enemies.filter(({ p }) => !p.dodging);
-    if (f.length) enemies = f;
-  }
+  let candidates = enemies;
 
-  let bestIdx = enemies[0].i;
-  let bestScore = -Infinity;
-
-  for (const { p, i } of enemies) {
-    const cardId = p.hand;
-    let s = 0;
-
-    if (typeof cardId === 'number') {
-      // 功能越狠越想處理
-      s += cardBaseScore(cardId) * 3;
-      // 尾數越大，比牌越兇
-      s += tail(cardId) * 2;
+  // 2) avoidProtected / avoidDodging 只給「非 killer 模式」用
+  //    （因為基拉就是要專門去打有盾 / 有閃避的人）
+  if (opts.for !== 'killer') {
+    if (opts.avoidProtected) {
+      const f = candidates.filter(({ p }) => !p.protected);
+      if (f.length) candidates = f;
     }
-
-    if (p.protected) s -= 5;
-    if (p.dodging)   s -= 5;
-
-    bestIdx = (s > bestScore) ? (bestScore = s, i) : bestIdx;
+    if (opts.avoidDodging) {
+      const f = candidates.filter(({ p }) => !p.dodging);
+      if (f.length) candidates = f;
+    }
   }
 
-  return bestIdx;
+  if (!candidates.length) return null;
+
+  // 3) 基礎模式 / killer 模式，決定「優先族群」
+
+  if (opts.for === 'killer') {
+    // ★ 基拉 13：優先「有保護 or 有閃避」的人
+    let shielded = candidates.filter(({ p }) => p.protected || p.dodging);
+    if (shielded.length) {
+      candidates = shielded;
+    }
+    // 如果場上沒有人有盾，就退回原本 candidates，不特別挑
+  } else {
+    // 一般情況：優先「沒保護 & 沒閃避」
+    let unshielded = candidates.filter(({ p }) => !p.protected && !p.dodging);
+    if (unshielded.length) {
+      candidates = unshielded;
+    }
+    // 如果大家都有盾，就照 candidates 原樣（沒辦法只能硬打）
+  }
+
+  if (!candidates.length) return null;
+
+  // 4) 在候選人裡面找「金幣最多」
+  let maxGold = -Infinity;
+  for (const { p } of candidates) {
+    const g = typeof p.gold === 'number' ? p.gold : 0;
+    if (g > maxGold) maxGold = g;
+  }
+
+  // 5) 把金幣等於 maxGold 的全部挑出來
+  const richest = candidates.filter(({ p }) => {
+    const g = typeof p.gold === 'number' ? p.gold : 0;
+    return g === maxGold;
+  });
+
+  // 6) 如果有很多個金幣一樣多，就在這幾個裡面隨機選一個
+  const pick = richest[Math.floor(Math.random() * richest.length)];
+  return pick ? pick.i : null;
 }
+
+
 
 // CPU 猜「騙人布」的尾數：
 // - 只用公開資訊 + 自己的牌：COUNTS / 棄牌堆 / 自己手牌 & 暫抽
