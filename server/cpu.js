@@ -183,7 +183,81 @@ function pickCpuCardSmart(st, meIdx){
   return best.which; // 'hand' 或 'drawn'
 }
 
+// CPU 選「攻擊/偵查目標」
+//   目前會看：
+//   - 活著的玩家
+//   - 盡量避開保護 / 閃避（如果有 avoidProtected / avoidDodging）
+//   - 偷窺真實手牌，挑「尾數大、功能分高」的目標（所以會超強）
+function pickCpuTargetSmart(st, meIdx, opts = {}){
+  const me = st.players[meIdx];
+  if (!me) return null;
+
+  let enemies = st.players
+    .map((p, i) => ({ p, i }))
+    .filter(({ p, i }) => i !== meIdx && p && p.alive);
+
+  if (!enemies.length) return null;
+
+  // 可選：盡量避免打到保護/閃避
+  if (opts.avoidProtected) {
+    const f = enemies.filter(({ p }) => !p.protected);
+    if (f.length) enemies = f;
+  }
+  if (opts.avoidDodging) {
+    const f = enemies.filter(({ p }) => !p.dodging);
+    if (f.length) enemies = f;
+  }
+
+  let bestIdx = enemies[0].i;
+  let bestScore = -Infinity;
+
+  for (const { p, i } of enemies) {
+    const cardId = p.hand;
+    let s = 0;
+
+    if (typeof cardId === 'number') {
+      // 功能越狠越想處理
+      s += cardBaseScore(cardId) * 3;
+      // 尾數越大，比牌越兇
+      s += tail(cardId) * 2;
+    }
+
+    if (p.protected) s -= 5;
+    if (p.dodging)   s -= 5;
+
+    bestIdx = (s > bestScore) ? (bestScore = s, i) : bestIdx;
+  }
+
+  return bestIdx;
+}
+
+// CPU 猜「騙人布」的尾數
+//   目前是直接偷看對方真實手牌：
+//   - 有牌就猜那張的尾數（尾數 1 改猜 2，因為 1 不能猜）
+//   - 沒牌就保底猜 2
+function pickCpuDigitSmart(st, meIdx, targetIdx){
+  const t = st.players[targetIdx];
+  if (!t) return 2;
+
+  const card = t.hand;
+  if (typeof card === 'number') {
+    const d = tail(card);
+    if (d === 1) return 2;
+    return d;
+  }
+  return 2;
+}
+
+// 原本的：依牌局評分（你現有的邏輯）
+function cardBaseScore(cardId){
+  return BASE_CARD_SCORE[cardId] ?? 10;
+}
+
+
 module.exports = {
   scoreStateForMe,
   pickCpuCardSmart,
+  pickCpuTargetSmart,
+  pickCpuDigitSmart,
 };
+
