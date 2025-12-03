@@ -642,6 +642,7 @@ function nextRound(state){
     if (oldP.displayName) p.displayName = oldP.displayName;
     if (oldP.avatar != null) p.avatar = oldP.avatar;
     if (!p.avatar && oldP.client?.avatar != null) p.avatar = oldP.client.avatar;
+    if (oldP.isCPU) p.isCPU = true;   // ★ 保留 CPU 標記
   }
 
   // 發新牌
