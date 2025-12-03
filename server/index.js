@@ -145,17 +145,17 @@ const PREV_CARD_DELAY = {
   0:  { normal: 4000,  enhanced: 10000 },
   1:  { normal: 4000,  enhanced: 4000  },
   2:  { normal: 4000,  enhanced: 10000 },
-  3:  { normal: 8000,  enhanced: 8000  },
+  3:  { normal: 10000,  enhanced: 10000  },
   4:  { normal: 4000,  enhanced: 10000 },
   5:  { normal: 4000,  enhanced: 4000  },
   6:  { normal: 4000,  enhanced: 4000  },
   7:  { normal: 4000,  enhanced: 4000  },
-  8:  { normal: 8000,  enhanced: 8000  },
+  8:  { normal: 10000,  enhanced: 10000  },
   9:  { normal: 4000,  enhanced: 14000 },
-  10: { normal: 8000,  enhanced: 8000  },
+  10: { normal: 10000,  enhanced: 8000  },
   11: { normal: 4000,  enhanced: 13000 },
   12: { normal: 8000,  enhanced: 13000 },
-  13: { normal: 4000,  enhanced: 4000  },
+  13: { normal: 4000,  enhanced: 10000  },
   14: { normal: 8000,  enhanced: 8000  },
   15: { normal: 4000,  enhanced: 4000  },
   16: { normal: 4000,  enhanced: 15000 },
@@ -612,6 +612,18 @@ function runCpuLoop(roomId){
 
 
     if (st.turnStep === 'choose') {
+      // 抽完牌 → 先等 4 秒，再真正出牌
+      // 用一個旗標避免每次進來都在等
+      if (!st._cpuWaitedAfterDraw) {
+        st._cpuWaitedAfterDraw = true;
+        // 第一次進到 choose：只等 4 秒，不出牌
+        delay(4000);
+        return;
+      }
+
+      // 第二次進到 choose：已經等過，再真正出牌
+      st._cpuWaitedAfterDraw = false;
+
       const which = pickCpuCardSmart(st, meIdx); // 'hand' 或 'drawn'
 
       applyAndBroadcast(roomNow, {
@@ -620,9 +632,11 @@ function runCpuLoop(roomId){
         payload: { which },
       }, io);
 
-      delay(4000);   // 出牌展示 4 秒
+      // 出牌後的展示時間，維持原本 4 秒
+      delay(4000);
       return;
     }
+
 
     // 其他 turnStep（例如結算中 / 換人中） → 不再自動動作
   };
