@@ -161,7 +161,7 @@ const PREV_CARD_DELAY = {
   16: { normal: 4000,  enhanced: 15000 },
   17: { normal: 4000,  enhanced: 4000  },
   18: { normal: 4000,  enhanced: 4000  },
-  19: { normal: 4000,  enhanced: 4000  },
+  19: { normal: 4000,  enhanced: 20000  },
 };
 
 // 判斷一張卡現在是不是在自己的強化場地上
