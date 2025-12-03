@@ -235,7 +235,7 @@ if (myId == null) {
       return;
     }
 
-    // 等待室：房主開始 → 重建 state、對齊 playerId、廣播 nav_game
+       // 等待室：房主開始 → 重建 state、對齊 playerId、廣播 nav_game
     if (type === 'START_GAME'){
       if (room.host !== playerId) {
         io.to(socket.id).emit('EMIT', { type:'toast', text:'只有房主可以開始遊戲' });
@@ -251,24 +251,32 @@ if (myId == null) {
         avatar: m.avatar || 1,
         secret: m.secret,
       }));
-      const n = joined.length;
-      if (n < 2){
-        io.to(socket.id).emit('EMIT', { type:'toast', text:'至少需要 2 名玩家才能開始' });
+
+      const nHuman = joined.length;
+      const cpu = room.cpuCount || 0;
+      const total = nHuman + cpu;
+
+      // ★ 最低人數判斷：真人 + CPU 一起算
+      if (total < 2){
+        io.to(socket.id).emit('EMIT', {
+          type:'toast',
+          text:'至少需要 2 名玩家（包含 CPU）才能開始'
+        });
         return;
       }
 
-      // ② 必須全員 ready（用 oldId 檢查）
+      // ② 必須全員 ready（用 oldId 檢查真人）
       const notReady = joined.filter(j => !room.lobbyReady[j.oldId]);
       if (notReady.length){
         io.to(socket.id).emit('EMIT', { type:'toast', text:'還有玩家尚未準備' });
         return;
       }
 
-      // ③ 依人數重建 state
-      const st = createInitialState(n);
+      // ③ 依「真人人數」重建 state（CPU 之後會再補進去）
+      const st = createInitialState(nHuman);
 
-      // ④ 把名字/頭像/secret 寫進 players
-      for (let i = 0; i < n; i++){
+      // ④ 把名字/頭像/secret 寫進 players（真人）
+      for (let i = 0; i < nHuman; i++){
         const j = joined[i];
         const p = st.players[i];
         p.client = {
@@ -312,6 +320,7 @@ if (myId == null) {
       }
       return;
     }
+
 
     // 遊戲中：下一局（只有房主或本局勝利玩家可以按）
     if (type === 'NEXT_ROUND') {
