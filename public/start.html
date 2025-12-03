@@ -828,7 +828,10 @@ function WaitingRoom({roomId, profile, onLeave}){
   const cpuCount = lobby?.cpuCount ?? 0;  // 從伺服器拿到的 CPU 數量
 
   const amHost = lobby && (lobby.host === mePid);
-  const canStart = players.length>=MIN_PLAYERS && players.every(p=> !!p.ready);
+  const canStart =
+  (players.length + cpuCount) >= MIN_PLAYERS &&  // 真人 + CPU 要 ≥ 最低人數
+  players.every(p => !!p.ready);                // 真人全部按準備
+
 
   function copyId(){
     if(!lobby?.roomId) return;
