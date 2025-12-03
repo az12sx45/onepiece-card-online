@@ -16,6 +16,24 @@ const TOTAL_TAIL_COUNTS = (() => {
   return arr;
 })();
 
+// === 最終決鬥用的「點數」（跟 showdown 的 showVal 一樣） ===
+function finalValue(id) {
+  return (id < 10) ? id : (Math.floor(id / 10) + (id % 10));
+}
+
+// 根據 COUNTS 算每個「final 點數」一開始有幾張牌
+const TOTAL_FINALVAL_COUNTS = (() => {
+  const maxVal = 20; // 理論上只會到 10，多留一點空間沒關係
+  const arr = Array(maxVal).fill(0);
+  for (const [idStr, cnt] of Object.entries(COUNTS)) {
+    const id = Number(idStr);
+    const v = finalValue(id);
+    if (v >= 0 && v < maxVal) {
+      arr[v] += cnt;
+    }
+  }
+  return arr;
+})();
 
 // 深拷貝 state，避免影響真實對局
 function cloneState(st){
@@ -78,6 +96,45 @@ function isEnhancedNowCpu(st, cardId) {
   if (!card || !card.venue) return false;
   if (!Array.isArray(st.venues)) return false;
   return st.venues.some(v => v && v.name === card.venue);
+}
+
+function isEnhancedNowCpu(st, cardId) {
+  const card = cardById(cardId);
+  if (!card || !card.venue) return false;
+  if (!Array.isArray(st.venues)) return false;
+  return st.venues.some(v => v && v.name === card.venue);
+}
+
+
+// === 雙卡出牌偏好表（由 Excel 匯入）===
+// index 0~19  = 一般 0~19
+// index 20~39 = 強化 0~19
+// 之後你可以把 cpu_play_matrix.xlsx 轉成 JSON，覆蓋掉 PAIR_MATRIX
+const PAIR_MATRIX = Array(40).fill(null).map(() => Array(40).fill(null));
+
+// 將「卡片 + 是否強化」轉成 0~39 的 index
+function encodeCardStateIndex(st, cardId) {
+  if (cardId == null) return null;
+  const enhanced = isEnhancedNowCpu(st, cardId);
+  return cardId + (enhanced ? 20 : 0);
+}
+
+// 讀出「手上是 (playId, keepId)」時，選擇打出 playId 的機率（0~100）
+// - 沒填的格子（undefined / null）一律當作 50% 看待
+function getPairMatrixProb(st, playId, keepId) {
+  const i = encodeCardStateIndex(st, playId);
+  const j = encodeCardStateIndex(st, keepId);
+  if (i == null || j == null) return 50;
+
+  const row = PAIR_MATRIX[i];
+  if (!row) return 50;
+
+  const v = row[j];
+  if (typeof v === "number" && !Number.isNaN(v)) {
+    // 保險一下 clamp 到 0~100
+    return Math.max(0, Math.min(100, v));
+  }
+  return 50;
 }
 
 
@@ -317,6 +374,33 @@ function pickCpuCardSmart(st, meIdx){
       }
     }
 
+    // 4.7) 雙卡出牌機率表（Excel）
+    //      - 只對「非決鬥牌」生效
+    //      - 雙卡狀況才看（opt.keepId 不為 null）
+    if (!isDuelCard && opt.keepId != null) {
+      const p = getPairMatrixProb(st, playId, opt.keepId); // 0~100，沒填＝50
+      const delta = p - 50;   // -50~+50
+      s += delta * 2;         // 權重可以之後再調整，現在大約是「每多 10% 多 20 分」
+    }
+
+    // 4.8) 紅髮 18：牌堆已經 ≤ HOT（預設 14）時，估算直接 final 的勝率
+    if (playId === 18 && opt.keepId != null) {
+      const hot = st.HOT ?? 14;
+      if (deckLeft <= hot) {
+        const winProb = estimateShanksWinProb(st, meIdx, opt.keepId); // 0~1
+
+        // ★★ 重點：勝率 >= 80% 就一定打出 ★★
+        if (winProb >= 0.8) {
+          // 給一個超大加分，保證這個選項優先
+          s += 10000;
+        } else {
+          // 沒到 80% 時，也用勝率稍微調整一下評分
+          s += Math.round(winProb * 100); // 0~100，小影響
+        }
+      }
+    }
+
+
     // 5) 避免打會卡死的牌（之後目標 / 猜數字 AI 完整後可以調回來）
     const needTarget = new Set([1,2,5,6,7,9,13,16,17,19]);
     if (needTarget.has(playId)){
@@ -496,6 +580,69 @@ function pickCpuDigitSmart(st, meIdx, targetIdx){
 
   return bestDigit;
 }
+
+// 給紅髮 18 用：估計「現在打出 18 直接 final」的勝率（回傳 0~1）
+function estimateShanksWinProb(st, meIdx, keepId) {
+  const me = st.players[meIdx];
+  if (!me || !me.alive) return 0;
+
+  // 場上還活著的敵人數
+  const enemies = st.players.filter((p, i) => p && p.alive && i !== meIdx);
+  const nEnemies = enemies.length;
+  if (!nEnemies) return 1;
+
+  // 在奧羅傑克森號上，紅髮開 HOT 會 +1 點
+  const venueActive = Array.isArray(st.venues)
+    && st.venues.some(v => v && v.name === '奧羅傑克森號');
+
+  let myVal = finalValue(keepId);
+  if (venueActive) myVal += 1;
+
+  // 1) 估計剩下的「final 點數」分布（只扣棄牌堆 + 自己手牌）
+  const remaining = TOTAL_FINALVAL_COUNTS.slice(); // 複製一份
+
+  const sub = (id) => {
+    if (typeof id !== "number") return;
+    const v = finalValue(id);
+    if (v >= 0 && v < remaining.length) {
+      remaining[v] = Math.max(0, remaining[v] - 1);
+    }
+  };
+
+  // 1-1) 扣棄牌堆
+  (st.discard || []).forEach(x => {
+    const id = (typeof x === "number")
+      ? x
+      : (x && typeof x.id === "number" ? x.id : null);
+    sub(id);
+  });
+
+  // 1-2) 扣自己已知的牌（手牌 + 暫抽）
+  if (me) {
+    sub(me.hand);
+    sub(me.tempDraw);
+  }
+
+  // 1-3) 避免變成負數
+  for (let i = 0; i < remaining.length; i++) {
+    if (remaining[i] < 0) remaining[i] = 0;
+  }
+
+  const totalRem = remaining.reduce((a, b) => a + b, 0);
+  if (totalRem <= 0) return 0.5; // 理論上很少發生，當作五五開
+
+  // 2) 一個敵人的牌比我小的機率
+  let less = 0;
+  for (let v = 0; v < myVal; v++) {
+    less += remaining[v];
+  }
+  const pSingle = less / totalRem;
+
+  // 3) 假設每個敵人獨立抽（近似）：全部都被我贏過的機率
+  const pAll = Math.pow(pSingle, nEnemies);
+  return pAll;
+}
+
 
 module.exports = {
   scoreStateForMe,
