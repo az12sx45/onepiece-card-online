@@ -952,7 +952,6 @@ function WaitingRoom({roomId, profile, onLeave}){
             })}
           </div>
         </div>
-
         {/* CPU 玩家區 */}
         {cpuCount > 0 && (
           <div>
@@ -963,7 +962,11 @@ function WaitingRoom({roomId, profile, onLeave}){
               {Array.from({length: cpuCount}).map((_, idx) => {
                 const cpuIdx = (idx % 3) + 1; // 1~3 對應 cpu1~cpu3
                 const avatarUrl = `images/avatars/cpu${cpuIdx}.webp`;
-                const name = `CPU ${idx + 1}`;
+
+                // ★ 新增：CPU 顯示名稱表
+                const cpuNames = ["克洛克達爾", "鷹眼密佛格", "小丑巴其"];
+                const name = cpuNames[idx] || `CPU ${idx + 1}`;
+
                 return (
                   <div
                     key={`cpu-${idx}`}
@@ -992,6 +995,7 @@ function WaitingRoom({roomId, profile, onLeave}){
             </div>
           </div>
         )}
+
       </div>
 
       <div className="text-xs text-neutral-400 mt-4">
