@@ -583,20 +583,32 @@ function runCpuLoop(roomId){
 
     // ========= ② 沒有 pending：正常「抽牌 → 出牌」 =========
     if (st.turnStep === 'draw') {
-      // 根據「上一張打出的牌」決定 CPU 這回合抽牌前要等多久
+      // 這個延遲是「從輪到他、進到這個分支開始算」
+      // 會依照上一張打出的牌 + 是否強化，從 PREV_CARD_DELAY 取出毫秒數
       const delayMs = getDelayForPrevCard(st);
 
-      // 這個 delay 是從「輪到他、進來 runCpuLoop 並判斷是 draw」開始算，
-      // 就算上一家也是 CPU，一樣用同一張最後打出的牌去套表
+      // 為了「抽牌前等」，我們用 state 上的一個旗標來避免重複等
+      if (!st._cpuWaitedBeforeDraw) {
+        st._cpuWaitedBeforeDraw = true;
+        // 第一次進來：只等，不抽牌
+        delay(delayMs || 0);
+        return;
+      }
+
+      // 第二次進來：已經等過了，真正執行抽牌
+      st._cpuWaitedBeforeDraw = false;
+
       applyAndBroadcast(roomNow, {
         type: 'DRAW',
         playerId: meIdx,
       }, io);
 
-      // 用表格的數字當這回合 CPU 抽完牌後，到「出牌 / 下一步」的等待時間
-      delay(delayMs || 0);
+      // 抽牌後不再額外等（要等的時間都已經「抽牌前」用掉了）
+      // 如果你想抽完牌停 0.5 秒再出牌，可以改成 delay(500);
+      delay(0);
       return;
     }
+
 
 
     if (st.turnStep === 'choose') {
