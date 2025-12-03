@@ -311,27 +311,6 @@ if (myId == null) {
       }
 
 
-      // ④-2 把 CPU 玩家塞到 players 尾巴（nHuman ~ total-1）
-      for (let k = 0; k < cpu; k++){
-        const idx = nHuman + k;
-        const p = st.players[idx];
-
-        // 讓 CPU 名稱看起來好辨識，頭像暫時用 1~3 對應，之後前端要換成 cpu1.webp/cpu2.webp 再調整
-        const cpuIdx = (k % 3) + 1;        // 1,2,3 循環
-        const name = `CPU ${cpuIdx}`;
-
-        p.client = {
-          displayName: name,
-          avatar: cpuIdx,
-          pid: null,
-          isCpu: true,
-        };
-        p.displayName = name;
-        p.avatar = cpuIdx;
-        p.isCpu = true;
-        // p.secret 不需要，因為不會用 secret 重連
-      }
-
       // ⑤ 重新對齊 socket 的 playerId（oldId → 新座位 i），並回傳新的 JOINED（只針對真人）
       const newSockets = new Map();
       for (let i = 0; i < joined.length; i++){
