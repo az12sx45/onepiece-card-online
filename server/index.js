@@ -263,15 +263,6 @@ if (myId == null) {
       avatar: Number(avatar) || 1,
     });
 
-
-    // 建 socket meta（之後驗章 / START_GAME 會用）
-    room.sockets.set(socket.id, {
-      playerId: myId,
-      secret: sec,
-      displayName: (displayName || "").trim() || `P${myId + 1}`,
-      avatar: Number(avatar) || 1,
-    });
-
     joinedRoom = roomId;
     socket.join(roomId);
     socket.emit("JOINED", { playerId: myId, secret: sec });
@@ -415,7 +406,7 @@ if (myId == null) {
 
 
     // 遊戲中：下一局（只有房主或本局勝利玩家可以按）
-    if (type === 'NEXT_ROUND') {
+     if (type === 'NEXT_ROUND') {
       const st = room.state;
 
       // 先確認這一局真的結束了
@@ -437,6 +428,7 @@ if (myId == null) {
         socket.emit('EMIT', { type: 'toast', text: '只有房主或本局勝者可以開始下一局' });
         return;
       }
+
       // 正式進入下一局
       const ns = nextRound(st);
       room.state = ns;
@@ -445,7 +437,7 @@ if (myId == null) {
       // ★ 如果下一局起始玩家是 CPU，一樣讓 CPU 先動
       runCpuLoop(room, io);
       return;
-
+    }   // ★★★ 多這一行，把 NEXT_ROUND 的 if 收起來
 
     // 遊戲內其他行為 → 交給引擎（統一用 helper）
     applyAndBroadcast(room, action, io);
@@ -453,6 +445,7 @@ if (myId == null) {
     // ★ 玩家行動結束後，如果接下來輪到的是 CPU，就讓 CPU 自動連續行動
     runCpuLoop(room, io);
   });
+
 
 
 
