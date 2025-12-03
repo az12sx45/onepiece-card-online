@@ -8,8 +8,12 @@ const {
   applyAction,
   getVisibleState,
   isRoundEnded,
-  nextRound
+  nextRound,
+  _util,   // 新增
 } = require("./engine.js");
+
+const { cardById } = _util;  // 新增：用來看卡片資訊（場地名）
+
 
 const {
   pickCpuCardSmart,
@@ -122,6 +126,86 @@ function isCpuTurn(room){
   const p = st.players && st.players[idx];
   return !!(p && p.isCPU && p.alive);
 }
+
+// ================= CPU 抽牌延遲設定（依上一張牌，一般 / 強化） =================
+
+// 你給的表格（我已經幫你換算成毫秒）
+//
+// 一般：
+// 0-4秒,1-4秒,2-4秒,3-8秒,4-4秒,5-4秒,6-4秒,7-4秒,
+// 8-8秒,9-4秒,10-8秒,11-4秒,12-8秒,13-4秒,14-8秒,
+// 15-4秒,16-4秒,17-4秒,18-4秒,19-4秒
+//
+// 強化：
+// 0-10秒,1-4秒,2-10秒,3-8秒,4-10秒,5-4秒,6-4秒,7-4秒,
+// 8-8秒,9-14秒,10-8秒,11-13秒,12-13秒,13-4秒,14-8秒,
+// 15-4秒,16-15秒,17-4秒,18-4秒,19-4秒
+
+const PREV_CARD_DELAY = {
+  0:  { normal: 4000,  enhanced: 10000 },
+  1:  { normal: 4000,  enhanced: 4000  },
+  2:  { normal: 4000,  enhanced: 10000 },
+  3:  { normal: 8000,  enhanced: 8000  },
+  4:  { normal: 4000,  enhanced: 10000 },
+  5:  { normal: 4000,  enhanced: 4000  },
+  6:  { normal: 4000,  enhanced: 4000  },
+  7:  { normal: 4000,  enhanced: 4000  },
+  8:  { normal: 8000,  enhanced: 8000  },
+  9:  { normal: 4000,  enhanced: 14000 },
+  10: { normal: 8000,  enhanced: 8000  },
+  11: { normal: 4000,  enhanced: 13000 },
+  12: { normal: 8000,  enhanced: 13000 },
+  13: { normal: 4000,  enhanced: 4000  },
+  14: { normal: 8000,  enhanced: 8000  },
+  15: { normal: 4000,  enhanced: 4000  },
+  16: { normal: 4000,  enhanced: 15000 },
+  17: { normal: 4000,  enhanced: 4000  },
+  18: { normal: 4000,  enhanced: 4000  },
+  19: { normal: 4000,  enhanced: 4000  },
+};
+
+// 判斷一張卡現在是不是在自己的強化場地上
+function isEnhancedNowServer(st, cardId) {
+  if (cardId == null) return false;
+  const card = cardById(cardId);
+  if (!card || !card.venue) return false;
+  if (!Array.isArray(st.venues)) return false;
+  return st.venues.some(v => v && v.name === card.venue);
+}
+
+// 從棄牌堆拿到「最後一張被打出去的卡 id」
+function getLastPlayedCardId(st) {
+  const disc = st.discard;
+  if (!Array.isArray(disc) || disc.length === 0) return null;
+
+  // 從後面往前找第一筆有 id 的
+  for (let i = disc.length - 1; i >= 0; i--) {
+    const d = disc[i];
+    if (typeof d === "number") return d;
+    if (d && typeof d.id === "number") return d.id;
+  }
+  return null;
+}
+
+// 根據上一張牌，算出 CPU 抽牌前要延遲多久（毫秒）
+// 沒有設定的卡 → 回傳 0
+function getDelayForPrevCard(st) {
+  const lastId = getLastPlayedCardId(st);
+  if (lastId == null) return 0;
+
+  const cfg = PREV_CARD_DELAY[lastId];
+  if (!cfg) return 0;
+
+  const enhanced = isEnhancedNowServer(st, lastId);
+  if (enhanced && typeof cfg.enhanced === "number") {
+    return cfg.enhanced;
+  }
+  if (!enhanced && typeof cfg.normal === "number") {
+    return cfg.normal;
+  }
+  return 0;
+}
+
 
 // 讓 CPU 自動行動：
 // - 抽牌 → 等 2 秒
@@ -499,14 +583,21 @@ function runCpuLoop(roomId){
 
     // ========= ② 沒有 pending：正常「抽牌 → 出牌」 =========
     if (st.turnStep === 'draw') {
+      // 根據「上一張打出的牌」決定 CPU 這回合抽牌前要等多久
+      const delayMs = getDelayForPrevCard(st);
+
+      // 這個 delay 是從「輪到他、進來 runCpuLoop 並判斷是 draw」開始算，
+      // 就算上一家也是 CPU，一樣用同一張最後打出的牌去套表
       applyAndBroadcast(roomNow, {
         type: 'DRAW',
         playerId: meIdx,
       }, io);
 
-      delay(2000);   // 抽牌動畫 2 秒
+      // 用表格的數字當這回合 CPU 抽完牌後，到「出牌 / 下一步」的等待時間
+      delay(delayMs || 0);
       return;
     }
+
 
     if (st.turnStep === 'choose') {
       const which = pickCpuCardSmart(st, meIdx); // 'hand' 或 'drawn'
