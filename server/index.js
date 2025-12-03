@@ -11,6 +11,8 @@ const {
   nextRound
 } = require("./engine.js");
 
+const { pickCpuCardSmart } = require("./cpu.js");
+
 const app = express();
 app.use(express.static(path.join(__dirname, "..", "public")));
 app.get("/", (req, res) => {
@@ -86,6 +88,70 @@ const payload = {
     io.to(sid).emit('EMIT', { type:'lobby', lobby: payload });
   }
 }
+
+// ---------- 統一套用 applyAction + 廣播 EMIT / STATE ----------
+function applyAndBroadcast(room, action, io){
+  const res = applyAction(room.state, action);
+  room.state = res.state;
+
+  // 1) 先把 EMIT 事件照舊丟給前端
+  for (const e of (res.emits || [])) {
+    if (e.to === "all") {
+      for (const [sid] of room.sockets) io.to(sid).emit("EMIT", e);
+    } else {
+      for (const [sid, meta] of room.sockets) {
+        if (meta.playerId === e.to) io.to(sid).emit("EMIT", e);
+      }
+    }
+  }
+
+  // 2) 再廣播一次 STATE
+  broadcastState(room);
+}
+
+// 判斷目前是否輪到 CPU
+function isCpuTurn(room){
+  const st = room.state;
+  if (!st) return false;
+  const idx = st.turnIndex;
+  const p = st.players && st.players[idx];
+  return !!(p && p.isCPU && p.alive);
+}
+
+// 讓 CPU 一口氣把「抽牌 / 出牌」做完
+function runCpuLoop(room, io){
+  let guard = 0;
+  while (guard++ < 50 && isCpuTurn(room)) {
+    const st = room.state;
+    const meIdx = st.turnIndex;
+    const me = st.players[meIdx];
+    if (!me) break;
+
+    if (st.turnStep === 'draw') {
+      // 抽牌（包含冰鬼檢查、娜美規則等都在 engine.js 裡處理）
+      applyAndBroadcast(room, {
+        type: 'DRAW',
+        playerId: meIdx,
+      }, io);
+      continue;
+    }
+
+    if (st.turnStep === 'choose') {
+      // 用你寫好的 AI 選要打 hand 還是 drawn
+      const which = pickCpuCardSmart(st, meIdx);
+      applyAndBroadcast(room, {
+        type: 'PLAY_CARD',
+        playerId: meIdx,
+        payload: { which },
+      }, io);
+      continue;
+    }
+
+    // 其他階段（之後有做 CPU 的 PICK_TARGET / PICK_DIGIT 再往下擴充）
+    break;
+  }
+}
+
 
 // ——— Socket.IO ———
 io.on("connection", (socket) => {
@@ -336,6 +402,9 @@ if (myId == null) {
       room.phase = 'playing';
       broadcastState(room);
 
+   // ★ 如果一開始就輪到 CPU，直接讓 CPU 先抽牌/出牌
+      runCpuLoop(room, io);
+
       // ⑧ 導頁到 game.html（只會導真人的頁面，CPU 沒 socket）
       for (const [sid] of room.sockets){
         io.to(sid).emit('EMIT', { type:'nav_game' });
@@ -368,32 +437,23 @@ if (myId == null) {
         socket.emit('EMIT', { type: 'toast', text: '只有房主或本局勝者可以開始下一局' });
         return;
       }
-
       // 正式進入下一局
       const ns = nextRound(st);
       room.state = ns;
       broadcastState(room);
+
+      // ★ 如果下一局起始玩家是 CPU，一樣讓 CPU 先動
+      runCpuLoop(room, io);
       return;
-    }
 
-    // 遊戲內其他行為 → 交給引擎
-    const res = applyAction(room.state, action);
-    room.state = res.state;
 
-    // EMIT 單播/群播
-    for (const e of (res.emits || [])) {
-      if (e.to === "all") {
-        for (const [sid] of room.sockets) io.to(sid).emit("EMIT", e);
-      } else {
-        for (const [sid, meta] of room.sockets) {
-          if (meta.playerId === e.to) io.to(sid).emit("EMIT", e);
-        }
-      }
-    }
+    // 遊戲內其他行為 → 交給引擎（統一用 helper）
+    applyAndBroadcast(room, action, io);
 
-    // 廣播 STATE
-    broadcastState(room);
+    // ★ 玩家行動結束後，如果接下來輪到的是 CPU，就讓 CPU 自動連續行動
+    runCpuLoop(room, io);
   });
+
 
 
   socket.on("disconnect", () => {
