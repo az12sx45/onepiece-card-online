@@ -141,6 +141,64 @@ function runCpuLoop(roomId){
     const delay = (ms) => setTimeout(step, ms);
     const pending = st.pending || null;
 
+  // ---------- 先處理「不是自己回合」但輪到 CPU 回應的互動 ----------
+    if (pending) {
+      // 奎因：輪到 target 擲硬幣（QUEEN_COIN）
+      if (pending.action === 'queen') {
+        const tgt = pending.target;
+        const victim = st.players[tgt];
+        if (victim && victim.isCPU && victim.alive) {
+          applyAndBroadcast(roomNow, {
+            type: 'QUEEN_COIN',
+            playerId: tgt,
+          }, io);
+
+          delay(1500);  // 硬幣動畫 & 文字稍微停一下
+          return;
+        }
+      }
+
+      // 大媽強化：被點名的玩家決定要不要交保護費（BIGMOM_CHOICE）
+      if (pending.action === 'bigmom-pay') {
+        const tgt = pending.target;
+        const victim = st.players[tgt];
+        if (victim && victim.isCPU && victim.alive) {
+          const willPay = (victim.gold || 0) > 0;  // 有金幣就先選「付錢」避免直接死
+          applyAndBroadcast(roomNow, {
+            type: 'BIGMOM_CHOICE',
+            playerId: tgt,
+            payload: { choice: willPay ? 'pay' : 'die' },
+          }, io);
+
+          delay(1500);
+          return;
+        }
+      }
+
+      // （順便補）羅傑被索隆丟出、在奧羅傑克森號上的預測，也可能是 CPU 要選
+      if (pending.action === 'roger' && pending.caster != null) {
+        const rogerIdx = pending.caster;           // 擁有羅傑的人
+        const roger = st.players[rogerIdx];
+        if (roger && roger.isCPU && roger.alive) {
+          const targetIdx = pickCpuTargetSmart(st, rogerIdx, {
+            for: 'roger',
+            avoidProtected: false,
+            avoidDodging: false,
+          });
+          if (targetIdx != null) {
+            applyAndBroadcast(roomNow, {
+              type: 'PICK_TARGET',
+              playerId: rogerIdx,
+              payload: { target: targetIdx },
+            }, io);
+
+            delay(1500);
+            return;
+          }
+        }
+      }
+    }
+
     // 目前只讓「輪到的玩家是 CPU」時自動動作
     const meIdx = st.turnIndex;
     const me = st.players && st.players[meIdx];
