@@ -11,7 +11,12 @@ const {
   nextRound
 } = require("./engine.js");
 
-const { pickCpuCardSmart } = require("./cpu.js");
+const {
+  pickCpuCardSmart,
+  pickCpuTargetSmart,
+  pickCpuDigitSmart,
+} = require("./cpu.js");
+
 
 const app = express();
 app.use(express.static(path.join(__dirname, "..", "public")));
@@ -118,7 +123,11 @@ function isCpuTurn(room){
   return !!(p && p.isCPU && p.alive);
 }
 
-// 讓 CPU 動作：抽牌 → 等 2 秒 → 出牌 → 等 4 秒 → 看下一個是不是 CPU
+// 讓 CPU 自動行動：
+// - 抽牌 → 等 2 秒
+// - 出牌 → 等 4 秒
+// - 如果卡在 pending（騙人布/羅賓/索隆/羅/娜美/魯夫/凱多/青雉/基拉/大媽/羅傑…）
+//   就自動送 PICK_TARGET / PICK_DIGIT / LUFFY_SECOND / BIGMOM_COIN 等
 function runCpuLoop(roomId){
   const room = rooms.get(roomId);
   if (!room) return;
@@ -126,50 +135,341 @@ function runCpuLoop(roomId){
   const step = () => {
     const roomNow = rooms.get(roomId);
     if (!roomNow) return;
-
     const st = roomNow.state;
     if (!st) return;
 
+    const delay = (ms) => setTimeout(step, ms);
+    const pending = st.pending || null;
+
+    // 目前只讓「輪到的玩家是 CPU」時自動動作
     const meIdx = st.turnIndex;
     const me = st.players && st.players[meIdx];
     if (!me || !me.isCPU || !me.alive) {
-      // 不是 CPU / 已死亡 → 不再自動動作
+      return; // 不輪到 CPU → 不動
+    }
+
+    // ========= ① 先處理 pending 的互動 =========
+    if (pending) {
+      const act = pending.action;
+
+      // --- 1 騙人布：選目標 → 猜尾數 ---
+      if (act === 'usopp') {
+        if (!pending.extra || pending.extra.target == null) {
+          const targetIdx = pickCpuTargetSmart(st, meIdx, {
+            for: 'usopp',
+            avoidProtected: true,
+            avoidDodging: true,
+          });
+          if (targetIdx == null) return;
+
+          applyAndBroadcast(roomNow, {
+            type: 'PICK_TARGET',
+            playerId: meIdx,
+            payload: { target: targetIdx },
+          }, io);
+
+          delay(1500);
+          return;
+        }
+
+        const d = pickCpuDigitSmart(st, meIdx, pending.extra.target);
+        applyAndBroadcast(roomNow, {
+          type: 'PICK_DIGIT',
+          playerId: meIdx,
+          payload: { digit: d },
+        }, io);
+
+        delay(1500);
+        return;
+      }
+
+      // --- 2 羅賓：選一個人偷看 ---
+      if (act === 'robin') {
+        const targetIdx = pickCpuTargetSmart(st, meIdx, {
+          for: 'robin',
+          avoidProtected: false,
+          avoidDodging: false,
+        });
+        if (targetIdx == null) return;
+
+        applyAndBroadcast(roomNow, {
+          type: 'PICK_TARGET',
+          playerId: meIdx,
+          payload: { target: targetIdx },
+        }, io);
+
+        delay(1500);
+        return;
+      }
+
+      // --- 3 香吉士：挑一個人決鬥 ---
+      if (act === 'sanji') {
+        const targetIdx = pickCpuTargetSmart(st, meIdx, {
+          for: 'sanji',
+          avoidProtected: true,
+          avoidDodging: true,
+        });
+        if (targetIdx == null) return;
+
+        applyAndBroadcast(roomNow, {
+          type: 'PICK_TARGET',
+          playerId: meIdx,
+          payload: { target: targetIdx },
+        }, io);
+
+        delay(1500);
+        return;
+      }
+
+      // --- 5 索隆：選一個人丟手牌 ---
+      if (act === 'zoro') {
+        const targetIdx = pickCpuTargetSmart(st, meIdx, {
+          for: 'zoro',
+          avoidProtected: true,
+          avoidDodging: true,
+        });
+        if (targetIdx == null) return;
+
+        applyAndBroadcast(roomNow, {
+          type: 'PICK_TARGET',
+          playerId: meIdx,
+          payload: { target: targetIdx },
+        }, io);
+
+        delay(1500);
+        return;
+      }
+
+      // --- 6 羅：選一個人交換 ---
+      if (act === 'law') {
+        const targetIdx = pickCpuTargetSmart(st, meIdx, {
+          for: 'law',
+          avoidProtected: false,
+          avoidDodging: false,
+        });
+        if (targetIdx == null) return;
+
+        applyAndBroadcast(roomNow, {
+          type: 'PICK_TARGET',
+          playerId: meIdx,
+          payload: { target: targetIdx },
+        }, io);
+
+        delay(1500);
+        return;
+      }
+
+      // --- 7 娜美（強化）：選一個人麻痺 ---
+      if (act === 'nami') {
+        const targetIdx = pickCpuTargetSmart(st, meIdx, {
+          for: 'nami',
+          avoidProtected: true,
+          avoidDodging: true,
+        });
+        if (targetIdx == null) return;
+
+        applyAndBroadcast(roomNow, {
+          type: 'PICK_TARGET',
+          playerId: meIdx,
+          payload: { target: targetIdx },
+        }, io);
+
+        delay(1500);
+        return;
+      }
+
+      // --- 10 凱多：選一個人決鬥（無視保護/閃避） ---
+      if (act === 'kaido') {
+        const targetIdx = pickCpuTargetSmart(st, meIdx, {
+          for: 'kaido',
+          avoidProtected: false,
+          avoidDodging: false,
+        });
+        if (targetIdx == null) return;
+
+        applyAndBroadcast(roomNow, {
+          type: 'PICK_TARGET',
+          playerId: meIdx,
+          payload: { target: targetIdx },
+        }, io);
+
+        delay(1500);
+        return;
+      }
+
+      // --- 16 青雉：選一個人凍結 ---
+      if (act === 'aokiji') {
+        const targetIdx = pickCpuTargetSmart(st, meIdx, {
+          for: 'aokiji',
+          avoidProtected: true,
+          avoidDodging: true,
+        });
+        if (targetIdx == null) return;
+
+        applyAndBroadcast(roomNow, {
+          type: 'PICK_TARGET',
+          playerId: meIdx,
+          payload: { target: targetIdx },
+        }, io);
+
+        delay(1500);
+        return;
+      }
+
+      // --- 13 基拉：選一個人解除保護/閃避 ---
+      if (act === 'killer') {
+        const targetIdx = pickCpuTargetSmart(st, meIdx, {
+          for: 'killer',
+          avoidProtected: false,
+          avoidDodging: false,
+        });
+        if (targetIdx == null) return;
+
+        applyAndBroadcast(roomNow, {
+          type: 'PICK_TARGET',
+          playerId: meIdx,
+          payload: { target: targetIdx },
+        }, io);
+
+        delay(1500);
+        return;
+      }
+
+      // --- 14 大媽強化（萬國）：選一個人收保護費/處刑 ---
+      if (act === 'bigmom') {
+        const targetIdx = pickCpuTargetSmart(st, meIdx, {
+          for: 'bigmom',
+          avoidProtected: true,
+          avoidDodging: true,
+        });
+        if (targetIdx == null) return;
+
+        applyAndBroadcast(roomNow, {
+          type: 'PICK_TARGET',
+          playerId: meIdx,
+          payload: { target: targetIdx },
+        }, io);
+
+        delay(1500);
+        return;
+      }
+
+      // --- 14 大媽一般：自己擲硬幣拿保護/閃避 ---
+      if (act === 'bigmom-coin') {
+        applyAndBroadcast(roomNow, {
+          type: 'BIGMOM_COIN',
+          playerId: meIdx,
+        }, io);
+
+        delay(1500);
+        return;
+      }
+
+      // --- 8 魯夫：第一次決鬥 + 第二次決鬥 ---
+      if (act === 'luffy') {
+        // 第一次決鬥：先挑一個人
+        if (!pending.extra || !pending.extra.firstDone) {
+          const targetIdx = pickCpuTargetSmart(st, meIdx, {
+            for: 'luffy',
+            avoidProtected: true,
+            avoidDodging: true,
+          });
+          if (targetIdx == null) return;
+
+          applyAndBroadcast(roomNow, {
+            type: 'PICK_TARGET',
+            playerId: meIdx,
+            payload: { target: targetIdx },
+          }, io);
+
+          delay(1500);
+          return;
+        }
+
+        // 已做過第一次 → 第二次決鬥（沒有合適對象就傳 -1）
+        const targetIdx = pickCpuTargetSmart(st, meIdx, {
+          for: 'luffy-second',
+          avoidProtected: true,
+          avoidDodging: true,
+        });
+        const sendTarget = (targetIdx == null) ? -1 : targetIdx;
+
+        applyAndBroadcast(roomNow, {
+          type: 'LUFFY_SECOND',
+          playerId: meIdx,
+          payload: { target: sendTarget },
+        }, io);
+
+        delay(1500);
+        return;
+      }
+
+      // --- 8 魯夫魚人島強化：是否發動全場大砍 ---
+      if (act === 'luffy-boost') {
+        applyAndBroadcast(roomNow, {
+          type: 'LUFFY_BOOST_COMMIT',
+          playerId: meIdx,
+          payload: { go: true },   // CPU 一律選發動
+        }, io);
+
+        delay(800);
+        return;
+      }
+
+      // --- 19 羅傑（有奧羅傑克森號）：預測勝者 ---
+      if (act === 'roger') {
+        const targetIdx = pickCpuTargetSmart(st, meIdx, {
+          for: 'roger',
+          avoidProtected: false,
+          avoidDodging: false,
+        });
+        if (targetIdx == null) return;
+
+        applyAndBroadcast(roomNow, {
+          type: 'PICK_TARGET',
+          playerId: meIdx,
+          payload: { target: targetIdx },
+        }, io);
+
+        delay(1500);
+        return;
+      }
+
+      // 其他暫時沒處理的 pending（例如卡塔庫栗頂牌排序）先不動
       return;
     }
 
-    // ① CPU 抽牌：馬上送 DRAW，前端會自己跑抽牌動畫（約 2 秒）
+    // ========= ② 沒有 pending：正常「抽牌 → 出牌」 =========
     if (st.turnStep === 'draw') {
       applyAndBroadcast(roomNow, {
         type: 'DRAW',
         playerId: meIdx,
       }, io);
 
-      // 等 2 秒再來看要不要出牌
-      setTimeout(step, 2000);
+      delay(2000);   // 抽牌動畫 2 秒
       return;
     }
 
-    // ② CPU 選牌出牌：用 pickCpuCardSmart 決定打 hand 還是 drawn
     if (st.turnStep === 'choose') {
-      const which = pickCpuCardSmart(st, meIdx);  // 'hand' 或 'drawn'
+      const which = pickCpuCardSmart(st, meIdx); // 'hand' 或 'drawn'
+
       applyAndBroadcast(roomNow, {
         type: 'PLAY_CARD',
         playerId: meIdx,
         payload: { which },
       }, io);
 
-      // 出牌後前端會展示那張牌 4 秒 → 4 秒後再檢查下一位是不是 CPU
-      setTimeout(step, 4000);
+      delay(4000);   // 出牌展示 4 秒
       return;
     }
 
-    // ③ 其他階段（選目標 / 擲硬幣 / 比牌等）暫時先不自動動作
-    //    之後如果有幫 CPU 做 PICK_TARGET / PICK_DIGIT，可以在這裡再往下寫。
+    // 其他 turnStep（例如結算中 / 換人中） → 不再自動動作
   };
 
-  // 立刻啟動一次檢查（第一步不用 delay）
+  // 啟動第一次檢查
   step();
 }
+
 
 
 
