@@ -276,7 +276,7 @@ function baseState(playerCount){
   const deck = buildDeck();
   players.forEach(p=>{ p.hand = deck.pop() ?? null; }); // 開局每人 1 張
   const venues = buildVenues(playerCount);
-  return {
+   return {
     players, deck, discard:[], venues,
     roundNo: 1, startSeat:0, turnIndex:0, turnStep:'draw',
     nextRoundStart:null, rogerPred:null, shanksBonusUid:null,
@@ -290,12 +290,14 @@ function baseState(playerCount){
     currentTurnOwner:0,
     meta: { coveredByTeach: [] }, // 仍保留，但不再使用
     stats: {}, // ★ 統計容器
+    usoppHistory: [],              // ★ 新增：騙人布猜尾數歷史
     log:[
       `第 1 局開始。起始玩家：P1`,
       `本局強化場地：${venues.map(v=>v.name).join('、')}（${venues.length} 張）`
     ]
   };
 }
+
 
 function clone(o){ return JSON.parse(JSON.stringify(o)); }
 
@@ -681,6 +683,7 @@ function nextRound(state){
 
     meta: { coveredByTeach: [] }, // 保留清空，但不再使用
     stats: st.stats || {}, // ★ 跨局累計
+    usoppHistory: [], 
     log: [
       `第 ${st.roundNo + 1} 局開始。起始玩家：P${startSeat + 1}`,
       `本局強化場地：${venues.map(v => v.name).join('、')}（${venues.length} 張）`,
@@ -696,6 +699,9 @@ function applyAction(state, action){
   const emits = [];
   const me = st.players[action.playerId];
   if(!me){ return { state: st, emits }; }
+
+// ★ 保險：確保有 usoppHistory 容器
+  if (!Array.isArray(st.usoppHistory)) st.usoppHistory = [];
 
   const type = action.type;
 
@@ -1749,7 +1755,7 @@ if (p.action === 'aokiji') {
     }
   }
 
-  if(type==='PICK_DIGIT'){
+   if(type==='PICK_DIGIT'){
     const p = st.pending;
     if(!p) return { state: st, emits };
     const d = action.payload?.digit;
@@ -1763,15 +1769,28 @@ if (p.action === 'aokiji') {
         return { state: st, emits };
       }
       const tgt = p.extra.target;
-           const g = effectGuard(st, tgt, {});
+      const g = effectGuard(st, tgt, {});
+
       if(!g.blocked){
         const th = st.players[tgt].hand;
+
+        // ★ 記錄這次猜的結果（只在真的有判定時記）
+        const rec = {
+          roundNo: st.roundNo || 1,
+          by: st.turnIndex,
+          target: tgt,
+          digit: d,
+          hit: false
+        };
+
         if(th!=null && tail(th)===d){
+          rec.hit = true;
+          st.usoppHistory.push(rec);
+
           // ★ 命中分：強化狀態下用連擊數（streak）
           const streak = Math.max(1, (p.extra.streak||1));
           scoreUsoppHit(st, st.turnIndex, th, streak);
           doEliminate(st, tgt, `被猜中尾數 ${d}`, st.turnIndex, emits);
-          // 新增：命中時廣播一個 usopp_hit 給所有人
           emits.push({ to:'all', type:'usopp_hit', casterId: st.turnIndex, targetId: tgt, digit: d });
 
           if(p.extra.chain){
@@ -1781,16 +1800,21 @@ if (p.action === 'aokiji') {
               endOrNext(st);
               return { state: st, emits };
             }
-            st.pending = { action:'usopp', extra:{ chain:true, target:null, streak: streak+1 } }; 
-            // ★ 連擊+1
+            st.pending = {
+              action:'usopp',
+              extra:{ chain:true, target:null, streak: streak+1, usedDigits: (p.extra.usedDigits||[]).concat(d) }
+            };
             return { state: st, emits };
           }
         } else {
+          // 猜錯但有真正判定 → 尾數不可能是 d
+          st.usoppHistory.push(rec);
           pushLog(st,'猜錯了',emits);
           emits.push({ to:'all', type:'usopp_miss', casterId: st.turnIndex, targetId: tgt, digit: d });
         }
       }
       else {
+        // 被保護/閃避擋掉 → 不記錄為 miss（因為沒有看到尾數）
         scoreDefense(st, tgt, 1); // 騙人布1被擋 → 防禦+1
       }
 
@@ -1799,6 +1823,7 @@ if (p.action === 'aokiji') {
       return { state: st, emits };
     }
   }
+
 
   // ===== 魯夫第二次決鬥 =====
   if (type === 'LUFFY_SECOND') {
