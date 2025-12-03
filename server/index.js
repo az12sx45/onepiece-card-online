@@ -843,24 +843,26 @@ if (myId == null) {
       }
 
       // ⑤ CPU 座位：補上名稱與專用頭像（位置：nHuman ~ total-1）
-      const cpuAvatarIds = ['cpu1', 'cpu2', 'cpu3'];
+  const cpuNames = ["克洛克達爾", "鷹眼密佛格", "小丑巴其"];
+const cpuAvatarIds = ['cpu1', 'cpu2', 'cpu3'];
 
-      for (let i = nHuman; i < total; i++) {
-        const p = st.players[i];
-        const idx = i - nHuman;                 // 第幾個 CPU（從 0 開始）
-        const cpuName = `CPU ${idx + 1}`;
-        const cpuAvatar = cpuAvatarIds[idx % cpuAvatarIds.length];
+for (let i = nHuman; i < total; i++) {
+  const p = st.players[i];
+  const idx = i - nHuman;       // 第幾個 CPU（0~2）
 
-        // 統一格式，跟真人一樣有 client 區塊
-        p.client = {
-          displayName: cpuName,
-          avatar: cpuAvatar,
-          pid: null,
-        };
-        p.displayName = cpuName;
-        p.avatar = cpuAvatar;   // ← 關鍵：這裡寫 'cpu1' / 'cpu2' / 'cpu3'
-        p.isCPU = true;         // 可選：之後若前端要特別標示 CPU 可以用
-      }
+  const cpuName = cpuNames[idx] || `CPU ${idx + 1}`;
+  const cpuAvatar = cpuAvatarIds[idx] || 'cpu1';
+
+  p.client = {
+    displayName: cpuName,
+    avatar: cpuAvatar,
+    pid: null,
+  };
+  p.displayName = cpuName;
+  p.avatar = cpuAvatar;
+  p.isCPU = true;
+}
+
 
 
       // ⑤ 重新對齊 socket 的 playerId（oldId → 新座位 i），並回傳新的 JOINED（只針對真人）
