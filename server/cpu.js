@@ -1,6 +1,7 @@
 // cpu.js
 const { applyAction, _util, COUNTS } = require("./engine.js");
-const { tail } = _util;
+const { tail, cardById } = _util;
+
 
 // === 尾數分布：根據 COUNTS 把每種尾數總共有幾張 ===
 const TOTAL_TAIL_COUNTS = (() => {
@@ -71,6 +72,15 @@ function scoreStateForMe(st, meIdx){
   return s;
 }
 
+// 判斷這張牌「現在」有沒有在自己的強化場地上
+function isEnhancedNowCpu(st, cardId) {
+  const card = cardById(cardId);
+  if (!card || !card.venue) return false;
+  if (!Array.isArray(st.venues)) return false;
+  return st.venues.some(v => v && v.name === card.venue);
+}
+
+
 // cpu.js（接續上面）
 
 // 這個表只是一個「基礎喜好」，之後你可以慢慢調
@@ -84,7 +94,7 @@ const BASE_CARD_SCORE = {
   6: 15,  // 羅：交換
   7: 18,  // 娜美：麻痺，控制很強
   8: 19,  // 魯夫：決鬥，能直接殺
-  9: 13,  // 漢考克：魅惑/控制
+  9: 2,  // 漢考克：魅惑/控制
  10: 18,  // 凱多：大招（你這邊可以自己依規則調）
  11: 14,  // 基德：棄牌堆操作
  12: 17,  // 奎因：硬幣麻痺
@@ -94,12 +104,106 @@ const BASE_CARD_SCORE = {
  16: 18,  // 青雉：凍結
  17: 18,  // 黑鬍子：多功能控制
  18: 16,  // 紅髮：紅髮 HOT 相關
- 19: 16,  // 羅傑：預測
+ 19: 3,  // 羅傑：預測
 };
 
 function cardBaseScore(cardId){
   return BASE_CARD_SCORE[cardId] ?? 10;
 }
+
+// 根據目前場地 & 規則，回傳這張牌「這一局實際好不好用」的分數
+// 強化技能 = 同一張卡的加強版，這裡會額外加減分
+function cardScoreWithVenue(st, cardId) {
+  if (cardId == null) return 0;
+
+  let score = cardBaseScore(cardId);
+  const enhanced = isEnhancedNowCpu(st, cardId);
+
+  switch (cardId) {
+    case 7: // 娜美：只有強化才有麻痺
+      if (enhanced) score += 8;   // 有維薩利亞 → 控制牌，變強
+      else          score -= 6;   // 沒場地 → 技能很弱，拉低一點
+      break;
+
+    case 5: // 索隆：和之國可直接秒殺偶數
+      if (enhanced) score += 7;
+      break;
+
+    case 6: // 羅：龐克哈薩德先看再換
+      if (enhanced) score += 4;
+      break;
+
+    case 8: // 魯夫：魚人島全場大砍，非常狠
+      if (enhanced) score += 8;
+      break;
+
+    case 10: // 凱多：鬼島版更兇（之後要再加大媽 combo 可再加）
+      if (enhanced) score += 6;
+      break;
+
+    case 11: // 基德：夏波帝全場換牌
+      if (enhanced) score += 5;
+      break;
+
+    case 12: // 奎因：鬼島冰鬼
+      if (enhanced) score += 5;
+      break;
+
+    case 13: // 基拉：夏波帝可以選擇決鬥
+      if (enhanced) score += 4;
+      break;
+
+    case 14: // 大媽：萬國收保護費 / 直接殺人
+      if (enhanced) score += 5;
+      break;
+
+    case 15: // 卡塔庫栗：萬國看更多張、重排頂牌
+      if (enhanced) score += 5;
+      break;
+
+    case 16: // 青雉：蜂巢島凍全場
+      if (enhanced) score += 5;
+      break;
+
+    case 17: // 黑鬍子：蜂巢島多張控制
+      if (enhanced) score += 5;
+      break;
+
+    case 18: // 紅髮：奧羅傑克森號跟 HOT / final 關聯更大
+      if (enhanced) score += 3;
+      break;
+
+    case 9: { // 漢考克：九蛇島才是保護牌，其他時候是自殺
+      if (!enhanced) {
+        // 沒九蛇島 → 打出就是自殺，極大負分，CPU 幾乎不會選
+        score -= 999;
+      } else {
+        // 有九蛇島 → 很好的保護牌
+        score += 10;
+      }
+      break;
+    }
+
+    case 19: { // 羅傑：奧羅傑克森號才會變預測，不然就是自殺
+      if (!enhanced) {
+        score -= 999;
+      } else {
+        // 強化版當作「預測 / 賽季分牌」用
+        score += 10;
+      }
+      break;
+    }
+
+    // 你之後如果想讓 0 薩波在強化場地（德雷斯羅薩）加一點分，也可以這樣加：
+    // case 0:
+    //   if (enhanced) score += 3;
+    //   break;
+  }
+
+  return score;
+}
+
+
 // 專門負責「抽完牌後，決定打 hand 還是 drawn」
 // st: 現在局面
 // meIdx: 我是第幾號玩家
@@ -148,8 +252,10 @@ function pickCpuCardSmart(st, meIdx){
     const deckLeft   = st.deck?.length ?? 99;
     const isDuelCard = duelCards.includes(playId);
 
-    // 1) 卡片固有強度
-    s += cardBaseScore(playId) * 5;
+    // 1) 卡片固有強度（會看現在有沒有強化場地）
+    const baseScore = cardScoreWithVenue(st, playId);
+    s += baseScore * 5;
+
 
     // 2) 尾數大小（比牌價值）
     s += tail(playId) * 4;
@@ -180,9 +286,10 @@ function pickCpuCardSmart(st, meIdx){
 
     // 4) 目前手牌「留著」的價值（保留更好的那張）
     if (opt.keepId != null){
-      s += tail(opt.keepId) * 2;            // 留大尾數的牌比較好
-      s += cardBaseScore(opt.keepId) * 1.5; // 留功能卡也不錯
+      s += tail(opt.keepId) * 2;                     // 留大尾數的牌比較好
+      s += cardScoreWithVenue(st, opt.keepId) * 1.5; // 留「在現在場地很強」的牌也不錯
     }
+
 
     // 4.5) ★ 決鬥 / 比牌牌：要確保「留下來那張」夠大
     if (isDuelCard && opt.keepId != null){
@@ -389,13 +496,6 @@ function pickCpuDigitSmart(st, meIdx, targetIdx){
 
   return bestDigit;
 }
-
-
-// 原本的：依牌局評分（你現有的邏輯）
-function cardBaseScore(cardId){
-  return BASE_CARD_SCORE[cardId] ?? 10;
-}
-
 
 module.exports = {
   scoreStateForMe,
