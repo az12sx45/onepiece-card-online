@@ -1,6 +1,20 @@
 // cpu.js
-const { applyAction, _util } = require("./engine.js");
+const { applyAction, _util, COUNTS } = require("./engine.js");
 const { tail } = _util;
+
+// === 尾數分布：根據 COUNTS 把每種尾數總共有幾張 ===
+const TOTAL_TAIL_COUNTS = (() => {
+  const arr = Array(10).fill(0); // 0~9
+  for (const [idStr, cnt] of Object.entries(COUNTS)) {
+    const id = Number(idStr);
+    const t = tail(id);
+    if (t >= 0 && t < 10) {
+      arr[t] += cnt;
+    }
+  }
+  return arr;
+})();
+
 
 // 深拷貝 state，避免影響真實對局
 function cloneState(st){
@@ -231,22 +245,89 @@ function pickCpuTargetSmart(st, meIdx, opts = {}){
   return bestIdx;
 }
 
-// CPU 猜「騙人布」的尾數
-//   目前是直接偷看對方真實手牌：
-//   - 有牌就猜那張的尾數（尾數 1 改猜 2，因為 1 不能猜）
-//   - 沒牌就保底猜 2
+// CPU 猜「騙人布」的尾數：
+// - 只用公開資訊 + 自己的牌：COUNTS / 棄牌堆 / 自己手牌 & 暫抽
+// - 參考 usoppHistory：同一局、同一個 target 已經猜錯的數字不再猜
+// - 在剩下可以猜的 [0,2,3,4,5,6,7,8,9] 裡，挑「剩餘尾數張數最多」的那個
 function pickCpuDigitSmart(st, meIdx, targetIdx){
-  const t = st.players[targetIdx];
-  if (!t) return 2;
+  const me = st.players[meIdx];
 
-  const card = t.hand;
-  if (typeof card === 'number') {
-    const d = tail(card);
-    if (d === 1) return 2;
-    return d;
+  // 不能猜 1，規則限制
+  const guessable = [0,2,3,4,5,6,7,8,9];
+
+  // ① 找出同一局、同一個 target 已經猜過的數字（且真的判定過）
+  const history = Array.isArray(st.usoppHistory)
+    ? st.usoppHistory.filter(h =>
+        h.roundNo === (st.roundNo || 1) &&
+        h.target === targetIdx
+      )
+    : [];
+
+  const tried = new Set(history.map(h => h.digit));
+
+  // 目前尚可猜的數字（排除已經證明錯誤的）
+  let candidates = guessable.filter(d => !tried.has(d));
+  if (!candidates.length) {
+    // 理論上不會發生，保險：全部都被猜光了就先回 2
+    return 2;
   }
-  return 2;
+
+  // ② 根據牌組 + 棄牌堆 + 自己手牌，估計每個尾數「還剩幾張」
+  const remaining = TOTAL_TAIL_COUNTS.slice(); // 0~9
+
+  // 2-1) 扣掉棄牌堆裡的牌
+  (st.discard || []).forEach(x => {
+    const id = (typeof x === 'number')
+      ? x
+      : (x && typeof x.id === 'number' ? x.id : null);
+    if (typeof id === 'number') {
+      const t = tail(id);
+      if (t >= 0 && t < 10) remaining[t]--;
+    }
+  });
+
+  // 2-2) 扣掉自己已知的牌（手牌 + 暫抽）
+  if (me) {
+    const knownIds = [];
+    if (typeof me.hand === 'number')     knownIds.push(me.hand);
+    if (typeof me.tempDraw === 'number') knownIds.push(me.tempDraw);
+    knownIds.forEach(id => {
+      const t = tail(id);
+      if (t >= 0 && t < 10) remaining[t]--;
+    });
+  }
+
+  // 2-3) 保險：避免數字跑到負的，全部壓到 0
+  for (let i = 0; i < 10; i++) {
+    if (remaining[i] < 0) remaining[i] = 0;
+  }
+
+  // ③ 在 candidates 裡面，挑「剩餘尾數張數」最大的那個
+  let bestDigit = candidates[0];
+  let bestWeight = -1;
+
+  for (const d of candidates) {
+    const w = remaining[d];
+
+    // 你如果想要「稍微偏愛大尾數」可以改成：
+    // const adj = w + (d >= 7 ? 0.1 : 0);
+    const adj = w;
+
+    if (adj > bestWeight) {
+      bestWeight = adj;
+      bestDigit = d;
+    }
+  }
+
+  // ④ 萬一每個尾數都變成 0（理論上很少發生） → 隨機從 candidates 選一個
+  if (bestWeight <= 0) {
+    const idx = Math.floor(Math.random() * candidates.length);
+    bestDigit = candidates[idx];
+  }
+
+  return bestDigit;
 }
+
 
 // 原本的：依牌局評分（你現有的邏輯）
 function cardBaseScore(cardId){
