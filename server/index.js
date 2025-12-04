@@ -577,6 +577,53 @@ function runCpuLoop(roomId){
         return;
       }
 
+      // --- 17 黑鬍子強化：頂牌多選覆蓋 teach-multipick ---
+      if (act === 'teach-multipick') {
+        const n = pending.n || 0;
+        const cards = Array.isArray(pending.cards) ? pending.cards : [];
+
+        // 簡單策略：優先覆蓋「尾數高」的牌，避免大家抽到太強的牌
+        const withTail = cards.map((id, idx) => ({
+          idx,
+          tail: (typeof id === 'number') ? ((id % 10 + 10) % 10) : 0,
+        }));
+
+        // 尾數由大到小排序
+        withTail.sort((a, b) => b.tail - a.tail);
+
+        // 覆蓋至少一張，預設覆蓋一半（無條件進位）
+        const coverCount = Math.max(1, Math.ceil(n / 2));
+        const pickedIndices = withTail.slice(0, coverCount).map(x => x.idx);
+
+        applyAndBroadcast(roomNow, {
+          type: 'MULTIPICK_COMMIT',
+          playerId: meIdx,
+          payload: { pickedIndices },
+        }, io);
+
+        delay(1500);
+        return;
+      }
+
+      // --- 15 卡塔庫栗強化：頂牌排序 kata-order ---
+      if (act === 'kata-order') {
+        const n = pending.n || 0;
+
+        // 簡單做法：直接維持原順序
+        const order = [];
+        for (let i = 0; i < n; i++) order.push(i);
+
+        applyAndBroadcast(roomNow, {
+          type: 'ORDER_COMMIT',
+          playerId: meIdx,
+          payload: { order },
+        }, io);
+
+        delay(1500);
+        return;
+      }
+
+
       // 其他暫時沒處理的 pending（例如卡塔庫栗頂牌排序）先不動
       return;
     }
