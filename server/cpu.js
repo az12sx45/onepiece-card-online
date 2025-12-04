@@ -607,6 +607,21 @@ function pickCpuDigitSmart(st, meIdx, targetIdx){
     return 2;
   }
 
+  // 1.5 若引擎有「針對這個 target 的可能尾數集合」，跟 candidates 做交集
+  if (Array.isArray(st.usoppHints) && Array.isArray(st.usoppHints[targetIdx])) {
+    const hintSet = new Set(st.usoppHints[targetIdx]);
+    const filtered = candidates.filter(d => hintSet.has(d));
+
+    // 有交集就用交集；完全沒交集就維持原本 candidates（避免出現空集合）
+    if (filtered.length > 0) {
+      candidates = filtered;
+    }
+  }
+
+  // ② 根據牌組 + 棄牌堆 + 自己手牌，估計每個尾數「還剩幾張」
+  const remaining = TOTAL_TAIL_COUNTS.slice(); // 0~9
+
+
   // ② 根據牌組 + 棄牌堆 + 自己手牌，估計每個尾數「還剩幾張」
   const remaining = TOTAL_TAIL_COUNTS.slice(); // 0~9
 
