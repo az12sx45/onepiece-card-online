@@ -198,6 +198,34 @@ function usoppHintEq(st, playerIdx, digit){
   }
 }
 
+// —— 決鬥資訊：記錄「某玩家至少比某個尾數還大」用來協助 Usopp 推理
+
+function ensureUsoppDuelFloor(st){
+  if (!Array.isArray(st.usoppDuelFloor) && Array.isArray(st.players)) {
+    st.usoppDuelFloor = Array(st.players.length).fill(null);
+  }
+  return st.usoppDuelFloor;
+}
+
+/**
+ * 贏家至少大於 loserTail：
+ *   - 記在 usoppDuelFloor[winnerIdx]
+ *   - 同時更新 usoppHints[winnerIdx]：把 ≤ loserTail 的尾數全部排除
+ */
+function usoppDuelWinnerGtTail(st, winnerIdx, loserTail){
+  if (!Array.isArray(st.players) || !st.players[winnerIdx]) return;
+  ensureUsoppHints(st);
+  const floors = ensureUsoppDuelFloor(st);
+
+  const t = (typeof loserTail === 'number') ? (loserTail|0) : 0;
+  const old = (typeof floors[winnerIdx] === 'number') ? floors[winnerIdx] : -1;
+  const floor = Math.max(old, t);
+  floors[winnerIdx] = floor;
+
+  const arr = initUsoppHintIfNeeded(st, winnerIdx);
+  st.usoppHints[winnerIdx] = arr.filter(d => d > floor);
+}
+
 
 function pname(st, idx){
   const p = st.players?.[idx];
@@ -328,6 +356,7 @@ function baseState(playerCount){
   stats: {}, // ★ 統計容器
   usoppHistory: [],              // ★ 騙人布猜尾數歷史
   usoppHints: Array(playerCount).fill(null), // ★ 每位玩家目前「可能尾數」提示
+  usoppDuelFloor: Array(playerCount).fill(null), // ★ 決鬥：贏家最小尾數下界
   log:[
     `第 1 局開始。起始玩家：P1`,
 
@@ -723,6 +752,7 @@ function nextRound(state){
     stats: st.stats || {}, // ★ 跨局累計
     usoppHistory: [],
     usoppHints: Array(playerCount).fill(null),
+    usoppDuelFloor: Array(playerCount).fill(null),
     log: [
       `第 ${st.roundNo + 1} 局開始。起始玩家：P${startSeat + 1}`,
 
@@ -1392,6 +1422,10 @@ case 19: { // 羅傑
           scoreDuelAttack(st, meIdx, p.extra.keep, st.players[idx].hand, { sanjiBoost: !!p.extra.boost }); // ★
           doEliminate(st, idx, '惡魔風腳', meIdx, emits);
                 pushDuelLog(emits, st, meIdx, idx, idx);
+
+      // ★ 決鬥推理：贏家 meIdx > 輸家 oppId 的尾數
+      usoppDuelWinnerGtTail(st, meIdx, tail(oppId));
+
         } else if(my<opp){
           scoreDefenseReversal(st, idx, st.players[idx].hand, p.extra.keep, { sanjiBoost: !!p.extra.boost });
           doEliminate(st, st.turnIndex, '惡魔風腳反噬', meIdx, emits);
@@ -1629,10 +1663,18 @@ if(p.action==='zoro'){
           scoreDuelAttack(st, st.turnIndex, p.extra.keep, st.players[idx].hand, {}); // ★
           doEliminate(st, idx, '魯夫擊倒', meIdx, emits);
                 pushDuelLog(emits, st, meIdx, idx, idx);
+
+      // ★ 贏家 meIdx > 輸家 oppId 尾數
+      usoppDuelWinnerGtTail(st, meIdx, tail(oppId));
+
         } else if(my<opp){
           scoreDefenseReversal(st, idx, st.players[idx].hand, p.extra.keep, {});
           doEliminate(st, st.turnIndex, '魯夫失敗', meIdx, emits);
       pushDuelLog(emits, st, meIdx, meIdx, idx);
+
+      // ★ 贏家 idx > 輸家 myId 尾數
+      usoppDuelWinnerGtTail(st, idx, tail(myId));
+
         } else {
           pushLog(st,'平手',emits);
           pushDuelDraw(emits, st, meIdx, idx);
@@ -1665,10 +1707,16 @@ if(p.action==='zoro'){
           scoreDuelAttack(st, meIdx, st.players[st.turnIndex].hand, st.players[idx].hand, { ignoreDefOrDodge: true }); // ★
           doEliminate(st, idx, '雷鳴八卦', meIdx, emits);
                 pushDuelLog(emits, st, meIdx, idx, idx);
+
+      usoppDuelWinnerGtTail(st, meIdx, tail(oppId));
+
         } else if(my<opp){
           scoreDefenseReversal(st, idx, st.players[idx].hand, st.players[st.turnIndex].hand, { ignoreDefOrDodge:true });
           doEliminate(st, st.turnIndex, '被反殺', meIdx, emits);
           pushDuelLog(emits, st, meIdx, meIdx, idx);
+
+      usoppDuelWinnerGtTail(st, idx, tail(myId));
+
         } else {
           pushLog(st,'平手',emits);
           pushDuelDraw(emits, st, meIdx, idx);
@@ -1704,17 +1752,24 @@ if (p.action === 'killer') {
   if (p.extra.boost) {
     if (action.payload?.duel === true) {
       pushLog(st, `基拉：向 ${pname(st, idx)} 發起決鬥`, emits);
-      const my  = tail(p.extra.keep);
-      const opp = tail(st.players[idx].hand);
+
+      const myId  = p.extra.keep;
+      const oppId = st.players[idx].hand;
+      const my    = tail(myId);
+      const opp   = tail(oppId);
 
       if (my > opp) {
         // 挑戰者勝
         pushDuelLog(emits, st, meIdx, idx, idx);
-        doEliminate(st, idx, `基拉決鬥輸了，尾數 ${my} > ${opp}`);
+        doEliminate(st, idx, `基拉決鬥：挑戰者勝，尾數 ${my} > ${opp}`, meIdx, emits);
+
+        usoppDuelWinnerGtTail(st, meIdx, tail(oppId));
       } else if (my < opp) {
         // 挑戰者敗
         pushDuelLog(emits, st, meIdx, meIdx, idx);
-        doEliminate(st, meIdx, `基拉決鬥輸了，尾數 ${my} < ${opp}`);
+        doEliminate(st, meIdx, `基拉決鬥：防守方勝，尾數 ${my} < ${opp}`, meIdx, emits);
+
+        usoppDuelWinnerGtTail(st, idx, tail(myId));
       } else {
         pushLog(st, '平手', emits);
         pushDuelDraw(emits, st, meIdx, idx);
@@ -1727,6 +1782,7 @@ if (p.action === 'killer') {
     // 強化但尚未選擇是否決鬥 → 等前端操作
     return { state: st, emits };
   }
+
 
   // 一般版：只解除保護/閃避就結束
   st.pending = null;
@@ -1876,49 +1932,52 @@ if (p.action === 'aokiji') {
 
 
   // ===== 魯夫第二次決鬥 =====
-  if (type === 'LUFFY_SECOND') {
-    const p = st.pending;
-    if (!p || p.action !== 'luffy') return { state: st, emits };
+if (type === 'LUFFY_SECOND') {
+  const p = st.pending;
+  if (!p || p.action !== 'luffy') return { state: st, emits };
 
-    const idx = action.payload?.target;
-    // -1 或沒給目標 → 視為放棄第二次決鬥，直接下一位
-    if (typeof idx !== 'number' || idx === -1) {
-      st.pending = null;
-      endOrNext(st);
-      return { state: st, emits };
-    }
-
-    const meIdx = st.turnIndex;
-    const g = effectGuard(st, idx, {});
-    if (!g.blocked) {
-      pushLog(st, `魯夫：向 ${pname(st, idx)} 發起第二次決鬥`, emits);
-      const my  = tail(p.extra.keep);
-      const opp = tail(st.players[idx].hand);
-
-      if (my > opp) {
-        // 我贏
-        scoreDuelAttack(st, meIdx, p.extra.keep, st.players[idx].hand, {});
-        doEliminate(st, idx, '魯夫擊倒', meIdx, emits);
-        pushDuelLog(emits, st, meIdx, idx, idx);
-      } else if (my < opp) {
-        // 我輸
-        scoreDefenseReversal(st, idx, st.players[idx].hand, p.extra.keep, {});
-        doEliminate(st, meIdx, '魯夫失敗', meIdx, emits);
-        pushDuelLog(emits, st, meIdx, meIdx, idx);
-      } else {
-        // ⭐ 第二次也是平手 → 播動畫後直接換下一位，不再卡住
-        pushLog(st, '平手', emits);
-        pushDuelDraw(emits, st, meIdx, idx);
-      }
-    } else {
-      // 被保護 / 閃避擋下 → 給防禦分
-      scoreDefense(st, idx, p.extra.keep);
-    }
-
+  const idx = action.payload?.target;
+  if (typeof idx !== 'number' || idx === -1) {
     st.pending = null;
     endOrNext(st);
     return { state: st, emits };
   }
+
+  const meIdx = st.turnIndex;
+  const g = effectGuard(st, idx, {});
+  if (!g.blocked) {
+    pushLog(st, `魯夫：向 ${pname(st, idx)} 發起第二次決鬥`, emits);
+
+    const myId  = p.extra.keep;
+    const oppId = st.players[idx].hand;
+    const my    = tail(myId);
+    const opp   = tail(oppId);
+
+    if (my > opp) {
+      scoreDuelAttack(st, meIdx, myId, oppId, {});
+      doEliminate(st, idx, '魯夫擊倒', meIdx, emits);
+      pushDuelLog(emits, st, meIdx, idx, idx);
+
+      usoppDuelWinnerGtTail(st, meIdx, tail(oppId));
+    } else if (my < opp) {
+      scoreDefenseReversal(st, idx, oppId, myId, {});
+      doEliminate(st, meIdx, '魯夫失敗', meIdx, emits);
+      pushDuelLog(emits, st, meIdx, meIdx, idx);
+
+      usoppDuelWinnerGtTail(st, idx, tail(myId));
+    } else {
+      pushLog(st, '平手', emits);
+      pushDuelDraw(emits, st, meIdx, idx);
+    }
+  } else {
+    scoreDefense(st, idx, p.extra.keep);
+  }
+
+  st.pending = null;
+  endOrNext(st);
+  return { state: st, emits };
+}
+
 
 
   // ===== 魯夫（魚人島強化）：猿王群鴉炮 =====
