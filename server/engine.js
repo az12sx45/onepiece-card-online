@@ -1539,10 +1539,6 @@ if(p.action==='zoro'){
         if(!gView.blocked){
           const th = st.players[idx].hand;
           if (th != null) scorePeek(st, action.playerId, th); // ★ 偵查分
-
-        // ★ 新增：Usopp 推理用 — 已經「看到」 target 的手牌尾數
-        usoppHintEq(st, idx, tail(th));
-
           emits.push({ to: action.playerId, type:'peek', lines:[`ROOM・SCAN：${pname(st, idx)} → ${cardLabel(th)}`] });
           emits.push({ to: action.playerId, type:'law_view', casterId: st.turnIndex, targetId: idx, cardId: th });
         } else {
@@ -1577,15 +1573,6 @@ if(p.action==='zoro'){
               casterName,
               targetName
             });
-
-   // ★ 新增：羅交換後，雙方目前「手上的牌尾數」都變成已知
-            if (typeof me.hand === 'number') {
-              usoppHintEq(st, meIdx, tail(me.hand));
-            }
-            if (typeof t.hand === 'number') {
-              usoppHintEq(st, idx, tail(t.hand));
-            }
-
           } else {
             scoreDefense(st, idx, 6); // 羅6交換被擋 → 防禦+6
             pushLog(st, `羅（強化）：對 ${pname(st, idx)} 的交換被保護/閃避抵銷`, emits);
@@ -1622,15 +1609,6 @@ if(p.action==='zoro'){
             casterName,
             targetName
           });
-
-  // ★ 新增：一般版交換一樣更新 Usopp 提示
-          if (typeof me.hand === 'number') {
-            usoppHintEq(st, meIdx, tail(me.hand));
-          }
-          if (typeof t.hand === 'number') {
-            usoppHintEq(st, idx, tail(t.hand));
-          }
-
         } else {
           scoreDefense(st, idx, 6); // 羅6交換被擋 → 防禦+6
           pushLog(st, `羅：對 ${pname(st, idx)} 的交換被保護/閃避抵銷`, emits);
