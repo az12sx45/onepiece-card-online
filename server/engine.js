@@ -163,6 +163,42 @@ function scorePeek(st, seerId, seenCardId){
   addStat(st, seerId, 'intelScore', t);
 }
 
+// ===== 騙人布：每位玩家「可能尾數」推理用 =====
+const USOPP_GUESSABLE = [0,2,3,4,5,6,7,8,9];
+
+function ensureUsoppHints(st){
+  if (!Array.isArray(st.usoppHints) && Array.isArray(st.players)) {
+    st.usoppHints = Array(st.players.length).fill(null);
+  }
+}
+
+function initUsoppHintIfNeeded(st, playerIdx){
+  ensureUsoppHints(st);
+  if (!Array.isArray(st.usoppHints[playerIdx])) {
+    // 一開始：全部可被猜的尾數都可能
+    st.usoppHints[playerIdx] = USOPP_GUESSABLE.slice();
+  }
+  return st.usoppHints[playerIdx];
+}
+
+// → 已知「不可能是 digit」
+function usoppHintNotEq(st, playerIdx, digit){
+  const arr = initUsoppHintIfNeeded(st, playerIdx);
+  st.usoppHints[playerIdx] = arr.filter(d => d !== digit);
+}
+
+// → 已知「就是 digit」（例如有看到那張牌）
+// 若 digit === 1（不能被猜），則代表「沒有一定會中的數字」，用空陣列代表
+function usoppHintEq(st, playerIdx, digit){
+  ensureUsoppHints(st);
+  if (digit === 1) {
+    st.usoppHints[playerIdx] = [];
+  } else {
+    st.usoppHints[playerIdx] = [digit];
+  }
+}
+
+
 function pname(st, idx){
   const p = st.players?.[idx];
   const nick = p?.client?.displayName || p?.displayName || '';
@@ -287,12 +323,14 @@ function baseState(playerCount){
     chestTotal: playerCount*5, chestLeft: playerCount*5,
     roundKills:Array(playerCount).fill(0),
     turnKills:Array(playerCount).fill(0),
-    currentTurnOwner:0,
-    meta: { coveredByTeach: [] }, // 仍保留，但不再使用
-    stats: {}, // ★ 統計容器
-    usoppHistory: [],              // ★ 新增：騙人布猜尾數歷史
-    log:[
-      `第 1 局開始。起始玩家：P1`,
+     currentTurnOwner:0,
+  meta: { coveredByTeach: [] }, // 仍保留，但不再使用
+  stats: {}, // ★ 統計容器
+  usoppHistory: [],              // ★ 騙人布猜尾數歷史
+  usoppHints: Array(playerCount).fill(null), // ★ 每位玩家目前「可能尾數」提示
+  log:[
+    `第 1 局開始。起始玩家：P1`,
+
       `本局強化場地：${venues.map(v=>v.name).join('、')}（${venues.length} 張）`
     ]
   };
@@ -679,13 +717,15 @@ function nextRound(state){
 
     roundKills: Array(playerCount).fill(0),
     turnKills:  Array(playerCount).fill(0),
-    currentTurnOwner: startSeat,
+     currentTurnOwner: startSeat,
 
     meta: { coveredByTeach: [] }, // 保留清空，但不再使用
     stats: st.stats || {}, // ★ 跨局累計
-    usoppHistory: [], 
+    usoppHistory: [],
+    usoppHints: Array(playerCount).fill(null),
     log: [
       `第 ${st.roundNo + 1} 局開始。起始玩家：P${startSeat + 1}`,
+
       `本局強化場地：${venues.map(v => v.name).join('、')}（${venues.length} 張）`,
       `寶箱剩餘金幣：${st.chestLeft} / ${st.chestTotal}`
     ]
@@ -759,6 +799,11 @@ function applyAction(state, action){
       me.iceArmed=true;
       pushLog(st, '冰鬼：標記生效，本回合受檢查', emits);
     }
+
+  // ★ 輪到某玩家時：他的手牌改變 → 把「針對他」的 Usopp 尾數提示清空
+  if (Array.isArray(st.usoppHints)) {
+    st.usoppHints[st.turnIndex] = null;
+  }
 
     addStat(st, st.turnIndex, 'survivalTurns', 1); // ★ 生存分：輪到自己 +1
     me.tempDraw = st.deck.pop() ?? null;
@@ -1787,6 +1832,9 @@ if (p.action === 'aokiji') {
           rec.hit = true;
           st.usoppHistory.push(rec);
 
+      // ★ Usopp 推理：我們現在知道 target 的尾數就是 d
+      usoppHintEq(st, tgt, d);
+
           // ★ 命中分：強化狀態下用連擊數（streak）
           const streak = Math.max(1, (p.extra.streak||1));
           scoreUsoppHit(st, st.turnIndex, th, streak);
@@ -1809,6 +1857,8 @@ if (p.action === 'aokiji') {
         } else {
           // 猜錯但有真正判定 → 尾數不可能是 d
           st.usoppHistory.push(rec);
+          usoppHintNotEq(st, tgt, d);
+
           pushLog(st,'猜錯了',emits);
           emits.push({ to:'all', type:'usopp_miss', casterId: st.turnIndex, targetId: tgt, digit: d });
         }
