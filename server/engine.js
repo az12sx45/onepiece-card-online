@@ -198,34 +198,6 @@ function usoppHintEq(st, playerIdx, digit){
   }
 }
 
-// —— 決鬥資訊：記錄「某玩家至少比某個尾數還大」用來協助 Usopp 推理
-
-function ensureUsoppDuelFloor(st){
-  if (!Array.isArray(st.usoppDuelFloor) && Array.isArray(st.players)) {
-    st.usoppDuelFloor = Array(st.players.length).fill(null);
-  }
-  return st.usoppDuelFloor;
-}
-
-/**
- * 贏家至少大於 loserTail：
- *   - 記在 usoppDuelFloor[winnerIdx]
- *   - 同時更新 usoppHints[winnerIdx]：把 ≤ loserTail 的尾數全部排除
- */
-function usoppDuelWinnerGtTail(st, winnerIdx, loserTail){
-  if (!Array.isArray(st.players) || !st.players[winnerIdx]) return;
-  ensureUsoppHints(st);
-  const floors = ensureUsoppDuelFloor(st);
-
-  const t = (typeof loserTail === 'number') ? (loserTail|0) : 0;
-  const old = (typeof floors[winnerIdx] === 'number') ? floors[winnerIdx] : -1;
-  const floor = Math.max(old, t);
-  floors[winnerIdx] = floor;
-
-  const arr = initUsoppHintIfNeeded(st, winnerIdx);
-  st.usoppHints[winnerIdx] = arr.filter(d => d > floor);
-}
-
 
 function pname(st, idx){
   const p = st.players?.[idx];
@@ -356,7 +328,6 @@ function baseState(playerCount){
   stats: {}, // ★ 統計容器
   usoppHistory: [],              // ★ 騙人布猜尾數歷史
   usoppHints: Array(playerCount).fill(null), // ★ 每位玩家目前「可能尾數」提示
-  usoppDuelFloor: Array(playerCount).fill(null), // ★ 決鬥：贏家最小尾數下界
   log:[
     `第 1 局開始。起始玩家：P1`,
 
@@ -752,7 +723,6 @@ function nextRound(state){
     stats: st.stats || {}, // ★ 跨局累計
     usoppHistory: [],
     usoppHints: Array(playerCount).fill(null),
-    usoppDuelFloor: Array(playerCount).fill(null),
     log: [
       `第 ${st.roundNo + 1} 局開始。起始玩家：P${startSeat + 1}`,
 
@@ -1423,8 +1393,6 @@ case 19: { // 羅傑
           doEliminate(st, idx, '惡魔風腳', meIdx, emits);
                 pushDuelLog(emits, st, meIdx, idx, idx);
 
-      // ★ 決鬥推理：贏家 meIdx > 輸家 oppId 的尾數
-      usoppDuelWinnerGtTail(st, meIdx, tail(oppId));
 
         } else if(my<opp){
           scoreDefenseReversal(st, idx, st.players[idx].hand, p.extra.keep, { sanjiBoost: !!p.extra.boost });
@@ -1664,16 +1632,12 @@ if(p.action==='zoro'){
           doEliminate(st, idx, '魯夫擊倒', meIdx, emits);
                 pushDuelLog(emits, st, meIdx, idx, idx);
 
-      // ★ 贏家 meIdx > 輸家 oppId 尾數
-      usoppDuelWinnerGtTail(st, meIdx, tail(oppId));
 
         } else if(my<opp){
           scoreDefenseReversal(st, idx, st.players[idx].hand, p.extra.keep, {});
           doEliminate(st, st.turnIndex, '魯夫失敗', meIdx, emits);
       pushDuelLog(emits, st, meIdx, meIdx, idx);
 
-      // ★ 贏家 idx > 輸家 myId 尾數
-      usoppDuelWinnerGtTail(st, idx, tail(myId));
 
         } else {
           pushLog(st,'平手',emits);
@@ -1708,14 +1672,12 @@ if(p.action==='zoro'){
           doEliminate(st, idx, '雷鳴八卦', meIdx, emits);
                 pushDuelLog(emits, st, meIdx, idx, idx);
 
-      usoppDuelWinnerGtTail(st, meIdx, tail(oppId));
 
         } else if(my<opp){
           scoreDefenseReversal(st, idx, st.players[idx].hand, st.players[st.turnIndex].hand, { ignoreDefOrDodge:true });
           doEliminate(st, st.turnIndex, '被反殺', meIdx, emits);
           pushDuelLog(emits, st, meIdx, meIdx, idx);
 
-      usoppDuelWinnerGtTail(st, idx, tail(myId));
 
         } else {
           pushLog(st,'平手',emits);
@@ -1763,13 +1725,11 @@ if (p.action === 'killer') {
         pushDuelLog(emits, st, meIdx, idx, idx);
         doEliminate(st, idx, `基拉決鬥：挑戰者勝，尾數 ${my} > ${opp}`, meIdx, emits);
 
-        usoppDuelWinnerGtTail(st, meIdx, tail(oppId));
       } else if (my < opp) {
         // 挑戰者敗
         pushDuelLog(emits, st, meIdx, meIdx, idx);
         doEliminate(st, meIdx, `基拉決鬥：防守方勝，尾數 ${my} < ${opp}`, meIdx, emits);
 
-        usoppDuelWinnerGtTail(st, idx, tail(myId));
       } else {
         pushLog(st, '平手', emits);
         pushDuelDraw(emits, st, meIdx, idx);
@@ -1958,13 +1918,11 @@ if (type === 'LUFFY_SECOND') {
       doEliminate(st, idx, '魯夫擊倒', meIdx, emits);
       pushDuelLog(emits, st, meIdx, idx, idx);
 
-      usoppDuelWinnerGtTail(st, meIdx, tail(oppId));
     } else if (my < opp) {
       scoreDefenseReversal(st, idx, oppId, myId, {});
       doEliminate(st, meIdx, '魯夫失敗', meIdx, emits);
       pushDuelLog(emits, st, meIdx, meIdx, idx);
 
-      usoppDuelWinnerGtTail(st, idx, tail(myId));
     } else {
       pushLog(st, '平手', emits);
       pushDuelDraw(emits, st, meIdx, idx);
