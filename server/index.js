@@ -875,78 +875,111 @@ if (myId == null) {
       const st = createInitialState(total);
       st.cpuCount = cpu;   // 之後如果要給引擎用，可以參考這個欄位
 
-      // ④ 把名字/頭像/secret 寫進 players（真人部分：0 ~ nHuman-1）
-      for (let i = 0; i < nHuman; i++){
-        const j = joined[i];
-        const p = st.players[i];
-        p.client = {
-          displayName: j.name,
-          avatar: j.avatar,
-          pid: null,
-        };
-        p.displayName = j.name;
-        p.avatar = j.avatar;
-        p.secret = j.secret;    // ← 把 secret 帶到新 state
-      }
+       // ④ 組一個「座位池」：把所有真人 & CPU 丟進來，等等一起洗牌
+  const seatPool = [];
 
-      // ⑤ CPU 座位：補上名稱與專用頭像（位置：nHuman ~ total-1）
+  // 先把真人塞進 seatPool
+  for (let i = 0; i < nHuman; i++) {
+    seatPool.push({ kind: 'human', data: joined[i] });
+  }
+
+  // 再把 CPU 佔位塞進 seatPool
+  for (let i = 0; i < cpu; i++) {
+    seatPool.push({ kind: 'cpu' });
+  }
+
+  // 小工具：Fisher–Yates 洗牌，讓座位順序隨機
+  for (let i = seatPool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [seatPool[i], seatPool[j]] = [seatPool[j], seatPool[i]];
+  }
+
+  // 預備：CPU 名稱 / 頭像、socket 新表、舊 id → 新 id 對照
   const cpuNames = ["克洛克達爾", "鷹眼密佛格", "小丑巴其"];
-const cpuAvatarIds = ['cpu1', 'cpu2', 'cpu3'];
+  const cpuAvatarIds = ["cpu1", "cpu2", "cpu3"];
 
-for (let i = nHuman; i < total; i++) {
-  const p = st.players[i];
-  const idx = i - nHuman;       // 第幾個 CPU（0~2）
+  let cpuUsed = 0;                 // 已經用了第幾個 CPU 名稱
+  const newSockets = new Map();    // sid → 新的 socket meta
+  const idRemap = new Map();       // oldId → newPlayerId
 
-  const cpuName = cpuNames[idx] || `CPU ${idx + 1}`;
-  const cpuAvatar = cpuAvatarIds[idx] || 'cpu1';
+  // ⑤ 把 seatPool 實際寫進 st.players
+  for (let i = 0; i < seatPool.length; i++) {
+    const seat = seatPool[i];
+    const p = st.players[i];
 
-  p.client = {
-    displayName: cpuName,
-    avatar: cpuAvatar,
-    pid: null,
-  };
-  p.displayName = cpuName;
-  p.avatar = cpuAvatar;
-  p.isCPU = true;
+    // 確保 player 自己的 id 也跟 index 對齊
+    p.id = i;
+
+    if (seat.kind === 'human') {
+      const j = seat.data;
+
+      // 真人：寫入名稱 / 頭像 / secret
+      p.client = {
+        displayName: j.name,
+        avatar: j.avatar,
+        pid: null,
+      };
+      p.displayName = j.name;
+      p.avatar = j.avatar;
+      p.secret = j.secret;
+      p.isCPU = false;
+
+      // 建立 oldId → newId 對照（等一下要換 host、socket）
+      idRemap.set(j.oldId, i);
+
+      // 重建 socket meta（保留其它欄位）
+      const oldMeta = room.sockets.get(j.sid) || {};
+      newSockets.set(j.sid, {
+        ...oldMeta,
+        playerId: i,
+        secret: j.secret,
+        displayName: j.name,
+        avatar: j.avatar,
+      });
+
+      // 通知真人自己的新座位
+      io.to(j.sid).emit('JOINED', { playerId: i, secret: j.secret });
+    } else {
+      // CPU：照順序發名字 / 頭像，但座位是已經洗過的 i
+      const idx = cpuUsed++;
+      const cpuName = cpuNames[idx] || `CPU ${idx + 1}`;
+      const cpuAvatar = cpuAvatarIds[idx] || "cpu1";
+
+      p.client = {
+        displayName: cpuName,
+        avatar: cpuAvatar,
+        pid: null,
+      };
+      p.displayName = cpuName;
+      p.avatar = cpuAvatar;
+      p.isCPU = true;
+      p.secret = null;
+    }
+  }
+
+  // 把 room.sockets 換成新的（playerId 已經是洗過座位）
+  room.sockets = newSockets;
+
+  // ⑥ host 也改成新座位（用 oldId → newId 對照）
+  const newHost = idRemap.get(room.host);
+  room.host = (newHost != null ? newHost : 0);
+
+  // ⑦ 清空等待室 ready，寫回狀態並先廣播一版 STATE
+  room.lobbyReady = {};
+  room.state = st;
+  room.phase = 'playing';
+  broadcastState(room);
+
+  // ★ 如果一開始就輪到 CPU，直接讓 CPU 先開始（含 2 秒 / 4 秒延遲）
+  runCpuLoop(roomId);
+
+  // ⑧ 導頁到 game.html（只會導真人的頁面，CPU 沒 socket）
+  for (const [sid] of room.sockets) {
+    io.to(sid).emit('EMIT', { type:'nav_game' });
+  }
+  return;
 }
 
-
-
-      // ⑤ 重新對齊 socket 的 playerId（oldId → 新座位 i），並回傳新的 JOINED（只針對真人）
-      const newSockets = new Map();
-      for (let i = 0; i < joined.length; i++){
-        const { sid, secret: sec } = joined[i];
-        const oldMeta = room.sockets.get(sid) || {};
-        newSockets.set(sid, {
-          ...oldMeta,
-          playerId: i,    // 新座位就是 i
-          secret: sec,
-        });
-        io.to(sid).emit('JOINED', { playerId: i, secret: sec });
-      }
-      room.sockets = newSockets;
-
-      // ⑥ host 也改成新座位
-      const remap = new Map(joined.map((j, idx) => [j.oldId, idx]));
-      const newHost = remap.get(room.host);
-      room.host = (newHost != null ? newHost : 0);
-
-      // ⑦ 清空等待室 ready，寫回狀態並先廣播一版 STATE
-      room.lobbyReady = {};
-      room.state = st;
-      room.phase = 'playing';
-      broadcastState(room);
-
-      // ★ 如果一開始就輪到 CPU，直接讓 CPU 先開始（含 2 秒 / 4 秒延遲）
-      runCpuLoop(roomId);
-
-
-      // ⑧ 導頁到 game.html（只會導真人的頁面，CPU 沒 socket）
-      for (const [sid] of room.sockets){
-        io.to(sid).emit('EMIT', { type:'nav_game' });
-      }
-      return;
-    }
 
 
 
