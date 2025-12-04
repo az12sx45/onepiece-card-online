@@ -153,7 +153,7 @@ const PREV_CARD_DELAY = {
   8:  { normal: 12000,  enhanced: 10000  },
   9:  { normal: 4000,  enhanced: 14000 },
   10: { normal: 12000,  enhanced: 8000  },
-  11: { normal: 4000,  enhanced: 13000 },
+  11: { normal: 4000,  enhanced: 18000 },
   12: { normal: 8000,  enhanced: 13000 },
   13: { normal: 4000,  enhanced: 12000  },
   14: { normal: 8000,  enhanced: 8000  },
@@ -163,6 +163,32 @@ const PREV_CARD_DELAY = {
   18: { normal: 4000,  enhanced: 4000  },
   19: { normal: 4000,  enhanced: 20000  },
 };
+
+// ================= CPU「打出牌後」延遲設定（依這張牌，一般 / 強化） =================
+// 單位：毫秒
+const PLAY_CARD_DECISION_DELAY = {
+  0:  { normal: 4000,  enhanced: 6000  },  // 薩波
+  1:  { normal: 4000,  enhanced: 7000  },  // 騙人布
+  2:  { normal: 4000,  enhanced: 7000  },  // 羅賓
+  3:  { normal: 4000,  enhanced: 5000  },  // 香吉士
+  4:  { normal: 4000,  enhanced: 6000  },  // 喬巴
+  5:  { normal: 4000,  enhanced: 14000  },  // 索隆
+  6:  { normal: 4000,  enhanced: 9000  },  // 羅
+  7:  { normal: 4000,  enhanced: 7000  },  // 娜美
+  8:  { normal: 4000,  enhanced: 10000  },  // 魯夫
+  9:  { normal: 4000,  enhanced: 14000  },  // 女帝
+  10: { normal: 4000,  enhanced: 8000  },  // 凱多
+  11: { normal: 4000,  enhanced: 9000  },  // 基德
+  12: { normal: 4000,  enhanced: 9000  },  // 奎因
+  13: { normal: 4000,  enhanced: 17000  },  // 基拉
+  14: { normal: 4000,  enhanced: 9000  },  // 大媽
+  15: { normal: 4000,  enhanced: 16000  },  // 卡塔庫栗
+  16: { normal: 4000,  enhanced: 9000  },  // 青雉
+  17: { normal: 4000,  enhanced: 13000  },  // 黑鬍子
+  18: { normal: 4000,  enhanced: 14000  },  // 紅髮
+  19: { normal: 4000,  enhanced: 18000 },  // 羅傑
+};
+
 
 // 判斷一張卡現在是不是在自己的強化場地上
 function isEnhancedNowServer(st, cardId) {
@@ -204,6 +230,30 @@ function getDelayForPrevCard(st) {
     return cfg.normal;
   }
   return 0;
+}
+
+// 根據「最後一張打出的牌」，決定 CPU 出牌後要延遲多久（毫秒）
+// 會依照 PLAY_CARD_DECISION_DELAY + 是否強化 來決定
+function getDelayAfterPlay(st) {
+  const lastId = getLastPlayedCardId(st);
+  if (lastId == null) return 4000;   // 找不到就給一個預設值（例如 4 秒）
+
+  const cfg = PLAY_CARD_DECISION_DELAY[lastId];
+  if (!cfg) return 4000;
+
+  const enhanced = isEnhancedNowServer(st, lastId);
+
+  // 強化版 → 用 enhanced
+  if (enhanced && typeof cfg.enhanced === "number") {
+    return cfg.enhanced;
+  }
+
+  // 一般版 → 用 normal
+  if (!enhanced && typeof cfg.normal === "number") {
+    return cfg.normal;
+  }
+
+  return 4000;
 }
 
 
@@ -722,11 +772,13 @@ function runCpuLoop(roomId){
         payload: { which },
       }, io);
 
-      // 出牌後的展示時間，維持原本 4 秒
-      delay(4000);
-      return;
-    }
+  // ★ 出牌後：依「這張牌是不是強化」決定要等多久
+  const stAfter = roomNow.state;          // 套用 PLAY_CARD 後的最新 state
+  const waitMs = getDelayAfterPlay(stAfter);
 
+  delay(waitMs);
+  return;
+}
 
     // 其他 turnStep（例如結算中 / 換人中） → 不再自動動作
   };
