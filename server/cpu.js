@@ -523,29 +523,6 @@ function pickCpuTargetSmart(st, meIdx, opts = {}){
 
   if (!enemies.length) return null;
 
- // === 新增：Usopp 專用 — 先找「已經 100% 知道尾數」的目標 ===
-  if (opts.for === 'usopp' && Array.isArray(st.usoppHints)) {
-    const sureTargets = enemies.filter(({ p, i }) => {
-      const hints = st.usoppHints[i];
-      if (!Array.isArray(hints) || hints.length !== 1) return false;
-      const d = hints[0];
-
-      // 1 不能被猜，不能算「必中」
-      if (d === 1) return false;
-
-      if (opts.avoidProtected && p.protected) return false;
-      if (opts.avoidDodging && p.dodging)   return false;
-      return true;
-    });
-
-    if (sureTargets.length > 0) {
-      // 若有很多個 → 優先打金幣最多的那個
-      sureTargets.sort((a, b) => (b.p.gold || 0) - (a.p.gold || 0));
-      return sureTargets[0].i;
-    }
-  }
-
-
   let candidates = enemies;
 
   // 2) avoidProtected / avoidDodging 只給「非 killer 模式」用
