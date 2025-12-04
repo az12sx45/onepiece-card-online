@@ -753,16 +753,34 @@ const roomId = qs.get('room') || sessionStorage.getItem('op_room') || '—';
 document.getElementById('roomLbl').textContent = '房號 ' + roomId;
 
 /* avatar 路徑修正 */
+/* avatar 路徑修正（支援數字頭像 & cpu1 這種字串） */
 function avatarUrl(v){
-  if(v==null) return '';
-  if(typeof v === 'number') return `images/avatars/${v}.webp`;
-  if(/^https?:\/\//i.test(v)) return v;
-  if(typeof v === 'string'){
-    if(v.includes('/')) return v;
-    return `images/avatars/${v}`;
+  if (v == null) return '';
+
+  // 數字：1 ~ 30 → 直接當成編號
+  if (typeof v === 'number') {
+    return `images/avatars/${v}.webp`;
   }
+
+  // 完整網址
+  if (/^https?:\/\//i.test(v)) return v;
+
+  if (typeof v === 'string') {
+    // 已經是含路徑的相對/絕對路徑
+    if (v.includes('/')) return v;
+
+    // 已經帶副檔名，例如 "cpu1.webp"
+    if (/\.(png|jpe?g|webp|gif|svg)$/i.test(v)) {
+      return `images/avatars/${v}`;
+    }
+
+    // 純檔名，例如 "cpu1" → 幫你補上 .webp
+    return `images/avatars/${v}.webp`;
+  }
+
   return '';
 }
+
 
 /* 勾選的指標（移除總分） */
 const METRICS = [
