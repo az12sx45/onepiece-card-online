@@ -916,7 +916,7 @@ if (myId == null) {
     const { sid, secret: sec } = joined[i];
     const oldMeta = room.sockets.get(sid) || {};
     newSockets.set(sid, {
-      .oldMeta,
+     ...oldMeta,
       playerId: i,    // 新座位就是 i
       secret: sec,
     });
