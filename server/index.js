@@ -12,7 +12,7 @@ const {
   _util,   // 新增
 } = require("./engine.js");
 
-const { cardById } = _util;  // 新增：用來看卡片資訊（場地名）
+const { cardById, tail } = _util;  // 再多拿 tail 來看尾數
 
 
 const {
@@ -458,7 +458,7 @@ function runCpuLoop(roomId){
         return;
       }
 
-      // --- 13 基拉：選一個人解除保護/閃避 ---
+      // --- 13 基拉：先解除，再決定要不要決鬥 ---
       if (act === 'killer') {
         const targetIdx = pickCpuTargetSmart(st, meIdx, {
           for: 'killer',
@@ -467,15 +467,58 @@ function runCpuLoop(roomId){
         });
         if (targetIdx == null) return;
 
+        const isBoost = !!(pending.extra && pending.extra.boost);
+
+        // ① 一般版基拉：只解除保護/閃避就結束
+        if (!isBoost) {
+          applyAndBroadcast(roomNow, {
+            type: 'PICK_TARGET',
+            playerId: meIdx,
+            payload: { target: targetIdx },
+          }, io);
+
+          delay(1500);
+          return;
+        }
+
+        // ② 強化版基拉：
+        //    先對目標送一次 PICK_TARGET（只解除保護/閃避）
         applyAndBroadcast(roomNow, {
           type: 'PICK_TARGET',
           playerId: meIdx,
           payload: { target: targetIdx },
         }, io);
 
+        // 讀出自己「保留下來的手牌」尾數（用來決定要不要決鬥）
+        const keepId =
+          (pending.extra && typeof pending.extra.keep === 'number')
+            ? pending.extra.keep
+            : (st.players[meIdx] && st.players[meIdx].hand);
+
+        const myTail = (typeof keepId === 'number') ? tail(keepId) : 0;
+
+        // 簡單策略：尾數 >= 7 再決鬥，尾數小就只拆防
+        const willDuel = myTail >= 7;
+
+        if (willDuel) {
+          // ③ 尾數夠大 → 再送一次 PICK_TARGET，這次帶 duel:true 進入決鬥
+          applyAndBroadcast(roomNow, {
+            type: 'PICK_TARGET',
+            playerId: meIdx,
+            payload: { target: targetIdx, duel: true },
+          }, io);
+        } else {
+          // ④ 不想決鬥 → 用 PICK_CANCEL 告訴引擎「我放棄決鬥」
+          applyAndBroadcast(roomNow, {
+            type: 'PICK_CANCEL',
+            playerId: meIdx,
+          }, io);
+        }
+
         delay(1500);
         return;
       }
+
 
       // --- 14 大媽強化（萬國）：選一個人收保護費/處刑 ---
       if (act === 'bigmom') {
