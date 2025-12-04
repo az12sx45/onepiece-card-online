@@ -145,48 +145,56 @@ const PREV_CARD_DELAY = {
   0:  { normal: 4000,  enhanced: 10000 },
   1:  { normal: 4000,  enhanced: 4000  },
   2:  { normal: 4000,  enhanced: 10000 },
-  3:  { normal: 12000,  enhanced: 12000  },
+  3:  { normal: 13000,  enhanced: 13000  },
   4:  { normal: 4000,  enhanced: 10000 },
   5:  { normal: 4000,  enhanced: 4000  },
   6:  { normal: 4000,  enhanced: 4000  },
   7:  { normal: 4000,  enhanced: 4000  },
-  8:  { normal: 12000,  enhanced: 10000  },
-  9:  { normal: 4000,  enhanced: 14000 },
-  10: { normal: 12000,  enhanced: 8000  },
+  8:  { normal: 13000,  enhanced: 12000  },
+  9:  { normal: 4000,  enhanced: 17000 },
+  10: { normal: 13000,  enhanced: 8000  },
   11: { normal: 4000,  enhanced: 18000 },
-  12: { normal: 8000,  enhanced: 13000 },
-  13: { normal: 4000,  enhanced: 12000  },
+  12: { normal: 8000,  enhanced: 16000 },
+  13: { normal: 4000,  enhanced: 13000  },
   14: { normal: 8000,  enhanced: 8000  },
   15: { normal: 4000,  enhanced: 4000  },
   16: { normal: 4000,  enhanced: 15000 },
   17: { normal: 4000,  enhanced: 4000  },
   18: { normal: 4000,  enhanced: 4000  },
-  19: { normal: 4000,  enhanced: 20000  },
+  19: { normal: 4000,  enhanced: 4000  },
 };
 
 // ================= CPU「打出牌後」延遲設定（依這張牌，一般 / 強化） =================
 // 單位：毫秒
 const PLAY_CARD_DECISION_DELAY = {
   0:  { normal: 4000,  enhanced: 6000  },  // 薩波
-  1:  { normal: 4000,  enhanced: 7000  },  // 騙人布
-  2:  { normal: 4000,  enhanced: 7000  },  // 羅賓
-  3:  { normal: 4000,  enhanced: 5000  },  // 香吉士
+  1:  { normal: 4000,  enhanced: 10000  },  // 騙人布
+  2:  { normal: 4000,  enhanced: 10000  },  // 羅賓
+  3:  { normal: 4000,  enhanced: 9000  },  // 香吉士
   4:  { normal: 4000,  enhanced: 6000  },  // 喬巴
-  5:  { normal: 4000,  enhanced: 14000  },  // 索隆
-  6:  { normal: 4000,  enhanced: 9000  },  // 羅
-  7:  { normal: 4000,  enhanced: 7000  },  // 娜美
-  8:  { normal: 4000,  enhanced: 10000  },  // 魯夫
+  5:  { normal: 4000,  enhanced: 17000  },  // 索隆
+  6:  { normal: 4000,  enhanced: 12000  },  // 羅
+  7:  { normal: 4000,  enhanced: 10000  },  // 娜美
+  8:  { normal: 4000,  enhanced: 13000  },  // 魯夫
   9:  { normal: 4000,  enhanced: 14000  },  // 女帝
   10: { normal: 4000,  enhanced: 8000  },  // 凱多
   11: { normal: 4000,  enhanced: 9000  },  // 基德
   12: { normal: 4000,  enhanced: 9000  },  // 奎因
-  13: { normal: 4000,  enhanced: 17000  },  // 基拉
-  14: { normal: 4000,  enhanced: 9000  },  // 大媽
-  15: { normal: 4000,  enhanced: 16000  },  // 卡塔庫栗
+  13: { normal: 4000,  enhanced: 20000  },  // 基拉
+  14: { normal: 4000,  enhanced: 12000  },  // 大媽
+  15: { normal: 4000,  enhanced: 19000  },  // 卡塔庫栗
   16: { normal: 4000,  enhanced: 9000  },  // 青雉
-  17: { normal: 4000,  enhanced: 13000  },  // 黑鬍子
+  17: { normal: 4000,  enhanced: 16000  },  // 黑鬍子
   18: { normal: 4000,  enhanced: 14000  },  // 紅髮
-  19: { normal: 4000,  enhanced: 18000 },  // 羅傑
+  19: { normal: 4000,  enhanced: 21000 },  // 羅傑
+};
+
+// ================= 魯夫第一次決鬥 → 第二次決鬥 中間的延遲 =================
+// 單位：毫秒
+// normal ＝ 一般魯夫；enhanced 這裡其實用不到，先留欄位給你之後調整
+const LUFFY_SECOND_GAP = {
+  normal: 10000,   // 一般魯夫：1.5 秒（你可以自己改）
+  enhanced: 1500, // 先隨便設，實際只會用在一般魯夫
 };
 
 
@@ -254,6 +262,20 @@ function getDelayAfterPlay(st) {
   }
 
   return 4000;
+}
+
+// 根據現在狀態，決定「魯夫第一次決鬥 → 第二次決鬥」中間要等多久
+function getLuffySecondGap(st) {
+  const lastId = getLastPlayedCardId(st);
+  const enhanced = isEnhancedNowServer(st, 8);
+
+  // 理論上 pending.action === 'luffy' 時，最後一張就是 8 號
+  if (lastId !== 8) {
+    return LUFFY_SECOND_GAP.normal;
+  }
+
+  // 如果你未來有要分「魯夫在魚人島但沒開強化招式」也可用這個欄位
+  return enhanced ? LUFFY_SECOND_GAP.enhanced : LUFFY_SECOND_GAP.normal;
 }
 
 
@@ -600,7 +622,7 @@ function runCpuLoop(roomId){
         return;
       }
 
-      // --- 8 魯夫：第一次決鬥 + 第二次決鬥 ---
+      // --- 8 魯夫：第一次決鬥 + 第二次決鬥（只影響一般魯夫） ---
       if (act === 'luffy') {
         // 第一次決鬥：先挑一個人
         if (!pending.extra || !pending.extra.firstDone) {
@@ -617,9 +639,24 @@ function runCpuLoop(roomId){
             payload: { target: targetIdx },
           }, io);
 
+          // 第一次決鬥前的思考時間（維持你原本 1.5 秒）
           delay(1500);
           return;
         }
+
+        // ★ 走到這裡代表：第一次決鬥已經做完（firstDone = true）
+
+        // 第一次 → 第二次中間：先停頓一次（只停一次）
+        if (!st._cpuWaitedLuffySecond) {
+          st._cpuWaitedLuffySecond = true;
+
+          const gapMs = getLuffySecondGap(st);  // 通常是 LUFFY_SECOND_GAP.normal
+          delay(gapMs);
+          return;
+        }
+
+        // 第二次進來：等完了，就真正選第二個對象
+        st._cpuWaitedLuffySecond = false;
 
         // 已做過第一次 → 第二次決鬥（沒有合適對象就傳 -1）
         const targetIdx = pickCpuTargetSmart(st, meIdx, {
@@ -635,9 +672,11 @@ function runCpuLoop(roomId){
           payload: { target: sendTarget },
         }, io);
 
+        // 第二次決鬥送出後，也可以留一點動畫時間
         delay(1500);
         return;
       }
+
 
       // --- 8 魯夫魚人島強化：是否發動全場大砍 ---
       if (act === 'luffy-boost') {
