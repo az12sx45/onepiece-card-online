@@ -655,7 +655,7 @@ body::before{
 
 .draw-hint{
   position: absolute;
-  right: 145px;          /* 桌機你現在覺得 OK，就先維持 */
+  right: 150px;          /* 桌機你現在覺得 OK，就先維持 */
   top: 20%;
   transform: translateY(-50%);
   display: inline-flex;
@@ -4703,20 +4703,31 @@ el.venues.innerHTML = '';
 
 
   // 棄牌（秘密棄牌＝卡背）
-  el.discard.innerHTML='';
-  (state.discard||[]).forEach(item=>{
-    const im=document.createElement('img');
-    im.className='thumb';
+  el.discard.innerHTML = '';
+  (state.discard || []).forEach(item => {
+    const im = document.createElement('img');
+    im.className = 'thumb';
     const isBack = (item && typeof item === 'object' && item.back === true);
     im.src = isBack ? 'images/cards/back.webp' : CARD(item);
     el.discard.appendChild(im);
   });
+
   const nowLen = (state.discard || []).length;
+
+  // ⭐ 有新卡進棄牌堆時：
   if (nowLen > _prev.discardLen) {
     const imgs = el.discard.querySelectorAll('img');
-    const last = imgs[imgs.length - 1];
-    onceFx(last, 'fx-flip');
+    if (imgs.length) {
+      const last = imgs[imgs.length - 1];
+
+      // 新牌翻轉效果
+      onceFx(last, 'fx-flip');
+
+      // ⭐ 自動捲到最右邊，顯示最新那張
+      el.discard.scrollLeft = el.discard.scrollWidth;
+    }
   }
+
   _prev.discardLen = nowLen;
 
   // 玩家
@@ -4741,7 +4752,7 @@ el.venues.innerHTML = '';
             ${p.dodging?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">🌀 閃避</span>':''}
             ${p.frozen?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">❄ 凍結</span>':''}
             ${p.skipNext?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">⚡ 麻痺</span>':''}
-            ${(p.iceInfected || p.iceArmed)?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">☠ 冰鬼-打出奇數牌淘汰</span>':''}
+            ${p.iceArmed?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">🧊 檢查</span>':''}
             ${(!p.protected&&!p.dodging&&!p.frozen&&!p.skipNext&&!p.iceArmed)?'<span class="opacity-50">—</span>':''}
           </div>
           ${isMe? `<div class="mt-2 flex items-start gap-2">
@@ -5404,17 +5415,8 @@ el.deckBtn.onclick   = ()=> playDrawFxThenDraw();
 el.playHand.onclick  = ()=> handlePlayCard('hand');
 el.playDrawn.onclick = ()=> handlePlayCard('drawn');
 el.nextRound.onclick = ()=> sendAction('NEXT_ROUND');
-
-  // === 遊戲中禁止直接關閉 / 刷新（避免整局歸零） ===
-  window.addEventListener('beforeunload', function (e) {
-    // 如果你之後想做「在等待室就不要彈出」，
-    // 可以在這裡加一個判斷，例如現在是不是 playing 階段。
-    e.preventDefault();
-    e.returnValue = ''; // Chrome 需要這一行
-  });
-  
 </script>
-  
+
 <!-- 角色語音（只有本機播放） -->
 <audio id="voiceAudio" preload="auto"></audio>
 
