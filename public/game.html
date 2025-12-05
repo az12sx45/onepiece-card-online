@@ -5404,8 +5404,17 @@ el.deckBtn.onclick   = ()=> playDrawFxThenDraw();
 el.playHand.onclick  = ()=> handlePlayCard('hand');
 el.playDrawn.onclick = ()=> handlePlayCard('drawn');
 el.nextRound.onclick = ()=> sendAction('NEXT_ROUND');
-</script>
 
+  // === 遊戲中禁止直接關閉 / 刷新（避免整局歸零） ===
+  window.addEventListener('beforeunload', function (e) {
+    // 如果你之後想做「在等待室就不要彈出」，
+    // 可以在這裡加一個判斷，例如現在是不是 playing 階段。
+    e.preventDefault();
+    e.returnValue = ''; // Chrome 需要這一行
+  });
+  
+</script>
+  
 <!-- 角色語音（只有本機播放） -->
 <audio id="voiceAudio" preload="auto"></audio>
 
