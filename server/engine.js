@@ -741,16 +741,27 @@ function nextRound(state){
   // 重建玩家陣列，保留 gold / client / displayName / avatar
   const players = initialPlayers(playerCount);
   for (let i = 0; i < playerCount; i++) {
-    const oldP = st.players[i];
+ const oldP = st.players[i];
     const p = players[i];
 
+    if (!oldP) continue;
+
+    // 金幣
     p.gold = oldP.gold || 0;
 
+    // 前端顯示用資訊
     if (oldP.client) p.client = clone(oldP.client);
     if (oldP.displayName) p.displayName = oldP.displayName;
     if (oldP.avatar != null) p.avatar = oldP.avatar;
-    if (!p.avatar && oldP.client?.avatar != null) p.avatar = oldP.client.avatar;
-    if (oldP.isCPU) p.isCPU = true;   // ★ 保留 CPU 標記
+    if (!p.avatar && oldP.client?.avatar != null) {
+      p.avatar = oldP.client.avatar;
+    }
+
+    // ★ 關鍵：保留每個玩家的 secret，讓刷新可以重連
+    if (oldP.secret) p.secret = oldP.secret;
+
+    // 保留 CPU 標記
+    if (oldP.isCPU) p.isCPU = true;
   }
 
   // 發新牌
