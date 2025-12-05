@@ -1036,63 +1036,65 @@ if (myId == null) {
   const newSockets = new Map();    // sid → 新的 socket meta
   const idRemap = new Map();       // oldId → newPlayerId
 
-  // ⑤ 把 seatPool 實際寫進 st.players
-  for (let i = 0; i < seatPool.length; i++) {
-    const seat = seatPool[i];
-    const p = st.players[i];
+// ⑤ 把 seatPool 實際寫進 st.players
+for (let i = 0; i < seatPool.length; i++) {
+  const seat = seatPool[i];
+  const p = st.players[i];
 
-    // 確保 player 自己的 id 也跟 index 對齊
-    p.id = i;
+  // 確保 player 自己的 id 也跟 index 對齊
+  p.id = i;
 
-    if (seat.kind === 'human') {
-      const j = seat.data;
+  if (seat.kind === 'human') {
+    const j = seat.data;
 
-      // 真人：寫入名稱 / 頭像 / secret
-      p.client = {
-        displayName: j.name,
-        avatar: j.avatar,
-        pid: null,
-      };
-      p.displayName = j.name;
-      p.avatar = j.avatar;
-      p.secret = j.secret;
-      p.isCPU = false;
+    // 真人：寫入名稱 / 頭像 / secret
+    p.client = {
+      displayName: j.name,
+      avatar: j.avatar,
+      pid: null,          // 之後你要用 pid 再補
+    };
+    p.displayName = j.name;
+    p.avatar = j.avatar;
 
-      // 建立 oldId → newId 對照（等一下要換 host、socket）
-      idRemap.set(j.oldId, i);
+    // ★ 關鍵：把舊的 secret 帶進來，讓之後重連可以靠 secret 找到你
+    p.secret = j.secret;
+    p.isCPU = false;
 
-      // 重建 socket meta（保留其它欄位）
-      const oldMeta = room.sockets.get(j.sid) || {};
-      newSockets.set(j.sid, {
-        ...oldMeta,
-        playerId: i,
-        secret: j.secret,
-        displayName: j.name,
-        avatar: j.avatar,
-      });
+    // 建立 oldId → newId 對照（等一下要換 host、socket）
+    idRemap.set(j.oldId, i);
 
-      // 通知真人自己的新座位
-      io.to(j.sid).emit('JOINED', { playerId: i, secret: j.secret });
-    } else {
-      // CPU：照順序發名字 / 頭像，但座位是已經洗過的 i
-      const idx = cpuUsed++;
-      const cpuName = cpuNames[idx] || `CPU ${idx + 1}`;
-      const cpuAvatar = cpuAvatarIds[idx] || "cpu1";
+    // 重建 socket meta（保留其它欄位）
+    const oldMeta = room.sockets.get(j.sid) || {};
+    newSockets.set(j.sid, {
+      ...oldMeta,         // ← 正確語法：展開舊 meta
+      playerId: i,
+      secret: j.secret,
+      displayName: j.name,
+      avatar: j.avatar,
+    });
 
-      p.client = {
-        displayName: cpuName,
-        avatar: cpuAvatar,
-        pid: null,
-      };
-      p.displayName = cpuName;
-      p.avatar = cpuAvatar;
-      p.isCPU = true;
-      p.secret = null;
-    }
+    // 通知真人自己的新座位
+    io.to(j.sid).emit('JOINED', { playerId: i, secret: j.secret });
+  } else {
+    // CPU：照順序發名字 / 頭像，但座位是已經洗過的 i
+    const idx = cpuUsed++;
+    const cpuName   = cpuNames[idx]     || `CPU ${idx + 1}`;
+    const cpuAvatar = cpuAvatarIds[idx] || "cpu1";
+
+    p.client = {
+      displayName: cpuName,
+      avatar: cpuAvatar,
+      pid: null,
+    };
+    p.displayName = cpuName;
+    p.avatar = cpuAvatar;
+    p.isCPU = true;
+    p.secret = null;  // CPU 不需要 secret
   }
+}
 
-  // 把 room.sockets 換成新的（playerId 已經是洗過座位）
-  room.sockets = newSockets;
+// 把 room.sockets 換成新的（playerId 已經是洗過座位）
+room.sockets = newSockets;
 
   // ⑥ host 也改成新座位（用 oldId → newId 對照）
   const newHost = idRemap.get(room.host);
