@@ -198,6 +198,74 @@ function usoppHintEq(st, playerIdx, digit){
   }
 }
 
+// ✨ 清空「針對某人的騙人布資訊」（當判斷他手牌已換掉時用）
+function resetUsoppForTarget(st, targetIdx) {
+  if (!Array.isArray(st.usoppHistory)) st.usoppHistory = [];
+  if (!Array.isArray(st.usoppHints)) return;
+
+  const roundNo = st.roundNo || 1;
+
+  // 只清掉「本局、這個目標」的紀錄，其它保留
+  st.usoppHistory = st.usoppHistory.filter(rec => {
+    if (!rec) return false;
+    if (rec.target !== targetIdx) return true;
+    if (rec.roundNo != null && rec.roundNo !== roundNo) return true;
+    // 同一局、同一個目標 → 清掉
+    return false;
+  });
+
+  st.usoppHints[targetIdx] = null;
+}
+
+// ✨ 取得「這一局針對某人曾猜錯過的尾數列表」
+function getUsoppMissDigitsForTarget(st, targetIdx) {
+  if (!Array.isArray(st.usoppHistory)) return [];
+  const roundNo = st.roundNo || 1;
+  const set = new Set();
+
+  for (const rec of st.usoppHistory) {
+    if (!rec) continue;
+    if (rec.target !== targetIdx) continue;
+    if (rec.roundNo != null && rec.roundNo !== roundNo) continue;
+    if (rec.hit) continue;                    // 只看沒中的紀錄
+    if (typeof rec.digit !== 'number') continue;
+    set.add(rec.digit);
+  }
+
+  return Array.from(set);
+}
+
+// ✨ 自己打牌時，依照「打出的尾數」決定要不要重置針對自己的 Usopp 資訊
+// isChanger: 這張牌是否屬於 0 / 6 / 8強化 / 11強化 這種會改變自己剩下那張牌的情況
+function updateUsoppOnSelfPlay(st, playerIdx, playId, isChanger) {
+  if (!Array.isArray(st.usoppHints) && !Array.isArray(st.usoppHistory)) return;
+
+  // 這幾張會把手牌洗掉/換掉：直接重置
+  if (isChanger) {
+    resetUsoppForTarget(st, playerIdx);
+    return;
+  }
+
+  // 取得「之前猜錯過的尾數」
+  const missDigits = getUsoppMissDigitsForTarget(st, playerIdx);
+  if (!missDigits.length) {
+    // 這一局還沒有人猜過他 → 沒什麼可以重置的，直接略過
+    return;
+  }
+
+  const t = tail(playId); // 這張牌的尾數 0~9
+
+  // 如果他打出的尾數本身就是以前被猜錯過的數字：
+  // → 當作他打的是剛抽到的那張，留下的那張還是「那張被大家一直猜」→ 不重置
+  if (missDigits.includes(t)) {
+    return;
+  }
+
+  // 否則：打出一個沒被猜過的尾數 → 很可能是原本那張
+  // → 代表原本那張被打掉了，之前那堆排除號碼失效 → 重置
+  resetUsoppForTarget(st, playerIdx);
+}
+
 
 function pname(st, idx){
   const p = st.players?.[idx];
@@ -800,10 +868,6 @@ function applyAction(state, action){
       pushLog(st, '冰鬼：標記生效，本回合受檢查', emits);
     }
 
-  // ★ 輪到某玩家時：他的手牌改變 → 把「針對他」的 Usopp 尾數提示清空
-  if (Array.isArray(st.usoppHints)) {
-    st.usoppHints[st.turnIndex] = null;
-  }
 
     addStat(st, st.turnIndex, 'survivalTurns', 1); // ★ 生存分：輪到自己 +1
     me.tempDraw = st.deck.pop() ?? null;
@@ -868,6 +932,16 @@ if (playId !== 10) {
 
     const card = cardById(playId);
     const venueActive = st.venues.some(v=>v.name===card.venue);
+
+    // ★ Usopp 推理：自己打牌時，決定要不要重置針對自己的排除號碼
+    // 會把自己剩下那張牌洗掉/換掉的牌：0、6、8強化、11強化
+    const isSelfHandChanger =
+      playId === 0 ||                      // 薩波：大家重抽
+      playId === 6 ||                      // 羅：自己和別人換手牌
+      (playId === 8 && venueActive) ||     // 魯夫強化（魚人島）：用 keepId 比完後再換牌
+      (playId === 11 && venueActive);      // 基德強化（夏波帝）：全場手牌輪轉
+
+    updateUsoppOnSelfPlay(st, st.turnIndex, playId, isSelfHandChanger);
 
     // 薩波靜默
     if(st.saboSilenceOn && isHighTail(playId)){
