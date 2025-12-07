@@ -1513,31 +1513,63 @@ case 19: { // 羅傑
       const g = effectGuard(st, idx, {});
       if(!g.blocked){
         pushLog(st, `香吉士：向 ${pname(st, idx)} 發起比拚`, emits);
-        const base=tail(p.extra.keep);
-        const my = p.extra.boost ? (base===9?10:base+1) : base;
-        const opp=tail(st.players[idx].hand);
+
+        const base = tail(p.extra.keep);                  // 香吉士手上的那張（決鬥用的那張）的尾數
+        const my   = p.extra.boost ? (base===9?10:base+1) // 有強化時，用 +1 之後的數字來比
+                                   : base;
+        const opp  = tail(st.players[idx].hand);          // 防守方手牌尾數
+
         if(my>opp){
+          // 香吉士這邊贏
           scoreDuelAttack(st, meIdx, p.extra.keep, st.players[idx].hand, { sanjiBoost: !!p.extra.boost }); // ★
           doEliminate(st, idx, '惡魔風腳', meIdx, emits);
-                pushDuelLog(emits, st, meIdx, idx, idx);
+          pushDuelLog(emits, st, meIdx, idx, idx);
 
+          // ★ Usopp 推理：贏家是 meIdx
+          // 一般版：winnerTail > opp → floor = opp
+          // 強化版：winnerTail ≥ opp → floor = opp-1（可以 100% 排除的只有 "小於 opp"）
+          let floorDigit = null;
+          if (p.extra.boost) {
+            if (opp > 0) floorDigit = opp - 1;  // 尾數 0 沒得減就不加資訊
+          } else {
+            floorDigit = opp;
+          }
+          if (floorDigit != null) {
+            updateUsoppDuelFloor(st, meIdx, floorDigit);
+          }
 
         } else if(my<opp){
+          // 香吉士這邊輸，被反殺
           scoreDefenseReversal(st, idx, st.players[idx].hand, p.extra.keep, { sanjiBoost: !!p.extra.boost });
           doEliminate(st, st.turnIndex, '惡魔風腳反噬', meIdx, emits);
-                pushDuelLog(emits, st, meIdx, meIdx, idx);
+          pushDuelLog(emits, st, meIdx, meIdx, idx);
+
+          // ★ Usopp 推理：贏家是 idx
+          // base 是「香吉士那張」的尾數
+          let floorDigit = null;
+          if (p.extra.boost) {
+            if (base > 0) floorDigit = base - 1;
+          } else {
+            floorDigit = base;
+          }
+          if (floorDigit != null) {
+            updateUsoppDuelFloor(st, idx, floorDigit);
+          }
+
         } else {
+          // 平手：什麼都推不出來
           pushLog(st,'平手',emits);
           pushDuelDraw(emits, st, meIdx, idx);
         }
       } else {
-        // ★ 防禦分：對手擋下攻擊
+        // ★ 防禦分：對手擋下攻擊（決鬥沒有觸發）
         scoreDefense(st, idx, p.extra.keep);
       }
       st.pending=null;
       endOrNext(st);
       return { state: st, emits };
     }
+
 
 if(p.action==='zoro'){
   const g = effectGuard(st, idx, {});
