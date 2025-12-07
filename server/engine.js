@@ -172,6 +172,13 @@ function ensureUsoppHints(st){
   }
 }
 
+// ★ 新增：每位玩家「決鬥得到的尾數下限」（exclusive）
+function ensureUsoppDuelFloor(st){
+  if (!Array.isArray(st.usoppDuelFloor) && Array.isArray(st.players)) {
+    st.usoppDuelFloor = Array(st.players.length).fill(null); // 每人一格，下限（例如 5 代表 >5）
+  }
+}
+
 function initUsoppHintIfNeeded(st, playerIdx){
   ensureUsoppHints(st);
   if (!Array.isArray(st.usoppHints[playerIdx])) {
@@ -217,6 +224,12 @@ function resetUsoppForTarget(st, targetIdx) {
   st.usoppHints[targetIdx] = null;
 }
 
+  // ★ 新增：把這個人的「決鬥尾數下限」也清掉
+  if (Array.isArray(st.usoppDuelFloor)) {
+    st.usoppDuelFloor[targetIdx] = null;
+  }
+}
+
 // ✨ 取得「這一局針對某人曾猜錯過的尾數列表」
 function getUsoppMissDigitsForTarget(st, targetIdx) {
   if (!Array.isArray(st.usoppHistory)) return [];
@@ -235,15 +248,46 @@ function getUsoppMissDigitsForTarget(st, targetIdx) {
   return Array.from(set);
 }
 
+// ★ 決鬥結果：贏家尾數一定 > loserTail
+function updateUsoppDuelFloor(st, playerIdx, loserTail) {
+  ensureUsoppHints(st);
+  ensureUsoppDuelFloor(st);
+
+  // 若原本就有下限，取較大的那個（越打越精準）
+  const prev = st.usoppDuelFloor[playerIdx];
+  const floor = (prev == null) ? loserTail : Math.max(prev, loserTail);
+  st.usoppDuelFloor[playerIdx] = floor;
+
+  // 目前這個玩家「可能的尾數」全都收窄成 > floor
+  const arr = initUsoppHintIfNeeded(st, playerIdx);
+  st.usoppHints[playerIdx] = arr.filter(d => d > floor);
+}
+
 // ✨ 自己打牌時，依照「打出的尾數」決定要不要重置針對自己的 Usopp 資訊
 // isChanger: 這張牌是否屬於 0 / 6 / 8強化 / 11強化 這種會改變自己剩下那張牌的情況
 function updateUsoppOnSelfPlay(st, playerIdx, playId, isChanger) {
-  if (!Array.isArray(st.usoppHints) && !Array.isArray(st.usoppHistory)) return;
+  if (!Array.isArray(st.usoppHints) &&
+      !Array.isArray(st.usoppHistory) &&
+      !Array.isArray(st.usoppDuelFloor)) {
+    return;
+  }
 
   // 這幾張會把手牌洗掉/換掉：直接重置
   if (isChanger) {
     resetUsoppForTarget(st, playerIdx);
     return;
+  }
+
+  const tPlay = tail(playId); // 這張牌的尾數 0~9
+
+  // ★ 先看「決鬥下限」：如果他現在打出的尾數 > 下限，代表當初決鬥那張牌被打掉了
+  if (Array.isArray(st.usoppDuelFloor)) {
+    const floor = st.usoppDuelFloor[playerIdx];
+    if (typeof floor === 'number' && tPlay > floor) {
+      // 代表那張「一定 > floor 的牌」已經被打掉 → 目前手牌等於新東西 → 清空推理
+      resetUsoppForTarget(st, playerIdx);
+      return;
+    }
   }
 
   // 取得「之前猜錯過的尾數」
@@ -253,11 +297,9 @@ function updateUsoppOnSelfPlay(st, playerIdx, playId, isChanger) {
     return;
   }
 
-  const t = tail(playId); // 這張牌的尾數 0~9
-
   // 如果他打出的尾數本身就是以前被猜錯過的數字：
   // → 當作他打的是剛抽到的那張，留下的那張還是「那張被大家一直猜」→ 不重置
-  if (missDigits.includes(t)) {
+  if (missDigits.includes(tPlay)) {
     return;
   }
 
@@ -1718,10 +1760,17 @@ if(p.action==='zoro'){
                 pushDuelLog(emits, st, meIdx, idx, idx);
 
 
+
+      // ★ 贏家是 meIdx，輸家的尾數是 opp
+      updateUsoppDuelFloor(st, meIdx, opp);
+
         } else if(my<opp){
           scoreDefenseReversal(st, idx, st.players[idx].hand, p.extra.keep, {});
           doEliminate(st, st.turnIndex, '魯夫失敗', meIdx, emits);
       pushDuelLog(emits, st, meIdx, meIdx, idx);
+
+      // ★ 贏家是 idx，輸家的尾數是 my
+      updateUsoppDuelFloor(st, idx, my);
 
 
         } else {
@@ -1757,12 +1806,17 @@ if(p.action==='zoro'){
           doEliminate(st, idx, '雷鳴八卦', meIdx, emits);
                 pushDuelLog(emits, st, meIdx, idx, idx);
 
+      // ★ 贏家 meIdx，輸家尾數 opp
+      updateUsoppDuelFloor(st, meIdx, opp);
+
 
         } else if(my<opp){
           scoreDefenseReversal(st, idx, st.players[idx].hand, st.players[st.turnIndex].hand, { ignoreDefOrDodge:true });
           doEliminate(st, st.turnIndex, '被反殺', meIdx, emits);
           pushDuelLog(emits, st, meIdx, meIdx, idx);
 
+  // ★ 贏家 idx，輸家尾數 my
+      updateUsoppDuelFloor(st, idx, my);
 
         } else {
           pushLog(st,'平手',emits);
@@ -1810,10 +1864,16 @@ if (p.action === 'killer') {
         pushDuelLog(emits, st, meIdx, idx, idx);
         doEliminate(st, idx, `基拉決鬥：挑戰者勝，尾數 ${my} > ${opp}`, meIdx, emits);
 
+  // ★ 贏家 meIdx
+        updateUsoppDuelFloor(st, meIdx, opp);
+
       } else if (my < opp) {
         // 挑戰者敗
         pushDuelLog(emits, st, meIdx, meIdx, idx);
         doEliminate(st, meIdx, `基拉決鬥：防守方勝，尾數 ${my} < ${opp}`, meIdx, emits);
+
+      // ★ 贏家 idx
+        updateUsoppDuelFloor(st, idx, my);
 
       } else {
         pushLog(st, '平手', emits);
@@ -2003,10 +2063,16 @@ if (type === 'LUFFY_SECOND') {
       doEliminate(st, idx, '魯夫擊倒', meIdx, emits);
       pushDuelLog(emits, st, meIdx, idx, idx);
 
+      // ★ 贏家 meIdx
+      updateUsoppDuelFloor(st, meIdx, opp);
+
     } else if (my < opp) {
       scoreDefenseReversal(st, idx, oppId, myId, {});
       doEliminate(st, meIdx, '魯夫失敗', meIdx, emits);
       pushDuelLog(emits, st, meIdx, meIdx, idx);
+
+      // ★ 贏家 idx
+      updateUsoppDuelFloor(st, idx, my);
 
     } else {
       pushLog(st, '平手', emits);
