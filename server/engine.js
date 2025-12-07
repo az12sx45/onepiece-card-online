@@ -221,14 +221,15 @@ function resetUsoppForTarget(st, targetIdx) {
     return false;
   });
 
+  // 清掉這個人目前的 Usopp 尾數提示
   st.usoppHints[targetIdx] = null;
-}
 
-  // ★ 新增：把這個人的「決鬥尾數下限」也清掉
+  // ★ 一併清掉這個人的「決鬥尾數下限」
   if (Array.isArray(st.usoppDuelFloor)) {
     st.usoppDuelFloor[targetIdx] = null;
   }
 }
+
 
 // ✨ 取得「這一局針對某人曾猜錯過的尾數列表」
 function getUsoppMissDigitsForTarget(st, targetIdx) {
