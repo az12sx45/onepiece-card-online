@@ -98,153 +98,1693 @@ function isEnhancedNowCpu(st, cardId) {
   return st.venues.some(v => v && v.name === card.venue);
 }
 
-function isEnhancedNowCpu(st, cardId) {
-  const card = cardById(cardId);
-  if (!card || !card.venue) return false;
-  if (!Array.isArray(st.venues)) return false;
-  return st.venues.some(v => v && v.name === card.venue);
-}
+// === 雙卡出牌偏好表（由你「2 選 1」點選紀錄產生）===
 
+// 這個物件要貼「卡片 2 選 1」工具匯出的 pairs：
+//   key 範例："0_N__5_E"
+//   value 內有 a / b / shown / aPref / bPref 等欄位
+const PAIR_PREF = {
+  "1_E__9_E": {
+      "a": "1_E",
+      "b": "9_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "12_E__15_E": {
+      "a": "12_E",
+      "b": "15_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "10_N__7_E": {
+      "a": "10_N",
+      "b": "7_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "18_N__1_N": {
+      "a": "18_N",
+      "b": "1_N",
+      "shown": 2,
+      "aWins": 0,
+      "bWins": 2,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "13_N__17_E": {
+      "a": "13_N",
+      "b": "17_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "16_E__18_N": {
+      "a": "16_E",
+      "b": "18_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "14_N__16_E": {
+      "a": "14_N",
+      "b": "16_E",
+      "shown": 2,
+      "aWins": 2,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "16_E__7_E": {
+      "a": "16_E",
+      "b": "7_E",
+      "shown": 2,
+      "aWins": 2,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "14_E__15_N": {
+      "a": "14_E",
+      "b": "15_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "19_N__5_N": {
+      "a": "19_N",
+      "b": "5_N",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "14_E__2_E": {
+      "a": "14_E",
+      "b": "2_E",
+      "shown": 2,
+      "aWins": 2,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "11_N__8_N": {
+      "a": "11_N",
+      "b": "8_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "12_E__18_E": {
+      "a": "12_E",
+      "b": "18_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "0_E__18_N": {
+      "a": "0_E",
+      "b": "18_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "15_E__19_N": {
+      "a": "15_E",
+      "b": "19_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "18_N__7_E": {
+      "a": "18_N",
+      "b": "7_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "16_E__1_E": {
+      "a": "16_E",
+      "b": "1_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "15_E__16_E": {
+      "a": "15_E",
+      "b": "16_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "12_E__5_N": {
+      "a": "12_E",
+      "b": "5_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "13_N__2_E": {
+      "a": "13_N",
+      "b": "2_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "0_E__17_N": {
+      "a": "0_E",
+      "b": "17_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "14_E__9_E": {
+      "a": "14_E",
+      "b": "9_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "14_E__6_E": {
+      "a": "14_E",
+      "b": "6_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "14_N__2_E": {
+      "a": "14_N",
+      "b": "2_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "0_N__2_E": {
+      "a": "0_N",
+      "b": "2_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "15_N__18_N": {
+      "a": "15_N",
+      "b": "18_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "17_N__6_N": {
+      "a": "17_N",
+      "b": "6_N",
+      "shown": 2,
+      "aWins": 2,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "13_N__6_N": {
+      "a": "13_N",
+      "b": "6_N",
+      "shown": 3,
+      "aWins": 3,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "14_N__16_N": {
+      "a": "14_N",
+      "b": "16_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "16_E__8_E": {
+      "a": "16_E",
+      "b": "8_E",
+      "shown": 2,
+      "aWins": 2,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "13_N__15_N": {
+      "a": "13_N",
+      "b": "15_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "0_E__16_E": {
+      "a": "0_E",
+      "b": "16_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "15_N__4_E": {
+      "a": "15_N",
+      "b": "4_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "10_N__9_N": {
+      "a": "10_N",
+      "b": "9_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "0_E__11_E": {
+      "a": "0_E",
+      "b": "11_E",
+      "shown": 2,
+      "aWins": 2,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "1_N__9_E": {
+      "a": "1_N",
+      "b": "9_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "16_N__4_N": {
+      "a": "16_N",
+      "b": "4_N",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "13_N__9_N": {
+      "a": "13_N",
+      "b": "9_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "10_N__14_N": {
+      "a": "10_N",
+      "b": "14_N",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "4_N__5_E": {
+      "a": "4_N",
+      "b": "5_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "12_N__8_E": {
+      "a": "12_N",
+      "b": "8_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "10_N__7_N": {
+      "a": "10_N",
+      "b": "7_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "11_N__3_N": {
+      "a": "11_N",
+      "b": "3_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "17_E__9_E": {
+      "a": "17_E",
+      "b": "9_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "17_N__3_N": {
+      "a": "17_N",
+      "b": "3_N",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "4_N__8_E": {
+      "a": "4_N",
+      "b": "8_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "14_E__5_N": {
+      "a": "14_E",
+      "b": "5_N",
+      "shown": 2,
+      "aWins": 2,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "14_N__8_E": {
+      "a": "14_N",
+      "b": "8_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "11_E__9_N": {
+      "a": "11_E",
+      "b": "9_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "15_N__9_N": {
+      "a": "15_N",
+      "b": "9_N",
+      "shown": 2,
+      "aWins": 2,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "13_E__2_E": {
+      "a": "13_E",
+      "b": "2_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "5_N__9_E": {
+      "a": "5_N",
+      "b": "9_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "12_E__8_N": {
+      "a": "12_E",
+      "b": "8_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "18_N__3_N": {
+      "a": "18_N",
+      "b": "3_N",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "0_E__9_E": {
+      "a": "0_E",
+      "b": "9_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "19_E__8_E": {
+      "a": "19_E",
+      "b": "8_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "14_N__5_N": {
+      "a": "14_N",
+      "b": "5_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "3_N__7_E": {
+      "a": "3_N",
+      "b": "7_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "0_E__14_E": {
+      "a": "0_E",
+      "b": "14_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "15_E__18_E": {
+      "a": "15_E",
+      "b": "18_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "0_E__19_N": {
+      "a": "0_E",
+      "b": "19_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "2_N__4_N": {
+      "a": "2_N",
+      "b": "4_N",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "10_N__4_N": {
+      "a": "10_N",
+      "b": "4_N",
+      "shown": 2,
+      "aWins": 0,
+      "bWins": 2,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "18_E__19_E": {
+      "a": "18_E",
+      "b": "19_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "14_E__9_N": {
+      "a": "14_E",
+      "b": "9_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "1_E__4_E": {
+      "a": "1_E",
+      "b": "4_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "11_E__4_E": {
+      "a": "11_E",
+      "b": "4_E",
+      "shown": 2,
+      "aWins": 0,
+      "bWins": 2,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "11_E__1_E": {
+      "a": "11_E",
+      "b": "1_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "11_N__6_N": {
+      "a": "11_N",
+      "b": "6_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "16_E__4_N": {
+      "a": "16_E",
+      "b": "4_N",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "0_E__1_E": {
+      "a": "0_E",
+      "b": "1_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "15_E__7_N": {
+      "a": "15_E",
+      "b": "7_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "2_N__8_N": {
+      "a": "2_N",
+      "b": "8_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "13_E__19_N": {
+      "a": "13_E",
+      "b": "19_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "10_E__3_E": {
+      "a": "10_E",
+      "b": "3_E",
+      "shown": 2,
+      "aWins": 2,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "16_N__18_E": {
+      "a": "16_N",
+      "b": "18_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "1_E__3_N": {
+      "a": "1_E",
+      "b": "3_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "4_N__8_N": {
+      "a": "4_N",
+      "b": "8_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "1_E__9_N": {
+      "a": "1_E",
+      "b": "9_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "15_N__7_E": {
+      "a": "15_N",
+      "b": "7_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "13_E__6_N": {
+      "a": "13_E",
+      "b": "6_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "17_E__3_E": {
+      "a": "17_E",
+      "b": "3_E",
+      "shown": 2,
+      "aWins": 0,
+      "bWins": 2,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "18_N__2_N": {
+      "a": "18_N",
+      "b": "2_N",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "10_N__19_N": {
+      "a": "10_N",
+      "b": "19_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "14_N__5_E": {
+      "a": "14_N",
+      "b": "5_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "14_E__16_N": {
+      "a": "14_E",
+      "b": "16_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "3_E__4_N": {
+      "a": "3_E",
+      "b": "4_N",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "17_N__8_N": {
+      "a": "17_N",
+      "b": "8_N",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "17_N__1_E": {
+      "a": "17_N",
+      "b": "1_E",
+      "shown": 2,
+      "aWins": 0,
+      "bWins": 2,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "10_E__18_N": {
+      "a": "10_E",
+      "b": "18_N",
+      "shown": 2,
+      "aWins": 0,
+      "bWins": 2,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "14_E__17_E": {
+      "a": "14_E",
+      "b": "17_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "5_E__7_E": {
+      "a": "5_E",
+      "b": "7_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "11_E__13_E": {
+      "a": "11_E",
+      "b": "13_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "19_E__7_E": {
+      "a": "19_E",
+      "b": "7_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "18_E__2_E": {
+      "a": "18_E",
+      "b": "2_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "17_N__7_N": {
+      "a": "17_N",
+      "b": "7_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "19_E__2_E": {
+      "a": "19_E",
+      "b": "2_E",
+      "shown": 2,
+      "aWins": 0,
+      "bWins": 2,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "10_N__15_N": {
+      "a": "10_N",
+      "b": "15_N",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "12_N__14_N": {
+      "a": "12_N",
+      "b": "14_N",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "0_N__3_N": {
+      "a": "0_N",
+      "b": "3_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "15_N__4_N": {
+      "a": "15_N",
+      "b": "4_N",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "1_E__6_N": {
+      "a": "1_E",
+      "b": "6_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "14_N__6_N": {
+      "a": "14_N",
+      "b": "6_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "5_N__8_N": {
+      "a": "5_N",
+      "b": "8_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "19_N__4_N": {
+      "a": "19_N",
+      "b": "4_N",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "0_E__8_E": {
+      "a": "0_E",
+      "b": "8_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "15_N__19_N": {
+      "a": "15_N",
+      "b": "19_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "12_E__1_E": {
+      "a": "12_E",
+      "b": "1_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "13_E__8_E": {
+      "a": "13_E",
+      "b": "8_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "12_N__14_E": {
+      "a": "12_N",
+      "b": "14_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "10_E__13_N": {
+      "a": "10_E",
+      "b": "13_N",
+      "shown": 2,
+      "aWins": 0,
+      "bWins": 2,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "4_N__6_E": {
+      "a": "4_N",
+      "b": "6_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "15_N__2_N": {
+      "a": "15_N",
+      "b": "2_N",
+      "shown": 2,
+      "aWins": 1,
+      "bWins": 1,
+      "aPref": 0.5,
+      "bPref": 0.5
+    },
+    "10_N__5_E": {
+      "a": "10_N",
+      "b": "5_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "13_E__16_N": {
+      "a": "13_E",
+      "b": "16_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "19_E__1_E": {
+      "a": "19_E",
+      "b": "1_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "10_E__12_E": {
+      "a": "10_E",
+      "b": "12_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "1_N__2_E": {
+      "a": "1_N",
+      "b": "2_E",
+      "shown": 2,
+      "aWins": 0,
+      "bWins": 2,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "10_N__5_N": {
+      "a": "10_N",
+      "b": "5_N",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "0_E__7_N": {
+      "a": "0_E",
+      "b": "7_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "12_E__14_N": {
+      "a": "12_E",
+      "b": "14_N",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "12_E__13_E": {
+      "a": "12_E",
+      "b": "13_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "12_N__9_E": {
+      "a": "12_N",
+      "b": "9_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "11_N__9_N": {
+      "a": "11_N",
+      "b": "9_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "0_E__2_E": {
+      "a": "0_E",
+      "b": "2_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "12_N__15_N": {
+      "a": "12_N",
+      "b": "15_N",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "1_E__2_E": {
+      "a": "1_E",
+      "b": "2_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "15_E__1_E": {
+      "a": "15_E",
+      "b": "1_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "19_E__8_N": {
+      "a": "19_E",
+      "b": "8_N",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "10_E__14_N": {
+      "a": "10_E",
+      "b": "14_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "0_N__16_E": {
+      "a": "0_N",
+      "b": "16_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "16_N__17_E": {
+      "a": "16_N",
+      "b": "17_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "17_N__19_N": {
+      "a": "17_N",
+      "b": "19_N",
+      "shown": 2,
+      "aWins": 2,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "0_E__17_E": {
+      "a": "0_E",
+      "b": "17_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "7_E__8_N": {
+      "a": "7_E",
+      "b": "8_N",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "18_N__3_E": {
+      "a": "18_N",
+      "b": "3_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "13_N__2_N": {
+      "a": "13_N",
+      "b": "2_N",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "12_E__14_E": {
+      "a": "12_E",
+      "b": "14_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "0_E__19_E": {
+      "a": "0_E",
+      "b": "19_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "10_E__14_E": {
+      "a": "10_E",
+      "b": "14_E",
+      "shown": 2,
+      "aWins": 2,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "15_E__4_E": {
+      "a": "15_E",
+      "b": "4_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "15_E__8_E": {
+      "a": "15_E",
+      "b": "8_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "17_N__4_E": {
+      "a": "17_N",
+      "b": "4_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "16_E__17_N": {
+      "a": "16_E",
+      "b": "17_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "1_N__6_E": {
+      "a": "1_N",
+      "b": "6_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "17_E__2_N": {
+      "a": "17_E",
+      "b": "2_N",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "12_N__4_N": {
+      "a": "12_N",
+      "b": "4_N",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "0_N__19_N": {
+      "a": "0_N",
+      "b": "19_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "13_N__15_E": {
+      "a": "13_N",
+      "b": "15_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "0_N__7_E": {
+      "a": "0_N",
+      "b": "7_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "12_E__17_N": {
+      "a": "12_E",
+      "b": "17_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "13_E__1_N": {
+      "a": "13_E",
+      "b": "1_N",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "10_N__3_N": {
+      "a": "10_N",
+      "b": "3_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "0_N__5_N": {
+      "a": "0_N",
+      "b": "5_N",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "15_E__9_N": {
+      "a": "15_E",
+      "b": "9_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "3_E__8_N": {
+      "a": "3_E",
+      "b": "8_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "0_E__2_N": {
+      "a": "0_E",
+      "b": "2_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "10_E__3_N": {
+      "a": "10_E",
+      "b": "3_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "18_N__5_E": {
+      "a": "18_N",
+      "b": "5_E",
+      "shown": 2,
+      "aWins": 0,
+      "bWins": 2,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "18_E__7_N": {
+      "a": "18_E",
+      "b": "7_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "16_N__2_E": {
+      "a": "16_N",
+      "b": "2_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "6_E__8_N": {
+      "a": "6_E",
+      "b": "8_N",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "1_N__7_N": {
+      "a": "1_N",
+      "b": "7_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "13_E__17_N": {
+      "a": "13_E",
+      "b": "17_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "4_E__5_N": {
+      "a": "4_E",
+      "b": "5_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "0_E__1_N": {
+      "a": "0_E",
+      "b": "1_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "17_E__4_E": {
+      "a": "17_E",
+      "b": "4_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "10_N__13_N": {
+      "a": "10_N",
+      "b": "13_N",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "0_E__4_E": {
+      "a": "0_E",
+      "b": "4_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "14_N__9_E": {
+      "a": "14_N",
+      "b": "9_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "19_N__3_E": {
+      "a": "19_N",
+      "b": "3_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "12_N__1_E": {
+      "a": "12_N",
+      "b": "1_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "5_E__6_N": {
+      "a": "5_E",
+      "b": "6_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "16_N__3_E": {
+      "a": "16_N",
+      "b": "3_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "0_N__1_N": {
+      "a": "0_N",
+      "b": "1_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "16_E__9_E": {
+      "a": "16_E",
+      "b": "9_E",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "17_E__9_N": {
+      "a": "17_E",
+      "b": "9_N",
+      "shown": 1,
+      "aWins": 1,
+      "bWins": 0,
+      "aPref": 1,
+      "bPref": 0
+    },
+    "15_E__2_E": {
+      "a": "15_E",
+      "b": "2_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    },
+    "13_N__1_E": {
+      "a": "13_N",
+      "b": "1_E",
+      "shown": 1,
+      "aWins": 0,
+      "bWins": 1,
+      "aPref": 0,
+      "bPref": 1
+    }
+};
 
-// === 雙卡出牌偏好表（由 Excel 匯入）===
-// index 0~19  = 一般 0~19
-// index 20~39 = 強化 0~19
-// 之後你可以把 cpu_play_matrix.xlsx 轉成 JSON，覆蓋掉 PAIR_MATRIX
-const PAIR_MATRIX = [
-  //  0: N0
-  [null, 50, 50, 100, 0, 50, 50, 100, 100, 100, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  //  1: N1
-  [null, 100, 50, 100, 0, 50, 50, 100, 100, 100, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  //  2: N2
-  [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
-  //  3: N3
-  [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
-  //  4: N4
-  [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
-  //  5: N5
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  //  6: N6
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  //  7: N7
-  [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
-  //  8: N8
-  [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
-  //  9: N9
-  [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
-  // 10: N10
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  // 11: N11
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  // 12: N12
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  // 13: N13
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  // 14: N14
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  // 15: N15
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  // 16: N16
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  // 17: N17
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  // 18: N18
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  // 19: N19
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  // 20: E0
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  // 21: E1
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  // 22: E2
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  // 23: E3
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  // 24: E4
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  // 25: E5
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  // 26: E6
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  // 27: E7
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  // 28: E8
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  // 29: E9
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  // 30: E10
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  // 31: E11
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  // 32: E12
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  // 33: E13
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  // 34: E14
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  // 35: E15
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  // 36: E16
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  // 37: E17
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  // 38: E18
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-  // 39: E19
-  [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-];
-
-
-// 將「卡片 + 是否強化」轉成 0~39 的 index
-function encodeCardStateIndex(st, cardId) {
+// 將「卡片 + 是否強化」轉成 "0_N" / "0_E" 這種 key（跟偏好 JSON 相同）
+function encodeVariantKey(st, cardId) {
   if (cardId == null) return null;
   const enhanced = isEnhancedNowCpu(st, cardId);
-  return cardId + (enhanced ? 20 : 0);
+  return `${cardId}_${enhanced ? "E" : "N"}`;
 }
 
 // 讀出「手上是 (playId, keepId)」時，選擇打出 playId 的機率（0~100）
-// - 沒填的格子（undefined / null）一律當作 50% 看待
+// - 沒資料就回 50（當作沒有特別偏好）
 function getPairMatrixProb(st, playId, keepId) {
-  const i = encodeCardStateIndex(st, playId);
-  const j = encodeCardStateIndex(st, keepId);
-  if (i == null || j == null) return 50;
+  const playKey = encodeVariantKey(st, playId);
+  const keepKey = encodeVariantKey(st, keepId);
+  if (!playKey || !keepKey || playKey === keepKey) return 50;
 
-  const row = PAIR_MATRIX[i];
-  if (!row) return 50;
+  // pairKey 的格式要跟 JSON 一樣：小的在前，大的在後，中間用 "__"
+  const pairKey =
+    playKey < keepKey ? `${playKey}__${keepKey}` : `${keepKey}__${playKey}`;
 
-  const v = row[j];
-  if (typeof v === "number" && !Number.isNaN(v)) {
-    // 保險一下 clamp 到 0~100
-    return Math.max(0, Math.min(100, v));
+  const ps = PAIR_PREF[pairKey];
+  if (!ps || !ps.shown) {
+    // 這一對你沒遇過 / 還沒選過 → 當作 50%
+    return 50;
   }
-  return 50;
+
+  let pref;
+  if (playKey === ps.a) {
+    pref = ps.aPref;  // JSON 裡「在這一對裡選 a 的機率」（0~1）
+  } else if (playKey === ps.b) {
+    pref = ps.bPref;  // 同上，選 b 的機率
+  } else {
+    // 理論上不會發生，保險一下
+    return 50;
+  }
+
+  if (typeof pref !== "number" || !isFinite(pref)) return 50;
+
+  // 0~1 → 0~100，順便壓在 0~100 之內
+  const v = Math.round(pref * 100);
+  return Math.max(0, Math.min(100, v));
 }
 
 
 // cpu.js（接續上面）
 
-// 這個表只是一個「基礎喜好」，之後你可以慢慢調
+// 這個表改成「依照你實際 2 選 1 點選」的大致平均偏好
 const BASE_CARD_SCORE = {
-  0:  8,  // 薩波：洗牌重抽，偏中立，後期稍微好用
-  1: 16,  // 騙人布：命中可以直接殺人（如果你之後有幫他寫猜數字 AI，可以調更高）
-  2: 10,  // 羅賓：偵查，偏資訊型
-  3: 12,  // 香吉士：補牌/強化
-  4: 20,  // 喬巴：保護 / 閃避，生存超重要，給高一點
-  5: 22,  // 索隆：棄掉別人手牌，很狠
-  6: 15,  // 羅：交換
-  7: 18,  // 娜美：麻痺，控制很強
-  8: 19,  // 魯夫：決鬥，能直接殺
-  9: 2,  // 漢考克：魅惑/控制
- 10: 18,  // 凱多：大招（你這邊可以自己依規則調）
- 11: 14,  // 基德：棄牌堆操作
- 12: 17,  // 奎因：硬幣麻痺
- 13: 16,  // 基拉：解除狀態
- 14: 20,  // 大媽：保護/閃避 + 金幣
- 15: 14,  // 卡塔庫栗：堆疊順序
- 16: 18,  // 青雉：凍結
- 17: 18,  // 黑鬍子：多功能控制
- 18: 16,  // 紅髮：紅髮 HOT 相關
- 19: 3,  // 羅傑：預測
+  0: 16, // 薩波
+  1: 17, // 騙人布
+  2: 19, // 羅賓
+  3: 15, // 香吉士
+  4: 25, // 喬巴：一般 / 強化你幾乎都選 → 給最高
+  5: 17, // 索隆
+  6: 5,  // 羅：整體幾乎不選
+  7: 8,  // 娜美
+  8: 10, // 魯夫
+  9: 6,  // 漢考克：本來就靠場地判定
+ 10: 15, // 凱多
+ 11: 19, // 基德
+ 12: 16, // 奎因
+ 13: 18, // 基拉
+ 14: 23, // 大媽：你超常選
+ 15: 17, // 卡塔庫栗
+ 16: 15, // 青雉
+ 17: 12, // 黑鬍子
+ 18: 10, // 紅髮
+ 19: 5,  // 羅傑
 };
+
 
 function cardBaseScore(cardId){
   return BASE_CARD_SCORE[cardId] ?? 10;
