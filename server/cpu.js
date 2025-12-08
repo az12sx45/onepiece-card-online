@@ -2130,6 +2130,20 @@ function pickCpuDigitSmart(st, meIdx, targetIdx){
   // 不能猜 1，規則限制
   const guessable = [0,2,3,4,5,6,7,8,9];
 
+  // 0) 若這個 AI 有自己的「看過 target 手牌」記憶，直接猜那張牌的尾數
+  if (Array.isArray(st.aiMemory)) {
+    const mem = st.aiMemory[meIdx];
+    const knownId = mem && mem.knownHands && mem.knownHands[targetIdx];
+
+    if (typeof knownId === 'number') {
+      const t = tail(knownId);
+      // 不能猜 1，如果剛好是 1，就先忽略，走原本的機率邏輯
+      if (t !== 1) {
+        return t;
+      }
+    }
+  }
+
   // ① 找出同一局、同一個 target 已經猜過的數字（且真的判定過）
   const history = Array.isArray(st.usoppHistory)
     ? st.usoppHistory.filter(h =>
