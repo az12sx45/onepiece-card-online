@@ -439,6 +439,14 @@ function baseState(playerCount){
   stats: {}, // ★ 統計容器
   usoppHistory: [],              // ★ 騙人布猜尾數歷史
   usoppHints: Array(playerCount).fill(null), // ★ 每位玩家目前「可能尾數」提示
+
+  // ★ 每個玩家自己的 AI 記憶：只記「我曾經看過誰的手牌」
+  aiMemory: Array(playerCount).fill(null).map(() => ({
+    // key: targetIdx → cardId
+    knownHands: {}
+  })),
+
+
   log:[
     `第 1 局開始。起始玩家：P1`,
 
@@ -845,6 +853,12 @@ function nextRound(state){
     stats: st.stats || {}, // ★ 跨局累計
     usoppHistory: [],
     usoppHints: Array(playerCount).fill(null),
+
+  // ★ 新局開打時，每個人的 AI 記憶重新來
+  aiMemory: Array(playerCount).fill(null).map(() => ({
+    knownHands: {}
+  })),
+
     log: [
       `第 ${st.roundNo + 1} 局開始。起始玩家：P${startSeat + 1}`,
 
@@ -1075,6 +1089,17 @@ case 2: { // 羅賓
             const label = cardLabel(pp.hand);
             if (i !== st.turnIndex && th != null) {
               scorePeek(st, action.playerId, th); // ★ 偵查分
+
+   // ★ AI 記憶：action.playerId 這個人，現在知道 i 的手牌是 th
+    if (Array.isArray(st.aiMemory)) {
+      const viewer = action.playerId;
+      const mem = st.aiMemory[viewer];
+      if (mem) {
+        if (!mem.knownHands) mem.knownHands = {};
+        mem.knownHands[i] = th;
+      }
+    }
+
               emits.push({ to: action.playerId, type:'robin_view', casterId: st.turnIndex, targetId: i, cardId: th });
             }
 
@@ -1485,6 +1510,17 @@ case 19: { // 羅傑
         // 只給出牌者看的詳細偷看內容
         emits.push({ to: action.playerId, type:'peek', lines:[line] });
         if (th != null) scorePeek(st, action.playerId, th); // ★ 偵查分
+
+  // ★ AI 記憶：action.playerId 這個人，現在知道 idx 的手牌是 th
+  if (th != null && Array.isArray(st.aiMemory)) {
+    const viewer = action.playerId;
+    const mem = st.aiMemory[viewer];
+    if (mem) {
+      if (!mem.knownHands) mem.knownHands = {};
+      mem.knownHands[idx] = th;
+    }
+  }
+
         emits.push({ to: action.playerId, type:'robin_view', casterId: st.turnIndex, targetId: idx, cardId: th });
 
         // 全體用的事件：給前端做浮動 Toast 用（不含任何卡號）
@@ -1668,6 +1704,17 @@ if(p.action==='zoro'){
           const th = st.players[idx].hand;
           if (th != null) scorePeek(st, action.playerId, th); // ★ 偵查分
           emits.push({ to: action.playerId, type:'peek', lines:[`ROOM・SCAN：${pname(st, idx)} → ${cardLabel(th)}`] });
+
+// ★ AI 記憶：action.playerId 這個人，現在知道 idx 的手牌是 th
+if (th != null && Array.isArray(st.aiMemory)) {
+  const viewer = action.playerId;
+  const mem = st.aiMemory[viewer];
+  if (mem) {
+    if (!mem.knownHands) mem.knownHands = {};
+    mem.knownHands[idx] = th;
+  }
+}
+
           emits.push({ to: action.playerId, type:'law_view', casterId: st.turnIndex, targetId: idx, cardId: th });
         } else {
           scoreDefense(st, idx, 6); // 羅6查看/交換被擋 → 防禦+6
