@@ -2202,8 +2202,9 @@ function pickCpuDigitSmart(st, meIdx, targetIdx){
   }
 
   // ③ 在 candidates 裡面，挑「剩餘尾數張數」最大的那個
-  let bestDigit = candidates[0];
+  //    若有多個同樣大 → 在裡面隨機挑一個
   let bestWeight = -1;
+  let bestDigits = [];
 
   for (const d of candidates) {
     const w = remaining[d];
@@ -2213,18 +2214,23 @@ function pickCpuDigitSmart(st, meIdx, targetIdx){
     const adj = w;
 
     if (adj > bestWeight) {
+      // 找到更好的 → 重新開一組
       bestWeight = adj;
-      bestDigit = d;
+      bestDigits = [d];
+    } else if (adj === bestWeight) {
+      // 同機率 → 一起丟進候選池
+      bestDigits.push(d);
     }
   }
 
-  // ④ 萬一每個尾數都變成 0（理論上很少發生） → 隨機從 candidates 選一個
-  if (bestWeight <= 0) {
-    const idx = Math.floor(Math.random() * candidates.length);
-    bestDigit = candidates[idx];
-  }
+  // ④ 從「機率最高的那幾個」裡面隨機選一個
+  //    如果理論外狀況 bestDigits 空掉，就退回用全部 candidates
+  const pool = bestDigits.length > 0 ? bestDigits : candidates;
+  const idx = Math.floor(Math.random() * pool.length);
+  const bestDigit = pool[idx];
 
   return bestDigit;
+
 }
 
 
