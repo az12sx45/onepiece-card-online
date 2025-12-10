@@ -2046,77 +2046,275 @@ function pickCpuCardSmart(st, meIdx){
   return best.which; // 'hand' 或 'drawn'
 }
 
-
 // CPU 選「攻擊 / 偵查目標」
-// 共通規則：
-//   1. 只在「活著 & 不是自己」的人裡面選
-//   2. 一般情況：優先沒保護、沒閃避 → 再看金幣最多 → 同金幣隨機
-//   3. 基拉 13（for: 'killer'）：改成「優先有保護或有閃避」→ 再看金幣最多 → 同金幣隨機
-function pickCpuTargetSmart(st, meIdx, opts = {}){
-  const me = st.players[meIdx];
-  if (!me) return null;
+// 這裡會依照不同卡牌（看 st.pending.action / extra.boost）做專用的目標優先順序
+function pickCpuTargetSmart(st, meIdx, opts = {}) {
+  const players = st.players || [];
+  const me = players[meIdx];
+  if (!me || !me.alive) return null;
 
-  // 1) 所有活著的敵人
-  let enemies = st.players
-    .map((p, i) => ({ p, i }))
-    .filter(({ p, i }) => i !== meIdx && p && p.alive);
+  // 目前場上還活著的其他玩家
+  const enemies = players
+    .map((p, idx) => ({ p, idx }))
+    .filter(x => x.p && x.p.alive && x.idx !== meIdx);
 
   if (!enemies.length) return null;
 
-  let candidates = enemies;
+  const pending = st.pending || null;
+  const act = pending && pending.action ? pending.action : null;
+  const isBoost = !!(pending && pending.extra && pending.extra.boost);
 
-  // 2) avoidProtected / avoidDodging 只給「非 killer 模式」用
-  //    （因為基拉就是要專門去打有盾 / 有閃避的人）
-  if (opts.for !== 'killer') {
-    if (opts.avoidProtected) {
-      const f = candidates.filter(({ p }) => !p.protected);
-      if (f.length) candidates = f;
-    }
-    if (opts.avoidDodging) {
-      const f = candidates.filter(({ p }) => !p.dodging);
-      if (f.length) candidates = f;
-    }
-  }
+  // 呼叫方原本帶進來的選項
+  const avoidProtectedRaw = !!opts.avoidProtected;
+  const avoidDodgingRaw = !!opts.avoidDodging;
 
-  if (!candidates.length) return null;
+  // 0,1,2 特例：就算呼叫時有設定 avoidDodging，也要允許打正在閃避的人
+  const ignoreDodgeForBreak =
+    act === 'sabo' ||  // 0
+    act === 'usopp' || // 1
+    act === 'nami';    // 2
 
-  // 3) 基礎模式 / killer 模式，決定「優先族群」
+  const avoidProtected = avoidProtectedRaw;
+  const avoidDodging = ignoreDodgeForBreak ? false : avoidDodgingRaw;
 
-  if (opts.for === 'killer') {
-    // ★ 基拉 13：優先「有保護 or 有閃避」的人
-    let shielded = candidates.filter(({ p }) => p.protected || p.dodging);
-    if (shielded.length) {
-      candidates = shielded;
-    }
-    // 如果場上沒有人有盾，就退回原本 candidates，不特別挑
-  } else {
-    // 一般情況：優先「沒保護 & 沒閃避」
-    let unshielded = candidates.filter(({ p }) => !p.protected && !p.dodging);
-    if (unshielded.length) {
-      candidates = unshielded;
-    }
-    // 如果大家都有盾，就照 candidates 原樣（沒辦法只能硬打）
-  }
-
-  if (!candidates.length) return null;
-
-  // 4) 在候選人裡面找「金幣最多」
-  let maxGold = -Infinity;
-  for (const { p } of candidates) {
-    const g = typeof p.gold === 'number' ? p.gold : 0;
-    if (g > maxGold) maxGold = g;
-  }
-
-  // 5) 把金幣等於 maxGold 的全部挑出來
-  const richest = candidates.filter(({ p }) => {
-    const g = typeof p.gold === 'number' ? p.gold : 0;
-    return g === maxGold;
+  // 先依照 avoidProtected / avoidDodging 過濾一輪
+  const candidates = enemies.filter(x => {
+    const p = x.p;
+    if (avoidProtected && p.protected) return false;
+    if (avoidDodging && p.dodging) return false;
+    return true;
   });
 
-  // 6) 如果有很多個金幣一樣多，就在這幾個裡面隨機選一個
-  const pick = richest[Math.floor(Math.random() * richest.length)];
-  return pick ? pick.i : null;
+  if (!candidates.length) return null;
+
+  const shieldedIdx = candidates.filter(x => x.p.protected).map(x => x.idx);
+  const dodgingIdx  = candidates.filter(x => x.p.dodging).map(x => x.idx);
+
+  // 小工具：算牌尾數（0~9）
+  const cardTail = (id) => {
+    if (typeof id !== 'number') return null;
+    return ((id % 10) + 10) % 10;
+  };
+
+  // 小工具：從一組候選裡挑「金幣最多的」，同金幣就隨機其一
+  function pickRichest(subsetIdxList) {
+    let list = candidates;
+    if (Array.isArray(subsetIdxList) && subsetIdxList.length) {
+      const set = new Set(subsetIdxList);
+      const filtered = candidates.filter(x => set.has(x.idx));
+      if (filtered.length) list = filtered;
+    }
+
+    let bestGold = -Infinity;
+    let best = [];
+    for (const x of list) {
+      const g = typeof x.p.gold === 'number' ? x.p.gold : 0;
+      if (g > bestGold) {
+        bestGold = g;
+        best = [x.idx];
+      } else if (g === bestGold) {
+        best.push(x.idx);
+      }
+    }
+    const choice = best[Math.floor(Math.random() * best.length)];
+    return choice;
+  }
+
+  // 小工具：取出對「某一個目標」目前掌握的尾數資訊
+  function getTailInfo(targetIdx) {
+    const mem = Array.isArray(st.aiMemory) ? st.aiMemory[meIdx] : null;
+    let est = null;
+    let fromKnown = false;
+
+    // 1) 如果 AI 記憶裡已經知道這個人的牌 → 直接用那張牌的尾數
+    if (mem && mem.knownHands && typeof mem.knownHands[targetIdx] === 'number') {
+      est = cardTail(mem.knownHands[targetIdx]);
+      fromKnown = true;
+    } else if (
+      Array.isArray(st.usoppHints) &&
+      Array.isArray(st.usoppHints[targetIdx]) &&
+      st.usoppHints[targetIdx].length
+    ) {
+      // 2) Usopp 提示：這個人可能的尾數集合（例如 [1, 9]）
+      const arr = st.usoppHints[targetIdx];
+      const sum = arr.reduce((a, b) => a + b, 0);
+      est = sum / arr.length; // 用平均當作「推測尾數」
+    }
+
+    return {
+      hasInfo: typeof est === 'number' && !Number.isNaN(est),
+      estTail: est,   // 可能是 0~9，也可能是浮點數（平均）
+      sure: fromKnown // true 表示「手牌完全確定」
+    };
+  }
+
+  const myTail = typeof me.hand === 'number' ? cardTail(me.hand) : null;
+
+  // ------------------------------------------------------------------
+  // A. 0,1,2：優先打「正在閃避」的玩家，用來拆閃避狀態
+  // ------------------------------------------------------------------
+  if (act === 'sabo' || act === 'usopp' || act === 'nami') {
+    if (dodgingIdx.length) {
+      // 有人在閃避 → 只在這些人裡面挑「金幣最多」的
+      return pickRichest(dodgingIdx);
+    }
+    // 沒人閃避 → 之後走通用規則（或其他卡的特例）
+  }
+
+  // ------------------------------------------------------------------
+  // B. 13 一般 + 13 強化（killer）：優先打有防禦的玩家
+  // ------------------------------------------------------------------
+  if (act === 'killer') {
+    if (shieldedIdx.length) {
+      // 有人在 protected → 只在有防禦的人裡挑最優先的（這裡先用金幣）
+      return pickRichest(shieldedIdx);
+    }
+    // 沒人有防禦 → 若是強化版還會走「決鬥優先」那段
+  }
+
+  // ------------------------------------------------------------------
+  // C. 決鬥類：3, 8, 10, 13 強化
+  //    優先打「已知 / 推測尾數比較小」的人
+  // ------------------------------------------------------------------
+  const isDuelCard =
+    act === 'sanji' || // 3
+    act === 'luffy' || // 8
+    act === 'kaido' || // 10
+    (act === 'killer' && isBoost); // 13 強化才會決鬥
+
+  if (isDuelCard) {
+    let bestIdx = null;
+    let bestScore = Infinity;
+
+    for (const { idx } of candidates) {
+      const info = getTailInfo(idx);
+      if (!info.hasInfo) continue; // 完全沒資訊就先不考慮
+
+      let score = info.estTail;
+
+      // 如果是「完全知道手牌」→ 再多給一點優勢
+      if (info.sure) score -= 0.3;
+
+      // 如果知道自己的尾數，就盡量找「比自己小」的目標
+      if (myTail != null && info.estTail >= myTail) {
+        score += 2; // 比自己大或一樣就加懲罰
+      }
+
+      if (score < bestScore) {
+        bestScore = score;
+        bestIdx = idx;
+      }
+    }
+
+    if (bestIdx != null) {
+      return bestIdx;
+    }
+    // 完全沒有任何尾數資訊 → 之後走通用規則
+  }
+
+  // ------------------------------------------------------------------
+  // D. 1（usopp）：優先找「最好猜的目標」
+  //     估計「這個人尾數可以猜中的機率」，高的優先
+  // ------------------------------------------------------------------
+  if (act === 'usopp') {
+    let bestIdx = null;
+    let bestProb = -1;
+    const mem = Array.isArray(st.aiMemory) ? st.aiMemory[meIdx] : null;
+
+    for (const { idx } of candidates) {
+      let prob = 0.1; // 完全沒資訊當作 1/10
+
+      if (mem && mem.knownHands && typeof mem.knownHands[idx] === 'number') {
+        prob = 1; // 已經知道他的牌 → 必中
+      } else if (
+        Array.isArray(st.usoppHints) &&
+        Array.isArray(st.usoppHints[idx]) &&
+        st.usoppHints[idx].length
+      ) {
+        const n = st.usoppHints[idx].length;
+        prob = 1 / n; // 候選越少越好猜
+      }
+
+      if (prob > bestProb) {
+        bestProb = prob;
+        bestIdx = idx;
+      }
+    }
+
+    if (bestIdx != null) {
+      return bestIdx;
+    }
+    // 如果每個人資訊都一樣差 → 之後走通用規則
+  }
+
+  // ------------------------------------------------------------------
+  // E. 5,6：優先打「已經確認尾數是 9」的人
+  // ------------------------------------------------------------------
+  if (act === 'zoro' || act === 'law') {
+    const mem = Array.isArray(st.aiMemory) ? st.aiMemory[meIdx] : null;
+    const candWithNine = [];
+
+    for (const { idx } of candidates) {
+      let sureNine = false;
+
+      if (mem && mem.knownHands && typeof mem.knownHands[idx] === 'number') {
+        if (cardTail(mem.knownHands[idx]) === 9) sureNine = true;
+      } else if (
+        Array.isArray(st.usoppHints) &&
+        Array.isArray(st.usoppHints[idx]) &&
+        st.usoppHints[idx].length === 1 &&
+        st.usoppHints[idx][0] === 9
+      ) {
+        // 提示結果只剩 [9]，等同「確定尾數是 9」
+        sureNine = true;
+      }
+
+      if (sureNine) candWithNine.push(idx);
+    }
+
+    if (candWithNine.length) {
+      return pickRichest(candWithNine);
+    }
+    // 沒有尾數 9 的明確目標 → 繼續看 5 強化那段（偶數），再不行就回通用規則
+  }
+
+  // ------------------------------------------------------------------
+  // F. 5 強化：優先攻擊「確定尾數為偶數」的人
+  // ------------------------------------------------------------------
+  if (act === 'zoro' && isBoost) {
+    const mem = Array.isArray(st.aiMemory) ? st.aiMemory[meIdx] : null;
+    const evenTargets = [];
+
+    for (const { idx } of candidates) {
+      let sureEven = false;
+
+      if (mem && mem.knownHands && typeof mem.knownHands[idx] === 'number') {
+        if ((cardTail(mem.knownHands[idx]) % 2) === 0) sureEven = true;
+      } else if (
+        Array.isArray(st.usoppHints) &&
+        Array.isArray(st.usoppHints[idx]) &&
+        st.usoppHints[idx].length === 1 &&
+        (st.usoppHints[idx][0] % 2) === 0
+      ) {
+        // 提示只剩 [0] / [2] / [4] / [6] / [8]
+        sureEven = true;
+      }
+
+      if (sureEven) evenTargets.push(idx);
+    }
+
+    if (evenTargets.length) {
+      return pickRichest(evenTargets);
+    }
+    // 找不到「確定偶數」的人 → 之後走通用規則
+  }
+
+  // ------------------------------------------------------------------
+  // G. 通用規則：金幣最多優先，同金幣隨機
+  // ------------------------------------------------------------------
+  return pickRichest(null);
 }
+
 
 
 
@@ -2303,4 +2501,5 @@ module.exports = {
   pickCpuTargetSmart,
   pickCpuDigitSmart,
 };
+
 
