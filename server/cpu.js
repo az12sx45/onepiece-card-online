@@ -2078,14 +2078,19 @@ function pickCpuTargetSmart(st, meIdx, opts = {}) {
   const avoidDodging = ignoreDodgeForBreak ? false : avoidDodgingRaw;
 
   // 先依照 avoidProtected / avoidDodging 過濾一輪
-  const candidates = enemies.filter(x => {
+  let candidates = enemies.filter(x => {
     const p = x.p;
     if (avoidProtected && p.protected) return false;
     if (avoidDodging && p.dodging) return false;
     return true;
   });
 
-  if (!candidates.length) return null;
+  // ⭐ 關鍵修正：
+  // 如果因為「全員都有保護 / 閃避」導致一個候選都沒有，
+  // 就退一步：改用所有活著的敵人當候選，寧可被擋掉，也不要讓 AI 卡死。
+  if (!candidates.length) {
+    candidates = enemies.slice();
+  }
 
   const shieldedIdx = candidates.filter(x => x.p.protected).map(x => x.idx);
   const dodgingIdx  = candidates.filter(x => x.p.dodging).map(x => x.idx);
