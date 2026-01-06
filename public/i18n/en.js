@@ -35,7 +35,8 @@ window.__I18N_DICTS["en"] = {
     cpuCountLabel: "CPU players",
     cpuCountHint: "Will be added to the room automatically (0–3)",
     cpuCountFootnote: "* This is the selection + persistence step. AI actions will be connected later.",
-    createNewRoom: "🏴‍☠️ Create New Room",
+        people: "{n} players",
+createNewRoom: "🏴‍☠️ Create New Room",
 
     joinFriendRoom: "Join a friend's room",
     enterRoomCode: "Room code",

@@ -35,7 +35,8 @@ window.__I18N_DICTS["ko"] = {
     cpuCountLabel: "CPU 인원",
     cpuCountHint: "시작 시 자동으로 추가 (0–3)",
     cpuCountFootnote: "* 현재는 선택/저장만 제공. AI 행동 로직은 이후 연결됩니다.",
-    createNewRoom: "🏴‍☠️ 새 방 만들기",
+        people: "{n}명",
+createNewRoom: "🏴‍☠️ 새 방 만들기",
 
     joinFriendRoom: "친구 방 참가",
     enterRoomCode: "방 코드",

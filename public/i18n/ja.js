@@ -35,7 +35,8 @@ window.__I18N_DICTS["ja"] = {
     cpuCountLabel: "CPU人数",
     cpuCountHint: "開始時に自動で追加（0～3）",
     cpuCountFootnote: "※ ここでは選択と保存のみ。AI行動は後で接続します。",
-    createNewRoom: "🏴‍☠️ 新しい部屋を作成",
+        people: "{n}人",
+createNewRoom: "🏴‍☠️ 新しい部屋を作成",
 
     joinFriendRoom: "友達の部屋に参加",
     enterRoomCode: "ルームID",

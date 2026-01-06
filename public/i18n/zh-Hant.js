@@ -35,7 +35,8 @@ window.__I18N_DICTS["zh-Hant"] = {
     cpuCountLabel: "加入 CPU 人數",
     cpuCountHint: "之後會自動填進房間（暫定 0–3 人）",
     cpuCountFootnote: "* 目前先提供選項與記錄，之後會接上電腦玩家自動行動邏輯。",
-    createNewRoom: "🏴‍☠️ 建立新房間",
+        people: "{n} 人",
+createNewRoom: "🏴‍☠️ 建立新房間",
 
     joinFriendRoom: "加入朋友的房間",
     enterRoomCode: "輸入房號",
