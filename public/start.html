@@ -11,6 +11,14 @@
   <!-- (1) 在 React 之後加入 Socket.IO -->
   <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<!-- i18n dictionaries -->
+<script>window.__I18N_DICTS = window.__I18N_DICTS || {};</script>
+<script src="i18n/zh-Hant.js"></script>
+<script src="i18n/en.js"></script>
+<script src="i18n/ja.js"></script>
+<script src="i18n/ko.js"></script>
+<script src="i18n/i18n.js"></script>
+
   <style>
     :root{ --bg:#121315; --ink:#eaecee; --brand:#ffb84d; --cover:url("images/cover.jpg"); }
     html,body{height:100%;}
@@ -93,9 +101,9 @@
   <div class="lock-overlay" id="lockOverlay">
     <div class="panel">
       <div class="icon">🔄</div>
-      <div class="text-lg font-semibold mb-1">請將手機旋轉至橫向以獲得最佳體驗</div>
-      <div class="text-sm opacity-80">若仍無法旋轉，請解鎖畫面旋轉或從瀏覽器選單開啟「允許旋轉」。</div>
-    </div>
+      <div id="txtRotateTitle" class="text-lg font-semibold mb-1">請將手機旋轉至橫向以獲得最佳體驗</div>
+<div id="txtRotateHint" class="text-sm opacity-80">若仍無法旋轉，請解鎖畫面旋轉或從瀏覽器選單開啟「允許旋轉」。</div>
+
   </div>
   <div class="bg-anim">
     <video id="bgVideo" class="bg-video" autoplay muted loop playsinline preload="auto" poster="images/cover.jpg">
@@ -135,6 +143,21 @@
         }
       }catch(e){}
     }
+
+(function applyStaticI18n(){
+  const I18N = window.__I18N;
+  if(!I18N) return;
+  const $t = (k)=>I18N.t(k);
+
+  const a = document.getElementById('txtRotateTitle');
+  const b = document.getElementById('txtRotateHint');
+  if(a) a.textContent = $t('ui.rotateTitle');
+  if(b) b.textContent = $t('ui.rotateHint');
+
+  document.documentElement.setAttribute('lang', I18N.getLang());
+})();
+
+
   </script>
 
   <script type="text/babel" data-presets="env,react">
@@ -186,6 +209,9 @@
 
     // === 原常數/工具：保留必要者 ===
     const {useState, useEffect, useMemo} = React;
+const I18N = window.__I18N;
+const t = (key, vars) => I18N.t(key, vars);
+
     const MIN_PLAYERS = 2; // 開局最低人數
 
     function uid(){ return Math.random().toString(36).slice(2,10); }
@@ -206,71 +232,85 @@
       );
     }
 
-    function PressAnyKey({onProceed}){
-      useEffect(()=>{
-        const h=(e)=>{
-          e.preventDefault();
-          onProceed();
-          tryLockLandscape();
-          window.__OPAudio?.startAudio();
-        };
-        window.addEventListener('keydown', h, {once:true});
-        window.addEventListener('pointerdown', h, {once:true});
-        return ()=>{
-          window.removeEventListener('keydown', h);
-          window.removeEventListener('pointerdown', h);
-        };
-      }, [onProceed]);
-      return (
-        <div className="relative w-full min-h-[92vh] select-none">
-          <div className="absolute left-1/2 -translate-x-1/2 top-[60vh] md:top-[58vh] text-center space-y-2">
-            <div className="title-wrap">
-              <div className="title-main font-black tracking-tight whitespace-nowrap fx-tiltDrop fx-shine text-[clamp(28px,8.2vw,48px)] [@media(orientation:landscape)]:text-[clamp(24px,6.6vw,44px)] md:text-[clamp(52px,5.2vw,96px)] lg:text-[clamp(60px,4.6vw,110px)] xl:text-[clamp(68px,4vw,128px)]">
-                <WaveText text="ONE PIECE" />
-              </div>
-              <div className="title-sub font-extrabold text-amber-300 mt-2 fx-fadeUp whitespace-nowrap text-[clamp(16px,5.2vw,28px)] [@media(orientation:landscape)]:text-[clamp(16px,3.6vw,24px)] md:text-[clamp(30px,3.2vw,56px)] lg:text-[clamp(34px,2.8vw,64px)] xl:text-[clamp(38px,2.4vw,72px)]">
-                <WaveText text="偉大航道爭霸戰" small />
-              </div>
-            </div>
+function PressAnyKey({onProceed}){
+  useEffect(()=>{
+    const h=(e)=>{
+      e.preventDefault();
+      onProceed();
+      tryLockLandscape();
+      window.__OPAudio?.startAudio();
+    };
+    window.addEventListener('keydown', h, {once:true});
+    window.addEventListener('pointerdown', h, {once:true});
+    return ()=>{
+      window.removeEventListener('keydown', h);
+      window.removeEventListener('pointerdown', h);
+    };
+  }, [onProceed]);
+
+  return (
+    <div className="relative w-full min-h-[92vh] select-none">
+      <div className="absolute left-1/2 -translate-x-1/2 top-[60vh] md:top-[58vh] text-center space-y-2">
+        <div className="title-wrap">
+          <div className="title-main font-black tracking-tight whitespace-nowrap fx-tiltDrop fx-shine text-[clamp(28px,8.2vw,48px)] [@media(orientation:landscape)]:text-[clamp(24px,6.6vw,44px)] md:text-[clamp(52px,5.2vw,96px)] lg:text-[clamp(60px,4.6vw,110px)] xl:text-[clamp(68px,4vw,128px)]">
+            <WaveText text={t("brand.titleEn")} />
           </div>
-          <div
-            className="absolute left-1/2 -translate-x-1/2 text-sm md:text-base text-neutral-200 blink md:bottom-8"
-            style={{bottom:"calc(env(safe-area-inset-bottom, 0px) - 10px)", paddingBottom:0}}
-          >
-            按任意鍵開始 / Press any key
+          <div className="title-sub font-extrabold text-amber-300 mt-2 fx-fadeUp whitespace-nowrap text-[clamp(16px,5.2vw,28px)] [@media(orientation:landscape)]:text-[clamp(16px,3.6vw,24px)] md:text-[clamp(30px,3.2vw,56px)] lg:text-[clamp(34px,2.8vw,64px)] xl:text-[clamp(38px,2.4vw,72px)]">
+            <WaveText text={t("brand.titleSub")} small />
           </div>
         </div>
-      );
-    }
+      </div>
+
+      <div
+        className="absolute left-1/2 -translate-x-1/2 text-sm md:text-base text-neutral-200 blink md:bottom-8"
+        style={{bottom:"calc(env(safe-area-inset-bottom, 0px) - 10px)", paddingBottom:0}}
+      >
+        {t("ui.pressAnyKey")}
+      </div>
+    </div>
+  );
+}
+
 
     // === 主選單：開始遊戲 / 遊戲規則 ===
-    function MainMenu({ onStart, onRule }) {
-      return (
-        <div className="card w-[min(480px,90vw)] p-6 text-center space-y-6">
-          <h1 className="text-2xl font-bold tracking-wide text-amber-300">
-            偉大航道爭霸戰
-          </h1>
+   function MainMenu({ onStart, onRule, onLangChange }) {
+  const cur = I18N.getLang();
 
-          <button
-            className="btn-primary btn w-full text-lg py-3"
-            onClick={onStart}
-          >
-            開始遊戲
-          </button>
+  return (
+    <div className="card w-[min(480px,90vw)] p-6 text-center space-y-6 relative">
+      {/* Language selector */}
+      <div className="absolute right-4 top-4">
+        <label className="text-[11px] text-neutral-300 mr-2">{t("ui.lang")}</label>
+        <select
+          className="btn text-sm py-1 px-2"
+          value={cur}
+          onChange={(e)=> onLangChange?.(e.target.value)}
+        >
+          {I18N.SUPPORTED.map(l=>(
+            <option key={l} value={l}>{I18N.getLangLabel(l)}</option>
+          ))}
+        </select>
+      </div>
 
-          <button
-            className="btn w-full text-lg py-3"
-            onClick={onRule}
-          >
-            遊戲規則
-          </button>
+      <h1 className="text-2xl font-bold tracking-wide text-amber-300">
+        {t("brand.titleSub")}
+      </h1>
 
-          <div className="text-xs text-neutral-400 mt-2">
-            ONE PIECE ｜ 卡牌對戰 ｜ PVP 多人遊戲
-          </div>
-        </div>
-      );
-    }
+      <button className="btn-primary btn w-full text-lg py-3" onClick={onStart}>
+        {t("ui.startGame")}
+      </button>
+
+      <button className="btn w-full text-lg py-3" onClick={onRule}>
+        {t("ui.rules")}
+      </button>
+
+      <div className="text-xs text-neutral-400 mt-2">
+        {t("brand.tagline")}
+      </div>
+    </div>
+  );
+}
+
 
        // === 遊戲規則彈窗（最終版） ===
     function RuleModal({ show, onClose }) {
@@ -681,7 +721,8 @@
   function tryJoin() {
     const code = (joinCode || "").toUpperCase().replace(/\s+/g, "");
     if (!code) {
-      alert("請輸入房號");
+     alert(t("ui.alertNeedRoomId"));
+
       return;
     }
     __lobby.roomId = code;
@@ -836,7 +877,7 @@ function WaitingRoom({roomId, profile, onLeave}){
   function copyId(){
     if(!lobby?.roomId) return;
     navigator.clipboard?.writeText(lobby.roomId);
-    alert("已複製房號："+lobby.roomId);
+   alert(t("ui.alertCopiedRoomId", { roomId: lobby.roomId }));
   }
 
   // 切換準備
@@ -964,7 +1005,12 @@ function WaitingRoom({roomId, profile, onLeave}){
                 const avatarUrl = `images/avatars/cpu${cpuIdx}.webp`;
 
                 // ★ 新增：CPU 顯示名稱表
-                const cpuNames = ["克洛克達爾", "鷹眼密佛格", "小丑巴其"];
+                const cpuNames = [
+  t("cpu.name1"),
+  t("cpu.name2"),
+  t("cpu.name3"),
+];
+
                 const name = cpuNames[idx] || `CPU ${idx + 1}`;
 
                 return (
@@ -1013,6 +1059,13 @@ function WaitingRoom({roomId, profile, onLeave}){
       const [roomInfo,setRoomInfo]=useState(null);
       getMeId(); // 產生一次本機識別
 
+const [langTick, setLangTick] = useState(0);
+function changeLang(next){
+  I18N.setLang(next);
+  setLangTick(x=>x+1); // 強制重繪
+}
+
+
       useEffect(()=>{
         const cached=localStorage.getItem("op_player_profile");
         if(cached){
@@ -1029,12 +1082,12 @@ function WaitingRoom({roomId, profile, onLeave}){
         <div className="w-full max-w-[1200px] mx-auto">
           <div className="min-h-dvh flex items-center justify-center">
             {stage==="press"   && <PressAnyKey onProceed={()=>setStage("menu")} />}
-            {stage==="menu"    && (
-              <MainMenu
-                onStart={()=>setStage("profile")}
-                onRule={()=>setStage("rule")}
-              />
-            )}
+             <MainMenu
+    onStart={()=>setStage("profile")}
+    onRule={()=>setStage("rule")}
+    onLangChange={changeLang}
+  />
+)}
             {stage==="profile" && (
               <NameAvatar
                 defaultName={profile?.playerName}
