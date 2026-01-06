@@ -212,6 +212,202 @@
 const I18N = window.__I18N;
 const t = (key, vars) => I18N.t(key, vars);
 
+    // === (i18n) 補齊 start.html 會用到的 key（就算外部字典缺漏也不會跳回中文/顯示 key）===
+    (function ensureStartI18nKeys(){
+      const D = window.__I18N_DICTS = window.__I18N_DICTS || {};
+      const merge = (lang, obj)=>{
+        D[lang] = Object.assign({}, obj, D[lang]||{});
+      };
+
+      merge("zh-Hant", {
+        "ui.you":"你",
+        "ui.back":"返回",
+        "ui.close":"關閉",
+        "ui.createCharacter":"創建角色",
+        "ui.localSaved":"資料會暫存於本機（localStorage）",
+        "ui.playerName":"玩家名稱",
+        "ui.namePlaceholder":"輸入你的名字",
+        "ui.nameHint":"* 名稱最多 16 字；可稍後在設定中修改。",
+        "ui.chooseAvatar":"選擇頭像（30）",
+        "ui.avatarPath":"路徑：images/avatars/1.webp ~ 30.webp",
+        "ui.roomMode":"房間模式",
+        "ui.createOrJoin":"建立房間 / 加入房間",
+        "ui.playerId":"玩家 ID：{id}",
+        "ui.createRoomTitle":"建立房間",
+        "ui.host":"房主",
+        "ui.joinCpuCount":"加入 CPU 人數",
+        "ui.joinCpuHint":"之後會自動填進房間（暫定 0–3 人）",
+        "ui.people":"{n} 人",
+        "ui.cpuOptionNote":"* 目前先提供選項與記錄，之後會接上電腦玩家自動行動邏輯。",
+        "ui.createNewRoom":"🏴‍☠️ 建立新房間",
+        "ui.joinFriendRoom":"加入朋友的房間",
+        "ui.enterRoomCode":"輸入房號",
+        "ui.roomCodePlaceholder":"例如：AB2D9F",
+        "ui.roomCodeHint":"* 房號由房主提供，大寫 / 小寫不影響。",
+        "ui.joinRoomBtn":"🔑 加入房間",
+        "ui.suggestion":"建議 2–4 名真人玩家一同遊玩，CPU 數量之後可搭配調整。",
+        "ui.connectingLobby":"正在連線等待室...",
+        "ui.roomId":"房號",
+        "ui.copyRoomId":"複製房號",
+        "ui.leaveRoom":"離開房間",
+        "ui.startGameBtn":"開始遊戲",
+        "ui.startGameNeed":"至少 2 名真人且全部準備才可開始",
+        "ui.cpuPlayers":"CPU 玩家：{n} 人",
+        "ui.cpuWillJoin":"開始遊戲後會自動加入對局（在下方列表中會顯示）",
+        "ui.humanPlayers":"真人玩家（{n}）",
+        "ui.cpuPlayersList":"CPU 玩家（{n}）",
+        "ui.player":"玩家",
+        "ui.ready":"已準備",
+        "ui.notReady":"未準備",
+        "ui.meReady":"準備",
+        "ui.meUnready":"取消準備",
+        "ui.cpuTag":"電腦玩家",
+        "ui.lobbyFootnote":"{t("ui.lobbyFootnote")}"
+      });
+
+      merge("en", {
+        "ui.you":"You",
+        "ui.back":"Back",
+        "ui.close":"Close",
+        "ui.createCharacter":"Create Profile",
+        "ui.localSaved":"Saved locally (localStorage)",
+        "ui.playerName":"Player name",
+        "ui.namePlaceholder":"Enter your name",
+        "ui.nameHint":"* Up to 16 characters. You can change it later.",
+        "ui.chooseAvatar":"Choose avatar (30)",
+        "ui.avatarPath":"Path: images/avatars/1.webp ~ 30.webp",
+        "ui.roomMode":"Room",
+        "ui.createOrJoin":"Create / Join",
+        "ui.playerId":"Player ID: {id}",
+        "ui.createRoomTitle":"Create room",
+        "ui.joinRoom":"Join room",
+        "ui.host":"Host",
+        "ui.joinCpuCount":"Add CPUs",
+        "ui.joinCpuHint":"Will be added on game start (0–3)",
+        "ui.people":"{n} players",
+        "ui.cpuOptionNote":"* Options are stored for now; CPU auto-play logic will be integrated later.",
+        "ui.createNewRoom":"🏴‍☠️ Create new room",
+        "ui.joinFriendRoom":"Join a friend's room",
+        "ui.enterRoomCode":"Room code",
+        "ui.roomCodePlaceholder":"e.g., AB2D9F",
+        "ui.roomCodeHint":"* Provided by the host. Case-insensitive.",
+        "ui.joinRoomBtn":"🔑 Join room",
+        "ui.suggestion":"Recommended: 2–4 human players. CPU count can be tuned later.",
+        "ui.connectingLobby":"Connecting to lobby...",
+        "ui.roomId":"Room ID",
+        "ui.copyRoomId":"Copy",
+        "ui.leaveRoom":"Leave",
+        "ui.startGameBtn":"Start",
+        "ui.startGameNeed":"Need ≥2 humans and all ready",
+        "ui.cpuPlayers":"CPU players: {n}",
+        "ui.cpuWillJoin":"CPUs will join automatically after the game starts.",
+        "ui.humanPlayers":"Humans ({n})",
+        "ui.cpuPlayersList":"CPUs ({n})",
+        "ui.player":"Player",
+        "ui.ready":"Ready",
+        "ui.notReady":"Not ready",
+        "ui.meReady":"Ready",
+        "ui.meUnready":"Unready",
+        "ui.cpuTag":"CPU",
+        "ui.lobbyFootnote":"This lobby is synced via Socket.IO. Ready/start actions are sent to the server. CPUs join after game start."
+      });
+
+      merge("ja", {
+        "ui.you":"あなた",
+        "ui.back":"戻る",
+        "ui.close":"閉じる",
+        "ui.createCharacter":"プロフィール作成",
+        "ui.localSaved":"ローカルに保存（localStorage）",
+        "ui.playerName":"プレイヤー名",
+        "ui.namePlaceholder":"名前を入力",
+        "ui.nameHint":"* 最大16文字。後で変更できます。",
+        "ui.chooseAvatar":"アバター選択（30）",
+        "ui.avatarPath":"パス：images/avatars/1.webp ~ 30.webp",
+        "ui.roomMode":"ルーム",
+        "ui.createOrJoin":"作成 / 参加",
+        "ui.playerId":"プレイヤーID：{id}",
+        "ui.createRoomTitle":"ルーム作成",
+        "ui.joinRoom":"参加して続行",
+        "ui.host":"ホスト",
+        "ui.joinCpuCount":"CPU人数",
+        "ui.joinCpuHint":"開始時に自動追加（0～3）",
+        "ui.people":"{n}人",
+        "ui.cpuOptionNote":"* 現在は選択と記録のみ。CPU自動行動は後で統合します。",
+        "ui.createNewRoom":"🏴‍☠️ 新しいルームを作成",
+        "ui.joinFriendRoom":"友達のルームに参加",
+        "ui.enterRoomCode":"ルームID",
+        "ui.roomCodePlaceholder":"例：AB2D9F",
+        "ui.roomCodeHint":"* ホストから共有。大/小文字は区別しません。",
+        "ui.joinRoomBtn":"🔑 参加",
+        "ui.suggestion":"推奨：真人2～4人。CPU人数は後で調整可能。",
+        "ui.connectingLobby":"ロビーに接続中...",
+        "ui.roomId":"ルームID",
+        "ui.copyRoomId":"コピー",
+        "ui.leaveRoom":"退出",
+        "ui.startGameBtn":"開始",
+        "ui.startGameNeed":"真人2人以上＆全員準備が必要",
+        "ui.cpuPlayers":"CPU：{n}人",
+        "ui.cpuWillJoin":"ゲーム開始後にCPUが自動参加します。",
+        "ui.humanPlayers":"真人（{n}）",
+        "ui.cpuPlayersList":"CPU（{n}）",
+        "ui.player":"プレイヤー",
+        "ui.ready":"準備OK",
+        "ui.notReady":"未準備",
+        "ui.meReady":"準備",
+        "ui.meUnready":"解除",
+        "ui.cpuTag":"CPU",
+        "ui.lobbyFootnote":"このロビーはSocket.IOで同期します。準備/開始はサーバーへ送信。CPUは開始後に参加。"
+      });
+
+      merge("ko", {
+        "ui.you":"나",
+        "ui.back":"뒤로",
+        "ui.close":"닫기",
+        "ui.createCharacter":"프로필 생성",
+        "ui.localSaved":"로컬 저장(localStorage)",
+        "ui.playerName":"플레이어 이름",
+        "ui.namePlaceholder":"이름 입력",
+        "ui.nameHint":"* 최대 16자. 나중에 변경 가능.",
+        "ui.chooseAvatar":"아바타 선택(30)",
+        "ui.avatarPath":"경로: images/avatars/1.webp ~ 30.webp",
+        "ui.roomMode":"방",
+        "ui.createOrJoin":"생성 / 참가",
+        "ui.playerId":"플레이어 ID: {id}",
+        "ui.createRoomTitle":"방 만들기",
+        "ui.joinRoom":"참가하기",
+        "ui.host":"호스트",
+        "ui.joinCpuCount":"CPU 추가",
+        "ui.joinCpuHint":"시작 시 자동 추가(0~3)",
+        "ui.people":"{n}명",
+        "ui.cpuOptionNote":"* 현재는 옵션/기록만 제공. CPU 자동 플레이는 추후 연동.",
+        "ui.createNewRoom":"🏴‍☠️ 새 방 만들기",
+        "ui.joinFriendRoom":"친구 방 참가",
+        "ui.enterRoomCode":"방 코드",
+        "ui.roomCodePlaceholder":"예: AB2D9F",
+        "ui.roomCodeHint":"* 호스트가 제공. 대/소문자 구분 없음.",
+        "ui.joinRoomBtn":"🔑 참가",
+        "ui.suggestion":"권장: 사람 2~4명. CPU 수는 추후 조정 가능.",
+        "ui.connectingLobby":"대기실 연결 중...",
+        "ui.roomId":"방 번호",
+        "ui.copyRoomId":"복사",
+        "ui.leaveRoom":"나가기",
+        "ui.startGameBtn":"시작",
+        "ui.startGameNeed":"사람 2명 이상 + 모두 준비 필요",
+        "ui.cpuPlayers":"CPU: {n}명",
+        "ui.cpuWillJoin":"게임 시작 후 CPU가 자동 참가합니다.",
+        "ui.humanPlayers":"사람({n})",
+        "ui.cpuPlayersList":"CPU({n})",
+        "ui.player":"플레이어",
+        "ui.ready":"준비됨",
+        "ui.notReady":"미준비",
+        "ui.meReady":"준비",
+        "ui.meUnready":"취소",
+        "ui.cpuTag":"CPU",
+        "ui.lobbyFootnote":"이 대기실은 Socket.IO로 동기화됩니다. 준비/시작은 서버로 전송되며 CPU는 시작 후 참가합니다."
+      });
+    })();
+
+
     const MIN_PLAYERS = 2; // 開局最低人數
 
     function uid(){ return Math.random().toString(36).slice(2,10); }
@@ -604,8 +800,8 @@ function PressAnyKey({onProceed}){
       return (
         <form onSubmit={handleSubmit} className="card w-[min(980px,96vw)] p-5 md:p-6">
           <div className="flex items-center justify-between gap-3 flex-wrap">
-            <h2 className="text-xl font-bold">創建角色</h2>
-            <div className="text-xs text-neutral-400">資料會暫存於本機（localStorage）</div>
+            <h2 className="text-xl font-bold">{t("ui.createCharacter")}</h2>
+            <div className="text-xs text-neutral-400">{t("ui.localSaved")}</div>
           </div>
           <div className="grid [@media(orientation:landscape)]:grid-cols-2 md:grid-cols-3 gap-5 mt-4">
             <div className="md:col-span-1">
@@ -617,31 +813,31 @@ function PressAnyKey({onProceed}){
                     onError={(e)=>{
                       e.currentTarget.replaceWith(Object.assign(
                         document.createElement('div'),
-                        {className:'mono avatar',innerText:(name||'').slice(0,1)||'你'}
+                        {className:'mono avatar',innerText:(name||'').slice(0,1)||t('ui.you')}
                       ));
                     }}
                   />
                 </div>
                 <div>
-                  <div className="text-sm text-neutral-400">玩家名稱</div>
+                  <div className="text-sm text-neutral-400">{t("ui.playerName")}</div>
                   <input
                     className="mt-1 w-56 rounded-lg bg-neutral-900 border border-neutral-700 px-3 py-2 outline-none focus:border-amber-400"
                     maxLength={16}
-                    placeholder="輸入你的名字"
+                    placeholder={t("ui.namePlaceholder")}
                     value={name}
                     onChange={(e)=>setName(e.target.value)}
                   />
                 </div>
               </div>
               <div className="text-xs text-neutral-400 mt-2">
-                * 名稱最多 16 字；可稍後在設定中修改。
+                {t("ui.nameHint")}
               </div>
             </div>
             <div className="md:col-span-2">
               <div className="flex items-center justify-between">
-                <div className="font-semibold">選擇頭像（30）</div>
+                <div className="font-semibold">{t("ui.chooseAvatar")}</div>
                 <div className="text-xs text-neutral-400">
-                  路徑：<code>images/avatars/1.webp ~ 30.webp</code>
+                  {t("ui.avatarPath")}
                 </div>
               </div>
               <div className="mt-2 grid grid-cols-5 sm:grid-cols-6 md:grid-cols-7 lg:grid-cols-8 gap-3">
@@ -659,7 +855,7 @@ function PressAnyKey({onProceed}){
             </div>
           </div>
           <div className="mt-5 flex flex-col sm:flex-row gap-3">
-            <button className="btn-primary btn grow" type="submit">創建房間</button>
+            <button className="btn-primary btn grow" type="submit">{t("ui.createRoomTitle")}</button>
             <button
               className="btn grow"
               type="button"
@@ -670,7 +866,7 @@ function PressAnyKey({onProceed}){
                 onDone(data,{join:true});
               }}
             >
-              加入房間
+              {t("ui.joinRoom")}
             </button>
           </div>
         </form>
@@ -744,9 +940,9 @@ function PressAnyKey({onProceed}){
       {/* 標題列 */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
         <div>
-          <div className="text-sm text-neutral-400">房間模式</div>
+          <div className="text-sm text-neutral-400">{t("ui.roomMode")}</div>
           <div className="text-xl font-bold text-amber-300">
-            建立房間 / 加入房間
+            {t("ui.createOrJoin")}
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -755,7 +951,7 @@ function PressAnyKey({onProceed}){
           </div>
           <div className="text-sm text-right">
             <div className="text-neutral-300">{profile.playerName}</div>
-            <div className="text-xs text-neutral-500">玩家 ID：{meId}</div>
+            <div className="text-xs text-neutral-500">{t("ui.playerId", {id: meId})}</div>
           </div>
         </div>
       </div>
@@ -765,9 +961,9 @@ function PressAnyKey({onProceed}){
         {/* 左：建立房間 */}
         <div className="space-y-4 border border-neutral-700/70 rounded-xl p-4 bg-black/20">
           <div className="flex items-center justify-between">
-            <div className="font-semibold">建立房間</div>
+            <div className="font-semibold">{t("ui.createRoomTitle")}</div>
             <span className="text-[11px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-400/40">
-              房主
+              {t("ui.host")}
             </span>
           </div>
 
@@ -775,10 +971,10 @@ function PressAnyKey({onProceed}){
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <label className="text-sm font-medium text-amber-200">
-                加入 CPU 人數
+                {t("ui.joinCpuCount")}
               </label>
               <span className="text-[11px] text-neutral-400">
-                之後會自動填進房間（暫定 0–3 人）
+                {t("ui.joinCpuHint")}
               </span>
             </div>
             <div className="grid grid-cols-4 gap-2">
@@ -796,13 +992,13 @@ function PressAnyKey({onProceed}){
                         : "")
                     }
                   >
-                    {n} 人
+                    {t("ui.people", {n})}
                   </button>
                 );
               })}
             </div>
             <div className="text-xs text-neutral-500">
-              * 目前先提供選項與記錄，之後會接上電腦玩家自動行動邏輯。
+              {t("ui.cpuOptionNote")}
             </div>
           </div>
 
@@ -811,24 +1007,24 @@ function PressAnyKey({onProceed}){
             onClick={createRoom}
             className="btn-primary btn w-full mt-2 py-2.5 text-base"
           >
-            🏴‍☠️ 建立新房間
+            {t("ui.createNewRoom")}
           </button>
         </div>
 
         {/* 右：加入房間 */}
         <div className="space-y-4 border border-neutral-700/70 rounded-xl p-4 bg-black/10">
-          <div className="font-semibold">加入朋友的房間</div>
+          <div className="font-semibold">{t("ui.joinFriendRoom")}</div>
           <div className="space-y-2">
-            <label className="text-sm text-neutral-300">輸入房號</label>
+            <label className="text-sm text-neutral-300">{t("ui.enterRoomCode")}</label>
             <input
               className="w-full rounded-lg bg-neutral-900 border border-neutral-700 px-3 py-2 text-sm outline-none focus:border-amber-400"
-              placeholder="例如：AB2D9F"
+              placeholder={t("ui.roomCodePlaceholder")}
               value={joinCode}
               onChange={(e) => setJoinCode(e.target.value)}
               maxLength={8}
             />
             <div className="text-[11px] text-neutral-500">
-              * 房號由房主提供，大寫 / 小寫不影響。
+              {t("ui.roomCodeHint")}
             </div>
           </div>
 
@@ -837,13 +1033,13 @@ function PressAnyKey({onProceed}){
             onClick={tryJoin}
             className="btn w-full mt-2 py-2.5 text-base"
           >
-            🔑 加入房間
+            {t("ui.joinRoomBtn")}
           </button>
         </div>
       </div>
 
       <div className="text-xs text-neutral-500 text-right">
-        建議 2–4 名真人玩家一同遊玩，CPU 數量之後可搭配調整。
+        {t("ui.suggestion")}
       </div>
     </div>
   );
@@ -890,7 +1086,7 @@ function WaitingRoom({roomId, profile, onLeave}){
     });
   }
 
-  // 房主開局
+  // {t("ui.host")}開局
   function startGame(){
     if(!amHost) return;
     socket.emit('ACTION', {
@@ -908,8 +1104,8 @@ function WaitingRoom({roomId, profile, onLeave}){
   if(!lobby){
     return (
       <div className="card w=[min(820px,96vw)] p-6">
-        <div className="text-lg font-bold mb-2">正在連線等待室...</div>
-        <button className="btn" onClick={onLeave}>返回</button>
+        <div className="text-lg font-bold mb-2">{t("ui.connectingLobby")}</div>
+        <button className="btn" onClick={onLeave}>{t("ui.back")}</button>
       </div>
     );
   }
@@ -919,20 +1115,20 @@ function WaitingRoom({roomId, profile, onLeave}){
       {/* 上方：房號 + 按鈕列 */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <div className="text-xs text-neutral-400">房號</div>
+          <div className="text-xs text-neutral-400">{t("ui.roomId")}</div>
           <div className="text-2xl font-extrabold tracking-widest">{lobby.roomId}</div>
         </div>
         <div className="flex gap-2">
-          <button className="btn" onClick={copyId}>複製房號</button>
-          <button className="btn" onClick={onLeave}>離開房間</button>
+          <button className="btn" onClick={copyId}>{t("ui.copyRoomId")}</button>
+          <button className="btn" onClick={onLeave}>{t("ui.leaveRoom")}</button>
           {amHost && (
             <button
               className={`btn-primary ${canStart? "": "opacity-50 cursor-not-allowed"}`}
               onClick={startGame}
               disabled={!canStart}
-              title={canStart? "開始遊戲":"至少 2 名真人且全部準備才可開始"}
+              title={canStart? t("ui.startGameBtn") : t("ui.startGameNeed")}
             >
-              開始遊戲
+              {t("ui.startGameBtn")}
             </button>
           )}
         </div>
@@ -942,20 +1138,20 @@ function WaitingRoom({roomId, profile, onLeave}){
       {cpuCount > 0 && (
         <div className="mt-3 text-xs text-amber-200 flex items-center gap-2">
           <span className="px-2 py-0.5 rounded-full border border-amber-400/40 bg-amber-500/10">
-            CPU 玩家：{cpuCount} 人
+            {t("ui.cpuPlayers", {n: cpuCount})}
           </span>
           <span className="text-[11px] text-neutral-400">
-            開始遊戲後會自動加入對局（在下方列表中會顯示）
+            {t("ui.cpuWillJoin")}
           </span>
         </div>
       )}
 
       {/* 真人 + CPU 列表 */}
       <div className="mt-5 space-y-5">
-        {/* 真人玩家區 */}
+        {/* 真人{t("ui.player")}區 */}
         <div>
           <div className="text-sm text-neutral-300 mb-2">
-            真人玩家（{players.length}）
+            {t("ui.humanPlayers", {n: players.length})}
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {players.map(p=> {
@@ -975,17 +1171,17 @@ function WaitingRoom({roomId, profile, onLeave}){
                       <div className="font-semibold leading-tight">{nameOf(p)}</div>
                       <div className="text-xs text-neutral-400 flex items-center gap-2">
                         {isHost
-                          ? <span className="px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-200 border border-amber-400/30">房主</span>
-                          : <span className="opacity-60">玩家</span>}
+                          ? <span className="px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-200 border border-amber-400/30">{t("ui.host")}</span>
+                          : <span className="opacity-60">{t("ui.player")}</span>}
                         {ready
-                          ? <span className="px-1.5 py-0.5 rounded bg-emerald-400/15 text-emerald-200 border border-emerald-400/30">已準備</span>
-                          : <span className="px-1.5 py-0.5 rounded bg-neutral-600/20 text-neutral-200 border border-neutral-600/40">未準備</span>}
+                          ? <span className="px-1.5 py-0.5 rounded bg-emerald-400/15 text-emerald-200 border border-emerald-400/30">{t("ui.ready")}</span>
+                          : <span className="px-1.5 py-0.5 rounded bg-neutral-600/20 text-neutral-200 border border-neutral-600/40">{t("ui.notReady")}</span>}
                       </div>
                     </div>
                   </div>
                   {isMe && (
                     <button className="btn" onClick={()=>toggleReady(!myReady)}>
-                      {myReady?"取消準備":"準備"}
+                      {myReady ? t("ui.meUnready") : t("ui.meReady")}
                     </button>
                   )}
                 </div>
@@ -993,11 +1189,11 @@ function WaitingRoom({roomId, profile, onLeave}){
             })}
           </div>
         </div>
-        {/* CPU 玩家區 */}
+        {/* CPU {t("ui.player")}區 */}
         {cpuCount > 0 && (
           <div>
             <div className="text-sm text-neutral-300 mb-2">
-              CPU 玩家（{cpuCount}）
+              {t("ui.cpuPlayersList", {n: cpuCount})}
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {Array.from({length: cpuCount}).map((_, idx) => {
@@ -1026,10 +1222,10 @@ function WaitingRoom({roomId, profile, onLeave}){
                         <div className="font-semibold leading-tight text-amber-200">{name}</div>
                         <div className="text-xs text-neutral-400 flex items-center gap-2">
                           <span className="px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-200 border border-sky-400/40">
-                            電腦玩家
+                            {t("ui.cpuTag")}
                           </span>
                           <span className="px-1.5 py-0.5 rounded bg-emerald-400/15 text-emerald-200 border border-emerald-400/30">
-                            已準備
+                            {t("ui.ready")}
                           </span>
                         </div>
                       </div>
@@ -1045,7 +1241,7 @@ function WaitingRoom({roomId, profile, onLeave}){
       </div>
 
       <div className="text-xs text-neutral-400 mt-4">
-        此等待室已綁定後端快照；準備/開局皆透過 Socket.IO。CPU 將在遊戲開始後自動加入。
+        {t("ui.lobbyFootnote")}
       </div>
     </div>
   );
@@ -1062,6 +1258,14 @@ function WaitingRoom({roomId, profile, onLeave}){
 const [langTick, setLangTick] = useState(0);
 function changeLang(next){
   I18N.setLang(next);
+  document.documentElement.setAttribute("lang", I18N.getLang());
+
+  // 非 React 區塊（旋轉提示）也要同步更新
+  const a = document.getElementById("txtRotateTitle");
+  const b = document.getElementById("txtRotateHint");
+  if(a) a.textContent = t("ui.rotateTitle");
+  if(b) b.textContent = t("ui.rotateHint");
+
   setLangTick(x=>x+1); // 強制重繪
 }
 
