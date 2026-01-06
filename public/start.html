@@ -209,10 +209,17 @@
 
     // === 原常數/工具：保留必要者 ===
     const {useState, useEffect, useMemo} = React;
-const I18N = window.__I18N;
-const t = (key, vars) => I18N.t(key, vars);
+// === I18N 防呆：避免字典/腳本載入失敗造成整頁白屏 ===
+const I18N = window.__I18N || {
+  getLang: () => 'zh-Hant',
+  setLang: () => {},
+  SUPPORTED: ['zh-Hant'],
+  getLangLabel: () => '繁體中文',
+  t: (k) => k
+};
+const t = (key, vars) => (I18N && typeof I18N.t === 'function') ? I18N.t(key, vars) : key;
 
-    // === (i18n) 補齊 start.html 會用到的 key（就算外部字典缺漏也不會跳回中文/顯示 key）===
+// === (i18n) 補齊 start.html 會用到的 key（就算外部字典缺漏也不會跳回中文/顯示 key）===
     (function ensureStartI18nKeys(){
       const D = window.__I18N_DICTS = window.__I18N_DICTS || {};
       const merge = (lang, obj)=>{
@@ -262,7 +269,23 @@ const t = (key, vars) => I18N.t(key, vars);
         "ui.meReady":"準備",
         "ui.meUnready":"取消準備",
         "ui.cpuTag":"電腦玩家",
-        "ui.lobbyFootnote":"{t("ui.lobbyFootnote")}"
+        "ui.lobbyFootnote":"此等待室透過 Socket.IO 同步；準備/開始會送到伺服器；CPU 會在開局後加入對局。",
+        "brand.titleEn":"ONE PIECE",
+        "brand.titleSub":"偉大航道爭霸戰",
+        "brand.tagline":"多人連線對戰・一局一張牌的推理與博弈",
+        "ui.pressAnyKey":"點一下 / 按任意鍵開始",
+        "ui.lang":"語言",
+        "ui.startGame":"開始遊戲",
+        "ui.rules":"遊戲規則",
+        "ui.joinRoom":"加入房間",
+        "ui.alertNeedRoomId":"請先輸入房號",
+        "ui.alertCopiedRoomId":"已複製房號：{roomId}",
+        "ui.rotateTitle":"請將手機旋轉至橫向以獲得最佳體驗",
+        "ui.rotateHint":"若仍無法旋轉，請解鎖畫面旋轉或從瀏覽器選單開啟「允許旋轉」。",
+        "cpu.name1":"克洛克達爾",
+        "cpu.name2":"鷹眼密佛格",
+        "cpu.name3":"小丑巴其"
+
       });
 
       merge("en", {
@@ -309,7 +332,22 @@ const t = (key, vars) => I18N.t(key, vars);
         "ui.meReady":"Ready",
         "ui.meUnready":"Unready",
         "ui.cpuTag":"CPU",
-        "ui.lobbyFootnote":"This lobby is synced via Socket.IO. Ready/start actions are sent to the server. CPUs join after game start."
+        "ui.lobbyFootnote":"This lobby is synced via Socket.IO. Ready/start actions are sent to the server. CPUs join after game start.",
+        "brand.titleEn":"ONE PIECE",
+        "brand.titleSub":"Grand Line Showdown",
+        "brand.tagline":"Online multiplayer mind-game card battle",
+        "ui.pressAnyKey":"Click / Press any key to start",
+        "ui.lang":"Language",
+        "ui.startGame":"Start Game",
+        "ui.rules":"Rules",
+        "ui.alertNeedRoomId":"Please enter a room code first.",
+        "ui.alertCopiedRoomId":"Copied room code: {roomId}",
+        "ui.rotateTitle":"Rotate your phone to landscape for the best experience",
+        "ui.rotateHint":"If it won't rotate, unlock rotation or enable “Auto-rotate” in your browser/system.",
+        "cpu.name1":"Crocodile",
+        "cpu.name2":"Mihawk",
+        "cpu.name3":"Buggy"
+
       });
 
       merge("ja", {
@@ -356,7 +394,22 @@ const t = (key, vars) => I18N.t(key, vars);
         "ui.meReady":"準備",
         "ui.meUnready":"解除",
         "ui.cpuTag":"CPU",
-        "ui.lobbyFootnote":"このロビーはSocket.IOで同期します。準備/開始はサーバーへ送信。CPUは開始後に参加。"
+        "ui.lobbyFootnote":"このロビーはSocket.IOで同期します。準備/開始はサーバーへ送信。CPUは開始後に参加。",
+        "brand.titleEn":"ONE PIECE",
+        "brand.titleSub":"偉大航道 争覇戦",
+        "brand.tagline":"オンライン対戦・推理と駆け引きのカードゲーム",
+        "ui.pressAnyKey":"クリック / 任意キーで開始",
+        "ui.lang":"言語",
+        "ui.startGame":"ゲーム開始",
+        "ui.rules":"ルール",
+        "ui.alertNeedRoomId":"ルームIDを入力してください",
+        "ui.alertCopiedRoomId":"コピーしました：{roomId}",
+        "ui.rotateTitle":"横向きに回転してお楽しみください",
+        "ui.rotateHint":"回転できない場合は画面回転ロックを解除するか設定で自動回転を有効にしてください。",
+        "cpu.name1":"クロコダイル",
+        "cpu.name2":"ミホーク",
+        "cpu.name3":"バギー"
+
       });
 
       merge("ko", {
@@ -403,7 +456,22 @@ const t = (key, vars) => I18N.t(key, vars);
         "ui.meReady":"준비",
         "ui.meUnready":"취소",
         "ui.cpuTag":"CPU",
-        "ui.lobbyFootnote":"이 대기실은 Socket.IO로 동기화됩니다. 준비/시작은 서버로 전송되며 CPU는 시작 후 참가합니다."
+        "ui.lobbyFootnote":"이 대기실은 Socket.IO로 동기화됩니다. 준비/시작은 서버로 전송되며 CPU는 시작 후 참가합니다.",
+        "brand.titleEn":"ONE PIECE",
+        "brand.titleSub":"위대한 항로 쟁패전",
+        "brand.tagline":"온라인 대전・추리와 심리전 카드 게임",
+        "ui.pressAnyKey":"클릭 / 아무 키나 눌러 시작",
+        "ui.lang":"언어",
+        "ui.startGame":"게임 시작",
+        "ui.rules":"규칙",
+        "ui.alertNeedRoomId":"방 코드를 먼저 입력해 주세요.",
+        "ui.alertCopiedRoomId":"복사됨: {roomId}",
+        "ui.rotateTitle":"가로 모드로 회전해 주세요",
+        "ui.rotateHint":"회전이 안 되면 화면 회전 잠금을 해제하거나 자동 회전을 켜주세요.",
+        "cpu.name1":"크로커다일",
+        "cpu.name2":"미호크",
+        "cpu.name3":"버기"
+
       });
     })();
 
