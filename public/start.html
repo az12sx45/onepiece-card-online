@@ -223,7 +223,7 @@ const t = (key, vars) => (I18N && typeof I18N.t === 'function') ? I18N.t(key, va
     (function ensureStartI18nKeys(){
       const D = window.__I18N_DICTS = window.__I18N_DICTS || {};
       const merge = (lang, obj)=>{
-        D[lang] = Object.assign({}, obj, D[lang]||{});
+        D[lang] = Object.assign({}, D[lang]||{}, obj);
       };
 
       merge("zh-Hant", {
