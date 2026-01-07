@@ -507,7 +507,6 @@ function PressAnyKey({onProceed}){
   // ✅ 翻頁式規則書 RuleModal（圖文版）
 // 需求：把圖片放在 public/images/rules/ 且檔名為 01~09
 // 支援：上一頁/下一頁、圓點跳頁、鍵盤 ← →、Esc 關閉、點背景關閉
-
 function RuleModal({ show, onClose }) {
   const pages = React.useMemo(
     () => [
@@ -608,12 +607,10 @@ function RuleModal({ show, onClose }) {
 
   const [idx, setIdx] = React.useState(0);
 
-  // show/hide
   React.useEffect(() => {
     if (show) setIdx(0);
   }, [show]);
 
-  // keyboard nav
   React.useEffect(() => {
     if (!show) return;
 
@@ -669,21 +666,18 @@ function RuleModal({ show, onClose }) {
             />
           </div>
 
-<div className="rulesText">
-  {/* 區域標題（放在介紹框內） */}
-  <div className="rulesSectionTitle">
-    {page.title}
-  </div>
+          <div className="rulesText">
+            <div className="rulesSectionTitle">{page.title}</div>
 
-  <ul className="rulesBullets">
-    {page.bullets.map((t, i) => (
-      <li key={i}>{t}</li>
-    ))}
-  </ul>
+            <ul className="rulesBullets">
+              {page.bullets.map((t, i) => (
+                <li key={i}>{t}</li>
+              ))}
+            </ul>
 
-  {page.tip ? <div className="rulesTip">提示：{page.tip}</div> : null}
-</div>
-
+            {page.tip ? <div className="rulesTip">提示：{page.tip}</div> : null}
+          </div>
+        </div>
 
         <div className="rulesFooter">
           <button
@@ -722,6 +716,7 @@ function RuleModal({ show, onClose }) {
     </div>
   );
 }
+
 
 
 
