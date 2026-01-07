@@ -108,8 +108,10 @@
 }
 
 .rulesCard{
-  width: min(1100px, 92vw);
-  max-height: 88vh;
+ width: 94vw;
+height: 92vh;
+max-height: none;
+
   background: rgba(10,12,18,0.92);
 
   /* 金色邊框 */
@@ -276,6 +278,17 @@
   border-bottom: 1px solid rgba(255, 211, 106, 0.35);
   letter-spacing: .02em;
 }
+
+/* 手機：真正全螢幕 */
+@media (max-width: 640px) {
+  .rulesCard{
+    width: 100vw;
+    height: 100dvh;
+    max-height: none;
+    border-radius: 0;
+  }
+}
+
 
 
   </style>
