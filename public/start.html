@@ -95,6 +95,171 @@
       opacity: .55;
       cursor: not-allowed;
     }
+
+/* === Rules Flipbook Modal === */
+.rulesOverlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index: 9999;
+}
+
+.rulesCard{
+  width: min(1100px, 92vw);
+  max-height: 88vh;
+  background: rgba(10,12,18,0.92);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 18px;
+  overflow: hidden;
+  display:flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+.rulesTopBar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.rulesTitleMain{
+  font-size: 18px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.92);
+}
+
+.rulesTitleSub{
+  font-size: 12px;
+  margin-top: 4px;
+  color: rgba(255,255,255,0.60);
+}
+
+.rulesCloseBtn{
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.86);
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.rulesCloseBtn:hover{
+  background: rgba(255,255,255,0.12);
+}
+
+.rulesBody{
+  padding: 14px 16px;
+  display:grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 14px;
+  overflow: auto;
+}
+
+@media (max-width: 920px){
+  .rulesBody{
+    grid-template-columns: 1fr;
+  }
+}
+
+.rulesImageWrap{
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.04);
+}
+
+.rulesImage{
+  width: 100%;
+  height: auto;
+  display:block;
+}
+
+.rulesText{
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.04);
+  padding: 12px 14px;
+  color: rgba(255,255,255,0.86);
+}
+
+.rulesBullets{
+  margin: 0;
+  padding-left: 18px;
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.rulesTip{
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 190, 88, 0.12);
+  border: 1px solid rgba(255, 190, 88, 0.25);
+  color: rgba(255,255,255,0.90);
+  font-size: 13px;
+}
+
+.rulesFooter{
+  padding: 12px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 10px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.rulesNavBtn{
+  padding: 10px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.88);
+}
+
+.rulesNavBtn:disabled{
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.rulesNavBtn.primary{
+  background: rgba(255, 190, 88, 0.16);
+  border-color: rgba(255, 190, 88, 0.35);
+}
+
+.rulesDots{
+  display:flex;
+  gap: 8px;
+  align-items:center;
+  justify-content:center;
+  flex: 1;
+}
+
+.rulesDot{
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.10);
+  cursor: pointer;
+}
+
+.rulesDot.active{
+  background: rgba(255, 190, 88, 0.55);
+  border-color: rgba(255, 190, 88, 0.75);
+}
+
+.rulesHintLine{
+  padding: 0 16px 12px;
+  color: rgba(255,255,255,0.50);
+  font-size: 12px;
+}
+
+
   </style>
 </head>
 <body class="no-video">
@@ -321,281 +486,219 @@ function PressAnyKey({onProceed}){
 
 
        // === 遊戲規則彈窗（最終版） ===
-    function RuleModal({ show, onClose }) {
-      if (!show) return null;
+  // ✅ 翻頁式規則書 RuleModal（圖文版）
+// 需求：把圖片放在 public/images/rules/ 且檔名為 01~09
+// 支援：上一頁/下一頁、圓點跳頁、鍵盤 ← →、Esc 關閉、點背景關閉
 
-      return (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="card w-[min(820px,95vw)] p-6 space-y-5 max-h-[90vh] overflow-y-auto text-sm leading-relaxed text-neutral-200">
-            <h2 className="text-xl font-bold text-amber-300 mb-1">📘 遊戲規則 & 介面說明</h2>
+function RuleModal({ show, onClose }) {
+  const pages = React.useMemo(
+    () => [
+      {
+        id: "overview",
+        title: "整體戰場總覽",
+        img: "images/rules/01-overview.webp",
+        bullets: [
+          "這就是整場對局的主要畫面。",
+          "輪到你時，可操作的區域會出現提示或亮起。",
+          "先不用背規則：照畫面提示做就能玩。"
+        ],
+        tip: "建議先快速翻完一輪，知道每個區塊在哪裡。"
+      },
+      {
+        id: "header",
+        title: "標題列：寶箱金幣與圖鑑入口",
+        img: "images/rules/02-header-bar.webp",
+        bullets: [
+          "「寶箱金幣剩餘」＝本局還能被拿走的獎勵。",
+          "「卡片圖鑑」＝查所有角色與技能（不影響對局）。"
+        ],
+        tip: "新手只要知道：想看角色技能，就按圖鑑。"
+      },
+      {
+        id: "gallery",
+        title: "卡片圖鑑：所有角色一覽",
+        img: "images/rules/03-card-gallery.webp",
+        bullets: [
+          "這裡列出所有角色（0～19）以及各卡張數。",
+          "紅框＝本局因場地而「強化」的角色。"
+        ],
+        tip: "不用記角色效果，真的要用時再查即可。"
+      },
+      {
+        id: "cardDetail",
+        title: "卡片詳情：一般 vs 強化",
+        img: "images/rules/04-card-detail.webp",
+        bullets: [
+          "點圖鑑中的角色後，會顯示「一般」與「強化」兩種版本。",
+          "若本局場地有強化到該角色，請以強化版效果為準。"
+        ],
+        tip: "你不需要背例外：圖鑑會直接並排顯示差異。"
+      },
+      {
+        id: "venuePanel",
+        title: "本局場地：本局哪些角色會變強",
+        img: "images/rules/05-venue-panel.webp",
+        bullets: [
+          "每一局會出現不同場地卡，影響特定角色。",
+          "場地卡會直接列出：哪些編號角色在本局獲得強化。"
+        ],
+        tip: "看到紅框或『強化』提示，多半就是場地影響。"
+      },
+      {
+        id: "venueBg",
+        title: "背景效果：點場地卡的視覺切換",
+        img: "images/rules/06-venue-background.webp",
+        bullets: [
+          "點擊場地卡切換背景是氣氛效果。",
+          "不影響規則、不影響技能、不影響勝負。"
+        ],
+        tip: "喜歡再點，不點也不影響遊戲。"
+      },
+      {
+        id: "players",
+        title: "玩家區：誰還在、誰出局、誰有狀態",
+        img: "images/rules/07-players-panel.webp",
+        bullets: [
+          "右側列出所有玩家：頭像、名稱、金幣。",
+          "會顯示出局與特殊狀態（如保護、凍結、麻痺等）。"
+        ],
+        tip: "看右側就知道：現在輪到誰、誰還能行動。"
+      },
+      {
+        id: "discard",
+        title: "棄牌區：所有已打出的牌都在這裡",
+        img: "images/rules/08-discard-panel.webp",
+        bullets: [
+          "本局打過的牌會進入棄牌區。",
+          "高手會利用棄牌資訊推理對手可能剩什麼。"
+        ],
+        tip: "新手先知道位置即可，熟了自然會開始看。"
+      },
+      {
+        id: "log",
+        title: "對局日誌：發生了什麼，一看就懂",
+        img: "images/rules/09-log-panel.webp",
+        bullets: [
+          "日誌會記錄抽牌、出牌、技能、出局等事件。",
+          "看不懂剛剛發生什麼時，先看這裡。"
+        ],
+        tip: "遇到爭議或想回放事件，日誌是最準的依據。"
+      }
+    ],
+    []
+  );
 
-            {/* 一、遊戲目標 */}
-            <section className="space-y-1.5">
-              <h3 className="font-semibold text-amber-300">一、遊戲目標</h3>
-              <p>
-                《偉大航道爭霸戰》是一款
-                <strong>簡易策略類型</strong>的多人對戰卡牌遊戲。
-                開局每位玩家手上都只有 1 張牌，透過抽牌、出牌和角色技能，
-                相互擊倒或干擾其他人，直到只剩一人存活，或牌堆打完進入比牌。
-              </p>
-              <ul className="list-disc ml-5 space-y-1">
-                <li>
-                  贏下每一局可從「寶箱」裡拿金幣，
-                  <strong>寶箱內的金幣總數 = 玩家數 × 5</strong>。
-                </li>
-                <li>
-                  當寶箱金幣被拿光時，會進入
-                  <strong>「最終結算」</strong>，
-                  依各玩家
-                  <span className="px-1 mx-1 rounded bg-black/40 border border-amber-400/30 text-amber-200">
-                    獲得的金幣數
-                  </span>
-                  排名。
-                </li>
-              </ul>
-            </section>
+  const [idx, setIdx] = React.useState(0);
 
-            {/* 二、一局流程 */}
-            <section className="space-y-1.5">
-              <h3 className="font-semibold text-amber-300">二、一局流程（實際對局時畫面會長這樣走）</h3>
-              <ol className="list-decimal ml-5 space-y-1">
-                <li>
-                  所有玩家各獲得 1 張<strong>起始手牌</strong>
-                  （不公開，只有本人可見）。
-                </li>
-                <li>
-                  畫面上方會顯示：
-                  <span className="px-1 mx-1 rounded bg-black/40 border border-amber-400/30 text-amber-200">
-                    本局場地
-                  </span>
-                  與
-                  <span className="px-1 mx-1 rounded bg-black/40 border border-amber-400/30 text-amber-200">
-                    寶箱金幣剩餘
-                  </span>
-                  等資訊。
-                </li>
-                <li>
-                  輪到你時，回合分成兩個階段：
-                  <ul className="list-disc ml-5 mt-1 space-y-0.5">
-                    <li>
-                      <span className="font-semibold">抽牌階段（DRAW）</span>：
-                      點中央的牌堆抽 1 張牌。
-                    </li>
-                    <li>
-                      <span className="font-semibold">選牌階段（CHOOSE）</span>：
-                      下方會出現兩張牌（原本手牌 + 新抽的牌），選 1 張打出。
-                    </li>
-                  </ul>
-                </li>
-                <li>你打出的角色會立刻觸發技能（攻擊、偵查、控制、保護、決鬥…等）。</li>
-                <li>
-                  若有玩家出局，畫面會標示該玩家
-                  <span className="px-1 mx-1 rounded bg-black/40 border border-red-400/40 text-red-200">
-                    已出局
-                  </span>
-                  ，並從回合輪替中移除。
-                </li>
-                <li>
-                  本局結束條件：
-                  <ul className="list-disc ml-5 mt-1 space-y-0.5">
-                    <li>
-                      <span className="font-semibold">只剩 1 人存活</span>
-                      ：直接獲勝，從寶箱拿金幣。
-                    </li>
-                    <li>
-                      <span className="font-semibold">牌堆被抽完</span>
-                      ：存活者公開手牌「比點數」決定勝負（詳見第四章）。
-                    </li>
-                  </ul>
-                </li>
-              </ol>
-            </section>
+  // show/hide
+  React.useEffect(() => {
+    if (show) setIdx(0);
+  }, [show]);
 
-            {/* 三、介面說明 */}
-            <section className="space-y-1.5">
-              <h3 className="font-semibold text-amber-300">三、介面說明</h3>
+  // keyboard nav
+  React.useEffect(() => {
+    if (!show) return;
 
-              {/* A. 上方資訊列 */}
-              <div>
-                <p className="font-semibold">A. 上方資訊列</p>
-                <ul className="list-disc ml-5 space-y-0.5">
-                  <li>
-                    <span className="font-semibold">寶箱金幣</span>：
-                    顯示文字類似
-                    <span className="px-1 mx-1 rounded bg-black/40 border border-amber-400/30 text-amber-200">
-                      寶箱金幣剩餘：10 枚
-                    </span>
-                    ，數字會跟著遊戲進行更新。
-                  </li>
-                  <li>
-                    <span className="font-semibold">場地卡區</span>：
-                    上方會橫向排出本局抽到的<strong>場地卡</strong>，
-                    每張寫著場地名稱（德雷斯羅薩鬥技場、艾尼艾斯大廳…），
-                    下面有簡短說明：哪些角色在這裡會變成
-                    <strong>強化技能</strong>（例如「5-索隆變為強化技能」）。
-                  </li>
-                  <li>
-                    <span className="font-semibold">卡片圖鑑</span>：
-                    可隨時點開查看所有號碼（0–19 號）的卡牌詳細資訊與張數。
-                    當前這一局中變成<strong>強化技能</strong>的卡片，
-                    在圖鑑中會以
-                    <span className="px-1 mx-1 rounded bg-black/40 border border-red-400/50 text-red-200">
-                      紅色邊框
-                    </span>
-                    標示，方便快速找到。
-                  </li>
-                  <li>點場地卡可以切換背景、感受該場地的氣氛（不影響實際規則，純視覺效果）。</li>
-                </ul>
-              </div>
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") onClose?.();
+      if (e.key === "ArrowLeft") setIdx((v) => Math.max(0, v - 1));
+      if (e.key === "ArrowRight") setIdx((v) => Math.min(pages.length - 1, v + 1));
+    };
 
-              {/* B. 左右玩家資訊框 */}
-              <div>
-                <p className="font-semibold mt-2">B. 左右玩家資訊框</p>
-                <ul className="list-disc ml-5 space-y-0.5">
-                  <li>每位玩家都有一個框：顯示「頭像」「名字」「目前金幣」。</li>
-                  <li>
-                    玩家出局後，右方會標示
-                    <span className="px-1 mx-1 rounded bg-black/40 border border-red-400/40 text-red-200">
-                      已出局
-                    </span>
-                    ，不再輪到他行動。
-                  </li>
-                  <li>
-                    玩家名字旁邊會有「狀態標籤」，例如：
-                    <ul className="list-disc ml-5 mt-1 space-y-0.5">
-                      <li>
-                        <span className="font-semibold">保護</span>：
-                        一回合內<strong>不受任何技能影響</strong>
-                        （從獲得開始到自己下一次行動前）。
-                      </li>
-                      <li>
-                        <span className="font-semibold">閃避</span>：
-                        下一次對你造成影響的技能<strong>完全無效化</strong>，觸發後解除；
-                        若一直沒被指定，就會持續保留。
-                      </li>
-                      <li>
-                        <span className="font-semibold">凍結</span>：
-                        手牌被冰起來一回合，只能打
-                        <strong>當回合新抽到的那張牌</strong>。
-                      </li>
-                      <li>
-                        <span className="font-semibold">麻痺</span>：
-                        下個回合會被
-                        <span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
-                          跳過抽牌
-                        </span>
-                        ，等於少一次行動。
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
-              </div>
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [show, onClose, pages.length]);
 
-              {/* C. 中央戰場區 */}
-              <div>
-                <p className="font-semibold mt-2">C. 中央戰場區</p>
-                <ul className="list-disc ml-5 space-y-0.5">
-                  <li>
-                    <span className="font-semibold">棄牌堆</span>：
-                    顯示已打出的卡牌，以及被淘汰玩家的手牌。
-                    玩家可以利用這些資訊推理別人可能剩下的牌。
-                  </li>
-                  <li>
-                    <span className="font-semibold">最近打出的卡牌</span>：
-                    中央會出現一張大卡圖，顯示
-                    「誰打出了什麼牌」，部分角色還會有專屬影片或特效。
-                  </li>
-                  <li>
-                    <span className="font-semibold">播報框</span>：
-                    某些角色（例如騙人布、羅賓、喬巴、索隆、羅、娜美、基拉、大媽…）
-                    打出時，會在畫面上方跳出特別樣式的提示框，顯示：
-                    「（打出玩家）對（目標玩家）做了什麼」。
-                  </li>
-                  <li>
-                    <span className="font-semibold">戰報 / 日誌</span>：
-                    畫面下方會有一條文字紀錄，
-                    例如「P1 魯夫 攻擊了 P3」、「本局強化場地：XXX…」，
-                    方便回顧發生過的事件。
-                  </li>
-                </ul>
-              </div>
+  if (!show) return null;
 
-              {/* D. 下方操作區 */}
-              <div>
-                <p className="font-semibold mt-2">D. 下方「你的操作區」（只會在輪到你時出現）</p>
-                <ul className="list-disc ml-5 space-y-0.5">
-                  <li>
-                    在<strong>抽牌階段</strong>時，下方只有簡單提示：
-                    <span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
-                      請點牌堆抽牌
-                    </span>
-                    。
-                  </li>
-                  <li>
-                    在<strong>選牌階段</strong>時，下方會出現兩張卡：
-                    <ul className="list-disc ml-5 mt-1 space-y-0.5">
-                      <li><span className="font-semibold">左邊</span>：你原本的手牌。</li>
-                      <li><span className="font-semibold">右邊</span>：剛抽到的那張牌。</li>
-                    </ul>
-                  </li>
-                  <li>
-                    若技能文字提到「挑戰」或「比大小」，是比較
-                    <strong>你手中最後剩下的那張牌的數值</strong>。
-                    在這種比較中，
-                    <span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
-                      10 以上的卡片只看尾數
-                    </span>
-                    ，例如 12 當作 2、18 當作 8。
-                  </li>
-                  <li>
-                    若有特殊限制（例如青雉凍結、娜美 7+6/8 規則），
-                    不能打的牌會被一層<strong>冰凍效果</strong>覆蓋，看起來整張卡被冰起來且無法點擊，
-                    你只會剩下合法的那張可以選。
-                  </li>
-                </ul>
-              </div>
-            </section>
+  const page = pages[idx];
+  const isFirst = idx === 0;
+  const isLast = idx === pages.length - 1;
 
-            {/* 四、特殊狀況與結算 */}
-            <section className="space-y-1.5">
-              <h3 className="font-semibold text-amber-300">四、特殊狀況與結算</h3>
-              <ul className="list-disc ml-5 space-y-0.5">
-                <li>
-                  <span className="font-semibold">當牌堆全部抽完後</span>：
-                  <ul className="list-disc ml-5 mt-1 space-y-0.5">
-                    <li>先把該回合打完。</li>
-                    <li>接著所有<strong>存活玩家公開手牌</strong>，比數值最大者勝出。</li>
-                    <li>
-                      在「最終比牌」階段，
-                      <strong>10 以上的卡片改用「各位數字相加」</strong>：
-                      例如 18 → 1+8 = 9。
-                    </li>
-                    <li>
-                      若「相加結果」剛好等於某張個位數牌，
-                      則<strong>個位數牌獲勝</strong>。
-                      例如 18（1+8=9）會贏 8 號牌，但會輸給 9 號牌。
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <span className="font-semibold">寶箱金幣用完</span>：
-                  畫面會顯示
-                  <span className="px-1 mx-1 rounded bg-black/40 border border-amber-400/40 text-amber-200">
-                    寶箱已空，等待結算
-                  </span>
-                  ，接著跳到<strong>最終結算畫面</strong>，
-                  以每位玩家的<strong>總金幣</strong>作為排行依據。
-                </li>
-              </ul>
-            </section>
+  return (
+    <div
+      className="rulesOverlay"
+      onMouseDown={(e) => {
+        if (e.target.classList.contains("rulesOverlay")) onClose?.();
+      }}
+    >
+      <div className="rulesCard" role="dialog" aria-modal="true">
+        <div className="rulesTopBar">
+          <div className="rulesTitleWrap">
+            <div className="rulesTitleMain">新手導覽</div>
+            <div className="rulesTitleSub">
+              第 {idx + 1} / {pages.length} 頁｜{page.title}
+            </div>
+          </div>
 
-            <button className="btn-primary btn w-full mt-2" onClick={onClose}>
-              關閉
-            </button>
+          <button className="rulesCloseBtn" onClick={onClose}>
+            關閉
+          </button>
+        </div>
+
+        <div className="rulesBody">
+          <div className="rulesImageWrap">
+            <img
+              src={page.img}
+              alt={page.title}
+              className="rulesImage"
+              loading="lazy"
+              draggable={false}
+              onError={(e) => {
+                console.warn("Rules image missing:", page.img);
+                e.currentTarget.style.opacity = 0.25;
+              }}
+            />
+          </div>
+
+          <div className="rulesText">
+            <ul className="rulesBullets">
+              {page.bullets.map((t, i) => (
+                <li key={i}>{t}</li>
+              ))}
+            </ul>
+            {page.tip ? <div className="rulesTip">提示：{page.tip}</div> : null}
           </div>
         </div>
-      );
-    }
+
+        <div className="rulesFooter">
+          <button
+            className="rulesNavBtn"
+            onClick={() => setIdx((v) => Math.max(0, v - 1))}
+            disabled={isFirst}
+            title="上一頁 (←)"
+          >
+            上一頁
+          </button>
+
+          <div className="rulesDots" aria-label="pages">
+            {pages.map((p, i) => (
+              <button
+                key={p.id}
+                className={"rulesDot" + (i === idx ? " active" : "")}
+                onClick={() => setIdx(i)}
+                title={p.title}
+                aria-label={`go page ${i + 1}`}
+              />
+            ))}
+          </div>
+
+          <button
+            className="rulesNavBtn primary"
+            onClick={() => setIdx((v) => Math.min(pages.length - 1, v + 1))}
+            disabled={isLast}
+            title="下一頁 (→)"
+          >
+            下一頁
+          </button>
+        </div>
+
+        <div className="rulesHintLine">快捷鍵：← / → 翻頁，Esc 關閉</div>
+      </div>
+    </div>
+  );
+}
+
 
 
     function NameAvatar({defaultName, onDone}){
