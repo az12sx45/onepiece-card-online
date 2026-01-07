@@ -111,13 +111,20 @@
   width: min(1100px, 92vw);
   max-height: 88vh;
   background: rgba(10,12,18,0.92);
-  border: 1px solid rgba(255,255,255,0.10);
-  border-radius: 18px;
+
+  /* 金色邊框 */
+  border: 2px solid rgba(255, 211, 106, 0.75);
+  box-shadow:
+    0 0 0 1px rgba(255, 184, 77, 0.35),
+    0 20px 60px rgba(0,0,0,0.55),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+
+  border-radius: 20px;
   overflow: hidden;
   display:flex;
   flex-direction: column;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
 }
+
 
 .rulesTopBar{
   display:flex;
@@ -257,6 +264,17 @@
   padding: 0 16px 12px;
   color: rgba(255,255,255,0.50);
   font-size: 12px;
+}
+
+/* 規則內文區塊標題 */
+.rulesSectionTitle{
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  color: #ffd36a;
+  border-bottom: 1px solid rgba(255, 211, 106, 0.35);
+  letter-spacing: .02em;
 }
 
 
@@ -651,15 +669,21 @@ function RuleModal({ show, onClose }) {
             />
           </div>
 
-          <div className="rulesText">
-            <ul className="rulesBullets">
-              {page.bullets.map((t, i) => (
-                <li key={i}>{t}</li>
-              ))}
-            </ul>
-            {page.tip ? <div className="rulesTip">提示：{page.tip}</div> : null}
-          </div>
-        </div>
+<div className="rulesText">
+  {/* 區域標題（放在介紹框內） */}
+  <div className="rulesSectionTitle">
+    {page.title}
+  </div>
+
+  <ul className="rulesBullets">
+    {page.bullets.map((t, i) => (
+      <li key={i}>{t}</li>
+    ))}
+  </ul>
+
+  {page.tip ? <div className="rulesTip">提示：{page.tip}</div> : null}
+</div>
+
 
         <div className="rulesFooter">
           <button
