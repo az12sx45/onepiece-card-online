@@ -631,7 +631,6 @@ function PressAnyKey({onProceed}){
                   />
                 </div>
                 <div>
-                  <div className="text-sm text-neutral-400">{t("ui.playerName")}</div>
                   <input
                     className="mt-1 w-56 rounded-lg bg-neutral-900 border border-neutral-700 px-3 py-2 outline-none focus:border-amber-400"
                     maxLength={16}
@@ -641,16 +640,10 @@ function PressAnyKey({onProceed}){
                   />
                 </div>
               </div>
-              <div className="text-xs text-neutral-400 mt-2">
-                {t("ui.nameHint")}
-              </div>
             </div>
             <div className="md:col-span-2">
               <div className="flex items-center justify-between">
                 <div className="font-semibold">{t("ui.chooseAvatar")}</div>
-                <div className="text-xs text-neutral-400">
-                  {t("ui.avatarPath")}
-                </div>
               </div>
               <div className="mt-2 grid grid-cols-5 sm:grid-cols-6 md:grid-cols-7 lg:grid-cols-8 gap-3">
                 {avatars.map((src,idx)=>(
@@ -808,9 +801,6 @@ function PressAnyKey({onProceed}){
                   </button>
                 );
               })}
-            </div>
-            <div className="text-xs text-neutral-500">
-              {t("ui.cpuCountFootnote")}
             </div>
           </div>
 
@@ -1052,9 +1042,6 @@ function WaitingRoom({roomId, profile, onLeave}){
 
       </div>
 
-      <div className="text-xs text-neutral-400 mt-4">
-        {t("ui.lobbyFootnote")}
-      </div>
     </div>
   );
 }
