@@ -162,10 +162,14 @@ max-height: none;
 
 .rulesBody{
   padding: 14px 16px;
-  display:grid;
+  display: grid;
   grid-template-columns: 1.4fr 1fr;
   gap: 14px;
-  overflow: auto;
+
+  /* 關鍵：固定主內容區高度，讓 footer 不會被圖片擠動 */
+  flex: 1;
+  min-height: 0;
+  overflow: hidden; /* 先不要整塊滾動，改成各欄自己滾 */
 }
 
 @media (max-width: 920px){
@@ -179,12 +183,21 @@ max-height: none;
   overflow: hidden;
   border: 1px solid rgba(255,255,255,0.10);
   background: rgba(255,255,255,0.04);
+
+  /* 關鍵：固定圖片區尺寸 */
+  aspect-ratio: 16 / 9;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 
 .rulesImage{
   width: 100%;
-  height: auto;
-  display:block;
+  height: 100%;
+  object-fit: contain;   /* 不裁切、完整呈現 */
+  display: block;
 }
 
 .rulesText{
@@ -193,7 +206,12 @@ max-height: none;
   background: rgba(255,255,255,0.04);
   padding: 12px 14px;
   color: rgba(255,255,255,0.86);
+
+  /* 關鍵：文字區自己滾，不影響 footer */
+  overflow: auto;
+  min-height: 0;
 }
+
 
 .rulesBullets{
   margin: 0;
