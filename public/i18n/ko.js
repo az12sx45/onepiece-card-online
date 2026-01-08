@@ -10,6 +10,12 @@ window.__I18N_DICTS["ko"] = {
     rules: "게임 규칙",
     close: "닫기",
 
+prev: "이전 페이지",
+next: "다음 페이지",
+tipPrefix: "팁:",
+rulesHotkeys: "단축키: ← / → 페이지 이동, Esc 닫기",
+
+
     rotateTitle: "최적의 경험을 위해 화면을 가로로 돌려주세요",
     rotateHint: "회전이 안 되면 화면 회전 잠금을 해제하거나 브라우저 메뉴에서 회전을 허용해주세요.",
 
@@ -84,7 +90,7 @@ window.__I18N_DICTS["ko"] = {
     name1: "크로커다일",
     name2: "미호크",
     name3: "버기"
-  },
+  }
 
 rules: {
   overview: {
