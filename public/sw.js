@@ -1,5 +1,5 @@
-// sw.js — 偉大航道爭霸戰（正確 cards 版）
-const CACHE_NAME = 'op-card-v7';
+// sw.js — 偉大航道爭霸戰（穩定全快取版）
+const CACHE_NAME = 'op-card-v7.1';
 
 // === 基本檔案 ===
 const CORE = [
@@ -23,9 +23,7 @@ const AVATARS = Array.from({ length: 30 }, (_, i) =>
 // === 卡片（正確在 images/cards/）===
 const CARDS = Array.from({ length: 20 }, (_, i) =>
   `./images/cards/${i}.webp`
-).concat([
-  './images/cards/back.webp'
-]);
+).concat(['./images/cards/back.webp']);
 
 // === 強化卡面 ===
 const CARDS_ENH = Array.from({ length: 20 }, (_, i) =>
@@ -43,7 +41,7 @@ const VENUES = [
 const VIDEOS = [
   './videos/start.mp4',
   './videos/coin.mp4',
- './videos/draw.mp4',
+  './videos/draw.mp4',
 ];
 
 // === 強化影片 ===
@@ -56,10 +54,9 @@ const BGM = [
   './audio/intro.mp3',
   './audio/bgm.mp3',
   ...Array.from({ length: 20 }, (_, i) =>
-    `./audio/bgm/track${String(i+1).padStart(2,'0')}.mp3`
-  )
+    `./audio/bgm/track${String(i + 1).padStart(2, '0')}.mp3`
+  ),
 ];
-
 
 // === 最終清單 ===
 const ASSETS = [
@@ -73,27 +70,77 @@ const ASSETS = [
   ...BGM,
 ];
 
-// === 安裝：快取所有 ===
-self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
-  );
+// 安全快取：逐一加入，失敗不會讓整個 install 掛掉
+async function addAllSettled(cache, urls) {
+  let ok = 0, fail = 0;
+
+  for (const url of urls) {
+    try {
+      // 用 Request 讓 cache key 更一致
+      const req = new Request(url, { cache: 'reload' });
+      const res = await fetch(req);
+
+      // 只快取成功回應
+      if (res && res.ok) {
+        await cache.put(req, res.clone());
+        ok++;
+      } else {
+        fail++;
+      }
+    } catch (e) {
+      fail++;
+    }
+  }
+
+  return { ok, fail, total: urls.length };
+}
+
+// === 安裝：快取所有（穩定版）===
+self.addEventListener('install', (e) => {
+  e.waitUntil((async () => {
+    const cache = await caches.open(CACHE_NAME);
+    await addAllSettled(cache, ASSETS);
+    await self.skipWaiting();
+  })());
 });
 
-// === 啟用：刪舊快取 ===
-self.addEventListener('activate', e => {
-  e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys.map(k => k !== CACHE_NAME ? caches.delete(k) : null)
-      )
-    )
-  );
+// === 啟用：刪舊快取 + 立即接管 ===
+self.addEventListener('activate', (e) => {
+  e.waitUntil((async () => {
+    const keys = await caches.keys();
+    await Promise.all(keys.map(k => (k !== CACHE_NAME ? caches.delete(k) : null)));
+    await self.clients.claim();
+  })());
 });
 
-// === 使用快取 ===
-self.addEventListener('fetch', e => {
-  e.respondWith(
-    caches.match(e.request).then(res => res || fetch(e.request))
-  );
+// === 使用快取：cache-first + runtime put（補洞）===
+self.addEventListener('fetch', (e) => {
+  const req = e.request;
+
+  // 只處理 GET，避免把 POST/socket 之類搞壞
+  if (req.method !== 'GET') return;
+
+  e.respondWith((async () => {
+    const cache = await caches.open(CACHE_NAME);
+
+    // 先找快取
+    const cached = await cache.match(req);
+    if (cached) return cached;
+
+    // 沒有就走網路
+    try {
+      const res = await fetch(req);
+
+      // 成功才寫入快取（同源且 ok）
+      if (res && res.ok && new URL(req.url).origin === self.location.origin) {
+        await cache.put(req, res.clone());
+      }
+      return res;
+    } catch (err) {
+      // 網路掛掉時，至少回傳 cache（若有）
+      const fallback = await cache.match(req);
+      if (fallback) return fallback;
+      throw err;
+    }
+  })());
 });
