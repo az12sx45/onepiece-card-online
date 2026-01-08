@@ -10,6 +10,12 @@ window.__I18N_DICTS["ja"] = {
     rules: "ルール",
     close: "閉じる",
 
+prev: "前のページ",
+next: "次のページ",
+tipPrefix: "ヒント：",
+rulesHotkeys: "ショートカット：← / → ページ切替、Esc 閉じる",
+
+
     rotateTitle: "最高の体験のため、端末を横向きにしてください",
     rotateHint: "回転できない場合は、画面回転ロックを解除するか、ブラウザの設定で回転を許可してください。",
 
