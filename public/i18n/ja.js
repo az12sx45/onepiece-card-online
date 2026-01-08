@@ -10,6 +10,9 @@ window.__I18N_DICTS["ja"] = {
     rules: "ルール",
     close: "閉じる",
 
+    people: "{n} 人",
+
+
 prev: "前のページ",
 next: "次のページ",
 tipPrefix: "ヒント：",
