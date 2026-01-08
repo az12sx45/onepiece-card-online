@@ -84,7 +84,7 @@ window.__I18N_DICTS["ko"] = {
     name1: "크로커다일",
     name2: "미호크",
     name3: "버기"
-  }
+  },
 
 rules: {
   overview: {
