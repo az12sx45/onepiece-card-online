@@ -1,5 +1,5 @@
 // sw.js — 偉大航道爭霸戰（穩定全快取版）
-const CACHE_NAME = 'op-card-v7.1';
+const CACHE_NAME = 'op-card-v7.2';
 
 // === 基本檔案 ===
 const CORE = [
@@ -150,4 +150,5 @@ self.addEventListener('fetch', (e) => {
     }
   })());
 });
+
 
