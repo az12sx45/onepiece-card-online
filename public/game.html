@@ -5220,81 +5220,39 @@ function showMultiTargets(title, opt, onDone){
   done.onclick = ()=>{ onDone([...picked]); hideModal(); };
 }
 
-/* ====== 選人面板（顯示頭像 + P? 名字） ====== */
+/* ====== 選人面板（顯示 P? 名字） ====== */
 function showTarget(title, onPick, opt={}){ 
-  const allowSelf = !!opt.allowSelf;
-  let html = `<div class="text-lg font-semibold mb-2">${title}</div><div class="grid grid-cols-3 gap-2">`;
-
+  const allowSelf=!!opt.allowSelf;
+  let html=`<div class="text-lg font-semibold mb-2">${title}</div><div class="grid grid-cols-3 gap-2">`;
   (state.players||[]).forEach((p,i)=>{
-    const en = p.alive && (allowSelf || i !== me.playerId);
-    const avatarId = (p?.client?.avatar ?? p?.avatar ?? 1);
-
-    html += `
-      <button ${en?'':'disabled'} data-i="${i}"
-        class="px-3 py-2 rounded-lg border ${en?'border-[#2a2f35] hover:bg-[#192028]':'border-[#22272d] opacity-40 cursor-not-allowed'}">
-        <div class="flex items-center gap-2">
-          <img class="w-8 h-8 rounded-full border border-[#2a2f35] shrink-0" src="${AVA(avatarId)}" alt="">
-          <div class="flex-1 min-w-0">
-            <div class="text-left truncate">${pname(i)}</div>
-          </div>
-          <div class="shrink-0 text-[12px] opacity-90 whitespace-nowrap">
-            ${p.protected?'🛡':''}${p.dodging?'🌀':''}${!p.alive?'✖':''}
-          </div>
-        </div>
-      </button>`;
+    const en=p.alive && (allowSelf || i!==me.playerId);
+    html+=`<button ${en?'':'disabled'} data-i="${i}" class="px-3 py-2 rounded-lg border ${en?'border-[#2a2f35] hover:bg-[#192028]':'border-[#22272d] opacity-40 cursor-not-allowed'}">${pname(i)} ${p.protected?'🛡':''} ${p.dodging?'🌀':''} ${!p.alive?'✖':''}</button>`;
   });
-
-  html += `</div>`;
+  html+=`</div>`;
   showModal(html);
-
   let locked = false;
   el.modal.querySelectorAll('button[data-i]').forEach(b=> b.onclick = ()=>{
-    if (locked) return;
-    locked = true;
-    b.disabled = true;
-    onPick(Number(b.dataset.i));
+    if (locked) return; locked = true; b.disabled = true; onPick(Number(b.dataset.i));
   });
 }
 
-/* ====== 可取消選人面板（顯示頭像） ====== */
+/* ====== 可取消選人面板 ====== */
 function showTargetWithCancel(title, onPick, onCancel, opt={}){
-  const allowSelf = !!opt.allowSelf;
-  let html = `<div class="text-lg font-semibold mb-2">${title}</div><div class="grid grid-cols-3 gap-2">`;
-
+  const allowSelf=!!opt.allowSelf;
+  let html=`<div class="text-lg font-semibold mb-2">${title}</div><div class="grid grid-cols-3 gap-2">`;
   (state.players||[]).forEach((p,i)=>{
-    const en = p.alive && (allowSelf || i !== me.playerId);
-    const avatarId = (p?.client?.avatar ?? p?.avatar ?? 1);
-
-    html += `
-      <button ${en?'':'disabled'} data-i="${i}"
-        class="px-3 py-2 rounded-lg border ${en?'border-[#2a2f35] hover:bg-[#192028]':'border-[#22272d] opacity-40 cursor-not-allowed'}">
-        <div class="flex items-center gap-2">
-          <img class="w-8 h-8 rounded-full border border-[#2a2f35] shrink-0" src="${AVA(avatarId)}" alt="">
-          <div class="flex-1 min-w-0">
-            <div class="text-left truncate">${pname(i)}</div>
-          </div>
-          <div class="shrink-0 text-[12px] opacity-90 whitespace-nowrap">
-            ${p.protected?'🛡':''}${p.dodging?'🌀':''}${!p.alive?'✖':''}
-          </div>
-        </div>
-      </button>`;
+    const en=p.alive && (allowSelf || i!==me.playerId);
+    html+=`<button ${en?'':'disabled'} data-i="${i}" class="px-3 py-2 rounded-lg border ${en?'border-[#2a2f35] hover:bg-[#192028]':'border-[#22272d] opacity-40 cursor-not-allowed'}">${pname(i)} ${p.protected?'🛡':''} ${p.dodging?'🌀':''} ${!p.alive?'✖':''}</button>`;
   });
-
-  html += `</div>
+  html+=`</div>
     <div class="flex justify-end gap-2 mt-3">
       <button id="btnCancel" class="px-3 py-1.5 rounded-lg border border-[#2a2f35]">取消</button>
     </div>`;
-
   showModal(html);
-
   let locked = false;
   el.modal.querySelectorAll('button[data-i]').forEach(b=> b.onclick = ()=>{
-    if (locked) return;
-    locked = true;
-    b.disabled = true;
-    onPick(Number(b.dataset.i));
+    if (locked) return; locked = true; b.disabled = true; onPick(Number(b.dataset.i));
   });
-
   el.modal.querySelector('#btnCancel').onclick = ()=>{ onCancel && onCancel(); hideModal(); };
 }
 
