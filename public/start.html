@@ -11,14 +11,6 @@
   <!-- (1) 在 React 之後加入 Socket.IO -->
   <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-<!-- i18n dictionaries -->
-<script>window.__I18N_DICTS = window.__I18N_DICTS || {};</script>
-<script src="i18n/zh-Hant.js"></script>
-<script src="i18n/en.js"></script>
-<script src="i18n/ja.js"></script>
-<script src="i18n/ko.js"></script>
-<script src="i18n/i18n.js"></script>
-
   <style>
     :root{ --bg:#121315; --ink:#eaecee; --brand:#ffb84d; --cover:url("images/cover.jpg"); }
     html,body{height:100%;}
@@ -65,296 +57,45 @@
     .audio-toggle .vol::-webkit-slider-thumb{ appearance:none; width:14px; height:14px; border-radius:999px; background:#ffd36a; border:1px solid #b3831b; }
     @media (max-width: 640px){ .audio-toggle{ gap:6px; padding:6px 8px; } .audio-toggle .vol{ width:86px; }
     }
-
-/* === Rules Flipbook Modal === */
-.rulesOverlay{
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.55);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index: 9999;
-}
-
-.rulesCard{
- width: 94vw;
-height: 92vh;
-max-height: none;
-
-  background: rgba(10,12,18,0.92);
-
-  /* 金色邊框 */
-  border: 2px solid rgba(255, 211, 106, 0.75);
-  box-shadow:
-    0 0 0 1px rgba(255, 184, 77, 0.35),
-    0 20px 60px rgba(0,0,0,0.55),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
-
-  border-radius: 20px;
-  overflow: hidden;
-  display:flex;
-  flex-direction: column;
-}
-
-
-.rulesTopBar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding: 14px 16px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-}
-
-.rulesTitleMain{
-  font-size: 18px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.92);
-}
-
-.rulesTitleSub{
-  font-size: 12px;
-  margin-top: 4px;
-  color: rgba(255,255,255,0.60);
-}
-
-.rulesCloseBtn{
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.12);
-  color: rgba(255,255,255,0.86);
-  padding: 8px 12px;
-  border-radius: 10px;
-  cursor: pointer;
-}
-.rulesCloseBtn:hover{
-  background: rgba(255,255,255,0.12);
-}
-
-.rulesBody{
-  padding: 14px 16px;
-  display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: 14px;
-
-  /* 關鍵：固定主內容區高度，讓 footer 不會被圖片擠動 */
-  flex: 1;
-  min-height: 0;
-  overflow: hidden; /* 先不要整塊滾動，改成各欄自己滾 */
-}
-
-@media (max-width: 920px){
-  .rulesBody{
-    grid-template-columns: 1fr;
-  }
-}
-
-.rulesImageWrap{
-  border-radius: 14px;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.10);
-  background: rgba(255,255,255,0.04);
-
-  /* 關鍵：固定圖片區尺寸 */
-  aspect-ratio: 16 / 9;
-  min-height: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-
-.rulesImage{
-  width: 100%;
-  height: 100%;
-  object-fit: contain;   /* 不裁切、完整呈現 */
-  display: block;
-}
-
-.rulesText{
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.10);
-  background: rgba(255,255,255,0.04);
-  padding: 12px 14px;
-  color: rgba(255,255,255,0.86);
-
-  /* 關鍵：文字區自己滾，不影響 footer */
-  overflow: auto;
-  min-height: 0;
-}
-
-
-.rulesBullets{
-  margin: 0;
-  padding-left: 18px;
-  line-height: 1.7;
-  font-size: 14px;
-}
-
-.rulesTip{
-  margin-top: 10px;
-  padding: 10px 12px;
-  border-radius: 12px;
-  background: rgba(255, 190, 88, 0.12);
-  border: 1px solid rgba(255, 190, 88, 0.25);
-  color: rgba(255,255,255,0.90);
-  font-size: 13px;
-}
-
-.rulesFooter{
-  padding: 12px 16px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap: 10px;
-  border-top: 1px solid rgba(255,255,255,0.08);
-}
-
-.rulesNavBtn{
-  padding: 10px 12px;
-  border-radius: 12px;
-  cursor: pointer;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(255,255,255,0.08);
-  color: rgba(255,255,255,0.88);
-}
-
-.rulesNavBtn:disabled{
-  opacity: 0.35;
-  cursor: not-allowed;
-}
-
-.rulesNavBtn.primary{
-  background: rgba(255, 190, 88, 0.16);
-  border-color: rgba(255, 190, 88, 0.35);
-}
-
-.rulesDots{
-  display:flex;
-  gap: 8px;
-  align-items:center;
-  justify-content:center;
-  flex: 1;
-}
-
-.rulesDot{
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.18);
-  background: rgba(255,255,255,0.10);
-  cursor: pointer;
-}
-
-.rulesDot.active{
-  background: rgba(255, 190, 88, 0.55);
-  border-color: rgba(255, 190, 88, 0.75);
-}
-
-.rulesHintLine{
-  padding: 0 16px 12px;
-  color: rgba(255,255,255,0.50);
-  font-size: 12px;
-}
-
-/* 規則內文區塊標題 */
-.rulesSectionTitle{
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 8px;
-  padding-bottom: 6px;
-  color: #ffd36a;
-  border-bottom: 1px solid rgba(255, 211, 106, 0.35);
-  letter-spacing: .02em;
-}
-
-/* 手機：真正全螢幕 */
-@media (max-width: 640px) {
-  .rulesCard{
-    width: 100vw;
-    height: 100dvh;
-    max-height: none;
-    border-radius: 0;
-  }
-}
-
-/* === 27 吋 / 1440p：規則導覽字體升級 === */
-@media (min-width: 1920px) {
-
-  .rulesTitleMain{
-    font-size: 22px;
-  }
-
-  .rulesTitleSub{
-    font-size: 14px;
-  }
-
-  .rulesSectionTitle{
-    font-size: 19px;
-  }
-
-  .rulesBullets{
-    font-size: 16px;
-    line-height: 1.75;
-  }
-
-  .rulesTip{
-    font-size: 15px;
-  }
-
-  .rulesNavBtn{
-    font-size: 16px;
-    padding: 12px 16px;
-  }
-
-  .rulesHintLine{
-    font-size: 13px;
-  }
-}
-
-/* === 4K / 超大螢幕：沉浸式教學字體 === */
-@media (min-width: 2560px) {
-
-  .rulesTitleMain{
-    font-size: 26px;
-  }
-
-  .rulesTitleSub{
-    font-size: 16px;
-  }
-
-  .rulesSectionTitle{
-    font-size: 22px;
-  }
-
-  .rulesBullets{
-    font-size: 18px;
-    line-height: 1.8;
-  }
-
-  .rulesTip{
-    font-size: 17px;
-  }
-
-  .rulesNavBtn{
-    font-size: 18px;
-    padding: 14px 18px;
-  }
-
-  .rulesHintLine{
-    font-size: 15px;
-  }
-}
-
-
+    /* === 一鍵下載進度條 === */
+    #preloadBox{
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    .preload-track{
+      margin-top: 6px;
+      width: 100%;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(15,23,42,.9);
+      border: 1px solid rgba(148,163,184,.7);
+      overflow: hidden;
+    }
+    .preload-bar{
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg,#fde68a,#facc15,#f97316);
+      transition: width .18s ease-out;
+    }
+    #preloadStatus{
+      margin-top: 4px;
+      font-size: 12px;
+      color: #e5e7eb;
+      text-align: center;
+    }
+    #btnPreloadAll[disabled]{
+      opacity: .55;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 <body class="no-video">
   <div class="lock-overlay" id="lockOverlay">
     <div class="panel">
       <div class="icon">🔄</div>
-      <div id="txtRotateTitle" class="text-lg font-semibold mb-1">請將手機旋轉至橫向以獲得最佳體驗</div>
-<div id="txtRotateHint" class="text-sm opacity-80">若仍無法旋轉，請解鎖畫面旋轉或從瀏覽器選單開啟「允許旋轉」。</div>
- </div> 
+      <div class="text-lg font-semibold mb-1">請將手機旋轉至橫向以獲得最佳體驗</div>
+      <div class="text-sm opacity-80">若仍無法旋轉，請解鎖畫面旋轉或從瀏覽器選單開啟「允許旋轉」。</div>
+    </div>
   </div>
   <div class="bg-anim">
     <video id="bgVideo" class="bg-video" autoplay muted loop playsinline preload="auto" poster="images/cover.jpg">
@@ -394,21 +135,6 @@ max-height: none;
         }
       }catch(e){}
     }
-
-(function applyStaticI18n(){
-  const I18N = window.__I18N;
-  if(!I18N) return;
-  const $t = (k)=>I18N.t(k);
-
-  const a = document.getElementById('txtRotateTitle');
-  const b = document.getElementById('txtRotateHint');
-  if(a) a.textContent = $t('ui.rotateTitle');
-  if(b) b.textContent = $t('ui.rotateHint');
-
-  document.documentElement.setAttribute('lang', I18N.getLang());
-})();
-
-
   </script>
 
   <script type="text/babel" data-presets="env,react">
@@ -460,17 +186,6 @@ max-height: none;
 
     // === 原常數/工具：保留必要者 ===
     const {useState, useEffect, useMemo} = React;
-// === I18N 防呆：避免字典/腳本載入失敗造成整頁白屏 ===
-const I18N = window.__I18N || {
-  getLang: () => 'zh-Hant',
-  setLang: () => {},
-  SUPPORTED: ['zh-Hant'],
-  getLangLabel: () => '繁體中文',
-  t: (k) => k
-};
-const t = (key, vars) => (I18N && typeof I18N.t === 'function') ? I18N.t(key, vars) : key;
-
-// === (i18n) 補齊 start.html 會用到的 key（就算外部字典缺漏也不會跳回中文/顯示 key）===
     const MIN_PLAYERS = 2; // 開局最低人數
 
     function uid(){ return Math.random().toString(36).slice(2,10); }
@@ -491,226 +206,349 @@ const t = (key, vars) => (I18N && typeof I18N.t === 'function') ? I18N.t(key, va
       );
     }
 
-function PressAnyKey({onProceed}){
-  useEffect(()=>{
-    const h=(e)=>{
-      e.preventDefault();
-      onProceed();
-      tryLockLandscape();
-      window.__OPAudio?.startAudio();
-    };
-    window.addEventListener('keydown', h, {once:true});
-    window.addEventListener('pointerdown', h, {once:true});
-    return ()=>{
-      window.removeEventListener('keydown', h);
-      window.removeEventListener('pointerdown', h);
-    };
-  }, [onProceed]);
-
-  return (
-    <div className="relative w-full min-h-[92vh] select-none">
-      <div className="absolute left-1/2 -translate-x-1/2 top-[60vh] md:top-[58vh] text-center space-y-2">
-        <div className="title-wrap">
-          <div className="title-main font-black tracking-tight whitespace-nowrap fx-tiltDrop fx-shine text-[clamp(28px,8.2vw,48px)] [@media(orientation:landscape)]:text-[clamp(24px,6.6vw,44px)] md:text-[clamp(52px,5.2vw,96px)] lg:text-[clamp(60px,4.6vw,110px)] xl:text-[clamp(68px,4vw,128px)]">
-            <WaveText text={t("brand.titleEn")} />
-          </div>
-          <div className="title-sub font-extrabold text-amber-300 mt-2 fx-fadeUp whitespace-nowrap text-[clamp(16px,5.2vw,28px)] [@media(orientation:landscape)]:text-[clamp(16px,3.6vw,24px)] md:text-[clamp(30px,3.2vw,56px)] lg:text-[clamp(34px,2.8vw,64px)] xl:text-[clamp(38px,2.4vw,72px)]">
-            <WaveText text={t("brand.titleSub")} small />
-          </div>
-        </div>
-      </div>
-
-      <div
-        className="absolute left-1/2 -translate-x-1/2 text-sm md:text-base text-neutral-200 blink md:bottom-8"
-        style={{bottom:"calc(env(safe-area-inset-bottom, 0px) - 10px)", paddingBottom:0}}
-      >
-        {t("ui.pressAnyKey")}
-      </div>
-    </div>
-  );
-}
-
-
-    // === 主選單：開始遊戲 / 遊戲規則 ===
-   function MainMenu({ onStart, onRule, onLangChange }) {
-  const cur = I18N.getLang();
-
-  return (
-    <div className="card w-[min(480px,90vw)] p-6 text-center space-y-6 relative">
-      {/* Language selector */}
-      <div className="absolute right-4 top-4">
-        <label className="text-[11px] text-neutral-300 mr-2">{t("ui.lang")}</label>
-        <select
-          className="btn text-sm py-1 px-2"
-          value={cur}
-          onChange={(e)=> onLangChange?.(e.target.value)}
-        >
-          {I18N.SUPPORTED.map(l=>(
-            <option key={l} value={l}>{I18N.getLangLabel(l)}</option>
-          ))}
-        </select>
-      </div>
-
-      <h1 className="text-2xl font-bold tracking-wide text-amber-300">
-        {t("brand.titleSub")}
-      </h1>
-
-      <button className="btn-primary btn w-full text-lg py-3" onClick={onStart}>
-        {t("ui.startGame")}
-      </button>
-
-      <button className="btn w-full text-lg py-3" onClick={onRule}>
-        {t("ui.rules")}
-      </button>
-
-      <div className="text-xs text-neutral-400 mt-2">
-        {t("brand.tagline")}
-      </div>
-    </div>
-  );
-}
-
-
-       // === 遊戲規則彈窗（最終版） ===
-  // ✅ 翻頁式規則書 RuleModal（圖文版）
-// 需求：把圖片放在 public/images/rules/ 且檔名為 01~09
-// 支援：上一頁/下一頁、圓點跳頁、鍵盤 ← →、Esc 關閉、點背景關閉
-function RuleModal({ show, onClose }) {
-  // 只保留結構：每頁只寫 key + 圖片
-  const pages = React.useMemo(
-    () => [
-      { id: "overview",      key: "rules.overview",      img: "images/rules/01-overview.webp" },
-      { id: "header",        key: "rules.header",        img: "images/rules/02-header-bar.webp" },
-      { id: "gallery",       key: "rules.gallery",       img: "images/rules/03-card-gallery.webp" },
-      { id: "cardDetail",    key: "rules.cardDetail",    img: "images/rules/04-card-detail.webp" },
-      { id: "venuePanel",    key: "rules.venuePanel",    img: "images/rules/05-venue-panel.webp" },
-      { id: "venueBg",       key: "rules.venueBg",       img: "images/rules/06-venue-background.webp" },
-      { id: "players",       key: "rules.players",       img: "images/rules/07-players-panel.webp" },
-      { id: "discard",       key: "rules.discard",       img: "images/rules/08-discard-panel.webp" },
-      { id: "log",           key: "rules.log",           img: "images/rules/09-log-panel.webp" },
-      { id: "drawOnly",      key: "rules.drawOnly",      img: "images/rules/10-draw-card.webp" },
-      { id: "afterDrawView", key: "rules.afterDrawView", img: "images/rules/11-after-draw.webp" },
-      { id: "playCardCoreRule", key: "rules.playCardCoreRule", img: "images/rules/12-play-card-mechanic.webp" },
-      { id: "example-play-6",  key: "rules.examplePlay6",  img: "images/rules/13-example-play-6.webp" },
-      { id: "example-play-13", key: "rules.examplePlay13", img: "images/rules/14-example-play-13.webp" },
-      { id: "extra-rules",     key: "rules.extraRules",    img: "images/rules/15-extra-rules.webp" },
-    ],
-    []
-  );
-
-  const [idx, setIdx] = React.useState(0);
-
-  React.useEffect(() => { if (show) setIdx(0); }, [show]);
-
-  React.useEffect(() => {
-    if (!show) return;
-    const onKeyDown = (e) => {
-      if (e.key === "Escape") onClose?.();
-      if (e.key === "ArrowLeft") setIdx((v) => Math.max(0, v - 1));
-      if (e.key === "ArrowRight") setIdx((v) => Math.min(pages.length - 1, v + 1));
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [show, onClose, pages.length]);
-
-  if (!show) return null;
-
-  const page = pages[idx];
-  const isFirst = idx === 0;
-  const isLast = idx === pages.length - 1;
-
-  // 從 i18n 取該頁內容（若 en/ja/ko 缺少，會自動 fallback zh-Hant）
-  const data = t(page.key) || {};
-  const title = data.title || page.id;
-  const bullets = Array.isArray(data.bullets) ? data.bullets : [];
-  const tip = data.tip || "";
-
-  return (
-    <div
-      className="rulesOverlay"
-      onMouseDown={(e) => {
-        if (e.target.classList.contains("rulesOverlay")) onClose?.();
-      }}
-    >
-      <div className="rulesCard" role="dialog" aria-modal="true">
-        <div className="rulesTopBar">
-          <div className="rulesTitleWrap">
-            <div className="rulesTitleMain">{t("ui.rules")}</div>
-            <div className="rulesTitleSub">
-              {idx + 1} / {pages.length} ｜ {title}
+    function PressAnyKey({onProceed}){
+      useEffect(()=>{
+        const h=(e)=>{
+          e.preventDefault();
+          onProceed();
+          tryLockLandscape();
+          window.__OPAudio?.startAudio();
+        };
+        window.addEventListener('keydown', h, {once:true});
+        window.addEventListener('pointerdown', h, {once:true});
+        return ()=>{
+          window.removeEventListener('keydown', h);
+          window.removeEventListener('pointerdown', h);
+        };
+      }, [onProceed]);
+      return (
+        <div className="relative w-full min-h-[92vh] select-none">
+          <div className="absolute left-1/2 -translate-x-1/2 top-[60vh] md:top-[58vh] text-center space-y-2">
+            <div className="title-wrap">
+              <div className="title-main font-black tracking-tight whitespace-nowrap fx-tiltDrop fx-shine text-[clamp(28px,8.2vw,48px)] [@media(orientation:landscape)]:text-[clamp(24px,6.6vw,44px)] md:text-[clamp(52px,5.2vw,96px)] lg:text-[clamp(60px,4.6vw,110px)] xl:text-[clamp(68px,4vw,128px)]">
+                <WaveText text="ONE PIECE" />
+              </div>
+              <div className="title-sub font-extrabold text-amber-300 mt-2 fx-fadeUp whitespace-nowrap text-[clamp(16px,5.2vw,28px)] [@media(orientation:landscape)]:text-[clamp(16px,3.6vw,24px)] md:text-[clamp(30px,3.2vw,56px)] lg:text-[clamp(34px,2.8vw,64px)] xl:text-[clamp(38px,2.4vw,72px)]">
+                <WaveText text="偉大航道爭霸戰" small />
+              </div>
             </div>
           </div>
-
-          <button className="rulesCloseBtn" onClick={onClose}>
-            {t("ui.close")}
-          </button>
-        </div>
-
-        <div className="rulesBody">
-          <div className="rulesImageWrap">
-            <img
-              src={page.img}
-              alt={title}
-              className="rulesImage"
-              loading="lazy"
-              draggable={false}
-              onError={(e) => {
-                console.warn("Rules image missing:", page.img);
-                e.currentTarget.style.opacity = 0.25;
-              }}
-            />
-          </div>
-
-          <div className="rulesText">
-            <div className="rulesSectionTitle">{title}</div>
-
-            <ul className="rulesBullets">
-              {bullets.map((line, i) => (
-                <li key={i}>{line}</li>
-              ))}
-            </ul>
-
-            {tip ? <div className="rulesTip">{t("ui.tipPrefix")} {tip}</div> : null}
-          </div>
-        </div>
-
-        <div className="rulesFooter">
-          <button
-            className="rulesNavBtn"
-            onClick={() => setIdx((v) => Math.max(0, v - 1))}
-            disabled={isFirst}
-            title="Prev (←)"
+          <div
+            className="absolute left-1/2 -translate-x-1/2 text-sm md:text-base text-neutral-200 blink md:bottom-8"
+            style={{bottom:"calc(env(safe-area-inset-bottom, 0px) - 10px)", paddingBottom:0}}
           >
-            {t("ui.prev")}
-          </button>
-
-          <div className="rulesDots" aria-label="pages">
-            {pages.map((p, i) => (
-              <button
-                key={p.id}
-                className={"rulesDot" + (i === idx ? " active" : "")}
-                onClick={() => setIdx(i)}
-                title={p.id}
-                aria-label={`go page ${i + 1}`}
-              />
-            ))}
+            按任意鍵開始 / Press any key
           </div>
+        </div>
+      );
+    }
+
+    // === 主選單：開始遊戲 / 遊戲規則 ===
+    function MainMenu({ onStart, onRule }) {
+      return (
+        <div className="card w-[min(480px,90vw)] p-6 text-center space-y-6">
+          <h1 className="text-2xl font-bold tracking-wide text-amber-300">
+            偉大航道爭霸戰
+          </h1>
 
           <button
-            className="rulesNavBtn primary"
-            onClick={() => setIdx((v) => Math.min(pages.length - 1, v + 1))}
-            disabled={isLast}
-            title="Next (→)"
+            className="btn-primary btn w-full text-lg py-3"
+            onClick={onStart}
           >
-            {t("ui.next")}
+            開始遊戲
           </button>
-        </div>
 
-        <div className="rulesHintLine">{t("ui.rulesHotkeys")}</div>
-      </div>
-    </div>
-  );
-}
+          <button
+            className="btn w-full text-lg py-3"
+            onClick={onRule}
+          >
+            遊戲規則
+          </button>
+
+          <div className="text-xs text-neutral-400 mt-2">
+            ONE PIECE ｜ 卡牌對戰 ｜ PVP 多人遊戲
+          </div>
+        </div>
+      );
+    }
+
+       // === 遊戲規則彈窗（最終版） ===
+    function RuleModal({ show, onClose }) {
+      if (!show) return null;
+
+      return (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="card w-[min(820px,95vw)] p-6 space-y-5 max-h-[90vh] overflow-y-auto text-sm leading-relaxed text-neutral-200">
+            <h2 className="text-xl font-bold text-amber-300 mb-1">📘 遊戲規則 & 介面說明</h2>
+
+            {/* 一、遊戲目標 */}
+            <section className="space-y-1.5">
+              <h3 className="font-semibold text-amber-300">一、遊戲目標</h3>
+              <p>
+                《偉大航道爭霸戰》是一款
+                <strong>簡易策略類型</strong>的多人對戰卡牌遊戲。
+                開局每位玩家手上都只有 1 張牌，透過抽牌、出牌和角色技能，
+                相互擊倒或干擾其他人，直到只剩一人存活，或牌堆打完進入比牌。
+              </p>
+              <ul className="list-disc ml-5 space-y-1">
+                <li>
+                  贏下每一局可從「寶箱」裡拿金幣，
+                  <strong>寶箱內的金幣總數 = 玩家數 × 5</strong>。
+                </li>
+                <li>
+                  當寶箱金幣被拿光時，會進入
+                  <strong>「最終結算」</strong>，
+                  依各玩家
+                  <span className="px-1 mx-1 rounded bg-black/40 border border-amber-400/30 text-amber-200">
+                    獲得的金幣數
+                  </span>
+                  排名。
+                </li>
+              </ul>
+            </section>
+
+            {/* 二、一局流程 */}
+            <section className="space-y-1.5">
+              <h3 className="font-semibold text-amber-300">二、一局流程（實際對局時畫面會長這樣走）</h3>
+              <ol className="list-decimal ml-5 space-y-1">
+                <li>
+                  所有玩家各獲得 1 張<strong>起始手牌</strong>
+                  （不公開，只有本人可見）。
+                </li>
+                <li>
+                  畫面上方會顯示：
+                  <span className="px-1 mx-1 rounded bg-black/40 border border-amber-400/30 text-amber-200">
+                    本局場地
+                  </span>
+                  與
+                  <span className="px-1 mx-1 rounded bg-black/40 border border-amber-400/30 text-amber-200">
+                    寶箱金幣剩餘
+                  </span>
+                  等資訊。
+                </li>
+                <li>
+                  輪到你時，回合分成兩個階段：
+                  <ul className="list-disc ml-5 mt-1 space-y-0.5">
+                    <li>
+                      <span className="font-semibold">抽牌階段（DRAW）</span>：
+                      點中央的牌堆抽 1 張牌。
+                    </li>
+                    <li>
+                      <span className="font-semibold">選牌階段（CHOOSE）</span>：
+                      下方會出現兩張牌（原本手牌 + 新抽的牌），選 1 張打出。
+                    </li>
+                  </ul>
+                </li>
+                <li>你打出的角色會立刻觸發技能（攻擊、偵查、控制、保護、決鬥…等）。</li>
+                <li>
+                  若有玩家出局，畫面會標示該玩家
+                  <span className="px-1 mx-1 rounded bg-black/40 border border-red-400/40 text-red-200">
+                    已出局
+                  </span>
+                  ，並從回合輪替中移除。
+                </li>
+                <li>
+                  本局結束條件：
+                  <ul className="list-disc ml-5 mt-1 space-y-0.5">
+                    <li>
+                      <span className="font-semibold">只剩 1 人存活</span>
+                      ：直接獲勝，從寶箱拿金幣。
+                    </li>
+                    <li>
+                      <span className="font-semibold">牌堆被抽完</span>
+                      ：存活者公開手牌「比點數」決定勝負（詳見第四章）。
+                    </li>
+                  </ul>
+                </li>
+              </ol>
+            </section>
+
+            {/* 三、介面說明 */}
+            <section className="space-y-1.5">
+              <h3 className="font-semibold text-amber-300">三、介面說明</h3>
+
+              {/* A. 上方資訊列 */}
+              <div>
+                <p className="font-semibold">A. 上方資訊列</p>
+                <ul className="list-disc ml-5 space-y-0.5">
+                  <li>
+                    <span className="font-semibold">寶箱金幣</span>：
+                    顯示文字類似
+                    <span className="px-1 mx-1 rounded bg-black/40 border border-amber-400/30 text-amber-200">
+                      寶箱金幣剩餘：10 枚
+                    </span>
+                    ，數字會跟著遊戲進行更新。
+                  </li>
+                  <li>
+                    <span className="font-semibold">場地卡區</span>：
+                    上方會橫向排出本局抽到的<strong>場地卡</strong>，
+                    每張寫著場地名稱（德雷斯羅薩鬥技場、艾尼艾斯大廳…），
+                    下面有簡短說明：哪些角色在這裡會變成
+                    <strong>強化技能</strong>（例如「5-索隆變為強化技能」）。
+                  </li>
+                  <li>
+                    <span className="font-semibold">卡片圖鑑</span>：
+                    可隨時點開查看所有號碼（0–19 號）的卡牌詳細資訊與張數。
+                    當前這一局中變成<strong>強化技能</strong>的卡片，
+                    在圖鑑中會以
+                    <span className="px-1 mx-1 rounded bg-black/40 border border-red-400/50 text-red-200">
+                      紅色邊框
+                    </span>
+                    標示，方便快速找到。
+                  </li>
+                  <li>點場地卡可以切換背景、感受該場地的氣氛（不影響實際規則，純視覺效果）。</li>
+                </ul>
+              </div>
+
+              {/* B. 左右玩家資訊框 */}
+              <div>
+                <p className="font-semibold mt-2">B. 左右玩家資訊框</p>
+                <ul className="list-disc ml-5 space-y-0.5">
+                  <li>每位玩家都有一個框：顯示「頭像」「名字」「目前金幣」。</li>
+                  <li>
+                    玩家出局後，右方會標示
+                    <span className="px-1 mx-1 rounded bg-black/40 border border-red-400/40 text-red-200">
+                      已出局
+                    </span>
+                    ，不再輪到他行動。
+                  </li>
+                  <li>
+                    玩家名字旁邊會有「狀態標籤」，例如：
+                    <ul className="list-disc ml-5 mt-1 space-y-0.5">
+                      <li>
+                        <span className="font-semibold">保護</span>：
+                        一回合內<strong>不受任何技能影響</strong>
+                        （從獲得開始到自己下一次行動前）。
+                      </li>
+                      <li>
+                        <span className="font-semibold">閃避</span>：
+                        下一次對你造成影響的技能<strong>完全無效化</strong>，觸發後解除；
+                        若一直沒被指定，就會持續保留。
+                      </li>
+                      <li>
+                        <span className="font-semibold">凍結</span>：
+                        手牌被冰起來一回合，只能打
+                        <strong>當回合新抽到的那張牌</strong>。
+                      </li>
+                      <li>
+                        <span className="font-semibold">麻痺</span>：
+                        下個回合會被
+                        <span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
+                          跳過抽牌
+                        </span>
+                        ，等於少一次行動。
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+
+              {/* C. 中央戰場區 */}
+              <div>
+                <p className="font-semibold mt-2">C. 中央戰場區</p>
+                <ul className="list-disc ml-5 space-y-0.5">
+                  <li>
+                    <span className="font-semibold">棄牌堆</span>：
+                    顯示已打出的卡牌，以及被淘汰玩家的手牌。
+                    玩家可以利用這些資訊推理別人可能剩下的牌。
+                  </li>
+                  <li>
+                    <span className="font-semibold">最近打出的卡牌</span>：
+                    中央會出現一張大卡圖，顯示
+                    「誰打出了什麼牌」，部分角色還會有專屬影片或特效。
+                  </li>
+                  <li>
+                    <span className="font-semibold">播報框</span>：
+                    某些角色（例如騙人布、羅賓、喬巴、索隆、羅、娜美、基拉、大媽…）
+                    打出時，會在畫面上方跳出特別樣式的提示框，顯示：
+                    「（打出玩家）對（目標玩家）做了什麼」。
+                  </li>
+                  <li>
+                    <span className="font-semibold">戰報 / 日誌</span>：
+                    畫面下方會有一條文字紀錄，
+                    例如「P1 魯夫 攻擊了 P3」、「本局強化場地：XXX…」，
+                    方便回顧發生過的事件。
+                  </li>
+                </ul>
+              </div>
+
+              {/* D. 下方操作區 */}
+              <div>
+                <p className="font-semibold mt-2">D. 下方「你的操作區」（只會在輪到你時出現）</p>
+                <ul className="list-disc ml-5 space-y-0.5">
+                  <li>
+                    在<strong>抽牌階段</strong>時，下方只有簡單提示：
+                    <span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
+                      請點牌堆抽牌
+                    </span>
+                    。
+                  </li>
+                  <li>
+                    在<strong>選牌階段</strong>時，下方會出現兩張卡：
+                    <ul className="list-disc ml-5 mt-1 space-y-0.5">
+                      <li><span className="font-semibold">左邊</span>：你原本的手牌。</li>
+                      <li><span className="font-semibold">右邊</span>：剛抽到的那張牌。</li>
+                    </ul>
+                  </li>
+                  <li>
+                    若技能文字提到「挑戰」或「比大小」，是比較
+                    <strong>你手中最後剩下的那張牌的數值</strong>。
+                    在這種比較中，
+                    <span className="px-1 mx-1 rounded bg-black/40 border border-white/10">
+                      10 以上的卡片只看尾數
+                    </span>
+                    ，例如 12 當作 2、18 當作 8。
+                  </li>
+                  <li>
+                    若有特殊限制（例如青雉凍結、娜美 7+6/8 規則），
+                    不能打的牌會被一層<strong>冰凍效果</strong>覆蓋，看起來整張卡被冰起來且無法點擊，
+                    你只會剩下合法的那張可以選。
+                  </li>
+                </ul>
+              </div>
+            </section>
+
+            {/* 四、特殊狀況與結算 */}
+            <section className="space-y-1.5">
+              <h3 className="font-semibold text-amber-300">四、特殊狀況與結算</h3>
+              <ul className="list-disc ml-5 space-y-0.5">
+                <li>
+                  <span className="font-semibold">當牌堆全部抽完後</span>：
+                  <ul className="list-disc ml-5 mt-1 space-y-0.5">
+                    <li>先把該回合打完。</li>
+                    <li>接著所有<strong>存活玩家公開手牌</strong>，比數值最大者勝出。</li>
+                    <li>
+                      在「最終比牌」階段，
+                      <strong>10 以上的卡片改用「各位數字相加」</strong>：
+                      例如 18 → 1+8 = 9。
+                    </li>
+                    <li>
+                      若「相加結果」剛好等於某張個位數牌，
+                      則<strong>個位數牌獲勝</strong>。
+                      例如 18（1+8=9）會贏 8 號牌，但會輸給 9 號牌。
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <span className="font-semibold">寶箱金幣用完</span>：
+                  畫面會顯示
+                  <span className="px-1 mx-1 rounded bg-black/40 border border-amber-400/40 text-amber-200">
+                    寶箱已空，等待結算
+                  </span>
+                  ，接著跳到<strong>最終結算畫面</strong>，
+                  以每位玩家的<strong>總金幣</strong>作為排行依據。
+                </li>
+              </ul>
+            </section>
+
+            <button className="btn-primary btn w-full mt-2" onClick={onClose}>
+              關閉
+            </button>
+          </div>
+        </div>
+      );
+    }
+
 
     function NameAvatar({defaultName, onDone}){
       const [name,setName]=useState(defaultName||"");
@@ -726,7 +564,8 @@ function RuleModal({ show, onClose }) {
       return (
         <form onSubmit={handleSubmit} className="card w-[min(980px,96vw)] p-5 md:p-6">
           <div className="flex items-center justify-between gap-3 flex-wrap">
-            <h2 className="text-xl font-bold">{t("ui.createCharacter")}</h2>
+            <h2 className="text-xl font-bold">創建角色</h2>
+            <div className="text-xs text-neutral-400">資料會暫存於本機（localStorage）</div>
           </div>
           <div className="grid [@media(orientation:landscape)]:grid-cols-2 md:grid-cols-3 gap-5 mt-4">
             <div className="md:col-span-1">
@@ -738,25 +577,32 @@ function RuleModal({ show, onClose }) {
                     onError={(e)=>{
                       e.currentTarget.replaceWith(Object.assign(
                         document.createElement('div'),
-                        {className:'mono avatar',innerText:(name||'').slice(0,1)||t('ui.you')}
+                        {className:'mono avatar',innerText:(name||'').slice(0,1)||'你'}
                       ));
                     }}
                   />
                 </div>
                 <div>
+                  <div className="text-sm text-neutral-400">玩家名稱</div>
                   <input
                     className="mt-1 w-56 rounded-lg bg-neutral-900 border border-neutral-700 px-3 py-2 outline-none focus:border-amber-400"
                     maxLength={16}
-                    placeholder={t("ui.namePlaceholder")}
+                    placeholder="輸入你的名字"
                     value={name}
                     onChange={(e)=>setName(e.target.value)}
                   />
                 </div>
               </div>
+              <div className="text-xs text-neutral-400 mt-2">
+                * 名稱最多 16 字；可稍後在設定中修改。
+              </div>
             </div>
             <div className="md:col-span-2">
               <div className="flex items-center justify-between">
-                <div className="font-semibold">{t("ui.chooseAvatar")}</div>
+                <div className="font-semibold">選擇頭像（30）</div>
+                <div className="text-xs text-neutral-400">
+                  路徑：<code>images/avatars/1.webp ~ 30.webp</code>
+                </div>
               </div>
               <div className="mt-2 grid grid-cols-5 sm:grid-cols-6 md:grid-cols-7 lg:grid-cols-8 gap-3">
                 {avatars.map((src,idx)=>(
@@ -773,7 +619,7 @@ function RuleModal({ show, onClose }) {
             </div>
           </div>
           <div className="mt-5 flex flex-col sm:flex-row gap-3">
-            <button className="btn-primary btn grow" type="submit">{t("ui.createRoomTitle")}</button>
+            <button className="btn-primary btn grow" type="submit">創建房間</button>
             <button
               className="btn grow"
               type="button"
@@ -784,7 +630,7 @@ function RuleModal({ show, onClose }) {
                 onDone(data,{join:true});
               }}
             >
-              {t("ui.joinRoom")}
+              加入房間
             </button>
           </div>
         </form>
@@ -835,8 +681,7 @@ function RuleModal({ show, onClose }) {
   function tryJoin() {
     const code = (joinCode || "").toUpperCase().replace(/\s+/g, "");
     if (!code) {
-     alert(t("ui.alertNeedRoomId"));
-
+      alert("請輸入房號");
       return;
     }
     __lobby.roomId = code;
@@ -858,9 +703,9 @@ function RuleModal({ show, onClose }) {
       {/* 標題列 */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
         <div>
-          <div className="text-sm text-neutral-400">{t("ui.roomMode")}</div>
+          <div className="text-sm text-neutral-400">房間模式</div>
           <div className="text-xl font-bold text-amber-300">
-            {t("ui.createOrJoin")}
+            建立房間 / 加入房間
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -869,7 +714,7 @@ function RuleModal({ show, onClose }) {
           </div>
           <div className="text-sm text-right">
             <div className="text-neutral-300">{profile.playerName}</div>
-            <div className="text-xs text-neutral-500">{t("ui.playerId", {id: meId})}</div>
+            <div className="text-xs text-neutral-500">玩家 ID：{meId}</div>
           </div>
         </div>
       </div>
@@ -879,9 +724,9 @@ function RuleModal({ show, onClose }) {
         {/* 左：建立房間 */}
         <div className="space-y-4 border border-neutral-700/70 rounded-xl p-4 bg-black/20">
           <div className="flex items-center justify-between">
-            <div className="font-semibold">{t("ui.createRoomTitle")}</div>
+            <div className="font-semibold">建立房間</div>
             <span className="text-[11px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-400/40">
-              {t("ui.host")}
+              房主
             </span>
           </div>
 
@@ -889,10 +734,10 @@ function RuleModal({ show, onClose }) {
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <label className="text-sm font-medium text-amber-200">
-                {t("ui.cpuCountLabel")}
+                加入 CPU 人數
               </label>
               <span className="text-[11px] text-neutral-400">
-                {t("ui.cpuCountHint")}
+                之後會自動填進房間（暫定 0–3 人）
               </span>
             </div>
             <div className="grid grid-cols-4 gap-2">
@@ -910,10 +755,13 @@ function RuleModal({ show, onClose }) {
                         : "")
                     }
                   >
-                    {t("ui.people", {n})}
+                    {n} 人
                   </button>
                 );
               })}
+            </div>
+            <div className="text-xs text-neutral-500">
+              * 目前先提供選項與記錄，之後會接上電腦玩家自動行動邏輯。
             </div>
           </div>
 
@@ -922,24 +770,24 @@ function RuleModal({ show, onClose }) {
             onClick={createRoom}
             className="btn-primary btn w-full mt-2 py-2.5 text-base"
           >
-            {t("ui.createNewRoom")}
+            🏴‍☠️ 建立新房間
           </button>
         </div>
 
         {/* 右：加入房間 */}
         <div className="space-y-4 border border-neutral-700/70 rounded-xl p-4 bg-black/10">
-          <div className="font-semibold">{t("ui.joinFriendRoom")}</div>
+          <div className="font-semibold">加入朋友的房間</div>
           <div className="space-y-2">
-            <label className="text-sm text-neutral-300">{t("ui.enterRoomCode")}</label>
+            <label className="text-sm text-neutral-300">輸入房號</label>
             <input
               className="w-full rounded-lg bg-neutral-900 border border-neutral-700 px-3 py-2 text-sm outline-none focus:border-amber-400"
-              placeholder={t("ui.roomCodePlaceholder")}
+              placeholder="例如：AB2D9F"
               value={joinCode}
               onChange={(e) => setJoinCode(e.target.value)}
               maxLength={8}
             />
             <div className="text-[11px] text-neutral-500">
-              {t("ui.roomCodeHint")}
+              * 房號由房主提供，大寫 / 小寫不影響。
             </div>
           </div>
 
@@ -948,13 +796,13 @@ function RuleModal({ show, onClose }) {
             onClick={tryJoin}
             className="btn w-full mt-2 py-2.5 text-base"
           >
-            {t("ui.joinRoomBtn")}
+            🔑 加入房間
           </button>
         </div>
       </div>
 
       <div className="text-xs text-neutral-500 text-right">
-        {t("ui.suggestion")}
+        建議 2–4 名真人玩家一同遊玩，CPU 數量之後可搭配調整。
       </div>
     </div>
   );
@@ -988,7 +836,7 @@ function WaitingRoom({roomId, profile, onLeave}){
   function copyId(){
     if(!lobby?.roomId) return;
     navigator.clipboard?.writeText(lobby.roomId);
-   alert(t("ui.alertCopiedRoomId", { roomId: lobby.roomId }));
+    alert("已複製房號："+lobby.roomId);
   }
 
   // 切換準備
@@ -1001,7 +849,7 @@ function WaitingRoom({roomId, profile, onLeave}){
     });
   }
 
-  // {t("ui.host")}開局
+  // 房主開局
   function startGame(){
     if(!amHost) return;
     socket.emit('ACTION', {
@@ -1019,8 +867,8 @@ function WaitingRoom({roomId, profile, onLeave}){
   if(!lobby){
     return (
       <div className="card w=[min(820px,96vw)] p-6">
-        <div className="text-lg font-bold mb-2">{t("ui.connectingLobby")}</div>
-        <button className="btn" onClick={onLeave}>{t("ui.back")}</button>
+        <div className="text-lg font-bold mb-2">正在連線等待室...</div>
+        <button className="btn" onClick={onLeave}>返回</button>
       </div>
     );
   }
@@ -1030,20 +878,20 @@ function WaitingRoom({roomId, profile, onLeave}){
       {/* 上方：房號 + 按鈕列 */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <div className="text-xs text-neutral-400">{t("ui.roomId")}</div>
+          <div className="text-xs text-neutral-400">房號</div>
           <div className="text-2xl font-extrabold tracking-widest">{lobby.roomId}</div>
         </div>
         <div className="flex gap-2">
-          <button className="btn" onClick={copyId}>{t("ui.copyRoomId")}</button>
-          <button className="btn" onClick={onLeave}>{t("ui.leaveRoom")}</button>
+          <button className="btn" onClick={copyId}>複製房號</button>
+          <button className="btn" onClick={onLeave}>離開房間</button>
           {amHost && (
             <button
               className={`btn-primary ${canStart? "": "opacity-50 cursor-not-allowed"}`}
               onClick={startGame}
               disabled={!canStart}
-              title={canStart? t("ui.startGameBtn") : t("ui.startGameNeed")}
+              title={canStart? "開始遊戲":"至少 2 名真人且全部準備才可開始"}
             >
-              {t("ui.startGameBtn")}
+              開始遊戲
             </button>
           )}
         </div>
@@ -1053,20 +901,20 @@ function WaitingRoom({roomId, profile, onLeave}){
       {cpuCount > 0 && (
         <div className="mt-3 text-xs text-amber-200 flex items-center gap-2">
           <span className="px-2 py-0.5 rounded-full border border-amber-400/40 bg-amber-500/10">
-            {t("ui.cpuPlayers", {n: cpuCount})}
+            CPU 玩家：{cpuCount} 人
           </span>
           <span className="text-[11px] text-neutral-400">
-            {t("ui.cpuWillJoin")}
+            開始遊戲後會自動加入對局（在下方列表中會顯示）
           </span>
         </div>
       )}
 
       {/* 真人 + CPU 列表 */}
       <div className="mt-5 space-y-5">
-        {/* 真人{t("ui.player")}區 */}
+        {/* 真人玩家區 */}
         <div>
           <div className="text-sm text-neutral-300 mb-2">
-            {t("ui.humanPlayers", {n: players.length})}
+            真人玩家（{players.length}）
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {players.map(p=> {
@@ -1086,17 +934,17 @@ function WaitingRoom({roomId, profile, onLeave}){
                       <div className="font-semibold leading-tight">{nameOf(p)}</div>
                       <div className="text-xs text-neutral-400 flex items-center gap-2">
                         {isHost
-                          ? <span className="px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-200 border border-amber-400/30">{t("ui.host")}</span>
-                          : <span className="opacity-60">{t("ui.player")}</span>}
+                          ? <span className="px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-200 border border-amber-400/30">房主</span>
+                          : <span className="opacity-60">玩家</span>}
                         {ready
-                          ? <span className="px-1.5 py-0.5 rounded bg-emerald-400/15 text-emerald-200 border border-emerald-400/30">{t("ui.ready")}</span>
-                          : <span className="px-1.5 py-0.5 rounded bg-neutral-600/20 text-neutral-200 border border-neutral-600/40">{t("ui.notReady")}</span>}
+                          ? <span className="px-1.5 py-0.5 rounded bg-emerald-400/15 text-emerald-200 border border-emerald-400/30">已準備</span>
+                          : <span className="px-1.5 py-0.5 rounded bg-neutral-600/20 text-neutral-200 border border-neutral-600/40">未準備</span>}
                       </div>
                     </div>
                   </div>
                   {isMe && (
                     <button className="btn" onClick={()=>toggleReady(!myReady)}>
-                      {myReady ? t("ui.meUnready") : t("ui.meReady")}
+                      {myReady?"取消準備":"準備"}
                     </button>
                   )}
                 </div>
@@ -1104,11 +952,11 @@ function WaitingRoom({roomId, profile, onLeave}){
             })}
           </div>
         </div>
-        {/* CPU {t("ui.player")}區 */}
+        {/* CPU 玩家區 */}
         {cpuCount > 0 && (
           <div>
             <div className="text-sm text-neutral-300 mb-2">
-              {t("ui.cpuPlayersList", {n: cpuCount})}
+              CPU 玩家（{cpuCount}）
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {Array.from({length: cpuCount}).map((_, idx) => {
@@ -1116,12 +964,7 @@ function WaitingRoom({roomId, profile, onLeave}){
                 const avatarUrl = `images/avatars/cpu${cpuIdx}.webp`;
 
                 // ★ 新增：CPU 顯示名稱表
-                const cpuNames = [
-  t("cpu.name1"),
-  t("cpu.name2"),
-  t("cpu.name3"),
-];
-
+                const cpuNames = ["克洛克達爾", "鷹眼密佛格", "小丑巴其"];
                 const name = cpuNames[idx] || `CPU ${idx + 1}`;
 
                 return (
@@ -1137,10 +980,10 @@ function WaitingRoom({roomId, profile, onLeave}){
                         <div className="font-semibold leading-tight text-amber-200">{name}</div>
                         <div className="text-xs text-neutral-400 flex items-center gap-2">
                           <span className="px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-200 border border-sky-400/40">
-                            {t("ui.cpuTag")}
+                            電腦玩家
                           </span>
                           <span className="px-1.5 py-0.5 rounded bg-emerald-400/15 text-emerald-200 border border-emerald-400/30">
-                            {t("ui.ready")}
+                            已準備
                           </span>
                         </div>
                       </div>
@@ -1155,6 +998,9 @@ function WaitingRoom({roomId, profile, onLeave}){
 
       </div>
 
+      <div className="text-xs text-neutral-400 mt-4">
+        此等待室已綁定後端快照；準備/開局皆透過 Socket.IO。CPU 將在遊戲開始後自動加入。
+      </div>
     </div>
   );
 }
@@ -1166,21 +1012,6 @@ function WaitingRoom({roomId, profile, onLeave}){
       const [intent,setIntent]=useState(null);
       const [roomInfo,setRoomInfo]=useState(null);
       getMeId(); // 產生一次本機識別
-
-const [langTick, setLangTick] = useState(0);
-function changeLang(next){
-  I18N.setLang(next);
-  document.documentElement.setAttribute("lang", I18N.getLang());
-
-  // 非 React 區塊（旋轉提示）也要同步更新
-  const a = document.getElementById("txtRotateTitle");
-  const b = document.getElementById("txtRotateHint");
-  if(a) a.textContent = t("ui.rotateTitle");
-  if(b) b.textContent = t("ui.rotateHint");
-
-  setLangTick(x=>x+1); // 強制重繪
-}
-
 
       useEffect(()=>{
         const cached=localStorage.getItem("op_player_profile");
@@ -1197,9 +1028,9 @@ function changeLang(next){
 return (
   <div className="w-full max-w-[1200px] mx-auto">
     <div className="min-h-dvh flex items-center justify-center">
-      {stage==="press" && <PressAnyKey onProceed={()=>setStage("menu")} />}
+      {stage==="press"   && <PressAnyKey onProceed={()=>setStage("menu")} />}
 
-      {stage==="menu" && (
+      {stage==="menu"    && (
         <MainMenu
           onStart={()=>setStage("profile")}
           onRule={()=>setStage("rule")}
@@ -1218,7 +1049,7 @@ return (
         />
       )}
 
-      {stage==="choice" && profile && (
+      {stage==="choice"  && profile && (
         <RoomChoice
           profile={profile}
           intent={intent}
@@ -1241,7 +1072,10 @@ return (
         />
       )}
 
-      <RuleModal show={stage==="rule"} onClose={()=>setStage("menu")} />
+      <RuleModal
+        show={stage==="rule"}
+        onClose={()=>setStage("menu")}
+      />
     </div>
   </div>
 );
@@ -1249,6 +1083,74 @@ return (
     }
 
     ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+  </script>
+
+  <!-- === 一鍵下載全部資源 (UI) === -->
+  <div id="preloadBox" class="mt-4 text-center" style="padding:16px;">
+    <button id="btnPreloadAll" class="btn btn-primary">
+      📦 一次下載全部資源（建議 Wi-Fi）
+    </button>
+    <div class="preload-track">
+      <div id="preloadBarInner" class="preload-bar"></div>
+    </div>
+    <div id="preloadStatus" class="text-sm text-neutral-300 mt-2"></div>
+  </div>
+  <audio id="sfxIntro" src="audio/intro.mp3" preload="auto" loop autoplay></audio>
+  <audio id="bgm" src="audio/bgm.mp3" preload="auto" loop autoplay></audio>
+  <!-- === 一鍵下載全部資源：邏輯 === -->
+  <script>
+    // 要預先下載的資源清單
+    // （這裡我先幫你列出 BGM + 影片，你之後可以依 sw.js 再加 / 改）
+    const PRELOAD_ASSETS = [
+      'images/cover.jpg',
+      // 頭像（1~30）
+      ...Array.from({length:30}, (_,i)=>`images/avatars/${i+1}.webp`),
+      // BGM：track01 ~ track20
+      ...Array.from({length:20}, (_,i)=>`audio/bgm/track${String(i+1).padStart(2,'0')}.mp3`),
+      // 影片
+      'videos/start.mp4',
+      'videos/coin.mp4',
+      // 強化影片 0~19
+      ...Array.from({length:20}, (_,i)=>`videos/enh/${i}.mp4`),
+    ];
+
+    async function preloadAllAssets() {
+      const btn  = document.getElementById('btnPreloadAll');
+      const info = document.getElementById('preloadStatus');
+      const bar  = document.getElementById('preloadBarInner');
+
+      if (!btn || !info) return;
+
+      btn.disabled = true;
+      let ok = 0, fail = 0;
+      const total = PRELOAD_ASSETS.length;
+
+      info.textContent = `開始下載（0 / ${total}）...`;
+      if (bar) bar.style.width = '0%';
+
+      for (const url of PRELOAD_ASSETS) {
+        try {
+          await fetch(url, { cache: "reload" });
+          ok++;
+        } catch(err) {
+          console.warn("下載失敗：", url, err);
+          fail++;
+        }
+        const done = ok + fail;
+        const pct  = Math.round(done / total * 100);
+        info.textContent = `下載中... ${done} / ${total}（${pct}%）`;
+        if (bar) bar.style.width = `${pct}%`;
+      }
+
+      info.textContent = `完成！成功 ${ok} 項，失敗 ${fail} 項。`;
+      if (bar) bar.style.width = '100%';
+      btn.disabled = false;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const btn = document.getElementById('btnPreloadAll');
+      if (btn) btn.addEventListener('click', preloadAllAssets);
+    });
   </script>
 
   <div class="audio-toggle" id="audioCtrl" style="display:none">
@@ -1363,17 +1265,5 @@ return (
     };
   })();
   </script>
-
-<script>
-  // === Service Worker 註冊（離線快取核心）===
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker
-        .register("./sw.js")
-        .catch((err) => console.warn("SW register failed:", err));
-    });
-  }
-</script>
-
 </body>
 </html>
