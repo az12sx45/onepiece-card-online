@@ -6,6 +6,117 @@
   <title>偉大航道爭霸戰｜正式對戰</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <!-- i18n dictionaries (shared with start.html) -->
+  <script>window.__I18N_DICTS = window.__I18N_DICTS || {};</script>
+  <script src="i18n/zh-Hant.js"></script>
+  <script src="i18n/en.js"></script>
+  <script src="i18n/ja.js"></script>
+  <script src="i18n/ko.js"></script>
+  <script src="i18n/i18n.js"></script>
+
+  <!-- game-specific i18n keys + apply -->
+  <script>
+  (function(){
+    // Extend dictionaries with game keys (safe merge)
+    function ensure(lang){ 
+      window.__I18N_DICTS = window.__I18N_DICTS || {};
+      window.__I18N_DICTS[lang] = window.__I18N_DICTS[lang] || { meta:{label:lang} };
+      window.__I18N_DICTS[lang].game = window.__I18N_DICTS[lang].game || {};
+      window.__I18N_DICTS[lang].ui = window.__I18N_DICTS[lang].ui || {};
+      return window.__I18N_DICTS[lang];
+    }
+
+    // Traditional Chinese
+    Object.assign(ensure("zh-Hant").game, {
+      title: "偉大航道爭霸戰｜正式對戰",
+      headerTitle: "偉大航道爭霸戰",
+      treasureLeft: "寶箱金幣剩餘：",
+      coinUnit: "枚",
+      cardDex: "卡片圖鑑",
+      drawHint: "請抽牌",
+      discard: "棄牌",
+      nextRound: "下一局 ▶",
+      unknownPlayer: "未知玩家",
+      allPlayers: "全體玩家",
+      disconnected: "未連線"
+    });
+
+    // English
+    Object.assign(ensure("en").game, {
+      title: "Grand Line Showdown | Match",
+      headerTitle: "Grand Line Showdown",
+      treasureLeft: "Treasure coins left: ",
+      coinUnit: "coins",
+      cardDex: "Card Index",
+      drawHint: "Draw a card",
+      discard: "Discard",
+      nextRound: "Next Round ▶",
+      unknownPlayer: "Unknown player",
+      allPlayers: "All players",
+      disconnected: "disconnected"
+    });
+
+    // Japanese
+    Object.assign(ensure("ja").game, {
+      title: "偉大航道 争覇戦｜対戦",
+      headerTitle: "偉大航道 争覇戦",
+      treasureLeft: "宝箱コイン残り：",
+      coinUnit: "枚",
+      cardDex: "カード図鑑",
+      drawHint: "カードを引いてください",
+      discard: "捨て札",
+      nextRound: "次のラウンド ▶",
+      unknownPlayer: "不明なプレイヤー",
+      allPlayers: "全員",
+      disconnected: "未接続"
+    });
+
+    // Korean
+    Object.assign(ensure("ko").game, {
+      title: "그랜드 라인 쟁탈전 | 대전",
+      headerTitle: "그랜드 라인 쟁탈전",
+      treasureLeft: "보물 코인 남음: ",
+      coinUnit: "개",
+      cardDex: "카드 도감",
+      drawHint: "카드를 뽑아 주세요",
+      discard: "버린 카드",
+      nextRound: "다음 라운드 ▶",
+      unknownPlayer: "알 수 없는 플레이어",
+      allPlayers: "전체 플레이어",
+      disconnected: "연결 끊김"
+    });
+
+    function apply(){
+      var I18N = window.__I18N;
+      if(!I18N || typeof I18N.t !== "function") return;
+      document.documentElement.setAttribute("lang", I18N.getLang());
+
+      function setText(id, key){
+        var el = document.getElementById(id);
+        if(!el) return;
+        el.textContent = I18N.t(key);
+      }
+
+      // title
+      try { document.title = I18N.t("game.title"); } catch(_){}
+      setText("txtGameTitle", "game.headerTitle");
+      setText("txtChestLabel", "game.treasureLeft");
+      setText("txtCoinUnit", "game.coinUnit");
+      setText("txtCardDexBtn", "game.cardDex");
+      setText("txtDrawHint", "game.drawHint");
+      setText("txtDiscardTitle", "game.discard");
+      setText("txtNextRound", "game.nextRound");
+
+      // connection label (if you ever unhide it)
+      var conn = document.getElementById("connLbl");
+      if(conn && (conn.textContent||"").trim().toLowerCase()==="disconnected" && I18N.getLang()==="zh-Hant"){
+        conn.textContent = I18N.t("game.disconnected");
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", apply);
+  })();
+  </script>
   <style>
     html,body{height:100%;background:#0f1113;color:#eaecee}
     .card{ background: rgba(16,20,24,.80);              /* 微透明面板色：#101418 / 80% */
@@ -1658,21 +1769,21 @@ body::before{
 <header class="sticky top-0 z-40 bg-[#101418]/80 backdrop-blur border-b border-[#1c2229]">
   <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
     <!-- 左側標題 -->
-    <div class="font-semibold tracking-wide">偉大航道爭霸戰</div>
+    <div id="txtGameTitle" class="font-semibold tracking-wide">偉大航道爭霸戰</div>
 
     <!-- 房號/連線：留著給程式用，但畫面隱藏 -->
     <div class="hidden text-xs px-2 py-1 rounded border border-neutral-700">房號：<span id="roomLbl">—</span></div>
     <div class="hidden text-xs px-2 py-1 rounded border border-neutral-700">連線：<span id="connLbl" class="text-red-400">disconnected</span></div>
 
     <!-- 保留寶箱（可見） -->
-    <div class="text-xs px-2 py-1 rounded border border-neutral-700">寶箱金幣剩餘：<span id="chestLbl">0</span> 枚</div>
+    <div class="text-xs px-2 py-1 rounded border border-neutral-700"><span id="txtChestLabel">寶箱金幣剩餘：</span><span id="chestLbl">0</span> <span id="txtCoinUnit">枚</span></div>
 
  <!-- ★ 新增：卡片圖鑑按鈕 -->
       <button id="cardDexBtn"
               class="px-2 py-1 rounded border border-[#374151] bg-[#111827]/80
                      text-[11px] tracking-wide hover:bg-[#020617] hover:border-[#f97373]
                      hover:text-[#fee2e2] transition-colors duration-150">
-        卡片圖鑑
+        <span id="txtCardDexBtn">卡片圖鑑</span>
       </button>
 
  <!-- 拉到最右邊：音樂條 -->
@@ -1759,15 +1870,15 @@ body::before{
   <!-- ★ 抽牌提示泡泡：預設 hidden，JS 會在可抽牌時打開 -->
   <div id="drawHint" class="draw-hint hidden select-none">
     <span class="emoji">👉</span>
-    <span class="txt">請抽牌</span>
+    <span class="txt" id="txtDrawHint">請抽牌</span>
   </div>
 </div>
 
 
         <div class="card p-3 md:col-span-3">
           <div class="flex items-center justify-between mb-2">
-            <div class="text-sm opacity-80">棄牌</div>
-            <button id="btnNextRound" class="hidden px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black text-sm">下一局 ▶</button>
+            <div class="text-sm opacity-80" id="txtDiscardTitle">棄牌</div>
+            <button id="btnNextRound" class="hidden px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black text-sm"><span id="txtNextRound">下一局 ▶</span></button>
           </div>
             <div id="discard" class="flex gap-2 overflow-x-auto"></div>
         </div>
