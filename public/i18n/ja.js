@@ -84,7 +84,7 @@ window.__I18N_DICTS["ja"] = {
     name1: "クロコダイル",
     name2: "ミホーク",
     name3: "バギー"
-  }
+  },
 
 rules: {
   overview: {
