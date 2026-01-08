@@ -117,6 +117,12 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
   const req = e.request;
 
+  // ⛔ i18n 語言檔不要走 SW 快取，避免更新後一直拿舊版
+  // 例如：/i18n/zh-Hant.js, /i18n/en.js, /i18n/ja.js, /i18n/ko.js, /i18n/i18n.js
+  if (req.url.includes('/i18n/')) {
+    return; // 直接交給瀏覽器走網路，不攔截、不快取
+  }
+
   // 只處理 GET，避免把 POST/socket 之類搞壞
   if (req.method !== 'GET') return;
 
@@ -144,3 +150,4 @@ self.addEventListener('fetch', (e) => {
     }
   })());
 });
+
