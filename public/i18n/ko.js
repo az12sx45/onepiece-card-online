@@ -90,7 +90,7 @@ rulesHotkeys: "단축키: ← / → 페이지 이동, Esc 닫기",
     name1: "크로커다일",
     name2: "미호크",
     name3: "버기"
-  }
+  },
 
 rules: {
   overview: {
