@@ -10,6 +10,9 @@ window.__I18N_DICTS["en"] = {
     rules: "Rules",
     close: "Close",
 
+    people: "{n} players",
+
+
     rotateTitle: "Rotate your phone to landscape for the best experience",
     rotateHint: "If rotation doesn't work, unlock screen rotation or enable “Allow rotation” in your browser menu.",
 
