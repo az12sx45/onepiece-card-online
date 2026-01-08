@@ -35,8 +35,7 @@ window.__I18N_DICTS["zh-Hant"] = {
     cpuCountLabel: "加入 CPU 人數",
     cpuCountHint: "之後會自動填進房間（暫定 0–3 人）",
     cpuCountFootnote: "* 目前先提供選項與記錄，之後會接上電腦玩家自動行動邏輯。",
-        people: "{n} 人",
-createNewRoom: "🏴‍☠️ 建立新房間",
+    createNewRoom: "🏴‍☠️ 建立新房間",
 
     joinFriendRoom: "加入朋友的房間",
     enterRoomCode: "輸入房號",
@@ -70,6 +69,12 @@ createNewRoom: "🏴‍☠️ 建立新房間",
     preloadStart: "開始下載（0 / {total}）...",
     preloading: "下載中... {done} / {total}（{pct}%）",
     preloadDone: "完成！成功 {ok} 項，失敗 {fail} 項。",
+
+    prev: "上一頁",
+    next: "下一頁",
+    tipPrefix: "提示：",
+    rulesHotkeys: "快捷鍵：← / → 翻頁，Esc 關閉",
+
 
     alertNeedRoomId: "請輸入房號",
     alertCopiedRoomId: "已複製房號：{roomId}"
