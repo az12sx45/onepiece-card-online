@@ -10,10 +10,7 @@ window.__I18N_DICTS["ko"] = {
     rules: "게임 규칙",
     close: "닫기",
 
-prev: "이전 페이지",
-next: "다음 페이지",
-tipPrefix: "팁:",
-rulesHotkeys: "단축키: ← / → 페이지 이동, Esc 닫기",
+    people: "{n}명",
 
 
     rotateTitle: "최적의 경험을 위해 화면을 가로로 돌려주세요",
