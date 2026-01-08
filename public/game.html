@@ -6,156 +6,6 @@
   <title>偉大航道爭霸戰｜正式對戰</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
-  <!-- i18n dictionaries (shared with start.html) -->
-  <script>window.__I18N_DICTS = window.__I18N_DICTS || {};</script>
-  <script src="i18n/zh-Hant.js"></script>
-  <script src="i18n/en.js"></script>
-  <script src="i18n/ja.js"></script>
-  <script src="i18n/ko.js"></script>
-  <script src="i18n/i18n.js"></script>
-
-  <!-- game-specific i18n keys + apply -->
-  <script>
-  (function(){
-    // Extend dictionaries with game keys (safe merge)
-    function ensure(lang){ 
-      window.__I18N_DICTS = window.__I18N_DICTS || {};
-      window.__I18N_DICTS[lang] = window.__I18N_DICTS[lang] || { meta:{label:lang} };
-      window.__I18N_DICTS[lang].game = window.__I18N_DICTS[lang].game || {};
-      window.__I18N_DICTS[lang].ui = window.__I18N_DICTS[lang].ui || {};
-      return window.__I18N_DICTS[lang];
-    }
-
-
-    // Auto-imported zh-Hant strings found in game.html that were not yet i18n'd
-    function deepSet(obj, path, val){
-      const parts = path.split(".");
-      let cur = obj;
-      for(let i=0;i<parts.length-1;i++){
-        const p = parts[i];
-        if(!cur[p] || typeof cur[p] !== "object") cur[p] = {};
-        cur = cur[p];
-      }
-      cur[parts[parts.length-1]] = val;
-    }
-
-    const __GAME_AUTO_ZH = {"game.text.auto.k8435c989":"未知玩家","game.text.auto.k9e16af3e":"的手牌","game.text.auto.kc62006fc":"要與","game.text.auto.ke5b419f9":"全體玩家","game.btn.cancel":"取消","game.text.auto.k6868328f":"夏波帝諸島","game.text.auto.kd86d8e9b":"奧羅傑克森號","game.text.auto.k95d93414":"萬國","game.text.auto.k418e1b0a":"蜂巢島","game.text.auto.k203991d5":"鬼島","game.text.auto.ka8f9e6dc":"九蛇島","game.btn.auto.kd2c0048a":"交換","game.text.auto.kdef1e3bc":"人類的夢想是永遠不會結束的！","game.text.auto.ka804462a":"佐烏","game.text.auto.k16566c3e":"和之國","game.text.auto.kefeb6f26":"巴拉蒂","game.text.auto.k891fc2e4":"德雷斯羅薩鬥技場","game.text.auto.k4e6f0b07":"猜錯","game.text.auto.kcbd1942d":"空）","game.text.auto.k906621ae":"笑)","game.text.auto.k4678b671":"維薩利亞","game.text.auto.k6f4db99c":"艾尼艾斯大廳","game.text.auto.k060684ea":"選擇尾數（不能選 1）","game.text.auto.kb513f469":"阿拉巴斯坦","game.text.auto.kedc2e667":"魚人島","game.text.auto.kec21bab9":"龐克哈薩德","game.btn.prevTrack":"上一首","game.btn.nextTrack":"下一首","game.btn.auto.k0e032740":"不交換","game.text.auto.kf049ba01":"不決鬥","game.text.auto.k58f15879":"交換了","game.text.auto.k4991b006":"交換手牌嗎？","game.text.auto.k36ebad12":"你查看了","game.text.auto.k08f73b18":"保護","game.text.auto.k9eb35e96":"偵察了","game.text.auto.kec41ba61":"大媽","game.text.auto.k283b2059":"寶箱已空，等待結算","game.text.auto.k7ec2f3dc":"尾數","game.text.auto.k090495b9":"必殺","game.text.auto.k40a23f24":"我是蒙其D魯夫，是要超越你們，成為海賊王的人","game.btn.auto.k59c0533a":"播放/暫停","game.text.auto.k2d8acf1d":"擲硬幣","game.text.notPlaying":"未播放","game.text.auto.k2c8a99cb":"決鬥","game.text.auto.k168b2107":"決鬥嗎？（他原本有防禦，已嘗試解除）","game.text.auto.k8331419f":"決鬥嗎？（目前看不到保護/閃避）","game.text.auto.k3541f781":"決鬥：","game.text.auto.k4693bac1":"狙擊","game.text.auto.kf6b06a57":"猜中！","game.text.auto.kba79cb0c":"獲得了","game.text.auto.kf39b527c":"的尾數為「","game.text.auto.k0c4ac172":"號）","game.text.auto.kfe56ccb4":"閃避","game.btn.shufflePlay":"隨機播放","game.text.auto.k1fc6d11c":"騙人布：","game.text.auto.k3970a85b":"魯夫","game.text.auto.k88f261a9":"一刀流","game.text.auto.k0e53b006":"一切的開始","game.text.auto.k7a327141":"一般","game.text.auto.k0e406a05":"一般）","game.btn.auto.k8f1c6bb2":"上移","game.text.auto.kc92c1f0b":"下一位玩家擲硬幣，反面麻痺一回合，延續到擲出正面的玩家或打出此卡的玩家為止。","game.btn.auto.kf1a515bb":"下一局","game.btn.auto.k37a00cd7":"下移","game.text.auto.k69887561":"不准弄哭我的航海士","game.btn.auto.k89ba544c":"交出 1 金幣","game.text.auto.k2525c262":"位玩家比大小，輸了會被淘汰。","game.text.auto.kd33818d5":"你們這群枷治的兔崽子","game.text.auto.kf7ea0a6b":"你有意見嗎","game.text.auto.k55ee7586":"你看到了相當遙遠的未來啊","game.text.auto.k0f1f24be":"你要和他的手牌交換嗎？","game.text.auto.k689e70a9":"你說你要當甚麼王啊","game.text.auto.k996d413b":"你這麼誇獎我我也不會高興的，你這個討厭鬼","game.text.auto.k12017a2c":"來和我決鬥吧","game.text.auto.k2ccb5152":"保護狀態","game.text.gameName":"偉大航道爭霸戰","game.text.auto.kca2e2b61":"偷看一名玩家手牌後可選擇是否交換。","game.text.auto.kc476ccbd":"偷看一名玩家的手牌。","game.text.auto.k0f50552b":"全場玩家手牌凍結，下一次出牌只能打剛抽的那張。","game.text.auto.kcac95abf":"再選一位（或取消略過）","game.text.auto.kcb7d84e7":"冰河時代","game.text.auto.k7dc2be9f":"冰球","game.text.auto.k2eae266a":"凍結","game.text.auto.kfcab825a":"凍結了","game.text.auto.k24db7f13":"凱多","game.text.auto.k195cfcee":"凱多12-奎因變為強化技能","game.text.auto.k390de77c":"出局","game.text.auto.kb38e1c24":"出局）","game.text.auto.kbacbee38":"出牌者可見）","game.text.auto.kb6f23d22":"出牌者可見）卡塔庫栗：你已將頂牌排序為","game.text.auto.k86325760":"出牌者可見）卡塔庫栗：你看到頂牌","game.text.auto.k678da036":"出牌者可見）羅賓：你查看了","game.text.auto.ke1a2a430":"出牌者可見）黑鬍子：你覆蓋了","game.text.auto.k6a71b3bb":"刃 音擊","game.text.auto.ka3d388f5":"別忘了你還欠我一個人情，那可是一輩子的恩情","game.btn.join":"加入","game.text.auto.kef5ac0b5":"勝利，","game.text.auto.k7d843d7d":"勝者：","game.text.auto.ka8af1a25":"千花繚亂","game.text.auto.kb75ac8e5":"卡塔庫栗","game.text.auto.kf4f8b3ad":"卡塔庫栗：排序頂牌","game.text.cardDex":"卡片圖鑑","game.text.auto.k142412ac":"卡片圖鑑(紅框為本局強化卡)","game.text.auto.kc49b78bc":"只在比牌時生效）。","game.text.auto.k8c383be6":"可以觀看剩餘玩家數","game.text.auto.k0b228413":"可以觀看牌堆上前三張卡片。","game.text.auto.k48779e6a":"可以解除一位玩家的保護/閃避狀態。","game.text.auto.k373e9547":"可以解除一位玩家的保護/閃避狀態，再決定是否與他決鬥。","game.text.auto.kb48d278d":"可挑戰1","game.text.auto.k550132f1":"哥爾羅傑","game.text.auto.k4d91ddba":"唉呀呀","game.text.auto.k6611023e":"喬巴","game.text.auto.k7f04025a":"喬巴變為強化技能","game.text.auto.k56709a59":"嘲笑你的傢伙，都由我來送下地獄","game.text.auto.kc014ab27":"四檔 猿王群鴉砲","game.text.auto.k0a945ea9":"在成為大劍豪以前，我永遠不會再輸了","game.text.auto.k56b882ff":"基德","game.text.auto.k461c5467":"基德13-基拉變為強化技能","game.text.auto.k2af9dd1a":"基德：洗混並抽取棄牌堆的卡","game.text.auto.k37aee3bb":"基拉","game.text.auto.k2074a7ea":"基本】","game.text.auto.k46d6213b":"大媽15-卡塔克利變為強化技能","game.text.auto.k6fee7a5d":"大媽（萬國）：選擇交出 1 金幣，或直接淘汰","game.text.auto.kfeebda5d":"天候危機","game.text.auto.ka940180e":"奎因","game.text.auto.k06405079":"女帝漢考克","game.text.auto.kfb43785a":"女帝變為強化技能","game.text.auto.k9c614aed":"娜美","game.text.auto.k23dcb78c":"娜美小姐","game.text.auto.ke423dbb3":"娜美變為強化技能","game.btn.auto.k31e92ef3":"完成","game.text.chestCoinsLeft":"寶箱金幣剩餘：","game.text.auto.k5350fb87":"將棄排堆洗牌抽出一張家加入手牌，在從手牌中打出一張執行效果。","game.text.auto.kcbe14612":"對局日誌","game.text.auto.k4555c4c6":"少囉嗦，一起走吧","game.text.auto.k7e5427ef":"巨鐮迴轉音速切割","game.text.auto.k658ffd67":"差不多該去拿下了吧","game.text.auto.k3b29b208":"已洗混棄排堆，請按下「抽取」","game.text.auto.k784e9662":"平手！","game.text.auto.kf10f0f92":"庫山17-黑鬍子變為強化技能","game.text.auto.k2378f2cd":"庫山（青雉）","game.text.auto.ke2bd85a2":"張牌，任選張數覆蓋（其他人不可查看）進棄牌堆。","game.text.auto.k83aa4bd9":"強化","game.text.auto.k4fb85e76":"強化】","game.text.auto.kea6a9d73":"強化場地：","game.text.auto.k263d46bb":"強化）","game.text.auto.ka2830765":"強化：","game.text.auto.kb0eae899":"忍法雷霆","game.text.auto.kc8a07da2":"惡魔風腳","game.text.auto.kaffdde54":"想活下去","game.text.auto.k2b3d139f":"想要我的財寶嗎？去找吧！我把世界上的一切都放在那裡了！","game.text.auto.k3308cf1f":"戀愛即是風暴","game.text.auto.ka91f5d2b":"我做什麼都會被原諒吧？","game.text.auto.kf3a52156":"我把這頂帽子留給你，等到你成為一位偉大的海賊再拿給我","game.text.auto.k5ce7e824":"我是來終結這場戰爭的","game.text.auto.keb4cbdcf":"我是魯夫，是要成為海賊王的人","game.text.auto.k5f0ab33a":"我的科學是無敵的，最強，最棒，世界第一","game.text.auto.k30a60d6f":"我要","game.text.auto.kcac42a06":"我要成為世界第一的大劍豪","game.text.auto.kd524fd9e":"我要成為勇敢的海上戰士","game.text.auto.kccbe89f0":"我要找到蔚藍海域(All Blue)","game.text.auto.k3394e176":"我要畫出全世界的航海圖","game.text.auto.k78789b5b":"我馬上去取你的首級，草帽小子","game.placeholder.room":"房號","game.text.roomCodeLabel":"房號：","game.text.auto.k7ebd0ae7":"所有人將手牌洗回牌堆後各重抽1張。","game.text.auto.k2a2dc55d":"所有玩家將手牌逆時針傳遞。","game.text.auto.k928383c0":"打出","game.text.auto.ka9102b3a":"打出不淘汰，可預測一位玩家是否為本局贏家，成功則獲得與勝利玩家同數量的金幣。","game.text.auto.k3577b686":"打出女帝時不會自殺，並獲得保護（本回合免疫所有卡牌效果）。","game.text.auto.ka101ece7":"打出娜美時，可指定一名玩家「麻痺」，使其跳過下回合行動。","game.text.auto.k2cd991ea":"打出後淘汰自己，成為下一局起始玩家。","game.text.auto.k11960c2e":"打出此牌立即淘汰自己（若無場地效果）。","game.text.auto.kfc9556b6":"技能：","game.text.auto.kc1b341de":"把我也一起帶出海吧","game.text.auto.k6fcfc7f6":"抽取","game.text.auto.k0b3551cb":"指定一位玩家棄牌並重抽一張。","game.text.auto.kbb9901fe":"指定一位玩家棄牌，偶數則淘汰，奇數則抽一張牌。","game.text.auto.kb2598eb7":"指定一位玩家比大小，我方攻擊力","game.text.auto.ke10c7349":"指定一位玩家，讓對方選擇被淘汰或交出一個勝利指示物。","game.text.auto.k9a3bf708":"指定一名玩家手牌凍結，下一次出牌只能打剛抽的那張。","game.text.auto.k21346ff0":"擊敗：","game.text.auto.k04f00466":"擲銅板，正面保護、反面閃避。","game.text.auto.kdcb373fe":"數字)","game.text.auto.k4f58caaf":"暗水","game.text.auto.k32c1838f":"暗穴道","game.placeholder.nickname":"暱稱","game.text.auto.k54a48504":"未知卡牌","game.text.auto.kb49199b1":"未知牌","game.text.auto.kbd008650":"本回合打出奇數牌的玩家獲得冰鬼狀態卡，下回合再打出奇數牌則直接淘汰。","game.text.currentVenue":"本局場地","game.text.auto.k332fd86c":"柔力強化","game.text.auto.kdab6acf8":"查看剩餘玩家數","game.text.auto.k21094494":"查看所有玩家的手牌。","game.text.auto.ke216d3c2":"查看牌堆最上面一張卡並覆蓋（其他人不可查看）進棄牌堆。","game.text.auto.k1d3ed5c7":"棄掉了","game.text.auto.k8681b73a":"棄牌","game.text.auto.k5e3514c7":"橡膠橡膠象槍","game.text.auto.k51206225":"檢查","game.text.auto.kbb68801a":"歷史雖然會重演，人卻無法回到過去","game.text.auto.k9b9fc8d4":"殺手彈星","game.text.auto.k00589989":"沒有你在的話，我是無法成為海賊王的","game.text.auto.kd87acc8f":"沒有曲目）","game.text.auto.k6a596553":"洗回手牌後重抽，本回合打出7以上角色卡技能無效。","game.text.auto.k22153fb6":"海賊団篇","game.text.auto.k88b2d11e":"海賊王","game.btn.auto.k301cc414":"淘汰","game.text.auto.k00e5808e":"火焰龍之息","game.text.auto.kfb14a442":"火焰龍王","game.text.auto.kd613c1e2":"無視防禦與閃避，指定一位玩家比大小，輸者淘汰。","game.text.deck":"牌堆","game.text.auto.k1b2f90f7":"牌堆剩一半以下時可直接進入手牌比大小階段。","game.text.auto.kcc073109":"牌堆剩一半以下時可直接進入手牌比大小階段，自身手牌數值","game.text.auto.k001d2795":"狀態","game.text.auto.k918824be":"狂暴與暴食","game.text.auto.k7d1578c5":"狙擊王，給我打穿那面旗子","game.text.auto.kd31eeb6f":"猜一名玩家手牌（不能猜1），猜中淘汰對方。","game.text.auto.k276e6354":"猜中可連猜至錯為止，每猜中一次重複發動淘汰效果。","game.text.auto.k9015ac89":"猿王群鴉炮","game.text.auto.ke84ddd96":"獅子歌歌","game.text.auto.kf6c02536":"獲得閃避效果，下一次被影響技能無效化。","game.text.player":"玩家","game.text.auto.k4ff93bef":"男人不能打女人，奎因，你這個混帳","game.text.auto.k61e32f9d":"疫災彈","game.text.auto.ka4066ca0":"疫災彈-冰鬼","game.text.auto.kc60a0ada":"發動","game.text.auto.kb4a586b6":"的武裝狀態","game.text.auto.kce2bcfc4":"的牌堆卡片，並自由排序放回牌堆。","game.text.auto.k2e177a47":"皮毛強化","game.text.auto.k538e3636":"目標玩家：","game.text.auto.kb8b690fa":"看到你，妾身已心滿意足了","game.text.auto.ka066f6c2":"真的很感謝你還活著，魯夫","game.text.auto.k2dc7dcfb":"眼花撩亂","game.btn.confirm":"確定","game.btn.auto.ke6453992":"確定排序","game.text.auto.k20abe34f":"磁力風暴","game.text.auto.kde944e79":"磁氣","game.text.auto.k8477e661":"秒後的未來","game.text.auto.k72774476":"紅髮19-哥爾羅傑變為強化技能","game.text.auto.k35fb64b1":"紅髮香克斯","game.text.auto.kd7bc7882":"紅髮，跟你的疤真搭","game.text.auto.k91e05a69":"索隆","game.text.auto.k582a7d20":"索隆變為強化技能","game.text.auto.k59fcf426":"終於，你也找到棲身之所了，那就好好的活下去","game.text.auto.k59362bae":"給我個面子吧","game.text.auto.kdbb186b9":"羅變為強化技能","game.text.auto.kceecc478":"羅賓","game.text.auto.k10aaaab7":"羅賓小姐","game.text.auto.k0811c9bd":"羅賓變為強化技能","game.text.auto.k50683ceb":"自身獲得保護狀態一回合。","game.text.auto.k9d47ca15":"臭小鬼","game.text.auto.kbeeb19ea":"與一名玩家交換手牌。","game.text.auto.kbde0508c":"與一名玩家比大小，低者淘汰。","game.text.auto.k8291239e":"若手牌同時持有6或8，必須打出娜美。","game.text.auto.k11a3f3d2":"若手牌同時擁有凱多與大媽，可無視閃避與保護，直接淘汰全場其他玩家。","game.text.auto.kbaf95db1":"落敗","game.text.auto.keb848aee":"蒙其","game.text.auto.k7faf2fde":"薩波","game.text.auto.kb5ce6bff":"薩波變為強化技能","game.text.auto.kd67080aa":"要燃起革命的燈火","game.btn.auto.kbdcc7101":"覆蓋所選","game.text.auto.k437fee4e":"見聞色霸氣","game.text.auto.k2a628919":"解除了","game.text.drawHint":"請抽牌","game.text.auto.k07cd6732":"讓你知道什麼叫人外有人，天外有天","game.text.auto.k3c0a0a2a":"越來越霸道了啊","game.text.auto.kbcc75250":"跟每位玩家比大小，攻擊力-3，自身輸了也不會被淘汰。","game.text.auto.k2c4b211e":"身體開花","game.text.auto.k251c4b1e":"輪到：","game.text.auto.k61cd58bf":"迷戀甘風","game.text.auto.kad567f01":"連擊彈星","game.text.auto.kdf6574e9":"連線中斷，正在嘗試重新連線…","game.text.connection":"連線：","game.text.auto.kc28302ab":"週年","game.text.auto.k076626e1":"選擇一位玩家（交 1 金幣或淘汰由對方決定）","game.text.auto.k95e1e284":"選擇交換對象","game.text.auto.k92b620d7":"選擇對象","game.text.auto.kdcdba6e3":"選擇對象（將先解除其保護/閃避，然後可選擇是否決鬥）","game.text.auto.k84fcf724":"選擇對象（將解除其保護/閃避）","game.text.auto.k5988fb6f":"選擇第一位對象","game.text.auto.ka1622ddb":"選擇要查看/可選擇交換的對象","game.text.auto.ka67c50b3":"選擇要猜的對象","game.text.auto.kfeedc9f0":"那一天我們知道了世界的真相","game.text.auto.k5342f442":"金幣","game.text.auto.kfc9f7d88":"閃避狀態","game.text.close":"關閉","game.text.auto.ka30b29c8":"阿修羅","game.text.auto.kc947713b":"階段：","game.text.auto.k654861d6":"難分勝負","game.text.auto.k99774d46":"雷鳴八卦","game.text.auto.k2d61974d":"霸海","game.text.auto.kd416578c":"非生即死，連這點覺悟都沒有嗎","game.text.auto.k2676a5a9":"音擊","game.text.auto.k0a372d6b":"香吉士","game.text.auto.ka494b074":"香吉士變為強化技能","game.text.auto.k218def76":"騙人布","game.text.auto.k450d9707":"騙人布變為強化技能","game.text.auto.kea4737ca":"鬼氣九刀流","game.text.auto.k5f539017":"魔神風腳","game.text.auto.k754e7643":"魯夫強化：是否發動？","game.text.auto.k970eb61f":"魯夫變為強化技能","game.text.auto.ka994b2ad":"麻痺","game.text.auto.kbb6a94b4":"麻痺了","game.text.auto.k6d9f81f7":"黑鬍子","game.text.auto.kd1c7bcf7":"黑鬍子：覆蓋哪些？","game.text.auto.kd3ba2c26":"點左邊任一張卡片，可以查看大圖與強化版本。","game.text.auto.k1f3eb361":"點我展開曲目清單","game.text.auto.kdee2ad88":"點數"};
-    for (const [k,v] of Object.entries(__GAME_AUTO_ZH)) {
-      deepSet(ensure("zh-Hant"), k, v);
-    }
-
-    // Traditional Chinese
-    Object.assign(ensure("zh-Hant").game, {
-      title: "偉大航道爭霸戰｜正式對戰",
-      headerTitle: I18N.t("game.text.gameName"),
-      treasureLeft: I18N.t("game.text.chestCoinsLeft"),
-      coinUnit: "枚",
-      cardDex: I18N.t("game.text.cardDex"),
-      drawHint: I18N.t("game.text.drawHint"),
-      discard: I18N.t("game.text.auto.k8681b73a"),
-      nextRound: "下一局 ▶",
-      unknownPlayer: I18N.t("game.text.auto.k8435c989"),
-      allPlayers: I18N.t("game.text.auto.ke5b419f9"),
-      disconnected: "未連線"
-    });
-
-    // English
-    Object.assign(ensure("en").game, {
-      title: "Grand Line Showdown | Match",
-      headerTitle: "Grand Line Showdown",
-      treasureLeft: "Treasure coins left: ",
-      coinUnit: "coins",
-      cardDex: "Card Index",
-      drawHint: "Draw a card",
-      discard: "Discard",
-      nextRound: "Next Round ▶",
-      unknownPlayer: "Unknown player",
-      allPlayers: "All players",
-      disconnected: "disconnected"
-    });
-
-    // Japanese
-    Object.assign(ensure("ja").game, {
-      title: "偉大航道 争覇戦｜対戦",
-      headerTitle: "偉大航道 争覇戦",
-      treasureLeft: "宝箱コイン残り：",
-      coinUnit: "枚",
-      cardDex: "カード図鑑",
-      drawHint: "カードを引いてください",
-      discard: "捨て札",
-      nextRound: "次のラウンド ▶",
-      unknownPlayer: "不明なプレイヤー",
-      allPlayers: "全員",
-      disconnected: "未接続"
-    });
-
-    // Korean
-    Object.assign(ensure("ko").game, {
-      title: "그랜드 라인 쟁탈전 | 대전",
-      headerTitle: "그랜드 라인 쟁탈전",
-      treasureLeft: "보물 코인 남음: ",
-      coinUnit: "개",
-      cardDex: "카드 도감",
-      drawHint: "카드를 뽑아 주세요",
-      discard: "버린 카드",
-      nextRound: "다음 라운드 ▶",
-      unknownPlayer: "알 수 없는 플레이어",
-      allPlayers: "전체 플레이어",
-      disconnected: "연결 끊김"
-    });
-
-    function apply(){
-      var I18N = window.__I18N;
-      if(!I18N || typeof I18N.t !== "function") return;
-      document.documentElement.setAttribute("lang", I18N.getLang());
-      try { document.title = I18N.t("game.title"); } catch(_) {}
-
-      function setText(id, key){
-        var el = document.getElementById(id);
-        if(!el) return;
-        el.textContent = I18N.t(key);
-      }
-
-      // title
-      try { document.title = I18N.t("game.title"); } catch(_){}
-      setText("txtGameTitle", "game.headerTitle");
-      setText("txtChestLabel", "game.treasureLeft");
-      setText("txtCoinUnit", "game.coinUnit");
-      setText("txtCardDexBtn", "game.cardDex");
-      setText("txtDrawHint", "game.drawHint");
-      setText("txtDiscardTitle", "game.discard");
-      setText("txtNextRound", "game.nextRound");
-
-      // generic data-i18n (safe for simple text nodes)
-      try {
-        document.querySelectorAll("[data-i18n]").forEach(function(el){
-          var k = el.getAttribute("data-i18n");
-          if(!k) return;
-          el.textContent = I18N.t(k);
-        });
-        document.querySelectorAll("[data-i18n-placeholder]").forEach(function(el){
-          var k = el.getAttribute("data-i18n-placeholder");
-          if(!k) return;
-          el.setAttribute("placeholder", I18N.t(k));
-        });
-        document.querySelectorAll("[data-i18n-title]").forEach(function(el){
-          var k = el.getAttribute("data-i18n-title");
-          if(!k) return;
-          el.setAttribute("title", I18N.t(k));
-        });
-      } catch(_) {}
-
-
-      // connection label (if you ever unhide it)
-      var conn = document.getElementById("connLbl");
-      if(conn && (conn.textContent||"").trim().toLowerCase()==="disconnected" && I18N.getLang()==="zh-Hant"){
-        conn.textContent = I18N.t("game.disconnected");
-      }
-    }
-
-    document.addEventListener("DOMContentLoaded", apply);
-  })();
-  </script>
   <style>
     html,body{height:100%;background:#0f1113;color:#eaecee}
     .card{ background: rgba(16,20,24,.80);              /* 微透明面板色：#101418 / 80% */
@@ -1808,35 +1658,35 @@ body::before{
 <header class="sticky top-0 z-40 bg-[#101418]/80 backdrop-blur border-b border-[#1c2229]">
   <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
     <!-- 左側標題 -->
-    <div id="txtGameTitle" class="font-semibold tracking-wide"><span data-i18n="game.text.gameName">偉大航道爭霸戰</span></div>
+    <div class="font-semibold tracking-wide">偉大航道爭霸戰</div>
 
     <!-- 房號/連線：留著給程式用，但畫面隱藏 -->
-    <div class="hidden text-xs px-2 py-1 rounded border border-neutral-700"><span data-i18n="game.text.roomCodeLabel">房號：</span><span id="roomLbl">—</span></div>
-    <div class="hidden text-xs px-2 py-1 rounded border border-neutral-700"><span data-i18n="game.text.connection">連線：</span><span id="connLbl" class="text-red-400">disconnected</span></div>
+    <div class="hidden text-xs px-2 py-1 rounded border border-neutral-700">房號：<span id="roomLbl">—</span></div>
+    <div class="hidden text-xs px-2 py-1 rounded border border-neutral-700">連線：<span id="connLbl" class="text-red-400">disconnected</span></div>
 
     <!-- 保留寶箱（可見） -->
-    <div class="text-xs px-2 py-1 rounded border border-neutral-700"><span id="txtChestLabel"><span data-i18n="game.text.chestCoinsLeft">寶箱金幣剩餘：</span></span><span id="chestLbl">0</span> <span id="txtCoinUnit">枚</span></div>
+    <div class="text-xs px-2 py-1 rounded border border-neutral-700">寶箱金幣剩餘：<span id="chestLbl">0</span> 枚</div>
 
  <!-- ★ 新增：卡片圖鑑按鈕 -->
       <button id="cardDexBtn"
               class="px-2 py-1 rounded border border-[#374151] bg-[#111827]/80
                      text-[11px] tracking-wide hover:bg-[#020617] hover:border-[#f97373]
                      hover:text-[#fee2e2] transition-colors duration-150">
-        <span id="txtCardDexBtn"><span data-i18n="game.text.cardDex">卡片圖鑑</span></span>
+        卡片圖鑑
       </button>
 
  <!-- 拉到最右邊：音樂條 -->
     <div class="ml-auto flex items-center gap-2">
       <div id="bgmBar" class="flex items-center gap-2 px-2 py-1 rounded-lg border border-[#2a2f35] bg-[#14181c]/80">
         <!-- 控制鈕 -->
-       <button id="bgmPrev" class="icon-btn" title=I18N.t("game.btn.prevTrack") aria-label=I18N.t("game.btn.prevTrack")>
+       <button id="bgmPrev" class="icon-btn" title="上一首" aria-label="上一首">
   <!-- 上一首：|◀ -->
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <path d="M7 12L18 5v14L7 12zM6 5h2v14H6z"/>
   </svg>
 </button>
 
-<button id="bgmPlay" class="icon-btn big" title=I18N.t("game.btn.auto.k59c0533a") aria-label=I18N.t("game.btn.auto.k59c0533a")>
+<button id="bgmPlay" class="icon-btn big" title="播放/暫停" aria-label="播放/暫停">
   <!-- ▶ -->
   <svg id="iconPlay" viewBox="0 0 24 24" aria-hidden="true">
     <path d="M8 5v14l11-7z"/>
@@ -1847,14 +1697,14 @@ body::before{
   </svg>
 </button>
 
-<button id="bgmNext" class="icon-btn" title=I18N.t("game.btn.nextTrack") aria-label=I18N.t("game.btn.nextTrack")>
+<button id="bgmNext" class="icon-btn" title="下一首" aria-label="下一首">
   <!-- ▶| -->
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <path d="M6 6l11 6-11 6V6zm12 0h2v12h-2z"/>
   </svg>
 </button>
 
-<button id="bgmShuffle" class="icon-btn" title=I18N.t("game.btn.shufflePlay") aria-label=I18N.t("game.btn.shufflePlay")>
+<button id="bgmShuffle" class="icon-btn" title="隨機播放" aria-label="隨機播放">
   <!-- 交錯箭頭 -->
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <path d="M17 3h4v4h-2V6h-2.17l-3.9 3.9 1.41 1.41L18.83 8H19v2h2V6a3 3 0 0 0-4-3zM4 6h5.17l3.9 3.9-1.41 1.41L7.17 8H4V6zm0 12h3.17l3.9-3.9 1.41 1.41L8.83 20H4v-2zm17-2v4h-4a3 3 0 0 1-3-3v-.17l-2.1-2.1 1.41-1.41 2.69 2.69c.24.24.57.39.91.39H19v-2h2z"/>
@@ -1883,9 +1733,9 @@ body::before{
    
 
     <!-- 這三個輸入留著但隱藏，避免打壞你現有 JS 綁定 -->
-    <input id="inpName" class="hidden w-40 px-2 py-1.5 rounded-lg border border-neutral-700 bg-[#14181c]" placeholder=I18N.t("game.placeholder.nickname")/>
-    <input id="inpRoom" class="hidden w-28 px-2 py-1.5 rounded-lg border border-neutral-700 bg-[#14181c]" placeholder=I18N.t("game.placeholder.room")/>
-    <button id="btnJoin" class="hidden px-3 py-1.5 rounded-lg border border-neutral-700 bg-[#14181c] hover:bg-[#192028]"><span data-i18n="game.btn.join">加入</span></button>
+    <input id="inpName" class="hidden w-40 px-2 py-1.5 rounded-lg border border-neutral-700 bg-[#14181c]" placeholder="暱稱"/>
+    <input id="inpRoom" class="hidden w-28 px-2 py-1.5 rounded-lg border border-neutral-700 bg-[#14181c]" placeholder="房號"/>
+    <button id="btnJoin" class="hidden px-3 py-1.5 rounded-lg border border-neutral-700 bg-[#14181c] hover:bg-[#192028]">加入</button>
   </div>
 </header>
 
@@ -1893,7 +1743,7 @@ body::before{
     <section class="space-y-3">
       <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
         <div class="card p-3 md:col-span-2">
-          <div class="text-sm mb-2 opacity-80"><span data-i18n="game.text.currentVenue">本局場地</span></div>
+          <div class="text-sm mb-2 opacity-80">本局場地</div>
           <div id="venues" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2"></div>
         </div>
       <div class="card p-3 flex items-center justify-between gap-3 relative">
@@ -1909,15 +1759,15 @@ body::before{
   <!-- ★ 抽牌提示泡泡：預設 hidden，JS 會在可抽牌時打開 -->
   <div id="drawHint" class="draw-hint hidden select-none">
     <span class="emoji">👉</span>
-    <span class="txt" id="txtDrawHint"><span data-i18n="game.text.drawHint">請抽牌</span></span>
+    <span class="txt">請抽牌</span>
   </div>
 </div>
 
 
         <div class="card p-3 md:col-span-3">
           <div class="flex items-center justify-between mb-2">
-            <div class="text-sm opacity-80" id="txtDiscardTitle"><span data-i18n="game.text.auto.k8681b73a">棄牌</span></div>
-            <button id="btnNextRound" class="hidden px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black text-sm"><span id="txtNextRound">下一局 ▶</span></button>
+            <div class="text-sm opacity-80">棄牌</div>
+            <button id="btnNextRound" class="hidden px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black text-sm">下一局 ▶</button>
           </div>
             <div id="discard" class="flex gap-2 overflow-x-auto"></div>
         </div>
@@ -1930,8 +1780,8 @@ body::before{
 
       <div class="card p-3">
         <div class="flex items-center justify-between mb-2">
-          <div class="text-sm opacity-80"><span data-i18n="game.text.auto.kcbe14612">對局日誌</span></div>
-          <div class="text-xs text-neutral-400"><span data-i18n="game.text.auto.k251c4b1e">輪到：</span><span id="turnLbl">—</span>｜階段：<span id="stepLbl">—</span></div>
+          <div class="text-sm opacity-80">對局日誌</div>
+          <div class="text-xs text-neutral-400">輪到：<span id="turnLbl">—</span>｜階段：<span id="stepLbl">—</span></div>
         </div>
         <ol id="logBox" class="text-sm space-y-1 list-decimal pl-5 max-h-72 overflow-auto"></ol>
       </div>
@@ -1939,7 +1789,7 @@ body::before{
 
     <aside class="space-y-3">
       <div class="card p-3">
-        <div class="text-sm mb-2 opacity-80"><span data-i18n="game.text.player">玩家</span></div>
+        <div class="text-sm mb-2 opacity-80">玩家</div>
         <div id="players" class="grid gap-2"></div>
       </div>
       <!-- 訊息面板已移除 -->
@@ -1959,7 +1809,7 @@ body::before{
             overflow-hidden flex flex-col">
       <!-- 標題列 -->
       <div class="flex items-center justify-between px-4 py-2 border-b border-slate-700/70 bg-gradient-to-r from-slate-900/80 via-slate-800/80 to-slate-900/80 text-xs md:text-sm">
-        <div class="font-semibold tracking-wide"><span data-i18n="game.text.auto.k142412ac">卡片圖鑑(紅框為本局強化卡)</span></div>
+        <div class="font-semibold tracking-wide">卡片圖鑑(紅框為本局強化卡)</div>
         <button id="cardDexClose"
                 class="px-2 py-1 rounded border border-slate-500/70 bg-black/30 hover:bg-black/60 text-[11px]">
           關閉
@@ -1986,12 +1836,12 @@ body::before{
 
             <div class="grid grid-cols-2 gap-2 mb-2">
               <div class="flex flex-col items-center">
-                <div class="text-[10px] md:text-xs mb-1 opacity-75"><span data-i18n="game.text.auto.k7a327141">一般</span></div>
+                <div class="text-[10px] md:text-xs mb-1 opacity-75">一般</div>
                 <img id="cardDexPreviewBase"
                      class="w-full max-w-[480px] rounded-lg border border-slate-600/80 shadow-lg bg-black/40 object-contain" />
               </div>
               <div class="flex flex-col items-center">
-                <div class="text-[10px] md:text-xs mb-1 opacity-75"><span data-i18n="game.text.auto.k83aa4bd9">強化</span></div>
+                <div class="text-[10px] md:text-xs mb-1 opacity-75">強化</div>
                 <img id="cardDexPreviewEnh"
                      class="w-full max-w-[480px] rounded-lg border border-rose-500/80 shadow-lg bg-black/40 object-contain" />
               </div>
@@ -2058,7 +1908,7 @@ body::before{
       </div>
       <!-- 中間圖片：換成你自己的圖檔路徑 -->
       <img src="images/final_ready.png"
-           alt=I18N.t("game.text.auto.k283b2059")
+           alt="寶箱已空，等待結算"
            class="max-h-[80vh] rounded-2xl shadow-2xl border border-white/20">
     </div>
   </div>
@@ -2109,13 +1959,13 @@ body::before{
       <div class="flex items-center gap-4 mb-4">
         <img id="lawTargetImg" class="w-40 h-56 object-contain rounded-lg border border-white/10" />
         <div class="text-sm opacity-80">
-          <div class="mb-2"><span data-i18n="game.text.auto.k538e3636">目標玩家：</span><span id="lawTargetName" class="font-semibold"></span></div>
-          <div><span data-i18n="game.text.auto.k0f1f24be">你要和他的手牌交換嗎？</span></div>
+          <div class="mb-2">目標玩家：<span id="lawTargetName" class="font-semibold"></span></div>
+          <div>你要和他的手牌交換嗎？</div>
         </div>
       </div>
       <div class="flex justify-end gap-2">
-        <button id="lawSwapCancel" class="px-3 py-1.5 rounded-lg border border-white/20 bg-white/10 hover:bg-white/20"><span data-i18n="game.btn.cancel">取消</span></button>
-        <button id="lawSwapOk" class="px-3 py-1.5 rounded-lg border border-white/20 bg-white/10 hover:bg-white/20"><span data-i18n="game.btn.auto.kd2c0048a">交換</span></button>
+        <button id="lawSwapCancel" class="px-3 py-1.5 rounded-lg border border-white/20 bg-white/10 hover:bg-white/20">取消</button>
+        <button id="lawSwapOk" class="px-3 py-1.5 rounded-lg border border-white/20 bg-white/10 hover:bg-white/20">交換</button>
       </div>
     </div>
   </div>
@@ -2123,8 +1973,8 @@ body::before{
   <!-- === 魯夫（強化）發動確認框 === -->
   <div id="luffyBoostModal" class="hidden fixed inset-0 z-[90] flex items-center justify-center bg-black/70">
     <div class="w-[min(520px,92vw)] rounded-2xl border border-neutral-700/70 bg-neutral-900/80 backdrop-blur p-5">
-      <div class="text-lg font-extrabold mb-3"><span data-i18n="game.text.auto.kc60a0ada">發動</span></div>
-      <div class="text-sm opacity-80 mb-4"><span data-i18n="game.text.auto.k754e7643">魯夫強化：是否發動？</span></div>
+      <div class="text-lg font-extrabold mb-3">發動</div>
+      <div class="text-sm opacity-80 mb-4">魯夫強化：是否發動？</div>
       <div class="flex justify-end">
         <button id="luffyBoostGo" class="px-4 py-2 rounded-lg border border-white/20 bg-white/10 hover:bg-white/20">
           猿王群鴉炮
@@ -2306,7 +2156,7 @@ document.addEventListener('click', ()=>{
 
 
 // ===== UI 繪製 =====
-function paintTitle(){ bgmTitleEl.textContent = BGM_LIST[bgmIndex]?.title || I18N.t("game.text.notPlaying"); }
+function paintTitle(){ bgmTitleEl.textContent = BGM_LIST[bgmIndex]?.title || '未播放'; }
 function paintShuffleBtn(){
   if (isShuffle) bgmShuffle.classList.add('is-active');
   else bgmShuffle.classList.remove('is-active');
@@ -2393,7 +2243,7 @@ function openMenu(){ bgmMenu.classList.remove('hidden'); }
 function closeMenu(){ bgmMenu.classList.add('hidden'); }
 function toggleMenu(){ bgmMenu.classList.toggle('hidden'); }
 bgmTitleEl.style.cursor = 'pointer';
-bgmTitleEl.title = I18N.t("game.text.auto.k1f3eb361");
+bgmTitleEl.title = '點我展開曲目清單';
 bgmTitleEl.addEventListener('click', ()=>{ toggleMenu(); });
 
 // 清單點擊
@@ -2933,10 +2783,10 @@ function pnameBy(p){
 
 /* ========= 卡牌→場地對照與強化判斷 ========= */
 const CARD_VENUE = {
-  0:I18N.t("game.text.auto.k891fc2e4"), 1:I18N.t("game.text.auto.k6f4db99c"), 2:I18N.t("game.text.auto.kb513f469"), 3:I18N.t("game.text.auto.kefeb6f26"), 4:I18N.t("game.text.auto.ka804462a"),
-  5:I18N.t("game.text.auto.k16566c3e"), 6:I18N.t("game.text.auto.kec21bab9"), 7:I18N.t("game.text.auto.k4678b671"), 8:I18N.t("game.text.auto.kedc2e667"), 9:I18N.t("game.text.auto.ka8f9e6dc"),
-  10:I18N.t("game.text.auto.k203991d5"), 11:I18N.t("game.text.auto.k6868328f"), 12:I18N.t("game.text.auto.k203991d5"), 13:I18N.t("game.text.auto.k6868328f"),
-  14:I18N.t("game.text.auto.k95d93414"), 15:I18N.t("game.text.auto.k95d93414"), 16:I18N.t("game.text.auto.k418e1b0a"), 17:I18N.t("game.text.auto.k418e1b0a"), 18:I18N.t("game.text.auto.kd86d8e9b"), 19:I18N.t("game.text.auto.kd86d8e9b")
+  0:"德雷斯羅薩鬥技場", 1:"艾尼艾斯大廳", 2:"阿拉巴斯坦", 3:"巴拉蒂", 4:"佐烏",
+  5:"和之國", 6:"龐克哈薩德", 7:"維薩利亞", 8:"魚人島", 9:"九蛇島",
+  10:"鬼島", 11:"夏波帝諸島", 12:"鬼島", 13:"夏波帝諸島",
+  14:"萬國", 15:"萬國", 16:"蜂巢島", 17:"蜂巢島", 18:"奧羅傑克森號", 19:"奧羅傑克森號"
 };
 function isEnhancedNow(cardId){
   if (cardId==null || !state?.venues) return false;
@@ -3021,14 +2871,14 @@ function showCardDexPreview(id){
   }
 
   dexDom.previewBase.src = CARD(id);
-  dexDom.previewBase.alt = `${name}（${I18N.t("game.text.auto.k0e406a05")}`;
+  dexDom.previewBase.alt = `${name}（一般）`;
   dexDom.previewEnh.src = CARD_ENH(id);
-  dexDom.previewEnh.alt = `${name}（${I18N.t("game.text.auto.k263d46bb")}`;
+  dexDom.previewEnh.alt = `${name}（強化）`;
 
   const parts = [];
-  if (venueName) parts.push(`${I18N.t("game.text.auto.kea6a9d73")}${venueName}`);
+  if (venueName) parts.push(`強化場地：${venueName}`);
   if (baseTitle || enhTitle) {
-    parts.push(`${I18N.t("game.text.auto.kfc9556b6")}${baseTitle || '—'} ／ ${I18N.t("game.text.auto.ka2830765")}${enhTitle || '—'}`);
+    parts.push(`技能：${baseTitle || '—'} ／ 強化：${enhTitle || '—'}`);
   }
   if (dexDom.previewVenue) {
     dexDom.previewVenue.textContent = parts.join('　');
@@ -3040,144 +2890,144 @@ function showCardDexPreview(id){
 /** 0–19：名字 + 基本/強化技能敘述（來源：docx 正式版） */
 const CARD_TEXT = {
   0: {
-    name: I18N.t("game.text.auto.k7faf2fde"),
-    baseTitle: I18N.t("game.text.auto.kfb14a442"),
-    base: I18N.t("game.text.auto.k7ebd0ae7"),
-    enhTitle: I18N.t("game.text.auto.k00e5808e"),
-    enh: I18N.t("game.text.auto.k6a596553")
+    name: "薩波",
+    baseTitle: "火焰龍王",
+    base: "所有人將手牌洗回牌堆後各重抽1張。",
+    enhTitle: "火焰龍之息",
+    enh: "洗回手牌後重抽，本回合打出7以上角色卡技能無效。"
   },
   1: {
-    name: I18N.t("game.text.auto.k218def76"),
+    name: "騙人布",
     baseTitle: "必殺・殺手彈星",
-    base: I18N.t("game.text.auto.kd31eeb6f"),
+    base: "猜一名玩家手牌（不能猜1），猜中淘汰對方。",
     enhTitle: "必殺・連擊彈星",
-    enh: I18N.t("game.text.auto.k276e6354")
+    enh: "猜中可連猜至錯為止，每猜中一次重複發動淘汰效果。"
   },
   2: {
-    name: I18N.t("game.text.auto.kceecc478"),
-    baseTitle: I18N.t("game.text.auto.k2dc7dcfb"),
-    base: I18N.t("game.text.auto.kc476ccbd"),
+    name: "羅賓",
+    baseTitle: "眼花撩亂",
+    base: "偷看一名玩家的手牌。",
     enhTitle: "千花繚亂・身體開花",
-    enh: I18N.t("game.text.auto.k21094494")
+    enh: "查看所有玩家的手牌。"
   },
   3: {
-    name: I18N.t("game.text.auto.k0a372d6b"),
-    baseTitle: I18N.t("game.text.auto.kc8a07da2"),
-    base: I18N.t("game.text.auto.kbde0508c"),
-    enhTitle: I18N.t("game.text.auto.k5f539017"),
+    name: "香吉士",
+    baseTitle: "惡魔風腳",
+    base: "與一名玩家比大小，低者淘汰。",
+    enhTitle: "魔神風腳",
     enh: "指定一位玩家比大小，我方攻擊力+1。"
   },
   4: {
-    name: I18N.t("game.text.auto.k6611023e"),
-    baseTitle: I18N.t("game.text.auto.k2e177a47"),
-    base: I18N.t("game.text.auto.k50683ceb"),
-    enhTitle: I18N.t("game.text.auto.k332fd86c"),
-    enh: I18N.t("game.text.auto.kf6c02536")
+    name: "喬巴",
+    baseTitle: "皮毛強化",
+    base: "自身獲得保護狀態一回合。",
+    enhTitle: "柔力強化",
+    enh: "獲得閃避效果，下一次被影響技能無效化。"
   },
   5: {
-    name: I18N.t("game.text.auto.k91e05a69"),
+    name: "索隆",
     baseTitle: "一刀流・獅子歌歌",
-    base: I18N.t("game.text.auto.k0b3551cb"),
+    base: "指定一位玩家棄牌並重抽一張。",
     enhTitle: "鬼氣九刀流・阿修羅",
-    enh: I18N.t("game.text.auto.kbb9901fe")
+    enh: "指定一位玩家棄牌，偶數則淘汰，奇數則抽一張牌。"
   },
   6: {
     name: "羅",
     baseTitle: "ROOM・SHAMBLES",
-    base: I18N.t("game.text.auto.kbeeb19ea"),
+    base: "與一名玩家交換手牌。",
     enhTitle: "ROOM・SCAN",
-    enh: I18N.t("game.text.auto.kca2e2b61")
+    enh: "偷看一名玩家手牌後可選擇是否交換。"
   },
   7: {
-    name: I18N.t("game.text.auto.k9c614aed"),
-    baseTitle: I18N.t("game.text.auto.kfeebda5d"),
-    base: I18N.t("game.text.auto.k8291239e"),
-    enhTitle: I18N.t("game.text.auto.kb0eae899"),
-    enh: I18N.t("game.text.auto.ka101ece7")
+    name: "娜美",
+    baseTitle: "天候危機",
+    base: "若手牌同時持有6或8，必須打出娜美。",
+    enhTitle: "忍法雷霆",
+    enh: "打出娜美時，可指定一名玩家「麻痺」，使其跳過下回合行動。"
   },
   8: {
-    name: I18N.t("game.text.auto.k3970a85b"),
-    baseTitle: I18N.t("game.text.auto.k5e3514c7"),
+    name: "魯夫",
+    baseTitle: "橡膠橡膠象槍",
     base: "可挑戰1～2位玩家比大小，輸了會被淘汰。",
-    enhTitle: I18N.t("game.text.auto.kc014ab27"),
-    enh: I18N.t("game.text.auto.kbcc75250")
+    enhTitle: "四檔 猿王群鴉砲",
+    enh: "跟每位玩家比大小，攻擊力-3，自身輸了也不會被淘汰。"
   },
   9: {
-    name: I18N.t("game.text.auto.k06405079"),
-    baseTitle: I18N.t("game.text.auto.k3308cf1f"),
-    base: I18N.t("game.text.auto.k11960c2e"),
-    enhTitle: I18N.t("game.text.auto.ka91f5d2b"),
-    enh: I18N.t("game.text.auto.k3577b686")
+    name: "女帝漢考克",
+    baseTitle: "戀愛即是風暴",
+    base: "打出此牌立即淘汰自己（若無場地效果）。",
+    enhTitle: "我做什麼都會被原諒吧？",
+    enh: "打出女帝時不會自殺，並獲得保護（本回合免疫所有卡牌效果）。"
   },
   10: {
-    name: I18N.t("game.text.auto.k24db7f13"),
-    baseTitle: I18N.t("game.text.auto.k99774d46"),
-    base: I18N.t("game.text.auto.kd613c1e2"),
-    enhTitle: I18N.t("game.text.auto.k2d61974d"),
-    enh: I18N.t("game.text.auto.k11a3f3d2")
+    name: "凱多",
+    baseTitle: "雷鳴八卦",
+    base: "無視防禦與閃避，指定一位玩家比大小，輸者淘汰。",
+    enhTitle: "霸海",
+    enh: "若手牌同時擁有凱多與大媽，可無視閃避與保護，直接淘汰全場其他玩家。"
   },
   11: {
-    name: I18N.t("game.text.auto.k56b882ff"),
+    name: "基德",
     baseTitle: "磁氣‧弦",
-    base: I18N.t("game.text.auto.k5350fb87"),
-    enhTitle: I18N.t("game.text.auto.k20abe34f"),
-    enh: I18N.t("game.text.auto.k2a2dc55d")
+    base: "將棄排堆洗牌抽出一張家加入手牌，在從手牌中打出一張執行效果。",
+    enhTitle: "磁力風暴",
+    enh: "所有玩家將手牌逆時針傳遞。"
   },
   12: {
-    name: I18N.t("game.text.auto.ka940180e"),
-    baseTitle: I18N.t("game.text.auto.k61e32f9d"),
-    base: I18N.t("game.text.auto.kc92c1f0b"),
-    enhTitle: I18N.t("game.text.auto.ka4066ca0"),
-    enh: I18N.t("game.text.auto.kbd008650")
+    name: "奎因",
+    baseTitle: "疫災彈",
+    base: "下一位玩家擲硬幣，反面麻痺一回合，延續到擲出正面的玩家或打出此卡的玩家為止。",
+    enhTitle: "疫災彈-冰鬼",
+    enh: "本回合打出奇數牌的玩家獲得冰鬼狀態卡，下回合再打出奇數牌則直接淘汰。"
   },
   13: {
-    name: I18N.t("game.text.auto.k37aee3bb"),
+    name: "基拉",
     baseTitle: "刃‧音擊",
-    base: I18N.t("game.text.auto.k48779e6a"),
-    enhTitle: I18N.t("game.text.auto.k7e5427ef"),
-    enh: I18N.t("game.text.auto.k373e9547")
+    base: "可以解除一位玩家的保護/閃避狀態。",
+    enhTitle: "巨鐮迴轉音速切割",
+    enh: "可以解除一位玩家的保護/閃避狀態，再決定是否與他決鬥。"
   },
   14: {
-    name: I18N.t("game.text.auto.kec41ba61"),
-    baseTitle: I18N.t("game.text.auto.k918824be"),
-    base: I18N.t("game.text.auto.k04f00466"),
+    name: "大媽",
+    baseTitle: "狂暴與暴食",
+    base: "擲銅板，正面保護、反面閃避。",
     enhTitle: "Soul or Life?",
-    enh: I18N.t("game.text.auto.ke10c7349")
+    enh: "指定一位玩家，讓對方選擇被淘汰或交出一個勝利指示物。"
   },
   15: {
-    name: I18N.t("game.text.auto.kb75ac8e5"),
-    baseTitle: I18N.t("game.text.auto.k437fee4e"),
-    base: I18N.t("game.text.auto.k0b228413"),
+    name: "卡塔庫栗",
+    baseTitle: "見聞色霸氣",
+    base: "可以觀看牌堆上前三張卡片。",
     enhTitle: "10秒後的未來",
     enh: "可以觀看剩餘玩家數÷2的牌堆卡片，並自由排序放回牌堆。"
   },
   16: {
-    name: I18N.t("game.text.auto.k2378f2cd"),
-    baseTitle: I18N.t("game.text.auto.k7dc2be9f"),
-    base: I18N.t("game.text.auto.k9a3bf708"),
-    enhTitle: I18N.t("game.text.auto.kcb7d84e7"),
-    enh: I18N.t("game.text.auto.k0f50552b")
+    name: "庫山（青雉）",
+    baseTitle: "冰球",
+    base: "指定一名玩家手牌凍結，下一次出牌只能打剛抽的那張。",
+    enhTitle: "冰河時代",
+    enh: "全場玩家手牌凍結，下一次出牌只能打剛抽的那張。"
   },
   17: {
-    name: I18N.t("game.text.auto.k6d9f81f7"),
-    baseTitle: I18N.t("game.text.auto.k4f58caaf"),
-    base: I18N.t("game.text.auto.ke216d3c2"),
-    enhTitle: I18N.t("game.text.auto.k32c1838f"),
+    name: "黑鬍子",
+    baseTitle: "暗水",
+    base: "查看牌堆最上面一張卡並覆蓋（其他人不可查看）進棄牌堆。",
+    enhTitle: "暗穴道",
     enh: "查看剩餘玩家數÷2張牌，任選張數覆蓋（其他人不可查看）進棄牌堆。"
   },
   18: {
-    name: I18N.t("game.text.auto.k35fb64b1"),
-    baseTitle: I18N.t("game.text.auto.k5ce7e824"),
-    base: I18N.t("game.text.auto.k1b2f90f7"),
-    enhTitle: I18N.t("game.text.auto.k59362bae"),
+    name: "紅髮香克斯",
+    baseTitle: "我是來終結這場戰爭的",
+    base: "牌堆剩一半以下時可直接進入手牌比大小階段。",
+    enhTitle: "給我個面子吧",
     enh: "牌堆剩一半以下時可直接進入手牌比大小階段，自身手牌數值+1（只在比牌時生效）。"
   },
   19: {
-    name: I18N.t("game.text.auto.k550132f1"),
-    baseTitle: I18N.t("game.text.auto.k0e53b006"),
-    base: I18N.t("game.text.auto.k2cd991ea"),
-    enhTitle: I18N.t("game.text.auto.kfeedc9f0"),
-    enh: I18N.t("game.text.auto.ka9102b3a")
+    name: "哥爾羅傑",
+    baseTitle: "一切的開始",
+    base: "打出後淘汰自己，成為下一局起始玩家。",
+    enhTitle: "那一天我們知道了世界的真相",
+    enh: "打出不淘汰，可預測一位玩家是否為本局贏家，成功則獲得與勝利玩家同數量的金幣。"
   }
 };
 
@@ -3195,9 +3045,9 @@ function cardLine(cardId){
 /* ========= 角色語音對照 ========= */
 const VOICE_MAP = {
   0: {
-    base:  { text: I18N.t("game.text.auto.kd67080aa"), file: 'audio/voice/0.mp3' },
+    base:  { text: '要燃起革命的燈火', file: 'audio/voice/0.mp3' },
     combos: {
-      8: { text: I18N.t("game.text.auto.ka066f6c2"), file: 'audio/voice/0-8.mp3' }
+      8: { text: '真的很感謝你還活著，魯夫', file: 'audio/voice/0-8.mp3' }
     }
   },
   1: {
@@ -3207,24 +3057,24 @@ const VOICE_MAP = {
     }
   },
   2: {
-    base:  { text: I18N.t("game.text.auto.kbb68801a"), file: 'audio/voice/2.mp3' },
+    base:  { text: '歷史雖然會重演，人卻無法回到過去', file: 'audio/voice/2.mp3' },
     combos: {
       8: { text: '想活下去!!把我也一起帶出海吧', file: 'audio/voice/2-8.mp3' }
     }
   },
   3: {
-    base:  { text: I18N.t("game.text.auto.kccbe89f0"), file: 'audio/voice/3.mp3' },
+    base:  { text: '我要找到蔚藍海域(All Blue)', file: 'audio/voice/3.mp3' },
     combos: {
       2:  { text: '羅賓小姐~', file: 'audio/voice/3-2.mp3' },
       7:  { text: '娜美小姐~', file: 'audio/voice/3-7.mp3' },
-      12: { text: I18N.t("game.text.auto.k4ff93bef"), file: 'audio/voice/3-12.mp3' }
+      12: { text: '男人不能打女人，奎因，你這個混帳', file: 'audio/voice/3-12.mp3' }
     }
   },
   4: {
     base:  { text: '你這麼誇獎我我也不會高興的，你這個討厭鬼~~', file: 'audio/voice/4.mp3' }
   },
   5: {
-    base:  { text: I18N.t("game.text.auto.kcac42a06"), file: 'audio/voice/5.mp3' },
+    base:  { text: '我要成為世界第一的大劍豪', file: 'audio/voice/5.mp3' },
     combos: {
       8: { text: '在成為大劍豪以前，我永遠不會再輸了!你有意見嗎?海賊王', file: 'audio/voice/5-8.mp3' }
     }
@@ -3233,24 +3083,24 @@ const VOICE_MAP = {
     base:  { text: 'Room', file: 'audio/voice/6.mp3' }
   },
   7: {
-    base:  { text: I18N.t("game.text.auto.k3394e176"), file: 'audio/voice/7.mp3' }
+    base:  { text: '我要畫出全世界的航海圖', file: 'audio/voice/7.mp3' }
   },
   8: {
-    base:  { text: I18N.t("game.text.auto.keb4cbdcf"), file: 'audio/voice/8.mp3' },
+    base:  { text: '我是魯夫，是要成為海賊王的人', file: 'audio/voice/8.mp3' },
     combos: {
-      1:  { text: I18N.t("game.text.auto.k7d1578c5"), file: 'audio/voice/8-1.mp3' },
-      3:  { text: I18N.t("game.text.auto.k00589989"), file: 'audio/voice/8-3.mp3' },
+      1:  { text: '狙擊王，給我打穿那面旗子', file: 'audio/voice/8-1.mp3' },
+      3:  { text: '沒有你在的話，我是無法成為海賊王的', file: 'audio/voice/8-3.mp3' },
       4:  { text: '少囉嗦，一起走吧~', file: 'audio/voice/8-4.mp3' },
-      7:  { text: I18N.t("game.text.auto.k69887561"), file: 'audio/voice/8-7.mp3' },
+      7:  { text: '不准弄哭我的航海士', file: 'audio/voice/8-7.mp3' },
       // 8-10-14：沒打出的牌是 10 或 14，用同一條
-      10: { text: I18N.t("game.text.auto.k40a23f24"), file: 'audio/voice/8-10-14.mp3' },
-      14: { text: I18N.t("game.text.auto.k40a23f24"), file: 'audio/voice/8-10-14.mp3' }
+      10: { text: '我是蒙其D魯夫，是要超越你們，成為海賊王的人', file: 'audio/voice/8-10-14.mp3' },
+      14: { text: '我是蒙其D魯夫，是要超越你們，成為海賊王的人', file: 'audio/voice/8-10-14.mp3' }
     }
   },
   9: {
-    base:  { text: I18N.t("game.text.auto.k61cd58bf"), file: 'audio/voice/9.mp3' },
+    base:  { text: '迷戀甘風', file: 'audio/voice/9.mp3' },
     combos: {
-      8: { text: I18N.t("game.text.auto.kb8b690fa"), file: 'audio/voice/9-8.mp3' }
+      8: { text: '看到你，妾身已心滿意足了', file: 'audio/voice/9-8.mp3' }
     }
   },
   10: {
@@ -3262,27 +3112,27 @@ const VOICE_MAP = {
   11: {
     base:  { text: '非生即死，連這點覺悟都沒有嗎?', file: 'audio/voice/11.mp3' },
     combos: {
-      8:  { text: I18N.t("game.text.auto.k78789b5b"), file: 'audio/voice/11-8.mp3' },
-      13: { text: I18N.t("game.text.auto.k56709a59"), file: 'audio/voice/11-13.mp3' }
+      8:  { text: '我馬上去取你的首級，草帽小子', file: 'audio/voice/11-8.mp3' },
+      13: { text: '嘲笑你的傢伙，都由我來送下地獄', file: 'audio/voice/11-13.mp3' }
     }
   },
   12: {
-    base:  { text: I18N.t("game.text.auto.k5f0ab33a"), file: 'audio/voice/12.mp3' },
+    base:  { text: '我的科學是無敵的，最強，最棒，世界第一', file: 'audio/voice/12.mp3' },
     combos: {
-      3: { text: I18N.t("game.text.auto.kd33818d5"), file: 'audio/voice/12-3.mp3' }
+      3: { text: '你們這群枷治的兔崽子', file: 'audio/voice/12-3.mp3' }
     }
   },
   13: {
-    base:  { text: I18N.t("game.text.auto.k6a71b3bb"), file: 'audio/voice/13.mp3' }
+    base:  { text: '刃 音擊', file: 'audio/voice/13.mp3' }
   },
   14: {
     base:  { text: 'ママママママ(笑)', file: 'audio/voice/14.mp3' },
     combos: {
-      10: { text: I18N.t("game.text.auto.ka3d388f5"), file: 'audio/voice/14-10.mp3' }
+      10: { text: '別忘了你還欠我一個人情，那可是一輩子的恩情', file: 'audio/voice/14-10.mp3' }
     }
   },
   15: {
-    base:  { text: I18N.t("game.text.auto.k07cd6732"), file: 'audio/voice/15.mp3' },
+    base:  { text: '讓你知道什麼叫人外有人，天外有天', file: 'audio/voice/15.mp3' },
     combos: {
       8: { text: '你看到了相當遙遠的未來啊!', file: 'audio/voice/15-8.mp3' }
     }
@@ -3290,27 +3140,27 @@ const VOICE_MAP = {
   16: {
     base:  { text: '唉呀呀～', file: 'audio/voice/16.mp3' },
     combos: {
-      2: { text: I18N.t("game.text.auto.k59fcf426"), file: 'audio/voice/16-2.mp3' }
+      2: { text: '終於，你也找到棲身之所了，那就好好的活下去', file: 'audio/voice/16-2.mp3' }
     }
   },
   17: {
     base:  { text: 'ゼハハハハ！(笑)', file: 'audio/voice/17.mp3' },
     combos: {
       // 17-5-7-8：同一個檔案 17-5-7-8.mp3
-      5:  { text: I18N.t("game.text.auto.kdef1e3bc"), file: 'audio/voice/17-5-7-8.mp3' },
-      7:  { text: I18N.t("game.text.auto.kdef1e3bc"), file: 'audio/voice/17-5-7-8.mp3' },
-      8:  { text: I18N.t("game.text.auto.kdef1e3bc"), file: 'audio/voice/17-5-7-8.mp3' },
+      5:  { text: '人類的夢想是永遠不會結束的！', file: 'audio/voice/17-5-7-8.mp3' },
+      7:  { text: '人類的夢想是永遠不會結束的！', file: 'audio/voice/17-5-7-8.mp3' },
+      8:  { text: '人類的夢想是永遠不會結束的！', file: 'audio/voice/17-5-7-8.mp3' },
       18: { text: '越來越霸道了啊!紅髮，跟你的疤真搭', file: 'audio/voice/17-18.mp3' }
     }
   },
   18: {
     base:  { text: '差不多該去拿下了吧! ONE PIECE', file: 'audio/voice/18.mp3' },
     combos: {
-      8: { text: I18N.t("game.text.auto.kf3a52156"), file: 'audio/voice/18-8.mp3' }
+      8: { text: '我把這頂帽子留給你，等到你成為一位偉大的海賊再拿給我', file: 'audio/voice/18-8.mp3' }
     }
   },
   19: {
-    base:  { text: I18N.t("game.text.auto.k2b3d139f"), file: 'audio/voice/19.mp3' }
+    base:  { text: '想要我的財寶嗎？去找吧！我把世界上的一切都放在那裡了！', file: 'audio/voice/19.mp3' }
   }
 };
 
@@ -3359,40 +3209,40 @@ function playVoiceLineFor(mainId, otherId){
 /* ========= 場地 → 背景圖片對照 & 切換工具 ========= */
 /** 場地 → 背景圖片對照（檔案放 public/images/venues/xxx.jpg/webp 自行準備） */
 const VENUE_BG = {
-  I18N.t("game.text.auto.k891fc2e4"): "images/venues/dressrosa.jpg",
-  I18N.t("game.text.auto.k6f4db99c"):     "images/venues/enieslobby.jpg",
-  I18N.t("game.text.auto.kb513f469"):       "images/venues/alabasta.jpg",
-  I18N.t("game.text.auto.kefeb6f26"):           "images/venues/baratie.jpg",
-  I18N.t("game.text.auto.ka804462a"):             "images/venues/zou.jpg",
-  I18N.t("game.text.auto.k16566c3e"):           "images/venues/wano.jpg",
-  I18N.t("game.text.auto.kec21bab9"):       "images/venues/punkhazard.jpg",
-  I18N.t("game.text.auto.k4678b671"):         "images/venues/weatheria.jpg",
-  I18N.t("game.text.auto.kedc2e667"):           "images/venues/fishmanisland.jpg",
-  I18N.t("game.text.auto.ka8f9e6dc"):           "images/venues/amazonlily.jpg",
-  I18N.t("game.text.auto.k203991d5"):             "images/venues/onigashima.jpg",
-  I18N.t("game.text.auto.k6868328f"):       "images/venues/sabaody.jpg",
-  I18N.t("game.text.auto.k95d93414"):             "images/venues/wholecake.jpg",
-  I18N.t("game.text.auto.k418e1b0a"):           "images/venues/hachinosu.jpg",
-  I18N.t("game.text.auto.kd86d8e9b"):     "images/venues/oro-jackson.jpg"
+  "德雷斯羅薩鬥技場": "images/venues/dressrosa.jpg",
+  "艾尼艾斯大廳":     "images/venues/enieslobby.jpg",
+  "阿拉巴斯坦":       "images/venues/alabasta.jpg",
+  "巴拉蒂":           "images/venues/baratie.jpg",
+  "佐烏":             "images/venues/zou.jpg",
+  "和之國":           "images/venues/wano.jpg",
+  "龐克哈薩德":       "images/venues/punkhazard.jpg",
+  "維薩利亞":         "images/venues/weatheria.jpg",
+  "魚人島":           "images/venues/fishmanisland.jpg",
+  "九蛇島":           "images/venues/amazonlily.jpg",
+  "鬼島":             "images/venues/onigashima.jpg",
+  "夏波帝諸島":       "images/venues/sabaody.jpg",
+  "萬國":             "images/venues/wholecake.jpg",
+  "蜂巢島":           "images/venues/hachinosu.jpg",
+  "奧羅傑克森號":     "images/venues/oro-jackson.jpg"
 };
 
 // 場地 → 說明文字（像玩家框裡的卡片說明一樣）
 const VENUE_TEXT = {
- I18N.t("game.text.auto.k891fc2e4"): "0-薩波變為強化技能",
-  I18N.t("game.text.auto.k6f4db99c"):     "1-騙人布變為強化技能",
-  I18N.t("game.text.auto.kb513f469"):       "2-羅賓變為強化技能",
-  I18N.t("game.text.auto.kefeb6f26"):           "3-香吉士變為強化技能",
-  I18N.t("game.text.auto.ka804462a"):             "4-喬巴變為強化技能",
-  I18N.t("game.text.auto.k16566c3e"):           "5-索隆變為強化技能",
-  I18N.t("game.text.auto.kec21bab9"):       "6-羅變為強化技能",
-  I18N.t("game.text.auto.k4678b671"):         "7-娜美變為強化技能",
-  I18N.t("game.text.auto.kedc2e667"):           "8-魯夫變為強化技能",
-  I18N.t("game.text.auto.ka8f9e6dc"):           "9-女帝變為強化技能",
-  I18N.t("game.text.auto.k203991d5"):             "10-凱多12-奎因變為強化技能",
-  I18N.t("game.text.auto.k6868328f"):       "11-基德13-基拉變為強化技能",
-  I18N.t("game.text.auto.k95d93414"):             "14-大媽15-卡塔克利變為強化技能",
-  I18N.t("game.text.auto.k418e1b0a"):           "16-庫山17-黑鬍子變為強化技能",
-  I18N.t("game.text.auto.kd86d8e9b"):     "18-紅髮19-哥爾羅傑變為強化技能"
+ "德雷斯羅薩鬥技場": "0-薩波變為強化技能",
+  "艾尼艾斯大廳":     "1-騙人布變為強化技能",
+  "阿拉巴斯坦":       "2-羅賓變為強化技能",
+  "巴拉蒂":           "3-香吉士變為強化技能",
+  "佐烏":             "4-喬巴變為強化技能",
+  "和之國":           "5-索隆變為強化技能",
+  "龐克哈薩德":       "6-羅變為強化技能",
+  "維薩利亞":         "7-娜美變為強化技能",
+  "魚人島":           "8-魯夫變為強化技能",
+  "九蛇島":           "9-女帝變為強化技能",
+  "鬼島":             "10-凱多12-奎因變為強化技能",
+  "夏波帝諸島":       "11-基德13-基拉變為強化技能",
+  "萬國":             "14-大媽15-卡塔克利變為強化技能",
+  "蜂巢島":           "16-庫山17-黑鬍子變為強化技能",
+  "奧羅傑克森號":     "18-紅髮19-哥爾羅傑變為強化技能"
 };
 
 // 取場地說明的小工具（有定義才顯示）
@@ -3478,9 +3328,9 @@ function msgToLogLine(e){
   switch(e.type){
     case 'log': return null;
     case 'duel_log': {
-      const loser = (typeof e.loserId === 'number') ? pname(e.loserId) : I18N.t("game.text.auto.k8435c989");
-      const card  = (typeof e.cardId  === 'number') ? `卡 ${e.cardId}` : I18N.t("game.text.auto.k54a48504");
-      return `${I18N.t("game.text.auto.k21346ff0")}${loser} 的 ${card}`;
+      const loser = (typeof e.loserId === 'number') ? pname(e.loserId) : '未知玩家';
+      const card  = (typeof e.cardId  === 'number') ? `卡 ${e.cardId}` : '未知卡牌';
+      return `擊敗：${loser} 的 ${card}`;
     }
 case 'duel': {
   const L = (typeof e.leftId  === 'number') ? pname(e.leftId)  : '？';
@@ -3488,72 +3338,72 @@ case 'duel': {
   const winId = (typeof e.winnerId === 'number') ? e.winnerId : null;
   const W = (winId != null) ? pname(winId) : null;
   return W
-    ? `${I18N.t("game.text.auto.k3541f781")}${L} vs ${R} → ${I18N.t("game.text.auto.k7d843d7d")}${W}`
-    : `${I18N.t("game.text.auto.k3541f781")}${L} vs ${R}`;
+    ? `決鬥：${L} vs ${R} → 勝者：${W}`
+    : `決鬥：${L} vs ${R}`;
 }
 
 // 羅賓：偵察手牌（全體可見播報）
     case 'robin_peek': {
-      const caster = (typeof e.casterId === 'number') ? pname(e.casterId) : I18N.t("game.text.auto.k8435c989");
+      const caster = (typeof e.casterId === 'number') ? pname(e.casterId) : '未知玩家';
       const target = e.all
-        ? I18N.t("game.text.auto.ke5b419f9")
-        : (typeof e.targetId === 'number') ? pname(e.targetId) : I18N.t("game.text.auto.k8435c989");
+        ? '全體玩家'
+        : (typeof e.targetId === 'number') ? pname(e.targetId) : '未知玩家';
       // ★ 這裡也完全不顯示任何卡片號碼
-      return `${caster} ${I18N.t("game.text.auto.k9eb35e96")} ${target} ${I18N.t("game.text.auto.k9e16af3e")}`;
+      return `${caster} 偵察了 ${target} 的手牌`;
     }
 
     case 'robin_view': {
-      const t = (typeof e.targetId === 'number') ? pname(e.targetId) : I18N.t("game.text.auto.k8435c989");
-      const c = (typeof e.cardId  === 'number') ? `卡 ${e.cardId}` : I18N.t("game.text.auto.kb49199b1");
-      return `（${I18N.t("game.text.auto.k678da036")} ${t} 的 ${c}`;
+      const t = (typeof e.targetId === 'number') ? pname(e.targetId) : '未知玩家';
+      const c = (typeof e.cardId  === 'number') ? `卡 ${e.cardId}` : '未知牌';
+      return `（出牌者可見）羅賓：你查看了 ${t} 的 ${c}`;
     }
     case 'teach_cover': {
       const arr = Array.isArray(e.cards) ? e.cards : [];
       const list = arr.length ? arr.map(id=>`卡 ${id}`).join('、') : '（空）';
-      return `（${I18N.t("game.text.auto.ke1a2a430")} ${list}`;
+      return `（出牌者可見）黑鬍子：你覆蓋了 ${list}`;
     }
     case 'kata_peek': {
       const arr = Array.isArray(e.cards) ? e.cards : [];
       const list = arr.length ? arr.map(id=>`卡 ${id}`).join('、') : '（空）';
-      return `（${I18N.t("game.text.auto.k86325760")} → ${list}`;
+      return `（出牌者可見）卡塔庫栗：你看到頂牌 → ${list}`;
     }
     case 'kata_order_done': {
       const arr = Array.isArray(e.order) ? e.order : [];
       const list = arr.length ? arr.map(id=>`卡 ${id}`).join('、') : '（空）';
-      return `（${I18N.t("game.text.auto.kb6f23d22")} → ${list}`;
+      return `（出牌者可見）卡塔庫栗：你已將頂牌排序為 → ${list}`;
     }
     case 'usopp_hit': {
-      const caster = (typeof e.casterId  === 'number') ? pname(e.casterId)  : I18N.t("game.text.auto.k8435c989");
-      const target = (typeof e.targetId  === 'number') ? pname(e.targetId)  : I18N.t("game.text.auto.k8435c989");
+      const caster = (typeof e.casterId  === 'number') ? pname(e.casterId)  : '未知玩家';
+      const target = (typeof e.targetId  === 'number') ? pname(e.targetId)  : '未知玩家';
       const d = (typeof e.digit === 'number') ? e.digit : '?';
-      return `${I18N.t("game.text.auto.k1fc6d11c")}${caster} 猜 ${target} ${I18N.t("game.text.auto.kf39b527c")}${d}」→ ${I18N.t("game.text.auto.kf6b06a57")}`;
+      return `騙人布：${caster} 猜 ${target} 的尾數為「${d}」→ 猜中！`;
     }
     case 'usopp_miss': {
-      const caster = (typeof e.casterId  === 'number') ? pname(e.casterId)  : I18N.t("game.text.auto.k8435c989");
-      const target = (typeof e.targetId  === 'number') ? pname(e.targetId)  : I18N.t("game.text.auto.k8435c989");
+      const caster = (typeof e.casterId  === 'number') ? pname(e.casterId)  : '未知玩家';
+      const target = (typeof e.targetId  === 'number') ? pname(e.targetId)  : '未知玩家';
       const d = (typeof e.digit === 'number') ? e.digit : '?';
-      return `${I18N.t("game.text.auto.k1fc6d11c")}${caster} 猜 ${target} ${I18N.t("game.text.auto.kf39b527c")}${d}」→ ${I18N.t("game.text.auto.k4e6f0b07")}`;
+      return `騙人布：${caster} 猜 ${target} 的尾數為「${d}」→ 猜錯`;
     }
     case 'law_swap': {
       const caster = (typeof e.casterId === 'number')
         ? pname(e.casterId)
-        : (e.casterName || I18N.t("game.text.auto.k8435c989"));
+        : (e.casterName || '未知玩家');
       const target = (typeof e.targetId === 'number')
         ? pname(e.targetId)
-        : (e.targetName || I18N.t("game.text.auto.k8435c989"));
-      return `${caster} ${I18N.t("game.text.auto.k58f15879")} ${target} ${I18N.t("game.text.auto.k9e16af3e")}`;
+        : (e.targetName || '未知玩家');
+      return `${caster} 交換了 ${target} 的手牌`;
     }
     case 'killer_disarm': {
       // 為了不要出現「P1（名字）」這種格式，前端自己用 index 算名稱
       const casterName =
         (typeof e.casterId === 'number')
           ? pname(e.casterId)
-          : (e.casterName || I18N.t("game.text.auto.k8435c989"));
+          : (e.casterName || '未知玩家');
 
       const targetName =
         (typeof e.targetId === 'number')
           ? pname(e.targetId)
-          : (e.targetName || I18N.t("game.text.auto.k8435c989"));
+          : (e.targetName || '未知玩家');
 
       showKillerToast(casterName, targetName);
       break;
@@ -3642,7 +3492,7 @@ socket.on('disconnect', ()=>{
   console.log('[socket] disconnected');
   try {
     if (window.showToast) {
-      showToast(I18N.t("game.text.auto.kdf6574e9"));
+      showToast('連線中斷，正在嘗試重新連線…');
     }
   } catch(e){}
 });
@@ -3697,7 +3547,7 @@ function showPlayedFlash(cardId, byIndex, opt = {}){
 
   // 誰打出的提示
   if (meta && typeof byIndex === 'number') {
-    meta.textContent = `${pname(byIndex)} ${I18N.t("game.text.auto.k928383c0")}`;
+    meta.textContent = `${pname(byIndex)} 打出`;
   }
 
   // 只有「自己打出的牌」才允許保留語音泡泡，
@@ -4040,7 +3890,7 @@ const isDraw = !hasWinner;
 
       // ⭐ 平手文字：等「撞擊」發生後才顯示
       if (lineWin) {
-        lineWin.textContent = `${I18N.t("game.text.auto.k784e9662")}${leftName} 與 ${rightName} ${I18N.t("game.text.auto.k654861d6")}`;
+        lineWin.textContent = `平手！${leftName} 與 ${rightName} 難分勝負`;
       }
     }
   }, clashDelay);
@@ -4058,7 +3908,7 @@ const isDraw = !hasWinner;
 
     // ⭐ 翻牌完成的同時，再顯示「誰勝利、誰落敗」
     if (lineWin && winnerName && loserName) {
-      lineWin.textContent = `${winnerName} ${I18N.t("game.text.auto.kef5ac0b5")}${loserName} ${I18N.t("game.text.auto.kbaf95db1")}`;
+      lineWin.textContent = `${winnerName} 勝利，${loserName} 落敗`;
     }
 
     // ⭐ 同一個時間點才把 winner / loser 外框點亮
@@ -4122,8 +3972,8 @@ function showUsoppToast(opts){
 
   const text = document.createElement('span');
   text.textContent = isHit
-    ? `${opts.caster} ${I18N.t("game.text.auto.k4693bac1")} ${opts.target}（${opts.digit} ${I18N.t("game.text.auto.k0c4ac172")}→ 🎯 ${I18N.t("game.text.auto.kf6b06a57")}`
-    : `${opts.caster} ${I18N.t("game.text.auto.k4693bac1")} ${opts.target}（${opts.digit} ${I18N.t("game.text.auto.k0c4ac172")}→ ❌ ${I18N.t("game.text.auto.k4e6f0b07")}`;
+    ? `${opts.caster} 狙擊 ${opts.target}（${opts.digit} 號）→ 🎯 猜中！`
+    : `${opts.caster} 狙擊 ${opts.target}（${opts.digit} 號）→ ❌ 猜錯`;
 
   box.appendChild(icon);
   box.appendChild(text);
@@ -4155,11 +4005,11 @@ function showRobinToast({ caster, target, all }) {
   const main = document.createElement('div');
   main.className = 'label-main';
 
-  const casterName = caster || I18N.t("game.text.auto.k8435c989");
-  const targetName = all ? I18N.t("game.text.auto.ke5b419f9") : (target || I18N.t("game.text.auto.k8435c989"));
+  const casterName = caster || '未知玩家';
+  const targetName = all ? '全體玩家' : (target || '未知玩家');
 
   // 只有一行主文字，不要副文字
-  main.textContent = ` ${casterName} ${I18N.t("game.text.auto.k9eb35e96")} ${targetName} ${I18N.t("game.text.auto.k9e16af3e")}🔍。`;
+  main.textContent = ` ${casterName} 偵察了 ${targetName} 的手牌🔍。`;
 
   box.appendChild(main);
 
@@ -4197,7 +4047,7 @@ function showLawToast({ caster, target }) {
   const targetName = target || 'P?';
 
   // 照你指定的格式：(打出玩家名)交換了(被選的玩家名)的手牌
-  text.innerHTML = `<b>${casterName}</b> ${I18N.t("game.text.auto.k58f15879")} <b>${targetName}</b> ${I18N.t("game.text.auto.k9e16af3e")}`;
+  text.innerHTML = `<b>${casterName}</b> 交換了 <b>${targetName}</b> 的手牌`;
 
   box.appendChild(text);
 
@@ -4226,17 +4076,17 @@ function showBigMomToast({ caster, status }) {
   const layer = document.getElementById('momLayer');
   if (!layer) return;
 
-  const mode = (status === 'dodge') ? I18N.t("game.text.auto.kfe56ccb4") : I18N.t("game.text.auto.k08f73b18");
+  const mode = (status === 'dodge') ? '閃避' : '保護';
   const box  = document.createElement('div');
   box.className = 'bigmom-toast bigmom-v3';
 
   const text = document.createElement('div');
   text.className = 'bigmom-text';
 
-  const casterName = caster || I18N.t("game.text.auto.k8435c989");
+  const casterName = caster || '未知玩家';
 
   // 文字格式：(打出玩家名) 獲得了 保護 / 閃避 狀態
-  text.innerHTML = `<b>${casterName}</b> ${I18N.t("game.text.auto.kba79cb0c")} <span class="bigmom-key">${mode}</span> ${I18N.t("game.text.auto.k001d2795")}`;
+  text.innerHTML = `<b>${casterName}</b> 獲得了 <span class="bigmom-key">${mode}</span> 狀態`;
 
   box.appendChild(text);
 
@@ -4279,11 +4129,11 @@ function showChopperToast({ caster, status }) {
   const text = document.createElement('div');
   text.className = 'chopper-text';
 
-  const casterName = caster || I18N.t("game.text.auto.k8435c989");
-  const statusText = (mode === 'dodge') ? I18N.t("game.text.auto.kfc9f7d88") : I18N.t("game.text.auto.k2ccb5152");
+  const casterName = caster || '未知玩家';
+  const statusText = (mode === 'dodge') ? '閃避狀態' : '保護狀態';
 
   // ✅ 只有一行主文字，不要副文字
-  text.textContent = `${casterName} ${I18N.t("game.text.auto.kba79cb0c")}${statusText}`;
+  text.textContent = `${casterName} 獲得了${statusText}`;
 
   box.appendChild(icon);
   box.appendChild(text);
@@ -4325,7 +4175,7 @@ function showNamiToast({ caster, target }) {
   const targetName = target || 'P?';
 
   // 文字格式：(打出玩家名) 麻痺了 (被選的玩家名)
-  text.innerHTML = `<b>${casterName}</b> ${I18N.t("game.text.auto.kbb6a94b4")} <b>${targetName}</b>`;
+  text.innerHTML = `<b>${casterName}</b> 麻痺了 <b>${targetName}</b>`;
 
   box.appendChild(text);
 
@@ -4367,10 +4217,10 @@ function showAokijiToast({ caster, target, all }) {
   text.className = 'aokiji-text';
 
   const casterName = caster || 'P?';
-  const targetName = all ? I18N.t("game.text.auto.ke5b419f9") : (target || 'P?');
+  const targetName = all ? '全體玩家' : (target || 'P?');
 
   // 文字：(打出玩家) 凍結了 (被選玩家或全體玩家) 的手牌
-  text.innerHTML = `<b>${casterName}</b> ${I18N.t("game.text.auto.kfcab825a")} <b>${targetName}</b> ${I18N.t("game.text.auto.k9e16af3e")}`;
+  text.innerHTML = `<b>${casterName}</b> 凍結了 <b>${targetName}</b> 的手牌`;
 
   frame.appendChild(text);
   wrap.appendChild(frame);
@@ -4412,9 +4262,9 @@ function showKillerToast(casterName, targetName) {
   text.className = 'killer-text';
   text.innerHTML = `
     <span class="killer-name">${casterName}</span>
-    ${I18N.t("game.text.auto.k2a628919")}
+    解除了
     <span class="killer-name">${targetName}</span>
-    ${I18N.t("game.text.auto.kb4a586b6")}
+    的武裝狀態
   `;
 
   box.appendChild(text);
@@ -4449,8 +4299,8 @@ function showZoroToast({ caster, target }) {
   const casterName = caster || 'P?';
   const targetName = target || 'P?';
 
-  // 名字加粗，跟 demo 的 `<b><span data-i18n="game.text.auto.k91e05a69">${I18N.t("game.text.auto.k91e05a69")}</span></b> ...` 用法一樣
-  text.innerHTML = `<b>${casterName}</b> ${I18N.t("game.text.auto.k1d3ed5c7")} <b>${targetName}</b> ${I18N.t("game.text.auto.k9e16af3e")}`;
+  // 名字加粗，跟 demo 的 `<b>索隆</b> ...` 用法一樣
+  text.innerHTML = `<b>${casterName}</b> 棄掉了 <b>${targetName}</b> 的手牌`;
 
   box.appendChild(text);
   layer.innerHTML = '';
@@ -4557,12 +4407,12 @@ function cardImageURL(id){
 
   // 羅賓：偵察手牌提示框
   if (e.type === 'robin_peek') {
-    const caster = (typeof e.casterId === 'number') ? pname(e.casterId) : I18N.t("game.text.auto.k8435c989");
+    const caster = (typeof e.casterId === 'number') ? pname(e.casterId) : '未知玩家';
 
     const isAll = !!e.all;
     const target = isAll
-      ? I18N.t("game.text.auto.ke5b419f9")
-      : (typeof e.targetId === 'number') ? pname(e.targetId) : I18N.t("game.text.auto.k8435c989");
+      ? '全體玩家'
+      : (typeof e.targetId === 'number') ? pname(e.targetId) : '未知玩家';
 
     showRobinToast({
       caster,
@@ -4576,7 +4426,7 @@ function cardImageURL(id){
   if (e.type === 'chopper_status') {
     const casterName =
       (typeof e.casterId === 'number') ? pname(e.casterId) :
-      (e.casterName || I18N.t("game.text.auto.k8435c989"));
+      (e.casterName || '未知玩家');
 
     const status =
       (e.status === 'dodge' || e.status === 'protect')
@@ -4594,7 +4444,7 @@ function cardImageURL(id){
   if (e.type === 'bigmom_status') {
     const casterName =
       (typeof e.casterId === 'number') ? pname(e.casterId) :
-      (e.casterName || I18N.t("game.text.auto.k8435c989"));
+      (e.casterName || '未知玩家');
 
     const status =
       (e.status === 'dodge' || e.status === 'protect')
@@ -4660,7 +4510,7 @@ if (e.type === 'aokiji_freeze') {
   // 如果後端有帶 all=true，就顯示「全體玩家」
 if (e.mode === 'all') {
   all = true;                 // 全體凍結
-  target = I18N.t("game.text.auto.ke5b419f9");
+  target = '全體玩家';
 } else {
   target = (typeof e.targetId === 'number')
     ? pname(e.targetId)
@@ -4673,8 +4523,8 @@ if (e.mode === 'all') {
 
   // 騙人布：猜數字（命中 / 失誤）提示框
   if (e.type === 'usopp_hit' || e.type === 'usopp_miss') {
-    const caster = (typeof e.casterId === 'number') ? pname(e.casterId) : I18N.t("game.text.auto.k8435c989");
-    const target = (typeof e.targetId === 'number') ? pname(e.targetId) : I18N.t("game.text.auto.k8435c989");
+    const caster = (typeof e.casterId === 'number') ? pname(e.casterId) : '未知玩家';
+    const target = (typeof e.targetId === 'number') ? pname(e.targetId) : '未知玩家';
     const d = (typeof e.digit === 'number') ? e.digit : '?';
     showUsoppToast({ caster, target, digit: d, isHit: e.type === 'usopp_hit' });
     // 不 return，讓文字也進 feed
@@ -4882,16 +4732,16 @@ el.venues.innerHTML = '';
           <div class="flex items-center justify-between">
             <div class="font-semibold">
               ${pnameBy(p)}
-              ${!p.alive ? '<span class="ml-1 text-neutral-400">（${I18N.t("game.text.auto.kb38e1c24")}</span>' : ''}
+              ${!p.alive ? '<span class="ml-1 text-neutral-400">（出局）</span>' : ''}
             </div>
-            <div class="text-xs text-neutral-400">${I18N.t("game.text.auto.k5342f442")} <span class="text-amber-300 font-bold">${p.gold||0}</span></div>
+            <div class="text-xs text-neutral-400">金幣 <span class="text-amber-300 font-bold">${p.gold||0}</span></div>
           </div>
           <div class="flex gap-1 mt-1 text-[11px] text-neutral-300">
-            ${p.protected?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">🛡 ${I18N.t("game.text.auto.k08f73b18")}</span>':''}
-            ${p.dodging?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">🌀 ${I18N.t("game.text.auto.kfe56ccb4")}</span>':''}
-            ${p.frozen?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">❄ ${I18N.t("game.text.auto.k2eae266a")}</span>':''}
-            ${p.skipNext?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">⚡ ${I18N.t("game.text.auto.ka994b2ad")}</span>':''}
-            ${p.iceArmed?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">🧊 ${I18N.t("game.text.auto.k51206225")}</span>':''}
+            ${p.protected?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">🛡 保護</span>':''}
+            ${p.dodging?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">🌀 閃避</span>':''}
+            ${p.frozen?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">❄ 凍結</span>':''}
+            ${p.skipNext?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">⚡ 麻痺</span>':''}
+            ${p.iceArmed?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">🧊 檢查</span>':''}
             ${(!p.protected&&!p.dodging&&!p.frozen&&!p.skipNext&&!p.iceArmed)?'<span class="opacity-50">—</span>':''}
           </div>
           ${isMe? `<div class="mt-2 flex items-start gap-2">
@@ -5059,13 +4909,13 @@ feed.forEach(line=>{
   //   對應後端：
   //   - P${p.id+1} 出局（${reason}）
   //   - P${me.id+1} 已出局 → P${st.turnIndex+1}
-  if (text.includes(I18N.t("game.text.auto.k390de77c"))) {
+  if (text.includes('出局')) {
     li.style.color = '#ef4444';   // 或 'red'
   }
 
   // 2) 猜錯的卡號 → 橘色
   //   後端目前是 pushLog(st,'猜錯了', ... )
-  else if (text.includes(I18N.t("game.text.auto.k4e6f0b07"))) {
+  else if (text.includes('猜錯')) {
     li.style.color = '#f97316';   // 橘色 (你也可用 'orange')
   }
 
@@ -5118,21 +4968,21 @@ function renderPending(){
   if (srvP.action === 'usopp') {
     if (srvP.extra?.target != null) {
       localPending = null;
-      return showDigits(I18N.t("game.text.auto.k060684ea"), (d)=>{
+      return showDigits('選擇尾數（不能選 1）', (d)=>{
         sendAction('PICK_DIGIT',{ digit:d });
         localPending = null;
       }, { ban:[1] });
     }
     if (localPending && localPending.action==='usopp' && localPending.stage==='digit' && Number.isInteger(localPending.target)) {
-      return showDigits(I18N.t("game.text.auto.k060684ea"), (d)=>{
+      return showDigits('選擇尾數（不能選 1）', (d)=>{
         sendAction('PICK_DIGIT',{ digit:d });
         localPending = null;
       }, { ban:[1] });
     }
-    return showTarget(I18N.t("game.text.auto.ka67c50b3"), (i)=>{
+    return showTarget('選擇要猜的對象', (i)=>{
       sendAction('PICK_TARGET',{ target:i });
       localPending = { action:'usopp', stage:'digit', target:i, at:Date.now() };
-      showDigits(I18N.t("game.text.auto.k060684ea"), (d)=>{
+      showDigits('選擇尾數（不能選 1）', (d)=>{
         sendAction('PICK_DIGIT',{ digit:d });
         localPending = null;
       }, { ban:[1] });
@@ -5143,9 +4993,9 @@ function renderPending(){
   if (srvP.action === 'luffy') {
     const firstDone = !!(srvP.extra && srvP.extra.firstDone);
     if (!firstDone) {
-      return showTarget(I18N.t("game.text.auto.k5988fb6f"), (i)=>{ sendAction('PICK_TARGET', { target:i }); }, { allowSelf:false });
+      return showTarget('選擇第一位對象', (i)=>{ sendAction('PICK_TARGET', { target:i }); }, { allowSelf:false });
     }
-    return showTargetWithCancel(I18N.t("game.text.auto.kcac95abf"), (i)=>{
+    return showTargetWithCancel('再選一位（或取消略過）', (i)=>{
       sendAction('LUFFY_SECOND', { target:i });
     }, ()=>{ sendAction('LUFFY_SECOND', { target:-1 }); }, { allowSelf:false });
   }
@@ -5161,14 +5011,14 @@ if (srvP.action === 'law') {
       const tcard = (tp && typeof tp.hand === 'number') ? tp.hand : null;
       const img = tcard != null ? (isEnhancedNow(tcard) ? CARD_ENH(tcard) : CARD(tcard)) : 'images/cards/back.webp';
       const html = `
-        <div class="text-lg font-semibold mb-3">${I18N.t("game.text.auto.k36ebad12")} ${pname(tid)} ${I18N.t("game.text.auto.k9e16af3e")}</div>
+        <div class="text-lg font-semibold mb-3">你查看了 ${pname(tid)} 的手牌</div>
         <div class="flex justify-center mb-4">
           <img src="${img}" alt="hand" class="w-[min(40vw,260px)] rounded-lg border border-[#2a2f35] shadow-xl"/>
         </div>
-        <div class="text-base mb-3">${I18N.t("game.text.auto.kc62006fc")} ${pname(tid)} ${I18N.t("game.text.auto.k4991b006")}</div>
+        <div class="text-base mb-3">要與 ${pname(tid)} 交換手牌嗎？</div>
         <div class="flex justify-end gap-2">
-          <button id="noBtn" class="px-3 py-1.5 rounded-lg border border-[#2a2f35]"><span data-i18n="game.btn.auto.k0e032740">${I18N.t("game.btn.auto.k0e032740")}</span></button>
-          <button id="yesBtn" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black"><span data-i18n="game.btn.auto.kd2c0048a">${I18N.t("game.btn.auto.kd2c0048a")}</span></button>
+          <button id="noBtn" class="px-3 py-1.5 rounded-lg border border-[#2a2f35]">不交換</button>
+          <button id="yesBtn" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black">交換</button>
         </div>`;
       showModal(html);
       const yesBtn = el.modal.querySelector('#yesBtn');
@@ -5179,21 +5029,21 @@ if (srvP.action === 'law') {
     }
 
     // 第一階段：選擇查看目標
-    return showTarget(I18N.t("game.text.auto.ka1622ddb"), (i)=>{
+    return showTarget('選擇要查看/可選擇交換的對象', (i)=>{
       sendAction('PICK_TARGET', { target: i });
       localPending = { action:'law', stage:'confirm', target:i, at:Date.now() };
       const tp = state.players?.[i];
       const tcard = (tp && typeof tp.hand === 'number') ? tp.hand : null;
       const img = tcard != null ? (isEnhancedNow(tcard) ? CARD_ENH(tcard) : CARD(tcard)) : 'images/cards/back.webp';
       const html = `
-        <div class="text-lg font-semibold mb-3">${I18N.t("game.text.auto.k36ebad12")} ${pname(i)} ${I18N.t("game.text.auto.k9e16af3e")}</div>
+        <div class="text-lg font-semibold mb-3">你查看了 ${pname(i)} 的手牌</div>
         <div class="flex justify-center mb-4">
           <img src="${img}" alt="hand" class="w-[min(40vw,260px)] rounded-lg border border-[#2a2f35] shadow-xl"/>
         </div>
-        <div class="text-base mb-3">${I18N.t("game.text.auto.kc62006fc")} ${pname(i)} ${I18N.t("game.text.auto.k4991b006")}</div>
+        <div class="text-base mb-3">要與 ${pname(i)} 交換手牌嗎？</div>
         <div class="flex justify-end gap-2">
-          <button id="noBtn" class="px-3 py-1.5 rounded-lg border border-[#2a2f35]"><span data-i18n="game.btn.auto.k0e032740">${I18N.t("game.btn.auto.k0e032740")}</span></button>
-          <button id="yesBtn" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black"><span data-i18n="game.btn.auto.kd2c0048a">${I18N.t("game.btn.auto.kd2c0048a")}</span></button>
+          <button id="noBtn" class="px-3 py-1.5 rounded-lg border border-[#2a2f35]">不交換</button>
+          <button id="yesBtn" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black">交換</button>
         </div>`;
       showModal(html);
       const yesBtn = el.modal.querySelector('#yesBtn');
@@ -5204,7 +5054,7 @@ if (srvP.action === 'law') {
   }
 
   // 非強化羅（普通交換）
-  return showTarget(I18N.t("game.text.auto.k95e1e284"), (i)=> sendAction('PICK_TARGET', { target:i }), { allowSelf:false });
+  return showTarget('選擇交換對象', (i)=> sendAction('PICK_TARGET', { target:i }), { allowSelf:false });
 }
 
 
@@ -5225,10 +5075,10 @@ if (srvP.action === 'law') {
 
         return showYesNo(
           stillDef
-            ? `${I18N.t("game.text.auto.kc62006fc")} ${pname(tid)} ${I18N.t("game.text.auto.k168b2107")}`
-            : `${I18N.t("game.text.auto.kc62006fc")} ${pname(tid)} ${I18N.t("game.text.auto.k8331419f")}`,
-          I18N.t("game.text.auto.k2c8a99cb"),
-          I18N.t("game.text.auto.kf049ba01"),
+            ? `要與 ${pname(tid)} 決鬥嗎？（他原本有防禦，已嘗試解除）`
+            : `要與 ${pname(tid)} 決鬥嗎？（目前看不到保護/閃避）`,
+          '決鬥',
+          '不決鬥',
           ()=>{
             sendAction('PICK_TARGET', { target: tid, duel: true });
             localPending = null;
@@ -5243,7 +5093,7 @@ if (srvP.action === 'law') {
       }
 
       return showTarget(
-        I18N.t("game.text.auto.kdcdba6e3"),
+        '選擇對象（將先解除其保護/閃避，然後可選擇是否決鬥）',
         (i)=>{
           sendAction('PICK_TARGET', { target: i });
           localPending = { action:'killer', stage:'confirm', target:i, at:Date.now() };
@@ -5253,10 +5103,10 @@ if (srvP.action === 'law') {
 
           showYesNo(
             stillDef
-              ? `${I18N.t("game.text.auto.kc62006fc")} ${pname(i)} ${I18N.t("game.text.auto.k168b2107")}`
-              : `${I18N.t("game.text.auto.kc62006fc")} ${pname(i)} ${I18N.t("game.text.auto.k8331419f")}`,
-            I18N.t("game.text.auto.k2c8a99cb"),
-            I18N.t("game.text.auto.kf049ba01"),
+              ? `要與 ${pname(i)} 決鬥嗎？（他原本有防禦，已嘗試解除）`
+              : `要與 ${pname(i)} 決鬥嗎？（目前看不到保護/閃避）`,
+            '決鬥',
+            '不決鬥',
             ()=>{
               sendAction('PICK_TARGET', { target: i, duel: true });
               localPending = null;
@@ -5274,7 +5124,7 @@ if (srvP.action === 'law') {
     }
 
     return showTarget(
-      I18N.t("game.text.auto.k84fcf724"),
+      '選擇對象（將解除其保護/閃避）',
       (i)=>{
         sendAction('PICK_TARGET', { target:i });
         hideModal();
@@ -5285,7 +5135,7 @@ if (srvP.action === 'law') {
 
   // 大媽（強化）— 先由出牌者選目標
   if (srvP.action === 'bigmom') {
-    return showTarget(I18N.t("game.text.auto.k076626e1"), (i)=>{ sendAction('PICK_TARGET', { target: i }); }, { allowSelf: false });
+    return showTarget('選擇一位玩家（交 1 金幣或淘汰由對方決定）', (i)=>{ sendAction('PICK_TARGET', { target: i }); }, { allowSelf: false });
   }
 
   // 大媽（強化）— 目標的最終選擇
@@ -5296,10 +5146,10 @@ if (srvP.action === 'law') {
     const my = state.players?.[me.playerId];
     const canPay = (my && (my.gold || 0) > 0);
 
-    let html = `<div class="text-lg font-semibold mb-2"><span data-i18n="game.text.auto.k6fee7a5d">${I18N.t("game.text.auto.k6fee7a5d")}</span></div>
+    let html = `<div class="text-lg font-semibold mb-2">大媽（萬國）：選擇交出 1 金幣，或直接淘汰</div>
       <div class="flex justify-end gap-2">
-        <button id="dieBtn" class="px-3 py-1.5 rounded-lg border border-[#2a2f35]"><span data-i18n="game.btn.auto.k301cc414">${I18N.t("game.btn.auto.k301cc414")}</span></button>
-        <button id="payBtn" class="px-3 py-1.5 rounded-lg border ${canPay?'border-amber-400 bg-amber-300 text-black':'border-[#22272d] opacity-40 cursor-not-allowed'}" ${canPay?'':'disabled'}><span data-i18n="game.btn.auto.k89ba544c">${I18N.t("game.btn.auto.k89ba544c")}</span></button>
+        <button id="dieBtn" class="px-3 py-1.5 rounded-lg border border-[#2a2f35]">淘汰</button>
+        <button id="payBtn" class="px-3 py-1.5 rounded-lg border ${canPay?'border-amber-400 bg-amber-300 text-black':'border-[#22272d] opacity-40 cursor-not-allowed'}" ${canPay?'':'disabled'}>交出 1 金幣</button>
       </div>`;
     showModal(html);
     const payBtn = el.modal.querySelector('#payBtn');
@@ -5310,12 +5160,12 @@ if (srvP.action === 'law') {
   }
 
   if(['robin','sanji','zoro','nami','kaido','aokiji','roger'].includes(srvP.action)){
-    return showTarget(I18N.t("game.text.auto.k92b620d7"), (i)=> sendAction('PICK_TARGET',{target:i}), {allowSelf:false});
+    return showTarget('選擇對象', (i)=> sendAction('PICK_TARGET',{target:i}), {allowSelf:false});
   }
 
 
   if(srvP.action==='queen'){
-    return showConfirm(`替 ${pname(srvP.target)} ${I18N.t("game.text.auto.k2d8acf1d")}`, ()=> sendAction('QUEEN_COIN'));
+    return showConfirm(`替 ${pname(srvP.target)} 擲硬幣`, ()=> sendAction('QUEEN_COIN'));
   }
 
   if(srvP.action==='bigmom-coin'){
@@ -5324,12 +5174,12 @@ if (srvP.action === 'law') {
 
   if(srvP.action==='kata-order'){
     const labels=(srvP.cards||[]).map(id=>({id,label:`卡 ${id}`}));
-    return showOrder(I18N.t("game.text.auto.kf4f8b3ad"), labels, (arr)=> sendAction('ORDER_COMMIT',{order:arr.map(x=>x.id)}));
+    return showOrder('卡塔庫栗：排序頂牌', labels, (arr)=> sendAction('ORDER_COMMIT',{order:arr.map(x=>x.id)}));
   }
 
   if(srvP.action==='teach-multipick'){
     const labels=(srvP.cards||[]).map((id,i)=>({id,label:`(頂${i+1}) ${id}`}));
-    return showMulti(I18N.t("game.text.auto.kd1c7bcf7"), labels, (picked)=> sendAction('MULTIPICK_COMMIT',{pickedIndices:[...picked]}));
+    return showMulti('黑鬍子：覆蓋哪些？', labels, (picked)=> sendAction('MULTIPICK_COMMIT',{pickedIndices:[...picked]}));
   }
 
   hideModal();
@@ -5349,8 +5199,8 @@ function showMultiTargets(title, opt, onDone){
   });
   html+=`</div>
     <div class="flex justify-end gap-2 mt-3">
-      <button class="px-3 py-1.5 rounded-lg border border-[#2a2f35]" onclick="document.getElementById('modal').classList.add('hidden')"><span data-i18n="game.btn.cancel">${I18N.t("game.btn.cancel")}</span></button>
-      <button id="mtDone" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black" disabled><span data-i18n="game.btn.auto.k31e92ef3">${I18N.t("game.btn.auto.k31e92ef3")}</span></button>
+      <button class="px-3 py-1.5 rounded-lg border border-[#2a2f35]" onclick="document.getElementById('modal').classList.add('hidden')">取消</button>
+      <button id="mtDone" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black" disabled>完成</button>
     </div>`;
   showModal(html);
 
@@ -5396,7 +5246,7 @@ function showTargetWithCancel(title, onPick, onCancel, opt={}){
   });
   html+=`</div>
     <div class="flex justify-end gap-2 mt-3">
-      <button id="btnCancel" class="px-3 py-1.5 rounded-lg border border-[#2a2f35]"><span data-i18n="game.btn.cancel">${I18N.t("game.btn.cancel")}</span></button>
+      <button id="btnCancel" class="px-3 py-1.5 rounded-lg border border-[#2a2f35]">取消</button>
     </div>`;
   showModal(html);
   let locked = false;
@@ -5425,7 +5275,7 @@ function showConfirm(title, onOk){
   let html =
     `<div class="text-lg font-semibold mb-2">${title}</div>` +
     `<div class="flex justify-end gap-2 mt-3">` +
-      `<button id="okBtn" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black"><span data-i18n="game.btn.confirm">${I18N.t("game.btn.confirm")}</span></button>` +
+      `<button id="okBtn" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black">確定</button>` +
     `</div>`;
   showModal(html);
 
@@ -5441,15 +5291,15 @@ function showConfirm(title, onOk){
 function showKidConfirm(which){
   const html = `
     <div class="text-lg font-semibold mb-3">
-      ${I18N.t("game.text.auto.k2af9dd1a")}
+      基德：洗混並抽取棄牌堆的卡
     </div>
     <div class="text-base mb-4 text-[#cbd5e1]">
-      ${I18N.t("game.text.auto.k3b29b208")}
+      已洗混棄排堆，請按下「抽取」
     </div>
     <div class="flex justify-end">
       <button id="kidDo"
               class="px-4 py-2 rounded-lg bg-purple-500 hover:bg-purple-600 text-white">
-        ${I18N.t("game.text.auto.k6fcfc7f6")}
+        抽取
       </button>
     </div>
   `;
@@ -5486,11 +5336,11 @@ function showOrder(title, cards, onCommit){
   let html=`<div class="text-lg font-semibold mb-2">${title}</div><div class="space-y-2" id="list">`;
   cards.forEach((c,i)=>{
     html+=`<div class="flex items-center gap-2"><div class="px-2 py-1 rounded border border-[#2a2f35] grow">${c.label}</div>`
-      +`<button class="px-2 py-1 rounded-lg border border-[#2a2f35]" data-up="${i}"><span data-i18n="game.btn.auto.k8f1c6bb2">${I18N.t("game.btn.auto.k8f1c6bb2")}</span></button>`
-      +`<button class="px-2 py-1 rounded-lg border border-[#2a2f35]" data-down="${i}"><span data-i18n="game.btn.auto.k37a00cd7">${I18N.t("game.btn.auto.k37a00cd7")}</span></button></div>`;
+      +`<button class="px-2 py-1 rounded-lg border border-[#2a2f35]" data-up="${i}">上移</button>`
+      +`<button class="px-2 py-1 rounded-lg border border-[#2a2f35]" data-down="${i}">下移</button></div>`;
   });
-  html+=`</div><div class="flex justify-end gap-2 mt-3"><button class="px-3 py-1.5 rounded-lg border border-[#2a2f35]" onclick="document.getElementById('modal').classList.add('hidden')"><span data-i18n="game.btn.cancel">${I18N.t("game.btn.cancel")}</span></button>`
-    +`<button id="okOrder" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black"><span data-i18n="game.btn.auto.ke6453992">${I18N.t("game.btn.auto.ke6453992")}</span></button></div>`;
+  html+=`</div><div class="flex justify-end gap-2 mt-3"><button class="px-3 py-1.5 rounded-lg border border-[#2a2f35]" onclick="document.getElementById('modal').classList.add('hidden')">取消</button>`
+    +`<button id="okOrder" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black">確定排序</button></div>`;
   showModal(html);
   const list=cards.slice();
   el.modal.querySelectorAll('[data-up]').forEach(btn=> btn.onclick=()=>{
@@ -5567,8 +5417,8 @@ function showMulti(title, cards, onCommit){
   cards.forEach((c,i)=>{
     html+=`<label class="flex items-center gap-2 p-2 rounded-lg border border-[#2a2f35]"><input type="checkbox" data-i="${i}"/> <span class="px-2 py-1 rounded border border-[#2a2f35] grow">${c.label}</span></label>`;
   });
-  html+=`</div><div class="flex justify-end gap-2 mt-3"><button class="px-3 py-1.5 rounded-lg border border-[#2a2f35]" onclick="document.getElementById('modal').classList.add('hidden')"><span data-i18n="game.btn.cancel">${I18N.t("game.btn.cancel")}</span></button>`
-    +`<button id="okM" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black"><span data-i18n="game.btn.auto.kbdcc7101">${I18N.t("game.btn.auto.kbdcc7101")}</span></button></div>`;
+  html+=`</div><div class="flex justify-end gap-2 mt-3"><button class="px-3 py-1.5 rounded-lg border border-[#2a2f35]" onclick="document.getElementById('modal').classList.add('hidden')">取消</button>`
+    +`<button id="okM" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black">覆蓋所選</button></div>`;
   showModal(html);
   el.modal.querySelector('#okM').onclick=()=>{
     const picked=new Set();
