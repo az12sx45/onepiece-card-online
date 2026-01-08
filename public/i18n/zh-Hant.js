@@ -9,6 +9,7 @@ window.__I18N_DICTS["zh-Hant"] = {
     startGame: "開始遊戲",
     rules: "遊戲規則",
     close: "關閉",
+    people: "{n} 人",
 
     rotateTitle: "請將手機旋轉至橫向以獲得最佳體驗",
     rotateHint: "若仍無法旋轉，請解鎖畫面旋轉或從瀏覽器選單開啟「允許旋轉」。",
