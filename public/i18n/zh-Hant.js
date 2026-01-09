@@ -18,6 +18,19 @@ window.__I18N_DICTS["zh-Hant"] = {
       phase: "階段：",
       nextRound: "下一局 ▶",
       drawHint: "請抽牌",
+
+cardDexTitle: "卡片圖鑑（紅框為本局強化卡）",
+cardDexHint: "點擊左側任一張卡片，可查看大圖與強化版本。",
+gold: "金幣",
+
+pickDigitNo1: "選擇尾數（不能選 1）",
+pickTargetToGuess: "選擇要猜的對象",
+pickFirstTarget: "選擇第一位對象",
+pickPeekOrSwapTarget: "選擇要查看／可選擇交換的對象",
+pickSwapTarget: "選擇交換對象",
+pickBigMomTarget: "選擇一位玩家（交 1 金幣或淘汰由對方決定）",
+pickTarget: "選擇對象",
+
     },
     lang: "語言",
     pressAnyKey: "按任意鍵開始",
