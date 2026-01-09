@@ -1,285 +1,5506 @@
-// public/i18n/en.js
-window.__I18N_DICTS = window.__I18N_DICTS || {};
-window.__I18N_DICTS["en"] = {
-  meta: { label: "English" },
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>偉大航道爭霸戰｜正式對戰</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <style>
+    html,body{height:100%;background:#0f1113;color:#eaecee}
+    .card{ background: rgba(16,20,24,.80);              /* 微透明面板色：#101418 / 80% */
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);                   /* 玻璃毛玻璃效果 */
+  border: 1px solid rgba(255,255,255,.06);      /* 邊線調淡，跟整體更搭 */
+  border-radius: 16px; }
+    .thumb{ width:68px; aspect-ratio:1242/1863; object-fit:cover; border-radius:10px; border:1px solid #2f353c; background:#0a0d10 }
+    .thumb-sm{ width:42px; aspect-ratio:1242/1863; object-fit:cover; border-radius:8px; border:1px solid #2f353c; background:#0a0d10 }
+    .deck{ position:relative; width:120px; aspect-ratio:1242/1863; border-radius:14px; border:1px solid #2a2f35; overflow:hidden; box-shadow:0 12px 28px rgba(0,0,0,.45) }
+    .deck > img{ width:100%; height:100%; object-fit:cover; background:#0a0d10 }
+    .deck .cnt{ position:absolute; right:-8px; top:-8px; background:#facc15; color:#111; border-radius:999px; padding:.15rem .45rem; font-size:12px; border:1px solid #caa902 }
+    .modal{ position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,.55); z-index:50 }
 
-  ui: {
-    game: {
-      title: "Grand Line Showdown",
-      chestRemaining: "Chest Coins:",
-      coinsUnit: "coins",
-      cardDex: "Card Codex",
-      venueThisMatch: "Venues (This Match)",
-      deck: "Deck",
-      players: "Players",
-      discard: "Discard",
-      battleLog: "Battle Log",
-      turn: "Turn:",
-      phase: "Phase:",
-      nextRound: "Next Round ▶",
-      drawHint: "Draw a card",
+    /* === FX: Glow / Flip / Shake / Pulse === */
+    @keyframes fx-glow { 0% { box-shadow: 0 0 0 rgba(250, 204, 21, 0); } 50% { box-shadow: 0 0 24px rgba(250, 204, 21, .6); } 100% { box-shadow: 0 0 0 rgba(250, 204, 21, 0); } }
+    .fx-glow { animation: fx-glow .8s ease-out 1; }
+    @keyframes fx-flip { 0%{ transform: rotateY(0deg) scale(0.9); filter: brightness(1.1); } 50%{ transform: rotateY(90deg) scale(1.05); filter: brightness(1.3); } 100%{ transform: rotateY(180deg) scale(1.0); filter: brightness(1.0);} }
+    .fx-flip { transform-style: preserve-3d; animation: fx-flip .45s ease-out 1; }
+    @keyframes fx-shake { 0%,100%{ transform: translateX(0);} 20%{ transform: translateX(-6px);} 40%{ transform: translateX(5px);} 60%{ transform: translateX(-4px);} 80%{ transform: translateX(3px);} }
+    .fx-shake { animation: fx-shake .45s ease-out 1; }
+    @keyframes fx-pulse { 0%{ transform: scale(1);} 40%{ transform: scale(1.15);} 100%{ transform: scale(1);} }
+    .fx-pulse { animation: fx-pulse .45s ease-out 1; }
+/* === 決鬥特效 overlay === */
+#duelFx{
+  position:fixed;
+  inset:0;
+  z-index:260;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  pointer-events:none;
+  background:radial-gradient(circle at center, rgba(0,0,0,.86), rgba(0,0,0,.97));
+  opacity:0;
+  transform:scale(1.04);
+  transition:opacity .3s ease-out, transform .3s ease-out;
+}
+#duelFx.show{
+  opacity:1;
+  transform:scale(1);
+}
+#duelFx.hidden{
+  display:none;
+}
 
-cardDexTitle: "Card Codex (red frame = enhanced this match)",
-cardDexHint: "Click any card on the left to view the large image and its enhanced version.",
-gold: "Coins",
+#duelFx .overlay{
+  width:100%;
+  max-width:900px;
+  padding:16px;
+}
 
-pickDigitNo1: "Pick the last digit (cannot pick 1)",
-pickTargetToGuess: "Select a target to guess",
-pickFirstTarget: "Select the first target",
-pickPeekOrSwapTarget: "Select a target to view / optionally swap with",
-pickSwapTarget: "Select a swap target",
-pickBigMomTarget: "Select a player (they choose: pay 1 coin or be eliminated)",
-pickTarget: "Select target",
+#duelFx .arena{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  transform:scale(.9);
+  opacity:0;
+  transition:transform .5s ease-out, opacity .5s ease-out;
+}
+#duelFx.show .arena{
+  opacity:1;
+}
+#duelFx .arena.spread{
+  transform:scale(1);
+}
 
-    },
-    lang: "Language",
-    pressAnyKey: "Press any key",
-    startGame: "Start Game",
-    rules: "Rules",
-    close: "Close",
+#duelFx .slot{
+  flex:0 0 auto;
+  width:min(280px, 36vw);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+}
 
-    people: "{n} players",
+#duelFx .avatar-wrap{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+#duelFx .avatar{
+  width:40px;
+  height:40px;
+  border-radius:999px;
+  object-fit:cover;
+  box-shadow:0 0 12px rgba(0,0,0,.75);
+}
+#duelFx .pname{
+  font-size:14px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:#e5e7eb;
+}
+
+#duelFx .cardwrap{
+  position:relative;
+  width:100%;
+  aspect-ratio:3/4;
+  border-radius:16px;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at top, rgba(248,250,252,.08), transparent 55%),
+    linear-gradient(145deg, rgba(148,163,184,.35), rgba(15,23,42,.9));
+  box-shadow:
+    0 0 0 1px rgba(148,163,184,.35),
+    0 18px 35px rgba(0,0,0,.9);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+#duelFx .cardimg{
+  position:relative;
+  width:90%;
+  height:90%;
+  object-fit:contain;
+  filter:drop-shadow(0 8px 18px rgba(0,0,0,.9));
+  transform-origin:center center;
+  transition:filter .25s ease-out, transform .25s ease-out;
+}
+
+/* 贏家 slot 高亮 */
+#duelFx .slot.winner .cardwrap{
+  box-shadow:
+    0 0 0 1px rgba(251,191,36,.7),
+    0 0 24px rgba(245,158,11,.75),
+    0 18px 35px rgba(0,0,0,.9);
+}
+#duelFx .slot.winner .pname{
+  color:#facc15;
+}
+
+/* 輸家 slot 稍微變暗 */
+#duelFx .slot.loser .cardwrap{
+  opacity:.9;
+  filter:grayscale(.2);
+}
+
+/* VS 標籤 */
+#duelFx .vs-tag{
+  flex:0 0 auto;
+  font-size:26px;
+  font-weight:900;
+  letter-spacing:.25em;
+  color:#fee2e2;
+  text-shadow:0 0 14px rgba(248,113,113,.9);
+}
+
+/* 底下說明文字 */
+#duelFx .caption{
+  margin-top:14px;
+  text-align:center;
+  font-size:14px;
+  line-height:1.6;
+  color:#e5e7eb;
+}
+#duelFx .caption .line{
+  opacity:.85;
+}
+#duelFx .caption .line-win{
+  margin-top:2px;
+  font-size:15px;
+  font-weight:700;
+  color:#fee2e2;
+}
+
+/* 牌翻面動畫 */
+#duelFx .cardimg.fx-flip{
+  animation:duelFlip .45s ease-out forwards;
+}
+#duelFx .cardimg.front-reveal{
+  transform:scale(1.04);
+  filter:drop-shadow(0 0 16px rgba(248,250,252,.95));
+}
+
+/* 輸家燃燒動畫 */
+#duelFx .slot.burning .cardimg{
+  animation:duelBurn .9s ease-out forwards;
+}
+#duelFx .slot.burning .cardimg::after{
+  content:'';
+  position:absolute;
+  inset:-12%;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(254,249,195,.85), transparent 60%),
+    radial-gradient(circle at 80% 40%, rgba(252,165,165,.85), transparent 65%),
+    radial-gradient(circle at 50% 100%, rgba(248,113,113,.95), transparent 55%);
+  mix-blend-mode:screen;
+  opacity:.0;
+  pointer-events:none;
+  animation:flame .6s ease-out forwards;
+}
+
+/* 衝撞感 */
+#duelFx .arena.clash .slot-left .cardwrap{
+  animation:duelHitL .4s cubic-bezier(.22,.61,.36,1) forwards;
+}
+#duelFx .arena.clash .slot-right .cardwrap{
+  animation:duelHitR .4s cubic-bezier(.22,.61,.36,1) forwards;
+}
+
+/* Keyframes */
+@keyframes duelFlip{
+  0%{ transform:rotateY(0deg) scale(1); }
+  49%{ transform:rotateY(90deg) scale(1.02); }
+  50%{ transform:rotateY(90deg) scale(1.02); }
+  100%{ transform:rotateY(0deg) scale(1.04); }
+}
+@keyframes duelHitL{
+  0%{ transform:translateX(0); }
+  100%{ transform:translateX(8px); }
+}
+@keyframes duelHitR{
+  0%{ transform:translateX(0); }
+  100%{ transform:translateX(-8px); }
+}
+@keyframes duelBurn{
+  0%{ opacity:1; transform:scale(1.04); filter:blur(0); }
+  40%{ opacity:1; transform:scale(1.08); filter:blur(1px); }
+  100%{ opacity:0; transform:scale(1.12); filter:blur(4px); }
+}
+@keyframes flame{
+  0%{ opacity:.0; transform:translateY(8px) scale(1); }
+  40%{ opacity:.95; transform:translateY(0) scale(1.05); }
+  100%{ opacity:0; transform:translateY(-10px) scale(1.1); }
+}
+
+    /* 強化特效：光球 */
+    .fx-orb { position: fixed; width: 14px; height: 14px; border-radius: 999px;
+      background: radial-gradient(circle at 40% 40%, #fff, #facc15 55%, rgba(250,204,21,.2) 70%);
+      box-shadow: 0 0 16px rgba(250,204,21,.9), 0 0 36px rgba(250,204,21,.55);
+      pointer-events:none; z-index: 90; opacity:.95;
+      transition: transform .6s cubic-bezier(.2,.7,.1,1), opacity .2s ease .5s;
+    }
+
+/* === 手牌結冰遮罩（冰花覆蓋） === */
+.card-frozen{
+  position: relative;
+  cursor: not-allowed;
+}
+
+.card-frozen::after{
+  content:'';
+  position:absolute;
+  inset:0;                     /* 等同 top/right/bottom/left = 0 */
+  background:url("images/freeze-mask.png") center/cover no-repeat;
+  opacity:0.9;                 /* 透明度你可以自己調整 0~1 */
+  pointer-events:none;         /* 視覺用就好，真正禁止點擊用 disabled */
+}
+
+/* 冰住時，底下卡圖再稍微灰一點 */
+.card-frozen img{
+  filter: grayscale(.25) brightness(.9);
+}
 
 
-    rotateTitle: "Rotate your phone to landscape for the best experience",
-    rotateHint: "If rotation doesn't work, unlock screen rotation or enable “Allow rotation” in your browser menu.",
+    /* === 擲硬幣 Overlay & 動畫框 === */
+    #coinOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,.7);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s ease;
+    }
+    #coinOverlay.show { opacity: 1; pointer-events: auto; }
 
-    connectingLobby: "Connecting to lobby...",
-    back: "Back",
+    #coinFrame {
+      background: radial-gradient(circle at 50% 40%,rgba(24,28,32,0.9) 0%,rgba(12,14,16,0.92) 60%,rgba(0,0,0,0.0) 100%);
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 24px 48px rgba(0,0,0,.8), 0 2px 4px rgba(0,0,0,.6), 0 0 1px rgba(255,255,255,.08) inset, 0 0 30px rgba(0,0,0,.6) inset;
+      padding: 16px;
+      width: 400px; max-width: 90vw; max-height: 90vh;
+      display: flex; align-items: center; justify-content: center;
+      transform: scale(.9); transition: transform .3s ease;
+    }
+    #coinOverlay.show #coinFrame { transform: scale(1); }
+    #coinFrame video { width: 100%; height: auto; max-height: 70vh; border-radius: 12px; box-shadow: 0 12px 28px rgba(0,0,0,.6); outline: none; }
+    #coinOverlay video { outline: none; }
 
-    createCharacter: "Create Character",
-    localSaved: "Saved locally (localStorage)",
-    playerName: "Player Name",
-    namePlaceholder: "Enter your name",
-    nameHint: "* Up to 16 characters. You can change it later.",
-    chooseAvatar: "Choose Avatar (30)",
-    avatarPath: "Path: images/avatars/1.webp ~ 30.webp",
-    createRoom: "Create Room",
-    joinRoom: "Join Room",
+    /* === 打出卡片「快閃」Overlay（新增） === */
+    #playedOverlay{ position:fixed; inset:0; z-index: ninetyfive; z-index:95; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,.72); opacity:0; pointer-events:none; transition:opacity .25s ease; }
+    #playedOverlay.show{ opacity:1; pointer-events:auto; }
+    #playedFrame{ display:flex; flex-direction:column; gap:10px; align-items:center; }
+    #playedImg{ width:min(40vw,320px); height:auto; border-radius:14px; border:1px solid #2f353c; box-shadow:0 18px 36px rgba(0,0,0,.45); }
+    #playedMeta{ font-size:14px; color:#cbd5e1; opacity:.95; }
 
-    roomMode: "Room Mode",
-    createOrJoin: "Create / Join Room",
-    playerId: "Player ID: {id}",
+  /* === 角色語音台詞泡泡（樣式 1） === */
+  #voiceBubble{
+    position: relative;
+    max-width: min(80vw, 420px);
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #fef9c3;
+    color: #111827;
+    border: 2px solid #111827;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    text-align: center;
+    box-shadow:
+      3px 3px 0 #111827,
+      0 10px 28px rgba(0,0,0,.7);
+    line-height: 1.4;
+    white-space: normal;
+    word-break: break-word;
+  }
+  #voiceBubble.hidden{
+    display: none;
+  }
+  /* 泡泡下面的小尾巴 */
+  #voiceBubble::after{
+    content:'';
+    position:absolute;
+    left: 50%;
+    top: 100%;
+    transform: translateX(-50%) translateY(-4px) rotate(45deg);
+    width: 14px;
+    height: 14px;
+    background:#fef9c3;
+    border-bottom: 2px solid #111827;
+    border-right: 2px solid #111827;
+  }
 
-    createRoomTitle: "Create Room",
-    host: "Host",
-    cpuCountLabel: "CPU players",
-    cpuCountHint: "Will be added to the room automatically (0–3)",
-    cpuCountFootnote: "* This is the selection + persistence step. AI actions will be connected later.",
-    createNewRoom: "🏴‍☠️ Create New Room",
+    
+/* === 場地背景直接掛在 body（v2） === */
+:root{
+  --venue-bg-url: none;  /* 由 JS 動態設定 */
+}
 
-    joinFriendRoom: "Join a friend's room",
-    enterRoomCode: "Room code",
-    roomCodePlaceholder: "e.g. AB2D9F",
-    roomCodeHint: "* Case-insensitive.",
-    joinRoomBtn: "🔑 Join Room",
+/* 預設你的原本背景 */
+body{
+  background:
+    radial-gradient(1200px 800px at 10% 20%, rgba(255,184,77,.06), transparent 60%),
+    radial-gradient(1200px 800px at 90% 80%, rgba(0,158,255,.05), transparent 60%),
+    linear-gradient(180deg,#0f1113 0%,#14171a 100%);
+  transition: background-image .25s ease, background-size .25s ease, background-position .25s ease;
+}
 
-    suggestion: "Recommended: 2–4 human players. CPU count can be adjusted later.",
+/* 啟用場地背景時：把圖片疊在最底層，再覆一點淡淡的遮罩，維持可讀性 */
+body.venue-on{
+  background-image:
+    var(--venue-bg-url), /* 場地圖片（最底層） */
+    radial-gradient(1200px 800px at 10% 20%, rgba(0,0,0,.18), transparent 60%),
+    radial-gradient(1200px 800px at 90% 80%, rgba(0,0,0,.18), transparent 60%),
+    linear-gradient(180deg,#0f1113 0%,#14171a 100%);
+  background-size: cover, auto, auto, auto;
+  background-position: center, center, center, center;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+  background-attachment: fixed, fixed, fixed, fixed; /* 滑動時更穩定 */
+}
 
-    roomId: "Room",
-    copyRoomId: "Copy",
-    leaveRoom: "Leave",
-    startGameBtn: "Start",
-    startGameNeed: "Need at least 2 players and everyone ready",
+/* 玩家小框：背景完全透明（移除毛玻璃、保留邊線） */
+#players .border,
+#players .border-amber-400,
+#players [class*="bg-\\[\\#12161b\\]"],
+#players .card{
+  background: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;  /* 若原本有陰影想清掉 */
+}
 
-    cpuPlayers: "CPU Players: {n}",
-    cpuWillJoin: "CPU will join automatically after the game starts.",
+/*（可選）目前回合框仍給一點金色輪廓，背景保持透明 */
+#players .current{
+  background: transparent !important;
+  box-shadow: 0 0 0 1px rgba(255,200,80,.35) !important;
+}
 
-    humanPlayers: "Human Players ({n})",
-    cpuPlayersList: "CPU Players ({n})",
-    player: "Player",
-    ready: "Ready",
-    notReady: "Not ready",
-    meReady: "Ready",
-    meUnready: "Unready",
-    cpuTag: "CPU",
+/*（可選）讓玩家卡文字在任何底圖上都清楚些 */
+#players .card, 
+#players .card *{
+  text-shadow: 0 1px 1px rgba(0,0,0,.35);
+}
+/* === 玩家框架視覺統一 === */
 
-    lobbyFootnote: "This lobby is synced with the server snapshot via Socket.IO. CPU will join after the game starts.",
+/* 預設：所有玩家小框 全透明底 + 白色半透明輪框 */
+#players .card,
+#players .border,
+#players .border-amber-400,
+#players [class*="bg-\\[\\#12161b\\]"]{
+  background: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  border: 1.5px solid rgba(255,255,255,.25) !important; /* 白色半透明邊線 */
+  border-radius: 14px;
+  box-shadow: none !important;
+  transition: border-color .25s ease, box-shadow .25s ease;
+}
 
-    prev: "Previous",
-    next: "Next",
-    tipPrefix: "Tip:",
-    rulesHotkeys: "Hotkeys: ← / → to flip pages, Esc to close",
+/* 當前回合的玩家（保持金邊或亮邊） */
+#players .current,
+#players .is-turn,
+#players .active{
+  border: 1.8px solid rgba(255,200,80,.85) !important;  /* 金色亮邊 */
+  box-shadow: 0 0 10px rgba(255,200,80,.4) !important;
+}
 
-    preloadAll: "📦 Download all assets (Wi-Fi recommended)",
-    preloadStart: "Starting (0 / {total})...",
-    preloading: "Downloading... {done} / {total} ({pct}%)",
-    preloadDone: "Done! Success {ok}, Failed {fail}.",
+/* 被淘汰或無法行動的玩家（灰邊、降低透明度） */
+#players .eliminated,
+#players .disabled{
+  opacity: .55;
+  border-color: rgba(255,255,255,.1) !important;
+}
 
-    alertNeedRoomId: "Please enter a room code",
-    alertCopiedRoomId: "Copied room code: {roomId}"
-  },
+/* 讓玩家名稱、金幣數在任何背景上都清楚 */
+#players .card *,
+#players .border *,
+#players .border-amber-400 *{
+  text-shadow: 0 1px 2px rgba(0,0,0,.5);
+}
 
-  brand: {
-    titleEn: "ONE PIECE",
-    titleSub: "Grand Line Battle",
-    tagline: "ONE PIECE ｜ Card Battle ｜ PVP Multiplayer"
-  },
+/* === 只移除玩家頭像的邊框/外框/陰影 === */
+#players .avatar,
+#players .avatar img,
+#players img.avatar,
+#players img.rounded-full,
+#players .player-avatar,
+#players .player-avatar img {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
 
-  cpu: {
-    name1: "Crocodile",
-    name2: "Mihawk",
-    name3: "Buggy"
-  },
+/* 如果你的頭像外面還包了一層有邊框的容器（常見 avatar-wrap/container） */
+#players .avatar-wrap,
+#players .avatar-container {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
 
-  // ===== Rules (full translation) =====
-  rules: {
-    overview: {
-      title: "Battlefield Overview",
-      bullets: [
-        "This is the main screen for the entire match.",
-        "On your turn, actionable areas will be highlighted or prompted.",
-        "No need to memorize rules at first—follow the on-screen prompts and you can play."
-      ],
-      tip: "Skim through once to learn where each panel is."
-    },
+/* 保險：玩家卡中的所有 img 都不加邊框（不影響外層卡片邊框） */
+#players .card img {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
 
-    header: {
-      title: "Top Bar: Treasure Coins & Card Encyclopedia",
-      bullets: [
-        "“Treasure Coins Remaining” = rewards still available to be taken this game.",
-        "Your goal is to compete with other players to claim coins from the treasure chest.",
-        "When the treasure coins are fully claimed, the player with the most coins wins.",
-        "“Card Encyclopedia” lets you check every card’s count and skills (available anytime)."
-      ],
-      tip: "New players: if you want to know a character’s skill, open the encyclopedia."
-    },
+/* 1) 把原本 body 的背景交給一個固定圖層處理 */
+html, body{
+  min-height: 100%;
+  background: none !important;   /* 先清掉原本會捲動的背景 */
+}
 
-    gallery: {
-      title: "Card Encyclopedia: All Characters at a Glance",
-      bullets: [
-        "Shows all characters (0–19) and how many copies exist.",
-        "Cards outlined in red are “Enhanced” this game due to the venue."
-      ],
-      tip: "You don’t need to memorize skills—look them up when you actually need them."
-    },
+body{
+  position: relative;             /* 讓 ::before 可以正常疊底 */
+  --venue-bg-url: none;           /* 由 JS 設定 url("...") 或 none */
+}
 
-    cardDetail: {
-      title: "Card Details: Normal vs Enhanced",
-      bullets: [
-        "Tap a character in the encyclopedia to see both “Normal” and “Enhanced” versions.",
-        "If the current venue enhances that character, use the Enhanced effect."
-      ],
-      tip: "No need to track exceptions—the encyclopedia shows the differences side by side."
-    },
+/* 2) 固定在視窗底下的背景圖層（不跟著捲動） */
+body::before{
+  content: '';
+  position: fixed;
+  inset: 0;                       /* 佔滿視窗 */
+  z-index: -1;                    /* 永遠在所有內容之下 */
+  background:
+    var(--venue-bg-url),                                              /* 場地圖 */
+    radial-gradient(1200px 800px at 10% 20%, rgba(0,0,0,.18), transparent 60%),
+    radial-gradient(1200px 800px at 90% 80%, rgba(0,0,0,.18), transparent 60%),
+    linear-gradient(180deg,#0f1113 0%,#14171a 100%);                  /* 原本的漸層底 */
+  background-size: cover, auto, auto, auto;
+  background-position: center, center, center, center;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+  /* 不用 background-attachment，因為本身就是 fixed 層 */
+}
 
-    venuePanel: {
-      title: "Venue Cards & Deck",
-      bullets: [
-        "Each game features different venue cards that affect specific characters.",
-        "Number of venue cards = (player count) / 2.",
-        "You can click venue cards to change the background (visual only; no gameplay impact).",
-        "Deck: On your turn, click to draw a card. When the deck reaches 0,",
-        "after the last player who drew ends their turn, the winner is determined by hand strength."
-      ],
-      tip: "If you see a red outline or an “Enhanced” hint, it is usually venue-related."
-    },
+/* 3) 把會擋住的主容器改成透明（避免「黑色東西」往上蓋） */
+#app, .table, .board, main, .page, .wrap{
+  background: transparent !important;
+}
 
-    venueBg: {
-      title: "Background Effect: Visual Switching via Venue Cards",
-      bullets: [
-        "Clicking a venue card to switch backgrounds is purely for atmosphere.",
-        "It does not change rules, skills, or win conditions."
-      ],
-      tip: "Use it if you like—ignoring it won’t affect the game."
-    },
 
-    players: {
-      title: "Players Panel: Who’s In, Who’s Out, and Status Effects",
-      bullets: [
-        "The right panel lists all players: avatar, name, and coins.",
-        "The highlighted frame indicates whose turn it is.",
-        "It also shows your current hand,",
-        "and displays eliminations and special statuses (e.g., Protection, Freeze, Paralysis, etc.)."
-      ],
-      tip: "Look at the right side to know whose turn it is and who can still act."
-    },
+/* ===== BGM 播放條：白色半透明按鈕 & 清單 ===== */
+#bgmBar{
+  border-color: rgba(255,255,255,.12) !important;
+  background: rgba(20,24,28,.65) !important;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+#bgmBar button{
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.06);
+  border-radius: 10px;
+  padding: 6px 10px;
+  line-height: 1;
+  user-select: none;
+  transition: background .2s ease, border-color .2s ease, transform .05s ease;
+}
+#bgmBar button:hover{
+  background: rgba(255,255,255,.12);
+  border-color: rgba(255,255,255,.28);
+}
+#bgmBar button:active{
+  transform: translateY(1px);
+}
+#bgmBar button:focus{ outline: none; box-shadow: none; }
 
-    discard: {
-      title: "Discard Pile: All Played Cards Are Shown Here",
-      bullets: [
-        "Cards that have been played, and the hands of eliminated players, go to the discard pile.",
-        "Advanced players use discard information to infer what others may still hold."
-      ],
-      tip: "As a beginner, just know where it is—later you’ll naturally start checking it."
-    },
+/* 隨機開啟的狀態 */
+#bgmBar .is-active{
+  background: rgba(255,255,255,.18);
+  border-color: rgba(255,255,255,.38);
+  font-weight: 600;
+}
 
-    log: {
-      title: "Match Log: See What Happened at a Glance",
-      bullets: [
-        "The log records draws, plays, skills, eliminations, and other events.",
-        "If you’re unsure what just happened, check the log first."
-      ],
-      tip: "For replaying events, the log is the most reliable reference."
-    },
+/* 曲目清單彈層 */
+#bgmMenu{
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  width: min(72vw, 420px);
+  max-height: 52vh;
+  overflow: auto;
+  padding: 8px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(16,20,24,.88);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-radius: 14px;
+  box-shadow: 0 10px 32px rgba(0,0,0,.45);
+  z-index: 60;
+}
+#bgmMenu .item{
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px; border-radius: 10px; cursor: pointer;
+  color: #fff; font-size: 13px;
+  border: 1px solid transparent;
+}
+#bgmMenu .item:hover{
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.12);
+}
+#bgmMenu .item.active{
+  background: rgba(255,255,255,.14);
+  border-color: rgba(255,255,255,.28);
+  font-weight: 600;
+}
 
-    drawOnly: {
-      title: "Draw: The First Step of Your Turn",
-      bullets: [
-        "On your turn, the UI will prompt you to draw.",
-        "Click the deck to draw one card."
-      ],
-      tip: "When you see the “Please draw” prompt, draw first—don’t rush your decision yet."
-    },
+/* === BGM 圓角 SVG 按鈕 === */
+#bgmBar .icon-btn{
+  width: 36px; height: 36px;
+  border-radius: 12px;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.06);
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background .18s ease, transform .06s ease, border-color .18s ease, box-shadow .18s ease;
+}
+#bgmBar .icon-btn:hover{
+  background: rgba(255,255,255,.12);
+  border-color: rgba(255,255,255,.28);
+  box-shadow: 0 6px 18px rgba(0,0,0,.25);
+}
+#bgmBar .icon-btn:active{ transform: translateY(1px); }
+#bgmBar .icon-btn.big{ width: 40px; height: 40px; font-weight: 700; }
 
-    afterDrawView: {
-      title: "After Drawing: Choose a Card to Play",
-      bullets: [
-        "After you draw, your two hand cards appear at the bottom of the screen.",
-        "Now choose one card from your hand to play.",
-        "Click a card to play it and resolve its effect."
-      ],
-      tip: "Drawing is done—this is the moment to think and decide."
-    },
+/* 隨機啟動時有亮度（沿用 is-active） */
+#bgmShuffle.is-active{
+  background: rgba(255,255,255,.18);
+  border-color: rgba(255,255,255,.38);
+}
 
-    playCardCoreRule: {
-      title: "How Played-Card Effects Work",
-      bullets: [
-        "Each turn, you may play only one card from your hand to choose which character effect to activate.",
-        "When resolving the effect, the game uses the card that remains in your hand (the unplayed one).",
-        "If an effect involves swapping hands, comparing values, or dueling, it uses the value/content of your remaining hand card.",
-        "The played card itself does not participate in swaps or value comparisons.",
-        "This diagram shows: playing a card is selecting the effect you want to trigger.",
-        "Starting next page, examples demonstrate what happens when you play 6 vs when you play 13."
-      ],
-      tip: "Remember: the played card selects the effect; the remaining card is used for swaps/comparisons."
-    },
+/* SVG 統一尺寸（不用每個都設） */
+#bgmBar .icon-btn svg{ width: 18px; height: 18px; fill: currentColor; }
+#bgmBar .icon-btn.big svg{ width: 20px; height: 20px; }
 
-    examplePlay6: {
-      title: "Example: Playing Card #6",
-      bullets: [
-        "The player holds two cards: 6 and 13.",
-        "Playing 6 activates Law’s “ROOM” skill effect.",
-        "When the skill resolves, it uses the remaining unplayed card (13).",
-        "So the player swaps hands using 13 with the chosen target player."
-      ],
-      tip: "Playing 6 chooses the skill; the actual swap uses the 13 you kept."
-    },
+/* 曲名依舊可點展開清單 */
+#bgmTitle{ cursor: pointer; }
 
-    examplePlay13: {
-      title: "Example: Playing Card #13",
-      bullets: [
-        "The player still holds two cards: 6 and 13.",
-        "Playing 13 activates the “Duel (compare values)” effect.",
-        "When comparing values, the game uses the remaining unplayed card (6).",
-        "So the duel is performed using value 6 against the opponent."
-      ],
-      tip: "The played card decides the effect; the remaining card is what you compare."
-    },
+#bgmMenu .dot{ width: 8px; height: 8px; border-radius: 50%; background: currentColor; opacity:.8; }
 
-    extraRules: {
-      title: "Additional Rules & Key Reminders",
-      bullets: [
-        "1. Any effect that requires “value comparison” or “guessing a card” is based on the last remaining card in a player’s hand.",
-        "2. In normal comparisons, cards 10 or higher use only the last digit (e.g., 12 is treated as 2, 18 is treated as 8).",
-        "3. If a comparison results in the same value, it is a tie and neither side is eliminated.",
-        "4. Value comparisons only determine higher/lower; they do not trigger any character skills or venue effects.",
-        "5. If a skill requires a target but there is no valid target, the skill does not activate—but the play still counts as completed.",
-        "6. Protected or dodging players can still be selected, but comparison results will not affect them.",
-        "7. When a player is eliminated, their hand is revealed immediately and moved to the discard pile.",
-        "8. All values and win/lose determinations follow what is shown on screen at the time as the final result."
-      ],
-      tip: "Remember: normal duels use the last digit; the final showdown uses “sum of digits” (per your game’s end condition)."
+/* BGM 播放器條：改為完全透明底（不影響按鈕外觀） */
+#bgmBar{
+  background: transparent !important;
+  border-color: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+  padding-left: 0 !important;  /* 可選：讓條更貼合右側 */
+  padding-right: 0 !important; /* 可選 */
+}
+
+/* 若想保留一點細線輪廓，改用這一行取代上面的 border-color 設定 */
+// #bgmBar{ border-color: rgba(255,255,255,.10) !important; }
+
+
+/* === LAW & LUFFY modals visibility === */
+#lawSwapModal.hidden, #luffyBoostModal.hidden { display:none; }
+
+.deck .cnt{ display:none !important; }
+
+/* === 牌堆外圈紅色呼吸光（不動圖片本體） === */
+@keyframes deckHaloBreath {
+  0%,100% { opacity: .28; box-shadow:
+      0 0 0 2px rgba(239,68,68,.35),
+      0 0 18px 6px rgba(239,68,68,.25); }
+  50%     { opacity: .95; box-shadow:
+      0 0 0 3px rgba(239,68,68,.55),
+      0 0 30px 12px rgba(239,68,68,.38); }
+}
+
+#btnDraw.hot{
+  position: relative;
+  overflow: visible;              /* 讓外圈不被裁切 */
+  border-radius: 12px;            /* 外圈圓角，對齊你原本按鈕 */
+}
+
+/* 只做外圈光暈：放在 ::after，不影響點擊 */
+#btnDraw.hot::after{
+  content: '';
+  position: absolute;
+  inset: -8px;                    /* 外圈距離，調大可更外擴 */
+  border-radius: 16px;
+  pointer-events: none;
+  animation: deckHaloBreath 2.2s ease-in-out infinite;
+}
+
+/* 保證圖片本體不被改動（避免之前的樣式殘留） */
+#btnDraw #deckImg{
+  outline: none !important;
+  box-shadow: none !important;
+  animation: none !important;
+}
+
+/* === 抽牌階段提示泡泡（👉 + 請抽牌，黃光） === */
+@keyframes drawHintPulse {
+  0%,100% {
+    transform: translateX(0);
+    box-shadow:
+      0 0 0 0 rgba(250,204,21,.0),
+      0 0 12px 0 rgba(250,204,21,.0);
+  }
+  50% {
+    transform: translateX(-4px);
+    box-shadow:
+      0 0 0 1px rgba(250,204,21,.65),
+      0 0 20px 6px rgba(250,204,21,.75);
+  }
+}
+
+.draw-hint{
+  position: absolute;
+  right: 150px;          /* 桌機你現在覺得 OK，就先維持 */
+  top: 20%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  line-height: 1.1;
+  background: radial-gradient(circle at 0 0, rgba(250,250,210,.22), transparent 60%),
+              radial-gradient(circle at 100% 100%, rgba(180,83,9,.60), transparent 65%),
+              rgba(15,23,42,.92);
+  border: 1px solid rgba(250,204,21,.85);
+  color: #fefce8;
+  text-shadow: 0 1px 2px rgba(0,0,0,.7);
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,.85),
+    0 0 12px 4px rgba(250,204,21,.55);
+  pointer-events: none;          /* 不擋你點牌堆 */
+  animation: drawHintPulse 1.6s ease-in-out infinite;
+  z-index: 5;
+
+  /* 這兩行是關鍵：避免平板自動換行或亂調整字體大小 */
+  white-space: nowrap;
+  -webkit-text-size-adjust: 100%;
+}
+
+
+
+/* 尊重「減少動態」偏好：保留靜態描邊、停用動畫 */
+@media (prefers-reduced-motion: reduce){
+  #btnDraw.hot::after{ animation: none !important; }
+}
+
+/* === 基拉：解除武裝提示框（2 號面具樣式 · demo 完整版） === */
+#killerLayer {
+  position: fixed;
+  top: 16px;           /* ← 跟騙人布一樣高 */
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  z-index: 188;
+}
+
+/* 容器本體：面具側視徽章（demo 同款） */
+.killer-v2 {
+  position: relative;
+  max-width: min(92vw, 560px);
+  padding: 9px 18px 11px 62px;  /* 左邊留位置給面具 */
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(37,99,235,0.45), transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(15,23,42,0.9), transparent 60%),
+    #020617;
+  border: 1px solid rgba(148,163,184,0.95);
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,1),
+    0 18px 34px rgba(0,0,0,0.96),
+    0 0 26px rgba(59,130,246,0.9);
+  color: #e5f2ff;
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+  line-height: 1.5;
+  letter-spacing: 0.03em;
+  transform: translateY(-20px) scale(0.96);
+  opacity: 0;
+  overflow: visible;
+  transition:
+    opacity 0.26s ease-out,
+    transform 0.26s ease-out,
+    box-shadow 0.26s ease-out;
+}
+
+/* 顯示時動畫狀態（JS 會加 show 類別） */
+.killer-v2.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  box-shadow:
+    0 0 0 1px rgba(191,219,254,1),
+    0 18px 40px rgba(15,23,42,1),
+    0 0 30px rgba(59,130,246,1);
+}
+
+/* 內文區塊（靠右一點，讓出左邊給面具） */
+.killer-text {
+  position: relative;
+  z-index: 3;
+  line-height: 1.6;
+  text-shadow: 0 0 6px rgba(0,0,0,0.85);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.03em;
+  text-align: left;
+}
+
+/* 角色名字上色（demo：冷藍） */
+.killer-name {
+  font-weight: 700;
+  color: #38bdf8;
+  text-shadow: 0 0 8px rgba(15,23,42,0.92);
+}
+
+/* 左邊圓形面具：藍白直條紋（demo ::before） */
+.killer-v2::before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  /* 藍白直條 */
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #1d4ed8 0,
+      #1d4ed8 7px,
+      #e5e7eb 7px,
+      #e5e7eb 14px
+    );
+  box-shadow:
+    0 0 0 2px #020617,
+    0 0 10px rgba(59,130,246,1);
+}
+
+/* 面具上的黑洞排布（demo ::after，多黑點） */
+.killer-v2::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 20% 15%, #020617 0 2px, transparent 3px),
+    radial-gradient(circle at 50% 13%, #020617 0 2px, transparent 3px),
+    radial-gradient(circle at 80% 15%, #020617 0 2px, transparent 3px),
+
+    radial-gradient(circle at 20% 40%, #020617 0 2px, transparent 3px),
+    radial-gradient(circle at 50% 38%, #020617 0 2px, transparent 3px),
+    radial-gradient(circle at 80% 40%, #020617 0 2px, transparent 3px),
+
+    radial-gradient(circle at 20% 65%, #020617 0 2px, transparent 3px),
+    radial-gradient(circle at 50% 63%, #020617 0 2px, transparent 3px),
+    radial-gradient(circle at 80% 65%, #020617 0 2px, transparent 3px),
+
+    radial-gradient(circle at 50% 88%, #020617 0 2px, transparent 3px);
+  /* 只保留在圓形中心，邊緣淡掉 */
+  mask-image: radial-gradient(circle, #000 60%, transparent 62%);
+  -webkit-mask-image: radial-gradient(circle, #000 60%, transparent 62%);
+  opacity: 0.95;
+  pointer-events: none;
+}
+
+
+  /* === 騙人布猜數字：漫畫爆炸提示框（亮色版） === */
+  #usoppLayer{
+    position:fixed;
+    inset-inline:0;
+    top:16px;
+    display:flex;
+    justify-content:center;
+    pointer-events:none;
+    z-index:90;
+  }
+  .usopp-toast{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:8px 14px;
+    font-size:14px;
+    font-weight:900;
+    letter-spacing:.05em;
+    background:#fff;
+    color:#000;
+    border:3px solid #000;
+    border-radius:4px;
+    box-shadow:
+      3px 3px 0 #000,
+      0 10px 28px rgba(0,0,0,.8);
+    opacity:0;
+    transform:translateY(-20px);
+    transition:opacity .25s ease, transform .25s ease;
+    pointer-events:auto;
+    white-space:nowrap;
+  }
+  .usopp-toast::after{
+    content:"";
+    position:absolute;
+    left:22%;
+    top:100%;
+    width:14px;
+    height:14px;
+    background:#fff;
+    border-left:3px solid #000;
+    border-bottom:3px solid #000;
+    transform:translateY(-5px) rotate(45deg);
+  }
+  .usopp-toast.hit{
+    background:#fef9c3;
+  }
+  .usopp-toast.miss{
+    background:#fee2e2;
+  }
+  .usopp-icon{
+    font-size:20px;
+  }
+  @keyframes usoppHitPulse{
+    0%{ transform:translateY(0) scale(1); }
+    30%{ transform:translateY(2px) scale(1.06); }
+    100%{ transform:translateY(0) scale(1); }
+  }
+  @keyframes usoppMissShake{
+    0%,100%{ transform:translateX(0); }
+    25%{ transform:translateX(-4px); }
+    50%{ transform:translateX(3px); }
+    75%{ transform:translateX(-2px); }
+  }
+  .usopp-toast.hit.show{
+    animation:usoppHitPulse .3s ease-out;
+  }
+  .usopp-toast.miss.show{
+    animation:usoppMissShake .32s ease-out;
+  }
+
+/* === 娜美：麻痺提示框（8 號 橘子＆金幣樣式） === */
+#namiLayer {
+  position: fixed;
+  top: 16px;          /* 跟羅賓 / 喬巴同一高度 */
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  z-index: 186;       /* 比 header 再高一點，蓋在最上層 */
+}
+
+/* 主框：直接用 demo 的 v8 當樣式 */
+.nami-v8 {
+  position: relative;
+  max-width: 620px;
+  padding: 9px 16px 11px 44px;
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(251,146,60,0.65), transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(245,158,11,0.55), transparent 60%),
+    #022c22;
+  border: 1px solid rgba(251,191,36,0.95);
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,1),
+    0 16px 32px rgba(15,23,42,0.95),
+    0 0 24px rgba(251,191,36,0.9);
+  color: #fffbeb;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+  transform: translateY(-24px) scale(0.96);
+  opacity: 0;
+  transition:
+    opacity .28s ease-out,
+    transform .28s ease-out,
+    box-shadow .28s ease-out;
+}
+
+/* 左邊橘子＋錢幣圖示 */
+.nami-v8::before {
+  content: "🍊";
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-60%);
+  font-size: 18px;
+  filter: drop-shadow(0 0 6px rgba(251,146,60,1));
+}
+
+.nami-v8::after {
+  content: "฿";
+  position: absolute;
+  left: 24px;
+  top: 50%;
+  transform: translateY(10%);
+  font-weight: 800;
+  font-size: 11px;
+  color: #fef9c3;
+  text-shadow: 0 0 6px rgba(250,250,210,1);
+}
+
+/* 文字本體 */
+.nami-text {
+  position: relative;
+  z-index: 3;
+  line-height: 1.6;
+  text-shadow: 0 0 6px rgba(0,0,0,0.85);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.03em;
+}
+
+.nami-text b {
+  color: #fbbf24; /* 玩家名字：金黃 */
+}
+
+/* 出場動畫用 .show */
+.nami-v8.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  box-shadow:
+    0 0 0 1px rgba(251,191,36,0.85),
+    0 20px 40px rgba(0,0,0,0.75);
+}
+
+/* === 青雉 16：凍結手牌播報（樣式 1-2） === */
+#aokijiLayer {
+  position: fixed;
+  top: 16px;          /* 跟羅賓/喬巴/娜美一樣高度 */
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  z-index: 187;       /* 比 header 再高一點，蓋在最上層 */
+}
+
+/* 外框冰風格：對應 demo 的 .style1-v2 */
+.style1-v2 {
+  position: relative;
+  padding: 8px 18px;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 0 0, rgba(178, 232, 255, 0.6), transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(18, 59, 104, 0.96), #020814 80%);
+  border: 1px solid rgba(204, 239, 255, 0.95);
+  box-shadow:
+    0 0 28px rgba(176, 229, 255, 0.95),
+    inset 0 0 18px rgba(120, 196, 255, 0.7);
+  backdrop-filter: blur(8px);
+}
+
+/* 斜線冰紋 + 亮點 */
+.style1-v2::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(240, 250, 255, 0.28) 0,
+      rgba(240, 250, 255, 0.28) 1px,
+      transparent 1px,
+      transparent 6px
+    ),
+    radial-gradient(circle at 20% 30%, rgba(255,255,255,0.4) 0, transparent 35%),
+    radial-gradient(circle at 80% 70%, rgba(226,244,255,0.4) 0, transparent 35%);
+  mix-blend-mode: screen;
+  opacity: 0.75;
+}
+
+/* 下方冰刺 */
+.style1-v2::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: -8px;
+  height: 18px;
+  background:
+    linear-gradient(180deg, rgba(199,236,255,0.95), rgba(126,201,252,0.95));
+  clip-path: polygon(
+    0 0,
+    10% 100%,
+    25% 0,
+    40% 100%,
+    55% 0,
+    70% 100%,
+    85% 0,
+    100% 100%
+  );
+  box-shadow: 0 0 14px rgba(181,230,255,1);
+  opacity: 0.9;
+}
+
+/* 內層文字框：對應 demo 的 .aokiji-frame */
+.aokiji-frame {
+  position: relative;
+  width: 100%;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #f5fcff;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
+  overflow: visible;
+
+  /* 出場動畫預設狀態 */
+  transform: translateY(-24px) scale(0.96);
+  opacity: 0;
+  transition:
+    opacity .28s ease-out,
+    transform .28s ease-out,
+    box-shadow .28s ease-out;
+}
+
+/* 文字本體：對應 demo 的 .aokiji-text */
+.aokiji-text {
+  position: relative;
+  z-index: 20;
+  padding: 0 18px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.aokiji-text b {
+  color: #c4f0ff; /* 名字稍微亮一點 */
+}
+
+/* 兩側直立冰塊：跟 demo 一樣的效果 */
+.aokiji-frame::before,
+.style1-v2 .aokiji-frame::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  bottom: 16px;
+  width: 32px;
+  background:
+    linear-gradient(145deg,#f8feff,#d7f1ff 30%,#9adfff 70%,#f3fdff 100%);
+  clip-path: polygon(0 0, 100% 20%, 85% 100%, 10% 70%);
+  box-shadow:
+    0 0 14px rgba(190,236,255,1),
+    inset 0 0 8px rgba(117,202,255,1);
+  mix-blend-mode: screen;
+  opacity: 0.96;
+  z-index: 15;
+  pointer-events: none;
+}
+
+.aokiji-frame::before {
+  left: -8px;
+  transform: scaleX(-1);
+}
+
+.aokiji-frame::after {
+  right: -8px;
+}
+
+/* 出場時加上的 .show：讓整塊冰框浮起來 */
+.aokiji-frame.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  box-shadow:
+    0 0 0 1px rgba(204,239,255,0.9),
+    0 20px 40px rgba(0,0,0,0.8);
+}
+
+/* 手機版：字稍微縮小，框高一點 */
+@media (max-width: 640px) {
+  .aokiji-text {
+    font-size: 13px;
+    white-space: normal;
+  }
+  .aokiji-frame {
+    min-height: 88px;
+  }
+}
+
+
+/* === 羅賓：偵察提示框（6 號樣式） === */
+#robinLayer {
+  position: fixed;
+  top: 16px;            /* 在 header 上緣稍微往下 */
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  z-index: 180;         /* 比 header 大，就會浮在最上面 */
+}
+
+.robin-toast {
+  pointer-events: auto;
+  max-width: 620px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(255,255,255,0.16), transparent 55%),
+    linear-gradient(120deg, rgba(188,160,255,0.96), rgba(79,57,135,0.98));
+  border: 1px solid rgba(230,212,255,0.9);
+  box-shadow:
+    0 0 0 1px rgba(120,90,200,0.45),
+    0 18px 32px rgba(0,0,0,0.4);
+  color: #f8f4ff;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transform: translateY(-24px) scale(0.96);
+  opacity: 0;
+  transition:
+    opacity .28s ease-out,
+    transform .28s ease-out,
+    box-shadow .28s ease-out;
+  backdrop-filter: blur(18px);
+}
+
+.robin-toast::before {
+  content: '';
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  border-radius: 999px;
+  border: 1px solid rgba(242,232,255,0.9);
+  box-shadow: inset 0 0 0 1px rgba(176,140,255,0.6);
+  background:
+    radial-gradient(circle at 30% 30%, #fff 0, #fff 18%, transparent 19%),
+    radial-gradient(circle at 65% 60%, rgba(255,216,255,0.85) 0, rgba(255,216,255,0.0) 55%),
+    conic-gradient(from -45deg, #764ea5, #f1a8ff, #7fd0ff, #764ea5);
+}
+
+.robin-toast .label-main {
+  font-weight: 600;
+}
+
+.robin-toast .label-sub {
+  opacity: .85;
+  font-size: 12px;
+}
+
+.robin-toast.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  box-shadow:
+    0 0 0 1px rgba(213,187,255,0.75),
+    0 20px 40px rgba(0,0,0,0.55);
+}
+
+/* === 羅：交換手牌提示框（Style 5 藍光版） === */
+#lawLayer {
+  position: fixed;
+  top: 16px;          /* 放在索隆下面一點點，免得撞在一起 */
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  z-index: 188;
+}
+
+/* 共用：外框容器 */
+.law-toast {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: min(90vw, 480px);
+}
+
+/* 共用：文字樣式 */
+.law-text {
+  position: relative;
+  z-index: 3;
+  line-height: 1.5;
+  text-align: center;
+  text-shadow: 0 0 6px rgba(0,0,0,0.9);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+}
+
+.law-text b {
+  color: #f9f871; /* 名字黃一點比較跳 */
+}
+
+/* Style 5 · 交換卡片 UI 面板（藍光加強版） */
+.law-v5 {
+  position: relative;
+  padding: 11px 24px 13px;
+  border-radius: 18px;
+  background:
+    /* 中央大塊手術藍光 */
+    radial-gradient(circle at 50% 50%, rgba(59,130,246,0.40), transparent 68%),
+    /* 左下亮一點 */
+    radial-gradient(circle at 0% 100%, rgba(56,189,248,0.55), transparent 65%),
+    /* 右上亮一點 */
+    radial-gradient(circle at 100% 0%, rgba(37,99,235,0.50), transparent 65%),
+    #020617;
+  border: 1px solid rgba(148,163,184,0.9);
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,1),         /* 外框邊線 */
+    0 20px 38px rgba(15,23,42,0.95),    /* 下方陰影 */
+    0 0 32px rgba(56,189,248,0.95);     /* 整體藍色外光暈（加強） */
+  color: #e5f2ff;
+  overflow: hidden;
+
+  /* 進場動畫初始狀態 */
+  opacity: 0;
+  transform: translateY(-18px) scale(.96);
+  transition:
+    opacity .28s ease-out,
+    transform .28s ease-out,
+    box-shadow .28s ease-out;
+}
+
+/* 顯示時 */
+.law-v5.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* 左右兩張正在交換的卡片輪廓 */
+.law-v5::before,
+.law-v5::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  width: 22px;
+  height: 30px;
+  border-radius: 4px;
+  border: 1px solid rgba(148,163,184,0.8);
+  box-shadow: 0 0 8px rgba(148,163,184,0.8);
+  opacity: 0.75;
+}
+
+.law-v5::before {
+  left: 10px;
+  transform: rotate(-8deg);
+}
+
+.law-v5::after {
+  right: 10px;
+  transform: rotate(8deg);
+}
+
+/* === 喬巴：狀態提示框（2 號糖果護盾樣式） === */
+#chopperLayer {
+  position: fixed;
+  top: 16px;          /* 在 header 下面一點 */
+  left: 0;
+  right: 0;
+  padding: 0 16px;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 180;
+}
+
+.chopper-toast {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 999px 999px 999px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(-16px) scale(.96);
+  transition: opacity .22s ease-out, transform .22s ease-out;
+  /* 這裡直接用 demo 的 2 號糖果護盾配色 */
+  background:
+    radial-gradient(circle at 0 0,#f9a8d4 0,transparent 60%),
+    radial-gradient(circle at 100% 100%,#bfdbfe 0,transparent 60%),
+    #fef9c3;
+  color:#1f2937;
+  border:1px solid #fb7185;
+  box-shadow:0 14px 32px rgba(244,114,182,.6);
+}
+
+/* 尾巴（小小下巴） */
+.chopper-toast::after {
+  content: "";
+  position: absolute;
+  right: 16px;
+  bottom: -8px;
+  width: 18px;
+  height: 14px;
+  background: inherit;
+  border-radius: 0 0 18px 18px;
+  transform: skewX(-18deg);
+}
+
+/* Icon 圓形（喬巴十字 / 閃光） */
+.chopper-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  background: #fef2f2;
+  box-shadow:
+    0 0 0 2px #fee2e2,
+    0 0 12px rgba(248,113,113,.7);
+}
+
+.chopper-text {
+  letter-spacing: .04em;
+}
+
+/* 顯示時 */
+.chopper-toast.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* === 大媽：保護 / 閃避狀態提示框（demo-mom 3 號蛋糕樣式） === */
+#momLayer {
+  position: fixed;
+  top: 16px;          /* 跟喬巴差不多高度，在 header 下面 */
+  left: 0;
+  right: 0;
+  padding: 0 16px;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 181;       /* 比喬巴略高一點，避免被蓋住 */
+}
+
+/* 外層 toast：負責進場動畫 */
+.bigmom-toast {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: min(92vw, 580px);
+  text-align: center;
+  margin-top: 4px;
+  opacity: 0;
+  transform: translateY(-16px) scale(.96);
+  transition:
+    opacity .24s ease-out,
+    transform .24s ease-out;
+}
+
+/* 顯示時加上 .show */
+.bigmom-toast.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* demo-mom 的 3 號蛋糕樣式本體 */
+.bigmom-v3 {
+  position: relative;
+  padding: 10px 20px 12px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 0% 50%, rgba(244,114,182,0.65), transparent 60%),
+    radial-gradient(circle at 100% 50%, rgba(249,168,212,0.55), transparent 60%),
+    #4c0519;
+  border: 1px solid rgba(251,113,133,0.95);
+  box-shadow:
+    0 0 0 2px #020617,
+    0 18px 32px rgba(15,23,42,0.96),
+    0 0 28px rgba(251,113,133,0.95);
+  color: #ffe4e6;
+  overflow: hidden;
+}
+
+/* 左蛋糕（原本是 ❤） */
+.bigmom-v3::before {
+  content: "🍰";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-55%);
+  font-size: 20px;
+  text-shadow:
+    0 0 6px rgba(248,113,113,1),
+    0 0 14px rgba(244,114,182,1);
+}
+
+/* 右蛋糕（原本是 🛡） */
+.bigmom-v3::after {
+  content: "🍰";
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  text-shadow:
+    0 0 6px rgba(254,249,195,1),
+    0 0 12px rgba(250,250,210,1);
+}
+
+/* 文字區 */
+.bigmom-text {
+  position: relative;
+  z-index: 3;
+  line-height: 1.6;
+  text-shadow: 0 0 6px rgba(0,0,0,0.85);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.03em;
+  padding: 0 30px 0 30px;  /* 兩側讓位給蛋糕 icon */
+}
+
+.bigmom-text b {
+  color: #f97316;   /* 打出玩家名 → 橘金色 */
+}
+
+.bigmom-key {
+  color: #f9a8d4;   /* 「保護 / 閃避」關鍵字 → 粉色 */
+}
+
+
+/* === 索隆：棄牌提示框（刀光金屬風） === */
+#zoroLayer {
+  position: fixed;
+  top: 16px;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  z-index: 185;
+}
+
+/* === 索隆：棄牌提示框（demo 樣式 3） === */
+.zoro-v3 {
+  position: relative;
+  min-width: 280px;
+  max-width: 360px;
+  padding: 14px 20px;
+  border-radius: 10px;
+  background:
+    linear-gradient(135deg, rgba(15, 15, 15, 0.95), rgba(60, 80, 60, 0.9)),
+    repeating-linear-gradient(
+      90deg,
+      rgba(15, 30, 20, 0.7) 0,
+      rgba(15, 30, 20, 0.7) 6px,
+      rgba(24, 50, 30, 0.9) 6px,
+      rgba(24, 50, 30, 0.9) 12px
+    );
+  border: 3px solid #1f6b3b;
+  color: #e9ffe1;
+  font-size: 16px;           /* demo 原本是 18px，遊戲我幫你略縮小一點 */
+  font-weight: 700;
+  text-align: center;
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.8),
+    0 0 18px rgba(10, 40, 20, 0.9);
+  overflow: hidden;
+  animation: popIn .35s ease-out;
+}
+
+/* 右邊金屬亮線 */
+.zoro-v3::after {
+  content: "";
+  position: absolute;
+  right: -6px;
+  top: -8px;
+  width: 24px;
+  height: 120%;
+  background: linear-gradient(
+    90deg,
+    rgba(200, 220, 210, 0.9),
+    rgba(130, 150, 140, 0.6),
+    rgba(20, 30, 25, 0.95)
+  );
+  box-shadow: 0 0 12px rgba(210, 255, 230, 0.8);
+  transform: skewX(-12deg);
+  opacity: .95;
+}
+
+/* 整體斜向亮面 */
+.zoro-v3::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.12),
+    transparent 55%,
+    rgba(0, 0, 0, 0.7)
+  );
+  mix-blend-mode: soft-light;
+  opacity: 0.5;
+}
+
+/* 文字本體 */
+.zoro-text {
+  position: relative;
+  z-index: 10;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.9);
+  line-height: 1.4;
+}
+.zoro-text b {
+  color: #8bffb5;
+}
+
+/* 彈出動畫 */
+@keyframes popIn {
+  0%   { transform: scale(.8);  opacity: 0; }
+  80%  { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+/* === 卡片圖鑑：縮圖樣式 === */
+.card-dex-thumb {
+  position: relative;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 0 0, rgba(148,163,184,0.35), transparent 55%),
+    #020617;
+  border: 1px solid rgba(51,65,85,0.95);
+  cursor: pointer;
+  transition:
+    transform .15s ease,
+    box-shadow .15s ease,
+    border-color .15s ease,
+    background .15s ease;
+}
+.card-dex-thumb:hover {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 8px 22px rgba(0,0,0,.75);
+  border-color: rgba(148,163,184,1);
+}
+.card-dex-thumb img {
+  width: 100%;
+  display: block;
+}
+
+.card-dex-meta {
+  padding: 3px 6px 4px;
+  font-size: 10px;
+  line-height: 1.2;
+  color: rgba(226,232,240,.9);
+  background: linear-gradient(to bottom, rgba(15,23,42,.92), rgba(15,23,42,.98));
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+}
+.card-dex-meta span:nth-child(1){
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card-dex-meta span:nth-child(2){
+  opacity:.85;
+}
+
+/* ★ 強化中：紅黑發光框（本局有強化的卡） */
+.card-dex-thumb.enhanced {
+  border-color: rgba(248,113,113,0.95);
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,0.9),
+    0 0 22px rgba(248,113,113,0.8),
+    0 0 45px rgba(15,23,42,0.95);
+  background:
+    radial-gradient(circle at 15% 0%, rgba(248,113,113,0.35), transparent 60%),
+    radial-gradient(circle at 85% 100%, rgba(15,23,42,0.9), transparent 65%),
+    #020617;
+  animation: cardDexPulse 1.1s ease-in-out infinite alternate;
+}
+
+@keyframes cardDexPulse{
+  from{
+    box-shadow:
+      0 0 0 1px rgba(15,23,42,0.9),
+      0 0 14px rgba(248,113,113,0.7),
+      0 0 36px rgba(15,23,42,0.9);
+    transform: translateY(0) scale(1);
+  }
+  to{
+    box-shadow:
+      0 0 0 1px rgba(15,23,42,0.9),
+      0 0 26px rgba(248,113,113,1),
+      0 0 52px rgba(0,0,0,1);
+    transform: translateY(-1px) scale(1.03);
+  }
+}
+
+
+</style>
+
+  <!-- i18n (4 languages) -->
+  <script src="i18n/zh-Hant.js"></script>
+  <script src="i18n/en.js"></script>
+  <script src="i18n/ja.js"></script>
+  <script src="i18n/ko.js"></script>
+  <script src="i18n/i18n.js"></script>
+  <script>
+    // Apply static translations in this page (reads localStorage key "op_lang")
+    function applyI18nOnGamePage(){
+      if (!window.__I18N || typeof window.__I18N.t !== 'function') return;
+      document.querySelectorAll('[data-i18n]').forEach(el=>{
+        const key = el.getAttribute('data-i18n');
+        if (!key) return;
+        el.textContent = window.__I18N.t(key);
+      });
+      try { document.title = window.__I18N.t('ui.game.title'); } catch(e){}
+    }
+    document.addEventListener('DOMContentLoaded', applyI18nOnGamePage);
+  </script>
+
+</head>
+<body>
+<div id="usoppLayer"></div>
+<div id="robinLayer"></div>
+<div id="zoroLayer"></div>
+<div id="lawLayer"></div> 
+<div id="namiLayer"></div>
+<div id="momLayer"></div>
+<div id="killerLayer"></div>
+<div id="chopperLayer"></div>
+<div id="aokijiLayer"></div>
+<header class="sticky top-0 z-40 bg-[#101418]/80 backdrop-blur border-b border-[#1c2229]">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
+    <!-- 左側標題 -->
+    <div class="font-semibold tracking-wide" data-i18n="ui.game.title">偉大航道爭霸戰</div>
+
+    <!-- 房號/連線：留著給程式用，但畫面隱藏 -->
+    <div class="hidden text-xs px-2 py-1 rounded border border-neutral-700">房號：<span id="roomLbl">—</span></div>
+    <div class="hidden text-xs px-2 py-1 rounded border border-neutral-700">連線：<span id="connLbl" class="text-red-400">disconnected</span></div>
+
+    <!-- 保留寶箱（可見） -->
+    <div class="text-xs px-2 py-1 rounded border border-neutral-700"><span data-i18n="ui.game.chestRemaining">寶箱金幣剩餘：</span><span id="chestLbl">0</span> <span data-i18n="ui.game.coinsUnit">枚</span></div>
+
+ <!-- ★ 新增：卡片圖鑑按鈕 -->
+      <button id="cardDexBtn"
+              class="px-2 py-1 rounded border border-[#374151] bg-[#111827]/80
+                     text-[11px] tracking-wide hover:bg-[#020617] hover:border-[#f97373]
+                     hover:text-[#fee2e2] transition-colors duration-150">
+        <span data-i18n="ui.game.cardDex">卡片圖鑑</span>
+      </button>
+
+ <!-- 拉到最右邊：音樂條 -->
+    <div class="ml-auto flex items-center gap-2">
+      <div id="bgmBar" class="flex items-center gap-2 px-2 py-1 rounded-lg border border-[#2a2f35] bg-[#14181c]/80">
+        <!-- 控制鈕 -->
+       <button id="bgmPrev" class="icon-btn" title="上一首" aria-label="上一首">
+  <!-- 上一首：|◀ -->
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M7 12L18 5v14L7 12zM6 5h2v14H6z"/>
+  </svg>
+</button>
+
+<button id="bgmPlay" class="icon-btn big" title="播放/暫停" aria-label="播放/暫停">
+  <!-- ▶ -->
+  <svg id="iconPlay" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M8 5v14l11-7z"/>
+  </svg>
+  <!-- ⏸（預設隱藏，播放時顯示） -->
+  <svg id="iconPause" class="hidden" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M6 5h4v14H6zm8 0h4v14h-4z"/>
+  </svg>
+</button>
+
+<button id="bgmNext" class="icon-btn" title="下一首" aria-label="下一首">
+  <!-- ▶| -->
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M6 6l11 6-11 6V6zm12 0h2v12h-2z"/>
+  </svg>
+</button>
+
+<button id="bgmShuffle" class="icon-btn" title="隨機播放" aria-label="隨機播放">
+  <!-- 交錯箭頭 -->
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M17 3h4v4h-2V6h-2.17l-3.9 3.9 1.41 1.41L18.83 8H19v2h2V6a3 3 0 0 0-4-3zM4 6h5.17l3.9 3.9-1.41 1.41L7.17 8H4V6zm0 12h3.17l3.9-3.9 1.41 1.41L8.83 20H4v-2zm17-2v4h-4a3 3 0 0 1-3-3v-.17l-2.1-2.1 1.41-1.41 2.69 2.69c.24.24.57.39.91.39H19v-2h2z"/>
+  </svg>
+</button>
+
+        <!-- 音量 -->
+        <div class="flex items-center gap-1 ml-1">
+          <span class="text-xs opacity-70">🔊</span>
+          <input id="bgmVol" type="range" min="0" max="1" step="0.01" value="0.7"
+                 class="w-24 accent-amber-300" />
+        </div>
+
+        <!-- 曲名 -->
+        <div id="bgmTitle"
+             class="text-xs sm:max-w-[280px] md:max-w-[360px] truncate ml-2 opacity-90">
+          未播放
+        </div>
+
+        <!-- 隱藏 audio 元件 -->
+        <audio id="bgmAudio" preload="auto"></audio>
+      </div>
+    </div>
+    </div>
+
+   
+
+    <!-- 這三個輸入留著但隱藏，避免打壞你現有 JS 綁定 -->
+    <input id="inpName" class="hidden w-40 px-2 py-1.5 rounded-lg border border-neutral-700 bg-[#14181c]" placeholder="暱稱"/>
+    <input id="inpRoom" class="hidden w-28 px-2 py-1.5 rounded-lg border border-neutral-700 bg-[#14181c]" placeholder="房號"/>
+    <button id="btnJoin" class="hidden px-3 py-1.5 rounded-lg border border-neutral-700 bg-[#14181c] hover:bg-[#192028]">加入</button>
+  </div>
+</header>
+
+  <main class="max-w-7xl mx-auto px-3 md:px-4 py-4 grid gap-4 lg:grid-cols-[1.2fr_.8fr]">
+    <section class="space-y-3">
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+        <div class="card p-3 md:col-span-2">
+          <div class="text-sm mb-2 opacity-80" data-i18n="ui.game.venueThisMatch">本局場地</div>
+          <div id="venues" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2"></div>
+        </div>
+      <div class="card p-3 flex items-center justify-between gap-3 relative">
+  <div class="text-sm opacity-80">
+    <span data-i18n="ui.game.deck">牌堆</span>
+    <span id="deckCnt" class="ml-2 px-1.5 py-0.5 rounded border border-[#2a2f35] text-amber-300 font-semibold">0</span>
+  </div>
+
+  <button id="btnDraw" class="deck">
+    <img id="deckImg" src="images/cards/back.webp" alt="deck"/>
+  </button>
+
+  <!-- ★ 抽牌提示泡泡：預設 hidden，JS 會在可抽牌時打開 -->
+  <div id="drawHint" class="draw-hint hidden select-none">
+    <span class="emoji">👉</span>
+    <span class="txt" data-i18n="ui.game.drawHint">請抽牌</span>
+  </div>
+</div>
+
+
+        <div class="card p-3 md:col-span-3">
+          <div class="flex items-center justify-between mb-2">
+            <div class="text-sm opacity-80" data-i18n="ui.game.discard">棄牌</div>
+            <button id="btnNextRound" class="hidden px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black text-sm"><span data-i18n="ui.game.nextRound">下一局 ▶</span></button>
+          </div>
+            <div id="discard" class="flex gap-2 overflow-x-auto"></div>
+        </div>
+      </div>
+
+      <div id="myPlayZone" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <button id="playHand" class="border border-[#2f353c] rounded-xl overflow-hidden"><img id="imgHand" src=""/></button>
+        <button id="playDrawn" class="border border-[#2f353c] rounded-xl overflow-hidden"><img id="imgDrawn" src=""/></button>
+      </div>
+
+      <div class="card p-3">
+        <div class="flex items-center justify-between mb-2">
+          <div class="text-sm opacity-80" data-i18n="ui.game.battleLog">對局日誌</div>
+          <div class="text-xs text-neutral-400"><span data-i18n="ui.game.turn">輪到：</span><span id="turnLbl">—</span>｜<span data-i18n="ui.game.phase">階段：</span><span id="stepLbl">—</span></div>
+        </div>
+        <ol id="logBox" class="text-sm space-y-1 list-decimal pl-5 max-h-72 overflow-auto"></ol>
+      </div>
+    </section>
+
+    <aside class="space-y-3">
+      <div class="card p-3">
+        <div class="text-sm mb-2 opacity-80" data-i18n="ui.game.players">玩家</div>
+        <div id="players" class="grid gap-2"></div>
+      </div>
+      <!-- 訊息面板已移除 -->
+    </aside>
+  </main>
+
+  <div id="modal" class="modal hidden"><div class="card w-[min(92vw,680px)] p-4"></div></div>
+
+  <!-- ★★ 卡片圖鑑 Overlay ★★ -->
+  <div id="cardDexOverlay"
+       class="hidden fixed inset-0 z-[90] md:z-[120] flex items-center justify-center bg-black/70">
+    <div class="card-dex-panel
+            w-[min(1500px,98vw)]
+            max-h-[96vh]
+            rounded-2xl border border-slate-600/80
+            bg-[#050914]/95 shadow-2xl backdrop-blur-md
+            overflow-hidden flex flex-col">
+      <!-- 標題列 -->
+      <div class="flex items-center justify-between px-4 py-2 border-b border-slate-700/70 bg-gradient-to-r from-slate-900/80 via-slate-800/80 to-slate-900/80 text-xs md:text-sm">
+        <div class="font-semibold tracking-wide">卡片圖鑑(紅框為本局強化卡)</div>
+        <button id="cardDexClose"
+                class="px-2 py-1 rounded border border-slate-500/70 bg-black/30 hover:bg-black/60 text-[11px]">
+          關閉
+        </button>
+      </div>
+
+      <!-- 內容 -->
+      <div class="flex flex-col md:flex-row gap-3 md:gap-4 p-3 md:p-4 overflow-hidden">
+        <!-- 左邊：卡片列表 -->
+        <div class="flex-1 overflow-y-auto pr-1">
+          <div id="cardDexGrid"
+               class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-5 lg:grid-cols-6 gap-2 text-[10px] md:text-xs"></div>
+        </div>
+
+        <!-- 右邊：大圖預覽 -->
+        <div class="w-full md:w-[50%] shrink-0 border-t md:border-t-0 md:border-l border-slate-700/70 pt-3 md:pt-0 md:pl-4">
+          <div id="cardDexPreviewEmpty"
+               class="text-[11px] md:text-xs text-slate-300/80 italic">
+            點左邊任一張卡片，可以查看大圖與強化版本。
+          </div>
+
+          <div id="cardDexPreview" class="hidden">
+            <div class="text-xs md:text-sm font-semibold mb-1" id="cardDexPreviewTitle"></div>
+
+            <div class="grid grid-cols-2 gap-2 mb-2">
+              <div class="flex flex-col items-center">
+                <div class="text-[10px] md:text-xs mb-1 opacity-75">一般</div>
+                <img id="cardDexPreviewBase"
+                     class="w-full max-w-[480px] rounded-lg border border-slate-600/80 shadow-lg bg-black/40 object-contain" />
+              </div>
+              <div class="flex flex-col items-center">
+                <div class="text-[10px] md:text-xs mb-1 opacity-75">強化</div>
+                <img id="cardDexPreviewEnh"
+                     class="w-full max-w-[480px] rounded-lg border border-rose-500/80 shadow-lg bg-black/40 object-contain" />
+              </div>
+            </div>
+
+            <div class="text-[10px] md:text-xs text-slate-300/75" id="cardDexPreviewVenue"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ★★ /卡片圖鑑 Overlay 結束 ★★ -->
+
+
+<!-- 決鬥特效 -->
+<div id="duelFx" class="hidden">
+  <div class="overlay">
+    <div class="arena">
+      <div class="slot slot-left">
+        <div class="avatar-wrap">
+          <img class="avatar" src="images/avatars/a1.webp" alt="">
+          <div class="pname">P1</div>
+        </div>
+        <div class="cardwrap">
+          <img class="cardimg" src="images/cards/back.png" alt="">
+        </div>
+      </div>
+
+<!-- 決鬥音效 -->
+<audio id="duelHitSfx"  src="audio/sfx/duel_hit.mp3"  preload="auto"></audio>
+<audio id="duelFlipSfx" src="audio/sfx/duel_flip.mp3" preload="auto"></audio>
+<audio id="duelBurnSfx" src="audio/sfx/duel_burn.mp3" preload="auto"></audio>
+
+      <div class="vs-tag">VS</div>
+
+      <div class="slot slot-right">
+        <div class="avatar-wrap">
+          <img class="avatar" src="images/avatars/a2.webp" alt="">
+          <div class="pname">P2</div>
+        </div>
+        <div class="cardwrap">
+          <img class="cardimg" src="images/cards/back.png" alt="">
+        </div>
+      </div>
+    </div>
+
+    <div class="caption">
+      <div class="line line-vs"></div>
+      <div class="line line-win"></div>
+    </div>
+  </div>
+</div>
+
+
+
+  <!-- 寶箱清空 → 結算前 7 秒圖片 -->
+  <div id="finalOverlay" class="hidden fixed inset-0 z-[220] flex items-center justify-center bg-black/80">
+    <div class="relative">
+      <!-- 上方文字 -->
+      <div class="absolute left-1/2 -translate-x-1/2 top-4 sm:top-6
+                  text-white text-xl sm:text-2xl font-bold tracking-wide
+                  drop-shadow-[0_0_10px_rgba(0,0,0,0.9)]">
+        寶箱已空，等待結算...
+      </div>
+      <!-- 中間圖片：換成你自己的圖檔路徑 -->
+      <img src="images/final_ready.png"
+           alt="寶箱已空，等待結算"
+           class="max-h-[80vh] rounded-2xl shadow-2xl border border-white/20">
+    </div>
+  </div>
+
+  <!-- 擲硬幣動畫（只有本機播放） -->
+  <div id="coinOverlay" class="hidden">
+    <div id="coinFrame">
+      <video id="coinVideo" src="videos/coin.mp4" playsinline preload="auto"></video>
+    </div>
+  </div>
+
+  <!-- 抽牌動畫（只有本機播放，播完才真正抽牌） -->
+  <div id="drawOverlay" class="hidden fixed inset-0 z-[105] flex items-center justify-center bg-black/80">
+    <video id="drawVideo"
+           src="videos/draw.mp4"
+           playsinline
+           preload="auto"
+           class="max-w-[90vw] max-h-[90vh] rounded-xl shadow-2xl"></video>
+  </div>
+
+  <!-- 打出卡片「快閃」Overlay（自己打牌時才會有語音＋台詞泡泡） -->
+  <div id="playedOverlay" class="hidden">
+    <div id="playedFrame">
+      <!-- 語音台詞泡泡：顯示在卡圖上方 -->
+      <div id="voiceBubble" class="hidden">
+        <span id="voiceText"></span>
+      </div>
+
+      <!-- 卡片大圖 -->
+      <img id="playedImg" src="images/cards/back.webp" alt="played"/>
+
+      <!-- 誰打出的提示小字（保留） -->
+      <div id="playedMeta" class="text-sm"></div>
+    </div>
+  </div>
+
+
+  <!-- 強化技能影片（全體播放） -->
+  <div id="enhOverlay" class="hidden fixed inset-0 z-[140] flex items-center justify-center bg-black/70">
+    <video id="enhVideo" playsinline preload="auto" class="max-w-[80vw] max-h-[80vh] rounded-xl shadow-2xl"></video>
+  </div>
+
+
+  <!-- === 羅（強化）查看後的交換詢問框 === -->
+  <div id="lawSwapModal" class="hidden fixed inset-0 z-[90] flex items-center justify-center bg-black/70">
+    <div class="w-[min(560px,92vw)] rounded-2xl border border-neutral-700/70 bg-neutral-900/80 backdrop-blur p-5">
+      <div class="text-lg font-bold mb-3">ROOM・SCAN</div>
+      <div class="flex items-center gap-4 mb-4">
+        <img id="lawTargetImg" class="w-40 h-56 object-contain rounded-lg border border-white/10" />
+        <div class="text-sm opacity-80">
+          <div class="mb-2">目標玩家：<span id="lawTargetName" class="font-semibold"></span></div>
+          <div>你要和他的手牌交換嗎？</div>
+        </div>
+      </div>
+      <div class="flex justify-end gap-2">
+        <button id="lawSwapCancel" class="px-3 py-1.5 rounded-lg border border-white/20 bg-white/10 hover:bg-white/20">取消</button>
+        <button id="lawSwapOk" class="px-3 py-1.5 rounded-lg border border-white/20 bg-white/10 hover:bg-white/20">交換</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- === 魯夫（強化）發動確認框 === -->
+  <div id="luffyBoostModal" class="hidden fixed inset-0 z-[90] flex items-center justify-center bg-black/70">
+    <div class="w-[min(520px,92vw)] rounded-2xl border border-neutral-700/70 bg-neutral-900/80 backdrop-blur p-5">
+      <div class="text-lg font-extrabold mb-3">發動</div>
+      <div class="text-sm opacity-80 mb-4">魯夫強化：是否發動？</div>
+      <div class="flex justify-end">
+        <button id="luffyBoostGo" class="px-4 py-2 rounded-lg border border-white/20 bg-white/10 hover:bg-white/20">
+          猿王群鴉炮
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+<script>
+/* === 路徑工具 === */
+const CARD     = id => `images/cards/${id}.webp`;
+const CARD_ENH = id => `images/cards/enh/${id}.webp`; // ★ 強化卡面
+const VEN      = name => `images/venues/${name}.webp`;
+const AVA      = a => `images/avatars/${a||1}.webp`;
+
+const el = {
+  conn: document.getElementById('connLbl'),
+  roomLbl: document.getElementById('roomLbl'),
+  name: document.getElementById('inpName'),
+  room: document.getElementById('inpRoom'),
+  join: document.getElementById('btnJoin'),
+  venues: document.getElementById('venues'),
+  discard: document.getElementById('discard'),
+  deckCnt: document.getElementById('deckCnt'),
+  deckBtn: document.getElementById('btnDraw'),
+  deckHint: document.getElementById('drawHint'),
+  imgHand: document.getElementById('imgHand'),
+  imgDrawn: document.getElementById('imgDrawn'),
+  playZone: document.getElementById('myPlayZone'),
+  playHand: document.getElementById('playHand'),
+  playDrawn: document.getElementById('playDrawn'),
+  players: document.getElementById('players'),
+  log: document.getElementById('logBox'),
+  /* msg: 已移除 */
+  turnLbl: document.getElementById('turnLbl'),
+  stepLbl: document.getElementById('stepLbl'),
+  modal: document.getElementById('modal'),
+  chestLbl: document.getElementById('chestLbl'),
+  nextRound: document.getElementById('btnNextRound'),
+  cardDexBtn: document.getElementById('cardDexBtn'),
+};
+
+// === 卡片圖鑑 DOM 快取 ===
+const dexDom = {
+  overlay: document.getElementById('cardDexOverlay'),
+  grid: document.getElementById('cardDexGrid'),
+  close: document.getElementById('cardDexClose'),
+  preview: document.getElementById('cardDexPreview'),
+  previewEmpty: document.getElementById('cardDexPreviewEmpty'),
+  previewTitle: document.getElementById('cardDexPreviewTitle'),
+  previewBase: document.getElementById('cardDexPreviewBase'),
+  previewEnh: document.getElementById('cardDexPreviewEnh'),
+  previewVenue: document.getElementById('cardDexPreviewVenue'),
+};
+
+// 先綁定按鈕與關閉行為（實際的 openCardDex 等函式在後面宣告）
+if (el.cardDexBtn && dexDom.overlay && dexDom.grid) {
+  el.cardDexBtn.addEventListener('click', openCardDex);
+}
+
+if (dexDom.close) {
+  dexDom.close.addEventListener('click', closeCardDex);
+}
+
+// 點黑色背景也可以關閉整個圖鑑
+if (dexDom.overlay) {
+  dexDom.overlay.addEventListener('click', (ev)=>{
+    if (ev.target === dexDom.overlay) {
+      closeCardDex();
+    }
+  });
+}
+
+// 點左邊縮圖 → 切換右邊預覽
+if (dexDom.grid) {
+  dexDom.grid.addEventListener('click', onCardDexGridClick);
+}
+
+
+// === BGM 播放清單（照你提供的 20 首） ===
+const BGM_LIST = [
+  { title: "OP 01 – ウィーアー!(We Are)", src: "audio/bgm/track01.mp3" },
+  { title: "OP 02 – Believe", src: "audio/bgm/track02.mp3" },
+  { title: "OP 03 – ヒカリへ", src: "audio/bgm/track03.mp3" },
+  { title: "OP 04 – BON VOYAGE!", src: "audio/bgm/track04.mp3" },
+  { title: "OP 05 – ココロのちず", src: "audio/bgm/track05.mp3" },
+  { title: "OP 06 – BRAND NEW WORLD", src: "audio/bgm/track06.mp3" },
+  { title: "OP 07 – ウィーアー!～7人の麥わら海賊団篇～", src: "audio/bgm/track07.mp3" },
+  { title: "OP 08 – Crazy Rainbow", src: "audio/bgm/track08.mp3" },
+  { title: "OP 09 – Jungle P", src: "audio/bgm/track09.mp3" },
+  { title: "OP 10 – ウィーアー!～アニメーションワンピース10週年", src: "audio/bgm/track10.mp3" },
+  { title: "OP 11 – Share The World", src: "audio/bgm/track11.mp3" },
+  { title: "OP 12 – 風をさがして", src: "audio/bgm/track12.mp3" },
+  { title: "OP 13 – One day", src: "audio/bgm/track13.mp3" },
+  { title: "OP 14 – Fight Together", src: "audio/bgm/track14.mp3" },
+  { title: "OP 15 – We Go!", src: "audio/bgm/track15.mp3" },
+  { title: "OP 16 – Hands Up!", src: "audio/bgm/track16.mp3" },
+  { title: "OP 17 – Wake up!", src: "audio/bgm/track17.mp3" },
+  { title: "OP 18 – Hard Knock Days", src: "audio/bgm/track18.mp3" },
+  { title: "OP 19 – We Can!", src: "audio/bgm/track19.mp3" },
+  { title: "OP 20 – Hope", src: "audio/bgm/track20.mp3" }
+];
+
+// === 取得 DOM ===
+const bgmAudio   = document.getElementById('bgmAudio');
+const bgmTitleEl = document.getElementById('bgmTitle');
+const bgmPlayBtn = document.getElementById('bgmPlay');
+const bgmPrevBtn = document.getElementById('bgmPrev');
+const bgmNextBtn = document.getElementById('bgmNext');
+const bgmVol     = document.getElementById('bgmVol');
+const bgmShuffle = document.getElementById('bgmShuffle');
+const iconPlay  = document.querySelector('#bgmPlay #iconPlay');
+const iconPause = document.querySelector('#bgmPlay #iconPause');
+
+function setPlayVisual(isPlaying){
+  if (!iconPlay || !iconPause) return;
+  if (isPlaying){
+    iconPlay.classList.add('hidden');
+    iconPause.classList.remove('hidden');
+  }else{
+    iconPause.classList.add('hidden');
+    iconPlay.classList.remove('hidden');
+  }
+}
+
+
+// 讓曲名可當「展開清單」的切換鈕
+let bgmMenu = document.getElementById('bgmMenu');
+if (!bgmMenu) {
+  // 建立彈層容器（放在 header 裡、靠右對齊）
+  const header = document.querySelector('header .max-w-7xl') || document.querySelector('header > div');
+  const anchor = header.querySelector('#bgmBar') || header;
+  const wrap = document.createElement('div');
+  wrap.style.position = 'relative';
+  anchor.parentNode.insertBefore(wrap, anchor);
+  wrap.appendChild(anchor);
+
+  bgmMenu = document.createElement('div');
+  bgmMenu.id = 'bgmMenu';
+  bgmMenu.classList.add('hidden');
+  wrap.appendChild(bgmMenu);
+}
+
+// === 狀態 ===
+let bgmIndex   = Number(localStorage.getItem('bgm_index') || '0') % BGM_LIST.length;
+let isShuffle  = localStorage.getItem('bgm_shuffle') === '1';
+let userInteracted = false; // 解除瀏覽器自動播放限制
+let wasPlayingBeforeDuck = false; // 影片介入前是否在播放
+let duckSet = new Set(); // 正在播放中的影片集合（同時多段也能正確回復）
+
+// === iOS 用：需要續播 BGM 的旗標 ===
+let needBgmResume = false;
+
+// 統一的「請嘗試續播 BGM」工具
+function requestBgmResume(){
+  if (!bgmAudio) return;
+
+  bgmAudio.play().then(()=>{
+    // 播放成功
+    setPlayVisual(true);
+    needBgmResume = false;
+    if (bgmPlayBtn) bgmPlayBtn.classList.remove('need-resume');
+  }).catch(()=>{
+    // iOS 可能覺得現在不是使用者手動觸發 → 先記旗標
+    needBgmResume = true;
+    if (bgmPlayBtn) bgmPlayBtn.classList.add('need-resume');
+  });
+}
+
+// 任何一次點擊 / 觸控，只要還需要續播，就再試一次
+document.addEventListener('touchend', ()=>{
+  if (needBgmResume) requestBgmResume();
+}, { passive:true });
+
+document.addEventListener('click', ()=>{
+  if (needBgmResume) requestBgmResume();
+});
+
+
+// ===== UI 繪製 =====
+function paintTitle(){ bgmTitleEl.textContent = BGM_LIST[bgmIndex]?.title || '未播放'; }
+function paintShuffleBtn(){
+  if (isShuffle) bgmShuffle.classList.add('is-active');
+  else bgmShuffle.classList.remove('is-active');
+}
+function renderMenu(){
+  const cur = bgmIndex;
+  const html = BGM_LIST.map((t,i)=>`
+    <div class="item ${i===cur?'active':''}" data-i="${i}">
+      <span class="dot" style="opacity:${i===cur?1:.35}"></span>
+      <span class="title" style="flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${t.title}</span>
+      <span class="sec" style="opacity:.7; font-size:12px;">${String(i+1).padStart(2,'0')}</span>
+    </div>
+  `).join('');
+  bgmMenu.innerHTML = html || '<div class="text-xs opacity-70 p-2">（沒有曲目）</div>';
+}
+
+paintTitle(); paintShuffleBtn(); renderMenu();
+
+// ===== 基本控制 =====
+function loadTrack(i, {autoPlay=false} = {}){
+  if (!Number.isInteger(i)) return;
+  bgmIndex = (i + BGM_LIST.length) % BGM_LIST.length;
+  localStorage.setItem('bgm_index', String(bgmIndex));
+  const item = BGM_LIST[bgmIndex]; if (!item) return;
+
+  if (bgmAudio.getAttribute('src') !== item.src) {
+    bgmAudio.setAttribute('src', item.src);
+    try { bgmAudio.load(); } catch(e){}
+  }
+  paintTitle(); renderMenu();
+
+   if (autoPlay && userInteracted) {
+   bgmAudio.play().then(()=> setPlayVisual(true))
+     .catch(()=> setPlayVisual(false));
+ } else {
+   setPlayVisual(false);
+ }
+
+}
+
+function nextIndex(){
+  if (!isShuffle) return (bgmIndex + 1) % BGM_LIST.length;
+  if (BGM_LIST.length <= 1) return bgmIndex;
+  let j = bgmIndex;
+  while (j === bgmIndex) j = Math.floor(Math.random()*BGM_LIST.length);
+  return j;
+}
+function prevIndex(){
+  if (!isShuffle) return (bgmIndex - 1 + BGM_LIST.length) % BGM_LIST.length;
+  return nextIndex();
+}
+
+// ===== 事件：控制鈕 =====
+bgmPlayBtn.addEventListener('click', ()=>{
+  userInteracted = true;
+  if (bgmAudio.paused) {
+    if (!bgmAudio.getAttribute('src')) loadTrack(bgmIndex);
+    bgmAudio.play().then(()=> setPlayVisual(true));
+  } else {
+    bgmAudio.pause(); setPlayVisual(false);
+  }
+});
+
+
+bgmNextBtn.addEventListener('click', ()=>{
+  userInteracted = true; loadTrack(nextIndex(), {autoPlay:true});
+});
+bgmPrevBtn.addEventListener('click', ()=>{
+  userInteracted = true; loadTrack(prevIndex(), {autoPlay:true});
+});
+bgmShuffle.addEventListener('click', ()=>{
+  isShuffle = !isShuffle;
+  localStorage.setItem('bgm_shuffle', isShuffle ? '1' : '0');
+  paintShuffleBtn();
+});
+bgmVol.addEventListener('input', ()=>{
+  const v = Number(bgmVol.value || '0.7');
+  bgmAudio.volume = Math.max(0, Math.min(1, v));
+  localStorage.setItem('bgm_vol', String(bgmAudio.volume));
+});
+
+// ===== 曲名 → 展開/收合清單 =====
+function openMenu(){ bgmMenu.classList.remove('hidden'); }
+function closeMenu(){ bgmMenu.classList.add('hidden'); }
+function toggleMenu(){ bgmMenu.classList.toggle('hidden'); }
+bgmTitleEl.style.cursor = 'pointer';
+bgmTitleEl.title = '點我展開曲目清單';
+bgmTitleEl.addEventListener('click', ()=>{ toggleMenu(); });
+
+// 清單點擊
+bgmMenu.addEventListener('click', (ev)=>{
+  const it = ev.target.closest('.item'); if (!it) return;
+  const i = Number(it.getAttribute('data-i'));
+  userInteracted = true;
+  loadTrack(i, {autoPlay:true});
+  closeMenu();
+});
+// 點外面關閉
+document.addEventListener('click', (ev)=>{
+  const bar = document.getElementById('bgmBar');
+  if (!bar) return;
+  if (!bar.contains(ev.target) && !bgmMenu.contains(ev.target)) closeMenu();
+});
+document.addEventListener('keydown', (ev)=>{ if (ev.key === 'Escape') closeMenu(); });
+
+// ===== 音量初始化 =====
+(function initVolume(){
+  const saved = Number(localStorage.getItem('bgm_vol'));
+  if (Number.isFinite(saved) && saved >= 0 && saved <= 1) {
+    bgmVol.value = String(saved); bgmAudio.volume = saved;
+  } else {
+    bgmVol.value = '0.7'; bgmAudio.volume = 0.7;
+  }
+})();
+
+// 播完自動下一首
+bgmAudio.addEventListener('ended', ()=>{ loadTrack(nextIndex(), {autoPlay:true}); });
+bgmAudio.addEventListener('play',  ()=> setPlayVisual(true));
+bgmAudio.addEventListener('pause', ()=> setPlayVisual(false));
+bgmAudio.addEventListener('ended', ()=>{ setPlayVisual(false); loadTrack(nextIndex(), {autoPlay:true}); });
+
+
+// ===================================================
+//    🔇 自動 Duck：任何 <video> 播放就暫停 BGM
+//    ★ 抽牌動畫 drawVideo 不 Duck，讓音樂照播
+//    全部影片結束後（duckSet 清空）自動續播
+// ===================================================
+function duckOn(videoEl){
+  if (!videoEl) return;   // ⬅️ 只保留這個
+
+  if (!duckSet.has(videoEl)) {
+    duckSet.add(videoEl);
+    if (duckSet.size === 1 && typeof bgmAudio !== 'undefined' && bgmAudio) {
+      wasPlayingBeforeDuck = !bgmAudio.paused && !bgmAudio.ended;
+      if (wasPlayingBeforeDuck) {
+        try { bgmAudio.pause(); } catch(e){}
+        setPlayVisual(false);
+      }
     }
   }
+}
+
+function duckOff(videoEl){
+  if (!videoEl) return;   // ⬅️ 一樣只留這個
+
+  if (duckSet.has(videoEl)) {
+    duckSet.delete(videoEl);
+    if (duckSet.size === 0 && wasPlayingBeforeDuck && typeof bgmAudio !== 'undefined' && bgmAudio) {
+      // 全部影片都停了 → 若一開始有在播，就請求續播（iOS 可能要等下一次點擊）
+      requestBgmResume();
+      wasPlayingBeforeDuck = false;
+    }
+  }
+}
+
+
+function attachDuck(video){
+  if (!video || video.__duckBound) return;
+  video.__duckBound = true;
+  video.addEventListener('play',  ()=> duckOn(video));
+  video.addEventListener('pause', ()=> duckOff(video));
+  video.addEventListener('ended', ()=> duckOff(video));
+}
+
+// 先綁目前頁面上已存在的所有影片（排除抽牌影片）
+document.querySelectorAll('video').forEach(v=>{
+  if (v.id === 'drawVideo') return;   // ⭐ 抽牌影片不要 duck
+  attachDuck(v);
+});
+
+// 再用 MutationObserver 綁後續動態插入的影片（例如 overlay 裡新建）
+const mo = new MutationObserver((ms)=>{
+  for (const m of ms){
+    m.addedNodes && m.addedNodes.forEach(node=>{
+      if (node instanceof HTMLVideoElement) {
+        if (node.id === 'drawVideo') return;  // ⭐ 一樣排除
+        attachDuck(node);
+      }
+      if (node.querySelectorAll){
+        node.querySelectorAll('video').forEach(v=>{
+          if (v.id === 'drawVideo') return;   // ⭐ 一樣排除
+          attachDuck(v);
+        });
+      }
+    });
+  }
+});
+mo.observe(document.documentElement, {subtree:true, childList:true});
+
+
+// === iOS / Safari 媒體預熱：第一次點畫面時，偷偷幫 enhVideo 解鎖有聲播放 ===
+let _iosPrimed = false;
+function primeIOSMediaOnce(){
+  if (_iosPrimed) return;
+  _iosPrimed = true;
+
+  const enh = document.getElementById('enhVideo');
+  if (!enh) return;
+
+  try{
+    // 播一小段有聲影片，讓 Safari 覺得這支影片是「使用者同意過」的
+    enh.muted  = false;
+    enh.volume = 0.1;          // 很小聲，幾乎不會察覺
+    enh.play().then(()=>{
+      setTimeout(()=>{
+        try{
+          enh.pause();
+          enh.currentTime = 0;
+          enh.volume = 1.0;    // 還原正常音量
+        }catch(e){}
+      }, 200);                 // 大約 0.2 秒
+    }).catch(()=>{
+      // 失敗就算了，不打斷遊戲
+    });
+  }catch(e){}
+}
+
+// 玩家第一次 click / touchstart 就觸發一次預熱
+document.addEventListener('click',      primeIOSMediaOnce, { once:true });
+document.addEventListener('touchstart', primeIOSMediaOnce, { once:true });
+
+const sp = new URLSearchParams(location.search);
+const presetRoom   = sp.get('room') || '';
+el.room.value = presetRoom; el.roomLbl.textContent = presetRoom || '—';
+const presetName   = sp.get('name') || '';
+el.name.value = presetName;
+const presetAvatar = Number(sp.get('avatar') || '1') || 1;
+const presetN      = Math.max(2, Math.min(8, Number(sp.get('n') || '4') || 4));
+
+const serverURL = sp.get('server') || undefined;
+const socket = io(serverURL, { transports:['websocket'] });
+let me = { roomId: presetRoom || 'op-001', playerId: null, secret: localStorage.getItem('opSecret')||'' };
+let _autoSkipKey = null;   // 麻痺自動跳過用的防呆 key
+let state = null;
+let _pendingDuel = null;   // 等待補上卡片資訊的決鬥事件
+let _enhFxForceTimer = null;  // 強化影片的保險計時器
+let _finalRedirecting = false; 
+
+let hasJoinedOnce = false;   // 記錄「這個頁面有沒有加入過某個房間」
+
+
+/* === 新增：快閃狀態全域變數 === */
+let _flashBusy = false;       // 正在顯示快閃中
+let _deferEnhCardId = null;   // 延後播放影片的 cardId（等快閃結束再播）
+let _silentDiscards = [];
+let _enhSignal = null;    // EMIT enh_fx 訊號：只在此卡被打出時才允許播強化影片
+
+// === 事件流（日誌） ===
+let feed = [];          // 這個陣列就是畫面上顯示的對局日誌
+let _seenRound = null;  // 已顯示的輪次
+let _seenSrvLen = 0;    // 已同步的 server log 行數
+
+let localPending = null; // ★ 本地暫存
+
+// === 簡易特效工具 ===
+function onceFx(dom, cls, delay=0){
+  if(!dom) return;
+  setTimeout(()=>{
+    dom.classList.remove(cls);
+    void dom.offsetWidth;
+    dom.classList.add(cls);
+  }, delay);
+}
+
+/* === 擲硬幣影片播放（本機，附框+淡入淡出） === */
+let _coinPlaying = false;
+function playCoinFx(){
+  const ov  = document.getElementById('coinOverlay');
+  const vid = document.getElementById('coinVideo');
+  if (!ov || !vid) return;
+  if (_coinPlaying) return;          // 避免重複觸發
+  _coinPlaying = true;
+
+  // 👉 開始播之前，先記錄「當下 BGM 是否正在播放」
+  const bgmWasPlaying =
+    typeof bgmAudio !== 'undefined' &&
+    bgmAudio &&
+    !bgmAudio.paused &&
+    !bgmAudio.ended;
+
+  // 顯示 overlay
+  ov.classList.remove('hidden');
+  ov.classList.add('show');
+
+  // 影片從頭、正常音量
+  try { vid.currentTime = 0; } catch(e){}
+  vid.volume = 1.0;
+  vid.muted  = false;
+
+  // 若當時 BGM 有在播，先暫停一下（保險，多一層而已）
+  if (bgmWasPlaying && bgmAudio) {
+    try { bgmAudio.pause(); } catch(e){}
+  }
+
+  // 正常播完 → cleanup
+  const onEnded = ()=> cleanup();
+  vid.addEventListener('ended', onEnded, { once:true });
+
+  let failTimer = null;
+  function armFailsafe(){
+    clearTimeout(failTimer);
+    const dur = Number.isFinite(vid.duration) && vid.duration > 0
+      ? vid.duration * 1000
+      : 4000; // 沒讀到長度就抓 4 秒
+    failTimer = setTimeout(()=> cleanup(), dur + 500);
+  }
+
+  function cleanup(){
+    clearTimeout(failTimer);
+
+    // 關閉 overlay
+    ov.classList.remove('show');
+    setTimeout(()=>{
+      ov.classList.add('hidden');
+      _coinPlaying = false;
+    }, 300);
+
+    // 停止影片
+    try {
+      vid.pause();
+      vid.currentTime = 0;
+    } catch(e){}
+
+    // 清掉事件
+    vid.removeEventListener('ended', onEnded);
+
+    // 告訴 duck 系統：這支 video 不算在「正在播放」裡了
+    try {
+      if (typeof duckOff === 'function') duckOff(vid);
+    } catch(e){}
+
+    // ⭐ 如果一開始 BGM 有在播 → 請求續播
+  if (bgmWasPlaying && bgmAudio) {
+    requestBgmResume();
+  }
+}
+
+// === 畫面被切到背景時，強制把各種 overlay 收掉，避免回來時卡在畫面 ===
+document.addEventListener('visibilitychange', ()=>{
+  if (!document.hidden) return;  // 只在「被隱藏」那一瞬間處理
+
+  // 1) 打出卡片快閃 overlay
+  const playedOv = document.getElementById('playedOverlay');
+  if (playedOv) {
+    playedOv.classList.remove('show');
+    playedOv.classList.add('hidden');
+  }
+
+  // 2) 強化影片 overlay
+  const enhOv  = document.getElementById('enhOverlay');
+  const enhVid = document.getElementById('enhVideo');
+  if (enhOv)  enhOv.classList.add('hidden');
+  if (enhVid) {
+    try {
+      enhVid.pause();
+      enhVid.currentTime = 0;
+    } catch(e){}
+  }
+  if (_enhFxForceTimer) {
+    clearTimeout(_enhFxForceTimer);
+    _enhFxForceTimer = null;
+  }
+
+  // 3) 擲硬幣 overlay
+  const coinOv  = document.getElementById('coinOverlay');
+  const coinVid = document.getElementById('coinVideo');
+  if (coinOv) {
+    coinOv.classList.remove('show');
+    coinOv.classList.add('hidden');
+  }
+  if (coinVid) {
+    try {
+      coinVid.pause();
+      coinVid.currentTime = 0;
+    } catch(e){}
+  }
+  if (typeof _coinPlaying !== 'undefined') {
+    _coinPlaying = false;
+  }
+
+  // 4) 決鬥動畫
+  const duelRoot = document.getElementById('duelFx');
+  if (duelRoot) {
+    duelRoot.classList.remove('show');
+  }
+
+  // 5) 重置快閃狀態，避免覺得「還在播快閃」而跳過後面動畫
+  _flashBusy = false;
+  _enhSignal = null;
+});
+
+
+  // 嘗試播放影片
+  vid.play().then(()=>{
+    armFailsafe();
+  }).catch(()=>{
+    // 若有聲播放被瀏覽器擋掉，改用靜音播放 + 點擊關閉
+    vid.muted = true;
+    vid.play().then(()=>{
+      ov.addEventListener('click', ()=> cleanup(), { once:true });
+      armFailsafe();
+    }).catch(()=>{
+      // 連靜音都播不動 → 直接關掉，不影響遊戲流程
+      cleanup();
+    });
+  });
+}
+
+/* === 抽牌前播放 draw.mp4，播完才真正送 DRAW === */
+let _drawPlaying = false;
+function playDrawFxThenDraw(){
+  const ov  = document.getElementById('drawOverlay');
+  const vid = document.getElementById('drawVideo');
+
+  // 萬一沒有這兩個 DOM，就直接抽牌，不擋流程
+  if (!ov || !vid) {
+    sendAction('DRAW');
+    return;
+  }
+  // 影片正在播時，不要重複觸發
+  if (_drawPlaying) return;
+  _drawPlaying = true;
+
+  // 顯示 overlay
+  ov.classList.remove('hidden');
+
+  // 重置影片狀態
+  try { vid.currentTime = 0; } catch(e){}
+  vid.muted  = false;
+  vid.volume = 1.0;
+
+  // 清理 + 真正抽牌
+  function cleanup(){
+    try {
+      vid.pause();
+      vid.currentTime = 0;
+    } catch(e){}
+    ov.classList.add('hidden');
+    _drawPlaying = false;
+
+    // ⭐ 真正送抽牌指令在這裡
+    sendAction('DRAW');
+  }
+
+  // 影片播完 → cleanup
+  const onEnded = ()=> cleanup();
+  vid.addEventListener('ended', onEnded, { once:true });
+
+  let failTimer = null;
+  function armFailsafe(){
+    clearTimeout(failTimer);
+    const dur = Number.isFinite(vid.duration) && vid.duration > 0
+      ? vid.duration * 1000
+      : 3000;  // 讀不到長度就抓 3 秒
+    failTimer = setTimeout(()=> cleanup(), dur + 600);
+  }
+
+  // 嘗試正常有聲播放
+  vid.play().then(()=>{
+    armFailsafe();
+  }).catch(()=>{
+    // 若被瀏覽器擋，改靜音播放，點畫面也可跳過
+    vid.muted = true;
+    vid.play().then(()=>{
+      ov.addEventListener('click', ()=> cleanup(), { once:true });
+      armFailsafe();
+    }).catch(()=>{
+      // 連靜音都播不了 → 直接抽牌，不卡住流程
+      cleanup();
+    });
+  });
+}
+
+
+/* === 強化影片（全體同步播放） === */
+// 20 張卡的強化影片路徑（0.mp4 ~ 19.mp4；若你有自訂，改這裡即可）
+const ENH_VID = Array.from({length:20}, (_,i)=> `videos/enh/${i}.mp4`);
+
+// 播放指定卡的強化影片（全體）
+function playEnhFxFor(cardId){
+  const ov  = document.getElementById('enhOverlay');
+  const vid = document.getElementById('enhVideo');
+  if (!ov || !vid) return;
+
+  const src = ENH_VID[cardId] || ENH_VID[0];
+  if (vid.getAttribute('src') !== src) {
+    vid.setAttribute('src', src);
+    try { vid.load(); } catch(e){}
+  }
+
+  // 清掉上一輪的計時器
+  if (_enhFxForceTimer) {
+    clearTimeout(_enhFxForceTimer);
+    _enhFxForceTimer = null;
+  }
+
+  // 先移除舊的事件（用 stored handler，避免殘留）
+  if (vid.__enhOnEnded)  vid.removeEventListener('ended', vid.__enhOnEnded);
+  if (ov.__enhOnClick)   ov.removeEventListener('click', ov.__enhOnClick);
+
+  // 顯示 overlay
+  ov.classList.remove('hidden');
+
+  // 從頭開始
+  try { vid.currentTime = 0; } catch(e){}
+  vid.muted  = false;
+  vid.volume = 1.0;
+
+  let failTimer = null;
+  function armFailsafe(){
+    clearTimeout(failTimer);
+    const dur = (Number.isFinite(vid.duration) && vid.duration > 0)
+      ? vid.duration * 1000
+      : 8000; // 沒讀到長度就抓 8 秒當保險，但不會截斷真正影片（因為通常 duration <= 這個值）
+    failTimer = setTimeout(()=> cleanup(), dur + 800);
+    _enhFxForceTimer = failTimer;
+  }
+
+  function cleanup(){
+    if (!ov || ov.classList.contains('hidden')) return;
+
+    clearTimeout(failTimer);
+    if (_enhFxForceTimer) {
+      clearTimeout(_enhFxForceTimer);
+      _enhFxForceTimer = null;
+    }
+
+    ov.classList.add('hidden');
+    try {
+      vid.pause();
+      vid.currentTime = 0;
+    } catch(e){}
+
+  // 若強化影片播放前有 BGM，在這裡請求續播
+  if (wasPlayingBeforeDuck && typeof bgmAudio !== 'undefined' && bgmAudio) {
+    requestBgmResume();
+    wasPlayingBeforeDuck = false;
+  }
+
+
+    // 移除事件綁定
+    if (vid.__enhOnEnded)  vid.removeEventListener('ended', vid.__enhOnEnded);
+    if (ov.__enhOnClick)   ov.removeEventListener('click', ov.__enhOnClick);
+    vid.__enhOnEnded = null;
+    ov.__enhOnClick  = null;
+  }
+
+  // 設定事件 handler 並記住參考，方便下次移除
+  vid.__enhOnEnded = ()=> cleanup();
+  ov.__enhOnClick  = ()=> cleanup();
+  vid.addEventListener('ended', vid.__enhOnEnded);
+  ov.addEventListener('click', ov.__enhOnClick);
+
+
+  // 嘗試播放：如果有聲被擋就改靜音；再失敗就直接關掉，不卡流程
+  vid.play().then(()=>{
+    armFailsafe();
+  }).catch(()=>{
+    vid.muted = true;
+    vid.play().then(()=>{
+      armFailsafe();
+    }).catch(()=>{
+      // 什麼都播不了 → 直接關掉 overlay，避免整場卡死
+      cleanup();
+    });
+  });
+}
+
+/* === 簡易音效工具（決鬥用） === */
+function playSfx(id){
+  const a = document.getElementById(id);
+  if (!a) return;
+  try { a.currentTime = 0; } catch(e){}
+  a.play().catch(()=>{ /* iOS 被擋就算了，不影響流程 */ });
+}
+
+
+/* === 強化特效工具（光球）與播放記錄 === */
+const _enhPlayed = new Set();
+let _lastRoundNo = null;
+
+function playEnhanceFx(venueName, targetImg, cardId, key){
+  if (!venueName || !targetImg) return;
+  const venImg = document.querySelector(`#venues img[data-name="${venueName}"]`);
+  if (!venImg) { targetImg.src = CARD_ENH(cardId); _enhPlayed.add(key); return; }
+
+  const vr = venImg.getBoundingClientRect();
+  const tr = targetImg.getBoundingClientRect();
+  const sx = vr.left + vr.width/2,  sy = vr.top + vr.height/2;
+  const tx = tr.left + tr.width/2,  ty = tr.top + tr.height/2;
+
+  const orb = document.createElement('div');
+  orb.className = 'fx-orb';
+  orb.style.transform = `translate(${sx}px, ${sy}px) scale(1)`;
+  document.body.appendChild(orb);
+
+  requestAnimationFrame(()=>{
+    orb.style.transform = `translate(${tx}px, ${ty}px) scale(1.2)`;
+    setTimeout(()=>{
+      targetImg.src = CARD_ENH(cardId);
+      onceFx(targetImg, 'fx-glow');
+      orb.style.opacity = '0';
+      setTimeout(()=>{ orb.remove(); }, 220);
+      _enhPlayed.add(key);
+    }, 620);
+  });
+}
+
+// 上一次渲染的快照
+let _prev = { chest: null, discardLen: 0, aliveMap: {} };
+
+/* ========= 名字工具 ========= */
+function pname(i){
+  const p = state?.players?.[i];
+  if (!p) return `P${(i??0)+1}`;
+  const nm = p.client?.displayName || p.displayName || '';
+  return nm || `P${i+1}`;
+}
+function pnameBy(p){
+  if (!p) return 'P?';
+  const nm = p.client?.displayName || p.displayName || '';
+  return nm || `P${(p.id??0)+1}`;
+}
+
+/* ========= 卡牌→場地對照與強化判斷 ========= */
+const CARD_VENUE = {
+  0:"德雷斯羅薩鬥技場", 1:"艾尼艾斯大廳", 2:"阿拉巴斯坦", 3:"巴拉蒂", 4:"佐烏",
+  5:"和之國", 6:"龐克哈薩德", 7:"維薩利亞", 8:"魚人島", 9:"九蛇島",
+  10:"鬼島", 11:"夏波帝諸島", 12:"鬼島", 13:"夏波帝諸島",
+  14:"萬國", 15:"萬國", 16:"蜂巢島", 17:"蜂巢島", 18:"奧羅傑克森號", 19:"奧羅傑克森號"
 };
+function isEnhancedNow(cardId){
+  if (cardId==null || !state?.venues) return false;
+  const vn = CARD_VENUE[cardId];
+  return !!state.venues.find(v=>v.name===vn);
+}
+
+/* ========= 卡片圖鑑：卡數表與行為 ========= */
+// 0 有 1 張；1 有 5 張；2–5 各 2 張；6–19 各 1 張
+const CARD_COUNTS = {
+  0:1,
+  1:5,
+  2:2, 3:2, 4:2, 5:2,
+  6:1, 7:1, 8:1, 9:1,
+  10:1,11:1,12:1,13:1,
+  14:1,15:1,16:1,17:1,
+  18:1,19:1
+};
+const ALL_CARD_IDS = Object.keys(CARD_COUNTS).map(n => Number(n)).sort((a,b)=>a-b);
+
+// 打開圖鑑：重算列表＋強化紅光
+function openCardDex(){
+  if (!dexDom.overlay || !dexDom.grid) return;
+
+  let html = '';
+  for (const id of ALL_CARD_IDS){
+    const meta = (typeof CARD_TEXT !== 'undefined') ? CARD_TEXT[id] : null;
+    const name = meta?.name || `卡 ${id}`;
+    const cnt  = CARD_COUNTS[id] ?? 0;
+    const enh  = isEnhancedNow(id); // ★ 本局有強化的卡 → 紅黑光
+
+    html += `
+      <button class="card-dex-thumb ${enh ? 'enhanced' : ''}" data-id="${id}">
+        <img src="${CARD(id)}" alt="${name}">
+        <div class="card-dex-meta">
+          <span>${id}｜${name}</span>
+          <span>x${cnt}</span>
+        </div>
+      </button>
+    `;
+  }
+  dexDom.grid.innerHTML = html;
+
+  // 重置右邊預覽
+  if (dexDom.previewEmpty) dexDom.previewEmpty.classList.remove('hidden');
+  if (dexDom.preview) dexDom.preview.classList.add('hidden');
+  dexDom.previewTitle && (dexDom.previewTitle.textContent = '');
+  dexDom.previewVenue && (dexDom.previewVenue.textContent = '');
+
+  dexDom.overlay.classList.remove('hidden');
+}
+
+function closeCardDex(){
+  if (!dexDom.overlay) return;
+  dexDom.overlay.classList.add('hidden');
+}
+
+// 點左邊縮圖
+function onCardDexGridClick(ev){
+  const btn = ev.target.closest('button.card-dex-thumb');
+  if (!btn) return;
+  const id = Number(btn.dataset.id);
+  if (!Number.isFinite(id)) return;
+  showCardDexPreview(id);
+}
+
+// 右側大圖預覽（一般＋強化）
+function showCardDexPreview(id){
+  if (!dexDom.preview || !dexDom.previewBase || !dexDom.previewEnh) return;
+
+  const meta = (typeof CARD_TEXT !== 'undefined') ? CARD_TEXT[id] : null;
+  const name = meta?.name || `卡 ${id}`;
+  const baseTitle = meta?.baseTitle || '';
+  const enhTitle  = meta?.enhTitle  || '';
+  const venueName = CARD_VENUE[id];
+
+  if (dexDom.previewEmpty) dexDom.previewEmpty.classList.add('hidden');
+  dexDom.preview.classList.remove('hidden');
+
+  if (dexDom.previewTitle) {
+    dexDom.previewTitle.textContent = `${id}｜${name}`;
+  }
+
+  dexDom.previewBase.src = CARD(id);
+  dexDom.previewBase.alt = `${name}（一般）`;
+  dexDom.previewEnh.src = CARD_ENH(id);
+  dexDom.previewEnh.alt = `${name}（強化）`;
+
+  const parts = [];
+  if (venueName) parts.push(`強化場地：${venueName}`);
+  if (baseTitle || enhTitle) {
+    parts.push(`技能：${baseTitle || '—'} ／ 強化：${enhTitle || '—'}`);
+  }
+  if (dexDom.previewVenue) {
+    dexDom.previewVenue.textContent = parts.join('　');
+  }
+}
+
+
+/* ========= 卡牌說明（基本 / 強化） ========= */
+/** 0–19：名字 + 基本/強化技能敘述（來源：docx 正式版） */
+const CARD_TEXT = {
+  0: {
+    name: "薩波",
+    baseTitle: "火焰龍王",
+    base: "所有人將手牌洗回牌堆後各重抽1張。",
+    enhTitle: "火焰龍之息",
+    enh: "洗回手牌後重抽，本回合打出7以上角色卡技能無效。"
+  },
+  1: {
+    name: "騙人布",
+    baseTitle: "必殺・殺手彈星",
+    base: "猜一名玩家手牌（不能猜1），猜中淘汰對方。",
+    enhTitle: "必殺・連擊彈星",
+    enh: "猜中可連猜至錯為止，每猜中一次重複發動淘汰效果。"
+  },
+  2: {
+    name: "羅賓",
+    baseTitle: "眼花撩亂",
+    base: "偷看一名玩家的手牌。",
+    enhTitle: "千花繚亂・身體開花",
+    enh: "查看所有玩家的手牌。"
+  },
+  3: {
+    name: "香吉士",
+    baseTitle: "惡魔風腳",
+    base: "與一名玩家比大小，低者淘汰。",
+    enhTitle: "魔神風腳",
+    enh: "指定一位玩家比大小，我方攻擊力+1。"
+  },
+  4: {
+    name: "喬巴",
+    baseTitle: "皮毛強化",
+    base: "自身獲得保護狀態一回合。",
+    enhTitle: "柔力強化",
+    enh: "獲得閃避效果，下一次被影響技能無效化。"
+  },
+  5: {
+    name: "索隆",
+    baseTitle: "一刀流・獅子歌歌",
+    base: "指定一位玩家棄牌並重抽一張。",
+    enhTitle: "鬼氣九刀流・阿修羅",
+    enh: "指定一位玩家棄牌，偶數則淘汰，奇數則抽一張牌。"
+  },
+  6: {
+    name: "羅",
+    baseTitle: "ROOM・SHAMBLES",
+    base: "與一名玩家交換手牌。",
+    enhTitle: "ROOM・SCAN",
+    enh: "偷看一名玩家手牌後可選擇是否交換。"
+  },
+  7: {
+    name: "娜美",
+    baseTitle: "天候危機",
+    base: "若手牌同時持有6或8，必須打出娜美。",
+    enhTitle: "忍法雷霆",
+    enh: "打出娜美時，可指定一名玩家「麻痺」，使其跳過下回合行動。"
+  },
+  8: {
+    name: "魯夫",
+    baseTitle: "橡膠橡膠象槍",
+    base: "可挑戰1～2位玩家比大小，輸了會被淘汰。",
+    enhTitle: "四檔 猿王群鴉砲",
+    enh: "跟每位玩家比大小，攻擊力-3，自身輸了也不會被淘汰。"
+  },
+  9: {
+    name: "女帝漢考克",
+    baseTitle: "戀愛即是風暴",
+    base: "打出此牌立即淘汰自己（若無場地效果）。",
+    enhTitle: "我做什麼都會被原諒吧？",
+    enh: "打出女帝時不會自殺，並獲得保護（本回合免疫所有卡牌效果）。"
+  },
+  10: {
+    name: "凱多",
+    baseTitle: "雷鳴八卦",
+    base: "無視防禦與閃避，指定一位玩家比大小，輸者淘汰。",
+    enhTitle: "霸海",
+    enh: "若手牌同時擁有凱多與大媽，可無視閃避與保護，直接淘汰全場其他玩家。"
+  },
+  11: {
+    name: "基德",
+    baseTitle: "磁氣‧弦",
+    base: "將棄排堆洗牌抽出一張家加入手牌，在從手牌中打出一張執行效果。",
+    enhTitle: "磁力風暴",
+    enh: "所有玩家將手牌逆時針傳遞。"
+  },
+  12: {
+    name: "奎因",
+    baseTitle: "疫災彈",
+    base: "下一位玩家擲硬幣，反面麻痺一回合，延續到擲出正面的玩家或打出此卡的玩家為止。",
+    enhTitle: "疫災彈-冰鬼",
+    enh: "本回合打出奇數牌的玩家獲得冰鬼狀態卡，下回合再打出奇數牌則直接淘汰。"
+  },
+  13: {
+    name: "基拉",
+    baseTitle: "刃‧音擊",
+    base: "可以解除一位玩家的保護/閃避狀態。",
+    enhTitle: "巨鐮迴轉音速切割",
+    enh: "可以解除一位玩家的保護/閃避狀態，再決定是否與他決鬥。"
+  },
+  14: {
+    name: "大媽",
+    baseTitle: "狂暴與暴食",
+    base: "擲銅板，正面保護、反面閃避。",
+    enhTitle: "Soul or Life?",
+    enh: "指定一位玩家，讓對方選擇被淘汰或交出一個勝利指示物。"
+  },
+  15: {
+    name: "卡塔庫栗",
+    baseTitle: "見聞色霸氣",
+    base: "可以觀看牌堆上前三張卡片。",
+    enhTitle: "10秒後的未來",
+    enh: "可以觀看剩餘玩家數÷2的牌堆卡片，並自由排序放回牌堆。"
+  },
+  16: {
+    name: "庫山（青雉）",
+    baseTitle: "冰球",
+    base: "指定一名玩家手牌凍結，下一次出牌只能打剛抽的那張。",
+    enhTitle: "冰河時代",
+    enh: "全場玩家手牌凍結，下一次出牌只能打剛抽的那張。"
+  },
+  17: {
+    name: "黑鬍子",
+    baseTitle: "暗水",
+    base: "查看牌堆最上面一張卡並覆蓋（其他人不可查看）進棄牌堆。",
+    enhTitle: "暗穴道",
+    enh: "查看剩餘玩家數÷2張牌，任選張數覆蓋（其他人不可查看）進棄牌堆。"
+  },
+  18: {
+    name: "紅髮香克斯",
+    baseTitle: "我是來終結這場戰爭的",
+    base: "牌堆剩一半以下時可直接進入手牌比大小階段。",
+    enhTitle: "給我個面子吧",
+    enh: "牌堆剩一半以下時可直接進入手牌比大小階段，自身手牌數值+1（只在比牌時生效）。"
+  },
+  19: {
+    name: "哥爾羅傑",
+    baseTitle: "一切的開始",
+    base: "打出後淘汰自己，成為下一局起始玩家。",
+    enhTitle: "那一天我們知道了世界的真相",
+    enh: "打出不淘汰，可預測一位玩家是否為本局贏家，成功則獲得與勝利玩家同數量的金幣。"
+  }
+};
+
+/** 把卡片變成簡短文字（會自動判斷是否強化） */
+function cardLine(cardId){
+  const meta = CARD_TEXT[cardId];
+  if (!meta) return "";
+  const enhanced = isEnhancedNow(cardId);
+  const tag = enhanced ? "【強化】" : "【基本】";
+  const title = enhanced && meta.enhTitle ? meta.enhTitle : meta.baseTitle;
+  const text  = enhanced && meta.enh ? meta.enh : meta.base;
+  return `${meta.name} ${tag}${title}：${text}`;
+}
+
+/* ========= 角色語音對照 ========= */
+const VOICE_MAP = {
+  0: {
+    base:  { text: '要燃起革命的燈火', file: 'audio/voice/0.mp3' },
+    combos: {
+      8: { text: '真的很感謝你還活著，魯夫', file: 'audio/voice/0-8.mp3' }
+    }
+  },
+  1: {
+    base:  { text: '我..我要..我要成為勇敢的海上戰士', file: 'audio/voice/1.mp3' },
+    combos: {
+      8: { text: '蒙其.D.魯夫...來和我決鬥吧!!', file: 'audio/voice/1-8.mp3' }
+    }
+  },
+  2: {
+    base:  { text: '歷史雖然會重演，人卻無法回到過去', file: 'audio/voice/2.mp3' },
+    combos: {
+      8: { text: '想活下去!!把我也一起帶出海吧', file: 'audio/voice/2-8.mp3' }
+    }
+  },
+  3: {
+    base:  { text: '我要找到蔚藍海域(All Blue)', file: 'audio/voice/3.mp3' },
+    combos: {
+      2:  { text: '羅賓小姐~', file: 'audio/voice/3-2.mp3' },
+      7:  { text: '娜美小姐~', file: 'audio/voice/3-7.mp3' },
+      12: { text: '男人不能打女人，奎因，你這個混帳', file: 'audio/voice/3-12.mp3' }
+    }
+  },
+  4: {
+    base:  { text: '你這麼誇獎我我也不會高興的，你這個討厭鬼~~', file: 'audio/voice/4.mp3' }
+  },
+  5: {
+    base:  { text: '我要成為世界第一的大劍豪', file: 'audio/voice/5.mp3' },
+    combos: {
+      8: { text: '在成為大劍豪以前，我永遠不會再輸了!你有意見嗎?海賊王', file: 'audio/voice/5-8.mp3' }
+    }
+  },
+  6: {
+    base:  { text: 'Room', file: 'audio/voice/6.mp3' }
+  },
+  7: {
+    base:  { text: '我要畫出全世界的航海圖', file: 'audio/voice/7.mp3' }
+  },
+  8: {
+    base:  { text: '我是魯夫，是要成為海賊王的人', file: 'audio/voice/8.mp3' },
+    combos: {
+      1:  { text: '狙擊王，給我打穿那面旗子', file: 'audio/voice/8-1.mp3' },
+      3:  { text: '沒有你在的話，我是無法成為海賊王的', file: 'audio/voice/8-3.mp3' },
+      4:  { text: '少囉嗦，一起走吧~', file: 'audio/voice/8-4.mp3' },
+      7:  { text: '不准弄哭我的航海士', file: 'audio/voice/8-7.mp3' },
+      // 8-10-14：沒打出的牌是 10 或 14，用同一條
+      10: { text: '我是蒙其D魯夫，是要超越你們，成為海賊王的人', file: 'audio/voice/8-10-14.mp3' },
+      14: { text: '我是蒙其D魯夫，是要超越你們，成為海賊王的人', file: 'audio/voice/8-10-14.mp3' }
+    }
+  },
+  9: {
+    base:  { text: '迷戀甘風', file: 'audio/voice/9.mp3' },
+    combos: {
+      8: { text: '看到你，妾身已心滿意足了', file: 'audio/voice/9-8.mp3' }
+    }
+  },
+  10: {
+    base:  { text: 'ウオロロロ(笑)', file: 'audio/voice/10.mp3' },
+    combos: {
+      8: { text: '你說你要當甚麼王啊? 臭小鬼', file: 'audio/voice/10-8.mp3' }
+    }
+  },
+  11: {
+    base:  { text: '非生即死，連這點覺悟都沒有嗎?', file: 'audio/voice/11.mp3' },
+    combos: {
+      8:  { text: '我馬上去取你的首級，草帽小子', file: 'audio/voice/11-8.mp3' },
+      13: { text: '嘲笑你的傢伙，都由我來送下地獄', file: 'audio/voice/11-13.mp3' }
+    }
+  },
+  12: {
+    base:  { text: '我的科學是無敵的，最強，最棒，世界第一', file: 'audio/voice/12.mp3' },
+    combos: {
+      3: { text: '你們這群枷治的兔崽子', file: 'audio/voice/12-3.mp3' }
+    }
+  },
+  13: {
+    base:  { text: '刃 音擊', file: 'audio/voice/13.mp3' }
+  },
+  14: {
+    base:  { text: 'ママママママ(笑)', file: 'audio/voice/14.mp3' },
+    combos: {
+      10: { text: '別忘了你還欠我一個人情，那可是一輩子的恩情', file: 'audio/voice/14-10.mp3' }
+    }
+  },
+  15: {
+    base:  { text: '讓你知道什麼叫人外有人，天外有天', file: 'audio/voice/15.mp3' },
+    combos: {
+      8: { text: '你看到了相當遙遠的未來啊!', file: 'audio/voice/15-8.mp3' }
+    }
+  },
+  16: {
+    base:  { text: '唉呀呀～', file: 'audio/voice/16.mp3' },
+    combos: {
+      2: { text: '終於，你也找到棲身之所了，那就好好的活下去', file: 'audio/voice/16-2.mp3' }
+    }
+  },
+  17: {
+    base:  { text: 'ゼハハハハ！(笑)', file: 'audio/voice/17.mp3' },
+    combos: {
+      // 17-5-7-8：同一個檔案 17-5-7-8.mp3
+      5:  { text: '人類的夢想是永遠不會結束的！', file: 'audio/voice/17-5-7-8.mp3' },
+      7:  { text: '人類的夢想是永遠不會結束的！', file: 'audio/voice/17-5-7-8.mp3' },
+      8:  { text: '人類的夢想是永遠不會結束的！', file: 'audio/voice/17-5-7-8.mp3' },
+      18: { text: '越來越霸道了啊!紅髮，跟你的疤真搭', file: 'audio/voice/17-18.mp3' }
+    }
+  },
+  18: {
+    base:  { text: '差不多該去拿下了吧! ONE PIECE', file: 'audio/voice/18.mp3' },
+    combos: {
+      8: { text: '我把這頂帽子留給你，等到你成為一位偉大的海賊再拿給我', file: 'audio/voice/18-8.mp3' }
+    }
+  },
+  19: {
+    base:  { text: '想要我的財寶嗎？去找吧！我把世界上的一切都放在那裡了！', file: 'audio/voice/19.mp3' }
+  }
+};
+
+
+
+/** 根據主角卡＋另一張卡，決定要播放哪一條語音 */
+function getVoiceData(mainId, otherId){
+  const conf = VOICE_MAP[mainId];
+  if (!conf) return null;
+  if (otherId != null && conf.combos && conf.combos[otherId]) {
+    return conf.combos[otherId];
+  }
+  return conf.base || null;
+}
+
+/** 播放語音＋顯示泡泡（只在本機觸發） */
+function playVoiceLineFor(mainId, otherId){
+  const data = getVoiceData(mainId, otherId);
+  const bubble = document.getElementById('voiceBubble');
+  const textSpan = document.getElementById('voiceText');
+  const audioEl = document.getElementById('voiceAudio');
+
+  // 沒對應台詞就什麼都不做
+  if (!data) {
+    if (bubble) bubble.classList.add('hidden');
+    if (audioEl) {
+      try { audioEl.pause(); audioEl.currentTime = 0; } catch(e){}
+    }
+    return;
+  }
+
+  // 顯示泡泡文字
+  if (bubble && textSpan) {
+    textSpan.textContent = data.text;
+    bubble.classList.remove('hidden');
+  }
+
+  // 播放 mp3（長度超過 4 秒沒關係，會自己播完）
+  if (audioEl) {
+    audioEl.src = data.file;
+    try { audioEl.currentTime = 0; } catch(e){}
+    audioEl.play().catch(()=>{ /* iOS 被擋就算了，不影響遊戲 */ });
+  }
+}
+
+/* ========= 場地 → 背景圖片對照 & 切換工具 ========= */
+/** 場地 → 背景圖片對照（檔案放 public/images/venues/xxx.jpg/webp 自行準備） */
+const VENUE_BG = {
+  "德雷斯羅薩鬥技場": "images/venues/dressrosa.jpg",
+  "艾尼艾斯大廳":     "images/venues/enieslobby.jpg",
+  "阿拉巴斯坦":       "images/venues/alabasta.jpg",
+  "巴拉蒂":           "images/venues/baratie.jpg",
+  "佐烏":             "images/venues/zou.jpg",
+  "和之國":           "images/venues/wano.jpg",
+  "龐克哈薩德":       "images/venues/punkhazard.jpg",
+  "維薩利亞":         "images/venues/weatheria.jpg",
+  "魚人島":           "images/venues/fishmanisland.jpg",
+  "九蛇島":           "images/venues/amazonlily.jpg",
+  "鬼島":             "images/venues/onigashima.jpg",
+  "夏波帝諸島":       "images/venues/sabaody.jpg",
+  "萬國":             "images/venues/wholecake.jpg",
+  "蜂巢島":           "images/venues/hachinosu.jpg",
+  "奧羅傑克森號":     "images/venues/oro-jackson.jpg"
+};
+
+// 場地 → 說明文字（像玩家框裡的卡片說明一樣）
+const VENUE_TEXT = {
+ "德雷斯羅薩鬥技場": "0-薩波變為強化技能",
+  "艾尼艾斯大廳":     "1-騙人布變為強化技能",
+  "阿拉巴斯坦":       "2-羅賓變為強化技能",
+  "巴拉蒂":           "3-香吉士變為強化技能",
+  "佐烏":             "4-喬巴變為強化技能",
+  "和之國":           "5-索隆變為強化技能",
+  "龐克哈薩德":       "6-羅變為強化技能",
+  "維薩利亞":         "7-娜美變為強化技能",
+  "魚人島":           "8-魯夫變為強化技能",
+  "九蛇島":           "9-女帝變為強化技能",
+  "鬼島":             "10-凱多12-奎因變為強化技能",
+  "夏波帝諸島":       "11-基德13-基拉變為強化技能",
+  "萬國":             "14-大媽15-卡塔克利變為強化技能",
+  "蜂巢島":           "16-庫山17-黑鬍子變為強化技能",
+  "奧羅傑克森號":     "18-紅髮19-哥爾羅傑變為強化技能"
+};
+
+// 取場地說明的小工具（有定義才顯示）
+function venueDesc(name){
+  return VENUE_TEXT[name] || "";
+}
+
+
+/** 若上面沒對到，就用場地名轉 slug 當作檔名（保底） */
+function venueFallbackURL(name){
+  const slug = String(name||"").normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^\w\u4e00-\u9fff]+/g, '-')
+    .replace(/-+/g,'-').replace(/^-|-$/g,'')
+    .toLowerCase();
+  return `images/venues/${slug}.jpg`;
+}
+/** 目前套用的場地名（存在 body 的 data-venue 上） */
+
+function getCurrentVenueName(){
+  return document.body.getAttribute('data-venue') || '';
+}
+
+/** v2：把圖片設進 body 的 CSS 變數，完全不影響前景互動 */
+function toggleVenueBackground(venueName){
+  const current = getCurrentVenueName();
+
+  if (current === venueName){
+    // 再點同一張 → 關閉，恢復原本純背景
+    document.body.removeAttribute('data-venue');
+    document.body.classList.remove('venue-on');
+    document.body.style.setProperty('--venue-bg-url', 'none');
+    return;
+  }
+
+  // 切到新場地
+  const url = VENUE_BG[venueName] || venueFallbackURL(venueName);
+  document.body.style.setProperty('--venue-bg-url', `url("${url}")`);
+  document.body.setAttribute('data-venue', venueName);
+  document.body.classList.add('venue-on');
+}
+
+/** 仍保留狀態校正：換局後如果這張場地不在清單，就自動關掉背景 */
+function reconcileVenueBackground(validVenuesArray){
+  const chosen = getCurrentVenueName();
+  if(!chosen) return;
+  const stillValid = Array.isArray(validVenuesArray) && validVenuesArray.some(v => (v && (v.name === chosen || v.title === chosen)));
+  if(!stillValid){
+    // 用 chosen 呼叫一次會進到「關閉」分支
+    toggleVenueBackground(chosen);
+  }
+}
+
+/** 場地卡點擊入口 */
+function onVenueClick(venueName){
+  toggleVenueBackground(venueName);
+}
+
+
+/* ========= 日誌 formatter ========= */
+function formatLogWithNames(line){
+  if(!state?.players) return line;
+  return String(line).replace(/P(\d+)/g, (m, numStr)=>{
+    const i = Number(numStr) - 1;
+    const nm = state.players?.[i]?.client?.displayName || state.players?.[i]?.displayName;
+    return nm ? `P${numStr} ${nm}` : `P${numStr}`;
+  });
+}
+
+/* ========= A-1：遮罩決鬥資訊 ========= */
+function stripDuelPoints(line){
+  if (!line) return line;
+  let s = String(line);
+  s = s.replace(/（[^）]*(尾數|點數|數字)[^）]*）/g, '');
+  s = s.replace(/\b尾數\s*\d+\s*(?:[>＜<≥≤=]|vs|VS)\s*\d+\b/g, '');
+  s = s.replace(/\b\d+\s*(?:[>＜<≥≤=]|vs|VS)\s*\d+\b/g, '');
+  return s.replace(/\s{2,}/g, ' ').trim();
+}
+
+/* ===== EMIT 事件轉字串 ===== */
+function msgToLogLine(e){
+  if (!e) return null;
+  switch(e.type){
+    case 'log': return null;
+    case 'duel_log': {
+      const loser = (typeof e.loserId === 'number') ? pname(e.loserId) : '未知玩家';
+      const card  = (typeof e.cardId  === 'number') ? `卡 ${e.cardId}` : '未知卡牌';
+      return `擊敗：${loser} 的 ${card}`;
+    }
+case 'duel': {
+  const L = (typeof e.leftId  === 'number') ? pname(e.leftId)  : '？';
+  const R = (typeof e.rightId === 'number') ? pname(e.rightId) : '？';
+  const winId = (typeof e.winnerId === 'number') ? e.winnerId : null;
+  const W = (winId != null) ? pname(winId) : null;
+  return W
+    ? `決鬥：${L} vs ${R} → 勝者：${W}`
+    : `決鬥：${L} vs ${R}`;
+}
+
+// 羅賓：偵察手牌（全體可見播報）
+    case 'robin_peek': {
+      const caster = (typeof e.casterId === 'number') ? pname(e.casterId) : '未知玩家';
+      const target = e.all
+        ? '全體玩家'
+        : (typeof e.targetId === 'number') ? pname(e.targetId) : '未知玩家';
+      // ★ 這裡也完全不顯示任何卡片號碼
+      return `${caster} 偵察了 ${target} 的手牌`;
+    }
+
+    case 'robin_view': {
+      const t = (typeof e.targetId === 'number') ? pname(e.targetId) : '未知玩家';
+      const c = (typeof e.cardId  === 'number') ? `卡 ${e.cardId}` : '未知牌';
+      return `（出牌者可見）羅賓：你查看了 ${t} 的 ${c}`;
+    }
+    case 'teach_cover': {
+      const arr = Array.isArray(e.cards) ? e.cards : [];
+      const list = arr.length ? arr.map(id=>`卡 ${id}`).join('、') : '（空）';
+      return `（出牌者可見）黑鬍子：你覆蓋了 ${list}`;
+    }
+    case 'kata_peek': {
+      const arr = Array.isArray(e.cards) ? e.cards : [];
+      const list = arr.length ? arr.map(id=>`卡 ${id}`).join('、') : '（空）';
+      return `（出牌者可見）卡塔庫栗：你看到頂牌 → ${list}`;
+    }
+    case 'kata_order_done': {
+      const arr = Array.isArray(e.order) ? e.order : [];
+      const list = arr.length ? arr.map(id=>`卡 ${id}`).join('、') : '（空）';
+      return `（出牌者可見）卡塔庫栗：你已將頂牌排序為 → ${list}`;
+    }
+    case 'usopp_hit': {
+      const caster = (typeof e.casterId  === 'number') ? pname(e.casterId)  : '未知玩家';
+      const target = (typeof e.targetId  === 'number') ? pname(e.targetId)  : '未知玩家';
+      const d = (typeof e.digit === 'number') ? e.digit : '?';
+      return `騙人布：${caster} 猜 ${target} 的尾數為「${d}」→ 猜中！`;
+    }
+    case 'usopp_miss': {
+      const caster = (typeof e.casterId  === 'number') ? pname(e.casterId)  : '未知玩家';
+      const target = (typeof e.targetId  === 'number') ? pname(e.targetId)  : '未知玩家';
+      const d = (typeof e.digit === 'number') ? e.digit : '?';
+      return `騙人布：${caster} 猜 ${target} 的尾數為「${d}」→ 猜錯`;
+    }
+    case 'law_swap': {
+      const caster = (typeof e.casterId === 'number')
+        ? pname(e.casterId)
+        : (e.casterName || '未知玩家');
+      const target = (typeof e.targetId === 'number')
+        ? pname(e.targetId)
+        : (e.targetName || '未知玩家');
+      return `${caster} 交換了 ${target} 的手牌`;
+    }
+    case 'killer_disarm': {
+      // 為了不要出現「P1（名字）」這種格式，前端自己用 index 算名稱
+      const casterName =
+        (typeof e.casterId === 'number')
+          ? pname(e.casterId)
+          : (e.casterName || '未知玩家');
+
+      const targetName =
+        (typeof e.targetId === 'number')
+          ? pname(e.targetId)
+          : (e.targetName || '未知玩家');
+
+      showKillerToast(casterName, targetName);
+      break;
+    }
+
+
+    default: return null;
+
+  }
+}
+
+/* ===== 去重推入（改為推到 feed） ===== */
+function pushLogUnique(line){
+  if (!line) return;
+  const pretty = stripDuelPoints(formatLogWithNames(line));
+  if (feed[feed.length - 1] !== pretty) feed.push(pretty);
+}
+
+/* ===== Socket 連線狀態 ===== */
+socket.on('connect', ()=>{ el.conn.textContent='connected'; el.conn.classList.replace('text-red-400','text-green-400'); });
+socket.on('disconnect', ()=>{ el.conn.textContent='disconnected'; el.conn.classList.replace('text-green-400','text-red-400'); });
+socket.on('connect_error', (e)=>{ el.conn.textContent='error'; el.conn.classList.replace('text-green-400','text-red-400'); console.error(e); });
+
+function sendAction(type, payload={}){
+  if(me.playerId==null) return;
+  socket.emit('ACTION', { type, payload, roomId: me.roomId, playerId: me.playerId, secret: me.secret });
+}
+
+
+// 共用：實際送 JOIN_ROOM 的函式
+function doJoin(displayNameOverride){
+  me.roomId = (el.room.value || 'op-001').trim();
+  try { sessionStorage.setItem('op_room', me.roomId); } catch {}
+
+  const baseName = el.name.value || presetName || 'P';
+  const displayName = displayNameOverride || (baseName + Math.floor(Math.random()*100));
+
+  el.roomLbl.textContent = me.roomId;
+
+  socket.emit('JOIN_ROOM', {
+    roomId: me.roomId,
+    displayName,
+    avatar: presetAvatar,
+    secret: me.secret,
+    pid: me.playerId   // 多帶一個 pid 給後端記錄（結果頁也會用到）
+  });
+
+  hasJoinedOnce = true;
+}
+
+// 按「加入房間」按鈕
+el.join.onclick = ()=> {
+  doJoin();   // 用隨機尾碼
+};
+
+// 若 URL 有帶 ?room= → 自動加入
+if (presetRoom) {
+  try { sessionStorage.setItem('op_room', presetRoom); } catch {}
+  setTimeout(()=>{
+    // 自動加入時不用亂數尾碼，以免每刷新名稱看起來都不一樣
+    doJoin(presetName || 'P');
+  }, 80);
+}
+
+// === socket 連線 / 斷線事件 ===
+socket.on('connect', ()=>{
+  console.log('[socket] connected', socket.id);
+
+  // 若這個頁面之前有加入過房間（hasJoinedOnce === true），
+  // 而且記得 roomId，就自動用同一組 secret 重連。
+  if (hasJoinedOnce && me.roomId) {
+    const baseName = el.name.value || presetName || 'P';
+    const displayName = baseName;   // 重連不用再加亂數
+
+    socket.emit('JOIN_ROOM', {
+      roomId: me.roomId,
+      displayName,
+      avatar: presetAvatar,
+      secret: me.secret,   // ★ 關鍵：帶同一組 secret，後端會視為「同一個位置重連」
+      pid: me.playerId
+    });
+  }
+});
+
+socket.on('disconnect', ()=>{
+  console.log('[socket] disconnected');
+  try {
+    if (window.showToast) {
+      showToast('連線中斷，正在嘗試重新連線…');
+    }
+  } catch(e){}
+});
+
+
+const socketOnJoined = ({ playerId, secret })=>{
+  me.playerId = playerId;
+  me.secret = secret;
+  localStorage.setItem('opSecret', secret);
+
+  // ★ 新增：記錄自己在本局的 playerId，供 result.html 用
+  try {
+    sessionStorage.setItem('op_pid', playerId);
+    console.log('[SESSION]', 'op_pid =', playerId);
+  } catch(e){
+    console.warn('sessionStorage set op_pid failed', e);
+  }
+};
+socket.on('JOINED', socketOnJoined);
+
+
+// ★ 新增：記錄自己在本局的 playerId，供 result.html 用
+socket.on('JOINED', ({ playerId })=>{
+  try {
+    sessionStorage.setItem('op_pid', playerId);
+    console.log('[SESSION]', 'op_pid=', playerId);
+  } catch(e){
+    console.warn('sessionStorage set op_pid failed', e);
+  }
+});
+
+/* ===== 新增：showPlayedFlash（支援強化卡面 + 結束回呼，支援點擊關閉） ===== */
+function showPlayedFlash(cardId, byIndex, opt = {}){
+  // 若這張是靜默棄牌 → 不做快閃，也不排程影片
+  if (Array.isArray(_silentDiscards) && _silentDiscards.includes(cardId)) {
+    _silentDiscards = _silentDiscards.filter(x => x !== cardId);
+    try {
+      if (typeof opt === 'object' && typeof opt.onDone === 'function') opt.onDone();
+    } catch {}
+    return;
+  }
+
+  const ov       = document.getElementById('playedOverlay');
+  const img      = document.getElementById('playedImg');
+  const meta     = document.getElementById('playedMeta');
+  const bubble   = document.getElementById('voiceBubble');
+  const bubbleTx = document.getElementById('voiceText');
+  if (!ov || !img) return;
+
+  const isEnh = isEnhancedNow(cardId);
+  img.src = isEnh ? CARD_ENH(cardId) : CARD(cardId);
+
+  // 誰打出的提示
+  if (meta && typeof byIndex === 'number') {
+    meta.textContent = `${pname(byIndex)} 打出`;
+  }
+
+  // 只有「自己打出的牌」才允許保留語音泡泡，
+  // 其他玩家打牌時，強制關掉泡泡（只顯示卡圖）
+  const isMePlay = (typeof byIndex === 'number' && byIndex === me.playerId);
+  if (!isMePlay && bubble) {
+    bubble.classList.add('hidden');
+    if (bubbleTx) bubbleTx.textContent = '';
+  }
+
+  // 先清掉前一次的計時器與點擊事件，避免殘留
+  if (ov.__flashTimer) {
+    clearTimeout(ov.__flashTimer);
+    ov.__flashTimer = null;
+  }
+  if (ov.__flashOnClick) {
+    ov.removeEventListener('click', ov.__flashOnClick);
+    ov.__flashOnClick = null;
+  }
+
+  // 真正關閉 overlay 的共用函式
+  function finalize(){
+    ov.classList.add('hidden');
+
+    // 關掉 overlay 時順便把泡泡也收掉，避免殘留到下一張牌
+    if (bubble) {
+      bubble.classList.add('hidden');
+      if (bubbleTx) bubbleTx.textContent = '';
+    }
+
+    if (typeof opt.onDone === 'function') {
+      try { opt.onDone(); } catch(e){}
+    }
+  }
+
+  function startHide(){
+    ov.classList.remove('show');
+    setTimeout(finalize, 250);
+  }
+
+  // 點擊整個 overlay 立刻關閉
+  ov.__flashOnClick = ()=> {
+    if (ov.__flashTimer) {
+      clearTimeout(ov.__flashTimer);
+      ov.__flashTimer = null;
+    }
+    startHide();
+  };
+  ov.addEventListener('click', ov.__flashOnClick);
+
+  // 顯示 overlay
+  ov.classList.remove('hidden');
+  requestAnimationFrame(()=>{
+    ov.classList.add('show');
+
+    // 3 秒自動關閉（如果中間沒有被點擊關閉的話）
+    ov.__flashTimer = setTimeout(()=>{
+      ov.__flashTimer = null;
+      startHide();
+    }, 3000);
+  });
+}
+
+
+
+/* ====== C. STATE：同步 server 的新行、偵測新局並清空 + 偵測新棄牌 → 強化先快閃後播片 ====== */
+socket.on('STATE', (s)=>{
+  const prevTurnIndex  = (state && typeof state.turnIndex === 'number') ? state.turnIndex : null;
+  const prevDiscardLen = Array.isArray(state?.discard) ? state.discard.length : 0;
+
+  state = s;
+
+  
+ // ★ 寶箱為 0 → 引擎會附帶 state.final
+  if (state && state.final) {
+    // 已經處理過 final 就不要重複
+    if (_finalRedirecting) return;
+    _finalRedirecting = true;
+
+    // 先把 final 資料存起來，result.html 會用
+    try {
+      sessionStorage.setItem('op_room', me.roomId || '');
+      sessionStorage.setItem('op_final', JSON.stringify(state.final)); // ★ 存整份資料
+    } catch(e) {
+      console.warn('sessionStorage failed', e);
+    }
+
+    const ov = document.getElementById('finalOverlay');
+    if (ov) {
+      // 顯示「寶箱已空，等待結算...＋圖片」
+      ov.classList.remove('hidden');
+
+      // 7 秒後再跳到結算頁
+      setTimeout(()=>{
+        const url = new URL('result.html', location.origin);
+        url.searchParams.set('room', me.roomId || '');
+        if (typeof me.playerId === 'number') {
+          url.searchParams.set('pid', String(me.playerId));
+        }
+        location.href = url.toString();
+      }, 7000);
+    } else {
+      // 找不到 overlay 就直接跳（保險）
+      const url = new URL('result.html', location.origin);
+      url.searchParams.set('room', me.roomId || '');
+      if (typeof me.playerId === 'number') url.searchParams.set('pid', String(me.playerId));
+      location.href = url.toString();
+    }
+
+    return;
+  }
+
+// 1) 新局偵測：roundNo 變了 → 清空 feed、重置指標
+  if (_seenRound !== state.roundNo) {
+    _seenRound   = state.roundNo;
+    _seenSrvLen  = 0;
+    feed = []; // 清空對局日誌
+  }
+
+  // 2) 把這次 STATE 裡「server 新增的行」接到 feed 後面
+  const srvLog = state.log || [];
+  if (_seenSrvLen < srvLog.length) {
+    for (let i = _seenSrvLen; i < srvLog.length; i++) {
+      const pretty = stripDuelPoints(formatLogWithNames(srvLog[i]));
+      if (feed[feed.length - 1] !== pretty) feed.push(pretty);
+    }
+    _seenSrvLen = srvLog.length;
+  }
+
+  // 3) 偵測新棄牌
+  const newDiscardLen = Array.isArray(state.discard) ? state.discard.length : 0;
+  if (newDiscardLen > prevDiscardLen) {
+    // 這次「新增到棄牌堆」的所有卡（可能不只 1 張）
+    const added = state.discard.slice(prevDiscardLen, newDiscardLen);
+
+    // 從後往前找「最後一張不是靜默棄牌」的卡，才拿來做快閃
+    let last = null;
+
+    for (let i = added.length - 1; i >= 0; i--) {
+      const c = added[i];
+      let id = null;
+
+      if (typeof c === 'number') {
+        id = c;
+      } else if (c && typeof c === 'object') {
+        // 新格式：{ id, by, coverBy, back? ... }
+        if (c.back === true) {
+          // 純卡背直接略過
+          continue;
+        }
+        if (typeof c.id === 'number') {
+          id = c.id;
+        }
+      }
+
+      if (id == null) continue;
+
+      // 如果是「靜默棄牌」（例如被淘汰時自動丟手牌），就消耗掉一次，不當成快閃目標
+      if (Array.isArray(_silentDiscards) && _silentDiscards.includes(id)) {
+        _silentDiscards = _silentDiscards.filter(x => x !== id);
+        continue;
+      }
+
+      // 找到真正要快閃的那張（通常就是玩家剛打出的那張牌）
+      last = id;
+      break;
+    }
+
+    // 沒有適合快閃的牌，就什麼都不做
+    if (last == null) {
+      // 這種情況通常是：只有靜默棄牌（例如被教學覆蓋、被淘汰丟手牌）才會發生
+    } else {
+      // 下面沿用原本的強化判定 + 影片邏輯，只是把 last 換成我們挑出來的那張
+      if (isEnhancedNow(last)) {
+        if (_enhSignal && _enhSignal.cardId === last) {
+          _flashBusy = true;
+          showPlayedFlash(last, prevTurnIndex, {
+            onDone: () => {
+              if (typeof playEnhFxFor === 'function') {
+                playEnhFxFor(last);
+              } else if (typeof playEnhFx === 'function') {
+                playEnhFx();
+              }
+              _flashBusy = false;
+              _enhSignal = null;
+            }
+          });
+        } else {
+          // 非打出卡（例如索隆逼棄、覆蓋頂牌）或沒有 enh_fx 訊號 → 僅快閃卡面，不播影片
+          showPlayedFlash(last, prevTurnIndex);
+        }
+      } else {
+        // 一般非強化牌 → 就快閃卡面
+        showPlayedFlash(last, prevTurnIndex);
+      }
+    }
+  }
+
+  // ★ 新增：收到新狀態後校正背景（若選的場地已不在本局場地清單就自動關閉）
+  reconcileVenueBackground(s.venues);
+
+  render();
+});
+
+// === 決鬥動畫：輸家卡片先翻正面，再被火焰燒掉 ===
+function playDuel(opts){
+  const {
+    leftId,
+    rightId,
+    leftAvatar,
+    rightAvatar,
+    winnerId,
+    loserSide,    // 'left' | 'right'
+    loserCardId   // 這就是輸家的卡片 id（來自 duel_log）
+  } = opts || {};
+
+  // winnerId 是「0,1,2…」才算真的有贏家；負數或不是數字都當平手
+const hasWinner = (typeof winnerId === 'number' && winnerId >= 0);
+const isDraw = !hasWinner;
+
+
+  const root = document.getElementById('duelFx');
+  if (!root) return;
+
+  const arena    = root.querySelector('.arena');
+  const leftSlot = root.querySelector('.slot-left');
+  const rightSlot= root.querySelector('.slot-right');
+
+  const lAva = leftSlot.querySelector('.avatar');
+  const rAva = rightSlot.querySelector('.avatar');
+  const lNameEl = leftSlot.querySelector('.pname');
+  const rNameEl = rightSlot.querySelector('.pname');
+  const lCard = leftSlot.querySelector('.cardimg');
+  const rCard = rightSlot.querySelector('.cardimg');
+
+  const lineVs  = root.querySelector('.line-vs');
+  const lineWin = root.querySelector('.line-win');
+
+  // 直接用前面定義好的 pname()，會優先顯示玩家暱稱，沒有才退回 P1 / P2
+  const leftName  = (typeof leftId  === 'number') ? pname(leftId)  : `P${(leftId ?? 0)+1}`;
+  const rightName = (typeof rightId === 'number') ? pname(rightId) : `P${(rightId ?? 1)+1}`;
+
+
+  // 幫 avatar 設定圖片：優先用實際玩家的 avatar，沒有再退回預設 a1 / a2
+  const lp = (typeof leftId  === 'number') ? state?.players?.[leftId]  : null;
+  const rp = (typeof rightId === 'number') ? state?.players?.[rightId] : null;
+
+  // 從 state 取出 avatar 編號（你在玩家列表那邊也是用這兩個欄位）
+  const leftAvatarId  = lp?.client?.avatar  ?? lp?.avatar  ?? 1;
+  const rightAvatarId = rp?.client?.avatar ?? rp?.avatar ?? 2;
+
+  if (lAva) lAva.src = AVA(leftAvatarId);
+  if (rAva) rAva.src = AVA(rightAvatarId);
+
+  if (lNameEl) lNameEl.textContent = leftName;
+  if (rNameEl) rNameEl.textContent = rightName;
+;
+
+  // 說明文字
+  if (lineVs)  lineVs.textContent  = `${leftName} VS ${rightName}`;
+  // ⭐ 一開始不顯示任何結果，等撞擊 / 翻牌後再改
+  if (lineWin) lineWin.textContent = '';
+
+  // 先把勝負名字算好，晚點再用在結果文字上（平手時維持 null）
+  let winnerName = null;
+  let loserName  = null;
+
+  if (!isDraw) {
+    winnerName = (winnerId === leftId) ? leftName : rightName;
+    loserName  = (winnerId === leftId) ? rightName : leftName;
+  }
+
+
+
+  // 先全部重置狀態
+  root.classList.remove('hidden');
+  root.classList.add('show');
+
+  arena.classList.remove('spread', 'clash');
+  [leftSlot, rightSlot].forEach(s=>{
+    if (!s) return;
+    s.classList.remove('winner','loser','burning');
+    if (s.dataset) delete s.dataset.duelRole;  // ⭐ 同步清掉上一局紀錄
+  });
+
+  [lCard, rCard].forEach(img=>{
+    if (!img) return;
+    img.classList.remove('fx-flip','front-reveal');
+    img.style.opacity = '1';
+    img.src = 'images/cards/back.png';
+  });
+
+  // 標出 winner / loser（先記在 dataset，等等翻牌後才套樣式）
+  const leftIsWinner  = (winnerId === leftId);
+  const rightIsWinner = (winnerId === rightId);
+
+  if (!isDraw) {
+    if (leftSlot && leftSlot.dataset) {
+      leftSlot.dataset.duelRole = leftIsWinner ? 'winner' : 'loser';
+    }
+    if (rightSlot && rightSlot.dataset) {
+      rightSlot.dataset.duelRole = rightIsWinner ? 'winner' : 'loser';
+    }
+  }
+
+
+
+  // 計算輸家 slot（照後端傳來的 loserSide 優先）
+  let loserIsLeft;
+  if (loserSide === 'left') loserIsLeft = true;
+  else if (loserSide === 'right') loserIsLeft = false;
+  else loserIsLeft = !leftIsWinner; // 後備：winner 不是左邊那輸家就是左邊
+
+  const loserSlot = loserIsLeft ? leftSlot : rightSlot;
+  const loserCardImg = loserIsLeft ? lCard : rCard;
+
+
+  // 動畫時間軸（加長版）
+  const spreadDelay = 2000;  // 原 800ms → 1.0s：左右先慢慢展開
+  const clashDelay  = 3200;  // 原 1.6s → 2.2s：中間碰撞晚一點
+  const flipDelay   = 4400;  // 原 2.5s → 3.4s：輸家卡再晚一點翻正面
+  const burnDelay   = 5300;  // 原 3.0s → 4.3s：火焰特效開始時間也往後
+  const hideDelay   = 8500;  // 原 4.8s → 6.5s：整體停留久一點再收掉
+
+
+  // 1) 兩邊展開
+  setTimeout(()=>{
+    arena.classList.add('spread');
+  }, spreadDelay);
+
+   // 2) 中間撞擊（牌稍微往中間衝一下）
+  setTimeout(()=>{
+    arena.classList.add('clash');
+    playSfx('duelHitSfx');           // ⭐ 撞擊音效
+
+    // ⭐ 平手：兩邊卡片一起晃動，讓玩家感覺有「撞到但沒分勝負」
+    if (isDraw) {
+      onceFx(lCard, 'fx-shake');
+      onceFx(rCard, 'fx-shake');
+
+      // ⭐ 平手文字：等「撞擊」發生後才顯示
+      if (lineWin) {
+        lineWin.textContent = `平手！${leftName} 與 ${rightName} 難分勝負`;
+      }
+    }
+  }, clashDelay);
+
+
+  // 3) 輸家卡片翻面成正面
+  setTimeout(()=>{
+    if (isDraw) return;              // 平手不翻牌、不顯示哪一張輸
+    if (!loserCardImg) return;
+    if (typeof loserCardId === 'number') {
+      loserCardImg.src = cardImageURL(loserCardId);
+    }
+    loserCardImg.classList.add('fx-flip','front-reveal');
+    playSfx('duelFlipSfx');          // ⭐ 翻牌音效
+
+    // ⭐ 翻牌完成的同時，再顯示「誰勝利、誰落敗」
+    if (lineWin && winnerName && loserName) {
+      lineWin.textContent = `${winnerName} 勝利，${loserName} 落敗`;
+    }
+
+    // ⭐ 同一個時間點才把 winner / loser 外框點亮
+    [leftSlot, rightSlot].forEach(s=>{
+      if (!s) return;
+      s.classList.remove('winner','loser');
+      const role = s.dataset?.duelRole;
+      if (!role) return;
+      if (role === 'winner') s.classList.add('winner');
+      if (role === 'loser')  s.classList.add('loser');
+    });
+  }, flipDelay);
+
+
+
+  // 4) 翻完後開始燃燒特效
+  setTimeout(()=>{
+    if (isDraw) return;              // 平手不燒牌
+    if (!loserSlot || !loserCardImg) return;
+    loserSlot.classList.add('burning');
+    playSfx('duelBurnSfx');          // ⭐ 燒牌音效
+  }, burnDelay);
+
+
+  // 5) 全部收掉
+  setTimeout(()=>{
+    root.classList.remove('show');
+    // 稍微等淡出結束，再加 hidden
+    setTimeout(()=>{
+      root.classList.add('hidden');
+      // reset class / 狀態
+      arena.classList.remove('spread','clash');
+      [leftSlot, rightSlot].forEach(s=>{
+        if (!s) return;
+        s.classList.remove('winner','loser','burning');
+      });
+      [lCard, rCard].forEach(img=>{
+        if (!img) return;
+        img.classList.remove('fx-flip','front-reveal');
+        img.style.opacity = '1';
+        img.src = 'images/cards/back.png';
+      });
+    }, 250);
+  }, hideDelay);
+}
+
+
+
+// === 騙人布：猜數字提示框 ===
+function showUsoppToast(opts){
+  if(!opts) return;
+  const layer = document.getElementById('usoppLayer');
+  if(!layer) return;
+  const box = document.createElement('div');
+  const isHit = !!opts.isHit;
+  box.className = 'usopp-toast ' + (isHit ? 'hit' : 'miss');
+
+  const icon = document.createElement('span');
+  icon.className = 'usopp-icon';
+  icon.textContent = isHit ? '🎯' : '❌';
+
+  const text = document.createElement('span');
+  text.textContent = isHit
+    ? `${opts.caster} 狙擊 ${opts.target}（${opts.digit} 號）→ 🎯 猜中！`
+    : `${opts.caster} 狙擊 ${opts.target}（${opts.digit} 號）→ ❌ 猜錯`;
+
+  box.appendChild(icon);
+  box.appendChild(text);
+  layer.appendChild(box);
+
+  requestAnimationFrame(()=>{
+    box.style.opacity = '1';
+    box.style.transform = 'translateY(0)';
+    box.classList.add('show');
+  });
+
+  const ttl = 4000;
+  setTimeout(()=>{
+    box.style.opacity = '0';
+    box.style.transform = 'translateY(-20px)';
+    box.classList.remove('show');
+    setTimeout(()=> box.remove(), 250);
+  }, ttl);
+}
+
+// 羅賓小框：偵察手牌提示（6 號樣式，只有主文字）
+function showRobinToast({ caster, target, all }) {
+  const layer = document.getElementById('robinLayer');
+  if (!layer) return;
+
+  const box  = document.createElement('div');
+  box.className = 'robin-toast';
+
+  const main = document.createElement('div');
+  main.className = 'label-main';
+
+  const casterName = caster || '未知玩家';
+  const targetName = all ? '全體玩家' : (target || '未知玩家');
+
+  // 只有一行主文字，不要副文字
+  main.textContent = ` ${casterName} 偵察了 ${targetName} 的手牌🔍。`;
+
+  box.appendChild(main);
+
+  // 只保留一個框
+  layer.innerHTML = '';
+  layer.appendChild(box);
+
+  // 出場動畫
+  requestAnimationFrame(() => {
+    box.classList.add('show');
+  });
+
+  // 顯示時間（約 3.6 秒）
+  const ttl = 4000;
+  setTimeout(() => {
+    box.classList.remove('show');
+    setTimeout(() => {
+      if (box.parentNode === layer) box.parentNode.removeChild(box);
+    }, 260);
+  }, ttl);
+}
+
+// === 羅：交換手牌提示框（Style 5 藍光版） ===
+function showLawToast({ caster, target }) {
+  const layer = document.getElementById('lawLayer');
+  if (!layer) return;
+
+  const box = document.createElement('div');
+  box.className = 'law-toast law-v5';
+
+  const text = document.createElement('div');
+  text.className = 'law-text';
+
+  const casterName = caster || 'P?';
+  const targetName = target || 'P?';
+
+  // 照你指定的格式：(打出玩家名)交換了(被選的玩家名)的手牌
+  text.innerHTML = `<b>${casterName}</b> 交換了 <b>${targetName}</b> 的手牌`;
+
+  box.appendChild(text);
+
+  // 只顯示一個框
+  layer.innerHTML = '';
+  layer.appendChild(box);
+
+  // 啟動進場動畫
+  requestAnimationFrame(() => {
+    box.classList.add('show');
+  });
+
+  const ttl = 4000; // 顯示約 4 秒
+  setTimeout(() => {
+    box.classList.remove('show');
+    setTimeout(() => {
+      if (box.parentNode === layer) {
+        layer.removeChild(box);
+      }
+    }, 260);
+  }, ttl);
+}
+
+// === 大媽：保護 / 閃避狀態提示框（demo-mom 3 號蛋糕樣式） ===
+function showBigMomToast({ caster, status }) {
+  const layer = document.getElementById('momLayer');
+  if (!layer) return;
+
+  const mode = (status === 'dodge') ? '閃避' : '保護';
+  const box  = document.createElement('div');
+  box.className = 'bigmom-toast bigmom-v3';
+
+  const text = document.createElement('div');
+  text.className = 'bigmom-text';
+
+  const casterName = caster || '未知玩家';
+
+  // 文字格式：(打出玩家名) 獲得了 保護 / 閃避 狀態
+  text.innerHTML = `<b>${casterName}</b> 獲得了 <span class="bigmom-key">${mode}</span> 狀態`;
+
+  box.appendChild(text);
+
+  // 同時間只顯示一個大媽框
+  layer.innerHTML = '';
+  layer.appendChild(box);
+
+  // 出場動畫
+  requestAnimationFrame(() => {
+    box.classList.add('show');
+  });
+
+  // 顯示時間（你可以改長一點，這裡先用 4 秒）
+  const ttl = 4000;
+  setTimeout(() => {
+    box.classList.remove('show');
+    setTimeout(() => {
+      if (box.parentNode === layer) {
+        layer.removeChild(box);
+      }
+    }, 260);
+  }, ttl);
+}
+
+
+// === 喬巴：保護 / 閃避狀態提示框（2 號樣式） ===
+function showChopperToast({ caster, status }) {
+  const layer = document.getElementById('chopperLayer');
+  if (!layer) return;
+
+  const mode = (status === 'dodge') ? 'dodge' : 'protect';
+  const box  = document.createElement('div');
+  box.className = 'chopper-toast ' + mode;
+
+  const icon = document.createElement('div');
+  icon.className = 'chopper-icon';
+  // 保護 / 閃避用不同符號
+  icon.textContent = (mode === 'dodge') ? '🌀' : '🛡';
+
+  const text = document.createElement('div');
+  text.className = 'chopper-text';
+
+  const casterName = caster || '未知玩家';
+  const statusText = (mode === 'dodge') ? '閃避狀態' : '保護狀態';
+
+  // ✅ 只有一行主文字，不要副文字
+  text.textContent = `${casterName} 獲得了${statusText}`;
+
+  box.appendChild(icon);
+  box.appendChild(text);
+
+  // 只保留一個框
+  layer.innerHTML = '';
+  layer.appendChild(box);
+
+  // 出場動畫
+  requestAnimationFrame(() => {
+    box.classList.add('show');
+  });
+
+  // 顯示時間（約 3.8 秒）
+  const ttl = 5000;
+  setTimeout(() => {
+    box.classList.remove('show');
+    setTimeout(() => {
+      if (box.parentNode === layer) {
+        layer.removeChild(box);
+      }
+    }, 260);
+  }, ttl);
+}
+
+// === 娜美：麻痺提示框（8 號 橘子＆金幣樣式） ===
+function showNamiToast({ caster, target }) {
+  const layer = document.getElementById('namiLayer');
+  if (!layer) return;
+
+  const box = document.createElement('div');
+  // 使用剛才 CSS 裡的 8 號樣式
+  box.className = 'nami-v8';
+
+  const text = document.createElement('div');
+  text.className = 'nami-text';
+
+  const casterName = caster || 'P?';
+  const targetName = target || 'P?';
+
+  // 文字格式：(打出玩家名) 麻痺了 (被選的玩家名)
+  text.innerHTML = `<b>${casterName}</b> 麻痺了 <b>${targetName}</b>`;
+
+  box.appendChild(text);
+
+  // 同時間只顯示一個娜美框
+  layer.innerHTML = '';
+  layer.appendChild(box);
+
+  // 出場動畫
+  requestAnimationFrame(() => {
+    box.classList.add('show');
+  });
+
+  // 顯示時間（可跟羅賓差不多）
+  const ttl = 4000;
+  setTimeout(() => {
+    box.classList.remove('show');
+    setTimeout(() => {
+      if (box.parentNode === layer) {
+        layer.removeChild(box);
+      }
+    }, 260);
+  }, ttl);
+}
+
+// === 青雉：凍結手牌 播報（16 號卡，樣式 1-2） ===
+function showAokijiToast({ caster, target, all }) {
+  const layer = document.getElementById('aokijiLayer');
+  if (!layer) return;
+
+  // 外層冰框
+  const wrap = document.createElement('div');
+  wrap.className = 'style1-v2';
+
+  // 內層文字框
+  const frame = document.createElement('div');
+  frame.className = 'aokiji-frame';
+
+  const text = document.createElement('div');
+  text.className = 'aokiji-text';
+
+  const casterName = caster || 'P?';
+  const targetName = all ? '全體玩家' : (target || 'P?');
+
+  // 文字：(打出玩家) 凍結了 (被選玩家或全體玩家) 的手牌
+  text.innerHTML = `<b>${casterName}</b> 凍結了 <b>${targetName}</b> 的手牌`;
+
+  frame.appendChild(text);
+  wrap.appendChild(frame);
+
+  // 同時間只顯示一個青雉框
+  layer.innerHTML = '';
+  layer.appendChild(wrap);
+
+  // 出場動畫：加上 .show
+  requestAnimationFrame(() => {
+    frame.classList.add('show');
+  });
+
+  // 顯示時間（大約 4 秒，可以自己調）
+  const ttl = 4000;
+  setTimeout(() => {
+    frame.classList.remove('show');
+    setTimeout(() => {
+      if (wrap.parentNode === layer) {
+        layer.removeChild(wrap);
+      }
+    }, 260);
+  }, ttl);
+}
+
+
+// === 基拉 解除武裝 播報 ===
+const killerLayer = document.getElementById('killerLayer');
+
+function showKillerToast(casterName, targetName) {
+  if (!killerLayer) return;
+
+  killerLayer.innerHTML = '';
+
+  const box = document.createElement('div');
+  box.className = 'killer-v2';  // 待會再加 show
+
+  const text = document.createElement('div');
+  text.className = 'killer-text';
+  text.innerHTML = `
+    <span class="killer-name">${casterName}</span>
+    解除了
+    <span class="killer-name">${targetName}</span>
+    的武裝狀態
+  `;
+
+  box.appendChild(text);
+  killerLayer.appendChild(box);
+
+  // 小延遲讓 CSS transition 吃到
+  requestAnimationFrame(() => {
+    box.classList.add('show');
+  });
+
+  // 顯示約 3 秒
+  setTimeout(() => {
+    box.classList.remove('show');
+    setTimeout(() => {
+      killerLayer.innerHTML = '';
+    }, 260);
+  }, 4000);
+}
+
+// === 索隆：棄牌提示框（使用 demo 樣式 3） ===
+function showZoroToast({ caster, target }) {
+  const layer = document.getElementById('zoroLayer');
+  if (!layer) return;
+
+  const box = document.createElement('div');
+  // 換成 demo 的框 class
+  box.className = 'zoro-v3';
+
+  const text = document.createElement('div');
+  text.className = 'zoro-text';
+
+  const casterName = caster || 'P?';
+  const targetName = target || 'P?';
+
+  // 名字加粗，跟 demo 的 `<b>索隆</b> ...` 用法一樣
+  text.innerHTML = `<b>${casterName}</b> 棄掉了 <b>${targetName}</b> 的手牌`;
+
+  box.appendChild(text);
+  layer.innerHTML = '';
+  layer.appendChild(box);
+
+  // 這段只是控制出現 / 消失時間，動畫主要靠 .zoro-v3 的 popIn
+  requestAnimationFrame(() => box.classList.add('show'));
+
+  const ttl = 4000;
+  setTimeout(() => {
+    box.classList.remove('show');
+    setTimeout(() => {
+      if (box.parentNode === layer) layer.removeChild(box);
+    }, 250);
+  }, ttl);
+}
+
+
+
+socket.on('EMIT', (e)=>{
+  
+
+if (e.type === 'silent_discard' && Array.isArray(e.cards)) {
+  _silentDiscards.push(...e.cards);
+  return;
+}
+// 記錄強化影片觸發信號（只對「有人打出的那張」）
+if (e.type === 'enh_fx' && typeof e.cardId === 'number') {
+  _enhSignal = { cardId: e.cardId, at: Date.now() };
+  return;
+}
+if (!e) return;
+
+  // 全體強化影片：伺服器廣播 e.cardId → 若正在快閃且同牌，改由快閃 onDone 播；否則立即播
+  // 一律忽略，在 STATE → showPlayedFlash 的 onDone 播
+  if (e.type === 'enh_fx') {
+    return;
+  }
+
+  // coin_fx：伺服器只丟給「該按的人」
+  if (e.type === 'coin_fx') {
+    playCoinFx();
+    return;
+  }
+
+// 決鬥：先記錄，等 duel_log 帶卡片 id 再一起播
+if (e.type === 'duel') {
+  _pendingDuel = e;
+
+  // winnerId 只有在 0,1,2… 這種正常玩家編號時才算「有勝利者」
+  const hasWinner = (typeof e.winnerId === 'number' && e.winnerId >= 0);
+
+  // ⭐ 沒有正常 winner → 當成平手，直接播一個「沒有燒牌」的決鬥動畫
+  if (!hasWinner) {
+    playDuel({
+      leftId:  e.leftId,
+      rightId: e.rightId,
+      winnerId: null   // 用 null 讓 playDuel 判斷是平手
+    });
+    _pendingDuel = null;
+  }
+}
+
+
+
+// duel_log：除了寫日誌，也觸發決鬥動畫（帶輸家卡片）
+if (e.type === 'duel_log') {
+  if (_pendingDuel && typeof e.loserId === 'number' && typeof e.cardId === 'number') {
+    const d = _pendingDuel;
+    const loserSide =
+      (e.loserId === d.leftId)  ? 'left' :
+      (e.loserId === d.rightId) ? 'right' : null;
+
+// 用卡片 id 找正面圖片路徑
+function cardImageURL(id){
+  if (id == null) return 'images/cards/back.png';
+
+  // 若前端有 CARD_TEXT（有些版本是這樣）
+  if (window.CARD_TEXT && window.CARD_TEXT[id] && window.CARD_TEXT[id].img){
+    return window.CARD_TEXT[id].img;
+  }
+
+  // 若有 CARDS 清單（有些版本是這樣）
+  if (window.CARDS && Array.isArray(window.CARDS)){
+    const found = window.CARDS.find(c => c.id === id || c.cid === id);
+    if (found && found.image) return found.image;
+  }
+
+  // 預設就用 images/cards/ID.webp 的命名
+  return `images/cards/${id}.webp`;
+}
+
+    playDuel({
+      leftId: d.leftId,
+      rightId: d.rightId,
+      winnerId: d.winnerId,
+      loserSide,
+      loserCardId: e.cardId
+    });
+
+    _pendingDuel = null;
+  }
+}
+
+  // 羅賓：偵察手牌提示框
+  if (e.type === 'robin_peek') {
+    const caster = (typeof e.casterId === 'number') ? pname(e.casterId) : '未知玩家';
+
+    const isAll = !!e.all;
+    const target = isAll
+      ? '全體玩家'
+      : (typeof e.targetId === 'number') ? pname(e.targetId) : '未知玩家';
+
+    showRobinToast({
+      caster,
+      target,
+      all: isAll
+    });
+    // 不 return，讓它一樣進 feed → 下面 msgToLogLine 會再產生一條文字
+  }
+
+  // 喬巴：獲得保護 / 閃避狀態提示框
+  if (e.type === 'chopper_status') {
+    const casterName =
+      (typeof e.casterId === 'number') ? pname(e.casterId) :
+      (e.casterName || '未知玩家');
+
+    const status =
+      (e.status === 'dodge' || e.status === 'protect')
+        ? e.status
+        : 'protect';
+
+    showChopperToast({
+      caster: casterName,
+      status
+    });
+    // 一樣不 return，讓伺服器的文字訊息照常進 feed
+  }
+
+  // 大媽：獲得保護 / 閃避狀態提示框
+  if (e.type === 'bigmom_status') {
+    const casterName =
+      (typeof e.casterId === 'number') ? pname(e.casterId) :
+      (e.casterName || '未知玩家');
+
+    const status =
+      (e.status === 'dodge' || e.status === 'protect')
+        ? e.status
+        : 'protect';
+
+    showBigMomToast({
+      caster: casterName,
+      status
+    });
+    // 一樣不 return，讓伺服器文字照常進 feed
+  }
+
+
+  // 娜美：麻痺提示框
+  if (e.type === 'nami_paralyze') {
+    const caster = (typeof e.casterId === 'number')
+      ? pname(e.casterId)
+      : (e.casterName || 'P?');
+
+    const target = (typeof e.targetId === 'number')
+      ? pname(e.targetId)
+      : (e.targetName || 'P?');
+
+    showNamiToast({ caster, target });
+    // 一樣不 return，讓伺服器的文字訊息照常進 feed
+  }
+
+// ★ 新增：索隆 5 號棄牌提示
+  if (e.type === 'zoro_discard') {
+    const caster = (typeof e.casterId === 'number')
+      ? pname(e.casterId)
+      : (e.casterName || 'P?');
+    const target = (typeof e.targetId === 'number')
+      ? pname(e.targetId)
+      : (e.targetName || 'P?');
+
+    showZoroToast({ caster, target });
+  }
+
+// 羅：交換手牌播報
+if (e.type === 'law_swap') {
+  const caster = (typeof e.casterId === 'number')
+    ? pname(e.casterId)
+    : (e.casterName || 'P?');
+
+  const target = (typeof e.targetId === 'number')
+    ? pname(e.targetId)
+    : (e.targetName || 'P?');
+
+  showLawToast({ caster, target });
+}
+
+// 青雉：凍結手牌播報
+if (e.type === 'aokiji_freeze') {
+  const caster = (typeof e.casterId === 'number')
+    ? pname(e.casterId)
+    : (e.casterName || 'P?');
+
+  let target = null;
+  let all = false;
+
+  // 如果後端有帶 all=true，就顯示「全體玩家」
+if (e.mode === 'all') {
+  all = true;                 // 全體凍結
+  target = '全體玩家';
+} else {
+  target = (typeof e.targetId === 'number')
+    ? pname(e.targetId)
+    : (e.targetName || 'P?');
+}
+
+  showAokijiToast({ caster, target, all });
+}
+
+
+  // 騙人布：猜數字（命中 / 失誤）提示框
+  if (e.type === 'usopp_hit' || e.type === 'usopp_miss') {
+    const caster = (typeof e.casterId === 'number') ? pname(e.casterId) : '未知玩家';
+    const target = (typeof e.targetId === 'number') ? pname(e.targetId) : '未知玩家';
+    const d = (typeof e.digit === 'number') ? e.digit : '?';
+    showUsoppToast({ caster, target, digit: d, isHit: e.type === 'usopp_hit' });
+    // 不 return，讓文字也進 feed
+  }
+
+  const line = msgToLogLine(e);
+
+  if (line) {
+    const pretty = stripDuelPoints(formatLogWithNames(line));
+    if (feed[feed.length - 1] !== pretty) feed.push(pretty);
+    render();
+  }
+});
+
+
+// ====== LAW & LUFFY UI helpers and socket events (added) ======
+const $ = (sel)=>document.querySelector(sel);
+
+// Local UI state for law swap
+let _lawTargetId   = null;
+let _lawTargetName = '';
+let _lawTargetCard = null;
+
+// Project card image resolver
+function cardImageURL(cardId){
+  return (typeof CARD_IMG === 'function')
+    ? CARD_IMG(cardId)
+    : (typeof CARD === 'function' ? CARD(cardId) : `images/cards/${cardId}.webp`);
+}
+
+// Open/Close modals
+function openLawSwap(targetId, cardId){
+  _lawTargetId   = targetId;
+  _lawTargetCard = cardId;
+
+  const nameEl = $('#lawTargetName');
+  if (nameEl){
+    // Prefer state.players nickname if available
+    if (Array.isArray(state?.players) && state.players[targetId]) {
+      const nm = state.players[targetId].client?.displayName || state.players[targetId].displayName;
+      nameEl.textContent = nm ? `P${targetId+1} ${nm}` : `P${targetId+1}`;
+    } else {
+      nameEl.textContent = `P${(targetId+1)}`;
+    }
+  }
+
+  const img = $('#lawTargetImg');
+  if (img) img.src = cardImageURL(cardId);
+
+  $('#lawSwapModal')?.classList.remove('hidden');
+}
+function closeLawSwap(){
+  $('#lawSwapModal')?.classList.add('hidden');
+  _lawTargetId = null; _lawTargetCard = null;
+}
+
+function openLuffyBoost(){
+  $('#luffyBoostModal')?.classList.remove('hidden');
+}
+function closeLuffyBoost(){
+  $('#luffyBoostModal')?.classList.add('hidden');
+}
+
+// Bind buttons
+$('#lawSwapCancel')?.addEventListener('click', ()=>{
+  closeLawSwap();
+  // cancel → PICK_CANCEL
+  socket.emit('ACTION', {
+    roomId: me.roomId, playerId: me.playerId, secret: me.secret,
+    type: 'PICK_CANCEL'
+  });
+});
+$('#lawSwapOk')?.addEventListener('click', ()=>{
+  const target = _lawTargetId;
+  closeLawSwap();
+  // confirm swap → PICK_TARGET with swap:true
+  socket.emit('ACTION', {
+    roomId: me.roomId, playerId: me.playerId, secret: me.secret,
+    type: 'PICK_TARGET',
+    payload: { target, swap: true }
+  });
+});
+$('#luffyBoostGo')?.addEventListener('click', ()=>{
+  closeLuffyBoost();
+  // commit boost
+  socket.emit('ACTION', {
+    roomId: me.roomId, playerId: me.playerId, secret: me.secret,
+    type: 'LUFFY_BOOST_COMMIT',
+    payload: { go: true }
+  });
+});
+
+// Extra EMIT hooks
+socket.on('EMIT', (e)=>{
+  if (!e) return;
+  // Law (boosted) view result → prompt swap (only caster receives)
+  if (e.type === 'law_view' && e.cardId != null && e.targetId != null){
+    openLawSwap(e.targetId, e.cardId);
+    return;
+  }
+  // Luffy (boost) prompt
+  if (e.type === 'luffy_boost_prompt'){
+    openLuffyBoost();
+    return;
+  }
+});
+
+
+/* ========= 渲染 ========= */
+function render(){
+  if(!state) return;
+
+  const left = state.deck?.length ?? 0;
+el.deckCnt.textContent = left;
+
+ // 少於 14 → 讓牌堆按鈕紅光微閃；反之移除
+ if (el.deckBtn) {
+   if (left < 14) el.deckBtn.classList.add('hot');
+   else           el.deckBtn.classList.remove('hot');
+ }
+
+// 想要數字變動時有小彈跳效果，可加上這行（可選）
+onceFx?.(el.deckCnt, 'fx-pulse');
+
+  el.turnLbl.textContent = (state.turnIndex!=null) ? `P${state.turnIndex+1}` : '—';
+  el.stepLbl.textContent = state.turnStep || '—';
+
+  // 寶箱金幣顯示（優先 chestCoins）
+  let chest = state.chestCoins;
+  if (typeof chest !== 'number') {
+    const cands = [ state.chestLeft, state.chest, state.treasure, state.bank, state.pot, state.meta?.chest, state.meta?.treasure, state.meta?.bank, state.meta?.pot ];
+    for (const v of cands){
+      if (typeof v === 'number') { chest = v; break; }
+      if (v && typeof v.coins  === 'number') { chest = v.coins;  break; }
+      if (v && typeof v.amount === 'number') { chest = v.amount; break; }
+      if (v && typeof v.value  === 'number') { chest = v.value;  break; }
+    }
+    if (typeof chest !== 'number') chest = 0;
+  }
+  if (el.chestLbl) el.chestLbl.textContent = chest;
+  if (_prev.chest !== null && _prev.chest !== chest) onceFx(el.chestLbl, 'fx-pulse');
+  _prev.chest = chest;
+
+  // 場地（改：外層綁 onclick → onVenueClick('場地名')）
+  // 場地（改：外層綁 onclick → onVenueClick('場地名')）
+el.venues.innerHTML = '';
+(state.venues || []).forEach(v => {
+  const d = document.createElement('div');
+  d.className = 'venue-card rounded overflow-hidden border border-[#2a2f35] cursor-pointer bg-[#05070b]/70';
+  d.setAttribute('data-venue', v.name);
+  d.setAttribute('onclick', `onVenueClick('${v.name}')`);
+
+  // 場地圖片
+  const im = document.createElement('img');
+  im.src = VEN(v.name);
+  im.alt = v.name;
+  im.dataset.name = v.name;
+  im.className = 'w-full block';
+  d.appendChild(im);
+
+  // 場地名稱 + 說明（像玩家框裡的卡片說明）
+  const desc = venueDesc(v.name);
+  if (desc) {
+    const textWrap = document.createElement('div');
+    textWrap.className = 'px-2 pt-1 pb-1.5 text-[11px] leading-snug text-slate-300/85 bg-black/40';
+
+    textWrap.innerHTML =
+      `<div class="font-semibold text-[11px] mb-0.5">${v.name}</div>` +
+      `<div class="text-[10px]">${desc}</div>`;
+
+    d.appendChild(textWrap);
+  }
+
+  el.venues.appendChild(d);
+});
+
+
+  // 棄牌（秘密棄牌＝卡背）
+  el.discard.innerHTML='';
+  (state.discard||[]).forEach(item=>{
+    const im=document.createElement('img');
+    im.className='thumb';
+    const isBack = (item && typeof item === 'object' && item.back === true);
+    im.src = isBack ? 'images/cards/back.webp' : CARD(item);
+    el.discard.appendChild(im);
+  });
+  const nowLen = (state.discard || []).length;
+  if (nowLen > _prev.discardLen) {
+    const imgs = el.discard.querySelectorAll('img');
+    const last = imgs[imgs.length - 1];
+    onceFx(last, 'fx-flip');
+  }
+  _prev.discardLen = nowLen;
+
+  // 玩家
+  el.players.innerHTML='';
+  (state.players||[]).forEach((p)=>{
+    const isTurn = state.turnIndex===p.id; const isMe = me.playerId===p.id;
+    const box = document.createElement('div');
+    box.className = `p-3 rounded-xl border ${isTurn?'border-amber-400':'border-[#2a2f35]'} bg-[#12161b] ${isTurn?' current':''}`;
+    box.innerHTML = `
+      <div class="flex items-center gap-3">
+        <img class="w-12 h-12 rounded-full border border-[#2a2f35]" src="${AVA(p?.client?.avatar ?? p?.avatar)}"/>
+        <div class="grow">
+          <div class="flex items-center justify-between">
+            <div class="font-semibold">
+              ${pnameBy(p)}
+              ${!p.alive ? '<span class="ml-1 text-neutral-400">（出局）</span>' : ''}
+            </div>
+            <div class="text-xs text-neutral-400">金幣 <span class="text-amber-300 font-bold">${p.gold||0}</span></div>
+          </div>
+          <div class="flex gap-1 mt-1 text-[11px] text-neutral-300">
+            ${p.protected?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">🛡 保護</span>':''}
+            ${p.dodging?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">🌀 閃避</span>':''}
+            ${p.frozen?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">❄ 凍結</span>':''}
+            ${p.skipNext?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">⚡ 麻痺</span>':''}
+            ${p.iceArmed?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">🧊 檢查</span>':''}
+            ${(!p.protected&&!p.dodging&&!p.frozen&&!p.skipNext&&!p.iceArmed)?'<span class="opacity-50">—</span>':''}
+          </div>
+          ${isMe? `<div class="mt-2 flex items-start gap-2">
+  <!-- 左邊：自己的小卡圖（跟原本一樣，只是加上 shrink-0 ） -->
+  <div class="flex items-center gap-1 text-[11px] text-neutral-400 shrink-0">
+    ${p.hand!=null
+      ? `<img class="thumb-sm" src="${isEnhancedNow(p.hand)? CARD_ENH(p.hand) : CARD(p.hand)}"/>`
+      : ''}
+    ${p.tempDraw!=null
+      ? `<span>/</span><img class="thumb-sm" src="${isEnhancedNow(p.tempDraw)? CARD_ENH(p.tempDraw) : CARD(p.tempDraw)}"/>`
+      : ''}
+  </div>
+
+  <!-- 右邊：卡片文字敘述（會自動判斷基本/強化） -->
+  <div class="flex-1 min-w-0 text-[10px] leading-tight text-neutral-300 space-y-0.5">
+    ${p.hand!=null
+      ? `<div>${cardLine(p.hand)}</div>`
+      : ''}
+    ${p.tempDraw!=null
+      ? `<div>${cardLine(p.tempDraw)}</div>`
+      : ''}
+  </div>
+</div>`:''}
+
+        </div>
+      </div>`;
+    el.players.appendChild(box);
+
+    const wasAlive = _prev.aliveMap[p.id];
+    if (typeof wasAlive === 'boolean' && wasAlive && !p.alive) onceFx(box, 'fx-shake');
+    _prev.aliveMap[p.id] = !!p.alive;
+  });
+
+    // 自己的出牌區
+  const my = state.players?.[me.playerId];
+  const isMyTurn = state.turnIndex === me.playerId;
+
+  // ① 正常情況：只有「抽牌階段」而且沒被麻痺，才可以按牌堆
+  const canDraw =
+    state.turnStep === 'draw' &&
+    isMyTurn &&
+    !(my && my.skipNext === true);
+
+  el.deckBtn.disabled = !canDraw;
+  el.deckBtn.style.opacity = canDraw ? 1 : 0.6;
+
+  el.deckBtn.disabled = !canDraw;
+  el.deckBtn.style.opacity = canDraw ? 1 : 0.6;
+
+  // ★ 抽牌提示泡泡：只有「自己回合 + 抽牌階段 + 沒麻痺」才顯示
+  if (el.deckHint) {
+    if (canDraw) {
+      el.deckHint.classList.remove('hidden');
+    } else {
+      el.deckHint.classList.add('hidden');
+    }
+  }
+
+  // ② 被麻痺（skipNext=true）：自動幫你送一次 DRAW，當成「跳過抽牌」
+  if (
+    state.turnStep === 'draw' &&
+    isMyTurn &&
+    my &&
+    my.skipNext === true
+  ) {
+    // 直接送出 DRAW；伺服器會把這回合跳過並換人
+    sendAction('DRAW');
+  }
+
+
+  // ② 被麻痺（skipNext=true）：自動幫你送一次 DRAW，當成「跳過抽牌」
+  if (
+    state.turnStep === 'draw' &&
+    isMyTurn &&
+    my &&
+    my.skipNext === true
+  ) {
+    // 直接送出 DRAW；伺服器會把這回合跳過並換人
+    sendAction('DRAW');
+  }
+
+
+const canChoose = state.turnStep === 'choose' && state.turnIndex === me.playerId && my;
+
+el.playZone.classList.toggle('hidden', !canChoose);
+if (canChoose) {
+  if (_lastRoundNo !== state.roundNo) { _enhPlayed.clear(); _lastRoundNo = state.roundNo; }
+
+  // 先照原本邏輯把兩張卡圖畫出來
+  if (my.hand != null) {
+    const key = `${state.roundNo}:${me.playerId}:hand:${my.hand}`;
+    const enhanced = isEnhancedNow(my.hand);
+    el.imgHand.src = (enhanced && _enhPlayed.has(key)) ? CARD_ENH(my.hand) : CARD(my.hand);
+    if (enhanced && !_enhPlayed.has(key)) {
+      const vn = CARD_VENUE[my.hand];
+      setTimeout(()=> playEnhanceFx(vn, el.imgHand, my.hand, key), 120);
+    }
+  } else {
+    el.imgHand.src = '';
+  }
+
+  if (my.tempDraw != null) {
+    const key2 = `${state.roundNo}:${me.playerId}:drawn:${my.tempDraw}`;
+    const enhanced2 = isEnhancedNow(my.tempDraw);
+    el.imgDrawn.src = (enhanced2 && _enhPlayed.has(key2)) ? CARD_ENH(my.tempDraw) : CARD(my.tempDraw);
+    if (enhanced2 && !_enhPlayed.has(key2)) {
+      const vn2 = CARD_VENUE[my.tempDraw];
+      setTimeout(()=> playEnhanceFx(vn2, el.imgDrawn, my.tempDraw, key2), 180);
+    }
+  } else {
+    el.imgDrawn.src = '';
+  }
+  // ======= 正確的冰凍與娜美規則 =======
+
+  // 清除舊狀態
+  el.playHand.classList.remove("card-frozen");
+  el.playDrawn.classList.remove("card-frozen");
+  el.playHand.disabled = false;
+  el.playDrawn.disabled = false;
+
+  const h = my.hand;
+  const d = my.tempDraw;
+
+  // 1️青雉凍結：只能打抽牌 tempDraw（所以凍 hand）
+  if (my.frozen) {
+    if (h != null) {
+      el.playHand.classList.add("card-frozen");
+      el.playHand.disabled = true;
+    }
+  }
+
+  // 2️娜美規則：7 + (6/8) → 必須打 7
+  const has7 = (h === 7 || d === 7);
+  const has68 = (h === 6 || h === 8 || d === 6 || d === 8);
+
+  if (!my.frozen && has7 && has68) {
+    if (h === 7 && (d === 6 || d === 8)) {
+      el.playDrawn.classList.add("card-frozen");
+      el.playDrawn.disabled = true;
+    }
+    if (d === 7 && (h === 6 || h === 8)) {
+      el.playHand.classList.add("card-frozen");
+      el.playHand.disabled = true;
+    }
+  }
+ }
+ 
+
+
+/* ====== D. render()：用 feed 畫畫面 ====== */
+const logBox = el.log;
+
+// 重新生成列表
+logBox.innerHTML = '';
+feed.forEach(line=>{
+  const li   = document.createElement('li');
+  const text = String(line ?? '');
+
+  // 原本的文字
+  li.textContent = text;
+
+  // --- 顏色規則 ---
+
+  // 1) 誰出局 → 紅色
+  //   對應後端：
+  //   - P${p.id+1} 出局（${reason}）
+  //   - P${me.id+1} 已出局 → P${st.turnIndex+1}
+  if (text.includes('出局')) {
+    li.style.color = '#ef4444';   // 或 'red'
+  }
+
+  // 2) 猜錯的卡號 → 橘色
+  //   後端目前是 pushLog(st,'猜錯了', ... )
+  else if (text.includes('猜錯')) {
+    li.style.color = '#f97316';   // 橘色 (你也可用 'orange')
+  }
+
+  // 3) 僅出牌者可見的資訊 → 藍色
+  //   你現在的字串都有前綴「（出牌者可見）」：
+  //   - （出牌者可見）羅賓：...
+  //   - （出牌者可見）卡塔庫栗：...
+  //   - （出牌者可見）黑鬍子：...
+  else if (text.includes('（出牌者可見）')) {
+    li.style.color = '#3b82f6';   // 或 'blue'
+  }
+
+  logBox.appendChild(li);
+});
+
+// ⭐ 每次更新後，自動拉到最下面（看到最新一行）
+logBox.scrollTop = logBox.scrollHeight;
+
+
+  // 下一局按鈕（依 viewerCanNext）
+  el.nextRound.classList.toggle('hidden', !(state.allowNextRound && state.viewerCanNext === true));
+
+  renderPending();
+}
+
+
+/* ===== 兼容：若外部還調用 addMsg()，沿用 feed ===== */
+function addMsg(e){
+  if (!e || e.type === 'peek' || e.type === 'toast') return;
+  const line = msgToLogLine(e);
+  if (!line) return;
+  pushLogUnique(line);
+  render();
+}
+
+/* =======================
+   PENDING（含騙人布修正 & 魯夫/羅/基拉/大媽流程）
+   ======================= */
+function renderPending(){
+  const srvP = state?.pending;
+  if (!srvP){ localPending = null; hideModal(); return; }
+
+  let actorId = state.turnIndex;
+  if ((srvP.action === 'bigmom-pay' || srvP.action === 'queen') && typeof srvP.target === 'number') {
+    actorId = srvP.target;
+  }
+  if (actorId !== me.playerId){ localPending = null; hideModal(); return; }
+
+  // USOPP
+  if (srvP.action === 'usopp') {
+    if (srvP.extra?.target != null) {
+      localPending = null;
+      return showDigits('選擇尾數（不能選 1）', (d)=>{
+        sendAction('PICK_DIGIT',{ digit:d });
+        localPending = null;
+      }, { ban:[1] });
+    }
+    if (localPending && localPending.action==='usopp' && localPending.stage==='digit' && Number.isInteger(localPending.target)) {
+      return showDigits('選擇尾數（不能選 1）', (d)=>{
+        sendAction('PICK_DIGIT',{ digit:d });
+        localPending = null;
+      }, { ban:[1] });
+    }
+    return showTarget('選擇要猜的對象', (i)=>{
+      sendAction('PICK_TARGET',{ target:i });
+      localPending = { action:'usopp', stage:'digit', target:i, at:Date.now() };
+      showDigits('選擇尾數（不能選 1）', (d)=>{
+        sendAction('PICK_DIGIT',{ digit:d });
+        localPending = null;
+      }, { ban:[1] });
+    }, { allowSelf:false });
+  }
+
+  // 魯夫
+  if (srvP.action === 'luffy') {
+    const firstDone = !!(srvP.extra && srvP.extra.firstDone);
+    if (!firstDone) {
+      return showTarget('選擇第一位對象', (i)=>{ sendAction('PICK_TARGET', { target:i }); }, { allowSelf:false });
+    }
+    return showTargetWithCancel('再選一位（或取消略過）', (i)=>{
+      sendAction('LUFFY_SECOND', { target:i });
+    }, ()=>{ sendAction('LUFFY_SECOND', { target:-1 }); }, { allowSelf:false });
+  }
+
+ // 羅（Law）
+if (srvP.action === 'law') {
+  const boosted = !!(srvP.extra && srvP.extra.boost);
+  if (boosted) {
+    // 第二階段：已選好對象 → 顯示對方手牌 + 是否交換
+    if (localPending && localPending.action === 'law' && localPending.stage === 'confirm' && Number.isInteger(localPending.target)) {
+      const tid = localPending.target;
+      const tp = state.players?.[tid];
+      const tcard = (tp && typeof tp.hand === 'number') ? tp.hand : null;
+      const img = tcard != null ? (isEnhancedNow(tcard) ? CARD_ENH(tcard) : CARD(tcard)) : 'images/cards/back.webp';
+      const html = `
+        <div class="text-lg font-semibold mb-3">你查看了 ${pname(tid)} 的手牌</div>
+        <div class="flex justify-center mb-4">
+          <img src="${img}" alt="hand" class="w-[min(40vw,260px)] rounded-lg border border-[#2a2f35] shadow-xl"/>
+        </div>
+        <div class="text-base mb-3">要與 ${pname(tid)} 交換手牌嗎？</div>
+        <div class="flex justify-end gap-2">
+          <button id="noBtn" class="px-3 py-1.5 rounded-lg border border-[#2a2f35]">不交換</button>
+          <button id="yesBtn" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black">交換</button>
+        </div>`;
+      showModal(html);
+      const yesBtn = el.modal.querySelector('#yesBtn');
+      const noBtn  = el.modal.querySelector('#noBtn');
+      yesBtn.onclick = ()=>{ sendAction('PICK_TARGET', { target: tid, swap: true }); localPending = null; hideModal(); };
+      noBtn.onclick  = ()=>{ sendAction('PICK_CANCEL'); localPending = null; hideModal(); };
+      return;
+    }
+
+    // 第一階段：選擇查看目標
+    return showTarget('選擇要查看/可選擇交換的對象', (i)=>{
+      sendAction('PICK_TARGET', { target: i });
+      localPending = { action:'law', stage:'confirm', target:i, at:Date.now() };
+      const tp = state.players?.[i];
+      const tcard = (tp && typeof tp.hand === 'number') ? tp.hand : null;
+      const img = tcard != null ? (isEnhancedNow(tcard) ? CARD_ENH(tcard) : CARD(tcard)) : 'images/cards/back.webp';
+      const html = `
+        <div class="text-lg font-semibold mb-3">你查看了 ${pname(i)} 的手牌</div>
+        <div class="flex justify-center mb-4">
+          <img src="${img}" alt="hand" class="w-[min(40vw,260px)] rounded-lg border border-[#2a2f35] shadow-xl"/>
+        </div>
+        <div class="text-base mb-3">要與 ${pname(i)} 交換手牌嗎？</div>
+        <div class="flex justify-end gap-2">
+          <button id="noBtn" class="px-3 py-1.5 rounded-lg border border-[#2a2f35]">不交換</button>
+          <button id="yesBtn" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black">交換</button>
+        </div>`;
+      showModal(html);
+      const yesBtn = el.modal.querySelector('#yesBtn');
+      const noBtn  = el.modal.querySelector('#noBtn');
+      yesBtn.onclick = ()=>{ sendAction('PICK_TARGET', { target: i, swap: true }); localPending = null; hideModal(); };
+      noBtn.onclick  = ()=>{ sendAction('PICK_CANCEL'); localPending = null; hideModal(); };
+    }, { allowSelf:false });
+  }
+
+  // 非強化羅（普通交換）
+  return showTarget('選擇交換對象', (i)=> sendAction('PICK_TARGET', { target:i }), { allowSelf:false });
+}
+
+
+  // 基拉（Killer）
+  if (srvP.action === 'killer') {
+    const boosted = !!(srvP.extra && srvP.extra.boost);
+
+    if (boosted) {
+      if (
+        localPending &&
+        localPending.action === 'killer' &&
+        localPending.stage === 'confirm' &&
+        Number.isInteger(localPending.target)
+      ) {
+        const tid = localPending.target;
+        const tp = state.players?.[tid];
+        const stillDef = !!(tp && (tp.protected || tp.dodging));
+
+        return showYesNo(
+          stillDef
+            ? `要與 ${pname(tid)} 決鬥嗎？（他原本有防禦，已嘗試解除）`
+            : `要與 ${pname(tid)} 決鬥嗎？（目前看不到保護/閃避）`,
+          '決鬥',
+          '不決鬥',
+          ()=>{
+            sendAction('PICK_TARGET', { target: tid, duel: true });
+            localPending = null;
+            hideModal();
+          },
+          ()=>{
+            sendAction('PICK_CANCEL');
+            localPending = null;
+            hideModal();
+          }
+        );
+      }
+
+      return showTarget(
+        '選擇對象（將先解除其保護/閃避，然後可選擇是否決鬥）',
+        (i)=>{
+          sendAction('PICK_TARGET', { target: i });
+          localPending = { action:'killer', stage:'confirm', target:i, at:Date.now() };
+
+          const tp = state.players?.[i];
+          const stillDef = !!(tp && (tp.protected || tp.dodging));
+
+          showYesNo(
+            stillDef
+              ? `要與 ${pname(i)} 決鬥嗎？（他原本有防禦，已嘗試解除）`
+              : `要與 ${pname(i)} 決鬥嗎？（目前看不到保護/閃避）`,
+            '決鬥',
+            '不決鬥',
+            ()=>{
+              sendAction('PICK_TARGET', { target: i, duel: true });
+              localPending = null;
+              hideModal();
+            },
+            ()=>{
+              sendAction('PICK_CANCEL');
+              localPending = null;
+              hideModal();
+            }
+          );
+        },
+        { allowSelf:false }
+      );
+    }
+
+    return showTarget(
+      '選擇對象（將解除其保護/閃避）',
+      (i)=>{
+        sendAction('PICK_TARGET', { target:i });
+        hideModal();
+      },
+      { allowSelf:false }
+    );
+  }
+
+  // 大媽（強化）— 先由出牌者選目標
+  if (srvP.action === 'bigmom') {
+    return showTarget('選擇一位玩家（交 1 金幣或淘汰由對方決定）', (i)=>{ sendAction('PICK_TARGET', { target: i }); }, { allowSelf: false });
+  }
+
+  // 大媽（強化）— 目標的最終選擇
+  if (srvP.action === 'bigmom-pay') {
+    const target = srvP.target;
+    const isMe = (me.playerId === target);
+    if (!isMe) { hideModal(); return; }
+    const my = state.players?.[me.playerId];
+    const canPay = (my && (my.gold || 0) > 0);
+
+    let html = `<div class="text-lg font-semibold mb-2">大媽（萬國）：選擇交出 1 金幣，或直接淘汰</div>
+      <div class="flex justify-end gap-2">
+        <button id="dieBtn" class="px-3 py-1.5 rounded-lg border border-[#2a2f35]">淘汰</button>
+        <button id="payBtn" class="px-3 py-1.5 rounded-lg border ${canPay?'border-amber-400 bg-amber-300 text-black':'border-[#22272d] opacity-40 cursor-not-allowed'}" ${canPay?'':'disabled'}>交出 1 金幣</button>
+      </div>`;
+    showModal(html);
+    const payBtn = el.modal.querySelector('#payBtn');
+    const dieBtn = el.modal.querySelector('#dieBtn');
+    if (payBtn) payBtn.onclick = ()=>{ if (!canPay) return; sendAction('BIGMOM_CHOICE', { choice:'pay' }); hideModal(); };
+    if (dieBtn) dieBtn.onclick = ()=>{ sendAction('BIGMOM_CHOICE', { choice:'die' }); hideModal(); };
+    return;
+  }
+
+  if(['robin','sanji','zoro','nami','kaido','aokiji','roger'].includes(srvP.action)){
+    return showTarget('選擇對象', (i)=> sendAction('PICK_TARGET',{target:i}), {allowSelf:false});
+  }
+
+
+  if(srvP.action==='queen'){
+    return showConfirm(`替 ${pname(srvP.target)} 擲硬幣`, ()=> sendAction('QUEEN_COIN'));
+  }
+
+  if(srvP.action==='bigmom-coin'){
+    return showConfirm('大媽・擲硬幣', ()=> sendAction('BIGMOM_COIN'));
+  }
+
+  if(srvP.action==='kata-order'){
+    const labels=(srvP.cards||[]).map(id=>({id,label:`卡 ${id}`}));
+    return showOrder('卡塔庫栗：排序頂牌', labels, (arr)=> sendAction('ORDER_COMMIT',{order:arr.map(x=>x.id)}));
+  }
+
+  if(srvP.action==='teach-multipick'){
+    const labels=(srvP.cards||[]).map((id,i)=>({id,label:`(頂${i+1}) ${id}`}));
+    return showMulti('黑鬍子：覆蓋哪些？', labels, (picked)=> sendAction('MULTIPICK_COMMIT',{pickedIndices:[...picked]}));
+  }
+
+  hideModal();
+}
+
+/* ====== Modal helpers ====== */
+function hideModal(){ el.modal.classList.add('hidden'); el.modal.querySelector('.card').innerHTML=''; }
+function showModal(inner){ el.modal.querySelector('.card').innerHTML = inner; el.modal.classList.remove('hidden'); }
+
+/* ====== 多目標（保留原樣） ====== */
+function showMultiTargets(title, opt, onDone){
+  const { allowSelf=false, max=2 } = opt||{};
+  let html = `<div class="text-lg font-semibold mb-2">${title}</div><div class="grid grid-cols-3 gap-2" id="mtGrid">`;
+  (state.players||[]).forEach((p,i)=>{
+    const enabled = p.alive && (allowSelf || i!==me.playerId);
+    html+=`<button ${enabled?'':'disabled'} data-i="${i}" class="px-3 py-2 rounded-lg border ${enabled?'border-[#2a2f35] hover:bg-[#192028]':'border-[#22272d] opacity-40 cursor-not-allowed'}">P${i+1} ${p.protected?'🛡':''} ${p.dodging?'🌀':''} ${!p.alive?'✖':''}</button>`;
+  });
+  html+=`</div>
+    <div class="flex justify-end gap-2 mt-3">
+      <button class="px-3 py-1.5 rounded-lg border border-[#2a2f35]" onclick="document.getElementById('modal').classList.add('hidden')">取消</button>
+      <button id="mtDone" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black" disabled>完成</button>
+    </div>`;
+  showModal(html);
+
+  const picked = new Set();
+  const grid = el.modal.querySelector('#mtGrid');
+  const done = el.modal.querySelector('#mtDone');
+
+  grid.querySelectorAll('button[data-i]').forEach(b=>{
+    b.onclick = ()=>{
+      const i = Number(b.dataset.i);
+      if (picked.has(i)) { picked.delete(i); b.classList.remove('border-amber-400'); }
+      else { if (picked.size >= max) return; picked.add(i); b.classList.add('border-amber-400'); }
+      done.disabled = (picked.size < 1);
+    };
+  });
+
+  done.onclick = ()=>{ onDone([...picked]); hideModal(); };
+}
+
+/* ====== 選人面板（顯示頭像 + P? 名字） ====== */
+function showTarget(title, onPick, opt={}){ 
+  const allowSelf = !!opt.allowSelf;
+  let html = `<div class="text-lg font-semibold mb-2">${title}</div><div class="grid grid-cols-3 gap-2">`;
+
+  (state.players||[]).forEach((p,i)=>{
+    const en = p.alive && (allowSelf || i !== me.playerId);
+    const avatarId = (p?.client?.avatar ?? p?.avatar ?? 1);
+
+    html += `
+      <button ${en?'':'disabled'} data-i="${i}"
+        class="px-3 py-2 rounded-lg border ${en?'border-[#2a2f35] hover:bg-[#192028]':'border-[#22272d] opacity-40 cursor-not-allowed'}">
+        <div class="flex items-center gap-2">
+          <img class="w-8 h-8 rounded-full border border-[#2a2f35] shrink-0" src="${AVA(avatarId)}" alt="">
+          <div class="flex-1 min-w-0">
+            <div class="text-left truncate">${pname(i)}</div>
+          </div>
+          <div class="shrink-0 text-[12px] opacity-90 whitespace-nowrap">
+            ${p.protected?'🛡':''}${p.dodging?'🌀':''}${!p.alive?'✖':''}
+          </div>
+        </div>
+      </button>`;
+  });
+
+  html += `</div>`;
+  showModal(html);
+
+  let locked = false;
+  el.modal.querySelectorAll('button[data-i]').forEach(b=> b.onclick = ()=>{
+    if (locked) return;
+    locked = true;
+    b.disabled = true;
+    onPick(Number(b.dataset.i));
+  });
+}
+
+/* ====== 可取消選人面板（顯示頭像） ====== */
+function showTargetWithCancel(title, onPick, onCancel, opt={}){
+  const allowSelf = !!opt.allowSelf;
+  let html = `<div class="text-lg font-semibold mb-2">${title}</div><div class="grid grid-cols-3 gap-2">`;
+
+  (state.players||[]).forEach((p,i)=>{
+    const en = p.alive && (allowSelf || i !== me.playerId);
+    const avatarId = (p?.client?.avatar ?? p?.avatar ?? 1);
+
+    html += `
+      <button ${en?'':'disabled'} data-i="${i}"
+        class="px-3 py-2 rounded-lg border ${en?'border-[#2a2f35] hover:bg-[#192028]':'border-[#22272d] opacity-40 cursor-not-allowed'}">
+        <div class="flex items-center gap-2">
+          <img class="w-8 h-8 rounded-full border border-[#2a2f35] shrink-0" src="${AVA(avatarId)}" alt="">
+          <div class="flex-1 min-w-0">
+            <div class="text-left truncate">${pname(i)}</div>
+          </div>
+          <div class="shrink-0 text-[12px] opacity-90 whitespace-nowrap">
+            ${p.protected?'🛡':''}${p.dodging?'🌀':''}${!p.alive?'✖':''}
+          </div>
+        </div>
+      </button>`;
+  });
+
+  html += `</div>
+    <div class="flex justify-end gap-2 mt-3">
+      <button id="btnCancel" class="px-3 py-1.5 rounded-lg border border-[#2a2f35]">取消</button>
+    </div>`;
+
+  showModal(html);
+
+  let locked = false;
+  el.modal.querySelectorAll('button[data-i]').forEach(b=> b.onclick = ()=>{
+    if (locked) return;
+    locked = true;
+    b.disabled = true;
+    onPick(Number(b.dataset.i));
+  });
+
+  el.modal.querySelector('#btnCancel').onclick = ()=>{ onCancel && onCancel(); hideModal(); };
+}
+
+function showDigits(title, onPick, opt={}){
+  const ban=new Set(opt.ban||[]);
+  let html=`<div class="text-lg font-semibold mb-2">${title}</div><div class="grid grid-cols-10 gap-1">`;
+  for(let n=0;n<10;n++){
+    const dis=ban.has(n);
+    html+=`<button ${dis?'disabled':''} data-d="${n}" class="px-2 py-2 rounded-lg border ${dis?'border-[#22272d] opacity-40 cursor-not-allowed':'border-[#2a2f35] hover:bg-[#192028]'}">${n}</button>`;
+  }
+  html+=`</div>`;
+  showModal(html);
+  let locked = false;
+  el.modal.querySelectorAll('button[data-d]').forEach(b=> b.onclick = ()=>{
+    if (locked) return; locked = true; b.disabled = true; onPick(Number(b.dataset.d));
+  });
+}
+
+function showConfirm(title, onOk){
+  let html =
+    `<div class="text-lg font-semibold mb-2">${title}</div>` +
+    `<div class="flex justify-end gap-2 mt-3">` +
+      `<button id="okBtn" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black">確定</button>` +
+    `</div>`;
+  showModal(html);
+
+  const okBtn = el.modal.querySelector('#okBtn');
+  if (okBtn) {
+    okBtn.onclick = () => {
+      onOk();
+      hideModal();
+    };
+  }
+}
+
+function showKidConfirm(which){
+  const html = `
+    <div class="text-lg font-semibold mb-3">
+      基德：洗混並抽取棄牌堆的卡
+    </div>
+    <div class="text-base mb-4 text-[#cbd5e1]">
+      已洗混棄排堆，請按下「抽取」
+    </div>
+    <div class="flex justify-end">
+      <button id="kidDo"
+              class="px-4 py-2 rounded-lg bg-purple-500 hover:bg-purple-600 text-white">
+        抽取
+      </button>
+    </div>
+  `;
+  showModal(html);
+
+  const okBtn = el.modal.querySelector('#kidDo');
+
+  if (okBtn) {
+    okBtn.onclick = ()=>{
+      // 關閉視窗後，才真正送 PLAY_CARD，後端照現在的基德效果走
+      hideModal();
+      sendAction('PLAY_CARD', { which });
+    };
+  }
+}
+
+function showYesNo(title, yesText, noText, onYes, onNo){
+  let html =
+    `<div class="text-lg font-semibold mb-2">${title}</div>`+
+    `<div class="flex justify-end gap-2">`+
+      `<button id="noBtn" class="px-3 py-1.5 rounded-lg border border-[#2a2f35]">${noText}</button>`+
+      `<button id="yesBtn" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black">${yesText}</button>`+
+    `</div>`;
+  showModal(html);
+
+  const yesBtn = el.modal.querySelector('#yesBtn');
+  const noBtn  = el.modal.querySelector('#noBtn');
+
+  if (yesBtn) yesBtn.onclick = ()=>{ if (onYes) onYes(); };
+  if (noBtn)  noBtn.onclick  = ()=>{ if (onNo) onNo(); };
+}
+
+function showOrder(title, cards, onCommit){
+  let html=`<div class="text-lg font-semibold mb-2">${title}</div><div class="space-y-2" id="list">`;
+  cards.forEach((c,i)=>{
+    html+=`<div class="flex items-center gap-2"><div class="px-2 py-1 rounded border border-[#2a2f35] grow">${c.label}</div>`
+      +`<button class="px-2 py-1 rounded-lg border border-[#2a2f35]" data-up="${i}">上移</button>`
+      +`<button class="px-2 py-1 rounded-lg border border-[#2a2f35]" data-down="${i}">下移</button></div>`;
+  });
+  html+=`</div><div class="flex justify-end gap-2 mt-3"><button class="px-3 py-1.5 rounded-lg border border-[#2a2f35]" onclick="document.getElementById('modal').classList.add('hidden')">取消</button>`
+    +`<button id="okOrder" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black">確定排序</button></div>`;
+  showModal(html);
+  const list=cards.slice();
+  el.modal.querySelectorAll('[data-up]').forEach(btn=> btn.onclick=()=>{
+    const i=Number(btn.dataset.up); if(i===0) return; [list[i-1],list[i]]=[list[i],list[i-1]]; showOrder(title, list, onCommit);
+  });
+  el.modal.querySelectorAll('[data-down]').forEach(btn=> btn.onclick=()=>{
+    const i=Number(btn.dataset.down); if(i===list.length-1) return; [list[i+1],list[i]]=[list[i],list[i+1]]; showOrder(title, list, onCommit);
+  });
+  el.modal.querySelector('#okOrder').onclick=()=>{ onCommit(list); hideModal(); };
+}
+
+/** 只在自己從手牌點出「打出」時觸發語音＋泡泡（而且僅限非強化） */
+function handlePlayCard(which){
+  const my = state?.players?.[me.playerId];
+  if (!my) {
+    // 萬一 state 還沒好，就單純送動作，避免卡死
+    sendAction('PLAY_CARD', { which });
+    return;
+  }
+  // mainId = 這次要打出的那張
+  // otherId = 另一張在手的角色（最多只會有 2 張）
+  const mainId  = (which === 'hand') ? my.hand    : my.tempDraw;
+  const otherId = (which === 'hand') ? my.tempDraw : my.hand;
+
+  const isKid = (mainId === 11);
+  const kidEnhanced = isKid && isEnhancedNow(mainId);
+
+  // 一般角色：非強化才播語音（基德另外處理，所以先排除）
+  if (typeof mainId === 'number' && !isEnhancedNow(mainId) && !isKid) {
+    const other = (typeof otherId === 'number') ? otherId : null;
+    playVoiceLineFor(mainId, other);
+  }
+
+  // ★ 基德
+  if (isKid) {
+    if (kidEnhanced) {
+      // ★ 強化基德：不用確認框、也不播台詞語音，直接出牌
+      sendAction('PLAY_CARD', { which });
+      return;
+    }
+
+    // ★ 一般基德：有台詞＋語音＋快閃＋確認框
+    // 1) 播基德語音 + 台詞泡泡
+    playVoiceLineFor(mainId, {
+      mainPlayerIndex: me.playerId,
+      otherPlayerIndex: null
+    });
+
+    // 2) 立刻手動播一次基德的「打出快閃卡圖」
+    if (typeof showPlayedFlash === 'function') {
+      showPlayedFlash(mainId, me.playerId);
+    }
+
+    // 3) 避免真正丟到棄牌堆時又被偵測成「新棄牌」再快閃一次
+    if (!Array.isArray(_silentDiscards)) {
+      _silentDiscards = [];
+    }
+    _silentDiscards.push(mainId);
+
+    // 4) 跳出「洗混並抽取棄牌堆的卡」確認框
+    showKidConfirm(which);
+    return;
+  }
+
+  // 其他卡維持原本流程，直接出牌
+  sendAction('PLAY_CARD', { which });
+}
+
+
+
+
+function showMulti(title, cards, onCommit){
+  let html=`<div class="text-lg font-semibold mb-2">${title}</div><div class="space-y-2">`;
+  cards.forEach((c,i)=>{
+    html+=`<label class="flex items-center gap-2 p-2 rounded-lg border border-[#2a2f35]"><input type="checkbox" data-i="${i}"/> <span class="px-2 py-1 rounded border border-[#2a2f35] grow">${c.label}</span></label>`;
+  });
+  html+=`</div><div class="flex justify-end gap-2 mt-3"><button class="px-3 py-1.5 rounded-lg border border-[#2a2f35]" onclick="document.getElementById('modal').classList.add('hidden')">取消</button>`
+    +`<button id="okM" class="px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black">覆蓋所選</button></div>`;
+  showModal(html);
+  el.modal.querySelector('#okM').onclick=()=>{
+    const picked=new Set();
+    el.modal.querySelectorAll('input[type="checkbox"][data-i]').forEach(ch=>{
+      if(ch.checked) picked.add(Number(ch.dataset.i));
+    });
+    onCommit(picked); hideModal();
+  };
+}
+
+// 綁定
+el.deckBtn.onclick   = ()=> playDrawFxThenDraw();
+el.playHand.onclick  = ()=> handlePlayCard('hand');
+el.playDrawn.onclick = ()=> handlePlayCard('drawn');
+el.nextRound.onclick = ()=> sendAction('NEXT_ROUND');
+</script>
+
+<!-- 角色語音（只有本機播放） -->
+<audio id="voiceAudio" preload="auto"></audio>
+
+</body>
+</html>
