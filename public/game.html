@@ -2899,7 +2899,7 @@ function showCardDexPreview(id){
   const parts = [];
   if (venueName) parts.push(`強化場地：${venueName}`);
   if (baseTitle || enhTitle) {
-    parts.push(`技能：${baseTitle || '—'} ／ 強化：${enhTitle || '—'}`);
+    parts.push(`一般技能：${baseTitle || '—'} ／ 強化技能：${enhTitle || '—'}`);
   }
   if (dexDom.previewVenue) {
     dexDom.previewVenue.textContent = parts.join('　');
@@ -2920,14 +2920,14 @@ const CARD_TEXT = {
   1: {
     name: "騙人布",
     baseTitle: "必殺・殺手彈星",
-    base: "猜一名玩家手牌（不能猜1），猜中淘汰對方。",
+    base: "猜一名玩家手牌尾數（不能猜1），猜中淘汰對方。",
     enhTitle: "必殺・連擊彈星",
-    enh: "猜中可連猜至錯為止，每猜中一次重複發動淘汰效果。"
+    enh: "猜一名玩家手牌尾數（不能猜1），猜中淘汰對方，猜中可連續猜下一位玩家至錯為止。"
   },
   2: {
     name: "羅賓",
     baseTitle: "眼花撩亂",
-    base: "偷看一名玩家的手牌。",
+    base: "查看一名玩家的手牌。",
     enhTitle: "千花繚亂・身體開花",
     enh: "查看所有玩家的手牌。"
   },
@@ -2955,21 +2955,21 @@ const CARD_TEXT = {
   6: {
     name: "羅",
     baseTitle: "ROOM・SHAMBLES",
-    base: "與一名玩家交換手牌。",
+    base: "選擇一名玩家交換手牌。",
     enhTitle: "ROOM・SCAN",
-    enh: "偷看一名玩家手牌後可選擇是否交換。"
+    enh: "查看一名玩家手牌後可選擇是否交換。"
   },
   7: {
     name: "娜美",
     baseTitle: "天候危機",
-    base: "若手牌同時持有6或8，必須打出娜美。",
+    base: "若手牌同時持有6或8，必須打出此牌。",
     enhTitle: "忍法雷霆",
-    enh: "打出娜美時，可指定一名玩家「麻痺」，使其跳過下回合行動。"
+    enh: "打出此牌時，可指定一名玩家「麻痺」，使其跳過下回合行動。"
   },
   8: {
     name: "魯夫",
     baseTitle: "橡膠橡膠象槍",
-    base: "可挑戰1～2位玩家比大小，輸了會被淘汰。",
+    base: "可選擇1或2位玩家比大小，輸了會被淘汰。",
     enhTitle: "四檔 猿王群鴉砲",
     enh: "跟每位玩家比大小，攻擊力-3，自身輸了也不會被淘汰。"
   },
@@ -2985,7 +2985,7 @@ const CARD_TEXT = {
     baseTitle: "雷鳴八卦",
     base: "無視防禦與閃避，指定一位玩家比大小，輸者淘汰。",
     enhTitle: "霸海",
-    enh: "若手牌同時擁有凱多與大媽，可無視閃避與保護，直接淘汰全場其他玩家。"
+    enh: "若手牌同時擁有此卡與14大媽，可無視閃避與保護，直接淘汰全場其他玩家。"
   },
   11: {
     name: "基德",
@@ -2999,7 +2999,7 @@ const CARD_TEXT = {
     baseTitle: "疫災彈",
     base: "下一位玩家擲硬幣，反面麻痺一回合，延續到擲出正面的玩家或打出此卡的玩家為止。",
     enhTitle: "疫災彈-冰鬼",
-    enh: "本回合打出奇數牌的玩家獲得冰鬼狀態卡，下回合再打出奇數牌則直接淘汰。"
+    enh: "本回合打出奇數牌的玩家獲得冰鬼狀態，下回合再打出奇數牌則直接淘汰。"
   },
   13: {
     name: "基拉",
@@ -3013,7 +3013,7 @@ const CARD_TEXT = {
     baseTitle: "狂暴與暴食",
     base: "擲銅板，正面保護、反面閃避。",
     enhTitle: "Soul or Life?",
-    enh: "指定一位玩家，讓對方選擇被淘汰或交出一個勝利指示物。"
+    enh: "指定一位玩家，讓對方選擇被淘汰或交出一枚金幣。"
   },
   15: {
     name: "卡塔庫栗",
@@ -3039,9 +3039,9 @@ const CARD_TEXT = {
   18: {
     name: "紅髮香克斯",
     baseTitle: "我是來終結這場戰爭的",
-    base: "牌堆剩一半以下時可直接進入手牌比大小階段。",
+    base: "牌堆剩14張以下時，直接進入手牌比大小階段。",
     enhTitle: "給我個面子吧",
-    enh: "牌堆剩一半以下時可直接進入手牌比大小階段，自身手牌數值+1（只在比牌時生效）。"
+    enh: "牌堆剩14張以下時可直接進入手牌比大小階段，自身手牌數值+1（只在比牌時生效）。"
   },
   19: {
     name: "哥爾羅傑",
@@ -3057,7 +3057,7 @@ function cardLine(cardId){
   const meta = CARD_TEXT[cardId];
   if (!meta) return "";
   const enhanced = isEnhancedNow(cardId);
-  const tag = enhanced ? "【強化】" : "【基本】";
+  const tag = enhanced ? "【強化技能】" : "【基本技能】";
   const title = enhanced && meta.enhTitle ? meta.enhTitle : meta.baseTitle;
   const text  = enhanced && meta.enh ? meta.enh : meta.base;
   return `${meta.name} ${tag}${title}：${text}`;
