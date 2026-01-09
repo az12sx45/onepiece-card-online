@@ -18,6 +18,19 @@ window.__I18N_DICTS["ja"] = {
       phase: "フェーズ：",
       nextRound: "次のラウンド ▶",
       drawHint: "カードを引いてください",
+
+cardDexTitle: "カード図鑑（赤枠＝この試合で強化）",
+cardDexHint: "左側のカードをクリックすると拡大画像と強化版を確認できます。",
+gold: "コイン",
+
+pickDigitNo1: "下一桁を選択（1は選択不可）",
+pickTargetToGuess: "推測する相手を選択",
+pickFirstTarget: "1人目の対象を選択",
+pickPeekOrSwapTarget: "確認／交換候補の対象を選択",
+pickSwapTarget: "交換相手を選択",
+pickBigMomTarget: "相手を選択（1コイン支払うか脱落かは相手が選ぶ）",
+pickTarget: "対象を選択",
+
     },
     lang: "言語",
     pressAnyKey: "任意のキーで開始",
