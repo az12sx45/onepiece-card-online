@@ -18,6 +18,19 @@ window.__I18N_DICTS["en"] = {
       phase: "Phase:",
       nextRound: "Next Round ▶",
       drawHint: "Draw a card",
+
+cardDexTitle: "Card Codex (red frame = enhanced this match)",
+cardDexHint: "Click any card on the left to view the large image and its enhanced version.",
+gold: "Coins",
+
+pickDigitNo1: "Pick the last digit (cannot pick 1)",
+pickTargetToGuess: "Select a target to guess",
+pickFirstTarget: "Select the first target",
+pickPeekOrSwapTarget: "Select a target to view / optionally swap with",
+pickSwapTarget: "Select a swap target",
+pickBigMomTarget: "Select a player (they choose: pay 1 coin or be eliminated)",
+pickTarget: "Select target",
+
     },
     lang: "Language",
     pressAnyKey: "Press any key",
