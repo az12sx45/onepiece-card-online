@@ -4,6 +4,21 @@ window.__I18N_DICTS["ja"] = {
   meta: { label: "日本語" },
 
   ui: {
+    game: {
+      title: "グランドライン覇権戦",
+      chestRemaining: "宝箱コイン残り：",
+      coinsUnit: "枚",
+      cardDex: "カード図鑑",
+      venueThisMatch: "この試合のステージ",
+      deck: "デッキ",
+      players: "プレイヤー",
+      discard: "捨て札",
+      battleLog: "バトルログ",
+      turn: "手番：",
+      phase: "フェーズ：",
+      nextRound: "次のラウンド ▶",
+      drawHint: "カードを引いてください",
+    },
     lang: "言語",
     pressAnyKey: "任意のキーで開始",
     startGame: "ゲーム開始",

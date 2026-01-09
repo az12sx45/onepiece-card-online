@@ -4,6 +4,21 @@ window.__I18N_DICTS["zh-Hant"] = {
   meta: { label: "繁體中文" },
 
   ui: {
+    game: {
+      title: "偉大航道爭霸戰",
+      chestRemaining: "寶箱金幣剩餘：",
+      coinsUnit: "枚",
+      cardDex: "卡片圖鑑",
+      venueThisMatch: "本局場地",
+      deck: "牌堆",
+      players: "玩家",
+      discard: "棄牌",
+      battleLog: "對局日誌",
+      turn: "輪到：",
+      phase: "階段：",
+      nextRound: "下一局 ▶",
+      drawHint: "請抽牌",
+    },
     lang: "語言",
     pressAnyKey: "按任意鍵開始",
     startGame: "開始遊戲",

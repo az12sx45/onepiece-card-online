@@ -4,6 +4,21 @@ window.__I18N_DICTS["ko"] = {
   meta: { label: "한국어" },
 
   ui: {
+    game: {
+      title: "그랜드 라인 패권전",
+      chestRemaining: "보물상자 코인 남은 수:",
+      coinsUnit: "개",
+      cardDex: "카드 도감",
+      venueThisMatch: "이번 판 장소",
+      deck: "덱",
+      players: "플레이어",
+      discard: "버린 카드",
+      battleLog: "대전 로그",
+      turn: "차례:",
+      phase: "단계:",
+      nextRound: "다음 라운드 ▶",
+      drawHint: "카드를 뽑으세요",
+    },
     lang: "언어",
     pressAnyKey: "아무 키나 눌러 시작",
     startGame: "게임 시작",

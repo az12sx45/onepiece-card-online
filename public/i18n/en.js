@@ -4,6 +4,21 @@ window.__I18N_DICTS["en"] = {
   meta: { label: "English" },
 
   ui: {
+    game: {
+      title: "Grand Line Showdown",
+      chestRemaining: "Chest Coins:",
+      coinsUnit: "coins",
+      cardDex: "Card Codex",
+      venueThisMatch: "Venues (This Match)",
+      deck: "Deck",
+      players: "Players",
+      discard: "Discard",
+      battleLog: "Battle Log",
+      turn: "Turn:",
+      phase: "Phase:",
+      nextRound: "Next Round ▶",
+      drawHint: "Draw a card",
+    },
     lang: "Language",
     pressAnyKey: "Press any key",
     startGame: "Start Game",
