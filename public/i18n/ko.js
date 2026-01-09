@@ -18,6 +18,19 @@ window.__I18N_DICTS["ko"] = {
       phase: "단계:",
       nextRound: "다음 라운드 ▶",
       drawHint: "카드를 뽑으세요",
+
+cardDexTitle: "카드 도감(빨간 테두리=이번 판 강화 카드)",
+cardDexHint: "왼쪽의 카드를 클릭하면 큰 이미지와 강화 버전을 확인할 수 있습니다。",
+gold: "코인",
+
+pickDigitNo1: "끝자리를 선택(1은 선택 불가)",
+pickTargetToGuess: "추측할 대상을 선택",
+pickFirstTarget: "첫 번째 대상을 선택",
+pickPeekOrSwapTarget: "확인/교환 후보 대상을 선택",
+pickSwapTarget: "교환 대상을 선택",
+pickBigMomTarget: "플레이어 선택(1코인 지불 또는 탈락은 상대가 결정)",
+pickTarget: "대상 선택",
+
     },
     lang: "언어",
     pressAnyKey: "아무 키나 눌러 시작",
