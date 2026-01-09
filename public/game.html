@@ -1830,7 +1830,10 @@ body::before{
             overflow-hidden flex flex-col">
       <!-- 標題列 -->
       <div class="flex items-center justify-between px-4 py-2 border-b border-slate-700/70 bg-gradient-to-r from-slate-900/80 via-slate-800/80 to-slate-900/80 text-xs md:text-sm">
-        <div class="font-semibold tracking-wide">卡片圖鑑(紅框為本局強化卡)</div>
+        <div class="font-semibold tracking-wide" data-i18n="ui.game.cardDexTitle">
+  卡片圖鑑（紅框為本局強化卡）
+</div>
+
         <button id="cardDexClose"
                 class="px-2 py-1 rounded border border-slate-500/70 bg-black/30 hover:bg-black/60 text-[11px]">
           關閉
@@ -1847,10 +1850,12 @@ body::before{
 
         <!-- 右邊：大圖預覽 -->
         <div class="w-full md:w-[50%] shrink-0 border-t md:border-t-0 md:border-l border-slate-700/70 pt-3 md:pt-0 md:pl-4">
-          <div id="cardDexPreviewEmpty"
-               class="text-[11px] md:text-xs text-slate-300/80 italic">
-            點左邊任一張卡片，可以查看大圖與強化版本。
-          </div>
+<div id="cardDexPreviewEmpty"
+     class="text-[11px] md:text-xs text-slate-300/80 italic"
+     data-i18n="ui.game.cardDexHint">
+  點擊左側任一張卡片，可查看大圖與強化版本。
+</div>
+
 
           <div id="cardDexPreview" class="hidden">
             <div class="text-xs md:text-sm font-semibold mb-1" id="cardDexPreviewTitle"></div>
@@ -4755,7 +4760,7 @@ el.venues.innerHTML = '';
               ${pnameBy(p)}
               ${!p.alive ? '<span class="ml-1 text-neutral-400">（出局）</span>' : ''}
             </div>
-            <div class="text-xs text-neutral-400">金幣 <span class="text-amber-300 font-bold">${p.gold||0}</span></div>
+            <div class="text-xs text-neutral-400">${t('ui.game.gold')} <span class="text-amber-300 font-bold">${p.gold||0}</span></div>
           </div>
           <div class="flex gap-1 mt-1 text-[11px] text-neutral-300">
             ${p.protected?'<span class="px-2 py-0.5 rounded border border-[#2a2f35]">🛡 保護</span>':''}
@@ -4989,21 +4994,21 @@ function renderPending(){
   if (srvP.action === 'usopp') {
     if (srvP.extra?.target != null) {
       localPending = null;
-      return showDigits('選擇尾數（不能選 1）', (d)=>{
+      return showDigits(t('ui.game.pickDigitNo1'), (d)=>{
         sendAction('PICK_DIGIT',{ digit:d });
         localPending = null;
       }, { ban:[1] });
     }
     if (localPending && localPending.action==='usopp' && localPending.stage==='digit' && Number.isInteger(localPending.target)) {
-      return showDigits('選擇尾數（不能選 1）', (d)=>{
+      return showDigits(t('ui.game.pickDigitNo1'), (d)=>{
         sendAction('PICK_DIGIT',{ digit:d });
         localPending = null;
       }, { ban:[1] });
     }
-    return showTarget('選擇要猜的對象', (i)=>{
+    return showTarget(t('ui.game.pickTargetToGuess'), (i)=>{
       sendAction('PICK_TARGET',{ target:i });
       localPending = { action:'usopp', stage:'digit', target:i, at:Date.now() };
-      showDigits('選擇尾數（不能選 1）', (d)=>{
+      showDigits(t('ui.game.pickDigitNo1'), (d)=>{
         sendAction('PICK_DIGIT',{ digit:d });
         localPending = null;
       }, { ban:[1] });
@@ -5014,7 +5019,7 @@ function renderPending(){
   if (srvP.action === 'luffy') {
     const firstDone = !!(srvP.extra && srvP.extra.firstDone);
     if (!firstDone) {
-      return showTarget('選擇第一位對象', (i)=>{ sendAction('PICK_TARGET', { target:i }); }, { allowSelf:false });
+      return showTarget(t('ui.game.pickFirstTarget'), (i)=>{ sendAction('PICK_TARGET', { target:i }); }, { allowSelf:false });
     }
     return showTargetWithCancel('再選一位（或取消略過）', (i)=>{
       sendAction('LUFFY_SECOND', { target:i });
@@ -5050,7 +5055,7 @@ if (srvP.action === 'law') {
     }
 
     // 第一階段：選擇查看目標
-    return showTarget('選擇要查看/可選擇交換的對象', (i)=>{
+    return showTarget(t('ui.game.pickPeekOrSwapTarget'), (i)=>{
       sendAction('PICK_TARGET', { target: i });
       localPending = { action:'law', stage:'confirm', target:i, at:Date.now() };
       const tp = state.players?.[i];
@@ -5075,7 +5080,7 @@ if (srvP.action === 'law') {
   }
 
   // 非強化羅（普通交換）
-  return showTarget('選擇交換對象', (i)=> sendAction('PICK_TARGET', { target:i }), { allowSelf:false });
+  return showTarget(t('ui.game.pickSwapTarget'), (i)=> sendAction('PICK_TARGET', { target:i }), { allowSelf:false });
 }
 
 
@@ -5156,7 +5161,7 @@ if (srvP.action === 'law') {
 
   // 大媽（強化）— 先由出牌者選目標
   if (srvP.action === 'bigmom') {
-    return showTarget('選擇一位玩家（交 1 金幣或淘汰由對方決定）', (i)=>{ sendAction('PICK_TARGET', { target: i }); }, { allowSelf: false });
+    return showTarget(t('ui.game.pickBigMomTarget'), (i)=>{ sendAction('PICK_TARGET', { target: i }); }, { allowSelf: false });
   }
 
   // 大媽（強化）— 目標的最終選擇
@@ -5181,7 +5186,7 @@ if (srvP.action === 'law') {
   }
 
   if(['robin','sanji','zoro','nami','kaido','aokiji','roger'].includes(srvP.action)){
-    return showTarget('選擇對象', (i)=> sendAction('PICK_TARGET',{target:i}), {allowSelf:false});
+    return showTarget(t('ui.game.pickTarget'), (i)=> sendAction('PICK_TARGET',{target:i}), {allowSelf:false});
   }
 
 
