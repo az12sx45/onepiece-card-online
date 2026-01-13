@@ -1644,27 +1644,6 @@ body::before{
 
 
 </style>
-
-  <!-- i18n (4 languages) -->
-  <script src="i18n/zh-Hant.js"></script>
-  <script src="i18n/en.js"></script>
-  <script src="i18n/ja.js"></script>
-  <script src="i18n/ko.js"></script>
-  <script src="i18n/i18n.js"></script>
-  <script>
-    // Apply static translations in this page (reads localStorage key "op_lang")
-    function applyI18nOnGamePage(){
-      if (!window.__I18N || typeof window.__I18N.t !== 'function') return;
-      document.querySelectorAll('[data-i18n]').forEach(el=>{
-        const key = el.getAttribute('data-i18n');
-        if (!key) return;
-        el.textContent = window.__I18N.t(key);
-      });
-      try { document.title = window.__I18N.t('ui.game.title'); } catch(e){}
-    }
-    document.addEventListener('DOMContentLoaded', applyI18nOnGamePage);
-  </script>
-
 </head>
 <body>
 <div id="usoppLayer"></div>
@@ -1679,21 +1658,21 @@ body::before{
 <header class="sticky top-0 z-40 bg-[#101418]/80 backdrop-blur border-b border-[#1c2229]">
   <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
     <!-- 左側標題 -->
-    <div class="font-semibold tracking-wide" data-i18n="ui.game.title">偉大航道爭霸戰</div>
+    <div class="font-semibold tracking-wide">偉大航道爭霸戰</div>
 
     <!-- 房號/連線：留著給程式用，但畫面隱藏 -->
     <div class="hidden text-xs px-2 py-1 rounded border border-neutral-700">房號：<span id="roomLbl">—</span></div>
     <div class="hidden text-xs px-2 py-1 rounded border border-neutral-700">連線：<span id="connLbl" class="text-red-400">disconnected</span></div>
 
     <!-- 保留寶箱（可見） -->
-    <div class="text-xs px-2 py-1 rounded border border-neutral-700"><span data-i18n="ui.game.chestRemaining">寶箱金幣剩餘：</span><span id="chestLbl">0</span> <span data-i18n="ui.game.coinsUnit">枚</span></div>
+    <div class="text-xs px-2 py-1 rounded border border-neutral-700">寶箱金幣剩餘：<span id="chestLbl">0</span> 枚</div>
 
  <!-- ★ 新增：卡片圖鑑按鈕 -->
       <button id="cardDexBtn"
               class="px-2 py-1 rounded border border-[#374151] bg-[#111827]/80
                      text-[11px] tracking-wide hover:bg-[#020617] hover:border-[#f97373]
                      hover:text-[#fee2e2] transition-colors duration-150">
-        <span data-i18n="ui.game.cardDex">卡片圖鑑</span>
+        卡片圖鑑
       </button>
 
  <!-- 拉到最右邊：音樂條 -->
@@ -1764,12 +1743,12 @@ body::before{
     <section class="space-y-3">
       <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
         <div class="card p-3 md:col-span-2">
-          <div class="text-sm mb-2 opacity-80" data-i18n="ui.game.venueThisMatch">本局場地</div>
+          <div class="text-sm mb-2 opacity-80">本局場地</div>
           <div id="venues" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2"></div>
         </div>
       <div class="card p-3 flex items-center justify-between gap-3 relative">
   <div class="text-sm opacity-80">
-    <span data-i18n="ui.game.deck">牌堆</span>
+    牌堆
     <span id="deckCnt" class="ml-2 px-1.5 py-0.5 rounded border border-[#2a2f35] text-amber-300 font-semibold">0</span>
   </div>
 
@@ -1780,15 +1759,15 @@ body::before{
   <!-- ★ 抽牌提示泡泡：預設 hidden，JS 會在可抽牌時打開 -->
   <div id="drawHint" class="draw-hint hidden select-none">
     <span class="emoji">👉</span>
-    <span class="txt" data-i18n="ui.game.drawHint">請抽牌</span>
+    <span class="txt">請抽牌</span>
   </div>
 </div>
 
 
         <div class="card p-3 md:col-span-3">
           <div class="flex items-center justify-between mb-2">
-            <div class="text-sm opacity-80" data-i18n="ui.game.discard">棄牌</div>
-            <button id="btnNextRound" class="hidden px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black text-sm"><span data-i18n="ui.game.nextRound">下一局 ▶</span></button>
+            <div class="text-sm opacity-80">棄牌</div>
+            <button id="btnNextRound" class="hidden px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black text-sm">下一局 ▶</button>
           </div>
             <div id="discard" class="flex gap-2 overflow-x-auto"></div>
         </div>
@@ -1801,8 +1780,8 @@ body::before{
 
       <div class="card p-3">
         <div class="flex items-center justify-between mb-2">
-          <div class="text-sm opacity-80" data-i18n="ui.game.battleLog">對局日誌</div>
-          <div class="text-xs text-neutral-400"><span data-i18n="ui.game.turn">輪到：</span><span id="turnLbl">—</span>｜<span data-i18n="ui.game.phase">階段：</span><span id="stepLbl">—</span></div>
+          <div class="text-sm opacity-80">對局日誌</div>
+          <div class="text-xs text-neutral-400">輪到：<span id="turnLbl">—</span>｜階段：<span id="stepLbl">—</span></div>
         </div>
         <ol id="logBox" class="text-sm space-y-1 list-decimal pl-5 max-h-72 overflow-auto"></ol>
       </div>
@@ -1810,7 +1789,7 @@ body::before{
 
     <aside class="space-y-3">
       <div class="card p-3">
-        <div class="text-sm mb-2 opacity-80" data-i18n="ui.game.players">玩家</div>
+        <div class="text-sm mb-2 opacity-80">玩家</div>
         <div id="players" class="grid gap-2"></div>
       </div>
       <!-- 訊息面板已移除 -->
@@ -2007,17 +1986,8 @@ body::before{
 
 <script>
 /* === 路徑工具 === */
-// 基礎卡圖（所有人共用）
 const CARD     = id => `images/cards/${id}.webp`;
 const CARD_ENH = id => `images/cards/enh/${id}.webp`; // ★ 強化卡面
-
-// ★ 豪華卡圖（只影響：卡片圖鑑縮圖 / 自己手牌顯示 / 自己打出的快閃）
-// 由伺服器私訊 EMIT:lux_unlock + STATE.luxUnlocked 驅動
-let _luxUnlocked = new Set();
-const CARD_LUX     = id => `images/cards_lux/${id}.webp`;
-const CARD_LUX_ENH = id => `images/cards_lux_enh/${id}.webp`;
-const CARD_ME      = id => (_luxUnlocked.has(id) ? CARD_LUX(id) : CARD(id));
-const CARD_ENH_ME  = id => (_luxUnlocked.has(id) ? CARD_LUX_ENH(id) : CARD_ENH(id));
 const VEN      = name => `images/venues/${name}.webp`;
 const AVA      = a => `images/avatars/${a||1}.webp`;
 
@@ -2850,7 +2820,7 @@ function openCardDex(){
 
     html += `
       <button class="card-dex-thumb ${enh ? 'enhanced' : ''}" data-id="${id}">
-        <img src="${CARD_ME(id)}" alt="${name}">
+        <img src="${CARD(id)}" alt="${name}">
         <div class="card-dex-meta">
           <span>${id}｜${name}</span>
           <span>x${cnt}</span>
@@ -2900,15 +2870,15 @@ function showCardDexPreview(id){
     dexDom.previewTitle.textContent = `${id}｜${name}`;
   }
 
-  dexDom.previewBase.src = CARD_ME(id);
+  dexDom.previewBase.src = CARD(id);
   dexDom.previewBase.alt = `${name}（一般）`;
-  dexDom.previewEnh.src = CARD_ENH_ME(id);
+  dexDom.previewEnh.src = CARD_ENH(id);
   dexDom.previewEnh.alt = `${name}（強化）`;
 
   const parts = [];
   if (venueName) parts.push(`強化場地：${venueName}`);
   if (baseTitle || enhTitle) {
-    parts.push(`一般技能：${baseTitle || '—'} ／ 強化技能：${enhTitle || '—'}`);
+    parts.push(`技能：${baseTitle || '—'} ／ 強化：${enhTitle || '—'}`);
   }
   if (dexDom.previewVenue) {
     dexDom.previewVenue.textContent = parts.join('　');
@@ -2920,140 +2890,140 @@ function showCardDexPreview(id){
 /** 0–19：名字 + 基本/強化技能敘述（來源：docx 正式版） */
 const CARD_TEXT = {
   0: {
-    name: "薩波-0",
+    name: "薩波",
     baseTitle: "火焰龍王",
     base: "所有人將手牌洗回牌堆後各重抽1張。",
     enhTitle: "火焰龍之息",
     enh: "洗回手牌後重抽，本回合打出7以上角色卡技能無效。"
   },
   1: {
-    name: "騙人布-1",
+    name: "騙人布",
     baseTitle: "必殺・殺手彈星",
     base: "猜一名玩家手牌（不能猜1），猜中淘汰對方。",
     enhTitle: "必殺・連擊彈星",
-    enh: "猜一名玩家手牌（不能猜1），猜中淘汰對方，猜中可連猜至錯為止。"
+    enh: "猜中可連猜至錯為止，每猜中一次重複發動淘汰效果。"
   },
   2: {
-    name: "羅賓-2",
+    name: "羅賓",
     baseTitle: "眼花撩亂",
-    base: "查看一名玩家的手牌。",
+    base: "偷看一名玩家的手牌。",
     enhTitle: "千花繚亂・身體開花",
     enh: "查看所有玩家的手牌。"
   },
   3: {
-    name: "香吉士-3",
+    name: "香吉士",
     baseTitle: "惡魔風腳",
     base: "與一名玩家比大小，低者淘汰。",
     enhTitle: "魔神風腳",
     enh: "指定一位玩家比大小，我方攻擊力+1。"
   },
   4: {
-    name: "喬巴-4",
+    name: "喬巴",
     baseTitle: "皮毛強化",
     base: "自身獲得保護狀態一回合。",
     enhTitle: "柔力強化",
     enh: "獲得閃避效果，下一次被影響技能無效化。"
   },
   5: {
-    name: "索隆-5",
+    name: "索隆",
     baseTitle: "一刀流・獅子歌歌",
     base: "指定一位玩家棄牌並重抽一張。",
     enhTitle: "鬼氣九刀流・阿修羅",
     enh: "指定一位玩家棄牌，偶數則淘汰，奇數則抽一張牌。"
   },
   6: {
-    name: "羅-6",
+    name: "羅",
     baseTitle: "ROOM・SHAMBLES",
     base: "與一名玩家交換手牌。",
     enhTitle: "ROOM・SCAN",
-    enh: "查看一名玩家手牌後可選擇是否交換。"
+    enh: "偷看一名玩家手牌後可選擇是否交換。"
   },
   7: {
-    name: "娜美-7",
+    name: "娜美",
     baseTitle: "天候危機",
     base: "若手牌同時持有6或8，必須打出娜美。",
     enhTitle: "忍法雷霆",
-    enh: "打出此卡時，可指定一名玩家「麻痺」，使其跳過下回合行動。"
+    enh: "打出娜美時，可指定一名玩家「麻痺」，使其跳過下回合行動。"
   },
   8: {
-    name: "魯夫-8",
+    name: "魯夫",
     baseTitle: "橡膠橡膠象槍",
-    base: "選擇1位玩家決鬥，若勝利可選擇是否再挑戰一位玩家。",
+    base: "可挑戰1～2位玩家比大小，輸了會被淘汰。",
     enhTitle: "四檔 猿王群鴉砲",
     enh: "跟每位玩家比大小，攻擊力-3，自身輸了也不會被淘汰。"
   },
   9: {
-    name: "女帝漢考克-9",
+    name: "女帝漢考克",
     baseTitle: "戀愛即是風暴",
     base: "打出此牌立即淘汰自己（若無場地效果）。",
     enhTitle: "我做什麼都會被原諒吧？",
     enh: "打出女帝時不會自殺，並獲得保護（本回合免疫所有卡牌效果）。"
   },
   10: {
-    name: "凱多-10",
+    name: "凱多",
     baseTitle: "雷鳴八卦",
     base: "無視防禦與閃避，指定一位玩家比大小，輸者淘汰。",
     enhTitle: "霸海",
-    enh: "若打出此卡手牌是大媽-14，可無視閃避與保護，直接淘汰全場其他玩家。"
+    enh: "若手牌同時擁有凱多與大媽，可無視閃避與保護，直接淘汰全場其他玩家。"
   },
   11: {
-    name: "基德-11",
+    name: "基德",
     baseTitle: "磁氣‧弦",
     base: "將棄排堆洗牌抽出一張家加入手牌，在從手牌中打出一張執行效果。",
     enhTitle: "磁力風暴",
     enh: "所有玩家將手牌逆時針傳遞。"
   },
   12: {
-    name: "奎因-12",
+    name: "奎因",
     baseTitle: "疫災彈",
     base: "下一位玩家擲硬幣，反面麻痺一回合，延續到擲出正面的玩家或打出此卡的玩家為止。",
     enhTitle: "疫災彈-冰鬼",
-    enh: "本回合打出奇數牌的玩家獲得冰鬼狀態，下回合再打出奇數牌則直接淘汰。"
+    enh: "本回合打出奇數牌的玩家獲得冰鬼狀態卡，下回合再打出奇數牌則直接淘汰。"
   },
   13: {
-    name: "基拉-13",
+    name: "基拉",
     baseTitle: "刃‧音擊",
     base: "可以解除一位玩家的保護/閃避狀態。",
     enhTitle: "巨鐮迴轉音速切割",
     enh: "可以解除一位玩家的保護/閃避狀態，再決定是否與他決鬥。"
   },
   14: {
-    name: "大媽-14",
+    name: "大媽",
     baseTitle: "狂暴與暴食",
     base: "擲銅板，正面保護、反面閃避。",
     enhTitle: "Soul or Life?",
-    enh: "指定一位玩家，讓對方選擇被淘汰或交出一枚金幣。"
+    enh: "指定一位玩家，讓對方選擇被淘汰或交出一個勝利指示物。"
   },
   15: {
-    name: "卡塔庫栗-15",
+    name: "卡塔庫栗",
     baseTitle: "見聞色霸氣",
     base: "可以觀看牌堆上前三張卡片。",
     enhTitle: "10秒後的未來",
     enh: "可以觀看剩餘玩家數÷2的牌堆卡片，並自由排序放回牌堆。"
   },
   16: {
-    name: "庫山（青雉）-16",
+    name: "庫山（青雉）",
     baseTitle: "冰球",
     base: "指定一名玩家手牌凍結，下一次出牌只能打剛抽的那張。",
     enhTitle: "冰河時代",
     enh: "全場玩家手牌凍結，下一次出牌只能打剛抽的那張。"
   },
   17: {
-    name: "黑鬍子-17",
+    name: "黑鬍子",
     baseTitle: "暗水",
     base: "查看牌堆最上面一張卡並覆蓋（其他人不可查看）進棄牌堆。",
     enhTitle: "暗穴道",
     enh: "查看剩餘玩家數÷2張牌，任選張數覆蓋（其他人不可查看）進棄牌堆。"
   },
   18: {
-    name: "紅髮香克斯-18",
+    name: "紅髮香克斯",
     baseTitle: "我是來終結這場戰爭的",
     base: "牌堆剩一半以下時可直接進入手牌比大小階段。",
     enhTitle: "給我個面子吧",
     enh: "牌堆剩一半以下時可直接進入手牌比大小階段，自身手牌數值+1（只在比牌時生效）。"
   },
   19: {
-    name: "哥爾羅傑-19",
+    name: "哥爾羅傑",
     baseTitle: "一切的開始",
     base: "打出後淘汰自己，成為下一局起始玩家。",
     enhTitle: "那一天我們知道了世界的真相",
@@ -3066,7 +3036,7 @@ function cardLine(cardId){
   const meta = CARD_TEXT[cardId];
   if (!meta) return "";
   const enhanced = isEnhancedNow(cardId);
-  const tag = enhanced ? "【強化技能】" : "【基本技能】";
+  const tag = enhanced ? "【強化】" : "【基本】";
   const title = enhanced && meta.enhTitle ? meta.enhTitle : meta.baseTitle;
   const text  = enhanced && meta.enh ? meta.enh : meta.base;
   return `${meta.name} ${tag}${title}：${text}`;
@@ -3573,10 +3543,7 @@ function showPlayedFlash(cardId, byIndex, opt = {}){
   if (!ov || !img) return;
 
   const isEnh = isEnhancedNow(cardId);
-  // 只有自己打出的牌才顯示豪華卡面
-  img.src = isEnh
-    ? (isMePlay ? CARD_ENH_ME(cardId) : CARD_ENH(cardId))
-    : (isMePlay ? CARD_ME(cardId) : CARD(cardId));
+  img.src = isEnh ? CARD_ENH(cardId) : CARD(cardId);
 
   // 誰打出的提示
   if (meta && typeof byIndex === 'number') {
@@ -3652,11 +3619,6 @@ socket.on('STATE', (s)=>{
   const prevDiscardLen = Array.isArray(state?.discard) ? state.discard.length : 0;
 
   state = s;
-
-  // ★ 同步本季豪華解鎖（只會包含自己的清單）
-  if (state && Array.isArray(state.luxUnlocked)) {
-    _luxUnlocked = new Set(state.luxUnlocked);
-  }
 
   
  // ★ 寶箱為 0 → 引擎會附帶 state.final
@@ -4384,23 +4346,6 @@ if (!e) return;
     return;
   }
 
-  // ★ 豪華解鎖：只會私訊給自己
-  if (e.type === 'lux_unlock' && Array.isArray(e.cards)) {
-    e.cards.forEach(id => _luxUnlocked.add(id));
-    // 讓圖鑑若正在開啟可立即更新縮圖
-    try {
-      if (document.getElementById('cardDexOverlay') && !document.getElementById('cardDexOverlay').classList.contains('hidden')) {
-        if (typeof openCardDex === 'function') openCardDex();
-      }
-    } catch {}
-    // 簡單提示（不影響遊戲流程）
-    try {
-      const msg = `豪華解鎖 +${e.cards.length}：${e.cards.join(', ')}`;
-      if (typeof showToast === 'function') showToast(msg);
-    } catch {}
-    return;
-  }
-
 // 決鬥：先記錄，等 duel_log 帶卡片 id 再一起播
 if (e.type === 'duel') {
   _pendingDuel = e;
@@ -4889,7 +4834,7 @@ if (canChoose) {
   if (my.hand != null) {
     const key = `${state.roundNo}:${me.playerId}:hand:${my.hand}`;
     const enhanced = isEnhancedNow(my.hand);
-    el.imgHand.src = (enhanced && _enhPlayed.has(key)) ? CARD_ENH_ME(my.hand) : CARD_ME(my.hand);
+    el.imgHand.src = (enhanced && _enhPlayed.has(key)) ? CARD_ENH(my.hand) : CARD(my.hand);
     if (enhanced && !_enhPlayed.has(key)) {
       const vn = CARD_VENUE[my.hand];
       setTimeout(()=> playEnhanceFx(vn, el.imgHand, my.hand, key), 120);
@@ -4901,7 +4846,7 @@ if (canChoose) {
   if (my.tempDraw != null) {
     const key2 = `${state.roundNo}:${me.playerId}:drawn:${my.tempDraw}`;
     const enhanced2 = isEnhancedNow(my.tempDraw);
-    el.imgDrawn.src = (enhanced2 && _enhPlayed.has(key2)) ? CARD_ENH_ME(my.tempDraw) : CARD_ME(my.tempDraw);
+    el.imgDrawn.src = (enhanced2 && _enhPlayed.has(key2)) ? CARD_ENH(my.tempDraw) : CARD(my.tempDraw);
     if (enhanced2 && !_enhPlayed.has(key2)) {
       const vn2 = CARD_VENUE[my.tempDraw];
       setTimeout(()=> playEnhanceFx(vn2, el.imgDrawn, my.tempDraw, key2), 180);
@@ -5275,81 +5220,39 @@ function showMultiTargets(title, opt, onDone){
   done.onclick = ()=>{ onDone([...picked]); hideModal(); };
 }
 
-/* ====== 選人面板（顯示頭像 + P? 名字） ====== */
+/* ====== 選人面板（顯示 P? 名字） ====== */
 function showTarget(title, onPick, opt={}){ 
-  const allowSelf = !!opt.allowSelf;
-  let html = `<div class="text-lg font-semibold mb-2">${title}</div><div class="grid grid-cols-3 gap-2">`;
-
+  const allowSelf=!!opt.allowSelf;
+  let html=`<div class="text-lg font-semibold mb-2">${title}</div><div class="grid grid-cols-3 gap-2">`;
   (state.players||[]).forEach((p,i)=>{
-    const en = p.alive && (allowSelf || i !== me.playerId);
-    const avatarId = (p?.client?.avatar ?? p?.avatar ?? 1);
-
-    html += `
-      <button ${en?'':'disabled'} data-i="${i}"
-        class="px-3 py-2 rounded-lg border ${en?'border-[#2a2f35] hover:bg-[#192028]':'border-[#22272d] opacity-40 cursor-not-allowed'}">
-        <div class="flex items-center gap-2">
-          <img class="w-8 h-8 rounded-full border border-[#2a2f35] shrink-0" src="${AVA(avatarId)}" alt="">
-          <div class="flex-1 min-w-0">
-            <div class="text-left truncate">${pname(i)}</div>
-          </div>
-          <div class="shrink-0 text-[12px] opacity-90 whitespace-nowrap">
-            ${p.protected?'🛡':''}${p.dodging?'🌀':''}${!p.alive?'✖':''}
-          </div>
-        </div>
-      </button>`;
+    const en=p.alive && (allowSelf || i!==me.playerId);
+    html+=`<button ${en?'':'disabled'} data-i="${i}" class="px-3 py-2 rounded-lg border ${en?'border-[#2a2f35] hover:bg-[#192028]':'border-[#22272d] opacity-40 cursor-not-allowed'}">${pname(i)} ${p.protected?'🛡':''} ${p.dodging?'🌀':''} ${!p.alive?'✖':''}</button>`;
   });
-
-  html += `</div>`;
+  html+=`</div>`;
   showModal(html);
-
   let locked = false;
   el.modal.querySelectorAll('button[data-i]').forEach(b=> b.onclick = ()=>{
-    if (locked) return;
-    locked = true;
-    b.disabled = true;
-    onPick(Number(b.dataset.i));
+    if (locked) return; locked = true; b.disabled = true; onPick(Number(b.dataset.i));
   });
 }
 
-/* ====== 可取消選人面板（顯示頭像） ====== */
+/* ====== 可取消選人面板 ====== */
 function showTargetWithCancel(title, onPick, onCancel, opt={}){
-  const allowSelf = !!opt.allowSelf;
-  let html = `<div class="text-lg font-semibold mb-2">${title}</div><div class="grid grid-cols-3 gap-2">`;
-
+  const allowSelf=!!opt.allowSelf;
+  let html=`<div class="text-lg font-semibold mb-2">${title}</div><div class="grid grid-cols-3 gap-2">`;
   (state.players||[]).forEach((p,i)=>{
-    const en = p.alive && (allowSelf || i !== me.playerId);
-    const avatarId = (p?.client?.avatar ?? p?.avatar ?? 1);
-
-    html += `
-      <button ${en?'':'disabled'} data-i="${i}"
-        class="px-3 py-2 rounded-lg border ${en?'border-[#2a2f35] hover:bg-[#192028]':'border-[#22272d] opacity-40 cursor-not-allowed'}">
-        <div class="flex items-center gap-2">
-          <img class="w-8 h-8 rounded-full border border-[#2a2f35] shrink-0" src="${AVA(avatarId)}" alt="">
-          <div class="flex-1 min-w-0">
-            <div class="text-left truncate">${pname(i)}</div>
-          </div>
-          <div class="shrink-0 text-[12px] opacity-90 whitespace-nowrap">
-            ${p.protected?'🛡':''}${p.dodging?'🌀':''}${!p.alive?'✖':''}
-          </div>
-        </div>
-      </button>`;
+    const en=p.alive && (allowSelf || i!==me.playerId);
+    html+=`<button ${en?'':'disabled'} data-i="${i}" class="px-3 py-2 rounded-lg border ${en?'border-[#2a2f35] hover:bg-[#192028]':'border-[#22272d] opacity-40 cursor-not-allowed'}">${pname(i)} ${p.protected?'🛡':''} ${p.dodging?'🌀':''} ${!p.alive?'✖':''}</button>`;
   });
-
-  html += `</div>
+  html+=`</div>
     <div class="flex justify-end gap-2 mt-3">
       <button id="btnCancel" class="px-3 py-1.5 rounded-lg border border-[#2a2f35]">取消</button>
     </div>`;
-
   showModal(html);
-
   let locked = false;
   el.modal.querySelectorAll('button[data-i]').forEach(b=> b.onclick = ()=>{
-    if (locked) return;
-    locked = true;
-    b.disabled = true;
-    onPick(Number(b.dataset.i));
+    if (locked) return; locked = true; b.disabled = true; onPick(Number(b.dataset.i));
   });
-
   el.modal.querySelector('#btnCancel').onclick = ()=>{ onCancel && onCancel(); hideModal(); };
 }
 
