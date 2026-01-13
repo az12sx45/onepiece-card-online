@@ -297,6 +297,27 @@ function runCpuLoop(roomId){
     const delay = (ms) => setTimeout(step, ms);
     const pending = st.pending || null;
 
+  // ===============================
+  // ★ CPU 自動領取回合勝利寶箱（避免卡死）
+  // ===============================
+  if (st.chestReward) {
+    const winnerId = st.chestReward.by;
+    const winner = st.players[winnerId];
+
+    // 如果勝者是 CPU → 直接自動開寶箱（不播影片）
+    if (winner && winner.isCPU) {
+      applyAndBroadcast(roomNow, {
+        type: 'CHEST_OPEN',
+        playerId: winnerId,
+      }, io);
+
+      // 給一點緩衝，讓前端 log 顯示完
+      delay(800);
+      return;
+    }
+  }
+
+
   // ---------- 先處理「不是自己回合」但輪到 CPU 回應的互動 ----------
     if (pending) {
       // 奎因：輪到 target 擲硬幣（QUEEN_COIN）
