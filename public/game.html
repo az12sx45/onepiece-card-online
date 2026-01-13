@@ -1986,43 +1986,8 @@ body::before{
 
 <script>
 /* === 路徑工具 === */
-
-// 你的豪華卡號清單（只影響「你自己的畫面」）
-const _myLuxSet = new Set();
-
-// 依你的 engine 設計：把「你自己的豪華卡號陣列」塞進來
-function setMyLuxFromArray(arr){
-  _myLuxSet.clear();
-  if (Array.isArray(arr)) {
-    for (const n of arr) {
-      const id = Number(n);
-      if (Number.isFinite(id)) _myLuxSet.add(id);
-    }
-  }
-}
-
-function isMyLux(id){
-  return _myLuxSet.has(Number(id));
-}
-
-// 一般卡圖：若是你抽到豪華，走 cards_lux；否則走原本 cards
-function cardImageURL(id){
-  return isMyLux(id)
-    ? `images/cards_lux/${id}.webp`
-    : `images/cards/${id}.webp`;
-}
-
-// 強化卡圖：若是你抽到豪華，走 cards_lux_enh；否則走原本 cards_enh
-function cardEnhImageURL(id){
-  return isMyLux(id)
-    ? `images/cards_lux_enh/${id}.webp`
-    : `images/cards_enh/${id}.webp`;
-}
-
-// 統一給全檔用的快捷
-const CARD     = id => cardImageURL(id);
-const CARD_ENH = id => cardEnhImageURL(id);
-
+const CARD     = id => `images/cards/${id}.webp`;
+const CARD_ENH = id => `images/cards/enh/${id}.webp`; // ★ 強化卡面
 const VEN      = name => `images/venues/${name}.webp`;
 const AVA      = a => `images/avatars/${a||1}.webp`;
 
@@ -3654,20 +3619,6 @@ socket.on('STATE', (s)=>{
   const prevDiscardLen = Array.isArray(state?.discard) ? state.discard.length : 0;
 
   state = s;
-  // ===== 豪華卡：只同步「我自己」的豪華清單，其他人不受影響 =====
-  // 下面三選一：依你 engine 實際塞的欄位是哪個
-  const meObj = state?.players?.[me.playerId];
-
-  // A) 最推薦：engine 把豪華清單放在 player.luxOwned（或類似）
-  const luxArrA = meObj?.luxOwned;
-
-  // B) 或 engine 放在 player.luxCards
-  const luxArrB = meObj?.luxCards;
-
-  // C) 或 engine 直接放在 state.myLuxCards（只給這個 client）
-  const luxArrC = state?.myLuxCards;
-
-  setMyLuxFromArray(luxArrA || luxArrB || luxArrC || []);
 
   
  // ★ 寶箱為 0 → 引擎會附帶 state.final
