@@ -2007,8 +2007,17 @@ body::before{
 
 <script>
 /* === 路徑工具 === */
+// 基礎卡圖（所有人共用）
 const CARD     = id => `images/cards/${id}.webp`;
 const CARD_ENH = id => `images/cards/enh/${id}.webp`; // ★ 強化卡面
+
+// ★ 豪華卡圖（只影響：卡片圖鑑縮圖 / 自己手牌顯示 / 自己打出的快閃）
+// 由伺服器私訊 EMIT:lux_unlock + STATE.luxUnlocked 驅動
+let _luxUnlocked = new Set();
+const CARD_LUX     = id => `images/cards_lux/${id}.webp`;
+const CARD_LUX_ENH = id => `images/cards_lux_enh/${id}.webp`;
+const CARD_ME      = id => (_luxUnlocked.has(id) ? CARD_LUX(id) : CARD(id));
+const CARD_ENH_ME  = id => (_luxUnlocked.has(id) ? CARD_LUX_ENH(id) : CARD_ENH(id));
 const VEN      = name => `images/venues/${name}.webp`;
 const AVA      = a => `images/avatars/${a||1}.webp`;
 
@@ -2841,7 +2850,7 @@ function openCardDex(){
 
     html += `
       <button class="card-dex-thumb ${enh ? 'enhanced' : ''}" data-id="${id}">
-        <img src="${CARD(id)}" alt="${name}">
+        <img src="${CARD_ME(id)}" alt="${name}">
         <div class="card-dex-meta">
           <span>${id}｜${name}</span>
           <span>x${cnt}</span>
@@ -2891,9 +2900,9 @@ function showCardDexPreview(id){
     dexDom.previewTitle.textContent = `${id}｜${name}`;
   }
 
-  dexDom.previewBase.src = CARD(id);
+  dexDom.previewBase.src = CARD_ME(id);
   dexDom.previewBase.alt = `${name}（一般）`;
-  dexDom.previewEnh.src = CARD_ENH(id);
+  dexDom.previewEnh.src = CARD_ENH_ME(id);
   dexDom.previewEnh.alt = `${name}（強化）`;
 
   const parts = [];
@@ -3564,7 +3573,10 @@ function showPlayedFlash(cardId, byIndex, opt = {}){
   if (!ov || !img) return;
 
   const isEnh = isEnhancedNow(cardId);
-  img.src = isEnh ? CARD_ENH(cardId) : CARD(cardId);
+  // 只有自己打出的牌才顯示豪華卡面
+  img.src = isEnh
+    ? (isMePlay ? CARD_ENH_ME(cardId) : CARD_ENH(cardId))
+    : (isMePlay ? CARD_ME(cardId) : CARD(cardId));
 
   // 誰打出的提示
   if (meta && typeof byIndex === 'number') {
@@ -3640,6 +3652,11 @@ socket.on('STATE', (s)=>{
   const prevDiscardLen = Array.isArray(state?.discard) ? state.discard.length : 0;
 
   state = s;
+
+  // ★ 同步本季豪華解鎖（只會包含自己的清單）
+  if (state && Array.isArray(state.luxUnlocked)) {
+    _luxUnlocked = new Set(state.luxUnlocked);
+  }
 
   
  // ★ 寶箱為 0 → 引擎會附帶 state.final
@@ -4367,6 +4384,23 @@ if (!e) return;
     return;
   }
 
+  // ★ 豪華解鎖：只會私訊給自己
+  if (e.type === 'lux_unlock' && Array.isArray(e.cards)) {
+    e.cards.forEach(id => _luxUnlocked.add(id));
+    // 讓圖鑑若正在開啟可立即更新縮圖
+    try {
+      if (document.getElementById('cardDexOverlay') && !document.getElementById('cardDexOverlay').classList.contains('hidden')) {
+        if (typeof openCardDex === 'function') openCardDex();
+      }
+    } catch {}
+    // 簡單提示（不影響遊戲流程）
+    try {
+      const msg = `豪華解鎖 +${e.cards.length}：${e.cards.join(', ')}`;
+      if (typeof showToast === 'function') showToast(msg);
+    } catch {}
+    return;
+  }
+
 // 決鬥：先記錄，等 duel_log 帶卡片 id 再一起播
 if (e.type === 'duel') {
   _pendingDuel = e;
@@ -4855,7 +4889,7 @@ if (canChoose) {
   if (my.hand != null) {
     const key = `${state.roundNo}:${me.playerId}:hand:${my.hand}`;
     const enhanced = isEnhancedNow(my.hand);
-    el.imgHand.src = (enhanced && _enhPlayed.has(key)) ? CARD_ENH(my.hand) : CARD(my.hand);
+    el.imgHand.src = (enhanced && _enhPlayed.has(key)) ? CARD_ENH_ME(my.hand) : CARD_ME(my.hand);
     if (enhanced && !_enhPlayed.has(key)) {
       const vn = CARD_VENUE[my.hand];
       setTimeout(()=> playEnhanceFx(vn, el.imgHand, my.hand, key), 120);
@@ -4867,7 +4901,7 @@ if (canChoose) {
   if (my.tempDraw != null) {
     const key2 = `${state.roundNo}:${me.playerId}:drawn:${my.tempDraw}`;
     const enhanced2 = isEnhancedNow(my.tempDraw);
-    el.imgDrawn.src = (enhanced2 && _enhPlayed.has(key2)) ? CARD_ENH(my.tempDraw) : CARD(my.tempDraw);
+    el.imgDrawn.src = (enhanced2 && _enhPlayed.has(key2)) ? CARD_ENH_ME(my.tempDraw) : CARD_ME(my.tempDraw);
     if (enhanced2 && !_enhPlayed.has(key2)) {
       const vn2 = CARD_VENUE[my.tempDraw];
       setTimeout(()=> playEnhanceFx(vn2, el.imgDrawn, my.tempDraw, key2), 180);
