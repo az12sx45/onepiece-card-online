@@ -432,6 +432,7 @@ function baseState(playerCount){
     pending:null, lastElimBy:null,
     HOT:14, _hotNotified:false,
     chestTotal: playerCount*5, chestLeft: playerCount*5,
+lastRoundAward: null, // ★ 回合勝者抽豪華卡用
     roundKills:Array(playerCount).fill(0),
     turnKills:Array(playerCount).fill(0),
      currentTurnOwner:0,
@@ -520,6 +521,7 @@ function awardRound(st, winner, tieBonus=0){
   if(gain > st.chestLeft) gain = st.chestLeft;
   winner.gold += gain;
   st.chestLeft -= gain;
+st.lastRoundAward = { roundNo: st.roundNo, winnerId: winner.id, gain, bonusKills, tieBonus }; // ★ 回合勝者抽豪華卡用
   addStat(st, by, 'coinScore', gain); // ★ 金幣分
   st.log.push(`★ 本局勝者：P${winner.id+1} +${gain} 金幣（保底1 + 擊倒 ${bonusKills}${tieBonus>0?` + 平手加成 ${tieBonus}`:''}）→ 寶箱剩 ${st.chestLeft}`);
 
@@ -844,6 +846,8 @@ function nextRound(state){
 
     chestTotal: st.chestTotal,
     chestLeft:  st.chestLeft,
+
+lastRoundAward: null, // ★ 新局清空
 
     roundKills: Array(playerCount).fill(0),
     turnKills:  Array(playerCount).fill(0),
