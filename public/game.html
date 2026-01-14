@@ -1946,6 +1946,37 @@ body::before{
   </div>
 
 
+
+
+  <!-- 勝利獎勵寶箱對話框（只給本局勝者） -->
+  <div id="rewardModal" class="hidden fixed inset-0 z-[120] flex items-center justify-center">
+    <div id="rewardModalBg" class="absolute inset-0 bg-black/70"></div>
+    <div class="relative w-[min(560px,92vw)] rounded-2xl border border-white/15 bg-[#0a0a0a]/90 backdrop-blur p-5 shadow-2xl">
+      <div class="text-xl font-bold text-[#ffbe58]">恭喜你贏得本局勝利</div>
+      <div class="mt-2 text-sm text-white/80">
+        這是本局獎勵寶箱（可抽 <span id="rewardDrawCount" class="font-semibold text-white"></span> 抽；抽到的數字不會重複）
+      </div>
+
+      <div class="mt-3 flex items-center gap-3">
+        <img id="rewardChestThumb" src="images/reward/chest_closed.webp" class="w-24 h-24 object-contain drop-shadow" alt="chest">
+        <div class="flex-1 text-sm text-white/70 leading-relaxed">
+          <div>打開後會根據抽數播放不同的寶箱動畫（1～5 抽）。</div>
+          <div class="mt-1">抽到的卡片與其強化技能卡面，將在「你的畫面」變成豪華版，並延續到整賽季結束。</div>
+        </div>
+      </div>
+
+      <div class="mt-4 flex justify-end gap-2">
+        <button id="rewardOpenBtn" class="px-4 py-2 rounded-xl bg-[#ffbe58] text-black font-semibold hover:brightness-110">打開</button>
+        <button id="rewardCloseBtn" class="px-4 py-2 rounded-xl bg-white/10 text-white/80 hover:bg-white/15">稍後</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 勝利獎勵寶箱影片 overlay（只給本局勝者） -->
+  <div id="rewardOverlay" class="hidden fixed inset-0 z-[125] flex items-center justify-center bg-black/85">
+    <video id="rewardVideo" class="w-[min(900px,96vw)] max-h-[92vh] rounded-2xl border border-white/15 shadow-2xl" playsinline></video>
+  </div>
+
   <!-- 強化技能影片（全體播放） -->
   <div id="enhOverlay" class="hidden fixed inset-0 z-[140] flex items-center justify-center bg-black/70">
     <video id="enhVideo" playsinline preload="auto" class="max-w-[80vw] max-h-[80vh] rounded-xl shadow-2xl"></video>
@@ -1984,37 +2015,18 @@ body::before{
   </div>
 
 
-  <!-- === 回合勝利獎勵寶箱（只顯示給勝者） === -->
-  <div id="chestRewardOverlay" class="hidden fixed inset-0 z-[95] flex items-center justify-center bg-black/75">
-    <div class="w-[min(560px,92vw)] rounded-2xl border border-neutral-700/70 bg-neutral-900/80 backdrop-blur p-5">
-      <div class="text-xl font-extrabold mb-2">恭喜你贏得本局勝利</div>
-      <div class="text-sm opacity-80 mb-4">這是本局獎勵寶箱</div>
-
-      <div id="chestRewardInfo" class="text-sm opacity-80 mb-4"></div>
-
-      <div class="flex justify-end gap-2">
-        <button id="chestRewardOpen" class="px-4 py-2 rounded-lg border border-white/20 bg-white/10 hover:bg-white/20">
-          打開
-        </button>
-      </div>
-
-      <!-- 影片區：按下打開後顯示 -->
-      <div id="chestRewardVideoWrap" class="hidden mt-4">
-        <video id="chestRewardVideo" class="w-full rounded-xl border border-white/10 bg-black" playsinline></video>
-      </div>
-    </div>
-  </div>
-
-
 <script>
 /* === 路徑工具 === */
-// ★ 豪華卡：只影響「自己這台」的顯示（伺服器會回傳 state.luxOwned 給自己）
-let myLuxSet = new Set(); // 0~19
-const CARD_LUX     = id => `images/cards_lux/${id}.webp`;
-const CARD_LUX_ENH = id => `images/cards_lux_enh/${id}.webp`;
+// ★ 豪華卡圖：只對自己生效（由 server 提供 state.myDeluxe）
+// 你需要準備素材路徑：
+//   - 普通豪華卡：public/images/cards_deluxe/{0-19}.webp
+//   - 強化豪華卡：public/images/cards_deluxe/enh/{0-19}.webp
+const DELUXE_BASE_DIR = 'images/cards_deluxe';
+const DELUXE_ENH_DIR  = 'images/cards_deluxe/enh';
+const isDeluxe = (id)=> Array.isArray(state?.myDeluxe) && state.myDeluxe.includes(id);
 
-const CARD     = id => (myLuxSet.has(id) ? CARD_LUX(id) : `images/cards/${id}.webp`);
-const CARD_ENH = id => (myLuxSet.has(id) ? CARD_LUX_ENH(id) : `images/cards/enh/${id}.webp`); // ★ 強化卡面
+const CARD     = id => isDeluxe(id) ? `${DELUXE_BASE_DIR}/${id}.webp` : `images/cards/${id}.webp`;
+const CARD_ENH = id => isDeluxe(id) ? `${DELUXE_ENH_DIR}/${id}.webp`  : `images/cards/enh/${id}.webp`; // ★ 強化卡面
 const VEN      = name => `images/venues/${name}.webp`;
 const AVA      = a => `images/avatars/${a||1}.webp`;
 
@@ -2043,13 +2055,6 @@ const el = {
   chestLbl: document.getElementById('chestLbl'),
   nextRound: document.getElementById('btnNextRound'),
   cardDexBtn: document.getElementById('cardDexBtn'),
-
-  // 回合勝利獎勵寶箱
-  chestRewardOverlay: document.getElementById('chestRewardOverlay'),
-  chestRewardOpen: document.getElementById('chestRewardOpen'),
-  chestRewardInfo: document.getElementById('chestRewardInfo'),
-  chestRewardVideoWrap: document.getElementById('chestRewardVideoWrap'),
-  chestRewardVideo: document.getElementById('chestRewardVideo'),
 };
 
 // === 卡片圖鑑 DOM 快取 ===
@@ -2527,106 +2532,6 @@ function playCoinFx(){
     requestBgmResume();
   }
 }
-
-
-// ===============================
-//   🎁 回合勝利獎勵寶箱（只給勝者）
-//   流程：收到 EMIT chest_ready → 彈窗 → 按「打開」→ 播放影片 → 影片播完送 CHEST_OPEN → 伺服器回傳 chest_result 並寫入日誌
-// ===============================
-let _pendingChestReady = null;
-
-function openChestRewardModal(coinsWon, draws){
-  _pendingChestReady = { coinsWon, draws };
-  if (!el.chestRewardOverlay) return;
-
-  // 文字提示：你本回合拿到幾枚金幣 → 幾抽（最多 5）
-  const d = Math.max(1, Math.min(5, draws || coinsWon || 1));
-  if (el.chestRewardInfo) {
-    el.chestRewardInfo.textContent = `本回合獎勵：${coinsWon} 枚金幣 → ${d} 抽（0–19，不重複；延續到整賽季結束）`;
-  }
-
-  // 先顯示按鈕、先藏影片
-  if (el.chestRewardVideoWrap) el.chestRewardVideoWrap.classList.add('hidden');
-
-  el.chestRewardOverlay.classList.remove('hidden');
-}
-
-function closeChestRewardModal(){
-  if (!el.chestRewardOverlay) return;
-  el.chestRewardOverlay.classList.add('hidden');
-
-  // 停掉影片（保險）
-  const v = el.chestRewardVideo;
-  if (v) {
-    try { v.pause(); v.currentTime = 0; } catch(e){}
-    v.src = '';
-  }
-  _pendingChestReady = null;
-}
-
-// 寶箱影片：依本回合拿到的金幣（1~5）決定
-function chestVideoSrcByCoins(coinsWon){
-  const n = Math.max(1, Math.min(5, Number(coinsWon)||1));
-  // 你需要把影片放到 public/videos/chest/1.mp4 ~ 5.mp4
-  return `videos/chest/${n}.mp4`;
-}
-
-async function playChestVideoThenOpen(){
-  if (!_pendingChestReady) return;
-  const coinsWon = _pendingChestReady.coinsWon || 1;
-
-  const wrap = el.chestRewardVideoWrap;
-  const v    = el.chestRewardVideo;
-  if (!wrap || !v) {
-    // 沒有影片 DOM → 直接開（保險）
-    sendAction('CHEST_OPEN', {});
-    closeChestRewardModal();
-    return;
-  }
-
-  wrap.classList.remove('hidden');
-
-  // 設定 src 並播放
-  const src = chestVideoSrcByCoins(coinsWon);
-  v.src = src;
-  v.muted = false;
-  v.volume = 1.0;
-
-  // duck 系統：影片播放會自動暫停 BGM
-  try { if (typeof attachDuck === 'function') attachDuck(v); } catch(e){}
-
-  const ended = new Promise((resolve)=> v.addEventListener('ended', resolve, { once:true }));
-  try {
-    await v.play();
-  } catch(e) {
-    // 播放失敗（iOS/權限）→ 仍然允許領取（避免卡住）
-  }
-
-  // 無論是否真的播到 ended，都設一個 failsafe
-  const durMs = (Number.isFinite(v.duration) && v.duration > 0) ? (v.duration*1000) : 4500;
-  await Promise.race([
-    ended,
-    new Promise(res=>setTimeout(res, durMs + 600))
-  ]);
-
-  // 影片播完 → 跟伺服器要抽卡結果
-  sendAction('CHEST_OPEN', {});
-  closeChestRewardModal();
-}
-
-// 綁定按鈕
-if (el.chestRewardOpen) {
-  el.chestRewardOpen.addEventListener('click', ()=>{
-    playChestVideoThenOpen();
-  });
-}
-
-// 點背景不關（避免誤觸漏領）；你若要允許取消，再把下面打開即可
-// if (el.chestRewardOverlay) {
-//   el.chestRewardOverlay.addEventListener('click', (ev)=>{
-//     if (ev.target === el.chestRewardOverlay) closeChestRewardModal();
-//   });
-// }
 
 // === 畫面被切到背景時，強制把各種 overlay 收掉，避免回來時卡在畫面 ===
 document.addEventListener('visibilitychange', ()=>{
@@ -3754,14 +3659,7 @@ socket.on('STATE', (s)=>{
 
   state = s;
 
-  // ★ 同步我的豪華卡清單（只影響自己畫面）
-  try {
-    const ids = Array.isArray(state?.luxOwned) ? state.luxOwned : [];
-    myLuxSet = new Set(ids.map(n=>Number(n)).filter(n=>Number.isFinite(n)));
-  } catch(e) {
-    myLuxSet = new Set();
-  }
-
+  
  // ★ 寶箱為 0 → 引擎會附帶 state.final
   if (state && state.final) {
     // 已經處理過 final 就不要重複
@@ -4487,22 +4385,6 @@ if (!e) return;
     return;
   }
 
-  // 🎁 chest_ready：只有勝者會收到 → 彈出獎勵寶箱
-  if (e.type === 'chest_ready') {
-    const coinsWon = Number(e.coinsWon || 1);
-    const draws    = Number(e.draws || coinsWon || 1);
-    openChestRewardModal(coinsWon, draws);
-    return;
-  }
-
-  // 🎁 chest_result：同步豪華卡（其實 STATE 也會帶），這裡主要用來保險
-  if (e.type === 'chest_result') {
-    if (Array.isArray(e.owned)) {
-      myLuxSet = new Set(e.owned.map(n=>Number(n)).filter(n=>Number.isFinite(n)));
-    }
-    return;
-  }
-
 // 決鬥：先記錄，等 duel_log 帶卡片 id 再一起播
 if (e.type === 'duel') {
   _pendingDuel = e;
@@ -4775,8 +4657,93 @@ $('#luffyBoostGo')?.addEventListener('click', ()=>{
 });
 
 // Extra EMIT hooks
+
+// ===================== 勝利獎勵寶箱（只給勝者） =====================
+let _rewardCache = null;          // { roundNo, coins, cards, total }
+let _rewardShownRoundNo = null;
+
+function rewardVideoSrc(coins){
+  const c = Math.max(1, Math.min(5, Number(coins || 1)));
+  // 你需要準備素材：public/videos/reward/chest_{1..5}.mp4
+  return `videos/reward/chest_${c}.mp4`;
+}
+
+function openRewardModal(payload){
+  _rewardCache = payload;
+  _rewardShownRoundNo = payload.roundNo;
+
+  const modal = document.getElementById('rewardModal');
+  const cntEl = document.getElementById('rewardDrawCount');
+  if (cntEl) cntEl.textContent = String(payload.coins || 1);
+
+  if (modal) modal.classList.remove('hidden');
+}
+
+function closeRewardModal(){
+  const modal = document.getElementById('rewardModal');
+  if (modal) modal.classList.add('hidden');
+}
+
+function playRewardVideo(payload){
+  const overlay = document.getElementById('rewardOverlay');
+  const video   = document.getElementById('rewardVideo');
+
+  closeRewardModal();
+
+  if (!overlay || !video) return;
+
+  overlay.classList.remove('hidden');
+
+  video.pause();
+  video.currentTime = 0;
+  video.src = rewardVideoSrc(payload.coins);
+  video.muted = false;
+  video.playsInline = true;
+
+  const onEnded = ()=>{
+    video.removeEventListener('ended', onEnded);
+    overlay.classList.add('hidden');
+
+    // 通知 server：影片播完 → 才把抽到內容寫進對局日誌（全體可見）
+    socket.emit('ACTION', {
+      roomId: me.roomId, playerId: me.playerId, secret: me.secret,
+      type: 'REWARD_DONE',
+      payload: { roundNo: payload.roundNo }
+    });
+
+    // 也可在本機做一次提示（不影響全體日誌）
+    try{
+      const got = (payload.cards && payload.cards.length) ? payload.cards.join('、') : '（未抽到）';
+      floatMsg?.(`🎁 你抽到：${got}`);
+    }catch(_){}
+  };
+
+  video.addEventListener('ended', onEnded);
+
+  // 一些瀏覽器需使用 play() Promise
+  const p = video.play();
+  if (p && typeof p.catch === 'function') p.catch(()=>{ /* ignore */ });
+}
+
+// Reward UI events
+document.getElementById('rewardModalBg')?.addEventListener('click', closeRewardModal);
+document.getElementById('rewardCloseBtn')?.addEventListener('click', closeRewardModal);
+document.getElementById('rewardOpenBtn')?.addEventListener('click', ()=>{
+  if(!_rewardCache) return;
+  playRewardVideo(_rewardCache);
+});
+
+// ================================================================
+
 socket.on('EMIT', (e)=>{
   if (!e) return;
+  // Reward chest (winner only)
+  if (e.type === 'reward_chest'){
+    if (_rewardShownRoundNo !== e.roundNo){
+      openRewardModal({ roundNo: e.roundNo, coins: e.coins, cards: e.cards || [], total: e.total || [] });
+    }
+    return;
+  }
   // Law (boosted) view result → prompt swap (only caster receives)
   if (e.type === 'law_view' && e.cardId != null && e.targetId != null){
     openLawSwap(e.targetId, e.cardId);
