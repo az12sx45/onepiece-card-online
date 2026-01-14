@@ -432,14 +432,11 @@ function baseState(playerCount){
     pending:null, lastElimBy:null,
     HOT:14, _hotNotified:false,
     chestTotal: playerCount*5, chestLeft: playerCount*5,
-
-    // ★ 豪華卡收藏：賽季內累積（每位玩家 0~19 是否已擁有豪華）
-    luxOwned: Array(playerCount).fill(null).map(()=>Array(20).fill(false)),
-    // ★ 回合勝利獎勵寶箱（只給勝者；等他按「打開」後才真正抽卡）
-    chestReward: null,
-    // ★ 寶箱拿空時，先標記等待獎勵結束再結算（避免被前端直接跳轉結算頁）
-    finalPending: false,
-
+    // ★ 豪華卡解鎖（只影響自己看到的卡圖；跨局/跨整賽季保留）
+    deluxeUnlocks: {}, // { [playerId]: number[] }
+    rewardPending: null, // { roundNo, winnerId, coins, cards }
+    rewardLoggedRounds: {}, // { [roundNo]: true }
+    lastRoundAward: null, // { roundNo, winnerId, coins }
     roundKills:Array(playerCount).fill(0),
     turnKills:Array(playerCount).fill(0),
      currentTurnOwner:0,
@@ -465,103 +462,6 @@ function baseState(playerCount){
 
 
 function clone(o){ return JSON.parse(JSON.stringify(o)); }
-
-// ======== 豪華卡收藏（賽季內不重複抽） ========
-function ensureLux(st){
-  if (!Array.isArray(st.luxOwned) && Array.isArray(st.players)) {
-    st.luxOwned = Array(st.players.length).fill(null).map(()=>Array(20).fill(false));
-  }
-}
-function getLuxIdsForPlayer(st, pid){
-  ensureLux(st);
-  const arr = st.luxOwned?.[pid];
-  if (!Array.isArray(arr)) return [];
-  const ids = [];
-  for (let i = 0; i < 20; i++) if (arr[i]) ids.push(i);
-  return ids;
-}
-function markLuxOwned(st, pid, ids){
-  ensureLux(st);
-  if (!Array.isArray(st.luxOwned?.[pid])) st.luxOwned[pid] = Array(20).fill(false);
-  for (const id of (ids||[])){
-    if (typeof id === 'number' && id >= 0 && id < 20) st.luxOwned[pid][id] = true;
-  }
-}
-function pickRandomDistinct(pool, k){
-  const a = pool.slice();
-  // Fisher–Yates shuffle 前 k
-  for (let i = a.length - 1; i > 0; i--){
-    const j = Math.floor(Math.random() * (i + 1));
-    const t = a[i]; a[i] = a[j]; a[j] = t;
-  }
-  return a.slice(0, Math.max(0, Math.min(k, a.length)));
-}
-
-// 賽季結算（寶箱拿空時才會真正產生 st.final；避免最後一回合獎勵被跳過）
-function buildFinalIfNeeded(st){
-  if (!st.finalPending) return;
-  ensureStats(st);
-
-  const board = {};
-  for (let i = 0; i < st.players.length; i++) {
-    const s = st.stats[i] || {};
-    const playerCount = st.players.length;
-    const baseTurns   = s.survivalTurns || 0;
-    const reached     = !!s.reachedFinal;
-    const won         = !!s.wonFinal;
-    const tail        = (typeof s.finalTail === 'number' ? s.finalTail : 0);
-
-    const survivalScore =
-      baseTurns +
-      (reached ? playerCount : 0) +
-      (won ? tail : 0);
-
-    board[i] = {
-      coinScore: s.coinScore || 0,
-      atkScore: s.atkScore || 0,
-      defScore: s.defScore || 0,
-      hitScore: s.hitScore || 0,
-      intelScore: s.intelScore || 0,
-      survivalScore
-    };
-  }
-
-  const playersMeta = {};
-  st.players.forEach((p, i) => {
-    playersMeta[i] = {
-      id: i,
-      name:
-        p.client?.displayName ??
-        p.displayName ??
-        p.name ??
-        p.nick ??
-        `P${i + 1}`,
-      pid: (p.pid != null ? p.pid : (p.client?.pid ?? i)),
-      avatar: (p.avatar != null ? p.avatar : (p.client?.avatar ?? null)),
-    };
-  });
-
-  const rank = [...st.players]
-    .map(p => ({ id: p.id, gold: p.gold || 0 }))
-    .sort((a, b) => b.gold - a.gold);
-
-  st.final = {
-    seasonNo: st.seasonNo || 1,
-    ranking: rank.map(r => ({
-      id: r.id,
-      name: (playersMeta[r.id] && playersMeta[r.id].name) || `P${r.id + 1}`,
-      coins: r.gold,
-      pid: playersMeta[r.id] ? playersMeta[r.id].pid : null,
-      avatar: playersMeta[r.id] ? playersMeta[r.id].avatar : null
-    })),
-    playersMeta,
-    scoreboard: board
-  };
-
-  st.turnStep = 'ended';
-  st.finalPending = false;
-}
-
 
 function pushLog(st, text, emits){
   st.log.push(text);
@@ -612,7 +512,7 @@ function doEliminate(st, victimIdx, reason, byIdx = st.turnIndex, emits){
 }
 
 // ====== ★ awardRound 替換版（含統計與 final 打包）======
-function awardRound(st, winner, tieBonus=0, emits){
+function awardRound(st, winner, tieBonus=0, emits=null){
   ensureStats(st);
   const by = winner.id;
   const bonusKills = st.turnKills[by] || 0;
@@ -625,15 +525,11 @@ function awardRound(st, winner, tieBonus=0, emits){
   if(gain > st.chestLeft) gain = st.chestLeft;
   winner.gold += gain;
   st.chestLeft -= gain;
+  // ★ 記錄本局勝者金幣（供獎勵寶箱抽卡使用）
+  st.lastRoundAward = { roundNo: st.roundNo, winnerId: winner.id, coins: gain };
+
   addStat(st, by, 'coinScore', gain); // ★ 金幣分
   st.log.push(`★ 本局勝者：P${winner.id+1} +${gain} 金幣（保底1 + 擊倒 ${bonusKills}${tieBonus>0?` + 平手加成 ${tieBonus}`:''}）→ 寶箱剩 ${st.chestLeft}`);
-
-  // ★ 回合勝利獎勵寶箱：抽卡次數 = 本回合實得金幣，最多 5 抽
-  const draws = Math.max(1, Math.min(5, gain || 0));
-  st.chestReward = { by: winner.id, coinsWon: gain, draws };
-  if (emits) {
-    emits.push({ to: winner.id, type: 'chest_ready', coinsWon: gain, draws });
-  }
 
   if(st.rogerPred && st.rogerPred.pick!=null && st.rogerPred.by!=null && st.rogerPred.pick===winner.id){
     const r = st.players[st.rogerPred.by];
@@ -649,16 +545,138 @@ function awardRound(st, winner, tieBonus=0, emits){
     }
   }
 
-// === 寶箱被拿空：標記賽季結算（等待勝者開寶箱後再產生 final）===
+// === 寶箱被拿空：打包賽季結算 ===
 if (st.chestLeft === 0) {
-  st.finalPending = true;
-  st.log.push('★ 寶箱已空：請勝者先領取獎勵，隨後進入賽季結算');
+  // 確保有統計容器（你前面應該已加過 ensureStats(st)）
+  ensureStats(st);
+
+  // 1) 蒐集每位玩家的統計分數，產出 scoreboard
+  const board = {};
+  for (let i = 0; i < st.players.length; i++) {
+    const s = st.stats[i] || {};
+const playerCount = st.players.length;
+const baseTurns   = s.survivalTurns || 0;
+const reached     = !!s.reachedFinal;
+const won         = !!s.wonFinal;
+const tail        = (typeof s.finalTail === 'number' ? s.finalTail : 0);
+
+// ★ 新生存分規則：
+//   生存分 = 生存回合數
+//          + (有活到 final ? 總玩家人數 : 0)
+//          + (有贏 final ? 最終比牌那張牌的尾數 : 0)
+const survivalScore =
+  baseTurns +
+  (reached ? playerCount : 0) +
+  (won ? tail : 0);
+
+board[i] = {
+  coinScore: s.coinScore || 0,
+  atkScore: s.atkScore || 0,
+  defScore: s.defScore || 0,
+  hitScore: s.hitScore || 0,
+  intelScore: s.intelScore || 0,
+  survivalScore
+};
+
+  }
+
+ // 2) 帶出玩家的 meta（名字、pid、頭像），供結果頁顯示
+const playersMeta = {};
+st.players.forEach((p, i) => {
+  playersMeta[i] = {
+    id: i,
+    name:
+      p.client?.displayName ??
+      p.displayName ??
+      p.name ??
+      p.nick ??
+      `P${i + 1}`,
+   pid: (p.pid != null ? p.pid : (p.client?.pid ?? i)),
+    avatar: (p.avatar != null ? p.avatar : (p.client?.avatar ?? null)),
+  };
+});
+
+  // 3) 金幣排名（只宣告一次，避免 const rank 重複）
+  const rank = [...st.players]
+    .map(p => ({ id: p.id, gold: p.gold || 0 }))
+    .sort((a, b) => b.gold - a.gold);
+
+  // 如需保留快取可寫：st._finalRank = rank;
+
+  // 4) 打包 final 物件（result.html 會用這包渲染）
+  st.final = {
+    seasonNo: st.seasonNo || 1,
+    ranking: rank.map(r => ({
+      id: r.id,
+      name: (playersMeta[r.id] && playersMeta[r.id].name) || `P${r.id + 1}`,
+      coins: r.gold,
+      pid: playersMeta[r.id] ? playersMeta[r.id].pid : null,
+      avatar: playersMeta[r.id] ? playersMeta[r.id].avatar : null
+    })),
+    playersMeta,
+    scoreboard: board
+  };
+
+  // 5) 結束本回合的回合狀態（保險）
+  st.turnStep = 'ended';
+  // 若你這裡原本有 endOrNext(st) 或其他收尾，依原本邏輯保留。
 }
 
-  return gain;
-
 }
 
+
+// ---------------------------------------------------------------
+// ★ 獎勵寶箱：依本局勝者獲得的金幣數，抽取「未重複」的豪華卡解鎖（0-19）
+//  - 抽到的豪華卡：僅該玩家自己看到（client 端用 myDeluxe 套圖）
+//  - 解鎖清單：跨局、跨整賽季保留（直到 chestLeft=0 結算）
+//  - 只在回合結束（turnStep='ended'）時生成一次，並用 EMIT 發給勝者
+function grantDeluxeRewards(st, emits){
+  if(!emits) return;
+  const info = st.lastRoundAward;
+  if(!info || info.roundNo !== st.roundNo) return;
+
+  // 避免同一局重複生成
+  if(st.rewardPending && st.rewardPending.roundNo === st.roundNo) return;
+
+  const winnerId = info.winnerId;
+  const coins = Math.max(0, Math.min(5, Number(info.coins || 0)));
+  if(coins <= 0) return;
+
+  if(!st.deluxeUnlocks) st.deluxeUnlocks = {};
+  const cur = Array.isArray(st.deluxeUnlocks[winnerId]) ? st.deluxeUnlocks[winnerId] : [];
+  const unlocked = new Set(cur);
+
+  const pool = [];
+  for(let i=0;i<=19;i++){
+    if(!unlocked.has(i)) pool.push(i);
+  }
+
+  // 沒得抽就不發（避免前端空寶箱）
+  if(pool.length === 0) return;
+
+  // Fisher–Yates shuffle
+  for(let i=pool.length-1;i>0;i--){
+    const j = Math.floor(Math.random() * (i+1));
+    const tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
+  }
+
+  const picks = pool.slice(0, Math.min(coins, pool.length));
+  const next = [...cur, ...picks]
+    .filter((v,i,a)=>a.indexOf(v)===i)
+    .sort((a,b)=>a-b);
+
+  st.deluxeUnlocks[winnerId] = next;
+  st.rewardPending = { roundNo: st.roundNo, winnerId, coins, cards: picks };
+
+  emits.push({
+    to: winnerId,
+    type: 'reward_chest',
+    roundNo: st.roundNo,
+    coins,
+    cards: picks,
+    total: next
+  });
+}
 function showdown(st, emits){
   const showVal = (id)=> (id<10 ? id : Math.floor(id/10) + (id%10));
   const isCore09 = (id)=> id>=0 && id<=9;
@@ -712,6 +730,7 @@ function showdown(st, emits){
   st.stats[w.id].finalTail = (wId != null ? (wId % 10) : 0);
 
   awardRound(st, w, tieBonus, emits);
+  grantDeluxeRewards(st, emits);
   st.turnStep = 'ended';
   st.shanksBonusUid = null;
   break;
@@ -757,6 +776,7 @@ function endOrNext(st, emits){
     const w=alive[0];
     st.log.push(`★ 本局結束：僅 P${w.id+1} 存活`);
     awardRound(st, w, 0, emits);
+    grantDeluxeRewards(st, emits);
     st.turnStep='ended';
     return;
   }
@@ -797,6 +817,15 @@ function createInitialState(playerCount=1){
 function getVisibleState(state, viewerId){
   const vis = clone(state);
 
+  // ★ 只把「自己已解鎖的豪華卡」提供給前端；其他玩家的清單不外流
+  vis.myDeluxe = (vis.deluxeUnlocks && Array.isArray(vis.deluxeUnlocks[viewerId]))
+    ? clone(vis.deluxeUnlocks[viewerId])
+    : [];
+  delete vis.deluxeUnlocks;
+  delete vis.rewardPending;
+  delete vis.rewardLoggedRounds;
+  delete vis.lastRoundAward;
+
   // 遮蔽他人手牌/暫抽
   vis.players.forEach((p)=>{
     if(p.id !== viewerId){
@@ -814,14 +843,6 @@ function getVisibleState(state, viewerId){
       return card;
     });
   }
-
-  // ★ 豪華卡收藏：只回傳「我自己擁有的豪華卡號」
-  vis.luxOwned = getLuxIdsForPlayer(state, viewerId);
-
-  // chestReward 只給勝者自己（其餘人看不到）
-  vis.chestReward = (state.chestReward && state.chestReward.by === viewerId)
-    ? { ...state.chestReward }
-    : null;
 
   return vis;
 }
@@ -902,6 +923,12 @@ function nextRound(state){
 
     meta: { coveredByTeach: [] }, // 保留清空，但不再使用
     stats: st.stats || {}, // ★ 跨局累計
+
+    // ★ 豪華卡解鎖：跨局保留（整賽季）
+    deluxeUnlocks: st.deluxeUnlocks || {},
+    rewardPending: null,
+    rewardLoggedRounds: st.rewardLoggedRounds || {},
+    lastRoundAward: null,
     usoppHistory: [],
     usoppHints: Array(playerCount).fill(null),
 
@@ -934,9 +961,6 @@ function applyAction(state, action){
 
   // ===== 房間 & 流程控制 =====
   if(type==='START_ROUND'){
-    // ★ 若有待領獎勵寶箱，先領取再開下一局
-    if (st.chestReward) return { state: st, emits };
-
     if(st.roundNo===1 && st.log.length<=2){
       return { state: st, emits };
     }
@@ -950,42 +974,33 @@ function applyAction(state, action){
     return { state: st, emits };
   }
 
+  
+  // ===== 獎勵寶箱（勝者開啟後回報：用來在影片播完後再寫入對局日誌）=====
+  if(type==='REWARD_DONE'){
+    const rp = st.rewardPending;
+    const roundNo = action.payload?.roundNo ?? st.roundNo;
+    if(!rp || rp.roundNo !== roundNo) return { state: st, emits };
+    if(action.playerId !== rp.winnerId) return { state: st, emits };
 
-  if(type==='CHEST_OPEN'){
-    // 只有當前玩家是「回合勝者」且有待領寶箱時才允許
-    if (!st.chestReward || st.chestReward.by !== action.playerId) return { state: st, emits };
-    const coinsWon = st.chestReward.coinsWon || 0;
-    const draws    = Math.max(1, Math.min(5, st.chestReward.draws || 1));
+    if(!st.rewardLoggedRounds) st.rewardLoggedRounds = {};
+    if(st.rewardLoggedRounds[roundNo]) return { state: st, emits };
 
-    // 產生可抽池（0~19，排除已擁有）
-    ensureLux(st);
-    const owned = st.luxOwned[action.playerId] || Array(20).fill(false);
-    const pool = [];
-    for (let i = 0; i < 20; i++) if (!owned[i]) pool.push(i);
+    const cards = Array.isArray(rp.cards) ? rp.cards : [];
+    const total = (st.deluxeUnlocks && Array.isArray(st.deluxeUnlocks[rp.winnerId]))
+      ? st.deluxeUnlocks[rp.winnerId]
+      : [];
 
-    const picked = pickRandomDistinct(pool, draws);
-    markLuxOwned(st, action.playerId, picked);
+    const who = pname(st, rp.winnerId);
+    const got = cards.length ? cards.join('、') : '（未抽到）';
+    const all = total.length ? total.join('、') : '（尚未解鎖）';
 
-    const nowOwnedIds = getLuxIdsForPlayer(st, action.playerId);
-    const name = st.players[action.playerId]?.client?.displayName || st.players[action.playerId]?.displayName || `P${action.playerId+1}`;
+    pushLog(st, `🎁 ${who} 開啟獎勵寶箱：抽到【${got}】（目前豪華卡：${all}）`, emits);
 
-    // 對局日誌（全體可見）：抽到幾號、目前累積多少豪華
-    st.log.push(`🎁 ${name} 開啟獎勵寶箱：抽到豪華卡 ${picked.join('、') || '（無）'}；目前已累積 ${nowOwnedIds.length} / 20 張豪華卡`);
-
-    // 私訊給自己：同步豪華清單（前端只要用 state.luxOwned 即可）
-    emits.push({ to: action.playerId, type: 'chest_result', coinsWon, picked, owned: nowOwnedIds });
-
-    // 清除待領寶箱
-    st.chestReward = null;
-
-    // 若寶箱已空 → 現在才真正產生 final（避免前端先跳 result.html）
-    buildFinalIfNeeded(st);
-
+    st.rewardLoggedRounds[roundNo] = true;
     return { state: st, emits };
   }
 
-
-  // ===== 抽牌階段 =====
+// ===== 抽牌階段 =====
   if(type==='DRAW'){
     if(st.turnStep!=='draw' || st.turnIndex!==action.playerId) return { state: st, emits };
 
