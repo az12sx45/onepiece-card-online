@@ -2019,10 +2019,10 @@ body::before{
 /* === 路徑工具 === */
 // ★ 豪華卡圖：只對自己生效（由 server 提供 state.myDeluxe）
 // 你需要準備素材路徑：
-//   - 普通豪華卡：public/images/cards_deluxe/{0-19}.webp
-//   - 強化豪華卡：public/images/cards_deluxe/enh/{0-19}.webp
-const DELUXE_BASE_DIR = 'images/cards_deluxe';
-const DELUXE_ENH_DIR  = 'images/cards_deluxe/enh';
+//   - 普通豪華卡：public/images/cards_lux/{0-19}.webp
+//   - 強化豪華卡：public/images/cards_lux/enh/{0-19}.webp
+const DELUXE_BASE_DIR = 'images/cards_lux';
+const DELUXE_ENH_DIR  = 'images/cards_lux/enh';
 const isDeluxe = (id)=> Array.isArray(state?.myDeluxe) && state.myDeluxe.includes(id);
 
 const CARD     = id => isDeluxe(id) ? `${DELUXE_BASE_DIR}/${id}.webp` : `images/cards/${id}.webp`;
@@ -4664,8 +4664,8 @@ let _rewardShownRoundNo = null;
 
 function rewardVideoSrc(coins){
   const c = Math.max(1, Math.min(5, Number(coins || 1)));
-  // 你需要準備素材：public/videos/reward/chest_{1..5}.mp4
-  return `videos/reward/chest_${c}.mp4`;
+  // 你需要準備素材：public/videos/chest/chest_{1..5}.mp4
+  return `videos/chest/chest_${c}.mp4`;
 }
 
 function openRewardModal(payload){
