@@ -108,8 +108,10 @@ function applyAndBroadcast(room, action, io){
     if (e.to === "all") {
       for (const [sid] of room.sockets) io.to(sid).emit("EMIT", e);
     } else {
+      // 注意：playerId 可能來自 localStorage / querystring，會是字串（例如 "0"）。
+      // 若不做型別統一，會導致「只對特定玩家發送」的事件（例如 chest_ready）漏送給真人。
       for (const [sid, meta] of room.sockets) {
-        if (meta.playerId === e.to) io.to(sid).emit("EMIT", e);
+        if (Number(meta.playerId) === Number(e.to)) io.to(sid).emit("EMIT", e);
       }
     }
   }
