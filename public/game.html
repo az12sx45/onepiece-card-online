@@ -4665,7 +4665,7 @@ let _rewardShownRoundNo = null;
 function rewardVideoSrc(coins){
   const c = Math.max(1, Math.min(5, Number(coins || 1)));
   // 你需要準備素材：public/videos/chest/chest_{1..5}.mp4
-  return `videos/chest/chest_${c}.mp4`;
+  return `/videos/chest/chest_${c}.mp4`;
 }
 
 function openRewardModal(payload){
