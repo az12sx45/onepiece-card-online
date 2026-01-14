@@ -108,10 +108,8 @@ function applyAndBroadcast(room, action, io){
     if (e.to === "all") {
       for (const [sid] of room.sockets) io.to(sid).emit("EMIT", e);
     } else {
-      // 注意：playerId 可能來自 localStorage / querystring，會是字串（例如 "0"）。
-      // 若不做型別統一，會導致「只對特定玩家發送」的事件（例如 chest_ready）漏送給真人。
       for (const [sid, meta] of room.sockets) {
-        if (Number(meta.playerId) === Number(e.to)) io.to(sid).emit("EMIT", e);
+        if (meta.playerId === e.to) io.to(sid).emit("EMIT", e);
       }
     }
   }
@@ -298,27 +296,6 @@ function runCpuLoop(roomId){
 
     const delay = (ms) => setTimeout(step, ms);
     const pending = st.pending || null;
-
-  // ===============================
-  // ★ CPU 自動領取回合勝利寶箱（避免卡死）
-  // ===============================
-  if (st.chestReward) {
-    const winnerId = st.chestReward.by;
-    const winner = st.players[winnerId];
-
-    // 如果勝者是 CPU → 直接自動開寶箱（不播影片）
-    if (winner && winner.isCPU) {
-      applyAndBroadcast(roomNow, {
-        type: 'CHEST_OPEN',
-        playerId: winnerId,
-      }, io);
-
-      // 給一點緩衝，讓前端 log 顯示完
-      delay(800);
-      return;
-    }
-  }
-
 
   // ---------- 先處理「不是自己回合」但輪到 CPU 回應的互動 ----------
     if (pending) {
