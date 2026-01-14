@@ -4665,7 +4665,7 @@ let _rewardShownRoundNo = null;
 function rewardVideoSrc(coins){
   const c = Math.max(1, Math.min(5, Number(coins || 1)));
   // 你需要準備素材：public/videos/chest/chest_{1..5}.mp4
-  return `/videos/chest/chest_${c}.mp4`;
+  return `videos/chest/chest_${c}.mp4`;
 }
 
 function openRewardModal(payload){
@@ -4689,41 +4689,88 @@ function playRewardVideo(payload){
   const video   = document.getElementById('rewardVideo');
 
   closeRewardModal();
-
   if (!overlay || !video) return;
 
   overlay.classList.remove('hidden');
 
-  video.pause();
-  video.currentTime = 0;
-  video.src = rewardVideoSrc(payload.coins);
-  video.muted = false;
-  video.playsInline = true;
+  // --- reset ---
+  try { video.pause(); } catch(e){}
+  try { video.currentTime = 0; } catch(e){}
 
-  const onEnded = ()=>{
-    video.removeEventListener('ended', onEnded);
+  // ✅ 設定 src 後強制 load，避免只換 src 沒載入
+  video.src = rewardVideoSrc(payload.coins);
+  video.playsInline = true;
+  video.preload = 'auto';
+  video.load();
+
+  // ✅ 先靜音，最不容易被瀏覽器擋（需要聲音可在開始播放後再開）
+  video.muted = true;
+  video.controls = false;
+
+  let finished = false;
+  let timer = null;
+
+  const finish = (reason)=>{
+    if (finished) return;
+    finished = true;
+
+    clearTimeout(timer);
+
+    try { video.pause(); } catch(e){}
+    try { video.currentTime = 0; } catch(e){}
     overlay.classList.add('hidden');
 
-    // 通知 server：影片播完 → 才把抽到內容寫進對局日誌（全體可見）
+    // 通知 server：不管 ended/error/skip/timeout 都要收尾，避免卡死
     socket.emit('ACTION', {
       roomId: me.roomId, playerId: me.playerId, secret: me.secret,
       type: 'REWARD_DONE',
-      payload: { roundNo: payload.roundNo }
+      payload: { roundNo: payload.roundNo, reason }
     });
 
-    // 也可在本機做一次提示（不影響全體日誌）
+    // 本機提示（可留）
     try{
       const got = (payload.cards && payload.cards.length) ? payload.cards.join('、') : '（未抽到）';
       floatMsg?.(`🎁 你抽到：${got}`);
     }catch(_){}
   };
 
-  video.addEventListener('ended', onEnded);
+  const onEnded = ()=> finish('ended');
+  const onError = ()=> finish('error');
 
-  // 一些瀏覽器需使用 play() Promise
+  // ✅ 播完收尾
+  video.addEventListener('ended', onEnded, { once:true });
+
+  // ✅ 載入/解碼/404 → 直接收尾
+  video.addEventListener('error', onError, { once:true });
+
+  // ✅ 最長 20 秒強制收尾（保險）
+  timer = setTimeout(()=> finish('timeout'), 20000);
+
+  // ✅ 允許點一下跳過，永不卡關
+  overlay.addEventListener('click', ()=> finish('skip'), { once:true });
+
+  // --- play with fallback ---
   const p = video.play();
-  if (p && typeof p.catch === 'function') p.catch(()=>{ /* ignore */ });
+  if (p && typeof p.catch === 'function'){
+    p.catch((err)=>{
+      console.warn('[reward] play blocked:', err);
+
+      // 讓使用者可以按播放（有些瀏覽器需要再點一次）
+      video.controls = true;
+
+      // 再嘗試一次（維持 muted）
+      const p2 = video.play();
+      if (p2 && typeof p2.catch === 'function'){
+        p2.catch((err2)=>{
+          console.warn('[reward] play still blocked:', err2);
+          // 不直接 finish，因為使用者可能會按 controls 播放；
+          // 但就算完全不播，timeout 也會 finish，不會卡住。
+        });
+      }
+    });
+  }
 }
+
 
 // Reward UI events
 document.getElementById('rewardModalBg')?.addEventListener('click', closeRewardModal);
