@@ -659,7 +659,7 @@ if (st.chestLeft === 0) {
 
 }
 
-function showdown(st){
+function showdown(st, emits){
   const showVal = (id)=> (id<10 ? id : Math.floor(id/10) + (id%10));
   const isCore09 = (id)=> id>=0 && id<=9;
   const alive = st.players.filter(p=>p.alive);
@@ -740,7 +740,7 @@ function showdown(st){
   }
 }
 
-function endOrNext(st){
+function endOrNext(st, emits){
   checkHot(st);
 
   const nextIdx = nextAliveIdx(st.turnIndex, st.players);
@@ -762,7 +762,7 @@ function endOrNext(st){
   }
 
   if(st.deck.length===0){
-    showdown(st);
+    showdown(st, emits);
     return;
   }
 
@@ -1103,12 +1103,12 @@ if (playId !== 10) {
     // 薩波靜默
     if(st.saboSilenceOn && isHighTail(playId)){
       pushLog(st, `【靜默】薩波：尾數≥7 不結算 → ${card.name}` , emits);
-      endOrNext(st);
+      endOrNext(st, emits);
       return { state: st, emits };
     }
     if(st.saboSilence && playId>=7){
       pushLog(st, `【靜默】本回合 7+ 效果無效：${card.name}`, emits);
-      endOrNext(st);
+      endOrNext(st, emits);
       return { state: st, emits };
     }
 
@@ -1116,7 +1116,7 @@ if (playId !== 10) {
     if(me.iceArmed){
       if((playId % 2) === 1){
         doEliminate(st, st.turnIndex, '冰鬼：下一回合仍出奇數 → 死亡', st.turnIndex, emits);
-        endOrNext(st);
+        endOrNext(st, emits);
         return { state: st, emits };
       } else {
         me.iceArmed=false;
@@ -1151,7 +1151,7 @@ case 0: { // 薩波
     pushLog(st, '薩波（強化）：靜默啟動（直到回到/經過你）。尾數≥7 打出/被棄出不結算。', emits);
   }
   pushLog(st, `薩波：影響 ${affected.length} 人（保護/閃避免疫不算）`, emits);
-  endOrNext(st);
+  endOrNext(st, emits);
   return { state: st, emits };
 }
       case 1: { // 騙人布
@@ -1215,7 +1215,7 @@ case 2: { // 羅賓
           const casterName = pname(st, st.turnIndex);
           pushLog(st, `${casterName} 偵察了全體玩家的手牌`, emits);
 
-          endOrNext(st);
+          endOrNext(st, emits);
           return { state: st, emits };
         } else {
           st.pending = { action:'robin' };
@@ -1250,7 +1250,7 @@ case 2: { // 羅賓
           status   // 'protect' 或 'dodge'
         });
 
-        endOrNext(st);
+        endOrNext(st, emits);
         return { state: st, emits };
       }
 
@@ -1267,7 +1267,7 @@ case 2: { // 羅賓
           st.pending = { action:'nami' };
           return { state: st, emits };
         }
-        endOrNext(st);
+        endOrNext(st, emits);
         return { state: st, emits };
       }
       case 8: { // 魯夫
@@ -1295,7 +1295,7 @@ case 9: { // 女帝
   } else {
     doEliminate(st, st.turnIndex, '女帝自我了斷', st.turnIndex, emits);
   }
-  endOrNext(st);
+  endOrNext(st, emits);
   return { state: st, emits };
 }
 
@@ -1327,12 +1327,12 @@ case 9: { // 女帝
         doEliminate(st, i, '霸海：清場', st.turnIndex, emits);
       });
 
-      endOrNext(st);
+      endOrNext(st, emits);
       return { state: st, emits };
     } else {
 
       pushLog(st, '凱多（鬼島）：未與大媽同握，本回合無效果', emits);
-      endOrNext(st);
+      endOrNext(st, emits);
       return { state: st, emits };
     }
   } else {
@@ -1381,14 +1381,14 @@ case 9: { // 女帝
             emits
           );
 
-          endOrNext(st);
+          endOrNext(st, emits);
           return { state: st, emits };
         } else {
           // 一般版：從棄牌堆洗牌抽 1（排除基德本人），再讓你重新選牌
 
           if (st.discard.length === 0) {
             pushLog(st, '基德：棄牌堆為空，技能失效', emits);
-            endOrNext(st);
+            endOrNext(st, emits);
             return { state: st, emits };
           }
 
@@ -1399,7 +1399,7 @@ case 9: { // 女帝
 
           if (pool.length === 0) {
             pushLog(st, '基德：棄牌堆只有基德，技能失效', emits);
-            endOrNext(st);
+            endOrNext(st, emits);
             return { state: st, emits };
           }
 
@@ -1419,7 +1419,7 @@ case 9: { // 女帝
           st.iceWindowOn = true;
           st.iceWindowOwner = st.turnIndex;
           pushLog(st, '奎因（強化）：冰鬼啟動—直到回到你前，其他玩家在自己回合打出奇數將被標記', emits);
-          endOrNext(st);
+          endOrNext(st, emits);
           return { state: st, emits };
         } else {
           st.pending = { action:'queen', target: nextAliveIdx(st.turnIndex, st.players), start: st.turnIndex };
@@ -1452,7 +1452,7 @@ case 9: { // 女帝
           top3.forEach(c=> scorePeek(st, action.playerId, c)); // ★ 偵查分
           emits.push({ to: action.playerId, type:'peek', lines: [ '你查看頂 3（由上到下）：', ...lines ] });
           emits.push({ to: action.playerId, type:'kata_peek', cards: top3 });
-          endOrNext(st);
+          endOrNext(st, emits);
           return { state: st, emits };
         }
       }
@@ -1500,7 +1500,7 @@ case 16: { // 青雉
       emits
     );
 
-    endOrNext(st);
+    endOrNext(st, emits);
     return { state: st, emits };
   } else {
     st.pending = { action: 'aokiji' };
@@ -1530,7 +1530,7 @@ case 16: { // 青雉
             emits.push({ to: action.playerId, type:'teach_cover', cards:[top1] });
           }
           checkHot(st);
-          endOrNext(st);
+          endOrNext(st, emits);
           return { state: st, emits };
         }
       }
@@ -1542,12 +1542,12 @@ case 16: { // 青雉
     // 影片是否播放交給 pushEnhFxIfAny 的特殊條件處理
     st.shanksBonusUid = venueActive ? st.turnIndex : null;
     pushLog(st, `紅髮：牌堆 ≤ ${hot} → 直接比牌${venueActive ? '（你算完 +1）' : ''}`, emits);
-    showdown(st);
+    showdown(st, emits);
     return { state: st, emits };
   }
 
   pushLog(st, `紅髮：目前牌堆 ${st.deck.length}，尚未 ≤ ${hot}`, emits);
-  endOrNext(st);
+  endOrNext(st, emits);
   return { state: st, emits };
 }
 
@@ -1567,7 +1567,7 @@ case 19: { // 羅傑
   } else {
     doEliminate(st, st.turnIndex, '羅傑：為下一局起始', st.turnIndex, emits);
     st.nextRoundStart = st.turnIndex;
-    endOrNext(st);
+    endOrNext(st, emits);
     return { state: st, emits };
   }
 }
@@ -1629,7 +1629,7 @@ case 19: { // 羅傑
         scoreDefense(st, idx, 2); // 羅賓2看牌被擋 → 防禦+2
       }
       st.pending=null;
-      endOrNext(st);
+      endOrNext(st, emits);
       return { state: st, emits };
     }
 
@@ -1691,7 +1691,7 @@ case 19: { // 羅傑
         scoreDefense(st, idx, p.extra.keep);
       }
       st.pending=null;
-      endOrNext(st);
+      endOrNext(st, emits);
       return { state: st, emits };
     }
 
@@ -1780,7 +1780,7 @@ if(p.action==='zoro'){
     scoreDefense(st, idx, 5); // 索隆5棄牌被擋 → 防禦+5
   }
   st.pending = null;
-  endOrNext(st);
+  endOrNext(st, emits);
   return { state: st, emits };
 }
 
@@ -1809,7 +1809,7 @@ if (th != null && Array.isArray(st.aiMemory)) {
           scoreDefense(st, idx, 6); // 羅6查看/交換被擋 → 防禦+6
           pushLog(st, `羅（強化）：對 ${pname(st, idx)} 的查看被保護/閃避抵銷`, emits);
           st.pending = null;
-          endOrNext(st);
+          endOrNext(st, emits);
           return { state: st, emits };
         }
 
@@ -1842,13 +1842,13 @@ if (th != null && Array.isArray(st.aiMemory)) {
             pushLog(st, `羅（強化）：對 ${pname(st, idx)} 的交換被保護/閃避抵銷`, emits);
           }
           st.pending = null;
-          endOrNext(st);
+          endOrNext(st, emits);
           return { state: st, emits };
         }
 
         // 只看不換：結束回合
         st.pending = null;
-        endOrNext(st);
+        endOrNext(st, emits);
         return { state: st, emits };
       } else {
         // 一般版：純交換
@@ -1878,7 +1878,7 @@ if (th != null && Array.isArray(st.aiMemory)) {
           pushLog(st, `羅：對 ${pname(st, idx)} 的交換被保護/閃避抵銷`, emits);
         }
         st.pending = null;
-        endOrNext(st);
+        endOrNext(st, emits);
         return { state: st, emits };
       }
     }
@@ -1912,7 +1912,7 @@ if (th != null && Array.isArray(st.aiMemory)) {
       }
 
       st.pending = null;
-      endOrNext(st);
+      endOrNext(st, emits);
       return { state: st, emits };
     }
 
@@ -1951,7 +1951,7 @@ if (th != null && Array.isArray(st.aiMemory)) {
       }
       if(!st.players[st.turnIndex].alive){
         st.pending=null;
-        endOrNext(st);
+        endOrNext(st, emits);
         return { state: st, emits };
       }
       if(!p.extra.firstDone){
@@ -1960,7 +1960,7 @@ if (th != null && Array.isArray(st.aiMemory)) {
         return { state: st, emits };
       }
       st.pending=null;
-      endOrNext(st);
+      endOrNext(st, emits);
       return { state: st, emits };
     }
 
@@ -1993,7 +1993,7 @@ if (th != null && Array.isArray(st.aiMemory)) {
         }
       }
       st.pending=null;
-      endOrNext(st);
+      endOrNext(st, emits);
       return { state: st, emits };
     }
 
@@ -2050,7 +2050,7 @@ if (p.action === 'killer') {
       }
 
       st.pending = null;
-      endOrNext(st);
+      endOrNext(st, emits);
       return { state: st, emits };
     }
     // 強化但尚未選擇是否決鬥 → 等前端操作
@@ -2060,7 +2060,7 @@ if (p.action === 'killer') {
 
   // 一般版：只解除保護/閃避就結束
   st.pending = null;
-  endOrNext(st);
+  endOrNext(st, emits);
   return { state: st, emits };
 }
 
@@ -2089,7 +2089,7 @@ if (p.action === 'aokiji') {
     scoreDefense(st, idx, 16); // 青雉16被擋 → 防禦+6
   }
   st.pending = null;
-  endOrNext(st);
+  endOrNext(st, emits);
   return { state: st, emits };
 }
 
@@ -2101,7 +2101,7 @@ if (p.action === 'aokiji') {
      st.rogerPred = { by, pick: idx };
      pushLog(st, `羅傑：已預測 ${pname(st, idx)}`, emits);
      st.pending=null;
-     endOrNext(st);
+     endOrNext(st, emits);
      return { state: st, emits };
     }
 
@@ -2120,7 +2120,7 @@ if (p.action === 'aokiji') {
         scoreDefense(st, idx, 14); // 大媽14強化被擋 → 防禦+4
         pushLog(st, `大媽（萬國強化）：對 ${pname(st, idx)} 的效果被保護/閃避抵銷`, emits);
         st.pending = null;
-        endOrNext(st);
+        endOrNext(st, emits);
         return { state: st, emits };
       }
 
@@ -2140,7 +2140,7 @@ if (p.action === 'aokiji') {
       if(d===1){
         pushLog(st,'騙人布：不能猜 1',emits);
         st.pending=null;
-        endOrNext(st);
+        endOrNext(st, emits);
         return { state: st, emits };
       }
       const tgt = p.extra.target;
@@ -2175,7 +2175,7 @@ if (p.action === 'aokiji') {
             const any = st.players.some((pp,i)=> i!==st.turnIndex && pp.alive);
             if(!any){
               st.pending=null;
-              endOrNext(st);
+              endOrNext(st, emits);
               return { state: st, emits };
             }
             st.pending = {
@@ -2199,7 +2199,7 @@ if (p.action === 'aokiji') {
       }
 
       st.pending=null;
-      endOrNext(st);
+      endOrNext(st, emits);
       return { state: st, emits };
     }
   }
@@ -2213,7 +2213,7 @@ if (type === 'LUFFY_SECOND') {
   const idx = action.payload?.target;
   if (typeof idx !== 'number' || idx === -1) {
     st.pending = null;
-    endOrNext(st);
+    endOrNext(st, emits);
     return { state: st, emits };
   }
 
@@ -2252,7 +2252,7 @@ if (type === 'LUFFY_SECOND') {
   }
 
   st.pending = null;
-  endOrNext(st);
+  endOrNext(st, emits);
   return { state: st, emits };
 }
 
@@ -2275,7 +2275,7 @@ if (type === 'LUFFY_SECOND') {
 
     if (typeof keepId !== 'number') {
       st.pending = null;
-      endOrNext(st);
+      endOrNext(st, emits);
       return { state: st, emits };
     }
 
@@ -2330,7 +2330,7 @@ if (type === 'LUFFY_SECOND') {
     }
 
     st.pending = null;
-    endOrNext(st);
+    endOrNext(st, emits);
     return { state: st, emits };
   }
 
@@ -2351,7 +2351,7 @@ if (type === 'LUFFY_SECOND') {
       if (st.players[tgt].dodging) st.players[tgt].dodging = false;
       pushLog(st, `奎因：${pname(st, tgt)} 有保護/閃避 → 不擲、不傳遞；效果結束`, emits);
       st.pending = null;
-      endOrNext(st);
+      endOrNext(st, emits);
       return { state: st, emits };
     }
 
@@ -2361,7 +2361,7 @@ if (type === 'LUFFY_SECOND') {
 
     if (face === 'H') {
       st.pending = null;
-      endOrNext(st);
+      endOrNext(st, emits);
       return { state: st, emits };
     }
 
@@ -2371,7 +2371,7 @@ if (type === 'LUFFY_SECOND') {
     const next = nextAliveIdx(tgt, st.players);
     if (next === p.start) {
       st.pending = null;
-      endOrNext(st);
+      endOrNext(st, emits);
       return { state: st, emits };
     }
 
@@ -2400,7 +2400,7 @@ if (type === 'LUFFY_SECOND') {
       if (me.dodging) me.dodging = false;
       pushLog(st, '大媽：已被保護/閃避覆蓋 → 不擲硬幣，效果結束', emits);
       st.pending = null;
-      endOrNext(st);
+      endOrNext(st, emits);
       return { state: st, emits };
     }
 
@@ -2432,7 +2432,7 @@ if (type === 'LUFFY_SECOND') {
     });
 
     st.pending = null;
-    endOrNext(st);
+    endOrNext(st, emits);
     return { state: st, emits };
   }
 
@@ -2466,7 +2466,7 @@ if (type === 'LUFFY_SECOND') {
     }
 
     st.pending = null;
-    endOrNext(st);
+    endOrNext(st, emits);
     return { state: st, emits };
   }
 
@@ -2485,7 +2485,7 @@ if (type === 'LUFFY_SECOND') {
     emits.push({ to: action.playerId, type:'kata_order_done', order });
 
     st.pending=null;
-    endOrNext(st);
+    endOrNext(st, emits);
     return { state: st, emits };
   }
 
@@ -2502,7 +2502,7 @@ if (type === 'LUFFY_SECOND') {
     // 之後如果要做「取消」按鈕，可以用 go=false 當跳過
     if (!go) {
       st.pending = null;
-      endOrNext(st);
+      endOrNext(st, emits);
       return { state: st, emits };
     }
 
@@ -2557,7 +2557,7 @@ if (type === 'LUFFY_SECOND') {
     );
 
     st.pending = null;
-    endOrNext(st);
+    endOrNext(st, emits);
     return { state: st, emits };
   }
 
@@ -2588,7 +2588,7 @@ if (type === 'LUFFY_SECOND') {
     pushLog(st, `黑鬍子強化：覆蓋 ${toDiscard.length} 張（出牌者可見）`, emits);
 
     st.pending=null;
-    endOrNext(st);
+    endOrNext(st, emits);
     return { state: st, emits };
   }
 
@@ -2596,12 +2596,12 @@ if (type === 'LUFFY_SECOND') {
     const p = st.pending;
     if (p && p.action === 'law' && p.extra?.boost) {
       st.pending = null;
-      endOrNext(st);
+      endOrNext(st, emits);
       return { state: st, emits };
     }
     if (p && p.action === 'killer' && p.extra?.boost) {
       st.pending = null;
-      endOrNext(st);
+      endOrNext(st, emits);
       return { state: st, emits };
     }
   }
