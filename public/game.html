@@ -1972,9 +1972,18 @@ body::before{
     </div>
   </div>
 
-  <!-- 勝利獎勵寶箱影片 overlay（只給本局勝者） -->
+  <!-- 勝利獎勵寶箱圖片 overlay（只給本局勝者） -->
   <div id="rewardOverlay" class="hidden fixed inset-0 z-[125] flex items-center justify-center bg-black/85">
-    <video id="rewardVideo" class="w-[min(900px,96vw)] max-h-[92vh] rounded-2xl border border-white/15 shadow-2xl" playsinline></video>
+    <div class="relative w-[min(900px,96vw)] max-h-[92vh]">
+      <img
+        id="rewardImg"
+        src="images/reward/chest_1.webp"
+        class="w-full max-h-[92vh] object-contain rounded-2xl border border-white/15 shadow-2xl"
+        alt="reward"
+        draggable="false"
+      />
+      <div class="mt-3 text-center text-sm text-white/70">點一下關閉</div>
+    </div>
   </div>
 
   <!-- 強化技能影片（全體播放） -->
@@ -4662,11 +4671,12 @@ $('#luffyBoostGo')?.addEventListener('click', ()=>{
 let _rewardCache = null;          // { roundNo, coins, cards, total }
 let _rewardShownRoundNo = null;
 
-function rewardVideoSrc(coins){
+function rewardImageSrc(coins){
   const c = Math.max(1, Math.min(5, Number(coins || 1)));
-  // 你需要準備素材：public/videos/chest/chest_{1..5}.mp4
-return `/videos/chest/chest_${c}.mp4`;
+  // 你需要準備素材：public/images/reward/chest_{1..5}.webp
+  return `/images/reward/chest_${c}.webp`;
 }
+
 
 function openRewardModal(payload){
   _rewardCache = payload;
@@ -4684,28 +4694,17 @@ function closeRewardModal(){
   if (modal) modal.classList.add('hidden');
 }
 
-function playRewardVideo(payload){
+function playRewardImage(payload){
   const overlay = document.getElementById('rewardOverlay');
-  const video   = document.getElementById('rewardVideo');
+  const img     = document.getElementById('rewardImg');
 
   closeRewardModal();
-  if (!overlay || !video) return;
+  if (!overlay || !img) return;
 
   overlay.classList.remove('hidden');
 
-  // --- reset ---
-  try { video.pause(); } catch(e){}
-  try { video.currentTime = 0; } catch(e){}
-
-  // ✅ 設定 src 後強制 load，避免只換 src 沒載入
-  video.src = rewardVideoSrc(payload.coins);
-  video.playsInline = true;
-  video.preload = 'auto';
-  video.load();
-
-  // ✅ 先靜音，最不容易被瀏覽器擋（需要聲音可在開始播放後再開）
-  video.muted = true;
-  video.controls = false;
+  // 依 coins 決定要顯示哪一張
+  img.src = rewardImageSrc(payload.coins);
 
   let finished = false;
   let timer = null;
@@ -4715,12 +4714,9 @@ function playRewardVideo(payload){
     finished = true;
 
     clearTimeout(timer);
-
-    try { video.pause(); } catch(e){}
-    try { video.currentTime = 0; } catch(e){}
     overlay.classList.add('hidden');
 
-    // 通知 server：不管 ended/error/skip/timeout 都要收尾，避免卡死
+    // 通知 server：不管 click/auto 都要收尾，避免卡死
     socket.emit('ACTION', {
       roomId: me.roomId, playerId: me.playerId, secret: me.secret,
       type: 'REWARD_DONE',
@@ -4734,42 +4730,13 @@ function playRewardVideo(payload){
     }catch(_){}
   };
 
-  const onEnded = ()=> finish('ended');
-  const onError = ()=> finish('error');
+  // 點一下關閉（立即收尾）
+  overlay.addEventListener('click', ()=>finish('click'), { once:true });
 
-  // ✅ 播完收尾
-  video.addEventListener('ended', onEnded, { once:true });
-
-  // ✅ 載入/解碼/404 → 直接收尾
-  video.addEventListener('error', onError, { once:true });
-
-  // ✅ 最長 20 秒強制收尾（保險）
-  timer = setTimeout(()=> finish('timeout'), 20000);
-
-  // ✅ 允許點一下跳過，永不卡關
-  overlay.addEventListener('click', ()=> finish('skip'), { once:true });
-
-  // --- play with fallback ---
-  const p = video.play();
-  if (p && typeof p.catch === 'function'){
-    p.catch((err)=>{
-      console.warn('[reward] play blocked:', err);
-
-      // 讓使用者可以按播放（有些瀏覽器需要再點一次）
-      video.controls = true;
-
-      // 再嘗試一次（維持 muted）
-      const p2 = video.play();
-      if (p2 && typeof p2.catch === 'function'){
-        p2.catch((err2)=>{
-          console.warn('[reward] play still blocked:', err2);
-          // 不直接 finish，因為使用者可能會按 controls 播放；
-          // 但就算完全不播，timeout 也會 finish，不會卡住。
-        });
-      }
-    });
-  }
+  // 保險：自動關閉（避免玩家不點導致卡住）
+  timer = setTimeout(()=> finish('auto'), 1800);
 }
+
 
 
 // Reward UI events
@@ -4777,7 +4744,7 @@ document.getElementById('rewardModalBg')?.addEventListener('click', closeRewardM
 document.getElementById('rewardCloseBtn')?.addEventListener('click', closeRewardModal);
 document.getElementById('rewardOpenBtn')?.addEventListener('click', ()=>{
   if(!_rewardCache) return;
-  playRewardVideo(_rewardCache);
+  playRewardImage(_rewardCache);
 });
 
 // ================================================================
