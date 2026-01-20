@@ -234,6 +234,50 @@
   100%{ opacity:0; transform:translateY(-10px) scale(1.1); }
 }
 
+/* ===============================
+   決鬥背景：圖片版本（貼在 #duelFx CSS 最後面）
+   =============================== */
+
+/* 讓原本 overlay 背景不要擋住你的圖 */
+#duelFx .overlay{
+  background: none !important;
+}
+
+/* 用 ::before 當背景圖層（不影響裡面的卡牌/文字） */
+#duelFx .overlay::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+
+  /* 黑色暗化遮罩 + 你的背景圖 */
+  background:
+    radial-gradient(circle at center, rgba(0,0,0,.72), rgba(0,0,0,.94)),
+    url("images/duel/duel_bg_haki_clash.webp"); /* ← 改成你的檔名 */
+
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+
+  /* 微動態 */
+  transform:scale(1.08);
+  filter:contrast(1.05) saturate(1.1);
+  animation:duelBgMove 10s ease-in-out infinite alternate;
+}
+
+/* 確保 overlay 內的內容都在背景圖上方 */
+#duelFx .overlay > *{
+  position:relative;
+  z-index:1;
+}
+
+@keyframes duelBgMove{
+  0%{ transform:scale(1.08) translate(-1%, -0.8%); }
+  100%{ transform:scale(1.14) translate(1%, 0.8%); }
+}
+
+
     /* 強化特效：光球 */
     .fx-orb { position: fixed; width: 14px; height: 14px; border-radius: 999px;
       background: radial-gradient(circle at 40% 40%, #fff, #facc15 55%, rgba(250,204,21,.2) 70%);
