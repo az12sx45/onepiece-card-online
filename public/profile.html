@@ -86,21 +86,23 @@
     /* === 牆面（頭像下方展示區）：可選牆背景 + 最近 4 張懸賞令 === */
     .wallCard{ margin-top:12px; }
     .wallHint{ font-size:11px; color:var(--muted); }
-  .wallStage{
-  margin-top:12px;
-  height: clamp(320px, 40vw, 520px);
-  width: 100%;
-
-  border-radius: 18px;
-  border: 1px solid rgba(35,52,85,.75);
-  overflow: hidden;
-  position: relative;
-
-  background-size: cover;
-  background-position: center;
-}
-
-
+    .wallStage{
+      margin-top:10px;
+      aspect-ratio: 16 / 9;
+      min-height: 260px;
+      max-height: 520px;
+      border-radius: 14px;
+      border: 1px solid rgba(35,52,85,.75);
+      overflow:hidden;
+      position:relative;
+      background:
+        radial-gradient(900px 480px at 20% 0%, rgba(255,211,106,.18), transparent 60%),
+        radial-gradient(700px 420px at 90% 20%, rgba(99,102,241,.12), transparent 60%),
+        linear-gradient(180deg, rgba(11,22,45,.65), rgba(2,6,23,.55));
+      background-size: cover;
+      background-position: center;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
+    }
     .wallStage.has-wall{
       /* 使用 CSS 變數疊一層牆圖片，不覆蓋底層漸層 */
       background-image:
@@ -123,7 +125,7 @@
 
     .poster{
       position:absolute;
-      width: 140px;
+      width: clamp(120px, 16vw, 180px);
       aspect-ratio: 2 / 3;
       border-radius: 10px;
       overflow:hidden;
@@ -147,6 +149,12 @@
       font-size: 11px;
       color: rgba(255,255,255,.92);
       text-shadow: 0 2px 6px rgba(0,0,0,.6);
+    }
+
+    @media (max-width: 520px){
+      .poster{ width: clamp(108px, 38vw, 150px); }
+      .poster .meta{ font-size: 10px; padding: 5px 7px; }
+      .poster .pin{ width: 12px; height: 12px; left: 9px; top: 9px; }
     }
 
     .wallTools{ display:flex; gap:8px; flex-wrap:wrap; }
@@ -639,12 +647,30 @@ function renderWall(){
   stage.querySelectorAll('.poster').forEach(n=>n.remove());
 
   const posters = loadPosters();
-  const slots = [
-    { left: '10%', top: '12%', rot: -8 },
-    { left: '34%', top: '18%', rot: 6 },
-    { left: '58%', top: '10%', rot: -4 },
-    { left: '78%', top: '22%', rot: 9 },
+
+  // 依牆面大小自動調整：避免海報太小/擠在一起
+  const rect = stage.getBoundingClientRect();
+  const w = rect.width || 0;
+  const isNarrow = w < 560;
+
+  // 海報寬度：跟著牆面寬度縮放（再限制上下限）
+  const posterW = Math.round(Math.max(120, Math.min(190, w * (isNarrow ? 0.42 : 0.19))));
+
+  // 位置：寬螢幕 1 排 4 張；窄螢幕 2x2 排列
+  const slotsWide = [
+    { x: 0.06, y: 0.12, rot: -7 },
+    { x: 0.29, y: 0.18, rot:  5 },
+    { x: 0.52, y: 0.12, rot: -4 },
+    { x: 0.75, y: 0.20, rot:  8 },
   ];
+  const slotsNarrow = [
+    { x: 0.08, y: 0.10, rot: -6 },
+    { x: 0.55, y: 0.12, rot:  5 },
+    { x: 0.10, y: 0.55, rot: -4 },
+    { x: 0.57, y: 0.56, rot:  7 },
+  ];
+
+  const slots = isNarrow ? slotsNarrow : slotsWide;
 
   if(empty) empty.style.display = posters.length ? 'none' : 'flex';
 
@@ -652,8 +678,9 @@ function renderWall(){
     const s = slots[i] || slots[0];
     const wrap = document.createElement('div');
     wrap.className = 'poster';
-    wrap.style.left = s.left;
-    wrap.style.top = s.top;
+    wrap.style.width = posterW + 'px';
+    wrap.style.left = (s.x * 100).toFixed(1) + '%';
+    wrap.style.top  = (s.y * 100).toFixed(1) + '%';
     wrap.style.transform = `rotate(${s.rot}deg)`;
     wrap.title = p.title ? p.title : (p.ts ? fmtTs(p.ts) : '懸賞令');
 
@@ -1078,6 +1105,13 @@ function closeModal(id){ const el=document.getElementById(id); if(el) el.style.d
 
   // 初次渲染牆面
   renderWall();
+
+  // 視窗大小變更時，重新計算海報尺寸與位置（避免牆圖很大但海報看起來很小）
+  let _wallResizeTimer = null;
+  window.addEventListener('resize', ()=>{
+    clearTimeout(_wallResizeTimer);
+    _wallResizeTimer = setTimeout(renderWall, 120);
+  });
 })();
 </script>
 </body>
