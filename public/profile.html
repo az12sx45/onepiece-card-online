@@ -37,7 +37,7 @@
 
     .brand{display:flex;gap:12px;align-items:center;min-width:0}
     .avatarBox{
-      width:44px;height:44px;border-radius:14px;border:1px solid var(--line);
+      width:44px;height:44px;border-radius:999px;border:1px solid var(--line);
       background: radial-gradient(circle at 30% 30%, rgba(251,191,36,.25), transparent 60%),
                   linear-gradient(135deg, rgba(59,130,246,.25), rgba(236,72,153,.15));
       display:flex;align-items:center;justify-content:center;
@@ -48,14 +48,6 @@
       flex:none;
     }
     .avatarBox img{width:100%;height:100%;object-fit:cover;display:block}
-    .avatarHint{
-      position:absolute;left:50%;bottom:-2px;transform:translateX(-50%);
-      font-size:10px;color:rgba(229,231,235,.75);
-      background:rgba(2,6,23,.65);
-      border:1px solid rgba(35,52,85,.75);
-      padding:2px 6px;border-radius:999px;
-      pointer-events:none;
-    }
     .avatarBox:hover{border-color:#3a5584}
 
     .title{min-width:0}
@@ -93,8 +85,6 @@
 
     /* === 牆面（頭像下方展示區）：可選牆背景 + 最近 4 張懸賞令 === */
     .wallCard{ margin-top:12px; }
-    .wallHd{ display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
-    .wallHd .h{ font-size:13px; font-weight:800; letter-spacing:.4px; }
     .wallHint{ font-size:11px; color:var(--muted); }
     .wallStage{
       margin-top:10px;
@@ -111,8 +101,15 @@
       background-position: center;
       box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
     }
+    .wallStage.has-wall{
+      /* 使用 CSS 變數疊一層牆圖片，不覆蓋底層漸層 */
+      background-image:
+        var(--wall-url),
+        radial-gradient(900px 480px at 20% 0%, rgba(255,211,106,.18), transparent 60%),
+        radial-gradient(700px 420px at 90% 20%, rgba(99,102,241,.12), transparent 60%),
+        linear-gradient(180deg, rgba(11,22,45,.65), rgba(2,6,23,.55));
+    }
     .wallStage::after{
-      /* 輕微顆粒感，避免純色太平 */
       content:"";
       position:absolute; inset:0;
       background-image:
@@ -121,9 +118,8 @@
         radial-gradient(circle at 50% 80%, rgba(255,255,255,.03), transparent 40%);
       pointer-events:none;
       mix-blend-mode: overlay;
-      opacity:.6;
+      opacity:.55;
     }
-    .wallStage.has-wall::after{ opacity:.42; }
 
     .poster{
       position:absolute;
@@ -183,6 +179,7 @@
     .wallBtn.on{ border-color:#ffd36a; box-shadow: 0 0 0 3px rgba(255,184,77,.25); }
     .wallBtn .thumb{ position:absolute; inset:0; background-size:cover; background-position:center; }
     .wallBtn .lab{ position:absolute; left:8px; top:8px; font-size:11px; padding:3px 7px; border-radius:999px; background:rgba(2,6,23,.72); border:1px solid rgba(0,0,0,.35); }
+
 
     .grid{
       margin-top:14px;
@@ -365,12 +362,10 @@
       <div class="brand">
         <div class="avatarBox" id="avatarBox" title="點擊更換頭貼（使用開始頁頭像）">
           <img id="avatarImg" alt="avatar" style="display:none" />
-          <span class="avatarHint">換頭貼</span>
         </div>
 
         <div class="title">
           <h1>
-            <span>玩家頁</span>
             <button class="nameBtn" id="nameBtn" title="點擊修改玩家名稱">未命名玩家</button>
           </h1>
           <div class="sub"><span class="nameSmall">名稱與頭貼會同步到開始頁。</span></div>
@@ -389,7 +384,7 @@
       <div class="hd">
         <div>
           <div class="h">我的牆面</div>
-          <div class="wallHint">可選牆背景；牆上會顯示最近 4 場的懸賞令（先支援手動匯入，結算頁自動寫入我下一步幫你接）。</div>
+          <div class="wallHint">可選牆背景；牆上會顯示最近 4 場的懸賞令（目前仍保留手動匯入，之後再接結算頁自動寫入）。</div>
         </div>
 
         <div class="wallTools">
@@ -404,7 +399,7 @@
         <div class="wallStage" id="wallStage">
           <div class="wallEmpty" id="wallEmpty">
             <div style="font-weight:800">牆面目前沒有懸賞令</div>
-            <div class="muted" style="font-size:12px">你可以先用「匯入懸賞令」手動貼 1～4 張；之後我把結算頁的懸賞單自動存進來。</div>
+            <div class="muted" style="font-size:12px">你可以先用「匯入懸賞令」手動貼 1～4 張；之後我再把結算頁的懸賞令自動存進來。</div>
           </div>
         </div>
       </div>
@@ -541,6 +536,8 @@
     </div>
   </div>
 
+
+
   <!-- wall modal -->
   <div class="modalBack" id="wallModalBack" role="dialog" aria-modal="true">
     <div class="modal">
@@ -550,18 +547,10 @@
       </div>
       <div class="mb">
         <div class="help" style="margin-bottom:10px">
-          預設路徑：<span class="mono">images/walls/{1..8}.webp</span>（若不存在會自動使用內建漸層）。你也可以上傳自訂牆面。
+          路徑：<span class="mono">images/walls/{1..8}.webp</span>（若不存在會自動使用內建漸層）。
         </div>
 
         <div class="wallGrid" id="wallGrid"></div>
-
-        <div class="divider"></div>
-
-        <div class="field">
-          <label>自訂牆面（上傳圖片）</label>
-          <input id="wallFile" class="inp" type="file" accept="image/*" />
-          <div class="help">上傳後會存在本機（localStorage），不會上傳到伺服器。</div>
-        </div>
 
         <div class="actions2">
           <button class="btn" id="wallCancel">取消</button>
@@ -581,17 +570,9 @@
 
 const LS_KEY_PROFILE = 'op_profile_v1';
 const LS_KEY_START   = 'op_player_profile';
-
-// 牆面設定與懸賞令（最近 4 張）
 const LS_KEY_WALL    = 'op_wall_v1';
 const LS_KEY_POSTERS = 'op_bounty_posters_v1';
 const WALL_COUNT = 8;
-
-const AVATAR_COUNT = 30;
-function avatarUrlById(id){
-  const n = Math.max(1, Math.min(AVATAR_COUNT, Number(id)||1));
-  return `images/avatars/${n}.webp`;
-}
 
 function wallUrlById(id){
   const n = Math.max(1, Math.min(WALL_COUNT, Number(id)||1));
@@ -599,7 +580,7 @@ function wallUrlById(id){
 }
 
 function defaultWall(){
-  return { version:1, type:'preset', id:1, dataUrl:'' };
+  return { version:1, id:1 };
 }
 
 function loadWall(){
@@ -608,18 +589,11 @@ function loadWall(){
   if(!raw) return base;
   const w = safeJsonParse(raw, null);
   if(!w || typeof w !== 'object') return base;
-  const out = {
-    version: 1,
-    type: (w.type === 'custom') ? 'custom' : 'preset',
-    id: Math.max(1, Math.min(WALL_COUNT, Number(w.id)||1)),
-    dataUrl: (typeof w.dataUrl === 'string') ? w.dataUrl : ''
-  };
-  if(out.type === 'custom' && !out.dataUrl) out.type = 'preset';
-  return out;
+  return { version:1, id: Math.max(1, Math.min(WALL_COUNT, Number(w.id)||1)) };
 }
 
 function saveWall(w){
-  try{ localStorage.setItem(LS_KEY_WALL, JSON.stringify(w)); }catch(e){}
+  try{ localStorage.setItem(LS_KEY_WALL, JSON.stringify({version:1, id: Math.max(1, Math.min(WALL_COUNT, Number(w?.id)||1))})); }catch(e){}
 }
 
 function loadPosters(){
@@ -628,11 +602,7 @@ function loadPosters(){
   if(!Array.isArray(arr)) return [];
   return arr
     .filter(x => x && typeof x === 'object' && typeof x.dataUrl === 'string' && x.dataUrl.startsWith('data:image'))
-    .map(x => ({
-      ts: Number(x.ts)||0,
-      title: String(x.title||'').trim(),
-      dataUrl: x.dataUrl
-    }))
+    .map(x => ({ ts: Number(x.ts)||0, title: String(x.title||'').trim(), dataUrl: x.dataUrl }))
     .slice(0, 4);
 }
 
@@ -648,6 +618,100 @@ async function fileToDataUrl(file){
     fr.onerror = ()=> resolve('');
     fr.readAsDataURL(file);
   });
+}
+
+function applyWallBackground(){
+  const stage = document.getElementById('wallStage');
+  if(!stage) return;
+  const w = loadWall();
+  stage.classList.add('has-wall');
+  stage.style.setProperty('--wall-url', `url(${wallUrlById(w.id)})`);
+}
+
+function renderWall(){
+  const stage = document.getElementById('wallStage');
+  const empty = document.getElementById('wallEmpty');
+  if(!stage) return;
+
+  applyWallBackground();
+
+  // 清掉舊海報
+  stage.querySelectorAll('.poster').forEach(n=>n.remove());
+
+  const posters = loadPosters();
+  const slots = [
+    { left: '10%', top: '12%', rot: -8 },
+    { left: '34%', top: '18%', rot: 6 },
+    { left: '58%', top: '10%', rot: -4 },
+    { left: '78%', top: '22%', rot: 9 },
+  ];
+
+  if(empty) empty.style.display = posters.length ? 'none' : 'flex';
+
+  posters.forEach((p, i)=>{
+    const s = slots[i] || slots[0];
+    const wrap = document.createElement('div');
+    wrap.className = 'poster';
+    wrap.style.left = s.left;
+    wrap.style.top = s.top;
+    wrap.style.transform = `rotate(${s.rot}deg)`;
+    wrap.title = p.title ? p.title : (p.ts ? fmtTs(p.ts) : '懸賞令');
+
+    const img = document.createElement('img');
+    img.src = p.dataUrl;
+    img.alt = 'wanted';
+    wrap.appendChild(img);
+
+    const pin = document.createElement('div');
+    pin.className = 'pin';
+    wrap.appendChild(pin);
+
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+    meta.textContent = p.title || (p.ts ? fmtTs(p.ts) : '');
+    wrap.appendChild(meta);
+
+    stage.appendChild(wrap);
+  });
+}
+
+function buildWallGrid(pendingId){
+  const grid = document.getElementById('wallGrid');
+  if(!grid) return;
+  grid.innerHTML = '';
+
+  for(let i=1; i<=WALL_COUNT; i++){
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'wallBtn' + (i===pendingId ? ' on' : '');
+
+    const thumb = document.createElement('div');
+    thumb.className = 'thumb';
+    thumb.style.backgroundImage = `url(${wallUrlById(i)})`;
+    btn.appendChild(thumb);
+
+    const lab = document.createElement('div');
+    lab.className = 'lab';
+    lab.textContent = `#${i}`;
+    btn.appendChild(lab);
+
+    btn.onclick = () => {
+      pendingId = i;
+      grid.querySelectorAll('.wallBtn').forEach(x=>x.classList.remove('on'));
+      btn.classList.add('on');
+      grid.dataset.pendingId = String(pendingId);
+    };
+
+    grid.appendChild(btn);
+  }
+
+  grid.dataset.pendingId = String(pendingId);
+}
+
+const AVATAR_COUNT = 30;
+function avatarUrlById(id){
+  const n = Math.max(1, Math.min(AVATAR_COUNT, Number(id)||1));
+  return `images/avatars/${n}.webp`;
 }
 
 function nowTs(){ return Date.now(); }
@@ -745,76 +809,6 @@ function saveStartProfile(name, avatarId){
   const data = { playerName: safeName, playerAvatar: safeId, avatarUrl: avatarUrlById(safeId) };
   try{ localStorage.setItem(LS_KEY_START, JSON.stringify(data)); }catch(e){}
   return data;
-}
-
-function applyWallBackground(wall){
-  const stage = document.getElementById('wallStage');
-  if (!stage) return;
-
-  stage.classList.remove('has-wall');
-  stage.style.backgroundImage = '';
-
-  if (wall?.type === 'custom' && wall.dataUrl){
-    stage.classList.add('has-wall');
-    stage.style.backgroundImage = `url(${wall.dataUrl})`;
-    return;
-  }
-
-  // preset：如果檔案不存在，會自然落回 CSS 內建漸層
-  const url = wallUrlById(wall?.id || 1);
-  stage.classList.add('has-wall');
-  stage.style.backgroundImage = `url(${url})`;
-  // 若圖片 404，保持 has-wall 但背景圖失效時，CSS 背景仍會顯示
-}
-
-function renderWall(){
-  const wall = loadWall();
-  const posters = loadPosters();
-  const stage = document.getElementById('wallStage');
-  const empty = document.getElementById('wallEmpty');
-  if(!stage) return;
-
-  applyWallBackground(wall);
-
-  // 清掉舊海報
-  stage.querySelectorAll('.poster').forEach(n=>n.remove());
-
-  // 位置/角度：固定四格（視覺穩定）
-  const slots = [
-    { left: '10%', top: '12%', rot: -8 },
-    { left: '34%', top: '18%', rot: 6 },
-    { left: '58%', top: '10%', rot: -4 },
-    { left: '78%', top: '22%', rot: 9 },
-  ];
-
-  const list = posters.slice(0,4);
-  if(empty) empty.style.display = list.length ? 'none' : 'flex';
-
-  list.forEach((p, i)=>{
-    const s = slots[i] || slots[0];
-    const wrap = document.createElement('div');
-    wrap.className = 'poster';
-    wrap.style.left = s.left;
-    wrap.style.top = s.top;
-    wrap.style.transform = `rotate(${s.rot}deg)`;
-    wrap.title = p.title ? p.title : (p.ts ? fmtTs(p.ts) : '懸賞令');
-
-    const img = document.createElement('img');
-    img.src = p.dataUrl;
-    img.alt = 'wanted';
-    wrap.appendChild(img);
-
-    const pin = document.createElement('div');
-    pin.className = 'pin';
-    wrap.appendChild(pin);
-
-    const meta = document.createElement('div');
-    meta.className = 'meta';
-    meta.textContent = p.title || (p.ts ? fmtTs(p.ts) : '');
-    wrap.appendChild(meta);
-
-    stage.appendChild(wrap);
-  });
 }
 
 // header render
@@ -1033,78 +1027,11 @@ function closeModal(id){ const el=document.getElementById(id); if(el) el.style.d
     if (ev.target && ev.target.id === 'avatarModalBack') closeAvatar();
   });
 
-  // ===== 牆面：選擇背景 + 匯入懸賞令 =====
-  let pendingWall = loadWall();
-  let pendingWallFile = null;
 
-  function wallThumbStyle(w){
-    if(w?.type === 'custom' && w.dataUrl) return `url(${w.dataUrl})`;
-    return `url(${wallUrlById(w?.id || 1)})`;
-  }
-
-  function buildWallGrid(){
-    const grid = document.getElementById('wallGrid');
-    if(!grid) return;
-    grid.innerHTML = '';
-
-    // 1) preset 1..WALL_COUNT
-    for(let i=1; i<=WALL_COUNT; i++){
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'wallBtn' + (pendingWall.type==='preset' && pendingWall.id===i ? ' on' : '');
-
-      const thumb = document.createElement('div');
-      thumb.className = 'thumb';
-      thumb.style.backgroundImage = `url(${wallUrlById(i)})`;
-      btn.appendChild(thumb);
-
-      const lab = document.createElement('div');
-      lab.className = 'lab';
-      lab.textContent = `#${i}`;
-      btn.appendChild(lab);
-
-      btn.onclick = () => {
-        pendingWall = { version:1, type:'preset', id:i, dataUrl:'' };
-        pendingWallFile = null;
-        grid.querySelectorAll('.wallBtn').forEach(x=>x.classList.remove('on'));
-        btn.classList.add('on');
-      };
-
-      grid.appendChild(btn);
-    }
-
-    // 2) custom（若存在）
-    if(pendingWall.type==='custom' && pendingWall.dataUrl){
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'wallBtn on';
-
-      const thumb = document.createElement('div');
-      thumb.className = 'thumb';
-      thumb.style.backgroundImage = `url(${pendingWall.dataUrl})`;
-      btn.appendChild(thumb);
-
-      const lab = document.createElement('div');
-      lab.className = 'lab';
-      lab.textContent = '自訂';
-      btn.appendChild(lab);
-
-      btn.onclick = () => {
-        // 點自訂，維持自訂選取（若使用者又點 preset 會覆蓋）
-        grid.querySelectorAll('.wallBtn').forEach(x=>x.classList.remove('on'));
-        btn.classList.add('on');
-      };
-
-      grid.appendChild(btn);
-    }
-  }
-
-  const openWallModal = ()=>{
-    pendingWall = loadWall();
-    pendingWallFile = null;
-    const wallFile = document.getElementById('wallFile');
-    if(wallFile) wallFile.value = '';
-    buildWallGrid();
+  // ===== 牆面：選擇背景（僅使用預設圖） + 匯入懸賞令 =====
+  const openWallModal = () => {
+    const w = loadWall();
+    buildWallGrid(w.id);
     openModal('wallModalBack');
   };
   const closeWallModal = ()=> closeModal('wallModalBack');
@@ -1116,27 +1043,15 @@ function closeModal(id){ const el=document.getElementById(id); if(el) el.style.d
     if(ev.target && ev.target.id==='wallModalBack') closeWallModal();
   });
 
-  document.getElementById('wallFile')?.addEventListener('change', (ev)=>{
-    const f = ev.target.files && ev.target.files[0];
-    if(!f) return;
-    pendingWallFile = f;
-    // 先不立刻寫入 localStorage；使用者按「套用」才寫入
-  });
-
-  document.getElementById('wallSave')?.addEventListener('click', async ()=>{
-    // 若有上傳檔，優先套用為 custom
-    if(pendingWallFile){
-      const dataUrl = await fileToDataUrl(pendingWallFile);
-      if(dataUrl && dataUrl.startsWith('data:image')){
-        pendingWall = { version:1, type:'custom', id:1, dataUrl };
-      }
-    }
-    saveWall(pendingWall);
+  document.getElementById('wallSave')?.addEventListener('click', ()=>{
+    const grid = document.getElementById('wallGrid');
+    const pendingId = Math.max(1, Math.min(WALL_COUNT, Number(grid?.dataset?.pendingId)||1));
+    saveWall({id: pendingId});
     closeWallModal();
     renderWall();
   });
 
-  // 匯入懸賞令（先手動；之後接結算頁自動寫入 LS_KEY_POSTERS）
+  // 匯入懸賞令（目前仍保留手動；之後可接結算頁自動寫入 LS_KEY_POSTERS）
   const posterFile = document.getElementById('posterFile');
   document.getElementById('btnImportPoster')?.addEventListener('click', ()=> posterFile?.click());
   posterFile?.addEventListener('change', async (ev)=>{
@@ -1146,7 +1061,8 @@ function closeModal(id){ const el=document.getElementById(id); if(el) el.style.d
     if(!dataUrl.startsWith('data:image')){ alert('讀取圖片失敗'); return; }
 
     const list = loadPosters();
-    list.unshift({ ts: nowTs(), title: `懸賞令 ${fmtTs(nowTs())}`, dataUrl });
+    const ts = nowTs();
+    list.unshift({ ts, title: `懸賞令 ${fmtTs(ts)}`, dataUrl });
     savePosters(list);
     posterFile.value = '';
     renderWall();
