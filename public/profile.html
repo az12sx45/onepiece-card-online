@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>玩家頁｜偉大航道爭霸戰</title>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#0f1b32cc;
+      --panel2:#0b162dcc;
+      --line:#233455;
+      --text:#e5e7eb;
+      --muted:#9ca3af;
+      --gold:#fbbf24;
+      --ok:#22c55e;
+      --bad:#ef4444;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans TC","PingFang TC","Microsoft JhengHei",Arial;
+      background: radial-gradient(1200px 800px at 20% 0%, #1a2a55 0%, transparent 55%),
+                  radial-gradient(1000px 700px at 90% 10%, #5b1a2a 0%, transparent 50%),
+                  linear-gradient(180deg, #050a14 0%, var(--bg) 100%);
+      color:var(--text);
+      min-height:100vh;
+    }
+    a{color:inherit}
+    .wrap{max-width:1100px;margin:0 auto;padding:18px 14px 40px}
+    .topbar{
+      display:flex;gap:10px;align-items:center;justify-content:space-between;
+      padding:14px 14px;border:1px solid var(--line);border-radius:14px;
+      background: linear-gradient(180deg, rgba(17,24,39,.75), rgba(2,6,23,.65));
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{
+      width:42px;height:42px;border-radius:12px;border:1px solid var(--line);
+      background: radial-gradient(circle at 30% 30%, rgba(251,191,36,.25), transparent 60%),
+                  linear-gradient(135deg, rgba(59,130,246,.25), rgba(236,72,153,.15));
+      display:flex;align-items:center;justify-content:center;
+      font-weight:800;color:#fff;letter-spacing:.5px;
+    }
+    .title h1{margin:0;font-size:16px;letter-spacing:.5px}
+    .title .sub{margin-top:2px;font-size:12px;color:var(--muted)}
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
+    .btn{
+      border:1px solid var(--line);background:#0b162dcc;color:var(--text);
+      padding:9px 12px;border-radius:12px;font-size:12px;cursor:pointer;
+      transition:transform .06s ease, background .15s ease, border-color .15s ease;
+      user-select:none;
+    }
+    .btn:hover{background:#0a1738;border-color:#37507a}
+    .btn:active{transform:translateY(1px)}
+    .btn.primary{border-color:rgba(251,191,36,.55);background:rgba(251,191,36,.12)}
+    .btn.danger{border-color:rgba(239,68,68,.55);background:rgba(239,68,68,.10)}
+    .grid{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:14px;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+    }
+    .card{
+      border:1px solid var(--line);border-radius:16px;
+      background: linear-gradient(180deg, rgba(15,27,50,.78), rgba(2,6,23,.62));
+      box-shadow: 0 10px 30px rgba(0,0,0,.22);
+      overflow:hidden;
+    }
+    .card .hd{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:12px 14px;border-bottom:1px solid rgba(35,52,85,.8);
+      background: linear-gradient(180deg, rgba(2,6,23,.15), rgba(2,6,23,0));
+    }
+    .card .hd .h{
+      font-size:13px;font-weight:800;letter-spacing:.4px
+    }
+    .card .bd{padding:12px 14px}
+    .muted{color:var(--muted)}
+    .kpi{
+      display:grid;grid-template-columns:repeat(4,1fr);
+      gap:10px;
+    }
+    @media (max-width: 700px){
+      .kpi{grid-template-columns:repeat(2,1fr)}
+    }
+    .k{
+      border:1px solid rgba(35,52,85,.7);
+      background:rgba(11,22,45,.55);
+      border-radius:14px;padding:10px 10px;
+    }
+    .k .lab{font-size:11px;color:var(--muted)}
+    .k .val{margin-top:6px;font-size:18px;font-weight:900;letter-spacing:.3px}
+    .k .hint{margin-top:4px;font-size:11px;color:var(--muted)}
+    .row{
+      display:flex;gap:10px;align-items:center;flex-wrap:wrap
+    }
+    .pill{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:7px 10px;border-radius:999px;
+      border:1px solid rgba(35,52,85,.75);
+      background:rgba(11,22,45,.55);
+      font-size:12px;
+    }
+    .pill .dot{
+      width:8px;height:8px;border-radius:50%;
+      background:rgba(251,191,36,.95);
+      box-shadow:0 0 0 3px rgba(251,191,36,.12);
+    }
+    .divider{height:1px;background:rgba(35,52,85,.75);margin:12px 0}
+    .gallery{
+      display:grid;grid-template-columns:repeat(5,1fr);gap:8px;
+    }
+    @media (max-width: 700px){
+      .gallery{grid-template-columns:repeat(4,1fr)}
+    }
+    .slot{
+      border:1px dashed rgba(156,163,175,.35);
+      background:rgba(2,6,23,.35);
+      border-radius:14px;
+      overflow:hidden;
+      aspect-ratio: 2 / 3;
+      position:relative;
+    }
+    .slot img{
+      width:100%;height:100%;object-fit:cover;display:block;
+    }
+    .slot .badge{
+      position:absolute;left:8px;top:8px;
+      border:1px solid rgba(0,0,0,.4);
+      background:rgba(2,6,23,.72);
+      padding:3px 7px;border-radius:999px;font-size:11px;
+    }
+    .slot.locked{
+      display:flex;align-items:center;justify-content:center;
+      color:rgba(156,163,175,.65);font-size:11px;
+    }
+    table{
+      width:100%;border-collapse:collapse;
+      font-size:12px;
+    }
+    th,td{
+      padding:9px 8px;border-bottom:1px solid rgba(35,52,85,.65);
+      text-align:left;vertical-align:middle;
+    }
+    th{color:#cbd5e1;font-size:11px;letter-spacing:.3px}
+    tr:hover td{background:rgba(2,6,23,.25)}
+    .rank{
+      font-weight:900;
+    }
+    .good{color:var(--ok)}
+    .bad{color:var(--bad)}
+    .titles{
+      display:flex;gap:8px;flex-wrap:wrap
+    }
+    .tag{
+      border:1px solid rgba(35,52,85,.75);
+      background:rgba(11,22,45,.55);
+      border-radius:999px;
+      padding:7px 10px;
+      font-size:12px;
+      cursor:pointer;
+      user-select:none;
+      transition: background .15s ease, border-color .15s ease, transform .06s ease;
+    }
+    .tag:hover{background:rgba(11,22,45,.75);border-color:#3a5584}
+    .tag:active{transform:translateY(1px)}
+    .tag.on{
+      border-color:rgba(251,191,36,.7);
+      background:rgba(251,191,36,.12);
+    }
+    .footnote{font-size:11px;color:var(--muted);line-height:1.5}
+    .mono{font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">OP</div>
+        <div class="title">
+          <h1>玩家頁</h1>
+          <div class="sub">戰績總覽 / 豪華解鎖 / 最近 10 局 / 稱號</div>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="btnBack">返回主畫面</button>
+        <button class="btn primary" id="btnRefresh">重新整理</button>
+        <button class="btn danger" id="btnReset">清除本機紀錄</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- 左：戰績 + 最近 -->
+      <div class="card">
+        <div class="hd">
+          <div class="h">戰績總覽</div>
+          <div class="pill" title="目前佩戴稱號（可在下方切換）">
+            <span class="dot"></span>
+            <span id="equippedTitle">未佩戴稱號</span>
+          </div>
+        </div>
+        <div class="bd">
+          <div class="kpi">
+            <div class="k">
+              <div class="lab">總場次</div>
+              <div class="val" id="kGames">0</div>
+              <div class="hint muted">同瀏覽器累積</div>
+            </div>
+            <div class="k">
+              <div class="lab">勝場</div>
+              <div class="val" id="kWins">0</div>
+              <div class="hint muted">本機資料</div>
+            </div>
+            <div class="k">
+              <div class="lab">勝率</div>
+              <div class="val" id="kWinRate">0%</div>
+              <div class="hint muted">wins / games</div>
+            </div>
+            <div class="k">
+              <div class="lab">累積金幣</div>
+              <div class="val" id="kCoins">0</div>
+              <div class="hint muted">可由結算匯入</div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="row" style="justify-content:space-between">
+            <div style="font-weight:800">已取得稱號</div>
+            <div class="muted" style="font-size:11px">點擊稱號可設定「佩戴」</div>
+          </div>
+          <div style="margin-top:10px" class="titles" id="titlesWrap"></div>
+
+          <div class="divider"></div>
+
+          <div class="row" style="justify-content:space-between">
+            <div style="font-weight:800">最近 10 局</div>
+            <div class="muted" style="font-size:11px">建議由結算頁自動匯入</div>
+          </div>
+
+          <div style="margin-top:8px; overflow:auto">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:140px">時間</th>
+                  <th style="width:80px">名次</th>
+                  <th style="width:90px">金幣</th>
+                  <th>本局解鎖</th>
+                </tr>
+              </thead>
+              <tbody id="recentTbody"></tbody>
+            </table>
+          </div>
+
+          <div class="divider"></div>
+          <div class="footnote">
+            提醒：資料保存在此瀏覽器（<span class="mono">localStorage</span>）。若使用無痕模式或清除網站資料，紀錄會消失。
+          </div>
+        </div>
+      </div>
+
+      <!-- 右：豪華解鎖 -->
+      <div class="card">
+        <div class="hd">
+          <div class="h">豪華解鎖展示</div>
+          <div class="muted" style="font-size:11px">
+            已解鎖 <span id="luxCount">0</span> / 20
+          </div>
+        </div>
+        <div class="bd">
+          <div class="gallery" id="luxGallery"></div>
+          <div class="divider"></div>
+          <div class="footnote">
+            圖片路徑預設使用：<span class="mono">/images/cards_lux/{id}.webp</span>。<br/>
+            若你豪華卡實際路徑不同，之後我再幫你對齊你專案的資料夾結構即可。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+/**
+ * 玩家頁 v1（本機版）
+ * - 讀寫 localStorage: op_profile_v1
+ * - 顯示：戰績、稱號、豪華解鎖、最近 10 局
+ * - 稱號佩戴：點擊切換 titles.equipped
+ */
+
+const LS_KEY = 'op_profile_v1';
+
+function nowTs(){ return Date.now(); }
+
+function safeJsonParse(s, fallback){
+  try{ return JSON.parse(s); }catch(e){ return fallback; }
+}
+
+function uniq(arr){
+  const set = new Set();
+  const out = [];
+  for (const x of (arr || [])){
+    const k = String(x ?? '').trim();
+    if (!k) continue;
+    if (set.has(k)) continue;
+    set.add(k);
+    out.push(k);
+  }
+  return out;
+}
+
+function defaultProfile(){
+  return {
+    version: 1,
+    createdAt: nowTs(),
+    lastSeenAt: nowTs(),
+    totals: { games: 0, wins: 0, coins: 0, atk: 0, def: 0, hit: 0, intel: 0, survival: 0 },
+    deluxeUnlocked: [],        // [0..19]
+    recent: [],                // [{ts, place, coinsGain, unlocked:[..]}]
+    titles: { owned: [], equipped: '' }
+  };
+}
+
+function loadProfile(){
+  const raw = localStorage.getItem(LS_KEY);
+  const base = defaultProfile();
+  if (!raw) return base;
+
+  const p = safeJsonParse(raw, null);
+  if (!p || typeof p !== 'object') return base;
+
+  // merge（避免舊版缺欄位）
+  const out = {
+    ...base,
+    ...p,
+    totals: { ...base.totals, ...(p.totals||{}) },
+    titles: { ...base.titles, ...(p.titles||{}) },
+  };
+
+  out.deluxeUnlocked = uniq(out.deluxeUnlocked).map(x=>Number(x)).filter(n=>Number.isFinite(n) && n>=0 && n<=19);
+  out.titles.owned = uniq(out.titles.owned);
+  out.titles.equipped = String(out.titles.equipped||'').trim();
+  out.recent = Array.isArray(out.recent) ? out.recent.slice(0, 10) : [];
+
+  out.lastSeenAt = nowTs();
+  return out;
+}
+
+function saveProfile(p){
+  try{
+    localStorage.setItem(LS_KEY, JSON.stringify(p));
+  }catch(e){
+    alert('儲存失敗：瀏覽器可能限制儲存空間或使用無痕模式。');
+  }
+}
+
+function fmtTs(ts){
+  if (!ts) return '-';
+  const d = new Date(ts);
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth()+1).padStart(2,'0');
+  const dd = String(d.getDate()).padStart(2,'0');
+  const hh = String(d.getHours()).padStart(2,'0');
+  const mi = String(d.getMinutes()).padStart(2,'0');
+  return `${yyyy}-${mm}-${dd} ${hh}:${mi}`;
+}
+
+function setText(id, txt){
+  const el = document.getElementById(id);
+  if (el) el.textContent = txt;
+}
+
+function render(profile){
+  // KPIs
+  const g = profile.totals.games || 0;
+  const w = profile.totals.wins || 0;
+  const winRate = g>0 ? Math.round((w/g)*100) : 0;
+
+  setText('kGames', String(g));
+  setText('kWins', String(w));
+  setText('kWinRate', `${winRate}%`);
+  setText('kCoins', String(profile.totals.coins || 0));
+
+  // Equipped title
+  setText('equippedTitle', profile.titles.equipped ? profile.titles.equipped : '未佩戴稱號');
+
+  // Titles
+  const wrap = document.getElementById('titlesWrap');
+  wrap.innerHTML = '';
+  const owned = profile.titles.owned || [];
+  if (!owned.length){
+    const span = document.createElement('div');
+    span.className = 'muted';
+    span.textContent = '尚未取得稱號（打完一季結算後會自動加入）';
+    wrap.appendChild(span);
+  }else{
+    for (const t of owned){
+      const tag = document.createElement('div');
+      tag.className = 'tag' + (profile.titles.equipped === t ? ' on' : '');
+      tag.textContent = t;
+      tag.title = '點擊設定為佩戴稱號';
+      tag.onclick = () => {
+        profile.titles.equipped = (profile.titles.equipped === t) ? '' : t;
+        saveProfile(profile);
+        render(profile);
+      };
+      wrap.appendChild(tag);
+    }
+  }
+
+  // Recent
+  const tb = document.getElementById('recentTbody');
+  tb.innerHTML = '';
+  const recent = Array.isArray(profile.recent) ? profile.recent : [];
+  if (!recent.length){
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td class="muted" colspan="4">尚無紀錄。建議在結算頁自動匯入最近對局摘要。</td>`;
+    tb.appendChild(tr);
+  }else{
+    for (const r of recent){
+      const place = (r.place==null || r.place==='') ? '-' : String(r.place);
+      const coins = (r.coinsGain==null || r.coinsGain==='') ? '-' : String(r.coinsGain);
+      const unlocked = Array.isArray(r.unlocked) ? r.unlocked : [];
+      const unlockedTxt = unlocked.length ? unlocked.map(n=>`#${n}`).join(' ') : '-';
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${fmtTs(r.ts)}</td>
+        <td class="rank">${place}</td>
+        <td>${coins}</td>
+        <td>${unlockedTxt}</td>
+      `;
+      tb.appendChild(tr);
+    }
+  }
+
+  // Deluxe gallery
+  const lux = document.getElementById('luxGallery');
+  lux.innerHTML = '';
+  const unlockedSet = new Set((profile.deluxeUnlocked||[]).map(n=>Number(n)));
+
+  let unlockedCount = 0;
+  for (let id=0; id<20; id++){
+    const isOn = unlockedSet.has(id);
+    if (isOn) unlockedCount++;
+
+    const slot = document.createElement('div');
+    slot.className = 'slot' + (isOn ? '' : ' locked');
+
+    if (isOn){
+      const img = document.createElement('img');
+      img.loading = 'lazy';
+      img.alt = `lux ${id}`;
+      img.src = `/images/cards_lux/${id}.webp`;
+      img.onerror = () => { img.src = `/images/cards_lux/${id}.png`; };
+      slot.appendChild(img);
+
+      const badge = document.createElement('div');
+      badge.className = 'badge';
+      badge.textContent = `#${id}`;
+      slot.appendChild(badge);
+    }else{
+      slot.textContent = `未解鎖 #${id}`;
+    }
+
+    lux.appendChild(slot);
+  }
+  setText('luxCount', String(unlockedCount));
+}
+
+(function init(){
+  const profile = loadProfile();
+  saveProfile(profile); // 確保補齊欄位與 lastSeenAt
+  render(profile);
+
+  document.getElementById('btnRefresh').onclick = () => location.reload();
+
+  document.getElementById('btnBack').onclick = () => {
+    // 你專案是 /start.html 作為入口
+    location.href = '/start.html';
+  };
+
+  document.getElementById('btnReset').onclick = () => {
+    const ok = confirm('確定要清除本機紀錄？（戰績、稱號、豪華解鎖、最近對局都會消失）');
+    if (!ok) return;
+    localStorage.removeItem(LS_KEY);
+    location.reload();
+  };
+})();
+</script>
+</body>
+</html>
