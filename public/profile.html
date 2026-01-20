@@ -86,16 +86,12 @@
     /* === 牆面（頭像下方展示區）：可選牆背景 + 最近 4 張懸賞令 === */
     .wallCard{ margin-top:12px; }
     .wallHint{ font-size:11px; color:var(--muted); }
-   .wallStage{
-  margin-top:10px;
-
-  /* 關鍵：用比例，不用固定高度 */
-  aspect-ratio: 16 / 9;
-  min-height: 260px;
-  max-height: 420px;
-
+  .wallStage{
+  margin-top:12px;
+  height: clamp(320px, 40vw, 520px);
   width: 100%;
-  border-radius: 14px;
+
+  border-radius: 18px;
   border: 1px solid rgba(35,52,85,.75);
   overflow: hidden;
   position: relative;
@@ -103,6 +99,7 @@
   background-size: cover;
   background-position: center;
 }
+
 
     .wallStage.has-wall{
       /* 使用 CSS 變數疊一層牆圖片，不覆蓋底層漸層 */
