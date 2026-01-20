@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>玩家頁｜偉大航道爭霸戰</title>
+  <title>偉大航道爭霸戰｜個人資料</title>
   <style>
     :root{
       --bg:#0b1220;
@@ -36,27 +36,26 @@
     }
 
     .brand{display:flex;gap:12px;align-items:center;min-width:0}
+
+    /* ✅ 圓形頭貼＋圓形框 */
     .avatarBox{
-      width:44px;height:44px;border-radius:14px;border:1px solid var(--line);
-      background: radial-gradient(circle at 30% 30%, rgba(251,191,36,.25), transparent 60%),
-                  linear-gradient(135deg, rgba(59,130,246,.25), rgba(236,72,153,.15));
+      width:56px;height:56px;
+      border-radius:999px;
+      border:2px solid rgba(255,255,255,.10);
+      background:#0c0e10;
       display:flex;align-items:center;justify-content:center;
       overflow:hidden;
       cursor:pointer;
       user-select:none;
       position:relative;
       flex:none;
+      box-shadow: 0 0 0 3px rgba(255,184,77,.18);
+    }
+    .avatarBox:hover{
+      border-color:#6b7280;
+      box-shadow: 0 0 0 3px rgba(255,184,77,.25);
     }
     .avatarBox img{width:100%;height:100%;object-fit:cover;display:block}
-    .avatarHint{
-      position:absolute;left:50%;bottom:-2px;transform:translateX(-50%);
-      font-size:10px;color:rgba(229,231,235,.75);
-      background:rgba(2,6,23,.65);
-      border:1px solid rgba(35,52,85,.75);
-      padding:2px 6px;border-radius:999px;
-      pointer-events:none;
-    }
-    .avatarBox:hover{border-color:#3a5584}
 
     .title{min-width:0}
     .title h1{margin:0;font-size:16px;letter-spacing:.5px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
@@ -237,7 +236,7 @@
     .help{font-size:11px;color:var(--muted);line-height:1.5}
     .modal .actions2{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:12px}
 
-    /* avatar picker grid (same spirit as start page) */
+    /* avatar picker grid */
     .avaGrid{
       display:grid;
       grid-template-columns:repeat(8, 1fr);
@@ -270,14 +269,13 @@
   <div class="wrap">
     <div class="topbar">
       <div class="brand">
-        <div class="avatarBox" id="avatarBox" title="點擊更換頭貼（使用開始頁頭像）">
+        <div class="avatarBox" id="avatarBox" title="點擊更換頭貼">
           <img id="avatarImg" alt="avatar" style="display:none" />
-          <span class="avatarHint">換頭貼</span>
         </div>
 
         <div class="title">
           <h1>
-            <span>玩家頁</span>
+            <!-- ✅ 移除「玩家頁」三字，只保留名稱 -->
             <button class="nameBtn" id="nameBtn" title="點擊修改玩家名稱">未命名玩家</button>
           </h1>
           <div class="sub"><span class="nameSmall">名稱與頭貼會同步到開始頁。</span></div>
@@ -406,12 +404,12 @@
   <div class="modalBack" id="avatarModalBack" role="dialog" aria-modal="true">
     <div class="modal">
       <div class="mh">
-        <div class="t">更換頭貼（開始頁頭像）</div>
+        <div class="t">更換頭貼</div>
         <button class="xBtn" id="avatarModalClose" title="關閉">✕</button>
       </div>
       <div class="mb">
         <div class="help" style="margin-bottom:10px">
-          使用路徑：<span class="mono">images/avatars/{1..30}.webp</span>（與開始頁一致）。
+          使用路徑：<span class="mono">images/avatars/{1..30}.webp</span>
         </div>
         <div class="avaGrid" id="avaGrid"></div>
         <div class="actions2">
@@ -425,9 +423,8 @@
 <script>
 /**
  * profile.html（玩家頁）
- * - 戰績/稱號/豪華/最近10局：用 op_profile_v1（你的既有結構）
+ * - 戰績/稱號/豪華/最近10局：用 op_profile_v1
  * - 名稱/頭貼：同步 op_player_profile（start.html 既有 key）
- *   start.html 已使用 images/avatars/{1..30}.webp 並寫入 op_player_profile。 :contentReference[oaicite:3]{index=3}
  */
 
 const LS_KEY_PROFILE = 'op_profile_v1';
@@ -474,7 +471,7 @@ function defaultProfile(){
     version: 1,
     createdAt: nowTs(),
     lastSeenAt: nowTs(),
-    player: { name:'未命名玩家', avatar:1 }, // 只存 id，圖片用路徑推導
+    player: { name:'未命名玩家', avatar:1 },
     totals: { games: 0, wins: 0, coins: 0, atk: 0, def: 0, hit: 0, intel: 0, survival: 0 },
     deluxeUnlocked: [],
     recent: [],
@@ -515,7 +512,6 @@ function saveProfile(p){
   catch(e){ alert('儲存失敗：瀏覽器可能限制儲存空間或使用無痕模式。'); }
 }
 
-// 與 start.html 同步：讀 op_player_profile
 function loadStartProfile(){
   const raw = localStorage.getItem(LS_KEY_START);
   const p = safeJsonParse(raw, null);
@@ -527,7 +523,6 @@ function loadStartProfile(){
   };
 }
 
-// 與 start.html 同步：寫 op_player_profile（讓等待室預設值自動一致）
 function saveStartProfile(name, avatarId){
   const safeName = clampStr(name || '未命名玩家', 16) || '未命名玩家';
   const safeId = Math.max(1, Math.min(AVATAR_COUNT, Number(avatarId)||1));
@@ -536,17 +531,13 @@ function saveStartProfile(name, avatarId){
   return data;
 }
 
-// header render
 function renderHeader(profile){
-  const name = clampStr(profile.player?.name || '未命名玩家', 16) || '未命名玩家';
-  setText('nameBtn', name);
-
+  setText('nameBtn', clampStr(profile.player?.name || '未命名玩家', 16) || '未命名玩家');
   const img = document.getElementById('avatarImg');
   img.src = avatarUrlById(profile.player?.avatar || 1);
   img.style.display = 'block';
 }
 
-// main render
 function render(profile){
   renderHeader(profile);
 
@@ -640,29 +631,23 @@ function render(profile){
   setText('luxCount', String(unlockedCount));
 }
 
-// modal helpers
 function openModal(id){ const el=document.getElementById(id); if(el) el.style.display='flex'; }
 function closeModal(id){ const el=document.getElementById(id); if(el) el.style.display='none'; }
 
-// init
 (function init(){
   const profile = loadProfile();
 
-  // 第一次載入時：如果 start 已經有選過名字/頭像，就同步過來
   const sp = loadStartProfile();
   if (sp){
-    // 同步到玩家頁資料
     profile.player.name = sp.playerName || profile.player.name;
     profile.player.avatar = sp.playerAvatar || profile.player.avatar;
   }else{
-    // 如果 start 沒資料，就確保至少寫一次，讓開始頁可帶入
     saveStartProfile(profile.player.name, profile.player.avatar);
   }
 
   saveProfile(profile);
   render(profile);
 
-  // top actions
   document.getElementById('btnRefresh').onclick = () => location.reload();
   document.getElementById('btnBack').onclick = () => { location.href = '/start.html'; };
   document.getElementById('btnReset').onclick = () => {
@@ -673,7 +658,6 @@ function closeModal(id){ const el=document.getElementById(id); if(el) el.style.d
     location.reload();
   };
 
-  // name modal
   const nameInput = document.getElementById('nameInput');
   document.getElementById('nameBtn').onclick = () => {
     nameInput.value = clampStr(profile.player.name, 16);
@@ -686,7 +670,6 @@ function closeModal(id){ const el=document.getElementById(id); if(el) el.style.d
   document.getElementById('nameSave').onclick = () => {
     const v = clampStr(nameInput.value, 16) || '未命名玩家';
     profile.player.name = v;
-    // 同步到 start
     saveStartProfile(profile.player.name, profile.player.avatar);
     saveProfile(profile);
     closeName();
@@ -700,7 +683,6 @@ function closeModal(id){ const el=document.getElementById(id); if(el) el.style.d
     if (ev.target && ev.target.id === 'nameModalBack') closeName();
   });
 
-  // avatar modal
   let pendingAvatar = profile.player.avatar;
 
   function buildAvatarGrid(){
@@ -719,7 +701,6 @@ function closeModal(id){ const el=document.getElementById(id); if(el) el.style.d
 
       btn.onclick = () => {
         pendingAvatar = i;
-        // 更新選取狀態
         grid.querySelectorAll('.avaBtn').forEach((x, idx)=>{
           x.classList.toggle('on', (idx+1)===pendingAvatar);
         });
@@ -741,7 +722,6 @@ function closeModal(id){ const el=document.getElementById(id); if(el) el.style.d
 
   document.getElementById('avatarSave').onclick = () => {
     profile.player.avatar = pendingAvatar;
-    // 同步到 start
     saveStartProfile(profile.player.name, profile.player.avatar);
     saveProfile(profile);
     closeAvatar();
