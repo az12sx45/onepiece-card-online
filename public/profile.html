@@ -45,17 +45,9 @@
       cursor:pointer;
       user-select:none;
       position:relative;
+      flex:none;
     }
-    .avatarBox img{
-      width:100%;height:100%;
-      object-fit:cover;display:block;
-    }
-    .avatarBox .fallback{
-      font-weight:900;color:#fff;letter-spacing:.5px;font-size:14px;
-    }
-    .avatarBox:hover{
-      border-color:#3a5584;
-    }
+    .avatarBox img{width:100%;height:100%;object-fit:cover;display:block}
     .avatarHint{
       position:absolute;left:50%;bottom:-2px;transform:translateX(-50%);
       font-size:10px;color:rgba(229,231,235,.75);
@@ -64,6 +56,7 @@
       padding:2px 6px;border-radius:999px;
       pointer-events:none;
     }
+    .avatarBox:hover{border-color:#3a5584}
 
     .title{min-width:0}
     .title h1{margin:0;font-size:16px;letter-spacing:.5px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
@@ -84,9 +77,7 @@
     }
     .nameBtn:hover{background:rgba(11,22,45,.75);border-color:#3a5584}
     .nameBtn:active{transform:translateY(1px)}
-    .nameSmall{
-      font-size:11px;color:var(--muted);
-    }
+    .nameSmall{font-size:11px;color:var(--muted)}
 
     .actions{display:flex;gap:8px;flex-wrap:wrap}
     .btn{
@@ -99,15 +90,15 @@
     .btn:active{transform:translateY(1px)}
     .btn.primary{border-color:rgba(251,191,36,.55);background:rgba(251,191,36,.12)}
     .btn.danger{border-color:rgba(239,68,68,.55);background:rgba(239,68,68,.10)}
+
     .grid{
       margin-top:14px;
       display:grid;
       grid-template-columns: 1.15fr .85fr;
       gap:14px;
     }
-    @media (max-width: 980px){
-      .grid{grid-template-columns:1fr}
-    }
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr} }
+
     .card{
       border:1px solid var(--line);border-radius:16px;
       background: linear-gradient(180deg, rgba(15,27,50,.78), rgba(2,6,23,.62));
@@ -119,18 +110,12 @@
       padding:12px 14px;border-bottom:1px solid rgba(35,52,85,.8);
       background: linear-gradient(180deg, rgba(2,6,23,.15), rgba(2,6,23,0));
     }
-    .card .hd .h{
-      font-size:13px;font-weight:800;letter-spacing:.4px
-    }
+    .card .hd .h{font-size:13px;font-weight:800;letter-spacing:.4px}
     .card .bd{padding:12px 14px}
     .muted{color:var(--muted)}
-    .kpi{
-      display:grid;grid-template-columns:repeat(4,1fr);
-      gap:10px;
-    }
-    @media (max-width: 700px){
-      .kpi{grid-template-columns:repeat(2,1fr)}
-    }
+
+    .kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    @media (max-width: 700px){ .kpi{grid-template-columns:repeat(2,1fr)} }
     .k{
       border:1px solid rgba(35,52,85,.7);
       background:rgba(11,22,45,.55);
@@ -139,9 +124,8 @@
     .k .lab{font-size:11px;color:var(--muted)}
     .k .val{margin-top:6px;font-size:18px;font-weight:900;letter-spacing:.3px}
     .k .hint{margin-top:4px;font-size:11px;color:var(--muted)}
-    .row{
-      display:flex;gap:10px;align-items:center;flex-wrap:wrap
-    }
+
+    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
     .pill{
       display:inline-flex;align-items:center;gap:6px;
       padding:7px 10px;border-radius:999px;
@@ -154,13 +138,12 @@
       background:rgba(251,191,36,.95);
       box-shadow:0 0 0 3px rgba(251,191,36,.12);
     }
+
     .divider{height:1px;background:rgba(35,52,85,.75);margin:12px 0}
-    .gallery{
-      display:grid;grid-template-columns:repeat(5,1fr);gap:8px;
-    }
-    @media (max-width: 700px){
-      .gallery{grid-template-columns:repeat(4,1fr)}
-    }
+
+    .gallery{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+    @media (max-width: 700px){ .gallery{grid-template-columns:repeat(4,1fr)} }
+
     .slot{
       border:1px dashed rgba(156,163,175,.35);
       background:rgba(2,6,23,.35);
@@ -169,9 +152,7 @@
       aspect-ratio: 2 / 3;
       position:relative;
     }
-    .slot img{
-      width:100%;height:100%;object-fit:cover;display:block;
-    }
+    .slot img{width:100%;height:100%;object-fit:cover;display:block}
     .slot .badge{
       position:absolute;left:8px;top:8px;
       border:1px solid rgba(0,0,0,.4);
@@ -182,22 +163,17 @@
       display:flex;align-items:center;justify-content:center;
       color:rgba(156,163,175,.65);font-size:11px;
     }
-    table{
-      width:100%;border-collapse:collapse;
-      font-size:12px;
-    }
+
+    table{width:100%;border-collapse:collapse;font-size:12px}
     th,td{
       padding:9px 8px;border-bottom:1px solid rgba(35,52,85,.65);
       text-align:left;vertical-align:middle;
     }
     th{color:#cbd5e1;font-size:11px;letter-spacing:.3px}
     tr:hover td{background:rgba(2,6,23,.25)}
-    .rank{
-      font-weight:900;
-    }
-    .titles{
-      display:flex;gap:8px;flex-wrap:wrap
-    }
+    .rank{font-weight:900}
+
+    .titles{display:flex;gap:8px;flex-wrap:wrap}
     .tag{
       border:1px solid rgba(35,52,85,.75);
       background:rgba(11,22,45,.55);
@@ -210,10 +186,8 @@
     }
     .tag:hover{background:rgba(11,22,45,.75);border-color:#3a5584}
     .tag:active{transform:translateY(1px)}
-    .tag.on{
-      border-color:rgba(251,191,36,.7);
-      background:rgba(251,191,36,.12);
-    }
+    .tag.on{border-color:rgba(251,191,36,.7);background:rgba(251,191,36,.12)}
+
     .footnote{font-size:11px;color:var(--muted);line-height:1.5}
     .mono{font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
 
@@ -227,7 +201,7 @@
       z-index:9999;
     }
     .modal{
-      width:min(520px, 100%);
+      width:min(720px, 100%);
       border:1px solid rgba(35,52,85,.9);
       border-radius:16px;
       background:linear-gradient(180deg, rgba(15,27,50,.92), rgba(2,6,23,.88));
@@ -249,9 +223,7 @@
       border-radius:12px;
       cursor:pointer;
     }
-    .field{
-      display:grid;gap:6px;margin:10px 0 12px;
-    }
+    .field{display:grid;gap:6px;margin:10px 0 12px}
     .field label{font-size:11px;color:var(--muted)}
     .inp{
       border:1px solid rgba(35,52,85,.85);
@@ -264,14 +236,42 @@
     }
     .help{font-size:11px;color:var(--muted);line-height:1.5}
     .modal .actions2{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:12px}
+
+    /* avatar picker grid (same spirit as start page) */
+    .avaGrid{
+      display:grid;
+      grid-template-columns:repeat(8, 1fr);
+      gap:10px;
+    }
+    @media (max-width: 720px){ .avaGrid{grid-template-columns:repeat(6,1fr)} }
+    @media (max-width: 480px){ .avaGrid{grid-template-columns:repeat(5,1fr)} }
+    .avaBtn{
+      width:100%;
+      aspect-ratio:1/1;
+      border-radius:999px;
+      overflow:hidden;
+      border:2px solid rgba(255,255,255,.08);
+      background:#0c0e10;
+      cursor:pointer;
+      padding:0;
+      transition:border-color .15s ease, box-shadow .15s ease, transform .06s ease;
+    }
+    .avaBtn img{width:100%;height:100%;object-fit:cover;display:block}
+    .avaBtn:hover{border-color:#6b7280}
+    .avaBtn:active{transform:translateY(1px)}
+    .avaBtn.on{
+      border-color:#ffd36a;
+      box-shadow:0 0 0 3px rgba(255,184,77,.25);
+    }
   </style>
 </head>
+
 <body>
   <div class="wrap">
     <div class="topbar">
       <div class="brand">
-        <div class="avatarBox" id="avatarBox" title="點擊更換頭貼">
-          <span class="fallback" id="avatarFallback">OP</span>
+        <div class="avatarBox" id="avatarBox" title="點擊更換頭貼（使用開始頁頭像）">
+          <img id="avatarImg" alt="avatar" style="display:none" />
           <span class="avatarHint">換頭貼</span>
         </div>
 
@@ -280,9 +280,7 @@
             <span>玩家頁</span>
             <button class="nameBtn" id="nameBtn" title="點擊修改玩家名稱">未命名玩家</button>
           </h1>
-          <div class="sub">
-            <span class="nameSmall">提示：名稱與頭貼保存在此瀏覽器。</span>
-          </div>
+          <div class="sub"><span class="nameSmall">名稱與頭貼會同步到開始頁。</span></div>
         </div>
       </div>
 
@@ -358,7 +356,7 @@
 
           <div class="divider"></div>
           <div class="footnote">
-            提醒：資料保存在此瀏覽器（<span class="mono">localStorage</span>）。若使用無痕模式或清除網站資料，紀錄會消失。
+            提醒：資料保存在此瀏覽器（<span class="mono">localStorage</span>）。若清除網站資料，紀錄會消失。
           </div>
         </div>
       </div>
@@ -382,9 +380,6 @@
     </div>
   </div>
 
-  <!-- hidden file input -->
-  <input id="avatarFile" type="file" accept="image/*" style="display:none" />
-
   <!-- name modal -->
   <div class="modalBack" id="nameModalBack" role="dialog" aria-modal="true">
     <div class="modal">
@@ -396,7 +391,7 @@
         <div class="field">
           <label for="nameInput">玩家名稱</label>
           <input id="nameInput" class="inp" maxlength="16" placeholder="最多 16 字" />
-          <div class="help">建議用你在等待室常用的名字，之後我也可以幫你同步到 start.html 預設名稱。</div>
+          <div class="help">會同步到開始頁（等待室）預設名字。</div>
         </div>
 
         <div class="actions2">
@@ -407,48 +402,62 @@
     </div>
   </div>
 
+  <!-- avatar modal -->
+  <div class="modalBack" id="avatarModalBack" role="dialog" aria-modal="true">
+    <div class="modal">
+      <div class="mh">
+        <div class="t">更換頭貼（開始頁頭像）</div>
+        <button class="xBtn" id="avatarModalClose" title="關閉">✕</button>
+      </div>
+      <div class="mb">
+        <div class="help" style="margin-bottom:10px">
+          使用路徑：<span class="mono">images/avatars/{1..30}.webp</span>（與開始頁一致）。
+        </div>
+        <div class="avaGrid" id="avaGrid"></div>
+        <div class="actions2">
+          <button class="btn" id="avatarCancel">取消</button>
+          <button class="btn primary" id="avatarSave">套用</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <script>
 /**
- * 玩家頁 v1（本機版）
- * - 讀寫 localStorage: op_profile_v1
- * - 顯示：戰績、稱號、豪華解鎖、最近 10 局
- * - 新增：玩家名稱、頭貼（上傳縮圖）
+ * profile.html（玩家頁）
+ * - 戰績/稱號/豪華/最近10局：用 op_profile_v1（你的既有結構）
+ * - 名稱/頭貼：同步 op_player_profile（start.html 既有 key）
+ *   start.html 已使用 images/avatars/{1..30}.webp 並寫入 op_player_profile。 :contentReference[oaicite:3]{index=3}
  */
 
-const LS_KEY = 'op_profile_v1';
+const LS_KEY_PROFILE = 'op_profile_v1';
+const LS_KEY_START   = 'op_player_profile';
 
-// ---------- utilities ----------
-function nowTs(){ return Date.now(); }
-
-function safeJsonParse(s, fallback){
-  try{ return JSON.parse(s); }catch(e){ return fallback; }
+const AVATAR_COUNT = 30;
+function avatarUrlById(id){
+  const n = Math.max(1, Math.min(AVATAR_COUNT, Number(id)||1));
+  return `images/avatars/${n}.webp`;
 }
 
+function nowTs(){ return Date.now(); }
+function safeJsonParse(s, fallback){ try{ return JSON.parse(s); }catch(e){ return fallback; } }
 function uniq(arr){
-  const set = new Set();
-  const out = [];
+  const set = new Set(); const out = [];
   for (const x of (arr || [])){
     const k = String(x ?? '').trim();
     if (!k) continue;
     if (set.has(k)) continue;
-    set.add(k);
-    out.push(k);
+    set.add(k); out.push(k);
   }
   return out;
 }
-
 function clampStr(s, maxLen){
   s = String(s ?? '').trim();
   if (!s) return '';
   if (s.length > maxLen) s = s.slice(0, maxLen);
   return s;
 }
-
-function setText(id, txt){
-  const el = document.getElementById(id);
-  if (el) el.textContent = txt;
-}
-
+function setText(id, txt){ const el = document.getElementById(id); if (el) el.textContent = txt; }
 function fmtTs(ts){
   if (!ts) return '-';
   const d = new Date(ts);
@@ -460,82 +469,27 @@ function fmtTs(ts){
   return `${yyyy}-${mm}-${dd} ${hh}:${mi}`;
 }
 
-// 將圖片縮成 maxSize 正方形（256x256），回傳 dataURL（webp 若失敗就 png）
-async function downscaleToDataUrl(file, maxSize=256, quality=0.82){
-  const blobUrl = URL.createObjectURL(file);
-  try{
-    const img = await new Promise((resolve, reject)=>{
-      const im = new Image();
-      im.onload = ()=> resolve(im);
-      im.onerror = reject;
-      im.src = blobUrl;
-    });
-
-    const canvas = document.createElement('canvas');
-    canvas.width = maxSize;
-    canvas.height = maxSize;
-    const ctx = canvas.getContext('2d');
-
-    // 置中裁切成正方形
-    const w = img.naturalWidth || img.width;
-    const h = img.naturalHeight || img.height;
-    const side = Math.min(w, h);
-    const sx = Math.floor((w - side) / 2);
-    const sy = Math.floor((h - side) / 2);
-
-    ctx.clearRect(0,0,maxSize,maxSize);
-    ctx.drawImage(img, sx, sy, side, side, 0, 0, maxSize, maxSize);
-
-    // webp 優先，部分瀏覽器不支援就退 png
-    let dataUrl = '';
-    try{
-      dataUrl = canvas.toDataURL('image/webp', quality);
-      if (!dataUrl.startsWith('data:image/webp')) throw new Error('webp not supported');
-    }catch(e){
-      dataUrl = canvas.toDataURL('image/png');
-    }
-    return dataUrl;
-  }finally{
-    URL.revokeObjectURL(blobUrl);
-  }
-}
-
-// ---------- profile storage ----------
 function defaultProfile(){
   return {
     version: 1,
     createdAt: nowTs(),
     lastSeenAt: nowTs(),
-
-    // 玩家基本資料（本機）
-    player: {
-      name: '未命名玩家',
-      avatarDataUrl: ''  // data:image/...
-    },
-
-    // 戰績累積
+    player: { name:'未命名玩家', avatar:1 }, // 只存 id，圖片用路徑推導
     totals: { games: 0, wins: 0, coins: 0, atk: 0, def: 0, hit: 0, intel: 0, survival: 0 },
-
-    // 豪華解鎖
-    deluxeUnlocked: [],        // [0..19]
-
-    // 最近 10 局
-    recent: [],                // [{ts, place, coinsGain, unlocked:[..]}]
-
-    // 稱號
+    deluxeUnlocked: [],
+    recent: [],
     titles: { owned: [], equipped: '' }
   };
 }
 
 function loadProfile(){
-  const raw = localStorage.getItem(LS_KEY);
+  const raw = localStorage.getItem(LS_KEY_PROFILE);
   const base = defaultProfile();
   if (!raw) return base;
 
   const p = safeJsonParse(raw, null);
   if (!p || typeof p !== 'object') return base;
 
-  // merge（避免舊版缺欄位）
   const out = {
     ...base,
     ...p,
@@ -545,7 +499,7 @@ function loadProfile(){
   };
 
   out.player.name = clampStr(out.player.name || '未命名玩家', 16) || '未命名玩家';
-  out.player.avatarDataUrl = String(out.player.avatarDataUrl || '');
+  out.player.avatar = Math.max(1, Math.min(AVATAR_COUNT, Number(out.player.avatar)||1));
 
   out.deluxeUnlocked = uniq(out.deluxeUnlocked).map(x=>Number(x)).filter(n=>Number.isFinite(n) && n>=0 && n<=19);
   out.titles.owned = uniq(out.titles.owned);
@@ -557,80 +511,45 @@ function loadProfile(){
 }
 
 function saveProfile(p){
-  try{
-    localStorage.setItem(LS_KEY, JSON.stringify(p));
-  }catch(e){
-    alert('儲存失敗：瀏覽器可能限制儲存空間或使用無痕模式。');
-  }
+  try{ localStorage.setItem(LS_KEY_PROFILE, JSON.stringify(p)); }
+  catch(e){ alert('儲存失敗：瀏覽器可能限制儲存空間或使用無痕模式。'); }
 }
 
-// ---------- UI: avatar + name ----------
+// 與 start.html 同步：讀 op_player_profile
+function loadStartProfile(){
+  const raw = localStorage.getItem(LS_KEY_START);
+  const p = safeJsonParse(raw, null);
+  if (!p || typeof p !== 'object') return null;
+  return {
+    playerName: clampStr(p.playerName || '', 16),
+    playerAvatar: Math.max(1, Math.min(AVATAR_COUNT, Number(p.playerAvatar)||1)),
+    avatarUrl: String(p.avatarUrl || avatarUrlById(p.playerAvatar||1))
+  };
+}
+
+// 與 start.html 同步：寫 op_player_profile（讓等待室預設值自動一致）
+function saveStartProfile(name, avatarId){
+  const safeName = clampStr(name || '未命名玩家', 16) || '未命名玩家';
+  const safeId = Math.max(1, Math.min(AVATAR_COUNT, Number(avatarId)||1));
+  const data = { playerName: safeName, playerAvatar: safeId, avatarUrl: avatarUrlById(safeId) };
+  try{ localStorage.setItem(LS_KEY_START, JSON.stringify(data)); }catch(e){}
+  return data;
+}
+
+// header render
 function renderHeader(profile){
-  // name
   const name = clampStr(profile.player?.name || '未命名玩家', 16) || '未命名玩家';
   setText('nameBtn', name);
 
-  // avatar
-  const box = document.getElementById('avatarBox');
-  const fallback = document.getElementById('avatarFallback');
-  const existingImg = box.querySelector('img');
-  if (existingImg) existingImg.remove();
-
-  const dataUrl = String(profile.player?.avatarDataUrl || '');
-  if (dataUrl.startsWith('data:image/')){
-    const img = document.createElement('img');
-    img.src = dataUrl;
-    img.alt = 'avatar';
-    box.insertBefore(img, fallback);
-    fallback.style.display = 'none';
-  }else{
-    fallback.style.display = 'block';
-    // fallback 顯示名字前兩字（或 OP）
-    const t = name.trim();
-    fallback.textContent = t ? t.slice(0, 2) : 'OP';
-  }
+  const img = document.getElementById('avatarImg');
+  img.src = avatarUrlById(profile.player?.avatar || 1);
+  img.style.display = 'block';
 }
 
-function openNameModal(profile){
-  const back = document.getElementById('nameModalBack');
-  const input = document.getElementById('nameInput');
-  input.value = clampStr(profile.player?.name || '', 16) || '';
-  back.style.display = 'flex';
-
-  // focus
-  setTimeout(()=>{ input.focus(); input.select(); }, 0);
-}
-
-function closeNameModal(){
-  const back = document.getElementById('nameModalBack');
-  back.style.display = 'none';
-}
-
-async function handlePickAvatar(profile, file){
-  if (!file) return;
-
-  // 基本檢查：限制 3MB（原圖可能很大，縮圖會小很多）
-  if (file.size > 3 * 1024 * 1024){
-    alert('圖片太大（>3MB）。請換一張較小的圖片。');
-    return;
-  }
-
-  try{
-    const dataUrl = await downscaleToDataUrl(file, 256, 0.82);
-    profile.player.avatarDataUrl = dataUrl;
-    saveProfile(profile);
-    render(profile);
-  }catch(e){
-    console.error(e);
-    alert('讀取圖片失敗，請換一張圖片再試一次。');
-  }
-}
-
-// ---------- main render ----------
+// main render
 function render(profile){
   renderHeader(profile);
 
-  // KPIs
   const g = profile.totals.games || 0;
   const w = profile.totals.wins || 0;
   const winRate = g>0 ? Math.round((w/g)*100) : 0;
@@ -640,10 +559,8 @@ function render(profile){
   setText('kWinRate', `${winRate}%`);
   setText('kCoins', String(profile.totals.coins || 0));
 
-  // Equipped title
   setText('equippedTitle', profile.titles.equipped ? profile.titles.equipped : '未佩戴稱號');
 
-  // Titles
   const wrap = document.getElementById('titlesWrap');
   wrap.innerHTML = '';
   const owned = profile.titles.owned || [];
@@ -667,7 +584,6 @@ function render(profile){
     }
   }
 
-  // Recent
   const tb = document.getElementById('recentTbody');
   tb.innerHTML = '';
   const recent = Array.isArray(profile.recent) ? profile.recent : [];
@@ -681,7 +597,6 @@ function render(profile){
       const coins = (r.coinsGain==null || r.coinsGain==='') ? '-' : String(r.coinsGain);
       const unlocked = Array.isArray(r.unlocked) ? r.unlocked : [];
       const unlockedTxt = unlocked.length ? unlocked.map(n=>`#${n}`).join(' ') : '-';
-
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td>${fmtTs(r.ts)}</td>
@@ -693,7 +608,6 @@ function render(profile){
     }
   }
 
-  // Deluxe gallery
   const lux = document.getElementById('luxGallery');
   lux.innerHTML = '';
   const unlockedSet = new Set((profile.deluxeUnlocked||[]).map(n=>Number(n)));
@@ -726,67 +640,116 @@ function render(profile){
   setText('luxCount', String(unlockedCount));
 }
 
-// ---------- init ----------
+// modal helpers
+function openModal(id){ const el=document.getElementById(id); if(el) el.style.display='flex'; }
+function closeModal(id){ const el=document.getElementById(id); if(el) el.style.display='none'; }
+
+// init
 (function init(){
   const profile = loadProfile();
+
+  // 第一次載入時：如果 start 已經有選過名字/頭像，就同步過來
+  const sp = loadStartProfile();
+  if (sp){
+    // 同步到玩家頁資料
+    profile.player.name = sp.playerName || profile.player.name;
+    profile.player.avatar = sp.playerAvatar || profile.player.avatar;
+  }else{
+    // 如果 start 沒資料，就確保至少寫一次，讓開始頁可帶入
+    saveStartProfile(profile.player.name, profile.player.avatar);
+  }
+
   saveProfile(profile);
   render(profile);
 
   // top actions
   document.getElementById('btnRefresh').onclick = () => location.reload();
-
-  document.getElementById('btnBack').onclick = () => {
-    location.href = '/start.html';
-  };
-
+  document.getElementById('btnBack').onclick = () => { location.href = '/start.html'; };
   document.getElementById('btnReset').onclick = () => {
     const ok = confirm('確定要清除本機紀錄？（名稱、頭貼、戰績、稱號、豪華解鎖、最近對局都會消失）');
     if (!ok) return;
-    localStorage.removeItem(LS_KEY);
+    localStorage.removeItem(LS_KEY_PROFILE);
+    localStorage.removeItem(LS_KEY_START);
     location.reload();
   };
 
-  // avatar click -> file
-  const avatarFile = document.getElementById('avatarFile');
-  document.getElementById('avatarBox').onclick = () => {
-    avatarFile.value = '';
-    avatarFile.click();
+  // name modal
+  const nameInput = document.getElementById('nameInput');
+  document.getElementById('nameBtn').onclick = () => {
+    nameInput.value = clampStr(profile.player.name, 16);
+    openModal('nameModalBack');
+    setTimeout(()=>{ nameInput.focus(); nameInput.select(); }, 0);
   };
-  avatarFile.addEventListener('change', async (e)=>{
-    const f = e.target.files && e.target.files[0];
-    await handlePickAvatar(profile, f);
+  const closeName = ()=> closeModal('nameModalBack');
+  document.getElementById('nameModalClose').onclick = closeName;
+  document.getElementById('nameCancel').onclick = closeName;
+  document.getElementById('nameSave').onclick = () => {
+    const v = clampStr(nameInput.value, 16) || '未命名玩家';
+    profile.player.name = v;
+    // 同步到 start
+    saveStartProfile(profile.player.name, profile.player.avatar);
+    saveProfile(profile);
+    closeName();
+    render(profile);
+  };
+  nameInput.addEventListener('keydown', (ev)=>{
+    if (ev.key === 'Enter'){ ev.preventDefault(); document.getElementById('nameSave').click(); }
+    if (ev.key === 'Escape'){ ev.preventDefault(); closeName(); }
+  });
+  document.getElementById('nameModalBack').addEventListener('click', (ev)=>{
+    if (ev.target && ev.target.id === 'nameModalBack') closeName();
   });
 
-  // name change
-  const nameBtn = document.getElementById('nameBtn');
-  nameBtn.onclick = () => openNameModal(profile);
+  // avatar modal
+  let pendingAvatar = profile.player.avatar;
 
-  const closeAll = () => closeNameModal();
-  document.getElementById('nameModalClose').onclick = closeAll;
-  document.getElementById('nameCancel').onclick = closeAll;
+  function buildAvatarGrid(){
+    const grid = document.getElementById('avaGrid');
+    grid.innerHTML = '';
+    for (let i=1; i<=AVATAR_COUNT; i++){
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'avaBtn' + (i===pendingAvatar ? ' on' : '');
+      btn.title = `avatar ${i}`;
 
-  document.getElementById('nameSave').onclick = () => {
-    const v = clampStr(document.getElementById('nameInput').value, 16);
-    profile.player.name = v || '未命名玩家';
+      const img = document.createElement('img');
+      img.src = avatarUrlById(i);
+      img.alt = `avatar-${i}`;
+      btn.appendChild(img);
+
+      btn.onclick = () => {
+        pendingAvatar = i;
+        // 更新選取狀態
+        grid.querySelectorAll('.avaBtn').forEach((x, idx)=>{
+          x.classList.toggle('on', (idx+1)===pendingAvatar);
+        });
+      };
+
+      grid.appendChild(btn);
+    }
+  }
+
+  document.getElementById('avatarBox').onclick = () => {
+    pendingAvatar = profile.player.avatar || 1;
+    buildAvatarGrid();
+    openModal('avatarModalBack');
+  };
+
+  const closeAvatar = ()=> closeModal('avatarModalBack');
+  document.getElementById('avatarModalClose').onclick = closeAvatar;
+  document.getElementById('avatarCancel').onclick = closeAvatar;
+
+  document.getElementById('avatarSave').onclick = () => {
+    profile.player.avatar = pendingAvatar;
+    // 同步到 start
+    saveStartProfile(profile.player.name, profile.player.avatar);
     saveProfile(profile);
-    closeNameModal();
+    closeAvatar();
     render(profile);
   };
 
-  // enter key to save
-  document.getElementById('nameInput').addEventListener('keydown', (ev)=>{
-    if (ev.key === 'Enter'){
-      ev.preventDefault();
-      document.getElementById('nameSave').click();
-    }else if (ev.key === 'Escape'){
-      ev.preventDefault();
-      closeNameModal();
-    }
-  });
-
-  // click outside modal to close
-  document.getElementById('nameModalBack').addEventListener('click', (ev)=>{
-    if (ev.target && ev.target.id === 'nameModalBack') closeNameModal();
+  document.getElementById('avatarModalBack').addEventListener('click', (ev)=>{
+    if (ev.target && ev.target.id === 'avatarModalBack') closeAvatar();
   });
 })();
 </script>
