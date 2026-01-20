@@ -34,16 +34,60 @@
       background: linear-gradient(180deg, rgba(17,24,39,.75), rgba(2,6,23,.65));
       box-shadow: 0 10px 30px rgba(0,0,0,.25);
     }
-    .brand{display:flex;gap:12px;align-items:center}
-    .logo{
-      width:42px;height:42px;border-radius:12px;border:1px solid var(--line);
+
+    .brand{display:flex;gap:12px;align-items:center;min-width:0}
+    .avatarBox{
+      width:44px;height:44px;border-radius:14px;border:1px solid var(--line);
       background: radial-gradient(circle at 30% 30%, rgba(251,191,36,.25), transparent 60%),
                   linear-gradient(135deg, rgba(59,130,246,.25), rgba(236,72,153,.15));
       display:flex;align-items:center;justify-content:center;
-      font-weight:800;color:#fff;letter-spacing:.5px;
+      overflow:hidden;
+      cursor:pointer;
+      user-select:none;
+      position:relative;
     }
-    .title h1{margin:0;font-size:16px;letter-spacing:.5px}
+    .avatarBox img{
+      width:100%;height:100%;
+      object-fit:cover;display:block;
+    }
+    .avatarBox .fallback{
+      font-weight:900;color:#fff;letter-spacing:.5px;font-size:14px;
+    }
+    .avatarBox:hover{
+      border-color:#3a5584;
+    }
+    .avatarHint{
+      position:absolute;left:50%;bottom:-2px;transform:translateX(-50%);
+      font-size:10px;color:rgba(229,231,235,.75);
+      background:rgba(2,6,23,.65);
+      border:1px solid rgba(35,52,85,.75);
+      padding:2px 6px;border-radius:999px;
+      pointer-events:none;
+    }
+
+    .title{min-width:0}
+    .title h1{margin:0;font-size:16px;letter-spacing:.5px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
     .title .sub{margin-top:2px;font-size:12px;color:var(--muted)}
+    .nameBtn{
+      border:1px solid rgba(35,52,85,.85);
+      background:rgba(11,22,45,.55);
+      color:var(--text);
+      padding:6px 10px;
+      border-radius:12px;
+      font-size:13px;
+      cursor:pointer;
+      transition:background .15s ease,border-color .15s ease,transform .06s ease;
+      max-width: 380px;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .nameBtn:hover{background:rgba(11,22,45,.75);border-color:#3a5584}
+    .nameBtn:active{transform:translateY(1px)}
+    .nameSmall{
+      font-size:11px;color:var(--muted);
+    }
+
     .actions{display:flex;gap:8px;flex-wrap:wrap}
     .btn{
       border:1px solid var(--line);background:#0b162dcc;color:var(--text);
@@ -151,8 +195,6 @@
     .rank{
       font-weight:900;
     }
-    .good{color:var(--ok)}
-    .bad{color:var(--bad)}
     .titles{
       display:flex;gap:8px;flex-wrap:wrap
     }
@@ -174,18 +216,76 @@
     }
     .footnote{font-size:11px;color:var(--muted);line-height:1.5}
     .mono{font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+
+    /* modal */
+    .modalBack{
+      position:fixed;inset:0;
+      background:rgba(0,0,0,.55);
+      display:none;
+      align-items:center;justify-content:center;
+      padding:18px;
+      z-index:9999;
+    }
+    .modal{
+      width:min(520px, 100%);
+      border:1px solid rgba(35,52,85,.9);
+      border-radius:16px;
+      background:linear-gradient(180deg, rgba(15,27,50,.92), rgba(2,6,23,.88));
+      box-shadow: 0 16px 50px rgba(0,0,0,.35);
+      overflow:hidden;
+    }
+    .modal .mh{
+      padding:12px 14px;
+      border-bottom:1px solid rgba(35,52,85,.65);
+      display:flex;justify-content:space-between;align-items:center;
+    }
+    .modal .mb{padding:12px 14px}
+    .modal .mh .t{font-weight:900;font-size:13px}
+    .xBtn{
+      border:1px solid rgba(35,52,85,.85);
+      background:rgba(11,22,45,.55);
+      color:var(--text);
+      width:34px;height:34px;
+      border-radius:12px;
+      cursor:pointer;
+    }
+    .field{
+      display:grid;gap:6px;margin:10px 0 12px;
+    }
+    .field label{font-size:11px;color:var(--muted)}
+    .inp{
+      border:1px solid rgba(35,52,85,.85);
+      background:rgba(11,22,45,.55);
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 10px;
+      outline:none;
+      font-size:13px;
+    }
+    .help{font-size:11px;color:var(--muted);line-height:1.5}
+    .modal .actions2{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:12px}
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="topbar">
       <div class="brand">
-        <div class="logo">OP</div>
+        <div class="avatarBox" id="avatarBox" title="點擊更換頭貼">
+          <span class="fallback" id="avatarFallback">OP</span>
+          <span class="avatarHint">換頭貼</span>
+        </div>
+
         <div class="title">
-          <h1>玩家頁</h1>
-          <div class="sub">戰績總覽 / 豪華解鎖 / 最近 10 局 / 稱號</div>
+          <h1>
+            <span>玩家頁</span>
+            <button class="nameBtn" id="nameBtn" title="點擊修改玩家名稱">未命名玩家</button>
+          </h1>
+          <div class="sub">
+            <span class="nameSmall">提示：名稱與頭貼保存在此瀏覽器。</span>
+          </div>
         </div>
       </div>
+
       <div class="actions">
         <button class="btn" id="btnBack">返回主畫面</button>
         <button class="btn primary" id="btnRefresh">重新整理</button>
@@ -239,7 +339,7 @@
 
           <div class="row" style="justify-content:space-between">
             <div style="font-weight:800">最近 10 局</div>
-            <div class="muted" style="font-size:11px">建議由結算頁自動匯入</div>
+            <div class="muted" style="font-size:11px">由結算頁匯入（之後我幫你接）</div>
           </div>
 
           <div style="margin-top:8px; overflow:auto">
@@ -275,9 +375,33 @@
           <div class="gallery" id="luxGallery"></div>
           <div class="divider"></div>
           <div class="footnote">
-            圖片路徑預設使用：<span class="mono">/images/cards_lux/{id}.webp</span>。<br/>
-            若你豪華卡實際路徑不同，之後我再幫你對齊你專案的資料夾結構即可。
+            圖片路徑預設使用：<span class="mono">/images/cards_lux/{id}.webp</span>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- hidden file input -->
+  <input id="avatarFile" type="file" accept="image/*" style="display:none" />
+
+  <!-- name modal -->
+  <div class="modalBack" id="nameModalBack" role="dialog" aria-modal="true">
+    <div class="modal">
+      <div class="mh">
+        <div class="t">修改玩家名稱</div>
+        <button class="xBtn" id="nameModalClose" title="關閉">✕</button>
+      </div>
+      <div class="mb">
+        <div class="field">
+          <label for="nameInput">玩家名稱</label>
+          <input id="nameInput" class="inp" maxlength="16" placeholder="最多 16 字" />
+          <div class="help">建議用你在等待室常用的名字，之後我也可以幫你同步到 start.html 預設名稱。</div>
+        </div>
+
+        <div class="actions2">
+          <button class="btn" id="nameCancel">取消</button>
+          <button class="btn primary" id="nameSave">儲存</button>
         </div>
       </div>
     </div>
@@ -288,11 +412,12 @@
  * 玩家頁 v1（本機版）
  * - 讀寫 localStorage: op_profile_v1
  * - 顯示：戰績、稱號、豪華解鎖、最近 10 局
- * - 稱號佩戴：點擊切換 titles.equipped
+ * - 新增：玩家名稱、頭貼（上傳縮圖）
  */
 
 const LS_KEY = 'op_profile_v1';
 
+// ---------- utilities ----------
 function nowTs(){ return Date.now(); }
 
 function safeJsonParse(s, fallback){
@@ -312,14 +437,92 @@ function uniq(arr){
   return out;
 }
 
+function clampStr(s, maxLen){
+  s = String(s ?? '').trim();
+  if (!s) return '';
+  if (s.length > maxLen) s = s.slice(0, maxLen);
+  return s;
+}
+
+function setText(id, txt){
+  const el = document.getElementById(id);
+  if (el) el.textContent = txt;
+}
+
+function fmtTs(ts){
+  if (!ts) return '-';
+  const d = new Date(ts);
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth()+1).padStart(2,'0');
+  const dd = String(d.getDate()).padStart(2,'0');
+  const hh = String(d.getHours()).padStart(2,'0');
+  const mi = String(d.getMinutes()).padStart(2,'0');
+  return `${yyyy}-${mm}-${dd} ${hh}:${mi}`;
+}
+
+// 將圖片縮成 maxSize 正方形（256x256），回傳 dataURL（webp 若失敗就 png）
+async function downscaleToDataUrl(file, maxSize=256, quality=0.82){
+  const blobUrl = URL.createObjectURL(file);
+  try{
+    const img = await new Promise((resolve, reject)=>{
+      const im = new Image();
+      im.onload = ()=> resolve(im);
+      im.onerror = reject;
+      im.src = blobUrl;
+    });
+
+    const canvas = document.createElement('canvas');
+    canvas.width = maxSize;
+    canvas.height = maxSize;
+    const ctx = canvas.getContext('2d');
+
+    // 置中裁切成正方形
+    const w = img.naturalWidth || img.width;
+    const h = img.naturalHeight || img.height;
+    const side = Math.min(w, h);
+    const sx = Math.floor((w - side) / 2);
+    const sy = Math.floor((h - side) / 2);
+
+    ctx.clearRect(0,0,maxSize,maxSize);
+    ctx.drawImage(img, sx, sy, side, side, 0, 0, maxSize, maxSize);
+
+    // webp 優先，部分瀏覽器不支援就退 png
+    let dataUrl = '';
+    try{
+      dataUrl = canvas.toDataURL('image/webp', quality);
+      if (!dataUrl.startsWith('data:image/webp')) throw new Error('webp not supported');
+    }catch(e){
+      dataUrl = canvas.toDataURL('image/png');
+    }
+    return dataUrl;
+  }finally{
+    URL.revokeObjectURL(blobUrl);
+  }
+}
+
+// ---------- profile storage ----------
 function defaultProfile(){
   return {
     version: 1,
     createdAt: nowTs(),
     lastSeenAt: nowTs(),
+
+    // 玩家基本資料（本機）
+    player: {
+      name: '未命名玩家',
+      avatarDataUrl: ''  // data:image/...
+    },
+
+    // 戰績累積
     totals: { games: 0, wins: 0, coins: 0, atk: 0, def: 0, hit: 0, intel: 0, survival: 0 },
+
+    // 豪華解鎖
     deluxeUnlocked: [],        // [0..19]
+
+    // 最近 10 局
     recent: [],                // [{ts, place, coinsGain, unlocked:[..]}]
+
+    // 稱號
     titles: { owned: [], equipped: '' }
   };
 }
@@ -336,9 +539,13 @@ function loadProfile(){
   const out = {
     ...base,
     ...p,
+    player: { ...base.player, ...(p.player||{}) },
     totals: { ...base.totals, ...(p.totals||{}) },
     titles: { ...base.titles, ...(p.titles||{}) },
   };
+
+  out.player.name = clampStr(out.player.name || '未命名玩家', 16) || '未命名玩家';
+  out.player.avatarDataUrl = String(out.player.avatarDataUrl || '');
 
   out.deluxeUnlocked = uniq(out.deluxeUnlocked).map(x=>Number(x)).filter(n=>Number.isFinite(n) && n>=0 && n<=19);
   out.titles.owned = uniq(out.titles.owned);
@@ -357,23 +564,72 @@ function saveProfile(p){
   }
 }
 
-function fmtTs(ts){
-  if (!ts) return '-';
-  const d = new Date(ts);
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth()+1).padStart(2,'0');
-  const dd = String(d.getDate()).padStart(2,'0');
-  const hh = String(d.getHours()).padStart(2,'0');
-  const mi = String(d.getMinutes()).padStart(2,'0');
-  return `${yyyy}-${mm}-${dd} ${hh}:${mi}`;
+// ---------- UI: avatar + name ----------
+function renderHeader(profile){
+  // name
+  const name = clampStr(profile.player?.name || '未命名玩家', 16) || '未命名玩家';
+  setText('nameBtn', name);
+
+  // avatar
+  const box = document.getElementById('avatarBox');
+  const fallback = document.getElementById('avatarFallback');
+  const existingImg = box.querySelector('img');
+  if (existingImg) existingImg.remove();
+
+  const dataUrl = String(profile.player?.avatarDataUrl || '');
+  if (dataUrl.startsWith('data:image/')){
+    const img = document.createElement('img');
+    img.src = dataUrl;
+    img.alt = 'avatar';
+    box.insertBefore(img, fallback);
+    fallback.style.display = 'none';
+  }else{
+    fallback.style.display = 'block';
+    // fallback 顯示名字前兩字（或 OP）
+    const t = name.trim();
+    fallback.textContent = t ? t.slice(0, 2) : 'OP';
+  }
 }
 
-function setText(id, txt){
-  const el = document.getElementById(id);
-  if (el) el.textContent = txt;
+function openNameModal(profile){
+  const back = document.getElementById('nameModalBack');
+  const input = document.getElementById('nameInput');
+  input.value = clampStr(profile.player?.name || '', 16) || '';
+  back.style.display = 'flex';
+
+  // focus
+  setTimeout(()=>{ input.focus(); input.select(); }, 0);
 }
 
+function closeNameModal(){
+  const back = document.getElementById('nameModalBack');
+  back.style.display = 'none';
+}
+
+async function handlePickAvatar(profile, file){
+  if (!file) return;
+
+  // 基本檢查：限制 3MB（原圖可能很大，縮圖會小很多）
+  if (file.size > 3 * 1024 * 1024){
+    alert('圖片太大（>3MB）。請換一張較小的圖片。');
+    return;
+  }
+
+  try{
+    const dataUrl = await downscaleToDataUrl(file, 256, 0.82);
+    profile.player.avatarDataUrl = dataUrl;
+    saveProfile(profile);
+    render(profile);
+  }catch(e){
+    console.error(e);
+    alert('讀取圖片失敗，請換一張圖片再試一次。');
+  }
+}
+
+// ---------- main render ----------
 function render(profile){
+  renderHeader(profile);
+
   // KPIs
   const g = profile.totals.games || 0;
   const w = profile.totals.wins || 0;
@@ -417,7 +673,7 @@ function render(profile){
   const recent = Array.isArray(profile.recent) ? profile.recent : [];
   if (!recent.length){
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td class="muted" colspan="4">尚無紀錄。建議在結算頁自動匯入最近對局摘要。</td>`;
+    tr.innerHTML = `<td class="muted" colspan="4">尚無紀錄。之後我會幫你在結算頁自動匯入最近對局摘要。</td>`;
     tb.appendChild(tr);
   }else{
     for (const r of recent){
@@ -465,30 +721,73 @@ function render(profile){
     }else{
       slot.textContent = `未解鎖 #${id}`;
     }
-
     lux.appendChild(slot);
   }
   setText('luxCount', String(unlockedCount));
 }
 
+// ---------- init ----------
 (function init(){
   const profile = loadProfile();
-  saveProfile(profile); // 確保補齊欄位與 lastSeenAt
+  saveProfile(profile);
   render(profile);
 
+  // top actions
   document.getElementById('btnRefresh').onclick = () => location.reload();
 
   document.getElementById('btnBack').onclick = () => {
-    // 你專案是 /start.html 作為入口
     location.href = '/start.html';
   };
 
   document.getElementById('btnReset').onclick = () => {
-    const ok = confirm('確定要清除本機紀錄？（戰績、稱號、豪華解鎖、最近對局都會消失）');
+    const ok = confirm('確定要清除本機紀錄？（名稱、頭貼、戰績、稱號、豪華解鎖、最近對局都會消失）');
     if (!ok) return;
     localStorage.removeItem(LS_KEY);
     location.reload();
   };
+
+  // avatar click -> file
+  const avatarFile = document.getElementById('avatarFile');
+  document.getElementById('avatarBox').onclick = () => {
+    avatarFile.value = '';
+    avatarFile.click();
+  };
+  avatarFile.addEventListener('change', async (e)=>{
+    const f = e.target.files && e.target.files[0];
+    await handlePickAvatar(profile, f);
+  });
+
+  // name change
+  const nameBtn = document.getElementById('nameBtn');
+  nameBtn.onclick = () => openNameModal(profile);
+
+  const closeAll = () => closeNameModal();
+  document.getElementById('nameModalClose').onclick = closeAll;
+  document.getElementById('nameCancel').onclick = closeAll;
+
+  document.getElementById('nameSave').onclick = () => {
+    const v = clampStr(document.getElementById('nameInput').value, 16);
+    profile.player.name = v || '未命名玩家';
+    saveProfile(profile);
+    closeNameModal();
+    render(profile);
+  };
+
+  // enter key to save
+  document.getElementById('nameInput').addEventListener('keydown', (ev)=>{
+    if (ev.key === 'Enter'){
+      ev.preventDefault();
+      document.getElementById('nameSave').click();
+    }else if (ev.key === 'Escape'){
+      ev.preventDefault();
+      closeNameModal();
+    }
+  });
+
+  // click outside modal to close
+  document.getElementById('nameModalBack').addEventListener('click', (ev)=>{
+    if (ev.target && ev.target.id === 'nameModalBack') closeNameModal();
+  });
 })();
 </script>
 </body>
