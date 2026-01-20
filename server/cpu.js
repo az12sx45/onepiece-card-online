@@ -40,6 +40,105 @@ function cloneState(st){
   return JSON.parse(JSON.stringify(st));
 }
 
+// =============================
+// 保守型 CPU AI：大局觀強化參數
+// =============================
+// 取向：保守（優先保命 / 資訊 / 控場），除非能高機率淘汰對手
+const AI_STYLE = {
+  // 若某行動「淘汰機率」達到這個門檻，就願意積極出手
+  killProbGo: 0.70,
+  // 若淘汰目標是領先者，可稍微降低門檻
+  killProbGoVsLeader: 0.60,
+  // Usopp 猜尾數：命中率太低就不要賭
+  guessMinHitProb: 0.35,
+  // 領先者判定：金幣差距達到多少算領先
+  leaderGoldDelta: 2,
+};
+
+function getLeaderIdx(st){
+  let bestIdx = null;
+  let bestGold = -Infinity;
+  const players = st.players || [];
+  for(let i=0;i<players.length;i++){
+    const p = players[i];
+    if(!p?.alive) continue;
+    const g = Number(p.gold||0);
+    if(g > bestGold){ bestGold = g; bestIdx = i; }
+  }
+  return bestIdx;
+}
+
+function threatScore(st, meIdx, idx){
+  const players = st.players || [];
+  const p = players[idx];
+  if(!p?.alive || idx === meIdx) return -Infinity;
+
+  let s = 0;
+  const g = Number(p.gold||0);
+  s += g * 10;
+
+  // 難殺程度（保護/閃避）
+  if(p.protected) s += 6;
+  if(p.dodging)  s += 4;
+
+  // 被控場 → 威脅下降
+  if(p.frozen)      s -= 4;
+  if(p.iceInfected) s -= 3;
+
+  // 已知尾數（資訊）
+  const mem = Array.isArray(st.aiMemory) ? st.aiMemory[meIdx] : null;
+  if(mem?.knownHands && typeof mem.knownHands[idx] === 'number'){
+    s += tail(mem.knownHands[idx]) * 1.5;
+  }
+
+  return s;
+}
+
+// 淘汰價值：越該殺的人值越高（領先者/高威脅者優先）
+function elimValue(st, meIdx, idx){
+  const leader = getLeaderIdx(st);
+  let v = 1;
+
+  const ts = threatScore(st, meIdx, idx);
+  if(Number.isFinite(ts)) v += Math.max(0, ts) * 0.15;
+
+  if(idx === leader) v += 2.0;
+  return v;
+}
+
+// 模擬：在 cloneState 上套用 action
+function simApply(st, action){
+  return applyAction(st, action).state;
+}
+
+// 判斷目前 pending 是否輪到我輸入（target / digit）
+function myPendingNeed(st, meIdx){
+  const p = st.pending;
+  if(!p) return null;
+
+  // Usopp：先 target 再 digit；target 存在 p.extra.target
+  if(p.action === 'usopp'){
+    const t = p?.extra?.target;
+    if(typeof t !== 'number') return { kind: 'target' };
+    return { kind: 'digit', targetIdx: t };
+  }
+
+  // 通用：若 pending 已經指向我，且還沒有 target（很多牌都是先選 target）
+  if(p.action && p.playerId === meIdx){
+    // 大多數 target 會放 p.target 或 p.extra.target
+    const t1 = p.target;
+    const t2 = p?.extra?.target;
+    if(typeof t1 !== 'number' && typeof t2 !== 'number'){
+      // 排除少數多段互動，不在這裡自動模擬，避免卡死
+      if(p.action === 'kata-order' || p.action === 'teach-multipick' || p.action === 'queen') return null;
+      return { kind: 'target' };
+    }
+  }
+
+  return null;
+}
+
+
 // 給某個玩家看的「局面好壞」
 function scoreStateForMe(st, meIdx){
   const me = st.players[meIdx];
@@ -2032,6 +2131,7 @@ function pickCpuCardSmart(st, meIdx){
     return s;
   }
 
+
   let best = options[0];
   let bestScore = scoreOption(best);
   const s2 = scoreOption(options[1]);
@@ -2040,11 +2140,58 @@ function pickCpuCardSmart(st, meIdx){
     bestScore = s2;
   }
 
+  // === 保守型：用「小深度模擬」做最終裁決（大局觀：看其他玩家狀態） ===
+  // 只有當模擬的局面分差夠明顯時，才覆蓋 heuristic，避免效能/隨機波動
+  function simulateWhich(which){
+    let sim = cloneState(st);
+    sim = simApply(sim, { type:'PLAY_CARD', playerId: meIdx, payload:{ which } });
+
+    // 若打完牌還需要我選 target / digit，就用目前 CPU 決策解完
+    for(let guard=0; guard<6; guard++){
+      const need = myPendingNeed(sim, meIdx);
+      if(!need) break;
+
+      if(need.kind === 'target'){
+        const t = pickCpuTargetSmart(sim, meIdx, { avoidProtected:false, avoidDodging:false });
+        sim = simApply(sim, { type:'PICK_TARGET', playerId: meIdx, payload:{ target: t } });
+        continue;
+      }
+
+      if(need.kind === 'digit'){
+        const d = pickCpuDigitSmart(sim, meIdx, need.targetIdx);
+        sim = simApply(sim, { type:'PICK_DIGIT', playerId: meIdx, payload:{ digit: d } });
+        continue;
+      }
+
+      break;
+    }
+
+    return scoreStateForMe(sim, meIdx);
+  }
+
+  // 模擬只在兩個選項都可行時進行
+  if (bestScore > -90000) {
+    const simHand  = simulateWhich('hand');
+    const simDrawn = simulateWhich('drawn');
+
+    // 分差門檻：越保守越不容易被模擬翻盤
+    if (Math.abs(simHand - simDrawn) >= 40) {
+      if (simHand >= simDrawn) {
+        best = options[0];
+        bestScore = simHand;
+      } else {
+        best = options[1];
+        bestScore = simDrawn;
+      }
+    }
+  }
+
   // 如果兩個都違反規則被打到 -99999，就隨便回一個讓引擎自己擋
   if (bestScore <= -90000) return 'drawn';
 
   return best.which; // 'hand' 或 'drawn'
 }
+
 
 // CPU 選「攻擊 / 偵查目標」
 // 這裡會依照不同卡牌（看 st.pending.action / extra.boost）做專用的目標優先順序
@@ -2063,6 +2210,35 @@ function pickCpuTargetSmart(st, meIdx, opts = {}) {
   const pending = st.pending || null;
   const act = pending && pending.action ? pending.action : null;
   const isBoost = !!(pending && pending.extra && pending.extra.boost);
+
+  // === 保守型：大局觀（領先者/威脅） ===
+  const leaderIdx = getLeaderIdx(st);
+
+  // 用於 usopp：估計命中率（基於 knownHands / hints）
+  function estimateUsoppHitProb(targetIdx){
+    const mem = Array.isArray(st.aiMemory) ? st.aiMemory[meIdx] : null;
+    if(mem?.knownHands && typeof mem.knownHands[targetIdx] === 'number') return 1.0;
+    if(Array.isArray(st.usoppHints) && Array.isArray(st.usoppHints[targetIdx]) && st.usoppHints[targetIdx].length){
+      const k = st.usoppHints[targetIdx].length;
+      return 1 / Math.max(1, k);
+    }
+    // 沒資訊：保守，不喜歡硬賭
+    return 0.15;
+  }
+
+  // 用於決鬥：粗估我贏對方的機率（已知→精準；未知→用尾數大小近似）
+  function estimateDuelWinProb(targetIdx, myKeepId){
+    const myT = tail(myKeepId);
+    const mem = Array.isArray(st.aiMemory) ? st.aiMemory[meIdx] : null;
+    if(mem?.knownHands && typeof mem.knownHands[targetIdx] === 'number') {
+      const oppT = tail(mem.knownHands[targetIdx]);
+      if(myT > oppT) return 1.0;
+      if(myT === oppT) return 0.5;
+      return 0.0;
+    }
+    // 未知：尾數越大越可能贏（粗估，用來排序足夠）
+    return Math.min(0.95, Math.max(0.05, (myT + 1) / 10));
+  }
 
   // 呼叫方原本帶進來的選項
   const avoidProtectedRaw = !!opts.avoidProtected;
@@ -2177,9 +2353,10 @@ function pickCpuTargetSmart(st, meIdx, opts = {}) {
     // 沒人有防禦 → 若是強化版還會走「決鬥優先」那段
   }
 
+
   // ------------------------------------------------------------------
   // C. 決鬥類：3, 8, 10, 13 強化
-  //    優先打「已知 / 推測尾數比較小」的人
+  //    保守型：優先「高勝率」且「淘汰價值高」的目標
   // ------------------------------------------------------------------
   const isDuelCard =
     act === 'sanji' || // 3
@@ -2188,68 +2365,97 @@ function pickCpuTargetSmart(st, meIdx, opts = {}) {
     (act === 'killer' && isBoost); // 13 強化才會決鬥
 
   if (isDuelCard) {
-    let bestIdx = null;
-    let bestScore = Infinity;
+    const myKeepId = pending?.extra?.keep;
 
-    for (const { idx } of candidates) {
-      const info = getTailInfo(idx);
-      if (!info.hasInfo) continue; // 完全沒資訊就先不考慮
+    // 若引擎沒有帶 keep（理論上不太會），就退回原本「找尾數小」邏輯
+    if (typeof myKeepId !== 'number') {
+      let bestIdx = null;
+      let bestScore = Infinity;
 
-      let score = info.estTail;
+      for (const { idx } of candidates) {
+        const info = getTailInfo(idx);
+        if (!info.hasInfo) continue;
 
-      // 如果是「完全知道手牌」→ 再多給一點優勢
-      if (info.sure) score -= 0.3;
+        let score = info.estTail;
+        if (info.sure) score -= 0.3;
+        if (myTail != null && info.estTail >= myTail) score += 2;
 
-      // 如果知道自己的尾數，就盡量找「比自己小」的目標
-      if (myTail != null && info.estTail >= myTail) {
-        score += 2; // 比自己大或一樣就加懲罰
+        if (score < bestScore) {
+          bestScore = score;
+          bestIdx = idx;
+        }
+      }
+      if (bestIdx != null) return bestIdx;
+
+    } else {
+      // 期望收益：P(win) * elimValue
+      let bestIdx = null;
+      let bestU = -Infinity;
+      let bestWinP = 0;
+
+      for (const { idx } of candidates) {
+        const winP = estimateDuelWinProb(idx, myKeepId);
+        const u = winP * elimValue(st, meIdx, idx);
+        if (u > bestU) {
+          bestU = u;
+          bestIdx = idx;
+          bestWinP = winP;
+        }
       }
 
-      if (score < bestScore) {
-        bestScore = score;
-        bestIdx = idx;
+      if (bestIdx != null) {
+        // 保守：若勝率很低，寧可挑「最容易贏的」，而不是硬鎖某個高價值目標
+        const leaderGate = (bestIdx === leaderIdx) ? AI_STYLE.killProbGoVsLeader : AI_STYLE.killProbGo;
+        if (bestWinP >= leaderGate) {
+          return bestIdx;
+        }
+
+        // fallback：純看勝率最大
+        let winBest = null;
+        let winBestP = -Infinity;
+        for (const { idx } of candidates) {
+          const winP = estimateDuelWinProb(idx, myKeepId);
+          if (winP > winBestP) { winBestP = winP; winBest = idx; }
+        }
+        if (winBest != null) return winBest;
       }
     }
-
-    if (bestIdx != null) {
-      return bestIdx;
-    }
-    // 完全沒有任何尾數資訊 → 之後走通用規則
+    // 沒資訊 → 之後走通用規則
   }
 
+
   // ------------------------------------------------------------------
-  // D. 1（usopp）：優先找「最好猜的目標」
-  //     估計「這個人尾數可以猜中的機率」，高的優先
+  // D. 1（usopp）：保守型 → 選「期望淘汰收益」最高的目標
+  //    Expected = P(hit) * elimValue
+  //    命中率太低時，不硬鎖領先者（避免亂賭）
   // ------------------------------------------------------------------
   if (act === 'usopp') {
-    let bestIdx = null;
-    let bestProb = -1;
-    const mem = Array.isArray(st.aiMemory) ? st.aiMemory[meIdx] : null;
+    let bestIdx = candidates[0].idx;
+    let bestU = -Infinity;
+    let bestHitP = 0;
 
     for (const { idx } of candidates) {
-      let prob = 0.1; // 完全沒資訊當作 1/10
-
-      if (mem && mem.knownHands && typeof mem.knownHands[idx] === 'number') {
-        prob = 1; // 已經知道他的牌 → 必中
-      } else if (
-        Array.isArray(st.usoppHints) &&
-        Array.isArray(st.usoppHints[idx]) &&
-        st.usoppHints[idx].length
-      ) {
-        const n = st.usoppHints[idx].length;
-        prob = 1 / n; // 候選越少越好猜
-      }
-
-      if (prob > bestProb) {
-        bestProb = prob;
+      const hitP = estimateUsoppHitProb(idx);
+      const u = hitP * elimValue(st, meIdx, idx);
+      if (u > bestU) {
+        bestU = u;
         bestIdx = idx;
+        bestHitP = hitP;
       }
     }
 
-    if (bestIdx != null) {
-      return bestIdx;
+    // 保守：若最佳命中率仍低於門檻，就改挑「最好猜的」而非單純高價值
+    if (bestHitP < AI_STYLE.guessMinHitProb) {
+      let easiestIdx = bestIdx;
+      let easiestP = -Infinity;
+      for (const { idx } of candidates) {
+        const p = estimateUsoppHitProb(idx);
+        if (p > easiestP) { easiestP = p; easiestIdx = idx; }
+      }
+      return easiestIdx;
     }
-    // 如果每個人資訊都一樣差 → 之後走通用規則
+
+    return bestIdx;
   }
 
   // ------------------------------------------------------------------
@@ -2404,35 +2610,59 @@ function pickCpuDigitSmart(st, meIdx, targetIdx){
     if (remaining[i] < 0) remaining[i] = 0;
   }
 
-  // ③ 在 candidates 裡面，挑「剩餘尾數張數」最大的那個
-  //    若有多個同樣大 → 在裡面隨機挑一個
-  let bestWeight = -1;
-  let bestDigits = [];
 
+  // ③ 把 remaining 當作先驗，算出「在 candidates 條件下」的後驗分布
+  const probs = {};
+  let sum = 0;
   for (const d of candidates) {
     const w = remaining[d];
+    if (w > 0) {
+      probs[d] = w;
+      sum += w;
+    } else {
+      probs[d] = 0;
+    }
+  }
 
-    // 你如果想要「稍微偏愛大尾數」可以改成：
-    // const adj = w + (d >= 7 ? 0.1 : 0);
-    const adj = w;
+  // 全部為 0（理論上很少）：退回隨機猜一個候選
+  if (sum <= 0) {
+    const idx = Math.floor(Math.random() * candidates.length);
+    return candidates[idx];
+  }
 
-    if (adj > bestWeight) {
-      // 找到更好的 → 重新開一組
-      bestWeight = adj;
+  for (const d of candidates) {
+    probs[d] = probs[d] / sum;
+  }
+
+  // ④ 保守型選擇：最大化 Expected = P(d) * elimValue(target)
+  //    但若最高命中率 < guessMinHitProb，就只選「純命中率最高」避免亂賭
+  let maxP = -1;
+  for (const d of candidates) {
+    if (probs[d] > maxP) maxP = probs[d];
+  }
+
+  const evTarget = elimValue(st, meIdx, targetIdx);
+
+  let bestDigits = [];
+  let bestScore = -Infinity;
+
+  for (const d of candidates) {
+    const p = probs[d];
+    const score = (maxP < AI_STYLE.guessMinHitProb)
+      ? p
+      : (p * evTarget);
+
+    if (score > bestScore) {
+      bestScore = score;
       bestDigits = [d];
-    } else if (adj === bestWeight) {
-      // 同機率 → 一起丟進候選池
+    } else if (score === bestScore) {
       bestDigits.push(d);
     }
   }
 
-  // ④ 從「機率最高的那幾個」裡面隨機選一個
-  //    如果理論外狀況 bestDigits 空掉，就退回用全部 candidates
-  const pool = bestDigits.length > 0 ? bestDigits : candidates;
+  const pool = bestDigits.length ? bestDigits : candidates;
   const idx = Math.floor(Math.random() * pool.length);
-  const bestDigit = pool[idx];
-
-  return bestDigit;
+  return pool[idx];
 
 }
 
