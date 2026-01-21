@@ -559,6 +559,7 @@ body.view-rank .layout > aside.card:first-child{
         <div class="badge" id="seasonLbl">Season —</div>
         <button class="btn" id="openHelp">📖 說明</button>
         <button class="btn" onclick="fireBounty()">📜 本次懸賞單</button>
+        <button class="btn" onclick="location.href='profile.html'">玩家頁</button>
         <button class="btn" onclick="location.href='start.html'">返回主畫面</button>
       </div>
     </div>
@@ -836,6 +837,54 @@ function writeResultToProfileOnce(final){
       profile.titles.equipped = title;
     }
   }
+
+const LS_KEY_POSTERS = 'op_bounty_posters_v1';
+
+function loadPostersLS(){
+  try{
+    const arr = JSON.parse(localStorage.getItem(LS_KEY_POSTERS) || '[]');
+    if(!Array.isArray(arr)) return [];
+    return arr
+      .filter(x => x && typeof x === 'object' && typeof x.dataUrl === 'string' && x.dataUrl.startsWith('data:image'))
+      .map(x => ({ ts: Number(x.ts)||0, title: String(x.title||'').trim(), dataUrl: x.dataUrl }))
+      .slice(0,4);
+  }catch(e){
+    return [];
+  }
+}
+
+function savePostersLS(list){
+  try{ localStorage.setItem(LS_KEY_POSTERS, JSON.stringify((list||[]).slice(0,4))); }catch(e){}
+}
+
+function saveBountyPosterFromCanvas({ title } = {}){
+  const canvas = document.getElementById('bountyCanvas');
+  if(!canvas) return false;
+
+  let dataUrl = '';
+  try{
+    dataUrl = canvas.toDataURL('image/png');
+  }catch(e){
+    return false;
+  }
+  if(!dataUrl.startsWith('data:image')) return false;
+
+  const ts = Date.now();
+  const list = loadPostersLS();
+
+  // 去重：完全相同的圖就不重複塞
+  if(list.some(x => x.dataUrl === dataUrl)) return false;
+
+  list.unshift({
+    ts,
+    title: title || `懸賞令 ${new Date(ts).toLocaleString()}`,
+    dataUrl
+  });
+
+  savePostersLS(list);
+  return true;
+}
+
 
   // ===== 豪華解鎖（預留） =====
   if(Array.isArray(unlockedLux)){
@@ -1199,6 +1248,35 @@ function renderFinal(final){
   document.getElementById('seasonLbl').textContent = 'Season ' + (final.seasonNo||1);
   LAST_FINAL = final;
 
+function autoSaveMyBountyPoster(final){
+  if(!final) return;
+
+  // ✅ 防重複：同一場 final 只存一次（即使 socket 重送、刷新）
+  const fp = finalFingerprint(final);
+  const key = 'op_saved_bounty_fp';
+  if(sessionStorage.getItem(key) === fp) return;
+
+  // 取得我的 id（你頁面已經有 MY_PID / guessMyId / fallbackId）
+  let myId = guessMyId(final, MY_PID);
+  if (!final.playersMeta || !final.playersMeta[myId]) {
+    myId = fallbackId(final);
+  }
+
+  // 靜默生成 + 存檔
+  showBounty(final, myId, { silent:true })
+    .then(()=>{
+      const me = (final?.playersMeta && final.playersMeta[myId]) || {};
+      const ok = saveBountyPosterFromCanvas({ title: `懸賞令 ${me.name || ''}`.trim() });
+      if(ok){
+        sessionStorage.setItem(key, fp);
+      }
+    })
+    .catch(err=>{
+      console.warn('[autoSaveMyBountyPoster] failed:', err);
+    });
+}
+
+
   const playerCount = final.playerCount ||
     Object.keys(final.playersMeta || {}).length ||
     (final.ranking ? final.ranking.length : 4);
@@ -1251,6 +1329,9 @@ function renderFinal(final){
 
   // ✅ 在資料都準備好後，寫入玩家頁（只寫一次）
   writeResultToProfileOnce(final);
+// ✅ 每局結算自動存「自己的」懸賞單到玩家頁牆上（只存一次）
+autoSaveMyBountyPoster(final);
+
 }
 
 /* ====== 啟動階段：載入快取 +（可選）接續監看 ====== */
@@ -1414,7 +1495,9 @@ function avatarUrl2(v){
 }
 
 // === 懸賞金繪製（頭像在下層，海報在上層） ===
-async function showBounty(final, myId){
+async function showBounty(final, myId, opts = {}){
+  const silent = !!opts.silent;
+
   const me = (final?.playersMeta && final.playersMeta[myId]) || {
     name: `P${(myId|0)+1}`, pid: myId|0, avatar: null
   };
@@ -1488,9 +1571,11 @@ async function showBounty(final, myId){
   ctx.fillText(bountyStr, cx, bountyY);
   ctx.restore();
 
-  // 顯示彈窗
+// ✅ 靜默模式：不打開彈窗
+if(!silent){
   document.getElementById('bountyModal').classList.remove('hidden');
 }
+
 
 document.getElementById('closeBounty').onclick = ()=>{
   document.getElementById('bountyModal').classList.add('hidden');
