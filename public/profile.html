@@ -229,6 +229,18 @@
       box-shadow:0 0 0 3px rgba(251,191,36,.12);
     }
 
+.titleBadge{
+  font-size:12px;
+  padding:5px 10px;
+  border-radius:999px;
+  border:1px solid rgba(251,191,36,.7);
+  background:rgba(251,191,36,.15);
+  color:#ffd36a;
+  font-weight:700;
+  white-space:nowrap;
+}
+
+
     .divider{height:1px;background:rgba(35,52,85,.75);margin:12px 0}
 
     .gallery{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
@@ -365,11 +377,10 @@
         </div>
 
         <div class="title">
-          <h1>
-            <button class="nameBtn" id="nameBtn" title="點擊修改玩家名稱">未命名玩家</button>
-          </h1>
-          <div class="sub"><span class="nameSmall">名稱與頭貼會同步到開始頁。</span></div>
-        </div>
+<h1>
+  <button class="nameBtn" id="nameBtn" title="點擊修改玩家名稱">未命名玩家</button>
+  <span class="titleBadge" id="nameTitleBadge" style="display:none"></span>
+</h1>
       </div>
 
       <div class="actions">
@@ -384,13 +395,11 @@
       <div class="hd">
         <div>
           <div class="h">我的牆面</div>
-          <div class="wallHint">可選牆背景；牆上會顯示最近 4 場的懸賞令（目前仍保留手動匯入，之後再接結算頁自動寫入）。</div>
+          <div class="wallHint">可選牆背景；牆上會顯示最近 4 場的懸賞令。</div>
         </div>
 
         <div class="wallTools">
           <button class="btn" id="btnPickWall">選擇牆</button>
-          <button class="btn" id="btnImportPoster">匯入懸賞令</button>
-          <button class="btn danger" id="btnClearWall">清空牆面</button>
           <input id="posterFile" type="file" accept="image/*" style="display:none" />
         </div>
       </div>
@@ -399,7 +408,7 @@
         <div class="wallStage" id="wallStage">
           <div class="wallEmpty" id="wallEmpty">
             <div style="font-weight:800">牆面目前沒有懸賞令</div>
-            <div class="muted" style="font-size:12px">你可以先用「匯入懸賞令」手動貼 1～4 張；之後我再把結算頁的懸賞令自動存進來。</div>
+            <div class="muted" style="font-size:12px"></div>
           </div>
         </div>
       </div>
@@ -451,7 +460,7 @@
 
           <div class="row" style="justify-content:space-between">
             <div style="font-weight:800">最近 10 局</div>
-            <div class="muted" style="font-size:11px">由結算頁匯入（之後我幫你接）</div>
+            <div class="muted" style="font-size:11px">由結算頁匯入</div>
           </div>
 
           <div style="margin-top:8px; overflow:auto">
@@ -847,6 +856,15 @@ function render(profile){
   setText('kCoins', String(profile.totals.coins || 0));
 
   setText('equippedTitle', profile.titles.equipped ? profile.titles.equipped : '未佩戴稱號');
+// 顯示稱號在玩家名稱旁
+const badge = document.getElementById('nameTitleBadge');
+if (profile.titles.equipped) {
+  badge.textContent = profile.titles.equipped;
+  badge.style.display = 'inline-flex';
+} else {
+  badge.style.display = 'none';
+}
+
 
   const wrap = document.getElementById('titlesWrap');
   wrap.innerHTML = '';
