@@ -371,24 +371,27 @@
 <body>
   <div class="wrap">
     <div class="topbar">
-      <div class="brand">
-        <div class="avatarBox" id="avatarBox" title="點擊更換頭貼（使用開始頁頭像）">
-          <img id="avatarImg" alt="avatar" style="display:none" />
-        </div>
-
-        <div class="title">
-<h1>
-  <button class="nameBtn" id="nameBtn" title="點擊修改玩家名稱">未命名玩家</button>
-  <span class="titleBadge" id="nameTitleBadge" style="display:none"></span>
-</h1>
-      </div>
-
-      <div class="actions">
-        <button class="btn" id="btnBack">返回主畫面</button>
-        <button class="btn primary" id="btnRefresh">重新整理</button>
-        <button class="btn danger" id="btnReset">清除本機紀錄</button>
-      </div>
+  <div class="brand">
+    <div class="avatarBox" id="avatarBox" title="點擊更換頭貼（使用開始頁頭像）">
+      <img id="avatarImg" alt="avatar" style="display:none" />
     </div>
+
+    <div class="title">
+      <h1>
+        <button class="nameBtn" id="nameBtn" title="點擊修改玩家名稱">未命名玩家</button>
+        <span class="titleBadge" id="nameTitleBadge" style="display:none"></span>
+      </h1>
+      <!-- ✅ 這裡原本的 sub（名稱與頭貼會同步到開始頁。）已移除 -->
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn" id="btnBack">返回主畫面</button>
+    <button class="btn primary" id="btnRefresh">重新整理</button>
+    <button class="btn danger" id="btnReset">清除本機紀錄</button>
+  </div>
+</div>
+
 
     <!-- === 牆面展示：可選牆背景 + 最近 4 張懸賞令 === -->
     <div class="card wallCard">
