@@ -1,7 +1,8 @@
 // sw.js — 偉大航道爭霸戰（穩定全快取版 + 豪華素材 + 語音）
 // 新增：audio/voice 全語音預快取
+// 修正：HTML 導航（navigate）改為 Network-first，避免 profile.html / result 等頁面被舊快取卡住
 
-const CACHE_NAME = 'op-card-v7.4';
+const CACHE_NAME = 'op-card-v7.5'; // ✅ 改版本號，讓舊快取自動清掉
 
 // === 基本檔案 ===
 const CORE = [
@@ -9,6 +10,10 @@ const CORE = [
   './start.html',
   './game.html',
   './result.html',
+
+  // ✅ 新增：玩家頁
+  './profile.html',
+
   './manifest.webmanifest',
   './images/icon-180.png',
   './images/icon-192.png',
@@ -151,15 +156,40 @@ self.addEventListener('activate', e => {
 // === fetch ===
 self.addEventListener('fetch', e => {
   const req = e.request;
+
+  // 不處理非 GET / i18n
   if (req.method !== 'GET' || req.url.includes('/i18n/')) return;
 
+  const url = new URL(req.url);
+  const isSameOrigin = url.origin === self.location.origin;
+
+  // ✅ 1) HTML 導航：Network-first（有網路就拿最新，失敗才回快取）
+  if (req.mode === 'navigate') {
+    e.respondWith((async () => {
+      const cache = await caches.open(CACHE_NAME);
+      try {
+        const fresh = await fetch(req);
+        if (fresh && fresh.ok && isSameOrigin) {
+          cache.put(req, fresh.clone());
+        }
+        return fresh;
+      } catch (err) {
+        const cached = await cache.match(req);
+        if (cached) return cached;
+        return cache.match('./') || Response.error();
+      }
+    })());
+    return;
+  }
+
+  // ✅ 2) 其他資源：維持 cache-first（圖片/音訊/影片等）
   e.respondWith((async () => {
     const cache = await caches.open(CACHE_NAME);
     const cached = await cache.match(req);
     if (cached) return cached;
 
     const res = await fetch(req);
-    if (res && res.ok && new URL(req.url).origin === self.location.origin) {
+    if (res && res.ok && isSameOrigin) {
       cache.put(req, res.clone());
     }
     return res;
