@@ -229,16 +229,254 @@
       box-shadow:0 0 0 3px rgba(251,191,36,.12);
     }
 
-.titleBadge{
+.player-title-badge{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:6px 18px;
   font-size:12px;
-  padding:5px 10px;
-  border-radius:999px;
-  border:1px solid rgba(251,191,36,.7);
-  background:rgba(251,191,36,.15);
-  color:#ffd36a;
-  font-weight:700;
+  font-weight:800;
+  letter-spacing:.5px;
+  text-align:center;
+  white-space:nowrap;
+  box-sizing:border-box;
+  user-select:none;
+}
+.player-title-badge .text{
+  position:relative;
+  z-index:3;
+  display:inline-block;
+  max-width:100%;
+  overflow:hidden;
+  text-overflow:ellipsis;
   white-space:nowrap;
 }
+.player-title-badge.compact{ padding:6px 14px; font-size:12px; }
+.player-title-badge.pick{ cursor:pointer; transition:transform .06s ease, filter .15s ease; }
+.player-title-badge.pick:hover{ filter:brightness(1.08); }
+.player-title-badge.pick:active{ transform:translateY(1px); }
+.player-title-badge.on{ box-shadow:0 0 0 3px rgba(255,184,77,.22); }
+
+/* animations */
+@keyframes float{
+  0%,100%{transform:translateY(0px);}
+  50%{transform:translateY(-3px);}
+}
+@keyframes pulse{
+  0%,100%{filter:brightness(1);}
+  50%{filter:brightness(1.18);}
+}
+@keyframes softGlow{
+  0%,100%{opacity:.5;}
+  50%{opacity:.95;}
+}
+@keyframes shine{
+  0%{transform:translateX(-130%);opacity:0;}
+  20%{opacity:0;}
+  40%{transform:translateX(130%);opacity:1;}
+  60%{opacity:0;}
+  100%{transform:translateX(130%);opacity:0;}
+}
+
+/* tier styles (match result.html look & feel) */
+.player-title-badge.tier-1{
+  border-radius:8px;
+  border:1px solid rgba(119,124,132,.85);
+  background:linear-gradient(135deg,#333842,#171920);
+  color:#d0d3d8;
+  text-shadow:0 0 6px rgba(0,0,0,.8);
+}
+.player-title-badge.tier-2{
+  border-radius:999px;
+  padding:7px 22px;
+  border:1px solid #63d2ff;
+  background:linear-gradient(135deg,#1b4d7e,#63d2ff);
+  color:#e8f9ff;
+  box-shadow:0 0 10px rgba(99,210,255,.45);
+  overflow:visible;
+}
+.player-title-badge.tier-2::before,
+.player-title-badge.tier-2::after{
+  content:"";
+  position:absolute; top:0; bottom:0; width:14px;
+  background:inherit;
+}
+.player-title-badge.tier-2::before{ left:-8px; transform:skewX(-24deg); }
+.player-title-badge.tier-2::after{ right:-8px; transform:skewX(24deg); }
+
+.player-title-badge.tier-3{
+  padding:7px 20px;
+  color:#ffe4c4;
+  background:
+    radial-gradient(circle at 0 0,rgba(255,255,255,.12) 0,transparent 55%),
+    radial-gradient(circle at 100% 100%,rgba(255,120,60,.25) 0,transparent 55%),
+    linear-gradient(135deg,#3a0f18,#8b1c24);
+  border:2px solid #f48c2b;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,.55),
+    0 0 16px rgba(244,140,43,.65);
+  clip-path:polygon(8% 0,92% 0,100% 50%,92% 100%,8% 100%,0 50%);
+}
+.player-title-badge.tier-3::before{
+  content:"";
+  position:absolute;
+  inset:2px;
+  border-radius:10px;
+  border:1px dashed rgba(255,223,186,.35);
+  opacity:.7;
+}
+
+.player-title-badge.tier-4{
+  padding:8px 22px 10px;
+  color:#f9f0ff;
+  background:radial-gradient(circle at top,#5c35b5,#1e1032);
+  border:2px solid #e1c4ff;
+  box-shadow:
+    0 0 0 1px rgba(90,40,200,.55),
+    0 0 18px rgba(147,96,255,.85);
+  border-radius:16px 16px 10px 10px;
+  overflow:visible;
+  animation:float 5s ease-in-out infinite;
+}
+.player-title-badge.tier-4::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:-10px;
+  transform:translateX(-50%);
+  width:60%;
+  height:16px;
+  background:linear-gradient(to bottom,#e1c4ff,#6e3bd1);
+  clip-path:polygon(50% 100%,0 0,100% 0);
+  box-shadow:0 4px 10px rgba(0,0,0,.55);
+}
+
+.player-title-badge.tier-5{
+  padding:8px 28px;
+  color:#fff9e0;
+  background:linear-gradient(135deg,#5a2400,#ffcf66);
+  border-radius:999px;
+  border:3px solid #ffe08a;
+  box-shadow:
+    0 0 0 1px rgba(255,224,138,.45),
+    0 0 22px rgba(255,204,110,.9);
+  overflow:visible;
+  animation:float 4.5s ease-in-out infinite, pulse 3.8s ease-in-out infinite;
+}
+.player-title-badge.tier-5::before,
+.player-title-badge.tier-5::after{
+  content:"";
+  position:absolute;
+  top:50%;
+  width:26px;
+  height:16px;
+  background:radial-gradient(circle at 0 50%,rgba(255,255,255,.95) 0,rgba(255,224,138,.1) 70%);
+  transform:translateY(-50%);
+  filter:drop-shadow(0 0 8px rgba(255,224,138,.75));
+}
+.player-title-badge.tier-5::before{
+  left:-16px;
+  clip-path:polygon(100% 0,0 50%,100% 100%);
+}
+.player-title-badge.tier-5::after{
+  right:-16px;
+  clip-path:polygon(0 0,100% 50%,0 100%);
+}
+.player-title-badge.tier-5 .text::after{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  background:linear-gradient(120deg,transparent 0,rgba(255,255,255,.85) 45%,transparent 75%);
+  mix-blend-mode:screen;
+  transform:translateX(-130%);
+  animation:shine 3.6s ease-in-out infinite;
+}
+
+/* tier-6 legend */
+.player-title-badge.tier-6{
+  padding:9px 36px;
+  color:#fffdf5;
+  background:
+    radial-gradient(circle at 20% 0,rgba(255,255,255,.4) 0,transparent 55%),
+    radial-gradient(circle at 80% 100%,rgba(255,210,120,.7) 0,transparent 55%),
+    linear-gradient(135deg,#4b2a00,#c68b00,#ffe7a3);
+  border-radius:999px;
+  border:4px solid #ffe9c4;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.38),
+    0 0 0 6px rgba(158,106,32,.65),
+    0 0 32px rgba(255,243,196,.95);
+  overflow:visible;
+  position:relative;
+  text-shadow:
+    0 0 8px rgba(0,0,0,1),
+    0 0 18px rgba(255,245,210,1);
+  animation:float 4.2s ease-in-out infinite, pulse 3.4s ease-in-out infinite;
+}
+.player-title-badge.tier-6::before{
+  content:"";
+  position:absolute;
+  inset:4px;
+  border-radius:999px;
+  border:2px solid rgba(255,252,230,.85);
+  box-shadow:
+    inset 0 0 8px rgba(255,255,255,.65),
+    0 0 14px rgba(255,252,210,.6);
+  opacity:.98;
+  z-index:1;
+}
+.player-title-badge.tier-6::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 12% 50%,#fff 0,rgba(255,255,255,0) 55%),
+    radial-gradient(circle at 88% 50%,#fff 0,rgba(255,255,255,0) 55%),
+    radial-gradient(circle at 50% -10%,#fff 0,rgba(255,255,255,0) 60%);
+  mix-blend-mode:screen;
+  opacity:.65;
+  z-index:1;
+}
+.player-title-badge.tier-6 .crown{
+  position:absolute;
+  top:-16px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:15px;
+  text-shadow:0 0 10px #ffffff, 0 0 18px rgba(255,230,160,1);
+  z-index:4;
+}
+.player-title-badge.tier-6 .pendant{
+  position:absolute;
+  bottom:-14px;
+  left:50%;
+  transform:translateX(-50%);
+  width:18px;height:18px;
+  background:radial-gradient(circle,#fff7d0 0,#f0b400 45%,#8b4c00 100%);
+  border-radius:50%;
+  box-shadow:0 4px 8px rgba(0,0,0,.75), 0 0 10px rgba(255,230,170,.9);
+  z-index:2;
+}
+.player-title-badge.tier-6 .pendant::before{
+  content:"";
+  position:absolute;
+  top:-6px; left:50%;
+  transform:translateX(-50%);
+  width:9px;height:5px;border-radius:999px;
+  background:radial-gradient(circle,#fffbe6 0,#b57a1f 100%);
+}
+.player-title-badge.tier-6 .glow{
+  position:absolute;
+  inset:-30%;
+  background:radial-gradient(circle,rgba(255,255,255,.42) 0,transparent 60%);
+  mix-blend-mode:screen;
+  opacity:.6;
+  z-index:0;
+  animation:softGlow 4.4s ease-in-out infinite;
+}
+
 
 
     .divider{height:1px;background:rgba(35,52,85,.75);margin:12px 0}
@@ -744,6 +982,89 @@ function clampStr(s, maxLen){
   if (s.length > maxLen) s = s.slice(0, maxLen);
   return s;
 }
+function normTier(t){
+  const n = Number(t);
+  if(!Number.isFinite(n)) return 1;
+  return Math.max(1, Math.min(6, Math.round(n)));
+}
+
+/**
+ * titles.owned 相容兩種格式：
+ * - 舊版：["  鐵拳  ", ...]（字串）
+ * - 新版：[{label:"鐵拳", tier:4}, ...]
+ */
+function normalizeOwnedTitles(arr){
+  const out = [];
+  const seen = new Set();
+
+  const list = Array.isArray(arr) ? arr : [];
+  for(const it of list){
+    let label = '';
+    let tier = 1;
+
+    if(typeof it === 'string'){
+      label = String(it).trim();
+      tier = 1; // 舊資料沒有 tier：先用 1，之後結算頁若有寫入 tier 會自動覆蓋
+    }else if(it && typeof it === 'object'){
+      label = String(it.label ?? it.text ?? '').trim();
+      tier = normTier(it.tier ?? it.level ?? 1);
+    }
+
+    if(!label) continue;
+    // 同 label 去重（保留較高 tier）
+    const key = label;
+    if(seen.has(key)){
+      const idx = out.findIndex(x=>x.label===label);
+      if(idx>=0) out[idx].tier = Math.max(out[idx].tier, tier);
+      continue;
+    }
+    seen.add(key);
+    out.push({ label, tier });
+  }
+
+  return out;
+}
+
+function findTitleMetaByLabel(owned, label){
+  const key = String(label||'').trim();
+  if(!key) return null;
+  const arr = Array.isArray(owned) ? owned : [];
+  return arr.find(x => String(x?.label||'').trim() === key) || null;
+}
+
+function buildTitleBadgeHTML(label, tier){
+  const t = normTier(tier || 1);
+  const safeLabel = String(label||'').trim();
+  if(!safeLabel) return '';
+
+  if(t === 6){
+    return `
+      <span class="player-title-badge tier-6">
+        <span class="glow"></span>
+        <span class="crown">👑</span>
+        <span class="text">${escapeHtml(safeLabel)}</span>
+        <span class="pendant"></span>
+      </span>
+    `;
+  }
+
+  return `
+    <span class="player-title-badge tier-${t}">
+      <span class="text">${escapeHtml(safeLabel)}</span>
+    </span>
+  `;
+}
+
+function escapeHtml(s){
+  return String(s ?? '')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+
+
 function setText(id, txt){ const el = document.getElementById(id); if (el) el.textContent = txt; }
 function fmtTs(ts){
   if (!ts) return '-';
@@ -765,7 +1086,7 @@ function defaultProfile(){
     totals: { games: 0, wins: 0, coins: 0, atk: 0, def: 0, hit: 0, intel: 0, survival: 0 },
     deluxeUnlocked: [],
     recent: [],
-    titles: { owned: [], equipped: '' },
+    titles: { owned: [], equipped: '', equippedTier: 1 },
     _appliedMatchKeys: []
   };
 }
@@ -790,8 +1111,9 @@ function loadProfile(){
   out.player.avatar = Math.max(1, Math.min(AVATAR_COUNT, Number(out.player.avatar)||1));
 
   out.deluxeUnlocked = uniq(out.deluxeUnlocked).map(x=>Number(x)).filter(n=>Number.isFinite(n) && n>=0 && n<=19);
-  out.titles.owned = uniq(out.titles.owned);
+  out.titles.owned = normalizeOwnedTitles(out.titles.owned);
   out.titles.equipped = String(out.titles.equipped||'').trim();
+  out.titles.equippedTier = normTier(out.titles.equippedTier || (findTitleMetaByLabel(out.titles.owned, out.titles.equipped)?.tier) || 1);
   out.recent = Array.isArray(out.recent) ? out.recent.slice(0, 10) : [];
 
   // 用於避免結算頁重複累加 totals 的去重 key（matchKey）
@@ -859,36 +1181,56 @@ function render(profile){
   setText('kCoins', String(profile.totals.coins || 0));
 
   setText('equippedTitle', profile.titles.equipped ? profile.titles.equipped : '未佩戴稱號');
-// 顯示稱號在玩家名稱旁
-const badge = document.getElementById('nameTitleBadge');
-if (profile.titles.equipped) {
-  badge.textContent = profile.titles.equipped;
-  badge.style.display = 'inline-flex';
-} else {
-  badge.style.display = 'none';
-}
+// 顯示稱號在玩家名稱旁（套用結算頁同款稱號框）
+  const badgeHost = document.getElementById('nameTitleBadge');
+  const eqLabel = String(profile.titles?.equipped || '').trim();
+  if (eqLabel) {
+    const meta = findTitleMetaByLabel(profile.titles?.owned, eqLabel);
+    const tier = normTier(profile.titles?.equippedTier || meta?.tier || 1);
+
+    // 若舊資料沒有 tier，這裡順手補上（不影響既有玩家）
+    profile.titles.equippedTier = tier;
+    saveProfile(profile);
+
+    badgeHost.innerHTML = buildTitleBadgeHTML(eqLabel, tier);
+    badgeHost.style.display = 'inline-flex';
+  } else {
+    badgeHost.style.display = 'none';
+    badgeHost.innerHTML = '';
+  }
 
 
   const wrap = document.getElementById('titlesWrap');
   wrap.innerHTML = '';
-  const owned = profile.titles.owned || [];
+  const owned = normalizeOwnedTitles(profile.titles?.owned || []);
+  // 讓資料自動升級成新格式（字串 → 物件含 tier）
+  profile.titles.owned = owned;
+  saveProfile(profile);
+
   if (!owned.length){
     const span = document.createElement('div');
     span.className = 'muted';
     span.textContent = '尚未取得稱號（打完一季結算後會自動加入）';
     wrap.appendChild(span);
   }else{
-    for (const t of owned){
-      const tag = document.createElement('div');
-      tag.className = 'tag' + (profile.titles.equipped === t ? ' on' : '');
-      tag.textContent = t;
-      tag.title = '點擊設定為佩戴稱號';
-      tag.onclick = () => {
-        profile.titles.equipped = (profile.titles.equipped === t) ? '' : t;
+    for (const meta of owned){
+      const tmp = document.createElement('div');
+      tmp.innerHTML = buildTitleBadgeHTML(meta.label, meta.tier).trim();
+
+      const badgeEl = tmp.firstElementChild;
+      if(!badgeEl) continue;
+
+      badgeEl.classList.add('compact','pick');
+      if (String(profile.titles?.equipped||'').trim() === meta.label) badgeEl.classList.add('on');
+
+      badgeEl.addEventListener('click', ()=>{
+        profile.titles.equipped = meta.label;
+        profile.titles.equippedTier = meta.tier;
         saveProfile(profile);
-        render(profile);
-      };
-      wrap.appendChild(tag);
+        render();
+      });
+
+      wrap.appendChild(badgeEl);
     }
   }
 
