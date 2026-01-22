@@ -1203,40 +1203,49 @@ function renderFinal(final){
   buildMetricPanel();
   renderDetailTable();
 
-  // === 自動匯入最近 10 場到玩家頁（op_profile_v1.recent）===
-  try{
-    // 1) 算出我在 ranking 的名次與 coinScore
-    const myId = MY_ID != null ? MY_ID : guessMyId(final, MY_PID);
-    const ranking = Array.isArray(final?.ranking) ? final.ranking : [];
-    const idx = ranking.findIndex(r => Number(r?.id) === Number(myId));
-    const place = (idx >= 0) ? (idx + 1) : null;
-
-// === 自動匯入「已取得稱號」到玩家頁 ===
-try {
+// === 自動匯入最近 10 場 + totals 到玩家頁（op_profile_v1）===
+try{
   const myId = MY_ID != null ? MY_ID : guessMyId(final, MY_PID);
-  const myRow = ROWS.find(r => Number(r.id) === Number(myId));
+  const ranking = Array.isArray(final?.ranking) ? final.ranking : [];
+  const idx = ranking.findIndex(r => Number(r?.id) === Number(myId));
+  const place = (idx >= 0) ? (idx + 1) : null;
 
-  if (myRow && myRow.titleLabel) {
-    const p = loadProfile();
+  const myRow = ROWS.find(r => Number(r?.id) === Number(myId));
+  const coinsGain = Number(myRow?.coinScore ?? 0);
 
-    if (!p.titles) p.titles = { owned: [], equipped: '' };
-    if (!Array.isArray(p.titles.owned)) p.titles.owned = [];
+  const season = final?.seasonNo ?? final?.season ?? '';
+  const endedAt = Number(final?.endedAt || final?.ts || Date.now());
+  const pid = (MY_PID ?? sessionStorage.getItem('op_pid') ?? '');
+  const rid = (qs.get('room') || sessionStorage.getItem('op_room') || '');
 
-    // 去重加入
-    if (!p.titles.owned.includes(myRow.titleLabel)) {
-      p.titles.owned.push(myRow.titleLabel);
-    }
+  const matchKey = `${rid}|${season}|${pid}|${endedAt}`;
 
-    // 若尚未佩戴任何稱號，預設戴最新的
-    if (!p.titles.equipped) {
-      p.titles.equipped = myRow.titleLabel;
-    }
+  // 先讀舊 profile（用舊 recent 去重）
+  const p = loadProfile();
+  if(!Array.isArray(p.recent)) p.recent = [];
 
-    saveProfile(p);
+  const existed = p.recent.some(x => String(x?.matchKey||'') === matchKey);
+
+  // 寫 recent（去重後最多 10 筆）
+  p.recent = [
+    { matchKey, ts: endedAt, place, coinsGain, unlocked: [] },
+    ...p.recent.filter(x => String(x?.matchKey||'') !== matchKey)
+  ].slice(0,10);
+
+  // 只在「第一次寫入這場」時，才累加 totals
+  if(!p.totals) p.totals = { games:0, wins:0, coins:0, atk:0, def:0, hit:0, intel:0, survival:0 };
+
+  if(!existed){
+    p.totals.games = Number(p.totals.games||0) + 1;
+    if(place === 1) p.totals.wins = Number(p.totals.wins||0) + 1;
+    p.totals.coins = Number(p.totals.coins||0) + coinsGain;
   }
-} catch (e) {
-  console.warn('[save title failed]', e);
+
+  saveProfile(p);
+}catch(e){
+  console.warn('[auto import recent+totals failed]', e);
 }
+
 
 
     // 這份結算頁的 scoreboard.coinScore 就是「金幣」分數
