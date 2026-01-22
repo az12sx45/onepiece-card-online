@@ -751,25 +751,7 @@ let MY_ID = null;
 
 // ====== 玩家頁 localStorage keys（與 profile.html 對齊）=====
 const LS_KEY_PROFILE = 'op_profile_v1';        // profile.html 讀 recent 的 key
-const LS_KEY_POSTERS = 'op_bounty_posters_v1';
-
-const TOKEN_KEY = "opToken";
-function getToken(){ return String(localStorage.getItem(TOKEN_KEY)||"").trim(); }
-async function syncCloudProfile(){
-  const t = getToken();
-  if(!t) return;
-  const profileObj = safeJsonParse(localStorage.getItem(LS_KEY_PROFILE), null);
-  const playerObj  = safeJsonParse(localStorage.getItem("op_player_profile"), null);
-  if(!profileObj) return;
-  try{
-    await fetch("/api/me/sync", {
-      method:"POST",
-      headers:{ "Content-Type":"application/json", "Authorization":"Bearer " + t },
-      body: JSON.stringify({ profile: profileObj, player: playerObj })
-    });
-  }catch(e){}
-}
- // profile.html 讀懸賞令牆面的 key
+const LS_KEY_POSTERS = 'op_bounty_posters_v1'; // profile.html 讀懸賞令牆面的 key
 
 function safeJsonParse(raw, fallback){
   try{ return JSON.parse(raw); }catch(e){ return fallback; }
@@ -820,20 +802,47 @@ function upsertOwnedTitle(owned, label, tier){
 
 
 // --- 懸賞令牆面：最多 4 張 ---
+// --- 懸賞令牆面：最多 4 張（新增：key 去重） ---
 function loadPosters(){
   const arr = safeJsonParse(localStorage.getItem(LS_KEY_POSTERS), []);
   return Array.isArray(arr) ? arr : [];
 }
 function savePosters(list){
-  try{ localStorage.setItem(LS_KEY_POSTERS, JSON.stringify((list||[]).slice(0,4))); }catch(e){}
+  try{
+    localStorage.setItem(LS_KEY_POSTERS, JSON.stringify((list||[]).slice(0,4)));
+  }catch(e){}
 }
-function pushPoster({ title, dataUrl }){
+
+/**
+ * pushPoster({ key, title, dataUrl })
+ * - key：用 matchKey（room|season|pid|endedAt）當作「這一場」的唯一識別
+ * - 若 key 已存在：不重複寫入（解決連按本次懸賞單造成牆面一堆同圖）
+ */
+function pushPoster({ key, title, dataUrl }){
   const ts = Date.now();
+  const K  = String(key || '').trim();
+  const T  = String(title || '').trim();
+  const D  = String(dataUrl || '');
+
+  if(!D.startsWith('data:image')) return false;
+
   const posters = loadPosters()
-    .filter(x => x && typeof x === 'object' && typeof x.dataUrl === 'string' && x.dataUrl.startsWith('data:image'));
-  posters.unshift({ ts, title: String(title||''), dataUrl: String(dataUrl||'') });
+    .filter(x => x && typeof x === 'object' && typeof x.dataUrl === 'string' && x.dataUrl.startsWith('data:image'))
+    .map(x => ({
+      ts: Number(x.ts)||0,
+      key: String(x.key||'').trim(),
+      title: String(x.title||'').trim(),
+      dataUrl: String(x.dataUrl||'')
+    }));
+
+  // key 去重：同一場同一人，不再塞入
+  if (K && posters.some(p => p.key === K)) return false;
+
+  posters.unshift({ ts, key: K || '', title: T, dataUrl: D });
   savePosters(posters);
+  return true;
 }
+
 
 // --- 最近 10 場：寫到 op_profile_v1.recent ---
 function loadProfile(){
@@ -882,10 +891,6 @@ function loadProfile(){
 }
 function saveProfile(p){
   try{ localStorage.setItem(LS_KEY_PROFILE, JSON.stringify(p)); }catch(e){}
-  try{
-    clearTimeout(window.__syncCloudTimer);
-    window.__syncCloudTimer = setTimeout(()=>{ syncCloudProfile(); }, 600);
-  }catch(e){}
 }
 
 /**
@@ -1387,6 +1392,16 @@ try {
     console.warn('[pushRecentMatch failed]', e);
   }
 
+  // === 自動存本次懸賞令到玩家頁牆面（不開彈窗、且用 key 去重）===
+  try{
+    const myId = MY_ID != null ? MY_ID : guessMyId(final, MY_PID);
+    // 不開 modal，只生成並寫入 localStorage（profile.html 會顯示最近 4 張）
+    showBounty(final, myId, { openModal:false });
+  }catch(e){
+    console.warn('[auto save bounty poster failed]', e);
+  }
+
+
 
 }
 
@@ -1407,7 +1422,7 @@ try {
 
   const serverURL = new URLSearchParams(location.search).get('server')
   || "https://onepiece-card-online.onrender.com";
-  const socket = io(serverURL, { transports: ['websocket'], auth:{ token: getToken() } });
+  const socket = io(serverURL, { transports: ['websocket'] });
 
   socket.on('connect', ()=>{
     socket.emit('JOIN', { roomId, resume:true, pid:MY_PID });
@@ -1551,7 +1566,7 @@ function avatarUrl(v){
 }
 
 // === 懸賞金繪製（頭像在下層，海報在上層） ===
-async function showBounty(final, myId){
+async function showBounty(final, myId, opts = {}){
   const me = (final?.playersMeta && final.playersMeta[myId]) || {
     name: `P${(myId|0)+1}`, pid: myId|0, avatar: null
   };
@@ -1625,18 +1640,31 @@ async function showBounty(final, myId){
   ctx.fillText(bountyStr, cx, bountyY);
   ctx.restore();
 
-  // === 自動匯入玩家頁：把目前 canvas 存成 dataURL，寫進 op_bounty_posters_v1（最多 4 張）===
+  // === 自動匯入玩家頁：把目前 canvas 存成 dataURL，寫進 op_bounty_posters_v1（最多 4 張，且用 key 去重）===
   try{
     const nameTxt = me.name || (`P${(myId|0)+1}`);
+
+    // 用「這場比賽」當唯一 key（跟 recent 的 matchKey 同概念）
+    const qs = new URLSearchParams(location.search);
+    const rid = (qs.get('room') || sessionStorage.getItem('op_room') || '');
+    const season = final?.seasonNo ?? final?.season ?? '';
+    const endedAt = Number(final?.endedAt || final?.ts || Date.now());
+    const pid = (MY_PID ?? sessionStorage.getItem('op_pid') ?? '');
+
+    const posterKey = `${rid}|${season}|${pid}|${endedAt}`;
+
     const dataUrl = canvas.toDataURL('image/webp', 0.92); // 比 png 省空間
-    pushPoster({ title: `${nameTxt}｜懸賞令`, dataUrl });
+    pushPoster({ key: posterKey, title: `${nameTxt}｜懸賞令`, dataUrl });
   }catch(e){
     console.warn('[pushPoster failed]', e);
   }
 
+  // opts.openModal === false：只存不開（給「自動存」用）
+  if (opts && opts.openModal === false) return;
 
   // 顯示彈窗
   document.getElementById('bountyModal').classList.remove('hidden');
+
 }
 
 document.getElementById('closeBounty').onclick = ()=>{
