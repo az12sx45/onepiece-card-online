@@ -1227,7 +1227,7 @@ function render(profile){
         profile.titles.equipped = meta.label;
         profile.titles.equippedTier = meta.tier;
         saveProfile(profile);
-        render();
+        render(profile);
       });
 
       wrap.appendChild(badgeEl);
@@ -1457,5 +1457,6 @@ function closeModal(id){ const el=document.getElementById(id); if(el) el.style.d
 </script>
 </body>
 </html>
+
 
 
