@@ -775,27 +775,71 @@ function pushPoster({ title, dataUrl }){
 
 // --- 最近 10 場：寫到 op_profile_v1.recent ---
 function loadProfile(){
-  const p = safeJsonParse(localStorage.getItem(LS_KEY_PROFILE), null);
-  if(!p || typeof p !== 'object') return { recent: [] };
-  if(!Array.isArray(p.recent)) p.recent = [];
-  return p;
+  const base = {
+    version: 1,
+    totals: { games: 0, wins: 0, coins: 0 },
+    recent: [],
+    titles: { owned: [], equipped: '' },
+    _appliedMatchKeys: []
+  };
+
+  const raw = localStorage.getItem(LS_KEY_PROFILE);
+  const p = safeJsonParse(raw, null);
+
+  if(!p || typeof p !== 'object') return base;
+
+  const out = {
+    ...base,
+    ...p,
+    totals: { ...base.totals, ...(p.totals||{}) },
+    titles: { ...base.titles, ...(p.titles||{}) },
+  };
+
+  if(!Array.isArray(out.recent)) out.recent = [];
+  if(!Array.isArray(out.titles.owned)) out.titles.owned = [];
+  out.titles.equipped = String(out.titles.equipped || '').trim();
+
+  if(!Array.isArray(out._appliedMatchKeys)) out._appliedMatchKeys = [];
+  out._appliedMatchKeys = out._appliedMatchKeys.map(x=>String(x||'')).filter(Boolean).slice(0, 200);
+
+  out.totals.games = Number(out.totals.games)||0;
+  out.totals.wins  = Number(out.totals.wins)||0;
+  out.totals.coins = Number(out.totals.coins)||0;
+
+  return out;
 }
 function saveProfile(p){
   try{ localStorage.setItem(LS_KEY_PROFILE, JSON.stringify(p)); }catch(e){}
 }
 
-/** 最近戰績：用 matchKey 去重，最多 10 筆 */
+/**
+ * 最近戰績：用 matchKey 去重，最多 10 筆
+ * 另外：同一個 matchKey 只會累加 totals 一次，避免「刷新結算頁」造成重複加總
+ */
 function pushRecentMatch(item){
   const p = loadProfile();
+
+  const mk = String(item?.matchKey || '').trim();
+  const place = (item?.place == null || item?.place==='') ? null : Number(item.place);
+  const coinsGain = Number(item?.coinsGain ?? 0) || 0;
+
+  // 1) totals 去重累加（用 matchKey）
+  if(mk && !p._appliedMatchKeys.includes(mk)){
+    p._appliedMatchKeys.unshift(mk);
+    p._appliedMatchKeys = p._appliedMatchKeys.slice(0, 200);
+
+    p.totals.games = (Number(p.totals.games)||0) + 1;
+    if(place === 1) p.totals.wins = (Number(p.totals.wins)||0) + 1;
+    p.totals.coins = (Number(p.totals.coins)||0) + coinsGain;
+  }
+
+  // 2) recent（最多 10 筆；同 matchKey 覆蓋）
   const arr = Array.isArray(p.recent) ? p.recent : [];
-
-  const mk = String(item.matchKey || '');
   const next = [item, ...arr.filter(x => String(x?.matchKey||'') !== mk)].slice(0,10);
-
   p.recent = next;
+
   saveProfile(p);
 }
-
 
 const qs = new URLSearchParams(location.search);
 const roomId = qs.get('room') || sessionStorage.getItem('op_room') || '—';
@@ -1211,70 +1255,55 @@ function renderFinal(final){
     const idx = ranking.findIndex(r => Number(r?.id) === Number(myId));
     const place = (idx >= 0) ? (idx + 1) : null;
 
-// === 自動匯入：recent + titles + totals（避免重複累加）===
-try{
-  // 1) 先算出我在 ranking 的名次
+// === 自動匯入「已取得稱號」到玩家頁 ===
+try {
   const myId = MY_ID != null ? MY_ID : guessMyId(final, MY_PID);
-  const ranking = Array.isArray(final?.ranking) ? final.ranking : [];
-  const idx = ranking.findIndex(r => Number(r?.id) === Number(myId));
-  const place = (idx >= 0) ? (idx + 1) : null;
+  const myRow = ROWS.find(r => Number(r.id) === Number(myId));
 
-  // 2) 這份結算頁 scoreboard.coinScore 作為「本場金幣增量」
-  const myRow = ROWS.find(r => Number(r?.id) === Number(myId));
-  const coinsGain = Number(myRow?.coinScore ?? 0);
+  if (myRow && myRow.titleLabel) {
+    const p = loadProfile();
 
-  // 3) 組 matchKey（用來去重：避免刷新頁面重複匯入）
-  const season = final?.seasonNo ?? final?.season ?? '';
-  const endedAt = Number(final?.endedAt || final?.ts || Date.now());
-  const pid = (MY_PID ?? sessionStorage.getItem('op_pid') ?? '');
-  const rid = (qs.get('room') || sessionStorage.getItem('op_room') || '');
-  const matchKey = `${rid}|${season}|${pid}|${endedAt}`;
+    if (!p.titles) p.titles = { owned: [], equipped: '' };
+    if (!Array.isArray(p.titles.owned)) p.titles.owned = [];
 
-  // 4) 先讀 profile（用舊 recent 判斷是否已經匯入過）
-  const p = loadProfile();
-  if(!Array.isArray(p.recent)) p.recent = [];
-  const existed = p.recent.some(x => String(x?.matchKey||'') === matchKey);
+    // 去重加入
+    if (!p.titles.owned.includes(myRow.titleLabel)) {
+      p.titles.owned.push(myRow.titleLabel);
+    }
 
-  // 5) 寫入 recent（最多 10 場，且去重）
-  p.recent = [
-    {
-      matchKey,
+    // 若尚未佩戴任何稱號，預設戴最新的
+    if (!p.titles.equipped) {
+      p.titles.equipped = myRow.titleLabel;
+    }
+
+    saveProfile(p);
+  }
+} catch (e) {
+  console.warn('[save title failed]', e);
+}
+
+
+    // 這份結算頁的 scoreboard.coinScore 就是「金幣」分數
+    const myRow = ROWS.find(r => Number(r?.id) === Number(myId));
+    const coinsGain = Number(myRow?.coinScore ?? 0);
+
+    // 2) 做一個去重 key（避免刷新頁面寫入重複）
+    const season = final?.seasonNo ?? final?.season ?? '';
+    const endedAt = Number(final?.endedAt || final?.ts || Date.now());
+    const pid = (MY_PID ?? sessionStorage.getItem('op_pid') ?? '');
+    const rid = (qs.get('room') || sessionStorage.getItem('op_room') || '');
+
+    pushRecentMatch({
+      matchKey: `${rid}|${season}|${pid}|${endedAt}`,
       ts: endedAt,
       place,
       coinsGain,
-      unlocked: [] // 之後如果你有「本局解鎖豪華」資料，再塞進這個陣列
-    },
-    ...p.recent.filter(x => String(x?.matchKey||'') !== matchKey)
-  ].slice(0,10);
-
-  // 6) 寫入 titles（去重）
-  if(!p.titles) p.titles = { owned: [], equipped: '' };
-  if(!Array.isArray(p.titles.owned)) p.titles.owned = [];
-
-  if(myRow && myRow.titleLabel){
-    if(!p.titles.owned.includes(myRow.titleLabel)){
-      p.titles.owned.push(myRow.titleLabel);
-    }
-    if(!p.titles.equipped){
-      p.titles.equipped = myRow.titleLabel;
-    }
+      unlocked: [] // 你若有「本局解鎖豪華」資料，再塞進這個陣列
+    });
+  }catch(e){
+    console.warn('[pushRecentMatch failed]', e);
   }
 
-  // 7) 只在「第一次匯入這場」時，才累加 totals
-  if(!p.totals) p.totals = { games:0, wins:0, coins:0, atk:0, def:0, hit:0, intel:0, survival:0 };
-
-  if(!existed){
-    p.totals.games = Number(p.totals.games||0) + 1;
-    if(place === 1) p.totals.wins = Number(p.totals.wins||0) + 1;
-    p.totals.coins = Number(p.totals.coins||0) + coinsGain;
-  }
-
-  // 8) 最後一次存回去
-  saveProfile(p);
-
-}catch(e){
-  console.warn('[auto import recent+titles+totals failed]', e);
-}
 
 }
 
