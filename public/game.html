@@ -2479,7 +2479,16 @@ const presetAvatar = Number(sp.get('avatar') || '1') || 1;
 const presetN      = Math.max(2, Math.min(8, Number(sp.get('n') || '4') || 4));
 
 const serverURL = sp.get('server') || undefined;
-const socket = io(serverURL, { transports:['websocket'] });
+
+// ===== Auth guard（需要登入）=====
+const TOKEN_KEY = "opToken";
+const __token = (localStorage.getItem(TOKEN_KEY)||"").trim();
+if(!__token){
+  // 沒登入就導回開始頁
+  location.href = "/start.html#login";
+}
+
+const socket = io(serverURL, { transports:['websocket'], auth:{ token: __token } });
 let me = { roomId: presetRoom || 'op-001', playerId: null, secret: localStorage.getItem('opSecret')||'' };
 let _autoSkipKey = null;   // 麻痺自動跳過用的防呆 key
 let state = null;
@@ -3535,7 +3544,7 @@ function doJoin(displayNameOverride){
 
   el.roomLbl.textContent = me.roomId;
 
-  socket.emit('JOIN_ROOM', {
+  socket.emit('JOIN_ROOM', { token: (localStorage.getItem("opToken")||"").trim(), 
     roomId: me.roomId,
     displayName,
     avatar: presetAvatar,
@@ -3570,7 +3579,7 @@ socket.on('connect', ()=>{
     const baseName = el.name.value || presetName || 'P';
     const displayName = baseName;   // 重連不用再加亂數
 
-    socket.emit('JOIN_ROOM', {
+    socket.emit('JOIN_ROOM', { token: (localStorage.getItem("opToken")||"").trim(), 
       roomId: me.roomId,
       displayName,
       avatar: presetAvatar,

@@ -830,6 +830,56 @@ const LS_KEY_WALL    = 'op_wall_v1';
 const LS_KEY_POSTERS = 'op_bounty_posters_v1';
 const WALL_COUNT = 8;
 
+const TOKEN_KEY = "opToken";
+function getToken(){ return String(localStorage.getItem(TOKEN_KEY)||"").trim(); }
+function requireLogin(){
+  const t = getToken();
+  if(!t){
+    location.href = "/start.html#login";
+    return null;
+  }
+  return t;
+}
+async function apiJSON(url, opt={}){
+  const t = requireLogin();
+  if(!t) throw new Error("NO_TOKEN");
+  const r = await fetch(url, {
+    ...opt,
+    headers: {
+      "Content-Type":"application/json",
+      ...(opt.headers||{}),
+      "Authorization":"Bearer " + t
+    }
+  });
+  const j = await r.json().catch(()=>({}));
+  if(!r.ok || !j.ok) throw Object.assign(new Error(j.error||"API_ERROR"), { code: j.error, status: r.status, payload: j });
+  return j;
+}
+async function loadCloud(){
+  const t = requireLogin();
+  if(!t) return null;
+  const r = await fetch("/api/me", { headers:{ "Authorization":"Bearer " + t }});
+  const j = await r.json().catch(()=>({}));
+  if(!r.ok || !j.ok) throw Object.assign(new Error(j.error||"API_ERROR"), { code: j.error, status: r.status, payload: j });
+  return j;
+}
+async function syncCloudFromLocal(){
+  // 把目前 localStorage 的 op_profile_v1 / op_player_profile 同步到雲端（合併）
+  const t = requireLogin();
+  if(!t) return;
+  const profileRaw = localStorage.getItem(LS_KEY_PROFILE);
+  const playerRaw  = localStorage.getItem(LS_KEY_START);
+  const profileObj = safeJsonParse(profileRaw, null);
+  const playerObj  = safeJsonParse(playerRaw, null);
+  if(!profileObj) return;
+  await fetch("/api/me/sync", {
+    method:"POST",
+    headers:{ "Content-Type":"application/json", "Authorization":"Bearer " + t },
+    body: JSON.stringify({ profile: profileObj, player: playerObj })
+  }).catch(()=>{});
+}
+
+
 function wallUrlById(id){
   const n = Math.max(1, Math.min(WALL_COUNT, Number(id)||1));
   return `images/walls/${n}.webp`;
@@ -1301,165 +1351,50 @@ function openModal(id){ const el=document.getElementById(id); if(el) el.style.di
 function closeModal(id){ const el=document.getElementById(id); if(el) el.style.display='none'; }
 
 // init
-(function init(){
-  const profile = loadProfile();
+(async function init(){
+  // 需要登入
+  requireLogin();
 
-  // 第一次載入時：如果 start 已經有選過名字/頭像，就同步過來
-  const sp = loadStartProfile();
-  if (sp){
-    // 同步到玩家頁資料
-    profile.player.name = sp.playerName || profile.player.name;
-    profile.player.avatar = sp.playerAvatar || profile.player.avatar;
-  }else{
-    // 如果 start 沒資料，就確保至少寫一次，讓開始頁可帶入
-    saveStartProfile(profile.player.name, profile.player.avatar);
+  // 先把本機舊資料同步一次到雲端（合併）
+  try{ await syncCloudFromLocal(); }catch(e){}
+
+  // 以雲端資料為準
+  let cloud = null;
+  try{ cloud = await loadCloud(); }catch(e){
+    console.warn("[cloud load failed]", e);
   }
 
+  const base = defaultProfile();
+  let profile = base;
+
+  if(cloud && cloud.profile && typeof cloud.profile === "object"){
+    profile = {
+      ...base,
+      ...cloud.profile,
+      player: { ...base.player, ...(cloud.profile.player||{}) },
+      totals: { ...base.totals, ...(cloud.profile.totals||{}) },
+      titles: { ...base.titles, ...(cloud.profile.titles||{}) },
+    };
+  }
+
+  // 用雲端 user 的 displayName/avatar 覆蓋（若有）
+  if(cloud && cloud.user){
+    if(cloud.user.displayName) profile.player.name = clampStr(cloud.user.displayName, 16) || profile.player.name;
+    if(cloud.user.avatar) profile.player.avatar = Math.max(1, Math.min(AVATAR_COUNT, Number(cloud.user.avatar)||1));
+  }
+
+  // 與 start.html 同步（讓開始頁名字/頭像一致）
+  saveStartProfile(profile.player.name, profile.player.avatar);
+
+  // 存回本機（快取）+ 渲染
   saveProfile(profile);
   render(profile);
 
   // top actions
   document.getElementById('btnRefresh').onclick = () => location.reload();
   document.getElementById('btnBack').onclick = () => { location.href = '/start.html'; };
-  document.getElementById('btnReset').onclick = () => {
-    const ok = confirm('確定要清除本機紀錄？（名稱、頭貼、戰績、稱號、豪華解鎖、最近對局都會消失）');
-    if (!ok) return;
-    localStorage.removeItem(LS_KEY_PROFILE);
-    localStorage.removeItem(LS_KEY_START);
-    location.reload();
-  };
-
-  // name modal
-  const nameInput = document.getElementById('nameInput');
-  document.getElementById('nameBtn').onclick = () => {
-    nameInput.value = clampStr(profile.player.name, 16);
-    openModal('nameModalBack');
-    setTimeout(()=>{ nameInput.focus(); nameInput.select(); }, 0);
-  };
-  const closeName = ()=> closeModal('nameModalBack');
-  document.getElementById('nameModalClose').onclick = closeName;
-  document.getElementById('nameCancel').onclick = closeName;
-  document.getElementById('nameSave').onclick = () => {
-    const v = clampStr(nameInput.value, 16) || '未命名玩家';
-    profile.player.name = v;
-    // 同步到 start
-    saveStartProfile(profile.player.name, profile.player.avatar);
-    saveProfile(profile);
-    closeName();
-    render(profile);
-  };
-  nameInput.addEventListener('keydown', (ev)=>{
-    if (ev.key === 'Enter'){ ev.preventDefault(); document.getElementById('nameSave').click(); }
-    if (ev.key === 'Escape'){ ev.preventDefault(); closeName(); }
-  });
-  document.getElementById('nameModalBack').addEventListener('click', (ev)=>{
-    if (ev.target && ev.target.id === 'nameModalBack') closeName();
-  });
-
-  // avatar modal
-  let pendingAvatar = profile.player.avatar;
-
-  function buildAvatarGrid(){
-    const grid = document.getElementById('avaGrid');
-    grid.innerHTML = '';
-    for (let i=1; i<=AVATAR_COUNT; i++){
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'avaBtn' + (i===pendingAvatar ? ' on' : '');
-      btn.title = `avatar ${i}`;
-
-      const img = document.createElement('img');
-      img.src = avatarUrlById(i);
-      img.alt = `avatar-${i}`;
-      btn.appendChild(img);
-
-      btn.onclick = () => {
-        pendingAvatar = i;
-        // 更新選取狀態
-        grid.querySelectorAll('.avaBtn').forEach((x, idx)=>{
-          x.classList.toggle('on', (idx+1)===pendingAvatar);
-        });
-      };
-
-      grid.appendChild(btn);
-    }
-  }
-
-  document.getElementById('avatarBox').onclick = () => {
-    pendingAvatar = profile.player.avatar || 1;
-    buildAvatarGrid();
-    openModal('avatarModalBack');
-  };
-
-  const closeAvatar = ()=> closeModal('avatarModalBack');
-  document.getElementById('avatarModalClose').onclick = closeAvatar;
-  document.getElementById('avatarCancel').onclick = closeAvatar;
-
-  document.getElementById('avatarSave').onclick = () => {
-    profile.player.avatar = pendingAvatar;
-    // 同步到 start
-    saveStartProfile(profile.player.name, profile.player.avatar);
-    saveProfile(profile);
-    closeAvatar();
-    render(profile);
-  };
-
-  document.getElementById('avatarModalBack').addEventListener('click', (ev)=>{
-    if (ev.target && ev.target.id === 'avatarModalBack') closeAvatar();
-  });
-
-
-  // ===== 牆面：選擇背景（僅使用預設圖） + 匯入懸賞令 =====
-  const openWallModal = () => {
-    const w = loadWall();
-    buildWallGrid(w.id);
-    openModal('wallModalBack');
-  };
-  const closeWallModal = ()=> closeModal('wallModalBack');
-
-  document.getElementById('btnPickWall')?.addEventListener('click', openWallModal);
-  document.getElementById('wallModalClose')?.addEventListener('click', closeWallModal);
-  document.getElementById('wallCancel')?.addEventListener('click', closeWallModal);
-  document.getElementById('wallModalBack')?.addEventListener('click', (ev)=>{
-    if(ev.target && ev.target.id==='wallModalBack') closeWallModal();
-  });
-
-  document.getElementById('wallSave')?.addEventListener('click', ()=>{
-    const grid = document.getElementById('wallGrid');
-    const pendingId = Math.max(1, Math.min(WALL_COUNT, Number(grid?.dataset?.pendingId)||1));
-    saveWall({id: pendingId});
-    closeWallModal();
-    renderWall();
-  });
-
-  // 匯入懸賞令（目前仍保留手動；之後可接結算頁自動寫入 LS_KEY_POSTERS）
-  const posterFile = document.getElementById('posterFile');
-  document.getElementById('btnImportPoster')?.addEventListener('click', ()=> posterFile?.click());
-  posterFile?.addEventListener('change', async (ev)=>{
-    const f = ev.target.files && ev.target.files[0];
-    if(!f) return;
-    const dataUrl = await fileToDataUrl(f);
-    if(!dataUrl.startsWith('data:image')){ alert('讀取圖片失敗'); return; }
-
-    const list = loadPosters();
-    const ts = nowTs();
-    list.unshift({ ts, title: `懸賞令 ${fmtTs(ts)}`, dataUrl });
-    savePosters(list);
-    posterFile.value = '';
-    renderWall();
-  });
-
-  document.getElementById('btnClearWall')?.addEventListener('click', ()=>{
-    const ok = confirm('確定要清空牆面？（牆背景與牆上懸賞令都會清掉）');
-    if(!ok) return;
-    localStorage.removeItem(LS_KEY_WALL);
-    localStorage.removeItem(LS_KEY_POSTERS);
-    renderWall();
-  });
-
-  // 初次渲染牆面
-  renderWall();
 })();
+
 </script>
 </body>
 </html>
