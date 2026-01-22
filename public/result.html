@@ -98,6 +98,7 @@ body.view-rank .layout > aside.card:first-child{
   border:1px solid rgba(255,255,255,.06);
   border-radius:12px;
   background:rgba(255,255,255,.03);
+  /* overflow:hidden;  <- 已移除，避免高階框被裁 */
 }
 
 .player-item.top1{
@@ -181,7 +182,7 @@ body.view-rank .layout > aside.card:first-child{
 .player-title-badge .text{
   display:inline-block;
   max-width:100%;
-  overflow:hidden;
+  overflow:hidden;   /* 防止跑出框；JS 會縮字（已移除縮字函式，不影響擴張） */
 }
 
 /* 基礎動畫 */
@@ -353,7 +354,7 @@ body.view-rank .layout > aside.card:first-child{
   overflow:visible;
   position:relative;
   text-shadow:
-    0 0 8px rgba(0,0,0,.85),
+    0 0 8px rgba(0,0,0,1),
     0 0 22px rgba(255,245,210,1);
   animation:float 4.2s ease-in-out infinite, pulse 3.4s ease-in-out infinite;
 }
@@ -427,6 +428,7 @@ body.view-rank .layout > aside.card:first-child{
 .tier-6 .player-title-badge .glow{
   position:absolute;
   inset:-30%;
+  background:radial-gradient(circle,rgba(255,255,255,.45) 0,透明 60%);
   background:radial-gradient(circle,rgba(255,255,255,.45) 0,transparent 60%);
   mix-blend-mode:screen;
   opacity:.65;
@@ -559,7 +561,6 @@ body.view-rank .layout > aside.card:first-child{
         <div class="badge" id="seasonLbl">Season —</div>
         <button class="btn" id="openHelp">📖 說明</button>
         <button class="btn" onclick="fireBounty()">📜 本次懸賞單</button>
-        <button class="btn" onclick="location.href='profile.html'">玩家頁</button>
         <button class="btn" onclick="location.href='start.html'">返回主畫面</button>
       </div>
     </div>
@@ -676,42 +677,44 @@ body.view-rank .layout > aside.card:first-child{
         <div class="help-note">※ 玩家越多，係數越小，避免人多房的懸賞金爆炸；不同房仍可以互相比較。</div>
       </div>
 
-      <div class="help-box" style="margin-top:12px">
-        <h4>稱號系統（如何拿到那些帥稱號？）</h4>
-        <ul>
-          <li><b>1️⃣ 先算出個人懸賞金</b>：用上面那個懸賞金公式，再依照玩家人數做平衡。</li>
-          <li><b>2️⃣ 用懸賞金決定等級（Tier 1～6）</b>：</li>
-        </ul>
-        <div class="help-math">
-          <div>Tier 1：懸賞金 &lt; 10 億</div>
-          <div>Tier 2：10 億 ～ &lt; 30 億</div>
-          <div>Tier 3：30 億 ～ &lt; 40 億</div>
-          <div>Tier 4：40 億 ～ &lt; 50 億</div>
-          <div>Tier 5：50 億 ～ &lt; 60 億</div>
-          <div>Tier 6：60 億以上（傳說級）</div>
-        </div>
+<div class="help-box" style="margin-top:12px">
+  <h4>稱號系統（如何拿到那些帥稱號？）</h4>
+  <ul>
+    <li><b>1️⃣ 先算出個人懸賞金</b>：用上面那個懸賞金公式，再依照玩家人數做平衡。</li>
+    <li><b>2️⃣ 用懸賞金決定等級（Tier 1～6）</b>：</li>
+  </ul>
+  <div class="help-math">
+    <div>Tier 1：懸賞金 &lt; 10 億</div>
+    <div>Tier 2：10 億 ～ &lt; 30 億</div>
+    <div>Tier 3：30 億 ～ &lt; 40 億</div>
+    <div>Tier 4：40 億 ～ &lt; 50 億</div>
+    <div>Tier 5：50 億 ～ &lt; 60 億</div>
+    <div>Tier 6：60 億以上（傳說級）</div>
+  </div>
 
-        <ul style="margin-top:6px">
-          <li><b>3️⃣ 看你本場最突出的能力項目</b>：在「攻擊 / 命中 / 防禦 / 偵查 / 生存」五項裡，<b>哪一項分數最高，就用那一項當主屬性</b>。</li>
-          <li><b>4️⃣ 用「主屬性 + Tier」對應到稱號文字</b>：</li>
-        </ul>
+  <ul style="margin-top:6px">
+    <li><b>3️⃣ 看你本場最突出的能力項目</b>：在「攻擊 / 命中 / 防禦 / 偵查 / 生存」五項裡，<b>哪一項分數最高，就用那一項當主屬性</b>。</li>
+    <li><b>4️⃣ 用「主屬性 + Tier」對應到稱號文字</b>：</li>
+  </ul>
 
-        <div class="help-math">
-          <div><b>攻擊</b>：斬斷鋼鐵的力量 → 世界最強生物</div>
-          <div><b>命中</b>：騙人布橡皮筋 → 我能打中螞蟻的眉心</div>
-          <div><b>防禦</b>：六式 鐵塊 → 屏障果實能力者</div>
-          <div><b>偵查</b>：航海士見習生 → 世界經濟新聞報社社長</div>
-          <div><b>生存</b>：騙人布的生存之道 → 不死神之騎士團</div>
-        </div>
+  <div class="help-math">
+    <div><b>攻擊</b>：斬斷鋼鐵的力量 → 世界最強生物</div>
+    <div><b>命中</b>：騙人布橡皮筋 → 我能打中螞蟻的眉心</div>
+    <div><b>防禦</b>：六式 鐵塊 → 屏障果實能力者</div>
+    <div><b>偵查</b>：航海士見習生 → 世界經濟新聞報社社長</div>
+    <div><b>生存</b>：騙人布的生存之道 → 不死神之騎士團</div>
+  </div>
 
-        <div class="help-note">
-          ※ 例如：你的「攻擊分」在全場最高，最後懸賞金落在 40～50 億，就會拿到「攻擊・Tier 4」對應的稱號「鐵拳」。<br/>
-          ※ 只有 <b>Tier 6</b>（60 億以上）的稱號，會在結算畫面顯示<b>皇冠特效</b>。
-        </div>
-      </div>
+  <div class="help-note">
+    ※ 例如：你的「攻擊分」在全場最高，最後懸賞金落在 40～50 億，就會拿到「攻擊・Tier 4」對應的稱號「鐵拳」。<br/>
+    ※ 只有 <b>Tier 6</b>（60 億以上）的稱號，會在結算畫面顯示<b>皇冠特效</b>。
+  </div>
+</div>
 
     </div>
   </div>
+
+
 
   <!-- === 雷達圖（我的 vs. 單一對手）【新增】 === -->
   <div id="radarModal" class="hidden">
@@ -745,172 +748,232 @@ let STATE = null;        // 最新 socket 狀態
 let MY_PID = null;       // 我的 pid（與 id 不同）
 let MY_ID = null;
 
+/* ===== 玩家頁自動匯入（profile.html） =====
+   - 寫入：localStorage.op_profile_v1（最近10局 / 累積 / 稱號 / 豪華解鎖）
+   - 寫入：localStorage.op_bounty_posters_v1（牆面最近4張懸賞令）
+*/
+const LS_KEY_PROFILE = 'op_profile_v1';
+const LS_KEY_POSTERS = 'op_bounty_posters_v1';
+
+// 建立/修補玩家資料（避免 profile 尚未初始化時寫入失敗）
+function ensureProfileShape(p){
+  const now = Date.now();
+  const base = {
+    version: 1,
+    createdAt: now,
+    lastSeenAt: now,
+    player: { name:'未命名玩家', avatar:1 },
+    totals: { games: 0, wins: 0, coins: 0, atk: 0, def: 0, hit: 0, intel: 0, survival: 0 },
+    deluxeUnlocked: [],
+    recent: [],
+    titles: { owned: [], equipped: '' }
+  };
+  const out = (p && typeof p === 'object') ? p : {};
+  out.version = 1;
+  out.createdAt = Number(out.createdAt)||base.createdAt;
+  out.lastSeenAt = now;
+
+  out.player = { ...base.player, ...(out.player||{}) };
+  out.totals = { ...base.totals, ...(out.totals||{}) };
+  out.titles = { ...base.titles, ...(out.titles||{}) };
+
+  if(!Array.isArray(out.deluxeUnlocked)) out.deluxeUnlocked = [];
+  if(!Array.isArray(out.recent)) out.recent = [];
+  if(!Array.isArray(out.titles.owned)) out.titles.owned = [];
+  out.titles.equipped = String(out.titles.equipped||'').trim();
+
+  return out;
+}
+
+function loadProfileLS(){
+  try{ return ensureProfileShape(JSON.parse(localStorage.getItem(LS_KEY_PROFILE))); }
+  catch(e){ return ensureProfileShape(null); }
+}
+function saveProfileLS(p){
+  try{ localStorage.setItem(LS_KEY_PROFILE, JSON.stringify(ensureProfileShape(p))); }catch(e){}
+}
+
+// uniq numbers 0..19
+function mergeLuxUnlocked(profile, arr){
+  const set = new Set((profile.deluxeUnlocked||[]).map(n=>Number(n)).filter(n=>Number.isFinite(n)));
+  (arr||[]).forEach(n=>{
+    const v = Number(n);
+    if(Number.isFinite(v) && v>=0 && v<=19) set.add(v);
+  });
+  profile.deluxeUnlocked = Array.from(set).sort((a,b)=>a-b);
+}
+
+// titles owned
+function addOwnedTitle(profile, titleLabel){
+  const t = String(titleLabel||'').trim();
+  if(!t) return;
+  const owned = new Set((profile.titles.owned||[]).map(x=>String(x).trim()).filter(Boolean));
+  owned.add(t);
+  profile.titles.owned = Array.from(owned);
+  // 若尚未佩戴，預設佩戴最新拿到的
+  if(!String(profile.titles.equipped||'').trim()){
+    profile.titles.equipped = t;
+  }
+}
+
+// recent match + totals
+function pushRecentMatch(profile, item){
+  profile.recent = Array.isArray(profile.recent) ? profile.recent : [];
+  profile.recent.unshift(item);
+  profile.recent = profile.recent.slice(0,10);
+}
+
+// 儲存牆面懸賞令（最近4張）
+function saveBountyPosterDataUrl(dataUrl, metaTitle){
+  if(!dataUrl || typeof dataUrl !== 'string' || !dataUrl.startsWith('data:image')) return;
+
+  const ts = Date.now();
+  let list = [];
+  try{ list = JSON.parse(localStorage.getItem(LS_KEY_POSTERS)) || []; }catch(e){}
+  if(!Array.isArray(list)) list = [];
+
+  list.unshift({ ts, title: String(metaTitle||'懸賞令').trim(), dataUrl });
+  list = list
+    .filter(x=>x && typeof x === 'object' && typeof x.dataUrl === 'string' && x.dataUrl.startsWith('data:image'))
+    .slice(0,4);
+
+  try{ localStorage.setItem(LS_KEY_POSTERS, JSON.stringify(list)); }catch(e){}
+}
+
+// 嘗試從 final / sessionStorage 抓「本局豪華解鎖」
+// 你後續如果在 server/final payload 加欄位，只要符合下列任一格式就能自動吃到：
+// - final.playersMeta[myId].unlockedLux / deluxeUnlocked / unlockedDeluxe : number[]
+// - final.unlockedLux[myId] 或 final.unlockedLuxById[myId] : number[]
+// - sessionStorage 任一 key 內的 JSON 若包含 unlocked/unlock/lux/deluxe 的 number[] 也會嘗試抽取
+function extractUnlockedLux(final, myId){
+  const out = [];
+
+  const pm = final?.playersMeta?.[myId];
+  const candidates = [
+    pm?.unlockedLux, pm?.deluxeUnlocked, pm?.unlockedDeluxe,
+    final?.unlockedLux?.[myId], final?.unlockedLuxById?.[myId],
+    final?.deluxeUnlocked?.[myId], final?.deluxeUnlockedById?.[myId],
+  ];
+  for(const c of candidates){
+    if(Array.isArray(c)) out.push(...c);
+  }
+
+  // sessionStorage 掃描（保守：只掃少量 key，避免效能問題）
+  const ssKeys = [];
+  try{
+    for(let i=0;i<sessionStorage.length;i++){
+      const k = sessionStorage.key(i);
+      if(!k) continue;
+      if(/reward|unlock|lux|deluxe|chest/i.test(k)) ssKeys.push(k);
+    }
+  }catch(e){}
+
+  for(const k of ssKeys.slice(0,12)){
+    try{
+      const raw = sessionStorage.getItem(k);
+      if(!raw) continue;
+      const obj = JSON.parse(raw);
+      // 常見形式：{ unlocked:[...] } 或 { lux:[...] } 或直接是 [...]
+      const arr =
+        (Array.isArray(obj) ? obj :
+          Array.isArray(obj?.unlocked) ? obj.unlocked :
+          Array.isArray(obj?.unlocks) ? obj.unlocks :
+          Array.isArray(obj?.lux) ? obj.lux :
+          Array.isArray(obj?.deluxe) ? obj.deluxe :
+          Array.isArray(obj?.cards) ? obj.cards : null
+        );
+      if(Array.isArray(arr)) out.push(...arr);
+    }catch(e){}
+  }
+
+  // normalize to 0..19 unique
+  const set = new Set();
+  out.forEach(n=>{
+    const v = Number(n);
+    if(Number.isFinite(v) && v>=0 && v<=19) set.add(v);
+  });
+  return Array.from(set);
+}
+
+// 防重：同一個結算資料只寫一次（同房間/同季/同 pid）
+function autoSaveKey(final, roomId, myPid){
+  const s = String(final?.seasonNo || 1);
+  const r = String(roomId || 'room');
+  const p = String(myPid || 'pid');
+  return `op_autosave_v1:${r}:S${s}:P${p}`;
+}
+
+async function autoSyncToProfile(final, myId){
+  if(!final) return;
+
+  const key = autoSaveKey(final, roomId, MY_PID);
+  if(sessionStorage.getItem(key) === '1') return;
+
+  // 取得基本資料
+  const rankIdx = Array.isArray(final.ranking) ? final.ranking.findIndex(r=>r.id===myId) : -1;
+  const place = rankIdx >= 0 ? (rankIdx + 1) : '-';
+  const coins = (rankIdx >= 0 && final.ranking[rankIdx]) ? (final.ranking[rankIdx].coins || 0) : 0;
+
+  const row = (typeof rowById === 'function') ? rowById(myId) : null;
+  const titleLabel = row?.titleLabel || (()=>{
+    try{
+      const pc = final.playerCount ||
+        Object.keys(final.playersMeta || {}).length ||
+        (final.ranking ? final.ranking.length : 4);
+      const info = getTitleInfoForRow(row || { coinScore:coins, atkScore:0, defScore:0, hitScore:0, intelScore:0, survivalScore:0 }, pc);
+      return info?.label || '';
+    }catch(e){ return ''; }
+  })();
+
+  const unlockedLux = extractUnlockedLux(final, myId);
+
+  // 先畫一次懸賞單到 canvas（silent），取出 dataUrl 存牆
+  try{
+    const dataUrl = await buildBountyDataUrl(final, myId);
+    const metaTitle = `Season ${final.seasonNo || 1} · 第 ${place} 名`;
+    saveBountyPosterDataUrl(dataUrl, metaTitle);
+  }catch(e){
+    // 海報不影響其餘匯入
+    console.warn('[autoSync] poster failed:', e);
+  }
+
+  // 寫入 profile
+  const profile = loadProfileLS();
+
+  // 玩家基本資料（以結算頁為主）
+  const pm = final.playersMeta?.[myId] || {};
+  profile.player.name = String(pm.name || profile.player.name || '未命名玩家').trim().slice(0,16) || '未命名玩家';
+  if(pm.avatar != null) profile.player.avatar = pm.avatar;
+
+  // recent
+  pushRecentMatch(profile, {
+    ts: Date.now(),
+    place,
+    coinsGain: coins,
+    unlocked: unlockedLux
+  });
+
+  // totals
+  profile.totals.games = (profile.totals.games || 0) + 1;
+  if(place === 1) profile.totals.wins = (profile.totals.wins || 0) + 1;
+  profile.totals.coins = (profile.totals.coins || 0) + coins;
+
+  // titles + lux
+  addOwnedTitle(profile, titleLabel);
+  mergeLuxUnlocked(profile, unlockedLux);
+
+  saveProfileLS(profile);
+
+  // 設定防重旗標
+  sessionStorage.setItem(key, '1');
+}
+
+
 const qs = new URLSearchParams(location.search);
 const roomId = qs.get('room') || sessionStorage.getItem('op_room') || '—';
 document.getElementById('roomLbl').textContent = '房號 ' + roomId;
 
-/* ===============================
-   ✅ 結算寫入玩家頁（op_profile_v1）
-   - 防重複：同一份 final 只寫一次
-   =============================== */
-const LS_PROFILE_KEY = 'op_profile_v1';
-
-function safeParseJSON(s, fallback){
-  try{ return JSON.parse(s); }catch(e){ return fallback; }
-}
-
-function ensureProfileShape(p){
-  if(!p || typeof p !== 'object') p = {};
-  if(!p.version) p.version = 1;
-  if(!p.createdAt) p.createdAt = Date.now();
-  if(!p.player) p.player = { name:'未命名玩家', avatar:1 };
-  if(!p.totals) p.totals = { games:0, wins:0, coins:0 };
-  if(!p.deluxeUnlocked) p.deluxeUnlocked = [];
-  if(!p.titles) p.titles = { owned:[], equipped:'' };
-  if(!p.recent) p.recent = [];
-  return p;
-}
-
-/** 用 final 生成一個「穩定指紋」：避免 socket 重送、重整頁面重複記錄 */
-function finalFingerprint(final){
-  const core = {
-    seasonNo: final?.seasonNo ?? null,
-    roomId: roomId ?? null,
-    ranking: (final?.ranking || []).map(r => ({ id:r.id, pid:r.pid, coins:r.coins, name:r.name })),
-    scoreboard: final?.scoreboard || null
-  };
-  // 穩定 stringify
-  return JSON.stringify(core);
-}
-
-function writeResultToProfileOnce(final){
-  if(!final) return;
-  if(MY_ID == null) return;
-
-  const fp = finalFingerprint(final);
-  const guardKey = 'op_saved_final_fp';
-  const savedFp = sessionStorage.getItem(guardKey);
-  if(savedFp === fp){
-    return; // ✅ 已寫入過
-  }
-
-  // 讀取現有玩家資料
-  let profile = ensureProfileShape(safeParseJSON(localStorage.getItem(LS_PROFILE_KEY), null));
-
-  // 讀取 start.html 產生的玩家資料（名稱/頭像）
-  const sp = safeParseJSON(localStorage.getItem('op_player_profile'), null);
-  if(sp && typeof sp === 'object'){
-    profile.player.name = (sp.playerName || profile.player.name || '').toString();
-    profile.player.avatar = Number(sp.playerAvatar || profile.player.avatar || 1) || 1;
-  }
-
-  // 取得我在排名中的位置與金幣
-  const ranking = Array.isArray(final.ranking) ? final.ranking : [];
-  const myRankIdx = ranking.findIndex(r => r && r.id === MY_ID);
-  const place = (myRankIdx >= 0) ? (myRankIdx + 1) : null;
-
-  const myRank = (myRankIdx >= 0) ? ranking[myRankIdx] : null;
-  const coinsGain = Number(myRank?.coins ?? 0);
-
-  const isWin = (place === 1);
-
-  // 取得稱號（你本頁已算好 ROWS / titleLabel）
-  const myRow = ROWS.find(r => r && r.id === MY_ID);
-  const title = (myRow?.titleLabel || '').toString().trim();
-
-  // 豪華解鎖：本頁目前沒有 final.reward 的明確欄位，先預留（不會壞）
-  const unlockedLux = [];
-
-  // ===== 寫入 totals =====
-  profile.totals.games += 1;
-  if(isWin) profile.totals.wins += 1;
-  profile.totals.coins += (Number.isFinite(coinsGain) ? coinsGain : 0);
-
-  // ===== 寫入稱號 =====
-  if(title){
-    if(!Array.isArray(profile.titles.owned)) profile.titles.owned = [];
-    if(!profile.titles.owned.includes(title)){
-      profile.titles.owned.push(title);
-    }
-    // 若未裝備稱號，第一個就自動裝備（你要完全手動也可把這段刪掉）
-    if(!profile.titles.equipped){
-      profile.titles.equipped = title;
-    }
-  }
-
-const LS_KEY_POSTERS = 'op_bounty_posters_v1';
-
-function loadPostersLS(){
-  try{
-    const arr = JSON.parse(localStorage.getItem(LS_KEY_POSTERS) || '[]');
-    if(!Array.isArray(arr)) return [];
-    return arr
-      .filter(x => x && typeof x === 'object' && typeof x.dataUrl === 'string' && x.dataUrl.startsWith('data:image'))
-      .map(x => ({ ts: Number(x.ts)||0, title: String(x.title||'').trim(), dataUrl: x.dataUrl }))
-      .slice(0,4);
-  }catch(e){
-    return [];
-  }
-}
-
-function savePostersLS(list){
-  try{ localStorage.setItem(LS_KEY_POSTERS, JSON.stringify((list||[]).slice(0,4))); }catch(e){}
-}
-
-function saveBountyPosterFromCanvas({ title } = {}){
-  const canvas = document.getElementById('bountyCanvas');
-  if(!canvas) return false;
-
-  let dataUrl = '';
-  try{
-    dataUrl = canvas.toDataURL('image/png');
-  }catch(e){
-    return false;
-  }
-  if(!dataUrl.startsWith('data:image')) return false;
-
-  const ts = Date.now();
-  const list = loadPostersLS();
-
-  // 去重：完全相同的圖就不重複塞
-  if(list.some(x => x.dataUrl === dataUrl)) return false;
-
-  list.unshift({
-    ts,
-    title: title || `懸賞令 ${new Date(ts).toLocaleString()}`,
-    dataUrl
-  });
-
-  savePostersLS(list);
-  return true;
-}
-
-
-  // ===== 豪華解鎖（預留） =====
-  if(Array.isArray(unlockedLux)){
-    unlockedLux.forEach(id=>{
-      if(!profile.deluxeUnlocked.includes(id)){
-        profile.deluxeUnlocked.push(id);
-      }
-    });
-  }
-
-  // ===== recent（最近 10 局）=====
-  profile.recent.unshift({
-    ts: Date.now(),
-    roomId: roomId,
-    seasonNo: final.seasonNo || 1,
-    place: place,
-    coinsGain: (Number.isFinite(coinsGain) ? coinsGain : 0),
-    title: title || '',
-    unlocked: unlockedLux
-  });
-  profile.recent = profile.recent.slice(0,10);
-
-  localStorage.setItem(LS_PROFILE_KEY, JSON.stringify(profile));
-  sessionStorage.setItem(guardKey, fp);
-}
-
+/* avatar 路徑修正 */
 /* avatar 路徑修正（支援數字頭像 & cpu1 這種字串） */
 function avatarUrl(v){
   if (v == null) return '';
@@ -938,6 +1001,7 @@ function avatarUrl(v){
 
   return '';
 }
+
 
 /* 勾選的指標（移除總分） */
 const METRICS = [
@@ -1026,6 +1090,15 @@ function computeBountyFromScore(score, playerCount){
   );
 }
 
+/* 把懸賞金換算成「幾億」（字串） */
+function formatBountyYi(bounty){
+  if(!bounty || bounty <= 0) return '0 億';
+  const yi = bounty / 100000000; // 1 億 = 1e8
+  let s = yi >= 10 ? yi.toFixed(0) : yi.toFixed(1);
+  s = s.replace(/\.0$/,'');
+  return s + ' 億';
+}
+
 /* 依 6 個區間，決定 tier（1~6） */
 function decideTierByBounty(bounty){
   if (bounty <   1000000000) return 1; // <10 億
@@ -1096,7 +1169,7 @@ function renderPlayersLeft(final, myId){
     };
     const info = getTitleInfoForRow(row, playerCount);
     const rawBounty = Math.floor(info.bounty || 0);
-    const bountyStr = rawBounty.toLocaleString('en-US');
+    const bountyStr = rawBounty.toLocaleString('en-US'); // 詳細數字＋千分位
     const tierClass = info.tier ? ('tier-'+info.tier) : 'tier-1';
 
     return {
@@ -1133,15 +1206,16 @@ function renderPlayersLeft(final, myId){
               <div class="player-bounty-amt">懸賞金 ${p.bountyStr}</div>
               ${titleText ? `
                <div class="player-title-badge">
-                  ${p.tierClass === 'tier-6' ? `
-                    <div class="glow"></div>
-                    <span class="crown">👑</span>
-                    <span class="text">${titleText}</span>
-                    <div class="pendant"></div>
-                  ` : `
-                    <span class="text">${titleText}</span>
-                  `}
-               </div>
+  ${p.tierClass === 'tier-6' ? `
+    <div class="glow"></div>
+    <span class="crown">👑</span>
+    <span class="text">${titleText}</span>
+    <div class="pendant"></div>
+  ` : `
+    <span class="text">${titleText}</span>
+  `}
+</div>
+
               ` : ''}
             </div>
           </div>
@@ -1154,7 +1228,7 @@ function renderPlayersLeft(final, myId){
     `;
   }).join('');
 
-  // 綁定：只有「自己」的頭像能打開雷達圖
+  // 綁定：只有「自己」的頭像能打開雷達圖（保持不動）
   el.querySelectorAll('img.avatar.me').forEach(img=>{
     img.addEventListener('click', ()=>{
       const myIdResolved = Number(img.getAttribute('data-id'));
@@ -1177,9 +1251,9 @@ function buildMetricPanel(){
   }).join('');
 
   ml.querySelectorAll('label.metric').forEach(lbl=>{
+    const key = lbl.getAttribute('data-key');
     const cb = lbl.querySelector('input[type="checkbox"]');
     cb.addEventListener('change', ()=>{
-      const key = cb.value;
       if(cb.checked) ACTIVE.add(key); else ACTIVE.delete(key);
       lbl.classList.toggle('active', cb.checked);
       renderDetailTable();
@@ -1187,6 +1261,8 @@ function buildMetricPanel(){
   });
 }
 
+/* 單一玩家一列：在同一欄位並列多條（每個勾選的指標各一條）
+   cap 規則：cap = (本場該指標最大值) + 10；若全為 0，cap = 10。 */
 function renderMetricsCell(r, capMap){
   const keys = Array.from(ACTIVE);
   if(keys.length===0) return '<div class="small" style="color:var(--muted)">（尚未勾選項目）</div>';
@@ -1220,6 +1296,7 @@ function renderDetailTable(){
 
   thead.innerHTML = `<th>玩家</th><th>數據</th>`;
 
+  // 依規格：cap = 本場最大值 + 10；若全 0，cap=10
   const capMap = {};
   for(const key of ACTIVE){
     const maxVal = Math.max(0, ...ROWS.map(r=> Number(r[key]||0) ));
@@ -1247,35 +1324,6 @@ function renderDetailTable(){
 function renderFinal(final){
   document.getElementById('seasonLbl').textContent = 'Season ' + (final.seasonNo||1);
   LAST_FINAL = final;
-
-function autoSaveMyBountyPoster(final){
-  if(!final) return;
-
-  // ✅ 防重複：同一場 final 只存一次（即使 socket 重送、刷新）
-  const fp = finalFingerprint(final);
-  const key = 'op_saved_bounty_fp';
-  if(sessionStorage.getItem(key) === fp) return;
-
-  // 取得我的 id（你頁面已經有 MY_PID / guessMyId / fallbackId）
-  let myId = guessMyId(final, MY_PID);
-  if (!final.playersMeta || !final.playersMeta[myId]) {
-    myId = fallbackId(final);
-  }
-
-  // 靜默生成 + 存檔
-  showBounty(final, myId, { silent:true })
-    .then(()=>{
-      const me = (final?.playersMeta && final.playersMeta[myId]) || {};
-      const ok = saveBountyPosterFromCanvas({ title: `懸賞令 ${me.name || ''}`.trim() });
-      if(ok){
-        sessionStorage.setItem(key, fp);
-      }
-    })
-    .catch(err=>{
-      console.warn('[autoSaveMyBountyPoster] failed:', err);
-    });
-}
-
 
   const playerCount = final.playerCount ||
     Object.keys(final.playersMeta || {}).length ||
@@ -1327,11 +1375,10 @@ function autoSaveMyBountyPoster(final){
   buildMetricPanel();
   renderDetailTable();
 
-  // ✅ 在資料都準備好後，寫入玩家頁（只寫一次）
-  writeResultToProfileOnce(final);
-// ✅ 每局結算自動存「自己的」懸賞單到玩家頁牆上（只存一次）
-autoSaveMyBountyPoster(final);
-
+  // === 結算頁 → 玩家頁：自動匯入（稱號/豪華解鎖/最近10局/牆面懸賞令）===
+  try{
+    queueMicrotask(()=> autoSyncToProfile(final, MY_ID));
+  }catch(e){}
 }
 
 /* ====== 啟動階段：載入快取 +（可選）接續監看 ====== */
@@ -1340,6 +1387,7 @@ autoSaveMyBountyPoster(final);
   const pidSS    = sessionStorage.getItem('op_pid');
   const pidState = STATE?.myPlayerId || STATE?.me?.playerId;
   MY_PID = pidUrl || pidSS || pidState || null;
+  console.log('[MY_PID resolved]', { pidUrl, pidSS, pidState, MY_PID });
 
   try{
     const cached=sessionStorage.getItem('op_final');
@@ -1371,7 +1419,7 @@ autoSaveMyBountyPoster(final);
     if(e.target.id==='helpModal') e.currentTarget.classList.add('hidden');
   });
 
-  // 分頁切換：玩家排名 / 詳細數據
+  // === 分頁切換：玩家排名 / 詳細數據 ===（搬到最外層）
   const btnRank   = document.getElementById('btnViewRank');
   const btnDetail = document.getElementById('btnViewDetail');
 
@@ -1482,22 +1530,19 @@ function loadImage(src){
   });
 }
 
-function avatarUrl2(v){
+function avatarUrl(v){
   if(v==null) return '';
   if(typeof v === 'number') return `images/avatars/${v}.webp`;
   if(/^https?:\/\//i.test(v)) return v;
   if(typeof v === 'string'){
     if(v.includes('/')) return v;
-    // 注意：這段保持你原本 wanted 的路徑處理
     return `images/avatars/${v}`;
   }
   return '';
 }
 
 // === 懸賞金繪製（頭像在下層，海報在上層） ===
-async function showBounty(final, myId, opts = {}){
-  const silent = !!opts.silent;
-
+async function buildBountyDataUrl(final, myId){
   const me = (final?.playersMeta && final.playersMeta[myId]) || {
     name: `P${(myId|0)+1}`, pid: myId|0, avatar: null
   };
@@ -1522,7 +1567,7 @@ async function showBounty(final, myId, opts = {}){
   // === 載圖 ===
   const bg = await loadImage('images/wanted.png');
   const fallbackAvatarIdx = (myId % 8) + 1;
-  const avaUrl = avatarUrl2(me.avatar) || `images/avatars/${fallbackAvatarIdx}.webp`;
+  const avaUrl = avatarUrl(me.avatar) || `images/avatars/${fallbackAvatarIdx}.webp`;
   const avatar = await loadImage(avaUrl);
 
   // 先畫頭像（在下層，做圓形裁切）
@@ -1571,11 +1616,21 @@ async function showBounty(final, myId, opts = {}){
   ctx.fillText(bountyStr, cx, bountyY);
   ctx.restore();
 
-// ✅ 靜默模式：不打開彈窗
-if(!silent){
-  document.getElementById('bountyModal').classList.remove('hidden');
+  // 回傳 dataUrl 給玩家頁牆面使用
+  try{
+    return canvas.toDataURL('image/png');
+  }catch(e){
+    return '';
+  }
 }
 
+// === 懸賞金繪製（可 silent：只畫不彈窗） ===
+async function showBounty(final, myId, opts){
+  await buildBountyDataUrl(final, myId);
+  if(!(opts && opts.silent)){
+    document.getElementById('bountyModal').classList.remove('hidden');
+  }
+}
 
 document.getElementById('closeBounty').onclick = ()=>{
   document.getElementById('bountyModal').classList.add('hidden');
@@ -1656,6 +1711,7 @@ function renderRadar(baseRow, oppRow){
   }
   ctx.restore();
 
+  // 工具：由 row 生點、畫多邊形
   function makePoints(row){
     if(!row) return null;
     return axes.map((key,i)=>{
@@ -1680,15 +1736,18 @@ function renderRadar(baseRow, oppRow){
     if(!points) return;
     ctx.font = '12px system-ui,-apple-system,Segoe UI,Roboto,Noto Sans TC,sans-serif';
     for(const p of points){
+      // 點
       ctx.beginPath();
       ctx.arc(p.x, p.y, 3, 0, Math.PI*2);
       ctx.fillStyle = color;
       ctx.fill();
 
+      // 數字（沿軸線往外推一點）
       const [tx,ty] = polar(cx, cy, Math.hypot(p.x-cx, p.y-cy) + (pushOut||12), p.rad);
       ctx.textAlign = (Math.cos(p.rad)>0.35) ? 'left' : (Math.cos(p.rad)<-0.35 ? 'right':'center');
       ctx.textBaseline = (Math.sin(p.rad)>0.35) ? 'top' : (Math.sin(p.rad)<-0.35 ? 'bottom':'middle');
 
+      // 先描邊再填色
       const label = String(p.val);
       ctx.lineWidth = 3;
       ctx.strokeStyle = 'rgba(0,0,0,.55)';
@@ -1698,15 +1757,19 @@ function renderRadar(baseRow, oppRow){
     }
   }
 
+  // 我、對手
   const mePts  = makePoints(baseRow);
   const opPts  = oppRow ? makePoints(oppRow) : null;
 
+  // 先畫對手，再畫自己
   if(opPts){ strokeFill(opPts, OP_COLOR_FILL, OP_COLOR_LINE); }
   if(mePts){ strokeFill(mePts, ME_COLOR_FILL, ME_COLOR_LINE); }
 
+  // 標記 + 數字：我（推 12px）、對手（推 22px）
   if(mePts){ drawMarkersWithValues(mePts, ME_COLOR_LINE, 12); }
   if(opPts){ drawMarkersWithValues(opPts, OP_COLOR_LINE, 22); }
 
+  // 中心小圓
   ctx.beginPath(); ctx.arc(cx,cy,3,0,Math.PI*2);
   ctx.fillStyle='rgba(255,255,255,.6)'; ctx.fill();
 }
@@ -1717,6 +1780,7 @@ function openRadar(myId){
   const me = rowById(myId);
   if (!me) return;
 
+  // 建立對手清單
   const oppoSel = document.getElementById('oppoSelect');
   const others = ORDERED_IDS.filter(id => id !== myId).map(id => rowById(id)).filter(Boolean);
   oppoSel.innerHTML = [
@@ -1724,16 +1788,20 @@ function openRadar(myId){
     ...others.map(r => `<option value="${r.id}">${r.name||('P'+(r.id+1))}</option>`)
   ].join('');
 
+  // 初次渲染（只有我）
   renderRadar(me, null);
 
+  // 監聽切換
   oppoSel.onchange = ()=>{
     const vid = Number(oppoSel.value||NaN);
     renderRadar(me, Number.isFinite(vid) ? rowById(vid) : null);
   };
 
+  // 顯示彈窗
   document.getElementById('radarModal').classList.remove('hidden');
 }
 
+// 關閉
 document.getElementById('closeRadar').addEventListener('click', ()=>{
   document.getElementById('radarModal').classList.add('hidden');
 });
