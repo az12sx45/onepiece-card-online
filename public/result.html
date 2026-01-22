@@ -757,6 +757,50 @@ function safeJsonParse(raw, fallback){
   try{ return JSON.parse(raw); }catch(e){ return fallback; }
 }
 
+
+/* ===== 稱號 tier：結算匯入到玩家頁（op_profile_v1.titles.owned） =====
+ * 目標格式：
+ *   titles.owned = [{label:"稱號", tier:1..6}, ...]
+ * 相容舊格式：
+ *   titles.owned = ["稱號", ...]
+ */
+function normTier(t){
+  const n = Number(t);
+  if(!Number.isFinite(n)) return 1;
+  return Math.max(1, Math.min(6, Math.round(n)));
+}
+function normalizeOwnedTitles(arr){
+  const out = [];
+  const list = Array.isArray(arr) ? arr : [];
+  for(const it of list){
+    let label = '';
+    let tier = 1;
+    if(typeof it === 'string'){
+      label = String(it).trim();
+      tier = 1;
+    }else if(it && typeof it === 'object'){
+      label = String(it.label ?? it.text ?? '').trim();
+      tier = normTier(it.tier ?? it.level ?? 1);
+    }
+    if(!label) continue;
+    const hit = out.find(x => x.label === label);
+    if(hit) hit.tier = Math.max(hit.tier, tier);
+    else out.push({ label, tier });
+  }
+  return out;
+}
+function upsertOwnedTitle(owned, label, tier){
+  const L = String(label||'').trim();
+  if(!L) return normalizeOwnedTitles(owned);
+  const t = normTier(tier || 1);
+  const arr = normalizeOwnedTitles(owned);
+  const hit = arr.find(x => x.label === L);
+  if(hit) hit.tier = Math.max(hit.tier, t);
+  else arr.push({ label: L, tier: t });
+  return arr;
+}
+
+
 // --- 懸賞令牆面：最多 4 張 ---
 function loadPosters(){
   const arr = safeJsonParse(localStorage.getItem(LS_KEY_POSTERS), []);
@@ -779,7 +823,7 @@ function loadProfile(){
     version: 1,
     totals: { games: 0, wins: 0, coins: 0 },
     recent: [],
-    titles: { owned: [], equipped: '' },
+    titles: { owned: [], equipped: '', equippedTier: 1 },
     _appliedMatchKeys: []
   };
 
@@ -798,6 +842,16 @@ function loadProfile(){
   if(!Array.isArray(out.recent)) out.recent = [];
   if(!Array.isArray(out.titles.owned)) out.titles.owned = [];
   out.titles.equipped = String(out.titles.equipped || '').trim();
+
+  // 相容舊資料：owned 可能是字串陣列；一律正規化成 {label,tier}
+  out.titles.owned = normalizeOwnedTitles(out.titles.owned);
+  // equippedTier 若缺少，嘗試從 owned 中補
+  if(!out.titles.equippedTier) out.titles.equippedTier = 1;
+  out.titles.equippedTier = normTier(out.titles.equippedTier || 1);
+  if(out.titles.equipped){
+    const hit = out.titles.owned.find(x => x.label === out.titles.equipped);
+    if(hit) out.titles.equippedTier = normTier(Math.max(out.titles.equippedTier||1, hit.tier||1));
+  }
 
   if(!Array.isArray(out._appliedMatchKeys)) out._appliedMatchKeys = [];
   out._appliedMatchKeys = out._appliedMatchKeys.map(x=>String(x||'')).filter(Boolean).slice(0, 200);
@@ -1255,25 +1309,31 @@ function renderFinal(final){
     const idx = ranking.findIndex(r => Number(r?.id) === Number(myId));
     const place = (idx >= 0) ? (idx + 1) : null;
 
-// === 自動匯入「已取得稱號」到玩家頁 ===
+// === 自動匯入「已取得稱號」到玩家頁（含 Tier） ===
 try {
   const myId = MY_ID != null ? MY_ID : guessMyId(final, MY_PID);
   const myRow = ROWS.find(r => Number(r.id) === Number(myId));
 
+  // titleLabel：稱號文字；titleTier：1..6（Tier 6 會在玩家頁顯示皇冠）
   if (myRow && myRow.titleLabel) {
+    const label = String(myRow.titleLabel||'').trim();
+    const tier  = normTier(myRow.titleTier || 1);
+
     const p = loadProfile();
+    if (!p.titles) p.titles = { owned: [], equipped: '', equippedTier: 1 };
 
-    if (!p.titles) p.titles = { owned: [], equipped: '' };
-    if (!Array.isArray(p.titles.owned)) p.titles.owned = [];
+    // 1) owned：寫入 {label,tier}（去重、保留較高 tier）
+    p.titles.owned = upsertOwnedTitle(p.titles.owned, label, tier);
 
-    // 去重加入
-    if (!p.titles.owned.includes(myRow.titleLabel)) {
-      p.titles.owned.push(myRow.titleLabel);
-    }
-
-    // 若尚未佩戴任何稱號，預設戴最新的
-    if (!p.titles.equipped) {
-      p.titles.equipped = myRow.titleLabel;
+    // 2) equipped：若尚未佩戴任何稱號，預設戴最新的；並同步 tier
+    if (!String(p.titles.equipped||'').trim()) {
+      p.titles.equipped = label;
+      p.titles.equippedTier = tier;
+    } else {
+      // 若已佩戴同一個稱號，tier 也補齊/升級
+      if (String(p.titles.equipped).trim() === label) {
+        p.titles.equippedTier = normTier(Math.max(Number(p.titles.equippedTier||1), tier));
+      }
     }
 
     saveProfile(p);
@@ -1281,6 +1341,7 @@ try {
 } catch (e) {
   console.warn('[save title failed]', e);
 }
+
 
 
     // 這份結算頁的 scoreboard.coinScore 就是「金幣」分數
