@@ -88,13 +88,7 @@
     .wallHint{ font-size:11px; color:var(--muted); }
     .wallStage{
       margin-top:10px;
-
-      /* 牆圖是 16:9 場景，牆面展示用比例撐高（避免被塞在小框） */
-      aspect-ratio: 16 / 9;
-      min-height: 280px;
-      max-height: 520px;
-      height: auto;
-
+      height: 220px;
       border-radius: 14px;
       border: 1px solid rgba(35,52,85,.75);
       overflow:hidden;
@@ -103,7 +97,6 @@
         radial-gradient(900px 480px at 20% 0%, rgba(255,211,106,.18), transparent 60%),
         radial-gradient(700px 420px at 90% 20%, rgba(99,102,241,.12), transparent 60%),
         linear-gradient(180deg, rgba(11,22,45,.65), rgba(2,6,23,.55));
-      background-repeat: no-repeat;
       background-size: cover;
       background-position: center;
       box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
@@ -115,11 +108,6 @@
         radial-gradient(900px 480px at 20% 0%, rgba(255,211,106,.18), transparent 60%),
         radial-gradient(700px 420px at 90% 20%, rgba(99,102,241,.12), transparent 60%),
         linear-gradient(180deg, rgba(11,22,45,.65), rgba(2,6,23,.55));
-
-      /* 讓牆圖更貼滿框（稍微放大），避免看起來『沒拉伸』 */
-      background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
-      background-position: center, center, center, center;
-       background-size: cover, cover, cover, cover !important; /* ✅ 保險 */
     }
     .wallStage::after{
       content:"";
@@ -133,34 +121,18 @@
       opacity:.55;
     }
 
-    /* ✅ poster：改成以 left/top 為「中心點」定位，並由 JS 動態算寬度 */
     .poster{
       position:absolute;
-
-      /* width 會由 JS 覆寫 */
       width: 140px;
       aspect-ratio: 2 / 3;
-
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%) rotate(0deg);
-      transform-origin: 50% 20%;
-
       border-radius: 10px;
       overflow:hidden;
       border: 1px solid rgba(0,0,0,.35);
       box-shadow: 0 16px 26px rgba(0,0,0,.35);
       background: rgba(2,6,23,.35);
+      transform-origin: 50% 20%;
     }
-
-    /* ✅ 懸賞令圖：強制拉伸貼滿框（不裁切、不留邊） */
-    .poster img{
-      width:100%;
-      height:100%;
-      object-fit: fill;
-      display:block;
-    }
-
+    .poster img{ width:100%; height:100%; object-fit: cover; display:block; }
     .poster .pin{
       position:absolute; left:10px; top:10px;
       width:14px; height:14px; border-radius:999px;
@@ -412,7 +384,7 @@
       <div class="hd">
         <div>
           <div class="h">我的牆面</div>
-          <div class="wallHint">可選牆背景；牆上會顯示最近 4 場的懸賞令（目前仍保留手動匯入，之後再接結算頁自動寫入）。</div>
+          <div class="wallHint">可選牆背景；牆上會自動顯示最近 4 場的懸賞令（由結算頁自動寫入）。仍保留手動匯入作為備援。</div>
         </div>
 
         <div class="wallTools">
@@ -479,7 +451,7 @@
 
           <div class="row" style="justify-content:space-between">
             <div style="font-weight:800">最近 10 局</div>
-            <div class="muted" style="font-size:11px">由結算頁匯入（之後我幫你接）</div>
+            <div class="muted" style="font-size:11px">由結算頁自動匯入（最多保留 10 局）</div>
           </div>
 
           <div style="margin-top:8px; overflow:auto">
@@ -564,6 +536,8 @@
     </div>
   </div>
 
+
+
   <!-- wall modal -->
   <div class="modalBack" id="wallModalBack" role="dialog" aria-modal="true">
     <div class="modal">
@@ -591,6 +565,7 @@
  * profile.html（玩家頁）
  * - 戰績/稱號/豪華/最近10局：用 op_profile_v1（你的既有結構）
  * - 名稱/頭貼：同步 op_player_profile（start.html 既有 key）
+ *   start.html 已使用 images/avatars/{1..30}.webp 並寫入 op_player_profile。 :contentReference[oaicite:3]{index=3}
  */
 
 const LS_KEY_PROFILE = 'op_profile_v1';
@@ -653,7 +628,6 @@ function applyWallBackground(){
   stage.style.setProperty('--wall-url', `url(${wallUrlById(w.id)})`);
 }
 
-/* ✅ 牆上 4 張：自動縮放 + 不同尺寸適配（中心定位 + 動態寬度） */
 function renderWall(){
   const stage = document.getElementById('wallStage');
   const empty = document.getElementById('wallEmpty');
@@ -665,30 +639,22 @@ function renderWall(){
   stage.querySelectorAll('.poster').forEach(n=>n.remove());
 
   const posters = loadPosters();
-
-  // 使用「中心點」比例座標（x/y 為 0~1）
   const slots = [
-    { x: 0.16, y: 0.28, rot: -8 },
-    { x: 0.38, y: 0.34, rot:  6 },
-    { x: 0.62, y: 0.28, rot: -4 },
-    { x: 0.84, y: 0.36, rot:  9 },
+    { left: '10%', top: '12%', rot: -8 },
+    { left: '34%', top: '18%', rot: 6 },
+    { left: '58%', top: '10%', rot: -4 },
+    { left: '78%', top: '22%', rot: 9 },
   ];
 
   if(empty) empty.style.display = posters.length ? 'none' : 'flex';
-
-  const rect = stage.getBoundingClientRect();
-  // 海報寬度：跟著牆框寬度縮放，並限制大小（你可自行調整 96/180/0.18）
-  const posterW = Math.max(96, Math.min(180, rect.width * 0.18));
 
   posters.forEach((p, i)=>{
     const s = slots[i] || slots[0];
     const wrap = document.createElement('div');
     wrap.className = 'poster';
-
-    wrap.style.width = `${posterW}px`;
-    wrap.style.left = `${s.x * 100}%`;
-    wrap.style.top  = `${s.y * 100}%`;
-    wrap.style.transform = `translate(-50%, -50%) rotate(${s.rot}deg)`;
+    wrap.style.left = s.left;
+    wrap.style.top = s.top;
+    wrap.style.transform = `rotate(${s.rot}deg)`;
     wrap.title = p.title ? p.title : (p.ts ? fmtTs(p.ts) : '懸賞令');
 
     const img = document.createElement('img');
@@ -1061,6 +1027,7 @@ function closeModal(id){ const el=document.getElementById(id); if(el) el.style.d
     if (ev.target && ev.target.id === 'avatarModalBack') closeAvatar();
   });
 
+
   // ===== 牆面：選擇背景（僅使用預設圖） + 匯入懸賞令 =====
   const openWallModal = () => {
     const w = loadWall();
@@ -1109,16 +1076,22 @@ function closeModal(id){ const el=document.getElementById(id); if(el) el.style.d
     renderWall();
   });
 
+
+  // 若剛從結算頁回來（同一個瀏覽器），切回此頁時自動刷新一次
+  document.addEventListener('visibilitychange', ()=>{
+    if(document.visibilityState === 'visible'){
+      try{
+        const p2 = loadProfile();
+        render(p2);
+        renderWall();
+      }catch(e){}
+    }
+  });
+
   // 初次渲染牆面
   renderWall();
-
-  // ✅ 視窗縮放/手機旋轉：重算海報大小與位置（避免不同尺寸跑版）
-  let _wallRaf = 0;
-  window.addEventListener('resize', ()=>{
-    cancelAnimationFrame(_wallRaf);
-    _wallRaf = requestAnimationFrame(()=> renderWall());
-  });
 })();
 </script>
 </body>
 </html>
+
