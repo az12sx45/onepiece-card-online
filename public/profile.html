@@ -229,18 +229,6 @@
       box-shadow:0 0 0 3px rgba(251,191,36,.12);
     }
 
-.titleBadge{
-  font-size:12px;
-  padding:5px 10px;
-  border-radius:999px;
-  border:1px solid rgba(251,191,36,.7);
-  background:rgba(251,191,36,.15);
-  color:#ffd36a;
-  font-weight:700;
-  white-space:nowrap;
-}
-
-
     .divider{height:1px;background:rgba(35,52,85,.75);margin:12px 0}
 
     .gallery{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
@@ -289,6 +277,252 @@
     .tag:hover{background:rgba(11,22,45,.75);border-color:#3a5584}
     .tag:active{transform:translateY(1px)}
     .tag.on{border-color:rgba(251,191,36,.7);background:rgba(251,191,36,.12)}
+    /* ===== 稱號框（與結算頁一致） ===== */
+    .player-title-badge{
+      position:relative;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:4px 16px;
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.5px;
+      text-align:center;
+      white-space:nowrap;
+      box-sizing:border-box;
+      user-select:none;
+    }
+    .player-title-badge .text{
+      position:relative;
+      z-index:3;
+      display:inline-block;
+      max-width:100%;
+      overflow:hidden;
+      white-space:nowrap;
+    }
+    @keyframes float{
+      0%,100%{transform:translateY(0px);}
+      50%{transform:translateY(-3px);}
+    }
+    @keyframes pulse{
+      0%,100%{filter:brightness(1);}
+      50%{filter:brightness(1.18);}
+    }
+    @keyframes softGlow{
+      0%,100%{opacity:.5;}
+      50%{opacity:.95;}
+    }
+    @keyframes shine{
+      0%{transform:translateX(-130%);opacity:0;}
+      20%{opacity:0;}
+      40%{transform:translateX(130%);opacity:1;}
+      60%{opacity:0;}
+      100%{transform:translateX(130%);opacity:0;}
+    }
+
+    .tier-1 .player-title-badge{
+      border-radius:8px;
+      border:1px solid #777c84;
+      background:linear-gradient(135deg,#333842,#171920);
+      color:#d0d3d8;
+      text-shadow:0 0 6px rgba(0,0,0,.8);
+    }
+    .tier-2 .player-title-badge{
+      border-radius:999px;
+      padding:6px 24px;
+      border:1px solid #63d2ff;
+      background:linear-gradient(135deg,#1b4d7e,#63d2ff);
+      color:#e8f9ff;
+      box-shadow:0 0 10px rgba(99,210,255,.6);
+      overflow:visible;
+    }
+    .tier-2 .player-title-badge::before,
+    .tier-2 .player-title-badge::after{
+      content:"";
+      position:absolute;
+      top:0; bottom:0;
+      width:14px;
+      background:inherit;
+    }
+    .tier-2 .player-title-badge::before{ left:-8px; transform:skewX(-24deg); }
+    .tier-2 .player-title-badge::after{ right:-8px; transform:skewX(24deg); }
+
+    .tier-3 .player-title-badge{
+      padding:7px 22px;
+      color:#ffe4c4;
+      background:
+        radial-gradient(circle at 0 0,rgba(255,255,255,.12) 0,transparent 55%),
+        radial-gradient(circle at 100% 100%,rgba(255,120,60,.25) 0,transparent 55%),
+        linear-gradient(135deg,#3a0f18,#8b1c24);
+      border:2px solid #f48c2b;
+      box-shadow:
+        0 0 0 1px rgba(0,0,0,.6),
+        0 0 18px rgba(244,140,43,.9);
+      clip-path:polygon(8% 0,92% 0,100% 50%,92% 100%,8% 100%,0 50%);
+    }
+    .tier-3 .player-title-badge::before{
+      content:"";
+      position:absolute;
+      inset:2px;
+      border-radius:10px;
+      border:1px dashed rgba(255,223,186,.35);
+      opacity:.7;
+    }
+
+    .tier-4 .player-title-badge{
+      padding:8px 24px 10px;
+      color:#f9f0ff;
+      background:radial-gradient(circle at top,#5c35b5,#1e1032);
+      border:2px solid #e1c4ff;
+      box-shadow:
+        0 0 0 1px rgba(90,40,200,.6),
+        0 0 22px rgba(147,96,255,1);
+      border-radius:16px 16px 10px 10px;
+      overflow:visible;
+      animation:float 5s ease-in-out infinite;
+    }
+    .tier-4 .player-title-badge::before{
+      content:"";
+      position:absolute;
+      left:50%;
+      bottom:-10px;
+      transform:translateX(-50%);
+      width:60%;
+      height:16px;
+      background:linear-gradient(to bottom,#e1c4ff,#6e3bd1);
+      clip-path:polygon(50% 100%,0 0,100% 0);
+      box-shadow:0 4px 10px rgba(0,0,0,.6);
+    }
+
+    .tier-5 .player-title-badge{
+      padding:8px 30px;
+      color:#fff9e0;
+      background:linear-gradient(135deg,#5a2400,#ffcf66);
+      border-radius:999px;
+      border:3px solid #ffe08a;
+      box-shadow:
+        0 0 0 1px rgba(255,224,138,.55),
+        0 0 26px rgba(255,204,110,1);
+      overflow:visible;
+      animation:float 4.5s ease-in-out infinite, pulse 3.8s ease-in-out infinite;
+    }
+    .tier-5 .player-title-badge::before,
+    .tier-5 .player-title-badge::after{
+      content:"";
+      position:absolute;
+      top:50%;
+      width:26px;
+      height:16px;
+      background:radial-gradient(circle at 0 50%,rgba(255,255,255,.95) 0,rgba(255,224,138,.1) 70%);
+      transform:translateY(-50%);
+      filter:drop-shadow(0 0 8px rgba(255,224,138,.9));
+    }
+    .tier-5 .player-title-badge::before{ left:-16px; clip-path:polygon(100% 0,0 50%,100% 100%); }
+    .tier-5 .player-title-badge::after{ right:-16px; clip-path:polygon(0 0,100% 50%,0 100%); }
+    .tier-5 .player-title-badge .text::after{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:linear-gradient(120deg,transparent 0,rgba(255,255,255,.9) 45%,transparent 75%);
+      mix-blend-mode:screen;
+      transform:translateX(-130%);
+      animation:shine 3.6s ease-in-out infinite;
+    }
+
+    .tier-6 .player-title-badge{
+      padding:9px 38px;
+      color:#fffdf5;
+      background:
+        radial-gradient(circle at 20% 0,rgba(255,255,255,.4) 0,transparent 55%),
+        radial-gradient(circle at 80% 100%,rgba(255,210,120,.7) 0,transparent 55%),
+        linear-gradient(135deg,#4b2a00,#c68b00,#ffe7a3);
+      border-radius:999px;
+      border:4px solid #ffe9c4;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,.45),
+        0 0 0 6px rgba(158,106,32,.75),
+        0 0 38px rgba(255,243,196,1);
+      overflow:visible;
+      position:relative;
+      text-shadow:
+        0 0 8px rgba(0,0,0,1),
+        0 0 22px rgba(255,245,210,1);
+      animation:float 4.2s ease-in-out infinite, pulse 3.4s ease-in-out infinite;
+    }
+    .tier-6 .player-title-badge::before{
+      content:"";
+      position:absolute;
+      inset:4px;
+      border-radius:999px;
+      border:2px solid rgba(255,252,230,.85);
+      box-shadow:
+        inset 0 0 8px rgba(255,255,255,.7),
+        0 0 16px rgba(255,252,210,.7);
+      opacity:.98;
+      z-index:1;
+    }
+    .tier-6 .player-title-badge::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 12% 50%,#fff 0,rgba(255,255,255,0) 55%),
+        radial-gradient(circle at 88% 50%,#fff 0,rgba(255,255,255,0) 55%),
+        radial-gradient(circle at 50% -10%,#fff 0,rgba(255,255,255,0) 60%);
+      mix-blend-mode:screen;
+      opacity:.75;
+      z-index:1;
+    }
+    .tier-6 .player-title-badge .crown{
+      position:absolute;
+      top:-16px;
+      left:50%;
+      transform:translateX(-50%);
+      font-size:15px;
+      text-shadow:
+        0 0 10px #ffffff,
+        0 0 18px rgba(255,230,160,1);
+      z-index:4;
+    }
+    .tier-6 .player-title-badge .pendant{
+      position:absolute;
+      bottom:-14px;
+      left:50%;
+      transform:translateX(-50%);
+      width:18px;
+      height:18px;
+      background:radial-gradient(circle,#fff7d0 0,#f0b400 45%,#8b4c00 100%);
+      border-radius:50%;
+      box-shadow:
+        0 4px 8px rgba(0,0,0,.8),
+        0 0 10px rgba(255,230,170,1);
+      z-index:2;
+    }
+    .tier-6 .player-title-badge .pendant::before{
+      content:"";
+      position:absolute;
+      top:-6px;
+      left:50%;
+      transform:translateX(-50%);
+      width:9px;
+      height:5px;
+      border-radius:999px;
+      background:radial-gradient(circle,#fffbe6 0,#b57a1f 100%);
+    }
+    .tier-6 .player-title-badge .glow{
+      position:absolute;
+      inset:-30%;
+      background:radial-gradient(circle,rgba(255,255,255,.45) 0,transparent 60%);
+      mix-blend-mode:screen;
+      opacity:.65;
+      z-index:0;
+      animation:softGlow 4.4s ease-in-out infinite;
+    }
+
+    /* 讓稱號在 .tag 裡置中 */
+    .tag{ display:flex; align-items:center; justify-content:center; }
+
 
     .footnote{font-size:11px;color:var(--muted);line-height:1.5}
     .mono{font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
@@ -371,38 +605,38 @@
 <body>
   <div class="wrap">
     <div class="topbar">
-  <div class="brand">
-    <div class="avatarBox" id="avatarBox" title="點擊更換頭貼（使用開始頁頭像）">
-      <img id="avatarImg" alt="avatar" style="display:none" />
+      <div class="brand">
+        <div class="avatarBox" id="avatarBox" title="點擊更換頭貼（使用開始頁頭像）">
+          <img id="avatarImg" alt="avatar" style="display:none" />
+        </div>
+
+        <div class="title">
+          <h1>
+            <button class="nameBtn" id="nameBtn" title="點擊修改玩家名稱">未命名玩家</button>
+          </h1>
+          <div class="sub"><span class="nameSmall">名稱與頭貼會同步到開始頁。</span></div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="btnBack">返回主畫面</button>
+        <button class="btn primary" id="btnRefresh">重新整理</button>
+        <button class="btn danger" id="btnReset">清除本機紀錄</button>
+      </div>
     </div>
-
-    <div class="title">
-      <h1>
-        <button class="nameBtn" id="nameBtn" title="點擊修改玩家名稱">未命名玩家</button>
-        <span class="titleBadge" id="nameTitleBadge" style="display:none"></span>
-      </h1>
-      <!-- ✅ 這裡原本的 sub（名稱與頭貼會同步到開始頁。）已移除 -->
-    </div>
-  </div>
-
-  <div class="actions">
-    <button class="btn" id="btnBack">返回主畫面</button>
-    <button class="btn primary" id="btnRefresh">重新整理</button>
-    <button class="btn danger" id="btnReset">清除本機紀錄</button>
-  </div>
-</div>
-
 
     <!-- === 牆面展示：可選牆背景 + 最近 4 張懸賞令 === -->
     <div class="card wallCard">
       <div class="hd">
         <div>
           <div class="h">我的牆面</div>
-          <div class="wallHint">可選牆背景；牆上會顯示最近 4 場的懸賞令。</div>
+          <div class="wallHint">可選牆背景；牆上會顯示最近 4 場的懸賞令（目前仍保留手動匯入，之後再接結算頁自動寫入）。</div>
         </div>
 
         <div class="wallTools">
           <button class="btn" id="btnPickWall">選擇牆</button>
+          <button class="btn" id="btnImportPoster">匯入懸賞令</button>
+          <button class="btn danger" id="btnClearWall">清空牆面</button>
           <input id="posterFile" type="file" accept="image/*" style="display:none" />
         </div>
       </div>
@@ -411,7 +645,7 @@
         <div class="wallStage" id="wallStage">
           <div class="wallEmpty" id="wallEmpty">
             <div style="font-weight:800">牆面目前沒有懸賞令</div>
-            <div class="muted" style="font-size:12px"></div>
+            <div class="muted" style="font-size:12px">你可以先用「匯入懸賞令」手動貼 1～4 張；之後我再把結算頁的懸賞令自動存進來。</div>
           </div>
         </div>
       </div>
@@ -463,7 +697,7 @@
 
           <div class="row" style="justify-content:space-between">
             <div style="font-weight:800">最近 10 局</div>
-            <div class="muted" style="font-size:11px">由結算頁匯入</div>
+            <div class="muted" style="font-size:11px">由結算頁匯入（之後我幫你接）</div>
           </div>
 
           <div style="margin-top:8px; overflow:auto">
@@ -745,6 +979,26 @@ function clampStr(s, maxLen){
   return s;
 }
 function setText(id, txt){ const el = document.getElementById(id); if (el) el.textContent = txt; }
+
+function setHTML(id, htmlStr){ const el = document.getElementById(id); if (el) el.innerHTML = htmlStr; }
+function escHtml(s){
+  return String(s??'')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+function renderTitleBadge(label, tier){
+  const t = Math.max(1, Math.min(6, Number(tier)||1));
+  const txt = escHtml(label||'');
+  if(!txt) return '';
+  if(t === 6){
+    return `<div class="tier-6"><div class="player-title-badge"><div class="glow"></div><span class="crown">👑</span><span class="text">${txt}</span><div class="pendant"></div></div></div>`;
+  }
+  return `<div class="tier-${t}"><div class="player-title-badge"><span class="text">${txt}</span></div></div>`;
+}
+
 function fmtTs(ts){
   if (!ts) return '-';
   const d = new Date(ts);
@@ -765,7 +1019,7 @@ function defaultProfile(){
     totals: { games: 0, wins: 0, coins: 0, atk: 0, def: 0, hit: 0, intel: 0, survival: 0 },
     deluxeUnlocked: [],
     recent: [],
-    titles: { owned: [], equipped: '' },
+    titles: { owned: [], equipped: { label:'', tier:1 } },
     _appliedMatchKeys: []
   };
 }
@@ -790,8 +1044,43 @@ function loadProfile(){
   out.player.avatar = Math.max(1, Math.min(AVATAR_COUNT, Number(out.player.avatar)||1));
 
   out.deluxeUnlocked = uniq(out.deluxeUnlocked).map(x=>Number(x)).filter(n=>Number.isFinite(n) && n>=0 && n<=19);
-  out.titles.owned = uniq(out.titles.owned);
-  out.titles.equipped = String(out.titles.equipped||'').trim();
+  
+  // titles 相容：舊版 owned = [string]、equipped = string
+  if (Array.isArray(out.titles.owned)){
+    out.titles.owned = out.titles.owned.map(x=>{
+      if (x && typeof x === 'object'){
+        return {
+          label: String(x.label||x.text||'').trim(),
+          tier: Math.max(1, Math.min(6, Number(x.tier)||1))
+        };
+      }
+      return { label: String(x||'').trim(), tier: 1 };
+    }).filter(x=>x.label);
+  }else{
+    out.titles.owned = [];
+  }
+  // 去重（以 label）
+  {
+    const seen = new Set();
+    out.titles.owned = out.titles.owned.filter(x=>{
+      const k = String(x.label||'').trim();
+      if(!k) return false;
+      if(seen.has(k)) return false;
+      seen.add(k);
+      return true;
+    });
+  }
+
+  if (out.titles.equipped && typeof out.titles.equipped === 'object'){
+    out.titles.equipped = {
+      label: String(out.titles.equipped.label||'').trim(),
+      tier: Math.max(1, Math.min(6, Number(out.titles.equipped.tier)||1))
+    };
+  }else{
+    const eq = String(out.titles.equipped||'').trim();
+    out.titles.equipped = eq ? { label:eq, tier:1 } : { label:'', tier:1 };
+  }
+
   out.recent = Array.isArray(out.recent) ? out.recent.slice(0, 10) : [];
 
   // 用於避免結算頁重複累加 totals 的去重 key（matchKey）
@@ -858,20 +1147,11 @@ function render(profile){
   setText('kWinRate', `${winRate}%`);
   setText('kCoins', String(profile.totals.coins || 0));
 
-  setText('equippedTitle', profile.titles.equipped ? profile.titles.equipped : '未佩戴稱號');
-// 顯示稱號在玩家名稱旁
-const badge = document.getElementById('nameTitleBadge');
-if (profile.titles.equipped) {
-  badge.textContent = profile.titles.equipped;
-  badge.style.display = 'inline-flex';
-} else {
-  badge.style.display = 'none';
-}
-
+  setHTML('equippedTitle', (profile.titles?.equipped?.label) ? renderTitleBadge(profile.titles.equipped.label, profile.titles.equipped.tier) : '未佩戴稱號');
 
   const wrap = document.getElementById('titlesWrap');
   wrap.innerHTML = '';
-  const owned = profile.titles.owned || [];
+  const owned = Array.isArray(profile.titles?.owned) ? profile.titles.owned : [];
   if (!owned.length){
     const span = document.createElement('div');
     span.className = 'muted';
@@ -879,12 +1159,24 @@ if (profile.titles.equipped) {
     wrap.appendChild(span);
   }else{
     for (const t of owned){
+      const label = (t && typeof t === 'object') ? String(t.label||'').trim() : String(t||'').trim();
+      const tier  = (t && typeof t === 'object') ? Number(t.tier||1) : 1;
+      if(!label) continue;
+
       const tag = document.createElement('div');
-      tag.className = 'tag' + (profile.titles.equipped === t ? ' on' : '');
-      tag.textContent = t;
+      const eqLabel = String(profile.titles?.equipped?.label || '').trim();
+      const isOn = (eqLabel === label);
+      tag.className = 'tag' + (isOn ? ' on' : '');
       tag.title = '點擊設定為佩戴稱號';
+      tag.innerHTML = renderTitleBadge(label, tier);
+
       tag.onclick = () => {
-        profile.titles.equipped = (profile.titles.equipped === t) ? '' : t;
+        const cur = String(profile.titles?.equipped?.label || '').trim();
+        if (cur === label){
+          profile.titles.equipped = { label:'', tier:1 };
+        }else{
+          profile.titles.equipped = { label, tier: Math.max(1, Math.min(6, Number(tier)||1)) };
+        }
         saveProfile(profile);
         render(profile);
       };
