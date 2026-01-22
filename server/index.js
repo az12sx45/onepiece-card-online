@@ -1450,7 +1450,7 @@ room.sockets = newSockets;
 const PORT = process.env.PORT || 8787;
 server.listen(PORT, () => console.log("Server listening on", PORT));
 // server/index.js — 動態人數/無佔位 + 正確對齊 playerId + 開局即廣播 STATE
-const path = require("path");
+// const path = require("path"); // duplicate, removed
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
