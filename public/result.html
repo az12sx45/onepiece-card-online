@@ -1211,6 +1211,34 @@ function renderFinal(final){
     const idx = ranking.findIndex(r => Number(r?.id) === Number(myId));
     const place = (idx >= 0) ? (idx + 1) : null;
 
+// === 自動匯入「已取得稱號」到玩家頁 ===
+try {
+  const myId = MY_ID != null ? MY_ID : guessMyId(final, MY_PID);
+  const myRow = ROWS.find(r => Number(r.id) === Number(myId));
+
+  if (myRow && myRow.titleLabel) {
+    const p = loadProfile();
+
+    if (!p.titles) p.titles = { owned: [], equipped: '' };
+    if (!Array.isArray(p.titles.owned)) p.titles.owned = [];
+
+    // 去重加入
+    if (!p.titles.owned.includes(myRow.titleLabel)) {
+      p.titles.owned.push(myRow.titleLabel);
+    }
+
+    // 若尚未佩戴任何稱號，預設戴最新的
+    if (!p.titles.equipped) {
+      p.titles.equipped = myRow.titleLabel;
+    }
+
+    saveProfile(p);
+  }
+} catch (e) {
+  console.warn('[save title failed]', e);
+}
+
+
     // 這份結算頁的 scoreboard.coinScore 就是「金幣」分數
     const myRow = ROWS.find(r => Number(r?.id) === Number(myId));
     const coinsGain = Number(myRow?.coinScore ?? 0);
