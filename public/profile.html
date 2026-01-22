@@ -384,7 +384,7 @@
       <div class="hd">
         <div>
           <div class="h">我的牆面</div>
-          <div class="wallHint">可選牆背景；牆上會自動顯示最近 4 場的懸賞令（由結算頁自動寫入）。仍保留手動匯入作為備援。</div>
+          <div class="wallHint">可選牆背景；牆上會顯示最近 4 場的懸賞令（目前仍保留手動匯入，之後再接結算頁自動寫入）。</div>
         </div>
 
         <div class="wallTools">
@@ -451,7 +451,7 @@
 
           <div class="row" style="justify-content:space-between">
             <div style="font-weight:800">最近 10 局</div>
-            <div class="muted" style="font-size:11px">由結算頁自動匯入（最多保留 10 局）</div>
+            <div class="muted" style="font-size:11px">由結算頁匯入（之後我幫你接）</div>
           </div>
 
           <div style="margin-top:8px; overflow:auto">
@@ -753,7 +753,8 @@ function defaultProfile(){
     totals: { games: 0, wins: 0, coins: 0, atk: 0, def: 0, hit: 0, intel: 0, survival: 0 },
     deluxeUnlocked: [],
     recent: [],
-    titles: { owned: [], equipped: '' }
+    titles: { owned: [], equipped: '' },
+    _appliedMatchKeys: []
   };
 }
 
@@ -780,6 +781,17 @@ function loadProfile(){
   out.titles.owned = uniq(out.titles.owned);
   out.titles.equipped = String(out.titles.equipped||'').trim();
   out.recent = Array.isArray(out.recent) ? out.recent.slice(0, 10) : [];
+
+  // 用於避免結算頁重複累加 totals 的去重 key（matchKey）
+  out._appliedMatchKeys = Array.isArray(out._appliedMatchKeys) ? out._appliedMatchKeys : [];
+  out._appliedMatchKeys = uniq(out._appliedMatchKeys).map(x=>String(x||'')).filter(Boolean).slice(0, 200);
+
+  // 舊資料相容：如果沒有 _appliedMatchKeys，但 recent 內有 matchKey，先把它們補進去
+  if(!out._appliedMatchKeys.length && Array.isArray(out.recent) && out.recent.length){
+    const keys = out.recent.map(r=>String(r?.matchKey||'')).filter(Boolean);
+    out._appliedMatchKeys = uniq(keys).slice(0, 200);
+  }
+
 
   out.lastSeenAt = nowTs();
   return out;
@@ -1074,18 +1086,6 @@ function closeModal(id){ const el=document.getElementById(id); if(el) el.style.d
     localStorage.removeItem(LS_KEY_WALL);
     localStorage.removeItem(LS_KEY_POSTERS);
     renderWall();
-  });
-
-
-  // 若剛從結算頁回來（同一個瀏覽器），切回此頁時自動刷新一次
-  document.addEventListener('visibilitychange', ()=>{
-    if(document.visibilityState === 'visible'){
-      try{
-        const p2 = loadProfile();
-        render(p2);
-        renderWall();
-      }catch(e){}
-    }
   });
 
   // 初次渲染牆面
