@@ -865,14 +865,20 @@ socket.on("PROFILE_GET", async ({ secret }, cb) => {
 
 // ====== 雲端個人頁：更新（結算用） ======
 socket.on("PROFILE_UPDATE", async ({ secret, patch }, cb) => {
-  if (!secret || !patch) return cb?.({ ok: false, error: "missing payload" });
-
   try {
+    if (!secret || !patch) return cb?.({ ok: false, error: "missing payload" });
+
+    const statsJson   = JSON.stringify(patch.stats || {});
+    const titlesJson  = JSON.stringify(patch.titles || []);
+    const bountiesJson = JSON.stringify(patch.bounties || []);
+    const recentJson  = JSON.stringify(patch.recent_matches || []);
+
     const { rows } = await pool.query(
       `
       INSERT INTO player_profiles
         (secret, name, avatar, stats, titles, bounties, recent_matches)
-      VALUES ($1,$2,$3,$4,$5,$6,$7)
+      VALUES
+        ($1, $2, $3, $4::jsonb, $5::jsonb, $6::jsonb, $7::jsonb)
       ON CONFLICT (secret) DO UPDATE SET
         name = EXCLUDED.name,
         avatar = EXCLUDED.avatar,
@@ -887,19 +893,20 @@ socket.on("PROFILE_UPDATE", async ({ secret, patch }, cb) => {
         secret,
         patch.name || "",
         String(patch.avatar ?? ""),
-        patch.stats || {},
-        patch.titles || [],
-        patch.bounties || [],
-        patch.recent_matches || [],
+        statsJson,
+        titlesJson,
+        bountiesJson,
+        recentJson
       ]
     );
 
     cb?.({ ok: true, profile: rows[0] });
-  }catch (err) {
-  console.error("[PROFILE_UPDATE] db error:", err);
-  cb?.({ ok: false, error: String(err.message || err) });
-}
+  } catch (err) {
+    console.error("[PROFILE_UPDATE] error:", err);
+    cb?.({ ok: false, error: String(err.message || err) });
+  }
 });
+
 
 socket.on("JOIN_ROOM", (payload = {}) => {
   const {
