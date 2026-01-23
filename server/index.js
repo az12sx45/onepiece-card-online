@@ -858,9 +858,9 @@ socket.on("PROFILE_GET", async ({ secret }, cb) => {
     );
     cb?.({ ok: true, profile: rows[0] || null });
   } catch (err) {
-    console.error("PROFILE_GET error", err);
-    cb?.({ ok: false, error: "db error" });
-  }
+  console.error("[PROFILE_GET] db error:", err);
+  cb?.({ ok: false, error: String(err.message || err) });
+}
 });
 
 // ====== 雲端個人頁：更新（結算用） ======
@@ -895,10 +895,10 @@ socket.on("PROFILE_UPDATE", async ({ secret, patch }, cb) => {
     );
 
     cb?.({ ok: true, profile: rows[0] });
-  } catch (err) {
-    console.error("PROFILE_UPDATE error", err);
-    cb?.({ ok: false, error: "db error" });
-  }
+  }catch (err) {
+  console.error("[PROFILE_UPDATE] db error:", err);
+  cb?.({ ok: false, error: String(err.message || err) });
+}
 });
 
 socket.on("JOIN_ROOM", (payload = {}) => {
