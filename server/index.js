@@ -3,6 +3,7 @@ const path = require("path");
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
+const { pool } = require("./db");
 const {
   createInitialState,
   applyAction,
@@ -30,6 +31,16 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "public", "start.html"));
 });
 app.get("/health", (_req, res) => res.json({ ok: true, ts: Date.now() }));
+
+(async () => {
+  try {
+    const r = await pool.query("select now() as now");
+    console.log("[db] connected at", r.rows[0].now);
+  } catch (e) {
+    console.error("[db] connection failed", e);
+  }
+})();
+
 
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
