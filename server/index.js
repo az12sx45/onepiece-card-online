@@ -846,17 +846,6 @@ function runCpuLoop(roomId){
 io.on("connection", (socket) => {
   let joinedRoom = null;
 
-socket.on("JOIN_ROOM", (payload = {}) => {
-  const {
-    roomId,
-    displayName = "",
-    avatar = 1,
-    secret = "",
-    pid,
-    cpuCount,        // ← 接收從前端傳來的 CPU 數量
-  } = payload;
-
-    if (!roomId) return;
 
 // ====== 雲端個人頁：取得 ======
 socket.on("PROFILE_GET", async ({ secret }, cb) => {
@@ -911,6 +900,18 @@ socket.on("PROFILE_UPDATE", async ({ secret, patch }, cb) => {
     cb?.({ ok: false, error: "db error" });
   }
 });
+
+socket.on("JOIN_ROOM", (payload = {}) => {
+  const {
+    roomId,
+    displayName = "",
+    avatar = 1,
+    secret = "",
+    pid,
+    cpuCount,        // ← 接收從前端傳來的 CPU 數量
+  } = payload;
+
+    if (!roomId) return;
 
 
 // 建房：暫給 1 位座位（真正開始時會重建）
