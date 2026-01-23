@@ -610,6 +610,7 @@
       box-shadow:0 0 0 3px rgba(255,184,77,.25);
     }
   </style>
+  <script src="https://onepiece-card-online.onrender.com/socket.io/socket.io.js"></script>
 </head>
 
 <body>
@@ -825,6 +826,138 @@
  */
 
 const LS_KEY_PROFILE = 'op_profile_v1';
+
+// ======================
+// 雲端個人頁（Render Postgres）
+// - 讀取：PROFILE_GET
+// - 更新：PROFILE_UPDATE（名稱/頭像等變更時同步上雲）
+// ======================
+const SERVER_URL = 'https://onepiece-card-online.onrender.com';
+let __cloudSocket = null;
+
+function getSecret(){
+  try{ return localStorage.getItem('opSecret') || sessionStorage.getItem('opSecret') || ''; }catch(e){ return ''; }
+}
+
+function ensureSocket(){
+  if(__cloudSocket) return __cloudSocket;
+  if(typeof io !== 'function'){
+    console.warn('[cloud] socket.io not loaded');
+    return null;
+  }
+  __cloudSocket = io(SERVER_URL, { transports: ['websocket'] });
+  __cloudSocket.on('connect', ()=>{ try{ flushCloudUpdate(); }catch(e){} });
+  return __cloudSocket;
+}
+
+function normalizeCloudRow(row){
+  // row: {secret,name,avatar,stats,titles,bounties,recent_matches,updated_at...}
+  // 轉成玩家頁使用的本機格式
+  const p = defaultProfile();
+
+  if(row && typeof row === 'object'){
+    p.player.name = clampStr(row.name || p.player.name, 16) || p.player.name;
+    // avatar 可能是 "" 或數字字串；統一轉 number（1..AVATAR_COUNT），若不合法就用預設
+    const a = Number(row.avatar);
+    p.player.avatar = Number.isFinite(a) ? Math.max(1, Math.min(AVATAR_COUNT, a)) : p.player.avatar;
+
+    const stats = (row.stats && typeof row.stats === 'object') ? row.stats : {};
+    // totals 允許兩種：stats.totals 或 stats 直接攜帶 games/wins/coins...
+    const totals = (stats.totals && typeof stats.totals === 'object') ? stats.totals : stats;
+    p.totals.games = Number(totals.games)||0;
+    p.totals.wins  = Number(totals.wins)||0;
+    p.totals.coins = Number(totals.coins)||0;
+    p.totals.atk   = Number(totals.atk)||0;
+    p.totals.def   = Number(totals.def)||0;
+    p.totals.hit   = Number(totals.hit)||0;
+    p.totals.intel = Number(totals.intel)||0;
+    p.totals.survival = Number(totals.survival)||0;
+
+    p.deluxeUnlocked = Array.isArray(stats.deluxeUnlocked) ? stats.deluxeUnlocked : [];
+
+    // titles：你後端目前 titles 欄位可以存 object 或 array；這裡都吃
+    if(row.titles && typeof row.titles === 'object'){
+      // 若是 {owned,equipped,equippedTier}
+      if(Array.isArray(row.titles.owned) || typeof row.titles.equipped === 'string'){
+        p.titles = { ...p.titles, ...(row.titles||{}) };
+      }else if(Array.isArray(row.titles)){
+        p.titles.owned = row.titles;
+      }
+    }else if(Array.isArray(row.titles)){
+      p.titles.owned = row.titles;
+    }
+
+    // recent_matches → recent
+    if(Array.isArray(row.recent_matches)) p.recent = row.recent_matches.slice(0,10);
+    // 去重 keys
+    if(Array.isArray(stats._appliedMatchKeys)) p._appliedMatchKeys = stats._appliedMatchKeys;
+
+    // 正規化
+    p.titles.owned = normalizeOwnedTitles(p.titles.owned);
+    p.titles.equipped = String(p.titles.equipped||'').trim();
+    p.titles.equippedTier = normTier(p.titles.equippedTier || (findTitleMetaByLabel(p.titles.owned, p.titles.equipped)?.tier) || 1);
+  }
+
+  p.lastSeenAt = nowTs();
+  return p;
+}
+
+async function cloudGetProfile(){
+  const secret = getSecret();
+  if(!secret) return { ok:false, error:'no secret' };
+
+  const sock = ensureSocket();
+  if(!sock) return { ok:false, error:'no socket' };
+
+  return await new Promise((resolve)=>{
+    sock.emit('PROFILE_GET', { secret }, (ack)=> resolve(ack || {ok:false, error:'no ack'}));
+  });
+}
+
+let __pendingCloudUpdate = null;
+let __cloudUpdateTimer = null;
+
+function buildCloudPatch(profile){
+  return {
+    name: String(profile?.player?.name || ''),
+    avatar: String(profile?.player?.avatar ?? ''),
+    stats: {
+      totals: profile?.totals || { games:0, wins:0, coins:0 },
+      deluxeUnlocked: Array.isArray(profile?.deluxeUnlocked) ? profile.deluxeUnlocked : [],
+      _appliedMatchKeys: Array.isArray(profile?._appliedMatchKeys) ? profile._appliedMatchKeys : []
+    },
+    titles: profile?.titles || { owned: [], equipped: '', equippedTier: 1 },
+    bounties: [], // 先不寫（要上雲牆面懸賞令再擴充）
+    recent_matches: Array.isArray(profile?.recent) ? profile.recent : []
+  };
+}
+
+function queueCloudUpdate(profile, reason){
+  const secret = getSecret();
+  if(!secret) return;
+  __pendingCloudUpdate = { secret, patch: buildCloudPatch(profile), reason: String(reason||''), ts: Date.now() };
+
+  if(__cloudUpdateTimer) clearTimeout(__cloudUpdateTimer);
+  __cloudUpdateTimer = setTimeout(()=> flushCloudUpdate(), 250);
+}
+
+function flushCloudUpdate(){
+  const pending = __pendingCloudUpdate;
+  if(!pending) return;
+
+  const sock = ensureSocket();
+  if(!sock || sock.disconnected) return;
+
+  sock.emit('PROFILE_UPDATE', { secret: pending.secret, patch: pending.patch }, (ack)=>{
+    if(ack && ack.ok){
+      console.log('[PROFILE_UPDATE] ok', { reason: pending.reason });
+      __pendingCloudUpdate = null;
+      return;
+    }
+    console.warn('[PROFILE_UPDATE] failed', ack);
+  });
+}
+
 const LS_KEY_START   = 'op_player_profile';
 const LS_KEY_WALL    = 'op_wall_v1';
 const LS_KEY_POSTERS = 'op_bounty_posters_v1';
@@ -1138,9 +1271,16 @@ function loadProfile(){
 }
 
 function saveProfile(p){
-  try{ localStorage.setItem(LS_KEY_PROFILE, JSON.stringify(p)); }
-  catch(e){ alert('儲存失敗：瀏覽器可能限制儲存空間或使用無痕模式。'); }
+  try{
+    localStorage.setItem(LS_KEY_PROFILE, JSON.stringify(p));
+  }catch(e){
+    alert('儲存失敗：瀏覽器可能限制儲存空間或使用無痕模式。');
+  }
+
+  // 同步上雲（延遲/去抖）
+  try{ queueCloudUpdate(p, 'profile:save'); }catch(e){}
 }
+
 
 // 與 start.html 同步：讀 op_player_profile
 function loadStartProfile(){
@@ -1301,19 +1441,35 @@ function openModal(id){ const el=document.getElementById(id); if(el) el.style.di
 function closeModal(id){ const el=document.getElementById(id); if(el) el.style.display='none'; }
 
 // init
-(function init(){
-  const profile = loadProfile();
+(async function init(){
+  let profile = loadProfile();
 
-  // 第一次載入時：如果 start 已經有選過名字/頭像，就同步過來
+  // 先用 start.html 的名字/頭像當作「本機預設」，避免首次完全空白
   const sp = loadStartProfile();
   if (sp){
-    // 同步到玩家頁資料
     profile.player.name = sp.playerName || profile.player.name;
     profile.player.avatar = sp.playerAvatar || profile.player.avatar;
-  }else{
-    // 如果 start 沒資料，就確保至少寫一次，讓開始頁可帶入
-    saveStartProfile(profile.player.name, profile.player.avatar);
   }
+
+  // (B) 個人頁：改成雲端讀取 PROFILE_GET（成功的話以雲端為準）
+  try{
+    const ack = await cloudGetProfile();
+    if(ack && ack.ok){
+      if(ack.profile){
+        profile = normalizeCloudRow(ack.profile);
+      }else{
+        // 雲端還沒有資料：用本機 profile 建立一份（不影響畫面）
+        try{ queueCloudUpdate(profile, 'profile:init-create'); }catch(e){}
+      }
+    }else{
+      console.warn('[PROFILE_GET] failed', ack);
+    }
+  }catch(e){
+    console.warn('[PROFILE_GET] exception', e);
+  }
+
+  // 雲端回來後，再同步到 start（讓開始頁預設一致）
+  saveStartProfile(profile.player.name, profile.player.avatar);
 
   saveProfile(profile);
   render(profile);
