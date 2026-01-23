@@ -858,6 +858,61 @@ socket.on("JOIN_ROOM", (payload = {}) => {
 
     if (!roomId) return;
 
+// ====== 雲端個人頁：取得 ======
+socket.on("PROFILE_GET", async ({ secret }, cb) => {
+  if (!secret) return cb?.({ ok: false, error: "no secret" });
+
+  try {
+    const { rows } = await pool.query(
+      "SELECT * FROM player_profiles WHERE secret=$1",
+      [secret]
+    );
+    cb?.({ ok: true, profile: rows[0] || null });
+  } catch (err) {
+    console.error("PROFILE_GET error", err);
+    cb?.({ ok: false, error: "db error" });
+  }
+});
+
+// ====== 雲端個人頁：更新（結算用） ======
+socket.on("PROFILE_UPDATE", async ({ secret, patch }, cb) => {
+  if (!secret || !patch) return cb?.({ ok: false, error: "missing payload" });
+
+  try {
+    const { rows } = await pool.query(
+      `
+      INSERT INTO player_profiles
+        (secret, name, avatar, stats, titles, bounties, recent_matches)
+      VALUES ($1,$2,$3,$4,$5,$6,$7)
+      ON CONFLICT (secret) DO UPDATE SET
+        name = EXCLUDED.name,
+        avatar = EXCLUDED.avatar,
+        stats = EXCLUDED.stats,
+        titles = EXCLUDED.titles,
+        bounties = EXCLUDED.bounties,
+        recent_matches = EXCLUDED.recent_matches,
+        updated_at = now()
+      RETURNING *;
+      `,
+      [
+        secret,
+        patch.name || "",
+        String(patch.avatar ?? ""),
+        patch.stats || {},
+        patch.titles || [],
+        patch.bounties || [],
+        patch.recent_matches || [],
+      ]
+    );
+
+    cb?.({ ok: true, profile: rows[0] });
+  } catch (err) {
+    console.error("PROFILE_UPDATE error", err);
+    cb?.({ ok: false, error: "db error" });
+  }
+});
+
+
 // 建房：暫給 1 位座位（真正開始時會重建）
 let room = rooms.get(roomId);
 if (!room) {
