@@ -922,6 +922,64 @@ function pushRecentMatch(item){
   saveProfile(p);
 }
 
+
+// ======================
+// 雲端個人資料同步（PROFILE_UPDATE）
+// - 結算頁先把資料寫進 localStorage（op_profile_v1）
+// - 然後把「最新的」打包成 patch，上傳到 Render Postgres
+// - 需依賴 localStorage 的 opSecret（start.html 會寫入）
+// ======================
+function __getSecret(){
+  try{ return localStorage.getItem('opSecret') || sessionStorage.getItem('opSecret') || ''; }catch(e){ return ''; }
+}
+
+function __buildCloudPatchFromLocal(){
+  const p = loadProfile();
+  // 你目前的玩家頁主要吃這些欄位；其餘可放在 stats 裡擴充
+  return {
+    name: String(p?.player?.name || ''),
+    avatar: String(p?.player?.avatar ?? ''),
+    stats: {
+      totals: p?.totals || { games:0, wins:0, coins:0 },
+      deluxeUnlocked: Array.isArray(p?.deluxeUnlocked) ? p.deluxeUnlocked : []
+    },
+    titles: p?.titles || { owned: [], equipped: '', equippedTier: 1 },
+    bounties: [], // 目前先不寫（你要把牆面懸賞令上雲再加）
+    recent_matches: Array.isArray(p?.recent) ? p.recent : []
+  };
+}
+
+function __queueProfileUpdate(secret, patch, reason){
+  try{
+    window.__pendingProfileUpdate = {
+      ts: Date.now(),
+      secret,
+      patch,
+      reason: String(reason || '')
+    };
+  }catch(e){}
+
+  __flushProfileUpdate();
+}
+
+function __flushProfileUpdate(){
+  const pending = window.__pendingProfileUpdate;
+  if(!pending) return;
+
+  const sock = window.__opResultSocket;
+  if(!sock || sock.disconnected) return;
+
+  sock.emit('PROFILE_UPDATE', { secret: pending.secret, patch: pending.patch }, (ack)=>{
+    if(ack && ack.ok){
+      // 成功才清掉，避免離線或頁面重整造成遺失
+      try{ delete window.__pendingProfileUpdate; }catch(e){}
+      console.log('[PROFILE_UPDATE] ok', { reason: pending.reason });
+      return;
+    }
+    console.warn('[PROFILE_UPDATE] failed', ack);
+  });
+}
+
 const qs = new URLSearchParams(location.search);
 const roomId = qs.get('room') || sessionStorage.getItem('op_room') || '—';
 document.getElementById('roomLbl').textContent = '房號 ' + roomId;
@@ -1381,13 +1439,36 @@ try {
     const pid = (MY_PID ?? sessionStorage.getItem('op_pid') ?? '');
     const rid = (qs.get('room') || sessionStorage.getItem('op_room') || '');
 
+    const matchKey = `${rid}|${season}|${pid}|${endedAt}`;
+
     pushRecentMatch({
-      matchKey: `${rid}|${season}|${pid}|${endedAt}`,
+      matchKey,
       ts: endedAt,
       place,
       coinsGain,
       unlocked: [] // 你若有「本局解鎖豪華」資料，再塞進這個陣列
     });
+
+    // === (A) 結算頁：自動上傳雲端個人資料（PROFILE_UPDATE）===
+    // 條件：
+    // - start.html 曾寫入 localStorage.opSecret（JOINED 時）
+    // - socket.io 已連線（window.__opResultSocket）
+    try{
+      const secret = __getSecret();
+      if(secret){
+        const patch = __buildCloudPatchFromLocal();
+
+        // 以本局的名字/頭像為準（避免本機 profile 還沒同步）
+        patch.name = String(myRow?.name || patch.name || '');
+        patch.avatar = String(myRow?.avatar ?? patch.avatar ?? '');
+
+        __queueProfileUpdate(secret, patch, `result:${matchKey}`);
+      }else{
+        console.warn('[PROFILE_UPDATE] skip: no opSecret');
+      }
+    }catch(e){
+      console.warn('[PROFILE_UPDATE] exception', e);
+    }
   }catch(e){
     console.warn('[pushRecentMatch failed]', e);
   }
@@ -1423,9 +1504,13 @@ try {
   const serverURL = new URLSearchParams(location.search).get('server')
   || "https://onepiece-card-online.onrender.com";
   const socket = io(serverURL, { transports: ['websocket'] });
+  // 讓 renderFinal 可以拿到 socket（用於 PROFILE_UPDATE 上雲）
+  window.__opResultSocket = socket;
+
 
   socket.on('connect', ()=>{
     socket.emit('JOIN', { roomId, resume:true, pid:MY_PID });
+    try{ __flushProfileUpdate(); }catch(e){}
   });
   socket.on('STATE', (s)=>{
     STATE = s;
