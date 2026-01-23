@@ -21,6 +21,8 @@ const {
   pickCpuDigitSmart,
 } = require("./cpu.js");
 
+console.log("[env] DATABASE_URL exists:", !!process.env.DATABASE_URL);
+
 
 const app = express();
 app.use(express.static(path.join(__dirname, "..", "public")));
