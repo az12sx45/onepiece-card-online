@@ -4,6 +4,8 @@ const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
 const { pool } = require("./db");
+const crypto = require("crypto");
+const bcrypt = require("bcryptjs");
 const {
   createInitialState,
   applyAction,
@@ -845,6 +847,101 @@ function runCpuLoop(roomId){
 // ——— Socket.IO ———
 io.on("connection", (socket) => {
   let joinedRoom = null;
+
+// =====================
+// AUTH: 註冊 / 登入
+// =====================
+
+// 註冊：建立 users + 建立 player_profiles 並綁 user_id，回傳 secret
+socket.on("AUTH_REGISTER", async ({ username, password }, cb) => {
+  try {
+    username = String(username || "").trim().toLowerCase();
+    password = String(password || "");
+
+    if (!username || username.length < 3 || username.length > 24) {
+      return cb?.({ ok: false, error: "username length 3~24" });
+    }
+    if (!/^[a-z0-9_]+$/.test(username)) {
+      return cb?.({ ok: false, error: "username only a-z 0-9 _" });
+    }
+    if (!password || password.length < 6 || password.length > 72) {
+      return cb?.({ ok: false, error: "password length 6~72" });
+    }
+
+    // 1) username 是否被用過
+    const exist = await pool.query("SELECT id FROM users WHERE username=$1", [username]);
+    if (exist.rows.length) return cb?.({ ok: false, error: "username taken" });
+
+    // 2) 建 user
+    const password_hash = await bcrypt.hash(password, 10);
+    const u = await pool.query(
+      "INSERT INTO users(username, password_hash) VALUES($1,$2) RETURNING id, username",
+      [username, password_hash]
+    );
+    const userId = u.rows[0].id;
+
+    // 3) 建 profile 並綁定 user_id（產生一組永久 secret）
+    const secret = crypto.randomBytes(24).toString("hex");
+
+    await pool.query(
+      `
+      INSERT INTO player_profiles(secret, user_id, name, avatar, stats, titles, bounties, recent_matches)
+      VALUES($1, $2, '', '', '{}'::jsonb, '[]'::jsonb, '[]'::jsonb, '[]'::jsonb)
+      `,
+      [secret, userId]
+    );
+
+    return cb?.({ ok: true, username, secret });
+  } catch (err) {
+    console.error("[AUTH_REGISTER] error:", err);
+    return cb?.({ ok: false, error: String(err.message || err) });
+  }
+});
+
+// 登入：驗證密碼 → 找到該 user 綁定的 player_profiles.secret → 回傳 secret
+socket.on("AUTH_LOGIN", async ({ username, password }, cb) => {
+  try {
+    username = String(username || "").trim().toLowerCase();
+    password = String(password || "");
+
+    if (!username || !password) return cb?.({ ok: false, error: "missing credentials" });
+
+    // 1) 找 user
+    const u = await pool.query(
+      "SELECT id, username, password_hash FROM users WHERE username=$1",
+      [username]
+    );
+    if (!u.rows.length) return cb?.({ ok: false, error: "invalid username/password" });
+
+    // 2) 比對密碼
+    const user = u.rows[0];
+    const ok = await bcrypt.compare(password, user.password_hash);
+    if (!ok) return cb?.({ ok: false, error: "invalid username/password" });
+
+    // 3) 拿這個帳號對應的 secret
+    const p = await pool.query("SELECT secret FROM player_profiles WHERE user_id=$1", [user.id]);
+
+    // 理論上一定有（因為註冊就建了），但保底處理
+    let secret;
+    if (p.rows.length) {
+      secret = p.rows[0].secret;
+    } else {
+      secret = crypto.randomBytes(24).toString("hex");
+      await pool.query(
+        `
+        INSERT INTO player_profiles(secret, user_id, name, avatar, stats, titles, bounties, recent_matches)
+        VALUES($1, $2, '', '', '{}'::jsonb, '[]'::jsonb, '[]'::jsonb, '[]'::jsonb)
+        `,
+        [secret, user.id]
+      );
+    }
+
+    return cb?.({ ok: true, username: user.username, secret });
+  } catch (err) {
+    console.error("[AUTH_LOGIN] error:", err);
+    return cb?.({ ok: false, error: String(err.message || err) });
+  }
+});
 
 
 // ====== 雲端個人頁：取得 ======
