@@ -1300,10 +1300,11 @@ return (
     <div className="min-h-dvh flex items-center justify-center">
 {stage==="auth" && (
   <AuthPanel
-    onAuthed={()=>setStage("press")}
-    onSkip={()=>setStage("press")}
+    onAuthed={() => setStage("menu")}
+    onSkip={() => alert("請先登入或註冊才能進入")}
   />
 )}
+
 
       {stage==="press" && (
   <PressAnyKey onProceed={() => setStage("auth")} />
