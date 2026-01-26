@@ -630,7 +630,7 @@ function PressAnyKey({onProceed}){
 
 
     // === 主選單：開始遊戲 / 遊戲規則 ===
-   function MainMenu({ onStart, onRule, onLangChange }) {
+   function MainMenu({ onStart, onRule, onLangChange, onProfilePage }) {
   const cur = I18N.getLang();
 
   return (
@@ -656,6 +656,11 @@ function PressAnyKey({onProceed}){
       <button className="btn-primary btn w-full text-lg py-3" onClick={onStart}>
         {t("ui.startGame")}
       </button>
+
+<button className="btn w-full text-lg py-3" onClick={onProfilePage}>
+  個人頁面
+</button>
+
 
       <button className="btn w-full text-lg py-3" onClick={onRule}>
         {t("ui.rules")}
@@ -1311,13 +1316,22 @@ return (
 )}
 
 
-      {stage==="menu" && (
-        <MainMenu
-          onStart={()=>setStage("profile")}
-          onRule={()=>setStage("rule")}
-          onLangChange={changeLang}
-        />
-      )}
+{stage==="menu" && (
+  <MainMenu
+    onStart={()=>{
+      // ✅ 只有第一次才創角；之後直接進入選房
+      const cached = localStorage.getItem("op_player_profile");
+      if (cached) setStage("choice");
+      else setStage("profile");
+    }}
+    onProfilePage={()=>{
+      location.href = "profile.html";
+    }}
+    onRule={()=>setStage("rule")}
+    onLangChange={changeLang}
+  />
+)}
+
 
       {stage==="profile" && (
         <NameAvatar
