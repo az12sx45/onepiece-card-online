@@ -468,6 +468,17 @@ function AuthPanel({ onAuthed, onSkip }) {
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
 
+  // ✅ 自動帶入上次輸入的帳密：讓玩家「按任意鍵 → 看到登入窗 → 直接按登入」
+  useEffect(() => {
+    try {
+      const savedUser = localStorage.getItem("op_last_username") || "";
+      const savedPass = localStorage.getItem("op_last_password") || "";
+      if (savedUser) setUsername(savedUser);
+      if (savedPass) setPassword(savedPass);
+    } catch {}
+  }, []);
+
+
   function submit() {
     if (!username || !password) {
       setErr("請輸入帳號與密碼");
@@ -487,6 +498,14 @@ function AuthPanel({ onAuthed, onSkip }) {
           setErr(res?.error || e?.message || "連線失敗");
           return;
         }
+
+        // ✅ 成功後記住帳密（下次自動填）
+        try {
+          localStorage.setItem("op_last_username", username);
+          localStorage.setItem("op_last_password", password);
+        } catch {}
+
+
         // ★ 關鍵：存 secret
         localStorage.setItem("opSecret", res.secret);
         __lobby.me.secret = res.secret;
@@ -1240,8 +1259,9 @@ function WaitingRoom({roomId, profile, onLeave}){
 
 
     function App(){
-      const hasSecret = !!localStorage.getItem("opSecret");
-const [stage,setStage]=useState(hasSecret ? "press" : "auth");
+// 啟動一定先顯示 Press Any Key
+const [stage, setStage] = useState("press");
+
    // press → menu → profile → choice → waiting
       const [profile,setProfile]=useState(null);
       const [intent,setIntent]=useState(null);
@@ -1285,7 +1305,10 @@ return (
   />
 )}
 
-      {stage==="press" && <PressAnyKey onProceed={()=>setStage("menu")} />}
+      {stage==="press" && (
+  <PressAnyKey onProceed={() => setStage("auth")} />
+)}
+
 
       {stage==="menu" && (
         <MainMenu
