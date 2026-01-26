@@ -1265,7 +1265,18 @@ function WaitingRoom({roomId, profile, onLeave}){
 
     function App(){
 // 啟動一定先顯示 Press Any Key
-const [stage, setStage] = useState("press");
+const [stage, setStage] = useState(() => {
+  const params = new URLSearchParams(location.search);
+  const fromProfile = params.get("from") === "profile";
+  const hasSecret = !!(localStorage.getItem("opSecret") || "").trim();
+
+  // ✅ 從個人頁回來：直接顯示主選單（已登入）或登入窗（未登入）
+  if (fromProfile) return hasSecret ? "menu" : "auth";
+
+  // 其他正常開啟：維持你原本的流程
+  return "press";
+});
+
 
    // press → menu → profile → choice → waiting
       const [profile,setProfile]=useState(null);
