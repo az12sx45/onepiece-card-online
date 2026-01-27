@@ -510,58 +510,6 @@
       color:rgba(156,163,175,.65);font-size:11px;
     }
 
-/* ✅ 豪華卡：雙圖顯示（一般 / 強化） */
-.slot.dual .dualWrap{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  width:100%;
-  height:100%;
-}
-.slot.dual .dualWrap img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-  cursor:zoom-in;
-}
-
-/* ✅ 點縮圖看大圖 */
-.imgPreviewBack{
-  position:fixed; inset:0;
-  background:rgba(0,0,0,.75);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:18px;
-  z-index:99999;
-}
-.imgPreview{
-  width:min(520px, 92vw);
-  aspect-ratio: 2 / 3;
-  border-radius:16px;
-  overflow:hidden;
-  border:1px solid rgba(255,255,255,.18);
-  box-shadow:0 18px 60px rgba(0,0,0,.55);
-  background:rgba(0,0,0,.25);
-  position:relative;
-}
-.imgPreview img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-  display:block;
-  background:rgba(0,0,0,.2);
-}
-.imgPreview .tag{
-  position:absolute;left:10px;top:10px;
-  padding:4px 8px;
-  border-radius:999px;
-  font-size:12px;
-  background:rgba(2,6,23,.72);
-  border:1px solid rgba(255,255,255,.16);
-}
-
-
     table{width:100%;border-collapse:collapse;font-size:12px}
     th,td{
       padding:9px 8px;border-bottom:1px solid rgba(35,52,85,.65);
@@ -1498,91 +1446,42 @@ function render(profile){
       tb.appendChild(tr);
     }
   }
-const lux = document.getElementById('luxGallery');
-lux.innerHTML = '';
-const unlockedSet = new Set((profile.deluxeUnlocked||[]).map(n=>Number(n)));
 
-let unlockedCount = 0;
-for (let id=0; id<20; id++){
-  const isOn = unlockedSet.has(id);
-  if (isOn) unlockedCount++;
+  const lux = document.getElementById('luxGallery');
+  lux.innerHTML = '';
+  const unlockedSet = new Set((profile.deluxeUnlocked||[]).map(n=>Number(n)));
 
-  const slot = document.createElement('div');
-  slot.className = 'slot' + (isOn ? ' dual' : ' locked');
+  let unlockedCount = 0;
+  for (let id=0; id<20; id++){
+    const isOn = unlockedSet.has(id);
+    if (isOn) unlockedCount++;
 
-  if (isOn){
-    const baseSrc = `/images/cards_lux/${id}.webp`;
-    const enhSrc  = `/images/cards_lux/enh/${id}.webp`;
+    const slot = document.createElement('div');
+    slot.className = 'slot' + (isOn ? '' : ' locked');
 
-    const wrap = document.createElement('div');
-    wrap.className = 'dualWrap';
+    if (isOn){
+      const img = document.createElement('img');
+      img.loading = 'lazy';
+      img.alt = `lux ${id}`;
+      img.src = `/images/cards_lux/${id}.webp`;
+      img.onerror = () => { img.src = `/images/cards_lux/${id}.png`; };
+      slot.appendChild(img);
 
-    // 左：一般豪華
-    const imgA = document.createElement('img');
-    imgA.loading = 'lazy';
-    imgA.alt = `lux base ${id}`;
-    imgA.src = baseSrc;
-    imgA.onerror = () => { imgA.src = `/images/cards_lux/${id}.png`; };
-    imgA.addEventListener('click', (e)=>{
-      e.stopPropagation();
-      openImgPreview(imgA.src, `#${id} 一般豪華`);
-    });
-
-    // 右：強化豪華
-    const imgB = document.createElement('img');
-    imgB.loading = 'lazy';
-    imgB.alt = `lux enh ${id}`;
-    imgB.src = enhSrc;
-    imgB.onerror = () => { imgB.src = `/images/cards_lux/enh/${id}.png`; };
-    imgB.addEventListener('click', (e)=>{
-      e.stopPropagation();
-      openImgPreview(imgB.src, `#${id} 強化豪華`);
-    });
-
-    wrap.appendChild(imgA);
-    wrap.appendChild(imgB);
-    slot.appendChild(wrap);
-
-    const badge = document.createElement('div');
-    badge.className = 'badge';
-    badge.textContent = `#${id}`;
-    slot.appendChild(badge);
-  }else{
-    slot.textContent = `未解鎖 #${id}`;
+      const badge = document.createElement('div');
+      badge.className = 'badge';
+      badge.textContent = `#${id}`;
+      slot.appendChild(badge);
+    }else{
+      slot.textContent = `未解鎖 #${id}`;
+    }
+    lux.appendChild(slot);
   }
-
-  lux.appendChild(slot);
-}
-setText('luxCount', String(unlockedCount));
-
+  setText('luxCount', String(unlockedCount));
 }
 
 // modal helpers
 function openModal(id){ const el=document.getElementById(id); if(el) el.style.display='flex'; }
 function closeModal(id){ const el=document.getElementById(id); if(el) el.style.display='none'; }
-
-function openImgPreview(src, tag){
-  const back = document.getElementById('imgPreviewBack');
-  const img  = document.getElementById('imgPreviewImg');
-  const t    = document.getElementById('imgPreviewTag');
-  if(!back || !img) return;
-  img.src = src;
-  if(t) t.textContent = tag || 'PREVIEW';
-  back.style.display = 'flex';
-}
-function closeImgPreview(){
-  const back = document.getElementById('imgPreviewBack');
-  if(back) back.style.display = 'none';
-}
-
-// 關閉事件
-document.getElementById('imgPreviewBack')?.addEventListener('click', (e)=>{
-  if(e.target?.id === 'imgPreviewBack') closeImgPreview();
-});
-document.addEventListener('keydown', (e)=>{
-  if(e.key === 'Escape') closeImgPreview();
-});
-
 
 // init
 (async function init(){
@@ -1758,16 +1657,6 @@ renderWall();
   renderWall();
 })();
 </script>
-
-<!-- ✅ 豪華卡大圖預覽 -->
-<div class="imgPreviewBack" id="imgPreviewBack">
-  <div class="imgPreview" role="dialog" aria-modal="true">
-    <div class="tag" id="imgPreviewTag">PREVIEW</div>
-    <img id="imgPreviewImg" alt="preview"/>
-  </div>
-</div>
-
-
 </body>
 </html>
 
