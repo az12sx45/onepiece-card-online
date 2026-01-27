@@ -732,23 +732,43 @@
         </div>
       </div>
 
-      <!-- 右：豪華解鎖 -->
-      <div class="card">
-        <div class="hd">
-          <div class="h">豪華解鎖展示</div>
-          <div class="muted" style="font-size:11px">
-            已解鎖 <span id="luxCount">0</span> / 20
-          </div>
-        </div>
-        <div class="bd">
-          <div class="gallery" id="luxGallery"></div>
-          <div class="divider"></div>
-          <div class="footnote">
-            圖片路徑預設使用：<span class="mono">/images/cards_lux/{id}.webp</span>
-          </div>
-        </div>
+<!-- 右：豪華解鎖（兩區） -->
+<div style="display:grid; gap:14px;">
+  <!-- A) 一般豪華卡 -->
+  <div class="card">
+    <div class="hd">
+      <div class="h">豪華解鎖展示</div>
+      <div class="muted" style="font-size:11px">
+        已解鎖 <span id="luxCount">0</span> / 20
       </div>
     </div>
+    <div class="bd">
+      <div class="gallery" id="luxGallery"></div>
+      <div class="divider"></div>
+      <div class="footnote">
+        圖片路徑預設使用：<span class="mono">/images/cards_lux/{id}.webp</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- B) 強化技能豪華卡 -->
+  <div class="card">
+    <div class="hd">
+      <div class="h">豪華解鎖展示（強化技能）</div>
+      <div class="muted" style="font-size:11px">
+        已解鎖 <span id="luxEnhCount">0</span> / 20
+      </div>
+    </div>
+    <div class="bd">
+      <div class="gallery" id="luxEnhGallery"></div>
+      <div class="divider"></div>
+      <div class="footnote">
+        圖片路徑預設使用：<span class="mono">/images/cards_lux/enh/{id}.webp</span>
+      </div>
+    </div>
+  </div>
+</div>
+
   </div>
 
   <!-- name modal -->
@@ -1466,6 +1486,42 @@ function render(profile){
       img.src = `/images/cards_lux/${id}.webp`;
       img.onerror = () => { img.src = `/images/cards_lux/${id}.png`; };
       slot.appendChild(img);
+
+  // === 強化技能豪華卡（使用同一份解鎖清單 deluxeUnlocked） ===
+  const luxEnh = document.getElementById('luxEnhGallery');
+  if (luxEnh){
+    luxEnh.innerHTML = '';
+
+    let unlockedEnhCount = 0;
+    for (let id=0; id<20; id++){
+      const isOn = unlockedSet.has(id);
+      if (isOn) unlockedEnhCount++;
+
+      const slot = document.createElement('div');
+      slot.className = 'slot' + (isOn ? '' : ' locked');
+
+      if (isOn){
+        const img = document.createElement('img');
+        img.loading = 'lazy';
+        img.alt = `lux enh ${id}`;
+        img.src = `/images/cards_lux/enh/${id}.webp`;
+        img.onerror = () => { img.src = `/images/cards_lux/enh/${id}.png`; };
+        slot.appendChild(img);
+
+        const badge = document.createElement('div');
+        badge.className = 'badge';
+        badge.textContent = `#${id}`;
+        slot.appendChild(badge);
+      }else{
+        slot.textContent = `未解鎖 #${id}`;
+      }
+
+      luxEnh.appendChild(slot);
+    }
+
+    setText('luxEnhCount', String(unlockedEnhCount));
+  }
+
 
       const badge = document.createElement('div');
       badge.className = 'badge';
