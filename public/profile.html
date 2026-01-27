@@ -1168,15 +1168,6 @@ function avatarUrlById(id){
 }
 
 function nowTs(){ return Date.now(); }
-function safeJsonParse(s, fallback){ try{ return JSON.parse(s); }catch(e){ return fallback; } }
-function uniq(arr){
-  const set = new Set(); const out = [];
-  for (const x of (arr || [])){
-    const k = String(x ?? '').trim();
-    if (!k) continue;
-    if (set.has(k)) continue;
-    set.add(k); out.push(k);
-  }
   return out;
 }
 function clampStr(s, maxLen){
@@ -1554,13 +1545,14 @@ function closeModal(id){ const el=document.getElementById(id); if(el) el.style.d
   location.href = '/start.html?from=profile';
 };
 
-  document.getElementById('btnReset').onclick = () => {
-    const ok = confirm('確定要清除本機紀錄？（名稱、頭貼、戰績、稱號、豪華解鎖、最近對局都會消失）');
-    if (!ok) return;
-    localStorage.removeItem(LS_KEY_PROFILE);
-    localStorage.removeItem(LS_KEY_START);
-    location.reload();
-  };
+document.getElementById('btnReset')?.addEventListener('click', () => {
+  const ok = confirm('確定要清除本機紀錄？（名稱、頭貼、戰績、稱號、豪華解鎖、最近對局都會消失）');
+  if (!ok) return;
+  localStorage.removeItem(LS_KEY_PROFILE);
+  localStorage.removeItem(LS_KEY_START);
+  location.reload();
+});
+
 
   // name modal
   const nameInput = document.getElementById('nameInput');
