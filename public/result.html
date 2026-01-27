@@ -846,13 +846,15 @@ function pushPoster({ key, title, dataUrl }){
 
 // --- 最近 10 場：寫到 op_profile_v1.recent ---
 function loadProfile(){
-  const base = {
-    version: 1,
-    totals: { games: 0, wins: 0, coins: 0 },
-    recent: [],
-    titles: { owned: [], equipped: '', equippedTier: 1 },
-    _appliedMatchKeys: []
-  };
+const base = {
+  version: 1,
+  totals: { games: 0, wins: 0, coins: 0 },
+  recent: [],
+  deluxeUnlocked: [],        // ✅ 新增
+  titles: { owned: [], equipped: '', equippedTier: 1 },
+  _appliedMatchKeys: []
+};
+
 
   const raw = localStorage.getItem(LS_KEY_PROFILE);
   const p = safeJsonParse(raw, null);
@@ -918,6 +920,17 @@ function pushRecentMatch(item){
   const arr = Array.isArray(p.recent) ? p.recent : [];
   const next = [item, ...arr.filter(x => String(x?.matchKey||'') !== mk)].slice(0,10);
   p.recent = next;
+
+// 3) 豪華解鎖：union 進 deluxeUnlocked
+try{
+  const unlocked = Array.isArray(item?.unlocked) ? item.unlocked : [];
+  const merged = Array.from(new Set([
+    ...(Array.isArray(p.deluxeUnlocked) ? p.deluxeUnlocked : []),
+    ...unlocked.map(x=>Number(x)).filter(n=>Number.isFinite(n))
+  ]));
+  p.deluxeUnlocked = merged;
+}catch(e){}
+
 
   saveProfile(p);
 }
@@ -1381,13 +1394,24 @@ try {
     const pid = (MY_PID ?? sessionStorage.getItem('op_pid') ?? '');
     const rid = (qs.get('room') || sessionStorage.getItem('op_room') || '');
 
-    pushRecentMatch({
-      matchKey: `${rid}|${season}|${pid}|${endedAt}`,
-      ts: endedAt,
-      place,
-      coinsGain,
-      unlocked: [] // 你若有「本局解鎖豪華」資料，再塞進這個陣列
-    });
+// ✅ 從 game.html 暫存撿回來（本局豪華解鎖）
+let unlockedNow = [];
+try{
+  unlockedNow = JSON.parse(sessionStorage.getItem('op_unlocked_this_match') || '[]')
+    .map(x=>Number(x)).filter(n=>Number.isFinite(n));
+}catch(e){ unlockedNow = []; }
+
+pushRecentMatch({
+  matchKey: `${rid}|${season}|${pid}|${endedAt}`,
+  ts: endedAt,
+  place,
+  coinsGain,
+  unlocked: unlockedNow
+});
+
+// ✅ 寫完就清掉，避免下一局沿用
+try{ sessionStorage.removeItem('op_unlocked_this_match'); }catch(e){}
+
 
 cloudSyncPushNow(socket);
 
@@ -1527,6 +1551,10 @@ function mergeLocalAndCloud(localClient, cloudClient){
   // applied keys：union 取 200（避免刷新重複加總）【turn13file0†L35-L43】
   out._appliedMatchKeys = uniqStr([...(localClient._appliedMatchKeys||[]), ...(cloudClient._appliedMatchKeys||[])])
     .slice(0,200);
+
+if(!Array.isArray(out.deluxeUnlocked)) out.deluxeUnlocked = [];
+out.deluxeUnlocked = out.deluxeUnlocked.map(x=>Number(x)).filter(n=>Number.isFinite(n));
+
 
   return out;
 }
