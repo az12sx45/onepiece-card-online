@@ -843,6 +843,54 @@ function pushPoster({ key, title, dataUrl }){
   return true;
 }
 
+function safeJsonParse(raw, fallback=null){
+  try{ return JSON.parse(raw); }catch(e){ return fallback; }
+}
+function loadPosterMetas(){
+  const raw = localStorage.getItem('op_bounty_posters_v1');
+  const arr = safeJsonParse(raw, null);
+  if(!Array.isArray(arr)) return [];
+  return arr
+    .filter(x => x && typeof x === 'object')
+    .map(x => ({
+      key: String(x.key||''),
+      ts: Number(x.ts)||0,
+      title: String(x.title||''),
+      name: String(x.name||''),
+      bounty: String(x.bounty||''),
+      avatarId: Number(x.avatarId)||1,
+      // 舊資料若還有 dataUrl 也不會壞
+      dataUrl: (typeof x.dataUrl === 'string') ? x.dataUrl : ''
+    }))
+    .filter(x => x.key)
+    .slice(0,4);
+}
+function savePosterMetas(list){
+  try{ localStorage.setItem('op_bounty_posters_v1', JSON.stringify((list||[]).slice(0,4))); }catch(e){}
+}
+
+// 新：只存資料（不存圖）
+function pushPosterMeta(meta){
+  const m = meta || {};
+  const key = String(m.key||'').trim();
+  if(!key) return;
+
+  const list = loadPosterMetas();
+  // key 去重：同 key 先移除舊的
+  const next = [m, ...list.filter(x => String(x.key||'') !== key)].slice(0,4);
+  savePosterMetas(next);
+
+  // ✅ 同步進 op_profile_v1（讓 cloudSyncPushNow 會帶上去）
+  try{
+    const pRaw = localStorage.getItem('op_profile_v1');
+    const p = safeJsonParse(pRaw, null);
+    if(p && typeof p === 'object'){
+      p.bountyPosters = next; // 新欄位
+      localStorage.setItem('op_profile_v1', JSON.stringify(p));
+    }
+  }catch(e){}
+}
+
 
 // --- 最近 10 場：寫到 op_profile_v1.recent ---
 function loadProfile(){
@@ -1852,24 +1900,47 @@ async function showBounty(final, myId, opts = {}){
   ctx.fillText(bountyStr, cx, bountyY);
   ctx.restore();
 
-  // === 自動匯入玩家頁：把目前 canvas 存成 dataURL，寫進 op_bounty_posters_v1（最多 4 張，且用 key 去重）===
+// === 自動匯入玩家頁（改：只存「資料」不上傳圖片，省雲端空間；最多4張；key去重）===
+try{
+  const nameTxt = me.name || (`P${(myId|0)+1}`);
+
+  // 用「這場比賽」當唯一 key（跟 recent 的 matchKey 同概念）
+  const qs = new URLSearchParams(location.search);
+  const rid = (qs.get('room') || sessionStorage.getItem('op_room') || '');
+  const season = final?.seasonNo ?? final?.season ?? '';
+  const endedAt = Number(final?.endedAt || final?.ts || Date.now());
+  const pid = (MY_PID ?? sessionStorage.getItem('op_pid') ?? '');
+
+  const posterKey = `${rid}|${season}|${pid}|${endedAt}`;
+
+  // 取開始頁頭貼（op_player_profile / 或你 local 結構）
+  let avatarId = 1;
   try{
-    const nameTxt = me.name || (`P${(myId|0)+1}`);
+    const sp = JSON.parse(localStorage.getItem('op_player_profile') || 'null');
+    avatarId = Number(sp?.playerAvatar ?? sp?.avatarId ?? sp?.avatar ?? 1) || 1;
+  }catch(e){}
 
-    // 用「這場比賽」當唯一 key（跟 recent 的 matchKey 同概念）
-    const qs = new URLSearchParams(location.search);
-    const rid = (qs.get('room') || sessionStorage.getItem('op_room') || '');
-    const season = final?.seasonNo ?? final?.season ?? '';
-    const endedAt = Number(final?.endedAt || final?.ts || Date.now());
-    const pid = (MY_PID ?? sessionStorage.getItem('op_pid') ?? '');
+  // bountyStr 你前面已經畫到canvas上了：這裡直接存同一個字串最穩
+  // 如果你這段函式裡沒有 bountyStr，就改成你當下用來顯示金額的那個變數
+  const bountyText = (typeof bountyStr !== 'undefined') ? String(bountyStr) : '';
 
-    const posterKey = `${rid}|${season}|${pid}|${endedAt}`;
+  pushPosterMeta({
+    key: posterKey,
+    ts: endedAt,
+    title: `${nameTxt}｜懸賞令`,
+    name: nameTxt,
+    bounty: bountyText,
+    avatarId
+  });
 
-    const dataUrl = canvas.toDataURL('image/webp', 0.92); // 比 png 省空間
-    pushPoster({ key: posterKey, title: `${nameTxt}｜懸賞令`, dataUrl });
-  }catch(e){
-    console.warn('[pushPoster failed]', e);
+  // ✅ 若已登入：立刻推雲端（把本機 client 同步上去）
+  if (localStorage.getItem('opSecret')) {
+    cloudSyncPushNow(socket);
   }
+}catch(e){
+  console.warn('[pushPosterMeta failed]', e);
+}
+
 
   // opts.openModal === false：只存不開（給「自動存」用）
   if (opts && opts.openModal === false) return;
