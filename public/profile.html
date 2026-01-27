@@ -499,12 +499,6 @@
       position:relative;
     }
     .slot img{width:100%;height:100%;object-fit:cover;display:block}
-    .slot .badge{
-      position:absolute;left:8px;top:8px;
-      border:1px solid rgba(0,0,0,.4);
-      background:rgba(2,6,23,.72);
-      padding:3px 7px;border-radius:999px;font-size:11px;
-    }
     .slot.locked{
       display:flex;align-items:center;justify-content:center;
       color:rgba(156,163,175,.65);font-size:11px;
@@ -609,6 +603,28 @@
       border-color:#ffd36a;
       box-shadow:0 0 0 3px rgba(255,184,77,.25);
     }
+
+/* === card image viewer === */
+.imgModal{
+  width:min(520px, 92vw);
+  aspect-ratio: 2 / 3;
+  border-radius:16px;
+  overflow:hidden;
+  border:1px solid rgba(35,52,85,.9);
+  background:rgba(2,6,23,.75);
+  box-shadow: 0 18px 60px rgba(0,0,0,.5);
+}
+#imgModalPic{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+  background:rgba(0,0,0,.15);
+}
+.slot.clickable{ cursor: zoom-in; }
+.slot.clickable:hover{ outline:2px solid rgba(255,211,106,.22); outline-offset:2px; }
+
+
   </style>
 <script src="https://onepiece-card-online.onrender.com/socket.io/socket.io.js"></script>
 </head>
@@ -836,6 +852,14 @@
       </div>
     </div>
   </div>
+
+<!-- card image viewer modal -->
+<div class="modalBack" id="imgModalBack" role="dialog" aria-modal="true">
+  <div class="imgModal">
+    <img id="imgModalPic" alt="card-large" />
+  </div>
+</div>
+
 
 <script>
 /**
@@ -1467,14 +1491,48 @@ function render(profile){
     }
   }
 
-  const lux = document.getElementById('luxGallery');
-  lux.innerHTML = '';
-  const unlockedSet = new Set((profile.deluxeUnlocked||[]).map(n=>Number(n)));
+// ===== 豪華解鎖：一般豪華卡 =====
+const lux = document.getElementById('luxGallery');
+lux.innerHTML = '';
+const unlockedSet = new Set((profile.deluxeUnlocked||[]).map(n=>Number(n)));
 
-  let unlockedCount = 0;
+let unlockedCount = 0;
+for (let id=0; id<20; id++){
+  const isOn = unlockedSet.has(id);
+  if (isOn) unlockedCount++;
+
+  const slot = document.createElement('div');
+  slot.className = 'slot' + (isOn ? '' : ' locked');
+
+  if (isOn){
+    const img = document.createElement('img');
+    img.loading = 'lazy';
+    img.alt = `lux ${id}`;
+    img.src = `/images/cards_lux/${id}.webp`;
+    img.onerror = () => { img.src = `/images/cards_lux/${id}.png`; };
+    slot.appendChild(img);
+
+    // 點卡看大圖
+    slot.classList.add('clickable');
+    slot.addEventListener('click', ()=> openImgModal(img.src));
+  }else{
+    slot.textContent = `未解鎖`;
+  }
+
+  lux.appendChild(slot);
+}
+setText('luxCount', String(unlockedCount));
+
+
+// ===== 豪華解鎖：強化技能豪華卡 =====
+const luxEnh = document.getElementById('luxEnhGallery');
+if (luxEnh){
+  luxEnh.innerHTML = '';
+
+  let unlockedEnhCount = 0;
   for (let id=0; id<20; id++){
     const isOn = unlockedSet.has(id);
-    if (isOn) unlockedCount++;
+    if (isOn) unlockedEnhCount++;
 
     const slot = document.createElement('div');
     slot.className = 'slot' + (isOn ? '' : ' locked');
@@ -1482,51 +1540,26 @@ function render(profile){
     if (isOn){
       const img = document.createElement('img');
       img.loading = 'lazy';
-      img.alt = `lux ${id}`;
-      img.src = `/images/cards_lux/${id}.webp`;
-      img.onerror = () => { img.src = `/images/cards_lux/${id}.png`; };
+      img.alt = `lux enh ${id}`;
+      img.src = `/images/cards_lux/enh/${id}.webp`;
+      img.onerror = () => { img.src = `/images/cards_lux/enh/${id}.png`; };
       slot.appendChild(img);
 
-  // === 強化技能豪華卡（使用同一份解鎖清單 deluxeUnlocked） ===
-  const luxEnh = document.getElementById('luxEnhGallery');
-  if (luxEnh){
-    luxEnh.innerHTML = '';
-
-    let unlockedEnhCount = 0;
-    for (let id=0; id<20; id++){
-      const isOn = unlockedSet.has(id);
-      if (isOn) unlockedEnhCount++;
-
-      const slot = document.createElement('div');
-      slot.className = 'slot' + (isOn ? '' : ' locked');
-
-      if (isOn){
-        const img = document.createElement('img');
-        img.loading = 'lazy';
-        img.alt = `lux enh ${id}`;
-        img.src = `/images/cards_lux/enh/${id}.webp`;
-        img.onerror = () => { img.src = `/images/cards_lux/enh/${id}.png`; };
-        slot.appendChild(img);
-
-        const badge = document.createElement('div');
-        badge.className = 'badge';
-        badge.textContent = `#${id}`;
-        slot.appendChild(badge);
-      }else{
-        slot.textContent = `未解鎖 #${id}`;
-      }
-
-      luxEnh.appendChild(slot);
+      // 點卡看大圖
+      slot.classList.add('clickable');
+      slot.addEventListener('click', ()=> openImgModal(img.src));
+    }else{
+      slot.textContent = `未解鎖`;
     }
 
-    setText('luxEnhCount', String(unlockedEnhCount));
+    luxEnh.appendChild(slot);
   }
 
+  setText('luxEnhCount', String(unlockedEnhCount));
+}
 
-      const badge = document.createElement('div');
-      badge.className = 'badge';
-      badge.textContent = `#${id}`;
-      slot.appendChild(badge);
+
+
     }else{
       slot.textContent = `未解鎖 #${id}`;
     }
@@ -1538,6 +1571,36 @@ function render(profile){
 // modal helpers
 function openModal(id){ const el=document.getElementById(id); if(el) el.style.display='flex'; }
 function closeModal(id){ const el=document.getElementById(id); if(el) el.style.display='none'; }
+
+// ===== card image viewer =====
+function openImgModal(src){
+  const back = document.getElementById('imgModalBack');
+  const pic  = document.getElementById('imgModalPic');
+  if(!back || !pic) return;
+  pic.src = src;
+  back.style.display = 'flex';
+}
+function closeImgModal(){
+  const back = document.getElementById('imgModalBack');
+  const pic  = document.getElementById('imgModalPic');
+  if(!back || !pic) return;
+  back.style.display = 'none';
+  pic.src = '';
+}
+
+// 點黑色區域關閉（點到圖片本體不關）
+document.getElementById('imgModalBack')?.addEventListener('click', (ev)=>{
+  if(ev.target && ev.target.id === 'imgModalBack') closeImgModal();
+});
+
+// ESC 關閉
+document.addEventListener('keydown', (ev)=>{
+  if(ev.key === 'Escape'){
+    const back = document.getElementById('imgModalBack');
+    if(back && back.style.display === 'flex') closeImgModal();
+  }
+});
+
 
 // init
 (async function init(){
