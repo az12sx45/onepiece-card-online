@@ -741,22 +741,7 @@
           </div>
         </div>
         <div class="bd">
-          <div style="display:grid; gap:12px;">
-  <div>
-    <div style="font-size:13px;font-weight:900;margin-bottom:8px;letter-spacing:.5px;">一般技能 · 豪華</div>
-    <div class="gallery" id="luxGalleryNormal"></div>
-  </div>
-
-  <div class="divider"></div>
-
-  <div>
-    <div style="font-size:13px;font-weight:900;margin-bottom:8px;letter-spacing:.5px;color:#ffb703;text-shadow:0 0 6px rgba(255,183,3,.35);">
-      強化技能 · 豪華
-    </div>
-    <div class="gallery" id="luxGalleryEnhanced"></div>
-  </div>
-</div>
-
+          <div class="gallery" id="luxGallery"></div>
           <div class="divider"></div>
           <div class="footnote">
             圖片路徑預設使用：<span class="mono">/images/cards_lux/{id}.webp</span>
@@ -1315,13 +1300,6 @@ function loadProfile(){
   out.player.avatar = Math.max(1, Math.min(AVATAR_COUNT, Number(out.player.avatar)||1));
 
   out.deluxeUnlocked = uniq(out.deluxeUnlocked).map(x=>Number(x)).filter(n=>Number.isFinite(n) && n>=0 && n<=19);
-// ✅ 相容：如果 deluxeUnlocked 不是陣列（例如曾經改成物件），轉回「單一 id 陣列」
-if (!Array.isArray(out.deluxeUnlocked)) {
-  const a = Array.isArray(out.deluxeUnlocked?.normal) ? out.deluxeUnlocked.normal : [];
-  const b = Array.isArray(out.deluxeUnlocked?.enhanced) ? out.deluxeUnlocked.enhanced : [];
-  out.deluxeUnlocked = uniq([...(a||[]), ...(b||[])]).map(x=>Number(x)).filter(n=>Number.isFinite(n) && n>=0 && n<=19);
-}
-
   out.titles.owned = normalizeOwnedTitles(out.titles.owned);
   out.titles.equipped = String(out.titles.equipped||'').trim();
   out.titles.equippedTier = normTier(out.titles.equippedTier || (findTitleMetaByLabel(out.titles.owned, out.titles.equipped)?.tier) || 1);
@@ -1469,64 +1447,37 @@ function render(profile){
     }
   }
 
-// === 豪華解鎖展示：同一 id 同時解鎖「一般技能豪華」+「強化技能豪華」 ===
-const luxA = document.getElementById('luxGalleryNormal');
-const luxB = document.getElementById('luxGalleryEnhanced');
-if (luxA) luxA.innerHTML = '';
-if (luxB) luxB.innerHTML = '';
+  const lux = document.getElementById('luxGallery');
+  lux.innerHTML = '';
+  const unlockedSet = new Set((profile.deluxeUnlocked||[]).map(n=>Number(n)));
 
-const unlockedSet = new Set((profile.deluxeUnlocked||[]).map(n=>Number(n)).filter(n=>Number.isFinite(n)));
-let unlockedCount = 0;
+  let unlockedCount = 0;
+  for (let id=0; id<20; id++){
+    const isOn = unlockedSet.has(id);
+    if (isOn) unlockedCount++;
 
-function makeSlot(id, srcBase){
-  const slot = document.createElement('div');
-  slot.className = 'slot';
+    const slot = document.createElement('div');
+    slot.className = 'slot' + (isOn ? '' : ' locked');
 
-  const img = document.createElement('img');
-  img.loading = 'lazy';
-  img.alt = `lux ${id}`;
-  img.src = `${srcBase}/${id}.webp`;
-  img.onerror = () => { img.src = `${srcBase}/${id}.png`; };
-  slot.appendChild(img);
+    if (isOn){
+      const img = document.createElement('img');
+      img.loading = 'lazy';
+      img.alt = `lux ${id}`;
+      img.src = `/images/cards_lux/${id}.webp`;
+      img.onerror = () => { img.src = `/images/cards_lux/${id}.png`; };
+      slot.appendChild(img);
 
-  const badge = document.createElement('div');
-  badge.className = 'badge';
-  badge.textContent = `#${id}`; // ✅ 兩種都顯示同樣號碼
-  slot.appendChild(badge);
-
-  return slot;
-}
-
-function makeLocked(text){
-  const slot = document.createElement('div');
-  slot.className = 'slot locked';
-  slot.textContent = text;
-  return slot;
-}
-
-// 你目前是 0..19 共 20 張
-for (let id=0; id<20; id++){
-  const isOn = unlockedSet.has(id);
-  if (isOn) unlockedCount++;
-
-  // 一般技能豪華：/images/cards_lux/{id}
-  if (luxA){
-    luxA.appendChild(
-      isOn ? makeSlot(id, '/images/cards_lux') : makeLocked(`未解鎖 #${id}`)
-    );
+      const badge = document.createElement('div');
+      badge.className = 'badge';
+      badge.textContent = `#${id}`;
+      slot.appendChild(badge);
+    }else{
+      slot.textContent = `未解鎖 #${id}`;
+    }
+    lux.appendChild(slot);
   }
-
-  // 強化技能豪華：你要準備一個資料夾（建議）/images/cards_lux_enh/{id}
-  // 注意：這裡「同一 id」也用 isOn（代表同時解鎖）
-  if (luxB){
-    luxB.appendChild(
-      isOn ? makeSlot(id, '/images/cards_lux_enh') : makeLocked(`未解鎖 #${id}`)
-    );
-  }
+  setText('luxCount', String(unlockedCount));
 }
-
-setText('luxCount', String(unlockedCount));
-
 
 // modal helpers
 function openModal(id){ const el=document.getElementById(id); if(el) el.style.display='flex'; }
