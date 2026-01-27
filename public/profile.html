@@ -632,8 +632,6 @@
 
   <div class="actions">
     <button class="btn" id="btnBack">返回主畫面</button>
-    <button class="btn primary" id="btnRefresh">重新整理</button>
-    <button class="btn danger" id="btnReset">清除本機紀錄</button>
   </div>
 </div>
 
@@ -755,8 +753,8 @@
   <div class="divider"></div>
   <div class="footnote">
     圖片路徑：
-    <span class="mono">/images/cards_lux/basic/{id}.webp</span>、
-    <span class="mono">/images/cards_lux/enhanced/{id}.webp</span>
+    <span class="mono">/images/cards_lux/{id}.webp</span>、
+    <span class="mono">/images/cards_lux/enh/{id}.webp</span>
   </div>
 </div>
 
@@ -1512,13 +1510,13 @@ function render(profile){
 const basicCount = renderLuxGallery(
   profile.deluxeUnlocked?.basic || [],
   'luxGalleryBasic',
-  '/images/cards_lux/basic'
+  '/images/cards_lux'
 );
 
 const enhancedCount = renderLuxGallery(
   profile.deluxeUnlocked?.enhanced || [],
   'luxGalleryEnhanced',
-  '/images/cards_lux/enhanced'
+  '/images/cards_lux/enh'
 );
 
 setText('luxCount', String(basicCount + enhancedCount));
@@ -1552,7 +1550,6 @@ function closeModal(id){ const el=document.getElementById(id); if(el) el.style.d
   render(profile);
 
   // top actions
-  document.getElementById('btnRefresh').onclick = () => location.reload();
   document.getElementById('btnBack').onclick = () => {
   location.href = '/start.html?from=profile';
 };
