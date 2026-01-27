@@ -1493,11 +1493,14 @@ function render(profile){
 
 // ===== 豪華解鎖：一般豪華卡 =====
 const lux = document.getElementById('luxGallery');
-lux.innerHTML = '';
-const unlockedSet = new Set((profile.deluxeUnlocked||[]).map(n=>Number(n)));
+if (lux){
+  lux.innerHTML = '';
+}
 
+const unlockedSet = new Set((profile.deluxeUnlocked || []).map(n => Number(n)));
 let unlockedCount = 0;
-for (let id=0; id<20; id++){
+
+for (let id = 0; id < 20; id++){
   const isOn = unlockedSet.has(id);
   if (isOn) unlockedCount++;
 
@@ -1514,13 +1517,14 @@ for (let id=0; id<20; id++){
 
     // 點卡看大圖
     slot.classList.add('clickable');
-    slot.addEventListener('click', ()=> openImgModal(img.src));
-  }else{
+    slot.addEventListener('click', () => openImgModal(img.src));
+  } else {
     slot.textContent = `未解鎖`;
   }
 
-  lux.appendChild(slot);
+  lux && lux.appendChild(slot);
 }
+
 setText('luxCount', String(unlockedCount));
 
 
@@ -1530,7 +1534,8 @@ if (luxEnh){
   luxEnh.innerHTML = '';
 
   let unlockedEnhCount = 0;
-  for (let id=0; id<20; id++){
+
+  for (let id = 0; id < 20; id++){
     const isOn = unlockedSet.has(id);
     if (isOn) unlockedEnhCount++;
 
@@ -1547,8 +1552,8 @@ if (luxEnh){
 
       // 點卡看大圖
       slot.classList.add('clickable');
-      slot.addEventListener('click', ()=> openImgModal(img.src));
-    }else{
+      slot.addEventListener('click', () => openImgModal(img.src));
+    } else {
       slot.textContent = `未解鎖`;
     }
 
@@ -1558,15 +1563,6 @@ if (luxEnh){
   setText('luxEnhCount', String(unlockedEnhCount));
 }
 
-
-
-    }else{
-      slot.textContent = `未解鎖 #${id}`;
-    }
-    lux.appendChild(slot);
-  }
-  setText('luxCount', String(unlockedCount));
-}
 
 // modal helpers
 function openModal(id){ const el=document.getElementById(id); if(el) el.style.display='flex'; }
