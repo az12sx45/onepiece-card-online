@@ -4726,6 +4726,18 @@ function openRewardModal(payload){
   _rewardCache = payload;
   _rewardShownRoundNo = payload.roundNo;
 
+  // ✅ 本局豪華解鎖：記到 sessionStorage，給 result.html 結算時上雲端
+  try{
+    const key = 'op_unlocked_this_match';
+    const incoming = Array.isArray(payload?.cards) ? payload.cards : [];
+    const list = incoming.map(x=>Number(x)).filter(n=>Number.isFinite(n));
+
+    const prev = JSON.parse(sessionStorage.getItem(key) || '[]');
+    const merged = Array.from(new Set([...(Array.isArray(prev)?prev:[]), ...list]));
+    sessionStorage.setItem(key, JSON.stringify(merged));
+  }catch(e){}
+
+
   const modal = document.getElementById('rewardModal');
   const cntEl = document.getElementById('rewardDrawCount');
   if (cntEl) cntEl.textContent = String(payload.coins || 1);
