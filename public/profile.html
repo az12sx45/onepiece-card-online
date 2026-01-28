@@ -1079,19 +1079,129 @@ function saveWall(w){
   try{ localStorage.setItem(LS_KEY_WALL, JSON.stringify({version:1, id: Math.max(1, Math.min(WALL_COUNT, Number(w?.id)||1))})); }catch(e){}
 }
 
-function loadPosters(){
+function normalizePosterMeta(x){
+  if(!x || typeof x !== 'object') return null;
+  const key = String(x.key||'').trim();
+  const ts = Number(x.ts)||0;
+  const title = String(x.title||'').trim();
+  const name = String(x.name||'').trim();
+  const bounty = String(x.bounty||'').trim();
+  const avatarId = Math.max(1, Math.min(AVATAR_COUNT, Number(x.avatarId)||1));
+  if(!key) return null;
+  return { key, ts, title, name, bounty, avatarId };
+}
+
+/** 懸賞令資料（meta）：最多 4 張
+ *  - 優先讀 op_profile_v1.bountyPosters（雲端同步的 client 會寫回這裡）
+ *  - 備援讀 LS_KEY_POSTERS（結算頁 pushPosterMeta 也會寫這份）
+ */
+function loadPosterMetas(){
+  // 1) op_profile_v1
+  try{
+    const p = safeJsonParse(localStorage.getItem(LS_KEY_PROFILE), null);
+    const arr = p?.bountyPosters;
+    if(Array.isArray(arr)){
+      return arr.map(normalizePosterMeta).filter(Boolean).slice(0,4);
+    }
+  }catch(e){}
+
+  // 2) LS_KEY_POSTERS
   const raw = localStorage.getItem(LS_KEY_POSTERS);
   const arr = safeJsonParse(raw, null);
   if(!Array.isArray(arr)) return [];
-  return arr
-    .filter(x => x && typeof x === 'object' && typeof x.dataUrl === 'string' && x.dataUrl.startsWith('data:image'))
-    .map(x => ({ ts: Number(x.ts)||0, title: String(x.title||'').trim(), dataUrl: x.dataUrl }))
-    .slice(0, 4);
+  return arr.map(normalizePosterMeta).filter(Boolean).slice(0,4);
 }
 
-function savePosters(list){
-  try{ localStorage.setItem(LS_KEY_POSTERS, JSON.stringify((list||[]).slice(0,4))); }catch(e){}
+function savePosterMetas(list){
+  const metas = (list||[]).map(normalizePosterMeta).filter(Boolean).slice(0,4);
+  try{ localStorage.setItem(LS_KEY_POSTERS, JSON.stringify(metas)); }catch(e){}
+  // 同步進 op_profile_v1（雲端同步會帶這份）
+  try{
+    const p = safeJsonParse(localStorage.getItem(LS_KEY_PROFILE), null);
+    if(p && typeof p === 'object'){
+      p.bountyPosters = metas;
+      localStorage.setItem(LS_KEY_PROFILE, JSON.stringify(p));
+    }
+  }catch(e){}
 }
+
+function loadImage(src){
+  return new Promise((resolve)=>{
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = ()=> resolve(img);
+    img.onerror = ()=> resolve(null);
+    img.src = src;
+  });
+}
+
+// key -> dataUrl（避免每次切頁都重畫）
+const __posterCache = new Map();
+
+/** 生成海報圖片（沿用結算頁 showBounty 的排版） */
+async function renderPosterDataUrl(meta){
+  const m = normalizePosterMeta(meta);
+  if(!m) return '';
+  if(__posterCache.has(m.key)) return __posterCache.get(m.key);
+
+  const W = 768, H = 1152;
+  const cvs = document.createElement('canvas');
+  cvs.width = W; cvs.height = H;
+  const ctx = cvs.getContext('2d');
+  ctx.clearRect(0,0,W,H);
+
+  // 對齊參數（與 result.html 一致）
+  const cx = 382, cy = 489, r = 250;
+  const nameY = 939, bountyY = 1032;
+  const nameFont = 126, bountyFont = 78;
+
+  const bg = await loadImage('images/wanted.png');
+  const ava = await loadImage(avatarUrlById(m.avatarId));
+
+  // 先畫頭像（圓形裁切）
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI*2);
+  ctx.closePath();
+  ctx.clip();
+  if(ava) ctx.drawImage(ava, cx-r, cy-r, r*2, r*2);
+  ctx.restore();
+
+  // 再畫海報
+  if(bg) ctx.drawImage(bg, 0, 0, W, H);
+
+  // 名稱（含細邊框）
+  ctx.textAlign = 'center';
+  ctx.font = `bold ${nameFont}px 'Times New Roman', serif`;
+  const nameStrokeW = Math.max(2, Math.round(nameFont * 0.035));
+  ctx.lineWidth = nameStrokeW;
+  ctx.lineJoin = 'round';
+  ctx.miterLimit = 2;
+  ctx.strokeStyle = '#412513';
+  ctx.fillStyle = '#674832';
+
+  const nameTxt = m.name || '未命名玩家';
+  ctx.strokeText(nameTxt, cx, nameY);
+  ctx.fillText(nameTxt, cx, nameY);
+
+  // 懸賞金額
+  ctx.save();
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'alphabetic';
+  ctx.font = `300 ${bountyFont}px "Cambria", "Georgia", "Arial", serif`;
+  ctx.fillStyle = '#38281d';
+  ctx.shadowColor = 'rgba(0,0,0,0.15)';
+  ctx.shadowBlur = 4;
+  ctx.shadowOffsetX = 1;
+  ctx.shadowOffsetY = 1;
+  ctx.fillText(String(m.bounty||''), cx, bountyY);
+  ctx.restore();
+
+  const dataUrl = cvs.toDataURL('image/png');
+  __posterCache.set(m.key, dataUrl);
+  return dataUrl;
+}
+
 
 async function fileToDataUrl(file){
   if(!file) return '';
@@ -1111,7 +1221,7 @@ function applyWallBackground(){
   stage.style.setProperty('--wall-url', `url(${wallUrlById(w.id)})`);
 }
 
-function renderWall(){
+async function renderWall(){
   const stage = document.getElementById('wallStage');
   const empty = document.getElementById('wallEmpty');
   if(!stage) return;
@@ -1121,7 +1231,17 @@ function renderWall(){
   // 清掉舊海報
   stage.querySelectorAll('.poster').forEach(n=>n.remove());
 
-  const posters = loadPosters();
+  const metas = loadPosterMetas();
+  const posters = [];
+  for (const m of metas){
+    const dataUrl = await renderPosterDataUrl(m);
+    if(dataUrl && dataUrl.startsWith('data:image')) posters.push({
+      ts: Number(m.ts)||0,
+      title: String(m.title||'').trim() || (m.name ? `${m.name}｜懸賞令` : '懸賞令'),
+      dataUrl
+    });
+  }
+
   const slots = [
     { left: '10%', top: '12%', rot: -8 },
     { left: '34%', top: '18%', rot: 6 },
@@ -1753,10 +1873,13 @@ renderWall();
     const dataUrl = await fileToDataUrl(f);
     if(!dataUrl.startsWith('data:image')){ alert('讀取圖片失敗'); return; }
 
-    const list = loadPosters();
+    const list = loadPosterMetas();
     const ts = nowTs();
-    list.unshift({ ts, title: `懸賞令 ${fmtTs(ts)}`, dataUrl });
-    savePosters(list);
+    // 匯入圖片（備援用）：用隨機 key 存成 meta，圖片放到 cache
+    const key = `import|${ts}|${Math.random().toString(16).slice(2)}`;
+    __posterCache.set(key, dataUrl);
+    list.unshift({ key, ts, title: `懸賞令 ${fmtTs(ts)}`, name:'', bounty:'', avatarId: 1 });
+    savePosterMetas(list);
     posterFile.value = '';
     renderWall();
   });
