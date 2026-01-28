@@ -877,35 +877,6 @@ const WALL_COUNT = 8;
 const SERVER_URL = 'https://onepiece-card-online.onrender.com';
 const socket = io(SERVER_URL, { transports: ['websocket'] });
 
-// ===== Cloud-only store =====
-function getSecret(){
-  return (localStorage.getItem('opSecret')||'').trim();
-}
-function cloudGetClient(){
-  return new Promise((resolve)=>{
-    const secret = getSecret();
-    if(!secret) return resolve(null);
-    socket.timeout(5000).emit('PROFILE_GET', { secret }, (err, res)=>{
-      if(err || !res?.ok || !res.profile) return resolve(null);
-      const client = res.profile?.stats?.client || null;
-      resolve(client && typeof client === 'object' ? client : null);
-    });
-  });
-}
-function cloudPutClient(client){
-  return new Promise((resolve)=>{
-    const secret = getSecret();
-    if(!secret) return resolve({ok:false, error:'no secret'});
-    const safeName = String(client?.player?.name || '').trim();
-    const safeAvatar = Number(client?.player?.avatar || 1) || 1;
-    const patch = { name: safeName, avatar: String(safeAvatar), stats: { client }, titles: [], bounties: [], recent_matches: [] };
-    socket.timeout(8000).emit('PROFILE_UPDATE', { secret, patch }, (err, res)=>{
-      if(err || !res?.ok) return resolve({ok:false, error:String(err?.message || res?.error || err || 'update failed')});
-      resolve({ok:true, profile: res.profile});
-    });
-  });
-}
-
 // ===== Cloud Sync helpers (op_profile_v1 <-> player_profiles.stats.client) =====
 const LS_KEY_PROFILE = 'op_profile_v1';
 const LS_KEY_START   = 'op_player_profile';
@@ -1009,7 +980,7 @@ function mergeLocalAndCloud(localClient, cloudClient){
   return out;
 }
 
-async function cloudGet(socket, secret){
+async async function cloudGet(socket, secret){
   return await new Promise((resolve)=>{
     socket.timeout(6000).emit('PROFILE_GET', { secret }, (err, res)=>{
       if(err || !res?.ok) return resolve(null);
@@ -1018,7 +989,7 @@ async function cloudGet(socket, secret){
   });
 }
 
-async function cloudUpdate(socket, secret, patch){
+async async function cloudUpdate(socket, secret, patch){
   return await new Promise((resolve)=>{
     socket.timeout(6000).emit('PROFILE_UPDATE', { secret, patch }, (err, res)=>{
       resolve(!err && !!res?.ok);
@@ -1026,7 +997,7 @@ async function cloudUpdate(socket, secret, patch){
   });
 }
 
-async function cloudSyncPullMergePush(socket){
+async async function cloudSyncPullMergePush(socket){
   const secret = localStorage.getItem('opSecret');
   if(!secret) return { ok:false, reason:'no-secret' };
 
@@ -1095,19 +1066,9 @@ function defaultWall(){
   return { version:1, id:1 };
 }
 
-function loadWall(){
-  const p = loadProfile();
-  const w = p?.wall;
-  const base = defaultWall();
-  if(!w || typeof w !== 'object') return base;
-  return { version:1, id: Math.max(1, Math.min(WALL_COUNT, Number(w.id)||1)) };
-}
+function loadWall(){ return { id: 1 }; }
 
-function saveWall(w){
-  const p = loadProfile();
-  p.wall = { version:1, id: Math.max(1, Math.min(WALL_COUNT, Number(w?.id)||1)) };
-  saveProfile(p);
-}
+function saveWall(){ /* cloud-only: no-op */ }
 
 function normalizePosterMeta(x){
   if(!x || typeof x !== 'object') return null;
@@ -1125,19 +1086,9 @@ function normalizePosterMeta(x){
  *  - 優先讀 op_profile_v1.bountyPosters（雲端同步的 client 會寫回這裡）
  *  - 備援讀 LS_KEY_POSTERS（結算頁 pushPosterMeta 也會寫這份）
  */
-function loadPosterMetas(){
-  const p = loadProfile();
-  const arr = p?.bountyPosters;
-  if(Array.isArray(arr)) return arr.map(normalizePosterMeta).filter(Boolean).slice(0,4);
-  return [];
-}
+function loadPosterMetas(){ return []; }
 
-function savePosterMetas(list){
-  const p = loadProfile();
-  const metas = (list||[]).map(normalizePosterMeta).filter(Boolean).slice(0,4);
-  p.bountyPosters = metas;
-  saveProfile(p);
-}
+function savePosterMetas(){ /* cloud-only: no-op */ }
 
 function loadImage(src){
   return new Promise((resolve)=>{
@@ -1454,39 +1405,19 @@ function defaultProfile(){
     deluxeUnlocked: [],
     recent: [],
     titles: { owned: [], equipped: '', equippedTier: 1 },
-    wall: { version:1, id:1 },
-    bountyPosters: [],
     _appliedMatchKeys: []
   };
 }
 
-function loadProfile(){
-  // ✅ 不讀本機：只用記憶體快取（進頁面會再從雲端拉）
-  if(window.__opProfileCache && typeof window.__opProfileCache === 'object'){
-    return window.__opProfileCache;
-  }
-  const base = defaultProfile();
-  window.__opProfileCache = base;
-  return base;
-}
+function loadProfile(){ return defaultProfile(); }
 
-function saveProfile(p){
-  // ✅ 不寫本機，僅更新記憶體 + 推雲端
-  window.__opProfileCache = p;
-  cloudPutClient(p);
-}
+function saveProfile(p){ /* cloud-only: no-op */ }
 
 // 與 start.html 同步：讀 op_player_profile
-function loadStartProfile(){
-  // start.html 已改成雲端，不再需要 op_player_profile
-  return null;
-}
+function loadStartProfile(){ return null; }
 
 // 與 start.html 同步：寫 op_player_profile（讓等待室預設值自動一致）
-function saveStartProfile(name, avatarId){
-  // no-op (cloud-only)
-  return { playerName: name, playerAvatar: avatarId, avatarUrl: avatarUrlById(avatarId) };
-}
+function saveStartProfile(){ /* cloud-only: no-op */ }
 
 // header render
 function renderHeader(profile){
@@ -1697,181 +1628,105 @@ document.addEventListener('keydown', (ev)=>{
 });
 
 
-// init
-(async function init(){
-  let profile = loadProfile();
+async function cloudSaveClientProfile(client, opt={}){
+  const secret = localStorage.getItem('opSecret');
+  if(!secret) return;
 
-  // ✅ 若已登入（有 opSecret）→ 先從雲端載入（不做本機合併）
-  if (getSecret()) {
-    const cloud = await cloudGetClient();
-    if (cloud) {
-      window.__opProfileCache = cloud;
-      profile = cloud;
-    } else {
-      // 雲端尚無資料：推一次預設
-      await cloudPutClient(profile);
+  const cloud = await cloudGet(socket, secret);
+  const stats = cloud?.stats || {};
+  const wallId = Number(opt.wallId || client.wallId || stats?.wall?.id || 1) || 1;
+
+  // 只把玩家資料寫進 stats.client
+  const patch = {
+    name: client?.player?.name || (cloud?.name || ''),
+    avatar: String(client?.player?.avatar ?? (cloud?.avatar || '')),
+    stats: {
+      ...stats,
+      client: client,
+      wall: { id: wallId }
+    }
+  };
+  await cloudUpdate(socket, secret, patch);
+}
+
+// init
+// init (cloud-only)
+(async function init(){
+  let profile = defaultProfile();
+
+  const secret = localStorage.getItem('opSecret');
+  if (secret){
+    try{
+      const cloud = await cloudGet(socket, secret);
+      const cloudClient = cloud?.stats?.client || null;
+
+      // 用雲端資料覆蓋顯示
+      if (cloudClient && typeof cloudClient === 'object'){
+        profile = {
+          ...profile,
+          ...cloudClient,
+          player: { ...profile.player, ...(cloudClient.player||{}) },
+          totals: { ...profile.totals, ...(cloudClient.totals||{}) },
+          titles: { ...profile.titles, ...(cloudClient.titles||{}) },
+          recent: Array.isArray(cloudClient.recent) ? cloudClient.recent : [],
+          deluxeUnlocked: Array.isArray(cloudClient.deluxeUnlocked) ? cloudClient.deluxeUnlocked : [],
+          bountyPosters: Array.isArray(cloudClient.bountyPosters) ? cloudClient.bountyPosters : [],
+          _appliedMatchKeys: Array.isArray(cloudClient._appliedMatchKeys) ? cloudClient._appliedMatchKeys : []
+        };
+      }
+
+      // wall: 優先用 stats.wall.id
+      const wid = Number(cloud?.stats?.wall?.id || 1) || 1;
+      profile.wallId = wid;
+    }catch(e){
+      console.warn('[PROFILE_GET/cloudGet failed]', e);
     }
   }
 
-  // start.html 已改雲端：這裡不再從本機同步名字/頭像
-
-
-  saveProfile(profile);
   render(profile);
 
   // top actions
   document.getElementById('btnRefresh').onclick = () => location.reload();
-  document.getElementById('btnBack').onclick = () => {
-  location.href = '/start.html?from=profile';
-};
+  document.getElementById('btnBack').onclick = () => { location.href = '/start.html?from=profile'; };
 
+  // reset：改成「登出」(只清 opSecret)
   document.getElementById('btnReset').onclick = () => {
-    const ok = confirm('確定要清除本機紀錄？（名稱、頭貼、戰績、稱號、豪華解鎖、最近對局都會消失）');
-    if (!ok) return;
-    localStorage.removeItem(LS_KEY_PROFILE);
-    localStorage.removeItem(LS_KEY_START);
-    location.reload();
+    const ok = confirm('確定要登出？（只會清除本機 opSecret，不會刪除雲端資料）');
+    if(!ok) return;
+    try{ localStorage.removeItem('opSecret'); }catch(e){}
+    location.href = '/start.html?from=logout';
   };
 
   // name modal
   const nameInput = document.getElementById('nameInput');
   document.getElementById('nameBtn').onclick = () => {
-    nameInput.value = clampStr(profile.player.name, 16);
-    openModal('nameModalBack');
-    setTimeout(()=>{ nameInput.focus(); nameInput.select(); }, 0);
-  };
-  const closeName = ()=> closeModal('nameModalBack');
-  document.getElementById('nameModalClose').onclick = closeName;
-  document.getElementById('nameCancel').onclick = closeName;
-  document.getElementById('nameSave').onclick = () => {
-    const v = clampStr(nameInput.value, 16) || '未命名玩家';
-    profile.player.name = v;
-    // 同步到 start
-    saveStartProfile(profile.player.name, profile.player.avatar);
-saveProfile(profile);
-cloudSyncPushNow(socket);
-closeName();
-render(profile);
-
-  };
-  nameInput.addEventListener('keydown', (ev)=>{
-    if (ev.key === 'Enter'){ ev.preventDefault(); document.getElementById('nameSave').click(); }
-    if (ev.key === 'Escape'){ ev.preventDefault(); closeName(); }
-  });
-  document.getElementById('nameModalBack').addEventListener('click', (ev)=>{
-    if (ev.target && ev.target.id === 'nameModalBack') closeName();
-  });
-
-  // avatar modal
-  let pendingAvatar = profile.player.avatar;
-
-  function buildAvatarGrid(){
-    const grid = document.getElementById('avaGrid');
-    grid.innerHTML = '';
-    for (let i=1; i<=AVATAR_COUNT; i++){
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'avaBtn' + (i===pendingAvatar ? ' on' : '');
-      btn.title = `avatar ${i}`;
-
-      const img = document.createElement('img');
-      img.src = avatarUrlById(i);
-      img.alt = `avatar-${i}`;
-      btn.appendChild(img);
-
-      btn.onclick = () => {
-        pendingAvatar = i;
-        // 更新選取狀態
-        grid.querySelectorAll('.avaBtn').forEach((x, idx)=>{
-          x.classList.toggle('on', (idx+1)===pendingAvatar);
-        });
-      };
-
-      grid.appendChild(btn);
-    }
-  }
-
-  document.getElementById('avatarBox').onclick = () => {
-    pendingAvatar = profile.player.avatar || 1;
-    buildAvatarGrid();
-    openModal('avatarModalBack');
+    nameInput.value = clampStr(profile.player.name, 14);
+    openNameModal();
   };
 
-  const closeAvatar = ()=> closeModal('avatarModalBack');
-  document.getElementById('avatarModalClose').onclick = closeAvatar;
-  document.getElementById('avatarCancel').onclick = closeAvatar;
-
-  document.getElementById('avatarSave').onclick = () => {
-    profile.player.avatar = pendingAvatar;
-    // 同步到 start
-    saveStartProfile(profile.player.name, profile.player.avatar);
-saveProfile(profile);
-cloudSyncPushNow(socket);
-closeAvatar();
-render(profile);
-
+  document.getElementById('nameSaveBtn').onclick = async () => {
+    const newName = clampStr(nameInput.value, 14);
+    if(!newName) return;
+    profile.player.name = newName;
+    render(profile);
+    await cloudSaveClientProfile(profile);
+    closeNameModal();
   };
 
-  document.getElementById('avatarModalBack').addEventListener('click', (ev)=>{
-    if (ev.target && ev.target.id === 'avatarModalBack') closeAvatar();
+  // avatar
+  bindAvatarPicker(async (avatarKey)=>{
+    profile.player.avatar = String(avatarKey||'');
+    render(profile);
+    await cloudSaveClientProfile(profile);
   });
 
-
-  // ===== 牆面：選擇背景（僅使用預設圖） + 匯入懸賞令 =====
-  const openWallModal = () => {
-    const w = loadWall();
-    buildWallGrid(w.id);
-    openModal('wallModalBack');
-  };
-  const closeWallModal = ()=> closeModal('wallModalBack');
-
-  document.getElementById('btnPickWall')?.addEventListener('click', openWallModal);
-  document.getElementById('wallModalClose')?.addEventListener('click', closeWallModal);
-  document.getElementById('wallCancel')?.addEventListener('click', closeWallModal);
-  document.getElementById('wallModalBack')?.addEventListener('click', (ev)=>{
-    if(ev.target && ev.target.id==='wallModalBack') closeWallModal();
+  // wall
+  bindWallPicker(async (wallId)=>{
+    profile.wallId = Number(wallId||1)||1;
+    render(profile);
+    await cloudSaveClientProfile(profile, { wallId: profile.wallId });
   });
 
-  document.getElementById('wallSave')?.addEventListener('click', ()=>{
-    const grid = document.getElementById('wallGrid');
-    const pendingId = Math.max(1, Math.min(WALL_COUNT, Number(grid?.dataset?.pendingId)||1));
-saveWall({id: pendingId});
-cloudSyncPushNow(socket);
-closeWallModal();
-renderWall();
-
-  });
-
-  // 匯入懸賞令（目前仍保留手動；之後可接結算頁自動寫入 LS_KEY_POSTERS）
-  const posterFile = document.getElementById('posterFile');
-  document.getElementById('btnImportPoster')?.addEventListener('click', ()=> posterFile?.click());
-  posterFile?.addEventListener('change', async (ev)=>{
-    const f = ev.target.files && ev.target.files[0];
-    if(!f) return;
-    const dataUrl = await fileToDataUrl(f);
-    if(!dataUrl.startsWith('data:image')){ alert('讀取圖片失敗'); return; }
-
-    const list = loadPosterMetas();
-    const ts = nowTs();
-    // 匯入圖片（備援用）：用隨機 key 存成 meta，圖片放到 cache
-    const key = `import|${ts}|${Math.random().toString(16).slice(2)}`;
-    __posterCache.set(key, dataUrl);
-    list.unshift({ key, ts, title: `懸賞令 ${fmtTs(ts)}`, name:'', bounty:'', avatarId: 1 });
-    savePosterMetas(list);
-    posterFile.value = '';
-    renderWall();
-  });
-
-  document.getElementById('btnClearWall')?.addEventListener('click', ()=>{
-    const ok = confirm('確定要清空牆面？（牆背景與牆上懸賞令都會清掉）');
-    if(!ok) return;
-    // cloud-only: do nothing
-    // cloud-only: do nothing
-    renderWall();
-  });
-
-  // 初次渲染牆面
-  renderWall();
 })();
 </script>
 </body>
