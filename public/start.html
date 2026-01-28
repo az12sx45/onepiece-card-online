@@ -416,53 +416,6 @@ max-height: none;
     const SERVER_URL = 'https://onepiece-card-online.onrender.com';
     const socket = io(SERVER_URL, { transports: ['websocket'] });
 
-// ===== Cloud-only player data (store everything in player_profiles.stats.client) =====
-function cloudGetClient(secret){
-  return new Promise((resolve)=>{
-    if(!secret) return resolve(null);
-    socket.timeout(5000).emit("PROFILE_GET", { secret }, (err, res)=>{
-      if(err || !res?.ok || !res.profile) return resolve(null);
-      const client = res.profile?.stats?.client || null;
-      resolve(client && typeof client === 'object' ? client : null);
-    });
-  });
-}
-function cloudPutClient(secret, client){
-  return new Promise((resolve)=>{
-    if(!secret || !client) return resolve({ok:false, error:'missing'});
-    const safeName = String(client?.player?.name || '').trim();
-    const safeAvatar = Number(client?.player?.avatar || 1) || 1;
-    const patch = {
-      name: safeName,
-      avatar: String(safeAvatar),
-      stats: { client },        // ✅ 所有玩家資料都放這裡
-      titles: [], bounties: [], recent_matches: []
-    };
-    socket.timeout(8000).emit("PROFILE_UPDATE", { secret, patch }, (err, res)=>{
-      if(err || !res?.ok) return resolve({ok:false, error: String(err?.message || res?.error || err || 'update failed')});
-      resolve({ok:true, profile: res.profile});
-    });
-  });
-}
-
-function defaultClientFromLocalProfile(p){
-  const name = String(p?.playerName || '').trim() || '無名航海士';
-  const avatar = Math.max(1, Math.min(30, Number(p?.playerAvatar||1)||1));
-  return {
-    version: 1,
-    createdAt: Date.now(),
-    lastSeenAt: Date.now(),
-    player: { name, avatar },
-    totals: { games:0, wins:0, coins:0, atk:0, def:0, hit:0, intel:0, survival:0 },
-    deluxeUnlocked: [],
-    recent: [],
-    titles: { owned: [], equipped: '', equippedTier: 1 },
-    wall: { version:1, id:1 },
-    bountyPosters: [],
-    _appliedMatchKeys: []
-  };
-}
-
 // ===== Cloud Sync helpers (op_profile_v1 <-> player_profiles.stats.client) =====
 const LS_KEY_PROFILE = 'op_profile_v1';
 const LS_KEY_START   = 'op_player_profile';
@@ -1529,25 +1482,11 @@ function changeLang(next){
 
 
       useEffect(()=>{
-  (async ()=>{
-    const secret = (localStorage.getItem("opSecret")||"").trim();
-    if(!secret) return;
-
-    const client = await cloudGetClient(secret);
-    if(client && client.player){
-      setProfile({
-        playerName: client.player.name || "無名航海士",
-        playerAvatar: client.player.avatar || 1,
-        avatarUrl: `images/avatars/${client.player.avatar||1}.webp`
-      });
-      return;
-    }
-
-    const initClient = defaultClientFromLocalProfile({ playerName:"無名航海士", playerAvatar:1 });
-    await cloudPutClient(secret, initClient);
-    setProfile({ playerName:"無名航海士", playerAvatar:1, avatarUrl:"images/avatars/1.webp" });
-  })();
-},[]);
+        const cached=localStorage.getItem("op_player_profile");
+        if(cached){
+          try{ setProfile(JSON.parse(cached)); }catch{}
+        }
+      },[]);
 
       function enterRoom(id, extra){
         setRoomInfo({id, host: !!extra?.host});
@@ -1572,7 +1511,12 @@ return (
 
 {stage==="menu" && (
   <MainMenu
-    onStart={()=>{ if(profile) setStage("choice"); else setStage("profile"); }}
+    onStart={()=>{
+      // ✅ 只有第一次才創角；之後直接進入選房
+      const cached = localStorage.getItem("op_player_profile");
+      if (cached) setStage("choice");
+      else setStage("profile");
+    }}
     onProfilePage={()=>{
       location.href = "profile.html";
     }}
