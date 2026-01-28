@@ -869,102 +869,23 @@ function pushPoster({ key, title, dataUrl }){
 function safeJsonParse(raw, fallback=null){
   try{ return JSON.parse(raw); }catch(e){ return fallback; }
 }
-function loadPosterMetas(){
-  const raw = localStorage.getItem('op_bounty_posters_v1');
-  const arr = safeJsonParse(raw, null);
-  if(!Array.isArray(arr)) return [];
-  return arr
-    .filter(x => x && typeof x === 'object')
-    .map(x => ({
-      key: String(x.key||''),
-      ts: Number(x.ts)||0,
-      title: String(x.title||''),
-      name: String(x.name||''),
-      bounty: String(x.bounty||''),
-      avatarId: Number(x.avatarId)||1,
-      // 舊資料若還有 dataUrl 也不會壞
-      dataUrl: (typeof x.dataUrl === 'string') ? x.dataUrl : ''
-    }))
-    .filter(x => x.key)
-    .slice(0,4);
-}
-function savePosterMetas(list){
-  try{ localStorage.setItem('op_bounty_posters_v1', JSON.stringify((list||[]).slice(0,4))); }catch(e){}
-}
+function loadPosterMetas(){ return []; }
+function savePosterMetas(list){ /* cloud-only: no-op */ }
 
 // 新：只存資料（不存圖）
 function pushPosterMeta(meta){
-  const m = meta || {};
-  const key = String(m.key||'').trim();
-  if(!key) return;
-
-  const list = loadPosterMetas();
-  // key 去重：同 key 先移除舊的
-  const next = [m, ...list.filter(x => String(x.key||'') !== key)].slice(0,4);
-  savePosterMetas(next);
-
-  // ✅ 同步進 op_profile_v1（讓 cloudSyncPushNow 會帶上去）
+  // cloud-only：懸賞令牆面直接寫雲端（stats.client.bountyPosters）
   try{
-    const pRaw = localStorage.getItem('op_profile_v1');
-    const p = safeJsonParse(pRaw, null);
-    if(p && typeof p === 'object'){
-      p.bountyPosters = next; // 新欄位
-      localStorage.setItem('op_profile_v1', JSON.stringify(p));
+    if(typeof socket !== 'undefined' && socket){
+      cloudApplyBountyPoster(socket, meta);
     }
-  }catch(e){}
+  }catch(e){ console.warn(e); }
 }
 
 
 // --- 最近 10 場：寫到 op_profile_v1.recent ---
-function loadProfile(){
-const base = {
-  version: 1,
-  totals: { games: 0, wins: 0, coins: 0 },
-  recent: [],
-  deluxeUnlocked: [],        // ✅ 新增
-  titles: { owned: [], equipped: '', equippedTier: 1 },
-  _appliedMatchKeys: []
-};
-
-
-  const raw = localStorage.getItem(LS_KEY_PROFILE);
-  const p = safeJsonParse(raw, null);
-
-  if(!p || typeof p !== 'object') return base;
-
-  const out = {
-    ...base,
-    ...p,
-    totals: { ...base.totals, ...(p.totals||{}) },
-    titles: { ...base.titles, ...(p.titles||{}) },
-  };
-
-  if(!Array.isArray(out.recent)) out.recent = [];
-  if(!Array.isArray(out.titles.owned)) out.titles.owned = [];
-  out.titles.equipped = String(out.titles.equipped || '').trim();
-
-  // 相容舊資料：owned 可能是字串陣列；一律正規化成 {label,tier}
-  out.titles.owned = normalizeOwnedTitles(out.titles.owned);
-  // equippedTier 若缺少，嘗試從 owned 中補
-  if(!out.titles.equippedTier) out.titles.equippedTier = 1;
-  out.titles.equippedTier = normTier(out.titles.equippedTier || 1);
-  if(out.titles.equipped){
-    const hit = out.titles.owned.find(x => x.label === out.titles.equipped);
-    if(hit) out.titles.equippedTier = normTier(Math.max(out.titles.equippedTier||1, hit.tier||1));
-  }
-
-  if(!Array.isArray(out._appliedMatchKeys)) out._appliedMatchKeys = [];
-  out._appliedMatchKeys = out._appliedMatchKeys.map(x=>String(x||'')).filter(Boolean).slice(0, 200);
-
-  out.totals.games = Number(out.totals.games)||0;
-  out.totals.wins  = Number(out.totals.wins)||0;
-  out.totals.coins = Number(out.totals.coins)||0;
-
-  return out;
-}
-function saveProfile(p){
-  try{ localStorage.setItem(LS_KEY_PROFILE, JSON.stringify(p)); }catch(e){}
-}
+function loadProfile(){ return defaultProfile(); }
+function saveProfile(p){ /* cloud-only: no-op */ }
 
 /**
  * 最近戰績：用 matchKey 去重，最多 10 筆
@@ -1472,29 +1393,33 @@ try{
     .map(x=>Number(x)).filter(n=>Number.isFinite(n));
 }catch(e){ unlockedNow = []; }
 
-pushRecentMatch({
-  matchKey: `${rid}|${season}|${pid}|${endedAt}`,
-  ts: endedAt,
-  place,
-  coinsGain,
-  unlocked: unlockedNow
-});
+// cloud-only: 本局結算直接寫入雲端
+  (async()=>{
+    try{
+      await cloudApplyRecentMatch(socket, {
+        matchKey: `${rid}|${season}|${pid}|${endedAt}`,
+        ts: endedAt,
+        place,
+        coinsGain,
+        unlocked: unlockedNow
+      });
 
+      // ✅ 寫完就清掉，避免下一局沿用
+      try{ sessionStorage.removeItem('op_unlocked_this_match'); }catch(e){}
+    }catch(e){ console.warn('[cloudApplyRecentMatch failed]', e); }
+  })();
 // ✅ 寫完就清掉，避免下一局沿用
-try{ sessionStorage.removeItem('op_unlocked_this_match'); }catch(e){}
-
-
-cloudSyncPushNow(socket);
-
-
-  }catch(e){
+      try{ sessionStorage.removeItem('op_unlocked_this_match'); }catch(e){}
+    }catch(e){ console.warn('[cloudApplyRecentMatch failed]', e); }
+  })();
+}catch(e){
     console.warn('[pushRecentMatch failed]', e);
   }
 
   // === 自動存本次懸賞令到玩家頁牆面（不開彈窗、且用 key 去重）===
   try{
     const myId = MY_ID != null ? MY_ID : guessMyId(final, MY_PID);
-    // 不開 modal，只生成並寫入 localStorage（profile.html 會顯示最近 4 張）
+    // 不開 modal，只生成並寫入雲端（profile.html 會顯示最近 4 張）
     showBounty(final, myId, { openModal:false });
   }catch(e){
     console.warn('[auto save bounty poster failed]', e);
@@ -1630,7 +1555,7 @@ out.deluxeUnlocked = out.deluxeUnlocked.map(x=>Number(x)).filter(n=>Number.isFin
   return out;
 }
 
-async function cloudGet(socket, secret){
+async async function cloudGet(socket, secret){
   return await new Promise((resolve)=>{
     socket.timeout(6000).emit('PROFILE_GET', { secret }, (err, res)=>{
       if(err || !res?.ok) return resolve(null);
@@ -1639,15 +1564,110 @@ async function cloudGet(socket, secret){
   });
 }
 
-async function cloudUpdate(socket, secret, patch){
+async async function cloudUpdate(socket, secret, patch){
   return await new Promise((resolve)=>{
     socket.timeout(6000).emit('PROFILE_UPDATE', { secret, patch }, (err, res)=>{
       resolve(!err && !!res?.ok);
     });
   });
 }
+function normalizeClientForCloud(base, cloudClient){
+  const out = { ...base, ...(cloudClient||{}) };
+  out.player = { ...base.player, ...(cloudClient?.player||{}) };
+  out.totals = { ...base.totals, ...(cloudClient?.totals||{}) };
+  out.titles = { ...base.titles, ...(cloudClient?.titles||{}) };
+  out.recent = Array.isArray(cloudClient?.recent) ? cloudClient.recent : (base.recent||[]);
+  out.deluxeUnlocked = Array.isArray(cloudClient?.deluxeUnlocked) ? cloudClient.deluxeUnlocked : [];
+  out.bountyPosters = Array.isArray(cloudClient?.bountyPosters) ? cloudClient.bountyPosters : [];
+  out._appliedMatchKeys = Array.isArray(cloudClient?._appliedMatchKeys) ? cloudClient._appliedMatchKeys : [];
+  return out;
+}
 
-async function cloudSyncPullMergePush(socket){
+async function cloudApplyRecentMatch(socket, item){
+  const secret = localStorage.getItem('opSecret');
+  if(!secret) return;
+
+  const cloud = await cloudGet(socket, secret);
+  const stats = cloud?.stats || {};
+  const base = defaultProfile();
+  const p = normalizeClientForCloud(base, stats.client);
+
+  const mk = String(item?.matchKey || '').trim();
+  const place = (item?.place == null || item?.place==='') ? null : Number(item.place);
+  const coinsGain = Number(item?.coinsGain ?? 0) || 0;
+
+  if(mk && !p._appliedMatchKeys.includes(mk)){
+    p._appliedMatchKeys.unshift(mk);
+    p._appliedMatchKeys = p._appliedMatchKeys.slice(0, 200);
+
+    p.totals.games = (Number(p.totals.games)||0) + 1;
+    if(place === 1) p.totals.wins = (Number(p.totals.wins)||0) + 1;
+    p.totals.coins = (Number(p.totals.coins)||0) + coinsGain;
+  }
+
+  const recentItem = {
+    ts: Number(item?.ts || Date.now()),
+    place,
+    coinsGain,
+    matchKey: mk,
+    unlocked: Array.isArray(item?.unlocked) ? item.unlocked : []
+  };
+
+  // recent 去重：同 matchKey 先移除舊的
+  p.recent = [recentItem, ...(Array.isArray(p.recent)?p.recent:[]).filter(x=>String(x?.matchKey||'')!==mk)]
+    .slice(0,10);
+
+  // 豪華解鎖（只做 union）
+  const unlock = Array.isArray(item?.unlocked) ? item.unlocked : [];
+  const set = new Set((p.deluxeUnlocked||[]).map(n=>Number(n)).filter(n=>Number.isFinite(n)));
+  unlock.forEach(n=>{ n=Number(n); if(Number.isFinite(n)) set.add(n); });
+  p.deluxeUnlocked = Array.from(set.values()).sort((a,b)=>a-b);
+
+  // 寫回雲端
+  const wallId = Number(stats?.wall?.id || 1) || 1;
+  const patch = {
+    name: p.player?.name || (cloud?.name || ''),
+    avatar: String(p.player?.avatar ?? (cloud?.avatar || '')),
+    stats: {
+      ...stats,
+      client: p,
+      wall: { id: wallId }
+    }
+  };
+  await cloudUpdate(socket, secret, patch);
+}
+
+async function cloudApplyBountyPoster(socket, meta){
+  const secret = localStorage.getItem('opSecret');
+  if(!secret) return;
+
+  const cloud = await cloudGet(socket, secret);
+  const stats = cloud?.stats || {};
+  const base = defaultProfile();
+  const p = normalizeClientForCloud(base, stats.client);
+
+  const m = meta || {};
+  const key = String(m.key||'').trim();
+  if(!key) return;
+
+  const next = [m, ...(p.bountyPosters||[]).filter(x=>String(x?.key||'')!==key)].slice(0,4);
+  p.bountyPosters = next;
+
+  const wallId = Number(stats?.wall?.id || 1) || 1;
+  const patch = {
+    name: p.player?.name || (cloud?.name || ''),
+    avatar: String(p.player?.avatar ?? (cloud?.avatar || '')),
+    stats: {
+      ...stats,
+      client: p,
+      wall: { id: wallId }
+    }
+  };
+  await cloudUpdate(socket, secret, patch);
+}
+
+
+async async function cloudSyncPullMergePush(socket){
   const secret = localStorage.getItem('opSecret');
   if(!secret) return { ok:false, reason:'no-secret' };
 
@@ -1690,7 +1710,7 @@ async function cloudSyncPullMergePush(socket){
   return { ok:false, reason:'no-merged' };
 }
 
-async function cloudSyncPushNow(socket){
+async async function cloudSyncPushNow(socket){
   const secret = localStorage.getItem('opSecret');
   if(!secret) return false;
 
@@ -2003,7 +2023,8 @@ document.getElementById('btnSavePoster')?.addEventListener('click', async ()=>{
 
     // 若已登入：立刻推雲端（把本機 client 同步上去）
     if (localStorage.getItem('opSecret')) {
-      await cloudSyncPushNow(socket);
+      await       }catch(e){ console.warn('[cloudApplyRecentMatch failed]', e); }
+  })();
     }
 
     btn.textContent = '已存到個人頁面 ✓';
