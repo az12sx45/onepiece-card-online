@@ -548,6 +548,26 @@ body.view-rank .layout > aside.card:first-child{
 /* 讓「自己的頭像」有可點提示 */
 .player-list .avatar.me{ cursor:pointer; outline:2px solid rgba(255,211,107,.35); }
 .player-list .avatar.me:hover{ outline-color: rgba(255,211,107,.8); }
+
+/* === 懸賞令彈窗：存到個人頁面按鈕 === */
+#bountyModal .bounty-actions{
+  margin-top:10px;
+  display:flex;
+  justify-content:center;
+}
+#btnSavePoster{
+  border:1px solid rgba(255,211,107,.55);
+  background:rgba(255,211,107,.14);
+  color:#1b1408;
+  font-weight:800;
+  padding:10px 14px;
+  border-radius:12px;
+  cursor:pointer;
+}
+#btnSavePoster:hover{ filter:brightness(1.08); }
+#btnSavePoster:active{ transform:translateY(1px); }
+#btnSavePoster[disabled]{ opacity:.45; cursor:not-allowed; }
+
 </style>
 </head>
 <body class="view-rank">
@@ -607,9 +627,12 @@ body.view-rank .layout > aside.card:first-child{
 
   <!-- === 懸賞金彈窗（修正：bg-black/70） === -->
   <div id="bountyModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-black/70">
-    <div class="relative">
+    <div class="relative" style="display:flex;flex-direction:column;align-items:center">
       <canvas id="bountyCanvas" width="768" height="1152"></canvas>
       <button id="closeBounty" class="absolute top-2 right-2 px-3 py-1 text-sm bg-black/70 text-white rounded">✕</button>
+      <div class="bounty-actions">
+        <button id="btnSavePoster" type="button" disabled>存到個人頁面</button>
+      </div>
     </div>
   </div>
 
@@ -1826,6 +1849,8 @@ function avatarUrl(v){
 }
 
 // === 懸賞金繪製（頭像在下層，海報在上層） ===
+let LAST_POSTER_META = null; // {key, ts, title, name, bounty, avatarId}
+
 async function showBounty(final, myId, opts = {}){
   const me = (final?.playersMeta && final.playersMeta[myId]) || {
     name: `P${(myId|0)+1}`, pid: myId|0, avatar: null
@@ -1900,7 +1925,7 @@ async function showBounty(final, myId, opts = {}){
   ctx.fillText(bountyStr, cx, bountyY);
   ctx.restore();
 
-// === 自動匯入玩家頁（改：只存「資料」不上傳圖片，省雲端空間；最多4張；key去重）===
+// === 記住「這次生成的懸賞單資料」（按鈕按下才存到個人頁面/雲端） ===
 try{
   const nameTxt = me.name || (`P${(myId|0)+1}`);
 
@@ -1920,25 +1945,26 @@ try{
     avatarId = Number(sp?.playerAvatar ?? sp?.avatarId ?? sp?.avatar ?? 1) || 1;
   }catch(e){}
 
-  // bountyStr 你前面已經畫到canvas上了：這裡直接存同一個字串最穩
-  // 如果你這段函式裡沒有 bountyStr，就改成你當下用來顯示金額的那個變數
   const bountyText = (typeof bountyStr !== 'undefined') ? String(bountyStr) : '';
 
-  pushPosterMeta({
+  LAST_POSTER_META = {
     key: posterKey,
     ts: endedAt,
     title: `${nameTxt}｜懸賞令`,
     name: nameTxt,
     bounty: bountyText,
     avatarId
-  });
+  };
 
-  // ✅ 若已登入：立刻推雲端（把本機 client 同步上去）
-  if (localStorage.getItem('opSecret')) {
-    cloudSyncPushNow(socket);
+  // 顯示「存到個人頁面」按鈕（生成後才可按）
+  const btn = document.getElementById('btnSavePoster');
+  if(btn){
+    btn.disabled = false;
+    btn.dataset.saved = '0';
+    btn.textContent = '存到個人頁面';
   }
 }catch(e){
-  console.warn('[pushPosterMeta failed]', e);
+  console.warn('[rememberPosterMeta failed]', e);
 }
 
 
@@ -1956,6 +1982,40 @@ document.getElementById('closeBounty').onclick = ()=>{
 document.getElementById('bountyModal').addEventListener('click',(e)=>{
   if(e.target.id==='bountyModal') e.currentTarget.classList.add('hidden');
 });
+
+// 生成後，按「存到個人頁面」才會把資料寫入本機 + 推雲端
+document.getElementById('btnSavePoster')?.addEventListener('click', async ()=>{
+  const btn = document.getElementById('btnSavePoster');
+  if(!btn || btn.disabled) return;
+  if(!LAST_POSTER_META || !LAST_POSTER_META.key){
+    alert('尚未生成懸賞單資料');
+    return;
+  }
+
+  // 避免連按
+  if(btn.dataset.saved === '1') return;
+  btn.dataset.saved = '1';
+  btn.disabled = true;
+  btn.textContent = '儲存中...';
+
+  try{
+    pushPosterMeta(LAST_POSTER_META);
+
+    // 若已登入：立刻推雲端（把本機 client 同步上去）
+    if (localStorage.getItem('opSecret')) {
+      await cloudSyncPushNow(socket);
+    }
+
+    btn.textContent = '已存到個人頁面 ✓';
+  }catch(e){
+    console.error('[save poster failed]', e);
+    btn.dataset.saved = '0';
+    btn.disabled = false;
+    btn.textContent = '存到個人頁面';
+    alert('儲存失敗：請檢查登入狀態/網路連線');
+  }
+});
+
 </script>
 
 <script>
