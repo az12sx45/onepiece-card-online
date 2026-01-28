@@ -416,6 +416,53 @@ max-height: none;
     const SERVER_URL = 'https://onepiece-card-online.onrender.com';
     const socket = io(SERVER_URL, { transports: ['websocket'] });
 
+// ===== Cloud-only player data (store everything in player_profiles.stats.client) =====
+function cloudGetClient(secret){
+  return new Promise((resolve)=>{
+    if(!secret) return resolve(null);
+    socket.timeout(5000).emit("PROFILE_GET", { secret }, (err, res)=>{
+      if(err || !res?.ok || !res.profile) return resolve(null);
+      const client = res.profile?.stats?.client || null;
+      resolve(client && typeof client === 'object' ? client : null);
+    });
+  });
+}
+function cloudPutClient(secret, client){
+  return new Promise((resolve)=>{
+    if(!secret || !client) return resolve({ok:false, error:'missing'});
+    const safeName = String(client?.player?.name || '').trim();
+    const safeAvatar = Number(client?.player?.avatar || 1) || 1;
+    const patch = {
+      name: safeName,
+      avatar: String(safeAvatar),
+      stats: { client },        // ✅ 所有玩家資料都放這裡
+      titles: [], bounties: [], recent_matches: []
+    };
+    socket.timeout(8000).emit("PROFILE_UPDATE", { secret, patch }, (err, res)=>{
+      if(err || !res?.ok) return resolve({ok:false, error: String(err?.message || res?.error || err || 'update failed')});
+      resolve({ok:true, profile: res.profile});
+    });
+  });
+}
+
+function defaultClientFromLocalProfile(p){
+  const name = String(p?.playerName || '').trim() || '無名航海士';
+  const avatar = Math.max(1, Math.min(30, Number(p?.playerAvatar||1)||1));
+  return {
+    version: 1,
+    createdAt: Date.now(),
+    lastSeenAt: Date.now(),
+    player: { name, avatar },
+    totals: { games:0, wins:0, coins:0, atk:0, def:0, hit:0, intel:0, survival:0 },
+    deluxeUnlocked: [],
+    recent: [],
+    titles: { owned: [], equipped: '', equippedTier: 1 },
+    wall: { version:1, id:1 },
+    bountyPosters: [],
+    _appliedMatchKeys: []
+  };
+}
+
 // ===== Cloud Sync helpers (op_profile_v1 <-> player_profiles.stats.client) =====
 const LS_KEY_PROFILE = 'op_profile_v1';
 const LS_KEY_START   = 'op_player_profile';
@@ -425,14 +472,33 @@ function safeJsonParse(raw, fallback=null){
   try{ return JSON.parse(raw); }catch(e){ return fallback; }
 }
 
-function loadLocalProfile(){ return null; }
-function saveLocalProfile(p){ /* cloud-only: no-op */ }
+function loadLocalProfile(){
+  // 這份結構在 profile.html / result.html 都一致：totals/titles/recent/_appliedMatchKeys 等【turn13file1†L22-L33】【turn13file0†L35-L50】
+  const raw = localStorage.getItem(LS_KEY_PROFILE);
+  const p = safeJsonParse(raw, null);
+  return (p && typeof p === 'object') ? p : null;
+}
+function saveLocalProfile(p){
+  try{ localStorage.setItem(LS_KEY_PROFILE, JSON.stringify(p)); }catch(e){}
+}
 
-function loadLocalStart(){ return null; }
-function saveLocalStart(p){ /* cloud-only: no-op */ }
+function loadLocalStart(){
+  const raw = localStorage.getItem(LS_KEY_START);
+  const p = safeJsonParse(raw, null);
+  return (p && typeof p === 'object') ? p : null;
+}
+function saveLocalStart(p){
+  try{ localStorage.setItem(LS_KEY_START, JSON.stringify(p)); }catch(e){}
+}
 
-function loadLocalWall(){ return null; }
-function saveLocalWall(w){ /* cloud-only: no-op */ }
+function loadLocalWall(){
+  const raw = localStorage.getItem(LS_KEY_WALL);
+  const w = safeJsonParse(raw, null);
+  return (w && typeof w === 'object') ? w : null;
+}
+function saveLocalWall(w){
+  try{ localStorage.setItem(LS_KEY_WALL, JSON.stringify(w)); }catch(e){}
+}
 
 function uniq(arr){ return Array.from(new Set((arr||[]).map(x=>JSON.stringify(x)))).map(s=>safeJsonParse(s,s)); }
 function uniqStr(arr){ return Array.from(new Set((arr||[]).map(x=>String(x||'')).filter(Boolean))); }
@@ -500,7 +566,7 @@ function mergeLocalAndCloud(localClient, cloudClient){
   return out;
 }
 
-async async function cloudGet(socket, secret){
+async function cloudGet(socket, secret){
   return await new Promise((resolve)=>{
     socket.timeout(6000).emit('PROFILE_GET', { secret }, (err, res)=>{
       if(err || !res?.ok) return resolve(null);
@@ -509,7 +575,7 @@ async async function cloudGet(socket, secret){
   });
 }
 
-async async function cloudUpdate(socket, secret, patch){
+async function cloudUpdate(socket, secret, patch){
   return await new Promise((resolve)=>{
     socket.timeout(6000).emit('PROFILE_UPDATE', { secret, patch }, (err, res)=>{
       resolve(!err && !!res?.ok);
@@ -517,26 +583,63 @@ async async function cloudUpdate(socket, secret, patch){
   });
 }
 
-async async function cloudSyncPullMergePush(socket){
-  // Cloud-only: 不再讀寫 op_profile_v1 / op_player_profile / op_wall_v1
+async function cloudSyncPullMergePush(socket){
   const secret = localStorage.getItem('opSecret');
   if(!secret) return { ok:false, reason:'no-secret' };
 
   const cloud = await cloudGet(socket, secret);
   const cloudClient = cloud?.stats?.client || null;
 
-  // 回傳雲端資料，讓呼叫端自行使用
-  return { ok:true, cloud, cloudClient };
+  const local = loadLocalProfile();
+  const merged = mergeLocalAndCloud(local, cloudClient);
+
+  if(merged){
+    saveLocalProfile(merged);
+
+    // 同步 start.html 用的 op_player_profile（玩家名稱/頭像）
+    if(merged.player){
+      const sp = loadLocalStart() || {};
+      sp.playerName = merged.player.name || sp.playerName;
+      sp.playerAvatar = merged.player.avatar || sp.playerAvatar;
+      saveLocalStart(sp);
+    }
+
+    // 同步牆背景（只同步 id，避免大圖）
+    const wall = loadLocalWall() || {};
+    if(cloud?.stats?.wall?.id) wall.id = cloud.stats.wall.id;
+    saveLocalWall(wall);
+
+    // 推回雲端：把 merged 放到 stats.client
+    const patch = {
+      name: merged.player?.name || (cloud?.name || ''),
+      avatar: String(merged.player?.avatar ?? (cloud?.avatar || '')),
+      stats: {
+        ...(cloud?.stats || {}),
+        client: merged,
+        wall: { id: wall?.id || 1 }
+      }
+    };
+    await cloudUpdate(socket, secret, patch);
+    return { ok:true };
+  }
+
+  return { ok:false, reason:'no-merged' };
 }
 
-
-async async async function cloudSyncPushNow(socket){
+async function cloudSyncPushNow(socket){
   const secret = localStorage.getItem('opSecret');
   if(!secret) return false;
 
-  const patch = {}; 
-  // Cloud-only：這裡不推本機資料
-  await cloudUpdate(socket, secret, patch);
+  const local = loadLocalProfile();
+  if(!local) return false;
+
+  const wall = loadLocalWall() || {};
+  const patch = {
+    name: local.player?.name || '',
+    avatar: String(local.player?.avatar ?? ''),
+    stats: { client: local, wall: { id: wall?.id || 1 } }
+  };
+  return await cloudUpdate(socket, secret, patch);
 }
 
 
@@ -1426,11 +1529,25 @@ function changeLang(next){
 
 
       useEffect(()=>{
-        const cached=localStorage.getItem("op_player_profile");
-        if(cached){
-          try{ setProfile(JSON.parse(cached)); }catch{}
-        }
-      },[]);
+  (async ()=>{
+    const secret = (localStorage.getItem("opSecret")||"").trim();
+    if(!secret) return;
+
+    const client = await cloudGetClient(secret);
+    if(client && client.player){
+      setProfile({
+        playerName: client.player.name || "無名航海士",
+        playerAvatar: client.player.avatar || 1,
+        avatarUrl: `images/avatars/${client.player.avatar||1}.webp`
+      });
+      return;
+    }
+
+    const initClient = defaultClientFromLocalProfile({ playerName:"無名航海士", playerAvatar:1 });
+    await cloudPutClient(secret, initClient);
+    setProfile({ playerName:"無名航海士", playerAvatar:1, avatarUrl:"images/avatars/1.webp" });
+  })();
+},[]);
 
       function enterRoom(id, extra){
         setRoomInfo({id, host: !!extra?.host});
@@ -1455,12 +1572,7 @@ return (
 
 {stage==="menu" && (
   <MainMenu
-    onStart={()=>{
-      // ✅ 只有第一次才創角；之後直接進入選房
-      const cached = localStorage.getItem("op_player_profile");
-      if (cached) setStage("choice");
-      else setStage("profile");
-    }}
+    onStart={()=>{ if(profile) setStage("choice"); else setStage("profile"); }}
     onProfilePage={()=>{
       location.href = "profile.html";
     }}
