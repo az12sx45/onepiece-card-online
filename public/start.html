@@ -1481,12 +1481,39 @@ function changeLang(next){
 }
 
 
-      useEffect(()=>{
-        const cached=localStorage.getItem("op_player_profile");
-        if(cached){
-          try{ setProfile(JSON.parse(cached)); }catch{}
-        }
-      },[]);
+useEffect(()=>{
+  let alive = true;
+
+  async function cloudGet(secret){
+    return await new Promise((resolve)=>{
+      socket.timeout(6000).emit("PROFILE_GET", { secret }, (err, res)=>{
+        if(err || !res?.ok) return resolve(null);
+        resolve(res.profile || null);
+      });
+    });
+  }
+
+  (async ()=>{
+    const secret = localStorage.getItem("opSecret");
+    if(!secret) return;
+
+    const cloud = await cloudGet(secret);
+    if(!alive || !cloud) return;
+
+    // 你 UI 用的 profile 結構：用雲端 stats.client 當準
+    const client = cloud?.stats?.client || null;
+    if(client){
+      setProfile({
+        playerName: client?.player?.name || cloud?.name || "",
+        playerAvatar: client?.player?.avatar || Number(cloud?.avatar||1) || 1,
+        avatarUrl: `images/avatars/${client?.player?.avatar || Number(cloud?.avatar||1) || 1}.webp`
+      });
+    }
+  })();
+
+  return ()=>{ alive = false; };
+},[]);
+
 
       function enterRoom(id, extra){
         setRoomInfo({id, host: !!extra?.host});
@@ -1513,9 +1540,24 @@ return (
   <MainMenu
     onStart={()=>{
       // ✅ 只有第一次才創角；之後直接進入選房
-      const cached = localStorage.getItem("op_player_profile");
-      if (cached) setStage("choice");
-      else setStage("profile");
+onStart={async ()=>{
+  const secret = localStorage.getItem("opSecret");
+  if(!secret) { setStage("auth"); return; }
+
+  const cloud = await new Promise((resolve)=>{
+    socket.timeout(6000).emit("PROFILE_GET", { secret }, (err, res)=>{
+      if(err || !res?.ok) return resolve(null);
+      resolve(res.profile || null);
+    });
+  });
+
+  const name = String(cloud?.stats?.client?.player?.name || cloud?.name || "").trim();
+  const avatar = Number(cloud?.stats?.client?.player?.avatar || cloud?.avatar || 0) || 0;
+
+  if(name && avatar) setStage("choice");
+  else setStage("profile"); // 第一次才創角
+}}
+
     }}
     onProfilePage={()=>{
       location.href = "profile.html";
