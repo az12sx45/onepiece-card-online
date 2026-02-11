@@ -877,33 +877,112 @@ const WALL_COUNT = 8;
 const SERVER_URL = 'https://onepiece-card-online.onrender.com';
 const socket = io(SERVER_URL, { transports: ['websocket'] });
 
-// ===== Cloud Profile helpers (Cloud ONLY; no local player data) =====
-// 本機只保留：opSecret（登入識別）；玩家資料全部以雲端 player_profiles 為準。
-
-const WALL_COUNT = 8;
+// ===== Cloud Sync helpers (op_profile_v1 <-> player_profiles.stats.client) =====
+const LS_KEY_PROFILE = 'op_profile_v1';
+const LS_KEY_START   = 'op_player_profile';
+const LS_KEY_WALL    = 'op_wall_v1'; // 你 profile.html 用的牆 key（若不同請改成你檔案內實際值）
 
 function safeJsonParse(raw, fallback=null){
   try{ return JSON.parse(raw); }catch(e){ return fallback; }
 }
 
-function defaultProfile(){
-  return {
-    version: 1,
-    player: { name: '未命名玩家', avatar: 1 },
-    totals: { games: 0, wins: 0, coins: 0 },
-    recent: [],
-    deluxeUnlocked: [],
-    bountyPosters: [], // meta only (最多 4)
-    titles: { owned: [], equipped: '', equippedTier: 1 },
-    _appliedMatchKeys: []
-  };
+function loadLocalProfile(){
+  // 這份結構在 profile.html / result.html 都一致：totals/titles/recent/_appliedMatchKeys 等【turn13file1†L22-L33】【turn13file0†L35-L50】
+  const raw = localStorage.getItem(LS_KEY_PROFILE);
+  const p = safeJsonParse(raw, null);
+  return (p && typeof p === 'object') ? p : null;
+}
+function saveLocalProfile(p){
+  try{ localStorage.setItem(LS_KEY_PROFILE, JSON.stringify(p)); }catch(e){}
 }
 
-function normInt(n, d=0){ n = Number(n); return Number.isFinite(n) ? n : d; }
+function loadLocalStart(){
+  const raw = localStorage.getItem(LS_KEY_START);
+  const p = safeJsonParse(raw, null);
+  return (p && typeof p === 'object') ? p : null;
+}
+function saveLocalStart(p){
+  try{ localStorage.setItem(LS_KEY_START, JSON.stringify(p)); }catch(e){}
+}
+
+function loadLocalWall(){
+  const raw = localStorage.getItem(LS_KEY_WALL);
+  const w = safeJsonParse(raw, null);
+  return (w && typeof w === 'object') ? w : null;
+}
+function saveLocalWall(w){
+  try{ localStorage.setItem(LS_KEY_WALL, JSON.stringify(w)); }catch(e){}
+}
+
+function uniq(arr){ return Array.from(new Set((arr||[]).map(x=>JSON.stringify(x)))).map(s=>safeJsonParse(s,s)); }
+function uniqStr(arr){ return Array.from(new Set((arr||[]).map(x=>String(x||'')).filter(Boolean))); }
+
+function mergeLocalAndCloud(localClient, cloudClient){
+  // 規則：數值取 max（避免回舊）；清單 union；recent 用 matchKey 去重取最新 10；_appliedMatchKeys union 取 200
+  if(!localClient) return cloudClient || null;
+  if(!cloudClient) return localClient;
+
+  const out = { ...localClient };
+
+  // player
+  out.player = { ...(localClient.player||{}), ...(cloudClient.player||{}) };
+
+  // totals：商店最重要 coins（你結算是累加到 totals.coins）【turn13file0†L40-L43】
+  out.totals = { ...(localClient.totals||{}), ...(cloudClient.totals||{}) };
+  for(const k of Object.keys(out.totals)){
+    const a = Number(localClient.totals?.[k] ?? 0) || 0;
+    const b = Number(cloudClient.totals?.[k] ?? 0) || 0;
+    out.totals[k] = Math.max(a,b);
+  }
+
+  // deluxeUnlocked / titles
+  out.deluxeUnlocked = uniqStr([...(localClient.deluxeUnlocked||[]), ...(cloudClient.deluxeUnlocked||[])])
+    .map(x=>Number(x)).filter(n=>Number.isFinite(n));
+
+  out.titles = { ...(localClient.titles||{}), ...(cloudClient.titles||{}) };
+  const ownedA = Array.isArray(localClient.titles?.owned) ? localClient.titles.owned : [];
+  const ownedB = Array.isArray(cloudClient.titles?.owned) ? cloudClient.titles.owned : [];
+  // owned 去重（以 label 為 key、保留較高 tier）：你的結算頁就是這樣升級 tier 的【turn13file10†L35-L46】
+  const map = new Map();
+  [...ownedA, ...ownedB].forEach(x=>{
+    const label = String(x?.label||'').trim(); if(!label) return;
+    const tier = Number(x?.tier||1)||1;
+    const prev = map.get(label);
+    if(!prev || tier > prev.tier) map.set(label, { label, tier });
+  });
+  out.titles.owned = Array.from(map.values());
+  if(!out.titles.equipped && cloudClient.titles?.equipped) out.titles.equipped = cloudClient.titles.equipped;
+  out.titles.equippedTier = Math.max(
+    Number(localClient.titles?.equippedTier||1)||1,
+    Number(cloudClient.titles?.equippedTier||1)||1
+  );
+
+  // recent：matchKey 去重取新 10（你本機 recent 就是這樣做）【turn13file0†L45-L49】
+  const ra = Array.isArray(localClient.recent) ? localClient.recent : [];
+  const rb = Array.isArray(cloudClient.recent) ? cloudClient.recent : [];
+  const seen = new Set();
+  const mergedRecent = [...rb, ...ra] // 先雲端再本機，後面會依 ts 排序
+    .filter(x=>{
+      const mk = String(x?.matchKey||'').trim();
+      if(!mk) return false;
+      if(seen.has(mk)) return false;
+      seen.add(mk);
+      return true;
+    })
+    .sort((x,y)=>(Number(y?.ts||0)-Number(x?.ts||0)))
+    .slice(0,10);
+  out.recent = mergedRecent;
+
+  // applied keys：union 取 200（避免刷新重複加總）【turn13file0†L35-L43】
+  out._appliedMatchKeys = uniqStr([...(localClient._appliedMatchKeys||[]), ...(cloudClient._appliedMatchKeys||[])])
+    .slice(0,200);
+
+  return out;
+}
 
 async function cloudGet(socket, secret){
   return await new Promise((resolve)=>{
-    socket.timeout(8000).emit('PROFILE_GET', { secret }, (err, res)=>{
+    socket.timeout(6000).emit('PROFILE_GET', { secret }, (err, res)=>{
       if(err || !res?.ok) return resolve(null);
       resolve(res.profile || null);
     });
@@ -912,24 +991,343 @@ async function cloudGet(socket, secret){
 
 async function cloudUpdate(socket, secret, patch){
   return await new Promise((resolve)=>{
-    socket.timeout(8000).emit('PROFILE_UPDATE', { secret, patch }, (err, res)=>{
+    socket.timeout(6000).emit('PROFILE_UPDATE', { secret, patch }, (err, res)=>{
       resolve(!err && !!res?.ok);
     });
   });
 }
 
-// ---- in-memory cache (no localStorage for player data) ----
-let __CLOUD = { profile:null, wallId:1, saving:false, saveTimer:null };
+async function cloudSyncPullMergePush(socket){
+  const secret = localStorage.getItem('opSecret');
+  if(!secret) return { ok:false, reason:'no-secret' };
+
+  const cloud = await cloudGet(socket, secret);
+  const cloudClient = cloud?.stats?.client || null;
+
+  const local = loadLocalProfile();
+  const merged = mergeLocalAndCloud(local, cloudClient);
+
+  if(merged){
+    saveLocalProfile(merged);
+
+    // 同步 start.html 用的 op_player_profile（玩家名稱/頭像）
+    if(merged.player){
+      const sp = loadLocalStart() || {};
+      sp.playerName = merged.player.name || sp.playerName;
+      sp.playerAvatar = merged.player.avatar || sp.playerAvatar;
+      saveLocalStart(sp);
+    }
+
+    // 同步牆背景（只同步 id，避免大圖）
+    const wall = loadLocalWall() || {};
+    if(cloud?.stats?.wall?.id) wall.id = cloud.stats.wall.id;
+    saveLocalWall(wall);
+
+    // 推回雲端：把 merged 放到 stats.client
+    const patch = {
+      name: merged.player?.name || (cloud?.name || ''),
+      avatar: String(merged.player?.avatar ?? (cloud?.avatar || '')),
+      stats: {
+        ...(cloud?.stats || {}),
+        client: merged,
+        wall: { id: wall?.id || 1 }
+      }
+    };
+    await cloudUpdate(socket, secret, patch);
+    return { ok:true };
+  }
+
+  return { ok:false, reason:'no-merged' };
+}
+
+async function cloudSyncPushNow(socket){
+  const secret = localStorage.getItem('opSecret');
+  if(!secret) return false;
+
+  const local = loadLocalProfile();
+  if(!local) return false;
+
+  const wall = loadLocalWall() || {};
+  const patch = {
+    name: local.player?.name || '',
+    avatar: String(local.player?.avatar ?? ''),
+    stats: { client: local, wall: { id: wall?.id || 1 } }
+  };
+  return await cloudUpdate(socket, secret, patch);
+}
+
 
 function wallUrlById(id){
   const n = Math.max(1, Math.min(WALL_COUNT, Number(id)||1));
   return `images/walls/${n}.webp`;
 }
 
-// 讀：永遠讀雲端快取
-function loadProfile(){
-  // Cloud ONLY
-  return __CLOUD.profile ? JSON.parse(JSON.stringify(__CLOUD.profile)) : defaultProfile();
+function defaultWall(){
+  return { version:1, id:1 };
+}
+
+function loadWall(){
+  const raw = localStorage.getItem(LS_KEY_WALL);
+  const base = defaultWall();
+  if(!raw) return base;
+  const w = safeJsonParse(raw, null);
+  if(!w || typeof w !== 'object') return base;
+  return { version:1, id: Math.max(1, Math.min(WALL_COUNT, Number(w.id)||1)) };
+}
+
+function saveWall(w){
+  try{ localStorage.setItem(LS_KEY_WALL, JSON.stringify({version:1, id: Math.max(1, Math.min(WALL_COUNT, Number(w?.id)||1))})); }catch(e){}
+}
+
+function normalizePosterMeta(x){
+  if(!x || typeof x !== 'object') return null;
+  const key = String(x.key||'').trim();
+  const ts = Number(x.ts)||0;
+  const title = String(x.title||'').trim();
+  const name = String(x.name||'').trim();
+  const bounty = String(x.bounty||'').trim();
+  const avatarId = Math.max(1, Math.min(AVATAR_COUNT, Number(x.avatarId)||1));
+  if(!key) return null;
+  return { key, ts, title, name, bounty, avatarId };
+}
+
+/** 懸賞令資料（meta）：最多 4 張
+ *  - 優先讀 op_profile_v1.bountyPosters（雲端同步的 client 會寫回這裡）
+ *  - 備援讀 LS_KEY_POSTERS（結算頁 pushPosterMeta 也會寫這份）
+ */
+function loadPosterMetas(){
+  // 1) op_profile_v1
+  try{
+    const p = safeJsonParse(localStorage.getItem(LS_KEY_PROFILE), null);
+    const arr = p?.bountyPosters;
+    if(Array.isArray(arr)){
+      return arr.map(normalizePosterMeta).filter(Boolean).slice(0,4);
+    }
+  }catch(e){}
+
+  // 2) LS_KEY_POSTERS
+  const raw = localStorage.getItem(LS_KEY_POSTERS);
+  const arr = safeJsonParse(raw, null);
+  if(!Array.isArray(arr)) return [];
+  return arr.map(normalizePosterMeta).filter(Boolean).slice(0,4);
+}
+
+function savePosterMetas(list){
+  const metas = (list||[]).map(normalizePosterMeta).filter(Boolean).slice(0,4);
+  try{ localStorage.setItem(LS_KEY_POSTERS, JSON.stringify(metas)); }catch(e){}
+  // 同步進 op_profile_v1（雲端同步會帶這份）
+  try{
+    const p = safeJsonParse(localStorage.getItem(LS_KEY_PROFILE), null);
+    if(p && typeof p === 'object'){
+      p.bountyPosters = metas;
+      localStorage.setItem(LS_KEY_PROFILE, JSON.stringify(p));
+    }
+  }catch(e){}
+}
+
+function loadImage(src){
+  return new Promise((resolve)=>{
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = ()=> resolve(img);
+    img.onerror = ()=> resolve(null);
+    img.src = src;
+  });
+}
+
+// key -> dataUrl（避免每次切頁都重畫）
+const __posterCache = new Map();
+
+/** 生成海報圖片（沿用結算頁 showBounty 的排版） */
+async function renderPosterDataUrl(meta){
+  const m = normalizePosterMeta(meta);
+  if(!m) return '';
+  if(__posterCache.has(m.key)) return __posterCache.get(m.key);
+
+  const W = 768, H = 1152;
+  const cvs = document.createElement('canvas');
+  cvs.width = W; cvs.height = H;
+  const ctx = cvs.getContext('2d');
+  ctx.clearRect(0,0,W,H);
+
+  // 對齊參數（與 result.html 一致）
+  const cx = 382, cy = 489, r = 250;
+  const nameY = 939, bountyY = 1032;
+  const nameFont = 126, bountyFont = 78;
+
+  const bg = await loadImage('images/wanted.png');
+  const ava = await loadImage(avatarUrlById(m.avatarId));
+
+  // 先畫頭像（圓形裁切）
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI*2);
+  ctx.closePath();
+  ctx.clip();
+  if(ava) ctx.drawImage(ava, cx-r, cy-r, r*2, r*2);
+  ctx.restore();
+
+  // 再畫海報
+  if(bg) ctx.drawImage(bg, 0, 0, W, H);
+
+  // 名稱（含細邊框）
+  ctx.textAlign = 'center';
+  ctx.font = `bold ${nameFont}px 'Times New Roman', serif`;
+  const nameStrokeW = Math.max(2, Math.round(nameFont * 0.035));
+  ctx.lineWidth = nameStrokeW;
+  ctx.lineJoin = 'round';
+  ctx.miterLimit = 2;
+  ctx.strokeStyle = '#412513';
+  ctx.fillStyle = '#674832';
+
+  const nameTxt = m.name || '未命名玩家';
+  ctx.strokeText(nameTxt, cx, nameY);
+  ctx.fillText(nameTxt, cx, nameY);
+
+  // 懸賞金額
+  ctx.save();
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'alphabetic';
+  ctx.font = `300 ${bountyFont}px "Cambria", "Georgia", "Arial", serif`;
+  ctx.fillStyle = '#38281d';
+  ctx.shadowColor = 'rgba(0,0,0,0.15)';
+  ctx.shadowBlur = 4;
+  ctx.shadowOffsetX = 1;
+  ctx.shadowOffsetY = 1;
+  ctx.fillText(String(m.bounty||''), cx, bountyY);
+  ctx.restore();
+
+  const dataUrl = cvs.toDataURL('image/png');
+  __posterCache.set(m.key, dataUrl);
+  return dataUrl;
+}
+
+
+async function fileToDataUrl(file){
+  if(!file) return '';
+  return new Promise((resolve)=>{
+    const fr = new FileReader();
+    fr.onload = ()=> resolve(String(fr.result||''));
+    fr.onerror = ()=> resolve('');
+    fr.readAsDataURL(file);
+  });
+}
+
+function applyWallBackground(){
+  const stage = document.getElementById('wallStage');
+  if(!stage) return;
+  const w = loadWall();
+  stage.classList.add('has-wall');
+  stage.style.setProperty('--wall-url', `url(${wallUrlById(w.id)})`);
+}
+
+async function renderWall(){
+  const stage = document.getElementById('wallStage');
+  const empty = document.getElementById('wallEmpty');
+  if(!stage) return;
+
+  applyWallBackground();
+
+  // 清掉舊海報
+  stage.querySelectorAll('.poster').forEach(n=>n.remove());
+
+  const metas = loadPosterMetas();
+  const posters = [];
+  for (const m of metas){
+    const dataUrl = await renderPosterDataUrl(m);
+    if(dataUrl && dataUrl.startsWith('data:image')) posters.push({
+      ts: Number(m.ts)||0,
+      title: String(m.title||'').trim() || (m.name ? `${m.name}｜懸賞令` : '懸賞令'),
+      dataUrl
+    });
+  }
+
+  const slots = [
+    { left: '10%', top: '12%', rot: -8 },
+    { left: '34%', top: '18%', rot: 6 },
+    { left: '58%', top: '10%', rot: -4 },
+    { left: '78%', top: '22%', rot: 9 },
+  ];
+
+  if(empty) empty.style.display = posters.length ? 'none' : 'flex';
+
+  posters.forEach((p, i)=>{
+    const s = slots[i] || slots[0];
+    const wrap = document.createElement('div');
+    wrap.className = 'poster';
+    wrap.style.left = s.left;
+    wrap.style.top = s.top;
+    wrap.style.transform = `rotate(${s.rot}deg)`;
+    wrap.title = p.title ? p.title : (p.ts ? fmtTs(p.ts) : '懸賞令');
+
+    const img = document.createElement('img');
+    img.src = p.dataUrl;
+    img.alt = 'wanted';
+    wrap.appendChild(img);
+
+    const pin = document.createElement('div');
+    pin.className = 'pin';
+    wrap.appendChild(pin);
+
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+    meta.textContent = p.title || (p.ts ? fmtTs(p.ts) : '');
+    wrap.appendChild(meta);
+
+    stage.appendChild(wrap);
+  });
+}
+
+function buildWallGrid(pendingId){
+  const grid = document.getElementById('wallGrid');
+  if(!grid) return;
+  grid.innerHTML = '';
+
+  for(let i=1; i<=WALL_COUNT; i++){
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'wallBtn' + (i===pendingId ? ' on' : '');
+
+    const thumb = document.createElement('div');
+    thumb.className = 'thumb';
+    thumb.style.backgroundImage = `url(${wallUrlById(i)})`;
+    btn.appendChild(thumb);
+
+    const lab = document.createElement('div');
+    lab.className = 'lab';
+    lab.textContent = `#${i}`;
+    btn.appendChild(lab);
+
+    btn.onclick = () => {
+      pendingId = i;
+      grid.querySelectorAll('.wallBtn').forEach(x=>x.classList.remove('on'));
+      btn.classList.add('on');
+      grid.dataset.pendingId = String(pendingId);
+    };
+
+    grid.appendChild(btn);
+  }
+
+  grid.dataset.pendingId = String(pendingId);
+}
+
+const AVATAR_COUNT = 30;
+function avatarUrlById(id){
+  const n = Math.max(1, Math.min(AVATAR_COUNT, Number(id)||1));
+  return `images/avatars/${n}.webp`;
+}
+
+function nowTs(){ return Date.now(); }
+function safeJsonParse(s, fallback){ try{ return JSON.parse(s); }catch(e){ return fallback; } }
+function uniq(arr){
+  const set = new Set(); const out = [];
+  for (const x of (arr || [])){
+    const k = String(x ?? '').trim();
+    if (!k) continue;
+    if (set.has(k)) continue;
+    set.add(k); out.push(k);
+  }
+  return out;
 }
 function clampStr(s, maxLen){
   s = String(s ?? '').trim();
@@ -1047,20 +1445,70 @@ function defaultProfile(){
 }
 
 function loadProfile(){
-  // Cloud ONLY
-  return __CLOUD.profile ? JSON.parse(JSON.stringify(__CLOUD.profile)) : defaultProfile();
+  const raw = localStorage.getItem(LS_KEY_PROFILE);
+  const base = defaultProfile();
+  if (!raw) return base;
+
+  const p = safeJsonParse(raw, null);
+  if (!p || typeof p !== 'object') return base;
+
+  const out = {
+    ...base,
+    ...p,
+    player: { ...base.player, ...(p.player||{}) },
+    totals: { ...base.totals, ...(p.totals||{}) },
+    titles: { ...base.titles, ...(p.titles||{}) },
+  };
+
+  out.player.name = clampStr(out.player.name || '未命名玩家', 16) || '未命名玩家';
+  out.player.avatar = Math.max(1, Math.min(AVATAR_COUNT, Number(out.player.avatar)||1));
+
+  out.deluxeUnlocked = uniq(out.deluxeUnlocked).map(x=>Number(x)).filter(n=>Number.isFinite(n) && n>=0 && n<=19);
+  out.titles.owned = normalizeOwnedTitles(out.titles.owned);
+  out.titles.equipped = String(out.titles.equipped||'').trim();
+  out.titles.equippedTier = normTier(out.titles.equippedTier || (findTitleMetaByLabel(out.titles.owned, out.titles.equipped)?.tier) || 1);
+  out.recent = Array.isArray(out.recent) ? out.recent.slice(0, 10) : [];
+
+  // 用於避免結算頁重複累加 totals 的去重 key（matchKey）
+  out._appliedMatchKeys = Array.isArray(out._appliedMatchKeys) ? out._appliedMatchKeys : [];
+  out._appliedMatchKeys = uniq(out._appliedMatchKeys).map(x=>String(x||'')).filter(Boolean).slice(0, 200);
+
+  // 舊資料相容：如果沒有 _appliedMatchKeys，但 recent 內有 matchKey，先把它們補進去
+  if(!out._appliedMatchKeys.length && Array.isArray(out.recent) && out.recent.length){
+    const keys = out.recent.map(r=>String(r?.matchKey||'')).filter(Boolean);
+    out._appliedMatchKeys = uniq(keys).slice(0, 200);
+  }
+
+
+  out.lastSeenAt = nowTs();
+  return out;
 }
 
 function saveProfile(p){
-  __CLOUD.profile = JSON.parse(JSON.stringify(p||defaultProfile()));
-  scheduleCloudSave();
+  try{ localStorage.setItem(LS_KEY_PROFILE, JSON.stringify(p)); }
+  catch(e){ alert('儲存失敗：瀏覽器可能限制儲存空間或使用無痕模式。'); }
 }
 
 // 與 start.html 同步：讀 op_player_profile
-function loadStartProfile(){ return null; }
+function loadStartProfile(){
+  const raw = localStorage.getItem(LS_KEY_START);
+  const p = safeJsonParse(raw, null);
+  if (!p || typeof p !== 'object') return null;
+  return {
+    playerName: clampStr(p.playerName || '', 16),
+    playerAvatar: Math.max(1, Math.min(AVATAR_COUNT, Number(p.playerAvatar)||1)),
+    avatarUrl: String(p.avatarUrl || avatarUrlById(p.playerAvatar||1))
+  };
+}
 
 // 與 start.html 同步：寫 op_player_profile（讓等待室預設值自動一致）
-function saveStartProfile(){ /* cloud only */ }
+function saveStartProfile(name, avatarId){
+  const safeName = clampStr(name || '未命名玩家', 16) || '未命名玩家';
+  const safeId = Math.max(1, Math.min(AVATAR_COUNT, Number(avatarId)||1));
+  const data = { playerName: safeName, playerAvatar: safeId, avatarUrl: avatarUrlById(safeId) };
+  try{ localStorage.setItem(LS_KEY_START, JSON.stringify(data)); }catch(e){}
+  return data;
+}
 
 // header render
 function renderHeader(profile){
@@ -1271,71 +1719,27 @@ document.addEventListener('keydown', (ev)=>{
 });
 
 
-
-// ===== Cloud ONLY runtime overrides (ensure definitions exist) =====
-async function cloudEnsureLoaded(){
-  const secret = localStorage.getItem('opSecret');
-  if(!secret) return false;
-
-  let cloud = await cloudGet(socket, secret);
-  if(!cloud){
-    await cloudUpdate(socket, secret, { name:'', avatar:'', stats:{ client: defaultProfile(), wall:{id:1} } });
-    cloud = await cloudGet(socket, secret);
-    if(!cloud) return false;
-  }
-
-  const client = (cloud?.stats?.client && typeof cloud.stats.client === 'object') ? cloud.stats.client : defaultProfile();
-  client.player = client.player || {};
-  client.player.name = String(cloud?.name || client.player.name || '未命名玩家');
-  client.player.avatar = Number(cloud?.avatar || client.player.avatar || 1) || 1;
-
-  __CLOUD.profile = client;
-  __CLOUD.wallId  = Number(cloud?.stats?.wall?.id || 1) || 1;
-
-  return true;
-}
-
-function scheduleCloudSave(){
-  if(__CLOUD.saveTimer) clearTimeout(__CLOUD.saveTimer);
-  __CLOUD.saveTimer = setTimeout(()=>{ cloudSaveNow(); }, 200);
-}
-
-async function cloudSaveNow(){
-  const secret = localStorage.getItem('opSecret');
-  if(!secret || __CLOUD.saving) return false;
-  __CLOUD.saving = true;
-  try{
-    const cloud = await cloudGet(socket, secret) || {};
-    const p = __CLOUD.profile || defaultProfile();
-    const patch = {
-      name: String(p?.player?.name || cloud?.name || ''),
-      avatar: String(p?.player?.avatar ?? cloud?.avatar ?? ''),
-      stats: { ...(cloud?.stats||{}), client: p, wall: { id: Number(__CLOUD.wallId||1)||1 } }
-    };
-    return await cloudUpdate(socket, secret, patch);
-  } finally {
-    __CLOUD.saving = false;
-  }
-}
-
-// 覆蓋：saveProfile/saveWall 需要 scheduleCloudSave
-function saveProfile(p){
-  __CLOUD.profile = JSON.parse(JSON.stringify(p||defaultProfile()));
-  scheduleCloudSave();
-}
-function saveWall(w){
-  __CLOUD.wallId = Number(w?.id||1)||1;
-  scheduleCloudSave();
-}
-
 // init
 (async function init(){
-  // 只要有 opSecret，就直接以雲端為準
-  const ok = await cloudEnsureLoaded();
-  const profile = ok ? loadProfile() : defaultProfile();
+  let profile = loadProfile();
 
+  // ✅ 若已登入（有 opSecret）→ 先跟雲端同步一次
+  if (localStorage.getItem('opSecret')) {
+    await cloudSyncPullMergePush(socket);
+    profile = loadProfile(); // 同步後重新載入本機合併結果
+  }
+
+  // 第一次載入時：如果 start 已經有選過名字/頭像，就同步過來
+  const sp = loadStartProfile();
+  if (sp){
+    profile.player.name = sp.playerName || profile.player.name;
+    profile.player.avatar = sp.playerAvatar || profile.player.avatar;
+  }else{
+    saveStartProfile(profile.player.name, profile.player.avatar);
+  }
+
+  saveProfile(profile);
   render(profile);
-
 
   // top actions
   document.getElementById('btnRefresh').onclick = () => location.reload();
@@ -1343,11 +1747,12 @@ function saveWall(w){
   location.href = '/start.html?from=profile';
 };
 
-  document.getElementById('btnReset').onclick = async () => {
-    const ok = confirm('確定要登出？（本機只會清掉 opSecret；玩家資料仍保留在雲端）');
+  document.getElementById('btnReset').onclick = () => {
+    const ok = confirm('確定要清除本機紀錄？（名稱、頭貼、戰績、稱號、豪華解鎖、最近對局都會消失）');
     if (!ok) return;
-    try{ localStorage.removeItem('opSecret'); }catch(e){}
-    location.href = '/start.html?logout=1';
+    localStorage.removeItem(LS_KEY_PROFILE);
+    localStorage.removeItem(LS_KEY_START);
+    location.reload();
   };
 
   // name modal
