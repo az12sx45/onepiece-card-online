@@ -416,28 +416,112 @@ max-height: none;
     const SERVER_URL = 'https://onepiece-card-online.onrender.com';
     const socket = io(SERVER_URL, { transports: ['websocket'] });
 
-// ===== Cloud Profile helpers (Cloud ONLY; no local player data) =====
-// 本機只保留：opSecret（登入識別）+ UI 偏好（例如 op_cpu_count、帳密自動填）
-// 玩家資料（名稱/頭像/戰績/稱號/豪華/懸賞單/牆面）全部以雲端 player_profiles 為準。
+// ===== Cloud Sync helpers (op_profile_v1 <-> player_profiles.stats.client) =====
+const LS_KEY_PROFILE = 'op_profile_v1';
+const LS_KEY_START   = 'op_player_profile';
+const LS_KEY_WALL    = 'op_wall_v1'; // 你 profile.html 用的牆 key（若不同請改成你檔案內實際值）
 
-function defaultClient(){
-  return {
-    version: 1,
-    player: { name: '', avatar: 1 },
-    totals: { games: 0, wins: 0, coins: 0 },
-    recent: [],
-    deluxeUnlocked: [],
-    bountyPosters: [], // meta only (最多 4)
-    titles: { owned: [], equipped: '', equippedTier: 1 },
-    _appliedMatchKeys: []
-  };
+function safeJsonParse(raw, fallback=null){
+  try{ return JSON.parse(raw); }catch(e){ return fallback; }
 }
 
-function normInt(n, d=0){ n = Number(n); return Number.isFinite(n) ? n : d; }
+function loadLocalProfile(){
+  // 這份結構在 profile.html / result.html 都一致：totals/titles/recent/_appliedMatchKeys 等【turn13file1†L22-L33】【turn13file0†L35-L50】
+  const raw = localStorage.getItem(LS_KEY_PROFILE);
+  const p = safeJsonParse(raw, null);
+  return (p && typeof p === 'object') ? p : null;
+}
+function saveLocalProfile(p){
+  try{ localStorage.setItem(LS_KEY_PROFILE, JSON.stringify(p)); }catch(e){}
+}
+
+function loadLocalStart(){
+  const raw = localStorage.getItem(LS_KEY_START);
+  const p = safeJsonParse(raw, null);
+  return (p && typeof p === 'object') ? p : null;
+}
+function saveLocalStart(p){
+  try{ localStorage.setItem(LS_KEY_START, JSON.stringify(p)); }catch(e){}
+}
+
+function loadLocalWall(){
+  const raw = localStorage.getItem(LS_KEY_WALL);
+  const w = safeJsonParse(raw, null);
+  return (w && typeof w === 'object') ? w : null;
+}
+function saveLocalWall(w){
+  try{ localStorage.setItem(LS_KEY_WALL, JSON.stringify(w)); }catch(e){}
+}
+
+function uniq(arr){ return Array.from(new Set((arr||[]).map(x=>JSON.stringify(x)))).map(s=>safeJsonParse(s,s)); }
+function uniqStr(arr){ return Array.from(new Set((arr||[]).map(x=>String(x||'')).filter(Boolean))); }
+
+function mergeLocalAndCloud(localClient, cloudClient){
+  // 規則：數值取 max（避免回舊）；清單 union；recent 用 matchKey 去重取最新 10；_appliedMatchKeys union 取 200
+  if(!localClient) return cloudClient || null;
+  if(!cloudClient) return localClient;
+
+  const out = { ...localClient };
+
+  // player
+  out.player = { ...(localClient.player||{}), ...(cloudClient.player||{}) };
+
+  // totals：商店最重要 coins（你結算是累加到 totals.coins）【turn13file0†L40-L43】
+  out.totals = { ...(localClient.totals||{}), ...(cloudClient.totals||{}) };
+  for(const k of Object.keys(out.totals)){
+    const a = Number(localClient.totals?.[k] ?? 0) || 0;
+    const b = Number(cloudClient.totals?.[k] ?? 0) || 0;
+    out.totals[k] = Math.max(a,b);
+  }
+
+  // deluxeUnlocked / titles
+  out.deluxeUnlocked = uniqStr([...(localClient.deluxeUnlocked||[]), ...(cloudClient.deluxeUnlocked||[])])
+    .map(x=>Number(x)).filter(n=>Number.isFinite(n));
+
+  out.titles = { ...(localClient.titles||{}), ...(cloudClient.titles||{}) };
+  const ownedA = Array.isArray(localClient.titles?.owned) ? localClient.titles.owned : [];
+  const ownedB = Array.isArray(cloudClient.titles?.owned) ? cloudClient.titles.owned : [];
+  // owned 去重（以 label 為 key、保留較高 tier）：你的結算頁就是這樣升級 tier 的【turn13file10†L35-L46】
+  const map = new Map();
+  [...ownedA, ...ownedB].forEach(x=>{
+    const label = String(x?.label||'').trim(); if(!label) return;
+    const tier = Number(x?.tier||1)||1;
+    const prev = map.get(label);
+    if(!prev || tier > prev.tier) map.set(label, { label, tier });
+  });
+  out.titles.owned = Array.from(map.values());
+  if(!out.titles.equipped && cloudClient.titles?.equipped) out.titles.equipped = cloudClient.titles.equipped;
+  out.titles.equippedTier = Math.max(
+    Number(localClient.titles?.equippedTier||1)||1,
+    Number(cloudClient.titles?.equippedTier||1)||1
+  );
+
+  // recent：matchKey 去重取新 10（你本機 recent 就是這樣做）【turn13file0†L45-L49】
+  const ra = Array.isArray(localClient.recent) ? localClient.recent : [];
+  const rb = Array.isArray(cloudClient.recent) ? cloudClient.recent : [];
+  const seen = new Set();
+  const mergedRecent = [...rb, ...ra] // 先雲端再本機，後面會依 ts 排序
+    .filter(x=>{
+      const mk = String(x?.matchKey||'').trim();
+      if(!mk) return false;
+      if(seen.has(mk)) return false;
+      seen.add(mk);
+      return true;
+    })
+    .sort((x,y)=>(Number(y?.ts||0)-Number(x?.ts||0)))
+    .slice(0,10);
+  out.recent = mergedRecent;
+
+  // applied keys：union 取 200（避免刷新重複加總）【turn13file0†L35-L43】
+  out._appliedMatchKeys = uniqStr([...(localClient._appliedMatchKeys||[]), ...(cloudClient._appliedMatchKeys||[])])
+    .slice(0,200);
+
+  return out;
+}
 
 async function cloudGet(socket, secret){
   return await new Promise((resolve)=>{
-    socket.timeout(8000).emit('PROFILE_GET', { secret }, (err, res)=>{
+    socket.timeout(6000).emit('PROFILE_GET', { secret }, (err, res)=>{
       if(err || !res?.ok) return resolve(null);
       resolve(res.profile || null);
     });
@@ -446,35 +530,67 @@ async function cloudGet(socket, secret){
 
 async function cloudUpdate(socket, secret, patch){
   return await new Promise((resolve)=>{
-    socket.timeout(8000).emit('PROFILE_UPDATE', { secret, patch }, (err, res)=>{
+    socket.timeout(6000).emit('PROFILE_UPDATE', { secret, patch }, (err, res)=>{
       resolve(!err && !!res?.ok);
     });
   });
 }
 
-// 等待室只需要 name/avatar：從雲端拿；雲端沒資料就建立一份空白
-async function cloudLoadMe(socket){
+async function cloudSyncPullMergePush(socket){
   const secret = localStorage.getItem('opSecret');
   if(!secret) return { ok:false, reason:'no-secret' };
 
-  let cloud = await cloudGet(socket, secret);
-  if(!cloud){
-    // 允許第一次登入尚未建立 profile：先建一份
-    const patch = { name:'', avatar:'', stats:{ client: defaultClient(), wall:{ id: 1 } } };
+  const cloud = await cloudGet(socket, secret);
+  const cloudClient = cloud?.stats?.client || null;
+
+  const local = loadLocalProfile();
+  const merged = mergeLocalAndCloud(local, cloudClient);
+
+  if(merged){
+    saveLocalProfile(merged);
+
+    // 同步 start.html 用的 op_player_profile（玩家名稱/頭像）
+    if(merged.player){
+      const sp = loadLocalStart() || {};
+      sp.playerName = merged.player.name || sp.playerName;
+      sp.playerAvatar = merged.player.avatar || sp.playerAvatar;
+      saveLocalStart(sp);
+    }
+
+    // 同步牆背景（只同步 id，避免大圖）
+    const wall = loadLocalWall() || {};
+    if(cloud?.stats?.wall?.id) wall.id = cloud.stats.wall.id;
+    saveLocalWall(wall);
+
+    // 推回雲端：把 merged 放到 stats.client
+    const patch = {
+      name: merged.player?.name || (cloud?.name || ''),
+      avatar: String(merged.player?.avatar ?? (cloud?.avatar || '')),
+      stats: {
+        ...(cloud?.stats || {}),
+        client: merged,
+        wall: { id: wall?.id || 1 }
+      }
+    };
     await cloudUpdate(socket, secret, patch);
-    cloud = await cloudGet(socket, secret);
+    return { ok:true };
   }
 
-  const name = String(cloud?.name || '').trim();
-  const avatar = normInt(cloud?.avatar, 1) || 1;
-
-  // 同步到 lobby 狀態（不落地到 localStorage）
-  __lobby.me.name = name || __lobby.me.name || '';
-  __lobby.me.avatar = avatar || __lobby.me.avatar || 1;
-
-  return { ok:true, name: __lobby.me.name, avatar: __lobby.me.avatar, cloud };
+  return { ok:false, reason:'no-merged' };
 }
 
+async function cloudSyncPushNow(socket){
+  const secret = localStorage.getItem('opSecret');
+  if(!secret) return false;
+
+  const local = loadLocalProfile();
+  if(!local) return false;
+
+  const wall = loadLocalWall() || {};
+  const patch = {
+    name: local.player?.name || '',
+    avatar: String(local.player?.avatar ?? ''),
+    stats: { client: local, wall: { id: wall?.id || 1 } }
   };
   return await cloudUpdate(socket, secret, patch);
 }
@@ -575,7 +691,7 @@ localStorage.setItem("opSecret", res.secret);
 __lobby.me.secret = res.secret;
 
 // ✅ 登入成功後：拉雲端→合併→寫回本機→推回雲端
-cloudLoadMe(socket).then(()=> onAuthed?.());
+cloudSyncPullMergePush(socket).then(()=> onAuthed?.());
       }
     );
   }
@@ -885,26 +1001,11 @@ function RuleModal({ show, onClose }) {
       const [name,setName]=useState(defaultName||"");
       const [pick,setPick]=useState(1);
       const avatars=useMemo(()=> Array.from({length:30},(_,i)=>`images/avatars/${i+1}.webp`), []);
-      async function handleSubmit(e){
+      function handleSubmit(e){
         e.preventDefault();
         const safe=(name||"").trim()||"無名航海士";
         const data={ playerName:safe, playerAvatar:pick, avatarUrl:avatars[pick-1] };
-        // Cloud ONLY：寫入 player_profiles（name/avatar + stats.client.player）
-        try{
-          const secret = localStorage.getItem('opSecret');
-          if(secret){
-            const cloud = await cloudGet(socket, secret);
-            const client = (cloud?.stats?.client && typeof cloud.stats.client==='object') ? cloud.stats.client : defaultClient();
-            client.player = { ...(client.player||{}), name: safe, avatar: pick };
-            await cloudUpdate(socket, secret, {
-              name: safe,
-              avatar: String(pick),
-              stats: { ...(cloud?.stats||{}), client, wall: cloud?.stats?.wall || {id:1} }
-            });
-          }
-        }catch(e){}
-        __lobby.me.name = safe;
-        __lobby.me.avatar = pick;
+        localStorage.setItem("op_player_profile", JSON.stringify(data));
         onDone(data);
       }
       return (
@@ -963,7 +1064,9 @@ function RuleModal({ show, onClose }) {
               type="button"
               onClick={()=>{
                 const safe=(name||"").trim()||"無名航海士";
-                const data={ playerName:safe, playerAvatar:pick, avatarUrl:avatars[pick-1] };                onDone(data,{join:true});
+                const data={ playerName:safe, playerAvatar:pick, avatarUrl:avatars[pick-1] };
+                localStorage.setItem("op_player_profile", JSON.stringify(data));
+                onDone(data,{join:true});
               }}
             >
               {t("ui.joinRoom")}
@@ -1379,16 +1482,10 @@ function changeLang(next){
 
 
       useEffect(()=>{
-        (async ()=>{
-          const r = await cloudLoadMe(socket);
-          if(r?.ok){
-            setProfile({
-              playerName: r.name || "",
-              playerAvatar: r.avatar || 1,
-              avatarUrl: `images/avatars/${r.avatar||1}.webp`
-            });
-          }
-        })();
+        const cached=localStorage.getItem("op_player_profile");
+        if(cached){
+          try{ setProfile(JSON.parse(cached)); }catch{}
+        }
       },[]);
 
       function enterRoom(id, extra){
@@ -1415,8 +1512,10 @@ return (
 {stage==="menu" && (
   <MainMenu
     onStart={()=>{
-      // ✅ 只有第一次才創角；之後直接進入選房       if (profile?.playerName) setStage("choice");
-       else setStage("profile");
+      // ✅ 只有第一次才創角；之後直接進入選房
+      const cached = localStorage.getItem("op_player_profile");
+      if (cached) setStage("choice");
+      else setStage("profile");
     }}
     onProfilePage={()=>{
       location.href = "profile.html";
