@@ -767,6 +767,7 @@ body.view-rank .layout > aside.card:first-child{
 <script>
 /* ====== 全域狀態 ====== */
 const RESUME = true;
+let socket = null; // global socket
 let LAST_FINAL = null;   // 最新 final
 let STATE = null;        // 最新 socket 狀態
 let MY_PID = null;       // 我的 pid（與 id 不同）
@@ -1422,7 +1423,10 @@ function renderFinal(final){
   // === 雲端主控：自動把本場戰績/稱號/豪華解鎖/懸賞單資料寫入雲端 ===
   try{
     const myId = MY_ID != null ? MY_ID : guessMyId(final, MY_PID);
-    await cloudApplyMatchResult(socket, final, myId, MY_PID);
+    if(socket){
+      Promise.resolve(cloudApplyMatchResult(socket, final, myId, MY_PID))
+        .catch((e)=> console.warn('[cloudApplyMatchResult failed]', e));
+    }
   }catch(e){
     console.warn('[cloudApplyMatchResult failed]', e);
   }
@@ -1447,7 +1451,7 @@ function renderFinal(final){
 
   const serverURL = new URLSearchParams(location.search).get('server')
   || "https://onepiece-card-online.onrender.com";
-  const socket = io(serverURL, { transports: ['websocket'] });
+  socket = io(serverURL, { transports: ['websocket'] });
 
 
   socket.on('connect', ()=>{
