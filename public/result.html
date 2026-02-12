@@ -1,420 +1,1527 @@
+<!-- /result.html -->
 <!doctype html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-  <title>onepiece 偉大航道爭霸戰 — 啟動流程（影片版 + 等待室 + 音效）</title>
-  <link rel="manifest" href="manifest.webmanifest">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  <!-- (1) 在 React 之後加入 Socket.IO -->
-  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-<!-- i18n dictionaries -->
-<script>window.__I18N_DICTS = window.__I18N_DICTS || {};</script>
-<script src="i18n/zh-Hant.js"></script>
-<script src="i18n/en.js"></script>
-<script src="i18n/ja.js"></script>
-<script src="i18n/ko.js"></script>
-<script src="i18n/i18n.js"></script>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>賽季結算｜偉大航道爭霸戰</title>
+<style>
+:root{
+  --bg:#0b1014; --card:#141a1f; --line:#2a3038;
+  --text:#e9f0f8; --muted:#9aa5b2; --accent:#ffd36b; --accent2:#ffb84a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,'Noto Sans TC',sans-serif;
+  background:radial-gradient(circle at 50% 30%,#0e141a 0%,#090c10 80%);
+  color:var(--text); min-height:100vh;
+}
+.header{
+  position:sticky;top:0;z-index:10;
+  background:rgba(16,22,28,.75);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.wrap{max-width:1280px;margin:0 auto;padding:14px 18px;}
+.h1{font-weight:800;letter-spacing:.5px}
 
-  <style>
-    :root{ --bg:#121315; --ink:#eaecee; --brand:#ffb84d; --cover:url("images/cover.jpg"); }
-    html,body{height:100%;}
-    body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC",system-ui,-apple-system,Segoe UI,Roboto,"PingFang TC","Noto Sans CJK TC",sans-serif;}
-    .bg-anim{ position:fixed; inset:0; overflow:hidden; z-index:-1; background: radial-gradient(1200px 800px at 10% 20%, rgba(255,184,77,.08), transparent 60%), radial-gradient(1200px 800px at 90% 80%, rgba(0,158,255,.07), transparent 60%), linear-gradient(180deg,#0f1113 0%,#14171a 100%); }
-    .bg-video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; opacity:.35; filter:contrast(108%) saturate(108%) brightness(95%); pointer-events:none; }
-    body.no-video .bg-anim::after{ content:""; position:absolute; inset:-5%; background-image:var(--cover); background-size:cover; background-position:center; opacity:.28; filter:contrast(110%) saturate(110%) blur(.4px); animation:kenburns 18s ease-in-out infinite alternate; mix-blend-mode:screen; }
-    @keyframes kenburns{ 0%{transform:scale(1)} 100%{transform:scale(1.08) translate3d(0,-1.2%,0)} }
-    .blink{ animation:blink 1.2s ease-in-out infinite; } @keyframes blink{ 0%,100%{opacity:.35} 50%{opacity:1} }
-    .card{ background:#0f1113cc; border:1px solid #2a2e33; border-radius:16px; }
-    .btn{ padding:.65rem .9rem; border-radius:.8rem; border:1px solid #2a2e33; background:#171a1e; } .btn:hover{ background:#1e2227; }
-    .btn-primary{ background:var(--brand); color:#111; border-color:var(--brand); } .btn-primary:hover{ filter:brightness(1.05); }
-    .avatar{ width:72px; height:72px; border-radius:999px; overflow:hidden; border:2px solid rgba(255,255,255,.08); background:#0c0e10; flex:none; }
-    .avatar, .avatar img{ aspect-ratio:1/1; } .avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
-    .avatar.is-active{ border-color:#ffd36a; box-shadow:0 0 0 3px rgba(255,184,77,.25); }
-    .avatar:hover{ border-color:#6b7280; }
-    .mono{ display:flex; align-items:center; justify-content:center; font-weight:700; font-size:28px; color:#111; background:#ffd36a; }
-    .title-wrap{ display:inline-block; perspective:1000px; }
-    .title-main, .title-sub{ will-change: transform, opacity, filter; text-shadow: 0 2px 12px rgba(0,0,0,.45), 0 0 1px rgba(0,0,0,.35); }
-    @keyframes tiltDrop{ 0%{opacity:0; transform:rotateX(18deg) translateY(-12px) scale(.98)} 100%{opacity:1; transform:rotateX(0) translateY(0) scale(1)} }
-    .fx-tiltDrop{ transform-origin:50% 80%; animation:tiltDrop .8s cubic-bezier(.2,.9,.2,1) .1s both; }
-    .fx-shine{ position:relative; overflow:hidden; }
-    .fx-shine::after{ content:""; position:absolute; inset:0; background:linear-gradient(120deg, transparent 0%, rgba(255,255,255,.0) 35%, rgba(255,211,106,.65) 50%, rgba(255,255,255,.0) 65%, transparent 100%); transform:translateX(-120%); animation:shineSweep 1.6s ease-out .5s both; mix-blend-mode:screen; pointer-events:none; }
-    @keyframes shineSweep{ to{ transform:translateX(120%);} }
-    @keyframes fadeUp{ 0%{opacity:0; transform:translateY(12px)} 100%{opacity:1; transform:translateY(0)} } .fx-fadeUp{ animation:fadeUp .7s ease-out .15s both; }
-    .wave{ --stagger:.06s; --dur:1.4s; --amp:8px; --delayStart:1.2s; }
-    .wave .char{ display:inline-block; transform:translateY(0); animation: waveBounce var(--dur) ease-in-out infinite; animation-delay: calc(var(--i) * var(--stagger) + var(--delayStart)); }
-    @keyframes waveBounce{ 0%,100%{transform:translateY(0)} 35%{transform:translateY(calc(-1 * var(--amp)))} 70%{transform:translateY(0)} }
-    .wave-sm{ --amp:5px; --dur:1.6s; --stagger:.055s; }
-    .lock-overlay{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.72); color:#fff; z-index:50; text-align:center; padding:24px; backdrop-filter: blur(6px); }
-    .lock-overlay .panel{ background:rgba(17,17,17,.85); border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:18px 20px; max-width:420px; }
-    .lock-overlay .icon{ font-size:40px; line-height:1; margin-bottom:10px; }
-    @media (orientation: portrait){ .lock-overlay{ display:flex; } body.lock-scroll{ overflow:hidden; } }
-    @media (orientation: landscape){ .card{ max-height:86vh; overflow:auto; } .avatar{ width:64px; height:64px; } }
-    @media (max-height: 420px) and (orientation: landscape){ .title-main{ font-size: clamp(28px, 6vw, 48px); } .title-sub{ font-size: clamp(18px, 3.6vw, 28px); } .avatar{ width:56px; height:56px; } }
-    @media (min-width: 768px) and (max-width: 1024px){ .title-main{ font-size: clamp(48px, 6.4vw, 92px); letter-spacing:.01em; } .title-sub{ font-size: clamp(28px, 3.8vw, 52px); } .wave{ --amp: 8px; } .wave-sm{ --amp: 5px; } }
-    @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape){ .title-main{ font-size: clamp(44px, 5.8vw, 86px); } .title-sub{ font-size: clamp(26px, 3.4vw, 48px); } }
-    @media (min-width: 1024px){ .wave{ --amp: 9px; } .wave-sm{ --amp: 6px; } } @media (min-width: 1536px){ .wave{ --amp: 10px; } .wave-sm{ --amp: 7px; }
-    }
-    .audio-toggle{ position: fixed; right: 12px; bottom: 12px; z-index: 30; display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,.45); border: 1px solid rgba(255,255,255,.12); border-radius: 999px; padding: 6px 10px; backdrop-filter: blur(6px); }
-    .audio-toggle button{ display:flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:999px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.16); }
-    .audio-toggle button:hover{ background: rgba(255,255,255,.1); }
-    .audio-toggle .vol{ appearance:none; width:120px; height:4px; border-radius:999px; background:#444; }
-    .audio-toggle .vol::-webkit-slider-thumb{ appearance:none; width:14px; height:14px; border-radius:999px; background:#ffd36a; border:1px solid #b3831b; }
-    @media (max-width: 640px){ .audio-toggle{ gap:6px; padding:6px 8px; } .audio-toggle .vol{ width:86px; }
-    }
-
-/* === Rules Flipbook Modal === */
-.rulesOverlay{
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.55);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index: 9999;
+/* 版型：左 玩家清單 / 中 勾選 / 右 統一清單表 */
+.layout{
+  display:grid; gap:18px;
+  grid-template-columns: 280px 220px 1fr;
+}
+/* 分頁切換按鈕 */
+.view-tabs{
+  margin:10px 0 6px;
+  display:inline-flex;
+  gap:6px;
+  padding:4px;
+  border-radius:999px;
+  background:rgba(20,24,28,.9);
+  border:1px solid rgba(255,255,255,.08);
+}
+.tab-btn{
+  border:none;
+  border-radius:999px;
+  padding:6px 14px;
+  font-size:13px;
+  cursor:pointer;
+  background:transparent;
+  color:var(--muted);
+}
+.tab-btn.active{
+  background:linear-gradient(135deg,#ffd36b,#ffb84a);
+  color:#1b1408;
+  font-weight:700;
 }
 
-.rulesCard{
- width: 94vw;
-height: 92vh;
-max-height: none;
+/* 分頁版型：
+   view-rank：只顯示玩家清單，讓左邊卡片變寬
+   view-detail：顯示原本三欄（採用 .layout 原本設定） */
+body.view-rank .layout{
+  grid-template-columns: minmax(0, 520px); /* 左邊卡片變寬 */
+}
+body.view-rank .metrics,
+body.view-rank .tablewrap{
+  display:none;
+}
+body.view-rank .layout > aside.card:first-child{
+  grid-column: 1 / -1; /* 讓玩家清單卡片佔滿整列 */
+}
+@media (max-width: 1180px){
+  .layout{ grid-template-columns: 280px 1fr; }
+  .metrics{ order:2; }
+  .tablewrap{ order:3; }
+}
+@media (max-width: 860px){
+  .layout{ grid-template-columns: 1fr; }
+}
 
-  background: rgba(10,12,18,0.92);
+/* 卡片 */
+.card{
+  background:rgba(20,24,28,.82);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:18px;
+  padding:16px;
+  backdrop-filter:blur(8px);
+  box-shadow:0 6px 16px rgba(0,0,0,.35);
+}
+.section-title{ font-weight:800; font-size:18px; margin-bottom:8px; }
 
-  /* 金色邊框 */
-  border: 2px solid rgba(255, 211, 106, 0.75);
+/* 左：玩家清單 */
+.player-item{
+  display:grid;
+  grid-template-columns:  28px minmax(0, 340px) 1fr;  /* rank | avatar+稱號(更寬) | 名字 */
+  align-items:start;
+  gap:10px;
+  padding:10px;
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:12px;
+  background:rgba(255,255,255,.03);
+  /* overflow:hidden;  <- 已移除，避免高階框被裁 */
+}
+
+.player-item.top1{
+  border-color: rgba(255,211,107,.45);
+  background: rgba(255,211,107,.06);
+}
+.rank-dot{
+  width:26px;height:26px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:12px;
+  color:#0a0d10;background:var(--accent);
+}
+
+/* 頭像＋金幣＋懸賞＋稱號都放這一欄（縱向） */
+.avatar-col{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  min-width:0;
+  width:100%;
+}
+
+.avatar{
+  width:44px;height:44px;border-radius:50%;
+  object-fit:cover;
+  background:#2a333d;
+  border:1px solid rgba(255,255,255,.18);
+}
+.avatar-meta{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:2px;
+}
+.coins{
+  color:var(--accent);
+  font-weight:800;
+  font-variant-numeric:tabular-nums;
+  font-size:13px;
+}
+.player-bounty{
+  font-size:10px;
+  line-height:1.2;
+  text-align:center;
+}
+.player-bounty-amt{
+  font-weight:700;
+  letter-spacing:.5px;
+  white-space:nowrap;
+}
+
+/* 名字在右側獨立一欄 */
+.pinfo{ line-height:1.2; display:flex; align-items:center; height:100%; }
+.pname{ font-weight:700; }
+
+/* ===== 稱號框基礎樣式（配合示範檔 v3） ===== */
+.player-title-badge{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:4px 16px;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.5px;
+  margin-top:4px;
+  text-align:center;
+  white-space:nowrap;
+  box-sizing:border-box;
+}
+
+.player-title-badge span,
+.player-title-badge .text{
+  position:relative;
+  z-index:3;
+  white-space:nowrap;
+}
+
+/* 讓文字在固定框裡，太長就用 ... 不要把框撐壞 */
+.player-title-badge .text{
+  display:inline-block;
+  max-width:100%;
+  overflow:hidden;   /* 防止跑出框；JS 會縮字（已移除縮字函式，不影響擴張） */
+}
+
+/* 基礎動畫 */
+@keyframes float{
+  0%,100%{transform:translateY(0px);}
+  50%{transform:translateY(-3px);}
+}
+@keyframes pulse{
+  0%,100%{filter:brightness(1);}
+  50%{filter:brightness(1.18);}
+}
+@keyframes softGlow{
+  0%,100%{opacity:.5;}
+  50%{opacity:.95;}
+}
+@keyframes shine{
+  0%{transform:translateX(-130%);opacity:0;}
+  20%{opacity:0;}
+  40%{transform:translateX(130%);opacity:1;}
+  60%{opacity:0;}
+  100%{transform:translateX(130%);opacity:0;}
+}
+
+/* Tier 1：普通圓角長方形 */
+.tier-1 .player-title-badge{
+  border-radius:8px;
+  border:1px solid #777c84;
+  background:linear-gradient(135deg,#333842,#171920);
+  color:#d0d3d8;
+  text-shadow:0 0 6px rgba(0,0,0,.8);
+}
+
+/* Tier 2：兩側斜切標籤 */
+.tier-2 .player-title-badge{
+  border-radius:999px;
+  padding:6px 24px;
+  border:1px solid #63d2ff;
+  background:linear-gradient(135deg,#1b4d7e,#63d2ff);
+  color:#e8f9ff;
+  box-shadow:0 0 10px rgba(99,210,255,.6);
+  overflow:visible;
+}
+.tier-2 .player-title-badge::before,
+.tier-2 .player-title-badge::after{
+  content:"";
+  position:absolute;
+  top:0; bottom:0;
+  width:14px;
+  background:inherit;
+}
+.tier-2 .player-title-badge::before{
+  left:-8px;
+  transform:skewX(-24deg);
+}
+.tier-2 .player-title-badge::after{
+  right:-8px;
+  transform:skewX(24deg);
+}
+
+/* Tier 3：鍊甲牌（六角） */
+.tier-3 .player-title-badge{
+  padding:7px 22px;
+  color:#ffe4c4;
+  background:
+    radial-gradient(circle at 0 0,rgba(255,255,255,.12) 0,transparent 55%),
+    radial-gradient(circle at 100% 100%,rgba(255,120,60,.25) 0,transparent 55%),
+    linear-gradient(135deg,#3a0f18,#8b1c24);
+  border:2px solid #f48c2b;
   box-shadow:
-    0 0 0 1px rgba(255, 184, 77, 0.35),
-    0 20px 60px rgba(0,0,0,0.55),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    0 0 0 1px rgba(0,0,0,.6),
+    0 0 18px rgba(244,140,43,.9);
+  clip-path:polygon(8% 0,92% 0,100% 50%,92% 100%,8% 100%,0 50%);
+}
+.tier-3 .player-title-badge::before{
+  content:"";
+  position:absolute;
+  inset:2px;
+  border-radius:10px;
+  border:1px dashed rgba(255,223,186,.35);
+  opacity:.7;
+}
 
-  border-radius: 20px;
-  overflow: hidden;
+/* Tier 4：王家盾徽 */
+.tier-4 .player-title-badge{
+  padding:8px 24px 10px;
+  color:#f9f0ff;
+  background:radial-gradient(circle at top,#5c35b5,#1e1032);
+  border:2px solid #e1c4ff;
+  box-shadow:
+    0 0 0 1px rgba(90,40,200,.6),
+    0 0 22px rgba(147,96,255,1);
+  border-radius:16px 16px 10px 10px;
+  overflow:visible;
+  animation:float 5s ease-in-out infinite;
+}
+.tier-4 .player-title-badge::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:-10px;
+  transform:translateX(-50%);
+  width:60%;
+  height:16px;
+  background:linear-gradient(to bottom,#e1c4ff,#6e3bd1);
+  clip-path:polygon(50% 100%,0 0,100% 0);
+  box-shadow:0 4px 10px rgba(0,0,0,.6);
+}
+
+/* Tier 5：王座雙翼徽章 */
+.tier-5 .player-title-badge{
+  padding:8px 30px;
+  color:#fff9e0;
+  background:linear-gradient(135deg,#5a2400,#ffcf66);
+  border-radius:999px;
+  border:3px solid #ffe08a;
+  box-shadow:
+    0 0 0 1px rgba(255,224,138,.55),
+    0 0 26px rgba(255,204,110,1);
+  overflow:visible;
+  animation:float 4.5s ease-in-out infinite, pulse 3.8s ease-in-out infinite;
+}
+.tier-5 .player-title-badge::before,
+.tier-5 .player-title-badge::after{
+  content:"";
+  position:absolute;
+  top:50%;
+  width:26px;
+  height:16px;
+  background:radial-gradient(circle at 0 50%,rgba(255,255,255,.95) 0,rgba(255,224,138,.1) 70%);
+  transform:translateY(-50%);
+  filter:drop-shadow(0 0 8px rgba(255,224,138,.9));
+}
+.tier-5 .player-title-badge::before{
+  left:-16px;
+  clip-path:polygon(100% 0,0 50%,100% 100%);
+}
+.tier-5 .player-title-badge::after{
+  right:-16px;
+  clip-path:polygon(0 0,100% 50%,0 100%);
+}
+.tier-5 .player-title-badge .text::after{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  background:linear-gradient(120deg,transparent 0,rgba(255,255,255,.9) 45%,transparent 75%);
+  mix-blend-mode:screen;
+  transform:translateX(-130%);
+  animation:shine 3.6s ease-in-out infinite;
+}
+
+/* Tier 6：罪金碧輝煌・傳說皇冠紋章 */
+.tier-6 .player-bounty-amt{
+  color:#fff4cf;
+  text-shadow:0 0 6px rgba(255,215,128,.9);
+}
+.tier-6 .player-title-badge{
+  padding:9px 38px;
+  color:#fffdf5;
+  background:
+    radial-gradient(circle at 20% 0,rgba(255,255,255,.4) 0,transparent 55%),
+    radial-gradient(circle at 80% 100%,rgba(255,210,120,.7) 0,transparent 55%),
+    linear-gradient(135deg,#4b2a00,#c68b00,#ffe7a3);
+  border-radius:999px;
+  border:4px solid #ffe9c4;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.45),
+    0 0 0 6px rgba(158,106,32,.75),
+    0 0 38px rgba(255,243,196,1);
+  overflow:visible;
+  position:relative;
+  text-shadow:
+    0 0 8px rgba(0,0,0,1),
+    0 0 22px rgba(255,245,210,1);
+  animation:float 4.2s ease-in-out infinite, pulse 3.4s ease-in-out infinite;
+}
+
+/* 內層浮雕框 */
+.tier-6 .player-title-badge::before{
+  content:"";
+  position:absolute;
+  inset:4px;
+  border-radius:999px;
+  border:2px solid rgba(255,252,230,.85);
+  box-shadow:
+    inset 0 0 8px rgba(255,255,255,.7),
+    0 0 16px rgba(255,252,210,.7);
+  opacity:.98;
+  z-index:1;
+}
+
+/* 周圍寶石光點 */
+.tier-6 .player-title-badge::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 12% 50%,#fff 0,rgba(255,255,255,0) 55%),
+    radial-gradient(circle at 88% 50%,#fff 0,rgba(255,255,255,0) 55%),
+    radial-gradient(circle at 50% -10%,#fff 0,rgba(255,255,255,0) 60%);
+  mix-blend-mode:screen;
+  opacity:.75;
+  z-index:1;
+}
+
+/* 皇冠 + 吊墜 + 中央光暈 */
+.tier-6 .player-title-badge .crown{
+  position:absolute;
+  top:-16px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:15px;
+  text-shadow:
+    0 0 10px #ffffff,
+    0 0 18px rgba(255,230,160,1);
+  z-index:4;
+}
+.tier-6 .player-title-badge .pendant{
+  position:absolute;
+  bottom:-14px;
+  left:50%;
+  transform:translateX(-50%);
+  width:18px;
+  height:18px;
+  background:radial-gradient(circle,#fff7d0 0,#f0b400 45%,#8b4c00 100%);
+  border-radius:50%;
+  box-shadow:
+    0 4px 8px rgba(0,0,0,.8),
+    0 0 10px rgba(255,230,170,1);
+  z-index:2;
+}
+.tier-6 .player-title-badge .pendant::before{
+  content:"";
+  position:absolute;
+  top:-6px;
+  left:50%;
+  transform:translateX(-50%);
+  width:9px;
+  height:5px;
+  border-radius:999px;
+  background:radial-gradient(circle,#fffbe6 0,#b57a1f 100%);
+}
+.tier-6 .player-title-badge .glow{
+  position:absolute;
+  inset:-30%;
+  background:radial-gradient(circle,rgba(255,255,255,.45) 0,透明 60%);
+  background:radial-gradient(circle,rgba(255,255,255,.45) 0,transparent 60%);
+  mix-blend-mode:screen;
+  opacity:.65;
+  z-index:0;
+  animation:softGlow 4.4s ease-in-out infinite;
+}
+
+/* 中：指標勾選 */
+.metric-list{ display:flex; flex-direction:column; gap:6px; }
+.metric{
+  display:flex; align-items:center; gap:10px;
+  padding:8px 10px; border-radius:10px;
+  border:1px solid rgba(255,255,255,.06);
+  background:rgba(255,255,255,.03);
+  cursor:pointer; user-select:none;
+}
+.metric input{ width:16px; height:16px; }
+.metric.active{ border-color:rgba(255,211,107,.45); background:rgba(255,211,107,.06); }
+.small{ font-size:13px; color:var(--muted) }
+
+/* 右：統一清單表（頭像/ID顯示一次；勾選項目→同一欄內並列多條） */
+.table{ width:100%; border-collapse:collapse; }
+.table th,.table td{ padding:10px; border-bottom:1px solid rgba(255,255,255,.06); text-align:left; vertical-align:middle; }
+.table thead th{ color:var(--muted); font-weight:600; }
+.cell-player{ display:flex; align-items:center; gap:10px; }
+.cell-player .avatar{ width:36px; height:36px; border-radius:50%; border:1px solid rgba(255,255,255,.15) }
+.cell-player .name{ font-weight:700 }
+.cell-player .pid{ font-size:12px; color:var(--muted) }
+
+/* 並列多條（每個指標一條） */
+.metrics-cell{ display:flex; flex-direction:column; gap:6px; }
+.metric-line{ display:flex; align-items:center; gap:8px; }
+.metric-badge{
+  font-size:12px; color:var(--muted); min-width:74px;
+  padding:2px 6px; border:1px solid rgba(255,255,255,.08); border-radius:999px;
+  text-align:center; background:rgba(255,255,255,.03);
+}
+
+/* 細長條（10px）＋ 末端數字 */
+.bar-wrap{ flex:1; position:relative; height:10px; }
+.bar{ position:absolute; inset:0; background:#2b333b; border:1px solid rgba(255,255,255,.08); border-radius:999px; overflow:hidden; }
+.fill{ position:absolute; left:0; top:0; bottom:0; background:linear-gradient(90deg,var(--accent),var(--accent2)); }
+.val-in{ position:absolute; right:6px; top:50%; transform:translateY(-50%); font-size:12px; color:#fff; font-variant-numeric:tabular-nums; }
+.val-out{ margin-left:6px; font-size:12px; color:#fff; font-variant-numeric:tabular-nums; }
+
+/* 小工具 */
+.badge{
+  padding:4px 10px;border:1px solid rgba(255,255,255,.15);
+  border-radius:999px;font-size:13px;color:var(--accent);
+}
+.btn{
+  padding:8px 12px;border:1px solid rgba(255,255,255,.1);
+  border-radius:10px;background:rgba(255,255,255,.06);
+  color:var(--text);cursor:pointer;transition:.15s;
+}
+.btn:hover{ background:rgba(255,255,255,.14); }
+/* 防止未載入 Tailwind 時無法隱藏 */
+.hidden{display:none !important;}
+
+/* ===== 說明面板 ===== */
+#helpModal, #bountyModal{
+  /* 統一覆蓋層樣式：見原懸賞金彈窗 */
+}
+.help-sheet{
+  width:min(960px,94vw);
+  background:rgba(20,24,28,.86);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:18px;
+  backdrop-filter: blur(8px);
+  padding:18px;
+}
+.help-title{ font-weight:900;font-size:20px;margin-bottom:8px; }
+.help-sub{ color:var(--muted);font-size:13px;margin-bottom:12px; }
+.help-grid{
+  display:grid;gap:12px;
+  grid-template-columns: 1fr 1fr;
+}
+@media (max-width:860px){ .help-grid{ grid-template-columns:1fr; } }
+.help-box{
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;padding:12px;background:rgba(255,255,255,.03);
+}
+.help-box h4{ font-size:15px;font-weight:800;margin-bottom:6px; }
+.help-box ul{ margin-left:1em; }
+.help-box li{ margin:4px 0; color:#cfd7e2; }
+.help-math{
+  margin-top:6px;padding:8px;border-radius:10px;
+  background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.12);
+  font-family: ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:13px;color:#dfe7f3;
+}
+.help-note{ font-size:12px;color:var(--muted);margin-top:6px; }
+
+/* ===== 雷達圖彈窗（新增） ===== */
+#radarModal.hidden{ display:none !important; }
+#radarModal{
+  position: fixed; inset: 0; z-index: 210;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,.7);
+}
+.radar-sheet{
+  width: min(980px, 96vw);
+  display: grid; gap: 16px;
+  grid-template-columns: 1fr 280px;
+  background: rgba(20,24,28,.86);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 18px; padding: 16px;
+  backdrop-filter: blur(8px);
+}
+.radar-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:6px; }
+.radar-legend{ display:flex; align-items:center; gap:12px; font-size:13px; color:var(--muted); }
+.radar-dot{ width:10px; height:10px; border-radius:50%; display:inline-block; }
+.radar-canvas-wrap{ display:flex; align-items:center; justify-content:center; }
+.radar-side{ display:flex; flex-direction:column; gap:10px; }
+.radar-side .btn{ width:100%; }
+
+/* 讓「自己的頭像」有可點提示 */
+.player-list .avatar.me{ cursor:pointer; outline:2px solid rgba(255,211,107,.35); }
+.player-list .avatar.me:hover{ outline-color: rgba(255,211,107,.8); }
+
+/* === 懸賞令彈窗：存到個人頁面按鈕 === */
+#bountyModal .bounty-actions{
+  margin-top:10px;
   display:flex;
-  flex-direction: column;
-}
-
-
-.rulesTopBar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding: 14px 16px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-}
-
-.rulesTitleMain{
-  font-size: 18px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.92);
-}
-
-.rulesTitleSub{
-  font-size: 12px;
-  margin-top: 4px;
-  color: rgba(255,255,255,0.60);
-}
-
-.rulesCloseBtn{
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.12);
-  color: rgba(255,255,255,0.86);
-  padding: 8px 12px;
-  border-radius: 10px;
-  cursor: pointer;
-}
-.rulesCloseBtn:hover{
-  background: rgba(255,255,255,0.12);
-}
-
-.rulesBody{
-  padding: 14px 16px;
-  display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: 14px;
-
-  /* 關鍵：固定主內容區高度，讓 footer 不會被圖片擠動 */
-  flex: 1;
-  min-height: 0;
-  overflow: hidden; /* 先不要整塊滾動，改成各欄自己滾 */
-}
-
-@media (max-width: 920px){
-  .rulesBody{
-    grid-template-columns: 1fr;
-  }
-}
-
-.rulesImageWrap{
-  border-radius: 14px;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.10);
-  background: rgba(255,255,255,0.04);
-
-  /* 關鍵：固定圖片區尺寸 */
-  aspect-ratio: 16 / 9;
-  min-height: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-
-.rulesImage{
-  width: 100%;
-  height: 100%;
-  object-fit: contain;   /* 不裁切、完整呈現 */
-  display: block;
-}
-
-.rulesText{
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.10);
-  background: rgba(255,255,255,0.04);
-  padding: 12px 14px;
-  color: rgba(255,255,255,0.86);
-
-  /* 關鍵：文字區自己滾，不影響 footer */
-  overflow: auto;
-  min-height: 0;
-}
-
-
-.rulesBullets{
-  margin: 0;
-  padding-left: 18px;
-  line-height: 1.7;
-  font-size: 14px;
-}
-
-.rulesTip{
-  margin-top: 10px;
-  padding: 10px 12px;
-  border-radius: 12px;
-  background: rgba(255, 190, 88, 0.12);
-  border: 1px solid rgba(255, 190, 88, 0.25);
-  color: rgba(255,255,255,0.90);
-  font-size: 13px;
-}
-
-.rulesFooter{
-  padding: 12px 16px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap: 10px;
-  border-top: 1px solid rgba(255,255,255,0.08);
-}
-
-.rulesNavBtn{
-  padding: 10px 12px;
-  border-radius: 12px;
-  cursor: pointer;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(255,255,255,0.08);
-  color: rgba(255,255,255,0.88);
-}
-
-.rulesNavBtn:disabled{
-  opacity: 0.35;
-  cursor: not-allowed;
-}
-
-.rulesNavBtn.primary{
-  background: rgba(255, 190, 88, 0.16);
-  border-color: rgba(255, 190, 88, 0.35);
-}
-
-.rulesDots{
-  display:flex;
-  gap: 8px;
-  align-items:center;
   justify-content:center;
-  flex: 1;
 }
-
-.rulesDot{
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.18);
-  background: rgba(255,255,255,0.10);
-  cursor: pointer;
+#btnSavePoster{
+  border:1px solid rgba(255,211,107,.55);
+  background:rgba(255,211,107,.14);
+  color:#1b1408;
+  font-weight:800;
+  padding:10px 14px;
+  border-radius:12px;
+  cursor:pointer;
 }
+#btnSavePoster:hover{ filter:brightness(1.08); }
+#btnSavePoster:active{ transform:translateY(1px); }
+#btnSavePoster[disabled]{ opacity:.45; cursor:not-allowed; }
 
-.rulesDot.active{
-  background: rgba(255, 190, 88, 0.55);
-  border-color: rgba(255, 190, 88, 0.75);
-}
-
-.rulesHintLine{
-  padding: 0 16px 12px;
-  color: rgba(255,255,255,0.50);
-  font-size: 12px;
-}
-
-/* 規則內文區塊標題 */
-.rulesSectionTitle{
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 8px;
-  padding-bottom: 6px;
-  color: #ffd36a;
-  border-bottom: 1px solid rgba(255, 211, 106, 0.35);
-  letter-spacing: .02em;
-}
-
-/* 手機：真正全螢幕 */
-@media (max-width: 640px) {
-  .rulesCard{
-    width: 100vw;
-    height: 100dvh;
-    max-height: none;
-    border-radius: 0;
-  }
-}
-
-/* === 27 吋 / 1440p：規則導覽字體升級 === */
-@media (min-width: 1920px) {
-
-  .rulesTitleMain{
-    font-size: 22px;
-  }
-
-  .rulesTitleSub{
-    font-size: 14px;
-  }
-
-  .rulesSectionTitle{
-    font-size: 19px;
-  }
-
-  .rulesBullets{
-    font-size: 16px;
-    line-height: 1.75;
-  }
-
-  .rulesTip{
-    font-size: 15px;
-  }
-
-  .rulesNavBtn{
-    font-size: 16px;
-    padding: 12px 16px;
-  }
-
-  .rulesHintLine{
-    font-size: 13px;
-  }
-}
-
-/* === 4K / 超大螢幕：沉浸式教學字體 === */
-@media (min-width: 2560px) {
-
-  .rulesTitleMain{
-    font-size: 26px;
-  }
-
-  .rulesTitleSub{
-    font-size: 16px;
-  }
-
-  .rulesSectionTitle{
-    font-size: 22px;
-  }
-
-  .rulesBullets{
-    font-size: 18px;
-    line-height: 1.8;
-  }
-
-  .rulesTip{
-    font-size: 17px;
-  }
-
-  .rulesNavBtn{
-    font-size: 18px;
-    padding: 14px 18px;
-  }
-
-  .rulesHintLine{
-    font-size: 15px;
-  }
-}
-
-
-  </style>
+</style>
 </head>
-<body class="no-video">
-  <div class="lock-overlay" id="lockOverlay">
-    <div class="panel">
-      <div class="icon">🔄</div>
-      <div id="txtRotateTitle" class="text-lg font-semibold mb-1">請將手機旋轉至橫向以獲得最佳體驗</div>
-<div id="txtRotateHint" class="text-sm opacity-80">若仍無法旋轉，請解鎖畫面旋轉或從瀏覽器選單開啟「允許旋轉」。</div>
- </div> 
+<body class="view-rank">
+  <div class="header">
+    <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+      <div>
+        <div class="h1">賽季結算</div>
+        <div class="small" id="roomLbl">房號 —</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="badge" id="seasonLbl">Season —</div>
+        <button class="btn" id="openHelp">📖 說明</button>
+        <button class="btn" onclick="fireBounty()">📜 本次懸賞單</button>
+          <button class="btn" onclick="location.href='profile.html'">👤 玩家頁面</button>
+        <button class="btn" onclick="location.href='start.html'">返回主畫面</button>
+      </div>
+    </div>
   </div>
-  <div class="bg-anim">
-    <video id="bgVideo" class="bg-video" autoplay muted loop playsinline preload="auto" poster="images/cover.jpg">
-      <source src="videos/start.mp4" type="video/mp4">
-    </video>
+
+  <!-- 分頁切換：玩家排名 / 詳細數據 -->
+  <div class="wrap">
+    <div class="view-tabs">
+      <button class="tab-btn active" id="btnViewRank">玩家排名</button>
+      <button class="tab-btn" id="btnViewDetail">詳細數據</button>
+    </div>
   </div>
-  <div id="root" class="min-h-dvh flex items-center justify-center p-6"></div>
-  <script>
-    (function initBGVideo(){
-      const v = document.getElementById('bgVideo');
-      if(!v) return;
-      const enableVideo = ()=> document.body.classList.remove('no-video');
-      const fallback = ()=> document.body.classList.add('no-video');
-      v.addEventListener('loadeddata', enableVideo, {once:true});
-      v.addEventListener('canplay', enableVideo, {once:true});
-      v.addEventListener('error', fallback, {once:true});
-      const tryPlay = ()=> v.play().then(enableVideo).catch(fallback);
-      window.addEventListener('pointerdown', tryPlay, {once:true});
-      window.addEventListener('keydown', tryPlay, {once:true});
-      tryPlay();
-    })();
-    (function orientationGate(){
-      const overlay = document.getElementById('lockOverlay');
-      function apply(){
-        const isPortrait = window.matchMedia("(orientation: portrait)").matches;
-        document.body.classList.toggle('lock-scroll', isPortrait);
-        if(overlay){ overlay.style.display = isPortrait ? 'flex' : 'none'; }
-      }
-      window.addEventListener('resize', apply);
-      window.addEventListener('orientationchange', apply);
-      apply();
-    })();
-    async function tryLockLandscape(){
-      try{
-        if(screen.orientation && screen.orientation.lock){
-          await screen.orientation.lock('landscape');
-        }
-      }catch(e){}
+
+  <div class="wrap layout">
+    <!-- 左：玩家清單 -->
+    <aside class="card">
+      <div class="section-title">玩家清單（依金幣排名）</div>
+      <div class="player-list" id="playerList"></div>
+    </aside>
+
+    <!-- 中：指標勾選 -->
+    <aside class="card metrics">
+      <div class="section-title">圖表項目</div>
+      <div class="metric-list" id="metricList"></div>
+      <div class="small" style="margin-top:8px">
+        勾選後，右側每位玩家那列會在同一欄位「並列多條」細長條；數字顯示在各條末端。
+      </div>
+    </aside>
+
+    <!-- 右：統一清單表（每人一列，並列多條） -->
+    <main class="card tablewrap">
+      <table class="table" id="detailTable">
+        <thead>
+          <tr id="theadRow">
+            <th>玩家</th>
+            <th>數據</th>
+          </tr>
+        </thead>
+        <tbody id="tbodyRows"></tbody>
+      </table>
+    </main>
+  </div>
+
+  <!-- === 懸賞金彈窗（修正：bg-black/70） === -->
+  <div id="bountyModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-black/70">
+    <div class="relative" style="display:flex;flex-direction:column;align-items:center">
+      <canvas id="bountyCanvas" width="768" height="1152"></canvas>
+      <button id="closeBounty" class="absolute top-2 right-2 px-3 py-1 text-sm bg-black/70 text-white rounded">✕</button>
+      <div class="bounty-actions">
+        <button id="btnSavePoster" type="button" disabled>存到個人頁面</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- === 說明面板（新） === -->
+  <div id="helpModal" class="hidden fixed inset-0 z-[200] flex items-center justify-content-center bg-black/70">
+    <div class="help-sheet">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px">
+        <div>
+          <div class="help-title">分數與懸賞金說明</div>
+          <div class="help-sub">簡易版規則，給玩家快速理解計分方式</div>
+        </div>
+        <button class="btn" id="closeHelp">關閉</button>
+      </div>
+
+      <div class="help-grid">
+        <div class="help-box">
+          <h4>金幣（coinScore）</h4>
+          <ul>
+            <li>每局勝者拿金幣：<b>1（保底）+ 當局擊倒數 + 平手延長加成</b></li>
+            <li>羅傑若預測到勝者：再拿同量金幣（命中分另計）</li>
+          </ul>
+        </div>
+        <div class="help-box">
+          <h4>攻擊（atkScore）</h4>
+          <ul>
+            <li>決鬥勝利 ⇒ 取<b>尾數差</b>（我 − 對手，≤0 不加）</li>
+            <li>香吉士強化：先 +1 再比較</li>
+            <li>凱多/基拉強化決鬥：<b>無視防禦/閃避 ×2</b></li>
+            <li>魯夫強化（群鴉砲）：同時擊倒多人 ⇒ <b>×人數</b></li>
+            <li>凱多強化清場：被清場者尾數總和 ×2 ×人數</li>
+          </ul>
+        </div>
+        <div class="help-box">
+          <h4>防禦（defScore）</h4>
+          <ul>
+            <li><b>擋住/抵消</b>他人效果：加<b>攻方那張牌的尾數</b>（例：索隆5被擋 +5）</li>
+            <li><b>反殺</b>（遭決鬥但你贏）：加<b>你的尾數 − 攻方尾數</b>，同樣吃該決鬥的加乘</li>
+          </ul>
+        </div>
+        <div class="help-box">
+          <h4>命中（hitScore）</h4>
+          <ul>
+            <li>騙人布猜中尾數：對手尾數 × 連擊數</li>
+            <li>索隆擊倒：對手尾數 ×2</li>
+            <li>羅傑預測成功：該局勝者實拿金幣 ×5</li>
+          </ul>
+        </div>
+        <div class="help-box">
+          <h4>偵查（intelScore）</h4>
+          <ul>
+            <li>看見的每張牌，都加該牌<b>尾數</b>（羅賓、羅檢視、黑鬍子覆蓋、卡塔庫栗預知）</li>
+          </ul>
+        </div>
+        <div class="help-box">
+          <h4>生存（survivalScore）</h4>
+          <ul>
+            <li>每輪到你一次：+1</li>
+            <li>進入最終比牌：×2；若又拿到最終勝利：再 ×2</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="help-box" style="margin-top:12px">
+        <h4>懸賞金（最後換算）</h4>
+        <div class="help-math">懸賞金 ＝ 金幣 × 200,000,000 ＋ (攻擊＋命中) × 10,000,000 ＋ (防禦＋偵查＋生存) × 5,000,000，再乘上玩家數平衡係數 (6 / 玩家數)。</div>
+        <div class="help-note">※ 玩家越多，係數越小，避免人多房的懸賞金爆炸；不同房仍可以互相比較。</div>
+      </div>
+
+<div class="help-box" style="margin-top:12px">
+  <h4>稱號系統（如何拿到那些帥稱號？）</h4>
+  <ul>
+    <li><b>1️⃣ 先算出個人懸賞金</b>：用上面那個懸賞金公式，再依照玩家人數做平衡。</li>
+    <li><b>2️⃣ 用懸賞金決定等級（Tier 1～6）</b>：</li>
+  </ul>
+  <div class="help-math">
+    <div>Tier 1：懸賞金 &lt; 10 億</div>
+    <div>Tier 2：10 億 ～ &lt; 30 億</div>
+    <div>Tier 3：30 億 ～ &lt; 40 億</div>
+    <div>Tier 4：40 億 ～ &lt; 50 億</div>
+    <div>Tier 5：50 億 ～ &lt; 60 億</div>
+    <div>Tier 6：60 億以上（傳說級）</div>
+  </div>
+
+  <ul style="margin-top:6px">
+    <li><b>3️⃣ 看你本場最突出的能力項目</b>：在「攻擊 / 命中 / 防禦 / 偵查 / 生存」五項裡，<b>哪一項分數最高，就用那一項當主屬性</b>。</li>
+    <li><b>4️⃣ 用「主屬性 + Tier」對應到稱號文字</b>：</li>
+  </ul>
+
+  <div class="help-math">
+    <div><b>攻擊</b>：斬斷鋼鐵的力量 → 世界最強生物</div>
+    <div><b>命中</b>：騙人布橡皮筋 → 我能打中螞蟻的眉心</div>
+    <div><b>防禦</b>：六式 鐵塊 → 屏障果實能力者</div>
+    <div><b>偵查</b>：航海士見習生 → 世界經濟新聞報社社長</div>
+    <div><b>生存</b>：騙人布的生存之道 → 不死神之騎士團</div>
+  </div>
+
+  <div class="help-note">
+    ※ 例如：你的「攻擊分」在全場最高，最後懸賞金落在 40～50 億，就會拿到「攻擊・Tier 4」對應的稱號「鐵拳」。<br/>
+    ※ 只有 <b>Tier 6</b>（60 億以上）的稱號，會在結算畫面顯示<b>皇冠特效</b>。
+  </div>
+</div>
+
+    </div>
+  </div>
+
+
+
+  <!-- === 雷達圖（我的 vs. 單一對手）【新增】 === -->
+  <div id="radarModal" class="hidden">
+    <div class="radar-sheet">
+      <div>
+        <div class="radar-head">
+          <div class="section-title">能力雷達圖</div>
+          <div class="radar-legend">
+            <span><span class="radar-dot" style="background:#4e9cff"></span> 我</span>
+            <span><span class="radar-dot" style="background:#ff6384"></span> 對手</span>
+          </div>
+        </div>
+        <div class="radar-canvas-wrap">
+          <canvas id="radarCanvas" width="600" height="600"></canvas>
+        </div>
+      </div>
+      <div class="radar-side">
+        <div class="small">選擇要比較的對手（一次一位）：</div>
+        <select id="oppoSelect" class="btn"></select>
+        <button id="closeRadar" class="btn">關閉</button>
+      </div>
+    </div>
+  </div>
+
+<script src="https://onepiece-card-online.onrender.com/socket.io/socket.io.js"></script>
+<script>
+/* ====== 全域狀態 ====== */
+const RESUME = true;
+let LAST_FINAL = null;   // 最新 final
+let STATE = null;        // 最新 socket 狀態
+let MY_PID = null;       // 我的 pid（與 id 不同）
+let MY_ID = null;
+
+// ====== 玩家頁 localStorage keys（與 profile.html 對齊）=====
+const LS_KEY_PROFILE = 'op_profile_v1';        // profile.html 讀 recent 的 key
+const LS_KEY_POSTERS = 'op_bounty_posters_v1'; // profile.html 讀懸賞令牆面的 key
+
+function safeJsonParse(raw, fallback){
+  try{ return JSON.parse(raw); }catch(e){ return fallback; }
+}
+
+
+/* ===== 稱號 tier：結算匯入到玩家頁（op_profile_v1.titles.owned） =====
+ * 目標格式：
+ *   titles.owned = [{label:"稱號", tier:1..6}, ...]
+ * 相容舊格式：
+ *   titles.owned = ["稱號", ...]
+ */
+function normTier(t){
+  const n = Number(t);
+  if(!Number.isFinite(n)) return 1;
+  return Math.max(1, Math.min(6, Math.round(n)));
+}
+function normalizeOwnedTitles(arr){
+  const out = [];
+  const list = Array.isArray(arr) ? arr : [];
+  for(const it of list){
+    let label = '';
+    let tier = 1;
+    if(typeof it === 'string'){
+      label = String(it).trim();
+      tier = 1;
+    }else if(it && typeof it === 'object'){
+      label = String(it.label ?? it.text ?? '').trim();
+      tier = normTier(it.tier ?? it.level ?? 1);
+    }
+    if(!label) continue;
+    const hit = out.find(x => x.label === label);
+    if(hit) hit.tier = Math.max(hit.tier, tier);
+    else out.push({ label, tier });
+  }
+  return out;
+}
+function upsertOwnedTitle(owned, label, tier){
+  const L = String(label||'').trim();
+  if(!L) return normalizeOwnedTitles(owned);
+  const t = normTier(tier || 1);
+  const arr = normalizeOwnedTitles(owned);
+  const hit = arr.find(x => x.label === L);
+  if(hit) hit.tier = Math.max(hit.tier, t);
+  else arr.push({ label: L, tier: t });
+  return arr;
+}
+
+
+// --- 懸賞令牆面：最多 4 張 ---
+// --- 懸賞令牆面：最多 4 張（新增：key 去重） ---
+function loadPosters(){
+  const arr = safeJsonParse(localStorage.getItem(LS_KEY_POSTERS), []);
+  return Array.isArray(arr) ? arr : [];
+}
+function savePosters(list){
+  try{
+    localStorage.setItem(LS_KEY_POSTERS, JSON.stringify((list||[]).slice(0,4)));
+  }catch(e){}
+}
+
+/**
+ * pushPoster({ key, title, dataUrl })
+ * - key：用 matchKey（room|season|pid|endedAt）當作「這一場」的唯一識別
+ * - 若 key 已存在：不重複寫入（解決連按本次懸賞單造成牆面一堆同圖）
+ */
+function pushPoster({ key, title, dataUrl }){
+  const ts = Date.now();
+  const K  = String(key || '').trim();
+  const T  = String(title || '').trim();
+  const D  = String(dataUrl || '');
+
+  if(!D.startsWith('data:image')) return false;
+
+  const posters = loadPosters()
+    .filter(x => x && typeof x === 'object' && typeof x.dataUrl === 'string' && x.dataUrl.startsWith('data:image'))
+    .map(x => ({
+      ts: Number(x.ts)||0,
+      key: String(x.key||'').trim(),
+      title: String(x.title||'').trim(),
+      dataUrl: String(x.dataUrl||'')
+    }));
+
+  // key 去重：同一場同一人，不再塞入
+  if (K && posters.some(p => p.key === K)) return false;
+
+  posters.unshift({ ts, key: K || '', title: T, dataUrl: D });
+  savePosters(posters);
+  return true;
+}
+
+function safeJsonParse(raw, fallback=null){
+  try{ return JSON.parse(raw); }catch(e){ return fallback; }
+}
+function loadPosterMetas(){
+  const raw = localStorage.getItem('op_bounty_posters_v1');
+  const arr = safeJsonParse(raw, null);
+  if(!Array.isArray(arr)) return [];
+  return arr
+    .filter(x => x && typeof x === 'object')
+    .map(x => ({
+      key: String(x.key||''),
+      ts: Number(x.ts)||0,
+      title: String(x.title||''),
+      name: String(x.name||''),
+      bounty: String(x.bounty||''),
+      avatarId: Number(x.avatarId)||1,
+      // 舊資料若還有 dataUrl 也不會壞
+      dataUrl: (typeof x.dataUrl === 'string') ? x.dataUrl : ''
+    }))
+    .filter(x => x.key)
+    .slice(0,4);
+}
+function savePosterMetas(list){
+  try{ localStorage.setItem('op_bounty_posters_v1', JSON.stringify((list||[]).slice(0,4))); }catch(e){}
+}
+
+// 新：只存資料（不存圖）
+function pushPosterMeta(meta){
+  const m = meta || {};
+  const key = String(m.key||'').trim();
+  if(!key) return;
+
+  const list = loadPosterMetas();
+  // key 去重：同 key 先移除舊的
+  const next = [m, ...list.filter(x => String(x.key||'') !== key)].slice(0,4);
+  savePosterMetas(next);
+
+  // ✅ 同步進 op_profile_v1（讓 cloudSyncPushNow 會帶上去）
+  try{
+    const pRaw = localStorage.getItem('op_profile_v1');
+    const p = safeJsonParse(pRaw, null);
+    if(p && typeof p === 'object'){
+      p.bountyPosters = next; // 新欄位
+      localStorage.setItem('op_profile_v1', JSON.stringify(p));
+    }
+  }catch(e){}
+}
+
+
+// --- 最近 10 場：寫到 op_profile_v1.recent ---
+function loadProfile(){
+const base = {
+  version: 1,
+  totals: { games: 0, wins: 0, coins: 0 },
+  recent: [],
+  deluxeUnlocked: [],        // ✅ 新增
+  titles: { owned: [], equipped: '', equippedTier: 1 },
+  _appliedMatchKeys: []
+};
+
+
+  const raw = localStorage.getItem(LS_KEY_PROFILE);
+  const p = safeJsonParse(raw, null);
+
+  if(!p || typeof p !== 'object') return base;
+
+  const out = {
+    ...base,
+    ...p,
+    totals: { ...base.totals, ...(p.totals||{}) },
+    titles: { ...base.titles, ...(p.titles||{}) },
+  };
+
+  if(!Array.isArray(out.recent)) out.recent = [];
+  if(!Array.isArray(out.titles.owned)) out.titles.owned = [];
+  out.titles.equipped = String(out.titles.equipped || '').trim();
+
+  // 相容舊資料：owned 可能是字串陣列；一律正規化成 {label,tier}
+  out.titles.owned = normalizeOwnedTitles(out.titles.owned);
+  // equippedTier 若缺少，嘗試從 owned 中補
+  if(!out.titles.equippedTier) out.titles.equippedTier = 1;
+  out.titles.equippedTier = normTier(out.titles.equippedTier || 1);
+  if(out.titles.equipped){
+    const hit = out.titles.owned.find(x => x.label === out.titles.equipped);
+    if(hit) out.titles.equippedTier = normTier(Math.max(out.titles.equippedTier||1, hit.tier||1));
+  }
+
+  if(!Array.isArray(out._appliedMatchKeys)) out._appliedMatchKeys = [];
+  out._appliedMatchKeys = out._appliedMatchKeys.map(x=>String(x||'')).filter(Boolean).slice(0, 200);
+
+  out.totals.games = Number(out.totals.games)||0;
+  out.totals.wins  = Number(out.totals.wins)||0;
+  out.totals.coins = Number(out.totals.coins)||0;
+
+  return out;
+}
+function saveProfile(p){
+  try{ localStorage.setItem(LS_KEY_PROFILE, JSON.stringify(p)); }catch(e){}
+}
+
+/**
+ * 最近戰績：用 matchKey 去重，最多 10 筆
+ * 另外：同一個 matchKey 只會累加 totals 一次，避免「刷新結算頁」造成重複加總
+ */
+function pushRecentMatch(item){
+  const p = loadProfile();
+
+  const mk = String(item?.matchKey || '').trim();
+  const place = (item?.place == null || item?.place==='') ? null : Number(item.place);
+  const coinsGain = Number(item?.coinsGain ?? 0) || 0;
+
+  // 1) totals 去重累加（用 matchKey）
+  if(mk && !p._appliedMatchKeys.includes(mk)){
+    p._appliedMatchKeys.unshift(mk);
+    p._appliedMatchKeys = p._appliedMatchKeys.slice(0, 200);
+
+    p.totals.games = (Number(p.totals.games)||0) + 1;
+    if(place === 1) p.totals.wins = (Number(p.totals.wins)||0) + 1;
+    p.totals.coins = (Number(p.totals.coins)||0) + coinsGain;
+  }
+
+  // 2) recent（最多 10 筆；同 matchKey 覆蓋）
+  const arr = Array.isArray(p.recent) ? p.recent : [];
+  const next = [item, ...arr.filter(x => String(x?.matchKey||'') !== mk)].slice(0,10);
+  p.recent = next;
+
+// 3) 豪華解鎖：union 進 deluxeUnlocked
+try{
+  const unlocked = Array.isArray(item?.unlocked) ? item.unlocked : [];
+  const merged = Array.from(new Set([
+    ...(Array.isArray(p.deluxeUnlocked) ? p.deluxeUnlocked : []),
+    ...unlocked.map(x=>Number(x)).filter(n=>Number.isFinite(n))
+  ]));
+  p.deluxeUnlocked = merged;
+}catch(e){}
+
+
+  saveProfile(p);
+}
+
+const qs = new URLSearchParams(location.search);
+const roomId = qs.get('room') || sessionStorage.getItem('op_room') || '—';
+document.getElementById('roomLbl').textContent = '房號 ' + roomId;
+
+/* avatar 路徑修正 */
+/* avatar 路徑修正（支援數字頭像 & cpu1 這種字串） */
+function avatarUrl(v){
+  if (v == null) return '';
+
+  // 數字：1 ~ 30 → 直接當成編號
+  if (typeof v === 'number') {
+    return `images/avatars/${v}.webp`;
+  }
+
+  // 完整網址
+  if (/^https?:\/\//i.test(v)) return v;
+
+  if (typeof v === 'string') {
+    // 已經是含路徑的相對/絕對路徑
+    if (v.includes('/')) return v;
+
+    // 已經帶副檔名，例如 "cpu1.webp"
+    if (/\.(png|jpe?g|webp|gif|svg)$/i.test(v)) {
+      return `images/avatars/${v}`;
     }
 
-(function applyStaticI18n(){
-  const I18N = window.__I18N;
-  if(!I18N) return;
-  const $t = (k)=>I18N.t(k);
+    // 純檔名，例如 "cpu1" → 幫你補上 .webp
+    return `images/avatars/${v}.webp`;
+  }
 
-  const a = document.getElementById('txtRotateTitle');
-  const b = document.getElementById('txtRotateHint');
-  if(a) a.textContent = $t('ui.rotateTitle');
-  if(b) b.textContent = $t('ui.rotateHint');
-
-  document.documentElement.setAttribute('lang', I18N.getLang());
-})();
+  return '';
+}
 
 
-  </script>
+/* 勾選的指標（移除總分） */
+const METRICS = [
+  { key:'coinScore',  title:'金幣' },
+  { key:'atkScore',   title:'攻擊' },
+  { key:'defScore',   title:'防禦' },
+  { key:'hitScore',   title:'命中' },
+  { key:'intelScore', title:'偵查' },
+  { key:'survivalScore', title:'生存' }
+];
 
-  <script type="text/babel" data-presets="env,react">
-    // === (2) 連線與全域參數：置於 React 程式碼最上方 ===
-    const SERVER_URL = 'https://onepiece-card-online.onrender.com';
-    const socket = io(SERVER_URL, { transports: ['websocket'] });
+/* 對應：key → 中文名稱（給稱號顯示用） */
+const METRIC_NAME_MAP = {
+  atkScore: '攻擊',
+  hitScore: '命中',
+  defScore: '防禦',
+  intelScore: '偵查',
+  survivalScore: '生存'
+};
+
+/* 各項目、各區間的稱號表（1–6 對應你的區間） */
+const TITLE_TABLE = {
+  atkScore: {
+    1:'  斬斷鋼鐵的力量  ',
+    2:'  流櫻見習生  ',
+    3:'  霸王色纏繞者  ',
+    4:'  鐵拳  ',
+    5:'  世界最強的男人  ',
+    6:'  世界最強生物  '
+  },
+  hitScore: {
+    1:'  騙人布橡皮筋  ',
+    2:'  狙擊手  ',
+    3:'  狙擊王  ',
+    4:'  神的制裁  ',
+    5:'  超音速狙擊手  ',
+    6:'  我能打中螞蟻的眉心  '
+  },
+  defScore: {
+    1:'  六式 鐵塊  ',
+    2:'  武裝色初學者  ',
+    3:'  鋼鐵氣球  ',
+    4:'  鑽石喬茲  ',
+    5:'  露娜利亞族  ',
+    6:'  屏障果實能力者  '
+  },
+  intelScore: {
+    1:'  航海士見習生  ',
+    2:'  監視電話蟲  ',
+    3:'  見聞色高手  ',
+    4:'  CP9 情報官  ',
+    5:'  CP0 諜報員  ',
+    6:'  世界經濟新聞報社社長  '
+  },
+  survivalScore: {
+    1:'  騙人布的生存之道  ',
+    2:'  奇蹟 Boy  ',
+    3:'  巨人族  ',
+    4:'  不死鳥馬可  ',
+    5:'  古代種的韌性  ',
+    6:'  不死神之騎士團  '
+  }
+};
+
+let ORDERED_IDS = []; // 依金幣排名
+let ROWS = [];        // 每位玩家的分數
+let ACTIVE = new Set(['coinScore']); // 預設顯示：金幣
+
+/* ===== 懸賞計算工具（與海報同公式） ===== */
+function computeBountyFromScore(score, playerCount){
+  const s = score || {};
+  const coins = +s.coinScore || 0;
+  const atk   = +s.atkScore   || 0;
+  const hit   = +s.hitScore   || 0;
+  const def   = +s.defScore   || 0;
+  const intel = +s.intelScore || 0;
+  const surv  = +s.survivalScore || 0;
+
+  const N = playerCount || 4;
+  const factor = 6 / N;
+
+  return (
+    coins * 200000000 * factor +
+    (atk + hit) * 10000000 * factor +
+    (def + intel + surv) * 5000000 * factor
+  );
+}
+
+/* 把懸賞金換算成「幾億」（字串） */
+function formatBountyYi(bounty){
+  if(!bounty || bounty <= 0) return '0 億';
+  const yi = bounty / 100000000; // 1 億 = 1e8
+  let s = yi >= 10 ? yi.toFixed(0) : yi.toFixed(1);
+  s = s.replace(/\.0$/,'');
+  return s + ' 億';
+}
+
+/* 依 6 個區間，決定 tier（1~6） */
+function decideTierByBounty(bounty){
+  if (bounty <   1000000000) return 1; // <10 億
+  if (bounty <   3000000000) return 2; // 10–30 億
+  if (bounty <   4000000000) return 3; // 30–40 億
+  if (bounty <   5000000000) return 4; // 40–50 億
+  if (bounty <   6000000000) return 5; // 50–60 億
+  return 6;                             // 60 億以上
+}
+
+/* 找出這位玩家本次「哪個項目最高」→ atk / hit / def / intel / survival */
+function pickMainMetricKey(row){
+  const keys = ['atkScore','hitScore','defScore','intelScore','survivalScore'];
+  let bestKey = keys[0];
+  let bestVal = -Infinity;
+  for(const k of keys){
+    const v = Number(row[k]||0);
+    if (v > bestVal){
+      bestVal = v;
+      bestKey = k;
+    }
+  }
+  return bestKey;
+}
+
+/* 依懸賞區間 + 主項目，決定稱號文字與 tier */
+function getTitleInfoForRow(row, playerCount){
+  const score = {
+    coinScore: row.coinScore,
+    atkScore: row.atkScore,
+    defScore: row.defScore,
+    hitScore: row.hitScore,
+    intelScore: row.intelScore,
+    survivalScore: row.survivalScore
+  };
+  const bounty = computeBountyFromScore(score, playerCount);
+  const tier = decideTierByBounty(bounty);
+  const mainKey = pickMainMetricKey(row);
+  const tableByKey = TITLE_TABLE[mainKey] || {};
+  const label = tableByKey[tier] || '';
+  const metricName = METRIC_NAME_MAP[mainKey] || '';
+
+  return {
+    bounty,
+    tier,
+    mainKey,
+    metricName,
+    label
+  };
+}
+
+/* 左欄玩家清單 */
+function renderPlayersLeft(final, myId){
+  const el = document.getElementById('playerList');
+  const playerCount = (final.playerCount) ||
+    Object.keys(final.playersMeta || {}).length ||
+    (final.ranking ? final.ranking.length : 4);
+
+  const list = (final.ranking||[]).map((r,idx)=>{
+    const pm = final.playersMeta?.[r.id] || {};
+    const name = r.name || pm.name || ('P'+(r.id+1));
+    const pid  = (r.pid != null ? r.pid : pm.pid) ?? '';
+    const ava  = (r.avatar != null ? r.avatar : pm.avatar) ?? '';
+    const coins = r.coins || 0;
+
+    const row = ROWS.find(x=>x.id===r.id) || {
+      coinScore:coins, atkScore:0, defScore:0, hitScore:0, intelScore:0, survivalScore:0
+    };
+    const info = getTitleInfoForRow(row, playerCount);
+    const rawBounty = Math.floor(info.bounty || 0);
+    const bountyStr = rawBounty.toLocaleString('en-US'); // 詳細數字＋千分位
+    const tierClass = info.tier ? ('tier-'+info.tier) : 'tier-1';
+
+    return {
+      idx:idx+1,
+      id:r.id,
+      name,
+      pid,
+      ava,
+      coins,
+      tierClass,
+      bountyStr,
+      titleLabel: info.label
+    };
+  });
+  ORDERED_IDS = list.map(p=>p.id);
+
+  el.innerHTML = list.map((p,i)=>{
+    const isMe = (myId != null && p.id === myId) || (MY_PID != null && String(p.pid) === String(MY_PID));
+    const highlight = (myId != null || MY_PID != null) ? isMe : (i === 0);
+    const titleText = p.titleLabel ? `${p.titleLabel}` : '';
+
+    return `
+      <div class="player-item ${highlight ? 'top1' : ''} ${p.tierClass}">
+        <div class="rank-dot">${p.idx}</div>
+
+        <div class="avatar-col">
+          <img class="avatar ${isMe?'me':''}"
+               data-id="${p.id}"
+               ${isMe?'title="點我看雷達圖"':''}
+               src="${avatarUrl(p.ava)}" alt="">
+          <div class="avatar-meta">
+            <div class="coins">${p.coins}</div>
+            <div class="player-bounty">
+              <div class="player-bounty-amt">懸賞金 ${p.bountyStr}</div>
+              ${titleText ? `
+               <div class="player-title-badge">
+  ${p.tierClass === 'tier-6' ? `
+    <div class="glow"></div>
+    <span class="crown">👑</span>
+    <span class="text">${titleText}</span>
+    <div class="pendant"></div>
+  ` : `
+    <span class="text">${titleText}</span>
+  `}
+</div>
+
+              ` : ''}
+            </div>
+          </div>
+        </div>
+
+        <div class="pinfo">
+          <div class="pname">${p.name}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // 綁定：只有「自己」的頭像能打開雷達圖（保持不動）
+  el.querySelectorAll('img.avatar.me').forEach(img=>{
+    img.addEventListener('click', ()=>{
+      const myIdResolved = Number(img.getAttribute('data-id'));
+      openRadar(myIdResolved);
+    });
+  });
+}
+
+/* 勾選面板 */
+function buildMetricPanel(){
+  const ml = document.getElementById('metricList');
+  ml.innerHTML = METRICS.map(m=>{
+    const on = ACTIVE.has(m.key);
+    return `
+      <label class="metric ${on?'active':''}" data-key="${m.key}">
+        <input type="checkbox" value="${m.key}" ${on?'checked':''}/>
+        <span>${m.title}</span>
+      </label>
+    `;
+  }).join('');
+
+  ml.querySelectorAll('label.metric').forEach(lbl=>{
+    const key = lbl.getAttribute('data-key');
+    const cb = lbl.querySelector('input[type="checkbox"]');
+    cb.addEventListener('change', ()=>{
+      if(cb.checked) ACTIVE.add(key); else ACTIVE.delete(key);
+      lbl.classList.toggle('active', cb.checked);
+      renderDetailTable();
+    });
+  });
+}
+
+/* 單一玩家一列：在同一欄位並列多條（每個勾選的指標各一條）
+   cap 規則：cap = (本場該指標最大值) + 10；若全為 0，cap = 10。 */
+function renderMetricsCell(r, capMap){
+  const keys = Array.from(ACTIVE);
+  if(keys.length===0) return '<div class="small" style="color:var(--muted)">（尚未勾選項目）</div>';
+
+  const lines = keys.map(key=>{
+    const m = METRICS.find(x=>x.key===key);
+    const val = Number(r[key]||0);
+    const cap = Math.max(10, capMap[key] || 10);
+    const pct = Math.max(0, Math.min(100, (100*val/cap)));
+    const showInside = pct >= 18;
+    return `
+      <div class="metric-line">
+        <span class="metric-badge">${m?m.title:key}</span>
+        <div class="bar-wrap">
+          <div class="bar"></div>
+          <div class="fill" style="width:${pct}%"></div>
+          ${showInside ? `<span class="val-in">${val}</span>` : ``}
+        </div>
+        ${!showInside ? `<span class="val-out">${val}</span>` : ``}
+      </div>
+    `;
+  }).join('');
+
+  return `<div class="metrics-cell">${lines}</div>`;
+}
+
+/* 右側表格 */
+function renderDetailTable(){
+  const thead = document.getElementById('theadRow');
+  const tbody = document.getElementById('tbodyRows');
+
+  thead.innerHTML = `<th>玩家</th><th>數據</th>`;
+
+  // 依規格：cap = 本場最大值 + 10；若全 0，cap=10
+  const capMap = {};
+  for(const key of ACTIVE){
+    const maxVal = Math.max(0, ...ROWS.map(r=> Number(r[key]||0) ));
+    capMap[key] = Math.max(10, maxVal + 10);
+  }
+
+  tbody.innerHTML = ORDERED_IDS.map(id=>{
+    const r = ROWS.find(x=>x.id===id) || {};
+    const playerCell = `
+      <div class="cell-player">
+        <img class="avatar" src="${avatarUrl(r.avatar)}" alt="">
+        <div>
+          <div class="name">${r.name||('P'+(id+1))}</div>
+        </div>
+      </div>
+    `;
+    return `<tr>
+      <td>${playerCell}</td>
+      <td>${renderMetricsCell(r, capMap)}</td>
+    </tr>`;
+  }).join('');
+}
+
+/* 主渲染 */
+function renderFinal(final){
+  document.getElementById('seasonLbl').textContent = 'Season ' + (final.seasonNo||1);
+  LAST_FINAL = final;
+
+  const playerCount = final.playerCount ||
+    Object.keys(final.playersMeta || {}).length ||
+    (final.ranking ? final.ranking.length : 4);
+
+  MY_ID = guessMyId(final, MY_PID);
+
+  const names={}, avatars={}, pids={};
+  (final.ranking||[]).forEach(r=>{
+    const pm = final.playersMeta?.[r.id] || {};
+    names[r.id]   = r.name ?? pm.name ?? ('P'+(r.id+1));
+    avatars[r.id] = (r.avatar != null ? r.avatar : pm.avatar) ?? '';
+    pids[r.id]    = (r.pid != null ? r.pid : pm.pid) ?? '';
+  });
+  if(final.playersMeta){
+    for(const [k,pm] of Object.entries(final.playersMeta)){
+      const i = +k;
+      if(!names[i])   names[i] = pm.name || ('P'+(i+1));
+      if(!avatars[i]) avatars[i] = pm.avatar ?? '';
+      if(typeof pids[i]==='undefined') pids[i] = pm.pid ?? '';
+    }
+  }
+
+  ROWS = Object.keys(final.scoreboard||{}).map(k=>{
+    const id = +k; const s = final.scoreboard[id]||{};
+    const row = {
+      id,
+      name:names[id],
+      avatar:avatars[id],
+      pid:pids[id],
+      coinScore:s.coinScore||0,
+      atkScore:s.atkScore||0,
+      defScore:s.defScore||0,
+      hitScore:s.hitScore||0,
+      intelScore:s.intelScore||0,
+      survivalScore:s.survivalScore||0
+    };
+
+    const info = getTitleInfoForRow(row, playerCount);
+    row.bounty = info.bounty;
+    row.titleTier = info.tier;
+    row.mainMetricKey = info.mainKey;
+    row.mainMetricName = info.metricName;
+    row.titleLabel = info.label;
+    return row;
+  });
+
+  renderPlayersLeft(final, MY_ID);
+  buildMetricPanel();
+  renderDetailTable();
+
+  // === 自動匯入最近 10 場到玩家頁（op_profile_v1.recent）===
+  try{
+    // 1) 算出我在 ranking 的名次與 coinScore
+    const myId = MY_ID != null ? MY_ID : guessMyId(final, MY_PID);
+    const ranking = Array.isArray(final?.ranking) ? final.ranking : [];
+    const idx = ranking.findIndex(r => Number(r?.id) === Number(myId));
+    const place = (idx >= 0) ? (idx + 1) : null;
+
+// === 自動匯入「已取得稱號」到玩家頁（含 Tier） ===
+try {
+  const myId = MY_ID != null ? MY_ID : guessMyId(final, MY_PID);
+  const myRow = ROWS.find(r => Number(r.id) === Number(myId));
+
+  // titleLabel：稱號文字；titleTier：1..6（Tier 6 會在玩家頁顯示皇冠）
+  if (myRow && myRow.titleLabel) {
+    const label = String(myRow.titleLabel||'').trim();
+    const tier  = normTier(myRow.titleTier || 1);
+
+    const p = loadProfile();
+    if (!p.titles) p.titles = { owned: [], equipped: '', equippedTier: 1 };
+
+    // 1) owned：寫入 {label,tier}（去重、保留較高 tier）
+    p.titles.owned = upsertOwnedTitle(p.titles.owned, label, tier);
+
+    // 2) equipped：若尚未佩戴任何稱號，預設戴最新的；並同步 tier
+    if (!String(p.titles.equipped||'').trim()) {
+      p.titles.equipped = label;
+      p.titles.equippedTier = tier;
+    } else {
+      // 若已佩戴同一個稱號，tier 也補齊/升級
+      if (String(p.titles.equipped).trim() === label) {
+        p.titles.equippedTier = normTier(Math.max(Number(p.titles.equippedTier||1), tier));
+      }
+    }
+
+    saveProfile(p);
+  }
+} catch (e) {
+  console.warn('[save title failed]', e);
+}
+
+
+
+    // 這份結算頁的 scoreboard.coinScore 就是「金幣」分數
+    const myRow = ROWS.find(r => Number(r?.id) === Number(myId));
+    const coinsGain = Number(myRow?.coinScore ?? 0);
+
+    // 2) 做一個去重 key（避免刷新頁面寫入重複）
+    const season = final?.seasonNo ?? final?.season ?? '';
+    const endedAt = Number(final?.endedAt || final?.ts || Date.now());
+    const pid = (MY_PID ?? sessionStorage.getItem('op_pid') ?? '');
+    const rid = (qs.get('room') || sessionStorage.getItem('op_room') || '');
+
+// ✅ 從 game.html 暫存撿回來（本局豪華解鎖）
+let unlockedNow = [];
+try{
+  unlockedNow = JSON.parse(sessionStorage.getItem('op_unlocked_this_match') || '[]')
+    .map(x=>Number(x)).filter(n=>Number.isFinite(n));
+}catch(e){ unlockedNow = []; }
+
+pushRecentMatch({
+  matchKey: `${rid}|${season}|${pid}|${endedAt}`,
+  ts: endedAt,
+  place,
+  coinsGain,
+  unlocked: unlockedNow
+});
+
+// ✅ 寫完就清掉，避免下一局沿用
+try{ sessionStorage.removeItem('op_unlocked_this_match'); }catch(e){}
+
+
+cloudSyncPushNow(socket);
+
+
+  }catch(e){
+    console.warn('[pushRecentMatch failed]', e);
+  }
+
+  // === 自動存本次懸賞令到玩家頁牆面（不開彈窗、且用 key 去重）===
+  try{
+    const myId = MY_ID != null ? MY_ID : guessMyId(final, MY_PID);
+    // 不開 modal，只生成並寫入 localStorage（profile.html 會顯示最近 4 張）
+    showBounty(final, myId, { openModal:false });
+  }catch(e){
+    console.warn('[auto save bounty poster failed]', e);
+  }
+
+
+
+}
+
+/* ====== 啟動階段：載入快取 +（可選）接續監看 ====== */
+(function init(){
+  const pidUrl   = qs.get('pid');
+  const pidSS    = sessionStorage.getItem('op_pid');
+  const pidState = STATE?.myPlayerId || STATE?.me?.playerId;
+  MY_PID = pidUrl || pidSS || pidState || null;
+  console.log('[MY_PID resolved]', { pidUrl, pidSS, pidState, MY_PID });
+
+  try{
+    const cached=sessionStorage.getItem('op_final');
+    if(cached){ renderFinal(JSON.parse(cached)); }
+  }catch(e){ console.warn(e); }
+
+  if(!RESUME) return;
+
+  const serverURL = new URLSearchParams(location.search).get('server')
+  || "https://onepiece-card-online.onrender.com";
+  const socket = io(serverURL, { transports: ['websocket'] });
 
 // ===== Cloud Sync helpers (op_profile_v1 <-> player_profiles.stats.client) =====
 const LS_KEY_PROFILE = 'op_profile_v1';
@@ -516,6 +1623,10 @@ function mergeLocalAndCloud(localClient, cloudClient){
   out._appliedMatchKeys = uniqStr([...(localClient._appliedMatchKeys||[]), ...(cloudClient._appliedMatchKeys||[])])
     .slice(0,200);
 
+if(!Array.isArray(out.deluxeUnlocked)) out.deluxeUnlocked = [];
+out.deluxeUnlocked = out.deluxeUnlocked.map(x=>Number(x)).filter(n=>Number.isFinite(n));
+
+
   return out;
 }
 
@@ -596,1102 +1707,485 @@ async function cloudSyncPushNow(socket){
 }
 
 
-    // === 等待室本地狀態（非必須存在於 localStorage）
-    let __lobby = {
-      roomId:'',
-      me:{ playerId:null, secret: localStorage.getItem('opSecret')||'', name:'', avatar:1 },
-      snapshot:null
-    };
-
-    // 伺服器回覆：拿到自己的 playerId / secret
-    socket.on('JOINED', ({ playerId, secret })=>{
-      __lobby.me.playerId = playerId;
-      __lobby.me.secret   = secret;
-      try { localStorage.setItem('opSecret', secret); } catch {}
-    });
-
-    // 伺服器廣播等待室快照或導向遊戲
-    socket.on('EMIT', (e)=>{
-      // ★ 等待室快照（房號 / 玩家清單 / 房主 / ready 狀態）
-      if (e?.type === 'lobby'){
-        __lobby.snapshot = e.lobby;
-        if (!__lobby.roomId) __lobby.roomId = e.lobby?.roomId || __lobby.roomId;
-        // 通知 WaitingRoom 立即重繪
-        if (typeof window.__setLobby === 'function') window.__setLobby(e.lobby);
-        return;
-      }
-
-      // ★ 後端要求進入遊戲
-      if (e?.type === 'nav_game'){
-        try{ socket.close(); }catch{}
-        const url = new URL('game.html', location.origin);
-        url.searchParams.set('server', SERVER_URL);
-        url.searchParams.set('room',   __lobby.roomId);
-        url.searchParams.set('name',   __lobby.me.name || 'P');
-        url.searchParams.set('avatar', String(__lobby.me.avatar || 1));
-        const count = Array.isArray(__lobby.snapshot?.players)
-          ? Math.max(1, __lobby.snapshot.players.length)
-          : 1;
-        url.searchParams.set('n', String(count));    // ← 不再預設 4
-        location.href = url.toString();
-        return;
-      }
-    });
-
-    // === 原常數/工具：保留必要者 ===
-    const {useState, useEffect, useMemo} = React;
-
-function AuthPanel({ onAuthed, onSkip }) {
-  const [mode, setMode] = useState("login"); // login | register
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState("");
-
-  // ✅ 自動帶入上次輸入的帳密：讓玩家「按任意鍵 → 看到登入窗 → 直接按登入」
-  useEffect(() => {
-    try {
-      const savedUser = localStorage.getItem("op_last_username") || "";
-      const savedPass = localStorage.getItem("op_last_password") || "";
-      if (savedUser) setUsername(savedUser);
-      if (savedPass) setPassword(savedPass);
-    } catch {}
-  }, []);
-
-
-  function submit() {
-    if (!username || !password) {
-      setErr("請輸入帳號與密碼");
-      return;
-    }
-    setLoading(true);
-    setErr("");
-
-    const evt = mode === "login" ? "AUTH_LOGIN" : "AUTH_REGISTER";
-
-    socket.timeout(12000).emit(
-      evt,
-      { username, password },
-      (e, res) => {
-        setLoading(false);
-        if (e || !res?.ok) {
-          setErr(res?.error || e?.message || "連線失敗");
-          return;
-        }
-
-        // ✅ 成功後記住帳密（下次自動填）
-        try {
-          localStorage.setItem("op_last_username", username);
-          localStorage.setItem("op_last_password", password);
-        } catch {}
-
-
-// ★ 關鍵：存 secret
-localStorage.setItem("opSecret", res.secret);
-__lobby.me.secret = res.secret;
-
-// ✅ 登入成功後：拉雲端→合併→寫回本機→推回雲端
-cloudSyncPullMergePush(socket).then(()=> onAuthed?.());
-      }
-    );
-  }
-
-  return (
-    <div className="card w-[min(420px,90vw)] p-6 space-y-4">
-      <h2 className="text-xl font-bold text-amber-300 text-center">
-        {mode === "login" ? "帳號登入" : "建立帳號"}
-      </h2>
-
-      <input
-        className="w-full rounded-lg bg-neutral-900 border border-neutral-700 px-3 py-2"
-        placeholder="帳號（英文 / 數字）"
-        value={username}
-        onChange={e=>setUsername(e.target.value)}
-      />
-
-      <input
-        type="password"
-        className="w-full rounded-lg bg-neutral-900 border border-neutral-700 px-3 py-2"
-        placeholder="密碼（至少 6 碼）"
-        value={password}
-        onChange={e=>setPassword(e.target.value)}
-      />
-
-      {err && <div className="text-sm text-red-400">{err}</div>}
-
-      <button
-        className="btn-primary btn w-full"
-        disabled={loading}
-        onClick={submit}
-      >
-        {loading ? "連線中…" : (mode === "login" ? "登入" : "註冊")}
-      </button>
-
-      <div className="flex justify-between text-sm text-neutral-400">
-        <button className="underline" onClick={()=>setMode(mode==="login"?"register":"login")}>
-          {mode === "login" ? "我要註冊" : "已有帳號"}
-        </button>
-        <button className="underline" onClick={onSkip}>
-          先不登入
-        </button>
-      </div>
-    </div>
-  );
-}
-
-
-// === I18N 防呆：避免字典/腳本載入失敗造成整頁白屏 ===
-const I18N = window.__I18N || {
-  getLang: () => 'zh-Hant',
-  setLang: () => {},
-  SUPPORTED: ['zh-Hant'],
-  getLangLabel: () => '繁體中文',
-  t: (k) => k
-};
-const t = (key, vars) => (I18N && typeof I18N.t === 'function') ? I18N.t(key, vars) : key;
-
-// === (i18n) 補齊 start.html 會用到的 key（就算外部字典缺漏也不會跳回中文/顯示 key）===
-    const MIN_PLAYERS = 2; // 開局最低人數
-
-    function uid(){ return Math.random().toString(36).slice(2,10); }
-    function genRoomId(){ const letters = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; let s=""; for(let i=0;i<6;i++) s += letters[Math.floor(Math.random()*letters.length)]; return s; }
-    function getMeId(){ let me = sessionStorage.getItem("op_me_id"); if(!me){ me = "me_" + uid(); sessionStorage.setItem("op_me_id", me); } return me; }
-
-    function WaveText({ text, className="", small=false }){
-      const chars = Array.from(text);
-      const waveClass = small ? "wave wave-sm" : "wave";
-      return (
-        <span className={`${waveClass} ${className}`}>
-          {chars.map((ch, idx) => (
-            <span className="char" style={{["--i"]: idx}} key={idx}>
-              {ch === " " ? "\u00A0" : ch}
-            </span>
-          ))}
-        </span>
-      );
-    }
-
-function PressAnyKey({onProceed}){
-  useEffect(()=>{
-    const h=(e)=>{
-      e.preventDefault();
-      onProceed();
-      tryLockLandscape();
-      window.__OPAudio?.startAudio();
-    };
-    window.addEventListener('keydown', h, {once:true});
-    window.addEventListener('pointerdown', h, {once:true});
-    return ()=>{
-      window.removeEventListener('keydown', h);
-      window.removeEventListener('pointerdown', h);
-    };
-  }, [onProceed]);
-
-  return (
-    <div className="relative w-full min-h-[92vh] select-none">
-      <div className="absolute left-1/2 -translate-x-1/2 top-[60vh] md:top-[58vh] text-center space-y-2">
-        <div className="title-wrap">
-          <div className="title-main font-black tracking-tight whitespace-nowrap fx-tiltDrop fx-shine text-[clamp(28px,8.2vw,48px)] [@media(orientation:landscape)]:text-[clamp(24px,6.6vw,44px)] md:text-[clamp(52px,5.2vw,96px)] lg:text-[clamp(60px,4.6vw,110px)] xl:text-[clamp(68px,4vw,128px)]">
-            <WaveText text={t("brand.titleEn")} />
-          </div>
-          <div className="title-sub font-extrabold text-amber-300 mt-2 fx-fadeUp whitespace-nowrap text-[clamp(16px,5.2vw,28px)] [@media(orientation:landscape)]:text-[clamp(16px,3.6vw,24px)] md:text-[clamp(30px,3.2vw,56px)] lg:text-[clamp(34px,2.8vw,64px)] xl:text-[clamp(38px,2.4vw,72px)]">
-            <WaveText text={t("brand.titleSub")} small />
-          </div>
-        </div>
-      </div>
-
-      <div
-        className="absolute left-1/2 -translate-x-1/2 text-sm md:text-base text-neutral-200 blink md:bottom-8"
-        style={{bottom:"calc(env(safe-area-inset-bottom, 0px) - 10px)", paddingBottom:0}}
-      >
-        {t("ui.pressAnyKey")}
-      </div>
-    </div>
-  );
-}
-
-
-    // === 主選單：開始遊戲 / 遊戲規則 ===
-   function MainMenu({ onStart, onRule, onLangChange, onProfilePage }) {
-  const cur = I18N.getLang();
-
-  return (
-    <div className="card w-[min(480px,90vw)] p-6 text-center space-y-6 relative">
-      {/* Language selector */}
-      <div className="absolute right-4 top-4">
-        <label className="text-[11px] text-neutral-300 mr-2">{t("ui.lang")}</label>
-        <select
-          className="btn text-sm py-1 px-2"
-          value={cur}
-          onChange={(e)=> onLangChange?.(e.target.value)}
-        >
-          {I18N.SUPPORTED.map(l=>(
-            <option key={l} value={l}>{I18N.getLangLabel(l)}</option>
-          ))}
-        </select>
-      </div>
-
-      <h1 className="text-2xl font-bold tracking-wide text-amber-300">
-        {t("brand.titleSub")}
-      </h1>
-
-      <button className="btn-primary btn w-full text-lg py-3" onClick={onStart}>
-        {t("ui.startGame")}
-      </button>
-
-<button className="btn w-full text-lg py-3" onClick={onProfilePage}>
-  個人頁面
-</button>
-
-
-      <button className="btn w-full text-lg py-3" onClick={onRule}>
-        {t("ui.rules")}
-      </button>
-
-      <div className="text-xs text-neutral-400 mt-2">
-        {t("brand.tagline")}
-      </div>
-    </div>
-  );
-}
-
-
-       // === 遊戲規則彈窗（最終版） ===
-  // ✅ 翻頁式規則書 RuleModal（圖文版）
-// 需求：把圖片放在 public/images/rules/ 且檔名為 01~09
-// 支援：上一頁/下一頁、圓點跳頁、鍵盤 ← →、Esc 關閉、點背景關閉
-function RuleModal({ show, onClose }) {
-  // 只保留結構：每頁只寫 key + 圖片
-  const pages = React.useMemo(
-    () => [
-      { id: "overview",      key: "rules.overview",      img: "images/rules/01-overview.webp" },
-      { id: "header",        key: "rules.header",        img: "images/rules/02-header-bar.webp" },
-      { id: "gallery",       key: "rules.gallery",       img: "images/rules/03-card-gallery.webp" },
-      { id: "cardDetail",    key: "rules.cardDetail",    img: "images/rules/04-card-detail.webp" },
-      { id: "venuePanel",    key: "rules.venuePanel",    img: "images/rules/05-venue-panel.webp" },
-      { id: "venueBg",       key: "rules.venueBg",       img: "images/rules/06-venue-background.webp" },
-      { id: "players",       key: "rules.players",       img: "images/rules/07-players-panel.webp" },
-      { id: "discard",       key: "rules.discard",       img: "images/rules/08-discard-panel.webp" },
-      { id: "log",           key: "rules.log",           img: "images/rules/09-log-panel.webp" },
-      { id: "drawOnly",      key: "rules.drawOnly",      img: "images/rules/10-draw-card.webp" },
-      { id: "afterDrawView", key: "rules.afterDrawView", img: "images/rules/11-after-draw.webp" },
-      { id: "playCardCoreRule", key: "rules.playCardCoreRule", img: "images/rules/12-play-card-mechanic.webp" },
-      { id: "example-play-6",  key: "rules.examplePlay6",  img: "images/rules/13-example-play-6.webp" },
-      { id: "example-play-13", key: "rules.examplePlay13", img: "images/rules/14-example-play-13.webp" },
-      { id: "extra-rules",     key: "rules.extraRules",    img: "images/rules/15-extra-rules.webp" },
-    ],
-    []
-  );
-
-  const [idx, setIdx] = React.useState(0);
-
-  React.useEffect(() => { if (show) setIdx(0); }, [show]);
-
-  React.useEffect(() => {
-    if (!show) return;
-    const onKeyDown = (e) => {
-      if (e.key === "Escape") onClose?.();
-      if (e.key === "ArrowLeft") setIdx((v) => Math.max(0, v - 1));
-      if (e.key === "ArrowRight") setIdx((v) => Math.min(pages.length - 1, v + 1));
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [show, onClose, pages.length]);
-
-  if (!show) return null;
-
-  const page = pages[idx];
-  const isFirst = idx === 0;
-  const isLast = idx === pages.length - 1;
-
-  // 從 i18n 取該頁內容（若 en/ja/ko 缺少，會自動 fallback zh-Hant）
-  const data = t(page.key) || {};
-  const title = data.title || page.id;
-  const bullets = Array.isArray(data.bullets) ? data.bullets : [];
-  const tip = data.tip || "";
-
-  return (
-    <div
-      className="rulesOverlay"
-      onMouseDown={(e) => {
-        if (e.target.classList.contains("rulesOverlay")) onClose?.();
-      }}
-    >
-      <div className="rulesCard" role="dialog" aria-modal="true">
-        <div className="rulesTopBar">
-          <div className="rulesTitleWrap">
-            <div className="rulesTitleMain">{t("ui.rules")}</div>
-            <div className="rulesTitleSub">
-              {idx + 1} / {pages.length} ｜ {title}
-            </div>
-          </div>
-
-          <button className="rulesCloseBtn" onClick={onClose}>
-            {t("ui.close")}
-          </button>
-        </div>
-
-        <div className="rulesBody">
-          <div className="rulesImageWrap">
-            <img
-              src={page.img}
-              alt={title}
-              className="rulesImage"
-              loading="lazy"
-              draggable={false}
-              onError={(e) => {
-                console.warn("Rules image missing:", page.img);
-                e.currentTarget.style.opacity = 0.25;
-              }}
-            />
-          </div>
-
-          <div className="rulesText">
-            <div className="rulesSectionTitle">{title}</div>
-
-            <ul className="rulesBullets">
-              {bullets.map((line, i) => (
-                <li key={i}>{line}</li>
-              ))}
-            </ul>
-
-            {tip ? <div className="rulesTip">{t("ui.tipPrefix")} {tip}</div> : null}
-          </div>
-        </div>
-
-        <div className="rulesFooter">
-          <button
-            className="rulesNavBtn"
-            onClick={() => setIdx((v) => Math.max(0, v - 1))}
-            disabled={isFirst}
-            title="Prev (←)"
-          >
-            {t("ui.prev")}
-          </button>
-
-          <div className="rulesDots" aria-label="pages">
-            {pages.map((p, i) => (
-              <button
-                key={p.id}
-                className={"rulesDot" + (i === idx ? " active" : "")}
-                onClick={() => setIdx(i)}
-                title={p.id}
-                aria-label={`go page ${i + 1}`}
-              />
-            ))}
-          </div>
-
-          <button
-            className="rulesNavBtn primary"
-            onClick={() => setIdx((v) => Math.min(pages.length - 1, v + 1))}
-            disabled={isLast}
-            title="Next (→)"
-          >
-            {t("ui.next")}
-          </button>
-        </div>
-
-        <div className="rulesHintLine">{t("ui.rulesHotkeys")}</div>
-      </div>
-    </div>
-  );
-}
-
-    function NameAvatar({defaultName, onDone}){
-      const [name,setName]=useState(defaultName||"");
-      const [pick,setPick]=useState(1);
-      const avatars=useMemo(()=> Array.from({length:30},(_,i)=>`images/avatars/${i+1}.webp`), []);
-      function handleSubmit(e){
-        e.preventDefault();
-        const safe=(name||"").trim()||"無名航海士";
-        const data={ playerName:safe, playerAvatar:pick, avatarUrl:avatars[pick-1] };
-        localStorage.setItem("op_player_profile", JSON.stringify(data));
-        onDone(data);
-      }
-      return (
-        <form onSubmit={handleSubmit} className="card w-[min(980px,96vw)] p-5 md:p-6">
-          <div className="flex items-center justify-between gap-3 flex-wrap">
-            <h2 className="text-xl font-bold">{t("ui.createCharacter")}</h2>
-          </div>
-          <div className="grid [@media(orientation:landscape)]:grid-cols-2 md:grid-cols-3 gap-5 mt-4">
-            <div className="md:col-span-1">
-              <div className="flex items-center gap-3">
-                <div className={"avatar "+(pick?"is-active":"")}>
-                  <img
-                    src={avatars[pick-1]}
-                    alt=""
-                    onError={(e)=>{
-                      e.currentTarget.replaceWith(Object.assign(
-                        document.createElement('div'),
-                        {className:'mono avatar',innerText:(name||'').slice(0,1)||t('ui.you')}
-                      ));
-                    }}
-                  />
-                </div>
-                <div>
-                  <input
-                    className="mt-1 w-56 rounded-lg bg-neutral-900 border border-neutral-700 px-3 py-2 outline-none focus:border-amber-400"
-                    maxLength={16}
-                    placeholder={t("ui.namePlaceholder")}
-                    value={name}
-                    onChange={(e)=>setName(e.target.value)}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="md:col-span-2">
-              <div className="flex items-center justify-between">
-                <div className="font-semibold">{t("ui.chooseAvatar")}</div>
-              </div>
-              <div className="mt-2 grid grid-cols-5 sm:grid-cols-6 md:grid-cols-7 lg:grid-cols-8 gap-3">
-                {avatars.map((src,idx)=>(
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={()=>setPick(idx+1)}
-                    className={"avatar "+(pick===idx+1?"is-active":"")}
-                  >
-                    <img src={src} alt={"avatar-"+(idx+1)} />
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-          <div className="mt-5 flex flex-col sm:flex-row gap-3">
-            <button className="btn-primary btn grow" type="submit">{t("ui.createRoomTitle")}</button>
-            <button
-              className="btn grow"
-              type="button"
-              onClick={()=>{
-                const safe=(name||"").trim()||"無名航海士";
-                const data={ playerName:safe, playerAvatar:pick, avatarUrl:avatars[pick-1] };
-                localStorage.setItem("op_player_profile", JSON.stringify(data));
-                onDone(data,{join:true});
-              }}
-            >
-              {t("ui.joinRoom")}
-            </button>
-          </div>
-        </form>
-      );
-    }
-
-   function RoomChoice({ profile, intent, onEnter }) {
-  const [joinCode, setJoinCode] = useState("");
-  const [cpuCount, setCpuCount] = useState(() => {
-    // 從 localStorage 讀取上一次的 CPU 設定（預設 0）
-    try {
-      const v = Number(localStorage.getItem("op_cpu_count") || "0");
-      if (Number.isNaN(v)) return 0;
-      return Math.min(3, Math.max(0, v));
-    } catch {
-      return 0;
-    }
+  socket.on('connect', ()=>{
+    socket.emit('JOIN', { roomId, resume:true, pid:MY_PID });
+  });
+  socket.on('STATE', (s)=>{
+    STATE = s;
+    if(s && s.final){ renderFinal(s.final); }
   });
 
-  const meId = getMeId(); // 僅用於本機識別，不影響後端
+  // 說明面板
+  document.getElementById('openHelp')?.addEventListener('click', ()=>{
+    document.getElementById('helpModal')?.classList.remove('hidden');
+  });
+  document.getElementById('closeHelp')?.addEventListener('click', ()=>{
+    document.getElementById('helpModal')?.classList.add('hidden');
+  });
+  document.getElementById('helpModal')?.addEventListener('click', (e)=>{
+    if(e.target.id==='helpModal') e.currentTarget.classList.add('hidden');
+  });
 
-  // === 建立房：emit JOIN_ROOM，帶入 CPU 設定 ===
-  function createRoom() {
-    const id = genRoomId();
-    __lobby.roomId = id;
-    __lobby.me.name = profile.playerName;
-    __lobby.me.avatar = profile.playerAvatar;
-    __lobby.cpuCount = cpuCount; // 先存在本地，全域記錄，之後後端 / AI 會用到
+  // === 分頁切換：玩家排名 / 詳細數據 ===（搬到最外層）
+  const btnRank   = document.getElementById('btnViewRank');
+  const btnDetail = document.getElementById('btnViewDetail');
 
-    // 記住 CPU 設定（下次開遊戲會自動帶出）
-    try {
-      localStorage.setItem("op_cpu_count", String(cpuCount));
-    } catch (e) {}
-
-    socket.emit("JOIN_ROOM", {
-      roomId: id,
-      displayName: profile.playerName,
-      avatar: profile.playerAvatar,
-      secret: __lobby.me.secret,
-      cpuCount, // ← 新增：這一房預計加入幾個 CPU 玩家
-    });
-
-    // onEnter 第二個參數帶出 host / cpuCount 等資訊給 WaitingRoom 使用
-    onEnter(id, { host: true, cpuCount });
-  }
-
-  // === 加入房：保持原本邏輯 ===
-  function tryJoin() {
-    const code = (joinCode || "").toUpperCase().replace(/\s+/g, "");
-    if (!code) {
-     alert(t("ui.alertNeedRoomId"));
-
-      return;
+  function setView(view){
+    if(view === 'detail'){
+      document.body.classList.remove('view-rank');
+      document.body.classList.add('view-detail');
+      btnRank?.classList.remove('active');
+      btnDetail?.classList.add('active');
+    }else{
+      document.body.classList.remove('view-detail');
+      document.body.classList.add('view-rank');
+      btnRank?.classList.add('active');
+      btnDetail?.classList.remove('active');
     }
-    __lobby.roomId = code;
-    __lobby.me.name = profile.playerName;
-    __lobby.me.avatar = profile.playerAvatar;
-
-    socket.emit("JOIN_ROOM", {
-      roomId: code,
-      displayName: profile.playerName,
-      avatar: profile.playerAvatar,
-      secret: __lobby.me.secret,
-    });
-
-    onEnter(code, { host: false });
   }
 
+  btnRank?.addEventListener('click', ()=> setView('rank'));
+  btnDetail?.addEventListener('click', ()=> setView('detail'));
+})();
+
+/* ====== 懸賞金：pid -> id 對應與按鈕觸發 ====== */
+function fallbackId(final){
+  if (Array.isArray(final?.ranking) && final.ranking.length) return final.ranking[0].id;
+  if (final?.playersMeta){
+    const ids = Object.keys(final.playersMeta).map(x=>+x).sort((a,b)=>a-b);
+    if (ids.length) return ids[0];
+  }
+  return 0;
+}
+
+function guessMyId(final, pid){
+  if(final?.playersMeta && pid!=null){
+    for(const [k,pm] of Object.entries(final.playersMeta)){
+      if(pm && String(pm.pid) === String(pid)) return +k;
+    }
+  }
+  if(Array.isArray(final?.ranking)){
+    const hit = final.ranking.find(r => String(r.pid) === String(pid));
+    if(hit) return hit.id;
+  }
+  const asNum = Number(pid);
+  if (Number.isInteger(asNum) && asNum >= 0) {
+    if (final?.scoreboard && Object.prototype.hasOwnProperty.call(final.scoreboard, String(asNum))) {
+      return asNum;
+    }
+    if (Array.isArray(final?.ranking) && asNum < final.ranking.length) {
+      return asNum;
+    }
+  }
+  return fallbackId(final);
+}
+
+async function fireBounty(){
+  const final = LAST_FINAL || (STATE && STATE.final);
+  if(!final){ alert('尚未取得結算資料'); return; }
+
+  if (!MY_PID) {
+    const fromSS = sessionStorage.getItem('op_pid');
+    if (fromSS) MY_PID = fromSS;
+  }
+
+  let myId = guessMyId(final, MY_PID);
+  if (!final.playersMeta || !final.playersMeta[myId]) {
+    myId = fallbackId(final);
+  }
+
+  try{
+    await showBounty(final, myId);
+  }catch(err){
+    console.error('[bounty] error:', err);
+    alert('懸賞金生成失敗：請檢查 images/wanted.png 與頭像路徑是否存在');
+  }
+}
+</script>
+
+<!-- === 懸賞金繪製 === -->
+<script>
+function calcBounty(score){
+  const s = score || {};
+
+  const coins = +s.coinScore || 0;
+  const atk   = +s.atkScore   || 0;
+  const hit   = +s.hitScore   || 0;
+  const def   = +s.defScore   || 0;
+  const intel = +s.intelScore || 0;
+  const surv  = +s.survivalScore || 0;
+
+  const N = (LAST_FINAL?.playerCount)
+         || Object.keys(LAST_FINAL?.playersMeta || {}).length
+         || 4;
+  const factor = 6 / N;
+
   return (
-    <div className="card w-[min(980px,96vw)] p-5 md:p-6 space-y-6">
-      {/* 標題列 */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-        <div>
-          <div className="text-sm text-neutral-400">{t("ui.roomMode")}</div>
-          <div className="text-xl font-bold text-amber-300">
-            {t("ui.createOrJoin")}
-          </div>
-        </div>
-        <div className="flex items-center gap-3">
-          <div className="avatar is-active">
-            <img src={profile.avatarUrl} alt="" />
-          </div>
-          <div className="text-sm text-right">
-            <div className="text-neutral-300">{profile.playerName}</div>
-            <div className="text-xs text-neutral-500">{t("ui.playerId", {id: meId})}</div>
-          </div>
-        </div>
-      </div>
-
-      {/* 左右兩欄：建立房、加入房 */}
-      <div className="grid md:grid-cols-2 gap-6">
-        {/* 左：建立房間 */}
-        <div className="space-y-4 border border-neutral-700/70 rounded-xl p-4 bg-black/20">
-          <div className="flex items-center justify-between">
-            <div className="font-semibold">{t("ui.createRoomTitle")}</div>
-            <span className="text-[11px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-400/40">
-              {t("ui.host")}
-            </span>
-          </div>
-
-          {/* CPU 人數選擇 */}
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <label className="text-sm font-medium text-amber-200">
-                {t("ui.cpuCountLabel")}
-              </label>
-              <span className="text-[11px] text-neutral-400">
-                {t("ui.cpuCountHint")}
-              </span>
-            </div>
-            <div className="grid grid-cols-4 gap-2">
-              {[0, 1, 2, 3].map((n) => {
-                const active = cpuCount === n;
-                return (
-                  <button
-                    key={n}
-                    type="button"
-                    onClick={() => setCpuCount(n)}
-                    className={
-                      "btn text-sm py-1.5 " +
-                      (active
-                        ? "bg-amber-400 text-black border-amber-300 shadow"
-                        : "")
-                    }
-                  >
-                    {t("ui.people", {n})}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={createRoom}
-            className="btn-primary btn w-full mt-2 py-2.5 text-base"
-          >
-            {t("ui.createNewRoom")}
-          </button>
-        </div>
-
-        {/* 右：加入房間 */}
-        <div className="space-y-4 border border-neutral-700/70 rounded-xl p-4 bg-black/10">
-          <div className="font-semibold">{t("ui.joinFriendRoom")}</div>
-          <div className="space-y-2">
-            <label className="text-sm text-neutral-300">{t("ui.enterRoomCode")}</label>
-            <input
-              className="w-full rounded-lg bg-neutral-900 border border-neutral-700 px-3 py-2 text-sm outline-none focus:border-amber-400"
-              placeholder={t("ui.roomCodePlaceholder")}
-              value={joinCode}
-              onChange={(e) => setJoinCode(e.target.value)}
-              maxLength={8}
-            />
-            <div className="text-[11px] text-neutral-500">
-              {t("ui.roomCodeHint")}
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={tryJoin}
-            className="btn w-full mt-2 py-2.5 text-base"
-          >
-            {t("ui.joinRoomBtn")}
-          </button>
-        </div>
-      </div>
-
-      <div className="text-xs text-neutral-500 text-right">
-        {t("ui.suggestion")}
-      </div>
-    </div>
+      coins * 200000000 * factor
+    + (atk + hit) * 10000000 * factor
+    + (def + intel + surv) * 5000000 * factor
   );
 }
 
+function loadImage(src){
+  return new Promise((resolve)=>{
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload  = ()=> resolve(img);
+    img.onerror = ()=> resolve(null);
+    img.src = src;
+  });
+}
 
-// === (4) 等待室：全面使用 __lobby.snapshot ===
-function WaitingRoom({roomId, profile, onLeave}){
-  const [lobby, setLobby] = useState(()=> __lobby.snapshot);
-  const mePid = __lobby.me.playerId;
-
-  useEffect(()=>{
-    window.__setLobby = setLobby;
-    return ()=>{ window.__setLobby = null; };
-  }, []);
-
-  const players = lobby?.players||[];
-  // 後端欄位防呆：支援 playerId/id, displayName/name
-  function pidOf(p){ return p.playerId ?? p.pid ?? p.id; }
-  function nameOf(p){ return p.displayName ?? p.name ?? 'P'; }
-  function avatarOf(p){ return p.avatar ?? 1; }
-
-  const cpuCount = lobby?.cpuCount ?? 0;  // 從伺服器拿到的 CPU 數量
-
-  const amHost = lobby && (lobby.host === mePid);
-  const canStart =
-  (players.length + cpuCount) >= MIN_PLAYERS &&  // 真人 + CPU 要 ≥ 最低人數
-  players.every(p => !!p.ready);                // 真人全部按準備
-
-
-  function copyId(){
-    if(!lobby?.roomId) return;
-    navigator.clipboard?.writeText(lobby.roomId);
-   alert(t("ui.alertCopiedRoomId", { roomId: lobby.roomId }));
+function avatarUrl(v){
+  if(v==null) return '';
+  if(typeof v === 'number') return `images/avatars/${v}.webp`;
+  if(/^https?:\/\//i.test(v)) return v;
+  if(typeof v === 'string'){
+    if(v.includes('/')) return v;
+    return `images/avatars/${v}`;
   }
+  return '';
+}
 
-  // 切換準備
-  function toggleReady(willReady){
-    socket.emit('ACTION', {
-      roomId: __lobby.roomId,
-      playerId: __lobby.me.playerId,
-      secret: __lobby.me.secret,
-      type: willReady ? 'LOBBY_READY' : 'LOBBY_UNREADY'
-    });
+// === 懸賞金繪製（頭像在下層，海報在上層） ===
+let LAST_POSTER_META = null; // {key, ts, title, name, bounty, avatarId}
+
+async function showBounty(final, myId, opts = {}){
+  const me = (final?.playersMeta && final.playersMeta[myId]) || {
+    name: `P${(myId|0)+1}`, pid: myId|0, avatar: null
+  };
+  const s  = (final?.scoreboard && final.scoreboard[myId]) || {
+    coinScore:0, atkScore:0, defScore:0, hitScore:0, intelScore:0, survivalScore:0
+  };
+
+  const bounty = calcBounty(s);
+  const canvas = document.getElementById('bountyCanvas');
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  // === 對齊參數（你給的那組） ===
+  const cx = 382;
+  const cy = 489;
+  const r  = 250;
+  const nameY = 939;
+  const bountyY = 1032;
+  const nameFont = 126;
+  const bountyFont = 78;
+
+  // === 載圖 ===
+  const bg = await loadImage('images/wanted.png');
+  const fallbackAvatarIdx = (myId % 8) + 1;
+  const avaUrl = avatarUrl(me.avatar) || `images/avatars/${fallbackAvatarIdx}.webp`;
+  const avatar = await loadImage(avaUrl);
+
+  // 先畫頭像（在下層，做圓形裁切）
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.closePath();
+  ctx.clip();
+  if (avatar) ctx.drawImage(avatar, cx - r, cy - r, r * 2, r * 2);
+  ctx.restore();
+
+  // 再畫懸賞海報（在上層）
+  if (bg) ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
+
+  // 名稱
+  ctx.fillStyle = "#674832";
+  ctx.textAlign = "center";
+  ctx.font = `bold ${nameFont}px 'Times New Roman', serif`;
+
+  // 細邊框參數
+  const nameStrokeW = Math.max(2, Math.round(nameFont * 0.035));
+  ctx.lineWidth = nameStrokeW;
+  ctx.lineJoin  = "round";
+  ctx.miterLimit = 2;
+  ctx.strokeStyle = "#412513";
+  ctx.fillStyle   = "#674832";
+
+  const nameTxt = me.name || (`P${(myId|0)+1}`);
+  ctx.strokeText(nameTxt, cx, nameY);
+  ctx.fillText(nameTxt,   cx, nameY);
+
+  // 懸賞金額（完整數字）
+  const bountyStr = Number(bounty).toLocaleString('en-US');
+
+  ctx.save();
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'alphabetic';
+
+  ctx.font = `300 ${bountyFont * 1}px "Cambria", "Georgia", "Arial", serif`;
+  ctx.fillStyle = '#38281d';
+  ctx.shadowColor = 'rgba(0,0,0,0.15)';
+  ctx.shadowBlur = 4;
+  ctx.shadowOffsetX = 1;
+  ctx.shadowOffsetY = 1;
+
+  ctx.fillText(bountyStr, cx, bountyY);
+  ctx.restore();
+
+// === 記住「這次生成的懸賞單資料」（按鈕按下才存到個人頁面/雲端） ===
+try{
+  const nameTxt = me.name || (`P${(myId|0)+1}`);
+
+  // 用「這場比賽」當唯一 key（跟 recent 的 matchKey 同概念）
+  const qs = new URLSearchParams(location.search);
+  const rid = (qs.get('room') || sessionStorage.getItem('op_room') || '');
+  const season = final?.seasonNo ?? final?.season ?? '';
+  const endedAt = Number(final?.endedAt || final?.ts || Date.now());
+  const pid = (MY_PID ?? sessionStorage.getItem('op_pid') ?? '');
+
+  const posterKey = `${rid}|${season}|${pid}|${endedAt}`;
+
+  // 取開始頁頭貼（op_player_profile / 或你 local 結構）
+  let avatarId = 1;
+  try{
+    const sp = JSON.parse(localStorage.getItem('op_player_profile') || 'null');
+    avatarId = Number(sp?.playerAvatar ?? sp?.avatarId ?? sp?.avatar ?? 1) || 1;
+  }catch(e){}
+
+  const bountyText = (typeof bountyStr !== 'undefined') ? String(bountyStr) : '';
+
+  LAST_POSTER_META = {
+    key: posterKey,
+    ts: endedAt,
+    title: `${nameTxt}｜懸賞令`,
+    name: nameTxt,
+    bounty: bountyText,
+    avatarId
+  };
+
+  // 顯示「存到個人頁面」按鈕（生成後才可按）
+  const btn = document.getElementById('btnSavePoster');
+  if(btn){
+    btn.disabled = false;
+    btn.dataset.saved = '0';
+    btn.textContent = '存到個人頁面';
   }
-
-  // {t("ui.host")}開局
-  function startGame(){
-    if(!amHost) return;
-    socket.emit('ACTION', {
-      roomId: __lobby.roomId,
-      playerId: __lobby.me.playerId,
-      secret: __lobby.me.secret,
-      type: 'START_GAME'
-    });
-  }
-
-  // 我的 ready 狀態（只看真人列表）
-  const me = players.find(p=> pidOf(p)===mePid);
-  const myReady = !!me?.ready;
-
-  if(!lobby){
-    return (
-      <div className="card w=[min(820px,96vw)] p-6">
-        <div className="text-lg font-bold mb-2">{t("ui.connectingLobby")}</div>
-        <button className="btn" onClick={onLeave}>{t("ui.back")}</button>
-      </div>
-    );
-  }
-
-  return (
-    <div className="card w-[min(980px,96vw)] p-6">
-      {/* 上方：房號 + 按鈕列 */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <div className="text-xs text-neutral-400">{t("ui.roomId")}</div>
-          <div className="text-2xl font-extrabold tracking-widest">{lobby.roomId}</div>
-        </div>
-        <div className="flex gap-2">
-          <button className="btn" onClick={copyId}>{t("ui.copyRoomId")}</button>
-          <button className="btn" onClick={onLeave}>{t("ui.leaveRoom")}</button>
-          {amHost && (
-            <button
-              className={`btn-primary ${canStart? "": "opacity-50 cursor-not-allowed"}`}
-              onClick={startGame}
-              disabled={!canStart}
-              title={canStart? t("ui.startGameBtn") : t("ui.startGameNeed")}
-            >
-              {t("ui.startGameBtn")}
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* CPU 數量提示 */}
-      {cpuCount > 0 && (
-        <div className="mt-3 text-xs text-amber-200 flex items-center gap-2">
-          <span className="px-2 py-0.5 rounded-full border border-amber-400/40 bg-amber-500/10">
-            {t("ui.cpuPlayers", {n: cpuCount})}
-          </span>
-          <span className="text-[11px] text-neutral-400">
-            {t("ui.cpuWillJoin")}
-          </span>
-        </div>
-      )}
-
-      {/* 真人 + CPU 列表 */}
-      <div className="mt-5 space-y-5">
-        {/* 真人{t("ui.player")}區 */}
-        <div>
-          <div className="text-sm text-neutral-300 mb-2">
-            {t("ui.humanPlayers", {n: players.length})}
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {players.map(p=> {
-              const pid = pidOf(p);
-              const isHost = lobby.host === pid;
-              const isMe   = pid === mePid;
-              const ready  = !!p.ready;
-              const avatarUrl = `images/avatars/${avatarOf(p)}.webp`;
-              return (
-                <div
-                  key={pid}
-                  className="flex items-center justify-between gap-3 rounded-xl border border-neutral-700/60 bg-black/30 px-3 py-2"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className={"avatar "+(isHost?"is-active":"")}><img src={avatarUrl} alt=""/></div>
-                    <div>
-                      <div className="font-semibold leading-tight">{nameOf(p)}</div>
-                      <div className="text-xs text-neutral-400 flex items-center gap-2">
-                        {isHost
-                          ? <span className="px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-200 border border-amber-400/30">{t("ui.host")}</span>
-                          : <span className="opacity-60">{t("ui.player")}</span>}
-                        {ready
-                          ? <span className="px-1.5 py-0.5 rounded bg-emerald-400/15 text-emerald-200 border border-emerald-400/30">{t("ui.ready")}</span>
-                          : <span className="px-1.5 py-0.5 rounded bg-neutral-600/20 text-neutral-200 border border-neutral-600/40">{t("ui.notReady")}</span>}
-                      </div>
-                    </div>
-                  </div>
-                  {isMe && (
-                    <button className="btn" onClick={()=>toggleReady(!myReady)}>
-                      {myReady ? t("ui.meUnready") : t("ui.meReady")}
-                    </button>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-        {/* CPU {t("ui.player")}區 */}
-        {cpuCount > 0 && (
-          <div>
-            <div className="text-sm text-neutral-300 mb-2">
-              {t("ui.cpuPlayersList", {n: cpuCount})}
-            </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {Array.from({length: cpuCount}).map((_, idx) => {
-                const cpuIdx = (idx % 3) + 1; // 1~3 對應 cpu1~cpu3
-                const avatarUrl = `images/avatars/cpu${cpuIdx}.webp`;
-
-                // ★ 新增：CPU 顯示名稱表
-                const cpuNames = [
-  t("cpu.name1"),
-  t("cpu.name2"),
-  t("cpu.name3"),
-];
-
-                const name = cpuNames[idx] || `CPU ${idx + 1}`;
-
-                return (
-                  <div
-                    key={`cpu-${idx}`}
-                    className="flex items-center justify-between gap-3 rounded-xl border border-neutral-700/60 bg-black/40 px-3 py-2"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="avatar is-active">
-                        <img src={avatarUrl} alt={name}/>
-                      </div>
-                      <div>
-                        <div className="font-semibold leading-tight text-amber-200">{name}</div>
-                        <div className="text-xs text-neutral-400 flex items-center gap-2">
-                          <span className="px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-200 border border-sky-400/40">
-                            {t("ui.cpuTag")}
-                          </span>
-                          <span className="px-1.5 py-0.5 rounded bg-emerald-400/15 text-emerald-200 border border-emerald-400/30">
-                            {t("ui.ready")}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    {/* CPU 不需要準備按鈕 */}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-      </div>
-
-    </div>
-  );
+}catch(e){
+  console.warn('[rememberPosterMeta failed]', e);
 }
 
 
-    function App(){
-// 啟動一定先顯示 Press Any Key
-const [stage, setStage] = useState(() => {
-  const params = new URLSearchParams(location.search);
-  const fromProfile = params.get("from") === "profile";
-  const hasSecret = !!(localStorage.getItem("opSecret") || "").trim();
+  // opts.openModal === false：只存不開（給「自動存」用）
+  if (opts && opts.openModal === false) return;
 
-  // ✅ 從個人頁回來：直接顯示主選單（已登入）或登入窗（未登入）
-  if (fromProfile) return hasSecret ? "menu" : "auth";
+  // 顯示彈窗
+  document.getElementById('bountyModal').classList.remove('hidden');
 
-  // 其他正常開啟：維持你原本的流程
-  return "press";
+}
+
+document.getElementById('closeBounty').onclick = ()=>{
+  document.getElementById('bountyModal').classList.add('hidden');
+};
+document.getElementById('bountyModal').addEventListener('click',(e)=>{
+  if(e.target.id==='bountyModal') e.currentTarget.classList.add('hidden');
 });
 
+// 生成後，按「存到個人頁面」才會把資料寫入本機 + 推雲端
+document.getElementById('btnSavePoster')?.addEventListener('click', async ()=>{
+  const btn = document.getElementById('btnSavePoster');
+  if(!btn || btn.disabled) return;
+  if(!LAST_POSTER_META || !LAST_POSTER_META.key){
+    alert('尚未生成懸賞單資料');
+    return;
+  }
 
-   // press → menu → profile → choice → waiting
-      const [profile,setProfile]=useState(null);
-      const [intent,setIntent]=useState(null);
-      const [roomInfo,setRoomInfo]=useState(null);
-      getMeId(); // 產生一次本機識別
+  // 避免連按
+  if(btn.dataset.saved === '1') return;
+  btn.dataset.saved = '1';
+  btn.disabled = true;
+  btn.textContent = '儲存中...';
 
-const [langTick, setLangTick] = useState(0);
-function changeLang(next){
-  I18N.setLang(next);
-  document.documentElement.setAttribute("lang", I18N.getLang());
+  try{
+    pushPosterMeta(LAST_POSTER_META);
 
-  // 非 React 區塊（旋轉提示）也要同步更新
-  const a = document.getElementById("txtRotateTitle");
-  const b = document.getElementById("txtRotateHint");
-  if(a) a.textContent = t("ui.rotateTitle");
-  if(b) b.textContent = t("ui.rotateHint");
-
-  setLangTick(x=>x+1); // 強制重繪
-}
-
-
-      useEffect(()=>{
-        const cached=localStorage.getItem("op_player_profile");
-        if(cached){
-          try{ setProfile(JSON.parse(cached)); }catch{}
-        }
-      },[]);
-
-      function enterRoom(id, extra){
-        setRoomInfo({id, host: !!extra?.host});
-        setStage("waiting");
-      }
-
-return (
-  <div className="w-full max-w-[1200px] mx-auto">
-    <div className="min-h-dvh flex items-center justify-center">
-{stage==="auth" && (
-  <AuthPanel
-    onAuthed={() => setStage("menu")}
-    onSkip={() => alert("請先登入或註冊才能進入")}
-  />
-)}
-
-
-      {stage==="press" && (
-  <PressAnyKey onProceed={() => setStage("auth")} />
-)}
-
-
-{stage==="menu" && (
-  <MainMenu
-    onStart={()=>{
-      // ✅ 只有第一次才創角；之後直接進入選房
-      const cached = localStorage.getItem("op_player_profile");
-      if (cached) setStage("choice");
-      else setStage("profile");
-    }}
-    onProfilePage={()=>{
-      location.href = "profile.html";
-    }}
-    onRule={()=>setStage("rule")}
-    onLangChange={changeLang}
-  />
-)}
-
-
-      {stage==="profile" && (
-        <NameAvatar
-          defaultName={profile?.playerName}
-          onDone={(p,i)=>{
-            setProfile(p);
-            setIntent(i||{});
-            setStage("choice");
-          }}
-        />
-      )}
-
-      {stage==="choice" && profile && (
-        <RoomChoice
-          profile={profile}
-          intent={intent}
-          onEnter={enterRoom}
-        />
-      )}
-
-      {stage==="waiting" && roomInfo && profile && (
-        <WaitingRoom
-          roomId={roomInfo.id}
-          profile={profile}
-          onLeave={()=>{
-            setStage("profile");
-            __lobby = {
-              roomId:'',
-              me:{ playerId:__lobby.me.playerId, secret:__lobby.me.secret, name:'', avatar:1 },
-              snapshot:null
-            };
-          }}
-        />
-      )}
-
-      <RuleModal show={stage==="rule"} onClose={()=>setStage("menu")} />
-    </div>
-  </div>
-);
-
+    // 若已登入：立刻推雲端（把本機 client 同步上去）
+    if (localStorage.getItem('opSecret')) {
+      await cloudSyncPushNow(socket);
     }
 
-    ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
-  </script>
+    btn.textContent = '已存到個人頁面 ✓';
+  }catch(e){
+    console.error('[save poster failed]', e);
+    btn.dataset.saved = '0';
+    btn.disabled = false;
+    btn.textContent = '存到個人頁面';
+    alert('儲存失敗：請檢查登入狀態/網路連線');
+  }
+});
 
-  <div class="audio-toggle" id="audioCtrl" style="display:none">
-    <button id="btnMute" title="靜音/取消靜音" aria-label="Mute/Unmute">
-      <svg id="icoVol" width="16" height="16" viewBox="0 0 24 24" fill="#ffd36a">
-        <path d="M4 9v6h4l5 4V5L8 9H4z"></path>
-        <path id="wave" d="M16 8c1.5 1.5 1.5 6.5 0 8" stroke="#ffd36a" stroke-width="2" fill="none"></path>
-      </svg>
-    </button>
-    <input id="rngVol" class="vol" type="range" min="0" max="100" step="1" value="65" />
-  </div>
-
-  <script>
-  (function(){
-    const S={ muteKey:"op_audio_mute", volKey:"op_audio_vol", hasStarted:false, fadeTimer:null, autoTried:false };
-    const $intro=document.getElementById('sfxIntro');
-    const $bgm=document.getElementById('bgm');
-    const $wrap=document.getElementById('audioCtrl');
-    const $btn=document.getElementById('btnMute');
-    const $ico=document.getElementById('icoVol');
-    const $wave=document.getElementById('wave');
-    const $rng=document.getElementById('rngVol');
-    const savedMute=localStorage.getItem(S.muteKey);
-    const savedVol=localStorage.getItem(S.volKey);
-    let muted=savedMute==="1";
-    let vol=isNaN(+savedVol)?20:Math.max(0,Math.min(100,+savedVol));
-    setVolume(vol);
-    applyMuteUI();
-    $wrap.style.display='flex';
-    function setVolume(v){
-      vol=v;
-      $rng.value=String(v);
-      const gain=muted?0:(v/100);
-      $bgm.volume=Math.min(1,Math.max(0,gain));
-      if($intro) $intro.volume=Math.min(1,Math.max(0,Math.min(0.9,gain*1.2)));
-      localStorage.setItem(S.volKey,String(v));
-    }
-    function fade(el,target,ms){
-      clearInterval(S.fadeTimer);
-      const stepMs=40, steps=Math.max(1,Math.round(ms/stepMs));
-      const start=el.volume;
-      let n=0;
-      S.fadeTimer=setInterval(()=>{
-        n++;
-        const t=n/steps;
-        el.volume=start+(target-start)*t;
-        if(n>=steps){
-          clearInterval(S.fadeTimer);
-          el.volume=target;
-        }
-      }, stepMs);
-    }
-    function applyMuteUI(){
-      const on=!muted;
-      $ico.setAttribute('fill', on?'#ffd36a':'#bbb');
-      $wave.setAttribute('stroke', on?'#ffd36a':'#bbb');
-    }
-    async function tryAutoStart(){
-      if(S.autoTried||S.hasStarted) return;
-      S.autoTried=true;
-      try{
-        setVolume(vol);
-        await $bgm.play();
-        if(!muted) $bgm.volume=Math.min(1,vol/100);
-        S.hasStarted=true;
-      }catch(e){
-        S.hasStarted=false;
-      }
-    }
-    async function startAudioAfterGesture(){
-      if(S.hasStarted) return;
-      S.hasStarted=true;
-      try{
-        $bgm.volume=0;
-        await $bgm.play().catch(()=>{});
-        if($intro && $intro.src){
-          $intro.currentTime=0;
-          $intro.volume=Math.min(1,(vol/100)*0.9);
-          await $intro.play().catch(()=>{});
-          $intro.onended=()=>{
-            if(!muted) fade($bgm, Math.min(1, vol/100), 1200);
-          };
-        }else{
-          if(!muted) fade($bgm, Math.min(1, vol/100), 800);
-        }
-      }catch(e){
-        S.hasStarted=false;
-      }
-    }
-    $btn.addEventListener('click', ()=>{
-      muted=!muted;
-      localStorage.setItem(S.muteKey, muted?"1":"0");
-      applyMuteUI();
-      if(muted){
-        fade($bgm,0,250);
-        if($intro && !$intro.paused) fade($intro,0,150);
-      }else{
-        setVolume(vol);
-        if($bgm.paused){
-          $bgm.play().catch(()=>{});
-        }
-        fade($bgm, Math.min(1, vol/100), 250);
-      }
-    });
-    $rng.addEventListener('input', (e)=> setVolume(+e.target.value));
-    document.addEventListener('DOMContentLoaded', tryAutoStart);
-    window.__OPAudio = {
-      startAudio: startAudioAfterGesture,
-      setVolume,
-      mute: ()=>{ if(!muted) $btn.click(); },
-      unmute: ()=>{ if(muted) $btn.click(); }
-    };
-  })();
-  </script>
+</script>
 
 <script>
-  // === Service Worker 註冊（離線快取核心）===
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker
-        .register("./sw.js")
-        .catch((err) => console.warn("SW register failed:", err));
+/* ===== 雷達圖繪製與互動（新增） ===== */
+function rowById(pid){
+  return ROWS.find(r => r.id === pid);
+}
+function polar(cx, cy, radius, rad){
+  return [cx + radius * Math.cos(rad), cy + radius * Math.sin(rad)];
+}
+function drawPoly(ctx, points, fillStyle, strokeStyle){
+  if (!points || !points.length) return;
+  ctx.beginPath();
+  ctx.moveTo(points[0][0], points[0][1]);
+  for(let i=1;i<points.length;i++) ctx.lineTo(points[i][0], points[i][1]);
+  ctx.closePath();
+  if (fillStyle){ ctx.fillStyle = fillStyle; ctx.fill(); }
+  if (strokeStyle){ ctx.strokeStyle = strokeStyle; ctx.lineWidth = 2; ctx.stroke(); }
+}
+// cap = 本場該軸最大值 + 10；若全 0，cap=10
+function buildRadarCaps(){
+  const caps = {};
+  for (const m of METRICS){
+    const key = m.key;
+    const maxVal = Math.max(0, ...ROWS.map(r => Number(r[key]||0)));
+    caps[key] = Math.max(10, maxVal + 10);
+  }
+  return caps;
+}
+
+function renderRadar(baseRow, oppRow){
+  const ME_COLOR_FILL = 'rgba(78,156,255,.22)';   // 我：藍
+  const ME_COLOR_LINE = 'rgba(78,156,255,.95)';
+  const OP_COLOR_FILL = 'rgba(255,99,132,.20)';   // 對手：洋紅
+  const OP_COLOR_LINE = 'rgba(255,99,132,.95)';
+
+  const cvs = document.getElementById('radarCanvas');
+  const ctx = cvs.getContext('2d');
+  const W = cvs.width, H = cvs.height;
+  ctx.clearRect(0,0,W,H);
+
+  const cx = W/2, cy = H/2, R = Math.min(W,H)*0.36;
+  const axes = METRICS.map(m => m.key);
+  const labels = METRICS.map(m => m.title);
+  const caps = buildRadarCaps();
+
+  // 底層蛛網 + 軸線 + 標籤
+  ctx.save();
+  ctx.globalAlpha = 0.85;
+  const rings = 5;
+  for(let r=1;r<=rings;r++){
+    const rr = (R * r) / rings;
+    const pts = axes.map((_,i)=>{
+      const rad = -Math.PI/2 + i*(2*Math.PI/axes.length);
+      return polar(cx, cy, rr, rad);
+    });
+    drawPoly(ctx, pts, null, 'rgba(255,255,255,.12)');
+  }
+  ctx.font = '12px system-ui,-apple-system,Segoe UI,Roboto,Noto Sans TC,sans-serif';
+  ctx.fillStyle = 'rgba(233,240,248,.92)';
+  ctx.strokeStyle = 'rgba(255,255,255,.12)';
+  for(let i=0;i<axes.length;i++){
+    const rad = -Math.PI/2 + i*(2*Math.PI/axes.length);
+    const [x,y] = polar(cx, cy, R, rad);
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(x,y); ctx.stroke();
+
+    const [lx,ly] = polar(cx, cy, R+20, rad);
+    ctx.textAlign = (Math.cos(rad)>0.35) ? 'left' : (Math.cos(rad)<-0.35 ? 'right':'center');
+    ctx.textBaseline = (Math.sin(rad)>0.35) ? 'top' : (Math.sin(rad)<-0.35 ? 'bottom':'middle');
+    ctx.fillText(labels[i], lx, ly);
+  }
+  ctx.restore();
+
+  // 工具：由 row 生點、畫多邊形
+  function makePoints(row){
+    if(!row) return null;
+    return axes.map((key,i)=>{
+      const val = Math.max(0, Number(row[key]||0));
+      const cap = Math.max(1, caps[key]||1);
+      const ratio = Math.min(1, val / cap);
+      const rad = -Math.PI/2 + i*(2*Math.PI/axes.length);
+      const [x,y] = polar(cx, cy, R*ratio, rad);
+      return { x,y,rad,val };
     });
   }
+  function strokeFill(points, fill, line){
+    if(!points || !points.length) return;
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, points[0].y);
+    for(let i=1;i<points.length;i++) ctx.lineTo(points[i].x, points[i].y);
+    ctx.closePath();
+    ctx.fillStyle = fill; ctx.strokeStyle = line; ctx.lineWidth = 2;
+    ctx.fill(); ctx.stroke();
+  }
+  function drawMarkersWithValues(points, color, pushOut){
+    if(!points) return;
+    ctx.font = '12px system-ui,-apple-system,Segoe UI,Roboto,Noto Sans TC,sans-serif';
+    for(const p of points){
+      // 點
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 3, 0, Math.PI*2);
+      ctx.fillStyle = color;
+      ctx.fill();
+
+      // 數字（沿軸線往外推一點）
+      const [tx,ty] = polar(cx, cy, Math.hypot(p.x-cx, p.y-cy) + (pushOut||12), p.rad);
+      ctx.textAlign = (Math.cos(p.rad)>0.35) ? 'left' : (Math.cos(p.rad)<-0.35 ? 'right':'center');
+      ctx.textBaseline = (Math.sin(p.rad)>0.35) ? 'top' : (Math.sin(p.rad)<-0.35 ? 'bottom':'middle');
+
+      // 先描邊再填色
+      const label = String(p.val);
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = 'rgba(0,0,0,.55)';
+      ctx.strokeText(label, tx, ty);
+      ctx.fillStyle = 'rgba(245,248,252,.98)';
+      ctx.fillText(label, tx, ty);
+    }
+  }
+
+  // 我、對手
+  const mePts  = makePoints(baseRow);
+  const opPts  = oppRow ? makePoints(oppRow) : null;
+
+  // 先畫對手，再畫自己
+  if(opPts){ strokeFill(opPts, OP_COLOR_FILL, OP_COLOR_LINE); }
+  if(mePts){ strokeFill(mePts, ME_COLOR_FILL, ME_COLOR_LINE); }
+
+  // 標記 + 數字：我（推 12px）、對手（推 22px）
+  if(mePts){ drawMarkersWithValues(mePts, ME_COLOR_LINE, 12); }
+  if(opPts){ drawMarkersWithValues(opPts, OP_COLOR_LINE, 22); }
+
+  // 中心小圓
+  ctx.beginPath(); ctx.arc(cx,cy,3,0,Math.PI*2);
+  ctx.fillStyle='rgba(255,255,255,.6)'; ctx.fill();
+}
+
+function openRadar(myId){
+  const final = LAST_FINAL || (STATE && STATE.final);
+  if (!final) return;
+  const me = rowById(myId);
+  if (!me) return;
+
+  // 建立對手清單
+  const oppoSel = document.getElementById('oppoSelect');
+  const others = ORDERED_IDS.filter(id => id !== myId).map(id => rowById(id)).filter(Boolean);
+  oppoSel.innerHTML = [
+    `<option value="">（不比較）</option>`,
+    ...others.map(r => `<option value="${r.id}">${r.name||('P'+(r.id+1))}</option>`)
+  ].join('');
+
+  // 初次渲染（只有我）
+  renderRadar(me, null);
+
+  // 監聽切換
+  oppoSel.onchange = ()=>{
+    const vid = Number(oppoSel.value||NaN);
+    renderRadar(me, Number.isFinite(vid) ? rowById(vid) : null);
+  };
+
+  // 顯示彈窗
+  document.getElementById('radarModal').classList.remove('hidden');
+}
+
+// 關閉
+document.getElementById('closeRadar').addEventListener('click', ()=>{
+  document.getElementById('radarModal').classList.add('hidden');
+});
+document.getElementById('radarModal').addEventListener('click', (e)=>{
+  if(e.target.id === 'radarModal') e.currentTarget.classList.add('hidden');
+});
 </script>
 
 </body>
