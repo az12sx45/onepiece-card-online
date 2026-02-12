@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>玩家頁｜偉大航道爭霸戰</title>
+
   <style>
     :root{
       --bg:#0b1220;
@@ -52,7 +53,6 @@
 
     .title{min-width:0}
     .title h1{margin:0;font-size:16px;letter-spacing:.5px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-    .title .sub{margin-top:2px;font-size:12px;color:var(--muted)}
     .nameBtn{
       border:1px solid rgba(35,52,85,.85);
       background:rgba(11,22,45,.55);
@@ -69,7 +69,6 @@
     }
     .nameBtn:hover{background:rgba(11,22,45,.75);border-color:#3a5584}
     .nameBtn:active{transform:translateY(1px)}
-    .nameSmall{font-size:11px;color:var(--muted)}
 
     .actions{display:flex;gap:8px;flex-wrap:wrap}
     .btn{
@@ -86,29 +85,23 @@
     /* === 牆面（頭像下方展示區）：可選牆背景 + 最近 4 張懸賞令 === */
     .wallCard{ margin-top:12px; }
     .wallHint{ font-size:11px; color:var(--muted); }
-  .wallStage{
-  margin-top:10px;
-  min-height: 300px;
-  height: auto;
-
-  border-radius: 14px;
-  border: 1px solid rgba(35,52,85,.75);
-  overflow:hidden;
-  position:relative;
-
-  background:
-    radial-gradient(900px 480px at 20% 0%, rgba(255,211,106,.18), transparent 60%),
-    radial-gradient(700px 420px at 90% 20%, rgba(99,102,241,.12), transparent 60%),
-    linear-gradient(180deg, rgba(11,22,45,.65), rgba(2,6,23,.55));
-
-  background-size: cover;
-  background-position: center;
-
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
-}
-
+    .wallStage{
+      margin-top:10px;
+      min-height: 300px;
+      height: auto;
+      border-radius: 14px;
+      border: 1px solid rgba(35,52,85,.75);
+      overflow:hidden;
+      position:relative;
+      background:
+        radial-gradient(900px 480px at 20% 0%, rgba(255,211,106,.18), transparent 60%),
+        radial-gradient(700px 420px at 90% 20%, rgba(99,102,241,.12), transparent 60%),
+        linear-gradient(180deg, rgba(11,22,45,.65), rgba(2,6,23,.55));
+      background-size: cover;
+      background-position: center;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
+    }
     .wallStage.has-wall{
-      /* 使用 CSS 變數疊一層牆圖片，不覆蓋底層漸層 */
       background-image:
         var(--wall-url),
         radial-gradient(900px 480px at 20% 0%, rgba(255,211,106,.18), transparent 60%),
@@ -137,6 +130,7 @@
       box-shadow: 0 16px 26px rgba(0,0,0,.35);
       background: rgba(2,6,23,.35);
       transform-origin: 50% 20%;
+      cursor: zoom-in;
     }
     .poster img{ width:100%; height:100%; object-fit: cover; display:block; }
     .poster .pin{
@@ -186,7 +180,6 @@
     .wallBtn .thumb{ position:absolute; inset:0; background-size:cover; background-position:center; }
     .wallBtn .lab{ position:absolute; left:8px; top:8px; font-size:11px; padding:3px 7px; border-radius:999px; background:rgba(2,6,23,.72); border:1px solid rgba(0,0,0,.35); }
 
-
     .grid{
       margin-top:14px;
       display:grid;
@@ -235,255 +228,235 @@
       box-shadow:0 0 0 3px rgba(251,191,36,.12);
     }
 
-.player-title-badge{
-  position:relative;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding:6px 18px;
-  font-size:12px;
-  font-weight:800;
-  letter-spacing:.5px;
-  text-align:center;
-  white-space:nowrap;
-  box-sizing:border-box;
-  user-select:none;
-}
-.player-title-badge .text{
-  position:relative;
-  z-index:3;
-  display:inline-block;
-  max-width:100%;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-.player-title-badge.compact{ padding:6px 14px; font-size:12px; }
-.player-title-badge.pick{ cursor:pointer; transition:transform .06s ease, filter .15s ease; }
-.player-title-badge.pick:hover{ filter:brightness(1.08); }
-.player-title-badge.pick:active{ transform:translateY(1px); }
-.player-title-badge.on{ box-shadow:0 0 0 3px rgba(255,184,77,.22); }
+    .player-title-badge{
+      position:relative;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:6px 18px;
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.5px;
+      text-align:center;
+      white-space:nowrap;
+      box-sizing:border-box;
+      user-select:none;
+    }
+    .player-title-badge .text{
+      position:relative;
+      z-index:3;
+      display:inline-block;
+      max-width:100%;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .player-title-badge.compact{ padding:6px 14px; font-size:12px; }
+    .player-title-badge.pick{ cursor:pointer; transition:transform .06s ease, filter .15s ease; }
+    .player-title-badge.pick:hover{ filter:brightness(1.08); }
+    .player-title-badge.pick:active{ transform:translateY(1px); }
+    .player-title-badge.on{ box-shadow:0 0 0 3px rgba(255,184,77,.22); }
 
-/* animations */
-@keyframes float{
-  0%,100%{transform:translateY(0px);}
-  50%{transform:translateY(-3px);}
-}
-@keyframes pulse{
-  0%,100%{filter:brightness(1);}
-  50%{filter:brightness(1.18);}
-}
-@keyframes softGlow{
-  0%,100%{opacity:.5;}
-  50%{opacity:.95;}
-}
-@keyframes shine{
-  0%{transform:translateX(-130%);opacity:0;}
-  20%{opacity:0;}
-  40%{transform:translateX(130%);opacity:1;}
-  60%{opacity:0;}
-  100%{transform:translateX(130%);opacity:0;}
-}
+    @keyframes float{ 0%,100%{transform:translateY(0px);} 50%{transform:translateY(-3px);} }
+    @keyframes pulse{ 0%,100%{filter:brightness(1);} 50%{filter:brightness(1.18);} }
+    @keyframes softGlow{ 0%,100%{opacity:.5;} 50%{opacity:.95;} }
+    @keyframes shine{ 0%{transform:translateX(-130%);opacity:0;} 20%{opacity:0;} 40%{transform:translateX(130%);opacity:1;} 60%{opacity:0;} 100%{transform:translateX(130%);opacity:0;} }
 
-/* tier styles (match result.html look & feel) */
-.player-title-badge.tier-1{
-  border-radius:8px;
-  border:1px solid rgba(119,124,132,.85);
-  background:linear-gradient(135deg,#333842,#171920);
-  color:#d0d3d8;
-  text-shadow:0 0 6px rgba(0,0,0,.8);
-}
-.player-title-badge.tier-2{
-  border-radius:999px;
-  padding:7px 22px;
-  border:1px solid #63d2ff;
-  background:linear-gradient(135deg,#1b4d7e,#63d2ff);
-  color:#e8f9ff;
-  box-shadow:0 0 10px rgba(99,210,255,.45);
-  overflow:visible;
-}
-.player-title-badge.tier-2::before,
-.player-title-badge.tier-2::after{
-  content:"";
-  position:absolute; top:0; bottom:0; width:14px;
-  background:inherit;
-}
-.player-title-badge.tier-2::before{ left:-8px; transform:skewX(-24deg); }
-.player-title-badge.tier-2::after{ right:-8px; transform:skewX(24deg); }
+    .player-title-badge.tier-1{
+      border-radius:8px;
+      border:1px solid rgba(119,124,132,.85);
+      background:linear-gradient(135deg,#333842,#171920);
+      color:#d0d3d8;
+      text-shadow:0 0 6px rgba(0,0,0,.8);
+    }
+    .player-title-badge.tier-2{
+      border-radius:999px;
+      padding:7px 22px;
+      border:1px solid #63d2ff;
+      background:linear-gradient(135deg,#1b4d7e,#63d2ff);
+      color:#e8f9ff;
+      box-shadow:0 0 10px rgba(99,210,255,.45);
+      overflow:visible;
+    }
+    .player-title-badge.tier-2::before,
+    .player-title-badge.tier-2::after{
+      content:"";
+      position:absolute; top:0; bottom:0; width:14px;
+      background:inherit;
+    }
+    .player-title-badge.tier-2::before{ left:-8px; transform:skewX(-24deg); }
+    .player-title-badge.tier-2::after{ right:-8px; transform:skewX(24deg); }
 
-.player-title-badge.tier-3{
-  padding:7px 20px;
-  color:#ffe4c4;
-  background:
-    radial-gradient(circle at 0 0,rgba(255,255,255,.12) 0,transparent 55%),
-    radial-gradient(circle at 100% 100%,rgba(255,120,60,.25) 0,transparent 55%),
-    linear-gradient(135deg,#3a0f18,#8b1c24);
-  border:2px solid #f48c2b;
-  box-shadow:
-    0 0 0 1px rgba(0,0,0,.55),
-    0 0 16px rgba(244,140,43,.65);
-  clip-path:polygon(8% 0,92% 0,100% 50%,92% 100%,8% 100%,0 50%);
-}
-.player-title-badge.tier-3::before{
-  content:"";
-  position:absolute;
-  inset:2px;
-  border-radius:10px;
-  border:1px dashed rgba(255,223,186,.35);
-  opacity:.7;
-}
+    .player-title-badge.tier-3{
+      padding:7px 20px;
+      color:#ffe4c4;
+      background:
+        radial-gradient(circle at 0 0,rgba(255,255,255,.12) 0,transparent 55%),
+        radial-gradient(circle at 100% 100%,rgba(255,120,60,.25) 0,transparent 55%),
+        linear-gradient(135deg,#3a0f18,#8b1c24);
+      border:2px solid #f48c2b;
+      box-shadow:
+        0 0 0 1px rgba(0,0,0,.55),
+        0 0 16px rgba(244,140,43,.65);
+      clip-path:polygon(8% 0,92% 0,100% 50%,92% 100%,8% 100%,0 50%);
+    }
+    .player-title-badge.tier-3::before{
+      content:"";
+      position:absolute;
+      inset:2px;
+      border-radius:10px;
+      border:1px dashed rgba(255,223,186,.35);
+      opacity:.7;
+    }
 
-.player-title-badge.tier-4{
-  padding:8px 22px 10px;
-  color:#f9f0ff;
-  background:radial-gradient(circle at top,#5c35b5,#1e1032);
-  border:2px solid #e1c4ff;
-  box-shadow:
-    0 0 0 1px rgba(90,40,200,.55),
-    0 0 18px rgba(147,96,255,.85);
-  border-radius:16px 16px 10px 10px;
-  overflow:visible;
-  animation:float 5s ease-in-out infinite;
-}
-.player-title-badge.tier-4::before{
-  content:"";
-  position:absolute;
-  left:50%;
-  bottom:-10px;
-  transform:translateX(-50%);
-  width:60%;
-  height:16px;
-  background:linear-gradient(to bottom,#e1c4ff,#6e3bd1);
-  clip-path:polygon(50% 100%,0 0,100% 0);
-  box-shadow:0 4px 10px rgba(0,0,0,.55);
-}
+    .player-title-badge.tier-4{
+      padding:8px 22px 10px;
+      color:#f9f0ff;
+      background:radial-gradient(circle at top,#5c35b5,#1e1032);
+      border:2px solid #e1c4ff;
+      box-shadow:
+        0 0 0 1px rgba(90,40,200,.55),
+        0 0 18px rgba(147,96,255,.85);
+      border-radius:16px 16px 10px 10px;
+      overflow:visible;
+      animation:float 5s ease-in-out infinite;
+    }
+    .player-title-badge.tier-4::before{
+      content:"";
+      position:absolute;
+      left:50%;
+      bottom:-10px;
+      transform:translateX(-50%);
+      width:60%;
+      height:16px;
+      background:linear-gradient(to bottom,#e1c4ff,#6e3bd1);
+      clip-path:polygon(50% 100%,0 0,100% 0);
+      box-shadow:0 4px 10px rgba(0,0,0,.55);
+    }
 
-.player-title-badge.tier-5{
-  padding:8px 28px;
-  color:#fff9e0;
-  background:linear-gradient(135deg,#5a2400,#ffcf66);
-  border-radius:999px;
-  border:3px solid #ffe08a;
-  box-shadow:
-    0 0 0 1px rgba(255,224,138,.45),
-    0 0 22px rgba(255,204,110,.9);
-  overflow:visible;
-  animation:float 4.5s ease-in-out infinite, pulse 3.8s ease-in-out infinite;
-}
-.player-title-badge.tier-5::before,
-.player-title-badge.tier-5::after{
-  content:"";
-  position:absolute;
-  top:50%;
-  width:26px;
-  height:16px;
-  background:radial-gradient(circle at 0 50%,rgba(255,255,255,.95) 0,rgba(255,224,138,.1) 70%);
-  transform:translateY(-50%);
-  filter:drop-shadow(0 0 8px rgba(255,224,138,.75));
-}
-.player-title-badge.tier-5::before{
-  left:-16px;
-  clip-path:polygon(100% 0,0 50%,100% 100%);
-}
-.player-title-badge.tier-5::after{
-  right:-16px;
-  clip-path:polygon(0 0,100% 50%,0 100%);
-}
-.player-title-badge.tier-5 .text::after{
-  content:"";
-  position:absolute;
-  inset:-2px;
-  background:linear-gradient(120deg,transparent 0,rgba(255,255,255,.85) 45%,transparent 75%);
-  mix-blend-mode:screen;
-  transform:translateX(-130%);
-  animation:shine 3.6s ease-in-out infinite;
-}
+    .player-title-badge.tier-5{
+      padding:8px 28px;
+      color:#fff9e0;
+      background:linear-gradient(135deg,#5a2400,#ffcf66);
+      border-radius:999px;
+      border:3px solid #ffe08a;
+      box-shadow:
+        0 0 0 1px rgba(255,224,138,.45),
+        0 0 22px rgba(255,204,110,.9);
+      overflow:visible;
+      animation:float 4.5s ease-in-out infinite, pulse 3.8s ease-in-out infinite;
+    }
+    .player-title-badge.tier-5::before,
+    .player-title-badge.tier-5::after{
+      content:"";
+      position:absolute;
+      top:50%;
+      width:26px;
+      height:16px;
+      background:radial-gradient(circle at 0 50%,rgba(255,255,255,.95) 0,rgba(255,224,138,.1) 70%);
+      transform:translateY(-50%);
+      filter:drop-shadow(0 0 8px rgba(255,224,138,.75));
+    }
+    .player-title-badge.tier-5::before{
+      left:-16px;
+      clip-path:polygon(100% 0,0 50%,100% 100%);
+    }
+    .player-title-badge.tier-5::after{
+      right:-16px;
+      clip-path:polygon(0 0,100% 50%,0 100%);
+    }
+    .player-title-badge.tier-5 .text::after{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:linear-gradient(120deg,transparent 0,rgba(255,255,255,.85) 45%,transparent 75%);
+      mix-blend-mode:screen;
+      transform:translateX(-130%);
+      animation:shine 3.6s ease-in-out infinite;
+    }
 
-/* tier-6 legend */
-.player-title-badge.tier-6{
-  padding:9px 36px;
-  color:#fffdf5;
-  background:
-    radial-gradient(circle at 20% 0,rgba(255,255,255,.4) 0,transparent 55%),
-    radial-gradient(circle at 80% 100%,rgba(255,210,120,.7) 0,transparent 55%),
-    linear-gradient(135deg,#4b2a00,#c68b00,#ffe7a3);
-  border-radius:999px;
-  border:4px solid #ffe9c4;
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,.38),
-    0 0 0 6px rgba(158,106,32,.65),
-    0 0 32px rgba(255,243,196,.95);
-  overflow:visible;
-  position:relative;
-  text-shadow:
-    0 0 8px rgba(0,0,0,1),
-    0 0 18px rgba(255,245,210,1);
-  animation:float 4.2s ease-in-out infinite, pulse 3.4s ease-in-out infinite;
-}
-.player-title-badge.tier-6::before{
-  content:"";
-  position:absolute;
-  inset:4px;
-  border-radius:999px;
-  border:2px solid rgba(255,252,230,.85);
-  box-shadow:
-    inset 0 0 8px rgba(255,255,255,.65),
-    0 0 14px rgba(255,252,210,.6);
-  opacity:.98;
-  z-index:1;
-}
-.player-title-badge.tier-6::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  background:
-    radial-gradient(circle at 12% 50%,#fff 0,rgba(255,255,255,0) 55%),
-    radial-gradient(circle at 88% 50%,#fff 0,rgba(255,255,255,0) 55%),
-    radial-gradient(circle at 50% -10%,#fff 0,rgba(255,255,255,0) 60%);
-  mix-blend-mode:screen;
-  opacity:.65;
-  z-index:1;
-}
-.player-title-badge.tier-6 .crown{
-  position:absolute;
-  top:-16px;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:15px;
-  text-shadow:0 0 10px #ffffff, 0 0 18px rgba(255,230,160,1);
-  z-index:4;
-}
-.player-title-badge.tier-6 .pendant{
-  position:absolute;
-  bottom:-14px;
-  left:50%;
-  transform:translateX(-50%);
-  width:18px;height:18px;
-  background:radial-gradient(circle,#fff7d0 0,#f0b400 45%,#8b4c00 100%);
-  border-radius:50%;
-  box-shadow:0 4px 8px rgba(0,0,0,.75), 0 0 10px rgba(255,230,170,.9);
-  z-index:2;
-}
-.player-title-badge.tier-6 .pendant::before{
-  content:"";
-  position:absolute;
-  top:-6px; left:50%;
-  transform:translateX(-50%);
-  width:9px;height:5px;border-radius:999px;
-  background:radial-gradient(circle,#fffbe6 0,#b57a1f 100%);
-}
-.player-title-badge.tier-6 .glow{
-  position:absolute;
-  inset:-30%;
-  background:radial-gradient(circle,rgba(255,255,255,.42) 0,transparent 60%);
-  mix-blend-mode:screen;
-  opacity:.6;
-  z-index:0;
-  animation:softGlow 4.4s ease-in-out infinite;
-}
-
-
+    .player-title-badge.tier-6{
+      padding:9px 36px;
+      color:#fffdf5;
+      background:
+        radial-gradient(circle at 20% 0,rgba(255,255,255,.4) 0,transparent 55%),
+        radial-gradient(circle at 80% 100%,rgba(255,210,120,.7) 0,transparent 55%),
+        linear-gradient(135deg,#4b2a00,#c68b00,#ffe7a3);
+      border-radius:999px;
+      border:4px solid #ffe9c4;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,.38),
+        0 0 0 6px rgba(158,106,32,.65),
+        0 0 32px rgba(255,243,196,.95);
+      overflow:visible;
+      position:relative;
+      text-shadow:
+        0 0 8px rgba(0,0,0,1),
+        0 0 18px rgba(255,245,210,1);
+      animation:float 4.2s ease-in-out infinite, pulse 3.4s ease-in-out infinite;
+    }
+    .player-title-badge.tier-6::before{
+      content:"";
+      position:absolute;
+      inset:4px;
+      border-radius:999px;
+      border:2px solid rgba(255,252,230,.85);
+      box-shadow:
+        inset 0 0 8px rgba(255,255,255,.65),
+        0 0 14px rgba(255,252,210,.6);
+      opacity:.98;
+      z-index:1;
+    }
+    .player-title-badge.tier-6::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 12% 50%,#fff 0,rgba(255,255,255,0) 55%),
+        radial-gradient(circle at 88% 50%,#fff 0,rgba(255,255,255,0) 55%),
+        radial-gradient(circle at 50% -10%,#fff 0,rgba(255,255,255,0) 60%);
+      mix-blend-mode:screen;
+      opacity:.65;
+      z-index:1;
+    }
+    .player-title-badge.tier-6 .crown{
+      position:absolute;
+      top:-16px;
+      left:50%;
+      transform:translateX(-50%);
+      font-size:15px;
+      text-shadow:0 0 10px #ffffff, 0 0 18px rgba(255,230,160,1);
+      z-index:4;
+    }
+    .player-title-badge.tier-6 .pendant{
+      position:absolute;
+      bottom:-14px;
+      left:50%;
+      transform:translateX(-50%);
+      width:18px;height:18px;
+      background:radial-gradient(circle,#fff7d0 0,#f0b400 45%,#8b4c00 100%);
+      border-radius:50%;
+      box-shadow:0 4px 8px rgba(0,0,0,.75), 0 0 10px rgba(255,230,170,.9);
+      z-index:2;
+    }
+    .player-title-badge.tier-6 .pendant::before{
+      content:"";
+      position:absolute;
+      top:-6px; left:50%;
+      transform:translateX(-50%);
+      width:9px;height:5px;border-radius:999px;
+      background:radial-gradient(circle,#fffbe6 0,#b57a1f 100%);
+    }
+    .player-title-badge.tier-6 .glow{
+      position:absolute;
+      inset:-30%;
+      background:radial-gradient(circle,rgba(255,255,255,.42) 0,transparent 60%);
+      mix-blend-mode:screen;
+      opacity:.6;
+      z-index:0;
+      animation:softGlow 4.4s ease-in-out infinite;
+    }
 
     .divider{height:1px;background:rgba(35,52,85,.75);margin:12px 0}
 
@@ -514,19 +487,6 @@
     .rank{font-weight:900}
 
     .titles{display:flex;gap:8px;flex-wrap:wrap}
-    .tag{
-      border:1px solid rgba(35,52,85,.75);
-      background:rgba(11,22,45,.55);
-      border-radius:999px;
-      padding:7px 10px;
-      font-size:12px;
-      cursor:pointer;
-      user-select:none;
-      transition: background .15s ease, border-color .15s ease, transform .06s ease;
-    }
-    .tag:hover{background:rgba(11,22,45,.75);border-color:#3a5584}
-    .tag:active{transform:translateY(1px)}
-    .tag.on{border-color:rgba(251,191,36,.7);background:rgba(251,191,36,.12)}
 
     .footnote{font-size:11px;color:var(--muted);line-height:1.5}
     .mono{font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
@@ -577,7 +537,7 @@
     .help{font-size:11px;color:var(--muted);line-height:1.5}
     .modal .actions2{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:12px}
 
-    /* avatar picker grid (same spirit as start page) */
+    /* avatar picker grid */
     .avaGrid{
       display:grid;
       grid-template-columns:repeat(8, 1fr);
@@ -604,67 +564,97 @@
       box-shadow:0 0 0 3px rgba(255,184,77,.25);
     }
 
-/* === card image viewer === */
-.imgModal{
-  width:min(520px, 92vw);
-  aspect-ratio: 2 / 3;
-  border-radius:16px;
-  overflow:hidden;
-  border:1px solid rgba(35,52,85,.9);
-  background:rgba(2,6,23,.75);
-  box-shadow: 0 18px 60px rgba(0,0,0,.5);
-}
-#imgModalPic{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-  display:block;
-  background:rgba(0,0,0,.15);
-}
-.slot.clickable{ cursor: zoom-in; }
-.slot.clickable:hover{ outline:2px solid rgba(255,211,106,.22); outline-offset:2px; }
+    /* === card image viewer === */
+    .imgModal{
+      width:min(520px, 92vw);
+      aspect-ratio: 2 / 3;
+      border-radius:16px;
+      overflow:hidden;
+      border:1px solid rgba(35,52,85,.9);
+      background:rgba(2,6,23,.75);
+      box-shadow: 0 18px 60px rgba(0,0,0,.5);
+    }
+    #imgModalPic{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      display:block;
+      background:rgba(0,0,0,.15);
+    }
+    .slot.clickable{ cursor: zoom-in; }
+    .slot.clickable:hover{ outline:2px solid rgba(255,211,106,.22); outline-offset:2px; }
 
-
+    /* loading overlay */
+    .loadingBack{
+      position:fixed; inset:0;
+      background:rgba(0,0,0,.55);
+      display:none;
+      align-items:center; justify-content:center;
+      z-index:10000;
+      padding:20px;
+    }
+    .loadingPanel{
+      width:min(420px, 92vw);
+      border:1px solid rgba(35,52,85,.9);
+      border-radius:16px;
+      background:linear-gradient(180deg, rgba(15,27,50,.92), rgba(2,6,23,.88));
+      box-shadow: 0 16px 50px rgba(0,0,0,.35);
+      padding:16px 16px;
+    }
+    .loadingTitle{ font-weight:900; color:#ffd36a; }
+    .loadingMsg{ margin-top:8px; font-size:12px; color:rgba(229,231,235,.82); line-height:1.6; }
+    .loadingBar{
+      margin-top:12px; height:10px; border-radius:999px;
+      border:1px solid rgba(35,52,85,.9);
+      background:rgba(2,6,23,.45);
+      overflow:hidden;
+    }
+    .loadingBar > i{
+      display:block; height:100%; width:40%;
+      background:linear-gradient(90deg, rgba(255,211,106,.2), rgba(255,211,106,.85), rgba(255,211,106,.2));
+      animation:slide 1.2s ease-in-out infinite;
+    }
+    @keyframes slide{ 0%{transform:translateX(-120%)} 100%{transform:translateX(260%)} }
+    .loadingActions{ margin-top:12px; display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap; }
   </style>
-<script src="https://onepiece-card-online.onrender.com/socket.io/socket.io.js"></script>
+
+  <!-- Socket.IO -->
+  <script src="https://onepiece-card-online.onrender.com/socket.io/socket.io.js"></script>
 </head>
 
 <body>
   <div class="wrap">
     <div class="topbar">
-  <div class="brand">
-    <div class="avatarBox" id="avatarBox" title="點擊更換頭貼（使用開始頁頭像）">
-      <img id="avatarImg" alt="avatar" style="display:none" />
+      <div class="brand">
+        <div class="avatarBox" id="avatarBox" title="點擊更換頭貼（使用開始頁頭像）">
+          <img id="avatarImg" alt="avatar" style="display:none" />
+        </div>
+
+        <div class="title">
+          <h1>
+            <button class="nameBtn" id="nameBtn" title="點擊修改玩家名稱">未命名玩家</button>
+            <span class="titleBadge" id="nameTitleBadge" style="display:none"></span>
+          </h1>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="btnBack">返回主畫面</button>
+        <button class="btn primary" id="btnRefresh">重新同步雲端</button>
+        <button class="btn danger" id="btnLogout">登出（清除本機 secret）</button>
+      </div>
     </div>
-
-    <div class="title">
-      <h1>
-        <button class="nameBtn" id="nameBtn" title="點擊修改玩家名稱">未命名玩家</button>
-        <span class="titleBadge" id="nameTitleBadge" style="display:none"></span>
-      </h1>
-      <!-- ✅ 這裡原本的 sub（名稱與頭貼會同步到開始頁。）已移除 -->
-    </div>
-  </div>
-
-  <div class="actions">
-    <button class="btn" id="btnBack">返回主畫面</button>
-    <button class="btn primary" id="btnRefresh">重新整理</button>
-    <button class="btn danger" id="btnReset">清除本機紀錄</button>
-  </div>
-</div>
-
 
     <!-- === 牆面展示：可選牆背景 + 最近 4 張懸賞令 === -->
     <div class="card wallCard">
       <div class="hd">
         <div>
           <div class="h">我的牆面</div>
-          <div class="wallHint">可選牆背景；牆上會顯示最近 4 場的懸賞令。</div>
+          <div class="wallHint">可選牆背景；牆上會顯示最近 4 場的懸賞令（雲端）。</div>
         </div>
 
         <div class="wallTools">
           <button class="btn" id="btnPickWall">選擇牆</button>
-          <input id="posterFile" type="file" accept="image/*" style="display:none" />
         </div>
       </div>
 
@@ -672,7 +662,7 @@
         <div class="wallStage" id="wallStage">
           <div class="wallEmpty" id="wallEmpty">
             <div style="font-weight:800">牆面目前沒有懸賞令</div>
-            <div class="muted" style="font-size:12px"></div>
+            <div class="muted" style="font-size:12px">（打完結算後會自動出現）</div>
           </div>
         </div>
       </div>
@@ -693,12 +683,12 @@
             <div class="k">
               <div class="lab">總場次</div>
               <div class="val" id="kGames">0</div>
-              <div class="hint muted">同瀏覽器累積</div>
+              <div class="hint muted">雲端資料</div>
             </div>
             <div class="k">
               <div class="lab">勝場</div>
               <div class="val" id="kWins">0</div>
-              <div class="hint muted">本機資料</div>
+              <div class="hint muted">雲端資料</div>
             </div>
             <div class="k">
               <div class="lab">勝率</div>
@@ -708,7 +698,7 @@
             <div class="k">
               <div class="lab">累積金幣</div>
               <div class="val" id="kCoins">0</div>
-              <div class="hint muted">可由結算匯入</div>
+              <div class="hint muted">雲端資料</div>
             </div>
           </div>
 
@@ -716,7 +706,7 @@
 
           <div class="row" style="justify-content:space-between">
             <div style="font-weight:800">已取得稱號</div>
-            <div class="muted" style="font-size:11px">點擊稱號可設定「佩戴」</div>
+            <div class="muted" style="font-size:11px">點擊稱號可設定「佩戴」（會寫入雲端）</div>
           </div>
           <div style="margin-top:10px" class="titles" id="titlesWrap"></div>
 
@@ -724,7 +714,7 @@
 
           <div class="row" style="justify-content:space-between">
             <div style="font-weight:800">最近 10 局</div>
-            <div class="muted" style="font-size:11px">由結算頁匯入</div>
+            <div class="muted" style="font-size:11px">雲端資料</div>
           </div>
 
           <div style="margin-top:8px; overflow:auto">
@@ -743,62 +733,61 @@
 
           <div class="divider"></div>
           <div class="footnote">
-            提醒：資料保存在此瀏覽器（<span class="mono">localStorage</span>）。若清除網站資料，紀錄會消失。
+            提醒：此頁面為 <b>完全雲端主控</b>。資料儲存在伺服器（Postgres / player_profiles.stats）。
+            本機僅保留 <span class="mono">opSecret</span> 供自動登入。
           </div>
         </div>
       </div>
 
-<!-- 右：豪華解鎖（兩區） -->
-<div style="display:grid; gap:14px;">
-  <!-- A) 一般豪華卡 -->
-  <div class="card">
-    <div class="hd">
-      <div class="h">豪華解鎖展示</div>
-      <div class="muted" style="font-size:11px">
-        已解鎖 <span id="luxCount">0</span> / 20
-      </div>
-    </div>
-    <div class="bd">
-      <div class="gallery" id="luxGallery"></div>
-      <div class="divider"></div>
-      <div class="footnote">
-        圖片路徑預設使用：<span class="mono">/images/cards_lux/{id}.webp</span>
-      </div>
-    </div>
-  </div>
+      <!-- 右：豪華解鎖（兩區） -->
+      <div style="display:grid; gap:14px;">
+        <div class="card">
+          <div class="hd">
+            <div class="h">豪華解鎖展示</div>
+            <div class="muted" style="font-size:11px">
+              已解鎖 <span id="luxCount">0</span> / 20
+            </div>
+          </div>
+          <div class="bd">
+            <div class="gallery" id="luxGallery"></div>
+            <div class="divider"></div>
+            <div class="footnote">
+              圖片路徑：<span class="mono">/images/cards_lux/{id}.webp</span>
+            </div>
+          </div>
+        </div>
 
-  <!-- B) 強化技能豪華卡 -->
-  <div class="card">
-    <div class="hd">
-      <div class="h">豪華解鎖展示（強化技能）</div>
-      <div class="muted" style="font-size:11px">
-        已解鎖 <span id="luxEnhCount">0</span> / 20
+        <div class="card">
+          <div class="hd">
+            <div class="h">豪華解鎖展示（強化技能）</div>
+            <div class="muted" style="font-size:11px">
+              已解鎖 <span id="luxEnhCount">0</span> / 20
+            </div>
+          </div>
+          <div class="bd">
+            <div class="gallery" id="luxEnhGallery"></div>
+            <div class="divider"></div>
+            <div class="footnote">
+              圖片路徑：<span class="mono">/images/cards_lux/enh/{id}.webp</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="bd">
-      <div class="gallery" id="luxEnhGallery"></div>
-      <div class="divider"></div>
-      <div class="footnote">
-        圖片路徑預設使用：<span class="mono">/images/cards_lux/enh/{id}.webp</span>
-      </div>
-    </div>
-  </div>
-</div>
-
   </div>
 
   <!-- name modal -->
   <div class="modalBack" id="nameModalBack" role="dialog" aria-modal="true">
     <div class="modal">
       <div class="mh">
-        <div class="t">修改玩家名稱</div>
+        <div class="t">修改玩家名稱（雲端）</div>
         <button class="xBtn" id="nameModalClose" title="關閉">✕</button>
       </div>
       <div class="mb">
         <div class="field">
           <label for="nameInput">玩家名稱</label>
           <input id="nameInput" class="inp" maxlength="16" placeholder="最多 16 字" />
-          <div class="help">會同步到開始頁（等待室）預設名字。</div>
+          <div class="help">儲存後會立即寫入雲端，所有裝置同步。</div>
         </div>
 
         <div class="actions2">
@@ -813,7 +802,7 @@
   <div class="modalBack" id="avatarModalBack" role="dialog" aria-modal="true">
     <div class="modal">
       <div class="mh">
-        <div class="t">更換頭貼（開始頁頭像）</div>
+        <div class="t">更換頭貼（雲端）</div>
         <button class="xBtn" id="avatarModalClose" title="關閉">✕</button>
       </div>
       <div class="mb">
@@ -829,18 +818,16 @@
     </div>
   </div>
 
-
-
   <!-- wall modal -->
   <div class="modalBack" id="wallModalBack" role="dialog" aria-modal="true">
     <div class="modal">
       <div class="mh">
-        <div class="t">選擇牆背景</div>
+        <div class="t">選擇牆背景（雲端）</div>
         <button class="xBtn" id="wallModalClose" title="關閉">✕</button>
       </div>
       <div class="mb">
         <div class="help" style="margin-bottom:10px">
-          路徑：<span class="mono">images/walls/{1..8}.webp</span>（若不存在會自動使用內建漸層）。
+          路徑：<span class="mono">images/walls/{1..8}.webp</span>
         </div>
 
         <div class="wallGrid" id="wallGrid"></div>
@@ -853,232 +840,186 @@
     </div>
   </div>
 
-<!-- card image viewer modal -->
-<div class="modalBack" id="imgModalBack" role="dialog" aria-modal="true">
-  <div class="imgModal">
-    <img id="imgModalPic" alt="card-large" />
+  <!-- card image viewer modal -->
+  <div class="modalBack" id="imgModalBack" role="dialog" aria-modal="true">
+    <div class="imgModal">
+      <img id="imgModalPic" alt="card-large" />
+    </div>
   </div>
-</div>
 
+  <!-- loading overlay -->
+  <div class="loadingBack" id="loadingBack" aria-hidden="true">
+    <div class="loadingPanel">
+      <div class="loadingTitle" id="loadingTitle">雲端同步中…</div>
+      <div class="loadingMsg" id="loadingMsg">正在從伺服器讀取玩家資料。</div>
+      <div class="loadingBar"><i></i></div>
+      <div class="loadingActions">
+        <button class="btn" id="loadingCloseBtn" style="display:none">關閉</button>
+      </div>
+    </div>
+  </div>
 
 <script>
 /**
- * profile.html（玩家頁）
- * - 戰績/稱號/豪華/最近10局：用 op_profile_v1（你的既有結構）
- * - 名稱/頭貼：同步 op_player_profile（start.html 既有 key）
- *   start.html 已使用 images/avatars/{1..30}.webp 並寫入 op_player_profile。 :contentReference[oaicite:3]{index=3}
+ * profile.html（完全雲端主控）
+ * - 只依賴 localStorage.opSecret 作為身份憑證
+ * - 其餘所有玩家資料：PROFILE_GET / PROFILE_UPDATE
+ * - 不讀、不寫：op_profile_v1 / op_player_profile / op_wall_v1 / op_bounty_posters_v1
  */
 
-
-const LS_KEY_POSTERS = 'op_bounty_posters_v1';
-const WALL_COUNT = 8;
-
-// ✅ Socket（profile.html 原本沒有）
 const SERVER_URL = 'https://onepiece-card-online.onrender.com';
 const socket = io(SERVER_URL, { transports: ['websocket'] });
 
-// ===== Cloud Sync helpers (op_profile_v1 <-> player_profiles.stats.client) =====
-const LS_KEY_PROFILE = 'op_profile_v1';
-const LS_KEY_START   = 'op_player_profile';
-const LS_KEY_WALL    = 'op_wall_v1'; // 你 profile.html 用的牆 key（若不同請改成你檔案內實際值）
+const AVATAR_COUNT = 30;
+const WALL_COUNT = 8;
 
-function safeJsonParse(raw, fallback=null){
-  try{ return JSON.parse(raw); }catch(e){ return fallback; }
+// === state (memory only) ===
+let __secret = '';
+let __cloudProfile = null;   // {name, avatar, stats}
+let __client = null;         // cloud stats.client
+let __wallId = 1;            // cloud stats.wall.id
+let __saving = false;
+
+// ===== basic utils =====
+function clamp(n, a, b){ n = Number(n); if(!Number.isFinite(n)) n = a; return Math.max(a, Math.min(b, n)); }
+function clampStr(s, maxLen){
+  s = String(s ?? '').trim();
+  if (!s) return '';
+  if (s.length > maxLen) s = s.slice(0, maxLen);
+  return s;
+}
+function normTier(t){
+  const n = Number(t);
+  if(!Number.isFinite(n)) return 1;
+  return clamp(Math.round(n), 1, 6);
+}
+function avatarUrlById(id){
+  const n = clamp(id, 1, AVATAR_COUNT);
+  return `images/avatars/${n}.webp`;
+}
+function wallUrlById(id){
+  const n = clamp(id, 1, WALL_COUNT);
+  return `images/walls/${n}.webp`;
+}
+function fmtTs(ts){
+  if (!ts) return '-';
+  const d = new Date(ts);
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth()+1).padStart(2,'0');
+  const dd = String(d.getDate()).padStart(2,'0');
+  const hh = String(d.getHours()).padStart(2,'0');
+  const mi = String(d.getMinutes()).padStart(2,'0');
+  return `${yyyy}-${mm}-${dd} ${hh}:${mi}`;
+}
+function setText(id, txt){ const el = document.getElementById(id); if (el) el.textContent = txt; }
+function escapeHtml(s){
+  return String(s ?? '')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
 }
 
-function loadLocalProfile(){
-  // 這份結構在 profile.html / result.html 都一致：totals/titles/recent/_appliedMatchKeys 等【turn13file1†L22-L33】【turn13file0†L35-L50】
-  const raw = localStorage.getItem(LS_KEY_PROFILE);
-  const p = safeJsonParse(raw, null);
-  return (p && typeof p === 'object') ? p : null;
+// ===== UI: loading overlay =====
+function showLoading(title, msg, closable=false){
+  const back = document.getElementById('loadingBack');
+  const t = document.getElementById('loadingTitle');
+  const m = document.getElementById('loadingMsg');
+  const btn = document.getElementById('loadingCloseBtn');
+  if(!back || !t || !m || !btn) return;
+  t.textContent = title || '雲端同步中…';
+  m.textContent = msg || '';
+  btn.style.display = closable ? 'inline-flex' : 'none';
+  back.style.display = 'flex';
+  back.setAttribute('aria-hidden', 'false');
 }
-function saveLocalProfile(p){
-  try{ localStorage.setItem(LS_KEY_PROFILE, JSON.stringify(p)); }catch(e){}
+function hideLoading(){
+  const back = document.getElementById('loadingBack');
+  if(!back) return;
+  back.style.display = 'none';
+  back.setAttribute('aria-hidden', 'true');
 }
+document.getElementById('loadingCloseBtn')?.addEventListener('click', hideLoading);
 
-function loadLocalStart(){
-  const raw = localStorage.getItem(LS_KEY_START);
-  const p = safeJsonParse(raw, null);
-  return (p && typeof p === 'object') ? p : null;
-}
-function saveLocalStart(p){
-  try{ localStorage.setItem(LS_KEY_START, JSON.stringify(p)); }catch(e){}
-}
-
-function loadLocalWall(){
-  const raw = localStorage.getItem(LS_KEY_WALL);
-  const w = safeJsonParse(raw, null);
-  return (w && typeof w === 'object') ? w : null;
-}
-function saveLocalWall(w){
-  try{ localStorage.setItem(LS_KEY_WALL, JSON.stringify(w)); }catch(e){}
-}
-
-function uniq(arr){ return Array.from(new Set((arr||[]).map(x=>JSON.stringify(x)))).map(s=>safeJsonParse(s,s)); }
-function uniqStr(arr){ return Array.from(new Set((arr||[]).map(x=>String(x||'')).filter(Boolean))); }
-
-function mergeLocalAndCloud(localClient, cloudClient){
-  // 規則：數值取 max（避免回舊）；清單 union；recent 用 matchKey 去重取最新 10；_appliedMatchKeys union 取 200
-  if(!localClient) return cloudClient || null;
-  if(!cloudClient) return localClient;
-
-  const out = { ...localClient };
-
-  // player
-  out.player = { ...(localClient.player||{}), ...(cloudClient.player||{}) };
-
-  // totals：商店最重要 coins（你結算是累加到 totals.coins）【turn13file0†L40-L43】
-  out.totals = { ...(localClient.totals||{}), ...(cloudClient.totals||{}) };
-  for(const k of Object.keys(out.totals)){
-    const a = Number(localClient.totals?.[k] ?? 0) || 0;
-    const b = Number(cloudClient.totals?.[k] ?? 0) || 0;
-    out.totals[k] = Math.max(a,b);
-  }
-
-  // deluxeUnlocked / titles
-  out.deluxeUnlocked = uniqStr([...(localClient.deluxeUnlocked||[]), ...(cloudClient.deluxeUnlocked||[])])
-    .map(x=>Number(x)).filter(n=>Number.isFinite(n));
-
-  out.titles = { ...(localClient.titles||{}), ...(cloudClient.titles||{}) };
-  const ownedA = Array.isArray(localClient.titles?.owned) ? localClient.titles.owned : [];
-  const ownedB = Array.isArray(cloudClient.titles?.owned) ? cloudClient.titles.owned : [];
-  // owned 去重（以 label 為 key、保留較高 tier）：你的結算頁就是這樣升級 tier 的【turn13file10†L35-L46】
-  const map = new Map();
-  [...ownedA, ...ownedB].forEach(x=>{
-    const label = String(x?.label||'').trim(); if(!label) return;
-    const tier = Number(x?.tier||1)||1;
-    const prev = map.get(label);
-    if(!prev || tier > prev.tier) map.set(label, { label, tier });
-  });
-  out.titles.owned = Array.from(map.values());
-  if(!out.titles.equipped && cloudClient.titles?.equipped) out.titles.equipped = cloudClient.titles.equipped;
-  out.titles.equippedTier = Math.max(
-    Number(localClient.titles?.equippedTier||1)||1,
-    Number(cloudClient.titles?.equippedTier||1)||1
-  );
-
-  // recent：matchKey 去重取新 10（你本機 recent 就是這樣做）【turn13file0†L45-L49】
-  const ra = Array.isArray(localClient.recent) ? localClient.recent : [];
-  const rb = Array.isArray(cloudClient.recent) ? cloudClient.recent : [];
-  const seen = new Set();
-  const mergedRecent = [...rb, ...ra] // 先雲端再本機，後面會依 ts 排序
-    .filter(x=>{
-      const mk = String(x?.matchKey||'').trim();
-      if(!mk) return false;
-      if(seen.has(mk)) return false;
-      seen.add(mk);
-      return true;
-    })
-    .sort((x,y)=>(Number(y?.ts||0)-Number(x?.ts||0)))
-    .slice(0,10);
-  out.recent = mergedRecent;
-
-  // applied keys：union 取 200（避免刷新重複加總）【turn13file0†L35-L43】
-  out._appliedMatchKeys = uniqStr([...(localClient._appliedMatchKeys||[]), ...(cloudClient._appliedMatchKeys||[])])
-    .slice(0,200);
-
-  return out;
-}
-
-async function cloudGet(socket, secret){
+// ===== socket helpers =====
+async function cloudGet(secret){
   return await new Promise((resolve)=>{
-    socket.timeout(6000).emit('PROFILE_GET', { secret }, (err, res)=>{
+    socket.timeout(9000).emit('PROFILE_GET', { secret }, (err, res)=>{
       if(err || !res?.ok) return resolve(null);
       resolve(res.profile || null);
     });
   });
 }
-
-async function cloudUpdate(socket, secret, patch){
+async function cloudUpdate(secret, patch){
   return await new Promise((resolve)=>{
-    socket.timeout(6000).emit('PROFILE_UPDATE', { secret, patch }, (err, res)=>{
+    socket.timeout(9000).emit('PROFILE_UPDATE', { secret, patch }, (err, res)=>{
       resolve(!err && !!res?.ok);
     });
   });
 }
 
-async function cloudSyncPullMergePush(socket){
-  const secret = localStorage.getItem('opSecret');
-  if(!secret) return { ok:false, reason:'no-secret' };
-
-  const cloud = await cloudGet(socket, secret);
-  const cloudClient = cloud?.stats?.client || null;
-
-  const local = loadLocalProfile();
-  const merged = mergeLocalAndCloud(local, cloudClient);
-
-  if(merged){
-    saveLocalProfile(merged);
-
-    // 同步 start.html 用的 op_player_profile（玩家名稱/頭像）
-    if(merged.player){
-      const sp = loadLocalStart() || {};
-      sp.playerName = merged.player.name || sp.playerName;
-      sp.playerAvatar = merged.player.avatar || sp.playerAvatar;
-      saveLocalStart(sp);
+// ===== normalize client data =====
+function defaultClient(name, avatar){
+  return {
+    player: { name: name || '', avatar: avatar || 1 },
+    totals: { coins: 0, games: 0, wins: 0, atk: 0, def: 0, hit: 0, intel: 0, survival: 0 },
+    deluxeUnlocked: [],
+    recent: [],
+    titles: { owned: [], equipped: '', equippedTier: 1 },
+    bountyPosters: [],
+    _appliedMatchKeys: []
+  };
+}
+function normalizeOwnedTitles(arr){
+  const out = [];
+  const map = new Map(); // label -> {label,tier}
+  const list = Array.isArray(arr) ? arr : [];
+  for(const it of list){
+    let label = '';
+    let tier = 1;
+    if(typeof it === 'string'){
+      label = String(it).trim();
+      tier = 1;
+    }else if(it && typeof it === 'object'){
+      label = String(it.label ?? it.text ?? '').trim();
+      tier = normTier(it.tier ?? it.level ?? 1);
     }
+    if(!label) continue;
+    const prev = map.get(label);
+    if(!prev || tier > prev.tier) map.set(label, { label, tier });
+  }
+  for(const v of map.values()) out.push(v);
+  return out;
+}
+function findTitleMetaByLabel(owned, label){
+  const key = String(label||'').trim();
+  if(!key) return null;
+  const arr = Array.isArray(owned) ? owned : [];
+  return arr.find(x => String(x?.label||'').trim() === key) || null;
+}
+function buildTitleBadgeHTML(label, tier){
+  const t = normTier(tier || 1);
+  const safeLabel = String(label||'').trim();
+  if(!safeLabel) return '';
 
-    // 同步牆背景（只同步 id，避免大圖）
-    const wall = loadLocalWall() || {};
-    if(cloud?.stats?.wall?.id) wall.id = cloud.stats.wall.id;
-    saveLocalWall(wall);
-
-    // 推回雲端：把 merged 放到 stats.client
-    const patch = {
-      name: merged.player?.name || (cloud?.name || ''),
-      avatar: String(merged.player?.avatar ?? (cloud?.avatar || '')),
-      stats: {
-        ...(cloud?.stats || {}),
-        client: merged,
-        wall: { id: wall?.id || 1 }
-      }
-    };
-    await cloudUpdate(socket, secret, patch);
-    return { ok:true };
+  if(t === 6){
+    return `
+      <span class="player-title-badge tier-6">
+        <span class="glow"></span>
+        <span class="crown">👑</span>
+        <span class="text">${escapeHtml(safeLabel)}</span>
+        <span class="pendant"></span>
+      </span>
+    `;
   }
 
-  return { ok:false, reason:'no-merged' };
+  return `
+    <span class="player-title-badge tier-${t}">
+      <span class="text">${escapeHtml(safeLabel)}</span>
+    </span>
+  `;
 }
-
-async function cloudSyncPushNow(socket){
-  const secret = localStorage.getItem('opSecret');
-  if(!secret) return false;
-
-  const local = loadLocalProfile();
-  if(!local) return false;
-
-  const wall = loadLocalWall() || {};
-  const patch = {
-    name: local.player?.name || '',
-    avatar: String(local.player?.avatar ?? ''),
-    stats: { client: local, wall: { id: wall?.id || 1 } }
-  };
-  return await cloudUpdate(socket, secret, patch);
-}
-
-
-function wallUrlById(id){
-  const n = Math.max(1, Math.min(WALL_COUNT, Number(id)||1));
-  return `images/walls/${n}.webp`;
-}
-
-function defaultWall(){
-  return { version:1, id:1 };
-}
-
-function loadWall(){
-  const raw = localStorage.getItem(LS_KEY_WALL);
-  const base = defaultWall();
-  if(!raw) return base;
-  const w = safeJsonParse(raw, null);
-  if(!w || typeof w !== 'object') return base;
-  return { version:1, id: Math.max(1, Math.min(WALL_COUNT, Number(w.id)||1)) };
-}
-
-function saveWall(w){
-  try{ localStorage.setItem(LS_KEY_WALL, JSON.stringify({version:1, id: Math.max(1, Math.min(WALL_COUNT, Number(w?.id)||1))})); }catch(e){}
-}
-
 function normalizePosterMeta(x){
   if(!x || typeof x !== 'object') return null;
   const key = String(x.key||'').trim();
@@ -1086,46 +1027,13 @@ function normalizePosterMeta(x){
   const title = String(x.title||'').trim();
   const name = String(x.name||'').trim();
   const bounty = String(x.bounty||'').trim();
-  const avatarId = Math.max(1, Math.min(AVATAR_COUNT, Number(x.avatarId)||1));
+  const avatarId = clamp(Number(x.avatarId)||1, 1, AVATAR_COUNT);
   if(!key) return null;
   return { key, ts, title, name, bounty, avatarId };
 }
 
-/** 懸賞令資料（meta）：最多 4 張
- *  - 優先讀 op_profile_v1.bountyPosters（雲端同步的 client 會寫回這裡）
- *  - 備援讀 LS_KEY_POSTERS（結算頁 pushPosterMeta 也會寫這份）
- */
-function loadPosterMetas(){
-  // 1) op_profile_v1
-  try{
-    const p = safeJsonParse(localStorage.getItem(LS_KEY_PROFILE), null);
-    const arr = p?.bountyPosters;
-    if(Array.isArray(arr)){
-      return arr.map(normalizePosterMeta).filter(Boolean).slice(0,4);
-    }
-  }catch(e){}
-
-  // 2) LS_KEY_POSTERS
-  const raw = localStorage.getItem(LS_KEY_POSTERS);
-  const arr = safeJsonParse(raw, null);
-  if(!Array.isArray(arr)) return [];
-  return arr.map(normalizePosterMeta).filter(Boolean).slice(0,4);
-}
-
-function savePosterMetas(list){
-  const metas = (list||[]).map(normalizePosterMeta).filter(Boolean).slice(0,4);
-  try{ localStorage.setItem(LS_KEY_POSTERS, JSON.stringify(metas)); }catch(e){}
-  // 同步進 op_profile_v1（雲端同步會帶這份）
-  try{
-    const p = safeJsonParse(localStorage.getItem(LS_KEY_PROFILE), null);
-    if(p && typeof p === 'object'){
-      p.bountyPosters = metas;
-      localStorage.setItem(LS_KEY_PROFILE, JSON.stringify(p));
-    }
-  }catch(e){}
-}
-
-function loadImage(src){
+// ===== poster renderer (generate on the fly) =====
+async function loadImage(src){
   return new Promise((resolve)=>{
     const img = new Image();
     img.crossOrigin = 'anonymous';
@@ -1134,11 +1042,8 @@ function loadImage(src){
     img.src = src;
   });
 }
+const __posterCache = new Map(); // key -> dataUrl
 
-// key -> dataUrl（避免每次切頁都重畫）
-const __posterCache = new Map();
-
-/** 生成海報圖片（沿用結算頁 showBounty 的排版） */
 async function renderPosterDataUrl(meta){
   const m = normalizePosterMeta(meta);
   if(!m) return '';
@@ -1150,7 +1055,6 @@ async function renderPosterDataUrl(meta){
   const ctx = cvs.getContext('2d');
   ctx.clearRect(0,0,W,H);
 
-  // 對齊參數（與 result.html 一致）
   const cx = 382, cy = 489, r = 250;
   const nameY = 939, bountyY = 1032;
   const nameFont = 126, bountyFont = 78;
@@ -1158,7 +1062,6 @@ async function renderPosterDataUrl(meta){
   const bg = await loadImage('images/wanted.png');
   const ava = await loadImage(avatarUrlById(m.avatarId));
 
-  // 先畫頭像（圓形裁切）
   ctx.save();
   ctx.beginPath();
   ctx.arc(cx, cy, r, 0, Math.PI*2);
@@ -1167,10 +1070,8 @@ async function renderPosterDataUrl(meta){
   if(ava) ctx.drawImage(ava, cx-r, cy-r, r*2, r*2);
   ctx.restore();
 
-  // 再畫海報
   if(bg) ctx.drawImage(bg, 0, 0, W, H);
 
-  // 名稱（含細邊框）
   ctx.textAlign = 'center';
   ctx.font = `bold ${nameFont}px 'Times New Roman', serif`;
   const nameStrokeW = Math.max(2, Math.round(nameFont * 0.035));
@@ -1184,7 +1085,6 @@ async function renderPosterDataUrl(meta){
   ctx.strokeText(nameTxt, cx, nameY);
   ctx.fillText(nameTxt, cx, nameY);
 
-  // 懸賞金額
   ctx.save();
   ctx.textAlign = 'center';
   ctx.textBaseline = 'alphabetic';
@@ -1202,40 +1102,59 @@ async function renderPosterDataUrl(meta){
   return dataUrl;
 }
 
+// ===== modals =====
+function openModal(id){ const el=document.getElementById(id); if(el) el.style.display='flex'; }
+function closeModal(id){ const el=document.getElementById(id); if(el) el.style.display='none'; }
 
-async function fileToDataUrl(file){
-  if(!file) return '';
-  return new Promise((resolve)=>{
-    const fr = new FileReader();
-    fr.onload = ()=> resolve(String(fr.result||''));
-    fr.onerror = ()=> resolve('');
-    fr.readAsDataURL(file);
-  });
+// ===== card viewer =====
+function openImgModal(src){
+  const back = document.getElementById('imgModalBack');
+  const pic  = document.getElementById('imgModalPic');
+  if(!back || !pic) return;
+  pic.src = src;
+  back.style.display = 'flex';
 }
+function closeImgModal(){
+  const back = document.getElementById('imgModalBack');
+  const pic  = document.getElementById('imgModalPic');
+  if(!back || !pic) return;
+  back.style.display = 'none';
+  pic.src = '';
+}
+document.getElementById('imgModalBack')?.addEventListener('click', (ev)=>{
+  if(ev.target && ev.target.id === 'imgModalBack') closeImgModal();
+});
+document.addEventListener('keydown', (ev)=>{
+  if(ev.key === 'Escape'){
+    const back = document.getElementById('imgModalBack');
+    if(back && back.style.display === 'flex') closeImgModal();
+  }
+});
 
+// ===== render wall =====
 function applyWallBackground(){
   const stage = document.getElementById('wallStage');
   if(!stage) return;
-  const w = loadWall();
+  const id = clamp(__wallId, 1, WALL_COUNT);
   stage.classList.add('has-wall');
-  stage.style.setProperty('--wall-url', `url(${wallUrlById(w.id)})`);
+  stage.style.setProperty('--wall-url', `url(${wallUrlById(id)})`);
 }
-
 async function renderWall(){
   const stage = document.getElementById('wallStage');
   const empty = document.getElementById('wallEmpty');
   if(!stage) return;
 
   applyWallBackground();
-
-  // 清掉舊海報
   stage.querySelectorAll('.poster').forEach(n=>n.remove());
 
-  const metas = loadPosterMetas();
+  const metasRaw = Array.isArray(__client?.bountyPosters) ? __client.bountyPosters : [];
+  const metas = metasRaw.map(normalizePosterMeta).filter(Boolean).slice(0,4);
+
   const posters = [];
   for (const m of metas){
     const dataUrl = await renderPosterDataUrl(m);
     if(dataUrl && dataUrl.startsWith('data:image')) posters.push({
+      key: m.key,
       ts: Number(m.ts)||0,
       title: String(m.title||'').trim() || (m.name ? `${m.name}｜懸賞令` : '懸賞令'),
       dataUrl
@@ -1274,6 +1193,8 @@ async function renderWall(){
     meta.textContent = p.title || (p.ts ? fmtTs(p.ts) : '');
     wrap.appendChild(meta);
 
+    wrap.addEventListener('click', ()=> openImgModal(p.dataUrl));
+
     stage.appendChild(wrap);
   });
 }
@@ -1311,348 +1232,150 @@ function buildWallGrid(pendingId){
   grid.dataset.pendingId = String(pendingId);
 }
 
-const AVATAR_COUNT = 30;
-function avatarUrlById(id){
-  const n = Math.max(1, Math.min(AVATAR_COUNT, Number(id)||1));
-  return `images/avatars/${n}.webp`;
-}
-
-function nowTs(){ return Date.now(); }
-function safeJsonParse(s, fallback){ try{ return JSON.parse(s); }catch(e){ return fallback; } }
-function uniq(arr){
-  const set = new Set(); const out = [];
-  for (const x of (arr || [])){
-    const k = String(x ?? '').trim();
-    if (!k) continue;
-    if (set.has(k)) continue;
-    set.add(k); out.push(k);
-  }
-  return out;
-}
-function clampStr(s, maxLen){
-  s = String(s ?? '').trim();
-  if (!s) return '';
-  if (s.length > maxLen) s = s.slice(0, maxLen);
-  return s;
-}
-function normTier(t){
-  const n = Number(t);
-  if(!Number.isFinite(n)) return 1;
-  return Math.max(1, Math.min(6, Math.round(n)));
-}
-
-/**
- * titles.owned 相容兩種格式：
- * - 舊版：["  鐵拳  ", ...]（字串）
- * - 新版：[{label:"鐵拳", tier:4}, ...]
- */
-function normalizeOwnedTitles(arr){
-  const out = [];
-  const seen = new Set();
-
-  const list = Array.isArray(arr) ? arr : [];
-  for(const it of list){
-    let label = '';
-    let tier = 1;
-
-    if(typeof it === 'string'){
-      label = String(it).trim();
-      tier = 1; // 舊資料沒有 tier：先用 1，之後結算頁若有寫入 tier 會自動覆蓋
-    }else if(it && typeof it === 'object'){
-      label = String(it.label ?? it.text ?? '').trim();
-      tier = normTier(it.tier ?? it.level ?? 1);
-    }
-
-    if(!label) continue;
-    // 同 label 去重（保留較高 tier）
-    const key = label;
-    if(seen.has(key)){
-      const idx = out.findIndex(x=>x.label===label);
-      if(idx>=0) out[idx].tier = Math.max(out[idx].tier, tier);
-      continue;
-    }
-    seen.add(key);
-    out.push({ label, tier });
-  }
-
-  return out;
-}
-
-function findTitleMetaByLabel(owned, label){
-  const key = String(label||'').trim();
-  if(!key) return null;
-  const arr = Array.isArray(owned) ? owned : [];
-  return arr.find(x => String(x?.label||'').trim() === key) || null;
-}
-
-function buildTitleBadgeHTML(label, tier){
-  const t = normTier(tier || 1);
-  const safeLabel = String(label||'').trim();
-  if(!safeLabel) return '';
-
-  if(t === 6){
-    return `
-      <span class="player-title-badge tier-6">
-        <span class="glow"></span>
-        <span class="crown">👑</span>
-        <span class="text">${escapeHtml(safeLabel)}</span>
-        <span class="pendant"></span>
-      </span>
-    `;
-  }
-
-  return `
-    <span class="player-title-badge tier-${t}">
-      <span class="text">${escapeHtml(safeLabel)}</span>
-    </span>
-  `;
-}
-
-function escapeHtml(s){
-  return String(s ?? '')
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;')
-    .replace(/'/g,'&#39;');
-}
-
-
-function setText(id, txt){ const el = document.getElementById(id); if (el) el.textContent = txt; }
-function fmtTs(ts){
-  if (!ts) return '-';
-  const d = new Date(ts);
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth()+1).padStart(2,'0');
-  const dd = String(d.getDate()).padStart(2,'0');
-  const hh = String(d.getHours()).padStart(2,'0');
-  const mi = String(d.getMinutes()).padStart(2,'0');
-  return `${yyyy}-${mm}-${dd} ${hh}:${mi}`;
-}
-
-function defaultProfile(){
-  return {
-    version: 1,
-    createdAt: nowTs(),
-    lastSeenAt: nowTs(),
-    player: { name:'未命名玩家', avatar:1 }, // 只存 id，圖片用路徑推導
-    totals: { games: 0, wins: 0, coins: 0, atk: 0, def: 0, hit: 0, intel: 0, survival: 0 },
-    deluxeUnlocked: [],
-    recent: [],
-    titles: { owned: [], equipped: '', equippedTier: 1 },
-    _appliedMatchKeys: []
-  };
-}
-
-function loadProfile(){
-  const raw = localStorage.getItem(LS_KEY_PROFILE);
-  const base = defaultProfile();
-  if (!raw) return base;
-
-  const p = safeJsonParse(raw, null);
-  if (!p || typeof p !== 'object') return base;
-
-  const out = {
-    ...base,
-    ...p,
-    player: { ...base.player, ...(p.player||{}) },
-    totals: { ...base.totals, ...(p.totals||{}) },
-    titles: { ...base.titles, ...(p.titles||{}) },
-  };
-
-  out.player.name = clampStr(out.player.name || '未命名玩家', 16) || '未命名玩家';
-  out.player.avatar = Math.max(1, Math.min(AVATAR_COUNT, Number(out.player.avatar)||1));
-
-  out.deluxeUnlocked = uniq(out.deluxeUnlocked).map(x=>Number(x)).filter(n=>Number.isFinite(n) && n>=0 && n<=19);
-  out.titles.owned = normalizeOwnedTitles(out.titles.owned);
-  out.titles.equipped = String(out.titles.equipped||'').trim();
-  out.titles.equippedTier = normTier(out.titles.equippedTier || (findTitleMetaByLabel(out.titles.owned, out.titles.equipped)?.tier) || 1);
-  out.recent = Array.isArray(out.recent) ? out.recent.slice(0, 10) : [];
-
-  // 用於避免結算頁重複累加 totals 的去重 key（matchKey）
-  out._appliedMatchKeys = Array.isArray(out._appliedMatchKeys) ? out._appliedMatchKeys : [];
-  out._appliedMatchKeys = uniq(out._appliedMatchKeys).map(x=>String(x||'')).filter(Boolean).slice(0, 200);
-
-  // 舊資料相容：如果沒有 _appliedMatchKeys，但 recent 內有 matchKey，先把它們補進去
-  if(!out._appliedMatchKeys.length && Array.isArray(out.recent) && out.recent.length){
-    const keys = out.recent.map(r=>String(r?.matchKey||'')).filter(Boolean);
-    out._appliedMatchKeys = uniq(keys).slice(0, 200);
-  }
-
-
-  out.lastSeenAt = nowTs();
-  return out;
-}
-
-function saveProfile(p){
-  try{ localStorage.setItem(LS_KEY_PROFILE, JSON.stringify(p)); }
-  catch(e){ alert('儲存失敗：瀏覽器可能限制儲存空間或使用無痕模式。'); }
-}
-
-// 與 start.html 同步：讀 op_player_profile
-function loadStartProfile(){
-  const raw = localStorage.getItem(LS_KEY_START);
-  const p = safeJsonParse(raw, null);
-  if (!p || typeof p !== 'object') return null;
-  return {
-    playerName: clampStr(p.playerName || '', 16),
-    playerAvatar: Math.max(1, Math.min(AVATAR_COUNT, Number(p.playerAvatar)||1)),
-    avatarUrl: String(p.avatarUrl || avatarUrlById(p.playerAvatar||1))
-  };
-}
-
-// 與 start.html 同步：寫 op_player_profile（讓等待室預設值自動一致）
-function saveStartProfile(name, avatarId){
-  const safeName = clampStr(name || '未命名玩家', 16) || '未命名玩家';
-  const safeId = Math.max(1, Math.min(AVATAR_COUNT, Number(avatarId)||1));
-  const data = { playerName: safeName, playerAvatar: safeId, avatarUrl: avatarUrlById(safeId) };
-  try{ localStorage.setItem(LS_KEY_START, JSON.stringify(data)); }catch(e){}
-  return data;
-}
-
-// header render
-function renderHeader(profile){
-  const name = clampStr(profile.player?.name || '未命名玩家', 16) || '未命名玩家';
+// ===== render main =====
+function renderHeader(){
+  const name = clampStr(__cloudProfile?.name || '未命名玩家', 16) || '未命名玩家';
   setText('nameBtn', name);
 
   const img = document.getElementById('avatarImg');
-  img.src = avatarUrlById(profile.player?.avatar || 1);
+  const avatar = clamp(Number(__cloudProfile?.avatar)||1, 1, AVATAR_COUNT);
+  img.src = avatarUrlById(avatar);
   img.style.display = 'block';
-}
 
-// main render
-function render(profile){
-  renderHeader(profile);
-
-  const g = profile.totals.games || 0;
-  const w = profile.totals.wins || 0;
-  const winRate = g>0 ? Math.round((w/g)*100) : 0;
-
-  setText('kGames', String(g));
-  setText('kWins', String(w));
-  setText('kWinRate', `${winRate}%`);
-  setText('kCoins', String(profile.totals.coins || 0));
-
-  setText('equippedTitle', profile.titles.equipped ? profile.titles.equipped : '未佩戴稱號');
-// 顯示稱號在玩家名稱旁（套用結算頁同款稱號框）
+  // name旁稱號
   const badgeHost = document.getElementById('nameTitleBadge');
-  const eqLabel = String(profile.titles?.equipped || '').trim();
+  const eqLabel = String(__client?.titles?.equipped || '').trim();
   if (eqLabel) {
-    const meta = findTitleMetaByLabel(profile.titles?.owned, eqLabel);
-    const tier = normTier(profile.titles?.equippedTier || meta?.tier || 1);
-
-    // 若舊資料沒有 tier，這裡順手補上（不影響既有玩家）
-    profile.titles.equippedTier = tier;
-    saveProfile(profile);
-
+    const owned = normalizeOwnedTitles(__client?.titles?.owned || []);
+    const meta = findTitleMetaByLabel(owned, eqLabel);
+    const tier = normTier(__client?.titles?.equippedTier || meta?.tier || 1);
     badgeHost.innerHTML = buildTitleBadgeHTML(eqLabel, tier);
     badgeHost.style.display = 'inline-flex';
   } else {
     badgeHost.style.display = 'none';
     badgeHost.innerHTML = '';
   }
+}
 
+function renderStats(){
+  const totals = __client?.totals || {};
+  const g = Number(totals.games||0)||0;
+  const w = Number(totals.wins||0)||0;
+  const winRate = g>0 ? Math.round((w/g)*100) : 0;
 
+  setText('kGames', String(g));
+  setText('kWins', String(w));
+  setText('kWinRate', `${winRate}%`);
+  setText('kCoins', String(Number(totals.coins||0)||0));
+
+  setText('equippedTitle', (__client?.titles?.equipped ? __client.titles.equipped : '未佩戴稱號'));
+}
+
+function renderTitles(){
   const wrap = document.getElementById('titlesWrap');
   wrap.innerHTML = '';
-  const owned = normalizeOwnedTitles(profile.titles?.owned || []);
-  // 讓資料自動升級成新格式（字串 → 物件含 tier）
-  profile.titles.owned = owned;
-  saveProfile(profile);
 
+  const owned = normalizeOwnedTitles(__client?.titles?.owned || []);
   if (!owned.length){
     const span = document.createElement('div');
     span.className = 'muted';
     span.textContent = '尚未取得稱號（打完一季結算後會自動加入）';
     wrap.appendChild(span);
-  }else{
-    for (const meta of owned){
-      const tmp = document.createElement('div');
-      tmp.innerHTML = buildTitleBadgeHTML(meta.label, meta.tier).trim();
-
-      const badgeEl = tmp.firstElementChild;
-      if(!badgeEl) continue;
-
-      badgeEl.classList.add('compact','pick');
-      if (String(profile.titles?.equipped||'').trim() === meta.label) badgeEl.classList.add('on');
-
-      badgeEl.addEventListener('click', ()=>{
-        profile.titles.equipped = meta.label;
-        profile.titles.equippedTier = meta.tier;
-        saveProfile(profile);
-        render(profile);
-      });
-
-      wrap.appendChild(badgeEl);
-    }
+    return;
   }
 
+  const equipped = String(__client?.titles?.equipped||'').trim();
+
+  for (const meta of owned){
+    const tmp = document.createElement('div');
+    tmp.innerHTML = buildTitleBadgeHTML(meta.label, meta.tier).trim();
+
+    const badgeEl = tmp.firstElementChild;
+    if(!badgeEl) continue;
+
+    badgeEl.classList.add('compact','pick');
+    if (equipped === meta.label) badgeEl.classList.add('on');
+
+    badgeEl.addEventListener('click', async ()=>{
+      if(__saving) return;
+      const next = { ...( __client || defaultClient(__cloudProfile?.name, __cloudProfile?.avatar) ) };
+      next.titles = { ...(next.titles||{}) };
+      next.titles.owned = owned; // normalize後寫回雲端
+      next.titles.equipped = meta.label;
+      next.titles.equippedTier = meta.tier;
+
+      await saveClientToCloud(next, { reason:'equip-title' });
+    });
+
+    wrap.appendChild(badgeEl);
+  }
+}
+
+function renderRecent(){
   const tb = document.getElementById('recentTbody');
   tb.innerHTML = '';
-  const recent = Array.isArray(profile.recent) ? profile.recent : [];
+
+  const recent = Array.isArray(__client?.recent) ? __client.recent : [];
   if (!recent.length){
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td class="muted" colspan="4">尚無紀錄。之後我會幫你在結算頁自動匯入最近對局摘要。</td>`;
+    tr.innerHTML = `<td class="muted" colspan="4">尚無紀錄。</td>`;
     tb.appendChild(tr);
-  }else{
-    for (const r of recent){
-      const place = (r.place==null || r.place==='') ? '-' : String(r.place);
-      const coins = (r.coinsGain==null || r.coinsGain==='') ? '-' : String(r.coinsGain);
-      const unlocked = Array.isArray(r.unlocked) ? r.unlocked : [];
-      const unlockedTxt = unlocked.length ? unlocked.map(n=>`#${n}`).join(' ') : '-';
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${fmtTs(r.ts)}</td>
-        <td class="rank">${place}</td>
-        <td>${coins}</td>
-        <td>${unlockedTxt}</td>
-      `;
-      tb.appendChild(tr);
+    return;
+  }
+
+  for (const r of recent.slice(0,10)){
+    const place = (r.place==null || r.place==='') ? '-' : String(r.place);
+    const coins = (r.coinsGain==null || r.coinsGain==='') ? '-' : String(r.coinsGain);
+    const unlocked = Array.isArray(r.unlocked) ? r.unlocked : [];
+    const unlockedTxt = unlocked.length ? unlocked.map(n=>`#${n}`).join(' ') : '-';
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${fmtTs(r.ts)}</td>
+      <td class="rank">${place}</td>
+      <td>${coins}</td>
+      <td>${unlockedTxt}</td>
+    `;
+    tb.appendChild(tr);
+  }
+}
+
+function renderLux(){
+  const unlockedSet = new Set((__client?.deluxeUnlocked || []).map(n => Number(n)));
+
+  // A) 一般豪華卡
+  const lux = document.getElementById('luxGallery');
+  if (lux) lux.innerHTML = '';
+  let unlockedCount = 0;
+
+  for (let id = 0; id < 20; id++){
+    const isOn = unlockedSet.has(id);
+    if (isOn) unlockedCount++;
+
+    const slot = document.createElement('div');
+    slot.className = 'slot' + (isOn ? '' : ' locked');
+
+    if (isOn){
+      const img = document.createElement('img');
+      img.loading = 'lazy';
+      img.alt = `lux ${id}`;
+      img.src = `/images/cards_lux/${id}.webp`;
+      img.onerror = () => { img.src = `/images/cards_lux/${id}.png`; };
+      slot.appendChild(img);
+
+      slot.classList.add('clickable');
+      slot.addEventListener('click', () => openImgModal(img.src));
+    } else {
+      slot.textContent = `未解鎖`;
     }
+
+    lux && lux.appendChild(slot);
   }
 
-// ===== 豪華解鎖：一般豪華卡 =====
-const lux = document.getElementById('luxGallery');
-if (lux){
-  lux.innerHTML = '';
-}
+  setText('luxCount', String(unlockedCount));
 
-const unlockedSet = new Set((profile.deluxeUnlocked || []).map(n => Number(n)));
-let unlockedCount = 0;
-
-for (let id = 0; id < 20; id++){
-  const isOn = unlockedSet.has(id);
-  if (isOn) unlockedCount++;
-
-  const slot = document.createElement('div');
-  slot.className = 'slot' + (isOn ? '' : ' locked');
-
-  if (isOn){
-    const img = document.createElement('img');
-    img.loading = 'lazy';
-    img.alt = `lux ${id}`;
-    img.src = `/images/cards_lux/${id}.webp`;
-    img.onerror = () => { img.src = `/images/cards_lux/${id}.png`; };
-    slot.appendChild(img);
-
-    // 點卡看大圖
-    slot.classList.add('clickable');
-    slot.addEventListener('click', () => openImgModal(img.src));
-  } else {
-    slot.textContent = `未解鎖`;
-  }
-
-  lux && lux.appendChild(slot);
-}
-
-setText('luxCount', String(unlockedCount));
-
-
-// ===== 豪華解鎖：強化技能豪華卡 =====
-const luxEnh = document.getElementById('luxEnhGallery');
-if (luxEnh){
-  luxEnh.innerHTML = '';
-
+  // B) 強化技能豪華卡
+  const luxEnh = document.getElementById('luxEnhGallery');
+  if (luxEnh) luxEnh.innerHTML = '';
   let unlockedEnhCount = 0;
 
   for (let id = 0; id < 20; id++){
@@ -1670,235 +1393,245 @@ if (luxEnh){
       img.onerror = () => { img.src = `/images/cards_lux/enh/${id}.png`; };
       slot.appendChild(img);
 
-      // 點卡看大圖
       slot.classList.add('clickable');
       slot.addEventListener('click', () => openImgModal(img.src));
     } else {
       slot.textContent = `未解鎖`;
     }
 
-    luxEnh.appendChild(slot);
+    luxEnh && luxEnh.appendChild(slot);
   }
 
   setText('luxEnhCount', String(unlockedEnhCount));
 }
-} 
 
-
-// modal helpers
-function openModal(id){ const el=document.getElementById(id); if(el) el.style.display='flex'; }
-function closeModal(id){ const el=document.getElementById(id); if(el) el.style.display='none'; }
-
-// ===== card image viewer =====
-function openImgModal(src){
-  const back = document.getElementById('imgModalBack');
-  const pic  = document.getElementById('imgModalPic');
-  if(!back || !pic) return;
-  pic.src = src;
-  back.style.display = 'flex';
-}
-function closeImgModal(){
-  const back = document.getElementById('imgModalBack');
-  const pic  = document.getElementById('imgModalPic');
-  if(!back || !pic) return;
-  back.style.display = 'none';
-  pic.src = '';
+function renderAll(){
+  renderHeader();
+  renderStats();
+  renderTitles();
+  renderRecent();
+  renderLux();
+  renderWall();
 }
 
-// 點黑色區域關閉（點到圖片本體不關）
-document.getElementById('imgModalBack')?.addEventListener('click', (ev)=>{
-  if(ev.target && ev.target.id === 'imgModalBack') closeImgModal();
-});
+// ===== save to cloud (single source of truth) =====
+async function saveClientToCloud(nextClient, {reason=''} = {}){
+  if(__saving) return;
+  __saving = true;
 
-// ESC 關閉
-document.addEventListener('keydown', (ev)=>{
-  if(ev.key === 'Escape'){
-    const back = document.getElementById('imgModalBack');
-    if(back && back.style.display === 'flex') closeImgModal();
+  showLoading('寫入雲端…', reason ? `正在儲存：${reason}` : '正在寫入玩家資料到雲端…');
+
+  const name = clampStr(__cloudProfile?.name || '', 16) || '未命名玩家';
+  const avatar = clamp(Number(__cloudProfile?.avatar)||1, 1, AVATAR_COUNT);
+
+  // 保證 nextClient player 同步
+  const mergedClient = { ...(nextClient || defaultClient(name, avatar)) };
+  mergedClient.player = { ...(mergedClient.player||{}), name, avatar };
+  mergedClient.titles = { ...(mergedClient.titles||{}) };
+  mergedClient.titles.owned = normalizeOwnedTitles(mergedClient.titles.owned || []);
+
+  const patch = {
+    name,
+    avatar: String(avatar),
+    stats: {
+      ...(__cloudProfile?.stats || {}),
+      client: mergedClient,
+      wall: { id: clamp(__wallId, 1, WALL_COUNT) }
+    }
+  };
+
+  const ok = await cloudUpdate(__secret, patch);
+
+  if(!ok){
+    showLoading('雲端儲存失敗', '請確認網路，或稍後再試。', true);
+    __saving = false;
+    return;
   }
-});
 
+  // 儲存成功：更新 memory state（不落地）
+  __client = mergedClient;
+  hideLoading();
+  __saving = false;
+  renderAll();
+}
 
-// init
-(async function init(){
-  let profile = loadProfile();
+// ===== init =====
+async function boot(){
+  __secret = String(localStorage.getItem('opSecret') || '').trim();
 
-  // ✅ 若已登入（有 opSecret）→ 先跟雲端同步一次
-  if (localStorage.getItem('opSecret')) {
-    await cloudSyncPullMergePush(socket);
-    profile = loadProfile(); // 同步後重新載入本機合併結果
+  if(!__secret){
+    alert('尚未登入（缺少 opSecret）。請回到開始頁登入。');
+    location.href = '/start.html';
+    return;
   }
 
-  // 第一次載入時：如果 start 已經有選過名字/頭像，就同步過來
-  const sp = loadStartProfile();
-  if (sp){
-    profile.player.name = sp.playerName || profile.player.name;
-    profile.player.avatar = sp.playerAvatar || profile.player.avatar;
-  }else{
-    saveStartProfile(profile.player.name, profile.player.avatar);
+  showLoading('雲端同步中…', '正在從伺服器讀取玩家資料…');
+
+  const cloud = await cloudGet(__secret);
+  if(!cloud){
+    showLoading('雲端讀取失敗', 'PROFILE_GET 失敗。你可以點「重新同步雲端」或回開始頁重新登入。', true);
+    return;
   }
 
-  saveProfile(profile);
-  render(profile);
+  __cloudProfile = cloud;
 
-  // top actions
-  document.getElementById('btnRefresh').onclick = () => location.reload();
-  document.getElementById('btnBack').onclick = () => {
-  location.href = '/start.html?from=profile';
+  const name = clampStr(cloud?.name || '未命名玩家', 16) || '未命名玩家';
+  const avatar = clamp(Number(cloud?.avatar)||1, 1, AVATAR_COUNT);
+
+  // wall
+  __wallId = clamp(Number(cloud?.stats?.wall?.id)||1, 1, WALL_COUNT);
+
+  // client
+  __client = (cloud?.stats?.client && typeof cloud.stats.client === 'object')
+    ? cloud.stats.client
+    : defaultClient(name, avatar);
+
+  // 確保 client.player 與 profile 一致（但不強制寫回；等下一次有操作再寫）
+  __client.player = { ...( __client.player || {} ), name, avatar };
+
+  hideLoading();
+  renderAll();
+}
+
+// ===== actions =====
+document.getElementById('btnRefresh').onclick = () => location.reload();
+document.getElementById('btnBack').onclick = () => { location.href = '/start.html?from=profile'; };
+
+document.getElementById('btnLogout').onclick = () => {
+  const ok = confirm('確定登出？（只會清除本機 opSecret，不會刪除雲端資料）');
+  if(!ok) return;
+  localStorage.removeItem('opSecret');
+  location.href = '/start.html';
 };
 
-  document.getElementById('btnReset').onclick = () => {
-    const ok = confirm('確定要清除本機紀錄？（名稱、頭貼、戰績、稱號、豪華解鎖、最近對局都會消失）');
-    if (!ok) return;
-    localStorage.removeItem(LS_KEY_PROFILE);
-    localStorage.removeItem(LS_KEY_START);
-    location.reload();
-  };
+// name modal
+const nameInput = document.getElementById('nameInput');
+document.getElementById('nameBtn').onclick = () => {
+  nameInput.value = clampStr(__cloudProfile?.name || '未命名玩家', 16);
+  openModal('nameModalBack');
+  setTimeout(()=>{ nameInput.focus(); nameInput.select(); }, 0);
+};
+const closeName = ()=> closeModal('nameModalBack');
+document.getElementById('nameModalClose').onclick = closeName;
+document.getElementById('nameCancel').onclick = closeName;
+document.getElementById('nameSave').onclick = async () => {
+  if(__saving) return;
 
-  // name modal
-  const nameInput = document.getElementById('nameInput');
-  document.getElementById('nameBtn').onclick = () => {
-    nameInput.value = clampStr(profile.player.name, 16);
-    openModal('nameModalBack');
-    setTimeout(()=>{ nameInput.focus(); nameInput.select(); }, 0);
-  };
-  const closeName = ()=> closeModal('nameModalBack');
-  document.getElementById('nameModalClose').onclick = closeName;
-  document.getElementById('nameCancel').onclick = closeName;
-  document.getElementById('nameSave').onclick = () => {
-    const v = clampStr(nameInput.value, 16) || '未命名玩家';
-    profile.player.name = v;
-    // 同步到 start
-    saveStartProfile(profile.player.name, profile.player.avatar);
-saveProfile(profile);
-cloudSyncPushNow(socket);
-closeName();
-render(profile);
+  const v = clampStr(nameInput.value, 16) || '未命名玩家';
+  __cloudProfile.name = v;
 
-  };
-  nameInput.addEventListener('keydown', (ev)=>{
-    if (ev.key === 'Enter'){ ev.preventDefault(); document.getElementById('nameSave').click(); }
-    if (ev.key === 'Escape'){ ev.preventDefault(); closeName(); }
-  });
-  document.getElementById('nameModalBack').addEventListener('click', (ev)=>{
-    if (ev.target && ev.target.id === 'nameModalBack') closeName();
-  });
+  // 同步 client.player.name
+  const next = { ...( __client || defaultClient(v, __cloudProfile?.avatar) ) };
+  next.player = { ...(next.player||{}), name: v, avatar: clamp(__cloudProfile?.avatar||1, 1, AVATAR_COUNT) };
 
-  // avatar modal
-  let pendingAvatar = profile.player.avatar;
+  // 直接寫回雲端（name/avatar/stats.client）
+  await saveClientToCloud(next, { reason:'修改名稱' });
 
-  function buildAvatarGrid(){
-    const grid = document.getElementById('avaGrid');
-    grid.innerHTML = '';
-    for (let i=1; i<=AVATAR_COUNT; i++){
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'avaBtn' + (i===pendingAvatar ? ' on' : '');
-      btn.title = `avatar ${i}`;
+  closeName();
+};
+nameInput.addEventListener('keydown', (ev)=>{
+  if (ev.key === 'Enter'){ ev.preventDefault(); document.getElementById('nameSave').click(); }
+  if (ev.key === 'Escape'){ ev.preventDefault(); closeName(); }
+});
+document.getElementById('nameModalBack').addEventListener('click', (ev)=>{
+  if (ev.target && ev.target.id === 'nameModalBack') closeName();
+});
 
-      const img = document.createElement('img');
-      img.src = avatarUrlById(i);
-      img.alt = `avatar-${i}`;
-      btn.appendChild(img);
+// avatar modal
+let pendingAvatar = 1;
+function buildAvatarGrid(){
+  const grid = document.getElementById('avaGrid');
+  grid.innerHTML = '';
+  for (let i=1; i<=AVATAR_COUNT; i++){
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'avaBtn' + (i===pendingAvatar ? ' on' : '');
+    btn.title = `avatar ${i}`;
 
-      btn.onclick = () => {
-        pendingAvatar = i;
-        // 更新選取狀態
-        grid.querySelectorAll('.avaBtn').forEach((x, idx)=>{
-          x.classList.toggle('on', (idx+1)===pendingAvatar);
-        });
-      };
+    const img = document.createElement('img');
+    img.src = avatarUrlById(i);
+    img.alt = `avatar-${i}`;
+    btn.appendChild(img);
 
-      grid.appendChild(btn);
-    }
+    btn.onclick = () => {
+      pendingAvatar = i;
+      grid.querySelectorAll('.avaBtn').forEach((x, idx)=>{
+        x.classList.toggle('on', (idx+1)===pendingAvatar);
+      });
+    };
+
+    grid.appendChild(btn);
   }
+}
+document.getElementById('avatarBox').onclick = () => {
+  pendingAvatar = clamp(Number(__cloudProfile?.avatar)||1, 1, AVATAR_COUNT);
+  buildAvatarGrid();
+  openModal('avatarModalBack');
+};
+const closeAvatar = ()=> closeModal('avatarModalBack');
+document.getElementById('avatarModalClose').onclick = closeAvatar;
+document.getElementById('avatarCancel').onclick = closeAvatar;
 
-  document.getElementById('avatarBox').onclick = () => {
-    pendingAvatar = profile.player.avatar || 1;
-    buildAvatarGrid();
-    openModal('avatarModalBack');
+document.getElementById('avatarSave').onclick = async () => {
+  if(__saving) return;
+
+  __cloudProfile.avatar = pendingAvatar;
+
+  const name = clampStr(__cloudProfile?.name || '未命名玩家', 16) || '未命名玩家';
+  const avatar = clamp(Number(__cloudProfile?.avatar)||1, 1, AVATAR_COUNT);
+
+  const next = { ...( __client || defaultClient(name, avatar) ) };
+  next.player = { ...(next.player||{}), name, avatar };
+
+  await saveClientToCloud(next, { reason:'更換頭貼' });
+
+  closeAvatar();
+};
+document.getElementById('avatarModalBack').addEventListener('click', (ev)=>{
+  if (ev.target && ev.target.id === 'avatarModalBack') closeAvatar();
+});
+
+// wall modal
+const openWallModal = () => {
+  buildWallGrid(clamp(__wallId, 1, WALL_COUNT));
+  openModal('wallModalBack');
+};
+const closeWallModal = ()=> closeModal('wallModalBack');
+
+document.getElementById('btnPickWall')?.addEventListener('click', openWallModal);
+document.getElementById('wallModalClose')?.addEventListener('click', closeWallModal);
+document.getElementById('wallCancel')?.addEventListener('click', closeWallModal);
+document.getElementById('wallModalBack')?.addEventListener('click', (ev)=>{
+  if(ev.target && ev.target.id==='wallModalBack') closeWallModal();
+});
+document.getElementById('wallSave')?.addEventListener('click', async ()=>{
+  if(__saving) return;
+  const grid = document.getElementById('wallGrid');
+  const pendingId = clamp(Number(grid?.dataset?.pendingId)||1, 1, WALL_COUNT);
+  __wallId = pendingId;
+
+  // 只更新 wall.id（仍寫回雲端）
+  showLoading('寫入雲端…', '正在儲存：牆背景');
+  const patch = {
+    name: clampStr(__cloudProfile?.name || '未命名玩家', 16) || '未命名玩家',
+    avatar: String(clamp(Number(__cloudProfile?.avatar)||1, 1, AVATAR_COUNT)),
+    stats: {
+      ...(__cloudProfile?.stats || {}),
+      client: __client || defaultClient(__cloudProfile?.name, __cloudProfile?.avatar),
+      wall: { id: __wallId }
+    }
   };
-
-  const closeAvatar = ()=> closeModal('avatarModalBack');
-  document.getElementById('avatarModalClose').onclick = closeAvatar;
-  document.getElementById('avatarCancel').onclick = closeAvatar;
-
-  document.getElementById('avatarSave').onclick = () => {
-    profile.player.avatar = pendingAvatar;
-    // 同步到 start
-    saveStartProfile(profile.player.name, profile.player.avatar);
-saveProfile(profile);
-cloudSyncPushNow(socket);
-closeAvatar();
-render(profile);
-
-  };
-
-  document.getElementById('avatarModalBack').addEventListener('click', (ev)=>{
-    if (ev.target && ev.target.id === 'avatarModalBack') closeAvatar();
-  });
-
-
-  // ===== 牆面：選擇背景（僅使用預設圖） + 匯入懸賞令 =====
-  const openWallModal = () => {
-    const w = loadWall();
-    buildWallGrid(w.id);
-    openModal('wallModalBack');
-  };
-  const closeWallModal = ()=> closeModal('wallModalBack');
-
-  document.getElementById('btnPickWall')?.addEventListener('click', openWallModal);
-  document.getElementById('wallModalClose')?.addEventListener('click', closeWallModal);
-  document.getElementById('wallCancel')?.addEventListener('click', closeWallModal);
-  document.getElementById('wallModalBack')?.addEventListener('click', (ev)=>{
-    if(ev.target && ev.target.id==='wallModalBack') closeWallModal();
-  });
-
-  document.getElementById('wallSave')?.addEventListener('click', ()=>{
-    const grid = document.getElementById('wallGrid');
-    const pendingId = Math.max(1, Math.min(WALL_COUNT, Number(grid?.dataset?.pendingId)||1));
-saveWall({id: pendingId});
-cloudSyncPushNow(socket);
-closeWallModal();
-renderWall();
-
-  });
-
-  // 匯入懸賞令（目前仍保留手動；之後可接結算頁自動寫入 LS_KEY_POSTERS）
-  const posterFile = document.getElementById('posterFile');
-  document.getElementById('btnImportPoster')?.addEventListener('click', ()=> posterFile?.click());
-  posterFile?.addEventListener('change', async (ev)=>{
-    const f = ev.target.files && ev.target.files[0];
-    if(!f) return;
-    const dataUrl = await fileToDataUrl(f);
-    if(!dataUrl.startsWith('data:image')){ alert('讀取圖片失敗'); return; }
-
-    const list = loadPosterMetas();
-    const ts = nowTs();
-    // 匯入圖片（備援用）：用隨機 key 存成 meta，圖片放到 cache
-    const key = `import|${ts}|${Math.random().toString(16).slice(2)}`;
-    __posterCache.set(key, dataUrl);
-    list.unshift({ key, ts, title: `懸賞令 ${fmtTs(ts)}`, name:'', bounty:'', avatarId: 1 });
-    savePosterMetas(list);
-    posterFile.value = '';
-    renderWall();
-  });
-
-  document.getElementById('btnClearWall')?.addEventListener('click', ()=>{
-    const ok = confirm('確定要清空牆面？（牆背景與牆上懸賞令都會清掉）');
-    if(!ok) return;
-    localStorage.removeItem(LS_KEY_WALL);
-    localStorage.removeItem(LS_KEY_POSTERS);
-    renderWall();
-  });
-
-  // 初次渲染牆面
+  const ok = await cloudUpdate(__secret, patch);
+  if(!ok){
+    showLoading('雲端儲存失敗', '請確認網路，或稍後再試。', true);
+    return;
+  }
+  hideLoading();
+  closeWallModal();
   renderWall();
-})();
+});
+
+boot();
 </script>
 </body>
 </html>
-
-
-
-
