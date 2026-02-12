@@ -898,28 +898,77 @@ async function cloudSaveClient(socket, nextClient){
 }
 
 /** 結算頁：把「本場」資料（recent / totals / titles / deluxeUnlocked / bountyPosters）寫入雲端 */
-async function cloudApplyMatchResult(socket, final, myId, myPid){
+async function cloudApplyMatchResult(socket, final){
   const secret = getSecret();
   if(!secret) return;
 
+  // 先讀雲端（用 secret 當唯一身份）
   const loaded = await cloudLoadClient(socket);
   if(!loaded) return;
   const prof = loaded.prof || {};
   const c = loaded.client || defaultClient();
 
-  // player identity：用雲端為主，沒有就沿用本場 meta
-  const meMeta = (final?.playersMeta && final.playersMeta[myId]) || {};
-  const meName = String(prof?.name || c.player?.name || meMeta.name || `P${(myId|0)+1}`).trim();
-  const meAvatar = (prof?.avatar != null ? prof.avatar : (c.player?.avatar ?? meMeta.avatar ?? ''));
-  c.player = { name: meName, avatar: meAvatar };
+  // 以雲端資料為主（避免 pid / id 對不到）
+  const meName = String(prof?.name || c.player?.name || '').trim();
+  const meAvatarRaw = (prof?.avatar != null ? prof.avatar : (c.player?.avatar ?? ''));
+  const meAvatarId = (Number.isFinite(Number(meAvatarRaw)) ? Number(meAvatarRaw) : null);
 
-  // matchKey
+  // 盡量從 STATE / URL / session 找 pid（可選）
   const qs = new URLSearchParams(location.search);
+  const pidUrl = qs.get('pid');
+  const pidSS  = sessionStorage.getItem('op_pid');
+  const pidState = STATE?.myPlayerId || STATE?.me?.playerId || STATE?.me?.pid || null;
+  const myPid = pidUrl || pidSS || pidState || null;
+
+  // === resolve myId：優先 pid，其次 name+avatar，再不行就 ranking[0] ===
+  function resolveMyId(){
+    // 1) pid match
+    if(myPid != null && final?.playersMeta){
+      for(const [k,pm] of Object.entries(final.playersMeta)){
+        if(pm && String(pm.pid) === String(myPid)) return Number(k);
+      }
+    }
+    if(myPid != null && Array.isArray(final?.ranking)){
+      const hit = final.ranking.find(r => String(r?.pid) === String(myPid));
+      if(hit) return Number(hit.id);
+    }
+
+    // 2) name match (optional avatar disambiguation)
+    const cand = [];
+    if(final?.playersMeta){
+      for(const [k,pm] of Object.entries(final.playersMeta)){
+        const n = String(pm?.name||'').trim();
+        if(meName && n === meName) cand.push({ id:Number(k), pm });
+      }
+    }
+    if(cand.length === 1) return cand[0].id;
+    if(cand.length > 1 && meAvatarId != null){
+      const hit = cand.find(x => Number(x.pm?.avatar) === meAvatarId);
+      if(hit) return hit.id;
+    }
+
+    // 3) fallback
+    if(Array.isArray(final?.ranking) && final.ranking.length) return Number(final.ranking[0].id);
+    if(final?.playersMeta){
+      const ids = Object.keys(final.playersMeta).map(x=>Number(x)).filter(Number.isFinite).sort((a,b)=>a-b);
+      if(ids.length) return ids[0];
+    }
+    return 0;
+  }
+
+  const myId = resolveMyId();
+
+  // player identity：雲端為主，沒有就沿用本場 meta
+  const meMeta = (final?.playersMeta && final.playersMeta[myId]) || {};
+  const finalName = String(meName || meMeta.name || `P${(myId|0)+1}`).trim() || `P${(myId|0)+1}`;
+  const finalAvatar = (meAvatarRaw !== '' && meAvatarRaw != null) ? meAvatarRaw : (meMeta.avatar ?? '');
+  c.player = { name: finalName, avatar: finalAvatar };
+
+  // matchKey（用 room + season + secret + endedAt，避免 pid 不同造成同一場算不同 key）
   const rid = (qs.get('room') || sessionStorage.getItem('op_room') || '');
   const season = final?.seasonNo ?? final?.season ?? '';
   const endedAt = Number(final?.endedAt || final?.ts || Date.now());
-  const pid = (myPid ?? sessionStorage.getItem('op_pid') ?? '');
-  const matchKey = `${rid}|${season}|${pid}|${endedAt}`;
+  const matchKey = `${rid}|${season}|${secret}|${endedAt}`;
 
   // 本場名次 / 金幣
   const ranking = Array.isArray(final?.ranking) ? final.ranking : [];
@@ -978,13 +1027,15 @@ async function cloudApplyMatchResult(socket, final, myId, myPid){
   try{
     const bounty = calcBounty(final?.scoreboard?.[myId] || {});
     const bountyStr = Number(bounty).toLocaleString('en-US');
+    const avatarId = Number.isFinite(Number(finalAvatar)) ? Number(finalAvatar) : 1;
+
     const posterMeta = {
       key: matchKey,
       ts: endedAt,
-      title: `${meName}｜懸賞令`,
-      name: meName,
+      title: `${finalName}｜懸賞令`,
+      name: finalName,
       bounty: bountyStr,
-      avatar: meAvatar
+      avatarId
     };
     const posters = Array.isArray(c.bountyPosters) ? c.bountyPosters : [];
     c.bountyPosters = [posterMeta, ...posters.filter(x => String(x?.key||'') !== matchKey)].slice(0,4);
@@ -1424,7 +1475,7 @@ function renderFinal(final){
   try{
     const myId = MY_ID != null ? MY_ID : guessMyId(final, MY_PID);
     if(socket){
-      Promise.resolve(cloudApplyMatchResult(socket, final, myId, MY_PID))
+      Promise.resolve(cloudApplyMatchResult(socket, final))
         .catch((e)=> console.warn('[cloudApplyMatchResult failed]', e));
     }
   }catch(e){
