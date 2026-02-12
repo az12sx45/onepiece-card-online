@@ -8,16 +8,16 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  <!-- (1) 在 React 之後加入 Socket.IO -->
   <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-<!-- i18n dictionaries -->
-<script>window.__I18N_DICTS = window.__I18N_DICTS || {};</script>
-<script src="i18n/zh-Hant.js"></script>
-<script src="i18n/en.js"></script>
-<script src="i18n/ja.js"></script>
-<script src="i18n/ko.js"></script>
-<script src="i18n/i18n.js"></script>
+
+  <!-- i18n dictionaries -->
+  <script>window.__I18N_DICTS = window.__I18N_DICTS || {};</script>
+  <script src="i18n/zh-Hant.js"></script>
+  <script src="i18n/en.js"></script>
+  <script src="i18n/ja.js"></script>
+  <script src="i18n/ko.js"></script>
+  <script src="i18n/i18n.js"></script>
 
   <style>
     :root{ --bg:#121315; --ink:#eaecee; --brand:#ffb84d; --cover:url("images/cover.jpg"); }
@@ -56,312 +56,113 @@
     @media (max-height: 420px) and (orientation: landscape){ .title-main{ font-size: clamp(28px, 6vw, 48px); } .title-sub{ font-size: clamp(18px, 3.6vw, 28px); } .avatar{ width:56px; height:56px; } }
     @media (min-width: 768px) and (max-width: 1024px){ .title-main{ font-size: clamp(48px, 6.4vw, 92px); letter-spacing:.01em; } .title-sub{ font-size: clamp(28px, 3.8vw, 52px); } .wave{ --amp: 8px; } .wave-sm{ --amp: 5px; } }
     @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape){ .title-main{ font-size: clamp(44px, 5.8vw, 86px); } .title-sub{ font-size: clamp(26px, 3.4vw, 48px); } }
-    @media (min-width: 1024px){ .wave{ --amp: 9px; } .wave-sm{ --amp: 6px; } } @media (min-width: 1536px){ .wave{ --amp: 10px; } .wave-sm{ --amp: 7px; }
-    }
+    @media (min-width: 1024px){ .wave{ --amp: 9px; } .wave-sm{ --amp: 6px; } } @media (min-width: 1536px){ .wave{ --amp: 10px; } .wave-sm{ --amp: 7px; } }
     .audio-toggle{ position: fixed; right: 12px; bottom: 12px; z-index: 30; display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,.45); border: 1px solid rgba(255,255,255,.12); border-radius: 999px; padding: 6px 10px; backdrop-filter: blur(6px); }
     .audio-toggle button{ display:flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:999px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.16); }
     .audio-toggle button:hover{ background: rgba(255,255,255,.1); }
     .audio-toggle .vol{ appearance:none; width:120px; height:4px; border-radius:999px; background:#444; }
     .audio-toggle .vol::-webkit-slider-thumb{ appearance:none; width:14px; height:14px; border-radius:999px; background:#ffd36a; border:1px solid #b3831b; }
-    @media (max-width: 640px){ .audio-toggle{ gap:6px; padding:6px 8px; } .audio-toggle .vol{ width:86px; }
+    @media (max-width: 640px){ .audio-toggle{ gap:6px; padding:6px 8px; } .audio-toggle .vol{ width:86px; } }
+
+    /* === Rules Flipbook Modal === */
+    .rulesOverlay{ position: fixed; inset: 0; background: rgba(0,0,0,0.55); display:flex; align-items:center; justify-content:center; z-index: 9999; }
+    .rulesCard{
+      width: 94vw; height: 92vh; max-height: none;
+      background: rgba(10,12,18,0.92);
+      border: 2px solid rgba(255, 211, 106, 0.75);
+      box-shadow: 0 0 0 1px rgba(255, 184, 77, 0.35), 0 20px 60px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+      border-radius: 20px; overflow: hidden; display:flex; flex-direction: column;
     }
+    .rulesTopBar{ display:flex; align-items:center; justify-content:space-between; padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .rulesTitleMain{ font-size: 18px; font-weight: 700; color: rgba(255,255,255,0.92); }
+    .rulesTitleSub{ font-size: 12px; margin-top: 4px; color: rgba(255,255,255,0.60); }
+    .rulesCloseBtn{ background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.86); padding: 8px 12px; border-radius: 10px; cursor: pointer; }
+    .rulesCloseBtn:hover{ background: rgba(255,255,255,0.12); }
+    .rulesBody{
+      padding: 14px 16px;
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 14px;
+      flex: 1; min-height: 0; overflow: hidden;
+    }
+    @media (max-width: 920px){ .rulesBody{ grid-template-columns: 1fr; } }
+    .rulesImageWrap{
+      border-radius: 14px; overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.04);
+      aspect-ratio: 16 / 9;
+      min-height: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .rulesImage{ width: 100%; height: 100%; object-fit: contain; display: block; }
+    .rulesText{
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.04);
+      padding: 12px 14px;
+      color: rgba(255,255,255,0.86);
+      overflow: auto; min-height: 0;
+    }
+    .rulesBullets{ margin: 0; padding-left: 18px; line-height: 1.7; font-size: 14px; }
+    .rulesTip{
+      margin-top: 10px; padding: 10px 12px; border-radius: 12px;
+      background: rgba(255, 190, 88, 0.12); border: 1px solid rgba(255, 190, 88, 0.25);
+      color: rgba(255,255,255,0.90); font-size: 13px;
+    }
+    .rulesFooter{ padding: 12px 16px; display:flex; align-items:center; justify-content:space-between; gap: 10px; border-top: 1px solid rgba(255,255,255,0.08); }
+    .rulesNavBtn{
+      padding: 10px 12px; border-radius: 12px; cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.88);
+    }
+    .rulesNavBtn:disabled{ opacity: 0.35; cursor: not-allowed; }
+    .rulesNavBtn.primary{ background: rgba(255, 190, 88, 0.16); border-color: rgba(255, 190, 88, 0.35); }
+    .rulesDots{ display:flex; gap: 8px; align-items:center; justify-content:center; flex: 1; }
+    .rulesDot{ width: 10px; height: 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.18); background: rgba(255,255,255,0.10); cursor: pointer; }
+    .rulesDot.active{ background: rgba(255, 190, 88, 0.55); border-color: rgba(255, 190, 88, 0.75); }
+    .rulesHintLine{ padding: 0 16px 12px; color: rgba(255,255,255,0.50); font-size: 12px; }
+    .rulesSectionTitle{ font-size: 16px; font-weight: 700; margin-bottom: 8px; padding-bottom: 6px; color: #ffd36a; border-bottom: 1px solid rgba(255, 211, 106, 0.35); letter-spacing: .02em; }
+    @media (max-width: 640px) { .rulesCard{ width: 100vw; height: 100dvh; max-height: none; border-radius: 0; } }
 
-/* === Rules Flipbook Modal === */
-.rulesOverlay{
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.55);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index: 9999;
-}
-
-.rulesCard{
- width: 94vw;
-height: 92vh;
-max-height: none;
-
-  background: rgba(10,12,18,0.92);
-
-  /* 金色邊框 */
-  border: 2px solid rgba(255, 211, 106, 0.75);
-  box-shadow:
-    0 0 0 1px rgba(255, 184, 77, 0.35),
-    0 20px 60px rgba(0,0,0,0.55),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
-
-  border-radius: 20px;
-  overflow: hidden;
-  display:flex;
-  flex-direction: column;
-}
-
-
-.rulesTopBar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding: 14px 16px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-}
-
-.rulesTitleMain{
-  font-size: 18px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.92);
-}
-
-.rulesTitleSub{
-  font-size: 12px;
-  margin-top: 4px;
-  color: rgba(255,255,255,0.60);
-}
-
-.rulesCloseBtn{
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.12);
-  color: rgba(255,255,255,0.86);
-  padding: 8px 12px;
-  border-radius: 10px;
-  cursor: pointer;
-}
-.rulesCloseBtn:hover{
-  background: rgba(255,255,255,0.12);
-}
-
-.rulesBody{
-  padding: 14px 16px;
-  display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: 14px;
-
-  /* 關鍵：固定主內容區高度，讓 footer 不會被圖片擠動 */
-  flex: 1;
-  min-height: 0;
-  overflow: hidden; /* 先不要整塊滾動，改成各欄自己滾 */
-}
-
-@media (max-width: 920px){
-  .rulesBody{
-    grid-template-columns: 1fr;
-  }
-}
-
-.rulesImageWrap{
-  border-radius: 14px;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.10);
-  background: rgba(255,255,255,0.04);
-
-  /* 關鍵：固定圖片區尺寸 */
-  aspect-ratio: 16 / 9;
-  min-height: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-
-.rulesImage{
-  width: 100%;
-  height: 100%;
-  object-fit: contain;   /* 不裁切、完整呈現 */
-  display: block;
-}
-
-.rulesText{
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.10);
-  background: rgba(255,255,255,0.04);
-  padding: 12px 14px;
-  color: rgba(255,255,255,0.86);
-
-  /* 關鍵：文字區自己滾，不影響 footer */
-  overflow: auto;
-  min-height: 0;
-}
-
-
-.rulesBullets{
-  margin: 0;
-  padding-left: 18px;
-  line-height: 1.7;
-  font-size: 14px;
-}
-
-.rulesTip{
-  margin-top: 10px;
-  padding: 10px 12px;
-  border-radius: 12px;
-  background: rgba(255, 190, 88, 0.12);
-  border: 1px solid rgba(255, 190, 88, 0.25);
-  color: rgba(255,255,255,0.90);
-  font-size: 13px;
-}
-
-.rulesFooter{
-  padding: 12px 16px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap: 10px;
-  border-top: 1px solid rgba(255,255,255,0.08);
-}
-
-.rulesNavBtn{
-  padding: 10px 12px;
-  border-radius: 12px;
-  cursor: pointer;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(255,255,255,0.08);
-  color: rgba(255,255,255,0.88);
-}
-
-.rulesNavBtn:disabled{
-  opacity: 0.35;
-  cursor: not-allowed;
-}
-
-.rulesNavBtn.primary{
-  background: rgba(255, 190, 88, 0.16);
-  border-color: rgba(255, 190, 88, 0.35);
-}
-
-.rulesDots{
-  display:flex;
-  gap: 8px;
-  align-items:center;
-  justify-content:center;
-  flex: 1;
-}
-
-.rulesDot{
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.18);
-  background: rgba(255,255,255,0.10);
-  cursor: pointer;
-}
-
-.rulesDot.active{
-  background: rgba(255, 190, 88, 0.55);
-  border-color: rgba(255, 190, 88, 0.75);
-}
-
-.rulesHintLine{
-  padding: 0 16px 12px;
-  color: rgba(255,255,255,0.50);
-  font-size: 12px;
-}
-
-/* 規則內文區塊標題 */
-.rulesSectionTitle{
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 8px;
-  padding-bottom: 6px;
-  color: #ffd36a;
-  border-bottom: 1px solid rgba(255, 211, 106, 0.35);
-  letter-spacing: .02em;
-}
-
-/* 手機：真正全螢幕 */
-@media (max-width: 640px) {
-  .rulesCard{
-    width: 100vw;
-    height: 100dvh;
-    max-height: none;
-    border-radius: 0;
-  }
-}
-
-/* === 27 吋 / 1440p：規則導覽字體升級 === */
-@media (min-width: 1920px) {
-
-  .rulesTitleMain{
-    font-size: 22px;
-  }
-
-  .rulesTitleSub{
-    font-size: 14px;
-  }
-
-  .rulesSectionTitle{
-    font-size: 19px;
-  }
-
-  .rulesBullets{
-    font-size: 16px;
-    line-height: 1.75;
-  }
-
-  .rulesTip{
-    font-size: 15px;
-  }
-
-  .rulesNavBtn{
-    font-size: 16px;
-    padding: 12px 16px;
-  }
-
-  .rulesHintLine{
-    font-size: 13px;
-  }
-}
-
-/* === 4K / 超大螢幕：沉浸式教學字體 === */
-@media (min-width: 2560px) {
-
-  .rulesTitleMain{
-    font-size: 26px;
-  }
-
-  .rulesTitleSub{
-    font-size: 16px;
-  }
-
-  .rulesSectionTitle{
-    font-size: 22px;
-  }
-
-  .rulesBullets{
-    font-size: 18px;
-    line-height: 1.8;
-  }
-
-  .rulesTip{
-    font-size: 17px;
-  }
-
-  .rulesNavBtn{
-    font-size: 18px;
-    padding: 14px 18px;
-  }
-
-  .rulesHintLine{
-    font-size: 15px;
-  }
-}
-
-
+    @media (min-width: 1920px){
+      .rulesTitleMain{ font-size: 22px; }
+      .rulesTitleSub{ font-size: 14px; }
+      .rulesSectionTitle{ font-size: 19px; }
+      .rulesBullets{ font-size: 16px; line-height: 1.75; }
+      .rulesTip{ font-size: 15px; }
+      .rulesNavBtn{ font-size: 16px; padding: 12px 16px; }
+      .rulesHintLine{ font-size: 13px; }
+    }
+    @media (min-width: 2560px){
+      .rulesTitleMain{ font-size: 26px; }
+      .rulesTitleSub{ font-size: 16px; }
+      .rulesSectionTitle{ font-size: 22px; }
+      .rulesBullets{ font-size: 18px; line-height: 1.8; }
+      .rulesTip{ font-size: 17px; }
+      .rulesNavBtn{ font-size: 18px; padding: 14px 18px; }
+      .rulesHintLine{ font-size: 15px; }
+    }
   </style>
 </head>
+
 <body class="no-video">
   <div class="lock-overlay" id="lockOverlay">
     <div class="panel">
       <div class="icon">🔄</div>
       <div id="txtRotateTitle" class="text-lg font-semibold mb-1">請將手機旋轉至橫向以獲得最佳體驗</div>
-<div id="txtRotateHint" class="text-sm opacity-80">若仍無法旋轉，請解鎖畫面旋轉或從瀏覽器選單開啟「允許旋轉」。</div>
- </div> 
+      <div id="txtRotateHint" class="text-sm opacity-80">若仍無法旋轉，請解鎖畫面旋轉或從瀏覽器選單開啟「允許旋轉」。</div>
+    </div>
   </div>
+
   <div class="bg-anim">
     <video id="bgVideo" class="bg-video" autoplay muted loop playsinline preload="auto" poster="images/cover.jpg">
       <source src="videos/start.mp4" type="video/mp4">
     </video>
   </div>
+
   <div id="root" class="min-h-dvh flex items-center justify-center p-6"></div>
+
   <script>
     (function initBGVideo(){
       const v = document.getElementById('bgVideo');
@@ -376,6 +177,7 @@ max-height: none;
       window.addEventListener('keydown', tryPlay, {once:true});
       tryPlay();
     })();
+
     (function orientationGate(){
       const overlay = document.getElementById('lockOverlay');
       function apply(){
@@ -387,6 +189,7 @@ max-height: none;
       window.addEventListener('orientationchange', apply);
       apply();
     })();
+
     async function tryLockLandscape(){
       try{
         if(screen.orientation && screen.orientation.lock){
@@ -395,181 +198,59 @@ max-height: none;
       }catch(e){}
     }
 
-(function applyStaticI18n(){
-  const I18N = window.__I18N;
-  if(!I18N) return;
-  const $t = (k)=>I18N.t(k);
+    (function applyStaticI18n(){
+      const I18N = window.__I18N;
+      if(!I18N) return;
+      const $t = (k)=>I18N.t(k);
 
-  const a = document.getElementById('txtRotateTitle');
-  const b = document.getElementById('txtRotateHint');
-  if(a) a.textContent = $t('ui.rotateTitle');
-  if(b) b.textContent = $t('ui.rotateHint');
+      const a = document.getElementById('txtRotateTitle');
+      const b = document.getElementById('txtRotateHint');
+      if(a) a.textContent = $t('ui.rotateTitle');
+      if(b) b.textContent = $t('ui.rotateHint');
 
-  document.documentElement.setAttribute('lang', I18N.getLang());
-})();
-
-
+      document.documentElement.setAttribute('lang', I18N.getLang());
+    })();
   </script>
 
   <script type="text/babel" data-presets="env,react">
-    // === (2) 連線與全域參數：置於 React 程式碼最上方 ===
+    // ========================
+    //  雲端主控版：Start Page
+    // ========================
+
     const SERVER_URL = 'https://onepiece-card-online.onrender.com';
     const socket = io(SERVER_URL, { transports: ['websocket'] });
 
+    // === I18N 防呆 ===
+    const I18N = window.__I18N || {
+      getLang: () => 'zh-Hant',
+      setLang: () => {},
+      SUPPORTED: ['zh-Hant'],
+      getLangLabel: () => '繁體中文',
+      t: (k) => k
+    };
+    const t = (key, vars) => (I18N && typeof I18N.t === 'function') ? I18N.t(key, vars) : key;
 
-/* ===== Cloud helpers (cloud is source of truth) =====
-   - Persistent player data lives in Postgres (player_profiles) and is accessed via Socket.IO:
-     PROFILE_GET / PROFILE_UPDATE.
-   - This client ONLY keeps opSecret locally (auth) and a few UI prefs (mute, last username/password, cpu count).
-   - Player records (name/avatar/stats/titles/recent/bounties/wall/deluxe) are rendered from cloud.
-*/
-
-function __sjparse(raw, fallback=null){
-  try{ return JSON.parse(raw); }catch(e){ return fallback; }
-}
-
-function __now(){ return Date.now(); }
-
-function defaultClient(){
-  return {
-    version: 1,
-    createdAt: __now(),
-    lastSeenAt: __now(),
-    player: { name:'未命名玩家', avatar:1 },
-    totals: { games: 0, wins: 0, coins: 0, atk: 0, def: 0, hit: 0, intel: 0, survival: 0 },
-    deluxeUnlocked: [],
-    recent: [],
-    titles: { owned: [], equipped: '', equippedTier: 1 },
-    bountyPosters: [],
-    _appliedMatchKeys: []
-  };
-}
-
-function clampInt(n, a, b){
-  n = Number(n);
-  if(!Number.isFinite(n)) n = a;
-  return Math.max(a, Math.min(b, Math.trunc(n)));
-}
-
-async function cloudGet(socket, secret){
-  return await new Promise((resolve)=>{
-    socket.timeout(8000).emit('PROFILE_GET', { secret }, (err, res)=>{
-      if(err || !res?.ok) return resolve(null);
-      resolve(res.profile || null);
-    });
-  });
-}
-
-async function cloudUpdate(socket, secret, patch){
-  return await new Promise((resolve)=>{
-    socket.timeout(8000).emit('PROFILE_UPDATE', { secret, patch }, (err, res)=>{
-      resolve(!err && !!res?.ok);
-    });
-  });
-}
-
-function normalizeCloud(profile){
-  const out = profile && typeof profile === 'object' ? profile : {};
-  out.stats = out.stats && typeof out.stats === 'object' ? out.stats : {};
-  out.stats.wall = out.stats.wall && typeof out.stats.wall === 'object' ? out.stats.wall : { id: 1 };
-  out.stats.client = out.stats.client && typeof out.stats.client === 'object' ? out.stats.client : null;
-  return out;
-}
-
-function cloudToClient(profile){
-  profile = normalizeCloud(profile);
-  const c = profile.stats.client && typeof profile.stats.client === 'object' ? profile.stats.client : defaultClient();
-
-  const name = String(profile.name || c.player?.name || '未命名玩家');
-  const avatar = clampInt(profile.avatar ?? c.player?.avatar ?? 1, 1, 9999);
-  c.player = { ...(c.player||{}), name, avatar };
-
-  c.titles = c.titles && typeof c.titles === 'object' ? c.titles : { owned: [], equipped: '', equippedTier: 1 };
-  c.titles.owned = Array.isArray(c.titles.owned) ? c.titles.owned : [];
-  c.recent = Array.isArray(c.recent) ? c.recent : [];
-  c.deluxeUnlocked = Array.isArray(c.deluxeUnlocked) ? c.deluxeUnlocked : [];
-  c.bountyPosters = Array.isArray(c.bountyPosters) ? c.bountyPosters : [];
-  c._appliedMatchKeys = Array.isArray(c._appliedMatchKeys) ? c._appliedMatchKeys : [];
-  c.totals = c.totals && typeof c.totals === 'object' ? c.totals : {};
-  c.lastSeenAt = __now();
-
-  return c;
-}
-
-async function cloudEnsureClient(socket){
-  const secret = localStorage.getItem('opSecret');
-  if(!secret) return { ok:false, reason:'no-secret' };
-
-  const prof = normalizeCloud(await cloudGet(socket, secret));
-  if(!prof || !prof.secret){
-    return { ok:false, reason:'no-profile' };
-  }
-
-  const client = cloudToClient(prof);
-  const wallId = clampInt(prof.stats?.wall?.id ?? 1, 1, 9999);
-  return { ok:true, secret, profile: prof, client, wallId };
-}
-
-async function cloudWriteAll(socket, baseProfile, client, wallId){
-  const secret = localStorage.getItem('opSecret');
-  if(!secret) return false;
-
-  baseProfile = normalizeCloud(baseProfile);
-  const patch = {
-    name: String(client?.player?.name || baseProfile.name || ''),
-    avatar: String(client?.player?.avatar ?? baseProfile.avatar ?? ''),
-    stats: {
-      ...(baseProfile.stats || {}),
-      client: client || defaultClient(),
-      wall: { id: clampInt(wallId ?? baseProfile.stats?.wall?.id ?? 1, 1, 9999) }
-    }
-  };
-  return await cloudUpdate(socket, secret, patch);
-}
-
-let __cloudPushTimer = null;
-let __cloudLastBaseProfile = null;
-let __cloudPendingClient = null;
-let __cloudPendingWallId = null;
-
-function scheduleCloudPush(socket, baseProfile, client, wallId){
-  __cloudLastBaseProfile = baseProfile;
-  __cloudPendingClient = client;
-  __cloudPendingWallId = wallId;
-
-  if(__cloudPushTimer) clearTimeout(__cloudPushTimer);
-  __cloudPushTimer = setTimeout(()=>{
-    __cloudPushTimer = null;
-    cloudWriteAll(socket, __cloudLastBaseProfile, __cloudPendingClient, __cloudPendingWallId);
-  }, 450);
-}
-
-    // === 等待室本地狀態（非必須存在於 localStorage）
+    // === 等待室本地狀態（不落地）===
     let __lobby = {
       roomId:'',
-      me:{ playerId:null, secret: localStorage.getItem('opSecret')||'', name:'', avatar:1 },
-      snapshot:null
+      me:{ playerId:null, secret: (localStorage.getItem('opSecret')||''), name:'', avatar:1 },
+      snapshot:null,
+      cpuCount: 0
     };
 
-    // 伺服器回覆：拿到自己的 playerId / secret
     socket.on('JOINED', ({ playerId, secret })=>{
       __lobby.me.playerId = playerId;
       __lobby.me.secret   = secret;
       try { localStorage.setItem('opSecret', secret); } catch {}
     });
 
-    // 伺服器廣播等待室快照或導向遊戲
     socket.on('EMIT', (e)=>{
-      // ★ 等待室快照（房號 / 玩家清單 / 房主 / ready 狀態）
       if (e?.type === 'lobby'){
         __lobby.snapshot = e.lobby;
         if (!__lobby.roomId) __lobby.roomId = e.lobby?.roomId || __lobby.roomId;
-        // 通知 WaitingRoom 立即重繪
         if (typeof window.__setLobby === 'function') window.__setLobby(e.lobby);
         return;
       }
-
-      // ★ 後端要求進入遊戲
       if (e?.type === 'nav_game'){
         try{ socket.close(); }catch{}
         const url = new URL('game.html', location.origin);
@@ -580,130 +261,78 @@ function scheduleCloudPush(socket, baseProfile, client, wallId){
         const count = Array.isArray(__lobby.snapshot?.players)
           ? Math.max(1, __lobby.snapshot.players.length)
           : 1;
-        url.searchParams.set('n', String(count));    // ← 不再預設 4
+        url.searchParams.set('n', String(count));
         location.href = url.toString();
         return;
       }
     });
 
-    // === 原常數/工具：保留必要者 ===
-    const {useState, useEffect, useMemo} = React;
-
-function AuthPanel({ onAuthed, onSkip }) {
-  const [mode, setMode] = useState("login"); // login | register
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState("");
-
-  // ✅ 自動帶入上次輸入的帳密：讓玩家「按任意鍵 → 看到登入窗 → 直接按登入」
-  useEffect(() => {
-    try {
-      const savedUser = localStorage.getItem("op_last_username") || "";
-      const savedPass = localStorage.getItem("op_last_password") || "";
-      if (savedUser) setUsername(savedUser);
-      if (savedPass) setPassword(savedPass);
-    } catch {}
-  }, []);
-
-
-  function submit() {
-    if (!username || !password) {
-      setErr("請輸入帳號與密碼");
-      return;
+    // === 雲端 API helpers（主控）===
+    async function cloudGet(secret){
+      return await new Promise((resolve)=>{
+        socket.timeout(8000).emit('PROFILE_GET', { secret }, (err, res)=>{
+          if(err || !res?.ok) return resolve(null);
+          resolve(res.profile || null);
+        });
+      });
     }
-    setLoading(true);
-    setErr("");
 
-    const evt = mode === "login" ? "AUTH_LOGIN" : "AUTH_REGISTER";
+    async function cloudUpdate(secret, patch){
+      return await new Promise((resolve)=>{
+        socket.timeout(8000).emit('PROFILE_UPDATE', { secret, patch }, (err, res)=>{
+          resolve(!err && !!res?.ok);
+        });
+      });
+    }
 
-    socket.timeout(12000).emit(
-      evt,
-      { username, password },
-      (e, res) => {
-        setLoading(false);
-        if (e || !res?.ok) {
-          setErr(res?.error || e?.message || "連線失敗");
-          return;
-        }
+    // === 把雲端資料 normalize 成 start.html 使用的 profile 結構 ===
+    function normalizeCloudProfile(cloud){
+      const name = String(cloud?.name || '').trim();
+      const avatarNum = Number(cloud?.avatar ?? 1) || 1;
+      const avatar = Math.min(30, Math.max(1, avatarNum));
+      const avatarUrl = `images/avatars/${avatar}.webp`;
 
-        // ✅ 成功後記住帳密（下次自動填）
-        try {
-          localStorage.setItem("op_last_username", username);
-          localStorage.setItem("op_last_password", password);
-        } catch {}
+      return {
+        playerName: name,
+        playerAvatar: avatar,
+        avatarUrl,
+        // 保留雲端 client（之後你若要在 start 頁顯示幣/稱號也可用）
+        client: (cloud?.stats?.client && typeof cloud.stats.client === 'object') ? cloud.stats.client : null,
+        wall: cloud?.stats?.wall || null
+      };
+    }
 
+    // === 若雲端沒 client，給一份最小預設（仍然只存雲端）===
+    function makeDefaultClient(name, avatar){
+      return {
+        player: { name: name || '', avatar: avatar || 1 },
+        totals: { coins: 0, games: 0, wins: 0 },
+        deluxeUnlocked: [],
+        titles: { owned: [], equipped: '', equippedTier: 1 },
+        recent: [],
+        _appliedMatchKeys: []
+      };
+    }
 
-// ★ 關鍵：存 secret
-localStorage.setItem("opSecret", res.secret);
-__lobby.me.secret = res.secret;
-
-// ✅ 登入成功後：拉雲端→合併→寫回本機→推回雲端
-cloudEnsureClient(socket).then(()=> onAuthed?.());
-      }
-    );
-  }
-
-  return (
-    <div className="card w-[min(420px,90vw)] p-6 space-y-4">
-      <h2 className="text-xl font-bold text-amber-300 text-center">
-        {mode === "login" ? "帳號登入" : "建立帳號"}
-      </h2>
-
-      <input
-        className="w-full rounded-lg bg-neutral-900 border border-neutral-700 px-3 py-2"
-        placeholder="帳號（英文 / 數字）"
-        value={username}
-        onChange={e=>setUsername(e.target.value)}
-      />
-
-      <input
-        type="password"
-        className="w-full rounded-lg bg-neutral-900 border border-neutral-700 px-3 py-2"
-        placeholder="密碼（至少 6 碼）"
-        value={password}
-        onChange={e=>setPassword(e.target.value)}
-      />
-
-      {err && <div className="text-sm text-red-400">{err}</div>}
-
-      <button
-        className="btn-primary btn w-full"
-        disabled={loading}
-        onClick={submit}
-      >
-        {loading ? "連線中…" : (mode === "login" ? "登入" : "註冊")}
-      </button>
-
-      <div className="flex justify-between text-sm text-neutral-400">
-        <button className="underline" onClick={()=>setMode(mode==="login"?"register":"login")}>
-          {mode === "login" ? "我要註冊" : "已有帳號"}
-        </button>
-        <button className="underline" onClick={onSkip}>
-          先不登入
-        </button>
-      </div>
-    </div>
-  );
-}
-
-
-// === I18N 防呆：避免字典/腳本載入失敗造成整頁白屏 ===
-const I18N = window.__I18N || {
-  getLang: () => 'zh-Hant',
-  setLang: () => {},
-  SUPPORTED: ['zh-Hant'],
-  getLangLabel: () => '繁體中文',
-  t: (k) => k
-};
-const t = (key, vars) => (I18N && typeof I18N.t === 'function') ? I18N.t(key, vars) : key;
-
-// === (i18n) 補齊 start.html 會用到的 key（就算外部字典缺漏也不會跳回中文/顯示 key）===
-    const MIN_PLAYERS = 2; // 開局最低人數
+    // === 工具 ===
+    const {useState, useEffect, useMemo} = React;
+    const MIN_PLAYERS = 2;
 
     function uid(){ return Math.random().toString(36).slice(2,10); }
-    function genRoomId(){ const letters = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; let s=""; for(let i=0;i<6;i++) s += letters[Math.floor(Math.random()*letters.length)]; return s; }
-    function getMeId(){ let me = sessionStorage.getItem("op_me_id"); if(!me){ me = "me_" + uid(); sessionStorage.setItem("op_me_id", me); } return me; }
+    function genRoomId(){
+      const letters = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+      let s="";
+      for(let i=0;i<6;i++) s += letters[Math.floor(Math.random()*letters.length)];
+      return s;
+    }
+    function getMeId(){
+      let me = sessionStorage.getItem("op_me_id");
+      if(!me){
+        me = "me_" + uid();
+        sessionStorage.setItem("op_me_id", me);
+      }
+      return me;
+    }
 
     function WaveText({ text, className="", small=false }){
       const chars = Array.from(text);
@@ -719,248 +348,343 @@ const t = (key, vars) => (I18N && typeof I18N.t === 'function') ? I18N.t(key, va
       );
     }
 
-function PressAnyKey({onProceed}){
-  useEffect(()=>{
-    const h=(e)=>{
-      e.preventDefault();
-      onProceed();
-      tryLockLandscape();
-      window.__OPAudio?.startAudio();
-    };
-    window.addEventListener('keydown', h, {once:true});
-    window.addEventListener('pointerdown', h, {once:true});
-    return ()=>{
-      window.removeEventListener('keydown', h);
-      window.removeEventListener('pointerdown', h);
-    };
-  }, [onProceed]);
+    function PressAnyKey({onProceed}){
+      useEffect(()=>{
+        const h=(e)=>{
+          e.preventDefault();
+          onProceed();
+          tryLockLandscape();
+          window.__OPAudio?.startAudio();
+        };
+        window.addEventListener('keydown', h, {once:true});
+        window.addEventListener('pointerdown', h, {once:true});
+        return ()=>{
+          window.removeEventListener('keydown', h);
+          window.removeEventListener('pointerdown', h);
+        };
+      }, [onProceed]);
 
-  return (
-    <div className="relative w-full min-h-[92vh] select-none">
-      <div className="absolute left-1/2 -translate-x-1/2 top-[60vh] md:top-[58vh] text-center space-y-2">
-        <div className="title-wrap">
-          <div className="title-main font-black tracking-tight whitespace-nowrap fx-tiltDrop fx-shine text-[clamp(28px,8.2vw,48px)] [@media(orientation:landscape)]:text-[clamp(24px,6.6vw,44px)] md:text-[clamp(52px,5.2vw,96px)] lg:text-[clamp(60px,4.6vw,110px)] xl:text-[clamp(68px,4vw,128px)]">
-            <WaveText text={t("brand.titleEn")} />
-          </div>
-          <div className="title-sub font-extrabold text-amber-300 mt-2 fx-fadeUp whitespace-nowrap text-[clamp(16px,5.2vw,28px)] [@media(orientation:landscape)]:text-[clamp(16px,3.6vw,24px)] md:text-[clamp(30px,3.2vw,56px)] lg:text-[clamp(34px,2.8vw,64px)] xl:text-[clamp(38px,2.4vw,72px)]">
-            <WaveText text={t("brand.titleSub")} small />
-          </div>
-        </div>
-      </div>
-
-      <div
-        className="absolute left-1/2 -translate-x-1/2 text-sm md:text-base text-neutral-200 blink md:bottom-8"
-        style={{bottom:"calc(env(safe-area-inset-bottom, 0px) - 10px)", paddingBottom:0}}
-      >
-        {t("ui.pressAnyKey")}
-      </div>
-    </div>
-  );
-}
-
-
-    // === 主選單：開始遊戲 / 遊戲規則 ===
-   function MainMenu({ onStart, onRule, onLangChange, onProfilePage }) {
-  const cur = I18N.getLang();
-
-  return (
-    <div className="card w-[min(480px,90vw)] p-6 text-center space-y-6 relative">
-      {/* Language selector */}
-      <div className="absolute right-4 top-4">
-        <label className="text-[11px] text-neutral-300 mr-2">{t("ui.lang")}</label>
-        <select
-          className="btn text-sm py-1 px-2"
-          value={cur}
-          onChange={(e)=> onLangChange?.(e.target.value)}
-        >
-          {I18N.SUPPORTED.map(l=>(
-            <option key={l} value={l}>{I18N.getLangLabel(l)}</option>
-          ))}
-        </select>
-      </div>
-
-      <h1 className="text-2xl font-bold tracking-wide text-amber-300">
-        {t("brand.titleSub")}
-      </h1>
-
-      <button className="btn-primary btn w-full text-lg py-3" onClick={onStart}>
-        {t("ui.startGame")}
-      </button>
-
-<button className="btn w-full text-lg py-3" onClick={onProfilePage}>
-  個人頁面
-</button>
-
-
-      <button className="btn w-full text-lg py-3" onClick={onRule}>
-        {t("ui.rules")}
-      </button>
-
-      <div className="text-xs text-neutral-400 mt-2">
-        {t("brand.tagline")}
-      </div>
-    </div>
-  );
-}
-
-
-       // === 遊戲規則彈窗（最終版） ===
-  // ✅ 翻頁式規則書 RuleModal（圖文版）
-// 需求：把圖片放在 public/images/rules/ 且檔名為 01~09
-// 支援：上一頁/下一頁、圓點跳頁、鍵盤 ← →、Esc 關閉、點背景關閉
-function RuleModal({ show, onClose }) {
-  // 只保留結構：每頁只寫 key + 圖片
-  const pages = React.useMemo(
-    () => [
-      { id: "overview",      key: "rules.overview",      img: "images/rules/01-overview.webp" },
-      { id: "header",        key: "rules.header",        img: "images/rules/02-header-bar.webp" },
-      { id: "gallery",       key: "rules.gallery",       img: "images/rules/03-card-gallery.webp" },
-      { id: "cardDetail",    key: "rules.cardDetail",    img: "images/rules/04-card-detail.webp" },
-      { id: "venuePanel",    key: "rules.venuePanel",    img: "images/rules/05-venue-panel.webp" },
-      { id: "venueBg",       key: "rules.venueBg",       img: "images/rules/06-venue-background.webp" },
-      { id: "players",       key: "rules.players",       img: "images/rules/07-players-panel.webp" },
-      { id: "discard",       key: "rules.discard",       img: "images/rules/08-discard-panel.webp" },
-      { id: "log",           key: "rules.log",           img: "images/rules/09-log-panel.webp" },
-      { id: "drawOnly",      key: "rules.drawOnly",      img: "images/rules/10-draw-card.webp" },
-      { id: "afterDrawView", key: "rules.afterDrawView", img: "images/rules/11-after-draw.webp" },
-      { id: "playCardCoreRule", key: "rules.playCardCoreRule", img: "images/rules/12-play-card-mechanic.webp" },
-      { id: "example-play-6",  key: "rules.examplePlay6",  img: "images/rules/13-example-play-6.webp" },
-      { id: "example-play-13", key: "rules.examplePlay13", img: "images/rules/14-example-play-13.webp" },
-      { id: "extra-rules",     key: "rules.extraRules",    img: "images/rules/15-extra-rules.webp" },
-    ],
-    []
-  );
-
-  const [idx, setIdx] = React.useState(0);
-
-  React.useEffect(() => { if (show) setIdx(0); }, [show]);
-
-  React.useEffect(() => {
-    if (!show) return;
-    const onKeyDown = (e) => {
-      if (e.key === "Escape") onClose?.();
-      if (e.key === "ArrowLeft") setIdx((v) => Math.max(0, v - 1));
-      if (e.key === "ArrowRight") setIdx((v) => Math.min(pages.length - 1, v + 1));
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [show, onClose, pages.length]);
-
-  if (!show) return null;
-
-  const page = pages[idx];
-  const isFirst = idx === 0;
-  const isLast = idx === pages.length - 1;
-
-  // 從 i18n 取該頁內容（若 en/ja/ko 缺少，會自動 fallback zh-Hant）
-  const data = t(page.key) || {};
-  const title = data.title || page.id;
-  const bullets = Array.isArray(data.bullets) ? data.bullets : [];
-  const tip = data.tip || "";
-
-  return (
-    <div
-      className="rulesOverlay"
-      onMouseDown={(e) => {
-        if (e.target.classList.contains("rulesOverlay")) onClose?.();
-      }}
-    >
-      <div className="rulesCard" role="dialog" aria-modal="true">
-        <div className="rulesTopBar">
-          <div className="rulesTitleWrap">
-            <div className="rulesTitleMain">{t("ui.rules")}</div>
-            <div className="rulesTitleSub">
-              {idx + 1} / {pages.length} ｜ {title}
+      return (
+        <div className="relative w-full min-h-[92vh] select-none">
+          <div className="absolute left-1/2 -translate-x-1/2 top-[60vh] md:top-[58vh] text-center space-y-2">
+            <div className="title-wrap">
+              <div className="title-main font-black tracking-tight whitespace-nowrap fx-tiltDrop fx-shine text-[clamp(28px,8.2vw,48px)] [@media(orientation:landscape)]:text-[clamp(24px,6.6vw,44px)] md:text-[clamp(52px,5.2vw,96px)] lg:text-[clamp(60px,4.6vw,110px)] xl:text-[clamp(68px,4vw,128px)]">
+                <WaveText text={t("brand.titleEn")} />
+              </div>
+              <div className="title-sub font-extrabold text-amber-300 mt-2 fx-fadeUp whitespace-nowrap text-[clamp(16px,5.2vw,28px)] [@media(orientation:landscape)]:text-[clamp(16px,3.6vw,24px)] md:text-[clamp(30px,3.2vw,56px)] lg:text-[clamp(34px,2.8vw,64px)] xl:text-[clamp(38px,2.4vw,72px)]">
+                <WaveText text={t("brand.titleSub")} small />
+              </div>
             </div>
           </div>
 
-          <button className="rulesCloseBtn" onClick={onClose}>
-            {t("ui.close")}
-          </button>
-        </div>
-
-        <div className="rulesBody">
-          <div className="rulesImageWrap">
-            <img
-              src={page.img}
-              alt={title}
-              className="rulesImage"
-              loading="lazy"
-              draggable={false}
-              onError={(e) => {
-                console.warn("Rules image missing:", page.img);
-                e.currentTarget.style.opacity = 0.25;
-              }}
-            />
+          <div
+            className="absolute left-1/2 -translate-x-1/2 text-sm md:text-base text-neutral-200 blink md:bottom-8"
+            style={{bottom:"calc(env(safe-area-inset-bottom, 0px) - 10px)", paddingBottom:0}}
+          >
+            {t("ui.pressAnyKey")}
           </div>
+        </div>
+      );
+    }
 
-          <div className="rulesText">
-            <div className="rulesSectionTitle">{title}</div>
+    // =========================
+    //  Auth Panel（只負責拿 secret）
+    // =========================
+    function AuthPanel({ onAuthed, onSkip }) {
+      const [mode, setMode] = useState("login");
+      const [username, setUsername] = useState("");
+      const [password, setPassword] = useState("");
+      const [loading, setLoading] = useState(false);
+      const [err, setErr] = useState("");
 
-            <ul className="rulesBullets">
-              {bullets.map((line, i) => (
-                <li key={i}>{line}</li>
+      useEffect(() => {
+        try {
+          const savedUser = localStorage.getItem("op_last_username") || "";
+          const savedPass = localStorage.getItem("op_last_password") || "";
+          if (savedUser) setUsername(savedUser);
+          if (savedPass) setPassword(savedPass);
+        } catch {}
+      }, []);
+
+      function submit() {
+        if (!username || !password) {
+          setErr("請輸入帳號與密碼");
+          return;
+        }
+        setLoading(true);
+        setErr("");
+
+        const evt = mode === "login" ? "AUTH_LOGIN" : "AUTH_REGISTER";
+
+        socket.timeout(12000).emit(evt, { username, password }, (e, res) => {
+          setLoading(false);
+          if (e || !res?.ok) {
+            setErr(res?.error || e?.message || "連線失敗");
+            return;
+          }
+
+          try {
+            localStorage.setItem("op_last_username", username);
+            localStorage.setItem("op_last_password", password);
+          } catch {}
+
+          localStorage.setItem("opSecret", res.secret);
+          __lobby.me.secret = res.secret;
+
+          onAuthed?.(res.secret);
+        });
+      }
+
+      return (
+        <div className="card w-[min(420px,90vw)] p-6 space-y-4">
+          <h2 className="text-xl font-bold text-amber-300 text-center">
+            {mode === "login" ? "帳號登入" : "建立帳號"}
+          </h2>
+
+          <input
+            className="w-full rounded-lg bg-neutral-900 border border-neutral-700 px-3 py-2"
+            placeholder="帳號（英文 / 數字）"
+            value={username}
+            onChange={e=>setUsername(e.target.value)}
+          />
+
+          <input
+            type="password"
+            className="w-full rounded-lg bg-neutral-900 border border-neutral-700 px-3 py-2"
+            placeholder="密碼（至少 6 碼）"
+            value={password}
+            onChange={e=>setPassword(e.target.value)}
+          />
+
+          {err && <div className="text-sm text-red-400">{err}</div>}
+
+          <button className="btn-primary btn w-full" disabled={loading} onClick={submit}>
+            {loading ? "連線中…" : (mode === "login" ? "登入" : "註冊")}
+          </button>
+
+          <div className="flex justify-between text-sm text-neutral-400">
+            <button className="underline" onClick={()=>setMode(mode==="login"?"register":"login")}>
+              {mode === "login" ? "我要註冊" : "已有帳號"}
+            </button>
+            <button className="underline" onClick={onSkip}>
+              先不登入
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    // =========================
+    //  Main Menu（雲端資料顯示）
+    // =========================
+    function MainMenu({ profile, onStart, onRule, onLangChange, onProfilePage, onRefreshCloud, cloudLoading }) {
+      const cur = I18N.getLang();
+      return (
+        <div className="card w-[min(520px,92vw)] p-6 text-center space-y-6 relative">
+          <div className="absolute right-4 top-4">
+            <label className="text-[11px] text-neutral-300 mr-2">{t("ui.lang")}</label>
+            <select className="btn text-sm py-1 px-2" value={cur} onChange={(e)=> onLangChange?.(e.target.value)}>
+              {I18N.SUPPORTED.map(l=>(
+                <option key={l} value={l}>{I18N.getLangLabel(l)}</option>
               ))}
-            </ul>
-
-            {tip ? <div className="rulesTip">{t("ui.tipPrefix")} {tip}</div> : null}
-          </div>
-        </div>
-
-        <div className="rulesFooter">
-          <button
-            className="rulesNavBtn"
-            onClick={() => setIdx((v) => Math.max(0, v - 1))}
-            disabled={isFirst}
-            title="Prev (←)"
-          >
-            {t("ui.prev")}
-          </button>
-
-          <div className="rulesDots" aria-label="pages">
-            {pages.map((p, i) => (
-              <button
-                key={p.id}
-                className={"rulesDot" + (i === idx ? " active" : "")}
-                onClick={() => setIdx(i)}
-                title={p.id}
-                aria-label={`go page ${i + 1}`}
-              />
-            ))}
+            </select>
           </div>
 
-          <button
-            className="rulesNavBtn primary"
-            onClick={() => setIdx((v) => Math.min(pages.length - 1, v + 1))}
-            disabled={isLast}
-            title="Next (→)"
-          >
-            {t("ui.next")}
+          <div className="flex items-center justify-center gap-3">
+            <div className="avatar is-active">
+              <img src={profile?.avatarUrl} alt=""/>
+            </div>
+            <div className="text-left">
+              <div className="text-sm text-neutral-400">已登入</div>
+              <div className="text-lg font-bold text-amber-300">
+                {profile?.playerName || "（尚未設定名稱）"}
+              </div>
+            </div>
+          </div>
+
+          <button className="btn-primary btn w-full text-lg py-3" onClick={onStart}>
+            {t("ui.startGame")}
           </button>
+
+          <button className="btn w-full text-lg py-3" onClick={onProfilePage}>
+            個人頁面
+          </button>
+
+          <button className="btn w-full text-lg py-3" onClick={onRule}>
+            {t("ui.rules")}
+          </button>
+
+          <button
+            className={"btn w-full text-sm py-2 " + (cloudLoading ? "opacity-60 cursor-not-allowed" : "")}
+            onClick={onRefreshCloud}
+            disabled={cloudLoading}
+            title="重新從雲端拉取玩家資料"
+          >
+            {cloudLoading ? "雲端同步中…" : "重新同步雲端資料"}
+          </button>
+
+          <div className="text-xs text-neutral-400 mt-2">{t("brand.tagline")}</div>
         </div>
+      );
+    }
 
-        <div className="rulesHintLine">{t("ui.rulesHotkeys")}</div>
-      </div>
-    </div>
-  );
-}
+    // =========================
+    //  Rule Modal（原樣保留）
+    // =========================
+    function RuleModal({ show, onClose }) {
+      const pages = React.useMemo(
+        () => [
+          { id: "overview",      key: "rules.overview",      img: "images/rules/01-overview.webp" },
+          { id: "header",        key: "rules.header",        img: "images/rules/02-header-bar.webp" },
+          { id: "gallery",       key: "rules.gallery",       img: "images/rules/03-card-gallery.webp" },
+          { id: "cardDetail",    key: "rules.cardDetail",    img: "images/rules/04-card-detail.webp" },
+          { id: "venuePanel",    key: "rules.venuePanel",    img: "images/rules/05-venue-panel.webp" },
+          { id: "venueBg",       key: "rules.venueBg",       img: "images/rules/06-venue-background.webp" },
+          { id: "players",       key: "rules.players",       img: "images/rules/07-players-panel.webp" },
+          { id: "discard",       key: "rules.discard",       img: "images/rules/08-discard-panel.webp" },
+          { id: "log",           key: "rules.log",           img: "images/rules/09-log-panel.webp" },
+          { id: "drawOnly",      key: "rules.drawOnly",      img: "images/rules/10-draw-card.webp" },
+          { id: "afterDrawView", key: "rules.afterDrawView", img: "images/rules/11-after-draw.webp" },
+          { id: "playCardCoreRule", key: "rules.playCardCoreRule", img: "images/rules/12-play-card-mechanic.webp" },
+          { id: "example-play-6",  key: "rules.examplePlay6",  img: "images/rules/13-example-play-6.webp" },
+          { id: "example-play-13", key: "rules.examplePlay13", img: "images/rules/14-example-play-13.webp" },
+          { id: "extra-rules",     key: "rules.extraRules",    img: "images/rules/15-extra-rules.webp" },
+        ],
+        []
+      );
+      const [idx, setIdx] = React.useState(0);
+      React.useEffect(() => { if (show) setIdx(0); }, [show]);
+      React.useEffect(() => {
+        if (!show) return;
+        const onKeyDown = (e) => {
+          if (e.key === "Escape") onClose?.();
+          if (e.key === "ArrowLeft") setIdx((v) => Math.max(0, v - 1));
+          if (e.key === "ArrowRight") setIdx((v) => Math.min(pages.length - 1, v + 1));
+        };
+        window.addEventListener("keydown", onKeyDown);
+        return () => window.removeEventListener("keydown", onKeyDown);
+      }, [show, onClose, pages.length]);
 
-    function NameAvatar({defaultName, onDone}){
-      const [name,setName]=useState(defaultName||"");
-      const [pick,setPick]=useState(1);
+      if (!show) return null;
+      const page = pages[idx];
+      const isFirst = idx === 0;
+      const isLast = idx === pages.length - 1;
+
+      const data = t(page.key) || {};
+      const title = data.title || page.id;
+      const bullets = Array.isArray(data.bullets) ? data.bullets : [];
+      const tip = data.tip || "";
+
+      return (
+        <div className="rulesOverlay" onMouseDown={(e)=>{ if (e.target.classList.contains("rulesOverlay")) onClose?.(); }}>
+          <div className="rulesCard" role="dialog" aria-modal="true">
+            <div className="rulesTopBar">
+              <div className="rulesTitleWrap">
+                <div className="rulesTitleMain">{t("ui.rules")}</div>
+                <div className="rulesTitleSub">{idx + 1} / {pages.length} ｜ {title}</div>
+              </div>
+              <button className="rulesCloseBtn" onClick={onClose}>{t("ui.close")}</button>
+            </div>
+
+            <div className="rulesBody">
+              <div className="rulesImageWrap">
+                <img
+                  src={page.img}
+                  alt={title}
+                  className="rulesImage"
+                  loading="lazy"
+                  draggable={false}
+                  onError={(e)=>{ console.warn("Rules image missing:", page.img); e.currentTarget.style.opacity = 0.25; }}
+                />
+              </div>
+
+              <div className="rulesText">
+                <div className="rulesSectionTitle">{title}</div>
+                <ul className="rulesBullets">
+                  {bullets.map((line, i) => (<li key={i}>{line}</li>))}
+                </ul>
+                {tip ? <div className="rulesTip">{t("ui.tipPrefix")} {tip}</div> : null}
+              </div>
+            </div>
+
+            <div className="rulesFooter">
+              <button className="rulesNavBtn" onClick={()=>setIdx(v=>Math.max(0, v-1))} disabled={isFirst} title="Prev (←)">
+                {t("ui.prev")}
+              </button>
+
+              <div className="rulesDots" aria-label="pages">
+                {pages.map((p, i) => (
+                  <button
+                    key={p.id}
+                    className={"rulesDot" + (i === idx ? " active" : "")}
+                    onClick={()=>setIdx(i)}
+                    title={p.id}
+                    aria-label={`go page ${i + 1}`}
+                  />
+                ))}
+              </div>
+
+              <button className="rulesNavBtn primary" onClick={()=>setIdx(v=>Math.min(pages.length-1, v+1))} disabled={isLast} title="Next (→)">
+                {t("ui.next")}
+              </button>
+            </div>
+
+            <div className="rulesHintLine">{t("ui.rulesHotkeys")}</div>
+          </div>
+        </div>
+      );
+    }
+
+    // =========================
+    //  雲端建角（不落地）
+    // =========================
+    function NameAvatarCloud({ initialName, initialAvatar, secret, onDone }){
+      const [name,setName]=useState(initialName || "");
+      const [pick,setPick]=useState(initialAvatar || 1);
+      const [saving,setSaving]=useState(false);
+      const [err,setErr]=useState("");
+
       const avatars=useMemo(()=> Array.from({length:30},(_,i)=>`images/avatars/${i+1}.webp`), []);
-      function handleSubmit(e){
+
+      async function handleSubmit(e){
         e.preventDefault();
         const safe=(name||"").trim()||"無名航海士";
-        const data={ playerName:safe, playerAvatar:pick, avatarUrl:avatars[pick-1] };
-        // (cloud-only) 不再寫入本機 op_player_profile
-        onDone(data);
+        const avatar = Math.min(30, Math.max(1, Number(pick)||1));
+
+        setSaving(true);
+        setErr("");
+
+        const ok = await cloudUpdate(secret, (prev=>({
+          name: safe,
+          avatar: String(avatar),
+          stats: {
+            ...(prev?.stats || {}),
+            client: (prev?.stats?.client && typeof prev.stats.client === 'object')
+              ? {
+                  ...prev.stats.client,
+                  player: { name: safe, avatar }
+                }
+              : makeDefaultClient(safe, avatar)
+          }
+        }))(window.__lastCloudProfile || null));
+
+        setSaving(false);
+
+        if(!ok){
+          setErr("雲端儲存失敗，請重試（確認網路/伺服器）");
+          return;
+        }
+
+        onDone?.({ playerName:safe, playerAvatar:avatar, avatarUrl:avatars[avatar-1] });
       }
+
       return (
         <form onSubmit={handleSubmit} className="card w-[min(980px,96vw)] p-5 md:p-6">
           <div className="flex items-center justify-between gap-3 flex-wrap">
             <h2 className="text-xl font-bold">{t("ui.createCharacter")}</h2>
+            <div className="text-xs text-neutral-400">（雲端主控：這裡會直接寫入雲端）</div>
           </div>
+
           <div className="grid [@media(orientation:landscape)]:grid-cols-2 md:grid-cols-3 gap-5 mt-4">
             <div className="md:col-span-1">
               <div className="flex items-center gap-3">
@@ -986,7 +710,10 @@ function RuleModal({ show, onClose }) {
                   />
                 </div>
               </div>
+
+              {err && <div className="mt-2 text-sm text-red-400">{err}</div>}
             </div>
+
             <div className="md:col-span-2">
               <div className="flex items-center justify-between">
                 <div className="font-semibold">{t("ui.chooseAvatar")}</div>
@@ -1005,557 +732,483 @@ function RuleModal({ show, onClose }) {
               </div>
             </div>
           </div>
+
           <div className="mt-5 flex flex-col sm:flex-row gap-3">
-            <button className="btn-primary btn grow" type="submit">{t("ui.createRoomTitle")}</button>
+            <button className="btn-primary btn grow" type="submit" disabled={saving}>
+              {saving ? "儲存中…" : t("ui.createRoomTitle")}
+            </button>
             <button
               className="btn grow"
               type="button"
-              onClick={()=>{
-                const safe=(name||"").trim()||"無名航海士";
-                const data={ playerName:safe, playerAvatar:pick, avatarUrl:avatars[pick-1] };
-        // (cloud-only) 不再寫入本機 op_player_profile
-                onDone(data,{join:true});
-              }}
+              disabled={saving}
+              onClick={(e)=>handleSubmit(e)}
+              title="同一份設定，儲存雲端後繼續"
             >
-              {t("ui.joinRoom")}
+              {saving ? "儲存中…" : t("ui.joinRoom")}
             </button>
           </div>
         </form>
       );
     }
 
-   function RoomChoice({ profile, intent, onEnter }) {
-  const [joinCode, setJoinCode] = useState("");
-  const [cpuCount, setCpuCount] = useState(() => {
-    // 從 localStorage 讀取上一次的 CPU 設定（預設 0）
-    try {
-      const v = Number(localStorage.getItem("op_cpu_count") || "0");
-      if (Number.isNaN(v)) return 0;
-      return Math.min(3, Math.max(0, v));
-    } catch {
-      return 0;
-    }
-  });
+    // =========================
+    //  Room Choice（只用雲端 profile）
+    // =========================
+    function RoomChoice({ profile, onEnter }) {
+      const [joinCode, setJoinCode] = useState("");
+      const [cpuCount, setCpuCount] = useState(() => {
+        try {
+          const v = Number(localStorage.getItem("op_cpu_count") || "0");
+          if (Number.isNaN(v)) return 0;
+          return Math.min(3, Math.max(0, v));
+        } catch {
+          return 0;
+        }
+      });
 
-  const meId = getMeId(); // 僅用於本機識別，不影響後端
+      const meId = getMeId();
 
-  // === 建立房：emit JOIN_ROOM，帶入 CPU 設定 ===
-  function createRoom() {
-    const id = genRoomId();
-    __lobby.roomId = id;
-    __lobby.me.name = profile.playerName;
-    __lobby.me.avatar = profile.playerAvatar;
-    __lobby.cpuCount = cpuCount; // 先存在本地，全域記錄，之後後端 / AI 會用到
+      function createRoom() {
+        const id = genRoomId();
+        __lobby.roomId = id;
+        __lobby.me.name = profile.playerName;
+        __lobby.me.avatar = profile.playerAvatar;
+        __lobby.cpuCount = cpuCount;
 
-    // 記住 CPU 設定（下次開遊戲會自動帶出）
-    try {
-      localStorage.setItem("op_cpu_count", String(cpuCount));
-    } catch (e) {}
+        try { localStorage.setItem("op_cpu_count", String(cpuCount)); } catch {}
 
-    socket.emit("JOIN_ROOM", {
-      roomId: id,
-      displayName: profile.playerName,
-      avatar: profile.playerAvatar,
-      secret: __lobby.me.secret,
-      cpuCount, // ← 新增：這一房預計加入幾個 CPU 玩家
-    });
+        socket.emit("JOIN_ROOM", {
+          roomId: id,
+          displayName: profile.playerName,
+          avatar: profile.playerAvatar,
+          secret: __lobby.me.secret,
+          cpuCount
+        });
 
-    // onEnter 第二個參數帶出 host / cpuCount 等資訊給 WaitingRoom 使用
-    onEnter(id, { host: true, cpuCount });
-  }
+        onEnter(id, { host: true, cpuCount });
+      }
 
-  // === 加入房：保持原本邏輯 ===
-  function tryJoin() {
-    const code = (joinCode || "").toUpperCase().replace(/\s+/g, "");
-    if (!code) {
-     alert(t("ui.alertNeedRoomId"));
+      function tryJoin() {
+        const code = (joinCode || "").toUpperCase().replace(/\s+/g, "");
+        if (!code) { alert(t("ui.alertNeedRoomId")); return; }
 
-      return;
-    }
-    __lobby.roomId = code;
-    __lobby.me.name = profile.playerName;
-    __lobby.me.avatar = profile.playerAvatar;
+        __lobby.roomId = code;
+        __lobby.me.name = profile.playerName;
+        __lobby.me.avatar = profile.playerAvatar;
 
-    socket.emit("JOIN_ROOM", {
-      roomId: code,
-      displayName: profile.playerName,
-      avatar: profile.playerAvatar,
-      secret: __lobby.me.secret,
-    });
+        socket.emit("JOIN_ROOM", {
+          roomId: code,
+          displayName: profile.playerName,
+          avatar: profile.playerAvatar,
+          secret: __lobby.me.secret,
+        });
 
-    onEnter(code, { host: false });
-  }
+        onEnter(code, { host: false });
+      }
 
-  return (
-    <div className="card w-[min(980px,96vw)] p-5 md:p-6 space-y-6">
-      {/* 標題列 */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-        <div>
-          <div className="text-sm text-neutral-400">{t("ui.roomMode")}</div>
-          <div className="text-xl font-bold text-amber-300">
-            {t("ui.createOrJoin")}
-          </div>
-        </div>
-        <div className="flex items-center gap-3">
-          <div className="avatar is-active">
-            <img src={profile.avatarUrl} alt="" />
-          </div>
-          <div className="text-sm text-right">
-            <div className="text-neutral-300">{profile.playerName}</div>
-            <div className="text-xs text-neutral-500">{t("ui.playerId", {id: meId})}</div>
-          </div>
-        </div>
-      </div>
-
-      {/* 左右兩欄：建立房、加入房 */}
-      <div className="grid md:grid-cols-2 gap-6">
-        {/* 左：建立房間 */}
-        <div className="space-y-4 border border-neutral-700/70 rounded-xl p-4 bg-black/20">
-          <div className="flex items-center justify-between">
-            <div className="font-semibold">{t("ui.createRoomTitle")}</div>
-            <span className="text-[11px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-400/40">
-              {t("ui.host")}
-            </span>
-          </div>
-
-          {/* CPU 人數選擇 */}
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <label className="text-sm font-medium text-amber-200">
-                {t("ui.cpuCountLabel")}
-              </label>
-              <span className="text-[11px] text-neutral-400">
-                {t("ui.cpuCountHint")}
-              </span>
+      return (
+        <div className="card w-[min(980px,96vw)] p-5 md:p-6 space-y-6">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <div>
+              <div className="text-sm text-neutral-400">{t("ui.roomMode")}</div>
+              <div className="text-xl font-bold text-amber-300">{t("ui.createOrJoin")}</div>
             </div>
-            <div className="grid grid-cols-4 gap-2">
-              {[0, 1, 2, 3].map((n) => {
-                const active = cpuCount === n;
-                return (
-                  <button
-                    key={n}
-                    type="button"
-                    onClick={() => setCpuCount(n)}
-                    className={
-                      "btn text-sm py-1.5 " +
-                      (active
-                        ? "bg-amber-400 text-black border-amber-300 shadow"
-                        : "")
-                    }
-                  >
-                    {t("ui.people", {n})}
-                  </button>
-                );
-              })}
+            <div className="flex items-center gap-3">
+              <div className="avatar is-active"><img src={profile.avatarUrl} alt="" /></div>
+              <div className="text-sm text-right">
+                <div className="text-neutral-300">{profile.playerName}</div>
+                <div className="text-xs text-neutral-500">{t("ui.playerId", {id: meId})}</div>
+              </div>
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={createRoom}
-            className="btn-primary btn w-full mt-2 py-2.5 text-base"
-          >
-            {t("ui.createNewRoom")}
-          </button>
-        </div>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="space-y-4 border border-neutral-700/70 rounded-xl p-4 bg-black/20">
+              <div className="flex items-center justify-between">
+                <div className="font-semibold">{t("ui.createRoomTitle")}</div>
+                <span className="text-[11px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-400/40">
+                  {t("ui.host")}
+                </span>
+              </div>
 
-        {/* 右：加入房間 */}
-        <div className="space-y-4 border border-neutral-700/70 rounded-xl p-4 bg-black/10">
-          <div className="font-semibold">{t("ui.joinFriendRoom")}</div>
-          <div className="space-y-2">
-            <label className="text-sm text-neutral-300">{t("ui.enterRoomCode")}</label>
-            <input
-              className="w-full rounded-lg bg-neutral-900 border border-neutral-700 px-3 py-2 text-sm outline-none focus:border-amber-400"
-              placeholder={t("ui.roomCodePlaceholder")}
-              value={joinCode}
-              onChange={(e) => setJoinCode(e.target.value)}
-              maxLength={8}
-            />
-            <div className="text-[11px] text-neutral-500">
-              {t("ui.roomCodeHint")}
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={tryJoin}
-            className="btn w-full mt-2 py-2.5 text-base"
-          >
-            {t("ui.joinRoomBtn")}
-          </button>
-        </div>
-      </div>
-
-      <div className="text-xs text-neutral-500 text-right">
-        {t("ui.suggestion")}
-      </div>
-    </div>
-  );
-}
-
-
-// === (4) 等待室：全面使用 __lobby.snapshot ===
-function WaitingRoom({roomId, profile, onLeave}){
-  const [lobby, setLobby] = useState(()=> __lobby.snapshot);
-  const mePid = __lobby.me.playerId;
-
-  useEffect(()=>{
-    window.__setLobby = setLobby;
-    return ()=>{ window.__setLobby = null; };
-  }, []);
-
-  const players = lobby?.players||[];
-  // 後端欄位防呆：支援 playerId/id, displayName/name
-  function pidOf(p){ return p.playerId ?? p.pid ?? p.id; }
-  function nameOf(p){ return p.displayName ?? p.name ?? 'P'; }
-  function avatarOf(p){ return p.avatar ?? 1; }
-
-  const cpuCount = lobby?.cpuCount ?? 0;  // 從伺服器拿到的 CPU 數量
-
-  const amHost = lobby && (lobby.host === mePid);
-  const canStart =
-  (players.length + cpuCount) >= MIN_PLAYERS &&  // 真人 + CPU 要 ≥ 最低人數
-  players.every(p => !!p.ready);                // 真人全部按準備
-
-
-  function copyId(){
-    if(!lobby?.roomId) return;
-    navigator.clipboard?.writeText(lobby.roomId);
-   alert(t("ui.alertCopiedRoomId", { roomId: lobby.roomId }));
-  }
-
-  // 切換準備
-  function toggleReady(willReady){
-    socket.emit('ACTION', {
-      roomId: __lobby.roomId,
-      playerId: __lobby.me.playerId,
-      secret: __lobby.me.secret,
-      type: willReady ? 'LOBBY_READY' : 'LOBBY_UNREADY'
-    });
-  }
-
-  // {t("ui.host")}開局
-  function startGame(){
-    if(!amHost) return;
-    socket.emit('ACTION', {
-      roomId: __lobby.roomId,
-      playerId: __lobby.me.playerId,
-      secret: __lobby.me.secret,
-      type: 'START_GAME'
-    });
-  }
-
-  // 我的 ready 狀態（只看真人列表）
-  const me = players.find(p=> pidOf(p)===mePid);
-  const myReady = !!me?.ready;
-
-  if(!lobby){
-    return (
-      <div className="card w=[min(820px,96vw)] p-6">
-        <div className="text-lg font-bold mb-2">{t("ui.connectingLobby")}</div>
-        <button className="btn" onClick={onLeave}>{t("ui.back")}</button>
-      </div>
-    );
-  }
-
-  return (
-    <div className="card w-[min(980px,96vw)] p-6">
-      {/* 上方：房號 + 按鈕列 */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <div className="text-xs text-neutral-400">{t("ui.roomId")}</div>
-          <div className="text-2xl font-extrabold tracking-widest">{lobby.roomId}</div>
-        </div>
-        <div className="flex gap-2">
-          <button className="btn" onClick={copyId}>{t("ui.copyRoomId")}</button>
-          <button className="btn" onClick={onLeave}>{t("ui.leaveRoom")}</button>
-          {amHost && (
-            <button
-              className={`btn-primary ${canStart? "": "opacity-50 cursor-not-allowed"}`}
-              onClick={startGame}
-              disabled={!canStart}
-              title={canStart? t("ui.startGameBtn") : t("ui.startGameNeed")}
-            >
-              {t("ui.startGameBtn")}
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* CPU 數量提示 */}
-      {cpuCount > 0 && (
-        <div className="mt-3 text-xs text-amber-200 flex items-center gap-2">
-          <span className="px-2 py-0.5 rounded-full border border-amber-400/40 bg-amber-500/10">
-            {t("ui.cpuPlayers", {n: cpuCount})}
-          </span>
-          <span className="text-[11px] text-neutral-400">
-            {t("ui.cpuWillJoin")}
-          </span>
-        </div>
-      )}
-
-      {/* 真人 + CPU 列表 */}
-      <div className="mt-5 space-y-5">
-        {/* 真人{t("ui.player")}區 */}
-        <div>
-          <div className="text-sm text-neutral-300 mb-2">
-            {t("ui.humanPlayers", {n: players.length})}
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {players.map(p=> {
-              const pid = pidOf(p);
-              const isHost = lobby.host === pid;
-              const isMe   = pid === mePid;
-              const ready  = !!p.ready;
-              const avatarUrl = `images/avatars/${avatarOf(p)}.webp`;
-              return (
-                <div
-                  key={pid}
-                  className="flex items-center justify-between gap-3 rounded-xl border border-neutral-700/60 bg-black/30 px-3 py-2"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className={"avatar "+(isHost?"is-active":"")}><img src={avatarUrl} alt=""/></div>
-                    <div>
-                      <div className="font-semibold leading-tight">{nameOf(p)}</div>
-                      <div className="text-xs text-neutral-400 flex items-center gap-2">
-                        {isHost
-                          ? <span className="px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-200 border border-amber-400/30">{t("ui.host")}</span>
-                          : <span className="opacity-60">{t("ui.player")}</span>}
-                        {ready
-                          ? <span className="px-1.5 py-0.5 rounded bg-emerald-400/15 text-emerald-200 border border-emerald-400/30">{t("ui.ready")}</span>
-                          : <span className="px-1.5 py-0.5 rounded bg-neutral-600/20 text-neutral-200 border border-neutral-600/40">{t("ui.notReady")}</span>}
-                      </div>
-                    </div>
-                  </div>
-                  {isMe && (
-                    <button className="btn" onClick={()=>toggleReady(!myReady)}>
-                      {myReady ? t("ui.meUnready") : t("ui.meReady")}
-                    </button>
-                  )}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-medium text-amber-200">{t("ui.cpuCountLabel")}</label>
+                  <span className="text-[11px] text-neutral-400">{t("ui.cpuCountHint")}</span>
                 </div>
-              );
-            })}
-          </div>
-        </div>
-        {/* CPU {t("ui.player")}區 */}
-        {cpuCount > 0 && (
-          <div>
-            <div className="text-sm text-neutral-300 mb-2">
-              {t("ui.cpuPlayersList", {n: cpuCount})}
+                <div className="grid grid-cols-4 gap-2">
+                  {[0, 1, 2, 3].map((n) => {
+                    const active = cpuCount === n;
+                    return (
+                      <button
+                        key={n}
+                        type="button"
+                        onClick={() => setCpuCount(n)}
+                        className={"btn text-sm py-1.5 " + (active ? "bg-amber-400 text-black border-amber-300 shadow" : "")}
+                      >
+                        {t("ui.people", {n})}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <button type="button" onClick={createRoom} className="btn-primary btn w-full mt-2 py-2.5 text-base">
+                {t("ui.createNewRoom")}
+              </button>
             </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {Array.from({length: cpuCount}).map((_, idx) => {
-                const cpuIdx = (idx % 3) + 1; // 1~3 對應 cpu1~cpu3
-                const avatarUrl = `images/avatars/cpu${cpuIdx}.webp`;
 
-                // ★ 新增：CPU 顯示名稱表
-                const cpuNames = [
-  t("cpu.name1"),
-  t("cpu.name2"),
-  t("cpu.name3"),
-];
+            <div className="space-y-4 border border-neutral-700/70 rounded-xl p-4 bg-black/10">
+              <div className="font-semibold">{t("ui.joinFriendRoom")}</div>
 
-                const name = cpuNames[idx] || `CPU ${idx + 1}`;
+              <div className="space-y-2">
+                <label className="text-sm text-neutral-300">{t("ui.enterRoomCode")}</label>
+                <input
+                  className="w-full rounded-lg bg-neutral-900 border border-neutral-700 px-3 py-2 text-sm outline-none focus:border-amber-400"
+                  placeholder={t("ui.roomCodePlaceholder")}
+                  value={joinCode}
+                  onChange={(e) => setJoinCode(e.target.value)}
+                  maxLength={8}
+                />
+                <div className="text-[11px] text-neutral-500">{t("ui.roomCodeHint")}</div>
+              </div>
 
-                return (
-                  <div
-                    key={`cpu-${idx}`}
-                    className="flex items-center justify-between gap-3 rounded-xl border border-neutral-700/60 bg-black/40 px-3 py-2"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="avatar is-active">
-                        <img src={avatarUrl} alt={name}/>
-                      </div>
-                      <div>
-                        <div className="font-semibold leading-tight text-amber-200">{name}</div>
-                        <div className="text-xs text-neutral-400 flex items-center gap-2">
-                          <span className="px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-200 border border-sky-400/40">
-                            {t("ui.cpuTag")}
-                          </span>
-                          <span className="px-1.5 py-0.5 rounded bg-emerald-400/15 text-emerald-200 border border-emerald-400/30">
-                            {t("ui.ready")}
-                          </span>
+              <button type="button" onClick={tryJoin} className="btn w-full mt-2 py-2.5 text-base">
+                {t("ui.joinRoomBtn")}
+              </button>
+            </div>
+          </div>
+
+          <div className="text-xs text-neutral-500 text-right">{t("ui.suggestion")}</div>
+        </div>
+      );
+    }
+
+    // =========================
+    //  Waiting Room（原樣保留）
+    // =========================
+    function WaitingRoom({roomId, profile, onLeave}){
+      const [lobby, setLobby] = useState(()=> __lobby.snapshot);
+      const mePid = __lobby.me.playerId;
+
+      useEffect(()=>{
+        window.__setLobby = setLobby;
+        return ()=>{ window.__setLobby = null; };
+      }, []);
+
+      const players = lobby?.players||[];
+      function pidOf(p){ return p.playerId ?? p.pid ?? p.id; }
+      function nameOf(p){ return p.displayName ?? p.name ?? 'P'; }
+      function avatarOf(p){ return p.avatar ?? 1; }
+
+      const cpuCount = lobby?.cpuCount ?? 0;
+      const amHost = lobby && (lobby.host === mePid);
+      const canStart = (players.length + cpuCount) >= MIN_PLAYERS && players.every(p => !!p.ready);
+
+      function copyId(){
+        if(!lobby?.roomId) return;
+        navigator.clipboard?.writeText(lobby.roomId);
+        alert(t("ui.alertCopiedRoomId", { roomId: lobby.roomId }));
+      }
+
+      function toggleReady(willReady){
+        socket.emit('ACTION', {
+          roomId: __lobby.roomId,
+          playerId: __lobby.me.playerId,
+          secret: __lobby.me.secret,
+          type: willReady ? 'LOBBY_READY' : 'LOBBY_UNREADY'
+        });
+      }
+
+      function startGame(){
+        if(!amHost) return;
+        socket.emit('ACTION', {
+          roomId: __lobby.roomId,
+          playerId: __lobby.me.playerId,
+          secret: __lobby.me.secret,
+          type: 'START_GAME'
+        });
+      }
+
+      const me = players.find(p=> pidOf(p)===mePid);
+      const myReady = !!me?.ready;
+
+      if(!lobby){
+        return (
+          <div className="card w=[min(820px,96vw)] p-6">
+            <div className="text-lg font-bold mb-2">{t("ui.connectingLobby")}</div>
+            <button className="btn" onClick={onLeave}>{t("ui.back")}</button>
+          </div>
+        );
+      }
+
+      return (
+        <div className="card w-[min(980px,96vw)] p-6">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <div className="text-xs text-neutral-400">{t("ui.roomId")}</div>
+              <div className="text-2xl font-extrabold tracking-widest">{lobby.roomId}</div>
+            </div>
+            <div className="flex gap-2">
+              <button className="btn" onClick={copyId}>{t("ui.copyRoomId")}</button>
+              <button className="btn" onClick={onLeave}>{t("ui.leaveRoom")}</button>
+              {amHost && (
+                <button
+                  className={`btn-primary ${canStart? "": "opacity-50 cursor-not-allowed"}`}
+                  onClick={startGame}
+                  disabled={!canStart}
+                  title={canStart? t("ui.startGameBtn") : t("ui.startGameNeed")}
+                >
+                  {t("ui.startGameBtn")}
+                </button>
+              )}
+            </div>
+          </div>
+
+          {cpuCount > 0 && (
+            <div className="mt-3 text-xs text-amber-200 flex items-center gap-2">
+              <span className="px-2 py-0.5 rounded-full border border-amber-400/40 bg-amber-500/10">
+                {t("ui.cpuPlayers", {n: cpuCount})}
+              </span>
+              <span className="text-[11px] text-neutral-400">{t("ui.cpuWillJoin")}</span>
+            </div>
+          )}
+
+          <div className="mt-5 space-y-5">
+            <div>
+              <div className="text-sm text-neutral-300 mb-2">{t("ui.humanPlayers", {n: players.length})}</div>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {players.map(p=> {
+                  const pid = pidOf(p);
+                  const isHost = lobby.host === pid;
+                  const isMe   = pid === mePid;
+                  const ready  = !!p.ready;
+                  const avatarUrl = `images/avatars/${avatarOf(p)}.webp`;
+                  return (
+                    <div key={pid} className="flex items-center justify-between gap-3 rounded-xl border border-neutral-700/60 bg-black/30 px-3 py-2">
+                      <div className="flex items-center gap-3">
+                        <div className={"avatar "+(isHost?"is-active":"")}><img src={avatarUrl} alt=""/></div>
+                        <div>
+                          <div className="font-semibold leading-tight">{nameOf(p)}</div>
+                          <div className="text-xs text-neutral-400 flex items-center gap-2">
+                            {isHost
+                              ? <span className="px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-200 border border-amber-400/30">{t("ui.host")}</span>
+                              : <span className="opacity-60">{t("ui.player")}</span>}
+                            {ready
+                              ? <span className="px-1.5 py-0.5 rounded bg-emerald-400/15 text-emerald-200 border border-emerald-400/30">{t("ui.ready")}</span>
+                              : <span className="px-1.5 py-0.5 rounded bg-neutral-600/20 text-neutral-200 border border-neutral-600/40">{t("ui.notReady")}</span>}
+                          </div>
                         </div>
                       </div>
+                      {isMe && (
+                        <button className="btn" onClick={()=>toggleReady(!myReady)}>
+                          {myReady ? t("ui.meUnready") : t("ui.meReady")}
+                        </button>
+                      )}
                     </div>
-                    {/* CPU 不需要準備按鈕 */}
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
+
+            {cpuCount > 0 && (
+              <div>
+                <div className="text-sm text-neutral-300 mb-2">{t("ui.cpuPlayersList", {n: cpuCount})}</div>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {Array.from({length: cpuCount}).map((_, idx) => {
+                    const cpuIdx = (idx % 3) + 1;
+                    const avatarUrl = `images/avatars/cpu${cpuIdx}.webp`;
+                    const cpuNames = [t("cpu.name1"), t("cpu.name2"), t("cpu.name3")];
+                    const name = cpuNames[idx] || `CPU ${idx + 1}`;
+                    return (
+                      <div key={`cpu-${idx}`} className="flex items-center justify-between gap-3 rounded-xl border border-neutral-700/60 bg-black/40 px-3 py-2">
+                        <div className="flex items-center gap-3">
+                          <div className="avatar is-active"><img src={avatarUrl} alt={name}/></div>
+                          <div>
+                            <div className="font-semibold leading-tight text-amber-200">{name}</div>
+                            <div className="text-xs text-neutral-400 flex items-center gap-2">
+                              <span className="px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-200 border border-sky-400/40">{t("ui.cpuTag")}</span>
+                              <span className="px-1.5 py-0.5 rounded bg-emerald-400/15 text-emerald-200 border border-emerald-400/30">{t("ui.ready")}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
-        )}
-
-      </div>
-
-    </div>
-  );
-}
-
-
-    
-function App(){
-  const avatars = React.useMemo(()=> Array.from({length:30},(_,i)=>`images/avatars/${i+1}.webp`), []);
-  const qs = React.useMemo(()=> new URLSearchParams(location.search), []);
-  const fromProfile = qs.get("from")==="profile";
-
-  const [stage, setStage] = React.useState(()=> fromProfile ? "menu" : "press");
-  const [cloud, setCloud] = React.useState({ loading:false, ok:false, base:null, client:null, wallId:1, reason:'' });
-  const [profile, setProfile] = React.useState(null); // {playerName, playerAvatar, avatarUrl}
-
-  async function loadCloud(){
-    const secret = (localStorage.getItem("opSecret")||"").trim();
-    if(!secret){
-      setCloud({loading:false, ok:false, base:null, client:null, wallId:1, reason:'no-secret'});
-      return { ok:false, reason:'no-secret' };
+        </div>
+      );
     }
 
-    setCloud(s=>({ ...s, loading:true, reason:'' }));
-    const r = await cloudEnsureClient(socket);
-    if(!r.ok){
-      // secret 失效就清掉，避免卡住
-      try{ localStorage.removeItem("opSecret"); }catch{}
-      setCloud({loading:false, ok:false, base:null, client:null, wallId:1, reason:r.reason||'no-profile'});
-      return r;
-    }
+    // =========================
+    //  App（雲端主控流程）
+    // =========================
+    function App(){
+      const [stage, setStage] = useState(() => {
+        const params = new URLSearchParams(location.search);
+        const fromProfile = params.get("from") === "profile";
+        const hasSecret = !!(localStorage.getItem("opSecret") || "").trim();
+        if (fromProfile) return hasSecret ? "boot" : "auth";
+        return "press";
+      });
 
-    const client = r.client;
-    const wallId = r.wallId;
-    const base = r.profile;
+      const [secret, setSecret] = useState(()=> (localStorage.getItem("opSecret") || "").trim());
+      const [cloudProfile, setCloudProfile] = useState(null); // normalized for UI
+      const [cloudLoading, setCloudLoading] = useState(false);
+      const [cloudErr, setCloudErr] = useState("");
 
-    const avatarId = Number(client?.player?.avatar||1)||1;
-    setProfile({
-      playerName: String(client?.player?.name || "未命名玩家"),
-      playerAvatar: avatarId,
-      avatarUrl: avatars[Math.max(1, Math.min(30, avatarId))-1] || avatars[0]
-    });
+      const [roomInfo,setRoomInfo]=useState(null);
+      getMeId();
 
-    setCloud({loading:false, ok:true, base, client, wallId, reason:''});
-    return r;
-  }
-
-  async function proceedFromPress(){
-    const hasSecret = !!(localStorage.getItem("opSecret")||"").trim();
-    if(hasSecret){
-      const r = await loadCloud();
-      setStage(r.ok ? "menu" : "auth");
-    }else{
-      setStage("auth");
-    }
-  }
-
-  // 若已登入（本機有 opSecret）→ 開頁先拉雲端資料（雲端為真相）
-  React.useEffect(()=>{
-    const hasSecret = !!(localStorage.getItem("opSecret")||"").trim();
-    if(!hasSecret) return;
-
-    loadCloud().then((r)=>{
-      if(!r?.ok && fromProfile){
-        setStage("auth");
+      const [langTick, setLangTick] = useState(0);
+      function changeLang(next){
+        I18N.setLang(next);
+        document.documentElement.setAttribute("lang", I18N.getLang());
+        const a = document.getElementById("txtRotateTitle");
+        const b = document.getElementById("txtRotateHint");
+        if(a) a.textContent = t("ui.rotateTitle");
+        if(b) b.textContent = t("ui.rotateHint");
+        setLangTick(x=>x+1);
       }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
-  function gotoChoiceOrCreate(){
-    // 只允許雲端模式進遊戲
-    if(!cloud.ok){
-      alert("請先登入或註冊才能進入遊戲。");
-      setStage("auth");
-      return;
+      async function pullCloudProfile(nextSecret){
+        const s = (nextSecret || secret || "").trim();
+        if(!s) return null;
+
+        setCloudLoading(true);
+        setCloudErr("");
+
+        const cloud = await cloudGet(s);
+
+        setCloudLoading(false);
+
+        if(!cloud){
+          setCloudErr("雲端讀取失敗（PROFILE_GET），請確認網路或重新登入。");
+          return null;
+        }
+
+        // 存一份給 NameAvatarCloud patch 參考（避免覆蓋 stats）
+        window.__lastCloudProfile = cloud;
+
+        const normalized = normalizeCloudProfile(cloud);
+        setCloudProfile(normalized);
+
+        // 同步 __lobby（只留記憶體）
+        __lobby.me.secret = s;
+        __lobby.me.name = normalized.playerName || '';
+        __lobby.me.avatar = normalized.playerAvatar || 1;
+
+        return normalized;
+      }
+
+      // boot：有 secret 就拉雲端，決定要 menu 還是 create-character
+      useEffect(()=>{
+        if(stage !== "boot") return;
+        pullCloudProfile().then((p)=>{
+          if(!p) return;
+          const hasName = !!String(p.playerName||'').trim();
+          const hasAvatar = Number(p.playerAvatar||0) > 0;
+          if(hasName && hasAvatar) setStage("menu");
+          else setStage("profileCloud");
+        });
+      }, [stage]);
+
+      function enterRoom(id, extra){
+        setRoomInfo({id, host: !!extra?.host});
+        setStage("waiting");
+      }
+
+      return (
+        <div className="w-full max-w-[1200px] mx-auto">
+          <div className="min-h-dvh flex items-center justify-center">
+            {stage==="auth" && (
+              <AuthPanel
+                onAuthed={(s)=>{
+                  setSecret(s);
+                  setStage("boot");
+                }}
+                onSkip={()=> alert("需要登入才能進入（雲端主控版）")}
+              />
+            )}
+
+            {stage==="press" && (
+              <PressAnyKey onProceed={()=>{
+                const hasSecret = !!(localStorage.getItem("opSecret") || "").trim();
+                setStage(hasSecret ? "boot" : "auth");
+              }} />
+            )}
+
+            {stage==="boot" && (
+              <div className="card w-[min(520px,92vw)] p-6 text-center space-y-3">
+                <div className="text-lg font-bold text-amber-300">讀取雲端玩家資料…</div>
+                <div className="text-sm text-neutral-400">（雲端主控：不讀本地玩家資料）</div>
+                {cloudErr && <div className="text-sm text-red-400">{cloudErr}</div>}
+                <div className="mt-2 flex gap-2 justify-center">
+                  <button className="btn" onClick={()=>setStage("auth")}>重新登入</button>
+                  <button className="btn" onClick={()=>pullCloudProfile()}>重試</button>
+                </div>
+              </div>
+            )}
+
+            {stage==="profileCloud" && (
+              <NameAvatarCloud
+                secret={secret}
+                initialName={cloudProfile?.playerName}
+                initialAvatar={cloudProfile?.playerAvatar || 1}
+                onDone={(p)=>{
+                  setCloudProfile(p);
+                  __lobby.me.name = p.playerName;
+                  __lobby.me.avatar = p.playerAvatar;
+                  setStage("menu");
+                }}
+              />
+            )}
+
+            {stage==="menu" && cloudProfile && (
+              <MainMenu
+                profile={cloudProfile}
+                cloudLoading={cloudLoading}
+                onRefreshCloud={()=>pullCloudProfile()}
+                onStart={()=> setStage("choice")}
+                onProfilePage={()=>{ location.href = "profile.html"; }}
+                onRule={()=> setStage("rule")}
+                onLangChange={changeLang}
+              />
+            )}
+
+            {stage==="choice" && cloudProfile && (
+              <RoomChoice
+                profile={cloudProfile}
+                onEnter={enterRoom}
+              />
+            )}
+
+            {stage==="waiting" && roomInfo && cloudProfile && (
+              <WaitingRoom
+                roomId={roomInfo.id}
+                profile={cloudProfile}
+                onLeave={()=>{
+                  setStage("choice");
+                  __lobby = {
+                    roomId:'',
+                    me:{ playerId:__lobby.me.playerId, secret:__lobby.me.secret, name:__lobby.me.name, avatar:__lobby.me.avatar },
+                    snapshot:null,
+                    cpuCount: 0
+                  };
+                }}
+              />
+            )}
+
+            <RuleModal show={stage==="rule"} onClose={()=> setStage("menu")} />
+          </div>
+        </div>
+      );
     }
-    const name = String(cloud.client?.player?.name || "").trim();
-    const avatar = Number(cloud.client?.player?.avatar || 0);
-    if(name && avatar){
-      setStage("choice");
-    }else{
-      setStage("profile");
-    }
-  }
 
-  function onCharacterDone(data, extra){
-    setProfile(data);
-
-    if(cloud.ok){
-      const base = cloud.base || {};
-      const nextClient = { ...(cloud.client || defaultClient()) };
-      nextClient.player = { name: data.playerName, avatar: data.playerAvatar };
-      setCloud(s=>({ ...s, client: nextClient }));
-
-      // 立即寫回雲端（並帶 debounce 保險）
-      scheduleCloudPush(socket, base, nextClient, cloud.wallId);
-      cloudWriteAll(socket, base, nextClient, cloud.wallId);
-    }
-
-    if(extra?.join) setStage("choice");
-    else setStage("choice");
-  }
-
-  return (
-    <div className="w-full max-w-[1200px] mx-auto">
-      <div className="min-h-dvh flex items-center justify-center">
-
-        {stage==="press" && (
-          <PressAnyKey onProceed={proceedFromPress} />
-        )}
-
-        {stage==="auth" && (
-          <AuthPanel
-            onAuthed={async()=>{ await loadCloud(); setStage("menu"); }}
-            onSkip={()=> alert("請先登入或註冊才能進入遊戲。")}
-          />
-        )}
-
-        {stage==="menu" && (
-          <MainMenu
-            onStart={gotoChoiceOrCreate}
-            onProfilePage={()=>{
-              if(!cloud.ok){ alert("請先登入再進入個人頁面。"); setStage("auth"); return; }
-              location.href = "profile.html";
-            }}
-            onRule={()=>setStage("rule")}
-            onLangChange={(lang)=>{
-              I18N.setLang(lang);
-              document.documentElement.setAttribute('lang', I18N.getLang());
-              location.reload();
-            }}
-          />
-        )}
-
-        {stage==="profile" && (
-          <NameAvatar
-            defaultName={profile?.playerName || cloud.client?.player?.name || ""}
-            onDone={onCharacterDone}
-          />
-        )}
-
-        {stage==="choice" && profile && (
-          <RoomChoice
-            profile={profile}
-            onEnter={(id, extra)=>{ setStage("waiting"); }}
-          />
-        )}
-
-        {stage==="waiting" && profile && (
-          <WaitingRoom
-            roomId={__lobby.roomId}
-            profile={profile}
-            onLeave={()=>{
-              try{ socket.emit("LEAVE_ROOM", { roomId: __lobby.roomId, playerId: __lobby.me.playerId, secret: __lobby.me.secret }); }catch{}
-              __lobby = { roomId:'', me:{ playerId:null, secret: (localStorage.getItem('opSecret')||''), name:'', avatar:1 }, snapshot:null };
-              setStage("menu");
-            }}
-          />
-        )}
-
-        <RuleModal show={stage==="rule"} onClose={()=>setStage("menu")} />
-      </div>
-    </div>
-  );
-}
-
-
-ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+    ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
   </script>
 
   <div class="audio-toggle" id="audioCtrl" style="display:none">
@@ -1578,22 +1231,27 @@ ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
     const $ico=document.getElementById('icoVol');
     const $wave=document.getElementById('wave');
     const $rng=document.getElementById('rngVol');
+
     const savedMute=localStorage.getItem(S.muteKey);
     const savedVol=localStorage.getItem(S.volKey);
     let muted=savedMute==="1";
     let vol=isNaN(+savedVol)?20:Math.max(0,Math.min(100,+savedVol));
+
     setVolume(vol);
     applyMuteUI();
     $wrap.style.display='flex';
+
     function setVolume(v){
       vol=v;
       $rng.value=String(v);
       const gain=muted?0:(v/100);
-      $bgm.volume=Math.min(1,Math.max(0,gain));
+      if($bgm) $bgm.volume=Math.min(1,Math.max(0,gain));
       if($intro) $intro.volume=Math.min(1,Math.max(0,Math.min(0.9,gain*1.2)));
       localStorage.setItem(S.volKey,String(v));
     }
+
     function fade(el,target,ms){
+      if(!el) return;
       clearInterval(S.fadeTimer);
       const stepMs=40, steps=Math.max(1,Math.round(ms/stepMs));
       const start=el.volume;
@@ -1608,60 +1266,68 @@ ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
         }
       }, stepMs);
     }
+
     function applyMuteUI(){
       const on=!muted;
       $ico.setAttribute('fill', on?'#ffd36a':'#bbb');
       $wave.setAttribute('stroke', on?'#ffd36a':'#bbb');
     }
+
     async function tryAutoStart(){
       if(S.autoTried||S.hasStarted) return;
       S.autoTried=true;
       try{
         setVolume(vol);
-        await $bgm.play();
-        if(!muted) $bgm.volume=Math.min(1,vol/100);
+        if($bgm) await $bgm.play();
+        if(!muted && $bgm) $bgm.volume=Math.min(1,vol/100);
         S.hasStarted=true;
       }catch(e){
         S.hasStarted=false;
       }
     }
+
     async function startAudioAfterGesture(){
       if(S.hasStarted) return;
       S.hasStarted=true;
       try{
-        $bgm.volume=0;
-        await $bgm.play().catch(()=>{});
+        if($bgm){
+          $bgm.volume=0;
+          await $bgm.play().catch(()=>{});
+        }
         if($intro && $intro.src){
           $intro.currentTime=0;
           $intro.volume=Math.min(1,(vol/100)*0.9);
           await $intro.play().catch(()=>{});
           $intro.onended=()=>{
-            if(!muted) fade($bgm, Math.min(1, vol/100), 1200);
+            if(!muted && $bgm) fade($bgm, Math.min(1, vol/100), 1200);
           };
         }else{
-          if(!muted) fade($bgm, Math.min(1, vol/100), 800);
+          if(!muted && $bgm) fade($bgm, Math.min(1, vol/100), 800);
         }
       }catch(e){
         S.hasStarted=false;
       }
     }
+
     $btn.addEventListener('click', ()=>{
       muted=!muted;
       localStorage.setItem(S.muteKey, muted?"1":"0");
       applyMuteUI();
       if(muted){
-        fade($bgm,0,250);
+        if($bgm) fade($bgm,0,250);
         if($intro && !$intro.paused) fade($intro,0,150);
       }else{
         setVolume(vol);
-        if($bgm.paused){
+        if($bgm && $bgm.paused){
           $bgm.play().catch(()=>{});
         }
-        fade($bgm, Math.min(1, vol/100), 250);
+        if($bgm) fade($bgm, Math.min(1, vol/100), 250);
       }
     });
+
     $rng.addEventListener('input', (e)=> setVolume(+e.target.value));
     document.addEventListener('DOMContentLoaded', tryAutoStart);
+
     window.__OPAudio = {
       startAudio: startAudioAfterGesture,
       setVolume,
@@ -1671,16 +1337,15 @@ ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
   })();
   </script>
 
-<script>
-  // === Service Worker 註冊（離線快取核心）===
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker
-        .register("./sw.js")
-        .catch((err) => console.warn("SW register failed:", err));
-    });
-  }
-</script>
-
+  <script>
+    // === Service Worker 註冊（離線快取核心）===
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("./sw.js")
+          .catch((err) => console.warn("SW register failed:", err));
+      });
+    }
+  </script>
 </body>
 </html>
