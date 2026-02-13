@@ -564,6 +564,26 @@
       box-shadow:0 0 0 3px rgba(255,184,77,.25);
     }
 
+
+    .avaBtn.locked{
+      opacity:.55;
+      filter: grayscale(1);
+      position:relative;
+    }
+    .avaBtn.locked::after{
+      content:"🔒";
+      position:absolute;
+      right:6px; bottom:6px;
+      font-size:14px;
+      background:rgba(2,6,23,75);
+      border:1px solid rgba(255,255,255,18);
+      border-radius:10px;
+      padding:2px 6px;
+    }
+    .avaBtn.locked:hover{
+      border-color: rgba(255,107,107,55);
+      box-shadow:0 0 0 3px rgba(255,107,107,18);
+    }
     /* === card image viewer === */
     .imgModal{
       width:min(520px, 92vw);
@@ -870,7 +890,7 @@
 const SERVER_URL = 'https://onepiece-card-online.onrender.com';
 const socket = io(SERVER_URL, { transports: ['websocket'] });
 
-const AVATAR_COUNT = 30;
+const AVATAR_COUNT = 40;
 const WALL_COUNT = 8;
 
 // === state (memory only) ===
@@ -1238,7 +1258,9 @@ function renderHeader(){
   setText('nameBtn', name);
 
   const img = document.getElementById('avatarImg');
-  const avatar = clamp(Number(__cloudProfile?.avatar)||1, 1, AVATAR_COUNT);
+  let avatar = clamp(Number(__cloudProfile?.avatar)||1, 1, AVATAR_COUNT);
+  // 若頭像屬於付費區(31~40)但未解鎖 → 回退到 1
+  if(avatar>30 && !canUseAvatar(avatar)) avatar = 1;
   img.src = avatarUrlById(avatar);
   img.style.display = 'block';
 
@@ -1422,7 +1444,9 @@ async function saveClientToCloud(nextClient, {reason=''} = {}){
   showLoading('寫入雲端…', reason ? `正在儲存：${reason}` : '正在寫入玩家資料到雲端…');
 
   const name = clampStr(__cloudProfile?.name || '', 16) || '未命名玩家';
-  const avatar = clamp(Number(__cloudProfile?.avatar)||1, 1, AVATAR_COUNT);
+  let avatar = clamp(Number(__cloudProfile?.avatar)||1, 1, AVATAR_COUNT);
+  // 若頭像屬於付費區(31~40)但未解鎖 → 回退到 1
+  if(avatar>30 && !canUseAvatar(avatar)) avatar = 1;
 
   // 保證 nextClient player 同步
   const mergedClient = { ...(nextClient || defaultClient(name, avatar)) };
@@ -1539,14 +1563,36 @@ document.getElementById('nameModalBack').addEventListener('click', (ev)=>{
 
 // avatar modal
 let pendingAvatar = 1;
+function getOwnedAvatars(){
+  // 1~30 free; 31~40 must be purchased in shop_v2
+  const owned = new Set();
+  for(let i=1;i<=30;i++) owned.add(i);
+  const arr = __client?.shop?.ownedAvatars;
+  if(Array.isArray(arr)){
+    for(const n of arr){
+      const k = Number(n);
+      if(Number.isFinite(k)) owned.add(k);
+    }
+  }
+  return owned;
+}
+function canUseAvatar(id){
+  const n = clamp(id, 1, AVATAR_COUNT);
+  return getOwnedAvatars().has(n);
+}
 function buildAvatarGrid(){
   const grid = document.getElementById('avaGrid');
   grid.innerHTML = '';
+
+  const owned = getOwnedAvatars();
+
   for (let i=1; i<=AVATAR_COUNT; i++){
+    const isOwned = owned.has(i);
+
     const btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = 'avaBtn' + (i===pendingAvatar ? ' on' : '');
-    btn.title = `avatar ${i}`;
+    btn.className = 'avaBtn' + (i===pendingAvatar ? ' on' : '') + (isOwned ? '' : ' locked');
+    btn.title = isOwned ? `avatar ${i}` : `avatar ${i}（需先購買）`;
 
     const img = document.createElement('img');
     img.src = avatarUrlById(i);
@@ -1554,6 +1600,12 @@ function buildAvatarGrid(){
     btn.appendChild(img);
 
     btn.onclick = () => {
+      if(!isOwned){
+        const ok = confirm(`頭像 #${i} 需要先在商店購買才能使用。
+要現在前往商店嗎？`);
+        if(ok) location.href = 'shop_v3.html';
+        return;
+      }
       pendingAvatar = i;
       grid.querySelectorAll('.avaBtn').forEach((x, idx)=>{
         x.classList.toggle('on', (idx+1)===pendingAvatar);
@@ -1576,9 +1628,15 @@ document.getElementById('avatarSave').onclick = async () => {
   if(__saving) return;
 
   __cloudProfile.avatar = pendingAvatar;
+  if(!canUseAvatar(__cloudProfile.avatar)){
+    alert('這個頭像尚未購買，無法套用。');
+    return;
+  }
 
   const name = clampStr(__cloudProfile?.name || '未命名玩家', 16) || '未命名玩家';
-  const avatar = clamp(Number(__cloudProfile?.avatar)||1, 1, AVATAR_COUNT);
+  let avatar = clamp(Number(__cloudProfile?.avatar)||1, 1, AVATAR_COUNT);
+  // 若頭像屬於付費區(31~40)但未解鎖 → 回退到 1
+  if(avatar>30 && !canUseAvatar(avatar)) avatar = 1;
 
   const next = { ...( __client || defaultClient(name, avatar) ) };
   next.player = { ...(next.player||{}), name, avatar };
