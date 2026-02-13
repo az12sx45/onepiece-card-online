@@ -1535,6 +1535,24 @@ if(window.__pendingFinalForCloud && socket){
   || "https://onepiece-card-online.onrender.com";
   socket = io(serverURL, { transports: ['websocket'] });
 
+// === 若 renderFinal 比 socket 更早跑：這裡補寫雲端一次（戰績/稱號/豪華解鎖/懸賞單）===
+if (window.__pendingFinalForCloud) {
+  const f = window.__pendingFinalForCloud;
+  window.__pendingFinalForCloud = null;
+
+  const doApply = () => {
+    if(!socket) return;
+    Promise.resolve(cloudApplyMatchResult(socket, f))
+      .catch((e)=> console.warn('[cloudApplyMatchResult failed]', e));
+  };
+
+  if (socket.connected) {
+    doApply();
+  } else {
+    socket.once('connect', doApply);
+  }
+}
+
 
   socket.on('connect', ()=>{
     socket.emit('JOIN', { roomId, resume:true, pid:MY_PID });
