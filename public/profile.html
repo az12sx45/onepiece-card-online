@@ -650,6 +650,42 @@
     }
     @keyframes slide{ 0%{transform:translateX(-120%)} 100%{transform:translateX(260%)} }
     .loadingActions{ margin-top:12px; display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap; }
+
+    /* ===== Wall Stickers v2 ===== */
+    .wallSticker{
+      position:absolute;
+      left:0; top:0;
+      width:120px; height:auto;
+      transform-origin: 50% 50%;
+      user-select:none;
+      touch-action:none;
+      cursor:grab;
+      filter: drop-shadow(0 10px 18px rgba(0,0,0,.45));
+    }
+    .wallSticker:active{ cursor:grabbing; }
+
+    .wallSticker.is-selected{
+      outline: 2px solid rgba(255,211,107,.85);
+      border-radius: 10px;
+    }
+
+    .stickerHud{
+      position:absolute;
+      right:10px; top:10px;
+      display:flex; gap:8px; flex-wrap:wrap;
+      z-index: 50;
+    }
+    .stickerHud .mini{
+      padding:7px 10px;
+      border-radius: 10px;
+      font-size: 12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.28);
+      color: rgba(255,255,255,.9);
+      cursor:pointer;
+    }
+    .stickerHud .mini:hover{ background: rgba(255,255,255,.10); }
+
   </style>
 
   <!-- Socket.IO -->
@@ -689,6 +725,8 @@
 
         <div class="wallTools">
           <button class="btn" id="btnPickWall">選擇牆</button>
+          <button class="btn" id="btnStickerAdd">新增貼紙</button>
+          <button class="btn danger" id="btnStickerClear">清空貼紙</button>
         </div>
       </div>
 
@@ -998,11 +1036,12 @@ function defaultClient(name, avatar){
   return {
     player: { name: name || '', avatar: avatar || 1 },
     totals: { coins: 0, games: 0, wins: 0, atk: 0, def: 0, hit: 0, intel: 0, survival: 0 },
-    shop: { ownedAvatars: [], ownedWalls: [], ownedItems: [] },
+    shop: { ownedAvatars: [], ownedWalls: [], ownedStickers: [], ownedItems: [] },
     deluxeUnlocked: [],
     recent: [],
     titles: { owned: [], equipped: '', equippedTier: 1 },
     bountyPosters: [],
+    stickers: [], // [{ id, key, x, y, s, r, z, locked }]
     _appliedMatchKeys: []
   };
 }
@@ -1233,9 +1272,295 @@ async function renderWall(){
 
     stage.appendChild(wrap);
   });
+
+  // render stickers after posters/wall
+  renderStickers();
 }
 
-function buildWallGrid(pendingId){
+
+// ===============================
+// Wall Stickers v2 (cloud saved)
+// data: __client.stickers = [{id,key,x,y,s,r,z,locked}]
+// s: scale, r: rotation(deg), z: z-index
+// ===============================
+function ensureStickerArrays(){
+  __client = __client || defaultClient(__cloudProfile?.name, __cloudProfile?.avatar);
+  __client.shop = __client.shop || { ownedAvatars:[], ownedWalls:[], ownedStickers:[], ownedItems:[] };
+  if(!Array.isArray(__client.shop.ownedStickers)) __client.shop.ownedStickers = [];
+  if(!Array.isArray(__client.stickers)) __client.stickers = [];
+}
+
+function stickerImgUrl(key){
+  return `images/stickers/${String(key)}.webp`;
+}
+
+function uidSticker(){
+  return 'stk_' + Math.random().toString(36).slice(2,10);
+}
+
+let __stkSelectedId = null;
+
+function getWallStage(){
+  return document.getElementById('wallStage');
+}
+
+function clearStickerDom(){
+  const wall = getWallStage();
+  if(!wall) return;
+  wall.querySelectorAll('.wallSticker').forEach(el=>el.remove());
+  wall.querySelectorAll('.stickerHud').forEach(el=>el.remove());
+}
+
+function applyStickerTransform(el, st){
+  const s = Number(st.s ?? 1) || 1;
+  const r = Number(st.r ?? 0) || 0;
+  el.style.transform = `translate3d(${st.x}px, ${st.y}px, 0) rotate(${r}deg) scale(${s})`;
+  el.style.zIndex = String(Number(st.z ?? 10) || 10);
+}
+
+function renderStickerHUD(){
+  const wall = getWallStage();
+  if(!wall) return;
+
+  wall.querySelectorAll('.stickerHud').forEach(el=>el.remove());
+
+  if(!__stkSelectedId) return;
+
+  const st = __client?.stickers?.find(x=>x.id===__stkSelectedId);
+  if(!st) return;
+
+  const hud = document.createElement('div');
+  hud.className = 'stickerHud';
+  hud.innerHTML = `
+    <button class="mini" data-act="front">置頂</button>
+    <button class="mini" data-act="back">置底</button>
+    <button class="mini" data-act="rotL">⟲ 旋轉</button>
+    <button class="mini" data-act="rotR">⟳ 旋轉</button>
+    <button class="mini" data-act="lock">${st.locked ? '解鎖' : '上鎖'}</button>
+    <button class="mini" data-act="del">刪除</button>
+  `;
+  hud.onclick = async (e)=>{
+    const act = e.target?.dataset?.act;
+    if(!act) return;
+
+    if(act==='front'){
+      st.z = Math.max(...(__client.stickers.map(x=>Number(x.z||10))), 10) + 1;
+    }
+    if(act==='back'){
+      st.z = Math.min(...(__client.stickers.map(x=>Number(x.z||10))), 10) - 1;
+    }
+    if(act==='rotL'){ st.r = (Number(st.r||0) - 15); }
+    if(act==='rotR'){ st.r = (Number(st.r||0) + 15); }
+    if(act==='lock'){ st.locked = !st.locked; }
+    if(act==='del'){
+      __client.stickers = __client.stickers.filter(x=>x.id!==st.id);
+      __stkSelectedId = null;
+    }
+
+    renderStickers();
+    await saveStickersToCloud('sticker-hud');
+  };
+
+  wall.appendChild(hud);
+}
+
+function selectSticker(id){
+  __stkSelectedId = id;
+  const wall = getWallStage();
+  if(!wall) return;
+  wall.querySelectorAll('.wallSticker').forEach(el=>{
+    el.classList.toggle('is-selected', el.dataset.id === id);
+  });
+  renderStickerHUD();
+}
+
+function renderStickers(){
+  ensureStickerArrays();
+  const wall = getWallStage();
+  if(!wall) return;
+
+  // 清除舊 DOM
+  wall.querySelectorAll('.wallSticker').forEach(el=>el.remove());
+
+  // 依 z 排序
+  const list = [...(__client.stickers||[])].sort((a,b)=>(Number(a.z||10)-Number(b.z||10)));
+
+  for(const st of list){
+    const img = document.createElement('img');
+    img.className = 'wallSticker';
+    img.src = stickerImgUrl(st.key);
+    img.alt = String(st.key||'sticker');
+    img.draggable = false;
+    img.dataset.id = st.id;
+
+    // 預設值
+    st.x = Number(st.x||40);
+    st.y = Number(st.y||40);
+    st.s = Number(st.s||1);
+    st.r = Number(st.r||0);
+    st.z = Number(st.z||10);
+
+    applyStickerTransform(img, st);
+
+    img.addEventListener('pointerdown', (e)=>{
+      e.stopPropagation();
+      selectSticker(st.id);
+      if(st.locked) return;
+      startDragSticker(e, img, st);
+    });
+
+    img.addEventListener('wheel', async (e)=>{
+      if(__stkSelectedId !== st.id) return;
+      if(st.locked) return;
+      e.preventDefault();
+      const delta = e.deltaY > 0 ? -0.05 : 0.05;
+      st.s = Math.max(0.2, Math.min(3, Number(st.s||1) + delta));
+      applyStickerTransform(img, st);
+      await saveStickersToCloud('sticker-wheel-scale', true);
+    }, { passive:false });
+
+    wall.appendChild(img);
+  }
+
+  // 背景點擊取消選取
+  wall.onclick = ()=>{
+    __stkSelectedId = null;
+    wall.querySelectorAll('.wallSticker').forEach(el=>el.classList.remove('is-selected'));
+    wall.querySelectorAll('.stickerHud').forEach(el=>el.remove());
+  };
+
+  // 保持選取狀態
+  if(__stkSelectedId){
+    selectSticker(__stkSelectedId);
+  }
+}
+
+let __stkDrag = null;
+function startDragSticker(e, el, st){
+  const wall = getWallStage();
+  if(!wall) return;
+
+  const rect = wall.getBoundingClientRect();
+  const start = {
+    pid: e.pointerId,
+    sx: e.clientX, sy: e.clientY,
+    ox: Number(st.x||0),
+    oy: Number(st.y||0)
+  };
+  __stkDrag = { start, el, st };
+  el.setPointerCapture(e.pointerId);
+
+  const onMove = (ev)=>{
+    if(!__stkDrag || ev.pointerId !== start.pid) return;
+    const dx = ev.clientX - start.sx;
+    const dy = ev.clientY - start.sy;
+
+    // 吸附格線（8px）
+    const grid = ev.shiftKey ? 1 : 8;
+    const nx = Math.round((start.ox + dx)/grid)*grid;
+    const ny = Math.round((start.oy + dy)/grid)*grid;
+
+    st.x = Math.max(-50, Math.min(rect.width  - 10, nx));
+    st.y = Math.max(-50, Math.min(rect.height - 10, ny));
+    applyStickerTransform(el, st);
+  };
+
+  const onUp = async (ev)=>{
+    if(!__stkDrag || ev.pointerId !== start.pid) return;
+    __stkDrag = null;
+    await saveStickersToCloud('sticker-drag');
+    wall.removeEventListener('pointermove', onMove);
+    wall.removeEventListener('pointerup', onUp);
+    wall.removeEventListener('pointercancel', onUp);
+  };
+
+  wall.addEventListener('pointermove', onMove);
+  wall.addEventListener('pointerup', onUp);
+  wall.addEventListener('pointercancel', onUp);
+}
+
+let __stkSaveTimer = null;
+async function saveStickersToCloud(reason, debounce=false){
+  if(debounce){
+    clearTimeout(__stkSaveTimer);
+    __stkSaveTimer = setTimeout(()=>saveStickersToCloud(reason, false), 250);
+    return;
+  }
+  try{
+    // 只 patch client（避免踩到其他欄位）
+    const patch = {
+      name: clampStr(__cloudProfile?.name || '未命名玩家', 16) || '未命名玩家',
+      avatar: String(clamp(Number(__cloudProfile?.avatar)||1, 1, AVATAR_COUNT)),
+      stats: {
+        ...( __cloudProfile?.stats || {} ),
+        client: __client
+      }
+    };
+    await cloudUpdate(__secret, patch);
+  }catch(e){
+    console.error(e);
+  }
+}
+
+// ===== Buttons =====
+document.getElementById('btnStickerAdd')?.addEventListener('click', async ()=>{
+  ensureStickerArrays();
+  const owned = __client.shop.ownedStickers || [];
+  if(!owned.length){
+    alert('你還沒有購買任何貼紙，先去商店買吧！');
+    location.href = 'shop.html';
+    return;
+  }
+
+  // 先用「選單」：用 prompt 簡單版（之後可改成漂亮 modal）
+  const listText = owned.map((k,i)=>`${i+1}. ${k}`).join('
+');
+  const pick = prompt(`選擇要新增的貼紙（輸入編號）：
+${listText}`, '1');
+  const idx = Math.max(1, Math.min(owned.length, Number(pick||1))) - 1;
+  const key = owned[idx];
+
+  const st = { id: uidSticker(), key, x: 40, y: 40, s: 1, r: 0, z: 30, locked: false };
+  __client.stickers.push(st);
+
+  renderStickers();
+  selectSticker(st.id);
+  await saveStickersToCloud('sticker-add');
+});
+
+document.getElementById('btnStickerClear')?.addEventListener('click', async ()=>{
+  ensureStickerArrays();
+  const ok = confirm('確定要清空牆面貼紙嗎？（會寫入雲端）');
+  if(!ok) return;
+  __client.stickers = [];
+  __stkSelectedId = null;
+  renderStickers();
+  await saveStickersToCloud('sticker-clear');
+});
+
+// 快捷鍵：Del 刪除、Q/E 旋轉、+/- 縮放、F/B 調層級
+window.addEventListener('keydown', async (e)=>{
+  if(!__stkSelectedId) return;
+  const st = __client?.stickers?.find(x=>x.id===__stkSelectedId);
+  if(!st) return;
+
+  const key = e.key.toLowerCase();
+  if(key==='delete' || key==='backspace'){
+    if(st.locked) return;
+    __client.stickers = __client.stickers.filter(x=>x.id!==st.id);
+    __stkSelectedId = null;
+    renderStickers();
+    await saveStickersToCloud('sticker-key-del');
+  }
+  if(key==='q'){ st.r = Number(st.r||0) - 5; renderStickers(); await saveStickersToCloud('sticker-key-rot', true); }
+  if(key==='e'){ st.r = Number(st.r||0) + 5; renderStickers(); await saveStickersToCloud('sticker-key-rot', true); }
+  if(key==='+' || key==='='){ if(st.locked) return; st.s = Math.min(3, Number(st.s||1) + 0.05); renderStickers(); await saveStickersToCloud('sticker-key-scale', true); }
+  if(key==='-' || key==='_'){ if(st.locked) return; st.s = Math.max(0.2, Number(st.s||1) - 0.05); renderStickers(); await saveStickersToCloud('sticker-key-scale', true); }
+  if(key==='f'){ st.z = Math.max(...(__client.stickers.map(x=>Number(x.z||10))), 10) + 1; renderStickers(); await saveStickersToCloud('sticker-key-z'); }
+  if(key==='b'){ st.z = Math.min(...(__client.stickers.map(x=>Number(x.z||10))), 10) - 1; renderStickers(); await saveStickersToCloud('sticker-key-z'); }
+});
+
+(pendingId){
   const grid = document.getElementById('wallGrid');
   if(!grid) return;
   grid.innerHTML = '';
@@ -1588,7 +1913,7 @@ document.getElementById('nameModalBack').addEventListener('click', (ev)=>{
 // avatar modal
 let pendingAvatar = 1;
 function getOwnedAvatars(){
-  // 1~30 free; 31~40 must be purchased in shop_v2
+  // 1~30 free; 31~40 must be purchased in shop
   const owned = new Set();
   for(let i=1;i<=30;i++) owned.add(i);
   const arr = __client?.shop?.ownedAvatars;
@@ -1603,6 +1928,7 @@ function getOwnedAvatars(){
 function canUseAvatar(id){
   const n = clamp(id, 1, AVATAR_COUNT);
   return getOwnedAvatars().has(n);
+}
 
 function getOwnedWalls(){
   // 1~3 free; 4~8 must be purchased in shop
@@ -1620,7 +1946,7 @@ function canUseWall(id){
   const n = clamp(id, 1, WALL_COUNT);
   return getOwnedWalls().has(n);
 }
-}
+
 function buildAvatarGrid(){
   const grid = document.getElementById('avaGrid');
   grid.innerHTML = '';
