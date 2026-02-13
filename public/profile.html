@@ -616,6 +616,48 @@
     }
     @keyframes slide{ 0%{transform:translateX(-120%)} 100%{transform:translateX(260%)} }
     .loadingActions{ margin-top:12px; display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap; }
+/* ===== Shop ===== */
+.shopGrid{
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap:10px;
+}
+.shopCard{
+  border:1px solid rgba(255,255,255,0.12);
+  background: rgba(0,0,0,0.18);
+  border-radius: 12px;
+  padding: 10px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+.shopPic{
+  width:48px; height:48px;
+  border-radius: 12px;
+  overflow:hidden;
+  flex:0 0 auto;
+  background: rgba(255,255,255,0.06);
+  display:flex; align-items:center; justify-content:center;
+}
+.shopPic img{ width:100%; height:100%; object-fit:cover; display:block; }
+.shopMeta{ flex:1 1 auto; min-width:0; }
+.shopName{ font-weight:800; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.shopDesc{ font-size:11px; opacity:.75; margin-top:2px; }
+.shopPrice{ font-size:12px; font-weight:800; margin-top:4px; }
+.shopBtn{
+  flex:0 0 auto;
+  white-space:nowrap;
+}
+.shopBtn[disabled]{ opacity:.55; cursor:not-allowed; }
+.badgeOwned{
+  display:inline-flex;
+  padding:2px 8px;
+  border-radius: 999px;
+  font-size:11px;
+  background: rgba(0,255,120,0.12);
+  border: 1px solid rgba(0,255,120,0.25);
+}
+
   </style>
 
   <!-- Socket.IO -->
@@ -732,6 +774,16 @@
           </div>
 
           <div class="divider"></div>
+
+<div class="divider"></div>
+
+<div class="row" style="justify-content:space-between">
+  <div style="font-weight:800">商店</div>
+  <div class="muted" style="font-size:11px">用累積金幣購買頭像/牆面（寫入雲端）</div>
+</div>
+
+<div id="shopWrap" class="shopGrid" style="margin-top:10px"></div>
+
           <div class="footnote">
             提醒：此頁面為 <b>完全雲端主控</b>。資料儲存在伺服器（Postgres / player_profiles.stats）。
             本機僅保留 <span class="mono">opSecret</span> 供自動登入。
@@ -1405,11 +1457,127 @@ function renderLux(){
   setText('luxEnhCount', String(unlockedEnhCount));
 }
 
+
+// ===== shop (cloud: stats.client.shop) =====
+const SHOP_CATALOG = [
+  // 目前先做示範商品，你之後要賣的頭像/牆面就往這裡加
+  { id:'ava-11', type:'avatar', avatarId: 11, name:'頭像 #11', desc:'新頭像', price: 1200 },
+  { id:'ava-12', type:'avatar', avatarId: 12, name:'頭像 #12', desc:'新頭像', price: 1200 },
+  { id:'wall-2', type:'wall', wallId: 2, name:'牆面 #2', desc:'新的展示牆', price: 1500 },
+];
+
+function ensureShop(){
+  if(!__client) return;
+  if(!__client.shop || typeof __client.shop !== 'object') __client.shop = {};
+  if(!Array.isArray(__client.shop.ownedAvatars)) __client.shop.ownedAvatars = []; // 不做鎖定，先當收藏/解鎖紀錄
+  if(!Array.isArray(__client.shop.ownedWalls)) __client.shop.ownedWalls = [];
+  if(!Array.isArray(__client.shop.ownedItems)) __client.shop.ownedItems = [];
+}
+
+function getCoins(){
+  return Math.max(0, Number(__cloudProfile?.stats?.coins || 0));
+}
+function setCoins(v){
+  if(!__cloudProfile.stats || typeof __cloudProfile.stats !== 'object') __cloudProfile.stats = {};
+  __cloudProfile.stats.coins = Math.max(0, Math.floor(Number(v) || 0));
+}
+
+function isOwned(item){
+  ensureShop();
+  if(item.type === 'avatar') return __client.shop.ownedAvatars.includes(item.avatarId);
+  if(item.type === 'wall') return __client.shop.ownedWalls.includes(item.wallId);
+  if(item.type === 'item') return __client.shop.ownedItems.includes(item.itemId);
+  return false;
+}
+
+function renderShop(){
+  const wrap = document.getElementById('shopWrap');
+  if(!wrap) return;
+  ensureShop();
+
+  const coins = getCoins();
+  wrap.innerHTML = '';
+
+  for(const it of SHOP_CATALOG){
+    const owned = isOwned(it);
+
+    const card = document.createElement('div');
+    card.className = 'shopCard';
+
+    const pic = document.createElement('div');
+    pic.className = 'shopPic';
+    const img = document.createElement('img');
+    img.loading = 'lazy';
+    img.alt = it.name;
+    img.src = (it.type === 'avatar') ? avatarUrlById(it.avatarId) : wallUrlById(it.wallId);
+    pic.appendChild(img);
+
+    const meta = document.createElement('div');
+    meta.className = 'shopMeta';
+    meta.innerHTML = `
+      <div class="shopName">${escapeHtml(it.name)}</div>
+      <div class="shopDesc">${escapeHtml(it.desc || '')}</div>
+      <div class="shopPrice">價格：${it.price.toLocaleString('en-US')} 金幣</div>
+    `;
+
+    const btn = document.createElement('button');
+    btn.className = 'btn primary shopBtn';
+    btn.type = 'button';
+
+    if(owned){
+      btn.disabled = true;
+      btn.innerHTML = `<span class="badgeOwned">已擁有</span>`;
+    }else{
+      btn.textContent = '購買';
+      btn.disabled = (__saving || coins < it.price);
+      btn.onclick = ()=> buyItem(it);
+    }
+
+    card.appendChild(pic);
+    card.appendChild(meta);
+    card.appendChild(btn);
+    wrap.appendChild(card);
+  }
+}
+
+async function buyItem(it){
+  ensureShop();
+  const coins = getCoins();
+  if(coins < it.price){
+    alert('金幣不足');
+    return;
+  }
+  const ok = confirm(`確定花 ${it.price.toLocaleString('en-US')} 金幣購買「${it.name}」？`);
+  if(!ok) return;
+
+  // 扣錢（要寫入雲端）
+  setCoins(coins - it.price);
+
+  // 寫入擁有清單（要寫入雲端 stats.client.shop）
+  if(it.type === 'avatar'){
+    if(!__client.shop.ownedAvatars.includes(it.avatarId)) __client.shop.ownedAvatars.push(it.avatarId);
+  }else if(it.type === 'wall'){
+    if(!__client.shop.ownedWalls.includes(it.wallId)) __client.shop.ownedWalls.push(it.wallId);
+  }
+
+  // 走你既有的雲端寫入
+  const name = clampStr(__cloudProfile?.name || '未命名玩家', 16) || '未命名玩家';
+  const avatar = clamp(Number(__cloudProfile?.avatar)||1, 1, AVATAR_COUNT);
+  const next = { ...( __client || defaultClient(name, avatar) ) };
+  next.player = { ...(next.player||{}), name, avatar };
+
+  await saveClientToCloud(next, { reason:`商店購買：${it.name}` });
+
+  renderAll();
+}
+
+
 function renderAll(){
   renderHeader();
   renderStats();
   renderTitles();
   renderRecent();
+  renderShop();
   renderLux();
   renderWall();
 }
@@ -1435,6 +1603,7 @@ async function saveClientToCloud(nextClient, {reason=''} = {}){
     avatar: String(avatar),
     stats: {
       ...(__cloudProfile?.stats || {}),
+      coins: Number(__cloudProfile?.stats?.coins || 0),
       client: mergedClient,
       wall: { id: clamp(__wallId, 1, WALL_COUNT) }
     }
