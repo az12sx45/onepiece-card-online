@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>商店</title>
+  <style>
+    body{ margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans TC",sans-serif; background:#0b0f14; color:#e8eef7; }
+    .top{ position:sticky; top:0; background:rgba(0,0,0,.45); backdrop-filter: blur(10px); border-bottom:1px solid rgba(255,255,255,.08); }
+    .wrap{ max-width:980px; margin:0 auto; padding:14px; }
+    .row{ display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+    .btn{ padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.06); color:#fff; cursor:pointer; }
+    .btn.primary{ background:rgba(255,190,88,.18); border-color:rgba(255,190,88,.35); }
+    .btn[disabled]{ opacity:.55; cursor:not-allowed; }
+    .coins{ font-weight:900; letter-spacing:.2px; }
+    .muted{ opacity:.7; font-size:12px; }
+    .grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:12px; }
+    .card{ display:flex; gap:12px; align-items:center; padding:12px; border-radius:14px; border:1px solid rgba(255,255,255,.10); background:rgba(255,255,255,.05); }
+    .pic{ width:56px; height:56px; border-radius:12px; overflow:hidden; background:rgba(0,0,0,.2); flex:0 0 auto; display:flex; align-items:center; justify-content:center; }
+    .pic img{ width:100%; height:100%; object-fit:cover; display:block; }
+    .meta{ flex:1 1 auto; min-width:0; }
+    .name{ font-weight:900; }
+    .desc{ opacity:.75; font-size:12px; margin-top:2px; }
+    .price{ margin-top:6px; font-weight:900; }
+    .owned{ font-size:12px; padding:4px 10px; border-radius:999px; border:1px solid rgba(0,255,120,.28); background:rgba(0,255,120,.10); }
+    .toast{ margin-top:10px; font-size:12px; opacity:.85; }
+  </style>
+</head>
+<body>
+
+  <div class="top">
+    <div class="wrap">
+      <div class="row">
+        <button class="btn" id="btnBack">← 回個人頁</button>
+        <div>
+          <div class="coins">金幣：<span id="coins">0</span></div>
+          <div class="muted" id="status">連線中…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="row">
+      <div>
+        <div style="font-weight:900;font-size:18px">商店</div>
+        <div class="muted">購買會扣雲端金幣，並寫入解鎖紀錄（目前不限制頭像使用）。</div>
+      </div>
+    </div>
+
+    <div id="grid" class="grid"></div>
+    <div class="toast" id="toast"></div>
+  </div>
+
+  <!-- socket.io (你若原本 profile.html 用相同 CDN/路徑，照搬那個即可) -->
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <script>
+    // ===== 基本設定 =====
+    const serverURL =
+      new URLSearchParams(location.search).get('server')
+      || "https://onepiece-card-online.onrender.com";
+
+    const secret = localStorage.getItem('opSecret');
+    if(!secret){
+      alert('尚未登入/沒有 secret，請先回主畫面登入。');
+      location.href = 'start.html';
+    }
+
+    document.getElementById('btnBack').onclick = ()=> location.href = 'profile.html';
+
+    // ===== 商品清單（你之後要賣的頭像/物品就加在這裡）=====
+    const SHOP = [
+      { id:'ava-11', type:'avatar', avatarId: 11, name:'頭像 #11', desc:'新頭像', price: 1200 },
+      { id:'ava-12', type:'avatar', avatarId: 12, name:'頭像 #12', desc:'新頭像', price: 1200 },
+      { id:'wall-2', type:'wall', wallId: 2, name:'牆面 #2', desc:'展示牆造型', price: 1500 },
+    ];
+
+    // ===== state =====
+    let socket = null;
+    let profile = null; // cloud player_profiles row
+    let saving = false;
+
+    // ===== util =====
+    const $ = (id)=> document.getElementById(id);
+    const esc = (s)=> String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    const coins = ()=> Math.max(0, Number(profile?.stats?.coins || 0));
+    const setCoins = (v)=> { profile.stats = profile.stats||{}; profile.stats.coins = Math.max(0, Math.floor(Number(v)||0)); };
+
+    function ensureClient(){
+      if(!profile) return;
+      if(!profile.stats || typeof profile.stats!=='object') profile.stats = {};
+      if(!profile.stats.client || typeof profile.stats.client!=='object') profile.stats.client = {};
+      const c = profile.stats.client;
+      if(!c.shop || typeof c.shop!=='object') c.shop = {};
+      if(!Array.isArray(c.shop.ownedAvatars)) c.shop.ownedAvatars = [];
+      if(!Array.isArray(c.shop.ownedWalls)) c.shop.ownedWalls = [];
+      if(!Array.isArray(c.shop.ownedItems)) c.shop.ownedItems = [];
+    }
+
+    function isOwned(it){
+      ensureClient();
+      const shop = profile.stats.client.shop;
+      if(it.type==='avatar') return shop.ownedAvatars.includes(it.avatarId);
+      if(it.type==='wall') return shop.ownedWalls.includes(it.wallId);
+      return false;
+    }
+
+    function avatarUrlById(id){ return `images/avatars/${id}.webp`; }
+    function wallUrlById(id){ return `images/walls/${id}.webp`; } // 若你牆面縮圖路徑不同，改這裡
+
+    function render(){
+      $('coins').textContent = coins().toLocaleString('en-US');
+      const grid = $('grid');
+      grid.innerHTML = '';
+
+      for(const it of SHOP){
+        const owned = isOwned(it);
+
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        const pic = document.createElement('div');
+        pic.className = 'pic';
+        const img = document.createElement('img');
+        img.loading = 'lazy';
+        img.alt = it.name;
+        img.src = (it.type==='avatar') ? avatarUrlById(it.avatarId) : wallUrlById(it.wallId);
+        pic.appendChild(img);
+
+        const meta = document.createElement('div');
+        meta.className = 'meta';
+        meta.innerHTML = `
+          <div class="name">${esc(it.name)}</div>
+          <div class="desc">${esc(it.desc||'')}</div>
+          <div class="price">價格：${it.price.toLocaleString('en-US')} 金幣</div>
+        `;
+
+        const btn = document.createElement('button');
+        btn.className = 'btn primary';
+        if(owned){
+          btn.disabled = true;
+          btn.innerHTML = `<span class="owned">已擁有</span>`;
+        }else{
+          btn.textContent = '購買';
+          btn.disabled = saving || coins() < it.price;
+          btn.onclick = ()=> buy(it);
+        }
+
+        card.appendChild(pic);
+        card.appendChild(meta);
+        card.appendChild(btn);
+        grid.appendChild(card);
+      }
+    }
+
+    async function buy(it){
+      if(saving) return;
+      if(coins() < it.price){ alert('金幣不足'); return; }
+      if(!confirm(`確定花 ${it.price.toLocaleString('en-US')} 金幣購買「${it.name}」？`)) return;
+
+      saving = true;
+      $('toast').textContent = '儲存中…';
+
+      try{
+        // 本地先更新
+        setCoins(coins() - it.price);
+        ensureClient();
+        const shop = profile.stats.client.shop;
+
+        if(it.type==='avatar' && !shop.ownedAvatars.includes(it.avatarId)) shop.ownedAvatars.push(it.avatarId);
+        if(it.type==='wall' && !shop.ownedWalls.includes(it.wallId)) shop.ownedWalls.push(it.wallId);
+
+        // 推雲端：PROFILE_UPDATE
+        await profileUpdate({
+          stats: {
+            ...(profile.stats || {}),
+            coins: Number(profile.stats.coins || 0),
+            client: profile.stats.client,
+            wall: profile.stats.wall
+          }
+        });
+
+        $('toast').textContent = `已購買：${it.name} ✓`;
+      }catch(e){
+        console.error(e);
+        $('toast').textContent = '儲存失敗，請檢查網路/登入狀態';
+        // 失敗可選：重新 GET 雲端還原
+        try{ await profileGet(); }catch(_){}
+      }finally{
+        saving = false;
+        render();
+      }
+    }
+
+    function profileGet(){
+      return new Promise((resolve, reject)=>{
+        socket.timeout(8000).emit('PROFILE_GET', { secret }, (err, res)=>{
+          if(err) return reject(err);
+          if(!res || !res.ok) return reject(res?.error || 'PROFILE_GET failed');
+          profile = res.profile || {};
+          ensureClient();
+          resolve(profile);
+        });
+      });
+    }
+
+    function profileUpdate(patch){
+      return new Promise((resolve, reject)=>{
+        socket.timeout(8000).emit('PROFILE_UPDATE', { secret, patch }, (err, res)=>{
+          if(err) return reject(err);
+          if(!res || !res.ok) return reject(res?.error || 'PROFILE_UPDATE failed');
+          // 更新本地快照（以伺服器回傳為準）
+          if(res.profile) profile = res.profile;
+          ensureClient();
+          resolve(res);
+        });
+      });
+    }
+
+    // ===== init =====
+    (function init(){
+      socket = io(serverURL, { transports:['websocket'] });
+
+      socket.on('connect', async ()=>{
+        $('status').textContent = '已連線';
+        try{
+          await profileGet();
+          $('toast').textContent = '';
+          render();
+        }catch(e){
+          console.error(e);
+          $('status').textContent = '讀取雲端失敗';
+          $('toast').textContent = '讀取雲端失敗，請重整或檢查登入';
+        }
+      });
+
+      socket.on('disconnect', ()=>{
+        $('status').textContent = '已斷線';
+      });
+    })();
+  </script>
+</body>
+</html>
