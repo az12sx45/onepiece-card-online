@@ -303,6 +303,7 @@
           <div class="tabs" role="tablist" aria-label="類別">
             <button class="tab active" data-tab="avatar" role="tab">頭像</button>
             <button class="tab" data-tab="wall" role="tab">牆面</button>
+            <button class="tab" data-tab="sticker" role="tab">貼紙</button>
             <button class="tab" data-tab="item" role="tab">道具</button>
           </div>
 
@@ -403,11 +404,15 @@
       { id:'wall-6', type:'wall', key: 6, name:'牆面 #6', desc:'商店限定牆面（購買後可在個人頁面套用）', price: 5, rarity:'epic' },
       { id:'wall-7', type:'wall', key: 7, name:'牆面 #7', desc:'商店限定牆面（購買後可在個人頁面套用）', price: 5, rarity:'epic' },
       { id:'wall-8', type:'wall', key: 8, name:'牆面 #8', desc:'商店限定牆面（購買後可在個人頁面套用）', price: 5, rarity:'epic' },
+    
+      { id:'stk-sword-zoro', type:'sticker', key:'sword_zoro', name:'索隆的刀', desc:'牆面貼紙：可自由拖曳/縮放/旋轉', price: 6, rarity:'epic' },
+      { id:'stk-flag-01',    type:'sticker', key:'flag_skull_01', name:'海賊旗', desc:'牆面貼紙：四角釘子風格',       price: 8, rarity:'legend' },
     ];
 
     function imgUrl(it){
-      if(it.type==='avatar') return `images/avatars/${it.key}.webp`;
-      if(it.type==='wall')   return `images/walls/${it.key}.webp`;
+      if(it.type==='avatar')  return `images/avatars/${it.key}.webp`;
+      if(it.type==='wall')    return `images/walls/${it.key}.webp`;
+      if(it.type==='sticker') return `images/stickers/${it.key}.webp`;
       return `images/items/${it.key}.webp`;
     }
 
@@ -424,7 +429,7 @@
       return '';
     }
     function typeLabel(t){
-      return ({avatar:'頭像', wall:'牆面', item:'道具'})[t] || t;
+      return ({avatar:'頭像', wall:'牆面', sticker:'貼紙', item:'道具'})[t] || t;
     }
 
     // ===== Cloud state =====
@@ -443,7 +448,7 @@
         titles: { owned: [], equipped:'', equippedTier: 1 },
         bountyPosters: [],
         _appliedMatchKeys: [],
-        shop: { ownedAvatars: [], ownedWalls: [], ownedItems: [] }
+        shop: { ownedAvatars: [], ownedWalls: [], ownedStickers: [], ownedItems: [] }
       };
     }
 
@@ -467,6 +472,7 @@
       const s = profile.stats.client.shop;
       if(!Array.isArray(s.ownedAvatars)) s.ownedAvatars = [];
       if(!Array.isArray(s.ownedWalls)) s.ownedWalls = [];
+      if(!Array.isArray(s.ownedStickers)) s.ownedStickers = [];
       if(!Array.isArray(s.ownedItems)) s.ownedItems = [];
 
       // --- backward compat (old shop wrote stats.coins) ---
@@ -496,25 +502,29 @@
     }
 
     function isOwned(it){
-      const s = shopState();
-      if(it.type==='avatar') return s.ownedAvatars.includes(Number(it.key));
-      if(it.type==='wall')   return s.ownedWalls.includes(Number(it.key));
-      return s.ownedItems.includes(String(it.key));
-    }
+  const s = shopState();
+  if(it.type==='avatar')  return s.ownedAvatars.includes(Number(it.key));
+  if(it.type==='wall')    return s.ownedWalls.includes(Number(it.key));
+  if(it.type==='sticker') return s.ownedStickers.includes(String(it.key));
+  return s.ownedItems.includes(String(it.key));
+}
 
-    function own(it){
-      const s = shopState();
-      if(it.type==='avatar'){
-        const k = Number(it.key);
-        if(!s.ownedAvatars.includes(k)) s.ownedAvatars.push(k);
-      }else if(it.type==='wall'){
-        const k = Number(it.key);
-        if(!s.ownedWalls.includes(k)) s.ownedWalls.push(k);
-      }else{
-        const k = String(it.key);
-        if(!s.ownedItems.includes(k)) s.ownedItems.push(k);
-      }
-    }
+function own(it){
+  const s = shopState();
+  if(it.type==='avatar'){
+    const k = Number(it.key);
+    if(!s.ownedAvatars.includes(k)) s.ownedAvatars.push(k);
+  }else if(it.type==='wall'){
+    const k = Number(it.key);
+    if(!s.ownedWalls.includes(k)) s.ownedWalls.push(k);
+  }else if(it.type==='sticker'){
+    const k = String(it.key);
+    if(!s.ownedStickers.includes(k)) s.ownedStickers.push(k);
+  }else{
+    const k = String(it.key);
+    if(!s.ownedItems.includes(k)) s.ownedItems.push(k);
+  }
+}
 
     // ===== Cloud API =====
     function profileGet(){
