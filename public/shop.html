@@ -2,28 +2,269 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>商店</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <title>商店｜偉大航道爭霸戰</title>
   <style>
-    body{ margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans TC",sans-serif; background:#0b0f14; color:#e8eef7; }
-    .top{ position:sticky; top:0; background:rgba(0,0,0,.45); backdrop-filter: blur(10px); border-bottom:1px solid rgba(255,255,255,.08); }
-    .wrap{ max-width:980px; margin:0 auto; padding:14px; }
-    .row{ display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
-    .btn{ padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.06); color:#fff; cursor:pointer; }
-    .btn.primary{ background:rgba(255,190,88,.18); border-color:rgba(255,190,88,.35); }
-    .btn[disabled]{ opacity:.55; cursor:not-allowed; }
-    .coins{ font-weight:900; letter-spacing:.2px; }
-    .muted{ opacity:.7; font-size:12px; }
-    .grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:12px; }
-    .card{ display:flex; gap:12px; align-items:center; padding:12px; border-radius:14px; border:1px solid rgba(255,255,255,.10); background:rgba(255,255,255,.05); }
-    .pic{ width:56px; height:56px; border-radius:12px; overflow:hidden; background:rgba(0,0,0,.2); flex:0 0 auto; display:flex; align-items:center; justify-content:center; }
-    .pic img{ width:100%; height:100%; object-fit:cover; display:block; }
-    .meta{ flex:1 1 auto; min-width:0; }
-    .name{ font-weight:900; }
-    .desc{ opacity:.75; font-size:12px; margin-top:2px; }
-    .price{ margin-top:6px; font-weight:900; }
-    .owned{ font-size:12px; padding:4px 10px; border-radius:999px; border:1px solid rgba(0,255,120,.28); background:rgba(0,255,120,.10); }
-    .toast{ margin-top:10px; font-size:12px; opacity:.85; }
+    :root{
+      --bg:#0b1014; --card:#141a1f; --line:#2a3038;
+      --text:#e9f0f8; --muted:#9aa5b2;
+      --gold:#ffd36b; --gold2:#ffb84a;
+      --good:#34d399; --bad:#fb7185;
+      --shadow: 0 10px 28px rgba(0,0,0,.38);
+      --r:18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Noto Sans TC",sans-serif;
+      background: radial-gradient(circle at 25% 15%, rgba(255,211,107,.10), transparent 55%),
+                  radial-gradient(circle at 80% 85%, rgba(0,158,255,.07), transparent 55%),
+                  linear-gradient(180deg,#070a0e 0%, #0b1014 40%, #080b10 100%);
+      color:var(--text);
+    }
+    a{color:inherit}
+    .top{
+      position:sticky; top:0; z-index:30;
+      backdrop-filter: blur(10px);
+      background: rgba(14,18,24,.72);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .wrap{max-width:1100px;margin:0 auto;padding:14px 16px;}
+    .row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+    .brand{
+      display:flex;align-items:center;gap:10px;
+      font-weight:900; letter-spacing:.6px;
+    }
+    .brand .dot{
+      width:12px;height:12px;border-radius:999px;
+      background:linear-gradient(135deg,var(--gold),var(--gold2));
+      box-shadow:0 0 0 3px rgba(255,211,107,.12);
+    }
+    .btn{
+      padding:10px 12px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color:var(--text); cursor:pointer;
+      transition: .15s;
+      user-select:none;
+    }
+    .btn:hover{background:rgba(255,255,255,.12)}
+    .btn:active{transform:translateY(1px)}
+    .btn.primary{
+      background: rgba(255,211,107,.16);
+      border-color: rgba(255,211,107,.35);
+      color:#1b1408;
+      font-weight:900;
+    }
+    .btn.ghost{
+      background: transparent;
+    }
+    .btn[disabled]{opacity:.55; cursor:not-allowed; transform:none}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      font-size:12px;
+    }
+    .coins{
+      font-weight:900;
+      font-variant-numeric:tabular-nums;
+      letter-spacing:.2px;
+    }
+    .status{
+      font-size:12px; color:var(--muted);
+    }
+
+    .panel{
+      margin-top:10px;
+      background: rgba(20,24,31,.78);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .panelHead{
+      padding:12px 14px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0));
+    }
+    .title{
+      font-weight:1000; font-size:18px;
+      display:flex; align-items:center; gap:10px;
+    }
+    .sub{
+      font-size:12px; color:var(--muted);
+      margin-top:2px;
+    }
+    .controls{
+      display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+    }
+    .tabs{
+      display:inline-flex; gap:6px; padding:4px;
+      border-radius:999px;
+      background: rgba(0,0,0,.25);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .tab{
+      border:none; cursor:pointer;
+      padding:7px 12px;
+      border-radius:999px;
+      font-size:13px;
+      background: transparent;
+      color: var(--muted);
+    }
+    .tab.active{
+      background: linear-gradient(135deg,var(--gold),var(--gold2));
+      color:#1b1408;
+      font-weight:900;
+    }
+    .input{
+      display:flex; align-items:center; gap:8px;
+      padding:8px 10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.22);
+    }
+    .input input{
+      border:none; outline:none; background:transparent; color:var(--text);
+      width:180px;
+    }
+    .select{
+      padding:8px 10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.22);
+      color:var(--text);
+      outline:none;
+    }
+
+    .grid{
+      padding:14px;
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap:12px;
+    }
+    @media (max-width: 980px){ .grid{grid-template-columns: repeat(2, minmax(0, 1fr));} }
+    @media (max-width: 640px){ .grid{grid-template-columns: 1fr;} .input input{width:140px;} }
+
+    .item{
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      overflow:hidden;
+      display:flex; flex-direction:column;
+      min-height: 210px;
+    }
+    .thumb{
+      position:relative;
+      height: 140px;
+      background: radial-gradient(circle at 50% 30%, rgba(255,211,107,.10), rgba(0,0,0,.0) 60%),
+                  linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.0));
+      display:flex; align-items:center; justify-content:center;
+    }
+    .thumb img{
+      width: 92px; height: 92px;
+      border-radius: 18px;
+      object-fit:cover;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.22);
+      box-shadow: 0 10px 20px rgba(0,0,0,.35);
+    }
+    .rarity{
+      position:absolute; left:10px; top:10px;
+      font-size:11px; font-weight:900;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.32);
+      color: #e8eef7;
+    }
+    .rarity.r-rare{ border-color: rgba(255,211,107,.40); background: rgba(255,211,107,.10); color: #ffe8b6; }
+    .rarity.r-epic{ border-color: rgba(147,96,255,.40); background: rgba(147,96,255,.10); color: #f1e7ff; }
+    .rarity.r-legend{ border-color: rgba(255,184,74,.55); background: rgba(255,184,74,.14); color: #fff2cc; box-shadow: 0 0 18px rgba(255,211,107,.22); }
+
+    .ownedTag{
+      position:absolute; right:10px; top:10px;
+      font-size:11px; font-weight:900;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid rgba(52,211,153,.40);
+      background: rgba(52,211,153,.10);
+      color: #b9f6dd;
+    }
+    .body{
+      padding:12px 12px 10px;
+      display:flex; flex-direction:column; gap:8px;
+      flex:1;
+    }
+    .name{font-weight:1000}
+    .desc{font-size:12px;color:rgba(233,240,248,.75);line-height:1.5; min-height: 34px;}
+    .metaRow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;}
+    .price{font-weight:1000; color:var(--gold); font-variant-numeric:tabular-nums;}
+    .actions{display:flex; gap:8px; justify-content:flex-end;}
+    .btn.small{padding:8px 10px;border-radius:12px;font-size:13px}
+    .btn.buy{
+      background: linear-gradient(135deg,var(--gold),var(--gold2));
+      border-color: rgba(255,211,107,.55);
+      color:#1b1408;
+      font-weight:1000;
+    }
+    .btn.buy:hover{filter:brightness(1.05)}
+    .hint{
+      padding:12px 14px;
+      border-top:1px solid rgba(255,255,255,.06);
+      color: var(--muted);
+      font-size:12px;
+      line-height:1.6;
+    }
+
+    /* modal */
+    .modalBack{
+      position:fixed; inset:0; z-index:200;
+      display:none; align-items:center; justify-content:center;
+      background: rgba(0,0,0,.70);
+      padding: 18px;
+    }
+    .modalBack.show{display:flex}
+    .modal{
+      width: min(880px, 96vw);
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(20,24,31,.90);
+      box-shadow: 0 20px 60px rgba(0,0,0,.55);
+      overflow:hidden;
+    }
+    .modalTop{
+      padding:12px 14px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .modalTop .t{font-weight:1000}
+    .modalBody{
+      display:grid;
+      grid-template-columns: 280px 1fr;
+      gap: 14px;
+      padding: 14px;
+    }
+    @media (max-width: 720px){ .modalBody{grid-template-columns: 1fr;} }
+    .preview{
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.22);
+      display:flex; align-items:center; justify-content:center;
+      padding: 14px;
+      min-height: 220px;
+    }
+    .preview img{width:200px;height:200px;border-radius:22px;object-fit:cover;border:1px solid rgba(255,255,255,.16);}
+    .detail h3{margin:0 0 8px;font-weight:1000}
+    .detail p{margin:0;color:rgba(233,240,248,.78);font-size:13px;line-height:1.7}
+    .kv{display:grid;grid-template-columns: 90px 1fr;gap:8px;margin-top:10px;font-size:13px}
+    .kv div{padding:6px 8px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);}
+    .kv .k{color:var(--muted)}
+    .modalActions{display:flex; gap:8px; justify-content:flex-end; padding: 0 14px 14px;}
   </style>
 </head>
 <body>
@@ -31,167 +272,239 @@
   <div class="top">
     <div class="wrap">
       <div class="row">
-        <button class="btn" id="btnBack">← 回個人頁</button>
-        <div>
-          <div class="coins">金幣：<span id="coins">0</span></div>
-          <div class="muted" id="status">連線中…</div>
+        <div class="brand">
+          <span class="dot"></span>
+          <div>
+            <div style="font-size:14px">偉大航道爭霸戰｜商店</div>
+            <div class="status" id="status">連線中…</div>
+          </div>
+        </div>
+
+        <div class="row" style="gap:8px">
+          <span class="pill" title="雲端金幣（以 stats.client.totals.coins 為準）">
+            🪙 <span class="coins">金幣：<span id="coins">0</span></span>
+          </span>
+          <button class="btn" id="btnBack">← 回個人頁</button>
+          <button class="btn ghost" id="btnReload" title="重新從雲端讀取">↻ 重新同步</button>
         </div>
       </div>
     </div>
   </div>
 
   <div class="wrap">
-    <div class="row">
-      <div>
-        <div style="font-weight:900;font-size:18px">商店</div>
-        <div class="muted">購買會扣雲端金幣，並寫入解鎖紀錄（目前不限制頭像使用）。</div>
+    <div class="panel">
+      <div class="panelHead">
+        <div>
+          <div class="title">商店（用累計金幣購買解鎖）</div>
+          <div class="sub">購買會扣 <b>雲端累計金幣</b>，解鎖紀錄寫入 <code>stats.client.shop</code>。</div>
+        </div>
+
+        <div class="controls">
+          <div class="tabs" role="tablist" aria-label="類別">
+            <button class="tab active" data-tab="avatar" role="tab">頭像</button>
+            <button class="tab" data-tab="wall" role="tab">牆面</button>
+            <button class="tab" data-tab="item" role="tab">道具</button>
+          </div>
+
+          <label class="input" title="搜尋名稱/描述">
+            🔎 <input id="q" placeholder="搜尋…" autocomplete="off"/>
+          </label>
+
+          <select id="sort" class="select" title="排序">
+            <option value="priceAsc">價格：低 → 高</option>
+            <option value="priceDesc">價格：高 → 低</option>
+            <option value="rarityDesc">稀有度：高 → 低</option>
+            <option value="ownedLast">已擁有：排後面</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="grid" class="grid"></div>
+
+      <div class="hint" id="hint">
+        提示：若你覺得商店顯示金幣不對，通常是因為舊版商店讀的是 <code>stats.coins</code>，但你現在專案的金幣已統一累積在 <code>stats.client.totals.coins</code>。
+        這版已修正並自動做相容轉換（必要時會把舊欄位同步回新欄位）。
       </div>
     </div>
 
-    <div id="grid" class="grid"></div>
-    <div class="toast" id="toast"></div>
+    <div style="margin-top:10px;font-size:12px;color:var(--muted)" id="toast"></div>
   </div>
 
-  <!-- socket.io (你若原本 profile.html 用相同 CDN/路徑，照搬那個即可) -->
+  <!-- Detail / Buy Modal -->
+  <div class="modalBack" id="modalBack" role="dialog" aria-modal="true" aria-label="商品詳情">
+    <div class="modal">
+      <div class="modalTop">
+        <div class="t" id="mTitle">商品</div>
+        <button class="btn" id="mClose">✕</button>
+      </div>
+      <div class="modalBody">
+        <div class="preview"><img id="mImg" alt="preview"/></div>
+        <div class="detail">
+          <h3 id="mName">—</h3>
+          <p id="mDesc">—</p>
+          <div class="kv">
+            <div class="k">類別</div><div id="mType">—</div>
+            <div class="k">稀有度</div><div id="mRarity">—</div>
+            <div class="k">價格</div><div id="mPrice">—</div>
+            <div class="k">狀態</div><div id="mOwned">—</div>
+          </div>
+        </div>
+      </div>
+      <div class="modalActions">
+        <button class="btn" id="mCancel">取消</button>
+        <button class="btn buy" id="mBuy">購買</button>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
   <script>
-    // ===== 基本設定 =====
+    // ========================
+    //  Cloud Shop (v2)
+    //  - coins source of truth: stats.client.totals.coins
+    //  - owned source of truth: stats.client.shop
+    // ========================
+
+    // server url
     const serverURL =
       new URLSearchParams(location.search).get('server')
       || "https://onepiece-card-online.onrender.com";
 
+    // auth
     const secret = localStorage.getItem('opSecret');
     if(!secret){
       alert('尚未登入/沒有 secret，請先回主畫面登入。');
       location.href = 'start.html';
     }
 
-    document.getElementById('btnBack').onclick = ()=> location.href = 'profile.html';
+    // UI helpers
+    const $ = (id)=>document.getElementById(id);
+    const esc = (s)=>String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    const fmt = (n)=> (Number(n)||0).toLocaleString('en-US');
+    const clampInt = (n, a, b)=> Math.max(a, Math.min(b, Math.floor(Number(n)||0)));
+    const toast = (msg)=>{ $('toast').textContent = msg || ''; };
 
-    // ===== 商品清單（你之後要賣的頭像/物品就加在這裡）=====
+    // 商品（你之後要賣的就改這個陣列）
+    // rarity: 'common' | 'rare' | 'epic' | 'legend'
     const SHOP = [
-      { id:'ava-11', type:'avatar', avatarId: 11, name:'頭像 #11', desc:'新頭像', price: 1200 },
-      { id:'ava-12', type:'avatar', avatarId: 12, name:'頭像 #12', desc:'新頭像', price: 1200 },
-      { id:'wall-2', type:'wall', wallId: 2, name:'牆面 #2', desc:'展示牆造型', price: 1500 },
+      { id:'ava-11', type:'avatar', key:11, name:'頭像 #11', desc:'新頭像（可在個人頁面切換）', price: 1200, rarity:'rare' },
+      { id:'ava-12', type:'avatar', key:12, name:'頭像 #12', desc:'新頭像（可在個人頁面切換）', price: 1200, rarity:'rare' },
+      { id:'wall-2', type:'wall',   key: 2, name:'牆面 #2',  desc:'展示牆造型（個人頁面可套用）',  price: 1500, rarity:'epic' },
+      // { id:'item-1', type:'item',  key:'rename', name:'改名券', desc:'允許你改名一次（示意）', price: 3000, rarity:'legend' },
     ];
 
-    // ===== state =====
+    function imgUrl(it){
+      if(it.type==='avatar') return `images/avatars/${it.key}.webp`;
+      if(it.type==='wall')   return `images/walls/${it.key}.webp`;
+      return `images/items/${it.key}.webp`;
+    }
+
+    function rarityRank(r){
+      return ({common:1, rare:2, epic:3, legend:4})[r] || 1;
+    }
+    function rarityLabel(r){
+      return ({common:'普通', rare:'稀有', epic:'史詩', legend:'傳說'})[r] || '普通';
+    }
+    function rarityClass(r){
+      if(r==='legend') return 'r-legend';
+      if(r==='epic')   return 'r-epic';
+      if(r==='rare')   return 'r-rare';
+      return '';
+    }
+    function typeLabel(t){
+      return ({avatar:'頭像', wall:'牆面', item:'道具'})[t] || t;
+    }
+
+    // ===== Cloud state =====
     let socket = null;
-    let profile = null; // cloud player_profiles row
+    let profile = null; // player_profiles row
     let saving = false;
 
-    // ===== util =====
-    const $ = (id)=> document.getElementById(id);
-    const esc = (s)=> String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-    const coins = ()=> Math.max(0, Number(profile?.stats?.coins || 0));
-    const setCoins = (v)=> { profile.stats = profile.stats||{}; profile.stats.coins = Math.max(0, Math.floor(Number(v)||0)); };
+    // ===== Normalization (match your project schema) =====
+    function defaultClient(){
+      return {
+        version: 2,
+        player: { name:'', avatar:'' },
+        totals: { games:0, wins:0, coins:0 },
+        recent: [],
+        deluxeUnlocked: [],
+        titles: { owned: [], equipped:'', equippedTier: 1 },
+        bountyPosters: [],
+        _appliedMatchKeys: [],
+        shop: { ownedAvatars: [], ownedWalls: [], ownedItems: [] }
+      };
+    }
 
     function ensureClient(){
       if(!profile) return;
       if(!profile.stats || typeof profile.stats!=='object') profile.stats = {};
       if(!profile.stats.client || typeof profile.stats.client!=='object') profile.stats.client = {};
+      const base = defaultClient();
+      // shallow merge + ensure nested
       const c = profile.stats.client;
-      if(!c.shop || typeof c.shop!=='object') c.shop = {};
-      if(!Array.isArray(c.shop.ownedAvatars)) c.shop.ownedAvatars = [];
-      if(!Array.isArray(c.shop.ownedWalls)) c.shop.ownedWalls = [];
-      if(!Array.isArray(c.shop.ownedItems)) c.shop.ownedItems = [];
+      profile.stats.client = {
+        ...base,
+        ...c,
+        player: { ...base.player, ...(c.player||{}) },
+        totals: { ...base.totals, ...(c.totals||{}) },
+        titles: { ...base.titles, ...(c.titles||{}) },
+        shop:   { ...base.shop,   ...(c.shop||{}) }
+      };
+
+      // arrays
+      const s = profile.stats.client.shop;
+      if(!Array.isArray(s.ownedAvatars)) s.ownedAvatars = [];
+      if(!Array.isArray(s.ownedWalls)) s.ownedWalls = [];
+      if(!Array.isArray(s.ownedItems)) s.ownedItems = [];
+
+      // --- backward compat (old shop wrote stats.coins) ---
+      // If old field exists and new totals.coins is empty, promote it.
+      const legacyCoins = Number(profile.stats.coins || 0) || 0;
+      const newCoins = Number(profile.stats.client.totals.coins || 0) || 0;
+      if(legacyCoins > 0 && newCoins <= 0){
+        profile.stats.client.totals.coins = legacyCoins;
+      }
+      // Keep legacy field in sync (optional but helps old pages)
+      profile.stats.coins = Number(profile.stats.client.totals.coins || 0) || 0;
+    }
+
+    function coins(){
+      ensureClient();
+      return clampInt(profile?.stats?.client?.totals?.coins, 0, 1e12);
+    }
+    function setCoins(v){
+      ensureClient();
+      profile.stats.client.totals.coins = clampInt(v, 0, 1e12);
+      profile.stats.coins = Number(profile.stats.client.totals.coins || 0) || 0; // keep legacy synced
+    }
+
+    function shopState(){
+      ensureClient();
+      return profile.stats.client.shop;
     }
 
     function isOwned(it){
-      ensureClient();
-      const shop = profile.stats.client.shop;
-      if(it.type==='avatar') return shop.ownedAvatars.includes(it.avatarId);
-      if(it.type==='wall') return shop.ownedWalls.includes(it.wallId);
-      return false;
+      const s = shopState();
+      if(it.type==='avatar') return s.ownedAvatars.includes(Number(it.key));
+      if(it.type==='wall')   return s.ownedWalls.includes(Number(it.key));
+      return s.ownedItems.includes(String(it.key));
     }
 
-    function avatarUrlById(id){ return `images/avatars/${id}.webp`; }
-    function wallUrlById(id){ return `images/walls/${id}.webp`; } // 若你牆面縮圖路徑不同，改這裡
-
-    function render(){
-      $('coins').textContent = coins().toLocaleString('en-US');
-      const grid = $('grid');
-      grid.innerHTML = '';
-
-      for(const it of SHOP){
-        const owned = isOwned(it);
-
-        const card = document.createElement('div');
-        card.className = 'card';
-
-        const pic = document.createElement('div');
-        pic.className = 'pic';
-        const img = document.createElement('img');
-        img.loading = 'lazy';
-        img.alt = it.name;
-        img.src = (it.type==='avatar') ? avatarUrlById(it.avatarId) : wallUrlById(it.wallId);
-        pic.appendChild(img);
-
-        const meta = document.createElement('div');
-        meta.className = 'meta';
-        meta.innerHTML = `
-          <div class="name">${esc(it.name)}</div>
-          <div class="desc">${esc(it.desc||'')}</div>
-          <div class="price">價格：${it.price.toLocaleString('en-US')} 金幣</div>
-        `;
-
-        const btn = document.createElement('button');
-        btn.className = 'btn primary';
-        if(owned){
-          btn.disabled = true;
-          btn.innerHTML = `<span class="owned">已擁有</span>`;
-        }else{
-          btn.textContent = '購買';
-          btn.disabled = saving || coins() < it.price;
-          btn.onclick = ()=> buy(it);
-        }
-
-        card.appendChild(pic);
-        card.appendChild(meta);
-        card.appendChild(btn);
-        grid.appendChild(card);
+    function own(it){
+      const s = shopState();
+      if(it.type==='avatar'){
+        const k = Number(it.key);
+        if(!s.ownedAvatars.includes(k)) s.ownedAvatars.push(k);
+      }else if(it.type==='wall'){
+        const k = Number(it.key);
+        if(!s.ownedWalls.includes(k)) s.ownedWalls.push(k);
+      }else{
+        const k = String(it.key);
+        if(!s.ownedItems.includes(k)) s.ownedItems.push(k);
       }
     }
 
-    async function buy(it){
-      if(saving) return;
-      if(coins() < it.price){ alert('金幣不足'); return; }
-      if(!confirm(`確定花 ${it.price.toLocaleString('en-US')} 金幣購買「${it.name}」？`)) return;
-
-      saving = true;
-      $('toast').textContent = '儲存中…';
-
-      try{
-        // 本地先更新
-        setCoins(coins() - it.price);
-        ensureClient();
-        const shop = profile.stats.client.shop;
-
-        if(it.type==='avatar' && !shop.ownedAvatars.includes(it.avatarId)) shop.ownedAvatars.push(it.avatarId);
-        if(it.type==='wall' && !shop.ownedWalls.includes(it.wallId)) shop.ownedWalls.push(it.wallId);
-
-        // 推雲端：PROFILE_UPDATE
-        await profileUpdate({
-          stats: {
-            ...(profile.stats || {}),
-            coins: Number(profile.stats.coins || 0),
-            client: profile.stats.client,
-            wall: profile.stats.wall
-          }
-        });
-
-        $('toast').textContent = `已購買：${it.name} ✓`;
-      }catch(e){
-        console.error(e);
-        $('toast').textContent = '儲存失敗，請檢查網路/登入狀態';
-        // 失敗可選：重新 GET 雲端還原
-        try{ await profileGet(); }catch(_){}
-      }finally{
-        saving = false;
-        render();
-      }
-    }
-
+    // ===== Cloud API =====
     function profileGet(){
       return new Promise((resolve, reject)=>{
         socket.timeout(8000).emit('PROFILE_GET', { secret }, (err, res)=>{
@@ -209,7 +522,6 @@
         socket.timeout(8000).emit('PROFILE_UPDATE', { secret, patch }, (err, res)=>{
           if(err) return reject(err);
           if(!res || !res.ok) return reject(res?.error || 'PROFILE_UPDATE failed');
-          // 更新本地快照（以伺服器回傳為準）
           if(res.profile) profile = res.profile;
           ensureClient();
           resolve(res);
@@ -217,20 +529,220 @@
       });
     }
 
+    async function saveCloud(reason){
+      // write back ONLY what we need (avoid clobbering other stats keys)
+      ensureClient();
+      return await profileUpdate({
+        stats: {
+          ...(profile.stats || {}),
+          coins: Number(profile.stats.coins || 0),
+          client: profile.stats.client
+        }
+      });
+    }
+
+    // ===== UI state =====
+    let curTab = 'avatar';
+    let curPick = null;
+
+    function applyCoinsUI(){
+      $('coins').textContent = fmt(coins());
+    }
+
+    function render(){
+      applyCoinsUI();
+
+      const q = String($('q').value || '').trim().toLowerCase();
+      const sort = $('sort').value;
+
+      // filter
+      let list = SHOP.filter(it => it.type === curTab);
+      if(q){
+        list = list.filter(it =>
+          (it.name && it.name.toLowerCase().includes(q)) ||
+          (it.desc && it.desc.toLowerCase().includes(q)) ||
+          String(it.key).includes(q)
+        );
+      }
+
+      // sort
+      list.sort((a,b)=>{
+        const ao = isOwned(a), bo = isOwned(b);
+        if(sort === 'ownedLast'){
+          if(ao !== bo) return ao ? 1 : -1;
+          return a.price - b.price;
+        }
+        if(sort === 'priceAsc')  return a.price - b.price;
+        if(sort === 'priceDesc') return b.price - a.price;
+        if(sort === 'rarityDesc'){
+          const rr = rarityRank(b.rarity) - rarityRank(a.rarity);
+          if(rr) return rr;
+          return b.price - a.price;
+        }
+        return 0;
+      });
+
+      const grid = $('grid');
+      grid.innerHTML = '';
+
+      if(!list.length){
+        grid.innerHTML = `<div style="grid-column:1/-1; padding:10px; color:var(--muted);">沒有符合的商品。</div>`;
+        return;
+      }
+
+      for(const it of list){
+        const owned = isOwned(it);
+        const afford = coins() >= it.price;
+
+        const el = document.createElement('div');
+        el.className = 'item';
+
+        el.innerHTML = `
+          <div class="thumb">
+            <span class="rarity ${rarityClass(it.rarity)}">${rarityLabel(it.rarity)}</span>
+            ${owned ? `<span class="ownedTag">已擁有</span>` : ``}
+            <img src="${esc(imgUrl(it))}" alt="${esc(it.name)}" loading="lazy"/>
+          </div>
+          <div class="body">
+            <div class="name">${esc(it.name)}</div>
+            <div class="desc">${esc(it.desc||'')}</div>
+            <div class="metaRow">
+              <div class="price">🪙 ${fmt(it.price)}</div>
+              <div class="actions">
+                <button class="btn small" data-act="detail">查看</button>
+                <button class="btn small buy" data-act="buy" ${owned || saving || !afford ? 'disabled' : ''}>
+                  ${owned ? '已擁有' : (afford ? '購買' : '金幣不足')}
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+
+        el.querySelector('[data-act="detail"]').onclick = ()=> openModal(it);
+        const buyBtn = el.querySelector('[data-act="buy"]');
+        buyBtn.onclick = ()=> openModal(it, {focusBuy:true});
+
+        grid.appendChild(el);
+      }
+    }
+
+    // ===== modal =====
+    function openModal(it, opt={}){
+      curPick = it;
+      const owned = isOwned(it);
+
+      $('mTitle').textContent = `商品詳情`;
+      $('mImg').src = imgUrl(it);
+      $('mName').textContent = it.name;
+      $('mDesc').textContent = it.desc || '';
+      $('mType').textContent = typeLabel(it.type);
+      $('mRarity').textContent = rarityLabel(it.rarity);
+      $('mPrice').textContent = `${fmt(it.price)} 金幣`;
+      $('mOwned').textContent = owned ? '已擁有' : '未擁有';
+
+      const btn = $('mBuy');
+      btn.disabled = saving || owned || coins() < it.price;
+      btn.textContent = owned ? '已擁有' : (coins() < it.price ? '金幣不足' : '購買');
+
+      $('modalBack').classList.add('show');
+      if(opt.focusBuy && !btn.disabled) btn.focus();
+    }
+
+    function closeModal(){
+      $('modalBack').classList.remove('show');
+      curPick = null;
+    }
+
+    async function buyCurrent(){
+      const it = curPick;
+      if(!it || saving) return;
+      if(isOwned(it)) return;
+      if(coins() < it.price){ alert('金幣不足'); return; }
+
+      const ok = confirm(`確定花 ${fmt(it.price)} 金幣購買「${it.name}」？`);
+      if(!ok) return;
+
+      saving = true;
+      toast('儲存中…');
+
+      try{
+        // local mutate
+        setCoins(coins() - it.price);
+        own(it);
+
+        await saveCloud('shop-buy');
+        toast(`已購買：${it.name} ✓`);
+        closeModal();
+      }catch(e){
+        console.error(e);
+        toast('儲存失敗：請檢查網路/登入狀態（已嘗試保護性回復）');
+        try{ await profileGet(); }catch(_){}
+      }finally{
+        saving = false;
+        render();
+      }
+    }
+
+    // ===== events =====
+    $('btnBack').onclick = ()=> location.href = 'profile.html';
+    $('btnReload').onclick = async ()=>{
+      if(!socket || saving) return;
+      toast('重新同步中…');
+      try{
+        await profileGet();
+        toast('已同步 ✓');
+      }catch(e){
+        console.error(e);
+        toast('同步失敗，請重整或檢查登入');
+      }finally{
+        render();
+      }
+    };
+
+    document.querySelectorAll('.tab').forEach(b=>{
+      b.onclick = ()=>{
+        document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+        b.classList.add('active');
+        curTab = b.dataset.tab;
+        render();
+      };
+    });
+
+    $('q').addEventListener('input', ()=> render());
+    $('sort').addEventListener('change', ()=> render());
+
+    $('mClose').onclick = closeModal;
+    $('mCancel').onclick = closeModal;
+    $('mBuy').onclick = buyCurrent;
+    $('modalBack').addEventListener('click', (e)=>{
+      if(e.target === $('modalBack')) closeModal();
+    });
+    window.addEventListener('keydown', (e)=>{
+      if(e.key === 'Escape') closeModal();
+    });
+
     // ===== init =====
     (function init(){
       socket = io(serverURL, { transports:['websocket'] });
 
       socket.on('connect', async ()=>{
         $('status').textContent = '已連線';
+        toast('');
         try{
           await profileGet();
-          $('toast').textContent = '';
+          // 如果發現舊 coins→新 coins 的提升，順便寫回（避免其他頁面顯示不一致）
+          // 注意：只在必要時才寫，避免每次進商店都 UPDATE。
+          const legacy = Number(profile?.stats?.coins || 0) || 0;
+          const now = Number(profile?.stats?.client?.totals?.coins || 0) || 0;
+          if(legacy !== now){
+            // ensureClient 已同步 legacy = now，但這裡再補寫一次保險（只差異時）
+            try{ await saveCloud('shop-migrate-coins'); }catch(_){}
+          }
           render();
         }catch(e){
           console.error(e);
           $('status').textContent = '讀取雲端失敗';
-          $('toast').textContent = '讀取雲端失敗，請重整或檢查登入';
+          toast('讀取雲端失敗，請重整或檢查登入');
         }
       });
 
