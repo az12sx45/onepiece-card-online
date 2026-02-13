@@ -1471,16 +1471,36 @@ function renderFinal(final){
   buildMetricPanel();
   renderDetailTable();
 
-  // === 雲端主控：自動把本場戰績/稱號/豪華解鎖/懸賞單資料寫入雲端 ===
+  // === 雲端主控：保證 socket 連上後一定會寫入一次 ===
   try{
-    const myId = MY_ID != null ? MY_ID : guessMyId(final, MY_PID);
-    if(socket){
-      Promise.resolve(cloudApplyMatchResult(socket, final))
+    if(!window.__pendingFinalForCloud) window.__pendingFinalForCloud = null;
+
+    const doApply = (f) => {
+      if(!socket) return;
+      Promise.resolve(cloudApplyMatchResult(socket, f))
         .catch((e)=> console.warn('[cloudApplyMatchResult failed]', e));
+    };
+
+    if(socket){
+      if(socket.connected){
+        doApply(final);
+      }else{
+        // renderFinal 早於 socket connect → 先排隊，等 connect 再寫
+        window.__pendingFinalForCloud = final;
+        socket.once('connect', ()=>{
+          const f = window.__pendingFinalForCloud || final;
+          window.__pendingFinalForCloud = null;
+          doApply(f);
+        });
+      }
+    }else{
+      // socket 尚未建立 → 先排隊（init() 建立 socket 後再處理）
+      window.__pendingFinalForCloud = final;
     }
   }catch(e){
     console.warn('[cloudApplyMatchResult failed]', e);
   }
+
 
 
 }
@@ -1497,6 +1517,17 @@ function renderFinal(final){
     const cached=sessionStorage.getItem('op_final');
     if(cached){ renderFinal(JSON.parse(cached)); }
   }catch(e){ console.warn(e); }
+
+// 若 renderFinal 比 socket 更早跑，等 socket connect 後補寫雲端一次
+if(window.__pendingFinalForCloud && socket){
+  socket.once('connect', ()=>{
+    const f = window.__pendingFinalForCloud;
+    window.__pendingFinalForCloud = null;
+    Promise.resolve(cloudApplyMatchResult(socket, f))
+      .catch((e)=> console.warn('[cloudApplyMatchResult failed]', e));
+  });
+}
+
 
   if(!RESUME) return;
 
@@ -1647,7 +1678,7 @@ function avatarUrl(v){
 }
 
 // === 懸賞金繪製（頭像在下層，海報在上層） ===
-let LAST_POSTER_META = null; // {key, ts, title, name, bounty, avatar}
+let LAST_POSTER_META = null; // {key, ts, title, name, bounty, avatarId}
 
 async function showBounty(final, myId, opts = {}){
   const me = (final?.playersMeta && final.playersMeta[myId]) || {
@@ -1675,7 +1706,7 @@ async function showBounty(final, myId, opts = {}){
   const bg = await loadImage('images/wanted.png');
   const fallbackAvatarIdx = (myId % 8) + 1;
   const avaUrl = avatarUrl(me.avatar) || `images/avatars/${fallbackAvatarIdx}.webp`;
-  const avatar = await loadImage(avaUrl);
+  const avatarImg = await loadImage(avaUrl);
 
   // 先畫頭像（在下層，做圓形裁切）
   ctx.save();
@@ -1683,7 +1714,7 @@ async function showBounty(final, myId, opts = {}){
   ctx.arc(cx, cy, r, 0, Math.PI * 2);
   ctx.closePath();
   ctx.clip();
-  if (avatar) ctx.drawImage(avatar, cx - r, cy - r, r * 2, r * 2);
+  if (avatarImg) ctx.drawImage(avatarImg, cx - r, cy - r, r * 2, r * 2);
   ctx.restore();
 
   // 再畫懸賞海報（在上層）
@@ -1712,60 +1743,55 @@ async function showBounty(final, myId, opts = {}){
   ctx.save();
   ctx.textAlign = 'center';
   ctx.textBaseline = 'alphabetic';
-
   ctx.font = `300 ${bountyFont * 1}px "Cambria", "Georgia", "Arial", serif`;
   ctx.fillStyle = '#38281d';
   ctx.shadowColor = 'rgba(0,0,0,0.15)';
   ctx.shadowBlur = 4;
   ctx.shadowOffsetX = 1;
   ctx.shadowOffsetY = 1;
-
   ctx.fillText(bountyStr, cx, bountyY);
   ctx.restore();
 
-// === 記住「這次生成的懸賞單資料」（按鈕按下才存到個人頁面/雲端） ===
-try{
-  const nameTxt = me.name || (`P${(myId|0)+1}`);
+  // === 記住「這次生成的懸賞單資料」（按鈕按下才存到個人頁面/雲端） ===
+  try{
+    // 用「這場比賽」當唯一 key（跟 recent 的 matchKey 同概念）
+    const qs = new URLSearchParams(location.search);
+    const rid = (qs.get('room') || sessionStorage.getItem('op_room') || '');
+    const season = final?.seasonNo ?? final?.season ?? '';
+    const endedAt = Number(final?.endedAt || final?.ts || Date.now());
+    const pid = (MY_PID ?? sessionStorage.getItem('op_pid') ?? '');
 
-  // 用「這場比賽」當唯一 key（跟 recent 的 matchKey 同概念）
-  const qs = new URLSearchParams(location.search);
-  const rid = (qs.get('room') || sessionStorage.getItem('op_room') || '');
-  const season = final?.seasonNo ?? final?.season ?? '';
-  const endedAt = Number(final?.endedAt || final?.ts || Date.now());
-  const pid = (MY_PID ?? sessionStorage.getItem('op_pid') ?? '');
+    const posterKey = `${rid}|${season}|${pid}|${endedAt}`;
 
-  const posterKey = `${rid}|${season}|${pid}|${endedAt}`;
+    // me.avatar 可能是數字或字串，統一轉成 avatarId
+    const avatarVal = (me.avatar != null ? me.avatar : null);
+    const avatarId = Number.isFinite(Number(avatarVal)) ? Number(avatarVal) : fallbackAvatarIdx;
 
-  // 以雲端/本場玩家頭像當作海報資料（不再讀本機 op_player_profile）
-  const avatarVal = (me.avatar != null ? me.avatar : null);
+    LAST_POSTER_META = {
+      key: posterKey,
+      ts: endedAt,
+      title: `${nameTxt}｜懸賞令`,
+      name: nameTxt,
+      bounty: bountyStr,  // ✅ 用你畫在海報上的字串
+      avatarId            // ✅ 個人頁面吃 avatarId
+    };
 
-  LAST_POSTER_META = {
-    key: posterKey,
-    ts: endedAt,
-    title: `${nameTxt}｜懸賞令`,
-    name: nameTxt,
-    bounty: bountyText,
-    avatar
-  };
-
-  // 顯示「存到個人頁面」按鈕（生成後才可按）
-  const btn = document.getElementById('btnSavePoster');
-  if(btn){
-    btn.disabled = false;
-    btn.dataset.saved = '0';
-    btn.textContent = '存到個人頁面';
+    // 顯示「存到個人頁面」按鈕（生成後才可按）
+    const btn = document.getElementById('btnSavePoster');
+    if(btn){
+      btn.disabled = false;
+      btn.dataset.saved = '0';
+      btn.textContent = '存到個人頁面';
+    }
+  }catch(e){
+    console.warn('[rememberPosterMeta failed]', e);
   }
-}catch(e){
-  console.warn('[rememberPosterMeta failed]', e);
-}
-
 
   // opts.openModal === false：只存不開（給「自動存」用）
   if (opts && opts.openModal === false) return;
 
   // 顯示彈窗
   document.getElementById('bountyModal').classList.remove('hidden');
-
 }
 
 document.getElementById('closeBounty').onclick = ()=>{
@@ -1779,6 +1805,7 @@ document.getElementById('bountyModal').addEventListener('click',(e)=>{
 document.getElementById('btnSavePoster')?.addEventListener('click', async ()=>{
   const btn = document.getElementById('btnSavePoster');
   if(!btn || btn.disabled) return;
+
   if(!LAST_POSTER_META || !LAST_POSTER_META.key){
     alert('尚未生成懸賞單資料');
     return;
@@ -1801,6 +1828,7 @@ document.getElementById('btnSavePoster')?.addEventListener('click', async ()=>{
     alert('儲存失敗：請檢查登入狀態/網路連線');
   }
 });
+
 
 </script>
 
