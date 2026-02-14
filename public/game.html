@@ -1689,10 +1689,7 @@ body::before{
 
 
 
-/* ====== 豪華稱號徽章（同 profile） ====== */
-@keyframes float{ 0%,100%{transform:translateY(0px);} 50%{transform:translateY(-3px);} }
-    @keyframes pulse{ 0%,100%{filter:brightness(1);}
-
+    /* ===== 玩家稱號 badge（與 profile/start 同款）===== */
 .player-title-badge{
       position:relative;
       display:inline-flex;
@@ -1885,6 +1882,44 @@ body::before{
       opacity:.65;
       z-index:1;
     }
+    .player-title-badge.tier-6 .crown{
+      position:absolute;
+      top:-16px;
+      left:50%;
+      transform:translateX(-50%);
+      font-size:15px;
+      text-shadow:0 0 10px #ffffff, 0 0 18px rgba(255,230,160,1);
+      z-index:4;
+    }
+    .player-title-badge.tier-6 .pendant{
+      position:absolute;
+      bottom:-14px;
+      left:50%;
+      transform:translateX(-50%);
+      width:18px;height:18px;
+      background:radial-gradient(circle,#fff7d0 0,#f0b400 45%,#8b4c00 100%);
+      border-radius:50%;
+      box-shadow:0 4px 8px rgba(0,0,0,.75), 0 0 10px rgba(255,230,170,.9);
+      z-index:2;
+    }
+    .player-title-badge.tier-6 .pendant::before{
+      content:"";
+      position:absolute;
+      top:-6px; left:50%;
+      transform:translateX(-50%);
+      width:9px;height:5px;border-radius:999px;
+      background:radial-gradient(circle,#fffbe6 0,#b57a1f 100%);
+    }
+    .player-title-badge.tier-6 .glow{
+      position:absolute;
+      inset:-30%;
+      background:radial-gradient(circle,rgba(255,255,255,.42) 0,transparent 60%);
+      mix-blend-mode:screen;
+      opacity:.6;
+      z-index:0;
+      animation:softGlow 4.4s ease-in-out infinite;
+    }
+
 
 </style>
 </head>
@@ -3072,20 +3107,20 @@ function pnameBy(p){
   return nm || `P${(p.id??0)+1}`;
 }
 
-/* ========= 稱號徽章（同個人頁豪華版） ========= */
-function escapeHtml(str){
-  return String(str ?? '').replace(/[&<>"']/g, (s)=>({
-    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-  }[s]));
+/* ========= 稱號 badge（與 profile/start 同款） ========= */
+function clamp(n, a, b){ n = Number(n); if(!Number.isFinite(n)) n = a; return Math.max(a, Math.min(b, n)); }
+function normTier(t){
+  const n = Number(t);
+  if(!Number.isFinite(n)) return 1;
+  return clamp(Math.round(n), 1, 6);
 }
-function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
-function normTier(t){ return clamp(Number(t)||1, 1, 6); }
-function titleOfPlayer(p){
-  // server/state 可能放在 p.client 或 p 本體
-  return String(p?.client?.title ?? p?.title ?? '').trim();
-}
-function titleTierOfPlayer(p){
-  return normTier(p?.client?.titleTier ?? p?.titleTier ?? 1);
+function escapeHtml(s){
+  return String(s ?? '')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
 }
 function buildTitleBadgeHTML(label, tier){
   const t = normTier(tier || 1);
@@ -3107,6 +3142,16 @@ function buildTitleBadgeHTML(label, tier){
     </span>
   `;
 }
+function playerEquippedTitle(p){
+  const c = p?.client || {};
+  const titles = c.titles || {};
+  const label =
+    String(titles.equipped ?? c.equippedTitle ?? c.title ?? c.titleLabel ?? '').trim();
+  if(!label) return { label:'', tier:1 };
+  const tier = normTier(titles.equippedTier ?? c.equippedTier ?? c.titleTier ?? 1);
+  return { label, tier };
+}
+
 
 
 /* ========= 卡牌→場地對照與強化判斷 ========= */
@@ -5161,8 +5206,7 @@ el.venues.innerHTML = '';
         <div class="grow">
           <div class="flex items-center justify-between">
             <div class="font-semibold">
-              ${pnameBy(p)}
-              ${buildTitleBadgeHTML(titleOfPlayer(p), titleTierOfPlayer(p))}
+              ${pnameBy(p)}${(()=>{const tt=playerEquippedTitle(p);return tt.label?` <span class="ml-2 inline-flex align-middle">${buildTitleBadgeHTML(tt.label, tt.tier)}</span>`:'';})()}
               ${!p.alive ? '<span class="ml-1 text-neutral-400">（出局）</span>' : ''}
             </div>
             <div class="text-xs text-neutral-400">金幣 <span class="text-amber-300 font-bold">${p.gold||0}</span></div>
