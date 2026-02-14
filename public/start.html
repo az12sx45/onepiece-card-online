@@ -531,7 +531,7 @@
     function normalizeCloudProfile(cloud){
       const name = String(cloud?.name || '').trim();
       const avatarNum = Number(cloud?.avatar ?? 1) || 1;
-      const avatar = Math.min(30, Math.max(1, avatarNum));
+      const avatar = Math.min(40, Math.max(1, avatarNum));
       const avatarUrl = `images/avatars/${avatar}.webp`;
 
       const client = (cloud?.stats?.client && typeof cloud.stats.client === 'object')
@@ -900,12 +900,12 @@
       const [saving,setSaving]=useState(false);
       const [err,setErr]=useState("");
 
-      const avatars=useMemo(()=> Array.from({length:30},(_,i)=>`images/avatars/${i+1}.webp`), []);
+      const avatars=useMemo(()=> Array.from({length:40},(_,i)=>`images/avatars/${i+1}.webp`), []);
 
       async function handleSubmit(e){
         e.preventDefault();
         const safe=(name||"").trim()||"無名航海士";
-        const avatar = Math.min(30, Math.max(1, Number(pick)||1));
+        const avatar = Math.min(40, Math.max(1, Number(pick)||1));
 
         setSaving(true);
         setErr("");
