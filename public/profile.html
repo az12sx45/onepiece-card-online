@@ -180,20 +180,6 @@
     .wallBtn .thumb{ position:absolute; inset:0; background-size:cover; background-position:center; }
     .wallBtn .lab{ position:absolute; left:8px; top:8px; font-size:11px; padding:3px 7px; border-radius:999px; background:rgba(2,6,23,.72); border:1px solid rgba(0,0,0,.35); }
 
-    .wallBtn.locked{ opacity:.55; filter: grayscale(1); }
-    .wallBtn.locked::after{
-      content:"🔒";
-      position:absolute;
-      right:8px; bottom:8px;
-      font-size:14px;
-      background:rgba(2,6,23,.72);
-      border:1px solid rgba(255,255,255,.18);
-      border-radius:10px;
-      padding:2px 6px;
-    }
-    .wallBtn.locked:hover{ border-color: rgba(255,107,107,.55); box-shadow:0 0 0 3px rgba(255,107,107,.18); }
-
-
     .grid{
       margin-top:14px;
       display:grid;
@@ -998,7 +984,6 @@ function defaultClient(name, avatar){
   return {
     player: { name: name || '', avatar: avatar || 1 },
     totals: { coins: 0, games: 0, wins: 0, atk: 0, def: 0, hit: 0, intel: 0, survival: 0 },
-    shop: { ownedAvatars: [], ownedWalls: [], ownedItems: [] },
     deluxeUnlocked: [],
     recent: [],
     titles: { owned: [], equipped: '', equippedTier: 1 },
@@ -1170,8 +1155,7 @@ document.addEventListener('keydown', (ev)=>{
 function applyWallBackground(){
   const stage = document.getElementById('wallStage');
   if(!stage) return;
-  let id = clamp(__wallId, 1, WALL_COUNT);
-  if(!canUseWall(id)) id = 1;
+  const id = clamp(__wallId, 1, WALL_COUNT);
   stage.classList.add('has-wall');
   stage.style.setProperty('--wall-url', `url(${wallUrlById(id)})`);
 }
@@ -1243,8 +1227,7 @@ function buildWallGrid(pendingId){
   for(let i=1; i<=WALL_COUNT; i++){
     const btn = document.createElement('button');
     btn.type = 'button';
-    const isOwned = canUseWall(i);
-    btn.className = 'wallBtn' + (i===pendingId ? ' on' : '') + (isOwned ? '' : ' locked');
+    btn.className = 'wallBtn' + (i===pendingId ? ' on' : '');
 
     const thumb = document.createElement('div');
     thumb.className = 'thumb';
@@ -1257,12 +1240,6 @@ function buildWallGrid(pendingId){
     btn.appendChild(lab);
 
     btn.onclick = () => {
-      if(!isOwned){
-        const ok = confirm(`牆面 #${i} 需要先在商店購買才能使用。
-要現在前往商店嗎？`);
-        if(ok) location.href = 'shop.html';
-        return;
-      }
       pendingId = i;
       grid.querySelectorAll('.wallBtn').forEach(x=>x.classList.remove('on'));
       btn.classList.add('on');
@@ -1527,7 +1504,6 @@ async function boot(){
 
   // wall
   __wallId = clamp(Number(cloud?.stats?.wall?.id)||1, 1, WALL_COUNT);
-  if(!canUseWall(__wallId)) __wallId = 1;
 
   // client
   __client = (cloud?.stats?.client && typeof cloud.stats.client === 'object')
@@ -1603,23 +1579,6 @@ function getOwnedAvatars(){
 function canUseAvatar(id){
   const n = clamp(id, 1, AVATAR_COUNT);
   return getOwnedAvatars().has(n);
-
-function getOwnedWalls(){
-  // 1~3 free; 4~8 must be purchased in shop
-  const owned = new Set([1,2,3]);
-  const arr = __client?.shop?.ownedWalls;
-  if(Array.isArray(arr)){
-    for(const n of arr){
-      const k = Number(n);
-      if(Number.isFinite(k)) owned.add(k);
-    }
-  }
-  return owned;
-}
-function canUseWall(id){
-  const n = clamp(id, 1, WALL_COUNT);
-  return getOwnedWalls().has(n);
-}
 }
 function buildAvatarGrid(){
   const grid = document.getElementById('avaGrid');
@@ -1644,7 +1603,7 @@ function buildAvatarGrid(){
       if(!isOwned){
         const ok = confirm(`頭像 #${i} 需要先在商店購買才能使用。
 要現在前往商店嗎？`);
-        if(ok) location.href = 'shop.html';
+        if(ok) location.href = 'shop_v3.html';
         return;
       }
       pendingAvatar = i;
@@ -1707,10 +1666,6 @@ document.getElementById('wallSave')?.addEventListener('click', async ()=>{
   if(__saving) return;
   const grid = document.getElementById('wallGrid');
   const pendingId = clamp(Number(grid?.dataset?.pendingId)||1, 1, WALL_COUNT);
-  if(!canUseWall(pendingId)){
-    alert('這個牆面尚未購買，無法套用。');
-    return;
-  }
   __wallId = pendingId;
 
   // 只更新 wall.id（仍寫回雲端）
