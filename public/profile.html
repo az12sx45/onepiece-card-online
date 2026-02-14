@@ -817,16 +817,12 @@
         </div>
       </div>
 
- <div class="actions">
-  <button class="btn" id="btnBack">返回主畫面</button>
-
-  <!-- ⭐ 新增：商店按鈕 -->
-  <button class="btn primary" id="btnShop">前往商店</button>
-
-  <button class="btn" id="btnRefresh">重新同步雲端</button>
-  <button class="btn danger" id="btnLogout">登出（清除本機 secret）</button>
-</div>
-
+      <div class="actions">
+        <button class="btn" id="btnBack">返回主畫面</button>
+        <button class="btn primary" id="btnRefresh">重新同步雲端</button>
+        <button class="btn danger" id="btnLogout">登出（清除本機 secret）</button>
+      </div>
+    </div>
 
     <!-- === 牆面展示：可選牆背景 + 最近 4 張懸賞令 === -->
     <div class="card wallCard">
@@ -2029,9 +2025,6 @@ async function boot(){
 
 // ===== actions =====
 document.getElementById('btnRefresh').onclick = () => location.reload();
-document.getElementById('btnShop').onclick = () => {
-  location.href = '/shop.html?from=profile';
-};
 document.getElementById('btnBack').onclick = () => { location.href = '/start.html?from=profile'; };
 
 document.getElementById('btnLogout').onclick = () => {
