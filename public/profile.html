@@ -505,62 +505,157 @@
 
     .titles{display:flex;gap:14px;flex-wrap:wrap}
 
-/* 稱號圖鑑 */
-.title-section{
+
+/* 稱號圖鑑（完全圖鑑化：5 欄主屬性 × 6 列 Tier，由 T6 → T1） */
+.titleCatalog{
   width:100%;
-  padding:10px 12px;
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:14px;
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:16px;
   background:rgba(255,255,255,.03);
+  overflow:hidden;
 }
-.title-head{
-  font-weight:900;
-  margin-bottom:10px;
-  color:#e9f0f8;
+.titleCatalogTop{
   display:flex;
   align-items:center;
-  gap:10px;
+  justify-content:space-between;
+  gap:12px;
+  padding:10px 12px;
+  border-bottom:1px solid rgba(255,255,255,.08);
 }
-.title-head::after{
-  content:"";
-  flex:1;
-  height:1px;
-  background:rgba(255,255,255,.08);
+.titleCatalogTop .left{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.titleCatalogTop .h{
+  font-weight:900;
+  letter-spacing:.4px;
 }
-.title-grid{
-  display:grid;
-  gap:10px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+.titleCatalogTop .sub{
+  font-size:11px;
+  color:rgba(229,231,235,.72);
 }
-@media (max-width: 980px){
-  .title-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.titleCatalogTop .right{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.tcBtn{
+  border:1px solid rgba(35,52,85,.85);
+  background:rgba(11,22,45,.55);
+  color:var(--text);
+  padding:7px 10px;
+  border-radius:12px;
+  font-size:12px;
+  cursor:pointer;
 }
-@media (max-width: 520px){
-  .title-grid{ grid-template-columns: 1fr; }
+.tcBtn:hover{ background:rgba(11,22,45,.75); border-color:#3a5584; }
+.tcBtn.on{ border-color:rgba(251,191,36,.55); box-shadow:0 0 0 3px rgba(255,184,77,.18); }
+.tcSearch{
+  width:170px;
+  max-width:48vw;
+  border:1px solid rgba(35,52,85,.85);
+  background:rgba(11,22,45,.55);
+  color:var(--text);
+  border-radius:12px;
+  padding:7px 10px;
+  font-size:12px;
+  outline:none;
 }
+.tcMeta{
+  display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+  font-size:11px; color:rgba(229,231,235,.72);
+}
+.tcBar{
+  width:160px; max-width:42vw; height:10px;
+  border-radius:999px;
+  border:1px solid rgba(35,52,85,.75);
+  background:rgba(2,6,23,.35);
+  overflow:hidden;
+}
+.tcBar > i{
+  display:block; height:100%;
+  width:0%;
+  background:linear-gradient(90deg, rgba(255,211,106,.22), rgba(255,211,106,.90), rgba(255,211,106,.22));
+}
+.titleMatrixWrap{
+  overflow:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.titleMatrix{
+  width:100%;
+  min-width: 820px; /* 讓 5 欄稱號有足夠寬度，手機會橫向滑 */
+  border-collapse:separate;
+  border-spacing:0;
+}
+.titleMatrix th,
+.titleMatrix td{
+  border-bottom:1px solid rgba(255,255,255,.08);
+  padding:10px 10px;
+  vertical-align:middle;
+  background:transparent;
+}
+.titleMatrix thead th{
+  position:sticky;
+  top:0;
+  z-index:3;
+  background:linear-gradient(180deg, rgba(2,6,23,.88), rgba(2,6,23,.62));
+  backdrop-filter: blur(6px);
+}
+.titleMatrix .tierCol{
+  width:92px;
+  position:sticky;
+  left:0;
+  z-index:4;
+  background:linear-gradient(180deg, rgba(2,6,23,.88), rgba(2,6,23,.62));
+  backdrop-filter: blur(6px);
+  border-right:1px solid rgba(255,255,255,.08);
+}
+.titleMatrix tbody .tierCol{
+  z-index:2;
+  background:rgba(2,6,23,.25);
+}
+.tierPill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:56px;
+  padding:6px 10px;
+  border-radius:999px;
+  font-weight:900;
+  letter-spacing:.4px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(2,6,23,.35);
+}
+.tierPill.t6{ border-color:rgba(255,231,163,.35); box-shadow:0 0 0 3px rgba(255,184,77,.12) inset; }
+.tierPill.t5{ border-color:rgba(255,204,110,.25); }
+.tierPill.t4{ border-color:rgba(225,196,255,.25); }
+.tierPill.t3{ border-color:rgba(244,140,43,.25); }
+.tierPill.t2{ border-color:rgba(99,210,255,.25); }
+.tierPill.t1{ border-color:rgba(119,124,132,.25); }
+
+.tcCell{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.tcCell .mini{
+  font-size:10px;
+  color:rgba(229,231,235,.70);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+.tcCell .mini .k{ opacity:.92; }
+.tcCell .mini .v{ opacity:.72; }
 
 .player-title-badge.locked{
   filter: grayscale(1) brightness(.72);
-  opacity:.75;
+  opacity:.72;
   cursor:not-allowed;
 }
-.player-title-badge.locked .text{
-  letter-spacing:1px;
-}
+.player-title-badge.locked .text{ letter-spacing:1px; }
 
-.tier-tag{
-  position:absolute;
-  top:-8px;
-  left:-8px;
-  font-size:10px;
-  font-weight:900;
-  padding:3px 7px;
-  border-radius:999px;
-  color:#0a0d10;
-  background:rgba(255,211,107,.92);
-  border:1px solid rgba(0,0,0,.25);
-  box-shadow:0 6px 14px rgba(0,0,0,.35);
+.tcHint{
+  padding:10px 12px;
+  font-size:11px;
+  color:rgba(229,231,235,.72);
+  line-height:1.5;
 }
+.tcHint b{ color:#ffd36a; }
 
 
     .footnote{font-size:11px;color:var(--muted);line-height:1.5}
@@ -1390,7 +1485,7 @@ function renderTitles(){
   const wrap = document.getElementById('titlesWrap');
   wrap.innerHTML = '';
 
-  // 你在結算頁定義的稱號表（主屬性 x Tier 1~6）
+  // === 稱號表（結算頁同款）：主屬性 x Tier 1~6 ===
   const TITLE_TABLE = {
     atkScore: {
       1:'斬斷鋼鐵的力量',
@@ -1435,113 +1530,259 @@ function renderTitles(){
   };
 
   const CAT_ORDER = [
-    { key:'atkScore', name:'攻擊' },
-    { key:'hitScore', name:'命中' },
-    { key:'defScore', name:'防禦' },
-    { key:'intelScore', name:'偵查' },
-    { key:'survivalScore', name:'生存' }
+    { key:'atkScore', name:'攻擊', code:'ATK' },
+    { key:'hitScore', name:'命中', code:'HIT' },
+    { key:'defScore', name:'防禦', code:'DEF' },
+    { key:'intelScore', name:'偵查', code:'INT' },
+    { key:'survivalScore', name:'生存', code:'SURV' }
   ];
 
   const owned = normalizeOwnedTitles(__client?.titles?.owned || []);
-  const ownedSet = new Set(owned.map(x => String(x?.label||'').trim()).filter(Boolean));
+  const ownedMap = new Map(owned.map(x => [String(x?.label||'').trim(), normTier(x?.tier||1)]).filter(x=>x[0]));
   const equipped = String(__client?.titles?.equipped||'').trim();
 
-  // 反查：label -> {catKey, tier}
-  const reverse = new Map();
+  // ===== 把表攤平成「圖鑑清單」：tier 6->1、每 tier 5 欄 =====
+  const rows = [];
+  for(let tier=6; tier>=1; tier--){
+    const row = { tier, cells: [] };
+    for(const cat of CAT_ORDER){
+      const realLabel = String(TITLE_TABLE?.[cat.key]?.[tier] || '').trim();
+      row.cells.push({ ...cat, tier, label: realLabel });
+    }
+    rows.push(row);
+  }
+
+  // ===== 統計解鎖度 =====
+  let total = 0, unlocked = 0;
+  for(const r of rows){
+    for(const c of r.cells){
+      if(!c.label) continue;
+      total++;
+      if(ownedMap.has(c.label)) unlocked++;
+    }
+  }
+
+  // ===== UI：頂部工具列（只看已解鎖 / 搜尋）=====
+  const root = document.createElement('div');
+  root.className = 'titleCatalog';
+
+  const top = document.createElement('div');
+  top.className = 'titleCatalogTop';
+
+  const left = document.createElement('div');
+  left.className = 'left';
+  left.innerHTML = `
+    <div class="h">稱號圖鑑（T6 → T1）</div>
+    <div class="sub">橫向：攻擊 / 命中 / 防禦 / 偵查 / 生存　｜　縱向：Tier</div>
+  `;
+
+  const right = document.createElement('div');
+  right.className = 'right';
+
+  const btnOnly = document.createElement('button');
+  btnOnly.type = 'button';
+  btnOnly.className = 'tcBtn';
+  btnOnly.textContent = '只看已解鎖';
+
+  const search = document.createElement('input');
+  search.className = 'tcSearch';
+  search.type = 'search';
+  search.placeholder = '搜尋稱號…';
+
+  const meta = document.createElement('div');
+  meta.className = 'tcMeta';
+  meta.innerHTML = `
+    <span>解鎖：</span>
+    <b style="color:#ffd36a">${unlocked}</b>
+    <span>/</span>
+    <span>${total}</span>
+  `;
+
+  const bar = document.createElement('div');
+  bar.className = 'tcBar';
+  const bi = document.createElement('i');
+  const pct = total ? Math.round((unlocked/total)*100) : 0;
+  bi.style.width = pct + '%';
+  bar.appendChild(bi);
+
+  right.appendChild(btnOnly);
+  right.appendChild(search);
+
+  top.appendChild(left);
+  top.appendChild(right);
+
+  root.appendChild(top);
+
+  const metaRow = document.createElement('div');
+  metaRow.className = 'tcHint';
+  metaRow.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+      <div class="tcMeta">${meta.innerHTML}</div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <div class="tcBar">${bar.innerHTML}</div>
+        <div class="muted" style="font-size:11px">${pct}%</div>
+      </div>
+    </div>
+    <div style="margin-top:8px">
+      <b>已解鎖</b>：顯示真實稱號，點擊即可佩戴（寫入雲端）。　
+      <b>未解鎖</b>：顯示「?????」，灰階鎖定。
+    </div>
+  `;
+  // 重建 bar（上面 innerHTML 只是字串）
+  metaRow.querySelector('.tcBar').innerHTML = '';
+  metaRow.querySelector('.tcBar').appendChild(bar);
+
+  root.appendChild(metaRow);
+
+  const wrapTable = document.createElement('div');
+  wrapTable.className = 'titleMatrixWrap';
+
+  const table = document.createElement('table');
+  table.className = 'titleMatrix';
+
+  // ===== thead（左上角空格 + 5 欄主屬性）=====
+  const thead = document.createElement('thead');
+  const trh = document.createElement('tr');
+
+  const th0 = document.createElement('th');
+  th0.className = 'tierCol';
+  th0.innerHTML = '<span class="muted" style="font-size:11px">Tier</span>';
+  trh.appendChild(th0);
+
+  for(const cat of CAT_ORDER){
+    const th = document.createElement('th');
+    th.innerHTML = `
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px">
+        <div style="font-weight:900;letter-spacing:.3px">${escapeHtml(cat.name)}</div>
+        <div class="muted" style="font-size:10px">${escapeHtml(cat.code)}</div>
+      </div>
+    `;
+    trh.appendChild(th);
+  }
+
+  thead.appendChild(trh);
+  table.appendChild(thead);
+
+  // ===== tbody（6 列：T6 → T1）=====
+  const tbody = document.createElement('tbody');
+
+  function tierPillEl(t){
+    const sp = document.createElement('span');
+    sp.className = 'tierPill t'+t;
+    sp.textContent = 'T' + t;
+    return sp;
+  }
+
+  // 建一份 cell DOM refs，方便做 filter/search
+  const cellRefs = []; // {label, unlocked, el, badgeEl}
+
+  for(const r of rows){
+    const tr = document.createElement('tr');
+
+    const tdTier = document.createElement('td');
+    tdTier.className = 'tierCol';
+    tdTier.appendChild(tierPillEl(r.tier));
+    tr.appendChild(tdTier);
+
+    for(const c of r.cells){
+      const td = document.createElement('td');
+
+      const real = c.label;
+      const isUnlocked = !!real && ownedMap.has(real);
+      const showLabel = isUnlocked ? real : '?????';
+
+      const cell = document.createElement('div');
+      cell.className = 'tcCell';
+
+      const mini = document.createElement('div');
+      mini.className = 'mini';
+      mini.innerHTML = `
+        <span class="k">${escapeHtml(c.name)}</span>
+        <span class="v">${real ? 'T'+c.tier : '-'}</span>
+      `;
+      cell.appendChild(mini);
+
+      if(real){
+        const tmp = document.createElement('div');
+        tmp.innerHTML = buildTitleBadgeHTML(showLabel, c.tier).trim();
+        const badgeEl = tmp.firstElementChild;
+
+        badgeEl.classList.add('compact');
+
+        if(isUnlocked){
+          badgeEl.classList.add('pick');
+          if(equipped === real) badgeEl.classList.add('on');
+
+          badgeEl.title = `已解鎖｜${c.name} T${c.tier}
+點擊佩戴：${real}`;
+          badgeEl.addEventListener('click', async ()=>{
+            if(__saving) return;
+            const next = { ...( __client || defaultClient(__cloudProfile?.name, __cloudProfile?.avatar) ) };
+            next.titles = { ...(next.titles||{}) };
+            next.titles.owned = owned;
+            next.titles.equipped = real;
+            next.titles.equippedTier = c.tier;
+            await saveClientToCloud(next, { reason:'equip-title' });
+          });
+        }else{
+          badgeEl.classList.add('locked');
+          badgeEl.title = `未解鎖｜${c.name} T${c.tier}
+（達成：該局結算此主屬性落在 Tier ${c.tier}）`;
+        }
+
+        cell.appendChild(badgeEl);
+        cellRefs.push({ label: real, unlocked: isUnlocked, td, badgeEl });
+      }else{
+        const placeholder = document.createElement('div');
+        placeholder.className = 'muted';
+        placeholder.style.fontSize = '12px';
+        placeholder.textContent = '—';
+        cell.appendChild(placeholder);
+        cellRefs.push({ label: '', unlocked: false, td, badgeEl: null });
+      }
+
+      td.appendChild(cell);
+      tr.appendChild(td);
+    }
+
+    tbody.appendChild(tr);
+  }
+
+  table.appendChild(tbody);
+  wrapTable.appendChild(table);
+  root.appendChild(wrapTable);
+
+  // ===== extra（表外已解鎖：不在 TITLE_TABLE 裡的舊稱號）=====
+  const reverse = new Set();
   for (const [catKey, tiers] of Object.entries(TITLE_TABLE)){
     for (let t=1; t<=6; t++){
       const label = String(tiers?.[t] || '').trim();
-      if(label) reverse.set(label, { catKey, tier:t });
+      if(label) reverse.add(label);
     }
   }
-
-  // 產生圖鑑
-  const frag = document.createDocumentFragment();
-
-  for (const cat of CAT_ORDER){
-    const sec = document.createElement('div');
-    sec.className = 'title-section';
-
-    const head = document.createElement('div');
-    head.className = 'title-head';
-    head.textContent = cat.name;
-    sec.appendChild(head);
-
-    const grid = document.createElement('div');
-    grid.className = 'title-grid';
-
-    for (let tier=1; tier<=6; tier++){
-      const label = String(TITLE_TABLE?.[cat.key]?.[tier] || '').trim();
-      if(!label) continue;
-
-      const unlocked = ownedSet.has(label);
-      const showLabel = unlocked ? label : '?????';
-
-      const tmp = document.createElement('div');
-      tmp.innerHTML = buildTitleBadgeHTML(showLabel, tier).trim();
-      const badgeEl = tmp.firstElementChild;
-      if(!badgeEl) continue;
-
-      badgeEl.classList.add('compact');
-      if(unlocked){
-        badgeEl.classList.add('pick');
-        if (equipped === label) badgeEl.classList.add('on');
-
-        badgeEl.addEventListener('click', async ()=>{
-          if(__saving) return;
-          const next = { ...( __client || defaultClient(__cloudProfile?.name, __cloudProfile?.avatar) ) };
-          next.titles = { ...(next.titles||{}) };
-          next.titles.owned = owned; // normalize 後寫回雲端
-          next.titles.equipped = label;
-          next.titles.equippedTier = tier;
-          await saveClientToCloud(next, { reason:'equip-title' });
-        });
-      }else{
-        badgeEl.classList.add('locked');
-        badgeEl.title = '尚未解鎖（結算拿到對應「主屬性 + Tier」才會解鎖）';
-      }
-
-      // 顯示 Tier 小標（方便你確認 tier 對應）
-      const ttag = document.createElement('span');
-      ttag.className = 'tier-tag';
-      ttag.textContent = 'T' + tier;
-      badgeEl.appendChild(ttag);
-
-      grid.appendChild(badgeEl);
-    }
-
-    sec.appendChild(grid);
-    frag.appendChild(sec);
-  }
-
-  // 額外：如果雲端有「不在稱號表內」的舊稱號，也讓它顯示在「其他」
   const extras = owned
     .map(x => String(x?.label||'').trim())
     .filter(label => label && !reverse.has(label));
 
   if(extras.length){
-    const sec = document.createElement('div');
-    sec.className = 'title-section';
-    const head = document.createElement('div');
-    head.className = 'title-head';
-    head.textContent = '其他';
-    sec.appendChild(head);
-
-    const grid = document.createElement('div');
-    grid.className = 'title-grid';
+    const extraBox = document.createElement('div');
+    extraBox.className = 'tcHint';
+    extraBox.innerHTML = `<div style="font-weight:900;margin-bottom:8px">其他（表外已解鎖）</div>`;
+    const extraRow = document.createElement('div');
+    extraRow.style.display = 'flex';
+    extraRow.style.gap = '8px';
+    extraRow.style.flexWrap = 'wrap';
 
     for(const label of extras){
-      const meta = owned.find(x => String(x?.label||'').trim() === label) || { tier: 1 };
-      const tier = normTier(meta.tier || 1);
-
+      const tier = normTier(ownedMap.get(label) || 1);
       const tmp = document.createElement('div');
       tmp.innerHTML = buildTitleBadgeHTML(label, tier).trim();
       const badgeEl = tmp.firstElementChild;
       if(!badgeEl) continue;
-
       badgeEl.classList.add('compact','pick');
-      if (equipped === label) badgeEl.classList.add('on');
-
+      if(equipped === label) badgeEl.classList.add('on');
+      badgeEl.title = `表外稱號｜T${tier}
+點擊佩戴：${label}`;
       badgeEl.addEventListener('click', async ()=>{
         if(__saving) return;
         const next = { ...( __client || defaultClient(__cloudProfile?.name, __cloudProfile?.avatar) ) };
@@ -1551,28 +1792,50 @@ function renderTitles(){
         next.titles.equippedTier = tier;
         await saveClientToCloud(next, { reason:'equip-title' });
       });
-
-      const ttag = document.createElement('span');
-      ttag.className = 'tier-tag';
-      ttag.textContent = 'T' + tier;
-      badgeEl.appendChild(ttag);
-
-      grid.appendChild(badgeEl);
+      extraRow.appendChild(badgeEl);
     }
-
-    sec.appendChild(grid);
-    frag.appendChild(sec);
+    extraBox.appendChild(extraRow);
+    root.appendChild(extraBox);
   }
 
-  if(!frag.childNodes.length){
-    const span = document.createElement('div');
-    span.className = 'muted';
-    span.textContent = '尚未取得稱號（打完一季結算後會自動加入）';
-    wrap.appendChild(span);
-    return;
+  // ===== filters =====
+  let onlyUnlocked = false;
+
+  function applyFilters(){
+    const q = String(search.value || '').trim();
+    const qq = q ? q.toLowerCase() : '';
+
+    for(const it of cellRefs){
+      const td = it.td;
+      if(!td) continue;
+
+      // 表格每格都保留尺寸，只是隱藏內容（避免表格縮排亂跳）
+      const content = td.querySelector('.tcCell');
+      if(!content) continue;
+
+      let ok = true;
+      if(onlyUnlocked && !it.unlocked) ok = false;
+      if(ok && qq){
+        const lab = String(it.label||'').toLowerCase();
+        if(!lab.includes(qq)) ok = false;
+      }
+      content.style.display = ok ? '' : 'none';
+    }
   }
 
-  wrap.appendChild(frag);
+  btnOnly.addEventListener('click', ()=>{
+    onlyUnlocked = !onlyUnlocked;
+    btnOnly.classList.toggle('on', onlyUnlocked);
+    btnOnly.textContent = onlyUnlocked ? '顯示全部' : '只看已解鎖';
+    applyFilters();
+  });
+
+  search.addEventListener('input', applyFilters);
+
+  // 初始套一次
+  applyFilters();
+
+  wrap.appendChild(root);
 }
 
 
