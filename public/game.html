@@ -1687,6 +1687,205 @@ body::before{
 }
 
 
+
+
+/* ====== 豪華稱號徽章（同 profile） ====== */
+@keyframes float{ 0%,100%{transform:translateY(0px);} 50%{transform:translateY(-3px);} }
+    @keyframes pulse{ 0%,100%{filter:brightness(1);}
+
+.player-title-badge{
+      position:relative;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:6px 18px;
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.5px;
+      text-align:center;
+      white-space:nowrap;
+      box-sizing:border-box;
+      user-select:none;
+    }
+    .player-title-badge .text{
+      position:relative;
+      z-index:3;
+      display:inline-block;
+      max-width:100%;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .player-title-badge.compact{ padding:6px 14px; font-size:12px; }
+    .player-title-badge.pick{ cursor:pointer; transition:transform .06s ease, filter .15s ease; }
+    .player-title-badge.pick:hover{ filter:brightness(1.08); }
+    .player-title-badge.pick:active{ transform:translateY(1px); }
+    .player-title-badge.on{ box-shadow:0 0 0 3px rgba(255,184,77,.22); }
+
+    @keyframes float{ 0%,100%{transform:translateY(0px);} 50%{transform:translateY(-3px);} }
+    @keyframes pulse{ 0%,100%{filter:brightness(1);} 50%{filter:brightness(1.18);} }
+    @keyframes softGlow{ 0%,100%{opacity:.5;} 50%{opacity:.95;} }
+    @keyframes shine{ 0%{transform:translateX(-130%);opacity:0;} 20%{opacity:0;} 40%{transform:translateX(130%);opacity:1;} 60%{opacity:0;} 100%{transform:translateX(130%);opacity:0;} }
+
+    .player-title-badge.tier-1{
+      border-radius:8px;
+      border:1px solid rgba(119,124,132,.85);
+      background:linear-gradient(135deg,#333842,#171920);
+      color:#d0d3d8;
+      text-shadow:0 0 6px rgba(0,0,0,.8);
+    }
+    .player-title-badge.tier-2{
+      border-radius:999px;
+      padding:7px 22px;
+      border:1px solid #63d2ff;
+      background:linear-gradient(135deg,#1b4d7e,#63d2ff);
+      color:#e8f9ff;
+      box-shadow:0 0 10px rgba(99,210,255,.45);
+      overflow:visible;
+    }
+    .player-title-badge.tier-2::before,
+    .player-title-badge.tier-2::after{
+      content:"";
+      position:absolute; top:0; bottom:0; width:14px;
+      background:inherit;
+    }
+    .player-title-badge.tier-2::before{ left:-8px; transform:skewX(-24deg); }
+    .player-title-badge.tier-2::after{ right:-8px; transform:skewX(24deg); }
+
+    .player-title-badge.tier-3{
+      padding:7px 20px;
+      color:#ffe4c4;
+      background:
+        radial-gradient(circle at 0 0,rgba(255,255,255,.12) 0,transparent 55%),
+        radial-gradient(circle at 100% 100%,rgba(255,120,60,.25) 0,transparent 55%),
+        linear-gradient(135deg,#3a0f18,#8b1c24);
+      border:2px solid #f48c2b;
+      box-shadow:
+        0 0 0 1px rgba(0,0,0,.55),
+        0 0 16px rgba(244,140,43,.65);
+      clip-path:polygon(8% 0,92% 0,100% 50%,92% 100%,8% 100%,0 50%);
+    }
+    .player-title-badge.tier-3::before{
+      content:"";
+      position:absolute;
+      inset:2px;
+      border-radius:10px;
+      border:1px dashed rgba(255,223,186,.35);
+      opacity:.7;
+    }
+
+    .player-title-badge.tier-4{
+      padding:8px 22px 10px;
+      color:#f9f0ff;
+      background:radial-gradient(circle at top,#5c35b5,#1e1032);
+      border:2px solid #e1c4ff;
+      box-shadow:
+        0 0 0 1px rgba(90,40,200,.55),
+        0 0 18px rgba(147,96,255,.85);
+      border-radius:16px 16px 10px 10px;
+      overflow:visible;
+      animation:float 5s ease-in-out infinite;
+    }
+    .player-title-badge.tier-4::before{
+      content:"";
+      position:absolute;
+      left:50%;
+      bottom:-10px;
+      transform:translateX(-50%);
+      width:60%;
+      height:16px;
+      background:linear-gradient(to bottom,#e1c4ff,#6e3bd1);
+      clip-path:polygon(50% 100%,0 0,100% 0);
+      box-shadow:0 4px 10px rgba(0,0,0,.55);
+    }
+
+    .player-title-badge.tier-5{
+      padding:8px 28px;
+      color:#fff9e0;
+      background:linear-gradient(135deg,#5a2400,#ffcf66);
+      border-radius:999px;
+      border:3px solid #ffe08a;
+      box-shadow:
+        0 0 0 1px rgba(255,224,138,.45),
+        0 0 22px rgba(255,204,110,.9);
+      overflow:visible;
+      animation:float 4.5s ease-in-out infinite, pulse 3.8s ease-in-out infinite;
+    }
+    .player-title-badge.tier-5::before,
+    .player-title-badge.tier-5::after{
+      content:"";
+      position:absolute;
+      top:50%;
+      width:26px;
+      height:16px;
+      background:radial-gradient(circle at 0 50%,rgba(255,255,255,.95) 0,rgba(255,224,138,.1) 70%);
+      transform:translateY(-50%);
+      filter:drop-shadow(0 0 8px rgba(255,224,138,.75));
+    }
+    .player-title-badge.tier-5::before{
+      left:-16px;
+      clip-path:polygon(100% 0,0 50%,100% 100%);
+    }
+    .player-title-badge.tier-5::after{
+      right:-16px;
+      clip-path:polygon(0 0,100% 50%,0 100%);
+    }
+    .player-title-badge.tier-5 .text::after{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:linear-gradient(120deg,transparent 0,rgba(255,255,255,.85) 45%,transparent 75%);
+      mix-blend-mode:screen;
+      transform:translateX(-130%);
+      animation:shine 3.6s ease-in-out infinite;
+    }
+
+    .player-title-badge.tier-6{
+      padding:9px 36px;
+      color:#fffdf5;
+      background:
+        radial-gradient(circle at 20% 0,rgba(255,255,255,.4) 0,transparent 55%),
+        radial-gradient(circle at 80% 100%,rgba(255,210,120,.7) 0,transparent 55%),
+        linear-gradient(135deg,#4b2a00,#c68b00,#ffe7a3);
+      border-radius:999px;
+      border:4px solid #ffe9c4;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,.38),
+        0 0 0 6px rgba(158,106,32,.65),
+        0 0 32px rgba(255,243,196,.95);
+      overflow:visible;
+      position:relative;
+      text-shadow:
+        0 0 8px rgba(0,0,0,1),
+        0 0 18px rgba(255,245,210,1);
+      animation:float 4.2s ease-in-out infinite, pulse 3.4s ease-in-out infinite;
+    }
+    .player-title-badge.tier-6::before{
+      content:"";
+      position:absolute;
+      inset:4px;
+      border-radius:999px;
+      border:2px solid rgba(255,252,230,.85);
+      box-shadow:
+        inset 0 0 8px rgba(255,255,255,.65),
+        0 0 14px rgba(255,252,210,.6);
+      opacity:.98;
+      z-index:1;
+    }
+    .player-title-badge.tier-6::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 12% 50%,#fff 0,rgba(255,255,255,0) 55%),
+        radial-gradient(circle at 88% 50%,#fff 0,rgba(255,255,255,0) 55%),
+        radial-gradient(circle at 50% -10%,#fff 0,rgba(255,255,255,0) 60%);
+      mix-blend-mode:screen;
+      opacity:.65;
+      z-index:1;
+    }
+
 </style>
 </head>
 <body>
@@ -2872,6 +3071,43 @@ function pnameBy(p){
   const nm = p.client?.displayName || p.displayName || '';
   return nm || `P${(p.id??0)+1}`;
 }
+
+/* ========= 稱號徽章（同個人頁豪華版） ========= */
+function escapeHtml(str){
+  return String(str ?? '').replace(/[&<>"']/g, (s)=>({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[s]));
+}
+function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+function normTier(t){ return clamp(Number(t)||1, 1, 6); }
+function titleOfPlayer(p){
+  // server/state 可能放在 p.client 或 p 本體
+  return String(p?.client?.title ?? p?.title ?? '').trim();
+}
+function titleTierOfPlayer(p){
+  return normTier(p?.client?.titleTier ?? p?.titleTier ?? 1);
+}
+function buildTitleBadgeHTML(label, tier){
+  const t = normTier(tier || 1);
+  const safeLabel = String(label||'').trim();
+  if(!safeLabel) return '';
+  if(t === 6){
+    return `
+      <span class="player-title-badge tier-6">
+        <span class="glow"></span>
+        <span class="crown">👑</span>
+        <span class="text">${escapeHtml(safeLabel)}</span>
+        <span class="pendant"></span>
+      </span>
+    `;
+  }
+  return `
+    <span class="player-title-badge tier-${t}">
+      <span class="text">${escapeHtml(safeLabel)}</span>
+    </span>
+  `;
+}
+
 
 /* ========= 卡牌→場地對照與強化判斷 ========= */
 const CARD_VENUE = {
@@ -4926,6 +5162,7 @@ el.venues.innerHTML = '';
           <div class="flex items-center justify-between">
             <div class="font-semibold">
               ${pnameBy(p)}
+              ${buildTitleBadgeHTML(titleOfPlayer(p), titleTierOfPlayer(p))}
               ${!p.alive ? '<span class="ml-1 text-neutral-400">（出局）</span>' : ''}
             </div>
             <div class="text-xs text-neutral-400">金幣 <span class="text-amber-300 font-bold">${p.gold||0}</span></div>
