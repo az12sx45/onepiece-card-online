@@ -1100,7 +1100,7 @@ const p = st.players[myId];
 
 // ✅ 稱號防呆（避免太長/亂值）
 const safeTitle = String(title || "").trim().slice(0, 18);
-const safeTier  = Math.max(1, Math.min(5, Number(titleTier || 1) || 1));
+const safeTier  = Math.max(1, Math.min(6, Number(titleTier || 1) || 1));
 
 p.client = { displayName, avatar, pid, title: safeTitle, titleTier: safeTier };
 p.displayName = displayName;
@@ -1172,7 +1172,7 @@ p.titleTier = safeTier;
 const joined = entries.map(([sid, m]) => {
   const oldP = room.state?.players?.[m.playerId];
   const safeTitle = String(oldP?.client?.title ?? oldP?.title ?? "").trim().slice(0, 18);
-  const safeTier  = Math.max(1, Math.min(5, Number(oldP?.client?.titleTier ?? oldP?.titleTier ?? 1) || 1));
+  const safeTier  = Math.max(1, Math.min(6, Number(oldP?.client?.titleTier ?? oldP?.titleTier ?? 1) || 1));
 
   return {
     sid,
@@ -1258,10 +1258,10 @@ p.client = {
 
   // ✅ 新增：稱號
   title: j.title || "",
-  titleTier: j.titleTier || 1,
+  titleTier: Math.max(1, Math.min(6, Number(j.titleTier || 1) || 1)),
 };
 p.title = j.title || "";
-p.titleTier = j.titleTier || 1;
+p.titleTier = Math.max(1, Math.min(6, Number(j.titleTier || 1) || 1));
 
     p.displayName = j.name;
     p.avatar = j.avatar;
