@@ -917,16 +917,21 @@
     // =========================
     function NameAvatarCloud({ initialName, initialAvatar, secret, onDone }){
       const [name,setName]=useState(initialName || "");
-      const [pick,setPick]=useState(initialAvatar || 1);
+      const [pick,setPick]=useState(Math.min(30, Math.max(1, Number(initialAvatar)||1)));
       const [saving,setSaving]=useState(false);
       const [err,setErr]=useState("");
 
-      const avatars=useMemo(()=> Array.from({length:40},(_,i)=>`images/avatars/${i+1}.webp`), []);
+      const avatars = useMemo(
+  ()=> Array.from({length:30},(_,i)=>`images/avatars/${i+1}.webp`),
+  []
+);
+
 
       async function handleSubmit(e){
         e.preventDefault();
         const safe=(name||"").trim()||"無名航海士";
-        const avatar = Math.min(40, Math.max(1, Number(pick)||1));
+        const avatar = Math.min(30, Math.max(1, Number(pick)||1));
+
 
         setSaving(true);
         setErr("");
@@ -1010,20 +1015,12 @@
             </div>
           </div>
 
-          <div className="mt-5 flex flex-col sm:flex-row gap-3">
-            <button className="btn-primary btn grow" type="submit" disabled={saving}>
-              {saving ? "儲存中…" : t("ui.createRoomTitle")}
-            </button>
-            <button
-              className="btn grow"
-              type="button"
-              disabled={saving}
-              onClick={(e)=>handleSubmit(e)}
-              title="同一份設定，儲存雲端後繼續"
-            >
-              {saving ? "儲存中…" : t("ui.joinRoom")}
-            </button>
-          </div>
+<div className="mt-5 flex flex-col sm:flex-row gap-3">
+  <button className="btn-primary btn w-full" type="submit" disabled={saving}>
+    {saving ? "儲存中…" : "創建角色"}
+  </button>
+</div>
+
         </form>
       );
     }
