@@ -965,41 +965,56 @@ socket.on("PROFILE_GET", async ({ secret }, cb) => {
 }
 });
 
-// ====== 雲端個人頁：更新（結算用） ======
+// ====== 雲端個人頁：更新（永久安全版：局部更新 + stats 合併，不會洗掉 shop/bounties/titles） ======
 socket.on("PROFILE_UPDATE", async ({ secret, patch }, cb) => {
   try {
     if (!secret || !patch) return cb?.({ ok: false, error: "missing payload" });
 
-    const statsJson   = JSON.stringify(patch.stats || {});
-    const titlesJson  = JSON.stringify(patch.titles || []);
-    const bountiesJson = JSON.stringify(patch.bounties || []);
-    const recentJson  = JSON.stringify(patch.recent_matches || []);
+    const has = (k) => Object.prototype.hasOwnProperty.call(patch, k);
+
+    // ✅ 沒傳就不改（避免其它頁只更新 stats 時把 name/avatar 洗成空字串）
+    const nameParam   = has("name")   ? String(patch.name ?? "") : null;
+    const avatarParam = has("avatar") ? String(patch.avatar ?? "") : null;
+
+    // ✅ stats：JSONB 合併（保留 stats.client.shop / stats.client.titles / …）
+    const statsParam = has("stats") ? JSON.stringify(patch.stats ?? {}) : null;
+
+    // ✅ JSON 欄位：沒傳就保留；有傳才覆蓋
+    const titlesParam   = has("titles")         ? JSON.stringify(patch.titles ?? []) : null;
+    const bountiesParam = has("bounties")       ? JSON.stringify(patch.bounties ?? []) : null;
+    const recentParam   = has("recent_matches") ? JSON.stringify(patch.recent_matches ?? []) : null;
 
     const { rows } = await pool.query(
       `
       INSERT INTO player_profiles
         (secret, name, avatar, stats, titles, bounties, recent_matches)
       VALUES
-        ($1, $2, $3, $4::jsonb, $5::jsonb, $6::jsonb, $7::jsonb)
+        (
+          $1,
+          COALESCE($2, ''),                 -- insert 時保底（但 update 時不會亂改）
+          COALESCE($3, ''),
+          COALESCE($4::jsonb, '{}'::jsonb),
+          COALESCE($5::jsonb, '[]'::jsonb),
+          COALESCE($6::jsonb, '[]'::jsonb),
+          COALESCE($7::jsonb, '[]'::jsonb)
+        )
       ON CONFLICT (secret) DO UPDATE SET
-        name = EXCLUDED.name,
-        avatar = EXCLUDED.avatar,
-        stats = EXCLUDED.stats,
-        titles = EXCLUDED.titles,
-        bounties = EXCLUDED.bounties,
-        recent_matches = EXCLUDED.recent_matches,
+        name = COALESCE($2, player_profiles.name),
+        avatar = COALESCE($3, player_profiles.avatar),
+
+        stats = CASE
+          WHEN $4::jsonb IS NULL THEN player_profiles.stats
+          ELSE (player_profiles.stats || $4::jsonb)
+        END,
+
+        titles = COALESCE($5::jsonb, player_profiles.titles),
+        bounties = COALESCE($6::jsonb, player_profiles.bounties),
+        recent_matches = COALESCE($7::jsonb, player_profiles.recent_matches),
+
         updated_at = now()
       RETURNING *;
       `,
-      [
-        secret,
-        patch.name || "",
-        String(patch.avatar ?? ""),
-        statsJson,
-        titlesJson,
-        bountiesJson,
-        recentJson
-      ]
+      [secret, nameParam, avatarParam, statsParam, titlesParam, bountiesParam, recentParam]
     );
 
     cb?.({ ok: true, profile: rows[0] });
