@@ -292,10 +292,6 @@
 }
 
 
-/* === Tier-6 overflow guard (避免祖先容器裁切皇冠/吊飾) === */
-.player-title-badge,
-.player-title-badge *{ overflow: visible !important; }
-
     /* === Rules Flipbook Modal === */
     .rulesOverlay{ position: fixed; inset: 0; background: rgba(0,0,0,0.55); display:flex; align-items:center; justify-content:center; z-index: 9999; }
     .rulesCard{
@@ -501,26 +497,8 @@
           const arr = Array.isArray(__lobby.snapshot?.players) ? __lobby.snapshot.players : [];
           arr.forEach(p=>{
             const pid = (p && (p.playerId ?? p.pid ?? p.id));
-            const c = p?.client || {};
-            const titles = c?.titles || {};
-            const label = String(
-              p?.title ??
-              p?.equippedTitle ??
-              p?.equipped ??
-              titles?.equipped ??
-              c?.equippedTitle ??
-              c?.title ??
-              c?.titleLabel ??
-              ''
-            ).trim();
-            const tier0 = Number(
-              p?.titleTier ??
-              p?.equippedTier ??
-              titles?.equippedTier ??
-              c?.equippedTier ??
-              c?.titleTier ??
-              1
-            ) || 1;
+            const label = String(p?.title ?? p?.equippedTitle ?? p?.equipped ?? '').trim();
+            const tier0 = Number(p?.titleTier ?? p?.equippedTier ?? 1) || 1;
             const tier = Math.min(6, Math.max(1, tier0));
             if (pid != null && label) map[String(pid)] = { label, tier };
           });
@@ -1064,11 +1042,6 @@
           title: profile.equippedTitle || "",
           titleTier: profile.equippedTier || 1,
 
-          // ✅ 再補一份 client.titles（有些 server 只會把 client 原樣帶回 lobby）
-          client: { titles: { equipped: profile.equippedTitle || "", equippedTier: profile.equippedTier || 1 } },
-          equippedTitle: profile.equippedTitle || "",
-          equippedTier: profile.equippedTier || 1,
-
           secret: __lobby.me.secret,
           cpuCount
         });
@@ -1193,36 +1166,14 @@
       function nameOf(p){ return p.displayName ?? p.name ?? 'P'; }
       function avatarOf(p){ return p.avatar ?? 1; }
 
-      // ✅ 稱號取值（等待室快照優先，其次從玩家 client.titles / client.equippedTitle 取）
+      // ✅ 新增：稱號取值（lobby 若有 title 就用；自己沒有的話 fallback 用雲端 equippedTitle）
       function titleOf(p){
-        // lobby snapshot 可能直接帶在 p.title / p.equippedTitle，也可能在 p.client.titles.equipped
-        const c = p?.client || {};
-        const titles = c?.titles || {};
-        return String(
-          p?.title ??
-          p?.equippedTitle ??
-          p?.equipped ??
-          titles?.equipped ??
-          c?.equippedTitle ??
-          c?.title ??
-          c?.titleLabel ??
-          ""
-        ).trim();
+        return String(p?.title ?? p?.equippedTitle ?? p?.equipped ?? "").trim();
       }
-      function titleTierOf(p){
-        const c = p?.client || {};
-        const titles = c?.titles || {};
-        const n = Number(
-          p?.titleTier ??
-          p?.equippedTier ??
-          titles?.equippedTier ??
-          c?.equippedTier ??
-          c?.titleTier ??
-          1
-        ) || 1;
-        return Math.min(6, Math.max(1, n));
-      }
-
+function titleTierOf(p){
+  const n = Number(p?.titleTier ?? p?.equippedTier ?? 1) || 1;
+  return Math.min(6, Math.max(1, n));
+}
 
 
       const cpuCount = lobby?.cpuCount ?? 0;
