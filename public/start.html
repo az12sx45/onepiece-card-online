@@ -292,6 +292,10 @@
 }
 
 
+/* === Tier-6 overflow guard (避免祖先容器裁切皇冠/吊飾) === */
+.player-title-badge,
+.player-title-badge *{ overflow: visible !important; }
+
     /* === Rules Flipbook Modal === */
     .rulesOverlay{ position: fixed; inset: 0; background: rgba(0,0,0,0.55); display:flex; align-items:center; justify-content:center; z-index: 9999; }
     .rulesCard{
@@ -1059,6 +1063,11 @@
           // ✅ 新增：稱號（server 若有存進 lobby，就能讓其他人也看到）
           title: profile.equippedTitle || "",
           titleTier: profile.equippedTier || 1,
+
+          // ✅ 再補一份 client.titles（有些 server 只會把 client 原樣帶回 lobby）
+          client: { titles: { equipped: profile.equippedTitle || "", equippedTier: profile.equippedTier || 1 } },
+          equippedTitle: profile.equippedTitle || "",
+          equippedTier: profile.equippedTier || 1,
 
           secret: __lobby.me.secret,
           cpuCount
