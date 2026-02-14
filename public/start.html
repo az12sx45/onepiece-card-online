@@ -89,36 +89,6 @@
   white-space:nowrap;
 }
 
-/* ===== 防止稱號撐爆等待室 ===== */
-.player-title-badge{
-  max-width: clamp(100px, 22vw, 180px);   /* 自適應最大寬度 */
-  min-width: 0;       /* 允許被壓縮 */
-  flex-shrink: 1;     /* 允許縮小 */
-  overflow: hidden;   /* 把光暈/裝飾收在 badge 盒內，避免蓋到按鈕 */
-  pointer-events: none; /* 避免稱號裝飾層擋到右側準備按鈕 */
-  z-index: 0;
-}
-
-.player-title-badge .text{
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* 右側準備按鈕永遠在最上層、可點 */
-.ready-btn{ position: relative; z-index: 10; }
-
-/* ===== 禁止稱號視覺溢出造成重疊（不讓任何元素超出自己的盒子）===== */
-.player-title-badge{
-  isolation: isolate;     /* 讓內部混合模式/光暈不影響外部疊層 */
-  contain: paint;         /* 強制繪製被限制在自身區域，避免視覺跑去蓋到按鈕 */
-  padding-bottom: 16px;   /* 給吊飾留空間，避免往外凸造成重疊 */
-}
-.player-title-badge .pendant{
-  bottom: 4px !important; /* 把吊飾收進 badge 內，不再外凸 */
-}
-.glow{ inset: -20% !important; } /* 光暈縮回一點，避免邊界溢出 */
-
 @keyframes float{ 0%,100%{transform:translateY(0px);} 50%{transform:translateY(-3px);} }
 @keyframes pulse{ 0%,100%{filter:brightness(1);} 50%{filter:brightness(1.18);} }
 @keyframes softGlow{ 0%,100%{opacity:.5;} 50%{opacity:.95;} }
@@ -1312,12 +1282,12 @@ function titleTierOf(p){
                   const tier = titleTierOf(p) || (isMe ? (profile?.equippedTier || 1) : 1);
 
                   return (
-                    <div key={pid} className="flex items-center justify-between gap-3 min-w-0 rounded-xl border border-neutral-700/60 bg-black/30 px-3 py-2">
-                      <div className="flex items-center gap-3 min-w-0 flex-1">
+                    <div key={pid} className="flex items-center justify-between gap-3 rounded-xl border border-neutral-700/60 bg-black/30 px-3 py-2">
+                      <div className="flex items-center gap-3">
                         <div className={"avatar "+(isHost?"is-active":"")}><img src={avatarUrl} alt=""/></div>
                         <div>
-                          <div className="font-semibold leading-tight flex items-center gap-2 min-w-0">
-                            <span className="truncate">{nameOf(p)}</span>
+                          <div className="font-semibold leading-tight flex flex-wrap items-center gap-2">
+                            <span>{nameOf(p)}</span>
 {tt ? (
   (Math.min(6, Math.max(1, Number(tier)||1)) === 6) ? (
     <span className="player-title-badge tier-6">
@@ -1346,7 +1316,7 @@ function titleTierOf(p){
                         </div>
                       </div>
                       {isMe && (
-	                        <button className="btn ready-btn shrink-0 min-w-[84px]" onClick={()=>toggleReady(!myReady)}>
+                        <button className="btn" onClick={()=>toggleReady(!myReady)}>
                           {myReady ? t("ui.meUnready") : t("ui.meReady")}
                         </button>
                       )}
@@ -1367,7 +1337,7 @@ function titleTierOf(p){
                     const name = cpuNames[idx] || `CPU ${idx + 1}`;
                     return (
                       <div key={`cpu-${idx}`} className="flex items-center justify-between gap-3 rounded-xl border border-neutral-700/60 bg-black/40 px-3 py-2">
-                        <div className="flex items-center gap-3 min-w-0 flex-1">
+                        <div className="flex items-center gap-3">
                           <div className="avatar is-active"><img src={avatarUrl} alt={name}/></div>
                           <div>
                             <div className="font-semibold leading-tight text-amber-200">{name}</div>
