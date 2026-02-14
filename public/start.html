@@ -94,6 +94,9 @@
   max-width: clamp(100px, 22vw, 180px);   /* 自適應最大寬度 */
   min-width: 0;       /* 允許被壓縮 */
   flex-shrink: 1;     /* 允許縮小 */
+  overflow: hidden;   /* 把光暈/裝飾收在 badge 盒內，避免蓋到按鈕 */
+  pointer-events: none; /* 避免稱號裝飾層擋到右側準備按鈕 */
+  z-index: 0;
 }
 
 .player-title-badge .text{
@@ -101,6 +104,9 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* 右側準備按鈕永遠在最上層、可點 */
+.ready-btn{ position: relative; z-index: 10; }
 
 @keyframes float{ 0%,100%{transform:translateY(0px);} 50%{transform:translateY(-3px);} }
 @keyframes pulse{ 0%,100%{filter:brightness(1);} 50%{filter:brightness(1.18);} }
@@ -1329,7 +1335,7 @@ function titleTierOf(p){
                         </div>
                       </div>
                       {isMe && (
-                        <button className="btn shrink-0 min-w-[84px]" onClick={()=>toggleReady(!myReady)}>
+	                        <button className="btn ready-btn shrink-0 min-w-[84px]" onClick={()=>toggleReady(!myReady)}>
                           {myReady ? t("ui.meUnready") : t("ui.meReady")}
                         </button>
                       )}
