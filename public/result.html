@@ -919,9 +919,8 @@ function pushPosterMeta(meta){
 function loadProfile(){
 const base = {
   version: 1,
-  totals: { games: 0, wins: 0, coins: 0 },
+  totals: { games: 0, wins: 0, coins: 0, radarCoin: 0, atk: 0, def: 0, hit: 0, intel: 0, survival: 0 },
   recent: [],
-  radarMatches: [],
   deluxeUnlocked: [],        // ✅ 新增
   titles: { owned: [], equipped: '', equippedTier: 1 },
   _appliedMatchKeys: []
@@ -941,8 +940,6 @@ const base = {
   };
 
   if(!Array.isArray(out.recent)) out.recent = [];
-  if(!Array.isArray(out.radarMatches)) out.radarMatches = [];
-  out.radarMatches = out.radarMatches.slice(0,200);
   if(!Array.isArray(out.titles.owned)) out.titles.owned = [];
   out.titles.equipped = String(out.titles.equipped || '').trim();
 
@@ -962,6 +959,12 @@ const base = {
   out.totals.games = Number(out.totals.games)||0;
   out.totals.wins  = Number(out.totals.wins)||0;
   out.totals.coins = Number(out.totals.coins)||0;
+  out.totals.radarCoin = Number(out.totals.radarCoin)||0;
+  out.totals.atk = Number(out.totals.atk)||0;
+  out.totals.def = Number(out.totals.def)||0;
+  out.totals.hit = Number(out.totals.hit)||0;
+  out.totals.intel = Number(out.totals.intel)||0;
+  out.totals.survival = Number(out.totals.survival)||0;
 
   return out;
 }
@@ -988,6 +991,15 @@ function pushRecentMatch(item){
     p.totals.games = (Number(p.totals.games)||0) + 1;
     if(place === 1) p.totals.wins = (Number(p.totals.wins)||0) + 1;
     p.totals.coins = (Number(p.totals.coins)||0) + coinsGain;
+
+    // 追加：雷達圖各項分數（用 matchKey 去重累加；每局分數約 0~100）
+    const radar = item?.radar || {};
+    p.totals.radarCoin = (Number(p.totals.radarCoin)||0) + (Number(radar.coin)||0);
+    p.totals.atk       = (Number(p.totals.atk)||0) + (Number(radar.atk)||0);
+    p.totals.def       = (Number(p.totals.def)||0) + (Number(radar.def)||0);
+    p.totals.hit       = (Number(p.totals.hit)||0) + (Number(radar.hit)||0);
+    p.totals.intel     = (Number(p.totals.intel)||0) + (Number(radar.intel)||0);
+    p.totals.survival  = (Number(p.totals.survival)||0) + (Number(radar.survival)||0);
   }
 
   // 2) recent（最多 10 筆；同 matchKey 覆蓋）
@@ -1008,41 +1020,6 @@ try{
 
   saveProfile(p);
 }
-
-
-/**
- * 雷達圖累計：存每場自己的 scoreboard（matchKey 去重，最多 200 筆）
- * 存到 op_profile_v1.radarMatches，雲端同步會帶走。
- * item: { matchKey, ts, metrics:{coinScore,atkScore,defScore,hitScore,intelScore,survivalScore} }
- */
-function pushRadarMatch(item){
-  const p = loadProfile();
-  const mk = String(item?.matchKey || '').trim();
-  if(!mk) return;
-
-  const ts = Number(item?.ts || Date.now());
-  const m = item?.metrics || {};
-  const entry = {
-    matchKey: mk,
-    ts,
-    metrics: {
-      coinScore: Number(m.coinScore||0)||0,
-      atkScore: Number(m.atkScore||0)||0,
-      defScore: Number(m.defScore||0)||0,
-      hitScore: Number(m.hitScore||0)||0,
-      intelScore: Number(m.intelScore||0)||0,
-      survivalScore: Number(m.survivalScore||0)||0
-    }
-  };
-
-  const arr = Array.isArray(p.radarMatches) ? p.radarMatches : [];
-  const next = [entry, ...arr.filter(x => String(x?.matchKey||'') !== mk)]
-    .sort((a,b)=>(Number(b.ts||0)-Number(a.ts||0)))
-    .slice(0,200);
-  p.radarMatches = next;
-  saveProfile(p);
-}
-
 
 const qs = new URLSearchParams(location.search);
 const roomId = qs.get('room') || sessionStorage.getItem('op_room') || '—';
@@ -1515,27 +1492,16 @@ pushRecentMatch({
   ts: endedAt,
   place,
   coinsGain,
+  radar: {
+    coin: Number(myRow?.coinScore ?? 0) || 0,
+    atk: Number(myRow?.atkScore ?? 0) || 0,
+    def: Number(myRow?.defScore ?? 0) || 0,
+    hit: Number(myRow?.hitScore ?? 0) || 0,
+    intel: Number(myRow?.intelScore ?? 0) || 0,
+    survival: Number(myRow?.survivalScore ?? 0) || 0,
+  },
   unlocked: unlockedNow
 });
-
-// ✅ 同步本場 scoreboard（給玩家頁總分雷達圖用）
-try{
-  const myRow2 = ROWS.find(r => Number(r?.id) === Number(myId));
-  if(myRow2){
-    pushRadarMatch({
-      matchKey: `${rid}|${season}|${pid}|${endedAt}`,
-      ts: endedAt,
-      metrics: {
-        coinScore: myRow2.coinScore,
-        atkScore: myRow2.atkScore,
-        defScore: myRow2.defScore,
-        hitScore: myRow2.hitScore,
-        intelScore: myRow2.intelScore,
-        survivalScore: myRow2.survivalScore
-      }
-    });
-  }
-}catch(e){ console.warn(\"[pushRadarMatch failed]\", e); }
 
 // ✅ 寫完就清掉，避免下一局沿用
 try{ sessionStorage.removeItem('op_unlocked_this_match'); }catch(e){}
@@ -1675,21 +1641,6 @@ function mergeLocalAndCloud(localClient, cloudClient){
     .sort((x,y)=>(Number(y?.ts||0)-Number(x?.ts||0)))
     .slice(0,10);
   out.recent = mergedRecent;
-  // radarMatches：matchKey 去重取新 200（用於玩家頁總分雷達圖；由結算頁匯入）
-  const sma = Array.isArray(localClient.radarMatches) ? localClient.radarMatches : [];
-  const smb = Array.isArray(cloudClient.radarMatches) ? cloudClient.radarMatches : [];
-  const seenM = new Set();
-  out.radarMatches = [...smb, ...sma]
-    .filter(x=>{
-      const mk = String(x?.matchKey||'').trim();
-      if(!mk) return false;
-      if(seenM.has(mk)) return false;
-      seenM.add(mk);
-      return true;
-    })
-    .sort((x,y)=>(Number(y?.ts||0)-Number(x?.ts||0)))
-    .slice(0,200);
-
 
   // applied keys：union 取 200（避免刷新重複加總）【turn13file0†L35-L43】
   out._appliedMatchKeys = uniqStr([...(localClient._appliedMatchKeys||[]), ...(cloudClient._appliedMatchKeys||[])])
