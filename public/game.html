@@ -3142,12 +3142,29 @@ function buildTitleBadgeHTML(label, tier){
     </span>
   `;
 }
+
+function getRoomTitleCache(){
+  try{
+    const raw = sessionStorage.getItem('opRoomTitles');
+    if(!raw) return {};
+    const obj = JSON.parse(raw);
+    return (obj && typeof obj === 'object') ? obj : {};
+  }catch(e){ return {}; }
+}
+
 function playerEquippedTitle(p){
   const c = p?.client || {};
   const titles = c.titles || {};
   const label =
     String(titles.equipped ?? c.equippedTitle ?? c.title ?? c.titleLabel ?? '').trim();
-  if(!label) return { label:'', tier:1 };
+  if(!label){
+    const cache = getRoomTitleCache();
+    const hit = cache && cache[String(p?.id)] || cache && cache[p?.id];
+    const clabel = String(hit?.label ?? hit?.title ?? '').trim();
+    if(!clabel) return { label:'', tier:1 };
+    const ctier = normTier(hit?.tier ?? hit?.titleTier ?? 1);
+    return { label: clabel, tier: ctier };
+  }
   const tier = normTier(titles.equippedTier ?? c.equippedTier ?? c.titleTier ?? 1);
   return { label, tier };
 }
