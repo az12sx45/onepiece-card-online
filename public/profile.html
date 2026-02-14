@@ -571,12 +571,11 @@
   background:linear-gradient(90deg, rgba(255,211,106,.22), rgba(255,211,106,.90), rgba(255,211,106,.22));
 }
 .titleMatrixWrap{
-  overflow:auto;
-  -webkit-overflow-scrolling:touch;
+  overflow:visible;
 }
 .titleMatrix{
   width:100%;
-  min-width: 820px; /* 讓 5 欄稱號有足夠寬度，手機會橫向滑 */
+  table-layout:fixed;
   border-collapse:separate;
   border-spacing:0;
 }
@@ -588,24 +587,14 @@
   background:transparent;
 }
 .titleMatrix thead th{
-  position:sticky;
-  top:0;
-  z-index:3;
+  position:static;
+  z-index:auto;
   background:linear-gradient(180deg, rgba(2,6,23,.88), rgba(2,6,23,.62));
-  backdrop-filter: blur(6px);
 }
 .titleMatrix .tierCol{
   width:92px;
-  position:sticky;
-  left:0;
-  z-index:4;
-  background:linear-gradient(180deg, rgba(2,6,23,.88), rgba(2,6,23,.62));
-  backdrop-filter: blur(6px);
-  border-right:1px solid rgba(255,255,255,.08);
-}
-.titleMatrix tbody .tierCol{
-  z-index:2;
   background:rgba(2,6,23,.25);
+  border-right:1px solid rgba(255,255,255,.08);
 }
 .tierPill{
   display:inline-flex;
@@ -898,7 +887,7 @@
             <div style="font-weight:800">稱號圖鑑</div>
             <div class="muted" style="font-size:11px">已解鎖顯示稱號；未解鎖顯示「?????」。點擊已解鎖可佩戴（寫入雲端）</div>
           </div>
-          <div style="margin-top:10px" class="titles" id="titlesWrap"></div>
+          <div class="muted" style="font-size:12px;margin-top:8px">稱號圖鑑已移到頁面最下方（完整展開）。</div>
 
           <div class="divider"></div>
 
@@ -964,6 +953,17 @@
         </div>
       </div>
     </div>
+    <!-- === 稱號圖鑑（完整展開，放在最下方） === -->
+    <div class="card" style="margin-top:14px;">
+      <div class="hd">
+        <div class="h">稱號圖鑑</div>
+        <div class="muted" style="font-size:11px">完整展開（頁面直接往下滑觀看），未解鎖顯示「?????」。點擊已解鎖可佩戴。</div>
+      </div>
+      <div class="bd">
+        <div id="titlesWrap"></div>
+      </div>
+    </div>
+
   </div>
 
   <!-- name modal -->
