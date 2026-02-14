@@ -795,168 +795,7 @@
     }
     @keyframes slide{ 0%{transform:translateX(-120%)} 100%{transform:translateX(260%)} }
     .loadingActions{ margin-top:12px; display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap; }
-  
-/* ===== 展示櫃（稱號圖鑑）===== */
-.cabinetWrap{
-  margin-top: 18px;
-  padding: 22px 18px 18px;
-  border-radius: 22px;
-  position: relative;
-  overflow: hidden;
-  background:
-    radial-gradient(1200px 420px at 50% -40%, rgba(255,255,255,.10), rgba(255,255,255,0) 65%),
-    radial-gradient(900px 520px at 50% 120%, rgba(0,0,0,.55), rgba(0,0,0,0) 62%),
-    linear-gradient(180deg, rgba(18,12,6,.92), rgba(10,7,4,.95));
-  border: 1px solid rgba(255,255,255,.10);
-  box-shadow:
-    0 18px 60px rgba(0,0,0,.55),
-    inset 0 1px 0 rgba(255,255,255,.10);
-}
-.cabinetWrap::before{
-  content:"";
-  position:absolute; inset:10px;
-  border-radius:18px;
-  border: 1px solid rgba(255,210,120,.35);
-  box-shadow:
-    0 0 0 1px rgba(0,0,0,.55),
-    inset 0 0 0 1px rgba(0,0,0,.55);
-  pointer-events:none;
-}
-.cabinetWrap::after{
-  content:"";
-  position:absolute; inset:0;
-  background:
-    linear-gradient(115deg,
-      rgba(255,255,255,.18) 0%,
-      rgba(255,255,255,.06) 18%,
-      rgba(255,255,255,0) 40%,
-      rgba(255,255,255,.04) 62%,
-      rgba(255,255,255,0) 78%
-    );
-  mix-blend-mode: screen;
-  opacity:.55;
-  pointer-events:none;
-}
-.cabinetRivet{
-  position:absolute;
-  width:12px; height:12px; border-radius:999px;
-  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.55), rgba(255,255,255,0) 45%),
-              radial-gradient(circle at 60% 60%, rgba(0,0,0,.65), rgba(0,0,0,0) 55%),
-              linear-gradient(180deg, rgba(255,210,120,.55), rgba(160,110,40,.55));
-  border:1px solid rgba(0,0,0,.55);
-  box-shadow: 0 2px 8px rgba(0,0,0,.45);
-  pointer-events:none;
-}
-.cabinetRivet.tl{ left:16px; top:16px; }
-.cabinetRivet.tr{ right:16px; top:16px; }
-.cabinetRivet.bl{ left:16px; bottom:16px; }
-.cabinetRivet.br{ right:16px; bottom:16px; }
-
-.cabinetHead{
-  display:flex; align-items:flex-start; justify-content:space-between;
-  gap:12px;
-  margin: 0 6px 12px;
-}
-.cabinetTitle{
-  font-weight: 900;
-  letter-spacing: .8px;
-  font-size: 14px;
-  color: rgba(255,235,205,.92);
-  text-shadow: 0 2px 10px rgba(0,0,0,.55);
-}
-.cabinetMeta{
-  display:flex; flex-direction:column; gap:6px; align-items:flex-end;
-}
-.cabinetSub{
-  font-size: 12px;
-  color: rgba(229,231,235,.75);
-  border:1px solid rgba(255,255,255,.12);
-  background: rgba(2,6,23,.25);
-  padding: 4px 10px;
-  border-radius: 999px;
-}
-.cabinetProg{
-  width:min(320px, 56vw);
-  height:10px;
-  border-radius:999px;
-  background: rgba(255,255,255,.08);
-  border:1px solid rgba(255,255,255,.10);
-  overflow:hidden;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
-}
-.cabinetProg > i{
-  display:block; height:100%;
-  width:0%;
-  background: linear-gradient(90deg, rgba(251,191,36,.95), rgba(245,158,11,.85));
-  box-shadow: 0 6px 18px rgba(251,191,36,.25);
-}
-
-.cabinetGrid{
-  display:grid;
-  grid-template-columns: repeat(5, minmax(160px, 1fr));
-  gap: 12px 12px;
-  padding: 10px 8px 6px;
-}
-
-.cabinetSlot{
-  border-radius: 16px;
-  padding: 10px;
-  position: relative;
-  background:
-    radial-gradient(120px 60px at 50% 0%, rgba(255,255,255,.09), rgba(255,255,255,0) 55%),
-    linear-gradient(180deg, rgba(8,10,16,.58), rgba(4,6,10,.72));
-  border: 1px solid rgba(255,255,255,.10);
-  box-shadow:
-    0 8px 22px rgba(0,0,0,.45),
-    inset 0 1px 0 rgba(255,255,255,.08);
-}
-.cabinetSlot::before{
-  content:"";
-  position:absolute;
-  left:10px; right:10px; bottom:8px;
-  height:10px;
-  border-radius: 999px;
-  background: radial-gradient(circle at 50% 50%, rgba(0,0,0,.55), rgba(0,0,0,0) 70%);
-  opacity:.7;
-  pointer-events:none;
-}
-.slotTag{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:8px;
-  margin-bottom:8px;
-  font-size:11px;
-  color: rgba(229,231,235,.72);
-}
-.slotTag .tier{
-  font-weight:900;
-  padding:2px 8px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,.12);
-  background: rgba(2,6,23,.35);
-}
-.slotTag .type{
-  font-weight:800;
-  letter-spacing:.3px;
-}
-.slotEmpty{
-  height:34px;
-  border-radius: 12px;
-  border: 1px dashed rgba(255,255,255,.12);
-  background: rgba(2,6,23,.20);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
-}
-.shelfDivider{
-  grid-column: 1 / -1;
-  height: 12px;
-  margin: -2px 0 2px;
-  background: linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,.52), rgba(0,0,0,0));
-  opacity:.55;
-  border-radius: 999px;
-}
-
-</style>
+  </style>
 
   <!-- Socket.IO -->
   <script src="https://onepiece-card-online.onrender.com/socket.io/socket.io.js"></script>
@@ -1046,7 +885,7 @@
 
           <div class="row" style="justify-content:space-between">
             <div style="font-weight:800">稱號圖鑑</div>
-            <div class="muted" style="font-size:11px">已解鎖顯示稱號；未解鎖為空格（展示櫃空槽）。點擊已解鎖可佩戴（寫入雲端）</div>
+            <div class="muted" style="font-size:11px">已解鎖顯示稱號；未解鎖顯示「?????」。點擊已解鎖可佩戴（寫入雲端）</div>
           </div>
           <div class="muted" style="font-size:12px;margin-top:8px">稱號圖鑑已移到頁面最下方（完整展開）。</div>
 
@@ -1118,7 +957,7 @@
     <div class="card" style="margin-top:14px;">
       <div class="hd">
         <div class="h">稱號圖鑑</div>
-        <div class="muted" style="font-size:11px">完整展開（頁面直接往下滑觀看），未解鎖為空格（展示櫃空槽）。點擊已解鎖可佩戴。</div>
+        <div class="muted" style="font-size:11px">完整展開（頁面直接往下滑觀看），未解鎖顯示「?????」。點擊已解鎖可佩戴。</div>
       </div>
       <div class="bd">
         <div id="titlesWrap"></div>
@@ -1502,7 +1341,147 @@ function applyWallBackground(){
 }
 async function renderWall(){
   const stage = document.getElementById('wallStage');
-  const empty = document.getElemfunction renderTitles(){
+  const empty = document.getElementById('wallEmpty');
+  if(!stage) return;
+
+  applyWallBackground();
+  stage.querySelectorAll('.poster').forEach(n=>n.remove());
+
+  const metasRaw = Array.isArray(__client?.bountyPosters) ? __client.bountyPosters : [];
+  const metas = metasRaw.map(normalizePosterMeta).filter(Boolean).slice(0,4);
+
+  const posters = [];
+  for (const m of metas){
+    const dataUrl = await renderPosterDataUrl(m);
+    if(dataUrl && dataUrl.startsWith('data:image')) posters.push({
+      key: m.key,
+      ts: Number(m.ts)||0,
+      title: String(m.title||'').trim() || (m.name ? `${m.name}｜懸賞令` : '懸賞令'),
+      dataUrl
+    });
+  }
+
+  const slots = [
+    { left: '10%', top: '12%', rot: -8 },
+    { left: '34%', top: '18%', rot: 6 },
+    { left: '58%', top: '10%', rot: -4 },
+    { left: '78%', top: '22%', rot: 9 },
+  ];
+
+  if(empty) empty.style.display = posters.length ? 'none' : 'flex';
+
+  posters.forEach((p, i)=>{
+    const s = slots[i] || slots[0];
+    const wrap = document.createElement('div');
+    wrap.className = 'poster';
+    wrap.style.left = s.left;
+    wrap.style.top = s.top;
+    wrap.style.transform = `rotate(${s.rot}deg)`;
+    wrap.title = p.title ? p.title : (p.ts ? fmtTs(p.ts) : '懸賞令');
+
+    const img = document.createElement('img');
+    img.src = p.dataUrl;
+    img.alt = 'wanted';
+    wrap.appendChild(img);
+
+    const pin = document.createElement('div');
+    pin.className = 'pin';
+    wrap.appendChild(pin);
+
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+    meta.textContent = p.title || (p.ts ? fmtTs(p.ts) : '');
+    wrap.appendChild(meta);
+
+    wrap.addEventListener('click', ()=> openImgModal(p.dataUrl));
+
+    stage.appendChild(wrap);
+  });
+}
+
+function buildWallGrid(pendingId){
+  const grid = document.getElementById('wallGrid');
+  if(!grid) return;
+  grid.innerHTML = '';
+
+  for(let i=1; i<=WALL_COUNT; i++){
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    const isOwned = canUseWall(i);
+    btn.className = 'wallBtn' + (i===pendingId ? ' on' : '') + (isOwned ? '' : ' locked');
+
+    const thumb = document.createElement('div');
+    thumb.className = 'thumb';
+    thumb.style.backgroundImage = `url(${wallUrlById(i)})`;
+    btn.appendChild(thumb);
+
+    const lab = document.createElement('div');
+    lab.className = 'lab';
+    lab.textContent = `#${i}`;
+    btn.appendChild(lab);
+
+    btn.onclick = () => {
+      if(!isOwned){
+        const ok = confirm(`牆面 #${i} 需要先在商店購買才能使用。
+要現在前往商店嗎？`);
+        if(ok) location.href = 'shop.html';
+        return;
+      }
+      pendingId = i;
+      grid.querySelectorAll('.wallBtn').forEach(x=>x.classList.remove('on'));
+      btn.classList.add('on');
+      grid.dataset.pendingId = String(pendingId);
+    };
+
+    grid.appendChild(btn);
+  }
+
+  grid.dataset.pendingId = String(pendingId);
+}
+
+// ===== render main =====
+function renderHeader(){
+  const name = clampStr(__cloudProfile?.name || '未命名玩家', 16) || '未命名玩家';
+  setText('nameBtn', name);
+
+  const img = document.getElementById('avatarImg');
+  let avatar = clamp(Number(__cloudProfile?.avatar)||1, 1, AVATAR_COUNT);
+  // 若頭像屬於付費區(31~40)但未解鎖 → 回退到 1
+  if(avatar>30 && !canUseAvatar(avatar)) avatar = 1;
+  img.src = avatarUrlById(avatar);
+  img.style.display = 'block';
+
+  // name旁稱號
+  const badgeHost = document.getElementById('nameTitleBadge');
+  const eqLabel = String(__client?.titles?.equipped || '').trim();
+  if (eqLabel) {
+    const owned = normalizeOwnedTitles(__client?.titles?.owned || []);
+    const meta = findTitleMetaByLabel(owned, eqLabel);
+    const tier = normTier(__client?.titles?.equippedTier || meta?.tier || 1);
+    badgeHost.innerHTML = buildTitleBadgeHTML(eqLabel, tier);
+    badgeHost.style.display = 'inline-flex';
+  } else {
+    badgeHost.style.display = 'none';
+    badgeHost.innerHTML = '';
+  }
+}
+
+function renderStats(){
+  const totals = __client?.totals || {};
+  const g = Number(totals.games||0)||0;
+  const w = Number(totals.wins||0)||0;
+  const winRate = g>0 ? Math.round((w/g)*100) : 0;
+
+  setText('kGames', String(g));
+  setText('kWins', String(w));
+  setText('kWinRate', `${winRate}%`);
+  setText('kCoins', String(Number(totals.coins||0)||0));
+
+  setText('equippedTitle', (__client?.titles?.equipped ? __client.titles.equipped : '未佩戴稱號'));
+}
+
+
+function renderTitles(){
   const wrap = document.getElementById('titlesWrap');
   wrap.innerHTML = '';
 
@@ -1546,165 +1525,208 @@ async function renderWall(){
       3:'巨人族',
       4:'不死鳥馬可',
       5:'古代種的韌性',
-      6:'不死神 佩德洛'
+      6:'不死神之騎士團'
     }
   };
 
-  const owned = normalizeOwnedTitles(__client?.titles?.owned || []);
-  const equipped = String(__client?.titles?.equipped||'').trim();
-
-  const TYPES = [
-    { key:'atkScore', label:'攻擊' },
-    { key:'hitScore', label:'命中' },
-    { key:'defScore', label:'防禦' },
-    { key:'intelScore', label:'偵查' },
-    { key:'survivalScore', label:'生存' },
+  const CAT_ORDER = [
+    { key:'atkScore', name:'攻擊', code:'ATK' },
+    { key:'hitScore', name:'命中', code:'HIT' },
+    { key:'defScore', name:'防禦', code:'DEF' },
+    { key:'intelScore', name:'偵查', code:'INT' },
+    { key:'survivalScore', name:'生存', code:'SURV' }
   ];
 
-  // === 展示櫃外框 ===
-  const cabinet = document.createElement('div');
-  cabinet.className = 'cabinetWrap';
+  const owned = normalizeOwnedTitles(__client?.titles?.owned || []);
+  const ownedMap = new Map(owned.map(x => [String(x?.label||'').trim(), normTier(x?.tier||1)]).filter(x=>x[0]));
+  const equipped = String(__client?.titles?.equipped||'').trim();
 
-  ['tl','tr','bl','br'].forEach(pos=>{
-    const r = document.createElement('div');
-    r.className = 'cabinetRivet ' + pos;
-    cabinet.appendChild(r);
-  });
+  // ===== 把表攤平成「圖鑑清單」：tier 6->1、每 tier 5 欄 =====
+  const rows = [];
+  for(let tier=6; tier>=1; tier--){
+    const row = { tier, cells: [] };
+    for(const cat of CAT_ORDER){
+      const realLabel = String(TITLE_TABLE?.[cat.key]?.[tier] || '').trim();
+      row.cells.push({ ...cat, tier, label: realLabel });
+    }
+    rows.push(row);
+  }
 
-  // 解鎖數量統計
-  const total = 6 * TYPES.length;
-  let unlocked = 0;
-  for(let tier=1; tier<=6; tier++){
-    for(const t of TYPES){
-      const label = TITLE_TABLE?.[t.key]?.[tier];
-      if(label && findTitleMetaByLabel(owned, label)) unlocked++;
+  // ===== 統計解鎖度 =====
+  let total = 0, unlocked = 0;
+  for(const r of rows){
+    for(const c of r.cells){
+      if(!c.label) continue;
+      total++;
+      if(ownedMap.has(c.label)) unlocked++;
     }
   }
-  const pct = total ? Math.round(unlocked * 100 / total) : 0;
 
-  const head = document.createElement('div');
-  head.className = 'cabinetHead';
-  head.innerHTML = `
-    <div>
-      <div class="cabinetTitle">稱號展示櫃</div>
-      <div class="muted" style="font-size:11px;margin-top:6px;opacity:.9">點擊已解鎖稱號即可佩戴（未解鎖為空槽）。</div>
+  // ===== UI：頂部工具列（只看已解鎖 / 搜尋）=====
+  const root = document.createElement('div');
+  root.className = 'titleCatalog';
+
+  const top = document.createElement('div');
+  top.className = 'titleCatalogTop';
+
+  const left = document.createElement('div');
+  left.className = 'left';
+  left.innerHTML = `
+    <div class="h">稱號圖鑑（T6 → T1）</div>
+    <div class="sub">橫向：攻擊 / 命中 / 防禦 / 偵查 / 生存　｜　縱向：Tier</div>
+  `;
+
+  const right = document.createElement('div');
+  right.className = 'right';
+
+  const btnOnly = document.createElement('button');
+  btnOnly.type = 'button';
+  btnOnly.className = 'tcBtn';
+  btnOnly.textContent = '只看已解鎖';
+
+  const search = document.createElement('input');
+  search.className = 'tcSearch';
+  search.type = 'search';
+  search.placeholder = '搜尋稱號…';
+
+  const meta = document.createElement('div');
+  meta.className = 'tcMeta';
+  meta.innerHTML = `
+    <span>解鎖：</span>
+    <b style="color:#ffd36a">${unlocked}</b>
+    <span>/</span>
+    <span>${total}</span>
+  `;
+
+  const bar = document.createElement('div');
+  bar.className = 'tcBar';
+  const bi = document.createElement('i');
+  const pct = total ? Math.round((unlocked/total)*100) : 0;
+  bi.style.width = pct + '%';
+  bar.appendChild(bi);
+
+  right.appendChild(btnOnly);
+  right.appendChild(search);
+
+  top.appendChild(left);
+  top.appendChild(right);
+
+  root.appendChild(top);
+
+  const metaRow = document.createElement('div');
+  metaRow.className = 'tcHint';
+  metaRow.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+      <div class="tcMeta">${meta.innerHTML}</div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <div class="tcBar">${bar.innerHTML}</div>
+        <div class="muted" style="font-size:11px">${pct}%</div>
+      </div>
     </div>
-    <div class="cabinetMeta">
-      <div class="cabinetSub">${unlocked} / ${total}（${pct}%）</div>
-      <div class="cabinetProg" aria-label="titles progress"><i style="width:${pct}%"></i></div>
+    <div style="margin-top:8px">
+      <b>已解鎖</b>：顯示真實稱號，點擊即可佩戴（寫入雲端）。　
+      <b>未解鎖</b>：顯示「?????」，灰階鎖定。
     </div>
   `;
-  cabinet.appendChild(head);
+  // 重建 bar（上面 innerHTML 只是字串）
+  metaRow.querySelector('.tcBar').innerHTML = '';
+  metaRow.querySelector('.tcBar').appendChild(bar);
 
-  const grid = document.createElement('div');
-  grid.className = 'cabinetGrid';
+  root.appendChild(metaRow);
 
-  // T6 -> T1，每列 5 欄
-  for(let tier=6; tier>=1; tier--){
-    for(const t of TYPES){
-      const label = TITLE_TABLE?.[t.key]?.[tier] || '';
-      const got = label ? findTitleMetaByLabel(owned, label) : null;
+  const wrapTable = document.createElement('div');
+  wrapTable.className = 'titleMatrixWrap';
 
-      const slot = document.createElement('div');
-      slot.className = 'cabinetSlot';
+  const table = document.createElement('table');
+  table.className = 'titleMatrix';
 
-      const tag = document.createElement('div');
-      tag.className = 'slotTag';
-      tag.innerHTML = `<div class="type">${t.label}</div><div class="tier">T${tier}</div>`;
-      slot.appendChild(tag);
+  // ===== thead（左上角空格 + 5 欄主屬性）=====
+  const thead = document.createElement('thead');
+  const trh = document.createElement('tr');
 
-      if(got){
+  const th0 = document.createElement('th');
+  th0.className = 'tierCol';
+  th0.innerHTML = '<span class="muted" style="font-size:11px">Tier</span>';
+  trh.appendChild(th0);
+
+  for(const cat of CAT_ORDER){
+    const th = document.createElement('th');
+    th.innerHTML = `
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px">
+        <div style="font-weight:900;letter-spacing:.3px">${escapeHtml(cat.name)}</div>
+        <div class="muted" style="font-size:10px">${escapeHtml(cat.code)}</div>
+      </div>
+    `;
+    trh.appendChild(th);
+  }
+
+  thead.appendChild(trh);
+  table.appendChild(thead);
+
+  // ===== tbody（6 列：T6 → T1）=====
+  const tbody = document.createElement('tbody');
+
+  function tierPillEl(t){
+    const sp = document.createElement('span');
+    sp.className = 'tierPill t'+t;
+    sp.textContent = 'T' + t;
+    return sp;
+  }
+
+  // 建一份 cell DOM refs，方便做 filter/search
+  const cellRefs = []; // {label, unlocked, el, badgeEl}
+
+  for(const r of rows){
+    const tr = document.createElement('tr');
+
+    const tdTier = document.createElement('td');
+    tdTier.className = 'tierCol';
+    tdTier.appendChild(tierPillEl(r.tier));
+    tr.appendChild(tdTier);
+
+    for(const c of r.cells){
+      const td = document.createElement('td');
+
+      const real = c.label;
+      const isUnlocked = !!real && ownedMap.has(real);
+      const showLabel = isUnlocked ? real : '?????';
+
+      const cell = document.createElement('div');
+      cell.className = 'tcCell';
+
+      const mini = document.createElement('div');
+      mini.className = 'mini';
+      mini.innerHTML = `
+        <span class="k">${escapeHtml(c.name)}</span>
+        <span class="v">${real ? 'T'+c.tier : '-'}</span>
+      `;
+      cell.appendChild(mini);
+
+      if(real){
         const tmp = document.createElement('div');
-        tmp.innerHTML = buildTitleBadgeHTML(got.label, tier).trim();
+        tmp.innerHTML = buildTitleBadgeHTML(showLabel, c.tier).trim();
         const badgeEl = tmp.firstElementChild;
-        if(badgeEl){
-          badgeEl.classList.add('compact','pick');
-          if(equipped === got.label) badgeEl.classList.add('on');
 
+        badgeEl.classList.add('compact');
+
+        if(isUnlocked){
+          badgeEl.classList.add('pick');
+          if(equipped === real) badgeEl.classList.add('on');
+
+          badgeEl.title = `已解鎖｜${c.name} T${c.tier}
+點擊佩戴：${real}`;
           badgeEl.addEventListener('click', async ()=>{
             if(__saving) return;
-
             const next = { ...( __client || defaultClient(__cloudProfile?.name, __cloudProfile?.avatar) ) };
             next.titles = { ...(next.titles||{}) };
             next.titles.owned = owned;
-            next.titles.equipped = got.label;
-            next.titles.equippedTier = tier;
-
+            next.titles.equipped = real;
+            next.titles.equippedTier = c.tier;
             await saveClientToCloud(next, { reason:'equip-title' });
           });
-
-          slot.appendChild(badgeEl);
-        } else {
-          const empty = document.createElement('div');
-          empty.className = 'slotEmpty';
-          slot.appendChild(empty);
-        }
-      } else {
-        // 未解鎖：空槽（不顯示 ?????）
-        const empty = document.createElement('div');
-        empty.className = 'slotEmpty';
-        slot.appendChild(empty);
-      }
-
-      grid.appendChild(slot);
-    }
-
-    if(tier !== 1){
-      const div = document.createElement('div');
-      div.className = 'shelfDivider';
-      grid.appendChild(div);
-    }
-  }
-
-  cabinet.appendChild(grid);
-  wrap.appendChild(cabinet);
-
-  // 表外已解鎖（若有舊稱號不在表中）
-  const inTable = new Set();
-  for(let tier=1; tier<=6; tier++){
-    for(const t of TYPES){
-      const label = TITLE_TABLE?.[t.key]?.[tier];
-      if(label) inTable.add(label);
-    }
-  }
-  const extras = owned.filter(x => x?.label && !inTable.has(x.label));
-  if(extras.length){
-    const box = document.createElement('div');
-    box.style.marginTop = '14px';
-    box.innerHTML = `
-      <div class="muted" style="font-size:12px;margin:10px 6px;">其他（表外已解鎖）</div>
-    `;
-    const row = document.createElement('div');
-    row.style.display = 'flex';
-    row.style.flexWrap = 'wrap';
-    row.style.gap = '8px';
-    row.style.padding = '0 6px 6px';
-
-    for(const meta of extras){
-      const tmp = document.createElement('div');
-      tmp.innerHTML = buildTitleBadgeHTML(meta.label, meta.tier || 1).trim();
-      const badgeEl = tmp.firstElementChild;
-      if(!badgeEl) continue;
-
-      badgeEl.classList.add('compact','pick');
-      if(equipped === meta.label) badgeEl.classList.add('on');
-
-      badgeEl.addEventListener('click', async ()=>{
-        if(__saving) return;
-        const next = { ...( __client || defaultClient(__cloudProfile?.name, __cloudProfile?.avatar) ) };
-        next.titles = { ...(next.titles||{}) };
-        next.titles.owned = owned;
-        next.titles.equipped = meta.label;
-        next.titles.equippedTier = meta.tier || 1;
-        await saveClientToCloud(next, { reason:'equip-title' });
-      });
-
-      row.appendChild(badgeEl);
-    }
-    box.appendChild(row);
-    wrap.appendChild(box);
-  }
-}{c.tier}
+        }else{
+          badgeEl.classList.add('locked');
+          badgeEl.title = `未解鎖｜${c.name} T${c.tier}
 （達成：該局結算此主屬性落在 Tier ${c.tier}）`;
         }
 
