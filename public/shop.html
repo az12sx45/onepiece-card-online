@@ -281,9 +281,9 @@
         </div>
 
         <div class="row" style="gap:8px">
-          <span class="pill" title="雲端金幣（以 stats.client.totals.coins 為準）">
-            🪙 <span class="coins">金幣：<span id="coins">0</span></span>
-          </span>
+<span class="pill" title="雲端金幣（以 stats.client.totals.coins 為準）">
+  <span class="coins">金幣：<span id="coins">0</span></span>
+</span>
           <button class="btn" id="btnBack">← 回個人頁</button>
           <button class="btn ghost" id="btnReload" title="重新從雲端讀取">↻ 重新同步</button>
         </div>
@@ -619,7 +619,7 @@
             <div class="name">${esc(it.name)}</div>
             <div class="desc">${esc(it.desc||'')}</div>
             <div class="metaRow">
-              <div class="price">🪙 ${fmt(it.price)}</div>
+              <div class="price">${fmt(it.price)} 金幣</div>
               <div class="actions">
                 <button class="btn small" data-act="detail">查看</button>
                 <button class="btn small buy" data-act="buy" ${owned || saving || !afford ? 'disabled' : ''}>
