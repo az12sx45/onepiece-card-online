@@ -503,7 +503,65 @@
     tr:hover td{background:rgba(2,6,23,.25)}
     .rank{font-weight:900}
 
-    .titles{display:flex;gap:8px;flex-wrap:wrap}
+    .titles{display:flex;gap:14px;flex-wrap:wrap}
+
+/* 稱號圖鑑 */
+.title-section{
+  width:100%;
+  padding:10px 12px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;
+  background:rgba(255,255,255,.03);
+}
+.title-head{
+  font-weight:900;
+  margin-bottom:10px;
+  color:#e9f0f8;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.title-head::after{
+  content:"";
+  flex:1;
+  height:1px;
+  background:rgba(255,255,255,.08);
+}
+.title-grid{
+  display:grid;
+  gap:10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+@media (max-width: 980px){
+  .title-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px){
+  .title-grid{ grid-template-columns: 1fr; }
+}
+
+.player-title-badge.locked{
+  filter: grayscale(1) brightness(.72);
+  opacity:.75;
+  cursor:not-allowed;
+}
+.player-title-badge.locked .text{
+  letter-spacing:1px;
+}
+
+.tier-tag{
+  position:absolute;
+  top:-8px;
+  left:-8px;
+  font-size:10px;
+  font-weight:900;
+  padding:3px 7px;
+  border-radius:999px;
+  color:#0a0d10;
+  background:rgba(255,211,107,.92);
+  border:1px solid rgba(0,0,0,.25);
+  box-shadow:0 6px 14px rgba(0,0,0,.35);
+}
+
 
     .footnote{font-size:11px;color:var(--muted);line-height:1.5}
     .mono{font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
@@ -742,8 +800,8 @@
           <div class="divider"></div>
 
           <div class="row" style="justify-content:space-between">
-            <div style="font-weight:800">已取得稱號</div>
-            <div class="muted" style="font-size:11px">點擊稱號可設定「佩戴」（會寫入雲端）</div>
+            <div style="font-weight:800">稱號圖鑑</div>
+            <div class="muted" style="font-size:11px">已解鎖顯示稱號；未解鎖顯示「?????」。點擊已解鎖可佩戴（寫入雲端）</div>
           </div>
           <div style="margin-top:10px" class="titles" id="titlesWrap"></div>
 
@@ -1327,12 +1385,186 @@ function renderStats(){
   setText('equippedTitle', (__client?.titles?.equipped ? __client.titles.equipped : '未佩戴稱號'));
 }
 
+
 function renderTitles(){
   const wrap = document.getElementById('titlesWrap');
   wrap.innerHTML = '';
 
+  // 你在結算頁定義的稱號表（主屬性 x Tier 1~6）
+  const TITLE_TABLE = {
+    atkScore: {
+      1:'斬斷鋼鐵的力量',
+      2:'流櫻見習生',
+      3:'霸王色纏繞者',
+      4:'鐵拳',
+      5:'世界最強的男人',
+      6:'世界最強生物'
+    },
+    hitScore: {
+      1:'騙人布橡皮筋',
+      2:'狙擊手',
+      3:'狙擊王',
+      4:'神的制裁',
+      5:'超音速狙擊手',
+      6:'我能打中螞蟻的眉心'
+    },
+    defScore: {
+      1:'六式 鐵塊',
+      2:'武裝色初學者',
+      3:'鋼鐵氣球',
+      4:'鑽石喬茲',
+      5:'露娜利亞族',
+      6:'屏障果實能力者'
+    },
+    intelScore: {
+      1:'航海士見習生',
+      2:'監視電話蟲',
+      3:'見聞色高手',
+      4:'CP9 情報官',
+      5:'CP0 諜報員',
+      6:'世界經濟新聞報社社長'
+    },
+    survivalScore: {
+      1:'騙人布的生存之道',
+      2:'奇蹟 Boy',
+      3:'巨人族',
+      4:'不死鳥馬可',
+      5:'古代種的韌性',
+      6:'不死神之騎士團'
+    }
+  };
+
+  const CAT_ORDER = [
+    { key:'atkScore', name:'攻擊' },
+    { key:'hitScore', name:'命中' },
+    { key:'defScore', name:'防禦' },
+    { key:'intelScore', name:'偵查' },
+    { key:'survivalScore', name:'生存' }
+  ];
+
   const owned = normalizeOwnedTitles(__client?.titles?.owned || []);
-  if (!owned.length){
+  const ownedSet = new Set(owned.map(x => String(x?.label||'').trim()).filter(Boolean));
+  const equipped = String(__client?.titles?.equipped||'').trim();
+
+  // 反查：label -> {catKey, tier}
+  const reverse = new Map();
+  for (const [catKey, tiers] of Object.entries(TITLE_TABLE)){
+    for (let t=1; t<=6; t++){
+      const label = String(tiers?.[t] || '').trim();
+      if(label) reverse.set(label, { catKey, tier:t });
+    }
+  }
+
+  // 產生圖鑑
+  const frag = document.createDocumentFragment();
+
+  for (const cat of CAT_ORDER){
+    const sec = document.createElement('div');
+    sec.className = 'title-section';
+
+    const head = document.createElement('div');
+    head.className = 'title-head';
+    head.textContent = cat.name;
+    sec.appendChild(head);
+
+    const grid = document.createElement('div');
+    grid.className = 'title-grid';
+
+    for (let tier=1; tier<=6; tier++){
+      const label = String(TITLE_TABLE?.[cat.key]?.[tier] || '').trim();
+      if(!label) continue;
+
+      const unlocked = ownedSet.has(label);
+      const showLabel = unlocked ? label : '?????';
+
+      const tmp = document.createElement('div');
+      tmp.innerHTML = buildTitleBadgeHTML(showLabel, tier).trim();
+      const badgeEl = tmp.firstElementChild;
+      if(!badgeEl) continue;
+
+      badgeEl.classList.add('compact');
+      if(unlocked){
+        badgeEl.classList.add('pick');
+        if (equipped === label) badgeEl.classList.add('on');
+
+        badgeEl.addEventListener('click', async ()=>{
+          if(__saving) return;
+          const next = { ...( __client || defaultClient(__cloudProfile?.name, __cloudProfile?.avatar) ) };
+          next.titles = { ...(next.titles||{}) };
+          next.titles.owned = owned; // normalize 後寫回雲端
+          next.titles.equipped = label;
+          next.titles.equippedTier = tier;
+          await saveClientToCloud(next, { reason:'equip-title' });
+        });
+      }else{
+        badgeEl.classList.add('locked');
+        badgeEl.title = '尚未解鎖（結算拿到對應「主屬性 + Tier」才會解鎖）';
+      }
+
+      // 顯示 Tier 小標（方便你確認 tier 對應）
+      const ttag = document.createElement('span');
+      ttag.className = 'tier-tag';
+      ttag.textContent = 'T' + tier;
+      badgeEl.appendChild(ttag);
+
+      grid.appendChild(badgeEl);
+    }
+
+    sec.appendChild(grid);
+    frag.appendChild(sec);
+  }
+
+  // 額外：如果雲端有「不在稱號表內」的舊稱號，也讓它顯示在「其他」
+  const extras = owned
+    .map(x => String(x?.label||'').trim())
+    .filter(label => label && !reverse.has(label));
+
+  if(extras.length){
+    const sec = document.createElement('div');
+    sec.className = 'title-section';
+    const head = document.createElement('div');
+    head.className = 'title-head';
+    head.textContent = '其他';
+    sec.appendChild(head);
+
+    const grid = document.createElement('div');
+    grid.className = 'title-grid';
+
+    for(const label of extras){
+      const meta = owned.find(x => String(x?.label||'').trim() === label) || { tier: 1 };
+      const tier = normTier(meta.tier || 1);
+
+      const tmp = document.createElement('div');
+      tmp.innerHTML = buildTitleBadgeHTML(label, tier).trim();
+      const badgeEl = tmp.firstElementChild;
+      if(!badgeEl) continue;
+
+      badgeEl.classList.add('compact','pick');
+      if (equipped === label) badgeEl.classList.add('on');
+
+      badgeEl.addEventListener('click', async ()=>{
+        if(__saving) return;
+        const next = { ...( __client || defaultClient(__cloudProfile?.name, __cloudProfile?.avatar) ) };
+        next.titles = { ...(next.titles||{}) };
+        next.titles.owned = owned;
+        next.titles.equipped = label;
+        next.titles.equippedTier = tier;
+        await saveClientToCloud(next, { reason:'equip-title' });
+      });
+
+      const ttag = document.createElement('span');
+      ttag.className = 'tier-tag';
+      ttag.textContent = 'T' + tier;
+      badgeEl.appendChild(ttag);
+
+      grid.appendChild(badgeEl);
+    }
+
+    sec.appendChild(grid);
+    frag.appendChild(sec);
+  }
+
+  if(!frag.childNodes.length){
     const span = document.createElement('div');
     span.className = 'muted';
     span.textContent = '尚未取得稱號（打完一季結算後會自動加入）';
@@ -1340,32 +1572,9 @@ function renderTitles(){
     return;
   }
 
-  const equipped = String(__client?.titles?.equipped||'').trim();
-
-  for (const meta of owned){
-    const tmp = document.createElement('div');
-    tmp.innerHTML = buildTitleBadgeHTML(meta.label, meta.tier).trim();
-
-    const badgeEl = tmp.firstElementChild;
-    if(!badgeEl) continue;
-
-    badgeEl.classList.add('compact','pick');
-    if (equipped === meta.label) badgeEl.classList.add('on');
-
-    badgeEl.addEventListener('click', async ()=>{
-      if(__saving) return;
-      const next = { ...( __client || defaultClient(__cloudProfile?.name, __cloudProfile?.avatar) ) };
-      next.titles = { ...(next.titles||{}) };
-      next.titles.owned = owned; // normalize後寫回雲端
-      next.titles.equipped = meta.label;
-      next.titles.equippedTier = meta.tier;
-
-      await saveClientToCloud(next, { reason:'equip-title' });
-    });
-
-    wrap.appendChild(badgeEl);
-  }
+  wrap.appendChild(frag);
 }
+
 
 function renderRecent(){
   const tb = document.getElementById('recentTbody');
@@ -1750,3 +1959,4 @@ boot();
 </script>
 </body>
 </html>
+
