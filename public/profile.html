@@ -180,6 +180,23 @@
     .wallBtn .thumb{ position:absolute; inset:0; background-size:cover; background-position:center; }
     .wallBtn .lab{ position:absolute; left:8px; top:8px; font-size:11px; padding:3px 7px; border-radius:999px; background:rgba(2,6,23,.72); border:1px solid rgba(0,0,0,.35); }
 
+    .wallBtn.locked{ opacity:.55; filter: grayscale(1); position:relative; }
+    .wallBtn.locked::after{
+      content:"🔒";
+      position:absolute;
+      right:8px; bottom:8px;
+      font-size:14px;
+      background:rgba(2,6,23,.72);
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:10px;
+      padding:2px 6px;
+    }
+    .wallBtn.locked:hover{
+      border-color: rgba(255,107,107,.55);
+      box-shadow:0 0 0 3px rgba(255,107,107,.18);
+    }
+
+
     .grid{
       margin-top:14px;
       display:grid;
@@ -827,7 +844,7 @@
       </div>
       <div class="mb">
         <div class="help" style="margin-bottom:10px">
-          使用路徑：<span class="mono">images/avatars/{1..30}.webp</span>（與開始頁一致）。
+          使用路徑：<span class="mono">images/avatars/{1..40}.webp</span>（1~30 免費；31~40 需先在商店購買）。
         </div>
         <div class="avaGrid" id="avaGrid"></div>
         <div class="actions2">
@@ -988,8 +1005,17 @@ function defaultClient(name, avatar){
     recent: [],
     titles: { owned: [], equipped: '', equippedTier: 1 },
     bountyPosters: [],
+    shop: { ownedAvatars: [], ownedWalls: [], ownedItems: [] },
     _appliedMatchKeys: []
   };
+}
+
+function ensureShopState(){
+  if(!__client) return;
+  if(!__client.shop || typeof __client.shop!=='object') __client.shop = { ownedAvatars: [], ownedWalls: [], ownedItems: [] };
+  if(!Array.isArray(__client.shop.ownedAvatars)) __client.shop.ownedAvatars = [];
+  if(!Array.isArray(__client.shop.ownedWalls)) __client.shop.ownedWalls = [];
+  if(!Array.isArray(__client.shop.ownedItems)) __client.shop.ownedItems = [];
 }
 function normalizeOwnedTitles(arr){
   const out = [];
@@ -1155,7 +1181,8 @@ document.addEventListener('keydown', (ev)=>{
 function applyWallBackground(){
   const stage = document.getElementById('wallStage');
   if(!stage) return;
-  const id = clamp(__wallId, 1, WALL_COUNT);
+  let id = clamp(__wallId, 1, WALL_COUNT);
+  if(!canUseWall(id)) id = 1;
   stage.classList.add('has-wall');
   stage.style.setProperty('--wall-url', `url(${wallUrlById(id)})`);
 }
@@ -1227,7 +1254,8 @@ function buildWallGrid(pendingId){
   for(let i=1; i<=WALL_COUNT; i++){
     const btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = 'wallBtn' + (i===pendingId ? ' on' : '');
+    const isOwned = canUseWall(i);
+    btn.className = 'wallBtn' + (i===pendingId ? ' on' : '') + (isOwned ? '' : ' locked');
 
     const thumb = document.createElement('div');
     thumb.className = 'thumb';
@@ -1240,6 +1268,12 @@ function buildWallGrid(pendingId){
     btn.appendChild(lab);
 
     btn.onclick = () => {
+      if(!isOwned){
+        const ok = confirm(`牆面 #${i} 需要先在商店購買才能使用。
+要現在前往商店嗎？`);
+        if(ok) location.href = 'shop.html';
+        return;
+      }
       pendingId = i;
       grid.querySelectorAll('.wallBtn').forEach(x=>x.classList.remove('on'));
       btn.classList.add('on');
@@ -1580,6 +1614,24 @@ function canUseAvatar(id){
   const n = clamp(id, 1, AVATAR_COUNT);
   return getOwnedAvatars().has(n);
 }
+
+function getOwnedWalls(){
+  // 牆面 1~3 free；4~8 需在商店購買
+  const owned = new Set([1,2,3]);
+  ensureShopState();
+  const arr = __client?.shop?.ownedWalls;
+  if(Array.isArray(arr)){
+    for(const n of arr){
+      const k = Number(n);
+      if(Number.isFinite(k)) owned.add(k);
+    }
+  }
+  return owned;
+}
+function canUseWall(id){
+  const n = clamp(id, 1, WALL_COUNT);
+  return getOwnedWalls().has(n);
+}
 function buildAvatarGrid(){
   const grid = document.getElementById('avaGrid');
   grid.innerHTML = '';
@@ -1603,7 +1655,7 @@ function buildAvatarGrid(){
       if(!isOwned){
         const ok = confirm(`頭像 #${i} 需要先在商店購買才能使用。
 要現在前往商店嗎？`);
-        if(ok) location.href = 'shop_v3.html';
+        if(ok) location.href = 'shop.html';
         return;
       }
       pendingAvatar = i;
@@ -1666,6 +1718,11 @@ document.getElementById('wallSave')?.addEventListener('click', async ()=>{
   if(__saving) return;
   const grid = document.getElementById('wallGrid');
   const pendingId = clamp(Number(grid?.dataset?.pendingId)||1, 1, WALL_COUNT);
+  if(!canUseWall(pendingId)){
+    const ok = confirm(`牆面 #${pendingId} 尚未購買，無法套用。\n要現在前往商店嗎？`);
+    if(ok) location.href = 'shop.html';
+    return;
+  }
   __wallId = pendingId;
 
   // 只更新 wall.id（仍寫回雲端）
@@ -1676,7 +1733,7 @@ document.getElementById('wallSave')?.addEventListener('click', async ()=>{
     stats: {
       ...(__cloudProfile?.stats || {}),
       client: __client || defaultClient(__cloudProfile?.name, __cloudProfile?.avatar),
-      wall: { id: __wallId }
+      wall: { id: clamp(__wallId, 1, WALL_COUNT) }
     }
   };
   const ok = await cloudUpdate(__secret, patch);
