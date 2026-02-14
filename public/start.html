@@ -143,6 +143,34 @@
       .rulesNavBtn{ font-size: 18px; padding: 14px 18px; }
       .rulesHintLine{ font-size: 15px; }
     }
+
+    /* === Player Title Badge (Lobby) === */
+    .player-title-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:2px 8px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.18);
+      background:rgba(0,0,0,0.28);
+      font-size:12px;
+      line-height:1.4;
+      white-space:nowrap;
+    }
+    .player-title-badge .text{ opacity:.95; }
+    .player-title-badge::before{
+      content:"🏷️";
+      font-size:12px;
+      opacity:.9;
+    }
+
+    /* tier 顏色（你想更華麗我再幫你加光暈/動效） */
+    .player-title-badge.tier-1{ border-color: rgba(180,180,180,.35); }
+    .player-title-badge.tier-2{ border-color: rgba(120,200,255,.45); }
+    .player-title-badge.tier-3{ border-color: rgba(255,184,77,.55); }
+    .player-title-badge.tier-4{ border-color: rgba(255,120,200,.55); }
+    .player-title-badge.tier-5{ border-color: rgba(255,215,90,.75); box-shadow: 0 0 0 2px rgba(255,215,90,.12); }
+
   </style>
 </head>
 
@@ -292,13 +320,23 @@
       const avatar = Math.min(30, Math.max(1, avatarNum));
       const avatarUrl = `images/avatars/${avatar}.webp`;
 
+      const client = (cloud?.stats?.client && typeof cloud.stats.client === 'object')
+        ? cloud.stats.client
+        : null;
+
+      const equippedTitle = String(client?.titles?.equipped || '').trim();
+      const equippedTier  = Number(client?.titles?.equippedTier || 1) || 1;
+
       return {
         playerName: name,
         playerAvatar: avatar,
         avatarUrl,
-        // 保留雲端 client（之後你若要在 start 頁顯示幣/稱號也可用）
-        client: (cloud?.stats?.client && typeof cloud.stats.client === 'object') ? cloud.stats.client : null,
-        wall: cloud?.stats?.wall || null
+        client,
+        wall: cloud?.stats?.wall || null,
+
+        // ✅ 新增：等待室顯示用
+        equippedTitle,
+        equippedTier
       };
     }
 
@@ -786,6 +824,11 @@
           roomId: id,
           displayName: profile.playerName,
           avatar: profile.playerAvatar,
+
+          // ✅ 新增：稱號（server 若有存進 lobby，就能讓其他人也看到）
+          title: profile.equippedTitle || "",
+          titleTier: profile.equippedTier || 1,
+
           secret: __lobby.me.secret,
           cpuCount
         });
@@ -805,6 +848,10 @@
           roomId: code,
           displayName: profile.playerName,
           avatar: profile.playerAvatar,
+
+          title: profile.equippedTitle || "",
+          titleTier: profile.equippedTier || 1,
+
           secret: __lobby.me.secret,
         });
 
@@ -904,7 +951,15 @@
       const players = lobby?.players||[];
       function pidOf(p){ return p.playerId ?? p.pid ?? p.id; }
       function nameOf(p){ return p.displayName ?? p.name ?? 'P'; }
-      function avatarOf(p){ return p.avatar ?? 1; }
+      function avatarOf\(p\)\{ return p\.avatar \?\? 1; \}
+
+      function titleOf(p){
+        return String(p?.title ?? p?.equippedTitle ?? p?.equipped ?? "").trim();
+      }
+      function titleTierOf(p){
+        const n = Number(p?.titleTier ?? p?.equippedTier ?? 1) || 1;
+        return Math.min(5, Math.max(1, n));
+      }
 
       const cpuCount = lobby?.cpuCount ?? 0;
       const amHost = lobby && (lobby.host === mePid);
@@ -994,7 +1049,22 @@
                       <div className="flex items-center gap-3">
                         <div className={"avatar "+(isHost?"is-active":"")}><img src={avatarUrl} alt=""/></div>
                         <div>
-                          <div className="font-semibold leading-tight">{nameOf(p)}</div>
+                          <div className="font-semibold leading-tight flex flex-wrap items-center gap-2">
+                          <span>{nameOf(p)}</span>
+
+                          {/* ✅ 若 lobby 玩家資料有 title 就顯示；若是自己但 lobby 沒帶到，就用雲端 profile 的 equippedTitle 顯示 */}
+                          {(() => {
+                            const isMe = pidOf(p) === mePid;
+                            const tt = titleOf(p) || (isMe ? (profile?.equippedTitle || "") : "");
+                            if (!tt) return null;
+                            const tier = titleTierOf(p) || (isMe ? (profile?.equippedTier || 1) : 1);
+                            return (
+                              <span className={`player-title-badge tier-${tier}`}>
+                                <span className="text">{tt}</span>
+                              </span>
+                            );
+                          })()}
+                        </div>
                           <div className="text-xs text-neutral-400 flex items-center gap-2">
                             {isHost
                               ? <span className="px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-200 border border-amber-400/30">{t("ui.host")}</span>
