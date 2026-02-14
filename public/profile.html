@@ -625,6 +625,51 @@
 .slot.clickable:hover{ outline:2px solid rgba(255,211,106,.22); outline-offset:2px; }
 
 
+
+    /* === 總分雷達圖（個人頁） === */
+    .radarWrap{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns: 320px 1fr;
+      gap:12px;
+      align-items:center;
+    }
+    @media (max-width: 700px){
+      .radarWrap{ grid-template-columns:1fr; }
+    }
+    .radarCanvasBox{
+      border:1px solid rgba(35,52,85,.7);
+      background:rgba(11,22,45,.55);
+      border-radius:14px;
+      padding:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .radarNote{
+      border:1px solid rgba(35,52,85,.65);
+      background:rgba(2,6,23,.28);
+      border-radius:14px;
+      padding:10px 12px;
+      font-size:12px;
+      color:rgba(229,231,235,.9);
+    }
+    .radarNote .muted{ color: var(--muted); }
+    .radarMini{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:8px;
+      font-size:12px;
+    }
+    .radarMini .chip{
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(35,52,85,.75);
+      background:rgba(11,22,45,.45);
+    }
+
+
   </style>
 <script src="https://onepiece-card-online.onrender.com/socket.io/socket.io.js"></script>
 </head>
@@ -712,18 +757,21 @@
             </div>
           </div>
 
-          
-          <div class="divider"></div>
+          <div class="radarWrap">
+            <div class="radarCanvasBox">
+              <canvas id="totalRadar" width="300" height="300" aria-label="總分雷達圖"></canvas>
+            </div>
+            <div class="radarNote">
+              <div style="font-weight:900;letter-spacing:.3px">總分雷達圖</div>
+              <div class="muted" style="font-size:11px;margin-top:4px">
+                由「結算頁雷達圖」的各項分數累積而來，顯示的是每局平均（0~100）。
+              </div>
+              <div class="radarMini" id="radarMini"></div>
+            </div>
+          </div>
 
-          <div class="row" style="justify-content:space-between">
-            <div style="font-weight:800">總分雷達圖</div>
-            <div class="muted" style="font-size:11px">累計所有結算（雲端同步）</div>
-          </div>
-          <div style="margin-top:10px;display:flex;justify-content:center">
-            <canvas id="totalRadar" width="600" height="520" style="max-width:100%;height:auto;"></canvas>
-          </div>
-          <div class="muted" id="totalRadarHint" style="margin-top:6px;font-size:11px;text-align:center"></div>
-<div class="divider"></div>
+
+          <div class="divider"></div>
 
           <div class="row" style="justify-content:space-between">
             <div style="font-weight:800">已取得稱號</div>
@@ -983,21 +1031,6 @@ function mergeLocalAndCloud(localClient, cloudClient){
     .sort((x,y)=>(Number(y?.ts||0)-Number(x?.ts||0)))
     .slice(0,10);
   out.recent = mergedRecent;
-  // radarMatches：matchKey 去重取新 200（用於玩家頁總分雷達圖；由結算頁匯入）
-  const sma = Array.isArray(localClient.radarMatches) ? localClient.radarMatches : [];
-  const smb = Array.isArray(cloudClient.radarMatches) ? cloudClient.radarMatches : [];
-  const seenM = new Set();
-  out.radarMatches = [...smb, ...sma]
-    .filter(x=>{
-      const mk = String(x?.matchKey||'').trim();
-      if(!mk) return false;
-      if(seenM.has(mk)) return false;
-      seenM.add(mk);
-      return true;
-    })
-    .sort((x,y)=>(Number(y?.ts||0)-Number(x?.ts||0)))
-    .slice(0,200);
-
 
   // applied keys：union 取 200（避免刷新重複加總）【turn13file0†L35-L43】
   out._appliedMatchKeys = uniqStr([...(localClient._appliedMatchKeys||[]), ...(cloudClient._appliedMatchKeys||[])])
@@ -1462,7 +1495,7 @@ function defaultProfile(){
     createdAt: nowTs(),
     lastSeenAt: nowTs(),
     player: { name:'未命名玩家', avatar:1 }, // 只存 id，圖片用路徑推導
-    totals: { games: 0, wins: 0, coins: 0, atk: 0, def: 0, hit: 0, intel: 0, survival: 0 },
+    totals: { games: 0, wins: 0, coins: 0, radarCoin: 0, atk: 0, def: 0, hit: 0, intel: 0, survival: 0 },
     deluxeUnlocked: [],
     recent: [],
     titles: { owned: [], equipped: '', equippedTier: 1 },
@@ -1494,8 +1527,6 @@ function loadProfile(){
   out.titles.equipped = String(out.titles.equipped||'').trim();
   out.titles.equippedTier = normTier(out.titles.equippedTier || (findTitleMetaByLabel(out.titles.owned, out.titles.equipped)?.tier) || 1);
   out.recent = Array.isArray(out.recent) ? out.recent.slice(0, 10) : [];
-
-  out.radarMatches = Array.isArray(out.radarMatches) ? out.radarMatches.slice(0, 200) : [];
 
   // 用於避免結算頁重複累加 totals 的去重 key（matchKey）
   out._appliedMatchKeys = Array.isArray(out._appliedMatchKeys) ? out._appliedMatchKeys : [];
@@ -1539,160 +1570,120 @@ function saveStartProfile(name, avatarId){
 }
 
 
-// ===== 總分雷達圖（玩家頁）=====
-// 資料來源：op_profile_v1.radarMatches = [{matchKey, ts, metrics:{coinScore,atkScore,defScore,hitScore,intelScore,survivalScore}}...]
-const RADAR_AXES = [
-  { key:'coinScore', title:'金幣' },
-  { key:'atkScore', title:'攻擊' },
-  { key:'defScore', title:'防禦' },
-  { key:'hitScore', title:'命中' },
-  { key:'intelScore', title:'偵查' },
-  { key:'survivalScore', title:'生存' }
-];
+// === Radar utils (總分雷達圖) ===
+function clamp(n,min,max){ n=Number(n)||0; return Math.max(min, Math.min(max, n)); }
 
-function buildRadarCapsFromMatches(matches){
-  const caps = {};
-  for(const a of RADAR_AXES){
-    const maxVal = Math.max(0, ...matches.map(m=>Number(m?.metrics?.[a.key]||0)));
-    caps[a.key] = Math.max(10, maxVal + 10);
-  }
-  return caps;
+function computeAvgRadar(profile){
+  const g = Number(profile?.totals?.games||0)||0;
+  const denom = g>0 ? g : 1;
+  const vals = {
+    coin: clamp((Number(profile?.totals?.radarCoin||0)||0) / denom, 0, 100),
+    atk:  clamp((Number(profile?.totals?.atk||0)||0) / denom, 0, 100),
+    def:  clamp((Number(profile?.totals?.def||0)||0) / denom, 0, 100),
+    hit:  clamp((Number(profile?.totals?.hit||0)||0) / denom, 0, 100),
+    intel:clamp((Number(profile?.totals?.intel||0)||0) / denom, 0, 100),
+    survival: clamp((Number(profile?.totals?.survival||0)||0) / denom, 0, 100),
+  };
+  return vals;
 }
 
-function radarAggFromMatches(matches){
-  const out = { count:0, avg:{}, caps:{} };
-  const list = Array.isArray(matches) ? matches : [];
-  if(!list.length) return out;
-  out.count = list.length;
+function drawRadarCanvas(canvas, values){
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  if(!ctx) return;
 
-  const sums = {};
-  for(const a of RADAR_AXES) sums[a.key] = 0;
-
-  for(const m of list){
-    for(const a of RADAR_AXES){
-      sums[a.key] += (Number(m?.metrics?.[a.key]||0) || 0);
-    }
-  }
-  for(const a of RADAR_AXES){
-    out.avg[a.key] = Math.round((sums[a.key] / out.count) * 10) / 10; // 取 1 位小數
-  }
-  out.caps = buildRadarCapsFromMatches(list);
-  return out;
-}
-
-function polar(cx, cy, radius, rad){ return [cx + radius*Math.cos(rad), cy + radius*Math.sin(rad)]; }
-function drawPoly(ctx, points, fillStyle, strokeStyle){
-  if(!points?.length) return;
-  ctx.beginPath();
-  ctx.moveTo(points[0][0], points[0][1]);
-  for(let i=1;i<points.length;i++) ctx.lineTo(points[i][0], points[i][1]);
-  ctx.closePath();
-  if(fillStyle){ ctx.fillStyle = fillStyle; ctx.fill(); }
-  if(strokeStyle){ ctx.strokeStyle = strokeStyle; ctx.lineWidth = 2; ctx.stroke(); }
-}
-
-function renderTotalRadar(profile){
-  const cvs = document.getElementById('totalRadar');
-  const hint = document.getElementById('totalRadarHint');
-  if(!cvs) return;
-  const ctx = cvs.getContext('2d');
-  const W = cvs.width, H = cvs.height;
+  const W = canvas.width, H = canvas.height;
   ctx.clearRect(0,0,W,H);
 
-  const matches = Array.isArray(profile?.radarMatches) ? profile.radarMatches : [];
-  if(!matches.length){
-    if(hint) hint.textContent = '尚無雷達圖資料（打一場結算後會自動累計）。';
-    // 畫一個空框
-    ctx.save();
-    ctx.globalAlpha = 0.75;
-    ctx.font = '14px system-ui,-apple-system,Segoe UI,Roboto,Noto Sans TC,sans-serif';
-    ctx.fillStyle = 'rgba(229,231,235,.65)';
-    ctx.textAlign = 'center';
-    ctx.fillText('No Data', W/2, H/2);
-    ctx.restore();
-    return;
-  }
+  const cx = W/2, cy = H/2;
+  const r = Math.min(W,H) * 0.38;
+  const labels = ['金幣','攻擊','防禦','命中','智謀','生存'];
+  const keys   = ['coin','atk','def','hit','intel','survival'];
+  const N = keys.length;
 
-  const agg = radarAggFromMatches(matches);
-  if(hint) hint.textContent = `已累計 ${agg.count} 場（顯示各項平均分）。`;
-
-  const cx = W/2, cy = H/2, R = Math.min(W,H)*0.34;
-  const axes = RADAR_AXES.map(a=>a.key);
-  const labels = RADAR_AXES.map(a=>a.title);
-
-  // 底層蛛網 + 軸線 + 標籤
+  // bg
   ctx.save();
-  ctx.globalAlpha = 0.85;
-  const rings = 5;
-  for(let r=1;r<=rings;r++){
-    const rr = (R * r) / rings;
-    const pts = axes.map((_,i)=>{
-      const rad = -Math.PI/2 + i*(2*Math.PI/axes.length);
-      return polar(cx, cy, rr, rad);
-    });
-    drawPoly(ctx, pts, null, 'rgba(255,255,255,.10)');
-  }
-  ctx.font = '12px system-ui,-apple-system,Segoe UI,Roboto,Noto Sans TC,sans-serif';
-  ctx.fillStyle = 'rgba(233,240,248,.90)';
-  ctx.strokeStyle = 'rgba(255,255,255,.10)';
-  for(let i=0;i<axes.length;i++){
-    const rad = -Math.PI/2 + i*(2*Math.PI/axes.length);
-    const [x,y] = polar(cx, cy, R, rad);
-    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(x,y); ctx.stroke();
+  ctx.translate(cx, cy);
 
-    const [lx,ly] = polar(cx, cy, R+22, rad);
-    ctx.textAlign = (Math.cos(rad)>0.35) ? 'left' : (Math.cos(rad)<-0.35 ? 'right':'center');
-    ctx.textBaseline = (Math.sin(rad)>0.35) ? 'top' : (Math.sin(rad)<-0.35 ? 'bottom':'middle');
+  // grid rings
+  ctx.strokeStyle = 'rgba(255,255,255,.14)';
+  ctx.lineWidth = 1;
+  for(let k=1;k<=4;k++){
+    const rr = r*(k/4);
+    ctx.beginPath();
+    for(let i=0;i<N;i++){
+      const a = (Math.PI*2*i/N) - Math.PI/2;
+      const x = Math.cos(a)*rr;
+      const y = Math.sin(a)*rr;
+      if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+    ctx.stroke();
+  }
+
+  // axes
+  ctx.strokeStyle = 'rgba(255,255,255,.18)';
+  for(let i=0;i<N;i++){
+    const a = (Math.PI*2*i/N) - Math.PI/2;
+    ctx.beginPath();
+    ctx.moveTo(0,0);
+    ctx.lineTo(Math.cos(a)*r, Math.sin(a)*r);
+    ctx.stroke();
+  }
+
+  // labels
+  ctx.fillStyle = 'rgba(229,231,235,.92)';
+  ctx.font = '12px ui-sans-serif,system-ui';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  for(let i=0;i<N;i++){
+    const a = (Math.PI*2*i/N) - Math.PI/2;
+    const lx = Math.cos(a)*(r*1.18);
+    const ly = Math.sin(a)*(r*1.18);
     ctx.fillText(labels[i], lx, ly);
   }
-  ctx.restore();
 
-  // 平均值多邊形
-  const pts = axes.map((key,i)=>{
-    const val = Math.max(0, Number(agg.avg[key]||0));
-    const cap = Math.max(1, Number(agg.caps[key]||10));
-    const ratio = Math.min(1, val / cap);
-    const rad = -Math.PI/2 + i*(2*Math.PI/axes.length);
-    return { rad, val, xy: polar(cx, cy, R*ratio, rad) };
-  });
-
-  // fill + stroke
-  ctx.save();
-  ctx.fillStyle = 'rgba(251,191,36,.18)';   // gold-ish
-  ctx.strokeStyle = 'rgba(251,191,36,.92)';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(pts[0].xy[0], pts[0].xy[1]);
-  for(let i=1;i<pts.length;i++) ctx.lineTo(pts[i].xy[0], pts[i].xy[1]);
-  ctx.closePath();
-  ctx.fill(); ctx.stroke();
-  ctx.restore();
-
-  // 點 + 數字
-  ctx.save();
-  ctx.font = '12px system-ui,-apple-system,Segoe UI,Roboto,Noto Sans TC,sans-serif';
-  for(const p of pts){
-    const [x,y] = p.xy;
-    ctx.beginPath();
-    ctx.arc(x,y,3,0,Math.PI*2);
-    ctx.fillStyle = 'rgba(251,191,36,.95)';
-    ctx.fill();
-
-    const [tx,ty] = polar(cx, cy, Math.hypot(x-cx, y-cy)+14, p.rad);
-    ctx.textAlign = (Math.cos(p.rad)>0.35) ? 'left' : (Math.cos(p.rad)<-0.35 ? 'right':'center');
-    ctx.textBaseline = (Math.sin(p.rad)>0.35) ? 'top' : (Math.sin(p.rad)<-0.35 ? 'bottom':'middle');
-    const label = String(p.val);
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = 'rgba(0,0,0,.55)';
-    ctx.strokeText(label, tx, ty);
-    ctx.fillStyle = 'rgba(245,248,252,.98)';
-    ctx.fillText(label, tx, ty);
+  // data polygon
+  const pts = [];
+  for(let i=0;i<N;i++){
+    const key = keys[i];
+    const v = clamp(values?.[key] ?? 0, 0, 100) / 100;
+    const a = (Math.PI*2*i/N) - Math.PI/2;
+    pts.push([Math.cos(a)*r*v, Math.sin(a)*r*v]);
   }
-  ctx.restore();
 
-  // 中心點
-  ctx.beginPath(); ctx.arc(cx,cy,3,0,Math.PI*2);
-  ctx.fillStyle='rgba(255,255,255,.55)'; ctx.fill();
+  ctx.beginPath();
+  pts.forEach((p,i)=>{ if(i===0) ctx.moveTo(p[0],p[1]); else ctx.lineTo(p[0],p[1]); });
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(251,191,36,.20)';
+  ctx.strokeStyle = 'rgba(251,191,36,.75)';
+  ctx.lineWidth = 2;
+  ctx.fill();
+  ctx.stroke();
+
+  // points
+  ctx.fillStyle = 'rgba(251,191,36,.95)';
+  for(const [x,y] of pts){
+    ctx.beginPath();
+    ctx.arc(x,y,3.2,0,Math.PI*2);
+    ctx.fill();
+  }
+
+  ctx.restore();
+}
+
+function renderRadarMini(values){
+  const host = document.getElementById('radarMini');
+  if(!host) return;
+  const items = [
+    ['金幣', values.coin],
+    ['攻擊', values.atk],
+    ['防禦', values.def],
+    ['命中', values.hit],
+    ['智謀', values.intel],
+    ['生存', values.survival],
+  ];
+  host.innerHTML = items.map(([k,v])=>`<span class="chip">${k} ${Math.round(v)}</span>`).join('');
 }
 
 
@@ -1719,15 +1710,13 @@ function render(profile){
   setText('kWinRate', `${winRate}%`);
   setText('kCoins', String(profile.totals.coins || 0));
 
+  // Radar (每局平均)
+  const avg = computeAvgRadar(profile);
+  drawRadarCanvas(document.getElementById('totalRadar'), avg);
+  renderRadarMini(avg);
+
+
   setText('equippedTitle', profile.titles.equipped ? profile.titles.equipped : '未佩戴稱號');
-
-  // === 總分雷達圖（累計所有結算匯入的 scoreboard）===
-  try{
-    renderTotalRadar(profile);
-  }catch(e){
-    console.warn('[totalRadar] render failed', e);
-  }
-
 // 顯示稱號在玩家名稱旁（套用結算頁同款稱號框）
   const badgeHost = document.getElementById('nameTitleBadge');
   const eqLabel = String(profile.titles?.equipped || '').trim();
