@@ -497,8 +497,26 @@
           const arr = Array.isArray(__lobby.snapshot?.players) ? __lobby.snapshot.players : [];
           arr.forEach(p=>{
             const pid = (p && (p.playerId ?? p.pid ?? p.id));
-            const label = String(p?.title ?? p?.equippedTitle ?? p?.equipped ?? '').trim();
-            const tier0 = Number(p?.titleTier ?? p?.equippedTier ?? 1) || 1;
+            const c = p?.client || {};
+            const titles = c?.titles || {};
+            const label = String(
+              p?.title ??
+              p?.equippedTitle ??
+              p?.equipped ??
+              titles?.equipped ??
+              c?.equippedTitle ??
+              c?.title ??
+              c?.titleLabel ??
+              ''
+            ).trim();
+            const tier0 = Number(
+              p?.titleTier ??
+              p?.equippedTier ??
+              titles?.equippedTier ??
+              c?.equippedTier ??
+              c?.titleTier ??
+              1
+            ) || 1;
             const tier = Math.min(6, Math.max(1, tier0));
             if (pid != null && label) map[String(pid)] = { label, tier };
           });
@@ -1166,14 +1184,36 @@
       function nameOf(p){ return p.displayName ?? p.name ?? 'P'; }
       function avatarOf(p){ return p.avatar ?? 1; }
 
-      // ✅ 新增：稱號取值（lobby 若有 title 就用；自己沒有的話 fallback 用雲端 equippedTitle）
+      // ✅ 稱號取值（等待室快照優先，其次從玩家 client.titles / client.equippedTitle 取）
       function titleOf(p){
-        return String(p?.title ?? p?.equippedTitle ?? p?.equipped ?? "").trim();
+        // lobby snapshot 可能直接帶在 p.title / p.equippedTitle，也可能在 p.client.titles.equipped
+        const c = p?.client || {};
+        const titles = c?.titles || {};
+        return String(
+          p?.title ??
+          p?.equippedTitle ??
+          p?.equipped ??
+          titles?.equipped ??
+          c?.equippedTitle ??
+          c?.title ??
+          c?.titleLabel ??
+          ""
+        ).trim();
       }
-function titleTierOf(p){
-  const n = Number(p?.titleTier ?? p?.equippedTier ?? 1) || 1;
-  return Math.min(6, Math.max(1, n));
-}
+      function titleTierOf(p){
+        const c = p?.client || {};
+        const titles = c?.titles || {};
+        const n = Number(
+          p?.titleTier ??
+          p?.equippedTier ??
+          titles?.equippedTier ??
+          c?.equippedTier ??
+          c?.titleTier ??
+          1
+        ) || 1;
+        return Math.min(6, Math.max(1, n));
+      }
+
 
 
       const cpuCount = lobby?.cpuCount ?? 0;
