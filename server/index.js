@@ -97,14 +97,19 @@ const payload = {
   roomId,
   host: room.host,
   cpuCount: room.cpuCount || 0,   // ← 新增：房間有幾個 CPU
-  players: st.players
-    .filter(p => joinedIds.has(p.id))
-    .map(p => ({
-      id: p.id,
-      name: p.client?.displayName || p.displayName || `P${p.id+1}`,
-      avatar: p.client?.avatar ?? p.avatar ?? 1,
-      ready: !!ready[p.id],
-    }))
+players: st.players
+  .filter(p => joinedIds.has(p.id))
+  .map(p => ({
+    id: p.id,
+    name: p.client?.displayName || p.displayName || `P${p.id+1}`,
+    avatar: p.client?.avatar ?? p.avatar ?? 1,
+    ready: !!ready[p.id],
+
+    // ✅ 新增：稱號（等待室互相可見）
+    title: (p.client?.title ?? p.title ?? ""),
+    titleTier: (p.client?.titleTier ?? p.titleTier ?? 1),
+  }))
+
 };
 
 
@@ -1007,13 +1012,17 @@ socket.on("PROFILE_UPDATE", async ({ secret, patch }, cb) => {
 
 socket.on("JOIN_ROOM", (payload = {}) => {
   const {
-    roomId,
-    displayName = "",
-    avatar = 1,
-    secret = "",
-    pid,
-    cpuCount,        // ← 接收從前端傳來的 CPU 數量
-  } = payload;
+  roomId,
+  displayName = "",
+  avatar = 1,
+  secret = "",
+  pid,
+  cpuCount,        // ← 接收從前端傳來的 CPU 數量
+
+  // ✅ 新增：稱號（等待室顯示）
+  title = "",
+  titleTier = 1,
+} = payload;
 
     if (!roomId) return;
 
@@ -1087,11 +1096,21 @@ if (myId == null) {
     if (!sec) sec = Math.random().toString(36).slice(2);
 
     // 寫入玩家 meta（state 端），順便記住 secret
-    const p = st.players[myId];
-    p.client = { displayName, avatar, pid };
-    p.displayName = displayName;
-    p.avatar = avatar;
-    p.secret = sec;             // ← 關鍵：把 secret 綁到這個玩家
+const p = st.players[myId];
+
+// ✅ 稱號防呆（避免太長/亂值）
+const safeTitle = String(title || "").trim().slice(0, 18);
+const safeTier  = Math.max(1, Math.min(5, Number(titleTier || 1) || 1));
+
+p.client = { displayName, avatar, pid, title: safeTitle, titleTier: safeTier };
+p.displayName = displayName;
+p.avatar = avatar;
+p.secret = sec;
+
+// ✅ 也存一份在 player 本體上（你 broadcastLobby 用這份取最快）
+p.title = safeTitle;
+p.titleTier = safeTier;
+
 
     // 第一位為房主
     if (room.host == null) room.host = myId;
@@ -1150,13 +1169,24 @@ if (myId == null) {
 
       // ① 以「socket 的加入順序」作為座位順序；同時帶出名稱/頭像/secret（真人）
       const entries = Array.from(room.sockets.entries()); // [ [sid, meta], ... ]
-      const joined = entries.map(([sid, m]) => ({
-        sid,
-        oldId: m.playerId,
-        name: m.displayName || `P${m.playerId + 1}`,
-        avatar: m.avatar || 1,
-        secret: m.secret,
-      }));
+const joined = entries.map(([sid, m]) => {
+  const oldP = room.state?.players?.[m.playerId];
+  const safeTitle = String(oldP?.client?.title ?? oldP?.title ?? "").trim().slice(0, 18);
+  const safeTier  = Math.max(1, Math.min(5, Number(oldP?.client?.titleTier ?? oldP?.titleTier ?? 1) || 1));
+
+  return {
+    sid,
+    oldId: m.playerId,
+    name: m.displayName || `P${m.playerId + 1}`,
+    avatar: m.avatar || 1,
+    secret: m.secret,
+
+    // ✅ 新增：稱號
+    title: safeTitle,
+    titleTier: safeTier,
+  };
+});
+
 
       const nHuman = joined.length;       // 真人數
       const cpu = room.cpuCount || 0;     // 等待室設定的 CPU 數
@@ -1221,11 +1251,18 @@ for (let i = 0; i < seatPool.length; i++) {
     const j = seat.data;
 
     // 真人：寫入名稱 / 頭像 / secret
-    p.client = {
-      displayName: j.name,
-      avatar: j.avatar,
-      pid: null,          // 之後你要用 pid 再補
-    };
+p.client = {
+  displayName: j.name,
+  avatar: j.avatar,
+  pid: null,
+
+  // ✅ 新增：稱號
+  title: j.title || "",
+  titleTier: j.titleTier || 1,
+};
+p.title = j.title || "";
+p.titleTier = j.titleTier || 1;
+
     p.displayName = j.name;
     p.avatar = j.avatar;
 
