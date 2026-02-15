@@ -70,18 +70,17 @@
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  padding:6px 14px;
-  font-size:12px;
+  padding:5px 12px;
+  font-size:11px;
+  line-height:1.1;
   font-weight:800;
-  letter-spacing:.5px;
+  letter-spacing:.4px;
   box-sizing:border-box;
   user-select:none;
 
-  /* 防止稱號把右側按鈕擠出去 */
-  max-width:160px;
+  max-width: clamp(90px, 22vw, 220px);
   overflow:hidden;
-}
-.player-title-badge .text{
+}.player-title-badge .text{
   position:relative;
   z-index:3;
   display:block;
@@ -1238,7 +1237,7 @@ function titleTierOf(p){
       }
 
       return (
-        <div className="card w-[min(980px,96vw)] p-6">
+        <div className="card w-[min(1200px,96vw)] p-7">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <div className="text-xs text-neutral-400">{t("ui.roomId")}</div>
@@ -1272,7 +1271,7 @@ function titleTierOf(p){
           <div className="mt-5 space-y-5">
             <div>
               <div className="text-sm text-neutral-300 mb-2">{t("ui.humanPlayers", {n: players.length})}</div>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {players.map(p=> {
                   const pid = pidOf(p);
                   const isHost = lobby.host === pid;
@@ -1284,7 +1283,7 @@ function titleTierOf(p){
                   const tier = titleTierOf(p) || (isMe ? (profile?.equippedTier || 1) : 1);
 
                   return (
-                    <div key={pid} className="flex items-center justify-between gap-3 rounded-xl border border-neutral-700/60 bg-black/30 px-3 py-2 min-w-0">
+                    <div key={pid} className="flex items-center justify-between gap-4 rounded-xl border border-neutral-700/60 bg-black/30 px-4 py-3 min-w-0 min-h-[96px]">
                       <div className="flex items-center gap-3 min-w-0 flex-1">
                         <div className={"avatar "+(isHost?"is-active":"")}><img src={avatarUrl} alt=""/></div>
                         <div>
@@ -1331,7 +1330,7 @@ function titleTierOf(p){
             {cpuCount > 0 && (
               <div>
                 <div className="text-sm text-neutral-300 mb-2">{t("ui.cpuPlayersList", {n: cpuCount})}</div>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   {Array.from({length: cpuCount}).map((_, idx) => {
                     const cpuIdx = (idx % 3) + 1;
                     const avatarUrl = `images/avatars/cpu${cpuIdx}.webp`;
