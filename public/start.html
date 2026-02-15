@@ -70,19 +70,21 @@
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  padding:6px 18px;
+  padding:6px 14px;
   font-size:12px;
   font-weight:800;
   letter-spacing:.5px;
-  text-align:center;
-  white-space:nowrap;
   box-sizing:border-box;
   user-select:none;
+
+  /* 防止稱號把右側按鈕擠出去 */
+  max-width:160px;
+  overflow:hidden;
 }
 .player-title-badge .text{
   position:relative;
   z-index:3;
-  display:inline-block;
+  display:block;
   max-width:100%;
   overflow:hidden;
   text-overflow:ellipsis;
@@ -1282,8 +1284,8 @@ function titleTierOf(p){
                   const tier = titleTierOf(p) || (isMe ? (profile?.equippedTier || 1) : 1);
 
                   return (
-                    <div key={pid} className="flex items-center justify-between gap-3 rounded-xl border border-neutral-700/60 bg-black/30 px-3 py-2">
-                      <div className="flex items-center gap-3">
+                    <div key={pid} className="flex items-center justify-between gap-3 rounded-xl border border-neutral-700/60 bg-black/30 px-3 py-2 min-w-0">
+                      <div className="flex items-center gap-3 min-w-0 flex-1">
                         <div className={"avatar "+(isHost?"is-active":"")}><img src={avatarUrl} alt=""/></div>
                         <div>
                           <div className="font-semibold leading-tight flex flex-wrap items-center gap-2">
@@ -1316,7 +1318,7 @@ function titleTierOf(p){
                         </div>
                       </div>
                       {isMe && (
-                        <button className="btn" onClick={()=>toggleReady(!myReady)}>
+                        <button className="btn shrink-0" onClick={()=>toggleReady(!myReady)}>
                           {myReady ? t("ui.meUnready") : t("ui.meReady")}
                         </button>
                       )}
