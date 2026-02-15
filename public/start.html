@@ -70,20 +70,19 @@
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  padding:5px 12px;
-  font-size:11px;
-  line-height:1.1;
+  padding:6px 18px;
+  font-size:12px;
   font-weight:800;
-  letter-spacing:.4px;
+  letter-spacing:.5px;
+  text-align:center;
+  white-space:nowrap;
   box-sizing:border-box;
   user-select:none;
-
-  max-width: clamp(90px, 22vw, 220px);
-  overflow:hidden;
-}.player-title-badge .text{
+}
+.player-title-badge .text{
   position:relative;
   z-index:3;
-  display:block;
+  display:inline-block;
   max-width:100%;
   overflow:hidden;
   text-overflow:ellipsis;
@@ -1237,7 +1236,7 @@ function titleTierOf(p){
       }
 
       return (
-        <div className="card w-[min(1200px,96vw)] p-7">
+        <div className="card w-[min(1180px,98vw)] p-8">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <div className="text-xs text-neutral-400">{t("ui.roomId")}</div>
@@ -1271,7 +1270,7 @@ function titleTierOf(p){
           <div className="mt-5 space-y-5">
             <div>
               <div className="text-sm text-neutral-300 mb-2">{t("ui.humanPlayers", {n: players.length})}</div>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {players.map(p=> {
                   const pid = pidOf(p);
                   const isHost = lobby.host === pid;
@@ -1283,8 +1282,8 @@ function titleTierOf(p){
                   const tier = titleTierOf(p) || (isMe ? (profile?.equippedTier || 1) : 1);
 
                   return (
-                    <div key={pid} className="flex items-center justify-between gap-4 rounded-xl border border-neutral-700/60 bg-black/30 px-4 py-3 min-w-0 min-h-[96px]">
-                      <div className="flex items-center gap-3 min-w-0 flex-1">
+                    <div key={pid} className="flex flex-col rounded-2xl border border-neutral-700/60 bg-black/40 px-4 py-4 min-h-[110px] shadow-lg hover:shadow-amber-500/20 transition">
+                      <div className="flex items-start gap-4">
                         <div className={"avatar "+(isHost?"is-active":"")}><img src={avatarUrl} alt=""/></div>
                         <div>
                           <div className="font-semibold leading-tight flex flex-wrap items-center gap-2">
@@ -1317,9 +1316,11 @@ function titleTierOf(p){
                         </div>
                       </div>
                       {isMe && (
-                        <button className="btn shrink-0" onClick={()=>toggleReady(!myReady)}>
-                          {myReady ? t("ui.meUnready") : t("ui.meReady")}
-                        </button>
+                        <div className="mt-3">
+                          <button className="btn w-full md:w-auto px-5 py-2" onClick={()=>toggleReady(!myReady)}>
+                            {myReady ? t("ui.meUnready") : t("ui.meReady")}
+                          </button>
+                        </div>
                       )}
                     </div>
                   );
@@ -1330,7 +1331,7 @@ function titleTierOf(p){
             {cpuCount > 0 && (
               <div>
                 <div className="text-sm text-neutral-300 mb-2">{t("ui.cpuPlayersList", {n: cpuCount})}</div>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
                   {Array.from({length: cpuCount}).map((_, idx) => {
                     const cpuIdx = (idx % 3) + 1;
                     const avatarUrl = `images/avatars/cpu${cpuIdx}.webp`;
