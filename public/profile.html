@@ -1347,8 +1347,15 @@ async function renderWall(){
   applyWallBackground();
   stage.querySelectorAll('.poster').forEach(n=>n.remove());
 
-  const metasRaw = Array.isArray(__client?.bountyPosters) ? __client.bountyPosters : [];
-  const metas = metasRaw.map(normalizePosterMeta).filter(Boolean).slice(0,4);
+const metasRaw = Array.isArray(__client?.bountyPosters) ? __client.bountyPosters : [];
+
+// 只取「最新一張」（ts 最大）
+const metas = metasRaw
+  .map(normalizePosterMeta)
+  .filter(Boolean)
+  .sort((a,b)=> (Number(b.ts)||0) - (Number(a.ts)||0))
+  .slice(0,1);
+
 
   const posters = [];
   for (const m of metas){
@@ -1370,8 +1377,9 @@ async function renderWall(){
 
   if(empty) empty.style.display = posters.length ? 'none' : 'flex';
 
-  posters.forEach((p, i)=>{
-    const s = slots[i] || slots[0];
+posters.forEach((p)=>{
+  const s = slots[3] || slots[0]; // 永遠放最右邊
+
     const wrap = document.createElement('div');
     wrap.className = 'poster';
     wrap.style.left = s.left;
@@ -2222,4 +2230,5 @@ boot();
 </script>
 </body>
 </html>
+
 
