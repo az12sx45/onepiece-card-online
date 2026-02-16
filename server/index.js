@@ -79,25 +79,22 @@ function broadcastState(room){
   const ended = (st?.turnStep === "ended" || st?.turnStep === "end" || st?.turnStep === "score");
   const winners = ended ? new Set(st.players.filter(p => p.alive).map(p => p.id)) : new Set();
 
-  for (const [sid, meta] of room.sockets){
-    const vis = injectChestCoins(getVisibleState(st, meta.playerId));
-    vis.viewerCanNext = (room.host === meta.playerId) || winners.has(meta.playerId);
+ for (const [sid, meta] of room.sockets){
+  const vis = injectChestCoins(getVisibleState(st, meta.playerId));
 
-    // ✅【新增】把稱號補進 STATE（安全資料，且用「洗牌後的新座位順序」不會跑掉）
-    try{
-      if (Array.isArray(vis.players) && Array.isArray(st.players)) {
-        for (let i = 0; i < vis.players.length; i++){
-          const src = st.players[i] || {};
-          const title = String(src.client?.title ?? src.title ?? "").trim();
-          const tier  = Math.max(1, Math.min(6, Number(src.client?.titleTier ?? src.titleTier ?? 1) || 1));
-          vis.players[i].title = title;
-          vis.players[i].titleTier = tier;
-        }
+  // ⭐ 新增：把稱號塞進 playersMeta
+  if (vis.playersMeta) {
+    Object.values(vis.playersMeta).forEach(p => {
+      if (p?.client) {
+        p.title = p.client.title || "";
+        p.titleTier = p.client.titleTier || 1;
       }
-    }catch(e){}
-
-    io.to(sid).emit("STATE", vis);
+    });
   }
+
+  vis.viewerCanNext = (room.host === meta.playerId) || winners.has(meta.playerId);
+
+  io.to(sid).emit("STATE", vis);
 }
 
 
