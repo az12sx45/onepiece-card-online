@@ -186,7 +186,9 @@
     .rarity.r-epic{ border-color: rgba(147,96,255,.40); background: rgba(147,96,255,.10); color: #f1e7ff; }
     .rarity.r-legend{ border-color: rgba(255,184,74,.55); background: rgba(255,184,74,.14); color: #fff2cc; box-shadow: 0 0 18px rgba(255,211,107,.22); }
 
-    .ownedTag{
+    
+    .rarity.r-mythic{ border-color: rgba(255, 70, 220, .55); background: rgba(255, 70, 220, .14); color: #ffe3fb; box-shadow: 0 0 18px rgba(255, 70, 220, .22); }
+.ownedTag{
       position:absolute; right:10px; top:10px;
       font-size:11px; font-weight:900;
       padding:4px 8px;
@@ -387,33 +389,47 @@
     // 商品（你之後要賣的就改這個陣列）
     // rarity: 'common' | 'rare' | 'epic' | 'legend'
     const SHOP = [
-                  { id:'ava-31', type:'avatar', key:31, name:'頭像 #31', desc:'商店限定頭像（購買後可在個人頁面切換）', price: 5, rarity:'epic' },
-      { id:'ava-32', type:'avatar', key:32, name:'頭像 #32', desc:'商店限定頭像（購買後可在個人頁面切換）', price: 5, rarity:'epic' },
-      { id:'ava-33', type:'avatar', key:33, name:'頭像 #33', desc:'商店限定頭像（購買後可在個人頁面切換）', price: 5, rarity:'epic' },
-      { id:'ava-34', type:'avatar', key:34, name:'頭像 #34', desc:'商店限定頭像（購買後可在個人頁面切換）', price: 5, rarity:'epic' },
-      { id:'ava-35', type:'avatar', key:35, name:'頭像 #35', desc:'商店限定頭像（購買後可在個人頁面切換）', price: 5, rarity:'epic' },
-      { id:'ava-36', type:'avatar', key:36, name:'頭像 #36', desc:'商店限定頭像（購買後可在個人頁面切換）', price: 5, rarity:'epic' },
-      { id:'ava-37', type:'avatar', key:37, name:'頭像 #37', desc:'商店限定頭像（購買後可在個人頁面切換）', price: 5, rarity:'epic' },
-      { id:'ava-38', type:'avatar', key:38, name:'頭像 #38', desc:'商店限定頭像（購買後可在個人頁面切換）', price: 8, rarity:'legend' },
-      { id:'ava-39', type:'avatar', key:39, name:'頭像 #39', desc:'商店限定頭像（購買後可在個人頁面切換）', price: 8, rarity:'legend' },
-      { id:'ava-40', type:'avatar', key:40, name:'頭像 #40', desc:'商店限定頭像（購買後可在個人頁面切換）', price: 8, rarity:'legend' },
-{ id:'ava-41', type:'avatar', key:41, name:'頭像 #41', desc:'商店限定頭像（購買後可在個人頁面切換）', price: 8, rarity:'legend' },
-{ id:'ava-42', type:'avatar', key:42, name:'頭像 #42', desc:'商店限定頭像（購買後可在個人頁面切換）', price: 8, rarity:'legend' },
-{ id:'ava-43', type:'avatar', key:43, name:'頭像 #43', desc:'商店限定頭像（購買後可在個人頁面切換）', price: 8, rarity:'legend' },
-{ id:'ava-44', type:'avatar', key:44, name:'頭像 #44', desc:'商店限定頭像（購買後可在個人頁面切換）', price: 10, rarity:'legend' },
-{ id:'ava-45', type:'avatar', key:45, name:'頭像 #45', desc:'商店限定頭像（購買後可在個人頁面切換）', price: 10, rarity:'legend' },
-{ id:'ava-46', type:'avatar', key:46, name:'頭像 #46', desc:'商店限定頭像（購買後可在個人頁面切換）', price: 10, rarity:'legend' },
-{ id:'ava-47', type:'avatar', key:47, name:'頭像 #47', desc:'商店限定頭像（購買後可在個人頁面切換）', price: 12, rarity:'legend' },
-{ id:'ava-48', type:'avatar', key:48, name:'頭像 #48', desc:'商店限定頭像（購買後可在個人頁面切換）', price: 12, rarity:'legend' },
-{ id:'ava-49', type:'avatar', key:49, name:'頭像 #49', desc:'商店限定頭像（購買後可在個人頁面切換）', price: 12, rarity:'legend' },
-{ id:'ava-50', type:'avatar', key:50, name:'頭像 #50', desc:'商店限定頭像（購買後可在個人頁面切換）', price: 15, rarity:'legend' },
+  // ===== Avatars 31-50 =====
+  // 普通：31-37, 41, 42
+  { id:'ava-31', type:'avatar', key:31, name:'頭像 #31', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'common' },
+  { id:'ava-32', type:'avatar', key:32, name:'頭像 #32', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'common' },
+  { id:'ava-33', type:'avatar', key:33, name:'頭像 #33', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'common' },
+  { id:'ava-34', type:'avatar', key:34, name:'頭像 #34', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'common' },
+  { id:'ava-35', type:'avatar', key:35, name:'頭像 #35', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'common' },
+  { id:'ava-36', type:'avatar', key:36, name:'頭像 #36', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'common' },
+  { id:'ava-37', type:'avatar', key:37, name:'頭像 #37', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'common' },
+  { id:'ava-41', type:'avatar', key:41, name:'頭像 #41', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'common' },
+  { id:'ava-42', type:'avatar', key:42, name:'頭像 #42', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'common' },
 
-      { id:'wall-4', type:'wall', key: 4, name:'牆面 #4', desc:'商店限定牆面（購買後可在個人頁面套用）', price: 5, rarity:'epic' },
-      { id:'wall-5', type:'wall', key: 5, name:'牆面 #5', desc:'商店限定牆面（購買後可在個人頁面套用）', price: 5, rarity:'epic' },
-      { id:'wall-6', type:'wall', key: 6, name:'牆面 #6', desc:'商店限定牆面（購買後可在個人頁面套用）', price: 5, rarity:'epic' },
-      { id:'wall-7', type:'wall', key: 7, name:'牆面 #7', desc:'商店限定牆面（購買後可在個人頁面套用）', price: 5, rarity:'epic' },
-      { id:'wall-8', type:'wall', key: 8, name:'牆面 #8', desc:'商店限定牆面（購買後可在個人頁面套用）', price: 5, rarity:'epic' },
-    ];
+  // 稀有：38, 43, 44, 45, 46, 47
+  { id:'ava-38', type:'avatar', key:38, name:'頭像 #38', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'rare' },
+  { id:'ava-43', type:'avatar', key:43, name:'頭像 #43', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'rare' },
+  { id:'ava-44', type:'avatar', key:44, name:'頭像 #44', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'rare' },
+  { id:'ava-45', type:'avatar', key:45, name:'頭像 #45', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'rare' },
+  { id:'ava-46', type:'avatar', key:46, name:'頭像 #46', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'rare' },
+  { id:'ava-47', type:'avatar', key:47, name:'頭像 #47', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'rare' },
+
+  // 史詩：39, 40, 48
+  { id:'ava-39', type:'avatar', key:39, name:'頭像 #39', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'epic' },
+  { id:'ava-40', type:'avatar', key:40, name:'頭像 #40', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'epic' },
+  { id:'ava-48', type:'avatar', key:48, name:'頭像 #48', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'epic' },
+
+  // 傳說：49, 50
+  { id:'ava-49', type:'avatar', key:49, name:'頭像 #49', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'legend' },
+  { id:'ava-50', type:'avatar', key:50, name:'頭像 #50', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'legend' },
+
+  // ===== Walls 4-8 =====
+  // 普通：4
+  { id:'wall-4', type:'wall', key: 4, name:'牆面 #4', desc:'商店限定牆面（購買後可在個人頁面套用）', rarity:'common' },
+  // 稀有：5,6
+  { id:'wall-5', type:'wall', key: 5, name:'牆面 #5', desc:'商店限定牆面（購買後可在個人頁面套用）', rarity:'rare' },
+  { id:'wall-6', type:'wall', key: 6, name:'牆面 #6', desc:'商店限定牆面（購買後可在個人頁面套用）', rarity:'rare' },
+  // 史詩：7
+  { id:'wall-7', type:'wall', key: 7, name:'牆面 #7', desc:'商店限定牆面（購買後可在個人頁面套用）', rarity:'epic' },
+  // 傳說：8
+  { id:'wall-8', type:'wall', key: 8, name:'牆面 #8', desc:'商店限定牆面（購買後可在個人頁面套用）', rarity:'legend' },
+];
+
 
     function imgUrl(it){
       if(it.type==='avatar') return `images/avatars/${it.key}.webp`;
@@ -422,18 +438,34 @@
     }
 
     function rarityRank(r){
-      return ({common:1, rare:2, epic:3, legend:4})[r] || 1;
-    }
-    function rarityLabel(r){
-      return ({common:'普通', rare:'稀有', epic:'史詩', legend:'傳說'})[r] || '普通';
-    }
-    function rarityClass(r){
-      if(r==='legend') return 'r-legend';
-      if(r==='epic')   return 'r-epic';
-      if(r==='rare')   return 'r-rare';
-      return '';
-    }
-    function typeLabel(t){
+  return ({common:1, rare:2, epic:3, legend:4, mythic:5})[r] || 1;
+}
+function rarityLabel(r){
+  return ({common:'普通', rare:'稀有', epic:'史詩', legend:'傳說', mythic:'神話'})[r] || '普通';
+}
+function rarityClass(r){
+  if(r==='mythic') return 'r-mythic';
+  if(r==='legend') return 'r-legend';
+  if(r==='epic')   return 'r-epic';
+  if(r==='rare')   return 'r-rare';
+  return '';
+}
+
+const PRICE_BY_RARITY = {
+  common: 5,
+  rare: 10,
+  epic: 18,
+  legend: 25,
+  mythic: 35,
+};
+
+function priceOf(it){
+  // 若未來少數商品想特例手動定價，也可保留 it.price 優先
+  if(Number.isFinite(Number(it.price))) return Number(it.price);
+  return PRICE_BY_RARITY[it.rarity] ?? 5;
+}
+
+function typeLabel(t){
       return ({avatar:'頭像', wall:'牆面', item:'道具'})[t] || t;
     }
 
@@ -578,7 +610,9 @@
       const sort = $('sort').value;
 
       // filter
-      let list = SHOP.filter(it => it.type === curTab);
+      let list = SHOP
+        .filter(it => it.type === curTab)
+        .map(it => ({ ...it, price: priceOf(it) }));
       if(q){
         list = list.filter(it =>
           (it.name && it.name.toLowerCase().includes(q)) ||
