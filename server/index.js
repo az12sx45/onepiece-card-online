@@ -81,7 +81,19 @@ function broadcastState(room){
 
   for (const [sid, meta] of room.sockets){
     const vis = injectChestCoins(getVisibleState(st, meta.playerId));
-    vis.viewerCanNext = (room.host === meta.playerId) || winners.has(meta.playerId);
+    // ✅ 補回每位玩家的稱號（安全資料，非敏感）
+try{
+  if (Array.isArray(vis.players) && Array.isArray(st.players)) {
+    for (let i = 0; i < vis.players.length; i++){
+      const src = st.players[i] || {};
+      const title = String(src.client?.title ?? src.title ?? "").trim();
+      const tier  = Math.max(1, Math.min(6, Number(src.client?.titleTier ?? src.titleTier ?? 1) || 1));
+      vis.players[i].title = title;
+      vis.players[i].titleTier = tier;
+    }
+  }
+}catch(e){}
+
     io.to(sid).emit("STATE", vis);
   }
 }
