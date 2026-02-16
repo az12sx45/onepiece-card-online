@@ -79,24 +79,12 @@ function broadcastState(room){
   const ended = (st?.turnStep === "ended" || st?.turnStep === "end" || st?.turnStep === "score");
   const winners = ended ? new Set(st.players.filter(p => p.alive).map(p => p.id)) : new Set();
 
- for (const [sid, meta] of room.sockets){
-  const vis = injectChestCoins(getVisibleState(st, meta.playerId));
-
-  // ⭐ 新增：把稱號塞進 playersMeta
-  if (vis.playersMeta) {
-    Object.values(vis.playersMeta).forEach(p => {
-      if (p?.client) {
-        p.title = p.client.title || "";
-        p.titleTier = p.client.titleTier || 1;
-      }
-    });
+  for (const [sid, meta] of room.sockets){
+    const vis = injectChestCoins(getVisibleState(st, meta.playerId));
+    vis.viewerCanNext = (room.host === meta.playerId) || winners.has(meta.playerId);
+    io.to(sid).emit("STATE", vis);
   }
-
-  vis.viewerCanNext = (room.host === meta.playerId) || winners.has(meta.playerId);
-
-  io.to(sid).emit("STATE", vis);
 }
-
 
 function broadcastLobby(roomId){
   const room = rooms.get(roomId);
