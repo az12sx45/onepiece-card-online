@@ -579,9 +579,24 @@
     // === 把雲端資料 normalize 成 start.html 使用的 profile 結構 ===
     function normalizeCloudProfile(cloud){
       const name = String(cloud?.name || '').trim();
-      const avatarNum = Number(cloud?.avatar ?? 1) || 1;
-      const avatar = Math.min(40, Math.max(1, avatarNum));
-      const avatarUrl = `images/avatars/${avatar}.webp`;
+    const avatarNum0 = Number(cloud?.avatar ?? 1) || 1;
+let avatar = Math.min(50, Math.max(1, avatarNum0));
+
+// 允許免費範圍：1~30
+const FREE_MAX = 30;
+
+// 讀取雲端擁有清單（商店購買紀錄）
+const ownedAvatars = Array.isArray(cloud?.stats?.client?.shop?.ownedAvatars)
+  ? cloud.stats.client.shop.ownedAvatars.map(n => Number(n)).filter(n => Number.isFinite(n))
+  : [];
+
+// 若選到 31+，但沒買過 → 強制降回 1（或 30 也行）
+if (avatar > FREE_MAX && !ownedAvatars.includes(avatar)) {
+  avatar = 1;
+}
+
+const avatarUrl = `images/avatars/${avatar}.webp`;
+
 
       const client = (cloud?.stats?.client && typeof cloud.stats.client === 'object')
         ? cloud.stats.client
