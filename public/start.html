@@ -540,13 +540,19 @@
           : 1;
         url.searchParams.set('n', String(count));
 
-try{
-  // profile 是雲端個人資料（你 start.html 已經用 profile.equippedTitle/equippedTier 送進 JOIN_ROOM）
-  sessionStorage.setItem("op_my_title", String(profile?.equippedTitle || "").trim());
-  sessionStorage.setItem("op_my_tier",  String(profile?.equippedTier || 1));
-}catch{}
-
-
+        // ★ 把等待室的「每位玩家已裝備稱號」快照存到 sessionStorage，讓 game.html 能顯示
+        try{
+          const map = {};
+          const arr = Array.isArray(__lobby.snapshot?.players) ? __lobby.snapshot.players : [];
+          arr.forEach(p=>{
+            const pid = (p && (p.playerId ?? p.pid ?? p.id));
+            const label = String(p?.title ?? p?.equippedTitle ?? p?.equipped ?? '').trim();
+            const tier0 = Number(p?.titleTier ?? p?.equippedTier ?? 1) || 1;
+            const tier = Math.min(6, Math.max(1, tier0));
+            if (pid != null && label) map[String(pid)] = { label, tier };
+          });
+          sessionStorage.setItem('opRoomTitles', JSON.stringify(map));
+        }catch(e){}
         location.href = url.toString();
         return;
       }
