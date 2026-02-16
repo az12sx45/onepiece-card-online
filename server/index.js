@@ -81,10 +81,24 @@ function broadcastState(room){
 
   for (const [sid, meta] of room.sockets){
     const vis = injectChestCoins(getVisibleState(st, meta.playerId));
+
+    // ✅ 把稱號資訊灌進 players（給 game 前端用）
+    if (Array.isArray(vis.players)) {
+      vis.players = vis.players.map(p => {
+        const real = st.players?.[p.id];
+        return {
+          ...p,
+          title: real?.client?.title ?? real?.title ?? "",
+          titleTier: real?.client?.titleTier ?? real?.titleTier ?? 1,
+        };
+      });
+    }
+
     vis.viewerCanNext = (room.host === meta.playerId) || winners.has(meta.playerId);
     io.to(sid).emit("STATE", vis);
   }
 }
+
 
 function broadcastLobby(roomId){
   const room = rooms.get(roomId);
