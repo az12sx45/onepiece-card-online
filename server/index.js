@@ -79,90 +79,12 @@ function broadcastState(room){
   const ended = (st?.turnStep === "ended" || st?.turnStep === "end" || st?.turnStep === "score");
   const winners = ended ? new Set(st.players.filter(p => p.alive).map(p => p.id)) : new Set();
 
-// ✅ 強制把「稱號」補回 visible state（避免 getVisibleState 省略導致前端用等待室 cache 而亂掉）
-try {
-  if (Array.isArray(vis.players) && Array.isArray(st.players)) {
-    for (let i = 0; i < vis.players.length; i++) {
-      const src = st.players[i];
-      const dst = vis.players[i];
-      if (!src || !dst) continue;
-
-      const title = (src.client?.title ?? src.title ?? "");
-      const tier  = (src.client?.titleTier ?? src.titleTier ?? 1);
-
-      // 確保 client 存在
-      if (!dst.client || typeof dst.client !== "object") dst.client = {};
-
-      // 填回去（讓 game.html 永遠以 STATE 為準）
-      dst.client.title = title;
-      dst.client.titleTier = tier;
-
-      // 也順便兼容一些前端可能讀的平面欄位
-      dst.title = title;
-      dst.titleTier = tier;
-    }
+  for (const [sid, meta] of room.sockets){
+    const vis = injectChestCoins(getVisibleState(st, meta.playerId));
+    vis.viewerCanNext = (room.host === meta.playerId) || winners.has(meta.playerId);
+    io.to(sid).emit("STATE", vis);
   }
-} catch (e) {
-  // 不要讓 STATE 因為補欄位失敗而中斷
 }
-
-
- for (const [sid, meta] of room.sockets){
-  const vis = injectChestCoins(getVisibleState(st, meta.playerId));
-
-  // ✅ 在這裡補稱號：用 id 對應，不吃座位順序
-  try {
-    if (Array.isArray(vis.players) && Array.isArray(st.players)) {
-      const srcById = new Map();
-      for (const sp of st.players) {
-        if (sp && typeof sp.id === "number") srcById.set(sp.id, sp);
-      }
-
-      for (const vp of vis.players) {
-        if (!vp || typeof vp.id !== "number") continue;
-        const src = srcById.get(vp.id);
-        if (!src) continue;
-
-        // 兼容：你前端會讀 titles.equipped / client.title 兩種
-        const label = String(
-          src.client?.titles?.equipped ??
-          src.client?.equippedTitle ??
-          src.client?.title ??
-          src.title ??
-          ""
-        ).trim();
-
-        const tierRaw =
-          src.client?.titles?.equippedTier ??
-          src.client?.equippedTier ??
-          src.client?.titleTier ??
-          src.titleTier ??
-          1;
-
-        const tier = Number(tierRaw) || 1;
-
-        if (!vp.client || typeof vp.client !== "object") vp.client = {};
-        if (!vp.client.titles || typeof vp.client.titles !== "object") vp.client.titles = {};
-
-        // 讓 game.html 不管讀哪個欄位都能拿到
-        vp.client.titles.equipped = label;
-        vp.client.titles.equippedTier = tier;
-
-        vp.client.title = label;
-        vp.client.titleTier = tier;
-
-        vp.title = label;
-        vp.titleTier = tier;
-      }
-    }
-  } catch (e) {
-    // 不要讓 STATE 因補欄位失敗而中斷
-  }
-
-  vis.viewerCanNext = (room.host === meta.playerId) || winners.has(meta.playerId);
-  io.to(sid).emit("STATE", vis);
-}
-
 
 function broadcastLobby(roomId){
   const room = rooms.get(roomId);
