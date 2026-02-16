@@ -2710,7 +2710,7 @@ el.room.value = presetRoom; el.roomLbl.textContent = presetRoom || '—';
 const presetName   = sp.get('name') || '';
 el.name.value = presetName;
 const presetAvatarRaw = Number(sp.get('avatar') || '1') || 1;
-const presetAvatar = Math.min(40, Math.max(1, presetAvatarRaw));
+const presetAvatar = Math.min(50, Math.max(1, presetAvatarRaw));
 const presetN      = Math.max(2, Math.min(8, Number(sp.get('n') || '4') || 4));
 
 const serverURL = sp.get('server') || undefined;
