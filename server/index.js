@@ -74,37 +74,41 @@ function injectChestCoins(vis){
   return vis;
 }
 
+function injectTitlesIntoVisibleState(vis, fullState){
+  try{
+    if (!vis || !Array.isArray(vis.players) || !fullState || !Array.isArray(fullState.players)) return vis;
+
+    const byId = new Map(fullState.players.map(p => [p.id, p]));
+    for (const vp of vis.players){
+      const fp = byId.get(vp?.id);
+      if (!fp) continue;
+
+      const title = String(fp?.client?.title ?? fp?.title ?? "").trim();
+      const tier0 = Number(fp?.client?.titleTier ?? fp?.titleTier ?? 1) || 1;
+      const tier = Math.max(1, Math.min(6, tier0));
+
+      // 確保 vis 這邊也有 client 容器
+      if (!vp.client || typeof vp.client !== "object") vp.client = {};
+
+      // 同時塞 client + root，讓前端怎麼吃都吃得到
+      vp.client.title = title;
+      vp.client.titleTier = tier;
+      vp.title = title;
+      vp.titleTier = tier;
+    }
+  }catch{}
+  return vis;
+}
+
+
 function broadcastState(room){
   const st = room.state;
   const ended = (st?.turnStep === "ended" || st?.turnStep === "end" || st?.turnStep === "score");
   const winners = ended ? new Set(st.players.filter(p => p.alive).map(p => p.id)) : new Set();
 
   for (const [sid, meta] of room.sockets){
-    const vis = injectChestCoins(getVisibleState(st, meta.playerId));
-// ✅ 把稱號資訊補回可視狀態（getVisibleState 可能會裁掉 client 內容）
-if (Array.isArray(vis.players) && Array.isArray(st.players)) {
-  for (const vp of vis.players) {
-    const sid = Number(vp?.id);
-    if (!Number.isFinite(sid)) continue;
-
-    const sp = st.players[sid];
-    if (!sp) continue;
-
-    const title = String(sp?.client?.title ?? sp?.title ?? "").trim();
-    const tier  = Math.max(1, Math.min(6, Number(sp?.client?.titleTier ?? sp?.titleTier ?? 1) || 1));
-
-    // 讓 game.html 的 playerEquippedTitle(p) 一定拿得到
-    vp.client = (vp.client && typeof vp.client === "object") ? vp.client : {};
-    vp.client.title = title;
-    vp.client.titleTier = tier;
-
-    // 額外也放在 player 本體上（保底）
-    vp.title = title;
-    vp.titleTier = tier;
-  }
-}
-
-
+    let vis = injectChestCoins(getVisibleState(st, meta.playerId));
+    vis = injectTitlesIntoVisibleState(vis, st);
     vis.viewerCanNext = (room.host === meta.playerId) || winners.has(meta.playerId);
     io.to(sid).emit("STATE", vis);
   }
