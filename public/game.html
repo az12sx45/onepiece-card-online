@@ -3158,14 +3158,17 @@ function playerEquippedTitle(p){
   const titles = c.titles || {};
   const label =
     String(titles.equipped ?? c.equippedTitle ?? c.title ?? c.titleLabel ?? '').trim();
-
-  // ✅ 不再用等待室 opRoomTitles 依座位 id 補資料（座位會洗牌，會亂）
-  if(!label) return { label:'', tier:1 };
-
+  if(!label){
+    const cache = getRoomTitleCache();
+    const hit = cache && cache[String(p?.id)] || cache && cache[p?.id];
+    const clabel = String(hit?.label ?? hit?.title ?? '').trim();
+    if(!clabel) return { label:'', tier:1 };
+    const ctier = normTier(hit?.tier ?? hit?.titleTier ?? 1);
+    return { label: clabel, tier: ctier };
+  }
   const tier = normTier(titles.equippedTier ?? c.equippedTier ?? c.titleTier ?? 1);
   return { label, tier };
 }
-
 
 
 
