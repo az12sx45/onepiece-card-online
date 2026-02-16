@@ -540,6 +540,13 @@
           : 1;
         url.searchParams.set('n', String(count));
 
+try{
+  // profile 是雲端個人資料（你 start.html 已經用 profile.equippedTitle/equippedTier 送進 JOIN_ROOM）
+  sessionStorage.setItem("op_my_title", String(profile?.equippedTitle || "").trim());
+  sessionStorage.setItem("op_my_tier",  String(profile?.equippedTier || 1));
+}catch{}
+
+
         location.href = url.toString();
         return;
       }
