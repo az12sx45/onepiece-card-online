@@ -81,24 +81,34 @@ function broadcastState(room){
 
   for (const [sid, meta] of room.sockets){
     const vis = injectChestCoins(getVisibleState(st, meta.playerId));
+// ✅ 把稱號資訊補回可視狀態（getVisibleState 可能會裁掉 client 內容）
+if (Array.isArray(vis.players) && Array.isArray(st.players)) {
+  for (const vp of vis.players) {
+    const sid = Number(vp?.id);
+    if (!Number.isFinite(sid)) continue;
 
-    // ✅ 把稱號資訊灌進 players（給 game 前端用）
-    if (Array.isArray(vis.players)) {
-      vis.players = vis.players.map(p => {
-        const real = st.players?.[p.id];
-        return {
-          ...p,
-          title: real?.client?.title ?? real?.title ?? "",
-          titleTier: real?.client?.titleTier ?? real?.titleTier ?? 1,
-        };
-      });
-    }
+    const sp = st.players[sid];
+    if (!sp) continue;
+
+    const title = String(sp?.client?.title ?? sp?.title ?? "").trim();
+    const tier  = Math.max(1, Math.min(6, Number(sp?.client?.titleTier ?? sp?.titleTier ?? 1) || 1));
+
+    // 讓 game.html 的 playerEquippedTitle(p) 一定拿得到
+    vp.client = (vp.client && typeof vp.client === "object") ? vp.client : {};
+    vp.client.title = title;
+    vp.client.titleTier = tier;
+
+    // 額外也放在 player 本體上（保底）
+    vp.title = title;
+    vp.titleTier = tier;
+  }
+}
+
 
     vis.viewerCanNext = (room.host === meta.playerId) || winners.has(meta.playerId);
     io.to(sid).emit("STATE", vis);
   }
 }
-
 
 function broadcastLobby(roomId){
   const room = rooms.get(roomId);
