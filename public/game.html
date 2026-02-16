@@ -3834,29 +3834,16 @@ function doJoin(displayNameOverride){
 
   el.roomLbl.textContent = me.roomId;
 
-  // ✅ 從 sessionStorage 取「我的稱號」
-  let myTitle = "";
-  let myTier = 1;
-  try{
-    myTitle = String(sessionStorage.getItem("op_my_title") || "").trim();
-    myTier = Number(sessionStorage.getItem("op_my_tier") || "1") || 1;
-  }catch{}
-
   socket.emit('JOIN_ROOM', {
     roomId: me.roomId,
     displayName,
     avatar: presetAvatar,
     secret: me.secret,
-    pid: me.playerId,
-
-    // ✅ 新增：稱號（避免進遊戲/重連時把 server 內的稱號洗掉）
-    title: myTitle,
-    titleTier: myTier,
+    pid: me.playerId   // 多帶一個 pid 給後端記錄（結果頁也會用到）
   });
 
   hasJoinedOnce = true;
 }
-
 
 // 按「加入房間」按鈕
 el.join.onclick = ()=> {
