@@ -57,9 +57,7 @@
       color:#1b1408;
       font-weight:900;
     }
-    .btn.ghost{
-      background: transparent;
-    }
+    .btn.ghost{ background: transparent; }
     .btn[disabled]{opacity:.55; cursor:not-allowed; transform:none}
     .pill{
       display:inline-flex; align-items:center; gap:8px;
@@ -73,9 +71,7 @@
       font-variant-numeric:tabular-nums;
       letter-spacing:.2px;
     }
-    .status{
-      font-size:12px; color:var(--muted);
-    }
+    .status{ font-size:12px; color:var(--muted); }
 
     .panel{
       margin-top:10px;
@@ -185,10 +181,9 @@
     .rarity.r-rare{ border-color: rgba(255,211,107,.40); background: rgba(255,211,107,.10); color: #ffe8b6; }
     .rarity.r-epic{ border-color: rgba(147,96,255,.40); background: rgba(147,96,255,.10); color: #f1e7ff; }
     .rarity.r-legend{ border-color: rgba(255,184,74,.55); background: rgba(255,184,74,.14); color: #fff2cc; box-shadow: 0 0 18px rgba(255,211,107,.22); }
-
-    
     .rarity.r-mythic{ border-color: rgba(255, 70, 220, .55); background: rgba(255, 70, 220, .14); color: #ffe3fb; box-shadow: 0 0 18px rgba(255, 70, 220, .22); }
-.ownedTag{
+
+    .ownedTag{
       position:absolute; right:10px; top:10px;
       font-size:11px; font-weight:900;
       padding:4px 8px;
@@ -283,9 +278,9 @@
         </div>
 
         <div class="row" style="gap:8px">
-<span class="pill" title="雲端金幣（以 stats.client.totals.coins 為準）">
-  <span class="coins">金幣：<span id="coins">0</span></span>
-</span>
+          <span class="pill" title="雲端金幣（以 stats.client.totals.coins 為準）">
+            <span class="coins">金幣：<span id="coins">0</span></span>
+          </span>
           <button class="btn" id="btnBack">← 回個人頁</button>
           <button class="btn ghost" id="btnReload" title="重新從雲端讀取">↻ 重新同步</button>
         </div>
@@ -365,6 +360,7 @@
     //  Cloud Shop (v2)
     //  - coins source of truth: stats.client.totals.coins
     //  - owned source of truth: stats.client.shop
+    //  - flags are sold in ITEM tab, but stored in shop.ownedFlags (numbers)
     // ========================
 
     // server url
@@ -386,87 +382,101 @@
     const clampInt = (n, a, b)=> Math.max(a, Math.min(b, Math.floor(Number(n)||0)));
     const toast = (msg)=>{ $('toast').textContent = msg || ''; };
 
+    // ===== rarity / price =====
+    function rarityRank(r){
+      return ({common:1, rare:2, epic:3, legend:4, mythic:5})[r] || 1;
+    }
+    function rarityLabel(r){
+      return ({common:'普通', rare:'稀有', epic:'史詩', legend:'傳說', mythic:'神話'})[r] || '普通';
+    }
+    function rarityClass(r){
+      if(r==='mythic') return 'r-mythic';
+      if(r==='legend') return 'r-legend';
+      if(r==='epic')   return 'r-epic';
+      if(r==='rare')   return 'r-rare';
+      return '';
+    }
+    const PRICE_BY_RARITY = {
+      common: 5,
+      rare: 10,
+      epic: 18,
+      legend: 25,
+      mythic: 35,
+    };
+    function priceOf(it){
+      if(Number.isFinite(Number(it.price))) return Number(it.price);
+      return PRICE_BY_RARITY[it.rarity] ?? 5;
+    }
+
+    function typeLabel(t){
+      return ({avatar:'頭像', wall:'牆面', item:'道具'})[t] || t;
+    }
+
+    // ========================
     // 商品（你之後要賣的就改這個陣列）
-    // rarity: 'common' | 'rare' | 'epic' | 'legend'
+    // type: 'avatar' | 'wall' | 'item'
+    // kind: 'flag' for pirate flags
+    // ========================
     const SHOP = [
-  // ===== Avatars 31-50 =====
-  // 普通：31-37, 41, 42
-  { id:'ava-31', type:'avatar', key:31, name:'路奇', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'common' },
-  { id:'ava-32', type:'avatar', key:32, name:'大和', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'common' },
-  { id:'ava-33', type:'avatar', key:33, name:'弗朗基', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'common' },
-  { id:'ava-34', type:'avatar', key:34, name:'艾斯', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'common' },
-  { id:'ava-35', type:'avatar', key:35, name:'巴索羅繆·大熊', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'common' },
-  { id:'ava-36', type:'avatar', key:36, name:'鑽石裘斯', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'common' },
-  { id:'ava-37', type:'avatar', key:37, name:'暴走喬巴', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'common' },
-  { id:'ava-41', type:'avatar', key:41, name:'多拉格', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'common' },
-  { id:'ava-42', type:'avatar', key:42, name:'火拳艾斯', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'common' },
+      // ===== Avatars 31-50 =====
+      // 普通：31-37, 41, 42
+      { id:'ava-31', type:'avatar', key:31, name:'路奇', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'common' },
+      { id:'ava-32', type:'avatar', key:32, name:'大和', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'common' },
+      { id:'ava-33', type:'avatar', key:33, name:'弗朗基', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'common' },
+      { id:'ava-34', type:'avatar', key:34, name:'艾斯', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'common' },
+      { id:'ava-35', type:'avatar', key:35, name:'巴索羅-大熊', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'common' },
+      { id:'ava-36', type:'avatar', key:36, name:'鑽石裘斯', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'common' },
+      { id:'ava-37', type:'avatar', key:37, name:'暴走喬巴', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'common' },
+      { id:'ava-41', type:'avatar', key:41, name:'多拉格', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'common' },
+      { id:'ava-42', type:'avatar', key:42, name:'火拳艾斯', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'common' },
 
-  // 稀有：38, 43, 44, 45, 46, 47
-  { id:'ava-38', type:'avatar', key:38, name:'草帽的傳承', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'rare' },
-  { id:'ava-43', type:'avatar', key:43, name:'ACE', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'rare' },
-  { id:'ava-44', type:'avatar', key:44, name:'不死鳥馬可', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'rare' },
-  { id:'ava-45', type:'avatar', key:45, name:'未來海賊王的左右手', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'rare' },
-  { id:'ava-46', type:'avatar', key:46, name:'艾斯剪影', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'rare' },
-  { id:'ava-47', type:'avatar', key:47, name:'魯夫Q版', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'rare' },
+      // 稀有：38, 43, 44, 45, 46, 47
+      { id:'ava-38', type:'avatar', key:38, name:'草帽的傳承', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'rare' },
+      { id:'ava-43', type:'avatar', key:43, name:'ACE', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'rare' },
+      { id:'ava-44', type:'avatar', key:44, name:'不死鳥馬可', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'rare' },
+      { id:'ava-45', type:'avatar', key:45, name:'未來海賊王的左右手', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'rare' },
+      { id:'ava-46', type:'avatar', key:46, name:'艾斯剪影', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'rare' },
+      { id:'ava-47', type:'avatar', key:47, name:'魯夫Q版', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'rare' },
 
-  // 史詩：39, 40, 48
-  { id:'ava-39', type:'avatar', key:39, name:'魯夫紅藍光影', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'epic' },
-  { id:'ava-40', type:'avatar', key:40, name:'海軍的未來 克比', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'epic' },
-  { id:'ava-48', type:'avatar', key:48, name:'海軍元帥 赤犬', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'epic' },
+      // 史詩：39, 40, 48
+      { id:'ava-39', type:'avatar', key:39, name:'魯夫紅藍光影', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'epic' },
+      { id:'ava-40', type:'avatar', key:40, name:'海軍的未來 克比', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'epic' },
+      { id:'ava-48', type:'avatar', key:48, name:'海軍元帥 赤犬', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'epic' },
 
-  // 傳說：49, 50
-  { id:'ava-49', type:'avatar', key:49, name:'尼卡大笑', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'legend' },
-  { id:'ava-50', type:'avatar', key:50, name:'尼卡防風鏡', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'legend' },
+      // 傳說：49, 50
+      { id:'ava-49', type:'avatar', key:49, name:'尼卡大笑', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'legend' },
+      { id:'ava-50', type:'avatar', key:50, name:'尼卡防風鏡', desc:'商店限定頭像（購買後可在個人頁面切換）', rarity:'legend' },
 
-  // ===== Walls 4-8 =====
-  // 普通：4
-  { id:'wall-4', type:'wall', key: 4, name:'牆面 #4', desc:'商店限定牆面（購買後可在個人頁面套用）', rarity:'common' },
-  // 稀有：5,6
-  { id:'wall-5', type:'wall', key: 5, name:'牆面 #5', desc:'商店限定牆面（購買後可在個人頁面套用）', rarity:'rare' },
-  { id:'wall-6', type:'wall', key: 6, name:'牆面 #6', desc:'商店限定牆面（購買後可在個人頁面套用）', rarity:'rare' },
-  // 史詩：7
-  { id:'wall-7', type:'wall', key: 7, name:'牆面 #7', desc:'商店限定牆面（購買後可在個人頁面套用）', rarity:'epic' },
-  // 傳說：8
-  { id:'wall-8', type:'wall', key: 8, name:'牆面 #8', desc:'商店限定牆面（購買後可在個人頁面套用）', rarity:'legend' },
-];
+      // ===== Walls 4-8 =====
+      { id:'wall-4', type:'wall', key: 4, name:'牆面 #4', desc:'商店限定牆面（購買後可在個人頁面套用）', rarity:'common' },
+      { id:'wall-5', type:'wall', key: 5, name:'牆面 #5', desc:'商店限定牆面（購買後可在個人頁面套用）', rarity:'rare' },
+      { id:'wall-6', type:'wall', key: 6, name:'牆面 #6', desc:'商店限定牆面（購買後可在個人頁面套用）', rarity:'rare' },
+      { id:'wall-7', type:'wall', key: 7, name:'牆面 #7', desc:'商店限定牆面（購買後可在個人頁面套用）', rarity:'epic' },
+      { id:'wall-8', type:'wall', key: 8, name:'牆面 #8', desc:'商店限定牆面（購買後可在個人頁面套用）', rarity:'legend' },
 
+      // ===== Pirate Flags (sold under ITEM tab) =====
+      // 依你指定：4、5普通 / 6、7稀有 / 8、9、10史詩 / 11-15傳說
+      { id:'flag-4',  type:'item', kind:'flag', key:4,  name:'海賊旗 #4',  desc:'懸賞牆專用海賊旗（購買後可在個人頁面套用）', rarity:'common' },
+      { id:'flag-5',  type:'item', kind:'flag', key:5,  name:'海賊旗 #5',  desc:'懸賞牆專用海賊旗（購買後可在個人頁面套用）', rarity:'common' },
+      { id:'flag-6',  type:'item', kind:'flag', key:6,  name:'海賊旗 #6',  desc:'懸賞牆專用海賊旗（購買後可在個人頁面套用）', rarity:'rare' },
+      { id:'flag-7',  type:'item', kind:'flag', key:7,  name:'海賊旗 #7',  desc:'懸賞牆專用海賊旗（購買後可在個人頁面套用）', rarity:'rare' },
+      { id:'flag-8',  type:'item', kind:'flag', key:8,  name:'海賊旗 #8',  desc:'懸賞牆專用海賊旗（購買後可在個人頁面套用）', rarity:'epic' },
+      { id:'flag-9',  type:'item', kind:'flag', key:9,  name:'海賊旗 #9',  desc:'懸賞牆專用海賊旗（購買後可在個人頁面套用）', rarity:'epic' },
+      { id:'flag-10', type:'item', kind:'flag', key:10, name:'海賊旗 #10', desc:'懸賞牆專用海賊旗（購買後可在個人頁面套用）', rarity:'epic' },
+      { id:'flag-11', type:'item', kind:'flag', key:11, name:'海賊旗 #11', desc:'懸賞牆專用海賊旗（購買後可在個人頁面套用）', rarity:'legend' },
+      { id:'flag-12', type:'item', kind:'flag', key:12, name:'海賊旗 #12', desc:'懸賞牆專用海賊旗（購買後可在個人頁面套用）', rarity:'legend' },
+      { id:'flag-13', type:'item', kind:'flag', key:13, name:'海賊旗 #13', desc:'懸賞牆專用海賊旗（購買後可在個人頁面套用）', rarity:'legend' },
+      { id:'flag-14', type:'item', kind:'flag', key:14, name:'海賊旗 #14', desc:'懸賞牆專用海賊旗（購買後可在個人頁面套用）', rarity:'legend' },
+      { id:'flag-15', type:'item', kind:'flag', key:15, name:'海賊旗 #15', desc:'懸賞牆專用海賊旗（購買後可在個人頁面套用）', rarity:'legend' },
+    ];
 
     function imgUrl(it){
       if(it.type==='avatar') return `images/avatars/${it.key}.webp`;
       if(it.type==='wall')   return `images/walls/${it.key}.webp`;
+      // flags live in images/flags
+      if(it.type==='item' && it.kind==='flag') return `images/flags/${it.key}.webp`;
+      // other items default
       return `images/items/${it.key}.webp`;
-    }
-
-    function rarityRank(r){
-  return ({common:1, rare:2, epic:3, legend:4, mythic:5})[r] || 1;
-}
-function rarityLabel(r){
-  return ({common:'普通', rare:'稀有', epic:'史詩', legend:'傳說', mythic:'神話'})[r] || '普通';
-}
-function rarityClass(r){
-  if(r==='mythic') return 'r-mythic';
-  if(r==='legend') return 'r-legend';
-  if(r==='epic')   return 'r-epic';
-  if(r==='rare')   return 'r-rare';
-  return '';
-}
-
-const PRICE_BY_RARITY = {
-  common: 5,
-  rare: 10,
-  epic: 18,
-  legend: 25,
-  mythic: 35,
-};
-
-function priceOf(it){
-  // 若未來少數商品想特例手動定價，也可保留 it.price 優先
-  if(Number.isFinite(Number(it.price))) return Number(it.price);
-  return PRICE_BY_RARITY[it.rarity] ?? 5;
-}
-
-function typeLabel(t){
-      return ({avatar:'頭像', wall:'牆面', item:'道具'})[t] || t;
     }
 
     // ===== Cloud state =====
@@ -485,7 +495,7 @@ function typeLabel(t){
         titles: { owned: [], equipped:'', equippedTier: 1 },
         bountyPosters: [],
         _appliedMatchKeys: [],
-        shop: { ownedAvatars: [], ownedWalls: [], ownedItems: [] }
+        shop: { ownedAvatars: [], ownedWalls: [], ownedItems: [], ownedFlags: [] }
       };
     }
 
@@ -494,7 +504,7 @@ function typeLabel(t){
       if(!profile.stats || typeof profile.stats!=='object') profile.stats = {};
       if(!profile.stats.client || typeof profile.stats.client!=='object') profile.stats.client = {};
       const base = defaultClient();
-      // shallow merge + ensure nested
+
       const c = profile.stats.client;
       profile.stats.client = {
         ...base,
@@ -505,20 +515,20 @@ function typeLabel(t){
         shop:   { ...base.shop,   ...(c.shop||{}) }
       };
 
-      // arrays
+      // arrays ensure
       const s = profile.stats.client.shop;
       if(!Array.isArray(s.ownedAvatars)) s.ownedAvatars = [];
-      if(!Array.isArray(s.ownedWalls)) s.ownedWalls = [];
-      if(!Array.isArray(s.ownedItems)) s.ownedItems = [];
+      if(!Array.isArray(s.ownedWalls))   s.ownedWalls   = [];
+      if(!Array.isArray(s.ownedItems))   s.ownedItems   = [];
+      if(!Array.isArray(s.ownedFlags))   s.ownedFlags   = [];
 
-      // --- backward compat (old shop wrote stats.coins) ---
-      // If old field exists and new totals.coins is empty, promote it.
+      // backward compat (old shop wrote stats.coins)
       const legacyCoins = Number(profile.stats.coins || 0) || 0;
       const newCoins = Number(profile.stats.client.totals.coins || 0) || 0;
       if(legacyCoins > 0 && newCoins <= 0){
         profile.stats.client.totals.coins = legacyCoins;
       }
-      // Keep legacy field in sync (optional but helps old pages)
+      // keep legacy in sync (helps old pages)
       profile.stats.coins = Number(profile.stats.client.totals.coins || 0) || 0;
     }
 
@@ -529,7 +539,7 @@ function typeLabel(t){
     function setCoins(v){
       ensureClient();
       profile.stats.client.totals.coins = clampInt(v, 0, 1e12);
-      profile.stats.coins = Number(profile.stats.client.totals.coins || 0) || 0; // keep legacy synced
+      profile.stats.coins = Number(profile.stats.client.totals.coins || 0) || 0;
     }
 
     function shopState(){
@@ -537,10 +547,13 @@ function typeLabel(t){
       return profile.stats.client.shop;
     }
 
+    function isFlag(it){ return it?.type==='item' && it?.kind==='flag'; }
+
     function isOwned(it){
       const s = shopState();
       if(it.type==='avatar') return s.ownedAvatars.includes(Number(it.key));
       if(it.type==='wall')   return s.ownedWalls.includes(Number(it.key));
+      if(isFlag(it))         return s.ownedFlags.includes(Number(it.key));
       return s.ownedItems.includes(String(it.key));
     }
 
@@ -552,6 +565,9 @@ function typeLabel(t){
       }else if(it.type==='wall'){
         const k = Number(it.key);
         if(!s.ownedWalls.includes(k)) s.ownedWalls.push(k);
+      }else if(isFlag(it)){
+        const k = Number(it.key);
+        if(!s.ownedFlags.includes(k)) s.ownedFlags.push(k);
       }else{
         const k = String(it.key);
         if(!s.ownedItems.includes(k)) s.ownedItems.push(k);
@@ -584,7 +600,6 @@ function typeLabel(t){
     }
 
     async function saveCloud(reason){
-      // write back ONLY what we need (avoid clobbering other stats keys)
       ensureClient();
       return await profileUpdate({
         stats: {
@@ -613,6 +628,7 @@ function typeLabel(t){
       let list = SHOP
         .filter(it => it.type === curTab)
         .map(it => ({ ...it, price: priceOf(it) }));
+
       if(q){
         list = list.filter(it =>
           (it.name && it.name.toLowerCase().includes(q)) ||
@@ -684,21 +700,21 @@ function typeLabel(t){
 
     // ===== modal =====
     function openModal(it, opt={}){
-      curPick = it;
-      const owned = isOwned(it);
+      curPick = { ...it, price: priceOf(it) };
+      const owned = isOwned(curPick);
 
       $('mTitle').textContent = `商品詳情`;
-      $('mImg').src = imgUrl(it);
-      $('mName').textContent = it.name;
-      $('mDesc').textContent = it.desc || '';
-      $('mType').textContent = typeLabel(it.type);
-      $('mRarity').textContent = rarityLabel(it.rarity);
-      $('mPrice').textContent = `${fmt(it.price)} 金幣`;
+      $('mImg').src = imgUrl(curPick);
+      $('mName').textContent = curPick.name;
+      $('mDesc').textContent = curPick.desc || '';
+      $('mType').textContent = typeLabel(curPick.type);
+      $('mRarity').textContent = rarityLabel(curPick.rarity);
+      $('mPrice').textContent = `${fmt(curPick.price)} 金幣`;
       $('mOwned').textContent = owned ? '已擁有' : '未擁有';
 
       const btn = $('mBuy');
-      btn.disabled = saving || owned || coins() < it.price;
-      btn.textContent = owned ? '已擁有' : (coins() < it.price ? '金幣不足' : '購買');
+      btn.disabled = saving || owned || coins() < curPick.price;
+      btn.textContent = owned ? '已擁有' : (coins() < curPick.price ? '金幣不足' : '購買');
 
       $('modalBack').classList.add('show');
       if(opt.focusBuy && !btn.disabled) btn.focus();
@@ -722,10 +738,8 @@ function typeLabel(t){
       toast('儲存中…');
 
       try{
-        // local mutate
         setCoins(coins() - it.price);
         own(it);
-
         await saveCloud('shop-buy');
         toast(`已購買：${it.name} ✓`);
         closeModal();
@@ -787,11 +801,9 @@ function typeLabel(t){
         try{
           await profileGet();
           // 如果發現舊 coins→新 coins 的提升，順便寫回（避免其他頁面顯示不一致）
-          // 注意：只在必要時才寫，避免每次進商店都 UPDATE。
           const legacy = Number(profile?.stats?.coins || 0) || 0;
           const now = Number(profile?.stats?.client?.totals?.coins || 0) || 0;
           if(legacy !== now){
-            // ensureClient 已同步 legacy = now，但這裡再補寫一次保險（只差異時）
             try{ await saveCloud('shop-migrate-coins'); }catch(_){}
           }
           render();
@@ -809,5 +821,3 @@ function typeLabel(t){
   </script>
 </body>
 </html>
-
-
