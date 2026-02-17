@@ -2234,10 +2234,15 @@ function renderFlag(){
   img.src = flagUrlById(id);
   img.alt = 'flag';
 
-  img.style.top = '16px';
-  img.style.right = '26px';
-  img.style.width = '170px';
-  img.style.height = 'auto';
+// === 海賊旗位置與尺寸（已調整） ===
+img.style.top = '67px';
+img.style.right = '173px';
+img.style.width = '373px';
+img.style.height = 'auto';
+img.style.opacity = '1.00';
+img.style.zIndex = '1';
+img.style.transform = 'rotate(0deg)';
+
 
   stage.appendChild(img);
 }
