@@ -46,6 +46,7 @@
       cursor:pointer;
       user-select:none;
       position:relative;
+      isolation:isolate;
       flex:none;
     }
     .avatarBox img{width:100%;height:100%;object-fit:cover;display:block}
@@ -111,6 +112,7 @@
     .wallStage::after{
       content:"";
       position:absolute; inset:0;
+      z-index:1;
       background-image:
         radial-gradient(circle at 20% 30%, rgba(255,255,255,.05), transparent 35%),
         radial-gradient(circle at 75% 40%, rgba(255,255,255,.04), transparent 35%),
@@ -122,6 +124,7 @@
 
     .poster{
       position:absolute;
+      z-index:3;
       width: 140px;
       aspect-ratio: 2 / 3;
       border-radius: 10px;
@@ -148,6 +151,16 @@
       color: rgba(255,255,255,.92);
       text-shadow: 0 2px 6px rgba(0,0,0,.6);
     }
+
+
+.flagLayer{
+  position:absolute;
+  z-index:2;
+  pointer-events:none;
+  user-select:none;
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
+  opacity:.98;
+}
 
     .wallTools{ display:flex; gap:8px; flex-wrap:wrap; }
     .wallTools .btn{ padding:8px 10px; }
@@ -834,6 +847,7 @@
 
         <div class="wallTools">
           <button class="btn" id="btnPickWall">選擇牆</button>
+          <button class="btn" id="btnPickFlag">選擇海賊旗</button>
         </div>
       </div>
 
@@ -1030,6 +1044,29 @@
     </div>
   </div>
 
+
+<!-- flag modal -->
+<div class="modalBack" id="flagModalBack" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="mh">
+      <div class="t">選擇海賊旗（雲端）</div>
+      <button class="xBtn" id="flagModalClose" title="關閉">✕</button>
+    </div>
+    <div class="mb">
+      <div class="help" style="margin-bottom:10px">
+        路徑：<span class="mono">images/flags/{1..10}.webp</span>（1~3 免費；4~10 需先在商店購買）。
+      </div>
+
+      <div class="wallGrid" id="flagGrid"></div>
+
+      <div class="actions2">
+        <button class="btn" id="flagCancel">取消</button>
+        <button class="btn primary" id="flagSave">套用</button>
+      </div>
+    </div>
+  </div>
+</div>
+
   <!-- card image viewer modal -->
   <div class="modalBack" id="imgModalBack" role="dialog" aria-modal="true">
     <div class="imgModal">
@@ -1062,12 +1099,14 @@ const socket = io(SERVER_URL, { transports: ['websocket'] });
 
 const AVATAR_COUNT = 50;
 const WALL_COUNT = 8;
+const FLAG_COUNT = 10;
 
 // === state (memory only) ===
 let __secret = '';
 let __cloudProfile = null;   // {name, avatar, stats}
 let __client = null;         // cloud stats.client
 let __wallId = 1;            // cloud stats.wall.id
+let __flagId = 1;           // cloud stats.wall.flagId
 let __saving = false;
 
 // ===== basic utils =====
@@ -1090,6 +1129,10 @@ function avatarUrlById(id){
 function wallUrlById(id){
   const n = clamp(id, 1, WALL_COUNT);
   return `images/walls/${n}.webp`;
+}
+function flagUrlById(id){
+  const n = clamp(id, 1, FLAG_COUNT);
+  return `images/flags/${n}.webp`;
 }
 function fmtTs(ts){
   if (!ts) return '-';
@@ -1158,16 +1201,17 @@ function defaultClient(name, avatar){
     recent: [],
     titles: { owned: [], equipped: '', equippedTier: 1 },
     bountyPosters: [],
-    shop: { ownedAvatars: [], ownedWalls: [], ownedItems: [] },
+    shop: { ownedAvatars: [], ownedWalls: [], ownedFlags: [], ownedItems: [] },
     _appliedMatchKeys: []
   };
 }
 
 function ensureShopState(){
   if(!__client) return;
-  if(!__client.shop || typeof __client.shop!=='object') __client.shop = { ownedAvatars: [], ownedWalls: [], ownedItems: [] };
+  if(!__client.shop || typeof __client.shop!=='object') __client.shop = { ownedAvatars: [], ownedWalls: [], ownedFlags: [], ownedItems: [] };
   if(!Array.isArray(__client.shop.ownedAvatars)) __client.shop.ownedAvatars = [];
   if(!Array.isArray(__client.shop.ownedWalls)) __client.shop.ownedWalls = [];
+  if(!Array.isArray(__client.shop.ownedFlags)) __client.shop.ownedFlags = [];
   if(!Array.isArray(__client.shop.ownedItems)) __client.shop.ownedItems = [];
 }
 function normalizeOwnedTitles(arr){
@@ -1345,6 +1389,7 @@ async function renderWall(){
   if(!stage) return;
 
   applyWallBackground();
+  renderFlag();
   stage.querySelectorAll('.poster').forEach(n=>n.remove());
 
 const metasRaw = Array.isArray(__client?.bountyPosters) ? __client.bountyPosters : [];
@@ -1446,6 +1491,48 @@ function buildWallGrid(pendingId){
 
   grid.dataset.pendingId = String(pendingId);
 }
+
+
+function buildFlagGrid(pendingId){
+  const grid = document.getElementById('flagGrid');
+  if(!grid) return;
+  grid.innerHTML = '';
+
+  for(let i=1; i<=FLAG_COUNT; i++){
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    const isOwned = canUseFlag(i);
+    btn.className = 'wallBtn' + (i===pendingId ? ' on' : '') + (isOwned ? '' : ' locked');
+
+    const thumb = document.createElement('div');
+    thumb.className = 'thumb';
+    thumb.style.backgroundImage = `url(${flagUrlById(i)})`;
+    btn.appendChild(thumb);
+
+    const lab = document.createElement('div');
+    lab.className = 'lab';
+    lab.textContent = `#${i}`;
+    btn.appendChild(lab);
+
+    btn.onclick = () => {
+      if(!isOwned){
+        const ok = confirm(`海賊旗 #${i} 需要先在商店購買才能使用。
+要現在前往商店嗎？`);
+        if(ok) location.href = 'shop.html';
+        return;
+      }
+      pendingId = i;
+      grid.querySelectorAll('.wallBtn').forEach(x=>x.classList.remove('on'));
+      btn.classList.add('on');
+      grid.dataset.pendingId = String(pendingId);
+    };
+
+    grid.appendChild(btn);
+  }
+
+  grid.dataset.pendingId = String(pendingId);
+}
+
 
 // ===== render main =====
 function renderHeader(){
@@ -1974,7 +2061,7 @@ async function saveClientToCloud(nextClient, {reason=''} = {}){
     stats: {
       ...(__cloudProfile?.stats || {}),
       client: mergedClient,
-      wall: { id: clamp(__wallId, 1, WALL_COUNT) }
+      wall: { id: clamp(__wallId, 1, WALL_COUNT), flagId: clamp(__flagId, 1, FLAG_COUNT) }
     }
   };
 
@@ -2018,6 +2105,7 @@ async function boot(){
 
   // wall
   __wallId = clamp(Number(cloud?.stats?.wall?.id)||1, 1, WALL_COUNT);
+  __flagId = clamp(Number(cloud?.stats?.wall?.flagId)||1, 1, FLAG_COUNT);
 
   // client
   __client = (cloud?.stats?.client && typeof cloud.stats.client === 'object')
@@ -2112,6 +2200,48 @@ function canUseWall(id){
   const n = clamp(id, 1, WALL_COUNT);
   return getOwnedWalls().has(n);
 }
+
+
+function getOwnedFlags(){
+  // 海賊旗 1~3 free；4~10 需在商店購買
+  const owned = new Set([1,2,3]);
+  ensureShopState();
+  const arr = __client?.shop?.ownedFlags;
+  if(Array.isArray(arr)){
+    for(const n of arr){
+      const k = Number(n);
+      if(Number.isFinite(k)) owned.add(k);
+    }
+  }
+  return owned;
+}
+function canUseFlag(id){
+  const n = clamp(id, 1, FLAG_COUNT);
+  return getOwnedFlags().has(n);
+}
+
+function renderFlag(){
+  const stage = document.getElementById('wallStage');
+  if(!stage) return;
+
+  stage.querySelectorAll('.flagLayer').forEach(n=>n.remove());
+
+  let id = clamp(__flagId, 1, FLAG_COUNT);
+  if(!canUseFlag(id)) id = 1;
+
+  const img = document.createElement('img');
+  img.className = 'flagLayer';
+  img.src = flagUrlById(id);
+  img.alt = 'flag';
+
+  img.style.top = '16px';
+  img.style.right = '26px';
+  img.style.width = '170px';
+  img.style.height = 'auto';
+
+  stage.appendChild(img);
+}
+
 function buildAvatarGrid(){
   const grid = document.getElementById('avaGrid');
   grid.innerHTML = '';
@@ -2213,7 +2343,7 @@ document.getElementById('wallSave')?.addEventListener('click', async ()=>{
     stats: {
       ...(__cloudProfile?.stats || {}),
       client: __client || defaultClient(__cloudProfile?.name, __cloudProfile?.avatar),
-      wall: { id: clamp(__wallId, 1, WALL_COUNT) }
+      wall: { id: clamp(__wallId, 1, WALL_COUNT), flagId: clamp(__flagId, 1, FLAG_COUNT) }
     }
   };
   const ok = await cloudUpdate(__secret, patch);
@@ -2225,6 +2355,52 @@ document.getElementById('wallSave')?.addEventListener('click', async ()=>{
   closeWallModal();
   renderWall();
 });
+
+
+// flag modal
+const openFlagModal = () => {
+  buildFlagGrid(clamp(__flagId, 1, FLAG_COUNT));
+  openModal('flagModalBack');
+};
+const closeFlagModal = ()=> closeModal('flagModalBack');
+
+document.getElementById('btnPickFlag')?.addEventListener('click', openFlagModal);
+document.getElementById('flagModalClose')?.addEventListener('click', closeFlagModal);
+document.getElementById('flagCancel')?.addEventListener('click', closeFlagModal);
+document.getElementById('flagModalBack')?.addEventListener('click', (ev)=>{
+  if(ev.target && ev.target.id==='flagModalBack') closeFlagModal();
+});
+document.getElementById('flagSave')?.addEventListener('click', async ()=>{
+  if(__saving) return;
+  const grid = document.getElementById('flagGrid');
+  const pendingId = clamp(Number(grid?.dataset?.pendingId)||1, 1, FLAG_COUNT);
+  if(!canUseFlag(pendingId)){
+    const ok = confirm(`海賊旗 #${pendingId} 尚未購買，無法套用。\n要現在前往商店嗎？`);
+    if(ok) location.href = 'shop.html';
+    return;
+  }
+  __flagId = pendingId;
+
+  showLoading('寫入雲端…', '正在儲存：海賊旗');
+  const patch = {
+    name: clampStr(__cloudProfile?.name || '未命名玩家', 16) || '未命名玩家',
+    avatar: String(clamp(Number(__cloudProfile?.avatar)||1, 1, AVATAR_COUNT)),
+    stats: {
+      ...(__cloudProfile?.stats || {}),
+      client: __client || defaultClient(__cloudProfile?.name, __cloudProfile?.avatar),
+      wall: { id: clamp(__wallId, 1, WALL_COUNT), flagId: clamp(__flagId, 1, FLAG_COUNT) }
+    }
+  };
+  const ok = await cloudUpdate(__secret, patch);
+  if(!ok){
+    showLoading('雲端儲存失敗', '請確認網路，或稍後再試。', true);
+    return;
+  }
+  hideLoading();
+  closeFlagModal();
+  renderWall();
+});
+
 
 boot();
 </script>
