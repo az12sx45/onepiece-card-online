@@ -1142,17 +1142,33 @@ if (myId == null) {
 const p = st.players[myId];
 
 // ✅ 稱號防呆（避免太長/亂值）
-const safeTitle = String(title || "").trim().slice(0, 18);
-const safeTier  = Math.max(1, Math.min(6, Number(titleTier || 1) || 1));
+const incomingTitle = String(title ?? "").trim().slice(0, 18);
+const incomingTier  = Math.max(1, Math.min(6, Number(titleTier || 1) || 1));
 
-p.client = { displayName, avatar, pid, title: safeTitle, titleTier: safeTier };
+// 先確保 client 容器存在
+if (!p.client || typeof p.client !== "object") p.client = {};
+
+// === 1) 一定更新名稱/頭像/pid/secret（但不一定更新稱號）===
+p.client.displayName = displayName;
+p.client.avatar = avatar;
+p.client.pid = pid;
+
 p.displayName = displayName;
 p.avatar = avatar;
 p.secret = sec;
 
-// ✅ 也存一份在 player 本體上（你 broadcastLobby 用這份取最快）
-p.title = safeTitle;
-p.titleTier = safeTier;
+// === 2) 只有「真的有帶稱號」才覆蓋（避免 game.html JOIN_ROOM 沒帶稱號就把稱號洗掉）===
+if (incomingTitle) {
+  p.client.title = incomingTitle;
+  p.client.titleTier = incomingTier;
+  p.title = incomingTitle;
+  p.titleTier = incomingTier;
+} else {
+  // 若沒帶稱號，至少確保 tier 有合理值（不要變成 undefined）
+  const keepTier = Math.max(1, Math.min(6, Number(p.client.titleTier ?? p.titleTier ?? 1) || 1));
+  p.client.titleTier = keepTier;
+  p.titleTier = keepTier;
+}
 
 
     // 第一位為房主
