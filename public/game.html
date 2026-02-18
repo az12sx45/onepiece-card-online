@@ -3155,26 +3155,38 @@ function getRoomTitleCache(){
 
 function playerEquippedTitle(p){
   const c = p?.client || {};
-  const titles = c.titles || {};
-  const label =
-    String(titles.equipped ?? c.equippedTitle ?? c.title ?? c.titleLabel ?? '').trim();
-  if(!label){
-const cache = getRoomTitleCache();
-const sec = String(p?.secret || "").trim();
 
-const hit =
-  (sec && cache[`sec:${sec}`]) ||
-  cache[`id:${p?.id}`] ||
-  cache[String(p?.id)] ||
-  cache[p?.id];
+  // ✅ 1) 正確來源：永遠優先吃「玩家自身資料」(後端 broadcastState 已注入)
+  const label = String(
+    c.title ?? p?.title ??
+    c.equippedTitle ?? c.titleLabel ??
+    c.titles?.equipped ?? ''
+  ).trim();
 
-    const clabel = String(hit?.label ?? hit?.title ?? '').trim();
-    if(!clabel) return { label:'', tier:1 };
-    const ctier = normTier(hit?.tier ?? hit?.titleTier ?? 1);
-    return { label: clabel, tier: ctier };
-  }
-  const tier = normTier(titles.equippedTier ?? c.equippedTier ?? c.titleTier ?? 1);
-  return { label, tier };
+  const tier = normTier(
+    c.titleTier ?? p?.titleTier ??
+    c.equippedTier ?? c.titles?.equippedTier ?? 1
+  );
+
+  if (label) return { label, tier };
+
+  // 🧯 2) 最後保底：只補「我自己」的稱號（用 secret 對）
+  try{
+    const cache = getRoomTitleCache();
+    const sec = String(p?.secret || '').trim();
+    const mySec = String(me?.secret || localStorage.getItem('opSecret') || '').trim();
+
+    if (sec && mySec && sec === mySec) {
+      const hit = cache[`sec:${sec}`];
+      const clabel = String(hit?.label ?? hit?.title ?? '').trim();
+      if (clabel) {
+        const ctier = normTier(hit?.tier ?? hit?.titleTier ?? 1);
+        return { label: clabel, tier: ctier };
+      }
+    }
+  }catch(e){}
+
+  return { label:'', tier:1 };
 }
 
 
