@@ -2716,8 +2716,6 @@ const presetN      = Math.max(2, Math.min(8, Number(sp.get('n') || '4') || 4));
 const serverURL = sp.get('server') || undefined;
 const socket = io(serverURL, { transports:['websocket'] });
 let me = { roomId: presetRoom || 'op-001', playerId: null, secret: localStorage.getItem('opSecret')||'' };
-let myEquippedTitle = "";
-let myEquippedTier = 1;
 let _autoSkipKey = null;   // 麻痺自動跳過用的防呆 key
 let state = null;
 let _pendingDuel = null;   // 等待補上卡片資訊的決鬥事件
@@ -3157,38 +3155,26 @@ function getRoomTitleCache(){
 
 function playerEquippedTitle(p){
   const c = p?.client || {};
+  const titles = c.titles || {};
+  const label =
+    String(titles.equipped ?? c.equippedTitle ?? c.title ?? c.titleLabel ?? '').trim();
+  if(!label){
+const cache = getRoomTitleCache();
+const sec = String(p?.secret || "").trim();
 
-  // ✅ 1) 正確來源：永遠優先吃「玩家自身資料」(後端 broadcastState 已注入)
-  const label = String(
-    c.title ?? p?.title ??
-    c.equippedTitle ?? c.titleLabel ??
-    c.titles?.equipped ?? ''
-  ).trim();
+const hit =
+  (sec && cache[`sec:${sec}`]) ||
+  cache[`id:${p?.id}`] ||
+  cache[String(p?.id)] ||
+  cache[p?.id];
 
-  const tier = normTier(
-    c.titleTier ?? p?.titleTier ??
-    c.equippedTier ?? c.titles?.equippedTier ?? 1
-  );
-
-  if (label) return { label, tier };
-
-  // 🧯 2) 最後保底：只補「我自己」的稱號（用 secret 對）
-  try{
-    const cache = getRoomTitleCache();
-    const sec = String(p?.secret || '').trim();
-    const mySec = String(me?.secret || localStorage.getItem('opSecret') || '').trim();
-
-    if (sec && mySec && sec === mySec) {
-      const hit = cache[`sec:${sec}`];
-      const clabel = String(hit?.label ?? hit?.title ?? '').trim();
-      if (clabel) {
-        const ctier = normTier(hit?.tier ?? hit?.titleTier ?? 1);
-        return { label: clabel, tier: ctier };
-      }
-    }
-  }catch(e){}
-
-  return { label:'', tier:1 };
+    const clabel = String(hit?.label ?? hit?.title ?? '').trim();
+    if(!clabel) return { label:'', tier:1 };
+    const ctier = normTier(hit?.tier ?? hit?.titleTier ?? 1);
+    return { label: clabel, tier: ctier };
+  }
+  const tier = normTier(titles.equippedTier ?? c.equippedTier ?? c.titleTier ?? 1);
+  return { label, tier };
 }
 
 
@@ -3839,20 +3825,6 @@ socket.on('connect', ()=>{ el.conn.textContent='connected'; el.conn.classList.re
 socket.on('disconnect', ()=>{ el.conn.textContent='disconnected'; el.conn.classList.replace('text-green-400','text-red-400'); });
 socket.on('connect_error', (e)=>{ el.conn.textContent='error'; el.conn.classList.replace('text-green-400','text-red-400'); console.error(e); });
 
-function fetchMyTitleOnce(){
-  const sec = String(me.secret || "").trim();
-  if (!sec) return;
-
-  socket.timeout(8000).emit("PROFILE_GET", { secret: sec }, (err, res) => {
-    if (err || !res?.ok || !res?.profile) return;
-    // 你的 start.html 用的是 profile.equippedTitle / equippedTier
-    myEquippedTitle = String(res.profile.equippedTitle || "").trim();
-    myEquippedTier  = Number(res.profile.equippedTier || 1) || 1;
-  });
-}
-fetchMyTitleOnce();
-
-
 function sendAction(type, payload={}){
   if(me.playerId==null) return;
   socket.emit('ACTION', { type, payload, roomId: me.roomId, playerId: me.playerId, secret: me.secret });
@@ -3869,17 +3841,13 @@ function doJoin(displayNameOverride){
 
   el.roomLbl.textContent = me.roomId;
 
-socket.emit('JOIN_ROOM', {
-  roomId: me.roomId,
-  displayName,
-  avatar: presetAvatar,
-  secret: me.secret,
-  pid: me.playerId,
-
-  // ✅ 把我自己的稱號帶回 server（避免空值）
-  title: myEquippedTitle || "",
-  titleTier: myEquippedTier || 1,
-});
+  socket.emit('JOIN_ROOM', {
+    roomId: me.roomId,
+    displayName,
+    avatar: presetAvatar,
+    secret: me.secret,
+    pid: me.playerId   // 多帶一個 pid 給後端記錄（結果頁也會用到）
+  });
 
   hasJoinedOnce = true;
 }
