@@ -3162,14 +3162,14 @@ function playerEquippedTitle(p){
 const cache = getRoomTitleCache();
 const sec = String(p?.secret || "").trim();
 
-const hit =
-  (sec && cache[`sec:${sec}`]) ||
-  cache[`id:${p?.id}`] ||
-  cache[String(p?.id)] ||
-  cache[p?.id];
+// 🔥 永遠只用 secret 對應，禁止用 id
+const hit = (sec && cache[`sec:${sec}`]) || null;
 
-    const clabel = String(hit?.label ?? hit?.title ?? '').trim();
-    if(!clabel) return { label:'', tier:1 };
+if(!hit) return { label:'', tier:1 };
+
+const clabel = String(hit.label || '').trim();
+if(!clabel) return { label:'', tier:1 };
+
     const ctier = normTier(hit?.tier ?? hit?.titleTier ?? 1);
     return { label: clabel, tier: ctier };
   }
