@@ -2716,6 +2716,8 @@ const presetN      = Math.max(2, Math.min(8, Number(sp.get('n') || '4') || 4));
 const serverURL = sp.get('server') || undefined;
 const socket = io(serverURL, { transports:['websocket'] });
 let me = { roomId: presetRoom || 'op-001', playerId: null, secret: localStorage.getItem('opSecret')||'' };
+let myEquippedTitle = "";
+let myEquippedTier = 1;
 let _autoSkipKey = null;   // 麻痺自動跳過用的防呆 key
 let state = null;
 let _pendingDuel = null;   // 等待補上卡片資訊的決鬥事件
@@ -3837,6 +3839,20 @@ socket.on('connect', ()=>{ el.conn.textContent='connected'; el.conn.classList.re
 socket.on('disconnect', ()=>{ el.conn.textContent='disconnected'; el.conn.classList.replace('text-green-400','text-red-400'); });
 socket.on('connect_error', (e)=>{ el.conn.textContent='error'; el.conn.classList.replace('text-green-400','text-red-400'); console.error(e); });
 
+function fetchMyTitleOnce(){
+  const sec = String(me.secret || "").trim();
+  if (!sec) return;
+
+  socket.timeout(8000).emit("PROFILE_GET", { secret: sec }, (err, res) => {
+    if (err || !res?.ok || !res?.profile) return;
+    // 你的 start.html 用的是 profile.equippedTitle / equippedTier
+    myEquippedTitle = String(res.profile.equippedTitle || "").trim();
+    myEquippedTier  = Number(res.profile.equippedTier || 1) || 1;
+  });
+}
+fetchMyTitleOnce();
+
+
 function sendAction(type, payload={}){
   if(me.playerId==null) return;
   socket.emit('ACTION', { type, payload, roomId: me.roomId, playerId: me.playerId, secret: me.secret });
@@ -3853,13 +3869,17 @@ function doJoin(displayNameOverride){
 
   el.roomLbl.textContent = me.roomId;
 
-  socket.emit('JOIN_ROOM', {
-    roomId: me.roomId,
-    displayName,
-    avatar: presetAvatar,
-    secret: me.secret,
-    pid: me.playerId   // 多帶一個 pid 給後端記錄（結果頁也會用到）
-  });
+socket.emit('JOIN_ROOM', {
+  roomId: me.roomId,
+  displayName,
+  avatar: presetAvatar,
+  secret: me.secret,
+  pid: me.playerId,
+
+  // ✅ 把我自己的稱號帶回 server（避免空值）
+  title: myEquippedTitle || "",
+  titleTier: myEquippedTier || 1,
+});
 
   hasJoinedOnce = true;
 }
