@@ -3156,25 +3156,29 @@ function getRoomTitleCache(){
 function playerEquippedTitle(p){
   const c = p?.client || {};
   const titles = c.titles || {};
+
   const label =
-    String(titles.equipped ?? c.equippedTitle ?? c.title ?? c.titleLabel ?? '').trim();
-  if(!label){
-const cache = getRoomTitleCache();
-const sec = String(p?.secret || "").trim();
+    String(titles.equipped ?? c.equippedTitle ?? '').trim();
 
-// 🔥 永遠只用 secret 對應，禁止用 id
-const hit = (sec && cache[`sec:${sec}`]) || null;
-
-if(!hit) return { label:'', tier:1 };
-
-const clabel = String(hit.label || '').trim();
-if(!clabel) return { label:'', tier:1 };
-
-    const ctier = normTier(hit?.tier ?? hit?.titleTier ?? 1);
-    return { label: clabel, tier: ctier };
+  // 如果 server 已經有 title，直接用
+  if(label){
+    const tier = normTier(titles.equippedTier ?? c.equippedTier ?? 1);
+    return { label, tier };
   }
-  const tier = normTier(titles.equippedTier ?? c.equippedTier ?? c.titleTier ?? 1);
-  return { label, tier };
+
+  // 🔥 否則只用 secret 查 cache
+  const cache = getRoomTitleCache();
+  const sec = String(p?.secret || "").trim();
+
+  const hit = (sec && cache[`sec:${sec}`]) || null;
+
+  if(!hit) return { label:'', tier:1 };
+
+  const clabel = String(hit.label || '').trim();
+  if(!clabel) return { label:'', tier:1 };
+
+  const ctier = normTier(hit.tier ?? 1);
+  return { label: clabel, tier: ctier };
 }
 
 
