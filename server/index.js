@@ -74,7 +74,7 @@ function injectChestCoins(vis){
   return vis;
 }
 
-function injectTitlesIntoVisibleState(vis, fullState){
+function injectRanksIntoVisibleState(vis, fullState){
   try{
     if (!vis || !Array.isArray(vis.players) || !fullState || !Array.isArray(fullState.players)) return vis;
 
@@ -83,22 +83,17 @@ function injectTitlesIntoVisibleState(vis, fullState){
       const fp = byId.get(vp?.id);
       if (!fp) continue;
 
-      const title = String(fp?.client?.title ?? fp?.title ?? "").trim();
-      const tier0 = Number(fp?.client?.titleTier ?? fp?.titleTier ?? 1) || 1;
-      const tier = Math.max(1, Math.min(6, tier0));
+      const rank = fp?.client?.rank ?? fp?.rank ?? null;
 
-      // 確保 vis 這邊也有 client 容器
       if (!vp.client || typeof vp.client !== "object") vp.client = {};
 
-      // 同時塞 client + root，讓前端怎麼吃都吃得到
-      vp.client.title = title;
-      vp.client.titleTier = tier;
-      vp.title = title;
-      vp.titleTier = tier;
+      vp.client.rank = (rank && typeof rank === "object") ? rank : null;
+      vp.rank = (rank && typeof rank === "object") ? rank : null;
     }
   }catch{}
   return vis;
 }
+
 
 
 function broadcastState(room){
@@ -1204,10 +1199,6 @@ if ((!pickedTitle || !pickedRank) && sec) {
   }
 }
 
-  } catch (e) {
-    console.error("[JOIN_ROOM] load title from DB failed:", e?.message || e);
-  }
-}
 
 const safeTitle = String(pickedTitle || "").trim().slice(0, 18);
 const safeTier  = Math.max(1, Math.min(6, Number(pickedTier || 1) || 1));
