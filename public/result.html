@@ -789,7 +789,7 @@ function defaultClient(){
     deluxeUnlocked: [],         // [cardNo,...]
     titles: { owned: [], equipped:'', equippedTier: 1 }, // owned: [{label,tier}]
     bountyPosters: [],          // [{key, ts, title, name, bounty, avatar}]
-    _appliedMatchKeys: []       // [matchKey,...] 防止重複累加
+    _appliedMatchKeys: [],      // [matchKey,...] 防止重複累加
 
     // ✅ 段位系統（新增）
     rank: {
@@ -801,8 +801,7 @@ function defaultClient(){
         score: 0            // Σ(perf)
       },
       updatedAt: 0
-    },
-
+    }
   };
 }
 
