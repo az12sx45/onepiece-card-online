@@ -3155,27 +3155,33 @@ function getRoomTitleCache(){
 
 function playerEquippedTitle(p){
   const c = p?.client || {};
-  const titles = c.titles || {};
-  const label =
-    String(titles.equipped ?? c.equippedTitle ?? c.title ?? c.titleLabel ?? '').trim();
-  if(!label){
-const cache = getRoomTitleCache();
-const sec = String(p?.secret || "").trim();
 
-const hit =
-  (sec && cache[`sec:${sec}`]) ||
-  cache[`id:${p?.id}`] ||
-  cache[String(p?.id)] ||
-  cache[p?.id];
+  // ✅ 1) 最優先：吃伺服器 STATE 注入的 title（洗牌後仍正確）
+  const directLabel = String(c.title ?? p?.title ?? '').trim();
+  const directTier  = normTier(c.titleTier ?? p?.titleTier ?? 1);
+  if (directLabel) return { label: directLabel, tier: directTier };
+
+  // ✅ 2) 次優先：如果你有設計「titles.equipped」這種結構也支援
+  const titles = c.titles || {};
+  const eqLabel = String(titles.equipped ?? c.equippedTitle ?? '').trim();
+  const eqTier  = normTier(titles.equippedTier ?? c.equippedTier ?? 1);
+  if (eqLabel) return { label: eqLabel, tier: eqTier };
+
+  // 🧯 3) 最後保底：只用 secret 去 sessionStorage 對照（不要再用 p.id，避免「跟座位走」）
+  try{
+    const cache = getRoomTitleCache();
+    const sec = String(p?.secret || "").trim();
+    const hit = (sec && cache[`sec:${sec}`]) || null;
 
     const clabel = String(hit?.label ?? hit?.title ?? '').trim();
-    if(!clabel) return { label:'', tier:1 };
+    if (!clabel) return { label:'', tier:1 };
     const ctier = normTier(hit?.tier ?? hit?.titleTier ?? 1);
     return { label: clabel, tier: ctier };
+  }catch(e){
+    return { label:'', tier:1 };
   }
-  const tier = normTier(titles.equippedTier ?? c.equippedTier ?? c.titleTier ?? 1);
-  return { label, tier };
 }
+
 
 
 
