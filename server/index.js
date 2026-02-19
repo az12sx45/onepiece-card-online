@@ -74,6 +74,32 @@ function injectChestCoins(vis){
   return vis;
 }
 
+function injectTitlesIntoVisibleState(vis, fullState){
+  try{
+    if (!vis || !Array.isArray(vis.players) || !fullState || !Array.isArray(fullState.players)) return vis;
+
+    const byId = new Map(fullState.players.map(p => [p.id, p]));
+    for (const vp of vis.players){
+      const fp = byId.get(vp?.id);
+      if (!fp) continue;
+
+      const title = String(fp?.client?.title ?? fp?.title ?? "").trim();
+      const tier0 = Number(fp?.client?.titleTier ?? fp?.titleTier ?? 1) || 1;
+      const tier = Math.max(1, Math.min(6, tier0));
+
+      if (!vp.client || typeof vp.client !== "object") vp.client = {};
+
+      // 同時塞到 client + root，前端怎麼吃都吃得到
+      vp.client.title = title;
+      vp.client.titleTier = tier;
+      vp.title = title;
+      vp.titleTier = tier;
+    }
+  }catch{}
+  return vis;
+}
+
+
 function injectRanksIntoVisibleState(vis, fullState){
   try{
     if (!vis || !Array.isArray(vis.players) || !fullState || !Array.isArray(fullState.players)) return vis;
@@ -105,22 +131,7 @@ function broadcastState(room){
     let vis = injectChestCoins(getVisibleState(st, meta.playerId));
     vis = injectTitlesIntoVisibleState(vis, st);
 vis = injectRanksIntoVisibleState(vis, st);
-function injectRanksIntoVisibleState(vis, fullState){
-  try{
-    if (!vis || !Array.isArray(vis.players) || !fullState || !Array.isArray(fullState.players)) return vis;
 
-    const byId = new Map(fullState.players.map(p => [p.id, p]));
-    for (const vp of vis.players){
-      const fp = byId.get(vp?.id);
-      if (!fp) continue;
-
-      const rank = fp?.client?.rank ?? fp?.rank ?? null;
-
-      if (!vp.client || typeof vp.client !== "object") vp.client = {};
-
-      vp.client.rank = rank && typeof rank === "object" ? rank : null;
-      vp.rank = rank && typeof rank === "object" ? rank : null;
-    }
   }catch{}
   return vis;
 }
