@@ -130,16 +130,13 @@ function broadcastState(room){
   for (const [sid, meta] of room.sockets){
     let vis = injectChestCoins(getVisibleState(st, meta.playerId));
     vis = injectTitlesIntoVisibleState(vis, st);
-vis = injectRanksIntoVisibleState(vis, st);
-
-  }catch{}
-  return vis;
-}
+    vis = injectRanksIntoVisibleState(vis, st);
 
     vis.viewerCanNext = (room.host === meta.playerId) || winners.has(meta.playerId);
     io.to(sid).emit("STATE", vis);
   }
 }
+
 
 function broadcastLobby(roomId){
   const room = rooms.get(roomId);
