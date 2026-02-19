@@ -162,6 +162,38 @@
   opacity:.98;
 }
 
+.rankLayer{
+  position:absolute;
+  z-index:2;
+  pointer-events:none;
+  user-select:none;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,35));
+}
+
+.rankLayer img{
+  display:block;
+  width:120px;     /* 你要更大就改這裡 */
+  height:auto;
+}
+
+.rankLayer .rankText{
+  padding:4px 8px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,18);
+  background:rgba(2,6,23,70);
+  color:rgba(255,255,255,92);
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.3px;
+  text-shadow:0 2px 6px rgba(0,0,0,55);
+  white-space:nowrap;
+}
+
+
     .wallTools{ display:flex; gap:8px; flex-wrap:wrap; }
     .wallTools .btn{ padding:8px 10px; }
     .wallEmpty{
@@ -1134,6 +1166,11 @@ function flagUrlById(id){
   const n = clamp(id, 1, FLAG_COUNT);
   return `images/flags/${n}.webp`;
 }
+function rankUrlByTier(tier){
+  const t = clamp(Number(tier)||1, 1, 7);
+  return `images/ranks/r${t}.webp`;
+}
+
 function fmtTs(ts){
   if (!ts) return '-';
   const d = new Date(ts);
@@ -1390,6 +1427,7 @@ async function renderWall(){
 
   applyWallBackground();
   renderFlag();
+  renderRank(); 
   stage.querySelectorAll('.poster').forEach(n=>n.remove());
 
 const metasRaw = Array.isArray(__client?.bountyPosters) ? __client.bountyPosters : [];
@@ -2247,6 +2285,71 @@ img.style.transform = 'rotate(0deg)';
 
   stage.appendChild(img);
 }
+
+function getSafeRank(){
+  // rank 存在 __client.rank（你 server 也會塞到 player.client.rank）
+  const r = __client?.rank;
+  if(r && typeof r === 'object'){
+    const tier = Number(r.tier);
+    const rp = Number(r.rp);
+    const placement = (r.placement && typeof r.placement === 'object') ? r.placement : null;
+    return {
+      tier: Number.isFinite(tier) ? tier : 0,
+      rp: Number.isFinite(rp) ? rp : 0,
+      placement,
+    };
+  }
+  // 沒資料：視為定位賽 0/3（避免 UI 壞掉）
+  return { tier: 0, rp: 0, placement: { games: 0, score: 0 } };
+}
+
+function renderRank(){
+  const stage = document.getElementById('wallStage');
+  if(!stage) return;
+
+  // 先清掉舊的
+  stage.querySelectorAll('.rankLayer').forEach(n=>n.remove());
+
+  const rank = getSafeRank();
+  const tier = Number(rank.tier)||0;
+  const rp = Number(rank.rp)||0;
+  const games = Number(rank?.placement?.games)||0;
+
+  // 建一個 wrapper：裡面有圖 + 文字
+  const wrap = document.createElement('div');
+  wrap.className = 'rankLayer';
+
+  // === 位置：放在海賊旗左邊 ===
+  // 你現在海賊旗是 right=379px（離右邊 379px）:contentReference[oaicite:3]{index=3}
+  // 「更往左」就是把 right 調大。
+  wrap.style.top = '52px';
+  wrap.style.right = '770px';   // ← 先給你一個起始值；覺得太左/太右再改這個
+  wrap.style.opacity = '0.98';
+
+  // 圖：只有 tier 1~7 才有
+  if(tier >= 1){
+    const img = document.createElement('img');
+    img.alt = `rank-r${tier}`;
+    img.src = rankUrlByTier(tier);
+    wrap.appendChild(img);
+  }
+
+  // 文字（依你的顯示規則）
+  const text = document.createElement('div');
+  text.className = 'rankText';
+
+  if(tier === 0){
+    text.textContent = `定位賽 ${Math.max(0, Math.min(3, games))}/3`;
+  }else if(tier === 7){
+    text.textContent = `海賊王級 +${Math.max(0, rp)}`;
+  }else{
+    text.textContent = `${Math.max(0, rp)}/100`;
+  }
+
+  wrap.appendChild(text);
+  stage.appendChild(wrap);
+}
+
 
 function buildAvatarGrid(){
   const grid = document.getElementById('avaGrid');
