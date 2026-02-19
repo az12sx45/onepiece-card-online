@@ -109,6 +109,27 @@ function broadcastState(room){
   for (const [sid, meta] of room.sockets){
     let vis = injectChestCoins(getVisibleState(st, meta.playerId));
     vis = injectTitlesIntoVisibleState(vis, st);
+vis = injectRanksIntoVisibleState(vis, st);
+function injectRanksIntoVisibleState(vis, fullState){
+  try{
+    if (!vis || !Array.isArray(vis.players) || !fullState || !Array.isArray(fullState.players)) return vis;
+
+    const byId = new Map(fullState.players.map(p => [p.id, p]));
+    for (const vp of vis.players){
+      const fp = byId.get(vp?.id);
+      if (!fp) continue;
+
+      const rank = fp?.client?.rank ?? fp?.rank ?? null;
+
+      if (!vp.client || typeof vp.client !== "object") vp.client = {};
+
+      vp.client.rank = rank && typeof rank === "object" ? rank : null;
+      vp.rank = rank && typeof rank === "object" ? rank : null;
+    }
+  }catch{}
+  return vis;
+}
+
     vis.viewerCanNext = (room.host === meta.playerId) || winners.has(meta.playerId);
     io.to(sid).emit("STATE", vis);
   }
@@ -136,6 +157,8 @@ players: st.players
     // ✅ 新增：稱號（等待室互相可見）
     title: (p.client?.title ?? p.title ?? ""),
     titleTier: (p.client?.titleTier ?? p.titleTier ?? 1),
+// ✅ 新增：段位（等待室互相可見）
+    rank: (p.client?.rank ?? p.rank ?? null),
   }))
 
 };
@@ -1066,6 +1089,8 @@ socket.on("JOIN_ROOM", async (payload = {}) => {
   // ✅ 新增：稱號（等待室顯示）
   title = "",
   titleTier = 1,
+// ✅ 新增：段位（可由前端帶；沒帶就 DB 撈）
+  rank = null,
 } = payload;
 
     if (!roomId) return;
@@ -1142,12 +1167,14 @@ if (myId == null) {
     // 寫入玩家 meta（state 端），順便記住 secret
 const p = st.players[myId];
 
-// ✅ 先準備：payload 的 title/tier
 let pickedTitle = String(title || "").trim();
 let pickedTier  = Number(titleTier || 1) || 1;
 
-// ✅ 若 payload 沒帶稱號（或為空），就用 secret 去雲端撈「已裝備稱號」
-if (!pickedTitle && sec) {
+// ✅ 新增：段位（優先用 payload.rank；沒有才 DB 撈）
+let pickedRank = (rank && typeof rank === "object") ? rank : null;
+
+// ✅ 若 payload 沒帶稱號（或為空），或沒帶 rank，就用 secret 去雲端撈
+if ((!pickedTitle || !pickedRank) && sec) {
   try {
     const r = await pool.query(
       "SELECT stats FROM player_profiles WHERE secret=$1",
@@ -1155,31 +1182,49 @@ if (!pickedTitle && sec) {
     );
     const client = r.rows?.[0]?.stats?.client;
 
-    const dbTitle = String(client?.titles?.equipped || "").trim();
-    const dbTier  = Number(client?.titles?.equippedTier || 1) || 1;
-
-    if (dbTitle) {
-      pickedTitle = dbTitle;
-      pickedTier = dbTier;
+    // --- title ---
+    if (!pickedTitle) {
+      const dbTitle = String(client?.titles?.equipped || "").trim();
+      const dbTier  = Number(client?.titles?.equippedTier || 1) || 1;
+      if (dbTitle) {
+        pickedTitle = dbTitle;
+        pickedTier = dbTier;
+      }
     }
+
+    // --- rank ---
+    if (!pickedRank) {
+      const dbRank = client?.rank;
+      if (dbRank && typeof dbRank === "object") {
+        pickedRank = dbRank;
+      }
+    }
+  } catch (e) {
+    console.error("[JOIN_ROOM] load title/rank from DB failed:", e?.message || e);
+  }
+}
+
   } catch (e) {
     console.error("[JOIN_ROOM] load title from DB failed:", e?.message || e);
   }
 }
 
-// ✅ 稱號防呆（避免太長/亂值）
 const safeTitle = String(pickedTitle || "").trim().slice(0, 18);
 const safeTier  = Math.max(1, Math.min(6, Number(pickedTier || 1) || 1));
 
-p.client = { displayName, avatar, pid, title: safeTitle, titleTier: safeTier };
+// ✅ rank 防呆
+const safeRank = (pickedRank && typeof pickedRank === "object") ? pickedRank : null;
+
+p.client = { displayName, avatar, pid, title: safeTitle, titleTier: safeTier, rank: safeRank };
 p.displayName = displayName;
 p.avatar = avatar;
 p.secret = sec;
 
-// ✅ 也存一份在 player 本體上（你 broadcastLobby / START_GAME 都有用到）
 p.title = safeTitle;
 p.titleTier = safeTier;
 
+// ✅ 新增：段位（等待室/遊戲都吃得到）
+p.rank = safeRank;
 
 
     // 第一位為房主
@@ -1241,8 +1286,12 @@ p.titleTier = safeTier;
       const entries = Array.from(room.sockets.entries()); // [ [sid, meta], ... ]
 const joined = entries.map(([sid, m]) => {
   const oldP = room.state?.players?.[m.playerId];
+
   const safeTitle = String(oldP?.client?.title ?? oldP?.title ?? "").trim().slice(0, 18);
   const safeTier  = Math.max(1, Math.min(6, Number(oldP?.client?.titleTier ?? oldP?.titleTier ?? 1) || 1));
+
+  const safeRank0 = (oldP?.client?.rank ?? oldP?.rank ?? null);
+  const safeRank  = (safeRank0 && typeof safeRank0 === "object") ? safeRank0 : null;
 
   return {
     sid,
@@ -1251,9 +1300,11 @@ const joined = entries.map(([sid, m]) => {
     avatar: m.avatar || 1,
     secret: m.secret,
 
-    // ✅ 新增：稱號
     title: safeTitle,
     titleTier: safeTier,
+
+    // ✅ 新增：段位
+    rank: safeRank,
   };
 });
 
@@ -1325,13 +1376,19 @@ p.client = {
   displayName: j.name,
   avatar: j.avatar,
   pid: null,
-
-  // ✅ 新增：稱號
   title: j.title || "",
   titleTier: Math.max(1, Math.min(6, Number(j.titleTier || 1) || 1)),
+
+  // ✅ 新增：段位
+  rank: (j.rank && typeof j.rank === "object") ? j.rank : null,
 };
+
 p.title = j.title || "";
 p.titleTier = Math.max(1, Math.min(6, Number(j.titleTier || 1) || 1));
+
+// ✅ 新增：段位
+p.rank = (j.rank && typeof j.rank === "object") ? j.rank : null;
+
 
     p.displayName = j.name;
     p.avatar = j.avatar;
