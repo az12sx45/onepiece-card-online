@@ -801,7 +801,8 @@ function defaultClient(){
         score: 0            // Σ(perf)
       },
       updatedAt: 0
-    }
+    },
+
   };
 }
 
@@ -840,6 +841,137 @@ function upsertOwnedTitle(owned, label, tier){
   else arr.push({ label: L, tier: t });
   return arr;
 }
+
+
+// ===== Rank utils =====
+function clamp(n, a, b){ n = Number(n); return Math.max(a, Math.min(b, n)); }
+function round(n){ return Math.round(Number(n) || 0); }
+
+function ensureRank(rank){
+  const base = {
+    tier: 0,
+    rp: 0,
+    dropShield: 0,
+    placement: { games: 0, score: 0 },
+    updatedAt: 0
+  };
+  const r = (rank && typeof rank === 'object') ? { ...base, ...rank } : { ...base };
+
+  r.tier = clamp(round(r.tier), 0, 7);
+  r.rp = Number(r.rp) || 0;
+  r.dropShield = (Number(r.dropShield) === 1) ? 1 : 0;
+
+  if (r.tier === 0){
+    if (!r.placement || typeof r.placement !== 'object') r.placement = { games: 0, score: 0 };
+    r.placement.games = clamp(round(r.placement.games), 0, 3);
+    r.placement.score = Number(r.placement.score) || 0;
+  }else{
+    delete r.placement;
+  }
+
+  r.updatedAt = Number(r.updatedAt) || 0;
+  return r;
+}
+
+function M_of_P(P){
+  const map = { 2:1.00, 3:1.10, 4:1.22, 5:1.35, 6:1.50 };
+  return map[P] || 1.00;
+}
+
+function applyPlacement(rank, P, myCoins, totalCoins){
+  const r = ensureRank(rank);
+  if (r.tier !== 0) return r;
+
+  const safeTotal = totalCoins > 0 ? totalCoins : 1;
+  const share = myCoins / safeTotal;
+  const expected = 1 / P;
+  const perf = share - expected;
+
+  r.placement = r.placement || { games: 0, score: 0 };
+  r.placement.games = clamp((r.placement.games||0) + 1, 0, 3);
+  r.placement.score = (Number(r.placement.score)||0) + perf;
+
+  if (r.placement.games >= 3){
+    const S = r.placement.score;
+
+    let decidedTier = 1;
+    let startRp = 0;
+
+    if (S <= -0.12) { decidedTier = 1; startRp = 0; }
+    else if (S <= 0.04) { decidedTier = 2; startRp = 25; }
+    else if (S <= 0.16) { decidedTier = 3; startRp = 40; }
+    else { decidedTier = 4; startRp = 50; }
+
+    r.tier = decidedTier;
+    r.rp = startRp;
+    r.dropShield = 0;
+    delete r.placement;
+  }
+
+  r.updatedAt = Date.now();
+  return r;
+}
+
+function applyRankedDelta(rank, P, myCoins, totalCoins){
+  const r0 = ensureRank(rank);
+  if (r0.tier <= 0) return r0;
+
+  const tier = r0.tier;
+  const safeTotal = totalCoins > 0 ? totalCoins : 1;
+  const share = myCoins / safeTotal;
+  const expected = 1 / P;
+  const diff = share - expected;
+
+  const K0 = 190;
+  const baseDelta = round(K0 * diff);
+
+  const M = M_of_P(P);
+  const baseDelta2 = round(baseDelta * M);
+
+  const G = { 1:1.35, 2:1.25, 3:1.15, 4:1.00, 5:0.90, 6:0.80, 7:0.70 };
+  const L = { 1:0.75, 2:0.85, 3:0.95, 4:1.00, 5:1.10, 6:1.20, 7:1.30 };
+
+  let dRP = 0;
+  if (baseDelta2 > 0) dRP = round(baseDelta2 * (G[tier] ?? 1));
+  else dRP = round(baseDelta2 * (L[tier] ?? 1));
+
+  const capTier = { 1:55, 2:50, 3:45, 4:40, 5:36, 6:32, 7:28 };
+  const cap = round((capTier[tier] ?? 40) * M);
+  dRP = clamp(dRP, -cap, +cap);
+
+  const r = { ...r0 };
+  r.rp = (Number(r.rp)||0) + dRP;
+
+  // 方案1：贏一場重置保護
+  if (dRP > 0) r.dropShield = 0;
+
+  // 升級（tier 1~6）
+  while (r.tier < 7 && r.rp >= 100){
+    r.tier += 1;
+    r.rp -= 100;
+    r.dropShield = 0;
+  }
+
+  // 降級規則
+  if (r.tier <= 3){
+    r.rp = Math.max(0, r.rp);
+  }else{
+    if (r.rp < 0){
+      if (r.dropShield === 0){
+        r.rp = 0;
+        r.dropShield = 1;
+      }else{
+        r.tier -= 1;
+        r.rp = 25;
+        r.dropShield = 0;
+      }
+    }
+  }
+
+  r.updatedAt = Date.now();
+  return r;
+}
+
 
 async function cloudGet(socket, secret){
   return await new Promise((resolve)=>{
@@ -885,7 +1017,7 @@ async function cloudLoadClient(socket){
     if(!Array.isArray(out.bountyPosters)) out.bountyPosters = [];
     if(!Array.isArray(out._appliedMatchKeys)) out._appliedMatchKeys = [];
 
-out.rank = ensureRank(out.rank);
+    out.rank = ensureRank(out.rank); // ✅ 新增：rank 防呆
 
     return { prof, client: out };
   }
@@ -1056,6 +1188,7 @@ async function cloudApplyMatchResult(socket, final){
     c.bountyPosters = [posterMeta, ...posters.filter(x => String(x?.key||'') !== matchKey)].slice(0,4);
   }catch(e){}
 
+
   // ===== Rank: 段位系統（新人定位賽 / 正式排位）=====
   try{
     const rankingNow = Array.isArray(final?.ranking) ? final.ranking : [];
@@ -1081,7 +1214,6 @@ async function cloudApplyMatchResult(socket, final){
     console.warn('[rank] apply failed', e);
   }
 
-
   await cloudSaveClient(socket, c);
 }
 
@@ -1104,134 +1236,6 @@ async function cloudSavePosterMeta(socket, meta){
   return await cloudSaveClient(socket, c);
 }
 // ====== /Cloud-only persistence ======
-// ===== Rank utils =====
-function clamp(n, a, b){ n = Number(n); return Math.max(a, Math.min(b, n)); }
-function round(n){ return Math.round(Number(n) || 0); }
-
-function ensureRank(rank){
-  const base = {
-    tier: 0,
-    rp: 0,
-    dropShield: 0,
-    placement: { games: 0, score: 0 },
-    updatedAt: 0
-  };
-  const r = (rank && typeof rank === 'object') ? { ...base, ...rank } : { ...base };
-
-  r.tier = clamp(round(r.tier), 0, 7);
-  r.rp = Number(r.rp) || 0;
-  r.dropShield = (Number(r.dropShield) === 1) ? 1 : 0;
-
-  if (r.tier === 0){
-    if (!r.placement || typeof r.placement !== 'object') r.placement = { games: 0, score: 0 };
-    r.placement.games = clamp(round(r.placement.games), 0, 3);
-    r.placement.score = Number(r.placement.score) || 0;
-  }else{
-    delete r.placement;
-  }
-
-  r.updatedAt = Number(r.updatedAt) || 0;
-  return r;
-}
-
-function M_of_P(P){
-  const map = { 2:1.00, 3:1.10, 4:1.22, 5:1.35, 6:1.50 };
-  return map[P] || 1.00;
-}
-
-function applyPlacement(rank, P, myCoins, totalCoins){
-  const r = ensureRank(rank);
-  if (r.tier !== 0) return r;
-
-  const safeTotal = totalCoins > 0 ? totalCoins : 1;
-  const share = myCoins / safeTotal;
-  const expected = 1 / P;
-  const perf = share - expected;
-
-  r.placement = r.placement || { games: 0, score: 0 };
-  r.placement.games = clamp((r.placement.games||0) + 1, 0, 3);
-  r.placement.score = (Number(r.placement.score)||0) + perf;
-
-  if (r.placement.games >= 3){
-    const S = r.placement.score;
-
-    let decidedTier = 1;
-    let startRp = 0;
-
-    if (S <= -0.12) { decidedTier = 1; startRp = 0; }
-    else if (S <= 0.04) { decidedTier = 2; startRp = 25; }
-    else if (S <= 0.16) { decidedTier = 3; startRp = 40; }
-    else { decidedTier = 4; startRp = 50; }
-
-    r.tier = decidedTier;
-    r.rp = startRp;
-    r.dropShield = 0;
-    delete r.placement;
-  }
-
-  r.updatedAt = Date.now();
-  return r;
-}
-
-function applyRankedDelta(rank, P, myCoins, totalCoins){
-  const r0 = ensureRank(rank);
-  if (r0.tier <= 0) return r0;
-
-  const tier = r0.tier;
-  const safeTotal = totalCoins > 0 ? totalCoins : 1;
-  const share = myCoins / safeTotal;
-  const expected = 1 / P;
-  const diff = share - expected;
-
-  const K0 = 190;
-  const baseDelta = round(K0 * diff);
-
-  const M = M_of_P(P);
-  const baseDelta2 = round(baseDelta * M);
-
-  const G = { 1:1.35, 2:1.25, 3:1.15, 4:1.00, 5:0.90, 6:0.80, 7:0.70 };
-  const L = { 1:0.75, 2:0.85, 3:0.95, 4:1.00, 5:1.10, 6:1.20, 7:1.30 };
-
-  let dRP = 0;
-  if (baseDelta2 > 0) dRP = round(baseDelta2 * (G[tier] ?? 1));
-  else dRP = round(baseDelta2 * (L[tier] ?? 1));
-
-  const capTier = { 1:55, 2:50, 3:45, 4:40, 5:36, 6:32, 7:28 };
-  const cap = round((capTier[tier] ?? 40) * M);
-  dRP = clamp(dRP, -cap, +cap);
-
-  const r = { ...r0 };
-  r.rp = (Number(r.rp)||0) + dRP;
-
-  // 方案1：贏一場重置保護
-  if (dRP > 0) r.dropShield = 0;
-
-  // 升級（tier 1~6）
-  while (r.tier < 7 && r.rp >= 100){
-    r.tier += 1;
-    r.rp -= 100;
-    r.dropShield = 0;
-  }
-
-  // 降級規則
-  if (r.tier <= 3){
-    r.rp = Math.max(0, r.rp);
-  }else{
-    if (r.rp < 0){
-      if (r.dropShield === 0){
-        r.rp = 0;
-        r.dropShield = 1;
-      }else{
-        r.tier -= 1;
-        r.rp = 25;
-        r.dropShield = 0;
-      }
-    }
-  }
-
-  r.updatedAt = Date.now();
-  return r;
-}
 
 
 const qs = new URLSearchParams(location.search);
