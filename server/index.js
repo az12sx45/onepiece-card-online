@@ -1053,7 +1053,8 @@ socket.on("PROFILE_UPDATE", async ({ secret, patch }, cb) => {
 });
 
 
-socket.on("JOIN_ROOM", (payload = {}) => {
+socket.on("JOIN_ROOM", async (payload = {}) => {
+
   const {
   roomId,
   displayName = "",
@@ -1141,18 +1142,44 @@ if (myId == null) {
     // 寫入玩家 meta（state 端），順便記住 secret
 const p = st.players[myId];
 
+// ✅ 先準備：payload 的 title/tier
+let pickedTitle = String(title || "").trim();
+let pickedTier  = Number(titleTier || 1) || 1;
+
+// ✅ 若 payload 沒帶稱號（或為空），就用 secret 去雲端撈「已裝備稱號」
+if (!pickedTitle && sec) {
+  try {
+    const r = await pool.query(
+      "SELECT stats FROM player_profiles WHERE secret=$1",
+      [sec]
+    );
+    const client = r.rows?.[0]?.stats?.client;
+
+    const dbTitle = String(client?.titles?.equipped || "").trim();
+    const dbTier  = Number(client?.titles?.equippedTier || 1) || 1;
+
+    if (dbTitle) {
+      pickedTitle = dbTitle;
+      pickedTier = dbTier;
+    }
+  } catch (e) {
+    console.error("[JOIN_ROOM] load title from DB failed:", e?.message || e);
+  }
+}
+
 // ✅ 稱號防呆（避免太長/亂值）
-const safeTitle = String(title || "").trim().slice(0, 18);
-const safeTier  = Math.max(1, Math.min(6, Number(titleTier || 1) || 1));
+const safeTitle = String(pickedTitle || "").trim().slice(0, 18);
+const safeTier  = Math.max(1, Math.min(6, Number(pickedTier || 1) || 1));
 
 p.client = { displayName, avatar, pid, title: safeTitle, titleTier: safeTier };
 p.displayName = displayName;
 p.avatar = avatar;
 p.secret = sec;
 
-// ✅ 也存一份在 player 本體上（你 broadcastLobby 用這份取最快）
+// ✅ 也存一份在 player 本體上（你 broadcastLobby / START_GAME 都有用到）
 p.title = safeTitle;
 p.titleTier = safeTier;
+
 
 
     // 第一位為房主
