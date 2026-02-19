@@ -789,7 +789,8 @@ function defaultClient(){
     deluxeUnlocked: [],         // [cardNo,...]
     titles: { owned: [], equipped:'', equippedTier: 1 }, // owned: [{label,tier}]
     bountyPosters: [],          // [{key, ts, title, name, bounty, avatar}]
-    _appliedMatchKeys: []       // [matchKey,...] 防止重複累加
+        rank: { tier:0, rp:0, dropShield:0, placement:{games:0, score:0}, updatedAt: Date.now() },
+_appliedMatchKeys: []       // [matchKey,...] 防止重複累加
   };
 }
 
@@ -818,6 +819,142 @@ function normalizeOwnedTitles(arr){
   }
   return out;
 }
+/* ================= 段位系統（rank） =================
+   stats.client.rank = { tier, rp, dropShield, placement{games,score}, updatedAt }
+   ※ 依你提供的完整規格，參數不改。
+*/
+const RANK_NAME = {
+  1:'新人船員',
+  2:'副船長',
+  3:'船長',
+  4:'超新星',
+  5:'王下七武海',
+  6:'四皇',
+  7:'海賊王級'
+};
+const RANK_G = { 1:1.35, 2:1.25, 3:1.15, 4:1.00, 5:0.90, 6:0.80, 7:0.70 };
+const RANK_L = { 1:0.75, 2:0.85, 3:0.95, 4:1.00, 5:1.10, 6:1.20, 7:1.30 };
+const RANK_CAP_TIER = { 1:55, 2:50, 3:45, 4:40, 5:36, 6:32, 7:28 };
+function rankMP(P){
+  const p = Number(P)||0;
+  if(p<=2) return 1.00;
+  if(p===3) return 1.10;
+  if(p===4) return 1.22;
+  if(p===5) return 1.35;
+  if(p>=6) return 1.50;
+  return 1.00;
+}
+function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+function ensureRank(obj){
+  const r = (obj && typeof obj==='object') ? obj : {};
+  const tier = Number(r.tier);
+  const fixed = {
+    tier: Number.isFinite(tier) ? tier : 0,
+    rp: Number(r.rp)||0,
+    dropShield: Number(r.dropShield)||0,
+    updatedAt: Number(r.updatedAt)||Date.now()
+  };
+  if(fixed.tier === 0){
+    const pl = (r.placement && typeof r.placement==='object') ? r.placement : {};
+    fixed.placement = { games: Number(pl.games)||0, score: Number(pl.score)||0 };
+  }
+  return fixed;
+}
+
+// 新人定位賽（3 場）
+function applyPlacement(rank, myCoins, totalCoins, P){
+  const r = ensureRank(rank);
+  r.tier = 0;
+  r.placement = r.placement || { games:0, score:0 };
+  const share = totalCoins > 0 ? (myCoins / totalCoins) : 0;
+  const expected = P > 0 ? (1 / P) : 0;
+  const perf = share - expected;
+  r.placement.games = clamp((Number(r.placement.games)||0) + 1, 0, 3);
+  r.placement.score = (Number(r.placement.score)||0) + perf;
+  r.updatedAt = Date.now();
+
+  if(r.placement.games >= 3){
+    const S = Number(r.placement.score)||0;
+    let decidedTier = 1;
+    let startRp = 0;
+    if(S <= -0.12){ decidedTier = 1; startRp = 0; }
+    else if(S <= 0.04){ decidedTier = 2; startRp = 25; }
+    else if(S <= 0.16){ decidedTier = 3; startRp = 40; }
+    else { decidedTier = 4; startRp = 50; }
+    r.tier = decidedTier;
+    r.rp = startRp;
+    r.dropShield = 0;
+    delete r.placement;
+    r.updatedAt = Date.now();
+  }
+  return r;
+}
+
+// 正式排位（tier=1~7）
+function applyRanked(rank, myCoins, totalCoins, P){
+  const r = ensureRank(rank);
+  if(!(r.tier>=1 && r.tier<=7)) r.tier = 1;
+  const share = totalCoins > 0 ? (myCoins / totalCoins) : 0;
+  const expected = P > 0 ? (1 / P) : 0;
+  const diff = share - expected;
+
+  const K0 = 190;
+  const BaseDelta = Math.round(K0 * diff);
+  const M = rankMP(P);
+  const BaseDelta2 = Math.round(BaseDelta * M);
+
+  const t = clamp(Number(r.tier)||1, 1, 7);
+  let d = 0;
+  if(BaseDelta2 > 0) d = Math.round(BaseDelta2 * (RANK_G[t] ?? 1));
+  else d = Math.round(BaseDelta2 * (RANK_L[t] ?? 1));
+
+  const capTier = RANK_CAP_TIER[t] ?? 40;
+  const cap = Math.round(capTier * M);
+  d = clamp(d, -cap, +cap);
+
+  r.rp = (Number(r.rp)||0) + d;
+  if(d > 0) r.dropShield = 0; // 贏一場重置保護
+  r.updatedAt = Date.now();
+
+  // 升級（tier 1~6）
+  while(r.tier < 7 && r.rp >= 100){
+    r.tier += 1;
+    r.rp -= 100;
+    r.dropShield = 0;
+  }
+
+  // 降級（兩段式）
+  if(r.tier <= 3){
+    r.rp = Math.max(0, r.rp);
+  }else{
+    if(r.rp < 0){
+      if((Number(r.dropShield)||0) === 0){
+        r.rp = 0;
+        r.dropShield = 1;
+      }else{
+        r.tier -= 1;
+        r.rp = 25;
+        r.dropShield = 0;
+      }
+    }
+  }
+  r.updatedAt = Date.now();
+  return { r, delta: d };
+}
+
+function applyRankUpdate(client, myCoins, totalCoins, P){
+  client.rank = ensureRank(client.rank);
+  const tier = Number(client.rank.tier)||0;
+  if(tier === 0){
+    client.rank = applyPlacement(client.rank, myCoins, totalCoins, P);
+    return { mode:'placement', delta:0, rank: client.rank };
+  }else{
+    const out = applyRanked(client.rank, myCoins, totalCoins, P);
+    client.rank = out.r;
+    return { mode:'ranked', delta: out.delta, rank: client.rank };
+  }
+}
+/* ================= /段位系統（rank） ================= */
 function upsertOwnedTitle(owned, label, tier){
   const L = String(label||'').trim();
   if(!L) return normalizeOwnedTitles(owned);
@@ -977,7 +1114,10 @@ async function cloudApplyMatchResult(socket, final){
   const myRow = ROWS.find(r => Number(r?.id) === Number(myId));
   const coinsGain = Number(myRow?.coinScore ?? 0);
 
-  // 豪華解鎖（這場）從 sessionStorage 取（本機暫存不算永久資料）
+  
+  const playerCount = (final?.playerCount) || Object.keys(final?.playersMeta || {}).length || (Array.isArray(final?.ranking) ? final.ranking.length : 4);
+  const totalCoins = Array.isArray(ROWS) ? ROWS.reduce((s,r)=>s + (Number(r?.coinScore||0)||0), 0) : 0;
+// 豪華解鎖（這場）從 sessionStorage 取（本機暫存不算永久資料）
   let unlockedNow = [];
   try{
     unlockedNow = JSON.parse(sessionStorage.getItem('op_unlocked_this_match') || '[]')
@@ -995,7 +1135,18 @@ async function cloudApplyMatchResult(socket, final){
     c.totals.games = (Number(c.totals.games)||0) + 1;
     if(place === 1) c.totals.wins = (Number(c.totals.wins)||0) + 1;
     c.totals.coins = (Number(c.totals.coins)||0) + coinsGain;
-  }
+  
+
+    // ====== rank：段位系統（只在 matchKey 去重的情況下才算一次）======
+    try{
+      if(!c.rank) c.rank = ensureRank(null);
+      const res = applyRankUpdate(c, coinsGain, totalCoins, playerCount);
+      // （可選）把本場段位變化留在 recent 方便 debug/日後 UI
+      c._lastRankChange = { mode: res.mode, delta: res.delta, tier: res.rank?.tier, rp: res.rank?.rp, at: Date.now() };
+    }catch(e){
+      console.warn('[rank] apply failed:', e);
+    }
+}
 
   // recent：matchKey 去重，最多 10
   const recentItem = { matchKey, ts: endedAt, place, coinsGain, unlocked: unlockedNow };
