@@ -808,24 +808,7 @@
     }
     @keyframes slide{ 0%{transform:translateX(-120%)} 100%{transform:translateX(260%)} }
     .loadingActions{ margin-top:12px; display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap; }
-  /* ===== 段位（rank）顯示 ===== */
-.rankLine{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-top:8px;
-  font-size:13px;
-  color:rgba(255,255,255,0.86);
-  text-shadow:0 1px 8px rgba(0,0,0,0.55);
-}
-#rankBadgeImg{
-  width:30px;
-  height:30px;
-  object-fit:contain;
-  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.55));
-}
-.rankText b{ color: rgba(255,211,107,0.98); }
-</style>
+  </style>
 
   <!-- Socket.IO -->
   <script src="https://onepiece-card-online.onrender.com/socket.io/socket.io.js"></script>
@@ -844,12 +827,7 @@
             <button class="nameBtn" id="nameBtn" title="點擊修改玩家名稱">未命名玩家</button>
             <span class="titleBadge" id="nameTitleBadge" style="display:none"></span>
           </h1>
-        
-          <div class="rankLine" id="rankLine" style="display:none">
-            <img id="rankBadgeImg" alt="rank" style="display:none" />
-            <div class="rankText" id="rankText"></div>
-          </div>
-</div>
+        </div>
       </div>
 
       <div class="actions">
@@ -1223,7 +1201,6 @@ function defaultClient(name, avatar){
     recent: [],
     titles: { owned: [], equipped: '', equippedTier: 1 },
     bountyPosters: [],
-    rank: { tier:0, rp:0, dropShield:0, placement:{games:0, score:0}, updatedAt: Date.now() },
     shop: { ownedAvatars: [], ownedWalls: [], ownedFlags: [], ownedItems: [] },
     _appliedMatchKeys: []
   };
@@ -1258,51 +1235,6 @@ function normalizeOwnedTitles(arr){
   for(const v of map.values()) out.push(v);
   return out;
 }
-/* ================= 段位系統（rank）顯示 helper ================= */
-const RANK_NAME = {
-  1:'新人船員',
-  2:'副船長',
-  3:'船長',
-  4:'超新星',
-  5:'王下七武海',
-  6:'四皇',
-  7:'海賊王級'
-};
-function ensureRank(obj){
-  const r = (obj && typeof obj==='object') ? obj : {};
-  const tier = Number(r.tier);
-  const fixed = {
-    tier: Number.isFinite(tier) ? tier : 0,
-    rp: Number(r.rp)||0,
-    dropShield: Number(r.dropShield)||0,
-    updatedAt: Number(r.updatedAt)||Date.now()
-  };
-  if(fixed.tier===0){
-    const pl = (r.placement && typeof r.placement==='object') ? r.placement : {};
-    fixed.placement = { games: Number(pl.games)||0, score: Number(pl.score)||0 };
-  }
-  return fixed;
-}
-function rankBadgeUrl(tier){
-  // 你若有做段位徽章：建議放在 public/images/ranks/r1.png ... r7.png（或 .webp）
-  const t = Number(tier)||0;
-  if(t<1 || t>7) return '';
-  return `images/ranks/r${t}.png`;
-}
-function formatRankText(rank){
-  const r = ensureRank(rank);
-  if(r.tier===0){
-    const g = Math.max(0, Math.min(3, Number(r.placement?.games)||0));
-    return `定位賽 <b>${g}</b>/3`;
-  }
-  if(r.tier===7){
-    return `${RANK_NAME[7]} <b>${Number(r.rp||0)||0}</b>`;
-  }
-  const nm = RANK_NAME[r.tier] || `R${r.tier}`;
-  const rp = Math.max(0, Math.min(99, Number(r.rp||0)||0));
-  return `${nm} <b>${rp}</b>/100`;
-}
-/* ================= /段位系統（rank）顯示 helper ================= */
 function findTitleMetaByLabel(owned, label){
   const key = String(label||'').trim();
   if(!key) return null;
@@ -1626,31 +1558,6 @@ function renderHeader(){
   } else {
     badgeHost.style.display = 'none';
     badgeHost.innerHTML = '';
-
-
-// 段位顯示
-try{
-  const r = ensureRank(__client?.rank);
-  const line = document.getElementById('rankLine');
-  const txt = document.getElementById('rankText');
-  const img = document.getElementById('rankBadgeImg');
-  if(line && txt){
-    txt.innerHTML = formatRankText(r);
-    line.style.display = 'flex';
-    if(img){
-      const url = rankBadgeUrl(r.tier);
-      if(url){
-        img.onerror = ()=>{ img.style.display='none'; };
-        img.src = url;
-        img.style.display = 'block';
-      }else{
-        img.style.display = 'none';
-      }
-    }
-  }
-}catch(e){
-  console.warn('[rank render] failed', e);
-}
   }
 }
 
