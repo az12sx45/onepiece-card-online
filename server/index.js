@@ -1146,9 +1146,8 @@ const p = st.players[myId];
 let pickedTitle = String(title || "").trim();
 let pickedTier  = Number(titleTier || 1) || 1;
 
-// ✅ 若有 secret：就用 secret 去雲端撈「已裝備稱號」+「rank」，確保等待室顯示正確
-let pickedRank = null;
-if (sec) {
+// ✅ 若 payload 沒帶稱號（或為空），就用 secret 去雲端撈「已裝備稱號」
+if (!pickedTitle && sec) {
   try {
     const r = await pool.query(
       "SELECT stats FROM player_profiles WHERE secret=$1",
@@ -1156,65 +1155,23 @@ if (sec) {
     );
     const client = r.rows?.[0]?.stats?.client;
 
-    // 稱號：只有前端沒帶時才用 DB 補
-    if (!pickedTitle) {
-      const dbTitle = String(client?.titles?.equipped || "").trim();
-      const dbTier  = Number(client?.titles?.equippedTier || 1) || 1;
-      if (dbTitle) {
-        pickedTitle = dbTitle;
-        pickedTier = dbTier;
-      }
-    }
+    const dbTitle = String(client?.titles?.equipped || "").trim();
+    const dbTier  = Number(client?.titles?.equippedTier || 1) || 1;
 
-    // rank：一律以 DB 為準（等待室/進遊戲時要跟著玩家，不要跟座位走）
-    if (client?.rank && typeof client.rank === 'object') {
-      pickedRank = client.rank;
+    if (dbTitle) {
+      pickedTitle = dbTitle;
+      pickedTier = dbTier;
     }
   } catch (e) {
-    console.error("[JOIN_ROOM] load title/rank from DB failed:", e?.message || e);
+    console.error("[JOIN_ROOM] load title from DB failed:", e?.message || e);
   }
 }
 
 // ✅ 稱號防呆（避免太長/亂值）
-（避免太長/亂值）
 const safeTitle = String(pickedTitle || "").trim().slice(0, 18);
 const safeTier  = Math.max(1, Math.min(6, Number(pickedTier || 1) || 1));
 
-// ✅ rank 防呆（避免亂值；tier=0 時保留 placement）
-const rawRank = (pickedRank && typeof pickedRank === 'object') ? pickedRank : {};
-let rankTier = Number(rawRank.tier);
-if (!Number.isFinite(rankTier)) rankTier = 0;
-rankTier = Math.max(0, Math.min(7, Math.round(rankTier)));
-
-let rankRp = Number(rawRank.rp);
-if (!Number.isFinite(rankRp)) rankRp = 0;
-// tier1~6: 0~99；tier7: 0~∞（不封頂）；tier0: rp 固定 0
-if (rankTier === 0) rankRp = 0;
-if (rankTier >= 1 && rankTier <= 6) rankRp = Math.max(0, Math.min(99, Math.round(rankRp)));
-if (rankTier === 7) rankRp = Math.max(0, Math.round(rankRp));
-
-let rankShield = Number(rawRank.dropShield);
-if (!Number.isFinite(rankShield)) rankShield = 0;
-rankShield = rankShield ? 1 : 0;
-
-let rankPlacement = null;
-if (rankTier === 0) {
-  const pl = (rawRank.placement && typeof rawRank.placement === 'object') ? rawRank.placement : {};
-  const games = Math.max(0, Math.min(3, Math.round(Number(pl.games)||0)));
-  const score = Number(pl.score)||0;
-  rankPlacement = { games, score };
-}
-
-const safeRank = {
-  tier: rankTier,
-  rp: rankRp,
-  dropShield: rankShield,
-  ...(rankPlacement ? { placement: rankPlacement } : {}),
-  updatedAt: Date.now()
-};
-
-p.client = { displayName, avatar, pid, title: safeTitle, titleTier: safeTier, rank: safeRank };
-
+p.client = { displayName, avatar, pid, title: safeTitle, titleTier: safeTier };
 p.displayName = displayName;
 p.avatar = avatar;
 p.secret = sec;
@@ -1222,8 +1179,6 @@ p.secret = sec;
 // ✅ 也存一份在 player 本體上（你 broadcastLobby / START_GAME 都有用到）
 p.title = safeTitle;
 p.titleTier = safeTier;
-    p.rank = p.client.rank;
-
 
 
 
