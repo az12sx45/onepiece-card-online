@@ -25,10 +25,10 @@ body{
 .wrap{max-width:1280px;margin:0 auto;padding:14px 18px;}
 .h1{font-weight:800;letter-spacing:.5px}
 
-/* 版型：左 玩家清單 / 中 勾選 / 右 統一清單表 */
+/* 版型：左 玩家清單 / 右 詳細數據（移除圖表項目欄，改為固定所有項目分數表） */
 .layout{
   display:grid; gap:18px;
-  grid-template-columns: 280px 220px 1fr;
+  grid-template-columns: 320px 1fr;
 }
 /* 分頁切換按鈕 */
 .view-tabs{
@@ -61,18 +61,15 @@ body{
 body.view-rank .layout{
   grid-template-columns: minmax(0, 520px); /* 左邊卡片變寬 */
 }
-body.view-rank .metrics,
-body.view-rank .tablewrap{
-  display:none;
-}
+body.view-rank .tablewrap{ display:none; }
+
 body.view-rank .layout > aside.card:first-child{
   grid-column: 1 / -1; /* 讓玩家清單卡片佔滿整列 */
 }
 @media (max-width: 1180px){
-  .layout{ grid-template-columns: 280px 1fr; }
-  .metrics{ order:2; }
-  .tablewrap{ order:3; }
+  .layout{ grid-template-columns: 320px 1fr; }
 }
+
 @media (max-width: 860px){
   .layout{ grid-template-columns: 1fr; }
 }
@@ -621,13 +618,16 @@ body.view-rank .layout > aside.card:first-child{
   align-items:center;
 }
 #rankIcon.rankicon{
-  width:64px;
-  height:64px;
+  width:96px;
+  height:96px;
 }
 @media (max-width: 520px){
-  #rankIcon.rankicon{ width:54px; height:54px; }
+  #rankIcon.rankicon{ width:76px; height:76px; }
 }
 
+
+/* ✅ 2026-02-21：牌位在玩家清單上方（更緊湊） */
+aside.card #rankBox.rankbox{ background:rgba(255,255,255,.03); }
 </style>
 </head>
 <body class="view-detail">
@@ -647,7 +647,7 @@ body.view-rank .layout > aside.card:first-child{
           <div class="rankhint" id="rankHint"></div>
         </div>
         <button class="btn" id="openHelp">📖 說明</button>
-        <button class="btn" onclick="fireBounty()">📜 本次懸賞單</button>
+        
           <button class="btn" onclick="location.href='profile.html'">👤 玩家頁面</button>
         <button class="btn" onclick="location.href='start.html'">返回主畫面</button>
       </div>
@@ -661,16 +661,7 @@ body.view-rank .layout > aside.card:first-child{
       <button class="tab-btn" id="btnViewDetail">詳細數據</button>
     </div>
   </div>
-
-  
-  <!-- ✅ 段位區（移到詳細資訊上方，圖片放大） -->
-  <div class="wrap">
-    <div class="card" style="padding:14px 16px">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-        <div class="section-title" style="margin:0">牌位進度</div>
-        <div class="small" style="margin:0">（新人定位賽 / 正式排位）</div>
-      </div>
-      <div id="rankBox" class="rankbox hidden" title="段位進度（新人定位賽 / 正式排位）">
+<div id="rankBox" class="rankbox hidden" title="段位進度（新人定位賽 / 正式排位）">
           <div class="rankbox-top">
             <div class="rankleft">
               <img id="rankIcon" class="rankicon hidden" alt="" />
@@ -681,29 +672,50 @@ body.view-rank .layout > aside.card:first-child{
 <div class="wrap layout">
     <!-- 左：玩家清單 -->
     <aside class="card">
+      <!-- ✅ 牌位（單獨一格，放在玩家清單上方） -->
+      <div class="card" style="padding:12px;margin-bottom:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+          <div style="font-weight:900">牌位</div>
+          <div class="small">（新人定位賽 / 正式排位）</div>
+        </div>
+        <div id="rankBox" class="rankbox hidden"></div>
+      </div>
+
       <div class="section-title">玩家清單（依金幣排名）</div>
       <div class="player-list" id="playerList"></div>
     </aside>
-
-    <!-- 中：指標勾選 -->
-    <aside class="card metrics">
-      <div class="section-title">圖表項目</div>
-      <div class="metric-list" id="metricList"></div>
-      <div class="small" style="margin-top:8px">
-        勾選後，右側每位玩家那列會在同一欄位「並列多條」細長條；數字顯示在各條末端。
-      </div>
-    </aside>
-
-    <!-- 右：統一清單表（每人一列，並列多條） -->
+<!-- 右：詳細數據（固定顯示所有項目分數，不擠） -->
     <main class="card tablewrap">
-      <table class="table" id="detailTable">
+      <div class="section-title" style="margin-bottom:10px">詳細數據</div>
+
+      <!-- ✅ 本次懸賞單：直接顯示（不需要按按鈕） -->
+      <div class="card" style="padding:12px;margin-bottom:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px">
+          <div style="font-weight:800">本次懸賞單</div>
+          <div class="small" id="bountyForWho">—</div>
+        </div>
+        <div style="display:flex;justify-content:center">
+          <canvas id="bountyCanvasInline" width="768" height="1152" style="max-width:100%;height:auto;border-radius:12px;border:1px solid rgba(255,255,255,.08)"></canvas>
+        </div>
+        <div class="bounty-actions" style="margin-top:10px">
+          <button id="btnSavePosterInline" type="button" class="btn" disabled>存到個人頁面</button>
+        </div>
+      </div>
+
+      <table class="table" id="scoreTable">
         <thead>
-          <tr id="theadRow">
+          <tr>
             <th>玩家</th>
-            <th>數據</th>
+            <th>金幣</th>
+            <th>攻擊</th>
+            <th>防禦</th>
+            <th>命中</th>
+            <th>偵查</th>
+            <th>生存</th>
+            <th>懸賞金</th>
           </tr>
         </thead>
-        <tbody id="tbodyRows"></tbody>
+        <tbody id="scoreTbody"></tbody>
       </table>
     </main>
   </div>
@@ -1608,8 +1620,6 @@ const TITLE_TABLE = {
 
 let ORDERED_IDS = []; // 依金幣排名
 let ROWS = [];        // 每位玩家的分數
-let ACTIVE = new Set(['coinScore']); // 預設顯示：金幣
-
 /* ===== 懸賞計算工具（與海報同公式） ===== */
 function computeBountyFromScore(score, playerCount){
   const s = score || {};
@@ -1777,77 +1787,15 @@ function renderPlayersLeft(final, myId){
   });
 }
 
-/* 勾選面板 */
-function buildMetricPanel(){
-  const ml = document.getElementById('metricList');
-  ml.innerHTML = METRICS.map(m=>{
-    const on = ACTIVE.has(m.key);
-    return `
-      <label class="metric ${on?'active':''}" data-key="${m.key}">
-        <input type="checkbox" value="${m.key}" ${on?'checked':''}/>
-        <span>${m.title}</span>
-      </label>
-    `;
-  }).join('');
 
-  ml.querySelectorAll('label.metric').forEach(lbl=>{
-    const key = lbl.getAttribute('data-key');
-    const cb = lbl.querySelector('input[type="checkbox"]');
-    cb.addEventListener('change', ()=>{
-      if(cb.checked) ACTIVE.add(key); else ACTIVE.delete(key);
-      lbl.classList.toggle('active', cb.checked);
-      renderDetailTable();
-
-  // 段位進度（顯示在結算頁上方）
-  scheduleRankUI();
-    });
-  });
-}
-
-/* 單一玩家一列：在同一欄位並列多條（每個勾選的指標各一條）
-   cap 規則：cap = (本場該指標最大值) + 10；若全為 0，cap = 10。 */
-function renderMetricsCell(r, capMap){
-  const keys = Array.from(ACTIVE);
-  if(keys.length===0) return '<div class="small" style="color:var(--muted)">（尚未勾選項目）</div>';
-
-  const lines = keys.map(key=>{
-    const m = METRICS.find(x=>x.key===key);
-    const val = Number(r[key]||0);
-    const cap = Math.max(10, capMap[key] || 10);
-    const pct = Math.max(0, Math.min(100, (100*val/cap)));
-    const showInside = pct >= 18;
-    return `
-      <div class="metric-line">
-        <span class="metric-badge">${m?m.title:key}</span>
-        <div class="bar-wrap">
-          <div class="bar"></div>
-          <div class="fill" style="width:${pct}%"></div>
-          ${showInside ? `<span class="val-in">${val}</span>` : ``}
-        </div>
-        ${!showInside ? `<span class="val-out">${val}</span>` : ``}
-      </div>
-    `;
-  }).join('');
-
-  return `<div class="metrics-cell">${lines}</div>`;
-}
-
-/* 右側表格 */
-function renderDetailTable(){
-  const thead = document.getElementById('theadRow');
-  const tbody = document.getElementById('tbodyRows');
-
-  thead.innerHTML = `<th>玩家</th><th>數據</th>`;
-
-  // 依規格：cap = 本場最大值 + 10；若全 0，cap=10
-  const capMap = {};
-  for(const key of ACTIVE){
-    const maxVal = Math.max(0, ...ROWS.map(r=> Number(r[key]||0) ));
-    capMap[key] = Math.max(10, maxVal + 10);
-  }
+/* 右側：固定所有項目分數表（每人一列，全部項目直接顯示） */
+function renderScoreTable(){
+  const tbody = document.getElementById('scoreTbody');
+  if(!tbody) return;
 
   tbody.innerHTML = ORDERED_IDS.map(id=>{
     const r = ROWS.find(x=>x.id===id) || {};
+    const bountyStr = Number(r.bounty||0).toLocaleString('en-US');
     const playerCell = `
       <div class="cell-player">
         <img class="avatar" src="${avatarUrl(r.avatar)}" alt="">
@@ -1858,10 +1806,17 @@ function renderDetailTable(){
     `;
     return `<tr>
       <td>${playerCell}</td>
-      <td>${renderMetricsCell(r, capMap)}</td>
+      <td>${Number(r.coinScore||0)}</td>
+      <td>${Number(r.atkScore||0)}</td>
+      <td>${Number(r.defScore||0)}</td>
+      <td>${Number(r.hitScore||0)}</td>
+      <td>${Number(r.intelScore||0)}</td>
+      <td>${Number(r.survivalScore||0)}</td>
+      <td>${bountyStr}</td>
     </tr>`;
   }).join('');
 }
+
 
 /* 主渲染 */
 function renderFinal(final){
@@ -1915,8 +1870,10 @@ function renderFinal(final){
   });
 
   renderPlayersLeft(final, MY_ID);
-  buildMetricPanel();
-  renderDetailTable();
+  renderScoreTable();
+
+  // ✅ 本次懸賞單：直接顯示（預設顯示「我」的懸賞令）
+  try{ autoShowBountyInline(final); }catch(e){ console.warn('[auto bounty inline] failed', e); }
 
   // === 雲端主控：保證 socket 連上後一定會寫入一次 ===
   try{
@@ -2077,6 +2034,23 @@ function guessMyId(final, pid){
   return fallbackId(final);
 }
 
+
+function setBountyInlineName(name){
+  const el = document.getElementById('bountyForWho');
+  if(el) el.textContent = name ? `對象：${name}` : '—';
+}
+
+async function autoShowBountyInline(final){
+  let pid = MY_PID || sessionStorage.getItem('op_pid') || null;
+  let myId = guessMyId(final, pid);
+  if (!final.playersMeta || !final.playersMeta[myId]) myId = fallbackId(final);
+
+  const me = (final?.playersMeta && final.playersMeta[myId]) || {};
+  setBountyInlineName(me?.name || '');
+
+  await showBounty(final, myId, { openModal:false, canvasId:'bountyCanvasInline', useInlineSaveBtn:true });
+}
+
 async function fireBounty(){
   const final = LAST_FINAL || (STATE && STATE.final);
   if(!final){ alert('尚未取得結算資料'); return; }
@@ -2157,7 +2131,8 @@ async function showBounty(final, myId, opts = {}){
   };
 
   const bounty = calcBounty(s);
-  const canvas = document.getElementById('bountyCanvas');
+  const canvasId = (opts && opts.canvasId) ? opts.canvasId : 'bountyCanvas';
+  const canvas = document.getElementById(canvasId);
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
@@ -2245,7 +2220,8 @@ async function showBounty(final, myId, opts = {}){
     };
 
     // 顯示「存到個人頁面」按鈕（生成後才可按）
-    const btn = document.getElementById('btnSavePoster');
+    const btnId = (opts && opts.useInlineSaveBtn) ? 'btnSavePosterInline' : 'btnSavePoster';
+    const btn = document.getElementById(btnId);
     if(btn){
       btn.disabled = false;
       btn.dataset.saved = '0';
@@ -2298,6 +2274,34 @@ document.getElementById('btnSavePoster')?.addEventListener('click', async ()=>{
 });
 
 
+
+
+// 生成後，按「存到個人頁面」（inline）也會把資料寫入雲端
+document.getElementById('btnSavePosterInline')?.addEventListener('click', async ()=>{
+  const btn = document.getElementById('btnSavePosterInline');
+  if(!btn || btn.disabled) return;
+
+  if(!LAST_POSTER_META || !LAST_POSTER_META.key){
+    alert('尚未生成懸賞單資料');
+    return;
+  }
+
+  if(btn.dataset.saved === '1') return;
+  btn.dataset.saved = '1';
+  btn.disabled = true;
+  btn.textContent = '儲存中...';
+
+  try{
+    await cloudSavePosterMeta(socket, LAST_POSTER_META);
+    btn.textContent = '已存到個人頁面 ✓';
+  }catch(e){
+    console.error('[save poster inline failed]', e);
+    btn.dataset.saved = '0';
+    btn.disabled = false;
+    btn.textContent = '存到個人頁面';
+    alert('儲存失敗：請檢查登入狀態/網路連線');
+  }
+});
 </script>
 
 <script>
