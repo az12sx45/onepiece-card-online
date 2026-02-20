@@ -605,9 +605,32 @@ body.view-rank .layout > aside.card:first-child{
 #btnSavePoster:active{ transform:translateY(1px); }
 #btnSavePoster[disabled]{ opacity:.45; cursor:not-allowed; }
 
+
+/* ✅ 2026-02-21：結算頁預設直接顯示「詳細數據」並隱藏分頁切換 */
+.view-tabs{ display:none !important; }
+
+
+/* ✅ 2026-02-21：牌位區放大（徽章圖片更大） */
+#rankBox.rankbox{
+  width:100%;
+  min-width:0;
+  padding:12px 12px;
+  border-radius:16px;
+}
+#rankBox .rankbox-top{
+  align-items:center;
+}
+#rankIcon.rankicon{
+  width:64px;
+  height:64px;
+}
+@media (max-width: 520px){
+  #rankIcon.rankicon{ width:54px; height:54px; }
+}
+
 </style>
 </head>
-<body class="view-rank">
+<body class="view-detail">
   <div class="header">
     <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
       <div>
@@ -616,12 +639,7 @@ body.view-rank .layout > aside.card:first-child{
       </div>
       <div style="display:flex;align-items:center;gap:10px">
         <div class="badge" id="seasonLbl">Season —</div>
-        <div id="rankBox" class="rankbox hidden" title="段位進度（新人定位賽 / 正式排位）">
-          <div class="rankbox-top">
-            <div class="rankleft">
-              <img id="rankIcon" class="rankicon hidden" alt="" />
-              <div class="rankname" id="rankName">段位</div>
-            </div>
+</div>
             <div class="rankdelta" id="rankDelta"></div>
           </div>
           <div class="ranksub" id="rankSub"></div>
@@ -644,7 +662,23 @@ body.view-rank .layout > aside.card:first-child{
     </div>
   </div>
 
-  <div class="wrap layout">
+  
+  <!-- ✅ 段位區（移到詳細資訊上方，圖片放大） -->
+  <div class="wrap">
+    <div class="card" style="padding:14px 16px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <div class="section-title" style="margin:0">牌位進度</div>
+        <div class="small" style="margin:0">（新人定位賽 / 正式排位）</div>
+      </div>
+      <div id="rankBox" class="rankbox hidden" title="段位進度（新人定位賽 / 正式排位）">
+          <div class="rankbox-top">
+            <div class="rankleft">
+              <img id="rankIcon" class="rankicon hidden" alt="" />
+              <div class="rankname" id="rankName">段位</div>
+    </div>
+  </div>
+
+<div class="wrap layout">
     <!-- 左：玩家清單 -->
     <aside class="card">
       <div class="section-title">玩家清單（依金幣排名）</div>
@@ -1947,6 +1981,9 @@ if(window.__pendingFinalForCloud && socket){
   const serverURL = new URLSearchParams(location.search).get('server')
   || "https://onepiece-card-online.onrender.com";
   socket = io(serverURL, { transports: ['websocket'] });
+
+  // ✅ 牌位區：結算頁一進來就顯示（會自動等待 socket 連線）
+  scheduleRankUI();
 
 // === 若 renderFinal 比 socket 更早跑：這裡補寫雲端一次（戰績/稱號/豪華解鎖/懸賞單）===
 if (window.__pendingFinalForCloud) {
