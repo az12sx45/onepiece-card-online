@@ -607,27 +607,42 @@ body.view-rank .layout > aside.card:first-child{
 .view-tabs{ display:none !important; }
 
 
-/* ✅ 2026-02-21：牌位區放大（徽章圖片更大） */
-#rankBox.rankbox{
-  width:100%;
-  min-width:0;
-  padding:12px 12px;
-  border-radius:16px;
-}
-#rankBox .rankbox-top{
-  align-items:center;
-}
-#rankIcon.rankicon{
-  width:96px;
-  height:96px;
-}
-@media (max-width: 520px){
-  #rankIcon.rankicon{ width:76px; height:76px; }
-}
-
-
 /* ✅ 2026-02-21：牌位在玩家清單上方（更緊湊） */
 aside.card #rankBox.rankbox{ background:rgba(255,255,255,.03); }
+
+/* ✅ 2026-02-21：牌位面板改為「徽章在上、進度在下」 */
+.rankbox-top{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  text-align:center;
+}
+.rankleft{ display:none !important; } /* 舊結構不用了 */
+
+#rankIcon.rankicon{
+  width:140px;
+  height:140px;
+}
+#rankBox .rankname{
+  font-size:18px;
+}
+#rankBox .ranksub{
+  font-size:13px;
+  color:var(--muted);
+}
+#rankBox .rankdelta{
+  text-align:center;
+  font-size:13px;
+}
+#rankBox .rankbar{
+  height:12px;
+}
+@media (max-width: 520px){
+  #rankIcon.rankicon{ width:108px; height:108px; }
+}
+
 </style>
 </head>
 <body class="view-detail">
@@ -661,13 +676,6 @@ aside.card #rankBox.rankbox{ background:rgba(255,255,255,.03); }
       <button class="tab-btn" id="btnViewDetail">詳細數據</button>
     </div>
   </div>
-<div id="rankBox" class="rankbox hidden" title="段位進度（新人定位賽 / 正式排位）">
-          <div class="rankbox-top">
-            <div class="rankleft">
-              <img id="rankIcon" class="rankicon hidden" alt="" />
-              <div class="rankname" id="rankName">段位</div>
-    </div>
-  </div>
 
 <div class="wrap layout">
     <!-- 左：玩家清單 -->
@@ -678,7 +686,17 @@ aside.card #rankBox.rankbox{ background:rgba(255,255,255,.03); }
           <div style="font-weight:900">牌位</div>
           <div class="small">（新人定位賽 / 正式排位）</div>
         </div>
-        <div id="rankBox" class="rankbox hidden"></div>
+        <div id="rankBox" class="rankbox hidden" title="段位進度（新人定位賽 / 正式排位）">
+  <div class="rankbox-top">
+    <img id="rankIcon" class="rankicon hidden" alt="" />
+    <div class="rankname" id="rankName">段位</div>
+    <div class="ranksub" id="rankSub"></div>
+  </div>
+
+  <div class="rankbar"><div class="rankfill" id="rankFill"></div></div>
+  <div class="rankdelta" id="rankDelta"></div>
+  <div class="rankhint" id="rankHint"></div>
+</div>
       </div>
 
       <div class="section-title">玩家清單（依金幣排名）</div>
@@ -688,13 +706,8 @@ aside.card #rankBox.rankbox{ background:rgba(255,255,255,.03); }
     <main class="card tablewrap">
       <div class="section-title" style="margin-bottom:10px">詳細數據</div>
 
-      <!-- ✅ 本次懸賞單：直接顯示（不需要按按鈕） -->
-      <div class="card" style="padding:12px;margin-bottom:12px">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px">
-          <div style="font-weight:800">本次懸賞單</div>
-          <div class="small" id="bountyForWho">—</div>
-        </div>
-        <div style="display:flex;justify-content:center">
+      
+<div style="display:flex;justify-content:center">
           <canvas id="bountyCanvasInline" width="768" height="1152" style="max-width:100%;height:auto;border-radius:12px;border:1px solid rgba(255,255,255,.08)"></canvas>
         </div>
         <div class="bounty-actions" style="margin-top:10px">
@@ -717,6 +730,13 @@ aside.card #rankBox.rankbox{ background:rgba(255,255,255,.03); }
         </thead>
         <tbody id="scoreTbody"></tbody>
       </table>
+
+      <!-- ✅ 本次懸賞單：直接顯示（不需要按按鈕） -->
+      <div class="card" style="padding:12px;margin-bottom:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px">
+          <div style="font-weight:800">本次懸賞單</div>
+          <div class="small" id="bountyForWho">—</div>
+        </div>
     </main>
   </div>
 
@@ -1527,7 +1547,7 @@ document.getElementById('roomLbl').textContent = '房號 ' + roomId;
 
 /* avatar 路徑修正 */
 /* avatar 路徑修正（支援數字頭像 & cpu1 這種字串） */
-function avatarUrl(v){
+function avatarUrl2(v){
   if (v == null) return '';
 
   // 數字：1 ~ 30 → 直接當成編號
@@ -1873,7 +1893,16 @@ function renderFinal(final){
   renderScoreTable();
 
   // ✅ 本次懸賞單：直接顯示（預設顯示「我」的懸賞令）
-  try{ autoShowBountyInline(final); }catch(e){ console.warn('[auto bounty inline] failed', e); }
+  // 注意：showBounty 定義在後段 script，快取模式可能先 renderFinal 再載入 showBounty → 這裡做等待
+  (function waitBountyReady(attempt){
+    attempt = attempt || 0;
+    if (typeof window.showBounty === 'function'){
+      try{ autoShowBountyInline(final); }catch(e){ console.warn('[auto bounty inline] failed', e); }
+      return;
+    }
+    if (attempt >= 60) { console.warn('[auto bounty inline] give up (showBounty not ready)'); return; }
+    setTimeout(()=>waitBountyReady(attempt+1), 50);
+  })();
 
   // === 雲端主控：保證 socket 連上後一定會寫入一次 ===
   try{
@@ -2114,7 +2143,8 @@ function avatarUrl(v){
   if(/^https?:\/\//i.test(v)) return v;
   if(typeof v === 'string'){
     if(v.includes('/')) return v;
-    return `images/avatars/${v}`;
+    if (/\.(png|jpe?g|webp|gif|svg)$/i.test(v)) return `images/avatars/${v}`;
+    return `images/avatars/${v}.webp`;
   }
   return '';
 }
@@ -2148,7 +2178,7 @@ async function showBounty(final, myId, opts = {}){
   // === 載圖 ===
   const bg = await loadImage('images/wanted.png');
   const fallbackAvatarIdx = (myId % 8) + 1;
-  const avaUrl = avatarUrl(me.avatar) || `images/avatars/${fallbackAvatarIdx}.webp`;
+  const avaUrl = avatarUrl2(me.avatar) || `images/avatars/${fallbackAvatarIdx}.webp`;
   const avatarImg = await loadImage(avaUrl);
 
   // 先畫頭像（在下層，做圓形裁切）
