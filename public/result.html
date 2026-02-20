@@ -479,6 +479,43 @@ body.view-rank .layout > aside.card:first-child{
   padding:4px 10px;border:1px solid rgba(255,255,255,.15);
   border-radius:999px;font-size:13px;color:var(--accent);
 }
+
+/* ===== 段位進度（結算頁顯示） ===== */
+.rankbox{
+  display:flex; flex-direction:column; gap:6px;
+  min-width:220px;
+  padding:8px 10px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:14px;
+  background:rgba(255,255,255,.04);
+}
+.rankbox-top{
+  display:flex; align-items:baseline; justify-content:space-between; gap:10px;
+}
+.rankleft{ display:flex; align-items:center; gap:8px; min-width:0; }
+.rankicon{
+  width:28px;height:28px;
+  object-fit:contain;
+  flex:0 0 auto;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,.45));
+}
+.rankname{ font-weight:900; letter-spacing:.4px; }
+.ranksub{ font-size:12px; color:var(--muted); font-variant-numeric:tabular-nums; }
+.rankdelta{ font-size:12px; font-weight:800; font-variant-numeric:tabular-nums; }
+.rankbar{
+  position:relative;
+  height:10px;
+  border-radius:999px;
+  background:#2b333b;
+  border:1px solid rgba(255,255,255,.10);
+  overflow:hidden;
+}
+.rankfill{
+  position:absolute; left:0; top:0; bottom:0;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  width:0%;
+}
+.rankhint{ font-size:12px; color:var(--muted); line-height:1.25; }
 .btn{
   padding:8px 12px;border:1px solid rgba(255,255,255,.1);
   border-radius:10px;background:rgba(255,255,255,.06);
@@ -579,6 +616,18 @@ body.view-rank .layout > aside.card:first-child{
       </div>
       <div style="display:flex;align-items:center;gap:10px">
         <div class="badge" id="seasonLbl">Season —</div>
+        <div id="rankBox" class="rankbox hidden" title="段位進度（新人定位賽 / 正式排位）">
+          <div class="rankbox-top">
+            <div class="rankleft">
+              <img id="rankIcon" class="rankicon hidden" alt="" />
+              <div class="rankname" id="rankName">段位</div>
+            </div>
+            <div class="rankdelta" id="rankDelta"></div>
+          </div>
+          <div class="ranksub" id="rankSub"></div>
+          <div class="rankbar"><div class="rankfill" id="rankFill"></div></div>
+          <div class="rankhint" id="rankHint"></div>
+        </div>
         <button class="btn" id="openHelp">📖 說明</button>
         <button class="btn" onclick="fireBounty()">📜 本次懸賞單</button>
           <button class="btn" onclick="location.href='profile.html'">👤 玩家頁面</button>
@@ -972,6 +1021,177 @@ function applyRankedDelta(rank, P, myCoins, totalCoins){
 }
 
 
+// ===== Rank UI (結算頁顯示段位進度) =====
+const RANK_TIER_NAME = {
+  0:'新人定位賽',
+  1:'新人船員',
+  2:'副船長',
+  3:'船長',
+  4:'超新星',
+  5:'王下七武海',
+  6:'四皇',
+  7:'海賊王級'
+};
+
+// 段位圖示（可在 window.OP_RANK_ICON_MAP 覆寫路徑）
+const DEFAULT_RANK_ICON_MAP = {
+  0: 'images/ranks/placement.png',
+  1: 'images/ranks/r1.png',
+  2: 'images/ranks/r2.png',
+  3: 'images/ranks/r3.png',
+  4: 'images/ranks/r4.png',
+  5: 'images/ranks/r5.png',
+  6: 'images/ranks/r6.png',
+  7: 'images/ranks/r7.png'
+};
+
+function getRankIconPath(tier){
+  try{
+    const m = (window.OP_RANK_ICON_MAP && typeof window.OP_RANK_ICON_MAP === 'object')
+      ? window.OP_RANK_ICON_MAP
+      : DEFAULT_RANK_ICON_MAP;
+    return m && m[tier] ? String(m[tier]) : '';
+  }catch(e){
+    return '';
+  }
+}
+
+
+function fmtSigned(n){
+  const x = Number(n)||0;
+  return (x>0?'+':'') + String(x);
+}
+
+function setRankUIVisible(on){
+  const box = document.getElementById('rankBox');
+  if(!box) return;
+  box.classList.toggle('hidden', !on);
+}
+
+function drawRankUI(rank, uiMeta){
+  const box = document.getElementById('rankBox');
+  if(!box) return;
+
+  const r = ensureRank(rank);
+  const nameEl = document.getElementById('rankName');
+  const subEl  = document.getElementById('rankSub');
+  const fillEl = document.getElementById('rankFill');
+  const hintEl = document.getElementById('rankHint');
+  const dEl    = document.getElementById('rankDelta');
+  const iconEl = document.getElementById('rankIcon');
+
+  const tierName = RANK_TIER_NAME[r.tier] || `Tier ${r.tier}`;
+  nameEl.textContent = tierName;
+
+  if(iconEl){
+    const path = getRankIconPath(r.tier);
+    if(path){
+      iconEl.classList.remove('hidden');
+      iconEl.alt = tierName;
+      // 重新指定 src 以觸發更新
+      iconEl.src = path;
+      iconEl.onerror = ()=>{ try{ iconEl.classList.add('hidden'); }catch(e){} };
+    }else{
+      iconEl.classList.add('hidden');
+      iconEl.removeAttribute('src');
+    }
+  }
+
+  dEl.textContent = '';
+  if(uiMeta && uiMeta.deltaText){
+    dEl.textContent = uiMeta.deltaText;
+    dEl.style.color = (uiMeta.deltaSign < 0) ? '#ff9a9a' : (uiMeta.deltaSign > 0 ? '#b7ffcf' : 'var(--muted)');
+  }else{
+    dEl.style.color = 'var(--muted)';
+  }
+
+  if(r.tier === 0){
+    const g = r.placement?.games ?? 0;
+    const s = Number(r.placement?.score ?? 0);
+    subEl.textContent = `定位賽進度：${g}/3　分數：${(s>0?'+':'')}${s.toFixed(3)}`;
+    const pct = Math.max(0, Math.min(100, (g/3)*100));
+    fillEl.style.width = pct + '%';
+    hintEl.textContent = '打滿 3 場後，依表現決定起始段位（R1~R4）。';
+    return;
+  }
+
+  if(r.tier === 7){
+    subEl.textContent = `RP：${Math.max(0, Number(r.rp)||0)}`;
+    fillEl.style.width = '100%';
+    hintEl.textContent = '海賊王級：RP 不封頂（依勝負持續加減）。';
+    return;
+  }
+
+  const rp = Math.max(0, Number(r.rp)||0);
+  subEl.textContent = `RP：${rp}/100`;
+  fillEl.style.width = Math.max(0, Math.min(100, rp)) + '%';
+
+  const shield = (Number(r.dropShield)===1);
+  hintEl.textContent = shield
+    ? '⚠️ 已用過一次負分保護：下次 RP < 0 會降級到上一階並重置到 25 RP。'
+    : '提示：第一次 RP < 0 會觸發負分保護（歸 0），再輸一場才會降級。';
+}
+
+function captureRankUiMeta(before, after){
+  const b = ensureRank(before);
+  const a = ensureRank(after);
+
+  if(b.tier === 0 || a.tier === 0){
+    const bg = b.placement?.games ?? 0;
+    const ag = a.placement?.games ?? 0;
+    const ds = Number(a.placement?.score||0) - Number(b.placement?.score||0);
+    const txt = (ag>bg) ? `第 ${ag} 場` : '';
+    const perfTxt = (ds !== 0) ? `（${fmtSigned(ds.toFixed(3))}）` : '';
+    return {
+      deltaText: txt ? (txt + perfTxt) : '',
+      deltaSign: (ds>0?1:(ds<0?-1:0))
+    };
+  }
+
+  const d = (Number(a.rp)||0) - (Number(b.rp)||0);
+  if(a.tier > b.tier) return { deltaText:`↑ 升級！`, deltaSign: +1 };
+  if(a.tier < b.tier) return { deltaText:`↓ 降級`, deltaSign: -1 };
+
+  if(d === 0) return { deltaText:'', deltaSign:0 };
+  return { deltaText:`${fmtSigned(d)} RP`, deltaSign:(d>0?1:-1) };
+}
+
+/* ===== 段位進度：讀雲端 rank 並顯示 ===== */
+let __rankUIOnce = false;
+function scheduleRankUI(){
+  if(__rankUIOnce) return;
+  __rankUIOnce = true;
+
+  const secret = getSecret();
+  if(!secret){ setRankUIVisible(false); return; }
+
+  const run = async ()=>{
+    try{
+      if(!socket) return;
+
+      let ui = null;
+      try{ ui = JSON.parse(sessionStorage.getItem('op_rank_ui')||'null'); }catch(e){ ui = null; }
+
+      const loaded = await cloudLoadClient(socket);
+      const r = loaded?.client?.rank ? ensureRank(loaded.client.rank) : ensureRank(null);
+
+      const meta = ui?.meta || null;
+      setRankUIVisible(true);
+      drawRankUI(r, meta);
+    }catch(e){
+      console.warn('[rank ui] failed', e);
+      setRankUIVisible(false);
+    }
+  };
+
+  if(socket && socket.connected){
+    run();
+  }else if(socket){
+    socket.once('connect', run);
+  }
+}
+
+
 async function cloudGet(socket, secret){
   return await new Promise((resolve)=>{
     socket.timeout(6000).emit('PROFILE_GET', { secret }, (err, res)=>{
@@ -1202,6 +1422,9 @@ async function cloudApplyMatchResult(socket, final){
     const myCoins = Number(myRankRow?.coins || 0) || 0;
     const totalCoins = rankingNow.reduce((s,r)=> s + (Number(r?.coins||0)||0), 0);
 
+    // UI：記錄本場前後段位（用於結算頁顯示）
+    const __rank_before = ensureRank(c.rank);
+
     c.rank = ensureRank(c.rank);
 
     if (c.rank.tier === 0){
@@ -1209,6 +1432,21 @@ async function cloudApplyMatchResult(socket, final){
     }else{
       c.rank = applyRankedDelta(c.rank, P, myCoins, totalCoins);
     }
+
+    // UI：保存前後段位差（只給結算頁顯示，不寫入雲端）
+    try{
+      const __rank_after = ensureRank(c.rank);
+      const meta = captureRankUiMeta(__rank_before, __rank_after);
+      sessionStorage.setItem('op_rank_ui', JSON.stringify({
+        ts: Date.now(),
+        before: __rank_before,
+        after: __rank_after,
+        meta,
+        P,
+        myCoins,
+        totalCoins
+      }));
+    }catch(_e){}
   }catch(e){
     console.warn('[rank] apply failed', e);
   }
@@ -1525,6 +1763,9 @@ function buildMetricPanel(){
       if(cb.checked) ACTIVE.add(key); else ACTIVE.delete(key);
       lbl.classList.toggle('active', cb.checked);
       renderDetailTable();
+
+  // 段位進度（顯示在結算頁上方）
+  scheduleRankUI();
     });
   });
 }
