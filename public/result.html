@@ -609,6 +609,18 @@ body.view-rank .layout > aside.card:first-child{
 #btnSavePoster:active{ transform:translateY(1px); }
 #btnSavePoster[disabled]{ opacity:.45; cursor:not-allowed; }
 
+
+/* === 段位面板：放在賽季結算與玩家清單之間（桌機左對齊、手機置中） === */
+.rank-panel{
+  margin-top:12px;
+  margin-bottom:10px;
+  display:flex;
+  justify-content:flex-start;
+}
+@media (max-width: 860px){
+  .rank-panel{ justify-content:center; }
+}
+
 </style>
 </head>
 <body class="view-detail">
@@ -620,12 +632,7 @@ body.view-rank .layout > aside.card:first-child{
       </div>
       <div style="display:flex;align-items:center;gap:10px">
         <div class="badge" id="seasonLbl">Season —</div>
-        <div id="rankBox" class="rankbox hidden" title="段位進度（新人定位賽 / 正式排位）">
-          <div class="rankbox-top">
-            <div class="rankleft">
-              <img id="rankIcon" class="rankicon hidden" alt="" />
-              <div class="rankname" id="rankName">段位</div>
-            </div>
+</div>
             <div class="rankdelta" id="rankDelta"></div>
           </div>
           <div class="ranksub" id="rankSub"></div>
@@ -633,7 +640,16 @@ body.view-rank .layout > aside.card:first-child{
           <div class="rankhint" id="rankHint"></div>
         </div>
         <button class="btn" id="openHelp">📖 說明</button>
-        <button class="btn" onclick="fireBounty()">📜 本次懸賞單</button>
+        <button class="btn" onclick="
+  <!-- === 段位圖與分數（插在「賽季結算」與「玩家清單」之間） === -->
+  <div class="wrap rank-panel">
+<div id="rankBox" class="rankbox hidden" title="段位進度（新人定位賽 / 正式排位）">
+          <div class="rankbox-top">
+            <div class="rankleft">
+              <img id="rankIcon" class="rankicon hidden" alt="" />
+              <div class="rankname" id="rankName">段位</div>
+  </div>
+fireBounty()">📜 本次懸賞單</button>
           <button class="btn" onclick="location.href='profile.html'">👤 玩家頁面</button>
         <button class="btn" onclick="location.href='start.html'">返回主畫面</button>
       </div>
