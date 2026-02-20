@@ -28,7 +28,7 @@ body{
 /* 版型：左 玩家清單 / 中 勾選 / 右 統一清單表 */
 .layout{
   display:grid; gap:18px;
-  grid-template-columns: 280px 1fr;
+  grid-template-columns: 280px 220px 1fr;
 }
 /* 分頁切換按鈕 */
 .view-tabs{
@@ -54,10 +54,6 @@ body{
   color:#1b1408;
   font-weight:700;
 }
-
-/* === 調整：結算頁預設直接顯示「詳細數據」，不提供勾選項目/分頁 === */
-.view-tabs{ display:none !important; }
-.metrics{ display:none !important; }
 
 /* 分頁版型：
    view-rank：只顯示玩家清單，讓左邊卡片變寬
@@ -609,21 +605,9 @@ body.view-rank .layout > aside.card:first-child{
 #btnSavePoster:active{ transform:translateY(1px); }
 #btnSavePoster[disabled]{ opacity:.45; cursor:not-allowed; }
 
-
-/* === 段位面板：放在賽季結算與玩家清單之間（桌機左對齊、手機置中） === */
-.rank-panel{
-  margin-top:12px;
-  margin-bottom:10px;
-  display:flex;
-  justify-content:flex-start;
-}
-@media (max-width: 860px){
-  .rank-panel{ justify-content:center; }
-}
-
 </style>
 </head>
-<body class="view-detail">
+<body class="view-rank">
   <div class="header">
     <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
       <div>
@@ -632,7 +616,12 @@ body.view-rank .layout > aside.card:first-child{
       </div>
       <div style="display:flex;align-items:center;gap:10px">
         <div class="badge" id="seasonLbl">Season —</div>
-</div>
+        <div id="rankBox" class="rankbox hidden" title="段位進度（新人定位賽 / 正式排位）">
+          <div class="rankbox-top">
+            <div class="rankleft">
+              <img id="rankIcon" class="rankicon hidden" alt="" />
+              <div class="rankname" id="rankName">段位</div>
+            </div>
             <div class="rankdelta" id="rankDelta"></div>
           </div>
           <div class="ranksub" id="rankSub"></div>
@@ -640,16 +629,7 @@ body.view-rank .layout > aside.card:first-child{
           <div class="rankhint" id="rankHint"></div>
         </div>
         <button class="btn" id="openHelp">📖 說明</button>
-        <button class="btn" onclick="
-  <!-- === 段位圖與分數（插在「賽季結算」與「玩家清單」之間） === -->
-  <div class="wrap rank-panel">
-<div id="rankBox" class="rankbox hidden" title="段位進度（新人定位賽 / 正式排位）">
-          <div class="rankbox-top">
-            <div class="rankleft">
-              <img id="rankIcon" class="rankicon hidden" alt="" />
-              <div class="rankname" id="rankName">段位</div>
-  </div>
-fireBounty()">📜 本次懸賞單</button>
+        <button class="btn" onclick="fireBounty()">📜 本次懸賞單</button>
           <button class="btn" onclick="location.href='profile.html'">👤 玩家頁面</button>
         <button class="btn" onclick="location.href='start.html'">返回主畫面</button>
       </div>
@@ -1594,7 +1574,7 @@ const TITLE_TABLE = {
 
 let ORDERED_IDS = []; // 依金幣排名
 let ROWS = [];        // 每位玩家的分數
-let ACTIVE = new Set(METRICS.map(m=>m.key)); // 預設顯示：全部指標
+let ACTIVE = new Set(['coinScore']); // 預設顯示：金幣
 
 /* ===== 懸賞計算工具（與海報同公式） ===== */
 function computeBountyFromScore(score, playerCount){
@@ -1901,10 +1881,8 @@ function renderFinal(final){
   });
 
   renderPlayersLeft(final, MY_ID);
-  // 預設直接顯示詳細數據（全部指標）
+  buildMetricPanel();
   renderDetailTable();
-  // 段位進度（顯示在結算頁上方）
-  scheduleRankUI();
 
   // === 雲端主控：保證 socket 連上後一定會寫入一次 ===
   try{
@@ -2025,9 +2003,6 @@ if (window.__pendingFinalForCloud) {
       btnDetail?.classList.remove('active');
     }
   }
-
-  // 預設進入：詳細數據
-  setView('detail');
 
   btnRank?.addEventListener('click', ()=> setView('rank'));
   btnDetail?.addEventListener('click', ()=> setView('detail'));
