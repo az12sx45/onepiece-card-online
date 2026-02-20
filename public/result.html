@@ -28,12 +28,55 @@ body{
 /* 版型：左 玩家清單 / 中 勾選 / 右 統一清單表 */
 .layout{
   display:grid; gap:18px;
-  grid-template-columns: 360px 1fr;
+  grid-template-columns: 280px 220px 1fr;
 }
-/* 版型：兩欄（左玩家清單/牌位、右詳細表） */
+/* 分頁切換按鈕 */
+.view-tabs{
+  margin:10px 0 6px;
+  display:inline-flex;
+  gap:6px;
+  padding:4px;
+  border-radius:999px;
+  background:rgba(20,24,28,.9);
+  border:1px solid rgba(255,255,255,.08);
+}
+.tab-btn{
+  border:none;
+  border-radius:999px;
+  padding:6px 14px;
+  font-size:13px;
+  cursor:pointer;
+  background:transparent;
+  color:var(--muted);
+}
+.tab-btn.active{
+  background:linear-gradient(135deg,#ffd36b,#ffb84a);
+  color:#1b1408;
+  font-weight:700;
+}
+
+/* 分頁版型：
+   view-rank：只顯示玩家清單，讓左邊卡片變寬
+   view-detail：顯示原本三欄（採用 .layout 原本設定） */
+body.view-rank .layout{
+  grid-template-columns: minmax(0, 520px); /* 左邊卡片變寬 */
+}
+body.view-rank .metrics,
+body.view-rank .tablewrap{
+  display:none;
+}
+body.view-rank .layout > aside.card:first-child{
+  grid-column: 1 / -1; /* 讓玩家清單卡片佔滿整列 */
+}
+@media (max-width: 1180px){
+  .layout{ grid-template-columns: 280px 1fr; }
+  .metrics{ order:2; }
+  .tablewrap{ order:3; }
+}
 @media (max-width: 860px){
   .layout{ grid-template-columns: 1fr; }
 }
+
 /* 卡片 */
 .card{
   background:rgba(20,24,28,.82);
@@ -48,7 +91,7 @@ body{
 /* 左：玩家清單 */
 .player-item{
   display:grid;
-  grid-template-columns: 50px 100px minmax(0,340px) 1fr; /* rank | rankIcon | avatar+title | name */  /* rank | avatar+稱號(更寬) | 名字 */
+  grid-template-columns:  28px minmax(0, 340px) 1fr;  /* rank | avatar+稱號(更寬) | 名字 */
   align-items:start;
   gap:10px;
   padding:10px;
@@ -451,7 +494,7 @@ body{
 }
 .rankleft{ display:flex; align-items:center; gap:8px; min-width:0; }
 .rankicon{
-  width:88px;height:88px;
+  width:28px;height:28px;
   object-fit:contain;
   flex:0 0 auto;
   filter: drop-shadow(0 2px 6px rgba(0,0,0,.45));
@@ -562,52 +605,9 @@ body{
 #btnSavePoster:active{ transform:translateY(1px); }
 #btnSavePoster[disabled]{ opacity:.45; cursor:not-allowed; }
 
-
-/* ===== 牌位區塊（左側獨立一格） ===== */
-.rank-area{
-  width:100%;
-  margin-bottom:12px;
-}
-.rankbox.rank-area{
-  min-width:0;
-  width:100%;
-}
-
-/* 玩家清單：牌位圖格 */
-.rank-badge{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.rank-big{
-  width:60px;
-  height:60px;
-  object-fit:contain;
-  filter: drop-shadow(0 2px 10px rgba(0,0,0,.5));
-}
-
-/* 詳細資訊上方：牌位區 */
-.detail-rank-header{
-  display:flex;
-  align-items:center;
-  gap:16px;
-  margin-bottom:20px;
-}
-.rankicon-large{
-  width:100px;
-  height:100px;
-  object-fit:contain;
-  filter: drop-shadow(0 3px 14px rgba(0,0,0,.55));
-}
-.rank-name-large{
-  font-size:28px;
-  font-weight:900;
-  letter-spacing:.4px;
-}
-
 </style>
 </head>
-<body class="view-detail">
+<body class="view-rank">
   <div class="header">
     <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
       <div>
@@ -616,7 +616,12 @@ body{
       </div>
       <div style="display:flex;align-items:center;gap:10px">
         <div class="badge" id="seasonLbl">Season —</div>
-</div>
+        <div id="rankBox" class="rankbox hidden" title="段位進度（新人定位賽 / 正式排位）">
+          <div class="rankbox-top">
+            <div class="rankleft">
+              <img id="rankIcon" class="rankicon hidden" alt="" />
+              <div class="rankname" id="rankName">段位</div>
+            </div>
             <div class="rankdelta" id="rankDelta"></div>
           </div>
           <div class="ranksub" id="rankSub"></div>
@@ -630,33 +635,33 @@ body{
       </div>
     </div>
   </div>
-<div class="wrap layout">
+
+  <!-- 分頁切換：玩家排名 / 詳細數據 -->
+  <div class="wrap">
+    <div class="view-tabs">
+      <button class="tab-btn active" id="btnViewRank">玩家排名</button>
+      <button class="tab-btn" id="btnViewDetail">詳細數據</button>
+    </div>
+  </div>
+
+  <div class="wrap layout">
     <!-- 左：玩家清單 -->
     <aside class="card">
-      
-      <div id="rankBox" class="rankbox rank-area hidden" title="段位進度（新人定位賽 / 正式排位）">
-        <div class="rankbox-top">
-          <div class="rankleft">
-            <img id="rankIcon" class="rankicon hidden" alt="" />
-            <div class="rankname" id="rankName">段位</div>
-          </div>
-          <div class="rankdelta" id="rankDelta"></div>
-        </div>
-        <div class="ranksub" id="rankSub"></div>
-        <div class="rankbar"><div class="rankfill" id="rankFill"></div></div>
-        <div class="rankhint" id="rankHint"></div>
-      </div>
-
       <div class="section-title">玩家清單（依金幣排名）</div>
       <div class="player-list" id="playerList"></div>
     </aside>
-<!-- 右：統一清單表（每人一列，顯示全部數據） -->
-    <main class="card tablewrap">
-      <div class="detail-rank-header">
-        <img id="detailRankIcon" class="rankicon-large hidden" alt="">
-        <div class="rank-name-large" id="detailRankName"></div>
-      </div>
 
+    <!-- 中：指標勾選 -->
+    <aside class="card metrics">
+      <div class="section-title">圖表項目</div>
+      <div class="metric-list" id="metricList"></div>
+      <div class="small" style="margin-top:8px">
+        勾選後，右側每位玩家那列會在同一欄位「並列多條」細長條；數字顯示在各條末端。
+      </div>
+    </aside>
+
+    <!-- 右：統一清單表（每人一列，並列多條） -->
+    <main class="card tablewrap">
       <table class="table" id="detailTable">
         <thead>
           <tr id="theadRow">
@@ -1076,8 +1081,6 @@ function drawRankUI(rank, uiMeta){
   const iconEl = document.getElementById('rankIcon');
 
   const tierName = RANK_TIER_NAME[r.tier] || `Tier ${r.tier}`;
-  try{ window.__MY_RANK_TIER = r.tier; }catch(e){}
-
   nameEl.textContent = tierName;
 
   if(iconEl){
@@ -1093,25 +1096,6 @@ function drawRankUI(rank, uiMeta){
       iconEl.removeAttribute('src');
     }
   }
-
-  // 詳細表上方：同步顯示牌位（大圖 + 名稱）
-  try{
-    const dIcon = document.getElementById('detailRankIcon');
-    const dName = document.getElementById('detailRankName');
-    if(dName) dName.textContent = tierName;
-    if(dIcon){
-      const path2 = getRankIconPath(r.tier);
-      if(path2){
-        dIcon.classList.remove('hidden');
-        dIcon.alt = tierName;
-        dIcon.src = path2;
-        dIcon.onerror = ()=>{ try{ dIcon.classList.add('hidden'); }catch(e){} };
-      }else{
-        dIcon.classList.add('hidden');
-        dIcon.removeAttribute('src');
-      }
-    }
-  }catch(e){} 
 
   dEl.textContent = '';
   if(uiMeta && uiMeta.deltaText){
@@ -1588,20 +1572,9 @@ const TITLE_TABLE = {
   }
 };
 
-let   // 注入「自己的段位圖」：只有自己有雲端 rank 可用
-  try{
-    const myTier = (window.__MY_RANK_TIER != null) ? Number(window.__MY_RANK_TIER) : null;
-    if(Number.isFinite(myTier)){
-      for(const p of list){
-        if((myId != null && p.id === myId) || (MY_PID != null && String(p.pid) === String(MY_PID))){
-          p.rankTier = myTier;
-        }
-      }
-    }
-  }catch(e){}
-
-  ORDERED_IDS = []; // 依金幣排名
+let ORDERED_IDS = []; // 依金幣排名
 let ROWS = [];        // 每位玩家的分數
+let ACTIVE = new Set(['coinScore']); // 預設顯示：金幣
 
 /* ===== 懸賞計算工具（與海報同公式） ===== */
 function computeBountyFromScore(score, playerCount){
@@ -1714,22 +1687,9 @@ function renderPlayersLeft(final, myId){
       coins,
       tierClass,
       bountyStr,
-      titleLabel: info.label,
-      rankTier: (null)
+      titleLabel: info.label
     };
   });
-    // 注入「自己的段位圖」：只有自己有雲端 rank 可用
-  try{
-    const myTier = (window.__MY_RANK_TIER != null) ? Number(window.__MY_RANK_TIER) : null;
-    if(Number.isFinite(myTier)){
-      for(const p of list){
-        if((myId != null && p.id === myId) || (MY_PID != null && String(p.pid) === String(MY_PID))){
-          p.rankTier = myTier;
-        }
-      }
-    }
-  }catch(e){}
-
   ORDERED_IDS = list.map(p=>p.id);
 
   el.innerHTML = list.map((p,i)=>{
@@ -1738,12 +1698,8 @@ function renderPlayersLeft(final, myId){
     const titleText = p.titleLabel ? `${p.titleLabel}` : '';
 
     return `
-      <div class="player-item ${highlight ? 'top1' : ''} ${p.tierClass}" data-id="${p.id}">
+      <div class="player-item ${highlight ? 'top1' : ''} ${p.tierClass}">
         <div class="rank-dot">${p.idx}</div>
-        <div class="rank-badge">
-          ${p.rankTier != null ? `<img src="${getRankIconPath(p.rankTier)}" class="rank-big" alt="">` : ``}
-        </div>
-
 
         <div class="avatar-col">
           <img class="avatar ${isMe?'me':''}"
@@ -1787,19 +1743,59 @@ function renderPlayersLeft(final, myId){
   });
 }
 
+/* 勾選面板 */
+function buildMetricPanel(){
+  const ml = document.getElementById('metricList');
+  ml.innerHTML = METRICS.map(m=>{
+    const on = ACTIVE.has(m.key);
+    return `
+      <label class="metric ${on?'active':''}" data-key="${m.key}">
+        <input type="checkbox" value="${m.key}" ${on?'checked':''}/>
+        <span>${m.title}</span>
+      </label>
+    `;
+  }).join('');
+
+  ml.querySelectorAll('label.metric').forEach(lbl=>{
+    const key = lbl.getAttribute('data-key');
+    const cb = lbl.querySelector('input[type="checkbox"]');
+    cb.addEventListener('change', ()=>{
+      if(cb.checked) ACTIVE.add(key); else ACTIVE.delete(key);
+      lbl.classList.toggle('active', cb.checked);
+      renderDetailTable();
+
+  // 段位進度（顯示在結算頁上方）
+  scheduleRankUI();
+    });
+  });
+}
+
 /* 單一玩家一列：在同一欄位並列多條（每個勾選的指標各一條）
    cap 規則：cap = (本場該指標最大值) + 10；若全為 0，cap = 10。 */
-function renderMetricsCell(r){
-  return `
-    <div class="metrics-cell">
-      <div>金幣：${Number(r.coinScore||0)}</div>
-      <div>攻擊：${Number(r.atkScore||0)}</div>
-      <div>防禦：${Number(r.defScore||0)}</div>
-      <div>命中：${Number(r.hitScore||0)}</div>
-      <div>偵查：${Number(r.intelScore||0)}</div>
-      <div>生存：${Number(r.survivalScore||0)}</div>
-    </div>
-  `;
+function renderMetricsCell(r, capMap){
+  const keys = Array.from(ACTIVE);
+  if(keys.length===0) return '<div class="small" style="color:var(--muted)">（尚未勾選項目）</div>';
+
+  const lines = keys.map(key=>{
+    const m = METRICS.find(x=>x.key===key);
+    const val = Number(r[key]||0);
+    const cap = Math.max(10, capMap[key] || 10);
+    const pct = Math.max(0, Math.min(100, (100*val/cap)));
+    const showInside = pct >= 18;
+    return `
+      <div class="metric-line">
+        <span class="metric-badge">${m?m.title:key}</span>
+        <div class="bar-wrap">
+          <div class="bar"></div>
+          <div class="fill" style="width:${pct}%"></div>
+          ${showInside ? `<span class="val-in">${val}</span>` : ``}
+        </div>
+        ${!showInside ? `<span class="val-out">${val}</span>` : ``}
+      </div>
+    `;
+  }).join('');
+
+  return `<div class="metrics-cell">${lines}</div>`;
 }
 
 /* 右側表格 */
@@ -1809,6 +1805,12 @@ function renderDetailTable(){
 
   thead.innerHTML = `<th>玩家</th><th>數據</th>`;
 
+  // 依規格：cap = 本場最大值 + 10；若全 0，cap=10
+  const capMap = {};
+  for(const key of ACTIVE){
+    const maxVal = Math.max(0, ...ROWS.map(r=> Number(r[key]||0) ));
+    capMap[key] = Math.max(10, maxVal + 10);
+  }
 
   tbody.innerHTML = ORDERED_IDS.map(id=>{
     const r = ROWS.find(x=>x.id===id) || {};
@@ -1822,7 +1824,7 @@ function renderDetailTable(){
     `;
     return `<tr>
       <td>${playerCell}</td>
-      <td>${renderMetricsCell(r)}</td>
+      <td>${renderMetricsCell(r, capMap)}</td>
     </tr>`;
   }).join('');
 }
@@ -1879,10 +1881,8 @@ function renderFinal(final){
   });
 
   renderPlayersLeft(final, MY_ID);
+  buildMetricPanel();
   renderDetailTable();
-
-  // 段位進度（顯示在結算頁上方 + 左側牌位格）
-  scheduleRankUI();
 
   // === 雲端主控：保證 socket 連上後一定會寫入一次 ===
   try{
@@ -1985,6 +1985,27 @@ if (window.__pendingFinalForCloud) {
   document.getElementById('helpModal')?.addEventListener('click', (e)=>{
     if(e.target.id==='helpModal') e.currentTarget.classList.add('hidden');
   });
+
+  // === 分頁切換：玩家排名 / 詳細數據 ===（搬到最外層）
+  const btnRank   = document.getElementById('btnViewRank');
+  const btnDetail = document.getElementById('btnViewDetail');
+
+  function setView(view){
+    if(view === 'detail'){
+      document.body.classList.remove('view-rank');
+      document.body.classList.add('view-detail');
+      btnRank?.classList.remove('active');
+      btnDetail?.classList.add('active');
+    }else{
+      document.body.classList.remove('view-detail');
+      document.body.classList.add('view-rank');
+      btnRank?.classList.add('active');
+      btnDetail?.classList.remove('active');
+    }
+  }
+
+  btnRank?.addEventListener('click', ()=> setView('rank'));
+  btnDetail?.addEventListener('click', ()=> setView('detail'));
 })();
 
 /* ====== 懸賞金：pid -> id 對應與按鈕觸發 ====== */
