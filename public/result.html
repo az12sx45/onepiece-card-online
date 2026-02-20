@@ -28,7 +28,7 @@ body{
 /* 版型：左 玩家清單 / 中 勾選 / 右 統一清單表 */
 .layout{
   display:grid; gap:18px;
-  grid-template-columns: 280px 220px 1fr;
+  grid-template-columns: 280px 1fr;
 }
 /* 分頁切換按鈕 */
 .view-tabs{
@@ -54,6 +54,10 @@ body{
   color:#1b1408;
   font-weight:700;
 }
+
+/* === 調整：結算頁預設直接顯示「詳細數據」，不提供勾選項目/分頁 === */
+.view-tabs{ display:none !important; }
+.metrics{ display:none !important; }
 
 /* 分頁版型：
    view-rank：只顯示玩家清單，讓左邊卡片變寬
@@ -607,7 +611,7 @@ body.view-rank .layout > aside.card:first-child{
 
 </style>
 </head>
-<body class="view-rank">
+<body class="view-detail">
   <div class="header">
     <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
       <div>
@@ -1574,7 +1578,7 @@ const TITLE_TABLE = {
 
 let ORDERED_IDS = []; // 依金幣排名
 let ROWS = [];        // 每位玩家的分數
-let ACTIVE = new Set(['coinScore']); // 預設顯示：金幣
+let ACTIVE = new Set(METRICS.map(m=>m.key)); // 預設顯示：全部指標
 
 /* ===== 懸賞計算工具（與海報同公式） ===== */
 function computeBountyFromScore(score, playerCount){
@@ -1881,8 +1885,10 @@ function renderFinal(final){
   });
 
   renderPlayersLeft(final, MY_ID);
-  buildMetricPanel();
+  // 預設直接顯示詳細數據（全部指標）
   renderDetailTable();
+  // 段位進度（顯示在結算頁上方）
+  scheduleRankUI();
 
   // === 雲端主控：保證 socket 連上後一定會寫入一次 ===
   try{
@@ -2003,6 +2009,9 @@ if (window.__pendingFinalForCloud) {
       btnDetail?.classList.remove('active');
     }
   }
+
+  // 預設進入：詳細數據
+  setView('detail');
 
   btnRank?.addEventListener('click', ()=> setView('rank'));
   btnDetail?.addEventListener('click', ()=> setView('detail'));
