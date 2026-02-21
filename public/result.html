@@ -460,43 +460,30 @@ body{
   width:0%;
 }
 .rankhint{ font-size:12px; color:var(--muted); line-height:1.25; }
-/* ===== 本場牌位圖與分數（加大強化版） ===== */
+
+/* ===== 本場牌位圖與分數（置中顯示） ===== */
+.rank-mid .rank-mid-inner{
+  display:flex;
+  justify-content:center;
+  padding-top:6px;
+}
 .rank-mid #rankBox{
   display:flex;
-  width:min(720px,100%);
-  padding:18px 24px;
-  border-radius:20px;
+  width:min(560px,100%);
 }
+.rank-mid .rankicon{ width:44px; height:44px; }
+.rank-mid .rankname{ font-size:18px; }
+.rank-mid .ranksub{ font-size:13px; }
+.rank-mid .rankdelta{ font-size:13px; }
+.btn{
+  padding:8px 12px;border:1px solid rgba(255,255,255,.1);
+  border-radius:10px;background:rgba(255,255,255,.06);
+  color:var(--text);cursor:pointer;transition:.15s;
+}
+.btn:hover{ background:rgba(255,255,255,.14); }
+/* 防止未載入 Tailwind 時無法隱藏 */
+.hidden{display:none !important;}
 
-.rank-mid .rankbox-top{
-  align-items:center;
-}
-
-.rank-mid .rankicon{
-  width:96px;
-  height:96px;
-  filter: drop-shadow(0 6px 18px rgba(0,0,0,.6));
-}
-
-.rank-mid .rankname{
-  font-size:28px;
-  font-weight:900;
-}
-
-.rank-mid .ranksub{
-  font-size:18px;
-  margin-top:4px;
-}
-
-.rank-mid .rankdelta{
-  font-size:18px;
-  font-weight:900;
-}
-
-.rank-mid .rankbar{
-  height:16px;
-  margin-top:6px;
-}
 /* ===== 說明面板 ===== */
 #helpModal, #bountyModal{
   /* 統一覆蓋層樣式：見原懸賞金彈窗 */
