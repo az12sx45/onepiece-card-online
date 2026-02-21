@@ -1395,10 +1395,47 @@ async function cloudApplyMatchResult(socket, final){
   }catch(e){}
 
 
-  // ===== Rank: 段位系統（伺服器權威結算）=====
-// 段位計算/寫入由伺服器在結算時處理；結算頁只負責顯示。
-// （伺服器會透過 EMIT {type:'rank_ui'} 推送本場前後段位快照，並寫入雲端 stats.client.rank）
+  // ===== Rank: 段位系統（新人定位賽 / 正式排位）=====
+  try{
+    const rankingNow = Array.isArray(final?.ranking) ? final.ranking : [];
+    const P = Number(final?.playerCount)
+      || Object.keys(final?.playersMeta || {}).length
+      || rankingNow.length
+      || 4;
 
+    const myRankRow = rankingNow.find(r => Number(r?.id) === Number(myId)) || null;
+
+    // 用 ranking coins（本局金幣），不是 coinScore
+    const myCoins = Number(myRankRow?.coins || 0) || 0;
+    const totalCoins = rankingNow.reduce((s,r)=> s + (Number(r?.coins||0)||0), 0);
+
+    // UI：記錄本場前後段位（用於結算頁顯示）
+    const __rank_before = ensureRank(c.rank);
+
+    c.rank = ensureRank(c.rank);
+
+    if (c.rank.tier === 0){
+      c.rank = applyPlacement(c.rank, P, myCoins, totalCoins);
+    }else{
+      c.rank = applyRankedDelta(c.rank, P, myCoins, totalCoins);
+    }
+
+    // UI：保存前後段位差（只給結算頁顯示，不寫入雲端）
+    try{
+      const __rank_after = ensureRank(c.rank);
+      const meta = captureRankUiMeta(__rank_before, __rank_after);
+      sessionStorage.setItem('op_rank_ui', JSON.stringify({
+        ts: Date.now(),
+        before: __rank_before,
+        after: __rank_after,
+        meta,
+        P,
+        myCoins,
+        totalCoins
+      }));
+    }catch(_e){}
+  }catch(e){
+    console.warn('[rank] apply failed', e);
   }
 
   await cloudSaveClient(socket, c);
@@ -1903,17 +1940,6 @@ if (window.__pendingFinalForCloud) {
   socket.on('STATE', (s)=>{
     STATE = s;
     if(s && s.final){ renderFinal(s.final); }
-  socket.on('EMIT', (e)=>{
-    // 伺服器推送：本場段位前後快照（給結算頁顯示 +/−）
-    try{
-      if(e && e.type === 'rank_ui' && e.rankUI){
-        sessionStorage.setItem('op_rank_ui', JSON.stringify(e.rankUI));
-        // 立即刷新顯示
-        scheduleRankUI();
-      }
-    }catch(_e){}
-  });
-
   });
 
   // 說明面板
