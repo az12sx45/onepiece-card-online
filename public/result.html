@@ -28,11 +28,8 @@ body{
 /* 版型：左 玩家清單 / 中 勾選 / 右 統一清單表 */
 .layout{
   display:grid; gap:18px;
-  grid-template-columns: 320px 1fr;
+  grid-template-columns: 280px 220px 1fr;
 }
-.metrics{display:none;}
-.view-tabs{display:none;}
-
 /* 分頁切換按鈕 */
 .view-tabs{
   margin:10px 0 6px;
@@ -610,7 +607,7 @@ body.view-rank .layout > aside.card:first-child{
 
 </style>
 </head>
-<body class="view-detail">
+<body class="view-rank">
   <div class="header">
     <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
       <div>
@@ -619,7 +616,11 @@ body.view-rank .layout > aside.card:first-child{
       </div>
       <div style="display:flex;align-items:center;gap:10px">
         <div class="badge" id="seasonLbl">Season —</div>
-        
+        <div id="rankBox" class="rankbox hidden" title="段位進度（新人定位賽 / 正式排位）">
+          <div class="rankbox-top">
+            <div class="rankleft">
+              <img id="rankIcon" class="rankicon hidden" alt="" />
+              <div class="rankname" id="rankName">段位</div>
             </div>
             <div class="rankdelta" id="rankDelta"></div>
           </div>
@@ -634,23 +635,32 @@ body.view-rank .layout > aside.card:first-child{
       </div>
     </div>
   </div>
-<div class="wrap" style="margin-top:12px">
-  <div style="display:flex;justify-content:center">
-    <div id="rankBox" class="rankbox hidden" title="段位進度（新人定位賽 / 正式排位）">
-          <div class="rankbox-top">
-            <div class="rankleft">
-              <img id="rankIcon" class="rankicon hidden" alt="" />
-              <div class="rankname" id="rankName">段位</div>
-  </div>
-</div>
 
-<div class="wrap layout">
+  <!-- 分頁切換：玩家排名 / 詳細數據 -->
+  <div class="wrap">
+    <div class="view-tabs">
+      <button class="tab-btn active" id="btnViewRank">玩家排名</button>
+      <button class="tab-btn" id="btnViewDetail">詳細數據</button>
+    </div>
+  </div>
+
+  <div class="wrap layout">
     <!-- 左：玩家清單 -->
     <aside class="card">
       <div class="section-title">玩家清單（依金幣排名）</div>
       <div class="player-list" id="playerList"></div>
     </aside>
-<!-- 右：統一清單表（每人一列，並列多條） -->
+
+    <!-- 中：指標勾選 -->
+    <aside class="card metrics">
+      <div class="section-title">圖表項目</div>
+      <div class="metric-list" id="metricList"></div>
+      <div class="small" style="margin-top:8px">
+        勾選後，右側每位玩家那列會在同一欄位「並列多條」細長條；數字顯示在各條末端。
+      </div>
+    </aside>
+
+    <!-- 右：統一清單表（每人一列，並列多條） -->
     <main class="card tablewrap">
       <table class="table" id="detailTable">
         <thead>
@@ -1564,7 +1574,7 @@ const TITLE_TABLE = {
 
 let ORDERED_IDS = []; // 依金幣排名
 let ROWS = [];        // 每位玩家的分數
-let ACTIVE = new Set(METRICS.map(m=>m.key)); // 預設顯示：金幣
+let ACTIVE = new Set(['coinScore']); // 預設顯示：金幣
 
 /* ===== 懸賞計算工具（與海報同公式） ===== */
 function computeBountyFromScore(score, playerCount){
@@ -1735,8 +1745,29 @@ function renderPlayersLeft(final, myId){
 
 /* 勾選面板 */
 function buildMetricPanel(){
-  // 圖表項目：全勾選（不提供玩家自行勾選）
-  ACTIVE = new Set(METRICS.map(m=>m.key));
+  const ml = document.getElementById('metricList');
+  ml.innerHTML = METRICS.map(m=>{
+    const on = ACTIVE.has(m.key);
+    return `
+      <label class="metric ${on?'active':''}" data-key="${m.key}">
+        <input type="checkbox" value="${m.key}" ${on?'checked':''}/>
+        <span>${m.title}</span>
+      </label>
+    `;
+  }).join('');
+
+  ml.querySelectorAll('label.metric').forEach(lbl=>{
+    const key = lbl.getAttribute('data-key');
+    const cb = lbl.querySelector('input[type="checkbox"]');
+    cb.addEventListener('change', ()=>{
+      if(cb.checked) ACTIVE.add(key); else ACTIVE.delete(key);
+      lbl.classList.toggle('active', cb.checked);
+      renderDetailTable();
+
+  // 段位進度（顯示在結算頁上方）
+  scheduleRankUI();
+    });
+  });
 }
 
 /* 單一玩家一列：在同一欄位並列多條（每個勾選的指標各一條）
@@ -1853,9 +1884,6 @@ function renderFinal(final){
   buildMetricPanel();
   renderDetailTable();
 
-  // 段位進度（顯示在賽季結算與玩家清單之間）
-  scheduleRankUI();
-
   // === 雲端主控：保證 socket 連上後一定會寫入一次 ===
   try{
     if(!window.__pendingFinalForCloud) window.__pendingFinalForCloud = null;
@@ -1957,6 +1985,27 @@ if (window.__pendingFinalForCloud) {
   document.getElementById('helpModal')?.addEventListener('click', (e)=>{
     if(e.target.id==='helpModal') e.currentTarget.classList.add('hidden');
   });
+
+  // === 分頁切換：玩家排名 / 詳細數據 ===（搬到最外層）
+  const btnRank   = document.getElementById('btnViewRank');
+  const btnDetail = document.getElementById('btnViewDetail');
+
+  function setView(view){
+    if(view === 'detail'){
+      document.body.classList.remove('view-rank');
+      document.body.classList.add('view-detail');
+      btnRank?.classList.remove('active');
+      btnDetail?.classList.add('active');
+    }else{
+      document.body.classList.remove('view-detail');
+      document.body.classList.add('view-rank');
+      btnRank?.classList.add('active');
+      btnDetail?.classList.remove('active');
+    }
+  }
+
+  btnRank?.addEventListener('click', ()=> setView('rank'));
+  btnDetail?.addEventListener('click', ()=> setView('detail'));
 })();
 
 /* ====== 懸賞金：pid -> id 對應與按鈕觸發 ====== */
