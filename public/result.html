@@ -1250,7 +1250,9 @@ async function cloudSaveClient(socket, nextClient){
   return await cloudUpdate(socket, secret, patch);
 }
 
-/** 結算頁：把「本場」資料（recent / totals / titles / deluxeUnlocked / bountyPosters）寫入雲端 */
+/** 結算頁：把「本場」資料（recent / totals / titles / deluxeUnlocked / bountyPosters / rank）寫入雲端
+ *  ✅ 修正版：用 matchKey 做一次性結算，刷新不會重複加扣（含段位）
+ */
 async function cloudApplyMatchResult(socket, final){
   const secret = getSecret();
   if(!secret) return;
@@ -1338,9 +1340,12 @@ async function cloudApplyMatchResult(socket, final){
   }catch(e){ unlockedNow = []; }
   try{ sessionStorage.removeItem('op_unlocked_this_match'); }catch(e){}
 
-  // totals：用 matchKey 去重，避免刷新重複加總
+  // === ✅ 一次性結算判斷（核心）：同一 matchKey 只允許套用一次 ===
   const applied = Array.isArray(c._appliedMatchKeys) ? c._appliedMatchKeys : [];
-  if(matchKey && !applied.includes(matchKey)){
+  const isNewMatch = !!(matchKey && !applied.includes(matchKey));
+
+  // totals：用 matchKey 去重，避免刷新重複加總
+  if(isNewMatch){
     applied.unshift(matchKey);
     c._appliedMatchKeys = applied.slice(0,200);
 
@@ -1348,9 +1353,12 @@ async function cloudApplyMatchResult(socket, final){
     c.totals.games = (Number(c.totals.games)||0) + 1;
     if(place === 1) c.totals.wins = (Number(c.totals.wins)||0) + 1;
     c.totals.coins = (Number(c.totals.coins)||0) + coinsGain;
+  }else{
+    // 保底：確保還是陣列
+    c._appliedMatchKeys = applied.slice(0,200);
   }
 
-  // recent：matchKey 去重，最多 10
+  // recent：matchKey 去重，最多 10（就算刷新也不會重複）
   const recentItem = { matchKey, ts: endedAt, place, coinsGain, unlocked: unlockedNow };
   const recent = Array.isArray(c.recent) ? c.recent : [];
   c.recent = [recentItem, ...recent.filter(x => String(x?.matchKey||'') !== matchKey)].slice(0,10);
@@ -1394,8 +1402,8 @@ async function cloudApplyMatchResult(socket, final){
     c.bountyPosters = [posterMeta, ...posters.filter(x => String(x?.key||'') !== matchKey)].slice(0,4);
   }catch(e){}
 
-
   // ===== Rank: 段位系統（新人定位賽 / 正式排位）=====
+  // ✅ 修正：只有「isNewMatch」才套用段位增減；刷新不重算
   try{
     const rankingNow = Array.isArray(final?.ranking) ? final.ranking : [];
     const P = Number(final?.playerCount)
@@ -1409,31 +1417,46 @@ async function cloudApplyMatchResult(socket, final){
     const myCoins = Number(myRankRow?.coins || 0) || 0;
     const totalCoins = rankingNow.reduce((s,r)=> s + (Number(r?.coins||0)||0), 0);
 
-    // UI：記錄本場前後段位（用於結算頁顯示）
-    const __rank_before = ensureRank(c.rank);
-
     c.rank = ensureRank(c.rank);
 
-    if (c.rank.tier === 0){
-      c.rank = applyPlacement(c.rank, P, myCoins, totalCoins);
-    }else{
-      c.rank = applyRankedDelta(c.rank, P, myCoins, totalCoins);
-    }
+    if(isNewMatch){
+      const __rank_before = ensureRank(c.rank);
 
-    // UI：保存前後段位差（只給結算頁顯示，不寫入雲端）
-    try{
-      const __rank_after = ensureRank(c.rank);
-      const meta = captureRankUiMeta(__rank_before, __rank_after);
-      sessionStorage.setItem('op_rank_ui', JSON.stringify({
-        ts: Date.now(),
-        before: __rank_before,
-        after: __rank_after,
-        meta,
-        P,
-        myCoins,
-        totalCoins
-      }));
-    }catch(_e){}
+      if (c.rank.tier === 0){
+        c.rank = applyPlacement(c.rank, P, myCoins, totalCoins);
+      }else{
+        c.rank = applyRankedDelta(c.rank, P, myCoins, totalCoins);
+      }
+
+      // UI：保存前後段位差（只給結算頁顯示，不寫入雲端）
+      try{
+        const __rank_after = ensureRank(c.rank);
+        const meta = captureRankUiMeta(__rank_before, __rank_after);
+        sessionStorage.setItem('op_rank_ui', JSON.stringify({
+          ts: Date.now(),
+          before: __rank_before,
+          after: __rank_after,
+          meta,
+          P,
+          myCoins,
+          totalCoins
+        }));
+      }catch(_e){}
+    }else{
+      // 刷新時：不重算，但把 UI delta 清空，避免顯示「又加一次」
+      try{
+        const cur = ensureRank(c.rank);
+        sessionStorage.setItem('op_rank_ui', JSON.stringify({
+          ts: Date.now(),
+          before: cur,
+          after: cur,
+          meta: { deltaText:'', deltaSign:0 },
+          P,
+          myCoins,
+          totalCoins
+        }));
+      }catch(_e){}
+    }
   }catch(e){
     console.warn('[rank] apply failed', e);
   }
