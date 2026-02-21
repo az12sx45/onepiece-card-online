@@ -1173,8 +1173,8 @@ const p = st.players[myId];
 let pickedTitle = String(title || "").trim();
 let pickedTier  = Number(titleTier || 1) || 1;
 
-// ✅ 新增：段位（優先用 payload.rank；沒有才 DB 撈）
-let pickedRank = (rank && typeof rank === "object") ? rank : null;
+// ✅ 段位：只讀雲端（忽略 payload.rank，避免本地舊資料覆蓋）
+let pickedRank = null;
 
 // ✅ 若 payload 沒帶稱號（或為空），或沒帶 rank，就用 secret 去雲端撈
 if ((!pickedTitle || !pickedRank) && sec) {
