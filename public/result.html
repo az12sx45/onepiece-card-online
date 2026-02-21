@@ -25,55 +25,12 @@ body{
 .wrap{max-width:1280px;margin:0 auto;padding:14px 18px;}
 .h1{font-weight:800;letter-spacing:.5px}
 
-/* 版型：左 玩家清單 / 中 勾選 / 右 統一清單表 */
+/* 版型：左 玩家清單 / 右 詳細數據（永遠顯示） */
 .layout{
   display:grid; gap:18px;
-  grid-template-columns: 280px 220px 1fr;
+  grid-template-columns: 320px 1fr;
 }
-/* 分頁切換按鈕 */
-.view-tabs{
-  margin:10px 0 6px;
-  display:inline-flex;
-  gap:6px;
-  padding:4px;
-  border-radius:999px;
-  background:rgba(20,24,28,.9);
-  border:1px solid rgba(255,255,255,.08);
-}
-.tab-btn{
-  border:none;
-  border-radius:999px;
-  padding:6px 14px;
-  font-size:13px;
-  cursor:pointer;
-  background:transparent;
-  color:var(--muted);
-}
-.tab-btn.active{
-  background:linear-gradient(135deg,#ffd36b,#ffb84a);
-  color:#1b1408;
-  font-weight:700;
-}
-
-/* 分頁版型：
-   view-rank：只顯示玩家清單，讓左邊卡片變寬
-   view-detail：顯示原本三欄（採用 .layout 原本設定） */
-body.view-rank .layout{
-  grid-template-columns: minmax(0, 520px); /* 左邊卡片變寬 */
-}
-body.view-rank .metrics,
-body.view-rank .tablewrap{
-  display:none;
-}
-body.view-rank .layout > aside.card:first-child{
-  grid-column: 1 / -1; /* 讓玩家清單卡片佔滿整列 */
-}
-@media (max-width: 1180px){
-  .layout{ grid-template-columns: 280px 1fr; }
-  .metrics{ order:2; }
-  .tablewrap{ order:3; }
-}
-@media (max-width: 860px){
+@media (max-width: 980px){
   .layout{ grid-template-columns: 1fr; }
 }
 
@@ -436,20 +393,7 @@ body.view-rank .layout > aside.card:first-child{
   animation:softGlow 4.4s ease-in-out infinite;
 }
 
-/* 中：指標勾選 */
-.metric-list{ display:flex; flex-direction:column; gap:6px; }
-.metric{
-  display:flex; align-items:center; gap:10px;
-  padding:8px 10px; border-radius:10px;
-  border:1px solid rgba(255,255,255,.06);
-  background:rgba(255,255,255,.03);
-  cursor:pointer; user-select:none;
-}
-.metric input{ width:16px; height:16px; }
-.metric.active{ border-color:rgba(255,211,107,.45); background:rgba(255,211,107,.06); }
-.small{ font-size:13px; color:var(--muted) }
-
-/* 右：統一清單表（頭像/ID顯示一次；勾選項目→同一欄內並列多條） */
+/* 右：統一清單表（每人一列；所有指標固定顯示） */
 .table{ width:100%; border-collapse:collapse; }
 .table th,.table td{ padding:10px; border-bottom:1px solid rgba(255,255,255,.06); text-align:left; vertical-align:middle; }
 .table thead th{ color:var(--muted); font-weight:600; }
@@ -516,6 +460,21 @@ body.view-rank .layout > aside.card:first-child{
   width:0%;
 }
 .rankhint{ font-size:12px; color:var(--muted); line-height:1.25; }
+
+/* ===== 本場牌位圖與分數（置中顯示） ===== */
+.rank-mid .rank-mid-inner{
+  display:flex;
+  justify-content:center;
+  padding-top:6px;
+}
+.rank-mid #rankBox{
+  display:flex;
+  width:min(560px,100%);
+}
+.rank-mid .rankicon{ width:44px; height:44px; }
+.rank-mid .rankname{ font-size:18px; }
+.rank-mid .ranksub{ font-size:13px; }
+.rank-mid .rankdelta{ font-size:13px; }
 .btn{
   padding:8px 12px;border:1px solid rgba(255,255,255,.1);
   border-radius:10px;background:rgba(255,255,255,.06);
@@ -607,7 +566,7 @@ body.view-rank .layout > aside.card:first-child{
 
 </style>
 </head>
-<body class="view-rank">
+<body class="view-detail">
   <div class="header">
     <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
       <div>
@@ -616,7 +575,20 @@ body.view-rank .layout > aside.card:first-child{
       </div>
       <div style="display:flex;align-items:center;gap:10px">
         <div class="badge" id="seasonLbl">Season —</div>
-        <div id="rankBox" class="rankbox hidden" title="段位進度（新人定位賽 / 正式排位）">
+        <button class="btn" id="openHelp">📖 說明</button>
+        <button class="btn" onclick="fireBounty()">📜 本次懸賞單</button>
+          <button class="btn" onclick="location.href='profile.html'">👤 玩家頁面</button>
+        <button class="btn" onclick="location.href='start.html'">返回主畫面</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 本場牌位圖與分數（永遠顯示） -->
+  <div class="wrap">
+    <div class="card rank-mid">
+      <div class="section-title">本場牌位與分數</div>
+      <div class="rank-mid-inner">
+<div id="rankBox" class="rankbox hidden" title="段位進度（新人定位賽 / 正式排位）">
           <div class="rankbox-top">
             <div class="rankleft">
               <img id="rankIcon" class="rankicon hidden" alt="" />
@@ -628,36 +600,15 @@ body.view-rank .layout > aside.card:first-child{
           <div class="rankbar"><div class="rankfill" id="rankFill"></div></div>
           <div class="rankhint" id="rankHint"></div>
         </div>
-        <button class="btn" id="openHelp">📖 說明</button>
-        <button class="btn" onclick="fireBounty()">📜 本次懸賞單</button>
-          <button class="btn" onclick="location.href='profile.html'">👤 玩家頁面</button>
-        <button class="btn" onclick="location.href='start.html'">返回主畫面</button>
       </div>
     </div>
   </div>
 
-  <!-- 分頁切換：玩家排名 / 詳細數據 -->
-  <div class="wrap">
-    <div class="view-tabs">
-      <button class="tab-btn active" id="btnViewRank">玩家排名</button>
-      <button class="tab-btn" id="btnViewDetail">詳細數據</button>
-    </div>
-  </div>
-
-  <div class="wrap layout">
+<div class="wrap layout">
     <!-- 左：玩家清單 -->
     <aside class="card">
       <div class="section-title">玩家清單（依金幣排名）</div>
       <div class="player-list" id="playerList"></div>
-    </aside>
-
-    <!-- 中：指標勾選 -->
-    <aside class="card metrics">
-      <div class="section-title">圖表項目</div>
-      <div class="metric-list" id="metricList"></div>
-      <div class="small" style="margin-top:8px">
-        勾選後，右側每位玩家那列會在同一欄位「並列多條」細長條；數字顯示在各條末端。
-      </div>
     </aside>
 
     <!-- 右：統一清單表（每人一列，並列多條） -->
@@ -1574,7 +1525,7 @@ const TITLE_TABLE = {
 
 let ORDERED_IDS = []; // 依金幣排名
 let ROWS = [];        // 每位玩家的分數
-let ACTIVE = new Set(['coinScore']); // 預設顯示：金幣
+let ACTIVE = new Set(METRICS.map(m=>m.key)); // 預設顯示：全部指標
 
 /* ===== 懸賞計算工具（與海報同公式） ===== */
 function computeBountyFromScore(score, playerCount){
@@ -1743,31 +1694,9 @@ function renderPlayersLeft(final, myId){
   });
 }
 
-/* 勾選面板 */
+/* 圖表項目：固定全顯示（不提供勾選） */
 function buildMetricPanel(){
-  const ml = document.getElementById('metricList');
-  ml.innerHTML = METRICS.map(m=>{
-    const on = ACTIVE.has(m.key);
-    return `
-      <label class="metric ${on?'active':''}" data-key="${m.key}">
-        <input type="checkbox" value="${m.key}" ${on?'checked':''}/>
-        <span>${m.title}</span>
-      </label>
-    `;
-  }).join('');
-
-  ml.querySelectorAll('label.metric').forEach(lbl=>{
-    const key = lbl.getAttribute('data-key');
-    const cb = lbl.querySelector('input[type="checkbox"]');
-    cb.addEventListener('change', ()=>{
-      if(cb.checked) ACTIVE.add(key); else ACTIVE.delete(key);
-      lbl.classList.toggle('active', cb.checked);
-      renderDetailTable();
-
-  // 段位進度（顯示在結算頁上方）
-  scheduleRankUI();
-    });
-  });
+  // no-op：保留函式避免其他地方引用出錯
 }
 
 /* 單一玩家一列：在同一欄位並列多條（每個勾選的指標各一條）
@@ -1985,27 +1914,7 @@ if (window.__pendingFinalForCloud) {
   document.getElementById('helpModal')?.addEventListener('click', (e)=>{
     if(e.target.id==='helpModal') e.currentTarget.classList.add('hidden');
   });
-
-  // === 分頁切換：玩家排名 / 詳細數據 ===（搬到最外層）
-  const btnRank   = document.getElementById('btnViewRank');
-  const btnDetail = document.getElementById('btnViewDetail');
-
-  function setView(view){
-    if(view === 'detail'){
-      document.body.classList.remove('view-rank');
-      document.body.classList.add('view-detail');
-      btnRank?.classList.remove('active');
-      btnDetail?.classList.add('active');
-    }else{
-      document.body.classList.remove('view-detail');
-      document.body.classList.add('view-rank');
-      btnRank?.classList.add('active');
-      btnDetail?.classList.remove('active');
-    }
-  }
-
-  btnRank?.addEventListener('click', ()=> setView('rank'));
-  btnDetail?.addEventListener('click', ()=> setView('detail'));
+  // （已移除分頁切換：結算頁固定顯示詳細數據）
 })();
 
 /* ====== 懸賞金：pid -> id 對應與按鈕觸發 ====== */
