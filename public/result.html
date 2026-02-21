@@ -1108,39 +1108,60 @@ function captureRankUiMeta(before, after){
 }
 
 /* ===== 段位進度：讀雲端 rank 並顯示 ===== */
-let __rankUIOnce = false;
+let __rankUIInFlight = false;
 function scheduleRankUI(){
-  if(__rankUIOnce) return;
-  __rankUIOnce = true;
-
-  const secret = getSecret();
-  if(!secret){ setRankUIVisible(false); return; }
+  // 可重複呼叫：避免第一次沒 secret 就永遠不顯示
+  if(__rankUIInFlight) return;
+  __rankUIInFlight = true;
 
   const run = async ()=>{
     try{
-      if(!socket) return;
-
+      // 1) 先用 sessionStorage 的 UI 快照（即使沒登入也能顯示）
       let ui = null;
       try{ ui = JSON.parse(sessionStorage.getItem('op_rank_ui')||'null'); }catch(e){ ui = null; }
 
-      const loaded = await cloudLoadClient(socket);
-      const r = loaded?.client?.rank ? ensureRank(loaded.client.rank) : ensureRank(null);
+      if(ui?.after){
+        setRankUIVisible(true);
+        drawRankUI(ui.after, ui.meta || null);
+        __rankUIInFlight = false;
+        return;
+      }
 
-      const meta = ui?.meta || null;
-      setRankUIVisible(true);
-      drawRankUI(r, meta);
+      // 2) 再嘗試走雲端（需要 secret）
+      const secret = getSecret();
+      if(!secret || !socket){
+        setRankUIVisible(false);
+        __rankUIInFlight = false;
+        return;
+      }
+
+      const doCloud = async ()=>{
+        const loaded = await cloudLoadClient(socket);
+        const r = loaded?.client?.rank ? ensureRank(loaded.client.rank) : ensureRank(null);
+
+        // 若雲端有，顯示；meta 用 ui 或空
+        setRankUIVisible(true);
+        drawRankUI(r, ui?.meta || null);
+        __rankUIInFlight = false;
+      };
+
+      if(socket.connected) await doCloud();
+      else socket.once('connect', ()=>{ doCloud().catch(e=>{
+        console.warn('[rank ui] failed', e);
+        setRankUIVisible(false);
+        __rankUIInFlight = false;
+      }); });
+
     }catch(e){
       console.warn('[rank ui] failed', e);
       setRankUIVisible(false);
+      __rankUIInFlight = false;
     }
   };
 
-  if(socket && socket.connected){
-    run();
-  }else if(socket){
-    socket.once('connect', run);
-  }
+  run();
 }
+
 
 
 async function cloudGet(socket, secret){
@@ -1159,7 +1180,22 @@ async function cloudUpdate(socket, secret, patch){
   });
 }
 function getSecret(){
-  return localStorage.getItem('opSecret') || '';
+  // 兼容不同頁面/舊版本：localStorage / sessionStorage / URL
+  try{
+    const qs = new URLSearchParams(location.search);
+    const fromUrl = qs.get('secret') || qs.get('s') || '';
+    const keys = ['opSecret','op_secret','secret','op_secret_key'];
+    for(const k of keys){
+      const v1 = localStorage.getItem(k);
+      if(v1) return v1;
+    }
+    for(const k of keys){
+      const v2 = sessionStorage.getItem(k);
+      if(v2) return v2;
+    }
+    if(fromUrl) return fromUrl;
+  }catch(e){}
+  return '';
 }
 
 /** 讀雲端 client（不存在就回 defaultClient） */
