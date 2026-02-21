@@ -1762,6 +1762,8 @@ function renderDetailTable(){
 function renderFinal(final){
   document.getElementById('seasonLbl').textContent = 'Season ' + (final.seasonNo||1);
   LAST_FINAL = final;
+  // 段位/牌位 UI（顯示在賽季結算與玩家清單之間）
+  try{ scheduleRankUI(); }catch(e){}
 
   const playerCount = final.playerCount ||
     Object.keys(final.playersMeta || {}).length ||
