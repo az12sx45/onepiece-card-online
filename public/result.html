@@ -460,21 +460,162 @@ body{
   width:0%;
 }
 .rankhint{ font-size:12px; color:var(--muted); line-height:1.25; }
-
-/* ===== 本場牌位圖與分數（置中顯示） ===== */
-.rank-mid .rank-mid-inner{
-  display:flex;
-  justify-content:center;
-  padding-top:6px;
-}
+/* ===== 本場牌位圖與分數（放大 + 段位特效分級） ===== */
 .rank-mid #rankBox{
   display:flex;
-  width:min(560px,100%);
+  width:min(760px,100%);
+  padding:18px 22px;
+  border-radius:22px;
+  position:relative;
+  overflow:hidden;
 }
-.rank-mid .rankicon{ width:44px; height:44px; }
-.rank-mid .rankname{ font-size:18px; }
-.rank-mid .ranksub{ font-size:13px; }
-.rank-mid .rankdelta{ font-size:13px; }
+
+/* 放大字體/圖示 */
+.rank-mid .rankbox-top{ align-items:center; }
+.rank-mid .rankicon{
+  width:96px;
+  height:96px;
+  filter: drop-shadow(0 8px 18px rgba(0,0,0,.65));
+}
+.rank-mid .rankname{ font-size:28px; font-weight:900; letter-spacing:.6px; }
+.rank-mid .ranksub{ font-size:16px; margin-top:4px; }
+.rank-mid .rankdelta{ font-size:16px; font-weight:900; }
+.rank-mid .rankbar{ height:16px; margin-top:6px; }
+
+/* 基礎：讓不同段位有微妙質感差 */
+.rank-mid #rankBox::before{
+  content:"";
+  position:absolute;
+  inset:-40%;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(255,255,255,.10) 0, transparent 55%),
+    radial-gradient(circle at 85% 80%, rgba(255,211,107,.08) 0, transparent 60%);
+  opacity:.9;
+  pointer-events:none;
+}
+
+/* 低段位：淡淡亮邊 */
+.rank-mid #rankBox[data-tier="1"],
+.rank-mid #rankBox[data-tier="2"],
+.rank-mid #rankBox[data-tier="3"]{
+  border-color: rgba(255,255,255,.14);
+}
+
+/* 中段位：更亮一點 */
+.rank-mid #rankBox[data-tier="4"],
+.rank-mid #rankBox[data-tier="5"]{
+  border-color: rgba(255,211,107,.22);
+  box-shadow: 0 10px 24px rgba(0,0,0,.35), 0 0 18px rgba(255,211,107,.10);
+}
+
+/* ===== R6：四皇（紫金能量圈 + 呼吸光 + 閃光掃過） ===== */
+@keyframes rankBreath{
+  0%,100%{ filter:brightness(1); }
+  50%{ filter:brightness(1.18); }
+}
+@keyframes rankSweep{
+  0%{ transform:translateX(-140%) rotate(12deg); opacity:0; }
+  15%{ opacity:.0; }
+  35%{ opacity:.9; }
+  55%{ opacity:0; }
+  100%{ transform:translateX(140%) rotate(12deg); opacity:0; }
+}
+.rank-mid #rankBox[data-tier="6"]{
+  border-color: rgba(255,231,163,.55);
+  box-shadow:
+    0 12px 30px rgba(0,0,0,.42),
+    0 0 0 1px rgba(255,255,255,.18),
+    0 0 28px rgba(255,211,107,.22),
+    0 0 60px rgba(160, 90, 255, .18);
+  animation: rankBreath 3.6s ease-in-out infinite;
+}
+.rank-mid #rankBox[data-tier="6"]::after{
+  content:"";
+  position:absolute;
+  inset:-30%;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(160,90,255,.28) 0, transparent 55%),
+    conic-gradient(from 0deg,
+      rgba(255,211,107,.0) 0deg,
+      rgba(255,211,107,.25) 60deg,
+      rgba(160,90,255,.25) 130deg,
+      rgba(255,211,107,.0) 220deg,
+      rgba(160,90,255,.18) 300deg,
+      rgba(255,211,107,.0) 360deg);
+  mix-blend-mode:screen;
+  opacity:.85;
+  filter: blur(8px);
+  pointer-events:none;
+}
+.rank-mid #rankBox[data-tier="6"] .rankbox-top{
+  position:relative;
+}
+.rank-mid #rankBox[data-tier="6"] .rankbox-top::after{
+  content:"";
+  position:absolute;
+  top:-22px; bottom:-22px;
+  left:-40%; width:60%;
+  background: linear-gradient(120deg, transparent 0, rgba(255,255,255,.70) 45%, transparent 75%);
+  transform:translateX(-140%) rotate(12deg);
+  mix-blend-mode:screen;
+  animation: rankSweep 3.4s ease-in-out infinite;
+  pointer-events:none;
+}
+
+/* ===== R7：海賊王級（黑金白光至尊：外框雙層 + 白光放射 + 更強呼吸） ===== */
+@keyframes kingPulse{
+  0%,100%{ transform:scale(1); opacity:.78; }
+  50%{ transform:scale(1.03); opacity:1; }
+}
+@keyframes kingRays{
+  0%{ transform:rotate(0deg); opacity:.55; }
+  50%{ opacity:.95; }
+  100%{ transform:rotate(360deg); opacity:.55; }
+}
+.rank-mid #rankBox[data-tier="7"]{
+  border:2px solid rgba(255,231,163,.65);
+  box-shadow:
+    0 14px 34px rgba(0,0,0,.55),
+    0 0 0 2px rgba(0,0,0,.55) inset,
+    0 0 26px rgba(255,255,255,.18),
+    0 0 90px rgba(255,231,163,.22);
+}
+.rank-mid #rankBox[data-tier="7"]::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:22px;
+  pointer-events:none;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.22) inset,
+    0 0 0 6px rgba(0,0,0,.55) inset;
+  opacity:1;
+}
+.rank-mid #rankBox[data-tier="7"]::after{
+  content:"";
+  position:absolute;
+  inset:-35%;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,.30) 0, transparent 55%),
+    conic-gradient(from 0deg,
+      rgba(255,255,255,.00) 0deg,
+      rgba(255,255,255,.22) 35deg,
+      rgba(255,231,163,.18) 85deg,
+      rgba(255,255,255,.00) 140deg,
+      rgba(255,255,255,.20) 210deg,
+      rgba(255,231,163,.16) 270deg,
+      rgba(255,255,255,.00) 360deg);
+  mix-blend-mode:screen;
+  filter: blur(10px);
+  animation: kingRays 10s linear infinite;
+  pointer-events:none;
+}
+.rank-mid #rankBox[data-tier="7"] .rankname{
+  text-shadow: 0 0 14px rgba(255,255,255,.35), 0 0 28px rgba(255,231,163,.22);
+}
+.rank-mid #rankBox[data-tier="7"]{
+  animation: kingPulse 3.2s ease-in-out infinite;
+}
 .btn{
   padding:8px 12px;border:1px solid rgba(255,255,255,.1);
   border-radius:10px;background:rgba(255,255,255,.06);
@@ -1024,6 +1165,8 @@ function drawRankUI(rank, uiMeta){
   if(!box) return;
 
   const r = ensureRank(rank);
+// 讓 CSS 可以依段位自動套特效
+box.dataset.tier = String(r.tier);
   const nameEl = document.getElementById('rankName');
   const subEl  = document.getElementById('rankSub');
   const fillEl = document.getElementById('rankFill');
