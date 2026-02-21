@@ -1348,7 +1348,7 @@ async function cloudApplyMatchResult(socket, final){
   }
 
   // totals：用 matchKey 去重，避免刷新重複加總
-  const applied = Array.isArray(c._appliedMatchKeys) ? c._appliedMatchKeys : [];
+  
   if(shouldApply){
 
     c.totals = c.totals || { games:0,wins:0,coins:0 };
