@@ -1242,27 +1242,6 @@ function captureRankUiMeta(before, after){
     };
   }
 
-
-/* ===== Rank UI Event Bus (事件驅動，不依賴 sessionStorage) ===== */
-const OP_RANK_UI_EVENT = 'OP_RANK_UI_UPDATE';
-function emitRankUI(rank, meta){
-  try{
-    window.dispatchEvent(new CustomEvent(OP_RANK_UI_EVENT, {
-      detail: { ts: Date.now(), rank: ensureRank(rank), meta: meta || null }
-    }));
-  }catch(e){}
-}
-let __rankListenerInstalled = false;
-function installRankUIListener(){
-  if(__rankListenerInstalled) return;
-  __rankListenerInstalled = true;
-  window.addEventListener(OP_RANK_UI_EVENT, (e)=>{
-    const d = e && e.detail ? e.detail : null;
-    if(!d || !d.rank) return;
-    setRankUIVisible(true);
-    drawRankUI(d.rank, d.meta || null);
-  });
-}
   const d = (Number(a.rp)||0) - (Number(b.rp)||0);
   if(a.tier > b.tier) return { deltaText:`↑ 升級！`, deltaSign: +1 };
   if(a.tier < b.tier) return { deltaText:`↓ 降級`, deltaSign: -1 };
@@ -1271,46 +1250,62 @@ function installRankUIListener(){
   return { deltaText:`${fmtSigned(d)} RP`, deltaSign:(d>0?1:-1) };
 }
 
-/* ===== 段位進度：讀雲端 rank 並顯示（事件驅動，不依賴 sessionStorage） ===== */
+/* ===== 段位進度：讀雲端 rank 並顯示 ===== */
 let __rankUIInFlight = false;
 function scheduleRankUI(){
-  installRankUIListener();
-
+  // 可重複呼叫：避免第一次沒 secret 就永遠不顯示
   if(__rankUIInFlight) return;
   __rankUIInFlight = true;
 
-  try{
-    const secret = getSecret();
-    if(!secret || !socket){
-      setRankUIVisible(false);
-      __rankUIInFlight = false;
-      return;
-    }
+  const run = async ()=>{
+    try{
+      // 1) 先用 sessionStorage 的 UI 快照（即使沒登入也能顯示）
+      let ui = null;
+      try{ ui = JSON.parse(sessionStorage.getItem('op_rank_ui')||'null'); }catch(e){ ui = null; }
 
-    const doCloud = async ()=>{
-      try{
+      if(ui?.after){
+        setRankUIVisible(true);
+        drawRankUI(ui.after, ui.meta || null);
+        __rankUIInFlight = false;
+        return;
+      }
+
+      // 2) 再嘗試走雲端（需要 secret）
+      const secret = getSecret();
+      if(!secret || !socket){
+        setRankUIVisible(false);
+        __rankUIInFlight = false;
+        return;
+      }
+
+      const doCloud = async ()=>{
         const loaded = await cloudLoadClient(socket);
         const r = loaded?.client?.rank ? ensureRank(loaded.client.rank) : ensureRank(null);
-        // 先把雲端最新 rank 送出（後續 cloudApplyMatchResult 算完也會再 emit 一次）
-        emitRankUI(r, null);
-      }finally{
-        __rankUIInFlight = false;
-      }
-    };
 
-    if(socket.connected) doCloud();
-    else socket.once('connect', ()=>{ doCloud().catch(e=>{
+        // 若雲端有，顯示；meta 用 ui 或空
+        setRankUIVisible(true);
+        drawRankUI(r, ui?.meta || null);
+        __rankUIInFlight = false;
+      };
+
+      if(socket.connected) await doCloud();
+      else socket.once('connect', ()=>{ doCloud().catch(e=>{
+        console.warn('[rank ui] failed', e);
+        setRankUIVisible(false);
+        __rankUIInFlight = false;
+      }); });
+
+    }catch(e){
       console.warn('[rank ui] failed', e);
       setRankUIVisible(false);
       __rankUIInFlight = false;
-    }); });
+    }
+  };
 
-  }catch(e){
-    console.warn('[rank ui] failed', e);
-    setRankUIVisible(false);
-    __rankUIInFlight = false;
-  }
+  run();
 }
+
+
 
 async function cloudGet(socket, secret){
   return await new Promise((resolve)=>{
@@ -1568,11 +1563,19 @@ async function cloudApplyMatchResult(socket, final){
       c.rank = applyRankedDelta(c.rank, P, myCoins, totalCoins);
     }
 
-    // UI：事件驅動刷新（不寫 sessionStorage）
+    // UI：保存前後段位差（只給結算頁顯示，不寫入雲端）
     try{
       const __rank_after = ensureRank(c.rank);
       const meta = captureRankUiMeta(__rank_before, __rank_after);
-      emitRankUI(__rank_after, meta);
+      sessionStorage.setItem('op_rank_ui', JSON.stringify({
+        ts: Date.now(),
+        before: __rank_before,
+        after: __rank_after,
+        meta,
+        P,
+        myCoins,
+        totalCoins
+      }));
     }catch(_e){}
   }catch(e){
     console.warn('[rank] apply failed', e);
