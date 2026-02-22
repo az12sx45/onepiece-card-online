@@ -4017,6 +4017,256 @@ function showPlayedFlash(cardId, byIndex, opt = {}){
 
 
 
+
+/* ====== Rank（段位）- 移到 game 結束時結算並寫入雲端 ====== */
+let __rankAppliedAtGameEnd = false;
+
+function clamp(n, a, b){ n = Number(n); return Math.max(a, Math.min(b, n)); }
+function round(n){ return Math.round(Number(n) || 0); }
+function fmtSigned(n){
+  const x = Number(n)||0;
+  return (x>0?'+':'') + String(x);
+}
+
+function ensureRank(rank){
+  const base = { tier:0, rp:0, dropShield:0, placement:{ games:0, score:0 }, updatedAt:0 };
+  const r = (rank && typeof rank === 'object') ? { ...base, ...rank } : { ...base };
+
+  r.tier = clamp(round(r.tier), 0, 7);
+  r.rp = Number(r.rp) || 0;
+  r.dropShield = (Number(r.dropShield) === 1) ? 1 : 0;
+
+  if (r.tier === 0){
+    if (!r.placement || typeof r.placement !== 'object') r.placement = { games: 0, score: 0 };
+    r.placement.games = clamp(round(r.placement.games), 0, 3);
+    r.placement.score = Number(r.placement.score) || 0;
+  }else{
+    delete r.placement;
+  }
+
+  r.updatedAt = Number(r.updatedAt) || 0;
+  return r;
+}
+
+function M_of_P(P){
+  const map = { 2:1.00, 3:1.10, 4:1.22, 5:1.35, 6:1.50 };
+  return map[P] || 1.00;
+}
+
+function applyPlacement(rank, P, myCoins, totalCoins){
+  const r = ensureRank(rank);
+  if (r.tier !== 0) return r;
+
+  const safeTotal = totalCoins > 0 ? totalCoins : 1;
+  const share = myCoins / safeTotal;
+  const expected = 1 / P;
+  const perf = share - expected;
+
+  r.placement = r.placement || { games: 0, score: 0 };
+  r.placement.games = clamp((r.placement.games||0) + 1, 0, 3);
+  r.placement.score = (Number(r.placement.score)||0) + perf;
+
+  if (r.placement.games >= 3){
+    const S = r.placement.score;
+
+    let decidedTier = 1;
+    let startRp = 0;
+
+    if (S <= -0.12) { decidedTier = 1; startRp = 0; }
+    else if (S <= 0.04) { decidedTier = 2; startRp = 25; }
+    else if (S <= 0.16) { decidedTier = 3; startRp = 40; }
+    else { decidedTier = 4; startRp = 50; }
+
+    r.tier = decidedTier;
+    r.rp = startRp;
+    r.dropShield = 0;
+    delete r.placement;
+  }
+
+  r.updatedAt = Date.now();
+  return r;
+}
+
+function applyRankedDelta(rank, P, myCoins, totalCoins){
+  const r0 = ensureRank(rank);
+  if (r0.tier <= 0) return r0;
+
+  const tier = r0.tier;
+  const safeTotal = totalCoins > 0 ? totalCoins : 1;
+  const share = myCoins / safeTotal;
+  const expected = 1 / P;
+  const diff = share - expected;
+
+  const K0 = 190;
+  const baseDelta = round(K0 * diff);
+
+  const M = M_of_P(P);
+  const baseDelta2 = round(baseDelta * M);
+
+  const G = { 1:1.35, 2:1.25, 3:1.15, 4:1.00, 5:0.90, 6:0.80, 7:0.70 };
+  const L = { 1:0.75, 2:0.85, 3:0.95, 4:1.00, 5:1.10, 6:1.20, 7:1.30 };
+
+  let dRP = 0;
+  if (baseDelta2 > 0) dRP = round(baseDelta2 * (G[tier] ?? 1));
+  else dRP = round(baseDelta2 * (L[tier] ?? 1));
+
+  const capTier = { 1:55, 2:50, 3:45, 4:40, 5:36, 6:32, 7:28 };
+  const cap = round((capTier[tier] ?? 40) * M);
+  dRP = clamp(dRP, -cap, +cap);
+
+  const r = { ...r0 };
+  r.rp = (Number(r.rp)||0) + dRP;
+
+  // 方案1：贏一場重置保護
+  if (dRP > 0) r.dropShield = 0;
+
+  // 升級（tier 1~6）
+  while (r.tier < 7 && r.rp >= 100){
+    r.tier += 1;
+    r.rp -= 100;
+    r.dropShield = 0;
+  }
+
+  // 降級規則
+  if (r.tier <= 3){
+    r.rp = Math.max(0, r.rp);
+  }else{
+    if (r.rp < 0){
+      if (r.dropShield === 0){
+        r.rp = 0;
+        r.dropShield = 1;
+      }else{
+        r.tier -= 1;
+        r.rp = 25;
+        r.dropShield = 0;
+      }
+    }
+  }
+
+  r.updatedAt = Date.now();
+  return r;
+}
+
+function captureRankUiMeta(before, after){
+  const b = ensureRank(before);
+  const a = ensureRank(after);
+
+  if(b.tier === 0 || a.tier === 0){
+    const bg = b.placement?.games ?? 0;
+    const ag = a.placement?.games ?? 0;
+    const ds = Number(a.placement?.score||0) - Number(b.placement?.score||0);
+    const txt = (ag>bg) ? `第 ${ag} 場` : '';
+    const perfTxt = (ds !== 0) ? `（${fmtSigned(ds.toFixed(3))}）` : '';
+    return { deltaText: txt ? (txt + perfTxt) : '', deltaSign: (ds>0?1:(ds<0?-1:0)) };
+  }
+
+  const d = (Number(a.rp)||0) - (Number(b.rp)||0);
+  if(a.tier > b.tier) return { deltaText:`↑ 升級！`, deltaSign: +1 };
+  if(a.tier < b.tier) return { deltaText:`↓ 降級`, deltaSign: -1 };
+
+  if(d === 0) return { deltaText:'', deltaSign:0 };
+  return { deltaText:`${fmtSigned(d)} RP`, deltaSign:(d>0?1:-1) };
+}
+
+function getSecret(){
+  try{
+    const qs = new URLSearchParams(location.search);
+    const fromUrl = qs.get('secret') || qs.get('s') || '';
+    const keys = ['opSecret','op_secret','secret','op_secret_key'];
+    for(const k of keys){
+      const v1 = localStorage.getItem(k);
+      if(v1) return v1;
+    }
+    for(const k of keys){
+      const v2 = sessionStorage.getItem(k);
+      if(v2) return v2;
+    }
+    if(fromUrl) return fromUrl;
+  }catch(e){}
+  return '';
+}
+
+async function cloudGet(socket, secret){
+  return await new Promise((resolve)=>{
+    socket.timeout(5500).emit('PROFILE_GET', { secret }, (err, res)=>{
+      if(err || !res?.ok) return resolve(null);
+      resolve(res.profile || null);
+    });
+  });
+}
+async function cloudUpdate(socket, secret, patch){
+  return await new Promise((resolve)=>{
+    socket.timeout(5500).emit('PROFILE_UPDATE', { secret, patch }, (err, res)=>{
+      resolve(!err && !!res?.ok);
+    });
+  });
+}
+
+/** game 結束：只更新雲端 stats.client.rank（其餘 client 欄位全部保留） */
+async function applyRankAtGameEnd(final){
+  if(__rankAppliedAtGameEnd) return;
+  __rankAppliedAtGameEnd = true;
+
+  try{
+    if(!socket) return;
+    const secret = getSecret();
+    if(!secret) return;
+
+    const prof = await cloudGet(socket, secret);
+    if(!prof) return;
+
+    const prevStats = (prof.stats && typeof prof.stats === 'object') ? prof.stats : {};
+    const client0 = (prevStats.client && typeof prevStats.client === 'object') ? { ...prevStats.client } : {};
+    const rank0 = ensureRank(client0.rank);
+
+    const rankingNow = Array.isArray(final?.ranking) ? final.ranking : [];
+    const P = Number(final?.playerCount)
+      || Object.keys(final?.playersMeta || {}).length
+      || rankingNow.length
+      || 4;
+
+    const myId = (typeof me?.playerId === 'number')
+      ? me.playerId
+      : Number(sessionStorage.getItem('op_pid') || NaN);
+
+    const myRankRow = rankingNow.find(r => Number(r?.id) === Number(myId)) || null;
+    const myCoins = Number(myRankRow?.coins || 0) || 0;
+    const totalCoins = rankingNow.reduce((s,r)=> s + (Number(r?.coins||0)||0), 0);
+
+    let rank1 = rank0;
+    if (rank0.tier === 0) rank1 = applyPlacement(rank0, P, myCoins, totalCoins);
+    else rank1 = applyRankedDelta(rank0, P, myCoins, totalCoins);
+
+    client0.rank = ensureRank(rank1);
+
+    // 結算頁顯示用（不影響雲端）
+    try{
+      const meta = captureRankUiMeta(rank0, client0.rank);
+      sessionStorage.setItem('op_rank_ui', JSON.stringify({
+        ts: Date.now(),
+        before: rank0,
+        after: client0.rank,
+        meta,
+        P,
+        myCoins,
+        totalCoins
+      }));
+    }catch(_e){}
+
+    const patch = {
+      name: String(prof?.name || ''),
+      avatar: String(prof?.avatar ?? ''),
+      stats: { ...prevStats, client: client0 }
+    };
+
+    await cloudUpdate(socket, secret, patch);
+  }catch(e){
+    console.warn('[rank] apply at game end failed', e);
+  }
+}
+/* ====== /Rank ====== */
+
+
 /* ====== C. STATE：同步 server 的新行、偵測新局並清空 + 偵測新棄牌 → 強化先快閃後播片 ====== */
 socket.on('STATE', (s)=>{
   const prevTurnIndex  = (state && typeof state.turnIndex === 'number') ? state.turnIndex : null;
@@ -4044,21 +4294,28 @@ socket.on('STATE', (s)=>{
       // 顯示「寶箱已空，等待結算...＋圖片」
       ov.classList.remove('hidden');
 
-      // 7 秒後再跳到結算頁
-      setTimeout(()=>{
+      // 至少停留 7 秒顯示結算提示；同時把段位先寫入雲端（避免 result.html 重算）
+      const delayP = new Promise(r=>setTimeout(r, 7000));
+      const rankP = applyRankAtGameEnd(state.final);
+
+      Promise.allSettled([delayP, rankP]).then(()=>{
         const url = new URL('result.html', location.origin);
         url.searchParams.set('room', me.roomId || '');
         if (typeof me.playerId === 'number') {
           url.searchParams.set('pid', String(me.playerId));
         }
         location.href = url.toString();
-      }, 7000);
+      });
     } else {
       // 找不到 overlay 就直接跳（保險）
-      const url = new URL('result.html', location.origin);
-      url.searchParams.set('room', me.roomId || '');
-      if (typeof me.playerId === 'number') url.searchParams.set('pid', String(me.playerId));
-      location.href = url.toString();
+      // 仍先嘗試把段位寫入雲端（不阻塞太久）
+      const rankP = applyRankAtGameEnd(state.final);
+      Promise.race([rankP, new Promise(r=>setTimeout(r, 2000))]).finally(()=>{
+        const url = new URL('result.html', location.origin);
+        url.searchParams.set('room', me.roomId || '');
+        if (typeof me.playerId === 'number') url.searchParams.set('pid', String(me.playerId));
+        location.href = url.toString();
+      });
     }
 
     return;
