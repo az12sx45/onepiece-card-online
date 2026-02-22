@@ -1338,18 +1338,11 @@ async function cloudApplyMatchResult(socket, final){
   }catch(e){ unlockedNow = []; }
   try{ sessionStorage.removeItem('op_unlocked_this_match'); }catch(e){}
 
-  // === 本場是否已處理過（防止刷新重複累加：totals + rank 都用這個）===
+  // totals：用 matchKey 去重，避免刷新重複加總
   const applied = Array.isArray(c._appliedMatchKeys) ? c._appliedMatchKeys : [];
-  const shouldApply = !!matchKey && !applied.includes(matchKey);
-
-  if(shouldApply){
+  if(matchKey && !applied.includes(matchKey)){
     applied.unshift(matchKey);
     c._appliedMatchKeys = applied.slice(0,200);
-  }
-
-  // totals：用 matchKey 去重，避免刷新重複加總
-  
-  if(shouldApply){
 
     c.totals = c.totals || { games:0,wins:0,coins:0 };
     c.totals.games = (Number(c.totals.games)||0) + 1;
@@ -1401,51 +1394,7 @@ async function cloudApplyMatchResult(socket, final){
     c.bountyPosters = [posterMeta, ...posters.filter(x => String(x?.key||'') !== matchKey)].slice(0,4);
   }catch(e){}
 
-
-  // ===== Rank: 段位系統（新人定位賽 / 正式排位）=====
-if(shouldApply){
-  try{
-    const rankingNow = Array.isArray(final?.ranking) ? final.ranking : [];
-    const P = Number(final?.playerCount)
-      || Object.keys(final?.playersMeta || {}).length
-      || rankingNow.length
-      || 4;
-
-    const myRankRow = rankingNow.find(r => Number(r?.id) === Number(myId)) || null;
-
-    // 用 ranking coins（本局金幣），不是 coinScore
-    const myCoins = Number(myRankRow?.coins || 0) || 0;
-    const totalCoins = rankingNow.reduce((s,r)=> s + (Number(r?.coins||0)||0), 0);
-
-    // UI：記錄本場前後段位（用於結算頁顯示）
-    const __rank_before = ensureRank(c.rank);
-
-    c.rank = ensureRank(c.rank);
-
-    if (c.rank.tier === 0){
-      c.rank = applyPlacement(c.rank, P, myCoins, totalCoins);
-    }else{
-      c.rank = applyRankedDelta(c.rank, P, myCoins, totalCoins);
-    }
-
-    // UI：保存前後段位差（只給結算頁顯示，不寫入雲端）
-    try{
-      const __rank_after = ensureRank(c.rank);
-      const meta = captureRankUiMeta(__rank_before, __rank_after);
-      sessionStorage.setItem('op_rank_ui', JSON.stringify({
-        ts: Date.now(),
-        before: __rank_before,
-        after: __rank_after,
-        meta,
-        P,
-        myCoins,
-        totalCoins
-      }));
-    }catch(_e){}
-  }catch(e){
-    console.warn('[rank] apply failed', e);
-  }
-}
+  // ===== Rank：已改為「game 結束時」計算並寫入雲端；結算頁僅顯示 =====
   await cloudSaveClient(socket, c);
 }
 
