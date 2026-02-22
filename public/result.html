@@ -471,8 +471,14 @@ body{
   display:flex;
   width:min(560px,100%);
 }
-.rank-mid .rankicon{ width:44px; height:44px; }
-.rank-mid .rankname{ font-size:18px; }
+.rank-mid .rankicon{
+  width:180px;
+  height:180px;
+}
+
+.rank-mid .rankname{
+  font-size:124px;
+}
 .rank-mid .ranksub{ font-size:13px; }
 .rank-mid .rankdelta{ font-size:13px; }
 .btn{
@@ -981,19 +987,19 @@ const RANK_TIER_NAME = {
   4:'超新星',
   5:'王下七武海',
   6:'四皇',
-  7:'海賊王級'
+  7:'海賊王者'
 };
 
 // 段位圖示（可在 window.OP_RANK_ICON_MAP 覆寫路徑）
 const DEFAULT_RANK_ICON_MAP = {
   0: 'images/ranks/placement.png',
-  1: 'images/ranks/r1.png',
-  2: 'images/ranks/r2.png',
-  3: 'images/ranks/r3.png',
-  4: 'images/ranks/r4.png',
-  5: 'images/ranks/r5.png',
-  6: 'images/ranks/r6.png',
-  7: 'images/ranks/r7.png'
+  1: 'images/ranks/r1.webp',
+  2: 'images/ranks/r2.webp',
+  3: 'images/ranks/r3.webp',
+  4: 'images/ranks/r4.webp',
+  5: 'images/ranks/r5.webp',
+  6: 'images/ranks/r6.webp',
+  7: 'images/ranks/r7.webp'
 };
 
 function getRankIconPath(tier){
@@ -1031,9 +1037,14 @@ function drawRankUI(rank, uiMeta){
   const dEl    = document.getElementById('rankDelta');
   const iconEl = document.getElementById('rankIcon');
 
-  const tierName = RANK_TIER_NAME[r.tier] || `Tier ${r.tier}`;
-  nameEl.textContent = tierName;
+const tierName = RANK_TIER_NAME[r.tier] || `Tier ${r.tier}`;
 
+if (r.tier === 7) {
+  const rp = Math.max(0, Number(r.rp) || 0);
+  nameEl.textContent = `海上王者 ${rp}分`;
+} else {
+  nameEl.textContent = `${tierName} (R${r.tier})`;
+}
   if(iconEl){
     const path = getRankIconPath(r.tier);
     if(path){
