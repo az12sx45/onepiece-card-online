@@ -1019,6 +1019,43 @@ socket.on("PROFILE_GET", async ({ secret }, cb) => {
 }
 });
 
+// ====== 公開參觀：用 user_id 取得玩家資料（唯讀，不回 secret） ======
+socket.on("PROFILE_PUBLIC_GET", async ({ userId }, cb) => {
+  try {
+    const uid = Number(userId);
+    if (!Number.isFinite(uid) || uid <= 0) {
+      return cb?.({ ok: false, error: "bad userId" });
+    }
+
+    const { rows } = await pool.query(
+      `
+      SELECT
+        user_id,
+        name,
+        avatar,
+        stats,
+        titles,
+        bounties,
+        recent_matches,
+        updated_at
+      FROM player_profiles
+      WHERE user_id = $1
+      LIMIT 1
+      `,
+      [uid]
+    );
+
+    const p = rows[0] || null;
+    if (!p) return cb?.({ ok: false, error: "not found" });
+
+    // ✅ 不回 secret，避免被拿去冒用
+    return cb?.({ ok: true, profile: p });
+  } catch (err) {
+    console.error("[PROFILE_PUBLIC_GET] error:", err);
+    return cb?.({ ok: false, error: String(err.message || err) });
+  }
+});
+
 // ====== 雲端個人頁：更新（永久安全版：局部更新 + stats 合併，不會洗掉 shop/bounties/titles） ======
 socket.on("PROFILE_UPDATE", async ({ secret, patch }, cb) => {
   try {
@@ -1084,21 +1121,22 @@ socket.on("RANK_LEADERBOARD", async ({ limit=200 } = {}, cb) => {
     const lim = Math.max(1, Math.min(500, Number(limit)||200));
 
     // rank 在 stats.client.rank
-    const { rows } = await pool.query(
-      `
-      SELECT
-        name,
-        avatar,
-        stats->'client'->'rank' AS rank
-      FROM player_profiles
-      ORDER BY
-        COALESCE((stats->'client'->'rank'->>'tier')::int, 0) DESC,
-        COALESCE((stats->'client'->'rank'->>'rp')::int, 0) DESC,
-        updated_at DESC
-      LIMIT $1
-      `,
-      [lim]
-    );
+const { rows } = await pool.query(
+  `
+  SELECT
+    user_id,
+    name,
+    avatar,
+    stats->'client'->'rank' AS rank
+  FROM player_profiles
+  ORDER BY
+    COALESCE((stats->'client'->'rank'->>'tier')::int, 0) DESC,
+    COALESCE((stats->'client'->'rank'->>'rp')::int, 0) DESC,
+    updated_at DESC
+  LIMIT $1
+  `,
+  [lim]
+);
 
     cb?.({ ok:true, list: rows || [] });
   } catch (err) {
