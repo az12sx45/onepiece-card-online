@@ -165,7 +165,8 @@
 .rankLayer{
   position:absolute;
   z-index:2;
-  pointer-events:none;
+  pointer-events:auto; /* ✅ 讓它可點 */
+  cursor:pointer;      /* ✅ 滑鼠提示 */
   user-select:none;
   display:flex;
   flex-direction:column;
@@ -848,105 +849,55 @@
     @keyframes slide{ 0%{transform:translateX(-120%)} 100%{transform:translateX(260%)} }
     .loadingActions{ margin-top:12px; display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap; }
 
-/* ===== 段位排行榜 modal ===== */
-.rb-back{
-  position:fixed; inset:0; z-index:260;
-  background:rgba(0,0,0,.72);
-  display:flex; align-items:center; justify-content:center;
-}
-.rb-panel{
-  width:min(980px, calc(100vw - 24px));
-  height:min(760px, calc(100vh - 24px));
-  background:rgba(18,24,30,.92);
-  border:1px solid rgba(255,255,255,.10);
-  border-radius:18px;
-  box-shadow:0 20px 60px rgba(0,0,0,.55);
-  overflow:hidden;
-  backdrop-filter: blur(10px);
-  display:flex; flex-direction:column;
-}
-.rb-head{
-  padding:14px 16px;
-  display:flex; align-items:center; justify-content:space-between;
-  border-bottom:1px solid rgba(255,255,255,.10);
-}
-.rb-title{ font-size:18px; font-weight:800; letter-spacing:.5px; }
-.rb-close{
-  border:1px solid rgba(255,255,255,.14);
-  background:rgba(255,255,255,.06);
-  color:#e9f0f8;
-  padding:8px 12px;
-  border-radius:10px;
-  cursor:pointer;
-}
-.rb-sub{
-  padding:8px 16px;
-  color:rgba(233,240,248,.75);
-  font-size:13px;
-  border-bottom:1px solid rgba(255,255,255,.08);
-}
-.rb-list{
-  padding:10px 12px;
-  overflow:auto;
-  flex:1;
-}
-.rb-row{
-  display:flex; align-items:center;
+.rankRow{
+  display:flex;
+  align-items:center;
   gap:10px;
-  padding:10px 10px;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,.08);
-  background:rgba(255,255,255,.04);
-  margin-bottom:10px;
+  padding:10px;
+  border:1px solid rgba(35,52,85,55);
+  background:rgba(2,6,23,45);
+  border-radius:14px;
 }
-.rb-no{
-  width:44px;
+.rankRow .idx{
+  width:34px;
   text-align:center;
   font-weight:900;
-  opacity:.9;
+  color:rgba(255,255,255,75);
 }
-.rb-ava{
-  width:44px; height:44px;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,.14);
-  object-fit:cover;
-  background:rgba(0,0,0,.25);
+.rankRow .ava{
+  width:42px; height:42px;
+  border-radius:999px;
+  border:1px solid rgba(35,52,85,85);
+  overflow:hidden;
+  flex:none;
 }
-.rb-name{
+.rankRow .ava img{ width:100%; height:100%; object-fit:cover; display:block; }
+.rankRow .name{
   flex:1;
-  font-weight:800;
-  white-space:nowrap;
+  min-width:0;
+  font-weight:900;
   overflow:hidden;
   text-overflow:ellipsis;
+  white-space:nowrap;
 }
-.rb-rank{
-  display:flex; align-items:center; gap:10px;
-}
-.rb-rank img{
-  width:44px; height:44px;
+.rankRow .rankIcon{
+  width:56px;
+  height:56px;
   object-fit:contain;
+  flex:none;
+  filter: drop-shadow(0 8px 14px rgba(0,0,0,35));
 }
-.rb-rtext{
-  min-width:170px;
+.rankRow .meta{
   text-align:right;
-  font-weight:800;
+  flex:none;
+  min-width:120px;
+  font-size:12px;
+  color:rgba(229,231,235,85);
 }
-.rb-foot{
-  padding:12px 12px;
-  display:flex; justify-content:flex-end; gap:10px;
-  border-top:1px solid rgba(255,255,255,.10);
-}
-.rb-btn{
-  border:1px solid rgba(255,255,255,.14);
-  background:rgba(255,255,255,.06);
-  color:#e9f0f8;
-  padding:10px 14px;
-  border-radius:12px;
-  cursor:pointer;
-}
-.rb-btn:disabled{
-  opacity:.45;
-  cursor:not-allowed;
+.rankRow .meta .sub{
+  font-size:11px;
+  color:rgba(156,163,175,85);
+  margin-top:2px;
 }
 
   </style>
@@ -1227,22 +1178,19 @@
     </div>
   </div>
 
-<!-- === 段位排行榜 Modal（全服） === -->
-<div id="rankBoardBack" style="display:none" class="rb-back" aria-hidden="true">
-  <div class="rb-panel">
-    <div class="rb-head">
-      <div class="rb-title">段位排行榜</div>
-      <button class="rb-close" id="rankBoardClose">關閉</button>
+<!-- === 段位排行榜 Modal === -->
+<div id="rankBoardBack" class="modalBack" style="display:none">
+  <div class="modalPanel" style="width:min(760px, 96vw); max-height:86vh; overflow:auto;">
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+      <div style="font-weight:900; color:#ffd36a;">段位排名</div>
+      <button class="btn" id="rankBoardClose">關閉</button>
     </div>
 
-    <div class="rb-sub" id="rankBoardSub">—</div>
-
-    <div class="rb-list" id="rankBoardList"></div>
-
-    <div class="rb-foot">
-      <button class="rb-btn" id="rankBoardPrev">上一頁</button>
-      <button class="rb-btn" id="rankBoardNext">下一頁</button>
+    <div style="margin-top:10px; color:rgba(229,231,235,75); font-size:12px;">
+      依段位（高→低）與 RP（高→低）排序
     </div>
+
+    <div id="rankBoardList" style="margin-top:12px; display:flex; flex-direction:column; gap:10px;"></div>
   </div>
 </div>
 
@@ -1354,6 +1302,96 @@ async function cloudUpdate(secret, patch){
     socket.timeout(9000).emit('PROFILE_UPDATE', { secret, patch }, (err, res)=>{
       resolve(!err && !!res?.ok);
     });
+  });
+}
+
+async function cloudRankBoard(limit=100){
+  return await new Promise((resolve)=>{
+    socket.timeout(9000).emit('RANK_LEADERBOARD', { limit }, (err, res)=>{
+      if(err || !res?.ok) return resolve([]);
+      resolve(Array.isArray(res.list) ? res.list : []);
+    });
+  });
+}
+
+function rankNameByTier(t){
+  const RANK_NAME = {
+    0:'新人定位賽',
+    1:'新人船員',
+    2:'副船長',
+    3:'船長',
+    4:'超新星',
+    5:'王下七武海',
+    6:'四皇',
+    7:'海賊王者'
+  };
+  return RANK_NAME[t] || '未知段位';
+}
+
+function openRankBoard(){
+  const back = document.getElementById('rankBoardBack');
+  if(!back) return;
+  back.style.display = 'flex';
+  back.setAttribute('aria-hidden','false');
+}
+function closeRankBoard(){
+  const back = document.getElementById('rankBoardBack');
+  if(!back) return;
+  back.style.display = 'none';
+  back.setAttribute('aria-hidden','true');
+}
+
+document.getElementById('rankBoardClose')?.addEventListener('click', closeRankBoard);
+document.getElementById('rankBoardBack')?.addEventListener('click', (ev)=>{
+  if(ev.target && ev.target.id === 'rankBoardBack') closeRankBoard();
+});
+
+async function showRankBoard(){
+  openRankBoard();
+  const listEl = document.getElementById('rankBoardList');
+  if(listEl) listEl.innerHTML = `<div class="muted">讀取中…</div>`;
+
+  const rows = await cloudRankBoard(200);
+
+  if(!listEl) return;
+  if(!rows.length){
+    listEl.innerHTML = `<div class="muted">目前沒有資料。</div>`;
+    return;
+  }
+
+  listEl.innerHTML = '';
+  rows.forEach((p, i)=>{
+    const name = String(p?.name || '未命名玩家').trim();
+    const avatar = Number(p?.avatar)||1;
+
+    const rank = (p?.rank && typeof p.rank === 'object') ? p.rank : { tier:0, rp:0, placement:{games:0,score:0} };
+    const tier = Number(rank.tier)||0;
+    const rp = Number(rank.rp)||0;
+    const games = Number(rank?.placement?.games)||0;
+
+    const row = document.createElement('div');
+    row.className = 'rankRow';
+
+    const iconTier = (tier>=1 ? tier : 1); // tier=0 沒圖就先用 r1 當佔位（你也可以改成不顯示）
+    const metaLine1 = (tier===0)
+      ? `定位賽 ${Math.max(0,Math.min(3,games))}/3`
+      : (tier>=7 ? `${rankNameByTier(7)} +${Math.max(0,rp)}` : `${rankNameByTier(tier)} (R${tier})`);
+
+    const metaLine2 = (tier===0)
+      ? `—`
+      : (tier>=7 ? `RP: ${Math.max(0,rp)}` : `RP: ${Math.max(0,rp)}/100`);
+
+    row.innerHTML = `
+      <div class="idx">#${i+1}</div>
+      <div class="ava"><img src="${avatarUrlById(avatar)}" alt=""></div>
+      <div class="name">${escapeHtml(name)}</div>
+      <img class="rankIcon" src="${rankUrlByTier(iconTier)}" alt="">
+      <div class="meta">
+        <div>${escapeHtml(metaLine1)}</div>
+        <div class="sub">${escapeHtml(metaLine2)}</div>
+      </div>
+    `;
+    listEl.appendChild(row);
   });
 }
 
@@ -1513,156 +1551,6 @@ async function renderPosterDataUrl(meta){
 // ===== modals =====
 function openModal(id){ const el=document.getElementById(id); if(el) el.style.display='flex'; }
 function closeModal(id){ const el=document.getElementById(id); if(el) el.style.display='none'; }
-
-// ===== 段位排行榜（全服）=====
-let __rbOffset = 0;
-const __rbLimit = 50;
-
-function openRankBoard(){
-  const back = document.getElementById('rankBoardBack');
-  if(!back) return;
-  back.style.display = 'flex';
-  back.setAttribute('aria-hidden', 'false');
-  loadRankBoardPage(__rbOffset);
-}
-
-function closeRankBoard(){
-  const back = document.getElementById('rankBoardBack');
-  if(!back) return;
-  back.style.display = 'none';
-  back.setAttribute('aria-hidden', 'true');
-}
-
-function rankNameByTier(tier){
-  const RANK_NAME = {
-    0:'新人定位賽',
-    1:'新人船員',
-    2:'副船長',
-    3:'船長',
-    4:'超新星',
-    5:'王下七武海',
-    6:'四皇',
-    7:'海賊王者'
-  };
-  return RANK_NAME[tier] || '段位';
-}
-
-function renderRankBoard(list, meta){
-  const host = document.getElementById('rankBoardList');
-  const sub = document.getElementById('rankBoardSub');
-  if(!host || !sub) return;
-
-  const total = Number(meta?.total||0)||0;
-  const offset = Number(meta?.offset||0)||0;
-  const limit = Number(meta?.limit||__rbLimit)||__rbLimit;
-
-  const startNo = total ? (offset + 1) : 0;
-  const endNo = Math.min(total, offset + limit);
-  sub.textContent = total
-    ? `顯示第 ${startNo}–${endNo} 名（共 ${total} 名）`
-    : '目前沒有任何玩家段位資料';
-
-  host.innerHTML = '';
-  (Array.isArray(list) ? list : []).forEach((p, i)=>{
-    const no = offset + i + 1;
-    const name = String(p?.name || '未命名玩家');
-    const avatar = String(p?.avatar || '1');
-
-    const r = p?.rank || {};
-    const tier = Number(r.tier||0)||0;
-    const rp = Number(r.rp||0)||0;
-    const games = Number(r?.placement?.games||0)||0;
-
-    const row = document.createElement('div');
-    row.className = 'rb-row';
-
-    const noEl = document.createElement('div');
-    noEl.className = 'rb-no';
-    noEl.textContent = `#${no}`;
-
-    const ava = document.createElement('img');
-    ava.className = 'rb-ava';
-    // 你的頭像路徑：images/avatars/{n}.webp
-    // CPU 可能是 cpu1/cpu2/cpu3（遊戲內用的），排行榜這裡以 DB 為主通常是數字
-    if(/^\d+$/.test(avatar)) ava.src = avatarUrlById(Number(avatar));
-    else ava.src = `images/avatars/${avatar}.webp`; // 保底（如果你有特殊命名）
-    ava.alt = name;
-
-    const nm = document.createElement('div');
-    nm.className = 'rb-name';
-    nm.textContent = name;
-
-    const rankBox = document.createElement('div');
-    rankBox.className = 'rb-rank';
-
-    const icon = document.createElement('img');
-    icon.alt = `r${tier}`;
-    icon.src = (tier>=1) ? rankUrlByTier(tier) : rankUrlByTier(1);
-
-    const txt = document.createElement('div');
-    txt.className = 'rb-rtext';
-    if(tier === 0){
-      txt.textContent = `${rankNameByTier(0)}｜${Math.max(0, Math.min(3, games))}/3`;
-    }else if(tier >= 7){
-      txt.textContent = `${rankNameByTier(7)} +${Math.max(0, rp)}`;
-    }else{
-      txt.textContent = `${rankNameByTier(tier)} (R${tier})｜${Math.max(0, rp)}/100`;
-    }
-
-    rankBox.appendChild(icon);
-    rankBox.appendChild(txt);
-
-    row.appendChild(noEl);
-    row.appendChild(ava);
-    row.appendChild(nm);
-    row.appendChild(rankBox);
-
-    host.appendChild(row);
-  });
-
-  // buttons
-  const prevBtn = document.getElementById('rankBoardPrev');
-  const nextBtn = document.getElementById('rankBoardNext');
-  if(prevBtn){
-    prevBtn.disabled = (offset <= 0);
-  }
-  if(nextBtn){
-    nextBtn.disabled = (offset + limit >= total);
-  }
-}
-
-async function loadRankBoardPage(offset){
-  const listHost = document.getElementById('rankBoardList');
-  if(listHost) listHost.innerHTML = `<div style="opacity:.75;padding:10px 6px;">讀取中…</div>`;
-
-  return await new Promise((resolve)=>{
-    socket.timeout(12000).emit('RANK_LEADERBOARD', { limit: __rbLimit, offset }, (err, res)=>{
-      if(err || !res?.ok){
-        const sub = document.getElementById('rankBoardSub');
-        if(sub) sub.textContent = '讀取失敗（RANK_LEADERBOARD）';
-        if(listHost) listHost.innerHTML = `<div style="opacity:.85;padding:10px 6px;">讀取失敗，請稍後再試。</div>`;
-        return resolve(false);
-      }
-      __rbOffset = Number(res.offset||0)||0;
-      renderRankBoard(res.list || [], res);
-      resolve(true);
-    });
-  });
-}
-
-// modal interactions
-document.getElementById('rankBoardClose')?.addEventListener('click', closeRankBoard);
-document.getElementById('rankBoardBack')?.addEventListener('click', (ev)=>{
-  if(ev.target && ev.target.id === 'rankBoardBack') closeRankBoard();
-});
-document.getElementById('rankBoardPrev')?.addEventListener('click', ()=>{
-  const next = Math.max(0, __rbOffset - __rbLimit);
-  loadRankBoardPage(next);
-});
-document.getElementById('rankBoardNext')?.addEventListener('click', ()=>{
-  const next = __rbOffset + __rbLimit;
-  loadRankBoardPage(next);
-});
 
 // ===== card viewer =====
 function openImgModal(src){
@@ -2597,20 +2485,18 @@ function renderRank(){
   const wrap = document.createElement('div');
   wrap.className = 'rankLayer';
 
+wrap.addEventListener('click', (ev)=>{
+  ev.preventDefault();
+  ev.stopPropagation();
+  showRankBoard();
+});
+
   // === 位置：放在海賊旗左邊 ===
   // 你現在海賊旗是 right=379px（離右邊 379px）:contentReference[oaicite:3]{index=3}
   // 「更往左」就是把 right 調大。
   wrap.style.top = '38px';
   wrap.style.right = '790px';   // ← 先給你一個起始值；覺得太左/太右再改這個
   wrap.style.opacity = '0.98';
-
-  // ✅ 讓段位圖可點
-  wrap.style.cursor = 'pointer';
-  wrap.title = '點擊查看段位排行榜';
-  wrap.addEventListener('click', (ev)=>{
-    ev.preventDefault();
-    openRankBoard();
-  });
 
   // 圖：只有 tier 1~7 才有
   if(tier >= 1){
