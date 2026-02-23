@@ -1078,6 +1078,73 @@ socket.on("PROFILE_UPDATE", async ({ secret, patch }, cb) => {
   }
 });
 
+// ====== 段位排行榜：取得（全服） ======
+socket.on("RANK_LEADERBOARD", async (payload = {}, cb) => {
+  try {
+    const limit = Math.max(1, Math.min(200, Number(payload.limit || 100) || 100));
+    const offset = Math.max(0, Number(payload.offset || 0) || 0);
+
+    // 1) 先算總數（有 rank 的玩家）
+    const c = await pool.query(`
+      SELECT COUNT(*)::int AS n
+      FROM player_profiles
+      WHERE (stats->'client'->'rank') IS NOT NULL
+    `);
+    const total = c.rows?.[0]?.n || 0;
+
+    // 2) 取資料 + 排序
+    // tier: 高 -> 低
+    // tier==0(定位賽): 用 placement.score / games 排
+    // 其他: rp 排
+    const q = await pool.query(
+      `
+      SELECT
+        COALESCE(NULLIF(name,''), '未命名玩家') AS name,
+        COALESCE(NULLIF(avatar,''), '1') AS avatar,
+        stats->'client'->'rank' AS rank,
+        updated_at
+      FROM player_profiles
+      WHERE (stats->'client'->'rank') IS NOT NULL
+      ORDER BY
+        COALESCE((stats->'client'->'rank'->>'tier')::int, 0) DESC,
+        CASE
+          WHEN COALESCE((stats->'client'->'rank'->>'tier')::int, 0) = 0
+            THEN COALESCE((stats->'client'->'rank'->'placement'->>'score')::int, 0)
+          ELSE COALESCE((stats->'client'->'rank'->>'rp')::int, 0)
+        END DESC,
+        CASE
+          WHEN COALESCE((stats->'client'->'rank'->>'tier')::int, 0) = 0
+            THEN COALESCE((stats->'client'->'rank'->'placement'->>'games')::int, 0)
+          ELSE 0
+        END DESC,
+        updated_at DESC
+      LIMIT $1 OFFSET $2
+      `,
+      [limit, offset]
+    );
+
+    const rows = q.rows || [];
+    const list = rows.map((r) => {
+      const rank = (r.rank && typeof r.rank === "object") ? r.rank : {};
+      const tier = Number(rank.tier || 0) || 0;
+      const rp = Number(rank.rp || 0) || 0;
+      const placement = (rank.placement && typeof rank.placement === "object") ? rank.placement : null;
+      const games = Number(placement?.games || 0) || 0;
+      const score = Number(placement?.score || 0) || 0;
+
+      return {
+        name: String(r.name || "未命名玩家").slice(0, 18),
+        avatar: String(r.avatar || "1"),
+        rank: { tier, rp, placement: placement ? { games, score } : null },
+      };
+    });
+
+    cb?.({ ok: true, total, limit, offset, list });
+  } catch (err) {
+    console.error("[RANK_LEADERBOARD] error:", err);
+    cb?.({ ok: false, error: String(err.message || err) });
+  }
+});
 
 socket.on("JOIN_ROOM", async (payload = {}) => {
 
