@@ -682,6 +682,22 @@ body{
   50%{ transform:translateY(-4px); filter:brightness(1.2); }
 }
 
+/* ✅ 強制段位變動彈窗：全螢幕置中，蓋住一切（避免被其他 CSS 影響） */
+#rankChangeModal{
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 999999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(0,0,0,.78) !important;
+}
+
+/* hidden 仍可控制關閉 */
+#rankChangeModal.hidden{
+  display: none !important;
+}
+
 </style>
 </head>
 <body class="view-detail">
@@ -1214,9 +1230,7 @@ function maybeShowRankChangeModal(){
   modal.classList.remove('hidden');
 
   // 點背景關閉
-  modal.onclick = (e)=>{
-    if(e.target.id === 'rankChangeModal') modal.classList.add('hidden');
-  };
+modal.onclick = ()=> modal.classList.add('hidden');
 
   // 也可以自動收起（可留可不留）
   setTimeout(()=>{ try{ modal.classList.add('hidden'); }catch(e){} }, 2200);
