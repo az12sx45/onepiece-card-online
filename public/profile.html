@@ -181,8 +181,8 @@
 }
 
 .rankLayer .rankText{
-  padding:4px 8px;
-  border-radius:999px;
+  padding:6px 10px;
+  border-radius:14px;
   border:1px solid rgba(255,255,255,18);
   background:rgba(2,6,23,70);
   color:rgba(255,255,255,92);
@@ -190,9 +190,16 @@
   font-weight:800;
   letter-spacing:.3px;
   text-shadow:0 2px 6px rgba(0,0,0,55);
-  white-space:nowrap;
+  white-space:normal;
+  text-align:center;
+  line-height:1.2;
 }
-
+.rankLayer .rankText .line2{
+  margin-top:4px;
+  font-size:11px;
+  opacity:.92;
+  font-weight:900;
+}
 
     .wallTools{ display:flex; gap:8px; flex-wrap:wrap; }
     .wallTools .btn{ padding:8px 10px; }
@@ -2334,16 +2341,34 @@ function renderRank(){
     wrap.appendChild(img);
   }
 
-  // 文字（依你的顯示規則）
+  // 文字（段位名稱 + R?；R7 以上顯示海賊王者+分數）
   const text = document.createElement('div');
   text.className = 'rankText';
 
+  const RANK_NAME = {
+  0:'新人定位賽',
+  1:'新人船員',
+  2:'副船長',
+  3:'船長',
+  4:'超新星',
+  5:'王下七武海',
+  6:'四皇',
+  7:'海賊王者'
+  };
+
   if(tier === 0){
     text.textContent = `定位賽 ${Math.max(0, Math.min(3, games))}/3`;
-  }else if(tier === 7){
-    text.textContent = `海賊王級 +${Math.max(0, rp)}`;
+  }else if(tier >= 7){
+    // r7 以上：海賊王者 +分數（不顯示 (R7)）
+    text.textContent = `${RANK_NAME[7]} +${Math.max(0, rp)}`;
   }else{
-    text.textContent = `${Math.max(0, rp)}/100`;
+    // r1~r6：顯示「段位名稱 (R?)」+「分數」
+    const name = RANK_NAME[tier] || `段位`;
+    const rpTxt = `${Math.max(0, rp)}/100`;
+    text.innerHTML = `
+      <div>${name} (R${tier})</div>
+      <div class="line2">${rpTxt}</div>
+    `;
   }
 
   wrap.appendChild(text);
@@ -2515,6 +2540,7 @@ boot();
 </script>
 </body>
 </html>
+
 
 
 
