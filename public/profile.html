@@ -1446,14 +1446,27 @@ async function showRankBoard(){
 
     // ✅ 新增：整列可點 → 跳到參觀頁 profile.html?view=<user_id>
     // 後端 RANK_LEADERBOARD 需回傳 user_id
-    const uid = p?.user_id;
-    row.style.cursor = uid ? 'pointer' : 'default';
-    row.title = uid ? '點擊查看玩家個人頁（參觀）' : '';
-    if(uid){
-      row.addEventListener('click', ()=>{
-        location.href = `profile.html?view=${encodeURIComponent(uid)}`;
-      });
-    }
+const uid = p?.user_id;
+row.style.cursor = uid ? 'pointer' : 'default';
+
+// 目前登入者自己的 user_id（從已載入的雲端資料拿）
+const myUid = Number(__cloudProfile?.user_id || 0);
+
+if(uid){
+  if(Number(uid) === myUid){
+    // 👉 點到自己
+    row.title = '這是你自己（返回個人頁）';
+    row.addEventListener('click', ()=>{
+      location.href = 'profile.html';
+    });
+  }else{
+    // 👉 點到別人
+    row.title = '點擊查看玩家個人頁（參觀）';
+    row.addEventListener('click', ()=>{
+      location.href = `profile.html?view=${encodeURIComponent(uid)}`;
+    });
+  }
+}
 
     const iconTier = (tier>=1 ? tier : 1); // tier=0 沒圖就先用 r1 當佔位（你也可以改成不顯示）
     const metaLine1 = (tier===0)
