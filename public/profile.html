@@ -1216,6 +1216,8 @@ let __client = null;         // cloud stats.client
 let __wallId = 1;            // cloud stats.wall.id
 let __flagId = 1;           // cloud stats.wall.flagId
 let __saving = false;
+let __viewOnly = false;
+let __viewUserId = null;
 
 // ===== basic utils =====
 function clamp(n, a, b){ n = Number(n); if(!Number.isFinite(n)) n = a; return Math.max(a, Math.min(b, n)); }
@@ -1288,6 +1290,46 @@ function hideLoading(){
 }
 document.getElementById('loadingCloseBtn')?.addEventListener('click', hideLoading);
 
+function applyViewOnlyUI(){
+  // 1) 右上角按鈕：只留「返回主畫面」
+  const btnRefresh = document.getElementById('btnRefresh');
+  const btnLogout  = document.getElementById('btnLogout');
+  if(btnRefresh) btnRefresh.style.display = 'none';
+  if(btnLogout)  btnLogout.style.display  = 'none';
+
+  // 2) 牆面工具：不給選牆/旗
+  const btnPickWall = document.getElementById('btnPickWall');
+  const btnPickFlag = document.getElementById('btnPickFlag');
+  if(btnPickWall) btnPickWall.style.display = 'none';
+  if(btnPickFlag) btnPickFlag.style.display = 'none';
+
+  // 3) 名字/頭像：禁止點擊
+  const nameBtn = document.getElementById('nameBtn');
+  const avatarBox = document.getElementById('avatarBox');
+  if(nameBtn){
+    nameBtn.style.cursor = 'default';
+    nameBtn.title = '參觀模式（不可編輯）';
+    nameBtn.onclick = null;
+  }
+  if(avatarBox){
+    avatarBox.style.cursor = 'default';
+    avatarBox.title = '參觀模式（不可更換）';
+    avatarBox.onclick = null;
+  }
+
+  // 4) 參觀模式提示（加在標題旁邊）
+  const h1 = document.querySelector('.title h1');
+  if(h1 && !document.getElementById('viewOnlyPill')){
+    const sp = document.createElement('span');
+    sp.id = 'viewOnlyPill';
+    sp.className = 'pill';
+    sp.style.borderColor = 'rgba(255,255,255,.18)';
+    sp.style.background = 'rgba(2,6,23,.35)';
+    sp.innerHTML = `<span class="dot" style="background:rgba(156,163,175,.95);box-shadow:none"></span><span>參觀模式</span>`;
+    h1.appendChild(sp);
+  }
+}
+
 // ===== socket helpers =====
 async function cloudGet(secret){
   return await new Promise((resolve)=>{
@@ -1297,6 +1339,16 @@ async function cloudGet(secret){
     });
   });
 }
+
+async function cloudGetPublic(userId){
+  return await new Promise((resolve)=>{
+    socket.timeout(9000).emit('PROFILE_PUBLIC_GET', { userId }, (err, res)=>{
+      if(err || !res?.ok) return resolve(null);
+      resolve(res.profile || null);
+    });
+  });
+}
+
 async function cloudUpdate(secret, patch){
   return await new Promise((resolve)=>{
     socket.timeout(9000).emit('PROFILE_UPDATE', { secret, patch }, (err, res)=>{
@@ -1371,6 +1423,17 @@ async function showRankBoard(){
 
     const row = document.createElement('div');
     row.className = 'rankRow';
+
+    // ✅ 新增：整列可點 → 跳到參觀頁 profile.html?view=<user_id>
+    // 後端 RANK_LEADERBOARD 需回傳 user_id
+    const uid = p?.user_id;
+    row.style.cursor = uid ? 'pointer' : 'default';
+    row.title = uid ? '點擊查看玩家個人頁（參觀）' : '';
+    if(uid){
+      row.addEventListener('click', ()=>{
+        location.href = `profile.html?view=${encodeURIComponent(uid)}`;
+      });
+    }
 
     const iconTier = (tier>=1 ? tier : 1); // tier=0 沒圖就先用 r1 當佔位（你也可以改成不顯示）
     const metaLine1 = (tier===0)
@@ -2243,6 +2306,7 @@ function renderAll(){
 
 // ===== save to cloud (single source of truth) =====
 async function saveClientToCloud(nextClient, {reason=''} = {}){
+  if(__viewOnly) { alert('參觀模式：不可修改對方資料'); return; }
   if(__saving) return;
   __saving = true;
 
@@ -2286,6 +2350,43 @@ async function saveClientToCloud(nextClient, {reason=''} = {}){
 
 // ===== init =====
 async function boot(){
+  const qs = new URLSearchParams(location.search);
+  const view = String(qs.get('view') || '').trim();
+
+  // === A) 參觀模式：profile.html?view=<user_id> ===
+  if(view){
+    __viewOnly = true;
+    __viewUserId = view;
+
+    showLoading('讀取玩家資料…', '參觀模式：正在從伺服器讀取玩家資料…');
+
+    const cloud = await cloudGetPublic(view);
+    if(!cloud){
+      showLoading('讀取失敗', 'PROFILE_PUBLIC_GET 失敗或玩家不存在。', true);
+      return;
+    }
+
+    __cloudProfile = cloud;
+
+    const name = clampStr(cloud?.name || '未命名玩家', 16) || '未命名玩家';
+    const avatar = clamp(Number(cloud?.avatar)||1, 1, AVATAR_COUNT);
+
+    __wallId = clamp(Number(cloud?.stats?.wall?.id)||1, 1, WALL_COUNT);
+    __flagId = clamp(Number(cloud?.stats?.wall?.flagId)||1, 1, FLAG_COUNT);
+
+    __client = (cloud?.stats?.client && typeof cloud.stats.client === 'object')
+      ? cloud.stats.client
+      : defaultClient(name, avatar);
+
+    __client.player = { ...( __client.player || {} ), name, avatar };
+
+    hideLoading();
+    applyViewOnlyUI();
+    renderAll();
+    return;
+  }
+
+  // === B) 自己模式：需要 opSecret（可編輯） ===
   __secret = String(localStorage.getItem('opSecret') || '').trim();
 
   if(!__secret){
@@ -2307,16 +2408,13 @@ async function boot(){
   const name = clampStr(cloud?.name || '未命名玩家', 16) || '未命名玩家';
   const avatar = clamp(Number(cloud?.avatar)||1, 1, AVATAR_COUNT);
 
-  // wall
   __wallId = clamp(Number(cloud?.stats?.wall?.id)||1, 1, WALL_COUNT);
   __flagId = clamp(Number(cloud?.stats?.wall?.flagId)||1, 1, FLAG_COUNT);
 
-  // client
   __client = (cloud?.stats?.client && typeof cloud.stats.client === 'object')
     ? cloud.stats.client
     : defaultClient(name, avatar);
 
-  // 確保 client.player 與 profile 一致（但不強制寫回；等下一次有操作再寫）
   __client.player = { ...( __client.player || {} ), name, avatar };
 
   hideLoading();
