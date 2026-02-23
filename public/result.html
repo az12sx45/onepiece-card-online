@@ -462,6 +462,41 @@ body{
 .rankhint{ font-size:12px; color:var(--muted); line-height:1.25; }
 
 /* ===== 本場牌位圖與分數（置中顯示） ===== */
+/* === 段位顯示：牌位圖在上，文字在下（本場牌位與分數） === */
+.rank-mid #rankBox{ justify-content:center; }
+
+/* 把 rankbox-top 改成直向：icon -> 名稱 -> 變動值 */
+.rank-mid .rankbox-top{
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+
+/* 左側（icon+name）也改成直向 */
+.rank-mid .rankleft{
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+}
+
+/* 置中 */
+.rank-mid .rankname,
+.rank-mid .ranksub,
+.rank-mid .rankdelta,
+.rank-mid .rankhint{
+  text-align:center;
+}
+
+/* 牌位圖放大（你也可以再調整 96/112） */
+.rank-mid .rankicon{
+  width:96px;
+  height:96px;
+}
+.rank-mid .rankname{ font-size:22px; }
+.rank-mid .ranksub{ font-size:14px; }
+.rank-mid .rankdelta{ font-size:14px; }
+
 .rank-mid .rank-mid-inner{
   display:flex;
   justify-content:center;
