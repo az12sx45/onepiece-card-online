@@ -922,11 +922,15 @@
         </div>
       </div>
 
-      <div class="actions">
-        <button class="btn" id="btnBack">返回主畫面</button>
-        <button class="btn primary" id="btnRefresh">重新同步雲端</button>
-        <button class="btn danger" id="btnLogout">登出（清除本機 secret）</button>
-      </div>
+<div class="actions">
+  <button class="btn" id="btnBack">返回主畫面</button>
+
+  <!-- ✅ 參觀模式才會顯示 -->
+  <button class="btn" id="btnMyProfile" style="display:none">回到我的個人頁</button>
+
+  <button class="btn primary" id="btnRefresh">重新同步雲端</button>
+  <button class="btn danger" id="btnLogout">登出（清除本機 secret）</button>
+</div>
     </div>
 
     <!-- === 牆面展示：可選牆背景 + 最近 4 張懸賞令 === -->
@@ -1296,6 +1300,22 @@ function applyViewOnlyUI(){
   const btnLogout  = document.getElementById('btnLogout');
   if(btnRefresh) btnRefresh.style.display = 'none';
   if(btnLogout)  btnLogout.style.display  = 'none';
+
+  // ✅ 1.5) 參觀模式：增加「回到我的個人頁」
+  const btnMyProfile = document.getElementById('btnMyProfile');
+  if(btnMyProfile){
+    btnMyProfile.style.display = 'inline-flex';
+    btnMyProfile.onclick = () => {
+      // 如果本機有 opSecret：回到自己的 profile（可編輯模式）
+      const s = String(localStorage.getItem('opSecret') || '').trim();
+      if(s){
+        location.href = 'profile.html';
+      }else{
+        // 沒登入就回開始頁
+        location.href = '/start.html?from=profile';
+      }
+    };
+  }
 
   // 2) 牆面工具：不給選牆/旗
   const btnPickWall = document.getElementById('btnPickWall');
