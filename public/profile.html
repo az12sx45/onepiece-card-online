@@ -1222,6 +1222,7 @@ let __flagId = 1;           // cloud stats.wall.flagId
 let __saving = false;
 let __viewOnly = false;
 let __viewUserId = null;
+let __myUserId = 0; // ✅ 我自己的 user_id（用來判斷排行榜點到自己）
 
 // ===== basic utils =====
 function clamp(n, a, b){ n = Number(n); if(!Number.isFinite(n)) n = a; return Math.max(a, Math.min(b, n)); }
@@ -2401,6 +2402,20 @@ async function boot(){
 
     __cloudProfile = cloud;
 
+// ✅ 參觀模式：如果本機其實有登入（有 opSecret），就抓一次「我的 user_id」
+// 這樣在參觀模式的排行榜點到自己，也能回到自己的 profile.html
+try{
+  const s = String(localStorage.getItem('opSecret') || '').trim();
+  if(s){
+    const me = await cloudGet(s);
+    __myUserId = Number(me?.user_id || 0) || 0;
+  }else{
+    __myUserId = 0;
+  }
+}catch{
+  __myUserId = 0;
+}
+
     const name = clampStr(cloud?.name || '未命名玩家', 16) || '未命名玩家';
     const avatar = clamp(Number(cloud?.avatar)||1, 1, AVATAR_COUNT);
 
@@ -2437,6 +2452,8 @@ async function boot(){
   }
 
   __cloudProfile = cloud;
+
+__myUserId = Number(cloud?.user_id || 0) || 0;
 
   const name = clampStr(cloud?.name || '未命名玩家', 16) || '未命名玩家';
   const avatar = clamp(Number(cloud?.avatar)||1, 1, AVATAR_COUNT);
