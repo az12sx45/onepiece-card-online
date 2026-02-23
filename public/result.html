@@ -813,7 +813,7 @@ let LAST_FINAL = null;   // 最新 final
 let STATE = null;        // 最新 socket 狀態
 let MY_PID = null;       // 我的 pid（與 id 不同）
 let MY_ID = null;
-
+let __AUTO_BOUNTY_SHOWN = false; // ✅ 避免 STATE 重送一直彈
 
 // ====== Cloud-only persistence (no local profile/posters) ======
 function safeJsonParse(raw, fallback){
@@ -1809,6 +1809,24 @@ function renderFinal(final){
     (final.ranking ? final.ranking.length : 4);
 
   MY_ID = guessMyId(final, MY_PID);
+
+// ✅ 進結算頁自動顯示懸賞單（維持原本彈窗/位置/畫法）
+try{
+  if(!__AUTO_BOUNTY_SHOWN){
+    __AUTO_BOUNTY_SHOWN = true;
+
+    // 讓 DOM 先更新一下再開彈窗，避免部分裝置剛進來卡住
+    setTimeout(async ()=>{
+      try{
+        const finalNow = LAST_FINAL || final;
+        const id = (MY_ID != null) ? MY_ID : guessMyId(finalNow, MY_PID);
+        await showBounty(finalNow, id); // 這會用你現有的 bountyModal + bountyCanvas 顯示
+      }catch(e){
+        console.warn('[auto bounty] failed', e);
+      }
+    }, 120);
+  }
+}catch(e){}
 
   const names={}, avatars={}, pids={};
   (final.ranking||[]).forEach(r=>{
