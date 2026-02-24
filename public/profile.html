@@ -1250,7 +1250,7 @@ function flagUrlById(id){
   return `images/flags/${n}.webp`;
 }
 function rankUrlByTier(tier){
-  const t = clamp(Number(tier)||1, 1, 7);
+  const t = clamp(Number(tier), 0, 7);
   return `images/ranks/r${t}.webp`;
 }
 
@@ -2658,8 +2658,8 @@ wrap.addEventListener('click', (ev)=>{
   wrap.style.right = '790px';   // ← 先給你一個起始值；覺得太左/太右再改這個
   wrap.style.opacity = '0.98';
 
-  // 圖：只有 tier 1~7 才有
-  if(tier >= 1){
+// 圖：tier 0~7 都有圖
+if(tier >= 0){
     const img = document.createElement('img');
     img.alt = `rank-r${tier}`;
     img.src = rankUrlByTier(tier);
