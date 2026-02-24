@@ -1222,6 +1222,7 @@ let __flagId = 1;           // cloud stats.wall.flagId
 let __saving = false;
 let __viewOnly = false;
 let __viewUserId = null;
+let __myUserId = 0; // ✅ 本機登入者（我自己）的 user_id
 
 // ===== basic utils =====
 function clamp(n, a, b){ n = Number(n); if(!Number.isFinite(n)) n = a; return Math.max(a, Math.min(b, n)); }
@@ -1386,6 +1387,30 @@ async function cloudRankBoard(limit=100){
   });
 }
 
+function getLocalMyUserId(){
+  const v = Number(localStorage.getItem('op_user_id') || 0);
+  return Number.isFinite(v) && v > 0 ? v : 0;
+}
+
+async function ensureMyUserId(){
+  // 1) 先吃本機存的
+  __myUserId = getLocalMyUserId();
+  if(__myUserId) return __myUserId;
+
+  // 2) 沒存就用 opSecret 去雲端拿一次自己的 profile（只取 user_id）
+  const s = String(localStorage.getItem('opSecret') || '').trim();
+  if(!s) return 0;
+
+  const me = await cloudGet(s);
+  const uid = Number(me?.user_id || 0);
+
+  if(Number.isFinite(uid) && uid > 0){
+    __myUserId = uid;
+    localStorage.setItem('op_user_id', String(uid)); // ✅ 回寫，下次不用再打 PROFILE_GET
+  }
+  return __myUserId || 0;
+}
+
 function rankNameByTier(t){
   const RANK_NAME = {
     0:'新人定位賽',
@@ -1449,8 +1474,9 @@ async function showRankBoard(){
 const uid = p?.user_id;
 row.style.cursor = uid ? 'pointer' : 'default';
 
-// 目前登入者自己的 user_id（從已載入的雲端資料拿）
-const myUid = Number(__cloudProfile?.user_id || 0);
+
+// ✅ 目前登入者自己的 user_id（不受參觀模式影響）
+const myUid = Number(__myUserId || 0);
 
 if(uid){
   if(Number(uid) === myUid){
@@ -2383,6 +2409,9 @@ async function saveClientToCloud(nextClient, {reason=''} = {}){
 
 // ===== init =====
 async function boot(){
+await ensureMyUserId(); // ✅ 不管是自己頁/參觀頁，都先拿到「我自己的 id」
+
+
   const qs = new URLSearchParams(location.search);
   const view = String(qs.get('view') || '').trim();
 
