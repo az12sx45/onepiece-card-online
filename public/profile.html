@@ -1493,8 +1493,7 @@ if(uid){
     });
   }
 }
-
-    const iconTier = (tier>=1 ? tier : 1); // tier=0 沒圖就先用 r1 當佔位（你也可以改成不顯示）
+const iconTier = tier; // 0~7 原樣顯示
     const metaLine1 = (tier===0)
       ? `定位賽 ${Math.max(0,Math.min(3,games))}/3`
       : (tier>=7 ? `${rankNameByTier(7)} +${Math.max(0,rp)}` : `${rankNameByTier(tier)} (R${tier})`);
