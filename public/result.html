@@ -1574,9 +1574,21 @@ async function cloudApplyMatchResult(socket, final){
       const name  = String(r?.name || pm?.name || pm?.displayName || '').trim();
       const avatar = String(pm?.avatar ?? r?.avatar ?? '');
       const userId = Number(pm?.userId || pm?.user_id || 0) || 0;
-      return { userId, name, avatar, place, coins };
+      return { seatId: Number(r?.id ?? id ?? 0) || 0, userId, name, avatar, place, coins };
     });
   })();
+
+  // 若 playersMeta 沒帶 userId：至少把「自己」那格補上（讓個人頁 recent 能抓到）
+  try{
+    const myUid0 = Number(prof?.user_id || 0) || 0;
+    if(myUid0){
+      for(const p of playersForHistory){
+        if(Number(p?.seatId||0) === Number(myId) && (!Number(p?.userId||0))){
+          p.userId = myUid0;
+        }
+      }
+    }
+  }catch(e){}
 
   // 本場名次 / 金幣
   const ranking = Array.isArray(final?.ranking) ? final.ranking : [];
