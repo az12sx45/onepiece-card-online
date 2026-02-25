@@ -1674,7 +1674,7 @@ async function cloudApplyMatchResult(socket, final){
         }, ()=>resolve(true));
       });
 
-      // 取本局 RP（從 op_rank_ui.meta.deltaRP 或 deltaText 解析）
+      // 取本局 RP（優先從 op_rank_ui.meta.deltaRP；不在就從畫面文字解析）
       let deltaRP = null;
       try{
         const ui = JSON.parse(sessionStorage.getItem('op_rank_ui')||'null');
@@ -1685,6 +1685,17 @@ async function cloudApplyMatchResult(socket, final){
           if(m) deltaRP = Number(m[1]);
         }
       }catch(e){}
+
+      // fallback：直接從結算頁 UI 的文字抓（避免 sessionStorage 沒保存）
+      if(deltaRP==null){
+        try{
+          const t1 = (document.getElementById('rankDelta')?.textContent || '').trim();
+          const t2 = (document.getElementById('rankChangeText')?.textContent || '').trim();
+          const s = t1 || t2;
+          const m = s.match(/([+\-]?\d+)\s*RP/i);
+          if(m) deltaRP = Number(m[1]);
+        }catch(e){}
+      }
 
       const myUid = Number(prof?.user_id || 0) || 0;
       if(myUid && deltaRP!=null && Number.isFinite(deltaRP)){
