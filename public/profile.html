@@ -900,7 +900,60 @@
   margin-top:2px;
 }
 
-  </style>
+  
+/* === 方案B：本局戰報彈窗 === */
+#matchModalBack{
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,.78);
+}
+#matchModalBack[aria-hidden="false"]{ display:flex; }
+.matchModal{
+  width: min(720px, 92vw);
+  max-height: min(78vh, 760px);
+  overflow: auto;
+  background: #141a1f;
+  border: 1px solid #2a3038;
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 30px 80px rgba(0,0,0,.55);
+}
+.matchModalHd{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom: 10px;
+}
+.matchModalTitle{ font-weight:900; letter-spacing:.4px; }
+.matchModalClose{
+  border: 1px solid #2a3038;
+  background: transparent;
+  color: #e9f0f8;
+  border-radius: 10px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+.matchRow{
+  display:grid;
+  grid-template-columns: 58px 56px 1fr auto;
+  gap: 10px;
+  align-items:center;
+  padding: 10px;
+  border: 1px solid #2a3038;
+  border-radius: 12px;
+  margin: 8px 0;
+  background: rgba(255,255,255,.02);
+}
+.matchRow .idx{ font-weight:900; color:#ffd36b; }
+.matchRow .ava img{ width:44px; height:44px; border-radius: 12px; object-fit: cover; }
+.matchRow .name{ font-weight:800; }
+.matchRow .meta{ color:#9aa5b2; font-size: 12px; }
+</style>
 
   <!-- Socket.IO -->
   <script src="https://onepiece-card-online.onrender.com/socket.io/socket.io.js"></script>
@@ -1011,9 +1064,9 @@
               <thead>
                 <tr>
                   <th style="width:140px">時間</th>
-                  <th style="width:80px">名次</th>
+                  <th style="width:140px">名次</th>
                   <th style="width:90px">金幣</th>
-                  <th>本局解鎖</th>
+                  <th style="width:90px">本局RP</th>
                 </tr>
               </thead>
               <tbody id="recentTbody"></tbody>
@@ -1220,6 +1273,9 @@ let __client = null;         // cloud stats.client
 let __wallId = 1;            // cloud stats.wall.id
 let __flagId = 1;           // cloud stats.wall.flagId
 let __saving = false;
+let __recentMatches = null;      // 方案B：match_history 最近10局（雲端）
+let __recentMatchesLoading = false;
+
 let __viewOnly = false;
 let __viewUserId = null;
 let __myUserId = 0; // ✅ 本機登入者（我自己）的 user_id
@@ -1386,6 +1442,25 @@ async function cloudRankBoard(limit=100){
     });
   });
 }
+
+async function cloudMatchRecent(userId, limit=10){
+  return await new Promise((resolve)=>{
+    socket.timeout(9000).emit('MATCH_HISTORY_RECENT', { userId, limit }, (err, res)=>{
+      if(err || !res?.ok) return resolve([]);
+      resolve(Array.isArray(res.list) ? res.list : []);
+    });
+  });
+}
+
+async function cloudMatchGet(matchKey){
+  return await new Promise((resolve)=>{
+    socket.timeout(9000).emit('MATCH_HISTORY_GET', { matchKey }, (err, res)=>{
+      if(err || !res?.ok) return resolve(null);
+      resolve(res.match || null);
+    });
+  });
+}
+
 
 function getLocalMyUserId(){
   const v = Number(localStorage.getItem('op_user_id') || 0);
@@ -2261,31 +2336,144 @@ function renderTitles(){
 
 function renderRecent(){
   const tb = document.getElementById('recentTbody');
-  tb.innerHTML = '';
+  if(!tb) return;
 
-  const recent = Array.isArray(__client?.recent) ? __client.recent : [];
-  if (!recent.length){
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td class="muted" colspan="4">尚無紀錄。</td>`;
-    tb.appendChild(tr);
+  // ✅ 方案B：recent 改讀 match_history（雲端）
+  if(__recentMatchesLoading){
+    tb.innerHTML = `<tr><td class="muted" colspan="4">讀取中…</td></tr>`;
     return;
   }
 
-  for (const r of recent.slice(0,10)){
-    const place = (r.place==null || r.place==='') ? '-' : String(r.place);
-    const coins = (r.coinsGain==null || r.coinsGain==='') ? '-' : String(r.coinsGain);
-    const unlocked = Array.isArray(r.unlocked) ? r.unlocked : [];
-    const unlockedTxt = unlocked.length ? unlocked.map(n=>`#${n}`).join(' ') : '-';
+  const list = Array.isArray(__recentMatches) ? __recentMatches : [];
+  tb.innerHTML = '';
+
+  if(!list.length){
+    tb.innerHTML = `<tr><td class="muted" colspan="4">尚無紀錄。</td></tr>`;
+    return;
+  }
+
+  for(const r of list.slice(0,10)){
+    const ts = Number(r.endedAt||0) || 0;
+    const pc = Number(r.playerCount||0) || 0;
+    const myPlace = Number(r.myPlace||0) || 0;
+    const myCoins = Number(r.myCoins||0) || 0;
+    const myRp = (r.myRp==null || !Number.isFinite(Number(r.myRp))) ? '—' : (Number(r.myRp)>0?`+${Number(r.myRp)}`:String(Number(r.myRp)));
+
+    const rankTxt = (pc && myPlace) ? `${pc}人局第${myPlace}名` : '—';
+
     const tr = document.createElement('tr');
+    tr.style.cursor = r.matchKey ? 'pointer' : 'default';
     tr.innerHTML = `
-      <td>${fmtTs(r.ts)}</td>
-      <td class="rank">${place}</td>
-      <td>${coins}</td>
-      <td>${unlockedTxt}</td>
+      <td>${fmtTs(ts)}</td>
+      <td class="rank">${escapeHtml(rankTxt)}</td>
+      <td>${escapeHtml(String(myCoins||0))}</td>
+      <td>${escapeHtml(String(myRp))}</td>
     `;
+
+    if(r.matchKey){
+      tr.title = '點擊查看本局戰報';
+      tr.addEventListener('click', ()=> openMatchModal(r.matchKey));
+    }
     tb.appendChild(tr);
   }
 }
+
+async function loadRecentMatches(){
+  const uid = Number(__cloudProfile?.user_id || 0) || 0;
+  if(!uid) return;
+  __recentMatchesLoading = true;
+  renderRecent();
+  try{
+    __recentMatches = await cloudMatchRecent(uid, 10);
+  }catch(e){
+    __recentMatches = [];
+  }
+  __recentMatchesLoading = false;
+  renderRecent();
+}
+
+function openMatchModalShell(){
+  const back = document.getElementById('matchModalBack');
+  if(!back) return;
+  back.style.display = 'flex';
+  back.setAttribute('aria-hidden','false');
+}
+function closeMatchModal(){
+  const back = document.getElementById('matchModalBack');
+  if(!back) return;
+  back.style.display = 'none';
+  back.setAttribute('aria-hidden','true');
+}
+
+document.getElementById('matchModalClose')?.addEventListener('click', closeMatchModal);
+document.getElementById('matchModalBack')?.addEventListener('click', (ev)=>{
+  if(ev.target && ev.target.id==='matchModalBack') closeMatchModal();
+});
+
+async function openMatchModal(matchKey){
+  openMatchModalShell();
+  const listEl = document.getElementById('matchModalList');
+  const titleEl = document.getElementById('matchModalTitle');
+  if(listEl) listEl.innerHTML = `<div class="muted">讀取中…</div>`;
+  if(titleEl) titleEl.textContent = '本局戰報';
+
+  const match = await cloudMatchGet(matchKey);
+  if(!match){
+    if(listEl) listEl.innerHTML = `<div class="muted">查無資料。</div>`;
+    return;
+  }
+
+  const endedAt = Number(match.endedAt||0) || 0;
+  const players = Array.isArray(match.players) ? match.players : [];
+  players.sort((a,b)=> (Number(a.place||0)||999) - (Number(b.place||0)||999));
+
+  if(titleEl){
+    titleEl.textContent = `本局戰報｜${fmtTs(endedAt)}`;
+  }
+
+  if(!listEl) return;
+  if(!players.length){
+    listEl.innerHTML = `<div class="muted">沒有玩家資料。</div>`;
+    return;
+  }
+
+  const myUid = Number(__myUserId || 0);
+  listEl.innerHTML = '';
+
+  players.forEach((p)=>{
+    const uid = Number(p?.userId||0) || 0;
+    const name = String(p?.name || '未命名玩家').trim();
+    const avatarId = Number(p?.avatar||0) || 1;
+    const place = Number(p?.place||0) || 0;
+    const coins = Number(p?.coins||0) || 0;
+
+    const row = document.createElement('div');
+    row.className = 'matchRow';
+    row.style.cursor = uid ? 'pointer' : 'default';
+
+    row.innerHTML = `
+      <div class="idx">#${place||'-'}</div>
+      <div class="ava"><img src="${avatarUrlById(avatarId)}" alt=""></div>
+      <div class="name">${escapeHtml(name)}</div>
+      <div class="meta">金幣：${escapeHtml(String(coins))}</div>
+    `;
+
+    if(uid){
+      if(uid === myUid){
+        row.title = '這是你自己（返回個人頁）';
+        row.addEventListener('click', ()=>{ location.href = 'profile.html'; });
+      }else{
+        row.title = '點擊參觀玩家個人頁';
+        row.addEventListener('click', ()=>{ location.href = `profile.html?view=${encodeURIComponent(uid)}`; });
+      }
+    }else{
+      row.title = 'CPU / 未登入玩家';
+    }
+
+    listEl.appendChild(row);
+  });
+}
+
 
 function renderLux(){
   const unlockedSet = new Set((__client?.deluxeUnlocked || []).map(n => Number(n)));
@@ -2404,6 +2592,7 @@ async function saveClientToCloud(nextClient, {reason=''} = {}){
   hideLoading();
   __saving = false;
   renderAll();
+  loadRecentMatches();
 }
 
 // ===== init =====
@@ -2480,6 +2669,7 @@ await ensureMyUserId(); // ✅ 不管是自己頁/參觀頁，都先拿到「我
 
   hideLoading();
   renderAll();
+  loadRecentMatches();
 }
 
 // ===== actions =====
@@ -2862,6 +3052,18 @@ document.getElementById('flagSave')?.addEventListener('click', async ()=>{
 
 boot();
 </script>
+
+  <!-- === 方案B：本局戰報彈窗 === -->
+  <div id="matchModalBack" aria-hidden="true">
+    <div class="matchModal" role="dialog" aria-modal="true">
+      <div class="matchModalHd">
+        <div class="matchModalTitle" id="matchModalTitle">本局戰報</div>
+        <button class="matchModalClose" id="matchModalClose">關閉</button>
+      </div>
+      <div id="matchModalList"></div>
+    </div>
+  </div>
+
 </body>
 </html>
 
