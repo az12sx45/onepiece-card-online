@@ -44,6 +44,36 @@ app.get("/health", (_req, res) => res.json({ ok: true, ts: Date.now() }));
 })();
 
 
+
+/* =========================
+ * Match History (方案B): 永久對戰紀錄
+ *  - match_history: 每局一筆（match_key 唯一）
+ *  - players: [{ userId, name, avatar, place, coins }]
+ *  - rp_map: { "<userId>": <deltaRP number> } 由各玩家結算頁回寫
+ * ========================= */
+async function ensureMatchHistoryTable(){
+  try{
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS match_history (
+        id SERIAL PRIMARY KEY,
+        match_key TEXT UNIQUE,
+        ended_at BIGINT,
+        players JSONB,
+        rp_map JSONB DEFAULT '{}'::jsonb
+      );
+    `);
+
+    // 查最近 10 局（依 ended_at）
+    await pool.query(`CREATE INDEX IF NOT EXISTS match_history_ended_at_idx ON match_history(ended_at DESC);`);
+
+    // players JSONB containment 查詢（players @> '[{"userId":123}]'）
+    await pool.query(`CREATE INDEX IF NOT EXISTS match_history_players_gin ON match_history USING GIN (players jsonb_path_ops);`);
+  }catch(e){
+    console.error("[db] ensureMatchHistoryTable failed:", e);
+  }
+}
+ensureMatchHistoryTable();
+
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
 
@@ -1115,6 +1145,144 @@ socket.on("PROFILE_UPDATE", async ({ secret, patch }, cb) => {
   }
 });
 
+
+// =====================
+// MATCH HISTORY（方案B）
+// =====================
+
+// 1) 結算頁寫入「這局有哪些人/名次/金幣」（一局一筆，match_key 去重）
+socket.on("MATCH_HISTORY_WRITE", async ({ matchKey, endedAt, players }, cb) => {
+  try{
+    matchKey = String(matchKey || "").trim();
+    endedAt = Number(endedAt || 0);
+    if(!matchKey) return cb?.({ ok:false, error:"bad matchKey" });
+    if(!Number.isFinite(endedAt) || endedAt<=0) endedAt = Date.now();
+    if(!Array.isArray(players) || !players.length) return cb?.({ ok:false, error:"bad players" });
+
+    // 瘦身 + 防呆（只留你要的欄位）
+    const slim = players
+      .map(p=>({
+        userId: Number(p?.userId || 0) || 0,
+        name: String(p?.name || "").slice(0, 32),
+        avatar: String(p?.avatar ?? ""),
+        place: Number(p?.place || 0) || 0,
+        coins: Number(p?.coins || 0) || 0,
+      }))
+      .filter(p=>p.place>0 && p.coins>=0); // place>=1
+
+    if(!slim.length) return cb?.({ ok:false, error:"empty slim players" });
+
+    await pool.query(
+      `
+      INSERT INTO match_history(match_key, ended_at, players, rp_map)
+      VALUES($1, $2, $3::jsonb, '{}'::jsonb)
+      ON CONFLICT (match_key) DO UPDATE SET
+        ended_at = EXCLUDED.ended_at,
+        players  = EXCLUDED.players
+      `,
+      [matchKey, endedAt, JSON.stringify(slim)]
+    );
+
+    return cb?.({ ok:true });
+  }catch(err){
+    console.error("[MATCH_HISTORY_WRITE] error:", err);
+    return cb?.({ ok:false, error:String(err.message || err) });
+  }
+});
+
+// 2) 結算頁回寫「自己的本局 RP」（只改 rp_map 裡的自己那格）
+socket.on("MATCH_HISTORY_RP_PATCH", async ({ matchKey, userId, deltaRP }, cb) => {
+  try{
+    matchKey = String(matchKey || "").trim();
+    const uid = Number(userId || 0);
+    const d = Number(deltaRP || 0);
+    if(!matchKey) return cb?.({ ok:false, error:"bad matchKey" });
+    if(!Number.isFinite(uid) || uid<=0) return cb?.({ ok:false, error:"bad userId" });
+    if(!Number.isFinite(d)) return cb?.({ ok:false, error:"bad deltaRP" });
+
+    await pool.query(
+      `
+      UPDATE match_history
+      SET rp_map = COALESCE(rp_map, '{}'::jsonb) || jsonb_build_object($2::text, $3)
+      WHERE match_key = $1
+      `,
+      [matchKey, uid, d]
+    );
+
+    return cb?.({ ok:true });
+  }catch(err){
+    console.error("[MATCH_HISTORY_RP_PATCH] error:", err);
+    return cb?.({ ok:false, error:String(err.message || err) });
+  }
+});
+
+// 3) 取某玩家最近 N 局（給個人頁最近10局）
+socket.on("MATCH_HISTORY_RECENT", async ({ userId, limit }, cb) => {
+  try{
+    const uid = Number(userId || 0);
+    const lim = Math.max(1, Math.min(50, Number(limit || 10) || 10));
+    if(!Number.isFinite(uid) || uid<=0) return cb?.({ ok:false, error:"bad userId" });
+
+    const needle = JSON.stringify([{ userId: uid }]);
+
+    const { rows } = await pool.query(
+      `
+      SELECT match_key, ended_at, players, rp_map
+      FROM match_history
+      WHERE players @> $1::jsonb
+      ORDER BY ended_at DESC NULLS LAST
+      LIMIT $2
+      `,
+      [needle, lim]
+    );
+
+    const list = (rows || []).map(r=>{
+      const players = Array.isArray(r.players) ? r.players : [];
+      const me = players.find(p => Number(p?.userId||0) === uid) || null;
+      const rpMap = (r.rp_map && typeof r.rp_map === 'object') ? r.rp_map : {};
+      const myRp = (rpMap && Object.prototype.hasOwnProperty.call(rpMap, String(uid))) ? Number(rpMap[String(uid)]) : null;
+
+      return {
+        matchKey: r.match_key,
+        endedAt: Number(r.ended_at || 0) || 0,
+        playerCount: players.length,
+        myPlace: Number(me?.place || 0) || 0,
+        myCoins: Number(me?.coins || 0) || 0,
+        myRp, // 可能 null（尚未回寫）
+      };
+    });
+
+    return cb?.({ ok:true, list });
+  }catch(err){
+    console.error("[MATCH_HISTORY_RECENT] error:", err);
+    return cb?.({ ok:false, error:String(err.message || err) });
+  }
+});
+
+// 4) 取單局完整資料（點擊最近10局 → 彈窗顯示所有人）
+socket.on("MATCH_HISTORY_GET", async ({ matchKey }, cb) => {
+  try{
+    matchKey = String(matchKey || "").trim();
+    if(!matchKey) return cb?.({ ok:false, error:"bad matchKey" });
+
+    const { rows } = await pool.query(
+      `SELECT match_key, ended_at, players, rp_map FROM match_history WHERE match_key=$1 LIMIT 1`,
+      [matchKey]
+    );
+    const r = rows[0] || null;
+    if(!r) return cb?.({ ok:false, error:"not found" });
+
+    return cb?.({ ok:true, match:{
+      matchKey: r.match_key,
+      endedAt: Number(r.ended_at || 0) || 0,
+      players: Array.isArray(r.players) ? r.players : [],
+      rpMap: (r.rp_map && typeof r.rp_map==='object') ? r.rp_map : {},
+    }});
+  }catch(err){
+    console.error("[MATCH_HISTORY_GET] error:", err);
+    return cb?.({ ok:false, error:String(err.message || err) });
+  }
+});
 // ====== 段位排行榜：回傳所有玩家段位（供 profile.html 點段位圖時顯示） ======
 socket.on("RANK_LEADERBOARD", async ({ limit=200 } = {}, cb) => {
   try {
