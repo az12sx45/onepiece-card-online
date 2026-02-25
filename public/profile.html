@@ -3064,6 +3064,35 @@ boot();
     </div>
   </div>
 
+
+<script>
+(function(){
+  function bind(){
+    const closeBtn = document.getElementById('matchModalClose');
+    const back = document.getElementById('matchModalBack');
+    if(closeBtn && !closeBtn.__bound){
+      closeBtn.__bound = true;
+      closeBtn.addEventListener('click', function(){
+        try{ if(typeof closeMatchModal==='function') closeMatchModal(); }catch(e){}
+      });
+    }
+    if(back && !back.__bound){
+      back.__bound = true;
+      back.addEventListener('click', function(ev){
+        if(ev && ev.target && ev.target.id==='matchModalBack'){
+          try{ if(typeof closeMatchModal==='function') closeMatchModal(); }catch(e){}
+        }
+      });
+    }
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', bind);
+  }else{
+    bind();
+  }
+})();
+</script>
+
 </body>
 </html>
 
