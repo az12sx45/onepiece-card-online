@@ -1321,6 +1321,7 @@ function captureRankUiMeta(before, after){
   const b = ensureRank(before);
   const a = ensureRank(after);
 
+  // 定位賽：沒有 RP，用 placement.score 當成「本局表現變動」
   if(b.tier === 0 || a.tier === 0){
     const bg = b.placement?.games ?? 0;
     const ag = a.placement?.games ?? 0;
@@ -1329,16 +1330,18 @@ function captureRankUiMeta(before, after){
     const perfTxt = (ds !== 0) ? `（${fmtSigned(ds.toFixed(3))}）` : '';
     return {
       deltaText: txt ? (txt + perfTxt) : '',
-      deltaSign: (ds>0?1:(ds<0?-1:0))
+      deltaSign: (ds>0?1:(ds<0?-1:0)),
+      deltaRP: null
     };
   }
 
   const d = (Number(a.rp)||0) - (Number(b.rp)||0);
-  if(a.tier > b.tier) return { deltaText:`↑ 升級！`, deltaSign: +1 };
-  if(a.tier < b.tier) return { deltaText:`↓ 降級`, deltaSign: -1 };
 
-  if(d === 0) return { deltaText:'', deltaSign:0 };
-  return { deltaText:`${fmtSigned(d)} RP`, deltaSign:(d>0?1:-1) };
+  if(a.tier > b.tier) return { deltaText:`↑ 升級！`, deltaSign: +1, deltaRP: d };
+  if(a.tier < b.tier) return { deltaText:`↓ 降級`, deltaSign: -1, deltaRP: d };
+
+  if(d === 0) return { deltaText:'', deltaSign:0, deltaRP: 0 };
+  return { deltaText:`${fmtSigned(d)} RP`, deltaSign:(d>0?1:-1), deltaRP: d };
 }
 
 /* ===== 段位進度：讀雲端 rank 並顯示 ===== */
@@ -1556,6 +1559,24 @@ async function cloudApplyMatchResult(socket, final){
   const season = final?.seasonNo ?? final?.season ?? '';
   const endedAt = Number(final?.endedAt || final?.ts || Date.now());
   const matchKey = `${rid}|${season}|${secret}|${endedAt}`;
+  // ✅ 方案B：全局 matchKey（同一局所有人共用）
+  const matchKeyGlobal = `${rid}|${season}|${endedAt}`;
+
+  // ✅ 方案B：準備寫入 match_history 的 players（只放必要欄位）
+  const playersForHistory = (()=>{
+    const arr = Array.isArray(final?.ranking) ? final.ranking : [];
+    const meta = (final?.playersMeta && typeof final.playersMeta==='object') ? final.playersMeta : {};
+    return arr.map((r, idx)=>{
+      const id = (r?.id ?? r?.pid ?? r?.playerId);
+      const pm = (id!=null && meta[String(id)]) ? meta[String(id)] : (id!=null && meta[id]) ? meta[id] : {};
+      const place = Number(r?.place || r?.rank || r?.pos || (idx+1)) || (idx+1);
+      const coins = Number(r?.coins ?? r?.coin ?? pm?.coins ?? pm?.coin ?? 0) || 0;
+      const name  = String(r?.name || pm?.name || pm?.displayName || '').trim();
+      const avatar = String(pm?.avatar ?? r?.avatar ?? '');
+      const userId = Number(pm?.userId || pm?.user_id || 0) || 0;
+      return { userId, name, avatar, place, coins };
+    });
+  })();
 
   // 本場名次 / 金幣
   const ranking = Array.isArray(final?.ranking) ? final.ranking : [];
@@ -1630,6 +1651,44 @@ async function cloudApplyMatchResult(socket, final){
 
   // ===== Rank：已改為「game 結束時」計算並寫入雲端；結算頁僅顯示 =====
   await cloudSaveClient(socket, c);
+  // ✅ 方案B：寫入 match_history（不影響遊戲流程，失敗就略過）
+  try{
+    if(socket && socket.connected){
+      await new Promise((resolve)=>{
+        socket.timeout(6000).emit('MATCH_HISTORY_WRITE', {
+          matchKey: matchKeyGlobal,
+          endedAt,
+          players: playersForHistory
+        }, ()=>resolve(true));
+      });
+
+      // 取本局 RP（從 op_rank_ui.meta.deltaRP 或 deltaText 解析）
+      let deltaRP = null;
+      try{
+        const ui = JSON.parse(sessionStorage.getItem('op_rank_ui')||'null');
+        const meta = ui?.meta || null;
+        if(meta && Number.isFinite(Number(meta.deltaRP))) deltaRP = Number(meta.deltaRP);
+        if(deltaRP==null && meta?.deltaText){
+          const m = String(meta.deltaText).match(/^([+\-]?\d+)\s*RP/i);
+          if(m) deltaRP = Number(m[1]);
+        }
+      }catch(e){}
+
+      const myUid = Number(prof?.user_id || 0) || 0;
+      if(myUid && deltaRP!=null && Number.isFinite(deltaRP)){
+        await new Promise((resolve)=>{
+          socket.timeout(6000).emit('MATCH_HISTORY_RP_PATCH', {
+            matchKey: matchKeyGlobal,
+            userId: myUid,
+            deltaRP
+          }, ()=>resolve(true));
+        });
+      }
+    }
+  }catch(e){
+    console.warn('[match_history write failed]', e);
+  }
+
 }
 
 /** 按「存到個人頁面」：把 LAST_POSTER_META 寫入雲端 */
