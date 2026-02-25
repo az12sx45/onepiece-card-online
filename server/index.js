@@ -1160,15 +1160,69 @@ socket.on("MATCH_HISTORY_WRITE", async ({ matchKey, endedAt, players }, cb) => {
     if(!Array.isArray(players) || !players.length) return cb?.({ ok:false, error:"bad players" });
 
     // 瘦身 + 防呆（只留你要的欄位）
-    const slim = players
-      .map(p=>({
-        userId: Number(p?.userId || 0) || 0,
-        name: String(p?.name || "").slice(0, 32),
-        avatar: String(p?.avatar ?? ""),
-        place: Number(p?.place || 0) || 0,
-        coins: Number(p?.coins || 0) || 0,
-      }))
-      .filter(p=>p.place>0 && p.coins>=0); // place>=1
+// 重要：userId 若前端沒帶到（=0），這裡會嘗試用「room / seatId」補齊
+const slimRaw = players
+  .map(p=>({
+    seatId: Number(p?.seatId ?? p?.id ?? p?.playerId ?? 0) || 0,
+    userId: Number(p?.userId || 0) || 0,
+    name: String(p?.name || "").slice(0, 32),
+    avatar: String(p?.avatar ?? ""),
+    place: Number(p?.place || 0) || 0,
+    coins: Number(p?.coins || 0) || 0,
+  }))
+  .filter(p=>p.place>0 && p.coins>=0); // place>=1
+
+// 依 matchKey 解析 roomId（matchKey 格式："<roomId>|<season>|<endedAt>"）
+const roomIdFromKey = String(matchKey).split("|")[0] || "";
+const room = roomIdFromKey ? rooms.get(roomIdFromKey) : null;
+
+// 若 room 存在：用 room.sockets(meta.playerId + meta.secret) 反查 user_id，補齊 slimRaw.userId
+let seatIdToUser = new Map();
+if (room && room.sockets){
+  // 建 seatId -> secret
+  const seatIdToSecret = new Map();
+  for (const [,meta] of room.sockets){
+    const sid = Number(meta?.playerId ?? -1);
+    const sec = String(meta?.secret || "").trim();
+    if (sid>=0 && sec) seatIdToSecret.set(sid, sec);
+  }
+
+  // 批次查 secret -> user_id/name/avatar
+  const secrets = Array.from(new Set(Array.from(seatIdToSecret.values())));
+  if (secrets.length){
+    try{
+      const { rows: profs } = await pool.query(
+        `SELECT secret, user_id, name, avatar FROM player_profiles WHERE secret = ANY($1::text[])`,
+        [secrets]
+      );
+      const bySecret = new Map((profs||[]).map(r=>[String(r.secret), r]));
+      for (const [sid, sec] of seatIdToSecret.entries()){
+        const pr = bySecret.get(sec);
+        if (pr){
+          seatIdToUser.set(sid, {
+            userId: Number(pr.user_id||0) || 0,
+            name: String(pr.name||"").slice(0,32),
+            avatar: String(pr.avatar ?? "")
+          });
+        }
+      }
+    }catch(e){
+      console.error("[MATCH_HISTORY_WRITE] enrich userId failed:", e);
+    }
+  }
+}
+
+const slim = slimRaw.map(p=>{
+  if(!p.userId && p.seatId && seatIdToUser.has(p.seatId)){
+    const filled = seatIdToUser.get(p.seatId);
+    return { ...p,
+      userId: filled.userId || 0,
+      name: p.name || filled.name || p.name,
+      avatar: p.avatar || filled.avatar || p.avatar
+    };
+  }
+  return p;
+});
 
     if(!slim.length) return cb?.({ ok:false, error:"empty slim players" });
 
