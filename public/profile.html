@@ -1047,14 +1047,6 @@
           <div class="divider"></div>
 
           <div class="row" style="justify-content:space-between">
-            <div style="font-weight:800">稱號圖鑑</div>
-            <div class="muted" style="font-size:11px">已解鎖顯示稱號；未解鎖顯示「?????」。點擊已解鎖可佩戴（寫入雲端）</div>
-          </div>
-          <div class="muted" style="font-size:12px;margin-top:8px">稱號圖鑑已移到頁面最下方（完整展開）。</div>
-
-          <div class="divider"></div>
-
-          <div class="row" style="justify-content:space-between">
             <div style="font-weight:800">最近 10 局</div>
             <div class="muted" style="font-size:11px">雲端資料</div>
           </div>
@@ -1066,7 +1058,6 @@
                   <th style="width:140px">時間</th>
                   <th style="width:140px">名次</th>
                   <th style="width:90px">金幣</th>
-                  <th style="width:90px">本局RP</th>
                 </tr>
               </thead>
               <tbody id="recentTbody"></tbody>
@@ -2340,7 +2331,7 @@ function renderRecent(){
 
   // ✅ 方案B：recent 改讀 match_history（雲端）
   if(__recentMatchesLoading){
-    tb.innerHTML = `<tr><td class="muted" colspan="4">讀取中…</td></tr>`;
+    tb.innerHTML = `<tr><td class="muted" colspan="3">讀取中…</td></tr>`;
     return;
   }
 
@@ -2348,7 +2339,7 @@ function renderRecent(){
   tb.innerHTML = '';
 
   if(!list.length){
-    tb.innerHTML = `<tr><td class="muted" colspan="4">尚無紀錄。</td></tr>`;
+    tb.innerHTML = `<tr><td class="muted" colspan="3">尚無紀錄。</td></tr>`;
     return;
   }
 
@@ -2363,12 +2354,11 @@ function renderRecent(){
 
     const tr = document.createElement('tr');
     tr.style.cursor = r.matchKey ? 'pointer' : 'default';
-    tr.innerHTML = `
-      <td>${fmtTs(ts)}</td>
-      <td class="rank">${escapeHtml(rankTxt)}</td>
-      <td>${escapeHtml(String(myCoins||0))}</td>
-      <td>${escapeHtml(String(myRp))}</td>
-    `;
+tr.innerHTML = `
+  <td>${fmtTs(ts)}</td>
+  <td class="rank">${escapeHtml(rankTxt)}</td>
+  <td>${escapeHtml(String(myCoins||0))}</td>
+`;
 
     if(r.matchKey){
       tr.title = '點擊查看本局戰報';
