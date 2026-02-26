@@ -578,7 +578,8 @@ try{
     async function cloudUpdate(secret, patch){
       return await new Promise((resolve)=>{
         socket.timeout(8000).emit('PROFILE_UPDATE', { secret, patch }, (err, res)=>{
-          resolve(!err && !!res?.ok);
+          if(err) return resolve({ ok:false, error:'timeout' });
+          resolve(res || { ok:false, error:'unknown' });
         });
       });
     }
@@ -1007,7 +1008,7 @@ const avatarUrl = `images/avatars/${avatar}.webp`;
         setSaving(true);
         setErr("");
 
-        const ok = await cloudUpdate(secret, (prev=>({
+        const res = await cloudUpdate(secret, (prev=>({
           name: safe,
           avatar: String(avatar),
           stats: {
@@ -1023,8 +1024,14 @@ const avatarUrl = `images/avatars/${avatar}.webp`;
 
         setSaving(false);
 
-        if(!ok){
-          setErr("雲端儲存失敗，請重試（確認網路/伺服器）");
+        if(!res?.ok){
+          if(res?.error === 'name_taken'){
+            setErr('此名稱已有人取用（全服不可重複），請換一個。');
+          }else if(res?.error === 'bad_name'){
+            setErr('名稱不合法：請輸入 1~16 字，不能全空白。');
+          }else{
+            setErr("雲端儲存失敗，請重試（確認網路/伺服器）");
+          }
           return;
         }
 
