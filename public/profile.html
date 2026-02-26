@@ -1420,7 +1420,8 @@ async function cloudGetPublic(userId){
 async function cloudUpdate(secret, patch){
   return await new Promise((resolve)=>{
     socket.timeout(9000).emit('PROFILE_UPDATE', { secret, patch }, (err, res)=>{
-      resolve(!err && !!res?.ok);
+      if(err) return resolve({ ok:false, error:'timeout' });
+      resolve(res || { ok:false, error:'unknown' });
     });
   });
 }
@@ -2569,12 +2570,18 @@ async function saveClientToCloud(nextClient, {reason=''} = {}){
     }
   };
 
-  const ok = await cloudUpdate(__secret, patch);
+  const res = await cloudUpdate(__secret, patch);
 
-  if(!ok){
-    showLoading('雲端儲存失敗', '請確認網路，或稍後再試。', true);
+  if(!res?.ok){
+    if(res?.error === 'name_taken'){
+      showLoading('名稱已被使用', '此名稱已有人取用（全服不可重複），請換一個。', true);
+    }else if(res?.error === 'bad_name'){
+      showLoading('名稱不合法', '請輸入 1~16 字，不能全空白。', true);
+    }else{
+      showLoading('雲端儲存失敗', '請確認網路，或稍後再試。', true);
+    }
     __saving = false;
-    return;
+    return { ok:false, error: res?.error || 'save_failed' };
   }
 
   // 儲存成功：更新 memory state（不落地）
@@ -2583,6 +2590,8 @@ async function saveClientToCloud(nextClient, {reason=''} = {}){
   __saving = false;
   renderAll();
   loadRecentMatches();
+
+  return { ok:true };
 }
 
 // ===== init =====
@@ -2686,6 +2695,7 @@ document.getElementById('nameCancel').onclick = closeName;
 document.getElementById('nameSave').onclick = async () => {
   if(__saving) return;
 
+  const oldName = String(__cloudProfile?.name || '未命名玩家');
   const v = clampStr(nameInput.value, 16) || '未命名玩家';
   __cloudProfile.name = v;
 
@@ -2694,7 +2704,11 @@ document.getElementById('nameSave').onclick = async () => {
   next.player = { ...(next.player||{}), name: v, avatar: clamp(__cloudProfile?.avatar||1, 1, AVATAR_COUNT) };
 
   // 直接寫回雲端（name/avatar/stats.client）
-  await saveClientToCloud(next, { reason:'修改名稱' });
+  const r = await saveClientToCloud(next, { reason:'修改名稱' });
+  if(!r?.ok){
+    __cloudProfile.name = oldName; // 失敗要回復
+    return;
+  }
 
   closeName();
 };
