@@ -74,6 +74,26 @@ async function ensureMatchHistoryTable(){
 }
 ensureMatchHistoryTable();
 
+/* =========================
+ * Player Name Uniqueness
+ *  - Enforce global unique display name (case-insensitive, trimmed)
+ *  - App-level check is primary; DB unique index is a safety net
+ * ========================= */
+async function ensurePlayerNameUniqueIndex(){
+  try{
+    // NOTE: if existing data already contains duplicates, this CREATE may fail.
+    // We still keep the runtime check in PROFILE_UPDATE to enforce going forward.
+    await pool.query(`
+      CREATE UNIQUE INDEX IF NOT EXISTS player_profiles_name_unique_ci
+      ON player_profiles (lower(btrim(name)))
+      WHERE btrim(name) <> '';
+    `);
+  }catch(e){
+    console.warn("[db] ensurePlayerNameUniqueIndex skipped/failed:", String(e?.message||e));
+  }
+}
+ensurePlayerNameUniqueIndex();
+
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
 
@@ -1094,8 +1114,27 @@ socket.on("PROFILE_UPDATE", async ({ secret, patch }, cb) => {
     const has = (k) => Object.prototype.hasOwnProperty.call(patch, k);
 
     // ✅ 沒傳就不改（避免其它頁只更新 stats 時把 name/avatar 洗成空字串）
-    const nameParam   = has("name")   ? String(patch.name ?? "") : null;
+    let nameParam   = has("name")   ? String(patch.name ?? "") : null;
     const avatarParam = has("avatar") ? String(patch.avatar ?? "") : null;
+
+    // =============================
+    // ✅ 名稱：全服唯一（大小寫不分、去頭尾空白）
+    // =============================
+    if (nameParam !== null) {
+      const cleaned = String(nameParam).replace(/\s+/g, ' ').trim();
+      if (!cleaned) return cb?.({ ok:false, error:"bad_name" });
+      if (cleaned.length > 16) return cb?.({ ok:false, error:"bad_name" });
+
+      // 查：是否已被其他人使用（secret 不同才算衝突）
+      const dup = await pool.query(
+        `SELECT 1 FROM player_profiles WHERE lower(btrim(name)) = lower(btrim($2)) AND secret <> $1 LIMIT 1`,
+        [secret, cleaned]
+      );
+      if (dup.rows.length) return cb?.({ ok:false, error:"name_taken" });
+
+      // 用清理後的名字寫入（避免 "  路飛  " 這種）
+      nameParam = cleaned;
+    }
 
     // ✅ stats：JSONB 合併（保留 stats.client.shop / stats.client.titles / …）
     const statsParam = has("stats") ? JSON.stringify(patch.stats ?? {}) : null;
@@ -1141,6 +1180,10 @@ socket.on("PROFILE_UPDATE", async ({ secret, patch }, cb) => {
     cb?.({ ok: true, profile: rows[0] });
   } catch (err) {
     console.error("[PROFILE_UPDATE] error:", err);
+    // 23505 = unique_violation（若有建 unique index）
+    if (String(err?.code || '') === '23505') {
+      return cb?.({ ok:false, error:'name_taken' });
+    }
     cb?.({ ok: false, error: String(err.message || err) });
   }
 });
