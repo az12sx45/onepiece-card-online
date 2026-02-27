@@ -1761,7 +1761,7 @@ function titleTierOf(p){
   #friendDock{
     position:fixed;
     top:72px;
-    left:12px;
+    right:12px;
     z-index: 9998;
     width: 300px;
     height: min(640px, calc(100vh - 92px));
@@ -1891,12 +1891,12 @@ function titleTierOf(p){
   /* ===== Chat Tray (LoL style) ===== */
   #fdChatTray{
     position: fixed;
-    left:12px;
+    left: 12px;
     bottom: 12px;
     z-index: 9999;
     display: flex;
     justify-content: flex-start;
-    flex-direction: row; /* newest near right */
+    flex-direction: row-reverse; /* newest near left */
     align-items: flex-end;
     gap: 10px;
     pointer-events: none; /* allow clicks only on windows */
