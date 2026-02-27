@@ -3249,25 +3249,17 @@ boot();
 
   /* chat pane */
   .fd-chat{
-    position: fixed;
-    left: 16px;
-    bottom: 16px;
-    width: 360px;
-    height: 430px;
-    border:1px solid rgba(255,255,255,.10);
-    border-radius: 14px;
-    background: var(--fd-bg);
-    box-shadow: 0 18px 50px rgba(0,0,0,.45);
-    display:none;
+    width: 0;
+    border-left:1px solid rgba(255,255,255,.08);
+    background: rgba(0,0,0,.12);
+    display:flex;
     flex-direction:column;
+    min-height:0;
+    transition: width .18s ease;
     overflow:hidden;
-    z-index: 230;
   }
-  .fd-chat.open{ display:flex; }
-  .fd-chat.min{ height: 46px; }
-  .fd-chat.min .fd-chat-log,
-  .fd-chat.min .fd-chat-in{ display:none; }
-#friendDock.collapsed .fd-body, #friendDock.collapsed .fd-tools{ display:none; }
+  #friendDock.chat-open .fd-chat{ width: 360px; }
+  #friendDock.collapsed .fd-body, #friendDock.collapsed .fd-tools{ display:none; }
   #friendDock.collapsed .fd-hd{ justify-content:center; }
   #friendDock.collapsed .fd-title{ display:none; }
   #friendDock.collapsed .fd-mini{ display:none; }
@@ -3332,9 +3324,37 @@ boot();
     color: rgba(255,255,255,.70);
     border-top:1px dashed rgba(255,255,255,.10);
   }
+
+  /* === Chat panel (separate, left side) === */
+  .fd-chatpanel{
+    position:fixed;
+    top:72px;
+    left:12px;
+    z-index: 9997;
+    width: 360px;
+    height: min(640px, calc(100vh - 92px));
+    border:1px solid var(--fd-line);
+    border-radius: 16px;
+    background: linear-gradient(180deg, var(--fd-bg), var(--fd-bg2));
+    box-shadow: 0 18px 60px rgba(0,0,0,45);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    backdrop-filter: blur(10px);
+  }
+  .fd-chatpanel.hidden{ display:none; }
+  .fd-chatpanel.minimized{
+    height: 54px;
+    width: 280px;
+  }
+  .fd-chatpanel.minimized .fd-chat-log,
+  .fd-chatpanel.minimized .fd-chat-in{ display:none; }
+
+  /* Dock body becomes list-only (chat is separate) */
+  .fd-body{ display:flex; }
 </style>
 
-<div id="friendDock" class="collapsed" aria-label="friends-dock">
+<div id=\"friendDock\" class="collapsed" aria-label="friends-dock">
   <div class="fd-hd">
     <div class="left">
       <div class="fd-logo">💬</div>
@@ -3355,26 +3375,30 @@ boot();
       <div id="fdList" class="fd-list"></div>
       <div id="fdHint" class="fd-warn" style="display:none;"></div>
     </div>
+    </div>
+  </div>
+</div>
 
-    <div class="fd-chat">
-      <div class="fd-chat-hd">
-        <div class="fd-chat-peer">
-          <div class="fd-ava" style="width:28px;height:28px;"><img id="fdChatAva" alt=""></div>
-          <div style="min-width:0;">
-            <div class="n" id="fdChatName">—</div>
-            <div class="s" id="fdChatStatus">—</div>
-          </div>
-        </div>
-        <div style="display:flex;gap:6px;"><button class="fd-btn" id="fdChatMin" title="縮小/展開">—</button><button class="fd-btn" id="fdChatClose" title="關閉聊天">✕</button></div>
-      </div>
-
-      <div id="fdChatLog" class="fd-chat-log"></div>
-
-      <div class="fd-chat-in">
-        <input id="fdChatInp" class="fd-inp" placeholder="輸入訊息…（Enter 送出）" />
-        <button id="fdChatSend" class="fd-send">送出</button>
+<div id="friendChatPanel" class="fd-chatpanel hidden" aria-label="friend-chat">
+  <div class="fd-chat-hd">
+    <div class="fd-chat-peer">
+      <div class="fd-ava" style="width:28px;height:28px;"><img id="fdChatAva" alt=""></div>
+      <div style="min-width:0;">
+        <div class="n" id="fdChatName">—</div>
+        <div class="s" id="fdChatStatus">—</div>
       </div>
     </div>
+    <div class="fd-mini">
+      <button class="fd-btn" id="fdChatMinBtn" title="縮小/展開">▣</button>
+      <button class="fd-btn" id="fdChatClose" title="關閉聊天">✕</button>
+    </div>
+  </div>
+
+  <div id="fdChatLog" class="fd-chat-log"></div>
+
+  <div class="fd-chat-in">
+    <input id="fdChatInp" class="fd-inp" placeholder="輸入訊息…（Enter 送出）" />
+    <button id="fdChatSend" class="fd-send">送出</button>
   </div>
 </div>
 
@@ -3406,9 +3430,9 @@ boot();
   const addInp = q("#fdAddName");
   const addBtn = q("#fdAddBtn");
 
-  const chatEl = q("#fdChat");
   const chatClose = q("#fdChatClose");
-  const chatMin = q("#fdChatMin");
+  const chatPanel = q("#friendChatPanel");
+  const chatMinBtn = q("#fdChatMinBtn");
   const chatAva = q("#fdChatAva");
   const chatName = q("#fdChatName");
   const chatStatus = q("#fdChatStatus");
@@ -3559,11 +3583,11 @@ boot();
   function setActivePeer(f, openChat){
     activePeer = f;
     unread.set(f.userId, 0);
-    if(openChat){
-      chatEl?.classList.add("open");
-      chatEl?.classList.remove("min");
-    }
-    chatAva.src = avatarUrlById(f.avatar);
+  if(openChat){
+    if(chatPanel) chatPanel.classList.remove("hidden");
+    if(chatPanel) chatPanel.classList.remove("minimized");
+  }
+        chatAva.src = avatarUrlById(f.avatar);
     chatName.textContent = f.name || ("#" + f.userId);
     chatStatus.textContent = f.online ? "線上" : "離線";
     renderFriends();
@@ -3656,13 +3680,15 @@ minBtn.addEventListener("click", () => {
     if(e.key === "Enter") sendMsg();
   });
   chatClose.addEventListener("click", () => {
-    chatEl?.classList.remove("open");
-    chatEl?.classList.remove("min");
+    if(chatPanel) chatPanel.classList.add("hidden");
+    if(chatPanel) chatPanel.classList.remove("minimized");
+    activePeer = null;
   });
-  chatMin?.addEventListener("click", () => {
-    if(!chatEl) return;
-    if(!chatEl.classList.contains("open")) chatEl.classList.add("open");
-    chatEl.classList.toggle("min");
+
+  chatMinBtn?.addEventListener("click", () => {
+    if(!chatPanel) return;
+    chatPanel.classList.toggle("minimized");
+    // keep visible; do not auto-close
   });
 
   function wireSocketEvents(){
