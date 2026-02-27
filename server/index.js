@@ -1215,6 +1215,13 @@ socket.on("DM_SEND", async ({ secret, toUserId, body }, cb) => {
     );
 
     const payload = { id:String(ins.rows[0].id), from: myId, to: otherId, body: msg, ts: now };
+
+    // ✅ 保底：若送出者尚未 SOCIAL_AUTH（onlineUsers 尚未記錄這顆 socket），也要立刻讓送出者看到
+    try{
+      const set = onlineUsers.get(myId);
+      if(!set || !set.has(socket.id)) socket.emit("DM_NEW", payload);
+    }catch{}
+
     emitToUser(myId, "DM_NEW", payload);
     emitToUser(otherId, "DM_NEW", payload);
 
