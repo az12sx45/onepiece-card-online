@@ -1775,8 +1775,24 @@ function titleTierOf(p){
     backdrop-filter: blur(10px);
   }
   #friendDock.collapsed{
-    width: 52px;
-    height: 240px;
+    width: 56px;
+    height: 260px;
+  }
+  /* fd-collapsed v2 */
+  #friendDock.collapsed .fd-title{ display:none; }
+  #friendDock.collapsed .fd-tools{ display:none; }
+  #friendDock.collapsed .fd-body{ display:none; }
+  #friendDock.collapsed .fd-hd{ justify-content:center; }
+  #friendDock.collapsed .fd-hd .left{ justify-content:center; }
+  #friendDock.collapsed .fd-hd .fd-logo{ width:34px;height:34px;border-radius:14px; }
+  #friendDock.collapsed::after{
+    content:"好友";
+    position:absolute;
+    top:58px; left:50%; transform:translateX(-50%);
+    font-size:11px;
+    color:rgba(255,255,255,.75);
+    letter-spacing:.2px;
+    pointer-events:none;
   }
   #friendDock *{ box-sizing:border-box; font-family:inherit; }
   .fd-hd{
@@ -2086,8 +2102,8 @@ function titleTierOf(p){
   async function socialAuth(){
     ensureSocket();
     ensureSecret();
-    if(!sock || !secret) return;
-
+    if(!sock){ setHint("好友/聊天：Socket 尚未連線"); return; }
+    if(!secret){ setHint("好友/聊天：請先登入（缺少 opSecret）"); return; }
     sock.timeout(12000).emit("SOCIAL_AUTH", { secret }, (err, res) => {
       if(err || !res?.ok){
         setHint("好友/聊天：尚未登入（缺少 secret）");
@@ -2100,7 +2116,8 @@ function titleTierOf(p){
   }
 
   function fetchFriends(){
-    if(!sock || !secret) return;
+    if(!sock){ setHint("好友/聊天：Socket 尚未連線"); return; }
+    if(!secret){ setHint("好友/聊天：請先登入（缺少 opSecret）"); return; }
     sock.timeout(12000).emit("FRIENDS_GET", { secret }, (err, res) => {
       if(err || !res?.ok){
         setHint(res?.error || "好友清單讀取失敗");
@@ -2204,7 +2221,8 @@ function titleTierOf(p){
   }
 
   function loadHistory(peerId){
-    if(!sock || !secret) return;
+    if(!sock){ setHint("好友/聊天：Socket 尚未連線"); return; }
+    if(!secret){ setHint("好友/聊天：請先登入（缺少 opSecret）"); return; }
     chatLog.innerHTML = "";
     sock.timeout(12000).emit("DM_HISTORY", { secret, withUserId: peerId, limit: 60 }, (err, res) => {
       if(err || !res?.ok){
@@ -2218,6 +2236,8 @@ function titleTierOf(p){
 
   function sendMsg(){
     if(!activePeer) return;
+    if(!sock){ setHint("好友/聊天：Socket 尚未連線"); return; }
+    if(!secret){ setHint("好友/聊天：請先登入（缺少 opSecret）"); return; }
     const body = String(chatInp.value||"").trim();
     if(!body) return;
     chatInp.value = "";
@@ -2232,7 +2252,17 @@ function titleTierOf(p){
     });
   }
 
-  minBtn.addEventListener("click", () => {
+  
+// click anywhere on collapsed dock to expand
+dock.addEventListener("click", (e) => {
+  if(dock.classList.contains("collapsed")){
+    if(e.target && (e.target.id === "fdMinBtn")) return;
+    dock.classList.remove("collapsed");
+    try{ localStorage.setItem("op_fdock_collapsed", "0"); }catch{}
+  }
+});
+
+minBtn.addEventListener("click", () => {
     dock.classList.toggle("collapsed");
     try{ localStorage.setItem("op_fdock_collapsed", dock.classList.contains("collapsed") ? "1" : "0"); }catch{}
   });
@@ -2241,7 +2271,8 @@ function titleTierOf(p){
     const name = String(addInp.value||"").trim();
     if(!name) return;
     addInp.value = "";
-    if(!sock || !secret) return;
+    if(!sock){ setHint("好友/聊天：Socket 尚未連線"); return; }
+    if(!secret){ setHint("好友/聊天：請先登入（缺少 opSecret）"); return; }
     sock.timeout(12000).emit("FRIEND_ADD_BY_NAME", { secret, name }, (err, res) => {
       if(err || !res?.ok){
         setHint(res?.error || "加入失敗");
@@ -2284,6 +2315,7 @@ function titleTierOf(p){
 
   // boot
   ensureSocket();
+  ensureSecret();
   wireSocketEvents();
   socialAuth();
   // refresh presence/friends periodically
