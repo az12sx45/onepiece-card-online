@@ -1807,12 +1807,17 @@ function titleTierOf(p){
     background: rgba(255,255,255,.05);
     color: var(--fd-text);
     cursor:pointer;
+  
+    padding:0;
+    display:flex; align-items:center; justify-content:center;
+    line-height:1;
   }
   .fd-btn:hover{ background: rgba(255,255,255,.08); }
   .fd-tools{
     padding:10px 12px;
     border-bottom:1px solid rgba(255,255,255,.08);
-    display:flex; gap:8px;
+    display:flex;
+    align-items:center; gap:8px;
   }
   .fd-inp{
     flex:1;
@@ -1834,6 +1839,11 @@ function titleTierOf(p){
     color: var(--fd-text);
     font-weight:900;
     cursor:pointer;
+  
+    display:flex; align-items:center; justify-content:center;
+    white-space:nowrap;
+    line-height:1;
+    font-size:13px;
   }
   .fd-body{ flex:1; overflow:hidden; display:flex; }
   .fd-col{ flex:1; display:flex; flex-direction:column; min-width:0; }
@@ -1885,7 +1895,8 @@ function titleTierOf(p){
     bottom: 12px;
     z-index: 9999;
     display: flex;
-    flex-direction: row-reverse; /* newest near right */
+    justify-content: flex-end;
+    flex-direction: row; /* newest near right */
     align-items: flex-end;
     gap: 10px;
     pointer-events: none; /* allow clicks only on windows */
@@ -1968,6 +1979,7 @@ function titleTierOf(p){
     padding:10px;
     border-top:1px solid rgba(255,255,255,.08);
     display:flex;
+    align-items:center;
     gap:8px;
   }
   .fd-send{
@@ -1978,6 +1990,13 @@ function titleTierOf(p){
     color: var(--fd-text);
     font-weight:900;
     cursor:pointer;
+  
+    height:38px;
+    padding:0;
+    display:flex; align-items:center; justify-content:center;
+    white-space:nowrap;
+    line-height:1;
+    font-size:13px;
   }
   .fd-send:active{ transform: translateY(1px); }
 
