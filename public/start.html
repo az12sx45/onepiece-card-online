@@ -2093,14 +2093,6 @@ function titleTierOf(p){
     }
     sock = io(url, { transports: ["websocket"] });
     window.socket = sock;
-    // ✅ 重要：每次連線/重連都自動 SOCIAL_AUTH，才能即時收到 DM_NEW
-    if(!sock.__fd_connect_hooked){
-      sock.__fd_connect_hooked = true;
-      sock.on('connect', () => {
-        try{ ensureSecret(); }catch{}
-        if(secret) socialAuth();
-      });
-    }
     return sock;
   }
 
@@ -2380,10 +2372,6 @@ function titleTierOf(p){
   }
 
   function openChat(peer){
-    // ✅ 確保已拿到最新 secret 並完成 SOCIAL_AUTH（否則收不到即時訊息）
-    ensureSocket();
-    ensureSecret();
-    if(!isAuthed()) socialAuth();
     const peerId = Number(peer.userId);
     unread.set(peerId, 0);
     renderFriends();
@@ -2454,31 +2442,43 @@ function titleTierOf(p){
     if(!sock) return;
     sock.on("FRIENDS_DIRTY", () => fetchFriends());
     sock.on("DM_NEW", (m) => {
-      if(!isAuthed()) return;
+  // ✅ 即時訊息：即使 me.userId 還沒拿到，也要能更新「已開啟」的聊天室
+  ensureSecret();
+  const my = myId();
+  const fromId = Number(m?.from);
+  const toId   = Number(m?.to);
 
-      const fromId = Number(m.from);
-      const peerId = (fromId === me.userId) ? Number(m.to) : fromId;
+  let peerId = null;
+  if(my){
+    peerId = (fromId === my) ? toId : fromId;
+  }else{
+    // 還沒 SOCIAL_AUTH 成功時：只更新「已經開著」的視窗，避免錯誤 unread
+    if(openChats.has(fromId)) peerId = fromId;
+    else if(openChats.has(toId)) peerId = toId;
+    else return;
+  }
 
-      // window open?
-      if(openChats.has(peerId)){
-        appendMsgTo(peerId, m);
+  const isMine = my ? (fromId === my) : false;
 
-        const w = openChats.get(peerId);
-        // if minimized and message from other side -> show small badge on window
-        if(w?.minimized && Number(m.from) !== Number(me.userId)){
-          const cur = Number(w.badgeEl.textContent||"0") || 0;
-          setWinBadge(peerId, cur + 1);
-        }else{
-          setWinBadge(peerId, 0);
-        }
-      }else{
-        // dock unread badge
-        if(Number(m.from) !== Number(me.userId)){
-          unread.set(peerId, (unread.get(peerId)||0) + 1);
-          renderFriends();
-        }
-      }
-    });
+  if(openChats.has(peerId)){
+    appendMsgTo(peerId, m);
+
+    const w = openChats.get(peerId);
+    if(w?.minimized && !isMine){
+      const cur = Number(w.badgeEl.textContent||"0") || 0;
+      setWinBadge(peerId, cur + 1);
+    }else{
+      setWinBadge(peerId, 0);
+    }
+  }else{
+    // dock unread badge
+    if(!isMine){
+      unread.set(peerId, (unread.get(peerId)||0) + 1);
+      renderFriends();
+    }
+  }
+});
+
   }
 
   // init
@@ -2486,14 +2486,13 @@ function titleTierOf(p){
   ensureSecret();
   wireSocketEvents();
   socialAuth();
+  // ✅ 保險：頁面先載入、後登入，或 socket 重連，會導致收不到 DM_NEW
+  // 只要 secret 有、但還沒拿到 me.userId，就定期補 Social Auth
   setInterval(() => {
-    try{ ensureSecret(); }catch{}
-    if(secret){
-      if(!isAuthed()) socialAuth();
-      else fetchFriends();
-    }
-  }, 12000);
-  })();
+    if(sock && sock.connected && secret && !me.userId) socialAuth();
+  }, 3000);
+  setInterval(() => { if(secret) fetchFriends(); }, 12000);
+})();
 </script>
 <!-- =================== /Friends Dock =================== -->
 
