@@ -1821,29 +1821,37 @@ function titleTierOf(p){
   }
   .fd-inp{
     flex:1;
-    height:38px;
+    height:32px;
     border-radius: 12px;
-    border:1px solid rgba(255,255,255,.10);
-    background: rgba(0,0,0,.20);
+    border:1px solid rgba(255,255,255,.12);
+    background: rgba(0,0,0,.22);
     color: var(--fd-text);
     padding:0 10px;
     outline:none;
+    font-size:12px;
+    min-width:0;
   }
   .fd-inp::placeholder{ color: rgba(255,255,255,.35); }
   .fd-add{
-    height:38px;
-    padding: 0 12px;
+    height:32px;
+    padding:0 10px;
     border-radius: 12px;
     border:1px solid rgba(255,211,107,.45);
-    background: rgba(255,211,107,.12);
+    background: rgba(255,211,107,.10);
     color: var(--fd-text);
-    font-weight:900;
     cursor:pointer;
-  
-    display:flex; align-items:center; justify-content:center;
-    white-space:nowrap;
+    font-weight:800;
+    font-size:12px;
+
+    flex: 0 0 auto;
+    min-width: 56px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
     line-height:1;
-    font-size:13px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
   }
   .fd-body{ flex:1; overflow:hidden; display:flex; }
   .fd-col{ flex:1; display:flex; flex-direction:column; min-width:0; }
@@ -1988,15 +1996,18 @@ function titleTierOf(p){
     border:1px solid rgba(255,211,107,.45);
     background: rgba(255,211,107,.12);
     color: var(--fd-text);
-    font-weight:900;
+    font-weight:800;
     cursor:pointer;
-  
-    height:38px;
+
+    height:32px;
     padding:0;
-    display:flex; align-items:center; justify-content:center;
+    display:flex;
+    align-items:center;
+    justify-content:center;
     white-space:nowrap;
     line-height:1;
-    font-size:13px;
+    font-size:12px;
+    flex: 0 0 auto;
   }
   .fd-send:active{ transform: translateY(1px); }
 
@@ -2316,7 +2327,7 @@ function titleTierOf(p){
 
     el.innerHTML = `
       <div class="fd-chat-hd">
-        <div class="fd-chat-peer" title="點一下可置頂">
+        <div class="fd-chat-peer" title="點一下可還原">
           <div class="fd-ava" style="width:28px;height:28px;"><img class="fdChatAva" alt=""></div>
           <div class="meta" style="min-width:0;">
             <div class="n fdChatName">—</div>
@@ -2353,8 +2364,7 @@ function titleTierOf(p){
     closeBtn.addEventListener("click", ()=> closeChat(peerId));
     minBtn.addEventListener("click", ()=> toggleMin(peerId));
     el.querySelector(".fd-chat-peer")?.addEventListener("click", ()=>{
-      bringToFront(peerId);
-      if(openChats.get(peerId)?.minimized) toggleMin(peerId);
+if(openChats.get(peerId)?.minimized) toggleMin(peerId);
       setTimeout(()=> inp?.focus(), 0);
     });
 
@@ -2378,8 +2388,7 @@ function titleTierOf(p){
 
     if(openChats.has(peerId)){
       // restore + focus + bring front
-      bringToFront(peerId);
-      const w = openChats.get(peerId);
+const w = openChats.get(peerId);
       w.peer = peer;
       updateWinHeader(peerId);
       if(w.minimized) toggleMin(peerId);
@@ -2398,9 +2407,7 @@ function titleTierOf(p){
     const el = createChatWindow(peer);
     tray.appendChild(el);
     chatOrder.push(peerId);
-
-    bringToFront(peerId);
-    loadHistory(peerId);
+loadHistory(peerId);
     setTimeout(()=> openChats.get(peerId)?.inp?.focus(), 0);
   }
 
