@@ -2393,6 +2393,9 @@ const w = openChats.get(peerId);
       updateWinHeader(peerId);
       if(w.minimized) toggleMin(peerId);
       setWinBadge(peerId, 0);
+      // move to left-most (newest)
+      chatOrder = [peerId, ...chatOrder.filter(x=>x!==peerId)];
+      try{ tray.insertBefore(w.el, tray.firstChild); }catch(e){}
       setTimeout(()=> w.inp?.focus(), 0);
       return;
     }
@@ -2400,13 +2403,13 @@ const w = openChats.get(peerId);
     // cap windows like LoL (avoid overflow)
     const MAX_OPEN = 4;
     if(chatOrder.length >= MAX_OPEN){
-      const kick = chatOrder.shift();
+      const kick = chatOrder.pop();
       if(kick != null) closeChat(kick);
     }
 
     const el = createChatWindow(peer);
-    tray.appendChild(el);
-    chatOrder.push(peerId);
+    tray.insertBefore(el, tray.firstChild);
+    chatOrder.unshift(peerId);
 loadHistory(peerId);
     setTimeout(()=> openChats.get(peerId)?.inp?.focus(), 0);
   }
