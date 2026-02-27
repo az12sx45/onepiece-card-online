@@ -420,7 +420,37 @@
       .rulesNavBtn{ font-size: 18px; padding: 14px 18px; }
       .rulesHintLine{ font-size: 15px; }
     }
-  </style>
+  
+
+/* === Chat Dock (Left) === */
+#chatDock{
+  position: fixed;
+  left: 12px;
+  bottom: 12px;
+  z-index: 9998;
+  width: min(420px, 46vw);
+  height: min(520px, 70vh);
+  display: none; /* closed by default */
+  flex-direction: column;
+  border-radius: 16px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(10,12,18,.90);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 18px 50px rgba(0,0,0,.55);
+  overflow: hidden;
+}
+#chatDock.open{ display:flex; }
+#chatDock.collapsed{ height: 46px; }
+#chatDock.collapsed .fd-chat-log,
+#chatDock.collapsed .fd-chat-in{ display:none; }
+#chatDock .fd-chat-hd{ padding:10px 10px; }
+#chatDock .fd-chat{ display:flex; flex-direction:column; flex:1; min-height:0; }
+#chatDock .fd-chat-log{ flex:1; min-height:0; }
+#chatDock .fd-chat-in{ padding:10px; }
+@media (max-width: 760px){
+  #chatDock{ width: min(420px, 92vw); left: 10px; right: 10px; }
+}
+</style>
 </head>
 
 <body class="no-video">
@@ -1995,29 +2025,35 @@ function titleTierOf(p){
       <div id="fdList" class="fd-list"></div>
       <div id="fdHint" class="fd-warn" style="display:none;"></div>
     </div>
-
-    <div class="fd-chat">
-      <div class="fd-chat-hd">
-        <div class="fd-chat-peer">
-          <div class="fd-ava" style="width:28px;height:28px;"><img id="fdChatAva" alt=""></div>
-          <div style="min-width:0;">
-            <div class="n" id="fdChatName">—</div>
-            <div class="s" id="fdChatStatus">—</div>
-          </div>
-        </div>
-        <button class="fd-btn" id="fdChatClose" title="關閉聊天">✕</button>
-      </div>
-
-      <div id="fdChatLog" class="fd-chat-log"></div>
-
-      <div class="fd-chat-in">
-        <input id="fdChatInp" class="fd-inp" placeholder="輸入訊息…（Enter 送出）" />
-        <button id="fdChatSend" class="fd-send">送出</button>
-      </div>
-    </div>
   </div>
 </div>
 
+
+<!-- === Chat Dock (Left) === -->
+<div id="chatDock" aria-label="chat-dock">
+  <div class="fd-chat">
+    <div class="fd-chat-hd">
+      <div class="fd-chat-peer">
+        <div class="fd-ava" style="width:28px;height:28px;"><img id="fdChatAva" alt=""></div>
+        <div style="min-width:0;">
+          <div class="n" id="fdChatName">—</div>
+          <div class="s" id="fdChatStatus">—</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:6px; align-items:center;">
+        <button class="fd-btn" id="fdChatMin" title="縮小/展開">▣</button>
+        <button class="fd-btn" id="fdChatClose" title="關閉聊天">✕</button>
+      </div>
+    </div>
+
+    <div id="fdChatLog" class="fd-chat-log"></div>
+
+    <div class="fd-chat-in">
+      <input id="fdChatInp" class="fd-inp" placeholder="輸入訊息…（Enter 送出）" />
+      <button id="fdChatSend" class="fd-send">送出</button>
+    </div>
+  </div>
+</div>
 <script>
 (function(){
   // Avoid double init
@@ -2040,12 +2076,14 @@ function titleTierOf(p){
   }
 
   const dock = q("#friendDock");
+  const chatDock = q("#chatDock");
   const listEl = q("#fdList");
   const hintEl = q("#fdHint");
   const minBtn = q("#fdMinBtn");
   const addInp = q("#fdAddName");
   const addBtn = q("#fdAddBtn");
 
+  const chatMin = q("#fdChatMin");
   const chatClose = q("#fdChatClose");
   const chatAva = q("#fdChatAva");
   const chatName = q("#fdChatName");
@@ -2067,7 +2105,17 @@ function titleTierOf(p){
     if(c === "0") dock.classList.remove("collapsed");
   }catch{}
 
-  function setHint(msg){
+  function isChatOpen(){
+  return !!(chatDock && chatDock.classList.contains("open"));
+}
+function setChatOpen(v){
+  if(!chatDock) return;
+  chatDock.classList.toggle("open", !!v);
+  if(!v) chatDock.classList.remove("collapsed");
+  try{ localStorage.setItem("op_chat_open", v ? "1" : "0"); }catch{}
+}
+
+function setHint(msg){
     if(!msg){ hintEl.style.display="none"; hintEl.textContent=""; return; }
     hintEl.style.display="block";
     hintEl.textContent = msg;
@@ -2197,8 +2245,8 @@ function titleTierOf(p){
   function setActivePeer(f, openChat){
     activePeer = f;
     unread.set(f.userId, 0);
-    dock.classList.toggle("chat-open", !!openChat);
-    chatAva.src = avatarUrlById(f.avatar);
+  if(openChat === true){ setChatOpen(true); }
+chatAva.src = avatarUrlById(f.avatar);
     chatName.textContent = f.name || ("#" + f.userId);
     chatStatus.textContent = f.online ? "線上" : "離線";
     renderFriends();
@@ -2253,7 +2301,7 @@ function titleTierOf(p){
   }
 
   
-// click anywhere on collapsed dock to expand
+// click anywhere on collapsed friends dock to expand
 dock.addEventListener("click", (e) => {
   if(dock.classList.contains("collapsed")){
     if(e.target && (e.target.id === "fdMinBtn")) return;
@@ -2261,6 +2309,17 @@ dock.addEventListener("click", (e) => {
     try{ localStorage.setItem("op_fdock_collapsed", "0"); }catch{}
   }
 });
+
+// click anywhere on collapsed chatDock to expand
+  if(chatDock){
+    chatDock.addEventListener("click", (e)=>{
+      if(chatDock.classList.contains("collapsed")){
+        if(e.target && (e.target.id === "fdChatMin")) return;
+        chatDock.classList.remove("collapsed");
+        try{ localStorage.setItem("op_chat_collapsed", "0"); }catch{}
+      }
+    });
+  }
 
 minBtn.addEventListener("click", () => {
     dock.classList.toggle("collapsed");
@@ -2287,15 +2346,23 @@ minBtn.addEventListener("click", () => {
   });
 
   chatSend.addEventListener("click", sendMsg);
+  if(chatMin){
+    chatMin.addEventListener("click", (e)=>{
+      e.stopPropagation();
+      if(!chatDock) return;
+      chatDock.classList.toggle("collapsed");
+      try{ localStorage.setItem("op_chat_collapsed", chatDock.classList.contains("collapsed") ? "1" : "0"); }catch{}
+    });
+  }
+
   chatInp.addEventListener("keydown", (e) => {
     if(e.key === "Enter") sendMsg();
   });
   chatClose.addEventListener("click", () => {
-    dock.classList.remove("chat-open");
+    setChatOpen(false);
     activePeer = null;
   });
-
-  function wireSocketEvents(){
+function wireSocketEvents(){
     if(!sock) return;
     sock.on("FRIENDS_DIRTY", () => fetchFriends());
     sock.on("DM_NEW", (m) => {
