@@ -92,6 +92,70 @@ async function ensurePlayerNameUniqueIndex(){
     console.warn("[db] ensurePlayerNameUniqueIndex skipped/failed:", String(e?.message||e));
   }
 }
+
+
+/* =========================
+ * Social: Friends + DM (LoL-style friend dock)
+ *  - friends stored in player_profiles.stats.client.social.friends : int[]
+ *  - dm_messages stores private chat history
+ * ========================= */
+async function ensureDmTable(){
+  try{
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS dm_messages(
+        id BIGSERIAL PRIMARY KEY,
+        a_id INT NOT NULL,
+        b_id INT NOT NULL,
+        from_id INT NOT NULL,
+        body TEXT NOT NULL,
+        created_at BIGINT NOT NULL
+      );
+    `);
+    await pool.query(`CREATE INDEX IF NOT EXISTS dm_messages_ab_idx ON dm_messages(a_id,b_id,created_at DESC);`);
+  }catch(e){
+    console.error("[db] ensureDmTable failed:", e);
+  }
+}
+ensureDmTable();
+
+// online presence: userId -> Set<socketId>
+const onlineUsers = new Map();
+function markOnline(userId, socketId){
+  if(!userId) return;
+  let set = onlineUsers.get(userId);
+  if(!set){ set = new Set(); onlineUsers.set(userId, set); }
+  set.add(socketId);
+}
+function markOffline(userId, socketId){
+  if(!userId) return;
+  const set = onlineUsers.get(userId);
+  if(!set) return;
+  set.delete(socketId);
+  if(set.size===0) onlineUsers.delete(userId);
+}
+function isOnline(userId){ return onlineUsers.has(userId); }
+function emitToUser(userId, event, payload){
+  const set = onlineUsers.get(userId);
+  if(!set) return;
+  for(const sid of set){
+    io.to(sid).emit(event, payload);
+  }
+}
+
+async function getProfileBySecret(secret){
+  if(!secret) return null;
+  const r = await pool.query(
+    "SELECT user_id, name, avatar, stats FROM player_profiles WHERE secret=$1",
+    [secret]
+  );
+  return r.rows?.[0] || null;
+}
+function ensureSocial(client){
+  if(!client || typeof client!=="object") return;
+  if(!client.social || typeof client.social!=="object") client.social = {};
+  if(!Array.isArray(client.social.friends)) client.social.friends = [];
+}
+
 ensurePlayerNameUniqueIndex();
 
 const server = http.createServer(app);
@@ -956,6 +1020,211 @@ function runCpuLoop(roomId){
 // ——— Socket.IO ———
 io.on("connection", (socket) => {
   let joinedRoom = null;
+
+// ===== Social auth (for friend dock presence / DM routing) =====
+socket.on("SOCIAL_AUTH", async ({ secret }, cb) => {
+  try{
+    const prof = await getProfileBySecret(String(secret||"").trim());
+    if(!prof) return cb?.({ ok:false, error:"bad secret" });
+
+    const uid = Number(prof.user_id);
+    socket.data.userId = uid;
+    markOnline(uid, socket.id);
+
+    return cb?.({ ok:true, me:{ userId: uid, name: prof.name || "", avatar: Number(prof.avatar)||1 } });
+  }catch(e){
+    console.error("[SOCIAL_AUTH] error:", e);
+    return cb?.({ ok:false, error:String(e?.message||e) });
+  }
+});
+
+socket.on("FRIENDS_GET", async ({ secret }, cb) => {
+  try{
+    const prof = await getProfileBySecret(String(secret||"").trim());
+    if(!prof) return cb?.({ ok:false, error:"bad secret" });
+
+    const stats = (prof.stats && typeof prof.stats==="object") ? prof.stats : {};
+    const client = (stats.client && typeof stats.client==="object") ? stats.client : (stats.client = {});
+    ensureSocial(client);
+    const friends = client.social.friends.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0);
+
+    if(!friends.length) return cb?.({ ok:true, friends:[] });
+
+    const r = await pool.query(
+      "SELECT user_id, name, avatar FROM player_profiles WHERE user_id = ANY($1::int[])",
+      [friends]
+    );
+    const rows = r.rows || [];
+    const byId = new Map(rows.map(x=>[Number(x.user_id), x]));
+
+    const list = friends
+      .map(id=>{
+        const x = byId.get(id);
+        if(!x) return null;
+        return {
+          userId: Number(x.user_id),
+          name: String(x.name||""),
+          avatar: Number(x.avatar)||1,
+          online: isOnline(Number(x.user_id))
+        };
+      })
+      .filter(Boolean);
+
+    return cb?.({ ok:true, friends:list });
+  }catch(e){
+    console.error("[FRIENDS_GET] error:", e);
+    return cb?.({ ok:false, error:String(e?.message||e) });
+  }
+});
+
+// Add friend by display name (auto mutual add)
+socket.on("FRIEND_ADD_BY_NAME", async ({ secret, name }, cb) => {
+  try{
+    const prof = await getProfileBySecret(String(secret||"").trim());
+    if(!prof) return cb?.({ ok:false, error:"bad secret" });
+    const myId = Number(prof.user_id);
+
+    const targetName = String(name||"").trim();
+    if(!targetName) return cb?.({ ok:false, error:"no name" });
+
+    const t = await pool.query(
+      "SELECT user_id, name, avatar, stats FROM player_profiles WHERE lower(btrim(name)) = lower(btrim($1)) LIMIT 1",
+      [targetName]
+    );
+    if(!t.rows.length) return cb?.({ ok:false, error:"not found" });
+    const other = t.rows[0];
+    const otherId = Number(other.user_id);
+    if(otherId === myId) return cb?.({ ok:false, error:"cannot add self" });
+
+    // load my stats
+    const myStats = (prof.stats && typeof prof.stats==="object") ? prof.stats : {};
+    const myClient = (myStats.client && typeof myStats.client==="object") ? myStats.client : (myStats.client = {});
+    ensureSocial(myClient);
+
+    // load other stats
+    const oStats = (other.stats && typeof other.stats==="object") ? other.stats : {};
+    const oClient = (oStats.client && typeof oStats.client==="object") ? oStats.client : (oStats.client = {});
+    ensureSocial(oClient);
+
+    if(!myClient.social.friends.includes(otherId)) myClient.social.friends.push(otherId);
+    if(!oClient.social.friends.includes(myId)) oClient.social.friends.push(myId);
+
+    await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [myStats, myId]);
+    await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [oStats, otherId]);
+
+    // notify online friend docks
+    emitToUser(myId, "FRIENDS_DIRTY", { by:"add", userId: otherId });
+    emitToUser(otherId, "FRIENDS_DIRTY", { by:"add", userId: myId });
+
+    return cb?.({ ok:true, friend:{ userId: otherId, name:String(other.name||""), avatar:Number(other.avatar)||1, online:isOnline(otherId) } });
+  }catch(e){
+    console.error("[FRIEND_ADD_BY_NAME] error:", e);
+    return cb?.({ ok:false, error:String(e?.message||e) });
+  }
+});
+
+socket.on("FRIEND_REMOVE", async ({ secret, userId }, cb) => {
+  try{
+    const prof = await getProfileBySecret(String(secret||"").trim());
+    if(!prof) return cb?.({ ok:false, error:"bad secret" });
+    const myId = Number(prof.user_id);
+    const otherId = Number(userId);
+    if(!Number.isFinite(otherId) || otherId<=0) return cb?.({ ok:false, error:"bad userId" });
+
+    const myStats = (prof.stats && typeof prof.stats==="object") ? prof.stats : {};
+    const myClient = (myStats.client && typeof myStats.client==="object") ? myStats.client : (myStats.client = {});
+    ensureSocial(myClient);
+    myClient.social.friends = myClient.social.friends.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0 && n!==otherId);
+    await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [myStats, myId]);
+
+    // mutual remove if other exists
+    const t = await pool.query("SELECT stats FROM player_profiles WHERE user_id=$1", [otherId]);
+    if(t.rows.length){
+      const oStats = (t.rows[0].stats && typeof t.rows[0].stats==="object") ? t.rows[0].stats : {};
+      const oClient = (oStats.client && typeof oStats.client==="object") ? oStats.client : (oStats.client = {});
+      ensureSocial(oClient);
+      oClient.social.friends = oClient.social.friends.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0 && n!==myId);
+      await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [oStats, otherId]);
+    }
+
+    emitToUser(myId, "FRIENDS_DIRTY", { by:"remove", userId: otherId });
+    emitToUser(otherId, "FRIENDS_DIRTY", { by:"remove", userId: myId });
+
+    return cb?.({ ok:true });
+  }catch(e){
+    console.error("[FRIEND_REMOVE] error:", e);
+    return cb?.({ ok:false, error:String(e?.message||e) });
+  }
+});
+
+socket.on("DM_HISTORY", async ({ secret, withUserId, limit }, cb) => {
+  try{
+    const prof = await getProfileBySecret(String(secret||"").trim());
+    if(!prof) return cb?.({ ok:false, error:"bad secret" });
+    const myId = Number(prof.user_id);
+    const otherId = Number(withUserId);
+    if(!Number.isFinite(otherId) || otherId<=0) return cb?.({ ok:false, error:"bad withUserId" });
+
+    const L = Math.max(10, Math.min(80, Number(limit)||50));
+    const a = Math.min(myId, otherId);
+    const b = Math.max(myId, otherId);
+
+    const r = await pool.query(
+      "SELECT id,a_id,b_id,from_id,body,created_at FROM dm_messages WHERE a_id=$1 AND b_id=$2 ORDER BY created_at DESC LIMIT $3",
+      [a,b,L]
+    );
+    const msgs = (r.rows||[]).map(m=>({
+      id: String(m.id),
+      from: Number(m.from_id),
+      body: String(m.body||""),
+      ts: Number(m.created_at)||0
+    })).reverse();
+
+    return cb?.({ ok:true, messages: msgs });
+  }catch(e){
+    console.error("[DM_HISTORY] error:", e);
+    return cb?.({ ok:false, error:String(e?.message||e) });
+  }
+});
+
+socket.on("DM_SEND", async ({ secret, toUserId, body }, cb) => {
+  try{
+    const prof = await getProfileBySecret(String(secret||"").trim());
+    if(!prof) return cb?.({ ok:false, error:"bad secret" });
+    const myId = Number(prof.user_id);
+    const otherId = Number(toUserId);
+    const msg = String(body||"").trim();
+    if(!Number.isFinite(otherId) || otherId<=0) return cb?.({ ok:false, error:"bad toUserId" });
+    if(!msg) return cb?.({ ok:false, error:"empty" });
+    if(msg.length > 400) return cb?.({ ok:false, error:"too long" });
+
+    // (optional) only allow to friends
+    const stats = (prof.stats && typeof prof.stats==="object") ? prof.stats : {};
+    const client = (stats.client && typeof stats.client==="object") ? stats.client : (stats.client = {});
+    ensureSocial(client);
+    if(!client.social.friends.includes(otherId)){
+      return cb?.({ ok:false, error:"not friends" });
+    }
+
+    const a = Math.min(myId, otherId);
+    const b = Math.max(myId, otherId);
+    const now = Date.now();
+    const ins = await pool.query(
+      "INSERT INTO dm_messages(a_id,b_id,from_id,body,created_at) VALUES($1,$2,$3,$4,$5) RETURNING id",
+      [a,b,myId,msg,now]
+    );
+
+    const payload = { id:String(ins.rows[0].id), from: myId, to: otherId, body: msg, ts: now };
+    emitToUser(myId, "DM_NEW", payload);
+    emitToUser(otherId, "DM_NEW", payload);
+
+    return cb?.({ ok:true, message: payload });
+  }catch(e){
+    console.error("[DM_SEND] error:", e);
+    return cb?.({ ok:false, error:String(e?.message||e) });
+  }
+});
+
 
 // =====================
 // AUTH: 註冊 / 登入
@@ -1833,6 +2102,9 @@ room.sockets = newSockets;
 
 
   socket.on("disconnect", () => {
+    // social presence
+    try{ markOffline(socket.data?.userId, socket.id); }catch{}
+
     if (!joinedRoom) return;
     const room = rooms.get(joinedRoom);
     if (!room) return;
