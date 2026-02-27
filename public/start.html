@@ -2093,6 +2093,14 @@ function titleTierOf(p){
     }
     sock = io(url, { transports: ["websocket"] });
     window.socket = sock;
+    // ✅ 重要：每次連線/重連都自動 SOCIAL_AUTH，才能即時收到 DM_NEW
+    if(!sock.__fd_connect_hooked){
+      sock.__fd_connect_hooked = true;
+      sock.on('connect', () => {
+        try{ ensureSecret(); }catch{}
+        if(secret) socialAuth();
+      });
+    }
     return sock;
   }
 
@@ -2270,45 +2278,23 @@ function titleTierOf(p){
     });
   }
 
-    function sendMsg(peerId){
-      const w = openChats.get(peerId);
-      if(!w) return;
-      if(!sock){ setHint("好友/聊天：Socket 尚未連線"); return; }
-      if(!secret){ setHint("好友/聊天：請先登入（缺少 opSecret）"); return; }
-      const body = String(w.inp.value||"").trim();
-      if(!body) return;
-
-      // ✅ 先在本地立即顯示（避免一定要關掉再打開才看到自己剛送出的訊息）
-      w.inp.value = "";
-      const now = Date.now();
-      if(isAuthed()){
-        appendMsgTo(peerId, { from: me.userId, to: peerId, body, ts: now });
-      }else{
-        // 尚未 SOCIAL_AUTH 完成也先顯示（from 用 -1，不影響樣式）
-        appendMsgTo(peerId, { from: -1, to: peerId, body, ts: now });
+  function sendMsg(peerId){
+    const w = openChats.get(peerId);
+    if(!w) return;
+    if(!sock){ setHint("好友/聊天：Socket 尚未連線"); return; }
+    if(!secret){ setHint("好友/聊天：請先登入（缺少 opSecret）"); return; }
+    const body = String(w.inp.value||"").trim();
+    if(!body) return;
+    w.inp.value = "";
+    sock.timeout(12000).emit("DM_SEND", { secret, toUserId: peerId, body }, (err, res) => {
+      if(err || !res?.ok){
+        setHint(res?.error || "送出失敗");
+        return;
       }
-
-      sock.timeout(12000).emit("DM_SEND", { secret, toUserId: peerId, body }, (err, res) => {
-        if(err || !res?.ok){
-          setHint(res?.error || "送出失敗");
-          return;
-        }
-        setHint("");
-
-        // 若 server 也回傳 message（或同時廣播 DM_NEW），避免重複追加
-        const m = res.message;
-        if(m && typeof m === "object"){
-          const last = w.log?.lastElementChild;
-          const lastTxt = last ? (last.firstChild?.nodeValue || last.textContent || "") : "";
-          const sameBody = String(lastTxt||"").trim() === String(m.body||"").trim();
-          const nearTs = Math.abs((Number(m.ts)||0) - now) <= 3000;
-          const lastIsMe = last ? last.classList?.contains("me") : false;
-          if(!(sameBody && nearTs && lastIsMe)){
-            appendMsgTo(peerId, m);
-          }
-        }
-      });
-    }
+      setHint("");
+      if(res.message) appendMsgTo(peerId, res.message);
+    });
+  }
 
   function closeChat(peerId){
     const w = openChats.get(peerId);
@@ -2394,6 +2380,10 @@ function titleTierOf(p){
   }
 
   function openChat(peer){
+    // ✅ 確保已拿到最新 secret 並完成 SOCIAL_AUTH（否則收不到即時訊息）
+    ensureSocket();
+    ensureSecret();
+    if(!isAuthed()) socialAuth();
     const peerId = Number(peer.userId);
     unread.set(peerId, 0);
     renderFriends();
@@ -2496,8 +2486,14 @@ function titleTierOf(p){
   ensureSecret();
   wireSocketEvents();
   socialAuth();
-  setInterval(() => { if(secret) fetchFriends(); }, 12000);
-})();
+  setInterval(() => {
+    try{ ensureSecret(); }catch{}
+    if(secret){
+      if(!isAuthed()) socialAuth();
+      else fetchFriends();
+    }
+  }, 12000);
+  })();
 </script>
 <!-- =================== /Friends Dock =================== -->
 
