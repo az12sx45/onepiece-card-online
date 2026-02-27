@@ -820,582 +820,966 @@
     })();
   </script>
 <!-- ===================== Friends Dock (LoL-like) ===================== -->
-<style id="friendDockStyle">
-  :root{
-    --fd-bg: rgba(10,16,26,.92);
-    --fd-bg2: rgba(6,10,18,.92);
-    --fd-line: rgba(255,255,255,.10);
-    --fd-text: rgba(255,255,255,.92);
-    --fd-muted: rgba(255,255,255,.60);
-    --fd-gold: rgba(255,211,107,.92);
-    --fd-green: #22c55e;
-    --fd-red: #ef4444;
-    --fd-blue: #60a5fa;
-  }
-  #friendDock{
-    position:fixed;
-    top:72px;
-    right:12px;
-    z-index: 9998;
-    width: 300px;
-    height: min(640px, calc(100vh - 92px));
-    border:1px solid var(--fd-line);
-    border-radius: 16px;
-    background: linear-gradient(180deg, var(--fd-bg), var(--fd-bg2));
-    box-shadow: 0 18px 60px rgba(0,0,0,.45);
-    overflow:hidden;
-    display:flex;
-    flex-direction:column;
-    backdrop-filter: blur(10px);
-  }
-  #friendDock.collapsed{
-    width: 56px;
-    height: 260px;
-  }
-  /* fd-collapsed v2 */
-  #friendDock.collapsed .fd-title{ display:none; }
-  #friendDock.collapsed .fd-tools{ display:none; }
-  #friendDock.collapsed .fd-body{ display:none; }
-  #friendDock.collapsed .fd-hd{ justify-content:center; }
-  #friendDock.collapsed .fd-hd .left{ justify-content:center; }
-  #friendDock.collapsed .fd-hd .fd-logo{ width:34px;height:34px;border-radius:14px; }
-  #friendDock.collapsed::after{
-    content:"好友";
-    position:absolute;
-    top:58px; left:50%; transform:translateX(-50%);
-    font-size:11px;
-    color:rgba(255,255,255,.75);
-    letter-spacing:.2px;
-    pointer-events:none;
-  }
-  #friendDock *{ box-sizing:border-box; font-family:inherit; }
-  .fd-hd{
-    display:flex; align-items:center; justify-content:space-between;
-    padding:10px 10px;
-    border-bottom:1px solid var(--fd-line);
-    background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,0));
-  }
-  .fd-hd .left{ display:flex; align-items:center; gap:8px; min-width:0; }
-  .fd-logo{
-    width:26px;height:26px;border-radius:10px;
-    border:1px solid rgba(255,255,255,.12);
-    background: radial-gradient(circle at 30% 30%, rgba(255,211,107,.28), transparent 60%),
-                linear-gradient(135deg, rgba(96,165,250,.18), rgba(236,72,153,.12));
-    display:flex;align-items:center;justify-content:center;
-    flex:none;
-  }
-  .fd-title{ font-weight:900; font-size:12px; letter-spacing:.4px; color:var(--fd-text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .fd-mini{
-    display:flex; gap:6px; align-items:center;
-  }
-  .fd-btn{
-    width:30px;height:30px;border-radius:12px;
-    border:1px solid rgba(255,255,255,.12);
-    background: rgba(0,0,0,.18);
-    color: var(--fd-text);
-    cursor:pointer;
-  }
-  .fd-btn:hover{ filter:brightness(1.08); }
-  .fd-body{ display:flex; flex:1; min-height:0; }
-  .fd-col{ display:flex; flex-direction:column; flex:1; min-height:0; }
-  .fd-tools{
-    padding:10px;
-    display:flex; gap:8px; align-items:center;
-    border-bottom:1px solid rgba(255,255,255,.08);
-  }
-  .fd-inp{
-    flex:1;
-    height:32px;
-    border-radius: 12px;
-    border:1px solid rgba(255,255,255,.12);
-    background: rgba(0,0,0,.22);
-    color: var(--fd-text);
-    padding:0 10px;
-    outline:none;
-    font-size:12px;
-  }
-  .fd-add{
-    height:32px;
-    padding:0 10px;
-    border-radius: 12px;
-    border:1px solid rgba(255,211,107,.45);
-    background: rgba(255,211,107,.10);
-    color: var(--fd-text);
-    cursor:pointer;
-    font-weight:800;
-    font-size:12px;
-  }
-  .fd-add:active{ transform: translateY(1px); }
-  .fd-list{
-    overflow:auto;
-    padding:8px;
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-  }
-  .fd-item{
-    display:flex; align-items:center; gap:10px;
-    padding:8px 8px;
-    border-radius: 14px;
-    border:1px solid rgba(255,255,255,.08);
-    background: rgba(0,0,0,.12);
-    cursor:pointer;
-  }
-  .fd-item:hover{ border-color: rgba(255,255,255,.16); background: rgba(0,0,0,.18); }
-  .fd-ava{
-    width:34px;height:34px;border-radius:999px; overflow:hidden;
-    border:1px solid rgba(255,255,255,.12);
-    flex:none;
-    background: rgba(0,0,0,.22);
-  }
-  .fd-ava img{ width:100%;height:100%;object-fit:cover; display:block; }
-  .fd-meta{ min-width:0; flex:1; }
-  .fd-name{ font-weight:900; font-size:12px; color:var(--fd-text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .fd-sub{ margin-top:2px; font-size:11px; color:var(--fd-muted); display:flex; align-items:center; gap:6px; }
-  .fd-dot{ width:8px;height:8px;border-radius:50%; background: var(--fd-red); box-shadow:0 0 0 3px rgba(239,68,68,.12); }
-  .fd-dot.on{ background: var(--fd-green); box-shadow:0 0 0 3px rgba(34,197,94,.12); }
-  .fd-badge{
-    min-width: 18px;
-    height: 18px;
-    padding:0 6px;
-    border-radius: 999px;
-    background: rgba(96,165,250,.18);
-    border:1px solid rgba(96,165,250,.35);
-    color: rgba(255,255,255,.92);
-    font-size:11px;
-    font-weight:900;
-    display:none;
-    align-items:center;
-    justify-content:center;
-  }
 
-  /* chat pane */
-  .fd-chat{
-    width: 0;
-    border-left:1px solid rgba(255,255,255,.08);
-    background: rgba(0,0,0,.12);
-    display:flex;
-    flex-direction:column;
-    min-height:0;
-    transition: width .18s ease;
-    overflow:hidden;
-  }
-  #friendDock.chat-open .fd-chat{ width: 360px; }
-  #friendDock.collapsed .fd-body, #friendDock.collapsed .fd-tools{ display:none; }
-  #friendDock.collapsed .fd-hd{ justify-content:center; }
-  #friendDock.collapsed .fd-title{ display:none; }
-  #friendDock.collapsed .fd-mini{ display:none; }
+<!-- === Friends Dock + Left Floating Chat (LoL-like) === -->
+<style>
+/* ===== Friends Dock (right) ===== */
+#friendDock{
+  position:fixed; right:12px; top:96px;
+  width:320px; max-height:calc(100vh - 120px);
+  z-index:260;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,'Noto Sans TC',sans-serif;
+}
+#friendDock.fd-collapsed{ width:56px; }
+#friendDock .fd-card{
+  background:rgba(14,18,24,.92);
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:0 12px 40px rgba(0,0,0,.45);
+  border-radius:14px;
+  overflow:hidden;
+  backdrop-filter:blur(12px);
+}
+#friendDock .fd-header{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 10px 8px 12px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+#friendDock .fd-title{
+  display:flex; gap:10px; align-items:center;
+  font-weight:800; letter-spacing:.5px;
+  color:#e7eef8;
+}
+#friendDock .fd-title .dot{
+  width:10px;height:10px;border-radius:99px;
+  background:#35d07f; box-shadow:0 0 0 3px rgba(53,208,127,.12);
+}
+#friendDock .fd-actions{ display:flex; gap:8px; align-items:center; }
+#friendDock .fd-btn{
+  width:30px;height:30px;border-radius:10px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.05);
+  color:#dbe6f3;
+  cursor:pointer;
+}
+#friendDock .fd-btn:hover{ background:rgba(255,255,255,.10); }
+#friendDock .fd-body{ padding:10px; }
+#friendDock.fd-collapsed .fd-body,
+#friendDock.fd-collapsed .fd-header .fd-title span,
+#friendDock.fd-collapsed .fd-header .fd-actions button[data-act="add"],
+#friendDock.fd-collapsed .fd-header .fd-actions button[data-act="refresh"],
+#friendDock.fd-collapsed .fd-header{ padding:10px; }
+#friendDock.fd-collapsed .fd-header{ justify-content:center; }
+#friendDock .fd-hint{ margin:8px 2px 0; font-size:12px; color:#93a3b7; line-height:1.35; }
+#friendDock .fd-addrow{
+  display:flex; gap:8px; margin-bottom:10px;
+}
+#friendDock .fd-input{
+  flex:1;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:12px;
+  padding:10px 10px;
+  color:#e7eef8;
+  outline:none;
+}
+#friendDock .fd-input::placeholder{ color:#7f92a8; }
+#friendDock .fd-primary{
+  padding:10px 12px; border-radius:12px;
+  background:linear-gradient(180deg,#2d83ff,#1f5fff);
+  border:1px solid rgba(255,255,255,.10);
+  color:white; font-weight:800; cursor:pointer;
+}
+#friendDock .fd-primary:hover{ filter:brightness(1.05); }
+#friendDock .fd-list{
+  display:flex; flex-direction:column; gap:6px;
+  max-height:calc(100vh - 280px);
+  overflow:auto;
+  padding-right:2px;
+}
+#friendDock .fd-item{
+  display:flex; align-items:center; gap:10px;
+  padding:8px 10px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.06);
+  background:rgba(255,255,255,.04);
+  cursor:pointer;
+  position:relative;
+}
+#friendDock .fd-item:hover{ background:rgba(255,255,255,.07); }
+#friendDock .fd-avatar{
+  width:34px;height:34px;border-radius:12px;
+  border:1px solid rgba(255,255,255,.14);
+  object-fit:cover; background:rgba(255,255,255,.06);
+}
+#friendDock .fd-meta{ min-width:0; flex:1; }
+#friendDock .fd-name{
+  font-weight:800; color:#e7eef8; font-size:14px;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+#friendDock .fd-sub{
+  margin-top:2px;
+  font-size:12px; color:#9bb0c8;
+  display:flex; align-items:center; gap:8px;
+}
+#friendDock .fd-status{
+  display:inline-flex; align-items:center; gap:6px;
+}
+#friendDock .fd-status i{
+  width:8px;height:8px;border-radius:99px; display:inline-block;
+  background:#657a93;
+}
+#friendDock .fd-status.online i{ background:#35d07f; box-shadow:0 0 0 3px rgba(53,208,127,.10); }
+#friendDock .fd-pill{
+  font-size:11px; padding:2px 8px; border-radius:999px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.04);
+  color:#bcd0e8;
+}
+#friendDock .fd-unread{
+  position:absolute; right:8px; top:8px;
+  min-width:18px; height:18px; padding:0 6px;
+  border-radius:999px;
+  background:#ff3159;
+  border:1px solid rgba(255,255,255,.14);
+  color:white;
+  font-size:11px;
+  font-weight:900;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 8px 18px rgba(255,49,89,.25);
+}
+#friendDock .fd-item.has-unread .fd-unread{ display:flex; }
+#friendDock .fd-miniBadge{
+  position:absolute; right:10px; top:10px;
+  min-width:18px;height:18px;padding:0 6px;border-radius:999px;
+  background:#ff3159;color:#fff;font-weight:900;font-size:11px;
+  display:none; align-items:center; justify-content:center;
+  border:1px solid rgba(255,255,255,.14);
+}
+#friendDock.fd-collapsed .fd-miniBadge{ display:flex; }
 
-  .fd-chat-hd{
-    padding:10px;
-    border-bottom:1px solid rgba(255,255,255,.08);
-    display:flex; align-items:center; justify-content:space-between; gap:8px;
-  }
-  .fd-chat-peer{ display:flex; align-items:center; gap:8px; min-width:0; }
-  .fd-chat-peer .n{ font-weight:900; font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .fd-chat-peer .s{ font-size:11px; color:var(--fd-muted); }
-  .fd-chat-log{
-    flex:1; min-height:0;
-    padding:10px;
-    overflow:auto;
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-  }
-  .fd-msg{
-    max-width: 86%;
-    padding:8px 10px;
-    border-radius: 14px;
-    border:1px solid rgba(255,255,255,.10);
-    background: rgba(0,0,0,.18);
-    color: var(--fd-text);
-    font-size:12px;
-    line-height:1.35;
-    white-space:pre-wrap;
-    word-break:break-word;
-  }
-  .fd-msg.me{
-    align-self:flex-end;
-    border-color: rgba(255,211,107,.24);
-    background: rgba(255,211,107,.10);
-  }
-  .fd-msg .t{
-    display:block;
-    margin-top:4px;
-    font-size:10px;
-    color: rgba(255,255,255,.55);
-  }
-  .fd-chat-in{
-    padding:10px;
-    border-top:1px solid rgba(255,255,255,.08);
-    display:flex; gap:8px;
-  }
-  .fd-send{
-    width: 64px;
-    border-radius: 12px;
-    border:1px solid rgba(255,211,107,.45);
-    background: rgba(255,211,107,.12);
-    color: var(--fd-text);
-    font-weight:900;
-    cursor:pointer;
-  }
-  .fd-send:active{ transform: translateY(1px); }
-  .fd-warn{
-    padding:10px;
-    font-size:11px;
-    color: rgba(255,255,255,.70);
-    border-top:1px dashed rgba(255,255,255,.10);
-  }
+/* ===== Left Floating Chat Window ===== */
+#friendChatFloat{
+  position:fixed;
+  left:12px;
+  bottom:12px;
+  width:420px;
+  height:520px;
+  z-index:265;
+  display:none; /* closed by default */
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,'Noto Sans TC',sans-serif;
+}
+#friendChatFloat .cf-card{
+  height:100%;
+  background:rgba(12,16,22,.94);
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:16px;
+  box-shadow:0 16px 60px rgba(0,0,0,.55);
+  overflow:hidden;
+  backdrop-filter:blur(12px);
+  display:flex;
+  flex-direction:column;
+}
+#friendChatFloat .cf-head{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 10px 8px 12px;
+  border-bottom:1px solid rgba(255,255,255,.10);
+  cursor:grab;
+  user-select:none;
+}
+#friendChatFloat .cf-left{
+  display:flex; align-items:center; gap:10px; min-width:0;
+}
+#friendChatFloat .cf-title{
+  font-weight:900; color:#e7eef8;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+#friendChatFloat .cf-totalUnread{
+  display:none;
+  min-width:18px; height:18px; padding:0 6px;
+  border-radius:999px;
+  background:#ff3159; color:#fff; font-weight:900; font-size:11px;
+  border:1px solid rgba(255,255,255,.14);
+}
+#friendChatFloat.has-unread .cf-totalUnread{ display:inline-flex; align-items:center; justify-content:center; }
+#friendChatFloat .cf-actions{ display:flex; gap:8px; align-items:center; }
+#friendChatFloat .cf-btn{
+  width:30px;height:30px;border-radius:10px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.06);
+  color:#dbe6f3;
+  cursor:pointer;
+}
+#friendChatFloat .cf-btn:hover{ background:rgba(255,255,255,.10); }
+
+/* Tabs */
+#friendChatFloat .cf-tabs{
+  display:flex;
+  gap:6px;
+  padding:8px 10px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  overflow:auto;
+}
+#friendChatFloat .cf-tab{
+  display:inline-flex; align-items:center; gap:6px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.05);
+  color:#cfe0f7;
+  font-size:12px;
+  cursor:pointer;
+  white-space:nowrap;
+  position:relative;
+}
+#friendChatFloat .cf-tab.active{
+  background:linear-gradient(180deg, rgba(45,131,255,.35), rgba(31,95,255,.20));
+  border-color:rgba(45,131,255,.55);
+  color:#eaf2ff;
+}
+#friendChatFloat .cf-tab .u{
+  display:none;
+  min-width:16px;height:16px;padding:0 5px;
+  border-radius:999px;
+  background:#ff3159;color:#fff;font-weight:900;font-size:10px;
+  border:1px solid rgba(255,255,255,.14);
+}
+#friendChatFloat .cf-tab.has-unread .u{ display:inline-flex; align-items:center; justify-content:center; }
+#friendChatFloat .cf-tab .x{
+  margin-left:2px;
+  width:16px;height:16px;border-radius:99px;
+  display:inline-flex; align-items:center; justify-content:center;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(0,0,0,.15);
+  color:#dbe6f3;
+  font-weight:900;
+  line-height:1;
+}
+#friendChatFloat .cf-tab .x:hover{ background:rgba(255,255,255,.10); }
+
+/* Chat body */
+#friendChatFloat .cf-body{
+  flex:1;
+  overflow:auto;
+  padding:10px 10px 0;
+}
+#friendChatFloat .cf-msg{
+  margin:0 0 10px;
+  display:flex;
+  gap:10px;
+  align-items:flex-end;
+}
+#friendChatFloat .cf-msg.me{ flex-direction:row-reverse; }
+#friendChatFloat .cf-bubble{
+  max-width:78%;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.10);
+  padding:8px 10px;
+  border-radius:14px;
+  color:#e9f1fb;
+  font-size:13px;
+  line-height:1.35;
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+#friendChatFloat .cf-msg.me .cf-bubble{
+  background:linear-gradient(180deg, rgba(45,131,255,.35), rgba(31,95,255,.18));
+  border-color:rgba(45,131,255,.45);
+}
+#friendChatFloat .cf-time{
+  font-size:11px;
+  color:#93a3b7;
+  margin:0 6px;
+  white-space:nowrap;
+}
+#friendChatFloat .cf-foot{
+  padding:10px;
+  border-top:1px solid rgba(255,255,255,.08);
+  display:flex;
+  gap:8px;
+}
+#friendChatFloat .cf-text{
+  flex:1;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:12px;
+  padding:10px 10px;
+  color:#e7eef8;
+  outline:none;
+}
+#friendChatFloat .cf-send{
+  padding:10px 12px;
+  border-radius:12px;
+  background:linear-gradient(180deg,#2d83ff,#1f5fff);
+  border:1px solid rgba(255,255,255,.10);
+  color:#fff;
+  font-weight:900;
+  cursor:pointer;
+}
+#friendChatFloat .cf-send:hover{ filter:brightness(1.05); }
+
+/* Minimized */
+#friendChatFloat.minimized{ height:auto; width:360px; }
+#friendChatFloat.minimized .cf-tabs,
+#friendChatFloat.minimized .cf-body,
+#friendChatFloat.minimized .cf-foot{ display:none; }
+#friendChatFloat.minimized .cf-head{ border-bottom:none; }
 </style>
 
-<div id="friendDock" class="collapsed" aria-label="friends-dock">
-  <div class="fd-hd">
-    <div class="left">
-      <div class="fd-logo">💬</div>
-      <div class="fd-title">好友 / 聊天</div>
-    </div>
-    <div class="fd-mini">
-      <button class="fd-btn" id="fdMinBtn" title="縮小/展開">▣</button>
-    </div>
-  </div>
-
-  <div class="fd-tools">
-    <input id="fdAddName" class="fd-inp" placeholder="輸入好友名稱加入…" />
-    <button id="fdAddBtn" class="fd-add">加入</button>
-  </div>
-
-  <div class="fd-body">
-    <div class="fd-col">
-      <div id="fdList" class="fd-list"></div>
-      <div id="fdHint" class="fd-warn" style="display:none;"></div>
+<div id="friendDock">
+  <div class="fd-card">
+    <div class="fd-header" id="fdHeaderHit">
+      <div class="fd-title" title="好友 / 私訊">
+        <div class="dot"></div>
+        <span>好友</span>
+      </div>
+      <div class="fd-actions">
+        <button class="fd-btn" data-act="refresh" title="重新整理">⟳</button>
+        <button class="fd-btn" data-act="add" title="加入好友">＋</button>
+        <button class="fd-btn" data-act="toggle" title="縮小/展開">▣</button>
+      </div>
+      <div class="fd-miniBadge" id="fdMiniUnread">0</div>
     </div>
 
-    <div class="fd-chat">
-      <div class="fd-chat-hd">
-        <div class="fd-chat-peer">
-          <div class="fd-ava" style="width:28px;height:28px;"><img id="fdChatAva" alt=""></div>
-          <div style="min-width:0;">
-            <div class="n" id="fdChatName">—</div>
-            <div class="s" id="fdChatStatus">—</div>
-          </div>
-        </div>
-        <button class="fd-btn" id="fdChatClose" title="關閉聊天">✕</button>
+    <div class="fd-body" id="fdBody">
+      <div class="fd-addrow" id="fdAddRow" style="display:none">
+        <input class="fd-input" id="fdAddInput" placeholder="輸入好友名稱加入…"/>
+        <button class="fd-primary" id="fdAddBtn">加入</button>
       </div>
 
-      <div id="fdChatLog" class="fd-chat-log"></div>
+      <div class="fd-list" id="fdList"></div>
 
-      <div class="fd-chat-in">
-        <input id="fdChatInp" class="fd-inp" placeholder="輸入訊息…（Enter 送出）" />
-        <button id="fdChatSend" class="fd-send">送出</button>
+      <div class="fd-hint" id="fdHint"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Left floating chat -->
+<div id="friendChatFloat">
+  <div class="cf-card">
+    <div class="cf-head" id="cfDragHandle">
+      <div class="cf-left">
+        <div class="cf-title" id="cfTitle">聊天</div>
+        <div class="cf-totalUnread" id="cfTotalUnread">0</div>
       </div>
+      <div class="cf-actions">
+        <button class="cf-btn" id="cfMinBtn" title="縮小/展開">—</button>
+        <button class="cf-btn" id="cfCloseBtn" title="關閉">✕</button>
+      </div>
+    </div>
+    <div class="cf-tabs" id="cfTabs"></div>
+    <div class="cf-body" id="cfBody"></div>
+    <div class="cf-foot">
+      <input class="cf-text" id="cfInput" placeholder="輸入訊息…（Enter 送出）"/>
+      <button class="cf-send" id="cfSendBtn">送出</button>
     </div>
   </div>
 </div>
 
 <script>
-(function(){
-  // Avoid double init
-  if (window.__friendDockInited) return;
-  window.__friendDockInited = true;
+(() => {
+  // ===== Helpers =====
+  const $ = (id) => document.getElementById(id);
+  const dock = $("friendDock");
+  const fdList = $("fdList");
+  const fdHint = $("fdHint");
+  const fdAddRow = $("fdAddRow");
+  const fdAddInput = $("fdAddInput");
+  const fdAddBtn = $("fdAddBtn");
+  const fdMiniUnread = $("fdMiniUnread");
 
-  function q(sel){ return document.querySelector(sel); }
-  function clamp(n,a,b){ n=Number(n); if(!Number.isFinite(n)) n=a; return Math.max(a,Math.min(b,n)); }
-  function avatarUrlById(id){
-    const n = clamp(id, 1, (window.AVATAR_COUNT||50));
-    return `images/avatars/${n}.webp`;
+  const chat = $("friendChatFloat");
+  const cfTitle = $("cfTitle");
+  const cfTotalUnread = $("cfTotalUnread");
+  const cfTabs = $("cfTabs");
+  const cfBody = $("cfBody");
+  const cfInput = $("cfInput");
+  const cfSendBtn = $("cfSendBtn");
+  const cfMinBtn = $("cfMinBtn");
+  const cfCloseBtn = $("cfCloseBtn");
+  const cfDragHandle = $("cfDragHandle");
+
+  const LS_TABS = "op_dm_tabs_v1";        // [{id,name,avatar}]
+  const LS_ACTIVE = "op_dm_active_v1";    // friendId
+  const LS_CHAT_OPEN = "op_dm_open_v1";   // "1"/"0"
+  const LS_CHAT_MIN = "op_dm_min_v1";     // "1"/"0"
+  const LS_CHAT_POS = "op_dm_pos_v1";     // {left,bottom,width,height}
+
+  const state = {
+    me: null,
+    friends: [], // {user_id,name,avatar,online}
+    unread: new Map(), // friendId -> count
+    tabs: [], // {id,name,avatar}
+    activeId: null,
+    chatOpen: false,
+    chatMin: false,
+    // histories cache: friendId -> messages array
+    history: new Map()
+  };
+
+  function getSecret(){
+    return localStorage.getItem("opSecret") || localStorage.getItem("op_secret") || "";
   }
   function fmtTime(ts){
     try{
       const d = new Date(ts);
-      const hh = String(d.getHours()).padStart(2,'0');
-      const mm = String(d.getMinutes()).padStart(2,'0');
+      const hh = String(d.getHours()).padStart(2,"0");
+      const mm = String(d.getMinutes()).padStart(2,"0");
       return `${hh}:${mm}`;
     }catch{ return ""; }
   }
-
-  const dock = q("#friendDock");
-  const listEl = q("#fdList");
-  const hintEl = q("#fdHint");
-  const minBtn = q("#fdMinBtn");
-  const addInp = q("#fdAddName");
-  const addBtn = q("#fdAddBtn");
-
-  const chatClose = q("#fdChatClose");
-  const chatAva = q("#fdChatAva");
-  const chatName = q("#fdChatName");
-  const chatStatus = q("#fdChatStatus");
-  const chatLog = q("#fdChatLog");
-  const chatInp = q("#fdChatInp");
-  const chatSend = q("#fdChatSend");
-
-  let sock = window.socket || null;
-  let secret = "";
-  let me = { userId: 0 };
-  let friends = [];
-  let activePeer = null; // {userId,name,avatar,online}
-  let unread = new Map(); // peerId -> count
-
-  // restore collapsed state
-  try{
-    const c = localStorage.getItem("op_fdock_collapsed");
-    if(c === "0") dock.classList.remove("collapsed");
-  }catch{}
+  function safeText(s){
+    return String(s ?? "");
+  }
 
   function setHint(msg){
-    if(!msg){ hintEl.style.display="none"; hintEl.textContent=""; return; }
-    hintEl.style.display="block";
-    hintEl.textContent = msg;
+    fdHint.textContent = msg || "";
   }
 
-  function ensureSocket(){
-    if (sock && sock.connected !== false) return sock;
-    // fallback: if page didn't create socket, create it here
-    const url =
-      window.SERVER_URL ||
-      window.serverURL ||
-      localStorage.getItem("op_server_url") ||
-      (location.origin.includes("onrender.com") ? location.origin : location.origin);
-    if (typeof io !== "function"){
-      setHint("缺少 Socket.IO（io）");
-      return null;
+  function totalUnread(){
+    let t = 0;
+    for (const v of state.unread.values()) t += (Number(v)||0);
+    return t;
+  }
+
+  function renderMiniUnread(){
+    const t = totalUnread();
+    fdMiniUnread.textContent = String(t);
+    if (dock.classList.contains("fd-collapsed")){
+      fdMiniUnread.style.display = t > 0 ? "flex" : "none";
+    } else {
+      fdMiniUnread.style.display = "none";
     }
-    sock = io(url, { transports: ["websocket"] });
-    window.socket = sock;
-    return sock;
+    // chat header badge
+    cfTotalUnread.textContent = String(t);
+    if (t > 0) chat.classList.add("has-unread");
+    else chat.classList.remove("has-unread");
   }
 
-  function ensureSecret(){
-    secret = (window.secret || localStorage.getItem("op_secret") || localStorage.getItem("opSecret") || "").trim();
-    return secret;
+  // ===== Dock collapse behavior =====
+  function setDockCollapsed(v){
+    dock.classList.toggle("fd-collapsed", !!v);
+    localStorage.setItem("op_friends_dock_collapsed", v ? "1" : "0");
+    renderMiniUnread();
+  }
+  (function initDockCollapsed(){
+    const saved = localStorage.getItem("op_friends_dock_collapsed");
+    setDockCollapsed(saved === "1");
+    // click header when collapsed to expand
+    $("fdHeaderHit").addEventListener("click", (e) => {
+      if (!dock.classList.contains("fd-collapsed")) return;
+      const actBtn = e.target?.closest?.("button");
+      if (actBtn) return;
+      setDockCollapsed(false);
+    });
+  })();
+
+  // ===== Chat window open/min/pos persistence =====
+  function applyChatPos(){
+    try{
+      const raw = localStorage.getItem(LS_CHAT_POS);
+      if (!raw) return;
+      const p = JSON.parse(raw);
+      if (!p) return;
+      if (Number.isFinite(p.left)) chat.style.left = p.left + "px";
+      if (Number.isFinite(p.bottom)) chat.style.bottom = p.bottom + "px";
+      if (Number.isFinite(p.width)) chat.style.width = Math.max(300, p.width) + "px";
+      if (Number.isFinite(p.height)) chat.style.height = Math.max(260, p.height) + "px";
+    }catch{}
+  }
+  function saveChatPos(){
+    try{
+      const rect = chat.getBoundingClientRect();
+      const p = { left: rect.left, bottom: (window.innerHeight - rect.bottom), width: rect.width, height: rect.height };
+      localStorage.setItem(LS_CHAT_POS, JSON.stringify(p));
+    }catch{}
+  }
+  function setChatOpen(v){
+    state.chatOpen = !!v;
+    chat.style.display = state.chatOpen ? "block" : "none";
+    localStorage.setItem(LS_CHAT_OPEN, state.chatOpen ? "1" : "0");
+    if (state.chatOpen) {
+      applyChatPos();
+      // ensure within viewport
+      clampChatIntoViewport();
+      requestAnimationFrame(() => cfInput?.focus?.());
+    }
+  }
+  function setChatMin(v){
+    state.chatMin = !!v;
+    chat.classList.toggle("minimized", state.chatMin);
+    localStorage.setItem(LS_CHAT_MIN, state.chatMin ? "1" : "0");
+    // when minimized, keep unread badge visible
+    renderMiniUnread();
+  }
+  function clampChatIntoViewport(){
+    try{
+      const rect = chat.getBoundingClientRect();
+      let left = rect.left;
+      let top = rect.top;
+      const maxLeft = Math.max(8, window.innerWidth - rect.width - 8);
+      const maxTop  = Math.max(8, window.innerHeight - rect.height - 8);
+      left = Math.min(Math.max(8, left), maxLeft);
+      top  = Math.min(Math.max(8, top), maxTop);
+      chat.style.left = left + "px";
+      // convert top->bottom for our positioning
+      const bottom = Math.max(8, window.innerHeight - (top + rect.height));
+      chat.style.bottom = bottom + "px";
+      saveChatPos();
+    }catch{}
+  }
+  (function initChatPersistence(){
+    applyChatPos();
+    const open = localStorage.getItem(LS_CHAT_OPEN) === "1";
+    const min = localStorage.getItem(LS_CHAT_MIN) === "1";
+    setChatOpen(open);
+    setChatMin(min);
+  })();
+
+  // ===== Tabs persistence =====
+  function loadTabs(){
+    try{
+      const raw = localStorage.getItem(LS_TABS);
+      state.tabs = raw ? JSON.parse(raw) || [] : [];
+    }catch{ state.tabs = []; }
+    const active = localStorage.getItem(LS_ACTIVE);
+    state.activeId = active ? Number(active) : null;
+    if (!Number.isFinite(state.activeId)) state.activeId = null;
+  }
+  function saveTabs(){
+    localStorage.setItem(LS_TABS, JSON.stringify(state.tabs));
+    localStorage.setItem(LS_ACTIVE, state.activeId != null ? String(state.activeId) : "");
   }
 
-  function isAuthed(){
-    return !!(secret && me && me.userId);
+  function ensureTab(friend){
+    const id = Number(friend.user_id ?? friend.id);
+    if (!Number.isFinite(id)) return;
+    if (!state.tabs.some(t => Number(t.id) === id)){
+      state.tabs.push({ id, name: friend.name || friend.displayName || "好友", avatar: friend.avatar || "" });
+    }
+    state.activeId = id;
+    saveTabs();
+    renderTabs();
   }
 
-  async function socialAuth(){
-    ensureSocket();
-    ensureSecret();
-    if(!sock){ setHint("好友/聊天：Socket 尚未連線"); return; }
-    if(!secret){ setHint("好友/聊天：請先登入（缺少 opSecret）"); return; }
-    sock.timeout(12000).emit("SOCIAL_AUTH", { secret }, (err, res) => {
-      if(err || !res?.ok){
-        setHint("好友/聊天：尚未登入（缺少 secret）");
-        return;
+  function closeTab(id){
+    id = Number(id);
+    state.tabs = state.tabs.filter(t => Number(t.id) !== id);
+    if (state.activeId === id){
+      state.activeId = state.tabs.length ? Number(state.tabs[state.tabs.length-1].id) : null;
+    }
+    saveTabs();
+    renderTabs();
+    if (!state.tabs.length){
+      // no tabs -> keep chat window open (LoL keeps window; but user may want it stay empty)
+      cfTitle.textContent = "聊天";
+      cfBody.innerHTML = "";
+    } else {
+      openActiveConversation();
+    }
+  }
+
+  function renderTabs(){
+    cfTabs.innerHTML = "";
+    for (const t of state.tabs){
+      const id = Number(t.id);
+      const btn = document.createElement("div");
+      btn.className = "cf-tab" + (state.activeId === id ? " active" : "");
+      const unread = Number(state.unread.get(id) || 0);
+      if (unread > 0) btn.classList.add("has-unread");
+      btn.innerHTML = `
+        <span class="n">${escapeHtml(t.name)}</span>
+        <span class="u">${unread}</span>
+        <span class="x" title="關閉分頁">×</span>
+      `;
+      btn.addEventListener("click", (e) => {
+        const isClose = e.target && e.target.classList.contains("x");
+        if (isClose){
+          e.stopPropagation();
+          closeTab(id);
+          return;
+        }
+        state.activeId = id;
+        saveTabs();
+        renderTabs();
+        openActiveConversation();
+      });
+      cfTabs.appendChild(btn);
+    }
+    // title text = active tab name
+    const active = state.tabs.find(t => Number(t.id) === Number(state.activeId));
+    cfTitle.textContent = active ? `聊天｜${active.name}` : "聊天";
+    renderMiniUnread();
+  }
+
+  function escapeHtml(s){
+    return String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+  }
+
+  // ===== Dragging =====
+  (function initDrag(){
+    let dragging = false;
+    let startX = 0, startY = 0;
+    let startLeft = 0, startBottom = 0;
+
+    function isOnButton(e){
+      return !!(e.target && (e.target.closest("#cfMinBtn") || e.target.closest("#cfCloseBtn")));
+    }
+
+    cfDragHandle.addEventListener("pointerdown", (e) => {
+      if (isOnButton(e)) return;
+      if (!state.chatOpen) return;
+      dragging = true;
+      cfDragHandle.setPointerCapture(e.pointerId);
+      const rect = chat.getBoundingClientRect();
+      startX = e.clientX; startY = e.clientY;
+      startLeft = rect.left;
+      startBottom = (window.innerHeight - rect.bottom);
+      cfDragHandle.style.cursor = "grabbing";
+      e.preventDefault();
+    });
+
+    cfDragHandle.addEventListener("pointermove", (e) => {
+      if (!dragging) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+
+      let newLeft = startLeft + dx;
+      // dy positive means move down -> bottom decreases
+      let newBottom = startBottom - dy;
+
+      chat.style.left = newLeft + "px";
+      chat.style.bottom = newBottom + "px";
+      clampChatIntoViewport();
+    });
+
+    cfDragHandle.addEventListener("pointerup", (e) => {
+      if (!dragging) return;
+      dragging = false;
+      cfDragHandle.style.cursor = "grab";
+      saveChatPos();
+    });
+
+    window.addEventListener("resize", () => {
+      if (!state.chatOpen) return;
+      clampChatIntoViewport();
+    });
+  })();
+
+  // ===== Chat open/min/close buttons =====
+  cfMinBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    setChatMin(!state.chatMin);
+  });
+  cfCloseBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    setChatOpen(false); // only close by button
+  });
+
+  // ===== Socket wrapper =====
+  function getSocket(){
+    return (window.socket && typeof window.socket.emit === "function") ? window.socket : null;
+  }
+  function emitAck(evt, payload, ms=12000){
+    const s = getSocket();
+    if (!s) return Promise.resolve({ ok:false, error:"no socket" });
+    return new Promise((resolve) => {
+      try{
+        s.timeout(ms).emit(evt, payload, (err, res) => {
+          if (err) return resolve({ ok:false, error:String(err?.message || err) });
+          resolve(res || { ok:false, error:"no response" });
+        });
+      }catch(ex){
+        resolve({ ok:false, error:String(ex?.message || ex) });
       }
-      me = res.me || me;
-      setHint("");
-      fetchFriends();
     });
   }
 
-  function fetchFriends(){
-    if(!sock){ setHint("好友/聊天：Socket 尚未連線"); return; }
-    if(!secret){ setHint("好友/聊天：請先登入（缺少 opSecret）"); return; }
-    sock.timeout(12000).emit("FRIENDS_GET", { secret }, (err, res) => {
-      if(err || !res?.ok){
-        setHint(res?.error || "好友清單讀取失敗");
-        return;
-      }
-      friends = (res.friends || []).slice(0, 200);
-      renderFriends();
-      if(activePeer){
-        // refresh active peer online status
-        const updated = friends.find(x=>x.userId===activePeer.userId);
-        if(updated) setActivePeer(updated, false);
-      }
-    });
+  // ===== Presence + friends =====
+  async function authSocial(){
+    const secret = getSecret();
+    if (!secret){
+      setHint("請先登入（缺少 opSecret）");
+      return { ok:false, error:"no secret" };
+    }
+    const res = await emitAck("SOCIAL_AUTH", { secret });
+    if (!res?.ok){
+      setHint("社交服務連線失敗：" + (res?.error || "unknown"));
+    }
+    return res;
+  }
+
+  async function refreshFriends(){
+    const secret = getSecret();
+    if (!secret){
+      setHint("請先登入（缺少 opSecret）");
+      return;
+    }
+    const res = await emitAck("FRIENDS_GET", { secret });
+    if (!res?.ok){
+      setHint("好友清單讀取失敗：" + (res?.error || "unknown"));
+      return;
+    }
+    state.me = res.me || null;
+    state.friends = Array.isArray(res.friends) ? res.friends : [];
+    renderFriends();
+    setHint("");
   }
 
   function renderFriends(){
-    listEl.innerHTML = "";
-    if(!friends.length){
-      const div = document.createElement("div");
-      div.style.padding="10px";
-      div.style.color="rgba(255,255,255,.65)";
-      div.style.fontSize="11px";
-      div.textContent = "目前沒有好友。你可以在上方輸入對方「名稱」加入（會自動互加）。";
-      listEl.appendChild(div);
+    fdList.innerHTML = "";
+    if (!state.friends.length){
+      const empty = document.createElement("div");
+      empty.style.color = "#9bb0c8";
+      empty.style.fontSize = "13px";
+      empty.style.padding = "8px 4px";
+      empty.textContent = "尚無好友。可用上方輸入名稱加入。";
+      fdList.appendChild(empty);
       return;
     }
-
-    // online first
-    const sorted = [...friends].sort((a,b)=> (b.online===true)-(a.online===true) || String(a.name).localeCompare(String(b.name),"zh-Hant"));
-    for(const f of sorted){
+    for (const f of state.friends){
+      const id = Number(f.user_id);
       const item = document.createElement("div");
-      item.className = "fd-item";
-      item.dataset.uid = String(f.userId);
-
-      const ava = document.createElement("div");
-      ava.className = "fd-ava";
-      const img = document.createElement("img");
-      img.alt = "";
-      img.src = avatarUrlById(f.avatar);
-      ava.appendChild(img);
-
-      const meta = document.createElement("div");
-      meta.className = "fd-meta";
-      const name = document.createElement("div");
-      name.className = "fd-name";
-      name.textContent = f.name || ("#" + f.userId);
-      const sub = document.createElement("div");
-      sub.className = "fd-sub";
-      const dot = document.createElement("span");
-      dot.className = "fd-dot" + (f.online ? " on" : "");
-      const sTxt = document.createElement("span");
-      sTxt.textContent = f.online ? "線上" : "離線";
-      sub.appendChild(dot); sub.appendChild(sTxt);
-
-      meta.appendChild(name); meta.appendChild(sub);
-
-      const badge = document.createElement("div");
-      badge.className = "fd-badge";
-      const u = unread.get(f.userId) || 0;
-      if(u>0){
-        badge.style.display="inline-flex";
-        badge.textContent = String(Math.min(99,u));
-      }
-
-      item.appendChild(ava);
-      item.appendChild(meta);
-      item.appendChild(badge);
-
+      const unread = Number(state.unread.get(id) || 0);
+      item.className = "fd-item" + (unread > 0 ? " has-unread" : "");
+      const isOnline = !!f.online;
+      item.innerHTML = `
+        <img class="fd-avatar" src="${escapeAttr(f.avatar || '')}" alt="">
+        <div class="fd-meta">
+          <div class="fd-name">${escapeHtml(f.name || "好友")}</div>
+          <div class="fd-sub">
+            <span class="fd-status ${isOnline ? "online":""}"><i></i>${isOnline ? "線上":"離線"}</span>
+            <span class="fd-pill">私訊</span>
+          </div>
+        </div>
+        <div class="fd-unread">${unread}</div>
+      `;
       item.addEventListener("click", () => {
-        setActivePeer(f, true);
+        // open chat + tab
+        setChatOpen(true);
+        setChatMin(false);
+        ensureTab({ user_id:id, name:f.name, avatar:f.avatar });
+        openActiveConversation();
       });
+      fdList.appendChild(item);
+    }
+    renderMiniUnread();
+  }
 
-      listEl.appendChild(item);
+  function escapeAttr(s){
+    return String(s ?? "").replace(/"/g, "&quot;");
+  }
+
+  // ===== Add friend =====
+  async function addFriendByName(name){
+    const secret = getSecret();
+    if (!secret){
+      setHint("請先登入（缺少 opSecret）");
+      return;
+    }
+    name = String(name || "").trim();
+    if (!name){
+      setHint("請輸入好友名稱");
+      return;
+    }
+    const res = await emitAck("FRIEND_ADD_BY_NAME", { secret, name });
+    if (!res?.ok){
+      setHint("加入失敗：" + (res?.error || "unknown"));
+      return;
+    }
+    setHint("已加入好友：" + name);
+    fdAddInput.value = "";
+    await refreshFriends();
+  }
+
+  // ===== Chat history + send =====
+  async function openActiveConversation(){
+    if (state.activeId == null) return;
+    const friendId = Number(state.activeId);
+    const friend = state.friends.find(x => Number(x.user_id) === friendId) || state.tabs.find(x => Number(x.id) === friendId);
+    cfTitle.textContent = friend?.name ? `聊天｜${friend.name}` : "聊天";
+    // fetch history (cache)
+    if (!state.history.has(friendId)){
+      const secret = getSecret();
+      if (!secret) return;
+      const res = await emitAck("DM_HISTORY", { secret, peerUserId: friendId, limit: 80 });
+      if (res?.ok){
+        state.history.set(friendId, Array.isArray(res.messages) ? res.messages : []);
+      } else {
+        state.history.set(friendId, []);
+      }
+    }
+    renderConversation(friendId);
+    // mark read
+    if (Number(state.unread.get(friendId)||0) > 0){
+      state.unread.set(friendId, 0);
+      renderFriends();
+      renderTabs();
     }
   }
 
-  function setActivePeer(f, openChat){
-    activePeer = f;
-    unread.set(f.userId, 0);
-    dock.classList.toggle("chat-open", !!openChat);
-    chatAva.src = avatarUrlById(f.avatar);
-    chatName.textContent = f.name || ("#" + f.userId);
-    chatStatus.textContent = f.online ? "線上" : "離線";
-    renderFriends();
-    if(openChat){
-      loadHistory(f.userId);
-      setTimeout(()=> chatInp?.focus(), 0);
+  function renderConversation(friendId){
+    const msgs = state.history.get(friendId) || [];
+    const meId = Number(state.me?.user_id);
+    cfBody.innerHTML = "";
+    for (const m of msgs){
+      const isMe = Number(m.from_user_id) === meId;
+      const row = document.createElement("div");
+      row.className = "cf-msg" + (isMe ? " me":"");
+      const bubble = document.createElement("div");
+      bubble.className = "cf-bubble";
+      bubble.textContent = safeText(m.body);
+      const time = document.createElement("div");
+      time.className = "cf-time";
+      time.textContent = fmtTime(m.created_at || m.createdAt || Date.now());
+      row.appendChild(bubble);
+      row.appendChild(time);
+      cfBody.appendChild(row);
     }
+    // scroll bottom
+    requestAnimationFrame(() => { cfBody.scrollTop = cfBody.scrollHeight; });
   }
 
-  function appendMsg(m){
-    const div = document.createElement("div");
-    div.className = "fd-msg" + (m.from === me.userId ? " me" : "");
-    div.textContent = m.body || "";
-    const t = document.createElement("span");
-    t.className = "t";
-    t.textContent = fmtTime(m.ts);
-    div.appendChild(t);
-    chatLog.appendChild(div);
-    chatLog.scrollTop = chatLog.scrollHeight + 9999;
+  async function sendMessage(){
+    const friendId = Number(state.activeId);
+    if (!Number.isFinite(friendId) || friendId <= 0){
+      setHint("請先選擇好友分頁");
+      return;
+    }
+    const secret = getSecret();
+    if (!secret){
+      setHint("請先登入（缺少 opSecret）");
+      return;
+    }
+    const body = String(cfInput.value || "").trim();
+    if (!body) return;
+    cfInput.value = "";
+    const res = await emitAck("DM_SEND", { secret, toUserId: friendId, body });
+    if (!res?.ok){
+      setHint("傳送失敗：" + (res?.error || "unknown"));
+      return;
+    }
+    // optimistic add into history
+    const arr = state.history.get(friendId) || [];
+    const msg = res.message || { from_user_id: state.me?.user_id, to_user_id: friendId, body, created_at: Date.now() };
+    arr.push(msg);
+    state.history.set(friendId, arr);
+    renderConversation(friendId);
+    setHint("");
   }
 
-  function loadHistory(peerId){
-    if(!sock){ setHint("好友/聊天：Socket 尚未連線"); return; }
-    if(!secret){ setHint("好友/聊天：請先登入（缺少 opSecret）"); return; }
-    chatLog.innerHTML = "";
-    sock.timeout(12000).emit("DM_HISTORY", { secret, withUserId: peerId, limit: 60 }, (err, res) => {
-      if(err || !res?.ok){
-        appendMsg({ from: peerId, body: "（讀取聊天記錄失敗）", ts: Date.now() });
-        return;
-      }
-      const msgs = res.messages || [];
-      for(const m of msgs) appendMsg(m);
-    });
-  }
-
-  function sendMsg(){
-    if(!activePeer) return;
-    if(!sock){ setHint("好友/聊天：Socket 尚未連線"); return; }
-    if(!secret){ setHint("好友/聊天：請先登入（缺少 opSecret）"); return; }
-    const body = String(chatInp.value||"").trim();
-    if(!body) return;
-    chatInp.value = "";
-    sock.timeout(12000).emit("DM_SEND", { secret, toUserId: activePeer.userId, body }, (err, res) => {
-      if(err || !res?.ok){
-        setHint(res?.error || "送出失敗");
-        return;
-      }
-      setHint("");
-      // message will also arrive via DM_NEW, but append immediately for snappy UX
-      if(res.message) appendMsg(res.message);
-    });
-  }
-
-  
-// click anywhere on collapsed dock to expand
-dock.addEventListener("click", (e) => {
-  if(dock.classList.contains("collapsed")){
-    if(e.target && (e.target.id === "fdMinBtn")) return;
-    dock.classList.remove("collapsed");
-    try{ localStorage.setItem("op_fdock_collapsed", "0"); }catch{}
-  }
-});
-
-minBtn.addEventListener("click", () => {
-    dock.classList.toggle("collapsed");
-    try{ localStorage.setItem("op_fdock_collapsed", dock.classList.contains("collapsed") ? "1" : "0"); }catch{}
+  cfSendBtn.addEventListener("click", sendMessage);
+  cfInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter"){
+      e.preventDefault();
+      sendMessage();
+    }
   });
 
-  addBtn.addEventListener("click", () => {
-    const name = String(addInp.value||"").trim();
-    if(!name) return;
-    addInp.value = "";
-    if(!sock){ setHint("好友/聊天：Socket 尚未連線"); return; }
-    if(!secret){ setHint("好友/聊天：請先登入（缺少 opSecret）"); return; }
-    sock.timeout(12000).emit("FRIEND_ADD_BY_NAME", { secret, name }, (err, res) => {
-      if(err || !res?.ok){
-        setHint(res?.error || "加入失敗");
-        return;
-      }
-      setHint("");
-      fetchFriends();
-    });
+  // ===== Dock buttons =====
+  dock.querySelector('button[data-act="toggle"]').addEventListener("click", (e) => {
+    e.stopPropagation();
+    setDockCollapsed(!dock.classList.contains("fd-collapsed"));
   });
-  addInp.addEventListener("keydown", (e) => {
-    if(e.key === "Enter") addBtn.click();
+  dock.querySelector('button[data-act="refresh"]').addEventListener("click", async (e) => {
+    e.stopPropagation();
+    await refreshFriends();
   });
-
-  chatSend.addEventListener("click", sendMsg);
-  chatInp.addEventListener("keydown", (e) => {
-    if(e.key === "Enter") sendMsg();
+  dock.querySelector('button[data-act="add"]').addEventListener("click", (e) => {
+    e.stopPropagation();
+    const show = fdAddRow.style.display === "none";
+    fdAddRow.style.display = show ? "flex" : "none";
+    if (show) setTimeout(() => fdAddInput.focus(), 30);
   });
-  chatClose.addEventListener("click", () => {
-    dock.classList.remove("chat-open");
-    activePeer = null;
+  fdAddBtn.addEventListener("click", () => addFriendByName(fdAddInput.value));
+  fdAddInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter"){
+      e.preventDefault();
+      addFriendByName(fdAddInput.value);
+    }
   });
 
-  function wireSocketEvents(){
-    if(!sock) return;
-    sock.on("FRIENDS_DIRTY", () => fetchFriends());
-    sock.on("DM_NEW", (m) => {
-      // Only show in dock if authed
-      if(!isAuthed()) return;
-      const fromId = Number(m.from);
-      const peerId = (fromId === me.userId) ? Number(m.to) : fromId;
+  // ===== Incoming DM handler =====
+  function attachSocketListeners(){
+    const s = getSocket();
+    if (!s) return;
 
-      if(activePeer && peerId === activePeer.userId){
-        appendMsg(m);
-      }else{
-        unread.set(peerId, (unread.get(peerId)||0) + 1);
+    // Avoid double-binding (across soft reloads)
+    if (window.__opFriendsDockBoundV4) return;
+    window.__opFriendsDockBoundV4 = true;
+
+    s.on("SOCIAL_PRESENCE", (payload) => {
+      try{
+        const map = payload?.online || {};
+        for (const f of state.friends){
+          f.online = !!map[String(f.user_id)];
+        }
         renderFriends();
-      }
+      }catch{}
+    });
+
+    s.on("DM_PUSH", (msg) => {
+      try{
+        const meId = Number(state.me?.user_id);
+        const fromId = Number(msg?.from_user_id);
+        const toId = Number(msg?.to_user_id);
+        if (!Number.isFinite(fromId) || !Number.isFinite(toId)) return;
+
+        const peerId = (fromId === meId) ? toId : fromId;
+
+        // store into history cache
+        const arr = state.history.get(peerId) || [];
+        arr.push(msg);
+        state.history.set(peerId, arr);
+
+        // if tab exists and active and chat open and not minimized -> render & mark read
+        const isActive = Number(state.activeId) === Number(peerId);
+        if (isActive && state.chatOpen && !state.chatMin){
+          renderConversation(peerId);
+          state.unread.set(peerId, 0);
+        } else {
+          // increment unread
+          const prev = Number(state.unread.get(peerId) || 0);
+          state.unread.set(peerId, prev + 1);
+        }
+
+        // if there is a tab for this peer -> update badge; else keep unread on friend list only
+        renderFriends();
+        renderTabs();
+        renderMiniUnread();
+      }catch{}
     });
   }
 
-  // boot
-  ensureSocket();
-  ensureSecret();
-  wireSocketEvents();
-  socialAuth();
-  // refresh presence/friends periodically
-  setInterval(() => { if(secret) fetchFriends(); }, 12000);
+  // ===== Boot =====
+  loadTabs();
+  renderTabs();
+  attachSocketListeners();
+
+  (async () => {
+    const a = await authSocial();
+    if (a?.ok){
+      await refreshFriends();
+      // restore tabs UI
+      if (state.tabs.length){
+        // ensure active is valid
+        if (!state.tabs.some(t => Number(t.id) === Number(state.activeId))){
+          state.activeId = Number(state.tabs[0].id);
+          saveTabs();
+        }
+        renderTabs();
+        // if chat open, render active convo
+        if (state.chatOpen && state.activeId != null){
+          openActiveConversation();
+        }
+      }
+    }
+  })();
+
 })();
 </script>
+
 <!-- =================== /Friends Dock =================== -->
 
 </body>
