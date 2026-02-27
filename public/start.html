@@ -1761,7 +1761,7 @@ function titleTierOf(p){
   #friendDock{
     position:fixed;
     top:72px;
-    right:12px;
+    left:12px;
     z-index: 9998;
     width: 300px;
     height: min(640px, calc(100vh - 92px));
@@ -1821,37 +1821,29 @@ function titleTierOf(p){
   }
   .fd-inp{
     flex:1;
-    height:32px;
+    height:38px;
     border-radius: 12px;
-    border:1px solid rgba(255,255,255,.12);
-    background: rgba(0,0,0,.22);
+    border:1px solid rgba(255,255,255,.10);
+    background: rgba(0,0,0,.20);
     color: var(--fd-text);
     padding:0 10px;
     outline:none;
-    font-size:12px;
-    min-width:0;
   }
   .fd-inp::placeholder{ color: rgba(255,255,255,.35); }
   .fd-add{
-    height:32px;
-    padding:0 10px;
+    height:38px;
+    padding: 0 12px;
     border-radius: 12px;
     border:1px solid rgba(255,211,107,.45);
-    background: rgba(255,211,107,.10);
+    background: rgba(255,211,107,.12);
     color: var(--fd-text);
+    font-weight:900;
     cursor:pointer;
-    font-weight:800;
-    font-size:12px;
-
-    flex: 0 0 auto;
-    min-width: 56px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    line-height:1;
+  
+    display:flex; align-items:center; justify-content:center;
     white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
+    line-height:1;
+    font-size:13px;
   }
   .fd-body{ flex:1; overflow:hidden; display:flex; }
   .fd-col{ flex:1; display:flex; flex-direction:column; min-width:0; }
@@ -1899,11 +1891,11 @@ function titleTierOf(p){
   /* ===== Chat Tray (LoL style) ===== */
   #fdChatTray{
     position: fixed;
-    right: 12px;
+    left:12px;
     bottom: 12px;
     z-index: 9999;
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
     flex-direction: row; /* newest near right */
     align-items: flex-end;
     gap: 10px;
@@ -1996,18 +1988,15 @@ function titleTierOf(p){
     border:1px solid rgba(255,211,107,.45);
     background: rgba(255,211,107,.12);
     color: var(--fd-text);
-    font-weight:800;
+    font-weight:900;
     cursor:pointer;
-
-    height:32px;
+  
+    height:38px;
     padding:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    display:flex; align-items:center; justify-content:center;
     white-space:nowrap;
     line-height:1;
-    font-size:12px;
-    flex: 0 0 auto;
+    font-size:13px;
   }
   .fd-send:active{ transform: translateY(1px); }
 
@@ -2327,7 +2316,7 @@ function titleTierOf(p){
 
     el.innerHTML = `
       <div class="fd-chat-hd">
-        <div class="fd-chat-peer" title="點一下可還原">
+        <div class="fd-chat-peer" title="點一下可置頂">
           <div class="fd-ava" style="width:28px;height:28px;"><img class="fdChatAva" alt=""></div>
           <div class="meta" style="min-width:0;">
             <div class="n fdChatName">—</div>
@@ -2364,7 +2353,8 @@ function titleTierOf(p){
     closeBtn.addEventListener("click", ()=> closeChat(peerId));
     minBtn.addEventListener("click", ()=> toggleMin(peerId));
     el.querySelector(".fd-chat-peer")?.addEventListener("click", ()=>{
-if(openChats.get(peerId)?.minimized) toggleMin(peerId);
+      bringToFront(peerId);
+      if(openChats.get(peerId)?.minimized) toggleMin(peerId);
       setTimeout(()=> inp?.focus(), 0);
     });
 
@@ -2388,14 +2378,12 @@ if(openChats.get(peerId)?.minimized) toggleMin(peerId);
 
     if(openChats.has(peerId)){
       // restore + focus + bring front
-const w = openChats.get(peerId);
+      bringToFront(peerId);
+      const w = openChats.get(peerId);
       w.peer = peer;
       updateWinHeader(peerId);
       if(w.minimized) toggleMin(peerId);
       setWinBadge(peerId, 0);
-      // move to left-most (newest)
-      chatOrder = [peerId, ...chatOrder.filter(x=>x!==peerId)];
-      try{ tray.insertBefore(w.el, tray.firstChild); }catch(e){}
       setTimeout(()=> w.inp?.focus(), 0);
       return;
     }
@@ -2403,14 +2391,16 @@ const w = openChats.get(peerId);
     // cap windows like LoL (avoid overflow)
     const MAX_OPEN = 4;
     if(chatOrder.length >= MAX_OPEN){
-      const kick = chatOrder.pop();
+      const kick = chatOrder.shift();
       if(kick != null) closeChat(kick);
     }
 
     const el = createChatWindow(peer);
-    tray.insertBefore(el, tray.firstChild);
-    chatOrder.unshift(peerId);
-loadHistory(peerId);
+    tray.appendChild(el);
+    chatOrder.push(peerId);
+
+    bringToFront(peerId);
+    loadHistory(peerId);
     setTimeout(()=> openChats.get(peerId)?.inp?.focus(), 0);
   }
 
