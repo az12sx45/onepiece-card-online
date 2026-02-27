@@ -1745,5 +1745,552 @@ function titleTierOf(p){
       });
     }
   </script>
+<!-- ===================== Friends Dock (LoL-like) ===================== -->
+<style id="friendDockStyle">
+  :root{
+    --fd-bg: rgba(10,16,26,.92);
+    --fd-bg2: rgba(6,10,18,.92);
+    --fd-line: rgba(255,255,255,.10);
+    --fd-text: rgba(255,255,255,.92);
+    --fd-muted: rgba(255,255,255,.60);
+    --fd-gold: rgba(255,211,107,.92);
+    --fd-green: #22c55e;
+    --fd-red: #ef4444;
+    --fd-blue: #60a5fa;
+  }
+  #friendDock{
+    position:fixed;
+    top:72px;
+    right:12px;
+    z-index: 9998;
+    width: 300px;
+    height: min(640px, calc(100vh - 92px));
+    border:1px solid var(--fd-line);
+    border-radius: 16px;
+    background: linear-gradient(180deg, var(--fd-bg), var(--fd-bg2));
+    box-shadow: 0 18px 60px rgba(0,0,0,.45);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    backdrop-filter: blur(10px);
+  }
+  #friendDock.collapsed{
+    width: 52px;
+    height: 240px;
+  }
+  #friendDock *{ box-sizing:border-box; font-family:inherit; }
+  .fd-hd{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 10px;
+    border-bottom:1px solid var(--fd-line);
+    background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,0));
+  }
+  .fd-hd .left{ display:flex; align-items:center; gap:8px; min-width:0; }
+  .fd-logo{
+    width:26px;height:26px;border-radius:10px;
+    border:1px solid rgba(255,255,255,.12);
+    background: radial-gradient(circle at 30% 30%, rgba(255,211,107,.28), transparent 60%),
+                linear-gradient(135deg, rgba(96,165,250,.18), rgba(236,72,153,.12));
+    display:flex;align-items:center;justify-content:center;
+    flex:none;
+  }
+  .fd-title{ font-weight:900; font-size:12px; letter-spacing:.4px; color:var(--fd-text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .fd-mini{
+    display:flex; gap:6px; align-items:center;
+  }
+  .fd-btn{
+    width:30px;height:30px;border-radius:12px;
+    border:1px solid rgba(255,255,255,.12);
+    background: rgba(0,0,0,.18);
+    color: var(--fd-text);
+    cursor:pointer;
+  }
+  .fd-btn:hover{ filter:brightness(1.08); }
+  .fd-body{ display:flex; flex:1; min-height:0; }
+  .fd-col{ display:flex; flex-direction:column; flex:1; min-height:0; }
+  .fd-tools{
+    padding:10px;
+    display:flex; gap:8px; align-items:center;
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .fd-inp{
+    flex:1;
+    height:32px;
+    border-radius: 12px;
+    border:1px solid rgba(255,255,255,.12);
+    background: rgba(0,0,0,.22);
+    color: var(--fd-text);
+    padding:0 10px;
+    outline:none;
+    font-size:12px;
+  }
+  .fd-add{
+    height:32px;
+    padding:0 10px;
+    border-radius: 12px;
+    border:1px solid rgba(255,211,107,.45);
+    background: rgba(255,211,107,.10);
+    color: var(--fd-text);
+    cursor:pointer;
+    font-weight:800;
+    font-size:12px;
+  }
+  .fd-add:active{ transform: translateY(1px); }
+  .fd-list{
+    overflow:auto;
+    padding:8px;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .fd-item{
+    display:flex; align-items:center; gap:10px;
+    padding:8px 8px;
+    border-radius: 14px;
+    border:1px solid rgba(255,255,255,.08);
+    background: rgba(0,0,0,.12);
+    cursor:pointer;
+  }
+  .fd-item:hover{ border-color: rgba(255,255,255,.16); background: rgba(0,0,0,.18); }
+  .fd-ava{
+    width:34px;height:34px;border-radius:999px; overflow:hidden;
+    border:1px solid rgba(255,255,255,.12);
+    flex:none;
+    background: rgba(0,0,0,.22);
+  }
+  .fd-ava img{ width:100%;height:100%;object-fit:cover; display:block; }
+  .fd-meta{ min-width:0; flex:1; }
+  .fd-name{ font-weight:900; font-size:12px; color:var(--fd-text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .fd-sub{ margin-top:2px; font-size:11px; color:var(--fd-muted); display:flex; align-items:center; gap:6px; }
+  .fd-dot{ width:8px;height:8px;border-radius:50%; background: var(--fd-red); box-shadow:0 0 0 3px rgba(239,68,68,.12); }
+  .fd-dot.on{ background: var(--fd-green); box-shadow:0 0 0 3px rgba(34,197,94,.12); }
+  .fd-badge{
+    min-width: 18px;
+    height: 18px;
+    padding:0 6px;
+    border-radius: 999px;
+    background: rgba(96,165,250,.18);
+    border:1px solid rgba(96,165,250,.35);
+    color: rgba(255,255,255,.92);
+    font-size:11px;
+    font-weight:900;
+    display:none;
+    align-items:center;
+    justify-content:center;
+  }
+
+  /* chat pane */
+  .fd-chat{
+    width: 0;
+    border-left:1px solid rgba(255,255,255,.08);
+    background: rgba(0,0,0,.12);
+    display:flex;
+    flex-direction:column;
+    min-height:0;
+    transition: width .18s ease;
+    overflow:hidden;
+  }
+  #friendDock.chat-open .fd-chat{ width: 360px; }
+  #friendDock.collapsed .fd-body, #friendDock.collapsed .fd-tools{ display:none; }
+  #friendDock.collapsed .fd-hd{ justify-content:center; }
+  #friendDock.collapsed .fd-title{ display:none; }
+  #friendDock.collapsed .fd-mini{ display:none; }
+
+  .fd-chat-hd{
+    padding:10px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+  }
+  .fd-chat-peer{ display:flex; align-items:center; gap:8px; min-width:0; }
+  .fd-chat-peer .n{ font-weight:900; font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .fd-chat-peer .s{ font-size:11px; color:var(--fd-muted); }
+  .fd-chat-log{
+    flex:1; min-height:0;
+    padding:10px;
+    overflow:auto;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .fd-msg{
+    max-width: 86%;
+    padding:8px 10px;
+    border-radius: 14px;
+    border:1px solid rgba(255,255,255,.10);
+    background: rgba(0,0,0,.18);
+    color: var(--fd-text);
+    font-size:12px;
+    line-height:1.35;
+    white-space:pre-wrap;
+    word-break:break-word;
+  }
+  .fd-msg.me{
+    align-self:flex-end;
+    border-color: rgba(255,211,107,.24);
+    background: rgba(255,211,107,.10);
+  }
+  .fd-msg .t{
+    display:block;
+    margin-top:4px;
+    font-size:10px;
+    color: rgba(255,255,255,.55);
+  }
+  .fd-chat-in{
+    padding:10px;
+    border-top:1px solid rgba(255,255,255,.08);
+    display:flex; gap:8px;
+  }
+  .fd-send{
+    width: 64px;
+    border-radius: 12px;
+    border:1px solid rgba(255,211,107,.45);
+    background: rgba(255,211,107,.12);
+    color: var(--fd-text);
+    font-weight:900;
+    cursor:pointer;
+  }
+  .fd-send:active{ transform: translateY(1px); }
+  .fd-warn{
+    padding:10px;
+    font-size:11px;
+    color: rgba(255,255,255,.70);
+    border-top:1px dashed rgba(255,255,255,.10);
+  }
+</style>
+
+<div id="friendDock" class="collapsed" aria-label="friends-dock">
+  <div class="fd-hd">
+    <div class="left">
+      <div class="fd-logo">💬</div>
+      <div class="fd-title">好友 / 聊天</div>
+    </div>
+    <div class="fd-mini">
+      <button class="fd-btn" id="fdMinBtn" title="縮小/展開">▣</button>
+    </div>
+  </div>
+
+  <div class="fd-tools">
+    <input id="fdAddName" class="fd-inp" placeholder="輸入好友名稱加入…" />
+    <button id="fdAddBtn" class="fd-add">加入</button>
+  </div>
+
+  <div class="fd-body">
+    <div class="fd-col">
+      <div id="fdList" class="fd-list"></div>
+      <div id="fdHint" class="fd-warn" style="display:none;"></div>
+    </div>
+
+    <div class="fd-chat">
+      <div class="fd-chat-hd">
+        <div class="fd-chat-peer">
+          <div class="fd-ava" style="width:28px;height:28px;"><img id="fdChatAva" alt=""></div>
+          <div style="min-width:0;">
+            <div class="n" id="fdChatName">—</div>
+            <div class="s" id="fdChatStatus">—</div>
+          </div>
+        </div>
+        <button class="fd-btn" id="fdChatClose" title="關閉聊天">✕</button>
+      </div>
+
+      <div id="fdChatLog" class="fd-chat-log"></div>
+
+      <div class="fd-chat-in">
+        <input id="fdChatInp" class="fd-inp" placeholder="輸入訊息…（Enter 送出）" />
+        <button id="fdChatSend" class="fd-send">送出</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // Avoid double init
+  if (window.__friendDockInited) return;
+  window.__friendDockInited = true;
+
+  function q(sel){ return document.querySelector(sel); }
+  function clamp(n,a,b){ n=Number(n); if(!Number.isFinite(n)) n=a; return Math.max(a,Math.min(b,n)); }
+  function avatarUrlById(id){
+    const n = clamp(id, 1, (window.AVATAR_COUNT||50));
+    return `images/avatars/${n}.webp`;
+  }
+  function fmtTime(ts){
+    try{
+      const d = new Date(ts);
+      const hh = String(d.getHours()).padStart(2,'0');
+      const mm = String(d.getMinutes()).padStart(2,'0');
+      return `${hh}:${mm}`;
+    }catch{ return ""; }
+  }
+
+  const dock = q("#friendDock");
+  const listEl = q("#fdList");
+  const hintEl = q("#fdHint");
+  const minBtn = q("#fdMinBtn");
+  const addInp = q("#fdAddName");
+  const addBtn = q("#fdAddBtn");
+
+  const chatClose = q("#fdChatClose");
+  const chatAva = q("#fdChatAva");
+  const chatName = q("#fdChatName");
+  const chatStatus = q("#fdChatStatus");
+  const chatLog = q("#fdChatLog");
+  const chatInp = q("#fdChatInp");
+  const chatSend = q("#fdChatSend");
+
+  let sock = window.socket || null;
+  let secret = "";
+  let me = { userId: 0 };
+  let friends = [];
+  let activePeer = null; // {userId,name,avatar,online}
+  let unread = new Map(); // peerId -> count
+
+  // restore collapsed state
+  try{
+    const c = localStorage.getItem("op_fdock_collapsed");
+    if(c === "0") dock.classList.remove("collapsed");
+  }catch{}
+
+  function setHint(msg){
+    if(!msg){ hintEl.style.display="none"; hintEl.textContent=""; return; }
+    hintEl.style.display="block";
+    hintEl.textContent = msg;
+  }
+
+  function ensureSocket(){
+    if (sock && sock.connected !== false) return sock;
+    // fallback: if page didn't create socket, create it here
+    const url =
+      window.SERVER_URL ||
+      window.serverURL ||
+      localStorage.getItem("op_server_url") ||
+      (location.origin.includes("onrender.com") ? location.origin : location.origin);
+    if (typeof io !== "function"){
+      setHint("缺少 Socket.IO（io）");
+      return null;
+    }
+    sock = io(url, { transports: ["websocket"] });
+    window.socket = sock;
+    return sock;
+  }
+
+  function ensureSecret(){
+    secret = (window.secret || localStorage.getItem("op_secret") || localStorage.getItem("opSecret") || "").trim();
+    return secret;
+  }
+
+  function isAuthed(){
+    return !!(secret && me && me.userId);
+  }
+
+  async function socialAuth(){
+    ensureSocket();
+    ensureSecret();
+    if(!sock || !secret) return;
+
+    sock.timeout(12000).emit("SOCIAL_AUTH", { secret }, (err, res) => {
+      if(err || !res?.ok){
+        setHint("好友/聊天：尚未登入（缺少 secret）");
+        return;
+      }
+      me = res.me || me;
+      setHint("");
+      fetchFriends();
+    });
+  }
+
+  function fetchFriends(){
+    if(!sock || !secret) return;
+    sock.timeout(12000).emit("FRIENDS_GET", { secret }, (err, res) => {
+      if(err || !res?.ok){
+        setHint(res?.error || "好友清單讀取失敗");
+        return;
+      }
+      friends = (res.friends || []).slice(0, 200);
+      renderFriends();
+      if(activePeer){
+        // refresh active peer online status
+        const updated = friends.find(x=>x.userId===activePeer.userId);
+        if(updated) setActivePeer(updated, false);
+      }
+    });
+  }
+
+  function renderFriends(){
+    listEl.innerHTML = "";
+    if(!friends.length){
+      const div = document.createElement("div");
+      div.style.padding="10px";
+      div.style.color="rgba(255,255,255,.65)";
+      div.style.fontSize="11px";
+      div.textContent = "目前沒有好友。你可以在上方輸入對方「名稱」加入（會自動互加）。";
+      listEl.appendChild(div);
+      return;
+    }
+
+    // online first
+    const sorted = [...friends].sort((a,b)=> (b.online===true)-(a.online===true) || String(a.name).localeCompare(String(b.name),"zh-Hant"));
+    for(const f of sorted){
+      const item = document.createElement("div");
+      item.className = "fd-item";
+      item.dataset.uid = String(f.userId);
+
+      const ava = document.createElement("div");
+      ava.className = "fd-ava";
+      const img = document.createElement("img");
+      img.alt = "";
+      img.src = avatarUrlById(f.avatar);
+      ava.appendChild(img);
+
+      const meta = document.createElement("div");
+      meta.className = "fd-meta";
+      const name = document.createElement("div");
+      name.className = "fd-name";
+      name.textContent = f.name || ("#" + f.userId);
+      const sub = document.createElement("div");
+      sub.className = "fd-sub";
+      const dot = document.createElement("span");
+      dot.className = "fd-dot" + (f.online ? " on" : "");
+      const sTxt = document.createElement("span");
+      sTxt.textContent = f.online ? "線上" : "離線";
+      sub.appendChild(dot); sub.appendChild(sTxt);
+
+      meta.appendChild(name); meta.appendChild(sub);
+
+      const badge = document.createElement("div");
+      badge.className = "fd-badge";
+      const u = unread.get(f.userId) || 0;
+      if(u>0){
+        badge.style.display="inline-flex";
+        badge.textContent = String(Math.min(99,u));
+      }
+
+      item.appendChild(ava);
+      item.appendChild(meta);
+      item.appendChild(badge);
+
+      item.addEventListener("click", () => {
+        setActivePeer(f, true);
+      });
+
+      listEl.appendChild(item);
+    }
+  }
+
+  function setActivePeer(f, openChat){
+    activePeer = f;
+    unread.set(f.userId, 0);
+    dock.classList.toggle("chat-open", !!openChat);
+    chatAva.src = avatarUrlById(f.avatar);
+    chatName.textContent = f.name || ("#" + f.userId);
+    chatStatus.textContent = f.online ? "線上" : "離線";
+    renderFriends();
+    if(openChat){
+      loadHistory(f.userId);
+      setTimeout(()=> chatInp?.focus(), 0);
+    }
+  }
+
+  function appendMsg(m){
+    const div = document.createElement("div");
+    div.className = "fd-msg" + (m.from === me.userId ? " me" : "");
+    div.textContent = m.body || "";
+    const t = document.createElement("span");
+    t.className = "t";
+    t.textContent = fmtTime(m.ts);
+    div.appendChild(t);
+    chatLog.appendChild(div);
+    chatLog.scrollTop = chatLog.scrollHeight + 9999;
+  }
+
+  function loadHistory(peerId){
+    if(!sock || !secret) return;
+    chatLog.innerHTML = "";
+    sock.timeout(12000).emit("DM_HISTORY", { secret, withUserId: peerId, limit: 60 }, (err, res) => {
+      if(err || !res?.ok){
+        appendMsg({ from: peerId, body: "（讀取聊天記錄失敗）", ts: Date.now() });
+        return;
+      }
+      const msgs = res.messages || [];
+      for(const m of msgs) appendMsg(m);
+    });
+  }
+
+  function sendMsg(){
+    if(!activePeer) return;
+    const body = String(chatInp.value||"").trim();
+    if(!body) return;
+    chatInp.value = "";
+    sock.timeout(12000).emit("DM_SEND", { secret, toUserId: activePeer.userId, body }, (err, res) => {
+      if(err || !res?.ok){
+        setHint(res?.error || "送出失敗");
+        return;
+      }
+      setHint("");
+      // message will also arrive via DM_NEW, but append immediately for snappy UX
+      if(res.message) appendMsg(res.message);
+    });
+  }
+
+  minBtn.addEventListener("click", () => {
+    dock.classList.toggle("collapsed");
+    try{ localStorage.setItem("op_fdock_collapsed", dock.classList.contains("collapsed") ? "1" : "0"); }catch{}
+  });
+
+  addBtn.addEventListener("click", () => {
+    const name = String(addInp.value||"").trim();
+    if(!name) return;
+    addInp.value = "";
+    if(!sock || !secret) return;
+    sock.timeout(12000).emit("FRIEND_ADD_BY_NAME", { secret, name }, (err, res) => {
+      if(err || !res?.ok){
+        setHint(res?.error || "加入失敗");
+        return;
+      }
+      setHint("");
+      fetchFriends();
+    });
+  });
+  addInp.addEventListener("keydown", (e) => {
+    if(e.key === "Enter") addBtn.click();
+  });
+
+  chatSend.addEventListener("click", sendMsg);
+  chatInp.addEventListener("keydown", (e) => {
+    if(e.key === "Enter") sendMsg();
+  });
+  chatClose.addEventListener("click", () => {
+    dock.classList.remove("chat-open");
+    activePeer = null;
+  });
+
+  function wireSocketEvents(){
+    if(!sock) return;
+    sock.on("FRIENDS_DIRTY", () => fetchFriends());
+    sock.on("DM_NEW", (m) => {
+      // Only show in dock if authed
+      if(!isAuthed()) return;
+      const fromId = Number(m.from);
+      const peerId = (fromId === me.userId) ? Number(m.to) : fromId;
+
+      if(activePeer && peerId === activePeer.userId){
+        appendMsg(m);
+      }else{
+        unread.set(peerId, (unread.get(peerId)||0) + 1);
+        renderFriends();
+      }
+    });
+  }
+
+  // boot
+  ensureSocket();
+  wireSocketEvents();
+  socialAuth();
+  // refresh presence/friends periodically
+  setInterval(() => { if(secret) fetchFriends(); }, 12000);
+})();
+</script>
+<!-- =================== /Friends Dock =================== -->
+
 </body>
 </html>
