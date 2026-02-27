@@ -2270,23 +2270,45 @@ function titleTierOf(p){
     });
   }
 
-  function sendMsg(peerId){
-    const w = openChats.get(peerId);
-    if(!w) return;
-    if(!sock){ setHint("好友/聊天：Socket 尚未連線"); return; }
-    if(!secret){ setHint("好友/聊天：請先登入（缺少 opSecret）"); return; }
-    const body = String(w.inp.value||"").trim();
-    if(!body) return;
-    w.inp.value = "";
-    sock.timeout(12000).emit("DM_SEND", { secret, toUserId: peerId, body }, (err, res) => {
-      if(err || !res?.ok){
-        setHint(res?.error || "送出失敗");
-        return;
+    function sendMsg(peerId){
+      const w = openChats.get(peerId);
+      if(!w) return;
+      if(!sock){ setHint("好友/聊天：Socket 尚未連線"); return; }
+      if(!secret){ setHint("好友/聊天：請先登入（缺少 opSecret）"); return; }
+      const body = String(w.inp.value||"").trim();
+      if(!body) return;
+
+      // ✅ 先在本地立即顯示（避免一定要關掉再打開才看到自己剛送出的訊息）
+      w.inp.value = "";
+      const now = Date.now();
+      if(isAuthed()){
+        appendMsgTo(peerId, { from: me.userId, to: peerId, body, ts: now });
+      }else{
+        // 尚未 SOCIAL_AUTH 完成也先顯示（from 用 -1，不影響樣式）
+        appendMsgTo(peerId, { from: -1, to: peerId, body, ts: now });
       }
-      setHint("");
-      if(res.message) appendMsgTo(peerId, res.message);
-    });
-  }
+
+      sock.timeout(12000).emit("DM_SEND", { secret, toUserId: peerId, body }, (err, res) => {
+        if(err || !res?.ok){
+          setHint(res?.error || "送出失敗");
+          return;
+        }
+        setHint("");
+
+        // 若 server 也回傳 message（或同時廣播 DM_NEW），避免重複追加
+        const m = res.message;
+        if(m && typeof m === "object"){
+          const last = w.log?.lastElementChild;
+          const lastTxt = last ? (last.firstChild?.nodeValue || last.textContent || "") : "";
+          const sameBody = String(lastTxt||"").trim() === String(m.body||"").trim();
+          const nearTs = Math.abs((Number(m.ts)||0) - now) <= 3000;
+          const lastIsMe = last ? last.classList?.contains("me") : false;
+          if(!(sameBody && nearTs && lastIsMe)){
+            appendMsgTo(peerId, m);
+          }
+        }
+      });
+    }
 
   function closeChat(peerId){
     const w = openChats.get(peerId);
