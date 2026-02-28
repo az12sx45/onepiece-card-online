@@ -2715,6 +2715,17 @@ const presetN      = Math.max(2, Math.min(8, Number(sp.get('n') || '4') || 4));
 
 const serverURL = sp.get('server') || undefined;
 const socket = io(serverURL, { transports:['websocket'] });
+
+// ===== friends presence (for friend dock status) =====
+try{
+  const __sec = localStorage.getItem("opSecret");
+  if(__sec){
+    socket.on("connect", ()=>{
+      try{ socket.emit("SOCIAL_AUTH", { secret: __sec }); }catch(e){}
+      try{ socket.emit("SOCIAL_PRESENCE_SET", { page: "game" }); }catch(e){}
+    });
+  }
+}catch(e){}
 let me = { roomId: presetRoom || 'op-001', playerId: null, secret: localStorage.getItem('opSecret')||'' };
 let _autoSkipKey = null;   // 麻痺自動跳過用的防呆 key
 let state = null;
