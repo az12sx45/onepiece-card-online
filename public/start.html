@@ -2160,6 +2160,9 @@ function titleTierOf(p){
         return;
       }
       me = res.me || me;
+
+      // 更新自己的好友狀態（讓其他人看到你在start頁）
+      try{ sock.emit("PRESENCE_SET", { secret, page: "start" }); }catch{}
       setHint("");
       fetchFriends();
     });
@@ -2295,7 +2298,7 @@ function titleTierOf(p){
       const dot = document.createElement("span");
       dot.className = "fd-dot" + (f.online ? " on" : "");
       const sTxt = document.createElement("span");
-      sTxt.textContent = f.online ? "線上" : "離線";
+      sTxt.textContent = f.online ? (f.activity || "線上") : "離線";
       sub.appendChild(dot); sub.appendChild(sTxt);
 
       meta.appendChild(name); meta.appendChild(sub);
@@ -2356,7 +2359,7 @@ item.addEventListener("click", () => {
     const f = w.peer;
     const name = f?.name || ("#" + peerId);
     w.nameEl.textContent = name;
-    w.statusEl.textContent = f?.online ? "線上" : "離線";
+    w.statusEl.textContent = f?.online ? (f?.activity || "線上") : "離線";
     w.avaImg.src = avatarUrlById(f?.avatar || 1);
   }
 
