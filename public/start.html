@@ -2565,9 +2565,10 @@ item.addEventListener("click", () => {
       dock.classList.remove("collapsed");
       try{ localStorage.setItem("op_fdock_collapsed", "0"); }catch{}
     }
-  });
+  }, true);
 
   minBtn.addEventListener("click", () => {
+    closeFriendMenus();
     dock.classList.toggle("collapsed");
     try{ localStorage.setItem("op_fdock_collapsed", dock.classList.contains("collapsed") ? "1" : "0"); }catch{}
   });
