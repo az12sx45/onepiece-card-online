@@ -1775,7 +1775,8 @@ function titleTierOf(p){
     backdrop-filter: blur(10px);
   }
   /* Collapsed = 自己的頭像 + 名稱 + 「點開好友清單」 */
-  #friendDock.collapsed{ width:190px; height:164px; }
+  #friendDock.collapsed{ width:190px; height:128px; }
+  #friendDock.collapsed .fd-hd{ display:none; }
   #friendDock.collapsed .fd-title,
   #friendDock.collapsed .fd-tools,
   #friendDock.collapsed .fd-body{ display:none; }
@@ -1834,6 +1835,17 @@ function titleTierOf(p){
     font-size:13px;
   }
   .fd-open:hover{ background: rgba(255,211,107,.16); }
+
+/* Top self bar (always visible; becomes header when collapsed) */
+.fd-me-top{
+  padding:10px 10px 8px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.fd-me-top .fd-me{
+  padding:10px;
+}
+/* When collapsed: top bar is the only header; no divider line */
+#friendDock.collapsed .fd-me-top{ border-bottom:none; padding-bottom:6px; }
 
   .fd-hd{
     height:56px;
@@ -2106,25 +2118,30 @@ function titleTierOf(p){
 </style>
 
 <div id="friendDock" class="collapsed" aria-label="friends-dock">
-  <div class="fd-hd">
-    <div class="left">
-      <div class="fd-logo">💬</div>
-      <div class="fd-title">好友 / 聊天</div>
-    </div>
-    <div class="fd-mini">
-      <button class="fd-btn" id="fdMinBtn" title="縮小/展開">▣</button>
-    </div>
-  </div>
-
-
-  <div class="fd-collapsed" aria-label="friends-collapsed">
+  
+  <div class="fd-me-top" aria-label="me-top">
     <div class="fd-me">
       <div class="fd-ava"><img id="fdMeAvaImg" alt=""></div>
       <div class="fd-me-meta">
         <div id="fdMeName" class="fd-me-name">—</div>
         <div class="fd-me-sub">我的好友</div>
       </div>
+      <div class="fd-morewrap" style="margin-left:auto;">
+        <button class="fd-btn" id="fdMinBtn" title="縮小/展開">▣</button>
+      </div>
     </div>
+  </div>
+
+  <div class="fd-hd">
+    <div class="left">
+      <div class="fd-logo">💬</div>
+      <div class="fd-title">好友 / 聊天</div>
+    </div>
+    <div class="fd-mini"></div>
+  </div>
+
+
+  <div class="fd-collapsed" aria-label="friends-collapsed">
     <button id="fdOpenBtn" class="fd-open" type="button">點開好友清單</button>
   </div>
 
