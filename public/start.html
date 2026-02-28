@@ -2272,6 +2272,10 @@ function titleTierOf(p){
       }
       friends = (res.friends || []).slice(0, 200);
       renderFriends();
+      // incoming friend requests (need confirm)
+      const reqsIn = Array.isArray(res.requestsIn) ? res.requestsIn : [];
+      if(reqsIn.length) handleIncomingFriendRequests(reqsIn);
+
       // sync open chat online status
       for(const [peerId, w] of openChats.entries()){
         const f = friends.find(x=>x.userId===peerId);
@@ -2283,7 +2287,36 @@ function titleTierOf(p){
     });
   }
 
-  function avatarUrlById(id){
+  
+
+// ===== friend request confirm flow =====
+let __fdReqPrompting = false;
+function handleIncomingFriendRequests(reqs){
+  if(__fdReqPrompting) return;
+  if(!sock || !secret) return;
+  __fdReqPrompting = true;
+  (async ()=>{
+    try{
+      for(const r of (reqs||[])){
+        const fromId = Number(r?.userId)||0;
+        if(!(fromId>0)) continue;
+        const nm = String(r?.name || ('#'+fromId)).trim() || ('#'+fromId);
+        const ok = confirm(`玩家「${nm}」想加你好友，是否同意？`);
+        const evt = ok ? "FRIEND_REQUEST_ACCEPT" : "FRIEND_REQUEST_REJECT";
+        await new Promise((resolve)=>{
+          sock.timeout(12000).emit(evt, { secret, fromId }, ()=> resolve());
+        });
+      }
+    }catch(_e){
+    }finally{
+      __fdReqPrompting = false;
+      // refresh lists after handling
+      try{ fetchFriends(); }catch{}
+    }
+  })();
+}
+
+function avatarUrlById(id){
     const n = clamp(id, 1, 2000);
     return `images/avatars/${n}.webp`;
   }
@@ -2660,7 +2693,7 @@ item.addEventListener("click", () => {
         setHint(res?.error || "加入失敗");
         return;
       }
-      setHint("");
+      setHint(res?.pending ? "已送出好友邀請，等待對方確認" : "");
       fetchFriends();
     });
   });
@@ -2672,6 +2705,12 @@ item.addEventListener("click", () => {
   function wireSocketEvents(){
     if(!sock) return;
     sock.on("FRIENDS_DIRTY", () => fetchFriends());
+    sock.on("FRIEND_REQUEST_INCOMING", (req) => {
+      // req: { from, name, avatar }
+      const fromId = Number(req?.from)||0;
+      if(!(fromId>0)) return;
+      handleIncomingFriendRequests([{ userId: fromId, name: req?.name, avatar: req?.avatar }]);
+    });
     sock.on("DM_NEW", (m) => {
       if(!isAuthed()) return;
 
