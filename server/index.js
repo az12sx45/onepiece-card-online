@@ -167,9 +167,8 @@ function ensureSocial(client){
   if(!client || typeof client!=="object") return;
   if(!client.social || typeof client.social!=="object") client.social = {};
   if(!Array.isArray(client.social.friends)) client.social.friends = [];
-  // pending friend requests
-  if(!Array.isArray(client.social.reqIn)) client.social.reqIn = [];   // userIds who requested me
-  if(!Array.isArray(client.social.reqOut)) client.social.reqOut = []; // userIds I requested
+  if(!Array.isArray(client.social.friend_in)) client.social.friend_in = [];   // incoming requests
+  if(!Array.isArray(client.social.friend_out)) client.social.friend_out = []; // outgoing requests
 }
 
 ensurePlayerNameUniqueIndex();
@@ -1095,71 +1094,61 @@ socket.on("FRIENDS_GET", async ({ secret }, cb) => {
     const stats = (prof.stats && typeof prof.stats==="object") ? prof.stats : {};
     const client = (stats.client && typeof stats.client==="object") ? stats.client : (stats.client = {});
     ensureSocial(client);
-    const friends = client.social.friends.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0);
 
-    if(!friends.length){
-      // still return pending friend requests
-      const reqInIds = client.social.reqIn.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0);
-      const reqOutIds = client.social.reqOut.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0);
-      let requestsIn = [];
-      let requestsOut = [];
-      const reqAll = Array.from(new Set([...reqInIds, ...reqOutIds]));
-      if(reqAll.length){
-        const rr = await pool.query("SELECT user_id, name, avatar FROM player_profiles WHERE user_id = ANY($1::int[])", [reqAll]);
-        const by = new Map((rr.rows||[]).map(x=>[Number(x.user_id), x]));
-        requestsIn = reqInIds.map(id=>{ const r=by.get(id)||{}; return { userId:id, name:String(r.name||""), avatar:Number(r.avatar)||1, online:isOnline(id), page:userPage.get(id)||"" }; }).filter(x=>x.userId>0);
-        requestsOut = reqOutIds.map(id=>{ const r=by.get(id)||{}; return { userId:id, name:String(r.name||""), avatar:Number(r.avatar)||1, online:isOnline(id), page:userPage.get(id)||"" }; }).filter(x=>x.userId>0);
-      }
-      return cb?.({ ok:true, friends:[], requestsIn, requestsOut });
+    const myId = Number(prof.user_id);
+    const friends = client.social.friends.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0);
+    const reqIn = client.social.friend_in.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0 && n!==myId);
+    const reqOut = client.social.friend_out.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0 && n!==myId);
+
+    const wantIds = Array.from(new Set([...friends, ...reqIn, ...reqOut]));
+    if(!wantIds.length){
+      return cb?.({ ok:true, friends:[], requestsIn:[], requestsOut:[] });
     }
-const r = await pool.query(
+
+    const r = await pool.query(
       "SELECT user_id, name, avatar FROM player_profiles WHERE user_id = ANY($1::int[])",
-      [friends]
+      [wantIds]
     );
     const rows = r.rows || [];
     const byId = new Map(rows.map(x=>[Number(x.user_id), x]));
 
-    const list = friends
+    const friendList = friends
       .map(id=>{
         const x = byId.get(id);
         if(!x) return null;
+        const uid = Number(x.user_id);
         return {
-          userId: Number(x.user_id),
+          userId: uid,
           name: String(x.name||""),
           avatar: Number(x.avatar)||1,
-          online: isOnline(Number(x.user_id)),
-          page: userPage.get(Number(x.user_id)) || "",
-          activity: (isOnline(Number(x.user_id))
-            ? ((userPage.get(Number(x.user_id))||"")==="game" ? "遊戲中" : "線上")
+          online: isOnline(uid),
+          page: userPage.get(uid) || "",
+          activity: (isOnline(uid)
+            ? ((userPage.get(uid)||"")==="game" ? "遊戲中" : "線上")
             : "離線")
         };
       })
       .filter(Boolean);
 
-    
-// pending friend requests
-const reqInIds = client.social.reqIn.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0);
-const reqOutIds = client.social.reqOut.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0);
-let requestsIn = [];
-let requestsOut = [];
-const reqAll = Array.from(new Set([...reqInIds, ...reqOutIds]));
-if(reqAll.length){
-  const rr = await pool.query(
-    "SELECT user_id, name, avatar FROM player_profiles WHERE user_id = ANY($1::int[])",
-    [reqAll]
-  );
-  const by = new Map((rr.rows||[]).map(x=>[Number(x.user_id), x]));
-  requestsIn = reqInIds.map(id=>{
-    const r = by.get(id) || {};
-    return { userId:id, name:String(r.name||""), avatar:Number(r.avatar)||1, online:isOnline(id), page:userPage.get(id)||"" };
-  }).filter(x=>x.userId>0);
-  requestsOut = reqOutIds.map(id=>{
-    const r = by.get(id) || {};
-    return { userId:id, name:String(r.name||""), avatar:Number(r.avatar)||1, online:isOnline(id), page:userPage.get(id)||"" };
-  }).filter(x=>x.userId>0);
-}
+    const reqInList = reqIn
+      .map(id=>{
+        const x = byId.get(id);
+        if(!x) return null;
+        const uid = Number(x.user_id);
+        return { userId: uid, name: String(x.name||""), avatar: Number(x.avatar)||1, online: isOnline(uid) };
+      })
+      .filter(Boolean);
 
-return cb?.({ ok:true, friends:list, requestsIn, requestsOut });
+    const reqOutList = reqOut
+      .map(id=>{
+        const x = byId.get(id);
+        if(!x) return null;
+        const uid = Number(x.user_id);
+        return { userId: uid, name: String(x.name||""), avatar: Number(x.avatar)||1, online: isOnline(uid) };
+      })
+      .filter(Boolean);
+
+    return cb?.({ ok:true, friends: friendList, requestsIn: reqInList, requestsOut: reqOutList });
   }catch(e){
     console.error("[FRIENDS_GET] error:", e);
     return cb?.({ ok:false, error:String(e?.message||e) });
@@ -1167,7 +1156,7 @@ return cb?.({ ok:true, friends:list, requestsIn, requestsOut });
 });
 
 
-// Add friend by display name (now: send request, needs recipient confirm)
+// Send friend request by display name (requires target confirmation)
 socket.on("FRIEND_ADD_BY_NAME", async ({ secret, name }, cb) => {
   try{
     const prof = await getProfileBySecret(String(secret||"").trim());
@@ -1197,34 +1186,28 @@ socket.on("FRIEND_ADD_BY_NAME", async ({ secret, name }, cb) => {
     ensureSocial(oClient);
 
     // already friends?
-    if(myClient.social.friends.includes(otherId) || oClient.social.friends.includes(myId)){
-      return cb?.({ ok:true, pending:false, already:true });
-    }
+    if(myClient.social.friends.includes(otherId)) return cb?.({ ok:false, error:"already friends" });
 
-    // already pending?
-    if(myClient.social.reqOut.includes(otherId) || oClient.social.reqIn.includes(myId)){
-      return cb?.({ ok:true, pending:true, alreadyPending:true });
-    }
+    // if I already sent request
+    if(myClient.social.friend_out.includes(otherId)) return cb?.({ ok:false, error:"request already sent" });
 
-    // create pending request (my out -> other, other in <- me)
-    myClient.social.reqOut.push(otherId);
-    oClient.social.reqIn.push(myId);
+    // if other already requested me -> auto accept? keep explicit confirm, so treat as: add to my incoming and show confirm
+    // We'll still create symmetrical in/out if not exists.
+    if(!myClient.social.friend_out.includes(otherId)) myClient.social.friend_out.push(otherId);
+    if(!oClient.social.friend_in.includes(myId)) oClient.social.friend_in.push(myId);
+
+    // clean duplicates
+    myClient.social.friend_out = Array.from(new Set(myClient.social.friend_out.map(n=>Number(n)).filter(n=>Number.isFinite(n)&&n>0)));
+    oClient.social.friend_in = Array.from(new Set(oClient.social.friend_in.map(n=>Number(n)).filter(n=>Number.isFinite(n)&&n>0)));
 
     await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [myStats, myId]);
     await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [oStats, otherId]);
 
-    // notify recipient if online
-    emitToUser(otherId, "FRIEND_REQUEST_INCOMING", {
-      from: myId,
-      name: String(prof.name||""),
-      avatar: Number(prof.avatar)||1
-    });
+    // notify online friend docks
+    emitToUser(myId, "FRIENDS_DIRTY", { by:"request_out", userId: otherId });
+    emitToUser(otherId, "FRIENDS_DIRTY", { by:"request_in", userId: myId });
 
-    // notify both docks to refresh
-    emitToUser(myId, "FRIENDS_DIRTY", { by:"req_out", userId: otherId });
-    emitToUser(otherId, "FRIENDS_DIRTY", { by:"req_in", userId: myId });
-
-    return cb?.({ ok:true, pending:true });
+    return cb?.({ ok:true, pending:true, to:{ userId: otherId, name:String(other.name||""), avatar:Number(other.avatar)||1, online:isOnline(otherId) } });
   }catch(e){
     console.error("[FRIEND_ADD_BY_NAME] error:", e);
     return cb?.({ ok:false, error:String(e?.message||e) });
@@ -1233,39 +1216,43 @@ socket.on("FRIEND_ADD_BY_NAME", async ({ secret, name }, cb) => {
 
 
 
-// Accept / Reject friend requests
-socket.on("FRIEND_REQUEST_ACCEPT", async ({ secret, fromId }, cb) => {
+// Accept incoming friend request (userId = requester)
+socket.on("FRIEND_REQUEST_ACCEPT", async ({ secret, userId }, cb) => {
   try{
     const prof = await getProfileBySecret(String(secret||"").trim());
     if(!prof) return cb?.({ ok:false, error:"bad secret" });
     const myId = Number(prof.user_id);
-    const otherId = Number(fromId);
-    if(!Number.isFinite(otherId) || otherId<=0) return cb?.({ ok:false, error:"bad fromId" });
-    if(otherId === myId) return cb?.({ ok:false, error:"cannot accept self" });
+    const otherId = Number(userId);
+    if(!(Number.isFinite(otherId) && otherId>0) || otherId===myId) return cb?.({ ok:false, error:"bad userId" });
 
-    const t = await pool.query("SELECT user_id, name, avatar, stats FROM player_profiles WHERE user_id=$1 LIMIT 1", [otherId]);
-    if(!t.rows.length) return cb?.({ ok:false, error:"not found" });
-    const other = t.rows[0];
-
+    // my stats
     const myStats = (prof.stats && typeof prof.stats==="object") ? prof.stats : {};
     const myClient = (myStats.client && typeof myStats.client==="object") ? myStats.client : (myStats.client = {});
     ensureSocial(myClient);
+
+    // other profile
+    const t = await pool.query("SELECT user_id, name, avatar, stats FROM player_profiles WHERE user_id=$1 LIMIT 1", [otherId]);
+    if(!t.rows.length) return cb?.({ ok:false, error:"not found" });
+    const other = t.rows[0];
 
     const oStats = (other.stats && typeof other.stats==="object") ? other.stats : {};
     const oClient = (oStats.client && typeof oStats.client==="object") ? oStats.client : (oStats.client = {});
     ensureSocial(oClient);
 
-    const idxIn = myClient.social.reqIn.indexOf(otherId);
-    if(idxIn === -1) return cb?.({ ok:false, error:"no incoming request" });
+    // must have incoming request
+    if(!myClient.social.friend_in.includes(otherId)) return cb?.({ ok:false, error:"no incoming request" });
 
-    // remove pending both sides
-    myClient.social.reqIn.splice(idxIn, 1);
-    const idxOut = oClient.social.reqOut.indexOf(myId);
-    if(idxOut !== -1) oClient.social.reqOut.splice(idxOut, 1);
+    // remove pending
+    myClient.social.friend_in = myClient.social.friend_in.filter(n=>Number(n)!==otherId);
+    oClient.social.friend_out = oClient.social.friend_out.filter(n=>Number(n)!==myId);
 
     // add friends mutual
     if(!myClient.social.friends.includes(otherId)) myClient.social.friends.push(otherId);
     if(!oClient.social.friends.includes(myId)) oClient.social.friends.push(myId);
+
+    // dedupe
+    myClient.social.friends = Array.from(new Set(myClient.social.friends.map(n=>Number(n)).filter(n=>Number.isFinite(n)&&n>0)));
+    oClient.social.friends = Array.from(new Set(oClient.social.friends.map(n=>Number(n)).filter(n=>Number.isFinite(n)&&n>0)));
 
     await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [myStats, myId]);
     await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [oStats, otherId]);
@@ -1280,41 +1267,47 @@ socket.on("FRIEND_REQUEST_ACCEPT", async ({ secret, fromId }, cb) => {
   }
 });
 
-socket.on("FRIEND_REQUEST_REJECT", async ({ secret, fromId }, cb) => {
+// Decline incoming friend request (userId = requester)
+socket.on("FRIEND_REQUEST_DECLINE", async ({ secret, userId }, cb) => {
   try{
     const prof = await getProfileBySecret(String(secret||"").trim());
     if(!prof) return cb?.({ ok:false, error:"bad secret" });
     const myId = Number(prof.user_id);
-    const otherId = Number(fromId);
-    if(!Number.isFinite(otherId) || otherId<=0) return cb?.({ ok:false, error:"bad fromId" });
+    const otherId = Number(userId);
+    if(!(Number.isFinite(otherId) && otherId>0) || otherId===myId) return cb?.({ ok:false, error:"bad userId" });
 
-    const t = await pool.query("SELECT user_id, stats FROM player_profiles WHERE user_id=$1 LIMIT 1", [otherId]);
-    if(!t.rows.length) return cb?.({ ok:false, error:"not found" });
-    const other = t.rows[0];
-
+    // my stats
     const myStats = (prof.stats && typeof prof.stats==="object") ? prof.stats : {};
     const myClient = (myStats.client && typeof myStats.client==="object") ? myStats.client : (myStats.client = {});
     ensureSocial(myClient);
 
+    if(!myClient.social.friend_in.includes(otherId)) return cb?.({ ok:false, error:"no incoming request" });
+
+    // other profile
+    const t = await pool.query("SELECT user_id, stats FROM player_profiles WHERE user_id=$1 LIMIT 1", [otherId]);
+    if(!t.rows.length){
+      // still remove on my side
+      myClient.social.friend_in = myClient.social.friend_in.filter(n=>Number(n)!==otherId);
+      await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [myStats, myId]);
+      return cb?.({ ok:true });
+    }
+    const other = t.rows[0];
     const oStats = (other.stats && typeof other.stats==="object") ? other.stats : {};
     const oClient = (oStats.client && typeof oStats.client==="object") ? oStats.client : (oStats.client = {});
     ensureSocial(oClient);
 
-    const idxIn = myClient.social.reqIn.indexOf(otherId);
-    if(idxIn !== -1) myClient.social.reqIn.splice(idxIn, 1);
-
-    const idxOut = oClient.social.reqOut.indexOf(myId);
-    if(idxOut !== -1) oClient.social.reqOut.splice(idxOut, 1);
+    myClient.social.friend_in = myClient.social.friend_in.filter(n=>Number(n)!==otherId);
+    oClient.social.friend_out = oClient.social.friend_out.filter(n=>Number(n)!==myId);
 
     await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [myStats, myId]);
     await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [oStats, otherId]);
 
-    emitToUser(myId, "FRIENDS_DIRTY", { by:"reject", userId: otherId });
-    emitToUser(otherId, "FRIENDS_DIRTY", { by:"rejected", userId: myId });
+    emitToUser(myId, "FRIENDS_DIRTY", { by:"decline", userId: otherId });
+    emitToUser(otherId, "FRIENDS_DIRTY", { by:"decline", userId: myId });
 
     return cb?.({ ok:true });
   }catch(e){
-    console.error("[FRIEND_REQUEST_REJECT] error:", e);
+    console.error("[FRIEND_REQUEST_DECLINE] error:", e);
     return cb?.({ ok:false, error:String(e?.message||e) });
   }
 });
@@ -1331,6 +1324,8 @@ socket.on("FRIEND_REMOVE", async ({ secret, userId }, cb) => {
     const myClient = (myStats.client && typeof myStats.client==="object") ? myStats.client : (myStats.client = {});
     ensureSocial(myClient);
     myClient.social.friends = myClient.social.friends.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0 && n!==otherId);
+    myClient.social.friend_in = myClient.social.friend_in.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0 && n!==otherId);
+    myClient.social.friend_out = myClient.social.friend_out.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0 && n!==otherId);
     await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [myStats, myId]);
 
     // mutual remove if other exists
@@ -1340,6 +1335,8 @@ socket.on("FRIEND_REMOVE", async ({ secret, userId }, cb) => {
       const oClient = (oStats.client && typeof oStats.client==="object") ? oStats.client : (oStats.client = {});
       ensureSocial(oClient);
       oClient.social.friends = oClient.social.friends.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0 && n!==myId);
+      oClient.social.friend_in = oClient.social.friend_in.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0 && n!==myId);
+      oClient.social.friend_out = oClient.social.friend_out.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0 && n!==myId);
       await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [oStats, otherId]);
     }
 
