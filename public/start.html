@@ -420,7 +420,36 @@
       .rulesNavBtn{ font-size: 18px; padding: 14px 18px; }
       .rulesHintLine{ font-size: 15px; }
     }
-  </style>
+  
+/* ===== Friends Dock: friend request row ===== */
+#friendDock .fd-sep{
+  padding:8px 10px;
+  font-size:11px;
+  color:rgba(255,255,255,.65);
+  border-top:1px solid rgba(255,255,255,.08);
+}
+#friendDock .fd-item.req{ cursor:default; }
+#friendDock .fd-reqwrap{
+  display:flex;
+  gap:6px;
+  align-items:center;
+  margin-left:auto;
+}
+#friendDock .fd-reqbtn{
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(255,255,255,.08);
+  color:rgba(255,255,255,.92);
+  padding:5px 10px;
+  border-radius:10px;
+  font-size:12px;
+  line-height:1;
+  cursor:pointer;
+  white-space:nowrap;
+}
+#friendDock .fd-reqbtn:hover{ background:rgba(255,255,255,.14); }
+#friendDock .fd-reqbtn.ok{ border-color:rgba(255,211,107,.45); }
+#friendDock .fd-reqbtn.no{ border-color:rgba(255,100,100,.45); }
+</style>
 </head>
 
 <body class="no-video">
@@ -2115,6 +2144,35 @@ function titleTierOf(p){
   .fd-menu button:hover{ background: rgba(255,255,255,.06); }
   .fd-menu .danger{ color: rgba(239,68,68,.95); }
 
+
+/* ===== Friends Dock: friend request row ===== */
+#friendDock .fd-sep{
+  padding:8px 10px;
+  font-size:11px;
+  color:rgba(255,255,255,.65);
+  border-top:1px solid rgba(255,255,255,.08);
+}
+#friendDock .fd-item.req{ cursor:default; }
+#friendDock .fd-reqwrap{
+  display:flex;
+  gap:6px;
+  align-items:center;
+  margin-left:auto;
+}
+#friendDock .fd-reqbtn{
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(255,255,255,.08);
+  color:rgba(255,255,255,.92);
+  padding:5px 10px;
+  border-radius:10px;
+  font-size:12px;
+  line-height:1;
+  cursor:pointer;
+  white-space:nowrap;
+}
+#friendDock .fd-reqbtn:hover{ background:rgba(255,255,255,.14); }
+#friendDock .fd-reqbtn.ok{ border-color:rgba(255,211,107,.45); }
+#friendDock .fd-reqbtn.no{ border-color:rgba(255,100,100,.45); }
 </style>
 
 <div id="friendDock" class="collapsed" aria-label="friends-dock">
@@ -2201,6 +2259,9 @@ function titleTierOf(p){
   let secret = "";
   let me = { userId: 0 };
   let friends = [];
+  let requestsIn = [];
+  let requestsOut = [];
+
   let unread = new Map(); // peerId -> count (dock badge)
   const openChats = new Map(); // peerId -> {peer, el, log, inp, send, badge, minimized}
   let chatOrder = []; // array of peerId (left<->right ordering handled by flex row-reverse)
@@ -2272,10 +2333,6 @@ function titleTierOf(p){
       }
       friends = (res.friends || []).slice(0, 200);
       renderFriends();
-      // incoming friend requests (need confirm)
-      const reqsIn = Array.isArray(res.requestsIn) ? res.requestsIn : [];
-      if(reqsIn.length) handleIncomingFriendRequests(reqsIn);
-
       // sync open chat online status
       for(const [peerId, w] of openChats.entries()){
         const f = friends.find(x=>x.userId===peerId);
@@ -2287,36 +2344,7 @@ function titleTierOf(p){
     });
   }
 
-  
-
-// ===== friend request confirm flow =====
-let __fdReqPrompting = false;
-function handleIncomingFriendRequests(reqs){
-  if(__fdReqPrompting) return;
-  if(!sock || !secret) return;
-  __fdReqPrompting = true;
-  (async ()=>{
-    try{
-      for(const r of (reqs||[])){
-        const fromId = Number(r?.userId)||0;
-        if(!(fromId>0)) continue;
-        const nm = String(r?.name || ('#'+fromId)).trim() || ('#'+fromId);
-        const ok = confirm(`玩家「${nm}」想加你好友，是否同意？`);
-        const evt = ok ? "FRIEND_REQUEST_ACCEPT" : "FRIEND_REQUEST_REJECT";
-        await new Promise((resolve)=>{
-          sock.timeout(12000).emit(evt, { secret, fromId }, ()=> resolve());
-        });
-      }
-    }catch(_e){
-    }finally{
-      __fdReqPrompting = false;
-      // refresh lists after handling
-      try{ fetchFriends(); }catch{}
-    }
-  })();
-}
-
-function avatarUrlById(id){
+  function avatarUrlById(id){
     const n = clamp(id, 1, 2000);
     return `images/avatars/${n}.webp`;
   }
@@ -2392,12 +2420,92 @@ function avatarUrlById(id){
 
   function renderFriends(){
     listEl.innerHTML = "";
-    if(!friends.length){
+    // === incoming friend requests ===
+    if(Array.isArray(requestsIn) && requestsIn.length){
+      const h = document.createElement("div");
+      h.className = "fd-sep";
+      h.textContent = `好友邀請（${requestsIn.length}）`;
+      listEl.appendChild(h);
+
+      for(const r of requestsIn){
+        const item = document.createElement("div");
+        item.className = "fd-item req";
+        item.dataset.uid = String(r.userId);
+
+        const ava = document.createElement("div");
+        ava.className = "fd-ava";
+        const img = document.createElement("img");
+        img.alt = "";
+        img.src = avatarUrlById(r.avatar);
+        ava.appendChild(img);
+
+        const meta = document.createElement("div");
+        meta.className = "fd-meta";
+        const name = document.createElement("div");
+        name.className = "fd-name";
+        name.textContent = r.name || ("#" + r.userId);
+        const sub = document.createElement("div");
+        sub.className = "fd-sub";
+        sub.textContent = "想加你為好友";
+        meta.appendChild(name); meta.appendChild(sub);
+
+        const act = document.createElement("div");
+        act.className = "fd-reqwrap";
+
+        const ok = document.createElement("button");
+        ok.type = "button";
+        ok.className = "fd-reqbtn ok";
+        ok.textContent = "確認";
+        ok.addEventListener("click", (e)=>{
+          e.stopPropagation();
+          if(!sock){ setHint("好友/聊天：Socket 尚未連線"); return; }
+          if(!secret){ setHint("好友/聊天：請先登入（缺少 opSecret）"); return; }
+          const uid = Number(r.userId)||0;
+          sock.timeout(12000).emit("FRIEND_REQUEST_ACCEPT", { secret, userId: uid }, (err, res)=>{
+            if(err || !res?.ok){ setHint(res?.error || "確認失敗"); return; }
+            setHint("");
+            fetchFriends();
+          });
+        });
+
+        const no = document.createElement("button");
+        no.type = "button";
+        no.className = "fd-reqbtn no";
+        no.textContent = "拒絕";
+        no.addEventListener("click", (e)=>{
+          e.stopPropagation();
+          if(!sock){ setHint("好友/聊天：Socket 尚未連線"); return; }
+          if(!secret){ setHint("好友/聊天：請先登入（缺少 opSecret）"); return; }
+          const uid = Number(r.userId)||0;
+          sock.timeout(12000).emit("FRIEND_REQUEST_DECLINE", { secret, userId: uid }, (err, res)=>{
+            if(err || !res?.ok){ setHint(res?.error || "拒絕失敗"); return; }
+            setHint("");
+            fetchFriends();
+          });
+        });
+
+        act.appendChild(ok);
+        act.appendChild(no);
+
+        item.appendChild(ava);
+        item.appendChild(meta);
+        item.appendChild(act);
+
+        listEl.appendChild(item);
+      }
+
+      const h2 = document.createElement("div");
+      h2.className = "fd-sep";
+      h2.textContent = "好友";
+      listEl.appendChild(h2);
+    }
+
+    if(!friends.length && !(Array.isArray(requestsIn) && requestsIn.length)){
       const div = document.createElement("div");
       div.style.padding="10px";
       div.style.color="rgba(255,255,255,.65)";
       div.style.fontSize="11px";
-      div.textContent = "目前沒有好友。你可以在上方輸入對方「名稱」加入（會自動互加）。";
+      div.textContent = "目前沒有好友。你可以在上方輸入對方「名稱」送出好友邀請（對方確認後才會成為好友）。";
       listEl.appendChild(div);
       return;
     }
@@ -2693,7 +2801,7 @@ item.addEventListener("click", () => {
         setHint(res?.error || "加入失敗");
         return;
       }
-      setHint(res?.pending ? "已送出好友邀請，等待對方確認" : "");
+      setHint("");
       fetchFriends();
     });
   });
@@ -2705,12 +2813,6 @@ item.addEventListener("click", () => {
   function wireSocketEvents(){
     if(!sock) return;
     sock.on("FRIENDS_DIRTY", () => fetchFriends());
-    sock.on("FRIEND_REQUEST_INCOMING", (req) => {
-      // req: { from, name, avatar }
-      const fromId = Number(req?.from)||0;
-      if(!(fromId>0)) return;
-      handleIncomingFriendRequests([{ userId: fromId, name: req?.name, avatar: req?.avatar }]);
-    });
     sock.on("DM_NEW", (m) => {
       if(!isAuthed()) return;
 
