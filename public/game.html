@@ -2716,16 +2716,6 @@ const presetN      = Math.max(2, Math.min(8, Number(sp.get('n') || '4') || 4));
 const serverURL = sp.get('server') || undefined;
 const socket = io(serverURL, { transports:['websocket'] });
 let me = { roomId: presetRoom || 'op-001', playerId: null, secret: localStorage.getItem('opSecret')||'' };
-
-// ===== Friends presence: mark "in game" for friend dock =====
-try{
-  const sec = (me && me.secret) ? String(me.secret) : "";
-  if(sec){
-    socket.emit("SOCIAL_AUTH", { secret: sec }, ()=> {
-      socket.emit("SOCIAL_PRESENCE", { secret: sec, page: "game" });
-    });
-  }
-}catch(e){}
 let _autoSkipKey = null;   // 麻痺自動跳過用的防呆 key
 let state = null;
 let _pendingDuel = null;   // 等待補上卡片資訊的決鬥事件
