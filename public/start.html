@@ -1871,7 +1871,9 @@ function titleTierOf(p){
   .fd-sub{ display:flex; align-items:center; gap:6px; font-size:11px; color:var(--fd-muted); margin-top:2px; }
   .fd-dot{ width:8px;height:8px;border-radius:99px;background: rgba(255,255,255,.25); }
   .fd-dot.on{ background: var(--fd-green); box-shadow: 0 0 0 3px rgba(34,197,94,.12); }
-  .fd-badge{
+  
+  .fd-dot.game{ background: var(--fd-blue); box-shadow: 0 0 0 3px rgba(96,165,250,.18); }
+.fd-badge{
     display:none;
     min-width:18px;height:18px;border-radius: 999px;
     padding:0 6px;
@@ -2161,6 +2163,7 @@ function titleTierOf(p){
       }
       me = res.me || me;
       setHint("");
+      sock.emit(\"SOCIAL_PRESENCE\", { secret, page: \"start" });
       fetchFriends();
     });
   }
@@ -2272,7 +2275,7 @@ function titleTierOf(p){
       return;
     }
 
-    const sorted = [...friends].sort((a,b)=> (b.online===true)-(a.online===true) || String(a.name).localeCompare(String(b.name),"zh-Hant"));
+    const sorted = [...friends].sort((a,b)=> (b.inGame===true)-(a.inGame===true) || (b.online===true)-(a.online===true) || String(a.name).localeCompare(String(b.name),"zh-Hant"));
     for(const f of sorted){
       const item = document.createElement("div");
       item.className = "fd-item";
@@ -2293,9 +2296,9 @@ function titleTierOf(p){
       const sub = document.createElement("div");
       sub.className = "fd-sub";
       const dot = document.createElement("span");
-      dot.className = "fd-dot" + (f.online ? " on" : "");
+      dot.className = "fd-dot" + (f.inGame ? " game" : (f.online ? " on" : ""));
       const sTxt = document.createElement("span");
-      sTxt.textContent = f.online ? "線上" : "離線";
+      sTxt.textContent = f.inGame ? "遊戲中" : (f.online ? "線上" : "離線");
       sub.appendChild(dot); sub.appendChild(sTxt);
 
       meta.appendChild(name); meta.appendChild(sub);
@@ -2356,7 +2359,7 @@ item.addEventListener("click", () => {
     const f = w.peer;
     const name = f?.name || ("#" + peerId);
     w.nameEl.textContent = name;
-    w.statusEl.textContent = f?.online ? "線上" : "離線";
+    w.statusEl.textContent = f?.inGame ? "遊戲中" : (f?.online ? "線上" : "離線");
     w.avaImg.src = avatarUrlById(f?.avatar || 1);
   }
 
