@@ -262,7 +262,36 @@
     .kv div{padding:6px 8px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);}
     .kv .k{color:var(--muted)}
     .modalActions{display:flex; gap:8px; justify-content:flex-end; padding: 0 14px 14px;}
-  </style>
+  
+/* ===== Friends Dock: friend request row ===== */
+#friendDock .fd-sep{
+  padding:8px 10px;
+  font-size:11px;
+  color:rgba(255,255,255,.65);
+  border-top:1px solid rgba(255,255,255,.08);
+}
+#friendDock .fd-item.req{ cursor:default; }
+#friendDock .fd-reqwrap{
+  display:flex;
+  gap:6px;
+  align-items:center;
+  margin-left:auto;
+}
+#friendDock .fd-reqbtn{
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(255,255,255,.08);
+  color:rgba(255,255,255,.92);
+  padding:5px 10px;
+  border-radius:10px;
+  font-size:12px;
+  line-height:1;
+  cursor:pointer;
+  white-space:nowrap;
+}
+#friendDock .fd-reqbtn:hover{ background:rgba(255,255,255,.14); }
+#friendDock .fd-reqbtn.ok{ border-color:rgba(255,211,107,.45); }
+#friendDock .fd-reqbtn.no{ border-color:rgba(255,100,100,.45); }
+</style>
 </head>
 <body>
 
@@ -848,13 +877,78 @@
     flex-direction:column;
     backdrop-filter: blur(10px);
   }
-  #friendDock.collapsed{ width:56px; height:260px; }
+  /* Collapsed = 自己的頭像 + 名稱 + 「點開好友清單」 */
+  #friendDock.collapsed{ width:190px; height:128px; }
+  #friendDock.collapsed .fd-hd{ display:none; }
   #friendDock.collapsed .fd-title,
   #friendDock.collapsed .fd-tools,
   #friendDock.collapsed .fd-body{ display:none; }
-  #friendDock.collapsed .fd-hd{ justify-content:center; }
-  #friendDock.collapsed .fd-hd .left{ justify-content:center; }
+  #friendDock.collapsed .fd-collapsed{ display:flex; }
+  #friendDock:not(.collapsed) .fd-collapsed{ display:none; }
+  #friendDock.collapsed .fd-hd{ justify-content:space-between; }
+  #friendDock.collapsed .fd-hd .left{ gap:8px; }
   #friendDock.collapsed .fd-hd .fd-logo{ width:34px;height:34px;border-radius:14px; }
+
+  .fd-collapsed{
+    display:none;
+    flex:1;
+    padding:10px 10px 12px;
+    gap:10px;
+    flex-direction:column;
+  }
+  .fd-me{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.05);
+  }
+  .fd-me .fd-ava{ width:42px; height:42px; border-radius:16px; }
+  .fd-me-meta{ min-width:0; flex:1; }
+  .fd-me-name{
+    font-weight:900;
+    font-size:13px;
+    color: var(--fd-text);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    line-height:1.15;
+  }
+  .fd-me-sub{
+    font-size:11px;
+    color: var(--fd-muted);
+    margin-top:2px;
+  }
+  .fd-open{
+    height:38px;
+    width:100%;
+    border-radius:14px;
+    border:1px solid rgba(255,211,107,.45);
+    background: rgba(255,211,107,.12);
+    color: var(--fd-text);
+    font-weight:900;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    white-space:nowrap;
+    line-height:1;
+    font-size:13px;
+  }
+  .fd-open:hover{ background: rgba(255,211,107,.16); }
+
+/* Top self bar (always visible; becomes header when collapsed) */
+.fd-me-top{
+  padding:10px 10px 8px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.fd-me-top .fd-me{
+  padding:10px;
+}
+/* When collapsed: top bar is the only header; no divider line */
+#friendDock.collapsed .fd-me-top{ border-bottom:none; padding-bottom:6px; }
 
   .fd-hd{
     height:56px;
@@ -1124,17 +1218,54 @@
   .fd-menu button:hover{ background: rgba(255,255,255,.06); }
   .fd-menu .danger{ color: rgba(239,68,68,.95); }
 
+
+/* ===== Friends Dock: friend request row ===== */
+#friendDock .fd-sep{
+  padding:8px 10px;
+  font-size:11px;
+  color:rgba(255,255,255,.65);
+  border-top:1px solid rgba(255,255,255,.08);
+}
+#friendDock .fd-item.req{ cursor:default; }
+#friendDock .fd-reqwrap{
+  display:flex;
+  gap:6px;
+  align-items:center;
+  margin-left:auto;
+}
+#friendDock .fd-reqbtn{
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(255,255,255,.08);
+  color:rgba(255,255,255,.92);
+  padding:5px 10px;
+  border-radius:10px;
+  font-size:12px;
+  line-height:1;
+  cursor:pointer;
+  white-space:nowrap;
+}
+#friendDock .fd-reqbtn:hover{ background:rgba(255,255,255,.14); }
+#friendDock .fd-reqbtn.ok{ border-color:rgba(255,211,107,.45); }
+#friendDock .fd-reqbtn.no{ border-color:rgba(255,100,100,.45); }
 </style>
 
 <div id="friendDock" class="collapsed" aria-label="friends-dock">
-  <div class="fd-hd">
-    <div class="left">
-      <div class="fd-logo">💬</div>
-      <div class="fd-title">好友 / 聊天</div>
+  
+  <div class="fd-me-top" aria-label="me-top">
+    <div class="fd-me">
+      <div class="fd-ava"><img id="fdMeAvaImg" alt=""></div>
+      <div class="fd-me-meta">
+        <div id="fdMeName" class="fd-me-name">—</div>
+        <div class="fd-me-sub">我的好友</div>
+      </div>
+      <div class="fd-morewrap" style="margin-left:auto;">
+        <button class="fd-btn" id="fdMinBtn" title="縮小/展開">▣</button>
+      </div>
     </div>
-    <div class="fd-mini">
-      <button class="fd-btn" id="fdMinBtn" title="縮小/展開">▣</button>
-    </div>
+  </div>
+
+  <div class="fd-collapsed" aria-label="friends-collapsed">
+    <button id="fdOpenBtn" class="fd-open" type="button">點開好友清單</button>
   </div>
 
   <div class="fd-tools">
@@ -1178,10 +1309,33 @@
   const addBtn = q("#fdAddBtn");
   const tray  = q("#fdChatTray");
 
+  const meAvaImg = q("#fdMeAvaImg");
+  const meNameEl = q("#fdMeName");
+  const openBtn  = q("#fdOpenBtn");
+
+  function renderMeMini(){
+    const nm = String(me?.name || me?.displayName || localStorage.getItem("op_player_name") || localStorage.getItem("op_name") || "").trim();
+    const av = Number(me?.avatar || localStorage.getItem("op_avatar") || localStorage.getItem("opAvatar") || 1) || 1;
+    if(meAvaImg) meAvaImg.src = avatarUrlById(av);
+    if(meNameEl) meNameEl.textContent = nm || (secret ? "玩家" : "未登入");
+  }
+
+  if(openBtn){
+    openBtn.addEventListener("click", ()=>{
+      dock.classList.remove("collapsed");
+      try{ localStorage.setItem("op_fdock_collapsed", "0"); }catch{}
+      try{ addInp && addInp.focus && addInp.focus(); }catch{}
+    });
+  }
+
+
   let sock = window.socket || null;
   let secret = "";
   let me = { userId: 0 };
   let friends = [];
+  let requestsIn = [];
+  let requestsOut = [];
+
   let unread = new Map(); // peerId -> count (dock badge)
   const openChats = new Map(); // peerId -> {peer, el, log, inp, send, badge, minimized}
   let chatOrder = []; // array of peerId (left<->right ordering handled by flex row-reverse)
@@ -1234,6 +1388,10 @@
         return;
       }
       me = res.me || me;
+      renderMeMini();
+
+      // 更新自己的好友狀態（讓其他人看到你在shop頁）
+      try{ sock.emit("PRESENCE_SET", { secret, page: "shop" }); }catch{}
       setHint("");
       fetchFriends();
     });
@@ -1248,7 +1406,10 @@
         return;
       }
       friends = (res.friends || []).slice(0, 200);
-      renderFriends();
+      
+      requestsIn = (res.requestsIn || []).slice(0, 200);
+      requestsOut = (res.requestsOut || []).slice(0, 200);
+renderFriends();
       // sync open chat online status
       for(const [peerId, w] of openChats.entries()){
         const f = friends.find(x=>x.userId===peerId);
@@ -1336,12 +1497,92 @@
 
   function renderFriends(){
     listEl.innerHTML = "";
-    if(!friends.length){
+    // === incoming friend requests ===
+    if(Array.isArray(requestsIn) && requestsIn.length){
+      const h = document.createElement("div");
+      h.className = "fd-sep";
+      h.textContent = `好友邀請（${requestsIn.length}）`;
+      listEl.appendChild(h);
+
+      for(const r of requestsIn){
+        const item = document.createElement("div");
+        item.className = "fd-item req";
+        item.dataset.uid = String(r.userId);
+
+        const ava = document.createElement("div");
+        ava.className = "fd-ava";
+        const img = document.createElement("img");
+        img.alt = "";
+        img.src = avatarUrlById(r.avatar);
+        ava.appendChild(img);
+
+        const meta = document.createElement("div");
+        meta.className = "fd-meta";
+        const name = document.createElement("div");
+        name.className = "fd-name";
+        name.textContent = r.name || ("#" + r.userId);
+        const sub = document.createElement("div");
+        sub.className = "fd-sub";
+        sub.textContent = "想加你為好友";
+        meta.appendChild(name); meta.appendChild(sub);
+
+        const act = document.createElement("div");
+        act.className = "fd-reqwrap";
+
+        const ok = document.createElement("button");
+        ok.type = "button";
+        ok.className = "fd-reqbtn ok";
+        ok.textContent = "確認";
+        ok.addEventListener("click", (e)=>{
+          e.stopPropagation();
+          if(!sock){ setHint("好友/聊天：Socket 尚未連線"); return; }
+          if(!secret){ setHint("好友/聊天：請先登入（缺少 opSecret）"); return; }
+          const uid = Number(r.userId)||0;
+          sock.timeout(12000).emit("FRIEND_REQUEST_ACCEPT", { secret, userId: uid }, (err, res)=>{
+            if(err || !res?.ok){ setHint(res?.error || "確認失敗"); return; }
+            setHint("");
+            fetchFriends();
+          });
+        });
+
+        const no = document.createElement("button");
+        no.type = "button";
+        no.className = "fd-reqbtn no";
+        no.textContent = "拒絕";
+        no.addEventListener("click", (e)=>{
+          e.stopPropagation();
+          if(!sock){ setHint("好友/聊天：Socket 尚未連線"); return; }
+          if(!secret){ setHint("好友/聊天：請先登入（缺少 opSecret）"); return; }
+          const uid = Number(r.userId)||0;
+          sock.timeout(12000).emit("FRIEND_REQUEST_DECLINE", { secret, userId: uid }, (err, res)=>{
+            if(err || !res?.ok){ setHint(res?.error || "拒絕失敗"); return; }
+            setHint("");
+            fetchFriends();
+          });
+        });
+
+        act.appendChild(ok);
+        act.appendChild(no);
+
+        item.appendChild(ava);
+        item.appendChild(meta);
+        item.appendChild(act);
+
+        listEl.appendChild(item);
+      }
+
+      const h2 = document.createElement("div");
+      h2.className = "fd-sep";
+      h2.textContent = "好友";
+      listEl.appendChild(h2);
+    }
+
+    if(!friends.length && !(Array.isArray(requestsIn) && requestsIn.length)){
       const div = document.createElement("div");
       div.style.padding="10px";
       div.style.color="rgba(255,255,255,.65)";
       div.style.fontSize="11px";
-      div.textContent = "目前沒有好友。你可以在上方輸入對方「名稱」加入（會自動互加）。";
+      div.textContent = "目前沒有好友。你可以在上方輸入對方「名稱」送出好友邀請（對方確認後才會成為好友）。";
       listEl.appendChild(div);
       return;
     }
@@ -1369,7 +1610,7 @@
       const dot = document.createElement("span");
       dot.className = "fd-dot" + (f.online ? " on" : "");
       const sTxt = document.createElement("span");
-      sTxt.textContent = f.online ? "線上" : "離線";
+      sTxt.textContent = f.online ? (f.activity || "線上") : "離線";
       sub.appendChild(dot); sub.appendChild(sTxt);
 
       meta.appendChild(name); meta.appendChild(sub);
@@ -1430,7 +1671,7 @@ item.addEventListener("click", () => {
     const f = w.peer;
     const name = f?.name || ("#" + peerId);
     w.nameEl.textContent = name;
-    w.statusEl.textContent = f?.online ? "線上" : "離線";
+    w.statusEl.textContent = f?.online ? (f?.activity || "線上") : "離線";
     w.avaImg.src = avatarUrlById(f?.avatar || 1);
   }
 
@@ -1622,6 +1863,7 @@ item.addEventListener("click", () => {
 
   minBtn.addEventListener("click", () => {
     dock.classList.toggle("collapsed");
+    renderMeMini();
     try{ localStorage.setItem("op_fdock_collapsed", dock.classList.contains("collapsed") ? "1" : "0"); }catch{}
   });
 
@@ -1680,6 +1922,7 @@ item.addEventListener("click", () => {
   ensureSocket();
   ensureSecret();
   wireSocketEvents();
+  renderMeMini();
   socialAuth();
   setInterval(() => { if(secret) fetchFriends(); }, 12000);
 })();
