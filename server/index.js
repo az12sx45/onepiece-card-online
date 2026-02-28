@@ -120,6 +120,8 @@ ensureDmTable();
 
 // online presence: userId -> Set<socketId>
 const onlineUsers = new Map();
+// presence page: userId -> page string (e.g. 'game')
+const userPage = new Map();
 function markOnline(userId, socketId){
   if(!userId) return;
   let set = onlineUsers.get(userId);
@@ -131,40 +133,18 @@ function markOffline(userId, socketId){
   const set = onlineUsers.get(userId);
   if(!set) return;
   set.delete(socketId);
-  if(set.size===0) onlineUsers.delete(userId);
+  if(set.size===0){ onlineUsers.delete(userId); userPage.delete(userId); }
 }
 function isOnline(userId){ return onlineUsers.has(userId); }
-
-// page presence: userId -> { page: string, ts: number }
-const presenceByUser = new Map();
-function normPage(p){
-  const raw = String(p||"").trim().toLowerCase();
-  if(!raw) return "";
-  if(raw.includes("game")) return "game";
-  if(raw.includes("start")) return "start";
-  if(raw.includes("profile")) return "profile";
-  if(raw.includes("shop")) return "shop";
-  if(raw.includes("result")) return "result";
-  return raw.slice(0, 32);
-}
-function guessPageFromReferer(ref){
-  try{
-    const u = new URL(String(ref||""));
-    return normPage((u.pathname || "").split("/").pop() || "");
-  }catch{
-    return normPage(String(ref||""));
-  }
-}
-function setPresence(userId, page){
-  if(!userId) return;
-  const p = normPage(page);
-  presenceByUser.set(userId, { page: p, ts: Date.now() });
-}
-function getPresenceState(userId){
-  if(!isOnline(userId)) return "offline";
-  const p = presenceByUser.get(userId);
-  if(p && p.page === "game") return "game";
-  return "online";
+function normalizePresencePage(p){
+  const s = String(p||"").trim().toLowerCase();
+  if(!s) return "";
+  if(s.includes("game")) return "game";
+  if(s.includes("start")) return "start";
+  if(s.includes("profile")) return "profile";
+  if(s.includes("shop")) return "shop";
+  if(s.includes("result")) return "result";
+  return s.slice(0, 24);
 }
 
 function emitToUser(userId, event, payload){
@@ -1064,9 +1044,6 @@ socket.on("SOCIAL_AUTH", async ({ secret }, cb) => {
     socket.data.userId = uid;
     markOnline(uid, socket.id);
 
-    // default presence guess from referer
-    try{ setPresence(uid, guessPageFromReferer(socket.handshake?.headers?.referer)); }catch{}
-
     return cb?.({ ok:true, me:{ userId: uid, name: prof.name || "", avatar: Number(prof.avatar)||1 } });
   }catch(e){
     console.error("[SOCIAL_AUTH] error:", e);
@@ -1074,17 +1051,38 @@ socket.on("SOCIAL_AUTH", async ({ secret }, cb) => {
   }
 });
 
-// client tells which page it's on (for friend status)
-socket.on("SOCIAL_PRESENCE_SET", ({ page }, cb) => {
+// ===== Presence update (page/scene) =====
+// Can be sent from any page (including game.html) to mark user online and set their current page.
+socket.on("PRESENCE_SET", async ({ secret, page }, cb) => {
   try{
-    const uid = Number(socket.data?.userId);
-    if(!Number.isFinite(uid) || uid<=0) return cb?.({ ok:false, error:"not authed" });
-    setPresence(uid, page);
+    const prof = await getProfileBySecret(String(secret||"").trim());
+    if(!prof) return cb?.({ ok:false, error:"bad secret" });
+
+    const uid = Number(prof.user_id);
+    socket.data.userId = uid;
+    markOnline(uid, socket.id);
+
+    const p = normalizePresencePage(page);
+    if(p) userPage.set(uid, p);
+
+    // notify this user's friends to refresh status (best-effort)
+    try{
+      const stats = (prof.stats && typeof prof.stats==="object") ? prof.stats : {};
+      const client = (stats.client && typeof stats.client==="object") ? stats.client : (stats.client = {});
+      ensureSocial(client);
+      const fs = client.social.friends.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0);
+      for(const fid of fs){
+        emitToUser(fid, "FRIENDS_DIRTY", { by:"presence", userId: uid });
+      }
+    }catch(_){}
+
     return cb?.({ ok:true });
   }catch(e){
+    console.error("[PRESENCE_SET] error:", e);
     return cb?.({ ok:false, error:String(e?.message||e) });
   }
 });
+
 
 socket.on("FRIENDS_GET", async ({ secret }, cb) => {
   try{
@@ -1114,7 +1112,10 @@ socket.on("FRIENDS_GET", async ({ secret }, cb) => {
           name: String(x.name||""),
           avatar: Number(x.avatar)||1,
           online: isOnline(Number(x.user_id)),
-          state: getPresenceState(Number(x.user_id))
+          page: userPage.get(Number(x.user_id)) || "",
+          activity: (isOnline(Number(x.user_id))
+            ? ((userPage.get(Number(x.user_id))||"")==="game" ? "遊戲中" : "線上")
+            : "離線")
         };
       })
       .filter(Boolean);
@@ -1165,7 +1166,7 @@ socket.on("FRIEND_ADD_BY_NAME", async ({ secret, name }, cb) => {
     emitToUser(myId, "FRIENDS_DIRTY", { by:"add", userId: otherId });
     emitToUser(otherId, "FRIENDS_DIRTY", { by:"add", userId: myId });
 
-    return cb?.({ ok:true, friend:{ userId: otherId, name:String(other.name||""), avatar:Number(other.avatar)||1, online:isOnline(otherId), state:getPresenceState(otherId) } });
+    return cb?.({ ok:true, friend:{ userId: otherId, name:String(other.name||""), avatar:Number(other.avatar)||1, online:isOnline(otherId) } });
   }catch(e){
     console.error("[FRIEND_ADD_BY_NAME] error:", e);
     return cb?.({ ok:false, error:String(e?.message||e) });
@@ -2152,7 +2153,7 @@ room.sockets = newSockets;
 
   socket.on("disconnect", () => {
     // social presence
-    try{ const uid = Number(socket.data?.userId); markOffline(uid, socket.id); if(uid && !isOnline(uid)) presenceByUser.delete(uid); }catch{}
+    try{ markOffline(socket.data?.userId, socket.id); }catch{}
 
     if (!joinedRoom) return;
     const room = rooms.get(joinedRoom);
