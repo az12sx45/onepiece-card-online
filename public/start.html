@@ -1774,13 +1774,66 @@ function titleTierOf(p){
     flex-direction:column;
     backdrop-filter: blur(10px);
   }
-  #friendDock.collapsed{ width:56px; height:260px; }
+  /* Collapsed = 自己的頭像 + 名稱 + 「點開好友清單」 */
+  #friendDock.collapsed{ width:190px; height:164px; }
   #friendDock.collapsed .fd-title,
   #friendDock.collapsed .fd-tools,
   #friendDock.collapsed .fd-body{ display:none; }
-  #friendDock.collapsed .fd-hd{ justify-content:center; }
-  #friendDock.collapsed .fd-hd .left{ justify-content:center; }
+  #friendDock.collapsed .fd-collapsed{ display:flex; }
+  #friendDock:not(.collapsed) .fd-collapsed{ display:none; }
+  #friendDock.collapsed .fd-hd{ justify-content:space-between; }
+  #friendDock.collapsed .fd-hd .left{ gap:8px; }
   #friendDock.collapsed .fd-hd .fd-logo{ width:34px;height:34px;border-radius:14px; }
+
+  .fd-collapsed{
+    display:none;
+    flex:1;
+    padding:10px 10px 12px;
+    gap:10px;
+    flex-direction:column;
+  }
+  .fd-me{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.05);
+  }
+  .fd-me .fd-ava{ width:42px; height:42px; border-radius:16px; }
+  .fd-me-meta{ min-width:0; flex:1; }
+  .fd-me-name{
+    font-weight:900;
+    font-size:13px;
+    color: var(--fd-text);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    line-height:1.15;
+  }
+  .fd-me-sub{
+    font-size:11px;
+    color: var(--fd-muted);
+    margin-top:2px;
+  }
+  .fd-open{
+    height:38px;
+    width:100%;
+    border-radius:14px;
+    border:1px solid rgba(255,211,107,.45);
+    background: rgba(255,211,107,.12);
+    color: var(--fd-text);
+    font-weight:900;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    white-space:nowrap;
+    line-height:1;
+    font-size:13px;
+  }
+  .fd-open:hover{ background: rgba(255,211,107,.16); }
 
   .fd-hd{
     height:56px;
@@ -2063,6 +2116,18 @@ function titleTierOf(p){
     </div>
   </div>
 
+
+  <div class="fd-collapsed" aria-label="friends-collapsed">
+    <div class="fd-me">
+      <div class="fd-ava"><img id="fdMeAvaImg" alt=""></div>
+      <div class="fd-me-meta">
+        <div id="fdMeName" class="fd-me-name">—</div>
+        <div class="fd-me-sub">我的好友</div>
+      </div>
+    </div>
+    <button id="fdOpenBtn" class="fd-open" type="button">點開好友清單</button>
+  </div>
+
   <div class="fd-tools">
     <input id="fdAddName" class="fd-inp" placeholder="輸入好友名稱加入…" />
     <button id="fdAddBtn" class="fd-add">加入</button>
@@ -2103,6 +2168,26 @@ function titleTierOf(p){
   const addInp = q("#fdAddName");
   const addBtn = q("#fdAddBtn");
   const tray  = q("#fdChatTray");
+
+  const meAvaImg = q("#fdMeAvaImg");
+  const meNameEl = q("#fdMeName");
+  const openBtn  = q("#fdOpenBtn");
+
+  function renderMeMini(){
+    const nm = String(me?.name || me?.displayName || localStorage.getItem("op_player_name") || localStorage.getItem("op_name") || "").trim();
+    const av = Number(me?.avatar || localStorage.getItem("op_avatar") || localStorage.getItem("opAvatar") || 1) || 1;
+    if(meAvaImg) meAvaImg.src = avatarUrlById(av);
+    if(meNameEl) meNameEl.textContent = nm || (secret ? "玩家" : "未登入");
+  }
+
+  if(openBtn){
+    openBtn.addEventListener("click", ()=>{
+      dock.classList.remove("collapsed");
+      try{ localStorage.setItem("op_fdock_collapsed", "0"); }catch{}
+      try{ addInp && addInp.focus && addInp.focus(); }catch{}
+    });
+  }
+
 
   let sock = window.socket || null;
   let secret = "";
@@ -2160,6 +2245,7 @@ function titleTierOf(p){
         return;
       }
       me = res.me || me;
+      renderMeMini();
 
       // 更新自己的好友狀態（讓其他人看到你在start頁）
       try{ sock.emit("PRESENCE_SET", { secret, page: "start" }); }catch{}
@@ -2551,6 +2637,7 @@ item.addEventListener("click", () => {
 
   minBtn.addEventListener("click", () => {
     dock.classList.toggle("collapsed");
+    renderMeMini();
     try{ localStorage.setItem("op_fdock_collapsed", dock.classList.contains("collapsed") ? "1" : "0"); }catch{}
   });
 
@@ -2609,6 +2696,7 @@ item.addEventListener("click", () => {
   ensureSocket();
   ensureSecret();
   wireSocketEvents();
+  renderMeMini();
   socialAuth();
   setInterval(() => { if(secret) fetchFriends(); }, 12000);
 })();
