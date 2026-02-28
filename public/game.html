@@ -2715,17 +2715,6 @@ const presetN      = Math.max(2, Math.min(8, Number(sp.get('n') || '4') || 4));
 
 const serverURL = sp.get('server') || undefined;
 const socket = io(serverURL, { transports:['websocket'] });
-
-// ===== friends presence (for friend dock status) =====
-try{
-  const __sec = localStorage.getItem("opSecret");
-  if(__sec){
-    socket.on("connect", ()=>{
-      try{ socket.emit("SOCIAL_AUTH", { secret: __sec }); }catch(e){}
-      try{ socket.emit("SOCIAL_PRESENCE_SET", { page: "game" }); }catch(e){}
-    });
-  }
-}catch(e){}
 let me = { roomId: presetRoom || 'op-001', playerId: null, secret: localStorage.getItem('opSecret')||'' };
 let _autoSkipKey = null;   // 麻痺自動跳過用的防呆 key
 let state = null;
@@ -3886,6 +3875,8 @@ if (presetRoom) {
 // === socket 連線 / 斷線事件 ===
 socket.on('connect', ()=>{
   console.log('[socket] connected', socket.id);
+  // 好友狀態：我在遊戲中
+  try{ if(me.secret) socket.emit('PRESENCE_SET', { secret: me.secret, page: 'game' }); }catch{}
 
   // 若這個頁面之前有加入過房間（hasJoinedOnce === true），
   // 而且記得 roomId，就自動用同一組 secret 重連。
@@ -3917,6 +3908,8 @@ const socketOnJoined = ({ playerId, secret })=>{
   me.playerId = playerId;
   me.secret = secret;
   localStorage.setItem('opSecret', secret);
+  // 好友狀態：我在遊戲中
+  try{ socket.emit('PRESENCE_SET', { secret, page: 'game' }); }catch{}
 
   // ★ 新增：記錄自己在本局的 playerId，供 result.html 用
   try {
