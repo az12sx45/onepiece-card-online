@@ -2332,7 +2332,10 @@ function titleTierOf(p){
         return;
       }
       friends = (res.friends || []).slice(0, 200);
-      renderFriends();
+      
+      requestsIn = (res.requestsIn || []).slice(0, 200);
+      requestsOut = (res.requestsOut || []).slice(0, 200);
+renderFriends();
       // sync open chat online status
       for(const [peerId, w] of openChats.entries()){
         const f = friends.find(x=>x.userId===peerId);
