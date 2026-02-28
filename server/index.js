@@ -142,6 +142,32 @@ function emitToUser(userId, event, payload){
   }
 }
 
+
+// page presence: userId -> Map<socketId, pageName>
+const userPages = new Map();
+function setUserPage(userId, socketId, page){
+  if(!userId) return;
+  const pg = String(page||"").trim().toLowerCase() || "unknown";
+  let m = userPages.get(userId);
+  if(!m){ m = new Map(); userPages.set(userId, m); }
+  m.set(socketId, pg);
+}
+function clearUserPage(userId, socketId){
+  if(!userId) return;
+  const m = userPages.get(userId);
+  if(!m) return;
+  m.delete(socketId);
+  if(m.size===0) userPages.delete(userId);
+}
+function isInGame(userId){
+  const m = userPages.get(userId);
+  if(!m) return false;
+  for(const pg of m.values()){
+    if(pg === "game") return true;
+  }
+  return false;
+}
+
 async function getProfileBySecret(secret){
   if(!secret) return null;
   const r = await pool.query(
@@ -1038,6 +1064,24 @@ socket.on("SOCIAL_AUTH", async ({ secret }, cb) => {
   }
 });
 
+// update current page for richer status (e.g. "in game")
+socket.on("SOCIAL_PRESENCE", async ({ secret, page }, cb) => {
+  try{
+    const prof = await getProfileBySecret(String(secret||"").trim());
+    if(!prof) return cb?.({ ok:false, error:"bad secret" });
+    const uid = Number(prof.user_id);
+    // ensure online map is updated even if caller forgot to SOCIAL_AUTH
+    socket.data.userId = uid;
+    markOnline(uid, socket.id);
+    setUserPage(uid, socket.id, page);
+    return cb?.({ ok:true });
+  }catch(e){
+    console.error("[SOCIAL_PRESENCE] error:", e);
+    return cb?.({ ok:false, error:String(e?.message||e) });
+  }
+});
+
+
 socket.on("FRIENDS_GET", async ({ secret }, cb) => {
   try{
     const prof = await getProfileBySecret(String(secret||"").trim());
@@ -1065,7 +1109,8 @@ socket.on("FRIENDS_GET", async ({ secret }, cb) => {
           userId: Number(x.user_id),
           name: String(x.name||""),
           avatar: Number(x.avatar)||1,
-          online: isOnline(Number(x.user_id))
+          online: isOnline(Number(x.user_id)),
+          inGame: isInGame(Number(x.user_id))
         };
       })
       .filter(Boolean);
@@ -1116,7 +1161,7 @@ socket.on("FRIEND_ADD_BY_NAME", async ({ secret, name }, cb) => {
     emitToUser(myId, "FRIENDS_DIRTY", { by:"add", userId: otherId });
     emitToUser(otherId, "FRIENDS_DIRTY", { by:"add", userId: myId });
 
-    return cb?.({ ok:true, friend:{ userId: otherId, name:String(other.name||""), avatar:Number(other.avatar)||1, online:isOnline(otherId) } });
+    return cb?.({ ok:true, friend:{ userId: otherId, name:String(other.name||""), avatar:Number(other.avatar)||1, online:isOnline(otherId), inGame:isInGame(otherId) } });
   }catch(e){
     console.error("[FRIEND_ADD_BY_NAME] error:", e);
     return cb?.({ ok:false, error:String(e?.message||e) });
@@ -1215,13 +1260,6 @@ socket.on("DM_SEND", async ({ secret, toUserId, body }, cb) => {
     );
 
     const payload = { id:String(ins.rows[0].id), from: myId, to: otherId, body: msg, ts: now };
-
-    // ✅ 保底：若送出者尚未 SOCIAL_AUTH（onlineUsers 尚未記錄這顆 socket），也要立刻讓送出者看到
-    try{
-      const set = onlineUsers.get(myId);
-      if(!set || !set.has(socket.id)) socket.emit("DM_NEW", payload);
-    }catch{}
-
     emitToUser(myId, "DM_NEW", payload);
     emitToUser(otherId, "DM_NEW", payload);
 
@@ -2111,6 +2149,7 @@ room.sockets = newSockets;
   socket.on("disconnect", () => {
     // social presence
     try{ markOffline(socket.data?.userId, socket.id); }catch{}
+    try{ clearUserPage(socket.data?.userId, socket.id); }catch{}
 
     if (!joinedRoom) return;
     const room = rooms.get(joinedRoom);
