@@ -2149,26 +2149,7 @@ function titleTierOf(p){
     return !!(secret && me && me.userId);
   }
 
-  
-
-  function getPageTag(){
-    try{
-      const base = (location.pathname.split(\"/\").pop() || \"\").toLowerCase();
-      if(base.includes(\"game\")) return \"game\";
-      if(base.includes(\"start\")) return \"start\";
-      if(base.includes(\"profile\")) return \"profile\";
-      if(base.includes(\"shop\")) return \"shop\";
-      if(base.includes(\"result\")) return \"result\";
-      return (base || \"page\").replace(/\.html$/i, \"\").slice(0, 32);
-    }catch{ return \"page\"; }
-  }
-
-  function sendPresence(){
-    if(!sock) return;
-    if(!(me && me.userId)) return;
-    sock.emit(\"SOCIAL_PRESENCE_SET\", { page: getPageTag() });
-  }
-async function socialAuth(){
+  async function socialAuth(){
     ensureSocket();
     ensureSecret();
     if(!sock){ setHint("好友/聊天：Socket 尚未連線"); return; }
@@ -2181,9 +2162,7 @@ async function socialAuth(){
       me = res.me || me;
       setHint("");
       fetchFriends();
-          sendPresence();
-      if(!window.__fdPoll){ window.__fdPoll = setInterval(()=>{ try{ sendPresence(); fetchFriends(); }catch(e){} }, 8000); }
-});
+    });
   }
 
   function fetchFriends(){
@@ -2316,7 +2295,7 @@ async function socialAuth(){
       const dot = document.createElement("span");
       dot.className = "fd-dot" + (f.online ? " on" : "");
       const sTxt = document.createElement("span");
-      sTxt.textContent = (f?.state==="game") ? "遊戲中" : (f?.online ? "線上" : "離線");
+      sTxt.textContent = f.online ? "線上" : "離線";
       sub.appendChild(dot); sub.appendChild(sTxt);
 
       meta.appendChild(name); meta.appendChild(sub);
@@ -2377,7 +2356,7 @@ item.addEventListener("click", () => {
     const f = w.peer;
     const name = f?.name || ("#" + peerId);
     w.nameEl.textContent = name;
-    w.statusEl.textContent = (f?.state==="game") ? "遊戲中" : (f?.online ? "線上" : "離線");
+    w.statusEl.textContent = f?.online ? "線上" : "離線";
     w.avaImg.src = avatarUrlById(f?.avatar || 1);
   }
 
@@ -2565,10 +2544,9 @@ item.addEventListener("click", () => {
       dock.classList.remove("collapsed");
       try{ localStorage.setItem("op_fdock_collapsed", "0"); }catch{}
     }
-  }, true);
+  });
 
   minBtn.addEventListener("click", () => {
-    closeFriendMenus();
     dock.classList.toggle("collapsed");
     try{ localStorage.setItem("op_fdock_collapsed", dock.classList.contains("collapsed") ? "1" : "0"); }catch{}
   });
