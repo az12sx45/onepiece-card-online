@@ -2858,7 +2858,10 @@ item.addEventListener("click", () => {
   function wireSocketEvents(){
     if(!sock) return;
     sock.on("FRIENDS_DIRTY", () => fetchFriends());
-        sock.on("DM_NEW", (m) => {
+        
+    // reconnect 後重新註冊在線（否則收不到 DM_NEW）
+    sock.on("connect", ()=>{ try{ ensureSecret(); }catch{}; if(secret) socialAuth(); });
+sock.on("DM_NEW", (m) => {
       if(!isAuthed()) return;
 
       const fromId = Number(m.from);
