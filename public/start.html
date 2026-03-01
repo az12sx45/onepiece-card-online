@@ -421,6 +421,26 @@
       .rulesHintLine{ font-size: 15px; }
     }
   
+
+/* ===== Friends Dock: incoming message blink ===== */
+@keyframes fdWinBlink {
+  0%,100% { filter: none; }
+  50% { filter: drop-shadow(0 0 10px rgba(255,211,107,.55)); }
+}
+@keyframes fdBadgeBlink {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+#fdChatTray .fd-chatwin.blinking { animation: fdWinBlink 1s ease-in-out infinite; }
+#fdChatTray .fd-chatwin.blinking .fd-chat-hd{
+  box-shadow: 0 0 0 1px rgba(255,211,107,.55), 0 0 18px rgba(255,211,107,.18);
+}
+#fdChatTray .fd-chatwin.blinking .fd-chat-badge{
+  background: rgba(255,211,107,.92);
+  color: #111;
+  animation: fdBadgeBlink 1s ease-in-out infinite;
+}
+
 /* ===== Friends Dock: friend request row ===== */
 #friendDock .fd-sep{
   padding:8px 10px;
@@ -2610,6 +2630,54 @@ item.addEventListener("click", () => {
       w.badgeEl.textContent = "";
       return;
     }
+
+
+  function setWinBlink(peerId, on){
+    const w = openChats.get(peerId);
+    if(!w || !w.el) return;
+    w.el.classList.toggle("blinking", !!on);
+  }
+
+  // 收到新訊息時：如果聊天室沒開，就自動「開一個縮小視窗」並閃爍提示
+  function openChatMinimized(peer, initialBadge){
+    const peerId = Number(peer.userId);
+
+    // window already open?
+    if(openChats.has(peerId)){
+      const w = openChats.get(peerId);
+      w.peer = peer;
+      updateWinHeader(peerId);
+
+      // 只有在縮小狀態才閃爍 + 加 badge
+      if(w.minimized){
+        const cur = Number(w.badgeEl?.textContent || "0") || 0;
+        setWinBadge(peerId, cur + (Number(initialBadge)||1));
+        setWinBlink(peerId, true);
+      }
+      return;
+    }
+
+    // cap windows like LoL (avoid overflow)
+    const MAX_OPEN = 4;
+    if(chatOrder.length >= MAX_OPEN){
+      const kick = chatOrder.shift();
+      if(kick != null) closeChat(kick);
+    }
+
+    const el = createChatWindow(peer);
+    tray.appendChild(el);
+    chatOrder.push(peerId);
+
+    // force minimized
+    const w = openChats.get(peerId);
+    if(w){
+      w.minimized = true;
+      w.el.classList.add("minimized");
+    }
+    setWinBadge(peerId, Number(initialBadge)||1);
+    setWinBlink(peerId, true);
+  }
+
     w.badgeEl.style.display="inline-flex";
     w.badgeEl.textContent = String(Math.min(99, v));
   }
@@ -2728,6 +2796,7 @@ item.addEventListener("click", () => {
     minBtn.addEventListener("click", ()=> toggleMin(peerId));
     el.querySelector(".fd-chat-peer")?.addEventListener("click", ()=>{
       bringToFront(peerId);
+      setWinBlink(peerId, false);
       if(openChats.get(peerId)?.minimized) toggleMin(peerId);
       setTimeout(()=> inp?.focus(), 0);
     });
@@ -2839,6 +2908,11 @@ item.addEventListener("click", () => {
         if(Number(m.from) !== Number(me.userId)){
           unread.set(peerId, (unread.get(peerId)||0) + 1);
           renderFriends();
+
+          // ✅ 新訊息自動彈出「縮小聊天室」+ 閃爍提示
+          const peer = friends.find(x=>Number(x.userId)===peerId) || { userId: peerId, name: ("#"+peerId), avatar: 1, online: false };
+          openChatMinimized(peer, 1);
+          appendMsgTo(peerId, m);
         }
       }
     });
