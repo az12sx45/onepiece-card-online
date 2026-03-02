@@ -383,7 +383,89 @@
 .pmenu-tip{ margin-top: 8px; font-size: 11px; color: rgba(255,255,255,.55); text-align:center; }
 
 
-    /* === Rules Flipbook Modal === */
+    
+/* === WaitingRoom: 文字聊天框 === */
+.lobby-chatwrap{
+  border:1px solid rgba(255,255,255,10);
+  background: rgba(0,0,0,18);
+  border-radius: 16px;
+  padding: 12px;
+}
+.lobby-chatbox{
+  height: 220px;
+  overflow:auto;
+  padding: 10px;
+  border-radius: 14px;
+  border:1px solid rgba(255,255,255,10);
+  background: rgba(0,0,0,28);
+}
+.lobby-chatrow{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  margin-bottom: 10px;
+}
+.lobby-chatrow:last-child{ margin-bottom: 0; }
+.lobby-chatava{
+  width:34px; height:34px;
+  border-radius: 10px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,14);
+  background: rgba(255,255,255,06);
+  flex: 0 0 auto;
+}
+.lobby-chatava img{ width:100%; height:100%; object-fit:cover; display:block; }
+.lobby-chatmeta{ flex: 1 1 auto; min-width: 0; }
+.lobby-chatname{
+  font-size: 12px;
+  color: rgba(255,255,255,80);
+  font-weight: 800;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.lobby-chattime{
+  font-size: 11px;
+  color: rgba(255,255,255,45);
+  font-weight: 600;
+}
+.lobby-chattext{
+  margin-top: 2px;
+  font-size: 13px;
+  color: rgba(255,255,255,90);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.lobby-chatinput{
+  margin-top: 10px;
+  display:flex;
+  gap:10px;
+}
+.lobby-chatinput input{
+  flex:1 1 auto;
+  border-radius: 14px;
+  border:1px solid rgba(255,255,255,12);
+  background: rgba(255,255,255,06);
+  color: rgba(255,255,255,92);
+  padding: 10px 12px;
+  outline:none;
+}
+.lobby-chatinput input:focus{
+  border-color: rgba(255,211,107,45);
+  box-shadow: 0 0 0 3px rgba(255,211,107,12);
+}
+.lobby-chatbtn{
+  flex: 0 0 auto;
+  border-radius: 14px;
+  border:1px solid rgba(255,255,255,14);
+  background: rgba(255,255,255,08);
+  color:#fff;
+  padding: 10px 14px;
+  font-weight: 800;
+  cursor:pointer;
+}
+.lobby-chatbtn:hover{ background: rgba(255,255,255,12); }
+/* === Rules Flipbook Modal === */
     .rulesOverlay{ position: fixed; inset: 0; background: rgba(0,0,0,0.55); display:flex; align-items:center; justify-content:center; z-index: 9999; }
     .rulesCard{
       width: 94vw; height: 92vh; max-height: none;
@@ -1541,11 +1623,48 @@ const avatarUrl = `images/avatars/${avatar}.webp`;
       const [lobby, setLobby] = useState(()=> __lobby.snapshot);
       const mePid = __lobby.me.playerId;
       const [pMenu, setPMenu] = useState(null); // { pid, name, avatarUrl, x, y, canKick }
+      const [chatText, setChatText] = useState("");
+      const chatBoxRef = React.useRef(null);
 
       useEffect(()=>{
         window.__setLobby = setLobby;
         return ()=>{ window.__setLobby = null; };
       }, []);
+
+      // 新聊天進來：自動滾到底
+      useEffect(()=>{
+        try{
+          const el = chatBoxRef.current;
+          if(!el) return;
+          // 稍微延遲，避免 React 還沒把新訊息 render 完
+          setTimeout(()=>{ try{ el.scrollTop = el.scrollHeight; }catch{} }, 0);
+        }catch{}
+      }, [lobby?.chat?.length]);
+
+      function fmtChatTime(ts){
+        try{
+          const d = new Date(Number(ts)||Date.now());
+          const hh = String(d.getHours()).padStart(2,'0');
+          const mm = String(d.getMinutes()).padStart(2,'0');
+          return `${hh}:${mm}`;
+        }catch{ return ""; }
+      }
+
+      function sendChat(){
+        const msg = String(chatText||"").trim();
+        if(!msg) return;
+        // 避免太長
+        const text = msg.slice(0, 160);
+        setChatText("");
+
+        socket.emit('ACTION', {
+          roomId: __lobby.roomId,
+          playerId: __lobby.me.playerId,
+          secret: __lobby.me.secret,
+          type: 'LOBBY_CHAT',
+          text
+        });
+      }
 
       const players = lobby?.players||[];
       function pidOf(p){ return p.playerId ?? p.pid ?? p.id; }
@@ -1767,7 +1886,46 @@ function titleTierOf(p){
               </div>
             </div>
 
-            {/* 點玩家頭像：加好友 /（房主）踢出 */}
+            
+            {/* === 等待室聊天 === */}
+            <div className="lobby-chatwrap">
+              <div className="text-sm text-neutral-300 mb-2">等待室聊天</div>
+
+              <div className="lobby-chatbox" ref={chatBoxRef}>
+                {(Array.isArray(lobby?.chat) ? lobby.chat : []).map((m, i) => {
+                  const avUrl = `images/avatars/${m?.avatar ?? 1}.webp`;
+                  const nm = String(m?.name || "玩家");
+                  const tx = String(m?.text || "");
+                  const ts = m?.ts;
+                  return (
+                    <div key={(m?.ts||i)+"-"+i} className="lobby-chatrow">
+                      <div className="lobby-chatava"><img src={avUrl} alt=""/></div>
+                      <div className="lobby-chatmeta">
+                        <div className="lobby-chatname">
+                          <span className="truncate">{nm}</span>
+                          <span className="lobby-chattime">{fmtChatTime(ts)}</span>
+                        </div>
+                        <div className="lobby-chattext">{tx}</div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="lobby-chatinput">
+                <input
+                  value={chatText}
+                  onChange={(e)=>setChatText(e.target.value)}
+                  placeholder="輸入訊息…（Enter 送出）"
+                  onKeyDown={(e)=>{ if(e.key==='Enter'){ e.preventDefault(); sendChat(); } }}
+                />
+                <button className="lobby-chatbtn" onClick={sendChat}>送出</button>
+              </div>
+
+              <div className="text-[11px] text-neutral-500 mt-2">※ 只在等待室顯示，進入遊戲後不會保留。</div>
+            </div>
+
+{/* 點玩家頭像：加好友 /（房主）踢出 */}
             {pMenu && (
               <div className="pmenu-back" onPointerDown={closePlayerMenu}>
                 <div
