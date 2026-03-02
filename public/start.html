@@ -449,6 +449,62 @@
 #friendDock .fd-reqbtn:hover{ background:rgba(255,255,255,.14); }
 #friendDock .fd-reqbtn.ok{ border-color:rgba(255,211,107,.45); }
 #friendDock .fd-reqbtn.no{ border-color:rgba(255,100,100,.45); }
+
+/* ===== Room Invite Modal / Toast ===== */
+.fd-inv.hidden,.fd-toast.hidden{ display:none; }
+.fd-inv{ position:fixed; inset:0; z-index:9999; display:flex; align-items:center; justify-content:center; }
+.fd-inv-backdrop{ position:absolute; inset:0; background:rgba(0,0,0,.60); backdrop-filter: blur(6px); }
+.fd-inv-panel{ position:relative; width:min(520px, 92vw); max-height:min(640px, 82vh); overflow:hidden;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:18px;
+  background: linear-gradient(180deg, rgba(12,18,28,.96), rgba(7,10,16,.96));
+  box-shadow:0 24px 80px rgba(0,0,0,.55);
+  display:flex; flex-direction:column;
+}
+.fd-inv-hd{ display:flex; align-items:center; justify-content:space-between; padding:12px 14px; border-bottom:1px solid rgba(255,255,255,.10); }
+.fd-inv-title{ font-weight:900; color:rgba(255,255,255,.92); }
+.fd-inv-x{ border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.06); color:rgba(255,255,255,.9);
+  width:34px; height:34px; border-radius:12px; cursor:pointer; }
+.fd-inv-x:hover{ background:rgba(255,255,255,.10); }
+.fd-inv-sub{ padding:10px 14px; font-size:12px; color:rgba(255,255,255,.65); }
+.fd-inv-list{ padding: 0 10px 10px; overflow:auto; display:flex; flex-direction:column; gap:8px; }
+.fd-inv-item{ display:flex; align-items:center; gap:10px; padding:10px; border-radius:14px;
+  border:1px solid rgba(255,255,255,.10); background:rgba(255,255,255,.04); }
+.fd-inv-item .ava{ width:40px; height:40px; border-radius:16px; overflow:hidden; border:1px solid rgba(255,255,255,.12); background:rgba(0,0,0,.25); }
+.fd-inv-item .ava img{ width:100%; height:100%; object-fit:cover; display:block; }
+.fd-inv-item .meta{ min-width:0; flex:1; }
+.fd-inv-item .name{ font-weight:900; font-size:13px; color:rgba(255,255,255,.92); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.fd-inv-item .sub{ font-size:11px; color:rgba(255,255,255,.60); }
+.fd-inv-send{ margin-left:auto; border:1px solid rgba(255,255,255,.16); background:rgba(255,255,255,.06);
+  color:rgba(255,255,255,.92); padding:6px 10px; border-radius:12px; cursor:pointer; font-size:12px; white-space:nowrap; }
+.fd-inv-send:hover{ background:rgba(255,255,255,.12); }
+.fd-inv-send:disabled{ opacity:.45; cursor:not-allowed; }
+.fd-inv-foot{ padding:10px 14px; border-top:1px solid rgba(255,255,255,.10); display:flex; justify-content:flex-end; }
+.fd-inv-btn{ border:1px solid rgba(255,255,255,.16); background:rgba(255,255,255,.06);
+  color:rgba(255,255,255,.92); padding:8px 12px; border-radius:14px; cursor:pointer; }
+.fd-inv-btn:hover{ background:rgba(255,255,255,.12); }
+
+.fd-toast{ position:fixed; right:12px; bottom:86px; z-index:9999; }
+.fd-toast-panel{ width:min(320px, 92vw); border:1px solid rgba(255,255,255,.14); border-radius:16px;
+  background:linear-gradient(180deg, rgba(12,18,28,.96), rgba(7,10,16,.96)); box-shadow:0 18px 60px rgba(0,0,0,.55); overflow:hidden; }
+.fd-toast-top{ display:flex; align-items:center; justify-content:space-between; padding:10px 12px; border-bottom:1px solid rgba(255,255,255,.10); }
+.fd-toast-title{ font-weight:900; color:rgba(255,255,255,.92); }
+.fd-toast-x{ border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.06); color:rgba(255,255,255,.9);
+  width:30px; height:30px; border-radius:12px; cursor:pointer; }
+.fd-toast-x:hover{ background:rgba(255,255,255,.10); }
+.fd-toast-body{ padding:12px; }
+.fd-toast-row{ display:flex; gap:10px; align-items:center; }
+.fd-toast-ava{ width:44px; height:44px; border-radius:16px; overflow:hidden; border:1px solid rgba(255,255,255,.12); background:rgba(0,0,0,.25); }
+.fd-toast-ava img{ width:100%; height:100%; object-fit:cover; display:block; }
+.fd-toast-meta{ min-width:0; flex:1; }
+.fd-toast-name{ font-weight:900; font-size:13px; color:rgba(255,255,255,.92); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.fd-toast-sub{ font-size:12px; color:rgba(255,255,255,.62); margin-top:2px; }
+.fd-toast-actions{ display:flex; gap:8px; justify-content:flex-end; margin-top:12px; }
+.fd-toast-btn{ border:1px solid rgba(255,255,255,.16); background:rgba(255,255,255,.06);
+  color:rgba(255,255,255,.92); padding:8px 12px; border-radius:14px; cursor:pointer; font-weight:800; }
+.fd-toast-btn:hover{ background:rgba(255,255,255,.12); }
+.fd-toast-btn.ok{ border-color:rgba(255,211,107,.45); }
+.fd-toast-btn.no{ border-color:rgba(255,100,100,.45); }
 </style>
 </head>
 
@@ -1196,6 +1252,35 @@ const avatarUrl = `images/avatars/${avatar}.webp`;
         onEnter(code, { host: false });
       }
 
+      // ✅ 由好友邀請（或外部連結）自動帶入房號並加入
+      useEffect(() => {
+        try{
+          const qs = new URLSearchParams(location.search);
+          const q = (qs.get('join') || qs.get('invite') || '').toUpperCase().replace(/\s+/g,'');
+          if(!q) return;
+
+          setJoinCode(q);
+
+          // 避免 React state 未更新時就 emit，稍微延遲
+          setTimeout(()=>{
+            __lobby.roomId = q;
+            __lobby.me.name = profile.playerName;
+            __lobby.me.avatar = profile.playerAvatar;
+
+            socket.emit("JOIN_ROOM", {
+              roomId: q,
+              displayName: profile.playerName,
+              avatar: profile.playerAvatar,
+              title: profile.equippedTitle || "",
+              titleTier: profile.equippedTier || 1,
+              secret: __lobby.me.secret,
+            });
+
+            onEnter(q, { host: false });
+          }, 120);
+        }catch{}
+      }, []);
+
       return (
         <div className="card w-[min(980px,96vw)] p-5 md:p-6 space-y-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
@@ -1351,6 +1436,9 @@ function titleTierOf(p){
             </div>
             <div className="flex gap-2">
               <button className="btn" onClick={copyId}>{t("ui.copyRoomId")}</button>
+              <button className="btn" onClick={()=>window.__openRoomInvite?.(lobby.roomId)}>
+                邀請好友
+              </button>
               <button className="btn" onClick={onLeave}>{t("ui.leaveRoom")}</button>
               {amHost && (
                 <button
@@ -2100,13 +2188,6 @@ function titleTierOf(p){
   .fd-chatwin.minimized .fd-ava{ display:none; }
   .fd-chatwin.minimized .fd-chat-hd{ border-bottom:none; }
   .fd-chatwin.minimized .fd-chat-peer{ width:100%; justify-content:center; }
-  /* === DM unread attention blink (auto open minimized) === */
-  @keyframes fdAttnBlink{
-    0%,100%{ box-shadow: 0 0 0 0 rgba(255,211,107,.0); filter: brightness(1); }
-    50%{ box-shadow: 0 0 0 3px rgba(255,211,107,.22), 0 0 24px rgba(255,211,107,.18); filter: brightness(1.12); }
-  }
-  .fd-chatwin.attn .fd-chat-hd{ animation: fdAttnBlink 1.05s ease-in-out infinite; }
-
 
   /* === friends row 3-dots menu === */
   .fd-item{ position:relative; }
@@ -2217,6 +2298,45 @@ function titleTierOf(p){
 <!-- 多聊天室托盤（LoL 風格：可同時開多個、可縮小保留） -->
 <div id="fdChatTray" aria-label="chat-tray"></div>
 
+<!-- 房間邀請：發送面板（等待室用） -->
+<div id="roomInviteModal" class="fd-inv hidden" aria-label="room-invite-modal">
+  <div class="fd-inv-backdrop"></div>
+  <div class="fd-inv-panel">
+    <div class="fd-inv-hd">
+      <div class="fd-inv-title">邀請好友加入等待室</div>
+      <button id="roomInviteClose" class="fd-inv-x" type="button" aria-label="close">✕</button>
+    </div>
+    <div class="fd-inv-sub" id="roomInviteRoom">房號：—</div>
+    <div class="fd-inv-list" id="roomInviteList"></div>
+    <div class="fd-inv-foot">
+      <button id="roomInviteClose2" class="fd-inv-btn" type="button">關閉</button>
+    </div>
+  </div>
+</div>
+
+<!-- 房間邀請：接收通知 -->
+<div id="roomInviteToast" class="fd-toast hidden" aria-label="room-invite-toast">
+  <div class="fd-toast-panel">
+    <div class="fd-toast-top">
+      <div class="fd-toast-title">收到等待室邀請</div>
+      <button id="roomInviteToastX" class="fd-toast-x" type="button">✕</button>
+    </div>
+    <div class="fd-toast-body">
+      <div class="fd-toast-row">
+        <div class="fd-toast-ava"><img id="roomInviteFromAva" alt=""></div>
+        <div class="fd-toast-meta">
+          <div id="roomInviteFromName" class="fd-toast-name">—</div>
+          <div id="roomInviteInfo" class="fd-toast-sub">房號：—</div>
+        </div>
+      </div>
+      <div class="fd-toast-actions">
+        <button id="roomInviteDecline" class="fd-toast-btn no" type="button">拒絕</button>
+        <button id="roomInviteAccept" class="fd-toast-btn ok" type="button">加入</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 (function(){
   // Avoid double init
@@ -2245,6 +2365,24 @@ function titleTierOf(p){
   const meAvaImg = q("#fdMeAvaImg");
   const meNameEl = q("#fdMeName");
   const openBtn  = q("#fdOpenBtn");
+
+  // ===== room invite ui =====
+  const invModal = q("#roomInviteModal");
+  const invRoomEl = q("#roomInviteRoom");
+  const invListEl = q("#roomInviteList");
+  const invClose1 = q("#roomInviteClose");
+  const invClose2 = q("#roomInviteClose2");
+
+  const toast = q("#roomInviteToast");
+  const toastX = q("#roomInviteToastX");
+  const toastFromAva = q("#roomInviteFromAva");
+  const toastFromName = q("#roomInviteFromName");
+  const toastInfo = q("#roomInviteInfo");
+  const toastNo = q("#roomInviteDecline");
+  const toastOk = q("#roomInviteAccept");
+
+  let __inviteRoomId = "";
+  let __invitePayload = null;
 
   function renderMeMini(){
     const nm = String(me?.name || me?.displayName || localStorage.getItem("op_player_name") || localStorage.getItem("op_name") || "").trim();
@@ -2283,6 +2421,131 @@ function titleTierOf(p){
     if(!msg){ hintEl.style.display="none"; hintEl.textContent=""; return; }
     hintEl.style.display="block";
     hintEl.textContent = msg;
+  }
+
+  function avatarUrlById(id){
+    const n = clamp(id, 1, 2000);
+    return `images/avatars/${n}.webp`;
+  }
+
+  function closeInviteModal(){
+    try{ invModal?.classList.add('hidden'); }catch{}
+    __inviteRoomId = "";
+  }
+  function openInviteModal(roomId){
+    __inviteRoomId = String(roomId||"").trim().toUpperCase();
+    if(!__inviteRoomId) return;
+    if(invRoomEl) invRoomEl.textContent = `房號：${__inviteRoomId}`;
+    renderInviteList();
+    try{ invModal?.classList.remove('hidden'); }catch{}
+  }
+
+  function renderInviteList(){
+    if(!invListEl) return;
+    invListEl.innerHTML = "";
+
+    const list = Array.isArray(friends) ? friends.slice() : [];
+    list.sort((a,b)=>{
+      const ao = a?.online ? 1 : 0;
+      const bo = b?.online ? 1 : 0;
+      if(ao!==bo) return bo-ao;
+      return String(a?.name||'').localeCompare(String(b?.name||''), 'zh-Hant');
+    });
+
+    if(!list.length){
+      const empty = document.createElement('div');
+      empty.style.padding = '12px 10px';
+      empty.style.color = 'rgba(255,255,255,.62)';
+      empty.style.fontSize = '12px';
+      empty.textContent = '目前沒有好友';
+      invListEl.appendChild(empty);
+      return;
+    }
+
+    for(const f of list){
+      const uid = Number(f?.userId)||0;
+      if(!uid) continue;
+
+      const row = document.createElement('div');
+      row.className = 'fd-inv-item';
+
+      const ava = document.createElement('div');
+      ava.className = 'ava';
+      const img = document.createElement('img');
+      img.alt = '';
+      img.src = avatarUrlById(f.avatar);
+      ava.appendChild(img);
+
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+      const nm = document.createElement('div');
+      nm.className = 'name';
+      nm.textContent = f.name || ('#'+uid);
+      const sub = document.createElement('div');
+      sub.className = 'sub';
+      sub.textContent = f.online ? (f.activity || '線上') : '離線';
+      meta.appendChild(nm); meta.appendChild(sub);
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'fd-inv-send';
+      btn.textContent = '邀請';
+      btn.disabled = !f.online;
+      btn.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        if(!sock){ setHint('好友/聊天：Socket 尚未連線'); return; }
+        if(!secret){ setHint('好友/聊天：請先登入（缺少 opSecret）'); return; }
+        if(!__inviteRoomId){ setHint('缺少房號'); return; }
+        btn.disabled = true;
+        sock.timeout(12000).emit('ROOM_INVITE_SEND', { secret, toUserId: uid, roomId: __inviteRoomId }, (err, res)=>{
+          if(err || !res?.ok){
+            btn.disabled = !f.online;
+            setHint(res?.error || '邀請失敗');
+            return;
+          }
+          setHint('');
+          btn.textContent = '已送出';
+          setTimeout(()=>{ btn.textContent='邀請'; btn.disabled = !f.online; }, 1200);
+        });
+      });
+
+      row.appendChild(ava);
+      row.appendChild(meta);
+      row.appendChild(btn);
+      invListEl.appendChild(row);
+    }
+  }
+
+  function hideInviteToast(){
+    try{ toast?.classList.add('hidden'); }catch{}
+    __invitePayload = null;
+  }
+
+  function showInviteToast(payload){
+    __invitePayload = payload || null;
+    const rid = String(payload?.roomId||"").trim().toUpperCase();
+    const from = payload?.from || {};
+    const fn = String(from?.name||"").trim() || ('#' + (from?.userId||''));
+    const fa = Number(from?.avatar)||1;
+
+    if(toastFromAva) toastFromAva.src = avatarUrlById(fa);
+    if(toastFromName) toastFromName.textContent = fn;
+    if(toastInfo) toastInfo.textContent = `房號：${rid}`;
+
+    try{ toast?.classList.remove('hidden'); }catch{}
+  }
+
+  function goJoinRoom(roomId){
+    const rid = String(roomId||"").trim().toUpperCase();
+    if(!rid) return;
+    // 用 query 交給 start.html 自動加入（RoomChoice 已支援 join/invite）
+    try{
+      const base = (location.pathname || '').split('/').slice(0,-1).join('/') || '';
+      const url = `${base ? base + '/' : ''}start.html?join=${encodeURIComponent(rid)}`;
+      location.href = url;
+    }catch{
+      location.href = `start.html?join=${encodeURIComponent(rid)}`;
+    }
   }
 
   function ensureSocket(){
@@ -2339,10 +2602,14 @@ function titleTierOf(p){
         return;
       }
       friends = (res.friends || []).slice(0, 200);
+      window.__fdFriends = friends;
       
       requestsIn = (res.requestsIn || []).slice(0, 200);
       requestsOut = (res.requestsOut || []).slice(0, 200);
 renderFriends();
+
+      // if invite modal is open, refresh list
+      try{ if(invModal && !invModal.classList.contains('hidden')) renderInviteList(); }catch{}
       // sync open chat online status
       for(const [peerId, w] of openChats.entries()){
         const f = friends.find(x=>x.userId===peerId);
@@ -2617,13 +2884,6 @@ item.addEventListener("click", () => {
       w.badgeEl.textContent = "";
       return;
     }
-
-  function setWinAttn(peerId, on){
-    const w = openChats.get(peerId);
-    if(!w || !w.el) return;
-    if(on) w.el.classList.add('attn');
-    else w.el.classList.remove('attn');
-  }
     w.badgeEl.style.display="inline-flex";
     w.badgeEl.textContent = String(Math.min(99, v));
   }
@@ -2692,7 +2952,6 @@ item.addEventListener("click", () => {
     else w.el.classList.remove("minimized");
     if(!w.minimized){
       setWinBadge(peerId, 0);
-      setWinAttn(peerId, false);
       setTimeout(()=> w.inp?.focus(), 0);
     }
   }
@@ -2760,33 +3019,20 @@ item.addEventListener("click", () => {
     return el;
   }
 
-  function openChat(peer, opts){
-    opts = (opts && typeof opts === 'object') ? opts : {};
+  function openChat(peer){
     const peerId = Number(peer.userId);
-    const wantMin = !!opts.minimized;
-    const clearUnread = (opts.clearUnread !== false); // default true
-    const wantAttn = !!opts.attention;
-
-    if(clearUnread){
-      unread.set(peerId, 0);
-      renderFriends();
-    }
+    unread.set(peerId, 0);
+    renderFriends();
 
     if(openChats.has(peerId)){
-      // restore/update + bring front
+      // restore + focus + bring front
       bringToFront(peerId);
       const w = openChats.get(peerId);
       w.peer = peer;
       updateWinHeader(peerId);
-
-      if(wantMin){
-        if(!w.minimized) toggleMin(peerId);
-      }else{
-        if(w.minimized) toggleMin(peerId);
-        setTimeout(()=> w.inp?.focus(), 0);
-      }
-
-      if(!wantAttn) setWinAttn(peerId, false);
+      if(w.minimized) toggleMin(peerId);
+      setWinBadge(peerId, 0);
+      setTimeout(()=> w.inp?.focus(), 0);
       return;
     }
 
@@ -2803,14 +3049,7 @@ item.addEventListener("click", () => {
 
     bringToFront(peerId);
     loadHistory(peerId);
-
-    if(wantMin){
-      toggleMin(peerId);         // => minimized
-      setWinAttn(peerId, wantAttn);
-    }else{
-      setWinAttn(peerId, false);
-      setTimeout(()=> openChats.get(peerId)?.inp?.focus(), 0);
-    }
+    setTimeout(()=> openChats.get(peerId)?.inp?.focus(), 0);
   }
 
   // click anywhere on collapsed dock to expand
@@ -2848,9 +3087,42 @@ item.addEventListener("click", () => {
     if(e.key === "Enter") addBtn.click();
   });
 
+  // ===== room invite ui events =====
+  function bindInviteUI(){
+    if(invClose1) invClose1.addEventListener('click', closeInviteModal);
+    if(invClose2) invClose2.addEventListener('click', closeInviteModal);
+    try{
+      invModal?.addEventListener('click', (e)=>{
+        if(e.target && (e.target.classList.contains('fd-inv-backdrop'))) closeInviteModal();
+      });
+    }catch{}
+
+    if(toastX) toastX.addEventListener('click', hideInviteToast);
+    if(toastNo) toastNo.addEventListener('click', hideInviteToast);
+    if(toastOk) toastOk.addEventListener('click', ()=>{
+      const rid = String(__invitePayload?.roomId || '').trim();
+      hideInviteToast();
+      if(rid) goJoinRoom(rid);
+    });
+  }
+  bindInviteUI();
+
+  // 供 WaitingRoom 的「邀請好友」按鈕呼叫
+  window.__openRoomInvite = (roomId) => {
+    socialAuth();
+    fetchFriends();
+    openInviteModal(roomId);
+  };
+
   function wireSocketEvents(){
     if(!sock) return;
     sock.on("FRIENDS_DIRTY", () => fetchFriends());
+
+    // 房間邀請通知
+    sock.on("ROOM_INVITE", (payload) => {
+      try{ showInviteToast(payload); }catch{}
+    });
+
     sock.on("DM_NEW", (m) => {
       if(!isAuthed()) return;
 
