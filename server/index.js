@@ -122,6 +122,14 @@ ensureDmTable();
 const onlineUsers = new Map();
 // presence page: userId -> page string (e.g. 'game')
 const userPage = new Map();
+
+// =========================
+// Lobby Invites
+//  - inviteId -> { fromId, toId, roomId, createdAt, expiresAt }
+//  - muteUntil: userId -> ts(ms) until which user won't receive invites
+// =========================
+const lobbyInvites = new Map();
+const lobbyInviteMuteUntil = new Map();
 function markOnline(userId, socketId){
   if(!userId) return;
   let set = onlineUsers.get(userId);
@@ -152,6 +160,23 @@ function emitToUser(userId, event, payload){
   if(!set) return;
   for(const sid of set){
     io.to(sid).emit(event, payload);
+  }
+}
+
+function lobbyInviteMuteRemainingMs(userId){
+  const until = Number(lobbyInviteMuteUntil.get(userId) || 0) || 0;
+  const now = Date.now();
+  if(until <= now){
+    lobbyInviteMuteUntil.delete(userId);
+    return 0;
+  }
+  return until - now;
+}
+
+function pruneLobbyInvites(){
+  const now = Date.now();
+  for(const [id, inv] of lobbyInvites){
+    if(!inv || (Number(inv.expiresAt)||0) <= now) lobbyInvites.delete(id);
   }
 }
 
@@ -1156,6 +1181,128 @@ socket.on("FRIENDS_GET", async ({ secret }, cb) => {
 });
 
 
+// =========================
+// Lobby Invite Flow
+//  - LOBBY_INVITE_SEND: sender invites friend to roomId
+//  - LOBBY_INVITE_RESPOND: receiver accept / reject / mute5
+// =========================
+socket.on("LOBBY_INVITE_SEND", async ({ secret, toUserId, roomId }, cb) => {
+  try{
+    pruneLobbyInvites();
+
+    const prof = await getProfileBySecret(String(secret||"").trim());
+    if(!prof) return cb?.({ ok:false, error:"bad secret" });
+
+    const fromId = Number(prof.user_id);
+    const toId = Number(toUserId);
+    const rid = String(roomId||"").trim().toUpperCase();
+
+    if(!(fromId>0)) return cb?.({ ok:false, error:"bad from" });
+    if(!(toId>0)) return cb?.({ ok:false, error:"bad to" });
+    if(!rid) return cb?.({ ok:false, error:"no room" });
+    if(toId === fromId) return cb?.({ ok:false, error:"cannot invite self" });
+
+    // verify room exists & in lobby phase
+    const room = rooms.get(rid);
+    if(!room) return cb?.({ ok:false, error:"room not found" });
+    if(room.phase !== 'lobby') return cb?.({ ok:false, error:"room already started" });
+
+    // only allow inviting friends
+    const stats = (prof.stats && typeof prof.stats==="object") ? prof.stats : {};
+    const client = (stats.client && typeof stats.client==="object") ? stats.client : (stats.client = {});
+    ensureSocial(client);
+    const friends = new Set(client.social.friends.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0));
+    if(!friends.has(toId)) return cb?.({ ok:false, error:"not friends" });
+
+    // receiver online?
+    if(!isOnline(toId)) return cb?.({ ok:false, error:"offline" });
+
+    // receiver muted?
+    const rem = lobbyInviteMuteRemainingMs(toId);
+    if(rem>0) return cb?.({ ok:false, error:"muted", remainingMs: rem });
+
+    // generate invite
+    const inviteId = crypto.randomBytes(4).toString('hex');
+    const now = Date.now();
+    const inv = {
+      inviteId,
+      fromId,
+      fromName: String(prof.name||""),
+      fromAvatar: Number(prof.avatar)||1,
+      toId,
+      roomId: rid,
+      createdAt: now,
+      expiresAt: now + 120000, // 2 min
+    };
+    lobbyInvites.set(inviteId, inv);
+
+    emitToUser(toId, "EMIT", {
+      type: "lobby_invite",
+      invite: {
+        inviteId,
+        fromId,
+        fromName: inv.fromName,
+        fromAvatar: inv.fromAvatar,
+        roomId: rid,
+        createdAt: now,
+        expiresAt: inv.expiresAt,
+      }
+    });
+
+    return cb?.({ ok:true, inviteId });
+  }catch(e){
+    console.error("[LOBBY_INVITE_SEND] error:", e);
+    return cb?.({ ok:false, error:String(e?.message||e) });
+  }
+});
+
+socket.on("LOBBY_INVITE_RESPOND", async ({ secret, inviteId, action }, cb) => {
+  try{
+    pruneLobbyInvites();
+
+    const prof = await getProfileBySecret(String(secret||"").trim());
+    if(!prof) return cb?.({ ok:false, error:"bad secret" });
+    const myId = Number(prof.user_id);
+
+    const id = String(inviteId||"").trim();
+    const act = String(action||"").trim().toLowerCase();
+    const inv = lobbyInvites.get(id);
+    if(!inv) return cb?.({ ok:false, error:"invite not found" });
+    if(Number(inv.toId)!==myId) return cb?.({ ok:false, error:"not receiver" });
+
+    if(act === 'mute5'){
+      lobbyInvites.delete(id);
+      const until = Date.now() + 5*60*1000;
+      lobbyInviteMuteUntil.set(myId, until);
+      emitToUser(Number(inv.fromId), "EMIT", { type:"toast", text:`${String(prof.name||'對方')} 已暫停接收遊戲邀請 5 分鐘` });
+      return cb?.({ ok:true, mutedUntil: until });
+    }
+
+    if(act === 'reject'){
+      lobbyInvites.delete(id);
+      emitToUser(Number(inv.fromId), "EMIT", { type:"toast", text:`${String(prof.name||'對方')} 已拒絕遊戲邀請` });
+      return cb?.({ ok:true });
+    }
+
+    if(act !== 'accept') return cb?.({ ok:false, error:"bad action" });
+
+    // accept
+    lobbyInvites.delete(id);
+
+    // verify room still exists and is lobby
+    const room = rooms.get(String(inv.roomId));
+    if(!room) return cb?.({ ok:false, error:"room not found" });
+    if(room.phase !== 'lobby') return cb?.({ ok:false, error:"room already started" });
+
+    emitToUser(Number(inv.fromId), "EMIT", { type:"toast", text:`${String(prof.name||'好友')} 已接受邀請` });
+    return cb?.({ ok:true, roomId: String(inv.roomId) });
+  }catch(e){
+    console.error("[LOBBY_INVITE_RESPOND] error:", e);
+    return cb?.({ ok:false, error:String(e?.message||e) });
+  }
+});
+
+
 // Send friend request by display name (requires target confirmation)
 socket.on("FRIEND_ADD_BY_NAME", async ({ secret, name }, cb) => {
   try{
@@ -1349,52 +1496,6 @@ socket.on("FRIEND_REMOVE", async ({ secret, userId }, cb) => {
     return cb?.({ ok:false, error:String(e?.message||e) });
   }
 });
-
-// ===== Waiting room invite =====
-socket.on("ROOM_INVITE_SEND", async ({ secret, toUserId, roomId }, cb) => {
-  try{
-    const prof = await getProfileBySecret(String(secret||"").trim());
-    if(!prof) return cb?.({ ok:false, error:"bad secret" });
-
-    const myId = Number(prof.user_id);
-    const otherId = Number(toUserId);
-    const rid = String(roomId||"").trim();
-
-    if(!(Number.isFinite(otherId) && otherId>0) || otherId===myId) return cb?.({ ok:false, error:"bad toUserId" });
-    if(!rid) return cb?.({ ok:false, error:"no roomId" });
-
-    // room must exist and sender must be in it
-    const room = rooms.get(rid);
-    if(!room) return cb?.({ ok:false, error:"room not found" });
-    const inRoom = room.sockets?.has(socket.id) || (Array.isArray(room.state?.players) && room.state.players.some(p=> String(p?.secret||"")===String(secret||"")));
-    if(!inRoom) return cb?.({ ok:false, error:"not in room" });
-
-    // check friendship
-    const stats = (prof.stats && typeof prof.stats==="object") ? prof.stats : {};
-    const client = (stats.client && typeof stats.client==="object") ? stats.client : (stats.client = {});
-    ensureSocial(client);
-
-    if(!client.social.friends.includes(otherId)) return cb?.({ ok:false, error:"not friends" });
-
-    // must be online
-    if(!isOnline(otherId)) return cb?.({ ok:false, error:"friend offline" });
-
-    emitToUser(otherId, "ROOM_INVITE", {
-      roomId: rid,
-      fromUserId: myId,
-      fromName: String(prof.name||""),
-      fromAvatar: Number(prof.avatar)||1,
-      ts: Date.now()
-    });
-
-    return cb?.({ ok:true });
-  }catch(e){
-    console.error("[ROOM_INVITE_SEND] error:", e);
-    return cb?.({ ok:false, error:String(e?.message||e) });
-  }
-});
-
-
 
 socket.on("DM_HISTORY", async ({ secret, withUserId, limit }, cb) => {
   try{
