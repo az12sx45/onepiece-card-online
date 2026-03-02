@@ -1418,6 +1418,52 @@ socket.on("DM_SEND", async ({ secret, toUserId, body }, cb) => {
   }
 });
 
+// ====== 等待室：房間邀請（好友） ======
+// 由等待室玩家發送給好友，對方會收到 ROOM_INVITE 通知，可一鍵加入房間。
+socket.on("ROOM_INVITE_SEND", async ({ secret, toUserId, roomId }, cb) => {
+  try{
+    const prof = await getProfileBySecret(String(secret||"").trim());
+    if(!prof) return cb?.({ ok:false, error:"bad secret" });
+    const myId = Number(prof.user_id);
+
+    const otherId = Number(toUserId);
+    const rid = String(roomId||"").trim().toUpperCase();
+    if(!Number.isFinite(otherId) || otherId<=0) return cb?.({ ok:false, error:"bad toUserId" });
+    if(!rid) return cb?.({ ok:false, error:"bad roomId" });
+
+    // only allow inviting friends
+    const stats = (prof.stats && typeof prof.stats==="object") ? prof.stats : {};
+    const client = (stats.client && typeof stats.client==="object") ? stats.client : (stats.client = {});
+    ensureSocial(client);
+    if(!client.social.friends.includes(otherId)){
+      return cb?.({ ok:false, error:"not friends" });
+    }
+
+    // room must exist and inviter must be inside that room
+    const room = rooms.get(rid);
+    if(!room) return cb?.({ ok:false, error:"room not found" });
+    if(!(room.sockets && room.sockets.has(socket.id))){
+      return cb?.({ ok:false, error:"not in room" });
+    }
+
+    const payload = {
+      roomId: rid,
+      ts: Date.now(),
+      from: {
+        userId: myId,
+        name: String(prof.name||""),
+        avatar: Number(prof.avatar)||1,
+      },
+    };
+
+    emitToUser(otherId, "ROOM_INVITE", payload);
+    return cb?.({ ok:true, to:{ userId: otherId, online: isOnline(otherId) }, roomId: rid });
+  }catch(e){
+    console.error("[ROOM_INVITE_SEND] error:", e);
+    return cb?.({ ok:false, error:String(e?.message||e) });
+  }
+});
+
 
 // =====================
 // AUTH: 註冊 / 登入
