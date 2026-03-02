@@ -225,6 +225,7 @@ function buildRoomList(){
     list.push({
       roomId,
       hostName: hostName || "",
+      title: (hostName ? `${hostName}的等待室` : `${roomId}的等待室`),
       humans,
       cpuCount,
       total,
@@ -233,6 +234,22 @@ function buildRoomList(){
   // 排序：房號字典序（視覺上好找）
   list.sort((a,b)=> String(a.roomId).localeCompare(String(b.roomId)));
   return list;
+}
+
+
+function cleanupRoomIfNoHumans(roomId){
+  const rid = String(roomId||"").trim();
+  if(!rid) return false;
+  const room = rooms.get(rid);
+  if(!room) return false;
+  // 真人玩家 = room.sockets 裡 distinct playerId
+  const humans = new Set([...room.sockets.values()].map(m => m?.playerId)).size;
+  if(humans <= 0){
+    rooms.delete(rid);
+    try{ broadcastRoomList(); }catch{}
+    return true;
+  }
+  return false;
 }
 
 function broadcastRoomList(){
@@ -2597,13 +2614,11 @@ room.sockets = newSockets;
       try{ socket.leave(rid); }catch{}
       if(joinedRoom === rid) joinedRoom = null;
 
-      // if nobody left, delete room to avoid stale rooms
-      if(room.sockets.size === 0){
-        rooms.delete(rid);
-      }else{
+      // if no human left, delete room to avoid stale rooms
+      if(!cleanupRoomIfNoHumans(rid)){
         broadcastLobby(rid);
+        broadcastRoomList();
       }
-
       return cb?.({ ok:true });
     }catch(e){
       console.error("[LEAVE_ROOM] error:", e);
@@ -2630,9 +2645,14 @@ room.sockets = newSockets;
       if (all.length) room.host = all[0].playerId;
     }
 
-    broadcastLobby(joinedRoom);
+        // 如果沒有真人玩家就解散房間（CPU 不算真人）
+    if(!cleanupRoomIfNoHumans(joinedRoom)){
+      broadcastLobby(joinedRoom);
+      broadcastRoomList();
+    }
   });
 });
+
 
 const PORT = process.env.PORT || 8787;
 server.listen(PORT, () => console.log("Server listening on", PORT));
