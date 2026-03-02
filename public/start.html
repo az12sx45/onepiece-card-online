@@ -340,6 +340,48 @@
   height: 16px;
 }
 
+/* === WaitingRoom: 點玩家頭像的功能選單（踢出 / 加好友）=== */
+.pmenu-back{
+  position:fixed; inset:0; z-index:240;
+}
+.pmenu-sheet{
+  position:fixed; z-index:241;
+  min-width: 180px;
+  background: rgba(20,26,31,.98);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius: 14px;
+  padding: 10px;
+  box-shadow: 0 18px 40px rgba(0,0,0,.55);
+  backdrop-filter: blur(10px);
+}
+.pmenu-hd{
+  display:flex; gap:10px; align-items:center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255,255,255,.10);
+  margin-bottom: 8px;
+}
+.pmenu-ava{ width:40px; height:40px; border-radius: 12px; overflow:hidden; border:1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.06); }
+.pmenu-ava img{ width:100%; height:100%; object-fit:cover; display:block; }
+.pmenu-name{ font-weight:800; font-size:14px; color: rgba(255,255,255,.92); }
+.pmenu-btn{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  border-radius: 12px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.92);
+  padding: 9px 10px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.pmenu-btn:hover{ background: rgba(255,255,255,.10); }
+.pmenu-btn.danger{ border-color: rgba(255,100,100,.35); background: rgba(255,80,80,.08); }
+.pmenu-btn.danger:hover{ background: rgba(255,80,80,.14); }
+.pmenu-tip{ margin-top: 8px; font-size: 11px; color: rgba(255,255,255,.55); text-align:center; }
+
 
     /* === Rules Flipbook Modal === */
     .rulesOverlay{ position: fixed; inset: 0; background: rgba(0,0,0,0.55); display:flex; align-items:center; justify-content:center; z-index: 9999; }
@@ -562,26 +604,13 @@
     socket.on('JOINED', ({ playerId, secret })=>{
       __lobby.me.playerId = playerId;
       __lobby.me.secret   = secret;
-      try { localStorage.setItem('opSecret', secret); } catch (e) {}
+      try { localStorage.setItem('opSecret', secret); } catch {}
     });
 
     socket.on('EMIT', (e)=>{
       if(!e) return;
 
-      
-      // ✅ 被房主踢出等待室
-      if (e.type === 'kicked'){
-        try{
-          alert("你已被房主踢出等待室");
-        }catch(_){}
-        try{ sessionStorage.removeItem("op_pending_join_room"); }catch (e) {}
-        try{ delete __lobby.roomId; __lobby.snapshot = null; }catch (e) {}
-        // 重新回到 Start 主流程（移除任何 join 參數）
-        try{ location.href = location.pathname; }catch{ location.reload(); }
-        return;
-      }
-
-// ✅ 伺服器 push 的 toast（提示文字）
+      // ✅ 伺服器 push 的 toast（提示文字）
       if (e.type === 'toast'){
         try{
           if(typeof window.toast === 'function') window.toast(String(e.text||''));
@@ -612,6 +641,14 @@
         return;
       }
 
+      // ✅ 被房主踢出等待室
+      if (e.type === 'lobby_kicked'){
+        try{
+          if(typeof window.__forceLeaveLobby === 'function') window.__forceLeaveLobby({ reason:'kicked', roomId: e.roomId });
+        }catch(_){ }
+        return;
+      }
+
       if (e?.type === 'lobby'){
         __lobby.snapshot = e.lobby;
         if (!__lobby.roomId) __lobby.roomId = e.lobby?.roomId || __lobby.roomId;
@@ -619,7 +656,7 @@
         return;
       }
       if (e?.type === 'nav_game'){
-        try{ socket.close(); }catch (e) {}
+        try{ socket.close(); }catch{}
         const url = new URL('game.html', location.origin);
         url.searchParams.set('server', SERVER_URL);
         url.searchParams.set('room',   __lobby.roomId);
@@ -817,7 +854,7 @@ const avatarUrl = `images/avatars/${avatar}.webp`;
       const savedPass = localStorage.getItem("op_last_password") || "";
       if (savedUser) setUsername(savedUser);
       if (savedPass) setPassword(savedPass);
-    } catch (e) {}
+    } catch {}
   }, []);
 
   function submit() {
@@ -842,7 +879,7 @@ const avatarUrl = `images/avatars/${avatar}.webp`;
       try {
         localStorage.setItem("op_last_username", username);
         localStorage.setItem("op_last_password", password);
-      } catch (e) {}
+      } catch {}
 
       localStorage.setItem("opSecret", res.secret);
       __lobby.me.secret = res.secret;
@@ -1217,7 +1254,7 @@ const avatarUrl = `images/avatars/${avatar}.webp`;
         __lobby.me.avatar = profile.playerAvatar;
         __lobby.cpuCount = cpuCount;
 
-        try { localStorage.setItem("op_cpu_count", String(cpuCount)); } catch (e) {}
+        try { localStorage.setItem("op_cpu_count", String(cpuCount)); } catch {}
 
         socket.emit("JOIN_ROOM", {
           roomId: id,
@@ -1341,6 +1378,7 @@ const avatarUrl = `images/avatars/${avatar}.webp`;
     function WaitingRoom({roomId, profile, onLeave}){
       const [lobby, setLobby] = useState(()=> __lobby.snapshot);
       const mePid = __lobby.me.playerId;
+      const [pMenu, setPMenu] = useState(null); // { pid, name, avatarUrl, x, y, canKick }
 
       useEffect(()=>{
         window.__setLobby = setLobby;
@@ -1364,67 +1402,74 @@ function titleTierOf(p){
 
       const cpuCount = lobby?.cpuCount ?? 0;
       const amHost = lobby && (lobby.host === mePid);
-      // === 玩家頭像點擊操作選單（房主：加好友/踢出；其他：只加好友）===
-      const [playerMenu, setPlayerMenu] = useState(null); 
-      // playerMenu: { pid, name, avatarUrl, canKick }
+      const canStart = (players.length + cpuCount) >= MIN_PLAYERS && players.every(p => !!p.ready);
 
-      function openPlayerMenu(p){
-        try{
-          const pid = pidOf(p);
-          if(pid === mePid) return;             // 不對自己開選單
-          if(p?.isCPU || p?.cpu) return;        // CPU 不開選單
-          const canKick = !!(lobby && (lobby.host === mePid) && (lobby.host !== pid));
-          setPlayerMenu({
-            pid,
-            name: nameOf(p),
-            avatarUrl: `images/avatars/${avatarOf(p)}.webp`,
-            canKick
-          });
-        }catch(err){
-          console.warn("[playerMenu] open failed", err);
-        }
+      function closePlayerMenu(){
+        setPMenu(null);
       }
-      function closePlayerMenu(){ setPlayerMenu(null); }
 
-      function doAddFriend(){
-        const pm = playerMenu;
-        if(!pm) return;
-        const sec = String(localStorage.getItem("opSecret")||"").trim();
-        if(!sec){ alert("請先登入才能加好友"); return; }
-
-        // 使用既有的 FRIEND_ADD_BY_NAME（以玩家名稱送出邀請）
-        socket.timeout(12000).emit("FRIEND_ADD_BY_NAME", { secret: sec, name: pm.name }, (err, res) => {
+      function addFriendByName(name){
+        const secret = String(__lobby?.me?.secret || localStorage.getItem('opSecret') || '').trim();
+        const target = String(name||'').trim();
+        if(!target){
+          try{ if(typeof window.toast==='function') window.toast('加好友失敗：缺少玩家名稱'); }catch{};
+          return;
+        }
+        if(!secret){
+          try{ if(typeof window.toast==='function') window.toast('請先登入（缺少 opSecret）'); }catch{};
+          return;
+        }
+        socket.timeout(12000).emit('FRIEND_ADD_BY_NAME', { secret, name: target }, (err, res)=>{
           if(err || !res?.ok){
-            alert(res?.error || "加入好友失敗");
+            try{ if(typeof window.toast==='function') window.toast(res?.error || '加入好友失敗'); }catch{};
             return;
           }
-          alert("已送出好友邀請");
-          closePlayerMenu();
+          try{ if(typeof window.toast==='function') window.toast('已送出好友邀請'); }catch{};
+          try{ if(typeof window.__friendsFetch === 'function') window.__friendsFetch(); }catch{};
         });
       }
 
-      function doKick(){
-        const pm = playerMenu;
-        if(!pm) return;
-        if(!pm.canKick){ return; }
-        const sec = String(localStorage.getItem("opSecret")||"").trim();
-        if(!sec){ alert("請先登入"); return; }
-        if(!lobby?.roomId){ alert("缺少 roomId"); return; }
-
-        if(!confirm(`確定要把「${pm.name}」踢出等待室嗎？`)) return;
-
-        socket.emit("ACTION", {
-          roomId: lobby.roomId,
-          playerId: mePid,
-          secret: sec,
-          type: "LOBBY_KICK",
-          targetPid: pm.pid
+      function kickPlayer(targetPid){
+        if(!amHost) return;
+        socket.emit('ACTION', {
+          roomId: __lobby.roomId,
+          playerId: __lobby.me.playerId,
+          secret: __lobby.me.secret,
+          type: 'LOBBY_KICK',
+          targetPlayerId: targetPid
         });
-
-        closePlayerMenu();
       }
 
-      const canStart = (players.length + cpuCount) >= MIN_PLAYERS && players.every(p => !!p.ready);
+      function openPlayerMenu(ev, p){
+        try{ ev.preventDefault(); ev.stopPropagation(); }catch{}
+        const pid = pidOf(p);
+        if(pid == null) return;
+        if(pid === mePid) return; // 不對自己開選單
+
+        const rect = ev.currentTarget?.getBoundingClientRect?.();
+        const x0 = rect ? (rect.left + rect.width/2) : (window.innerWidth/2);
+        const y0 = rect ? (rect.bottom + 8) : (window.innerHeight/2);
+
+        const avatarUrl = `images/avatars/${avatarOf(p)}.webp`;
+        const nm = nameOf(p);
+
+        setPMenu({
+          pid,
+          name: nm,
+          avatarUrl,
+          x: Math.min(window.innerWidth - 210, Math.max(12, x0 - 90)),
+          y: Math.min(window.innerHeight - 180, Math.max(12, y0)),
+          canKick: !!amHost
+        });
+      }
+
+      // 點空白處關閉
+      useEffect(()=>{
+        if(!pMenu) return;
+        const onDown = ()=> setPMenu(null);
+        window.addEventListener('pointerdown', onDown);
+        return ()=> window.removeEventListener('pointerdown', onDown);
+      }, [pMenu]);
 
       function copyId(){
         if(!lobby?.roomId) return;
@@ -1512,7 +1557,16 @@ function titleTierOf(p){
                   return (
                     <div key={pid} className="lobby-player flex items-center justify-between rounded-xl border border-neutral-700/60 bg-black/30">
                       <div className="flex items-center gap-3">
-                        <div className={"avatar "+(isHost?"is-active":"")} onClick={()=>openPlayerMenu(p)} role="button" title="玩家操作"><img src={avatarUrl} alt=""/></div>
+                        <div
+                          className={"avatar "+(isHost?"is-active":"")}
+                          role={isMe ? undefined : 'button'}
+                          tabIndex={isMe ? undefined : 0}
+                          title={isMe ? '' : (amHost ? '點擊：加好友 / 踢出' : '點擊：加好友')}
+                          onClick={isMe ? undefined : (ev)=>openPlayerMenu(ev, p)}
+                          onKeyDown={isMe ? undefined : (ev)=>{ if(ev.key==='Enter' || ev.key===' ') openPlayerMenu(ev, p); }}
+                        >
+                          <img src={avatarUrl} alt=""/>
+                        </div>
                         <div>
 <div className="font-semibold leading-tight">
   <div className="flex items-center gap-2 flex-wrap">
@@ -1559,6 +1613,42 @@ function titleTierOf(p){
               </div>
             </div>
 
+            {/* 點玩家頭像：加好友 /（房主）踢出 */}
+            {pMenu && (
+              <>
+                <div className="pmenu-back" onClick={closePlayerMenu}></div>
+                <div
+                  className="pmenu-sheet"
+                  style={{ left: pMenu.x+'px', top: pMenu.y+'px' }}
+                  onClick={(e)=>{ try{ e.stopPropagation(); }catch{} }}
+                >
+                  <div className="pmenu-hd">
+                    <div className="pmenu-ava"><img src={pMenu.avatarUrl} alt=""/></div>
+                    <div>
+                      <div className="pmenu-name">{pMenu.name}</div>
+                      <div className="text-[11px] text-neutral-400">{pMenu.canKick ? '房主：可踢人 / 加好友' : '可加好友'}</div>
+                    </div>
+                  </div>
+
+                  <button className="pmenu-btn" onClick={()=>{ closePlayerMenu(); addFriendByName(pMenu.name); }}>
+                    ➕ 加好友
+                  </button>
+
+                  {pMenu.canKick && (
+                    <button className="pmenu-btn danger" onClick={()=>{
+                      const ok = confirm(`確定要把「${pMenu.name}」踢出房間嗎？`);
+                      if(!ok) return;
+                      closePlayerMenu();
+                      kickPlayer(pMenu.pid);
+                    }}>
+                      🦶 踢出房間
+                    </button>
+                  )}
+                  <div className="pmenu-tip">點空白處可關閉</div>
+                </div>
+              </>
+            )}
+
             {cpuCount > 0 && (
               <div>
                 <div className="text-sm text-neutral-300 mb-2">{t("ui.cpuPlayersList", {n: cpuCount})}</div>
@@ -1588,39 +1678,6 @@ function titleTierOf(p){
             )}
           </div>
         </div>
-
-          {/* === 玩家操作選單 Modal === */}
-          {playerMenu && (
-            <div className="fixed inset-0 z-[250] flex items-center justify-center bg-black/70" onClick={closePlayerMenu}>
-              <div className="w-[320px] max-w-[92vw] rounded-2xl border border-neutral-700/70 bg-[#0c1014] p-4 shadow-2xl" onClick={(e)=>e.stopPropagation()}>
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl overflow-hidden border border-neutral-700/70 bg-black/40">
-                    <img src={playerMenu.avatarUrl} className="w-full h-full object-cover" alt=""/>
-                  </div>
-                  <div className="min-w-0">
-                    <div className="font-semibold text-neutral-100 truncate">{playerMenu.name}</div>
-                    <div className="text-xs text-neutral-400">玩家操作</div>
-                  </div>
-                </div>
-
-                <div className="mt-4 grid gap-2">
-                  <button className="px-3 py-2 rounded-xl bg-emerald-500/15 border border-emerald-400/30 text-emerald-200 hover:bg-emerald-500/25" onClick={doAddFriend}>
-                    加好友
-                  </button>
-
-                  {playerMenu.canKick && (
-                    <button className="px-3 py-2 rounded-xl bg-rose-500/15 border border-rose-400/30 text-rose-200 hover:bg-rose-500/25" onClick={doKick}>
-                      踢出去
-                    </button>
-                  )}
-
-                  <button className="px-3 py-2 rounded-xl bg-neutral-700/30 border border-neutral-600/40 text-neutral-200 hover:bg-neutral-700/40" onClick={closePlayerMenu}>
-                    取消
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
       );
     }
 
@@ -1649,9 +1706,38 @@ useEffect(() => {
   dock.style.display = showStages.includes(stage) ? "flex" : "none";
 }, [stage]);
 
+// ====== 伺服器強制離開等待室（例如：被房主踢出）======
+useEffect(() => {
+  window.__forceLeaveLobby = (opt={}) => {
+    try{
+      // 若不是在等待室，忽略
+      if(stage !== 'waiting') return;
+
+      // 不需要再送 LEAVE_ROOM（踢人時 server 已經移除）
+      try{
+        if(typeof window.toast === 'function'){
+          const msg = (opt?.reason === 'kicked') ? '你已被房主踢出房間' : '已離開房間';
+          window.toast(msg);
+        }
+      }catch(_){ }
+
+      // 切回選房 + 清掉 lobby 記憶體
+      setStage('choice');
+      __lobby = {
+        roomId:'',
+        me:{ playerId:__lobby.me.playerId, secret:__lobby.me.secret, name:__lobby.me.name, avatar:__lobby.me.avatar },
+        snapshot:null,
+        cpuCount: 0
+      };
+    }catch(_){ }
+  };
+
+  return () => { try{ window.__forceLeaveLobby = null; }catch(_){} };
+}, [stage]);
+
 
       // expose current stage for non-React scripts (invite auto-join)
-      useEffect(()=>{ try{ window.__stageNow = stage; }catch (e) {} }, [stage]);
+      useEffect(()=>{ try{ window.__stageNow = stage; }catch{} }, [stage]);
 
       const [secret, setSecret] = useState(()=> (localStorage.getItem("opSecret") || "").trim());
       const [cloudProfile, setCloudProfile] = useState(null); // normalized for UI
@@ -1709,7 +1795,7 @@ useEffect(() => {
 
         // prevent stale async boot from overriding stage after auto-join (e.g., when accepting an invite)
         const token = Date.now();
-        try{ window.__bootToken = token; }catch (e) {}
+        try{ window.__bootToken = token; }catch{}
 
         pullCloudProfile().then((p)=>{
           try{
@@ -1730,7 +1816,7 @@ useEffect(() => {
         setStage("waiting");
       }
 
-      useEffect(()=>{ try{ window.__enterRoom = enterRoom; }catch (e) {} }, [enterRoom]);
+      useEffect(()=>{ try{ window.__enterRoom = enterRoom; }catch{} }, [enterRoom]);
 
       return (
         <div className="w-full max-w-[1200px] mx-auto">
@@ -1805,7 +1891,7 @@ useEffect(() => {
                   const rid = __lobby?.roomId || roomInfo?.id || "";
                   try{
                     socket.emit("LEAVE_ROOM", { roomId: rid, playerId: __lobby.me.playerId, secret: __lobby.me.secret }, ()=>{});
-                  }catch (e) {}
+                  }catch{}
                   setStage("choice");
                   __lobby = {
                     roomId:'',
@@ -2568,8 +2654,8 @@ useEffect(() => {
   if(openBtn){
     openBtn.addEventListener("click", ()=>{
       dock.classList.remove("collapsed");
-      try{ localStorage.setItem("op_fdock_collapsed", "0"); }catch (e) {}
-      try{ addInp && addInp.focus && addInp.focus(); }catch (e) {}
+      try{ localStorage.setItem("op_fdock_collapsed", "0"); }catch{}
+      try{ addInp && addInp.focus && addInp.focus(); }catch{}
     });
   }
 
@@ -2589,7 +2675,7 @@ useEffect(() => {
   try{
     const c = localStorage.getItem("op_fdock_collapsed");
     if(c === "0") dock.classList.remove("collapsed");
-  }catch (e) {}
+  }catch{}
 
   function setHint(msg){
     if(!msg){ hintEl.style.display="none"; hintEl.textContent=""; return; }
@@ -2636,7 +2722,7 @@ useEffect(() => {
       renderMeMini();
 
       // 更新自己的好友狀態（讓其他人看到你在start頁）
-      try{ sock.emit("PRESENCE_SET", { secret, page: "start" }); }catch (e) {}
+      try{ sock.emit("PRESENCE_SET", { secret, page: "start" }); }catch{}
       setHint("");
       fetchFriends();
     });
@@ -3135,14 +3221,14 @@ item.addEventListener("click", () => {
     if(dock.classList.contains("collapsed")){
       if(e.target && (e.target.id === "fdMinBtn")) return;
       dock.classList.remove("collapsed");
-      try{ localStorage.setItem("op_fdock_collapsed", "0"); }catch (e) {}
+      try{ localStorage.setItem("op_fdock_collapsed", "0"); }catch{}
     }
   });
 
   minBtn.addEventListener("click", () => {
     dock.classList.toggle("collapsed");
     renderMeMini();
-    try{ localStorage.setItem("op_fdock_collapsed", dock.classList.contains("collapsed") ? "1" : "0"); }catch (e) {}
+    try{ localStorage.setItem("op_fdock_collapsed", dock.classList.contains("collapsed") ? "1" : "0"); }catch{}
   });
 
   addBtn.addEventListener("click", () => {
@@ -3244,13 +3330,13 @@ item.addEventListener("click", () => {
 
     const me = pickMe();
     try{
-      try{ window.__pendingJoinActive = true; }catch (e) {}
+      try{ window.__pendingJoinActive = true; }catch{}
       sock.emit('JOIN_ROOM', { roomId, displayName: me.name, avatar: me.avatar, title: me.title, titleTier: me.tier, secret: sec });
       window.__enterRoom(roomId, { host:false });
       // ✅ 這時才清掉 pendingJoin（確保已跳過 press 並開始自動加入）
       try{ sessionStorage.removeItem('op_pending_join_room'); sessionStorage.removeItem('op_pending_join_via'); }catch(_){ }
 
-      setTimeout(()=>{ try{ window.__pendingJoinActive = false; }catch (e) {} }, 1500);
+      setTimeout(()=>{ try{ window.__pendingJoinActive = false; }catch{} }, 1500);
     }catch(e){
       console.warn('[autoJoin] failed', e);
     }
