@@ -526,6 +526,21 @@
     const SERVER_URL = 'https://onepiece-card-online.onrender.com';
     const socket = io(SERVER_URL, { transports: ['websocket'] });
 
+    // === Presence：讓伺服器把此 socket 綁定到 userId（邀請/好友在線狀態會用到）===
+    function sendPresence(pageName='start'){
+      try{
+        const secret = String(localStorage.getItem('opSecret')||'').trim();
+        if(!secret) return;
+        socket.timeout(8000).emit('PRESENCE_SET', { secret, page: pageName }, ()=>{});
+      }catch(_){}
+    }
+    socket.on('connect', ()=>{
+      // 連線一建立就回報一次，避免 onlineUsers 留著舊 socketId 造成「顯示在線但收不到邀請」
+      sendPresence('start');
+    });
+    // 每 30 秒補送一次（Render / 某些網路情境可能會斷線重連，保險）
+    setInterval(()=>sendPresence('start'), 30000);
+
     // === I18N 防呆 ===
     const I18N = window.__I18N || {
       getLang: () => 'zh-Hant',
@@ -564,6 +579,8 @@
 
       // ✅ 遊戲邀請：等待室邀請通知（會觸發底下的 Lobby Invite Modal）
       if (e.type === 'lobby_invite'){
+        try{ console.log('[EMIT] lobby_invite', e); }catch(_){}
+
         try{
           const inv = e.invite;
           if(!inv) return;
