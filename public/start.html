@@ -340,6 +340,55 @@
   height: 16px;
 }
 
+/* === WaitingRoom: 點玩家頭像的操作選單 === */
+.lobby-avatar-btn{
+  cursor: pointer;
+  user-select: none;
+}
+.lobby-avatar-btn:hover{
+  filter: brightness(1.06);
+}
+.lobbyActionModal{
+  position: fixed;
+  inset: 0;
+  z-index: 240;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,.65);
+}
+.lobbyActionSheet{
+  width: min(420px, 92vw);
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(18,22,28,.92);
+  box-shadow: 0 22px 60px rgba(0,0,0,.55);
+  padding: 16px;
+}
+.lobbyActionHead{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 6px 12px;
+}
+.lobbyActionHead .ava{
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.18);
+}
+.lobbyActionHead .ava img{ width:100%; height:100%; object-fit:cover; }
+.lobbyActionHead .name{ font-weight: 800; }
+.lobbyActionBtns{ display:flex; gap:10px; padding: 0 6px 6px; }
+.lobbyActionBtns .btn{ flex:1; }
+.lobbyActionBtns .btn-danger{
+  background: linear-gradient(180deg, rgba(239,68,68,.92), rgba(185,28,28,.92));
+  border: 1px solid rgba(255,255,255,.10);
+  color: #fff;
+}
+.lobbyActionBtns .btn-danger:hover{ filter: brightness(1.04); }
+
 
     /* === Rules Flipbook Modal === */
     .rulesOverlay{ position: fixed; inset: 0; background: rgba(0,0,0,0.55); display:flex; align-items:center; justify-content:center; z-index: 9999; }
@@ -577,15 +626,6 @@
         return;
       }
 
-      // ✅ 等待室：被房主踢出
-      if (e.type === 'kicked'){
-        try{
-          if (typeof window.__onKicked === 'function') window.__onKicked(e);
-          else alert('你已被房主踢出房間');
-        }catch(_){}
-        return;
-      }
-
       // ✅ 遊戲邀請：等待室邀請通知（會觸發底下的 Lobby Invite Modal）
       if (e.type === 'lobby_invite'){
         try{ console.log('[EMIT] lobby_invite', e); }catch(_){}
@@ -604,6 +644,21 @@
           }
         }catch(err){
           console.warn('[lobby_invite] handler failed', err);
+        }
+        return;
+      }
+
+      // ✅ 被房主踢出等待室
+      if (e.type === 'kicked'){
+        try{
+          if (typeof window.__onLobbyKicked === 'function') {
+            window.__onLobbyKicked(e);
+          } else {
+            alert('你已被房主踢出等待室');
+            location.href = 'start.html';
+          }
+        }catch(_){
+          try{ location.href = 'start.html'; }catch{} 
         }
         return;
       }
@@ -793,54 +848,6 @@ const avatarUrl = `images/avatars/${avatar}.webp`;
           >
             {t("ui.pressAnyKey")}
           </div>
-
-          {/* 玩家操作彈窗：加好友 / 踢出（只有房主看到踢出） */}
-          {actOpen && actTarget && (
-            <div
-              className="fixed inset-0 z-[260] flex items-center justify-center bg-black/70"
-              onClick={()=>{ setActOpen(false); setActTarget(null); }}
-            >
-              <div
-                className="card w-[min(420px,92vw)] p-5"
-                onClick={(ev)=>ev.stopPropagation()}
-              >
-                <div className="flex items-center gap-3">
-                  <div className="avatar is-active"><img src={`images/avatars/${actTarget.avatar}.webp`} alt=""/></div>
-                  <div className="flex-1">
-                    <div className="text-lg font-bold text-amber-200">{actTarget.name}</div>
-                    <div className="text-xs text-neutral-400">{amHost ? '房主可：加好友 / 踢出' : '可：加好友'}</div>
-                  </div>
-                  <button className="btn" onClick={()=>{ setActOpen(false); setActTarget(null); }}>關閉</button>
-                </div>
-
-                <div className="mt-4 flex gap-2 justify-end flex-wrap">
-                  <button
-                    className="btn"
-                    onClick={()=>{
-                      addFriendByName(actTarget.name);
-                      setActOpen(false);
-                      setActTarget(null);
-                    }}
-                  >
-                    加好友
-                  </button>
-
-                  {amHost && (
-                    <button
-                      className="btn"
-                      onClick={()=>{
-                        kickPlayer(actTarget.pid);
-                        setActOpen(false);
-                        setActTarget(null);
-                      }}
-                    >
-                      踢出房間
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       );
     }
@@ -1386,23 +1393,24 @@ const avatarUrl = `images/avatars/${avatar}.webp`;
       const [lobby, setLobby] = useState(()=> __lobby.snapshot);
       const mePid = __lobby.me.playerId;
 
-      // 等待室：點玩家頭像 → 操作彈窗（加好友 / 踢出）
-      const [actOpen, setActOpen] = useState(false);
-      const [actTarget, setActTarget] = useState(null); // { pid, name, avatar }
+      // 點玩家頭像後的操作選單
+      const [pick, setPick] = useState(null); // { pid, name, avatarUrl, isHost }
 
       useEffect(()=>{
         window.__setLobby = setLobby;
-        return ()=>{ window.__setLobby = null; };
-      }, []);
-
-      // 被踢出：由 socket.on('EMIT') 轉呼叫
-      useEffect(()=>{
-        window.__onKicked = () => {
-          try{ alert('你已被房主踢出房間'); }catch{}
-          try{ onLeave && onLeave(); }catch{}
+        window.__onLobbyKicked = ()=>{
+          try{
+            const rid = __lobby?.roomId || roomId || '';
+            socket.emit('LEAVE_ROOM', { roomId: rid, playerId: __lobby.me.playerId, secret: __lobby.me.secret }, ()=>{});
+          }catch{}
+          try{ if(typeof window.toast === 'function') window.toast('你已被房主踢出等待室'); }catch{}
+          onLeave?.();
         };
-        return ()=>{ try{ if(window.__onKicked) window.__onKicked = null; }catch{} };
-      }, [onLeave]);
+        return ()=>{
+          window.__setLobby = null;
+          window.__onLobbyKicked = null;
+        };
+      }, []);
 
       const players = lobby?.players||[];
       function pidOf(p){ return p.playerId ?? p.pid ?? p.id; }
@@ -1448,42 +1456,47 @@ function titleTierOf(p){
         });
       }
 
-      function openPlayerAction(p){
+      function openActions(p){
         const pid = pidOf(p);
         if(pid == null) return;
-        if(pid === mePid) return; // 自己不彈
-        setActTarget({ pid, name: nameOf(p), avatar: avatarOf(p) });
-        setActOpen(true);
+        if(pid === mePid) return; // 自己不用開
+        const avatarUrl = `images/avatars/${avatarOf(p)}.webp`;
+        setPick({ pid, name: nameOf(p), avatarUrl, isHost: (lobby?.host === pid) });
       }
+      function closeActions(){ setPick(null); }
 
       function addFriendByName(name){
-        const nm = String(name||'').trim();
-        if(!nm) return;
-        const sec = String(__lobby?.me?.secret || localStorage.getItem('opSecret') || '').trim();
-        if(!sec){
-          alert('請先登入（缺少 opSecret）');
+        const n = String(name||'').trim();
+        if(!n) return;
+        const secret = String(__lobby?.me?.secret || localStorage.getItem('opSecret') || '').trim();
+        if(!secret){
+          alert('尚未登入（缺少 opSecret），無法加好友');
           return;
         }
-        socket.timeout(12000).emit('FRIEND_ADD_BY_NAME', { secret: sec, name: nm }, (err, res) => {
+        socket.timeout(12000).emit('FRIEND_ADD_BY_NAME', { secret, name: n }, (err, res)=>{
           if(err || !res?.ok){
-            alert(res?.error || '加入好友失敗');
+            try{ if(typeof window.toast === 'function') window.toast(res?.error || '加入好友失敗'); }catch{}
+            else alert(res?.error || '加入好友失敗');
             return;
           }
-          try{ if(typeof window.toast==='function') window.toast('已送出好友邀請'); }catch{}
+          try{ if(typeof window.toast === 'function') window.toast('已送出好友邀請'); }catch{}
+          closeActions();
         });
       }
 
       function kickPlayer(pid){
+        const target = Number(pid);
+        if(!Number.isFinite(target)) return;
         if(!amHost) return;
-        if(pid == null) return;
-        if(!confirm('確定要把這位玩家踢出房間？')) return;
+        if(!confirm(`確定要踢出「${pick?.name || ('#'+target)}」嗎？`)) return;
         socket.emit('ACTION', {
           roomId: __lobby.roomId,
           playerId: __lobby.me.playerId,
           secret: __lobby.me.secret,
           type: 'LOBBY_KICK',
-          targetPlayerId: pid,
+          targetPlayerId: target,
         });
+        closeActions();
       }
 
       const me = players.find(p=> pidOf(p)===mePid);
@@ -1548,11 +1561,10 @@ function titleTierOf(p){
                     <div key={pid} className="lobby-player flex items-center justify-between rounded-xl border border-neutral-700/60 bg-black/30">
                       <div className="flex items-center gap-3">
                         <div
-                          className={"avatar "+(isHost?"is-active":"")}
+                          className={"avatar lobby-avatar-btn "+(isHost?"is-active":"")}
                           role="button"
-                          title={isMe ? '' : (amHost ? '點擊：加好友 / 踢出' : '點擊：加好友')}
-                          onClick={()=>openPlayerAction(p)}
-                          style={{ cursor: isMe ? 'default' : 'pointer' }}
+                          title={amHost ? '點擊：踢出 / 加好友' : '點擊：加好友'}
+                          onClick={()=>openActions(p)}
                         >
                           <img src={avatarUrl} alt=""/>
                         </div>
@@ -1601,6 +1613,29 @@ function titleTierOf(p){
                 })}
               </div>
             </div>
+
+            {pick && (
+              <div className="lobbyActionModal" onMouseDown={(e)=>{ if(e.target === e.currentTarget) closeActions(); }}>
+                <div className="lobbyActionSheet" onMouseDown={(e)=>e.stopPropagation()}>
+                  <div className="lobbyActionHead">
+                    <div className="ava"><img src={pick.avatarUrl} alt=""/></div>
+                    <div>
+                      <div className="name">{pick.name}</div>
+                      <div className="text-xs text-neutral-400">{amHost ? '房主可踢人 / 加好友' : '可加好友'}</div>
+                    </div>
+                  </div>
+                  <div className="lobbyActionBtns">
+                    <button className="btn" onClick={()=>addFriendByName(pick.name)}>加好友</button>
+                    {amHost && (
+                      <button className="btn btn-danger" onClick={()=>kickPlayer(pick.pid)}>踢出去</button>
+                    )}
+                  </div>
+                  <div className="mt-1 px-1">
+                    <button className="btn w-full opacity-80" onClick={closeActions}>取消</button>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {cpuCount > 0 && (
               <div>
