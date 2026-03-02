@@ -3074,5 +3074,50 @@ item.addEventListener("click", () => {
 </script>
 <!-- =================== /Friends Dock =================== -->
 
+<script>
+(function(){
+  // ✅ 從其他頁面接受邀請後，會先把 roomId 放在 sessionStorage，跳回 start.html
+  const roomId = String(sessionStorage.getItem('op_pending_join_room') || '').trim();
+  if(!roomId) return;
+  try{
+    sessionStorage.removeItem('op_pending_join_room');
+    sessionStorage.removeItem('op_pending_join_via');
+  }catch(_){}
+
+  function pickMe(){
+    // 盡量用雲端 profile，其次 fallback 用 localStorage
+    const p = window.__cloudProfile || {};
+    const name =
+      String(p.playerName || localStorage.getItem('op_name') || localStorage.getItem('op_player_name') || 'P').trim() || 'P';
+    const avatar = Number(p.playerAvatar || localStorage.getItem('op_avatar') || localStorage.getItem('op_player_avatar') || 1) || 1;
+    const title = String(p.equippedTitle || '').trim();
+    const tier  = Number(p.equippedTier || 1) || 1;
+    return { name, avatar, title, tier };
+  }
+
+  function ensureSocket(){
+    // 這頁本來就會建立 window.socket（等待室主連線）
+    return window.socket || null;
+  }
+
+  function tick(){
+    const sock = ensureSocket();
+    if(!sock || !sock.connected){ return setTimeout(tick, 200); }
+    if(typeof window.__enterRoom !== 'function'){ return setTimeout(tick, 200); }
+
+    const sec = String(localStorage.getItem('opSecret')||'').trim();
+    if(!sec){ console.warn('[autoJoin] missing opSecret'); return; }
+
+    const me = pickMe();
+    try{
+      sock.emit('JOIN_ROOM', { roomId, displayName: me.name, avatar: me.avatar, title: me.title, titleTier: me.tier, secret: sec });
+      window.__enterRoom(roomId, { host:false });
+    }catch(e){
+      console.warn('[autoJoin] failed', e);
+    }
+  }
+  tick();
+})();
+</script>
 </body>
 </html>
