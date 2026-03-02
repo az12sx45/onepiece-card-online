@@ -568,7 +568,20 @@
     socket.on('EMIT', (e)=>{
       if(!e) return;
 
-      // ✅ 伺服器 push 的 toast（提示文字）
+      
+      // ✅ 被房主踢出等待室
+      if (e.type === 'kicked'){
+        try{
+          alert("你已被房主踢出等待室");
+        }catch(_){}
+        try{ sessionStorage.removeItem("op_pending_join_room"); }catch{}
+        try{ delete __lobby.roomId; __lobby.snapshot = null; }catch{}
+        // 重新回到 Start 主流程（移除任何 join 參數）
+        try{ location.href = location.pathname; }catch{ location.reload(); }
+        return;
+      }
+
+// ✅ 伺服器 push 的 toast（提示文字）
       if (e.type === 'toast'){
         try{
           if(typeof window.toast === 'function') window.toast(String(e.text||''));
@@ -1351,6 +1364,66 @@ function titleTierOf(p){
 
       const cpuCount = lobby?.cpuCount ?? 0;
       const amHost = lobby && (lobby.host === mePid);
+      // === 玩家頭像點擊操作選單（房主：加好友/踢出；其他：只加好友）===
+      const [playerMenu, setPlayerMenu] = useState(null); 
+      // playerMenu: { pid, name, avatarUrl, canKick }
+
+      function openPlayerMenu(p){
+        try{
+          const pid = pidOf(p);
+          if(pid === mePid) return;             // 不對自己開選單
+          if(p?.isCPU || p?.cpu) return;        // CPU 不開選單
+          const canKick = !!(lobby && (lobby.host === mePid) && (lobby.host !== pid));
+          setPlayerMenu({
+            pid,
+            name: nameOf(p),
+            avatarUrl: `images/avatars/${avatarOf(p)}.webp`,
+            canKick
+          });
+        }catch(err){
+          console.warn("[playerMenu] open failed", err);
+        }
+      }
+      function closePlayerMenu(){ setPlayerMenu(null); }
+
+      function doAddFriend(){
+        const pm = playerMenu;
+        if(!pm) return;
+        const sec = String(localStorage.getItem("opSecret")||"").trim();
+        if(!sec){ alert("請先登入才能加好友"); return; }
+
+        // 使用既有的 FRIEND_ADD_BY_NAME（以玩家名稱送出邀請）
+        socket.timeout(12000).emit("FRIEND_ADD_BY_NAME", { secret: sec, name: pm.name }, (err, res) => {
+          if(err || !res?.ok){
+            alert(res?.error || "加入好友失敗");
+            return;
+          }
+          alert("已送出好友邀請");
+          closePlayerMenu();
+        });
+      }
+
+      function doKick(){
+        const pm = playerMenu;
+        if(!pm) return;
+        if(!pm.canKick){ return; }
+        const sec = String(localStorage.getItem("opSecret")||"").trim();
+        if(!sec){ alert("請先登入"); return; }
+        if(!lobby?.roomId){ alert("缺少 roomId"); return; }
+
+        if(!confirm(`確定要把「${pm.name}」踢出等待室嗎？`)) return;
+
+        socket.emit("ACTION", {
+          roomId: lobby.roomId,
+          playerId: mePid,
+          secret: sec,
+          type: "LOBBY_KICK",
+          targetPid: pm.pid
+        });
+
+        closePlayerMenu();
+      }
+
       const canStart = (players.length + cpuCount) >= MIN_PLAYERS && players.every(p => !!p.ready);
 
       function copyId(){
@@ -1439,7 +1512,7 @@ function titleTierOf(p){
                   return (
                     <div key={pid} className="lobby-player flex items-center justify-between rounded-xl border border-neutral-700/60 bg-black/30">
                       <div className="flex items-center gap-3">
-                        <div className={"avatar "+(isHost?"is-active":"")}><img src={avatarUrl} alt=""/></div>
+                        <div className={"avatar "+(isHost?"is-active":"")} onClick={()=>openPlayerMenu(p)} role="button" title="玩家操作"><img src={avatarUrl} alt=""/></div>
                         <div>
 <div className="font-semibold leading-tight">
   <div className="flex items-center gap-2 flex-wrap">
@@ -1515,6 +1588,39 @@ function titleTierOf(p){
             )}
           </div>
         </div>
+
+          {/* === 玩家操作選單 Modal === */}
+          {playerMenu && (
+            <div className="fixed inset-0 z-[250] flex items-center justify-center bg-black/70" onClick={closePlayerMenu}>
+              <div className="w-[320px] max-w-[92vw] rounded-2xl border border-neutral-700/70 bg-[#0c1014] p-4 shadow-2xl" onClick={(e)=>e.stopPropagation()}>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-xl overflow-hidden border border-neutral-700/70 bg-black/40">
+                    <img src={playerMenu.avatarUrl} className="w-full h-full object-cover" alt=""/>
+                  </div>
+                  <div className="min-w-0">
+                    <div className="font-semibold text-neutral-100 truncate">{playerMenu.name}</div>
+                    <div className="text-xs text-neutral-400">玩家操作</div>
+                  </div>
+                </div>
+
+                <div className="mt-4 grid gap-2">
+                  <button className="px-3 py-2 rounded-xl bg-emerald-500/15 border border-emerald-400/30 text-emerald-200 hover:bg-emerald-500/25" onClick={doAddFriend}>
+                    加好友
+                  </button>
+
+                  {playerMenu.canKick && (
+                    <button className="px-3 py-2 rounded-xl bg-rose-500/15 border border-rose-400/30 text-rose-200 hover:bg-rose-500/25" onClick={doKick}>
+                      踢出去
+                    </button>
+                  )}
+
+                  <button className="px-3 py-2 rounded-xl bg-neutral-700/30 border border-neutral-600/40 text-neutral-200 hover:bg-neutral-700/40" onClick={closePlayerMenu}>
+                    取消
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
       );
     }
 
