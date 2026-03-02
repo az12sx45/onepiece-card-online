@@ -525,8 +525,6 @@
 
     const SERVER_URL = 'https://onepiece-card-online.onrender.com';
     const socket = io(SERVER_URL, { transports: ['websocket'] });
-    // expose for friend dock / invite modal helpers
-    try{ window.socket = socket; }catch{}
 
     // === I18N 防呆 ===
     const I18N = window.__I18N || {
@@ -557,11 +555,6 @@
         __lobby.snapshot = e.lobby;
         if (!__lobby.roomId) __lobby.roomId = e.lobby?.roomId || __lobby.roomId;
         if (typeof window.__setLobby === 'function') window.__setLobby(e.lobby);
-        return;
-      }
-      // ✅ 等待室邀請（好友邀請你進等待室）
-      if (e?.type === 'lobby_invite'){
-        try{ window.__onLobbyInvite?.(e.invite); }catch{}
         return;
       }
       if (e?.type === 'nav_game'){
@@ -1497,10 +1490,6 @@ function titleTierOf(p){
       const [roomInfo,setRoomInfo]=useState(null);
       getMeId();
 
-      // expose to non-React scripts (friend dock / invite modal)
-      useEffect(()=>{ try{ window.__appStage = stage; }catch{} }, [stage]);
-      useEffect(()=>{ try{ window.__currentCloudProfile = cloudProfile; }catch{} }, [cloudProfile]);
-
       const [langTick, setLangTick] = useState(0);
       function changeLang(next){
         I18N.setLang(next);
@@ -1558,8 +1547,6 @@ function titleTierOf(p){
         setRoomInfo({id, host: !!extra?.host});
         setStage("waiting");
       }
-
-      useEffect(()=>{ try{ window.__enterRoom = enterRoom; }catch{} }, []);
 
       return (
         <div className="w-full max-w-[1200px] mx-auto">
@@ -1787,6 +1774,137 @@ function titleTierOf(p){
       });
     }
   </script>
+
+<!-- ===================== Lobby Invite Modal ===================== -->
+<style>
+  #lobbyInviteBack{ display:none; position:fixed; inset:0; z-index:260; background:rgba(0,0,0,.70); align-items:center; justify-content:center; }
+  #lobbyInviteSheet{ width:min(560px, 92vw); background:rgba(20,26,31,.98); border:1px solid rgba(255,255,255,.10); border-radius:18px; padding:18px 18px 14px; box-shadow:0 18px 40px rgba(0,0,0,.45); }
+  #lobbyInviteSheet .hd{ display:flex; gap:12px; align-items:center; }
+  #lobbyInviteSheet .ava{ width:56px; height:56px; border-radius:14px; overflow:hidden; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); flex:0 0 auto; }
+  #lobbyInviteSheet .ava img{ width:100%; height:100%; object-fit:cover; }
+  #lobbyInviteSheet .ttl{ font-weight:800; font-size:18px; letter-spacing:.5px; }
+  #lobbyInviteSheet .sub{ margin-top:2px; font-size:13px; color:rgba(255,255,255,.72); }
+  #lobbyInviteSheet .meta{ margin-top:14px; padding:10px 12px; border-radius:14px; border:1px solid rgba(255,255,255,.10); background:rgba(255,255,255,.04); font-size:13px; color:rgba(255,255,255,.86); }
+  #lobbyInviteSheet .row{ margin-top:14px; display:flex; gap:10px; flex-wrap:wrap; }
+  #lobbyInviteSheet .btnx{ flex:1 1 140px; border-radius:14px; padding:10px 12px; border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.06); color:#fff; font-weight:700; cursor:pointer; }
+  #lobbyInviteSheet .btnx:hover{ background:rgba(255,255,255,.10); }
+  #lobbyInviteSheet .btnx.ok{ border-color:rgba(120,255,170,.40); background:rgba(120,255,170,.12); }
+  #lobbyInviteSheet .btnx.no{ border-color:rgba(255,120,120,.40); background:rgba(255,120,120,.12); }
+  #lobbyInviteSheet .btnx.mute{ border-color:rgba(160,160,255,.45); background:rgba(160,160,255,.12); }
+  #lobbyInviteSheet .small{ margin-top:10px; font-size:11px; color:rgba(255,255,255,.55); text-align:right; }
+</style>
+
+<div id="lobbyInviteBack" aria-hidden="true">
+  <div id="lobbyInviteSheet" role="dialog" aria-label="lobby-invite">
+    <div class="hd">
+      <div class="ava"><img id="lobbyInviteAva" alt=""></div>
+      <div>
+        <div class="ttl" id="lobbyInviteTitle">遊戲邀請</div>
+        <div class="sub" id="lobbyInviteSub">—</div>
+      </div>
+    </div>
+    <div class="meta" id="lobbyInviteMeta">—</div>
+    <div class="row">
+      <button class="btnx ok" id="lobbyInviteOk" type="button">確認加入</button>
+      <button class="btnx no" id="lobbyInviteNo" type="button">拒絕</button>
+      <button class="btnx mute" id="lobbyInviteMute" type="button">暫停 5 分鐘</button>
+    </div>
+    <div class="small">（邀請有效時間：2 分鐘）</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  function q(id){ return document.getElementById(id); }
+  const back = q('lobbyInviteBack');
+  const ava  = q('lobbyInviteAva');
+  const sub  = q('lobbyInviteSub');
+  const meta = q('lobbyInviteMeta');
+  const bOk  = q('lobbyInviteOk');
+  const bNo  = q('lobbyInviteNo');
+  const bMu  = q('lobbyInviteMute');
+
+  let curInvite = null;
+
+  function avatarUrlById(id){
+    const n = Math.max(1, Math.min(2000, Number(id)||1));
+    return `images/avatars/${n}.webp`;
+  }
+
+  function hide(){
+    curInvite = null;
+    if(back){ back.style.display='none'; back.setAttribute('aria-hidden','true'); }
+  }
+
+  function show(inv){
+    if(!inv) return;
+    curInvite = inv;
+    if(ava) ava.src = avatarUrlById(inv.fromAvatar);
+    if(sub) sub.textContent = `${String(inv.fromName||'好友')} 邀請你加入等待室`;
+    if(meta) meta.textContent = `房號：${String(inv.roomId||'—')}`;
+    if(back){ back.style.display='flex'; back.setAttribute('aria-hidden','false'); }
+  }
+
+  // 給 socket.on('EMIT') 呼叫用（若先收到，會暫存在 __pendingLobbyInvites）
+  window.__onLobbyInvite = function(inv){
+    try{ show(inv); }catch(e){ console.warn('[invite show failed]', e); }
+  };
+
+  // 若邀請在本 script 載入前就先收到：補撈最後一筆直接顯示
+  try{
+    const list = window.__pendingLobbyInvites;
+    if(Array.isArray(list) && list.length){
+      const last = list[list.length-1];
+      window.__pendingLobbyInvites = [];
+      show(last);
+    }
+  }catch(_){ }
+
+  back && back.addEventListener('click', (e)=>{ if(e.target===back) hide(); });
+
+  function respond(action){
+    const inv = curInvite;
+    if(!inv) return hide();
+    const sec = String(localStorage.getItem('opSecret')||'').trim();
+    const sock = window.socket;
+    if(!sec || !sock){
+      hide();
+      alert('尚未登入或 socket 未連線');
+      return;
+    }
+    sock.timeout(12000).emit('LOBBY_INVITE_RESPOND', { secret: sec, inviteId: inv.inviteId, action }, (err, res)=>{
+      if(err || !res?.ok){
+        hide();
+        alert(res?.error || '回覆邀請失敗');
+        return;
+      }
+      if(action==='accept'){
+        const roomId = String(res.roomId || inv.roomId || '').trim();
+        if(roomId){
+          try{
+            const prof = window.__currentCloudProfile;
+            const name = String(prof?.playerName || 'P').trim() || 'P';
+            const avatar = Number(prof?.playerAvatar || 1) || 1;
+            const title = String(prof?.equippedTitle || '').trim();
+            const tier  = Number(prof?.equippedTier || 1) || 1;
+            sock.emit('JOIN_ROOM', { roomId, displayName: name, avatar, title, titleTier: tier, secret: sec });
+            window.__enterRoom && window.__enterRoom(roomId, { host:false });
+          }catch(e){
+            console.warn('[invite accept join failed]', e);
+          }
+        }
+      }
+      hide();
+    });
+  }
+
+  bOk && bOk.addEventListener('click', ()=> respond('accept'));
+  bNo && bNo.addEventListener('click', ()=> respond('reject'));
+  bMu && bMu.addEventListener('click', ()=> respond('mute5'));
+})();
+</script>
+<!-- ===================== /Lobby Invite Modal ===================== -->
+
 <!-- ===================== Friends Dock (LoL-like) ===================== -->
 <style id="friendDockStyle">
   :root{
@@ -2392,37 +2510,6 @@ renderFriends();
       if(uid>0) location.href = `profile.html?view=${uid}`;
     });
 
-    // ✅ 等待室：邀請好友直接進房
-    const canInvite = (window.__appStage === 'waiting') && window.__lobby && String(window.__lobby.roomId||'').trim();
-    let bInvite = null;
-    if(canInvite){
-      bInvite = document.createElement('button');
-      bInvite.type = 'button';
-      bInvite.textContent = '邀請進等待室';
-      bInvite.addEventListener('click', (e)=>{
-        e.stopPropagation();
-        closeFriendMenus();
-        const uid = Number(f?.userId)||0;
-        const rid = String(window.__lobby?.roomId||'').trim().toUpperCase();
-        const sec = String(localStorage.getItem('opSecret')||'').trim();
-        if(!(uid>0) || !rid || !sec){
-          setHint('邀請失敗：缺少登入或房號');
-          return;
-        }
-        if(!sock){ setHint('好友/聊天：Socket 尚未連線'); return; }
-        sock.timeout(12000).emit('LOBBY_INVITE_SEND', { secret: sec, toUserId: uid, roomId: rid }, (err, res)=>{
-          if(err || !res?.ok){
-            if(res?.error==='offline') return setHint('對方離線，無法邀請');
-            if(res?.error==='muted') return setHint('對方已暫停接收邀請');
-            if(res?.error==='room already started') return setHint('房間已開始遊戲，無法邀請');
-            if(res?.error==='not friends') return setHint('只能邀請好友');
-            return setHint(res?.error || '邀請失敗');
-          }
-          setHint('已送出遊戲邀請');
-        });
-      });
-    }
-
     const bDel = document.createElement('button');
     bDel.type = 'button';
     bDel.className = 'danger';
@@ -2448,7 +2535,6 @@ renderFriends();
     });
 
     menu.appendChild(bView);
-    if(bInvite) menu.appendChild(bInvite);
     menu.appendChild(bDel);
     // prevent click inside menu from bubbling to fd-item (open chat)
     menu.addEventListener('click', (e)=> e.stopPropagation());
@@ -2899,133 +2985,6 @@ item.addEventListener("click", () => {
 })();
 </script>
 <!-- =================== /Friends Dock =================== -->
-
-<!-- =================== Lobby Invite Modal =================== -->
-<style>
-  #lobbyInviteBack{ position:fixed; inset:0; z-index:9999; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.75); }
-  #lobbyInviteSheet{ width:min(520px, 92vw); border:1px solid rgba(255,255,255,.14); background:rgba(18,22,28,.96); backdrop-filter: blur(10px);
-    border-radius:16px; padding:16px; box-shadow: 0 20px 80px rgba(0,0,0,.55);
-  }
-  #lobbyInviteSheet .hd{ display:flex; align-items:center; gap:12px; }
-  #lobbyInviteSheet .ava{ width:48px; height:48px; border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.06); flex:0 0 auto; }
-  #lobbyInviteSheet .ava img{ width:100%; height:100%; object-fit:cover; }
-  #lobbyInviteSheet .ttl{ font-size:16px; font-weight:900; color:rgba(255,255,255,.95); }
-  #lobbyInviteSheet .sub{ margin-top:2px; font-size:12px; color:rgba(255,255,255,.72); }
-  #lobbyInviteSheet .meta{ margin-top:10px; font-size:12px; color:rgba(255,255,255,.78); padding:10px 12px; border-radius:12px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.10); }
-  #lobbyInviteSheet .row{ display:flex; gap:8px; margin-top:12px; }
-  #lobbyInviteSheet .btnx{ flex:1; border-radius:12px; padding:10px 12px; font-weight:800; border:1px solid rgba(255,255,255,.16); background:rgba(255,255,255,.08); color:rgba(255,255,255,.92); cursor:pointer; }
-  #lobbyInviteSheet .btnx:hover{ background:rgba(255,255,255,.12); }
-  #lobbyInviteSheet .btnx.ok{ border-color:rgba(255,211,107,.45); background:rgba(255,211,107,.12); }
-  #lobbyInviteSheet .btnx.no{ border-color:rgba(255,100,100,.45); background:rgba(255,100,100,.10); }
-  #lobbyInviteSheet .btnx.mute{ border-color:rgba(160,160,255,.45); background:rgba(160,160,255,.10); }
-  #lobbyInviteSheet .small{ margin-top:10px; font-size:11px; color:rgba(255,255,255,.55); text-align:right; }
-</style>
-
-<div id="lobbyInviteBack" aria-hidden="true">
-  <div id="lobbyInviteSheet" role="dialog" aria-label="lobby-invite">
-    <div class="hd">
-      <div class="ava"><img id="lobbyInviteAva" alt=""></div>
-      <div>
-        <div class="ttl" id="lobbyInviteTitle">遊戲邀請</div>
-        <div class="sub" id="lobbyInviteSub">—</div>
-      </div>
-    </div>
-    <div class="meta" id="lobbyInviteMeta">—</div>
-    <div class="row">
-      <button class="btnx ok" id="lobbyInviteOk" type="button">確認加入</button>
-      <button class="btnx no" id="lobbyInviteNo" type="button">拒絕</button>
-      <button class="btnx mute" id="lobbyInviteMute" type="button">暫停 5 分鐘</button>
-    </div>
-    <div class="small" id="lobbyInviteSmall">（邀請有效時間：2 分鐘）</div>
-  </div>
-</div>
-
-<script>
-(function(){
-  function q(id){ return document.getElementById(id); }
-  const back = q('lobbyInviteBack');
-  const ava  = q('lobbyInviteAva');
-  const sub  = q('lobbyInviteSub');
-  const meta = q('lobbyInviteMeta');
-  const bOk  = q('lobbyInviteOk');
-  const bNo  = q('lobbyInviteNo');
-  const bMu  = q('lobbyInviteMute');
-
-  let curInvite = null;
-
-  function avatarUrlById(id){
-    const n = Math.max(1, Math.min(2000, Number(id)||1));
-    return `images/avatars/${n}.webp`;
-  }
-
-  function hide(){
-    curInvite = null;
-    if(back){ back.style.display='none'; back.setAttribute('aria-hidden','true'); }
-  }
-
-  function show(inv){
-    if(!inv) return;
-    curInvite = inv;
-    if(ava) ava.src = avatarUrlById(inv.fromAvatar);
-    if(sub) sub.textContent = `${String(inv.fromName||'好友')} 邀請你加入等待室`;
-    if(meta) meta.textContent = `房號：${String(inv.roomId||'—')}`;
-    if(back){ back.style.display='flex'; back.setAttribute('aria-hidden','false'); }
-  }
-
-  // global hook called from socket EMIT handler
-  window.__onLobbyInvite = function(inv){
-    try{ show(inv); }catch(e){ console.warn('[invite show failed]', e); }
-  };
-
-  back?.addEventListener('click', (e)=>{ if(e.target===back) hide(); });
-
-  async function respond(action){
-    const inv = curInvite;
-    if(!inv) return hide();
-    const sec = String(localStorage.getItem('opSecret')||'').trim();
-    if(!sec || !window.socket){
-      hide();
-      alert('尚未登入或 socket 未連線');
-      return;
-    }
-    window.socket.timeout(12000).emit('LOBBY_INVITE_RESPOND', { secret: sec, inviteId: inv.inviteId, action }, (err, res)=>{
-      if(err || !res?.ok){
-        hide();
-        alert(res?.error || '回覆邀請失敗');
-        return;
-      }
-      if(action==='accept'){
-        const roomId = String(res.roomId || inv.roomId || '').trim();
-        if(!roomId){ hide(); return; }
-
-        // if currently inside a different room, just switch stage and JOIN_ROOM again
-        try{
-          const prof = window.__currentCloudProfile;
-          const name = String(prof?.playerName || window.__lobby?.me?.name || 'P').trim() || 'P';
-          const avatar = Number(prof?.playerAvatar || window.__lobby?.me?.avatar || 1) || 1;
-          const title = String(prof?.equippedTitle || '').trim();
-          const tier  = Number(prof?.equippedTier || 1) || 1;
-
-          window.__lobby.roomId = roomId;
-          window.__lobby.me.name = name;
-          window.__lobby.me.avatar = avatar;
-
-          window.socket.emit('JOIN_ROOM', { roomId, displayName: name, avatar, title, titleTier: tier, secret: sec });
-          window.__enterRoom?.(roomId, { host:false });
-        }catch(e){
-          console.warn('[invite accept join failed]', e);
-        }
-      }
-      hide();
-    });
-  }
-
-  bOk?.addEventListener('click', ()=> respond('accept'));
-  bNo?.addEventListener('click', ()=> respond('reject'));
-  bMu?.addEventListener('click', ()=> respond('mute5'));
-})();
-</script>
-<!-- =================== /Lobby Invite Modal =================== -->
 
 </body>
 </html>
