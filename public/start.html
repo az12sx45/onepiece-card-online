@@ -2535,6 +2535,39 @@ renderFriends();
     });
 
     menu.appendChild(bView);
+
+    // === 邀請進等待室（只有自己在等待室內才顯示）===
+    const canInvite = !!(__lobby && __lobby.roomId && String(__lobby.roomId).trim());
+    if(canInvite){
+      const bInv = document.createElement('button');
+      bInv.type = 'button';
+      bInv.textContent = '邀請進等待室';
+      bInv.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        closeFriendMenus();
+        const uid = Number(f?.userId)||0;
+        const rid = String(__lobby.roomId||'').trim();
+        if(!(uid>0) || !rid) return;
+        if(!sock){ setHint('好友/聊天：Socket 尚未連線'); return; }
+        if(!secret){ setHint('好友/聊天：請先登入（缺少 opSecret）'); return; }
+
+        sock.timeout(12000).emit('LOBBY_INVITE_SEND', { secret, toUserId: uid, roomId: rid }, (err, res)=>{
+          if(err || !res?.ok){
+            const code = String(res?.error||'invite failed');
+            if(code==='offline') setHint('對方離線，無法邀請');
+            else if(code==='muted') setHint('對方已暫停接收邀請');
+            else if(code==='not friends') setHint('你們還不是好友，無法邀請');
+            else if(code==='room already started') setHint('房間已開始，無法邀請');
+            else setHint(res?.error || '邀請失敗');
+            return;
+          }
+          setHint('已送出等待室邀請');
+        });
+      });
+
+      menu.appendChild(bInv);
+    }
+
     menu.appendChild(bDel);
     // prevent click inside menu from bubbling to fd-item (open chat)
     menu.addEventListener('click', (e)=> e.stopPropagation());
