@@ -543,6 +543,9 @@
       snapshot:null,
       cpuCount: 0
     };
+      // ✅ 讓好友邀請功能可讀取目前等待室狀態
+      window.__lobby = __lobby;
+
 
     socket.on('JOINED', ({ playerId, secret })=>{
       __lobby.me.playerId = playerId;
@@ -1195,6 +1198,19 @@ const avatarUrl = `images/avatars/${avatar}.webp`;
 
         onEnter(code, { host: false });
       }
+
+      // ✅ 由邀請連結自動加入：start.html?join=XXXX
+      try{
+        const params = new URLSearchParams(location.search);
+        const joinCode = (params.get("join")||"").trim();
+        if(joinCode){
+          const inp = document.getElementById("roomCode");
+          if(inp) inp.value = joinCode;
+          history.replaceState(null, "", location.pathname);
+          setTimeout(()=>{ tryJoin(); }, 200);
+        }
+      }catch{}
+
 
       return (
         <div className="card w-[min(980px,96vw)] p-5 md:p-6 space-y-6">
@@ -2405,31 +2421,33 @@ renderFriends();
 
     menu.appendChild(bView);
 
-    // === 邀請進等待室（僅線上 + 我在等待室時顯示）===
-    if (f?.online && window.__lobby && String(window.__lobby.roomId||"")) {
-      const bInv = document.createElement('button');
-      bInv.type = 'button';
-      bInv.textContent = '邀請進等待室';
-      bInv.addEventListener('click', (e)=>{
-        e.stopPropagation();
-        const uid = Number(f?.userId)||0;
-        const rid = String(window.__lobby?.roomId||"").trim();
-        if(!(uid>0) || !rid) return closeFriendMenus();
-        if(!sock){ setHint('邀請：Socket 尚未連線'); return; }
-        if(!secret){ setHint('邀請：請先登入（缺少 opSecret）'); return; }
+    // ✅ 等待室邀請
+    const bInv = document.createElement('button');
+    bInv.type = 'button';
+    bInv.textContent = '邀請進等待室';
+    bInv.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const uid = Number(f?.userId)||0;
+      const rid = (window.__lobby && window.__lobby.roomId) ? String(window.__lobby.roomId).trim() : '';
+      if(!(uid>0)) return closeFriendMenus();
+      if(!rid){
+        setHint('邀請：你目前不在等待室（先建立/加入房間）');
+        return closeFriendMenus();
+      }
+      if(!sock){ setHint('邀請：Socket 尚未連線'); return; }
+      if(!secret){ setHint('邀請：請先登入（缺少 opSecret）'); return; }
 
-        sock.timeout(12000).emit('ROOM_INVITE_SEND', { secret, toUserId: uid, roomId: rid }, (err, res)=>{
-          if(err || !res?.ok){
-            setHint(res?.error || '邀請失敗');
-            return;
-          }
-          setHint(`已邀請「${String(f?.name||('#'+uid))}」加入等待室`);
-          closeFriendMenus();
-        });
+      sock.timeout(12000).emit('ROOM_INVITE_SEND', { secret, toUserId: uid, roomId: rid }, (err, res)=>{
+        if(err || !res?.ok){
+          setHint(res?.error || '邀請失敗');
+          return;
+        }
+        setHint(`已邀請「${String(f?.name||('#'+uid))}」加入等待室`);
+        closeFriendMenus();
       });
-      menu.appendChild(bInv);
-    }
+    });
 
+    menu.appendChild(bInv);
     menu.appendChild(bDel);
     // prevent click inside menu from bubbling to fd-item (open chat)
     menu.addEventListener('click', (e)=> e.stopPropagation());
@@ -2839,96 +2857,62 @@ item.addEventListener("click", () => {
     if(e.key === "Enter") addBtn.click();
   });
 
-  function wireSocketEvents(){
+  
+  // === 等待室邀請通知 Toast ===
+  let __roomInviteToastEl = null;
+  function showRoomInviteToast(inv){
+    try{
+      if(__roomInviteToastEl) __roomInviteToastEl.remove();
+      const fromName = String(inv?.fromName || '好友');
+      const rid = String(inv?.roomId || '').trim();
+      if(!rid) return;
+
+      const wrap = document.createElement('div');
+      __roomInviteToastEl = wrap;
+      wrap.style.position = 'fixed';
+      wrap.style.right = '18px';
+      wrap.style.bottom = '18px';
+      wrap.style.zIndex = '99999';
+      wrap.style.maxWidth = '360px';
+      wrap.style.background = 'rgba(16,22,28,.95)';
+      wrap.style.border = '1px solid rgba(255,255,255,.12)';
+      wrap.style.borderRadius = '14px';
+      wrap.style.padding = '12px 12px';
+      wrap.style.boxShadow = '0 12px 30px rgba(0,0,0,.45)';
+      wrap.style.backdropFilter = 'blur(10px)';
+      wrap.style.color = '#e9f0f8';
+      wrap.innerHTML = `
+        <div style="font-weight:800;font-size:14px;margin-bottom:6px;">收到等待室邀請</div>
+        <div style="font-size:13px;opacity:.92;line-height:1.35;margin-bottom:10px;">
+          「${fromName}」邀請你加入房間：<b>${rid}</b>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;">
+          <button id="riReject" style="padding:8px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#e9f0f8;cursor:pointer;">拒絕</button>
+          <button id="riJoin" style="padding:8px 10px;border-radius:10px;border:1px solid rgba(255,211,107,.35);background:rgba(255,211,107,.18);color:#ffe8b6;cursor:pointer;font-weight:800;">加入</button>
+        </div>
+      `;
+      document.body.appendChild(wrap);
+
+      wrap.querySelector('#riReject')?.addEventListener('click', ()=>{
+        try{ wrap.remove(); }catch{}
+      });
+      wrap.querySelector('#riJoin')?.addEventListener('click', ()=>{
+        try{
+          // 走 join query 自動加入流程
+          location.href = `start.html?join=${encodeURIComponent(rid)}`;
+        }catch{}
+      });
+
+      // 12 秒自動消失
+      setTimeout(()=>{ try{ wrap.remove(); }catch{} }, 12000);
+    }catch{}
+  }
+
+function wireSocketEvents(){
     if(!sock) return;
     sock.on("FRIENDS_DIRTY", () => fetchFriends());
-    sock.on("ROOM_INVITE", (p) => {
-      try{
-        if(!isAuthed()) return;
-        const roomId = String(p?.roomId||"").trim();
-        const fromName = String(p?.fromName||"好友");
-        const fromId = Number(p?.fromUserId)||0;
-
-        // build toast
-        let toast = document.getElementById("opInviteToast");
-        if(!toast){
-          toast = document.createElement("div");
-          toast.id = "opInviteToast";
-          toast.style.position = "fixed";
-          toast.style.right = "18px";
-          toast.style.bottom = "18px";
-          toast.style.zIndex = "9999";
-          toast.style.minWidth = "260px";
-          toast.style.maxWidth = "320px";
-          toast.style.background = "rgba(20,26,31,.96)";
-          toast.style.border = "1px solid rgba(255,255,255,.18)";
-          toast.style.borderRadius = "14px";
-          toast.style.padding = "12px 12px";
-          toast.style.boxShadow = "0 18px 40px rgba(0,0,0,.55)";
-          toast.style.color = "#e9f0f8";
-          toast.style.fontSize = "13px";
-          toast.style.display = "none";
-          document.body.appendChild(toast);
-        }
-
-        toast.innerHTML = "";
-        const title = document.createElement("div");
-        title.style.fontWeight = "800";
-        title.style.marginBottom = "6px";
-        title.textContent = "收到等待室邀請";
-        const msg = document.createElement("div");
-        msg.style.opacity = ".92";
-        msg.style.marginBottom = "10px";
-        msg.textContent = `${fromName} 邀請你加入等待室（房號：${roomId}）`;
-
-        const row = document.createElement("div");
-        row.style.display = "flex";
-        row.style.gap = "8px";
-
-        const bJoin = document.createElement("button");
-        bJoin.textContent = "加入";
-        bJoin.style.flex = "1";
-        bJoin.style.padding = "8px 10px";
-        bJoin.style.borderRadius = "12px";
-        bJoin.style.border = "1px solid rgba(255,211,107,.45)";
-        bJoin.style.background = "rgba(255,211,107,.12)";
-        bJoin.style.color = "rgba(255,255,255,.95)";
-        bJoin.style.cursor = "pointer";
-
-        const bNo = document.createElement("button");
-        bNo.textContent = "拒絕";
-        bNo.style.flex = "1";
-        bNo.style.padding = "8px 10px";
-        bNo.style.borderRadius = "12px";
-        bNo.style.border = "1px solid rgba(255,100,100,.45)";
-        bNo.style.background = "rgba(255,100,100,.10)";
-        bNo.style.color = "rgba(255,255,255,.92)";
-        bNo.style.cursor = "pointer";
-
-        bNo.onclick = ()=>{ toast.style.display="none"; };
-        bJoin.onclick = ()=>{
-          toast.style.display="none";
-          if(!roomId) return;
-          const url = new URL(location.href);
-          url.searchParams.set("join", roomId);
-          location.href = url.toString();
-        };
-
-        row.appendChild(bJoin);
-        row.appendChild(bNo);
-
-        toast.appendChild(title);
-        toast.appendChild(msg);
-        toast.appendChild(row);
-        toast.style.display = "block";
-
-        // auto hide
-        clearTimeout(window.__opInviteToastTimer);
-        window.__opInviteToastTimer = setTimeout(()=>{ try{ toast.style.display="none"; }catch{} }, 15000);
-      }catch(_){}
-    });
-
-        sock.on("DM_NEW", (m) => {
+    sock.on("ROOM_INVITE", (inv)=>{ if(!isAuthed()) return; showRoomInviteToast(inv); });
+    sock.on("DM_NEW", (m) => {
       if(!isAuthed()) return;
 
       const fromId = Number(m.from);
