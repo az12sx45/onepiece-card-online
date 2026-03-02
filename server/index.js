@@ -2214,58 +2214,44 @@ p.rank = safeRank;
       return;
     }
 
-    // 等待室：房主踢人（只在 lobby 階段）
+
+    // 等待室：房主踢人
     if (type === 'LOBBY_KICK'){
-      // host only
-      if (room.host !== playerId) {
+      const targetPid = Number(action.targetPid);
+      if (!Number.isFinite(targetPid) || targetPid < 0){
+        io.to(socket.id).emit('EMIT', { type:'toast', text:'踢人失敗：targetPid 不正確' });
+        return;
+      }
+      if (room.host !== playerId){
         io.to(socket.id).emit('EMIT', { type:'toast', text:'只有房主可以踢人' });
         return;
       }
-      if (room.phase === 'playing'){
-        io.to(socket.id).emit('EMIT', { type:'toast', text:'遊戲已開始，無法踢人' });
-        return;
-      }
-
-      const targetId = Number(action?.targetPlayerId);
-      if (!Number.isFinite(targetId) || targetId < 0){
-        io.to(socket.id).emit('EMIT', { type:'toast', text:'踢人失敗：目標錯誤' });
-        return;
-      }
-      if (targetId === room.host){
-        io.to(socket.id).emit('EMIT', { type:'toast', text:'不能踢出房主' });
-        return;
-      }
-      if (targetId === playerId){
+      if (targetPid === playerId){
         io.to(socket.id).emit('EMIT', { type:'toast', text:'不能踢自己' });
         return;
       }
 
-      // collect all sockets that belong to targetId
-      const toKick = [];
+      // 找到目標 socket
+      let targetSid = null;
       for (const [sid, meta] of room.sockets.entries()){
-        if (meta && meta.playerId === targetId) toKick.push([sid, meta]);
+        if (meta && meta.playerId === targetPid){
+          targetSid = sid;
+          break;
+        }
       }
-      if (toKick.length === 0){
-        io.to(socket.id).emit('EMIT', { type:'toast', text:'踢人失敗：玩家已不在房內' });
-        broadcastLobby(roomId);
+      if (!targetSid){
+        io.to(socket.id).emit('EMIT', { type:'toast', text:'踢人失敗：找不到該玩家' });
         return;
       }
 
-      // remove from room.sockets + clear ready
-      for (const [sid, meta] of toKick){
-        room.sockets.delete(sid);
-        if (room.lobbyReady) delete room.lobbyReady[meta.playerId];
+      // 通知被踢者 + 移除房間資料
+      io.to(targetSid).emit('EMIT', { type:'kicked', roomId, by: playerId });
 
-        // force socket to leave the socket.io room (best effort)
-        try{
-          const sock = io.sockets.sockets.get(sid);
-          sock && sock.leave(roomId);
-        }catch(_){ }
+      try { io.sockets.sockets.get(targetSid)?.leave(roomId); } catch {}
+      try { io.sockets.sockets.get(targetSid)?.emit('LEFT', { roomId }); } catch {}
 
-        // notify the kicked player (front-end will return to menu)
-        io.to(sid).emit('EMIT', { type:'kicked', roomId, by: playerId });
-        io.to(sid).emit('EMIT', { type:'toast', text:'你已被房主踢出等待室' });
-      }
+      room.sockets.delete(targetSid);
+      if (room.lobbyReady) delete room.lobbyReady[targetPid];
 
       broadcastLobby(roomId);
       return;
