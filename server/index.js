@@ -2441,6 +2441,56 @@ room.sockets = newSockets;
 
 
 
+
+
+  // ===== Lobby: leave room (explicit) =====
+  // Client can leave waiting room without closing the page; we must remove the socket from room.sockets,
+  // otherwise other players will still see them in lobby.
+  socket.on("LEAVE_ROOM", (payload = {}, cb) => {
+    try{
+      const { roomId } = payload || {};
+      const rid = String(roomId || joinedRoom || "").trim();
+      if(!rid) return cb?.({ ok:false, error:"no roomId" });
+
+      const room = rooms.get(rid);
+      if(!room) {
+        // still allow client to proceed
+        joinedRoom = null;
+        try{ socket.leave(rid); }catch{}
+        return cb?.({ ok:true, gone:true });
+      }
+
+      // remove this socket from this room
+      const meta = room.sockets.get(socket.id);
+      room.sockets.delete(socket.id);
+
+      // if lobby stage, also clear ready flag for that playerId
+      if(meta && room.lobbyReady) delete room.lobbyReady[meta.playerId];
+
+      // host transfer if needed
+      if(room.host != null){
+        const all = [...room.sockets.values()];
+        room.host = all.length ? all[0].playerId : null;
+      }
+
+      // leave socket.io room & clear joinedRoom
+      try{ socket.leave(rid); }catch{}
+      if(joinedRoom === rid) joinedRoom = null;
+
+      // if nobody left, delete room to avoid stale rooms
+      if(room.sockets.size === 0){
+        rooms.delete(rid);
+      }else{
+        broadcastLobby(rid);
+      }
+
+      return cb?.({ ok:true });
+    }catch(e){
+      console.error("[LEAVE_ROOM] error:", e);
+      return cb?.({ ok:false, error:String(e?.message||e) });
+    }
+  });
+
   socket.on("disconnect", () => {
     // social presence
     try{ markOffline(socket.data?.userId, socket.id); }catch{}
