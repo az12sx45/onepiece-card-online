@@ -204,6 +204,43 @@ const io = new Server(server, { cors: { origin: "*" } });
 // room = { state, sockets: Map<sid,{playerId,secret,displayName,avatar}>, host, lobbyReady }
 const rooms = new Map();
 
+const MAX_ROOM_PLAYERS = 6;
+
+// ====== 房間清單（等待室） ======
+function buildRoomList(){
+  const list = [];
+  for (const [roomId, room] of rooms.entries()){
+    if(!room) continue;
+    // 只顯示還在等待室的房間（遊戲中不列）
+    if(room.phase !== "lobby") continue;
+
+    const humans = new Set([...room.sockets.values()].map(m => m?.playerId)).size;
+    const cpuCount = Math.max(0, Math.min(MAX_ROOM_PLAYERS, Number(room.cpuCount || 0) || 0));
+    const total = Math.min(MAX_ROOM_PLAYERS, humans + cpuCount);
+
+    const hostId = (room.host == null) ? null : Number(room.host);
+    const hostP = (hostId != null) ? room.state?.players?.[hostId] : null;
+    const hostName = String(hostP?.client?.displayName || hostP?.displayName || "").trim();
+
+    list.push({
+      roomId,
+      hostName: hostName || "",
+      humans,
+      cpuCount,
+      total,
+    });
+  }
+  // 排序：房號字典序（視覺上好找）
+  list.sort((a,b)=> String(a.roomId).localeCompare(String(b.roomId)));
+  return list;
+}
+
+function broadcastRoomList(){
+  try{ io.emit("ROOM_LIST_UPDATE", { rooms: buildRoomList() }); }catch{}
+}
+
+
+
 // ——— 視圖小工具：統一 chestCoins 並加上 viewerCanNext ———
 function injectChestCoins(vis){
   const cands = [
@@ -2019,6 +2056,16 @@ const { rows } = await pool.query(
   }
 });
 
+
+// ====== 房間清單：等待室公開列表 ======
+socket.on("ROOM_LIST_GET", (_payload = {}, cb) => {
+  try{
+    cb?.({ ok:true, rooms: buildRoomList() });
+  }catch(err){
+    cb?.({ ok:false, error: String(err?.message || err) });
+  }
+});
+
 socket.on("JOIN_ROOM", async (payload = {}) => {
 
   const {
@@ -2043,7 +2090,7 @@ socket.on("JOIN_ROOM", async (payload = {}) => {
 let room = rooms.get(roomId);
 if (!room) {
   const safeCpu = typeof cpuCount === "number"
-    ? Math.max(0, Math.min(3, cpuCount))  // 限制在 0~3
+    ? Math.max(0, Math.min(5, cpuCount))  // 限制在 0~5
     : 0;
 
   room = {
@@ -2055,6 +2102,7 @@ if (!room) {
     cpuCount: safeCpu,       // ← 新增：這個房間預計的 CPU 人數
   };
   rooms.set(roomId, room);
+  broadcastRoomList();
 }
 
 
@@ -2089,6 +2137,12 @@ if (myId == null) {
 
 // ★ 2) 若都滿就新增一格座位（等待室用）
 if (myId == null) {
+  // 房間上限：最多 6 位（等待室只算真人座位；CPU 之後開始時再補）
+  if (st.players.length >= MAX_ROOM_PLAYERS) {
+    io.to(socket.id).emit('EMIT', { type:'toast', text:`房間已滿（${MAX_ROOM_PLAYERS}/${MAX_ROOM_PLAYERS}）` });
+    return;
+  }
+
   myId = st.players.length;
   st.players.push({
     id: myId,
@@ -2193,6 +2247,7 @@ p.rank = safeRank;
     room.lobbyReady[myId] = room.lobbyReady[myId] ?? false;
 
     broadcastLobby(roomId);
+    broadcastRoomList();
     broadcastState(room);
   });
 
@@ -2270,8 +2325,10 @@ p.rank = safeRank;
       // 若房間沒人了就刪掉
       if (room.sockets.size === 0){
         rooms.delete(roomId);
+        broadcastRoomList();
       } else {
         broadcastLobby(roomId);
+        broadcastRoomList();
       }
       return;
     }
@@ -2311,8 +2368,8 @@ const joined = entries.map(([sid, m]) => {
 
 
       const nHuman = joined.length;       // 真人數
-      const cpu = room.cpuCount || 0;     // 等待室設定的 CPU 數
-      const total = nHuman + cpu;         // 總人數 = 真人 + CPU
+      const cpuMax = Math.max(0, Math.min(MAX_ROOM_PLAYERS - nHuman, Number(room.cpuCount || 0) || 0)); // CPU 上限：總人數不超過 6
+      const total = nHuman + cpuMax;      // 總人數 = 真人 + CPU
 
       // ★ 最低人數判斷：真人 + CPU 一起算
       if (total < 2){
@@ -2332,7 +2389,7 @@ const joined = entries.map(([sid, m]) => {
 
       // ③ 依「總人數」重建 state
       const st = createInitialState(total);
-      st.cpuCount = cpu;   // 之後如果要給引擎用，可以參考這個欄位
+      st.cpuCount = cpuMax;   // 之後如果要給引擎用，可以參考這個欄位
 
     // ④ 組一個「座位池」：把所有真人 & CPU 丟進來，等等一起洗牌
   const seatPool = [];
@@ -2343,7 +2400,7 @@ const joined = entries.map(([sid, m]) => {
   }
 
   // 再把 CPU 佔位塞進 seatPool
-  for (let i = 0; i < cpu; i++) {
+  for (let i = 0; i < cpuMax; i++) {
     seatPool.push({ kind: 'cpu' });
   }
 
@@ -2442,6 +2499,7 @@ room.sockets = newSockets;
   room.lobbyReady = {};
   room.state = st;
   room.phase = 'playing';
+  broadcastRoomList();
   broadcastState(room);
 
   // ★ 如果一開始就輪到 CPU，直接讓 CPU 先開始（含 2 秒 / 4 秒延遲）
