@@ -1570,6 +1570,7 @@ function titleTierOf(p){
 
         const normalized = normalizeCloudProfile(cloud);
         setCloudProfile(normalized);
+        window.__cloudProfile = normalized;
 
         // 同步 __lobby（只留記憶體）
         __lobby.me.secret = s;
@@ -1595,6 +1596,8 @@ function titleTierOf(p){
         setRoomInfo({id, host: !!extra?.host});
         setStage("waiting");
       }
+
+      useEffect(()=>{ try{ window.__enterRoom = enterRoom; }catch{} }, [enterRoom]);
 
       return (
         <div className="w-full max-w-[1200px] mx-auto">
@@ -1930,9 +1933,9 @@ function titleTierOf(p){
         const roomId = String(res.roomId || inv.roomId || '').trim();
         if(roomId){
           try{
-            const prof = window.__currentCloudProfile;
-            const name = String(prof?.playerName || 'P').trim() || 'P';
-            const avatar = Number(prof?.playerAvatar || 1) || 1;
+            const prof = window.__cloudProfile;
+            const name = String(prof?.playerName || window.__lobby?.me?.name || 'P').trim() || 'P';
+            const avatar = Number(prof?.playerAvatar || window.__lobby?.me?.avatar || 1) || 1;
             const title = String(prof?.equippedTitle || '').trim();
             const tier  = Number(prof?.equippedTier || 1) || 1;
             sock.emit('JOIN_ROOM', { roomId, displayName: name, avatar, title, titleTier: tier, secret: sec });
