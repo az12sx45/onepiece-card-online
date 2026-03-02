@@ -1769,7 +1769,7 @@ function titleTierOf(p){
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker
-          .register("./sw.js?v=20260302a")
+          .register("./sw.js")
           .catch((err) => console.warn("SW register failed:", err));
       });
     }
@@ -2009,18 +2009,6 @@ function titleTierOf(p){
     backdrop-filter: blur(10px);
   }
   .fd-chatwin.minimized{ height:48px; }
-  /* unread blink */
-  @keyframes fdBlinkBox{
-    0%,100%{ box-shadow: 0 18px 60px rgba(0,0,0,45), 0 0 0 0 rgba(239,68,68,0); filter:brightness(1); }
-    50%{ box-shadow: 0 18px 60px rgba(0,0,0,45), 0 0 0 4px rgba(239,68,68,.35); filter:brightness(1.25); }
-  }
-  .fd-chatwin.attn{ animation: fdBlinkBox .95s ease-in-out infinite; }
-  @keyframes fdBlinkBtn{
-    0%,100%{ filter:brightness(1); }
-    50%{ filter:brightness(1.35); }
-  }
-  #friendDock.attn .fd-open{ animation: fdBlinkBtn .95s steps(2,end) infinite; }
-
   .fd-chat-hd{
     height:48px;
     display:flex;
@@ -2682,63 +2670,6 @@ item.addEventListener("click", () => {
     chatOrder = chatOrder.filter(x=>x!==peerId);
   }
 
-  // === 未讀訊息：閃爍提醒 + 自動彈出縮小聊天室 ===
-  function setWinAttention(peerId, on){
-    const w = openChats.get(peerId);
-    if(w && w.el){
-      if(on) w.el.classList.add("attn");
-      else w.el.classList.remove("attn");
-    }
-    try{
-      if(on && dock.classList.contains("collapsed")) dock.classList.add("attn");
-      if(!on) dock.classList.remove("attn");
-    }catch{}
-  }
-
-  function guessPeer(peerId, m){
-    const hit = friends.find(x => Number(x.userId) === Number(peerId));
-    if(hit) return hit;
-    // fallback (still render a window instead of failing)
-    return {
-      userId: peerId,
-      name: (m && (m.fromName || m.name)) ? String(m.fromName || m.name) : ("玩家#" + peerId),
-      avatar: Number(m && (m.fromAvatar || m.avatar) ? (m.fromAvatar || m.avatar) : 1) || 1,
-      online: false
-    };
-  }
-
-  function popMinChat(peerId, m){
-    peerId = Number(peerId);
-    if(openChats.has(peerId)) return;
-
-    // cap windows like LoL (avoid overflow)
-    const MAX_OPEN = 4;
-    if(chatOrder.length >= MAX_OPEN){
-      const kick = chatOrder.shift();
-      if(kick != null) closeChat(kick);
-    }
-
-    const peer = guessPeer(peerId, m);
-    const el = createChatWindow(peer);
-    tray.appendChild(el);
-    chatOrder.push(peerId);
-
-    // start minimized
-    const w = openChats.get(peerId);
-    if(w){
-      w.minimized = true;
-      w.el.classList.add("minimized");
-    }
-
-    if(m) appendMsgTo(peerId, m);
-
-    // badge + blink
-    setWinBadge(peerId, 1);
-    setWinAttention(peerId, true);
-
-    bringToFront(peerId);
-  }
-
   function toggleMin(peerId){
     const w = openChats.get(peerId);
     if(!w) return;
@@ -2746,9 +2677,7 @@ item.addEventListener("click", () => {
     if(w.minimized) w.el.classList.add("minimized");
     else w.el.classList.remove("minimized");
     if(!w.minimized){
-      setWinAttention(peerId, false);
       setWinBadge(peerId, 0);
-      setWinAttention(peerId, false);
       setTimeout(()=> w.inp?.focus(), 0);
     }
   }
@@ -2829,7 +2758,6 @@ item.addEventListener("click", () => {
       updateWinHeader(peerId);
       if(w.minimized) toggleMin(peerId);
       setWinBadge(peerId, 0);
-      setWinAttention(peerId, false);
       setTimeout(()=> w.inp?.focus(), 0);
       return;
     }
@@ -2888,49 +2816,32 @@ item.addEventListener("click", () => {
   function wireSocketEvents(){
     if(!sock) return;
     sock.on("FRIENDS_DIRTY", () => fetchFriends());
-    
-  // AUTO_POP_MIN_CHAT: 未讀訊息會自動彈出縮小聊天室並閃爍提醒
-  sock.on("DM_NEW", (m) => {
-    console.debug("[DM_NEW]", m);
-    try{
-      if(!m) return;
-      const fromId = Number(m.from);
-      const toId   = Number(m.to);
-      const peerId = (fromId === Number(me?.userId)) ? toId : fromId;
+    sock.on("DM_NEW", (m) => {
+      if(!isAuthed()) return;
 
-      // always append to open window if exists
+      const fromId = Number(m.from);
+      const peerId = (fromId === me.userId) ? Number(m.to) : fromId;
+
+      // window open?
       if(openChats.has(peerId)){
         appendMsgTo(peerId, m);
 
         const w = openChats.get(peerId);
-        const fromOther = fromId !== Number(me?.userId);
-
-        if(fromOther){
-          if(w?.minimized){
-            const cur = Number(w.badgeEl?.textContent || 0) || 0;
-            setWinBadge(peerId, cur + 1);
-            setWinAttention(peerId, true);
-          }else{
-            setWinBadge(peerId, 0);
-            setWinAttention(peerId, false);
-          }
+        // if minimized and message from other side -> show small badge on window
+        if(w?.minimized && Number(m.from) !== Number(me.userId)){
+          const cur = Number(w.badgeEl.textContent||"0") || 0;
+          setWinBadge(peerId, cur + 1);
+        }else{
+          setWinBadge(peerId, 0);
         }
-        return;
+      }else{
+        // dock unread badge
+        if(Number(m.from) !== Number(me.userId)){
+          unread.set(peerId, (unread.get(peerId)||0) + 1);
+          renderFriends();
+        }
       }
-
-      // not open yet: only pop for messages from other people
-      if(fromId !== Number(me?.userId)){
-        // keep list unread
-        unread.set(peerId, (unread.get(peerId) || 0) + 1);
-        renderFriends();
-
-        // pop minimized window
-        popMinChat(peerId, m);
-      }
-    }catch(err){
-      console.warn("[DM_NEW] handler error:", err);
-    }
-  });
+    });
   }
 
   // init
@@ -2938,7 +2849,52 @@ item.addEventListener("click", () => {
   ensureSecret();
   wireSocketEvents();
   renderMeMini();
-  socialAuth();
+
+  // ===== Auto re-auth / retry when secret becomes available (fix: login after page load) =====
+  let __lastSecret = secret || "";
+  let __authedOnce = false;
+
+  function maybeReauth(force=false){
+    try{
+      const s = ensureSecret();
+      if(!s) return;
+      const changed = s !== __lastSecret;
+      if(force || changed || (!__authedOnce && !isAuthed())){
+        __lastSecret = s;
+        socialAuth();
+        __authedOnce = true;
+      }
+    }catch(_){}
+  }
+
+  // If user logs in later and localStorage(opSecret) is written, we must retry.
+  // - fast poll a few seconds, then slow poll
+  let __fastTicks = 0;
+  const __fastTimer = setInterval(()=>{
+    __fastTicks++;
+    maybeReauth(false);
+    if(__fastTicks >= 25){ // ~25s
+      clearInterval(__fastTimer);
+    }
+  }, 1000);
+
+  setInterval(()=> maybeReauth(false), 5000);
+
+  // listen storage change (other tab / React login)
+  window.addEventListener("storage", (e)=>{
+    if(e && (e.key === "opSecret" || e.key === "op_secret")) maybeReauth(true);
+  });
+
+  // reconnect handling
+  try{
+    sock.on("connect", ()=> maybeReauth(true));
+    sock.on("reconnect", ()=> maybeReauth(true));
+  }catch(_){}
+
+  // initial auth attempt
+  maybeReauth(true);
+
+  // refresh friends list periodically
   setInterval(() => { if(secret) fetchFriends(); }, 12000);
 })();
 </script>
