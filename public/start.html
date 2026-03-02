@@ -1769,7 +1769,7 @@ function titleTierOf(p){
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker
-          .register("./sw.js")
+          .register("./sw.js?v=20260302a")
           .catch((err) => console.warn("SW register failed:", err));
       });
     }
@@ -2891,6 +2891,7 @@ item.addEventListener("click", () => {
     
   // AUTO_POP_MIN_CHAT: 未讀訊息會自動彈出縮小聊天室並閃爍提醒
   sock.on("DM_NEW", (m) => {
+    console.debug("[DM_NEW]", m);
     try{
       if(!m) return;
       const fromId = Number(m.from);
