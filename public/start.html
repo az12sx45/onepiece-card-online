@@ -562,7 +562,7 @@
     socket.on('JOINED', ({ playerId, secret })=>{
       __lobby.me.playerId = playerId;
       __lobby.me.secret   = secret;
-      try { localStorage.setItem('opSecret', secret); } catch {}
+      try { localStorage.setItem('opSecret', secret); } catch (e) {}
     });
 
     socket.on('EMIT', (e)=>{
@@ -574,8 +574,8 @@
         try{
           alert("你已被房主踢出等待室");
         }catch(_){}
-        try{ sessionStorage.removeItem("op_pending_join_room"); }catch{}
-        try{ delete __lobby.roomId; __lobby.snapshot = null; }catch{}
+        try{ sessionStorage.removeItem("op_pending_join_room"); }catch (e) {}
+        try{ delete __lobby.roomId; __lobby.snapshot = null; }catch (e) {}
         // 重新回到 Start 主流程（移除任何 join 參數）
         try{ location.href = location.pathname; }catch{ location.reload(); }
         return;
@@ -619,7 +619,7 @@
         return;
       }
       if (e?.type === 'nav_game'){
-        try{ socket.close(); }catch{}
+        try{ socket.close(); }catch (e) {}
         const url = new URL('game.html', location.origin);
         url.searchParams.set('server', SERVER_URL);
         url.searchParams.set('room',   __lobby.roomId);
@@ -817,7 +817,7 @@ const avatarUrl = `images/avatars/${avatar}.webp`;
       const savedPass = localStorage.getItem("op_last_password") || "";
       if (savedUser) setUsername(savedUser);
       if (savedPass) setPassword(savedPass);
-    } catch {}
+    } catch (e) {}
   }, []);
 
   function submit() {
@@ -842,7 +842,7 @@ const avatarUrl = `images/avatars/${avatar}.webp`;
       try {
         localStorage.setItem("op_last_username", username);
         localStorage.setItem("op_last_password", password);
-      } catch {}
+      } catch (e) {}
 
       localStorage.setItem("opSecret", res.secret);
       __lobby.me.secret = res.secret;
@@ -1217,7 +1217,7 @@ const avatarUrl = `images/avatars/${avatar}.webp`;
         __lobby.me.avatar = profile.playerAvatar;
         __lobby.cpuCount = cpuCount;
 
-        try { localStorage.setItem("op_cpu_count", String(cpuCount)); } catch {}
+        try { localStorage.setItem("op_cpu_count", String(cpuCount)); } catch (e) {}
 
         socket.emit("JOIN_ROOM", {
           roomId: id,
@@ -1651,7 +1651,7 @@ useEffect(() => {
 
 
       // expose current stage for non-React scripts (invite auto-join)
-      useEffect(()=>{ try{ window.__stageNow = stage; }catch{} }, [stage]);
+      useEffect(()=>{ try{ window.__stageNow = stage; }catch (e) {} }, [stage]);
 
       const [secret, setSecret] = useState(()=> (localStorage.getItem("opSecret") || "").trim());
       const [cloudProfile, setCloudProfile] = useState(null); // normalized for UI
@@ -1709,7 +1709,7 @@ useEffect(() => {
 
         // prevent stale async boot from overriding stage after auto-join (e.g., when accepting an invite)
         const token = Date.now();
-        try{ window.__bootToken = token; }catch{}
+        try{ window.__bootToken = token; }catch (e) {}
 
         pullCloudProfile().then((p)=>{
           try{
@@ -1730,7 +1730,7 @@ useEffect(() => {
         setStage("waiting");
       }
 
-      useEffect(()=>{ try{ window.__enterRoom = enterRoom; }catch{} }, [enterRoom]);
+      useEffect(()=>{ try{ window.__enterRoom = enterRoom; }catch (e) {} }, [enterRoom]);
 
       return (
         <div className="w-full max-w-[1200px] mx-auto">
@@ -1805,7 +1805,7 @@ useEffect(() => {
                   const rid = __lobby?.roomId || roomInfo?.id || "";
                   try{
                     socket.emit("LEAVE_ROOM", { roomId: rid, playerId: __lobby.me.playerId, secret: __lobby.me.secret }, ()=>{});
-                  }catch{}
+                  }catch (e) {}
                   setStage("choice");
                   __lobby = {
                     roomId:'',
@@ -2568,8 +2568,8 @@ useEffect(() => {
   if(openBtn){
     openBtn.addEventListener("click", ()=>{
       dock.classList.remove("collapsed");
-      try{ localStorage.setItem("op_fdock_collapsed", "0"); }catch{}
-      try{ addInp && addInp.focus && addInp.focus(); }catch{}
+      try{ localStorage.setItem("op_fdock_collapsed", "0"); }catch (e) {}
+      try{ addInp && addInp.focus && addInp.focus(); }catch (e) {}
     });
   }
 
@@ -2589,7 +2589,7 @@ useEffect(() => {
   try{
     const c = localStorage.getItem("op_fdock_collapsed");
     if(c === "0") dock.classList.remove("collapsed");
-  }catch{}
+  }catch (e) {}
 
   function setHint(msg){
     if(!msg){ hintEl.style.display="none"; hintEl.textContent=""; return; }
@@ -2636,7 +2636,7 @@ useEffect(() => {
       renderMeMini();
 
       // 更新自己的好友狀態（讓其他人看到你在start頁）
-      try{ sock.emit("PRESENCE_SET", { secret, page: "start" }); }catch{}
+      try{ sock.emit("PRESENCE_SET", { secret, page: "start" }); }catch (e) {}
       setHint("");
       fetchFriends();
     });
@@ -3135,14 +3135,14 @@ item.addEventListener("click", () => {
     if(dock.classList.contains("collapsed")){
       if(e.target && (e.target.id === "fdMinBtn")) return;
       dock.classList.remove("collapsed");
-      try{ localStorage.setItem("op_fdock_collapsed", "0"); }catch{}
+      try{ localStorage.setItem("op_fdock_collapsed", "0"); }catch (e) {}
     }
   });
 
   minBtn.addEventListener("click", () => {
     dock.classList.toggle("collapsed");
     renderMeMini();
-    try{ localStorage.setItem("op_fdock_collapsed", dock.classList.contains("collapsed") ? "1" : "0"); }catch{}
+    try{ localStorage.setItem("op_fdock_collapsed", dock.classList.contains("collapsed") ? "1" : "0"); }catch (e) {}
   });
 
   addBtn.addEventListener("click", () => {
@@ -3244,13 +3244,13 @@ item.addEventListener("click", () => {
 
     const me = pickMe();
     try{
-      try{ window.__pendingJoinActive = true; }catch{}
+      try{ window.__pendingJoinActive = true; }catch (e) {}
       sock.emit('JOIN_ROOM', { roomId, displayName: me.name, avatar: me.avatar, title: me.title, titleTier: me.tier, secret: sec });
       window.__enterRoom(roomId, { host:false });
       // ✅ 這時才清掉 pendingJoin（確保已跳過 press 並開始自動加入）
       try{ sessionStorage.removeItem('op_pending_join_room'); sessionStorage.removeItem('op_pending_join_via'); }catch(_){ }
 
-      setTimeout(()=>{ try{ window.__pendingJoinActive = false; }catch{} }, 1500);
+      setTimeout(()=>{ try{ window.__pendingJoinActive = false; }catch (e) {} }, 1500);
     }catch(e){
       console.warn('[autoJoin] failed', e);
     }
