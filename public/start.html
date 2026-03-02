@@ -2009,15 +2009,17 @@ function titleTierOf(p){
     backdrop-filter: blur(10px);
   }
   .fd-chatwin.minimized{ height:48px; }
-  .fd-chatwin.blink{
-    border-color: rgba(255,211,107,.55);
-    animation: fdBlink 1.05s infinite;
+  /* unread blink */
+  @keyframes fdBlinkBox{
+    0%,100%{ box-shadow: 0 18px 60px rgba(0,0,0,45), 0 0 0 0 rgba(239,68,68,0); filter:brightness(1); }
+    50%{ box-shadow: 0 18px 60px rgba(0,0,0,45), 0 0 0 4px rgba(239,68,68,.35); filter:brightness(1.25); }
   }
-  @keyframes fdBlink{
-    0%{ box-shadow: 0 18px 60px rgba(0,0,0,.45); }
-    50%{ box-shadow: 0 18px 60px rgba(0,0,0,.45), 0 0 0 3px rgba(255,211,107,.28); }
-    100%{ box-shadow: 0 18px 60px rgba(0,0,0,.45); }
+  .fd-chatwin.attn{ animation: fdBlinkBox .95s ease-in-out infinite; }
+  @keyframes fdBlinkBtn{
+    0%,100%{ filter:brightness(1); }
+    50%{ filter:brightness(1.35); }
   }
+  #friendDock.attn .fd-open{ animation: fdBlinkBtn .95s steps(2,end) infinite; }
 
   .fd-chat-hd{
     height:48px;
@@ -2680,6 +2682,63 @@ item.addEventListener("click", () => {
     chatOrder = chatOrder.filter(x=>x!==peerId);
   }
 
+  // === 未讀訊息：閃爍提醒 + 自動彈出縮小聊天室 ===
+  function setWinAttention(peerId, on){
+    const w = openChats.get(peerId);
+    if(w && w.el){
+      if(on) w.el.classList.add("attn");
+      else w.el.classList.remove("attn");
+    }
+    try{
+      if(on && dock.classList.contains("collapsed")) dock.classList.add("attn");
+      if(!on) dock.classList.remove("attn");
+    }catch{}
+  }
+
+  function guessPeer(peerId, m){
+    const hit = friends.find(x => Number(x.userId) === Number(peerId));
+    if(hit) return hit;
+    // fallback (still render a window instead of failing)
+    return {
+      userId: peerId,
+      name: (m && (m.fromName || m.name)) ? String(m.fromName || m.name) : ("玩家#" + peerId),
+      avatar: Number(m && (m.fromAvatar || m.avatar) ? (m.fromAvatar || m.avatar) : 1) || 1,
+      online: false
+    };
+  }
+
+  function popMinChat(peerId, m){
+    peerId = Number(peerId);
+    if(openChats.has(peerId)) return;
+
+    // cap windows like LoL (avoid overflow)
+    const MAX_OPEN = 4;
+    if(chatOrder.length >= MAX_OPEN){
+      const kick = chatOrder.shift();
+      if(kick != null) closeChat(kick);
+    }
+
+    const peer = guessPeer(peerId, m);
+    const el = createChatWindow(peer);
+    tray.appendChild(el);
+    chatOrder.push(peerId);
+
+    // start minimized
+    const w = openChats.get(peerId);
+    if(w){
+      w.minimized = true;
+      w.el.classList.add("minimized");
+    }
+
+    if(m) appendMsgTo(peerId, m);
+
+    // badge + blink
+    setWinBadge(peerId, 1);
+    setWinAttention(peerId, true);
+
+    bringToFront(peerId);
+  }
+
   function toggleMin(peerId){
     const w = openChats.get(peerId);
     if(!w) return;
@@ -2687,8 +2746,10 @@ item.addEventListener("click", () => {
     if(w.minimized) w.el.classList.add("minimized");
     else w.el.classList.remove("minimized");
     if(!w.minimized){
+      setWinAttention(peerId, false);
       setWinBadge(peerId, 0);
-      if(!noFocus && !autoMin) setTimeout(()=> w.inp?.focus(), 0);
+      setWinAttention(peerId, false);
+      setTimeout(()=> w.inp?.focus(), 0);
     }
   }
 
@@ -2755,24 +2816,21 @@ item.addEventListener("click", () => {
     return el;
   }
 
-  function openChat(peer, opt={}){
+  function openChat(peer){
     const peerId = Number(peer.userId);
-    const autoMin = !!opt.autoMin;
-    const keepUnread = !!opt.keepUnread;
-    const noFocus = !!opt.noFocus;
-    if(!keepUnread){
-      unread.set(peerId, 0);
-      renderFriends();
-    }
+    unread.set(peerId, 0);
+    renderFriends();
+
     if(openChats.has(peerId)){
       // restore + focus + bring front
       bringToFront(peerId);
       const w = openChats.get(peerId);
       w.peer = peer;
       updateWinHeader(peerId);
-      if(w.minimized && !autoMin) toggleMin(peerId);
+      if(w.minimized) toggleMin(peerId);
       setWinBadge(peerId, 0);
-      if(!noFocus && !autoMin) setTimeout(()=> w.inp?.focus(), 0);
+      setWinAttention(peerId, false);
+      setTimeout(()=> w.inp?.focus(), 0);
       return;
     }
 
@@ -2787,20 +2845,9 @@ item.addEventListener("click", () => {
     tray.appendChild(el);
     chatOrder.push(peerId);
 
-    if(autoMin){
-      const w = openChats.get(peerId);
-      if(w){
-        w.minimized = true;
-        w.el.classList.add("minimized");
-        const c = Number(unread.get(peerId)||0) || 1;
-        setWinBadge(peerId, c);
-        w.el.classList.add("blink");
-      }
-    }
-
     bringToFront(peerId);
     loadHistory(peerId);
-    if(!noFocus && !autoMin) setTimeout(()=> openChats.get(peerId)?.inp?.focus(), 0);
+    setTimeout(()=> openChats.get(peerId)?.inp?.focus(), 0);
   }
 
   // click anywhere on collapsed dock to expand
@@ -2841,41 +2888,48 @@ item.addEventListener("click", () => {
   function wireSocketEvents(){
     if(!sock) return;
     sock.on("FRIENDS_DIRTY", () => fetchFriends());
-    sock.on("DM_NEW", (m) => {
-      if(!isAuthed()) return;
-
+    
+  // AUTO_POP_MIN_CHAT: 未讀訊息會自動彈出縮小聊天室並閃爍提醒
+  sock.on("DM_NEW", (m) => {
+    try{
+      if(!m) return;
       const fromId = Number(m.from);
-      const peerId = (fromId === me.userId) ? Number(m.to) : fromId;
+      const toId   = Number(m.to);
+      const peerId = (fromId === Number(me?.userId)) ? toId : fromId;
 
-      // window open?
+      // always append to open window if exists
       if(openChats.has(peerId)){
         appendMsgTo(peerId, m);
 
         const w = openChats.get(peerId);
-        // if minimized and message from other side -> show small badge on window
-        if(w?.minimized && Number(m.from) !== Number(me.userId)){
-          const cur = Number(w.badgeEl.textContent||"0") || 0;
-          setWinBadge(peerId, cur + 1);
-          w.el.classList.add("blink");
-        }else{
-          setWinBadge(peerId, 0);
-        }
-      }else{
-        // not open -> auto pop a minimized window + blink
-        if(Number(m.from) !== Number(me.userId)){
-          const next = (unread.get(peerId)||0) + 1;
-          unread.set(peerId, next);
-          const peer = friends.find(f=>Number(f.userId)===peerId) || { userId: peerId, name: `玩家#${peerId}`, avatar: 1 };
-          openChat(peer, { autoMin:true, keepUnread:true, noFocus:true });
-          const w = openChats.get(peerId);
-          if(w){
-            setWinBadge(peerId, next);
-            w.el.classList.add("blink");
+        const fromOther = fromId !== Number(me?.userId);
+
+        if(fromOther){
+          if(w?.minimized){
+            const cur = Number(w.badgeEl?.textContent || 0) || 0;
+            setWinBadge(peerId, cur + 1);
+            setWinAttention(peerId, true);
+          }else{
+            setWinBadge(peerId, 0);
+            setWinAttention(peerId, false);
           }
-          renderFriends();
         }
+        return;
       }
-    });
+
+      // not open yet: only pop for messages from other people
+      if(fromId !== Number(me?.userId)){
+        // keep list unread
+        unread.set(peerId, (unread.get(peerId) || 0) + 1);
+        renderFriends();
+
+        // pop minimized window
+        popMinChat(peerId, m);
+      }
+    }catch(err){
+      console.warn("[DM_NEW] handler error:", err);
+    }
+  });
   }
 
   // init
