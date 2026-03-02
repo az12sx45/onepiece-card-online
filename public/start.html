@@ -551,6 +551,37 @@
     });
 
     socket.on('EMIT', (e)=>{
+      if(!e) return;
+
+      // ✅ 伺服器 push 的 toast（提示文字）
+      if (e.type === 'toast'){
+        try{
+          if(typeof window.toast === 'function') window.toast(String(e.text||''));
+          else console.log('[toast]', e.text);
+        }catch(_){}
+        return;
+      }
+
+      // ✅ 遊戲邀請：等待室邀請通知（會觸發底下的 Lobby Invite Modal）
+      if (e.type === 'lobby_invite'){
+        try{
+          const inv = e.invite;
+          if(!inv) return;
+          window.__pendingLobbyInvites = Array.isArray(window.__pendingLobbyInvites) ? window.__pendingLobbyInvites : [];
+          window.__pendingLobbyInvites.push(inv);
+
+          // 若 modal 的 handler 已經載入 → 立即顯示最後一筆
+          if(typeof window.__onLobbyInvite === 'function'){
+            const last = window.__pendingLobbyInvites[window.__pendingLobbyInvites.length-1];
+            window.__pendingLobbyInvites = [];
+            window.__onLobbyInvite(last);
+          }
+        }catch(err){
+          console.warn('[lobby_invite] handler failed', err);
+        }
+        return;
+      }
+
       if (e?.type === 'lobby'){
         __lobby.snapshot = e.lobby;
         if (!__lobby.roomId) __lobby.roomId = e.lobby?.roomId || __lobby.roomId;
