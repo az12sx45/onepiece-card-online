@@ -1530,6 +1530,9 @@ function titleTierOf(p){
         return "press";
       });
 
+      // expose current stage for non-React scripts (invite auto-join)
+      useEffect(()=>{ try{ window.__stageNow = stage; }catch{} }, [stage]);
+
       const [secret, setSecret] = useState(()=> (localStorage.getItem("opSecret") || "").trim());
       const [cloudProfile, setCloudProfile] = useState(null); // normalized for UI
       const [cloudLoading, setCloudLoading] = useState(false);
@@ -1583,7 +1586,17 @@ function titleTierOf(p){
       // boot：有 secret 就拉雲端，決定要 menu 還是 create-character
       useEffect(()=>{
         if(stage !== "boot") return;
+
+        // prevent stale async boot from overriding stage after auto-join (e.g., when accepting an invite)
+        const token = Date.now();
+        try{ window.__bootToken = token; }catch{}
+
         pullCloudProfile().then((p)=>{
+          try{
+            if(window.__bootToken !== token) return;
+            if(window.__stageNow && window.__stageNow !== "boot") return;
+          }catch(_){}
+
           if(!p) return;
           const hasName = !!String(p.playerName||'').trim();
           const hasAvatar = Number(p.playerAvatar||0) > 0;
@@ -3105,13 +3118,19 @@ item.addEventListener("click", () => {
     if(!sock || !sock.connected){ return setTimeout(tick, 200); }
     if(typeof window.__enterRoom !== 'function'){ return setTimeout(tick, 200); }
 
+    // wait until boot/profile fetch is not actively driving the stage
+    const st = String(window.__stageNow || '').trim();
+    if(!st || st === 'press' || st === 'auth' || st === 'boot'){ return setTimeout(tick, 200); }
+
     const sec = String(localStorage.getItem('opSecret')||'').trim();
     if(!sec){ console.warn('[autoJoin] missing opSecret'); return; }
 
     const me = pickMe();
     try{
+      try{ window.__pendingJoinActive = true; }catch{}
       sock.emit('JOIN_ROOM', { roomId, displayName: me.name, avatar: me.avatar, title: me.title, titleTier: me.tier, secret: sec });
       window.__enterRoom(roomId, { host:false });
+      setTimeout(()=>{ try{ window.__pendingJoinActive = false; }catch{} }, 1500);
     }catch(e){
       console.warn('[autoJoin] failed', e);
     }
