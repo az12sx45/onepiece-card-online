@@ -2206,6 +2206,79 @@ p.rank = safeRank;
     const ok = Array.from(room.sockets.values()).some(m => m.playerId === playerId && m.secret === secret);
     if (!ok) return socket.emit("ERROR", { message: "驗證失敗" });
 
+    // ================= 等待室：房主踢人（只允許房主；被踢者會被強制離開等待室） =================
+    // action.targetPlayerId: number
+    if (type === 'LOBBY_KICK'){
+      // 只允許等待室階段
+      if (room.phase && room.phase !== 'lobby'){
+        io.to(socket.id).emit('EMIT', { type:'toast', text:'目前不在等待室，無法踢人' });
+        return;
+      }
+
+      if (room.host !== playerId){
+        io.to(socket.id).emit('EMIT', { type:'toast', text:'只有房主可以踢人' });
+        return;
+      }
+
+      const targetId = Number(action.targetPlayerId);
+      if (!Number.isFinite(targetId) || targetId < 0){
+        io.to(socket.id).emit('EMIT', { type:'toast', text:'踢人失敗：targetPlayerId 無效' });
+        return;
+      }
+
+      if (targetId === playerId){
+        io.to(socket.id).emit('EMIT', { type:'toast', text:'不能踢自己' });
+        return;
+      }
+
+      // target 必須真的在房內（room.sockets）
+      const hasTarget = Array.from(room.sockets.values()).some(m => m.playerId === targetId);
+      if (!hasTarget){
+        io.to(socket.id).emit('EMIT', { type:'toast', text:'踢人失敗：玩家不在房間內' });
+        return;
+      }
+
+      // 保護：不允許踢房主
+      if (room.host === targetId){
+        io.to(socket.id).emit('EMIT', { type:'toast', text:'不能踢出房主' });
+        return;
+      }
+
+      // 找出該玩家在 room.sockets 的所有連線（可能多開分頁）
+      const sids = [];
+      for (const [sid, meta] of room.sockets){
+        if (meta && meta.playerId === targetId) sids.push(sid);
+      }
+
+      // 從 room.sockets 移除
+      for (const sid of sids) room.sockets.delete(sid);
+
+      // 清 ready
+      if (room.lobbyReady) delete room.lobbyReady[targetId];
+
+      // 讓被踢者離開 socket.io room，並通知前端
+      for (const sid of sids){
+        try{
+          io.to(sid).emit('EMIT', { type:'toast', text:'你已被房主踢出房間' });
+          io.to(sid).emit('EMIT', { type:'kicked', roomId });
+        }catch{}
+
+        try{
+          const s = io.sockets.sockets.get(sid);
+          if (s) s.leave(roomId);
+        }catch{}
+      }
+
+      // 若房間已空 → 刪除；否則廣播 lobby
+      if (room.sockets.size === 0){
+        rooms.delete(roomId);
+      }else{
+        broadcastLobby(roomId);
+      }
+
+      return;
+    }
+
     // 等待室：準備 / 取消
     if (type === 'LOBBY_READY' || type === 'LOBBY_UNREADY'){
       room.lobbyReady = room.lobbyReady || {};
