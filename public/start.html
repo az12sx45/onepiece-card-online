@@ -1669,6 +1669,10 @@ function titleTierOf(p){
                 roomId={roomInfo.id}
                 profile={cloudProfile}
                 onLeave={()=>{
+                  const rid = __lobby?.roomId || roomInfo?.id || "";
+                  try{
+                    socket.emit("LEAVE_ROOM", { roomId: rid, playerId: __lobby.me.playerId, secret: __lobby.me.secret }, ()=>{});
+                  }catch{}
                   setStage("choice");
                   __lobby = {
                     roomId:'',
