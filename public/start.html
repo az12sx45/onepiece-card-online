@@ -1461,15 +1461,7 @@ function titleTierOf(p){
           y: Math.min(window.innerHeight - 180, Math.max(12, y0)),
           canKick: !!amHost
         });
-      }
-
-      // 點空白處關閉
-      useEffect(()=>{
-        if(!pMenu) return;
-        const onDown = ()=> setPMenu(null);
-        window.addEventListener('pointerdown', onDown);
-        return ()=> window.removeEventListener('pointerdown', onDown);
-      }, [pMenu]);
+      } 
 
       function copyId(){
         if(!lobby?.roomId) return;
@@ -1615,11 +1607,11 @@ function titleTierOf(p){
 
             {/* 點玩家頭像：加好友 /（房主）踢出 */}
             {pMenu && (
-              <>
-                <div className="pmenu-back" onClick={closePlayerMenu}></div>
+              <div className="pmenu-back" onPointerDown={closePlayerMenu}>
                 <div
                   className="pmenu-sheet"
                   style={{ left: pMenu.x+'px', top: pMenu.y+'px' }}
+                  onPointerDown={(e)=>{ try{ e.stopPropagation(); }catch{} }}
                   onClick={(e)=>{ try{ e.stopPropagation(); }catch{} }}
                 >
                   <div className="pmenu-hd">
@@ -1646,7 +1638,7 @@ function titleTierOf(p){
                   )}
                   <div className="pmenu-tip">點空白處可關閉</div>
                 </div>
-              </>
+              </div>
             )}
 
             {cpuCount > 0 && (
