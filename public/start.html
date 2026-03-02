@@ -2005,6 +2005,41 @@ function titleTierOf(p){
     flex-direction:column;
     backdrop-filter: blur(10px);
   }
+  /* ===== Locked state (not logged in) ===== */
+  #friendDock.fd-locked{
+    opacity: .55;
+    filter: grayscale(1);
+  }
+  /* Disable interactions when locked (overlay will capture clicks) */
+  #friendDock.fd-locked .fd-tools,
+  #friendDock.fd-locked .fd-body,
+  #friendDock.fd-locked .fd-collapsed{
+    pointer-events: none;
+  }
+  #fdLockOverlay{
+    position:absolute;
+    inset:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:16px;
+    text-align:center;
+    background: radial-gradient(500px 280px at 50% 35%, rgba(255,255,255,.06), rgba(0,0,0,.35) 70%), rgba(0,0,0,.25);
+    z-index: 20;
+  }
+  #friendDock.fd-locked #fdLockOverlay{ display:flex; }
+  #fdLockOverlay .panel{
+    width: 100%;
+    max-width: 260px;
+    border-radius: 16px;
+    border:1px solid rgba(255,255,255,.14);
+    background: rgba(0,0,0,.30);
+    padding: 14px 14px 12px;
+    box-shadow: 0 18px 40px rgba(0,0,0,.35);
+  }
+  #fdLockOverlay .ico{ font-size: 28px; line-height: 1; margin-bottom: 8px; }
+  #fdLockOverlay .t1{ font-weight: 900; color: rgba(255,255,255,.92); font-size: 14px; }
+  #fdLockOverlay .t2{ margin-top: 6px; color: rgba(255,255,255,.70); font-size: 12px; line-height: 1.35; }
   /* Collapsed = 自己的頭像 + 名稱 + 「點開好友清單」 */
   #friendDock.collapsed{ width:190px; height:128px; }
   #friendDock.collapsed .fd-hd{ display:none; }
@@ -2391,6 +2426,16 @@ function titleTierOf(p){
       </div>
     </div>
   </div>
+
+  <!-- Locked overlay (shown when not logged in / not in main stages) -->
+  <div id="fdLockOverlay" aria-hidden="true">
+    <div class="panel">
+      <div class="ico">🔒</div>
+      <div class="t1">好友功能已鎖定</div>
+      <div class="t2">請先完成登入後再使用好友 / 聊天。</div>
+    </div>
+  </div>
+
 
   <div class="fd-collapsed" aria-label="friends-collapsed">
     <button id="fdOpenBtn" class="fd-open" type="button">點開好友清單</button>
@@ -3079,13 +3124,66 @@ item.addEventListener("click", () => {
     });
   }
 
-  // init
-  ensureSocket();
-  ensureSecret();
-  wireSocketEvents();
-  renderMeMini();
-  socialAuth();
-  setInterval(() => { if(secret) fetchFriends(); }, 12000);
+  // init (locked-aware)
+  let __unlocked = false;
+
+  function getStage(){
+    try{ return String(window.__stageNow || "").trim(); }catch{ return ""; }
+  }
+
+  function isUnlockedStage(){
+    const st = getStage();
+    // ✅ 只有真正登入後可操作的階段才解鎖
+    return (st === "menu" || st === "choice" || st === "waiting");
+  }
+
+  function applyLockUI(locked){
+    if(!dock) return;
+    dock.classList.toggle("fd-locked", !!locked);
+    const ov = document.getElementById("fdLockOverlay");
+    if(ov) ov.setAttribute("aria-hidden", locked ? "false" : "true");
+    // locked 時，把提示收斂成「請登入」
+    if(locked){
+      setHint("好友/聊天：請先登入後使用");
+    }else{
+      setHint("");
+    }
+    renderMeMini();
+  }
+
+  function tryUnlock(){
+    ensureSecret();
+    const ok = isUnlockedStage() && !!secret;
+    if(!ok){
+      applyLockUI(true);
+      return false;
+    }
+    // 解鎖一次後就不再回鎖（避免 stage 切換造成閃爍）
+    if(__unlocked) return true;
+
+    __unlocked = true;
+    applyLockUI(false);
+
+    // 開始真正初始化好友系統
+    ensureSocket();
+    wireSocketEvents();
+    socialAuth();
+
+    // 定期刷新好友列表
+    setInterval(() => { if(secret) fetchFriends(); }, 12000);
+    return true;
+  }
+
+  // 一進頁面先套鎖定 UI
+  applyLockUI(true);
+
+  // 輪詢 stage/secret，符合條件就解鎖
+  const timer = setInterval(()=>{
+    if(tryUnlock()){
+      clearInterval(timer);
+    }
+  }, 400);
+
 })();
 </script>
 <!-- =================== /Friends Dock =================== -->
