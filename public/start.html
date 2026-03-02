@@ -3095,10 +3095,7 @@ item.addEventListener("click", () => {
   // ✅ 從其他頁面接受邀請後，會先把 roomId 放在 sessionStorage，跳回 start.html
   const roomId = String(sessionStorage.getItem('op_pending_join_room') || '').trim();
   if(!roomId) return;
-  try{
-    sessionStorage.removeItem('op_pending_join_room');
-    sessionStorage.removeItem('op_pending_join_via');
-  }catch(_){}
+  // 注意：不要在 React 初始化前清掉 pendingJoin，否則會回到「按任意鍵開始」。
 
   function pickMe(){
     // 盡量用雲端 profile，其次 fallback 用 localStorage
@@ -3133,6 +3130,9 @@ item.addEventListener("click", () => {
       try{ window.__pendingJoinActive = true; }catch{}
       sock.emit('JOIN_ROOM', { roomId, displayName: me.name, avatar: me.avatar, title: me.title, titleTier: me.tier, secret: sec });
       window.__enterRoom(roomId, { host:false });
+      // ✅ 這時才清掉 pendingJoin（確保已跳過 press 並開始自動加入）
+      try{ sessionStorage.removeItem('op_pending_join_room'); sessionStorage.removeItem('op_pending_join_via'); }catch(_){ }
+
       setTimeout(()=>{ try{ window.__pendingJoinActive = false; }catch{} }, 1500);
     }catch(e){
       console.warn('[autoJoin] failed', e);
