@@ -1350,6 +1350,7 @@ socket.on("FRIEND_REMOVE", async ({ secret, userId }, cb) => {
   }
 });
 
+// ===== Waiting room invite =====
 socket.on("ROOM_INVITE_SEND", async ({ secret, toUserId, roomId }, cb) => {
   try{
     const prof = await getProfileBySecret(String(secret||"").trim());
@@ -1392,6 +1393,7 @@ socket.on("ROOM_INVITE_SEND", async ({ secret, toUserId, roomId }, cb) => {
     return cb?.({ ok:false, error:String(e?.message||e) });
   }
 });
+
 
 
 socket.on("DM_HISTORY", async ({ secret, withUserId, limit }, cb) => {
