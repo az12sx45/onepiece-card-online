@@ -357,6 +357,7 @@ const payload = {
   roomId,
   host: room.host,
   cpuCount: room.cpuCount || 0,   // ← 新增：房間有幾個 CPU
+  chat: Array.isArray(room.lobbyChat) ? room.lobbyChat : [],
 players: st.players
   .filter(p => joinedIds.has(p.id))
   .map(p => ({
@@ -2107,7 +2108,7 @@ socket.on("JOIN_ROOM", async (payload = {}) => {
 let room = rooms.get(roomId);
 if (!room) {
   const safeCpu = typeof cpuCount === "number"
-    ? Math.max(0, Math.min(5, cpuCount))  // 限制在 0~5
+    ? Math.max(0, Math.min(3, cpuCount))  // 限制在 0~5
     : 0;
 
   room = {
@@ -2282,6 +2283,44 @@ p.rank = safeRank;
     if (type === 'LOBBY_READY' || type === 'LOBBY_UNREADY'){
       room.lobbyReady = room.lobbyReady || {};
       room.lobbyReady[playerId] = (type === 'LOBBY_READY');
+      broadcastLobby(roomId);
+      return;
+    }
+
+
+    // 等待室：文字聊天（所有在等待室的人都看得到）
+    // 前端送：{ type:'LOBBY_CHAT', text }
+    if (type === 'LOBBY_CHAT'){
+      // 只允許在 lobby 階段聊天
+      if (room.phase && room.phase !== 'lobby'){
+        return;
+      }
+
+      const raw = String(action?.text || "").replace(/\s+/g, " ").trim();
+      if (!raw) return;
+
+      const msg = raw.slice(0, 160); // 最多 160 字
+      room.lobbyChat = Array.isArray(room.lobbyChat) ? room.lobbyChat : [];
+
+      // 取得發送者資料
+      const st = room.state;
+      const p = (st?.players || []).find(x => x && x.id === playerId) || null;
+      const name = (p?.client?.displayName || p?.displayName || `P${playerId+1}`).toString();
+      const avatar = Number(p?.client?.avatar ?? p?.avatar ?? 1) || 1;
+
+      room.lobbyChat.push({
+        ts: Date.now(),
+        pid: playerId,
+        name,
+        avatar,
+        text: msg,
+      });
+
+      // 保留最近 60 則
+      if (room.lobbyChat.length > 60){
+        room.lobbyChat = room.lobbyChat.slice(room.lobbyChat.length - 60);
+      }
+
       broadcastLobby(roomId);
       return;
     }
