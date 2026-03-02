@@ -20,7 +20,7 @@
   <script src="i18n/i18n.js"></script>
 
   <style>
-    :root{ --bg:#121315; --ink:#eaecee; --brand:#ffb84d; --cover:url("images/cover.jpg"); }
+    :root{ --bg:#121315; --ink:#eaecee; --brand:#ffb84d; --brand-rgb: 255,184,77; --line: rgba(255,255,255,.12); --panel: rgba(15,17,19,.80); --cover:url("images/cover.jpg"); }
     html,body{height:100%;}
     body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC",system-ui,-apple-system,Segoe UI,Roboto,"PingFang TC","Noto Sans CJK TC",sans-serif;}
     .bg-anim{ position:fixed; inset:0; overflow:hidden; z-index:-1; background: radial-gradient(1200px 800px at 10% 20%, rgba(255,184,77,.08), transparent 60%), radial-gradient(1200px 800px at 90% 80%, rgba(0,158,255,.07), transparent 60%), linear-gradient(180deg,#0f1113 0%,#14171a 100%); }
@@ -384,20 +384,21 @@
 
 
     
-/* === WaitingRoom: 文字聊天框 === */
+/* === WaitingRoom: 文字聊天框（融入主題） === */
 .lobby-chatwrap{
-  border:1px solid rgba(255,255,255,10);
-  background: rgba(0,0,0,18);
+  border:1px solid rgba(var(--brand-rgb), .55);
+  background: rgba(0,0,0,.16);
   border-radius: 16px;
   padding: 12px;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.25) inset;
 }
 .lobby-chatbox{
   height: 220px;
   overflow:auto;
   padding: 10px;
   border-radius: 14px;
-  border:1px solid rgba(255,255,255,10);
-  background: rgba(0,0,0,28);
+  border:1px solid rgba(var(--brand-rgb), .30);
+  background: rgba(0,0,0,.28);
 }
 .lobby-chatrow{
   display:flex;
@@ -406,19 +407,31 @@
   margin-bottom: 10px;
 }
 .lobby-chatrow:last-child{ margin-bottom: 0; }
+
+/* 自己訊息靠右 */
+.lobby-chatrow.me{
+  flex-direction: row-reverse;
+}
+.lobby-chatrow.me .lobby-chatmeta{
+  text-align:right;
+}
+.lobby-chatrow.me .lobby-chatname{
+  justify-content:flex-end;
+}
 .lobby-chatava{
   width:34px; height:34px;
   border-radius: 10px;
   overflow:hidden;
-  border:1px solid rgba(255,255,255,14);
-  background: rgba(255,255,255,06);
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.06);
   flex: 0 0 auto;
 }
 .lobby-chatava img{ width:100%; height:100%; object-fit:cover; display:block; }
+
 .lobby-chatmeta{ flex: 1 1 auto; min-width: 0; }
 .lobby-chatname{
   font-size: 12px;
-  color: rgba(255,255,255,80);
+  color: rgba(255,255,255,.80);
   font-weight: 800;
   display:flex;
   align-items:center;
@@ -426,15 +439,25 @@
 }
 .lobby-chattime{
   font-size: 11px;
-  color: rgba(255,255,255,45);
+  color: rgba(255,255,255,.45);
   font-weight: 600;
 }
 .lobby-chattext{
-  margin-top: 2px;
+  margin-top: 4px;
   font-size: 13px;
-  color: rgba(255,255,255,90);
+  color: rgba(255,255,255,.92);
   white-space: pre-wrap;
   word-break: break-word;
+  display:inline-block;
+  max-width: 100%;
+  padding: 7px 10px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+}
+.lobby-chatrow.me .lobby-chattext{
+  background: rgba(var(--brand-rgb), .12);
+  border-color: rgba(var(--brand-rgb), .28);
 }
 .lobby-chatinput{
   margin-top: 10px;
@@ -444,27 +467,31 @@
 .lobby-chatinput input{
   flex:1 1 auto;
   border-radius: 14px;
-  border:1px solid rgba(255,255,255,12);
-  background: rgba(255,255,255,06);
-  color: rgba(255,255,255,92);
+  border:1px solid rgba(var(--brand-rgb), .28);
+  background: rgba(0,0,0,.28); /* ✅ 不要白底，跟主題一致 */
+  color: rgba(255,255,255,.92);
   padding: 10px 12px;
   outline:none;
 }
+.lobby-chatinput input::placeholder{
+  color: rgba(255,255,255,.45);
+}
 .lobby-chatinput input:focus{
-  border-color: rgba(255,211,107,45);
-  box-shadow: 0 0 0 3px rgba(255,211,107,12);
+  border-color: rgba(var(--brand-rgb), .65);
+  box-shadow: 0 0 0 3px rgba(var(--brand-rgb), .14);
 }
 .lobby-chatbtn{
   flex: 0 0 auto;
   border-radius: 14px;
-  border:1px solid rgba(255,255,255,14);
-  background: rgba(255,255,255,08);
-  color:#fff;
+  border:1px solid rgba(var(--brand-rgb), .38);
+  background: rgba(var(--brand-rgb), .14);
+  color: rgba(255,255,255,.92);
   padding: 10px 14px;
-  font-weight: 800;
+  font-weight: 900;
   cursor:pointer;
 }
-.lobby-chatbtn:hover{ background: rgba(255,255,255,12); }
+.lobby-chatbtn:hover{ background: rgba(var(--brand-rgb), .20); }
+
 /* === Rules Flipbook Modal === */
     .rulesOverlay{ position: fixed; inset: 0; background: rgba(0,0,0,0.55); display:flex; align-items:center; justify-content:center; z-index: 9999; }
     .rulesCard{
@@ -1897,8 +1924,9 @@ function titleTierOf(p){
                   const nm = String(m?.name || "玩家");
                   const tx = String(m?.text || "");
                   const ts = m?.ts;
+                  const isMe = Number(m?.pid) === Number(mePid);
                   return (
-                    <div key={(m?.ts||i)+"-"+i} className="lobby-chatrow">
+                    <div key={(m?.ts||i)+"-"+i} className={"lobby-chatrow" + (isMe ? " me" : "")}>
                       <div className="lobby-chatava"><img src={avUrl} alt=""/></div>
                       <div className="lobby-chatmeta">
                         <div className="lobby-chatname">
