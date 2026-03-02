@@ -1533,6 +1533,17 @@ function titleTierOf(p){
         return "press";
       });
 
+// ====== 控制好友框顯示（登入完成後才顯示）======
+useEffect(() => {
+  const dock = document.getElementById("friendDock");
+  if (!dock) return;
+
+  // 只有登入完成並進入主流程才顯示
+  const showStages = ["menu", "choice", "waiting"];
+  dock.style.display = showStages.includes(stage) ? "flex" : "none";
+}, [stage]);
+
+
       // expose current stage for non-React scripts (invite auto-join)
       useEffect(()=>{ try{ window.__stageNow = stage; }catch{} }, [stage]);
 
