@@ -2816,6 +2816,21 @@ document.getElementById('radarModal').addEventListener('click', (e)=>{
 
     const sec = String(localStorage.getItem('opSecret')||'').trim();
     const sock = ensureSocket();
+
+
+// === INVITE_PRESENCE_HEARTBEAT: 確保伺服器把「目前這個 socket」綁到 user（避免邀請打到舊 socketId）===
+try {
+  const sec = String(localStorage.getItem('opSecret')||localStorage.getItem('op_secret')||'').trim();
+  if(sec){
+    const sendPresence = ()=>{ try{ sock.emit('PRESENCE_SET', { secret: sec, page: "result" }); }catch(_){} };
+    if(sock.connected) sendPresence();
+    sock.on('connect', sendPresence);
+    // 每 30 秒補送一次，避免中途重連後映射失效
+    if(!sock.__invitePresenceTimer){
+      sock.__invitePresenceTimer = setInterval(sendPresence, 30000);
+    }
+  }
+} catch(_e) {}
     if(!sec || !sock){
       hide();
       alert('尚未登入或 socket 未連線');
