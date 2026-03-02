@@ -1525,8 +1525,11 @@ function titleTierOf(p){
       const [stage, setStage] = useState(() => {
         const params = new URLSearchParams(location.search);
         const fromProfile = params.get("from") === "profile";
+        const autoJoin = params.get("autojoin") === "1";
+        const pendingJoin = !!(sessionStorage.getItem("op_pending_join_room") || "").trim();
         const hasSecret = !!(localStorage.getItem("opSecret") || "").trim();
-        if (fromProfile) return hasSecret ? "boot" : "auth";
+        // ✅ 若是從其他頁面接受邀請回來：直接跳過「按一下開始」畫面
+        if (fromProfile || autoJoin || pendingJoin) return hasSecret ? "boot" : "auth";
         return "press";
       });
 
