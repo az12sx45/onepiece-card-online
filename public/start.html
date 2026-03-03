@@ -771,10 +771,16 @@
         url.searchParams.set('room',   __lobby.roomId);
         url.searchParams.set('name',   __lobby.me.name || 'P');
         url.searchParams.set('avatar', String(__lobby.me.avatar || 1));
-        const count = Array.isArray(__lobby.snapshot?.players)
-          ? Math.max(1, __lobby.snapshot.players.length)
-          : 1;
-        url.searchParams.set('n', String(count));
+const humans = Array.isArray(__lobby.snapshot?.players)
+  ? __lobby.snapshot.players.length
+  : 1;
+
+const cpu = Math.max(0, Math.min(3, Number(__lobby.snapshot?.cpuCount ?? 0) || 0));
+
+// 最多 6 人
+const count = Math.min(6, Math.max(1, humans + cpu));
+
+url.searchParams.set('n', String(count));
 
         // ★ 把等待室的「每位玩家已裝備稱號」快照存到 sessionStorage，讓 game.html 能顯示
 try{
