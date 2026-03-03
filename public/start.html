@@ -677,10 +677,7 @@
     const SERVER_URL = 'https://onepiece-card-online.onrender.com';
     const socket = io(SERVER_URL, { transports: ['websocket'] });
 
-    
-    // ✅ expose singleton socket for friend dock (avoid double connections)
-    window.socket = socket;
-// === Presence：讓伺服器把此 socket 綁定到 userId（邀請/好友在線狀態會用到）===
+    // === Presence：讓伺服器把此 socket 綁定到 userId（邀請/好友在線狀態會用到）===
     function sendPresence(pageName='start'){
       try{
         const secret = String(localStorage.getItem('opSecret')||'').trim();
@@ -3025,35 +3022,6 @@ useEffect(() => {
   const openChats = new Map(); // peerId -> {peer, el, log, inp, send, badge, minimized}
   let chatOrder = []; // array of peerId (left<->right ordering handled by flex row-reverse)
 
-  // === DM de-duplication (avoid duplicated emits / duplicated listeners) ===
-  const __dmSeen = new Map(); // key -> lastSeenMs
-  function __dmKey(m){
-    const a = Number(m?.from)||0;
-    const b = Number(m?.to)||0;
-    const body = String(m?.body||"");
-    const t = Math.floor((Number(m?.ts)||0)/1000); // second precision
-    return `${a}|${b}|${t}|${body}`;
-  }
-  function __dmHasSeen(m){
-    const k = __dmKey(m);
-    const tt = __dmSeen.get(k);
-    return !!(tt && (Date.now()-tt) < 60*1000);
-  }
-  function __dmMarkSeen(m){
-    const k = __dmKey(m);
-    const now = Date.now();
-    __dmSeen.set(k, now);
-    // prune
-    if(__dmSeen.size > 400){
-      for(const [kk,tt] of __dmSeen){
-        if(now-tt > 5*60*1000) __dmSeen.delete(kk);
-        if(__dmSeen.size <= 300) break;
-      }
-    }
-    return k;
-  }
-
-
   // restore collapsed state
   try{
     const c = localStorage.getItem("op_fdock_collapsed");
@@ -3067,11 +3035,7 @@ useEffect(() => {
   }
 
   function ensureSocket(){
-    if (sock && sock.connected !== false) {
-      // ✅ 如果 socket 曾經被重建/重連，確保事件監聽一定存在
-      wireSocketEvents();
-      return sock;
-    }
+    if (sock && sock.connected !== false) return sock;
     const url =
       window.SERVER_URL ||
       window.serverURL ||
@@ -3081,14 +3045,10 @@ useEffect(() => {
       setHint("缺少 Socket.IO（io）");
       return null;
     }
-        sock = io(url, { transports: ["websocket"] });
+    sock = io(url, { transports: ["websocket"] });
     window.socket = sock;
-    wireSocketEvents();
-    // reconnect 時確保有重新做 social auth（讓 DM_NEW 推送能正常收到）
-    try{ sock.off("connect"); }catch{}
-    sock.on("connect", ()=>{ try{ if(secret) socialAuth(); }catch{} });
     return sock;
-    }
+  }
 
   function ensureSecret(){
     secret = (window.secret || localStorage.getItem("op_secret") || localStorage.getItem("opSecret") || "").trim();
@@ -3473,19 +3433,13 @@ item.addEventListener("click", () => {
     });
   }
 
-    function sendMsg(peerId){
+  function sendMsg(peerId){
     const w = openChats.get(peerId);
     if(!w) return;
     if(!sock){ setHint("好友/聊天：Socket 尚未連線"); return; }
     if(!secret){ setHint("好友/聊天：請先登入（缺少 opSecret）"); return; }
     const body = String(w.inp.value||"").trim();
     if(!body) return;
-
-    // ✅ optimistic append (immediate UI), and mark seen to prevent echo-dup
-    const localMsg = { from: Number(me.userId)||0, to: Number(peerId)||0, body, ts: Date.now(), _local:true };
-    __dmMarkSeen(localMsg);
-    appendMsgTo(peerId, localMsg);
-
     w.inp.value = "";
     sock.timeout(12000).emit("DM_SEND", { secret, toUserId: peerId, body }, (err, res) => {
       if(err || !res?.ok){
@@ -3493,7 +3447,7 @@ item.addEventListener("click", () => {
         return;
       }
       setHint("");
-      // ❗不要在這裡再 append，避免跟 DM_NEW echo 重複
+      if(res.message) appendMsgTo(peerId, res.message);
     });
   }
 
@@ -3650,15 +3604,9 @@ item.addEventListener("click", () => {
 
   function wireSocketEvents(){
     if(!sock) return;
-    try{ sock.off("FRIENDS_DIRTY"); }catch{}
-    try{ sock.off("DM_NEW"); }catch{}
     sock.on("FRIENDS_DIRTY", () => fetchFriends());
     sock.on("DM_NEW", (m) => {
       if(!isAuthed()) return;
-
-      // ✅ dedupe: ignore repeated same message
-      if(__dmHasSeen(m)) return;
-      __dmMarkSeen(m);
 
       const fromId = Number(m.from);
       const peerId = (fromId === me.userId) ? Number(m.to) : fromId;
