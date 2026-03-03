@@ -420,13 +420,13 @@
 }
 .lobby-chatava{
   width:34px; height:34px;
-  border-radius: 10px;
+  border-radius: 999px;          /* ✅ 圓形頭像 */
   overflow:hidden;
-  border:1px solid rgba(255,255,255,.14);
-  background: rgba(255,255,255,.06);
+  border:none;                   /* ✅ 移除方形外框 */
+  background: transparent;        /* ✅ 不要底色 */
   flex: 0 0 auto;
 }
-.lobby-chatava img{ width:100%; height:100%; object-fit:cover; display:block; }
+.lobby-chatava img{ width:100%; height:100%; object-fit:cover; display:block; border-radius:999px; }
 
 .lobby-chatmeta{ flex: 1 1 auto; min-width: 0; }
 .lobby-chatname{
@@ -1342,7 +1342,7 @@ const avatarUrl = `images/avatars/${avatar}.webp`;
     // =========================
     //  Room Choice（只用雲端 profile）
     // =========================
-    function RoomChoice({ profile, onEnter }) {
+    function RoomChoice({ profile, onEnter, onBackToMenu }) {
       const [joinCode, setJoinCode] = useState("");
       const [view, setView] = useState("main"); // main | list
       const [cpuCount, setCpuCount] = useState(() => {
@@ -1568,11 +1568,21 @@ const avatarUrl = `images/avatars/${avatar}.webp`;
               <div className="text-sm text-neutral-400">{t("ui.roomMode")}</div>
               <div className="text-xl font-bold text-amber-300">{t("ui.createOrJoin")}</div>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="avatar is-active"><img src={profile.avatarUrl} alt="" /></div>
-              <div className="text-sm text-right">
-                <div className="text-neutral-300">{profile.playerName}</div>
-                <div className="text-xs text-neutral-500">{t("ui.playerId", {id: meId})}</div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                className="btn"
+                onClick={() => { try{ onBackToMenu && onBackToMenu(); }catch{} }}
+              >
+                返回主畫面
+              </button>
+
+              <div className="flex items-center gap-3">
+                <div className="avatar is-active"><img src={profile.avatarUrl} alt="" /></div>
+                <div className="text-sm text-right">
+                  <div className="text-neutral-300">{profile.playerName}</div>
+                  <div className="text-xs text-neutral-500">{t("ui.playerId", {id: meId})}</div>
+                </div>
               </div>
             </div>
           </div>
@@ -2220,6 +2230,7 @@ useEffect(() => {
               <RoomChoice
                 profile={cloudProfile}
                 onEnter={enterRoom}
+                onBackToMenu={()=> setStage("menu")}
               />
             )}
 
