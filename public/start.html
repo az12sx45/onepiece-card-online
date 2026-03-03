@@ -3035,7 +3035,11 @@ useEffect(() => {
   }
 
   function ensureSocket(){
-    if (sock && sock.connected !== false) return sock;
+    if (sock && sock.connected !== false) {
+      // ✅ 如果 socket 曾經被重建/重連，確保事件監聽一定存在
+      wireSocketEvents();
+      return sock;
+    }
     const url =
       window.SERVER_URL ||
       window.serverURL ||
@@ -3045,10 +3049,14 @@ useEffect(() => {
       setHint("缺少 Socket.IO（io）");
       return null;
     }
-    sock = io(url, { transports: ["websocket"] });
+        sock = io(url, { transports: ["websocket"] });
     window.socket = sock;
+    wireSocketEvents();
+    // reconnect 時確保有重新做 social auth（讓 DM_NEW 推送能正常收到）
+    try{ sock.off("connect"); }catch{}
+    sock.on("connect", ()=>{ try{ if(secret) socialAuth(); }catch{} });
     return sock;
-  }
+    }
 
   function ensureSecret(){
     secret = (window.secret || localStorage.getItem("op_secret") || localStorage.getItem("opSecret") || "").trim();
@@ -3604,6 +3612,8 @@ item.addEventListener("click", () => {
 
   function wireSocketEvents(){
     if(!sock) return;
+    try{ sock.off("FRIENDS_DIRTY"); }catch{}
+    try{ sock.off("DM_NEW"); }catch{}
     sock.on("FRIENDS_DIRTY", () => fetchFriends());
     sock.on("DM_NEW", (m) => {
       if(!isAuthed()) return;
