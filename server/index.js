@@ -1659,6 +1659,33 @@ socket.on("DM_SEND", async ({ secret, toUserId, body }, cb) => {
 });
 
 
+socket.on("DM_TYPING", async ({ secret, toUserId, isTyping }, cb) => {
+  try{
+    const prof = await getProfileBySecret(String(secret||"").trim());
+    if(!prof) return cb?.({ ok:false, error:"bad secret" });
+    const myId = Number(prof.user_id);
+    const otherId = Number(toUserId);
+    if(!Number.isFinite(otherId) || otherId<=0) return cb?.({ ok:false, error:"bad toUserId" });
+
+    // only allow typing to friends (same rule as DM)
+    const stats = (prof.stats && typeof prof.stats==="object") ? prof.stats : {};
+    const client = (stats.client && typeof stats.client==="object") ? stats.client : (stats.client = {});
+    ensureSocial(client);
+    if(!client.social.friends.includes(otherId)){
+      return cb?.({ ok:false, error:"not friends" });
+    }
+
+    const payload = { from: myId, to: otherId, isTyping: !!isTyping, ts: Date.now() };
+    emitToUser(otherId, "DM_TYPING", payload);
+    return cb?.({ ok:true });
+  }catch(e){
+    console.error("[DM_TYPING] error:", e);
+    return cb?.({ ok:false, error:String(e?.message||e) });
+  }
+});
+
+
+
 // =====================
 // AUTH: 註冊 / 登入
 // =====================
