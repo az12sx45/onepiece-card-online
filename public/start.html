@@ -3604,26 +3604,54 @@ item.addEventListener("click", () => {
   });
 
   function wireSocketEvents(){
-    if(!sock) return;
-    sock.on("FRIENDS_DIRTY", () => fetchFriends());
-    sock.on("DM_NEW", (m) => {
-      if(!isAuthed()) return;
+  if(!sock) return;
 
-      const fromId = Number(m.from);
-      const peerId = (fromId === me.userId) ? Number(m.to) : fromId;
+  // idempotent wiring per socket instance (avoid duplicate listeners)
+  if(sock.__fdockWired) return;
+  sock.__fdockWired = true;
 
-      // window open?
-      if(openChats.has(peerId)){
-        appendMsgTo(peerId, m);
+  // reconnect: re-auth + refresh
+  sock.on("connect", () => {
+    try{
+      setHint("");
+      // socialAuth() will also PRESENCE_SET + fetchFriends()
+      if(ensureSecret()) socialAuth();
+    }catch{}
+  });
 
-        const w = openChats.get(peerId);
-        // if minimized and message from other side -> show small badge on window
-        if(w?.minimized && Number(m.from) !== Number(me.userId)){
-          const cur = Number(w.badgeEl.textContent||"0") || 0;
-          setWinBadge(peerId, cur + 1);
-        }else{
-          setWinBadge(peerId, 0);
-        }
+  sock.on("disconnect", () => {
+    try{ setHint("好友/聊天：連線中斷，正在重連…"); }catch{}
+  });
+
+  sock.on("FRIENDS_DIRTY", () => fetchFriends());
+
+  sock.on("DM_NEW", (m) => {
+    if(!isAuthed()) return;
+
+    const fromId = Number(m.from);
+    const peerId = (fromId === Number(me.userId)) ? Number(m.to) : fromId;
+
+    // window open?
+    if(openChats.has(peerId)){
+      appendMsgTo(peerId, m);
+
+      const w = openChats.get(peerId);
+      // if minimized and message from other side -> show small badge on window
+      if(w?.minimized && Number(m.from) !== Number(me.userId)){
+        const cur = Number(w.badgeEl.textContent||"0") || 0;
+        setWinBadge(peerId, cur + 1);
+      }else{
+        setWinBadge(peerId, 0);
+      }
+    }else{
+      // dock unread badge
+      if(Number(m.from) !== Number(me.userId)){
+        unread.set(peerId, (unread.get(peerId)||0) + 1);
+        renderFriends();
+      }
+    }
+  });
+}
       }else{
         // dock unread badge
         if(Number(m.from) !== Number(me.userId)){
