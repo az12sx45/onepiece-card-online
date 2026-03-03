@@ -242,15 +242,53 @@ function cleanupRoomIfNoHumans(roomId){
   if(!rid) return false;
   const room = rooms.get(rid);
   if(!room) return false;
+
   // 真人玩家 = room.sockets 裡 distinct playerId
   const humans = new Set([...room.sockets.values()].map(m => m?.playerId)).size;
-  if(humans <= 0){
+
+  // ✅ 等待室：沒真人就立刻解散（符合你原本需求）
+  if(humans <= 0 && room.phase === 'lobby'){
     rooms.delete(rid);
     try{ broadcastRoomList(); }catch{}
     return true;
   }
+
+  // ✅ 遊戲中：不要「立刻」刪房，避免 start.html → game.html 轉跳時所有人暫時斷線導致 CPU / 房間資料丟失
+  if(humans <= 0 && room.phase === 'playing'){
+    // 已經在倒數就不重複排
+    if(!room._emptyTimer){
+      room._emptySince = Date.now();
+      room._emptyTimer = setTimeout(()=>{
+        try{
+          const r2 = rooms.get(rid);
+          if(!r2) return;
+          const humans2 = new Set([...r2.sockets.values()].map(m => m?.playerId)).size;
+          // 仍然沒真人才刪（保守一點）
+          if(humans2 <= 0){
+            rooms.delete(rid);
+            try{ broadcastRoomList(); }catch{}
+          }else{
+            // 有人回來了 → 取消刪房標記
+            try{ clearTimeout(r2._emptyTimer); }catch{}
+            r2._emptyTimer = null;
+            r2._emptySince = 0;
+          }
+        }catch{}
+      }, 60000); // 60 秒緩衝（足夠完成換頁 / 斷線重連）
+    }
+    return false;
+  }
+
+  // 有真人：如果之前有排刪房，取消它
+  if(humans > 0 && room._emptyTimer){
+    try{ clearTimeout(room._emptyTimer); }catch{}
+    room._emptyTimer = null;
+    room._emptySince = 0;
+  }
+
   return false;
 }
+
 
 function broadcastRoomList(){
   try{ io.emit("ROOM_LIST_UPDATE", { rooms: buildRoomList() }); }catch{}
@@ -2123,8 +2161,14 @@ if (!room) {
   broadcastRoomList();
 }
 
+// ✅ 若之前因為全員暫離而排了刪房倒數，這裡有人回來就取消
+if(room && room._emptyTimer){
+  try{ clearTimeout(room._emptyTimer); }catch{}
+  room._emptyTimer = null;
+  room._emptySince = 0;
+}
 
-    const st = room.state;
+const st = room.state;
 let sec = secret || "";
 
 // ★ 0) 若帶有 secret，且 state 裡已有同 secret 的玩家 → 視為「重連」
