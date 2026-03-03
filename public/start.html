@@ -2768,6 +2768,12 @@ useEffect(() => {
     backdrop-filter: blur(10px);
   }
   .fd-chatwin.minimized{ height:48px; }
+  .fd-chatwin.attn{ animation: fdPulse 1.25s ease-in-out infinite; }
+  @keyframes fdPulse{
+    0%,100%{ opacity:1; filter:brightness(1); }
+    50%{ opacity:.55; filter:brightness(1.25); }
+  }
+
   .fd-chat-hd{
     height:48px;
     display:flex;
@@ -3443,6 +3449,18 @@ item.addEventListener("click", () => {
     w.badgeEl.textContent = String(Math.min(99, v));
   }
 
+function startPulse(peerId){
+  const w = openChats.get(peerId);
+  if(!w || !w.el) return;
+  w.el.classList.add("attn");
+}
+function stopPulse(peerId){
+  const w = openChats.get(peerId);
+  if(!w || !w.el) return;
+  w.el.classList.remove("attn");
+}
+
+
   function appendMsgTo(peerId, m){
     const w = openChats.get(peerId);
     if(!w) return;
@@ -3513,6 +3531,7 @@ item.addEventListener("click", () => {
     else w.el.classList.remove("minimized");
     if(!w.minimized){
       setWinBadge(peerId, 0);
+      stopPulse(peerId);
       setTimeout(()=> w.inp?.focus(), 0);
     }
   }
@@ -3563,6 +3582,8 @@ item.addEventListener("click", () => {
     minBtn.addEventListener("click", ()=> toggleMin(peerId));
     el.querySelector(".fd-chat-peer")?.addEventListener("click", ()=>{
       bringToFront(peerId);
+      stopPulse(peerId);
+      setWinBadge(peerId, 0);
       if(openChats.get(peerId)?.minimized) toggleMin(peerId);
       setTimeout(()=> inp?.focus(), 0);
     });
@@ -3580,8 +3601,14 @@ item.addEventListener("click", () => {
     return el;
   }
 
-  function openChat(peer){
+  function openChat(peer, opts = {}){
     const peerId = Number(peer.userId);
+    const wantMin = !!opts.minimized;
+    const noFocus = !!opts.noFocus;
+    const pulse = !!opts.pulse;
+    const initBadge = Math.max(0, Number(opts.badge)||0);
+
+    // opening chat means dock unread cleared (window badge may still show)
     unread.set(peerId, 0);
     renderFriends();
 
@@ -3591,9 +3618,10 @@ item.addEventListener("click", () => {
       const w = openChats.get(peerId);
       w.peer = peer;
       updateWinHeader(peerId);
-      if(w.minimized) toggleMin(peerId);
-      setWinBadge(peerId, 0);
-      setTimeout(()=> w.inp?.focus(), 0);
+      if(!wantMin && w.minimized) toggleMin(peerId);
+      setWinBadge(peerId, wantMin ? initBadge : 0);
+      if(pulse && wantMin) startPulse(peerId); else stopPulse(peerId);
+      if(!noFocus && !wantMin) setTimeout(()=> w.inp?.focus(), 0);
       return;
     }
 
@@ -3610,7 +3638,18 @@ item.addEventListener("click", () => {
 
     bringToFront(peerId);
     loadHistory(peerId);
-    setTimeout(()=> openChats.get(peerId)?.inp?.focus(), 0);
+
+    if(wantMin){
+      // set minimized without clearing badge
+      const w = openChats.get(peerId);
+      if(w && !w.minimized) toggleMin(peerId);
+      setWinBadge(peerId, initBadge || 1);
+      if(pulse) startPulse(peerId);
+    }else{
+      stopPulse(peerId);
+      setWinBadge(peerId, 0);
+      if(!noFocus) setTimeout(()=> openChats.get(peerId)?.inp?.focus(), 0);
+    }
   }
 
   // click anywhere on collapsed dock to expand
@@ -3662,25 +3701,33 @@ item.addEventListener("click", () => {
 
       const fromId = Number(m.from);
       const peerId = (fromId === me.userId) ? Number(m.to) : fromId;
-
       // window open?
       if(openChats.has(peerId)){
         appendMsgTo(peerId, m);
 
         const w = openChats.get(peerId);
-        // if minimized and message from other side -> show small badge on window
-        if(w?.minimized && Number(m.from) !== Number(me.userId)){
-          const cur = Number(w.badgeEl.textContent||"0") || 0;
-          setWinBadge(peerId, cur + 1);
-        }else{
-          setWinBadge(peerId, 0);
+        const fromOther = (Number(m.from) !== Number(me.userId));
+
+        if(fromOther){
+          bringToFront(peerId);
+          if(w?.minimized){
+            const cur = Number(w.badgeEl.textContent||"0") || 0;
+            setWinBadge(peerId, cur + 1);
+            startPulse(peerId);
+          }else{
+            setWinBadge(peerId, 0);
+            stopPulse(peerId);
+          }
         }
+        return;
+      }
+
+      // not open: if message from other, auto pop a minimized chat window + pulse
+      if(Number(m.from) !== Number(me.userId)){
+        const peerObj = (friends || []).find(x=>Number(x.userId)===peerId) || { userId: peerId, name: "#"+peerId, avatar: 1, online: true, activity: "新訊息" };
+        openChat(peerObj, { minimized:true, noFocus:true, pulse:true, badge:1 });
       }else{
-        // dock unread badge
-        if(Number(m.from) !== Number(me.userId)){
-          unread.set(peerId, (unread.get(peerId)||0) + 1);
-          renderFriends();
-        }
+        // my own message echo but window isn't open -> ignore
       }
     });
   }
