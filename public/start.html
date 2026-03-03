@@ -2544,6 +2544,30 @@ useEffect(() => {
     --fd-red: #ef4444;
     --fd-blue: #60a5fa;
   }
+    /* ===== Unread dot (collapsed) + Typing indicator ===== */
+    .fd-open{ position:relative; }
+    .fd-open-dot, .fd-min-dot{
+      position:absolute;
+      top:6px;
+      right:10px;
+      width:10px;height:10px;
+      border-radius:99px;
+      background: rgba(239,68,68,.95);
+      box-shadow: 0 0 0 3px rgba(239,68,68,.18);
+      display:none;
+    }
+    .fd-min-dot{ top:-2px; right:-2px; }
+    .fd-chat-typing{
+      display:none;
+      font-size:11px;
+      color: var(--fd-blue);
+      margin-top:2px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    
+
   #friendDock{
     position:fixed;
     top:72px;
@@ -3019,7 +3043,112 @@ useEffect(() => {
   let requestsIn = [];
   let requestsOut = [];
 
-  let unread = new Map(); // peerId -> count (dock badge)
+  let unread = new Map();
+  function loadUnread(){
+    try{
+      const raw = sessionStorage.getItem('op_dm_unread_v1');
+      if(!raw) return;
+      const obj = JSON.parse(raw);
+      if(obj && typeof obj === 'object'){
+        for(const [k,v] of Object.entries(obj)){
+          const uid = Number(k);
+          const n = Number(v)||0;
+          if(Number.isFinite(uid) && uid>0 && n>0) unread.set(uid, n);
+        }
+      }
+    }catch(_){}
+  }
+  function saveUnread(){
+    try{
+      const obj = {};
+      for(const [k,v] of unread.entries()){
+        if((Number(v)||0)>0) obj[String(k)] = Number(v)||0;
+      }
+      sessionStorage.setItem('op_dm_unread_v1', JSON.stringify(obj));
+    }catch(_){}
+  }
+  function totalUnread(){
+    let s=0;
+    for(const v of unread.values()) s += (Number(v)||0);
+    return s;
+  }
+
+  // typing state (outgoing + incoming)
+  const __typingState = new Map();       // peerId -> boolean (me typing)
+  const __typingLastSent = new Map();    // peerId -> ts
+  const __typingStopTimers = new Map();  // peerId -> timer
+  const __typingHideTimers = new Map();  // peerId -> timer (incoming hide)
+
+  function emitTyping(peerId, on){
+    if(!sock || !secret) return;
+    const pid = Number(peerId)||0;
+    if(!(pid>0)) return;
+
+    const want = !!on;
+    const prev = !!__typingState.get(pid);
+    const now = Date.now();
+    const last = Number(__typingLastSent.get(pid)||0);
+
+    if(want){
+      // throttle bursts
+      if(prev && (now - last) < 800){
+        // still refresh auto-stop
+      }else{
+        __typingState.set(pid, true);
+        __typingLastSent.set(pid, now);
+        try{ sock.emit('DM_TYPING', { secret, toUserId: pid, isTyping: true }); }catch(_){}
+      }
+      // auto stop if idle
+      if(__typingStopTimers.get(pid)) clearTimeout(__typingStopTimers.get(pid));
+      __typingStopTimers.set(pid, setTimeout(()=> emitTyping(pid, false), 1600));
+    }else{
+      if(!prev) return;
+      __typingState.set(pid, false);
+      __typingLastSent.set(pid, now);
+      if(__typingStopTimers.get(pid)) clearTimeout(__typingStopTimers.get(pid));
+      __typingStopTimers.delete(pid);
+      try{ sock.emit('DM_TYPING', { secret, toUserId: pid, isTyping: false }); }catch(_){}
+    }
+  }
+
+  function showTyping(peerId){
+    const w = openChats.get(peerId);
+    if(!w || !w.typingEl) return;
+    w.typingEl.style.display = 'block';
+    if(__typingHideTimers.get(peerId)) clearTimeout(__typingHideTimers.get(peerId));
+    __typingHideTimers.set(peerId, setTimeout(()=> hideTyping(peerId), 2200));
+  }
+  function hideTyping(peerId){
+    const w = openChats.get(peerId);
+    if(!w || !w.typingEl) return;
+    w.typingEl.style.display = 'none';
+    if(__typingHideTimers.get(peerId)) clearTimeout(__typingHideTimers.get(peerId));
+    __typingHideTimers.delete(peerId);
+  }
+
+  // collapsed unread dots
+  let __fdOpenDot = null;
+  let __fdMinDot = null;
+  function ensureDots(){
+    if(openBtn && !__fdOpenDot){
+      __fdOpenDot = document.createElement('span');
+      __fdOpenDot.className = 'fd-open-dot';
+      openBtn.appendChild(__fdOpenDot);
+    }
+    if(minBtn && !__fdMinDot){
+      minBtn.style.position = 'relative';
+      __fdMinDot = document.createElement('span');
+      __fdMinDot.className = 'fd-min-dot';
+      minBtn.appendChild(__fdMinDot);
+    }
+  }
+  function updateDots(){
+    ensureDots();
+    const on = totalUnread() > 0;
+    if(__fdOpenDot) __fdOpenDot.style.display = on ? 'block' : 'none';
+    if(__fdMinDot) __fdMinDot.style.display = on ? 'block' : 'none';
+  }
+ // peerId -> count (dock badge)
   const openChats = new Map(); // peerId -> {peer, el, log, inp, send, badge, minimized}
   let chatOrder = []; // array of peerId (left<->right ordering handled by flex row-reverse)
 
@@ -3485,6 +3614,7 @@ item.addEventListener("click", () => {
           <div class="meta" style="min-width:0;">
             <div class="n fdChatName">—</div>
             <div class="s fdChatStatus">—</div>
+            <div class="fd-chat-typing fdChatTyping">正在輸入…</div>
           </div>
         </div>
         <div class="fd-chat-actions">
@@ -3511,10 +3641,17 @@ item.addEventListener("click", () => {
     const nameEl = el.querySelector(".fdChatName");
     const statusEl = el.querySelector(".fdChatStatus");
 
+
+    const typingEl = el.querySelector(".fdChatTyping");
     // wire
     sendBtn.addEventListener("click", ()=> sendMsg(peerId));
     inp.addEventListener("keydown", (e)=>{ if(e.key==="Enter") sendMsg(peerId); });
-    closeBtn.addEventListener("click", ()=> closeChat(peerId));
+    inp.addEventListener("input", ()=>{
+      const v = String(inp.value||"").trim();
+      emitTyping(peerId, v.length>0);
+    });
+    inp.addEventListener("blur", ()=> emitTyping(peerId, false));
+closeBtn.addEventListener("click", ()=> closeChat(peerId));
     minBtn.addEventListener("click", ()=> toggleMin(peerId));
     el.querySelector(".fd-chat-peer")?.addEventListener("click", ()=>{
       bringToFront(peerId);
@@ -3525,7 +3662,7 @@ item.addEventListener("click", () => {
     openChats.set(peerId, {
       peer,
       el, log, inp,
-      avaImg, nameEl, statusEl,
+      avaImg, nameEl, statusEl, typingEl,
       badgeEl,
       minimized:false
     });
@@ -3538,9 +3675,10 @@ item.addEventListener("click", () => {
   function openChat(peer){
     const peerId = Number(peer.userId);
     unread.set(peerId, 0);
+    saveUnread();
+    updateDots();
     renderFriends();
-
-    if(openChats.has(peerId)){
+if(openChats.has(peerId)){
       // restore + focus + bring front
       bringToFront(peerId);
       const w = openChats.get(peerId);
@@ -3628,8 +3766,10 @@ item.addEventListener("click", () => {
         // dock unread badge
         if(Number(m.from) !== Number(me.userId)){
           unread.set(peerId, (unread.get(peerId)||0) + 1);
+          saveUnread();
+          updateDots();
           renderFriends();
-        }
+}
       }
     });
   }
@@ -3637,6 +3777,8 @@ item.addEventListener("click", () => {
   // init
   ensureSocket();
   ensureSecret();
+  loadUnread();
+  updateDots();
   wireSocketEvents();
   renderMeMini();
   socialAuth();
