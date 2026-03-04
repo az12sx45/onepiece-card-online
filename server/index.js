@@ -2285,6 +2285,41 @@ socket.on("RESUME_ROOM", (payload = {}, cb) => {
   }
 });
 
+
+// ====== 遊戲整場（多局）結算完成：封存房間，禁止再 RESUME 回來 ======
+socket.on("ROOM_FINISHED", (payload = {}, cb) => {
+  try{
+    const rid = String(payload?.roomId || joinedRoom || "").trim();
+    if(!rid) return cb?.({ ok:false, error:"no roomId" });
+
+    const room = rooms.get(rid);
+    if(!room) return cb?.({ ok:true, gone:true });
+
+    // 標記為 ended：RESUME_ROOM 只會找 lobby/playing，所以後續不會再被自動接回
+    room.phase = 'ended';
+    room.endedAt = Date.now();
+
+    // 1 分鐘後直接刪房（避免使用者回到 start/profile/shop 又被舊房間牽回）
+    if(room._endedTimer){
+      try{ clearTimeout(room._endedTimer); }catch{}
+      room._endedTimer = null;
+    }
+    room._endedTimer = setTimeout(()=>{
+      try{
+        rooms.delete(rid);
+        broadcastRoomList();
+      }catch(e){
+        console.error("[ROOM_FINISHED] delete error:", e);
+      }
+    }, 60 * 1000);
+
+    try{ broadcastRoomList(); }catch{}
+    cb?.({ ok:true });
+  }catch(err){
+    cb?.({ ok:false, error: String(err?.message || err) });
+  }
+});
+
 socket.on("JOIN_ROOM", async (payload = {}) => {
 
   const {
