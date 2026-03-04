@@ -155,11 +155,10 @@ function normalizePresencePage(p){
   return s.slice(0, 24);
 }
 
-function emitToUser(userId, event, payload, excludeSid){
+function emitToUser(userId, event, payload){
   const set = onlineUsers.get(userId);
   if(!set) return;
   for(const sid of set){
-    if(excludeSid && sid === excludeSid) continue;
     io.to(sid).emit(event, payload);
   }
 }
@@ -206,6 +205,115 @@ const io = new Server(server, { cors: { origin: "*" } });
 const rooms = new Map();
 
 const MAX_ROOM_PLAYERS = 6;
+
+// =========================
+// Resilience: disconnect takeover + idle watchdog (multi-round match safe)
+//  - If a human disconnects during playing, give a short grace period, then mark them as CPU.
+//  - If a human is idle on their turn or during pending interaction, convert them to CPU (prevents soft-lock).
+//  - If the human reconnects with same secret, they regain control immediately.
+// =========================
+const OFFLINE_GRACE_MS = 8000;      // 斷線保留時間：8 秒（可自行調整）
+const TURN_IDLE_MS    = 30000;     // 回合掛機：30 秒自動接管
+const PENDING_IDLE_MS = 30000;     // 互動流程掛機：30 秒自動接管
+
+function ensureRoomResilience(room){
+  if(!room) return;
+  if(!room._offlineTimers) room._offlineTimers = new Map(); // playerId -> timeout
+  if(!room._turnTimer) room._turnTimer = null;
+  if(!room._pendingTimer) room._pendingTimer = null;
+}
+
+function clearOfflineTimer(room, playerId){
+  try{
+    ensureRoomResilience(room);
+    const t = room._offlineTimers.get(playerId);
+    if(t) clearTimeout(t);
+    room._offlineTimers.delete(playerId);
+  }catch{}
+}
+
+function emitRoomToast(room, text){
+  try{
+    for(const [sid] of room.sockets){
+      io.to(sid).emit("EMIT", { type:"toast", text: String(text||"") });
+    }
+  }catch{}
+}
+
+function pendingResponderId(st){
+  const p = st?.pending;
+  if(!p) return null;
+
+  // victim-response style interactions
+  if(p.action === "queen" || p.action === "bigmom-pay"){
+    return (p.target != null) ? Number(p.target) : null;
+  }
+
+  // some pending include caster explicitly
+  if(p.caster != null) return Number(p.caster);
+
+  // default: assume current turn player
+  return (st?.turnIndex != null) ? Number(st.turnIndex) : null;
+}
+
+function armRoomWatchdogs(roomId){
+  const room = rooms.get(roomId);
+  if(!room) return;
+  ensureRoomResilience(room);
+
+  // clear existing timers
+  try{ if(room._turnTimer) clearTimeout(room._turnTimer); }catch{}
+  try{ if(room._pendingTimer) clearTimeout(room._pendingTimer); }catch{}
+  room._turnTimer = null;
+  room._pendingTimer = null;
+
+  if(room.phase !== "playing") return;
+  const st = room.state;
+  if(!st || !Array.isArray(st.players) || st.players.length===0) return;
+
+  // ---- turn watchdog ----
+  const turnIdx = Number(st.turnIndex);
+  const turnP = st.players[turnIdx];
+  if(turnP && turnP.alive && !turnP.isCPU){
+    room._turnTimer = setTimeout(()=>{
+      const r2 = rooms.get(roomId);
+      if(!r2 || r2.phase!=="playing") return;
+      const s2 = r2.state;
+      if(!s2) return;
+      const idx2 = Number(s2.turnIndex);
+      const p2 = s2.players?.[idx2];
+      if(!p2 || !p2.alive || p2.isCPU) return;
+
+      p2.isCPU = true;
+      emitRoomToast(r2, `⚠ ${p2.client?.displayName || p2.displayName || "玩家"} 掛機，已由 CPU 接管`);
+      try{ broadcastState(r2); }catch{}
+      try{ runCpuLoop(roomId); }catch{}
+    }, TURN_IDLE_MS);
+  }
+
+  // ---- pending watchdog ----
+  const respId = pendingResponderId(st);
+  if(respId != null){
+    const rp = st.players?.[respId];
+    if(rp && rp.alive && !rp.isCPU){
+      room._pendingTimer = setTimeout(()=>{
+        const r2 = rooms.get(roomId);
+        if(!r2 || r2.phase!=="playing") return;
+        const s2 = r2.state;
+        const resp2 = pendingResponderId(s2);
+        if(resp2 == null || Number(resp2)!==Number(respId)) return;
+
+        const p2 = s2.players?.[resp2];
+        if(!p2 || !p2.alive || p2.isCPU) return;
+
+        p2.isCPU = true;
+        emitRoomToast(r2, `⚠ ${p2.client?.displayName || p2.displayName || "玩家"} 掛機，已由 CPU 接管`);
+        try{ broadcastState(r2); }catch{}
+        try{ runCpuLoop(roomId); }catch{}
+      }, PENDING_IDLE_MS);
+    }
+  }
+}
 
 // ====== 房間清單（等待室） ======
 function buildRoomList(){
@@ -1649,7 +1757,7 @@ socket.on("DM_SEND", async ({ secret, toUserId, body }, cb) => {
     );
 
     const payload = { id:String(ins.rows[0].id), from: myId, to: otherId, body: msg, ts: now };
-    emitToUser(myId, "DM_NEW", payload, socket.id);
+    emitToUser(myId, "DM_NEW", payload);
     emitToUser(otherId, "DM_NEW", payload);
 
     return cb?.({ ok:true, message: payload });
@@ -2179,6 +2287,19 @@ if (sec) {
   if (found) myId = found.id;
 }
 
+// ✅ 重連到遊戲中：若玩家先前被 CPU 接管，回來就拿回控制權
+if (myId != null && room && room.phase === 'playing') {
+  try{
+    const p0 = room.state?.players?.[myId];
+    if(p0){
+      p0.isCPU = false;
+      clearOfflineTimer(room, myId);
+      emitRoomToast(room, `✅ ${p0.client?.displayName || p0.displayName || '玩家'} 已重新連線，恢復真人操控`);
+      armRoomWatchdogs(roomId);
+    }
+  }catch{}
+}
+
 // ★ 判斷房間是否已經在遊戲中
 const gameStarted = (room.phase === 'playing');
 
@@ -2323,6 +2444,8 @@ p.rank = safeRank;
     // 驗章
     const ok = Array.from(room.sockets.values()).some(m => m.playerId === playerId && m.secret === secret);
     if (!ok) return socket.emit("ERROR", { message: "驗證失敗" });
+    // ✅ 任一動作都重置 watchdog，避免掛機卡死
+    try{ armRoomWatchdogs(roomId); }catch{}
 
     // 等待室：準備 / 取消
     if (type === 'LOBBY_READY' || type === 'LOBBY_UNREADY'){
@@ -2606,6 +2729,9 @@ room.sockets = newSockets;
   // ★ 如果一開始就輪到 CPU，直接讓 CPU 先開始（含 2 秒 / 4 秒延遲）
   runCpuLoop(roomId);
 
+  // ✅ 啟動 watchdog（斷線/掛機/互動卡死保護）
+  armRoomWatchdogs(roomId);
+
   // ⑧ 導頁到 game.html（只會導真人的頁面，CPU 沒 socket）
   for (const [sid] of room.sockets) {
     io.to(sid).emit('EMIT', { type:'nav_game' });
@@ -2647,6 +2773,9 @@ room.sockets = newSockets;
 
       // ★ 如果下一局起始玩家是 CPU，一樣讓 CPU 先動（含延遲）
       runCpuLoop(roomId);
+
+      // ✅ 每局開始也重上 watchdog
+      armRoomWatchdogs(roomId);
       return;
 
     }   // ★★★ 多這一行，把 NEXT_ROUND 的 if 收起來
@@ -2657,6 +2786,9 @@ room.sockets = newSockets;
 
     // ★ 玩家行動結束後，如果接下來輪到的是 CPU，就讓 CPU 自動行動（含 2 秒 / 4 秒延遲）
     runCpuLoop(roomId);
+
+    // ✅ 動作結束後再 arm 一次（因為 state 可能已變 turn/pending）
+    armRoomWatchdogs(roomId);
   });
 
 
@@ -2721,6 +2853,45 @@ room.sockets = newSockets;
     const meta = room.sockets.get(socket.id);
     room.sockets.delete(socket.id);
 
+    // ✅ 遊戲中斷線：給 grace 之後 CPU 接管，避免整場多局卡死
+    try{
+      ensureRoomResilience(room);
+      if(room.phase === 'playing' && meta && meta.playerId != null){
+        const pid2 = Number(meta.playerId);
+        const p = room.state?.players?.[pid2];
+        if(p && p.alive){
+          emitRoomToast(room, `⚠ ${p.client?.displayName || p.displayName || '玩家'} 連線中斷，${Math.round(OFFLINE_GRACE_MS/1000)} 秒內未回來將由 CPU 接管`);
+
+          clearOfflineTimer(room, pid2);
+
+          const t = setTimeout(()=>{
+            const r2 = rooms.get(joinedRoom);
+            if(!r2 || r2.phase !== 'playing') return;
+            const p2 = r2.state?.players?.[pid2];
+            if(!p2 || !p2.alive) return;
+
+            const sec2 = String(p2.secret || '').trim();
+            if(sec2){
+              const reconnected = Array.from(r2.sockets.values()).some(m=> String(m?.secret||'').trim() === sec2);
+              if(reconnected) return;
+            }
+
+            if(!p2.isCPU){
+              p2.isCPU = true;
+              emitRoomToast(r2, `⚠ ${p2.client?.displayName || p2.displayName || '玩家'} 未回來，已由 CPU 接管（直到整場結束/或玩家重連）`);
+              try{ broadcastState(r2); }catch{}
+              try{ runCpuLoop(joinedRoom); }catch{}
+              try{ armRoomWatchdogs(joinedRoom); }catch{}
+            }
+          }, OFFLINE_GRACE_MS);
+
+          room._offlineTimers.set(pid2, t);
+        }
+      }
+    }catch(e){
+      console.error("[disconnect takeover] error:", e);
+    }
+
     if (meta && room.lobbyReady) delete room.lobbyReady[meta.playerId];
 
     // 房主斷線 → 交棒給目前第一位
@@ -2733,6 +2904,8 @@ room.sockets = newSockets;
     if(!cleanupRoomIfNoHumans(joinedRoom)){
       broadcastLobby(joinedRoom);
       broadcastRoomList();
+      // ✅ 剩下的人繼續玩：重上 watchdog
+      try{ armRoomWatchdogs(joinedRoom); }catch{}
     }
   });
 });
