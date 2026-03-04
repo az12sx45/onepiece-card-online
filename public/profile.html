@@ -3588,7 +3588,7 @@ boot();
         <div class="fd-me-sub">我的好友</div>
       </div>
       <div class="fd-morewrap" style="margin-left:auto;">
-        <button class="fd-btn" id="fdMinBtn" title="縮小/展開">▣</button>
+        <button class="fd-btn" id="fdMinBtn" title="縮小/展開">+</button>
       </div>
     </div>
   </div>
@@ -3642,6 +3642,12 @@ boot();
   const meNameEl = q("#fdMeName");
   const openBtn  = q("#fdOpenBtn");
 
+  function updateDockMinIcon(){
+    // collapsed: + (展開) / expanded: - (縮小)
+    try{ if(minBtn) minBtn.textContent = dock.classList.contains("collapsed") ? "+" : "-"; }catch(e){}
+  }
+
+
   function renderMeMini(){
     const nm = String(me?.name || me?.displayName || localStorage.getItem("op_player_name") || localStorage.getItem("op_name") || "").trim();
     const av = Number(me?.avatar || localStorage.getItem("op_avatar") || localStorage.getItem("opAvatar") || 1) || 1;
@@ -3652,6 +3658,7 @@ boot();
   if(openBtn){
     openBtn.addEventListener("click", ()=>{
       dock.classList.remove("collapsed");
+      updateDockMinIcon();
       try{ localStorage.setItem("op_fdock_collapsed", "0"); }catch{}
       try{ addInp && addInp.focus && addInp.focus(); }catch{}
     });
@@ -3705,6 +3712,9 @@ function __fdMarkRecent(m){
     const c = localStorage.getItem("op_fdock_collapsed");
     if(c === "0") dock.classList.remove("collapsed");
   }catch{}
+
+  updateDockMinIcon();
+  renderMeMini();
 
   function setHint(msg){
     if(!msg){ hintEl.style.display="none"; hintEl.textContent=""; return; }
@@ -4300,11 +4310,13 @@ function appendMsgTo(peerId, m){
       if(e.target && (e.target.id === "fdMinBtn")) return;
       dock.classList.remove("collapsed");
       try{ localStorage.setItem("op_fdock_collapsed", "0"); }catch{}
+      updateDockMinIcon();
     }
   });
 
   minBtn.addEventListener("click", () => {
     dock.classList.toggle("collapsed");
+    updateDockMinIcon();
     renderMeMini();
     try{ localStorage.setItem("op_fdock_collapsed", dock.classList.contains("collapsed") ? "1" : "0"); }catch{}
   });
