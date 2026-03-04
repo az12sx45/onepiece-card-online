@@ -425,6 +425,33 @@
     rgba(var(--brand-rgb), .70)
   );
 }
+
+
+/* === WaitingRoom right-side scrollbar (page/container) ===
+   This targets the main panel (.card) that becomes scrollable on smaller heights. */
+.card{
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(var(--brand-rgb), .80) rgba(255,255,255,.06);
+}
+.card::-webkit-scrollbar{ width: 10px; }
+.card::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.05);
+  border-radius: 999px;
+}
+.card::-webkit-scrollbar-thumb{
+  background: linear-gradient(180deg,
+    rgba(var(--brand-rgb), .90),
+    rgba(var(--brand-rgb), .45)
+  );
+  border-radius: 999px;
+  border: 2px solid rgba(0,0,0,.35);
+}
+.card::-webkit-scrollbar-thumb:hover{
+  background: linear-gradient(180deg,
+    rgba(var(--brand-rgb), 1),
+    rgba(var(--brand-rgb), .65)
+  );
+}
 .lobby-chatrow{
   display:flex;
   gap:10px;
