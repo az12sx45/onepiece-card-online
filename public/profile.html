@@ -3401,6 +3401,17 @@ boot();
     backdrop-filter: blur(10px);
   }
   .fd-chatwin.minimized{ height:48px; }
+
+/* ===== Friends Dock: unread minimized chat pulse ===== */
+@keyframes fdUnreadPulse{
+  0%,100%{ filter:brightness(1); box-shadow: 0 10px 26px rgba(0,0,0,.42); }
+  50%{ filter:brightness(1.22); box-shadow: 0 12px 32px rgba(255,211,107,.18), 0 10px 26px rgba(0,0,0,.42); }
+}
+.fd-chatwin.minimized.unreadPulse{
+  animation: fdUnreadPulse 1.8s ease-in-out infinite;
+}
+
+
   .fd-chat-hd{
     height:48px;
     display:flex;
@@ -4043,7 +4054,15 @@ item.addEventListener("click", () => {
     w.badgeEl.textContent = String(Math.min(99, v));
   }
 
-  function appendMsgTo(peerId, m){
+  function scrollLogToBottom(peerId){
+    const w = openChats.get(peerId);
+    if(!w || !w.log) return;
+    // 避免縮小狀態/剛開啟時高度尚未計算，使用 raf + setTimeout 雙保險
+    try{ requestAnimationFrame(()=>{ try{ w.log.scrollTop = w.log.scrollHeight + 9999; }catch{} }); }catch{}
+    setTimeout(()=>{ try{ w.log.scrollTop = w.log.scrollHeight + 9999; }catch{} }, 0);
+  }
+
+function appendMsgTo(peerId, m){
     const w = openChats.get(peerId);
     if(!w) return;
     const div = document.createElement("div");
@@ -4054,7 +4073,7 @@ item.addEventListener("click", () => {
     t.textContent = fmtTime(m.ts);
     div.appendChild(t);
     w.log.appendChild(div);
-    w.log.scrollTop = w.log.scrollHeight + 9999;
+    scrollLogToBottom(peerId);
   }
 
   function loadHistory(peerId){
@@ -4070,7 +4089,9 @@ item.addEventListener("click", () => {
       }
       const msgs = res.messages || [];
       for(const m of msgs) appendMsgTo(peerId, m);
-    });
+    
+      scrollLogToBottom(peerId);
+  });
   }
 
   function sendMsg(peerId){
@@ -4109,7 +4130,11 @@ item.addEventListener("click", () => {
     if(w.minimized) w.el.classList.add("minimized");
     else w.el.classList.remove("minimized");
     if(!w.minimized){
+      scrollLogToBottom(peerId);
       setWinBadge(peerId, 0);
+      w.el.classList.remove("unreadPulse");
+      unread.set(peerId, 0);
+      renderFriends();
       setTimeout(()=> w.inp?.focus(), 0);
     }
   }
@@ -4182,6 +4207,9 @@ item.addEventListener("click", () => {
     unread.set(peerId, 0);
     renderFriends();
 
+    // 使用者主動開啟聊天 -> 視為已讀，停止提醒動畫
+    stopUnreadPulse(peerId);
+
     if(openChats.has(peerId)){
       // restore + focus + bring front
       bringToFront(peerId);
@@ -4209,6 +4237,62 @@ item.addEventListener("click", () => {
     loadHistory(peerId);
     setTimeout(()=> openChats.get(peerId)?.inp?.focus(), 0);
   }
+
+  function startUnreadPulse(peerId){
+    const w = openChats.get(peerId);
+    if(!w?.el) return;
+    w.el.classList.add("unreadPulse");
+  }
+  function stopUnreadPulse(peerId){
+    const w = openChats.get(peerId);
+    if(!w?.el) return;
+    w.el.classList.remove("unreadPulse");
+  }
+
+  // 當收到未讀訊息時：自動開「縮小聊天室」並慢慢忽暗忽明提醒
+  function openChatAuto(peerId){
+    peerId = Number(peerId);
+    if(!Number.isFinite(peerId) || peerId<=0) return;
+
+    const peer =
+      friends.find(x => Number(x.userId) === peerId) ||
+      { userId: peerId, name: "好友", avatar: 1, online: false };
+
+    if(openChats.has(peerId)){
+      const w = openChats.get(peerId);
+      w.peer = peer;
+      updateWinHeader(peerId);
+
+      if(!w.minimized) toggleMin(peerId);
+
+      const cnt = Math.max(1, Number(unread.get(peerId)||0) || 0);
+      setWinBadge(peerId, cnt);
+      startUnreadPulse(peerId);
+      return;
+    }
+
+    const MAX_OPEN = 4;
+    if(chatOrder.length >= MAX_OPEN){
+      const kick = chatOrder.shift();
+      if(kick != null) closeChat(kick);
+    }
+
+    const el = createChatWindow(peer);
+    tray.appendChild(el);
+    chatOrder.push(peerId);
+
+    bringToFront(peerId);
+
+    const w = openChats.get(peerId);
+    if(w && !w.minimized) toggleMin(peerId);
+
+    loadHistory(peerId);
+
+    const cnt = Math.max(1, Number(unread.get(peerId)||0) || 0);
+    setWinBadge(peerId, cnt);
+    startUnreadPulse(peerId);
+  }
+
 
   // click anywhere on collapsed dock to expand
   dock.addEventListener("click", (e) => {
@@ -4280,14 +4364,17 @@ item.addEventListener("click", () => {
         if(w?.minimized && Number(m.from) !== Number(me.userId)){
           const cur = Number(w.badgeEl.textContent||"0") || 0;
           setWinBadge(peerId, cur + 1);
+          startUnreadPulse(peerId);
         }else{
           setWinBadge(peerId, 0);
         }
       }else{
-        // dock unread badge
+        // dock unread badge + 自動跳出縮小聊天室提醒
         if(Number(m.from) !== Number(me.userId)){
-          unread.set(peerId, (unread.get(peerId)||0) + 1);
+          const next = (unread.get(peerId)||0) + 1;
+          unread.set(peerId, next);
           renderFriends();
+          openChatAuto(peerId);
         }
       }
     });
