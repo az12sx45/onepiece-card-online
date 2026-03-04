@@ -3897,6 +3897,20 @@ function appendMsgTo(peerId, m){
       const roomId = String(res.roomId || '').trim();
       if(!roomId) return;
 
+      // ✅ 防止「已結算房間」回到 start 又被自動續接（避免無限重複跳回結算）
+      const blockRoom = String(sessionStorage.getItem('op_resume_block_room')||'').trim();
+      const blockUntil = Number(sessionStorage.getItem('op_resume_block_until')||0) || 0;
+      if (blockRoom && blockRoom === roomId && (!blockUntil || Date.now() < blockUntil)){
+        try{
+          sessionStorage.removeItem('op_pending_join_room');
+          sessionStorage.removeItem('op_pending_join_via');
+          // 這個 block 通常只需擋一次；擋到後清掉避免影響未來
+          sessionStorage.removeItem('op_resume_block_room');
+          sessionStorage.removeItem('op_resume_block_until');
+        }catch(_){}
+        return;
+      }
+
       // 記錄一下來源（可選），並讓後續 UI 可用
       try{ sessionStorage.setItem('op_pending_join_room', roomId); sessionStorage.setItem('op_pending_join_via', 'resume'); }catch(_){ }
 
@@ -3923,6 +3937,19 @@ function appendMsgTo(peerId, m){
   // ✅ 從其他頁面接受邀請後，會先把 roomId 放在 sessionStorage，跳回 start.html
   const roomId = String(sessionStorage.getItem('op_pending_join_room') || '').trim();
   if(!roomId) return;
+
+  // ✅ 若這個房間已經被標記為「剛結算完，不要再自動續接」，就直接清掉 pending
+  const blockRoom = String(sessionStorage.getItem('op_resume_block_room')||'').trim();
+  const blockUntil = Number(sessionStorage.getItem('op_resume_block_until')||0) || 0;
+  if (blockRoom && blockRoom === roomId && (!blockUntil || Date.now() < blockUntil)){
+    try{
+      sessionStorage.removeItem('op_pending_join_room');
+      sessionStorage.removeItem('op_pending_join_via');
+      sessionStorage.removeItem('op_resume_block_room');
+      sessionStorage.removeItem('op_resume_block_until');
+    }catch(_){}
+    return;
+  }
   // 注意：不要在 React 初始化前清掉 pendingJoin，否則會回到「按任意鍵開始」。
 
   function pickMe(){
