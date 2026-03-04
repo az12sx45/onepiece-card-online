@@ -3902,12 +3902,10 @@ function appendMsgTo(peerId, m){
       const blockUntil = Number(sessionStorage.getItem('op_resume_block_until')||0) || 0;
       if (blockRoom && blockRoom === roomId && (!blockUntil || Date.now() < blockUntil)){
         try{
+          // 只清 pending，block 讓它依照 op_resume_block_until 自動過期
           sessionStorage.removeItem('op_pending_join_room');
           sessionStorage.removeItem('op_pending_join_via');
-          // 這個 block 通常只需擋一次；擋到後清掉避免影響未來
-          sessionStorage.removeItem('op_resume_block_room');
-          sessionStorage.removeItem('op_resume_block_until');
-        }catch(_){}
+        }catch(_){ }
         return;
       }
 
@@ -3943,11 +3941,10 @@ function appendMsgTo(peerId, m){
   const blockUntil = Number(sessionStorage.getItem('op_resume_block_until')||0) || 0;
   if (blockRoom && blockRoom === roomId && (!blockUntil || Date.now() < blockUntil)){
     try{
+      // 只清 pending，block 讓它依照 op_resume_block_until 自動過期
       sessionStorage.removeItem('op_pending_join_room');
       sessionStorage.removeItem('op_pending_join_via');
-      sessionStorage.removeItem('op_resume_block_room');
-      sessionStorage.removeItem('op_resume_block_until');
-    }catch(_){}
+    }catch(_){ }
     return;
   }
   // 注意：不要在 React 初始化前清掉 pendingJoin，否則會回到「按任意鍵開始」。
