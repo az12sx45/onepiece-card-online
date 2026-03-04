@@ -400,6 +400,31 @@
   border:1px solid rgba(var(--brand-rgb), .30);
   background: rgba(0,0,0,.28);
 }
+
+/* === WaitingRoom chat scrollbar (less intrusive, themed) === */
+.lobby-chatbox{
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(var(--brand-rgb), .85) rgba(255,255,255,.08);
+}
+.lobby-chatbox::-webkit-scrollbar{ width: 10px; }
+.lobby-chatbox::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.06);
+  border-radius: 999px;
+}
+.lobby-chatbox::-webkit-scrollbar-thumb{
+  background: linear-gradient(180deg,
+    rgba(var(--brand-rgb), .95),
+    rgba(var(--brand-rgb), .55)
+  );
+  border-radius: 999px;
+  border: 2px solid rgba(0,0,0,.35);
+}
+.lobby-chatbox::-webkit-scrollbar-thumb:hover{
+  background: linear-gradient(180deg,
+    rgba(var(--brand-rgb), 1),
+    rgba(var(--brand-rgb), .70)
+  );
+}
 .lobby-chatrow{
   display:flex;
   gap:10px;
