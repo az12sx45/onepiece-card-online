@@ -750,7 +750,27 @@ function getDeviceId(){
 }
     const socket = io(SERVER_URL, { transports: ['websocket'] });
 
+    // ✅ 擠下線：同帳號在其他裝置登入 → 本裝置強制登出
+    socket.on('FORCE_LOGOUT', (p={})=>{
+      try{
+        // 清掉登入態 & 可能的續局資訊，避免自動回房造成循環
+        localStorage.removeItem('op_secret');
+        localStorage.removeItem('op_username');
+        localStorage.removeItem('op_roomId');
+        localStorage.removeItem('op_pendingRoom');
+        localStorage.removeItem('op_lastRoomId');
+        localStorage.removeItem('op_roomResume');
+        localStorage.removeItem('op_matchEndedAt');
+        localStorage.setItem('op_kicked_msg', '此帳號已在其他裝置登入，你已被擠下線');
+      }catch{}
+      try{ alert('此帳號已在其他裝置登入，你已被擠下線'); }catch{}
+      try{ window.location.href = 'start.html'; }catch{}
+    });
+
+
     // === Presence：讓伺服器把此 socket 綁定到 userId（邀請/好友在線狀態會用到）===
+    try{ const m = localStorage.getItem('op_kicked_msg'); if(m){ localStorage.removeItem('op_kicked_msg'); alert(m); } }catch{}
+
     function sendPresence(pageName='start'){
       try{
         const secret = String(localStorage.getItem('opSecret')||'').trim();
