@@ -121,7 +121,51 @@ ensureDmTable();
 // online presence: userId -> Set<socketId>
 const onlineUsers = new Map();
 // presence page: userId -> page string (e.g. 'game')
-const userPage = new Map();
+const userPage = new Map();// =========================
+// Single-session login lock (per account)
+//  - Prevent the same account from logging in on another device while still online.
+//  - A "deviceId" is generated/stored by client (localStorage) and sent on AUTH_LOGIN / SOCIAL_AUTH / PRESENCE_SET.
+//  - If the last socket disconnects, we keep the lock for a short grace window, then auto-release.
+// =========================
+const loginLocks = new Map(); // userId -> { deviceId, sockets:Set<socketId>, lastSeen:number }
+const LOGIN_LOCK_GRACE_MS = 60000; // 60s after last disconnect auto-release (avoid permanent lock)
+
+function lockTouch(userId, deviceId, socketId){
+  if(!userId) return;
+  const uid = Number(userId);
+  if(!(uid>0)) return;
+  const did = String(deviceId||"").trim();
+  let lock = loginLocks.get(uid);
+  if(!lock){
+    lock = { deviceId: did || "", sockets: new Set(), lastSeen: Date.now() };
+    loginLocks.set(uid, lock);
+  }
+  // If deviceId provided, bind/refresh it
+  if(did) lock.deviceId = did;
+  if(socketId) lock.sockets.add(String(socketId));
+  lock.lastSeen = Date.now();
+  return lock;
+}
+
+function lockRemoveSocket(userId, socketId){
+  const uid = Number(userId);
+  const lock = loginLocks.get(uid);
+  if(!lock) return;
+  try{ lock.sockets.delete(String(socketId)); }catch{}
+  lock.lastSeen = Date.now();
+  if(lock.sockets.size<=0){
+    // keep lock for grace window, then auto-release
+    lock.lastSeen = Date.now();
+  }
+}
+
+function lockIsActive(lock){
+  if(!lock) return false;
+  if(lock.sockets && lock.sockets.size>0) return true;
+  return (Date.now() - (Number(lock.lastSeen)||0)) <= LOGIN_LOCK_GRACE_MS;
+}
+
+// JS doesn't have True; fix below after insertion
 
 // =========================
 // Lobby Invites
@@ -178,6 +222,19 @@ function pruneLobbyInvites(){
   for(const [id, inv] of lobbyInvites){
     if(!inv || (Number(inv.expiresAt)||0) <= now) lobbyInvites.delete(id);
   }
+
+
+function pruneLoginLocks(){
+  const now = Date.now();
+  for(const [uid, lock] of loginLocks.entries()){
+    const sockets = (lock && lock.sockets) ? lock.sockets.size : 0;
+    const last = Number(lock?.lastSeen||0) || 0;
+    if(sockets<=0 && (now - last) > LOGIN_LOCK_GRACE_MS){
+      loginLocks.delete(uid);
+    }
+  }
+}
+setInterval(pruneLoginLocks, 15000).unref?.();
 }
 
 async function getProfileBySecret(secret){
@@ -1291,12 +1348,26 @@ io.on("connection", (socket) => {
   let joinedRoom = null;
 
 // ===== Social auth (for friend dock presence / DM routing) =====
-socket.on("SOCIAL_AUTH", async ({ secret }, cb) => {
+socket.on("SOCIAL_AUTH", async ({ secret, deviceId }, cb) => {
   try{
     const prof = await getProfileBySecret(String(secret||"").trim());
     if(!prof) return cb?.({ ok:false, error:"bad secret" });
 
     const uid = Number(prof.user_id);
+
+const did = String(deviceId||"").trim();
+const existing = loginLocks.get(uid);
+if(existing){
+  const sockets = existing.sockets ? existing.sockets.size : 0;
+  const last = Number(existing.lastSeen||0) || 0;
+  const active = (sockets>0) || ((Date.now()-last) <= LOGIN_LOCK_GRACE_MS);
+  const bound = String(existing.deviceId||"");
+  if(active && bound && did && bound !== did){
+    return cb?.({ ok:false, error:"already_logged_in" });
+  }
+}
+lockTouch(uid, did, socket.id);
+
     socket.data.userId = uid;
     markOnline(uid, socket.id);
 
@@ -1309,12 +1380,26 @@ socket.on("SOCIAL_AUTH", async ({ secret }, cb) => {
 
 // ===== Presence update (page/scene) =====
 // Can be sent from any page (including game.html) to mark user online and set their current page.
-socket.on("PRESENCE_SET", async ({ secret, page }, cb) => {
+socket.on("PRESENCE_SET", async ({ secret, page, deviceId }, cb) => {
   try{
     const prof = await getProfileBySecret(String(secret||"").trim());
     if(!prof) return cb?.({ ok:false, error:"bad secret" });
 
     const uid = Number(prof.user_id);
+
+const did = String(deviceId||"").trim();
+const existing = loginLocks.get(uid);
+if(existing){
+  const sockets = existing.sockets ? existing.sockets.size : 0;
+  const last = Number(existing.lastSeen||0) || 0;
+  const active = (sockets>0) || ((Date.now()-last) <= LOGIN_LOCK_GRACE_MS);
+  const bound = String(existing.deviceId||"");
+  if(active && bound && did && bound !== did){
+    return cb?.({ ok:false, error:"already_logged_in" });
+  }
+}
+lockTouch(uid, did, socket.id);
+
     socket.data.userId = uid;
     markOnline(uid, socket.id);
 
@@ -1800,7 +1885,7 @@ socket.on("DM_SEND", async ({ secret, toUserId, body }, cb) => {
 // =====================
 
 // 註冊：建立 users + 建立 player_profiles 並綁 user_id，回傳 secret
-socket.on("AUTH_REGISTER", async ({ username, password }, cb) => {
+socket.on("AUTH_REGISTER", async ({ username, password, deviceId }, cb) => {
   try {
     username = String(username || "").trim().toLowerCase();
     password = String(password || "");
@@ -1838,6 +1923,8 @@ socket.on("AUTH_REGISTER", async ({ username, password }, cb) => {
       [secret, userId]
     );
 
+    lockTouch(userId, deviceId, socket.id);
+
     return cb?.({ ok: true, username, secret });
   } catch (err) {
     console.error("[AUTH_REGISTER] error:", err);
@@ -1846,7 +1933,7 @@ socket.on("AUTH_REGISTER", async ({ username, password }, cb) => {
 });
 
 // 登入：驗證密碼 → 找到該 user 綁定的 player_profiles.secret → 回傳 secret
-socket.on("AUTH_LOGIN", async ({ username, password }, cb) => {
+socket.on("AUTH_LOGIN", async ({ username, password, deviceId }, cb) => {
   try {
     username = String(username || "").trim().toLowerCase();
     password = String(password || "");
@@ -1865,7 +1952,24 @@ socket.on("AUTH_LOGIN", async ({ username, password }, cb) => {
     const ok = await bcrypt.compare(password, user.password_hash);
     if (!ok) return cb?.({ ok: false, error: "invalid username/password" });
 
-    // 3) 拿這個帳號對應的 secret
+
+
+// =============================
+// ✅ Single-session lock: same account cannot login from another device while active
+// =============================
+const did = String(deviceId||"").trim();
+const existing = loginLocks.get(Number(user.id));
+if(existing){
+  const sockets = existing.sockets ? existing.sockets.size : 0;
+  const last = Number(existing.lastSeen||0) || 0;
+  const active = (sockets>0) || ((Date.now()-last) <= LOGIN_LOCK_GRACE_MS);
+  const bound = String(existing.deviceId||"");
+  if(active && bound && did && bound !== did){
+    return cb?.({ ok:false, error:"already_logged_in" });
+  }
+}
+// lock to this deviceId (or bind if first time)
+lockTouch(Number(user.id), did, socket.id);    // 3) 拿這個帳號對應的 secret
     const p = await pool.query("SELECT secret FROM player_profiles WHERE user_id=$1", [user.id]);
 
     // 理論上一定有（因為註冊就建了），但保底處理
@@ -2951,6 +3055,7 @@ room.sockets = newSockets;
   socket.on("disconnect", () => {
     // social presence
     try{ markOffline(socket.data?.userId, socket.id); }catch{}
+    try{ lockRemoveSocket(socket.data?.userId, socket.id); }catch{}
 
     if (!joinedRoom) return;
     const room = rooms.get(joinedRoom);
