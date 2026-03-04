@@ -4308,6 +4308,19 @@ socket.on('STATE', (s)=>{
         if (typeof me.playerId === 'number') {
           url.searchParams.set('pid', String(me.playerId));
         }
+        
+                // ✅ 避免結算完回到 start.html 又被「自動續接」拉回同一房間，造成結算無限循環
+                try{
+                  const rid = String(me.roomId || '');
+                  if(rid){
+                    sessionStorage.setItem('op_resume_block_room', rid);
+                    // 擋 30 分鐘夠用；擋到後 start 也會清掉
+                    sessionStorage.setItem('op_resume_block_until', String(Date.now() + 30*60*1000));
+                  }
+                  sessionStorage.removeItem('op_pending_join_room');
+                  sessionStorage.removeItem('op_pending_join_via');
+                }catch(_e){}
+        
         location.href = url.toString();
       });
     } else {
@@ -4318,6 +4331,19 @@ socket.on('STATE', (s)=>{
         const url = new URL('result.html', location.origin);
         url.searchParams.set('room', me.roomId || '');
         if (typeof me.playerId === 'number') url.searchParams.set('pid', String(me.playerId));
+        
+                // ✅ 避免結算完回到 start.html 又被「自動續接」拉回同一房間，造成結算無限循環
+                try{
+                  const rid = String(me.roomId || '');
+                  if(rid){
+                    sessionStorage.setItem('op_resume_block_room', rid);
+                    // 擋 30 分鐘夠用；擋到後 start 也會清掉
+                    sessionStorage.setItem('op_resume_block_until', String(Date.now() + 30*60*1000));
+                  }
+                  sessionStorage.removeItem('op_pending_join_room');
+                  sessionStorage.removeItem('op_pending_join_via');
+                }catch(_e){}
+        
         location.href = url.toString();
       });
     }
