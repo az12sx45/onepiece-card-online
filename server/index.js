@@ -166,40 +166,32 @@ function lockIsActive(lock){
 }
 
 
-function forceKickLogin(userId, newDeviceId, reason){
+function lockKickOthers(userId, keepSocketId, reason, newDeviceId){
   try{
     const uid = Number(userId);
     if(!(uid>0)) return;
     const lock = loginLocks.get(uid);
     if(!lock) return;
+    const keep = keepSocketId ? String(keepSocketId) : "";
+    const did = String(newDeviceId||"").trim();
 
-    const at = Date.now();
-    const payload = { reason: String(reason||"kicked"), at, newDeviceId: String(newDeviceId||"") };
-
-    // tell old devices
-    if(lock.sockets && lock.sockets.size>0){
-      for(const sid of Array.from(lock.sockets)){
-        try{ io.to(String(sid)).emit("FORCE_LOGOUT", payload); }catch{}
-      }
-
-      // disconnect after a short delay so the packet has a chance to flush
-      setTimeout(()=>{
-        try{
-          for(const sid of Array.from(lock.sockets)){
-            const s = io.sockets?.sockets?.get(String(sid));
-            if(s) s.disconnect(true);
-          }
-        }catch{}
-      }, 80);
+    const ids = Array.from(lock.sockets || []);
+    for(const sid of ids){
+      const sidStr = String(sid);
+      if(keep && sidStr === keep) continue;
+      const s = io?.sockets?.sockets?.get(sidStr);
+      if(!s) continue;
+      try{ s.emit("SESSION_KICK", { reason: reason || "takeover" }); }catch{}
+      try{ s.disconnect(true); }catch{}
     }
-
-    // transfer lock to new device immediately
-    lock.deviceId = String(newDeviceId||"");
-    try{ lock.sockets = new Set(); }catch{ lock.sockets = new Set(); }
-    lock.lastSeen = at;
-  }catch{}
+    // transfer lock to new device/socket
+    lock.sockets = new Set(keep ? [keep] : []);
+    if(did) lock.deviceId = did;
+    lock.lastSeen = Date.now();
+  }catch(e){
+    console.error("[lockKickOthers] error:", e);
+  }
 }
-
 
 // JS doesn't have True; fix below after insertion
 
@@ -1399,8 +1391,8 @@ if(existing){
   const active = (sockets>0) || ((Date.now()-last) <= LOGIN_LOCK_GRACE_MS);
   const bound = String(existing.deviceId||"");
   if(active && bound && did && bound !== did){
-    // ✅ 擠下線模式：新裝置登入 → 強制踢掉舊裝置，並把 lock 轉移到新 deviceId
-    forceKickLogin(uid, did, "kicked_by_new_login");
+    // 擠下線模式：新裝置登入 → 強制把舊裝置踢下線，並把登入轉移到新裝置
+    lockKickOthers(uid, socket.id, "takeover", did);
   }
 }
 lockTouch(uid, did, socket.id);
@@ -1432,8 +1424,8 @@ if(existing){
   const active = (sockets>0) || ((Date.now()-last) <= LOGIN_LOCK_GRACE_MS);
   const bound = String(existing.deviceId||"");
   if(active && bound && did && bound !== did){
-    // ✅ 擠下線模式：新裝置登入 → 強制踢掉舊裝置，並把 lock 轉移到新 deviceId
-    forceKickLogin(uid, did, "kicked_by_new_login");
+    // 擠下線模式：新裝置更新 presence → 踢掉舊裝置，並把登入轉移到新裝置
+    lockKickOthers(uid, socket.id, "takeover", did);
   }
 }
 lockTouch(uid, did, socket.id);
@@ -2003,8 +1995,8 @@ if(existing){
   const active = (sockets>0) || ((Date.now()-last) <= LOGIN_LOCK_GRACE_MS);
   const bound = String(existing.deviceId||"");
   if(active && bound && did && bound !== did){
-    // ✅ 擠下線模式：新裝置登入 → 強制踢掉舊裝置，並把 lock 轉移到新 deviceId
-    forceKickLogin(uid, did, "kicked_by_new_login");
+    // 擠下線模式：新裝置登入 → 強制踢掉舊裝置，並把登入轉移到新裝置
+    lockKickOthers(Number(user.id), socket.id, "takeover", did);
   }
 }
 // lock to this deviceId (or bind if first time)
