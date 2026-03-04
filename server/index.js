@@ -2258,6 +2258,33 @@ socket.on("ROOM_LIST_GET", (_payload = {}, cb) => {
   }
 });
 
+// ====== 斷線回來：用 secret 找回自己所在房間（不需要 roomId） ======
+// start.html 會在登入後呼叫，若找到就自動 JOIN_ROOM。
+// 回傳：{ ok:true, roomId, phase }
+socket.on("RESUME_ROOM", (payload = {}, cb) => {
+  try{
+    const sec = String(payload?.secret || "").trim();
+    if (!sec) return cb?.({ ok:false, error:"no secret" });
+
+    let found = null;
+    for (const [rid, room] of rooms.entries()){
+      const ph = String(room?.phase || "");
+      if (ph !== 'lobby' && ph !== 'playing') continue;
+      const arr = room?.state?.players || [];
+      const hit = Array.isArray(arr) ? arr.find(p => p && String(p.secret||"") === sec) : null;
+      if (!hit) continue;
+      // 優先：playing > lobby
+      if (!found) found = { roomId: rid, phase: ph };
+      else if (found.phase !== 'playing' && ph === 'playing') found = { roomId: rid, phase: ph };
+    }
+
+    if (!found) return cb?.({ ok:true, roomId:"", phase:"" });
+    cb?.({ ok:true, roomId: found.roomId, phase: found.phase });
+  }catch(err){
+    cb?.({ ok:false, error: String(err?.message || err) });
+  }
+});
+
 socket.on("JOIN_ROOM", async (payload = {}) => {
 
   const {
@@ -2469,6 +2496,14 @@ p.rank = safeRank;
     broadcastLobby(roomId);
     broadcastRoomList();
     broadcastState(room);
+
+    // ✅ 若這是一個「正在進行中的遊戲」且前端要求立即進 game（斷線回復 / 重新登入）
+    // 為了避免 game.html 自己 JOIN_ROOM 時被硬跳，這個只在 wantNav=true 才送。
+    try{
+      if (room.phase === 'playing' && payload?.wantNav) {
+        io.to(socket.id).emit('EMIT', { type:'nav_game', roomId });
+      }
+    }catch(_){ }
   });
 
 
