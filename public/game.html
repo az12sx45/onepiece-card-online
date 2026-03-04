@@ -5500,6 +5500,8 @@ el.venues.innerHTML = '';
             <div class="font-semibold">
               ${pnameBy(p)}${(()=>{const tt=playerEquippedTitle(p);return tt.label?` <span class="ml-2 inline-flex align-middle">${buildTitleBadgeHTML(tt.label, tt.tier)}</span>`:'';})()}
               ${!p.alive ? '<span class="ml-1 text-neutral-400">（出局）</span>' : ''}
+              ${p?.client?.offline ? '<span class="ml-2 text-[11px] px-2 py-0.5 rounded border border-red-500 bg-red-600/20 text-red-200 animate-pulse">斷線中</span>' : ''}
+              ${(p.isCPU && p.alive) ? '<span class="ml-2 text-[11px] px-2 py-0.5 rounded border border-violet-500 bg-violet-600/20 text-violet-200">CPU</span>' : ''}
             </div>
             <div class="text-xs text-neutral-400">金幣 <span class="text-amber-300 font-bold">${p.gold||0}</span></div>
           </div>
