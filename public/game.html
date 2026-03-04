@@ -4320,7 +4320,17 @@ socket.on('STATE', (s)=>{
                   sessionStorage.removeItem('op_pending_join_room');
                   sessionStorage.removeItem('op_pending_join_via');
                 }catch(_e){}
-        
+
+        // ✅ 通知 server：此房間已完成整場（多局）結算，後續不要再允許 resume 回來
+        try{
+          const rid = String(me.roomId || '');
+          if(rid){
+            socket.emit('ROOM_FINISHED', { roomId: rid, secret: String(localStorage.getItem('opSecret')||'').trim() });
+            // 順手離房（不一定要等 ack）
+            socket.emit('LEAVE_ROOM', { roomId: rid });
+          }
+        }catch(_e){}
+
         location.href = url.toString();
       });
     } else {
@@ -4343,7 +4353,17 @@ socket.on('STATE', (s)=>{
                   sessionStorage.removeItem('op_pending_join_room');
                   sessionStorage.removeItem('op_pending_join_via');
                 }catch(_e){}
-        
+
+        // ✅ 通知 server：此房間已完成整場（多局）結算，後續不要再允許 resume 回來
+        try{
+          const rid = String(me.roomId || '');
+          if(rid){
+            socket.emit('ROOM_FINISHED', { roomId: rid, secret: String(localStorage.getItem('opSecret')||'').trim() });
+            // 順手離房（不一定要等 ack）
+            socket.emit('LEAVE_ROOM', { roomId: rid });
+          }
+        }catch(_e){}
+
         location.href = url.toString();
       });
     }
