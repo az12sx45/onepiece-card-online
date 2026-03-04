@@ -3859,6 +3859,67 @@ function appendMsgTo(peerId, m){
 
 <script>
 (function(){
+  // ✅ 斷線後重新登入 start：自動找回「我所在的房間」並直接接回去
+  // 依賴 server 的 RESUME_ROOM（用 secret 找房間），找到後會自動 JOIN_ROOM。
+  let tried = false;
+
+  function pickMe(){
+    const p = window.__cloudProfile || {};
+    const name =
+      String(p.playerName || localStorage.getItem('op_name') || localStorage.getItem('op_player_name') || 'P').trim() || 'P';
+    const avatar = Number(p.playerAvatar || localStorage.getItem('op_avatar') || localStorage.getItem('op_player_avatar') || 1) || 1;
+    const title = String(p.equippedTitle || '').trim();
+    const tier  = Number(p.equippedTier || 1) || 1;
+    return { name, avatar, title, tier };
+  }
+
+  function ensureSocket(){ return window.socket || null; }
+
+  function tick(){
+    if (tried) return;
+    const sock = ensureSocket();
+    if(!sock || !sock.connected){ return setTimeout(tick, 200); }
+    if(typeof window.__enterRoom !== 'function'){ return setTimeout(tick, 200); }
+
+    const st = String(window.__stageNow || '').trim();
+    if(!st || st === 'press' || st === 'auth' || st === 'boot'){ return setTimeout(tick, 200); }
+
+    // 若已經有邀請 pending join，就不要搶
+    const pending = String(sessionStorage.getItem('op_pending_join_room') || '').trim();
+    if (pending) { tried = true; return; }
+
+    const sec = String(localStorage.getItem('opSecret')||'').trim();
+    if(!sec){ tried = true; return; }
+
+    tried = true;
+    sock.timeout(3500).emit('RESUME_ROOM', { secret: sec }, (err, res)=>{
+      if(err || !res?.ok) return;
+      const roomId = String(res.roomId || '').trim();
+      if(!roomId) return;
+
+      // 記錄一下來源（可選），並讓後續 UI 可用
+      try{ sessionStorage.setItem('op_pending_join_room', roomId); sessionStorage.setItem('op_pending_join_via', 'resume'); }catch(_){ }
+
+      const me = pickMe();
+      try{
+        // wantNav=true：如果房間已經在 playing，server 會補送 nav_game，直接跳回 game.html
+        sock.emit('JOIN_ROOM', { roomId, displayName: me.name, avatar: me.avatar, title: me.title, titleTier: me.tier, secret: sec, wantNav: true });
+        window.__enterRoom(roomId, { host:false });
+
+        // 這裡先不清 pendingJoin，讓你如果中途 reload 還能再接一次；
+        // 等真的成功進 lobby/nav_game 後，原本的 autoJoin 也會幫你清。
+      }catch(e){
+        console.warn('[resumeJoin] failed', e);
+      }
+    });
+  }
+
+  tick();
+})();
+</script>
+
+<script>
+(function(){
   // ✅ 從其他頁面接受邀請後，會先把 roomId 放在 sessionStorage，跳回 start.html
   const roomId = String(sessionStorage.getItem('op_pending_join_room') || '').trim();
   if(!roomId) return;
@@ -3895,7 +3956,8 @@ function appendMsgTo(peerId, m){
     const me = pickMe();
     try{
       try{ window.__pendingJoinActive = true; }catch{}
-      sock.emit('JOIN_ROOM', { roomId, displayName: me.name, avatar: me.avatar, title: me.title, titleTier: me.tier, secret: sec });
+      // wantNav=true：若你被邀請時房間已經開始了，也能直接跳回 game
+      sock.emit('JOIN_ROOM', { roomId, displayName: me.name, avatar: me.avatar, title: me.title, titleTier: me.tier, secret: sec, wantNav: true });
       window.__enterRoom(roomId, { host:false });
       // ✅ 這時才清掉 pendingJoin（確保已跳過 press 並開始自動加入）
       try{ sessionStorage.removeItem('op_pending_join_room'); sessionStorage.removeItem('op_pending_join_via'); }catch(_){ }
