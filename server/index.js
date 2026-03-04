@@ -155,10 +155,11 @@ function normalizePresencePage(p){
   return s.slice(0, 24);
 }
 
-function emitToUser(userId, event, payload){
+function emitToUser(userId, event, payload, excludeSid){
   const set = onlineUsers.get(userId);
   if(!set) return;
   for(const sid of set){
+    if(excludeSid && sid === excludeSid) continue;
     io.to(sid).emit(event, payload);
   }
 }
@@ -1648,7 +1649,7 @@ socket.on("DM_SEND", async ({ secret, toUserId, body }, cb) => {
     );
 
     const payload = { id:String(ins.rows[0].id), from: myId, to: otherId, body: msg, ts: now };
-    emitToUser(myId, "DM_NEW", payload);
+    emitToUser(myId, "DM_NEW", payload, socket.id);
     emitToUser(otherId, "DM_NEW", payload);
 
     return cb?.({ ok:true, message: payload });
