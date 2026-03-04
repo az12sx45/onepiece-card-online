@@ -3452,7 +3452,15 @@ item.addEventListener("click", () => {
     w.badgeEl.textContent = String(Math.min(99, v));
   }
 
-  function appendMsgTo(peerId, m){
+  function scrollLogToBottom(peerId){
+    const w = openChats.get(peerId);
+    if(!w || !w.log) return;
+    // 避免縮小狀態/剛開啟時高度尚未計算，使用 raf + setTimeout 雙保險
+    try{ requestAnimationFrame(()=>{ try{ w.log.scrollTop = w.log.scrollHeight + 9999; }catch{} }); }catch{}
+    setTimeout(()=>{ try{ w.log.scrollTop = w.log.scrollHeight + 9999; }catch{} }, 0);
+  }
+
+function appendMsgTo(peerId, m){
     const w = openChats.get(peerId);
     if(!w) return;
     const div = document.createElement("div");
@@ -3463,7 +3471,7 @@ item.addEventListener("click", () => {
     t.textContent = fmtTime(m.ts);
     div.appendChild(t);
     w.log.appendChild(div);
-    w.log.scrollTop = w.log.scrollHeight + 9999;
+    scrollLogToBottom(peerId);
   }
 
   function loadHistory(peerId){
@@ -3479,7 +3487,9 @@ item.addEventListener("click", () => {
       }
       const msgs = res.messages || [];
       for(const m of msgs) appendMsgTo(peerId, m);
-    });
+    
+      scrollLogToBottom(peerId);
+  });
   }
 
   function sendMsg(peerId){
@@ -3518,6 +3528,7 @@ item.addEventListener("click", () => {
     if(w.minimized) w.el.classList.add("minimized");
     else w.el.classList.remove("minimized");
     if(!w.minimized){
+      scrollLogToBottom(peerId);
       setWinBadge(peerId, 0);
       w.el.classList.remove("unreadPulse");
       unread.set(peerId, 0);
