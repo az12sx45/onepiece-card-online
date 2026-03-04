@@ -2715,6 +2715,23 @@ const presetN      = Math.max(2, Math.min(8, Number(sp.get('n') || '4') || 4));
 
 const serverURL = sp.get('server') || undefined;
 const socket = io(serverURL, { transports:['websocket'] });
+
+// ✅ 擠下線：同帳號在其他裝置登入 → 本裝置強制登出 + 回主畫面
+socket.on('FORCE_LOGOUT', (p={})=>{
+  try{
+    localStorage.removeItem('op_secret');
+    localStorage.removeItem('op_username');
+    localStorage.removeItem('op_roomId');
+    localStorage.removeItem('op_pendingRoom');
+    localStorage.removeItem('op_lastRoomId');
+    localStorage.removeItem('op_roomResume');
+    localStorage.removeItem('op_matchEndedAt');
+    localStorage.setItem('op_kicked_msg', '此帳號已在其他裝置登入，你已被擠下線');
+  }catch{}
+  try{ alert('此帳號已在其他裝置登入，你已被擠下線'); }catch{}
+  try{ window.location.href = 'start.html'; }catch{}
+});
+
 let me = { roomId: presetRoom || 'op-001', playerId: null, secret: localStorage.getItem('opSecret')||'' };
 let _autoSkipKey = null;   // 麻痺自動跳過用的防呆 key
 let state = null;
