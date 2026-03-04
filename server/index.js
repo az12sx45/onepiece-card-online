@@ -477,6 +477,32 @@ function injectRanksIntoVisibleState(vis, fullState){
 
 
 
+function injectOfflineIntoVisibleState(vis, fullState){
+  try{
+    if (!vis || !Array.isArray(vis.players) || !fullState || !Array.isArray(fullState.players)) return vis;
+
+    const byId = new Map(fullState.players.map(p => [p.id, p]));
+    for (const vp of vis.players){
+      const fp = byId.get(vp?.id);
+      if (!fp) continue;
+
+      const offline = !!(fp?.client?.offline || fp?.offline);
+      const since = Number(fp?.client?.offlineSince || fp?.offlineSince || 0) || 0;
+
+      if (!vp.client || typeof vp.client !== "object") vp.client = {};
+      vp.client.offline = offline;
+      vp.client.offlineSince = since;
+
+      // root fields too (some frontends read without .client)
+      vp.offline = offline;
+      vp.offlineSince = since;
+    }
+  }catch{}
+  return vis;
+}
+
+
+
 function broadcastState(room){
   const st = room.state;
   const ended = (st?.turnStep === "ended" || st?.turnStep === "end" || st?.turnStep === "score");
@@ -486,6 +512,7 @@ function broadcastState(room){
     let vis = injectChestCoins(getVisibleState(st, meta.playerId));
     vis = injectTitlesIntoVisibleState(vis, st);
     vis = injectRanksIntoVisibleState(vis, st);
+    vis = injectOfflineIntoVisibleState(vis, st);
 
     vis.viewerCanNext = (room.host === meta.playerId) || winners.has(meta.playerId);
     io.to(sid).emit("STATE", vis);
@@ -2293,8 +2320,17 @@ if (myId != null && room && room.phase === 'playing') {
     const p0 = room.state?.players?.[myId];
     if(p0){
       p0.isCPU = false;
+
+      // ✅ 重新連線：清掉「斷線中」標記，並立刻廣播讓其他人看到
+      if(!p0.client || typeof p0.client !== "object") p0.client = {};
+      p0.client.offline = false;
+      p0.client.offlineSince = 0;
+      p0.offline = false;
+      p0.offlineSince = 0;
+
       clearOfflineTimer(room, myId);
       emitRoomToast(room, `✅ ${p0.client?.displayName || p0.displayName || '玩家'} 已重新連線，恢復真人操控`);
+      try{ broadcastState(room); }catch{}
       armRoomWatchdogs(roomId);
     }
   }catch{}
@@ -2392,7 +2428,7 @@ const safeTier  = Math.max(1, Math.min(6, Number(pickedTier || 1) || 1));
 // ✅ rank 防呆
 const safeRank = (pickedRank && typeof pickedRank === "object") ? pickedRank : null;
 
-p.client = { displayName, avatar, pid, title: safeTitle, titleTier: safeTier, rank: safeRank };
+p.client = { displayName, avatar, pid, title: safeTitle, titleTier: safeTier, rank: safeRank, offline:false, offlineSince:0 };
 p.displayName = displayName;
 p.avatar = avatar;
 p.secret = sec;
@@ -2861,6 +2897,15 @@ room.sockets = newSockets;
         const p = room.state?.players?.[pid2];
         if(p && p.alive){
           emitRoomToast(room, `⚠ ${p.client?.displayName || p.displayName || '玩家'} 連線中斷，${Math.round(OFFLINE_GRACE_MS/1000)} 秒內未回來將由 CPU 接管`);
+
+          // ✅ 斷線中標記（讓其他玩家 UI 立刻看到）
+          if(!p.client || typeof p.client !== "object") p.client = {};
+          p.client.offline = true;
+          p.client.offlineSince = Date.now();
+          p.offline = true;
+          p.offlineSince = p.client.offlineSince;
+
+          try{ broadcastState(room); }catch{}
 
           clearOfflineTimer(room, pid2);
 
