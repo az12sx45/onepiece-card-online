@@ -3021,7 +3021,38 @@ useEffect(() => {
 
   let unread = new Map(); // peerId -> count (dock badge)
   const openChats = new Map(); // peerId -> {peer, el, log, inp, send, badge, minimized}
-  let chatOrder = []; // array of peerId (left<->right ordering handled by flex row-reverse)
+  let chatOrder = \[\]; // array of peerId \(left<->right ordering handled by flex row-reverse\)
+
+// ===== 防止「自己看到自己訊息重複」：DM_SEND callback + DM_NEW echo 會造成重複顯示 =====
+// 做法：送出成功時先把訊息簽名記到快取；收到同一則 DM_NEW（from=自己）就略過。
+const __fdRecentSig = new Map(); // peerId -> Set(sig)
+function __fdMsgSig(m){
+  // 用 from/to/ts/body 組合做簽名；伺服器 echo 時通常一致
+  const from = Number(m?.from)||0;
+  const to   = Number(m?.to)||0;
+  const ts   = Number(m?.ts)||0;
+  const body = String(m?.body||"");
+  return `${from}|${to}|${ts}|${body}`;
+}
+function __fdMarkRecent(m){
+  try{
+    const fromId = Number(m?.from)||0;
+    const peerId = (fromId === Number(me?.userId)) ? Number(m?.to) : fromId;
+    if(!peerId) return;
+    const sig = __fdMsgSig(m);
+    let set = __fdRecentSig.get(peerId);
+    if(!set){ set = new Set(); __fdRecentSig.set(peerId, set); }
+    set.add(sig);
+    setTimeout(()=>{
+      try{
+        const s = __fdRecentSig.get(peerId);
+        if(!s) return;
+        s.delete(sig);
+        if(s.size===0) __fdRecentSig.delete(peerId);
+      }catch{}
+    }, 12000);
+  }catch{}
+}
 
   // restore collapsed state
   try{
@@ -3454,7 +3485,10 @@ item.addEventListener("click", () => {
         return;
       }
       setHint("");
-      if(res.message) appendMsgTo(peerId, res.message);
+        if(res.message){
+          __fdMarkRecent(res.message);
+          appendMsgTo(peerId, res.message);
+        }
     });
   }
 
@@ -3631,6 +3665,12 @@ item.addEventListener("click", () => {
 
       // window open?
       if(openChats.has(peerId)){
+        // 防止自己端重複：若此 DM_NEW 是我剛剛 DM_SEND 成功回傳的同一則，就略過
+        if(Number(m?.from) === Number(me?.userId)){
+          const sig = __fdMsgSig(m);
+          const set = __fdRecentSig.get(peerId);
+          if(set && set.has(sig)) return;
+        }
         appendMsgTo(peerId, m);
 
         const w = openChats.get(peerId);
