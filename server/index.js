@@ -165,6 +165,42 @@ function lockIsActive(lock){
   return (Date.now() - (Number(lock.lastSeen)||0)) <= LOGIN_LOCK_GRACE_MS;
 }
 
+
+function forceKickLogin(userId, newDeviceId, reason){
+  try{
+    const uid = Number(userId);
+    if(!(uid>0)) return;
+    const lock = loginLocks.get(uid);
+    if(!lock) return;
+
+    const at = Date.now();
+    const payload = { reason: String(reason||"kicked"), at, newDeviceId: String(newDeviceId||"") };
+
+    // tell old devices
+    if(lock.sockets && lock.sockets.size>0){
+      for(const sid of Array.from(lock.sockets)){
+        try{ io.to(String(sid)).emit("FORCE_LOGOUT", payload); }catch{}
+      }
+
+      // disconnect after a short delay so the packet has a chance to flush
+      setTimeout(()=>{
+        try{
+          for(const sid of Array.from(lock.sockets)){
+            const s = io.sockets?.sockets?.get(String(sid));
+            if(s) s.disconnect(true);
+          }
+        }catch{}
+      }, 80);
+    }
+
+    // transfer lock to new device immediately
+    lock.deviceId = String(newDeviceId||"");
+    try{ lock.sockets = new Set(); }catch{ lock.sockets = new Set(); }
+    lock.lastSeen = at;
+  }catch{}
+}
+
+
 // JS doesn't have True; fix below after insertion
 
 // =========================
@@ -1363,7 +1399,8 @@ if(existing){
   const active = (sockets>0) || ((Date.now()-last) <= LOGIN_LOCK_GRACE_MS);
   const bound = String(existing.deviceId||"");
   if(active && bound && did && bound !== did){
-    return cb?.({ ok:false, error:"already_logged_in" });
+    // ✅ 擠下線模式：新裝置登入 → 強制踢掉舊裝置，並把 lock 轉移到新 deviceId
+    forceKickLogin(uid, did, "kicked_by_new_login");
   }
 }
 lockTouch(uid, did, socket.id);
@@ -1395,7 +1432,8 @@ if(existing){
   const active = (sockets>0) || ((Date.now()-last) <= LOGIN_LOCK_GRACE_MS);
   const bound = String(existing.deviceId||"");
   if(active && bound && did && bound !== did){
-    return cb?.({ ok:false, error:"already_logged_in" });
+    // ✅ 擠下線模式：新裝置登入 → 強制踢掉舊裝置，並把 lock 轉移到新 deviceId
+    forceKickLogin(uid, did, "kicked_by_new_login");
   }
 }
 lockTouch(uid, did, socket.id);
@@ -1965,7 +2003,8 @@ if(existing){
   const active = (sockets>0) || ((Date.now()-last) <= LOGIN_LOCK_GRACE_MS);
   const bound = String(existing.deviceId||"");
   if(active && bound && did && bound !== did){
-    return cb?.({ ok:false, error:"already_logged_in" });
+    // ✅ 擠下線模式：新裝置登入 → 強制踢掉舊裝置，並把 lock 轉移到新 deviceId
+    forceKickLogin(uid, did, "kicked_by_new_login");
   }
 }
 // lock to this deviceId (or bind if first time)
