@@ -731,6 +731,23 @@
     // ========================
 
     const SERVER_URL = 'https://onepiece-card-online.onrender.com';
+
+// === Device ID (single-session login lock) ===
+const DEVICE_ID_KEY = 'op_device_id';
+function getDeviceId(){
+  try{
+    let id = localStorage.getItem(DEVICE_ID_KEY);
+    if(!id){
+      const arr = new Uint8Array(12);
+      (crypto?.getRandomValues ? crypto.getRandomValues(arr) : arr.fill(Math.floor(Math.random()*256)));
+      id = Array.from(arr).map(b=>b.toString(16).padStart(2,'0')).join('');
+      localStorage.setItem(DEVICE_ID_KEY, id);
+    }
+    return id;
+  }catch(e){
+    return 'legacy';
+  }
+}
     const socket = io(SERVER_URL, { transports: ['websocket'] });
 
     // === Presence：讓伺服器把此 socket 綁定到 userId（邀請/好友在線狀態會用到）===
@@ -738,7 +755,7 @@
       try{
         const secret = String(localStorage.getItem('opSecret')||'').trim();
         if(!secret) return;
-        socket.timeout(8000).emit('PRESENCE_SET', { secret, page: pageName }, ()=>{});
+        socket.timeout(8000).emit('PRESENCE_SET', { secret, page: pageName, deviceId: getDeviceId() }, ()=>{});
       }catch(_){}
     }
     socket.on('connect', ()=>{
@@ -1034,11 +1051,11 @@ const avatarUrl = `images/avatars/${avatar}.webp`;
 
     const evt = mode === "login" ? "AUTH_LOGIN" : "AUTH_REGISTER";
 
-    socket.timeout(12000).emit(evt, { username, password }, (e, res) => {
+    socket.timeout(12000).emit(evt, { username, password, deviceId: getDeviceId() }, (e, res) => {
       setLoading(false);
 
       if (e || !res?.ok) {
-        setErr(res?.error || e?.message || "連線失敗");
+        setErr((res?.error==="already_logged_in") ? "此帳號已在其他裝置登入中，請先登出或稍後再試" : (res?.error || e?.message || "連線失敗"));
         return;
       }
 
@@ -3179,7 +3196,7 @@ function __fdMarkRecent(m){
     ensureSecret();
     if(!sock){ setHint("好友/聊天：Socket 尚未連線"); return; }
     if(!secret){ setHint("好友/聊天：請先登入（缺少 opSecret）"); return; }
-    sock.timeout(12000).emit("SOCIAL_AUTH", { secret }, (err, res) => {
+    sock.timeout(12000).emit("SOCIAL_AUTH", { secret, deviceId: getDeviceId() }, (err, res) => {
       if(err || !res?.ok){
         setHint("好友/聊天：尚未登入（缺少 secret）");
         return;
