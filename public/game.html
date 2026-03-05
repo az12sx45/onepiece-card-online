@@ -2716,21 +2716,33 @@ const presetN      = Math.max(2, Math.min(8, Number(sp.get('n') || '4') || 4));
 const serverURL = sp.get('server') || undefined;
 const socket = io(serverURL, { transports:['websocket'] });
 
-// ✅ 擠下線：同帳號在其他裝置登入 → 本裝置強制登出 + 回主畫面
-socket.on('FORCE_LOGOUT', (p={})=>{
+// ✅ 被擠下線：同帳號在別的裝置登入時，本頁要立刻退回 start（並清掉自動回房記錄）
+socket.on("SESSION_KICK", (info)=>{
   try{
-    localStorage.removeItem('op_secret');
-    localStorage.removeItem('op_username');
-    localStorage.removeItem('op_roomId');
-    localStorage.removeItem('op_pendingRoom');
-    localStorage.removeItem('op_lastRoomId');
-    localStorage.removeItem('op_roomResume');
-    localStorage.removeItem('op_matchEndedAt');
-    localStorage.setItem('op_kicked_msg', '此帳號已在其他裝置登入，你已被擠下線');
+    localStorage.setItem("op_kicked_reason", String(info?.reason||"takeover"));
+    [
+      "op_secret","opSecret",
+      "op_resume_roomId","op_resume_nonce","op_resume_gameId",
+      "op_resume_endlock","op_resume_endAt","op_resume_done",
+      "op_gameEndlock_roomId","op_gameEndlock_until"
+    ].forEach(k=>{ try{ localStorage.removeItem(k); }catch{} });
   }catch{}
-  try{ alert('此帳號已在其他裝置登入，你已被擠下線'); }catch{}
-  try{ window.location.href = 'start.html'; }catch{}
+  try{ socket.disconnect(); }catch{}
+  location.href = "start.html?kicked=1";
 });
+
+
+function getDeviceId(){
+  try{
+    let did = localStorage.getItem("op_device_id");
+    if(did && String(did).length >= 8) return String(did);
+    did = (crypto?.randomUUID ? crypto.randomUUID() : (Date.now()+"-"+Math.random().toString(16).slice(2)));
+    localStorage.setItem("op_device_id", did);
+    return did;
+  }catch{
+    return "dev-"+Date.now();
+  }
+}
 
 let me = { roomId: presetRoom || 'op-001', playerId: null, secret: localStorage.getItem('opSecret')||'' };
 let _autoSkipKey = null;   // 麻痺自動跳過用的防呆 key
