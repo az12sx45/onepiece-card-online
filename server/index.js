@@ -1899,7 +1899,10 @@ socket.on("DM_SEND", async ({ secret, toUserId, body }, cb) => {
     );
 
     const payload = { id:String(ins.rows[0].id), from: myId, to: otherId, body: msg, ts: now };
-    emitToUser(myId, "DM_NEW", payload);
+
+    // ✅ 修正：避免「送出者」在前端同時做 optimistic append + 收到 DM_NEW 再 append 造成重複。
+    // 送出者會以 callback(res.message) 自己渲染一次即可。
+    // 收到者才需要 DM_NEW 推播。
     emitToUser(otherId, "DM_NEW", payload);
 
     return cb?.({ ok:true, message: payload });
