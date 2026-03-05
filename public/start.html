@@ -400,6 +400,58 @@
   border:1px solid rgba(var(--brand-rgb), .30);
   background: rgba(0,0,0,.28);
 }
+
+/* === WaitingRoom chat scrollbar (less intrusive, themed) === */
+.lobby-chatbox{
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(var(--brand-rgb), .85) rgba(255,255,255,.08);
+}
+.lobby-chatbox::-webkit-scrollbar{ width: 10px; }
+.lobby-chatbox::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.06);
+  border-radius: 999px;
+}
+.lobby-chatbox::-webkit-scrollbar-thumb{
+  background: linear-gradient(180deg,
+    rgba(var(--brand-rgb), .95),
+    rgba(var(--brand-rgb), .55)
+  );
+  border-radius: 999px;
+  border: 2px solid rgba(0,0,0,.35);
+}
+.lobby-chatbox::-webkit-scrollbar-thumb:hover{
+  background: linear-gradient(180deg,
+    rgba(var(--brand-rgb), 1),
+    rgba(var(--brand-rgb), .70)
+  );
+}
+
+
+/* === WaitingRoom right-side scrollbar (page/container) ===
+   This targets the main panel (.card) that becomes scrollable on smaller heights. */
+.card{
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(var(--brand-rgb), .80) rgba(255,255,255,.06);
+}
+.card::-webkit-scrollbar{ width: 10px; }
+.card::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.05);
+  border-radius: 999px;
+}
+.card::-webkit-scrollbar-thumb{
+  background: linear-gradient(180deg,
+    rgba(var(--brand-rgb), .90),
+    rgba(var(--brand-rgb), .45)
+  );
+  border-radius: 999px;
+  border: 2px solid rgba(0,0,0,.35);
+}
+.card::-webkit-scrollbar-thumb:hover{
+  background: linear-gradient(180deg,
+    rgba(var(--brand-rgb), 1),
+    rgba(var(--brand-rgb), .65)
+  );
+}
 .lobby-chatrow{
   display:flex;
   gap:10px;
@@ -422,8 +474,12 @@
   width:34px; height:34px;
   border-radius: 999px;          /* ✅ 圓形頭像 */
   overflow:hidden;
-  border:none;                   /* ✅ 移除方形外框 */
+  border:none;                   /* ✅ 不改變頭像尺寸（用外發光圈） */
   background: transparent;        /* ✅ 不要底色 */
+  /* ✅ 與聊天室外框同色的圓形亮框（不會讓頭像變小） */
+  box-shadow:
+    0 0 0 2px rgba(255, 211, 107, .95),
+    0 0 10px rgba(255, 211, 107, .35);
   flex: 0 0 auto;
 }
 .lobby-chatava img{ width:100%; height:100%; object-fit:cover; display:block; border-radius:999px; }
@@ -675,6 +731,23 @@
     // ========================
 
     const SERVER_URL = 'https://onepiece-card-online.onrender.com';
+
+// === Device ID (single-session login lock) ===
+const DEVICE_ID_KEY = 'op_device_id';
+function getDeviceId(){
+  try{
+    let id = localStorage.getItem(DEVICE_ID_KEY);
+    if(!id){
+      const arr = new Uint8Array(12);
+      (crypto?.getRandomValues ? crypto.getRandomValues(arr) : arr.fill(Math.floor(Math.random()*256)));
+      id = Array.from(arr).map(b=>b.toString(16).padStart(2,'0')).join('');
+      localStorage.setItem(DEVICE_ID_KEY, id);
+    }
+    return id;
+  }catch(e){
+    return 'legacy';
+  }
+}
     const socket = io(SERVER_URL, { transports: ['websocket'] });
 
     // === Presence：讓伺服器把此 socket 綁定到 userId（邀請/好友在線狀態會用到）===
@@ -682,7 +755,7 @@
       try{
         const secret = String(localStorage.getItem('opSecret')||'').trim();
         if(!secret) return;
-        socket.timeout(8000).emit('PRESENCE_SET', { secret, deviceId: (typeof getDeviceId==='function'?getDeviceId():(localStorage.getItem('op_device_id')||'')), page: pageName }, ()=>{});
+        socket.timeout(8000).emit('PRESENCE_SET', { secret, page: pageName, deviceId: getDeviceId() }, ()=>{});
       }catch(_){}
     }
     socket.on('connect', ()=>{
@@ -978,11 +1051,11 @@ const avatarUrl = `images/avatars/${avatar}.webp`;
 
     const evt = mode === "login" ? "AUTH_LOGIN" : "AUTH_REGISTER";
 
-    socket.timeout(12000).emit(evt, { username, password }, (e, res) => {
+    socket.timeout(12000).emit(evt, { username, password, deviceId: getDeviceId() }, (e, res) => {
       setLoading(false);
 
       if (e || !res?.ok) {
-        setErr(res?.error || e?.message || "連線失敗");
+        setErr((res?.error==="already_logged_in") ? "此帳號已在其他裝置登入中，請先登出或稍後再試" : (res?.error || e?.message || "連線失敗"));
         return;
       }
 
@@ -2766,6 +2839,17 @@ useEffect(() => {
     backdrop-filter: blur(10px);
   }
   .fd-chatwin.minimized{ height:48px; }
+
+/* ===== Friends Dock: unread minimized chat pulse ===== */
+@keyframes fdUnreadPulse{
+  0%,100%{ filter:brightness(1); box-shadow: 0 10px 26px rgba(0,0,0,.42); }
+  50%{ filter:brightness(1.22); box-shadow: 0 12px 32px rgba(255,211,107,.18), 0 10px 26px rgba(0,0,0,.42); }
+}
+.fd-chatwin.minimized.unreadPulse{
+  animation: fdUnreadPulse 1.8s ease-in-out infinite;
+}
+
+
   .fd-chat-hd{
     height:48px;
     display:flex;
@@ -2942,7 +3026,7 @@ useEffect(() => {
         <div class="fd-me-sub">我的好友</div>
       </div>
       <div class="fd-morewrap" style="margin-left:auto;">
-        <button class="fd-btn" id="fdMinBtn" title="縮小/展開">▣</button>
+        <button class="fd-btn" id="fdMinBtn" title="縮小/展開">+</button>
       </div>
     </div>
   </div>
@@ -2984,20 +3068,6 @@ useEffect(() => {
     }catch{ return ""; }
   }
 
-  function getDeviceId(){
-    try{
-      let id = (localStorage.getItem("op_device_id") || "").trim();
-      if(!id){
-        id = (crypto && crypto.randomUUID) ? crypto.randomUUID() : ("dev_" + Math.random().toString(16).slice(2) + Date.now().toString(16));
-        localStorage.setItem("op_device_id", id);
-      }
-      return id;
-    }catch(_){
-      return "dev_" + Math.random().toString(16).slice(2);
-    }
-  }
-
-
   const dock = q("#friendDock");
   const listEl = q("#fdList");
   const hintEl = q("#fdHint");
@@ -3010,6 +3080,12 @@ useEffect(() => {
   const meNameEl = q("#fdMeName");
   const openBtn  = q("#fdOpenBtn");
 
+  function updateDockMinIcon(){
+    // collapsed: + (展開) / expanded: - (縮小)
+    try{ if(minBtn) minBtn.textContent = dock.classList.contains("collapsed") ? "+" : "-"; }catch(e){}
+  }
+
+
   function renderMeMini(){
     const nm = String(me?.name || me?.displayName || localStorage.getItem("op_player_name") || localStorage.getItem("op_name") || "").trim();
     const av = Number(me?.avatar || localStorage.getItem("op_avatar") || localStorage.getItem("opAvatar") || 1) || 1;
@@ -3020,6 +3096,7 @@ useEffect(() => {
   if(openBtn){
     openBtn.addEventListener("click", ()=>{
       dock.classList.remove("collapsed");
+      updateDockMinIcon();
       try{ localStorage.setItem("op_fdock_collapsed", "0"); }catch{}
       try{ addInp && addInp.focus && addInp.focus(); }catch{}
     });
@@ -3074,6 +3151,9 @@ function __fdMarkRecent(m){
     if(c === "0") dock.classList.remove("collapsed");
   }catch{}
 
+  updateDockMinIcon();
+  renderMeMini();
+
   function setHint(msg){
     if(!msg){ hintEl.style.display="none"; hintEl.textContent=""; return; }
     hintEl.style.display="block";
@@ -3125,7 +3205,7 @@ function __fdMarkRecent(m){
       renderMeMini();
 
       // 更新自己的好友狀態（讓其他人看到你在start頁）
-      try{ sock.emit("PRESENCE_SET", { secret, deviceId: getDeviceId(), page: "start" }); }catch{}
+      try{ sock.emit("PRESENCE_SET", { secret, page: "start", deviceId: getDeviceId() }); }catch{}
       setHint("");
       fetchFriends();
     });
@@ -3455,7 +3535,15 @@ item.addEventListener("click", () => {
     w.badgeEl.textContent = String(Math.min(99, v));
   }
 
-  function appendMsgTo(peerId, m){
+  function scrollLogToBottom(peerId){
+    const w = openChats.get(peerId);
+    if(!w || !w.log) return;
+    // 避免縮小狀態/剛開啟時高度尚未計算，使用 raf + setTimeout 雙保險
+    try{ requestAnimationFrame(()=>{ try{ w.log.scrollTop = w.log.scrollHeight + 9999; }catch{} }); }catch{}
+    setTimeout(()=>{ try{ w.log.scrollTop = w.log.scrollHeight + 9999; }catch{} }, 0);
+  }
+
+function appendMsgTo(peerId, m){
     const w = openChats.get(peerId);
     if(!w) return;
     const div = document.createElement("div");
@@ -3466,7 +3554,7 @@ item.addEventListener("click", () => {
     t.textContent = fmtTime(m.ts);
     div.appendChild(t);
     w.log.appendChild(div);
-    w.log.scrollTop = w.log.scrollHeight + 9999;
+    scrollLogToBottom(peerId);
   }
 
   function loadHistory(peerId){
@@ -3482,7 +3570,9 @@ item.addEventListener("click", () => {
       }
       const msgs = res.messages || [];
       for(const m of msgs) appendMsgTo(peerId, m);
-    });
+    
+      scrollLogToBottom(peerId);
+  });
   }
 
   function sendMsg(peerId){
@@ -3521,7 +3611,11 @@ item.addEventListener("click", () => {
     if(w.minimized) w.el.classList.add("minimized");
     else w.el.classList.remove("minimized");
     if(!w.minimized){
+      scrollLogToBottom(peerId);
       setWinBadge(peerId, 0);
+      w.el.classList.remove("unreadPulse");
+      unread.set(peerId, 0);
+      renderFriends();
       setTimeout(()=> w.inp?.focus(), 0);
     }
   }
@@ -3594,6 +3688,9 @@ item.addEventListener("click", () => {
     unread.set(peerId, 0);
     renderFriends();
 
+    // 使用者主動開啟聊天 -> 視為已讀，停止提醒動畫
+    stopUnreadPulse(peerId);
+
     if(openChats.has(peerId)){
       // restore + focus + bring front
       bringToFront(peerId);
@@ -3622,17 +3719,75 @@ item.addEventListener("click", () => {
     setTimeout(()=> openChats.get(peerId)?.inp?.focus(), 0);
   }
 
+  function startUnreadPulse(peerId){
+    const w = openChats.get(peerId);
+    if(!w?.el) return;
+    w.el.classList.add("unreadPulse");
+  }
+  function stopUnreadPulse(peerId){
+    const w = openChats.get(peerId);
+    if(!w?.el) return;
+    w.el.classList.remove("unreadPulse");
+  }
+
+  // 當收到未讀訊息時：自動開「縮小聊天室」並慢慢忽暗忽明提醒
+  function openChatAuto(peerId){
+    peerId = Number(peerId);
+    if(!Number.isFinite(peerId) || peerId<=0) return;
+
+    const peer =
+      friends.find(x => Number(x.userId) === peerId) ||
+      { userId: peerId, name: "好友", avatar: 1, online: false };
+
+    if(openChats.has(peerId)){
+      const w = openChats.get(peerId);
+      w.peer = peer;
+      updateWinHeader(peerId);
+
+      if(!w.minimized) toggleMin(peerId);
+
+      const cnt = Math.max(1, Number(unread.get(peerId)||0) || 0);
+      setWinBadge(peerId, cnt);
+      startUnreadPulse(peerId);
+      return;
+    }
+
+    const MAX_OPEN = 4;
+    if(chatOrder.length >= MAX_OPEN){
+      const kick = chatOrder.shift();
+      if(kick != null) closeChat(kick);
+    }
+
+    const el = createChatWindow(peer);
+    tray.appendChild(el);
+    chatOrder.push(peerId);
+
+    bringToFront(peerId);
+
+    const w = openChats.get(peerId);
+    if(w && !w.minimized) toggleMin(peerId);
+
+    loadHistory(peerId);
+
+    const cnt = Math.max(1, Number(unread.get(peerId)||0) || 0);
+    setWinBadge(peerId, cnt);
+    startUnreadPulse(peerId);
+  }
+
+
   // click anywhere on collapsed dock to expand
   dock.addEventListener("click", (e) => {
     if(dock.classList.contains("collapsed")){
       if(e.target && (e.target.id === "fdMinBtn")) return;
       dock.classList.remove("collapsed");
       try{ localStorage.setItem("op_fdock_collapsed", "0"); }catch{}
+      updateDockMinIcon();
     }
   });
 
   minBtn.addEventListener("click", () => {
     dock.classList.toggle("collapsed");
+    updateDockMinIcon();
     renderMeMini();
     try{ localStorage.setItem("op_fdock_collapsed", dock.classList.contains("collapsed") ? "1" : "0"); }catch{}
   });
@@ -3670,6 +3825,26 @@ item.addEventListener("click", () => {
         }catch{}
       });
     }
+
+    // ✅ 被擠下線：同帳號在別的裝置登入時，本頁要立刻退回 start（並清掉自動回房記錄）
+    if(!sock.__session_kick_wired){
+      sock.__session_kick_wired = true;
+      sock.on("SESSION_KICK", (info)=>{
+        try{
+          localStorage.setItem("op_kicked_reason", String(info?.reason||"takeover"));
+          // 清掉登入 + 回房資訊，避免無限回房
+          [
+            "op_secret","opSecret",
+            "op_resume_roomId","op_resume_nonce","op_resume_gameId",
+            "op_resume_endlock","op_resume_endAt","op_resume_done",
+            "op_gameEndlock_roomId","op_gameEndlock_until"
+          ].forEach(k=>{ try{ localStorage.removeItem(k); }catch{} });
+        }catch{}
+        try{ window.secret = ""; }catch{}
+        try{ if(window.socket) window.socket.disconnect(); }catch{}
+        location.href = "start.html?kicked=1";
+      });
+    }
     sock.on("FRIENDS_DIRTY", () => fetchFriends());
     sock.on("DM_NEW", (m) => {
       if(!isAuthed()) return;
@@ -3692,14 +3867,17 @@ item.addEventListener("click", () => {
         if(w?.minimized && Number(m.from) !== Number(me.userId)){
           const cur = Number(w.badgeEl.textContent||"0") || 0;
           setWinBadge(peerId, cur + 1);
+          startUnreadPulse(peerId);
         }else{
           setWinBadge(peerId, 0);
         }
       }else{
-        // dock unread badge
+        // dock unread badge + 自動跳出縮小聊天室提醒
         if(Number(m.from) !== Number(me.userId)){
-          unread.set(peerId, (unread.get(peerId)||0) + 1);
+          const next = (unread.get(peerId)||0) + 1;
+          unread.set(peerId, next);
           renderFriends();
+          openChatAuto(peerId);
         }
       }
     });
@@ -3718,9 +3896,94 @@ item.addEventListener("click", () => {
 
 <script>
 (function(){
+  // ✅ 斷線後重新登入 start：自動找回「我所在的房間」並直接接回去
+  // 依賴 server 的 RESUME_ROOM（用 secret 找房間），找到後會自動 JOIN_ROOM。
+  let tried = false;
+
+  function pickMe(){
+    const p = window.__cloudProfile || {};
+    const name =
+      String(p.playerName || localStorage.getItem('op_name') || localStorage.getItem('op_player_name') || 'P').trim() || 'P';
+    const avatar = Number(p.playerAvatar || localStorage.getItem('op_avatar') || localStorage.getItem('op_player_avatar') || 1) || 1;
+    const title = String(p.equippedTitle || '').trim();
+    const tier  = Number(p.equippedTier || 1) || 1;
+    return { name, avatar, title, tier };
+  }
+
+  function ensureSocket(){ return window.socket || null; }
+
+  function tick(){
+    if (tried) return;
+    const sock = ensureSocket();
+    if(!sock || !sock.connected){ return setTimeout(tick, 200); }
+    if(typeof window.__enterRoom !== 'function'){ return setTimeout(tick, 200); }
+
+    const st = String(window.__stageNow || '').trim();
+    if(!st || st === 'press' || st === 'auth' || st === 'boot'){ return setTimeout(tick, 200); }
+
+    // 若已經有邀請 pending join，就不要搶
+    const pending = String(sessionStorage.getItem('op_pending_join_room') || '').trim();
+    if (pending) { tried = true; return; }
+
+    const sec = String(localStorage.getItem('opSecret')||'').trim();
+    if(!sec){ tried = true; return; }
+
+    tried = true;
+    sock.timeout(3500).emit('RESUME_ROOM', { secret: sec }, (err, res)=>{
+      if(err || !res?.ok) return;
+      const roomId = String(res.roomId || '').trim();
+      if(!roomId) return;
+
+      // ✅ 防止「已結算房間」回到 start 又被自動續接（避免無限重複跳回結算）
+      const blockRoom = String(sessionStorage.getItem('op_resume_block_room')||'').trim();
+      const blockUntil = Number(sessionStorage.getItem('op_resume_block_until')||0) || 0;
+      if (blockRoom && blockRoom === roomId && (!blockUntil || Date.now() < blockUntil)){
+        try{
+          // 只清 pending，block 讓它依照 op_resume_block_until 自動過期
+          sessionStorage.removeItem('op_pending_join_room');
+          sessionStorage.removeItem('op_pending_join_via');
+        }catch(_){ }
+        return;
+      }
+
+      // 記錄一下來源（可選），並讓後續 UI 可用
+      try{ sessionStorage.setItem('op_pending_join_room', roomId); sessionStorage.setItem('op_pending_join_via', 'resume'); }catch(_){ }
+
+      const me = pickMe();
+      try{
+        // wantNav=true：如果房間已經在 playing，server 會補送 nav_game，直接跳回 game.html
+        sock.emit('JOIN_ROOM', { roomId, displayName: me.name, avatar: me.avatar, title: me.title, titleTier: me.tier, secret: sec, wantNav: true });
+        window.__enterRoom(roomId, { host:false });
+
+        // 這裡先不清 pendingJoin，讓你如果中途 reload 還能再接一次；
+        // 等真的成功進 lobby/nav_game 後，原本的 autoJoin 也會幫你清。
+      }catch(e){
+        console.warn('[resumeJoin] failed', e);
+      }
+    });
+  }
+
+  tick();
+})();
+</script>
+
+<script>
+(function(){
   // ✅ 從其他頁面接受邀請後，會先把 roomId 放在 sessionStorage，跳回 start.html
   const roomId = String(sessionStorage.getItem('op_pending_join_room') || '').trim();
   if(!roomId) return;
+
+  // ✅ 若這個房間已經被標記為「剛結算完，不要再自動續接」，就直接清掉 pending
+  const blockRoom = String(sessionStorage.getItem('op_resume_block_room')||'').trim();
+  const blockUntil = Number(sessionStorage.getItem('op_resume_block_until')||0) || 0;
+  if (blockRoom && blockRoom === roomId && (!blockUntil || Date.now() < blockUntil)){
+    try{
+      // 只清 pending，block 讓它依照 op_resume_block_until 自動過期
+      sessionStorage.removeItem('op_pending_join_room');
+      sessionStorage.removeItem('op_pending_join_via');
+    }catch(_){ }
+    return;
+  }
   // 注意：不要在 React 初始化前清掉 pendingJoin，否則會回到「按任意鍵開始」。
 
   function pickMe(){
@@ -3754,7 +4017,8 @@ item.addEventListener("click", () => {
     const me = pickMe();
     try{
       try{ window.__pendingJoinActive = true; }catch{}
-      sock.emit('JOIN_ROOM', { roomId, displayName: me.name, avatar: me.avatar, title: me.title, titleTier: me.tier, secret: sec });
+      // wantNav=true：若你被邀請時房間已經開始了，也能直接跳回 game
+      sock.emit('JOIN_ROOM', { roomId, displayName: me.name, avatar: me.avatar, title: me.title, titleTier: me.tier, secret: sec, wantNav: true });
       window.__enterRoom(roomId, { host:false });
       // ✅ 這時才清掉 pendingJoin（確保已跳過 press 並開始自動加入）
       try{ sessionStorage.removeItem('op_pending_join_room'); sessionStorage.removeItem('op_pending_join_via'); }catch(_){ }
