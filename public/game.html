@@ -2392,6 +2392,86 @@ const el = {
   nextRound: document.getElementById('btnNextRound'),
   cardDexBtn: document.getElementById('cardDexBtn'),
 };
+// ================= 棄牌區：滑鼠滾輪/觸控拖曳捲動（不用一定拉捲軸） =================
+(function initDiscardScrollUX(){
+  const box = el.discard;
+  if (!box) return;
+
+  // 讓觸控在此區塊可「用手指拖曳」水平捲動，但仍允許頁面垂直滑動
+  box.style.touchAction = 'pan-y';
+  box.style.cursor = 'grab';
+
+  // 滾輪：用垂直滾輪去推水平捲動（很多滑鼠只有 deltaY）
+  box.addEventListener('wheel', (ev)=>{
+    // 若已經在做水平滾動（觸控板 deltaX 明顯），就交給瀏覽器
+    const ax = Math.abs(ev.deltaX || 0);
+    const ay = Math.abs(ev.deltaY || 0);
+    if (ay > ax) {
+      box.scrollLeft += ev.deltaY; // 用 deltaY 推水平
+      ev.preventDefault();
+    }
+  }, { passive: false });
+
+  // 指標拖曳（滑鼠 + 觸控 + 筆）
+  let isDown = false;
+  let startX = 0;
+  let startLeft = 0;
+  let moved = false;
+  let pid = null;
+
+  const clear = ()=>{
+    isDown = false;
+    pid = null;
+    box.style.cursor = 'grab';
+  };
+
+  box.addEventListener('pointerdown', (ev)=>{
+    // 滑鼠只接受左鍵，觸控/筆沒有 button
+    if (typeof ev.button === 'number' && ev.button !== 0) return;
+
+    isDown = true;
+    moved = false;
+    pid = ev.pointerId;
+    startX = ev.clientX;
+    startLeft = box.scrollLeft;
+    box.style.cursor = 'grabbing';
+
+    try { box.setPointerCapture(pid); } catch {}
+  });
+
+  box.addEventListener('pointermove', (ev)=>{
+    if (!isDown) return;
+    const dx = ev.clientX - startX;
+    if (Math.abs(dx) > 2) moved = true;
+    box.scrollLeft = startLeft - dx;
+  });
+
+  box.addEventListener('pointerup', (ev)=>{
+    if (!isDown) return;
+
+    // 如果剛剛是「拖曳」，避免拖完後誤點到卡片（會觸發點擊）
+    if (moved) {
+      box.__discardDragJustHappened = true;
+      setTimeout(()=>{ box.__discardDragJustHappened = false; }, 0);
+    }
+
+    try { if (pid != null) box.releasePointerCapture(pid); } catch {}
+    clear();
+  });
+
+  box.addEventListener('pointercancel', ()=>{
+    try { if (pid != null) box.releasePointerCapture(pid); } catch {}
+    clear();
+  });
+
+  // 捕獲階段攔截點擊（只有在剛拖曳過才攔）
+  box.addEventListener('click', (ev)=>{
+    if (box.__discardDragJustHappened) {
+      ev.preventDefault();
+      ev.stopPropagation();
+    }
+  }, true);
+})();
 
 // === 卡片圖鑑 DOM 快取 ===
 const dexDom = {
