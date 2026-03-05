@@ -3330,6 +3330,18 @@ function __fdMarkRecent(m){
     return secret;
   }
 
+  function getDeviceId(){
+    try{
+      let did = localStorage.getItem("op_device_id");
+      if(did && String(did).length >= 8) return String(did);
+      did = (crypto?.randomUUID ? crypto.randomUUID() : (Date.now()+"-"+Math.random().toString(16).slice(2)));
+      localStorage.setItem("op_device_id", did);
+      return did;
+    }catch{
+      return "dev-"+Date.now();
+    }
+  }
+
   function isAuthed(){
     return !!(secret && me && me.userId);
   }
@@ -3339,7 +3351,7 @@ function __fdMarkRecent(m){
     ensureSecret();
     if(!sock){ setHint("好友/聊天：Socket 尚未連線"); return; }
     if(!secret){ setHint("好友/聊天：請先登入（缺少 opSecret）"); return; }
-    sock.timeout(12000).emit("SOCIAL_AUTH", { secret }, (err, res) => {
+    sock.timeout(12000).emit("SOCIAL_AUTH", { secret, deviceId: getDeviceId() }, (err, res) => {
       if(err || !res?.ok){
         setHint("好友/聊天：尚未登入（缺少 secret）");
         return;
@@ -3348,7 +3360,7 @@ function __fdMarkRecent(m){
       renderMeMini();
 
       // 更新自己的好友狀態（讓其他人看到你在result頁）
-      try{ sock.emit("PRESENCE_SET", { secret, page: "result" }); }catch{}
+      try{ sock.emit("PRESENCE_SET", { secret, page: "result", deviceId: getDeviceId() }); }catch{}
       setHint("");
       fetchFriends();
     });
@@ -3933,6 +3945,26 @@ function appendMsgTo(peerId, m){
           ensureSecret();
           if(secret) socialAuth();
         }catch{}
+      });
+    }
+
+    // ✅ 被擠下線：同帳號在別的裝置登入時，本頁要立刻退回 start（並清掉自動回房記錄）
+    if(!sock.__session_kick_wired){
+      sock.__session_kick_wired = true;
+      sock.on("SESSION_KICK", (info)=>{
+        try{
+          localStorage.setItem("op_kicked_reason", String(info?.reason||"takeover"));
+          // 清掉登入 + 回房資訊，避免無限回房
+          [
+            "op_secret","opSecret",
+            "op_resume_roomId","op_resume_nonce","op_resume_gameId",
+            "op_resume_endlock","op_resume_endAt","op_resume_done",
+            "op_gameEndlock_roomId","op_gameEndlock_until"
+          ].forEach(k=>{ try{ localStorage.removeItem(k); }catch{} });
+        }catch{}
+        try{ window.secret = ""; }catch{}
+        try{ if(window.socket) window.socket.disconnect(); }catch{}
+        location.href = "start.html?kicked=1";
       });
     }
     sock.on("FRIENDS_DIRTY", () => fetchFriends());
