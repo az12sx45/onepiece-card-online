@@ -1,574 +1,566 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>偉大航道爭霸戰｜新手互動教學</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>偉大航道爭霸戰｜新手導覽</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    :root{
-      --bg:#0a0d12;
-      --panel:#121821;
-      --panel2:#171f2b;
-      --gold:#f3c766;
-      --gold2:#8a6325;
-      --line:#2f3b4d;
-      --text:#eef3fb;
-      --muted:#9fb1c8;
-      --accent:#74d6ff;
-      --green:#8cf2b4;
-      --red:#ff8a8a;
-      --shadow:0 18px 45px rgba(0,0,0,.35);
-      --radius:18px;
+    :root{ --brand-rgb:245,158,11; --spot-x:50vw; --spot-y:50vh; --spot-w:240px; --spot-h:160px; }
+    html,body{height:100%;background:#0f1113;color:#eaecee;overflow-x:hidden}
+    body{
+      background:
+        radial-gradient(1200px 800px at 10% 20%, rgba(255,184,77,.06), transparent 60%),
+        radial-gradient(1200px 800px at 90% 80%, rgba(0,158,255,.05), transparent 60%),
+        linear-gradient(180deg,#0f1113 0%,#14171a 100%);
     }
-    *{box-sizing:border-box}
-    html,body{margin:0;background:
-      radial-gradient(circle at 20% 0%, rgba(84,128,255,.12), transparent 25%),
-      radial-gradient(circle at 100% 20%, rgba(255,181,68,.09), transparent 30%),
-      linear-gradient(180deg,#091018,#0c1017 35%,#0b0f14 100%);
-      color:var(--text);font-family:"Segoe UI","Noto Sans TC",Arial,sans-serif;}
-    body{min-height:100vh}
-    .shell{max-width:1480px;margin:0 auto;padding:20px}
-    .hero{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:16px}
-    .hero-left{display:flex;flex-direction:column;gap:8px}
-    .title{font-size:34px;font-weight:900;letter-spacing:1px}
-    .subtitle{color:var(--muted);font-size:15px;line-height:1.7;max-width:900px}
-    .hero-actions{display:flex;gap:10px;flex-wrap:wrap}
-    .btn{border:none;border-radius:14px;padding:12px 18px;font-weight:800;cursor:pointer;transition:.18s transform,.18s opacity,.18s box-shadow;background:#223043;color:#fff;box-shadow:var(--shadow)}
-    .btn:hover{transform:translateY(-1px)}
-    .btn.gold{background:linear-gradient(180deg,#ffd77b,#d39a31);color:#201505}
-    .btn.ghost{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12)}
-    .layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:16px}
-    .panel{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.015));border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);box-shadow:var(--shadow)}
-    .sidebar{padding:18px;display:flex;flex-direction:column;gap:14px;position:sticky;top:16px;height:fit-content}
-    .step-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(243,199,102,.14);border:1px solid rgba(243,199,102,.35);color:#ffe6a5;border-radius:999px;padding:6px 12px;font-weight:800;font-size:13px;width:fit-content}
-    .step-title{font-size:28px;font-weight:900;line-height:1.2}
-    .step-desc{color:var(--muted);line-height:1.8;font-size:15px}
-    .callout{background:rgba(116,214,255,.08);border:1px solid rgba(116,214,255,.24);border-radius:14px;padding:14px}
-    .callout h3{margin:0 0 8px;font-size:16px}
-    .callout p{margin:0;color:#d7e7f8;line-height:1.7;font-size:14px}
-    .tips{display:grid;gap:10px}
-    .tip{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}
-    .tip strong{display:block;margin-bottom:5px;color:#ffe2a0}
-    .progress{height:10px;border-radius:999px;background:#0b1016;border:1px solid rgba(255,255,255,.08);overflow:hidden}
-    .progress>div{height:100%;background:linear-gradient(90deg,#ffd979,#76dbff);width:0%;transition:width .25s ease}
-
-    .main{padding:14px}
-    .topbar{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:10px;margin-bottom:12px}
-    .top-pill{background:linear-gradient(180deg,#182231,#111924);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px 14px;position:relative;overflow:hidden;min-height:68px}
-    .top-pill::after{content:"";position:absolute;inset:auto -20% -60% auto;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle, rgba(255,255,255,.08), transparent 62%)}
-    .pill-label{font-size:12px;color:var(--muted);margin-bottom:5px}
-    .pill-value{font-size:18px;font-weight:900}
-    .board{display:grid;grid-template-columns:1.08fr 1.32fr .9fr;gap:12px;align-items:start}
-    .zone{position:relative;background:linear-gradient(180deg,#141c27,#101720);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:14px;min-height:160px;transition:box-shadow .18s ease,border-color .18s ease,transform .18s ease,opacity .18s ease}
-    .zone h4{margin:0 0 10px;font-size:15px;color:#ffe6a7;display:flex;justify-content:space-between;gap:10px;align-items:center}
-    .zone small{color:var(--muted);font-weight:500}
-    .zone.highlight{border-color:#ffd67a;box-shadow:0 0 0 2px rgba(255,214,122,.28), 0 0 24px rgba(255,214,122,.16)}
-    .zone.dim{opacity:.45;transform:scale(.995)}
-    .stack{display:flex;gap:12px;flex-wrap:wrap}
-    .mini-card,.disc-card,.hand-card{position:relative;border-radius:16px;border:1px solid rgba(255,255,255,.12);overflow:hidden}
-    .mini-card,.hand-card{width:120px;height:170px;background:linear-gradient(180deg,#2c4364,#162235)}
-    .disc-card{width:80px;height:112px;background:linear-gradient(180deg,#54412d,#1d1711)}
-    .card-head{position:absolute;inset:0 0 auto 0;padding:10px 11px;background:linear-gradient(180deg,rgba(255,255,255,.16),transparent);font-weight:900;font-size:13px}
-    .card-body{position:absolute;inset:42px 10px 12px 10px;border-radius:12px;border:1px dashed rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;text-align:center;padding:12px;color:#dce7f8;font-size:13px;line-height:1.6}
-    .card-footer{position:absolute;left:9px;right:9px;bottom:8px;font-size:11px;color:#d8e6ff;background:rgba(0,0,0,.25);padding:5px 7px;border-radius:8px}
-    .hand-row{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
-    .hand-card.selectable{outline:2px solid rgba(124,230,173,.48);box-shadow:0 0 18px rgba(124,230,173,.14)}
-    .hand-card.locked{opacity:.45}
-    .hand-card .choose-tag{position:absolute;right:8px;top:8px;background:#8cf2b4;color:#112318;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:900}
-    .players{display:grid;gap:10px}
-    .player{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;padding:10px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)}
-    .avatar{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(180deg,#4d6c8f,#223448);font-weight:900}
-    .p-name{font-weight:900}
-    .p-sub{font-size:12px;color:var(--muted);margin-top:2px}
-    .tag{padding:6px 9px;border-radius:999px;font-size:11px;font-weight:900;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05)}
-    .tag.turn{background:rgba(140,242,180,.16);color:#b9ffd0;border-color:rgba(140,242,180,.3)}
-    .tag.warn{background:rgba(255,138,138,.14);color:#ffc4c4;border-color:rgba(255,138,138,.28)}
-    .venue-card{padding:16px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,#3b2840,#17131c);min-height:120px;display:flex;flex-direction:column;justify-content:space-between}
-    .venue-name{font-size:20px;font-weight:900}
-    .venue-desc{font-size:13px;color:#e0d6ef;line-height:1.7}
-    .log{display:grid;gap:8px;max-height:220px;overflow:auto;padding-right:4px}
-    .log-item{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);font-size:13px;color:#d8e4f3;line-height:1.65}
-    .tools{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-    .tool{padding:14px;border-radius:14px;background:linear-gradient(180deg,#172131,#111824);border:1px solid rgba(255,255,255,.08);min-height:110px}
-    .tool .icon{font-size:24px;margin-bottom:8px}
-    .tool .name{font-weight:900;margin-bottom:6px}
-    .tool .desc{font-size:13px;color:var(--muted);line-height:1.65}
-    .overlay{position:absolute;z-index:4;max-width:290px;background:rgba(8,12,18,.96);border:1px solid rgba(255,214,122,.34);border-radius:16px;padding:14px 15px;box-shadow:0 18px 36px rgba(0,0,0,.46);display:none}
-    .overlay.show{display:block;animation:pop .18s ease}
-    .overlay .kicker{font-size:11px;color:#ffe6a8;font-weight:900;letter-spacing:.5px;margin-bottom:6px}
-    .overlay .ov-title{font-size:18px;font-weight:900;margin-bottom:7px}
-    .overlay .ov-desc{font-size:14px;line-height:1.75;color:#d9e4f4}
-    .overlay .ov-tip{margin-top:8px;color:#8cf2b4;font-size:12px;font-weight:800}
-    @keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-    .modal-wrap{position:relative}
-    .fake-modal{margin-top:10px;background:rgba(8,12,18,.88);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px;display:none}
-    .fake-modal.show{display:block}
-    .fake-modal h5{margin:0 0 10px;font-size:16px}
-    .modal-targets{display:flex;gap:10px;flex-wrap:wrap}
-    .target-btn{padding:10px 12px;border-radius:12px;background:#1a2636;border:1px solid rgba(255,255,255,.1);font-weight:800}
-    .footer-note{margin-top:14px;padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--muted);line-height:1.8}
-
-    @media (max-width:1200px){
-      .layout{grid-template-columns:1fr}
-      .sidebar{position:static}
-      .topbar{grid-template-columns:1fr 1fr}
-      .board{grid-template-columns:1fr}
-      .tools{grid-template-columns:1fr 1fr}
+    body::before{
+      content:''; position:fixed; inset:0; z-index:-1;
+      background:var(--venue-bg-url, none), radial-gradient(circle at center, rgba(0,0,0,.15), rgba(0,0,0,.35));
+      background-size:cover; background-position:center; background-repeat:no-repeat;
+      opacity:.9;
     }
-    @media (max-width:720px){
-      .shell{padding:12px}
-      .title{font-size:28px}
-      .step-title{font-size:24px}
-      .topbar,.tools{grid-template-columns:1fr}
-      .mini-card,.hand-card{width:105px;height:150px}
-      .disc-card{width:70px;height:96px}
+    .card{ background: rgba(16,20,24,.80); backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,.06); border-radius: 16px; }
+    .thumb{ width:68px; aspect-ratio:1242/1863; object-fit:cover; border-radius:10px; border:1px solid #2f353c; background:#0a0d10 }
+    .thumb-lg{ width:110px; aspect-ratio:1242/1863; object-fit:cover; border-radius:12px; border:1px solid #2f353c; background:#0a0d10 }
+    .thumb-xl{ width:min(22vw,190px); aspect-ratio:1242/1863; object-fit:cover; border-radius:14px; border:1px solid #2f353c; background:#0a0d10 }
+    .deck{ position:relative; width:120px; aspect-ratio:1242/1863; border-radius:14px; border:1px solid #2a2f35; overflow:hidden; box-shadow:0 12px 28px rgba(0,0,0,.45) }
+    .deck > img{ width:100%; height:100%; object-fit:cover; background:#0a0d10 }
+    .draw-hint{
+      position:absolute; right:150px; top:20%; transform:translateY(-50%); display:inline-flex; align-items:center; gap:4px;
+      padding:4px 10px; border-radius:999px; font-size:11px; line-height:1.1;
+      background: radial-gradient(circle at 0 0, rgba(250,250,210,.22), transparent 60%), radial-gradient(circle at 100% 100%, rgba(180,83,9,.60), transparent 65%), rgba(15,23,42,.92);
+      border:1px solid rgba(250,204,21,.85); color:#fefce8; text-shadow:0 1px 2px rgba(0,0,0,.7);
+      box-shadow: 0 0 0 1px rgba(15,23,42,.85), 0 0 12px 4px rgba(250,204,21,.55);
+      pointer-events:none; white-space:nowrap; z-index:5; animation:drawHintPulse 1.6s ease-in-out infinite;
+    }
+    @keyframes drawHintPulse {
+      0%,100% { transform: translateY(-50%) translateX(0); box-shadow:0 0 0 1px rgba(15,23,42,.85),0 0 10px 2px rgba(250,204,21,.35);} 
+      50% { transform: translateY(-50%) translateX(-4px); box-shadow:0 0 0 1px rgba(15,23,42,.85),0 0 18px 6px rgba(250,204,21,.7);} 
+    }
+    @keyframes breath { 0%,100%{ box-shadow:0 0 0 0 rgba(250,204,21,.15),0 0 0 1px rgba(255,255,255,.06);} 50%{ box-shadow:0 0 18px 2px rgba(250,204,21,.3),0 0 0 1px rgba(255,255,255,.14);} }
+    .panel-soft{ animation:breath 2.4s ease-in-out infinite; }
+    .venue-tile{ position:relative; border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,.08); background:#0b0f13; cursor:pointer; }
+    .venue-tile img{ width:100%; aspect-ratio:16/10; object-fit:cover; display:block; }
+    .venue-tile .label{ position:absolute; inset:auto 8px 8px 8px; font-size:11px; padding:4px 8px; border-radius:999px; background:rgba(0,0,0,.6); border:1px solid rgba(255,255,255,.1) }
+    .player-card{ background:transparent; border:1.5px solid rgba(255,255,255,.25); border-radius:14px; padding:10px; }
+    .player-card.current{ border-color: rgba(255,200,80,.85); box-shadow:0 0 10px rgba(255,200,80,.35); }
+    .player-card.offline{ opacity:.55; }
+    .avatar{ width:42px; height:42px; border-radius:999px; object-fit:cover; }
+    .log-item{ padding:6px 8px; border-radius:10px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.04); }
+    .btn-ui{ border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.06); color:#fff; border-radius:12px; padding:.55rem .9rem; transition:all .15s ease; }
+    .btn-ui:hover{ background:rgba(255,255,255,.12); }
+    .btn-main{ background:#fbbf24; color:#111827; border-color:#f59e0b; font-weight:700; }
+    .btn-main:hover{ background:#fcd34d; }
+
+    .spotlight-layer{ position:fixed; inset:0; pointer-events:none; z-index:150; }
+    .spotlight-hole{
+      position:absolute; left:var(--spot-x); top:var(--spot-y); width:var(--spot-w); height:var(--spot-h); transform:translate(-50%,-50%);
+      border-radius:22px; box-shadow:0 0 0 9999px rgba(0,0,0,.66), 0 0 0 2px rgba(251,191,36,.95), 0 0 34px rgba(251,191,36,.55);
+      transition:all .35s ease;
+    }
+    .guide-arrow{
+      position:absolute; left:var(--spot-x); top:calc(var(--spot-y) - var(--spot-h)/2 - 22px); transform:translateX(-50%);
+      color:#fde68a; font-size:28px; text-shadow:0 0 10px rgba(251,191,36,.6); animation:floaty 1.2s ease-in-out infinite;
+      transition:all .35s ease;
+    }
+    @keyframes floaty{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-6px)}}
+    .guide-card{
+      position:fixed; z-index:160; width:min(420px, calc(100vw - 24px));
+      background:rgba(8,12,18,.94); border:1px solid rgba(251,191,36,.45); border-radius:20px;
+      box-shadow:0 22px 40px rgba(0,0,0,.5), 0 0 22px rgba(251,191,36,.12);
+      backdrop-filter:blur(10px); transition:all .35s ease;
+    }
+    .guide-head{ background:linear-gradient(90deg, rgba(251,191,36,.18), rgba(251,191,36,.05)); border-bottom:1px solid rgba(251,191,36,.18); }
+    .guide-badge{ background:rgba(251,191,36,.16); color:#fde68a; border:1px solid rgba(251,191,36,.25); }
+
+    .pulse-ring{ position:relative; }
+    .pulse-ring::after{ content:''; position:absolute; inset:-8px; border-radius:18px; border:2px solid rgba(251,191,36,.8); animation:ring 1.8s ease-out infinite; }
+    @keyframes ring{0%{opacity:.9; transform:scale(.96)}100%{opacity:0; transform:scale(1.08)}}
+
+    .card-dex-overlay{ position:fixed; inset:0; z-index:120; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.7); }
+    .card-dex-overlay.open{ display:flex; }
+
+    .step-dot{ width:8px; height:8px; border-radius:999px; background:rgba(255,255,255,.25); }
+    .step-dot.on{ background:#fbbf24; box-shadow:0 0 12px rgba(251,191,36,.7); }
+
+    .hide-for-step{ display:none !important; }
+
+    @media (max-width: 1023px){
+      .draw-hint{ right:135px; top:14%; }
+    }
+    @media (max-width: 768px){
+      .guide-arrow{ display:none; }
+      .thumb-xl{ width:42vw; }
+      .draw-hint{ right:122px; top:12%; }
     }
   </style>
 </head>
 <body>
-  <div class="shell">
-    <div class="hero">
-      <div class="hero-left">
-        <div class="title">偉大航道爭霸戰｜互動式新手教學</div>
-        <div class="subtitle">
-          這不是純文字規則頁，而是直接用<strong>接近遊戲內畫面</strong>帶你跑一次流程。按「下一步」就會一步一步演示：輪到你時要做什麼、每個區塊是幹嘛的、看到提示該怎麼操作。
+  <header class="sticky top-0 z-40 bg-[#101418]/80 backdrop-blur border-b border-[#1c2229]">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
+      <div class="font-semibold tracking-wide">偉大航道爭霸戰</div>
+      <div class="hidden text-xs px-2 py-1 rounded border border-neutral-700">房號：<span>教學</span></div>
+      <div class="hidden text-xs px-2 py-1 rounded border border-neutral-700">連線：<span class="text-emerald-400">guide</span></div>
+      <div id="topChest" class="text-xs px-2 py-1 rounded border border-neutral-700">寶箱金幣剩餘：<span id="chestLbl">30</span> 枚</div>
+      <button id="cardDexBtn" class="px-2 py-1 rounded border border-[#374151] bg-[#111827]/80 text-[11px] tracking-wide hover:bg-[#020617] hover:border-[#f97373] hover:text-[#fee2e2] transition-colors duration-150">卡片圖鑑</button>
+      <div class="ml-auto flex items-center gap-2" id="bgmArea">
+        <div class="flex items-center gap-2 px-2 py-1 rounded-lg border border-[#2a2f35]">
+          <button class="btn-ui !px-3 !py-2 text-xs">◀</button>
+          <button class="btn-ui !px-3 !py-2 text-xs">▶</button>
+          <button class="btn-ui !px-3 !py-2 text-xs">🔀</button>
+          <div class="text-xs opacity-90">未播放</div>
         </div>
-      </div>
-      <div class="hero-actions">
-        <button class="btn ghost" id="prevBtn">← 上一步</button>
-        <button class="btn gold" id="nextBtn">下一步 →</button>
-        <button class="btn" id="restartBtn">重新教學</button>
       </div>
     </div>
+  </header>
 
-    <div class="layout">
-      <aside class="sidebar panel">
-        <div class="step-badge" id="stepBadge">STEP 1 / 7</div>
-        <div class="step-title" id="stepTitle">先認識畫面區塊</div>
-        <div class="step-desc" id="stepDesc"></div>
-        <div class="progress"><div id="progressBar"></div></div>
-
-        <div class="callout">
-          <h3>你這頁會學到什麼</h3>
-          <p id="stepGoal">知道主畫面各區塊用途，不會一進遊戲就看不懂。</p>
+  <main class="max-w-7xl mx-auto px-3 md:px-4 py-4 grid gap-4 lg:grid-cols-[1.2fr_.8fr]">
+    <section class="space-y-3">
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+        <div id="venuesCard" class="card p-3 md:col-span-2 panel-soft">
+          <div class="text-sm mb-2 opacity-80">本局場地</div>
+          <div id="venues" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2"></div>
         </div>
-
-        <div class="tips" id="tipList"></div>
-      </aside>
-
-      <main class="main panel modal-wrap">
-        <div class="topbar">
-          <div class="top-pill" id="pill-room">
-            <div class="pill-label">房間 / 回合資訊</div>
-            <div class="pill-value" id="roomInfo">房號 H72JUG｜第 3 回合</div>
+        <div id="deckCard" class="card p-3 flex items-center justify-between gap-3 relative panel-soft">
+          <div class="text-sm opacity-80">牌堆 <span id="deckCnt" class="ml-2 px-1.5 py-0.5 rounded border border-[#2a2f35] text-amber-300 font-semibold">18</span></div>
+          <button id="btnDraw" class="deck">
+            <img id="deckImg" src="images/cards/back.webp" alt="deck" onerror="this.src='';this.style.background='#1f2937'"/>
+          </button>
+          <div id="drawHint" class="draw-hint"><span>👉</span><span>請抽牌</span></div>
+        </div>
+        <div id="discardCard" class="card p-3 md:col-span-3 panel-soft">
+          <div class="flex items-center justify-between mb-2">
+            <div class="text-sm opacity-80">棄牌</div>
+            <button class="hidden px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black text-sm">下一局 ▶</button>
           </div>
-          <div class="top-pill" id="pill-chest">
-            <div class="pill-label">寶箱金幣</div>
-            <div class="pill-value">8 / 10</div>
+          <div id="discard" class="flex gap-2 overflow-x-auto"></div>
+        </div>
+      </div>
+
+      <div id="myPlayZone" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <button id="playHand" class="border border-[#2f353c] rounded-xl overflow-hidden bg-black/20 p-2">
+          <img id="imgHand" class="thumb-xl mx-auto" src="images/cards/8.webp" alt="hand" onerror="this.src='';this.style.height='180px';this.style.background='#111827'"/>
+          <div class="text-xs opacity-75 mt-2">原本手牌</div>
+        </button>
+        <button id="playDrawn" class="border border-[#2f353c] rounded-xl overflow-hidden bg-black/20 p-2 pulse-ring">
+          <img id="imgDrawn" class="thumb-xl mx-auto" src="images/cards/5.webp" alt="drawn" onerror="this.src='';this.style.height='180px';this.style.background='#111827'"/>
+          <div class="text-xs text-amber-300 mt-2">剛抽到的牌</div>
+        </button>
+      </div>
+
+      <div id="logCard" class="card p-3 panel-soft">
+        <div class="flex items-center justify-between mb-2">
+          <div class="text-sm opacity-80">對局日誌</div>
+          <div class="text-xs text-neutral-400">輪到：<span id="turnLbl">你</span>｜階段：<span id="stepLbl">抽牌</span></div>
+        </div>
+        <ol id="logBox" class="text-sm space-y-1 list-decimal pl-5 max-h-72 overflow-auto"></ol>
+      </div>
+    </section>
+
+    <aside class="space-y-3">
+      <div id="playersCard" class="card p-3 panel-soft">
+        <div class="text-sm mb-2 opacity-80">玩家</div>
+        <div id="players" class="grid gap-2"></div>
+      </div>
+    </aside>
+  </main>
+
+  <div id="cardDexOverlay" class="card-dex-overlay">
+    <div class="w-[min(1200px,96vw)] max-h-[92vh] rounded-2xl border border-slate-600/80 bg-[#050914]/95 shadow-2xl backdrop-blur-md overflow-hidden flex flex-col">
+      <div class="flex items-center justify-between px-4 py-2 border-b border-slate-700/70 bg-gradient-to-r from-slate-900/80 via-slate-800/80 to-slate-900/80 text-xs md:text-sm">
+        <div class="font-semibold tracking-wide">卡片圖鑑（教學示範）</div>
+        <button id="cardDexClose" class="btn-ui !text-[11px] !py-1 !px-2">關閉</button>
+      </div>
+      <div class="grid md:grid-cols-[1.2fr_.8fr] gap-4 p-4 overflow-auto">
+        <div id="cardDexGrid" class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-5 lg:grid-cols-6 gap-2"></div>
+        <div class="border-t md:border-t-0 md:border-l border-slate-700/70 pt-3 md:pt-0 md:pl-4">
+          <div id="dexEmpty" class="text-[11px] md:text-xs text-slate-300/80 italic">點左邊任一張卡片，可以查看大圖與強化版本。</div>
+          <div id="dexPreview" class="hidden">
+            <div id="dexTitle" class="text-sm font-semibold mb-2"></div>
+            <div class="grid grid-cols-2 gap-2 mb-2">
+              <div class="flex flex-col items-center">
+                <div class="text-[10px] md:text-xs mb-1 opacity-75">一般</div>
+                <img id="dexBase" class="w-full max-w-[340px] rounded-lg border border-slate-600/80 shadow-lg bg-black/40 object-contain"/>
+              </div>
+              <div class="flex flex-col items-center">
+                <div class="text-[10px] md:text-xs mb-1 opacity-75">強化</div>
+                <img id="dexEnh" class="w-full max-w-[340px] rounded-lg border border-rose-500/80 shadow-lg bg-black/40 object-contain"/>
+              </div>
+            </div>
+            <div id="dexDesc" class="text-[11px] text-slate-300/75"></div>
           </div>
-          <div class="top-pill" id="pill-dex">
-            <div class="pill-label">卡片圖鑑</div>
-            <div class="pill-value">可查看全部卡牌</div>
-          </div>
-          <div class="top-pill" id="pill-bgm">
-            <div class="pill-label">音樂 / 音量</div>
-            <div class="pill-value">可切歌、暫停、調整音量</div>
-          </div>
         </div>
-
-        <div class="board">
-          <section>
-            <div class="zone" id="zone-venue">
-              <h4>場地區 <small>本局可能會強化特定卡片</small></h4>
-              <div class="venue-card">
-                <div>
-                  <div class="venue-name" id="venueName">德雷斯羅薩鬥技場</div>
-                  <div class="venue-desc" id="venueDesc">在這個場地，部分卡牌會出現「強化版」效果，威力更強。</div>
-                </div>
-                <div class="tag">記得看卡片是基本版還是強化版</div>
-              </div>
-            </div>
-
-            <div class="zone" id="zone-deck" style="margin-top:12px;">
-              <h4>牌堆 / 抽牌區 <small>輪到你且在抽牌階段才可按</small></h4>
-              <div class="stack">
-                <div class="mini-card">
-                  <div class="card-head">牌堆</div>
-                  <div class="card-body" id="deckState">現在輪到你抽牌</div>
-                  <div class="card-footer" id="deckHint">提示：看到「請抽牌」就按這裡</div>
-                </div>
-                <div class="mini-card" style="background:linear-gradient(180deg,#3a2f56,#1c1730)">
-                  <div class="card-head">抽到的牌</div>
-                  <div class="card-body" id="drawPreview">抽牌後，這裡會出現新牌</div>
-                  <div class="card-footer">之後要和原本手牌二選一</div>
-                </div>
-              </div>
-            </div>
-
-            <div class="zone" id="zone-discard" style="margin-top:12px;">
-              <h4>棄牌堆 <small>可看最近打出的牌</small></h4>
-              <div class="stack">
-                <div class="disc-card"><div class="card-head">香吉士</div><div class="card-body">剛打出</div></div>
-                <div class="disc-card"><div class="card-head">娜美</div><div class="card-body">上一張</div></div>
-                <div class="disc-card"><div class="card-head">喬巴</div><div class="card-body">更早</div></div>
-              </div>
-            </div>
-          </section>
-
-          <section>
-            <div class="zone" id="zone-play">
-              <h4>你的出牌區 <small>抽完後，從兩張牌選一張打出</small></h4>
-              <div class="hand-row">
-                <div class="hand-card selectable" id="handCard">
-                  <div class="card-head">原本手牌｜魯夫</div>
-                  <div class="choose-tag" id="handTag">可選擇</div>
-                  <div class="card-body" id="handBody">這是你原本手上的牌。<br>抽完後，它會跟新抽到的牌一起給你二選一。</div>
-                  <div class="card-footer" id="handFoot">通常按一下就能打出</div>
-                </div>
-                <div class="hand-card locked" id="drawnCard" style="background:linear-gradient(180deg,#3c335a,#17132a)">
-                  <div class="card-head">新抽的牌｜索隆</div>
-                  <div class="card-body" id="drawnBody">現在還沒抽牌，所以這張先當示意。</div>
-                  <div class="card-footer" id="drawnFoot">抽牌後才會變成真正可選</div>
-                </div>
-              </div>
-              <div class="fake-modal" id="fakeModal">
-                <h5>指定目標</h5>
-                <div class="modal-targets">
-                  <div class="target-btn">指定 玩家A</div>
-                  <div class="target-btn">指定 玩家B</div>
-                  <div class="target-btn">指定 自己</div>
-                </div>
-              </div>
-            </div>
-
-            <div class="zone" id="zone-log" style="margin-top:12px;">
-              <h4>對局日誌 <small>看技能結果、失敗原因、誰打了什麼</small></h4>
-              <div class="log" id="logList">
-                <div class="log-item">第 3 回合開始，輪到你行動。</div>
-                <div class="log-item">如果效果有指定目標、確認框、是/否選擇，這裡通常也會寫結果。</div>
-                <div class="log-item">看不懂剛剛發生什麼時，先看這裡。</div>
-              </div>
-            </div>
-          </section>
-
-          <section>
-            <div class="zone" id="zone-players">
-              <h4>玩家列表 <small>看誰存活、誰斷線、現在輪到誰</small></h4>
-              <div class="players" id="playerList">
-                <div class="player">
-                  <div class="avatar">你</div>
-                  <div><div class="p-name">曜瑋</div><div class="p-sub">你的角色區 / 手牌資訊</div></div>
-                  <div class="tag turn">你的回合</div>
-                </div>
-                <div class="player">
-                  <div class="avatar">A</div>
-                  <div><div class="p-name">伊多</div><div class="p-sub">存活中，等待你操作</div></div>
-                  <div class="tag">待機</div>
-                </div>
-                <div class="player">
-                  <div class="avatar">B</div>
-                  <div><div class="p-name">CPU-1</div><div class="p-sub">如果斷線太久，可能會被 CPU 接管</div></div>
-                  <div class="tag warn">斷線示意</div>
-                </div>
-              </div>
-            </div>
-
-            <div class="zone" id="zone-tools" style="margin-top:12px;">
-              <h4>常用功能 <small>不是戰鬥操作，但新手很常需要</small></h4>
-              <div class="tools">
-                <div class="tool" id="tool-dex">
-                  <div class="icon">📘</div>
-                  <div class="name">卡片圖鑑</div>
-                  <div class="desc">查看全部卡牌、基本版/強化版效果與對應場地。</div>
-                </div>
-                <div class="tool" id="tool-bgm">
-                  <div class="icon">🎵</div>
-                  <div class="name">音樂控制</div>
-                  <div class="desc">切歌、暫停播放、調整音量與隨機播放。</div>
-                </div>
-                <div class="tool" id="tool-discard">
-                  <div class="icon">🗂️</div>
-                  <div class="name">棄牌觀察</div>
-                  <div class="desc">回頭確認最近出過哪些牌，推測別人可能剩什麼。</div>
-                </div>
-                <div class="tool" id="tool-log">
-                  <div class="icon">📜</div>
-                  <div class="name">對局日誌</div>
-                  <div class="desc">看技能發生過程、回合變化與失敗提示。</div>
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
-
-        <div class="overlay" id="overlayBox">
-          <div class="kicker" id="ovKicker">教學說明</div>
-          <div class="ov-title" id="ovTitle">標題</div>
-          <div class="ov-desc" id="ovDesc">內容</div>
-          <div class="ov-tip" id="ovTip"></div>
-        </div>
-
-        <div class="footer-note" id="footerNote">
-          這頁是<strong>模擬教學</strong>：目的不是讓你真的打一局，而是讓新手看懂「現在該點哪裡」「各區塊是幹嘛的」。看完後再進正式對局，理解會快很多。
-        </div>
-      </main>
+      </div>
     </div>
   </div>
 
-  <script>
-    const $ = (s) => document.querySelector(s);
-    const $$ = (s) => [...document.querySelectorAll(s)];
+  <div class="spotlight-layer" id="spotlightLayer" aria-hidden="true">
+    <div class="spotlight-hole"></div>
+    <div class="guide-arrow">⬇</div>
+  </div>
 
-    const steps = [
-      {
-        title: '先認識畫面區塊',
-        badge: 'STEP 1 / 7',
-        goal: '知道主畫面各區塊用途，不會一進遊戲就看不懂。',
-        desc: '先不用背規則，先知道哪些地方最常看。左邊通常是場地、牌堆、棄牌堆；中間是你自己的出牌區與日誌；右邊是玩家列表與常用功能。',
-        tips: [
-          ['先看哪裡', '輪到你時，先看牌堆區有沒有抽牌提示。'],
-          ['再看哪裡', '抽完牌後，看中間的兩張牌，選一張打出。'],
-          ['看不懂時', '對局日誌通常會告訴你剛剛發生了什麼。']
-        ],
-        highlight: ['#zone-venue','#zone-deck','#zone-play','#zone-log','#zone-players'],
-        overlay: {
-          anchor: '#zone-play',
-          title: '這頁的核心區域',
-          desc: '新手最先學會的其實只有三件事：看回合提示、抽牌、兩張選一張。其他功能之後再慢慢熟。',
-          tip: '只要會這三步，就已經能正常開始玩。'
-        },
-        apply(){
-          $('#deckState').innerHTML = '現在輪到你抽牌';
-          $('#deckHint').textContent = '提示：看到「請抽牌」就按這裡';
-          $('#drawPreview').innerHTML = '抽牌後，這裡會出現新牌';
-          $('#drawnCard').classList.add('locked');
-          $('#drawnCard').classList.remove('selectable');
-          $('#fakeModal').classList.remove('show');
-          $('#handTag').textContent = '可選擇';
-          $('#roomInfo').textContent = '房號 H72JUG｜第 3 回合';
-        }
-      },
-      {
-        title: '輪到你時，先抽牌',
-        badge: 'STEP 2 / 7',
-        goal: '知道什麼時候可以抽牌，避免站著不知道下一步。',
-        desc: '你的遊戲流程是先進入抽牌階段。當輪到自己而且在抽牌階段時，牌堆按鈕才會可用，而且畫面會出現提示。遊戲前端也是這樣做的：只有自己回合、在 draw 階段、沒被麻痺時，牌堆才可按，並顯示抽牌提示。fileciteturn6file1L29-L48',
-        tips: [
-          ['可以抽牌的條件', '必須是你的回合，而且目前階段是抽牌。'],
-          ['不能抽牌時', '牌堆會變灰或不給按，代表現在不是這一步。'],
-          ['被麻痺時', '會直接跳過抽牌，不用自己亂按。']
-        ],
-        highlight: ['#zone-deck'],
-        overlay: {
-          anchor: '#zone-deck',
-          title: '看到抽牌提示就按牌堆',
-          desc: '不要先去按中間的牌。正常流程一定是先抽，再從兩張裡選一張打出。',
-          tip: '新手最常卡住的地方，就是還沒抽就開始找出牌按鈕。'
-        },
-        apply(){
-          $('#deckState').innerHTML = '<span style="color:#8cf2b4;font-weight:900">請抽牌</span>';
-          $('#deckHint').textContent = '現在這一步就是點牌堆';
-          $('#drawPreview').innerHTML = '抽完後會翻出一張新牌';
-          $('#handTag').textContent = '先不要按';
-          $('#roomInfo').textContent = '房號 H72JUG｜你的抽牌階段';
-        }
-      },
-      {
-        title: '抽完後，兩張選一張打出',
-        badge: 'STEP 3 / 7',
-        goal: '知道中間兩張卡是二選一，不是兩張都能出。',
-        desc: '抽牌後會進入 choose 階段，這時中間的出牌區才會出現兩張可選牌。你的前端現在就是用這個規則：只有 turnStep 是 choose 且輪到自己時，才顯示 playZone，並把原本手牌與新抽到的牌都畫出來。fileciteturn6file0L34-L63',
-        tips: [
-          ['最重要觀念', '你不是手上兩張都能出，是二選一。'],
-          ['怎麼選', '看哪張效果現在比較有利，就按哪張。'],
-          ['另一張去哪', '通常會成為你保留的那張，等下回合再搭配。']
-        ],
-        highlight: ['#zone-play'],
-        overlay: {
-          anchor: '#zone-play',
-          title: '中間兩張 = 二選一',
-          desc: '左邊是你原本的手牌，右邊是剛抽到的新牌。這一步只要做一個決定：哪張現在打最賺。',
-          tip: '先不要急著背所有卡，先學會比較兩張哪張更適合當下局面。'
-        },
-        apply(){
-          $('#deckState').innerHTML = '抽牌完成';
-          $('#deckHint').textContent = '下一步：從中間兩張牌選一張';
-          $('#drawPreview').innerHTML = '你抽到：索隆';
-          $('#drawnCard').classList.remove('locked');
-          $('#drawnCard').classList.add('selectable');
-          $('#drawnBody').innerHTML = '這張是剛抽到的新牌。<br>現在它也能按。';
-          $('#drawnFoot').textContent = '兩張擇一打出';
-          $('#handBody').innerHTML = '這是你原本手上的牌。<br>現在也可按。';
-          $('#handTag').textContent = '二選一';
-          $('#roomInfo').textContent = '房號 H72JUG｜你的選牌階段';
-        }
-      },
-      {
-        title: '有些牌打出後，還要再做選擇',
-        badge: 'STEP 4 / 7',
-        goal: '看懂指定目標、確認框、是/否選擇，不會以為遊戲壞掉。',
-        desc: '不是每張牌按下去就直接結束。有些卡會要求你指定目標、確認是否發動、選數字或選其中幾張。你現在的前端就有這種互動視窗，例如多選、確認框、指定目標類型的 modal。fileciteturn6file2L31-L52',
-        tips: [
-          ['看到彈窗代表什麼', '不是卡住，是這張卡還在等你補完操作。'],
-          ['常見補操作', '指定一名玩家、確認是否發動、選擇覆蓋或取消。'],
-          ['怎麼判斷', '先看彈窗標題，再看日誌說明。']
-        ],
-        highlight: ['#zone-play','#zone-log'],
-        overlay: {
-          anchor: '#fakeModal',
-          title: '這就是技能補操作',
-          desc: '像指定目標、確認框、是/否選擇，都是技能流程的一部分。不是按錯，也不是系統沒反應。',
-          tip: '有彈窗時，先完成彈窗再看回合會怎麼往下跑。'
-        },
-        apply(){
-          $('#fakeModal').classList.add('show');
-          $('#deckHint').textContent = '有些卡打出後，會要求你再選一次目標';
-          $('#logList').innerHTML = `
-            <div class="log-item">你打出了一張需要指定目標的卡。</div>
-            <div class="log-item">系統跳出彈窗，請你選擇要作用到哪位玩家。</div>
-            <div class="log-item">完成這一步後，技能才會真正結算。</div>`;
-        }
-      },
-      {
-        title: '看場地，判斷是不是強化版',
-        badge: 'STEP 5 / 7',
-        goal: '學會看場地與卡牌強化，不會只照基本效果玩。',
-        desc: '你的卡片有基本版和強化版，而且圖鑑頁面也能同時看一般與強化說明。現在前端的圖鑑就是依卡片 id 顯示一般版、強化版與對應場地。fileciteturn6file4L47-L76',
-        tips: [
-          ['先看場地', '場地決定哪些卡會變強。'],
-          ['再看圖鑑', '不確定時，直接開圖鑑看基本版 / 強化版差別。'],
-          ['新手觀念', '不要只背卡名，還要知道它在哪些場地會更兇。']
-        ],
-        highlight: ['#zone-venue','#tool-dex','#pill-dex'],
-        overlay: {
-          anchor: '#zone-venue',
-          title: '場地不是裝飾，是規則的一部分',
-          desc: '很多玩家會忽略場地，結果明明同一張牌，這局卻比平常更強。場地和圖鑑要一起看。',
-          tip: '玩熟後，你會開始因為場地去調整保留哪張牌。'
-        },
-        apply(){
-          $('#venueName').textContent = '德雷斯羅薩鬥技場';
-          $('#venueDesc').textContent = '這局有些卡會進入強化狀態，所以圖鑑與卡片描述要注意是不是強化版。';
-          $('#fakeModal').classList.remove('show');
-          $('#logList').innerHTML = `
-            <div class="log-item">本局場地：德雷斯羅薩鬥技場。</div>
-            <div class="log-item">部分卡牌在這局會變成強化版，效果比平常更強。</div>
-            <div class="log-item">不確定時，可以直接打開卡片圖鑑確認。</div>`;
-        }
-      },
-      {
-        title: '學會看其他功能：圖鑑、音樂、棄牌、日誌、玩家狀態',
-        badge: 'STEP 6 / 7',
-        goal: '知道各種功能按鈕是做什麼，不再覺得畫面很亂。',
-        desc: '正式操作雖然只有抽牌和出牌，但你遊戲裡還有很多輔助功能。像音樂控制可以切歌與調音量；圖鑑可查全部卡牌；玩家列表能看誰斷線、誰當前回合；棄牌堆與日誌則是理解局勢的關鍵。你的前端也確實有卡片圖鑑與 BGM 控制功能。fileciteturn6file3L21-L39 fileciteturn6file4L1-L36',
-        tips: [
-          ['卡片圖鑑', '不懂卡片先查，不用硬背。'],
-          ['棄牌堆', '可回頭看最近出了哪些牌。'],
-          ['玩家列表', '可以觀察誰斷線、誰還活著、輪到誰。']
-        ],
-        highlight: ['#zone-tools','#pill-bgm','#zone-discard','#zone-log','#zone-players'],
-        overlay: {
-          anchor: '#zone-tools',
-          title: '這些都是幫你看懂局勢的工具',
-          desc: '很多新手只盯著中間兩張牌，但真正會玩的玩家，會同時看棄牌堆、日誌和玩家列表。',
-          tip: '越後面越要靠資訊判斷，而不是只靠直覺。'
-        },
-        apply(){
-          $('#deckHint').textContent = '功能按鈕本身不是出牌，但能幫你看懂局勢';
-        }
-      },
-      {
-        title: '最後幫你總結一個完整回合',
-        badge: 'STEP 7 / 7',
-        goal: '把整個回合順序記住，正式進場就不容易亂。',
-        desc: '整個回合其實很固定：先確認是不是輪到你 → 抽牌 → 兩張擇一打出 → 若有彈窗就完成補操作 → 看日誌確認結果 → 換下一位。伺服器端 CPU 流程也是先 DRAW，再進入 choose，然後才 PLAY_CARD。fileciteturn6file5L1-L12 fileciteturn6file5L17-L43',
-        tips: [
-          ['完整順序', '輪到你 → 抽牌 → 二選一 → 補操作 → 看結果。'],
-          ['不會時先看', '先看抽牌提示，再看中間兩張牌。'],
-          ['結論', '你不用先會全部卡，只要先會流程就能玩。']
-        ],
-        highlight: ['#zone-deck','#zone-play','#zone-log'],
-        overlay: {
-          anchor: '#zone-log',
-          title: '新手先學流程，不用先背全部卡牌',
-          desc: '只要你知道現在是抽牌階段還是選牌階段，並且會看提示、日誌、彈窗，基本上就不會再覺得難上手。',
-          tip: '看完這頁，再進正式遊戲測一次就會清楚很多。'
-        },
-        apply(){
-          $('#deckState').innerHTML = '1. 先抽牌';
-          $('#drawPreview').innerHTML = '2. 出現新牌';
-          $('#handBody').innerHTML = '3. 和新牌二選一';
-          $('#drawnBody').innerHTML = '4. 按下去後若有技能彈窗，就完成它';
-          $('#drawnCard').classList.remove('locked');
-          $('#drawnCard').classList.add('selectable');
-          $('#fakeModal').classList.remove('show');
-          $('#logList').innerHTML = `
-            <div class="log-item">流程總結：輪到你 → 抽牌 → 兩張擇一 → 技能結算 → 換人。</div>
-            <div class="log-item">看見提示就跟著做，不要跳步驟。</div>
-            <div class="log-item">正式進遊戲後，只要先把這套流程跑順就可以了。</div>`;
-          $('#roomInfo').textContent = '教學完成｜你已懂基本操作流程';
-        }
-      }
-    ];
+  <div id="guideCard" class="guide-card">
+    <div class="guide-head px-4 py-3 rounded-t-[20px] flex items-center justify-between gap-3">
+      <div>
+        <div id="guideBadge" class="guide-badge inline-flex items-center gap-2 rounded-full px-2.5 py-1 text-[11px] font-semibold">步驟 1 / 8</div>
+        <div id="guideTitle" class="mt-2 text-lg font-bold">歡迎來到新手導覽</div>
+      </div>
+      <button id="skipGuide" class="btn-ui !text-xs !py-1 !px-2">略過</button>
+    </div>
+    <div class="px-4 py-4">
+      <div id="guideText" class="text-sm leading-7 text-slate-200"></div>
+      <div class="mt-4 flex items-center justify-between gap-3 flex-wrap">
+        <div id="stepDots" class="flex items-center gap-2"></div>
+        <div class="flex items-center gap-2 ml-auto">
+          <button id="prevStep" class="btn-ui">上一步</button>
+          <button id="nextStep" class="btn-ui btn-main">下一步</button>
+        </div>
+      </div>
+      <div id="miniTip" class="mt-3 text-[12px] text-amber-200/85"></div>
+    </div>
+  </div>
 
-    const overlay = $('#overlayBox');
-    function clearHighlights(){
-      $$('.zone, .top-pill, .tool').forEach(el=>{el.classList.remove('highlight','dim')});
-    }
-    function applyHighlights(selectors){
-      const all = $$('.zone, .top-pill, .tool');
-      const set = new Set(selectors || []);
-      all.forEach(el=>{
-        const idSel = '#' + el.id;
-        if(set.has(idSel)) el.classList.add('highlight');
-        else el.classList.add('dim');
-      });
-    }
-    function positionOverlay(anchorSel, title, desc, tip){
-      const anchor = document.querySelector(anchorSel);
-      if(!anchor){ overlay.classList.remove('show'); return; }
-      $('#ovTitle').textContent = title || '';
-      $('#ovDesc').textContent = desc || '';
-      $('#ovTip').textContent = tip || '';
-      const mainRect = document.querySelector('.main').getBoundingClientRect();
-      const rect = anchor.getBoundingClientRect();
-      const top = rect.top - mainRect.top + 14;
-      const left = Math.min(rect.right - mainRect.left + 10, document.querySelector('.main').clientWidth - 315);
-      overlay.style.top = Math.max(10, top) + 'px';
-      overlay.style.left = Math.max(10, left) + 'px';
-      overlay.classList.add('show');
-    }
-    function renderTips(tips){
-      $('#tipList').innerHTML = (tips || []).map(([a,b]) => `<div class="tip"><strong>${a}</strong>${b}</div>`).join('');
-    }
+<script>
+const CARD_TEXT = {
+  0:'薩波：看頂牌。強化時還能決定放回頂或底。',
+  5:'索隆：指定一人棄牌。',
+  8:'魯夫：決鬥型角色，強化時能更猛地壓制全場。',
+  16:'青雉：凍結目標，限制對方下一步操作。'
+};
+const VENUE_INFO = [
+  { name:'魚人島', img:'images/venues/魚人島.webp', bg:'images/venues/魚人島.webp', tip:'有些卡在自己的專屬場地會進入強化版。' },
+  { name:'和之國', img:'images/venues/和之國.webp', bg:'images/venues/和之國.webp', tip:'點場地可查看背景，也能幫助你記住誰可能被強化。' },
+  { name:'龐克哈薩特', img:'images/venues/龐克哈薩特.webp', bg:'images/venues/龐克哈薩特.webp', tip:'注意場地圖就是判斷卡片強化的重要線索。' },
+  { name:'蛋糕島', img:'images/venues/蛋糕島.webp', bg:'images/venues/蛋糕島.webp', tip:'不同場地會改變不同角色的表現。' },
+  { name:'德雷斯羅薩', img:'images/venues/德雷斯羅薩.webp', bg:'images/venues/德雷斯羅薩.webp', tip:'開局先看場地，是新手最需要養成的習慣。' },
+  { name:'司法島', img:'images/venues/司法島.webp', bg:'images/venues/司法島.webp', tip:'你不需要背全部，只要先知道場地＝可能強化就夠了。' },
+];
+const DEX_CARDS = [
+  { id:0, name:'薩波', venue:'德雷斯羅薩鬥技場', base:'images/cards/0.webp', enh:'images/cards/enh/0.webp' },
+  { id:5, name:'索隆', venue:'和之國', base:'images/cards/5.webp', enh:'images/cards/enh/5.webp' },
+  { id:8, name:'魯夫', venue:'魚人島', base:'images/cards/8.webp', enh:'images/cards/enh/8.webp' },
+  { id:16, name:'青雉', venue:'龐克哈薩特', base:'images/cards/16.webp', enh:'images/cards/enh/16.webp' },
+  { id:6, name:'羅', venue:'龐克哈薩特', base:'images/cards/6.webp', enh:'images/cards/enh/6.webp' },
+  { id:7, name:'娜美', venue:'魚人島', base:'images/cards/7.webp', enh:'images/cards/enh/7.webp' },
+  { id:4, name:'喬巴', venue:'磁鼓島', base:'images/cards/4.webp', enh:'images/cards/enh/4.webp' },
+  { id:14, name:'大媽', venue:'蛋糕島', base:'images/cards/14.webp', enh:'images/cards/enh/14.webp' }
+];
 
-    let idx = 0;
-    function render(){
-      const step = steps[idx];
-      clearHighlights();
-      applyHighlights(step.highlight);
-      step.apply?.();
-      $('#stepBadge').textContent = step.badge;
-      $('#stepTitle').textContent = step.title;
-      $('#stepDesc').innerHTML = step.desc;
-      $('#stepGoal').textContent = step.goal;
-      $('#progressBar').style.width = `${((idx+1)/steps.length)*100}%`;
-      renderTips(step.tips);
-      positionOverlay(step.overlay.anchor, step.overlay.title, step.overlay.desc, step.overlay.tip);
-      $('#prevBtn').style.opacity = idx === 0 ? .45 : 1;
-      $('#nextBtn').textContent = idx === steps.length - 1 ? '完成教學' : '下一步 →';
-      $('#footerNote').innerHTML = idx === steps.length - 1
-        ? '你現在已經看完整個基本流程。建議下一步就是直接進正式遊戲，讓玩家把這一頁和真實畫面對照一次。'
-        : '這頁是<strong>模擬教學</strong>：目的不是讓你真的打一局，而是讓新手看懂「現在該點哪裡」「各區塊是幹嘛的」。看完後再進正式對局，理解會快很多。';
-      document.querySelector('.main').scrollTo?.({top:0, behavior:'smooth'});
-    }
+const state = {
+  drawn:false,
+  chosen:false,
+  dexOpen:false,
+  currentVenueBg:'',
+  logs:[
+    '開局後，先看場地有哪些。',
+    '輪到你時，先抽一張牌。',
+    '抽完後，兩張選一張打出。'
+  ]
+};
 
-    $('#prevBtn').addEventListener('click', ()=>{ if(idx>0){ idx--; render(); } });
-    $('#nextBtn').addEventListener('click', ()=>{ if(idx<steps.length-1){ idx++; render(); } else { idx=0; render(); } });
-    $('#restartBtn').addEventListener('click', ()=>{ idx=0; render(); });
-    window.addEventListener('resize', ()=> render());
+const steps = [
+  {
+    target:'main',
+    pad:18,
+    title:'這就是正式對戰畫面',
+    text:'我把教學做成和你正式遊戲幾乎同樣的版面。之後你只要按「下一步」，我就會直接指給玩家看：現在能做什麼、每個區塊是做什麼。',
+    tip:'這頁可以直接拿去當真正的新手導覽頁。',
+    onEnter(){ document.getElementById('myPlayZone').classList.add('hidden'); setStepLabel('抽牌'); }
+  },
+  {
+    target:'#venuesCard',
+    pad:14,
+    title:'先看「本局場地」',
+    text:'每局開場先看這裡。場地會決定哪些角色可能變成強化版，所以新手第一眼先看場地，會比先看手牌更有方向。',
+    tip:'你也可以直接點場地圖，示範切換背景。',
+    onEnter(){ pulse('#venuesCard'); }
+  },
+  {
+    target:'#deckCard',
+    pad:14,
+    title:'輪到你時，先抽牌',
+    text:'你的遊戲本來就有「請抽牌」提示。新手只要記住：輪到自己、看到這個提示，就先按牌堆抽一張。',
+    tip:'這一步可以直接點牌堆試試看。',
+    onEnter(){ setStepLabel('抽牌'); document.getElementById('drawHint').style.display='inline-flex'; },
+    advanceOn:'#btnDraw'
+  },
+  {
+    target:'#myPlayZone',
+    pad:14,
+    title:'抽完後，兩張選一張打出',
+    text:'抽完牌後，畫面會出現兩張牌：一張是原本手牌，一張是剛抽到的牌。你不是兩張都能打，而是要二選一。',
+    tip:'右邊這張有黃圈，代表這裡正在示範你剛抽到的新牌。',
+    onEnter(){ ensureDrawn(); setStepLabel('選牌'); },
+  },
+  {
+    target:'#playDrawn',
+    pad:12,
+    title:'選好後，把其中一張打出去',
+    text:'點你要出的那張牌。打出去後，效果會處理，然後才輪到下一位。新手最常卡住的地方，就是不知道這裡其實只是「從兩張裡選一張」。',
+    tip:'現在就點這張牌，示範打出。',
+    onEnter(){ ensureDrawn(); },
+    advanceOn:'#playDrawn'
+  },
+  {
+    target:'#playersCard',
+    pad:14,
+    title:'右邊這欄是所有玩家狀態',
+    text:'這裡可以看誰還活著、誰是目前回合、誰可能斷線、每個人的金幣和手牌狀態。真正對戰時，很多判斷都要從這一欄做。',
+    tip:'金框代表目前輪到的人。',
+    onEnter(){ setCurrentPlayer(1); }
+  },
+  {
+    target:'#logCard',
+    pad:14,
+    title:'看不懂發生什麼，就看對局日誌',
+    text:'角色技能、決鬥結果、誰被棄牌、誰被麻痺，幾乎都能從這裡快速回頭看。新手如果一瞬間看不懂畫面，先看日誌最容易補上。',
+    tip:'教學頁會把剛剛的抽牌和出牌寫進日誌。',
+    onEnter(){ appendLog('你打出了索隆，指定一名對手棄牌。'); }
+  },
+  {
+    target:'#cardDexBtn',
+    pad:12,
+    title:'不知道卡片效果？直接看卡片圖鑑',
+    text:'這個按鈕很重要。玩家忘記某張牌效果時，不用離開頁面，直接打開圖鑑，就能看一般版和強化版差在哪裡。',
+    tip:'點按鈕會打開示範圖鑑。',
+    onEnter(){},
+    advanceOn:'#cardDexBtn'
+  },
+  {
+    target:'#guideCard',
+    pad:10,
+    title:'你已經懂基本流程了',
+    text:'新手實際要記住的只有這條線：先看場地 → 輪到你先抽牌 → 兩張選一張打出 → 看右邊玩家狀態和下方日誌。其他功能再邊玩邊熟就行。',
+    tip:'測試沒問題後，把這份 tutorial.html 放進 public，就能直接當正式新手導覽。',
+    onEnter(){ document.getElementById('drawHint').style.display='none'; }
+  }
+];
 
-    render();
-  </script>
+const $ = (s)=>document.querySelector(s);
+const guideCard = $('#guideCard');
+const spotlightLayer = $('#spotlightLayer');
+let stepIndex = 0;
+
+function init(){
+  renderVenues();
+  renderDiscard();
+  renderPlayers();
+  renderLogs();
+  renderDex();
+  wireEvents();
+  renderStepDots();
+  goStep(0);
+}
+
+function renderVenues(){
+  const box = $('#venues');
+  box.innerHTML = VENUE_INFO.map((v,i)=>`
+    <button class="venue-tile" data-venue="${i}" aria-label="${v.name}">
+      <img src="${v.img}" alt="${v.name}" onerror="this.style.background='#1f2937';this.removeAttribute('src')">
+      <div class="label">${v.name}</div>
+    </button>
+  `).join('');
+}
+function renderDiscard(){
+  const box = $('#discard');
+  box.innerHTML = [16, 0].map(id=>`<img class="thumb" src="images/cards/${id}.webp" onerror="this.removeAttribute('src');this.style.background='#111827'">`).join('');
+}
+function renderPlayers(){
+  const players = [
+    { id:0, name:'你', avatar:49, gold:7, hand:1, current:true },
+    { id:1, name:'巴奇', avatar:31, gold:5, hand:1 },
+    { id:2, name:'薩波', avatar:39, gold:4, hand:1 },
+    { id:3, name:'魯海', avatar:45, gold:3, hand:1, offline:true },
+  ];
+  $('#players').innerHTML = players.map(p=>`
+    <div class="player-card ${p.current?'current':''} ${p.offline?'offline':''}" data-player="${p.id}">
+      <div class="flex items-center gap-3">
+        <img class="avatar" src="images/avatars/${p.avatar}.webp" onerror="this.style.background='#374151';this.removeAttribute('src')">
+        <div class="min-w-0 flex-1">
+          <div class="font-semibold truncate">${p.name} ${p.offline?'<span class="text-xs text-rose-300">斷線中</span>':''}</div>
+          <div class="text-xs opacity-70">金幣 ${p.gold} ｜ 手牌 ${p.hand} 張</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+function renderLogs(){
+  $('#logBox').innerHTML = state.logs.map(line=>`<li class="log-item">${escapeHtml(line)}</li>`).join('');
+}
+function appendLog(line){
+  if (!state.logs.includes(line)) {
+    state.logs.push(line);
+    renderLogs();
+  }
+}
+function renderDex(){
+  $('#cardDexGrid').innerHTML = DEX_CARDS.map(c=>`
+    <button class="rounded-xl overflow-hidden border border-slate-700 bg-slate-900/70 hover:border-amber-300 transition text-left" data-card="${c.id}">
+      <img src="${c.base}" class="w-full aspect-[1242/1863] object-cover bg-black/40" onerror="this.removeAttribute('src');this.style.background='#111827'">
+      <div class="px-2 py-1 text-[10px] flex items-center justify-between gap-1"><span class="truncate">${c.name}</span><span class="opacity-70">#${c.id}</span></div>
+    </button>
+  `).join('');
+}
+function showDexCard(id){
+  const c = DEX_CARDS.find(x=>x.id===id) || DEX_CARDS[0];
+  $('#dexEmpty').classList.add('hidden');
+  $('#dexPreview').classList.remove('hidden');
+  $('#dexTitle').textContent = `${c.name}｜強化場地：${c.venue}`;
+  $('#dexBase').src = c.base;
+  $('#dexEnh').src = c.enh;
+  $('#dexDesc').textContent = CARD_TEXT[c.id] || '這張卡可以在圖鑑裡比較一般版與強化版差別。';
+}
+function openDex(){ state.dexOpen = true; $('#cardDexOverlay').classList.add('open'); if (!$('#dexPreview').classList.contains('hidden')) return; showDexCard(8); }
+function closeDex(){ state.dexOpen = false; $('#cardDexOverlay').classList.remove('open'); }
+
+function wireEvents(){
+  $('#btnDraw').addEventListener('click', ()=>{
+    if (stepIndex < 2) return;
+    ensureDrawn();
+    if (steps[stepIndex]?.advanceOn === '#btnDraw') nextStep();
+  });
+  $('#playHand').addEventListener('click', ()=>{ if (!state.drawn) return; chooseCard('hand'); });
+  $('#playDrawn').addEventListener('click', ()=>{ if (!state.drawn) return; chooseCard('drawn'); if (steps[stepIndex]?.advanceOn === '#playDrawn') nextStep(); });
+  $('#cardDexBtn').addEventListener('click', ()=>{ openDex(); if (steps[stepIndex]?.advanceOn === '#cardDexBtn') setTimeout(nextStep, 200); });
+  $('#cardDexClose').addEventListener('click', closeDex);
+  $('#cardDexOverlay').addEventListener('click', (e)=>{ if (e.target.id === 'cardDexOverlay') closeDex(); });
+  $('#cardDexGrid').addEventListener('click', (e)=>{
+    const btn = e.target.closest('[data-card]');
+    if (!btn) return;
+    showDexCard(Number(btn.dataset.card));
+  });
+  $('#prevStep').addEventListener('click', prevStep);
+  $('#nextStep').addEventListener('click', nextStep);
+  $('#skipGuide').addEventListener('click', ()=>goStep(steps.length - 1));
+  window.addEventListener('resize', ()=>positionGuide());
+  document.querySelectorAll('.venue-tile').forEach(tile=>{
+    tile.addEventListener('click', ()=>{
+      const info = VENUE_INFO[Number(tile.dataset.venue)];
+      if (!info) return;
+      document.body.style.setProperty('--venue-bg-url', `url("${info.bg}")`);
+      appendLog(`你查看了場地：${info.name}。`);
+      $('#miniTip').textContent = info.tip;
+    });
+  });
+}
+
+function ensureDrawn(){
+  if (state.drawn) return;
+  state.drawn = true;
+  $('#myPlayZone').classList.remove('hidden');
+  $('#stepLbl').textContent = '選牌';
+  $('#drawHint').style.display = 'none';
+  appendLog('你抽了一張牌，現在要兩張選一張。');
+}
+function chooseCard(which){
+  if (state.chosen) return;
+  state.chosen = true;
+  const playedId = which === 'drawn' ? 5 : 8;
+  const box = $('#discard');
+  const img = document.createElement('img');
+  img.className = 'thumb';
+  img.src = `images/cards/${playedId}.webp`;
+  img.onerror = function(){ this.removeAttribute('src'); this.style.background='#111827'; };
+  box.appendChild(img);
+  box.scrollLeft = box.scrollWidth;
+  appendLog(`你從兩張牌中選擇打出 ${playedId===5?'索隆':'魯夫'}。`);
+  $('#playHand').classList.add('opacity-50');
+  $('#playDrawn').classList.add('opacity-50');
+  setCurrentPlayer(1);
+}
+function setCurrentPlayer(id){
+  document.querySelectorAll('.player-card').forEach(el=>el.classList.remove('current'));
+  const target = document.querySelector(`.player-card[data-player="${id}"]`);
+  if (target) target.classList.add('current');
+  $('#turnLbl').textContent = id === 0 ? '你' : target?.querySelector('.font-semibold')?.textContent?.replace('斷線中','').trim() || '對手';
+}
+function setStepLabel(text){ $('#stepLbl').textContent = text; }
+function pulse(sel){ const el = $(sel); if (!el) return; el.classList.remove('pulse-ring'); void el.offsetWidth; el.classList.add('pulse-ring'); setTimeout(()=>el.classList.remove('pulse-ring'), 1800); }
+
+function renderStepDots(){
+  $('#stepDots').innerHTML = steps.map((_,i)=>`<span class="step-dot ${i===stepIndex?'on':''}" data-dot="${i}"></span>`).join('');
+}
+
+function goStep(i){
+  stepIndex = Math.max(0, Math.min(steps.length - 1, i));
+  const step = steps[stepIndex];
+  $('#guideBadge').textContent = `步驟 ${stepIndex + 1} / ${steps.length}`;
+  $('#guideTitle').textContent = step.title;
+  $('#guideText').textContent = step.text;
+  $('#miniTip').textContent = step.tip || '';
+  $('#prevStep').disabled = stepIndex === 0;
+  $('#prevStep').classList.toggle('opacity-50', stepIndex === 0);
+  $('#nextStep').textContent = stepIndex === steps.length - 1 ? '重新看一次' : '下一步';
+  renderStepDots();
+  step.onEnter?.();
+  positionGuide();
+}
+function nextStep(){
+  if (stepIndex >= steps.length - 1) {
+    resetDemo();
+    goStep(0);
+    return;
+  }
+  goStep(stepIndex + 1);
+}
+function prevStep(){ goStep(stepIndex - 1); }
+
+function positionGuide(){
+  const step = steps[stepIndex];
+  const target = step.target === 'main' ? document.querySelector('main') : $(step.target);
+  if (!target) return;
+  const r = target.getBoundingClientRect();
+  const pad = step.pad || 10;
+  const spotX = r.left + r.width/2;
+  const spotY = r.top + r.height/2;
+  const spotW = Math.min(window.innerWidth - 24, r.width + pad*2);
+  const spotH = Math.min(window.innerHeight - 24, r.height + pad*2);
+  document.documentElement.style.setProperty('--spot-x', `${spotX}px`);
+  document.documentElement.style.setProperty('--spot-y', `${spotY}px`);
+  document.documentElement.style.setProperty('--spot-w', `${spotW}px`);
+  document.documentElement.style.setProperty('--spot-h', `${spotH}px`);
+
+  const cardW = Math.min(420, window.innerWidth - 24);
+  const below = r.bottom + 18;
+  const above = r.top - 18;
+  let top = below;
+  if (below + 220 > window.innerHeight && above > 240) top = Math.max(12, above - 210);
+  top = Math.max(12, Math.min(window.innerHeight - 220, top));
+
+  let left = r.left;
+  if (left + cardW > window.innerWidth - 12) left = window.innerWidth - cardW - 12;
+  if (left < 12) left = 12;
+  guideCard.style.left = `${left}px`;
+  guideCard.style.top = `${top}px`;
+
+  spotlightLayer.style.display = step.target === '#guideCard' ? 'none' : 'block';
+}
+
+function resetDemo(){
+  state.drawn = false;
+  state.chosen = false;
+  state.dexOpen = false;
+  $('#myPlayZone').classList.add('hidden');
+  $('#drawHint').style.display = 'inline-flex';
+  $('#discard').innerHTML = [16,0].map(id=>`<img class="thumb" src="images/cards/${id}.webp" onerror="this.removeAttribute('src');this.style.background='#111827'">`).join('');
+  state.logs = [
+    '開局後，先看場地有哪些。',
+    '輪到你時，先抽一張牌。',
+    '抽完後，兩張選一張打出。'
+  ];
+  renderLogs();
+  renderPlayers();
+  closeDex();
+  setCurrentPlayer(0);
+  setStepLabel('抽牌');
+}
+
+function escapeHtml(s){
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+init();
+</script>
 </body>
 </html>
