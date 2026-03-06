@@ -1,0 +1,836 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>偉大航道爭霸戰｜新手教學</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root{
+      --gold:#f59e0b;
+      --gold-2:#facc15;
+      --panel:rgba(14,18,22,.82);
+      --panel-2:rgba(20,24,28,.88);
+      --line:rgba(255,255,255,.08);
+      --text:#eef2f7;
+      --muted:#9ca3af;
+      --ok:#34d399;
+      --danger:#fb7185;
+      --sea:#60a5fa;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    html,body{min-height:100%}
+    body{
+      margin:0;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 800px at 10% 15%, rgba(245,158,11,.14), transparent 55%),
+        radial-gradient(1100px 700px at 90% 85%, rgba(96,165,250,.10), transparent 55%),
+        linear-gradient(180deg,#0b0d10 0%,#11151a 100%);
+      font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      z-index:-1;
+      background:
+        linear-gradient(rgba(0,0,0,.42), rgba(0,0,0,.55)),
+        url("images/tutorial/tutorial-bg.webp");
+      background-size:cover;
+      background-position:center;
+      opacity:.34;
+      pointer-events:none;
+    }
+
+    .glass{
+      background:var(--panel);
+      border:1px solid var(--line);
+      box-shadow:0 18px 40px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.04);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .gold-line{
+      border:1px solid rgba(245,158,11,.42);
+      box-shadow:0 0 0 1px rgba(250,204,21,.12) inset, 0 0 18px rgba(245,158,11,.08);
+    }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:.45rem;
+      padding:.35rem .7rem;
+      border-radius:999px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      font-size:.8rem;
+      color:#e5e7eb;
+    }
+
+    .step-card{
+      position:relative;
+      overflow:hidden;
+      border-radius:22px;
+      padding:1.1rem;
+      background:linear-gradient(180deg, rgba(18,23,28,.92), rgba(12,15,19,.92));
+      border:1px solid rgba(255,255,255,.07);
+      min-height:100%;
+    }
+    .step-card.active{
+      border-color:rgba(245,158,11,.55);
+      box-shadow:0 0 0 1px rgba(250,204,21,.12) inset, 0 14px 32px rgba(0,0,0,.34), 0 0 26px rgba(245,158,11,.10);
+    }
+    .step-card::after{
+      content:"";
+      position:absolute;
+      inset:auto -30% -40% auto;
+      width:180px;
+      height:180px;
+      border-radius:999px;
+      background:radial-gradient(circle, rgba(245,158,11,.14), transparent 65%);
+      pointer-events:none;
+    }
+
+    .num-badge{
+      width:40px;
+      height:40px;
+      border-radius:999px;
+      display:grid;
+      place-items:center;
+      font-weight:900;
+      background:linear-gradient(180deg, #fcd34d, #f59e0b);
+      color:#19140a;
+      box-shadow:0 6px 18px rgba(245,158,11,.28);
+      flex:0 0 auto;
+    }
+
+    .mock-board{
+      position:relative;
+      overflow:hidden;
+      border-radius:24px;
+      border:1px solid rgba(255,255,255,.08);
+      background:
+        radial-gradient(1200px 500px at 50% 0%, rgba(255,255,255,.04), transparent 40%),
+        linear-gradient(180deg, rgba(12,16,20,.86), rgba(15,20,25,.92));
+      min-height:520px;
+    }
+
+    .zone{
+      position:absolute;
+      border:1px dashed rgba(255,255,255,.18);
+      border-radius:18px;
+      background:rgba(255,255,255,.03);
+      padding:.8rem;
+    }
+
+    .zone-tag{
+      position:absolute;
+      top:.55rem;
+      left:.65rem;
+      font-size:.78rem;
+      color:#fde68a;
+      background:rgba(0,0,0,.45);
+      padding:.22rem .5rem;
+      border-radius:999px;
+      border:1px solid rgba(245,158,11,.24);
+    }
+
+    .mini-card, .mini-back{
+      width:72px;
+      aspect-ratio:1242/1863;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      object-fit:cover;
+      background:#0a0d10;
+      box-shadow:0 10px 22px rgba(0,0,0,.35);
+    }
+
+    .mini-card.small{width:58px}
+    .pulse-ring{
+      animation:pulseRing 1.8s ease-in-out infinite;
+    }
+    @keyframes pulseRing{
+      0%,100%{ transform:scale(1); box-shadow:0 0 0 0 rgba(250,204,21,.10)}
+      50%{ transform:scale(1.03); box-shadow:0 0 0 10px rgba(250,204,21,0)}
+    }
+
+    .floating-tip{
+      position:absolute;
+      display:flex;
+      gap:.55rem;
+      align-items:flex-start;
+      max-width:260px;
+      padding:.8rem .9rem;
+      border-radius:18px;
+      border:1px solid rgba(250,204,21,.28);
+      background:rgba(11,14,18,.92);
+      box-shadow:0 16px 36px rgba(0,0,0,.38);
+      font-size:.92rem;
+      line-height:1.5;
+    }
+
+    .progress-dot{
+      width:10px;
+      height:10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.18);
+      transition:.22s ease;
+    }
+    .progress-dot.on{
+      width:28px;
+      background:linear-gradient(90deg, #fcd34d, #f59e0b);
+      box-shadow:0 0 16px rgba(245,158,11,.28);
+    }
+
+    .step-pane{display:none}
+    .step-pane.show{display:block}
+
+    .hint-list li{position:relative;padding-left:1.1rem}
+    .hint-list li::before{
+      content:"•";
+      position:absolute;
+      left:0;
+      color:#fbbf24;
+      font-weight:900;
+    }
+
+    .card-pill{
+      border-radius:14px;
+      padding:.9rem;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.07);
+    }
+
+    .sticky-nav{position:sticky; top:14px}
+
+    .line-arrow{
+      width:44px;
+      height:2px;
+      background:linear-gradient(90deg, rgba(250,204,21,.15), rgba(250,204,21,.95));
+      border-radius:999px;
+      position:relative;
+      flex:0 0 auto;
+    }
+    .line-arrow::after{
+      content:"";
+      position:absolute;
+      right:-2px;
+      top:50%;
+      width:10px;
+      height:10px;
+      border-top:2px solid #facc15;
+      border-right:2px solid #facc15;
+      transform:translateY(-50%) rotate(45deg);
+    }
+
+    .btn-op{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:.5rem;
+      padding:.85rem 1.1rem;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.05);
+      color:#f3f4f6;
+      font-weight:700;
+      transition:.18s ease;
+      text-decoration:none;
+      cursor:pointer;
+      user-select:none;
+    }
+    .btn-op:hover{transform:translateY(-1px); background:rgba(255,255,255,.08)}
+    .btn-gold{
+      background:linear-gradient(180deg, #fcd34d, #f59e0b);
+      color:#17120b;
+      border-color:rgba(0,0,0,.12);
+      box-shadow:0 10px 24px rgba(245,158,11,.25);
+    }
+    .btn-gold:hover{background:linear-gradient(180deg, #fde68a, #f59e0b)}
+
+    .anchor-link{
+      display:block;
+      padding:.75rem .9rem;
+      border-radius:14px;
+      border:1px solid transparent;
+      text-decoration:none;
+      color:#d1d5db;
+      transition:.18s ease;
+    }
+    .anchor-link:hover, .anchor-link.on{
+      color:#fff;
+      background:rgba(255,255,255,.05);
+      border-color:rgba(245,158,11,.28);
+    }
+
+    .faq-item summary{
+      list-style:none;
+      cursor:pointer;
+    }
+    .faq-item summary::-webkit-details-marker{display:none}
+
+    @media (max-width: 1024px){
+      .sticky-nav{position:static}
+    }
+    @media (max-width: 768px){
+      .mock-board{min-height:740px}
+      .zone{position:relative !important; inset:auto !important; width:100% !important; margin-bottom:.85rem}
+      .floating-tip{position:relative !important; inset:auto !important; max-width:none; margin-top:.7rem}
+    }
+  </style>
+</head>
+<body>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    <header class="glass gold-line rounded-[28px] overflow-hidden mb-6 sm:mb-8">
+      <div class="grid lg:grid-cols-[1.2fr_.8fr] gap-0">
+        <div class="p-6 sm:p-8 lg:p-10">
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span class="chip">🏴‍☠️ 新手教學</span>
+            <span class="chip">一步一步帶你玩</span>
+            <span class="chip">看完就能上手</span>
+          </div>
+          <h1 class="text-3xl sm:text-5xl font-black tracking-wide leading-tight">偉大航道爭霸戰<br><span class="text-amber-300">新手教學頁</span></h1>
+          <p class="mt-4 text-base sm:text-lg text-slate-300 leading-8 max-w-3xl">
+            這頁不是在背規則，而是直接告訴玩家：<span class="text-amber-300 font-bold">現在輪到你時可以做什麼、畫面出現什麼代表什麼、什麼情況最常卡住。</span>
+            從抽牌、選牌、指定目標，到基本版與強化版差別，全部照實戰順序帶你看。
+          </p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a href="#quick-start" class="btn-op btn-gold">開始看教學</a>
+            <a href="start.html" class="btn-op">返回主畫面</a>
+          </div>
+        </div>
+        <div class="p-5 sm:p-6 lg:p-8 bg-[linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02))] border-l border-white/5">
+          <div class="glass rounded-[24px] p-5 h-full gold-line">
+            <div class="text-sm text-slate-300 mb-3">先記住這 4 件事</div>
+            <div class="space-y-3">
+              <div class="card-pill"><div class="font-bold text-amber-300 mb-1">1. 先抽牌</div><div class="text-sm text-slate-300">輪到你時，先從牌堆抽一張。</div></div>
+              <div class="card-pill"><div class="font-bold text-amber-300 mb-1">2. 兩張選一張打</div><div class="text-sm text-slate-300">你的舊手牌 + 剛抽的新牌，只能二選一。</div></div>
+              <div class="card-pill"><div class="font-bold text-amber-300 mb-1">3. 看提示做事</div><div class="text-sm text-slate-300">畫面要你選玩家、選數字、按確認時，再執行效果。</div></div>
+              <div class="card-pill"><div class="font-bold text-amber-300 mb-1">4. 活到最後</div><div class="text-sm text-slate-300">你不是一直打人而已，很多時候更重要的是保命。</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="grid lg:grid-cols-[290px_minmax(0,1fr)] gap-6">
+      <aside class="sticky-nav">
+        <div class="glass rounded-[24px] p-4 sm:p-5">
+          <div class="text-xs tracking-[.22em] text-slate-400 mb-3">教學目錄</div>
+          <nav class="space-y-1" id="toc">
+            <a class="anchor-link on" href="#quick-start">快速上手</a>
+            <a class="anchor-link" href="#board">看懂畫面</a>
+            <a class="anchor-link" href="#turn-flow">你的回合流程</a>
+            <a class="anchor-link" href="#prompts">畫面提示代表什麼</a>
+            <a class="anchor-link" href="#normal-enh">基本版與強化版</a>
+            <a class="anchor-link" href="#starter-cards">新手先記這幾張</a>
+            <a class="anchor-link" href="#faq">常見卡關</a>
+          </nav>
+          <div class="mt-5 pt-5 border-t border-white/10">
+            <div class="text-sm text-slate-300 mb-2">新手最容易卡住：</div>
+            <ul class="text-sm text-slate-400 space-y-2 hint-list">
+              <li>不知道什麼時候要先抽牌</li>
+              <li>不知道兩張牌要怎麼選</li>
+              <li>看不懂彈窗是不是在叫自己操作</li>
+              <li>不知道哪些卡是保命、哪些卡是進攻</li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+
+      <main class="space-y-6 sm:space-y-8">
+        <section id="quick-start" class="glass rounded-[28px] p-5 sm:p-7 lg:p-8 scroll-mt-6">
+          <div class="flex items-start justify-between gap-4 flex-wrap">
+            <div>
+              <div class="text-xs tracking-[.24em] text-slate-400 mb-2">QUICK START</div>
+              <h2 class="text-2xl sm:text-3xl font-black text-amber-300">1 分鐘快速上手</h2>
+              <p class="mt-2 text-slate-300 leading-8 max-w-3xl">先不用背全部卡片。你只要先知道自己的回合會怎麼進行，就已經能開始玩。</p>
+            </div>
+          </div>
+
+          <div class="mt-6 grid md:grid-cols-4 gap-4">
+            <div class="step-card active">
+              <div class="flex items-center gap-3 mb-4"><div class="num-badge">1</div><div class="font-bold text-lg">看有沒有輪到你</div></div>
+              <p class="text-slate-300 leading-7">先看玩家列表和中央提示。輪到你時，畫面會明顯提示你可以操作。</p>
+            </div>
+            <div class="step-card active">
+              <div class="flex items-center gap-3 mb-4"><div class="num-badge">2</div><div class="font-bold text-lg">先抽牌</div></div>
+              <p class="text-slate-300 leading-7">抽牌階段就是先從牌堆抽 1 張。這時你手上會暫時有 2 張可選。</p>
+            </div>
+            <div class="step-card active">
+              <div class="flex items-center gap-3 mb-4"><div class="num-badge">3</div><div class="font-bold text-lg">兩張選一張打出</div></div>
+              <p class="text-slate-300 leading-7">原本手牌和剛抽到的牌只能擇一打出，另一張會留在手上。</p>
+            </div>
+            <div class="step-card active">
+              <div class="flex items-center gap-3 mb-4"><div class="num-badge">4</div><div class="font-bold text-lg">照提示完成效果</div></div>
+              <p class="text-slate-300 leading-7">若卡片要猜數字、選玩家、確認效果，就按照彈窗一步步做完。</p>
+            </div>
+          </div>
+
+          <div class="mt-6 grid lg:grid-cols-[1.1fr_.9fr] gap-5">
+            <div class="rounded-[24px] border border-white/10 bg-white/5 p-5">
+              <div class="font-bold text-lg text-amber-300 mb-3">這遊戲的目標</div>
+              <ul class="space-y-2 text-slate-300 leading-7 hint-list">
+                <li>想辦法用角色效果讓別人出局。</li>
+                <li>同時保住自己，不要因為高風險卡而先倒。</li>
+                <li>回合一個一個打到剩最後存活者，或進入比大小階段分勝負。</li>
+                <li>多局累積寶箱金幣，最後再進結算頁面。</li>
+              </ul>
+            </div>
+            <div class="rounded-[24px] border border-amber-400/25 bg-amber-300/5 p-5">
+              <div class="font-bold text-lg text-amber-300 mb-3">新手記住這句就好</div>
+              <div class="text-xl sm:text-2xl leading-relaxed font-black">「<span class="text-amber-300">抽一張 → 選一張 → 看提示做效果</span>」</div>
+              <p class="mt-3 text-slate-300 leading-7">你每回合幾乎都在做這三件事。真的卡住時，就回頭看這句。</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="board" class="glass rounded-[28px] p-5 sm:p-7 lg:p-8 scroll-mt-6">
+          <div class="text-xs tracking-[.24em] text-slate-400 mb-2">BOARD GUIDE</div>
+          <h2 class="text-2xl sm:text-3xl font-black text-amber-300">看懂主畫面在幹嘛</h2>
+          <p class="mt-2 text-slate-300 leading-8">下面這張是簡化過的新手導覽圖。真正遊戲畫面會更豐富，但功能大致就是這些區塊。</p>
+
+          <div class="mt-6 mock-board p-4 sm:p-5">
+            <div class="zone" style="left:18px;top:18px;width:34%;min-height:110px;">
+              <div class="zone-tag">場地區</div>
+              <div class="pt-7 text-sm text-slate-300 leading-6">這裡會顯示目前啟用的場地。<span class="text-amber-300 font-bold">如果角色對應到自己的場地，就會變成強化版效果。</span></div>
+            </div>
+
+            <div class="zone pulse-ring" style="right:18px;top:18px;width:22%;min-height:180px; display:flex; align-items:center; justify-content:center;">
+              <div class="zone-tag">牌堆</div>
+              <div class="pt-6 text-center">
+                <img class="mini-back mx-auto" src="images/cards/back.webp" alt="牌堆">
+                <div class="mt-3 text-sm text-slate-300">輪到你抽牌時，主要就是點這裡。</div>
+              </div>
+            </div>
+
+            <div class="zone" style="left:18px;right:26%;top:148px;min-height:190px;">
+              <div class="zone-tag">中央戰場 / 提示區</div>
+              <div class="pt-7 flex flex-wrap items-center gap-3">
+                <span class="chip">請抽牌</span>
+                <span class="chip">請選擇要打出的牌</span>
+                <span class="chip">請指定目標</span>
+              </div>
+              <p class="mt-4 text-sm text-slate-300 leading-7">很多玩家不是不懂規則，而是沒看懂畫面現在要他做什麼。<span class="text-amber-300 font-bold">你只要跟著中央提示走就好。</span></p>
+            </div>
+
+            <div class="zone" style="right:18px;top:220px;width:22%;min-height:230px;">
+              <div class="zone-tag">玩家列表</div>
+              <div class="pt-7 space-y-3 text-sm">
+                <div class="rounded-xl border border-amber-400/35 bg-amber-300/8 p-3">👉 目前回合玩家</div>
+                <div class="rounded-xl border border-white/10 bg-white/5 p-3">🛡 保護 / 🌀 閃避</div>
+                <div class="rounded-xl border border-white/10 bg-white/5 p-3">❄ 凍結 / ⚡ 麻痺</div>
+              </div>
+            </div>
+
+            <div class="zone" style="left:18px;bottom:18px;width:44%;min-height:148px;">
+              <div class="zone-tag">你的兩張可選牌</div>
+              <div class="pt-7 flex items-center gap-3 sm:gap-4">
+                <img class="mini-card" src="images/cards/3.webp" alt="原本手牌">
+                <div class="line-arrow"></div>
+                <img class="mini-card pulse-ring" src="images/cards/8.webp" alt="剛抽到的牌">
+              </div>
+              <p class="mt-3 text-sm text-slate-300 leading-7">當你抽完牌後，這裡會變成最重要的地方：<span class="text-amber-300 font-bold">兩張擇一打出。</span></p>
+            </div>
+
+            <div class="zone" style="left:48%;right:26%;bottom:18px;min-height:148px;">
+              <div class="zone-tag">棄牌堆 / 對局紀錄</div>
+              <div class="pt-7 text-sm text-slate-300 leading-7">這裡可以看剛剛打出去的是什麼，幫助你推測剩下還有什麼牌沒出。</div>
+            </div>
+
+            <div class="floating-tip" style="right:24px; bottom:22px;">
+              <div class="text-xl">💡</div>
+              <div><span class="text-amber-300 font-bold">新手重點：</span>看不懂時先別急著亂按，先確認現在亮的是牌堆、兩張手牌，還是跳出了指定目標彈窗。</div>
+            </div>
+          </div>
+        </section>
+
+        <section id="turn-flow" class="glass rounded-[28px] p-5 sm:p-7 lg:p-8 scroll-mt-6">
+          <div class="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <div class="text-xs tracking-[.24em] text-slate-400 mb-2">TURN FLOW</div>
+              <h2 class="text-2xl sm:text-3xl font-black text-amber-300">你的回合到底怎麼跑</h2>
+              <p class="mt-2 text-slate-300 leading-8">下面做成一步一步的互動教學。按「下一步」，照實戰順序看一次。</p>
+            </div>
+            <div class="flex items-center gap-2" id="progressDots">
+              <span class="progress-dot on"></span>
+              <span class="progress-dot"></span>
+              <span class="progress-dot"></span>
+              <span class="progress-dot"></span>
+              <span class="progress-dot"></span>
+            </div>
+          </div>
+
+          <div class="mt-6 rounded-[24px] border border-white/10 bg-black/20 p-4 sm:p-5">
+            <div id="stepPanes">
+              <div class="step-pane show" data-step="0">
+                <div class="grid lg:grid-cols-[.9fr_1.1fr] gap-5 items-center">
+                  <div class="step-card active">
+                    <div class="flex items-center gap-3 mb-4"><div class="num-badge">1</div><div class="font-black text-2xl">先確認是不是你的回合</div></div>
+                    <p class="text-slate-300 leading-8">先看玩家列表的亮框，以及中央提示文字。<span class="text-amber-300 font-bold">不是你回合時，你通常不能亂動牌。</span></p>
+                    <div class="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-slate-300 leading-7">
+                      若你現在只能看畫面、不能抽、不能選牌，通常只是因為還沒輪到你，或正在等其他玩家完成效果。
+                    </div>
+                  </div>
+                  <div class="step-card">
+                    <div class="text-sm text-slate-400 mb-3">畫面上你會看到</div>
+                    <div class="space-y-3">
+                      <div class="rounded-2xl border border-amber-400/30 bg-amber-300/8 p-4">👉 玩家框有亮邊，表示現在輪到那位玩家。</div>
+                      <div class="rounded-2xl border border-white/10 bg-white/5 p-4">若亮的是你，就準備要操作。</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="step-pane" data-step="1">
+                <div class="grid lg:grid-cols-[.95fr_1.05fr] gap-5 items-center">
+                  <div class="step-card active">
+                    <div class="flex items-center gap-3 mb-4"><div class="num-badge">2</div><div class="font-black text-2xl">抽牌階段：先抽 1 張</div></div>
+                    <p class="text-slate-300 leading-8">輪到你之後，第一件事通常就是抽牌。畫面若出現「請抽牌」之類的提示，就代表現在要先點牌堆。</p>
+                    <div class="mt-4 rounded-2xl border border-emerald-400/25 bg-emerald-300/5 p-4 text-sm text-slate-300 leading-7">
+                      你原本就有 1 張手牌，抽完會暫時變成 2 張可以選。
+                    </div>
+                  </div>
+                  <div class="step-card flex flex-col items-center justify-center text-center">
+                    <img class="mini-back pulse-ring" src="images/cards/back.webp" alt="牌堆">
+                    <div class="mt-4 inline-flex px-4 py-2 rounded-full border border-amber-400/30 bg-amber-300/10 text-amber-200 font-bold">請抽牌</div>
+                    <div class="mt-3 text-sm text-slate-300">亮的通常是牌堆，不是你的兩張手牌。</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="step-pane" data-step="2">
+                <div class="grid lg:grid-cols-[1.05fr_.95fr] gap-5 items-center">
+                  <div class="step-card active">
+                    <div class="flex items-center gap-3 mb-4"><div class="num-badge">3</div><div class="font-black text-2xl">選牌階段：兩張擇一打出</div></div>
+                    <p class="text-slate-300 leading-8">抽完之後，你會看到兩張牌：<span class="text-amber-300 font-bold">原本留在手上的那張</span>與<span class="text-amber-300 font-bold">剛抽到的新牌</span>。你要從中選 1 張打出。</p>
+                    <div class="mt-4 grid sm:grid-cols-2 gap-3 text-sm text-slate-300">
+                      <div class="rounded-2xl border border-white/10 bg-white/5 p-4">打出的牌：立即執行效果</div>
+                      <div class="rounded-2xl border border-white/10 bg-white/5 p-4">沒打出的牌：留著當你下回合的手牌</div>
+                    </div>
+                  </div>
+                  <div class="step-card flex flex-col items-center justify-center text-center">
+                    <div class="flex items-center gap-3">
+                      <img class="mini-card" src="images/cards/4.webp" alt="手牌1">
+                      <div class="line-arrow"></div>
+                      <img class="mini-card pulse-ring" src="images/cards/7.webp" alt="手牌2">
+                    </div>
+                    <div class="mt-4 text-sm text-slate-300">你不是兩張都打，也不是兩張都留。<br><span class="text-amber-300 font-bold">只能選一張。</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="step-pane" data-step="3">
+                <div class="grid lg:grid-cols-[.95fr_1.05fr] gap-5 items-center">
+                  <div class="step-card active">
+                    <div class="flex items-center gap-3 mb-4"><div class="num-badge">4</div><div class="font-black text-2xl">效果階段：依照彈窗完成操作</div></div>
+                    <p class="text-slate-300 leading-8">有些角色打出去後是立即生效，有些則要你再做一步，例如選目標、選數字、選是或否、按確認。</p>
+                    <div class="mt-4 rounded-2xl border border-rose-400/20 bg-rose-300/5 p-4 text-sm text-slate-300 leading-7">
+                      沒做完這些互動，效果可能不會完整執行，所以看到彈窗時不要直接當掉或亂點關閉。
+                    </div>
+                  </div>
+                  <div class="step-card">
+                    <div class="grid sm:grid-cols-2 gap-3 text-sm">
+                      <div class="rounded-2xl border border-white/10 bg-white/5 p-4">🎯 選玩家：像索隆、羅賓這類需要指定目標</div>
+                      <div class="rounded-2xl border border-white/10 bg-white/5 p-4">🔢 選數字：像騙人布要猜對方手牌</div>
+                      <div class="rounded-2xl border border-white/10 bg-white/5 p-4">✅ 確認：是否要執行額外效果</div>
+                      <div class="rounded-2xl border border-white/10 bg-white/5 p-4">❄ 冰凍 / ⚡ 麻痺：有時你能做的事會被限制</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="step-pane" data-step="4">
+                <div class="grid lg:grid-cols-[1.05fr_.95fr] gap-5 items-center">
+                  <div class="step-card active">
+                    <div class="flex items-center gap-3 mb-4"><div class="num-badge">5</div><div class="font-black text-2xl">回合結束，換下一位</div></div>
+                    <p class="text-slate-300 leading-8">效果做完後，回合會往下輪。你這時就開始觀察其他人出了什麼、剩幾張強牌還沒出、誰身上有保護或異常狀態。</p>
+                    <div class="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-slate-300 leading-7">
+                      高手不只是看自己手牌，也會看：<span class="text-amber-300 font-bold">棄牌堆、剩餘玩家、目前場地、誰可能有高數值卡。</span>
+                    </div>
+                  </div>
+                  <div class="step-card flex flex-col justify-center">
+                    <div class="text-sm text-slate-400 mb-3">一個完整回合總結</div>
+                    <div class="flex flex-wrap items-center gap-3 text-sm font-bold">
+                      <span class="chip">輪到你</span>
+                      <span class="line-arrow"></span>
+                      <span class="chip">抽牌</span>
+                      <span class="line-arrow"></span>
+                      <span class="chip">選 1 張打出</span>
+                      <span class="line-arrow"></span>
+                      <span class="chip">做效果</span>
+                      <span class="line-arrow"></span>
+                      <span class="chip">換人</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-5 flex items-center justify-between gap-3 flex-wrap">
+              <button id="prevStep" class="btn-op">← 上一步</button>
+              <div class="text-sm text-slate-400">第 <span id="stepCurrent">1</span> / <span id="stepTotal">5</span> 步</div>
+              <button id="nextStep" class="btn-op btn-gold">下一步 →</button>
+            </div>
+          </div>
+        </section>
+
+        <section id="prompts" class="glass rounded-[28px] p-5 sm:p-7 lg:p-8 scroll-mt-6">
+          <div class="text-xs tracking-[.24em] text-slate-400 mb-2">PROMPTS</div>
+          <h2 class="text-2xl sm:text-3xl font-black text-amber-300">畫面出現什麼，就代表你要做什麼</h2>
+          <p class="mt-2 text-slate-300 leading-8">這段是給「規則大概懂，但不知道 UI 在叫我幹嘛」的人看的。</p>
+
+          <div class="mt-6 grid md:grid-cols-2 xl:grid-cols-4 gap-4">
+            <div class="step-card active">
+              <div class="text-3xl mb-3">🃏</div>
+              <div class="font-bold text-lg mb-2">看到牌堆被提示</div>
+              <p class="text-sm text-slate-300 leading-7">代表現在是抽牌階段。先抽，不要急著去點別的地方。</p>
+            </div>
+            <div class="step-card active">
+              <div class="text-3xl mb-3">✋</div>
+              <div class="font-bold text-lg mb-2">看到兩張牌亮起來</div>
+              <p class="text-sm text-slate-300 leading-7">代表現在要在原手牌與新抽牌之間做選擇，二選一打出。</p>
+            </div>
+            <div class="step-card active">
+              <div class="text-3xl mb-3">🎯</div>
+              <div class="font-bold text-lg mb-2">跳出指定玩家</div>
+              <p class="text-sm text-slate-300 leading-7">代表這張卡需要目標，例如偷看、決鬥、凍結、棄牌等。</p>
+            </div>
+            <div class="step-card active">
+              <div class="text-3xl mb-3">🔢</div>
+              <div class="font-bold text-lg mb-2">跳出選數字</div>
+              <p class="text-sm text-slate-300 leading-7">通常是要你猜牌值。像騙人布就會用到這種操作。</p>
+            </div>
+            <div class="step-card active">
+              <div class="text-3xl mb-3">✅</div>
+              <div class="font-bold text-lg mb-2">跳出確認 / 是或否</div>
+              <p class="text-sm text-slate-300 leading-7">代表卡片有額外選擇，不是自動幫你做決定。</p>
+            </div>
+            <div class="step-card active">
+              <div class="text-3xl mb-3">❄</div>
+              <div class="font-bold text-lg mb-2">手牌有冰凍感</div>
+              <p class="text-sm text-slate-300 leading-7">代表那張手牌被凍結，下次出牌可能只能打剛抽到的新牌。</p>
+            </div>
+            <div class="step-card active">
+              <div class="text-3xl mb-3">⚡</div>
+              <div class="font-bold text-lg mb-2">出現麻痺狀態</div>
+              <p class="text-sm text-slate-300 leading-7">你下回合可能會被跳過，先有心理準備，不是系統壞掉。</p>
+            </div>
+            <div class="step-card active">
+              <div class="text-3xl mb-3">🛡</div>
+              <div class="font-bold text-lg mb-2">看到保護 / 閃避</div>
+              <p class="text-sm text-slate-300 leading-7">代表那位玩家比較難被影響，不是每張攻擊牌都能直接處理掉他。</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="normal-enh" class="glass rounded-[28px] p-5 sm:p-7 lg:p-8 scroll-mt-6">
+          <div class="text-xs tracking-[.24em] text-slate-400 mb-2">NORMAL VS ENHANCED</div>
+          <h2 class="text-2xl sm:text-3xl font-black text-amber-300">基本版與強化版差在哪</h2>
+          <p class="mt-2 text-slate-300 leading-8">同一張角色卡，不一定每次效果都一樣。關鍵在於：<span class="text-amber-300 font-bold">這張角色對應的場地現在有沒有開出來。</span></p>
+
+          <div class="mt-6 grid lg:grid-cols-2 gap-5">
+            <div class="step-card active">
+              <div class="font-bold text-xl mb-3 text-amber-300">基本觀念</div>
+              <ul class="space-y-2 text-slate-300 leading-7 hint-list">
+                <li>每張角色都有自己的對應場地。</li>
+                <li>沒對到場地時，使用的是一般效果。</li>
+                <li>對到場地時，使用的是強化效果。</li>
+                <li>所以同一張牌，有時普通、有時超強，不能死背一種玩法。</li>
+              </ul>
+            </div>
+            <div class="step-card active">
+              <div class="font-bold text-xl mb-3 text-amber-300">新手最簡單的判斷法</div>
+              <div class="rounded-2xl border border-white/10 bg-white/5 p-4 text-slate-300 leading-8">
+                先看<span class="text-amber-300 font-bold">場地區</span>，再決定這張牌要不要現在打。<br>
+                有些牌普通版還好，但強化版會直接變成關鍵大招。
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-5 grid md:grid-cols-3 gap-4">
+            <div class="step-card">
+              <div class="font-bold text-lg mb-2">香吉士</div>
+              <div class="text-sm text-slate-400 mb-3">進攻型範例</div>
+              <div class="text-sm text-slate-300 leading-7">基本：和一名玩家比大小，低者淘汰。<br>強化：比大小時我方攻擊力 +1，更容易贏。</div>
+            </div>
+            <div class="step-card">
+              <div class="font-bold text-lg mb-2">喬巴</div>
+              <div class="text-sm text-slate-400 mb-3">保命型範例</div>
+              <div class="text-sm text-slate-300 leading-7">基本：獲得保護。<br>強化：變成閃避，下次被效果影響時能直接無效。</div>
+            </div>
+            <div class="step-card">
+              <div class="font-bold text-lg mb-2">娜美</div>
+              <div class="text-sm text-slate-400 mb-3">控制型範例</div>
+              <div class="text-sm text-slate-300 leading-7">基本：有特定手牌時會被迫出。<br>強化：打出時還能麻痺別人，讓對手下回合難受。</div>
+            </div>
+          </div>
+        </section>
+
+        <section id="starter-cards" class="glass rounded-[28px] p-5 sm:p-7 lg:p-8 scroll-mt-6">
+          <div class="text-xs tracking-[.24em] text-slate-400 mb-2">STARTER CARDS</div>
+          <h2 class="text-2xl sm:text-3xl font-black text-amber-300">新手先記這幾張就夠了</h2>
+          <p class="mt-2 text-slate-300 leading-8">不用一開始硬背全部 20 張。先把常見又好懂的幾類記起來，你就能玩得很順。</p>
+
+          <div class="mt-6 grid md:grid-cols-2 xl:grid-cols-3 gap-4">
+            <div class="step-card active">
+              <div class="flex items-start gap-3 mb-3">
+                <img class="mini-card small" src="images/cards/4.webp" alt="喬巴">
+                <div>
+                  <div class="font-bold text-lg">喬巴</div>
+                  <div class="text-sm text-slate-400">保命牌</div>
+                </div>
+              </div>
+              <p class="text-sm text-slate-300 leading-7">你怕自己等等會被針對時，喬巴很好用。先活下來，常常比硬打人更重要。</p>
+            </div>
+            <div class="step-card active">
+              <div class="flex items-start gap-3 mb-3">
+                <img class="mini-card small" src="images/cards/3.webp" alt="香吉士">
+                <div>
+                  <div class="font-bold text-lg">香吉士</div>
+                  <div class="text-sm text-slate-400">直接決鬥牌</div>
+                </div>
+              </div>
+              <p class="text-sm text-slate-300 leading-7">玩法直覺，就是找人比大小。新手很好理解，也能快速體會高牌的重要性。</p>
+            </div>
+            <div class="step-card active">
+              <div class="flex items-start gap-3 mb-3">
+                <img class="mini-card small" src="images/cards/2.webp" alt="羅賓">
+                <div>
+                  <div class="font-bold text-lg">羅賓</div>
+                  <div class="text-sm text-slate-400">資訊牌</div>
+                </div>
+              </div>
+              <p class="text-sm text-slate-300 leading-7">看別人的手牌。這種卡不一定馬上淘汰人，但能讓你下一步更準。</p>
+            </div>
+            <div class="step-card active">
+              <div class="flex items-start gap-3 mb-3">
+                <img class="mini-card small" src="images/cards/5.webp" alt="索隆">
+                <div>
+                  <div class="font-bold text-lg">索隆</div>
+                  <div class="text-sm text-slate-400">干擾牌</div>
+                </div>
+              </div>
+              <p class="text-sm text-slate-300 leading-7">讓對方棄牌重抽，很適合拆別人的計畫，也能逼高牌離手。</p>
+            </div>
+            <div class="step-card active">
+              <div class="flex items-start gap-3 mb-3">
+                <img class="mini-card small" src="images/cards/7.webp" alt="娜美">
+                <div>
+                  <div class="font-bold text-lg">娜美</div>
+                  <div class="text-sm text-slate-400">規則型控制牌</div>
+                </div>
+              </div>
+              <p class="text-sm text-slate-300 leading-7">這張常讓新手混亂。記住：有些情況你會被迫打娜美；強化時還能讓別人麻痺。</p>
+            </div>
+            <div class="step-card active">
+              <div class="flex items-start gap-3 mb-3">
+                <img class="mini-card small" src="images/cards/16.webp" alt="青雉">
+                <div>
+                  <div class="font-bold text-lg">青雉</div>
+                  <div class="text-sm text-slate-400">限制對手牌路</div>
+                </div>
+              </div>
+              <p class="text-sm text-slate-300 leading-7">凍結對手手牌，讓對方下次很可能只能打剛抽到的牌，節奏控制很強。</p>
+            </div>
+          </div>
+
+          <div class="mt-5 rounded-[24px] border border-amber-400/20 bg-amber-300/5 p-5">
+            <div class="font-bold text-lg text-amber-300 mb-2">新手選牌小觀念</div>
+            <ul class="grid md:grid-cols-2 gap-2 text-slate-300 leading-7 hint-list">
+              <li>被追殺時，優先考慮保命牌，不一定要先進攻。</li>
+              <li>不知道出什麼時，資訊牌與保命牌通常比較穩。</li>
+              <li>高風險高回報的牌，先確認場上狀況再出。</li>
+              <li>如果某張牌在對應場地上，價值通常會大幅提升。</li>
+            </ul>
+          </div>
+        </section>
+
+        <section id="faq" class="glass rounded-[28px] p-5 sm:p-7 lg:p-8 scroll-mt-6">
+          <div class="text-xs tracking-[.24em] text-slate-400 mb-2">FAQ</div>
+          <h2 class="text-2xl sm:text-3xl font-black text-amber-300">常見卡關問題</h2>
+
+          <div class="mt-6 space-y-3">
+            <details class="faq-item rounded-[20px] border border-white/10 bg-white/5 p-4" open>
+              <summary class="font-bold text-lg text-white">為什麼我不能直接打牌？</summary>
+              <div class="mt-3 text-slate-300 leading-8">通常是因為現在還在抽牌階段，或根本還沒輪到你。先看中央提示與玩家亮框。</div>
+            </details>
+            <details class="faq-item rounded-[20px] border border-white/10 bg-white/5 p-4">
+              <summary class="font-bold text-lg text-white">抽完牌後為什麼有兩張？</summary>
+              <div class="mt-3 text-slate-300 leading-8">因為你的回合規則就是「原手牌 + 新抽牌」二選一。不是 bug，也不是多抽。</div>
+            </details>
+            <details class="faq-item rounded-[20px] border border-white/10 bg-white/5 p-4">
+              <summary class="font-bold text-lg text-white">為什麼某些時候我明明有牌卻不能打那張？</summary>
+              <div class="mt-3 text-slate-300 leading-8">可能是被冰凍、被娜美規則限制，或卡片本身效果要求你必須照某種方式出牌。</div>
+            </details>
+            <details class="faq-item rounded-[20px] border border-white/10 bg-white/5 p-4">
+              <summary class="font-bold text-lg text-white">為什麼同一張角色有時候效果不一樣？</summary>
+              <div class="mt-3 text-slate-300 leading-8">因為有場地強化。對到場地時，會走強化版效果，不是固定只用一種效果。</div>
+            </details>
+            <details class="faq-item rounded-[20px] border border-white/10 bg-white/5 p-4">
+              <summary class="font-bold text-lg text-white">我是不是一定要把所有卡都背熟才玩得懂？</summary>
+              <div class="mt-3 text-slate-300 leading-8">不用。先記住抽牌流程、常見提示、幾張代表性角色卡，剩下邊玩邊熟就好。</div>
+            </details>
+          </div>
+
+          <div class="mt-6 rounded-[24px] border border-emerald-400/25 bg-emerald-300/5 p-5">
+            <div class="font-bold text-lg text-emerald-300 mb-2">最後一句送新手</div>
+            <div class="text-lg sm:text-xl font-black leading-relaxed">先不要想著「我要把所有人都秒掉」，先想著「<span class="text-amber-300">這回合我最穩的操作是什麼</span>」。</div>
+          </div>
+
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a href="#quick-start" class="btn-op">回到最上面</a>
+            <a href="start.html" class="btn-op btn-gold">我懂了，開始遊戲</a>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const panes = Array.from(document.querySelectorAll('.step-pane'));
+    const dots = Array.from(document.querySelectorAll('.progress-dot'));
+    const cur = document.getElementById('stepCurrent');
+    const total = document.getElementById('stepTotal');
+    const prevBtn = document.getElementById('prevStep');
+    const nextBtn = document.getElementById('nextStep');
+    let step = 0;
+
+    function renderStep(){
+      panes.forEach((pane, i)=> pane.classList.toggle('show', i===step));
+      dots.forEach((dot, i)=> dot.classList.toggle('on', i===step));
+      cur.textContent = String(step + 1);
+      total.textContent = String(panes.length);
+      prevBtn.disabled = step === 0;
+      prevBtn.style.opacity = step === 0 ? '.45' : '1';
+      prevBtn.style.pointerEvents = step === 0 ? 'none' : 'auto';
+      nextBtn.textContent = step === panes.length - 1 ? '重新看一次 ↺' : '下一步 →';
+    }
+
+    prevBtn.addEventListener('click', ()=>{
+      if(step > 0){ step--; renderStep(); }
+    });
+    nextBtn.addEventListener('click', ()=>{
+      if(step < panes.length - 1) step++;
+      else step = 0;
+      renderStep();
+    });
+    renderStep();
+
+    const links = Array.from(document.querySelectorAll('#toc a'));
+    const sections = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+    const observer = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(!entry.isIntersecting) return;
+        const id = '#' + entry.target.id;
+        links.forEach(link=> link.classList.toggle('on', link.getAttribute('href') === id));
+      });
+    }, { rootMargin: '-30% 0px -55% 0px', threshold: 0.01 });
+    sections.forEach(sec => observer.observe(sec));
+  </script>
+</body>
+</html>
