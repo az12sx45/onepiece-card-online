@@ -6521,10 +6521,6 @@ body.tutorial-mode #connLbl{ color:#facc15 !important; }
 
   const VENUES = [
     { name:'魚人島' },
-    { name:'龐克哈薩特' },
-    { name:'德雷斯羅薩鬥技場' },
-    { name:'萬國' },
-    { name:'奧羅傑克森號' },
     { name:'和之國' },
   ];
 
@@ -6546,9 +6542,9 @@ body.tutorial-mode #connLbl{ color:#facc15 !important; }
       chestLeft: 20,
       players: [
         makePlayer(0,'你', Number((new URLSearchParams(location.search)).get('avatar')||1)||1, 4, 1, { isCPU:false }),
-        makePlayer(1,'娜美AI', 8, 7, 1),
-        makePlayer(2,'索隆AI', 14, 3, 0),
-        makePlayer(3,'羅賓AI', 20, 9, 2),
+        makePlayer(1,'香吉士AI', 4, 3, 1),
+        makePlayer(2,'羅AI', 7, 6, 0),
+        makePlayer(3,'女帝AI', 9, 9, 2),
       ],
       turnIndex: 0,
       turnStep: 'draw',
@@ -6562,7 +6558,8 @@ body.tutorial-mode #connLbl{ color:#facc15 !important; }
   state = baseState();
   feed = [
     '歡迎來到新手教學',
-    '你的目標很簡單：抽牌 → 在兩張牌中選一張打出',
+    '這個教學直接使用正式對戰畫面，但流程改成固定示範。',
+    '本教學固定為 4 位玩家，所以場地只會有 2 張。',
   ];
 
   function safeRender(){
@@ -6575,6 +6572,13 @@ body.tutorial-mode #connLbl{ color:#facc15 !important; }
 
   function cardName(id){
     try{ return CARD_TEXT?.[id]?.name || ('卡 '+id); }catch(e){ return '卡 '+id; }
+  }
+  function cardTextShort(id){
+    try{
+      const meta = CARD_TEXT?.[id];
+      if(!meta) return '';
+      return isEnhancedNow(id) ? meta.enh : meta.base;
+    }catch(e){ return ''; }
   }
 
   function pushLine(t){ if(t) { feed.push(t); safeRender(); } }
@@ -6629,8 +6633,15 @@ body.tutorial-mode #connLbl{ color:#facc15 !important; }
     {
       title:'歡迎來到偉大航道爭霸戰',
       sub:'這一頁直接沿用正式遊戲畫面，只是把流程改成固定教學。你會真的看到牌堆、玩家區、場地、棄牌堆和日誌。',
-      tip:'先按「下一步」，我帶你看每一個區塊。',
+      tip:'先按「下一步」，我帶你看整個桌面。',
       selector:'#players',
+      wait:'next'
+    },
+    {
+      title:'這局只有 4 位玩家，所以只有 2 張場地',
+      sub:'正式規則中，場地數會跟玩家數對應。這個教學固定是 4 人局，因此上方只放 2 張場地卡。',
+      tip:'目前是「魚人島」與「和之國」，所以魯夫與索隆在這局都屬於強化狀態。',
+      selector:'#venues',
       wait:'next'
     },
     {
@@ -6642,44 +6653,66 @@ body.tutorial-mode #connLbl{ color:#facc15 !important; }
     },
     {
       title:'你的回合第一步：抽牌',
-      sub:'每回合先從牌堆抽 1 張。教學裡我已經把你原本的手牌固定成喬巴，接下來抽到的牌也固定好了。',
+      sub:'每回合先從牌堆抽 1 張。教學裡我已經把你原本的手牌固定成喬巴，接下來抽到的牌也固定成索隆。',
       tip:'直接點一下牌堆。',
       selector:'#btnDraw',
       wait:'action:draw'
     },
     {
-      title:'現在你有兩張牌',
-      sub:'你手上原本的牌，加上剛抽到的新牌，會出現在左下的出牌區。正式規則就是二選一打出。',
-      tip:'這次教學請你打出左邊那張喬巴。',
+      title:'現在你有兩張牌，要二選一打出',
+      sub:'左邊是你原本的喬巴，右邊是剛抽到的索隆。正式規則就是每回合在這兩張中選一張打出。',
+      tip:'這一步請先打出左邊那張喬巴。',
       selector:'#myPlayZone',
       wait:'action:playHand'
     },
     {
-      title:'打牌後，效果會立刻生效',
-      sub:'你剛打出喬巴，所以自己獲得了「保護」狀態。這代表下一次被某些效果指定時，能先擋掉一次。',
-      tip:'看右邊你的玩家框，已經多了 🛡 保護。',
+      title:'打出的牌會立刻執行效果',
+      sub:'你剛打出喬巴，所以效果立刻生效，你獲得了「保護」。保護會顯示在右邊玩家框。',
+      tip:'牌一旦打出去，就進棄牌堆；效果不是等回合結束才觸發，而是立刻執行。',
       selector:'#players',
       wait:'next'
     },
     {
-      title:'棄牌堆與日誌',
-      sub:'每張打出的牌都會進入棄牌區；下方日誌則會記錄本局發生了什麼。之後你判斷局勢，常常要看這兩塊。',
-      tip:'我等一下會示範一次 AI 的出牌，讓你更有感覺。',
-      selector:'#discard',
-      wait:'next',
-      onNext(){ simulateEnemyTurn(); }
-    },
-    {
-      title:'場地會改變卡片強度',
-      sub:'上方這排就是本局場地。只要角色對應到自己的強化場地，技能就會升級。這也是遊戲最重要的變化來源之一。',
-      tip:'例如魯夫在魚人島、索隆在和之國，效果就會比一般版更強。',
-      selector:'#venues',
+      title:'沒打出去的那張，才是你真正留下來的手牌',
+      sub:'你剛剛打掉的是喬巴，所以你現在手上留下的是索隆。之後如果發生比牌、交換手牌，真正拿來比或拿來交換的，都是這張「沒打出去的牌」。',
+      tip:'先記住這個觀念，等一下我用兩個例子示範給你看。',
+      selector:'#myPlayZone',
       wait:'next'
     },
     {
-      title:'你已經學會基本操作了',
-      sub:'核心流程就是：看場地 → 抽牌 → 從兩張中選一張 → 觀察狀態、棄牌與日誌。之後你就能進正式對戰。',
-      tip:'關閉教學後，可把這頁接到開始頁入口。',
+      title:'棄牌堆與日誌也很重要',
+      sub:'每張打出的牌都會進棄牌堆；下方日誌則會記錄本局發生了什麼。你判斷局勢時，常常要回頭看這兩塊。',
+      tip:'下一步我會先示範一次「比牌效果」。',
+      selector:'#discard',
+      wait:'next',
+      onNext(){ simulateCompareExample(); }
+    },
+    {
+      title:'示範一：比牌看的是剩下沒打出的牌',
+      sub:'剛才香吉士AI 打出了香吉士。香吉士只是「發動效果的牌」，真正拿去比大小的，是他手上剩下的騙人布；被挑戰的女帝AI，也是一樣用自己剩下沒打出的牌來比。',
+      tip:'所以不是拿「打出去的香吉士」比，而是拿「保留在手上的另一張牌」比。',
+      selector:'#logBox',
+      wait:'next',
+      onNext(){ simulateSwapExample(); }
+    },
+    {
+      title:'示範二：交換手牌也是交換剩下那張',
+      sub:'剛才羅AI 打出了羅。羅只是觸發交換技能的牌，真正被交換的，是雙方各自手上剩下沒打出的那張牌。',
+      tip:'你原本留下的是索隆，所以被換走的其實是索隆；你換回來的是羅AI手上保留的羅賓。',
+      selector:'#players',
+      wait:'next'
+    },
+    {
+      title:'記規則最快的方法',
+      sub:'你可以把它想成：打出去的牌負責「發動技能」，留在手上的牌負責「當你的真正手牌」。因此比牌、交換、被偷看，通常都跟這張留下來的牌有關。',
+      tip:'如果忘記效果，也可以隨時打開卡片圖鑑查看每張牌的一般版與強化版。',
+      selector:'#cardDexBtn',
+      wait:'next'
+    },
+    {
+      title:'你已經學會基本操作與核心判斷',
+      sub:'核心流程就是：看場地 → 抽牌 → 在兩張中選一張打出 → 立刻結算效果 → 記住剩下那張才是自己的真正手牌。',
+      tip:'關閉教學後，就可以去正式對戰了。',
       selector:'#btnDraw',
       wait:'done'
     }
@@ -6735,9 +6768,9 @@ body.tutorial-mode #connLbl{ color:#facc15 !important; }
     state.players[0].tempDraw = 5; // 固定抽到索隆
     state.deck.pop();
     state.turnStep = 'choose';
-    pushLine('你抽到了索隆');
+    pushLine('你抽到了索隆（因為和之國在場，索隆屬於強化狀態）');
     redrawWithoutChangingStep();
-    goStep(3);
+    goStep(4);
   }
 
   function applyCardEffectForTutorial(cardId, player){
@@ -6755,35 +6788,88 @@ body.tutorial-mode #connLbl{ color:#facc15 !important; }
     mep.tempDraw = null;
     applyCardEffectForTutorial(cardId, mep);
     state.turnStep = 'draw';
-    state.turnIndex = 1;
-    pushLine(`你打出了${cardName(cardId)}，獲得保護`);
+    state.turnIndex = 0;
+    pushLine(`你打出了${cardName(cardId)}：${cardTextShort(cardId)}`);
+    pushLine(`效果立刻結算，所以你現在獲得了保護；而你手上留下的牌變成 ${cardName(mep.hand)}`);
     redrawWithoutChangingStep();
-    goStep(4);
+    goStep(5);
   }
 
-  function simulateEnemyTurn(){
-    pushLine('現在示範一次 AI 回合');
-    const p = state.players[1];
+  function simulateCompareExample(){
+    cancelAuto();
+    pushLine('現在示範一次 AI 的比牌效果');
+    const attacker = state.players[1]; // 香吉士AI
+    const defender = state.players[3]; // 女帝AI
     state.turnIndex = 1;
     state.turnStep = 'draw';
     redrawWithoutChangingStep();
+
     after(900, ()=>{
-      p.tempDraw = 3;
+      attacker.tempDraw = 1; // 抽到騙人布，等等會保留這張
       state.deck.pop();
       state.turnStep = 'choose';
-      pushLine('娜美AI 抽了 1 張牌');
+      pushLine('香吉士AI 抽到了騙人布');
       redrawWithoutChangingStep();
+
       after(1200, ()=>{
-        const played = p.hand;
+        const played = attacker.hand; // 打出香吉士
         try{ showPlayedFlash(played, 1); }catch(e){}
         state.discard.push(played);
-        p.hand = p.tempDraw;
-        p.tempDraw = null;
+        attacker.hand = attacker.tempDraw; // 留下騙人布
+        attacker.tempDraw = null;
+
+        const attackerRemain = attacker.hand; // 1
+        const defenderRemain = defender.hand; // 9
+
+        pushLine(`香吉士AI 打出了${cardName(played)}：${cardTextShort(played)}`);
+        pushLine(`但是比牌時，真正拿來比的是剩下沒打出的牌：香吉士AI 用 ${cardName(attackerRemain)}，女帝AI 用 ${cardName(defenderRemain)}`);
+        pushLine(`這次比牌結果：${cardName(attackerRemain)} < ${cardName(defenderRemain)}，所以香吉士AI 落敗`);
+        attacker.alive = false;
         state.turnIndex = 0;
         state.turnStep = 'draw';
-        pushLine(`娜美AI 打出了${cardName(played)}`);
         redrawWithoutChangingStep();
-        goStep(6);
+      });
+    });
+  }
+
+  function simulateSwapExample(){
+    cancelAuto();
+    pushLine('接著示範一次交換手牌效果');
+    const caster = state.players[2]; // 羅AI
+    const you = state.players[0];
+
+    state.turnIndex = 2;
+    state.turnStep = 'draw';
+    redrawWithoutChangingStep();
+
+    after(900, ()=>{
+      caster.tempDraw = 2; // 抽到羅賓，等等會保留這張
+      state.deck.pop();
+      state.turnStep = 'choose';
+      pushLine('羅AI 抽到了羅賓');
+      redrawWithoutChangingStep();
+
+      after(1200, ()=>{
+        const played = caster.hand; // 打出羅
+        try{ showPlayedFlash(played, 2); }catch(e){}
+        state.discard.push(played);
+
+        const casterRemainBefore = caster.tempDraw; // 2
+        const yourRemainBefore = you.hand;          // 5
+
+        caster.hand = casterRemainBefore;
+        caster.tempDraw = null;
+
+        pushLine(`羅AI 打出了${cardName(played)}：${cardTextShort(played)}`);
+        pushLine(`交換時，打出去的羅不會被拿來交換；真正交換的是雙方手上剩下的牌：你的是 ${cardName(yourRemainBefore)}，羅AI的是 ${cardName(casterRemainBefore)}`);
+
+        you.hand = casterRemainBefore;
+        caster.hand = yourRemainBefore;
+
+        pushLine(`交換完成：你拿到 ${cardName(you.hand)}，羅AI 拿到 ${cardName(caster.hand)}`);
+        state.turnIndex = 0;
+        state.turnStep = 'draw';
+        redrawWithoutChangingStep();
       });
     });
   }
