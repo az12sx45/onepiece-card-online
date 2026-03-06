@@ -3,564 +3,2822 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>偉大航道爭霸戰｜新手導覽</title>
+  <title>偉大航道爭霸戰｜正式對戰</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
   <style>
-    :root{ --brand-rgb:245,158,11; --spot-x:50vw; --spot-y:50vh; --spot-w:240px; --spot-h:160px; }
-    html,body{height:100%;background:#0f1113;color:#eaecee;overflow-x:hidden}
-    body{
-      background:
-        radial-gradient(1200px 800px at 10% 20%, rgba(255,184,77,.06), transparent 60%),
-        radial-gradient(1200px 800px at 90% 80%, rgba(0,158,255,.05), transparent 60%),
-        linear-gradient(180deg,#0f1113 0%,#14171a 100%);
-    }
-    body::before{
-      content:''; position:fixed; inset:0; z-index:-1;
-      background:var(--venue-bg-url, none), radial-gradient(circle at center, rgba(0,0,0,.15), rgba(0,0,0,.35));
-      background-size:cover; background-position:center; background-repeat:no-repeat;
-      opacity:.9;
-    }
-    .card{ background: rgba(16,20,24,.80); backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,.06); border-radius: 16px; }
+    
+/* === OP themed scrollbar (match waiting room style) === */
+:root{ --brand-rgb: 245, 158, 11; } /* amber */
+
+.overflow-auto,
+.overflow-y-auto,
+.overflow-x-auto,
+.op-scroll{
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(var(--brand-rgb), .85) rgba(255,255,255,.08);
+}
+
+/* WebKit */
+.overflow-auto::-webkit-scrollbar,
+.overflow-y-auto::-webkit-scrollbar,
+.overflow-x-auto::-webkit-scrollbar,
+.op-scroll::-webkit-scrollbar{
+  width: 10px;
+  height: 10px;
+}
+.overflow-auto::-webkit-scrollbar-track,
+.overflow-y-auto::-webkit-scrollbar-track,
+.overflow-x-auto::-webkit-scrollbar-track,
+.op-scroll::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.06);
+  border-radius: 999px;
+}
+.overflow-auto::-webkit-scrollbar-thumb,
+.overflow-y-auto::-webkit-scrollbar-thumb,
+.overflow-x-auto::-webkit-scrollbar-thumb,
+.op-scroll::-webkit-scrollbar-thumb{
+  background: linear-gradient(180deg,
+    rgba(var(--brand-rgb), .95),
+    rgba(var(--brand-rgb), .55)
+  );
+  border-radius: 999px;
+  border: 2px solid rgba(0,0,0,.35);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.18);
+}
+.overflow-auto::-webkit-scrollbar-thumb:hover,
+.overflow-y-auto::-webkit-scrollbar-thumb:hover,
+.overflow-x-auto::-webkit-scrollbar-thumb:hover,
+.op-scroll::-webkit-scrollbar-thumb:hover{
+  background: linear-gradient(180deg,
+    rgba(var(--brand-rgb), 1),
+    rgba(var(--brand-rgb), .70)
+  );
+}
+
+html,body{height:100%;background:#0f1113;color:#eaecee}
+    .card{ background: rgba(16,20,24,.80);              /* 微透明面板色：#101418 / 80% */
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);                   /* 玻璃毛玻璃效果 */
+  border: 1px solid rgba(255,255,255,.06);      /* 邊線調淡，跟整體更搭 */
+  border-radius: 16px; }
     .thumb{ width:68px; aspect-ratio:1242/1863; object-fit:cover; border-radius:10px; border:1px solid #2f353c; background:#0a0d10 }
-    .thumb-lg{ width:110px; aspect-ratio:1242/1863; object-fit:cover; border-radius:12px; border:1px solid #2f353c; background:#0a0d10 }
-    .thumb-xl{ width:min(22vw,190px); aspect-ratio:1242/1863; object-fit:cover; border-radius:14px; border:1px solid #2f353c; background:#0a0d10 }
+    .thumb-sm{ width:42px; aspect-ratio:1242/1863; object-fit:cover; border-radius:8px; border:1px solid #2f353c; background:#0a0d10 }
     .deck{ position:relative; width:120px; aspect-ratio:1242/1863; border-radius:14px; border:1px solid #2a2f35; overflow:hidden; box-shadow:0 12px 28px rgba(0,0,0,.45) }
     .deck > img{ width:100%; height:100%; object-fit:cover; background:#0a0d10 }
-    .draw-hint{
-      position:absolute; right:150px; top:20%; transform:translateY(-50%); display:inline-flex; align-items:center; gap:4px;
-      padding:4px 10px; border-radius:999px; font-size:11px; line-height:1.1;
-      background: radial-gradient(circle at 0 0, rgba(250,250,210,.22), transparent 60%), radial-gradient(circle at 100% 100%, rgba(180,83,9,.60), transparent 65%), rgba(15,23,42,.92);
-      border:1px solid rgba(250,204,21,.85); color:#fefce8; text-shadow:0 1px 2px rgba(0,0,0,.7);
-      box-shadow: 0 0 0 1px rgba(15,23,42,.85), 0 0 12px 4px rgba(250,204,21,.55);
-      pointer-events:none; white-space:nowrap; z-index:5; animation:drawHintPulse 1.6s ease-in-out infinite;
-    }
-    @keyframes drawHintPulse {
-      0%,100% { transform: translateY(-50%) translateX(0); box-shadow:0 0 0 1px rgba(15,23,42,.85),0 0 10px 2px rgba(250,204,21,.35);} 
-      50% { transform: translateY(-50%) translateX(-4px); box-shadow:0 0 0 1px rgba(15,23,42,.85),0 0 18px 6px rgba(250,204,21,.7);} 
-    }
-    @keyframes breath { 0%,100%{ box-shadow:0 0 0 0 rgba(250,204,21,.15),0 0 0 1px rgba(255,255,255,.06);} 50%{ box-shadow:0 0 18px 2px rgba(250,204,21,.3),0 0 0 1px rgba(255,255,255,.14);} }
-    .panel-soft{ animation:breath 2.4s ease-in-out infinite; }
-    .venue-tile{ position:relative; border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,.08); background:#0b0f13; cursor:pointer; }
-    .venue-tile img{ width:100%; aspect-ratio:16/10; object-fit:cover; display:block; }
-    .venue-tile .label{ position:absolute; inset:auto 8px 8px 8px; font-size:11px; padding:4px 8px; border-radius:999px; background:rgba(0,0,0,.6); border:1px solid rgba(255,255,255,.1) }
-    .player-card{ background:transparent; border:1.5px solid rgba(255,255,255,.25); border-radius:14px; padding:10px; }
-    .player-card.current{ border-color: rgba(255,200,80,.85); box-shadow:0 0 10px rgba(255,200,80,.35); }
-    .player-card.offline{ opacity:.55; }
-    .avatar{ width:42px; height:42px; border-radius:999px; object-fit:cover; }
-    .log-item{ padding:6px 8px; border-radius:10px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.04); }
-    .btn-ui{ border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.06); color:#fff; border-radius:12px; padding:.55rem .9rem; transition:all .15s ease; }
-    .btn-ui:hover{ background:rgba(255,255,255,.12); }
-    .btn-main{ background:#fbbf24; color:#111827; border-color:#f59e0b; font-weight:700; }
-    .btn-main:hover{ background:#fcd34d; }
+    .deck .cnt{ position:absolute; right:-8px; top:-8px; background:#facc15; color:#111; border-radius:999px; padding:.15rem .45rem; font-size:12px; border:1px solid #caa902 }
+    .modal{ position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,.55); z-index:50 }
 
-    .spotlight-layer{ position:fixed; inset:0; pointer-events:none; z-index:150; }
-    .spotlight-hole{
-      position:absolute; left:var(--spot-x); top:var(--spot-y); width:var(--spot-w); height:var(--spot-h); transform:translate(-50%,-50%);
-      border-radius:22px; box-shadow:0 0 0 9999px rgba(0,0,0,.66), 0 0 0 2px rgba(251,191,36,.95), 0 0 34px rgba(251,191,36,.55);
-      transition:all .35s ease;
-    }
-    .guide-arrow{
-      position:absolute; left:var(--spot-x); top:calc(var(--spot-y) - var(--spot-h)/2 - 22px); transform:translateX(-50%);
-      color:#fde68a; font-size:28px; text-shadow:0 0 10px rgba(251,191,36,.6); animation:floaty 1.2s ease-in-out infinite;
-      transition:all .35s ease;
-    }
-    @keyframes floaty{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-6px)}}
-    .guide-card{
-      position:fixed; z-index:160; width:min(420px, calc(100vw - 24px));
-      background:rgba(8,12,18,.94); border:1px solid rgba(251,191,36,.45); border-radius:20px;
-      box-shadow:0 22px 40px rgba(0,0,0,.5), 0 0 22px rgba(251,191,36,.12);
-      backdrop-filter:blur(10px); transition:all .35s ease;
-    }
-    .guide-head{ background:linear-gradient(90deg, rgba(251,191,36,.18), rgba(251,191,36,.05)); border-bottom:1px solid rgba(251,191,36,.18); }
-    .guide-badge{ background:rgba(251,191,36,.16); color:#fde68a; border:1px solid rgba(251,191,36,.25); }
+    /* === FX: Glow / Flip / Shake / Pulse === */
+    @keyframes fx-glow { 0% { box-shadow: 0 0 0 rgba(250, 204, 21, 0); } 50% { box-shadow: 0 0 24px rgba(250, 204, 21, .6); } 100% { box-shadow: 0 0 0 rgba(250, 204, 21, 0); } }
+    .fx-glow { animation: fx-glow .8s ease-out 1; }
+    @keyframes fx-flip { 0%{ transform: rotateY(0deg) scale(0.9); filter: brightness(1.1); } 50%{ transform: rotateY(90deg) scale(1.05); filter: brightness(1.3); } 100%{ transform: rotateY(180deg) scale(1.0); filter: brightness(1.0);} }
+    .fx-flip { transform-style: preserve-3d; animation: fx-flip .45s ease-out 1; }
+    @keyframes fx-shake { 0%,100%{ transform: translateX(0);} 20%{ transform: translateX(-6px);} 40%{ transform: translateX(5px);} 60%{ transform: translateX(-4px);} 80%{ transform: translateX(3px);} }
+    .fx-shake { animation: fx-shake .45s ease-out 1; }
+    @keyframes fx-pulse { 0%{ transform: scale(1);} 40%{ transform: scale(1.15);} 100%{ transform: scale(1);} }
+    .fx-pulse { animation: fx-pulse .45s ease-out 1; }
+/* === 決鬥特效 overlay === */
+#duelFx{
+  position:fixed;
+  inset:0;
+  z-index:260;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  pointer-events:none;
+  background:radial-gradient(circle at center, rgba(0,0,0,.86), rgba(0,0,0,.97));
+  opacity:0;
+  transform:scale(1.04);
+  transition:opacity .3s ease-out, transform .3s ease-out;
+}
+#duelFx.show{
+  opacity:1;
+  transform:scale(1);
+}
+#duelFx.hidden{
+  display:none;
+}
 
-    .pulse-ring{ position:relative; }
-    .pulse-ring::after{ content:''; position:absolute; inset:-8px; border-radius:18px; border:2px solid rgba(251,191,36,.8); animation:ring 1.8s ease-out infinite; }
-    @keyframes ring{0%{opacity:.9; transform:scale(.96)}100%{opacity:0; transform:scale(1.08)}}
+#duelFx .overlay{
+  width:100%;
+  max-width:900px;
+  padding:16px;
+}
 
-    .card-dex-overlay{ position:fixed; inset:0; z-index:120; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.7); }
-    .card-dex-overlay.open{ display:flex; }
+#duelFx .arena{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  transform:scale(.9);
+  opacity:0;
+  transition:transform .5s ease-out, opacity .5s ease-out;
+}
+#duelFx.show .arena{
+  opacity:1;
+}
+#duelFx .arena.spread{
+  transform:scale(1);
+}
 
-    .step-dot{ width:8px; height:8px; border-radius:999px; background:rgba(255,255,255,.25); }
-    .step-dot.on{ background:#fbbf24; box-shadow:0 0 12px rgba(251,191,36,.7); }
+#duelFx .slot{
+  flex:0 0 auto;
+  width:min(280px, 36vw);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+}
 
-    .hide-for-step{ display:none !important; }
+#duelFx .avatar-wrap{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+#duelFx .avatar{
+  width:40px;
+  height:40px;
+  border-radius:999px;
+  object-fit:cover;
+  box-shadow:0 0 12px rgba(0,0,0,.75);
+}
+#duelFx .pname{
+  font-size:14px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:#e5e7eb;
+}
 
-    @media (max-width: 1023px){
-      .draw-hint{ right:135px; top:14%; }
+#duelFx .cardwrap{
+  position:relative;
+  width:100%;
+  aspect-ratio:3/4;
+  border-radius:16px;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at top, rgba(248,250,252,.08), transparent 55%),
+    linear-gradient(145deg, rgba(148,163,184,.35), rgba(15,23,42,.9));
+  box-shadow:
+    0 0 0 1px rgba(148,163,184,.35),
+    0 18px 35px rgba(0,0,0,.9);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+#duelFx .cardimg{
+  position:relative;
+  width:90%;
+  height:90%;
+  object-fit:contain;
+  filter:drop-shadow(0 8px 18px rgba(0,0,0,.9));
+  transform-origin:center center;
+  transition:filter .25s ease-out, transform .25s ease-out;
+}
+
+/* 贏家 slot 高亮 */
+#duelFx .slot.winner .cardwrap{
+  box-shadow:
+    0 0 0 1px rgba(251,191,36,.7),
+    0 0 24px rgba(245,158,11,.75),
+    0 18px 35px rgba(0,0,0,.9);
+}
+#duelFx .slot.winner .pname{
+  color:#facc15;
+}
+
+/* 輸家 slot 稍微變暗 */
+#duelFx .slot.loser .cardwrap{
+  opacity:.9;
+  filter:grayscale(.2);
+}
+
+/* VS 標籤 */
+#duelFx .vs-tag{
+  flex:0 0 auto;
+  font-size:26px;
+  font-weight:900;
+  letter-spacing:.25em;
+  color:#fee2e2;
+  text-shadow:0 0 14px rgba(248,113,113,.9);
+}
+
+/* 底下說明文字 */
+#duelFx .caption{
+  margin-top:14px;
+  text-align:center;
+  font-size:14px;
+  line-height:1.6;
+  color:#e5e7eb;
+}
+#duelFx .caption .line{
+  opacity:.85;
+}
+#duelFx .caption .line-win{
+  margin-top:2px;
+  font-size:15px;
+  font-weight:700;
+  color:#fee2e2;
+}
+
+/* 牌翻面動畫 */
+#duelFx .cardimg.fx-flip{
+  animation:duelFlip .45s ease-out forwards;
+}
+#duelFx .cardimg.front-reveal{
+  transform:scale(1.04);
+  filter:drop-shadow(0 0 16px rgba(248,250,252,.95));
+}
+
+/* 輸家燃燒動畫 */
+#duelFx .slot.burning .cardimg{
+  animation:duelBurn .9s ease-out forwards;
+}
+#duelFx .slot.burning .cardimg::after{
+  content:'';
+  position:absolute;
+  inset:-12%;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(254,249,195,.85), transparent 60%),
+    radial-gradient(circle at 80% 40%, rgba(252,165,165,.85), transparent 65%),
+    radial-gradient(circle at 50% 100%, rgba(248,113,113,.95), transparent 55%);
+  mix-blend-mode:screen;
+  opacity:.0;
+  pointer-events:none;
+  animation:flame .6s ease-out forwards;
+}
+
+/* 衝撞感 */
+#duelFx .arena.clash .slot-left .cardwrap{
+  animation:duelHitL .4s cubic-bezier(.22,.61,.36,1) forwards;
+}
+#duelFx .arena.clash .slot-right .cardwrap{
+  animation:duelHitR .4s cubic-bezier(.22,.61,.36,1) forwards;
+}
+
+/* Keyframes */
+@keyframes duelFlip{
+  0%{ transform:rotateY(0deg) scale(1); }
+  49%{ transform:rotateY(90deg) scale(1.02); }
+  50%{ transform:rotateY(90deg) scale(1.02); }
+  100%{ transform:rotateY(0deg) scale(1.04); }
+}
+@keyframes duelHitL{
+  0%{ transform:translateX(0); }
+  100%{ transform:translateX(8px); }
+}
+@keyframes duelHitR{
+  0%{ transform:translateX(0); }
+  100%{ transform:translateX(-8px); }
+}
+@keyframes duelBurn{
+  0%{ opacity:1; transform:scale(1.04); filter:blur(0); }
+  40%{ opacity:1; transform:scale(1.08); filter:blur(1px); }
+  100%{ opacity:0; transform:scale(1.12); filter:blur(4px); }
+}
+@keyframes flame{
+  0%{ opacity:.0; transform:translateY(8px) scale(1); }
+  40%{ opacity:.95; transform:translateY(0) scale(1.05); }
+  100%{ opacity:0; transform:translateY(-10px) scale(1.1); }
+}
+
+/* ===============================
+   決鬥背景：圖片版本（貼在 #duelFx CSS 最後面）
+   =============================== */
+
+/* 讓原本 overlay 背景不要擋住你的圖 */
+#duelFx .overlay{
+  background: none !important;
+}
+
+/* 用 ::before 當背景圖層（不影響裡面的卡牌/文字） */
+#duelFx .overlay::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+
+  /* 黑色暗化遮罩 + 你的背景圖 */
+  background:
+    radial-gradient(circle at center, rgba(0,0,0,.72), rgba(0,0,0,.94)),
+    url("images/duel/duel_bg_haki_clash.webp"); /* ← 改成你的檔名 */
+
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+
+  /* 微動態 */
+  transform:scale(1.08);
+  filter:contrast(1.05) saturate(1.1);
+  animation:duelBgMove 10s ease-in-out infinite alternate;
+}
+
+/* 確保 overlay 內的內容都在背景圖上方 */
+#duelFx .overlay > *{
+  position:relative;
+  z-index:1;
+}
+
+@keyframes duelBgMove{
+  0%{ transform:scale(1.08) translate(-1%, -0.8%); }
+  100%{ transform:scale(1.14) translate(1%, 0.8%); }
+}
+
+
+    /* 強化特效：光球 */
+    .fx-orb { position: fixed; width: 14px; height: 14px; border-radius: 999px;
+      background: radial-gradient(circle at 40% 40%, #fff, #facc15 55%, rgba(250,204,21,.2) 70%);
+      box-shadow: 0 0 16px rgba(250,204,21,.9), 0 0 36px rgba(250,204,21,.55);
+      pointer-events:none; z-index: 90; opacity:.95;
+      transition: transform .6s cubic-bezier(.2,.7,.1,1), opacity .2s ease .5s;
     }
-    @media (max-width: 768px){
-      .guide-arrow{ display:none; }
-      .thumb-xl{ width:42vw; }
-      .draw-hint{ right:122px; top:12%; }
+
+/* === 手牌結冰遮罩（冰花覆蓋） === */
+.card-frozen{
+  position: relative;
+  cursor: not-allowed;
+}
+
+.card-frozen::after{
+  content:'';
+  position:absolute;
+  inset:0;                     /* 等同 top/right/bottom/left = 0 */
+  background:url("images/freeze-mask.png") center/cover no-repeat;
+  opacity:0.9;                 /* 透明度你可以自己調整 0~1 */
+  pointer-events:none;         /* 視覺用就好，真正禁止點擊用 disabled */
+}
+
+/* 冰住時，底下卡圖再稍微灰一點 */
+.card-frozen img{
+  filter: grayscale(.25) brightness(.9);
+}
+
+
+    /* === 擲硬幣 Overlay & 動畫框 === */
+    #coinOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,.7);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s ease;
     }
-  </style>
+    #coinOverlay.show { opacity: 1; pointer-events: auto; }
+
+    #coinFrame {
+      background: radial-gradient(circle at 50% 40%,rgba(24,28,32,0.9) 0%,rgba(12,14,16,0.92) 60%,rgba(0,0,0,0.0) 100%);
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 24px 48px rgba(0,0,0,.8), 0 2px 4px rgba(0,0,0,.6), 0 0 1px rgba(255,255,255,.08) inset, 0 0 30px rgba(0,0,0,.6) inset;
+      padding: 16px;
+      width: 400px; max-width: 90vw; max-height: 90vh;
+      display: flex; align-items: center; justify-content: center;
+      transform: scale(.9); transition: transform .3s ease;
+    }
+    #coinOverlay.show #coinFrame { transform: scale(1); }
+    #coinFrame video { width: 100%; height: auto; max-height: 70vh; border-radius: 12px; box-shadow: 0 12px 28px rgba(0,0,0,.6); outline: none; }
+    #coinOverlay video { outline: none; }
+
+    /* === 打出卡片「快閃」Overlay（新增） === */
+    #playedOverlay{ position:fixed; inset:0; z-index: ninetyfive; z-index:95; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,.72); opacity:0; pointer-events:none; transition:opacity .25s ease; }
+    #playedOverlay.show{ opacity:1; pointer-events:auto; }
+    #playedFrame{ display:flex; flex-direction:column; gap:10px; align-items:center; }
+    #playedImg{ width:min(40vw,320px); height:auto; border-radius:14px; border:1px solid #2f353c; box-shadow:0 18px 36px rgba(0,0,0,.45); }
+    #playedMeta{ font-size:14px; color:#cbd5e1; opacity:.95; }
+
+  /* === 角色語音台詞泡泡（樣式 1） === */
+  #voiceBubble{
+    position: relative;
+    max-width: min(80vw, 420px);
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #fef9c3;
+    color: #111827;
+    border: 2px solid #111827;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    text-align: center;
+    box-shadow:
+      3px 3px 0 #111827,
+      0 10px 28px rgba(0,0,0,.7);
+    line-height: 1.4;
+    white-space: normal;
+    word-break: break-word;
+  }
+  #voiceBubble.hidden{
+    display: none;
+  }
+  /* 泡泡下面的小尾巴 */
+  #voiceBubble::after{
+    content:'';
+    position:absolute;
+    left: 50%;
+    top: 100%;
+    transform: translateX(-50%) translateY(-4px) rotate(45deg);
+    width: 14px;
+    height: 14px;
+    background:#fef9c3;
+    border-bottom: 2px solid #111827;
+    border-right: 2px solid #111827;
+  }
+
+    
+/* === 場地背景直接掛在 body（v2） === */
+:root{
+  --venue-bg-url: none;  /* 由 JS 動態設定 */
+}
+
+/* 預設你的原本背景 */
+body{
+  background:
+    radial-gradient(1200px 800px at 10% 20%, rgba(255,184,77,.06), transparent 60%),
+    radial-gradient(1200px 800px at 90% 80%, rgba(0,158,255,.05), transparent 60%),
+    linear-gradient(180deg,#0f1113 0%,#14171a 100%);
+  transition: background-image .25s ease, background-size .25s ease, background-position .25s ease;
+}
+
+/* 啟用場地背景時：把圖片疊在最底層，再覆一點淡淡的遮罩，維持可讀性 */
+body.venue-on{
+  background-image:
+    var(--venue-bg-url), /* 場地圖片（最底層） */
+    radial-gradient(1200px 800px at 10% 20%, rgba(0,0,0,.18), transparent 60%),
+    radial-gradient(1200px 800px at 90% 80%, rgba(0,0,0,.18), transparent 60%),
+    linear-gradient(180deg,#0f1113 0%,#14171a 100%);
+  background-size: cover, auto, auto, auto;
+  background-position: center, center, center, center;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+  background-attachment: fixed, fixed, fixed, fixed; /* 滑動時更穩定 */
+}
+
+/* 玩家小框：背景完全透明（移除毛玻璃、保留邊線） */
+#players .border,
+#players .border-amber-400,
+#players [class*="bg-\\[\\#12161b\\]"],
+#players .card{
+  background: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;  /* 若原本有陰影想清掉 */
+}
+
+/*（可選）目前回合框仍給一點金色輪廓，背景保持透明 */
+#players .current{
+  background: transparent !important;
+  box-shadow: 0 0 0 1px rgba(255,200,80,.35) !important;
+}
+
+/*（可選）讓玩家卡文字在任何底圖上都清楚些 */
+#players .card, 
+#players .card *{
+  text-shadow: 0 1px 1px rgba(0,0,0,.35);
+}
+/* === 玩家框架視覺統一 === */
+
+/* 預設：所有玩家小框 全透明底 + 白色半透明輪框 */
+#players .card,
+#players .border,
+#players .border-amber-400,
+#players [class*="bg-\\[\\#12161b\\]"]{
+  background: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  border: 1.5px solid rgba(255,255,255,.25) !important; /* 白色半透明邊線 */
+  border-radius: 14px;
+  box-shadow: none !important;
+  transition: border-color .25s ease, box-shadow .25s ease;
+}
+
+/* 當前回合的玩家（保持金邊或亮邊） */
+#players .current,
+#players .is-turn,
+#players .active{
+  border: 1.8px solid rgba(255,200,80,.85) !important;  /* 金色亮邊 */
+  box-shadow: 0 0 10px rgba(255,200,80,.4) !important;
+}
+
+/* 被淘汰或無法行動的玩家（灰邊、降低透明度） */
+#players .eliminated,
+#players .disabled{
+  opacity: .55;
+  border-color: rgba(255,255,255,.1) !important;
+}
+
+/* 讓玩家名稱、金幣數在任何背景上都清楚 */
+#players .card *,
+#players .border *,
+#players .border-amber-400 *{
+  text-shadow: 0 1px 2px rgba(0,0,0,.5);
+}
+
+/* === 只移除玩家頭像的邊框/外框/陰影 === */
+#players .avatar,
+#players .avatar img,
+#players img.avatar,
+#players img.rounded-full,
+#players .player-avatar,
+#players .player-avatar img {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* 如果你的頭像外面還包了一層有邊框的容器（常見 avatar-wrap/container） */
+#players .avatar-wrap,
+#players .avatar-container {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* 保險：玩家卡中的所有 img 都不加邊框（不影響外層卡片邊框） */
+#players .card img {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* 1) 把原本 body 的背景交給一個固定圖層處理 */
+html, body{
+  min-height: 100%;
+  background: none !important;   /* 先清掉原本會捲動的背景 */
+}
+
+body{
+  position: relative;             /* 讓 ::before 可以正常疊底 */
+  --venue-bg-url: none;           /* 由 JS 設定 url("...") 或 none */
+}
+
+/* 2) 固定在視窗底下的背景圖層（不跟著捲動） */
+body::before{
+  content: '';
+  position: fixed;
+  inset: 0;                       /* 佔滿視窗 */
+  z-index: -1;                    /* 永遠在所有內容之下 */
+  background:
+    var(--venue-bg-url),                                              /* 場地圖 */
+    radial-gradient(1200px 800px at 10% 20%, rgba(0,0,0,.18), transparent 60%),
+    radial-gradient(1200px 800px at 90% 80%, rgba(0,0,0,.18), transparent 60%),
+    linear-gradient(180deg,#0f1113 0%,#14171a 100%);                  /* 原本的漸層底 */
+  background-size: cover, auto, auto, auto;
+  background-position: center, center, center, center;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+  /* 不用 background-attachment，因為本身就是 fixed 層 */
+}
+
+/* 3) 把會擋住的主容器改成透明（避免「黑色東西」往上蓋） */
+#app, .table, .board, main, .page, .wrap{
+  background: transparent !important;
+}
+
+
+/* ===== BGM 播放條：白色半透明按鈕 & 清單 ===== */
+#bgmBar{
+  border-color: rgba(255,255,255,.12) !important;
+  background: rgba(20,24,28,.65) !important;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+#bgmBar button{
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.06);
+  border-radius: 10px;
+  padding: 6px 10px;
+  line-height: 1;
+  user-select: none;
+  transition: background .2s ease, border-color .2s ease, transform .05s ease;
+}
+#bgmBar button:hover{
+  background: rgba(255,255,255,.12);
+  border-color: rgba(255,255,255,.28);
+}
+#bgmBar button:active{
+  transform: translateY(1px);
+}
+#bgmBar button:focus{ outline: none; box-shadow: none; }
+
+/* 隨機開啟的狀態 */
+#bgmBar .is-active{
+  background: rgba(255,255,255,.18);
+  border-color: rgba(255,255,255,.38);
+  font-weight: 600;
+}
+
+/* 曲目清單彈層 */
+#bgmMenu{
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  width: min(72vw, 420px);
+  max-height: 52vh;
+  overflow: auto;
+  padding: 8px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(16,20,24,.88);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-radius: 14px;
+  box-shadow: 0 10px 32px rgba(0,0,0,.45);
+  z-index: 60;
+}
+#bgmMenu .item{
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px; border-radius: 10px; cursor: pointer;
+  color: #fff; font-size: 13px;
+  border: 1px solid transparent;
+}
+#bgmMenu .item:hover{
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.12);
+}
+#bgmMenu .item.active{
+  background: rgba(255,255,255,.14);
+  border-color: rgba(255,255,255,.28);
+  font-weight: 600;
+}
+
+/* === BGM 圓角 SVG 按鈕 === */
+#bgmBar .icon-btn{
+  width: 36px; height: 36px;
+  border-radius: 12px;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.06);
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background .18s ease, transform .06s ease, border-color .18s ease, box-shadow .18s ease;
+}
+#bgmBar .icon-btn:hover{
+  background: rgba(255,255,255,.12);
+  border-color: rgba(255,255,255,.28);
+  box-shadow: 0 6px 18px rgba(0,0,0,.25);
+}
+#bgmBar .icon-btn:active{ transform: translateY(1px); }
+#bgmBar .icon-btn.big{ width: 40px; height: 40px; font-weight: 700; }
+
+/* 隨機啟動時有亮度（沿用 is-active） */
+#bgmShuffle.is-active{
+  background: rgba(255,255,255,.18);
+  border-color: rgba(255,255,255,.38);
+}
+
+/* SVG 統一尺寸（不用每個都設） */
+#bgmBar .icon-btn svg{ width: 18px; height: 18px; fill: currentColor; }
+#bgmBar .icon-btn.big svg{ width: 20px; height: 20px; }
+
+/* 曲名依舊可點展開清單 */
+#bgmTitle{ cursor: pointer; }
+
+#bgmMenu .dot{ width: 8px; height: 8px; border-radius: 50%; background: currentColor; opacity:.8; }
+
+/* BGM 播放器條：改為完全透明底（不影響按鈕外觀） */
+#bgmBar{
+  background: transparent !important;
+  border-color: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+  padding-left: 0 !important;  /* 可選：讓條更貼合右側 */
+  padding-right: 0 !important; /* 可選 */
+}
+
+/* 若想保留一點細線輪廓，改用這一行取代上面的 border-color 設定 */
+// #bgmBar{ border-color: rgba(255,255,255,.10) !important; }
+
+
+/* === LAW & LUFFY modals visibility === */
+#lawSwapModal.hidden, #luffyBoostModal.hidden { display:none; }
+
+.deck .cnt{ display:none !important; }
+
+/* === 牌堆外圈紅色呼吸光（不動圖片本體） === */
+@keyframes deckHaloBreath {
+  0%,100% { opacity: .28; box-shadow:
+      0 0 0 2px rgba(239,68,68,.35),
+      0 0 18px 6px rgba(239,68,68,.25); }
+  50%     { opacity: .95; box-shadow:
+      0 0 0 3px rgba(239,68,68,.55),
+      0 0 30px 12px rgba(239,68,68,.38); }
+}
+
+#btnDraw.hot{
+  position: relative;
+  overflow: visible;              /* 讓外圈不被裁切 */
+  border-radius: 12px;            /* 外圈圓角，對齊你原本按鈕 */
+}
+
+/* 只做外圈光暈：放在 ::after，不影響點擊 */
+#btnDraw.hot::after{
+  content: '';
+  position: absolute;
+  inset: -8px;                    /* 外圈距離，調大可更外擴 */
+  border-radius: 16px;
+  pointer-events: none;
+  animation: deckHaloBreath 2.2s ease-in-out infinite;
+}
+
+/* 保證圖片本體不被改動（避免之前的樣式殘留） */
+#btnDraw #deckImg{
+  outline: none !important;
+  box-shadow: none !important;
+  animation: none !important;
+}
+
+/* === 抽牌階段提示泡泡（👉 + 請抽牌，黃光） === */
+@keyframes drawHintPulse {
+  0%,100% {
+    transform: translateX(0);
+    box-shadow:
+      0 0 0 0 rgba(250,204,21,.0),
+      0 0 12px 0 rgba(250,204,21,.0);
+  }
+  50% {
+    transform: translateX(-4px);
+    box-shadow:
+      0 0 0 1px rgba(250,204,21,.65),
+      0 0 20px 6px rgba(250,204,21,.75);
+  }
+}
+
+.draw-hint{
+  position: absolute;
+  right: 150px;          /* 桌機你現在覺得 OK，就先維持 */
+  top: 20%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  line-height: 1.1;
+  background: radial-gradient(circle at 0 0, rgba(250,250,210,.22), transparent 60%),
+              radial-gradient(circle at 100% 100%, rgba(180,83,9,.60), transparent 65%),
+              rgba(15,23,42,.92);
+  border: 1px solid rgba(250,204,21,.85);
+  color: #fefce8;
+  text-shadow: 0 1px 2px rgba(0,0,0,.7);
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,.85),
+    0 0 12px 4px rgba(250,204,21,.55);
+  pointer-events: none;          /* 不擋你點牌堆 */
+  animation: drawHintPulse 1.6s ease-in-out infinite;
+  z-index: 5;
+
+  /* 這兩行是關鍵：避免平板自動換行或亂調整字體大小 */
+  white-space: nowrap;
+  -webkit-text-size-adjust: 100%;
+}
+
+
+
+/* 尊重「減少動態」偏好：保留靜態描邊、停用動畫 */
+@media (prefers-reduced-motion: reduce){
+  #btnDraw.hot::after{ animation: none !important; }
+}
+
+/* === 基拉：解除武裝提示框（2 號面具樣式 · demo 完整版） === */
+#killerLayer {
+  position: fixed;
+  top: 16px;           /* ← 跟騙人布一樣高 */
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  z-index: 188;
+}
+
+/* 容器本體：面具側視徽章（demo 同款） */
+.killer-v2 {
+  position: relative;
+  max-width: min(92vw, 560px);
+  padding: 9px 18px 11px 62px;  /* 左邊留位置給面具 */
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(37,99,235,0.45), transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(15,23,42,0.9), transparent 60%),
+    #020617;
+  border: 1px solid rgba(148,163,184,0.95);
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,1),
+    0 18px 34px rgba(0,0,0,0.96),
+    0 0 26px rgba(59,130,246,0.9);
+  color: #e5f2ff;
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+  line-height: 1.5;
+  letter-spacing: 0.03em;
+  transform: translateY(-20px) scale(0.96);
+  opacity: 0;
+  overflow: visible;
+  transition:
+    opacity 0.26s ease-out,
+    transform 0.26s ease-out,
+    box-shadow 0.26s ease-out;
+}
+
+/* 顯示時動畫狀態（JS 會加 show 類別） */
+.killer-v2.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  box-shadow:
+    0 0 0 1px rgba(191,219,254,1),
+    0 18px 40px rgba(15,23,42,1),
+    0 0 30px rgba(59,130,246,1);
+}
+
+/* 內文區塊（靠右一點，讓出左邊給面具） */
+.killer-text {
+  position: relative;
+  z-index: 3;
+  line-height: 1.6;
+  text-shadow: 0 0 6px rgba(0,0,0,0.85);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.03em;
+  text-align: left;
+}
+
+/* 角色名字上色（demo：冷藍） */
+.killer-name {
+  font-weight: 700;
+  color: #38bdf8;
+  text-shadow: 0 0 8px rgba(15,23,42,0.92);
+}
+
+/* 左邊圓形面具：藍白直條紋（demo ::before） */
+.killer-v2::before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  /* 藍白直條 */
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #1d4ed8 0,
+      #1d4ed8 7px,
+      #e5e7eb 7px,
+      #e5e7eb 14px
+    );
+  box-shadow:
+    0 0 0 2px #020617,
+    0 0 10px rgba(59,130,246,1);
+}
+
+/* 面具上的黑洞排布（demo ::after，多黑點） */
+.killer-v2::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 20% 15%, #020617 0 2px, transparent 3px),
+    radial-gradient(circle at 50% 13%, #020617 0 2px, transparent 3px),
+    radial-gradient(circle at 80% 15%, #020617 0 2px, transparent 3px),
+
+    radial-gradient(circle at 20% 40%, #020617 0 2px, transparent 3px),
+    radial-gradient(circle at 50% 38%, #020617 0 2px, transparent 3px),
+    radial-gradient(circle at 80% 40%, #020617 0 2px, transparent 3px),
+
+    radial-gradient(circle at 20% 65%, #020617 0 2px, transparent 3px),
+    radial-gradient(circle at 50% 63%, #020617 0 2px, transparent 3px),
+    radial-gradient(circle at 80% 65%, #020617 0 2px, transparent 3px),
+
+    radial-gradient(circle at 50% 88%, #020617 0 2px, transparent 3px);
+  /* 只保留在圓形中心，邊緣淡掉 */
+  mask-image: radial-gradient(circle, #000 60%, transparent 62%);
+  -webkit-mask-image: radial-gradient(circle, #000 60%, transparent 62%);
+  opacity: 0.95;
+  pointer-events: none;
+}
+
+
+  /* === 騙人布猜數字：漫畫爆炸提示框（亮色版） === */
+  #usoppLayer{
+    position:fixed;
+    inset-inline:0;
+    top:16px;
+    display:flex;
+    justify-content:center;
+    pointer-events:none;
+    z-index:90;
+  }
+  .usopp-toast{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:8px 14px;
+    font-size:14px;
+    font-weight:900;
+    letter-spacing:.05em;
+    background:#fff;
+    color:#000;
+    border:3px solid #000;
+    border-radius:4px;
+    box-shadow:
+      3px 3px 0 #000,
+      0 10px 28px rgba(0,0,0,.8);
+    opacity:0;
+    transform:translateY(-20px);
+    transition:opacity .25s ease, transform .25s ease;
+    pointer-events:auto;
+    white-space:nowrap;
+  }
+  .usopp-toast::after{
+    content:"";
+    position:absolute;
+    left:22%;
+    top:100%;
+    width:14px;
+    height:14px;
+    background:#fff;
+    border-left:3px solid #000;
+    border-bottom:3px solid #000;
+    transform:translateY(-5px) rotate(45deg);
+  }
+  .usopp-toast.hit{
+    background:#fef9c3;
+  }
+  .usopp-toast.miss{
+    background:#fee2e2;
+  }
+  .usopp-icon{
+    font-size:20px;
+  }
+  @keyframes usoppHitPulse{
+    0%{ transform:translateY(0) scale(1); }
+    30%{ transform:translateY(2px) scale(1.06); }
+    100%{ transform:translateY(0) scale(1); }
+  }
+  @keyframes usoppMissShake{
+    0%,100%{ transform:translateX(0); }
+    25%{ transform:translateX(-4px); }
+    50%{ transform:translateX(3px); }
+    75%{ transform:translateX(-2px); }
+  }
+  .usopp-toast.hit.show{
+    animation:usoppHitPulse .3s ease-out;
+  }
+  .usopp-toast.miss.show{
+    animation:usoppMissShake .32s ease-out;
+  }
+
+/* === 娜美：麻痺提示框（8 號 橘子＆金幣樣式） === */
+#namiLayer {
+  position: fixed;
+  top: 16px;          /* 跟羅賓 / 喬巴同一高度 */
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  z-index: 186;       /* 比 header 再高一點，蓋在最上層 */
+}
+
+/* 主框：直接用 demo 的 v8 當樣式 */
+.nami-v8 {
+  position: relative;
+  max-width: 620px;
+  padding: 9px 16px 11px 44px;
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(251,146,60,0.65), transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(245,158,11,0.55), transparent 60%),
+    #022c22;
+  border: 1px solid rgba(251,191,36,0.95);
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,1),
+    0 16px 32px rgba(15,23,42,0.95),
+    0 0 24px rgba(251,191,36,0.9);
+  color: #fffbeb;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+  transform: translateY(-24px) scale(0.96);
+  opacity: 0;
+  transition:
+    opacity .28s ease-out,
+    transform .28s ease-out,
+    box-shadow .28s ease-out;
+}
+
+/* 左邊橘子＋錢幣圖示 */
+.nami-v8::before {
+  content: "🍊";
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-60%);
+  font-size: 18px;
+  filter: drop-shadow(0 0 6px rgba(251,146,60,1));
+}
+
+.nami-v8::after {
+  content: "฿";
+  position: absolute;
+  left: 24px;
+  top: 50%;
+  transform: translateY(10%);
+  font-weight: 800;
+  font-size: 11px;
+  color: #fef9c3;
+  text-shadow: 0 0 6px rgba(250,250,210,1);
+}
+
+/* 文字本體 */
+.nami-text {
+  position: relative;
+  z-index: 3;
+  line-height: 1.6;
+  text-shadow: 0 0 6px rgba(0,0,0,0.85);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.03em;
+}
+
+.nami-text b {
+  color: #fbbf24; /* 玩家名字：金黃 */
+}
+
+/* 出場動畫用 .show */
+.nami-v8.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  box-shadow:
+    0 0 0 1px rgba(251,191,36,0.85),
+    0 20px 40px rgba(0,0,0,0.75);
+}
+
+/* === 青雉 16：凍結手牌播報（樣式 1-2） === */
+#aokijiLayer {
+  position: fixed;
+  top: 16px;          /* 跟羅賓/喬巴/娜美一樣高度 */
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  z-index: 187;       /* 比 header 再高一點，蓋在最上層 */
+}
+
+/* 外框冰風格：對應 demo 的 .style1-v2 */
+.style1-v2 {
+  position: relative;
+  padding: 8px 18px;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 0 0, rgba(178, 232, 255, 0.6), transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(18, 59, 104, 0.96), #020814 80%);
+  border: 1px solid rgba(204, 239, 255, 0.95);
+  box-shadow:
+    0 0 28px rgba(176, 229, 255, 0.95),
+    inset 0 0 18px rgba(120, 196, 255, 0.7);
+  backdrop-filter: blur(8px);
+}
+
+/* 斜線冰紋 + 亮點 */
+.style1-v2::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(240, 250, 255, 0.28) 0,
+      rgba(240, 250, 255, 0.28) 1px,
+      transparent 1px,
+      transparent 6px
+    ),
+    radial-gradient(circle at 20% 30%, rgba(255,255,255,0.4) 0, transparent 35%),
+    radial-gradient(circle at 80% 70%, rgba(226,244,255,0.4) 0, transparent 35%);
+  mix-blend-mode: screen;
+  opacity: 0.75;
+}
+
+/* 下方冰刺 */
+.style1-v2::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: -8px;
+  height: 18px;
+  background:
+    linear-gradient(180deg, rgba(199,236,255,0.95), rgba(126,201,252,0.95));
+  clip-path: polygon(
+    0 0,
+    10% 100%,
+    25% 0,
+    40% 100%,
+    55% 0,
+    70% 100%,
+    85% 0,
+    100% 100%
+  );
+  box-shadow: 0 0 14px rgba(181,230,255,1);
+  opacity: 0.9;
+}
+
+/* 內層文字框：對應 demo 的 .aokiji-frame */
+.aokiji-frame {
+  position: relative;
+  width: 100%;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #f5fcff;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
+  overflow: visible;
+
+  /* 出場動畫預設狀態 */
+  transform: translateY(-24px) scale(0.96);
+  opacity: 0;
+  transition:
+    opacity .28s ease-out,
+    transform .28s ease-out,
+    box-shadow .28s ease-out;
+}
+
+/* 文字本體：對應 demo 的 .aokiji-text */
+.aokiji-text {
+  position: relative;
+  z-index: 20;
+  padding: 0 18px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.aokiji-text b {
+  color: #c4f0ff; /* 名字稍微亮一點 */
+}
+
+/* 兩側直立冰塊：跟 demo 一樣的效果 */
+.aokiji-frame::before,
+.style1-v2 .aokiji-frame::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  bottom: 16px;
+  width: 32px;
+  background:
+    linear-gradient(145deg,#f8feff,#d7f1ff 30%,#9adfff 70%,#f3fdff 100%);
+  clip-path: polygon(0 0, 100% 20%, 85% 100%, 10% 70%);
+  box-shadow:
+    0 0 14px rgba(190,236,255,1),
+    inset 0 0 8px rgba(117,202,255,1);
+  mix-blend-mode: screen;
+  opacity: 0.96;
+  z-index: 15;
+  pointer-events: none;
+}
+
+.aokiji-frame::before {
+  left: -8px;
+  transform: scaleX(-1);
+}
+
+.aokiji-frame::after {
+  right: -8px;
+}
+
+/* 出場時加上的 .show：讓整塊冰框浮起來 */
+.aokiji-frame.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  box-shadow:
+    0 0 0 1px rgba(204,239,255,0.9),
+    0 20px 40px rgba(0,0,0,0.8);
+}
+
+/* 手機版：字稍微縮小，框高一點 */
+@media (max-width: 640px) {
+  .aokiji-text {
+    font-size: 13px;
+    white-space: normal;
+  }
+  .aokiji-frame {
+    min-height: 88px;
+  }
+}
+
+
+/* === 羅賓：偵察提示框（6 號樣式） === */
+#robinLayer {
+  position: fixed;
+  top: 16px;            /* 在 header 上緣稍微往下 */
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  z-index: 180;         /* 比 header 大，就會浮在最上面 */
+}
+
+.robin-toast {
+  pointer-events: auto;
+  max-width: 620px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(255,255,255,0.16), transparent 55%),
+    linear-gradient(120deg, rgba(188,160,255,0.96), rgba(79,57,135,0.98));
+  border: 1px solid rgba(230,212,255,0.9);
+  box-shadow:
+    0 0 0 1px rgba(120,90,200,0.45),
+    0 18px 32px rgba(0,0,0,0.4);
+  color: #f8f4ff;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transform: translateY(-24px) scale(0.96);
+  opacity: 0;
+  transition:
+    opacity .28s ease-out,
+    transform .28s ease-out,
+    box-shadow .28s ease-out;
+  backdrop-filter: blur(18px);
+}
+
+.robin-toast::before {
+  content: '';
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  border-radius: 999px;
+  border: 1px solid rgba(242,232,255,0.9);
+  box-shadow: inset 0 0 0 1px rgba(176,140,255,0.6);
+  background:
+    radial-gradient(circle at 30% 30%, #fff 0, #fff 18%, transparent 19%),
+    radial-gradient(circle at 65% 60%, rgba(255,216,255,0.85) 0, rgba(255,216,255,0.0) 55%),
+    conic-gradient(from -45deg, #764ea5, #f1a8ff, #7fd0ff, #764ea5);
+}
+
+.robin-toast .label-main {
+  font-weight: 600;
+}
+
+.robin-toast .label-sub {
+  opacity: .85;
+  font-size: 12px;
+}
+
+.robin-toast.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  box-shadow:
+    0 0 0 1px rgba(213,187,255,0.75),
+    0 20px 40px rgba(0,0,0,0.55);
+}
+
+/* === 羅：交換手牌提示框（Style 5 藍光版） === */
+#lawLayer {
+  position: fixed;
+  top: 16px;          /* 放在索隆下面一點點，免得撞在一起 */
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  z-index: 188;
+}
+
+/* 共用：外框容器 */
+.law-toast {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: min(90vw, 480px);
+}
+
+/* 共用：文字樣式 */
+.law-text {
+  position: relative;
+  z-index: 3;
+  line-height: 1.5;
+  text-align: center;
+  text-shadow: 0 0 6px rgba(0,0,0,0.9);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+}
+
+.law-text b {
+  color: #f9f871; /* 名字黃一點比較跳 */
+}
+
+/* Style 5 · 交換卡片 UI 面板（藍光加強版） */
+.law-v5 {
+  position: relative;
+  padding: 11px 24px 13px;
+  border-radius: 18px;
+  background:
+    /* 中央大塊手術藍光 */
+    radial-gradient(circle at 50% 50%, rgba(59,130,246,0.40), transparent 68%),
+    /* 左下亮一點 */
+    radial-gradient(circle at 0% 100%, rgba(56,189,248,0.55), transparent 65%),
+    /* 右上亮一點 */
+    radial-gradient(circle at 100% 0%, rgba(37,99,235,0.50), transparent 65%),
+    #020617;
+  border: 1px solid rgba(148,163,184,0.9);
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,1),         /* 外框邊線 */
+    0 20px 38px rgba(15,23,42,0.95),    /* 下方陰影 */
+    0 0 32px rgba(56,189,248,0.95);     /* 整體藍色外光暈（加強） */
+  color: #e5f2ff;
+  overflow: hidden;
+
+  /* 進場動畫初始狀態 */
+  opacity: 0;
+  transform: translateY(-18px) scale(.96);
+  transition:
+    opacity .28s ease-out,
+    transform .28s ease-out,
+    box-shadow .28s ease-out;
+}
+
+/* 顯示時 */
+.law-v5.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* 左右兩張正在交換的卡片輪廓 */
+.law-v5::before,
+.law-v5::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  width: 22px;
+  height: 30px;
+  border-radius: 4px;
+  border: 1px solid rgba(148,163,184,0.8);
+  box-shadow: 0 0 8px rgba(148,163,184,0.8);
+  opacity: 0.75;
+}
+
+.law-v5::before {
+  left: 10px;
+  transform: rotate(-8deg);
+}
+
+.law-v5::after {
+  right: 10px;
+  transform: rotate(8deg);
+}
+
+/* === 喬巴：狀態提示框（2 號糖果護盾樣式） === */
+#chopperLayer {
+  position: fixed;
+  top: 16px;          /* 在 header 下面一點 */
+  left: 0;
+  right: 0;
+  padding: 0 16px;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 180;
+}
+
+.chopper-toast {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 999px 999px 999px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(-16px) scale(.96);
+  transition: opacity .22s ease-out, transform .22s ease-out;
+  /* 這裡直接用 demo 的 2 號糖果護盾配色 */
+  background:
+    radial-gradient(circle at 0 0,#f9a8d4 0,transparent 60%),
+    radial-gradient(circle at 100% 100%,#bfdbfe 0,transparent 60%),
+    #fef9c3;
+  color:#1f2937;
+  border:1px solid #fb7185;
+  box-shadow:0 14px 32px rgba(244,114,182,.6);
+}
+
+/* 尾巴（小小下巴） */
+.chopper-toast::after {
+  content: "";
+  position: absolute;
+  right: 16px;
+  bottom: -8px;
+  width: 18px;
+  height: 14px;
+  background: inherit;
+  border-radius: 0 0 18px 18px;
+  transform: skewX(-18deg);
+}
+
+/* Icon 圓形（喬巴十字 / 閃光） */
+.chopper-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  background: #fef2f2;
+  box-shadow:
+    0 0 0 2px #fee2e2,
+    0 0 12px rgba(248,113,113,.7);
+}
+
+.chopper-text {
+  letter-spacing: .04em;
+}
+
+/* 顯示時 */
+.chopper-toast.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* === 大媽：保護 / 閃避狀態提示框（demo-mom 3 號蛋糕樣式） === */
+#momLayer {
+  position: fixed;
+  top: 16px;          /* 跟喬巴差不多高度，在 header 下面 */
+  left: 0;
+  right: 0;
+  padding: 0 16px;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 181;       /* 比喬巴略高一點，避免被蓋住 */
+}
+
+/* 外層 toast：負責進場動畫 */
+.bigmom-toast {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: min(92vw, 580px);
+  text-align: center;
+  margin-top: 4px;
+  opacity: 0;
+  transform: translateY(-16px) scale(.96);
+  transition:
+    opacity .24s ease-out,
+    transform .24s ease-out;
+}
+
+/* 顯示時加上 .show */
+.bigmom-toast.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* demo-mom 的 3 號蛋糕樣式本體 */
+.bigmom-v3 {
+  position: relative;
+  padding: 10px 20px 12px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 0% 50%, rgba(244,114,182,0.65), transparent 60%),
+    radial-gradient(circle at 100% 50%, rgba(249,168,212,0.55), transparent 60%),
+    #4c0519;
+  border: 1px solid rgba(251,113,133,0.95);
+  box-shadow:
+    0 0 0 2px #020617,
+    0 18px 32px rgba(15,23,42,0.96),
+    0 0 28px rgba(251,113,133,0.95);
+  color: #ffe4e6;
+  overflow: hidden;
+}
+
+/* 左蛋糕（原本是 ❤） */
+.bigmom-v3::before {
+  content: "🍰";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-55%);
+  font-size: 20px;
+  text-shadow:
+    0 0 6px rgba(248,113,113,1),
+    0 0 14px rgba(244,114,182,1);
+}
+
+/* 右蛋糕（原本是 🛡） */
+.bigmom-v3::after {
+  content: "🍰";
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  text-shadow:
+    0 0 6px rgba(254,249,195,1),
+    0 0 12px rgba(250,250,210,1);
+}
+
+/* 文字區 */
+.bigmom-text {
+  position: relative;
+  z-index: 3;
+  line-height: 1.6;
+  text-shadow: 0 0 6px rgba(0,0,0,0.85);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.03em;
+  padding: 0 30px 0 30px;  /* 兩側讓位給蛋糕 icon */
+}
+
+.bigmom-text b {
+  color: #f97316;   /* 打出玩家名 → 橘金色 */
+}
+
+.bigmom-key {
+  color: #f9a8d4;   /* 「保護 / 閃避」關鍵字 → 粉色 */
+}
+
+
+/* === 索隆：棄牌提示框（刀光金屬風） === */
+#zoroLayer {
+  position: fixed;
+  top: 16px;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  z-index: 185;
+}
+
+/* === 索隆：棄牌提示框（demo 樣式 3） === */
+.zoro-v3 {
+  position: relative;
+  min-width: 280px;
+  max-width: 360px;
+  padding: 14px 20px;
+  border-radius: 10px;
+  background:
+    linear-gradient(135deg, rgba(15, 15, 15, 0.95), rgba(60, 80, 60, 0.9)),
+    repeating-linear-gradient(
+      90deg,
+      rgba(15, 30, 20, 0.7) 0,
+      rgba(15, 30, 20, 0.7) 6px,
+      rgba(24, 50, 30, 0.9) 6px,
+      rgba(24, 50, 30, 0.9) 12px
+    );
+  border: 3px solid #1f6b3b;
+  color: #e9ffe1;
+  font-size: 16px;           /* demo 原本是 18px，遊戲我幫你略縮小一點 */
+  font-weight: 700;
+  text-align: center;
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.8),
+    0 0 18px rgba(10, 40, 20, 0.9);
+  overflow: hidden;
+  animation: popIn .35s ease-out;
+}
+
+/* 右邊金屬亮線 */
+.zoro-v3::after {
+  content: "";
+  position: absolute;
+  right: -6px;
+  top: -8px;
+  width: 24px;
+  height: 120%;
+  background: linear-gradient(
+    90deg,
+    rgba(200, 220, 210, 0.9),
+    rgba(130, 150, 140, 0.6),
+    rgba(20, 30, 25, 0.95)
+  );
+  box-shadow: 0 0 12px rgba(210, 255, 230, 0.8);
+  transform: skewX(-12deg);
+  opacity: .95;
+}
+
+/* 整體斜向亮面 */
+.zoro-v3::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.12),
+    transparent 55%,
+    rgba(0, 0, 0, 0.7)
+  );
+  mix-blend-mode: soft-light;
+  opacity: 0.5;
+}
+
+/* 文字本體 */
+.zoro-text {
+  position: relative;
+  z-index: 10;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.9);
+  line-height: 1.4;
+}
+.zoro-text b {
+  color: #8bffb5;
+}
+
+/* 彈出動畫 */
+@keyframes popIn {
+  0%   { transform: scale(.8);  opacity: 0; }
+  80%  { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+/* === 卡片圖鑑：縮圖樣式 === */
+.card-dex-thumb {
+  position: relative;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 0 0, rgba(148,163,184,0.35), transparent 55%),
+    #020617;
+  border: 1px solid rgba(51,65,85,0.95);
+  cursor: pointer;
+  transition:
+    transform .15s ease,
+    box-shadow .15s ease,
+    border-color .15s ease,
+    background .15s ease;
+}
+.card-dex-thumb:hover {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 8px 22px rgba(0,0,0,.75);
+  border-color: rgba(148,163,184,1);
+}
+.card-dex-thumb img {
+  width: 100%;
+  display: block;
+}
+
+.card-dex-meta {
+  padding: 3px 6px 4px;
+  font-size: 10px;
+  line-height: 1.2;
+  color: rgba(226,232,240,.9);
+  background: linear-gradient(to bottom, rgba(15,23,42,.92), rgba(15,23,42,.98));
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+}
+.card-dex-meta span:nth-child(1){
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card-dex-meta span:nth-child(2){
+  opacity:.85;
+}
+
+/* ★ 強化中：紅黑發光框（本局有強化的卡） */
+.card-dex-thumb.enhanced {
+  border-color: rgba(248,113,113,0.95);
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,0.9),
+    0 0 22px rgba(248,113,113,0.8),
+    0 0 45px rgba(15,23,42,0.95);
+  background:
+    radial-gradient(circle at 15% 0%, rgba(248,113,113,0.35), transparent 60%),
+    radial-gradient(circle at 85% 100%, rgba(15,23,42,0.9), transparent 65%),
+    #020617;
+  animation: cardDexPulse 1.1s ease-in-out infinite alternate;
+}
+
+@keyframes cardDexPulse{
+  from{
+    box-shadow:
+      0 0 0 1px rgba(15,23,42,0.9),
+      0 0 14px rgba(248,113,113,0.7),
+      0 0 36px rgba(15,23,42,0.9);
+    transform: translateY(0) scale(1);
+  }
+  to{
+    box-shadow:
+      0 0 0 1px rgba(15,23,42,0.9),
+      0 0 26px rgba(248,113,113,1),
+      0 0 52px rgba(0,0,0,1);
+    transform: translateY(-1px) scale(1.03);
+  }
+}
+
+
+
+
+    /* ===== 玩家稱號 badge（與 profile/start 同款）===== */
+.player-title-badge{
+      position:relative;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:6px 18px;
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.5px;
+      text-align:center;
+      white-space:nowrap;
+      box-sizing:border-box;
+      user-select:none;
+    }
+    .player-title-badge .text{
+      position:relative;
+      z-index:3;
+      display:inline-block;
+      max-width:100%;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .player-title-badge.compact{ padding:6px 14px; font-size:12px; }
+    .player-title-badge.pick{ cursor:pointer; transition:transform .06s ease, filter .15s ease; }
+    .player-title-badge.pick:hover{ filter:brightness(1.08); }
+    .player-title-badge.pick:active{ transform:translateY(1px); }
+    .player-title-badge.on{ box-shadow:0 0 0 3px rgba(255,184,77,.22); }
+
+    @keyframes float{ 0%,100%{transform:translateY(0px);} 50%{transform:translateY(-3px);} }
+    @keyframes pulse{ 0%,100%{filter:brightness(1);} 50%{filter:brightness(1.18);} }
+    @keyframes softGlow{ 0%,100%{opacity:.5;} 50%{opacity:.95;} }
+    @keyframes shine{ 0%{transform:translateX(-130%);opacity:0;} 20%{opacity:0;} 40%{transform:translateX(130%);opacity:1;} 60%{opacity:0;} 100%{transform:translateX(130%);opacity:0;} }
+
+    .player-title-badge.tier-1{
+      border-radius:8px;
+      border:1px solid rgba(119,124,132,.85);
+      background:linear-gradient(135deg,#333842,#171920);
+      color:#d0d3d8;
+      text-shadow:0 0 6px rgba(0,0,0,.8);
+    }
+    .player-title-badge.tier-2{
+      border-radius:999px;
+      padding:7px 22px;
+      border:1px solid #63d2ff;
+      background:linear-gradient(135deg,#1b4d7e,#63d2ff);
+      color:#e8f9ff;
+      box-shadow:0 0 10px rgba(99,210,255,.45);
+      overflow:visible;
+    }
+    .player-title-badge.tier-2::before,
+    .player-title-badge.tier-2::after{
+      content:"";
+      position:absolute; top:0; bottom:0; width:14px;
+      background:inherit;
+    }
+    .player-title-badge.tier-2::before{ left:-8px; transform:skewX(-24deg); }
+    .player-title-badge.tier-2::after{ right:-8px; transform:skewX(24deg); }
+
+    .player-title-badge.tier-3{
+      padding:7px 20px;
+      color:#ffe4c4;
+      background:
+        radial-gradient(circle at 0 0,rgba(255,255,255,.12) 0,transparent 55%),
+        radial-gradient(circle at 100% 100%,rgba(255,120,60,.25) 0,transparent 55%),
+        linear-gradient(135deg,#3a0f18,#8b1c24);
+      border:2px solid #f48c2b;
+      box-shadow:
+        0 0 0 1px rgba(0,0,0,.55),
+        0 0 16px rgba(244,140,43,.65);
+      clip-path:polygon(8% 0,92% 0,100% 50%,92% 100%,8% 100%,0 50%);
+    }
+    .player-title-badge.tier-3::before{
+      content:"";
+      position:absolute;
+      inset:2px;
+      border-radius:10px;
+      border:1px dashed rgba(255,223,186,.35);
+      opacity:.7;
+    }
+
+    .player-title-badge.tier-4{
+      padding:8px 22px 10px;
+      color:#f9f0ff;
+      background:radial-gradient(circle at top,#5c35b5,#1e1032);
+      border:2px solid #e1c4ff;
+      box-shadow:
+        0 0 0 1px rgba(90,40,200,.55),
+        0 0 18px rgba(147,96,255,.85);
+      border-radius:16px 16px 10px 10px;
+      overflow:visible;
+      animation:float 5s ease-in-out infinite;
+    }
+    .player-title-badge.tier-4::before{
+      content:"";
+      position:absolute;
+      left:50%;
+      bottom:-10px;
+      transform:translateX(-50%);
+      width:60%;
+      height:16px;
+      background:linear-gradient(to bottom,#e1c4ff,#6e3bd1);
+      clip-path:polygon(50% 100%,0 0,100% 0);
+      box-shadow:0 4px 10px rgba(0,0,0,.55);
+    }
+
+    .player-title-badge.tier-5{
+      padding:8px 28px;
+      color:#fff9e0;
+      background:linear-gradient(135deg,#5a2400,#ffcf66);
+      border-radius:999px;
+      border:3px solid #ffe08a;
+      box-shadow:
+        0 0 0 1px rgba(255,224,138,.45),
+        0 0 22px rgba(255,204,110,.9);
+      overflow:visible;
+      animation:float 4.5s ease-in-out infinite, pulse 3.8s ease-in-out infinite;
+    }
+    .player-title-badge.tier-5::before,
+    .player-title-badge.tier-5::after{
+      content:"";
+      position:absolute;
+      top:50%;
+      width:26px;
+      height:16px;
+      background:radial-gradient(circle at 0 50%,rgba(255,255,255,.95) 0,rgba(255,224,138,.1) 70%);
+      transform:translateY(-50%);
+      filter:drop-shadow(0 0 8px rgba(255,224,138,.75));
+    }
+    .player-title-badge.tier-5::before{
+      left:-16px;
+      clip-path:polygon(100% 0,0 50%,100% 100%);
+    }
+    .player-title-badge.tier-5::after{
+      right:-16px;
+      clip-path:polygon(0 0,100% 50%,0 100%);
+    }
+    .player-title-badge.tier-5 .text::after{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:linear-gradient(120deg,transparent 0,rgba(255,255,255,.85) 45%,transparent 75%);
+      mix-blend-mode:screen;
+      transform:translateX(-130%);
+      animation:shine 3.6s ease-in-out infinite;
+    }
+
+    .player-title-badge.tier-6{
+      padding:9px 36px;
+      color:#fffdf5;
+      background:
+        radial-gradient(circle at 20% 0,rgba(255,255,255,.4) 0,transparent 55%),
+        radial-gradient(circle at 80% 100%,rgba(255,210,120,.7) 0,transparent 55%),
+        linear-gradient(135deg,#4b2a00,#c68b00,#ffe7a3);
+      border-radius:999px;
+      border:4px solid #ffe9c4;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,.38),
+        0 0 0 6px rgba(158,106,32,.65),
+        0 0 32px rgba(255,243,196,.95);
+      overflow:visible;
+      position:relative;
+      text-shadow:
+        0 0 8px rgba(0,0,0,1),
+        0 0 18px rgba(255,245,210,1);
+      animation:float 4.2s ease-in-out infinite, pulse 3.4s ease-in-out infinite;
+    }
+    .player-title-badge.tier-6::before{
+      content:"";
+      position:absolute;
+      inset:4px;
+      border-radius:999px;
+      border:2px solid rgba(255,252,230,.85);
+      box-shadow:
+        inset 0 0 8px rgba(255,255,255,.65),
+        0 0 14px rgba(255,252,210,.6);
+      opacity:.98;
+      z-index:1;
+    }
+    .player-title-badge.tier-6::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 12% 50%,#fff 0,rgba(255,255,255,0) 55%),
+        radial-gradient(circle at 88% 50%,#fff 0,rgba(255,255,255,0) 55%),
+        radial-gradient(circle at 50% -10%,#fff 0,rgba(255,255,255,0) 60%);
+      mix-blend-mode:screen;
+      opacity:.65;
+      z-index:1;
+    }
+    .player-title-badge.tier-6 .crown{
+      position:absolute;
+      top:-16px;
+      left:50%;
+      transform:translateX(-50%);
+      font-size:15px;
+      text-shadow:0 0 10px #ffffff, 0 0 18px rgba(255,230,160,1);
+      z-index:4;
+    }
+    .player-title-badge.tier-6 .pendant{
+      position:absolute;
+      bottom:-14px;
+      left:50%;
+      transform:translateX(-50%);
+      width:18px;height:18px;
+      background:radial-gradient(circle,#fff7d0 0,#f0b400 45%,#8b4c00 100%);
+      border-radius:50%;
+      box-shadow:0 4px 8px rgba(0,0,0,.75), 0 0 10px rgba(255,230,170,.9);
+      z-index:2;
+    }
+    .player-title-badge.tier-6 .pendant::before{
+      content:"";
+      position:absolute;
+      top:-6px; left:50%;
+      transform:translateX(-50%);
+      width:9px;height:5px;border-radius:999px;
+      background:radial-gradient(circle,#fffbe6 0,#b57a1f 100%);
+    }
+    .player-title-badge.tier-6 .glow{
+      position:absolute;
+      inset:-30%;
+      background:radial-gradient(circle,rgba(255,255,255,.42) 0,transparent 60%);
+      mix-blend-mode:screen;
+      opacity:.6;
+      z-index:0;
+      animation:softGlow 4.4s ease-in-out infinite;
+    }
+
+
+</style>
 </head>
 <body>
-  <header class="sticky top-0 z-40 bg-[#101418]/80 backdrop-blur border-b border-[#1c2229]">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
-      <div class="font-semibold tracking-wide">偉大航道爭霸戰</div>
-      <div class="hidden text-xs px-2 py-1 rounded border border-neutral-700">房號：<span>教學</span></div>
-      <div class="hidden text-xs px-2 py-1 rounded border border-neutral-700">連線：<span class="text-emerald-400">guide</span></div>
-      <div id="topChest" class="text-xs px-2 py-1 rounded border border-neutral-700">寶箱金幣剩餘：<span id="chestLbl">30</span> 枚</div>
-      <button id="cardDexBtn" class="px-2 py-1 rounded border border-[#374151] bg-[#111827]/80 text-[11px] tracking-wide hover:bg-[#020617] hover:border-[#f97373] hover:text-[#fee2e2] transition-colors duration-150">卡片圖鑑</button>
-      <div class="ml-auto flex items-center gap-2" id="bgmArea">
-        <div class="flex items-center gap-2 px-2 py-1 rounded-lg border border-[#2a2f35]">
-          <button class="btn-ui !px-3 !py-2 text-xs">◀</button>
-          <button class="btn-ui !px-3 !py-2 text-xs">▶</button>
-          <button class="btn-ui !px-3 !py-2 text-xs">🔀</button>
-          <div class="text-xs opacity-90">未播放</div>
+<div id="usoppLayer"></div>
+<div id="robinLayer"></div>
+<div id="zoroLayer"></div>
+<div id="lawLayer"></div> 
+<div id="namiLayer"></div>
+<div id="momLayer"></div>
+<div id="killerLayer"></div>
+<div id="chopperLayer"></div>
+<div id="aokijiLayer"></div>
+<header class="sticky top-0 z-40 bg-[#101418]/80 backdrop-blur border-b border-[#1c2229]">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
+    <!-- 左側標題 -->
+    <div class="font-semibold tracking-wide">偉大航道爭霸戰</div>
+
+    <!-- 房號/連線：留著給程式用，但畫面隱藏 -->
+    <div class="hidden text-xs px-2 py-1 rounded border border-neutral-700">房號：<span id="roomLbl">—</span></div>
+    <div class="hidden text-xs px-2 py-1 rounded border border-neutral-700">連線：<span id="connLbl" class="text-red-400">disconnected</span></div>
+
+    <!-- 保留寶箱（可見） -->
+    <div class="text-xs px-2 py-1 rounded border border-neutral-700">寶箱金幣剩餘：<span id="chestLbl">0</span> 枚</div>
+
+ <!-- ★ 新增：卡片圖鑑按鈕 -->
+      <button id="cardDexBtn"
+              class="px-2 py-1 rounded border border-[#374151] bg-[#111827]/80
+                     text-[11px] tracking-wide hover:bg-[#020617] hover:border-[#f97373]
+                     hover:text-[#fee2e2] transition-colors duration-150">
+        卡片圖鑑
+      </button>
+
+ <!-- 拉到最右邊：音樂條 -->
+    <div class="ml-auto flex items-center gap-2">
+      <div id="bgmBar" class="flex items-center gap-2 px-2 py-1 rounded-lg border border-[#2a2f35] bg-[#14181c]/80">
+        <!-- 控制鈕 -->
+       <button id="bgmPrev" class="icon-btn" title="上一首" aria-label="上一首">
+  <!-- 上一首：|◀ -->
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M7 12L18 5v14L7 12zM6 5h2v14H6z"/>
+  </svg>
+</button>
+
+<button id="bgmPlay" class="icon-btn big" title="播放/暫停" aria-label="播放/暫停">
+  <!-- ▶ -->
+  <svg id="iconPlay" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M8 5v14l11-7z"/>
+  </svg>
+  <!-- ⏸（預設隱藏，播放時顯示） -->
+  <svg id="iconPause" class="hidden" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M6 5h4v14H6zm8 0h4v14h-4z"/>
+  </svg>
+</button>
+
+<button id="bgmNext" class="icon-btn" title="下一首" aria-label="下一首">
+  <!-- ▶| -->
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M6 6l11 6-11 6V6zm12 0h2v12h-2z"/>
+  </svg>
+</button>
+
+<button id="bgmShuffle" class="icon-btn" title="隨機播放" aria-label="隨機播放">
+  <!-- 交錯箭頭 -->
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M17 3h4v4h-2V6h-2.17l-3.9 3.9 1.41 1.41L18.83 8H19v2h2V6a3 3 0 0 0-4-3zM4 6h5.17l3.9 3.9-1.41 1.41L7.17 8H4V6zm0 12h3.17l3.9-3.9 1.41 1.41L8.83 20H4v-2zm17-2v4h-4a3 3 0 0 1-3-3v-.17l-2.1-2.1 1.41-1.41 2.69 2.69c.24.24.57.39.91.39H19v-2h2z"/>
+  </svg>
+</button>
+
+        <!-- 音量 -->
+        <div class="flex items-center gap-1 ml-1">
+          <span class="text-xs opacity-70">🔊</span>
+          <input id="bgmVol" type="range" min="0" max="1" step="0.01" value="0.7"
+                 class="w-24 accent-amber-300" />
         </div>
+
+        <!-- 曲名 -->
+        <div id="bgmTitle"
+             class="text-xs sm:max-w-[280px] md:max-w-[360px] truncate ml-2 opacity-90">
+          未播放
+        </div>
+
+        <!-- 隱藏 audio 元件 -->
+        <audio id="bgmAudio" preload="auto"></audio>
       </div>
     </div>
-  </header>
+    </div>
+
+   
+
+    <!-- 這三個輸入留著但隱藏，避免打壞你現有 JS 綁定 -->
+    <input id="inpName" class="hidden w-40 px-2 py-1.5 rounded-lg border border-neutral-700 bg-[#14181c]" placeholder="暱稱"/>
+    <input id="inpRoom" class="hidden w-28 px-2 py-1.5 rounded-lg border border-neutral-700 bg-[#14181c]" placeholder="房號"/>
+    <button id="btnJoin" class="hidden px-3 py-1.5 rounded-lg border border-neutral-700 bg-[#14181c] hover:bg-[#192028]">加入</button>
+  </div>
+</header>
 
   <main class="max-w-7xl mx-auto px-3 md:px-4 py-4 grid gap-4 lg:grid-cols-[1.2fr_.8fr]">
     <section class="space-y-3">
       <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-        <div id="venuesCard" class="card p-3 md:col-span-2 panel-soft">
+        <div class="card p-3 md:col-span-2">
           <div class="text-sm mb-2 opacity-80">本局場地</div>
           <div id="venues" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2"></div>
         </div>
-        <div id="deckCard" class="card p-3 flex items-center justify-between gap-3 relative panel-soft">
-          <div class="text-sm opacity-80">牌堆 <span id="deckCnt" class="ml-2 px-1.5 py-0.5 rounded border border-[#2a2f35] text-amber-300 font-semibold">18</span></div>
-          <button id="btnDraw" class="deck">
-            <img id="deckImg" src="images/cards/back.webp" alt="deck" onerror="this.src='';this.style.background='#1f2937'"/>
-          </button>
-          <div id="drawHint" class="draw-hint"><span>👉</span><span>請抽牌</span></div>
-        </div>
-        <div id="discardCard" class="card p-3 md:col-span-3 panel-soft">
+      <div class="card p-3 flex items-center justify-between gap-3 relative">
+  <div class="text-sm opacity-80">
+    牌堆
+    <span id="deckCnt" class="ml-2 px-1.5 py-0.5 rounded border border-[#2a2f35] text-amber-300 font-semibold">0</span>
+  </div>
+
+  <button id="btnDraw" class="deck">
+    <img id="deckImg" src="images/cards/back.webp" alt="deck"/>
+  </button>
+
+  <!-- ★ 抽牌提示泡泡：預設 hidden，JS 會在可抽牌時打開 -->
+  <div id="drawHint" class="draw-hint hidden select-none">
+    <span class="emoji">👉</span>
+    <span class="txt">請抽牌</span>
+  </div>
+</div>
+
+
+        <div class="card p-3 md:col-span-3">
           <div class="flex items-center justify-between mb-2">
             <div class="text-sm opacity-80">棄牌</div>
-            <button class="hidden px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black text-sm">下一局 ▶</button>
+            <button id="btnNextRound" class="hidden px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black text-sm">下一局 ▶</button>
           </div>
-          <div id="discard" class="flex gap-2 overflow-x-auto"></div>
+            <div id="discard" class="flex gap-2 overflow-x-auto"></div>
         </div>
       </div>
 
       <div id="myPlayZone" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <button id="playHand" class="border border-[#2f353c] rounded-xl overflow-hidden bg-black/20 p-2">
-          <img id="imgHand" class="thumb-xl mx-auto" src="images/cards/8.webp" alt="hand" onerror="this.src='';this.style.height='180px';this.style.background='#111827'"/>
-          <div class="text-xs opacity-75 mt-2">原本手牌</div>
-        </button>
-        <button id="playDrawn" class="border border-[#2f353c] rounded-xl overflow-hidden bg-black/20 p-2 pulse-ring">
-          <img id="imgDrawn" class="thumb-xl mx-auto" src="images/cards/5.webp" alt="drawn" onerror="this.src='';this.style.height='180px';this.style.background='#111827'"/>
-          <div class="text-xs text-amber-300 mt-2">剛抽到的牌</div>
-        </button>
+        <button id="playHand" class="border border-[#2f353c] rounded-xl overflow-hidden"><img id="imgHand" src=""/></button>
+        <button id="playDrawn" class="border border-[#2f353c] rounded-xl overflow-hidden"><img id="imgDrawn" src=""/></button>
       </div>
 
-      <div id="logCard" class="card p-3 panel-soft">
+      <div class="card p-3">
         <div class="flex items-center justify-between mb-2">
           <div class="text-sm opacity-80">對局日誌</div>
-          <div class="text-xs text-neutral-400">輪到：<span id="turnLbl">你</span>｜階段：<span id="stepLbl">抽牌</span></div>
+          <div class="text-xs text-neutral-400">輪到：<span id="turnLbl">—</span>｜階段：<span id="stepLbl">—</span></div>
         </div>
         <ol id="logBox" class="text-sm space-y-1 list-decimal pl-5 max-h-72 overflow-auto"></ol>
       </div>
     </section>
 
     <aside class="space-y-3">
-      <div id="playersCard" class="card p-3 panel-soft">
+      <div class="card p-3">
         <div class="text-sm mb-2 opacity-80">玩家</div>
         <div id="players" class="grid gap-2"></div>
       </div>
+      <!-- 訊息面板已移除 -->
     </aside>
   </main>
 
-  <div id="cardDexOverlay" class="card-dex-overlay">
-    <div class="w-[min(1200px,96vw)] max-h-[92vh] rounded-2xl border border-slate-600/80 bg-[#050914]/95 shadow-2xl backdrop-blur-md overflow-hidden flex flex-col">
+  <div id="modal" class="modal hidden"><div class="card w-[min(92vw,680px)] p-4"></div></div>
+
+  <!-- ★★ 卡片圖鑑 Overlay ★★ -->
+  <div id="cardDexOverlay"
+       class="hidden fixed inset-0 z-[90] md:z-[120] flex items-center justify-center bg-black/70">
+    <div class="card-dex-panel
+            w-[min(1500px,98vw)]
+            max-h-[96vh]
+            rounded-2xl border border-slate-600/80
+            bg-[#050914]/95 shadow-2xl backdrop-blur-md
+            overflow-hidden flex flex-col">
+      <!-- 標題列 -->
       <div class="flex items-center justify-between px-4 py-2 border-b border-slate-700/70 bg-gradient-to-r from-slate-900/80 via-slate-800/80 to-slate-900/80 text-xs md:text-sm">
-        <div class="font-semibold tracking-wide">卡片圖鑑（教學示範）</div>
-        <button id="cardDexClose" class="btn-ui !text-[11px] !py-1 !px-2">關閉</button>
+        <div class="font-semibold tracking-wide">卡片圖鑑(紅框為本局強化卡)</div>
+        <button id="cardDexClose"
+                class="px-2 py-1 rounded border border-slate-500/70 bg-black/30 hover:bg-black/60 text-[11px]">
+          關閉
+        </button>
       </div>
-      <div class="grid md:grid-cols-[1.2fr_.8fr] gap-4 p-4 overflow-auto">
-        <div id="cardDexGrid" class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-5 lg:grid-cols-6 gap-2"></div>
-        <div class="border-t md:border-t-0 md:border-l border-slate-700/70 pt-3 md:pt-0 md:pl-4">
-          <div id="dexEmpty" class="text-[11px] md:text-xs text-slate-300/80 italic">點左邊任一張卡片，可以查看大圖與強化版本。</div>
-          <div id="dexPreview" class="hidden">
-            <div id="dexTitle" class="text-sm font-semibold mb-2"></div>
+
+      <!-- 內容 -->
+      <div class="flex flex-col md:flex-row gap-3 md:gap-4 p-3 md:p-4 overflow-hidden">
+        <!-- 左邊：卡片列表 -->
+        <div class="flex-1 overflow-y-auto pr-1">
+          <div id="cardDexGrid"
+               class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-5 lg:grid-cols-6 gap-2 text-[10px] md:text-xs"></div>
+        </div>
+
+        <!-- 右邊：大圖預覽 -->
+        <div class="w-full md:w-[50%] shrink-0 border-t md:border-t-0 md:border-l border-slate-700/70 pt-3 md:pt-0 md:pl-4">
+          <div id="cardDexPreviewEmpty"
+               class="text-[11px] md:text-xs text-slate-300/80 italic">
+            點左邊任一張卡片，可以查看大圖與強化版本。
+          </div>
+
+          <div id="cardDexPreview" class="hidden">
+            <div class="text-xs md:text-sm font-semibold mb-1" id="cardDexPreviewTitle"></div>
+
             <div class="grid grid-cols-2 gap-2 mb-2">
               <div class="flex flex-col items-center">
                 <div class="text-[10px] md:text-xs mb-1 opacity-75">一般</div>
-                <img id="dexBase" class="w-full max-w-[340px] rounded-lg border border-slate-600/80 shadow-lg bg-black/40 object-contain"/>
+                <img id="cardDexPreviewBase"
+                     class="w-full max-w-[480px] rounded-lg border border-slate-600/80 shadow-lg bg-black/40 object-contain" />
               </div>
               <div class="flex flex-col items-center">
                 <div class="text-[10px] md:text-xs mb-1 opacity-75">強化</div>
-                <img id="dexEnh" class="w-full max-w-[340px] rounded-lg border border-rose-500/80 shadow-lg bg-black/40 object-contain"/>
+                <img id="cardDexPreviewEnh"
+                     class="w-full max-w-[480px] rounded-lg border border-rose-500/80 shadow-lg bg-black/40 object-contain" />
               </div>
             </div>
-            <div id="dexDesc" class="text-[11px] text-slate-300/75"></div>
+
+            <div class="text-[10px] md:text-xs text-slate-300/75" id="cardDexPreviewVenue"></div>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <!-- ★★ /卡片圖鑑 Overlay 結束 ★★ -->
 
-  <div class="spotlight-layer" id="spotlightLayer" aria-hidden="true">
-    <div class="spotlight-hole"></div>
-    <div class="guide-arrow">⬇</div>
-  </div>
 
-  <div id="guideCard" class="guide-card">
-    <div class="guide-head px-4 py-3 rounded-t-[20px] flex items-center justify-between gap-3">
-      <div>
-        <div id="guideBadge" class="guide-badge inline-flex items-center gap-2 rounded-full px-2.5 py-1 text-[11px] font-semibold">步驟 1 / 8</div>
-        <div id="guideTitle" class="mt-2 text-lg font-bold">歡迎來到新手導覽</div>
-      </div>
-      <button id="skipGuide" class="btn-ui !text-xs !py-1 !px-2">略過</button>
-    </div>
-    <div class="px-4 py-4">
-      <div id="guideText" class="text-sm leading-7 text-slate-200"></div>
-      <div class="mt-4 flex items-center justify-between gap-3 flex-wrap">
-        <div id="stepDots" class="flex items-center gap-2"></div>
-        <div class="flex items-center gap-2 ml-auto">
-          <button id="prevStep" class="btn-ui">上一步</button>
-          <button id="nextStep" class="btn-ui btn-main">下一步</button>
+<!-- 決鬥特效 -->
+<div id="duelFx" class="hidden">
+  <div class="overlay">
+    <div class="arena">
+      <div class="slot slot-left">
+        <div class="avatar-wrap">
+          <img class="avatar" src="images/avatars/a1.webp" alt="">
+          <div class="pname">P1</div>
+        </div>
+        <div class="cardwrap">
+          <img class="cardimg" src="images/cards/back.png" alt="">
         </div>
       </div>
-      <div id="miniTip" class="mt-3 text-[12px] text-amber-200/85"></div>
+
+<!-- 決鬥音效 -->
+<audio id="duelHitSfx"  src="audio/sfx/duel_hit.mp3"  preload="auto"></audio>
+<audio id="duelFlipSfx" src="audio/sfx/duel_flip.mp3" preload="auto"></audio>
+<audio id="duelBurnSfx" src="audio/sfx/duel_burn.mp3" preload="auto"></audio>
+
+      <div class="vs-tag">VS</div>
+
+      <div class="slot slot-right">
+        <div class="avatar-wrap">
+          <img class="avatar" src="images/avatars/a2.webp" alt="">
+          <div class="pname">P2</div>
+        </div>
+        <div class="cardwrap">
+          <img class="cardimg" src="images/cards/back.png" alt="">
+        </div>
+      </div>
+    </div>
+
+    <div class="caption">
+      <div class="line line-vs"></div>
+      <div class="line line-win"></div>
+    </div>
+  </div>
+</div>
+
+
+
+  <!-- 寶箱清空 → 結算前 7 秒圖片 -->
+  <div id="finalOverlay" class="hidden fixed inset-0 z-[220] flex items-center justify-center bg-black/80">
+    <div class="relative">
+      <!-- 上方文字 -->
+      <div class="absolute left-1/2 -translate-x-1/2 top-4 sm:top-6
+                  text-white text-xl sm:text-2xl font-bold tracking-wide
+                  drop-shadow-[0_0_10px_rgba(0,0,0,0.9)]">
+        寶箱已空，等待結算...
+      </div>
+      <!-- 中間圖片：換成你自己的圖檔路徑 -->
+      <img src="images/final_ready.png"
+           alt="寶箱已空，等待結算"
+           class="max-h-[80vh] rounded-2xl shadow-2xl border border-white/20">
     </div>
   </div>
 
-<script>
-const CARD_TEXT = {
-  0:'薩波：看頂牌。強化時還能決定放回頂或底。',
-  5:'索隆：指定一人棄牌。',
-  8:'魯夫：決鬥型角色，強化時能更猛地壓制全場。',
-  16:'青雉：凍結目標，限制對方下一步操作。'
-};
-const VENUE_INFO = [
-  { name:'魚人島', img:'images/venues/魚人島.webp', bg:'images/venues/魚人島.webp', tip:'有些卡在自己的專屬場地會進入強化版。' },
-  { name:'和之國', img:'images/venues/和之國.webp', bg:'images/venues/和之國.webp', tip:'點場地可查看背景，也能幫助你記住誰可能被強化。' },
-  { name:'龐克哈薩特', img:'images/venues/龐克哈薩特.webp', bg:'images/venues/龐克哈薩特.webp', tip:'注意場地圖就是判斷卡片強化的重要線索。' },
-  { name:'蛋糕島', img:'images/venues/蛋糕島.webp', bg:'images/venues/蛋糕島.webp', tip:'不同場地會改變不同角色的表現。' },
-  { name:'德雷斯羅薩', img:'images/venues/德雷斯羅薩.webp', bg:'images/venues/德雷斯羅薩.webp', tip:'開局先看場地，是新手最需要養成的習慣。' },
-  { name:'司法島', img:'images/venues/司法島.webp', bg:'images/venues/司法島.webp', tip:'你不需要背全部，只要先知道場地＝可能強化就夠了。' },
-];
-const DEX_CARDS = [
-  { id:0, name:'薩波', venue:'德雷斯羅薩鬥技場', base:'images/cards/0.webp', enh:'images/cards/enh/0.webp' },
-  { id:5, name:'索隆', venue:'和之國', base:'images/cards/5.webp', enh:'images/cards/enh/5.webp' },
-  { id:8, name:'魯夫', venue:'魚人島', base:'images/cards/8.webp', enh:'images/cards/enh/8.webp' },
-  { id:16, name:'青雉', venue:'龐克哈薩特', base:'images/cards/16.webp', enh:'images/cards/enh/16.webp' },
-  { id:6, name:'羅', venue:'龐克哈薩特', base:'images/cards/6.webp', enh:'images/cards/enh/6.webp' },
-  { id:7, name:'娜美', venue:'魚人島', base:'images/cards/7.webp', enh:'images/cards/enh/7.webp' },
-  { id:4, name:'喬巴', venue:'磁鼓島', base:'images/cards/4.webp', enh:'images/cards/enh/4.webp' },
-  { id:14, name:'大媽', venue:'蛋糕島', base:'images/cards/14.webp', enh:'images/cards/enh/14.webp' }
-];
+  <!-- 擲硬幣動畫（只有本機播放） -->
+  <div id="coinOverlay" class="hidden">
+    <div id="coinFrame">
+      <video id="coinVideo" src="videos/coin.mp4" playsinline preload="auto"></video>
+    </div>
+  </div>
 
-const state = {
-  drawn:false,
-  chosen:false,
-  dexOpen:false,
-  currentVenueBg:'',
-  logs:[
-    '開局後，先看場地有哪些。',
-    '輪到你時，先抽一張牌。',
-    '抽完後，兩張選一張打出。'
+  <!-- 抽牌動畫（只有本機播放，播完才真正抽牌） -->
+  <div id="drawOverlay" class="hidden fixed inset-0 z-[105] flex items-center justify-center bg-black/80">
+    <video id="drawVideo"
+           src="videos/draw.mp4"
+           playsinline
+           preload="auto"
+           class="max-w-[90vw] max-h-[90vh] rounded-xl shadow-2xl"></video>
+  </div>
+
+  <!-- 打出卡片「快閃」Overlay（自己打牌時才會有語音＋台詞泡泡） -->
+  <div id="playedOverlay" class="hidden">
+    <div id="playedFrame">
+      <!-- 語音台詞泡泡：顯示在卡圖上方 -->
+      <div id="voiceBubble" class="hidden">
+        <span id="voiceText"></span>
+      </div>
+
+      <!-- 卡片大圖 -->
+      <img id="playedImg" src="images/cards/back.webp" alt="played"/>
+
+      <!-- 誰打出的提示小字（保留） -->
+      <div id="playedMeta" class="text-sm"></div>
+    </div>
+  </div>
+
+
+
+
+  <!-- 勝利獎勵寶箱對話框（只給本局勝者） -->
+  <div id="rewardModal" class="hidden fixed inset-0 z-[120] flex items-center justify-center">
+    <div id="rewardModalBg" class="absolute inset-0 bg-black/70"></div>
+    <div class="relative w-[min(560px,92vw)] rounded-2xl border border-white/15 bg-[#0a0a0a]/90 backdrop-blur p-5 shadow-2xl">
+      <div class="text-xl font-bold text-[#ffbe58]">恭喜你贏得本局勝利</div>
+      <div class="mt-2 text-sm text-white/80">
+        這是本局獎勵寶箱（可抽 <span id="rewardDrawCount" class="font-semibold text-white"></span> 抽；抽到的數字不會重複）
+      </div>
+
+      <div class="mt-3 flex items-center gap-3">
+        <img id="rewardChestThumb" src="images/reward/chest_closed.webp" class="w-24 h-24 object-contain drop-shadow" alt="chest">
+        <div class="flex-1 text-sm text-white/70 leading-relaxed">
+          <div>打開後會根據抽數播放不同的寶箱動畫（1～5 抽）。</div>
+          <div class="mt-1">抽到的卡片與其強化技能卡面，將在「你的畫面」變成豪華版，並延續到整賽季結束。</div>
+        </div>
+      </div>
+
+      <div class="mt-4 flex justify-end gap-2">
+        <button id="rewardOpenBtn" class="px-4 py-2 rounded-xl bg-[#ffbe58] text-black font-semibold hover:brightness-110">打開</button>
+        <button id="rewardCloseBtn" class="px-4 py-2 rounded-xl bg-white/10 text-white/80 hover:bg-white/15">稍後</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 勝利獎勵寶箱圖片 overlay（只給本局勝者） -->
+  <div id="rewardOverlay" class="hidden fixed inset-0 z-[125] flex items-center justify-center bg-black/85">
+    <div class="relative w-[min(900px,96vw)] max-h-[92vh]">
+      <img
+        id="rewardImg"
+        src="images/reward/chest_1.webp"
+        class="w-full max-h-[92vh] object-contain rounded-2xl border border-white/15 shadow-2xl"
+        alt="reward"
+        draggable="false"
+      />
+      <div class="mt-3 text-center text-sm text-white/70">點一下關閉</div>
+    </div>
+  </div>
+
+  <!-- 強化技能影片（全體播放） -->
+  <div id="enhOverlay" class="hidden fixed inset-0 z-[140] flex items-center justify-center bg-black/70">
+    <video id="enhVideo" playsinline preload="auto" class="max-w-[80vw] max-h-[80vh] rounded-xl shadow-2xl"></video>
+  </div>
+
+
+  <!-- === 羅（強化）查看後的交換詢問框 === -->
+  <div id="lawSwapModal" class="hidden fixed inset-0 z-[90] flex items-center justify-center bg-black/70">
+    <div class="w-[min(560px,92vw)] rounded-2xl border border-neutral-700/70 bg-neutral-900/80 backdrop-blur p-5">
+      <div class="text-lg font-bold mb-3">ROOM・SCAN</div>
+      <div class="flex items-center gap-4 mb-4">
+        <img id="lawTargetImg" class="w-40 h-56 object-contain rounded-lg border border-white/10" />
+        <div class="text-sm opacity-80">
+          <div class="mb-2">目標玩家：<span id="lawTargetName" class="font-semibold"></span></div>
+          <div>你要和他的手牌交換嗎？</div>
+        </div>
+      </div>
+      <div class="flex justify-end gap-2">
+        <button id="lawSwapCancel" class="px-3 py-1.5 rounded-lg border border-white/20 bg-white/10 hover:bg-white/20">取消</button>
+        <button id="lawSwapOk" class="px-3 py-1.5 rounded-lg border border-white/20 bg-white/10 hover:bg-white/20">交換</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- === 魯夫（強化）發動確認框 === -->
+  <div id="luffyBoostModal" class="hidden fixed inset-0 z-[90] flex items-center justify-center bg-black/70">
+    <div class="w-[min(520px,92vw)] rounded-2xl border border-neutral-700/70 bg-neutral-900/80 backdrop-blur p-5">
+      <div class="text-lg font-extrabold mb-3">發動</div>
+      <div class="text-sm opacity-80 mb-4">魯夫強化：是否發動？</div>
+      <div class="flex justify-end">
+        <button id="luffyBoostGo" class="px-4 py-2 rounded-lg border border-white/20 bg-white/10 hover:bg-white/20">
+          猿王群鴉炮
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+
+<script>
+const CARD = id => `images/cards/${id}.webp`;
+const CARD_ENH = id => `images/cards/enh/${id}.webp`;
+const VEN = name => `images/venues/${name}.webp`;
+const AVA = a => `images/avatars/${a||1}.webp`;
+
+const el = {
+  venues: document.getElementById('venues'),
+  discard: document.getElementById('discard'),
+  deckCnt: document.getElementById('deckCnt'),
+  deckBtn: document.getElementById('btnDraw'),
+  deckHint: document.getElementById('drawHint'),
+  imgHand: document.getElementById('imgHand'),
+  imgDrawn: document.getElementById('imgDrawn'),
+  playZone: document.getElementById('myPlayZone'),
+  playHand: document.getElementById('playHand'),
+  playDrawn: document.getElementById('playDrawn'),
+  players: document.getElementById('players'),
+  log: document.getElementById('logBox'),
+  turnLbl: document.getElementById('turnLbl'),
+  stepLbl: document.getElementById('stepLbl'),
+  chestLbl: document.getElementById('chestLbl'),
+  cardDexBtn: document.getElementById('cardDexBtn'),
+  cardDexOverlay: document.getElementById('cardDexOverlay'),
+  cardDexClose: document.getElementById('cardDexClose'),
+  cardDexGrid: document.getElementById('cardDexGrid'),
+  preview: document.getElementById('cardDexPreview'),
+  previewEmpty: document.getElementById('cardDexPreviewEmpty'),
+  previewTitle: document.getElementById('cardDexPreviewTitle'),
+  previewBase: document.getElementById('cardDexPreviewBase'),
+  previewEnh: document.getElementById('cardDexPreviewEnh'),
+  previewVenue: document.getElementById('cardDexPreviewVenue'),
+  roomLbl: document.getElementById('roomLbl'),
+};
+
+const VENUE_TEXT = {
+  '魚人島': '這張場地會讓魯夫變成強化版。',
+  '和之國': '這張場地會讓索隆、凱多、基德等角色更危險。',
+  '蛋糕島': '這張場地會讓大媽、卡塔庫栗更強。',
+  '龐克哈薩德': '這張場地會讓羅、青雉更強。',
+  '司法島': '這張場地會讓羅賓更強。',
+  '阿拉巴斯坦': '這張場地會讓薩波更強。',
+};
+
+const demo = {
+  roomId: 'TUTOR',
+  chestCoins: 12,
+  turnIndex: 0,
+  turnStep: 'draw',
+  chosenVenue: '',
+  venues: ['魚人島','和之國','蛋糕島','龐克哈薩德','司法島','阿拉巴斯坦'],
+  players: [
+    { id:0, name:'你', avatar:49, gold:3, alive:true, title:'新手教學中', titleTier:2 },
+    { id:1, name:'索隆迷', avatar:31, gold:2, alive:true },
+    { id:2, name:'娜美控', avatar:39, gold:1, alive:true },
+    { id:3, name:'CPU', avatar:45, gold:0, alive:true },
+  ],
+  hand: 4,
+  drawn: 8,
+  played: null,
+  deckCount: 26,
+  discard: [],
+  logs: ['歡迎來到教學模式。這裡會用正式遊戲畫面，直接帶你走一遍流程。'],
+  canDraw: false,
+  canChoose: false,
+  dexOpen: false,
+};
+
+const tutorial = {
+  index: 0,
+  playedCardId: null,
+  steps: [
+    {
+      id:'welcome',
+      selector:'header',
+      title:'這就是正式遊戲畫面',
+      text:'這頁不是簡化版，而是直接用正式對戰畫面做教學。按右下角「下一步」，我會一步一步帶你看每個區塊。',
+      anchor:'bottom'
+    },
+    {
+      id:'players',
+      selector:'#players',
+      title:'右側是玩家區',
+      text:'這裡會看到所有玩家、金幣、存活狀態。金色邊框代表目前輪到誰。這一步只是認畫面。',
+      anchor:'left'
+    },
+    {
+      id:'venues',
+      selector:'#venues',
+      title:'上方是本局場地',
+      text:'每局會出現多個場地。某些角色在對應場地會變成強化版。你也可以點場地卡看背景，幫助記憶。',
+      anchor:'bottom',
+      prepare(){ demo.chosenVenue = '魚人島'; renderAll(); }
+    },
+    {
+      id:'deck',
+      selector:'#btnDraw',
+      title:'輪到你時，先抽牌',
+      text:'看到牌堆旁出現「請抽牌」時，就代表現在可以抽。這一步請直接點牌堆。',
+      anchor:'left',
+      prepare(){ demo.turnStep='draw'; demo.canDraw=true; demo.canChoose=false; demo.played=null; renderAll(); },
+      waitAction:'draw'
+    },
+    {
+      id:'choose',
+      selector:'#myPlayZone',
+      title:'抽完後，兩張選一張打出',
+      text:'左邊是你原本手上的牌，右邊是剛抽到的新牌。你必須二選一打出。這一步請直接點一張牌。',
+      anchor:'top',
+      prepare(){ demo.turnStep='choose'; demo.canDraw=false; demo.canChoose=true; renderAll(); },
+      waitAction:'choose'
+    },
+    {
+      id:'discard',
+      selector:'#discard',
+      title:'被打出的牌會進棄牌區',
+      text:'你剛剛打出的牌會出現在這裡。之後很多技能、判斷、回顧都會看棄牌區。最新的牌會在最右邊。',
+      anchor:'top'
+    },
+    {
+      id:'log',
+      selector:'#logBox',
+      title:'下面是對局日誌',
+      text:'不知道剛剛發生了什麼，就看這裡。抽牌、出牌、決鬥、淘汰都會寫進日誌。',
+      anchor:'top'
+    },
+    {
+      id:'carddex',
+      selector:'#cardDexBtn',
+      title:'卡片圖鑑可以查效果',
+      text:'新手最常用的功能就是這個。忘記某張牌做什麼時，直接打開圖鑑看一般版與強化版。這一步請點「卡片圖鑑」。',
+      anchor:'bottom',
+      waitAction:'dex'
+    },
+    {
+      id:'venueclick',
+      selector:'#venues',
+      title:'場地不只影響效果，也能幫你記規則',
+      text:'你可以點場地卡，直接切換成那張場地的背景。這樣比較容易記住「誰在哪裡會強化」。',
+      anchor:'bottom',
+      waitAction:'venue'
+    },
+    {
+      id:'finish',
+      selector:'#btnDraw',
+      title:'你已經會基本流程了',
+      text:'真正開始玩時，只要記住：看輪到誰 → 抽牌 → 兩張選一張 → 看提示做效果 → 不懂就查圖鑑或看日誌。右下角可重新教學。',
+      anchor:'left'
+    }
   ]
 };
 
-const steps = [
-  {
-    target:'main',
-    pad:18,
-    title:'這就是正式對戰畫面',
-    text:'我把教學做成和你正式遊戲幾乎同樣的版面。之後你只要按「下一步」，我就會直接指給玩家看：現在能做什麼、每個區塊是做什麼。',
-    tip:'這頁可以直接拿去當真正的新手導覽頁。',
-    onEnter(){ document.getElementById('myPlayZone').classList.add('hidden'); setStepLabel('抽牌'); }
-  },
-  {
-    target:'#venuesCard',
-    pad:14,
-    title:'先看「本局場地」',
-    text:'每局開場先看這裡。場地會決定哪些角色可能變成強化版，所以新手第一眼先看場地，會比先看手牌更有方向。',
-    tip:'你也可以直接點場地圖，示範切換背景。',
-    onEnter(){ pulse('#venuesCard'); }
-  },
-  {
-    target:'#deckCard',
-    pad:14,
-    title:'輪到你時，先抽牌',
-    text:'你的遊戲本來就有「請抽牌」提示。新手只要記住：輪到自己、看到這個提示，就先按牌堆抽一張。',
-    tip:'這一步可以直接點牌堆試試看。',
-    onEnter(){ setStepLabel('抽牌'); document.getElementById('drawHint').style.display='inline-flex'; },
-    advanceOn:'#btnDraw'
-  },
-  {
-    target:'#myPlayZone',
-    pad:14,
-    title:'抽完後，兩張選一張打出',
-    text:'抽完牌後，畫面會出現兩張牌：一張是原本手牌，一張是剛抽到的牌。你不是兩張都能打，而是要二選一。',
-    tip:'右邊這張有黃圈，代表這裡正在示範你剛抽到的新牌。',
-    onEnter(){ ensureDrawn(); setStepLabel('選牌'); },
-  },
-  {
-    target:'#playDrawn',
-    pad:12,
-    title:'選好後，把其中一張打出去',
-    text:'點你要出的那張牌。打出去後，效果會處理，然後才輪到下一位。新手最常卡住的地方，就是不知道這裡其實只是「從兩張裡選一張」。',
-    tip:'現在就點這張牌，示範打出。',
-    onEnter(){ ensureDrawn(); },
-    advanceOn:'#playDrawn'
-  },
-  {
-    target:'#playersCard',
-    pad:14,
-    title:'右邊這欄是所有玩家狀態',
-    text:'這裡可以看誰還活著、誰是目前回合、誰可能斷線、每個人的金幣和手牌狀態。真正對戰時，很多判斷都要從這一欄做。',
-    tip:'金框代表目前輪到的人。',
-    onEnter(){ setCurrentPlayer(1); }
-  },
-  {
-    target:'#logCard',
-    pad:14,
-    title:'看不懂發生什麼，就看對局日誌',
-    text:'角色技能、決鬥結果、誰被棄牌、誰被麻痺，幾乎都能從這裡快速回頭看。新手如果一瞬間看不懂畫面，先看日誌最容易補上。',
-    tip:'教學頁會把剛剛的抽牌和出牌寫進日誌。',
-    onEnter(){ appendLog('你打出了索隆，指定一名對手棄牌。'); }
-  },
-  {
-    target:'#cardDexBtn',
-    pad:12,
-    title:'不知道卡片效果？直接看卡片圖鑑',
-    text:'這個按鈕很重要。玩家忘記某張牌效果時，不用離開頁面，直接打開圖鑑，就能看一般版和強化版差在哪裡。',
-    tip:'點按鈕會打開示範圖鑑。',
-    onEnter(){},
-    advanceOn:'#cardDexBtn'
-  },
-  {
-    target:'#guideCard',
-    pad:10,
-    title:'你已經懂基本流程了',
-    text:'新手實際要記住的只有這條線：先看場地 → 輪到你先抽牌 → 兩張選一張打出 → 看右邊玩家狀態和下方日誌。其他功能再邊玩邊熟就行。',
-    tip:'測試沒問題後，把這份 tutorial.html 放進 public，就能直接當正式新手導覽。',
-    onEnter(){ document.getElementById('drawHint').style.display='none'; }
+function escapeHtml(s){
+  return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function setVenueBg(name=''){
+  if(!name){
+    document.body.removeAttribute('data-venue');
+    document.body.classList.remove('venue-on');
+    document.body.style.setProperty('--venue-bg-url', 'none');
+    return;
   }
-];
+  document.body.style.setProperty('--venue-bg-url', `url("${VEN(name)}")`);
+  document.body.setAttribute('data-venue', name);
+  document.body.classList.add('venue-on');
+}
 
-const $ = (s)=>document.querySelector(s);
-const guideCard = $('#guideCard');
-const spotlightLayer = $('#spotlightLayer');
-let stepIndex = 0;
-
-function init(){
-  renderVenues();
-  renderDiscard();
-  renderPlayers();
-  renderLogs();
-  renderDex();
-  wireEvents();
-  renderStepDots();
-  goStep(0);
+function buildPlayerCard(p, idx){
+  const current = idx === demo.turnIndex;
+  return `
+  <div class="card ${current ? 'current' : ''} p-2 border ${current ? 'border-amber-400' : 'border-white/10'}">
+    <div class="flex items-center gap-2">
+      <img class="w-10 h-10 rounded-full object-cover" src="${AVA(p.avatar)}" alt="${escapeHtml(p.name)}">
+      <div class="min-w-0 flex-1">
+        <div class="font-semibold truncate">${escapeHtml(p.name)}</div>
+        <div class="text-xs opacity-80">金幣：${p.gold}　${p.alive ? '存活中' : '已淘汰'}</div>
+      </div>
+    </div>
+  </div>`;
 }
 
 function renderVenues(){
-  const box = $('#venues');
-  box.innerHTML = VENUE_INFO.map((v,i)=>`
-    <button class="venue-tile" data-venue="${i}" aria-label="${v.name}">
-      <img src="${v.img}" alt="${v.name}" onerror="this.style.background='#1f2937';this.removeAttribute('src')">
-      <div class="label">${v.name}</div>
-    </button>
-  `).join('');
+  el.venues.innerHTML = demo.venues.map((name, i)=>`
+    <button class="venue-card relative overflow-hidden rounded-xl border ${demo.chosenVenue===name ? 'border-amber-300 ring-2 ring-amber-400/70' : 'border-[#2f353c]'}" data-name="${escapeHtml(name)}">
+      <img src="${VEN(name)}" data-name="${escapeHtml(name)}" class="w-full h-full object-cover aspect-[1242/1863]" alt="${escapeHtml(name)}">
+      <div class="absolute inset-x-0 bottom-0 text-[11px] py-1 px-1 bg-black/55 text-white">${escapeHtml(name)}</div>
+    </button>`).join('');
 }
+
 function renderDiscard(){
-  const box = $('#discard');
-  box.innerHTML = [16, 0].map(id=>`<img class="thumb" src="images/cards/${id}.webp" onerror="this.removeAttribute('src');this.style.background='#111827'">`).join('');
+  el.discard.innerHTML = demo.discard.map(id=>`<img class="thumb" src="${CARD(id)}" alt="${id}">`).join('');
+  el.discard.scrollLeft = el.discard.scrollWidth;
 }
+
 function renderPlayers(){
-  const players = [
-    { id:0, name:'你', avatar:49, gold:7, hand:1, current:true },
-    { id:1, name:'巴奇', avatar:31, gold:5, hand:1 },
-    { id:2, name:'薩波', avatar:39, gold:4, hand:1 },
-    { id:3, name:'魯海', avatar:45, gold:3, hand:1, offline:true },
-  ];
-  $('#players').innerHTML = players.map(p=>`
-    <div class="player-card ${p.current?'current':''} ${p.offline?'offline':''}" data-player="${p.id}">
-      <div class="flex items-center gap-3">
-        <img class="avatar" src="images/avatars/${p.avatar}.webp" onerror="this.style.background='#374151';this.removeAttribute('src')">
-        <div class="min-w-0 flex-1">
-          <div class="font-semibold truncate">${p.name} ${p.offline?'<span class="text-xs text-rose-300">斷線中</span>':''}</div>
-          <div class="text-xs opacity-70">金幣 ${p.gold} ｜ 手牌 ${p.hand} 張</div>
+  el.players.innerHTML = demo.players.map(buildPlayerCard).join('');
+}
+
+function renderPlayZone(){
+  if(demo.turnStep === 'choose'){
+    el.playZone.classList.remove('hidden');
+    el.imgHand.src = CARD(demo.hand);
+    el.imgDrawn.src = CARD(demo.drawn);
+  }else{
+    el.playZone.classList.add('hidden');
+  }
+}
+
+function renderLogs(){
+  el.log.innerHTML = demo.logs.map(line=>`<li>${escapeHtml(line)}</li>`).join('');
+  el.log.scrollTop = el.log.scrollHeight;
+}
+
+function renderHeader(){
+  el.deckCnt.textContent = String(demo.deckCount);
+  el.turnLbl.textContent = demo.players[demo.turnIndex]?.name || '你';
+  el.stepLbl.textContent = demo.turnStep === 'draw' ? '抽牌' : (demo.turnStep === 'choose' ? '選牌' : '教學');
+  el.chestLbl.textContent = String(demo.chestCoins);
+  el.roomLbl.textContent = demo.roomId;
+  el.deckHint.classList.toggle('hidden', !demo.canDraw);
+  el.deckBtn.classList.toggle('hot', !!demo.canDraw);
+}
+
+function renderAll(){
+  renderHeader();
+  renderVenues();
+  renderDiscard();
+  renderPlayers();
+  renderPlayZone();
+  renderLogs();
+  setVenueBg(demo.chosenVenue || '');
+}
+
+function openDex(cardId=8){
+  el.cardDexOverlay.classList.remove('hidden');
+  el.previewEmpty.classList.add('hidden');
+  el.preview.classList.remove('hidden');
+  el.previewTitle.textContent = `示範卡：${cardId} 號`;
+  el.previewBase.src = CARD(cardId);
+  el.previewEnh.src = CARD_ENH(cardId);
+  el.previewVenue.textContent = '右圖是強化版。只要角色對到自己的場地，效果就會升級。';
+  const ids = Array.from({length:20}, (_,i)=>i);
+  el.cardDexGrid.innerHTML = ids.map(id=>`
+    <button class="card-dex-thumb ${id===cardId ? 'enhanced' : ''}" data-id="${id}">
+      <img src="${CARD(id)}" alt="${id}">
+      <div class="card-dex-meta"><span>卡 ${id}</span><span>${id===cardId ? '示範' : ''}</span></div>
+    </button>`).join('');
+  demo.dexOpen = true;
+}
+
+function closeDex(){
+  el.cardDexOverlay.classList.add('hidden');
+  demo.dexOpen = false;
+}
+
+function chooseCard(which){
+  if(!demo.canChoose) return;
+  const played = which === 'hand' ? demo.hand : demo.drawn;
+  tutorial.playedCardId = played;
+  demo.played = played;
+  demo.canChoose = false;
+  demo.turnStep = 'done';
+  demo.discard.push(played);
+  demo.logs.push(`你打出了 ${played} 號卡。`);
+  demo.logs.push('打出去的牌會進入棄牌區，接著效果會依照卡牌內容處理。');
+  renderAll();
+  signalAction('choose');
+}
+
+function doDraw(){
+  if(!demo.canDraw) return;
+  demo.canDraw = false;
+  demo.turnStep = 'choose';
+  demo.deckCount -= 1;
+  demo.logs.push('你從牌堆抽了一張牌。');
+  demo.logs.push('接下來要在原本手牌與新抽牌之間，選一張打出。');
+  renderAll();
+  signalAction('draw');
+}
+
+function signalAction(type){
+  const step = tutorial.steps[tutorial.index];
+  if(step?.waitAction === type){
+    setTimeout(()=>goStep(tutorial.index + 1), 280);
+  }
+}
+
+function ensureGuideUi(){
+  if(document.getElementById('guideMask')) return;
+  const style = document.createElement('style');
+  style.textContent = `
+    #guideMask{position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:300;pointer-events:none;}
+    #guideHole{position:fixed;border-radius:18px;border:2px solid rgba(250,204,21,.98);box-shadow:0 0 0 9999px rgba(0,0,0,.62),0 0 0 4px rgba(250,204,21,.15),0 0 28px rgba(250,204,21,.85);z-index:301;pointer-events:none;transition:all .25s ease;}
+    #guideArrow{position:fixed;z-index:302;font-size:34px;line-height:1;filter:drop-shadow(0 0 12px rgba(250,204,21,.95));pointer-events:none;transition:all .25s ease;}
+    #guideCard{position:fixed;z-index:303;width:min(440px,calc(100vw - 24px));background:rgba(10,14,18,.94);backdrop-filter:blur(10px);border:1px solid rgba(250,204,21,.55);border-radius:18px;box-shadow:0 24px 48px rgba(0,0,0,.55),0 0 24px rgba(250,204,21,.18);padding:16px 16px 14px;transition:all .25s ease;}
+    #guideCard h3{font-size:18px;font-weight:800;color:#fde68a;margin:0 0 6px;}
+    #guideCard p{font-size:14px;line-height:1.65;color:#f8fafc;margin:0 0 12px;}
+    #guideBtns{display:flex;justify-content:space-between;gap:10px;align-items:center;}
+    #guideBtns .left,#guideBtns .right{display:flex;gap:8px;align-items:center;}
+    .guide-btn{padding:8px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:#fff;font-size:13px;font-weight:700;cursor:pointer}
+    .guide-btn:hover{background:rgba(255,255,255,.12)}
+    .guide-btn.primary{background:#f59e0b;color:#111827;border-color:#fbbf24}
+    .guide-btn.primary:hover{filter:brightness(1.05)}
+    #guideStepText{font-size:12px;color:#cbd5e1;}
+    .tutorial-disabled{pointer-events:none !important;opacity:.75;}
+    .tutorial-allow{pointer-events:auto !important;}
+  `;
+  document.head.appendChild(style);
+  document.body.insertAdjacentHTML('beforeend', `
+    <div id="guideMask"></div>
+    <div id="guideHole"></div>
+    <div id="guideArrow">➜</div>
+    <div id="guideCard">
+      <h3 id="guideTitle"></h3>
+      <p id="guideText"></p>
+      <div id="guideBtns">
+        <div class="left">
+          <button id="guidePrev" class="guide-btn">上一步</button>
+          <button id="guideRestart" class="guide-btn">重新教學</button>
+        </div>
+        <div class="right">
+          <span id="guideStepText"></span>
+          <button id="guideNext" class="guide-btn primary">下一步</button>
         </div>
       </div>
     </div>
-  `).join('');
+  `);
+  document.getElementById('guidePrev').addEventListener('click', ()=>goStep(Math.max(0, tutorial.index-1)));
+  document.getElementById('guideNext').addEventListener('click', ()=>{
+    const step = tutorial.steps[tutorial.index];
+    if(step?.waitAction) return;
+    goStep(Math.min(tutorial.steps.length-1, tutorial.index+1));
+  });
+  document.getElementById('guideRestart').addEventListener('click', resetTutorial);
 }
-function renderLogs(){
-  $('#logBox').innerHTML = state.logs.map(line=>`<li class="log-item">${escapeHtml(line)}</li>`).join('');
-}
-function appendLog(line){
-  if (!state.logs.includes(line)) {
-    state.logs.push(line);
-    renderLogs();
+
+function placeGuide(target, anchor='bottom'){
+  const hole = document.getElementById('guideHole');
+  const arrow = document.getElementById('guideArrow');
+  const card = document.getElementById('guideCard');
+  const title = document.getElementById('guideTitle');
+  const text = document.getElementById('guideText');
+  const stepText = document.getElementById('guideStepText');
+  const nextBtn = document.getElementById('guideNext');
+  const step = tutorial.steps[tutorial.index];
+  title.textContent = step.title;
+  text.textContent = step.text;
+  stepText.textContent = `${tutorial.index+1} / ${tutorial.steps.length}`;
+  nextBtn.textContent = step.waitAction ? '請依指示操作' : (tutorial.index === tutorial.steps.length-1 ? '完成' : '下一步');
+  nextBtn.disabled = !!step.waitAction;
+  nextBtn.style.opacity = step.waitAction ? '.6' : '1';
+
+  const rect = target.getBoundingClientRect();
+  const pad = 8;
+  hole.style.left = `${rect.left - pad}px`;
+  hole.style.top = `${rect.top - pad}px`;
+  hole.style.width = `${rect.width + pad*2}px`;
+  hole.style.height = `${rect.height + pad*2}px`;
+
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const cardW = Math.min(440, vw - 24);
+  const cardH = 188;
+  let cardLeft = rect.left;
+  let cardTop = rect.bottom + 18;
+  let arrowLeft = rect.left + rect.width / 2 - 14;
+  let arrowTop = rect.bottom - 8;
+  let arrowChar = '⬇';
+
+  if(anchor === 'top'){
+    cardTop = rect.top - cardH - 22;
+    arrowTop = rect.top - 28;
+    arrowChar = '⬆';
+  }else if(anchor === 'left'){
+    cardLeft = rect.left - cardW - 20;
+    cardTop = rect.top + Math.max(0, rect.height/2 - cardH/2);
+    arrowLeft = rect.left - 28;
+    arrowTop = rect.top + rect.height/2 - 18;
+    arrowChar = '⬅';
+  }else if(anchor === 'right'){
+    cardLeft = rect.right + 20;
+    cardTop = rect.top + Math.max(0, rect.height/2 - cardH/2);
+    arrowLeft = rect.right + 4;
+    arrowTop = rect.top + rect.height/2 - 18;
+    arrowChar = '➡';
   }
-}
-function renderDex(){
-  $('#cardDexGrid').innerHTML = DEX_CARDS.map(c=>`
-    <button class="rounded-xl overflow-hidden border border-slate-700 bg-slate-900/70 hover:border-amber-300 transition text-left" data-card="${c.id}">
-      <img src="${c.base}" class="w-full aspect-[1242/1863] object-cover bg-black/40" onerror="this.removeAttribute('src');this.style.background='#111827'">
-      <div class="px-2 py-1 text-[10px] flex items-center justify-between gap-1"><span class="truncate">${c.name}</span><span class="opacity-70">#${c.id}</span></div>
-    </button>
-  `).join('');
-}
-function showDexCard(id){
-  const c = DEX_CARDS.find(x=>x.id===id) || DEX_CARDS[0];
-  $('#dexEmpty').classList.add('hidden');
-  $('#dexPreview').classList.remove('hidden');
-  $('#dexTitle').textContent = `${c.name}｜強化場地：${c.venue}`;
-  $('#dexBase').src = c.base;
-  $('#dexEnh').src = c.enh;
-  $('#dexDesc').textContent = CARD_TEXT[c.id] || '這張卡可以在圖鑑裡比較一般版與強化版差別。';
-}
-function openDex(){ state.dexOpen = true; $('#cardDexOverlay').classList.add('open'); if (!$('#dexPreview').classList.contains('hidden')) return; showDexCard(8); }
-function closeDex(){ state.dexOpen = false; $('#cardDexOverlay').classList.remove('open'); }
 
-function wireEvents(){
-  $('#btnDraw').addEventListener('click', ()=>{
-    if (stepIndex < 2) return;
-    ensureDrawn();
-    if (steps[stepIndex]?.advanceOn === '#btnDraw') nextStep();
-  });
-  $('#playHand').addEventListener('click', ()=>{ if (!state.drawn) return; chooseCard('hand'); });
-  $('#playDrawn').addEventListener('click', ()=>{ if (!state.drawn) return; chooseCard('drawn'); if (steps[stepIndex]?.advanceOn === '#playDrawn') nextStep(); });
-  $('#cardDexBtn').addEventListener('click', ()=>{ openDex(); if (steps[stepIndex]?.advanceOn === '#cardDexBtn') setTimeout(nextStep, 200); });
-  $('#cardDexClose').addEventListener('click', closeDex);
-  $('#cardDexOverlay').addEventListener('click', (e)=>{ if (e.target.id === 'cardDexOverlay') closeDex(); });
-  $('#cardDexGrid').addEventListener('click', (e)=>{
-    const btn = e.target.closest('[data-card]');
-    if (!btn) return;
-    showDexCard(Number(btn.dataset.card));
-  });
-  $('#prevStep').addEventListener('click', prevStep);
-  $('#nextStep').addEventListener('click', nextStep);
-  $('#skipGuide').addEventListener('click', ()=>goStep(steps.length - 1));
-  window.addEventListener('resize', ()=>positionGuide());
-  document.querySelectorAll('.venue-tile').forEach(tile=>{
-    tile.addEventListener('click', ()=>{
-      const info = VENUE_INFO[Number(tile.dataset.venue)];
-      if (!info) return;
-      document.body.style.setProperty('--venue-bg-url', `url("${info.bg}")`);
-      appendLog(`你查看了場地：${info.name}。`);
-      $('#miniTip').textContent = info.tip;
-    });
+  if(cardTop + cardH > vh - 12) cardTop = vh - cardH - 12;
+  if(cardTop < 12) cardTop = 12;
+  if(cardLeft + cardW > vw - 12) cardLeft = vw - cardW - 12;
+  if(cardLeft < 12) cardLeft = 12;
+
+  card.style.left = `${cardLeft}px`;
+  card.style.top = `${cardTop}px`;
+  arrow.style.left = `${Math.max(8, Math.min(vw-50, arrowLeft))}px`;
+  arrow.style.top = `${Math.max(8, Math.min(vh-50, arrowTop))}px`;
+  arrow.textContent = arrowChar;
+}
+
+function clearInteractiveLocks(){
+  [el.deckBtn, el.playHand, el.playDrawn, el.cardDexBtn, el.venues].forEach(node=>{
+    if(node){ node.classList.remove('tutorial-allow'); }
   });
 }
 
-function ensureDrawn(){
-  if (state.drawn) return;
-  state.drawn = true;
-  $('#myPlayZone').classList.remove('hidden');
-  $('#stepLbl').textContent = '選牌';
-  $('#drawHint').style.display = 'none';
-  appendLog('你抽了一張牌，現在要兩張選一張。');
-}
-function chooseCard(which){
-  if (state.chosen) return;
-  state.chosen = true;
-  const playedId = which === 'drawn' ? 5 : 8;
-  const box = $('#discard');
-  const img = document.createElement('img');
-  img.className = 'thumb';
-  img.src = `images/cards/${playedId}.webp`;
-  img.onerror = function(){ this.removeAttribute('src'); this.style.background='#111827'; };
-  box.appendChild(img);
-  box.scrollLeft = box.scrollWidth;
-  appendLog(`你從兩張牌中選擇打出 ${playedId===5?'索隆':'魯夫'}。`);
-  $('#playHand').classList.add('opacity-50');
-  $('#playDrawn').classList.add('opacity-50');
-  setCurrentPlayer(1);
-}
-function setCurrentPlayer(id){
-  document.querySelectorAll('.player-card').forEach(el=>el.classList.remove('current'));
-  const target = document.querySelector(`.player-card[data-player="${id}"]`);
-  if (target) target.classList.add('current');
-  $('#turnLbl').textContent = id === 0 ? '你' : target?.querySelector('.font-semibold')?.textContent?.replace('斷線中','').trim() || '對手';
-}
-function setStepLabel(text){ $('#stepLbl').textContent = text; }
-function pulse(sel){ const el = $(sel); if (!el) return; el.classList.remove('pulse-ring'); void el.offsetWidth; el.classList.add('pulse-ring'); setTimeout(()=>el.classList.remove('pulse-ring'), 1800); }
-
-function renderStepDots(){
-  $('#stepDots').innerHTML = steps.map((_,i)=>`<span class="step-dot ${i===stepIndex?'on':''}" data-dot="${i}"></span>`).join('');
+function goStep(index){
+  ensureGuideUi();
+  tutorial.index = Math.max(0, Math.min(index, tutorial.steps.length-1));
+  const step = tutorial.steps[tutorial.index];
+  if(typeof step.prepare === 'function') step.prepare();
+  clearInteractiveLocks();
+  if(step.waitAction === 'draw') el.deckBtn.classList.add('tutorial-allow');
+  if(step.waitAction === 'choose'){ el.playHand.classList.add('tutorial-allow'); el.playDrawn.classList.add('tutorial-allow'); }
+  if(step.waitAction === 'dex') el.cardDexBtn.classList.add('tutorial-allow');
+  if(step.waitAction === 'venue') el.venues.classList.add('tutorial-allow');
+  const target = document.querySelector(step.selector) || document.body;
+  placeGuide(target, step.anchor || 'bottom');
 }
 
-function goStep(i){
-  stepIndex = Math.max(0, Math.min(steps.length - 1, i));
-  const step = steps[stepIndex];
-  $('#guideBadge').textContent = `步驟 ${stepIndex + 1} / ${steps.length}`;
-  $('#guideTitle').textContent = step.title;
-  $('#guideText').textContent = step.text;
-  $('#miniTip').textContent = step.tip || '';
-  $('#prevStep').disabled = stepIndex === 0;
-  $('#prevStep').classList.toggle('opacity-50', stepIndex === 0);
-  $('#nextStep').textContent = stepIndex === steps.length - 1 ? '重新看一次' : '下一步';
-  renderStepDots();
-  step.onEnter?.();
-  positionGuide();
+function resetTutorial(){
+  demo.turnIndex = 0;
+  demo.turnStep = 'draw';
+  demo.chosenVenue = '';
+  demo.played = null;
+  demo.deckCount = 26;
+  demo.discard = [];
+  demo.logs = ['歡迎來到教學模式。這裡會用正式遊戲畫面，直接帶你走一遍流程。'];
+  demo.canDraw = false;
+  demo.canChoose = false;
+  tutorial.playedCardId = null;
+  closeDex();
+  renderAll();
+  goStep(0);
 }
-function nextStep(){
-  if (stepIndex >= steps.length - 1) {
-    resetDemo();
-    goStep(0);
+
+window.addEventListener('resize', ()=>goStep(tutorial.index));
+
+document.addEventListener('click', (ev)=>{
+  const venueBtn = ev.target.closest('.venue-card');
+  if(venueBtn){
+    const name = venueBtn.getAttribute('data-name');
+    demo.chosenVenue = demo.chosenVenue === name ? '' : name;
+    demo.logs.push(demo.chosenVenue ? `你查看了場地：${name}。` : '你把場地背景關掉了。');
+    renderAll();
+    signalAction('venue');
     return;
   }
-  goStep(stepIndex + 1);
-}
-function prevStep(){ goStep(stepIndex - 1); }
+  const dexThumb = ev.target.closest('.card-dex-thumb');
+  if(dexThumb){
+    const id = Number(dexThumb.getAttribute('data-id') || '0');
+    openDex(id);
+    return;
+  }
+  if(ev.target === el.cardDexOverlay){ closeDex(); }
+});
 
-function positionGuide(){
-  const step = steps[stepIndex];
-  const target = step.target === 'main' ? document.querySelector('main') : $(step.target);
-  if (!target) return;
-  const r = target.getBoundingClientRect();
-  const pad = step.pad || 10;
-  const spotX = r.left + r.width/2;
-  const spotY = r.top + r.height/2;
-  const spotW = Math.min(window.innerWidth - 24, r.width + pad*2);
-  const spotH = Math.min(window.innerHeight - 24, r.height + pad*2);
-  document.documentElement.style.setProperty('--spot-x', `${spotX}px`);
-  document.documentElement.style.setProperty('--spot-y', `${spotY}px`);
-  document.documentElement.style.setProperty('--spot-w', `${spotW}px`);
-  document.documentElement.style.setProperty('--spot-h', `${spotH}px`);
+el.deckBtn?.addEventListener('click', doDraw);
+el.playHand?.addEventListener('click', ()=>chooseCard('hand'));
+el.playDrawn?.addEventListener('click', ()=>chooseCard('drawn'));
+el.cardDexBtn?.addEventListener('click', ()=>{ openDex(8); signalAction('dex'); });
+el.cardDexClose?.addEventListener('click', closeDex);
 
-  const cardW = Math.min(420, window.innerWidth - 24);
-  const below = r.bottom + 18;
-  const above = r.top - 18;
-  let top = below;
-  if (below + 220 > window.innerHeight && above > 240) top = Math.max(12, above - 210);
-  top = Math.max(12, Math.min(window.innerHeight - 220, top));
-
-  let left = r.left;
-  if (left + cardW > window.innerWidth - 12) left = window.innerWidth - cardW - 12;
-  if (left < 12) left = 12;
-  guideCard.style.left = `${left}px`;
-  guideCard.style.top = `${top}px`;
-
-  spotlightLayer.style.display = step.target === '#guideCard' ? 'none' : 'block';
-}
-
-function resetDemo(){
-  state.drawn = false;
-  state.chosen = false;
-  state.dexOpen = false;
-  $('#myPlayZone').classList.add('hidden');
-  $('#drawHint').style.display = 'inline-flex';
-  $('#discard').innerHTML = [16,0].map(id=>`<img class="thumb" src="images/cards/${id}.webp" onerror="this.removeAttribute('src');this.style.background='#111827'">`).join('');
-  state.logs = [
-    '開局後，先看場地有哪些。',
-    '輪到你時，先抽一張牌。',
-    '抽完後，兩張選一張打出。'
-  ];
-  renderLogs();
-  renderPlayers();
-  closeDex();
-  setCurrentPlayer(0);
-  setStepLabel('抽牌');
-}
-
-function escapeHtml(s){
-  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-}
-
-init();
+renderAll();
+openDex(8);
+closeDex();
+goStep(0);
 </script>
 </body>
 </html>
