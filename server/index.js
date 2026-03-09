@@ -1345,21 +1345,56 @@ function runCpuLoop(roomId){
       // 第二次進到 choose：已經等過，再真正出牌
       st._cpuWaitedAfterDraw = false;
 
-      const which = pickCpuCardSmart(st, meIdx); // 'hand' 或 'drawn'
+      const beforeTurnIndex = st.turnIndex;
+      const firstWhich = pickCpuCardSmart(st, meIdx); // 'hand' 或 'drawn'
 
       applyAndBroadcast(roomNow, {
         type: 'PLAY_CARD',
         playerId: meIdx,
-        payload: { which },
+        payload: { which: firstWhich },
       }, io);
 
-  // ★ 出牌後：依「這張牌是不是強化」決定要等多久
-  const stAfter = roomNow.state;          // 套用 PLAY_CARD 後的最新 state
-  const waitMs = getDelayAfterPlay(stAfter);
+      // ===== 保底：如果這次出牌被規則擋下，立刻改打另一張 =====
+      const stAfterFirst = roomNow.state;
+      const meAfterFirst = stAfterFirst?.players?.[meIdx];
+      const stillSameCpuChoose = (
+        stAfterFirst &&
+        stAfterFirst.turnIndex === beforeTurnIndex &&
+        stAfterFirst.turnStep === 'choose' &&
+        !stAfterFirst.pending &&
+        meAfterFirst &&
+        meAfterFirst.alive &&
+        meAfterFirst.isCPU
+      );
 
-  delay(waitMs);
-  return;
-}
+      if (stillSameCpuChoose) {
+        let fallbackWhich = null;
+
+        // 青雉凍結：只能打剛抽那張
+        if (meAfterFirst.frozen && meAfterFirst.tempDraw != null) {
+          fallbackWhich = 'drawn';
+        } else if (firstWhich !== 'drawn' && meAfterFirst.tempDraw != null) {
+          fallbackWhich = 'drawn';
+        } else if (firstWhich !== 'hand' && meAfterFirst.hand != null) {
+          fallbackWhich = 'hand';
+        }
+
+        if (fallbackWhich) {
+          applyAndBroadcast(roomNow, {
+            type: 'PLAY_CARD',
+            playerId: meIdx,
+            payload: { which: fallbackWhich },
+          }, io);
+        }
+      }
+
+      // ★ 出牌後：依「最後成功打出的牌」決定要等多久
+      const stAfter = roomNow.state;          // 套用 PLAY_CARD 後的最新 state
+      const waitMs = getDelayAfterPlay(stAfter);
+
+      delay(waitMs);
+      return;
+    }
 
     // 其他 turnStep（例如結算中 / 換人中） → 不再自動動作
   };
