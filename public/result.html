@@ -770,7 +770,7 @@ body{
 <div class="wrap layout">
     <!-- 左：玩家清單 -->
     <aside class="card">
-      <div class="section-title">玩家清單（依金幣排名）</div>
+      <div class="section-title">玩家清單（先比金幣，平手比懸賞金）</div>
       <div class="player-list" id="playerList"></div>
     </aside>
 
@@ -1861,7 +1861,7 @@ const TITLE_TABLE = {
   }
 };
 
-let ORDERED_IDS = []; // 依金幣排名
+let ORDERED_IDS = []; // 依最終排名（先比金幣，平手再比懸賞金）
 let ROWS = [];        // 每位玩家的分數
 let ACTIVE = new Set(METRICS.map(m=>m.key)); // 預設顯示：全部指標
 
