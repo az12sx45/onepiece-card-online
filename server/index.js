@@ -147,6 +147,22 @@ function lockTouch(userId, deviceId, socketId){
   return lock;
 }
 
+function canHostSkipCpu(room, viewerId){
+  try{
+    if(!room || room.phase !== 'playing') return false;
+    if(room.host !== viewerId) return false;
+
+    const ps = Array.isArray(room.state?.players) ? room.state.players : [];
+    const aliveHumans = ps.filter(p => p && p.alive && !p.isCPU).length;
+    const aliveCpus   = ps.filter(p => p && p.alive &&  p.isCPU).length;
+
+    // 只剩 CPU 存活，且觀看者是房主
+    return aliveHumans === 0 && aliveCpus > 0;
+  }catch{
+    return false;
+  }
+}
+
 function lockRemoveSocket(userId, socketId){
   const uid = Number(userId);
   const lock = loginLocks.get(uid);
@@ -599,8 +615,10 @@ function broadcastState(room){
     vis = injectRanksIntoVisibleState(vis, st);
     vis = injectOfflineIntoVisibleState(vis, st);
 
-    vis.viewerCanNext = (room.host === meta.playerId) || winners.has(meta.playerId);
-    io.to(sid).emit("STATE", vis);
+vis.viewerCanNext = (room.host === meta.playerId) || winners.has(meta.playerId);
+vis.viewerIsHost = (room.host === meta.playerId);
+vis.cpuSkipAvailable = canHostSkipCpu(room, meta.playerId);
+io.to(sid).emit("STATE", vis);
   }
 }
 
@@ -830,13 +848,22 @@ function runCpuLoop(roomId){
   const room = rooms.get(roomId);
   if (!room) return;
 
+  room._cpuLoopToken = Number(room._cpuLoopToken || 0) + 1;
+  const loopToken = room._cpuLoopToken;
+
   const step = () => {
     const roomNow = rooms.get(roomId);
     if (!roomNow) return;
+    if (Number(roomNow._cpuLoopToken || 0) !== loopToken) return;
+
     const st = roomNow.state;
     if (!st) return;
 
-    const delay = (ms) => setTimeout(step, ms);
+    if (st.turnStep === 'ended' || st.turnStep === 'end' || st.turnStep === 'score') {
+      roomNow._cpuFastForward = false;
+    }
+
+    const delay = (ms) => setTimeout(step, roomNow._cpuFastForward ? 0 : ms);
     const pending = st.pending || null;
 
   // ---------- 先處理「不是自己回合」但輪到 CPU 回應的互動 ----------
@@ -2734,6 +2761,25 @@ p.rank = safeRank;
       return;
     }
 
+if (type === 'HOST_SKIP_CPU') {
+  if (room.host !== playerId) {
+    socket.emit('EMIT', { type:'toast', text:'只有房主可以使用一鍵跳過' });
+    return;
+  }
+
+  if (!canHostSkipCpu(room, playerId)) {
+    socket.emit('EMIT', { type:'toast', text:'目前還有真人存活，不能一鍵跳過' });
+    return;
+  }
+
+  room._cpuFastForward = true;
+  io.to(roomId).emit('EMIT', { type:'toast', text:'房主已啟用 CPU 快速跳過' });
+
+  try{ broadcastState(room); }catch{}
+  try{ runCpuLoop(roomId); }catch{}
+  try{ armRoomWatchdogs(roomId); }catch{}
+  return;
+}
 
     // 等待室：文字聊天（所有在等待室的人都看得到）
     // 前端送：{ type:'LOBBY_CHAT', text }
@@ -3046,10 +3092,10 @@ room.sockets = newSockets;
       }
 
       // 正式進入下一局
-       const ns = nextRound(st);
-      room.state = ns;
-      broadcastState(room);
-
+const ns = nextRound(st);
+room.state = ns;
+room._cpuFastForward = false;
+broadcastState(room);
       // ★ 如果下一局起始玩家是 CPU，一樣讓 CPU 先動（含延遲）
       runCpuLoop(roomId);
 
