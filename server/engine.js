@@ -172,6 +172,25 @@ function ensureUsoppHints(st){
   }
 }
 
+function computeBountyFromScore(score, playerCount){
+  const s = score || {};
+  const coins = Number(s.coinScore || 0);
+  const atk   = Number(s.atkScore || 0);
+  const hit   = Number(s.hitScore || 0);
+  const def   = Number(s.defScore || 0);
+  const intel = Number(s.intelScore || 0);
+  const surv  = Number(s.survivalScore || 0);
+
+  const N = Math.max(2, Number(playerCount || 4));
+  const factor = 6 / N;
+
+  return (
+    coins * 200000000 * factor +
+    (atk + hit) * 10000000 * factor +
+    (def + intel + surv) * 5000000 * factor
+  );
+}
+
 // ★ 新增：每位玩家「決鬥得到的尾數下限」（exclusive）
 function ensureUsoppDuelFloor(st){
   if (!Array.isArray(st.usoppDuelFloor) && Array.isArray(st.players)) {
@@ -596,20 +615,47 @@ st.players.forEach((p, i) => {
   };
 });
 
-  // 3) 金幣排名（只宣告一次，避免 const rank 重複）
+    // 3) 排名：先比金幣，金幣平手時再比懸賞金
   const rank = [...st.players]
-    .map(p => ({ id: p.id, gold: p.gold || 0 }))
-    .sort((a, b) => b.gold - a.gold);
+    .map(p => {
+      const score = board[p.id] || {
+        coinScore: p.gold || 0,
+        atkScore: 0,
+        defScore: 0,
+        hitScore: 0,
+        intelScore: 0,
+        survivalScore: 0
+      };
+
+      const bounty = computeBountyFromScore(score, st.players.length);
+
+      return {
+        id: p.id,
+        gold: p.gold || 0,
+        bounty
+      };
+    })
+    .sort((a, b) => {
+      // ① 先比金幣
+      if (b.gold !== a.gold) return b.gold - a.gold;
+
+      // ② 金幣平手時，比懸賞金
+      if (b.bounty !== a.bounty) return b.bounty - a.bounty;
+
+      // ③ 如果還完全相同，就固定用 id 排，避免順序亂跳
+      return a.id - b.id;
+    });
 
   // 如需保留快取可寫：st._finalRank = rank;
 
   // 4) 打包 final 物件（result.html 會用這包渲染）
   st.final = {
     seasonNo: st.seasonNo || 1,
-    ranking: rank.map(r => ({
+     ranking: rank.map(r => ({
       id: r.id,
       name: (playersMeta[r.id] && playersMeta[r.id].name) || `P${r.id + 1}`,
       coins: r.gold,
+      bounty: r.bounty,
       pid: playersMeta[r.id] ? playersMeta[r.id].pid : null,
       avatar: playersMeta[r.id] ? playersMeta[r.id].avatar : null
     })),
