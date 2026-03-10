@@ -2163,13 +2163,16 @@ body::before{
 </div>
 
 
-        <div class="card p-3 md:col-span-3">
-          <div class="flex items-center justify-between mb-2">
-            <div class="text-sm opacity-80">棄牌</div>
-            <button id="btnNextRound" class="hidden px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black text-sm">下一局 ▶</button>
-          </div>
-            <div id="discard" class="flex gap-2 overflow-x-auto"></div>
-        </div>
+<div class="card p-3 md:col-span-3">
+  <div class="flex items-center justify-between mb-2">
+    <div class="text-sm opacity-80">棄牌</div>
+    <div class="flex items-center gap-2">
+      <button id="btnCpuSkip" class="hidden px-3 py-1.5 rounded-lg border border-sky-400 bg-sky-300 text-black text-sm font-semibold">只剩 CPU｜一鍵跳過</button>
+      <button id="btnNextRound" class="hidden px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-300 text-black text-sm">下一局 ▶</button>
+    </div>
+  </div>
+  <div id="discard" class="flex gap-2 overflow-x-auto"></div>
+</div>
       </div>
 
 <div id="myPlayZone" class="hidden">
@@ -2473,6 +2476,7 @@ chooseHint: document.getElementById('chooseHint'),
   modal: document.getElementById('modal'),
   chestLbl: document.getElementById('chestLbl'),
   nextRound: document.getElementById('btnNextRound'),
+  cpuSkip: document.getElementById('btnCpuSkip'),
   cardDexBtn: document.getElementById('cardDexBtn'),
 };
 // ================= 棄牌區：滑鼠滾輪/觸控拖曳捲動（不用一定拉捲軸） =================
@@ -2971,6 +2975,11 @@ let _flashBusy = false;       // 正在顯示快閃中
 let _deferEnhCardId = null;   // 延後播放影片的 cardId（等快閃結束再播）
 let _silentDiscards = [];
 let _enhSignal = null;    // EMIT enh_fx 訊號：只在此卡被打出時才允許播強化影片
+let _cpuSkipUiFast = false; // 房主一鍵跳過：本機同步關掉動畫/快閃
+
+function isCpuSkipFastMode(){
+  return !!_cpuSkipUiFast && !!state?.cpuSkipAvailable;
+}
 
 // === 事件流（日誌） ===
 let feed = [];          // 這個陣列就是畫面上顯示的對局日誌
@@ -2992,6 +3001,7 @@ function onceFx(dom, cls, delay=0){
 /* === 擲硬幣影片播放（本機，附框+淡入淡出） === */
 let _coinPlaying = false;
 function playCoinFx(){
+  if (isCpuSkipFastMode()) return;
   const ov  = document.getElementById('coinOverlay');
   const vid = document.getElementById('coinVideo');
   if (!ov || !vid) return;
@@ -3205,6 +3215,7 @@ const ENH_VID = Array.from({length:20}, (_,i)=> `videos/enh/${i}.mp4`);
 
 // 播放指定卡的強化影片（全體）
 function playEnhFxFor(cardId){
+  if (isCpuSkipFastMode()) return;
   const ov  = document.getElementById('enhOverlay');
   const vid = document.getElementById('enhVideo');
   if (!ov || !vid) return;
@@ -4175,6 +4186,12 @@ socket.on('JOINED', ({ playerId })=>{
 
 /* ===== 新增：showPlayedFlash（支援強化卡面 + 結束回呼，支援點擊關閉） ===== */
 function showPlayedFlash(cardId, byIndex, opt = {}){
+  if (isCpuSkipFastMode()) {
+    try {
+      if (typeof opt === 'object' && typeof opt.onDone === 'function') opt.onDone();
+    } catch(e){}
+    return;
+  }
   // 若這張是靜默棄牌 → 不做快閃，也不排程影片
   if (Array.isArray(_silentDiscards) && _silentDiscards.includes(cardId)) {
     _silentDiscards = _silentDiscards.filter(x => x !== cardId);
@@ -4706,6 +4723,8 @@ socket.on('STATE', (s)=>{
 
 // === 決鬥動畫：輸家卡片先翻正面，再被火焰燒掉 ===
 function playDuel(opts){
+  if (isCpuSkipFastMode()) return;
+
   const {
     leftId,
     rightId,
@@ -5653,7 +5672,24 @@ function playRewardImage(payload){
   timer = setTimeout(()=> finish('auto'), 2800);
 }
 
+el.cpuSkip?.addEventListener('click', ()=>{
+  if (!state?.cpuSkipAvailable) return;
+  _cpuSkipUiFast = true;
 
+  try{
+    document.getElementById('playedOverlay')?.classList.add('hidden');
+    document.getElementById('enhOverlay')?.classList.add('hidden');
+    document.getElementById('coinOverlay')?.classList.add('hidden');
+    document.getElementById('duelFx')?.classList.add('hidden');
+  }catch(e){}
+
+  socket.emit('ACTION', {
+    roomId: me.roomId,
+    playerId: me.playerId,
+    secret: me.secret,
+    type: 'HOST_SKIP_CPU'
+  });
+});
 
 // Reward UI events
 document.getElementById('rewardModalBg')?.addEventListener('click', closeRewardModal);
@@ -6009,10 +6045,17 @@ feed.forEach(line=>{
 logBox.scrollTop = logBox.scrollHeight;
 
 
-  // 下一局按鈕（依 viewerCanNext）
-  el.nextRound.classList.toggle('hidden', !(state.allowNextRound && state.viewerCanNext === true));
+// 下一局按鈕（依 viewerCanNext）
+el.nextRound.classList.toggle('hidden', !(state.allowNextRound && state.viewerCanNext === true));
 
-  renderPending();
+if (el.cpuSkip) {
+  el.cpuSkip.classList.toggle('hidden', !state.cpuSkipAvailable);
+}
+if (!state.cpuSkipAvailable) {
+  _cpuSkipUiFast = false;
+}
+
+renderPending();
 }
 
 
