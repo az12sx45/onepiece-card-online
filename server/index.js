@@ -313,15 +313,18 @@ const MAX_ROOM_PLAYERS = 6;
 //  - If a human is idle on their turn or during pending interaction, convert them to CPU (prevents soft-lock).
 //  - If the human reconnects with same secret, they regain control immediately.
 // =========================
-const OFFLINE_GRACE_MS = 8000;      // 斷線保留時間：8 秒（可自行調整）
-const TURN_IDLE_MS    = 30000;     // 回合掛機：30 秒自動接管
-const PENDING_IDLE_MS = 30000;     // 互動流程掛機：30 秒自動接管
+const OFFLINE_GRACE_MS = 8000;      // 斷線保留時間：8 秒
+const TURN_IDLE_MS     = 30000;     // 回合掛機：30 秒自動接管
+const PENDING_IDLE_MS  = 30000;     // 互動流程掛機：30 秒自動接管
+const IDLE_WARN_MS     = 10000;     // 接手前 10 秒先警告
 
 function ensureRoomResilience(room){
   if(!room) return;
   if(!room._offlineTimers) room._offlineTimers = new Map(); // playerId -> timeout
   if(!room._turnTimer) room._turnTimer = null;
   if(!room._pendingTimer) room._pendingTimer = null;
+  if(!room._turnWarnTimer) room._turnWarnTimer = null;
+  if(!room._pendingWarnTimer) room._pendingWarnTimer = null;
 }
 
 function clearOfflineTimer(room, playerId){
@@ -338,6 +341,49 @@ function emitRoomToast(room, text){
     for(const [sid] of room.sockets){
       io.to(sid).emit("EMIT", { type:"toast", text: String(text||"") });
     }
+  }catch{}
+}
+
+function emitToPlayer(room, playerId, event, payload){
+  try{
+    for(const [sid, meta] of room.sockets){
+      if(Number(meta?.playerId) === Number(playerId)){
+        io.to(sid).emit(event, payload);
+      }
+    }
+  }catch{}
+}
+
+function setPlayerAutoControl(room, playerId, isAuto, reason = "idle"){
+  try{
+    const p = room?.state?.players?.[playerId];
+    if(!p) return;
+
+    p.isCPU = !!isAuto;
+
+    if(!p.client || typeof p.client !== "object") p.client = {};
+    p.client.autoControlled = !!isAuto;
+    p.autoControlled = !!isAuto;
+
+    emitToPlayer(room, playerId, "EMIT", {
+      type: "auto_control_changed",
+      isAuto: !!isAuto,
+      reason: String(reason || "idle")
+    });
+
+    broadcastState(room);
+  }catch(e){
+    console.error("[setPlayerAutoControl] error:", e);
+  }
+}
+
+function warnPlayerBeforeTakeover(room, playerId, remainMs){
+  try{
+    const sec = Math.max(1, Math.ceil(Number(remainMs || 0) / 1000));
+    emitToPlayer(room, playerId, "EMIT", {
+      type: "idle_warning",
+      remainSec: sec
+    });
   }catch{}
 }
 
@@ -363,11 +409,14 @@ function armRoomWatchdogs(roomId){
   ensureRoomResilience(room);
 
   // clear existing timers
-  try{ if(room._turnTimer) clearTimeout(room._turnTimer); }catch{}
-  try{ if(room._pendingTimer) clearTimeout(room._pendingTimer); }catch{}
-  room._turnTimer = null;
-  room._pendingTimer = null;
-
+try{ if(room._turnTimer) clearTimeout(room._turnTimer); }catch{}
+try{ if(room._pendingTimer) clearTimeout(room._pendingTimer); }catch{}
+try{ if(room._turnWarnTimer) clearTimeout(room._turnWarnTimer); }catch{}
+try{ if(room._pendingWarnTimer) clearTimeout(room._pendingWarnTimer); }catch{}
+room._turnTimer = null;
+room._pendingTimer = null;
+room._turnWarnTimer = null;
+room._pendingWarnTimer = null;
   if(room.phase !== "playing") return;
   const st = room.state;
   if(!st || !Array.isArray(st.players) || st.players.length===0) return;
@@ -375,44 +424,65 @@ function armRoomWatchdogs(roomId){
   // ---- turn watchdog ----
   const turnIdx = Number(st.turnIndex);
   const turnP = st.players[turnIdx];
-  if(turnP && turnP.alive && !turnP.isCPU){
-    room._turnTimer = setTimeout(()=>{
-      const r2 = rooms.get(roomId);
-      if(!r2 || r2.phase!=="playing") return;
-      const s2 = r2.state;
-      if(!s2) return;
-      const idx2 = Number(s2.turnIndex);
-      const p2 = s2.players?.[idx2];
-      if(!p2 || !p2.alive || p2.isCPU) return;
+if(turnP && turnP.alive && !turnP.isCPU){
+  room._turnWarnTimer = setTimeout(()=>{
+    const r2 = rooms.get(roomId);
+    if(!r2 || r2.phase !== "playing") return;
+    const s2 = r2.state;
+    const idx2 = Number(s2?.turnIndex);
+    const p2 = s2?.players?.[idx2];
+    if(!p2 || !p2.alive || p2.isCPU) return;
 
-      p2.isCPU = true;
-      emitRoomToast(r2, `⚠ ${p2.client?.displayName || p2.displayName || "玩家"} 掛機，已由 CPU 接管`);
-      try{ broadcastState(r2); }catch{}
-      try{ runCpuLoop(roomId); }catch{}
-    }, TURN_IDLE_MS);
-  }
+    warnPlayerBeforeTakeover(r2, idx2, IDLE_WARN_MS);
+  }, Math.max(0, TURN_IDLE_MS - IDLE_WARN_MS));
+
+  room._turnTimer = setTimeout(()=>{
+    const r2 = rooms.get(roomId);
+    if(!r2 || r2.phase!=="playing") return;
+    const s2 = r2.state;
+    if(!s2) return;
+    const idx2 = Number(s2.turnIndex);
+    const p2 = s2.players?.[idx2];
+    if(!p2 || !p2.alive || p2.isCPU) return;
+
+    setPlayerAutoControl(r2, idx2, true, "idle");
+    emitRoomToast(r2, `⚠ ${p2.client?.displayName || p2.displayName || "玩家"} 掛機，已由 CPU 接管`);
+    try{ runCpuLoop(roomId); }catch{}
+  }, TURN_IDLE_MS);
+}
 
   // ---- pending watchdog ----
   const respId = pendingResponderId(st);
-  if(respId != null){
-    const rp = st.players?.[respId];
-    if(rp && rp.alive && !rp.isCPU){
-      room._pendingTimer = setTimeout(()=>{
-        const r2 = rooms.get(roomId);
-        if(!r2 || r2.phase!=="playing") return;
-        const s2 = r2.state;
-        const resp2 = pendingResponderId(s2);
-        if(resp2 == null || Number(resp2)!==Number(respId)) return;
+if(respId != null){
+  const rp = st.players?.[respId];
+  if(rp && rp.alive && !rp.isCPU){
+    room._pendingWarnTimer = setTimeout(()=>{
+      const r2 = rooms.get(roomId);
+      if(!r2 || r2.phase !== "playing") return;
+      const s2 = r2.state;
+      const resp2 = pendingResponderId(s2);
+      if(resp2 == null || Number(resp2)!==Number(respId)) return;
 
-        const p2 = s2.players?.[resp2];
-        if(!p2 || !p2.alive || p2.isCPU) return;
+      const p2 = s2.players?.[resp2];
+      if(!p2 || !p2.alive || p2.isCPU) return;
 
-        p2.isCPU = true;
-        emitRoomToast(r2, `⚠ ${p2.client?.displayName || p2.displayName || "玩家"} 掛機，已由 CPU 接管`);
-        try{ broadcastState(r2); }catch{}
-        try{ runCpuLoop(roomId); }catch{}
-      }, PENDING_IDLE_MS);
-    }
+      warnPlayerBeforeTakeover(r2, resp2, IDLE_WARN_MS);
+    }, Math.max(0, PENDING_IDLE_MS - IDLE_WARN_MS));
+
+    room._pendingTimer = setTimeout(()=>{
+      const r2 = rooms.get(roomId);
+      if(!r2 || r2.phase!=="playing") return;
+      const s2 = r2.state;
+      const resp2 = pendingResponderId(s2);
+      if(resp2 == null || Number(resp2)!==Number(respId)) return;
+
+      const p2 = s2.players?.[resp2];
+      if(!p2 || !p2.alive || p2.isCPU) return;
+
+      setPlayerAutoControl(r2, resp2, true, "pending");
+      emitRoomToast(r2, `⚠ ${p2.client?.displayName || p2.displayName || "玩家"} 掛機，已由 CPU 接管`);
+      try{ runCpuLoop(roomId); }catch{}
+    }, PENDING_IDLE_MS);
   }
 }
 
@@ -602,7 +672,24 @@ function injectOfflineIntoVisibleState(vis, fullState){
   return vis;
 }
 
+function injectAutoControlIntoVisibleState(vis, fullState){
+  try{
+    if (!vis || !Array.isArray(vis.players) || !fullState || !Array.isArray(fullState.players)) return vis;
 
+    const byId = new Map(fullState.players.map(p => [p.id, p]));
+    for (const vp of vis.players){
+      const fp = byId.get(vp?.id);
+      if (!fp) continue;
+
+      const autoControlled = !!(fp?.client?.autoControlled || fp?.autoControlled || fp?.isCPU);
+
+      if (!vp.client || typeof vp.client !== "object") vp.client = {};
+      vp.client.autoControlled = autoControlled;
+      vp.autoControlled = autoControlled;
+    }
+  }catch{}
+  return vis;
+}
 
 function broadcastState(room){
   const st = room.state;
@@ -611,9 +698,10 @@ function broadcastState(room){
 
   for (const [sid, meta] of room.sockets){
     let vis = injectChestCoins(getVisibleState(st, meta.playerId));
-    vis = injectTitlesIntoVisibleState(vis, st);
-    vis = injectRanksIntoVisibleState(vis, st);
-    vis = injectOfflineIntoVisibleState(vis, st);
+vis = injectTitlesIntoVisibleState(vis, st);
+vis = injectRanksIntoVisibleState(vis, st);
+vis = injectOfflineIntoVisibleState(vis, st);
+vis = injectAutoControlIntoVisibleState(vis, st);
 
 vis.viewerCanNext = (room.host === meta.playerId) || winners.has(meta.playerId);
 vis.viewerIsHost = (room.host === meta.playerId);
@@ -2581,7 +2669,7 @@ if (myId != null && room && room.phase === 'playing') {
   try{
     const p0 = room.state?.players?.[myId];
     if(p0){
-      p0.isCPU = false;
+      setPlayerAutoControl(room, myId, false, "reconnect");
 
       // ✅ 重新連線：清掉「斷線中」標記，並立刻廣播讓其他人看到
       if(!p0.client || typeof p0.client !== "object") p0.client = {};
@@ -2741,6 +2829,29 @@ p.rank = safeRank;
     }catch(_){ }
   });
 
+socket.on("TAKE_BACK_CONTROL", ({ roomId, playerId, secret } = {}, cb) => {
+  try{
+    const room = rooms.get(String(roomId || "").trim());
+    if(!room) return cb?.({ ok:false, error:"room not found" });
+
+    const ok = Array.from(room.sockets.values()).some(
+      m => Number(m.playerId) === Number(playerId) && String(m.secret || "") === String(secret || "")
+    );
+    if(!ok) return cb?.({ ok:false, error:"auth failed" });
+
+    const p = room.state?.players?.[playerId];
+    if(!p) return cb?.({ ok:false, error:"player not found" });
+
+    setPlayerAutoControl(room, playerId, false, "manual");
+    emitRoomToast(room, `✅ ${p.client?.displayName || p.displayName || "玩家"} 已拿回控制權`);
+
+    try{ armRoomWatchdogs(roomId); }catch{}
+    return cb?.({ ok:true });
+  }catch(e){
+    console.error("[TAKE_BACK_CONTROL] error:", e);
+    return cb?.({ ok:false, error:String(e?.message || e) });
+  }
+});
 
   socket.on("ACTION", (action = {}) => {
     const { roomId, playerId, secret, type } = action;
@@ -2750,6 +2861,15 @@ p.rank = safeRank;
     // 驗章
     const ok = Array.from(room.sockets.values()).some(m => m.playerId === playerId && m.secret === secret);
     if (!ok) return socket.emit("ERROR", { message: "驗證失敗" });
+
+try{
+  const p = room.state?.players?.[playerId];
+  if(p && p.isCPU){
+    setPlayerAutoControl(room, playerId, false, "manual");
+    emitRoomToast(room, `✅ ${p.client?.displayName || p.displayName || "玩家"} 已拿回控制權`);
+  }
+}catch{}
+
     // ✅ 任一動作都重置 watchdog，避免掛機卡死
     try{ armRoomWatchdogs(roomId); }catch{}
 
@@ -3211,13 +3331,12 @@ broadcastState(room);
               if(reconnected) return;
             }
 
-            if(!p2.isCPU){
-              p2.isCPU = true;
-              emitRoomToast(r2, `⚠ ${p2.client?.displayName || p2.displayName || '玩家'} 未回來，已由 CPU 接管（直到整場結束/或玩家重連）`);
-              try{ broadcastState(r2); }catch{}
-              try{ runCpuLoop(joinedRoom); }catch{}
-              try{ armRoomWatchdogs(joinedRoom); }catch{}
-            }
+if(!p2.isCPU){
+  setPlayerAutoControl(r2, pid2, true, "offline");
+  emitRoomToast(r2, `⚠ ${p2.client?.displayName || p2.displayName || '玩家'} 未回來，已由 CPU 接管（直到整場結束/或玩家重連）`);
+  try{ runCpuLoop(joinedRoom); }catch{}
+  try{ armRoomWatchdogs(joinedRoom); }catch{}
+}
           }, OFFLINE_GRACE_MS);
 
           room._offlineTimers.set(pid2, t);
