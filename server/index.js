@@ -704,7 +704,14 @@ vis = injectRanksIntoVisibleState(vis, st);
 vis = injectOfflineIntoVisibleState(vis, st);
 vis = injectAutoControlIntoVisibleState(vis, st);
 
-vis.viewerCanNext = (room.host === meta.playerId) || winners.has(meta.playerId);
+const hostPlayer = st?.players?.[room.host];
+const hostIsCPU = !!(hostPlayer?.isCPU);
+
+vis.viewerCanNext =
+  hostIsCPU ||
+  (room.host === meta.playerId) ||
+  winners.has(meta.playerId);
+
 vis.viewerIsHost = (room.host === meta.playerId);
 vis.cpuSkipAvailable = canHostSkipCpu(room, meta.playerId);
 io.to(sid).emit("STATE", vis);
@@ -765,6 +772,49 @@ function applyAndBroadcast(room, action, io){
 
   // 2) 再廣播一次 STATE
   broadcastState(room);
+
+  // 2.5) A 方案：如果這局已結束，而且目前沒有任何真人可操作，3 秒後自動下一局
+  try{
+    const st = room.state;
+    const ended = (st?.turnStep === "ended" || st?.turnStep === "end" || st?.turnStep === "score");
+
+    if (ended) {
+      const winners = st.players.filter(p => p.alive);
+      const aliveHumans = winners.filter(p => !p.isCPU).length;
+
+      // 先清掉舊的 auto-next timer，避免重複排程
+      if (room._autoNextTimer) {
+        try{ clearTimeout(room._autoNextTimer); }catch{}
+        room._autoNextTimer = null;
+      }
+
+      // 只要本局結束後，存活者全是 CPU，就自動下一局
+      if (aliveHumans === 0) {
+        const roomId = [...rooms.entries()].find(([_, r]) => r === room)?.[0];
+        if (roomId) {
+          room._autoNextTimer = setTimeout(() => {
+            const r2 = rooms.get(roomId);
+            if (!r2) return;
+
+            const st2 = r2.state;
+            const ended2 = (st2?.turnStep === "ended" || st2?.turnStep === "end" || st2?.turnStep === "score");
+            if (!ended2) return;
+
+            const ns = nextRound(st2);
+            r2.state = ns;
+            r2._cpuFastForward = false;
+            r2._autoNextTimer = null;
+
+            broadcastState(r2);
+            runCpuLoop(roomId);
+            armRoomWatchdogs(roomId);
+          }, 3000);
+        }
+      }
+    }
+  }catch(e){
+    console.error("[auto next round] error:", e);
+  }
 
   // 3) 用「最新 state」重新掛 watchdog
   try{
@@ -3224,19 +3274,35 @@ room.sockets = newSockets;
       }
 
       // 找出這一局的勝利玩家（還活著的）
-      const winners = new Set(st.players.filter(p => p.alive).map(p => p.id));
+const winners = new Set(st.players.filter(p => p.alive).map(p => p.id));
+const hostPlayer = st?.players?.[room.host];
+const hostIsCPU = !!(hostPlayer?.isCPU);
 
-      // 只有房主或本局勝利者可以開下一局
-      const can = (room.host === playerId) || winners.has(playerId);
-      if (!can) {
-        socket.emit('EMIT', { type: 'toast', text: '只有房主或本局勝者可以開始下一局' });
-        return;
-      }
+// 只有房主 / 本局勝者，或「房主已被接手成 CPU」時的任何玩家，才能開下一局
+const can =
+  hostIsCPU ||
+  (room.host === playerId) ||
+  winners.has(playerId);
+
+if (!can) {
+  socket.emit('EMIT', {
+    type: 'toast',
+    text: '只有房主或本局勝者可以開始下一局'
+  });
+  return;
+}
 
       // 正式進入下一局
 const ns = nextRound(st);
 room.state = ns;
 room._cpuFastForward = false;
+
+// 新一局開始時，把「自動進下一局」計時器清掉，避免重複觸發
+if (room._autoNextTimer) {
+  try{ clearTimeout(room._autoNextTimer); }catch{}
+  room._autoNextTimer = null;
+}
+
 broadcastState(room);
       // ★ 如果下一局起始玩家是 CPU，一樣讓 CPU 先動（含延遲）
       runCpuLoop(roomId);
