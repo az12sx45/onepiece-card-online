@@ -767,6 +767,13 @@ function applyAndBroadcast(room, action, io){
   broadcastState(room);
 }
 
+  try{
+    const roomId = [...rooms.entries()].find(([_, r]) => r === room)?.[0];
+    if (roomId) armRoomWatchdogs(roomId);
+  }catch(e){
+    console.error("[applyAndBroadcast -> armRoomWatchdogs] error:", e);
+  }
+
 // 判斷目前是否輪到 CPU（原本那個保留即可）
 function isCpuTurn(room){
   const st = room.state;
