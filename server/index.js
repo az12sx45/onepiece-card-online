@@ -266,7 +266,7 @@ function pruneLobbyInvites(){
   for(const [id, inv] of lobbyInvites){
     if(!inv || (Number(inv.expiresAt)||0) <= now) lobbyInvites.delete(id);
   }
-
+}
 
 function pruneLoginLocks(){
   const now = Date.now();
@@ -484,6 +484,7 @@ if(respId != null){
       try{ runCpuLoop(roomId); }catch{}
     }, PENDING_IDLE_MS);
   }
+}
 }
 
 // ====== 房間清單（等待室） ======
