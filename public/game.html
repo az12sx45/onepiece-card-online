@@ -4225,18 +4225,28 @@ function setAutoTakeoverBanner(on, text=''){
 socket.on('connect', ()=>{ el.conn.textContent='connected'; el.conn.classList.replace('text-red-400','text-green-400'); });
 socket.on('disconnect', ()=>{ el.conn.textContent='disconnected'; el.conn.classList.replace('text-green-400','text-red-400'); });
 socket.on('connect_error', (e)=>{ el.conn.textContent='error'; el.conn.classList.replace('text-green-400','text-red-400'); console.error(e); });
-socket.on('IDLE_WARNING', (payload)=>{
-  if (Number(payload?.playerId) !== Number(me.playerId)) return;
-  showIdleWarning(payload);
-});
-socket.on('AUTO_TAKEOVER', (payload)=>{
-  if (Number(payload?.playerId) !== Number(me.playerId)) return;
-  setAutoTakeoverBanner(true, String(payload?.text || '目前由 CPU 暫時代打，點一下就能立刻接手繼續玩。'));
-});
-socket.on('AUTO_TAKEOVER_CLEARED', (payload)=>{
-  if (payload?.playerId != null && Number(payload.playerId) !== Number(me.playerId)) return;
-  setAutoTakeoverBanner(false);
-  hideIdleWarning();
+socket.on('EMIT', (e)=>{
+  if (!e || typeof e !== 'object') return;
+
+  // 掛機前警告
+  if (e.type === 'idle_warning') {
+    showIdleWarning({
+      remainMs: Math.max(1000, Number(e.remainSec || 10) * 1000),
+      text: e.text || '請立即操作，否則會由 CPU 暫時接手。'
+    });
+    return;
+  }
+
+  // CPU 接手 / 玩家拿回控制
+  if (e.type === 'auto_control_changed') {
+    if (e.isAuto) {
+      setAutoTakeoverBanner(true, '目前由 CPU 暫時代打，點一下就能立刻接手繼續玩。');
+    } else {
+      setAutoTakeoverBanner(false);
+      hideIdleWarning();
+    }
+    return;
+  }
 });
 el.autoTakeoverBanner?.addEventListener('click', ()=>{
   sendAction('TAKE_BACK_CONTROL');
