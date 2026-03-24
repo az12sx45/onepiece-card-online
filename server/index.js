@@ -2871,8 +2871,21 @@ try{
   }
 }catch{}
 
+
+
     // ✅ 任一動作都重置 watchdog，避免掛機卡死
     try{ armRoomWatchdogs(roomId); }catch{}
+
+    if (type === 'TAKE_BACK_CONTROL') {
+      const p = room.state?.players?.[playerId];
+      if (!p) return;
+
+      setPlayerAutoControl(room, playerId, false, 'manual');
+      emitRoomToast(room, `✅ ${p.client?.displayName || p.displayName || "玩家"} 已拿回控制權`);
+
+      try{ armRoomWatchdogs(roomId); }catch{}
+      return;
+    }
 
     // 等待室：準備 / 取消
     if (type === 'LOBBY_READY' || type === 'LOBBY_UNREADY'){
