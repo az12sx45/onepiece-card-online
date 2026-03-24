@@ -258,2676 +258,2990 @@ function lobbyInviteMuteRemainingMs(userId){
     lobbyInviteMuteUntil.delete(userId);
     return 0;
   }
-  return Math.max(0, until - now);
+  return until - now;
 }
 
-function makeInvitePayload(inv){
-  return {
-    id: inv.id,
-    roomId: inv.roomId,
-    fromId: inv.fromId,
-    fromName: inv.fromName,
-    fromAvatar: inv.fromAvatar,
-    createdAt: inv.createdAt,
-    expiresAt: inv.expiresAt,
-  };
-}
-
-function cleanupLobbyInvites(){
+function pruneLobbyInvites(){
   const now = Date.now();
-  for(const [id, inv] of lobbyInvites.entries()){
-    if(!inv || Number(inv.expiresAt||0) <= now){
-      lobbyInvites.delete(id);
+  for(const [id, inv] of lobbyInvites){
+    if(!inv || (Number(inv.expiresAt)||0) <= now) lobbyInvites.delete(id);
+  }
+
+
+function pruneLoginLocks(){
+  const now = Date.now();
+  for(const [uid, lock] of loginLocks.entries()){
+    const sockets = (lock && lock.sockets) ? lock.sockets.size : 0;
+    const last = Number(lock?.lastSeen||0) || 0;
+    if(sockets<=0 && (now - last) > LOGIN_LOCK_GRACE_MS){
+      loginLocks.delete(uid);
     }
   }
 }
-setInterval(cleanupLobbyInvites, 30 * 1000);
-
-async function getProfileBasicByUserId(userId){
-  try{
-    const uid = Number(userId);
-    if(!(uid>0)) return null;
-    const q = await pool.query(
-      `SELECT user_id, secret, name, avatar, stats
-         FROM player_profiles
-        WHERE user_id = $1
-        LIMIT 1`,
-      [uid]
-    );
-    const row = q.rows[0];
-    if(!row) return null;
-    const stats = row.stats || {};
-    const client = stats.client || {};
-    const player = client.player || {};
-    return {
-      userId: Number(row.user_id),
-      secret: row.secret,
-      name: String(row.name || player.name || ""),
-      avatar: Number(row.avatar || player.avatar || 1),
-      stats,
-    };
-  }catch(e){
-    console.error("[getProfileBasicByUserId] failed:", e);
-    return null;
-  }
+setInterval(pruneLoginLocks, 15000).unref?.();
 }
 
-async function areFriends(userIdA, userIdB){
-  try{
-    const a = Number(userIdA), b = Number(userIdB);
-    if(!(a>0 && b>0)) return false;
-    const pa = await getProfileBasicByUserId(a);
-    if(!pa) return false;
-    const social = (((pa.stats||{}).client||{}).social) || {};
-    const friends = Array.isArray(social.friends) ? social.friends.map(Number).filter(n=>n>0) : [];
-    return friends.includes(b);
-  }catch(e){
-    console.error("[areFriends] failed:", e);
-    return false;
-  }
+async function getProfileBySecret(secret){
+  if(!secret) return null;
+  const r = await pool.query(
+    "SELECT user_id, name, avatar, stats FROM player_profiles WHERE secret=$1",
+    [secret]
+  );
+  return r.rows?.[0] || null;
+}
+function ensureSocial(client){
+  if(!client || typeof client!=="object") return;
+  if(!client.social || typeof client.social!=="object") client.social = {};
+  if(!Array.isArray(client.social.friends)) client.social.friends = [];
+  if(!Array.isArray(client.social.friend_in)) client.social.friend_in = [];   // incoming requests
+  if(!Array.isArray(client.social.friend_out)) client.social.friend_out = []; // outgoing requests
 }
 
-async function listFriendsOnline(userId){
-  try{
-    const prof = await getProfileBasicByUserId(userId);
-    if(!prof) return [];
-    const social = (((prof.stats||{}).client||{}).social) || {};
-    const ids = Array.isArray(social.friends) ? social.friends.map(Number).filter(n=>n>0) : [];
-    if(!ids.length) return [];
-    const rows = [];
-    for(const fid of ids){
-      const fp = await getProfileBasicByUserId(fid);
-      if(!fp) continue;
-      const page = userPage.get(fid) || "";
-      rows.push({
-        userId: fid,
-        name: fp.name || `玩家${fid}`,
-        avatar: Number(fp.avatar || 1),
-        online: isOnline(fid),
-        page: page || "",
-      });
-    }
-    return rows;
-  }catch(e){
-    console.error("[listFriendsOnline] failed:", e);
-    return [];
-  }
-}
-
-async function pushSocialStateToUser(userId){
-  try{
-    const list = await listFriendsOnline(userId);
-    emitToUser(userId, "SOCIAL_STATE", { friends: list, ts: Date.now() });
-  }catch(e){
-    console.error("[pushSocialStateToUser] failed:", e);
-  }
-}
-
-async function pushSocialStateToFriendsOf(userId){
-  try{
-    const prof = await getProfileBasicByUserId(userId);
-    if(!prof) return;
-    const social = (((prof.stats||{}).client||{}).social) || {};
-    const ids = Array.isArray(social.friends) ? social.friends.map(Number).filter(n=>n>0) : [];
-    for(const fid of ids){
-      await pushSocialStateToUser(fid);
-    }
-  }catch(e){
-    console.error("[pushSocialStateToFriendsOf] failed:", e);
-  }
-}
 ensurePlayerNameUniqueIndex();
-
-
-async function ensurePlayerProfilesTable(){
-  try{
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS player_profiles (
-        secret TEXT PRIMARY KEY,
-        name TEXT NOT NULL DEFAULT '',
-        avatar TEXT NOT NULL DEFAULT '',
-        stats JSONB NOT NULL DEFAULT '{}'::jsonb,
-        titles JSONB NOT NULL DEFAULT '[]'::jsonb,
-        bounties JSONB NOT NULL DEFAULT '[]'::jsonb,
-        recent_matches JSONB NOT NULL DEFAULT '[]'::jsonb,
-        updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
-      );
-    `);
-
-    // 新增 user_id 欄位（若尚未存在）
-    await pool.query(`
-      ALTER TABLE player_profiles
-      ADD COLUMN IF NOT EXISTS user_id INTEGER UNIQUE REFERENCES users(id);
-    `);
-
-    await pool.query(`
-      CREATE INDEX IF NOT EXISTS idx_player_profiles_user_id
-      ON player_profiles(user_id);
-    `);
-
-    // 新增獎金欄位（累積金幣）
-    await pool.query(`
-      ALTER TABLE player_profiles
-      ADD COLUMN IF NOT EXISTS coins INTEGER NOT NULL DEFAULT 0;
-    `);
-    await pool.query(`CREATE INDEX IF NOT EXISTS idx_player_profiles_coins ON player_profiles(coins DESC);`);
-  }catch(e){
-    console.error("[db] ensurePlayerProfilesTable failed:", e);
-  }
-}
-ensurePlayerProfilesTable();
-
-// 上雲時，把舊格式補齊，避免 social/title 結構缺欄位
-function normalizeProfilePayload(raw){
-  const data = raw && typeof raw === "object" ? JSON.parse(JSON.stringify(raw)) : {};
-
-  const client = (data.client && typeof data.client === "object") ? data.client : (data.client = {});
-  const player = (client.player && typeof client.player === "object") ? client.player : (client.player = {});
-  const shop   = (client.shop   && typeof client.shop   === "object") ? client.shop   : (client.shop   = {});
-  const totals = (client.totals && typeof client.totals === "object") ? client.totals : (client.totals = {});
-  const titles = (client.titles && typeof client.titles === "object") ? client.titles : (client.titles = {});
-  const social = (client.social && typeof client.social === "object") ? client.social : (client.social = {});
-  const wall   = (client.wall   && typeof client.wall   === "object") ? client.wall   : (client.wall   = {});
-
-  if (!Array.isArray(shop.ownedAvatars)) shop.ownedAvatars = [];
-  if (!Array.isArray(shop.ownedWalls))   shop.ownedWalls = [];
-  if (!Array.isArray(shop.ownedFlags))   shop.ownedFlags = [];
-  if (!Array.isArray(shop.ownedItems))   shop.ownedItems = [];
-
-  if (!Array.isArray(titles.owned)) titles.owned = [];
-  if (!("equipped" in titles)) titles.equipped = "";
-  if (!("equippedTier" in titles)) titles.equippedTier = 1;
-  if (!Array.isArray((client.recent))) client.recent = [];
-
-  if (!Array.isArray(social.friends))   social.friends = [];
-  if (!Array.isArray(social.reqIn))     social.reqIn = [];
-  if (!Array.isArray(social.reqOut))    social.reqOut = [];
-  if (!Array.isArray(social.dmPinned))  social.dmPinned = [];
-  if (!Array.isArray(social.blocked))   social.blocked = [];
-  if (!Array.isArray(social.unread))    social.unread = []; // optional structure [{userId,count}]
-  if (!Array.isArray(social.friend_in)) social.friend_in = [];
-  if (!Array.isArray(social.friend_out)) social.friend_out = [];
-
-  if (!("id" in wall)) wall.id = 1;
-  if (!("flagId" in wall)) wall.flagId = 1;
-
-  if (!("wins" in totals)) totals.wins = 0;
-  if (!("coins" in totals)) totals.coins = 0;
-  if (!("games" in totals)) totals.games = 0;
-
-  if (!("name" in player)) player.name = "";
-  if (!("avatar" in player)) player.avatar = 1;
-
-  return data;
-}
-
-
-/* ========== Auth tables & helpers ========== */
-async function ensureUsersTable() {
-  try {
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS users (
-        id SERIAL PRIMARY KEY,
-        username TEXT NOT NULL UNIQUE,
-        passhash TEXT NOT NULL,
-        secret TEXT NOT NULL UNIQUE,
-        created_at TIMESTAMPTZ NOT NULL DEFAULT now()
-      );
-    `);
-    await pool.query(`CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);`);
-    // 提醒：player_profiles.user_id 欄位與索引現在由 ensurePlayerProfilesTable() 建立
-  } catch (e) {
-    console.error("[db] ensureUsersTable failed:", e);
-  }
-}
-ensureUsersTable();
-
-/* 玩家名稱占用表（舊表）：若你已手動建立過也沒關係，這裡僅確保存在 */
-async function ensurePlayerNamesTable() {
-  try {
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS player_names (
-        name TEXT PRIMARY KEY,
-        owner_secret TEXT NOT NULL,
-        updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
-      );
-    `);
-  } catch (e) {
-    console.error("[db] ensurePlayerNamesTable failed:", e);
-  }
-}
-ensurePlayerNamesTable();
-
-function genSecret() {
-  return crypto.randomBytes(16).toString("hex");
-}
-function normUsername(s) {
-  return String(s || "").trim().toLowerCase();
-}
-function okUsername(s) {
-  return /^[a-zA-Z0-9_]{3,24}$/.test(String(s || "").trim());
-}
-function okPassword(s) {
-  return String(s || "").length >= 4 && String(s || "").length <= 64;
-}
-
-// 綁定 user_id -> player_profiles（如果已存在 secret 對應的 profile）
-async function bindUserProfile(userId, secret) {
-  try {
-    await pool.query(
-      `INSERT INTO player_profiles (secret, user_id, updated_at)
-       VALUES ($1, $2, now())
-       ON CONFLICT (secret) DO UPDATE SET user_id = EXCLUDED.user_id, updated_at = now()`,
-      [secret, userId]
-    );
-  } catch (e) {
-    console.error("[db] bindUserProfile failed:", e);
-  }
-}
-
-/* 檢查並占用玩家名稱（舊機制保留） */
-async function reservePlayerName(name, ownerSecret){
-  const trimmed = String(name || "").trim();
-  if (!trimmed) return { ok:false, msg:"名稱不能空白" };
-  try{
-    const q = await pool.query(
-      "SELECT owner_secret FROM player_names WHERE name = $1 LIMIT 1",
-      [trimmed]
-    );
-    const row = q.rows[0];
-    if (!row) {
-      await pool.query(
-        "INSERT INTO player_names(name, owner_secret, updated_at) VALUES($1,$2,now())",
-        [trimmed, String(ownerSecret||"")]
-      );
-      return { ok:true };
-    }
-    if (String(row.owner_secret||"") === String(ownerSecret||"")) {
-      await pool.query("UPDATE player_names SET updated_at = now() WHERE name = $1", [trimmed]);
-      return { ok:true };
-    }
-    return { ok:false, msg:"這個玩家名稱已被使用" };
-  }catch(e){
-    // 安全網：若撞 PK 或其他錯誤
-    console.error("[reservePlayerName] failed:", e);
-    return { ok:false, msg:"名稱保留失敗，請稍後再試" };
-  }
-}
-
-async function readProfileBySecret(secret){
-  try{
-    const q = await pool.query(
-      `SELECT secret, user_id, name, avatar, stats, titles, bounties, recent_matches, coins, updated_at
-       FROM player_profiles
-       WHERE secret = $1
-       LIMIT 1`,
-      [String(secret||"")]
-    );
-    return q.rows[0] || null;
-  }catch(e){
-    console.error("[db] readProfileBySecret failed:", e);
-    return null;
-  }
-}
-
-async function writeProfileBySecret(secret, payload){
-  const p = normalizeProfilePayload(payload);
-  const name = String(p?.client?.player?.name || "");
-  const avatar = String(p?.client?.player?.avatar || "");
-  const titles = p?.client?.titles || {};
-  const bounties = Array.isArray(p?.bountyPosters) ? p.bountyPosters : [];
-  const recent = Array.isArray(p?.client?.recent) ? p.client.recent : [];
-  try{
-    await pool.query(
-      `INSERT INTO player_profiles (secret, name, avatar, stats, titles, bounties, recent_matches, updated_at)
-       VALUES ($1, $2, $3, $4::jsonb, $5::jsonb, $6::jsonb, $7::jsonb, now())
-       ON CONFLICT (secret) DO UPDATE SET
-         name = EXCLUDED.name,
-         avatar = EXCLUDED.avatar,
-         stats = EXCLUDED.stats,
-         titles = EXCLUDED.titles,
-         bounties = EXCLUDED.bounties,
-         recent_matches = EXCLUDED.recent_matches,
-         updated_at = now()`,
-      [
-        String(secret||""),
-        name,
-        avatar,
-        JSON.stringify(p),
-        JSON.stringify(titles),
-        JSON.stringify(bounties),
-        JSON.stringify(recent),
-      ]
-    );
-    return true;
-  }catch(e){
-    console.error("[db] writeProfileBySecret failed:", e);
-    return false;
-  }
-}
 
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
 
-
-
+// room = { state, sockets: Map<sid,{playerId,secret,displayName,avatar}>, host, lobbyReady }
 const rooms = new Map();
 
-function makeCode() {
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  let s = "";
-  for (let i = 0; i < 6; i++) s += chars[Math.floor(Math.random() * chars.length)];
-  return s;
-}
-function pickUniqueCode() {
-  let c = makeCode();
-  while (rooms.has(c)) c = makeCode();
-  return c;
+const MAX_ROOM_PLAYERS = 6;
+
+// =========================
+// Resilience: disconnect takeover + idle watchdog (multi-round match safe)
+//  - If a human disconnects during playing, give a short grace period, then mark them as CPU.
+//  - If a human is idle on their turn or during pending interaction, convert them to CPU (prevents soft-lock).
+//  - If the human reconnects with same secret, they regain control immediately.
+// =========================
+const OFFLINE_GRACE_MS = 8000;      // 斷線保留時間：8 秒（可自行調整）
+const TURN_IDLE_MS    = 30000;     // 回合掛機：30 秒自動接管
+const PENDING_IDLE_MS = 30000;     // 互動流程掛機：30 秒自動接管
+
+function ensureRoomResilience(room){
+  if(!room) return;
+  if(!room._offlineTimers) room._offlineTimers = new Map(); // playerId -> timeout
+  if(!room._turnTimer) room._turnTimer = null;
+  if(!room._pendingTimer) room._pendingTimer = null;
 }
 
-function toLobbySnapshot(room){
-  return {
-    code: room.code,
-    phase: room.phase,
-    host: room.host,
-    players: room.players.map(p => ({
-      id: p.id,
-      name: p.name,
-      avatar: p.avatar,
-      ready: !!p.ready,
-      isCPU: !!p.isCPU,
-      online: p.online !== false, // 預設 true
-    })),
-    viewerCanSkipCpu: !!room.viewerCanSkipCpu, // 新增：給前端決定顯示跳過按鈕
-  };
-}
-
-
-function buildStartPlayers(roomPlayers) {
-  return roomPlayers.map(p => ({
-    id: p.id,
-    name: p.name,
-    isCPU: !!p.isCPU,
-    avatar: p.avatar || (p.isCPU ? "👑" : "🙂"),
-  }));
-}
-
-function broadcastLobby(room) {
-  const roomPlayers = room.players.map(p => ({ id: p.id, name: p.name, avatar: p.avatar, ready: p.ready, isCPU: !!p.isCPU, online: p.online !== false }));
-  for (const p of room.players){
-    const payload = {
-      type: "lobby",
-      lobby: {
-        code: room.code,
-        phase: room.phase,
-        host: room.host,
-        players: roomPlayers,
-        viewerCanSkipCpu: canHostSkipCpu(room, p.id),
-      }
-    };
-    io.to(p.socketId).emit("EMIT", payload);
-  }
-}
-
-function stableStringify(obj){
-  if (obj === null || typeof obj !== "object") return JSON.stringify(obj);
-  if (Array.isArray(obj)) return "[" + obj.map(stableStringify).join(",") + "]";
-  const keys = Object.keys(obj).sort();
-  return "{" + keys.map(k => JSON.stringify(k) + ":" + stableStringify(obj[k])).join(",") + "}";
-}
-function hashMatchPlayers(arr){
-  const src = stableStringify(arr.map(p => ({
-    userId: Number(p.userId || 0) || 0,
-    name: String(p.name || ""),
-    avatar: String(p.avatar || ""),
-    place: Number(p.place || 0) || 0,
-    coins: Number(p.coins || 0) || 0,
-  })));
-  return crypto.createHash("sha1").update(src).digest("hex");
-}
-function buildMatchKey(roomCode, endedAt, playersArr){
-  return `${roomCode}|${Number(endedAt)||0}|${hashMatchPlayers(playersArr)}`;
-}
-
-/* =========================
- * Persist final match snapshot if not exists
- * ========================= */
-async function saveMatchHistoryIfNeeded(room){
+function clearOfflineTimer(room, playerId){
   try{
-    if (!room || !room.finalResults || !Array.isArray(room.finalResults.players)) return null;
-    const endedAt = Number(room.finalResults.endedAt || Date.now());
-    const players = room.finalResults.players.map(p => ({
-      userId: Number(p.userId || 0) || 0,
-      name: String(p.name || ""),
-      avatar: String(p.avatar || ""),
-      place: Number(p.place || 0) || 0,
-      coins: Number(p.coins || 0) || 0,
-    }));
-    const matchKey = buildMatchKey(room.code, endedAt, players);
-
-    await pool.query(
-      `INSERT INTO match_history (match_key, ended_at, players, rp_map)
-       VALUES ($1, $2, $3::jsonb, '{}'::jsonb)
-       ON CONFLICT (match_key) DO NOTHING`,
-      [matchKey, endedAt, JSON.stringify(players)]
-    );
-    return matchKey;
-  }catch(e){
-    console.error("[saveMatchHistoryIfNeeded] failed:", e);
-    return null;
-  }
+    ensureRoomResilience(room);
+    const t = room._offlineTimers.get(playerId);
+    if(t) clearTimeout(t);
+    room._offlineTimers.delete(playerId);
+  }catch{}
 }
 
-/* =========================
- * Upsert one player's RP delta into match_history.rp_map
- *  - caller provides userId, rp delta, and either matchKey OR room.finalResults
- * ========================= */
-async function upsertMatchRpDelta({ matchKey, roomCode, endedAt, playersArr, userId, deltaRp }){
+function emitRoomToast(room, text){
   try{
-    let mk = String(matchKey || "");
-    if (!mk){
-      const players = Array.isArray(playersArr) ? playersArr : [];
-      mk = buildMatchKey(roomCode, endedAt, players);
+    for(const [sid] of room.sockets){
+      io.to(sid).emit("EMIT", { type:"toast", text: String(text||"") });
     }
-    const uid = String(Number(userId||0) || 0);
-    const drp = Number(deltaRp || 0) || 0;
-    if (!mk || uid === "0") return false;
+  }catch{}
+}
 
-    await pool.query(
-      `UPDATE match_history
-          SET rp_map = COALESCE(rp_map, '{}'::jsonb) || jsonb_build_object($2::text, to_jsonb($3::int))
-        WHERE match_key = $1`,
-      [mk, uid, drp]
-    );
+function pendingResponderId(st){
+  const p = st?.pending;
+  if(!p) return null;
+
+  // victim-response style interactions
+  if(p.action === "queen" || p.action === "bigmom-pay"){
+    return (p.target != null) ? Number(p.target) : null;
+  }
+
+  // some pending include caster explicitly
+  if(p.caster != null) return Number(p.caster);
+
+  // default: assume current turn player
+  return (st?.turnIndex != null) ? Number(st.turnIndex) : null;
+}
+
+function armRoomWatchdogs(roomId){
+  const room = rooms.get(roomId);
+  if(!room) return;
+  ensureRoomResilience(room);
+
+  // clear existing timers
+  try{ if(room._turnTimer) clearTimeout(room._turnTimer); }catch{}
+  try{ if(room._pendingTimer) clearTimeout(room._pendingTimer); }catch{}
+  room._turnTimer = null;
+  room._pendingTimer = null;
+
+  if(room.phase !== "playing") return;
+  const st = room.state;
+  if(!st || !Array.isArray(st.players) || st.players.length===0) return;
+
+  // ---- turn watchdog ----
+  const turnIdx = Number(st.turnIndex);
+  const turnP = st.players[turnIdx];
+  if(turnP && turnP.alive && !turnP.isCPU){
+    room._turnTimer = setTimeout(()=>{
+      const r2 = rooms.get(roomId);
+      if(!r2 || r2.phase!=="playing") return;
+      const s2 = r2.state;
+      if(!s2) return;
+      const idx2 = Number(s2.turnIndex);
+      const p2 = s2.players?.[idx2];
+      if(!p2 || !p2.alive || p2.isCPU) return;
+
+      p2.isCPU = true;
+      emitRoomToast(r2, `⚠ ${p2.client?.displayName || p2.displayName || "玩家"} 掛機，已由 CPU 接管`);
+      try{ broadcastState(r2); }catch{}
+      try{ runCpuLoop(roomId); }catch{}
+    }, TURN_IDLE_MS);
+  }
+
+  // ---- pending watchdog ----
+  const respId = pendingResponderId(st);
+  if(respId != null){
+    const rp = st.players?.[respId];
+    if(rp && rp.alive && !rp.isCPU){
+      room._pendingTimer = setTimeout(()=>{
+        const r2 = rooms.get(roomId);
+        if(!r2 || r2.phase!=="playing") return;
+        const s2 = r2.state;
+        const resp2 = pendingResponderId(s2);
+        if(resp2 == null || Number(resp2)!==Number(respId)) return;
+
+        const p2 = s2.players?.[resp2];
+        if(!p2 || !p2.alive || p2.isCPU) return;
+
+        p2.isCPU = true;
+        emitRoomToast(r2, `⚠ ${p2.client?.displayName || p2.displayName || "玩家"} 掛機，已由 CPU 接管`);
+        try{ broadcastState(r2); }catch{}
+        try{ runCpuLoop(roomId); }catch{}
+      }, PENDING_IDLE_MS);
+    }
+  }
+}
+
+// ====== 房間清單（等待室） ======
+function buildRoomList(){
+  const list = [];
+  for (const [roomId, room] of rooms.entries()){
+    if(!room) continue;
+    // 只顯示還在等待室的房間（遊戲中不列）
+    if(room.phase !== "lobby") continue;
+
+    const humans = new Set([...room.sockets.values()].map(m => m?.playerId)).size;
+    const cpuCount = Math.max(0, Math.min(MAX_ROOM_PLAYERS, Number(room.cpuCount || 0) || 0));
+    const total = Math.min(MAX_ROOM_PLAYERS, humans + cpuCount);
+
+    const hostId = (room.host == null) ? null : Number(room.host);
+    const hostP = (hostId != null) ? room.state?.players?.[hostId] : null;
+    const hostName = String(hostP?.client?.displayName || hostP?.displayName || "").trim();
+
+    list.push({
+      roomId,
+      hostName: hostName || "",
+      title: (hostName ? `${hostName}的等待室` : `${roomId}的等待室`),
+      humans,
+      cpuCount,
+      total,
+    });
+  }
+  // 排序：房號字典序（視覺上好找）
+  list.sort((a,b)=> String(a.roomId).localeCompare(String(b.roomId)));
+  return list;
+}
+
+
+function cleanupRoomIfNoHumans(roomId){
+  const rid = String(roomId||"").trim();
+  if(!rid) return false;
+  const room = rooms.get(rid);
+  if(!room) return false;
+
+  // 真人玩家 = room.sockets 裡 distinct playerId
+  const humans = new Set([...room.sockets.values()].map(m => m?.playerId)).size;
+
+  // ✅ 等待室：沒真人就立刻解散（符合你原本需求）
+  if(humans <= 0 && room.phase === 'lobby'){
+    rooms.delete(rid);
+    try{ broadcastRoomList(); }catch{}
     return true;
-  }catch(e){
-    console.error("[upsertMatchRpDelta] failed:", e);
+  }
+
+  // ✅ 遊戲中：不要「立刻」刪房，避免 start.html → game.html 轉跳時所有人暫時斷線導致 CPU / 房間資料丟失
+  if(humans <= 0 && room.phase === 'playing'){
+    // 已經在倒數就不重複排
+    if(!room._emptyTimer){
+      room._emptySince = Date.now();
+      room._emptyTimer = setTimeout(()=>{
+        try{
+          const r2 = rooms.get(rid);
+          if(!r2) return;
+          const humans2 = new Set([...r2.sockets.values()].map(m => m?.playerId)).size;
+          // 仍然沒真人才刪（保守一點）
+          if(humans2 <= 0){
+            rooms.delete(rid);
+            try{ broadcastRoomList(); }catch{}
+          }else{
+            // 有人回來了 → 取消刪房標記
+            try{ clearTimeout(r2._emptyTimer); }catch{}
+            r2._emptyTimer = null;
+            r2._emptySince = 0;
+          }
+        }catch{}
+      }, 60000); // 60 秒緩衝（足夠完成換頁 / 斷線重連）
+    }
     return false;
   }
+
+  // 有真人：如果之前有排刪房，取消它
+  if(humans > 0 && room._emptyTimer){
+    try{ clearTimeout(room._emptyTimer); }catch{}
+    room._emptyTimer = null;
+    room._emptySince = 0;
+  }
+
+  return false;
 }
 
 
-/* =========================
- * Read last N matches for a given userId
- * returns [{ matchKey, endedAt, place, coins, name, avatar, deltaRp }]
- * ========================= */
-async function getRecentMatchesForUser(userId, limit=10){
+function broadcastRoomList(){
+  try{ io.emit("ROOM_LIST_UPDATE", { rooms: buildRoomList() }); }catch{}
+}
+
+
+
+// ——— 視圖小工具：統一 chestCoins 並加上 viewerCanNext ———
+function injectChestCoins(vis){
+  const cands = [
+    vis.chestCoins, vis.chestLeft, vis.chest, vis.treasure, vis.bank, vis.pot,
+    vis.meta?.chest, vis.meta?.treasure, vis.meta?.bank, vis.meta?.pot,
+  ];
+  let chest;
+  for (const v of cands){
+    if (typeof v === "number") { chest = v; break; }
+    if (v && typeof v.coins  === "number") { chest = v.coins;  break; }
+    if (v && typeof v.amount === "number") { chest = v.amount; break; }
+    if (v && typeof v.value  === "number") { chest = v.value;  break; }
+  }
+  if (typeof chest !== "number") chest = 0;
+  vis.chestCoins = chest;
+
+  if (vis.turnStep){
+    const ended = (vis.turnStep === "ended" || vis.turnStep === "end" || vis.turnStep === "score");
+    vis.roundEnded = !!ended;
+    vis.allowNextRound = ended && (typeof vis.chestLeft === "number" ? vis.chestLeft > 0 : true);
+  }
+  return vis;
+}
+
+function injectTitlesIntoVisibleState(vis, fullState){
   try{
-    const uid = Number(userId||0) || 0;
-    if (!(uid > 0)) return [];
-    const q = await pool.query(
-      `SELECT match_key, ended_at, players, rp_map
-         FROM match_history
-        WHERE players @> $1::jsonb
-        ORDER BY ended_at DESC
-        LIMIT $2`,
-      [JSON.stringify([{ userId: uid }]), Math.max(1, Math.min(50, Number(limit)||10))]
-    );
-    const out = [];
-    for (const row of q.rows){
-      const players = Array.isArray(row.players) ? row.players : [];
-      const me = players.find(p => Number(p?.userId||0) === uid);
-      if (!me) continue;
-      const rpMap = row.rp_map && typeof row.rp_map === "object" ? row.rp_map : {};
-      out.push({
-        matchKey: String(row.match_key || ""),
-        endedAt: Number(row.ended_at || 0) || 0,
-        place: Number(me.place || 0) || 0,
-        coins: Number(me.coins || 0) || 0,
-        name: String(me.name || ""),
-        avatar: String(me.avatar || ""),
-        deltaRp: Number(rpMap[String(uid)] || 0) || 0,
-      });
+    if (!vis || !Array.isArray(vis.players) || !fullState || !Array.isArray(fullState.players)) return vis;
+
+    const byId = new Map(fullState.players.map(p => [p.id, p]));
+    for (const vp of vis.players){
+      const fp = byId.get(vp?.id);
+      if (!fp) continue;
+
+      const title = String(fp?.client?.title ?? fp?.title ?? "").trim();
+      const tier0 = Number(fp?.client?.titleTier ?? fp?.titleTier ?? 1) || 1;
+      const tier = Math.max(1, Math.min(6, tier0));
+
+      if (!vp.client || typeof vp.client !== "object") vp.client = {};
+
+      // 同時塞到 client + root，前端怎麼吃都吃得到
+      vp.client.title = title;
+      vp.client.titleTier = tier;
+      vp.title = title;
+      vp.titleTier = tier;
     }
-    return out;
-  }catch(e){
-    console.error("[getRecentMatchesForUser] failed:", e);
-    return [];
+  }catch{}
+  return vis;
+}
+
+
+function injectRanksIntoVisibleState(vis, fullState){
+  try{
+    if (!vis || !Array.isArray(vis.players) || !fullState || !Array.isArray(fullState.players)) return vis;
+
+    const byId = new Map(fullState.players.map(p => [p.id, p]));
+    for (const vp of vis.players){
+      const fp = byId.get(vp?.id);
+      if (!fp) continue;
+
+      const rank = fp?.client?.rank ?? fp?.rank ?? null;
+
+      if (!vp.client || typeof vp.client !== "object") vp.client = {};
+
+      vp.client.rank = (rank && typeof rank === "object") ? rank : null;
+      vp.rank = (rank && typeof rank === "object") ? rank : null;
+    }
+  }catch{}
+  return vis;
+}
+
+
+
+function injectOfflineIntoVisibleState(vis, fullState){
+  try{
+    if (!vis || !Array.isArray(vis.players) || !fullState || !Array.isArray(fullState.players)) return vis;
+
+    const byId = new Map(fullState.players.map(p => [p.id, p]));
+    for (const vp of vis.players){
+      const fp = byId.get(vp?.id);
+      if (!fp) continue;
+
+      const offline = !!(fp?.client?.offline || fp?.offline);
+      const since = Number(fp?.client?.offlineSince || fp?.offlineSince || 0) || 0;
+
+      if (!vp.client || typeof vp.client !== "object") vp.client = {};
+      vp.client.offline = offline;
+      vp.client.offlineSince = since;
+
+      // root fields too (some frontends read without .client)
+      vp.offline = offline;
+      vp.offlineSince = since;
+    }
+  }catch{}
+  return vis;
+}
+
+
+
+function broadcastState(room){
+  const st = room.state;
+  const ended = (st?.turnStep === "ended" || st?.turnStep === "end" || st?.turnStep === "score");
+  const winners = ended ? new Set(st.players.filter(p => p.alive).map(p => p.id)) : new Set();
+
+  for (const [sid, meta] of room.sockets){
+    let vis = injectChestCoins(getVisibleState(st, meta.playerId));
+    vis = injectTitlesIntoVisibleState(vis, st);
+    vis = injectRanksIntoVisibleState(vis, st);
+    vis = injectOfflineIntoVisibleState(vis, st);
+
+vis.viewerCanNext = (room.host === meta.playerId) || winners.has(meta.playerId);
+vis.viewerIsHost = (room.host === meta.playerId);
+vis.cpuSkipAvailable = canHostSkipCpu(room, meta.playerId);
+io.to(sid).emit("STATE", vis);
   }
 }
 
-function emitState(room) {
-  for (const p of room.players) {
-    const visible = getVisibleState(room.state, p.id);
-    io.to(p.socketId).emit("STATE", visible);
+
+function broadcastLobby(roomId){
+  const room = rooms.get(roomId);
+  if (!room) return;
+  const st = room.state;
+  const ready = room.lobbyReady || {};
+  const joinedIds = new Set([...room.sockets.values()].map(m => m.playerId));
+
+const payload = {
+  roomId,
+  host: room.host,
+  cpuCount: room.cpuCount || 0,   // ← 新增：房間有幾個 CPU
+  chat: Array.isArray(room.lobbyChat) ? room.lobbyChat : [],
+players: st.players
+  .filter(p => joinedIds.has(p.id))
+  .map(p => ({
+    id: p.id,
+    name: p.client?.displayName || p.displayName || `P${p.id+1}`,
+    avatar: p.client?.avatar ?? p.avatar ?? 1,
+    ready: !!ready[p.id],
+
+    // ✅ 新增：稱號（等待室互相可見）
+    title: (p.client?.title ?? p.title ?? ""),
+    titleTier: (p.client?.titleTier ?? p.titleTier ?? 1),
+// ✅ 新增：段位（等待室互相可見）
+    rank: (p.client?.rank ?? p.rank ?? null),
+  }))
+
+};
+
+
+  for (const [sid] of room.sockets){
+    io.to(sid).emit('EMIT', { type:'lobby', lobby: payload });
   }
 }
 
-function getRoomBySocket(socketId) {
-  for (const room of rooms.values()) {
-    const found = room.players.find((p) => p.socketId === socketId);
-    if (found) return { room, player: found };
+// ---------- 統一套用 applyAction + 廣播 EMIT / STATE ----------
+function applyAndBroadcast(room, action, io){
+  const res = applyAction(room.state, action);
+  room.state = res.state;
+
+  // 1) 先把 EMIT 事件照舊丟給前端
+  for (const e of (res.emits || [])) {
+    if (e.to === "all") {
+      for (const [sid] of room.sockets) io.to(sid).emit("EMIT", e);
+    } else {
+      for (const [sid, meta] of room.sockets) {
+        if (meta.playerId === e.to) io.to(sid).emit("EMIT", e);
+      }
+    }
+  }
+
+  // 2) 再廣播一次 STATE
+  broadcastState(room);
+}
+
+// 判斷目前是否輪到 CPU（原本那個保留即可）
+function isCpuTurn(room){
+  const st = room.state;
+  if (!st) return false;
+  const idx = st.turnIndex;
+  const p = st.players && st.players[idx];
+  return !!(p && p.isCPU && p.alive);
+}
+
+// ================= CPU 抽牌延遲設定（依上一張牌，一般 / 強化） =================
+
+// 你給的表格（我已經幫你換算成毫秒）
+//
+// 一般：
+// 0-4秒,1-4秒,2-4秒,3-8秒,4-4秒,5-4秒,6-4秒,7-4秒,
+// 8-8秒,9-4秒,10-8秒,11-4秒,12-8秒,13-4秒,14-8秒,
+// 15-4秒,16-4秒,17-4秒,18-4秒,19-4秒
+//
+// 強化：
+// 0-10秒,1-4秒,2-10秒,3-8秒,4-10秒,5-4秒,6-4秒,7-4秒,
+// 8-8秒,9-14秒,10-8秒,11-13秒,12-13秒,13-4秒,14-8秒,
+// 15-4秒,16-15秒,17-4秒,18-4秒,19-4秒
+
+const PREV_CARD_DELAY = {
+  0:  { normal: 4000,  enhanced: 10000 },
+  1:  { normal: 4000,  enhanced: 4000  },
+  2:  { normal: 4000,  enhanced: 10000 },
+  3:  { normal: 13000,  enhanced: 13000  },
+  4:  { normal: 4000,  enhanced: 10000 },
+  5:  { normal: 4000,  enhanced: 4000  },
+  6:  { normal: 4000,  enhanced: 4000  },
+  7:  { normal: 4000,  enhanced: 4000  },
+  8:  { normal: 13000,  enhanced: 12000  },
+  9:  { normal: 4000,  enhanced: 17000 },
+  10: { normal: 13000,  enhanced: 8000  },
+  11: { normal: 4000,  enhanced: 18000 },
+  12: { normal: 8000,  enhanced: 16000 },
+  13: { normal: 4000,  enhanced: 13000  },
+  14: { normal: 8000,  enhanced: 8000  },
+  15: { normal: 4000,  enhanced: 4000  },
+  16: { normal: 4000,  enhanced: 15000 },
+  17: { normal: 4000,  enhanced: 4000  },
+  18: { normal: 4000,  enhanced: 4000  },
+  19: { normal: 4000,  enhanced: 4000  },
+};
+
+// ================= CPU「打出牌後」延遲設定（依這張牌，一般 / 強化） =================
+// 單位：毫秒
+const PLAY_CARD_DECISION_DELAY = {
+  0:  { normal: 4000,  enhanced: 6000  },  // 薩波
+  1:  { normal: 4000,  enhanced: 10000  },  // 騙人布
+  2:  { normal: 4000,  enhanced: 10000  },  // 羅賓
+  3:  { normal: 4000,  enhanced: 9000  },  // 香吉士
+  4:  { normal: 4000,  enhanced: 6000  },  // 喬巴
+  5:  { normal: 4000,  enhanced: 17000  },  // 索隆
+  6:  { normal: 4000,  enhanced: 12000  },  // 羅
+  7:  { normal: 4000,  enhanced: 10000  },  // 娜美
+  8:  { normal: 4000,  enhanced: 13000  },  // 魯夫
+  9:  { normal: 4000,  enhanced: 14000  },  // 女帝
+  10: { normal: 4000,  enhanced: 8000  },  // 凱多
+  11: { normal: 4000,  enhanced: 9000  },  // 基德
+  12: { normal: 4000,  enhanced: 9000  },  // 奎因
+  13: { normal: 4000,  enhanced: 20000  },  // 基拉
+  14: { normal: 4000,  enhanced: 12000  },  // 大媽
+  15: { normal: 4000,  enhanced: 19000  },  // 卡塔庫栗
+  16: { normal: 4000,  enhanced: 9000  },  // 青雉
+  17: { normal: 4000,  enhanced: 16000  },  // 黑鬍子
+  18: { normal: 4000,  enhanced: 14000  },  // 紅髮
+  19: { normal: 4000,  enhanced: 21000 },  // 羅傑
+};
+
+// ================= 魯夫第一次決鬥 → 第二次決鬥 中間的延遲 =================
+// 單位：毫秒
+// normal ＝ 一般魯夫；enhanced 這裡其實用不到，先留欄位給你之後調整
+const LUFFY_SECOND_GAP = {
+  normal: 10000,   // 一般魯夫：1.5 秒（你可以自己改）
+  enhanced: 1500, // 先隨便設，實際只會用在一般魯夫
+};
+
+
+// 判斷一張卡現在是不是在自己的強化場地上
+function isEnhancedNowServer(st, cardId) {
+  if (cardId == null) return false;
+  const card = cardById(cardId);
+  if (!card || !card.venue) return false;
+  if (!Array.isArray(st.venues)) return false;
+  return st.venues.some(v => v && v.name === card.venue);
+}
+
+// 從棄牌堆拿到「最後一張被打出去的卡 id」
+function getLastPlayedCardId(st) {
+  const disc = st.discard;
+  if (!Array.isArray(disc) || disc.length === 0) return null;
+
+  // 從後面往前找第一筆有 id 的
+  for (let i = disc.length - 1; i >= 0; i--) {
+    const d = disc[i];
+    if (typeof d === "number") return d;
+    if (d && typeof d.id === "number") return d.id;
   }
   return null;
 }
 
-function getLivingPlayers(state) {
-  return state.players.filter((p) => p.alive);
-}
+// 根據上一張牌，算出 CPU 抽牌前要延遲多久（毫秒）
+// 沒有設定的卡 → 回傳 0
+function getDelayForPrevCard(st) {
+  const lastId = getLastPlayedCardId(st);
+  if (lastId == null) return 0;
 
-function getPlayerById(state, id) {
-  return state.players.find((p) => p.id === id);
-}
+  const cfg = PREV_CARD_DELAY[lastId];
+  if (!cfg) return 0;
 
-function remainingDeckCount(state) {
-  return state.deck.length;
-}
-
-function autoArrangeCardPositions(room) {
-  const players = room.state.players;
-  const aliveCount = players.filter((p) => p.alive).length;
-  const oneCardSlots = aliveCount === 2 ? ["bottom", "top"] : ["bottom", "left", "top", "right"];
-
-  const livingIds = players.filter((p) => p.alive).map((p) => p.id);
-  const deadIds = players.filter((p) => !p.alive).map((p) => p.id);
-
-  const arr = [];
-
-  if (aliveCount === 2) {
-    // 2人生還：優先把活著的擺 bottom / top；淘汰者補 left / right
-    for (let i = 0; i < livingIds.length; i++) {
-      arr.push({ playerId: livingIds[i], slot: oneCardSlots[i] });
-    }
-    const deadSlots = ["left", "right"];
-    for (let i = 0; i < deadIds.length; i++) {
-      arr.push({ playerId: deadIds[i], slot: deadSlots[i] || null });
-    }
-  } else {
-    // 其餘情況（3~4人生還 或 1人生還）：維持原先順序分配
-    const order = [...livingIds, ...deadIds];
-    for (let i = 0; i < order.length; i++) {
-      arr.push({ playerId: order[i], slot: i < 4 ? oneCardSlots[i] || oneCardSlots[oneCardSlots.length - 1] : null });
-    }
+  const enhanced = isEnhancedNowServer(st, lastId);
+  if (enhanced && typeof cfg.enhanced === "number") {
+    return cfg.enhanced;
   }
-
-  room.cardPositions = arr;
-  io.to(room.code).emit("card_positions", arr);
-}
-
-// === [P1] helper：回傳真正「還存活且可操作」的人類玩家數（排除已被 CPU 接手的真人） ===
-function countActiveHumans(room){
-  try{
-    const ps = Array.isArray(room?.state?.players) ? room.state.players : [];
-    const rp = Array.isArray(room?.players) ? room.players : [];
-    let n = 0;
-    for (const p of ps){
-      if (!p || !p.alive || p.isCPU) continue;
-      const meta = rp.find(x => x && x.id === p.id);
-      if (meta && meta.cpuControlled) continue; // 真人被 CPU 接手中，視同不算真人在操作
-      n++;
-    }
-    return n;
-  }catch{
-    return 0;
+  if (!enhanced && typeof cfg.normal === "number") {
+    return cfg.normal;
   }
-}
-
-// === 新增：如果「完全沒有真人可操作」，就讓房主看到可跳過CPU按鈕 ===
-function emitLobbyViewFlagsForPlaying(room){
-  try{
-    if (!room || room.phase !== 'playing') return;
-
-    const noActiveHumans = countActiveHumans(room) === 0;
-
-    // 找一位人類房主（room.host 可能是 player.id，不是 socket）
-    for (const p of room.players){
-      if (!p || !p.socketId) continue;
-      const viewerCanSkipCpu = !!(noActiveHumans && p.id === room.host);
-      io.to(p.socketId).emit("LOBBY_VIEW_FLAGS", { viewerCanSkipCpu });
-    }
-  }catch(e){
-    console.error("[emitLobbyViewFlagsForPlaying] failed:", e);
-  }
-}
-
-// 按活著玩家數決定場地卡數量：
-// 4人 → 2張；3/2人 → 1張；1人/0人 → 0張
-function desiredVenueCountByAlive(aliveCount){
-  if (aliveCount >= 4) return 2;
-  if (aliveCount >= 2) return 1;
   return 0;
 }
 
-// 生成「不與現有重複」的隨機場地卡 ID（優先從 1..8）
-// 若抽不到，最後退回 1..8 任一張（理論上不會）
-function drawUniqueVenueId(excludingIds){
-  const banned = new Set((excludingIds || []).map(Number));
-  const pool = [];
-  for (let id = 1; id <= 8; id++) {
-    if (!banned.has(id)) pool.push(id);
+// 根據「最後一張打出的牌」，決定 CPU 出牌後要延遲多久（毫秒）
+// 會依照 PLAY_CARD_DECISION_DELAY + 是否強化 來決定
+function getDelayAfterPlay(st) {
+  const lastId = getLastPlayedCardId(st);
+  if (lastId == null) return 4000;   // 找不到就給一個預設值（例如 4 秒）
+
+  const cfg = PLAY_CARD_DECISION_DELAY[lastId];
+  if (!cfg) return 4000;
+
+  const enhanced = isEnhancedNowServer(st, lastId);
+
+  // 強化版 → 用 enhanced
+  if (enhanced && typeof cfg.enhanced === "number") {
+    return cfg.enhanced;
   }
-  if (pool.length > 0) return pool[Math.floor(Math.random() * pool.length)];
-  return 1 + Math.floor(Math.random() * 8);
+
+  // 一般版 → 用 normal
+  if (!enhanced && typeof cfg.normal === "number") {
+    return cfg.normal;
+  }
+
+  return 4000;
 }
 
-// 依目前存活人數，把 room.venues 補/減到正確數量
-function syncVenueCountToAlive(room){
-  try{
-    if (!room) return;
-    if (!Array.isArray(room.venues)) room.venues = [];
+// 根據現在狀態，決定「魯夫第一次決鬥 → 第二次決鬥」中間要等多久
+function getLuffySecondGap(st) {
+  const lastId = getLastPlayedCardId(st);
+  const enhanced = isEnhancedNowServer(st, 8);
 
-    const aliveCount = (room.state?.players || []).filter(p => p.alive).length;
-    const want = desiredVenueCountByAlive(aliveCount);
-    const cur = room.venues.length;
-
-    if (cur === want) return;
-
-    if (cur < want){
-      // 補到 want：新增時避免與現有重複
-      while (room.venues.length < want){
-        const nowIds = room.venues.map(v => Number(v?.id)).filter(Boolean);
-        const newId = drawUniqueVenueId(nowIds);
-        room.venues.push({ id: newId });
-      }
-    } else {
-      // 多了就裁掉尾端
-      room.venues = room.venues.slice(0, want);
-    }
-
-    io.to(room.code).emit("venues", room.venues);
-  }catch(e){
-    console.error("[syncVenueCountToAlive] failed:", e);
+  // 理論上 pending.action === 'luffy' 時，最後一張就是 8 號
+  if (lastId !== 8) {
+    return LUFFY_SECOND_GAP.normal;
   }
+
+  // 如果你未來有要分「魯夫在魚人島但沒開強化招式」也可用這個欄位
+  return enhanced ? LUFFY_SECOND_GAP.enhanced : LUFFY_SECOND_GAP.normal;
 }
 
-/* =========================
- * Helpers: lobby cleanup / game-end transitions
- * ========================= */
 
-// 檢查等待室是否已無真人玩家；若無則解散房間
-function maybeDissolveLobbyIfNoHumans(roomCode){
-  const room = rooms.get(roomCode);
-  if (!room) return false;
-  if (room.phase !== "lobby") return false;
-  const humanCount = room.players.filter(p => !p.isCPU).length;
-  if (humanCount > 0) return false;
-
-  try {
-    io.to(room.code).emit("ROOM_CLOSED", {
-      reason: "empty_lobby",
-      message: "等待室已無真人玩家，房間已解散。"
-    });
-  } catch {}
-  // 離開 room
-  for (const p of room.players){
-    try{ io.sockets.sockets.get(p.socketId)?.leave(room.code); }catch{}
-  }
-  rooms.delete(room.code);
-  return true;
-}
-
-// 遊戲房：把所有仍在房內 socket 廣播移回 start（例如被踢下線、結束後）
-function emitNavStartToRoom(room, reason){
+// 讓 CPU 自動行動：
+// - 抽牌 → 等 2 秒
+// - 出牌 → 等 4 秒
+// - 如果卡在 pending（騙人布/羅賓/索隆/羅/娜美/魯夫/凱多/青雉/基拉/大媽/羅傑…）
+//   就自動送 PICK_TARGET / PICK_DIGIT / LUFFY_SECOND / BIGMOM_COIN 等
+function runCpuLoop(roomId){
+  const room = rooms.get(roomId);
   if (!room) return;
-  for (const p of room.players){
-    try{
-      io.to(p.socketId).emit("EMIT", { type: "nav_start", reason: reason || "room_closed" });
-    }catch{}
-  }
-}
 
-// 遊戲已經結束且清房後，保險再刪一次
-function forceDeleteRoom(roomCode){
-  const room = rooms.get(roomCode);
-  if (!room) return false;
-  try{
-    for (const p of room.players){
-      try{ io.sockets.sockets.get(p.socketId)?.leave(room.code); }catch{}
-    }
-  }catch{}
-  rooms.delete(roomCode);
-  return true;
-}
+  room._cpuLoopToken = Number(room._cpuLoopToken || 0) + 1;
+  const loopToken = room._cpuLoopToken;
 
-/* =========================
- * Turn Watchdog / CPU takeover
- *  - 真人逾時：先切 CPU 接手（顯示中），再由 CPU 自動出牌
- *  - 玩家回來點一下即可解除 auto，恢復真人操作
- *  - 房內只剩 CPU 可操作時，主機可一鍵 skip
- * ========================= */
+  const step = () => {
+    const roomNow = rooms.get(roomId);
+    if (!roomNow) return;
+    if (Number(roomNow._cpuLoopToken || 0) !== loopToken) return;
 
-const PLAYER_TURN_TIMEOUT_MS = 10000; // 真人回合逾時幾秒後接手
-const CPU_ACTION_DELAY_MS = 600;      // 接手後多久出牌
-const CPU_WARN_BEFORE_MS = 3000;      // 接手前幾秒先警告
+    const st = roomNow.state;
+    if (!st) return;
 
-function clearRoomTimers(room){
-  try{
-    if (room.turnWarnTimer) { clearTimeout(room.turnWarnTimer); room.turnWarnTimer = null; }
-    if (room.turnTimer) { clearTimeout(room.turnTimer); room.turnTimer = null; }
-    if (room.cpuTakeoverTimer) { clearTimeout(room.cpuTakeoverTimer); room.cpuTakeoverTimer = null; }
-  }catch{}
-}
-
-function emitPlayerAutoState(room, playerId, autoPlay){
-  try{
-    const meta = room.players.find(x => x.id === playerId);
-    if (!meta?.socketId) return;
-    io.to(meta.socketId).emit("PLAYER_AUTO_STATE", {
-      playerId,
-      autoPlay: !!autoPlay,
-      canCancel: !!autoPlay,
-      ts: Date.now(),
-    });
-  }catch{}
-}
-
-function emitCpuTakeoverCountdown(room, playerId, msLeft){
-  try{
-    const meta = room.players.find(x => x.id === playerId);
-    if (!meta?.socketId) return;
-    io.to(meta.socketId).emit("CPU_TAKEOVER_COUNTDOWN", {
-      playerId,
-      msLeft: Math.max(0, Number(msLeft)||0),
-      ts: Date.now(),
-    });
-  }catch{}
-}
-
-function setCpuControlled(room, playerId, on){
-  const meta = room.players.find(x => x.id === playerId);
-  if (!meta) return;
-  meta.cpuControlled = !!on;
-  emitPlayerAutoState(room, playerId, !!on);
-  emitLobbyViewFlagsForPlaying(room);
-}
-
-function getRoomMetaPlayer(room, playerId){
-  return room.players.find(p => p.id === playerId) || null;
-}
-
-function isHumanTurnControllable(room){
-  if (!room || room.phase !== "playing") return false;
-  const pid = room.state?.turnPlayerId;
-  if (!pid) return false;
-  const sp = getPlayerById(room.state, pid);
-  if (!sp || !sp.alive) return false;
-  if (sp.isCPU) return false;
-  return true;
-}
-
-// 判斷這位目前回合玩家是否應該被視為 CPU 操作中
-function isTurnAutoControlled(room){
-  try{
-    const pid = room.state?.turnPlayerId;
-    if (!pid) return false;
-    const sp = getPlayerById(room.state, pid);
-    if (!sp) return false;
-    if (sp.isCPU) return true;
-    const meta = getRoomMetaPlayer(room, pid);
-    return !!meta?.cpuControlled;
-  }catch{
-    return false;
-  }
-}
-
-function scheduleCpuAutoPlay(room, playerId, delay = CPU_ACTION_DELAY_MS){
-  try{
-    if (!room || room.phase !== "playing") return;
-    if (room.cpuTakeoverTimer) clearTimeout(room.cpuTakeoverTimer);
-    room.cpuTakeoverTimer = setTimeout(() => {
-      room.cpuTakeoverTimer = null;
-      tryCpuTakeTurn(room, playerId);
-    }, Math.max(0, Number(delay)||0));
-  }catch{}
-}
-
-function armRoomWatchdogs(room){
-  try{
-    clearRoomTimers(room);
-    if (!room || room.phase !== "playing") return;
-
-    const pid = room.state?.turnPlayerId;
-    if (!pid) return;
-
-    const sp = getPlayerById(room.state, pid);
-    if (!sp || !sp.alive) return;
-
-    // 本來就是 CPU，直接排 auto play
-    if (sp.isCPU){
-      scheduleCpuAutoPlay(room, pid, 500);
-      return;
+    if (st.turnStep === 'ended' || st.turnStep === 'end' || st.turnStep === 'score') {
+      roomNow._cpuFastForward = false;
     }
 
-    const meta = getRoomMetaPlayer(room, pid);
-    if (!meta) return;
+    const delay = (ms) => setTimeout(step, roomNow._cpuFastForward ? 0 : ms);
+    const pending = st.pending || null;
 
-    // 已被接手中：持續 auto play
-    if (meta.cpuControlled){
-      emitPlayerAutoState(room, pid, true);
-      scheduleCpuAutoPlay(room, pid, 500);
-      return;
-    }
+  // ---------- 先處理「不是自己回合」但輪到 CPU 回應的互動 ----------
+    if (pending) {
+      // 奎因：輪到 target 擲硬幣（QUEEN_COIN）
+      if (pending.action === 'queen') {
+        const tgt = pending.target;
+        const victim = st.players[tgt];
+        if (victim && victim.isCPU && victim.alive) {
+          applyAndBroadcast(roomNow, {
+            type: 'QUEEN_COIN',
+            playerId: tgt,
+          }, io);
 
-    // 真人、尚未接手：先倒數提示，再正式接手
-    const warnDelay = Math.max(0, PLAYER_TURN_TIMEOUT_MS - CPU_WARN_BEFORE_MS);
-
-    room.turnWarnTimer = setTimeout(() => {
-      room.turnWarnTimer = null;
-      try{
-        // 若回合已變，不提示
-        if (room.phase !== "playing") return;
-        if (room.state?.turnPlayerId !== pid) return;
-        const sp2 = getPlayerById(room.state, pid);
-        const meta2 = getRoomMetaPlayer(room, pid);
-        if (!sp2 || !sp2.alive || sp2.isCPU || meta2?.cpuControlled) return;
-        emitCpuTakeoverCountdown(room, pid, CPU_WARN_BEFORE_MS);
-      }catch{}
-    }, warnDelay);
-
-    room.turnTimer = setTimeout(() => {
-      room.turnTimer = null;
-      try{
-        if (room.phase !== "playing") return;
-        if (room.state?.turnPlayerId !== pid) return;
-        const sp2 = getPlayerById(room.state, pid);
-        const meta2 = getRoomMetaPlayer(room, pid);
-        if (!sp2 || !sp2.alive || sp2.isCPU) return;
-        if (meta2?.cpuControlled) return;
-
-        setCpuControlled(room, pid, true);
-        scheduleCpuAutoPlay(room, pid, 500);
-      }catch(e){
-        console.error("[turn watchdog takeover] failed:", e);
+          delay(1500);  // 硬幣動畫 & 文字稍微停一下
+          return;
+        }
       }
-    }, PLAYER_TURN_TIMEOUT_MS);
-  }catch(e){
-    console.error("[armRoomWatchdogs] failed:", e);
-  }
-}
 
-function cancelAutoForPlayer(room, playerId){
-  try{
-    const meta = getRoomMetaPlayer(room, playerId);
-    if (!meta) return false;
-    if (!meta.cpuControlled) return false;
-    meta.cpuControlled = false;
+      // 大媽強化：被點名的玩家決定要不要交保護費（BIGMOM_CHOICE）
+      if (pending.action === 'bigmom-pay') {
+        const tgt = pending.target;
+        const victim = st.players[tgt];
+        if (victim && victim.isCPU && victim.alive) {
+          const willPay = (victim.gold || 0) > 0;  // 有金幣就先選「付錢」避免直接死
+          applyAndBroadcast(roomNow, {
+            type: 'BIGMOM_CHOICE',
+            playerId: tgt,
+            payload: { choice: willPay ? 'pay' : 'die' },
+          }, io);
 
-    // 若現在正好輪到他，重開 watchdog，讓玩家可手動出牌
-    if (room.phase === "playing" && room.state?.turnPlayerId === playerId){
-      emitPlayerAutoState(room, playerId, false);
-      armRoomWatchdogs(room);
-    }else{
-      emitPlayerAutoState(room, playerId, false);
-      emitLobbyViewFlagsForPlaying(room);
-    }
-    return true;
-  }catch{
-    return false;
-  }
-}
-
-/* =========================
- * CPU decision helpers
- * ========================= */
-
-function findHighestCardIndex(hand){
-  if (!Array.isArray(hand) || hand.length === 0) return 0;
-  let best = 0;
-  let bestVal = -Infinity;
-  for (let i = 0; i < hand.length; i++){
-    const id = Number(hand[i]?.id ?? -999);
-    if (id > bestVal){
-      bestVal = id;
-      best = i;
-    }
-  }
-  return best;
-}
-
-function pickFallbackTarget(state, selfId){
-  const others = state.players.filter(p => p.alive && p.id !== selfId);
-  return others[0]?.id || null;
-}
-
-function pickFallbackDigit(hand){
-  // 偏保守：選手牌第一張尾數
-  const c = hand?.[0];
-  return c ? tail(cardById(c.id).id) : 0;
-}
-
-/* =========================
- * CPU execute one legal action for current turn
- * ========================= */
-
-function tryCpuTakeTurn(room, expectedPlayerId = null){
-  try{
-    if (!room || room.phase !== "playing") return false;
-
-    const currentId = room.state?.turnPlayerId;
-    if (!currentId) return false;
-    if (expectedPlayerId && currentId !== expectedPlayerId) return false;
-
-    const sp = getPlayerById(room.state, currentId);
-    if (!sp || !sp.alive) return false;
-
-    const meta = getRoomMetaPlayer(room, currentId);
-
-    // 只有 CPU 或被接手的真人，才允許自動出牌
-    const auto = !!sp.isCPU || !!meta?.cpuControlled;
-    if (!auto) return false;
-
-    if (!Array.isArray(sp.hand) || sp.hand.length === 0) return false;
-
-    // 先挑 card index
-    let cardIndex = 0;
-    try{
-      cardIndex = Number(pickCpuCardSmart(room.state, currentId));
-      if (!(cardIndex >= 0 && cardIndex < sp.hand.length)) {
-        cardIndex = findHighestCardIndex(sp.hand);
+          delay(1500);
+          return;
+        }
       }
-    }catch{
-      cardIndex = findHighestCardIndex(sp.hand);
-    }
 
-    const chosen = sp.hand[cardIndex];
-    const cid = Number(chosen?.id);
+      // （順便補）羅傑被索隆丟出、在奧羅傑克森號上的預測，也可能是 CPU 要選
+      if (pending.action === 'roger' && pending.caster != null) {
+        const rogerIdx = pending.caster;           // 擁有羅傑的人
+        const roger = st.players[rogerIdx];
+        if (roger && roger.isCPU && roger.alive) {
+          const targetIdx = pickCpuTargetSmart(st, rogerIdx, {
+            for: 'roger',
+            avoidProtected: false,
+            avoidDodging: false,
+          });
+          if (targetIdx != null) {
+            applyAndBroadcast(roomNow, {
+              type: 'PICK_TARGET',
+              playerId: rogerIdx,
+              payload: { target: targetIdx },
+            }, io);
 
-    // 再補 payload（target / digit）
-    const payload = { cardIndex };
-
-    try{
-      const target = pickCpuTargetSmart(room.state, currentId, cid);
-      if (target != null) payload.targetPlayerId = Number(target);
-    }catch{}
-
-    try{
-      const digit = pickCpuDigitSmart(room.state, currentId, cid);
-      if (digit != null) payload.declareDigit = Number(digit);
-    }catch{}
-
-    // fallback：某些牌若缺 target / digit，補一個
-    if (payload.targetPlayerId == null){
-      const fb = pickFallbackTarget(room.state, currentId);
-      if (fb != null) payload.targetPlayerId = fb;
-    }
-    if (payload.declareDigit == null){
-      payload.declareDigit = pickFallbackDigit(sp.hand);
-    }
-
-    const r = applyAction(room.state, currentId, payload);
-
-    // 若 smart AI 挑的資料不合法，退回簡單暴力嘗試
-    if (!r.ok){
-      let applied = false;
-      const fallbackTarget = pickFallbackTarget(room.state, currentId);
-      for (let i = 0; i < sp.hand.length && !applied; i++){
-        const base = { cardIndex: i };
-        const cardId = Number(sp.hand[i]?.id);
-        const tries = [
-          { ...base },
-          { ...base, targetPlayerId: fallbackTarget },
-          { ...base, declareDigit: pickFallbackDigit(sp.hand) },
-          { ...base, targetPlayerId: fallbackTarget, declareDigit: pickFallbackDigit(sp.hand) },
-        ];
-        for (const t of tries){
-          const rr = applyAction(room.state, currentId, t);
-          if (rr.ok){
-            applied = true;
-            break;
+            delay(1500);
+            return;
           }
         }
       }
-      if (!applied){
-        console.warn("[CPU] no legal move found for", currentId);
-        return false;
+    }
+
+    // 目前只讓「輪到的玩家是 CPU」時自動動作
+    const meIdx = st.turnIndex;
+    const me = st.players && st.players[meIdx];
+    if (!me || !me.isCPU || !me.alive) {
+      return; // 不輪到 CPU → 不動
+    }
+
+    // ========= ① 先處理 pending 的互動 =========
+    if (pending) {
+      const act = pending.action;
+
+      // --- 1 騙人布：選目標 → 猜尾數 ---
+      if (act === 'usopp') {
+        if (!pending.extra || pending.extra.target == null) {
+          const targetIdx = pickCpuTargetSmart(st, meIdx, {
+            for: 'usopp',
+            avoidProtected: true,
+            avoidDodging: true,
+          });
+          if (targetIdx == null) return;
+
+          applyAndBroadcast(roomNow, {
+            type: 'PICK_TARGET',
+            playerId: meIdx,
+            payload: { target: targetIdx },
+          }, io);
+
+          delay(1500);
+          return;
+        }
+
+        const d = pickCpuDigitSmart(st, meIdx, pending.extra.target);
+        applyAndBroadcast(roomNow, {
+          type: 'PICK_DIGIT',
+          playerId: meIdx,
+          payload: { digit: d },
+        }, io);
+
+        delay(1500);
+        return;
       }
-    }
 
-    // 有可能這步讓回合推進 / round end
-    afterAnyAction(room);
-    return true;
-  }catch(e){
-    console.error("[tryCpuTakeTurn] failed:", e);
-    return false;
-  }
-}
-
-/* =========================
- * Common post-action flow
- * ========================= */
-
-function afterAnyAction(room){
-  try{
-    emitState(room);
-    io.to(room.code).emit("coin_count", room.state.chestCoins);
-
-    syncVenueCountToAlive(room);      // 新增：存活數改變時，場地張數立即同步
-    autoArrangeCardPositions(room);
-
-    if (room.state.lastRoundResult) {
-      io.to(room.code).emit("round_result", room.state.lastRoundResult);
-    }
-
-    if (isRoundEnded(room.state)) {
-      if (room.state.chestCoins <= 0) {
-        clearRoomTimers(room);
-        endGame(room);
-      } else {
-        clearRoomTimers(room);
-        setTimeout(() => {
-          // 只在還沒結束時進下一輪
-          if (room.phase !== "playing") return;
-          room.state = nextRound(room.state);
-          syncVenueCountToAlive(room);  // 新一輪也再校正一次
-          autoArrangeCardPositions(room);
-          emitState(room);
-          io.to(room.code).emit("coin_count", room.state.chestCoins);
-          if (room.state.lastRoundResult) {
-            io.to(room.code).emit("round_result", room.state.lastRoundResult);
-          }
-          armRoomWatchdogs(room);       // 新回合重上 watchdog
-        }, 1600);
-      }
-    } else {
-      // 正常進下一位 / 繼續同回合
-      armRoomWatchdogs(room);
-    }
-  }catch(e){
-    console.error("[afterAnyAction] failed:", e);
-  }
-}
-
-function buildFinalRankPlayers(room){
-  // 以本局已結算資訊為主；place 越小越前面。coins 從 state.players 讀。
-  const ranked = [...room.state.players]
-    .map(p => {
-      const meta = room.players.find(x => x.id === p.id);
-      return {
-        id: p.id,
-        userId: Number(meta?.userId || 0) || 0,
-        name: p.name,
-        avatar: p.avatar,
-        place: Number(p.place || 999) || 999,
-        coins: Number(p.coinsWon || 0) || 0,
-      };
-    })
-    .sort((a,b) => (a.place - b.place) || (b.coins - a.coins) || (a.id - b.id));
-
-  return ranked;
-}
-
-function endGame(room){
-  try{
-    room.phase = "finished";
-
-    const players = buildFinalRankPlayers(room);
-    const endedAt = Date.now();
-    room.finalResults = { endedAt, players };
-
-    // 先確保 match_history 有這局（方案B）
-    saveMatchHistoryIfNeeded(room).then((matchKey)=>{
-      try{
-        if (matchKey) room.finalResults.matchKey = matchKey;
-      }catch{}
-    }).catch(()=>{});
-
-    // 廣播 final 給遊戲頁（若你前端還要用）
-    io.to(room.code).emit("final_result", room.finalResults);
-
-    // 導到 result 頁；把必要資料塞 query
-    for (const p of room.players){
-      try{
-        const me = players.find(x => x.id === p.id) || null;
-        const q = new URLSearchParams({
-          room: room.code,
-          endedAt: String(endedAt),
-          userId: String(Number(p.userId || 0) || 0),
-          playerId: String(p.id),
-          matchKey: room.finalResults.matchKey || "",
+      // --- 2 羅賓：選一個人偷看 ---
+      if (act === 'robin') {
+        const targetIdx = pickCpuTargetSmart(st, meIdx, {
+          for: 'robin',
+          avoidProtected: false,
+          avoidDodging: false,
         });
-        io.to(p.socketId).emit("EMIT", { type:"nav_result", url:`/result.html?${q.toString()}` });
-      }catch{}
+        if (targetIdx == null) return;
+
+        applyAndBroadcast(roomNow, {
+          type: 'PICK_TARGET',
+          playerId: meIdx,
+          payload: { target: targetIdx },
+        }, io);
+
+        delay(1500);
+        return;
+      }
+
+      // --- 3 香吉士：挑一個人決鬥 ---
+      if (act === 'sanji') {
+        const targetIdx = pickCpuTargetSmart(st, meIdx, {
+          for: 'sanji',
+          avoidProtected: true,
+          avoidDodging: true,
+        });
+        if (targetIdx == null) return;
+
+        applyAndBroadcast(roomNow, {
+          type: 'PICK_TARGET',
+          playerId: meIdx,
+          payload: { target: targetIdx },
+        }, io);
+
+        delay(1500);
+        return;
+      }
+
+      // --- 5 索隆：選一個人丟手牌 ---
+      if (act === 'zoro') {
+        const targetIdx = pickCpuTargetSmart(st, meIdx, {
+          for: 'zoro',
+          avoidProtected: true,
+          avoidDodging: true,
+        });
+        if (targetIdx == null) return;
+
+        applyAndBroadcast(roomNow, {
+          type: 'PICK_TARGET',
+          playerId: meIdx,
+          payload: { target: targetIdx },
+        }, io);
+
+        delay(1500);
+        return;
+      }
+
+      // --- 6 羅：選一個人交換 ---
+      if (act === 'law') {
+        const targetIdx = pickCpuTargetSmart(st, meIdx, {
+          for: 'law',
+          avoidProtected: false,
+          avoidDodging: false,
+        });
+        if (targetIdx == null) return;
+
+        applyAndBroadcast(roomNow, {
+          type: 'PICK_TARGET',
+          playerId: meIdx,
+          payload: { target: targetIdx },
+        }, io);
+
+        delay(1500);
+        return;
+      }
+
+      // --- 7 娜美（強化）：選一個人麻痺 ---
+      if (act === 'nami') {
+        const targetIdx = pickCpuTargetSmart(st, meIdx, {
+          for: 'nami',
+          avoidProtected: true,
+          avoidDodging: true,
+        });
+        if (targetIdx == null) return;
+
+        applyAndBroadcast(roomNow, {
+          type: 'PICK_TARGET',
+          playerId: meIdx,
+          payload: { target: targetIdx },
+        }, io);
+
+        delay(1500);
+        return;
+      }
+
+      // --- 10 凱多：選一個人決鬥（無視保護/閃避） ---
+      if (act === 'kaido') {
+        const targetIdx = pickCpuTargetSmart(st, meIdx, {
+          for: 'kaido',
+          avoidProtected: false,
+          avoidDodging: false,
+        });
+        if (targetIdx == null) return;
+
+        applyAndBroadcast(roomNow, {
+          type: 'PICK_TARGET',
+          playerId: meIdx,
+          payload: { target: targetIdx },
+        }, io);
+
+        delay(1500);
+        return;
+      }
+
+      // --- 16 青雉：選一個人凍結 ---
+      if (act === 'aokiji') {
+        const targetIdx = pickCpuTargetSmart(st, meIdx, {
+          for: 'aokiji',
+          avoidProtected: true,
+          avoidDodging: true,
+        });
+        if (targetIdx == null) return;
+
+        applyAndBroadcast(roomNow, {
+          type: 'PICK_TARGET',
+          playerId: meIdx,
+          payload: { target: targetIdx },
+        }, io);
+
+        delay(1500);
+        return;
+      }
+
+      // --- 13 基拉：先解除，再決定要不要決鬥 ---
+      if (act === 'killer') {
+        const targetIdx = pickCpuTargetSmart(st, meIdx, {
+          for: 'killer',
+          avoidProtected: false,
+          avoidDodging: false,
+        });
+        if (targetIdx == null) return;
+
+        const isBoost = !!(pending.extra && pending.extra.boost);
+
+        // ① 一般版基拉：只解除保護/閃避就結束
+        if (!isBoost) {
+          applyAndBroadcast(roomNow, {
+            type: 'PICK_TARGET',
+            playerId: meIdx,
+            payload: { target: targetIdx },
+          }, io);
+
+          delay(1500);
+          return;
+        }
+
+        // ② 強化版基拉：
+        //    先對目標送一次 PICK_TARGET（只解除保護/閃避）
+        applyAndBroadcast(roomNow, {
+          type: 'PICK_TARGET',
+          playerId: meIdx,
+          payload: { target: targetIdx },
+        }, io);
+
+        // 讀出自己「保留下來的手牌」尾數（用來決定要不要決鬥）
+        const keepId =
+          (pending.extra && typeof pending.extra.keep === 'number')
+            ? pending.extra.keep
+            : (st.players[meIdx] && st.players[meIdx].hand);
+
+        const myTail = (typeof keepId === 'number') ? tail(keepId) : 0;
+
+        // 簡單策略：尾數 >= 7 再決鬥，尾數小就只拆防
+        const willDuel = myTail >= 7;
+
+        if (willDuel) {
+          // ③ 尾數夠大 → 再送一次 PICK_TARGET，這次帶 duel:true 進入決鬥
+          applyAndBroadcast(roomNow, {
+            type: 'PICK_TARGET',
+            playerId: meIdx,
+            payload: { target: targetIdx, duel: true },
+          }, io);
+        } else {
+          // ④ 不想決鬥 → 用 PICK_CANCEL 告訴引擎「我放棄決鬥」
+          applyAndBroadcast(roomNow, {
+            type: 'PICK_CANCEL',
+            playerId: meIdx,
+          }, io);
+        }
+
+        delay(1500);
+        return;
+      }
+
+
+      // --- 14 大媽強化（萬國）：選一個人收保護費/處刑 ---
+      if (act === 'bigmom') {
+        const targetIdx = pickCpuTargetSmart(st, meIdx, {
+          for: 'bigmom',
+          avoidProtected: true,
+          avoidDodging: true,
+        });
+        if (targetIdx == null) return;
+
+        applyAndBroadcast(roomNow, {
+          type: 'PICK_TARGET',
+          playerId: meIdx,
+          payload: { target: targetIdx },
+        }, io);
+
+        delay(1500);
+        return;
+      }
+
+      // --- 14 大媽一般：自己擲硬幣拿保護/閃避 ---
+      if (act === 'bigmom-coin') {
+        applyAndBroadcast(roomNow, {
+          type: 'BIGMOM_COIN',
+          playerId: meIdx,
+        }, io);
+
+        delay(1500);
+        return;
+      }
+
+      // --- 8 魯夫：第一次決鬥 + 第二次決鬥（只影響一般魯夫） ---
+      if (act === 'luffy') {
+        // 第一次決鬥：先挑一個人
+        if (!pending.extra || !pending.extra.firstDone) {
+          const targetIdx = pickCpuTargetSmart(st, meIdx, {
+            for: 'luffy',
+            avoidProtected: true,
+            avoidDodging: true,
+          });
+          if (targetIdx == null) return;
+
+          applyAndBroadcast(roomNow, {
+            type: 'PICK_TARGET',
+            playerId: meIdx,
+            payload: { target: targetIdx },
+          }, io);
+
+          // 第一次決鬥前的思考時間（維持你原本 1.5 秒）
+          delay(1500);
+          return;
+        }
+
+        // ★ 走到這裡代表：第一次決鬥已經做完（firstDone = true）
+
+        // 第一次 → 第二次中間：先停頓一次（只停一次）
+        if (!st._cpuWaitedLuffySecond) {
+          st._cpuWaitedLuffySecond = true;
+
+          const gapMs = getLuffySecondGap(st);  // 通常是 LUFFY_SECOND_GAP.normal
+          delay(gapMs);
+          return;
+        }
+
+        // 第二次進來：等完了，就真正選第二個對象
+        st._cpuWaitedLuffySecond = false;
+
+        // 已做過第一次 → 第二次決鬥（沒有合適對象就傳 -1）
+        const targetIdx = pickCpuTargetSmart(st, meIdx, {
+          for: 'luffy-second',
+          avoidProtected: true,
+          avoidDodging: true,
+        });
+        const sendTarget = (targetIdx == null) ? -1 : targetIdx;
+
+        applyAndBroadcast(roomNow, {
+          type: 'LUFFY_SECOND',
+          playerId: meIdx,
+          payload: { target: sendTarget },
+        }, io);
+
+        // 第二次決鬥送出後，也可以留一點動畫時間
+        delay(1500);
+        return;
+      }
+
+
+      // --- 8 魯夫魚人島強化：是否發動全場大砍 ---
+      if (act === 'luffy-boost') {
+        applyAndBroadcast(roomNow, {
+          type: 'LUFFY_BOOST_COMMIT',
+          playerId: meIdx,
+          payload: { go: true },   // CPU 一律選發動
+        }, io);
+
+        delay(800);
+        return;
+      }
+
+      // --- 19 羅傑（有奧羅傑克森號）：預測勝者 ---
+      if (act === 'roger') {
+        const targetIdx = pickCpuTargetSmart(st, meIdx, {
+          for: 'roger',
+          avoidProtected: false,
+          avoidDodging: false,
+        });
+        if (targetIdx == null) return;
+
+        applyAndBroadcast(roomNow, {
+          type: 'PICK_TARGET',
+          playerId: meIdx,
+          payload: { target: targetIdx },
+        }, io);
+
+        delay(1500);
+        return;
+      }
+
+      // --- 17 黑鬍子強化：頂牌多選覆蓋 teach-multipick ---
+      if (act === 'teach-multipick') {
+        const n = pending.n || 0;
+        const cards = Array.isArray(pending.cards) ? pending.cards : [];
+
+        // 簡單策略：優先覆蓋「尾數高」的牌，避免大家抽到太強的牌
+        const withTail = cards.map((id, idx) => ({
+          idx,
+          tail: (typeof id === 'number') ? ((id % 10 + 10) % 10) : 0,
+        }));
+
+        // 尾數由大到小排序
+        withTail.sort((a, b) => b.tail - a.tail);
+
+        // 覆蓋至少一張，預設覆蓋一半（無條件進位）
+        const coverCount = Math.max(1, Math.ceil(n / 2));
+        const pickedIndices = withTail.slice(0, coverCount).map(x => x.idx);
+
+        applyAndBroadcast(roomNow, {
+          type: 'MULTIPICK_COMMIT',
+          playerId: meIdx,
+          payload: { pickedIndices },
+        }, io);
+
+        delay(1500);
+        return;
+      }
+
+      // --- 15 卡塔庫栗強化：頂牌排序 kata-order ---
+      if (act === 'kata-order') {
+        const n = pending.n || 0;
+
+        // 簡單做法：直接維持原順序
+        const order = [];
+        for (let i = 0; i < n; i++) order.push(i);
+
+        applyAndBroadcast(roomNow, {
+          type: 'ORDER_COMMIT',
+          playerId: meIdx,
+          payload: { order },
+        }, io);
+
+        delay(1500);
+        return;
+      }
+
+
+      // 其他暫時沒處理的 pending（例如卡塔庫栗頂牌排序）先不動
+      return;
     }
 
-    // 一段時間後刪房，避免 refresh / 回跳又連回遊戲
-    setTimeout(() => {
-      try{
-        emitNavStartToRoom(room, "game_finished_cleanup");
-      }catch{}
-      forceDeleteRoom(room.code);
-    }, 15000);
-  }catch(e){
-    console.error("[endGame] failed:", e);
-  }
+    // ========= ② 沒有 pending：正常「抽牌 → 出牌」 =========
+    if (st.turnStep === 'draw') {
+      // 這個延遲是「從輪到他、進到這個分支開始算」
+      // 會依照上一張打出的牌 + 是否強化，從 PREV_CARD_DELAY 取出毫秒數
+      const delayMs = getDelayForPrevCard(st);
+
+      // 為了「抽牌前等」，我們用 state 上的一個旗標來避免重複等
+      if (!st._cpuWaitedBeforeDraw) {
+        st._cpuWaitedBeforeDraw = true;
+        // 第一次進來：只等，不抽牌
+        delay(delayMs || 0);
+        return;
+      }
+
+      // 第二次進來：已經等過了，真正執行抽牌
+      st._cpuWaitedBeforeDraw = false;
+
+      applyAndBroadcast(roomNow, {
+        type: 'DRAW',
+        playerId: meIdx,
+      }, io);
+
+      // 抽牌後不再額外等（要等的時間都已經「抽牌前」用掉了）
+      // 如果你想抽完牌停 0.5 秒再出牌，可以改成 delay(500);
+      delay(0);
+      return;
+    }
+
+
+
+    if (st.turnStep === 'choose') {
+      // 抽完牌 → 先等 4 秒，再真正出牌
+      // 用一個旗標避免每次進來都在等
+      if (!st._cpuWaitedAfterDraw) {
+        st._cpuWaitedAfterDraw = true;
+        // 第一次進到 choose：只等 4 秒，不出牌
+        delay(4000);
+        return;
+      }
+
+      // 第二次進到 choose：已經等過，再真正出牌
+      st._cpuWaitedAfterDraw = false;
+
+      const beforeTurnIndex = st.turnIndex;
+      const firstWhich = pickCpuCardSmart(st, meIdx); // 'hand' 或 'drawn'
+
+      applyAndBroadcast(roomNow, {
+        type: 'PLAY_CARD',
+        playerId: meIdx,
+        payload: { which: firstWhich },
+      }, io);
+
+      // ===== 保底：如果這次出牌被規則擋下，立刻改打另一張 =====
+      const stAfterFirst = roomNow.state;
+      const meAfterFirst = stAfterFirst?.players?.[meIdx];
+      const stillSameCpuChoose = (
+        stAfterFirst &&
+        stAfterFirst.turnIndex === beforeTurnIndex &&
+        stAfterFirst.turnStep === 'choose' &&
+        !stAfterFirst.pending &&
+        meAfterFirst &&
+        meAfterFirst.alive &&
+        meAfterFirst.isCPU
+      );
+
+      if (stillSameCpuChoose) {
+        let fallbackWhich = null;
+
+        // 青雉凍結：只能打剛抽那張
+        if (meAfterFirst.frozen && meAfterFirst.tempDraw != null) {
+          fallbackWhich = 'drawn';
+        } else if (firstWhich !== 'drawn' && meAfterFirst.tempDraw != null) {
+          fallbackWhich = 'drawn';
+        } else if (firstWhich !== 'hand' && meAfterFirst.hand != null) {
+          fallbackWhich = 'hand';
+        }
+
+        if (fallbackWhich) {
+          applyAndBroadcast(roomNow, {
+            type: 'PLAY_CARD',
+            playerId: meIdx,
+            payload: { which: fallbackWhich },
+          }, io);
+        }
+      }
+
+      // ★ 出牌後：依「最後成功打出的牌」決定要等多久
+      const stAfter = roomNow.state;          // 套用 PLAY_CARD 後的最新 state
+      const waitMs = getDelayAfterPlay(stAfter);
+
+      delay(waitMs);
+      return;
+    }
+
+    // 其他 turnStep（例如結算中 / 換人中） → 不再自動動作
+  };
+
+  // 啟動第一次檢查
+  step();
 }
 
+
+
+
+// ——— Socket.IO ———
 io.on("connection", (socket) => {
-  console.log("socket connected", socket.id);
+  let joinedRoom = null;
 
-  socket.on("health_ping", () => {
-    socket.emit("health_pong", { ts: Date.now() });
-  });
+// ===== Social auth (for friend dock presence / DM routing) =====
+socket.on("SOCIAL_AUTH", async ({ secret, deviceId }, cb) => {
+  try{
+    const prof = await getProfileBySecret(String(secret||"").trim());
+    if(!prof) return cb?.({ ok:false, error:"bad secret" });
 
+    const uid = Number(prof.user_id);
 
-  // 建立帳號
-  socket.on("AUTH_REGISTER", async (d = {}) => {
-    try {
-      const username = normUsername(d.username);
-      const password = String(d.password || "");
-      if (!okUsername(username)) {
-        socket.emit("AUTH_RESULT", { ok: false, mode: "register", msg: "帳號格式錯誤（3-24字，可用英數底線）" });
-        return;
+const did = String(deviceId||"").trim();
+const existing = loginLocks.get(uid);
+if(existing){
+  const sockets = existing.sockets ? existing.sockets.size : 0;
+  const last = Number(existing.lastSeen||0) || 0;
+  const active = (sockets>0) || ((Date.now()-last) <= LOGIN_LOCK_GRACE_MS);
+  const bound = String(existing.deviceId||"");
+  if(active && bound && did && bound !== did){
+    // 擠下線模式：新裝置登入 → 強制把舊裝置踢下線，並把登入轉移到新裝置
+    lockKickOthers(uid, socket.id, "takeover", did);
+  }
+}
+lockTouch(uid, did, socket.id);
+
+    socket.data.userId = uid;
+    markOnline(uid, socket.id);
+
+    return cb?.({ ok:true, me:{ userId: uid, name: prof.name || "", avatar: Number(prof.avatar)||1 } });
+  }catch(e){
+    console.error("[SOCIAL_AUTH] error:", e);
+    return cb?.({ ok:false, error:String(e?.message||e) });
+  }
+});
+
+// ===== Presence update (page/scene) =====
+// Can be sent from any page (including game.html) to mark user online and set their current page.
+socket.on("PRESENCE_SET", async ({ secret, page, deviceId }, cb) => {
+  try{
+    const prof = await getProfileBySecret(String(secret||"").trim());
+    if(!prof) return cb?.({ ok:false, error:"bad secret" });
+
+    const uid = Number(prof.user_id);
+
+const did = String(deviceId||"").trim();
+const existing = loginLocks.get(uid);
+if(existing){
+  const sockets = existing.sockets ? existing.sockets.size : 0;
+  const last = Number(existing.lastSeen||0) || 0;
+  const active = (sockets>0) || ((Date.now()-last) <= LOGIN_LOCK_GRACE_MS);
+  const bound = String(existing.deviceId||"");
+  if(active && bound && did && bound !== did){
+    // 擠下線模式：新裝置更新 presence → 踢掉舊裝置，並把登入轉移到新裝置
+    lockKickOthers(uid, socket.id, "takeover", did);
+  }
+}
+lockTouch(uid, did, socket.id);
+
+    socket.data.userId = uid;
+    markOnline(uid, socket.id);
+
+    const p = normalizePresencePage(page);
+    if(p) userPage.set(uid, p);
+
+    // notify this user's friends to refresh status (best-effort)
+    try{
+      const stats = (prof.stats && typeof prof.stats==="object") ? prof.stats : {};
+      const client = (stats.client && typeof stats.client==="object") ? stats.client : (stats.client = {});
+      ensureSocial(client);
+      const fs = client.social.friends.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0);
+      for(const fid of fs){
+        emitToUser(fid, "FRIENDS_DIRTY", { by:"presence", userId: uid });
       }
-      if (!okPassword(password)) {
-        socket.emit("AUTH_RESULT", { ok: false, mode: "register", msg: "密碼長度需 4-64 字" });
-        return;
-      }
+    }catch(_){}
 
-      const exists = await pool.query(`SELECT id FROM users WHERE username = $1 LIMIT 1`, [username]);
-      if (exists.rowCount > 0) {
-        socket.emit("AUTH_RESULT", { ok: false, mode: "register", msg: "此帳號已存在" });
-        return;
-      }
-
-      const passhash = await bcrypt.hash(password, 10);
-      const secret = genSecret();
-
-      const ins = await pool.query(
-        `INSERT INTO users(username, passhash, secret) VALUES($1,$2,$3) RETURNING id, username, secret`,
-        [username, passhash, secret]
-      );
-      const user = ins.rows[0];
-
-      // 綁 profile（若無則建立空 profile）
-      await bindUserProfile(user.id, user.secret);
-
-      socket.emit("AUTH_RESULT", {
-        ok: true,
-        mode: "register",
-        userId: user.id,
-        username: user.username,
-        secret: user.secret,
-      });
-    } catch (e) {
-      console.error("AUTH_REGISTER error:", e);
-      socket.emit("AUTH_RESULT", { ok: false, mode: "register", msg: "註冊失敗，請稍後再試" });
-    }
-  });
-
-  // 登入
-socket.on("AUTH_LOGIN", async (d = {}) => {
-  try {
-    const username = normUsername(d.username);
-    const password = String(d.password || "");
-    const deviceId = String(d.deviceId || "").trim();
-
-    if (!okUsername(username) || !okPassword(password)) {
-      socket.emit("AUTH_RESULT", { ok: false, mode: "login", msg: "帳號或密碼格式錯誤" });
-      return;
-    }
-
-    const q = await pool.query(
-      `SELECT id, username, secret, passhash FROM users WHERE username = $1 LIMIT 1`,
-      [username]
-    );
-    if (q.rowCount === 0) {
-      socket.emit("AUTH_RESULT", { ok: false, mode: "login", msg: "帳號或密碼錯誤" });
-      return;
-    }
-
-    const user = q.rows[0];
-    const ok = await bcrypt.compare(password, user.passhash);
-    if (!ok) {
-      socket.emit("AUTH_RESULT", { ok: false, mode: "login", msg: "帳號或密碼錯誤" });
-      return;
-    }
-
-    // === 擠下線模式：同帳號新裝置登入時，強制踢掉舊裝置 ===
-    // 若同 deviceId 視為同裝置刷新，不踢自己；若 deviceId 不同則把舊的都踢掉。
-    const existing = loginLocks.get(Number(user.id));
-    if (existing && lockIsActive(existing)) {
-      const sameDevice = !!deviceId && !!existing.deviceId && String(existing.deviceId) === deviceId;
-      if (!sameDevice) {
-        lockKickOthers(Number(user.id), socket.id, "takeover", deviceId || existing.deviceId || "");
-      }
-    }
-    lockTouch(Number(user.id), deviceId, socket.id);
-
-    await bindUserProfile(user.id, user.secret);
-
-    socket.userId = Number(user.id);
-    socket.secret = user.secret;
-    socket.deviceId = deviceId || "";
-    socket.authed = true;
-
-    socket.emit("AUTH_RESULT", {
-      ok: true,
-      mode: "login",
-      userId: user.id,
-      username: user.username,
-      secret: user.secret,
-    });
-  } catch (e) {
-    console.error("AUTH_LOGIN error:", e);
-    socket.emit("AUTH_RESULT", { ok: false, mode: "login", msg: "登入失敗，請稍後再試" });
+    return cb?.({ ok:true });
+  }catch(e){
+    console.error("[PRESENCE_SET] error:", e);
+    return cb?.({ ok:false, error:String(e?.message||e) });
   }
 });
 
 
-  // 讀取自己 profile（需 secret）
-  socket.on("PROFILE_GET", async ({ secret }) => {
-    try{
-      const row = await readProfileBySecret(secret);
-      if (!row) {
-        socket.emit("PROFILE_DATA", { ok:true, profile:null });
-        return;
-      }
+socket.on("FRIENDS_GET", async ({ secret }, cb) => {
+  try{
+    const prof = await getProfileBySecret(String(secret||"").trim());
+    if(!prof) return cb?.({ ok:false, error:"bad secret" });
 
-      let profile = row.stats || {};
-      profile = normalizeProfilePayload(profile);
+    const stats = (prof.stats && typeof prof.stats==="object") ? prof.stats : {};
+    const client = (stats.client && typeof stats.client==="object") ? stats.client : (stats.client = {});
+    ensureSocial(client);
 
-      // 將資料庫欄位補回前端慣用位置
-      if (!profile.client) profile.client = {};
-      if (!profile.client.player) profile.client.player = {};
-      if (!profile.client.titles) profile.client.titles = row.titles || {};
-      profile.client.player.name = row.name || profile.client.player.name || "";
-      profile.client.player.avatar = row.avatar || profile.client.player.avatar || "";
-      profile.bountyPosters = Array.isArray(row.bounties) ? row.bounties : [];
-      if (!profile.client.recent || !Array.isArray(profile.client.recent) || profile.client.recent.length === 0) {
-        const uid = Number(row.user_id || 0) || 0;
-        if (uid > 0) {
-          profile.client.recent = await getRecentMatchesForUser(uid, 10);
-        }
-      }
-      if (row.user_id) {
-        profile.client.userId = Number(row.user_id);
-      }
-      // 累積金幣
-      profile.coins = Number(row.coins || 0) || 0;
+    const myId = Number(prof.user_id);
+    const friends = client.social.friends.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0);
+    const reqIn = client.social.friend_in.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0 && n!==myId);
+    const reqOut = client.social.friend_out.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0 && n!==myId);
 
-      socket.emit("PROFILE_DATA", { ok:true, profile, updatedAt: row.updated_at });
-    }catch(e){
-      console.error("PROFILE_GET error:", e);
-      socket.emit("PROFILE_DATA", { ok:false, msg:"讀取失敗" });
+    const wantIds = Array.from(new Set([...friends, ...reqIn, ...reqOut]));
+    if(!wantIds.length){
+      return cb?.({ ok:true, friends:[], requestsIn:[], requestsOut:[] });
     }
-  });
 
-  // 讀取公開 profile（依 userId，不回 secret）
-  socket.on("PROFILE_PUBLIC_GET", async ({ userId }) => {
-    try{
-      const uid = Number(userId);
-      if (!(uid > 0)) {
-        socket.emit("PROFILE_PUBLIC_DATA", { ok:false, msg:"userId 無效" });
-        return;
-      }
+    const r = await pool.query(
+      "SELECT user_id, name, avatar FROM player_profiles WHERE user_id = ANY($1::int[])",
+      [wantIds]
+    );
+    const rows = r.rows || [];
+    const byId = new Map(rows.map(x=>[Number(x.user_id), x]));
 
-      const q = await pool.query(
-        `SELECT user_id, name, avatar, stats, titles, bounties, recent_matches, coins, updated_at
-         FROM player_profiles
-         WHERE user_id = $1
-         LIMIT 1`,
-        [uid]
-      );
-
-      const row = q.rows[0];
-      if (!row) {
-        socket.emit("PROFILE_PUBLIC_DATA", { ok:true, profile:null });
-        return;
-      }
-
-      let profile = row.stats || {};
-      profile = normalizeProfilePayload(profile);
-
-      // 將資料庫欄位補回前端慣用位置（不包含 secret）
-      if (!profile.client) profile.client = {};
-      if (!profile.client.player) profile.client.player = {};
-      if (!profile.client.titles) profile.client.titles = row.titles || {};
-      profile.client.player.name = row.name || profile.client.player.name || "";
-      profile.client.player.avatar = row.avatar || profile.client.player.avatar || "";
-      profile.bountyPosters = Array.isArray(row.bounties) ? row.bounties : [];
-      if (!profile.client.recent || !Array.isArray(profile.client.recent) || profile.client.recent.length === 0) {
-        const uid2 = Number(row.user_id || 0) || 0;
-        if (uid2 > 0) {
-          profile.client.recent = await getRecentMatchesForUser(uid2, 10);
-        }
-      }
-      profile.client.userId = Number(row.user_id || uid);
-      profile.coins = Number(row.coins || 0) || 0;
-
-      socket.emit("PROFILE_PUBLIC_DATA", { ok:true, profile, updatedAt: row.updated_at });
-    }catch(e){
-      console.error("PROFILE_PUBLIC_GET error:", e);
-      socket.emit("PROFILE_PUBLIC_DATA", { ok:false, msg:"讀取公開資料失敗" });
-    }
-  });
-
-  // 新增：排行榜（依累積 coins）
-  socket.on("LEADERBOARD_GET", async () => {
-    try{
-      const q = await pool.query(`
-        SELECT user_id, name, avatar, coins, stats
-        FROM player_profiles
-        WHERE user_id IS NOT NULL
-        ORDER BY coins DESC, updated_at ASC
-        LIMIT 100
-      `);
-
-      const rows = q.rows.map((r, idx) => {
-        const stats = r.stats || {};
-        const client = stats.client || {};
-        const rank = client.rank || {};
+    const friendList = friends
+      .map(id=>{
+        const x = byId.get(id);
+        if(!x) return null;
+        const uid = Number(x.user_id);
         return {
-          rankNo: idx + 1,
-          userId: Number(r.user_id || 0) || 0,
-          name: String(r.name || client?.player?.name || ""),
-          avatar: Number(r.avatar || client?.player?.avatar || 1),
-          coins: Number(r.coins || 0) || 0,
-          rp: Number(rank.rp || 0) || 0,
-          tier: Number(rank.tier || 1) || 1,
+          userId: uid,
+          name: String(x.name||""),
+          avatar: Number(x.avatar)||1,
+          online: isOnline(uid),
+          page: userPage.get(uid) || "",
+          activity: (isOnline(uid)
+            ? ((userPage.get(uid)||"")==="game" ? "遊戲中" : "線上")
+            : "離線")
         };
-      });
-
-      socket.emit("LEADERBOARD_DATA", { ok:true, rows });
-    }catch(e){
-      console.error("LEADERBOARD_GET error:", e);
-      socket.emit("LEADERBOARD_DATA", { ok:false, msg:"讀取排行榜失敗" });
-    }
-  });
-
-  // 可選：排行榜分頁版
-  socket.on("LEADERBOARD_GET_PAGE", async ({ page=1, pageSize=50 } = {}) => {
-    try{
-      const p = Math.max(1, Number(page)||1);
-      const s = Math.max(1, Math.min(100, Number(pageSize)||50));
-      const offset = (p - 1) * s;
-
-      const totalQ = await pool.query(`SELECT COUNT(*)::int AS c FROM player_profiles WHERE user_id IS NOT NULL`);
-      const total = Number(totalQ.rows?.[0]?.c || 0) || 0;
-
-      const q = await pool.query(`
-        SELECT user_id, name, avatar, coins, stats
-        FROM player_profiles
-        WHERE user_id IS NOT NULL
-        ORDER BY coins DESC, updated_at ASC
-        OFFSET $1 LIMIT $2
-      `, [offset, s]);
-
-      const rows = q.rows.map((r, i) => {
-        const stats = r.stats || {};
-        const client = stats.client || {};
-        const rank = client.rank || {};
-        return {
-          rankNo: offset + i + 1,
-          userId: Number(r.user_id || 0) || 0,
-          name: String(r.name || client?.player?.name || ""),
-          avatar: Number(r.avatar || client?.player?.avatar || 1),
-          coins: Number(r.coins || 0) || 0,
-          rp: Number(rank.rp || 0) || 0,
-          tier: Number(rank.tier || 1) || 1,
-        };
-      });
-
-      socket.emit("LEADERBOARD_PAGE_DATA", { ok:true, page:p, pageSize:s, total, rows });
-    }catch(e){
-      console.error("LEADERBOARD_GET_PAGE error:", e);
-      socket.emit("LEADERBOARD_PAGE_DATA", { ok:false, msg:"讀取排行榜分頁失敗" });
-    }
-  });
-
-  // 寫入自己 profile（需 secret）
-  socket.on("PROFILE_UPDATE", async ({ secret, profile }) => {
-    try{
-      // 先補齊資料結構
-      const normalized = normalizeProfilePayload(profile || {});
-
-      // 名稱唯一檢查（以 player_profiles 為主，大小寫不分、trim 後）
-      const newName = String(normalized?.client?.player?.name || "").trim();
-      if (newName){
-        const dup = await pool.query(
-          `SELECT secret
-             FROM player_profiles
-            WHERE lower(btrim(name)) = lower(btrim($1))
-              AND secret <> $2
-            LIMIT 1`,
-          [newName, String(secret||"")]
-        );
-        if (dup.rowCount > 0){
-          socket.emit("PROFILE_SAVE_RESULT", { ok:false, msg:"這個玩家名稱已被使用" });
-          return;
-        }
-      }
-
-      // 舊的保留機制一併更新（可作兼容）
-      if (newName){
-        const r = await reservePlayerName(newName, secret);
-        if (!r.ok){
-          socket.emit("PROFILE_SAVE_RESULT", { ok:false, msg:r.msg || "名稱不可用" });
-          return;
-        }
-      }
-
-      // 取出目前資料庫 coins，避免被前端覆蓋
-      let keepCoins = 0;
-      let boundUserId = null;
-      try{
-        const rowNow = await readProfileBySecret(secret);
-        keepCoins = Number(rowNow?.coins || 0) || 0;
-        boundUserId = Number(rowNow?.user_id || 0) || null;
-      }catch{}
-
-      // 將 coins 欄位從 payload 分離，不讓前端任意覆蓋 DB coins
-      const payload = JSON.parse(JSON.stringify(normalized));
-      if (payload && typeof payload === "object") {
-        delete payload.coins;
-      }
-
-      const ok = await writeProfileBySecret(secret, payload);
-      if (ok) {
-        // 重新把 coins / user_id 寫回列（保留原值）
-        try{
-          await pool.query(
-            `UPDATE player_profiles
-                SET coins = $2,
-                    user_id = COALESCE(user_id, $3),
-                    updated_at = now()
-              WHERE secret = $1`,
-            [String(secret||""), keepCoins, boundUserId]
-          );
-        }catch(e2){
-          console.error("[PROFILE_UPDATE keep coins/user_id] failed:", e2);
-        }
-
-        socket.emit("PROFILE_SAVE_RESULT", { ok:true });
-      } else {
-        socket.emit("PROFILE_SAVE_RESULT", { ok:false, msg:"保存失敗" });
-      }
-    }catch(e){
-      console.error("PROFILE_UPDATE error:", e);
-      socket.emit("PROFILE_SAVE_RESULT", { ok:false, msg:"保存失敗" });
-    }
-  });
-
-  /* =========================
-   * Match History APIs
-   * ========================= */
-
-  // 前端在 result 頁送自己的 RP 結算回來，伺服器寫入 match_history.rp_map
-  // payload:
-  // {
-  //   matchKey?: string,
-  //   roomCode?: string,
-  //   endedAt?: number,
-  //   players?: [{userId,name,avatar,place,coins}],
-  //   userId: number,
-  //   deltaRp: number
-  // }
-  socket.on("MATCH_RP_UPSERT", async (payload = {}) => {
-    try{
-      const userId = Number(payload.userId || 0) || 0;
-      const deltaRp = Number(payload.deltaRp || 0) || 0;
-      if (!(userId > 0)) {
-        socket.emit("MATCH_RP_UPSERT_RESULT", { ok:false, msg:"userId 無效" });
-        return;
-      }
-
-      const ok = await upsertMatchRpDelta({
-        matchKey: String(payload.matchKey || ""),
-        roomCode: String(payload.roomCode || ""),
-        endedAt: Number(payload.endedAt || 0) || 0,
-        playersArr: Array.isArray(payload.players) ? payload.players : [],
-        userId,
-        deltaRp
-      });
-
-      socket.emit("MATCH_RP_UPSERT_RESULT", { ok: !!ok });
-    }catch(e){
-      console.error("MATCH_RP_UPSERT error:", e);
-      socket.emit("MATCH_RP_UPSERT_RESULT", { ok:false, msg:"寫入 RP 失敗" });
-    }
-  });
-
-  // 取得某玩家最近 N 局
-  // payload: { userId:number, limit?:number }
-  socket.on("MATCH_HISTORY_GET", async ({ userId, limit=10 } = {}) => {
-    try{
-      const uid = Number(userId || 0) || 0;
-      if (!(uid > 0)) {
-        socket.emit("MATCH_HISTORY_DATA", { ok:false, msg:"userId 無效", rows: [] });
-        return;
-      }
-      const rows = await getRecentMatchesForUser(uid, limit);
-      socket.emit("MATCH_HISTORY_DATA", { ok:true, rows });
-    }catch(e){
-      console.error("MATCH_HISTORY_GET error:", e);
-      socket.emit("MATCH_HISTORY_DATA", { ok:false, msg:"讀取對戰紀錄失敗", rows: [] });
-    }
-  });
-
-  // 只查指定 matchKey（給 result 頁 refresh 後重建）
-  socket.on("MATCH_HISTORY_GET_ONE", async ({ matchKey } = {}) => {
-    try{
-      const mk = String(matchKey || "");
-      if (!mk){
-        socket.emit("MATCH_HISTORY_ONE_DATA", { ok:false, msg:"matchKey 無效" });
-        return;
-      }
-      const q = await pool.query(
-        `SELECT match_key, ended_at, players, rp_map
-           FROM match_history
-          WHERE match_key = $1
-          LIMIT 1`,
-        [mk]
-      );
-      const row = q.rows[0];
-      if (!row){
-        socket.emit("MATCH_HISTORY_ONE_DATA", { ok:true, row:null });
-        return;
-      }
-      socket.emit("MATCH_HISTORY_ONE_DATA", {
-        ok:true,
-        row: {
-          matchKey: String(row.match_key || ""),
-          endedAt: Number(row.ended_at || 0) || 0,
-          players: Array.isArray(row.players) ? row.players : [],
-          rpMap: row.rp_map && typeof row.rp_map === "object" ? row.rp_map : {},
-        }
-      });
-    }catch(e){
-      console.error("MATCH_HISTORY_GET_ONE error:", e);
-      socket.emit("MATCH_HISTORY_ONE_DATA", { ok:false, msg:"讀取指定對戰失敗" });
-    }
-  });
-
-
-
-  socket.on("SOCIAL_AUTH", async ({ secret, userId, deviceId } = {}) => {
-    try{
-      const sec = String(secret || "").trim();
-      const uid = Number(userId || 0) || 0;
-      const did = String(deviceId || "").trim();
-      if (!sec || !(uid > 0)) {
-        socket.emit("SOCIAL_AUTH_RESULT", { ok:false, msg:"缺少憑證" });
-        return;
-      }
-      const row = await readProfileBySecret(sec);
-      if (!row || Number(row.user_id || 0) !== uid) {
-        socket.emit("SOCIAL_AUTH_RESULT", { ok:false, msg:"憑證失效" });
-        return;
-      }
-
-      // single-session lock: social pages entering later should also register the device/socket
-      const existing = loginLocks.get(uid);
-      if (existing && lockIsActive(existing)) {
-        const sameDevice = !!did && !!existing.deviceId && String(existing.deviceId) === did;
-        if (!sameDevice) {
-          lockKickOthers(uid, socket.id, "takeover", did || existing.deviceId || "");
-        }
-      }
-      lockTouch(uid, did, socket.id);
-
-      socket.userId = uid;
-      socket.secret = sec;
-      socket.deviceId = did || socket.deviceId || "";
-      socket.authed = true;
-      markOnline(uid, socket.id);
-      await pushSocialStateToUser(uid);
-      await pushSocialStateToFriendsOf(uid);
-      socket.emit("SOCIAL_AUTH_RESULT", { ok:true });
-    }catch(e){
-      console.error("SOCIAL_AUTH error:", e);
-      socket.emit("SOCIAL_AUTH_RESULT", { ok:false, msg:"社交登入失敗" });
-    }
-  });
-
-  socket.on("PRESENCE_SET", async ({ secret, userId, page, deviceId } = {}) => {
-    try{
-      const sec = String(secret || "").trim();
-      const uid = Number(userId || 0) || 0;
-      const pg = normalizePresencePage(page);
-      const did = String(deviceId || "").trim();
-      if (!sec || !(uid > 0)) return;
-      const row = await readProfileBySecret(sec);
-      if (!row || Number(row.user_id || 0) !== uid) return;
-
-      const existing = loginLocks.get(uid);
-      if (existing && lockIsActive(existing)) {
-        const sameDevice = !!did && !!existing.deviceId && String(existing.deviceId) === did;
-        if (!sameDevice) {
-          lockKickOthers(uid, socket.id, "takeover", did || existing.deviceId || "");
-        }
-      }
-      lockTouch(uid, did || socket.deviceId || "", socket.id);
-      socket.userId = uid;
-      socket.secret = sec;
-      socket.deviceId = did || socket.deviceId || "";
-      socket.authed = true;
-      markOnline(uid, socket.id);
-      if (pg) userPage.set(uid, pg);
-      await pushSocialStateToUser(uid);
-      await pushSocialStateToFriendsOf(uid);
-    }catch(e){
-      console.error("PRESENCE_SET error:", e);
-    }
-  });
-
-  socket.on("SOCIAL_STATE_GET", async ({ secret, userId } = {}) => {
-    try{
-      const sec = String(secret || "").trim();
-      const uid = Number(userId || 0) || 0;
-      if (!sec || !(uid > 0)) {
-        socket.emit("SOCIAL_STATE", { friends: [], ts: Date.now() });
-        return;
-      }
-      const row = await readProfileBySecret(sec);
-      if (!row || Number(row.user_id || 0) !== uid) {
-        socket.emit("SOCIAL_STATE", { friends: [], ts: Date.now() });
-        return;
-      }
-      socket.userId = uid;
-      socket.secret = sec;
-      socket.authed = true;
-      markOnline(uid, socket.id);
-      await pushSocialStateToUser(uid);
-    }catch(e){
-      console.error("SOCIAL_STATE_GET error:", e);
-      socket.emit("SOCIAL_STATE", { friends: [], ts: Date.now() });
-    }
-  });
-
-  socket.on("FRIEND_REQUEST_SEND", async ({ secret, fromUserId, toUserId } = {}) => {
-    try{
-      const sec = String(secret || "").trim();
-      const fromId = Number(fromUserId || 0) || 0;
-      const toId = Number(toUserId || 0) || 0;
-      if (!sec || !(fromId > 0) || !(toId > 0) || fromId === toId) {
-        socket.emit("FRIEND_REQUEST_RESULT", { ok:false, msg:"參數錯誤" });
-        return;
-      }
-      const me = await readProfileBySecret(sec);
-      if (!me || Number(me.user_id || 0) !== fromId) {
-        socket.emit("FRIEND_REQUEST_RESULT", { ok:false, msg:"憑證錯誤" });
-        return;
-      }
-      const myProf = normalizeProfilePayload(me.stats || {});
-      const mySocial = (((myProf||{}).client||{}).social) || (myProf.client.social = {});
-      mySocial.friends = Array.isArray(mySocial.friends) ? mySocial.friends.map(Number).filter(n=>n>0) : [];
-      mySocial.reqIn = Array.isArray(mySocial.reqIn) ? mySocial.reqIn.map(Number).filter(n=>n>0) : [];
-      mySocial.reqOut = Array.isArray(mySocial.reqOut) ? mySocial.reqOut.map(Number).filter(n=>n>0) : [];
-      mySocial.friend_in = Array.isArray(mySocial.friend_in) ? mySocial.friend_in : [];
-      mySocial.friend_out = Array.isArray(mySocial.friend_out) ? mySocial.friend_out : [];
-      if (mySocial.friends.includes(toId)) {
-        socket.emit("FRIEND_REQUEST_RESULT", { ok:false, msg:"你們已經是好友" });
-        return;
-      }
-      if (!mySocial.reqOut.includes(toId)) mySocial.reqOut.push(toId);
-
-      const targetRow = await getProfileBasicByUserId(toId);
-      if (!targetRow) {
-        socket.emit("FRIEND_REQUEST_RESULT", { ok:false, msg:"找不到對方" });
-        return;
-      }
-      const targetProf = normalizeProfilePayload(targetRow.stats || {});
-      const targetSocial = (((targetProf||{}).client||{}).social) || (targetProf.client.social = {});
-      targetSocial.friends = Array.isArray(targetSocial.friends) ? targetSocial.friends.map(Number).filter(n=>n>0) : [];
-      targetSocial.reqIn = Array.isArray(targetSocial.reqIn) ? targetSocial.reqIn.map(Number).filter(n=>n>0) : [];
-      targetSocial.reqOut = Array.isArray(targetSocial.reqOut) ? targetSocial.reqOut.map(Number).filter(n=>n>0) : [];
-      targetSocial.friend_in = Array.isArray(targetSocial.friend_in) ? targetSocial.friend_in : [];
-      targetSocial.friend_out = Array.isArray(targetSocial.friend_out) ? targetSocial.friend_out : [];
-      if (!targetSocial.reqIn.includes(fromId)) targetSocial.reqIn.push(fromId);
-
-      const basicFrom = await getProfileBasicByUserId(fromId);
-      const basicTo = await getProfileBasicByUserId(toId);
-      const reqInEntry = {
-        userId: fromId,
-        name: basicFrom?.name || `玩家${fromId}`,
-        avatar: Number(basicFrom?.avatar || 1),
-        ts: Date.now(),
-      };
-      const reqOutEntry = {
-        userId: toId,
-        name: basicTo?.name || `玩家${toId}`,
-        avatar: Number(basicTo?.avatar || 1),
-        ts: Date.now(),
-      };
-      targetSocial.friend_in = targetSocial.friend_in.filter(x => Number(x?.userId||0) !== fromId);
-      targetSocial.friend_in.push(reqInEntry);
-      mySocial.friend_out = mySocial.friend_out.filter(x => Number(x?.userId||0) !== toId);
-      mySocial.friend_out.push(reqOutEntry);
-
-      await writeProfileBySecret(sec, myProf);
-      await writeProfileBySecret(targetRow.secret, targetProf);
-
-      emitToUser(toId, "FRIEND_REQUEST_RECEIVED", reqInEntry);
-      await pushSocialStateToUser(fromId);
-      await pushSocialStateToUser(toId);
-
-      socket.emit("FRIEND_REQUEST_RESULT", { ok:true });
-    }catch(e){
-      console.error("FRIEND_REQUEST_SEND error:", e);
-      socket.emit("FRIEND_REQUEST_RESULT", { ok:false, msg:"好友申請失敗" });
-    }
-  });
-
-  socket.on("FRIEND_REQUEST_ACCEPT", async ({ secret, userId, fromUserId } = {}) => {
-    try{
-      const sec = String(secret || "").trim();
-      const toId = Number(userId || 0) || 0;
-      const fromId = Number(fromUserId || 0) || 0;
-      if (!sec || !(toId > 0) || !(fromId > 0) || toId === fromId) {
-        socket.emit("FRIEND_ACCEPT_RESULT", { ok:false, msg:"參數錯誤" });
-        return;
-      }
-      const me = await readProfileBySecret(sec);
-      if (!me || Number(me.user_id || 0) !== toId) {
-        socket.emit("FRIEND_ACCEPT_RESULT", { ok:false, msg:"憑證錯誤" });
-        return;
-      }
-      const myProf = normalizeProfilePayload(me.stats || {});
-      const mySocial = (((myProf||{}).client||{}).social) || (myProf.client.social = {});
-      mySocial.friends = Array.isArray(mySocial.friends) ? mySocial.friends.map(Number).filter(n=>n>0) : [];
-      mySocial.reqIn = Array.isArray(mySocial.reqIn) ? mySocial.reqIn.map(Number).filter(n=>n>0) : [];
-      mySocial.reqOut = Array.isArray(mySocial.reqOut) ? mySocial.reqOut.map(Number).filter(n=>n>0) : [];
-      mySocial.friend_in = Array.isArray(mySocial.friend_in) ? mySocial.friend_in : [];
-      mySocial.friend_out = Array.isArray(mySocial.friend_out) ? mySocial.friend_out : [];
-      if (!mySocial.friends.includes(fromId)) mySocial.friends.push(fromId);
-      mySocial.reqIn = mySocial.reqIn.filter(x => Number(x)!==fromId);
-      mySocial.friend_in = mySocial.friend_in.filter(x => Number(x?.userId||0)!==fromId);
-
-      const other = await getProfileBasicByUserId(fromId);
-      if (!other) {
-        socket.emit("FRIEND_ACCEPT_RESULT", { ok:false, msg:"找不到對方" });
-        return;
-      }
-      const otherProf = normalizeProfilePayload(other.stats || {});
-      const otherSocial = (((otherProf||{}).client||{}).social) || (otherProf.client.social = {});
-      otherSocial.friends = Array.isArray(otherSocial.friends) ? otherSocial.friends.map(Number).filter(n=>n>0) : [];
-      otherSocial.reqIn = Array.isArray(otherSocial.reqIn) ? otherSocial.reqIn.map(Number).filter(n=>n>0) : [];
-      otherSocial.reqOut = Array.isArray(otherSocial.reqOut) ? otherSocial.reqOut.map(Number).filter(n=>n>0) : [];
-      otherSocial.friend_in = Array.isArray(otherSocial.friend_in) ? otherSocial.friend_in : [];
-      otherSocial.friend_out = Array.isArray(otherSocial.friend_out) ? otherSocial.friend_out : [];
-      if (!otherSocial.friends.includes(toId)) otherSocial.friends.push(toId);
-      otherSocial.reqOut = otherSocial.reqOut.filter(x => Number(x)!==toId);
-      otherSocial.friend_out = otherSocial.friend_out.filter(x => Number(x?.userId||0)!==toId);
-
-      await writeProfileBySecret(sec, myProf);
-      await writeProfileBySecret(other.secret, otherProf);
-
-      await pushSocialStateToUser(toId);
-      await pushSocialStateToUser(fromId);
-
-      socket.emit("FRIEND_ACCEPT_RESULT", { ok:true });
-      emitToUser(fromId, "FRIEND_ACCEPTED", { userId: toId });
-    }catch(e){
-      console.error("FRIEND_REQUEST_ACCEPT error:", e);
-      socket.emit("FRIEND_ACCEPT_RESULT", { ok:false, msg:"接受好友失敗" });
-    }
-  });
-
-  socket.on("FRIEND_REQUEST_REJECT", async ({ secret, userId, fromUserId } = {}) => {
-    try{
-      const sec = String(secret || "").trim();
-      const toId = Number(userId || 0) || 0;
-      const fromId = Number(fromUserId || 0) || 0;
-      if (!sec || !(toId > 0) || !(fromId > 0)) {
-        socket.emit("FRIEND_REJECT_RESULT", { ok:false, msg:"參數錯誤" });
-        return;
-      }
-      const me = await readProfileBySecret(sec);
-      if (!me || Number(me.user_id || 0) !== toId) {
-        socket.emit("FRIEND_REJECT_RESULT", { ok:false, msg:"憑證錯誤" });
-        return;
-      }
-      const myProf = normalizeProfilePayload(me.stats || {});
-      const mySocial = (((myProf||{}).client||{}).social) || (myProf.client.social = {});
-      mySocial.reqIn = Array.isArray(mySocial.reqIn) ? mySocial.reqIn.map(Number).filter(n=>n>0) : [];
-      mySocial.friend_in = Array.isArray(mySocial.friend_in) ? mySocial.friend_in : [];
-      mySocial.reqIn = mySocial.reqIn.filter(x => Number(x)!==fromId);
-      mySocial.friend_in = mySocial.friend_in.filter(x => Number(x?.userId||0)!==fromId);
-      await writeProfileBySecret(sec, myProf);
-
-      const other = await getProfileBasicByUserId(fromId);
-      if (other){
-        const otherProf = normalizeProfilePayload(other.stats || {});
-        const otherSocial = (((otherProf||{}).client||{}).social) || (otherProf.client.social = {});
-        otherSocial.reqOut = Array.isArray(otherSocial.reqOut) ? otherSocial.reqOut.map(Number).filter(n=>n>0) : [];
-        otherSocial.friend_out = Array.isArray(otherSocial.friend_out) ? otherSocial.friend_out : [];
-        otherSocial.reqOut = otherSocial.reqOut.filter(x => Number(x)!==toId);
-        otherSocial.friend_out = otherSocial.friend_out.filter(x => Number(x?.userId||0)!==toId);
-        await writeProfileBySecret(other.secret, otherProf);
-      }
-
-      await pushSocialStateToUser(toId);
-      await pushSocialStateToUser(fromId);
-
-      socket.emit("FRIEND_REJECT_RESULT", { ok:true });
-    }catch(e){
-      console.error("FRIEND_REQUEST_REJECT error:", e);
-      socket.emit("FRIEND_REJECT_RESULT", { ok:false, msg:"拒絕好友失敗" });
-    }
-  });
-
-  socket.on("DM_SEND", async ({ secret, fromUserId, toUserId, body } = {}) => {
-    try{
-      const sec = String(secret || "").trim();
-      const fromId = Number(fromUserId || 0) || 0;
-      const toId = Number(toUserId || 0) || 0;
-      const text = String(body || "").slice(0, 1000).trim();
-      if (!sec || !(fromId > 0) || !(toId > 0) || !text) {
-        socket.emit("DM_SEND_RESULT", { ok:false, msg:"訊息無效" });
-        return;
-      }
-      const me = await readProfileBySecret(sec);
-      if (!me || Number(me.user_id || 0) !== fromId) {
-        socket.emit("DM_SEND_RESULT", { ok:false, msg:"憑證錯誤" });
-        return;
-      }
-      const friend = await areFriends(fromId, toId);
-      if (!friend) {
-        socket.emit("DM_SEND_RESULT", { ok:false, msg:"只有好友可以私訊" });
-        return;
-      }
-
-      const a = Math.min(fromId, toId);
-      const b = Math.max(fromId, toId);
-      const createdAt = Date.now();
-      const ins = await pool.query(
-        `INSERT INTO dm_messages(a_id,b_id,from_id,body,created_at)
-         VALUES($1,$2,$3,$4,$5)
-         RETURNING id, a_id, b_id, from_id, body, created_at`,
-        [a, b, fromId, text, createdAt]
-      );
-      const msg = ins.rows[0];
-
-      const payload = {
-        id: Number(msg.id),
-        aId: Number(msg.a_id),
-        bId: Number(msg.b_id),
-        fromId: Number(msg.from_id),
-        toId,
-        body: String(msg.body || ""),
-        createdAt: Number(msg.created_at || createdAt),
-      };
-
-      // 發送給雙方所有連線
-      emitToUser(fromId, "DM_MESSAGE", payload);
-      emitToUser(toId, "DM_MESSAGE", payload);
-
-      // 若收件者不在 DM 頁面，可額外送未讀提示
-      emitToUser(toId, "DM_UNREAD", { fromId, countDelta: 1, ts: Date.now() });
-
-      socket.emit("DM_SEND_RESULT", { ok:true, message: payload });
-    }catch(e){
-      console.error("DM_SEND error:", e);
-      socket.emit("DM_SEND_RESULT", { ok:false, msg:"私訊發送失敗" });
-    }
-  });
-
-  socket.on("DM_HISTORY_GET", async ({ secret, userId, otherUserId, limit=50, beforeId } = {}) => {
-    try{
-      const sec = String(secret || "").trim();
-      const uid = Number(userId || 0) || 0;
-      const oid = Number(otherUserId || 0) || 0;
-      const lim = Math.max(1, Math.min(100, Number(limit)||50));
-      const before = Number(beforeId || 0) || 0;
-
-      if (!sec || !(uid > 0) || !(oid > 0)) {
-        socket.emit("DM_HISTORY_DATA", { ok:false, msg:"參數錯誤", messages: [] });
-        return;
-      }
-      const me = await readProfileBySecret(sec);
-      if (!me || Number(me.user_id || 0) !== uid) {
-        socket.emit("DM_HISTORY_DATA", { ok:false, msg:"憑證錯誤", messages: [] });
-        return;
-      }
-      const friend = await areFriends(uid, oid);
-      if (!friend) {
-        socket.emit("DM_HISTORY_DATA", { ok:false, msg:"不是好友", messages: [] });
-        return;
-      }
-
-      const a = Math.min(uid, oid);
-      const b = Math.max(uid, oid);
-
-      let q;
-      if (before > 0) {
-        q = await pool.query(
-          `SELECT id, a_id, b_id, from_id, body, created_at
-             FROM dm_messages
-            WHERE a_id=$1 AND b_id=$2 AND id < $3
-            ORDER BY id DESC
-            LIMIT $4`,
-          [a, b, before, lim]
-        );
-      } else {
-        q = await pool.query(
-          `SELECT id, a_id, b_id, from_id, body, created_at
-             FROM dm_messages
-            WHERE a_id=$1 AND b_id=$2
-            ORDER BY id DESC
-            LIMIT $3`,
-          [a, b, lim]
-        );
-      }
-
-      const messages = q.rows
-        .slice()
-        .reverse()
-        .map(r => ({
-          id: Number(r.id),
-          aId: Number(r.a_id),
-          bId: Number(r.b_id),
-          fromId: Number(r.from_id),
-          body: String(r.body || ""),
-          createdAt: Number(r.created_at || 0) || 0,
-        }));
-
-      socket.emit("DM_HISTORY_DATA", { ok:true, messages });
-    }catch(e){
-      console.error("DM_HISTORY_GET error:", e);
-      socket.emit("DM_HISTORY_DATA", { ok:false, msg:"讀取私訊失敗", messages: [] });
-    }
-  });
-
-  socket.on("LOBBY_INVITE_SEND", async ({ secret, fromUserId, toUserId, roomId } = {}) => {
-    try{
-      cleanupLobbyInvites();
-      const sec = String(secret || "").trim();
-      const fromId = Number(fromUserId || 0) || 0;
-      const toId = Number(toUserId || 0) || 0;
-      const code = String(roomId || "").trim().toUpperCase();
-      if (!sec || !(fromId > 0) || !(toId > 0) || !code) {
-        socket.emit("LOBBY_INVITE_RESULT", { ok:false, msg:"邀請參數錯誤" });
-        return;
-      }
-      const me = await readProfileBySecret(sec);
-      if (!me || Number(me.user_id || 0) !== fromId) {
-        socket.emit("LOBBY_INVITE_RESULT", { ok:false, msg:"憑證錯誤" });
-        return;
-      }
-      if (!(await areFriends(fromId, toId))) {
-        socket.emit("LOBBY_INVITE_RESULT", { ok:false, msg:"只能邀請好友" });
-        return;
-      }
-      const room = rooms.get(code);
-      if (!room || room.phase !== "lobby") {
-        socket.emit("LOBBY_INVITE_RESULT", { ok:false, msg:"房間不存在或已開始" });
-        return;
-      }
-      const meInRoom = room.players.find(p => Number(p.userId || 0) === fromId);
-      if (!meInRoom) {
-        socket.emit("LOBBY_INVITE_RESULT", { ok:false, msg:"你不在這個等待室" });
-        return;
-      }
-      const targetBasic = await getProfileBasicByUserId(toId);
-      if (!targetBasic) {
-        socket.emit("LOBBY_INVITE_RESULT", { ok:false, msg:"找不到對方" });
-        return;
-      }
-      const muteRemain = lobbyInviteMuteRemainingMs(toId);
-      if (muteRemain > 0) {
-        socket.emit("LOBBY_INVITE_RESULT", { ok:false, msg:"對方目前暫時關閉邀請通知" });
-        return;
-      }
-      const inviteId = crypto.randomUUID ? crypto.randomUUID() : genSecret();
-      const now = Date.now();
-      const inv = {
-        id: inviteId,
-        fromId,
-        fromName: String(me.name || me.stats?.client?.player?.name || `玩家${fromId}`),
-        fromAvatar: Number(me.avatar || me.stats?.client?.player?.avatar || 1),
-        toId,
-        roomId: code,
-        createdAt: now,
-        expiresAt: now + 5 * 60 * 1000,
-      };
-      lobbyInvites.set(inviteId, inv);
-
-      emitToUser(toId, "LOBBY_INVITE", makeInvitePayload(inv));
-      socket.emit("LOBBY_INVITE_RESULT", { ok:true, invite: makeInvitePayload(inv) });
-    }catch(e){
-      console.error("LOBBY_INVITE_SEND error:", e);
-      socket.emit("LOBBY_INVITE_RESULT", { ok:false, msg:"送出邀請失敗" });
-    }
-  });
-
-  socket.on("LOBBY_INVITE_RESPOND", async ({ secret, userId, inviteId, action } = {}) => {
-    try{
-      cleanupLobbyInvites();
-      const sec = String(secret || "").trim();
-      const uid = Number(userId || 0) || 0;
-      const iid = String(inviteId || "").trim();
-      const act = String(action || "").trim().toLowerCase();
-      if (!sec || !(uid > 0) || !iid || !["accept","reject","mute5"].includes(act)) {
-        socket.emit("LOBBY_INVITE_RESPONSE_RESULT", { ok:false, msg:"邀請回應參數錯誤" });
-        return;
-      }
-      const row = await readProfileBySecret(sec);
-      if (!row || Number(row.user_id || 0) !== uid) {
-        socket.emit("LOBBY_INVITE_RESPONSE_RESULT", { ok:false, msg:"憑證錯誤" });
-        return;
-      }
-      const inv = lobbyInvites.get(iid);
-      if (!inv || Number(inv.toId || 0) !== uid) {
-        socket.emit("LOBBY_INVITE_RESPONSE_RESULT", { ok:false, msg:"邀請不存在或已失效" });
-        return;
-      }
-      if (Number(inv.expiresAt || 0) <= Date.now()) {
-        lobbyInvites.delete(iid);
-        socket.emit("LOBBY_INVITE_RESPONSE_RESULT", { ok:false, msg:"邀請已過期" });
-        return;
-      }
-
-      if (act === "mute5") {
-        lobbyInviteMuteUntil.set(uid, Date.now() + 5 * 60 * 1000);
-        lobbyInvites.delete(iid);
-        socket.emit("LOBBY_INVITE_RESPONSE_RESULT", { ok:true, action:"mute5" });
-        emitToUser(inv.fromId, "LOBBY_INVITE_FEEDBACK", {
-          inviteId: iid,
-          toId: uid,
-          action: "mute5",
-        });
-        return;
-      }
-
-      if (act === "reject") {
-        lobbyInvites.delete(iid);
-        socket.emit("LOBBY_INVITE_RESPONSE_RESULT", { ok:true, action:"reject" });
-        emitToUser(inv.fromId, "LOBBY_INVITE_FEEDBACK", {
-          inviteId: iid,
-          toId: uid,
-          action: "reject",
-        });
-        return;
-      }
-
-      // accept
-      const room = rooms.get(String(inv.roomId || "").trim().toUpperCase());
-      if (!room || room.phase !== "lobby") {
-        lobbyInvites.delete(iid);
-        socket.emit("LOBBY_INVITE_RESPONSE_RESULT", { ok:false, msg:"房間已不存在或已開始" });
-        return;
-      }
-
-      // 已在房內就直接導航
-      const existingByUser = room.players.find(p => Number(p.userId || 0) === uid);
-      if (existingByUser) {
-        lobbyInvites.delete(iid);
-        socket.emit("LOBBY_INVITE_RESPONSE_RESULT", {
-          ok:true,
-          action:"accept",
-          roomId: room.code,
-          alreadyJoined: true,
-        });
-        socket.emit("EMIT", { type:"nav_waiting", code: room.code, viaInvite:true });
-        emitToUser(inv.fromId, "LOBBY_INVITE_FEEDBACK", {
-          inviteId: iid,
-          toId: uid,
-          action: "accept",
-          roomId: room.code,
-        });
-        return;
-      }
-
-      const activeHumans = room.players.filter(p => !p.isCPU).length;
-      if (activeHumans >= 4) {
-        socket.emit("LOBBY_INVITE_RESPONSE_RESULT", { ok:false, msg:"房間已滿" });
-        return;
-      }
-
-      // 若有在線的同 userId 舊 socket 先從其他等待室移除，避免同人多房
-      try{
-        for (const [code0, room0] of rooms.entries()){
-          const idx0 = room0.players.findIndex(p => Number(p.userId || 0) === uid);
-          if (idx0 >= 0) {
-            room0.players.splice(idx0, 1);
-            broadcastLobby(room0);
-            maybeDissolveLobbyIfNoHumans(code0);
-          }
-        }
-      }catch{}
-
-      // 以目前這個 socket 加入房間（注意：等待頁先做 SOCIAL_AUTH / PRESENCE_SET）
-      const joinerName = String(row.name || row.stats?.client?.player?.name || "玩家");
-      const joinerAvatar = String(row.avatar || row.stats?.client?.player?.avatar || "🙂");
-
-      const p = {
-        id: room.nextPlayerId++,
-        name: joinerName,
-        avatar: joinerAvatar,
-        ready: false,
-        socketId: socket.id,
-        isCPU: false,
-        online: true,
-        userId: uid,
-      };
-      room.players.push(p);
-      socket.join(room.code);
-
-      lobbyInvites.delete(iid);
-      broadcastLobby(room);
-
-      socket.emit("LOBBY_INVITE_RESPONSE_RESULT", {
-        ok:true,
-        action:"accept",
-        roomId: room.code,
-        playerId: p.id,
-      });
-      socket.emit("EMIT", { type:"nav_waiting", code: room.code, viaInvite:true });
-
-      emitToUser(inv.fromId, "LOBBY_INVITE_FEEDBACK", {
-        inviteId: iid,
-        toId: uid,
-        action: "accept",
-        roomId: room.code,
-      });
-    }catch(e){
-      console.error("LOBBY_INVITE_RESPOND error:", e);
-      socket.emit("LOBBY_INVITE_RESPONSE_RESULT", { ok:false, msg:"回應邀請失敗" });
-    }
-  });
-
-  socket.on("LOBBY_INVITES_SYNC", async ({ secret, userId } = {}) => {
-    try{
-      cleanupLobbyInvites();
-      const sec = String(secret || "").trim();
-      const uid = Number(userId || 0) || 0;
-      if (!sec || !(uid > 0)) {
-        socket.emit("LOBBY_INVITES_DATA", { ok:false, invites: [] });
-        return;
-      }
-      const row = await readProfileBySecret(sec);
-      if (!row || Number(row.user_id || 0) !== uid) {
-        socket.emit("LOBBY_INVITES_DATA", { ok:false, invites: [] });
-        return;
-      }
-      const invites = [];
-      for (const inv of lobbyInvites.values()){
-        if (Number(inv.toId || 0) === uid && Number(inv.expiresAt || 0) > Date.now()) {
-          invites.push(makeInvitePayload(inv));
-        }
-      }
-      socket.emit("LOBBY_INVITES_DATA", {
-        ok:true,
-        invites,
-        mutedMs: lobbyInviteMuteRemainingMs(uid),
-      });
-    }catch(e){
-      console.error("LOBBY_INVITES_SYNC error:", e);
-      socket.emit("LOBBY_INVITES_DATA", { ok:false, invites: [] });
-    }
-  });
-
-  // 建房：只加入房主，不預設補任何玩家/CPU（前端再決定加幾個 CPU）
-  socket.on("CREATE_ROOM", (data) => {
-    const code = pickUniqueCode();
-    const room = {
-      code,
-      host: 1,
-      phase: "lobby",
-      players: [{
-        id: 1,
-        name: data.name || "玩家1",
-        avatar: data.avatar || "🙂",
-        ready: false,
-        socketId: socket.id,
-        isCPU: false,
-        online: true,                   // 新增
-        userId: Number(data.userId || 0) || null, // 新增：綁定帳號
-      }],
-      nextPlayerId: 2,
-      state: null,
-      turnWarnTimer: null,
-      turnTimer: null,
-      cpuTakeoverTimer: null,
+      })
+      .filter(Boolean);
+
+    const reqInList = reqIn
+      .map(id=>{
+        const x = byId.get(id);
+        if(!x) return null;
+        const uid = Number(x.user_id);
+        return { userId: uid, name: String(x.name||""), avatar: Number(x.avatar)||1, online: isOnline(uid) };
+      })
+      .filter(Boolean);
+
+    const reqOutList = reqOut
+      .map(id=>{
+        const x = byId.get(id);
+        if(!x) return null;
+        const uid = Number(x.user_id);
+        return { userId: uid, name: String(x.name||""), avatar: Number(x.avatar)||1, online: isOnline(uid) };
+      })
+      .filter(Boolean);
+
+    return cb?.({ ok:true, friends: friendList, requestsIn: reqInList, requestsOut: reqOutList });
+  }catch(e){
+    console.error("[FRIENDS_GET] error:", e);
+    return cb?.({ ok:false, error:String(e?.message||e) });
+  }
+});
+
+
+// =========================
+// Lobby Invite Flow
+//  - LOBBY_INVITE_SEND: sender invites friend to roomId
+//  - LOBBY_INVITE_RESPOND: receiver accept / reject / mute5
+// =========================
+socket.on("LOBBY_INVITE_SEND", async ({ secret, toUserId, roomId }, cb) => {
+  try{
+    pruneLobbyInvites();
+
+    const prof = await getProfileBySecret(String(secret||"").trim());
+    if(!prof) return cb?.({ ok:false, error:"bad secret" });
+
+    const fromId = Number(prof.user_id);
+    const toId = Number(toUserId);
+    const rid = String(roomId||"").trim().toUpperCase();
+
+    if(!(fromId>0)) return cb?.({ ok:false, error:"bad from" });
+    if(!(toId>0)) return cb?.({ ok:false, error:"bad to" });
+    if(!rid) return cb?.({ ok:false, error:"no room" });
+    if(toId === fromId) return cb?.({ ok:false, error:"cannot invite self" });
+
+    // verify room exists & in lobby phase
+    const room = rooms.get(rid);
+    if(!room) return cb?.({ ok:false, error:"room not found" });
+    if(room.phase !== 'lobby') return cb?.({ ok:false, error:"room already started" });
+
+    // only allow inviting friends
+    const stats = (prof.stats && typeof prof.stats==="object") ? prof.stats : {};
+    const client = (stats.client && typeof stats.client==="object") ? stats.client : (stats.client = {});
+    ensureSocial(client);
+    const friends = new Set(client.social.friends.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0));
+    if(!friends.has(toId)) return cb?.({ ok:false, error:"not friends" });
+
+    // receiver online?
+    if(!isOnline(toId)) return cb?.({ ok:false, error:"offline" });
+
+    // receiver muted?
+    const rem = lobbyInviteMuteRemainingMs(toId);
+    if(rem>0) return cb?.({ ok:false, error:"muted", remainingMs: rem });
+
+    // generate invite
+    const inviteId = crypto.randomBytes(4).toString('hex');
+    const now = Date.now();
+    const inv = {
+      inviteId,
+      fromId,
+      fromName: String(prof.name||""),
+      fromAvatar: Number(prof.avatar)||1,
+      toId,
+      roomId: rid,
+      createdAt: now,
+      expiresAt: now + 120000, // 2 min
     };
-    rooms.set(code, room);
-    socket.join(code);
-    broadcastLobby(room);
-  });
+    lobbyInvites.set(inviteId, inv);
 
-  // 加房：只允許真人加入到 4 人總上限；不自動補位
-  socket.on("JOIN_ROOM", (data) => {
-    const code = String(data.code || "").trim().toUpperCase();
-    const room = rooms.get(code);
-    if (!room || room.phase !== "lobby") return;
-
-    // 先檢查這個 userId 是否已經在房內（避免同帳號重複加入）
-    const uid = Number(data.userId || 0) || 0;
-    if (uid > 0) {
-      const existingByUser = room.players.find(p => Number(p.userId || 0) === uid);
-      if (existingByUser) {
-        existingByUser.socketId = socket.id;   // 更新連線
-        existingByUser.online = true;
-        socket.join(code);
-        broadcastLobby(room);
-        return;
+    emitToUser(toId, "EMIT", {
+      type: "lobby_invite",
+      invite: {
+        inviteId,
+        fromId,
+        fromName: inv.fromName,
+        fromAvatar: inv.fromAvatar,
+        roomId: rid,
+        createdAt: now,
+        expiresAt: inv.expiresAt,
       }
-    }
-
-    const humanCount = room.players.filter(p => !p.isCPU).length;
-    if (humanCount >= 4) return;
-
-    const playerId = room.nextPlayerId++;
-    room.players.push({
-      id: playerId,
-      name: data.name || `玩家${playerId}`,
-      avatar: data.avatar || "🙂",
-      ready: false,
-      socketId: socket.id,
-      isCPU: false,
-      online: true,                  // 新增
-      userId: uid || null,           // 新增
-    });
-    socket.join(code);
-    broadcastLobby(room);
-  });
-
-  // 房主可動態加/減 CPU（最多總數 4 人、CPU 最多 3）
-  socket.on("SET_CPU_COUNT", (data) => {
-    const code = String(data.code || "").trim().toUpperCase();
-    const want = Math.max(0, Math.min(3, Number(data.cpuCount || 0)));
-    const room = rooms.get(code);
-    if (!room || room.phase !== "lobby") return;
-
-    // 只有房主可以調整
-    const me = room.players.find(p => p.socketId === socket.id);
-    if (!me || me.id !== room.host) return;
-
-    const humans = room.players.filter(p => !p.isCPU);
-    let cpus = room.players.filter(p => p.isCPU);
-
-    // 總人數上限 4
-    const maxCpuAllowedBySeats = Math.max(0, 4 - humans.length);
-    const targetCpu = Math.min(want, maxCpuAllowedBySeats, 3);
-
-    if (cpus.length < targetCpu) {
-      while (cpus.length < targetCpu) {
-        const id = room.nextPlayerId++;
-        const cpu = {
-          id,
-          name: `CPU${cpus.length + 1}`,
-          avatar: "🤖",
-          ready: true,     // CPU 視同已準備
-          socketId: `cpu:${code}:${id}`,
-          isCPU: true,
-          online: true,
-          userId: null,
-        };
-        room.players.push(cpu);
-        cpus.push(cpu);
-      }
-    } else if (cpus.length > targetCpu) {
-      const removeN = cpus.length - targetCpu;
-      let removed = 0;
-      room.players = room.players.filter(p => {
-        if (p.isCPU && removed < removeN) { removed++; return false; }
-        return true;
-      });
-    }
-
-    // 若房主被刪到（理論上不會），補正
-    if (!room.players.some(p => p.id === room.host)) {
-      room.host = room.players[0]?.id || 1;
-    }
-
-    broadcastLobby(room);
-  });
-
-  // 房主點擊玩家頭像：踢出（房主不能踢自己；只在 lobby）
-  socket.on("KICK_PLAYER", (data) => {
-    const code = String(data.code || "").trim().toUpperCase();
-    const targetId = Number(data.targetId || 0);
-    const room = rooms.get(code);
-    if (!room || room.phase !== "lobby") return;
-
-    const me = room.players.find(p => p.socketId === socket.id);
-    if (!me || me.id !== room.host) return;       // 只有房主可踢
-    if (targetId === room.host) return;           // 不能踢自己
-
-    const idx = room.players.findIndex(p => p.id === targetId);
-    if (idx < 0) return;
-
-    const target = room.players[idx];
-    room.players.splice(idx, 1);
-
-    // 通知被踢者返回主畫面（CPU 不需要）
-    if (!target.isCPU && target.socketId) {
-      io.to(target.socketId).emit("ROOM_KICKED", { code, byHost: true });
-      try { io.sockets.sockets.get(target.socketId)?.leave(code); } catch {}
-    }
-
-    // 若房主被意外移除（理論上不會），補新房主
-    if (!room.players.some(p => p.id === room.host)) {
-      room.host = room.players[0]?.id || 1;
-    }
-
-    broadcastLobby(room);
-    maybeDissolveLobbyIfNoHumans(code);
-  });
-
-  // 就緒切換：只有真人需要 ready；CPU 固定 ready=true
-  socket.on("TOGGLE_READY", (data) => {
-    const code = String(data.code || "").trim().toUpperCase();
-    const room = rooms.get(code);
-    if (!room || room.phase !== "lobby") return;
-    const p = room.players.find((x) => x.socketId === socket.id);
-    if (!p || p.isCPU) return;
-    p.ready = !p.ready;
-    broadcastLobby(room);
-  });
-
-  // 開始：至少 2 人；所有真人 ready
-  socket.on("START_GAME", (data) => {
-    const code = String(data.code || "").trim().toUpperCase();
-    const room = rooms.get(code);
-    if (!room || room.phase !== "lobby") return;
-
-    const me = room.players.find((x) => x.socketId === socket.id);
-    if (!me || me.id !== room.host) return;
-
-    const humans = room.players.filter(p => !p.isCPU);
-    const total = room.players.length;
-    const allHumansReady = humans.every(p => !!p.ready);
-
-    if (total < 2) return;
-    if (!allHumansReady) return;
-
-    const startPlayers = buildStartPlayers(room.players);
-    room.state = createInitialState(startPlayers);
-    room.phase = "playing";
-
-    // 場地卡：4人兩張；3/2人一張；1人零張
-    const aliveAtStart = room.state.players.filter(p => p.alive).length;
-    const venueCount = desiredVenueCountByAlive(aliveAtStart);
-    const used = new Set();
-    room.venues = [];
-    for (let i = 0; i < venueCount; i++) {
-      const id = drawUniqueVenueId([...used]);
-      used.add(id);
-      room.venues.push({ id });
-    }
-
-    // 存房內對應表：state.players 已用同樣順序建立 id，仍可沿用 room.players 的 id
-    room.players.forEach((meta, idx) => {
-      meta.id = room.state.players[idx].id; // 保險對齊
     });
 
-    // 進場動畫/導航
-    for (const p of room.players) {
-      const q = new URLSearchParams({
-        room: code,
-        name: p.name,
-        avatar: p.avatar,
-        playerId: String(p.id),
-        userId: String(Number(p.userId || 0) || 0),
-      });
-      io.to(p.socketId).emit("EMIT", { type: "nav_game", url: `/game.html?${q.toString()}` });
+    return cb?.({ ok:true, inviteId });
+  }catch(e){
+    console.error("[LOBBY_INVITE_SEND] error:", e);
+    return cb?.({ ok:false, error:String(e?.message||e) });
+  }
+});
+
+socket.on("LOBBY_INVITE_RESPOND", async ({ secret, inviteId, action }, cb) => {
+  try{
+    pruneLobbyInvites();
+
+    const prof = await getProfileBySecret(String(secret||"").trim());
+    if(!prof) return cb?.({ ok:false, error:"bad secret" });
+    const myId = Number(prof.user_id);
+
+    const id = String(inviteId||"").trim();
+    const act = String(action||"").trim().toLowerCase();
+    const inv = lobbyInvites.get(id);
+    if(!inv) return cb?.({ ok:false, error:"invite not found" });
+    if(Number(inv.toId)!==myId) return cb?.({ ok:false, error:"not receiver" });
+
+    if(act === 'mute5'){
+      lobbyInvites.delete(id);
+      const until = Date.now() + 5*60*1000;
+      lobbyInviteMuteUntil.set(myId, until);
+      emitToUser(Number(inv.fromId), "EMIT", { type:"toast", text:`${String(prof.name||'對方')} 已暫停接收遊戲邀請 5 分鐘` });
+      return cb?.({ ok:true, mutedUntil: until });
     }
 
-    // 等一下讓前端頁面切過來再推狀態
-    setTimeout(() => {
-      emitState(room);
-      io.to(room.code).emit("coin_count", room.state.chestCoins);
-      io.to(room.code).emit("venues", room.venues);
-      autoArrangeCardPositions(room);
-      armRoomWatchdogs(room);           // <— 開局即上 watchdog
-    }, 350);
-  });
+    if(act === 'reject'){
+      lobbyInvites.delete(id);
+      emitToUser(Number(inv.fromId), "EMIT", { type:"toast", text:`${String(prof.name||'對方')} 已拒絕遊戲邀請` });
+      return cb?.({ ok:true });
+    }
 
-  // 進入 game.html 後主動加入 Socket room，伺服器回補目前 STATE
-  socket.on("GAME_JOIN", (data) => {
-    const code = String(data.room || "").trim().toUpperCase();
-    const room = rooms.get(code);
-    if (!room || room.phase !== "playing") return;
+    if(act !== 'accept') return cb?.({ ok:false, error:"bad action" });
 
-    // 依 query 的 playerId 找到既有玩家，更新 socketId（支援頁面切換後重連）
-    const playerId = Number(data.playerId || 0);
-    const p = room.players.find((x) => x.id === playerId);
-    if (!p) return;
+    // accept
+    lobbyInvites.delete(id);
 
-    try {
-      if (p.socketId && p.socketId !== socket.id) {
-        io.sockets.sockets.get(p.socketId)?.leave(code);
-      }
-    } catch {}
-    p.socketId = socket.id;
-    p.online = true;                  // 新增：標記在線
+    // verify room still exists and is lobby
+    const room = rooms.get(String(inv.roomId));
+    if(!room) return cb?.({ ok:false, error:"room not found" });
+    if(room.phase !== 'lobby') return cb?.({ ok:false, error:"room already started" });
 
-    socket.join(code);
+    emitToUser(Number(inv.fromId), "EMIT", { type:"toast", text:`${String(prof.name||'好友')} 已接受邀請` });
+    return cb?.({ ok:true, roomId: String(inv.roomId) });
+  }catch(e){
+    console.error("[LOBBY_INVITE_RESPOND] error:", e);
+    return cb?.({ ok:false, error:String(e?.message||e) });
+  }
+});
 
-    // 立刻回補目前可見狀態給這位玩家
-    const visible = getVisibleState(room.state, p.id);
-    io.to(socket.id).emit("STATE", visible);
-    io.to(socket.id).emit("coin_count", room.state.chestCoins);
-    io.to(socket.id).emit("venues", room.venues || []);
-    if (room.cardPositions) {
-      io.to(socket.id).emit("card_positions", room.cardPositions);
+
+// Send friend request by display name (requires target confirmation)
+socket.on("FRIEND_ADD_BY_NAME", async ({ secret, name }, cb) => {
+  try{
+    const prof = await getProfileBySecret(String(secret||"").trim());
+    if(!prof) return cb?.({ ok:false, error:"bad secret" });
+    const myId = Number(prof.user_id);
+
+    const targetName = String(name||"").trim();
+    if(!targetName) return cb?.({ ok:false, error:"no name" });
+
+    const t = await pool.query(
+      "SELECT user_id, name, avatar, stats FROM player_profiles WHERE lower(btrim(name)) = lower(btrim($1)) LIMIT 1",
+      [targetName]
+    );
+    if(!t.rows.length) return cb?.({ ok:false, error:"not found" });
+    const other = t.rows[0];
+    const otherId = Number(other.user_id);
+    if(otherId === myId) return cb?.({ ok:false, error:"cannot add self" });
+
+    // load my stats
+    const myStats = (prof.stats && typeof prof.stats==="object") ? prof.stats : {};
+    const myClient = (myStats.client && typeof myStats.client==="object") ? myStats.client : (myStats.client = {});
+    ensureSocial(myClient);
+
+    // load other stats
+    const oStats = (other.stats && typeof other.stats==="object") ? other.stats : {};
+    const oClient = (oStats.client && typeof oStats.client==="object") ? oStats.client : (oStats.client = {});
+    ensureSocial(oClient);
+
+    // already friends?
+    if(myClient.social.friends.includes(otherId)) return cb?.({ ok:false, error:"already friends" });
+
+    // if I already sent request
+    if(myClient.social.friend_out.includes(otherId)) return cb?.({ ok:false, error:"request already sent" });
+
+    // if other already requested me -> auto accept? keep explicit confirm, so treat as: add to my incoming and show confirm
+    // We'll still create symmetrical in/out if not exists.
+    if(!myClient.social.friend_out.includes(otherId)) myClient.social.friend_out.push(otherId);
+    if(!oClient.social.friend_in.includes(myId)) oClient.social.friend_in.push(myId);
+
+    // clean duplicates
+    myClient.social.friend_out = Array.from(new Set(myClient.social.friend_out.map(n=>Number(n)).filter(n=>Number.isFinite(n)&&n>0)));
+    oClient.social.friend_in = Array.from(new Set(oClient.social.friend_in.map(n=>Number(n)).filter(n=>Number.isFinite(n)&&n>0)));
+
+    await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [myStats, myId]);
+    await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [oStats, otherId]);
+
+    // notify online friend docks
+    emitToUser(myId, "FRIENDS_DIRTY", { by:"request_out", userId: otherId });
+    emitToUser(otherId, "FRIENDS_DIRTY", { by:"request_in", userId: myId });
+
+    return cb?.({ ok:true, pending:true, to:{ userId: otherId, name:String(other.name||""), avatar:Number(other.avatar)||1, online:isOnline(otherId) } });
+  }catch(e){
+    console.error("[FRIEND_ADD_BY_NAME] error:", e);
+    return cb?.({ ok:false, error:String(e?.message||e) });
+  }
+});
+
+
+
+// Accept incoming friend request (userId = requester)
+socket.on("FRIEND_REQUEST_ACCEPT", async ({ secret, userId }, cb) => {
+  try{
+    const prof = await getProfileBySecret(String(secret||"").trim());
+    if(!prof) return cb?.({ ok:false, error:"bad secret" });
+    const myId = Number(prof.user_id);
+    const otherId = Number(userId);
+    if(!(Number.isFinite(otherId) && otherId>0) || otherId===myId) return cb?.({ ok:false, error:"bad userId" });
+
+    // my stats
+    const myStats = (prof.stats && typeof prof.stats==="object") ? prof.stats : {};
+    const myClient = (myStats.client && typeof myStats.client==="object") ? myStats.client : (myStats.client = {});
+    ensureSocial(myClient);
+
+    // other profile
+    const t = await pool.query("SELECT user_id, name, avatar, stats FROM player_profiles WHERE user_id=$1 LIMIT 1", [otherId]);
+    if(!t.rows.length) return cb?.({ ok:false, error:"not found" });
+    const other = t.rows[0];
+
+    const oStats = (other.stats && typeof other.stats==="object") ? other.stats : {};
+    const oClient = (oStats.client && typeof oStats.client==="object") ? oStats.client : (oStats.client = {});
+    ensureSocial(oClient);
+
+    // must have incoming request
+    if(!myClient.social.friend_in.includes(otherId)) return cb?.({ ok:false, error:"no incoming request" });
+
+    // remove pending
+    myClient.social.friend_in = myClient.social.friend_in.filter(n=>Number(n)!==otherId);
+    oClient.social.friend_out = oClient.social.friend_out.filter(n=>Number(n)!==myId);
+
+    // add friends mutual
+    if(!myClient.social.friends.includes(otherId)) myClient.social.friends.push(otherId);
+    if(!oClient.social.friends.includes(myId)) oClient.social.friends.push(myId);
+
+    // dedupe
+    myClient.social.friends = Array.from(new Set(myClient.social.friends.map(n=>Number(n)).filter(n=>Number.isFinite(n)&&n>0)));
+    oClient.social.friends = Array.from(new Set(oClient.social.friends.map(n=>Number(n)).filter(n=>Number.isFinite(n)&&n>0)));
+
+    await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [myStats, myId]);
+    await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [oStats, otherId]);
+
+    emitToUser(myId, "FRIENDS_DIRTY", { by:"accept", userId: otherId });
+    emitToUser(otherId, "FRIENDS_DIRTY", { by:"accept", userId: myId });
+
+    return cb?.({ ok:true });
+  }catch(e){
+    console.error("[FRIEND_REQUEST_ACCEPT] error:", e);
+    return cb?.({ ok:false, error:String(e?.message||e) });
+  }
+});
+
+// Decline incoming friend request (userId = requester)
+socket.on("FRIEND_REQUEST_DECLINE", async ({ secret, userId }, cb) => {
+  try{
+    const prof = await getProfileBySecret(String(secret||"").trim());
+    if(!prof) return cb?.({ ok:false, error:"bad secret" });
+    const myId = Number(prof.user_id);
+    const otherId = Number(userId);
+    if(!(Number.isFinite(otherId) && otherId>0) || otherId===myId) return cb?.({ ok:false, error:"bad userId" });
+
+    // my stats
+    const myStats = (prof.stats && typeof prof.stats==="object") ? prof.stats : {};
+    const myClient = (myStats.client && typeof myStats.client==="object") ? myStats.client : (myStats.client = {});
+    ensureSocial(myClient);
+
+    if(!myClient.social.friend_in.includes(otherId)) return cb?.({ ok:false, error:"no incoming request" });
+
+    // other profile
+    const t = await pool.query("SELECT user_id, stats FROM player_profiles WHERE user_id=$1 LIMIT 1", [otherId]);
+    if(!t.rows.length){
+      // still remove on my side
+      myClient.social.friend_in = myClient.social.friend_in.filter(n=>Number(n)!==otherId);
+      await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [myStats, myId]);
+      return cb?.({ ok:true });
+    }
+    const other = t.rows[0];
+    const oStats = (other.stats && typeof other.stats==="object") ? other.stats : {};
+    const oClient = (oStats.client && typeof oStats.client==="object") ? oStats.client : (oStats.client = {});
+    ensureSocial(oClient);
+
+    myClient.social.friend_in = myClient.social.friend_in.filter(n=>Number(n)!==otherId);
+    oClient.social.friend_out = oClient.social.friend_out.filter(n=>Number(n)!==myId);
+
+    await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [myStats, myId]);
+    await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [oStats, otherId]);
+
+    emitToUser(myId, "FRIENDS_DIRTY", { by:"decline", userId: otherId });
+    emitToUser(otherId, "FRIENDS_DIRTY", { by:"decline", userId: myId });
+
+    return cb?.({ ok:true });
+  }catch(e){
+    console.error("[FRIEND_REQUEST_DECLINE] error:", e);
+    return cb?.({ ok:false, error:String(e?.message||e) });
+  }
+});
+
+socket.on("FRIEND_REMOVE", async ({ secret, userId }, cb) => {
+  try{
+    const prof = await getProfileBySecret(String(secret||"").trim());
+    if(!prof) return cb?.({ ok:false, error:"bad secret" });
+    const myId = Number(prof.user_id);
+    const otherId = Number(userId);
+    if(!Number.isFinite(otherId) || otherId<=0) return cb?.({ ok:false, error:"bad userId" });
+
+    const myStats = (prof.stats && typeof prof.stats==="object") ? prof.stats : {};
+    const myClient = (myStats.client && typeof myStats.client==="object") ? myStats.client : (myStats.client = {});
+    ensureSocial(myClient);
+    myClient.social.friends = myClient.social.friends.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0 && n!==otherId);
+    myClient.social.friend_in = myClient.social.friend_in.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0 && n!==otherId);
+    myClient.social.friend_out = myClient.social.friend_out.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0 && n!==otherId);
+    await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [myStats, myId]);
+
+    // mutual remove if other exists
+    const t = await pool.query("SELECT stats FROM player_profiles WHERE user_id=$1", [otherId]);
+    if(t.rows.length){
+      const oStats = (t.rows[0].stats && typeof t.rows[0].stats==="object") ? t.rows[0].stats : {};
+      const oClient = (oStats.client && typeof oStats.client==="object") ? oStats.client : (oStats.client = {});
+      ensureSocial(oClient);
+      oClient.social.friends = oClient.social.friends.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0 && n!==myId);
+      oClient.social.friend_in = oClient.social.friend_in.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0 && n!==myId);
+      oClient.social.friend_out = oClient.social.friend_out.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0 && n!==myId);
+      await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [oStats, otherId]);
+    }
+
+    emitToUser(myId, "FRIENDS_DIRTY", { by:"remove", userId: otherId });
+    emitToUser(otherId, "FRIENDS_DIRTY", { by:"remove", userId: myId });
+
+    return cb?.({ ok:true });
+  }catch(e){
+    console.error("[FRIEND_REMOVE] error:", e);
+    return cb?.({ ok:false, error:String(e?.message||e) });
+  }
+});
+
+socket.on("DM_HISTORY", async ({ secret, withUserId, limit }, cb) => {
+  try{
+    const prof = await getProfileBySecret(String(secret||"").trim());
+    if(!prof) return cb?.({ ok:false, error:"bad secret" });
+    const myId = Number(prof.user_id);
+    const otherId = Number(withUserId);
+    if(!Number.isFinite(otherId) || otherId<=0) return cb?.({ ok:false, error:"bad withUserId" });
+
+    const L = Math.max(10, Math.min(80, Number(limit)||50));
+    const a = Math.min(myId, otherId);
+    const b = Math.max(myId, otherId);
+
+    const r = await pool.query(
+      "SELECT id,a_id,b_id,from_id,body,created_at FROM dm_messages WHERE a_id=$1 AND b_id=$2 ORDER BY created_at DESC LIMIT $3",
+      [a,b,L]
+    );
+    const msgs = (r.rows||[]).map(m=>({
+      id: String(m.id),
+      from: Number(m.from_id),
+      body: String(m.body||""),
+      ts: Number(m.created_at)||0
+    })).reverse();
+
+    return cb?.({ ok:true, messages: msgs });
+  }catch(e){
+    console.error("[DM_HISTORY] error:", e);
+    return cb?.({ ok:false, error:String(e?.message||e) });
+  }
+});
+
+socket.on("DM_SEND", async ({ secret, toUserId, body }, cb) => {
+  try{
+    const prof = await getProfileBySecret(String(secret||"").trim());
+    if(!prof) return cb?.({ ok:false, error:"bad secret" });
+    const myId = Number(prof.user_id);
+    const otherId = Number(toUserId);
+    const msg = String(body||"").trim();
+    if(!Number.isFinite(otherId) || otherId<=0) return cb?.({ ok:false, error:"bad toUserId" });
+    if(!msg) return cb?.({ ok:false, error:"empty" });
+    if(msg.length > 400) return cb?.({ ok:false, error:"too long" });
+
+    // (optional) only allow to friends
+    const stats = (prof.stats && typeof prof.stats==="object") ? prof.stats : {};
+    const client = (stats.client && typeof stats.client==="object") ? stats.client : (stats.client = {});
+    ensureSocial(client);
+    if(!client.social.friends.includes(otherId)){
+      return cb?.({ ok:false, error:"not friends" });
+    }
+
+    const a = Math.min(myId, otherId);
+    const b = Math.max(myId, otherId);
+    const now = Date.now();
+    const ins = await pool.query(
+      "INSERT INTO dm_messages(a_id,b_id,from_id,body,created_at) VALUES($1,$2,$3,$4,$5) RETURNING id",
+      [a,b,myId,msg,now]
+    );
+
+    const payload = { id:String(ins.rows[0].id), from: myId, to: otherId, body: msg, ts: now };
+
+    // ✅ 修正：避免「送出者」在前端同時做 optimistic append + 收到 DM_NEW 再 append 造成重複。
+    // 送出者會以 callback(res.message) 自己渲染一次即可。
+    // 收到者才需要 DM_NEW 推播。
+    emitToUser(otherId, "DM_NEW", payload);
+
+    return cb?.({ ok:true, message: payload });
+  }catch(e){
+    console.error("[DM_SEND] error:", e);
+    return cb?.({ ok:false, error:String(e?.message||e) });
+  }
+});
+
+
+// =====================
+// AUTH: 註冊 / 登入
+// =====================
+
+// 註冊：建立 users + 建立 player_profiles 並綁 user_id，回傳 secret
+socket.on("AUTH_REGISTER", async ({ username, password, deviceId }, cb) => {
+  try {
+    username = String(username || "").trim().toLowerCase();
+    password = String(password || "");
+
+    if (!username || username.length < 3 || username.length > 24) {
+      return cb?.({ ok: false, error: "username length 3~24" });
+    }
+    if (!/^[a-z0-9_]+$/.test(username)) {
+      return cb?.({ ok: false, error: "username only a-z 0-9 _" });
+    }
+    if (!password || password.length < 6 || password.length > 72) {
+      return cb?.({ ok: false, error: "password length 6~72" });
+    }
+
+    // 1) username 是否被用過
+    const exist = await pool.query("SELECT id FROM users WHERE username=$1", [username]);
+    if (exist.rows.length) return cb?.({ ok: false, error: "username taken" });
+
+    // 2) 建 user
+    const password_hash = await bcrypt.hash(password, 10);
+    const u = await pool.query(
+      "INSERT INTO users(username, password_hash) VALUES($1,$2) RETURNING id, username",
+      [username, password_hash]
+    );
+    const userId = u.rows[0].id;
+
+    // 3) 建 profile 並綁定 user_id（產生一組永久 secret）
+    const secret = crypto.randomBytes(24).toString("hex");
+
+    await pool.query(
+      `
+      INSERT INTO player_profiles(secret, user_id, name, avatar, stats, titles, bounties, recent_matches)
+      VALUES($1, $2, '', '', '{}'::jsonb, '[]'::jsonb, '[]'::jsonb, '[]'::jsonb)
+      `,
+      [secret, userId]
+    );
+
+    lockTouch(userId, deviceId, socket.id);
+
+    return cb?.({ ok: true, username, secret });
+  } catch (err) {
+    console.error("[AUTH_REGISTER] error:", err);
+    return cb?.({ ok: false, error: String(err.message || err) });
+  }
+});
+
+// 登入：驗證密碼 → 找到該 user 綁定的 player_profiles.secret → 回傳 secret
+socket.on("AUTH_LOGIN", async ({ username, password, deviceId }, cb) => {
+  try {
+    username = String(username || "").trim().toLowerCase();
+    password = String(password || "");
+
+    if (!username || !password) return cb?.({ ok: false, error: "missing credentials" });
+
+    // 1) 找 user
+    const u = await pool.query(
+      "SELECT id, username, password_hash FROM users WHERE username=$1",
+      [username]
+    );
+    if (!u.rows.length) return cb?.({ ok: false, error: "invalid username/password" });
+
+    // 2) 比對密碼
+    const user = u.rows[0];
+    const ok = await bcrypt.compare(password, user.password_hash);
+    if (!ok) return cb?.({ ok: false, error: "invalid username/password" });
+
+
+
+// =============================
+// ✅ Single-session lock: same account cannot login from another device while active
+// =============================
+const did = String(deviceId||"").trim();
+const existing = loginLocks.get(Number(user.id));
+if(existing){
+  const sockets = existing.sockets ? existing.sockets.size : 0;
+  const last = Number(existing.lastSeen||0) || 0;
+  const active = (sockets>0) || ((Date.now()-last) <= LOGIN_LOCK_GRACE_MS);
+  const bound = String(existing.deviceId||"");
+  if(active && bound && did && bound !== did){
+    // 擠下線模式：新裝置登入 → 強制踢掉舊裝置，並把登入轉移到新裝置
+    lockKickOthers(Number(user.id), socket.id, "takeover", did);
+  }
+}
+// lock to this deviceId (or bind if first time)
+lockTouch(Number(user.id), did, socket.id);    // 3) 拿這個帳號對應的 secret
+    const p = await pool.query("SELECT secret FROM player_profiles WHERE user_id=$1", [user.id]);
+
+    // 理論上一定有（因為註冊就建了），但保底處理
+    let secret;
+    if (p.rows.length) {
+      secret = p.rows[0].secret;
     } else {
-      autoArrangeCardPositions(room);
+      secret = crypto.randomBytes(24).toString("hex");
+      await pool.query(
+        `
+        INSERT INTO player_profiles(secret, user_id, name, avatar, stats, titles, bounties, recent_matches)
+        VALUES($1, $2, '', '', '{}'::jsonb, '[]'::jsonb, '[]'::jsonb, '[]'::jsonb)
+        `,
+        [secret, user.id]
+      );
     }
 
-    // 若這個真人之前被 CPU 接手，重連後也維持覆蓋提示
-    if (p.cpuControlled){
-      emitPlayerAutoState(room, p.id, true);
-    } else {
-      // 玩家重進畫面，就把自己的 CPU 接手解除
-      cancelAutoForPlayer(room, p.id);
+    return cb?.({ ok: true, username: user.username, secret });
+  } catch (err) {
+    console.error("[AUTH_LOGIN] error:", err);
+    return cb?.({ ok: false, error: String(err.message || err) });
+  }
+});
+
+
+// ====== 雲端個人頁：取得 ======
+socket.on("PROFILE_GET", async ({ secret }, cb) => {
+  if (!secret) return cb?.({ ok: false, error: "no secret" });
+
+  try {
+    const { rows } = await pool.query(
+      "SELECT * FROM player_profiles WHERE secret=$1",
+      [secret]
+    );
+    cb?.({ ok: true, profile: rows[0] || null });
+  } catch (err) {
+  console.error("[PROFILE_GET] db error:", err);
+  cb?.({ ok: false, error: String(err.message || err) });
+}
+});
+
+// ====== 公開參觀：用 user_id 取得玩家資料（唯讀，不回 secret） ======
+socket.on("PROFILE_PUBLIC_GET", async ({ userId }, cb) => {
+  try {
+    const uid = Number(userId);
+    if (!Number.isFinite(uid) || uid <= 0) {
+      return cb?.({ ok: false, error: "bad userId" });
     }
 
-    emitLobbyViewFlagsForPlaying(room);
-  });
+    const { rows } = await pool.query(
+      `
+      SELECT
+        user_id,
+        name,
+        avatar,
+        stats,
+        titles,
+        bounties,
+        recent_matches,
+        updated_at
+      FROM player_profiles
+      WHERE user_id = $1
+      LIMIT 1
+      `,
+      [uid]
+    );
 
-  // 玩家點一下畫面，要求解除 CPU 接手
-  socket.on("CANCEL_CPU_TAKEOVER", (data = {}) => {
+    const p = rows[0] || null;
+    if (!p) return cb?.({ ok: false, error: "not found" });
+
+    // ✅ 不回 secret，避免被拿去冒用
+    return cb?.({ ok: true, profile: p });
+  } catch (err) {
+    console.error("[PROFILE_PUBLIC_GET] error:", err);
+    return cb?.({ ok: false, error: String(err.message || err) });
+  }
+});
+
+// ====== 雲端個人頁：更新（永久安全版：局部更新 + stats 合併，不會洗掉 shop/bounties/titles） ======
+socket.on("PROFILE_UPDATE", async ({ secret, patch }, cb) => {
+  try {
+    if (!secret || !patch) return cb?.({ ok: false, error: "missing payload" });
+
+    const has = (k) => Object.prototype.hasOwnProperty.call(patch, k);
+
+    // ✅ 沒傳就不改（避免其它頁只更新 stats 時把 name/avatar 洗成空字串）
+    let nameParam   = has("name")   ? String(patch.name ?? "") : null;
+    const avatarParam = has("avatar") ? String(patch.avatar ?? "") : null;
+
+    // =============================
+    // ✅ 名稱：全服唯一（大小寫不分、去頭尾空白）
+    // =============================
+    if (nameParam !== null) {
+      const cleaned = String(nameParam).replace(/\s+/g, ' ').trim();
+      if (!cleaned) return cb?.({ ok:false, error:"bad_name" });
+      if (cleaned.length > 16) return cb?.({ ok:false, error:"bad_name" });
+
+      // 查：是否已被其他人使用（secret 不同才算衝突）
+      const dup = await pool.query(
+        `SELECT 1 FROM player_profiles WHERE lower(btrim(name)) = lower(btrim($2)) AND secret <> $1 LIMIT 1`,
+        [secret, cleaned]
+      );
+      if (dup.rows.length) return cb?.({ ok:false, error:"name_taken" });
+
+      // 用清理後的名字寫入（避免 "  路飛  " 這種）
+      nameParam = cleaned;
+    }
+
+    // ✅ stats：JSONB 合併（保留 stats.client.shop / stats.client.titles / …）
+    const statsParam = has("stats") ? JSON.stringify(patch.stats ?? {}) : null;
+
+    // ✅ JSON 欄位：沒傳就保留；有傳才覆蓋
+    const titlesParam   = has("titles")         ? JSON.stringify(patch.titles ?? []) : null;
+    const bountiesParam = has("bounties")       ? JSON.stringify(patch.bounties ?? []) : null;
+    const recentParam   = has("recent_matches") ? JSON.stringify(patch.recent_matches ?? []) : null;
+
+    const { rows } = await pool.query(
+      `
+      INSERT INTO player_profiles
+        (secret, name, avatar, stats, titles, bounties, recent_matches)
+      VALUES
+        (
+          $1,
+          COALESCE($2, ''),                 -- insert 時保底（但 update 時不會亂改）
+          COALESCE($3, ''),
+          COALESCE($4::jsonb, '{}'::jsonb),
+          COALESCE($5::jsonb, '[]'::jsonb),
+          COALESCE($6::jsonb, '[]'::jsonb),
+          COALESCE($7::jsonb, '[]'::jsonb)
+        )
+      ON CONFLICT (secret) DO UPDATE SET
+        name = COALESCE($2, player_profiles.name),
+        avatar = COALESCE($3, player_profiles.avatar),
+
+        stats = CASE
+          WHEN $4::jsonb IS NULL THEN player_profiles.stats
+          ELSE (player_profiles.stats || $4::jsonb)
+        END,
+
+        titles = COALESCE($5::jsonb, player_profiles.titles),
+        bounties = COALESCE($6::jsonb, player_profiles.bounties),
+        recent_matches = COALESCE($7::jsonb, player_profiles.recent_matches),
+
+        updated_at = now()
+      RETURNING *;
+      `,
+      [secret, nameParam, avatarParam, statsParam, titlesParam, bountiesParam, recentParam]
+    );
+
+    cb?.({ ok: true, profile: rows[0] });
+  } catch (err) {
+    console.error("[PROFILE_UPDATE] error:", err);
+    // 23505 = unique_violation（若有建 unique index）
+    if (String(err?.code || '') === '23505') {
+      return cb?.({ ok:false, error:'name_taken' });
+    }
+    cb?.({ ok: false, error: String(err.message || err) });
+  }
+});
+
+
+// =====================
+// MATCH HISTORY（方案B）
+// =====================
+
+// 1) 結算頁寫入「這局有哪些人/名次/金幣」（一局一筆，match_key 去重）
+socket.on("MATCH_HISTORY_WRITE", async ({ matchKey, endedAt, players }, cb) => {
+  try{
+    matchKey = String(matchKey || "").trim();
+    endedAt = Number(endedAt || 0);
+    if(!matchKey) return cb?.({ ok:false, error:"bad matchKey" });
+    if(!Number.isFinite(endedAt) || endedAt<=0) endedAt = Date.now();
+    if(!Array.isArray(players) || !players.length) return cb?.({ ok:false, error:"bad players" });
+
+    // 瘦身 + 防呆（只留你要的欄位）
+// 重要：userId 若前端沒帶到（=0），這裡會嘗試用「room / seatId」補齊
+const slimRaw = players
+  .map(p=>({
+    seatId: Number(p?.seatId ?? p?.id ?? p?.playerId ?? 0) || 0,
+    userId: Number(p?.userId || 0) || 0,
+    name: String(p?.name || "").slice(0, 32),
+    avatar: String(p?.avatar ?? ""),
+    place: Number(p?.place || 0) || 0,
+    coins: Number(p?.coins || 0) || 0,
+  }))
+  .filter(p=>p.place>0 && p.coins>=0); // place>=1
+
+// 依 matchKey 解析 roomId（matchKey 格式："<roomId>|<season>|<endedAt>"）
+const roomIdFromKey = String(matchKey).split("|")[0] || "";
+const room = roomIdFromKey ? rooms.get(roomIdFromKey) : null;
+
+// 若 room 存在：用 room.sockets(meta.playerId + meta.secret) 反查 user_id，補齊 slimRaw.userId
+let seatIdToUser = new Map();
+if (room && room.sockets){
+  // 建 seatId -> secret
+  const seatIdToSecret = new Map();
+  for (const [,meta] of room.sockets){
+    const sid = Number(meta?.playerId ?? -1);
+    const sec = String(meta?.secret || "").trim();
+    if (sid>=0 && sec) seatIdToSecret.set(sid, sec);
+  }
+
+  // 批次查 secret -> user_id/name/avatar
+  const secrets = Array.from(new Set(Array.from(seatIdToSecret.values())));
+  if (secrets.length){
     try{
-      const code = String(data.room || "").trim().toUpperCase();
-      const playerId = Number(data.playerId || 0);
-      const room = rooms.get(code);
-      if (!room || room.phase !== "playing") return;
-
-      const p = room.players.find(x => x.id === playerId);
-      if (!p) return;
-      if (p.socketId !== socket.id) return; // 只能本人解除
-      if (p.isCPU) return;
-
-      cancelAutoForPlayer(room, playerId);
-    }catch(e){
-      console.error("CANCEL_CPU_TAKEOVER error:", e);
-    }
-  });
-
-  // 房主在只剩 CPU 可操作時，可一鍵跳過 CPU 回合
-  socket.on("HOST_SKIP_CPU", (data = {}) => {
-    try{
-      const code = String(data.room || "").trim().toUpperCase();
-      const room = rooms.get(code);
-      if (!room || room.phase !== "playing") return;
-
-      const me = room.players.find(x => x.socketId === socket.id);
-      if (!me || me.id !== room.host) return;
-
-      // 僅當完全沒有真人可操作時才允許
-      if (countActiveHumans(room) > 0) return;
-
-      // 直接讓當前 CPU/被接手者出牌
-      const pid = room.state?.turnPlayerId;
-      if (!pid) return;
-
-      const sp = getPlayerById(room.state, pid);
-      if (!sp || !sp.alive) return;
-
-      // 若是人類但尚未接手，先標記成接手
-      if (!sp.isCPU){
-        const meta = getRoomMetaPlayer(room, pid);
-        if (meta && !meta.cpuControlled){
-          setCpuControlled(room, pid, true);
+      const { rows: profs } = await pool.query(
+        `SELECT secret, user_id, name, avatar FROM player_profiles WHERE secret = ANY($1::text[])`,
+        [secrets]
+      );
+      const bySecret = new Map((profs||[]).map(r=>[String(r.secret), r]));
+      for (const [sid, sec] of seatIdToSecret.entries()){
+        const pr = bySecret.get(sec);
+        if (pr){
+          seatIdToUser.set(sid, {
+            userId: Number(pr.user_id||0) || 0,
+            name: String(pr.name||"").slice(0,32),
+            avatar: String(pr.avatar ?? "")
+          });
         }
       }
-
-      clearRoomTimers(room);
-      scheduleCpuAutoPlay(room, pid, 50);
     }catch(e){
-      console.error("HOST_SKIP_CPU error:", e);
+      console.error("[MATCH_HISTORY_WRITE] enrich userId failed:", e);
     }
+  }
+}
+
+const slim = slimRaw.map(p=>{
+  if(!p.userId && p.seatId && seatIdToUser.has(p.seatId)){
+    const filled = seatIdToUser.get(p.seatId);
+    return { ...p,
+      userId: filled.userId || 0,
+      name: p.name || filled.name || p.name,
+      avatar: p.avatar || filled.avatar || p.avatar
+    };
+  }
+  return p;
+});
+
+    if(!slim.length) return cb?.({ ok:false, error:"empty slim players" });
+
+    await pool.query(
+      `
+      INSERT INTO match_history(match_key, ended_at, players, rp_map)
+      VALUES($1, $2, $3::jsonb, '{}'::jsonb)
+      ON CONFLICT (match_key) DO UPDATE SET
+        ended_at = EXCLUDED.ended_at,
+        players  = EXCLUDED.players
+      `,
+      [matchKey, endedAt, JSON.stringify(slim)]
+    );
+
+    return cb?.({ ok:true });
+  }catch(err){
+    console.error("[MATCH_HISTORY_WRITE] error:", err);
+    return cb?.({ ok:false, error:String(err.message || err) });
+  }
+});
+
+// 2) 結算頁回寫「自己的本局 RP」（只改 rp_map 裡的自己那格）
+socket.on("MATCH_HISTORY_RP_PATCH", async ({ matchKey, userId, deltaRP }, cb) => {
+  try{
+    matchKey = String(matchKey || "").trim();
+    const uid = Number(userId || 0);
+    const d = Number(deltaRP || 0);
+    if(!matchKey) return cb?.({ ok:false, error:"bad matchKey" });
+    if(!Number.isFinite(uid) || uid<=0) return cb?.({ ok:false, error:"bad userId" });
+    if(!Number.isFinite(d)) return cb?.({ ok:false, error:"bad deltaRP" });
+
+    await pool.query(
+      `
+      UPDATE match_history
+      SET rp_map = COALESCE(rp_map, '{}'::jsonb) || jsonb_build_object($2::text, $3)
+      WHERE match_key = $1
+      `,
+      [matchKey, uid, d]
+    );
+
+    return cb?.({ ok:true });
+  }catch(err){
+    console.error("[MATCH_HISTORY_RP_PATCH] error:", err);
+    return cb?.({ ok:false, error:String(err.message || err) });
+  }
+});
+
+// 3) 取某玩家最近 N 局（給個人頁最近10局）
+socket.on("MATCH_HISTORY_RECENT", async ({ userId, limit }, cb) => {
+  try{
+    const uid = Number(userId || 0);
+    const lim = Math.max(1, Math.min(50, Number(limit || 10) || 10));
+    if(!Number.isFinite(uid) || uid<=0) return cb?.({ ok:false, error:"bad userId" });
+
+    const needle = JSON.stringify([{ userId: uid }]);
+
+    const { rows } = await pool.query(
+      `
+      SELECT match_key, ended_at, players, rp_map
+      FROM match_history
+      WHERE players @> $1::jsonb
+      ORDER BY ended_at DESC NULLS LAST
+      LIMIT $2
+      `,
+      [needle, lim]
+    );
+
+    const list = (rows || []).map(r=>{
+      const players = Array.isArray(r.players) ? r.players : [];
+      const me = players.find(p => Number(p?.userId||0) === uid) || null;
+      const rpMap = (r.rp_map && typeof r.rp_map === 'object') ? r.rp_map : {};
+      const myRp = (rpMap && Object.prototype.hasOwnProperty.call(rpMap, String(uid))) ? Number(rpMap[String(uid)]) : null;
+
+      return {
+        matchKey: r.match_key,
+        endedAt: Number(r.ended_at || 0) || 0,
+        playerCount: players.length,
+        myPlace: Number(me?.place || 0) || 0,
+        myCoins: Number(me?.coins || 0) || 0,
+        myRp, // 可能 null（尚未回寫）
+      };
+    });
+
+    return cb?.({ ok:true, list });
+  }catch(err){
+    console.error("[MATCH_HISTORY_RECENT] error:", err);
+    return cb?.({ ok:false, error:String(err.message || err) });
+  }
+});
+
+// 4) 取單局完整資料（點擊最近10局 → 彈窗顯示所有人）
+socket.on("MATCH_HISTORY_GET", async ({ matchKey }, cb) => {
+  try{
+    matchKey = String(matchKey || "").trim();
+    if(!matchKey) return cb?.({ ok:false, error:"bad matchKey" });
+
+    const { rows } = await pool.query(
+      `SELECT match_key, ended_at, players, rp_map FROM match_history WHERE match_key=$1 LIMIT 1`,
+      [matchKey]
+    );
+    const r = rows[0] || null;
+    if(!r) return cb?.({ ok:false, error:"not found" });
+
+    return cb?.({ ok:true, match:{
+      matchKey: r.match_key,
+      endedAt: Number(r.ended_at || 0) || 0,
+      players: Array.isArray(r.players) ? r.players : [],
+      rpMap: (r.rp_map && typeof r.rp_map==='object') ? r.rp_map : {},
+    }});
+  }catch(err){
+    console.error("[MATCH_HISTORY_GET] error:", err);
+    return cb?.({ ok:false, error:String(err.message || err) });
+  }
+});
+// ====== 段位排行榜：回傳所有玩家段位（供 profile.html 點段位圖時顯示） ======
+socket.on("RANK_LEADERBOARD", async ({ limit=200 } = {}, cb) => {
+  try {
+    const lim = Math.max(1, Math.min(500, Number(limit)||200));
+
+    // rank 在 stats.client.rank
+const { rows } = await pool.query(
+  `
+  SELECT
+    user_id,
+    name,
+    avatar,
+    stats->'client'->'rank' AS rank
+  FROM player_profiles
+  ORDER BY
+    COALESCE((stats->'client'->'rank'->>'tier')::int, 0) DESC,
+    COALESCE((stats->'client'->'rank'->>'rp')::int, 0) DESC,
+    updated_at DESC
+  LIMIT $1
+  `,
+  [lim]
+);
+
+    cb?.({ ok:true, list: rows || [] });
+  } catch (err) {
+    console.error("[RANK_LEADERBOARD] error:", err);
+    cb?.({ ok:false, error: String(err.message || err) });
+  }
+});
+
+
+// ====== 房間清單：等待室公開列表 ======
+socket.on("ROOM_LIST_GET", (_payload = {}, cb) => {
+  try{
+    cb?.({ ok:true, rooms: buildRoomList() });
+  }catch(err){
+    cb?.({ ok:false, error: String(err?.message || err) });
+  }
+});
+
+// ====== 斷線回來：用 secret 找回自己所在房間（不需要 roomId） ======
+// start.html 會在登入後呼叫，若找到就自動 JOIN_ROOM。
+// 回傳：{ ok:true, roomId, phase }
+socket.on("RESUME_ROOM", (payload = {}, cb) => {
+  try{
+    const sec = String(payload?.secret || "").trim();
+    if (!sec) return cb?.({ ok:false, error:"no secret" });
+
+    let found = null;
+    for (const [rid, room] of rooms.entries()){
+      const ph = String(room?.phase || "");
+      if (ph !== 'lobby' && ph !== 'playing') continue;
+      const arr = room?.state?.players || [];
+      const hit = Array.isArray(arr) ? arr.find(p => p && String(p.secret||"") === sec) : null;
+      if (!hit) continue;
+      // 優先：playing > lobby
+      if (!found) found = { roomId: rid, phase: ph };
+      else if (found.phase !== 'playing' && ph === 'playing') found = { roomId: rid, phase: ph };
+    }
+
+    if (!found) return cb?.({ ok:true, roomId:"", phase:"" });
+    cb?.({ ok:true, roomId: found.roomId, phase: found.phase });
+  }catch(err){
+    cb?.({ ok:false, error: String(err?.message || err) });
+  }
+});
+
+
+// ====== 遊戲整場（多局）結算完成：封存房間，禁止再 RESUME 回來 ======
+socket.on("ROOM_FINISHED", (payload = {}, cb) => {
+  try{
+    const rid = String(payload?.roomId || joinedRoom || "").trim();
+    if(!rid) return cb?.({ ok:false, error:"no roomId" });
+
+    const room = rooms.get(rid);
+    if(!room) return cb?.({ ok:true, gone:true });
+
+    // 標記為 ended：RESUME_ROOM 只會找 lobby/playing，所以後續不會再被自動接回
+    room.phase = 'ended';
+    room.endedAt = Date.now();
+
+    // 1 分鐘後直接刪房（避免使用者回到 start/profile/shop 又被舊房間牽回）
+    if(room._endedTimer){
+      try{ clearTimeout(room._endedTimer); }catch{}
+      room._endedTimer = null;
+    }
+    room._endedTimer = setTimeout(()=>{
+      try{
+        rooms.delete(rid);
+        broadcastRoomList();
+      }catch(e){
+        console.error("[ROOM_FINISHED] delete error:", e);
+      }
+    }, 60 * 1000);
+
+    try{ broadcastRoomList(); }catch{}
+    cb?.({ ok:true });
+  }catch(err){
+    cb?.({ ok:false, error: String(err?.message || err) });
+  }
+});
+
+socket.on("JOIN_ROOM", async (payload = {}) => {
+
+  const {
+  roomId,
+  displayName = "",
+  avatar = 1,
+  secret = "",
+  pid,
+  cpuCount,        // ← 接收從前端傳來的 CPU 數量
+
+  // ✅ 新增：稱號（等待室顯示）
+  title = "",
+  titleTier = 1,
+// ✅ 新增：段位（可由前端帶；沒帶就 DB 撈）
+  rank = null,
+} = payload;
+
+    if (!roomId) return;
+
+
+// 建房：暫給 1 位座位（真正開始時會重建）
+let room = rooms.get(roomId);
+if (!room) {
+  const safeCpu = typeof cpuCount === "number"
+    ? Math.max(0, Math.min(3, cpuCount))  // 限制在 0~5
+    : 0;
+
+  room = {
+    state: createInitialState(1),
+    sockets: new Map(),
+    host: null,
+    lobbyReady: {},
+    phase: 'lobby',          // 目前還在等待室階段
+    cpuCount: safeCpu,       // ← 新增：這個房間預計的 CPU 人數
+  };
+  rooms.set(roomId, room);
+  broadcastRoomList();
+}
+
+// ✅ 若之前因為全員暫離而排了刪房倒數，這裡有人回來就取消
+if(room && room._emptyTimer){
+  try{ clearTimeout(room._emptyTimer); }catch{}
+  room._emptyTimer = null;
+  room._emptySince = 0;
+}
+
+const st = room.state;
+let sec = secret || "";
+
+// ★ 0) 若帶有 secret，且 state 裡已有同 secret 的玩家 → 視為「重連」
+let myId = null;
+if (sec) {
+  const found = (st.players || []).find(p => p && p.secret === sec);
+  if (found) myId = found.id;
+}
+
+// ✅ 重連到遊戲中：若玩家先前被 CPU 接管，回來就拿回控制權
+if (myId != null && room && room.phase === 'playing') {
+  try{
+    const p0 = room.state?.players?.[myId];
+    if(p0){
+      p0.isCPU = false;
+
+      // ✅ 重新連線：清掉「斷線中」標記，並立刻廣播讓其他人看到
+      if(!p0.client || typeof p0.client !== "object") p0.client = {};
+      p0.client.offline = false;
+      p0.client.offlineSince = 0;
+      p0.offline = false;
+      p0.offlineSince = 0;
+
+      clearOfflineTimer(room, myId);
+      emitRoomToast(room, `✅ ${p0.client?.displayName || p0.displayName || '玩家'} 已重新連線，恢復真人操控`);
+      try{ broadcastState(room); }catch{}
+      armRoomWatchdogs(roomId);
+    }
+  }catch{}
+}
+
+// ★ 判斷房間是否已經在遊戲中
+const gameStarted = (room.phase === 'playing');
+
+// ★ 如果遊戲已經開始，而且沒找到舊座位，就拒絕中途加入
+if (gameStarted && myId == null) {
+  io.to(socket.id).emit('EMIT', {
+    type: 'toast',
+    text: '本局已經開始，無法中途加入，請等下一局。'
+  });
+  return;
+}
+
+// ★ 1) 沒找到舊座位時：找第一個未綁 client 的位置（只會在 lobby 階段發生）
+if (myId == null) {
+  for (const p of st.players) {
+    if (!p.client) { myId = p.id; break; }
+  }
+}
+
+// ★ 2) 若都滿就新增一格座位（等待室用）
+if (myId == null) {
+  // 房間上限：最多 6 位（等待室只算真人座位；CPU 之後開始時再補）
+  if (st.players.length >= MAX_ROOM_PLAYERS) {
+    io.to(socket.id).emit('EMIT', { type:'toast', text:`房間已滿（${MAX_ROOM_PLAYERS}/${MAX_ROOM_PLAYERS}）` });
+    return;
+  }
+
+  myId = st.players.length;
+  st.players.push({
+    id: myId,
+    alive: true,
+    protected: false,
+    dodging: false,
+    frozen: false,
+    hand: null,
+    tempDraw: null,
+    gold: 0,
+    skipNext: false
+  });
+}
+
+
+    // ★ 若這次才產生 secret → 給一個新的
+    if (!sec) sec = Math.random().toString(36).slice(2);
+
+    // 寫入玩家 meta（state 端），順便記住 secret
+const p = st.players[myId];
+
+let pickedTitle = String(title || "").trim();
+let pickedTier  = Number(titleTier || 1) || 1;
+
+// ✅ 段位：只讀雲端（忽略 payload.rank，避免本地舊資料覆蓋）
+let pickedRank = null;
+
+// ✅ 若 payload 沒帶稱號（或為空），或沒帶 rank，就用 secret 去雲端撈
+if ((!pickedTitle || !pickedRank) && sec) {
+  try {
+    const r = await pool.query(
+      "SELECT stats FROM player_profiles WHERE secret=$1",
+      [sec]
+    );
+    const client = r.rows?.[0]?.stats?.client;
+
+    // --- title ---
+    if (!pickedTitle) {
+      const dbTitle = String(client?.titles?.equipped || "").trim();
+      const dbTier  = Number(client?.titles?.equippedTier || 1) || 1;
+      if (dbTitle) {
+        pickedTitle = dbTitle;
+        pickedTier = dbTier;
+      }
+    }
+
+    // --- rank ---
+    if (!pickedRank) {
+      const dbRank = client?.rank;
+      if (dbRank && typeof dbRank === "object") {
+        pickedRank = dbRank;
+      }
+    }
+  } catch (e) {
+    console.error("[JOIN_ROOM] load title/rank from DB failed:", e?.message || e);
+  }
+}
+
+
+const safeTitle = String(pickedTitle || "").trim().slice(0, 18);
+const safeTier  = Math.max(1, Math.min(6, Number(pickedTier || 1) || 1));
+
+// ✅ rank 防呆
+const safeRank = (pickedRank && typeof pickedRank === "object") ? pickedRank : null;
+
+p.client = { displayName, avatar, pid, title: safeTitle, titleTier: safeTier, rank: safeRank, offline:false, offlineSince:0 };
+p.displayName = displayName;
+p.avatar = avatar;
+p.secret = sec;
+
+p.title = safeTitle;
+p.titleTier = safeTier;
+
+// ✅ 新增：段位（等待室/遊戲都吃得到）
+p.rank = safeRank;
+
+
+    // 第一位為房主
+    if (room.host == null) room.host = myId;
+
+    // 先把「同一個玩家 + 同一個 secret」舊的 socket 清掉
+    // 避免一個人重連後房間裡還掛著多個連線
+    for (const [sid, meta] of room.sockets) {
+      if (meta.playerId === myId && meta.secret === sec) {
+        room.sockets.delete(sid);
+      }
+    }
+
+    // 建 socket meta（之後驗章 / START_GAME 會用）
+    room.sockets.set(socket.id, {
+      playerId: myId,
+      secret: sec,
+      displayName: (displayName || "").trim() || `P${myId + 1}`,
+      avatar: Number(avatar) || 1,
+    });
+
+    joinedRoom = roomId;
+    socket.join(roomId);
+    socket.emit("JOINED", { playerId: myId, secret: sec });
+
+    // 等待室 ready 狀態（預設未準備）
+    room.lobbyReady[myId] = room.lobbyReady[myId] ?? false;
+
+    broadcastLobby(roomId);
+    broadcastRoomList();
+    broadcastState(room);
+
+    // ✅ 若這是一個「正在進行中的遊戲」且前端要求立即進 game（斷線回復 / 重新登入）
+    // 為了避免 game.html 自己 JOIN_ROOM 時被硬跳，這個只在 wantNav=true 才送。
+    try{
+      if (room.phase === 'playing' && payload?.wantNav) {
+        io.to(socket.id).emit('EMIT', { type:'nav_game', roomId });
+      }
+    }catch(_){ }
   });
 
-  // 出牌：沿用原本流程，但真人若正在被接手就不允許手動出
-  socket.on("ACTION", (payload) => {
-    const joined = getRoomBySocket(socket.id);
-    if (!joined) return;
 
-    const { room, player } = joined;
-    if (room.phase !== "playing") return;
+  socket.on("ACTION", (action = {}) => {
+    const { roomId, playerId, secret, type } = action;
+    const room = rooms.get(roomId);
+    if (!room) return;
 
-    // 不是你的回合
-    if (room.state.turnPlayerId !== player.id) return;
+    // 驗章
+    const ok = Array.from(room.sockets.values()).some(m => m.playerId === playerId && m.secret === secret);
+    if (!ok) return socket.emit("ERROR", { message: "驗證失敗" });
+    // ✅ 任一動作都重置 watchdog，避免掛機卡死
+    try{ armRoomWatchdogs(roomId); }catch{}
 
-    const sp = getPlayerById(room.state, player.id);
-    if (!sp || !sp.alive) return;
-
-    // CPU or 被 CPU 接手中的真人，不允許手動 action
-    if (sp.isCPU || player.cpuControlled) return;
-
-    // 合法真人操作：取消 watchdog，套用動作
-    clearRoomTimers(room);
-
-    const result = applyAction(room.state, player.id, payload);
-    if (!result.ok) {
-      // 非法仍重開 watchdog
-      armRoomWatchdogs(room);
+    // 等待室：準備 / 取消
+    if (type === 'LOBBY_READY' || type === 'LOBBY_UNREADY'){
+      room.lobbyReady = room.lobbyReady || {};
+      room.lobbyReady[playerId] = (type === 'LOBBY_READY');
+      broadcastLobby(roomId);
       return;
     }
 
-    afterAnyAction(room);
-  });
+if (type === 'HOST_SKIP_CPU') {
+  if (room.host !== playerId) {
+    socket.emit('EMIT', { type:'toast', text:'只有房主可以使用一鍵跳過' });
+    return;
+  }
 
-  // 房內聊天（等待室 + 遊戲中都可）
-  socket.on("ROOM_CHAT", (data) => {
-    const code = String(data.code || "").trim().toUpperCase();
-    const text = String(data.text || "").trim();
-    if (!code || !text) return;
-    const room = rooms.get(code);
-    if (!room) return;
+  if (!canHostSkipCpu(room, playerId)) {
+    socket.emit('EMIT', { type:'toast', text:'目前還有真人存活，不能一鍵跳過' });
+    return;
+  }
 
-    const sender = room.players.find(p => p.socketId === socket.id);
-    if (!sender) return;
+  room._cpuFastForward = true;
+  io.to(roomId).emit('EMIT', { type:'toast', text:'房主已啟用 CPU 快速跳過' });
 
-    io.to(code).emit("room_chat", {
-      fromId: sender.id,
-      name: sender.name,
-      avatar: sender.avatar,
-      text: text.slice(0, 300),
-      ts: Date.now(),
-    });
-  });
+  try{ broadcastState(room); }catch{}
+  try{ runCpuLoop(roomId); }catch{}
+  try{ armRoomWatchdogs(roomId); }catch{}
+  return;
+}
 
-  socket.on("REQUEST_ROOMS", () => {
-    const list = [];
-    for (const room of rooms.values()) {
-      if (room.phase !== "lobby") continue;
-      const humanCount = room.players.filter(p => !p.isCPU).length;
-      const cpuCount = room.players.filter(p => p.isCPU).length;
-      const hostPlayer = room.players.find(p => p.id === room.host);
-      list.push({
-        code: room.code,
-        roomTitle: `${hostPlayer?.name || "玩家"}的等待室`,
-        hostName: hostPlayer?.name || "玩家",
-        humans: humanCount,
-        cpus: cpuCount,
-        total: room.players.length,
-      });
-    }
-    socket.emit("ROOMS", list);
-  });
-
-  socket.on("LEAVE_ROOM", (data) => {
-    const code = String(data.code || "").trim().toUpperCase();
-    const room = rooms.get(code);
-    if (!room) return;
-
-    const idx = room.players.findIndex(p => p.socketId === socket.id);
-    if (idx < 0) return;
-
-    const leaving = room.players[idx];
-    room.players.splice(idx, 1);
-    try { socket.leave(code); } catch {}
-
-    if (room.phase === "lobby") {
-      if (room.players.length === 0 || !room.players.some(p => !p.isCPU)) {
-        rooms.delete(code);
+    // 等待室：文字聊天（所有在等待室的人都看得到）
+    // 前端送：{ type:'LOBBY_CHAT', text }
+    if (type === 'LOBBY_CHAT'){
+      // 只允許在 lobby 階段聊天
+      if (room.phase && room.phase !== 'lobby'){
         return;
       }
-      if (leaving.id === room.host) {
-        room.host = room.players.find(p => !p.isCPU)?.id || room.players[0].id;
+
+      const raw = String(action?.text || "").replace(/\s+/g, " ").trim();
+      if (!raw) return;
+
+      const msg = raw.slice(0, 160); // 最多 160 字
+      room.lobbyChat = Array.isArray(room.lobbyChat) ? room.lobbyChat : [];
+
+      // 取得發送者資料
+      const st = room.state;
+      const p = (st?.players || []).find(x => x && x.id === playerId) || null;
+      const name = (p?.client?.displayName || p?.displayName || `P${playerId+1}`).toString();
+      const avatar = Number(p?.client?.avatar ?? p?.avatar ?? 1) || 1;
+
+      room.lobbyChat.push({
+        ts: Date.now(),
+        pid: playerId,
+        name,
+        avatar,
+        text: msg,
+      });
+
+      // 保留最近 60 則
+      if (room.lobbyChat.length > 60){
+        room.lobbyChat = room.lobbyChat.slice(room.lobbyChat.length - 60);
       }
-      broadcastLobby(room);
-      maybeDissolveLobbyIfNoHumans(code);
+
+      broadcastLobby(roomId);
       return;
     }
 
-    // playing / finished：真人離開先標示離線，不直接移除 state 玩家
-    const meta = room.players.find(p => p.id === leaving.id);
-    if (meta) meta.online = false;
-
-    // 真人離線 → 立即 CPU 接手（若還活著）
-    try{
-      const sp = getPlayerById(room.state, leaving.id);
-      if (sp && sp.alive && !sp.isCPU){
-        setCpuControlled(room, leaving.id, true);
-        // 如果剛好是他的回合，安排自動出牌
-        if (room.state?.turnPlayerId === leaving.id){
-          clearRoomTimers(room);
-          scheduleCpuAutoPlay(room, leaving.id, 500);
-        }
+    // 等待室：房主踢人（只在 waiting lobby 生效）
+    // 前端送：{ type:'LOBBY_KICK', targetPlayerId }
+    if (type === 'LOBBY_KICK'){
+      if (room.host !== playerId) {
+        io.to(socket.id).emit('EMIT', { type:'toast', text:'只有房主可以踢人' });
+        return;
       }
-    }catch{}
 
-    emitLobbyViewFlagsForPlaying(room);
+      const targetPlayerId = Number(action?.targetPlayerId);
+      if (!Number.isFinite(targetPlayerId)) {
+        io.to(socket.id).emit('EMIT', { type:'toast', text:'踢人失敗：targetPlayerId 錯誤' });
+        return;
+      }
+
+      // 不允許踢自己
+      if (targetPlayerId === playerId) {
+        io.to(socket.id).emit('EMIT', { type:'toast', text:'不能踢自己' });
+        return;
+      }
+
+      // 找出目標 socket（可能理論上有多個 sid，保險起見全刪）
+      const kickSids = [];
+      for (const [sid, meta] of room.sockets.entries()){
+        if (meta?.playerId === targetPlayerId) kickSids.push(sid);
+      }
+
+      if (!kickSids.length){
+        io.to(socket.id).emit('EMIT', { type:'toast', text:'踢人失敗：玩家已不在房間' });
+        return;
+      }
+
+      // 從等待室移除（socket map + ready 狀態）
+      for (const sid of kickSids){
+        try{ room.sockets.delete(sid); }catch{}
+        try{ if (room.lobbyReady) delete room.lobbyReady[targetPlayerId]; }catch{}
+
+        // 讓對方端立即回到「選房」
+        try{ io.to(sid).emit('EMIT', { type:'lobby_kicked', roomId, by: playerId }); }catch{}
+        try{ io.to(sid).emit('EMIT', { type:'toast', text:'你已被房主踢出房間' }); }catch{}
+
+        // 讓 socket.io 也離開該房間（避免收到後續廣播）
+        try{
+          const s = io.sockets.sockets.get(sid);
+          if (s && typeof s.leave === 'function') s.leave(roomId);
+        }catch{}
+      }
+
+      // 重新選房主（理論上不會踢到 host，但保險）
+      if (room.host === targetPlayerId){
+        const all = [...room.sockets.values()];
+        room.host = all.length ? all[0].playerId : null;
+      }
+
+      // 若房間沒人了就刪掉
+      if (room.sockets.size === 0){
+        rooms.delete(roomId);
+        broadcastRoomList();
+      } else {
+        broadcastLobby(roomId);
+        broadcastRoomList();
+      }
+      return;
+    }
+
+     // 等待室：房主開始 → 重建 state、對齊 playerId、廣播 nav_game
+    if (type === 'START_GAME'){
+      if (room.host !== playerId) {
+        io.to(socket.id).emit('EMIT', { type:'toast', text:'只有房主可以開始遊戲' });
+        return;
+      }
+
+      // ① 以「socket 的加入順序」作為座位順序；同時帶出名稱/頭像/secret（真人）
+      const entries = Array.from(room.sockets.entries()); // [ [sid, meta], ... ]
+const joined = entries.map(([sid, m]) => {
+  const oldP = room.state?.players?.[m.playerId];
+
+  const safeTitle = String(oldP?.client?.title ?? oldP?.title ?? "").trim().slice(0, 18);
+  const safeTier  = Math.max(1, Math.min(6, Number(oldP?.client?.titleTier ?? oldP?.titleTier ?? 1) || 1));
+
+  const safeRank0 = (oldP?.client?.rank ?? oldP?.rank ?? null);
+  const safeRank  = (safeRank0 && typeof safeRank0 === "object") ? safeRank0 : null;
+
+  return {
+    sid,
+    oldId: m.playerId,
+    name: m.displayName || `P${m.playerId + 1}`,
+    avatar: m.avatar || 1,
+    secret: m.secret,
+
+    title: safeTitle,
+    titleTier: safeTier,
+
+    // ✅ 新增：段位
+    rank: safeRank,
+  };
+});
+
+
+      const nHuman = joined.length;       // 真人數
+      const cpuMax = Math.max(0, Math.min(MAX_ROOM_PLAYERS - nHuman, Number(room.cpuCount || 0) || 0)); // CPU 上限：總人數不超過 6
+      const total = nHuman + cpuMax;      // 總人數 = 真人 + CPU
+
+      // ★ 最低人數判斷：真人 + CPU 一起算
+      if (total < 2){
+        io.to(socket.id).emit('EMIT', {
+          type:'toast',
+          text:'至少需要 2 名玩家（包含 CPU）才能開始'
+        });
+        return;
+      }
+
+      // ② 必須全員 ready（只檢查真人，CPU 視為一開始就準備好）
+      const notReady = joined.filter(j => !room.lobbyReady[j.oldId]);
+      if (notReady.length){
+        io.to(socket.id).emit('EMIT', { type:'toast', text:'還有玩家尚未準備' });
+        return;
+      }
+
+      // ③ 依「總人數」重建 state
+      const st = createInitialState(total);
+      st.cpuCount = cpuMax;   // 之後如果要給引擎用，可以參考這個欄位
+
+    // ④ 組一個「座位池」：把所有真人 & CPU 丟進來，等等一起洗牌
+  const seatPool = [];
+
+  // 先把真人塞進 seatPool
+  for (let i = 0; i < nHuman; i++) {
+    seatPool.push({ kind: 'human', data: joined[i] });
+  }
+
+  // 再把 CPU 佔位塞進 seatPool
+  for (let i = 0; i < cpuMax; i++) {
+    seatPool.push({ kind: 'cpu' });
+  }
+
+  // 小工具：Fisher–Yates 洗牌，讓座位順序隨機
+  for (let i = seatPool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [seatPool[i], seatPool[j]] = [seatPool[j], seatPool[i]];
+  }
+
+  // 預備：CPU 名稱 / 頭像、socket 新表、舊 id → 新 id 對照
+  const cpuNames = ["克洛克達爾", "鷹眼密佛格", "小丑巴其"];
+  const cpuAvatarIds = ["cpu1", "cpu2", "cpu3"];
+
+  let cpuUsed = 0;                 // 已經用了第幾個 CPU 名稱
+  const newSockets = new Map();    // sid → 新的 socket meta
+  const idRemap = new Map();       // oldId → newPlayerId
+
+// ⑤ 把 seatPool 實際寫進 st.players
+for (let i = 0; i < seatPool.length; i++) {
+  const seat = seatPool[i];
+  const p = st.players[i];
+
+  // 確保 player 自己的 id 也跟 index 對齊
+  p.id = i;
+
+  if (seat.kind === 'human') {
+    const j = seat.data;
+
+    // 真人：寫入名稱 / 頭像 / secret
+p.client = {
+  displayName: j.name,
+  avatar: j.avatar,
+  pid: null,
+  title: j.title || "",
+  titleTier: Math.max(1, Math.min(6, Number(j.titleTier || 1) || 1)),
+
+  // ✅ 新增：段位
+  rank: (j.rank && typeof j.rank === "object") ? j.rank : null,
+};
+
+p.title = j.title || "";
+p.titleTier = Math.max(1, Math.min(6, Number(j.titleTier || 1) || 1));
+
+// ✅ 新增：段位
+p.rank = (j.rank && typeof j.rank === "object") ? j.rank : null;
+
+
+    p.displayName = j.name;
+    p.avatar = j.avatar;
+
+    // ★ 關鍵：把舊的 secret 帶進來，讓之後重連可以靠 secret 找到你
+    p.secret = j.secret;
+    p.isCPU = false;
+
+    // 建立 oldId → newId 對照（等一下要換 host、socket）
+    idRemap.set(j.oldId, i);
+
+    // 重建 socket meta（保留其它欄位）
+    const oldMeta = room.sockets.get(j.sid) || {};
+    newSockets.set(j.sid, {
+      ...oldMeta,         // ← 正確語法：展開舊 meta
+      playerId: i,
+      secret: j.secret,
+      displayName: j.name,
+      avatar: j.avatar,
+    });
+
+    // 通知真人自己的新座位
+    io.to(j.sid).emit('JOINED', { playerId: i, secret: j.secret });
+  } else {
+    // CPU：照順序發名字 / 頭像，但座位是已經洗過的 i
+    const idx = cpuUsed++;
+    const cpuName   = cpuNames[idx]     || `CPU ${idx + 1}`;
+    const cpuAvatar = cpuAvatarIds[idx] || "cpu1";
+
+    p.client = {
+      displayName: cpuName,
+      avatar: cpuAvatar,
+      pid: null,
+    };
+    p.displayName = cpuName;
+    p.avatar = cpuAvatar;
+    p.isCPU = true;
+    p.secret = null;  // CPU 不需要 secret
+  }
+}
+
+// 把 room.sockets 換成新的（playerId 已經是洗過座位）
+room.sockets = newSockets;
+
+  // ⑥ host 也改成新座位（用 oldId → newId 對照）
+  const newHost = idRemap.get(room.host);
+  room.host = (newHost != null ? newHost : 0);
+
+  // ⑦ 清空等待室 ready，寫回狀態並先廣播一版 STATE
+  room.lobbyReady = {};
+  room.state = st;
+  room.phase = 'playing';
+  broadcastRoomList();
+  broadcastState(room);
+
+  // ★ 如果一開始就輪到 CPU，直接讓 CPU 先開始（含 2 秒 / 4 秒延遲）
+  runCpuLoop(roomId);
+
+  // ✅ 啟動 watchdog（斷線/掛機/互動卡死保護）
+  armRoomWatchdogs(roomId);
+
+  // ⑧ 導頁到 game.html（只會導真人的頁面，CPU 沒 socket）
+  for (const [sid] of room.sockets) {
+    io.to(sid).emit('EMIT', { type:'nav_game' });
+  }
+  return;
+}
+
+
+
+
+    // 遊戲中：下一局（只有房主或本局勝利玩家可以按）
+     if (type === 'NEXT_ROUND') {
+      const st = room.state;
+
+      // 先確認這一局真的結束了
+      const ended = typeof isRoundEnded === "function"
+        ? isRoundEnded(st)
+        : (st?.turnStep === "ended" || st?.turnStep === "end" || st?.turnStep === "score");
+
+      if (!ended) {
+        socket.emit('EMIT', { type: 'toast', text: '本局尚未結束' });
+        return;
+      }
+
+      // 找出這一局的勝利玩家（還活著的）
+      const winners = new Set(st.players.filter(p => p.alive).map(p => p.id));
+
+      // 只有房主或本局勝利者可以開下一局
+      const can = (room.host === playerId) || winners.has(playerId);
+      if (!can) {
+        socket.emit('EMIT', { type: 'toast', text: '只有房主或本局勝者可以開始下一局' });
+        return;
+      }
+
+      // 正式進入下一局
+const ns = nextRound(st);
+room.state = ns;
+room._cpuFastForward = false;
+broadcastState(room);
+      // ★ 如果下一局起始玩家是 CPU，一樣讓 CPU 先動（含延遲）
+      runCpuLoop(roomId);
+
+      // ✅ 每局開始也重上 watchdog
+      armRoomWatchdogs(roomId);
+      return;
+
+    }   // ★★★ 多這一行，把 NEXT_ROUND 的 if 收起來
+
+    // 遊戲內其他行為 → 交給引擎（統一用 helper）
+     // 遊戲內其他行為 → 交給引擎（統一用 helper）
+    applyAndBroadcast(room, action, io);
+
+    // ★ 玩家行動結束後，如果接下來輪到的是 CPU，就讓 CPU 自動行動（含 2 秒 / 4 秒延遲）
+    runCpuLoop(roomId);
+
+    // ✅ 動作結束後再 arm 一次（因為 state 可能已變 turn/pending）
+    armRoomWatchdogs(roomId);
+  });
+
+
+
+
+
+
+  // ===== Lobby: leave room (explicit) =====
+  // Client can leave waiting room without closing the page; we must remove the socket from room.sockets,
+  // otherwise other players will still see them in lobby.
+  socket.on("LEAVE_ROOM", (payload = {}, cb) => {
+    try{
+      const { roomId } = payload || {};
+      const rid = String(roomId || joinedRoom || "").trim();
+      if(!rid) return cb?.({ ok:false, error:"no roomId" });
+
+      const room = rooms.get(rid);
+      if(!room) {
+        // still allow client to proceed
+        joinedRoom = null;
+        try{ socket.leave(rid); }catch{}
+        return cb?.({ ok:true, gone:true });
+      }
+
+      // remove this socket from this room
+      const meta = room.sockets.get(socket.id);
+      room.sockets.delete(socket.id);
+
+      // if lobby stage, also clear ready flag for that playerId
+      if(meta && room.lobbyReady) delete room.lobbyReady[meta.playerId];
+
+      // host transfer if needed
+      if(room.host != null){
+        const all = [...room.sockets.values()];
+        room.host = all.length ? all[0].playerId : null;
+      }
+
+      // leave socket.io room & clear joinedRoom
+      try{ socket.leave(rid); }catch{}
+      if(joinedRoom === rid) joinedRoom = null;
+
+      // if no human left, delete room to avoid stale rooms
+      if(!cleanupRoomIfNoHumans(rid)){
+        broadcastLobby(rid);
+        broadcastRoomList();
+      }
+      return cb?.({ ok:true });
+    }catch(e){
+      console.error("[LEAVE_ROOM] error:", e);
+      return cb?.({ ok:false, error:String(e?.message||e) });
+    }
   });
 
   socket.on("disconnect", () => {
-    console.log("socket disconnected", socket.id);
+    // social presence
+    try{ markOffline(socket.data?.userId, socket.id); }catch{}
+    try{ lockRemoveSocket(socket.data?.userId, socket.id); }catch{}
 
-    // social presence cleanup
+    if (!joinedRoom) return;
+    const room = rooms.get(joinedRoom);
+    if (!room) return;
+
+    const meta = room.sockets.get(socket.id);
+    room.sockets.delete(socket.id);
+
+    // ✅ 遊戲中斷線：給 grace 之後 CPU 接管，避免整場多局卡死
     try{
-      if (socket.userId) {
-        markOffline(socket.userId, socket.id);
-        lockRemoveSocket(socket.userId, socket.id);
-      }
-    }catch{}
-    if (socket.userId) {
-      pushSocialStateToUser(socket.userId).catch(()=>{});
-      pushSocialStateToFriendsOf(socket.userId).catch(()=>{});
-    }
+      ensureRoomResilience(room);
+      if(room.phase === 'playing' && meta && meta.playerId != null){
+        const pid2 = Number(meta.playerId);
+        const p = room.state?.players?.[pid2];
+        if(p && p.alive){
+          emitRoomToast(room, `⚠ ${p.client?.displayName || p.displayName || '玩家'} 連線中斷，${Math.round(OFFLINE_GRACE_MS/1000)} 秒內未回來將由 CPU 接管`);
 
-    const joined = getRoomBySocket(socket.id);
-    if (!joined) return;
+          // ✅ 斷線中標記（讓其他玩家 UI 立刻看到）
+          if(!p.client || typeof p.client !== "object") p.client = {};
+          p.client.offline = true;
+          p.client.offlineSince = Date.now();
+          p.offline = true;
+          p.offlineSince = p.client.offlineSince;
 
-    const { room, player } = joined;
+          try{ broadcastState(room); }catch{}
 
-    // lobby：直接移除，若沒真人了就解散
-    if (room.phase === "lobby") {
-      room.players = room.players.filter((p) => p.socketId !== socket.id);
-      if (room.players.length === 0 || !room.players.some(p => !p.isCPU)) {
-        rooms.delete(room.code);
-        return;
-      }
-      if (player.id === room.host) room.host = room.players.find(p => !p.isCPU)?.id || room.players[0].id;
-      broadcastLobby(room);
-      maybeDissolveLobbyIfNoHumans(room.code);
-      return;
-    }
+          clearOfflineTimer(room, pid2);
 
-    // playing / finished：不刪玩家，改為離線，並由 CPU 接手
-    const meta = room.players.find((p) => p.id === player.id);
-    if (meta) meta.online = false;
+          const t = setTimeout(()=>{
+            const r2 = rooms.get(joinedRoom);
+            if(!r2 || r2.phase !== 'playing') return;
+            const p2 = r2.state?.players?.[pid2];
+            if(!p2 || !p2.alive) return;
 
-    try{
-      const sp = getPlayerById(room.state, player.id);
-      if (sp && sp.alive && !sp.isCPU){
-        setCpuControlled(room, player.id, true);
-        if (room.phase === "playing" && room.state?.turnPlayerId === player.id){
-          clearRoomTimers(room);
-          scheduleCpuAutoPlay(room, player.id, 500);
+            const sec2 = String(p2.secret || '').trim();
+            if(sec2){
+              const reconnected = Array.from(r2.sockets.values()).some(m=> String(m?.secret||'').trim() === sec2);
+              if(reconnected) return;
+            }
+
+            if(!p2.isCPU){
+              p2.isCPU = true;
+              emitRoomToast(r2, `⚠ ${p2.client?.displayName || p2.displayName || '玩家'} 未回來，已由 CPU 接管（直到整場結束/或玩家重連）`);
+              try{ broadcastState(r2); }catch{}
+              try{ runCpuLoop(joinedRoom); }catch{}
+              try{ armRoomWatchdogs(joinedRoom); }catch{}
+            }
+          }, OFFLINE_GRACE_MS);
+
+          room._offlineTimers.set(pid2, t);
         }
       }
-    }catch{}
+    }catch(e){
+      console.error("[disconnect takeover] error:", e);
+    }
 
-    emitLobbyViewFlagsForPlaying(room);
+    if (meta && room.lobbyReady) delete room.lobbyReady[meta.playerId];
 
-    // finished 房間會照 endGame 的清房定時器刪掉
-    // ✅ 剩下的人繼續玩：重上 watchdog
-    try{ armRoomWatchdogs(room); }catch{}
+    // 房主斷線 → 交棒給目前第一位
+    if (room.host != null){
+      const all = [...room.sockets.values()];
+      if (all.length) room.host = all[0].playerId;
+    }
+
+        // 如果沒有真人玩家就解散房間（CPU 不算真人）
+    if(!cleanupRoomIfNoHumans(joinedRoom)){
+      broadcastLobby(joinedRoom);
+      broadcastRoomList();
+      // ✅ 剩下的人繼續玩：重上 watchdog
+      try{ armRoomWatchdogs(joinedRoom); }catch{}
+    }
   });
 });
 
