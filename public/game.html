@@ -850,6 +850,90 @@ body::before{
   }
 }
 
+/* === 掛機警告 / CPU 接手提示 === */
+#idleWarning{
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  z-index: 280;
+  width: min(92vw, 560px);
+  padding: 12px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(251,191,36,.75);
+  background: linear-gradient(180deg, rgba(17,24,39,.95), rgba(10,14,20,.96));
+  box-shadow: 0 12px 36px rgba(0,0,0,.48), 0 0 24px rgba(251,191,36,.18);
+}
+#idleWarning.hidden{ display:none; }
+#idleWarning .ttl{
+  font-size: 14px;
+  font-weight: 800;
+  color: #fde68a;
+}
+#idleWarning .sub{
+  margin-top: 4px;
+  font-size: 12px;
+  color: #e5e7eb;
+}
+#idleWarning .bar{
+  margin-top: 10px;
+  height: 8px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.08);
+}
+#idleWarning .bar > i{
+  display:block;
+  width:100%;
+  height:100%;
+  background: linear-gradient(90deg, rgba(251,191,36,.96), rgba(249,115,22,.96));
+  transform-origin: left center;
+}
+
+#autoTakeoverBanner{
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  z-index: 281;
+  width: min(92vw, 620px);
+  padding: 14px 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(168,85,247,.72);
+  background: linear-gradient(180deg, rgba(34,18,58,.97), rgba(15,8,30,.97));
+  box-shadow: 0 16px 42px rgba(0,0,0,.52), 0 0 28px rgba(168,85,247,.22);
+  cursor: pointer;
+}
+#autoTakeoverBanner.hidden{ display:none; }
+#autoTakeoverBanner .ttl{
+  font-size: 15px;
+  font-weight: 900;
+  color: #e9d5ff;
+}
+#autoTakeoverBanner .sub{
+  margin-top: 5px;
+  font-size: 12px;
+  color: #ddd6fe;
+  opacity: .95;
+}
+#autoTakeoverBanner .cta{
+  margin-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(196,181,253,.55);
+  background: rgba(255,255,255,.10);
+  font-size: 12px;
+  font-weight: 800;
+  color: #faf5ff;
+}
+@media (prefers-reduced-motion: no-preference){
+  #autoTakeoverBanner{ animation: chooseHintPulse 1.45s ease-in-out infinite; }
+}
+
 /* 尊重「減少動態」偏好：保留靜態描邊、停用動畫 */
 @media (prefers-reduced-motion: reduce){
   #btnDraw.hot::after{ animation: none !important; }
@@ -2190,6 +2274,18 @@ body::before{
     </button>
   </div>
 </div>
+
+<div id="idleWarning" class="hidden">
+  <div class="ttl">⚠ 太久沒動作，快要由 CPU 接手</div>
+  <div id="idleWarningText" class="sub">請立即操作，否則會進入自動出牌。</div>
+  <div class="bar"><i id="idleWarningBar"></i></div>
+</div>
+
+<div id="autoTakeoverBanner" class="hidden">
+  <div class="ttl">🤖 自動出牌中</div>
+  <div id="autoTakeoverText" class="sub">目前由 CPU 暫時代打，點一下就能立刻接手繼續玩。</div>
+  <div class="cta">點一下拿回操作權</div>
+</div>
       <div class="card p-3">
         <div class="flex items-center justify-between mb-2">
           <div class="text-sm opacity-80">對局日誌</div>
@@ -2478,6 +2574,11 @@ chooseHint: document.getElementById('chooseHint'),
   nextRound: document.getElementById('btnNextRound'),
   cpuSkip: document.getElementById('btnCpuSkip'),
   cardDexBtn: document.getElementById('cardDexBtn'),
+  idleWarning: document.getElementById('idleWarning'),
+  idleWarningText: document.getElementById('idleWarningText'),
+  idleWarningBar: document.getElementById('idleWarningBar'),
+  autoTakeoverBanner: document.getElementById('autoTakeoverBanner'),
+  autoTakeoverText: document.getElementById('autoTakeoverText'),
 };
 // ================= 棄牌區：滑鼠滾輪/觸控拖曳捲動（不用一定拉捲軸） =================
 (function initDiscardScrollUX(){
@@ -2963,6 +3064,9 @@ function getDeviceId(){
 let me = { roomId: presetRoom || 'op-001', playerId: null, secret: localStorage.getItem('opSecret')||'' };
 let _autoSkipKey = null;   // 麻痺自動跳過用的防呆 key
 let state = null;
+let _idleWarnTimer = null;
+let _idleWarnEndsAt = 0;
+let _autoTakenOver = false;
 let _pendingDuel = null;   // 等待補上卡片資訊的決鬥事件
 let _enhFxForceTimer = null;  // 強化影片的保險計時器
 let _finalRedirecting = false; 
@@ -4078,13 +4182,69 @@ function pushLogUnique(line){
   if (feed[feed.length - 1] !== pretty) feed.push(pretty);
 }
 
+function hideIdleWarning(){
+  _idleWarnEndsAt = 0;
+  if (_idleWarnTimer) { clearInterval(_idleWarnTimer); _idleWarnTimer = null; }
+  el.idleWarning?.classList.add('hidden');
+  if (el.idleWarningBar) el.idleWarningBar.style.transform = 'scaleX(1)';
+}
+
+function showIdleWarning(payload = {}){
+  const remainMs = Math.max(1000, Number(payload?.remainMs || 10000));
+  _idleWarnEndsAt = Date.now() + remainMs;
+  if (el.idleWarningText) {
+    el.idleWarningText.textContent = String(payload?.text || '請立即操作，否則會由 CPU 暫時接手。');
+  }
+  el.idleWarning?.classList.remove('hidden');
+  if (_idleWarnTimer) clearInterval(_idleWarnTimer);
+
+  const tick = ()=>{
+    const left = Math.max(0, _idleWarnEndsAt - Date.now());
+    const ratio = Math.max(0, Math.min(1, left / remainMs));
+    if (el.idleWarningBar) el.idleWarningBar.style.transform = `scaleX(${ratio})`;
+    if (left <= 0) hideIdleWarning();
+  };
+  tick();
+  _idleWarnTimer = setInterval(tick, 100);
+}
+
+function setAutoTakeoverBanner(on, text=''){
+  _autoTakenOver = !!on;
+  if (_autoTakenOver) {
+    hideIdleWarning();
+    if (el.autoTakeoverText) {
+      el.autoTakeoverText.textContent = text || '目前由 CPU 暫時代打，點一下就能立刻接手繼續玩。';
+    }
+    el.autoTakeoverBanner?.classList.remove('hidden');
+  } else {
+    el.autoTakeoverBanner?.classList.add('hidden');
+  }
+}
+
 /* ===== Socket 連線狀態 ===== */
 socket.on('connect', ()=>{ el.conn.textContent='connected'; el.conn.classList.replace('text-red-400','text-green-400'); });
 socket.on('disconnect', ()=>{ el.conn.textContent='disconnected'; el.conn.classList.replace('text-green-400','text-red-400'); });
 socket.on('connect_error', (e)=>{ el.conn.textContent='error'; el.conn.classList.replace('text-green-400','text-red-400'); console.error(e); });
+socket.on('IDLE_WARNING', (payload)=>{
+  if (Number(payload?.playerId) !== Number(me.playerId)) return;
+  showIdleWarning(payload);
+});
+socket.on('AUTO_TAKEOVER', (payload)=>{
+  if (Number(payload?.playerId) !== Number(me.playerId)) return;
+  setAutoTakeoverBanner(true, String(payload?.text || '目前由 CPU 暫時代打，點一下就能立刻接手繼續玩。'));
+});
+socket.on('AUTO_TAKEOVER_CLEARED', (payload)=>{
+  if (payload?.playerId != null && Number(payload.playerId) !== Number(me.playerId)) return;
+  setAutoTakeoverBanner(false);
+  hideIdleWarning();
+});
+el.autoTakeoverBanner?.addEventListener('click', ()=>{
+  sendAction('TAKE_BACK_CONTROL');
+});
 
 function sendAction(type, payload={}){
   if(me.playerId==null) return;
+  if (type !== 'TAKE_BACK_CONTROL') hideIdleWarning();
   socket.emit('ACTION', { type, payload, roomId: me.roomId, playerId: me.playerId, secret: me.secret });
 }
 
@@ -4535,6 +4695,14 @@ socket.on('STATE', (s)=>{
   const prevDiscardLen = Array.isArray(state?.discard) ? state.discard.length : 0;
 
   state = s;
+
+  const myNow = state?.players?.[me.playerId];
+  if (myNow?.client?.autoTakenOver && myNow.alive) {
+    setAutoTakeoverBanner(true);
+  } else {
+    setAutoTakeoverBanner(false);
+  }
+  if (!myNow?.client?.autoTakenOver) hideIdleWarning();
 
   
  // ★ 寶箱為 0 → 引擎會附帶 state.final
