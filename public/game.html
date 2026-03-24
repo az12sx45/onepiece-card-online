@@ -4706,13 +4706,19 @@ socket.on('STATE', (s)=>{
 
   state = s;
 
-  const myNow = state?.players?.[me.playerId];
-  if (myNow?.client?.autoTakenOver && myNow.alive) {
-    setAutoTakeoverBanner(true);
-  } else {
-    setAutoTakeoverBanner(false);
-  }
-  if (!myNow?.client?.autoTakenOver) hideIdleWarning();
+const myNow = state?.players?.[me.playerId];
+const myAuto = !!(
+  myNow?.client?.autoControlled ||
+  myNow?.autoControlled
+);
+
+if (myAuto && myNow?.alive) {
+  setAutoTakeoverBanner(true, '目前由 CPU 暫時代打，點一下就能立刻接手繼續玩。');
+} else {
+  setAutoTakeoverBanner(false);
+}
+
+if (!myAuto) hideIdleWarning();
 
   
  // ★ 寶箱為 0 → 引擎會附帶 state.final
@@ -5881,6 +5887,25 @@ document.getElementById('rewardOpenBtn')?.addEventListener('click', ()=>{
 
 socket.on('EMIT', (e)=>{
   if (!e) return;
+
+  if (e.type === 'idle_warning') {
+    showIdleWarning({
+      remainMs: Math.max(1000, Number(e.remainSec || 10) * 1000),
+      text: e.text || '請立即操作，否則會由 CPU 暫時接手。'
+    });
+    return;
+  }
+
+  if (e.type === 'auto_control_changed') {
+    if (e.isAuto) {
+      setAutoTakeoverBanner(true, '目前由 CPU 暫時代打，點一下就能立刻接手繼續玩。');
+    } else {
+      setAutoTakeoverBanner(false);
+      hideIdleWarning();
+    }
+    return;
+  }
+
   // Reward chest (winner only)
   if (e.type === 'reward_chest'){
     if (_rewardShownRoundNo !== e.roundNo){
