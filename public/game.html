@@ -2491,6 +2491,61 @@ body::before{
   }
 }
 
+@media (max-width: 960px) and (orientation: landscape){
+  #playedOverlay{
+    padding: 10px;
+  }
+
+  #playedFrame{
+    width: 100%;
+    max-width: 100%;
+    max-height: calc(100dvh - 20px);
+    gap: 8px;
+    padding: 4px 0;
+  }
+
+  #playedImg{
+    width: auto !important;
+    max-width: min(34vw, 240px) !important;
+    max-height: calc(100dvh - 110px) !important;
+    object-fit: contain;
+  }
+
+  #playedMeta{
+    font-size: 12px;
+  }
+
+  #voiceBubble{
+    max-width: min(52vw, 360px);
+    font-size: 12px;
+  }
+
+  #myPlayZone .grid{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+
+  #playHand,
+  #playDrawn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    background: rgba(0,0,0,.16);
+  }
+
+  #imgHand,
+  #imgDrawn{
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: calc(100dvh - 260px);
+    object-fit: contain;
+    margin-inline: auto;
+  }
+}
+
 </style>
 </head>
 <body>
