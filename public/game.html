@@ -2520,9 +2520,34 @@ body::before{
     font-size: 12px;
   }
 
+  #myPlayZone{
+    position: fixed;
+    inset: 56px 8px 8px;
+    z-index: 96;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px 12px;
+    border-radius: 18px;
+    background: rgba(8, 12, 18, .92);
+    border: 1px solid rgba(255,255,255,.10);
+    box-shadow: 0 18px 36px rgba(0,0,0,.38);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+
+  #chooseHint{
+    position: static;
+    margin: 0 0 10px;
+    align-self: center;
+  }
+
   #myPlayZone .grid{
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    align-items: start;
+    align-items: center;
+    gap: 12px;
+    min-height: 0;
+    flex: 1 1 auto;
   }
 
   #playHand,
@@ -2531,6 +2556,8 @@ body::before{
     align-items: center;
     justify-content: center;
     min-height: 0;
+    height: 100%;
+    padding: 8px;
     background: rgba(0,0,0,.16);
   }
 
@@ -2540,7 +2567,7 @@ body::before{
     width: auto;
     height: auto;
     max-width: 100%;
-    max-height: calc(100dvh - 260px);
+    max-height: calc(100dvh - 110px);
     object-fit: contain;
     margin-inline: auto;
   }
