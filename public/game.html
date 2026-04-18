@@ -2145,10 +2145,6 @@ body::before{
     -webkit-text-size-adjust: 100%;
   }
 
-  body{
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-
   /* ===== Header ===== */
   header .max-w-7xl{
     padding-left: 10px !important;
@@ -2193,11 +2189,6 @@ body::before{
     font-size: 11px !important;
     padding: 4px 8px !important;
     flex: 0 0 auto;
-  }
-
-  #gameHeaderActions{
-    width: 100%;
-    margin-left: 0 !important;
   }
 
   /* ===== BGM 播放列 ===== */
@@ -2260,19 +2251,10 @@ body::before{
     padding-right: 10px !important;
     padding-top: 10px !important;
     gap: 10px !important;
-    padding-bottom: calc(220px + env(safe-area-inset-bottom)) !important;
   }
 
   .card{
     border-radius: 14px !important;
-  }
-
-  #gameTopGrid{
-    grid-template-columns: minmax(0, 1fr) !important;
-  }
-
-  #gameTopGrid > .card{
-    min-width: 0;
   }
 
   /* 場地格數縮少，避免太擠 */
@@ -2302,41 +2284,12 @@ body::before{
   }
 
   /* 出牌區兩張卡在手機上改成 2 欄但縮小間距 */
-  #myPlayZone{
-    position: fixed !important;
-    left: 10px;
-    right: 10px;
-    bottom: calc(10px + env(safe-area-inset-bottom));
-    z-index: 55;
-    padding: 12px !important;
-    border-radius: 18px !important;
-    background: rgba(8,12,18,.94) !important;
-    border: 1px solid rgba(255,255,255,.12) !important;
-    box-shadow:
-      0 18px 40px rgba(0,0,0,.45),
-      0 0 0 1px rgba(255,255,255,.05) inset;
-    -webkit-backdrop-filter: blur(14px);
-    backdrop-filter: blur(14px);
-  }
-
-  #chooseHint{
-    position: static !important;
-    margin-bottom: 10px !important;
-  }
-
   #myPlayZone .grid{
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 8px !important;
   }
 
   #myPlayZone button{
     border-radius: 12px !important;
-    background: rgba(255,255,255,.03);
-  }
-
-  #myPlayZone img{
-    aspect-ratio: 1242 / 1863;
-    object-fit: cover;
   }
 
   /* 日誌區上方文字 */
@@ -2345,28 +2298,13 @@ body::before{
   }
 
   /* ===== 玩家區 ===== */
-  #gameSidebar{
-    position: relative;
-  }
-
-  #playersPanel{
-    padding-right: 0 !important;
-  }
-
   #players{
-    display: grid !important;
-    grid-auto-flow: column !important;
-    grid-auto-columns: minmax(220px, 84vw) !important;
-    gap: 10px !important;
-    overflow-x: auto !important;
-    padding-bottom: 6px;
-    scroll-snap-type: x proximity;
+    gap: 8px !important;
   }
 
   #players .card,
   #players > div{
     padding: 10px !important;
-    scroll-snap-align: start;
   }
 
   /* 玩家頭像縮小 */
@@ -2409,21 +2347,6 @@ body::before{
   }
 
   /* ===== 棄牌與 log ===== */
-  #discardPanel .flex.items-center.justify-between.mb-2{
-    align-items: flex-start !important;
-    flex-direction: column !important;
-    gap: 8px !important;
-  }
-
-  #discardPanel .flex.items-center.gap-2{
-    width: 100%;
-    flex-wrap: wrap;
-  }
-
-  #discardPanel .flex.items-center.gap-2 > button{
-    flex: 1 1 0;
-  }
-
   #discard{
     gap: 8px !important;
     padding-bottom: 2px;
@@ -2440,7 +2363,7 @@ body::before{
   }
 
   #logBox{
-    max-height: 28vh !important;
+    max-height: 40vh !important;
     font-size: 12px !important;
     line-height: 1.45 !important;
   }
@@ -2568,128 +2491,6 @@ body::before{
   }
 }
 
-@media (max-width: 960px) and (orientation: landscape){
-
-  header .max-w-7xl{
-    padding-top: 8px !important;
-    padding-bottom: 8px !important;
-  }
-
-  #gameHeaderBar{
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center !important;
-    column-gap: 10px !important;
-    row-gap: 6px !important;
-  }
-
-  #gameHeaderActions{
-    width: auto !important;
-    margin-left: auto !important;
-  }
-
-  #bgmBar{
-    width: auto !important;
-    flex-wrap: nowrap !important;
-    align-items: center !important;
-  }
-
-  #bgmTitle{
-    order: 0;
-    width: auto;
-    max-width: min(24vw, 180px) !important;
-    margin-left: 4px !important;
-  }
-
-  main.max-w-7xl{
-    grid-template-columns: minmax(0, 1.18fr) minmax(280px, .82fr) !important;
-    align-items: start !important;
-    gap: 10px !important;
-    padding-bottom: 14px !important;
-  }
-
-  #gameTopGrid{
-    grid-template-columns: minmax(0, 1fr) minmax(180px, 240px) !important;
-    gap: 10px !important;
-  }
-
-  #venues{
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  }
-
-  #discardPanel{
-    grid-column: 1 / -1;
-  }
-
-  #gameSidebar{
-    position: sticky;
-    top: 74px;
-  }
-
-  #playersPanel{
-    max-height: 44vh;
-    overflow-y: auto;
-    padding-right: 8px !important;
-  }
-
-  #players{
-    display: grid !important;
-    grid-auto-flow: row !important;
-    grid-auto-columns: unset !important;
-    grid-template-columns: 1fr !important;
-    overflow-x: visible !important;
-    overflow-y: visible !important;
-    scroll-snap-type: none !important;
-  }
-
-  #players .card,
-  #players > div{
-    scroll-snap-align: none;
-  }
-
-  #myPlayZone{
-    position: static !important;
-    left: auto;
-    right: auto;
-    bottom: auto;
-    margin-top: 8px;
-    padding: 10px !important;
-    border-radius: 14px !important;
-    background: rgba(8,12,18,.78) !important;
-    box-shadow: 0 10px 28px rgba(0,0,0,.28) !important;
-  }
-
-  #myPlayZone .grid{
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-
-  #myPlayZone img{
-    max-height: 34vh;
-    object-fit: contain;
-  }
-
-  #logPanel .flex.items-center.justify-between{
-    align-items: flex-start !important;
-    gap: 6px !important;
-  }
-
-  #logBox{
-    max-height: 26vh !important;
-  }
-
-  #discard{
-    min-height: 74px;
-  }
-
-  .thumb{
-    width: 48px !important;
-  }
-
-  .thumb-sm{
-    width: 30px !important;
-  }
-}
-
 </style>
 </head>
 <body>
@@ -2703,7 +2504,7 @@ body::before{
 <div id="chopperLayer"></div>
 <div id="aokijiLayer"></div>
 <header class="sticky top-0 z-40 bg-[#101418]/80 backdrop-blur border-b border-[#1c2229]">
-  <div id="gameHeaderBar" class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
     <!-- 左側標題 -->
     <div class="font-semibold tracking-wide">偉大航道爭霸戰</div>
 
@@ -2723,7 +2524,7 @@ body::before{
       </button>
 
  <!-- 拉到最右邊：音樂條 -->
-    <div id="gameHeaderActions" class="ml-auto flex items-center gap-2">
+    <div class="ml-auto flex items-center gap-2">
       <div id="bgmBar" class="flex items-center gap-2 px-2 py-1 rounded-lg border border-[#2a2f35] bg-[#14181c]/80">
         <!-- 控制鈕 -->
        <button id="bgmPrev" class="icon-btn" title="上一首" aria-label="上一首">
@@ -2786,9 +2587,9 @@ body::before{
   </div>
 </header>
 
-  <main id="gameMain" class="max-w-7xl mx-auto px-3 md:px-4 py-4 grid gap-4 lg:grid-cols-[1.2fr_.8fr]">
-    <section id="gameBoard" class="space-y-3">
-      <div id="gameTopGrid" class="grid grid-cols-2 md:grid-cols-3 gap-3">
+  <main class="max-w-7xl mx-auto px-3 md:px-4 py-4 grid gap-4 lg:grid-cols-[1.2fr_.8fr]">
+    <section class="space-y-3">
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
         <div class="card p-3 md:col-span-2">
           <div class="text-sm mb-2 opacity-80">本局場地</div>
           <div id="venues" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2"></div>
@@ -2811,7 +2612,7 @@ body::before{
 </div>
 
 
-<div id="discardPanel" class="card p-3 md:col-span-3">
+<div class="card p-3 md:col-span-3">
   <div class="flex items-center justify-between mb-2">
     <div class="text-sm opacity-80">棄牌</div>
     <div class="flex items-center gap-2">
@@ -2850,7 +2651,7 @@ body::before{
   <div id="autoTakeoverText" class="sub">目前由 CPU 暫時代打，點一下就能立刻接手繼續玩。</div>
   <div class="cta">點一下拿回操作權</div>
 </div>
-      <div id="logPanel" class="card p-3">
+      <div class="card p-3">
         <div class="flex items-center justify-between mb-2">
           <div class="text-sm opacity-80">對局日誌</div>
           <div class="text-xs text-neutral-400">輪到：<span id="turnLbl">—</span>｜階段：<span id="stepLbl">—</span></div>
@@ -2859,8 +2660,8 @@ body::before{
       </div>
     </section>
 
-    <aside id="gameSidebar" class="space-y-3">
-      <div id="playersPanel" class="card p-3">
+    <aside class="space-y-3">
+      <div class="card p-3">
         <div class="text-sm mb-2 opacity-80">玩家</div>
         <div id="players" class="grid gap-2"></div>
       </div>
