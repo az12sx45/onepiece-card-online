@@ -6,10 +6,10 @@
   <title>onepiece 偉大航道爭霸戰 — 啟動流程（影片版 + 等待室 + 音效）</title>
   <link rel="manifest" href="manifest.webmanifest">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
   <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js"></script>
 
   <!-- i18n dictionaries -->
   <script>window.__I18N_DICTS = window.__I18N_DICTS || {};</script>
@@ -748,6 +748,7 @@ function getDeviceId(){
     return 'legacy';
   }
 }
+window.getDeviceId = getDeviceId;
     const socket = io(SERVER_URL, { transports: ['websocket'] });
 
     // === Presence：讓伺服器把此 socket 綁定到 userId（邀請/好友在線狀態會用到）===
