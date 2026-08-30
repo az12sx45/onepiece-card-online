@@ -1,0 +1,15 @@
+{
+  "name": "航海王大富翁",
+  "short_name": "航海王大富翁",
+  "start_url": "./board_start.html",
+  "scope": "./",
+  "display": "fullscreen",
+  "display_override": ["fullscreen", "standalone"],
+  "orientation": "landscape",
+  "background_color": "#06111d",
+  "theme_color": "#06111d",
+  "icons": [
+    { "src": "images/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "images/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

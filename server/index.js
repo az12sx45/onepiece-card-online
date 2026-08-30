@@ -1,5 +1,6 @@
 // server/index.js — 動態人數/無佔位 + 正確對齊 playerId + 開局即廣播 STATE
 const path = require("path");
+const fs = require("fs/promises");
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
@@ -28,7 +29,363 @@ console.log("[env] DATABASE_URL exists:", !!process.env.DATABASE_URL);
 
 
 const app = express();
+app.use(express.json({ limit: "30mb" }));
 app.use(express.static(path.join(__dirname, "..", "public")));
+app.use("/api/board-save", (req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET,PUT,DELETE,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  if (req.method === "OPTIONS") return res.sendStatus(204);
+  return next();
+});
+
+const BOARD_SAVE_DIR = path.join(__dirname, "data", "board_saves");
+const BOARD_CAMPAIGN_DIR = path.join(__dirname, "data", "board_campaigns");
+const BOARD_CAMPAIGN_SCHEMA_VERSION = 1;
+const BOARD_DB_PERSISTENCE_ENABLED = Boolean(process.env.DATABASE_URL);
+const boardCampaignWriteQueues = new Map();
+
+async function ensureBoardPersistenceTables(){
+  if(!BOARD_DB_PERSISTENCE_ENABLED) return;
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS board_saves (
+      room_code TEXT PRIMARY KEY,
+      payload JSONB NOT NULL,
+      saved_at BIGINT NOT NULL
+    );
+  `);
+  await pool.query(`CREATE INDEX IF NOT EXISTS board_saves_saved_at_idx ON board_saves(saved_at DESC);`);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS board_campaigns (
+      campaign_id TEXT PRIMARY KEY,
+      payload JSONB NOT NULL,
+      updated_at BIGINT NOT NULL
+    );
+  `);
+  await pool.query(`CREATE INDEX IF NOT EXISTS board_campaigns_updated_at_idx ON board_campaigns(updated_at DESC);`);
+}
+
+let boardPersistenceInitError = null;
+const boardPersistenceReady = ensureBoardPersistenceTables().then(() => {
+  if(BOARD_DB_PERSISTENCE_ENABLED) console.log("[board-persistence] PostgreSQL ready");
+}).catch((error) => {
+  console.error("[board-persistence] PostgreSQL init failed", error);
+  boardPersistenceInitError = error;
+});
+
+async function waitForBoardPersistence(){
+  await boardPersistenceReady;
+  if(boardPersistenceInitError) throw boardPersistenceInitError;
+}
+
+function sanitizeBoardSaveRoomCode(value){
+  return String(value || "LOCAL").trim().toUpperCase().replace(/[^A-Z0-9_-]/g, "").slice(0, 32) || "LOCAL";
+}
+
+function boardSaveFilePath(roomCode){
+  const safeRoom = sanitizeBoardSaveRoomCode(roomCode);
+  return path.join(BOARD_SAVE_DIR, `${safeRoom}.json`);
+}
+
+function sanitizeBoardCampaignId(value){
+  return String(value || "")
+    .trim()
+    .toUpperCase()
+    .replace(/[^A-Z0-9_-]/g, "")
+    .slice(0, 32);
+}
+
+function boardCampaignFilePath(campaignId){
+  const safeId = sanitizeBoardCampaignId(campaignId);
+  if(!safeId) throw new Error("invalid campaign id");
+  return path.join(BOARD_CAMPAIGN_DIR, `${safeId}.json`);
+}
+
+function boardCampaignClone(value){
+  return value == null ? value : JSON.parse(JSON.stringify(value));
+}
+
+function boardCampaignMemberKey(value = {}){
+  const userId = Number(value?.userId ?? value?.id);
+  if(Number.isFinite(userId) && userId > 0) return `user-${Math.trunc(userId)}`;
+  const clientId = String(value?.clientId || "").trim().replace(/[^a-zA-Z0-9_-]/g, "").slice(0, 80);
+  return clientId ? `client-${clientId}` : "";
+}
+
+function isValidBoardCampaign(campaign){
+  return Boolean(
+    campaign
+    && typeof campaign === "object"
+    && sanitizeBoardCampaignId(campaign.campaignId)
+    && Array.isArray(campaign.members)
+    && campaign.memberRecords
+    && typeof campaign.memberRecords === "object"
+  );
+}
+
+async function readBoardCampaign(campaignId){
+  const safeId = sanitizeBoardCampaignId(campaignId);
+  let campaign;
+  if(BOARD_DB_PERSISTENCE_ENABLED){
+    await waitForBoardPersistence();
+    const result = await pool.query(
+      "SELECT payload FROM board_campaigns WHERE campaign_id=$1 LIMIT 1",
+      [safeId]
+    );
+    if(!result.rows.length){
+      const error = new Error("campaign not found");
+      error.code = "ENOENT";
+      throw error;
+    }
+    campaign = result.rows[0].payload;
+  }else{
+    const raw = await fs.readFile(boardCampaignFilePath(safeId), "utf8");
+    campaign = JSON.parse(raw);
+  }
+  if(!isValidBoardCampaign(campaign)){
+    const error = new Error("invalid campaign");
+    error.code = "INVALID_CAMPAIGN";
+    throw error;
+  }
+  return campaign;
+}
+
+async function writeBoardCampaign(campaign){
+  if(!isValidBoardCampaign(campaign)) throw new Error("invalid campaign");
+  const normalized = {
+    ...campaign,
+    schemaVersion: BOARD_CAMPAIGN_SCHEMA_VERSION,
+    campaignId: sanitizeBoardCampaignId(campaign.campaignId),
+    updatedAt: Date.now(),
+  };
+  if(BOARD_DB_PERSISTENCE_ENABLED){
+    await waitForBoardPersistence();
+    await pool.query(
+      `INSERT INTO board_campaigns(campaign_id,payload,updated_at)
+       VALUES($1,$2,$3)
+       ON CONFLICT(campaign_id) DO UPDATE
+       SET payload=EXCLUDED.payload, updated_at=EXCLUDED.updated_at`,
+      [normalized.campaignId, normalized, normalized.updatedAt]
+    );
+    return normalized;
+  }
+  await fs.mkdir(BOARD_CAMPAIGN_DIR, { recursive: true });
+  const filePath = boardCampaignFilePath(normalized.campaignId);
+  const tempPath = `${filePath}.${process.pid}.${Date.now()}.tmp`;
+  await fs.writeFile(tempPath, JSON.stringify(normalized), "utf8");
+  try{
+    await fs.rename(tempPath, filePath);
+  }catch(error){
+    if(!["EPERM", "EEXIST", "EACCES"].includes(String(error?.code || ""))) throw error;
+    // Windows/OneDrive/防毒軟體偶爾會短暫鎖住既有 JSON；同一 campaign
+    // 已由 write queue 串行化，因此可安全改用覆寫後移除暫存檔。
+    await fs.copyFile(tempPath, filePath);
+    await fs.unlink(tempPath).catch(() => {});
+  }
+  return normalized;
+}
+
+async function listBoardCampaigns(){
+  if(BOARD_DB_PERSISTENCE_ENABLED){
+    await waitForBoardPersistence();
+    const result = await pool.query("SELECT payload FROM board_campaigns ORDER BY updated_at DESC");
+    return result.rows.map((row) => row.payload).filter(isValidBoardCampaign);
+  }
+  let entries = [];
+  try{
+    entries = await fs.readdir(BOARD_CAMPAIGN_DIR, { withFileTypes:true });
+  }catch(error){
+    if(error?.code === "ENOENT") return [];
+    throw error;
+  }
+  const campaigns = [];
+  for(const entry of entries){
+    if(!entry.isFile() || !entry.name.toLowerCase().endsWith(".json")) continue;
+    try{
+      campaigns.push(await readBoardCampaign(path.basename(entry.name, ".json")));
+    }catch(error){
+      console.warn("[board-campaign:list] skipped invalid file", entry.name, String(error?.message || error));
+    }
+  }
+  return campaigns;
+}
+
+async function withBoardCampaignWriteLock(campaignId, task){
+  const key = sanitizeBoardCampaignId(campaignId);
+  const previous = boardCampaignWriteQueues.get(key) || Promise.resolve();
+  const next = previous.catch(() => {}).then(task);
+  boardCampaignWriteQueues.set(key, next);
+  try{
+    return await next;
+  }finally{
+    if(boardCampaignWriteQueues.get(key) === next) boardCampaignWriteQueues.delete(key);
+  }
+}
+
+function isValidBoardSavePayload(payload){
+  return Boolean(payload && typeof payload === "object" && payload.gameState && payload.gameState.boardData);
+}
+
+async function readValidBoardSavePayload(roomCode){
+  const safeRoom = sanitizeBoardSaveRoomCode(roomCode);
+  let payload;
+  let raw;
+  if(BOARD_DB_PERSISTENCE_ENABLED){
+    await waitForBoardPersistence();
+    const result = await pool.query(
+      "SELECT payload FROM board_saves WHERE room_code=$1 LIMIT 1",
+      [safeRoom]
+    );
+    if(!result.rows.length){
+      const error = new Error("save not found");
+      error.code = "ENOENT";
+      throw error;
+    }
+    payload = result.rows[0].payload;
+    raw = JSON.stringify(payload);
+  }else{
+    raw = await fs.readFile(boardSaveFilePath(safeRoom), "utf8");
+    payload = JSON.parse(raw);
+  }
+  if (!isValidBoardSavePayload(payload)) {
+    const error = new Error("invalid save");
+    error.code = "INVALID_SAVE";
+    throw error;
+  }
+  return { roomCode: safeRoom, payload, raw };
+}
+
+function boardSaveTimestamp(payload, stat){
+  const savedAt = Date.parse(payload?.serverSavedAt || payload?.savedAt || "");
+  return Number.isFinite(savedAt) ? savedAt : Number(stat?.mtimeMs || 0);
+}
+
+async function readLatestValidBoardSavePayload(excludeRoomCode = ""){
+  const exclude = sanitizeBoardSaveRoomCode(excludeRoomCode);
+  if(BOARD_DB_PERSISTENCE_ENABLED){
+    await waitForBoardPersistence();
+    const result = await pool.query(
+      `SELECT room_code,payload,saved_at
+       FROM board_saves
+       WHERE room_code<>$1
+       ORDER BY saved_at DESC
+       LIMIT 1`,
+      [exclude]
+    );
+    if(!result.rows.length || !isValidBoardSavePayload(result.rows[0].payload)) return null;
+    return {
+      roomCode: result.rows[0].room_code,
+      payload: result.rows[0].payload,
+      timestamp: Number(result.rows[0].saved_at || 0),
+      modifiedAt: Number(result.rows[0].saved_at || 0),
+    };
+  }
+  let entries = [];
+  try {
+    entries = await fs.readdir(BOARD_SAVE_DIR, { withFileTypes: true });
+  } catch (error) {
+    if (error?.code === "ENOENT") return null;
+    throw error;
+  }
+  const candidates = [];
+  for (const entry of entries) {
+    if (!entry.isFile() || !entry.name.toLowerCase().endsWith(".json")) continue;
+    const roomCode = sanitizeBoardSaveRoomCode(path.basename(entry.name, ".json"));
+    if (!roomCode || roomCode === exclude) continue;
+    const filePath = boardSaveFilePath(roomCode);
+    try {
+      const [raw, stat] = await Promise.all([fs.readFile(filePath, "utf8"), fs.stat(filePath)]);
+      const payload = JSON.parse(raw);
+      if (!isValidBoardSavePayload(payload)) continue;
+      candidates.push({
+        roomCode,
+        payload,
+        timestamp: boardSaveTimestamp(payload, stat),
+        modifiedAt: Number(stat.mtimeMs || 0),
+      });
+    } catch (_) {
+      // Ignore broken or in-progress save files when searching fallback saves.
+    }
+  }
+  candidates.sort((a, b) => (b.timestamp - a.timestamp) || (b.modifiedAt - a.modifiedAt));
+  return candidates[0] || null;
+}
+
+app.get("/api/board-save/:roomCode", async (req, res) => {
+  const roomCode = sanitizeBoardSaveRoomCode(req.params.roomCode);
+  try {
+    const { payload } = await readValidBoardSavePayload(roomCode);
+    return res.json({ ok: true, roomCode, payload });
+  } catch (error) {
+    if (error?.code === "INVALID_SAVE") {
+      return res.status(422).json({ ok: false, error: "invalid save" });
+    }
+    if (error?.code === "ENOENT") {
+      const fallback = await readLatestValidBoardSavePayload(roomCode);
+      if (fallback?.payload) {
+        return res.json({ ok: true, roomCode, fallbackRoomCode: fallback.roomCode, payload: fallback.payload });
+      }
+      return res.status(404).json({ ok: false, error: "not found" });
+    }
+    console.error("[board-save:get] failed:", error);
+    return res.status(500).json({ ok: false, error: "read failed" });
+  }
+});
+
+app.put("/api/board-save/:roomCode", async (req, res) => {
+  const roomCode = sanitizeBoardSaveRoomCode(req.params.roomCode || req.body?.roomCode);
+  const payload = req.body?.payload || req.body;
+  if (!isValidBoardSavePayload(payload)) {
+    return res.status(400).json({ ok: false, error: "invalid save payload" });
+  }
+  const normalized = {
+    ...payload,
+    roomCode: payload.roomCode || roomCode,
+    serverSavedAt: new Date().toISOString(),
+  };
+  try {
+    if(BOARD_DB_PERSISTENCE_ENABLED){
+      await waitForBoardPersistence();
+      const savedAtMs = Date.parse(normalized.serverSavedAt) || Date.now();
+      await pool.query(
+        `INSERT INTO board_saves(room_code,payload,saved_at)
+         VALUES($1,$2,$3)
+         ON CONFLICT(room_code) DO UPDATE
+         SET payload=EXCLUDED.payload, saved_at=EXCLUDED.saved_at`,
+        [roomCode, normalized, savedAtMs]
+      );
+    }else{
+      await fs.mkdir(BOARD_SAVE_DIR, { recursive: true });
+      const filePath = boardSaveFilePath(roomCode);
+      const tempPath = `${filePath}.${process.pid}.${Date.now()}.tmp`;
+      await fs.writeFile(tempPath, JSON.stringify(normalized), "utf8");
+      await fs.rename(tempPath, filePath);
+    }
+    return res.json({ ok: true, roomCode, savedAt: normalized.savedAt, serverSavedAt: normalized.serverSavedAt });
+  } catch (error) {
+    console.error("[board-save:put] failed:", error);
+    return res.status(500).json({ ok: false, error: "write failed" });
+  }
+});
+
+app.delete("/api/board-save/:roomCode", async (req, res) => {
+  const roomCode = sanitizeBoardSaveRoomCode(req.params.roomCode);
+  try {
+    if(BOARD_DB_PERSISTENCE_ENABLED){
+      await waitForBoardPersistence();
+      const result = await pool.query("DELETE FROM board_saves WHERE room_code=$1", [roomCode]);
+      return res.json({ ok: true, roomCode, deleted: result.rowCount > 0 });
+    }
+    await fs.unlink(boardSaveFilePath(roomCode));
+    return res.json({ ok: true, roomCode, deleted: true });
+  } catch (error) {
+    if (error?.code === "ENOENT") {
+      return res.json({ ok: true, roomCode, deleted: false });
+    }
+    console.error("[board-save:delete] failed:", error);
+    return res.status(500).json({ ok: false, error: "delete failed" });
+  }
+});
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "public", "start.html"));
 });
@@ -300,12 +657,1044 @@ function ensureSocial(client){
 ensurePlayerNameUniqueIndex();
 
 const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: "*" } });
+const io = new Server(server, {
+  cors: { origin: "*" },
+  maxHttpBufferSize: 30 * 1024 * 1024,
+});
 
 // room = { state, sockets: Map<sid,{playerId,secret,displayName,avatar}>, host, lobbyReady }
 const rooms = new Map();
+const boardRooms = new Map();
 
 const MAX_ROOM_PLAYERS = 6;
+const BOARD_HOST_RECONNECT_GRACE_MS = 8000;
+const BOARD_CAMPAIGN_RECONNECT_GRACE_MS = 30000;
+
+function sanitizeBoardRoomCode(value){
+  return String(value || "")
+    .trim()
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g, "")
+    .slice(0, 12);
+}
+
+function makeBoardRoomCode(){
+  for(let i = 0; i < 24; i += 1){
+    const code = `B${Math.floor(1000 + Math.random() * 9000)}`;
+    if(!boardRooms.has(code)) return code;
+  }
+  return `B${Date.now().toString(36).slice(-5).toUpperCase()}`;
+}
+
+function normalizeBoardProfile(profile = {}){
+  const userId = Number(profile.userId) || Math.floor(100000 + Math.random() * 900000);
+  const clientId = String(profile.clientId || `board-${userId}`).trim() || `board-${userId}`;
+  const name = String(profile.name || `玩家${String(userId).slice(-4)}`).trim() || `玩家${String(userId).slice(-4)}`;
+  return {
+    userId,
+    clientId,
+    name,
+    avatar: Math.max(1, Math.min(2000, Number(profile.avatar) || 1)),
+    title: String(profile.title || "航海士").trim() || "航海士",
+  };
+}
+
+function createBoardRoom(roomCode, profile){
+  const host = normalizeBoardProfile(profile);
+  const code = sanitizeBoardRoomCode(roomCode) || makeBoardRoomCode();
+  const room = {
+    roomCode: code,
+    roomId: code,
+    roomName: `${host.name} 的航海房`,
+    hostUserId: host.userId,
+    status: "waiting",
+    maxPlayers: 4,
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+    players: [],
+    chat: [
+      { system: true, text: "本地連線房間已建立。同 WiFi 裝置可用房號加入。", ts: Date.now() },
+    ],
+    sockets: new Map(),
+    gamePayload: null,
+    gameVersion: 0,
+    gameUpdatedAt: 0,
+    hostTransferTimer: null,
+  };
+  room.players.push({ ...host, isHost: true, ready: false, online: true });
+  boardRooms.set(code, room);
+  return room;
+}
+
+function boardPlayerKey(player){
+  return `${Number(player?.userId) || 0}:${String(player?.clientId || "")}`;
+}
+
+function upsertBoardPlayer(room, profile, socketId){
+  const player = normalizeBoardProfile(profile);
+  const key = boardPlayerKey(player);
+  let existing = room.players.find((item) => boardPlayerKey(item) === key);
+  if(!existing){
+    existing = room.players.find((item) => Number(item.userId) === Number(player.userId));
+  }
+  if(!existing){
+    if(room.players.length >= Number(room.maxPlayers || 4)) {
+      return { ok:false, error:"full" };
+    }
+    existing = { ...player, isHost: false, ready: false, online: true };
+    room.players.push(existing);
+  }else{
+    Object.assign(existing, player, { online: true });
+  }
+  if(!room.hostUserId || !room.players.some((item) => Number(item.userId) === Number(room.hostUserId))){
+    room.hostUserId = existing.userId;
+  }
+  room.players.forEach((item) => {
+    item.isHost = Number(item.userId) === Number(room.hostUserId);
+  });
+  room.sockets.set(socketId, { userId: existing.userId, clientId: existing.clientId });
+  if(Number(existing.userId) === Number(room.hostUserId) && room.hostTransferTimer){
+    clearTimeout(room.hostTransferTimer);
+    room.hostTransferTimer = null;
+  }
+  room.updatedAt = Date.now();
+  return { ok:true, player: existing };
+}
+
+function boardPlayerIsCpu(player){
+  return !!player && (
+    player.isCPU === true
+    || player.isCpu === true
+    || player.cpu === true
+    || String(player.clientId || "").startsWith("board-cpu-")
+  );
+}
+
+function boardCpuSlotNumber(player, fallbackOrdinal = 1){
+  const userId = Number(player?.userId);
+  if(Number.isInteger(userId) && userId <= -1001) return Math.max(1, Math.abs(userId + 1000));
+  const clientMatch = String(player?.clientId || "").match(/-(\d+)$/);
+  if(clientMatch) return Math.max(1, Number(clientMatch[1]) || 1);
+  return Math.max(1, Number(fallbackOrdinal) || 1);
+}
+
+function boardCpuDisplayName(player, fallbackOrdinal = 1){
+  return `CPU${boardCpuSlotNumber(player, fallbackOrdinal)}`;
+}
+
+function nextBoardCpuSlot(room){
+  const usedIds = new Set((room?.players || []).map((player) => Number(player.userId)));
+  for(let slot = 1; slot <= Math.max(1, Number(room?.maxPlayers || 4)); slot += 1){
+    const userId = -1000 - slot;
+    if(!usedIds.has(userId)) return slot;
+  }
+  return Math.max(1, (room?.players || []).length + 1);
+}
+
+function createBoardCpuPlayer(room){
+  const slot = nextBoardCpuSlot(room);
+  const avatars = [12, 18, 24];
+  return {
+    userId: -1000 - slot,
+    clientId: `board-cpu-${room.roomCode}-${slot}`,
+    name: `CPU${slot}`,
+    avatar: avatars[(slot - 1) % avatars.length],
+    title: "CPU 航海士",
+    isHost: false,
+    ready: true,
+    online: true,
+    isCPU: true,
+  };
+}
+
+function boardCampaignLocationSummary(player = {}){
+  const location = player?.location && typeof player.location === "object" ? player.location : {};
+  if(location.kind === "island") return { ...boardCampaignClone(location), label: String(location.islandId || "島嶼") };
+  if(location.kind === "sea") return { ...boardCampaignClone(location), label: String(location.tileId || location.routeId || "海上") };
+  return { ...boardCampaignClone(location), label: "位置已保存" };
+}
+
+function boardCampaignCrewSummary(player = {}){
+  return (Array.isArray(player?.crew) ? player.crew : []).slice(0, 6).map((card) => ({
+    id: String(card?.id || card?.cardId || card?.instanceId || ""),
+    instanceId: String(card?.instanceId || ""),
+    name: String(card?.name || "未知角色"),
+    level: Math.max(1, Number(card?.level || 1)),
+    image: String(card?.image || card?.imagePath || card?.portrait || ""),
+  }));
+}
+
+function boardCampaignSharedStateFromPayload(payload = {}){
+  const game = payload?.gameState || {};
+  const world = game?.postgameWorld || {};
+  return {
+    postgameUnlocked: world.unlocked === true,
+    finalIslandUnlocked: game.finalIslandUnlocked === true,
+    researchLabsActive: world.researchLabsActive === true,
+    eggheadUnlocked: world.eggheadUnlocked === true,
+    finalEndingCleared: game.finalEndingCleared === true,
+  };
+}
+
+function mergeBoardCampaignSharedState(previous = {}, incoming = {}){
+  const merged = { ...previous };
+  ["postgameUnlocked", "finalIslandUnlocked", "researchLabsActive", "eggheadUnlocked", "finalEndingCleared"].forEach((key) => {
+    merged[key] = previous?.[key] === true || incoming?.[key] === true;
+  });
+  return merged;
+}
+
+function applyBoardCampaignSharedState(payload, shared = {}){
+  const clone = boardCampaignClone(payload);
+  const game = clone?.gameState;
+  if(!game) return clone;
+  if(shared.finalIslandUnlocked) game.finalIslandUnlocked = true;
+  if(shared.finalEndingCleared) game.finalEndingCleared = true;
+  if(shared.postgameUnlocked || shared.researchLabsActive || shared.eggheadUnlocked){
+    if(!game.postgameWorld || typeof game.postgameWorld !== "object") game.postgameWorld = {};
+    if(shared.postgameUnlocked) game.postgameWorld.unlocked = true;
+    if(shared.researchLabsActive) game.postgameWorld.researchLabsActive = true;
+    if(shared.eggheadUnlocked) game.postgameWorld.eggheadUnlocked = true;
+  }
+  return clone;
+}
+
+function boardCampaignHumanPlayers(payload = {}){
+  const players = Array.isArray(payload?.gameState?.players) ? payload.gameState.players : [];
+  return players.filter((player) => {
+    const userId = Number(player?.userId ?? player?.id);
+    return Number.isFinite(userId) && userId > 0;
+  });
+}
+
+function boardCampaignRecordSummary(record = {}){
+  const player = record?.player || {};
+  return {
+    revision: Math.max(0, Number(record?.revision || 0)),
+    savedAt: String(record?.savedAt || ""),
+    playerName: String(player?.name || "玩家"),
+    location: boardCampaignLocationSummary(player),
+    crew: boardCampaignCrewSummary(player),
+    coins: Math.max(0, Number(player?.coins || 0)),
+    bounty: Math.max(0, Number(player?.bounty || 0)),
+  };
+}
+
+function boardCampaignBasePayload(campaign, memberKey = ""){
+  const key = String(memberKey || "");
+  return campaign?.branchRecords?.[key]?.payload
+    || campaign?.basePayload
+    || Object.values(campaign?.branchRecords || {}).find((record) => isValidBoardSavePayload(record?.payload))?.payload
+    || null;
+}
+
+function boardCampaignProgressId(room, payload = {}){
+  if(room?.campaignId) return sanitizeBoardCampaignId(room.campaignId);
+  if(payload?.campaignContext?.campaignId) return sanitizeBoardCampaignId(payload.campaignContext.campaignId);
+  if(room?.roomCode && room?.createdAt){
+    return sanitizeBoardCampaignId(`${room.roomCode}-${Number(room.createdAt).toString(36)}`);
+  }
+  return sanitizeBoardCampaignId(payload?.roomCode || room?.roomCode || "");
+}
+
+function boardCampaignFindMember(campaign, identity = {}){
+  const key = boardCampaignMemberKey(identity);
+  return (campaign?.members || []).find((member) => member.key === key)
+    || (campaign?.members || []).find((member) => Number(member.userId) > 0 && Number(member.userId) === Number(identity?.userId))
+    || null;
+}
+
+function boardCampaignActiveGatherRoom(campaignId){
+  const id = sanitizeBoardCampaignId(campaignId);
+  return Array.from(boardRooms.values()).find((room) => (
+    room?.campaignId === id
+    && room?.campaignMode === "gather"
+    && room?.status === "waiting"
+  )) || null;
+}
+
+function serializeBoardCampaign(campaign, identity = {}){
+  const member = boardCampaignFindMember(campaign, identity);
+  if(!member) return null;
+  const activeGather = boardCampaignActiveGatherRoom(campaign.campaignId);
+  const branch = campaign?.branchRecords?.[member.key] || null;
+  return {
+    campaignId: campaign.campaignId,
+    roomName: campaign.roomName || "共有航海紀錄",
+    schemaVersion: Number(campaign.schemaVersion || BOARD_CAMPAIGN_SCHEMA_VERSION),
+    createdAt: Number(campaign.createdAt || 0),
+    updatedAt: Number(campaign.updatedAt || 0),
+    shared: boardCampaignClone(campaign.shared || {}),
+    memberKey: member.key,
+    seatIndex: Number(member.seatIndex || 0),
+    branch: branch ? {
+      revision: Number(branch.revision || 0),
+      savedAt: String(branch.savedAt || ""),
+      hasBattle: Boolean(branch.payload?.battleState),
+      round: Math.max(1, Number(branch.payload?.gameState?.round || 1)),
+      turnStep: String(branch.payload?.gameState?.turnStep || branch.payload?.gameState?.phase || ""),
+    } : null,
+    members: (campaign.members || []).map((entry) => ({
+      key: entry.key,
+      userId: Number(entry.userId || 0),
+      name: String(entry.name || "玩家"),
+      avatar: Number(entry.avatar || 1),
+      title: String(entry.title || "航海士"),
+      seatIndex: Number(entry.seatIndex || 0),
+      latest: boardCampaignRecordSummary(campaign.memberRecords?.[entry.key]),
+    })),
+    activeGatherRoom: activeGather ? {
+      roomCode: activeGather.roomCode,
+      hostName: activeGather.players.find((player) => Number(player.userId) === Number(activeGather.hostUserId))?.name || "房主",
+      joinedHumans: activeGather.players.filter((player) => !boardPlayerIsCpu(player)).length,
+    } : null,
+  };
+}
+
+async function boardCampaignsForIdentity(identity = {}){
+  const campaigns = await listBoardCampaigns();
+  return campaigns
+    .map((campaign) => serializeBoardCampaign(campaign, identity))
+    .filter(Boolean)
+    .sort((a, b) => Number(b.updatedAt || 0) - Number(a.updatedAt || 0));
+}
+
+function boardCampaignRoomPlayer(member, profile, campaignId, isActiveHuman){
+  const activeProfile = isActiveHuman ? normalizeBoardProfile(profile) : null;
+  const userId = Number(member.userId || activeProfile?.userId || 0);
+  return {
+    userId,
+    clientId: isActiveHuman
+      ? activeProfile.clientId
+      : `board-proxy-${sanitizeBoardCampaignId(campaignId)}-${userId}`,
+    name: isActiveHuman ? activeProfile.name : member.name,
+    avatar: isActiveHuman ? activeProfile.avatar : member.avatar,
+    title: isActiveHuman ? activeProfile.title : member.title,
+    isHost: false,
+    ready: !isActiveHuman,
+    online: true,
+    isCPU: !isActiveHuman,
+    isProxyCPU: !isActiveHuman,
+    proxyOwnerUserId: !isActiveHuman ? userId : 0,
+    campaignMemberKey: member.key,
+  };
+}
+
+function createBoardCampaignRoom(campaign, profile, mode = "gather"){
+  const opener = boardCampaignFindMember(campaign, profile);
+  if(!opener) return { ok:false, error:"not_campaign_member" };
+  const roomCode = makeBoardRoomCode();
+  const normalizedProfile = normalizeBoardProfile(profile);
+  const basePayload = boardCampaignBasePayload(campaign, opener.key);
+  if(!isValidBoardSavePayload(basePayload)) return { ok:false, error:"campaign_missing_save" };
+  const basePlayers = Array.isArray(basePayload.gameState?.players) ? basePayload.gameState.players : [];
+  const playersBySeat = [];
+  (campaign.members || []).forEach((member) => {
+    playersBySeat[Number(member.seatIndex || 0)] = boardCampaignRoomPlayer(
+      member,
+      normalizedProfile,
+      campaign.campaignId,
+      member.key === opener.key
+    );
+  });
+  basePlayers.forEach((player, index) => {
+    const userId = Number(player?.userId ?? player?.id);
+    if(userId > 0 || playersBySeat[index]) return;
+    playersBySeat[index] = {
+      userId,
+      clientId: String(player?.clientId || `board-cpu-${roomCode}-${index + 1}`),
+      name: String(player?.name || `CPU${index + 1}`),
+      avatar: Number(player?.avatar || 1),
+      title: String(player?.title || "CPU 航海士"),
+      isHost: false,
+      ready: true,
+      online: true,
+      isCPU: true,
+      isOriginalCPU: true,
+    };
+  });
+  const players = playersBySeat.filter(Boolean).slice(0, 4);
+  const room = {
+    roomCode,
+    roomId: roomCode,
+    roomName: campaign.roomName || "共有航海紀錄",
+    hostUserId: normalizedProfile.userId,
+    status: mode === "solo" ? "playing" : "waiting",
+    maxPlayers: 4,
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+    players,
+    chat: [
+      { system:true, text: mode === "solo" ? "已從共有航海紀錄開啟個別分支。" : "集合等待室已開啟；所有真人準備後才會開始。", ts:Date.now() },
+    ],
+    sockets: new Map(),
+    gamePayload: null,
+    gameVersion: 0,
+    gameUpdatedAt: 0,
+    hostTransferTimer: null,
+    campaignId: campaign.campaignId,
+    campaignMode: mode === "solo" ? "solo" : "gather",
+    campaignBaseMemberKey: opener.key,
+    campaignStartedHumanUserIds: mode === "solo" ? [normalizedProfile.userId] : [],
+  };
+  room.players.forEach((player) => {
+    player.isHost = Number(player.userId) === Number(room.hostUserId);
+  });
+  boardRooms.set(roomCode, room);
+  return { ok:true, room, opener };
+}
+
+function joinBoardCampaignRoom(room, profile, socketId){
+  if(!room?.campaignId || room.status !== "waiting") return { ok:false, error:"not_waiting" };
+  const normalized = normalizeBoardProfile(profile);
+  const player = room.players.find((entry) => Number(entry.userId) === Number(normalized.userId));
+  if(!player) return { ok:false, error:"not_campaign_member" };
+  const alreadyConnected = Array.from(room.sockets.entries()).some(([activeSocketId, meta]) => (
+    activeSocketId !== socketId
+    && Number(meta?.userId) === Number(normalized.userId)
+  ));
+  if(alreadyConnected) return { ok:false, error:"campaign_already_connected" };
+  clearBoardCampaignDisconnectTimer(room, normalized.userId);
+  if(!player.isProxyCPU && !boardPlayerIsCpu(player)){
+    Object.assign(player, normalized, { online:true });
+    room.sockets.set(socketId, { userId:player.userId, clientId:player.clientId });
+    room.updatedAt = Date.now();
+    return { ok:true, player, reconnected:true };
+  }
+  if(!player.isProxyCPU) return { ok:false, error:"not_campaign_member" };
+  Object.assign(player, normalized, {
+    isCPU:false,
+    isProxyCPU:false,
+    proxyOwnerUserId:0,
+    ready:false,
+    online:true,
+  });
+  room.sockets.set(socketId, { userId:player.userId, clientId:player.clientId });
+  room.updatedAt = Date.now();
+  return { ok:true, player };
+}
+
+function boardCampaignGatherPayloadIsStable(payload){
+  const game = payload?.gameState || {};
+  return !payload?.battleState
+    && !game.pendingMove
+    && !game.routePrompt
+    && !game.tradePrompt
+    && !game.coopBattlePrompt
+    && !game.activeTrade
+    && !game.activeSpar
+    && !game.islandDecision
+    && !game.movementAnimating
+    && !game.diceRolling
+    && !game.resolutionLock
+    && !game.battleExitLock;
+}
+
+function assembleBoardCampaignPayload(campaign, room){
+  const base = boardCampaignBasePayload(campaign, room.campaignBaseMemberKey);
+  if(!isValidBoardSavePayload(base)) return null;
+  let payload = applyBoardCampaignSharedState(base, campaign.shared || {});
+  const game = payload.gameState;
+  const players = Array.isArray(game.players) ? game.players : [];
+  (campaign.members || []).forEach((member) => {
+    const recordPlayer = campaign.memberRecords?.[member.key]?.player;
+    if(!recordPlayer) return;
+    const lobbyPlayer = room.players.find((entry) => Number(entry.userId) === Number(member.userId));
+    const proxy = !lobbyPlayer || boardPlayerIsCpu(lobbyPlayer);
+    const nextPlayer = boardCampaignClone(recordPlayer);
+    nextPlayer.id = String(member.userId);
+    nextPlayer.userId = Number(member.userId);
+    nextPlayer.clientId = String(lobbyPlayer?.clientId || `board-proxy-${campaign.campaignId}-${member.userId}`);
+    nextPlayer.name = String(member.name || nextPlayer.name || "玩家");
+    nextPlayer.avatar = Number(member.avatar || nextPlayer.avatar || 1);
+    nextPlayer.title = String(member.title || nextPlayer.title || "航海士");
+    nextPlayer.isCPU = proxy;
+    nextPlayer.isCpu = false;
+    nextPlayer.cpu = false;
+    nextPlayer.isProxyCPU = proxy;
+    nextPlayer.proxyOwnerUserId = proxy ? Number(member.userId) : 0;
+    nextPlayer.isHost = Number(member.userId) === Number(room.hostUserId);
+    nextPlayer.isMe = false;
+    players[Number(member.seatIndex || 0)] = nextPlayer;
+  });
+  game.players = players.filter(Boolean).slice(0, 4);
+  game.currentPlayerIndex = Math.max(0, Math.min(game.players.length - 1, Number(game.currentPlayerIndex || 0)));
+  if(room.campaignMode === "gather"){
+    payload.battleState = null;
+    payload.boardUiEvent = null;
+    game.pendingMove = null;
+    game.routePrompt = null;
+    game.tradePrompt = null;
+    game.coopBattlePrompt = null;
+    game.activeTrade = null;
+    game.activeSpar = null;
+    game.islandDecision = null;
+    game.movementAnimating = false;
+    game.diceRolling = false;
+    game.resolutionLock = false;
+    game.battleExitLock = false;
+  }
+  payload.roomCode = room.roomCode;
+  payload.savedAt = new Date().toISOString();
+  payload.campaignContext = {
+    schemaVersion: BOARD_CAMPAIGN_SCHEMA_VERSION,
+    campaignId: campaign.campaignId,
+    mode: room.campaignMode,
+    baseMemberKey: room.campaignBaseMemberKey,
+    startedHumanUserIds: room.players.filter((player) => !boardPlayerIsCpu(player)).map((player) => Number(player.userId)),
+  };
+  return payload;
+}
+
+async function saveBoardCampaignProgressUnlocked(room, identity, payload){
+  if(!isValidBoardSavePayload(payload)) return { ok:false, error:"invalid_payload" };
+  const callerKey = boardCampaignMemberKey(identity);
+  const humanPlayers = boardCampaignHumanPlayers(payload);
+  const callerPlayer = humanPlayers.find((player) => boardCampaignMemberKey(player) === callerKey)
+    || humanPlayers.find((player) => Number(player.userId || player.id) === Number(identity?.userId));
+  if(!callerPlayer) return { ok:false, error:"player_not_found" };
+  const campaignId = boardCampaignProgressId(room, payload);
+  if(!campaignId) return { ok:false, error:"invalid_campaign_id" };
+  let campaign = null;
+  try{
+    campaign = await readBoardCampaign(campaignId);
+  }catch(error){
+    if(error?.code !== "ENOENT") throw error;
+  }
+  const nowIso = new Date().toISOString();
+  if(!campaign){
+    const members = humanPlayers.map((player, seatIndex) => ({
+      key: boardCampaignMemberKey(player),
+      userId: Number(player.userId || player.id),
+      clientId: String(player.clientId || ""),
+      name: String(player.name || `玩家${seatIndex + 1}`),
+      avatar: Number(player.avatar || 1),
+      title: String(player.title || "航海士"),
+      seatIndex: Math.max(0, (payload.gameState.players || []).indexOf(player)),
+      joinedAt: Date.now(),
+    })).filter((member) => member.key);
+    const memberRecords = {};
+    const branchRecords = {};
+    members.forEach((member) => {
+      const player = humanPlayers.find((entry) => boardCampaignMemberKey(entry) === member.key);
+      memberRecords[member.key] = { revision:1, savedAt:nowIso, player:boardCampaignClone(player) };
+      branchRecords[member.key] = { revision:1, savedAt:nowIso, payload:boardCampaignClone(payload) };
+    });
+    campaign = {
+      schemaVersion: BOARD_CAMPAIGN_SCHEMA_VERSION,
+      campaignId,
+      roomName: String(room?.roomName || payload?.campaignContext?.roomName || "共有航海紀錄"),
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      shared: boardCampaignSharedStateFromPayload(payload),
+      members,
+      memberRecords,
+      branchRecords,
+      basePayload: boardCampaignClone(payload),
+    };
+  }else{
+    const member = boardCampaignFindMember(campaign, identity);
+    if(!member) return { ok:false, error:"not_campaign_member" };
+    member.clientId = String(identity?.clientId || member.clientId || "");
+    member.name = String(identity?.name || callerPlayer.name || member.name || "玩家");
+    member.avatar = Number(identity?.avatar || callerPlayer.avatar || member.avatar || 1);
+    member.title = String(identity?.title || callerPlayer.title || member.title || "航海士");
+    const previousRevision = Number(campaign.memberRecords?.[member.key]?.revision || 0);
+    campaign.memberRecords[member.key] = {
+      revision: previousRevision + 1,
+      savedAt: nowIso,
+      player: boardCampaignClone(callerPlayer),
+    };
+    const previousBranchRevision = Number(campaign.branchRecords?.[member.key]?.revision || 0);
+    campaign.branchRecords[member.key] = {
+      revision: previousBranchRevision + 1,
+      savedAt: nowIso,
+      payload: boardCampaignClone(payload),
+    };
+    campaign.shared = mergeBoardCampaignSharedState(campaign.shared, boardCampaignSharedStateFromPayload(payload));
+  }
+  campaign = await writeBoardCampaign(campaign);
+  return {
+    ok:true,
+    campaignId:campaign.campaignId,
+    campaign:serializeBoardCampaign(campaign, identity),
+  };
+}
+
+async function saveBoardCampaignProgress(room, identity, payload){
+  const campaignId = boardCampaignProgressId(room, payload);
+  if(!campaignId) return { ok:false, error:"invalid_campaign_id" };
+  return withBoardCampaignWriteLock(campaignId, () => saveBoardCampaignProgressUnlocked(room, identity, payload));
+}
+
+function serializeBoardLobby(room){
+  let cpuOrdinal = 0;
+  return {
+    roomId: room.roomCode,
+    roomCode: room.roomCode,
+    roomName: room.roomName,
+    hostName: room.players.find((item) => Number(item.userId) === Number(room.hostUserId))?.name || "房主",
+    hostUserId: room.hostUserId,
+    status: room.status,
+    maxPlayers: room.maxPlayers,
+    campaignId: room.campaignId || "",
+    campaignMode: room.campaignMode || "",
+    campaignBaseMemberKey: room.campaignBaseMemberKey || "",
+    players: room.players.map((item) => {
+      const isCPU = boardPlayerIsCpu(item);
+      if(isCPU) cpuOrdinal += 1;
+      return {
+        userId: item.userId,
+        clientId: item.clientId,
+        name: isCPU ? boardCpuDisplayName(item, cpuOrdinal) : item.name,
+        avatar: item.avatar,
+        title: item.title,
+        isHost: Number(item.userId) === Number(room.hostUserId),
+        ready: !!item.ready,
+        online: !!item.online,
+        isCPU,
+        isProxyCPU: item.isProxyCPU === true,
+        isOriginalCPU: item.isOriginalCPU === true,
+        proxyOwnerUserId: Number(item.proxyOwnerUserId || 0),
+        campaignMemberKey: String(item.campaignMemberKey || ""),
+      };
+    }),
+    chat: room.chat.slice(-80),
+  };
+}
+
+function currentBoardTurnActorFromPayload(payload){
+  const game = payload?.gameState;
+  if (!game || game.phase !== "main") return null;
+  const players = Array.isArray(game.players) ? game.players : [];
+  if (!players.length) return null;
+  const index = Math.max(0, Math.min(players.length - 1, Number(game.currentPlayerIndex) || 0));
+  return players[index] || null;
+}
+
+function boardGameFromPayload(payload){
+  return payload?.gameState && typeof payload.gameState === "object" ? payload.gameState : null;
+}
+
+function boardGamePhaseRank(payload){
+  const phase = String(boardGameFromPayload(payload)?.phase || "");
+  if (phase === "setup-order") return 0;
+  if (phase === "setup-draft") return 1;
+  if (phase === "main") return 2;
+  return -1;
+}
+
+function boardPlayerFromPayload(payload, playerId){
+  const players = Array.isArray(boardGameFromPayload(payload)?.players) ? boardGameFromPayload(payload).players : [];
+  return players.find((item) => String(item?.id) === String(playerId)) || null;
+}
+
+function boardBattleActorFromPayload(payload){
+  const battle = payload?.battleState;
+  if (!battle || typeof battle !== "object") return null;
+  return boardPlayerFromPayload(payload, battle.playerId);
+}
+
+function boardSparParticipantIds(spar){
+  return Array.isArray(spar?.participantIds)
+    ? [...new Set(spar.participantIds.map((id) => String(id || "").trim()).filter(Boolean))].slice(0, 2)
+    : [];
+}
+
+function boardSparFromPayload(payload){
+  const spar = boardGameFromPayload(payload)?.activeSpar;
+  return spar && typeof spar === "object" ? spar : null;
+}
+
+function boardBattleSparParticipantIds(payload){
+  const battle = payload?.battleState;
+  if (!battle?.isSparBattle || !Array.isArray(battle.participantOrder)) return [];
+  return [...new Set(battle.participantOrder.map((id) => String(id || "").trim()).filter(Boolean))].slice(0, 2);
+}
+
+function boardJsonKey(value){
+  try{
+    return JSON.stringify(value ?? null);
+  }catch{
+    return "";
+  }
+}
+
+function boardGameWithoutSettings(game){
+  if (!game || typeof game !== "object") return null;
+  try{
+    const clone = JSON.parse(JSON.stringify(game));
+    if (clone && typeof clone === "object") delete clone.settings;
+    return clone;
+  }catch{
+    return null;
+  }
+}
+
+function boardSettingsOnlyChange(previousPayload, nextPayload){
+  const previousGame = boardGameFromPayload(previousPayload);
+  const nextGame = boardGameFromPayload(nextPayload);
+  if (!previousGame || !nextGame) return false;
+  return boardJsonKey(boardGameWithoutSettings(previousGame)) === boardJsonKey(boardGameWithoutSettings(nextGame))
+    && boardJsonKey(previousPayload?.battleState || null) === boardJsonKey(nextPayload?.battleState || null);
+}
+
+function boardPayloadWithPreservedSettings(room, socket, payload, reason = ""){
+  if (!payload?.gameState || String(reason || "").startsWith("settings-")) return payload;
+  const socketMeta = room?.sockets?.get(socket.id) || socket.data.boardProfile || {};
+  if (boardSocketIsRoomHost(room, socketMeta)) return payload;
+  const previousSettings = room?.gamePayload?.gameState?.settings;
+  if (!previousSettings || typeof previousSettings !== "object") return payload;
+  try{
+    const clone = JSON.parse(JSON.stringify(payload));
+    clone.gameState.settings = JSON.parse(JSON.stringify(previousSettings));
+    return clone;
+  }catch{
+    payload.gameState.settings = previousSettings;
+    return payload;
+  }
+}
+
+function boardLocationKey(player){
+  const location = player?.location || {};
+  return [
+    location.kind || "",
+    location.routeId || "",
+    Number(location.tileIndex ?? -1),
+    location.islandId || "",
+  ].join("|");
+}
+
+function boardPlayersStayOnSameTiles(previousPayload, nextPayload){
+  const previousPlayers = Array.isArray(boardGameFromPayload(previousPayload)?.players) ? boardGameFromPayload(previousPayload).players : [];
+  return previousPlayers.every((player) => {
+    const nextPlayer = boardPlayerFromPayload(nextPayload, player?.id);
+    return nextPlayer && boardLocationKey(player) === boardLocationKey(nextPlayer);
+  });
+}
+
+function boardTradeParticipants(trade){
+  return [trade?.initiatorId, trade?.partnerId]
+    .map((id) => String(id || "").trim())
+    .filter(Boolean);
+}
+
+function boardActiveTradeFromPayload(payload){
+  const trade = boardGameFromPayload(payload)?.activeTrade;
+  return trade && typeof trade === "object" ? trade : null;
+}
+
+function boardTradeIncludesCpu(payload, trade){
+  return boardTradeParticipants(trade).some((playerId) => {
+    const player = boardPlayerFromPayload(payload, playerId);
+    return boardPlayerIsCpu(player);
+  });
+}
+
+function boardTradeSamePair(previousTrade, nextTrade){
+  if (!previousTrade || !nextTrade) return false;
+  const previousIds = boardTradeParticipants(previousTrade).sort().join("|");
+  const nextIds = boardTradeParticipants(nextTrade).sort().join("|");
+  return Boolean(previousTrade.id && nextTrade.id)
+    && String(previousTrade.id) === String(nextTrade.id)
+    && previousIds === nextIds;
+}
+
+function boardSocketIsRoomHost(room, socketMeta = {}){
+  return !!room
+    && Number(room.hostUserId) === Number(socketMeta.userId)
+    && Number(socketMeta.userId) !== 0;
+}
+
+function boardSocketCanDriveActor(actor, room, socketMeta = {}, sourceClientId = ""){
+  if (boardPlayerIsCpu(actor) && boardSocketIsRoomHost(room, socketMeta)) return true;
+  return boardActorMatchesSocket(actor, socketMeta, sourceClientId);
+}
+
+function boardSocketControlsTradeParticipant(payload, trade, socketMeta = {}, sourceClientId = "", room = null){
+  return boardTradeParticipants(trade).some((playerId) => {
+    const player = boardPlayerFromPayload(payload, playerId);
+    return player && boardSocketCanDriveActor(player, room, socketMeta, sourceClientId);
+  });
+}
+
+function boardTradeFlowUnchanged(previousPayload, nextPayload){
+  const previousGame = boardGameFromPayload(previousPayload);
+  const nextGame = boardGameFromPayload(nextPayload);
+  if (!previousGame || !nextGame) return false;
+  if (String(previousGame.phase || "") !== String(nextGame.phase || "")) return false;
+  if (Number(previousGame.currentPlayerIndex || 0) !== Number(nextGame.currentPlayerIndex || 0)) return false;
+  if (Number(previousGame.round || 0) !== Number(nextGame.round || 0)) return false;
+  if (boardJsonKey(previousPayload?.battleState || null) !== boardJsonKey(nextPayload?.battleState || null)) return false;
+  if (boardJsonKey(previousGame.pendingMove || null) !== boardJsonKey(nextGame.pendingMove || null)) return false;
+  return boardPlayersStayOnSameTiles(previousPayload, nextPayload);
+}
+
+function canAcceptBoardTradeStateUpdate(previousPayload, nextPayload, socket, sourceClientId = ""){
+  const previousTrade = boardActiveTradeFromPayload(previousPayload);
+  if (!previousTrade) return false;
+  const nextTrade = boardActiveTradeFromPayload(nextPayload);
+  if (nextTrade && boardTradeIncludesCpu(nextPayload, nextTrade)) return false;
+  if (nextTrade && !boardTradeSamePair(previousTrade, nextTrade)) return false;
+  if (!boardTradeFlowUnchanged(previousPayload, nextPayload)) return false;
+  const roomCode = sanitizeBoardRoomCode(socket.data.boardRoomCode || nextPayload?.roomCode || previousPayload?.roomCode || "");
+  const room = boardRooms.get(roomCode);
+  const socketMeta = room?.sockets?.get(socket.id) || socket.data.boardProfile || {};
+  return boardSocketControlsTradeParticipant(previousPayload, previousTrade, socketMeta, sourceClientId, room);
+}
+
+function canAcceptBoardBattleStateUpdate(previousPayload, nextPayload, socket, sourceClientId = ""){
+  const roomCode = sanitizeBoardRoomCode(socket.data.boardRoomCode || nextPayload?.roomCode || previousPayload?.roomCode || "");
+  const room = boardRooms.get(roomCode);
+  const socketMeta = room?.sockets?.get(socket.id) || socket.data.boardProfile || {};
+  const sparIds = boardBattleSparParticipantIds(nextPayload).length
+    ? boardBattleSparParticipantIds(nextPayload)
+    : boardBattleSparParticipantIds(previousPayload);
+  if (sparIds.length === 2) {
+    return sparIds.some((playerId) => {
+      const player = boardPlayerFromPayload(nextPayload, playerId) || boardPlayerFromPayload(previousPayload, playerId);
+      return player && !boardPlayerIsCpu(player) && boardSocketCanDriveActor(player, room, socketMeta, sourceClientId);
+    });
+  }
+  const nextActor = boardBattleActorFromPayload(nextPayload);
+  if (nextActor && boardSocketCanDriveActor(nextActor, room, socketMeta, sourceClientId)) return true;
+  const previousActor = boardBattleActorFromPayload(previousPayload);
+  if (previousActor && boardSocketCanDriveActor(previousActor, room, socketMeta, sourceClientId)) return true;
+  return false;
+}
+
+function canAcceptBoardSparStateUpdate(previousPayload, nextPayload, socket, sourceClientId = ""){
+  const previousSpar = boardSparFromPayload(previousPayload);
+  const nextSpar = boardSparFromPayload(nextPayload);
+  const ids = boardSparParticipantIds(nextSpar).length ? boardSparParticipantIds(nextSpar) : boardSparParticipantIds(previousSpar);
+  if (ids.length !== 2) return false;
+  const previousIds = boardSparParticipantIds(previousSpar).sort().join("|");
+  const nextIds = boardSparParticipantIds(nextSpar).sort().join("|");
+  if (previousSpar && nextSpar && previousIds !== nextIds) return false;
+  const previousGame = boardGameFromPayload(previousPayload);
+  const nextGame = boardGameFromPayload(nextPayload);
+  if (!previousGame || !nextGame) return false;
+  if (String(previousGame.phase || "") !== String(nextGame.phase || "")) return false;
+  if (Number(previousGame.currentPlayerIndex || 0) !== Number(nextGame.currentPlayerIndex || 0)) return false;
+  if (Number(previousGame.round || 0) !== Number(nextGame.round || 0)) return false;
+  if (!boardPlayersStayOnSameTiles(previousPayload, nextPayload)) return false;
+  const roomCode = sanitizeBoardRoomCode(socket.data.boardRoomCode || nextPayload?.roomCode || previousPayload?.roomCode || "");
+  const room = boardRooms.get(roomCode);
+  const socketMeta = room?.sockets?.get(socket.id) || socket.data.boardProfile || {};
+  return ids.some((playerId) => {
+    const player = boardPlayerFromPayload(nextPayload, playerId) || boardPlayerFromPayload(previousPayload, playerId);
+    return player && !boardPlayerIsCpu(player) && boardSocketCanDriveActor(player, room, socketMeta, sourceClientId);
+  });
+}
+
+function boardActorMatchesSocket(actor, socketMeta = {}, sourceClientId = ""){
+  if (!actor) return true;
+  const actorClientId = String(actor.clientId || "").trim();
+  const socketClientId = String(socketMeta.clientId || sourceClientId || "").trim();
+  const fallbackClientId = String(actor.userId || actor.id || "").trim();
+  const actorClientIdIsSynthetic = actorClientId === fallbackClientId || actorClientId.startsWith("board-player-");
+  if (actorClientId && socketClientId && actorClientId === socketClientId) return true;
+  if (actorClientId && socketClientId && !actorClientIdIsSynthetic) return false;
+  const actorUserId = Number(actor.userId || actor.id);
+  const socketUserId = Number(socketMeta.userId);
+  if (Number.isFinite(actorUserId) && actorUserId > 0 && Number.isFinite(socketUserId) && socketUserId > 0) {
+    return actorUserId === socketUserId;
+  }
+  return true;
+}
+
+function canAcceptBoardGameStateUpdate(room, socket, sourceClientId = "", nextPayload = null, reason = ""){
+  const previousPayload = room?.gamePayload;
+  if (!previousPayload) {
+    const socketMeta = room?.sockets?.get(socket.id) || socket.data.boardProfile || {};
+    return boardSocketIsRoomHost(room, socketMeta);
+  }
+  const normalizedReason = String(reason || "");
+  if (normalizedReason !== "load-save" && boardGamePhaseRank(nextPayload) < boardGamePhaseRank(previousPayload)) {
+    return false;
+  }
+  if (normalizedReason === "join") return false;
+  if (normalizedReason === "lobby-players") {
+    const previousPhase = String(previousPayload?.gameState?.phase || "");
+    const nextPhase = String(nextPayload?.gameState?.phase || "");
+    if (previousPhase && previousPhase !== "setup-order" && nextPhase === "setup-order") return false;
+  }
+  const nextTrade = boardActiveTradeFromPayload(nextPayload);
+  if (nextTrade && boardTradeIncludesCpu(nextPayload, nextTrade)) return false;
+  const socketMeta = room.sockets.get(socket.id) || socket.data.boardProfile || {};
+  if (normalizedReason.startsWith("settings-")) {
+    return boardSocketIsRoomHost(room, socketMeta) && boardSettingsOnlyChange(previousPayload, nextPayload);
+  }
+  if (normalizedReason === "load-save" && boardSocketIsRoomHost(room, socketMeta)) {
+    return true;
+  }
+  const actor = currentBoardTurnActorFromPayload(previousPayload);
+  if (!actor) return true;
+  if (boardSocketCanDriveActor(actor, room, socketMeta, sourceClientId)) return true;
+  if (normalizedReason.startsWith("battle-") || nextPayload?.battleState || previousPayload?.battleState) {
+    return canAcceptBoardBattleStateUpdate(previousPayload, nextPayload, socket, sourceClientId);
+  }
+  if (normalizedReason.startsWith("spar-")) {
+    return canAcceptBoardSparStateUpdate(previousPayload, nextPayload, socket, sourceClientId);
+  }
+  if (normalizedReason.startsWith("trade-")) {
+    return canAcceptBoardTradeStateUpdate(previousPayload, nextPayload, socket, sourceClientId);
+  }
+  return false;
+}
+
+function serializeBoardRoomList(){
+  return Array.from(boardRooms.values())
+    .filter((room) => room && room.status !== "closed" && (!room.campaignId || room.campaignMode === "gather"))
+    .sort((a, b) => Number(b.updatedAt || 0) - Number(a.updatedAt || 0))
+    .slice(0, 24)
+    .map((room) => ({
+      roomId: room.roomCode,
+      hostName: room.players.find((item) => Number(item.userId) === Number(room.hostUserId))?.name || "房主",
+      total: room.players.length,
+      maxPlayers: room.maxPlayers,
+      status: room.players.length >= room.maxPlayers ? "full" : room.status,
+      title: room.roomName,
+      campaignId: room.campaignId || "",
+      campaignMode: room.campaignMode || "",
+    }));
+}
+
+function emitBoardRoomList(){
+  io.emit("BOARD_ROOM_LIST", { rooms: serializeBoardRoomList() });
+}
+
+function emitBoardLobby(room){
+  if(!room) return;
+  io.to(`board:${room.roomCode}`).emit("BOARD_LOBBY", { lobby: serializeBoardLobby(room) });
+  emitBoardRoomList();
+}
+
+function boardRoomPlayerOnline(room, player){
+  if(!room || !player) return false;
+  return Array.from(room.sockets.values()).some((meta) => Number(meta.userId) === Number(player.userId));
+}
+
+function clearBoardCampaignDisconnectTimer(room, userId){
+  const timers = room?._campaignDisconnectTimers;
+  const timer = timers?.get(Number(userId));
+  if(timer) clearTimeout(timer);
+  timers?.delete(Number(userId));
+}
+
+function scheduleBoardCampaignProxyTakeover(room, userId){
+  if(!room?.campaignId) return;
+  if(!room._campaignDisconnectTimers) room._campaignDisconnectTimers = new Map();
+  clearBoardCampaignDisconnectTimer(room, userId);
+  const timer = setTimeout(() => {
+    const latest = boardRooms.get(room.roomCode);
+    if(!latest || latest !== room) return;
+    const player = latest.players.find((entry) => Number(entry.userId) === Number(userId));
+    if(!player || boardRoomPlayerOnline(latest, player)) return;
+    player.clientId = `board-proxy-${latest.campaignId}-${player.userId}`;
+    player.isCPU = true;
+    player.isProxyCPU = true;
+    player.proxyOwnerUserId = Number(player.userId || 0);
+    player.ready = true;
+    player.online = true;
+    latest.campaignStartedHumanUserIds = (latest.campaignStartedHumanUserIds || [])
+      .filter((entry) => Number(entry) !== Number(player.userId));
+    transferBoardHostToOnlinePlayer(latest);
+    latest.updatedAt = Date.now();
+    emitBoardLobby(latest);
+    if(latest.sockets.size <= 0){
+      clearBoardHostTransferTimer(latest);
+      boardRooms.delete(latest.roomCode);
+      emitBoardRoomList();
+    }
+  }, BOARD_CAMPAIGN_RECONNECT_GRACE_MS);
+  room._campaignDisconnectTimers.set(Number(userId), timer);
+}
+
+function clearBoardHostTransferTimer(room){
+  if(!room?.hostTransferTimer) return;
+  clearTimeout(room.hostTransferTimer);
+  room.hostTransferTimer = null;
+}
+
+function transferBoardHostToOnlinePlayer(room){
+  if(!room) return false;
+  const currentHost = room.players.find((player) => Number(player.userId) === Number(room.hostUserId));
+  if(currentHost && boardRoomPlayerOnline(room, currentHost)){
+    clearBoardHostTransferTimer(room);
+    return false;
+  }
+  const nextHost = room.players.find((player) => !boardPlayerIsCpu(player) && boardRoomPlayerOnline(room, player))
+    || room.players.find((player) => !boardPlayerIsCpu(player))
+    || room.players[0];
+  if(!nextHost) return false;
+  const changed = Number(room.hostUserId) !== Number(nextHost.userId);
+  room.hostUserId = nextHost.userId;
+  room.players.forEach((player) => {
+    player.isHost = Number(player.userId) === Number(room.hostUserId);
+  });
+  return changed;
+}
+
+function scheduleBoardHostTransfer(room){
+  if(!room || room.hostTransferTimer) return;
+  room.hostTransferTimer = setTimeout(() => {
+    room.hostTransferTimer = null;
+    const latestRoom = boardRooms.get(room.roomCode);
+    if(!latestRoom || latestRoom !== room) return;
+    const changed = transferBoardHostToOnlinePlayer(latestRoom);
+    if(!changed) return;
+    latestRoom.updatedAt = Date.now();
+    emitBoardLobby(latestRoom);
+    if(latestRoom.status === "playing" && !latestRoom.gamePayload){
+      io.to(`board:${latestRoom.roomCode}`).emit("BOARD_STATE_REQUEST", {
+        roomCode: latestRoom.roomCode,
+        requesterClientId: "host-transfer",
+      });
+    }
+  }, BOARD_HOST_RECONNECT_GRACE_MS);
+}
+
+function cleanupBoardRoom(roomCode){
+  const code = sanitizeBoardRoomCode(roomCode);
+  const room = boardRooms.get(code);
+  if(!room) return;
+  room.players.forEach((player) => {
+    if(boardPlayerIsCpu(player)){
+      player.online = true;
+      return;
+    }
+    const online = Array.from(room.sockets.values()).some((meta) => Number(meta.userId) === Number(player.userId));
+    player.online = online;
+  });
+  if(room.campaignId && room.sockets.size <= 0){
+    clearBoardHostTransferTimer(room);
+    boardRooms.delete(code);
+    emitBoardRoomList();
+    return;
+  }
+  if(room.sockets.size <= 0 && !room.gamePayload && room.status !== "playing"){
+    clearBoardHostTransferTimer(room);
+    boardRooms.delete(code);
+    emitBoardRoomList();
+    return;
+  }
+  const currentHost = room.players.find((player) => Number(player.userId) === Number(room.hostUserId));
+  const currentHostOnline = currentHost && boardRoomPlayerOnline(room, currentHost);
+  if(currentHostOnline){
+    clearBoardHostTransferTimer(room);
+  }else if(room.status === "playing" && currentHost){
+    scheduleBoardHostTransfer(room);
+  }else{
+    clearBoardHostTransferTimer(room);
+    transferBoardHostToOnlinePlayer(room);
+  }
+  room.players.forEach((player) => {
+    player.isHost = Number(player.userId) === Number(room.hostUserId);
+  });
+  room.updatedAt = Date.now();
+  emitBoardLobby(room);
+}
 
 // =========================
 // Resilience: disconnect takeover + idle watchdog (multi-round match safe)
@@ -1583,6 +2972,402 @@ function runCpuLoop(roomId){
 // ——— Socket.IO ———
 io.on("connection", (socket) => {
   let joinedRoom = null;
+
+  socket.on("BOARD_ROOM_LIST", (_payload = {}, cb) => {
+    const rooms = serializeBoardRoomList();
+    socket.emit("BOARD_ROOM_LIST", { rooms });
+    cb?.({ ok:true, rooms });
+  });
+
+  socket.on("BOARD_CAMPAIGN_LIST", async (payload = {}, cb) => {
+    try{
+      const profile = normalizeBoardProfile(payload.profile || socket.data.boardProfile || {});
+      const campaigns = await boardCampaignsForIdentity(profile);
+      socket.emit("BOARD_CAMPAIGN_LIST", { campaigns });
+      return cb?.({ ok:true, campaigns });
+    }catch(error){
+      console.error("[BOARD_CAMPAIGN_LIST] error:", error);
+      return cb?.({ ok:false, error:String(error?.message || error) });
+    }
+  });
+
+  socket.on("BOARD_CAMPAIGN_OPEN", async (payload = {}, cb) => {
+    try{
+      const profile = normalizeBoardProfile(payload.profile || socket.data.boardProfile || {});
+      const campaignId = sanitizeBoardCampaignId(payload.campaignId || "");
+      const mode = String(payload.mode || "gather") === "solo" ? "solo" : "gather";
+      const campaign = await readBoardCampaign(campaignId);
+      if(!boardCampaignFindMember(campaign, profile)) return cb?.({ ok:false, error:"not_campaign_member" });
+      let room = mode === "gather" ? boardCampaignActiveGatherRoom(campaignId) : null;
+      if(room){
+        const joined = joinBoardCampaignRoom(room, profile, socket.id);
+        if(!joined.ok) return cb?.({ ok:false, error:joined.error || "join_failed" });
+      }else{
+        const created = createBoardCampaignRoom(campaign, profile, mode);
+        if(!created.ok) return cb?.({ ok:false, error:created.error || "campaign_open_failed" });
+        room = created.room;
+        room.sockets.set(socket.id, {
+          userId:profile.userId,
+          clientId:profile.clientId,
+          // 個別遊玩會從開始頁立刻導向遊戲頁；允許同一裝置的新分頁連線接手這個暫存席位。
+          campaignNavigationPending:mode === "solo",
+        });
+      }
+      socket.data.boardRoomCode = room.roomCode;
+      socket.data.boardProfile = profile;
+      socket.join(`board:${room.roomCode}`);
+      if(mode === "solo" && !room.gamePayload){
+        room.gamePayload = assembleBoardCampaignPayload(campaign, room);
+        if(!isValidBoardSavePayload(room.gamePayload)) return cb?.({ ok:false, error:"campaign_assemble_failed" });
+        room.gameVersion = 1;
+        room.gameUpdatedAt = Date.now();
+      }
+      emitBoardLobby(room);
+      return cb?.({
+        ok:true,
+        mode,
+        navigate:mode === "solo",
+        roomCode:room.roomCode,
+        lobby:serializeBoardLobby(room),
+        hasState:!!room.gamePayload,
+      });
+    }catch(error){
+      if(error?.code === "ENOENT") return cb?.({ ok:false, error:"campaign_not_found" });
+      console.error("[BOARD_CAMPAIGN_OPEN] error:", error);
+      return cb?.({ ok:false, error:String(error?.message || error) });
+    }
+  });
+
+  socket.on("BOARD_CAMPAIGN_SAVE", async (message = {}, cb) => {
+    try{
+      const roomCode = sanitizeBoardRoomCode(message.roomCode || socket.data.boardRoomCode || "");
+      const room = boardRooms.get(roomCode);
+      const profile = normalizeBoardProfile(message.profile || socket.data.boardProfile || {});
+      if(room){
+        const socketMeta = room.sockets.get(socket.id);
+        if(!socketMeta || Number(socketMeta.userId) !== Number(profile.userId)){
+          return cb?.({ ok:false, error:"not_joined" });
+        }
+      }
+      const result = await saveBoardCampaignProgress(room, profile, message.payload);
+      if(!result.ok) return cb?.(result);
+      socket.emit("BOARD_CAMPAIGN_SAVED", { campaign:result.campaign });
+      return cb?.(result);
+    }catch(error){
+      console.error("[BOARD_CAMPAIGN_SAVE] error:", error);
+      return cb?.({ ok:false, error:String(error?.message || error) });
+    }
+  });
+
+  socket.on("BOARD_JOIN_ROOM", (payload = {}, cb) => {
+    try{
+      const profile = normalizeBoardProfile(payload.profile || {});
+      const wantsCreate = !!payload.create;
+      let roomCode = sanitizeBoardRoomCode(payload.roomCode || payload.roomId || "");
+      let room = roomCode ? boardRooms.get(roomCode) : null;
+      if(!room && wantsCreate){
+        room = createBoardRoom(roomCode || makeBoardRoomCode(), profile);
+        roomCode = room.roomCode;
+      }
+      if(!room){
+        return cb?.({ ok:false, error:"not_found" });
+      }
+      if(room.status === "playing" && !payload.allowPlayingJoin){
+        return cb?.({ ok:false, error:"playing" });
+      }
+      if(room.campaignId && room.status === "playing"){
+        return cb?.({ ok:false, error:"campaign_locked" });
+      }
+      const joined = room.campaignId
+        ? joinBoardCampaignRoom(room, profile, socket.id)
+        : upsertBoardPlayer(room, profile, socket.id);
+      if(!joined.ok) return cb?.({ ok:false, error:joined.error || "join_failed" });
+      socket.data.boardRoomCode = room.roomCode;
+      socket.data.boardProfile = profile;
+      socket.join(`board:${room.roomCode}`);
+      emitBoardLobby(room);
+      return cb?.({ ok:true, lobby: serializeBoardLobby(room), rooms: serializeBoardRoomList() });
+    }catch(e){
+      console.error("[BOARD_JOIN_ROOM] error:", e);
+      return cb?.({ ok:false, error:String(e?.message || e) });
+    }
+  });
+
+  socket.on("BOARD_LEAVE_ROOM", (payload = {}, cb) => {
+    try{
+      const roomCode = sanitizeBoardRoomCode(payload.roomCode || socket.data.boardRoomCode || "");
+      const room = boardRooms.get(roomCode);
+      if(room){
+        room.sockets.delete(socket.id);
+        const meta = normalizeBoardProfile(payload.profile || socket.data.boardProfile || {});
+        const player = room.players.find((item) => Number(item.userId) === Number(meta.userId));
+        if(player){
+          if(room.campaignId){
+            player.clientId = `board-proxy-${room.campaignId}-${player.userId}`;
+            player.isCPU = true;
+            player.isProxyCPU = true;
+            player.proxyOwnerUserId = Number(player.userId || 0);
+            player.ready = true;
+            player.online = true;
+            if(room.status === "playing"){
+              room.campaignStartedHumanUserIds = (room.campaignStartedHumanUserIds || [])
+                .filter((userId) => Number(userId) !== Number(player.userId));
+            }
+            emitBoardLobby(room);
+          }else{
+            player.online = false;
+          }
+        }
+        socket.leave(`board:${room.roomCode}`);
+        cleanupBoardRoom(room.roomCode);
+      }
+      socket.data.boardRoomCode = null;
+      return cb?.({ ok:true });
+    }catch(e){
+      console.error("[BOARD_LEAVE_ROOM] error:", e);
+      return cb?.({ ok:false, error:String(e?.message || e) });
+    }
+  });
+
+  socket.on("BOARD_LOBBY_READY", (payload = {}, cb) => {
+    try{
+      const roomCode = sanitizeBoardRoomCode(payload.roomCode || socket.data.boardRoomCode || "");
+      const room = boardRooms.get(roomCode);
+      if(!room) return cb?.({ ok:false, error:"not_found" });
+      const profile = normalizeBoardProfile(payload.profile || socket.data.boardProfile || {});
+      const player = room.players.find((item) => Number(item.userId) === Number(profile.userId));
+      if(!player) return cb?.({ ok:false, error:"not_joined" });
+      player.ready = typeof payload.ready === "boolean" ? payload.ready : !player.ready;
+      room.chat.push({ system:true, text:`${player.name}${player.ready ? "已準備完成" : "取消了準備"}`, ts:Date.now() });
+      room.updatedAt = Date.now();
+      emitBoardLobby(room);
+      return cb?.({ ok:true, lobby: serializeBoardLobby(room) });
+    }catch(e){
+      console.error("[BOARD_LOBBY_READY] error:", e);
+      return cb?.({ ok:false, error:String(e?.message || e) });
+    }
+  });
+
+  socket.on("BOARD_LOBBY_CHAT", (payload = {}, cb) => {
+    try{
+      const roomCode = sanitizeBoardRoomCode(payload.roomCode || socket.data.boardRoomCode || "");
+      const room = boardRooms.get(roomCode);
+      if(!room) return cb?.({ ok:false, error:"not_found" });
+      const profile = normalizeBoardProfile(payload.profile || socket.data.boardProfile || {});
+      const text = String(payload.text || "").trim().slice(0, 240);
+      if(!text) return cb?.({ ok:false, error:"empty" });
+      room.chat.push({ name:profile.name, avatar:profile.avatar, userId:profile.userId, text, ts:Date.now() });
+      room.updatedAt = Date.now();
+      emitBoardLobby(room);
+      return cb?.({ ok:true });
+    }catch(e){
+      console.error("[BOARD_LOBBY_CHAT] error:", e);
+      return cb?.({ ok:false, error:String(e?.message || e) });
+    }
+  });
+
+  socket.on("BOARD_ADD_CPU", (payload = {}, cb) => {
+    try{
+      const roomCode = sanitizeBoardRoomCode(payload.roomCode || socket.data.boardRoomCode || "");
+      const room = boardRooms.get(roomCode);
+      if(!room) return cb?.({ ok:false, error:"not_found" });
+      if(room.campaignId) return cb?.({ ok:false, error:"campaign_fixed_roster" });
+      const profile = normalizeBoardProfile(payload.profile || socket.data.boardProfile || {});
+      if(Number(room.hostUserId) !== Number(profile.userId)){
+        return cb?.({ ok:false, error:"host_only" });
+      }
+      if(room.status !== "waiting") return cb?.({ ok:false, error:"not_waiting" });
+      if(room.players.length >= Number(room.maxPlayers || 4)) return cb?.({ ok:false, error:"full" });
+      const cpu = createBoardCpuPlayer(room);
+      room.players.push(cpu);
+      room.players.forEach((item) => {
+        item.isHost = Number(item.userId) === Number(room.hostUserId);
+      });
+      room.chat.push({ system:true, text:`${cpu.name} 已加入等待室。`, ts:Date.now() });
+      room.updatedAt = Date.now();
+      emitBoardLobby(room);
+      return cb?.({ ok:true, lobby: serializeBoardLobby(room), rooms: serializeBoardRoomList() });
+    }catch(e){
+      console.error("[BOARD_ADD_CPU] error:", e);
+      return cb?.({ ok:false, error:String(e?.message || e) });
+    }
+  });
+
+  socket.on("BOARD_REMOVE_CPU", (payload = {}, cb) => {
+    try{
+      const roomCode = sanitizeBoardRoomCode(payload.roomCode || socket.data.boardRoomCode || "");
+      const room = boardRooms.get(roomCode);
+      if(!room) return cb?.({ ok:false, error:"not_found" });
+      if(room.campaignId) return cb?.({ ok:false, error:"campaign_fixed_roster" });
+      const profile = normalizeBoardProfile(payload.profile || socket.data.boardProfile || {});
+      if(Number(room.hostUserId) !== Number(profile.userId)){
+        return cb?.({ ok:false, error:"host_only" });
+      }
+      if(room.status !== "waiting") return cb?.({ ok:false, error:"not_waiting" });
+      const targetUserId = Number(payload.userId);
+      const target = room.players.find((player) => Number(player.userId) === targetUserId);
+      if(!boardPlayerIsCpu(target)) return cb?.({ ok:false, error:"cpu_only" });
+      room.players = room.players.filter((player) => Number(player.userId) !== targetUserId);
+      room.players.forEach((item) => {
+        item.isHost = Number(item.userId) === Number(room.hostUserId);
+      });
+      room.chat.push({ system:true, text:`${target.name} 已離開等待室。`, ts:Date.now() });
+      room.updatedAt = Date.now();
+      emitBoardLobby(room);
+      return cb?.({ ok:true, lobby: serializeBoardLobby(room), rooms: serializeBoardRoomList() });
+    }catch(e){
+      console.error("[BOARD_REMOVE_CPU] error:", e);
+      return cb?.({ ok:false, error:String(e?.message || e) });
+    }
+  });
+
+  socket.on("BOARD_START_GAME", async (payload = {}, cb) => {
+    try{
+      const roomCode = sanitizeBoardRoomCode(payload.roomCode || socket.data.boardRoomCode || "");
+      const room = boardRooms.get(roomCode);
+      if(!room) return cb?.({ ok:false, error:"not_found" });
+      const profile = normalizeBoardProfile(payload.profile || socket.data.boardProfile || {});
+      if(Number(room.hostUserId) !== Number(profile.userId)){
+        return cb?.({ ok:false, error:"host_only" });
+      }
+      if(room.campaignId){
+        const joinedHumans = room.players.filter((player) => !boardPlayerIsCpu(player));
+        const notReady = joinedHumans.filter((player) => !player.ready);
+        if(notReady.length) return cb?.({ ok:false, error:"not_all_ready" });
+        const campaign = await readBoardCampaign(room.campaignId);
+        const basePayload = boardCampaignBasePayload(campaign, room.campaignBaseMemberKey);
+        if(room.campaignMode === "gather" && !boardCampaignGatherPayloadIsStable(basePayload)){
+          return cb?.({ ok:false, error:"campaign_branch_busy" });
+        }
+        room.gamePayload = assembleBoardCampaignPayload(campaign, room);
+        if(!isValidBoardSavePayload(room.gamePayload)) return cb?.({ ok:false, error:"campaign_assemble_failed" });
+        room.gameVersion = Math.max(1, Number(room.gameVersion || 0) + 1);
+        room.gameUpdatedAt = Date.now();
+        room.campaignStartedHumanUserIds = joinedHumans.map((player) => Number(player.userId));
+      }
+      room.status = "playing";
+      room.updatedAt = Date.now();
+      emitBoardLobby(room);
+      io.to(`board:${room.roomCode}`).emit("BOARD_NAV_GAME", { roomCode: room.roomCode, lobby: serializeBoardLobby(room) });
+      return cb?.({ ok:true });
+    }catch(e){
+      console.error("[BOARD_START_GAME] error:", e);
+      return cb?.({ ok:false, error:String(e?.message || e) });
+    }
+  });
+
+  socket.on("BOARD_JOIN_GAME", (payload = {}, cb) => {
+    try{
+      const roomCode = sanitizeBoardRoomCode(payload.roomCode || socket.data.boardRoomCode || "");
+      const room = boardRooms.get(roomCode);
+      if(!room) return cb?.({ ok:false, error:"not_found" });
+      const profile = normalizeBoardProfile(payload.profile || socket.data.boardProfile || {});
+      let joined = null;
+      if(room.campaignId && room.status === "playing"){
+        const allowed = (room.campaignStartedHumanUserIds || []).some((userId) => Number(userId) === Number(profile.userId));
+        const existing = room.players.find((player) => Number(player.userId) === Number(profile.userId));
+        if(!allowed || !existing || boardPlayerIsCpu(existing)) return cb?.({ ok:false, error:"campaign_locked" });
+        const activeConnection = Array.from(room.sockets.entries()).find(([activeSocketId, meta]) => (
+          activeSocketId !== socket.id
+          && Number(meta?.userId) === Number(profile.userId)
+        ));
+        if(activeConnection){
+          const [activeSocketId, activeMeta] = activeConnection;
+          const canTakeOverCampaignNavigation = activeMeta?.campaignNavigationPending === true
+            && String(activeMeta?.clientId || "") === String(profile.clientId || "");
+          if(!canTakeOverCampaignNavigation) return cb?.({ ok:false, error:"campaign_already_connected" });
+          room.sockets.delete(activeSocketId);
+          const launcherSocket = io.sockets.sockets.get(activeSocketId);
+          if(launcherSocket){
+            launcherSocket.leave(`board:${room.roomCode}`);
+            launcherSocket.data.boardRoomCode = "";
+          }
+        }
+        clearBoardCampaignDisconnectTimer(room, profile.userId);
+        Object.assign(existing, profile, { online:true, isCPU:false, isProxyCPU:false });
+        room.sockets.set(socket.id, { userId:existing.userId, clientId:existing.clientId });
+        joined = { ok:true, player:existing, reconnected:true };
+      }else{
+        joined = upsertBoardPlayer(room, profile, socket.id);
+      }
+      if(!joined.ok) return cb?.({ ok:false, error:joined.error || "join_failed" });
+      socket.data.boardRoomCode = room.roomCode;
+      socket.data.boardProfile = profile;
+      socket.join(`board:${room.roomCode}`);
+      const socketMeta = room.sockets.get(socket.id) || profile;
+      const canSeedState = boardSocketIsRoomHost(room, socketMeta);
+      socket.emit("BOARD_LOBBY", { lobby: serializeBoardLobby(room) });
+      if(room.gamePayload){
+        socket.emit("BOARD_GAME_STATE", {
+          roomCode: room.roomCode,
+          payload: room.gamePayload,
+          version: room.gameVersion,
+          sourceClientId: room.gameSourceClientId || "",
+        });
+      }else{
+        socket.to(`board:${room.roomCode}`).emit("BOARD_STATE_REQUEST", { roomCode: room.roomCode, requesterClientId: profile.clientId });
+      }
+      emitBoardLobby(room);
+      return cb?.({
+        ok:true,
+        lobby: serializeBoardLobby(room),
+        hasState: !!room.gamePayload,
+        canSeedState,
+        version: room.gameVersion,
+      });
+    }catch(e){
+      console.error("[BOARD_JOIN_GAME] error:", e);
+      return cb?.({ ok:false, error:String(e?.message || e) });
+    }
+  });
+
+  socket.on("BOARD_GAME_STATE", (message = {}, cb) => {
+    try{
+      const roomCode = sanitizeBoardRoomCode(message.roomCode || socket.data.boardRoomCode || "");
+      const room = boardRooms.get(roomCode);
+      if(!room) return cb?.({ ok:false, error:"not_found" });
+      let payload = message.payload;
+      if(!isValidBoardSavePayload(payload)) return cb?.({ ok:false, error:"invalid_payload" });
+      const sourceClientId = String(message.sourceClientId || socket.data.boardProfile?.clientId || "");
+      if(!canAcceptBoardGameStateUpdate(room, socket, sourceClientId, payload, message.reason || "")){
+        return cb?.({ ok:false, error:"not_your_turn" });
+      }
+      payload = boardPayloadWithPreservedSettings(room, socket, payload, message.reason || "");
+      const version = Math.max(Number(room.gameVersion || 0) + 1, Number(message.version || 0) || 0);
+      room.gamePayload = payload;
+      room.gameVersion = version;
+      room.gameSourceClientId = sourceClientId;
+      room.gameUpdatedAt = Date.now();
+      room.updatedAt = Date.now();
+      socket.to(`board:${room.roomCode}`).emit("BOARD_GAME_STATE", { roomCode: room.roomCode, payload, version, sourceClientId, reason: message.reason || "" });
+      return cb?.({ ok:true, version });
+    }catch(e){
+      console.error("[BOARD_GAME_STATE] error:", e);
+      return cb?.({ ok:false, error:String(e?.message || e) });
+    }
+  });
+
+  socket.on("BOARD_STATE_REQUEST", (payload = {}, cb) => {
+    try{
+      const roomCode = sanitizeBoardRoomCode(payload.roomCode || socket.data.boardRoomCode || "");
+      const room = boardRooms.get(roomCode);
+      if(!room) return cb?.({ ok:false, error:"not_found" });
+      if(room.gamePayload){
+        socket.emit("BOARD_GAME_STATE", {
+          roomCode: room.roomCode,
+          payload: room.gamePayload,
+          version: room.gameVersion,
+          sourceClientId: room.gameSourceClientId || "",
+        });
+      }else{
+        socket.to(`board:${room.roomCode}`).emit("BOARD_STATE_REQUEST", { roomCode: room.roomCode, requesterClientId: payload.requesterClientId || "" });
+      }
+      return cb?.({ ok:true });
+    }catch(e){
+      console.error("[BOARD_STATE_REQUEST] error:", e);
+      return cb?.({ ok:false, error:String(e?.message || e) });
+    }
+  });
 
 // ===== Social auth (for friend dock presence / DM routing) =====
 socket.on("SOCIAL_AUTH", async ({ secret, deviceId }, cb) => {
@@ -3379,6 +5164,26 @@ broadcastState(room);
     // social presence
     try{ markOffline(socket.data?.userId, socket.id); }catch{}
     try{ lockRemoveSocket(socket.data?.userId, socket.id); }catch{}
+
+    try{
+      const boardCode = sanitizeBoardRoomCode(socket.data?.boardRoomCode || "");
+      const boardRoom = boardRooms.get(boardCode);
+      if(boardRoom){
+        boardRoom.sockets.delete(socket.id);
+        const meta = socket.data?.boardProfile || {};
+        const player = boardRoom.players.find((item) => Number(item.userId) === Number(meta.userId));
+        if(player) player.online = false;
+        if(boardRoom.campaignId && player){
+          boardRoom.updatedAt = Date.now();
+          emitBoardLobby(boardRoom);
+          scheduleBoardCampaignProxyTakeover(boardRoom, player.userId);
+        }else{
+          cleanupBoardRoom(boardRoom.roomCode);
+        }
+      }
+    }catch(e){
+      console.error("[BOARD disconnect] error:", e);
+    }
 
     if (!joinedRoom) return;
     const room = rooms.get(joinedRoom);

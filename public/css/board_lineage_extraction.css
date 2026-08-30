@@ -1,0 +1,1697 @@
+.battle-stage.lineage-extraction-active .action-panel,
+.battle-stage.lineage-extraction-active .info-panel,
+.battle-stage.lineage-extraction-active .attribute-matchup-chip {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.battle-stage.lineage-extraction-operation .hud-panel,
+.battle-stage.lineage-extraction-operation #playerCard {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.battle-stage.lineage-extraction-active #enemyCard {
+  left: auto !important;
+  right: 4% !important;
+  z-index: 100 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: none !important;
+  transform: none !important;
+  animation: none !important;
+  pointer-events: auto;
+}
+
+.battle-stage.lineage-extraction-active #enemyCard.portrait-ko,
+.battle-stage.lineage-extraction-active #enemyCard .battle-portrait {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.battle-stage.lineage-extraction-active #enemyCard.portrait-ko {
+  animation: none !important;
+  transform: none !important;
+}
+
+@media (max-width: 1024px), (max-height: 576px) {
+  .battle-stage.lineage-extraction-active #enemyCard {
+    top: 2% !important;
+    right: 3% !important;
+    width: 340px !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
+  }
+}
+
+.battle-stage.lineage-extraction-battle-layout .hud-panel.enemy {
+  z-index: 101 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: none !important;
+  transform: none !important;
+}
+
+.battle-stage.lineage-extraction-operation .hud-panel.enemy {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* The full-screen laboratory scene sits at z-index 140. During extractor
+   selection and the minigame, the original enemy card must stay above that
+   backdrop so the target is actually visible instead of merely present in DOM. */
+.battle-stage.lineage-extraction-operation #enemyCard {
+  z-index: 160 !important;
+}
+
+.battle-stage.lineage-viewport-fitted {
+  position: fixed;
+  left: var(--lineage-stage-left, 50%);
+  top: var(--lineage-stage-top, 50%);
+  width: 1024px;
+  height: 576px;
+  min-width: 1024px;
+  min-height: 576px;
+  transform: translate(-50%, -50%) scale(var(--lineage-stage-scale, 1));
+  transform-origin: 50% 50%;
+}
+
+.battle-stage.lineage-viewport-fitted #enemyCard {
+  right: 1% !important;
+  left: auto !important;
+}
+
+.lineage-extraction-root {
+  --lineage-glow-rgb: 73 232 221;
+  --lineage-beam-core: #fff8c9;
+  --lineage-beam-mid: #57eee1;
+  --lineage-beam-edge: #2c93b3;
+  position: absolute;
+  inset: 0;
+  z-index: 140;
+  display: none;
+  overflow: hidden;
+  color: #eefefa;
+  font-family: inherit;
+  isolation: isolate;
+}
+
+/* Tot Musica uses a full-stage battle layer. Once the post-battle extraction
+   decision opens, keep its dedicated battlefield as the backdrop but yield
+   interaction and result-panel space to the shared extraction scene. */
+.battle-stage.tot-musica-battle-mode.lineage-extraction-active .tot-musica-dual-fx {
+  pointer-events: none !important;
+}
+
+.battle-stage.tot-musica-battle-mode.lineage-extraction-active #enemyCard {
+  display: block !important;
+}
+
+.battle-stage.tot-musica-battle-mode.lineage-extraction-active .info-panel.result-mode,
+.battle-stage.tot-musica-battle-mode.lineage-extraction-active .action-panel {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.lineage-extraction-root.is-open {
+  display: block;
+}
+
+.lineage-extraction-root::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, .18), transparent 38% 62%, rgba(0, 0, 0, .12)),
+    radial-gradient(circle at 50% 48%, transparent 0 20%, rgba(0, 0, 0, .16) 70%, rgba(0, 0, 0, .5) 100%),
+    url("../images/board/lineage_extraction_ui/lineage_extraction_minigame_bg_v1.webp") center / cover no-repeat,
+    #000;
+  pointer-events: none;
+}
+
+.lineage-extraction-root::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, rgba(0, 0, 0, .1), transparent 44% 60%, rgba(0, 0, 0, .08));
+  pointer-events: none;
+}
+
+.lineage-extraction-root.is-battle-layout {
+  pointer-events: none;
+}
+
+.lineage-extraction-root.is-battle-layout::before,
+.lineage-extraction-root.is-battle-layout::after {
+  background: transparent;
+}
+
+.lineage-extraction-root.is-battle-layout .lineage-extraction-kicker,
+.lineage-extraction-root.is-battle-layout .lineage-extraction-title {
+  display: none;
+}
+
+.lineage-extraction-kicker {
+  position: absolute;
+  top: 4.2%;
+  left: 4.5%;
+  z-index: 15;
+  margin: 0;
+  color: #84f5e7;
+  font-size: clamp(10px, 1.05vw, 18px);
+  font-weight: 1000;
+  letter-spacing: .16em;
+  text-shadow: 0 0 14px rgb(var(--lineage-glow-rgb) / .75);
+}
+
+.lineage-extraction-title {
+  position: absolute;
+  top: 7.5%;
+  left: 4.5%;
+  z-index: 15;
+  margin: 0;
+  max-width: 47%;
+  color: #fff3c5;
+  font-size: clamp(18px, 2.2vw, 38px);
+  font-weight: 1000;
+  line-height: 1.08;
+  text-shadow: 0 3px 8px #000, 0 0 18px rgba(247, 202, 88, .28);
+}
+
+.lineage-extraction-rank {
+  display: inline-grid;
+  place-items: center;
+  min-width: 2.65em;
+  margin-left: .42em;
+  padding: .14em .42em;
+  border: 1px solid rgba(255, 222, 134, .72);
+  border-radius: 999px;
+  background: rgba(23, 15, 3, .82);
+  color: #ffdf82;
+  font-size: .56em;
+  vertical-align: .24em;
+}
+
+.lineage-extraction-panel {
+  position: absolute;
+  z-index: 8;
+  top: 21%;
+  left: 5%;
+  width: min(41%, 610px);
+  min-height: 50%;
+  box-sizing: border-box;
+  padding: 3.1% 3.4%;
+  border: 1px solid rgba(119, 237, 222, .4);
+  border-radius: 22px;
+  background:
+    linear-gradient(145deg, rgba(5, 35, 44, .95), rgba(3, 14, 23, .94)),
+    radial-gradient(circle at 20% 10%, rgb(var(--lineage-glow-rgb) / .2), transparent 45%);
+  box-shadow: 0 22px 45px rgba(0, 0, 0, .55), inset 0 0 28px rgb(var(--lineage-glow-rgb) / .08);
+}
+
+.lineage-extraction-panel[hidden] {
+  display: none;
+}
+
+.lineage-extraction-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+.lineage-extraction-panel .lineage-result-frame {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  opacity: .76;
+  pointer-events: none;
+}
+
+.lineage-extraction-panel h3 {
+  margin: 0 0 .55em;
+  color: #ffe8a7;
+  font-size: clamp(17px, 2vw, 31px);
+  line-height: 1.15;
+}
+
+.lineage-extraction-panel p {
+  margin: .55em 0;
+  color: #b8dbd7;
+  font-size: clamp(10px, 1.03vw, 16px);
+  font-weight: 760;
+  line-height: 1.55;
+}
+
+.lineage-extraction-rate {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 1.1em 0;
+}
+
+.lineage-extraction-rate span {
+  padding: .7em .4em;
+  border: 1px solid rgba(122, 234, 220, .22);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, .24);
+  color: #a9d8d1;
+  font-size: clamp(8px, .82vw, 13px);
+  font-weight: 850;
+  text-align: center;
+}
+
+.lineage-extraction-rate strong {
+  display: block;
+  margin-top: .16em;
+  color: #fff0ae;
+  font-size: 1.32em;
+}
+
+.lineage-extraction-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 1.25em;
+}
+
+.lineage-extraction-button {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 46px;
+  padding: .8em 1em;
+  border: 1px solid rgba(130, 245, 231, .55);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(38, 126, 125, .94), rgba(9, 60, 67, .98));
+  box-shadow: inset 0 1px rgba(255, 255, 255, .28), 0 7px 18px rgba(0, 0, 0, .32);
+  color: #f5ffff;
+  font: inherit;
+  font-size: clamp(10px, 1vw, 16px);
+  font-weight: 1000;
+  cursor: pointer;
+}
+
+.lineage-extraction-button:hover,
+.lineage-extraction-button:focus-visible {
+  filter: brightness(1.16);
+  outline: 2px solid rgba(255, 229, 143, .72);
+  outline-offset: 2px;
+}
+
+.lineage-extraction-button.secondary {
+  border-color: rgba(206, 221, 222, .35);
+  background: linear-gradient(180deg, rgba(65, 77, 84, .92), rgba(24, 31, 38, .96));
+  color: #cbd8da;
+}
+
+.lineage-extraction-button:disabled {
+  cursor: wait;
+  filter: grayscale(.65);
+  opacity: .58;
+}
+
+.lineage-battle-panels[hidden] {
+  display: none;
+}
+
+.lineage-battle-panel {
+  position: absolute;
+  z-index: 70;
+  top: 72%;
+  height: 25.8%;
+  box-sizing: border-box;
+  padding: clamp(20px, 2.4vh, 28px) clamp(26px, 2.2vw, 38px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  isolation: isolate;
+  pointer-events: auto;
+}
+
+.lineage-battle-panel.info {
+  left: 2.2%;
+  width: 48%;
+}
+
+.lineage-battle-panel.action {
+  left: 50.7%;
+  width: 48%;
+}
+
+.lineage-battle-panel-frame {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+}
+
+.lineage-battle-panel-title {
+  color: #ffe7a7;
+  font-size: clamp(18px, 1.75vw, 26px);
+  font-weight: 950;
+  line-height: 1.05;
+  text-align: center;
+  text-shadow: 0 3px 8px #000;
+}
+
+.lineage-battle-panel-copy {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: clamp(7px, 1.1vh, 12px);
+  box-sizing: border-box;
+  padding: 4px 2%;
+  color: #f7e9bd;
+  font-size: clamp(13px, 1.25vw, 18px);
+  font-weight: 750;
+  line-height: 1.45;
+  text-align: center;
+  text-shadow: 0 2px 6px #000;
+}
+
+.lineage-battle-log {
+  width: 92%;
+  display: grid;
+  gap: 5px;
+  color: rgba(244, 235, 207, .88);
+  text-align: left;
+}
+
+.lineage-battle-log strong {
+  color: #ffe39a;
+  font-size: 1.08em;
+}
+
+.lineage-hint-line {
+  color: rgba(223, 252, 248, .88);
+}
+
+.lineage-prompt-actions,
+.lineage-result-actions {
+  width: min(92%, 590px);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(7px, 1vw, 12px);
+}
+
+.lineage-result-actions.single {
+  width: min(52%, 300px);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.lineage-image-button {
+  position: relative;
+  min-height: clamp(48px, 7.4vh, 66px);
+  padding: 10px 17px;
+  border: 0;
+  display: grid;
+  place-items: center;
+  color: #fff1c3;
+  background: transparent;
+  font: inherit;
+  font-size: clamp(15px, 1.5vw, 22px);
+  font-weight: 950;
+  line-height: 1;
+  text-align: center;
+  text-shadow: 0 3px 7px #000;
+  cursor: pointer;
+  isolation: isolate;
+}
+
+.lineage-image-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: url("../images/board/battle_command_ui/battle_command_choice_button_frame.webp") center / 100% 100% no-repeat;
+}
+
+.lineage-image-button.danger::before {
+  background-image: url("../images/board/battle_command_ui/battle_command_danger_button_frame.webp");
+}
+
+.lineage-image-button:hover,
+.lineage-image-button:focus-visible {
+  filter: brightness(1.13);
+}
+
+.lineage-image-button:focus-visible {
+  outline: 2px solid rgba(255, 229, 143, .82);
+  outline-offset: 2px;
+}
+
+.lineage-image-button:disabled {
+  cursor: wait;
+  filter: grayscale(.65);
+  opacity: .58;
+}
+
+.lineage-phase-stats {
+  width: min(94%, 620px);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.lineage-stat {
+  min-width: 0;
+  padding: 7px 5px;
+  border: 1px solid rgba(224, 180, 91, .46);
+  border-radius: 7px;
+  background: rgba(2, 22, 37, .76);
+  color: #d6f8f4;
+  font-size: clamp(10px, .95vw, 14px);
+}
+
+.lineage-stat strong {
+  display: block;
+  margin-top: 2px;
+  overflow: hidden;
+  color: #ffe09a;
+  font-size: clamp(15px, 1.5vw, 21px);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lineage-stage-grade {
+  color: #ffe4a3;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(22px, 2.35vw, 34px);
+  font-weight: 950;
+  line-height: 1;
+  text-shadow: 0 3px 7px #000, 0 0 12px rgba(255, 210, 104, .52);
+}
+
+.lineage-stage-grade.good {
+  color: #71ebe3;
+}
+
+.lineage-stage-grade.miss {
+  color: #ff8d8d;
+}
+
+.lineage-battle-panel-copy.result-mode {
+  align-content: start;
+  gap: 4px;
+  padding-top: 0;
+}
+
+.lineage-battle-panel-copy.result-mode .lineage-stage-grade {
+  display: none;
+}
+
+.lineage-battle-panel-copy.result-mode .lineage-stat {
+  padding-block: 3px;
+  line-height: 1.05;
+}
+
+.lineage-battle-panel-copy.result-mode .lineage-stat strong {
+  margin-top: 1px;
+  line-height: 1;
+}
+
+.lineage-battle-panel-copy.result-mode .lineage-hint-line {
+  font-size: .86em;
+  line-height: 1.1;
+}
+
+.lineage-battle-panel-copy.result-mode .lineage-image-button {
+  min-height: clamp(36px, 4.8vh, 44px);
+  padding-block: 6px;
+  font-size: clamp(13px, 1.25vw, 18px);
+}
+
+.lineage-battle-panel-copy.result-mode .lineage-result-actions {
+  align-self: end;
+}
+
+.lineage-cylinder-scene {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  overflow: hidden;
+  touch-action: none;
+  cursor: grab;
+}
+
+.lineage-cylinder-scene[hidden] {
+  display: none;
+}
+
+.lineage-cylinder-scene.is-dragging {
+  cursor: grabbing;
+}
+
+.lineage-extraction-root.is-cylinder .lineage-extraction-kicker {
+  display: none;
+}
+
+.lineage-extraction-root.is-cylinder .lineage-extraction-title {
+  position: absolute;
+  top: 4.2%;
+  left: 50%;
+  width: min(760px, 64vw);
+  max-width: 64%;
+  color: #ffe7a4;
+  font-size: clamp(25px, 2.8vw, 42px);
+  line-height: 1.1;
+  letter-spacing: .06em;
+  text-align: center;
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+
+.lineage-extraction-root.is-cylinder .lineage-extraction-rank {
+  display: none;
+}
+
+.lineage-cylinder-viewport {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.lineage-cylinder-art {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 30px rgba(0, 0, 0, .62));
+  pointer-events: none;
+}
+
+.lineage-cylinder-rotator {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  transform: rotate(90deg);
+  transform-origin: 50% 50%;
+  transition: transform var(--lineage-cylinder-duration, 460ms) cubic-bezier(.08, .76, .12, 1);
+  will-change: transform;
+}
+
+.lineage-cylinder-slots {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.lineage-cylinder-slot {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 17.2%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  isolation: isolate;
+  pointer-events: none;
+}
+
+.lineage-cylinder-slot::before {
+  content: none;
+}
+
+.lineage-cylinder-device-upright,
+.lineage-cylinder-device-orient {
+  position: relative;
+  z-index: 1;
+  width: 88%;
+  height: 88%;
+  display: grid;
+  place-items: center;
+  transform-origin: 50% 50%;
+  pointer-events: none;
+}
+
+.lineage-cylinder-device-upright {
+  transition: transform var(--lineage-cylinder-duration, 460ms) cubic-bezier(.08, .76, .12, 1), filter 180ms ease;
+  will-change: transform;
+  filter: drop-shadow(0 7px 9px rgba(0, 0, 0, .76));
+}
+
+.lineage-extraction-root.is-cylinder-spinning .lineage-cylinder-rotator,
+.lineage-extraction-root.is-cylinder-spinning .lineage-cylinder-device-upright {
+  transition: none;
+}
+
+.lineage-cylinder-device-orient {
+  width: 100%;
+  height: 100%;
+  transform: rotate(var(--lineage-device-angle, 0deg));
+}
+
+.lineage-cylinder-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transform: translateY(var(--lineage-art-y, 0%)) scale(var(--lineage-art-scale, 1));
+  transform-origin: 50% 50%;
+  -webkit-clip-path: var(--lineage-art-clip, none);
+  clip-path: var(--lineage-art-clip, none);
+}
+
+.lineage-cylinder-slot.selected .lineage-cylinder-device-upright {
+  filter:
+    brightness(1.12)
+    drop-shadow(0 7px 9px rgba(0, 0, 0, .76))
+    drop-shadow(0 0 11px rgb(var(--lineage-slot-glow) / .84));
+}
+
+.lineage-extraction-root.is-cylinder-locked .lineage-cylinder-art {
+  opacity: .6;
+  filter: saturate(.72) brightness(.78) drop-shadow(0 18px 30px rgba(0, 0, 0, .62));
+}
+
+.lineage-extraction-root.is-cylinder-locked .lineage-cylinder-slot:not(.selected)::before {
+  opacity: .3;
+  filter: saturate(.62) brightness(.78);
+}
+
+.lineage-extraction-root.is-cylinder-locked .lineage-cylinder-slot:not(.selected) .lineage-cylinder-device-upright {
+  opacity: .5;
+  filter: saturate(.58) brightness(.8) drop-shadow(0 5px 7px rgba(0, 0, 0, .64));
+}
+
+.lineage-extraction-root.is-cylinder-locked .lineage-cylinder-slot.selected::before {
+  opacity: 1;
+  transform: scale(1.14);
+  filter: saturate(1.18) brightness(1.08);
+}
+
+.lineage-extraction-root.is-cylinder-locked .lineage-cylinder-slot.selected .lineage-cylinder-device-upright {
+  opacity: 1;
+  filter:
+    brightness(1.18)
+    saturate(1.08)
+    drop-shadow(0 8px 10px rgba(0, 0, 0, .78))
+    drop-shadow(0 0 17px rgb(var(--lineage-slot-glow) / .94));
+}
+
+.lineage-extraction-root.is-outcome .lineage-cylinder-slot.selected .lineage-cylinder-device-upright {
+  opacity: 0;
+  transition: none;
+}
+
+.lineage-launcher-showcase {
+  position: absolute;
+  z-index: 3;
+  top: 24%;
+  left: 4.5%;
+  width: 37%;
+  aspect-ratio: 16 / 9;
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+  pointer-events: none;
+}
+
+.lineage-launcher-frame {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  -webkit-mask-image: radial-gradient(ellipse 13.2% 23.47% at 24.7% 46.6%, transparent 0 97.4%, #000 99.5%);
+  mask-image: radial-gradient(ellipse 13.2% 23.47% at 24.7% 46.6%, transparent 0 97.4%, #000 99.5%);
+}
+
+.lineage-launcher-bay {
+  position: absolute;
+  z-index: 2;
+  top: 46.6%;
+  left: 25%;
+  width: 31.5%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  clip-path: circle(49% at 50% 50%);
+  transform: translate(-50%, -50%);
+}
+
+.lineage-extraction-root.is-cylinder-selection .lineage-launcher-bay {
+  visibility: hidden;
+}
+
+.lineage-launcher-rotor {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 115%;
+  height: 115%;
+  transform: translate(-50%, -50%) rotate(var(--launcher-start, 0deg));
+  transition: transform 1.25s cubic-bezier(.2, .85, .2, 1), filter .4s ease;
+  pointer-events: none;
+}
+
+.lineage-launcher-device {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 7px 10px rgba(0, 0, 0, .7)) drop-shadow(0 0 10px rgb(var(--lineage-glow-rgb) / .48));
+  transform: translateY(var(--launcher-art-y, 0%));
+}
+
+.lineage-extraction-root.is-outcome-locked .lineage-launcher-rotor {
+  transform: translate(-50%, -50%) rotate(var(--launcher-fire, 90deg)) scale(.96);
+  filter: drop-shadow(0 0 18px rgb(var(--lineage-glow-rgb) / .82));
+}
+
+.lineage-extraction-root.is-outcome-charging .lineage-launcher-bay {
+  animation: lineage-launcher-charge 760ms ease-in-out infinite alternate;
+}
+
+.lineage-extraction-root.is-outcome-firing .lineage-launcher-rotor {
+  animation: lineage-launcher-recoil 520ms ease-out;
+}
+
+@keyframes lineage-launcher-charge {
+  from { filter: brightness(1) drop-shadow(0 0 7px rgb(var(--lineage-glow-rgb) / .42)); }
+  to { filter: brightness(1.25) drop-shadow(0 0 19px rgb(var(--lineage-glow-rgb) / .92)); }
+}
+
+@keyframes lineage-launcher-recoil {
+  0%, 100% { translate: 0 0; }
+  28% { translate: -3.5% 0; }
+  55% { translate: 1.2% 0; }
+}
+
+.lineage-launcher-aperture {
+  position: absolute;
+  z-index: 4;
+  top: 28%;
+  left: 3.6%;
+  width: 28%;
+  aspect-ratio: 1;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: none;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.lineage-cylinder-caption {
+  position: absolute;
+  z-index: 3;
+  left: 65.5%;
+  top: 70.8%;
+  width: 49.5%;
+  height: 7.2%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(5px, .55vw, 9px);
+  min-height: clamp(14px, 1.25vw, 18px);
+  overflow: hidden;
+  color: #fff0bd;
+  text-align: center;
+  white-space: nowrap;
+  text-shadow: 0 3px 8px #000;
+  transform: translateX(-50%);
+}
+
+.lineage-cylinder-caption strong {
+  flex: 0 0 auto;
+  color: #fff0bd;
+  font-size: clamp(10px, .9vw, 14px);
+  line-height: 1;
+}
+
+.lineage-cylinder-caption span {
+  min-width: 0;
+  flex: 0 1 auto;
+  color: #73e6df;
+  font-size: clamp(8px, .64vw, 10px);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.lineage-cylinder-instruction {
+  position: absolute;
+  z-index: 4;
+  left: 41.5%;
+  bottom: 5.8%;
+  width: 25%;
+  margin: 0;
+  color: #dffcf8;
+  font-size: clamp(13px, 1.25vw, 18px);
+  font-weight: 900;
+  line-height: 1.35;
+  text-align: center;
+  text-shadow: 0 2px 7px #000;
+  pointer-events: none;
+}
+
+.lineage-minigame-hud {
+  position: absolute;
+  inset: 0;
+  z-index: 55;
+  pointer-events: none;
+}
+
+.lineage-extraction-root.is-minigame .lineage-cylinder-instruction,
+.lineage-extraction-root.is-outcome .lineage-cylinder-instruction {
+  display: none;
+}
+
+.lineage-extraction-root.is-minigame .lineage-minigame-hud {
+  display: block;
+}
+
+.lineage-extraction-root.is-minigame .lineage-minigame-hud > strong {
+  display: none;
+}
+
+.lineage-extraction-root.is-minigame .lineage-minigame-hud p {
+  position: absolute;
+  left: 41.5%;
+  bottom: 5.8%;
+  width: 25%;
+  margin: 0;
+  color: #dffcf8;
+  font-size: clamp(13px, 1.25vw, 18px);
+  font-weight: 900;
+  line-height: 1.35;
+  text-align: center;
+  text-shadow: 0 2px 7px #000;
+}
+
+.lineage-stage-status {
+  position: absolute;
+  left: 41.5%;
+  bottom: 13%;
+  width: 25%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.lineage-stage-stat {
+  min-width: 0;
+  padding: 10px 7px;
+  border: 1px solid rgba(215, 174, 91, .54);
+  border-radius: 8px;
+  color: #dffbf7;
+  background: rgba(1, 14, 27, .86);
+  font-size: clamp(10px, .95vw, 14px);
+  font-weight: 850;
+  text-align: center;
+  box-shadow: inset 0 0 13px rgba(37, 184, 178, .08), 0 8px 18px rgba(0, 0, 0, .34);
+}
+
+.lineage-stage-stat strong {
+  display: block;
+  margin-top: 3px;
+  overflow: hidden;
+  color: #ffe29b;
+  font-size: clamp(17px, 1.7vw, 25px);
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lineage-minigame-hud[hidden] {
+  display: none;
+}
+
+.lineage-grade-strip {
+  display: none;
+}
+
+.lineage-grade-chip {
+  padding: .3em .65em;
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, .28);
+  color: #aebfc0;
+  font-size: clamp(8px, .72vw, 12px);
+  font-weight: 900;
+}
+
+.lineage-grade-chip.Perfect {
+  color: #fff0a1;
+  border-color: rgba(255, 226, 112, .58);
+}
+
+.lineage-grade-chip.Good {
+  color: #8ff7ed;
+  border-color: rgba(93, 237, 224, .55);
+}
+
+.lineage-grade-chip.Miss {
+  color: #ff9d9d;
+  border-color: rgba(255, 108, 108, .5);
+}
+
+.lineage-target-layer {
+  position: absolute;
+  inset: 2.5% 3% 15%;
+  z-index: 80;
+  overflow: hidden;
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.lineage-osu-target {
+  position: absolute;
+  width: var(--target-size, 24%);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.lineage-osu-target img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.lineage-osu-target .approach {
+  animation: lineage-approach var(--target-duration, 1000ms) linear forwards;
+  filter: drop-shadow(0 0 9px rgb(var(--lineage-glow-rgb) / .85));
+}
+
+.lineage-osu-target .hit {
+  filter: drop-shadow(0 0 7px rgb(var(--lineage-glow-rgb) / .7));
+}
+
+.lineage-target-number {
+  position: absolute;
+  inset: 24%;
+  display: grid;
+  place-items: center;
+  color: #fff0bd;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(20px, 2.6vw, 38px);
+  font-weight: 950;
+  text-shadow: 0 2px 4px #000, 0 0 7px rgba(0, 17, 25, .95);
+  pointer-events: none;
+}
+
+.lineage-target-preview {
+  z-index: -1;
+  opacity: .34;
+  filter: saturate(.7);
+  pointer-events: none;
+}
+
+.lineage-osu-target.is-start .approach {
+  animation: lineage-start-pulse 1.35s ease-in-out infinite;
+}
+
+.lineage-osu-target.is-start {
+  --target-size: 34% !important;
+}
+
+.lineage-osu-target.is-start::after {
+  content: "開始";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #fff4b1;
+  font-family: "Noto Serif TC", "Microsoft JhengHei", serif;
+  font-size: clamp(12px, 1.35vw, 19px);
+  font-weight: 1000;
+  line-height: 1.12;
+  text-shadow: 0 2px 5px #000;
+}
+
+@keyframes lineage-approach {
+  from { transform: scale(2.15); opacity: .75; }
+  to { transform: scale(.55); opacity: 1; }
+}
+
+@keyframes lineage-start-pulse {
+  0%, 100% { transform: scale(1.42); opacity: .66; }
+  50% { transform: scale(1.12); opacity: 1; }
+}
+
+.lineage-lock-target,
+.lineage-seal-target {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: auto;
+  cursor: crosshair;
+}
+
+.lineage-phase-start-control {
+  position: absolute;
+  z-index: 34;
+  left: 50%;
+  top: 50%;
+  width: 66%;
+  min-height: clamp(56px, 8vh, 78px);
+  padding: 12px 16px;
+  border: 0;
+  display: grid;
+  place-items: center;
+  color: #fff0bd;
+  background: url("../images/board/battle_command_ui/battle_command_choice_button_frame.webp") center / 100% 100% no-repeat;
+  font-size: clamp(15px, 1.45vw, 21px);
+  font-weight: 950;
+  line-height: 1.15;
+  text-align: center;
+  text-shadow: 0 3px 7px #000;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.lineage-phase-start-control:hover {
+  filter: brightness(1.14);
+}
+
+.lineage-lock-target img,
+.lineage-seal-target img {
+  position: absolute;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.lineage-lock-target .track {
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  width: 146%;
+  height: auto;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 0 7px rgba(62, 224, 216, .32));
+}
+
+.lineage-lock-target .left,
+.lineage-lock-target .right {
+  z-index: 4;
+  top: 50%;
+  left: var(--lock-left, -4%);
+  width: 31%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 0 6px rgba(255, 208, 105, .48));
+}
+
+.lineage-lock-target .right {
+  left: var(--lock-right, 104%);
+  transform: translate(-50%, -50%) scaleX(-1);
+}
+
+.lineage-seal-target .fixed,
+.lineage-seal-target .pulse {
+  inset: 4%;
+  width: 92%;
+  height: 92%;
+}
+
+.lineage-seal-target .fixed {
+  z-index: 3;
+  transform: translate(-1.14%, 1.43%);
+  filter: drop-shadow(0 0 7px rgba(255, 206, 101, .34));
+}
+
+.lineage-seal-target .pulse {
+  z-index: 4;
+  transform: translate(.13%, .2%) scale(var(--seal-scale, .52));
+  filter: drop-shadow(0 0 7px rgb(var(--lineage-glow-rgb) / .46));
+}
+
+.lineage-grade-flash {
+  position: absolute;
+  z-index: 28;
+  top: 50%;
+  left: 50%;
+  opacity: 0;
+  color: #fff0a6;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(24px, 3.4vw, 48px);
+  font-weight: 950;
+  letter-spacing: .04em;
+  text-align: center;
+  text-shadow: 0 4px 10px #000, 0 0 25px rgb(var(--lineage-glow-rgb) / .9);
+  animation: lineage-grade-pop .52s ease-out forwards;
+  pointer-events: none;
+}
+
+.lineage-grade-flash.Good {
+  color: #78f3e9;
+  text-shadow: 0 3px 7px #000, 0 0 15px rgba(64, 226, 216, .72);
+}
+
+.lineage-grade-flash.Miss {
+  color: #ff8c8c;
+  text-shadow: 0 3px 7px #000, 0 0 15px rgba(239, 61, 72, .72);
+}
+
+@keyframes lineage-grade-pop {
+  0% { opacity: 0; transform: translate(-50%, -36%) scale(.78); }
+  28% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
+  100% { opacity: 0; transform: translate(-50%, -68%) scale(1); }
+}
+
+.lineage-outcome {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+}
+
+.lineage-outcome[hidden] {
+  display: none;
+}
+
+.lineage-outcome-launcher {
+  display: none;
+}
+
+.lineage-track-beam,
+.lineage-target-beam {
+  position: absolute;
+  height: clamp(18px, 2.2vw, 32px);
+  transform-origin: left center;
+  pointer-events: none;
+}
+
+.lineage-track-beam {
+  z-index: -2;
+  transform: translateY(-50%);
+}
+
+.lineage-target-beam {
+  z-index: 110;
+}
+
+/* playOutcome() moves the final sampling beam directly under #battleStage.
+   Keep that beam above the laboratory backdrop (140) and the extraction
+   target card (160), without changing the minigame beam inside the overlay. */
+.battle-stage.lineage-extraction-operation > .lineage-target-beam {
+  z-index: 170;
+}
+
+.lineage-beam-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 34%;
+  border-radius: 999px;
+  opacity: 0;
+  background: linear-gradient(90deg, var(--lineage-beam-core), var(--lineage-beam-mid) 18% 76%, var(--lineage-beam-edge));
+  box-shadow: 0 0 6px #fff, 0 0 13px var(--lineage-beam-mid), 0 0 28px rgb(var(--lineage-glow-rgb) / .72);
+  transform: translateY(-50%) scaleX(0);
+  transform-origin: left center;
+}
+
+.lineage-beam-line::before,
+.lineage-beam-line::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  opacity: .62;
+  background: var(--lineage-beam-core);
+  transform: translateY(-50%) rotate(1.7deg);
+}
+
+.lineage-beam-line::after {
+  transform: translateY(-50%) rotate(-1.7deg);
+}
+
+.lineage-track-beam .lineage-beam-line {
+  height: 52%;
+}
+
+.lineage-track-beam .lineage-beam-line::before,
+.lineage-track-beam .lineage-beam-line::after {
+  transform: translateY(-50%);
+}
+
+.lineage-extraction-root.is-outcome-firing .lineage-track-beam .lineage-beam-line {
+  animation: lineage-beam-fire 520ms cubic-bezier(.12, .75, .2, 1) forwards;
+}
+
+.lineage-extraction-root.is-outcome-firing .lineage-target-beam .lineage-beam-line {
+  animation: lineage-beam-fire 1.35s 260ms cubic-bezier(.12, .75, .2, 1) forwards;
+}
+
+.lineage-target-beam.is-firing .lineage-beam-line {
+  animation: lineage-beam-fire 1.35s 260ms cubic-bezier(.12, .75, .2, 1) forwards;
+}
+
+@keyframes lineage-beam-fire {
+  0% { opacity: 0; transform: translateY(-50%) scaleX(0); }
+  14% { opacity: 1; }
+  48%, 78%, 100% { opacity: 1; transform: translateY(-50%) scaleX(1); }
+}
+
+.lineage-sample-core {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 98%;
+  width: clamp(16px, 2vw, 29px);
+  aspect-ratio: 1;
+  border: 2px solid var(--lineage-beam-core);
+  border-radius: 50%;
+  opacity: 0;
+  background: radial-gradient(circle, #fff 0 15%, var(--lineage-beam-mid) 18% 45%, var(--lineage-beam-edge) 48% 66%, transparent 68%);
+  box-shadow: 0 0 9px #fff, 0 0 22px var(--lineage-beam-mid);
+  transform: translate(-50%, -50%);
+}
+
+.lineage-extraction-root.is-outcome-success .lineage-sample-core {
+  animation: lineage-sample-return 1.35s cubic-bezier(.35, .05, .2, 1) forwards;
+}
+
+.lineage-target-beam.is-success .lineage-sample-core {
+  animation: lineage-sample-return 1.35s cubic-bezier(.35, .05, .2, 1) forwards;
+}
+
+@keyframes lineage-sample-return {
+  0% { left: 98%; opacity: 0; transform: translate(-50%, -50%) scale(.5); }
+  16%, 78% { opacity: 1; }
+  100% { left: 3%; opacity: 0; transform: translate(-50%, -50%) scale(.84); }
+}
+
+.lineage-impact {
+  position: absolute;
+  z-index: 66;
+  left: var(--impact-x, 72%);
+  top: var(--impact-y, 48%);
+  width: 13%;
+  aspect-ratio: 1;
+  width: clamp(105px, 13vw, 185px);
+  transform: translate(-50%, -50%) scale(.45);
+  border: clamp(3px, .32vw, 5px) solid rgb(var(--lineage-glow-rgb) / .92);
+  border-radius: 50%;
+  opacity: 0;
+  box-shadow: inset 0 0 22px rgb(var(--lineage-glow-rgb) / .54), 0 0 16px var(--lineage-beam-mid), 0 0 42px rgb(var(--lineage-glow-rgb) / .78);
+}
+
+.lineage-impact::before,
+.lineage-impact::after {
+  content: "";
+  position: absolute;
+  inset: 13%;
+  border: 2px solid var(--lineage-beam-core);
+  border-radius: 50%;
+}
+
+.lineage-impact::after {
+  inset: 30%;
+  border-color: var(--lineage-beam-mid);
+}
+
+.lineage-containment-pips {
+  position: absolute;
+  z-index: 67;
+  display: flex;
+  gap: clamp(7px, .8vw, 11px);
+  opacity: 0;
+  transform: translate(-50%, -50%);
+}
+
+.lineage-containment-pips span {
+  width: clamp(10px, 1.1vw, 16px);
+  aspect-ratio: 1;
+  border: 2px solid var(--lineage-beam-edge);
+  background: rgba(2, 18, 30, .92);
+  box-shadow: 0 0 7px rgb(var(--lineage-glow-rgb) / .46);
+  transform: rotate(45deg) scale(.72);
+}
+
+.battle-stage.lineage-extraction-active #enemyCard.lineage-outcome-firing .lineage-impact {
+  animation: lineage-impact-in 1.6s 360ms ease-out forwards;
+}
+
+.battle-stage.lineage-extraction-active #enemyCard.lineage-outcome-testing .lineage-impact {
+  opacity: 1;
+  animation: lineage-containment-test 2.7s ease-in-out forwards;
+}
+
+.battle-stage.lineage-extraction-active #enemyCard.lineage-outcome-testing .lineage-containment-pips {
+  opacity: 1;
+}
+
+.battle-stage.lineage-extraction-active #enemyCard.lineage-outcome-testing .lineage-containment-pips span:nth-child(1) {
+  animation: lineage-pip-lock 360ms 260ms ease-out forwards;
+}
+
+.battle-stage.lineage-extraction-active #enemyCard.lineage-outcome-testing .lineage-containment-pips span:nth-child(2) {
+  animation: lineage-pip-lock 360ms 1.12s ease-out forwards;
+}
+
+.battle-stage.lineage-extraction-active #enemyCard.lineage-outcome-testing .lineage-containment-pips span:nth-child(3) {
+  animation: lineage-pip-lock 360ms 1.98s ease-out forwards;
+}
+
+.battle-stage.lineage-extraction-active #enemyCard.lineage-outcome-success .lineage-impact {
+  opacity: .9;
+  animation: lineage-impact-success 1.35s ease-in-out infinite;
+}
+
+.lineage-extraction-root.is-outcome-failure .lineage-beam-line {
+  background: linear-gradient(90deg, #fff0e5, #ff746b 26% 74%, #401016);
+  box-shadow: 0 0 6px #fff, 0 0 16px #ff5f57, 0 0 30px rgba(213, 44, 40, .7);
+  animation: lineage-beam-collapse 720ms ease-in forwards !important;
+}
+
+.lineage-target-beam.is-failure .lineage-beam-line {
+  background: linear-gradient(90deg, #fff0e5, #ff746b 26% 74%, #401016);
+  box-shadow: 0 0 6px #fff, 0 0 16px #ff5f57, 0 0 30px rgba(213, 44, 40, .7);
+  animation: lineage-beam-collapse 720ms ease-in forwards !important;
+}
+
+.battle-stage.lineage-extraction-active #enemyCard.lineage-outcome-failure .lineage-impact {
+  border-color: #ff776d;
+  box-shadow: inset 0 0 18px rgba(255, 70, 64, .48), 0 0 15px #ff5d55, 0 0 38px rgba(203, 42, 36, .7);
+  animation: lineage-impact-failure 820ms ease-out forwards;
+}
+
+.battle-stage.lineage-extraction-active #enemyCard.lineage-sample-secured .battle-portrait {
+  animation: lineage-enemy-sample-secured 850ms ease-out;
+}
+
+.battle-stage.lineage-extraction-active #enemyCard.lineage-sample-rejected .battle-portrait {
+  animation: lineage-enemy-sample-breakout 820ms cubic-bezier(.2, .8, .2, 1);
+}
+
+@keyframes lineage-impact-in {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(.3); }
+  34% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
+  72% { opacity: .86; transform: translate(-50%, -50%) scale(.92); }
+  100% { opacity: .5; transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes lineage-containment-test {
+  0% { opacity: .86; transform: translate(-50%, -50%) scale(1) rotate(0); }
+  14% { opacity: 1; transform: translate(-50%, -50%) scale(.86) rotate(-7deg); }
+  28% { transform: translate(-50%, -50%) scale(1.03); }
+  43% { transform: translate(-50%, -50%) scale(.82) rotate(7deg); }
+  57% { transform: translate(-50%, -50%) scale(1.01); }
+  72% { transform: translate(-50%, -50%) scale(.78) rotate(-5deg); }
+  86% { transform: translate(-50%, -50%) scale(.97); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(.9); }
+}
+
+@keyframes lineage-pip-lock {
+  0% { background: rgba(2, 18, 30, .92); transform: rotate(45deg) scale(.72); }
+  55% { background: #fff2b3; box-shadow: 0 0 10px #fff, 0 0 20px #58eee3; transform: rotate(45deg) scale(1.2); }
+  100% { background: #64f5e9; box-shadow: 0 0 8px #fff, 0 0 16px #4de6dc; transform: rotate(45deg) scale(1); }
+}
+
+@keyframes lineage-impact-success {
+  0%, 100% { transform: translate(-50%, -50%) scale(.94); }
+  50% { transform: translate(-50%, -50%) scale(1.06) rotate(8deg); }
+}
+
+@keyframes lineage-beam-collapse {
+  0% { opacity: .72; transform: translateY(-50%) scaleX(1); }
+  24% { opacity: 1; transform: translateY(-50%) scaleX(.94) scaleY(1.8); }
+  55% { opacity: .7; transform: translateY(-50%) scaleX(.58) scaleY(.52); }
+  100% { opacity: 0; transform: translateY(-50%) scaleX(.12) scaleY(.12); }
+}
+
+@keyframes lineage-impact-failure {
+  0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  36% { opacity: 1; transform: translate(-50%, -50%) scale(1.2) rotate(13deg); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.72) rotate(34deg); }
+}
+
+@keyframes lineage-enemy-sample-secured {
+  0%, 100% { filter: none; transform: scale(1); }
+  45% { filter: brightness(1.35) saturate(.75) hue-rotate(125deg); transform: scale(.985); }
+}
+
+@keyframes lineage-enemy-sample-breakout {
+  0%, 100% { filter: none; transform: translateX(0) scale(1); }
+  18% { filter: brightness(1.7) saturate(.6) sepia(.25); transform: translateX(-1.6%) scale(1.025); }
+  38% { filter: brightness(1.2) saturate(1.35); transform: translateX(2.2%) scale(1.045); }
+  58% { transform: translateX(-1.4%) scale(1.025); }
+  78% { transform: translateX(.8%) scale(1.012); }
+}
+
+.lineage-outcome-status {
+  position: absolute;
+  z-index: 70;
+  left: 5%;
+  bottom: 9%;
+  width: 39%;
+  color: #d7f8f1;
+  font-size: clamp(11px, 1.15vw, 19px);
+  font-weight: 900;
+  text-align: center;
+  text-shadow: 0 2px 5px #000;
+}
+
+.lineage-extraction-root.is-outcome .lineage-outcome-status {
+  left: 41.5%;
+  bottom: 10.5%;
+  width: 25%;
+  color: #dffcf8;
+  font-size: clamp(15px, 1.5vw, 22px);
+}
+
+.lineage-outcome-next {
+  position: absolute;
+  z-index: 120;
+  left: 46%;
+  bottom: 3.2%;
+  width: 16%;
+  min-height: clamp(38px, 5.2vh, 50px);
+  padding: 7px 12px;
+  border: 0;
+  display: grid;
+  place-items: center;
+  color: #fff1c3;
+  background: url("../images/board/battle_command_ui/battle_command_choice_button_frame.webp") center / 100% 100% no-repeat;
+  font: inherit;
+  font-size: clamp(12px, 1.15vw, 17px);
+  font-weight: 950;
+  line-height: 1;
+  text-align: center;
+  text-shadow: 0 3px 7px #000;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.lineage-outcome-next[hidden] {
+  display: none;
+}
+
+.lineage-outcome-next:hover,
+.lineage-outcome-next:focus-visible {
+  filter: brightness(1.13);
+}
+
+.lineage-extraction-root.is-outcome-success .lineage-extraction-title {
+  color: #bafff5;
+  text-shadow: 0 4px 12px #000, 0 0 20px rgba(61, 238, 225, .78);
+}
+
+.lineage-extraction-root.is-outcome-failure .lineage-extraction-title {
+  color: #ffb1a5;
+  text-shadow: 0 4px 12px #000, 0 0 18px rgba(234, 72, 64, .68);
+}
+
+.lineage-waiting-names {
+  color: #8ee8dc;
+  font-weight: 900;
+}
+
+.lineage-waiting-summary {
+  color: #b9d8d5;
+  font-size: clamp(10px, .82vw, 14px);
+  font-weight: 800;
+}
+
+.lineage-waiting-player-grid {
+  width: 92%;
+  max-height: 29vh;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.lineage-battle-panel-copy.waiting-mode {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  align-content: stretch;
+  gap: 4px;
+  padding-block: 1px;
+}
+
+.lineage-battle-panel-copy.waiting-mode .lineage-result-actions.single {
+  align-self: end;
+  width: min(58%, 310px);
+}
+
+.lineage-battle-panel-copy.waiting-mode .lineage-image-button {
+  min-height: clamp(31px, 4.5vh, 40px);
+  padding-block: 5px;
+  font-size: clamp(11px, 1.05vw, 16px);
+}
+
+.lineage-waiting-player {
+  position: relative;
+  min-height: 36px;
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  color: #dff8f3;
+  background: rgba(3, 20, 27, .82) url("../images/board/lineage_extraction_ui/lineage_extractor_selection_panel_frame.webp") center / 100% 100% no-repeat;
+  filter: drop-shadow(0 5px 7px rgba(0, 0, 0, .52));
+}
+
+.lineage-waiting-player > img {
+  width: 28px;
+  height: 28px;
+  object-fit: cover;
+  border: 2px solid rgba(83, 226, 207, .72);
+  border-radius: 50%;
+}
+
+.lineage-waiting-player > span {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.lineage-waiting-player strong,
+.lineage-waiting-player small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lineage-waiting-player strong { color: #fff0bc; font-size: clamp(9px, .78vw, 13px); }
+.lineage-waiting-player small { color: #a8d5d0; font-size: clamp(7px, .62vw, 10px); }
+.lineage-waiting-player em { color: #ffc46e; font-size: clamp(8px, .68vw, 11px); font-style: normal; font-weight: 900; }
+.lineage-waiting-player.is-complete { opacity: .78; }
+.lineage-waiting-player.is-complete > img { border-color: rgba(143, 244, 178, .85); }
+.lineage-waiting-player.is-complete em { color: #92efb4; }
+.lineage-waiting-player.is-current { filter: drop-shadow(0 0 9px rgba(64, 224, 207, .38)); }
+
+@media (max-width: 900px) {
+  .lineage-extraction-kicker {
+    top: 2.5%;
+  }
+
+  .lineage-extraction-title {
+    top: 6%;
+    max-width: 56%;
+  }
+
+  .lineage-extraction-panel {
+    top: 18%;
+    left: 3%;
+    width: 47%;
+    min-height: 60%;
+    padding: 3%;
+  }
+
+}
+
+@media (max-aspect-ratio: 1/1) {
+  .lineage-extraction-title {
+    max-width: 88%;
+  }
+
+  .lineage-extraction-panel {
+    top: 16%;
+    left: 5%;
+    width: 90%;
+    min-height: 31%;
+  }
+
+  .lineage-waiting-player-grid {
+    grid-template-columns: 1fr;
+    max-height: 24vh;
+  }
+
+  .lineage-outcome-launcher {
+    left: 4%;
+    top: 63%;
+    width: 42%;
+    height: 25%;
+  }
+
+  .lineage-outcome-status {
+    left: 4%;
+    bottom: 4%;
+    width: 92%;
+  }
+}
+
+body.battle-tablet-portrait .lineage-waiting-player-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-height: 42px;
+  gap: 4px;
+  padding: 2px;
+}
+
+body.battle-tablet-portrait .lineage-battle-panel {
+  padding: 12px 22px;
+}
+
+body.battle-tablet-portrait .lineage-battle-panel-title {
+  font-size: 16px;
+}
+
+body.battle-tablet-portrait .lineage-battle-panel-copy.waiting-mode {
+  height: calc(100% - 24px);
+  gap: 2px;
+  padding-block: 0;
+}
+
+body.battle-tablet-portrait .lineage-waiting-summary {
+  font-size: 9px;
+  line-height: 1;
+}
+
+body.battle-tablet-portrait .lineage-battle-panel-copy.waiting-mode .lineage-result-actions.single {
+  width: min(52%, 260px);
+}
+
+body.battle-tablet-portrait .lineage-battle-panel-copy.waiting-mode .lineage-image-button {
+  min-height: 24px;
+  padding-block: 2px;
+  font-size: 10px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lineage-osu-target .approach,
+  .lineage-osu-target.is-start .approach,
+  .lineage-extraction-root.is-outcome-firing .lineage-beam-line,
+  .battle-stage.lineage-extraction-active #enemyCard.lineage-outcome-firing .lineage-impact,
+  .lineage-grade-flash {
+    animation-duration: .01ms !important;
+  }
+}

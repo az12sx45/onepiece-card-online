@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <title>航海王大富翁</title>
+  <style>
+    :root{
+      --board-fixed-scale:1;
+      --board-fixed-left:50vw;
+      --board-fixed-top:50vh;
+    }
+    *{box-sizing:border-box}
+    html,body{
+      width:100%;
+      height:100%;
+      margin:0;
+      overflow:hidden;
+      overscroll-behavior:none;
+      background:#000;
+    }
+    .board-fixed-stage{
+      position:fixed;
+      left:var(--board-fixed-left);
+      top:var(--board-fixed-top);
+      width:1920px;
+      height:900px;
+      overflow:hidden;
+      transform:translate(-50%,-50%) scale(var(--board-fixed-scale));
+      transform-origin:center;
+      background:#06111d;
+      box-shadow:0 0 42px rgba(0,0,0,.86);
+    }
+    .board-fixed-frame{
+      display:block;
+      width:1920px;
+      height:900px;
+      border:0;
+      background:#06111d;
+    }
+  </style>
+</head>
+<body>
+  <div class="board-fixed-stage" id="boardFixedStage">
+    <iframe class="board-fixed-frame" id="boardFixedFrame" title="航海王大富翁固定比例遊戲畫面" allow="autoplay; fullscreen"></iframe>
+  </div>
+  <script>
+    (() => {
+      const DESIGN_WIDTH = 1920;
+      const DESIGN_HEIGHT = 900;
+      const frame = document.getElementById("boardFixedFrame");
+      const sourceUrl = new URL("board_game.html", window.location.href);
+      sourceUrl.search = window.location.search;
+      sourceUrl.searchParams.set("desktop_frame", "1");
+      sourceUrl.hash = window.location.hash;
+      frame.src = sourceUrl.href;
+
+      const fit = () => {
+        const viewport = window.visualViewport;
+        const width = Math.max(1, viewport?.width || window.innerWidth || DESIGN_WIDTH);
+        const height = Math.max(1, viewport?.height || window.innerHeight || DESIGN_HEIGHT);
+        const left = (viewport?.offsetLeft || 0) + width / 2;
+        const top = (viewport?.offsetTop || 0) + height / 2;
+        const scale = Math.min(width / DESIGN_WIDTH, height / DESIGN_HEIGHT);
+        document.documentElement.style.setProperty("--board-fixed-scale", scale.toFixed(6));
+        document.documentElement.style.setProperty("--board-fixed-left", `${left}px`);
+        document.documentElement.style.setProperty("--board-fixed-top", `${top}px`);
+      };
+
+      fit();
+      window.addEventListener("resize", fit, { passive: true });
+      window.addEventListener("orientationchange", fit, { passive: true });
+      window.visualViewport?.addEventListener("resize", fit, { passive: true });
+      window.visualViewport?.addEventListener("scroll", fit, { passive: true });
+    })();
+  </script>
+</body>
+</html>

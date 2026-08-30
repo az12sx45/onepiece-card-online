@@ -63,6 +63,80 @@
     .audio-toggle .vol{ appearance:none; width:120px; height:4px; border-radius:999px; background:#444; }
     .audio-toggle .vol::-webkit-slider-thumb{ appearance:none; width:14px; height:14px; border-radius:999px; background:#ffd36a; border:1px solid #b3831b; }
     @media (max-width: 640px){ .audio-toggle{ gap:6px; padding:6px 8px; } .audio-toggle .vol{ width:86px; } }
+    .secret-mode-scene{
+      position:fixed;
+      left:50%;
+      top:50%;
+      z-index:2;
+      width:max(100vw,177.7778vh);
+      aspect-ratio:16/9;
+      transform:translate(-50%,-50%);
+      pointer-events:none;
+      overflow:visible;
+    }
+    .secret-mode-scene-inner{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      transform-origin:50% 50%;
+    }
+    body.no-video .secret-mode-scene-inner{
+      animation:secretSceneKenburns 18s ease-in-out infinite alternate;
+    }
+    @keyframes secretSceneKenburns{
+      from{transform:scale(1)}
+      to{transform:scale(1.08) translate3d(0,-1.2%,0)}
+    }
+    .secret-mode-object{
+      position:absolute;
+      display:block;
+      padding:0;
+      border:0;
+      background:transparent;
+      color:transparent;
+      cursor:pointer;
+      pointer-events:auto;
+      opacity:.36;
+      -webkit-tap-highlight-color:transparent;
+      transition:opacity .2s ease,filter .2s ease;
+    }
+    .secret-mode-object img{
+      display:block;
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      pointer-events:none;
+    }
+    .secret-mode-object:hover,
+    .secret-mode-object:focus-visible,
+    .secret-mode-object:active{
+      opacity:.92;
+      filter:drop-shadow(0 0 13px rgba(255,184,77,.46));
+      outline:none;
+    }
+    .secret-mode-board{
+      left:max(4.8%,calc((100% - 100vw)/2 + 2.8vw));
+      top:49.5%;
+      width:clamp(56px,5.35vw,84px);
+      aspect-ratio:1;
+      opacity:.24;
+      animation:secretDiceDrift 6.8s ease-in-out infinite alternate;
+    }
+    .secret-mode-board img{
+      border-radius:50%;
+      mix-blend-mode:screen;
+      filter:grayscale(.38) sepia(.82) saturate(.42) brightness(.58) contrast(.96);
+      -webkit-mask-image:radial-gradient(circle at 50% 50%,#000 0 43%,rgba(0,0,0,.72) 49%,transparent 61%);
+      mask-image:radial-gradient(circle at 50% 50%,#000 0 43%,rgba(0,0,0,.72) 49%,transparent 61%);
+    }
+    @keyframes secretDiceDrift{
+      from{transform:translate3d(-2px,3px,0) rotate(-17deg) scale(.98)}
+      to{transform:translate3d(4px,-4px,0) rotate(-11deg) scale(1.02)}
+    }
+    @media (prefers-reduced-motion:reduce){
+      .secret-mode-scene-inner,
+      .secret-mode-object{animation:none!important}
+    }
 
    /* === Player Title Badge (Luxury / same as profile.html) === */
 .player-title-badge{
@@ -673,9 +747,9 @@
       <source src="videos/start.mp4" type="video/mp4">
     </video>
   </div>
+  <div id="secretModeScene" class="secret-mode-scene" aria-label="隱藏遊戲入口"></div>
 
   <div id="root" class="min-h-dvh flex items-center justify-center p-6"></div>
-
   <script>
     (function initBGVideo(){
       const v = document.getElementById('bgVideo');
@@ -923,11 +997,15 @@ const avatarUrl = `images/avatars/${avatar}.webp`;
 
       const equippedTitle = String(client?.titles?.equipped || '').trim();
       const equippedTier  = Number(client?.titles?.equippedTier || 1) || 1;
+      const userId = Number(cloud?.user_id ?? cloud?.userId ?? 0) || 0;
+      const coins = Math.max(0, Number(client?.totals?.coins || 0) || 0);
 
       return {
+        userId,
         playerName: name,
         playerAvatar: avatar,
         avatarUrl,
+        coins,
         client,
         wall: cloud?.stats?.wall || null,
 
@@ -1135,7 +1213,27 @@ const avatarUrl = `images/avatars/${avatar}.webp`;
     // =========================
     function MainMenu({ profile, onStart, onRule, onLangChange, onProfilePage, onRefreshCloud, cloudLoading }) {
       const cur = I18N.getLang();
-      return (
+      function openSecretBoard(){
+        const userId = Number(profile?.userId || 0);
+        const name = String(profile?.playerName || '').trim();
+        const avatar = Math.max(1, Number(profile?.playerAvatar || 1) || 1);
+        const title = String(profile?.equippedTitle || '').trim();
+        const coins = Math.max(0, Number(profile?.coins || 0) || 0);
+        try{
+          if(userId > 0) localStorage.setItem('op_user_id', String(userId));
+          localStorage.setItem('op_name', name);
+          localStorage.setItem('op_player_name', name);
+          localStorage.setItem('op_avatar', String(avatar));
+          localStorage.setItem('op_player_avatar', String(avatar));
+          localStorage.setItem('op_board_title', title);
+          localStorage.setItem('op_board_coins', String(coins));
+          const secret = String(localStorage.getItem('opSecret') || '').trim();
+          if(secret) localStorage.setItem('op_secret', secret);
+        }catch(_){ }
+        location.href = 'board_start.html?from=secret-route';
+      }
+      const secretModeScene = document.getElementById('secretModeScene');
+      return (<>
         <div className="card w-[min(520px,92vw)] p-6 text-center space-y-6 relative">
           <div className="absolute right-4 top-4">
             <label className="text-[11px] text-neutral-300 mr-2">{t("ui.lang")}</label>
@@ -1185,7 +1283,21 @@ const avatarUrl = `images/avatars/${avatar}.webp`;
 
           <div className="text-xs text-neutral-400 mt-2">{t("brand.tagline")}</div>
         </div>
-      );
+        {secretModeScene && ReactDOM.createPortal(
+          <div className="secret-mode-scene-inner">
+            <button
+              type="button"
+              className="secret-mode-object secret-mode-board"
+              onClick={openSecretBoard}
+              title="？？？"
+              aria-label="開啟航海王大富翁"
+            >
+              <img src="images/board/items/odd_dice.webp" alt="" aria-hidden="true"/>
+            </button>
+          </div>,
+          secretModeScene
+        )}
+      </>);
     }
 
     // =========================

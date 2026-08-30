@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>航海王大富翁 | Lobby Redirect</title>
+  <meta http-equiv="refresh" content="0; url=board_start.html?view=lobby">
+  <script>
+    (function () {
+      const params = new URLSearchParams(location.search);
+      const room = String(params.get("room") || "").trim().toUpperCase();
+      const next = room
+        ? `board_start.html?view=lobby&room=${encodeURIComponent(room)}`
+        : "board_start.html?view=modeSelect";
+      location.replace(next);
+    })();
+  </script>
+</head>
+<body></body>
+</html>

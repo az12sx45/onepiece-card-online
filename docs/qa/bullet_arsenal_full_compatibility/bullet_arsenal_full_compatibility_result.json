@@ -1,0 +1,2931 @@
+{
+  "outputDir": "C:\\Users\\王曜瑋\\Documents\\Codex\\2026-04-20-1-2-start-html-game-html\\docs\\qa\\bullet_arsenal_full_compatibility",
+  "catalog": {
+    "count": 95,
+    "arsenal": {
+      "name": "巴雷特的武器庫",
+      "id": "bullet_large_bullet_armor",
+      "rarity": "S",
+      "summary": "可從背包裝入兩件不同的其他攜帶物，兩件效果與各自的觸發狀態同時生效；同一種不能重複裝入，卸下武器庫時內裝物會一併回到背包。"
+    },
+    "eligibleCount": 94
+  },
+  "sourceCard": {
+    "id": "zoro",
+    "name": "索隆"
+  },
+  "structuralPassCount": 94,
+  "structuralFailures": [],
+  "playerEffectPassCount": 94,
+  "playerEffectFailures": [],
+  "runtimeAnomalies": [],
+  "speedChecks": {
+    "choiceScarf": 1.252,
+    "windShell": 1.15,
+    "lucciBlackFlame": 1.299
+  },
+  "combinationCount": 4371,
+  "activeCombinationCount": 4371,
+  "rankings": {
+    "general": [
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "judge_germa66_battle_suit"
+        ],
+        "names": [
+          "Battle Smasher",
+          "傑爾馬66戰鬥服"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 116.6,
+          "offense": 131,
+          "survival": 162,
+          "speed": 92
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "shiki_oto_kogarashi",
+          "zephyr_battle_smasher"
+        ],
+        "names": [
+          "櫻十・木枯",
+          "Battle Smasher"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 114.9,
+          "offense": 157.5,
+          "survival": 114,
+          "speed": 107.8
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.197,
+          "avgDamage": 1.079,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "green_bull_life_seed"
+        ],
+        "names": [
+          "Battle Smasher",
+          "森森生命種子"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 113.4,
+          "offense": 131,
+          "survival": 160,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "going_merry_rescue"
+        ],
+        "names": [
+          "Battle Smasher",
+          "梅利號的救援"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 113.4,
+          "offense": 131,
+          "survival": 160,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "lucci_awakened_black_flame_hagoromo"
+        ],
+        "names": [
+          "Battle Smasher",
+          "覺醒黑焰羽衣"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 112.5,
+          "offense": 131,
+          "survival": 135.1,
+          "speed": 115.9
+        },
+        "ratios": {
+          "hp": 1.301,
+          "speed": 1.299,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "king_sword"
+        ],
+        "names": [
+          "Battle Smasher",
+          "KING 的佩刀"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 111,
+          "offense": 142.3,
+          "survival": 130,
+          "speed": 92
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "redfield_umbrella_sword"
+        ],
+        "names": [
+          "Battle Smasher",
+          "赤色伯爵的傘劍"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 110.8,
+          "offense": 137,
+          "survival": 144,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.6,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "shiki_oto_kogarashi",
+          "judge_germa66_battle_suit"
+        ],
+        "names": [
+          "櫻十・木枯",
+          "傑爾馬66戰鬥服"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 110.1,
+          "offense": 131.5,
+          "survival": 118,
+          "speed": 123.8
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.197,
+          "avgDamage": 1.079,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      },
+      {
+        "ids": [
+          "focus_band",
+          "zephyr_battle_smasher"
+        ],
+        "names": [
+          "不屈頭巾",
+          "Battle Smasher"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 109.1,
+          "offense": 131,
+          "survival": 146,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "focus_sash",
+          "zephyr_battle_smasher"
+        ],
+        "names": [
+          "不倒披帶",
+          "Battle Smasher"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 109.1,
+          "offense": 131,
+          "survival": 146,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "life_paper"
+        ],
+        "names": [
+          "Battle Smasher",
+          "生命紙"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 109.1,
+          "offense": 131,
+          "survival": 146,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "rocks_eclipse_sword"
+        ],
+        "names": [
+          "Battle Smasher",
+          "名刀『日蝕』"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 108.8,
+          "offense": 152.5,
+          "survival": 114,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1.079,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      },
+      {
+        "ids": [
+          "judge_germa66_battle_suit",
+          "green_bull_life_seed"
+        ],
+        "names": [
+          "傑爾馬66戰鬥服",
+          "森森生命種子"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 108.7,
+          "offense": 105,
+          "survival": 164,
+          "speed": 94
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "judge_germa66_battle_suit",
+          "going_merry_rescue"
+        ],
+        "names": [
+          "傑爾馬66戰鬥服",
+          "梅利號的救援"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 108.7,
+          "offense": 105,
+          "survival": 164,
+          "speed": 94
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "griffon_sword",
+          "zephyr_battle_smasher"
+        ],
+        "names": [
+          "格里芬之劍",
+          "Battle Smasher"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 108.1,
+          "offense": 138,
+          "survival": 130,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.7,
+          "lowHpBurst": 1
+        }
+      }
+    ],
+    "offense": [
+      {
+        "ids": [
+          "shiki_oto_kogarashi",
+          "zephyr_battle_smasher"
+        ],
+        "names": [
+          "櫻十・木枯",
+          "Battle Smasher"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 114.9,
+          "offense": 157.5,
+          "survival": 114,
+          "speed": 107.8
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.197,
+          "avgDamage": 1.079,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "rocks_eclipse_sword"
+        ],
+        "names": [
+          "Battle Smasher",
+          "名刀『日蝕』"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 108.8,
+          "offense": 152.5,
+          "survival": 114,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1.079,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      },
+      {
+        "ids": [
+          "shiki_oto_kogarashi",
+          "seastone_handcuffs"
+        ],
+        "names": [
+          "櫻十・木枯",
+          "海樓石手銬"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 100.2,
+          "offense": 150.6,
+          "survival": 70,
+          "speed": 109.8
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.197,
+          "avgDamage": 1.174,
+          "burstDamage": 1.769,
+          "lowHpBurst": 1.179
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "katakuri_mogura"
+        ],
+        "names": [
+          "Battle Smasher",
+          "三叉戟「土龍」"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 108,
+          "offense": 150.5,
+          "survival": 114,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "seastone_handcuffs"
+        ],
+        "names": [
+          "Battle Smasher",
+          "海樓石手銬"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 106,
+          "offense": 148.5,
+          "survival": 114,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1.079,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      },
+      {
+        "ids": [
+          "katakuri_mogura",
+          "rocks_eclipse_sword"
+        ],
+        "names": [
+          "三叉戟「土龍」",
+          "名刀『日蝕』"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 95.9,
+          "offense": 147.2,
+          "survival": 70,
+          "speed": 80
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1.079,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      },
+      {
+        "ids": [
+          "shiki_oto_kogarashi",
+          "katakuri_mogura"
+        ],
+        "names": [
+          "櫻十・木枯",
+          "三叉戟「土龍」"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 100,
+          "offense": 146.9,
+          "survival": 70,
+          "speed": 109.8
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.197,
+          "avgDamage": 1.079,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "enma"
+        ],
+        "names": [
+          "Battle Smasher",
+          "閻魔"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 105.4,
+          "offense": 146.9,
+          "survival": 114,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1.059,
+          "burstDamage": 1.75,
+          "lowHpBurst": 1.061
+        }
+      },
+      {
+        "ids": [
+          "tone_shell",
+          "shiki_oto_kogarashi"
+        ],
+        "names": [
+          "音擊貝",
+          "櫻十・木枯"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 98.5,
+          "offense": 146.1,
+          "survival": 70,
+          "speed": 109.8
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.197,
+          "avgDamage": 1.093,
+          "burstDamage": 1.769,
+          "lowHpBurst": 1.179
+        }
+      },
+      {
+        "ids": [
+          "rocks_eclipse_sword",
+          "seastone_handcuffs"
+        ],
+        "names": [
+          "名刀『日蝕』",
+          "海樓石手銬"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 94.1,
+          "offense": 145.6,
+          "survival": 70,
+          "speed": 80
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1.174,
+          "burstDamage": 1.769,
+          "lowHpBurst": 1.179
+        }
+      },
+      {
+        "ids": [
+          "shiki_oto_kogarashi",
+          "rocks_eclipse_sword"
+        ],
+        "names": [
+          "櫻十・木枯",
+          "名刀『日蝕』"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 99.3,
+          "offense": 145.3,
+          "survival": 70,
+          "speed": 109.8
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.197,
+          "avgDamage": 1.08,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      },
+      {
+        "ids": [
+          "tone_shell",
+          "zephyr_battle_smasher"
+        ],
+        "names": [
+          "音擊貝",
+          "Battle Smasher"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 104.5,
+          "offense": 144.7,
+          "survival": 114,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1.012,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      },
+      {
+        "ids": [
+          "choice_band",
+          "shiki_oto_kogarashi"
+        ],
+        "names": [
+          "武裝頭巾",
+          "櫻十・木枯"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 97.7,
+          "offense": 144.1,
+          "survival": 70,
+          "speed": 109.8
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.197,
+          "avgDamage": 1.198,
+          "burstDamage": 1.805,
+          "lowHpBurst": 1.204
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "loki_ragnir"
+        ],
+        "names": [
+          "Battle Smasher",
+          "鐵雷「Ragnir」"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 104.3,
+          "offense": 144,
+          "survival": 114,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "shiki_oto_kogarashi",
+          "king_sword"
+        ],
+        "names": [
+          "櫻十・木枯",
+          "KING 的佩刀"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 104.6,
+          "offense": 142.7,
+          "survival": 86,
+          "speed": 123.8
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.197,
+          "avgDamage": 1.079,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      }
+    ],
+    "survival": [
+      {
+        "ids": [
+          "judge_germa66_battle_suit",
+          "green_bull_life_seed"
+        ],
+        "names": [
+          "傑爾馬66戰鬥服",
+          "森森生命種子"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 108.7,
+          "offense": 105,
+          "survival": 164,
+          "speed": 94
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "judge_germa66_battle_suit",
+          "going_merry_rescue"
+        ],
+        "names": [
+          "傑爾馬66戰鬥服",
+          "梅利號的救援"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 108.7,
+          "offense": 105,
+          "survival": 164,
+          "speed": 94
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "judge_germa66_battle_suit"
+        ],
+        "names": [
+          "Battle Smasher",
+          "傑爾馬66戰鬥服"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 116.6,
+          "offense": 131,
+          "survival": 162,
+          "speed": 92
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "green_bull_life_seed",
+          "going_merry_rescue"
+        ],
+        "names": [
+          "森森生命種子",
+          "梅利號的救援"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 105.6,
+          "offense": 105,
+          "survival": 162,
+          "speed": 80
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "green_bull_life_seed"
+        ],
+        "names": [
+          "Battle Smasher",
+          "森森生命種子"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 113.4,
+          "offense": 131,
+          "survival": 160,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "going_merry_rescue"
+        ],
+        "names": [
+          "Battle Smasher",
+          "梅利號的救援"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 113.4,
+          "offense": 131,
+          "survival": 160,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "focus_band",
+          "judge_germa66_battle_suit"
+        ],
+        "names": [
+          "不屈頭巾",
+          "傑爾馬66戰鬥服"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 104.4,
+          "offense": 105,
+          "survival": 150,
+          "speed": 94
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "focus_sash",
+          "judge_germa66_battle_suit"
+        ],
+        "names": [
+          "不倒披帶",
+          "傑爾馬66戰鬥服"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 104.4,
+          "offense": 105,
+          "survival": 150,
+          "speed": 94
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "judge_germa66_battle_suit",
+          "life_paper"
+        ],
+        "names": [
+          "傑爾馬66戰鬥服",
+          "生命紙"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 104.4,
+          "offense": 105,
+          "survival": 150,
+          "speed": 94
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "judge_germa66_battle_suit",
+          "oars_giant_belt"
+        ],
+        "names": [
+          "傑爾馬66戰鬥服",
+          "魔人歐斯的巨人腰帶"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 102.9,
+          "offense": 114,
+          "survival": 149,
+          "speed": 82.1
+        },
+        "ratios": {
+          "hp": 1.5,
+          "speed": 0.701,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "focus_band",
+          "green_bull_life_seed"
+        ],
+        "names": [
+          "不屈頭巾",
+          "森森生命種子"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 101.2,
+          "offense": 105,
+          "survival": 148,
+          "speed": 80
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "focus_band",
+          "going_merry_rescue"
+        ],
+        "names": [
+          "不屈頭巾",
+          "梅利號的救援"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 101.2,
+          "offense": 105,
+          "survival": 148,
+          "speed": 80
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "focus_sash",
+          "green_bull_life_seed"
+        ],
+        "names": [
+          "不倒披帶",
+          "森森生命種子"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 101.2,
+          "offense": 105,
+          "survival": 148,
+          "speed": 80
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "focus_sash",
+          "going_merry_rescue"
+        ],
+        "names": [
+          "不倒披帶",
+          "梅利號的救援"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 101.2,
+          "offense": 105,
+          "survival": 148,
+          "speed": 80
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "judge_germa66_battle_suit",
+          "redfield_umbrella_sword"
+        ],
+        "names": [
+          "傑爾馬66戰鬥服",
+          "赤色伯爵的傘劍"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 106.1,
+          "offense": 111,
+          "survival": 148,
+          "speed": 94
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.6,
+          "lowHpBurst": 1
+        }
+      }
+    ],
+    "speed": [
+      {
+        "ids": [
+          "choice_scarf",
+          "lucci_awakened_black_flame_hagoromo"
+        ],
+        "names": [
+          "疾風圍巾",
+          "覺醒黑焰羽衣"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 97.6,
+          "offense": 105,
+          "survival": 91.1,
+          "speed": 158.1
+        },
+        "ratios": {
+          "hp": 1.301,
+          "speed": 1.626,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "shiki_oto_kogarashi",
+          "lucci_awakened_black_flame_hagoromo"
+        ],
+        "names": [
+          "櫻十・木枯",
+          "覺醒黑焰羽衣"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 107,
+          "offense": 131.5,
+          "survival": 91.1,
+          "speed": 152.6
+        },
+        "ratios": {
+          "hp": 1.301,
+          "speed": 1.558,
+          "avgDamage": 1.079,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      },
+      {
+        "ids": [
+          "choice_scarf",
+          "shiki_oto_kogarashi"
+        ],
+        "names": [
+          "疾風圍巾",
+          "櫻十・木枯"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 99.7,
+          "offense": 131.5,
+          "survival": 70,
+          "speed": 148.3
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.503,
+          "avgDamage": 1.079,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      },
+      {
+        "ids": [
+          "wind_shell",
+          "lucci_awakened_black_flame_hagoromo"
+        ],
+        "names": [
+          "疾風貝",
+          "覺醒黑焰羽衣"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 95.8,
+          "offense": 105,
+          "survival": 91.1,
+          "speed": 147.7
+        },
+        "ratios": {
+          "hp": 1.301,
+          "speed": 1.497,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "lucci_awakened_black_flame_hagoromo",
+          "wind_dial"
+        ],
+        "names": [
+          "覺醒黑焰羽衣",
+          "風貝"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 95.8,
+          "offense": 105,
+          "survival": 91.1,
+          "speed": 147.7
+        },
+        "ratios": {
+          "hp": 1.301,
+          "speed": 1.497,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "choice_scarf",
+          "wind_shell"
+        ],
+        "names": [
+          "疾風圍巾",
+          "疾風貝"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 88.4,
+          "offense": 105,
+          "survival": 70,
+          "speed": 142.8
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.435,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "choice_scarf",
+          "wind_dial"
+        ],
+        "names": [
+          "疾風圍巾",
+          "風貝"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 88.4,
+          "offense": 105,
+          "survival": 70,
+          "speed": 142.8
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.435,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "wind_shell",
+          "shiki_oto_kogarashi"
+        ],
+        "names": [
+          "疾風貝",
+          "櫻十・木枯"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 97.9,
+          "offense": 131.5,
+          "survival": 70,
+          "speed": 138.5
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.381,
+          "avgDamage": 1.079,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      },
+      {
+        "ids": [
+          "shiki_oto_kogarashi",
+          "wind_dial"
+        ],
+        "names": [
+          "櫻十・木枯",
+          "風貝"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 97.9,
+          "offense": 131.5,
+          "survival": 70,
+          "speed": 138.5
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.381,
+          "avgDamage": 1.079,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      },
+      {
+        "ids": [
+          "wind_shell",
+          "wind_dial"
+        ],
+        "names": [
+          "疾風貝",
+          "風貝"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 86.7,
+          "offense": 105,
+          "survival": 70,
+          "speed": 133.6
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.32,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "quick_claw",
+          "lucci_awakened_black_flame_hagoromo"
+        ],
+        "names": [
+          "疾風鉤爪",
+          "覺醒黑焰羽衣"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 94.9,
+          "offense": 110,
+          "survival": 91.1,
+          "speed": 131.9
+        },
+        "ratios": {
+          "hp": 1.301,
+          "speed": 1.299,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "red_card",
+          "lucci_awakened_black_flame_hagoromo"
+        ],
+        "names": [
+          "海軍通緝令",
+          "覺醒黑焰羽衣"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 94.1,
+          "offense": 105,
+          "survival": 91.1,
+          "speed": 131.9
+        },
+        "ratios": {
+          "hp": 1.301,
+          "speed": 1.299,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "blunder_policy",
+          "lucci_awakened_black_flame_hagoromo"
+        ],
+        "names": [
+          "失手加速契約",
+          "覺醒黑焰羽衣"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 94.1,
+          "offense": 105,
+          "survival": 91.1,
+          "speed": 131.9
+        },
+        "ratios": {
+          "hp": 1.301,
+          "speed": 1.299,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "sun_pirates_badge",
+          "lucci_awakened_black_flame_hagoromo"
+        ],
+        "names": [
+          "太陽海賊團的徽章",
+          "覺醒黑焰羽衣"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 95.6,
+          "offense": 105,
+          "survival": 91.1,
+          "speed": 131.9
+        },
+        "ratios": {
+          "hp": 1.301,
+          "speed": 1.299,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "judge_germa66_battle_suit",
+          "lucci_awakened_black_flame_hagoromo"
+        ],
+        "names": [
+          "傑爾馬66戰鬥服",
+          "覺醒黑焰羽衣"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 107.8,
+          "offense": 105,
+          "survival": 139.1,
+          "speed": 131.9
+        },
+        "ratios": {
+          "hp": 1.301,
+          "speed": 1.299,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      }
+    ]
+  },
+  "recommendedRankings": {
+    "general": [
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "judge_germa66_battle_suit"
+        ],
+        "names": [
+          "Battle Smasher",
+          "傑爾馬66戰鬥服"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 116.6,
+          "offense": 131,
+          "survival": 162,
+          "speed": 92
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "shiki_oto_kogarashi",
+          "zephyr_battle_smasher"
+        ],
+        "names": [
+          "櫻十・木枯",
+          "Battle Smasher"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 114.9,
+          "offense": 157.5,
+          "survival": 114,
+          "speed": 107.8
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.197,
+          "avgDamage": 1.079,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "green_bull_life_seed"
+        ],
+        "names": [
+          "Battle Smasher",
+          "森森生命種子"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 113.4,
+          "offense": 131,
+          "survival": 160,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "going_merry_rescue"
+        ],
+        "names": [
+          "Battle Smasher",
+          "梅利號的救援"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 113.4,
+          "offense": 131,
+          "survival": 160,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "lucci_awakened_black_flame_hagoromo"
+        ],
+        "names": [
+          "Battle Smasher",
+          "覺醒黑焰羽衣"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 112.5,
+          "offense": 131,
+          "survival": 135.1,
+          "speed": 115.9
+        },
+        "ratios": {
+          "hp": 1.301,
+          "speed": 1.299,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "king_sword"
+        ],
+        "names": [
+          "Battle Smasher",
+          "KING 的佩刀"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 111,
+          "offense": 142.3,
+          "survival": 130,
+          "speed": 92
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "redfield_umbrella_sword"
+        ],
+        "names": [
+          "Battle Smasher",
+          "赤色伯爵的傘劍"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 110.8,
+          "offense": 137,
+          "survival": 144,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.6,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "shiki_oto_kogarashi",
+          "judge_germa66_battle_suit"
+        ],
+        "names": [
+          "櫻十・木枯",
+          "傑爾馬66戰鬥服"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 110.1,
+          "offense": 131.5,
+          "survival": 118,
+          "speed": 123.8
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.197,
+          "avgDamage": 1.079,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      },
+      {
+        "ids": [
+          "focus_band",
+          "zephyr_battle_smasher"
+        ],
+        "names": [
+          "不屈頭巾",
+          "Battle Smasher"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 109.1,
+          "offense": 131,
+          "survival": 146,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "focus_sash",
+          "zephyr_battle_smasher"
+        ],
+        "names": [
+          "不倒披帶",
+          "Battle Smasher"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 109.1,
+          "offense": 131,
+          "survival": 146,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "life_paper"
+        ],
+        "names": [
+          "Battle Smasher",
+          "生命紙"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 109.1,
+          "offense": 131,
+          "survival": 146,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "rocks_eclipse_sword"
+        ],
+        "names": [
+          "Battle Smasher",
+          "名刀『日蝕』"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 108.8,
+          "offense": 152.5,
+          "survival": 114,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1.079,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      },
+      {
+        "ids": [
+          "judge_germa66_battle_suit",
+          "green_bull_life_seed"
+        ],
+        "names": [
+          "傑爾馬66戰鬥服",
+          "森森生命種子"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 108.7,
+          "offense": 105,
+          "survival": 164,
+          "speed": 94
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "judge_germa66_battle_suit",
+          "going_merry_rescue"
+        ],
+        "names": [
+          "傑爾馬66戰鬥服",
+          "梅利號的救援"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 108.7,
+          "offense": 105,
+          "survival": 164,
+          "speed": 94
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "griffon_sword",
+          "zephyr_battle_smasher"
+        ],
+        "names": [
+          "格里芬之劍",
+          "Battle Smasher"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 108.1,
+          "offense": 138,
+          "survival": 130,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.7,
+          "lowHpBurst": 1
+        }
+      }
+    ],
+    "offense": [
+      {
+        "ids": [
+          "shiki_oto_kogarashi",
+          "zephyr_battle_smasher"
+        ],
+        "names": [
+          "櫻十・木枯",
+          "Battle Smasher"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 114.9,
+          "offense": 157.5,
+          "survival": 114,
+          "speed": 107.8
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.197,
+          "avgDamage": 1.079,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "rocks_eclipse_sword"
+        ],
+        "names": [
+          "Battle Smasher",
+          "名刀『日蝕』"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 108.8,
+          "offense": 152.5,
+          "survival": 114,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1.079,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      },
+      {
+        "ids": [
+          "shiki_oto_kogarashi",
+          "seastone_handcuffs"
+        ],
+        "names": [
+          "櫻十・木枯",
+          "海樓石手銬"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 100.2,
+          "offense": 150.6,
+          "survival": 70,
+          "speed": 109.8
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.197,
+          "avgDamage": 1.174,
+          "burstDamage": 1.769,
+          "lowHpBurst": 1.179
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "katakuri_mogura"
+        ],
+        "names": [
+          "Battle Smasher",
+          "三叉戟「土龍」"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 108,
+          "offense": 150.5,
+          "survival": 114,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "seastone_handcuffs"
+        ],
+        "names": [
+          "Battle Smasher",
+          "海樓石手銬"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 106,
+          "offense": 148.5,
+          "survival": 114,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1.079,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      },
+      {
+        "ids": [
+          "katakuri_mogura",
+          "rocks_eclipse_sword"
+        ],
+        "names": [
+          "三叉戟「土龍」",
+          "名刀『日蝕』"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 95.9,
+          "offense": 147.2,
+          "survival": 70,
+          "speed": 80
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1.079,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      },
+      {
+        "ids": [
+          "shiki_oto_kogarashi",
+          "katakuri_mogura"
+        ],
+        "names": [
+          "櫻十・木枯",
+          "三叉戟「土龍」"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 100,
+          "offense": 146.9,
+          "survival": 70,
+          "speed": 109.8
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.197,
+          "avgDamage": 1.079,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "enma"
+        ],
+        "names": [
+          "Battle Smasher",
+          "閻魔"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 105.4,
+          "offense": 146.9,
+          "survival": 114,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1.059,
+          "burstDamage": 1.75,
+          "lowHpBurst": 1.061
+        }
+      },
+      {
+        "ids": [
+          "tone_shell",
+          "shiki_oto_kogarashi"
+        ],
+        "names": [
+          "音擊貝",
+          "櫻十・木枯"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 98.5,
+          "offense": 146.1,
+          "survival": 70,
+          "speed": 109.8
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.197,
+          "avgDamage": 1.093,
+          "burstDamage": 1.769,
+          "lowHpBurst": 1.179
+        }
+      },
+      {
+        "ids": [
+          "rocks_eclipse_sword",
+          "seastone_handcuffs"
+        ],
+        "names": [
+          "名刀『日蝕』",
+          "海樓石手銬"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 94.1,
+          "offense": 145.6,
+          "survival": 70,
+          "speed": 80
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1.174,
+          "burstDamage": 1.769,
+          "lowHpBurst": 1.179
+        }
+      },
+      {
+        "ids": [
+          "shiki_oto_kogarashi",
+          "rocks_eclipse_sword"
+        ],
+        "names": [
+          "櫻十・木枯",
+          "名刀『日蝕』"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 99.3,
+          "offense": 145.3,
+          "survival": 70,
+          "speed": 109.8
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.197,
+          "avgDamage": 1.08,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      },
+      {
+        "ids": [
+          "tone_shell",
+          "zephyr_battle_smasher"
+        ],
+        "names": [
+          "音擊貝",
+          "Battle Smasher"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 104.5,
+          "offense": 144.7,
+          "survival": 114,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1.012,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      },
+      {
+        "ids": [
+          "choice_band",
+          "shiki_oto_kogarashi"
+        ],
+        "names": [
+          "武裝頭巾",
+          "櫻十・木枯"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 97.7,
+          "offense": 144.1,
+          "survival": 70,
+          "speed": 109.8
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.197,
+          "avgDamage": 1.198,
+          "burstDamage": 1.805,
+          "lowHpBurst": 1.204
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "loki_ragnir"
+        ],
+        "names": [
+          "Battle Smasher",
+          "鐵雷「Ragnir」"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 104.3,
+          "offense": 144,
+          "survival": 114,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "shiki_oto_kogarashi",
+          "king_sword"
+        ],
+        "names": [
+          "櫻十・木枯",
+          "KING 的佩刀"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 104.6,
+          "offense": 142.7,
+          "survival": 86,
+          "speed": 123.8
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.197,
+          "avgDamage": 1.079,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      }
+    ],
+    "survival": [
+      {
+        "ids": [
+          "judge_germa66_battle_suit",
+          "green_bull_life_seed"
+        ],
+        "names": [
+          "傑爾馬66戰鬥服",
+          "森森生命種子"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 108.7,
+          "offense": 105,
+          "survival": 164,
+          "speed": 94
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "judge_germa66_battle_suit",
+          "going_merry_rescue"
+        ],
+        "names": [
+          "傑爾馬66戰鬥服",
+          "梅利號的救援"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 108.7,
+          "offense": 105,
+          "survival": 164,
+          "speed": 94
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "judge_germa66_battle_suit"
+        ],
+        "names": [
+          "Battle Smasher",
+          "傑爾馬66戰鬥服"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 116.6,
+          "offense": 131,
+          "survival": 162,
+          "speed": 92
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "green_bull_life_seed",
+          "going_merry_rescue"
+        ],
+        "names": [
+          "森森生命種子",
+          "梅利號的救援"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 105.6,
+          "offense": 105,
+          "survival": 162,
+          "speed": 80
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "green_bull_life_seed"
+        ],
+        "names": [
+          "Battle Smasher",
+          "森森生命種子"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 113.4,
+          "offense": 131,
+          "survival": 160,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "zephyr_battle_smasher",
+          "going_merry_rescue"
+        ],
+        "names": [
+          "Battle Smasher",
+          "梅利號的救援"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 113.4,
+          "offense": 131,
+          "survival": 160,
+          "speed": 78
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "focus_band",
+          "judge_germa66_battle_suit"
+        ],
+        "names": [
+          "不屈頭巾",
+          "傑爾馬66戰鬥服"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 104.4,
+          "offense": 105,
+          "survival": 150,
+          "speed": 94
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "focus_sash",
+          "judge_germa66_battle_suit"
+        ],
+        "names": [
+          "不倒披帶",
+          "傑爾馬66戰鬥服"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 104.4,
+          "offense": 105,
+          "survival": 150,
+          "speed": 94
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "judge_germa66_battle_suit",
+          "life_paper"
+        ],
+        "names": [
+          "傑爾馬66戰鬥服",
+          "生命紙"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 104.4,
+          "offense": 105,
+          "survival": 150,
+          "speed": 94
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "judge_germa66_battle_suit",
+          "oars_giant_belt"
+        ],
+        "names": [
+          "傑爾馬66戰鬥服",
+          "魔人歐斯的巨人腰帶"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 102.9,
+          "offense": 114,
+          "survival": 149,
+          "speed": 82.1
+        },
+        "ratios": {
+          "hp": 1.5,
+          "speed": 0.701,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "focus_band",
+          "green_bull_life_seed"
+        ],
+        "names": [
+          "不屈頭巾",
+          "森森生命種子"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 101.2,
+          "offense": 105,
+          "survival": 148,
+          "speed": 80
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "focus_band",
+          "going_merry_rescue"
+        ],
+        "names": [
+          "不屈頭巾",
+          "梅利號的救援"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 101.2,
+          "offense": 105,
+          "survival": 148,
+          "speed": 80
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "focus_sash",
+          "green_bull_life_seed"
+        ],
+        "names": [
+          "不倒披帶",
+          "森森生命種子"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 101.2,
+          "offense": 105,
+          "survival": 148,
+          "speed": 80
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "focus_sash",
+          "going_merry_rescue"
+        ],
+        "names": [
+          "不倒披帶",
+          "梅利號的救援"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 101.2,
+          "offense": 105,
+          "survival": 148,
+          "speed": 80
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "judge_germa66_battle_suit",
+          "redfield_umbrella_sword"
+        ],
+        "names": [
+          "傑爾馬66戰鬥服",
+          "赤色伯爵的傘劍"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 106.1,
+          "offense": 111,
+          "survival": 148,
+          "speed": 94
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1,
+          "avgDamage": 1,
+          "burstDamage": 1.6,
+          "lowHpBurst": 1
+        }
+      }
+    ],
+    "speed": [
+      {
+        "ids": [
+          "choice_scarf",
+          "lucci_awakened_black_flame_hagoromo"
+        ],
+        "names": [
+          "疾風圍巾",
+          "覺醒黑焰羽衣"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 97.6,
+          "offense": 105,
+          "survival": 91.1,
+          "speed": 158.1
+        },
+        "ratios": {
+          "hp": 1.301,
+          "speed": 1.626,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "shiki_oto_kogarashi",
+          "lucci_awakened_black_flame_hagoromo"
+        ],
+        "names": [
+          "櫻十・木枯",
+          "覺醒黑焰羽衣"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 107,
+          "offense": 131.5,
+          "survival": 91.1,
+          "speed": 152.6
+        },
+        "ratios": {
+          "hp": 1.301,
+          "speed": 1.558,
+          "avgDamage": 1.079,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      },
+      {
+        "ids": [
+          "choice_scarf",
+          "shiki_oto_kogarashi"
+        ],
+        "names": [
+          "疾風圍巾",
+          "櫻十・木枯"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 99.7,
+          "offense": 131.5,
+          "survival": 70,
+          "speed": 148.3
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.503,
+          "avgDamage": 1.079,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      },
+      {
+        "ids": [
+          "wind_shell",
+          "lucci_awakened_black_flame_hagoromo"
+        ],
+        "names": [
+          "疾風貝",
+          "覺醒黑焰羽衣"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 95.8,
+          "offense": 105,
+          "survival": 91.1,
+          "speed": 147.7
+        },
+        "ratios": {
+          "hp": 1.301,
+          "speed": 1.497,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "lucci_awakened_black_flame_hagoromo",
+          "wind_dial"
+        ],
+        "names": [
+          "覺醒黑焰羽衣",
+          "風貝"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 95.8,
+          "offense": 105,
+          "survival": 91.1,
+          "speed": 147.7
+        },
+        "ratios": {
+          "hp": 1.301,
+          "speed": 1.497,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "choice_scarf",
+          "wind_shell"
+        ],
+        "names": [
+          "疾風圍巾",
+          "疾風貝"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 88.4,
+          "offense": 105,
+          "survival": 70,
+          "speed": 142.8
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.435,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "choice_scarf",
+          "wind_dial"
+        ],
+        "names": [
+          "疾風圍巾",
+          "風貝"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 88.4,
+          "offense": 105,
+          "survival": 70,
+          "speed": 142.8
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.435,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "wind_shell",
+          "shiki_oto_kogarashi"
+        ],
+        "names": [
+          "疾風貝",
+          "櫻十・木枯"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 97.9,
+          "offense": 131.5,
+          "survival": 70,
+          "speed": 138.5
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.381,
+          "avgDamage": 1.079,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      },
+      {
+        "ids": [
+          "shiki_oto_kogarashi",
+          "wind_dial"
+        ],
+        "names": [
+          "櫻十・木枯",
+          "風貝"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 97.9,
+          "offense": 131.5,
+          "survival": 70,
+          "speed": 138.5
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.381,
+          "avgDamage": 1.079,
+          "burstDamage": 1.623,
+          "lowHpBurst": 1.082
+        }
+      },
+      {
+        "ids": [
+          "wind_shell",
+          "wind_dial"
+        ],
+        "names": [
+          "疾風貝",
+          "風貝"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 86.7,
+          "offense": 105,
+          "survival": 70,
+          "speed": 133.6
+        },
+        "ratios": {
+          "hp": 1,
+          "speed": 1.32,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "quick_claw",
+          "lucci_awakened_black_flame_hagoromo"
+        ],
+        "names": [
+          "疾風鉤爪",
+          "覺醒黑焰羽衣"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 94.9,
+          "offense": 110,
+          "survival": 91.1,
+          "speed": 131.9
+        },
+        "ratios": {
+          "hp": 1.301,
+          "speed": 1.299,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "red_card",
+          "lucci_awakened_black_flame_hagoromo"
+        ],
+        "names": [
+          "海軍通緝令",
+          "覺醒黑焰羽衣"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 94.1,
+          "offense": 105,
+          "survival": 91.1,
+          "speed": 131.9
+        },
+        "ratios": {
+          "hp": 1.301,
+          "speed": 1.299,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "blunder_policy",
+          "lucci_awakened_black_flame_hagoromo"
+        ],
+        "names": [
+          "失手加速契約",
+          "覺醒黑焰羽衣"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 94.1,
+          "offense": 105,
+          "survival": 91.1,
+          "speed": 131.9
+        },
+        "ratios": {
+          "hp": 1.301,
+          "speed": 1.299,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "sun_pirates_badge",
+          "lucci_awakened_black_flame_hagoromo"
+        ],
+        "names": [
+          "太陽海賊團的徽章",
+          "覺醒黑焰羽衣"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 95.6,
+          "offense": 105,
+          "survival": 91.1,
+          "speed": 131.9
+        },
+        "ratios": {
+          "hp": 1.301,
+          "speed": 1.299,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      },
+      {
+        "ids": [
+          "judge_germa66_battle_suit",
+          "lucci_awakened_black_flame_hagoromo"
+        ],
+        "names": [
+          "傑爾馬66戰鬥服",
+          "覺醒黑焰羽衣"
+        ],
+        "inactive": false,
+        "scores": {
+          "general": 107.8,
+          "offense": 105,
+          "survival": 139.1,
+          "speed": 131.9
+        },
+        "ratios": {
+          "hp": 1.301,
+          "speed": 1.299,
+          "avgDamage": 1,
+          "burstDamage": 1.5,
+          "lowHpBurst": 1
+        }
+      }
+    ]
+  },
+  "errors": [],
+  "failures": []
+}

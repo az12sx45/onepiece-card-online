@@ -1,0 +1,147 @@
+﻿[
+    {
+        "id":  "impact_dial",
+        "from":  "impact_shell",
+        "file":  "public\\images\\items\\impact_dial.webp"
+    },
+    {
+        "id":  "reject_dial",
+        "from":  "reject_shell",
+        "file":  "public\\images\\items\\reject_dial.webp"
+    },
+    {
+        "id":  "wind_dial",
+        "from":  "wind_shell",
+        "file":  "public\\images\\items\\wind_dial.webp"
+    },
+    {
+        "id":  "cloud_dial",
+        "from":  "cloud_shell",
+        "file":  "public\\images\\items\\cloud_dial.webp"
+    },
+    {
+        "id":  "justice_cloak",
+        "from":  "assault_vest",
+        "file":  "public\\images\\items\\justice_cloak.webp"
+    },
+    {
+        "id":  "seastone_bullet",
+        "from":  "seastone_repel",
+        "file":  "public\\images\\items\\seastone_bullet.webp"
+    },
+    {
+        "id":  "seastone_handcuffs",
+        "from":  "seastone_repel",
+        "file":  "public\\images\\items\\seastone_handcuffs.webp"
+    },
+    {
+        "id":  "life_paper",
+        "from":  "focus_sash",
+        "file":  "public\\images\\items\\life_paper.webp"
+    },
+    {
+        "id":  "going_merry_rescue",
+        "from":  "medical_ship_ticket",
+        "file":  "public\\images\\items\\going_merry_rescue.webp"
+    },
+    {
+        "id":  "sanji_bento",
+        "from":  "pirate_bento",
+        "file":  "public\\images\\items\\sanji_bento.webp"
+    },
+    {
+        "id":  "water_meat",
+        "from":  "large_meat",
+        "file":  "public\\images\\items\\water_meat.webp"
+    },
+    {
+        "id":  "medicine_pack",
+        "from":  "emergency_med_kit",
+        "file":  "public\\images\\items\\medicine_pack.webp"
+    },
+    {
+        "id":  "sniper_king_goggles",
+        "from":  "scope_lens",
+        "file":  "public\\images\\items\\sniper_king_goggles.webp"
+    },
+    {
+        "id":  "log_pose",
+        "from":  "pointer",
+        "file":  "public\\images\\items\\log_pose.webp"
+    },
+    {
+        "id":  "eternal_pose",
+        "from":  "pointer",
+        "file":  "public\\images\\items\\eternal_pose.webp"
+    },
+    {
+        "id":  "vision_dial",
+        "from":  "vision_shell",
+        "file":  "public\\images\\items\\vision_dial.webp"
+    },
+    {
+        "id":  "lamp_dial",
+        "from":  "light_shell",
+        "file":  "public\\images\\items\\lamp_dial.webp"
+    },
+    {
+        "id":  "flame_dial",
+        "from":  "flame_shell",
+        "file":  "public\\images\\items\\flame_dial.webp"
+    },
+    {
+        "id":  "water_dial",
+        "from":  "heal_shell",
+        "file":  "public\\images\\items\\water_dial.webp"
+    },
+    {
+        "id":  "flash_dial",
+        "from":  "bright_powder",
+        "file":  "public\\images\\items\\flash_dial.webp"
+    },
+    {
+        "id":  "slash_dial",
+        "from":  "quick_claw",
+        "file":  "public\\images\\items\\slash_dial.webp"
+    },
+    {
+        "id":  "iron_cloud",
+        "from":  "iron_ball",
+        "file":  "public\\images\\items\\iron_cloud.webp"
+    },
+    {
+        "id":  "opal_cloud",
+        "from":  "cloud_shell",
+        "file":  "public\\images\\items\\opal_cloud.webp"
+    },
+    {
+        "id":  "pirate_flag_charm",
+        "from":  "king_badge",
+        "file":  "public\\images\\items\\pirate_flag_charm.webp"
+    },
+    {
+        "id":  "captain_coat",
+        "from":  "assault_vest",
+        "file":  "public\\images\\items\\captain_coat.webp"
+    },
+    {
+        "id":  "medical_bag",
+        "from":  "emergency_med_kit",
+        "file":  "public\\images\\items\\medical_bag.webp"
+    },
+    {
+        "id":  "ammo_pouch",
+        "from":  "scope_lens",
+        "file":  "public\\images\\items\\ammo_pouch.webp"
+    },
+    {
+        "id":  "sky_island_goggles",
+        "from":  "scope_lens",
+        "file":  "public\\images\\items\\sky_island_goggles.webp"
+    },
+    {
+        "id":  "vegapunk_mini_shield",
+        "from":  "guard_charm",
+        "file":  "public\\images\\items\\vegapunk_mini_shield.webp"
+    }
+]

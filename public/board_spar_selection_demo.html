@@ -1,0 +1,887 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>二周目切磋準備室</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --gold: #f3cf78;
+      --gold-deep: #856326;
+      --ink: #06131d;
+      --teal: #58e5dd;
+      --red: #ff6960;
+      --paper: #e8eef0;
+    }
+    * { box-sizing: border-box; }
+    html, body { width: 100%; min-height: 100%; margin: 0; overflow: hidden; }
+    body {
+      font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      color: var(--paper);
+      background: #02070b radial-gradient(circle at 50% 50%, #17303a 0, #02070b 70%);
+    }
+    button { font: inherit; }
+    .stage {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: clamp(6px, 1.2vw, 18px);
+    }
+    .spar-room {
+      position: relative;
+      width: min(calc(100vw - 12px), calc((100vh - 12px) * 1.7778));
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      isolation: isolate;
+      border-radius: clamp(10px, 1vw, 18px);
+      background: #07141c url("images/board/spar_ui/spar_selection_panel_frame_v1.webp") center / 100% 100% no-repeat;
+      box-shadow: 0 0 0 1px #c6a35199, 0 24px 80px #000, inset 0 0 55px #000b;
+    }
+    .spar-room::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background: linear-gradient(90deg, #052a2618 0 42%, transparent 49% 51%, #55121218 58% 100%);
+    }
+    .title-block {
+      position: absolute;
+      z-index: 4;
+      top: 7.2%;
+      left: 50%;
+      width: 27%;
+      transform: translateX(-50%);
+      text-align: center;
+      text-shadow: 0 2px 4px #000, 0 0 14px #e9c97488;
+      pointer-events: none;
+    }
+    .title-block h1 {
+      margin: 0;
+      color: #fff0b8;
+      font-family: "DFKai-SB", "Noto Serif TC", serif;
+      font-size: clamp(12px, 1.75vw, 29px);
+      letter-spacing: .16em;
+      line-height: 1.05;
+    }
+    .title-block p {
+      margin: .18em 0 0;
+      color: #b9d8dc;
+      font-size: clamp(6px, .63vw, 11px);
+      letter-spacing: .12em;
+    }
+    .crew-side {
+      position: absolute;
+      top: 19%;
+      bottom: 18%;
+      width: 36%;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-rows: repeat(2, auto);
+      align-content: center;
+      gap: clamp(4px, .7vw, 12px);
+      padding: .55%;
+    }
+    .crew-side.left { left: 4.1%; }
+    .crew-side.right { right: 4.1%; }
+    .crew-card {
+      --accent: var(--teal);
+      --attribute: #f4d574;
+      position: relative;
+      min-width: 0;
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      align-self: center;
+      overflow: hidden;
+      padding: 0;
+      border: 0;
+      border-radius: clamp(5px, .55vw, 9px);
+      color: #fff;
+      text-align: center;
+      cursor: pointer;
+      background: transparent;
+      filter: drop-shadow(0 6px 6px #000b);
+      transition: transform .18s ease, filter .18s ease;
+    }
+    .right .crew-card { --accent: var(--red); }
+    .crew-card.attr-power { --attribute: #ff6d55; }
+    .crew-card.attr-speed { --attribute: #63dcff; }
+    .crew-card.attr-technique { --attribute: #f2d15f; }
+    .crew-card:hover, .crew-card:focus-visible {
+      z-index: 2;
+      outline: none;
+      transform: translateY(-3px) scale(1.015);
+      filter: brightness(1.12) drop-shadow(0 0 10px var(--accent));
+    }
+    .crew-card.selected {
+      filter: brightness(1.08) drop-shadow(0 0 5px #fff4c9) drop-shadow(0 0 13px var(--accent));
+    }
+    .crew-card.locked:not(.selected) { filter: grayscale(.72) brightness(.55); }
+    .crew-card.revealed:not(.selected) { filter: grayscale(.82) brightness(.5); }
+    .card-shell-art {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 3;
+      object-fit: contain;
+      pointer-events: none;
+    }
+    .portrait-window {
+      position: absolute;
+      z-index: 1;
+      top: 10.2%;
+      right: 17.3%;
+      bottom: 34.1%;
+      left: 17.3%;
+      overflow: hidden;
+      border: 0;
+      border-radius: 2% 2% 0 0;
+      background: #07121b;
+      box-shadow: inset 0 0 16px #000;
+    }
+    .crew-portrait {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 50% 20%;
+      filter: saturate(.96) contrast(1.05);
+      transition: transform .22s ease, filter .22s ease;
+    }
+    .crew-card:hover .crew-portrait { transform: scale(1.035); }
+    .portrait-window::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, transparent 48%, #02070be8 100%),
+        radial-gradient(circle at 50% 45%, transparent 45%, #01050788 100%);
+      pointer-events: none;
+    }
+    .crew-card::after {
+      content: "";
+      position: absolute;
+      z-index: 2;
+      top: 10.2%;
+      bottom: 34.1%;
+      left: -65%;
+      width: 42%;
+      opacity: 0;
+      transform: skewX(-18deg);
+      background: linear-gradient(90deg, transparent, #fff9c588, transparent);
+      pointer-events: none;
+    }
+    .crew-card.selected::after {
+      animation: cardSweep 1.8s ease-in-out infinite;
+    }
+    @keyframes cardSweep {
+      0%, 48% { left: -65%; opacity: 0; }
+      60% { opacity: .78; }
+      82%, 100% { left: 120%; opacity: 0; }
+    }
+    .crew-info {
+      position: absolute;
+      z-index: 5;
+      inset: 0;
+      min-width: 0;
+      pointer-events: none;
+    }
+    .crew-name {
+      position: absolute;
+      top: 67.8%;
+      left: 15.8%;
+      right: 15.8%;
+      height: 7.2%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      color: #fff0bd;
+      font-family: "DFKai-SB", "Noto Serif TC", serif;
+      font-size: clamp(7px, .82vw, 14px);
+      font-weight: 900;
+      line-height: 1.2;
+      text-align: center;
+      text-overflow: ellipsis;
+      text-shadow: 0 2px 3px #000, 0 0 6px #000;
+      white-space: nowrap;
+    }
+    .crew-meta {
+      position: absolute;
+      top: 83.3%;
+      left: 21%;
+      right: 21%;
+      height: 7.2%;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      align-items: center;
+      justify-items: center;
+      gap: 0;
+      color: #bdccce;
+      font-size: clamp(5px, .48vw, 8px);
+      text-align: center;
+      text-shadow: 0 1px 2px #000;
+    }
+    .crew-meta > span {
+      min-width: 0;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .crew-meta .role {
+      min-width: 0;
+      overflow: hidden;
+      color: #f0d584;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .attribute-slot {
+      position: absolute;
+      z-index: 6;
+      top: 11.53%;
+      left: 18.97%;
+      display: grid;
+      width: 9.58%;
+      height: 8.63%;
+      place-items: center;
+      clip-path: polygon(10% 0, 90% 0, 100% 12%, 100% 68%, 50% 100%, 0 68%, 0 12%);
+      color: #fff7d2;
+      background: radial-gradient(circle at 50% 35%, color-mix(in srgb, var(--attribute) 38%, #071018), #03090dcf 72%);
+      box-shadow: inset 0 0 0 1px #ffedaa99, 0 0 8px var(--attribute);
+      font-size: clamp(8px, .78vw, 13px);
+      font-weight: 1000;
+      line-height: 1;
+      text-shadow: 0 2px 3px #000, 0 0 5px var(--attribute);
+      pointer-events: none;
+    }
+    .selection-ribbon {
+      display: none;
+    }
+    .pick-order {
+      position: absolute;
+      z-index: 7;
+      top: 11.12%;
+      left: 71.55%;
+      display: none;
+      width: 11.88%;
+      height: 9.12%;
+      place-items: center;
+      border: 2px solid #fff6cc;
+      border-radius: 50%;
+      color: #07151c;
+      background: var(--accent);
+      box-shadow: 0 0 14px var(--accent), 0 2px 7px #000;
+      font-size: clamp(9px, 1vw, 16px);
+      font-weight: 1000;
+    }
+    .selected .pick-order { display: grid; }
+    .center-console {
+      position: absolute;
+      top: 27%;
+      bottom: 18.5%;
+      left: 41.1%;
+      width: 17.8%;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-end;
+      gap: clamp(4px, .55vw, 9px);
+      text-align: center;
+      pointer-events: none;
+    }
+    .versus {
+      margin: auto 0 0;
+      color: #f8dc88;
+      font-family: Georgia, serif;
+      font-size: clamp(18px, 3.4vw, 54px);
+      font-style: italic;
+      font-weight: 900;
+      letter-spacing: -.08em;
+      text-shadow: 2px 3px 0 #6f1d18, 0 0 14px #000;
+    }
+    .secret-state {
+      min-height: 3.9em;
+      display: grid;
+      place-items: center;
+      padding: .5em .65em;
+      border: 1px solid #d7bd7b55;
+      border-radius: 9px;
+      color: #d7e4e5;
+      background: #02080dc9;
+      box-shadow: inset 0 0 20px #000;
+      font-size: clamp(6px, .68vw, 11px);
+      line-height: 1.45;
+    }
+    .secret-state strong { color: #ffe39b; font-size: 1.14em; }
+    .side-status {
+      position: absolute;
+      bottom: 5.2%;
+      width: 28%;
+      min-height: 8.7%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4%;
+      padding: .5% 2.2%;
+      text-align: center;
+    }
+    .side-status.left { left: 8.8%; }
+    .side-status.right { right: 8.8%; }
+    .player-name {
+      min-width: 0;
+      overflow: hidden;
+      color: #fff0bc;
+      font-size: clamp(8px, 1vw, 16px);
+      font-weight: 900;
+      text-overflow: ellipsis;
+      text-shadow: 0 2px 4px #000;
+      white-space: nowrap;
+    }
+    .ready-mark {
+      flex: 0 0 auto;
+      padding: .35em .7em;
+      border: 1px solid #71858a;
+      border-radius: 999px;
+      color: #a9b7ba;
+      background: #071016d9;
+      font-size: clamp(6px, .66vw, 11px);
+      font-weight: 900;
+    }
+    .ready-mark.ready { border-color: #76e5b4; color: #baffd8; box-shadow: 0 0 12px #41d79d66; }
+    .room-actions {
+      position: absolute;
+      z-index: 6;
+      right: 2.1%;
+      top: 2.4%;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .side-toggle, .reset-btn {
+      border: 1px solid #b79b5b99;
+      border-radius: 999px;
+      color: #f0dfab;
+      background: #061018e8;
+      padding: .52em .9em;
+      cursor: pointer;
+      font-size: clamp(7px, .66vw, 11px);
+      font-weight: 800;
+      box-shadow: 0 3px 12px #0008;
+    }
+    .lock-btn {
+      position: absolute;
+      z-index: 7;
+      left: 50%;
+      bottom: 6.2%;
+      width: 16%;
+      min-height: 7%;
+      transform: translateX(-50%);
+      border: 1px solid #f4d982;
+      border-radius: 999px;
+      color: #141006;
+      background: linear-gradient(#fff1af, #c99232 55%, #81551f);
+      box-shadow: 0 3px 0 #34200e, 0 0 18px #edc45e55;
+      cursor: pointer;
+      font-size: clamp(7px, .85vw, 14px);
+      font-weight: 1000;
+      letter-spacing: .08em;
+    }
+    .lock-btn:disabled { cursor: not-allowed; filter: grayscale(.85) brightness(.55); box-shadow: none; }
+    .privacy-note {
+      position: absolute;
+      z-index: 5;
+      left: 50%;
+      bottom: 1.15%;
+      transform: translateX(-50%);
+      color: #90a5a9;
+      font-size: clamp(5px, .52vw, 9px);
+      letter-spacing: .04em;
+      white-space: nowrap;
+    }
+    .detail-backdrop {
+      position: fixed;
+      z-index: 30;
+      inset: 0;
+      display: none;
+      place-items: center;
+      padding: 18px;
+      background: #000b;
+      backdrop-filter: blur(7px);
+    }
+    .detail-backdrop.open { display: grid; }
+    .detail-panel {
+      position: relative;
+      width: min(1060px, 94vw, 138vh);
+      aspect-ratio: 3 / 2;
+      max-height: 92vh;
+      overflow: hidden;
+      margin: auto;
+      border: 0;
+      background: transparent;
+      filter: drop-shadow(0 25px 45px #000);
+    }
+    .detail-frame-art {
+      position: absolute;
+      z-index: 3;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      pointer-events: none;
+    }
+    .detail-head {
+      position: absolute;
+      inset: 0;
+      min-height: 0;
+      padding: 0;
+      pointer-events: none;
+    }
+    .detail-portrait {
+      position: absolute;
+      z-index: 1;
+      top: 12.2%;
+      left: 7.75%;
+      width: 35.75%;
+      height: 67.9%;
+      object-fit: cover;
+      object-position: 50% 18%;
+      border: 0;
+      clip-path: polygon(2% 0, 91% 0, 100% 5%, 100% 82%, 95% 91%, 85% 100%, 8% 100%, 0 94%, 0 4%);
+      background: #061018;
+      box-shadow: inset 0 0 30px #000;
+    }
+    .detail-portrait-name {
+      position: absolute;
+      z-index: 4;
+      top: 82.9%;
+      left: 7.75%;
+      display: flex;
+      width: 35.75%;
+      height: 8.2%;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      color: #fff0b2;
+      font-family: "DFKai-SB", "Noto Serif TC", serif;
+      font-size: clamp(13px, 1.75vw, 26px);
+      font-weight: 1000;
+      line-height: 1.2;
+      text-align: center;
+      text-overflow: ellipsis;
+      text-shadow: 0 2px 4px #000;
+      white-space: nowrap;
+    }
+    .detail-attribute {
+      position: absolute;
+      z-index: 4;
+      top: 9.69%;
+      left: 6.2%;
+      display: grid;
+      width: 5.75%;
+      height: 11.2%;
+      place-items: center;
+      color: #ffe9a7;
+      font-size: clamp(18px, 2vw, 32px);
+      font-weight: 1000;
+      line-height: 1;
+      text-align: center;
+      text-shadow: 0 2px 3px #000;
+    }
+    .detail-title {
+      position: absolute;
+      z-index: 4;
+      top: 11.13%;
+      left: 52.73%;
+      width: 37.04%;
+      height: 9.38%;
+      display: grid;
+      align-content: center;
+      color: #fff;
+      border-radius: 999px;
+      background: #02090dc7;
+    }
+    .detail-title h2 {
+      margin: 0;
+      overflow: hidden;
+      color: #fff0b7;
+      font-family: "DFKai-SB", "Noto Serif TC", serif;
+      font-size: clamp(16px, 2vw, 30px);
+      line-height: 1.05;
+      text-align: center;
+      text-overflow: ellipsis;
+      text-shadow: 0 2px 4px #000;
+      white-space: nowrap;
+    }
+    .detail-title p {
+      margin: .6% 0 0;
+      color: #d8e6e6;
+      font-size: clamp(8px, .9vw, 13px);
+      text-align: center;
+      text-shadow: 0 1px 2px #000;
+    }
+    .stats {
+      position: absolute;
+      z-index: 4;
+      top: 24.22%;
+      left: 50.13%;
+      width: 41.54%;
+      height: 26.17%;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: repeat(3, minmax(0, 1fr));
+      gap: 9.7% 7.85%;
+    }
+    .stat {
+      display: grid;
+      grid-template-columns: auto auto;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(7px, .7vw, 12px);
+      min-width: 0;
+      padding: .25em 1em;
+      border: 0;
+      border-radius: 999px;
+      background: #02080bdb;
+      box-shadow: inset 0 0 12px #000;
+    }
+    .stat small { color: #9fb5b8; font-size: clamp(6px, .62vw, 9px); text-align: center; }
+    .stat b { min-width: 2.2em; color: #fff5c7; font-size: clamp(9px, 1vw, 15px); text-align: center; }
+    .detail-body {
+      position: absolute;
+      z-index: 4;
+      top: 54%;
+      left: 50.65%;
+      width: 40.36%;
+      height: 22.46%;
+      box-sizing: border-box;
+      overflow: auto;
+      padding: 1.2% 1.6%;
+      border-radius: 2%;
+      color: #e9e1d2;
+      background: #02080be0;
+      scrollbar-color: #8b602d #071018;
+      scrollbar-width: thin;
+    }
+    .passive {
+      margin: 0 0 2.2%;
+      padding: .45em .7em;
+      border: 1px solid #8e643688;
+      border-left: 3px solid #8a351f;
+      border-radius: 5px;
+      color: #f3e7cf;
+      background: #0b171bc4;
+      font-size: clamp(7px, .75vw, 11px);
+    }
+    .moves { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(3px, .4vw, 6px); }
+    .move {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: .22em .45em;
+      align-items: center;
+      min-width: 0;
+      padding: .42em .55em;
+      border: 1px solid #8d633766;
+      border-radius: 6px;
+      background: #0b171bc4;
+    }
+    .move b { overflow: hidden; color: #ffe0a0; font-size: clamp(7px, .73vw, 11px); text-overflow: ellipsis; white-space: nowrap; }
+    .move span { grid-column: 1 / -1; overflow: hidden; color: #c8d4d2; font-size: clamp(6px, .63vw, 9px); text-overflow: ellipsis; white-space: nowrap; }
+    .move em { color: #e7a566; font-size: clamp(6px, .58vw, 9px); font-style: normal; white-space: nowrap; }
+    .detail-close {
+      position: absolute;
+      z-index: 4;
+      top: 81.5%;
+      left: 48.2%;
+      width: 42.4%;
+      height: 10%;
+      box-sizing: border-box;
+      margin: 0;
+      border: 0;
+      border-radius: 999px;
+      color: #ffe5a0;
+      background: transparent;
+      cursor: pointer;
+      font-size: clamp(9px, 1.1vw, 16px);
+      font-weight: 1000;
+      text-shadow: 0 2px 3px #000;
+    }
+    .detail-close:hover, .detail-close:focus-visible { color: #fff; outline: none; filter: drop-shadow(0 0 8px #ffd36b); }
+    .reveal-flash { animation: revealFlash .9s ease; }
+    @keyframes revealFlash { 0%, 100% { filter: none; } 35% { filter: brightness(1.55) drop-shadow(0 0 24px #fff8bd); } }
+    @media (max-aspect-ratio: 4/3) {
+      .stage { padding: 4px; }
+      .spar-room { width: calc(100vw - 8px); }
+      .room-actions { top: 1.7%; right: 1.4%; }
+      .side-toggle, .reset-btn { padding: .35em .6em; }
+    }
+    @media (max-width: 720px) {
+      .detail-backdrop { padding: 4px; }
+      .detail-panel { width: 99vw; }
+      .detail-body { padding: .8% 1.2%; }
+    }
+  </style>
+</head>
+<body>
+  <main class="stage">
+    <section class="spar-room" id="sparRoom" aria-label="切磋準備室">
+      <header class="title-block">
+        <h1>切磋準備室</h1>
+        <p>雙方各自秘密選擇三名出戰角色</p>
+      </header>
+      <div class="room-actions">
+        <button class="side-toggle" id="sideToggle" type="button">模擬操作：左方</button>
+        <button class="reset-btn" id="resetBtn" type="button">重設</button>
+      </div>
+      <div class="crew-side left" id="leftCrew"></div>
+      <div class="crew-side right" id="rightCrew"></div>
+      <div class="center-console">
+        <div class="versus">VS</div>
+        <div class="secret-state" id="secretState"></div>
+      </div>
+      <div class="side-status left">
+        <span class="player-name" id="leftPlayerName">草帽海賊團</span>
+        <span class="ready-mark" id="leftReady">選擇中 0/3</span>
+      </div>
+      <div class="side-status right">
+        <span class="player-name" id="rightPlayerName">新世界聯軍</span>
+        <span class="ready-mark" id="rightReady">選擇中 0/3</span>
+      </div>
+      <button class="lock-btn" id="lockBtn" type="button" disabled>選滿三人後鎖定</button>
+      <div class="privacy-note">角色情報公開 · 攜帶物保密 · 雙方鎖定後同時揭曉</div>
+    </section>
+  </main>
+
+  <div class="detail-backdrop" id="detailBackdrop" role="dialog" aria-modal="true" aria-labelledby="detailName">
+    <article class="detail-panel" id="detailPanel"></article>
+  </div>
+
+  <script src="js/board_cards.js"></script>
+  <script>
+    (() => {
+      const query = new URLSearchParams(window.location.search);
+      const formalMode = query.get("formal") === "1";
+      const leftIds = ["luffy", "zoro", "sanji", "nami", "robin", "chopper"];
+      const rightIds = ["ace", "sabo", "yamato", "hancock", "law", "oden"];
+      const allCards = window.BoardCards?.cards || [];
+      const fallbackRight = ["custom_mp3l85c1", "custom_mp3la6fr", "carrot", "usopp", "jinbe", "brook"];
+      const cardById = (id) => allCards.find((card) => card.id === id);
+      const makeCrew = (ids, fallback = []) => ids.map(cardById).filter(Boolean).concat(fallback.map(cardById).filter(Boolean)).filter((card, index, list) => list.indexOf(card) === index).slice(0, 6);
+      const crew = {
+        left: makeCrew(leftIds),
+        right: makeCrew(rightIds, fallbackRight),
+      };
+      if (crew.left.length < 6) crew.left = allCards.slice(0, 6);
+      if (crew.right.length < 6) crew.right = allCards.slice(8, 14);
+      const ui = {
+        room: document.getElementById("sparRoom"),
+        leftCrew: document.getElementById("leftCrew"),
+        rightCrew: document.getElementById("rightCrew"),
+        leftReady: document.getElementById("leftReady"),
+        rightReady: document.getElementById("rightReady"),
+        leftPlayerName: document.getElementById("leftPlayerName"),
+        rightPlayerName: document.getElementById("rightPlayerName"),
+        secretState: document.getElementById("secretState"),
+        sideToggle: document.getElementById("sideToggle"),
+        lockBtn: document.getElementById("lockBtn"),
+        resetBtn: document.getElementById("resetBtn"),
+        detailBackdrop: document.getElementById("detailBackdrop"),
+        detailPanel: document.getElementById("detailPanel"),
+      };
+      const picks = { left: [], right: [] };
+      const locked = { left: false, right: false };
+      let localSide = "left";
+      let formalSparId = "";
+
+      if (formalMode) {
+        ui.sideToggle.hidden = true;
+        ui.resetBtn.hidden = true;
+      }
+
+      function esc(value) {
+        return String(value ?? "").replace(/[&<>'"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[char]));
+      }
+      function portrait(card) {
+        return card?.battlePortraits?.normal || "images/board/battle/portraits/placeholder/normal.webp";
+      }
+      function levelStats(card) {
+        return card?.baseStats || { hp: card?.hp || 1, atk: card?.atk || 1, def: card?.def || 1, satk: card?.satk || 1, sdef: card?.sdef || 1, spd: card?.spd || 1 };
+      }
+      function attributeClass(attribute) {
+        if (attribute === "力") return "attr-power";
+        if (attribute === "速") return "attr-speed";
+        return "attr-technique";
+      }
+      function cardMarkup(card, side, index) {
+        const selectionIndex = picks[side].indexOf(index);
+        const bothLocked = locked.left && locked.right;
+        const ownLocked = locked[side];
+        const classes = ["crew-card", attributeClass(card.attribute)];
+        if (selectionIndex >= 0) classes.push("selected");
+        if (ownLocked && !bothLocked) classes.push("locked");
+        if (bothLocked) classes.push("revealed");
+        const cardAria = side !== localSide || ownLocked || bothLocked ? `查看 ${card.name} 詳情` : `選擇 ${card.name}`;
+        return `
+          <article class="${classes.join(" ")}" data-side="${side}" data-index="${index}" tabindex="0" role="button" aria-label="${esc(cardAria)}">
+            <img class="card-shell-art" src="images/board/spar_ui/spar_character_card_overlay_frame_v1.webp" alt="" aria-hidden="true">
+            <span class="portrait-window"><img class="crew-portrait" src="${esc(portrait(card))}" alt=""></span>
+            <span class="attribute-slot" aria-label="${esc(card.attribute)}屬性">${esc(card.attribute)}</span>
+            <span class="pick-order">${selectionIndex + 1}</span>
+            <span class="selection-ribbon">已選入陣容</span>
+            <span class="crew-info">
+              <span class="crew-name">${esc(card.name)}</span>
+              <span class="crew-meta"><span>${esc(card.tier)}</span><span class="role">${esc(card.roleType)}</span><span>Lv.1</span></span>
+            </span>
+          </article>`;
+      }
+      function readiness(side) {
+        const target = side === "left" ? ui.leftReady : ui.rightReady;
+        target.classList.toggle("ready", locked[side]);
+        target.textContent = locked[side] ? "已鎖定" : `選擇中 ${picks[side].length}/3`;
+      }
+      function render() {
+        ui.leftCrew.innerHTML = crew.left.map((card, index) => cardMarkup(card, "left", index)).join("");
+        ui.rightCrew.innerHTML = crew.right.map((card, index) => cardMarkup(card, "right", index)).join("");
+        readiness("left");
+        readiness("right");
+        const bothLocked = locked.left && locked.right;
+        const currentLocked = locked[localSide];
+        ui.sideToggle.textContent = `模擬操作：${localSide === "left" ? "左方" : "右方"}`;
+        ui.lockBtn.disabled = currentLocked || picks[localSide].length !== 3;
+        ui.lockBtn.textContent = currentLocked ? "本方已鎖定" : picks[localSide].length === 3 ? "鎖定三名出戰角色" : "選滿三人後鎖定";
+        if (bothLocked) {
+          ui.secretState.innerHTML = "<strong>雙方陣容揭曉</strong><br>出戰順序以 1、2、3 標示";
+          ui.lockBtn.disabled = true;
+          ui.lockBtn.textContent = "準備完成";
+        } else if (currentLocked) {
+          ui.secretState.innerHTML = `<strong>本方已鎖定</strong><br>等待${localSide === "left" ? "右方" : "左方"}完成選擇`;
+        } else {
+          ui.secretState.innerHTML = `<strong>${localSide === "left" ? "左方" : "右方"}秘密選擇中</strong><br>對手只會看到是否鎖定`;
+        }
+        ui.room.querySelectorAll(".crew-card").forEach((button) => {
+          button.addEventListener("click", onCardClick);
+          button.addEventListener("keydown", (event) => {
+            if (event.key !== "Enter" && event.key !== " ") return;
+            event.preventDefault();
+            onCardClick({ currentTarget: button });
+          });
+        });
+      }
+      function onCardClick(event) {
+        const button = event.currentTarget;
+        const side = button.dataset.side;
+        const index = Number(button.dataset.index);
+        const card = crew[side]?.[index];
+        if (!card) return;
+        if (side !== localSide || locked[side] || (locked.left && locked.right)) {
+          openDetail(card);
+          return;
+        }
+        if (formalMode) {
+          postFormalCommand("toggle-pick", { index, cardId: card.id });
+          return;
+        }
+        const current = picks[side].indexOf(index);
+        if (current >= 0) picks[side].splice(current, 1);
+        else if (picks[side].length < 3) picks[side].push(index);
+        else openDetail(card);
+        render();
+      }
+      function openDetail(card) {
+        const stats = levelStats(card);
+        const moves = (card.moveSet || []).slice(0, 6);
+        ui.detailPanel.innerHTML = `
+          <img class="detail-frame-art" src="images/board/spar_ui/spar_character_detail_overlay_frame_v1.webp" alt="" aria-hidden="true">
+          <div class="detail-head">
+            <img class="detail-portrait" src="${esc(portrait(card))}" alt="${esc(card.name)}">
+            <span class="detail-attribute">${esc(card.attribute)}</span>
+            <strong class="detail-portrait-name">${esc(card.name)}</strong>
+            <div class="detail-title">
+              <h2 id="detailName">${esc(card.name)}</h2>
+              <p>${esc(card.tier)} · Lv.1 · ${esc(card.roleType)} · ${esc(card.attribute)}屬性</p>
+            </div>
+            <div class="stats">
+              ${[["HP", stats.hp], ["攻擊", stats.atk], ["防禦", stats.def], ["特攻", stats.satk], ["特防", stats.sdef], ["速度", stats.spd]].map(([label, value]) => `<span class="stat"><small>${label}</small><b>${value}</b></span>`).join("")}
+            </div>
+          </div>
+          <div class="detail-body">
+            <p class="passive"><b>角色特性｜</b>${esc(card.passive || "無")}</p>
+            <div class="moves">
+              ${moves.map((move) => `<div class="move"><b>${esc(move.name)}</b><span>${esc(move.effectText || "—")}</span><em>威力 ${Number(move.power || 0)}</em></div>`).join("")}
+            </div>
+          </div>
+          <button class="detail-close" type="button">返回準備室</button>`;
+        ui.detailBackdrop.classList.add("open");
+        ui.detailPanel.querySelector(".detail-close").addEventListener("click", closeDetail);
+      }
+      function closeDetail() { ui.detailBackdrop.classList.remove("open"); }
+      function postFormalCommand(type, payload = {}) {
+        if (!formalMode || !formalSparId) return;
+        window.parent.postMessage({
+          type: "board-spar-selection-command",
+          command: {
+            id: `spar-selection-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+            type,
+            sparId: formalSparId,
+            payload,
+          },
+        }, window.location.protocol === "file:" ? "*" : window.location.origin);
+      }
+      function replaceArray(target, values) {
+        target.splice(0, target.length, ...(Array.isArray(values) ? values.map(Number).filter(Number.isInteger) : []));
+      }
+      function applyFormalView(view) {
+        if (!formalMode || !view || !view.id) return;
+        formalSparId = String(view.id);
+        localSide = view.localSide === "right" ? "right" : "left";
+        ["left", "right"].forEach((side) => {
+          const participant = view[side] || {};
+          crew[side] = Array.isArray(participant.crew) ? participant.crew.filter(Boolean).slice(0, 6) : [];
+          locked[side] = Boolean(participant.locked);
+          replaceArray(picks[side], participant.picks);
+          const nameNode = side === "left" ? ui.leftPlayerName : ui.rightPlayerName;
+          if (nameNode) nameNode.textContent = participant.name || (side === "left" ? "左方玩家" : "右方玩家");
+        });
+        ui.room.classList.toggle("reveal-flash", locked.left && locked.right);
+        render();
+      }
+      ui.detailBackdrop.addEventListener("click", (event) => { if (event.target === ui.detailBackdrop) closeDetail(); });
+      ui.sideToggle.addEventListener("click", () => { if (!formalMode) { localSide = localSide === "left" ? "right" : "left"; render(); } });
+      ui.lockBtn.addEventListener("click", () => {
+        if (picks[localSide].length !== 3 || locked[localSide]) return;
+        if (formalMode) {
+          postFormalCommand("lock", {});
+          return;
+        }
+        locked[localSide] = true;
+        if (localSide === "left" && !locked.right) localSide = "right";
+        else if (localSide === "right" && !locked.left) localSide = "left";
+        render();
+        if (locked.left && locked.right) ui.room.classList.add("reveal-flash");
+      });
+      ui.resetBtn.addEventListener("click", () => {
+        if (formalMode) return;
+        picks.left.length = 0;
+        picks.right.length = 0;
+        locked.left = false;
+        locked.right = false;
+        localSide = "left";
+        ui.room.classList.remove("reveal-flash");
+        render();
+      });
+      window.addEventListener("message", (event) => {
+        if (!formalMode || (window.location.protocol !== "file:" && event.origin !== window.location.origin)) return;
+        if (event.data?.type === "board-spar-selection-update") applyFormalView(event.data.view);
+      });
+      if (formalMode) {
+        window.parent.postMessage({ type: "board-spar-selection-ready" }, window.location.protocol === "file:" ? "*" : window.location.origin);
+      }
+      render();
+    })();
+  </script>
+</body>
+</html>

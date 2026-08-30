@@ -1,0 +1,234 @@
+[
+  {
+    "index": 1,
+    "id": "impact_dial",
+    "target": "public/images/items/impact_dial.webp",
+    "sourceArchived": "public/images/items/_source_png_carry_unique_20260514-162219/ChatGPT Image 2026年5月14日 下午04_15_08 (1).png",
+    "sourceBytes": 1774202,
+    "targetBytes": 271218
+  },
+  {
+    "index": 2,
+    "id": "reject_dial",
+    "target": "public/images/items/reject_dial.webp",
+    "sourceArchived": "public/images/items/_source_png_carry_unique_20260514-162219/ChatGPT Image 2026年5月14日 下午04_15_08 (2).png",
+    "sourceBytes": 2001876,
+    "targetBytes": 314930
+  },
+  {
+    "index": 3,
+    "id": "wind_dial",
+    "target": "public/images/items/wind_dial.webp",
+    "sourceArchived": "public/images/items/_source_png_carry_unique_20260514-162219/ChatGPT Image 2026年5月14日 下午04_15_08 (3).png",
+    "sourceBytes": 1573952,
+    "targetBytes": 214744
+  },
+  {
+    "index": 4,
+    "id": "cloud_dial",
+    "target": "public/images/items/cloud_dial.webp",
+    "sourceArchived": "public/images/items/_source_png_carry_unique_20260514-162219/ChatGPT Image 2026年5月14日 下午04_15_09 (4).png",
+    "sourceBytes": 1388552,
+    "targetBytes": 115322
+  },
+  {
+    "index": 5,
+    "id": "justice_cloak",
+    "target": "public/images/items/justice_cloak.webp",
+    "sourceArchived": "public/images/items/_source_png_carry_unique_20260514-162219/ChatGPT Image 2026年5月14日 下午04_15_09 (5).png",
+    "sourceBytes": 1497335,
+    "targetBytes": 167222
+  },
+  {
+    "index": 6,
+    "id": "seastone_bullet",
+    "target": "public/images/items/seastone_bullet.webp",
+    "sourceArchived": "public/images/items/_source_png_carry_unique_20260514-162219/ChatGPT Image 2026年5月14日 下午04_15_09 (6).png",
+    "sourceBytes": 1670928,
+    "targetBytes": 204530
+  },
+  {
+    "index": 7,
+    "id": "seastone_handcuffs",
+    "target": "public/images/items/seastone_handcuffs.webp",
+    "sourceArchived": "public/images/items/_source_png_carry_unique_20260514-162219/ChatGPT Image 2026年5月14日 下午04_15_10 (7).png",
+    "sourceBytes": 1453905,
+    "targetBytes": 176382
+  },
+  {
+    "index": 8,
+    "id": "life_paper",
+    "target": "public/images/items/life_paper.webp",
+    "sourceArchived": "public/images/items/_source_png_carry_unique_20260514-162219/ChatGPT Image 2026年5月14日 下午04_15_10 (8).png",
+    "sourceBytes": 1753395,
+    "targetBytes": 248012
+  },
+  {
+    "index": 9,
+    "id": "going_merry_rescue",
+    "target": "public/images/items/going_merry_rescue.webp",
+    "sourceArchived": "public/images/items/_source_png_carry_unique_20260514-162219/ChatGPT Image 2026年5月14日 下午04_15_10 (9).png",
+    "sourceBytes": 1648045,
+    "targetBytes": 227076
+  },
+  {
+    "index": 10,
+    "id": "sanji_bento",
+    "target": "public/images/items/sanji_bento.webp",
+    "sourceArchived": "public/images/items/_source_png_carry_unique_20260514-162219/ChatGPT Image 2026年5月14日 下午04_15_10 (10).png",
+    "sourceBytes": 2026368,
+    "targetBytes": 347414
+  },
+  {
+    "index": 11,
+    "id": "water_meat",
+    "target": "public/images/items/water_meat.webp",
+    "sourceArchived": "public/images/items/_source_png_carry_unique_20260514-162219/ChatGPT Image 2026年5月14日 下午04_17_36 (1).png",
+    "sourceBytes": 1883843,
+    "targetBytes": 295658
+  },
+  {
+    "index": 12,
+    "id": "medicine_pack",
+    "target": "public/images/items/medicine_pack.webp",
+    "sourceArchived": "public/images/items/_source_png_carry_unique_20260514-162219/ChatGPT Image 2026年5月14日 下午04_17_37 (2).png",
+    "sourceBytes": 1848876,
+    "targetBytes": 255914
+  },
+  {
+    "index": 13,
+    "id": "sniper_king_goggles",
+    "target": "public/images/items/sniper_king_goggles.webp",
+    "sourceArchived": "public/images/items/_source_png_carry_unique_20260514-162219/ChatGPT Image 2026年5月14日 下午04_17_37 (3).png",
+    "sourceBytes": 1672726,
+    "targetBytes": 261770
+  },
+  {
+    "index": 14,
+    "id": "log_pose",
+    "target": "public/images/items/log_pose.webp",
+    "sourceArchived": "public/images/items/_source_png_carry_unique_20260514-162219/ChatGPT Image 2026年5月14日 下午04_17_38 (4).png",
+    "sourceBytes": 1856891,
+    "targetBytes": 273356
+  },
+  {
+    "index": 15,
+    "id": "eternal_pose",
+    "target": "public/images/items/eternal_pose.webp",
+    "sourceArchived": "public/images/items/_source_png_carry_unique_20260514-162219/ChatGPT Image 2026年5月14日 下午04_17_38 (5).png",
+    "sourceBytes": 1700968,
+    "targetBytes": 263872
+  },
+  {
+    "index": 16,
+    "id": "vision_dial",
+    "target": "public/images/items/vision_dial.webp",
+    "sourceArchived": "public/images/items/_source_png_carry_unique_20260514-162219/ChatGPT Image 2026年5月14日 下午04_17_38 (6).png",
+    "sourceBytes": 1679112,
+    "targetBytes": 213884
+  },
+  {
+    "index": 17,
+    "id": "lamp_dial",
+    "target": "public/images/items/lamp_dial.webp",
+    "sourceArchived": "public/images/items/_source_png_carry_unique_20260514-162219/ChatGPT Image 2026年5月14日 下午04_17_39 (7).png",
+    "sourceBytes": 1413674,
+    "targetBytes": 158070
+  },
+  {
+    "index": 18,
+    "id": "flame_dial",
+    "target": "public/images/items/flame_dial.webp",
+    "sourceArchived": "public/images/items/_source_png_carry_unique_20260514-162219/ChatGPT Image 2026年5月14日 下午04_17_39 (8).png",
+    "sourceBytes": 1395137,
+    "targetBytes": 193862
+  },
+  {
+    "index": 19,
+    "id": "water_dial",
+    "target": "public/images/items/water_dial.webp",
+    "sourceArchived": "public/images/items/_source_png_carry_unique_20260514-162219/ChatGPT Image 2026年5月14日 下午04_17_39 (9).png",
+    "sourceBytes": 1601619,
+    "targetBytes": 212788
+  },
+  {
+    "index": 20,
+    "id": "flash_dial",
+    "target": "public/images/items/flash_dial.webp",
+    "sourceArchived": "public/images/items/_source_png_carry_unique_20260514-162219/ChatGPT Image 2026年5月14日 下午04_17_39 (10).png",
+    "sourceBytes": 1484284,
+    "targetBytes": 191296
+  },
+  {
+    "index": 21,
+    "id": "slash_dial",
+    "target": "public/images/items/slash_dial.webp",
+    "sourceArchived": "public/images/items/_source_png_carry_unique_20260514-162219/ChatGPT Image 2026年5月14日 下午04_19_47 (1).png",
+    "sourceBytes": 1441243,
+    "targetBytes": 165546
+  },
+  {
+    "index": 22,
+    "id": "iron_cloud",
+    "target": "public/images/items/iron_cloud.webp",
+    "sourceArchived": "public/images/items/_source_png_carry_unique_20260514-162219/ChatGPT Image 2026年5月14日 下午04_19_48 (2).png",
+    "sourceBytes": 1720462,
+    "targetBytes": 211164
+  },
+  {
+    "index": 23,
+    "id": "opal_cloud",
+    "target": "public/images/items/opal_cloud.webp",
+    "sourceArchived": "public/images/items/_source_png_carry_unique_20260514-162219/ChatGPT Image 2026年5月14日 下午04_19_49 (3).png",
+    "sourceBytes": 1746631,
+    "targetBytes": 225482
+  },
+  {
+    "index": 24,
+    "id": "pirate_flag_charm",
+    "target": "public/images/items/pirate_flag_charm.webp",
+    "sourceArchived": "public/images/items/_source_png_carry_unique_20260514-162219/ChatGPT Image 2026年5月14日 下午04_19_49 (4).png",
+    "sourceBytes": 1885150,
+    "targetBytes": 265948
+  },
+  {
+    "index": 25,
+    "id": "captain_coat",
+    "target": "public/images/items/captain_coat.webp",
+    "sourceArchived": "public/images/items/_source_png_carry_unique_20260514-162219/ChatGPT Image 2026年5月14日 下午04_19_49 (5).png",
+    "sourceBytes": 1398426,
+    "targetBytes": 157006
+  },
+  {
+    "index": 26,
+    "id": "medical_bag",
+    "target": "public/images/items/medical_bag.webp",
+    "sourceArchived": "public/images/items/_source_png_carry_unique_20260514-162219/ChatGPT Image 2026年5月14日 下午04_19_50 (6).png",
+    "sourceBytes": 2041055,
+    "targetBytes": 323842
+  },
+  {
+    "index": 27,
+    "id": "ammo_pouch",
+    "target": "public/images/items/ammo_pouch.webp",
+    "sourceArchived": "public/images/items/_source_png_carry_unique_20260514-162219/ChatGPT Image 2026年5月14日 下午04_19_50 (7).png",
+    "sourceBytes": 2055922,
+    "targetBytes": 346602
+  },
+  {
+    "index": 28,
+    "id": "sky_island_goggles",
+    "target": "public/images/items/sky_island_goggles.webp",
+    "sourceArchived": "public/images/items/_source_png_carry_unique_20260514-162219/ChatGPT Image 2026年5月14日 下午04_19_50 (8).png",
+    "sourceBytes": 1586715,
+    "targetBytes": 229316
+  },
+  {
+    "index": 29,
+    "id": "vegapunk_mini_shield",
+    "target": "public/images/items/vegapunk_mini_shield.webp",
+    "sourceArchived": "public/images/items/_source_png_carry_unique_20260514-162219/ChatGPT Image 2026年5月14日 下午04_19_53 (9).png",
+    "sourceBytes": 1692272,
+    "targetBytes": 225862
+  }
+]

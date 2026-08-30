@@ -1,0 +1,925 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>約克十三張線索牌・座標解碼</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #e9f7ff;
+      --muted: #9bb5c4;
+      --gold: #f4c35a;
+      --cyan: #45efff;
+      --navy: #061522;
+      --panel: rgba(4, 17, 29, 0.9);
+      --danger: #ff7180;
+      --success: #75ffc6;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; margin: 0; }
+    body {
+      overflow: hidden;
+      color: var(--ink);
+      font-family: "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+      background: #02080d url("images/board/postgame_clue_puzzle_ui/york_clue_puzzle_background.webp") center / cover fixed;
+    }
+    button { font: inherit; }
+    button:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
+    .hidden { display: none !important; }
+
+    .demo-tag {
+      position: fixed;
+      z-index: 60;
+      top: max(10px, env(safe-area-inset-top));
+      right: max(10px, env(safe-area-inset-right));
+      padding: 6px 11px;
+      border: 1px solid rgba(69, 239, 255, 0.48);
+      border-radius: 999px;
+      color: #bffaff;
+      background: rgba(2, 11, 19, 0.84);
+      font-size: 12px;
+      letter-spacing: .08em;
+      cursor: pointer;
+    }
+
+    .difficulty-screen {
+      min-height: 100vh;
+      overflow: auto;
+      padding: clamp(34px, 6vh, 70px) clamp(18px, 5vw, 76px) 40px;
+      background:
+        radial-gradient(circle at 50% 20%, rgba(30, 180, 205, .16), transparent 38%),
+        linear-gradient(180deg, rgba(1, 7, 12, .3), rgba(1, 7, 12, .86));
+    }
+    .selection-header { max-width: 1160px; margin: 0 auto 25px; text-align: center; }
+    .eyebrow { margin: 0 0 8px; color: var(--cyan); font-size: 13px; font-weight: 800; letter-spacing: .16em; }
+    h1 { margin: 0; font-size: clamp(31px, 5vw, 62px); line-height: 1.24; text-shadow: 0 4px 20px #000; }
+    .selection-lead { max-width: 780px; margin: 14px auto 0; color: #c6d8e1; line-height: 1.75; }
+    .account-state {
+      display: inline-flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px 20px;
+      margin-top: 18px;
+      padding: 10px 17px;
+      border: 1px solid rgba(244, 195, 90, .45);
+      border-radius: 13px;
+      background: rgba(2, 15, 25, .82);
+      box-shadow: 0 14px 36px rgba(0, 0, 0, .35);
+    }
+    .account-state strong { color: var(--gold); }
+    .difficulty-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(250px, 1fr));
+      gap: clamp(14px, 2.2vw, 30px);
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+    .difficulty-card {
+      position: relative;
+      min-height: 360px;
+      border: 0;
+      padding: 0;
+      color: var(--ink);
+      background: transparent;
+      cursor: pointer;
+      filter: drop-shadow(0 20px 24px rgba(0, 0, 0, .55));
+      transition: transform .18s ease, filter .18s ease;
+    }
+    .difficulty-card:hover:not(:disabled) { transform: translateY(-7px); filter: drop-shadow(0 25px 30px rgba(0, 0, 0, .68)); }
+    .difficulty-card:disabled { cursor: default; filter: grayscale(.36) brightness(.72); }
+    .difficulty-frame { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill; pointer-events: none; }
+    .difficulty-content {
+      position: absolute;
+      inset: 13% 12% 14%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .difficulty-kicker { color: var(--cyan); font-size: 12px; font-weight: 900; letter-spacing: .16em; }
+    .difficulty-content h2 { margin: 7px 0 0; font-size: clamp(29px, 3.1vw, 45px); color: var(--gold); }
+    .difficulty-target { margin: 10px 0 0; font-weight: 850; }
+    .decoder-thumb { width: min(48%, 160px); min-height: 0; margin: 5px auto -4px; object-fit: contain; filter: drop-shadow(0 8px 9px #000); }
+    .difficulty-desc { margin: 0; color: #bcd1dc; font-size: 13px; line-height: 1.55; }
+    .difficulty-meta { margin-top: auto; color: #d7e8ed; font-size: 12px; }
+    .difficulty-action {
+      display: inline-flex;
+      justify-content: center;
+      min-width: 126px;
+      margin-top: 8px;
+      padding: 8px 17px;
+      color: #06111a;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #fff0a2, #d89529);
+      font-weight: 900;
+      box-shadow: 0 4px 14px rgba(244, 195, 90, .34);
+    }
+    .difficulty-card:disabled .difficulty-action { color: #d9e0e3; background: rgba(79, 92, 99, .75); box-shadow: none; }
+    .selection-note { max-width: 850px; margin: 20px auto 0; color: #98aeb9; font-size: 12px; text-align: center; line-height: 1.65; }
+
+    .puzzle-screen { min-height: 100vh; display: grid; place-items: center; background: rgba(0, 5, 10, .18); }
+    .puzzle-stage {
+      position: relative;
+      width: min(100vw, calc(100vh * 16 / 9));
+      height: min(100vh, calc(100vw * 9 / 16));
+      min-height: 360px;
+    }
+    .main-frame { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    .frame-panel { position: absolute; z-index: 2; overflow: hidden; }
+    .clue-panel { left: 3.2%; top: 6.5%; width: 18.7%; height: 85%; padding: 1.4% 1.2%; }
+    .clue-panel h2 { margin: 0; padding-bottom: 2px; color: var(--gold); font-size: clamp(13px, 1.34vw, 23px); line-height: 1.25; overflow-wrap: anywhere; }
+    .clue-summary { margin: 4px 0 9px; color: var(--muted); font-size: clamp(8px, .68vw, 12px); line-height: 1.35; overflow-wrap: anywhere; }
+    .puzzle-guide { position: relative; z-index: 4; margin: 0 0 7px; color: #bdebf3; font-size: clamp(8px,.58vw,10px); }
+    .puzzle-guide summary { cursor: pointer; color: var(--gold); font-weight: 900; }
+    .puzzle-guide p { margin: 5px 0 0; padding: 6px; border: 1px solid rgba(69,239,255,.28); border-radius: 7px; background: rgba(2,13,22,.96); line-height: 1.45; }
+    .clue-list { height: calc(100% - 76px); overflow: auto; padding-right: 5px; scrollbar-color: #268ea0 transparent; }
+    .clue-row {
+      display: grid;
+      grid-template-columns: 24px minmax(0, 1fr);
+      gap: 5px;
+      width: 100%;
+      margin: 0 0 6px;
+      padding: 6px;
+      border: 1px solid rgba(77, 206, 222, .22);
+      border-radius: 8px;
+      color: #dbe9ee;
+      background: rgba(5, 21, 33, .72);
+      text-align: left;
+      cursor: pointer;
+    }
+    .clue-row.active { border-color: var(--gold); background: rgba(82, 60, 17, .62); }
+    .clue-number { color: var(--cyan); font-weight: 900; }
+    .clue-copy { min-width: 0; font-size: clamp(8px, .63vw, 11px); line-height: 1.38; overflow-wrap: anywhere; word-break: break-word; }
+
+    .status-panel { left: 26%; top: 5.2%; width: 69%; height: 11.8%; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 16px; padding: 0 2.5%; }
+    .status-title { min-width: 0; }
+    .status-title strong { display: block; color: var(--gold); font-size: clamp(13px, 1.45vw, 25px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .status-title span { display: block; margin-top: 3px; color: var(--muted); font-size: clamp(8px, .7vw, 12px); line-height: 1.3; overflow-wrap: anywhere; }
+    .status-badges { display: flex; min-width: 0; justify-content: flex-end; gap: 5px; }
+    .badge { min-width: 0; padding: 4px 7px; border: 1px solid rgba(69, 239, 255, .4); border-radius: 999px; color: #c3faff; background: rgba(4, 31, 43, .75); font-size: clamp(7px, .6vw, 10px); font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .sequence-panel { left: 25.5%; top: 20.42%; width: 64.75%; height: 12.3%; display: grid; grid-template-columns: repeat(13, minmax(0, 1fr)); gap: 0; padding: 0; }
+    .target-slot { position: relative; min-width: 0; display: grid; place-items: center; border-radius: 5px; transition: background .14s ease, box-shadow .14s ease; }
+    .target-slot.drag-over { background: rgba(69,239,255,.16); box-shadow: inset 0 0 10px rgba(69,239,255,.68); }
+    .slot-empty { width: 100%; height: 100%; pointer-events: none; }
+    .formal-clue-card {
+      position: relative;
+      display: block;
+      width: 100%;
+      aspect-ratio: 1;
+      border: 0;
+      padding: 0;
+      background: transparent;
+      cursor: pointer;
+      isolation: isolate;
+      container-type: inline-size;
+      filter: drop-shadow(0 4px 4px #000);
+      transition: transform .14s ease, filter .14s ease;
+    }
+    .formal-clue-card:hover { transform: translateY(-4px); }
+    .formal-clue-card.selected { transform: translateY(-7px); filter: drop-shadow(0 0 11px var(--gold)); }
+    .formal-clue-card.locked { filter: grayscale(.25) brightness(.75); }
+    .target-slot .formal-clue-card, .bank-card-wrap .formal-clue-card { width: min(6.6vw, 11.73vh); max-width: none; }
+    .target-slot .formal-clue-card { position: absolute; left: 50%; top: 50%; translate: -50% -50%; }
+    .item-card-frame { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; object-fit: contain; clip-path: inset(1.4% 16.6% 1.5% 16.6% round 3.2%); pointer-events: none; }
+    .item-card-island-window { position: absolute; z-index: 2; top: 19.3%; left: 30.2%; width: 39.6%; height: 60.8%; display: grid; place-items: center; overflow: hidden; border-radius: 7%; background: radial-gradient(circle at 50% 52%,#19485f,#02080d 70%); pointer-events: none; }
+    .item-card-island { width: 100%; height: 100%; object-fit: contain; transform: scale(1.04); filter: drop-shadow(0 3px 5px rgba(0,0,0,.72)); }
+    .item-card-rank { position: absolute; z-index: 3; top: 7%; left: 20.2%; width: 10.8%; height: 10.8%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff2b8; font-family: Georgia,"Times New Roman",serif; font-size: clamp(6px,10.5cqw,18px); font-weight: 950; line-height: .78; text-shadow: 0 2px 5px #000,0 0 7px rgba(103,235,255,.72); pointer-events: none; }
+    .item-card-rank::after { content: "◆"; margin-top: .22em; color: #63eaff; font-size: .46em; line-height: 1; text-shadow: 0 1px 3px #000,0 0 5px rgba(72,224,255,.9); }
+    .item-card-rank.corner-bottom { top: auto; left: auto; right: 20.2%; bottom: 7%; transform: rotate(180deg); }
+    .item-card-rank.double { font-size: clamp(5px,8cqw,15px); }
+    .slot-lock {
+      position: absolute;
+      z-index: 5;
+      right: 1%;
+      bottom: 1%;
+      width: 48%;
+      aspect-ratio: 8 / 3;
+      border: 0;
+      padding: 0;
+      background: center / contain no-repeat;
+      cursor: pointer;
+      filter: drop-shadow(0 2px 3px #000);
+    }
+    .slot-lock.locked { background-image: url("images/board/postgame_clue_puzzle_ui/york_slot_lock_button.webp"); }
+    .slot-lock.unlocked { background-image: url("images/board/postgame_clue_puzzle_ui/york_slot_unlock_button.webp"); opacity: .74; }
+    .slot-lock:disabled { opacity: .18; cursor: default; }
+
+    .bank-panel { left: 27%; top: 40.6%; width: 68%; height: 43.2%; padding: 1% 1.7% 1.4%; display: flex; flex-direction: column; }
+    .bank-heading { display: block; flex: 0 0 auto; color: var(--gold); font-size: clamp(9px,.76vw,13px); line-height: 1.25; text-align: center; overflow-wrap: anywhere; }
+    .bank-subtitle { display: block; margin-top: 2px; color: var(--muted); font-size: clamp(7px,.6vw,10px); text-align: center; }
+    .card-bank-grid { display: grid; flex: 1 1 auto; grid-template-columns: repeat(13,minmax(0,1fr)); align-items: center; align-content: center; justify-items: center; gap: .35%; min-height: 0; width: 100%; }
+    .bank-card-wrap { width: 100%; min-width: 0; display: flex; flex-direction: column; align-items: center; }
+    .bank-card-label { max-width: 100%; margin-top: -3px; color: #b9d2dc; font-size: clamp(7px,.54vw,9px); font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bank-drop.drag-over { background: rgba(69,239,255,.08); box-shadow: inset 0 0 14px rgba(69,239,255,.34); }
+    .sequence-message { flex: 0 0 auto; max-width: 100%; margin: 0; color: var(--cyan); font-size: clamp(8px,.64vw,11px); line-height: 1.3; font-weight: 800; text-align: center; overflow-wrap: anywhere; }
+    .sequence-message.error { color: var(--danger); }
+    .sequence-message.success { color: var(--success); }
+    .instructions { margin-top: 4px; color: var(--muted); font-size: clamp(7px, .58vw, 10px); text-align: center; }
+    .instructions summary { color: #c3eaf0; cursor: pointer; font-weight: 800; }
+    .instructions p { margin: 5px 0 0; font-size: inherit; }
+    .action-panel { left: 47.4%; top: 85.1%; width: 43.5%; height: 9.2%; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.3%; align-items: center; }
+    .image-button {
+      position: relative;
+      height: 68%;
+      border: 0;
+      color: #e7f8ff;
+      background: url("images/board/postgame_clue_puzzle_ui/york_secondary_button_frame.webp") center / 100% 100% no-repeat;
+      cursor: pointer;
+      font-size: clamp(8px, .82vw, 14px);
+      font-weight: 900;
+      text-shadow: 0 2px 3px #000;
+      padding: 4px 8px;
+      line-height: 1.15;
+      overflow-wrap: anywhere;
+    }
+    .image-button.primary { color: #fff5c8; background-image: url("images/board/postgame_clue_puzzle_ui/york_primary_button_frame.webp"); }
+    .image-button:hover { filter: brightness(1.16); }
+    .image-button:disabled { opacity: .42; cursor: default; }
+    .back-button { position: absolute; z-index: 8; top: 1.1%; left: 1%; border: 1px solid rgba(255,255,255,.25); border-radius: 999px; padding: 6px 11px; color: #d7edf2; background: rgba(2, 12, 20, .82); cursor: pointer; font-size: 11px; }
+
+    .result-overlay { position: fixed; z-index: 80; inset: 0; display: grid; place-items: center; padding: 18px; background: rgba(0, 4, 8, .86); backdrop-filter: blur(9px); }
+    .result-stage { position: relative; width: min(1050px, 96vw); aspect-ratio: 16 / 9; }
+    .result-frame { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    .result-copy { position: absolute; left: 7%; top: 18%; width: 43%; height: 66%; display: flex; flex-direction: column; justify-content: center; padding: 3%; }
+    .result-copy .eyebrow { margin-bottom: 4px; }
+    .result-copy h2 { margin: 0; color: var(--gold); font-size: clamp(23px, 4vw, 48px); }
+    .result-copy p { color: #bed2dc; line-height: 1.65; font-size: clamp(11px, 1.35vw, 16px); }
+    .result-decoder { position: absolute; left: 54.18%; top: 14.98%; width: 14.06%; height: 24.97%; object-fit: contain; filter: drop-shadow(0 8px 12px #000); }
+    .result-fields { position: absolute; inset: 0; color: #dbe9ee; pointer-events: none; }
+    .result-field { position: absolute; display: grid; grid-template-columns: minmax(58px, 34%) minmax(0, 1fr); align-items: center; gap: 6px; padding: 0 3.5%; border: 0; line-height: 1.35; font-size: clamp(9px, .88vw, 13px); }
+    .result-field:nth-child(1) { left: 68.4%; top: 16.2%; width: 23.2%; height: 10.4%; grid-template-columns: minmax(52px, 28%) minmax(0, 1fr); font-size: clamp(8.5px, .78vw, 11px); }
+    .result-field:nth-child(2) { left: 69.5%; top: 28.7%; width: 22.4%; height: 10.3%; }
+    .result-field:nth-child(3) { left: 56.8%; top: 40.8%; width: 35.1%; height: 9.6%; }
+    .result-field span { display: flex; align-items: center; min-height: 1.35em; color: var(--muted); white-space: nowrap; }
+    .result-field strong { display: flex; align-items: center; min-width: 0; min-height: 1.35em; white-space: nowrap; }
+    .result-close { position: absolute; left: 34.2%; bottom: 6.8%; width: 32.5%; height: 9%; border: 0; background-image: none !important; }
+
+    @media (max-width: 980px) {
+      body { overflow: auto; }
+      .result-overlay { overflow: auto; place-items: start center; }
+      .difficulty-grid { grid-template-columns: 1fr; max-width: 560px; }
+      .difficulty-card { min-height: 330px; }
+      .puzzle-screen { display: block; padding: 54px 12px 24px; }
+      .puzzle-stage { width: 100%; height: auto; min-height: 0; display: grid; grid-template-columns: 1fr; gap: 12px; }
+      .main-frame { display: none; }
+      .frame-panel { position: static; width: auto; height: auto; border: 1px solid rgba(69, 239, 255, .28); border-radius: 15px; background: var(--panel); box-shadow: 0 12px 30px rgba(0,0,0,.42); }
+      .status-panel { order: 1; padding: 13px 15px; grid-template-columns: 1fr; gap: 8px; }
+      .status-badges { justify-content: flex-start; flex-wrap: wrap; }
+      .sequence-panel { order: 2; min-height: 112px; grid-template-columns: repeat(13, 56px); gap: 5px; overflow-x: auto; padding: 14px; }
+      .target-slot { width: 56px; min-height: 84px; aspect-ratio: 2 / 3; border: 1px solid rgba(69,239,255,.22); background: rgba(3,20,31,.72); }
+      .target-slot .formal-clue-card, .bank-card-wrap .formal-clue-card { width: 82px; }
+      .clue-panel { order: 4; padding: 15px; max-height: 390px; }
+      .clue-list { height: 300px; }
+      .bank-panel { order: 3; min-height: 300px; padding: 12px; }
+      .card-bank-grid { grid-template-columns: repeat(auto-fit,minmax(82px,1fr)); gap: 10px 5px; }
+      .action-panel { order: 5; display: grid; grid-template-columns: repeat(2, 1fr); padding: 10px; }
+      .image-button { min-height: 52px; }
+      .back-button { position: fixed; top: max(8px, env(safe-area-inset-top)); left: 10px; }
+      .result-stage { width: min(680px, calc(100vw - 36px)); min-height: 590px; aspect-ratio: auto; border: 1px solid rgba(244,195,90,.45); border-radius: 18px; background: var(--panel); }
+      .result-frame { display: none; }
+      .result-copy, .result-decoder, .result-fields, .result-close { position: static; width: auto; height: auto; }
+      .result-copy { padding: 26px 24px 10px; }
+      .result-decoder { display: block; width: 190px; height: 190px; margin: 0 auto; }
+      .result-fields { padding: 0 24px; }
+      .result-field { position: static; left: auto; top: auto; width: auto; height: auto; grid-template-columns: 90px 1fr; min-height: 44px; padding: 8px 0; border-bottom: 1px solid rgba(69, 239, 255, .18); font-size: clamp(10px, 1.2vw, 15px); }
+      .result-field:nth-child(1), .result-field:nth-child(2), .result-field:nth-child(3) { left: auto; top: auto; width: auto; height: auto; }
+      .result-field:nth-child(1) { grid-template-columns: 90px 1fr; font-size: clamp(10px, 1.2vw, 15px); }
+      .result-field strong { white-space: normal; overflow-wrap: anywhere; }
+      .result-close { display: block; width: calc(100% - 48px); min-height: 56px; margin: 18px 24px 24px; background-image: url("images/board/postgame_clue_puzzle_ui/york_primary_button_frame.webp") !important; }
+    }
+
+    @media (max-width: 520px) {
+      .difficulty-screen { padding-left: 10px; padding-right: 10px; }
+      .difficulty-card { min-height: 300px; }
+      .difficulty-content { inset: 12% 11% 13%; }
+      .decoder-thumb { width: 120px; }
+      .demo-tag { font-size: 9px; }
+      .result-field { grid-template-columns: 74px 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <button id="exitButton" class="demo-tag" type="button">離開解碼</button>
+
+  <main id="difficultyScreen" class="difficulty-screen">
+    <header class="selection-header">
+      <p class="eyebrow">YORK COORDINATE DECODE</p>
+      <h1>約克十三張線索牌</h1>
+      <p class="selection-lead">選擇難度後排列十三張島嶼牌。每個難度使用同一局種與玩家身分穩定產生，但答案互不相同；成功只提升本玩家的解碼器階級。</p>
+      <div class="account-state">
+        <span>個人解碼器：<strong id="currentTierLabel">尚未持有</strong></span>
+        <span>蛋頭島座標：<strong id="eggheadStatus">尚未揭露</strong></span>
+      </div>
+    </header>
+    <section id="difficultyGrid" class="difficulty-grid" aria-label="選擇解碼難度"></section>
+    <p class="selection-note">十三張線索不會消耗。第一次可直接選任何難度；完成後只可挑戰更高階，困難完成後即達最高階。</p>
+  </main>
+
+  <main id="puzzleScreen" class="puzzle-screen hidden">
+    <section class="puzzle-stage" aria-label="約克線索牌解碼盤">
+      <img class="main-frame" src="images/board/postgame_clue_puzzle_ui/york_clue_puzzle_main_frame.webp" alt="">
+      <button id="backButton" class="back-button" type="button">← 返回難度</button>
+
+      <aside class="frame-panel clue-panel">
+        <h2>十三張卡牌線索</h2>
+        <p id="clueSummary" class="clue-summary"></p>
+        <details class="puzzle-guide">
+          <summary>解題符號說明</summary>
+          <p>「我在 X 右邊」＝X → 我，不代表相鄰；「右邊 2 格」是固定距離；「中間隔一張」代表相距 2 格。</p>
+        </details>
+        <div id="clueList" class="clue-list"></div>
+      </aside>
+
+      <header class="frame-panel status-panel">
+        <div class="status-title">
+          <strong id="puzzleTitle">約克座標解碼</strong>
+          <span id="seedStatus"></span>
+        </div>
+        <div class="status-badges">
+          <span id="uniqueBadge" class="badge">唯一解</span>
+          <span id="attemptBadge" class="badge">確認 0 次</span>
+        </div>
+      </header>
+
+      <section id="sequencePanel" class="frame-panel sequence-panel" aria-label="十三張牌排列區"></section>
+
+      <section id="cardBankDrop" class="frame-panel bank-panel bank-drop" aria-label="下方待放卡牌區">
+        <strong class="bank-heading">下方待放卡牌</strong>
+        <div id="cardBank" class="card-bank-grid"></div>
+        <p id="sequenceMessage" class="sequence-message">請從下方選牌，放到上方第 1～13 格。</p>
+      </section>
+
+      <nav class="frame-panel action-panel" aria-label="解碼操作">
+        <button id="shuffleButton" class="image-button" type="button">洗牌下方卡牌</button>
+        <button id="unlockAllButton" class="image-button" type="button">全部解鎖</button>
+        <button id="resetButton" class="image-button" type="button">重設排列</button>
+        <button id="submitButton" class="image-button primary" type="button">確認座標</button>
+      </nav>
+    </section>
+  </main>
+
+  <section id="resultOverlay" class="result-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
+    <div class="result-stage">
+      <img class="result-frame" src="images/board/postgame_clue_puzzle_ui/york_decoder_result_frame.webp" alt="">
+      <div class="result-copy">
+        <p class="eyebrow">COORDINATE RESOLVED</p>
+        <h2 id="resultTitle">座標解碼成功</h2>
+        <p id="resultDescription"></p>
+      </div>
+      <img id="resultDecoder" class="result-decoder" alt="獲得的解碼器">
+      <div class="result-fields">
+        <div class="result-field"><span id="resultTierLabel">個人升級</span><strong id="resultTier"></strong></div>
+        <div class="result-field"><span id="resultWorldLabel">世界座標</span><strong id="resultWorld"></strong></div>
+        <div class="result-field"><span id="resultRateLabel">名刀掉落率</span><strong id="resultRate"></strong></div>
+      </div>
+      <button id="resultClose" class="image-button primary result-close" type="button">回到難度選擇</button>
+    </div>
+  </section>
+
+  <script src="js/board_york_clue_puzzle.js?v=20260824-york-tier3-practice-v307"></script>
+  <script>
+    (() => {
+      "use strict";
+
+      const api = window.BoardYorkCluePuzzle;
+      const query = new URLSearchParams(window.location.search);
+      const EMBEDDED = query.get("embed") === "1" && window.parent !== window;
+      const CHANNEL = String(query.get("channel") || "");
+      const LAYOUT_SEED = String(query.get("layoutSeed") || "formal-preview-layout-20260802");
+      const PLAYER_ID = String(query.get("playerId") || "formal-preview-player-1");
+      const INITIAL_TIER = Math.max(0, Math.min(3, Math.floor(Number(query.get("tier")) || 0)));
+      const INITIAL_EGGHEAD_REVEALED = query.get("eggheadUnlocked") === "1";
+      const PUZZLE_VARIANT = String(query.get("puzzleVariant") || (INITIAL_TIER >= 3 ? `practice-preview-${Date.now()}-${Math.random().toString(36).slice(2)}` : ""));
+      const FRAME_IMAGE = "images/board/postgame_clue_ui/york_clue_playing_card_frame_v2.webp";
+      const ISLAND_IMAGES = [
+        "images/board/islands/postgame_boss_shiki_island.webp",
+        "images/board/islands/postgame_boss_gild_tesoro_island.webp",
+        "images/board/islands/postgame_boss_zephyr_island.webp",
+        "images/board/islands/postgame_boss_tot_musica_island.webp",
+        "images/board/islands/postgame_boss_douglas_bullet_island.webp",
+        "images/board/islands/postgame_boss_saga_island.webp",
+        "images/board/islands/postgame_boss_vinsmoke_judge_island.webp",
+        "images/board/islands/postgame_boss_rob_lucci_awakened_island.webp",
+        "images/board/islands/postgame_boss_king_island.webp",
+        "images/board/islands/postgame_boss_charlotte_katakuri_island.webp",
+        "images/board/islands/postgame_boss_patrick_redfield_island.webp",
+        "images/board/islands/postgame_boss_loki_island.webp",
+        "images/board/islands/postgame_boss_aramaki_island.webp",
+      ];
+      const ASSET_ROOT = "images/board/postgame_clue_puzzle_ui/";
+      const DIFFICULTY_ASSETS = {
+        easy: {
+          frame: `${ASSET_ROOT}york_difficulty_easy_frame.webp`,
+          decoder: `${ASSET_ROOT}york_coordinate_decoder_t1.webp`,
+        },
+        normal: {
+          frame: `${ASSET_ROOT}york_difficulty_normal_frame.webp`,
+          decoder: `${ASSET_ROOT}york_coordinate_decoder_t2.webp`,
+        },
+        hard: {
+          frame: `${ASSET_ROOT}york_difficulty_hard_frame.webp`,
+          decoder: `${ASSET_ROOT}york_coordinate_decoder_t3.webp`,
+        },
+      };
+      const RANKS = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+
+      const refs = Object.fromEntries([
+        "exitButton", "difficultyScreen", "difficultyGrid", "currentTierLabel", "eggheadStatus", "puzzleScreen",
+        "backButton", "clueSummary", "clueList", "puzzleTitle", "seedStatus", "uniqueBadge",
+        "attemptBadge", "sequencePanel", "cardBank", "cardBankDrop",
+        "sequenceMessage", "shuffleButton", "unlockAllButton", "resetButton", "submitButton",
+        "resultOverlay", "resultTitle", "resultDescription", "resultDecoder", "resultTierLabel", "resultTier",
+        "resultRateLabel", "resultRate", "resultWorldLabel", "resultWorld", "resultClose",
+      ].map(id => [id, document.getElementById(id)]));
+
+      const puzzleSet = api.createPuzzleSet(LAYOUT_SEED, PLAYER_ID, PUZZLE_VARIANT);
+      const state = {
+        currentTier: INITIAL_TIER,
+        eggheadRevealed: INITIAL_EGGHEAD_REVEALED,
+        activeKey: null,
+        dragCard: null,
+        pendingSubmit: false,
+        sessions: Object.fromEntries(puzzleSet.puzzles.map(puzzle => [puzzle.difficultyKey, {
+          puzzle,
+          slots: Array(api.CARD_COUNT).fill(null),
+          bankOrder: [...puzzle.initialOrder],
+          lockedSlots: Array(api.CARD_COUNT).fill(false),
+          selectedCard: null,
+          selectedSource: null,
+          attempts: 0,
+          solved: false,
+        }])),
+      };
+
+      refs.exitButton.textContent = EMBEDDED ? "離開解碼" : "獨立流程檢查";
+      refs.resultClose.textContent = EMBEDDED ? "返回主遊戲" : "回到難度選擇";
+
+      function sendParent(type, detail = {}) {
+        if (!EMBEDDED) return false;
+        window.parent.postMessage({ type, channel: CHANNEL, ...detail }, window.location.origin);
+        return true;
+      }
+
+      function currentSession() {
+        return state.activeKey ? state.sessions[state.activeKey] : null;
+      }
+
+      function tierLabel(tier) {
+        if (tier <= 0) return "尚未持有";
+        return api.DIFFICULTIES[["easy", "normal", "hard"][tier - 1]].targetItemName;
+      }
+
+      function setMessage(message, kind = "") {
+        refs.sequenceMessage.textContent = message;
+        refs.sequenceMessage.className = `sequence-message${kind ? ` ${kind}` : ""}`;
+      }
+
+      function difficultyCardMarkup(key) {
+        const difficulty = api.DIFFICULTIES[key];
+        const asset = DIFFICULTY_ASSETS[key];
+        const completed = state.currentTier >= difficulty.targetTier;
+        const practiceMode = state.currentTier >= 3;
+        return `
+          <button class="difficulty-card" type="button" data-difficulty="${key}" ${completed && !practiceMode ? "disabled" : ""}>
+            <img class="difficulty-frame" src="${asset.frame}" alt="">
+            <span class="difficulty-content">
+              <span class="difficulty-kicker">${practiceMode ? "TIER 3 PRACTICE" : `TIER ${difficulty.targetTier} DECODER`}</span>
+              <h2>${difficulty.label}</h2>
+              <span class="difficulty-target">${practiceMode ? "三階後新題目練習" : difficulty.targetItemName}</span>
+              <img class="decoder-thumb" src="${asset.decoder}" alt="">
+              <span class="difficulty-desc">${difficulty.description}</span>
+              <span class="difficulty-meta">${practiceMode ? "不提高掉落率，也不發放其他加成獎勵" : `名刀「日蝕」獨立掉落率 ${Math.round(difficulty.dropRate * 100)}%`}</span>
+              <span class="difficulty-action">${practiceMode ? "開始新題目" : (completed ? "此階已完成" : "開始解碼")}</span>
+            </span>
+          </button>`;
+      }
+
+      function renderDifficultySelection() {
+        refs.currentTierLabel.textContent = tierLabel(state.currentTier);
+        refs.eggheadStatus.textContent = state.eggheadRevealed ? "全隊已揭露" : "尚未揭露";
+        refs.difficultyGrid.innerHTML = Object.keys(api.DIFFICULTIES).map(difficultyCardMarkup).join("");
+        refs.difficultyGrid.querySelectorAll("[data-difficulty]").forEach(button => {
+          button.addEventListener("click", () => openPuzzle(button.dataset.difficulty));
+        });
+      }
+
+      function openPuzzle(key) {
+        const difficulty = api.DIFFICULTIES[key];
+        if (!difficulty || (state.currentTier < 3 && state.currentTier >= difficulty.targetTier)) return;
+        state.activeKey = key;
+        refs.difficultyScreen.classList.add("hidden");
+        refs.puzzleScreen.classList.remove("hidden");
+        setMessage(state.currentTier >= 3
+          ? "三階練習題：請排好十三張牌；完成後不會獲得其他加成獎勵。"
+          : "請從下方選牌，放到上方第 1～13 格。");
+        renderPuzzle();
+        window.scrollTo(0, 0);
+      }
+
+      function closePuzzle() {
+        state.activeKey = null;
+        refs.puzzleScreen.classList.add("hidden");
+        refs.difficultyScreen.classList.remove("hidden");
+        renderDifficultySelection();
+        window.scrollTo(0, 0);
+      }
+
+      function clueCardMarkup(card, options = {}) {
+        const selected = Boolean(options.selected);
+        const locked = Boolean(options.locked);
+        const rank = RANKS[card - 1] || String(card);
+        return `
+          <button class="formal-clue-card${selected ? " selected" : ""}${locked ? " locked" : ""}" type="button"
+            draggable="${options.draggable === false ? "false" : "true"}" ${options.dataAttribute || ""}
+            aria-label="約克的線索 ${card}，牌值 ${rank}">
+            <img class="item-card-frame" src="${FRAME_IMAGE}" alt="">
+            <span class="item-card-island-window"><img class="item-card-island" src="${ISLAND_IMAGES[card - 1]}" alt=""></span>
+            <span class="item-card-rank${rank.length > 1 ? " double" : ""}">${rank}</span>
+            <span class="item-card-rank corner-bottom${rank.length > 1 ? " double" : ""}" aria-hidden="true">${rank}</span>
+          </button>`;
+      }
+
+      function targetSlotMarkup(index, session) {
+        const card = session.slots[index];
+        const locked = session.lockedSlots[index];
+        const selected = card && session.selectedCard === card && session.selectedSource === "slot";
+        return `
+          <div class="target-slot" data-slot-index="${index}" aria-label="第 ${index + 1} 格${card ? `，目前為線索 ${card}` : "，空格"}">
+            ${card
+              ? clueCardMarkup(card, { selected, locked, draggable: !locked && !session.solved, dataAttribute: `data-placed-card="${card}"` })
+              : `<span class="slot-empty" aria-hidden="true"></span>`}
+            <button class="slot-lock ${locked ? "locked" : "unlocked"}" type="button" data-lock-index="${index}"
+              ${card && !session.solved ? "" : "disabled"} aria-label="${locked ? "解鎖" : "鎖定"}第 ${index + 1} 格"></button>
+          </div>`;
+      }
+
+      function bankCardMarkup(card, session) {
+        const selected = session.selectedCard === card && session.selectedSource === "bank";
+        return `
+          <span class="bank-card-wrap">
+            ${clueCardMarkup(card, { selected, draggable: !session.solved, dataAttribute: `data-bank-card="${card}"` })}
+            <span class="bank-card-label">線索 ${card}</span>
+          </span>`;
+      }
+
+      function renderPuzzle() {
+        const session = currentSession();
+        if (!session) return;
+        const puzzle = session.puzzle;
+        const difficulty = api.DIFFICULTIES[puzzle.difficultyKey];
+        const profile = puzzle.profile;
+        refs.puzzleTitle.textContent = `${difficulty.label}・${difficulty.targetItemName}`;
+        const filledCount = session.slots.filter(Number.isInteger).length;
+        const selectedClue = puzzle.clues.find(clue => clue.owner === session.selectedCard);
+        refs.seedStatus.textContent = selectedClue
+          ? `${selectedClue.owner} 號牌：${selectedClue.text}`
+          : `已放 ${filledCount}/13・直接 ${profile.direct}／關係 ${profile.relational}／寬鬆 ${profile.broad}`;
+        refs.uniqueBadge.textContent = puzzle.audit.count === 1 ? "唯一解" : "檢查中";
+        refs.uniqueBadge.setAttribute("aria-label", puzzle.audit.count === 1 ? "已驗證唯一解" : "題目檢查中");
+        refs.attemptBadge.textContent = `${session.attempts} 次`;
+        refs.attemptBadge.setAttribute("aria-label", `已確認 ${session.attempts} 次`);
+        refs.clueSummary.textContent = `每牌一條線索・關係距離最多 ${profile.maxRelationDistance} 格・保證唯一解`;
+        refs.sequencePanel.innerHTML = session.slots.map((_, index) => targetSlotMarkup(index, session)).join("");
+        refs.cardBank.innerHTML = session.bankOrder.map(card => bankCardMarkup(card, session)).join("");
+        refs.clueList.innerHTML = puzzle.clues.map(clue => `
+          <button class="clue-row${session.selectedCard === clue.owner ? " active" : ""}" type="button" data-clue-card="${clue.owner}">
+            <span class="clue-number">${clue.owner}</span><span class="clue-copy">${clue.text}</span>
+          </button>`).join("");
+        const disabled = session.solved || state.pendingSubmit;
+        [refs.shuffleButton, refs.unlockAllButton, refs.resetButton, refs.submitButton].forEach(button => { button.disabled = disabled; });
+        bindPuzzleEvents();
+      }
+
+      function bindPuzzleEvents() {
+        refs.sequencePanel.querySelectorAll("[data-slot-index]").forEach(slot => {
+          const slotIndex = Number(slot.dataset.slotIndex);
+          slot.addEventListener("click", event => {
+            if (event.target.closest("[data-lock-index]")) return;
+            handleSlotClick(slotIndex);
+          });
+          slot.addEventListener("dragover", event => {
+            event.preventDefault();
+            slot.classList.add("drag-over");
+          });
+          slot.addEventListener("dragleave", () => slot.classList.remove("drag-over"));
+          slot.addEventListener("drop", event => {
+            event.preventDefault();
+            slot.classList.remove("drag-over");
+            if (Number.isInteger(state.dragCard)) placeCardInSlot(state.dragCard, slotIndex);
+            state.dragCard = null;
+          });
+        });
+        refs.sequencePanel.querySelectorAll("[data-placed-card]").forEach(card => {
+          card.addEventListener("dragstart", event => {
+            state.dragCard = Number(card.dataset.placedCard);
+            event.dataTransfer.effectAllowed = "move";
+            event.dataTransfer.setData("text/plain", String(state.dragCard));
+          });
+          card.addEventListener("dragend", () => { state.dragCard = null; });
+        });
+        refs.sequencePanel.querySelectorAll("[data-lock-index]").forEach(button => {
+          button.addEventListener("click", event => {
+            event.stopPropagation();
+            toggleLock(Number(button.dataset.lockIndex));
+          });
+        });
+        refs.cardBank.querySelectorAll("[data-bank-card]").forEach(card => {
+          card.addEventListener("click", () => handleBankCardClick(Number(card.dataset.bankCard)));
+          card.addEventListener("dragstart", event => {
+            state.dragCard = Number(card.dataset.bankCard);
+            event.dataTransfer.effectAllowed = "move";
+            event.dataTransfer.setData("text/plain", String(state.dragCard));
+          });
+          card.addEventListener("dragend", () => { state.dragCard = null; });
+        });
+        [refs.cardBankDrop].forEach(dropZone => {
+          dropZone.addEventListener("dragover", event => {
+            event.preventDefault();
+            dropZone.classList.add("drag-over");
+          });
+          dropZone.addEventListener("dragleave", event => {
+            if (!dropZone.contains(event.relatedTarget)) dropZone.classList.remove("drag-over");
+          });
+          dropZone.addEventListener("drop", event => {
+            event.preventDefault();
+            dropZone.classList.remove("drag-over");
+            if (Number.isInteger(state.dragCard)) returnCardToBank(state.dragCard);
+            state.dragCard = null;
+          });
+        });
+        refs.clueList.querySelectorAll("[data-clue-card]").forEach(button => {
+          button.addEventListener("click", () => {
+            const session = currentSession();
+            const card = Number(button.dataset.clueCard);
+            session.selectedCard = card;
+            session.selectedSource = session.bankOrder.includes(card) ? "bank" : "slot";
+            setMessage(`${card} 號線索牌已選取；點上方未鎖定格即可放置或交換。`);
+            renderPuzzle();
+          });
+        });
+      }
+
+      function cardLocation(session, card) {
+        const bankIndex = session.bankOrder.indexOf(card);
+        if (bankIndex >= 0) return { source: "bank", index: bankIndex };
+        const slotIndex = session.slots.indexOf(card);
+        if (slotIndex >= 0) return { source: "slot", index: slotIndex };
+        return null;
+      }
+
+      function handleBankCardClick(card) {
+        const session = currentSession();
+        if (!session || session.solved) return;
+        if (session.selectedSource === "slot" && Number.isInteger(session.selectedCard)) {
+          const sourceIndex = session.slots.indexOf(session.selectedCard);
+          const bankIndex = session.bankOrder.indexOf(card);
+          if (sourceIndex >= 0 && bankIndex >= 0 && !session.lockedSlots[sourceIndex]) {
+            const placedCard = session.selectedCard;
+            session.slots[sourceIndex] = card;
+            session.bankOrder[bankIndex] = placedCard;
+            session.selectedCard = card;
+            session.selectedSource = null;
+            setMessage(`${card} 號牌已換入第 ${sourceIndex + 1} 格，${placedCard} 號牌回到下方。`);
+            renderPuzzle();
+            return;
+          }
+        }
+        if (session.selectedCard === card && session.selectedSource === "bank") {
+          session.selectedCard = null;
+          session.selectedSource = null;
+          setMessage(`${card} 號牌已取消選取。`);
+          renderPuzzle();
+          return;
+        }
+        session.selectedCard = card;
+        session.selectedSource = "bank";
+        setMessage(`${card} 號道具牌已選取；請點上方第 1～13 格。`);
+        renderPuzzle();
+      }
+
+      function handleSlotClick(index) {
+        const session = currentSession();
+        if (!session || session.solved || index < 0 || index >= api.CARD_COUNT) return;
+        if (session.lockedSlots[index]) {
+          setMessage(`第 ${index + 1} 格已鎖定，請先按鎖頭解鎖。`, "error");
+          renderPuzzle();
+          return;
+        }
+        if (session.selectedSource && Number.isInteger(session.selectedCard)) {
+          placeCardInSlot(session.selectedCard, index);
+          return;
+        }
+        const card = session.slots[index];
+        if (!Number.isInteger(card)) {
+          setMessage("這是空格；請先從下方選一張道具牌。", "error");
+          return;
+        }
+        session.selectedCard = card;
+        session.selectedSource = "slot";
+        setMessage(`${card} 號牌已從第 ${index + 1} 格選取；可點另一格交換，或點下方牌替換。`);
+        renderPuzzle();
+      }
+
+      function placeCardInSlot(card, targetIndex) {
+        const session = currentSession();
+        if (!session || session.solved || targetIndex < 0 || targetIndex >= api.CARD_COUNT) return;
+        if (session.lockedSlots[targetIndex]) {
+          setMessage(`第 ${targetIndex + 1} 格已鎖定，不能放入卡牌。`, "error");
+          return;
+        }
+        const location = cardLocation(session, card);
+        if (!location) return;
+        const targetCard = session.slots[targetIndex];
+        if (location.source === "bank") {
+          if (Number.isInteger(targetCard)) session.bankOrder[location.index] = targetCard;
+          else session.bankOrder.splice(location.index, 1);
+          session.slots[targetIndex] = card;
+        } else {
+          if (session.lockedSlots[location.index]) {
+            setMessage(`第 ${location.index + 1} 格已鎖定，不能移出卡牌。`, "error");
+            return;
+          }
+          if (location.index === targetIndex) {
+            session.selectedSource = null;
+            setMessage(`${card} 號牌維持在第 ${targetIndex + 1} 格。`);
+            renderPuzzle();
+            return;
+          }
+          session.slots[location.index] = targetCard;
+          session.slots[targetIndex] = card;
+        }
+        session.selectedCard = card;
+        session.selectedSource = null;
+        setMessage(`${card} 號道具牌已放到上方第 ${targetIndex + 1} 格。`);
+        renderPuzzle();
+      }
+
+      function returnCardToBank(card) {
+        const session = currentSession();
+        if (!session || session.solved) return;
+        const location = cardLocation(session, card);
+        if (!location || location.source === "bank") return;
+        if (session.lockedSlots[location.index]) {
+          setMessage(`第 ${location.index + 1} 格已鎖定，不能收回卡牌。`, "error");
+          return;
+        }
+        session.slots[location.index] = null;
+        session.bankOrder.push(card);
+        session.selectedCard = card;
+        session.selectedSource = "bank";
+        setMessage(`${card} 號牌已從第 ${location.index + 1} 格收回下方。`);
+        renderPuzzle();
+      }
+
+      function toggleLock(index) {
+        const session = currentSession();
+        if (!session || session.solved || index < 0 || index >= api.CARD_COUNT || !Number.isInteger(session.slots[index])) return;
+        session.lockedSlots[index] = !session.lockedSlots[index];
+        if (session.lockedSlots[index] && session.selectedSource === "slot" && session.selectedCard === session.slots[index]) {
+          session.selectedSource = null;
+        }
+        setMessage(`第 ${index + 1} 格已${session.lockedSlots[index] ? "鎖定" : "解鎖"}。`);
+        renderPuzzle();
+      }
+
+      function shuffleUnlocked() {
+        const session = currentSession();
+        if (!session || session.solved) return;
+        if (session.bankOrder.length < 2) {
+          setMessage("下方至少需要兩張卡牌才能洗牌。", "error");
+          return;
+        }
+        for (let index = session.bankOrder.length - 1; index > 0; index -= 1) {
+          const target = Math.floor(Math.random() * (index + 1));
+          [session.bankOrder[index], session.bankOrder[target]] = [session.bankOrder[target], session.bankOrder[index]];
+        }
+        session.selectedCard = null;
+        session.selectedSource = null;
+        setMessage(`已洗牌下方 ${session.bankOrder.length} 張未放置卡牌；上方格保持不動。`);
+        renderPuzzle();
+      }
+
+      function unlockAll() {
+        const session = currentSession();
+        if (!session || session.solved) return;
+        session.lockedSlots.fill(false);
+        session.selectedSource = null;
+        setMessage("十三個上方位置已全部解鎖；排列與下方牌區保持不動。" );
+        renderPuzzle();
+      }
+
+      function resetPuzzle() {
+        const session = currentSession();
+        if (!session || session.solved) return;
+        session.slots.fill(null);
+        session.bankOrder = [...session.puzzle.initialOrder];
+        session.lockedSlots.fill(false);
+        session.selectedCard = null;
+        session.selectedSource = null;
+        setMessage("已清空上方 13 格，所有正式道具牌回到下方初始順序。" );
+        renderPuzzle();
+      }
+
+      function submitPuzzle() {
+        const session = currentSession();
+        if (!session || session.solved) return;
+        session.attempts += 1;
+        if (session.slots.some(card => !Number.isInteger(card))) {
+          setMessage("上方仍有空格，請先放滿十三張卡牌。", "error");
+          renderPuzzle();
+          return;
+        }
+        if (!api.arraysEqual(session.slots, session.puzzle.solution)) {
+          setMessage("座標仍有誤，請重新比對十三條線索。", "error");
+          renderPuzzle();
+          return;
+        }
+        if (EMBEDDED) {
+          state.pendingSubmit = true;
+          setMessage("正在由主遊戲確認個人解碼結果……");
+          renderPuzzle();
+          sendParent("york-puzzle-submit", {
+            difficultyKey: session.puzzle.difficultyKey,
+            order: [...session.slots],
+          });
+          return;
+        }
+        const practice = state.currentTier >= 3;
+        session.solved = true;
+        state.currentTier = Math.max(state.currentTier, session.puzzle.targetTier);
+        const firstReveal = !state.eggheadRevealed;
+        if (!practice) state.eggheadRevealed = true;
+        showResult(session, practice ? false : firstReveal, { practice, rewardGranted: !practice });
+      }
+
+      function showResult(session, firstReveal, result = {}) {
+        const puzzle = session.puzzle;
+        const practice = Boolean(result.practice);
+        if (practice) {
+          refs.resultTierLabel.textContent = "練習結果";
+          refs.resultWorldLabel.textContent = "世界狀態";
+          refs.resultRateLabel.textContent = "名刀掉落率";
+          refs.resultTitle.textContent = `${api.DIFFICULTIES[puzzle.difficultyKey].label}新題目完成`;
+          refs.resultDescription.textContent = "你已完成三階後的練習題。本次只保留遊玩結果，不會新增解碼器、提升名刀掉落率或發放其他加成獎勵。";
+          refs.resultDecoder.src = DIFFICULTY_ASSETS[puzzle.difficultyKey].decoder;
+          refs.resultTier.textContent = "未獲得新道具或階級";
+          refs.resultRate.textContent = `${Math.round(Number(result.dropRate ?? api.eclipseDropRateForTier(state.currentTier)) * 100)}%（維持不變）`;
+          refs.resultWorld.textContent = "練習模式・不重播解鎖與獎勵";
+          refs.resultOverlay.classList.remove("hidden");
+          return;
+        }
+        refs.resultTierLabel.textContent = "個人升級";
+        refs.resultWorldLabel.textContent = "世界座標";
+        refs.resultRateLabel.textContent = "名刀掉落率";
+        refs.resultTitle.textContent = `${api.DIFFICULTIES[puzzle.difficultyKey].label}座標解碼成功`;
+        refs.resultDescription.textContent = firstReveal
+          ? "你完成了本隊第一份解碼，蛋頭島座標將對全隊揭露；解碼器階級則只屬於本玩家。"
+          : "蛋頭島座標已經揭露；本次成功只提升你的個人解碼器階級，不覆寫其他玩家狀態。";
+        refs.resultDecoder.src = DIFFICULTY_ASSETS[puzzle.difficultyKey].decoder;
+        refs.resultTier.textContent = result.itemName || puzzle.targetItemName;
+        refs.resultRate.textContent = `${Math.round(Number(result.dropRate ?? puzzle.dropRate) * 100)}%（每位參戰玩家各自判定）`;
+        refs.resultWorld.textContent = firstReveal ? "首次完成後揭露" : "已揭露・不重播全隊解鎖";
+        refs.resultOverlay.classList.remove("hidden");
+      }
+
+      window.addEventListener("message", event => {
+        if (!EMBEDDED || event.origin !== window.location.origin || event.source !== window.parent) return;
+        const message = event.data || {};
+        if (message.channel !== CHANNEL || message.type !== "york-puzzle-result") return;
+        const session = currentSession();
+        if (!session) return;
+        state.pendingSubmit = false;
+        if (!message.ok) {
+          session.solved = false;
+          setMessage("座標仍有誤，請重新比對十三條線索。", "error");
+          renderPuzzle();
+          return;
+        }
+        session.solved = true;
+        state.currentTier = Math.max(state.currentTier, Number(message.tier || session.puzzle.targetTier));
+        state.eggheadRevealed = Boolean(message.eggheadRevealed);
+        showResult(session, Boolean(message.firstReveal), message);
+      });
+
+      refs.exitButton.addEventListener("click", () => {
+        if (!sendParent("york-puzzle-close")) closePuzzle();
+      });
+      refs.backButton.addEventListener("click", closePuzzle);
+      refs.shuffleButton.addEventListener("click", shuffleUnlocked);
+      refs.unlockAllButton.addEventListener("click", unlockAll);
+      refs.resetButton.addEventListener("click", resetPuzzle);
+      refs.submitButton.addEventListener("click", submitPuzzle);
+      refs.resultClose.addEventListener("click", () => {
+        refs.resultOverlay.classList.add("hidden");
+        if (sendParent("york-puzzle-close", { afterSuccess: true })) return;
+        closePuzzle();
+      });
+
+      renderDifficultySelection();
+    })();
+  </script>
+</body>
+</html>

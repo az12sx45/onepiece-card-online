@@ -1,0 +1,22 @@
+# Installed dependencies
+node_modules/
+__pycache__/
+*.pyc
+
+# Local Codex and QA outputs
+.codex-runtime/
+.codex/
+_codex_artifacts/
+tmp/
+public/battle_chess/
+public/images/secret_modes/
+public/images/board/**/incoming/
+
+# Runtime Board saves are local/private state, never deployment source.
+server/data/board_saves/*.json
+server/data/board_campaigns/*.json
+
+# Local backup and restore snapshots
+backups/
+_codex_backups/
+_restore_backup_*/

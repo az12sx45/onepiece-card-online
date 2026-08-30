@@ -1,0 +1,4768 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>頂上戰爭篇示範</title>
+  <style>
+    :root {
+      --ink: #f8eed8;
+      --muted: #d4c39e;
+      --gold: #f1bf58;
+      --gold2: #ffe6a8;
+      --red: #cf4d3a;
+      --panel: rgba(7, 12, 17, .84);
+      --panel2: rgba(8, 13, 20, .96);
+      --line: rgba(255, 229, 177, .24);
+      --line2: rgba(255, 229, 177, .58);
+      --ice: #8edcff;
+      --light: #ffe58d;
+      --magma: #ff7442;
+      --sea: #5bb8c9;
+      font-family: "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html, body { margin: 0; width: 100%; min-height: 100%; overflow: hidden; background: #07090d; color: var(--ink); }
+    button { font: inherit; color: inherit; }
+
+    .marineford {
+      position: relative;
+      min-height: 100vh;
+      isolation: isolate;
+      background-image:
+        linear-gradient(180deg, rgba(5, 7, 10, .16), rgba(5, 7, 10, .78)),
+        url("images/board/marineford/backgrounds/marineford_stage_bg.webp"),
+        url("images/board/islands/marineford_island.webp");
+      background-size: cover, cover, cover;
+      background-position: center, center 44%, center 44%;
+    }
+
+    .marineford.conqueror-page-shock {
+      animation: conquerorPageShake 2.7s cubic-bezier(.16, .74, .22, 1) forwards;
+      transform-origin: center center;
+      will-change: transform;
+      backface-visibility: hidden;
+    }
+
+    .conqueror-video-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 12;
+      display: grid;
+      place-items: center;
+      background: #020308;
+      opacity: 0;
+      pointer-events: none;
+      animation: conquerorVideoIn .22s ease forwards;
+    }
+
+    .conqueror-video-layer.needs-sound {
+      pointer-events: auto;
+      cursor: pointer;
+    }
+
+    .conqueror-video-layer.fade-out {
+      animation: conquerorVideoOut .28s ease forwards;
+    }
+
+    .conqueror-video-layer video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .conqueror-video-sound-prompt {
+      position: absolute;
+      left: 50%;
+      bottom: 13vh;
+      transform: translateX(-50%);
+      min-width: 240px;
+      height: 50px;
+      border: 1px solid rgba(255, 238, 188, .72);
+      border-radius: 6px;
+      background: linear-gradient(180deg, rgba(26, 33, 43, .94), rgba(9, 13, 19, .96));
+      box-shadow: 0 0 28px rgba(114, 210, 255, .24), inset 0 0 18px rgba(255, 255, 255, .08);
+      color: var(--gold2);
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: .08em;
+    }
+
+    .conqueror-page-aura {
+      position: absolute;
+      inset: -12vh -10vw;
+      z-index: 11;
+      pointer-events: none;
+      opacity: 0;
+      background:
+        radial-gradient(circle at 50% 46%, rgba(255, 255, 255, .42), transparent 8%),
+        radial-gradient(circle at 50% 48%, rgba(142, 213, 255, .45), transparent 29%),
+        radial-gradient(circle at 50% 52%, rgba(4, 16, 31, .82), transparent 58%);
+      will-change: opacity, transform;
+      animation: conquerorPageAura 2.55s ease forwards;
+    }
+
+    .conqueror-page-aura::before,
+    .conqueror-page-aura::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 118vw;
+      height: 70vh;
+      border: 4px solid rgba(219, 245, 255, .86);
+      border-radius: 50%;
+      transform: translate(-50%, -50%) scale(.28);
+      opacity: 0;
+      animation: conquerorPageRing 2.25s ease forwards;
+    }
+
+    .conqueror-page-aura::after {
+      width: 145vw;
+      height: 86vh;
+      border-color: rgba(86, 169, 219, .58);
+      animation-delay: .12s;
+    }
+
+    .haki-bolt {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: min(74vw, 980px);
+      height: 5px;
+      transform-origin: left center;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .95), rgba(121, 211, 255, .9), transparent);
+      opacity: 0;
+      animation: conquerorBolt 1.85s ease forwards;
+    }
+
+    .haki-bolt:nth-child(1) { --bolt-angle: 18deg; animation-delay: .04s; }
+    .haki-bolt:nth-child(2) { --bolt-angle: 156deg; animation-delay: .11s; }
+    .haki-bolt:nth-child(3) { --bolt-angle: 78deg; animation-delay: .18s; }
+    .haki-bolt:nth-child(4) { --bolt-angle: 122deg; animation-delay: .25s; }
+    .haki-bolt:nth-child(5) { --bolt-angle: -28deg; animation-delay: .32s; }
+    .haki-bolt:nth-child(6) { --bolt-angle: -72deg; animation-delay: .39s; }
+
+    .marineford::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        linear-gradient(90deg, rgba(3, 6, 10, .96), rgba(3, 6, 10, .18) 30%, rgba(3, 6, 10, .18) 70%, rgba(3, 6, 10, .96)),
+        linear-gradient(180deg, rgba(5, 9, 15, .05), rgba(5, 9, 15, .72) 62%, rgba(3, 5, 8, .9)),
+        radial-gradient(circle at 50% 14%, rgba(255, 219, 139, .13), transparent 28%);
+      pointer-events: none;
+    }
+
+    .marineford::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 42vh;
+      z-index: -1;
+      background: linear-gradient(180deg, transparent, rgba(4, 7, 10, .86));
+      pointer-events: none;
+    }
+
+    .top-hud {
+      position: absolute;
+      inset: 16px 20px auto;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 14px;
+      align-items: start;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    .title small,
+    .chip span,
+    .slot small,
+    .card-meta,
+    .dialog-sub {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: .05em;
+    }
+
+    .title h1 {
+      margin: 2px 0 0;
+      font-size: clamp(29px, 3.5vw, 48px);
+      line-height: .9;
+      text-shadow: 0 6px 24px rgba(0, 0, 0, .62);
+    }
+
+    .raid-summary, .status-row, .tool-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      pointer-events: auto;
+    }
+
+    .raid-summary {
+      min-width: 300px;
+      align-self: start;
+      flex-direction: column;
+      gap: 2px;
+      border: 1px solid rgba(241, 191, 88, .36);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(14, 26, 36, .9), rgba(7, 10, 15, .82));
+      padding: 9px 15px 10px;
+      pointer-events: none;
+      text-align: center;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, .34);
+    }
+
+    .raid-summary span {
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: .08em;
+    }
+
+    .raid-summary strong {
+      color: var(--gold);
+      font-size: 20px;
+      line-height: 1.1;
+    }
+
+    .status-row { justify-content: flex-end; }
+
+    .tab, .btn, .icon-btn, .count-btn {
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: rgba(6, 10, 15, .7);
+      min-height: 38px;
+      padding: 0 13px;
+      cursor: pointer;
+      transition: transform .14s ease, border-color .14s ease, background .14s ease;
+    }
+
+    .tab:hover, .btn:hover, .icon-btn:hover, .count-btn:hover {
+      transform: translateY(-1px);
+      border-color: var(--line2);
+      background: rgba(30, 35, 44, .9);
+    }
+
+    .tab.active, .count-btn.active, .btn.primary {
+      border-color: rgba(241, 191, 88, .78);
+      background: linear-gradient(180deg, rgba(111, 72, 29, .9), rgba(46, 28, 17, .94));
+    }
+
+    .btn.danger {
+      border-color: rgba(207, 77, 58, .76);
+      background: linear-gradient(180deg, rgba(116, 34, 27, .94), rgba(49, 19, 17, .94));
+    }
+
+    .btn.rescue-dice {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-color: rgba(255, 223, 128, .78);
+      background:
+        radial-gradient(circle at 18% 18%, rgba(255, 255, 255, .28), transparent 28%),
+        linear-gradient(180deg, rgba(145, 82, 22, .98), rgba(72, 34, 12, .98));
+      color: #fff0bd;
+      box-shadow: 0 0 18px rgba(241, 191, 88, .22), inset 0 1px rgba(255,255,255,.15);
+    }
+
+    .chip.execution-countdown {
+      min-width: 210px;
+      display: grid;
+      grid-template-columns: minmax(72px, 1fr) auto;
+      grid-template-areas:
+        "label action"
+        "count action";
+      column-gap: 10px;
+      align-items: center;
+    }
+
+    .chip.execution-countdown span {
+      grid-area: label;
+    }
+
+    .chip.execution-countdown strong {
+      grid-area: count;
+      white-space: nowrap;
+    }
+
+    .chip.execution-countdown .btn.rescue-dice {
+      grid-area: action;
+      min-height: 32px;
+      padding: 0 10px;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .tab:disabled, .btn:disabled, .icon-btn:disabled, .count-btn:disabled {
+      opacity: .4;
+      transform: none;
+      cursor: default;
+    }
+
+    .chip {
+      min-width: 96px;
+      border: 1px solid rgba(255, 229, 177, .2);
+      border-radius: 8px;
+      background: rgba(5, 9, 14, .78);
+      padding: 7px 10px;
+      box-shadow: inset 0 1px rgba(255,255,255,.04);
+    }
+
+    .chip strong {
+      display: block;
+      color: var(--gold);
+      font-size: 19px;
+      line-height: 1.05;
+    }
+
+    .stage {
+      position: absolute;
+      inset: 90px 18px 18px;
+      display: grid;
+      grid-template-columns: minmax(230px, 280px) minmax(420px, 1fr) minmax(190px, 270px);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .side-lineup {
+      display: grid;
+      gap: 10px;
+      align-content: center;
+      min-height: 100%;
+      pointer-events: none;
+    }
+
+    .execution-intel {
+      pointer-events: auto;
+      align-content: start;
+      padding-top: 0;
+      transform: translateY(-22px);
+    }
+
+    .intel-panel {
+      display: grid;
+      gap: 8px;
+    }
+
+    .intel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      padding: 0 2px 1px;
+      color: var(--gold);
+      font-weight: 900;
+    }
+
+    .intel-head small {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .intel-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .intel-card {
+      width: 100%;
+      border: 1px solid rgba(255, 229, 177, .16);
+      border-radius: 8px;
+      background: rgba(4, 8, 13, .72);
+      color: var(--ink);
+      padding: 9px 10px;
+      text-align: left;
+      cursor: default;
+      transition: border-color .14s ease, background .14s ease, transform .14s ease;
+    }
+
+    button.intel-card {
+      cursor: pointer;
+    }
+
+    .intel-card.self {
+      border-color: rgba(241, 191, 88, .42);
+      background: linear-gradient(180deg, rgba(40, 29, 15, .78), rgba(5, 8, 13, .72));
+    }
+
+    .intel-card:hover {
+      transform: translateY(-1px);
+      border-color: rgba(241, 191, 88, .54);
+      background: rgba(23, 29, 38, .9);
+    }
+
+    .intel-card span,
+    .intel-card small {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.25;
+    }
+
+    .intel-card b {
+      display: block;
+      margin: 3px 0 4px;
+      color: var(--ink);
+      font-size: 17px;
+      line-height: 1.1;
+    }
+
+    .intel-card strong {
+      color: var(--gold);
+      font-size: 13px;
+      line-height: 1.2;
+    }
+
+    .intel-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .intel-actions button {
+      min-height: 28px;
+      border: 1px solid rgba(241, 191, 88, .34);
+      border-radius: 7px;
+      background: rgba(31, 23, 14, .86);
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 800;
+      padding: 0 8px;
+      cursor: pointer;
+    }
+
+    .intel-actions button:hover {
+      border-color: rgba(241, 191, 88, .7);
+      background: rgba(70, 45, 20, .92);
+    }
+
+    .intel-empty {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .fighter-card {
+      position: relative;
+      min-height: 196px;
+      border: 1px solid rgba(255, 229, 177, .2);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(12, 20, 28, .58), rgba(5, 8, 13, .92));
+      overflow: hidden;
+      display: grid;
+      align-content: end;
+      padding: 12px;
+      box-shadow: 0 18px 44px rgba(0, 0, 0, .34), inset 0 1px rgba(255,255,255,.05);
+    }
+
+    .fighter-card.main { min-height: 330px; }
+    #bossLineup {
+      align-content: start;
+      padding-top: clamp(24px, 4.2vh, 34px);
+      pointer-events: auto;
+    }
+
+    #bossLineup.raid-cleared {
+      pointer-events: none;
+    }
+
+    #bossLineup .fighter-card.main {
+      cursor: pointer;
+      transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+    }
+
+    #bossLineup .fighter-card.main:hover {
+      transform: translateY(-2px);
+      border-color: rgba(142, 220, 255, .78) !important;
+      box-shadow: 0 20px 54px rgba(0,0,0,.42), 0 0 22px rgba(142,220,255,.2);
+    }
+
+    .battle-prompt {
+      margin-top: 8px;
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: 900;
+      text-align: center;
+      letter-spacing: .08em;
+      text-shadow: 0 2px 7px rgba(0,0,0,.9), 0 0 14px rgba(241,191,88,.28);
+      animation: battleFloat 1.55s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes battleFloat {
+      0%, 100% { transform: translateY(0); opacity: .78; }
+      50% { transform: translateY(-7px); opacity: 1; }
+    }
+    .fighter-card.helper { min-height: 174px; }
+    .fighter-card.text-only {
+      min-height: 82px;
+      padding: 10px 12px;
+      align-content: center;
+    }
+
+    .enemy-title {
+      position: relative;
+      z-index: 3;
+      width: min(220px, calc(100% - 18px));
+      margin: 0 auto -2px;
+      border-top: 1px solid rgba(142, 220, 255, .52);
+      border-bottom: 1px solid rgba(142, 220, 255, .52);
+      background:
+        linear-gradient(90deg, transparent, rgba(7, 24, 35, .92) 18%, rgba(6, 12, 20, .98) 50%, rgba(7, 24, 35, .92) 82%, transparent);
+      color: var(--ice);
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: .18em;
+      line-height: 1;
+      padding: 8px 12px 7px;
+      text-align: center;
+      text-shadow: 0 2px 8px rgba(0,0,0,.88), 0 0 18px rgba(142,220,255,.26);
+      pointer-events: none;
+    }
+
+    .enemy-title::before,
+    .enemy-title::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 28px;
+      height: 1px;
+      background: rgba(142, 220, 255, .72);
+      box-shadow: 0 0 10px rgba(142, 220, 255, .34);
+    }
+
+    .enemy-title::before { left: 10px; }
+    .enemy-title::after { right: 10px; }
+
+    .enemy-title span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .enemy-title.defeated {
+      border-color: rgba(241, 191, 88, .64);
+      background:
+        linear-gradient(90deg, transparent, rgba(58, 41, 19, .92) 18%, rgba(16, 12, 7, .98) 50%, rgba(58, 41, 19, .92) 82%, transparent);
+      color: var(--gold2);
+    }
+
+    .fighter-card.defeated {
+      min-height: 116px;
+      border-color: rgba(241, 191, 88, .32);
+      background: linear-gradient(180deg, rgba(44, 31, 16, .72), rgba(5, 8, 13, .84));
+    }
+
+    .fighter-img {
+      position: absolute;
+      inset: 10px 10px 62px;
+      display: grid;
+      place-items: end center;
+      overflow: hidden;
+      border-radius: 7px;
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.14));
+    }
+
+    .fighter-img img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 18px 20px rgba(0, 0, 0, .58));
+    }
+
+    .fallback-face {
+      display: grid;
+      place-items: center;
+      width: 88px;
+      height: 88px;
+      border: 2px solid var(--line2);
+      border-radius: 50%;
+      background: rgba(0, 0, 0, .4);
+      color: var(--gold);
+      font-size: 34px;
+      font-weight: 800;
+    }
+
+    .fighter-copy {
+      position: relative;
+      z-index: 1;
+      margin: 0 -12px -12px;
+      padding: 70px 12px 12px;
+      background: linear-gradient(180deg, transparent, rgba(4, 7, 12, .96) 38%);
+    }
+
+    .fighter-copy b {
+      display: block;
+      font-size: clamp(17px, 2vw, 24px);
+      line-height: 1.08;
+    }
+
+    .fighter-card.text-only .fighter-copy {
+      margin: 0;
+      padding: 0;
+      background: none;
+    }
+
+    .execution-zone {
+      --platform-x: 50%;
+      --platform-y: -426px;
+      --platform-w: 94%;
+      --platform-maxh: 635px;
+      --platform-opacity: .82;
+      --platform-frame-y: 170px;
+      --platform-frame-h: 60px;
+      --platform-frame-w: 64%;
+      --slots-y: 140px;
+      --slots-w: 73%;
+      --slot-card-x: 0px;
+      --slot-card-y: 112px;
+      --slot-w: 166px;
+      --slot-h: 264px;
+      --slot-img-h: 250px;
+      --slot-img-scale: 1.13;
+      --slot-img-x: 0px;
+      --slot-img-y: 4px;
+      --slot-guard-x: 0px;
+      --guard-w: 410%;
+      --guard-y: -120px;
+      --guard-h: 574px;
+      --guard-opacity: .95;
+      --cut-guard-x: -3px;
+      --cut-guard-y: -13px;
+      --slot-timer-space: 67px;
+      --timer-x: -2px;
+      --timer-y: -61px;
+      --timer-size: 19px;
+      position: relative;
+      min-height: 100%;
+      display: grid;
+      align-items: center;
+      justify-items: center;
+      pointer-events: none;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      overflow: visible;
+    }
+
+    .execution-zone::before {
+      content: "";
+      display: none;
+      position: absolute;
+      left: 50%;
+      bottom: var(--platform-frame-y);
+      width: min(var(--platform-frame-w), 900px);
+      height: var(--platform-frame-h);
+      transform: translateX(-50%);
+      border: 1px solid rgba(241, 191, 88, .22);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, transparent 0 10%, rgba(255,255,255,.08) 10% 10.4%, transparent 10.4% 20%),
+        linear-gradient(180deg, rgba(109, 56, 39, .38), rgba(33, 21, 17, .62));
+      opacity: .74;
+    }
+
+    .platform-img {
+      position: absolute;
+      left: var(--platform-x);
+      bottom: var(--platform-y);
+      transform: translateX(-50%);
+      width: var(--platform-w);
+      max-height: var(--platform-maxh);
+      object-fit: contain;
+      opacity: var(--platform-opacity);
+      filter: drop-shadow(0 20px 34px rgba(0, 0, 0, .52));
+    }
+
+    .platform-fallback {
+      position: absolute;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      width: min(94%, 850px);
+      height: 230px;
+      border: 2px solid rgba(241, 191, 88, .34);
+      border-radius: 10px 10px 4px 4px;
+      background:
+        repeating-linear-gradient(90deg, rgba(255,255,255,.1) 0 3px, transparent 3px 36px),
+        linear-gradient(180deg, rgba(108, 57, 39, .62), rgba(34, 22, 17, .9));
+    }
+
+    .execution-slots {
+      position: relative;
+      z-index: 1;
+      width: min(var(--slots-w), 1120px);
+      display: grid;
+      grid-template-columns: repeat(var(--slot-count, 1), max-content);
+      gap: clamp(10px, 1.8vw, 24px);
+      justify-content: center;
+      align-self: center;
+      margin-bottom: var(--slots-y);
+    }
+
+    .slot-wrap {
+      position: relative;
+      width: var(--slot-card-w, var(--slot-w));
+      min-height: calc(var(--slot-card-h, var(--slot-h)) + var(--slot-timer-space));
+      padding-top: var(--slot-timer-space);
+      overflow: visible;
+    }
+
+    .slot-wrap.has-card::before {
+      content: "";
+      position: absolute;
+      left: calc(50% + var(--slot-guard-x, 0px));
+      top: calc(var(--slot-guard-y, var(--guard-y)) + var(--slot-timer-space));
+      z-index: 3;
+      width: var(--slot-guard-w, var(--guard-w));
+      height: var(--slot-guard-h, var(--guard-h));
+      transform: translateX(-50%);
+      background: url("images/board/marineford/props/execution_guard_crossed_swords.png") center center / contain no-repeat;
+      filter: drop-shadow(0 5px 8px rgba(0,0,0,.56));
+      opacity: var(--guard-opacity);
+      pointer-events: none;
+    }
+
+    .slot-wrap.execution-playing::before {
+      opacity: 0;
+      transition: opacity .18s ease;
+    }
+
+    .slot-wrap.rescued::before {
+      display: none;
+    }
+
+    .execution-cut-guard {
+      position: absolute;
+      left: calc(50% + var(--slot-guard-x, 0px) + var(--cut-guard-x, 0px));
+      top: calc(var(--slot-guard-y, var(--guard-y)) + var(--slot-timer-space) + var(--cut-guard-y, 0px));
+      z-index: 7;
+      width: var(--slot-guard-w, var(--guard-w));
+      height: var(--slot-guard-h, var(--guard-h));
+      transform: translateX(-50%);
+      object-fit: contain;
+      filter: drop-shadow(0 8px 12px rgba(0,0,0,.66));
+      pointer-events: none;
+    }
+
+    .rescue-shock {
+      position: absolute;
+      left: 50%;
+      top: calc(var(--slot-timer-space) + 52px);
+      z-index: 9;
+      width: 470%;
+      height: 330px;
+      transform: translateX(-50%);
+      pointer-events: none;
+      opacity: 0;
+      animation: conquerorShockBurst 2.05s ease forwards;
+    }
+
+    .rescue-shock::before,
+    .rescue-shock::after {
+      content: "";
+      position: absolute;
+      inset: 50% 50% auto auto;
+      width: 68%;
+      height: 42%;
+      transform: translate(50%, -50%) scale(1);
+      border: 3px solid rgba(232, 249, 255, .9);
+      border-radius: 50%;
+      box-shadow: none;
+    }
+
+    .rescue-shock::after {
+      width: 96%;
+      height: 68%;
+      border-color: rgba(94, 177, 229, .66);
+      animation-delay: .08s;
+    }
+
+    .rescue-cracks {
+      position: absolute;
+      inset: 15% 7%;
+      background:
+        linear-gradient(22deg, transparent 0 43%, rgba(239, 251, 255, .95) 43.4% 44.2%, transparent 44.8%),
+        linear-gradient(148deg, transparent 0 47%, rgba(18, 58, 88, .86) 47.2% 48.1%, rgba(159, 223, 255, .9) 48.4% 48.9%, transparent 49.4%),
+        linear-gradient(97deg, transparent 0 50%, rgba(255,255,255,.72) 50.2% 50.7%, transparent 51.1%),
+        linear-gradient(71deg, transparent 0 58%, rgba(111, 202, 255, .86) 58.2% 58.8%, transparent 59.2%);
+      opacity: 0;
+      transform: scale(.45);
+      animation: conquerorLightningFlash 1.8s ease .08s forwards;
+    }
+
+    .conqueror-guard-split {
+      position: absolute;
+      left: calc(50% + var(--slot-guard-x, 0px) + var(--cut-guard-x, 0px));
+      top: calc(var(--slot-guard-y, var(--guard-y)) + var(--slot-timer-space) + var(--cut-guard-y, 0px));
+      z-index: 7;
+      width: var(--slot-guard-w, var(--guard-w));
+      height: var(--slot-guard-h, var(--guard-h));
+      transform: translateX(-50%);
+      pointer-events: none;
+      will-change: transform, opacity;
+      overflow: visible;
+      backface-visibility: hidden;
+    }
+
+    .conqueror-guard-split.waiting .conqueror-guard-half {
+      animation-play-state: paused;
+    }
+
+    .conqueror-guard-half {
+      position: absolute;
+      inset: 0;
+      overflow: visible;
+      will-change: transform, opacity;
+      transform: translate3d(0, 0, 0);
+      backface-visibility: hidden;
+    }
+
+    .conqueror-guard-half.left {
+      transform-origin: 28% 88%;
+      animation: conquerorGuardFallLeft 2.15s cubic-bezier(.22, .05, .22, 1) forwards;
+    }
+
+    .conqueror-guard-half.right {
+      transform-origin: 72% 88%;
+      animation: conquerorGuardFallRight 2.15s cubic-bezier(.22, .05, .22, 1) forwards;
+    }
+
+    .conqueror-guard-half img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transform: translate3d(0, 0, 0);
+      backface-visibility: hidden;
+    }
+
+    .slot {
+      position: relative;
+      width: var(--slot-card-w, var(--slot-w));
+      height: var(--slot-card-h, var(--slot-h));
+      min-height: var(--slot-card-h, var(--slot-h));
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      overflow: visible;
+      padding: 0;
+      display: grid;
+      grid-template-rows: 1fr;
+      align-content: end;
+      box-shadow: none;
+      transform: translate(var(--slot-card-x, 0px), var(--slot-card-y, 0px));
+    }
+
+    .slot.empty {
+      opacity: .82;
+      background: transparent;
+    }
+
+    .timer-badge {
+      position: absolute;
+      left: calc(50% + var(--timer-x));
+      top: var(--timer-y);
+      z-index: 8;
+      width: max-content;
+      max-width: 240px;
+      transform: translateX(-50%);
+      color: var(--gold);
+      font-size: var(--timer-size);
+      font-weight: 800;
+      line-height: 1.1;
+      padding: 0 6px;
+      text-align: center;
+      white-space: normal;
+      -webkit-text-stroke: 3px rgba(0, 0, 0, .72);
+      paint-order: stroke fill;
+      text-shadow: 0 2px 7px rgba(0,0,0,.96), 0 0 14px rgba(241,191,88,.36);
+      pointer-events: none;
+    }
+
+    .slot-img {
+      position: relative;
+      z-index: 1;
+      min-height: var(--slot-card-img-h, var(--slot-img-h));
+      height: var(--slot-card-img-h, var(--slot-img-h));
+      border: 1px solid rgba(255, 229, 177, .2);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.06), transparent 36%),
+        rgba(0, 0, 0, .22);
+      overflow: hidden;
+      display: grid;
+      place-items: end center;
+      box-shadow: 0 10px 20px rgba(0,0,0,.34), inset 0 0 18px rgba(0,0,0,.44);
+    }
+
+    .slot-img > span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .slot-img img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 12px 16px rgba(0,0,0,.55)) grayscale(.18);
+      transform: translate(var(--slot-card-img-x, var(--slot-img-x)), var(--slot-card-img-y, var(--slot-img-y))) scale(var(--slot-card-img-scale, var(--slot-img-scale)));
+      transform-origin: center bottom;
+    }
+
+    .slot-img.is-rescued {
+      border-color: rgba(255, 229, 177, .78);
+      animation: rescuedCardPop .92s cubic-bezier(.2, .86, .21, 1) forwards;
+      box-shadow:
+        0 12px 24px rgba(0,0,0,.4),
+        0 0 26px rgba(241, 191, 88, .35),
+        inset 0 0 20px rgba(255, 229, 177, .2);
+    }
+
+    .slot-img.is-rescued::before {
+      content: "";
+      position: absolute;
+      inset: -30%;
+      z-index: 2;
+      background: radial-gradient(circle, rgba(255, 255, 255, .62), rgba(241, 191, 88, .22) 28%, transparent 58%);
+      opacity: 0;
+      animation: rescuedGlow .82s ease forwards;
+      pointer-events: none;
+    }
+
+    .slot-img.is-rescued img {
+      filter: drop-shadow(0 12px 16px rgba(0,0,0,.55)) grayscale(0) saturate(1.06) brightness(1.08);
+    }
+
+    .slot-img.is-sentenced {
+      animation: executionCondemn .42s ease forwards;
+    }
+
+    .slot-img.is-sentenced::after {
+      content: "";
+      position: absolute;
+      inset: -10% calc(50% - 2px);
+      z-index: 5;
+      background: linear-gradient(180deg, transparent, rgba(255, 255, 255, .95) 18%, rgba(255, 224, 132, .8) 50%, transparent 84%);
+      filter: blur(.4px) drop-shadow(0 0 10px rgba(255, 222, 132, .92));
+      opacity: 0;
+      pointer-events: none;
+      animation: executionCutFlash .34s ease .18s forwards;
+    }
+
+    .slot-img.is-hidden-after-split {
+      opacity: 0;
+    }
+
+    .execution-card-split {
+      position: absolute;
+      z-index: 6;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    .execution-card-split::before {
+      content: "";
+      position: absolute;
+      left: calc(50% - 2px);
+      top: -8%;
+      z-index: 8;
+      width: 4px;
+      height: 116%;
+      background: linear-gradient(180deg, transparent, rgba(255, 239, 184, .95) 20%, rgba(255, 255, 255, .88) 52%, transparent 88%);
+      opacity: 0;
+      filter: blur(.2px) drop-shadow(0 0 12px rgba(255, 214, 95, .78));
+      transform: scaleY(.2);
+    }
+
+    .execution-card-half {
+      position: absolute;
+      inset: 0;
+      overflow: visible;
+      will-change: transform, opacity, filter;
+    }
+
+    .execution-card-half.left {
+      clip-path: inset(0 50% 0 0);
+      transform-origin: 49% 52%;
+    }
+
+    .execution-card-half.right {
+      clip-path: inset(0 0 0 50%);
+      transform-origin: 51% 52%;
+    }
+
+    .execution-card-half .slot-img {
+      width: 100%;
+      height: 100%;
+      min-height: 100%;
+      filter: grayscale(1) saturate(.08) brightness(.58) contrast(1.12);
+      box-shadow: 0 16px 28px rgba(0,0,0,.42), inset 0 0 26px rgba(0,0,0,.62);
+    }
+
+    .execution-card-half .slot-img::after {
+      display: none;
+    }
+
+    .execution-card-split.is-splitting::before {
+      animation: executionSplitLine .34s ease forwards;
+    }
+
+    .execution-card-split.is-splitting .execution-card-half.left {
+      animation: executionSplitLeft 1.05s cubic-bezier(.17, .84, .22, 1) forwards;
+    }
+
+    .execution-card-split.is-splitting .execution-card-half.right {
+      animation: executionSplitRight 1.05s cubic-bezier(.17, .84, .22, 1) forwards;
+    }
+
+    @keyframes executionCondemn {
+      0% { filter: grayscale(.1) brightness(1); transform: scale(1); }
+      60% { filter: grayscale(1) saturate(.12) brightness(.68); transform: scale(.985); }
+      100% { filter: grayscale(1) saturate(.05) brightness(.54); transform: scale(.98); }
+    }
+
+    @keyframes executionCutFlash {
+      0% { opacity: 0; transform: scaleY(.1); }
+      28% { opacity: 1; transform: scaleY(1); }
+      100% { opacity: 0; transform: scaleY(1.06); }
+    }
+
+    @keyframes executionSplitLine {
+      0% { opacity: 0; transform: scaleY(.18); }
+      34% { opacity: 1; transform: scaleY(1); }
+      100% { opacity: 0; transform: scaleY(1.08); }
+    }
+
+    @keyframes executionSplitLeft {
+      0% { opacity: 1; transform: translate(0, 0) rotate(0deg); filter: blur(0); }
+      42% { opacity: .92; transform: translate(-22px, 6px) rotate(-3deg); filter: blur(.1px); }
+      100% { opacity: 0; transform: translate(-82px, 48px) rotate(-10deg); filter: blur(1.4px); }
+    }
+
+    @keyframes executionSplitRight {
+      0% { opacity: 1; transform: translate(0, 0) rotate(0deg); filter: blur(0); }
+      42% { opacity: .92; transform: translate(22px, 6px) rotate(3deg); filter: blur(.1px); }
+      100% { opacity: 0; transform: translate(82px, 48px) rotate(10deg); filter: blur(1.4px); }
+    }
+
+    @keyframes conquerorShockBurst {
+      0% { opacity: 0; transform: translateX(-50%) scale(.45); }
+      18% { opacity: 1; transform: translateX(-50%) scale(.68); }
+      52% { opacity: .9; transform: translateX(-50%) scale(.98); }
+      100% { opacity: 0; transform: translateX(-50%) scale(1.42); }
+    }
+
+    @keyframes conquerorVideoIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes conquerorVideoOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+
+    @keyframes conquerorPageAura {
+      0% { opacity: 0; transform: scale(.86); }
+      10% { opacity: .95; transform: scale(1); }
+      56% { opacity: .78; transform: scale(1.08); }
+      100% { opacity: 0; transform: scale(1.18); }
+    }
+
+    @keyframes conquerorPageRing {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(.22); }
+      18% { opacity: .98; transform: translate(-50%, -50%) scale(.62); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(1.18); }
+    }
+
+    @keyframes conquerorBolt {
+      0% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--bolt-angle, 0deg)) scaleX(.08); }
+      18% { opacity: 1; transform: translate(-50%, -50%) rotate(var(--bolt-angle, 0deg)) scaleX(1); }
+      68% { opacity: .8; transform: translate(-50%, -50%) rotate(var(--bolt-angle, 0deg)) scaleX(.92); }
+      100% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--bolt-angle, 0deg)) scaleX(1.08); }
+    }
+
+    @keyframes conquerorLightningFlash {
+      0% { opacity: 0; transform: scale(.28) rotate(-2deg); }
+      22% { opacity: 1; transform: scale(.78) rotate(.6deg); }
+      58% { opacity: .9; transform: scale(1.05) rotate(-.4deg); }
+      100% { opacity: 0; transform: scale(1.24) rotate(1.4deg); }
+    }
+
+    @keyframes conquerorGuardFallLeft {
+      0% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0deg); }
+      100% { opacity: 0; transform: translate3d(-158px, 132px, 0) rotate(-18deg); }
+    }
+
+    @keyframes conquerorGuardFallRight {
+      0% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0deg); }
+      100% { opacity: 0; transform: translate3d(158px, 132px, 0) rotate(18deg); }
+    }
+
+    @keyframes conquerorPageShake {
+      0% { transform: translate3d(0, 0, 0) rotate(0deg); }
+      7% { transform: translate3d(-14px, 8px, 0) rotate(-.22deg); }
+      15% { transform: translate3d(16px, -10px, 0) rotate(.24deg); }
+      25% { transform: translate3d(-12px, -7px, 0) rotate(-.18deg); }
+      37% { transform: translate3d(10px, 8px, 0) rotate(.14deg); }
+      51% { transform: translate3d(-8px, 4px, 0) rotate(-.1deg); }
+      67% { transform: translate3d(5px, -4px, 0) rotate(.07deg); }
+      84% { transform: translate3d(-3px, 2px, 0) rotate(-.03deg); }
+      100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+    }
+
+    @keyframes rescuedCardPop {
+      0% { transform: scale(.98); filter: grayscale(1) brightness(.62); }
+      42% { transform: scale(1.08); filter: grayscale(0) brightness(1.2); }
+      100% { transform: scale(1); filter: grayscale(0) brightness(1); }
+    }
+
+    @keyframes rescuedGlow {
+      0% { opacity: 0; transform: scale(.45); }
+      35% { opacity: 1; transform: scale(.82); }
+      100% { opacity: 0; transform: scale(1.35); }
+    }
+
+    .slot b {
+      display: block;
+      margin-top: 3px;
+      font-size: 15px;
+      line-height: 1.08;
+    }
+
+    .slot-copy {
+      display: none;
+    }
+
+    .phase-strip {
+      position: absolute;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      display: none;
+      gap: 8px;
+      pointer-events: auto;
+    }
+
+    .phase {
+      width: 92px;
+      border: 1px solid rgba(255, 229, 177, .22);
+      border-radius: 8px;
+      background: rgba(5, 9, 14, .82);
+      padding: 7px 8px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .phase.done { color: rgba(248, 238, 216, .48); opacity: .7; }
+    .phase.current { border-color: rgba(241, 191, 88, .78); color: var(--gold); background: rgba(62, 42, 20, .86); }
+
+    .bottom-dock {
+      position: absolute;
+      inset: auto 18px 16px;
+      z-index: 5;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(10, 16, 24, .96), rgba(5, 8, 12, .97));
+      padding: 13px 15px;
+      box-shadow: 0 18px 56px rgba(0, 0, 0, .4);
+    }
+
+    .hormone-panel {
+      position: absolute;
+      left: 18px;
+      bottom: 16px;
+      z-index: 6;
+      width: 132px;
+      height: 132px;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      padding: 0;
+      pointer-events: auto;
+      cursor: pointer;
+      filter: drop-shadow(0 14px 20px rgba(0,0,0,.55));
+      transition: transform .16s ease, filter .16s ease;
+    }
+
+    .hormone-panel:hover {
+      transform: translateY(-3px);
+      filter: drop-shadow(0 18px 24px rgba(0,0,0,.62)) drop-shadow(0 0 16px rgba(239,100,197,.22));
+    }
+
+    .hormone-panel.used {
+      opacity: .72;
+    }
+
+    .hormone-img {
+      width: 132px;
+      height: 132px;
+      border: 0;
+      border-radius: 0;
+      display: grid;
+      place-items: center;
+      overflow: visible;
+      background: transparent;
+      color: rgba(255, 216, 245, .9);
+      font-weight: 900;
+    }
+
+    .hormone-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .hormone-copy b {
+      display: block;
+      color: #ffd5f4;
+      font-size: 18px;
+      line-height: 1.1;
+    }
+
+    .hormone-copy span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+      margin-top: 4px;
+    }
+
+    .hormone-actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .hormone-actions button {
+      min-height: 30px;
+      border: 1px solid rgba(239, 100, 197, .36);
+      border-radius: 7px;
+      background: rgba(32, 14, 37, .88);
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 800;
+      padding: 0 8px;
+      cursor: pointer;
+    }
+
+    .hormone-actions button.used {
+      opacity: .46;
+      cursor: default;
+      text-decoration: line-through;
+    }
+
+    .dialog-title {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 2px;
+    }
+
+    .dock-actions {
+      display: flex;
+      gap: 9px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      height: 44px;
+      min-width: 112px;
+      font-weight: 800;
+    }
+
+    .modal-back {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: none;
+      place-items: center;
+      background: rgba(0, 0, 0, .56);
+      padding: 22px;
+    }
+
+    .modal-back.show { display: grid; }
+
+    .debug-back {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: none;
+      justify-content: flex-end;
+      align-items: flex-start;
+      background: rgba(0, 0, 0, .24);
+      padding: 18px;
+    }
+
+    .debug-back.show { display: flex; }
+
+    .debug-panel {
+      width: min(430px, calc(100vw - 36px));
+      border: 1px solid rgba(241, 191, 88, .62);
+      border-radius: 8px;
+      background: rgba(8, 12, 18, .98);
+      box-shadow: 0 22px 70px rgba(0, 0, 0, .56);
+      padding: 15px;
+    }
+
+    .debug-panel h2 {
+      margin: 0 0 4px;
+      font-size: 21px;
+    }
+
+    .debug-hint {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 12px;
+    }
+
+    .debug-section {
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+      margin-top: 12px;
+    }
+
+    .debug-section b {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .debug-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .debug-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .modal {
+      width: min(1020px, 100%);
+      max-height: min(760px, calc(100vh - 44px));
+      overflow: auto;
+      border: 1px solid var(--line2);
+      border-radius: 8px;
+      background: rgba(8, 12, 18, .98);
+      box-shadow: 0 28px 80px rgba(0,0,0,.55);
+      padding: 16px;
+    }
+
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+    }
+
+    .modal-head h2 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
+      gap: 10px;
+    }
+
+    .select-card {
+      border: 1px solid rgba(255, 229, 177, .2);
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(19, 28, 38, .86), rgba(7, 10, 15, .96));
+      padding: 11px;
+      min-height: 214px;
+      display: grid;
+      align-content: space-between;
+      cursor: pointer;
+      box-shadow: inset 0 1px rgba(255,255,255,.04);
+    }
+
+    button.select-card {
+      color: inherit;
+      text-align: left;
+      font: inherit;
+    }
+
+    .select-card.used { opacity: .48; }
+    .select-card.active {
+      border-color: rgba(241, 191, 88, .86);
+      box-shadow: inset 0 1px rgba(255,255,255,.06), 0 0 0 1px rgba(241, 191, 88, .25), 0 18px 42px rgba(0,0,0,.26);
+    }
+    .select-card img {
+      width: 100%;
+      height: 138px;
+      object-fit: contain;
+      border: 1px solid rgba(255, 229, 177, .12);
+      border-radius: 7px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.05), transparent 38%),
+        rgba(0, 0, 0, .22);
+    }
+    .select-card b { display: block; margin-top: 6px; }
+
+    .lottery-stage {
+      display: grid;
+      gap: 13px;
+    }
+
+    .lottery-reel {
+      position: relative;
+      border: 1px solid rgba(241, 191, 88, .32);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(18, 27, 37, .96), rgba(5, 8, 12, .98));
+      padding: 12px 12px 13px;
+      overflow: hidden;
+      box-shadow: inset 0 1px rgba(255,255,255,.05), 0 18px 42px rgba(0,0,0,.26);
+    }
+
+    .lottery-reel small {
+      display: block;
+      color: var(--gold2);
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .lottery-lane {
+      position: relative;
+      height: 164px;
+      border: 1px solid rgba(255, 229, 177, .2);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,.72), transparent 20%, transparent 80%, rgba(0,0,0,.72)),
+        linear-gradient(180deg, rgba(255,255,255,.05), transparent 38%),
+        rgba(0, 0, 0, .26);
+      overflow: hidden;
+    }
+
+    .lottery-lane::before {
+      content: "";
+      position: absolute;
+      top: 8px;
+      bottom: 8px;
+      left: 50%;
+      width: 138px;
+      transform: translateX(-50%);
+      z-index: 3;
+      border: 2px solid rgba(241, 191, 88, .84);
+      border-radius: 8px;
+      box-shadow: 0 0 0 1px rgba(0,0,0,.35), 0 0 30px rgba(241, 191, 88, .22);
+      pointer-events: none;
+    }
+
+    .lottery-track {
+      height: 100%;
+      display: flex;
+      gap: 10px;
+      align-items: stretch;
+      transform: translateX(0);
+      will-change: transform;
+    }
+
+    .lottery-track.is-running {
+      transform: translateX(var(--target-x));
+      transition: transform 2600ms cubic-bezier(.12, .76, .08, 1);
+    }
+
+    .lottery-token {
+      flex: 0 0 132px;
+      margin: 10px 0;
+      border: 1px solid rgba(255, 229, 177, .16);
+      border-radius: 8px;
+      background: rgba(7, 11, 17, .88);
+      display: grid;
+      grid-template-rows: 1fr auto;
+      gap: 5px;
+      place-items: end center;
+      padding: 7px 6px 8px;
+      overflow: hidden;
+    }
+
+    .lottery-token.hit {
+      border-color: rgba(241, 191, 88, .92);
+      background: linear-gradient(180deg, rgba(92, 59, 23, .92), rgba(10, 13, 17, .96));
+    }
+
+    .lottery-token img {
+      max-width: 112px;
+      max-height: 108px;
+      object-fit: contain;
+      filter: drop-shadow(0 13px 14px rgba(0, 0, 0, .56));
+    }
+
+    .lottery-token b {
+      width: 100%;
+      color: var(--ink);
+      font-size: 14px;
+      line-height: 1.05;
+      text-align: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .lottery-result {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 9px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .lottery-result strong {
+      color: var(--gold);
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .lottery-note {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(178px, 220px));
+      gap: 12px;
+      justify-content: start;
+    }
+
+    .result-card {
+      border: 1px solid rgba(255, 229, 177, .2);
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(19, 28, 38, .86), rgba(7, 10, 15, .96));
+      padding: 10px;
+      min-height: 238px;
+      display: grid;
+      align-content: space-between;
+      box-shadow: inset 0 1px rgba(255,255,255,.04);
+    }
+
+    .result-card img {
+      width: 100%;
+      height: 150px;
+      object-fit: contain;
+      border: 1px solid rgba(255, 229, 177, .12);
+      border-radius: 7px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.05), transparent 38%),
+        rgba(0, 0, 0, .22);
+    }
+
+    @media (max-width: 980px) {
+      html, body { overflow: auto; }
+      .marineford { min-height: 100svh; padding-bottom: 220px; }
+      .top-hud, .stage, .bottom-dock { position: relative; inset: auto; }
+      .top-hud, .stage, .bottom-dock { grid-template-columns: 1fr; margin: 0 14px; }
+      .top-hud { padding-top: 14px; }
+      .status-row { justify-content: flex-start; }
+      .stage { min-height: auto; margin-top: 16px; }
+      .execution-zone { min-height: 470px; }
+      .side-lineup { display: none; }
+      .execution-slots { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-bottom: 92px; }
+      .slot { min-height: 230px; }
+      .phase-strip { flex-wrap: wrap; justify-content: center; width: 100%; }
+      .bottom-dock { margin-top: 12px; }
+      .dock-actions { justify-content: flex-start; }
+      .lottery-lane { height: 154px; }
+      .lottery-token { flex-basis: 122px; }
+    }
+
+    /* 2026-07-23 formal Marineford image UI.
+       The existing full-screen stage, execution platform and every animation keep
+       their original dimensions and coordinates above this decorative layer. */
+    .marineford-ui-frame {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: fill;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .top-hud {
+      inset: 0;
+      display: block;
+      z-index: 4;
+    }
+
+    .top-hud .title {
+      position: absolute;
+      left: 5.1%;
+      top: 8.2%;
+      width: 18%;
+      height: 9.8%;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      padding: 0 8%;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .top-hud .title h1 {
+      width: 100%;
+      margin: 0;
+      color: #f5dfaa;
+      font-size: clamp(16px, 1.78vw, 29px);
+      line-height: 1;
+      letter-spacing: .08em;
+      white-space: nowrap;
+      text-shadow: 0 3px 6px rgba(0, 0, 0, .92);
+    }
+
+    .top-hud .status-row {
+      position: absolute;
+      top: 5.7%;
+      right: 2.55%;
+      width: 24.3%;
+      height: auto;
+      display: block;
+      pointer-events: auto;
+    }
+
+    .chip.execution-countdown {
+      position: relative;
+      width: 100%;
+      min-width: 0;
+      aspect-ratio: 3 / 1;
+      display: block;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: url("images/board/marineford_ui/marineford_countdown_rescue_dice_frame.webp") center / 100% 100% no-repeat;
+      box-shadow: none;
+      overflow: visible;
+    }
+
+    .chip.execution-countdown > span,
+    .chip.execution-countdown > strong,
+    .chip.execution-countdown .btn.rescue-dice {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      margin: 0;
+      padding: 0 7%;
+      overflow: hidden;
+      box-sizing: border-box;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .chip.execution-countdown > span {
+      left: 8.2%;
+      top: 22.2%;
+      width: 25.7%;
+      height: 18.8%;
+      color: #c8d9df;
+      font-size: clamp(6px, .62vw, 10px);
+      font-weight: 850;
+      letter-spacing: .08em;
+    }
+
+    .chip.execution-countdown > strong {
+      left: 7.7%;
+      top: 48%;
+      width: 26.7%;
+      height: 30.5%;
+      color: #f2d69a;
+      font-size: clamp(9px, 1vw, 16px);
+      line-height: 1;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, .92);
+    }
+
+    .chip.execution-countdown .btn.rescue-dice {
+      left: 50.6%;
+      top: 22.2%;
+      width: 40.6%;
+      height: 60.5%;
+      min-height: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      color: #e6edf0;
+      font-size: clamp(7px, .76vw, 12px);
+      font-weight: 950;
+      line-height: 1;
+      box-shadow: none;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, .92);
+    }
+
+    .chip.execution-countdown .btn.rescue-dice.available {
+      color: #ffe2a0;
+      filter: brightness(1.13);
+    }
+
+    .chip.execution-countdown .btn.rescue-dice:hover:not(:disabled),
+    .chip.execution-countdown .btn.rescue-dice:focus-visible {
+      outline: none;
+      transform: translateY(-1px);
+      filter: brightness(1.2);
+    }
+
+    .stage {
+      z-index: 2;
+    }
+
+    .execution-intel {
+      position: relative;
+      align-content: start;
+      padding-top: 0;
+      transform: none;
+    }
+
+    .intel-panel {
+      position: fixed;
+      left: 5%;
+      top: 23.5%;
+      z-index: 3;
+      width: 18.25%;
+      height: 54%;
+      display: block;
+      pointer-events: auto;
+    }
+
+    .intel-head {
+      position: absolute;
+      left: 4%;
+      top: 0;
+      width: 92%;
+      height: 5.5%;
+      min-height: 0;
+      padding: 0 8%;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      overflow: hidden;
+      color: #f2d79b;
+      font-size: clamp(9px, .9vw, 14px);
+      text-align: center;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, .94);
+    }
+
+    .intel-head small {
+      font-size: clamp(7px, .66vw, 10px);
+    }
+
+    .intel-list {
+      position: absolute;
+      left: 0;
+      top: 31%;
+      width: 100%;
+      height: 69%;
+      display: grid;
+      grid-template-rows: repeat(3, 29%);
+      align-content: space-between;
+      gap: 0;
+    }
+
+    .intel-card,
+    .intel-card.self {
+      position: relative;
+      width: 100%;
+      height: 18%;
+      min-height: 0;
+      aspect-ratio: auto;
+      display: block;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: url("images/board/marineford_ui/marineford_execution_intel_row_frame.webp") center / 100% 100% no-repeat;
+      box-shadow: none;
+      overflow: hidden;
+      transform: none;
+      text-align: center;
+    }
+
+    .intel-panel > .intel-card.self {
+      position: absolute;
+      left: 0;
+      top: 6%;
+      height: 24%;
+    }
+
+    .intel-list .intel-card {
+      height: 100%;
+    }
+
+    button.intel-card:hover,
+    button.intel-card:focus-visible,
+    .intel-card.self:hover {
+      outline: none;
+      border: 0;
+      background: url("images/board/marineford_ui/marineford_execution_intel_row_frame.webp") center / 100% 100% no-repeat;
+      filter: brightness(1.13);
+      transform: none;
+    }
+
+    .intel-card > .intel-portrait {
+      position: absolute;
+      left: 3.8%;
+      top: 27%;
+      width: 14.3%;
+      height: 52%;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .intel-card > .intel-portrait img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      object-position: center top;
+      filter: drop-shadow(0 3px 4px rgba(0, 0, 0, .82));
+    }
+
+    .intel-card > .intel-portrait .fallback-face {
+      display: grid;
+      width: 100%;
+      height: 100%;
+      place-items: center;
+      color: #f2d69a;
+      font-size: clamp(8px, .82vw, 13px);
+    }
+
+    .intel-card > .intel-player {
+      position: absolute;
+      left: 22.2%;
+      top: 20.9%;
+      width: 50.5%;
+      height: 13.1%;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      color: #c7d6dd;
+      font-size: clamp(8px, .7vw, 11px);
+      line-height: 1;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .intel-card > b {
+      position: absolute;
+      left: 20.4%;
+      top: 36%;
+      width: 54.5%;
+      height: 29.8%;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      margin: 0;
+      color: #f0e5ca;
+      font-size: clamp(10px, .9vw, 14px);
+      line-height: 1;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .intel-card > strong {
+      position: absolute;
+      left: 22.2%;
+      top: 68.4%;
+      width: 50.5%;
+      height: 11.9%;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      color: #f1cb78;
+      font-size: clamp(7px, .6vw, 10px);
+      line-height: 1.05;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .intel-card > small {
+      display: none;
+    }
+
+    .intel-actions {
+      position: absolute;
+      left: 77.5%;
+      top: 30%;
+      width: 15.6%;
+      height: 41.7%;
+      display: grid;
+      place-items: center;
+      margin: 0;
+      padding: 4% 8%;
+    }
+
+    .intel-actions button {
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      color: #e5edf0;
+      font-size: clamp(5px, .52vw, 8px);
+      line-height: 1;
+      padding: 0;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, .9);
+    }
+
+    .intel-actions button:hover:not(:disabled),
+    .intel-actions button:focus-visible {
+      outline: none;
+      border: 0;
+      background: transparent;
+      color: #ffe0a0;
+    }
+
+    .intel-empty {
+      position: absolute;
+      left: 8%;
+      top: 38%;
+      width: 84%;
+      padding: 5%;
+      color: #c5d4d9;
+      font-size: clamp(7px, .7vw, 11px);
+      text-align: center;
+    }
+
+    #bossLineup {
+      position: relative;
+      display: block;
+      align-content: initial;
+      padding-top: clamp(105px, 14vh, 128px);
+      pointer-events: auto;
+    }
+
+    #bossLineup .enemy-title {
+      position: fixed;
+      left: 78.7%;
+      top: 23.8%;
+      z-index: 5;
+      width: 13.5%;
+      height: 4.1%;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border: 0;
+      background: transparent;
+      color: #bfe4f1;
+      font-size: clamp(7px, .74vw, 12px);
+      line-height: 1;
+      text-align: center;
+    }
+
+    #bossLineup .enemy-title::before,
+    #bossLineup .enemy-title::after {
+      display: none;
+    }
+
+    #bossLineup .fighter-card.main {
+      position: fixed;
+      left: 74.4%;
+      top: 23.8%;
+      z-index: 3;
+      width: 21.8%;
+      height: 59.5%;
+      min-height: 0;
+      aspect-ratio: auto;
+      display: block;
+      padding: 0;
+      border: 0 !important;
+      border-radius: 0;
+      background: url("images/board/marineford_ui/marineford_current_boss_card_frame.webp") center / 100% 100% no-repeat;
+      box-shadow: none;
+      overflow: visible;
+    }
+
+    #bossLineup .fighter-card.main:hover {
+      border: 0 !important;
+      background: url("images/board/marineford_ui/marineford_current_boss_card_frame.webp") center / 100% 100% no-repeat;
+      box-shadow: none;
+      filter: brightness(1.08);
+      transform: none;
+    }
+
+    #bossLineup .fighter-card.main .fighter-img {
+      position: absolute;
+      left: 17.2%;
+      top: 17.2%;
+      right: auto;
+      bottom: auto;
+      z-index: 1;
+      width: 65.6%;
+      height: 48.7%;
+      display: grid;
+      place-items: end center;
+      overflow: hidden;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+    }
+
+    #bossLineup .fighter-card.main .fighter-img img {
+      width: 100%;
+      height: 100%;
+      max-width: none;
+      max-height: none;
+      object-fit: cover;
+      object-position: center top;
+      filter: drop-shadow(0 12px 14px rgba(0, 0, 0, .66));
+    }
+
+    #bossLineup .fighter-card.main .fighter-copy {
+      position: absolute;
+      left: 17.5%;
+      top: 69.8%;
+      z-index: 3;
+      width: 65%;
+      height: 19%;
+      margin: 0;
+      padding: 2% 7%;
+      display: grid;
+      grid-template-rows: 62% 38%;
+      align-items: center;
+      overflow: hidden;
+      background: transparent;
+      text-align: center;
+    }
+
+    #bossLineup .fighter-card.main .fighter-copy > small {
+      display: none;
+    }
+
+    #bossLineup .fighter-card.main .fighter-copy b,
+    #bossLineup .fighter-card.main .fighter-copy .card-meta {
+      width: 100%;
+      overflow: hidden;
+      margin: 0;
+      text-align: center;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    #bossLineup .fighter-card.main .fighter-copy b {
+      align-self: end;
+      color: #f3e2ba;
+      font-size: clamp(10px, 1.14vw, 18px);
+      line-height: 1;
+    }
+
+    #bossLineup .fighter-card.main .fighter-copy .card-meta {
+      align-self: start;
+      color: #b9d6df;
+      font-size: clamp(6px, .68vw, 11px);
+      line-height: 1.1;
+    }
+
+    #bossLineup .battle-prompt {
+      position: fixed;
+      left: 82%;
+      top: 78.6%;
+      z-index: 6;
+      width: 6.6%;
+      height: 3%;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      color: #f3d58e;
+      font-size: clamp(6px, .64vw, 10px);
+      line-height: 1;
+      text-align: center;
+      animation: battleFloat 1.55s ease-in-out infinite;
+    }
+
+    /* Marineford crew/support lottery image UI. */
+    .modal.lottery-modal {
+      position: relative;
+      isolation: isolate;
+      width: min(1360px, calc(100vw - 12px), calc((100vh - 12px) * 1.5));
+      height: auto;
+      max-height: calc(100vh - 12px);
+      aspect-ratio: 3 / 2;
+      overflow: hidden;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: url("images/board/marineford_ui/marineford_lottery_panel_frame.webp") center / 100% 100% no-repeat;
+      box-shadow: none;
+    }
+
+    .modal.lottery-modal::before {
+      content: "";
+      position: absolute;
+      left: 13.7%;
+      top: 23.2%;
+      z-index: 0;
+      width: 72.6%;
+      height: 59.8%;
+      background:
+        radial-gradient(circle at 50% 8%, rgba(42, 82, 111, .25), transparent 34%),
+        linear-gradient(180deg, #0a1b2d 0%, #071421 54%, #040b12 100%);
+      box-shadow: inset 0 0 80px rgba(0, 0, 0, .72);
+      pointer-events: none;
+    }
+
+    .modal.lottery-modal::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background: url("images/board/marineford_ui/marineford_lottery_panel_frame.webp") center / 100% 100% no-repeat;
+      pointer-events: none;
+    }
+
+    .modal-back.lottery-mode {
+      padding: 6px;
+      background: #010408;
+    }
+
+    .lottery-modal .modal-head {
+      position: absolute;
+      left: 24%;
+      top: 6.1%;
+      z-index: 8;
+      width: 52%;
+      height: 11%;
+      margin: 0;
+      padding: 0 5%;
+      display: block;
+      pointer-events: none;
+    }
+
+    .lottery-modal .modal-head h2 {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      margin: 0;
+      color: #f4dda6;
+      font-size: clamp(17px, 2vw, 30px);
+      line-height: 1;
+      letter-spacing: .08em;
+      text-align: center;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      text-shadow: 0 3px 6px rgba(0, 0, 0, .94);
+    }
+
+    .lottery-prompt-modal > .icon-btn,
+    .lottery-running-modal > .icon-btn {
+      display: none;
+    }
+
+    .lottery-result-modal > .icon-btn {
+      position: absolute;
+      left: 26.4%;
+      top: 85%;
+      z-index: 9;
+      width: 22.2%;
+      height: 9.5%;
+      display: grid;
+      place-items: center;
+      place-content: center;
+      padding: 0 !important;
+      pointer-events: auto;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      color: #d9e6ea;
+      font-size: clamp(16px, 1.5vw, 22px);
+      font-weight: 950;
+      line-height: 1;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, .92);
+    }
+
+    .lottery-modal > .dialog-sub,
+    .lottery-modal > .lottery-note {
+      position: absolute;
+      left: 30%;
+      top: 19%;
+      z-index: 5;
+      width: 40%;
+      height: 6.5%;
+      margin: 0 !important;
+      padding: 0 4%;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      color: #c8dce3;
+      font-size: clamp(10px, .94vw, 15px);
+      line-height: 1.25;
+      text-align: center;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, .94);
+    }
+
+    .lottery-prompt-modal > .result-grid {
+      position: absolute;
+      left: 14%;
+      top: 27%;
+      z-index: 4;
+      width: 72%;
+      height: 53.5%;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: repeat(2, minmax(0, 1fr));
+      gap: 1.5% 1.8%;
+      align-content: stretch;
+      justify-content: stretch;
+    }
+
+    .lottery-prompt-modal .result-card {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 0 !important;
+      display: block;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: url("images/board/marineford_ui/marineford_lottery_player_info_frame.webp") center / 100% 100% no-repeat;
+      box-shadow: none;
+      overflow: hidden;
+    }
+
+    .lottery-prompt-modal .result-card > div {
+      display: contents;
+    }
+
+    .lottery-prompt-modal .result-card b,
+    .lottery-prompt-modal .result-card .card-meta {
+      box-sizing: border-box;
+      position: absolute;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      margin: 0;
+      padding: 0 5%;
+      text-align: center;
+    }
+
+    .lottery-prompt-modal .result-card b {
+      left: 23%;
+      top: 12%;
+      width: 54%;
+      height: 17%;
+      color: #f1dfb4;
+      font-size: clamp(11px, 1.1vw, 17px);
+      line-height: 1;
+    }
+
+    .lottery-prompt-modal .result-card > div > .card-meta {
+      left: 14%;
+      top: 34%;
+      width: 72%;
+      height: 31%;
+      color: #c4d8df;
+      font-size: clamp(9px, .8vw, 13px);
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
+
+    .lottery-prompt-modal .result-card > .card-meta {
+      left: 25%;
+      top: 76%;
+      width: 50%;
+      height: 13%;
+      color: #f0c973;
+      font-size: clamp(9px, .82vw, 13px);
+      line-height: 1;
+    }
+
+    .lottery-modal > .tool-row {
+      position: absolute;
+      left: 26.4%;
+      top: 85%;
+      z-index: 8;
+      width: 47.5%;
+      height: 9.5%;
+      margin: 0 !important;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 7%;
+      justify-content: stretch !important;
+      align-items: stretch;
+    }
+
+    .lottery-modal > .tool-row .btn {
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      display: grid;
+      place-items: center;
+      place-content: center;
+      padding: 0 !important;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      color: #dbe8eb;
+      font-size: clamp(16px, 1.5vw, 22px);
+      font-weight: 950;
+      line-height: 1;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, .94);
+      box-shadow: none;
+    }
+
+    .lottery-modal > .tool-row .btn.primary {
+      color: #ffe0a0;
+    }
+
+    .lottery-modal > .tool-row .btn:hover:not(:disabled),
+    .lottery-modal > .tool-row .btn:focus-visible {
+      outline: none;
+      border: 0;
+      background: transparent;
+      filter: brightness(1.22);
+      transform: none;
+    }
+
+    .lottery-running-modal > .lottery-stage {
+      position: absolute;
+      left: 12.5%;
+      top: 24.8%;
+      z-index: 4;
+      width: 75%;
+      height: 58.2%;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: repeat(2, minmax(0, 1fr));
+      gap: 1.8% 1.2%;
+      align-content: center;
+      overflow: visible;
+    }
+
+    .lottery-running-modal > .lottery-stage.reel-count-1 {
+      left: 12%;
+      top: 25.1%;
+      width: 76%;
+      height: 56.1%;
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr;
+      overflow: hidden;
+    }
+
+    .lottery-running-modal > .lottery-stage.reel-count-1 .lottery-reel {
+      height: 100%;
+      aspect-ratio: auto;
+      align-self: stretch;
+    }
+
+    .lottery-running-modal > .lottery-stage.reel-count-1 .lottery-token {
+      flex-basis: clamp(82px, 7.6vw, 110px);
+      height: 78%;
+      margin: 0;
+    }
+
+    .lottery-running-modal > .lottery-stage.reel-count-1 .lottery-track {
+      align-items: center;
+    }
+
+    .lottery-running-modal > .lottery-stage.reel-count-1 .lottery-reel > small {
+      font-size: clamp(14px, 1.45vw, 22px);
+    }
+
+    .lottery-running-modal > .lottery-stage.reel-count-1 .lottery-token b,
+    .lottery-running-modal > .lottery-stage.reel-count-1 .lottery-result {
+      font-size: clamp(10px, .95vw, 15px);
+    }
+
+    .lottery-running-modal > .lottery-stage.reel-count-1 .lottery-result strong {
+      font-size: clamp(14px, 1.3vw, 20px);
+    }
+
+    .lottery-running-modal > .lottery-stage.reel-count-2 {
+      top: 38%;
+      height: auto;
+      grid-template-rows: auto;
+    }
+
+    .lottery-running-modal > .lottery-stage.reel-count-4 {
+      left: 12%;
+      top: 25.1%;
+      width: 76%;
+      height: 56.1%;
+      gap: 0 1.2%;
+      align-content: stretch;
+      overflow: hidden;
+    }
+
+    .lottery-running-modal > .lottery-stage.reel-count-4 .lottery-reel {
+      height: 100%;
+      aspect-ratio: auto;
+      align-self: stretch;
+    }
+
+    .lottery-reel {
+      position: relative;
+      width: 100%;
+      min-height: 0;
+      aspect-ratio: 2.16 / 1;
+      align-self: center;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      overflow: hidden;
+    }
+
+    .lottery-reel::before,
+    .lottery-reel::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: url("images/board/marineford_ui/marineford_player_lottery_reel_frame.webp") center / 100% 100% no-repeat;
+      pointer-events: none;
+    }
+
+    .lottery-reel::before {
+      z-index: 0;
+    }
+
+    .lottery-reel::after {
+      z-index: 3;
+    }
+
+    .lottery-reel > small {
+      position: absolute;
+      left: 33%;
+      top: 7%;
+      z-index: 4;
+      width: 34%;
+      height: 16%;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      color: #f0d79d;
+      font-size: clamp(9px, .78vw, 13px);
+      line-height: 1;
+      text-align: center;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .lottery-reel .lottery-lane {
+      position: absolute;
+      left: 9%;
+      top: 25%;
+      z-index: 1;
+      width: 82%;
+      height: 49%;
+      margin: 0;
+      border: 0;
+      border-radius: 0;
+      background: rgba(3, 8, 14, .42);
+      box-shadow: none;
+      overflow: hidden;
+    }
+
+    .lottery-reel .lottery-lane::before {
+      display: none;
+    }
+
+    .lottery-reel .lottery-track {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      gap: 6px;
+      padding: 0 4px;
+    }
+
+    .lottery-reel .lottery-token {
+      flex: 0 0 clamp(54px, 5.5vw, 78px);
+      height: calc(100% - 10px);
+      margin: 5px 0;
+      display: grid;
+      grid-template-rows: minmax(0, 1fr) auto;
+      place-items: center;
+      gap: 1px;
+      padding: 2px 3px;
+      border: 0;
+      border-radius: 3px;
+      background: rgba(5, 12, 20, .82);
+      box-shadow: none;
+    }
+
+    .lottery-reel .lottery-token.hit {
+      border: 0;
+      background: rgba(36, 27, 13, .9);
+      filter: brightness(1.12);
+    }
+
+    .lottery-reel .lottery-token img {
+      width: 100%;
+      height: 100%;
+      max-width: none;
+      max-height: none;
+      object-fit: cover;
+      object-position: center top;
+      filter: none;
+    }
+
+    .lottery-reel .lottery-token b {
+      width: 100%;
+      overflow: hidden;
+      color: #f1e4c5;
+      font-size: clamp(6px, .58vw, 9px);
+      line-height: 1;
+      text-align: center;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .lottery-reel .lottery-result {
+      position: absolute;
+      left: 10%;
+      top: 78%;
+      z-index: 4;
+      width: 80%;
+      height: 15%;
+      margin: 0;
+      display: grid;
+      grid-template-columns: 28% 44% 28%;
+      align-items: center;
+      gap: 0;
+      overflow: hidden;
+      color: #c2d6dc;
+      font-size: clamp(6px, .52vw, 9px);
+      line-height: 1;
+      text-align: center;
+    }
+
+    .lottery-reel .lottery-result > span,
+    .lottery-reel .lottery-result > strong {
+      box-sizing: border-box;
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      padding: 0 4%;
+      text-align: center;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+
+    .lottery-reel .lottery-result strong {
+      color: #f2d181;
+      font-size: clamp(8px, .72vw, 12px);
+      line-height: 1;
+    }
+
+    .lottery-result-modal > .result-grid {
+      position: absolute;
+      left: 14%;
+      top: 25%;
+      z-index: 4;
+      width: 72%;
+      height: 57%;
+      display: grid;
+      grid-template-columns: repeat(var(--lottery-result-count, 4), minmax(0, 1fr));
+      gap: 1.6%;
+      align-items: center;
+      justify-content: center;
+      justify-items: center;
+    }
+
+    .lottery-result-modal .result-card {
+      position: relative;
+      width: min(100%, 250px);
+      min-height: 0;
+      aspect-ratio: 4 / 5;
+      display: block;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: url("images/board/marineford_ui/marineford_lottery_result_character_frame.webp") center / 100% 100% no-repeat;
+      box-shadow: none;
+      overflow: hidden;
+    }
+
+    .lottery-result-modal .result-card > img {
+      position: absolute;
+      left: 18.5%;
+      top: 20%;
+      width: 63%;
+      height: 51%;
+      display: block;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      object-fit: cover;
+      object-position: center top;
+    }
+
+    .lottery-result-modal .result-card > div {
+      display: contents;
+    }
+
+    .lottery-result-modal .lottery-result-owner,
+    .lottery-result-modal .result-card b,
+    .lottery-result-modal .result-card .card-meta {
+      box-sizing: border-box;
+      position: absolute;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      margin: 0;
+      padding: 0 5%;
+      text-align: center;
+    }
+
+    .lottery-result-modal .lottery-result-owner {
+      left: 25%;
+      top: 9%;
+      width: 50%;
+      height: 10%;
+      color: #d7e4e7;
+      font-size: clamp(9px, .74vw, 12px);
+      line-height: 1;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .lottery-result-modal .result-card b {
+      left: 20%;
+      top: 73%;
+      width: 60%;
+      height: 8%;
+      color: #f2dca9;
+      font-size: clamp(10px, .9vw, 14px);
+      line-height: 1;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .lottery-result-modal .result-card .card-meta {
+      left: 18%;
+      top: 83%;
+      width: 64%;
+      height: 10%;
+      color: #c3d9df;
+      font-size: clamp(8px, .66vw, 11px);
+      line-height: 1.15;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+
+    .lottery-result-modal > .tool-row > :only-child {
+      grid-column: 2;
+    }
+
+    @media (max-width: 980px) {
+      html, body {
+        height: 100%;
+        overflow: hidden;
+      }
+
+      .marineford {
+        min-height: 100dvh;
+        padding-bottom: 0;
+        overflow: hidden;
+      }
+
+      .top-hud,
+      .stage {
+        position: absolute;
+        margin: 0;
+      }
+
+      .top-hud {
+        inset: 0;
+        padding-top: 0;
+      }
+
+      .stage {
+        inset: 90px 18px 18px;
+        grid-template-columns: minmax(210px, 26vw) minmax(360px, 1fr) minmax(170px, 24vw);
+        min-height: 0;
+        margin-top: 0;
+      }
+
+      .status-row {
+        justify-content: initial;
+      }
+
+      .side-lineup {
+        display: grid;
+      }
+
+      .execution-zone {
+        min-height: 100%;
+      }
+
+      .execution-slots {
+        grid-template-columns: repeat(var(--slot-count, 1), max-content);
+        margin-bottom: var(--slots-y);
+      }
+
+      .slot {
+        min-height: var(--slot-card-h, var(--slot-h));
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="marineford">
+    <img class="marineford-ui-frame" src="images/board/marineford_ui/marineford_raid_panel_frame.webp" alt="" aria-hidden="true">
+    <header class="top-hud">
+      <section class="title">
+        <small hidden>SPECIAL RAID</small>
+        <h1>頂上戰爭篇</h1>
+      </section>
+      <section class="raid-summary" aria-live="polite" hidden>
+        <span>海軍本部特殊副本</span>
+        <strong id="entryLabel">推進城全滅</strong>
+      </section>
+      <section class="status-row">
+        <div class="chip" hidden><span>處刑台</span><strong id="executionCount">1/4</strong></div>
+        <div class="chip" hidden><span>四連戰</span><strong id="progressText">0/4</strong></div>
+        <div class="chip execution-countdown">
+          <span>剩餘回合</span>
+          <strong id="remainingTurnsText">40 回合</strong>
+          <button class="btn rescue-dice" type="button" id="rescueDiceBtn">救援骰 x0</button>
+        </div>
+      </section>
+    </header>
+
+    <section class="stage">
+      <aside class="side-lineup execution-intel" id="helperLineup"></aside>
+      <section class="execution-zone" id="executionZone">
+        <img class="platform-img" src="images/board/marineford/props/execution_platform.webp" alt="處刑台" onerror="this.hidden=true;document.getElementById('platformFallback').hidden=false">
+        <div class="platform-fallback" id="platformFallback" hidden></div>
+        <div class="execution-slots" id="executionSlots"></div>
+        <div class="phase-strip" id="phaseStrip"></div>
+      </section>
+      <aside class="side-lineup" id="bossLineup"></aside>
+    </section>
+
+    <footer class="bottom-dock" hidden>
+      <section>
+        <div class="dialog-title" id="dialogTitle">準備進入海軍本部</div>
+        <span class="dialog-sub" id="dialogSub">確認處刑台與支援角色，準備挑戰青雉、黃猿、赤犬、戰國元帥。</span>
+      </section>
+      <section class="dock-actions" hidden>
+        <button class="btn" type="button" id="poolBtn">白鬍子池</button>
+        <button class="btn" type="button" id="teamBtn">隊伍狀態</button>
+        <button class="btn" type="button" id="rerollBtn">處刑台調整</button>
+        <button class="btn primary" type="button" id="startBtn">開始救援</button>
+        <button class="btn primary" type="button" id="battleBtn">進入戰鬥</button>
+        <button class="btn" type="button" id="stallBtn">整備1回合</button>
+      </section>
+    </footer>
+
+    <button class="hormone-panel" id="hormonePanel" type="button" aria-label="賀爾蒙注射">
+      <span class="hormone-img">
+        <img src="images/board/marineford/props/ivankov_hormone.webp" alt="伊娃科夫" onerror="this.hidden=true;this.nextElementSibling.hidden=false">
+        <span hidden>伊娃</span>
+      </span>
+    </button>
+
+    <div class="modal-back" id="modalBack">
+      <section class="modal" id="modal"></section>
+    </div>
+    <div class="debug-back" id="debugBack" aria-hidden="true">
+      <section class="debug-panel" id="debugPanel">
+        <h2>海軍本部測試選單</h2>
+        <span class="debug-hint">F2 或 Ctrl+Shift+M 開關；這裡只給測試切入口、玩家數與結算。</span>
+        <div class="debug-section">
+          <b>進入形式</b>
+          <div class="debug-grid">
+            <button class="tab active" type="button" data-debug-mode="wipe">推進城全滅</button>
+            <button class="tab" type="button" data-debug-mode="volunteer">自願挑戰</button>
+            <button class="tab" type="button" data-debug-mode="assist">幫忙救援</button>
+          </div>
+        </div>
+        <div class="debug-section">
+          <b>玩家數</b>
+          <div class="debug-grid">
+            <button class="count-btn active" type="button" data-debug-count="1">1人</button>
+            <button class="count-btn" type="button" data-debug-count="2">2人</button>
+            <button class="count-btn" type="button" data-debug-count="3">3人</button>
+            <button class="count-btn" type="button" data-debug-count="4">4人</button>
+          </div>
+        </div>
+        <div class="debug-actions">
+          <button class="btn primary" type="button" id="debugWinBtn">本戰勝利</button>
+          <button class="btn danger" type="button" id="debugLoseBtn">副本戰敗</button>
+          <button class="btn" type="button" id="debugResetBtn">重置示範</button>
+          <button class="btn" type="button" id="debugCloseBtn">關閉</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="js/board_cards.js?v=20260817-opening-roster-tiers-v2"></script>
+  <script>
+    (() => {
+      const cards = window.BoardCards?.cards || [];
+      const byId = Object.fromEntries(cards.map((card) => [card.id, card]));
+      const whitebeardIds = ["whitebeard", "ace", "marco", "jozu", "vista", "izo", "little_oars_jr", "squard"];
+      const compactNames = {
+        whitebeard: "白鬍子",
+        ace: "艾斯",
+        marco: "馬可",
+        jozu: "喬茲",
+        vista: "比斯塔",
+        izo: "以藏",
+        little_oars_jr: "小奧茲 Jr.",
+        squard: "史庫亞德",
+      };
+      const recruitableCardIds = cards
+        .filter((card) => card?.id && !String(card.id).startsWith("prison_"))
+        .sort((a, b) => ({ T1: 1, T2: 2, T3: 3, T4: 4, T5: 5, T6: 6 }[a.tier] || 9) - ({ T1: 1, T2: 2, T3: 3, T4: 4, T5: 5, T6: 6 }[b.tier] || 9))
+        .map((card) => card.id);
+      const crewFromPreferred = (preferred, count = 5) => {
+        const merged = [...preferred, ...recruitableCardIds].filter((id, index, list) => byId[id] && list.indexOf(id) === index);
+        return merged.slice(0, count);
+      };
+      const basePlayers = [
+        { id: "p1", name: "魯夫船長", crew: crewFromPreferred(["luffy", "zoro", "sanji", "nami", "robin"]) },
+        { id: "p2", name: "索隆船長", crew: crewFromPreferred(["zoro", "brook", "franky", "jinbe", "carrot"]) },
+        { id: "p3", name: "羅船長", crew: crewFromPreferred(["law", "kid", "killer", "hancock", "sabo"]) },
+        { id: "p4", name: "大和船長", crew: crewFromPreferred(["yamato", "kuzan", "smoker", "tashigi", "koby"]) },
+      ];
+      const bosses = [
+        { key: "aokiji", name: "青雉", phase: "第一戰", role: "冰凍果實能力者", tint: "var(--ice)" },
+        { key: "kizaru", name: "黃猿", phase: "第二戰", role: "閃閃果實能力者", tint: "var(--light)" },
+        { key: "akainu", name: "赤犬", phase: "第三戰", role: "岩漿果實能力者", tint: "var(--magma)" },
+        { key: "sengoku", name: "戰國元帥", phase: "最終戰", role: "海軍本部元帥", tint: "var(--gold)" },
+      ];
+      const state = {
+        mode: "wipe",
+        count: 1,
+        started: false,
+        finished: false,
+        win: false,
+        setupStep: "drawCrew",
+        bossIndex: 0,
+        rounds: 40,
+        players: JSON.parse(JSON.stringify(basePlayers)),
+        slots: [],
+        helpers: [],
+        returnedCardPool: [],
+        rewards: [],
+        lostWhitebeard: new Set(),
+        joinedWhitebeard: new Set(),
+        rescueDice: 0,
+        selectedSlotIndex: 0,
+        nextLeader: {},
+        hormoneUsed: {},
+        hormoneBoost: {},
+        rulesShown: false,
+        rulesActive: false,
+        rulesAckPending: false,
+        modalAfterClose: "",
+        pendingWhitebeardChoice: "",
+        resultModalShown: false,
+        failureConfirmPending: false,
+        failureAnimationDone: false,
+        successConfirmPending: false,
+        successAnimationDone: false,
+        animating: false,
+      };
+      const $ = (id) => document.getElementById(id);
+      const pageQuery = new URLSearchParams(location.search);
+      const BOARD_MODE = pageQuery.get("board") === "1";
+      const MARINEFORD_SNAPSHOT_KEY = "onepiece-board-marineford-snapshot-v1";
+      const MARINEFORD_COMMAND_KEY = "onepiece-board-marineford-command-v1";
+      const MARINEFORD_COMMAND_RESULT_KEY = "onepiece-board-marineford-command-result-v1";
+      const tier = (value) => ({ T1: "S", T2: "A", T3: "B", T4: "C", T5: "D", T6: "E" })[value] || value || "-";
+      const nameOf = (id) => compactNames[id] || byId[id]?.name || id || "空位";
+      const fullNameOf = (id) => byId[id]?.name || nameOf(id);
+      const initials = (text) => String(text || "?").replace(/[·・／\s.]/g, "").slice(0, 2);
+      const portrait = (id, mood = "normal") => byId[id]?.battlePortraits?.[mood] || `images/board/battle/portraits/${id}/${mood}.webp`;
+      const enemyPortrait = (key, mood = "normal") => `images/board/battle/enemies/${key}/${mood}.webp`;
+      const usedWhitebeards = () => new Set([...state.slots, ...state.helpers].map((entry) => entry.cardId).filter((id) => whitebeardIds.includes(id)));
+      const limitSupportHelpers = (helpers) => {
+        const usedPlayers = new Set();
+        const usedCards = new Set();
+        return (Array.isArray(helpers) ? helpers : []).filter((entry) => {
+          const playerId = entry?.playerId || "";
+          const cardId = entry?.cardId || "";
+          if (!playerId || !whitebeardIds.includes(cardId) || usedPlayers.has(playerId) || usedCards.has(cardId)) return false;
+          usedPlayers.add(playerId);
+          usedCards.add(cardId);
+          return true;
+        });
+      };
+      const unavailableWhitebeards = () => new Set([...state.lostWhitebeard, ...state.joinedWhitebeard, ...usedWhitebeards()]);
+      const availableWhitebeards = () => whitebeardIds.filter((id) => !unavailableWhitebeards().has(id));
+      const activePlayers = () => state.players.slice(0, state.count);
+      const pick = (list, seed) => list[Math.abs(Math.floor(seed * 9973)) % Math.max(1, list.length)] || "";
+      const randomPick = (list) => list[Math.floor(Math.random() * Math.max(1, list.length))] || "";
+      const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+      const nextFrame = () => new Promise((resolve) => requestAnimationFrame(() => resolve()));
+      const executionCutAnimationUrl = "images/board/marineford/props/execution_cut_video/marine_execution_raise_then_cut_snap_footlock_24fps.webp";
+      const executionTopGuardFrameUrl = "images/board/marineford/props/execution_cut_video/transparent_frames_24fps_raise_then_cut_snap_footlock/marine_execution_raise_cut_footlock24_122.png";
+      const conquerorIntroVideoUrl = "images/board/marineford/props/haki/conqueror_intro.mp4";
+      const executionTopGuardHalfUrls = {
+        left: "images/board/marineford/props/execution_cut_video/conqueror_guard_halves/execution_guard_top_left.png",
+        right: "images/board/marineford/props/execution_cut_video/conqueror_guard_halves/execution_guard_top_right.png",
+      };
+      const EXECUTION_TURNS = 40;
+      const EXECUTION_BONUS_DICE_MAX = 6;
+      const executionTurnsFor = () => EXECUTION_TURNS;
+
+      function sendBoardCommand(type, payload = {}) {
+        if (!BOARD_MODE) return null;
+        const command = {
+          id: `marineford-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+          type,
+          payload,
+        };
+        try {
+          localStorage.setItem(MARINEFORD_COMMAND_KEY, JSON.stringify(command));
+        } catch (_) {}
+        try {
+          window.parent?.postMessage({ type: "board-marineford-command", command }, window.location.origin || "*");
+        } catch (_) {}
+        return command;
+      }
+
+      function setFromArray(value) {
+        return new Set(Array.isArray(value) ? value.filter(Boolean) : []);
+      }
+
+      function applyBoardView(view) {
+        if (!view || typeof view !== "object") return false;
+        if (state.animating) return false;
+        const wasFinished = state.finished;
+        const wasRulesActive = state.rulesActive;
+        const modalOpen = $("modalBack")?.classList.contains("show");
+        const pendingModalAfterClose = state.modalAfterClose;
+        const incomingFinished = Boolean(view.finished);
+        const incomingWin = Boolean(view.win);
+        state.mode = view.mode || "wipe";
+        state.count = Math.max(1, Math.min(4, Number(view.count || view.players?.length || 1)));
+        state.started = Boolean(view.started);
+        state.finished = incomingFinished;
+        state.win = incomingWin;
+        state.setupStep = view.setupStep || (state.mode === "wipe" ? "drawCrew" : "chooseExecution");
+        state.bossIndex = Math.max(0, Math.min(bosses.length - 1, Number(view.bossIndex || 0)));
+        state.rounds = Math.max(0, Number(view.rounds || 0));
+        state.players = Array.isArray(view.players) && view.players.length
+          ? JSON.parse(JSON.stringify(view.players))
+          : JSON.parse(JSON.stringify(basePlayers.slice(0, state.count)));
+        state.slots = Array.isArray(view.slots) ? JSON.parse(JSON.stringify(view.slots)) : [];
+        if (BOARD_MODE && incomingFinished && !incomingWin && !state.failureAnimationDone) {
+          state.slots.forEach((slot) => {
+            if (slot?.cardId) slot.executed = false;
+          });
+        }
+        if (BOARD_MODE && incomingFinished && incomingWin && !state.successAnimationDone) {
+          state.slots.forEach((slot) => {
+            if (slot?.cardId) slot.rescued = false;
+          });
+        }
+        state.helpers = limitSupportHelpers(Array.isArray(view.helpers) ? JSON.parse(JSON.stringify(view.helpers)) : []);
+        state.returnedCardPool = Array.isArray(view.returnedCardPool) ? JSON.parse(JSON.stringify(view.returnedCardPool)) : [];
+        state.rewards = Array.isArray(view.rewards) ? view.rewards.slice() : [];
+        state.lostWhitebeard = setFromArray(view.lostWhitebeard);
+        state.joinedWhitebeard = setFromArray(view.joinedWhitebeard);
+        state.rescueDice = Math.max(0, Math.floor(Number(view.rescueDice || 0)));
+        state.selectedSlotIndex = Math.max(0, Number(view.selectedSlotIndex || 0));
+        state.nextLeader = view.nextLeader && typeof view.nextLeader === "object" ? { ...view.nextLeader } : {};
+        state.hormoneUsed = view.hormoneUsed && typeof view.hormoneUsed === "object" ? { ...view.hormoneUsed } : {};
+        state.hormoneBoost = view.hormoneBoost && typeof view.hormoneBoost === "object" ? { ...view.hormoneBoost } : {};
+        if (view.rulesShown) state.rulesAckPending = false;
+        state.rulesShown = Boolean(view.rulesShown) || state.rulesAckPending || wasRulesActive;
+        state.rulesActive = wasRulesActive && !view.rulesShown;
+        state.modalAfterClose = modalOpen ? pendingModalAfterClose : "";
+        if (!state.finished) {
+          state.resultModalShown = false;
+          state.failureConfirmPending = false;
+          state.failureAnimationDone = false;
+          state.successConfirmPending = false;
+          state.successAnimationDone = false;
+        }
+        render();
+        if (BOARD_MODE && state.finished && !wasFinished && !state.resultModalShown) {
+          state.resultModalShown = true;
+          setTimeout(() => {
+            if (!state.win) openFailureAnimationPrompt();
+            else openSuccessAnimationPrompt();
+          }, 100);
+        }
+        if (view.showRules && !state.rulesShown && !state.rulesActive && !$("modalBack").classList.contains("show")) openRulesModal();
+        return true;
+      }
+
+      function readBoardSnapshot() {
+        if (!BOARD_MODE) return false;
+        try {
+          const raw = localStorage.getItem(MARINEFORD_SNAPSHOT_KEY);
+          if (!raw) return false;
+          return applyBoardView(JSON.parse(raw)?.view);
+        } catch (_) {
+          return false;
+        }
+      }
+
+      function readBoardCommandResult(event) {
+        if (!BOARD_MODE || event?.key !== MARINEFORD_COMMAND_RESULT_KEY || !event?.newValue) return;
+        try {
+          const result = JSON.parse(event.newValue);
+          if (result?.view) applyBoardView(result.view);
+          if (result?.type === "rollRescueDie") showRescueRollResult(result.result);
+          if (result?.type === "startBattle" && result?.result && result.result.ok === false && (result.result.error || result.result.message)) {
+            openModal("無法開始戰鬥", `<div class="dialog-sub">${escapeText(result.result.error || result.result.message)}</div>`);
+          }
+        } catch (_) {}
+      }
+
+      function preloadImage(src) {
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.onload = () => resolve(true);
+          img.onerror = () => resolve(false);
+          img.src = src;
+        });
+      }
+
+      function preloadRescueAssets() {
+        return Promise.all([
+          preloadImage(executionTopGuardFrameUrl),
+          preloadImage(executionTopGuardHalfUrls.left),
+          preloadImage(executionTopGuardHalfUrls.right),
+        ]);
+      }
+
+      function playConquerorIntroVideo(page) {
+        return new Promise((resolve) => {
+          if (!page) {
+            resolve(false);
+            return;
+          }
+          const layer = document.createElement("div");
+          layer.className = "conqueror-video-layer";
+          const video = document.createElement("video");
+          video.src = conquerorIntroVideoUrl;
+          video.muted = false;
+          video.volume = 1;
+          video.playsInline = true;
+          video.preload = "auto";
+          video.setAttribute("playsinline", "");
+          video.removeAttribute("muted");
+          layer.appendChild(video);
+          page.appendChild(layer);
+          let done = false;
+          let prompted = false;
+          let promptButton = null;
+          let timeoutId = 0;
+          const finish = () => {
+            if (done) return;
+            done = true;
+            clearTimeout(timeoutId);
+            layer.classList.add("fade-out");
+            setTimeout(() => {
+              video.pause();
+              layer.remove();
+              resolve(true);
+            }, 300);
+          };
+          const armTimeout = (ms) => {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(finish, ms);
+          };
+          const startVideo = (fromPrompt = false) => {
+            if (done) return;
+            if (fromPrompt) {
+              try { video.currentTime = 0; } catch (_) {}
+            }
+            video.muted = false;
+            video.volume = 1;
+            video.removeAttribute("muted");
+            const playPromise = video.play();
+            if (playPromise?.then) {
+              playPromise
+                .then(() => {
+                  promptButton?.remove();
+                  promptButton = null;
+                  layer.classList.remove("needs-sound");
+                  armTimeout(11200);
+                })
+                .catch(() => {
+                  if (prompted) {
+                    finish();
+                    return;
+                  }
+                  prompted = true;
+                  clearTimeout(timeoutId);
+                  layer.classList.add("needs-sound");
+                  promptButton = document.createElement("button");
+                  promptButton.type = "button";
+                  promptButton.className = "conqueror-video-sound-prompt";
+                  promptButton.textContent = "點擊播放霸氣影片";
+                  promptButton.addEventListener("click", (event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    startVideo(true);
+                  }, { once: true });
+                  layer.appendChild(promptButton);
+                  armTimeout(30000);
+                });
+            } else {
+              armTimeout(11200);
+            }
+          };
+          video.addEventListener("ended", finish, { once: true });
+          video.addEventListener("error", finish, { once: true });
+          armTimeout(11200);
+          startVideo();
+        });
+      }
+
+      function capturedIdsForPlayer(playerId) {
+        return state.slots.filter((slot) => slot.playerId === playerId && slot.cardId).map((slot) => slot.cardId);
+      }
+
+      function helperIdsForPlayer(playerId) {
+        return state.helpers.filter((entry) => entry.playerId === playerId).map((entry) => entry.cardId);
+      }
+
+      function fighterIdsForPlayer(player) {
+        if (!player) return [];
+        const captured = new Set(capturedIdsForPlayer(player.id));
+        return player.crew.filter((id) => !captured.has(id)).concat(helperIdsForPlayer(player.id));
+      }
+
+      function leaderIdForPlayer(player) {
+        const fighters = fighterIdsForPlayer(player);
+        const chosen = state.nextLeader[player?.id];
+        return fighters.includes(chosen) ? chosen : fighters[0] || "";
+      }
+
+      function setLeaderForPlayer(playerId, cardId) {
+        const player = playerById(playerId);
+        const fighters = fighterIdsForPlayer(player);
+        if (!player || !fighters.includes(cardId)) return false;
+        state.nextLeader[playerId] = cardId;
+        if (player.crew.includes(cardId)) {
+          player.crew = [cardId, ...player.crew.filter((id) => id !== cardId)];
+        }
+        sendBoardCommand("switchLeader", { playerId, cardId });
+        return true;
+      }
+
+      function hardResetDemo() {
+        state.players = JSON.parse(JSON.stringify(basePlayers));
+        state.returnedCardPool = [];
+        state.rewards = [];
+        state.lostWhitebeard = new Set();
+        state.joinedWhitebeard = new Set();
+        state.rescueDice = 0;
+        state.nextLeader = {};
+        state.hormoneUsed = {};
+        state.hormoneBoost = {};
+        state.selectedSlotIndex = 0;
+        resetScenario();
+      }
+
+      function resetScenario() {
+        state.started = false;
+        state.finished = false;
+        state.win = false;
+        state.bossIndex = 0;
+        state.rounds = executionTurnsFor(0);
+        state.slots = [];
+        state.helpers = [];
+        state.rescueDice = 0;
+        state.selectedSlotIndex = 0;
+        state.rulesShown = false;
+        state.rulesActive = false;
+        state.rulesAckPending = false;
+        state.modalAfterClose = "";
+        state.pendingWhitebeardChoice = "";
+        state.resultModalShown = false;
+        state.failureConfirmPending = false;
+        state.failureAnimationDone = false;
+        state.successConfirmPending = false;
+        state.successAnimationDone = false;
+        state.hormoneUsed = {};
+        state.hormoneBoost = {};
+        if (state.mode === "wipe") {
+          state.setupStep = "drawCrew";
+        } else {
+          activePlayers().forEach((player, index) => {
+            state.slots.push({ playerId: player.id, playerName: player.name, cardId: "", source: "whitebeard", canJoinOnWin: true, roundsLeft: executionTurnsFor(index) });
+          });
+          state.setupStep = "chooseExecution";
+        }
+        render();
+        openRulesModal();
+      }
+
+      function renderImage(src, label, className = "") {
+        return `<span class="${className}"><img src="${src}" alt="${label}" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="fallback-face" hidden>${initials(label)}</span></span>`;
+      }
+
+      function cardMarkup(entry, options = {}) {
+        const id = entry?.cardId || "";
+        const card = byId[id] || {};
+        const cls = `${options.main ? "fighter-card main" : "fighter-card helper"}${options.noImage ? " text-only" : ""}`;
+        const meta = `${tier(card.tier)} ・ ${card.roleType || "角色"}${entry?.temporary ? " ・ 暫時支援" : ""}`;
+        return `
+          <article class="${cls}">
+            ${options.noImage ? "" : `<div class="fighter-img">${renderImage(portrait(id, options.mood || "normal"), nameOf(id))}</div>`}
+            <div class="fighter-copy">
+              <small>${entry?.playerName || options.kicker || ""}</small>
+              <b>${nameOf(id)}</b>
+              <span class="card-meta">${meta}</span>
+            </div>
+          </article>
+        `;
+      }
+
+      function currentSlotIndex() {
+        if (!state.slots.length) {
+          state.selectedSlotIndex = 0;
+          return 0;
+        }
+        state.selectedSlotIndex = Math.max(0, Math.min(state.slots.length - 1, Number(state.selectedSlotIndex || 0)));
+        return state.selectedSlotIndex;
+      }
+
+      function slotTimerText(slot, index) {
+        const turns = slot?.roundsLeft ?? executionTurnsFor(index);
+        return `距離處刑時間還有 ${turns} 回合`;
+      }
+
+      function slotStatusText(slot, index) {
+        if (slot?.rescued) return "已救出";
+        if (slot?.executed) return "已處刑";
+        return slotTimerText(slot, index);
+      }
+
+      function renderSlots() {
+        const index = currentSlotIndex();
+        const slot = state.slots[index];
+        const visibleSlot = slot && (slot.cardId || state.mode !== "wipe");
+        $("executionSlots").style.setProperty("--slot-count", "1");
+        if (!visibleSlot) {
+          $("executionSlots").innerHTML = "";
+          return;
+        }
+        const slotNo = index + 1;
+        if (slot.executed) {
+          $("executionSlots").innerHTML = "";
+          return;
+        }
+        if (!slot.cardId) {
+          $("executionSlots").innerHTML = `
+            <div class="slot-wrap" data-slot-index="${slotNo}">
+              ${slot.rescued ? "" : `<div class="timer-badge">${slotTimerText(slot, index)}</div>`}
+              <article class="slot empty">
+                <div class="slot-img"><span class="fallback-face">待</span></div>
+              </article>
+            </div>
+          `;
+          return;
+        }
+        $("executionSlots").innerHTML = `
+          <div class="slot-wrap has-card${slot.rescued ? " rescued" : ""}" data-slot-index="${slotNo}">
+            ${slot.rescued ? "" : `<div class="timer-badge">${slotTimerText(slot, index)}</div>`}
+            <article class="slot">
+              <div class="slot-img${slot.rescued ? " is-rescued" : ""}">${renderImage(portrait(slot.cardId, slot.rescued ? "normal" : "weak"), nameOf(slot.cardId))}</div>
+            </article>
+          </div>
+        `;
+      }
+
+      function renderExecutionIntel() {
+        const current = currentSlotIndex();
+        const currentSlot = state.slots[current];
+        const currentPlayer = playerById(currentSlot?.playerId) || activePlayers()[current];
+        const leaderId = leaderIdForPlayer(currentPlayer);
+        const selfVisible = currentSlot && (currentSlot.cardId || state.mode !== "wipe");
+        const others = state.slots
+          .map((slot, index) => ({ slot, index }))
+          .filter(({ slot, index }) => slot && index !== current && (slot.cardId || state.mode !== "wipe"));
+        $("helperLineup").innerHTML = `
+          <section class="intel-panel">
+            <div class="intel-head">
+              <span>處刑台詳情</span>
+              <small>${others.length ? `其他 ${others.length} 位` : "自己的"}</small>
+            </div>
+            ${selfVisible ? `
+              <article class="intel-card self">
+                ${currentSlot.cardId ? renderImage(portrait(currentSlot.cardId, currentSlot.rescued ? "normal" : "weak"), nameOf(currentSlot.cardId), "intel-portrait") : ""}
+                <span class="intel-player">自己的處刑台 ・ ${currentSlot.playerName}</span>
+                <b>${currentSlot.cardId ? nameOf(currentSlot.cardId) : "待選處刑者"}</b>
+                <strong>${slotStatusText(currentSlot, current)}</strong>
+                <small>下次首位：${leaderId ? nameOf(leaderId) : "目前沒有可出戰角色"}</small>
+                <div class="intel-actions">
+                  <button type="button" data-change-leader="${current}" ${leaderId ? "" : "disabled"}>換隊長</button>
+                </div>
+              </article>
+            ` : `
+              <article class="intel-card self">
+                <span class="intel-player">自己的處刑台</span>
+                <b>尚未抽出</b>
+                <strong>先完成進場流程</strong>
+              </article>
+            `}
+            ${others.length ? `
+              <div class="intel-list">
+                ${others.map(({ slot, index }) => `
+                  <button class="intel-card" type="button" data-view-slot="${index}">
+                    ${slot.cardId ? renderImage(portrait(slot.cardId, slot.rescued ? "normal" : "weak"), nameOf(slot.cardId), "intel-portrait") : ""}
+                    <span class="intel-player">${slot.playerName}</span>
+                    <b>${slot.cardId ? nameOf(slot.cardId) : "待選處刑者"}</b>
+                    <strong>${slotStatusText(slot, index)}</strong>
+                    <small>點擊切換查看這位的處刑台</small>
+                  </button>
+                `).join("")}
+              </div>
+            ` : `<div class="intel-empty">目前沒有其他玩家的處刑台資訊。</div>`}
+          </section>
+        `;
+      }
+
+      function renderSides() {
+        renderExecutionIntel();
+        $("bossLineup").classList.toggle("raid-cleared", Boolean(state.finished && state.win));
+        if (state.finished && state.win) {
+          $("bossLineup").innerHTML = `
+            <div class="enemy-title defeated"><span>已擊敗</span></div>
+            <article class="fighter-card text-only defeated">
+              <div class="fighter-copy">
+                <b>海軍本部突破</b>
+                <span class="card-meta">處刑台角色已救出</span>
+              </div>
+            </article>
+          `;
+          return;
+        }
+        const boss = bosses[Math.min(state.bossIndex, bosses.length - 1)] || bosses[0];
+        const promptText = state.finished
+          ? "▲ 查看結果 ▲"
+          : state.started
+            ? "▲ 點擊戰鬥 ▲"
+            : readyToStart()
+              ? "▲ 點擊開始救援 ▲"
+              : state.setupStep === "chooseExecution"
+                ? "▲ 點擊選擇處刑台 ▲"
+                : "▲ 點擊繼續整備 ▲";
+        $("bossLineup").innerHTML = `
+          <div class="enemy-title"><span>目前敵人</span></div>
+          <article class="fighter-card main" style="border-color:${boss.tint}" data-open-battle>
+            <div class="fighter-img">${renderImage(enemyPortrait(boss.key, state.started ? "angry" : "normal"), boss.name)}</div>
+            <div class="fighter-copy">
+              <b>${boss.name}</b>
+              <span class="card-meta">${boss.role}</span>
+            </div>
+          </article>
+          <div class="battle-prompt">${promptText}</div>
+        `;
+      }
+
+      function renderHormonePanel() {
+        const allUsed = activePlayers().length > 0 && activePlayers().every((player) => state.hormoneUsed[player.id]);
+        $("hormonePanel").classList.toggle("used", allUsed);
+        $("hormonePanel").setAttribute("aria-label", allUsed ? "賀爾蒙注射 已全部使用" : "賀爾蒙注射");
+      }
+
+      function renderPhases() {
+        $("phaseStrip").innerHTML = "";
+      }
+
+      function slotsReady() {
+        return state.slots.length > 0 && state.slots.every((slot) => slot.cardId);
+      }
+
+      function supportReady() {
+        return state.mode !== "wipe" || (state.helpers.length > 0 && state.helpers.length >= Math.min(state.count, state.slots.length));
+      }
+
+      function readyToStart() {
+        return state.setupStep === "ready" && slotsReady() && supportReady();
+      }
+
+      function soonestExecutionTurns() {
+        const fallback = executionTurnsFor(0);
+        const values = state.slots.filter((slot) => slot.cardId).map((slot) => slot.roundsLeft ?? fallback);
+        return values.length ? Math.min(...values) : fallback;
+      }
+
+      function tickExecutionTimers(amount) {
+        state.slots.forEach((slot) => {
+          if (!slot.cardId) return;
+          slot.roundsLeft = Math.max(0, (slot.roundsLeft ?? executionTurnsFor(0)) - amount);
+        });
+        state.rounds = soonestExecutionTurns();
+        return state.slots.some((slot) => slot.cardId && (slot.roundsLeft ?? 0) <= 0);
+      }
+
+      function addExecutionBonusTurns(amount) {
+        const bonus = Math.max(0, Math.floor(Number(amount || 0)));
+        if (!bonus) return 0;
+        let applied = false;
+        state.slots.forEach((slot) => {
+          if (!slot.cardId || slot.rescued || slot.executed) return;
+          slot.roundsLeft = Math.max(0, Number(slot.roundsLeft ?? 0)) + bonus;
+          applied = true;
+        });
+        if (applied) state.rounds = soonestExecutionTurns();
+        return applied ? bonus : 0;
+      }
+
+      function escapeText(value) {
+        return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          "\"": "&quot;",
+          "'": "&#39;",
+        })[char]);
+      }
+
+      function showRescueRollResult(result) {
+        if (!result) return;
+        if (!result.ok) {
+          openModal("救援骰", `<div class="dialog-sub">${escapeText(result.message || "現在不能擲救援骰。")}</div>`);
+          return;
+        }
+        openModal("救援骰", `
+          <div class="reward-list">
+            <article class="reward-card">
+              <b>擲出 ${Number(result.roll || 0)} 點</b>
+              <span class="card-meta">處刑倒數 +${Number(result.bonus || 0)} 回合</span>
+              <span class="card-meta">剩餘救援骰 x${Number(result.rescueDice || 0)} ・ 最近倒數 ${Number(result.rounds || 0)} 回合</span>
+            </article>
+          </div>
+        `);
+      }
+
+      function renderHud() {
+        const filledSlots = state.slots.filter((slot) => slot.cardId).length;
+        $("executionCount").textContent = `${filledSlots}/4`;
+        $("progressText").textContent = `${Math.min(state.bossIndex, 4)}/4`;
+        $("remainingTurnsText").textContent = state.finished
+          ? (state.win ? "已救出" : "已失守")
+          : `${soonestExecutionTurns()} 回合`;
+        const entryText = state.mode === "wipe" ? "推進城全滅" : state.mode === "assist" ? "幫忙救援" : "自願挑戰";
+        $("entryLabel").textContent = entryText;
+        document.querySelectorAll("[data-debug-mode]").forEach((button) => button.classList.toggle("active", button.dataset.debugMode === state.mode));
+        document.querySelectorAll("[data-debug-count]").forEach((button) => button.classList.toggle("active", Number(button.dataset.debugCount) === state.count));
+        const modeText = state.mode === "wipe" ? "推進城全滅：每位參戰玩家先抽自己隊伍一人上處刑台，再抽白鬍子暫時支援。"
+          : "自願挑戰/幫忙救援：從白鬍子海賊團挑角色上處刑台，通關後可選擇加入隊伍。";
+        let primaryText = "開始救援";
+        let primaryDisabled = false;
+        let adjustText = state.mode === "wipe" ? "重新抽籤" : "處刑台調整";
+        let adjustDisabled = state.started;
+        if (state.animating) {
+          primaryDisabled = true;
+          adjustDisabled = true;
+        }
+        if (state.finished) {
+          $("dialogTitle").textContent = state.win ? "救援成功" : "處刑台失守";
+          $("dialogSub").textContent = state.win
+            ? "救回處刑台角色，獲得 3D2Y 的報紙。白鬍子救援目標可決定是否加入隊伍。"
+            : (state.mode === "wipe" ? "我方處刑台角色回歸卡池，重新招募時修練等額外數值清除；剩餘隊伍回到羅格鎮重新出發。" : "白鬍子處刑台角色消失，之後不能再上處刑台或當幫手。");
+          primaryText = "已結算";
+          primaryDisabled = true;
+          adjustDisabled = true;
+        } else if (state.started) {
+          $("dialogTitle").textContent = `正在挑戰 ${bosses[state.bossIndex]?.name || "海軍本部"}`;
+          $("dialogSub").textContent = "限回合內打倒青雉、黃猿、赤犬、戰國元帥。";
+          primaryText = "救援中";
+          primaryDisabled = true;
+          adjustDisabled = true;
+        } else if (state.mode === "wipe" && state.setupStep === "drawCrew") {
+          $("dialogTitle").textContent = "抽處刑台角色";
+          $("dialogSub").textContent = "推進城全滅進入海軍本部時，先從每位參戰玩家自己的隊伍抽一位上處刑台。";
+          primaryText = "抽處刑台";
+          adjustText = "等待抽籤";
+          adjustDisabled = true;
+        } else if (state.mode === "wipe" && state.setupStep === "drawSupport") {
+          $("dialogTitle").textContent = "抽白鬍子支援";
+          $("dialogSub").textContent = "處刑台角色確定後，再從白鬍子海賊團抽暫時支援角色。";
+          primaryText = "抽支援角色";
+          primaryDisabled = !slotsReady();
+          adjustText = "已上處刑台";
+          adjustDisabled = true;
+        } else if (state.setupStep === "chooseExecution") {
+          $("dialogTitle").textContent = "選擇處刑台角色";
+          $("dialogSub").textContent = "自願挑戰與幫忙救援都可以從白鬍子海賊團挑一位上處刑台。";
+          primaryText = "選擇白鬍子";
+          adjustText = "處刑台調整";
+        } else if (readyToStart()) {
+          $("dialogTitle").textContent = "準備進入海軍本部";
+          $("dialogSub").textContent = modeText;
+          primaryText = "開始救援";
+        } else {
+          $("dialogTitle").textContent = "準備進入海軍本部";
+          $("dialogSub").textContent = modeText;
+          primaryDisabled = true;
+        }
+        $("startBtn").textContent = primaryText;
+        $("battleBtn").textContent = state.started && !state.finished ? `挑戰${bosses[state.bossIndex]?.name || "敵人"}` : "進入戰鬥";
+        const rescueDiceCount = Math.max(0, Number(state.rescueDice || 0));
+        $("rescueDiceBtn").textContent = `救援骰 x${rescueDiceCount}`;
+        $("rescueDiceBtn").classList.toggle("available", rescueDiceCount > 0 && !state.finished);
+        $("rerollBtn").textContent = adjustText;
+        $("startBtn").disabled = primaryDisabled || state.animating;
+        $("battleBtn").disabled = !state.started || state.finished || state.animating;
+        $("rescueDiceBtn").disabled = state.finished || state.animating || rescueDiceCount <= 0;
+        $("stallBtn").disabled = BOARD_MODE || !state.started || state.finished || state.animating;
+        $("rerollBtn").disabled = adjustDisabled;
+        $("debugWinBtn").disabled = !state.started || state.finished || state.animating;
+        $("debugLoseBtn").disabled = !state.started || state.finished || state.animating;
+      }
+
+      function openModal(title, body, className = "") {
+        const modal = $("modal");
+        const lotteryMode = className.split(/\s+/).includes("lottery-modal");
+        modal.className = `modal${className ? ` ${className}` : ""}`;
+        modal.innerHTML = `
+          <div class="modal-head">
+            <h2>${title}</h2>
+            <button class="icon-btn" type="button" data-close-modal>關閉</button>
+          </div>
+          ${body}
+        `;
+        $("modalBack").classList.toggle("lottery-mode", lotteryMode);
+        if (lotteryMode) {
+          const headerClose = modal.querySelector(".modal-head > [data-close-modal]");
+          if (headerClose) modal.appendChild(headerClose);
+        }
+        $("modalBack").classList.add("show");
+      }
+
+      function runModalAfterClose(action) {
+        if (!action) return;
+        setTimeout(() => {
+          if (action === "rulesFlow") {
+            if (state.mode === "wipe") openLotteryPrompt("crew");
+            else openSelectModal();
+          }
+          if (action === "drawSupport") openLotteryPrompt("support");
+        }, 90);
+      }
+
+      function closeModal() {
+        if (state.animating) return;
+        $("modalBack").classList.remove("show");
+        if (state.rulesActive) {
+          state.rulesAckPending = true;
+          sendBoardCommand("rulesShown", {});
+        }
+        const action = state.rulesActive ? "rulesFlow" : state.modalAfterClose;
+        state.rulesActive = false;
+        state.modalAfterClose = "";
+        runModalAfterClose(action);
+      }
+
+      function openRulesModal() {
+        if (state.rulesShown) return;
+        state.rulesShown = true;
+        state.rulesActive = true;
+        state.rulesAckPending = BOARD_MODE;
+        const entryText = state.mode === "wipe" ? "推進城全滅" : state.mode === "assist" ? "幫忙救援" : "自願挑戰";
+        const setupText = state.mode === "wipe"
+          ? "關閉說明後，會先抽出每位玩家隊伍中要上處刑台的夥伴，接著自動抽白鬍子海賊團暫時支援。"
+          : "關閉說明後，會直接選擇要上處刑台的白鬍子海賊團成員；選定後會先確認戰敗後果。";
+        openModal("頂上戰爭篇規則", `
+          <div class="dialog-sub" style="margin-bottom:12px">進入形式：${entryText}</div>
+          <div class="result-grid">
+            <article class="result-card">
+              <div>
+                <b>四連戰</b>
+                <span class="card-meta">依序挑戰青雉、黃猿、赤犬、戰國元帥。每場戰鬥結束會回到此頁面，不能靠一般方式補血或回 PP。</span>
+              </div>
+            </article>
+            <article class="result-card">
+              <div>
+                <b>處刑台</b>
+                <span class="card-meta">每位處刑者各自倒數，時間歸零就視為救援失敗。左側會顯示其他玩家的處刑台情報。</span>
+              </div>
+            </article>
+            <article class="result-card">
+              <div>
+                <b>賀爾蒙注射</b>
+                <span class="card-meta">左下角伊娃科夫功能，每位玩家本副本限用一次：全隊復活並回滿 HP / PP，下次開戰第 1 回合攻擊、防禦、閃避 +10%。</span>
+              </div>
+            </article>
+            <article class="result-card">
+              <div>
+                <b>接下來</b>
+                <span class="card-meta">${setupText}</span>
+              </div>
+            </article>
+          </div>
+          <div class="tool-row" style="justify-content:flex-end;margin-top:14px">
+            <button class="btn primary" type="button" data-rules-continue>開始副本流程</button>
+          </div>
+        `);
+      }
+
+      function setDebugMenu(open) {
+        $("debugBack").classList.toggle("show", open);
+        $("debugBack").setAttribute("aria-hidden", open ? "false" : "true");
+      }
+
+      function lotteryTokenHtml(reel, cardId) {
+        const mood = reel.source === "crew" ? "weak" : "normal";
+        return `
+          <div class="lottery-token">
+            <img src="${portrait(cardId, mood)}" alt="${nameOf(cardId)}" onerror="this.hidden=true">
+            <b>${nameOf(cardId)}</b>
+          </div>
+        `;
+      }
+
+      function buildLotteryView(reel, index) {
+        const candidates = (reel.candidates.length ? reel.candidates : [reel.resultId]).filter(Boolean);
+        const start = index * 3;
+        const tokens = Array.from({ length: 22 }, (_, tokenIndex) => candidates[(start + tokenIndex) % candidates.length]);
+        const targetIndex = 16 + (index % 3);
+        tokens[targetIndex] = reel.resultId;
+        return { reel, tokens, targetIndex };
+      }
+
+      function lotteryReelHtml(view, index) {
+        return `
+          <section class="lottery-reel">
+            <small>${view.reel.playerName}</small>
+            <div class="lottery-lane" data-lottery-lane="${index}">
+              <div class="lottery-track" data-lottery-track="${index}">
+                ${view.tokens.map((cardId) => lotteryTokenHtml(view.reel, cardId)).join("")}
+              </div>
+            </div>
+            <div class="lottery-result">
+              <span>${view.reel.source === "crew" ? "處刑台抽選" : "白鬍子支援"}</span>
+              <strong>抽籤中</strong>
+              <span>停在中央金框後公布</span>
+            </div>
+          </section>
+        `;
+      }
+
+      function startLotteryTrack(view, index) {
+        const track = document.querySelector(`[data-lottery-track="${index}"]`);
+        const lane = document.querySelector(`[data-lottery-lane="${index}"]`);
+        const token = track?.querySelector(".lottery-token");
+        if (!track || !lane || !token) return;
+        const gap = parseFloat(getComputedStyle(track).gap || "0") || 0;
+        const tokenWidth = token.getBoundingClientRect().width;
+        const laneWidth = lane.getBoundingClientRect().width;
+        const step = tokenWidth + gap;
+        const targetX = -((view.targetIndex * step) - ((laneWidth - tokenWidth) / 2));
+        track.style.setProperty("--target-x", `${targetX}px`);
+        requestAnimationFrame(() => track.classList.add("is-running"));
+      }
+
+      async function runLottery(title, reels, complete, resultTitle, resultNote) {
+        if (state.animating || !reels.length) return;
+        state.animating = true;
+        renderHud();
+        const views = reels.map(buildLotteryView);
+        openModal(title, `
+          <div class="lottery-note">角色卡帶會停在中央金框，停住的就是本次結果。</div>
+          <div class="lottery-stage reel-count-${Math.min(4, views.length)}">
+            ${views.map((view, index) => lotteryReelHtml(view, index)).join("")}
+          </div>
+        `, "lottery-modal lottery-running-modal");
+        await sleep(80);
+        views.forEach(startLotteryTrack);
+        await sleep(2750);
+        views.forEach((view, index) => {
+          const track = document.querySelector(`[data-lottery-track="${index}"]`);
+          track?.children?.[view.targetIndex]?.classList.add("hit");
+        });
+        await sleep(950);
+        const entries = complete();
+        state.animating = false;
+        render();
+        openDrawResultModal(resultTitle, entries, resultNote);
+      }
+
+      function openLotteryPrompt(kind) {
+        const isCrew = kind === "crew";
+        const ready = isCrew ? activePlayers().some((player) => player.crew.length) : slotsReady();
+        const title = isCrew ? "處刑台抽籤" : "白鬍子支援抽籤";
+        const note = isCrew
+          ? "按下開始後，會從每位玩家自己的隊伍抽一位送上處刑台。"
+          : "按下開始後，會從白鬍子海賊團抽出本次暫時支援角色。";
+        openModal(title, `
+          <div class="dialog-sub" style="margin-bottom:12px">${note}</div>
+          <div class="result-grid">
+            ${activePlayers().map((player, index) => {
+              const existingSlot = state.slots.find((slot) => slot.playerId === player.id);
+              const poolText = isCrew
+                ? `隊伍池：${player.crew.map(nameOf).join("、") || "無"}`
+                : `處刑台：${existingSlot?.cardId ? nameOf(existingSlot.cardId) : "尚未完成"}`;
+              return `
+                <article class="result-card" style="min-height:150px">
+                  <div>
+                    <b>${player.name}</b>
+                    <span class="card-meta">${poolText}</span>
+                  </div>
+                  <span class="card-meta">${isCrew ? "" : "支援角色不會與其他玩家重複"}</span>
+                </article>
+              `;
+            }).join("")}
+          </div>
+          <div class="tool-row" style="justify-content:flex-end;margin-top:14px">
+            <button class="btn" type="button" data-close-modal>先等等</button>
+            <button class="btn primary" type="button" data-start-lottery="${kind}" ${ready ? "" : "disabled"}>開始抽籤</button>
+          </div>
+        `, "lottery-modal lottery-prompt-modal");
+      }
+
+      function openDrawResultModal(title, entries, note) {
+        const resultSource = entries.every((entry) => entry.source === "crew")
+          ? "crew"
+          : entries.every((entry) => entry.source === "support")
+            ? "support"
+            : "";
+        const nextAction = resultSource === "crew"
+          ? `<button class="btn primary" type="button" data-continue-lottery-flow>繼續抽支援</button>`
+          : resultSource === "support"
+            ? `<button class="btn primary" type="button" data-start-ready-battle>挑戰${bosses[state.bossIndex]?.name || "敵人"}</button>`
+            : "";
+        openModal(title, `
+          <div class="dialog-sub" style="margin-bottom:10px">${note}</div>
+          <div class="result-grid" style="--lottery-result-count:${Math.max(1, Math.min(4, entries.length))}">
+            ${entries.map((entry) => {
+              const card = byId[entry.cardId] || {};
+              return `
+                <article class="result-card">
+                  <img src="${portrait(entry.cardId, entry.source === "crew" ? "weak" : "normal")}" alt="${nameOf(entry.cardId)}" onerror="this.hidden=true">
+                  <small class="lottery-result-owner">${entry.playerName}</small>
+                  <div>
+                    <b>${fullNameOf(entry.cardId)}</b>
+                    <span class="card-meta">${entry.playerName} ・ ${tier(card.tier)} ・ ${entry.source === "crew" ? "上處刑台" : "暫時支援"}</span>
+                  </div>
+                </article>
+              `;
+            }).join("")}
+          </div>
+          ${nextAction ? `<div class="tool-row" style="justify-content:flex-end;margin-top:14px">${nextAction}</div>` : ""}
+        `, "lottery-modal lottery-result-modal");
+      }
+
+      async function drawWipeCrewCaptives() {
+        const reels = activePlayers().map((player, index) => {
+          const crewId = randomPick(player.crew);
+          return { player, playerName: player.name, resultId: crewId, candidates: player.crew.slice(), source: "crew", roundsLeft: executionTurnsFor(index) };
+        });
+        await runLottery("處刑台抽籤", reels, () => {
+          state.slots = reels.filter((reel) => reel.resultId).map((reel) => ({
+            playerId: reel.player.id,
+            playerName: reel.player.name,
+            cardId: reel.resultId,
+            source: "crew",
+            cleanOnLoss: true,
+            roundsLeft: reel.roundsLeft,
+          }));
+          state.setupStep = "drawSupport";
+          state.rounds = soonestExecutionTurns();
+          return state.slots;
+        }, "處刑台抽籤結果", "已從自己的隊伍抽出上處刑台的角色，下一步抽白鬍子海賊團支援。");
+        sendBoardCommand("drawCrew", { slots: state.slots });
+        state.modalAfterClose = "drawSupport";
+      }
+
+      async function drawWipeSupport() {
+        let pool = availableWhitebeards();
+        const reels = activePlayers().map((player) => {
+          const cardId = randomPick(pool);
+          pool = pool.filter((id) => id !== cardId);
+          return { player, playerName: player.name, resultId: cardId, candidates: whitebeardIds.filter((id) => !state.lostWhitebeard.has(id) && !state.joinedWhitebeard.has(id)), source: "support" };
+        });
+        await runLottery("白鬍子支援抽籤", reels, () => {
+          state.helpers = limitSupportHelpers(reels.filter((reel) => reel.resultId).map((reel) => ({
+            playerId: reel.player.id,
+            playerName: reel.player.name,
+            cardId: reel.resultId,
+            source: "support",
+            temporary: true,
+          })));
+          state.setupStep = "ready";
+          return state.helpers;
+        }, "白鬍子支援抽籤", "支援角色只在本次海軍本部救援中暫時加入。");
+        sendBoardCommand("drawSupport", { helpers: state.helpers });
+      }
+
+      function handlePrimaryAction() {
+        if (state.started || state.finished) return;
+        if (state.mode === "wipe" && state.setupStep === "drawCrew") {
+          openLotteryPrompt("crew");
+          return;
+        }
+        if (state.mode === "wipe" && state.setupStep === "drawSupport") {
+          openLotteryPrompt("support");
+          return;
+        }
+        if (state.setupStep === "chooseExecution") {
+          openSelectModal();
+          return;
+        }
+        startRaid();
+      }
+
+      function handleAdjustAction() {
+        if (state.started || state.finished) return;
+        if (state.mode === "wipe") {
+          if (readyToStart()) resetScenario();
+          return;
+        }
+        openSelectModal();
+      }
+
+      function handleBossCardAction() {
+        if (state.animating) return;
+        if (state.finished) {
+          openResultModal();
+          return;
+        }
+        if (!state.started) {
+          if (readyToStart()) startBattleFromEnemy();
+          else handlePrimaryAction();
+          return;
+        }
+        startBattleFromEnemy();
+      }
+
+      function openBattleModal() {
+        if (!state.started || state.finished) return;
+        const boss = bosses[state.bossIndex] || bosses[0];
+        openModal(`挑戰${boss.name}`, `
+          <div class="grid">
+            <article class="select-card" style="min-height:240px;border-color:${boss.tint}">
+              <img src="${enemyPortrait(boss.key, "angry")}" alt="${boss.name}" onerror="this.hidden=true">
+              <div>
+                <b>${boss.name}</b>
+                <span class="card-meta">${boss.role} ・ 最近處刑倒數 ${soonestExecutionTurns()} 回合</span>
+              </div>
+            </article>
+            <article class="select-card" style="min-height:240px">
+              <div>
+                <b>本場出戰</b>
+                <span class="card-meta">${state.mode === "wipe" ? "救援隊與白鬍子暫時支援共同作戰。" : "玩家隊伍挑戰海軍本部，救援處刑台白鬍子角色。"}</span>
+              </div>
+              <div class="tool-row" style="justify-content:flex-start">${crewNames(state.helpers.map((entry) => entry.cardId).concat(activePlayers().flatMap((player) => player.crew)))}</div>
+            </article>
+          </div>
+          <div class="tool-row" style="justify-content:flex-end;margin-top:14px">
+            <button class="btn primary" type="button" data-battle-result="win">戰鬥勝利</button>
+            <button class="btn danger" type="button" data-battle-result="lose">戰鬥失敗</button>
+          </div>
+        `);
+      }
+
+      function openPoolModal() {
+        const used = usedWhitebeards();
+        openModal("白鬍子卡池", `
+          <div class="grid">
+            ${whitebeardIds.map((id) => {
+              const card = byId[id] || {};
+              const lost = state.lostWhitebeard.has(id);
+              const joined = state.joinedWhitebeard.has(id);
+              const active = used.has(id);
+              return `
+                <article class="select-card${lost || joined || active ? " used" : ""}" data-pool-id="${id}">
+                  <img src="${portrait(id)}" alt="${nameOf(id)}" onerror="this.hidden=true">
+                  <div>
+                    <b>${fullNameOf(id)}</b>
+                    <span class="card-meta">${tier(card.tier)} ・ ${card.attribute || "無"} ・ ${card.roleType || "角色"} ・ ${lost ? "消失鎖定" : joined ? "已加入隊伍" : active ? "本次使用中" : "可用"}</span>
+                  </div>
+                </article>
+              `;
+            }).join("")}
+          </div>
+        `);
+      }
+
+      function playerById(id) {
+        return state.players.find((entry) => entry.id === id);
+      }
+
+      function crewNames(ids) {
+        return (ids || []).filter(Boolean).map((id) => `<span>${nameOf(id)}</span>`).join("") || "<span>無</span>";
+      }
+
+      function useHormone(playerId) {
+        const player = playerById(playerId);
+        if (!player || state.hormoneUsed[playerId]) return;
+        state.hormoneUsed[playerId] = true;
+        state.hormoneBoost[playerId] = true;
+        sendBoardCommand("useHormone", { playerId });
+        renderHormonePanel();
+        openHormoneModal(`${player.name} 已完成賀爾蒙注射。`);
+      }
+
+      function openHormoneModal(message = "") {
+        openModal("賀爾蒙注射", `
+          ${message ? `<div class="dialog-sub" style="margin-bottom:10px;color:#ffd5f4">${message}</div>` : ""}
+          <div class="grid">
+            <article class="select-card" style="min-height:180px">
+              <div>
+                <b>效果</b>
+                <span class="card-meta">每位玩家本副本限用一次：全隊復活並回滿 HP / PP。</span>
+              </div>
+              <span class="card-meta">下次開戰第 1 回合攻擊、防禦、閃避全部 +10%。</span>
+            </article>
+            ${activePlayers().map((player) => {
+              const used = Boolean(state.hormoneUsed[player.id]);
+              const boosted = Boolean(state.hormoneBoost[player.id]);
+              const status = used ? boosted ? "已使用 ・ 下次開戰待觸發" : "已使用" : "尚未使用";
+              return `
+                <button class="select-card${used ? " used" : ""}" style="min-height:180px" type="button" data-hormone-player="${player.id}" ${used ? "disabled" : ""}>
+                  <div>
+                    <b>${player.name}</b>
+                    <span class="card-meta">${status}</span>
+                  </div>
+                  <span class="card-meta">${used ? "本副本不能再次注射。" : "點擊替這位玩家執行賀爾蒙注射。"}</span>
+                </button>
+              `;
+            }).join("")}
+          </div>
+        `);
+      }
+
+      function openTeamModal() {
+        openModal("參戰狀態", `
+          <div class="grid">
+            ${activePlayers().map((player) => {
+              const captured = state.slots.filter((slot) => slot.playerId === player.id && slot.cardId).map((slot) => slot.cardId);
+              const helpers = state.helpers.filter((entry) => entry.playerId === player.id).map((entry) => entry.cardId);
+              const fighters = player.crew.filter((id) => !captured.includes(id)).concat(helpers);
+              return `
+                <article class="select-card" style="min-height:190px">
+                  <div>
+                    <b>${player.name}</b>
+                    <span class="card-meta">隊伍 ${player.crew.length}/6</span>
+                  </div>
+                  <div class="tool-row" style="justify-content:flex-start;margin-top:8px">${crewNames(fighters)}</div>
+                  <span class="card-meta">處刑台：${captured.map(nameOf).join("、") || "無"}${helpers.length ? ` ・ 暫時支援：${helpers.map(nameOf).join("、")}` : ""}</span>
+                </article>
+              `;
+            }).join("")}
+            <article class="select-card" style="min-height:190px">
+              <div>
+                <b>回歸卡池</b>
+                <span class="card-meta">推進城全滅挑戰失敗後，這些角色需重新招募，修練與額外數值清除；剩餘隊伍回到羅格鎮重新出發。</span>
+              </div>
+              <div class="tool-row" style="justify-content:flex-start">${crewNames(state.returnedCardPool.map((entry) => entry.cardId))}</div>
+            </article>
+            <article class="select-card" style="min-height:190px">
+              <div>
+                <b>獎勵</b>
+                <span class="card-meta">${state.rewards.length ? state.rewards.join("、") : "尚未取得"}</span>
+              </div>
+            </article>
+          </div>
+        `);
+      }
+
+      function openLeaderModal(slotIndex = currentSlotIndex()) {
+        const slot = state.slots[Math.max(0, Math.min(state.slots.length - 1, Number(slotIndex || 0)))];
+        const player = playerById(slot?.playerId) || activePlayers()[Number(slotIndex || 0)];
+        const fighters = fighterIdsForPlayer(player);
+        const leaderId = leaderIdForPlayer(player);
+        if (!player) return;
+        openModal("更換下次戰鬥首位角色", `
+          <div class="dialog-sub" style="margin-bottom:10px">${player.name} 下次進入戰鬥時，會由選中的角色先上場。</div>
+          ${fighters.length ? `
+            <div class="grid">
+              ${fighters.map((id) => {
+                const card = byId[id] || {};
+                return `
+                  <button class="select-card${id === leaderId ? " active" : ""}" type="button" data-set-leader="${id}" data-leader-player="${player.id}">
+                    <img src="${portrait(id)}" alt="${nameOf(id)}" onerror="this.hidden=true">
+                    <div>
+                      <b>${nameOf(id)}</b>
+                      <span class="card-meta">${tier(card.tier)} ・ ${card.roleType || "角色"}${id === leaderId ? " ・ 目前首位" : ""}</span>
+                    </div>
+                  </button>
+                `;
+              }).join("")}
+            </div>
+          ` : `<div class="intel-empty">目前沒有可出戰角色可以更換。</div>`}
+        `);
+      }
+
+      function openBattleConfirmModal() {
+        if (state.finished) {
+          openResultModal();
+          return;
+        }
+        if (!state.started && !readyToStart()) {
+          const nextAction = state.mode === "wipe" && state.setupStep === "drawCrew"
+            ? "抽上處刑台的夥伴"
+            : state.mode === "wipe" && state.setupStep === "drawSupport"
+              ? "抽白鬍子支援角色"
+              : state.setupStep === "chooseExecution"
+                ? "選擇送上處刑台的白鬍子成員"
+                : "完成進場設定";
+          openModal("尚未能開戰", `
+            <article class="select-card" style="min-height:150px">
+              <div>
+                <b>${nextAction}</b>
+                <span class="card-meta">處刑台與支援角色都確認後，點擊目前敵人頭像就能開始本戰。</span>
+              </div>
+            </article>
+            <div class="tool-row" style="justify-content:flex-end;margin-top:14px">
+              <button class="btn primary" type="button" data-continue-setup>繼續設定</button>
+            </div>
+          `);
+          return;
+        }
+        const boss = bosses[state.bossIndex] || bosses[0];
+        openModal(`開始挑戰${boss.name}`, `
+          <div class="grid">
+            <article class="select-card" style="min-height:230px;border-color:${boss.tint}">
+              <img src="${enemyPortrait(boss.key, "angry")}" alt="${boss.name}" onerror="this.hidden=true">
+              <div>
+                <b>${boss.name}</b>
+                <span class="card-meta">${boss.role} ・ 最近處刑倒數 ${soonestExecutionTurns()} 回合</span>
+              </div>
+            </article>
+            <article class="select-card" style="min-height:230px">
+              <div>
+                <b>確認開戰</b>
+                <span class="card-meta">進入戰鬥後，本場結束會回到海軍本部畫面；處刑倒數會依戰鬥結果推進。</span>
+              </div>
+              <div class="tool-row" style="justify-content:flex-start">
+                ${activePlayers().map((player) => `<span>${player.name} 首位：${leaderIdForPlayer(player) ? nameOf(leaderIdForPlayer(player)) : "無"}</span>`).join("")}
+              </div>
+            </article>
+          </div>
+          <div class="tool-row" style="justify-content:flex-end;margin-top:14px">
+            <button class="btn" type="button" data-close-modal>取消</button>
+            <button class="btn primary" type="button" data-confirm-battle-start>開始戰鬥</button>
+          </div>
+        `);
+      }
+
+      function continueSetupFlow() {
+        closeModal();
+        if (state.mode === "wipe" && state.setupStep === "drawCrew") {
+          setTimeout(() => openLotteryPrompt("crew"), 80);
+        } else if (state.mode === "wipe" && state.setupStep === "drawSupport") {
+          setTimeout(() => openLotteryPrompt("support"), 80);
+        } else if (state.setupStep === "chooseExecution") {
+          setTimeout(() => openSelectModal(true), 80);
+        }
+      }
+
+      function startBattleFromEnemy() {
+        closeModal();
+        if (!state.started) startRaid();
+        if (BOARD_MODE) {
+          render();
+          sendBoardCommand("startBattle", {});
+          return;
+        }
+        setTimeout(openBattleModal, 80);
+      }
+
+      function openSelectModal(keepSelection = false) {
+        if (state.mode === "wipe") {
+          resetScenario();
+          return;
+        }
+        const firstEmpty = state.slots.findIndex((slot) => !slot.cardId);
+        const current = Math.max(0, Math.min(state.slots.length - 1, Number(state.selectedSlotIndex || 0)));
+        const selectedSlot = keepSelection || firstEmpty < 0 ? current : firstEmpty;
+        state.selectedSlotIndex = selectedSlot;
+        openModal("選擇處刑台角色", `
+          <div class="dialog-sub" style="margin-bottom:10px">先選玩家位置，再選白鬍子卡池角色。已加入、消失、其他處刑位使用中的角色不能選。</div>
+          <div class="tool-row" style="justify-content:flex-start;margin-bottom:12px">
+            ${state.slots.map((slot, index) => `<button class="count-btn${index === state.selectedSlotIndex ? " active" : ""}" type="button" data-select-slot="${index}">${slot.playerName}</button>`).join("")}
+          </div>
+          <div class="grid">
+            ${whitebeardIds.map((id) => {
+              const card = byId[id] || {};
+              const usedByOtherSlot = state.slots.some((slot, index) => index !== state.selectedSlotIndex && slot.cardId === id);
+              const disabled = state.lostWhitebeard.has(id) || state.joinedWhitebeard.has(id) || usedByOtherSlot;
+              return `
+                <button class="select-card${disabled ? " used" : ""}" type="button" data-select-wb="${id}" ${disabled ? "disabled" : ""}>
+                  <img src="${portrait(id)}" alt="${nameOf(id)}" onerror="this.hidden=true">
+                  <div>
+                    <b>${fullNameOf(id)}</b>
+                    <span class="card-meta">${tier(card.tier)} ・ ${card.attribute || "無"} ・ ${card.roleType || "角色"}</span>
+                  </div>
+                </button>
+              `;
+            }).join("")}
+          </div>
+        `);
+      }
+
+      function assignWhitebeardToExecution(cardId) {
+        if (!cardId || !state.slots[state.selectedSlotIndex]) return;
+        const assignedSlotIndex = state.selectedSlotIndex;
+        state.slots[assignedSlotIndex].cardId = cardId;
+        state.slots[assignedSlotIndex].roundsLeft = state.slots[assignedSlotIndex].roundsLeft ?? executionTurnsFor(assignedSlotIndex);
+        state.setupStep = slotsReady() ? "ready" : "chooseExecution";
+        state.rounds = soonestExecutionTurns();
+        const firstEmpty = state.slots.findIndex((slot) => !slot.cardId);
+        if (firstEmpty >= 0) state.selectedSlotIndex = firstEmpty;
+        state.pendingWhitebeardChoice = "";
+        closeModal();
+        render();
+        sendBoardCommand("assignExecution", { slotIndex: assignedSlotIndex, cardId });
+        if (firstEmpty >= 0) setTimeout(() => openSelectModal(), 120);
+      }
+
+      function openExecutionConfirmModal(cardId) {
+        const slot = state.slots[state.selectedSlotIndex];
+        const card = byId[cardId] || {};
+        state.pendingWhitebeardChoice = cardId;
+        openModal("確認處刑台人選", `
+          <div class="grid">
+            <article class="select-card" style="min-height:230px">
+              <img src="${portrait(cardId)}" alt="${nameOf(cardId)}" onerror="this.hidden=true">
+              <div>
+                <b>${fullNameOf(cardId)}</b>
+                <span class="card-meta">${slot?.playerName || "玩家"} ・ ${tier(card.tier)} ・ ${card.roleType || "角色"}</span>
+              </div>
+            </article>
+            <article class="select-card" style="min-height:230px">
+              <div>
+                <b>戰敗後果</b>
+                <span class="card-meta">如果本次海軍本部副本失敗，這位白鬍子海賊團成員會消失，之後不能再被選上處刑台，也不能再作為支援角色。</span>
+              </div>
+              <div>
+                <b>通關結果</b>
+                <span class="card-meta">通關後可決定是否讓這位角色加入隊伍；隊伍上限仍為 6 人。</span>
+              </div>
+            </article>
+          </div>
+          <div class="tool-row" style="justify-content:flex-end;margin-top:14px">
+            <button class="btn" type="button" data-change-wb>換人</button>
+            <button class="btn primary" type="button" data-confirm-wb="${cardId}">確認送上處刑台</button>
+          </div>
+        `);
+      }
+
+      function startRaid() {
+        if (!readyToStart()) return;
+        state.started = true;
+        state.finished = false;
+        state.win = false;
+        sendBoardCommand("startRaid", {});
+        render();
+      }
+
+      async function winBattle() {
+        if (!state.started || state.animating) return;
+        const expired = tickExecutionTimers(2);
+        state.bossIndex += 1;
+        if (state.bossIndex >= bosses.length) await finishRaid(true);
+        else {
+          state.rescueDice = Math.max(0, Number(state.rescueDice || 0)) + 1;
+          if (expired && state.rescueDice <= 0) await finishRaid(false);
+          else render();
+        }
+      }
+
+      function rollRescueDie() {
+        if (state.finished || state.animating || Math.max(0, Number(state.rescueDice || 0)) <= 0) return;
+        if (BOARD_MODE) {
+          sendBoardCommand("rollRescueDie", {});
+          return;
+        }
+        const roll = Math.floor(Math.random() * EXECUTION_BONUS_DICE_MAX) + 1;
+        state.rescueDice = Math.max(0, Number(state.rescueDice || 0)) - 1;
+        const bonus = addExecutionBonusTurns(roll);
+        render();
+        showRescueRollResult({ ok: true, roll, bonus, rescueDice: state.rescueDice, rounds: state.rounds });
+      }
+
+      async function stall() {
+        if (!state.started || state.animating) return;
+        const expired = tickExecutionTimers(1);
+        if (expired) await finishRaid(false);
+        else render();
+      }
+
+      function executionTargetSlotIndex() {
+        const expired = state.slots.findIndex((slot) => slot.cardId && (slot.roundsLeft ?? 1) <= 0);
+        if (expired >= 0) return expired;
+        const current = currentSlotIndex();
+        if (state.slots[current]?.cardId) return current;
+        return state.slots.findIndex((slot) => slot.cardId);
+      }
+
+      function splitExecutionCard(slot, slotImg) {
+        if (!slot || !slotImg || slot.querySelector(".execution-card-split")) return;
+        const slotBox = slot.getBoundingClientRect();
+        const imgBox = slotImg.getBoundingClientRect();
+        const split = document.createElement("div");
+        split.className = "execution-card-split";
+        split.style.left = `${imgBox.left - slotBox.left}px`;
+        split.style.top = `${imgBox.top - slotBox.top}px`;
+        split.style.width = `${imgBox.width}px`;
+        split.style.height = `${imgBox.height}px`;
+        ["left", "right"].forEach((side) => {
+          const half = document.createElement("div");
+          half.className = `execution-card-half ${side}`;
+          const clone = slotImg.cloneNode(true);
+          clone.classList.remove("is-sentenced", "is-hidden-after-split");
+          clone.querySelectorAll("[id]").forEach((node) => node.removeAttribute("id"));
+          half.appendChild(clone);
+          split.appendChild(half);
+        });
+        slot.appendChild(split);
+        slotImg.classList.add("is-hidden-after-split");
+        requestAnimationFrame(() => split.classList.add("is-splitting"));
+      }
+
+      async function playExecutionCutAnimation() {
+        const targetIndex = executionTargetSlotIndex();
+        if (targetIndex < 0) return false;
+        state.animating = true;
+        state.selectedSlotIndex = targetIndex;
+        state.rulesActive = false;
+        state.modalAfterClose = "";
+        $("modalBack").classList.remove("show");
+        render();
+        renderHud();
+        await sleep(80);
+        const wrap = document.querySelector(`[data-slot-index="${targetIndex + 1}"]`);
+        const slot = wrap?.querySelector(".slot");
+        const slotImg = wrap?.querySelector(".slot-img");
+        if (!wrap || !slot || !slotImg) {
+          state.animating = false;
+          renderHud();
+          return false;
+        }
+        wrap.classList.add("execution-playing");
+        const guard = document.createElement("img");
+        guard.className = "execution-cut-guard";
+        guard.alt = "處刑守衛";
+        guard.src = `${executionCutAnimationUrl}?t=${Date.now()}`;
+        wrap.appendChild(guard);
+        await sleep(5080);
+        slotImg.classList.add("is-sentenced");
+        await sleep(360);
+        splitExecutionCard(slot, slotImg);
+        await sleep(1120);
+        wrap.classList.add("execution-card-gone");
+        await sleep(260);
+        guard.remove();
+        return true;
+      }
+
+      function openFailureAnimationPrompt() {
+        if (state.animating) return;
+        state.failureConfirmPending = true;
+        state.resultModalShown = true;
+        const targetIndex = executionTargetSlotIndex();
+        const targetSlot = state.slots[targetIndex] || {};
+        openModal("處刑台失守", `
+          <div class="grid">
+            <article class="select-card" style="min-height:180px">
+              <div>
+                <b>${targetSlot.cardId ? nameOf(targetSlot.cardId) : "處刑台角色"}</b>
+                <span class="card-meta">${state.mode === "wipe" ? "救援失敗後，這位夥伴會回到招募池並清除額外養成；剩餘隊伍回到羅格鎮重新出發。" : "挑戰失敗後，這位白鬍子成員會消失並鎖定。"}</span>
+              </div>
+            </article>
+            <article class="select-card" style="min-height:180px">
+              <div>
+                <b>確認後播放動畫</b>
+                <span class="card-meta">按下確認才會開始處刑動畫；動畫結束後再顯示失敗結算。</span>
+              </div>
+            </article>
+          </div>
+          <div class="tool-row" style="justify-content:flex-end;margin-top:14px">
+            <button class="btn danger" type="button" data-confirm-failure-animation>確認失敗</button>
+          </div>
+        `);
+      }
+
+      async function resolveFailureAfterConfirm() {
+        if (state.animating) return;
+        state.failureConfirmPending = false;
+        await playExecutionCutAnimation();
+        state.started = false;
+        state.finished = true;
+        state.win = false;
+        state.helpers = [];
+        if (state.mode === "wipe") {
+          state.slots.forEach((slot) => {
+            const player = playerById(slot.playerId);
+            if (!player) return;
+            player.crew = player.crew.filter((id) => id !== slot.cardId);
+            if (!state.returnedCardPool.some((entry) => entry.cardId === slot.cardId && entry.fromPlayer === slot.playerName)) {
+              state.returnedCardPool.push({ cardId: slot.cardId, fromPlayer: slot.playerName, clean: true });
+            }
+          });
+        } else {
+          state.slots.forEach((slot) => state.lostWhitebeard.add(slot.cardId));
+        }
+        state.slots.forEach((slot) => { if (slot.cardId) slot.executed = true; });
+        state.failureAnimationDone = true;
+        state.animating = false;
+        render();
+        openResultModal();
+      }
+
+      function createConquerorGuardSplit(wrap, waiting = false) {
+        const split = document.createElement("div");
+        split.className = `conqueror-guard-split${waiting ? " waiting" : ""}`;
+        ["left", "right"].forEach((side) => {
+          const half = document.createElement("span");
+          half.className = `conqueror-guard-half ${side}`;
+          const img = document.createElement("img");
+          img.src = executionTopGuardHalfUrls[side];
+          img.alt = "";
+          half.appendChild(img);
+          split.appendChild(half);
+        });
+        wrap.appendChild(split);
+        return split;
+      }
+
+      function createConquerorPageAura(page) {
+        const aura = document.createElement("div");
+        aura.className = "conqueror-page-aura";
+        aura.innerHTML = Array.from({ length: 6 }, () => `<span class="haki-bolt"></span>`).join("");
+        page?.appendChild(aura);
+        return aura;
+      }
+
+      async function playRescueSuccessAnimation() {
+        const targetIndex = currentSlotIndex();
+        if (!state.slots[targetIndex]?.cardId) return false;
+        const rescueAssetsReady = preloadRescueAssets();
+        state.animating = true;
+        state.selectedSlotIndex = targetIndex;
+        state.rulesActive = false;
+        state.modalAfterClose = "";
+        $("modalBack").classList.remove("show");
+        render();
+        renderHud();
+        await sleep(80);
+        const wrap = document.querySelector(`[data-slot-index="${targetIndex + 1}"]`);
+        const slotImg = wrap?.querySelector(".slot-img");
+        if (!wrap || !slotImg) {
+          state.animating = false;
+          renderHud();
+          return false;
+        }
+        wrap.classList.add("execution-playing");
+        const guard = document.createElement("img");
+        guard.className = "execution-cut-guard execution-raise-guard";
+        guard.alt = "處刑守衛";
+        guard.src = `${executionCutAnimationUrl}?raise=${Date.now()}`;
+        wrap.appendChild(guard);
+        await sleep(5000);
+        await rescueAssetsReady;
+        guard.src = executionTopGuardFrameUrl;
+        await nextFrame();
+        const page = document.querySelector(".marineford");
+        await playConquerorIntroVideo(page);
+        const splitGuard = createConquerorGuardSplit(wrap, true);
+        await nextFrame();
+        guard.remove();
+        splitGuard.classList.remove("waiting");
+        const shock = document.createElement("div");
+        shock.className = "rescue-shock";
+        shock.innerHTML = `<span class="rescue-cracks"></span>`;
+        wrap.appendChild(shock);
+        const aura = createConquerorPageAura(page);
+        page?.classList.remove("conqueror-page-shock");
+        if (page) void page.offsetWidth;
+        page?.classList.add("conqueror-page-shock");
+        await sleep(1200);
+        state.slots.forEach((slot) => { slot.rescued = true; });
+        wrap.querySelector(".timer-badge")?.remove();
+        slotImg.innerHTML = renderImage(portrait(state.slots[targetIndex].cardId, "normal"), nameOf(state.slots[targetIndex].cardId));
+        slotImg.classList.add("is-rescued");
+        await sleep(1700);
+        page?.classList.remove("conqueror-page-shock");
+        splitGuard.remove();
+        shock.remove();
+        aura?.remove();
+        return true;
+      }
+
+      function openSuccessAnimationPrompt() {
+        if (state.animating) return;
+        state.successConfirmPending = true;
+        state.resultModalShown = true;
+        const targetIndex = currentSlotIndex();
+        const targetSlot = state.slots[targetIndex] || {};
+        openModal("救援成功", `
+          <div class="grid">
+            <article class="select-card" style="min-height:180px">
+              <div>
+                <b>${targetSlot.cardId ? nameOf(targetSlot.cardId) : "處刑台角色"}</b>
+                <span class="card-meta">已突破海軍本部。按下確認後播放救援成功動畫。</span>
+              </div>
+            </article>
+            <article class="select-card" style="min-height:180px">
+              <div>
+                <b>救援結算</b>
+                <span class="card-meta">${state.mode === "wipe" ? "救回自己的夥伴並取得 3D2Y 的報紙。" : "救出白鬍子海賊團成員後，可以決定是否加入隊伍；滿員時可選擇替換。"}</span>
+              </div>
+            </article>
+          </div>
+          <div class="tool-row" style="justify-content:flex-end;margin-top:14px">
+            <button class="btn primary" type="button" data-confirm-success-animation>確認救援成功</button>
+          </div>
+        `);
+      }
+
+      async function resolveSuccessAfterConfirm() {
+        if (state.animating) return;
+        state.successConfirmPending = false;
+        await playRescueSuccessAnimation();
+        state.started = false;
+        state.finished = true;
+        state.win = true;
+        state.helpers = [];
+        state.slots.forEach((slot) => { if (slot.cardId) slot.rescued = true; });
+        if (!state.rewards.includes("3D2Y 的報紙")) state.rewards.push("3D2Y 的報紙");
+        state.successAnimationDone = true;
+        state.animating = false;
+        render();
+        if (state.mode !== "wipe" && state.slots.some((slot) => slot.source === "whitebeard" && slot.cardId && !state.joinedWhitebeard.has(slot.cardId))) openJoinModal();
+        else openResultModal();
+      }
+
+      async function finishRaid(win) {
+        if (state.finished || state.animating) return;
+        if (!win) {
+          openFailureAnimationPrompt();
+          return;
+        }
+        openSuccessAnimationPrompt();
+      }
+
+      function openResultModal() {
+        const title = state.win ? "救援成功" : "處刑台失守";
+        openModal(title, `
+          <div class="grid">
+            <article class="select-card" style="min-height:180px">
+              <b>${state.win ? "通關獎勵" : "失敗處理"}</b>
+              <span class="card-meta">${state.win ? "取得 3D2Y 的報紙，救回處刑台角色。" : state.mode === "wipe" ? "處刑台角色已從隊伍移除，回到卡池重新招募；修練與額外數值清除；剩餘隊伍回到羅格鎮重新出發。" : "處刑台白鬍子角色已消失鎖定。"}</span>
+            </article>
+            <article class="select-card" style="min-height:180px">
+              <b>處刑台</b>
+              <div class="tool-row" style="justify-content:flex-start">${crewNames(state.slots.map((slot) => slot.cardId))}</div>
+            </article>
+          </div>
+          ${BOARD_MODE ? `<div class="tool-row" style="justify-content:flex-end;margin-top:14px"><button class="btn primary" type="button" data-close-raid>返回地圖</button></div>` : ""}
+        `);
+      }
+
+      function openJoinModal() {
+        const pendingJoin = state.slots.some((slot) => slot.source === "whitebeard" && slot.cardId && !state.joinedWhitebeard.has(slot.cardId));
+        openModal("是否加入隊伍", `
+          <div class="dialog-sub" style="margin-bottom:10px">通關後，處刑台上的白鬍子卡池角色可以選擇加入對應玩家隊伍；隊伍滿 6 人時可選擇替換一位。</div>
+          <div class="grid">
+            ${state.slots.map((slot, index) => {
+              const player = playerById(slot.playerId);
+              const full = !player || player.crew.length >= 6;
+              const joined = state.joinedWhitebeard.has(slot.cardId) || player?.crew.includes(slot.cardId);
+              return `
+                <article class="select-card">
+                  <img src="${portrait(slot.cardId)}" alt="${nameOf(slot.cardId)}" onerror="this.hidden=true">
+                  <div>
+                    <b>${fullNameOf(slot.cardId)}</b>
+                    <span class="card-meta">${slot.playerName} ・ 隊伍 ${player?.crew.length || 0}/6 ・ ${joined ? "已加入" : full ? "可替換加入" : "可加入"}</span>
+                    <div class="tool-row" style="justify-content:flex-start;margin-top:8px">
+                      <button class="btn primary" type="button" data-join-slot="${index}" ${joined || !player ? "disabled" : ""}>${full ? "選擇替換" : "加入隊伍"}</button>
+                      <button class="btn" type="button" data-decline-slot="${index}" ${joined ? "disabled" : ""}>不加入</button>
+                    </div>
+                  </div>
+                </article>
+              `;
+            }).join("")}
+          </div>
+          ${BOARD_MODE && !pendingJoin ? `<div class="tool-row" style="justify-content:flex-end;margin-top:14px"><button class="btn primary" type="button" data-close-raid>返回地圖</button></div>` : ""}
+        `);
+      }
+
+      function openJoinReplaceModal(slotIndex) {
+        const slot = state.slots[slotIndex];
+        const player = playerById(slot?.playerId);
+        if (!slot?.cardId || !player) {
+          openJoinModal();
+          return;
+        }
+        openModal("選擇替換成員", `
+          <div class="dialog-sub" style="margin-bottom:10px">${fullNameOf(slot.cardId)} 要加入 ${player.name} 的隊伍，請選擇要替換掉的角色。</div>
+          <div class="grid">
+            ${player.crew.map((cardId, replaceIndex) => `
+              <button class="select-card" type="button" data-replace-join-slot="${slotIndex}" data-replace-crew-index="${replaceIndex}">
+                <img src="${portrait(cardId)}" alt="${nameOf(cardId)}" onerror="this.hidden=true">
+                <div>
+                  <b>${fullNameOf(cardId)}</b>
+                  <span class="card-meta">替換後會回到可招募池；攜帶物會回到背包。</span>
+                </div>
+              </button>
+            `).join("")}
+          </div>
+          <div class="tool-row" style="justify-content:flex-end;margin-top:14px">
+            <button class="btn" type="button" data-back-join-modal>返回</button>
+          </div>
+        `);
+      }
+
+      function joinSlotToLocalTeam(slotIndex, replaceCrewIndex = -1) {
+        const slot = state.slots[slotIndex];
+        const player = playerById(slot?.playerId);
+        if (!slot?.cardId || !player) return false;
+        if (player.crew.includes(slot.cardId) || state.joinedWhitebeard.has(slot.cardId)) return false;
+        if (player.crew.length >= 6) {
+          if (replaceCrewIndex < 0 || replaceCrewIndex >= player.crew.length) return false;
+          player.crew.splice(replaceCrewIndex, 1, slot.cardId);
+        } else {
+          player.crew.push(slot.cardId);
+        }
+        state.joinedWhitebeard.add(slot.cardId);
+        sendBoardCommand("joinSlot", { slotIndex, cardId: slot.cardId, replaceCrewIndex });
+        render();
+        if (state.slots.some((entry) => entry.source === "whitebeard" && entry.cardId && !state.joinedWhitebeard.has(entry.cardId))) openJoinModal();
+        else openResultModal();
+        return true;
+      }
+
+      function render() {
+        renderSlots();
+        renderSides();
+        renderPhases();
+        renderHormonePanel();
+        renderHud();
+      }
+
+      document.querySelectorAll("[data-debug-mode]").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.mode = button.dataset.debugMode || "wipe";
+          resetScenario();
+        });
+      });
+      document.querySelectorAll("[data-debug-count]").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.count = Math.max(1, Math.min(4, Number(button.dataset.debugCount || 1)));
+          resetScenario();
+        });
+      });
+      $("poolBtn").addEventListener("click", openPoolModal);
+      $("teamBtn").addEventListener("click", openTeamModal);
+      $("rerollBtn").addEventListener("click", handleAdjustAction);
+      $("startBtn").addEventListener("click", handlePrimaryAction);
+      $("battleBtn").addEventListener("click", startBattleFromEnemy);
+      $("rescueDiceBtn").addEventListener("click", rollRescueDie);
+      $("stallBtn").addEventListener("click", stall);
+      $("hormonePanel").addEventListener("click", () => openHormoneModal());
+      $("debugWinBtn").addEventListener("click", async () => {
+        await winBattle();
+        if (state.finished) setDebugMenu(false);
+        else renderHud();
+      });
+      $("debugLoseBtn").addEventListener("click", async () => {
+        await finishRaid(false);
+        setDebugMenu(false);
+      });
+      $("debugResetBtn").addEventListener("click", () => {
+        closeModal();
+        hardResetDemo();
+      });
+      $("debugCloseBtn").addEventListener("click", () => setDebugMenu(false));
+      $("debugBack").addEventListener("click", (event) => {
+        if (event.target === $("debugBack")) setDebugMenu(false);
+      });
+      document.addEventListener("click", async (event) => {
+        if (event.target.closest("[data-open-battle]")) {
+          handleBossCardAction();
+          return;
+        }
+        const changeLeader = event.target.closest("[data-change-leader]")?.dataset.changeLeader;
+        if (changeLeader !== undefined) {
+          openLeaderModal(Number(changeLeader));
+          return;
+        }
+        const viewSlot = event.target.closest("[data-view-slot]")?.dataset.viewSlot;
+        if (viewSlot === undefined) return;
+        state.selectedSlotIndex = Math.max(0, Math.min(state.slots.length - 1, Number(viewSlot)));
+        render();
+      });
+      document.addEventListener("click", (event) => {
+        const playerId = event.target.closest("[data-hormone-player]")?.dataset.hormonePlayer;
+        if (!playerId) return;
+        useHormone(playerId);
+      });
+      $("modalBack").addEventListener("click", async (event) => {
+        if (event.target.closest("[data-rules-continue]")) {
+          state.rulesAckPending = true;
+          closeModal();
+          return;
+        }
+        if (event.target.closest("[data-close-raid]")) {
+          sendBoardCommand("close", {});
+          closeModal();
+          return;
+        }
+        if (event.target === $("modalBack") || event.target.closest("[data-close-modal]")) {
+          closeModal();
+          return;
+        }
+        const battleResult = event.target.closest("[data-battle-result]")?.dataset.battleResult;
+        if (battleResult) {
+          closeModal();
+          if (battleResult === "win") await winBattle();
+          else await finishRaid(false);
+          return;
+        }
+        if (event.target.closest("[data-confirm-failure-animation]")) {
+          await resolveFailureAfterConfirm();
+          return;
+        }
+        if (event.target.closest("[data-confirm-success-animation]")) {
+          await resolveSuccessAfterConfirm();
+          return;
+        }
+        const startLottery = event.target.closest("[data-start-lottery]")?.dataset.startLottery;
+        if (startLottery) {
+          if (startLottery === "crew") drawWipeCrewCaptives();
+          else if (startLottery === "support") drawWipeSupport();
+          return;
+        }
+        if (event.target.closest("[data-continue-lottery-flow]")) {
+          closeModal();
+          return;
+        }
+        if (event.target.closest("[data-start-ready-battle]")) {
+          startBattleFromEnemy();
+          return;
+        }
+        if (event.target.closest("[data-confirm-battle-start]")) {
+          startBattleFromEnemy();
+          return;
+        }
+        if (event.target.closest("[data-continue-setup]")) {
+          continueSetupFlow();
+          return;
+        }
+        const leaderButton = event.target.closest("[data-set-leader]");
+        if (leaderButton) {
+          setLeaderForPlayer(leaderButton.dataset.leaderPlayer, leaderButton.dataset.setLeader);
+          closeModal();
+          render();
+          return;
+        }
+        const slotIndex = event.target.closest("[data-select-slot]")?.dataset.selectSlot;
+        if (slotIndex !== undefined) {
+          state.selectedSlotIndex = Number(slotIndex);
+          openSelectModal(true);
+          return;
+        }
+        const selectedId = event.target.closest("[data-select-wb]")?.dataset.selectWb;
+        if (selectedId && state.slots[state.selectedSlotIndex]) {
+          openExecutionConfirmModal(selectedId);
+          return;
+        }
+        const confirmWb = event.target.closest("[data-confirm-wb]")?.dataset.confirmWb;
+        if (confirmWb) {
+          assignWhitebeardToExecution(confirmWb);
+          return;
+        }
+        if (event.target.closest("[data-change-wb]")) {
+          openSelectModal(true);
+          return;
+        }
+        const joinSlot = event.target.closest("[data-join-slot]")?.dataset.joinSlot;
+        if (joinSlot !== undefined) {
+          const slot = state.slots[Number(joinSlot)];
+          const player = playerById(slot?.playerId);
+          if (slot && player && player.crew.length >= 6 && !player.crew.includes(slot.cardId) && !state.joinedWhitebeard.has(slot.cardId)) openJoinReplaceModal(Number(joinSlot));
+          else joinSlotToLocalTeam(Number(joinSlot));
+          return;
+        }
+        const replaceJoinButton = event.target.closest("[data-replace-join-slot]");
+        if (replaceJoinButton) {
+          joinSlotToLocalTeam(Number(replaceJoinButton.dataset.replaceJoinSlot), Number(replaceJoinButton.dataset.replaceCrewIndex));
+          return;
+        }
+        if (event.target.closest("[data-back-join-modal]")) {
+          openJoinModal();
+          return;
+        }
+        const declineSlot = event.target.closest("[data-decline-slot]")?.dataset.declineSlot;
+        if (declineSlot !== undefined) {
+          const slot = state.slots[Number(declineSlot)];
+          if (slot) {
+            sendBoardCommand("declineSlot", { slotIndex: Number(declineSlot), cardId: slot.cardId });
+            state.slots = state.slots.filter((entry) => entry !== slot);
+            render();
+            if (state.slots.some((entry) => entry.source === "whitebeard" && entry.cardId && !state.joinedWhitebeard.has(entry.cardId))) openJoinModal();
+            else openResultModal();
+          }
+        }
+      });
+      document.addEventListener("keydown", (event) => {
+        const key = event.key.toLowerCase();
+        if (!BOARD_MODE && (event.key === "F2" || (event.ctrlKey && event.shiftKey && key === "m"))) {
+          event.preventDefault();
+          setDebugMenu(!$("debugBack").classList.contains("show"));
+        } else if (event.key === "Escape") {
+          closeModal();
+          setDebugMenu(false);
+        }
+      });
+      if (BOARD_MODE) {
+        window.addEventListener("message", (event) => {
+          if (event?.data?.type === "board-marineford-update") readBoardSnapshot();
+        });
+        window.addEventListener("storage", readBoardCommandResult);
+        document.addEventListener("visibilitychange", () => {
+          if (!document.hidden) readBoardSnapshot();
+        });
+        if (!readBoardSnapshot()) render();
+        window.setInterval(readBoardSnapshot, 500);
+        sendBoardCommand("ready", {});
+      } else {
+        resetScenario();
+      }
+    })();
+  </script>
+</body>
+</html>

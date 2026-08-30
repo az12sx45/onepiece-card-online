@@ -1,0 +1,108 @@
+全破後 13 Boss 專屬機制素材 ImageGen 紀錄
+日期：2026-08-01
+
+說明：
+- 本檔只列正式遊戲實際採用的生成結果與原始提示詞。
+- 原始 PNG 保存在 Codex generated_images；正式頁使用專案內 PNG／WebP。
+- Tot Musica 第三樂章沿用既有正式 normal.webp 複製為 movement_3_normal.webp，沒有另行生成。
+
+============================================================
+01．共用 Boss 機制圖片式主框
+============================================================
+
+原始圖：
+C:\Users\王曜瑋\.codex\generated_images\019fa333-31ef-7e32-b226-023fffa4c411\exec-7923806b-b6dc-4b85-a83b-a3061eeb9f28.png
+
+正式圖：
+public/images/board/battle/postgame_mechanics/postgame_boss_mechanic_panel_v1.png
+
+提示詞：
+Use case: stylized-concept
+Asset type: reusable boss-mechanic HUD panel background for a pirate-themed browser RPG battle screen
+Primary request: create one finished wide horizontal decorative interface panel with a large empty readable center, designed to hold changing boss mechanic icons and short Chinese status labels added later by HTML
+Scene/backdrop: self-contained dark navy panel, not a full scene
+Style/medium: highly polished hand-painted anime pirate RPG game UI, matching a deep-ocean treasure-map and dramatic boss-battle aesthetic
+Composition/framing: 3:1 wide horizontal panel, perfectly centered and symmetrical; broad empty central field occupying at least 70% of the area; thin ornamental frame only around the edges
+Lighting/mood: restrained cyan sea glow, warm aged-gold edge highlights, subtle crimson warning accents, ominous but readable
+Materials/textures: dark lacquered wood, aged brass, small rope knots, very subtle wave engravings and rivets
+Constraints: no characters, no portraits, no weapons, no icons, no buttons, no slots, no grids, no text, no letters, no numbers, no logo, no watermark; keep the central area uncluttered and nearly flat dark navy so overlaid UI remains legible; no transparent background required; entire frame visible without cropping
+
+============================================================
+02．薩卡／七星劍融合形態
+============================================================
+
+原始圖：
+C:\Users\王曜瑋\.codex\generated_images\019fa333-31ef-7e32-b226-023fffa4c411\exec-a7197dda-07fc-4c12-9c00-408ed9e1f1a4.png
+
+正式圖：
+public/images/board/battle/enemies/postgame_saga/fused_normal.webp
+
+提示詞：
+Edit the referenced game battle portrait into Saga's final Seven Star Sword fusion phase. Preserve the exact same character identity, facial structure, silver hair, dark red clothing palette, moonlit ancient ruin setting, polished anime pirate RPG rendering, vertical 2:3 canvas, and waist-up boss portrait scale. Make the fusion unmistakable: the cursed Seven Star Sword has dissolved into his body, luminous teal seven-star runes spread across his chest, neck and right arm, both eyes glow eerie teal, his right forearm is restored and transformed into a dark teal crystalline blade-arm with star-shaped energy fissures, and a violent green-teal demonic aura coils behind him. He must still look like Saga, not a new character. Exactly two arms, anatomically correct hands, no extra limbs, no text, no logo, no UI, no border. Keep head and upper torso fully visible with comfortable margins; do not crop the top of hair or shoulders.
+
+============================================================
+03．捷風黑腕第二階段
+============================================================
+
+原始圖：
+C:\Users\王曜瑋\.codex\generated_images\019fa333-31ef-7e32-b226-023fffa4c411\exec-61cfceac-75d6-4c92-8b75-471dc9eb6371.png
+
+正式圖：
+public/images/board/battle/enemies/postgame_zephyr/black_arm_normal.webp
+
+提示詞：
+Edit the referenced boss battle portrait into Z / Zephyr's final Black Arm phase after the Battle Smasher has been completely destroyed. Preserve his exact identity: elderly enormous muscular marine veteran, short spiky purple hair, black sunglasses, scarred face, black military coat and medals, ruined burning fortress background, same polished anime pirate RPG rendering, same vertical 2:3 canvas and waist-up scale. Remove the giant mechanical arm entirely. Show two normal human arms only; his forward right forearm and clenched fist are coated in glossy pitch-black Armament Haki with subtle purple highlights, while the other human hand is also ready to fight. Add a few broken mechanical fragments and sparks behind him to make the destroyed Battle Smasher unmistakable. Exactly two arms and two hands, anatomically correct, no extra limbs, no remaining attached robot arm, no text, no logo, no UI. Keep his full head, shoulders, both fists and upper torso visible with comfortable margins.
+
+============================================================
+04．Tot Musica 第一樂章
+============================================================
+
+原始圖：
+C:\Users\王曜瑋\.codex\generated_images\019fa333-31ef-7e32-b226-023fffa4c411\exec-2250b552-f2bf-4856-bf53-2542afa105cf.png
+
+正式圖：
+public/images/board/battle/enemies/postgame_tot_musica/movement_1_normal.webp
+
+提示詞：
+Create Tot Musica's FIRST MOVEMENT boss battle portrait, using the second reference for the canonical first-movement design and the first reference for the finished game's rendering quality, palette and vertical composition. It must clearly be the early form: one central grinning pale mask-like conductor face beneath a small dark conductor hat, black upper body, enormous horizontal piano-key wings extending left and right, blue paint-like drips from the keys, and three small red-purple skull-flame notes around the lower torso. Do not show the later three reptilian heads or giant clawed hands. Polished dramatic anime pirate RPG boss art, ominous crimson music-energy ribbons, moonlit ruined concert fortress background. Vertical 2:3 canvas, upper-body boss portrait, face and both piano wings visible with comfortable margins. Symmetrical readable silhouette, no text, no logo, no UI, no border, no extra faces, no extra arms.
+
+============================================================
+05．Tot Musica 第二樂章
+============================================================
+
+原始圖：
+C:\Users\王曜瑋\.codex\generated_images\019fa333-31ef-7e32-b226-023fffa4c411\exec-16e61893-dcb1-4e7b-974f-8ad86b362b12.png
+
+正式圖：
+public/images/board/battle/enemies/postgame_tot_musica/movement_2_normal.webp
+
+提示詞：
+Create Tot Musica's SECOND MOVEMENT boss battle portrait as the clear transition between the referenced early piano-wing conductor form and the referenced final three-headed giant form. Preserve the same polished dramatic anime pirate RPG look, dark navy, sickly green, gold, ivory piano keys and crimson-magenta music-energy palette. The middle form must have: the original central grinning conductor face becoming a larger toothed demonic mouth under a broken dark crown, two newly grown green crocodile-dragon side heads, piano-key wings folding forward into medium clawed arms, five purple skull-flame notes around the waist, and a partially enlarged green torso. It must look visibly stronger than first movement but not yet as massive as the final form: no gigantic foreground hands, no fully swollen final belly. Ruined moonlit concert fortress and swirling red musical energy behind. Vertical 2:3 canvas, upper-body boss portrait, all three heads and both transformed piano arms visible with comfortable margins. Symmetrical readable silhouette, exactly three heads and two arms, no extra limbs, no text, no logo, no UI, no border.
+
+============================================================
+06．巴雷特終極合體六孔裝甲
+============================================================
+
+原始圖：
+C:\Users\王曜瑋\.codex\generated_images\019fa333-31ef-7e32-b226-023fffa4c411\exec-56f5f9fa-c2e3-442f-99d0-eaa2571f5682.png
+
+正式圖：
+public/images/board/battle/enemies/postgame_douglas_bullet/fusion_normal.webp
+
+提示詞：
+Recompose this exact Douglas Bullet fusion-monster artwork as a FINAL SQUARE 1:1 IN-GAME BATTLE PORTRAIT, not vertical. Preserve the same face, blond hair, headphones, grimacing teeth, black-purple battleship armor, aged gold rings, purple lightning, ruined fortress mood and polished anime pirate RPG rendering. Show a compact head-to-waist half-body pose with both bent armored forearms brought inward, so ALL SIX equipment sockets are simultaneously obvious and fully visible in the square: 1 forehead, 1 center chest, 1 left forearm, 1 right forearm, 1 lower-left abdomen, 1 lower-right abdomen. Place every socket within the central 88% of the square; no socket may touch or leave the edges. The two forearm sockets should face forward beside the chest, and the two abdomen sockets must be above the belt. Exactly six sockets, all separate empty pitch-black circular recesses with aged-gold rims. Exactly two arms and two fists, correct anatomy. No legs, no full body, no extra limbs, no extra sockets, no objects inside sockets, no text, no logo, no interface border. 1:1 square canvas, centered symmetric boss portrait, comfortable safe margins on every side.
+
+============================================================
+07．洛基尼德霍格龍人形態（退役歷史稿）
+============================================================
+
+2026-08-15 退役註記：本節只保留歷史生成來源。洛基已改為艾爾巴夫高強度標準戰鬥，正式遊戲不再引用 `dragon_normal.webp`，也不再使用任何龍人形態；全程沿用原本巨人王子半身狀態圖。
+
+原始圖：
+C:\Users\王曜瑋\.codex\generated_images\019fa333-31ef-7e32-b226-023fffa4c411\exec-1109db0c-9334-408a-8239-9b88789bc609.png
+
+正式圖：
+public/images/board/battle/enemies/postgame_loki/dragon_normal.webp
+
+提示詞：
+Edit the referenced Loki boss portrait into his final Nidhogg dragon-hybrid phase while preserving unmistakable identity and the exact same polished anime pirate RPG style. Keep the horned black giant-prince helmet, bandaged eyes, long braided magenta hair, magenta beard, huge muscular build, purple fur mantle, chains and the enormous Ragnir hammer. Transform his skin into dark charcoal dragon scales along the shoulders, chest and arms; grow one pair of broad black-purple dragon wings behind him, icy blue runes and lightning cracks over the scales, larger fangs, and a cold blue breath glow around the mouth. Ragnir must remain visible over one shoulder, surrounded by three distinct floating ice clouds. Exactly two arms, two hands, one pair of wings, no extra limbs, no separate second dragon head. Frozen giant castle background with blue-violet lightning. Vertical 2:3 canvas, waist-up boss portrait, full helmet horns, wings, shoulders and hammer visible with comfortable margins. No text, no logo, no UI, no border.
