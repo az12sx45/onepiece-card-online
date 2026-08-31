@@ -3,18 +3,56 @@
   const cardsModule = window.BoardCards;
   if (!shared || !cardsModule) return;
   const moveDamageClassModule = window.BoardMoveDamageClass || cardsModule;
+  const PORTABLE_ASSET_VERSION = "20260831-portable-prefetch-v397";
+  const IMAGE_DECODE_WAIT_TIMEOUT_MS = 5000;
+  const PORTABLE_PREFETCHED_BOARD_ASSETS = new Set([
+    "images/board/evolution_ui/evolution_portrait_frame_v1.webp",
+    "images/board/item_reveal_ui/important_item_reveal_panel_frame.webp",
+    "images/board/postgame_clue_ui/york_clue_playing_card_frame_v2.webp",
+  ]);
   const MOBILE_MAP_ASSET_MODE = new URLSearchParams(window.location.search).get("portable_assets") === "1";
   const MOBILE_MAP_ASSET_PATTERN = /^images\/board\/(?:islands\/|decorations\/(?:sea_beasts|reefs)\/|ships\/)/;
 
   function mapDisplayAssetUrl(source) {
     const normalized = String(source || "").trim();
     if (!MOBILE_MAP_ASSET_MODE || !MOBILE_MAP_ASSET_PATTERN.test(normalized)) return normalized;
-    return normalized.replace(/^images\/board\//, "images/board/mobile/");
+    const mobileUrl = normalized.replace(/^images\/board\//, "images/board/mobile/");
+    return `${mobileUrl}${mobileUrl.includes("?") ? "&" : "?"}v=${PORTABLE_ASSET_VERSION}`;
+  }
+
+  function portablePrefetchedBoardAssetUrl(source) {
+    const normalized = String(source || "").trim();
+    if (!normalized) return "";
+    const assetPath = normalized.split(/[?#]/, 1)[0];
+    if (!PORTABLE_PREFETCHED_BOARD_ASSETS.has(assetPath)) return normalized;
+    if (/[?&]v=/.test(normalized)) return normalized;
+    return `${normalized}${normalized.includes("?") ? "&" : "?"}v=${PORTABLE_ASSET_VERSION}`;
   }
 
   function ensureDeferredImageSource(image) {
-    if (!image || image.getAttribute("src") || !image.dataset?.src) return;
-    image.src = image.dataset.src;
+    if (!image) return null;
+    if (!image.getAttribute("src") && image.dataset?.src) image.src = image.dataset.src;
+    return image;
+  }
+
+  function decodeImageWhenReady(image) {
+    if (!image?.getAttribute("src")) return Promise.resolve();
+    const ready = typeof image.decode === "function"
+      ? image.decode().catch(() => {})
+      : image.complete
+        ? Promise.resolve()
+        : new Promise((resolve) => {
+          image.addEventListener("load", resolve, { once: true });
+          image.addEventListener("error", resolve, { once: true });
+        });
+    return Promise.race([
+      ready,
+      new Promise((resolve) => window.setTimeout(resolve, IMAGE_DECODE_WAIT_TIMEOUT_MS)),
+    ]);
+  }
+
+  function ensureDeferredImageDecoded(image) {
+    return decodeImageWhenReady(ensureDeferredImageSource(image));
   }
 
   function boardMoveDamageClass(moveEntry = {}) {
@@ -1854,7 +1892,7 @@
 
   function itemImageForDisplay(itemOrId) {
     const source = itemDisplaySource(itemOrId);
-    return String(source.image || "").trim();
+    return portablePrefetchedBoardAssetUrl(source.image);
   }
 
   function itemIconMarkup(itemOrId, className = "item-thumb", options = {}) {
@@ -1869,8 +1907,8 @@
       const bossDef = postgameBossDef(source.effect?.bossKey || source.bossKey);
       const clueNumber = Math.max(1, Number(source.effect?.clueNumber || source.clueNumber || bossDef?.clueNumber || 1));
       const clueBadge = postgameClueCardLabel(clueNumber);
-      const clueFrameImage = String(options.frameImage || source.frameImage || source.image || "images/board/postgame_clue_ui/york_clue_playing_card_frame_v2.webp").trim();
-      const clueIslandImage = String(options.portraitImage || source.portraitImage || bossDef?.islandImage || ISLAND_IMAGE_MAP.postgame_boss).trim();
+      const clueFrameImage = portablePrefetchedBoardAssetUrl(options.frameImage || source.frameImage || source.image || "images/board/postgame_clue_ui/york_clue_playing_card_frame_v2.webp");
+      const clueIslandImage = mapDisplayAssetUrl(options.portraitImage || source.portraitImage || bossDef?.islandImage || ISLAND_IMAGE_MAP.postgame_boss);
       const classes = `${className} item-thumb postgame-clue-icon`.trim();
       return `
         <span class="${escapeModalText(classes)}" data-item-fallback="${escapeModalText(clueBadge)}">
@@ -16803,7 +16841,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     notifyItemRevealIdle();
   }
 
-  function playNextItemReveal() {
+  async function playNextItemReveal() {
     if (itemRevealActive) return;
     if (!refs.itemRevealHud) {
       itemRevealQueue.length = 0;
@@ -16822,7 +16860,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       return;
     }
     itemRevealActive = true;
-    ensureDeferredImageSource(refs.itemRevealPanelFrame);
+    const revealImagesReady = [ensureDeferredImageDecoded(refs.itemRevealPanelFrame)];
     const image = itemImageForDisplay(itemDef);
     const clueBossDef = itemDef.effect?.kind === "postgame_york_clue"
       ? postgameBossDef(itemDef.effect.bossKey)
@@ -16832,8 +16870,6 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const clueRevealIsland = document.getElementById("postgameClueRevealIsland");
     const clueRevealRank = document.getElementById("postgameClueRevealRank");
     const clueRevealRankMirror = document.getElementById("postgameClueRevealRankMirror");
-    refs.itemRevealHud.className = `item-reveal-hud show ${normalizeGameItemCategory(itemDef.category)}${clueBossDef ? " postgame-clue" : ""}`;
-    refs.itemRevealHud.setAttribute("aria-hidden", "false");
     if (refs.itemRevealTitle) refs.itemRevealTitle.textContent = itemDef.revealTitle || "重要道具";
     if (refs.itemRevealName) refs.itemRevealName.textContent = `${itemDef.name}${Number(entry.quantity || 1) > 1 ? ` ×${entry.quantity}` : ""}`;
     if (refs.itemRevealLine) refs.itemRevealLine.textContent = itemDef.revealLine || itemDef.uiSummary || itemDef.description || "新的重要道具已加入背包。";
@@ -16841,14 +16877,19 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       refs.itemRevealImage.src = image;
       refs.itemRevealImage.alt = itemDef.name;
       refs.itemRevealImage.hidden = Boolean(clueBossDef) || !image;
+      if (!clueBossDef && image) revealImagesReady.push(decodeImageWhenReady(refs.itemRevealImage));
     }
     if (clueReveal) {
       clueReveal.hidden = !clueBossDef;
       if (clueBossDef) {
-        if (clueRevealFrame) clueRevealFrame.src = image || "images/board/postgame_clue_ui/york_clue_playing_card_frame_v2.webp";
+        if (clueRevealFrame) {
+          clueRevealFrame.src = portablePrefetchedBoardAssetUrl(image || "images/board/postgame_clue_ui/york_clue_playing_card_frame_v2.webp");
+          revealImagesReady.push(decodeImageWhenReady(clueRevealFrame));
+        }
         if (clueRevealIsland) {
-          clueRevealIsland.src = clueBossDef.islandImage || ISLAND_IMAGE_MAP.postgame_boss;
+          clueRevealIsland.src = mapDisplayAssetUrl(clueBossDef.islandImage || ISLAND_IMAGE_MAP.postgame_boss);
           clueRevealIsland.alt = clueBossDef.name;
+          revealImagesReady.push(decodeImageWhenReady(clueRevealIsland));
         }
         if (clueRevealRank) {
           const clueLabel = postgameClueCardLabel(itemDef.effect.clueNumber || clueBossDef.clueNumber);
@@ -16861,6 +16902,10 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         }
       }
     }
+    await Promise.all(revealImagesReady);
+    if (!itemRevealActive || !refs.itemRevealHud) return;
+    refs.itemRevealHud.className = `item-reveal-hud show ${normalizeGameItemCategory(itemDef.category)}${clueBossDef ? " postgame-clue" : ""}`;
+    refs.itemRevealHud.setAttribute("aria-hidden", "false");
     itemRevealTimer = window.setTimeout(() => {
       if (!refs.itemRevealHud) return;
       refs.itemRevealHud.classList.add("awaiting");
@@ -16880,14 +16925,11 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     window.setTimeout(playNextItemReveal, 0);
   }
 
-  function playEvolutionMaterialEffect({ card, form, costs, materialText, materialAction, beforePortraits, afterPortraits, beforeName, afterName }) {
+  async function playEvolutionMaterialEffect({ card, form, costs, materialText, materialAction, beforePortraits, afterPortraits, beforeName, afterName }) {
     const config = evolutionEffectForCosts(costs);
     if (!config || !refs.evolutionHud || !refs.evolutionHudMaterial) return Promise.resolve();
     hideEvolutionHud();
-    ensureDeferredImageSource(refs.evolutionHudCharacterFrame);
-    void refs.evolutionHud.offsetWidth;
-    refs.evolutionHud.className = `evolution-hud show ${config.type}`;
-    refs.evolutionHud.setAttribute("aria-hidden", "false");
+    const frameReady = ensureDeferredImageDecoded(refs.evolutionHudCharacterFrame);
     const basePortraits = beforePortraits || card?.battlePortraits || {};
     const evolvedPortraits = afterPortraits || cardPortraitsForDisplay(card) || {};
     const baseSrc = basePortraits.normal || basePortraits.morale || basePortraits.idle || "";
@@ -16900,6 +16942,15 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const startName = beforeName || card?.name || cardDisplayName(card);
     const finalName = afterName || form?.displayName || form?.name || cardDisplayName(card);
     if (refs.evolutionHudSub) refs.evolutionHudSub.textContent = "沉睡的力量，正在回應這片大海。";
+    await Promise.all([
+      frameReady,
+      decodeImageWhenReady(refs.evolutionHudCharacterBefore),
+      decodeImageWhenReady(refs.evolutionHudCharacterAfter),
+      config.image ? decodeImageWhenReady(refs.evolutionHudMaterial) : Promise.resolve(),
+    ]);
+    void refs.evolutionHud.offsetWidth;
+    refs.evolutionHud.className = `evolution-hud show ${config.type}`;
+    refs.evolutionHud.setAttribute("aria-hidden", "false");
     return new Promise((resolve) => {
       let finished = false;
       const finish = () => {
@@ -27103,7 +27154,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const detail = event.detail && typeof event.detail === "object" ? event.detail : {};
     const clueCards = Array.from({ length: POSTGAME_BOSS_DEFS.length }, (_, index) => `
       <span class="postgame-egghead-coordinate-card" style="--clue-index:${index};--clue-angle:${(index * 360) / POSTGAME_BOSS_DEFS.length}deg;--clue-angle-back:${(index * -360) / POSTGAME_BOSS_DEFS.length}deg">
-        <img src="images/board/postgame_clue_ui/york_clue_playing_card_frame_v2.webp" alt="">
+        <img src="${portablePrefetchedBoardAssetUrl("images/board/postgame_clue_ui/york_clue_playing_card_frame_v2.webp")}" alt="">
         <b>${index + 1}</b>
       </span>
     `).join("");
@@ -38228,7 +38279,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const chestImage = options.chestImage || chestType.image || "";
     return `
       <div class="sea-chest-stage-shell is-result" data-chest-type="${escapeModalText(chestType.id || options.chestTypeId || "unknown")}">
-        <img class="sea-chest-stage-frame" src="images/board/item_reveal_ui/important_item_reveal_panel_frame.webp" alt="" aria-hidden="true">
+        <img class="sea-chest-stage-frame" src="${portablePrefetchedBoardAssetUrl("images/board/item_reveal_ui/important_item_reveal_panel_frame.webp")}" alt="" aria-hidden="true">
         <div class="sea-chest-stage-head">
           <h3 class="sea-chest-stage-title">${escapeModalText(options.title || `${chestLabel}開啟`)}</h3>
           <div class="sea-chest-stage-meta">${escapeModalText(options.desc || chestType.desc || "寶箱已打開。")}</div>

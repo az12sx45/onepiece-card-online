@@ -1,5 +1,16 @@
 ﻿# Dev Workflow
 
+## 修改紀錄：行動裝置進場素材預下載 V397（2026-08-31）
+
+- 問題：V396 已降低 iPad 地圖圖片的解碼記憶體，但第一次真正需要圖片時仍可能受網路速度影響；Board 全部原圖約 1.93 GiB，不能一次預載，因此只建立觸控行動裝置進場必需清單。
+- 預下載：平板／手機開啟 `board_start.html` 250 ms 後，依 `public/images/board/mobile/manifest-v397.json` 背景下載 105 張 mobile WebP 與進化、重要道具、約克線索三張演出框，共 108 個檔案、5,039,358 bytes（約 4.81 MiB）。同時最多 6 個請求，只讀取 response bytes 存入 HTTP cache，不建立 `Image` 或提前解碼。
+- 進場保護：單人 campaign、離線及線上房間三條進場路徑共用同一閘門；尚未完成時顯示持續進度畫面。第一次最多 30 秒，若 manifest 或個別素材失敗，進場前再以新請求重試最多 15 秒；仍失敗才提示並沿用已完成快取進場，不會永久卡住多人房。
+- 準時顯示：地圖與 1～50 號頭像使用與 manifest 完全相同的版本網址；約克卡牌、寶箱結果、重要道具框及進化框也收斂到同一版本。重要道具與進化演出會等待當次所需圖片完成解碼後才顯示，避免先出現空框。
+- 快取：只有帶 `v=20260831-portable-prefetch-v397` 的 mobile／三張指定框圖，以及檔名已版本化的 manifest，回傳 `Cache-Control: public, max-age=31536000, immutable`；無版本素材、HTML 與 JS 仍為 `max-age=0`，日後換圖不會被舊快取鎖死。
+- 邊界：不改 `BOARD_GAME_STATE`、campaign、存檔、角色／道具／地圖 id、Socket.IO event、回合、戰鬥或原始大圖；桌機略過預下載，其他未列入 manifest 的素材仍按實際需要載入。
+- 檔案：修改 `public/board_start.html`、`public/board_game.html`、`public/js/board_start.js`、`public/js/board_shared.js`、`public/js/board_game.js`、`server/index.js`；新增 `public/images/board/mobile/manifest-v397.json`、`scripts/build_board_mobile_prefetch_manifest.js`、`scripts/board_portable_asset_prefetch_qa.js`，並同步四份專案文件。
+- 驗證：六支 V397 JS 均通過 `node --check`，manifest 重建為 108／108 且無缺檔；`npm start` 於 8800 啟動，兩個正式 HTML 皆 HTTP 200。iPad QA 驗證 108／108 下載、預載 `<img>` 0、108／108 immutable、無版本素材 `max-age=0`、進圖後 96／96 mobile 地圖，24 個實際唯一素材逐一有 resource entry 且 `transferSize=0`；故意讓一張圖第一次回 503 後，進場閘門顯示 107／108，第二次請求恢復為 108／108、`attempts=2` 並自動進圖。既有固定視角 QA 在 1024×768、932×430、390×844 全部通過，三尺寸皆無原尺寸地圖、無提前解碼演出框及 browser error。
+
 ## 修改紀錄：iPad 進入地圖記憶體降載 V396（2026-08-31）
 
 - 問題：iPad 由等待室進入 `board_fixed_viewport.html` 時，WebKit 顯示「重複發生問題」。實際線上 1 真人＋3 CPU 量測沒有重新導向循環或 JS 例外，但主地圖初始同時建立 116 張已解碼圖片；重複元素估算約 345.5 MiB、唯一圖片約 144.8 MiB，再加上 DPR 2、CSS 濾鏡、合成圖層與 iframe，會對 iOS WebContent 造成顯著記憶體壓力。

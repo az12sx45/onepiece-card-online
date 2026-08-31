@@ -1,4 +1,5 @@
 (function () {
+  const PORTABLE_ASSET_VERSION = "20260831-portable-prefetch-v397";
   const STORAGE_KEYS = {
     boardRoom: "op_board_preview_room",
     boardLobby: "op_board_preview_lobby",
@@ -35,7 +36,8 @@
     const directory = portableAssets && avatarId <= 50
       ? "images/board/mobile/avatars"
       : "images/board/avatars";
-    return `${directory}/${avatarId}.webp`;
+    const version = portableAssets && avatarId <= 50 ? `?v=${PORTABLE_ASSET_VERSION}` : "";
+    return `${directory}/${avatarId}.webp${version}`;
   }
 
   function readJson(key, fallback) {

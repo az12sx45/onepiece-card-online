@@ -1666,6 +1666,44 @@
         padding:16px;
       }
     }
+    .portable-asset-gate{
+      position:fixed;
+      inset:0;
+      z-index:12000;
+      display:grid;
+      place-items:center;
+      padding:24px;
+      background:rgba(3,16,28,.72);
+      backdrop-filter:blur(8px);
+    }
+    .portable-asset-gate[hidden]{display:none}
+    .portable-asset-gate-card{
+      width:min(420px,calc(100vw - 40px));
+      padding:24px;
+      border:1px solid rgba(246,204,104,.62);
+      border-radius:22px;
+      color:#f8f1dc;
+      text-align:center;
+      background:linear-gradient(155deg,rgba(9,40,57,.98),rgba(4,22,36,.98));
+      box-shadow:0 24px 70px rgba(0,0,0,.48),inset 0 0 30px rgba(36,166,174,.12);
+    }
+    .portable-asset-gate-card strong{display:block;font-size:20px;letter-spacing:.08em}
+    .portable-asset-gate-card span{display:block;margin-top:8px;color:#b8dce1;font-size:14px}
+    .portable-asset-gate-track{
+      height:9px;
+      margin-top:18px;
+      overflow:hidden;
+      border-radius:999px;
+      background:rgba(255,255,255,.12);
+    }
+    .portable-asset-gate-bar{
+      width:var(--portable-progress,0%);
+      height:100%;
+      border-radius:inherit;
+      background:linear-gradient(90deg,#1fc6bd,#f4cf69);
+      box-shadow:0 0 16px rgba(31,198,189,.7);
+      transition:width .18s ease;
+    }
   </style>
 </head>
 <body>
@@ -1860,8 +1898,16 @@
 
   </main>
 
-  <script src="js/board_shared.js?v=20260831-home-social-v394"></script>
+  <div class="portable-asset-gate" id="portableAssetGate" role="status" aria-live="polite" hidden>
+    <div class="portable-asset-gate-card">
+      <strong>正在備妥航海素材</strong>
+      <span id="portableAssetGateText">下載完成後會自動進入遊戲</span>
+      <div class="portable-asset-gate-track" aria-hidden="true"><div class="portable-asset-gate-bar" id="portableAssetGateBar"></div></div>
+    </div>
+  </div>
+
+  <script src="js/board_shared.js?v=20260831-portable-prefetch-v397"></script>
   <script src="/socket.io/socket.io.js"></script>
-  <script src="js/board_start.js?v=20260831-home-social-v394"></script>
+  <script src="js/board_start.js?v=20260831-portable-prefetch-v397"></script>
 </body>
 </html>

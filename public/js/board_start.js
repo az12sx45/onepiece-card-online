@@ -59,6 +59,9 @@
     boardLobbyChatBox: document.getElementById("boardLobbyChatBox"),
     boardLobbyChatInput: document.getElementById("boardLobbyChatInput"),
     boardLobbySendChatBtn: document.getElementById("boardLobbySendChatBtn"),
+    portableAssetGate: document.getElementById("portableAssetGate"),
+    portableAssetGateText: document.getElementById("portableAssetGateText"),
+    portableAssetGateBar: document.getElementById("portableAssetGateBar"),
   };
 
   const initData = shared.init({
@@ -88,6 +91,10 @@
   };
   const CPU_LOBBY_NAMES = ["CPU1", "CPU2", "CPU3"];
   const CPU_LOBBY_AVATARS = [12, 18, 24];
+  const PORTABLE_ASSET_MANIFEST_URL = "images/board/mobile/manifest-v397.json";
+  const PORTABLE_ASSET_WARMUP_TIMEOUT_MS = 30000;
+  const PORTABLE_ASSET_RETRY_TIMEOUT_MS = 15000;
+  const PORTABLE_ASSET_WARMUP_CONCURRENCY = 6;
 
   const state = {
     currentView: "home",
@@ -103,6 +110,221 @@
     connected: false,
     retryTimer: 0,
   };
+  const portableAssetWarmup = {
+    status: "idle",
+    version: "",
+    total: 0,
+    completed: 0,
+    failed: 0,
+    startedAt: 0,
+    finishedAt: 0,
+    promise: null,
+    retryPromise: null,
+    failedUrls: [],
+    attempts: 0,
+    navigationPending: false,
+  };
+
+  function isPortableTouchDevice() {
+    return window.matchMedia?.("(pointer: coarse)")?.matches
+      || Number(navigator.maxTouchPoints || 0) > 1
+      || /Android|iPhone|iPad|Mobile/i.test(navigator.userAgent || "");
+  }
+
+  function portableAssetWarmupSnapshot() {
+    return {
+      status: portableAssetWarmup.status,
+      version: portableAssetWarmup.version,
+      total: portableAssetWarmup.total,
+      completed: portableAssetWarmup.completed,
+      failed: portableAssetWarmup.failed,
+      attempts: portableAssetWarmup.attempts,
+      startedAt: portableAssetWarmup.startedAt,
+      finishedAt: portableAssetWarmup.finishedAt,
+    };
+  }
+
+  function notifyPortableAssetWarmup() {
+    if (portableAssetWarmup.navigationPending && refs.portableAssetGate) {
+      const successful = Math.max(0, portableAssetWarmup.completed - portableAssetWarmup.failed);
+      const percent = portableAssetWarmup.total
+        ? Math.min(100, Math.round((successful / portableAssetWarmup.total) * 100))
+        : 0;
+      refs.portableAssetGate.hidden = false;
+      if (refs.portableAssetGateText) {
+        refs.portableAssetGateText.textContent = portableAssetWarmup.total
+          ? `${successful} / ${portableAssetWarmup.total}（${percent}%）`
+          : "正在讀取素材清單…";
+      }
+      refs.portableAssetGateBar?.style.setProperty("--portable-progress", `${percent}%`);
+    }
+    window.dispatchEvent(new CustomEvent("board:portable-assets-progress", {
+      detail: portableAssetWarmupSnapshot(),
+    }));
+  }
+
+  function versionedPortableAssetUrl(source, version) {
+    const url = String(source || "").trim();
+    if (!url) return "";
+    return `${url}${url.includes("?") ? "&" : "?"}v=${encodeURIComponent(version)}`;
+  }
+
+  async function fetchPortableAsset(url, signal) {
+    const response = await fetch(url, {
+      cache: "force-cache",
+      credentials: "same-origin",
+      signal,
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}: ${url}`);
+    await response.arrayBuffer();
+  }
+
+  async function fetchPortableAssetBatch(urls, signal, completedBefore = 0) {
+    const failedUrls = [];
+    let cursor = 0;
+    portableAssetWarmup.completed = Math.max(0, completedBefore);
+    portableAssetWarmup.failed = 0;
+    const worker = async () => {
+      while (cursor < urls.length) {
+        const index = cursor;
+        cursor += 1;
+        try {
+          await fetchPortableAsset(urls[index], signal);
+        } catch (_) {
+          failedUrls.push(urls[index]);
+          portableAssetWarmup.failed += 1;
+        } finally {
+          portableAssetWarmup.completed += 1;
+          notifyPortableAssetWarmup();
+        }
+      }
+    };
+    await Promise.all(Array.from({ length: Math.min(PORTABLE_ASSET_WARMUP_CONCURRENCY, urls.length) }, worker));
+    return failedUrls;
+  }
+
+  function startPortableAssetWarmup() {
+    if (portableAssetWarmup.promise) return portableAssetWarmup.promise;
+    if (!isPortableTouchDevice()) {
+      portableAssetWarmup.status = "skipped";
+      portableAssetWarmup.promise = Promise.resolve(portableAssetWarmupSnapshot());
+      notifyPortableAssetWarmup();
+      return portableAssetWarmup.promise;
+    }
+    portableAssetWarmup.status = "loading";
+    portableAssetWarmup.startedAt = Date.now();
+    portableAssetWarmup.attempts = 1;
+    notifyPortableAssetWarmup();
+    portableAssetWarmup.promise = (async () => {
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), PORTABLE_ASSET_WARMUP_TIMEOUT_MS);
+      try {
+        const manifestResponse = await fetch(PORTABLE_ASSET_MANIFEST_URL, {
+          cache: "force-cache",
+          credentials: "same-origin",
+          signal: controller.signal,
+        });
+        if (!manifestResponse.ok) throw new Error(`HTTP ${manifestResponse.status}: ${PORTABLE_ASSET_MANIFEST_URL}`);
+        const manifest = await manifestResponse.json();
+        const version = String(manifest?.version || "").trim();
+        const sources = [
+          ...(Array.isArray(manifest?.assets) ? manifest.assets : []),
+          ...(Array.isArray(manifest?.deferredAssets) ? manifest.deferredAssets : []),
+        ];
+        const urls = Array.from(new Set(sources.map((source) => versionedPortableAssetUrl(source, version)).filter(Boolean)));
+        if (!version || !urls.length) throw new Error("portable asset manifest is empty");
+        portableAssetWarmup.version = version;
+        portableAssetWarmup.total = urls.length;
+        notifyPortableAssetWarmup();
+        portableAssetWarmup.failedUrls = await fetchPortableAssetBatch(urls, controller.signal);
+        portableAssetWarmup.status = portableAssetWarmup.failed ? "partial" : "complete";
+      } catch (_) {
+        portableAssetWarmup.failedUrls = [];
+        portableAssetWarmup.status = "failed";
+      } finally {
+        window.clearTimeout(timeout);
+        portableAssetWarmup.finishedAt = Date.now();
+        notifyPortableAssetWarmup();
+      }
+      return portableAssetWarmupSnapshot();
+    })();
+    return portableAssetWarmup.promise;
+  }
+
+  function retryPortableAssetWarmup() {
+    if (portableAssetWarmup.retryPromise) return portableAssetWarmup.retryPromise;
+    if (["complete", "skipped"].includes(portableAssetWarmup.status)) {
+      return Promise.resolve(portableAssetWarmupSnapshot());
+    }
+    portableAssetWarmup.retryPromise = (async () => {
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), PORTABLE_ASSET_RETRY_TIMEOUT_MS);
+      portableAssetWarmup.status = "retrying";
+      portableAssetWarmup.attempts += 1;
+      notifyPortableAssetWarmup();
+      try {
+        let urls = portableAssetWarmup.failedUrls.slice();
+        if (!urls.length) {
+          const manifestResponse = await fetch(PORTABLE_ASSET_MANIFEST_URL, {
+            cache: "no-cache",
+            credentials: "same-origin",
+            signal: controller.signal,
+          });
+          if (!manifestResponse.ok) throw new Error(`HTTP ${manifestResponse.status}: ${PORTABLE_ASSET_MANIFEST_URL}`);
+          const manifest = await manifestResponse.json();
+          const version = String(manifest?.version || "").trim();
+          const sources = [
+            ...(Array.isArray(manifest?.assets) ? manifest.assets : []),
+            ...(Array.isArray(manifest?.deferredAssets) ? manifest.deferredAssets : []),
+          ];
+          urls = Array.from(new Set(sources.map((source) => versionedPortableAssetUrl(source, version)).filter(Boolean)));
+          if (!version || !urls.length) throw new Error("portable asset manifest is empty");
+          portableAssetWarmup.version = version;
+          portableAssetWarmup.total = urls.length;
+        }
+        const completedBefore = Math.max(0, portableAssetWarmup.total - urls.length);
+        portableAssetWarmup.failedUrls = await fetchPortableAssetBatch(urls, controller.signal, completedBefore);
+        portableAssetWarmup.status = portableAssetWarmup.failed ? "partial" : "complete";
+      } catch (_) {
+        portableAssetWarmup.status = "failed";
+      } finally {
+        window.clearTimeout(timeout);
+        portableAssetWarmup.finishedAt = Date.now();
+        notifyPortableAssetWarmup();
+      }
+      return portableAssetWarmupSnapshot();
+    })();
+    return portableAssetWarmup.retryPromise;
+  }
+
+  async function ensurePortableAssetsReadyForNavigation() {
+    const firstAttempt = await startPortableAssetWarmup();
+    if (!isPortableTouchDevice() || ["complete", "skipped"].includes(firstAttempt.status)) return firstAttempt;
+    return retryPortableAssetWarmup();
+  }
+
+  async function navigateToBoardGameWhenReady(url) {
+    if (portableAssetWarmup.navigationPending) return;
+    portableAssetWarmup.navigationPending = true;
+    const warmup = ensurePortableAssetsReadyForNavigation();
+    if (isPortableTouchDevice() && !["complete", "skipped"].includes(portableAssetWarmup.status)) {
+      document.documentElement.dataset.portableAssetGate = "waiting";
+      if (refs.portableAssetGate) refs.portableAssetGate.hidden = false;
+      notifyPortableAssetWarmup();
+      shared.showToast("正在完成平板航海素材下載，準備好後立即進場…");
+    }
+    let readyState = null;
+    try {
+      readyState = await warmup;
+    } finally {
+      delete document.documentElement.dataset.portableAssetGate;
+      if (refs.portableAssetGate) refs.portableAssetGate.hidden = true;
+    }
+    if (isPortableTouchDevice() && readyState?.status !== "complete") {
+      shared.showToast("網路未能完成少數素材下載；已重試並保留快取，遊戲仍會正常進場。");
+    }
+    location.href = url;
+  }
 
   function buildLobbyFromQuery(roomId) {
     const rid = sanitizeRoomCode(roomId || "B7412");
@@ -575,7 +797,7 @@
       if (handleSocketError(result, "開啟共有航海紀錄失敗")) return;
       if (result.lobby) saveAndRenderLobby(result.lobby);
       if (result.navigate && result.roomCode) {
-        location.href = `board_game.html?room=${encodeURIComponent(result.roomCode)}&online=1&campaign=${encodeURIComponent(campaignId)}&campaignMode=solo`;
+        void navigateToBoardGameWhenReady(`board_game.html?room=${encodeURIComponent(result.roomCode)}&online=1&campaign=${encodeURIComponent(campaignId)}&campaignMode=solo`);
         return;
       }
       setView("lobby");
@@ -949,7 +1171,7 @@
       return;
     }
     if (!waitForOnlineRoomClient("開始遊戲")) return;
-    location.href = `board_game.html?room=${encodeURIComponent(state.lobby.roomCode)}`;
+    void navigateToBoardGameWhenReady(`board_game.html?room=${encodeURIComponent(state.lobby.roomCode)}`);
   }
 
   function connectBoardSocket() {
@@ -1013,7 +1235,7 @@
         const campaignQuery = lobby.campaignId
           ? `&campaign=${encodeURIComponent(lobby.campaignId)}&campaignMode=${encodeURIComponent(lobby.campaignMode || "gather")}`
           : "";
-        location.href = `board_game.html?room=${encodeURIComponent(lobby.roomCode)}&online=1${campaignQuery}`;
+        void navigateToBoardGameWhenReady(`board_game.html?room=${encodeURIComponent(lobby.roomCode)}&online=1${campaignQuery}`);
       }
     });
   }
@@ -1138,16 +1360,20 @@
       campaigns: JSON.parse(JSON.stringify(state.campaigns || [])),
       accountProfileLocked,
       linkedAccountUserId,
+      portableAssetWarmup: portableAssetWarmupSnapshot(),
     }),
     selectAvatar,
     addCpuPlayer,
     removeCpuPlayer,
+    ensurePortableAssetsReadyForNavigation,
+    navigateToBoardGameWhenReady,
     setPlayerName: (name) => {
       if (refs.playerName) refs.playerName.value = name;
       commitPlayerName();
     },
   };
 
+  window.setTimeout(startPortableAssetWarmup, 250);
   connectBoardSocket();
   wireEvents();
   bootInitialView();

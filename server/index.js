@@ -30,7 +30,26 @@ console.log("[env] DATABASE_URL exists:", !!process.env.DATABASE_URL);
 
 const app = express();
 app.use(express.json({ limit: "30mb" }));
-app.use(express.static(path.join(__dirname, "..", "public")));
+const publicDir = path.join(__dirname, "..", "public");
+const portableAssetVersion = "20260831-portable-prefetch-v397";
+const portableAssetManifestPath = "images/board/mobile/manifest-v397.json";
+const immutableDeferredBoardAssets = new Set([
+  "images/board/evolution_ui/evolution_portrait_frame_v1.webp",
+  "images/board/item_reveal_ui/important_item_reveal_panel_frame.webp",
+  "images/board/postgame_clue_ui/york_clue_playing_card_frame_v2.webp",
+]);
+app.use(express.static(publicDir, {
+  setHeaders(res, filePath) {
+    const relativePath = path.relative(publicDir, filePath).replace(/\\/g, "/");
+    const requestUrl = new URL(res.req.originalUrl || "/", "http://board.local");
+    const isVersionedAsset = requestUrl.searchParams.get("v") === portableAssetVersion;
+    const isPortableAsset = relativePath.startsWith("images/board/mobile/");
+    const isDeferredAsset = immutableDeferredBoardAssets.has(relativePath);
+    if (relativePath === portableAssetManifestPath || (isVersionedAsset && (isPortableAsset || isDeferredAsset))) {
+      res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+    }
+  },
+}));
 app.use("/api/board-save", (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET,PUT,DELETE,OPTIONS");
