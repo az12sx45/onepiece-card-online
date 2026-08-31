@@ -1,5 +1,39 @@
 ﻿# Dev Workflow
 
+## 修改紀錄：Board 首頁主選單／正式好友私訊 V394（2026-08-31）
+
+- 首頁：`board_start.html` 登入後固定先顯示「開始航海／繼續航海／好友與聊天室／玩家資料」四選單；建立／加入房間、共有航海紀錄與社交說明各自進入第二層 view，不再一開頁就把房間或整份紀錄鋪在首頁。帳號卡、既有房間、campaign 與本機測試資料流程不改。
+- 正式社交：移除 `board_shared.js` 的假好友、假邀請與假聊天內容，改以目前 Board Socket 進行 `SOCIAL_AUTH`、`PRESENCE_SET`、`FRIENDS_GET`、好友新增／確認／拒絕／刪除、`DM_HISTORY`、`DM_SEND`、`FRIENDS_DIRTY` 與 `DM_NEW`。好友名單、在線狀態、待確認邀請、歷史訊息與即時未讀都使用雲端帳號及資料庫；未登入或本機沒有 `DATABASE_URL` 時顯示明確不可用狀態，不再造出預覽玩家。
+- Board 房邀請：沿用既有 `LOBBY_INVITE_SEND`／`LOBBY_INVITE_RESPOND`，只增加 `mode:"board"` payload；server 會在 `boardRooms` 驗證邀請者確實在等待室、房間未開局、雙方為好友且接收者在線。Board 邀請用 `EMIT.type="board_lobby_invite"`，不會被舊卡牌頁誤當成卡牌房；接受後前往同一個 `board_start.html?view=lobby&room=...` 並由原 `BOARD_JOIN_ROOM` 加入。
+- 遊戲中：正式 `board_game.js` 的 LAN Socket 也交給同一份社交模組，因此好友與私訊在進入地圖後仍保持連線；沒有新增 `gameState`／campaign 欄位、角色／道具／地圖 id，也未改完整 `BOARD_GAME_STATE` 權威。
+- 檔案：修改 `public/board_start.html`、`public/js/board_start.js`、`public/js/board_shared.js`、`public/board_game.html`、`public/js/board_game.js`、`server/index.js`；新增 `scripts/board_home_social_qa_server.js`、`scripts/board_home_social_qa.js`，並同步四份專案文件。開始頁、共用模組與主遊戲 query 統一為 `20260831-home-social-v394`。
+- 驗證：`node --check` 通過 server、三支正式 JS 與兩支專項 QA；正式 `PORT=8798 npm start` 啟動，`board_start.html`／`board_game.html` 皆 HTTP 200 且載入 V394。帶 mock PostgreSQL 的真實 Socket.IO 專項測試以 1600×900 與 1024×768 兩個獨立登入身分完成：首頁 4 選單、首頁不展開房間／紀錄、好友確認、正式私訊寫入與另一端 `DM_NEW`、建立 Board 房、好友房邀請、接受後兩端同房 2/4；結果 `ok=true`、`errors=[]`，截圖與 JSON 位於 `.codex/qa/board_home_social_v394/`。
+
+## 修改紀錄：觀看方正式介面補齊 V393（2026-08-31）
+
+- 盤點：逐一比對正式 `emitSpectatorModalEvent()` 的 15 種實際 kind 與 `openSpectatorBoardModal()` 分流，確認 `final-island-revisit`、`final-boss-voyage-compass` 原本沒有專用 renderer，會落回通用藍色行動 HUD；其餘海域卡、寶箱、商店、醫院、研究所、競技場、司法島、酒館與任務牆均已有正式觀看版。
+- 修正：最終之島重訪改由操作方與觀看方共用 `finalIslandRevisitPanelConfig()` 及既有航海情報框；大熊 Boss 航向羅盤改由雙方共用同一份 13 張 cover-flow markup。操作方每次左右切換線索牌都以輕量事件同步目前 `selectedBossKey`，不額外傳完整快照；觀看端立即切到相同卡片，但所有卡片、箭頭與確認均維持唯讀，只保留「關閉觀看」。
+- 防線：未知 `spectator-modal` kind 不再呼叫藍色 `showBoardUiHud()`，改以既有 `encounter_panel_frame.webp` 航海情報框顯示唯讀摘要。沒有新增 Socket.IO event 名稱、gameState／battleState 欄位、localStorage key、角色／道具／地圖 id；規則結果仍由操作方與完整 `BOARD_GAME_STATE` 決定。
+- 檔案：修改 `public/js/board_game.js`、`public/board_game.html`、新增 `scripts/spectator_modal_ui_qa.js`，並同步四份專案文件。正式主頁 query 更新為 `20260831-spectator-formal-ui-v393`。
+- 驗證：`node --check` 通過主程式與專項 QA；靜態比對顯示 15 種正式 emit kind 的未處理數為 0。獨立 8796 `npm start` 服務建立兩個真人 Socket.IO 房，在 1280×720 與 1024×768 依序由房主送出最終之島重訪、13 卡大熊羅盤與未知 kind；觀看端分別得到正式航海框、13 張唯讀羅盤與正式後備框，三者 `oldBlueHudOpen=false`，兩尺寸均 `errors=[]`、`failures=[]`。首次直接以專案 Node 執行因專案未安裝 Playwright 而停止，未修改正式依賴；改用 Codex 隨附唯讀 Node 套件後完整通過。兩組截圖已目視確認無裁切。
+
+## 修改紀錄：觀看端寶箱完整演出同步 V392（2026-08-31）
+
+- 問題澄清：觀看方的「舊 UI」不是只有過期畫面未清除，而是操作方進入漂流寶箱時，其他玩家看不到四箱與洗牌；開箱後也因事件未帶寶箱種類／圖片，只能落回通用藍色結果框。
+- 同步：沿用 V391 的非持久化 `BOARD_GAME_EVENT`，把寶箱流程拆成 `chest-draft`、`chest-shuffle`、`chest-result` 三個 `spectator-modal` kind。事件只帶四個候選的槽位／種類／最終順序、比例 id 與最後抽中的種類／圖片，不新增 Socket.IO event 名稱、不寫入 `BOARD_GAME_STATE` 或存檔。
+- UI：操作方與觀看方共用同一組寶箱 draft／result markup。觀看方依序顯示四個正式寶箱、翻面洗牌、最後抽中的木／銅／銀／金／寶石箱圖片與 `important_item_reveal_panel_frame.webp`；觀看卡片不綁選擇事件並禁止滑鼠操作。一般海域卡結果流程不改。
+- 檔案：修改 `public/js/board_game.js`、`public/board_game.html` 與四份專案文件；主頁 query 更新為 `20260831-lan-spectator-chest-sync-v392`。沒有新增頂層 state、localStorage key、角色／道具／地圖 id。
+- 驗證：`node --check public/js/board_game.js`、`node --check server/index.js`、`git diff --check` 通過。真實 Socket.IO 房以兩個正式 Board DOM 頁驗證：觀看方 draft 為 4 箱、洗牌完成為 4 張 ready 卡、結果取得實際 `gold` 種類、`chest_gold.webp` 與金色重要道具框，三段皆未建立 `.sea-event-result-ui` 通用藍框，雙頁 page error 為 0。
+
+## 修改紀錄：多人流量瘦身／觀看端舊 UI 清除 V391（2026-08-31）
+
+- 需求：降低四人房的 Render 傳輸量，同時修正觀看方偶爾停留在舊骰子、舊提示或舊海域選擇畫面的問題；不得犧牲刷新後的完整狀態恢復。
+- 壓縮／紀錄：Socket.IO WebSocket 啟用 `perMessageDeflate`（1 KiB 以上、level 6、雙向 no-context-takeover）。`gameState.log` 在載入、追加與產生存檔前都只保留最新 500 筆；舊存檔會先把依歷史紀錄判斷的外觀獎勵轉成既有永久玩家狀態，再裁切。原本以紀錄長度作亂數鹽的流程改取最近紀錄雜湊，避免到 500 筆後固定重複。
+- 同步分層：`BOARD_GAME_STATE` 仍是玩家、地圖、戰鬥與刷新恢復的唯一完整權威快照。新增不快取、不寫存檔的 `BOARD_GAME_EVENT`，只傳短暫 UI 與逐格船位；移動每格傳輕量位置，最多每 4 格補一份完整檢查點，抵達、事件、戰鬥與其他重要狀態仍送完整快照。server 限制事件 64 KiB，並沿用目前行動者／戰鬥／切磋／交易控制權驗證。
+- 舊 UI：完整存檔的 `boardUiEvent` 固定為 `null`；短暫事件帶 `createdAt`／`expiresAt` 與 server 房間序號，觀看端拒絕過期或倒序事件，到期會清除 HUD、骰子與屬於該事件的觀看彈窗。交棒提示仍會延後套用下一份完整快照，維持原動畫順序。
+- 檔案：修改 `server/index.js`、`public/js/board_game.js`、`public/board_game.html`，並同步四份專案文件；主頁 query 為 `20260831-lan-event-compression-v391`。沒有新增頂層 `gameState` 欄位、localStorage key，也沒有改角色／道具／Boss／地圖 id。
+- 驗證：`node --check server/index.js`、`node --check public/js/board_game.js`、`git diff --check` 通過；`npm start` 於 `127.0.0.1:8787` 啟動且主頁 HTTP 200。真實 WebSocket 雙端驗證壓縮協商、完整快照、輕量事件與非當前玩家拒絕；正式頁 DOM 驗證觀看船位會動但權威位置不變、短暫 HUD 到期清除、過期快照事件不重播且 page error 為 0。四連線房收到 3／3 fan-out，刷新請求取回相同完整版本。750 筆測試紀錄保存後為 500 筆且 `boardUiEvent=null`；現有 `B1007` 樣本由 1,887,341 bytes／gzip 232,420 bytes 降為 833,831／118,504，`CURRENT` 樣本由 4,879,566／169,088 降為 640,255／75,874（只在記憶體模擬，不覆寫玩家存檔）。
+
 ## 修改紀錄：線上發布隔離與 Board 雲端持久化 V390（2026-08-31）
 
 - 需求：整理並部署 Board，但不能用本機舊 commit 覆蓋既有卡牌正式站；西洋棋暫不發布。

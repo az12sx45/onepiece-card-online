@@ -660,6 +660,12 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: { origin: "*" },
   maxHttpBufferSize: 30 * 1024 * 1024,
+  perMessageDeflate: {
+    threshold: 1024,
+    clientNoContextTakeover: true,
+    serverNoContextTakeover: true,
+    zlibDeflateOptions: { level: 6, memLevel: 7 },
+  },
 });
 
 // room = { state, sockets: Map<sid,{playerId,secret,displayName,avatar}>, host, lobbyReady }
@@ -718,6 +724,7 @@ function createBoardRoom(roomCode, profile){
     sockets: new Map(),
     gamePayload: null,
     gameVersion: 0,
+    gameEventVersion: 0,
     gameUpdatedAt: 0,
     hostTransferTimer: null,
   };
@@ -1540,6 +1547,28 @@ function canAcceptBoardGameStateUpdate(room, socket, sourceClientId = "", nextPa
   if (normalizedReason.startsWith("trade-")) {
     return canAcceptBoardTradeStateUpdate(previousPayload, nextPayload, socket, sourceClientId);
   }
+  return false;
+}
+
+function isValidBoardGameEvent(event){
+  if(!event || typeof event !== "object" || Array.isArray(event)) return false;
+  if(!String(event.id || "").trim() || !String(event.channel || "").trim() || !String(event.type || "").trim()) return false;
+  try{
+    return Buffer.byteLength(JSON.stringify(event), "utf8") <= 64 * 1024;
+  }catch{
+    return false;
+  }
+}
+
+function canAcceptBoardGameEvent(room, socket, sourceClientId = ""){
+  const payload = room?.gamePayload;
+  const socketMeta = room?.sockets?.get(socket.id) || socket.data.boardProfile || {};
+  if(!payload) return boardSocketIsRoomHost(room, socketMeta);
+  const actor = currentBoardTurnActorFromPayload(payload);
+  if(actor && boardSocketCanDriveActor(actor, room, socketMeta, sourceClientId)) return true;
+  if(payload.battleState && canAcceptBoardBattleStateUpdate(payload, payload, socket, sourceClientId)) return true;
+  if(boardSparFromPayload(payload) && canAcceptBoardSparStateUpdate(payload, payload, socket, sourceClientId)) return true;
+  if(boardActiveTradeFromPayload(payload) && canAcceptBoardTradeStateUpdate(payload, payload, socket, sourceClientId)) return true;
   return false;
 }
 
@@ -3347,6 +3376,34 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("BOARD_GAME_EVENT", (message = {}, cb) => {
+    try{
+      const roomCode = sanitizeBoardRoomCode(message.roomCode || socket.data.boardRoomCode || "");
+      const room = boardRooms.get(roomCode);
+      if(!room) return cb?.({ ok:false, error:"not_found" });
+      const event = message.event;
+      if(!isValidBoardGameEvent(event)) return cb?.({ ok:false, error:"invalid_event" });
+      const sourceClientId = String(message.sourceClientId || socket.data.boardProfile?.clientId || "");
+      if(!canAcceptBoardGameEvent(room, socket, sourceClientId)){
+        return cb?.({ ok:false, error:"not_your_turn" });
+      }
+      const sequence = Math.max(0, Number(room.gameEventVersion || 0)) + 1;
+      room.gameEventVersion = sequence;
+      room.updatedAt = Date.now();
+      socket.to(`board:${room.roomCode}`).emit("BOARD_GAME_EVENT", {
+        roomCode: room.roomCode,
+        event,
+        sequence,
+        stateVersion: Number(room.gameVersion || 0),
+        sourceClientId,
+      });
+      return cb?.({ ok:true, sequence, stateVersion:Number(room.gameVersion || 0) });
+    }catch(e){
+      console.error("[BOARD_GAME_EVENT] error:", e);
+      return cb?.({ ok:false, error:String(e?.message || e) });
+    }
+  });
+
   socket.on("BOARD_STATE_REQUEST", (payload = {}, cb) => {
     try{
       const roomCode = sanitizeBoardRoomCode(payload.roomCode || socket.data.boardRoomCode || "");
@@ -3524,7 +3581,7 @@ socket.on("FRIENDS_GET", async ({ secret }, cb) => {
 //  - LOBBY_INVITE_SEND: sender invites friend to roomId
 //  - LOBBY_INVITE_RESPOND: receiver accept / reject / mute5
 // =========================
-socket.on("LOBBY_INVITE_SEND", async ({ secret, toUserId, roomId }, cb) => {
+socket.on("LOBBY_INVITE_SEND", async ({ secret, toUserId, roomId, mode }, cb) => {
   try{
     pruneLobbyInvites();
 
@@ -3534,16 +3591,23 @@ socket.on("LOBBY_INVITE_SEND", async ({ secret, toUserId, roomId }, cb) => {
     const fromId = Number(prof.user_id);
     const toId = Number(toUserId);
     const rid = String(roomId||"").trim().toUpperCase();
+    const inviteMode = String(mode||"card").trim().toLowerCase() === "board" ? "board" : "card";
 
     if(!(fromId>0)) return cb?.({ ok:false, error:"bad from" });
     if(!(toId>0)) return cb?.({ ok:false, error:"bad to" });
     if(!rid) return cb?.({ ok:false, error:"no room" });
     if(toId === fromId) return cb?.({ ok:false, error:"cannot invite self" });
 
-    // verify room exists & in lobby phase
-    const room = rooms.get(rid);
+    // verify the matching game room exists and is still waiting
+    const room = inviteMode === "board" ? boardRooms.get(rid) : rooms.get(rid);
     if(!room) return cb?.({ ok:false, error:"room not found" });
-    if(room.phase !== 'lobby') return cb?.({ ok:false, error:"room already started" });
+    if(inviteMode === "board"){
+      if(room.status !== "waiting") return cb?.({ ok:false, error:"room already started" });
+      const senderInRoom = (room.players || []).some(player => Number(player?.userId) === fromId && !boardPlayerIsCpu(player));
+      if(!senderInRoom) return cb?.({ ok:false, error:"not room member" });
+    }else if(room.phase !== 'lobby'){
+      return cb?.({ ok:false, error:"room already started" });
+    }
 
     // only allow inviting friends
     const stats = (prof.stats && typeof prof.stats==="object") ? prof.stats : {};
@@ -3569,19 +3633,21 @@ socket.on("LOBBY_INVITE_SEND", async ({ secret, toUserId, roomId }, cb) => {
       fromAvatar: Number(prof.avatar)||1,
       toId,
       roomId: rid,
+      mode: inviteMode,
       createdAt: now,
       expiresAt: now + 120000, // 2 min
     };
     lobbyInvites.set(inviteId, inv);
 
     emitToUser(toId, "EMIT", {
-      type: "lobby_invite",
+      type: inviteMode === "board" ? "board_lobby_invite" : "lobby_invite",
       invite: {
         inviteId,
         fromId,
         fromName: inv.fromName,
         fromAvatar: inv.fromAvatar,
         roomId: rid,
+        mode: inviteMode,
         createdAt: now,
         expiresAt: inv.expiresAt,
       }
@@ -3624,16 +3690,19 @@ socket.on("LOBBY_INVITE_RESPOND", async ({ secret, inviteId, action }, cb) => {
 
     if(act !== 'accept') return cb?.({ ok:false, error:"bad action" });
 
-    // accept
-    lobbyInvites.delete(id);
-
-    // verify room still exists and is lobby
-    const room = rooms.get(String(inv.roomId));
+    // verify the corresponding card/Board room still exists and is waiting
+    const inviteMode = String(inv.mode||"card") === "board" ? "board" : "card";
+    const room = inviteMode === "board" ? boardRooms.get(String(inv.roomId)) : rooms.get(String(inv.roomId));
     if(!room) return cb?.({ ok:false, error:"room not found" });
-    if(room.phase !== 'lobby') return cb?.({ ok:false, error:"room already started" });
+    if(inviteMode === "board"){
+      if(room.status !== "waiting") return cb?.({ ok:false, error:"room already started" });
+    }else if(room.phase !== 'lobby'){
+      return cb?.({ ok:false, error:"room already started" });
+    }
 
+    lobbyInvites.delete(id);
     emitToUser(Number(inv.fromId), "EMIT", { type:"toast", text:`${String(prof.name||'好友')} 已接受邀請` });
-    return cb?.({ ok:true, roomId: String(inv.roomId) });
+    return cb?.({ ok:true, roomId: String(inv.roomId), mode: inviteMode });
   }catch(e){
     console.error("[LOBBY_INVITE_RESPOND] error:", e);
     return cb?.({ ok:false, error:String(e?.message||e) });

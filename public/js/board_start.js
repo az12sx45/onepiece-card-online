@@ -21,8 +21,21 @@
     localProfileControls: document.getElementById("localProfileControls"),
     avatarPickerGrid: document.getElementById("avatarPickerGrid"),
     openBoardFlowBtn: document.getElementById("openBoardFlowBtn"),
+    openCampaignsBtn: document.getElementById("openCampaignsBtn"),
+    campaignMenuHint: document.getElementById("campaignMenuHint"),
+    openSocialBtn: document.getElementById("openSocialBtn"),
+    socialMenuHint: document.getElementById("socialMenuHint"),
     backToHomeBtn: document.getElementById("backToHomeBtn"),
     backToMainBtn: document.getElementById("backToMainBtn"),
+    backFromCampaignsBtn: document.getElementById("backFromCampaignsBtn"),
+    backFromSocialBtn: document.getElementById("backFromSocialBtn"),
+    openFriendDockBtn: document.getElementById("openFriendDockBtn"),
+    refreshSocialBtn: document.getElementById("refreshSocialBtn"),
+    socialConnectionText: document.getElementById("socialConnectionText"),
+    socialFriendCount: document.getElementById("socialFriendCount"),
+    socialOnlineCount: document.getElementById("socialOnlineCount"),
+    socialRequestCount: document.getElementById("socialRequestCount"),
+    socialUnreadCount: document.getElementById("socialUnreadCount"),
     createBoardRoomBtn: document.getElementById("createBoardRoomBtn"),
     joinBoardRoomBtn: document.getElementById("joinBoardRoomBtn"),
     refreshBoardRoomsBtn: document.getElementById("refreshBoardRoomsBtn"),
@@ -283,6 +296,39 @@
     }
   }
 
+  function socialSummaryFromState() {
+    const social = shared.getState?.() || {};
+    return {
+      ready: !!social.socialReady,
+      loading: !!social.socialLoading,
+      error: String(social.socialError || ""),
+      friendCount: Array.isArray(social.friends) ? social.friends.length : 0,
+      onlineCount: Array.isArray(social.friends) ? social.friends.filter((friend) => friend.online).length : 0,
+      requestCount: Array.isArray(social.requestsIn) ? social.requestsIn.length : 0,
+      unreadCount: social.unread instanceof Map
+        ? Array.from(social.unread.values()).reduce((sum, value) => sum + Math.max(0, Number(value) || 0), 0)
+        : 0,
+    };
+  }
+
+  function renderSocialSummary(summary = socialSummaryFromState()) {
+    if (refs.socialFriendCount) refs.socialFriendCount.textContent = summary.ready ? String(summary.friendCount || 0) : "—";
+    if (refs.socialOnlineCount) refs.socialOnlineCount.textContent = summary.ready ? String(summary.onlineCount || 0) : "—";
+    if (refs.socialRequestCount) refs.socialRequestCount.textContent = summary.ready ? String(summary.requestCount || 0) : "—";
+    if (refs.socialUnreadCount) refs.socialUnreadCount.textContent = summary.ready ? String(summary.unreadCount || 0) : "—";
+    if (refs.socialConnectionText) {
+      refs.socialConnectionText.classList.toggle("is-ready", !!summary.ready);
+      refs.socialConnectionText.textContent = summary.ready
+        ? `已連接正式帳號：${summary.friendCount || 0} 位好友，${summary.onlineCount || 0} 位目前在線。`
+        : (summary.loading ? "正在連接好友服務…" : (summary.error || "好友服務尚未連線。"));
+    }
+    if (refs.socialMenuHint) {
+      refs.socialMenuHint.textContent = summary.ready
+        ? `${summary.onlineCount || 0} 位好友在線${summary.requestCount ? `・${summary.requestCount} 筆邀請待確認` : ""}`
+        : (accountProfileLocked ? "正在連接好友名單與私人訊息" : "登入正式帳號後啟用好友與私人訊息");
+    }
+  }
+
   function togglePlayerProfileMenu(forceOpen) {
     if (!refs.accountProfileMenu) return;
     const shouldOpen = typeof forceOpen === "boolean" ? forceOpen : refs.accountProfileMenu.hidden;
@@ -445,6 +491,11 @@
     if (!refs.boardCampaignList || !refs.boardCampaignEmpty) return;
     refs.boardCampaignList.innerHTML = "";
     const campaigns = Array.isArray(state.campaigns) ? state.campaigns : [];
+    if (refs.campaignMenuHint) {
+      refs.campaignMenuHint.textContent = campaigns.length
+        ? `${campaigns.length} 份可使用的航海紀錄`
+        : (onlineReady() ? "目前沒有可繼續的共有紀錄" : "讀取這個帳號的個人與集合紀錄");
+    }
     refs.boardCampaignEmpty.style.display = campaigns.length ? "none" : "block";
     refs.boardCampaignEmpty.textContent = onlineReady()
       ? (accountProfileLocked
@@ -913,6 +964,7 @@
       return;
     }
     boardSocket.socket = window.io({ transports: ["websocket", "polling"] });
+    shared.attachSocket?.(boardSocket.socket);
     boardSocket.socket.on("connect", () => {
       boardSocket.connected = true;
       state.online = true;
@@ -972,6 +1024,15 @@
       setView("modeSelect");
       requestCampaignList();
     });
+    refs.openCampaignsBtn?.addEventListener("click", () => {
+      setView("campaigns");
+      requestCampaignList();
+    });
+    refs.openSocialBtn?.addEventListener("click", () => {
+      setView("social");
+      renderSocialSummary();
+      shared.openFriends?.();
+    });
     refs.openPlayerProfileBtn?.addEventListener("click", () => togglePlayerProfileMenu());
     refs.closePlayerProfileBtn?.addEventListener("click", () => togglePlayerProfileMenu(false));
     refs.playerName?.addEventListener("input", (event) => updatePlayerNameDraft(event.target.value));
@@ -987,6 +1048,14 @@
     });
     refs.backToHomeBtn.addEventListener("click", () => setView("home"));
     refs.backToMainBtn.addEventListener("click", () => setView("home"));
+    refs.backFromCampaignsBtn?.addEventListener("click", () => setView("home"));
+    refs.backFromSocialBtn?.addEventListener("click", () => setView("home"));
+    refs.openFriendDockBtn?.addEventListener("click", () => shared.openFriends?.());
+    refs.refreshSocialBtn?.addEventListener("click", () => {
+      shared.refreshFriends?.();
+      renderSocialSummary();
+    });
+    window.addEventListener("board:social-updated", (event) => renderSocialSummary(event.detail || {}));
     refs.createBoardRoomBtn.addEventListener("click", createRoom);
     refs.joinBoardRoomBtn.addEventListener("click", () => joinRoom(refs.roomCodeInput.value));
     refs.refreshBoardRoomsBtn.addEventListener("click", () => {
@@ -1010,6 +1079,7 @@
           profile: boardProfilePayload(),
         });
       }
+      shared.setRoomContext("", "board");
       setView("modeSelect");
       requestCampaignList();
     });
@@ -1026,6 +1096,7 @@
     renderHome();
     renderRoomList();
     renderCampaignList();
+    renderSocialSummary();
     toggleRoomList(false);
     if (state.lobby) renderLobby();
 
@@ -1040,6 +1111,15 @@
     }
     if (view === "modeSelect") {
       setView("modeSelect");
+      return;
+    }
+    if (view === "campaigns") {
+      setView("campaigns");
+      return;
+    }
+    if (view === "social") {
+      setView("social");
+      shared.openFriends?.();
       return;
     }
     setView("home");

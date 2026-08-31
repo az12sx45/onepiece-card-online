@@ -4,6 +4,8 @@
     boardLobby: "op_board_preview_lobby",
     boardClientId: "op_board_client_id",
     boardUserId: "op_board_user_id",
+    deviceId: "op_device_id",
+    friendDockCollapsed: "op_fdock_collapsed",
   };
 
   const MOCK_PROFILE = {
@@ -17,32 +19,11 @@
     rank: "Grand Line S",
   };
 
-  const MOCK_FRIENDS = [
-    { userId: 10002, name: "索隆", avatar: 5, online: true, activity: "在羅格鎮閒晃" },
-    { userId: 10003, name: "娜美", avatar: 7, online: true, activity: "查看航海圖" },
-    { userId: 10004, name: "香吉士", avatar: 3, online: false, activity: "離線中" },
-    { userId: 10005, name: "羅", avatar: 6, online: true, activity: "等待你的邀請" },
-  ];
-
   const MOCK_ROOMS = [
     { roomId: "B7412", hostName: "索隆", total: 2, maxPlayers: 4, status: "waiting", title: "鬼斬試玩房" },
     { roomId: "B8201", hostName: "娜美", total: 3, maxPlayers: 4, status: "waiting", title: "航海士策略局" },
     { roomId: "B6008", hostName: "羅", total: 4, maxPlayers: 4, status: "full", title: "ROOM・Board" },
   ];
-
-  const MOCK_INVITES = [
-    { inviteId: "mock-invite-1", fromName: "娜美", fromAvatar: 7, roomId: "B8201", mode: "board" },
-  ];
-
-  const MOCK_CHAT_MAP = {
-    10002: [
-      { from: 10002, body: "要不要來試一下大富翁模式？", ts: Date.now() - 1000 * 60 * 10 },
-      { from: MOCK_PROFILE.userId, body: "我等等就進房。", ts: Date.now() - 1000 * 60 * 7 },
-    ],
-    10003: [
-      { from: 10003, body: "房間我先開好了，等你。", ts: Date.now() - 1000 * 60 * 4 },
-    ],
-  };
 
   function clamp(n, min, max) {
     return Math.min(max, Math.max(min, Number(n) || 0));
@@ -79,6 +60,15 @@
     try {
       localStorage.setItem(key, String(value));
     } catch {}
+  }
+
+  function getDeviceId() {
+    let deviceId = String(readLocalValue(STORAGE_KEYS.deviceId, "") || "").trim();
+    if (!deviceId) {
+      deviceId = `dev_${randomIdFragment()}`;
+      writeLocalValue(STORAGE_KEYS.deviceId, deviceId);
+    }
+    return deviceId;
   }
 
   function randomIdFragment() {
@@ -137,13 +127,21 @@
     roomId: "",
     profile: null,
     friends: [],
+    requestsIn: [],
+    requestsOut: [],
     rooms: [],
     invites: [],
-    chats: {},
+    currentInvite: null,
     currentInviteMode: "board",
     unread: new Map(),
     openChats: new Map(),
     chatOrder: [],
+    socket: null,
+    socialMe: null,
+    socialReady: false,
+    socialLoading: false,
+    socialError: "",
+    socialRefreshTimer: 0,
   };
 
   function createProfile() {
@@ -304,6 +302,11 @@
         align-items:center; justify-content:center; background:#4da9ff; color:white; font-size:11px; font-weight:900;
       }
       .fd-warn{ padding:10px; font-size:11px; color:#55798d; border-top:1px dashed rgba(103,166,198,.18); }
+      .fd-empty,.fd-chat-note{
+        margin:8px; padding:12px; border-radius:12px; color:#55798d; font-size:12px; line-height:1.55;
+        border:1px dashed rgba(103,166,198,.24); background:rgba(255,255,255,.26);
+      }
+      .fd-item.pending{ cursor:default; opacity:.76; }
       .fd-btn,.fd-morebtn,.fd-chat-btn{
         height:32px; min-width:32px; border-radius:12px; border:1px solid rgba(255,255,255,.72);
         background:rgba(255,255,255,.34); color:#2c5e77; cursor:pointer; padding:0;
@@ -433,7 +436,7 @@
             <div class="fd-ava"><img id="boardDockMeAva" alt=""></div>
             <div class="fd-me-meta">
               <div class="fd-me-name" id="boardDockMeName">—</div>
-              <div class="fd-me-sub">我的好友</div>
+              <div class="fd-me-sub">好友與聊天室</div>
             </div>
             <div class="fd-morewrap" style="margin-left:auto;">
               <button type="button" class="fd-btn" id="boardDockToggle" title="縮小/展開">+</button>
@@ -442,7 +445,7 @@
         </div>
 
         <div class="fd-collapsed" aria-label="friends-collapsed">
-          <button id="boardDockOpen" class="fd-open" type="button">點開好友清單</button>
+          <button id="boardDockOpen" class="fd-open" type="button">好友與聊天室</button>
         </div>
 
         <div class="fd-tools">
@@ -501,6 +504,226 @@
     el.style.display = next ? "block" : "none";
   }
 
+  function socialSecret() {
+    const secret = String(
+      state.profile?.secret ||
+      readLocalValue("op_secret", "") ||
+      readLocalValue("opSecret", "") ||
+      ""
+    ).trim();
+    if (state.profile) state.profile.secret = secret;
+    return secret;
+  }
+
+  function emitSocialUpdate() {
+    window.dispatchEvent(new CustomEvent("board:social-updated", {
+      detail: {
+        ready: state.socialReady,
+        loading: state.socialLoading,
+        error: state.socialError,
+        friendCount: state.friends.length,
+        onlineCount: state.friends.filter((friend) => friend.online).length,
+        requestCount: state.requestsIn.length,
+        inviteCount: state.invites.length,
+        unreadCount: Array.from(state.unread.values()).reduce((sum, value) => sum + Math.max(0, Number(value) || 0), 0),
+      },
+    }));
+  }
+
+  function translateSocialError(error, fallback = "好友服務暫時無法使用") {
+    const code = String(error || "").trim();
+    const map = {
+      "bad secret": "登入已失效，請回卡牌首頁重新登入。",
+      "not found": "找不到這個玩家名稱。",
+      "cannot add self": "不能加入自己為好友。",
+      "already friends": "你們已經是好友。",
+      "request already sent": "好友邀請已送出，等待對方確認。",
+      "no incoming request": "這筆好友邀請已失效。",
+      "not friends": "你們還不是好友。",
+      "offline": "對方目前離線。",
+      "muted": "對方暫停接收房間邀請。",
+      "room not found": "房間已不存在。",
+      "room already started": "房間已經開始，不能再加入。",
+      "invite not found": "這筆房間邀請已失效。",
+      "too long": "訊息最多 400 個字。",
+      "empty": "請先輸入訊息。",
+    };
+    return map[code] || code || fallback;
+  }
+
+  function emitWithAck(eventName, payload, callback) {
+    const socket = state.socket;
+    if (!socket) {
+      callback?.(new Error("socket unavailable"), null);
+      return;
+    }
+    try {
+      if (typeof socket.timeout === "function") {
+        socket.timeout(12000).emit(eventName, payload, (error, result) => callback?.(error, result));
+      } else {
+        socket.emit(eventName, payload, (result) => callback?.(null, result));
+      }
+    } catch (error) {
+      callback?.(error, null);
+    }
+  }
+
+  function fetchFriends() {
+    const secret = socialSecret();
+    if (!state.socket) {
+      state.socialError = "好友服務尚未連線。";
+      setHint(state.socialError);
+      emitSocialUpdate();
+      return;
+    }
+    if (!secret) {
+      state.socialReady = false;
+      state.socialLoading = false;
+      state.socialError = "請先從卡牌遊戲登入帳號，好友與聊天才會啟用。";
+      setHint(state.socialError);
+      renderFriends();
+      emitSocialUpdate();
+      return;
+    }
+    state.socialLoading = true;
+    emitSocialUpdate();
+    emitWithAck("FRIENDS_GET", { secret }, (error, result = {}) => {
+      state.socialLoading = false;
+      if (error || !result?.ok) {
+        state.socialError = translateSocialError(result?.error, "好友清單讀取失敗，請稍後再試。");
+        setHint(state.socialError);
+        renderFriends();
+        emitSocialUpdate();
+        return;
+      }
+      state.friends = Array.isArray(result.friends) ? result.friends.slice(0, 200) : [];
+      state.requestsIn = Array.isArray(result.requestsIn) ? result.requestsIn.slice(0, 200) : [];
+      state.requestsOut = Array.isArray(result.requestsOut) ? result.requestsOut.slice(0, 200) : [];
+      state.socialReady = true;
+      state.socialError = "";
+      setHint("");
+      renderFriends();
+      state.openChats.forEach((chat, peerId) => {
+        const friend = state.friends.find((entry) => Number(entry.userId) === Number(peerId));
+        if (!friend || !chat?.el) return;
+        chat.friend = friend;
+        const status = chat.el.querySelector(".fd-chat-peer .s");
+        if (status) status.textContent = friend.online ? (friend.activity || "線上") : "離線中";
+      });
+      emitSocialUpdate();
+    });
+  }
+
+  function socialAuth() {
+    const secret = socialSecret();
+    if (!state.socket) return;
+    if (!secret) {
+      state.socialReady = false;
+      state.socialLoading = false;
+      state.socialError = "請先從卡牌遊戲登入帳號，好友與聊天才會啟用。";
+      setHint(state.socialError);
+      renderFriends();
+      emitSocialUpdate();
+      return;
+    }
+    state.socialLoading = true;
+    state.socialError = "";
+    setHint("正在連接好友服務…");
+    emitSocialUpdate();
+    emitWithAck("SOCIAL_AUTH", { secret, deviceId: getDeviceId() }, (error, result = {}) => {
+      if (error || !result?.ok) {
+        state.socialLoading = false;
+        state.socialReady = false;
+        state.socialError = translateSocialError(result?.error, "好友服務登入失敗。");
+        setHint(state.socialError);
+        renderFriends();
+        emitSocialUpdate();
+        return;
+      }
+      state.socialMe = result.me || null;
+      state.socialReady = true;
+      state.socialLoading = false;
+      state.socialError = "";
+      renderMe();
+      try {
+        state.socket.emit("PRESENCE_SET", { secret, page: state.page || "board", deviceId: getDeviceId() });
+      } catch (_) {}
+      setHint("");
+      fetchFriends();
+    });
+  }
+
+  function handleDirectMessage(message = {}) {
+    if (!state.socialReady) return;
+    const fromId = Number(message.from) || 0;
+    const myId = Number(state.socialMe?.userId || state.profile?.userId) || 0;
+    const peerId = fromId === myId ? Number(message.to) || 0 : fromId;
+    if (!peerId) return;
+    if (state.openChats.has(peerId)) {
+      appendChat(peerId, message);
+      const win = state.openChats.get(peerId);
+      if (win?.min && fromId !== myId) {
+        const next = Math.max(1, Number(state.unread.get(peerId) || 0) + 1);
+        state.unread.set(peerId, next);
+        setChatBadge(peerId, next);
+        win.el.classList.add("unreadPulse");
+      }
+    } else if (fromId !== myId) {
+      state.unread.set(peerId, Math.max(1, Number(state.unread.get(peerId) || 0) + 1));
+      renderFriends();
+      openChatAuto(peerId);
+    }
+    emitSocialUpdate();
+  }
+
+  function handleSocialEmit(message = {}) {
+    if ((message.type === "board_lobby_invite" || message.type === "lobby_invite")
+      && String(message.invite?.mode || "") === "board") {
+      const invite = { ...message.invite, mode: "board" };
+      state.invites = [invite, ...state.invites.filter((entry) => String(entry.inviteId) !== String(invite.inviteId))];
+      renderFriends();
+      showInvite(invite);
+      emitSocialUpdate();
+      return;
+    }
+    if (message.type === "toast" && message.text) showToast(message.text);
+  }
+
+  function wireSocialSocket(socket) {
+    if (!socket || socket.__boardSocialWired) return;
+    socket.__boardSocialWired = true;
+    socket.on("connect", socialAuth);
+    socket.on("disconnect", () => {
+      state.socialReady = false;
+      state.socialLoading = false;
+      state.socialError = "好友服務已斷線，正在等待重新連線。";
+      setHint(state.socialError);
+      emitSocialUpdate();
+    });
+    socket.on("FRIENDS_DIRTY", fetchFriends);
+    socket.on("DM_NEW", handleDirectMessage);
+    socket.on("EMIT", handleSocialEmit);
+    socket.on("SESSION_KICK", (info = {}) => {
+      try {
+        writeLocalValue("op_kicked_reason", info.reason || "takeover");
+        ["op_secret", "opSecret"].forEach((key) => localStorage.removeItem(key));
+      } catch (_) {}
+      location.href = "start.html?kicked=1";
+    });
+  }
+
+  function attachSocket(socket) {
+    if (!socket) return;
+    state.socket = socket;
+    wireSocialSocket(socket);
+    if (socket.connected) socialAuth();
+    if (!state.socialRefreshTimer) {
+      state.socialRefreshTimer = window.setInterval(() => {
+        if (state.socket?.connected && socialSecret()) fetchFriends();
+      }, 12000);
+    }
+  }
+
   function renderMe() {
     const profile = state.profile;
     const name = document.getElementById("boardDockMeName");
@@ -522,6 +745,15 @@
     } catch {
       return "";
     }
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
   }
 
   function scrollChat(peerId) {
@@ -596,12 +828,43 @@
     if (!win) return;
     const body = String(win.input.value || "").trim();
     if (!body) return;
+    const secret = socialSecret();
+    if (!state.socket || !secret) {
+      setHint("請先登入並連上好友服務，才能傳送訊息。");
+      return;
+    }
     win.input.value = "";
-    const msg = { from: state.profile.userId, body, ts: Date.now() };
-    state.chats[peerId] = state.chats[peerId] || [];
-    state.chats[peerId].push(msg);
-    appendChat(peerId, msg);
-    setHint("聊天室目前是 mock 預覽資料，第二階段再接真實訊息。");
+    emitWithAck("DM_SEND", { secret, toUserId: peerId, body }, (error, result = {}) => {
+      if (error || !result?.ok) {
+        win.input.value = body;
+        setHint(translateSocialError(result?.error, "訊息送出失敗，請稍後再試。"));
+        return;
+      }
+      setHint("");
+      if (result.message) appendChat(peerId, result.message);
+    });
+  }
+
+  function loadChatHistory(peerId) {
+    const win = state.openChats.get(peerId);
+    if (!win) return;
+    const secret = socialSecret();
+    if (!state.socket || !secret) {
+      win.log.textContent = "請先登入並連上好友服務。";
+      return;
+    }
+    win.log.innerHTML = "";
+    emitWithAck("DM_HISTORY", { secret, withUserId: peerId, limit: 60 }, (error, result = {}) => {
+      if (error || !result?.ok) {
+        const note = document.createElement("div");
+        note.className = "fd-chat-note";
+        note.textContent = translateSocialError(result?.error, "聊天記錄讀取失敗。");
+        win.log.appendChild(note);
+        return;
+      }
+      (result.messages || []).forEach((message) => appendChat(peerId, message));
+      scrollChat(peerId);
+    });
   }
 
   function createChatWindow(friend) {
@@ -613,8 +876,8 @@
         <div class="fd-chat-peer" title="點一下可置頂">
           <div class="fd-ava" style="width:28px;height:28px;"><img src="${avatarUrlById(friend.avatar)}" alt=""></div>
           <div class="meta" style="min-width:0;">
-            <div class="n">${friend.name}</div>
-            <div class="s">${friend.online ? friend.activity : "離線中"}</div>
+            <div class="n">${escapeHtml(friend.name || `#${friend.userId}`)}</div>
+            <div class="s">${escapeHtml(friend.online ? (friend.activity || "線上") : "離線中")}</div>
           </div>
         </div>
         <div class="fd-chat-actions">
@@ -642,9 +905,7 @@
       bringChatToFront(peerId);
       if (state.openChats.get(peerId)?.min) toggleChat(peerId);
     });
-    state.openChats.set(peerId, { el, log, input, badge, min: false });
-    const history = state.chats[peerId] || [];
-    history.forEach((msg) => appendChat(peerId, msg));
+    state.openChats.set(peerId, { el, log, input, badge, min: false, friend });
     return el;
   }
 
@@ -665,6 +926,7 @@
     tray.appendChild(el);
     state.chatOrder.push(peerId);
     bringChatToFront(peerId);
+    loadChatHistory(peerId);
     setTimeout(() => state.openChats.get(peerId)?.input.focus(), 0);
   }
 
@@ -684,6 +946,7 @@
     tray.appendChild(el);
     state.chatOrder.push(peerId);
     bringChatToFront(peerId);
+    loadChatHistory(peerId);
     toggleChat(peerId);
     setChatBadge(peerId, state.unread.get(peerId) || 1);
     state.openChats.get(peerId)?.el.classList.add("unreadPulse");
@@ -708,14 +971,45 @@
     menu.appendChild(mk("查看個人頁", () => {
       location.href = `profile.html?view=${encodeURIComponent(friend.userId)}`;
     }));
-    menu.appendChild(mk("邀請加入房間", () => {
-      showToast(`已對 ${friend.name} 顯示 mock 邀請效果`);
-      setHint("好友邀請目前是 UI mock，第二階段再接真實房間邀請。");
-    }));
+    if (state.roomId) {
+      menu.appendChild(mk("邀請加入房間", () => {
+        const secret = socialSecret();
+        if (!state.socket || !secret) {
+          setHint("請先登入並連上好友服務。");
+          return;
+        }
+        emitWithAck("LOBBY_INVITE_SEND", {
+          secret,
+          toUserId: Number(friend.userId),
+          roomId: state.roomId,
+          mode: "board",
+        }, (error, result = {}) => {
+          if (error || !result?.ok) {
+            setHint(translateSocialError(result?.error, "房間邀請送出失敗。"));
+            return;
+          }
+          setHint("");
+          showToast(`已邀請 ${friend.name} 加入大富翁房間`);
+        });
+      }));
+    }
     menu.appendChild(mk("刪除好友", () => {
-      state.friends = state.friends.filter((item) => Number(item.userId) !== Number(friend.userId));
-      renderFriends();
-      showToast(`已從預覽清單移除 ${friend.name}`);
+      if (!window.confirm(`確定要刪除好友「${friend.name}」嗎？\n雙方好友關係都會解除。`)) return;
+      const secret = socialSecret();
+      if (!state.socket || !secret) {
+        setHint("請先登入並連上好友服務。");
+        return;
+      }
+      emitWithAck("FRIEND_REMOVE", { secret, userId: Number(friend.userId) }, (error, result = {}) => {
+        if (error || !result?.ok) {
+          setHint(translateSocialError(result?.error, "刪除好友失敗。"));
+          return;
+        }
+        closeChat(Number(friend.userId));
+        setHint("");
+        fetchFriends();
+        showToast(`已刪除好友 ${friend.name}`);
+      });
     }, "danger"));
     item.appendChild(menu);
   }
@@ -731,8 +1025,8 @@
       row.innerHTML = `
         <div class="fd-ava"><img src="${avatarUrlById(invite.fromAvatar)}" alt=""></div>
         <div class="fd-meta">
-          <div class="fd-name">${invite.fromName} 的房間邀請</div>
-          <div class="fd-sub">房號 ${invite.roomId} ・ 大富翁模式</div>
+          <div class="fd-name">${escapeHtml(invite.fromName)} 的房間邀請</div>
+          <div class="fd-sub">房號 ${escapeHtml(invite.roomId)} ・ 大富翁模式</div>
         </div>
         <div class="fd-reqwrap">
           <button type="button" class="fd-reqbtn ok" data-action="open">查看</button>
@@ -742,21 +1036,67 @@
       list.appendChild(row);
     });
 
-    if (state.invites.length) {
-      const sep = document.createElement("div");
-      sep.className = "fd-sep";
-      sep.textContent = "好友名單";
-      list.appendChild(sep);
+    if (state.requestsIn.length) {
+      const heading = document.createElement("div");
+      heading.className = "fd-sep";
+      heading.textContent = `好友邀請（${state.requestsIn.length}）`;
+      list.appendChild(heading);
+      state.requestsIn.forEach((request) => {
+        const item = document.createElement("div");
+        item.className = "fd-item req";
+        item.innerHTML = `
+          <div class="fd-ava"><img src="${avatarUrlById(request.avatar)}" alt=""></div>
+          <div class="fd-meta">
+            <div class="fd-name">${escapeHtml(request.name || `#${request.userId}`)}</div>
+            <div class="fd-sub">想加你為好友</div>
+          </div>
+          <div class="fd-reqwrap">
+            <button type="button" class="fd-reqbtn ok" data-action="accept">確認</button>
+            <button type="button" class="fd-reqbtn no" data-action="decline">拒絕</button>
+          </div>
+        `;
+        item.querySelector("[data-action='accept']")?.addEventListener("click", () => respondFriendRequest(request, "accept"));
+        item.querySelector("[data-action='decline']")?.addEventListener("click", () => respondFriendRequest(request, "decline"));
+        list.appendChild(item);
+      });
     }
 
-    state.friends.forEach((friend) => {
+    if (state.requestsOut.length) {
+      const heading = document.createElement("div");
+      heading.className = "fd-sep";
+      heading.textContent = "等待對方確認";
+      list.appendChild(heading);
+      state.requestsOut.forEach((request) => {
+        const item = document.createElement("div");
+        item.className = "fd-item req pending";
+        item.innerHTML = `
+          <div class="fd-ava"><img src="${avatarUrlById(request.avatar)}" alt=""></div>
+          <div class="fd-meta">
+            <div class="fd-name">${escapeHtml(request.name || `#${request.userId}`)}</div>
+            <div class="fd-sub">好友邀請已送出</div>
+          </div>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    if (state.requestsIn.length || state.requestsOut.length || state.invites.length) {
+      const heading = document.createElement("div");
+      heading.className = "fd-sep";
+      heading.textContent = "好友名單";
+      list.appendChild(heading);
+    }
+
+    const sortedFriends = [...state.friends].sort((a, b) => Number(!!b.online) - Number(!!a.online)
+      || String(a.name || "").localeCompare(String(b.name || ""), "zh-Hant"));
+    sortedFriends.forEach((friend) => {
       const item = document.createElement("div");
       item.className = "fd-item";
       item.innerHTML = `
         <div class="fd-ava"><img src="${avatarUrlById(friend.avatar)}" alt=""></div>
         <div class="fd-meta">
-          <div class="fd-name">${friend.name}</div>
-          <div class="fd-sub"><span class="fd-dot${friend.online ? " on" : ""}"></span><span>${friend.online ? friend.activity : "離線中"}</span></div>
+          <div class="fd-name">${escapeHtml(friend.name || `#${friend.userId}`)}</div>
+          <div class="fd-sub"><span class="fd-dot${friend.online ? " on" : ""}"></span><span>${escapeHtml(friend.online ? (friend.activity || "線上") : "離線中")}</span></div>
         </div>
         <div class="fd-morewrap">
           <div class="fd-badge"></div>
@@ -777,6 +1117,33 @@
       item.addEventListener("click", () => openChat(friend));
       list.appendChild(item);
     });
+
+    if (!state.socialLoading && !state.friends.length && !state.requestsIn.length && !state.requestsOut.length && !state.invites.length) {
+      const empty = document.createElement("div");
+      empty.className = "fd-empty";
+      empty.textContent = state.socialReady
+        ? "目前沒有好友。可在上方輸入對方的玩家名稱送出邀請。"
+        : (state.socialError || "正在讀取好友清單…");
+      list.appendChild(empty);
+    }
+  }
+
+  function respondFriendRequest(request, action) {
+    const secret = socialSecret();
+    if (!state.socket || !secret) {
+      setHint("請先登入並連上好友服務。");
+      return;
+    }
+    const eventName = action === "accept" ? "FRIEND_REQUEST_ACCEPT" : "FRIEND_REQUEST_DECLINE";
+    emitWithAck(eventName, { secret, userId: Number(request.userId) }, (error, result = {}) => {
+      if (error || !result?.ok) {
+        setHint(translateSocialError(result?.error, action === "accept" ? "確認好友失敗。" : "拒絕好友失敗。"));
+        return;
+      }
+      setHint("");
+      showToast(action === "accept" ? `已和 ${request.name} 成為好友` : `已拒絕 ${request.name} 的好友邀請`);
+      fetchFriends();
+    });
   }
 
   function showInvite(invite) {
@@ -787,7 +1154,7 @@
     state.currentInvite = invite;
     ava.src = avatarUrlById(invite.fromAvatar);
     sub.textContent = `${invite.fromName} 邀請你加入航海王大富翁`;
-    meta.textContent = `房號：${invite.roomId} ・ 這一階段先做獨立等待室原型`;
+    meta.textContent = `房號：${invite.roomId} ・ 接受後會進入大富翁等待室`;
     back.style.display = "flex";
   }
 
@@ -795,6 +1162,33 @@
     state.currentInvite = null;
     const back = document.getElementById("boardInviteBack");
     if (back) back.style.display = "none";
+  }
+
+  function respondLobbyInvite(action) {
+    const invite = state.currentInvite;
+    const secret = socialSecret();
+    if (!invite?.inviteId || !state.socket || !secret) {
+      hideInvite();
+      setHint("房間邀請已失效，或好友服務尚未連線。");
+      return;
+    }
+    emitWithAck("LOBBY_INVITE_RESPOND", { secret, inviteId: invite.inviteId, action }, (error, result = {}) => {
+      if (error || !result?.ok) {
+        setHint(translateSocialError(result?.error, "房間邀請處理失敗。"));
+        return;
+      }
+      state.invites = state.invites.filter((entry) => String(entry.inviteId) !== String(invite.inviteId));
+      renderFriends();
+      hideInvite();
+      emitSocialUpdate();
+      if (action === "accept" && result.roomId) {
+        location.href = `board_start.html?view=lobby&room=${encodeURIComponent(result.roomId)}`;
+      } else if (action === "mute5") {
+        showToast("已暫停接收房間邀請 5 分鐘");
+      } else {
+        showToast("已拒絕房間邀請");
+      }
+    });
   }
 
   function updateDockMinIcon() {
@@ -807,12 +1201,15 @@
   function bindUiEvents() {
     document.getElementById("boardDockToggle")?.addEventListener("click", (e) => {
       e.stopPropagation();
-      document.getElementById("boardFriendDock")?.classList.toggle("collapsed");
+      const dock = document.getElementById("boardFriendDock");
+      dock?.classList.toggle("collapsed");
+      writeLocalValue(STORAGE_KEYS.friendDockCollapsed, dock?.classList.contains("collapsed") ? "1" : "0");
       updateDockMinIcon();
     });
     document.getElementById("boardDockOpen")?.addEventListener("click", (e) => {
       e.stopPropagation();
       document.getElementById("boardFriendDock")?.classList.remove("collapsed");
+      writeLocalValue(STORAGE_KEYS.friendDockCollapsed, "0");
       updateDockMinIcon();
     });
     document.getElementById("boardFriendDock")?.addEventListener("click", (e) => {
@@ -820,22 +1217,28 @@
       if (!dock?.classList.contains("collapsed")) return;
       if (e.target?.id === "boardDockToggle") return;
       dock.classList.remove("collapsed");
+      writeLocalValue(STORAGE_KEYS.friendDockCollapsed, "0");
       updateDockMinIcon();
     });
     document.getElementById("boardFriendAddBtn")?.addEventListener("click", () => {
       const input = document.getElementById("boardFriendAddInput");
       const name = String(input.value || "").trim();
       if (!name) return;
-      input.value = "";
-      state.friends.unshift({
-        userId: Date.now(),
-        name,
-        avatar: 1 + (state.friends.length % 9),
-        online: false,
-        activity: "剛加入預覽列表",
+      const secret = socialSecret();
+      if (!state.socket || !secret) {
+        setHint("請先登入並連上好友服務。");
+        return;
+      }
+      emitWithAck("FRIEND_ADD_BY_NAME", { secret, name }, (error, result = {}) => {
+        if (error || !result?.ok) {
+          setHint(translateSocialError(result?.error, "好友邀請送出失敗。"));
+          return;
+        }
+        input.value = "";
+        setHint("");
+        showToast(`已向 ${result.to?.name || name} 送出好友邀請`);
+        fetchFriends();
       });
-      renderFriends();
-      showToast(`已把 ${name} 加到預覽好友列`);
     });
     document.getElementById("boardFriendAddInput")?.addEventListener("keydown", (e) => {
       if (e.key === "Enter") document.getElementById("boardFriendAddBtn")?.click();
@@ -848,19 +1251,13 @@
       if (e.target?.id === "boardInviteBack") hideInvite();
     });
     document.getElementById("boardInviteAccept")?.addEventListener("click", () => {
-      const roomId = String(state.currentInvite?.roomId || "").trim();
-      hideInvite();
-      if (roomId) {
-        location.href = `board_start.html?view=lobby&room=${encodeURIComponent(roomId)}`;
-      }
+      respondLobbyInvite("accept");
     });
     document.getElementById("boardInviteReject")?.addEventListener("click", () => {
-      hideInvite();
-      showToast("已在預覽中拒絕邀請");
+      respondLobbyInvite("reject");
     });
     document.getElementById("boardInviteMute")?.addEventListener("click", () => {
-      hideInvite();
-      showToast("已標記為稍後再看");
+      respondLobbyInvite("mute5");
     });
     updateDockMinIcon();
   }
@@ -870,17 +1267,24 @@
     state.roomId = String(options.roomId || "").trim();
     state.currentInviteMode = String(options.inviteMode || "board").trim();
     state.profile = createProfile();
-    state.friends = MOCK_FRIENDS.map((item) => ({ ...item }));
+    state.friends = [];
+    state.requestsIn = [];
+    state.requestsOut = [];
     state.rooms = readJson(STORAGE_KEYS.boardRoom, MOCK_ROOMS.map((item) => ({ ...item })));
-    state.invites = MOCK_INVITES.map((item) => ({ ...item }));
-    state.chats = JSON.parse(JSON.stringify(MOCK_CHAT_MAP));
+    state.invites = [];
+    state.socialReady = false;
+    state.socialLoading = false;
+    state.socialError = socialSecret() ? "正在連接好友服務…" : "請先從卡牌遊戲登入帳號，好友與聊天才會啟用。";
 
     installSharedStyle();
     ensureUiShell();
     document.body.classList.add("board-theme");
+    const dock = document.getElementById("boardFriendDock");
+    dock?.classList.toggle("collapsed", readLocalValue(STORAGE_KEYS.friendDockCollapsed, "1") !== "0");
     bindUiEvents();
     renderMe();
     renderFriends();
+    setHint(state.socialError);
 
     return {
       profile: state.profile,
@@ -916,12 +1320,20 @@
     showToast,
     openFriends() {
       document.getElementById("boardFriendDock")?.classList.remove("collapsed");
+      writeLocalValue(STORAGE_KEYS.friendDockCollapsed, "0");
       updateDockMinIcon();
+      if (state.socket?.connected) {
+        if (state.socialReady) fetchFriends();
+        else socialAuth();
+      }
     },
     closeFriends() {
       document.getElementById("boardFriendDock")?.classList.add("collapsed");
+      writeLocalValue(STORAGE_KEYS.friendDockCollapsed, "1");
       updateDockMinIcon();
     },
+    attachSocket,
+    refreshFriends: fetchFriends,
     setRoomContext,
     getRooms,
     saveRooms,

@@ -775,6 +775,7 @@
   const handledBoardUiEventIds = new Set();
   let boardUiHudTimer = null;
   let diceHudClearTimer = null;
+  let diceAnimationSession = null;
   let diceUiAssetsPreloaded = false;
   let boardActionHudElement = null;
   let turnTransitionBannerTimer = null;
@@ -793,6 +794,8 @@
   let resumeSetupAfterManualLoadClose = false;
   const MAP_MOVEMENT_STEP_MS = 320;
   const MAP_MOVEMENT_FAST_STEP_MS = 140;
+  const BOARD_GAME_LOG_LIMIT = 500;
+  const BOARD_MOVE_FULL_SYNC_INTERVAL = 4;
   const DEV_OBSERVER_STORAGE_KEY = "onepiece-board-dev-observer-v1";
   const devObserver = {
     visible: false,
@@ -9659,12 +9662,18 @@
     initialStateWaitStartedAt: 0,
     initialStateCanSeed: false,
     version: 0,
+    eventSequence: 0,
     awaitingInitialState: false,
     roomCode: sanitizeRoomCode(query.get("room") || state.lobby?.roomCode || ""),
     clientId: String(profile.clientId || profile.userId || `board-${Date.now()}`),
     lastSentKey: "",
     lastAck: null,
     lastError: "",
+    activeRemoteUiEventId: "",
+    activeRemoteUiStateVersion: 0,
+    remoteUiExpiryTimer: 0,
+    deferStateApplyUntil: 0,
+    remoteMovementLocations: new Map(),
   };
   const campaignInitialLoadRequested = boardLan.enabled && Boolean(state.campaignContext.campaignId);
 
@@ -11688,6 +11697,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
 
   function createManualSavePayload(options = {}) {
     syncBattleReplacementActiveCrewIndex();
+    trimBoardGameLog(state.gameState);
     const gameState = safeJsonClone(state.gameState);
     let battleState = state.battleState ? safeJsonClone(state.battleState) : null;
     if (options.excludeSpar && (gameState.activeSpar || battleState?.isSparBattle)) {
@@ -11702,7 +11712,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       roomCode: state.lobby.roomCode || "",
       gameState,
       battleState,
-      boardUiEvent: state.boardUiEvent ? safeJsonClone(state.boardUiEvent) : null,
+      // 短暫演出由 BOARD_GAME_EVENT 傳送，不寫入存檔／斷線恢復快照，避免重整後重播舊 UI。
+      boardUiEvent: null,
       campaignContext: state.campaignContext?.campaignId
         ? safeJsonClone(state.campaignContext)
         : null,
@@ -12149,6 +12160,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (syncedRecruitCards > 0) {
       game.log.push(`已同步 ${syncedRecruitCards} 名新酒館候選人。`);
     }
+    trimBoardGameLog(game);
     refreshPrisonerCrewBlockedEnemyIslands(game);
     if (state.battleState?.isSparBattle && options.source !== "lan") {
       state.battleState = null;
@@ -12654,6 +12666,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (!state.battleState) closeBattlePageOverlay();
     if (!options.silent) {
       state.gameState.log.push(`已讀取 ${formatSaveTime(payload.savedAt)} 的存檔。`);
+      trimBoardGameLog(state.gameState);
     }
     renderAll();
     autoCenterOnCurrentPlayer();
@@ -12807,6 +12820,108 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     }, delay);
   }
 
+  function emitBoardLanGameEvent(event = {}) {
+    if (!boardLan.enabled || !boardLan.connected || boardLan.applying || boardLan.awaitingInitialState || !boardLan.socket) return false;
+    if (!event?.id || !event?.channel || !event?.type) return false;
+    boardLan.socket.emit("BOARD_GAME_EVENT", {
+      roomCode: boardLan.roomCode || state.lobby?.roomCode || "",
+      sourceClientId: boardLan.clientId,
+      event,
+    }, (result = {}) => {
+      if (result.ok && Number(result.sequence || 0) > boardLan.eventSequence) {
+        boardLan.eventSequence = Number(result.sequence);
+      }
+    });
+    return true;
+  }
+
+  function remoteMovementVisualPlayer(player) {
+    if (!player) return player;
+    const entry = boardLan.remoteMovementLocations.get(String(player.id || ""));
+    if (!entry) return player;
+    if (Number(entry.expiresAt || 0) <= Date.now()) {
+      boardLan.remoteMovementLocations.delete(String(player.id || ""));
+      return player;
+    }
+    return { ...player, location: safeJsonClone(entry.location) };
+  }
+
+  function applyRemoteMovementEvent(event = {}) {
+    const playerId = String(event.playerId || "");
+    const player = (state.gameState?.players || []).find((entry) => String(entry.id || "") === playerId);
+    if (!player || !event.location) return;
+    const expiresAt = Math.max(Date.now() + 1200, Number(event.expiresAt || 0));
+    boardLan.remoteMovementLocations.set(playerId, {
+      location: safeJsonClone(event.location),
+      expiresAt,
+    });
+    const visualPlayer = remoteMovementVisualPlayer(player);
+    const token = Array.from(refs.boardGameMap?.querySelectorAll(".ship-token[data-player-id]") || [])
+      .find((entry) => String(entry.dataset.playerId || "") === playerId);
+    if (!token) return;
+    const pos = playerShipTokenPositionPx(visualPlayer);
+    token.style.left = `${pos.x}px`;
+    token.style.top = `${pos.y}px`;
+    token.style.setProperty("--ship-rot", shipRotationForPlayer(visualPlayer));
+    token.style.setProperty("--ship-flip", shipFlipForPlayer(visualPlayer));
+  }
+
+  function clearRemoteBoardUiEvent(targetEventId = "") {
+    const activeId = String(boardLan.activeRemoteUiEventId || "");
+    if (targetEventId && activeId && String(targetEventId) !== activeId) return;
+    window.clearTimeout(boardLan.remoteUiExpiryTimer);
+    boardLan.remoteUiExpiryTimer = 0;
+    if (String(pinnedSpectatorModalEvent?.id || "") === activeId) clearPinnedSpectatorModalEvent();
+    if (refs.modalBack?.dataset?.boardUiEventId === activeId) closeModal();
+    if (boardActionHudElement?.dataset?.boardUiEventId === activeId) {
+      boardActionHudElement.classList.remove("open");
+      delete boardActionHudElement.dataset.boardUiEventId;
+      window.clearTimeout(boardUiHudTimer);
+      boardUiHudTimer = null;
+    }
+    const banner = refs.turnTransitionBanner || document.getElementById("turnTransitionBanner");
+    if (banner?.dataset?.boardUiEventId === activeId) {
+      window.clearTimeout(turnTransitionBannerTimer);
+      turnTransitionBannerTimer = null;
+      banner.classList.remove("open");
+      banner.setAttribute("aria-hidden", "true");
+      delete banner.dataset.boardUiEventId;
+    }
+    cancelDiceAnimation(activeId);
+    boardLan.activeRemoteUiEventId = "";
+    boardLan.activeRemoteUiStateVersion = 0;
+  }
+
+  function applyBoardLanGameEvent(message = {}) {
+    if (!boardLan.enabled || !message.event) return;
+    if (message.sourceClientId === boardLan.clientId) return;
+    const sequence = Math.max(0, Number(message.sequence || 0));
+    if (sequence && sequence <= boardLan.eventSequence) return;
+    if (sequence) boardLan.eventSequence = sequence;
+    const event = message.event;
+    if (Number(event.expiresAt || 0) > 0 && Number(event.expiresAt) <= Date.now()) return;
+    if (event.channel === "movement" && event.type === "move-step") {
+      applyRemoteMovementEvent(event);
+      return;
+    }
+    if (event.channel !== "ui") return;
+    if (boardLan.activeRemoteUiEventId && boardLan.activeRemoteUiEventId !== event.id) {
+      clearRemoteBoardUiEvent(boardLan.activeRemoteUiEventId);
+    }
+    boardLan.activeRemoteUiEventId = String(event.id || "");
+    boardLan.activeRemoteUiStateVersion = Math.max(0, Number(message.stateVersion || 0));
+    if (event.type === "turn-banner") {
+      boardLan.deferStateApplyUntil = Math.max(
+        boardLan.deferStateApplyUntil,
+        Date.now() + Math.max(0, Number(event.transitionDelay || TURN_HANDOFF_TRANSITION_DELAY_MS))
+      );
+    }
+    handleBoardUiEvent({ ...event, __remote: true });
+    const remaining = Math.max(120, Number(event.expiresAt || 0) - Date.now());
+    window.clearTimeout(boardLan.remoteUiExpiryTimer);
+    boardLan.remoteUiExpiryTimer = window.setTimeout(() => clearRemoteBoardUiEvent(event.id), remaining);
+  }
+
   function clearBoardLanInitialStateRetry() {
     window.clearTimeout(boardLan.initialStateRetryTimer);
     boardLan.initialStateRetryTimer = 0;
@@ -12957,6 +13072,16 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (version && version < boardLan.version && !allowTradeTerminal && !allowBattleCatchup) return;
     // turn-banner 會先播放交棒演出，再用同一份版本延後套用；這次內部續跑不能被重複版本保護擋掉。
     if (version && version === boardLan.version && !message.__skipPreApplyUiEvent && !boardLan.awaitingInitialState && !allowTradeTerminal && !allowBattleCatchup) return;
+    const transientDelay = Math.max(0, Number(boardLan.deferStateApplyUntil || 0) - Date.now());
+    if (!initialRestorePending && !message.__skipTransientUiDelay && transientDelay > 0) {
+      window.clearTimeout(boardLan.deferredApplyTimer);
+      boardLan.deferredApplyTimer = window.setTimeout(() => {
+        boardLan.deferredApplyTimer = 0;
+        boardLan.deferStateApplyUntil = 0;
+        applyBoardLanPayload({ ...message, __skipTransientUiDelay: true });
+      }, transientDelay);
+      return;
+    }
     const preApplyEvent = message.payload?.boardUiEvent || null;
     if (!initialRestorePending && !message.__skipPreApplyUiEvent && shouldPreApplyBoardUiEvent(preApplyEvent)) {
       boardLan.version = Math.max(boardLan.version, version);
@@ -12968,6 +13093,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       }, delay);
       return;
     }
+    boardLan.remoteMovementLocations.clear();
     boardLan.version = Math.max(boardLan.version, version);
     boardLan.applying = true;
     let applied = false;
@@ -13018,6 +13144,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   function setupBoardLanSocket() {
     if (!boardLan.enabled || !window.io || boardLan.socket) return false;
     boardLan.socket = window.io({ transports: ["websocket", "polling"] });
+    shared.attachSocket?.(boardLan.socket);
     boardLan.socket.on("connect", () => {
       boardLan.connected = true;
       boardLan.awaitingInitialState = true;
@@ -13097,6 +13224,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       }
     });
     boardLan.socket.on("BOARD_GAME_STATE", applyBoardLanPayload);
+    boardLan.socket.on("BOARD_GAME_EVENT", applyBoardLanGameEvent);
     boardLan.socket.on("BOARD_STATE_REQUEST", () => {
       if (boardLan.awaitingInitialState) {
         if (!seedBoardLanInitialState("join")) scheduleBoardLanInitialStateRetry(220);
@@ -13641,7 +13769,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
 
   function activateTemporaryEnemyIslandService(island, islandState, player) {
     if (!island || !islandState || island.kind !== "enemy") return "";
-    const rand = createRng(`${state.gameState.seed}-enemy-service-${island.id}-${state.gameState.round || 1}-${state.gameState.log.length}`);
+    const rand = createRng(`${state.gameState.seed}-enemy-service-${island.id}-${state.gameState.round || 1}-${boardGameLogEntropy()}`);
     const serviceKind = TEMPORARY_ENEMY_ISLAND_SERVICE_KINDS[Math.floor(rand() * TEMPORARY_ENEMY_ISLAND_SERVICE_KINDS.length)] || "shop";
     islandState.currentKind = serviceKind;
     islandState.isDefeated = true;
@@ -15513,6 +15641,21 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   function mapMovementStepDelay(player) {
     // Fast-forward only compresses the visual wait; pendingMove still resolves one step at a time.
     return cpuTurnDelay(MAP_MOVEMENT_STEP_MS, player, MAP_MOVEMENT_FAST_STEP_MS);
+  }
+
+  function emitBoardMovementStep(player, pending) {
+    if (!player?.location) return false;
+    const createdAt = Date.now();
+    return emitBoardLanGameEvent({
+      id: `move-step-${player.id}-${createdAt}-${Math.random().toString(36).slice(2, 8)}`,
+      channel: "movement",
+      type: "move-step",
+      createdAt,
+      expiresAt: createdAt + 5000,
+      playerId: player.id,
+      location: safeJsonClone(player.location),
+      stepsRemaining: Math.max(0, Number(pending?.stepsRemaining || 0)),
+    });
   }
 
   function traversalFromIsland(routeItem, islandId) {
@@ -17420,8 +17563,30 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   }
 
   function addLog(text) {
+    if (!state.gameState) return;
+    state.gameState.log = Array.isArray(state.gameState.log) ? state.gameState.log : [];
     state.gameState.log.push(text);
+    trimBoardGameLog(state.gameState);
     renderLog();
+  }
+
+  function trimBoardGameLog(game = state.gameState) {
+    if (!game) return 0;
+    game.log = Array.isArray(game.log) ? game.log : [];
+    const overflow = Math.max(0, game.log.length - BOARD_GAME_LOG_LIMIT);
+    if (overflow > 0) game.log.splice(0, overflow);
+    return overflow;
+  }
+
+  function boardGameLogEntropy(game = state.gameState) {
+    const log = Array.isArray(game?.log) ? game.log : [];
+    const recent = log.slice(-6).map((entry) => String(entry || "")).join("\u241f");
+    let hash = 2166136261;
+    for (let index = 0; index < recent.length; index += 1) {
+      hash ^= recent.charCodeAt(index);
+      hash = Math.imul(hash, 16777619);
+    }
+    return `${log.length}-${hash >>> 0}`;
   }
 
   function showMissionCompleteToast(mission) {
@@ -20461,7 +20626,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     renderMapMarkers();
 
     state.gameState.players.forEach((player, index) => {
-      const pos = playerShipTokenPositionPx(player);
+      const visualPlayer = remoteMovementVisualPlayer(player);
+      const pos = playerShipTokenPositionPx(visualPlayer);
       const isCurrentTurnShip = index === state.gameState.currentPlayerIndex;
       const canUseShipActions = isCurrentTurnShip && canOpenShipActionsFor(player);
       const canUseCpuControls = canOpenCpuShipControlFor(player);
@@ -20489,8 +20655,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       token.style.left = `${tokenX}px`;
       token.style.top = `${tokenY}px`;
       token.style.setProperty("--ship-color", ["#ff966f", "#5aa7ff", "#6fd3a8", "#f3c25a"][index % 4]);
-      token.style.setProperty("--ship-rot", shipRotationForPlayer(player));
-      token.style.setProperty("--ship-flip", shipFlipForPlayer(player));
+      token.style.setProperty("--ship-rot", shipRotationForPlayer(visualPlayer));
+      token.style.setProperty("--ship-flip", shipFlipForPlayer(visualPlayer));
       const shipSkin = shipSkinForPlayer(player, index);
       const shipImage = shipSkin?.image || "";
       const shipName = shipSkin?.name || "玩家船隻";
@@ -20558,7 +20724,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         complete = false;
         return;
       }
-      const pos = playerShipTokenPositionPx(player);
+      const visualPlayer = remoteMovementVisualPlayer(player);
+      const pos = playerShipTokenPositionPx(visualPlayer);
       const isCurrentTurnShip = index === state.gameState.currentPlayerIndex;
       const canUseShipActions = isCurrentTurnShip && canOpenShipActionsFor(player);
       const canUseCpuControls = canOpenCpuShipControlFor(player);
@@ -20572,8 +20739,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       token.style.left = `${pos.x}px`;
       token.style.top = `${pos.y}px`;
       token.style.setProperty("--ship-color", ["#ff966f", "#5aa7ff", "#6fd3a8", "#f3c25a"][index % 4]);
-      token.style.setProperty("--ship-rot", shipRotationForPlayer(player));
-      token.style.setProperty("--ship-flip", shipFlipForPlayer(player));
+      token.style.setProperty("--ship-rot", shipRotationForPlayer(visualPlayer));
+      token.style.setProperty("--ship-flip", shipFlipForPlayer(visualPlayer));
       token.classList.toggle("current", isCurrentTurnShip);
       token.classList.toggle("actionable", canInteractWithShip);
       token.classList.toggle("move-learn-ready", canLearnMoves);
@@ -26293,6 +26460,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     refs.modalBack.classList.remove("shop-nautical-backdrop");
     delete refs.modalBack.dataset.forceChoice;
     delete refs.modalBack.dataset.backdropClose;
+    delete refs.modalBack.dataset.boardUiEventId;
     refs.modalBack.classList.remove("open");
     syncTurnActionButtons();
     refreshBgmForState();
@@ -26436,6 +26604,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const hud = ensureBoardActionHud();
     const theme = String(options.theme || "event").replace(/[^\w-]/g, "") || "event";
     hud.className = `board-action-hud theme-${theme}`;
+    if (options.eventId) hud.dataset.boardUiEventId = String(options.eventId);
+    else delete hud.dataset.boardUiEventId;
     hud.querySelector("[data-action-hud-title]").textContent = title || "行動同步";
     hud.querySelector("[data-action-hud-subtitle]").textContent = subtitle || "";
     const icon = hud.querySelector("[data-action-hud-icon]");
@@ -26443,6 +26613,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     hud.classList.add("open");
     boardUiHudTimer = window.setTimeout(() => {
       hud.classList.remove("open");
+      delete hud.dataset.boardUiEventId;
       boardUiHudTimer = null;
     }, Math.max(900, Number(options.duration || 1700)));
     if (subtitle) shared.showToast(subtitle);
@@ -26496,6 +26667,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
 
     window.clearTimeout(turnTransitionBannerTimer);
     banner.className = `turn-transition-banner${isLocalHumanTurn ? " is-your-turn" : " is-watch"}`;
+    if (event.__remote) banner.dataset.boardUiEventId = String(event.id || "");
+    else delete banner.dataset.boardUiEventId;
     banner.style.setProperty("--turn-color", color);
     banner.setAttribute("aria-hidden", "false");
     if (refs.turnTransitionKicker) refs.turnTransitionKicker.textContent = event.context === "battle" ? "BATTLE TURN" : "NEXT TURN";
@@ -26510,12 +26683,31 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     turnTransitionBannerTimer = window.setTimeout(() => {
       banner.classList.remove("open");
       banner.setAttribute("aria-hidden", "true");
+      delete banner.dataset.boardUiEventId;
       turnTransitionBannerTimer = null;
     }, duration);
     return transitionDelay;
   }
 
+  function cancelDiceAnimation(targetRemoteEventId = "") {
+    const session = diceAnimationSession;
+    if (!session) {
+      if (!targetRemoteEventId) hideDiceHud();
+      return;
+    }
+    if (targetRemoteEventId && String(session.remoteEventId || "") !== String(targetRemoteEventId)) return;
+    window.clearInterval(session.rollTimer);
+    window.clearTimeout(session.settleTimer);
+    window.clearTimeout(session.hideTimer);
+    session.unlockBgmSwitch?.();
+    diceAnimationSession = null;
+    refs.diceHudOrb?.classList.remove("rolling", "settled");
+    hideDiceHud();
+    session.resolve?.(session.settle);
+  }
+
   function animateDice(theme, title, subtitle, maxFace = 6, options = {}) {
+    cancelDiceAnimation();
     return new Promise((resolve) => {
       const unlockBgmSwitch = window.BgmManager?.lockAutoSwitch?.("dice");
       const forcedSettle = Number(options.settle);
@@ -26536,21 +26728,35 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       showDiceHud(theme, title, subtitle);
       const orb = refs.diceHudOrb;
       orb.classList.add("rolling");
-      const timer = setInterval(() => {
+      const session = {
+        rollTimer: 0,
+        settleTimer: 0,
+        hideTimer: 0,
+        settle,
+        remoteEventId: String(options.remoteEventId || ""),
+        unlockBgmSwitch,
+        resolve,
+      };
+      diceAnimationSession = session;
+      session.rollTimer = window.setInterval(() => {
         const face = randomInt(1, maxFace);
         renderDiceHudFace(face, faceLabel(face), useImageFaces);
       }, 85);
-      setTimeout(() => {
-        clearInterval(timer);
+      session.settleTimer = window.setTimeout(() => {
+        if (diceAnimationSession !== session) return;
+        window.clearInterval(session.rollTimer);
+        session.rollTimer = 0;
         orb.classList.remove("rolling");
         renderDiceHudFace(settle, faceLabel(settle), useImageFaces);
         orb.classList.remove("settled");
         void orb.offsetWidth;
         orb.classList.add("settled");
-        setTimeout(() => {
+        session.hideTimer = window.setTimeout(() => {
+          if (diceAnimationSession !== session) return;
           orb.classList.remove("settled");
           hideDiceHud();
           unlockBgmSwitch?.();
+          diceAnimationSession = null;
           resolve(settle);
         }, resultHoldMs);
       }, settleDelay);
@@ -26562,11 +26768,23 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     return value.length > max ? `${value.slice(0, max - 1)}…` : value;
   }
 
+  function boardUiEventLifetimeMs(event = {}, options = {}) {
+    const explicit = Math.max(0, Number(options.clearDelay || 0));
+    if (event.type === "spectator-modal") return Math.max(6000, explicit || 60000);
+    if (event.type === "dice") return Math.max(3600, Number(event.settleDelay || 0) + 3400);
+    if (event.type === "turn-banner") return Math.max(1800, Number(event.duration || 0) + 500);
+    if (["postgame-world-unlock", "postgame-egghead-reveal", "final-boss-voyage"].includes(event.type)) {
+      return Math.max(5000, Number(event.duration || 0) + 3000);
+    }
+    return Math.max(2400, Number(event.duration || 0) + 800, explicit >= 1000 ? explicit : 0);
+  }
+
   function emitBoardUiEvent(type, data = {}, options = {}) {
     if (!state.gameState) return null;
     const player = data.player || currentPlayer();
     const event = {
       id: `${type}-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      channel: "ui",
       type,
       createdAt: Date.now(),
       playerId: data.playerId || player?.id || "",
@@ -26595,11 +26813,15 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       detail: data.detail == null ? null : safeJsonClone(data.detail),
       faceLabels: Array.isArray(data.faceLabels) ? data.faceLabels.slice() : null,
     };
+    event.expiresAt = event.createdAt + boardUiEventLifetimeMs(event, options);
     state.boardUiEvent = safeJsonClone(event);
     if (boardLan.enabled) {
       const reason = `board-event-${type}`;
-      if (options.immediate) pushBoardLanStateUnchecked(reason);
-      else scheduleBoardLanStatePush(reason, Number(options.delay ?? 0), { force: true });
+      emitBoardLanGameEvent(safeJsonClone(event));
+      if (!options.skipStatePush) {
+        if (options.immediate) pushBoardLanStateUnchecked(reason);
+        else scheduleBoardLanStatePush(reason, Number(options.delay ?? 0), { force: true });
+      }
     }
     const clearDelay = Number.isFinite(Number(options.clearDelay))
       ? Math.max(120, Number(options.clearDelay))
@@ -26644,7 +26866,11 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       subtitle: detail.subtitle || "",
       context: kind,
       detail: { kind, ...detail },
-    }, { immediate: options.immediate !== false, clearDelay: options.clearDelay });
+    }, {
+      immediate: options.immediate !== false,
+      clearDelay: options.clearDelay,
+      skipStatePush: options.skipStatePush === true,
+    });
   }
 
   function clearPostgameWorldCinematicTimers() {
@@ -26937,8 +27163,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       return;
     }
     if (!pinnedSpectatorModalEvent) return;
-    const age = Date.now() - Number(pinnedSpectatorModalEvent.createdAt || 0);
-    if (age > 60000 || state.battleState || !state.gameState?.resolutionLock) {
+    const expiresAt = Number(pinnedSpectatorModalEvent.expiresAt || (Number(pinnedSpectatorModalEvent.createdAt || 0) + 60000));
+    if (expiresAt <= Date.now() || state.battleState || !state.gameState?.resolutionLock) {
       clearPinnedSpectatorModalEvent();
       return;
     }
@@ -27060,17 +27286,31 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     }), "sea-event-result-modal");
   }
 
-  function spectatorCardResultModal(detail = {}) {
-    const chips = Array.isArray(detail.chips) ? detail.chips : [];
-    openSpectatorModal(`
-      <h3 class="modal-title">${escapeModalText(detail.title || "事件結果")}</h3>
-      <div class="modal-sub">${escapeModalText(detail.desc || detail.subtitle || "效果已套用。")}</div>
-      <div class="tier-strip">
-        ${chips.map((chip) => `<span class="tier-chip">${escapeModalText(chip)}</span>`).join("")}
-        <span class="tier-chip">${escapeModalText(detail.summary || "效果已套用")}</span>
-      </div>
-      ${spectatorCloseRow()}
-    `);
+  function spectatorSeaTreasureChestDraftModal(detail = {}, options = {}) {
+    const choices = Array.isArray(detail.choices) ? detail.choices.slice(0, 4) : [];
+    openSpectatorModal(seaTreasureChestDraftMarkup(
+      { title: detail.title || "漂流寶箱群", desc: detail.desc || "" },
+      detail.profileId || "standard",
+      choices,
+      { spectator: true, shuffling: !!options.shuffling }
+    ), "sea-chest-stage-modal");
+    if (options.shuffling) {
+      const shuffleButton = refs.modal?.querySelector?.("[data-spectator-chest-shuffle]");
+      window.setTimeout(() => startSeaTreasureChestShuffle(shuffleButton, { readonly: true }), 40);
+    }
+  }
+
+  function spectatorSeaTreasureChestResultModal(detail = {}) {
+    openSpectatorModal(seaTreasureChestResultMarkup({
+      title: detail.title || "寶箱開啟",
+      desc: detail.desc || detail.subtitle || "寶箱已打開。",
+      summary: detail.summary || "獎勵已取得",
+      chestTypeId: detail.chestTypeId || "wood",
+      chestLabel: detail.chestLabel || "寶箱",
+      chestImage: detail.chestImage || "",
+      actionId: "spectatorModalCloseBtn",
+      actionLabel: "關閉觀看",
+    }), "sea-chest-stage-modal");
   }
 
   function spectatorShopModal(detail = {}) {
@@ -27349,6 +27589,68 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     `, "mission-board-modal");
   }
 
+  function spectatorEventPlayer(event = {}, detail = {}) {
+    const playerId = String(event.playerId || detail.playerId || "");
+    return (state.gameState?.players || []).find((entry) => String(entry?.id || "") === playerId) || null;
+  }
+
+  function spectatorFinalIslandRevisitModal(event = {}) {
+    const detail = event.detail || {};
+    const player = spectatorEventPlayer(event, detail);
+    if (!player) {
+      spectatorGenericFormalModal(event);
+      return;
+    }
+    openSpectatorModal(
+      renderEncounterNauticalPanel(finalIslandRevisitPanelConfig(player, { spectator: true })),
+      "encounter-nautical-modal"
+    );
+  }
+
+  function spectatorFinalBossVoyageCompassModal(event = {}) {
+    const detail = event.detail || {};
+    const player = spectatorEventPlayer(event, detail);
+    if (!player) {
+      spectatorGenericFormalModal(event);
+      return;
+    }
+    const entries = postgameBossVoyageEntries(player);
+    const unlockedEntries = entries.filter((entry) => entry.unlocked && entry.assignment && entry.island);
+    const selected = unlockedEntries.find((entry) => entry.bossDef.key === detail.selectedBossKey) || unlockedEntries[0] || null;
+    openSpectatorModal(
+      finalIslandBossVoyageCompassMarkup(player, entries, selected, { spectator: true }),
+      "final-boss-compass-fullscreen-modal"
+    );
+  }
+
+  function spectatorGenericFormalModal(event = {}) {
+    const detail = event.detail || {};
+    const player = spectatorEventPlayer(event, detail);
+    openSpectatorModal(renderEncounterNauticalPanel({
+      title: event.title || detail.title || "航海行動",
+      eyebrow: "同房觀看同步",
+      portraitSrc: "images/board/attribute_icons/neutral.webp",
+      portraitFallback: PLACEHOLDER_BATTLE_PORTRAIT,
+      portraitName: player?.name || event.playerName || detail.playerName || "玩家",
+      portraitMeta: "正在操作目前的航海事件",
+      contextTitle: detail.contextTitle || "等待玩家決定",
+      contextSubtitle: event.subtitle || detail.subtitle || "觀看端已同步到目前畫面",
+      stats: [
+        ["玩家", player?.name || event.playerName || detail.playerName || "玩家"],
+        ["狀態", "操作中"],
+        ["介面", "觀看模式"],
+        ["權限", "唯讀"],
+        ["同步", "即時事件"],
+        ["回合", String((state.gameState?.round || 0) + 1)],
+      ],
+      messageTitle: event.title || detail.title || "航海行動",
+      messageLines: [event.subtitle || detail.subtitle || "操作方正在處理事件；觀看方不能代為操作。"],
+      detailLabel: "觀看規則",
+      detailText: "此畫面只供同房玩家觀看，所有結果仍由目前操作方結算。",
+      actions: [{ id: "spectatorModalCloseBtn", label: "關閉觀看", secondary: true }],
+    }), "encounter-nautical-modal");
+  }
+
   function openSpectatorBoardModal(event = {}) {
     const detail = event.detail || {};
     if (detail.kind === "sea-choice") {
@@ -27357,7 +27659,9 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     } else {
       clearPinnedSpectatorModalEvent();
       if (detail.kind === "sea-result") spectatorSeaEventResultModal(detail);
-      else if (detail.kind === "chest-result") spectatorCardResultModal(detail);
+      else if (detail.kind === "chest-draft") spectatorSeaTreasureChestDraftModal(detail);
+      else if (detail.kind === "chest-shuffle") spectatorSeaTreasureChestDraftModal(detail, { shuffling: true });
+      else if (detail.kind === "chest-result") spectatorSeaTreasureChestResultModal(detail);
       else if (detail.kind === "shop") spectatorShopModal(detail);
       else if (detail.kind === "hospital") spectatorHospitalModal(detail);
       else if (detail.kind === "research-lab") spectatorResearchLabModal(detail);
@@ -27367,8 +27671,11 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       else if (detail.kind === "tavern-result") spectatorTavernResultModal(detail);
       else if (detail.kind === "battle-rewards") spectatorBattleRewardsModal(detail);
       else if (detail.kind === "mission-board") spectatorMissionBoardModal(detail);
-      else showBoardUiHud(event.title || "行動同步", event.subtitle || "觀看操作方行動。", { theme: "event", symbol: "看" });
+      else if (detail.kind === "final-island-revisit") spectatorFinalIslandRevisitModal(event);
+      else if (detail.kind === "final-boss-voyage-compass") spectatorFinalBossVoyageCompassModal(event);
+      else spectatorGenericFormalModal(event);
     }
+    if (refs.modalBack?.classList.contains("open")) refs.modalBack.dataset.boardUiEventId = String(event.id || "");
   }
 
   function emitTurnHandoffEvent(player, data = {}) {
@@ -27418,6 +27725,9 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (handledBoardUiEventIds.size > 120) {
       Array.from(handledBoardUiEventIds).slice(0, 40).forEach((id) => handledBoardUiEventIds.delete(id));
     }
+    const fallbackLifetime = boardUiEventLifetimeMs(event);
+    const expiresAt = Number(event.expiresAt || (Number(event.createdAt || 0) + fallbackLifetime));
+    if (expiresAt > 0 && expiresAt <= Date.now()) return 0;
     const playerName = event.playerName || "玩家";
     if (event.type === "turn-banner") {
       return showTurnTransitionBanner(event);
@@ -27464,19 +27774,20 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
           settle: event.result,
           settleDelay: event.settleDelay,
           faceLabels: event.faceLabels,
+          remoteEventId: event.__remote ? event.id : "",
         }
       );
       return 0;
     }
     if (event.type === "sea-encounter") {
       void playSeaEncounterSplash(event.enemyName || "敵人");
-      showBoardUiHud(event.title || "敵影襲來", event.subtitle || `${event.enemyName || "敵人"} 襲來！`, { theme: "battle", symbol: "!" });
+      showBoardUiHud(event.title || "敵影襲來", event.subtitle || `${event.enemyName || "敵人"} 襲來！`, { theme: "battle", symbol: "!", eventId: event.__remote ? event.id : "" });
       return 0;
     }
     showBoardUiHud(
       event.title || "行動同步",
       event.subtitle || `${playerName} 正在行動。`,
-      { theme: event.theme || "event", symbol: event.symbol || "", duration: event.duration || 1700 }
+      { theme: event.theme || "event", symbol: event.symbol || "", duration: event.duration || 1700, eventId: event.__remote ? event.id : "" }
     );
     return 0;
   }
@@ -31819,6 +32130,15 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (resolveCrewWipeoutIfNeeded(player, "全隊瀕死")) return;
     state.gameState.movementAnimating = true;
     setMapMovementStable(true);
+    let stepsSinceFullSync = 0;
+
+    const syncMovementStep = () => {
+      emitBoardMovementStep(player, pending);
+      stepsSinceFullSync += 1;
+      if (stepsSinceFullSync < BOARD_MOVE_FULL_SYNC_INTERVAL) return;
+      stepsSinceFullSync = 0;
+      scheduleBoardLanStatePush("move-checkpoint", 0, { force: true });
+    };
 
     try {
       while (pending.stepsRemaining > 0) {
@@ -31879,7 +32199,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
           }
           addLog(`${player.name} 從 ${getIslandById(travel.fromIslandId).name} 往${directionLabel(travel.exitDirection)}方航行，朝 ${getIslandById(travel.toIslandId).name} 前進。`);
           renderMovementFrame();
-          scheduleBoardLanStatePush("move-step", 0, { force: true });
+          syncMovementStep();
           addLog(`${player.name} 逐格移動到海格 ${travel.tiles[0].col}, ${travel.tiles[0].row}。`);
           await wait(mapMovementStepDelay(player));
           if (maybeOpenSeaTileCoopPrompt(player)) return;
@@ -31900,7 +32220,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
             recordMainMissionEvent(player, { type: "final_route_step" });
           }
           renderMovementFrame();
-          scheduleBoardLanStatePush("move-step", 0, { force: true });
+          syncMovementStep();
           addLog(`${player.name} 逐格移動到海格 ${nextTile.col}, ${nextTile.row}。`);
           await wait(mapMovementStepDelay(player));
           if (maybeOpenSeaTileCoopPrompt(player)) return;
@@ -36296,12 +36616,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     `;
   }
 
-  function openFinalIslandBossVoyageCompass(player, island, selectedBossKey = "") {
-    if (!player || !island || warnBoardLanTurnLocked(player)) return false;
-    if (normalizePendingPostgameBossVoyage(player)) return false;
-    const entries = postgameBossVoyageEntries(player);
-    const unlockedEntries = entries.filter((entry) => entry.unlocked && entry.assignment && entry.island);
-    const selected = unlockedEntries.find((entry) => entry.bossDef.key === selectedBossKey) || unlockedEntries[0] || null;
+  function finalIslandBossVoyageCompassMarkup(player, entries, selected, options = {}) {
+    const spectator = options.spectator === true;
     const selectedIndex = selected ? entries.findIndex((entry) => entry.bossDef.key === selected.bossDef.key) : 0;
     const cards = entries.map((entry, index) => {
       const bossDef = entry.bossDef;
@@ -36316,14 +36632,15 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       const coverOpacity = coverDistance > 4 ? 0 : Math.max(0.34, 1 - (coverDistance * 0.13));
       const coverAngle = coverOffset === 0 ? 0 : (coverOffset < 0 ? 58 : -58);
       const coverHiddenClass = coverDistance > 4 ? " is-cover-hidden" : "";
+      const disabled = spectator || !entry.unlocked || !entry.assignment;
       return `
-        <button type="button" class="final-boss-compass-card${selectedClass}${lockedClass}${coverHiddenClass}" style="--cover-offset:${coverOffset};--cover-scale:${coverScale};--cover-opacity:${coverOpacity};--cover-angle:${coverAngle}deg;--cover-order:${20 - coverDistance}" data-final-boss-voyage-key="${escapeModalText(bossDef.key)}" ${entry.unlocked && entry.assignment ? "" : "disabled"} aria-pressed="${selectedClass ? "true" : "false"}" aria-label="${escapeModalText(entry.unlocked ? bossDef.name : `未解鎖線索牌 ${postgameClueCardLabel(bossDef.clueNumber)}`)}">
+        <button type="button" class="final-boss-compass-card${selectedClass}${lockedClass}${coverHiddenClass}" style="--cover-offset:${coverOffset};--cover-scale:${coverScale};--cover-opacity:${coverOpacity};--cover-angle:${coverAngle}deg;--cover-order:${20 - coverDistance}" data-final-boss-voyage-key="${escapeModalText(bossDef.key)}" ${disabled ? "disabled" : ""} aria-pressed="${selectedClass ? "true" : "false"}" aria-label="${escapeModalText(entry.unlocked ? bossDef.name : `未解鎖線索牌 ${postgameClueCardLabel(bossDef.clueNumber)}`)}">
           ${itemIconMarkup(clueDef, "final-boss-compass-card-art", { portraitImage: bossDef.islandImage })}
           <span>${escapeModalText(entry.unlocked ? bossDef.name : "未解鎖")}</span>
         </button>
       `;
     }).join("");
-    openModal(`
+    return `
       <section class="final-boss-compass-screen" aria-labelledby="finalBossCompassTitle">
         <div class="final-boss-compass-bg" aria-hidden="true"></div>
         <header class="final-boss-compass-heading">
@@ -36332,21 +36649,37 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
           <p>左右循環選擇永久記錄的約克線索牌，再把目的地交給大熊；線索已交易出去也不會失去座標。</p>
         </header>
         <div class="final-boss-compass-layout">
-          <div class="final-boss-compass-stage" id="finalBossCoverFlowStage" tabindex="0" aria-label="十三張 Boss 線索牌左右循環選擇">
+          <div class="final-boss-compass-stage" id="finalBossCoverFlowStage" tabindex="${spectator ? "-1" : "0"}" aria-label="十三張 Boss 線索牌左右循環選擇">
             <div class="final-boss-coverflow-floor" aria-hidden="true"></div>
             <div class="final-boss-compass-card-ring">${cards}</div>
-            <button type="button" class="final-boss-coverflow-arrow previous" id="finalBossCoverFlowPrevious" aria-label="上一張線索牌">‹</button>
-            <button type="button" class="final-boss-coverflow-arrow next" id="finalBossCoverFlowNext" aria-label="下一張線索牌">›</button>
-            <div class="final-boss-compass-core-copy"><strong>${selected ? `${String(selectedIndex + 1).padStart(2, "0")} / 13` : `0 / 13`}</strong><span>左右選擇・循環</span></div>
+            <button type="button" class="final-boss-coverflow-arrow previous" id="finalBossCoverFlowPrevious" aria-label="上一張線索牌" ${spectator ? "disabled" : ""}>‹</button>
+            <button type="button" class="final-boss-coverflow-arrow next" id="finalBossCoverFlowNext" aria-label="下一張線索牌" ${spectator ? "disabled" : ""}>›</button>
+            <div class="final-boss-compass-core-copy"><strong>${selected ? `${String(selectedIndex + 1).padStart(2, "0")} / 13` : `0 / 13`}</strong><span>${spectator ? "觀看中・由玩家選擇" : "左右選擇・循環"}</span></div>
           </div>
           ${finalIslandBossVoyageDetailMarkup(player, selected)}
         </div>
         <footer class="final-boss-compass-actions">
-          <button type="button" class="modal-btn secondary" id="finalBossCompassBackBtn">返回黎明紀錄殿</button>
-          <button type="button" class="modal-btn primary" id="finalBossCompassConfirmBtn" ${selected ? "" : "disabled"}>把目的地交給大熊</button>
+          ${spectator
+            ? `<button type="button" class="modal-btn secondary" id="spectatorModalCloseBtn">關閉觀看</button>`
+            : `
+              <button type="button" class="modal-btn secondary" id="finalBossCompassBackBtn">返回黎明紀錄殿</button>
+              <button type="button" class="modal-btn primary" id="finalBossCompassConfirmBtn" ${selected ? "" : "disabled"}>把目的地交給大熊</button>
+            `}
         </footer>
       </section>
-    `, "final-boss-compass-fullscreen-modal force-choice no-backdrop-close");
+    `;
+  }
+
+  function openFinalIslandBossVoyageCompass(player, island, selectedBossKey = "") {
+    if (!player || !island || warnBoardLanTurnLocked(player)) return false;
+    if (normalizePendingPostgameBossVoyage(player)) return false;
+    const entries = postgameBossVoyageEntries(player);
+    const unlockedEntries = entries.filter((entry) => entry.unlocked && entry.assignment && entry.island);
+    const selected = unlockedEntries.find((entry) => entry.bossDef.key === selectedBossKey) || unlockedEntries[0] || null;
+    openModal(
+      finalIslandBossVoyageCompassMarkup(player, entries, selected),
+      "final-boss-compass-fullscreen-modal force-choice no-backdrop-close"
+    );
     refs.modal.querySelectorAll("[data-final-boss-voyage-key]").forEach((button) => {
       button.addEventListener("click", () => openFinalIslandBossVoyageCompass(player, island, button.dataset.finalBossVoyageKey));
     });
@@ -36383,12 +36716,12 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     document.getElementById("finalBossCompassConfirmBtn")?.addEventListener("click", () => {
       if (selected) void startFinalIslandBossVoyage(player, island, selected);
     });
-    if (!selectedBossKey) {
-      emitSpectatorModalEvent("final-boss-voyage-compass", player, {
-        title: "大熊的肉球航路",
-        subtitle: `${player.name} 正在請大熊確認 Boss 島座標。`,
-      });
-    }
+    emitSpectatorModalEvent("final-boss-voyage-compass", player, {
+      title: "大熊的肉球航路",
+      subtitle: `${player.name} 正在請大熊確認 Boss 島座標。`,
+      islandId: island.id,
+      selectedBossKey: selected?.bossDef.key || "",
+    }, { skipStatePush: true });
     return true;
   }
 
@@ -36649,32 +36982,14 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     });
   }
 
-  function openFinalIslandRevisitModal(player, island) {
-    if (!player || !island || warnBoardLanTurnLocked(player)) return false;
+  function finalIslandRevisitPanelConfig(player, options = {}) {
     const record = finalIslandRevisitRecord(player);
     const clues = postgameClueCollectionSummary(player);
     const voyageUnlocked = finalIslandBossVoyageUnlockedCount(player);
     const world = normalizePostgameWorldState();
     const decoderTier = normalizePlayerYorkDecoderState(player);
-    if (isCpuPlayer(player)) {
-      const target = selectFinalIslandBossVoyageForCpu(player);
-      if (target) void startFinalIslandBossVoyage(player, island, target);
-      else {
-        applyFinalIslandDawnBanquet(player, island);
-        finishIslandServiceTurn();
-      }
-      return true;
-    }
-    playBgmForContext({
-      phase: "town",
-      sceneType: "final_island_revisit",
-      locationType: "island",
-      islandType: "final",
-      environment: ["laugh_tale", "banquet", "history"],
-      eventTags: ["final", "postgame", "revisit", "healing"],
-      storyMood: "healing",
-    });
-    openModal(renderEncounterNauticalPanel({
+    const spectator = options.spectator === true;
+    return {
       title: "拉夫德魯・黎明紀錄殿",
       eyebrow: "最終劇情已完成・再次登島",
       portraitSrc: "images/board/story/speakers/kuma_memory_smile.webp",
@@ -36700,12 +37015,40 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       ],
       detailLabel: "黎明宴會",
       detailText: "免費完成全隊整備且不消耗回合；不重複發放結局、任務或世界解鎖獎勵。",
-      actions: [
-        { id: "finalIslandBossVoyageBtn", label: `請大熊轉送（${voyageUnlocked}/13）` },
-        { id: "finalIslandDawnBanquetBtn", label: "黎明宴會・不耗回合" },
-        { id: "leaveFinalIslandArchiveBtn", label: "離開紀錄殿", secondary: true },
-      ],
-    }), "encounter-nautical-modal no-backdrop-close");
+      actions: spectator
+        ? [{ id: "spectatorModalCloseBtn", label: "關閉觀看", secondary: true }]
+        : [
+            { id: "finalIslandBossVoyageBtn", label: `請大熊轉送（${voyageUnlocked}/13）` },
+            { id: "finalIslandDawnBanquetBtn", label: "黎明宴會・不耗回合" },
+            { id: "leaveFinalIslandArchiveBtn", label: "離開紀錄殿", secondary: true },
+          ],
+    };
+  }
+
+  function openFinalIslandRevisitModal(player, island) {
+    if (!player || !island || warnBoardLanTurnLocked(player)) return false;
+    if (isCpuPlayer(player)) {
+      const target = selectFinalIslandBossVoyageForCpu(player);
+      if (target) void startFinalIslandBossVoyage(player, island, target);
+      else {
+        applyFinalIslandDawnBanquet(player, island);
+        finishIslandServiceTurn();
+      }
+      return true;
+    }
+    playBgmForContext({
+      phase: "town",
+      sceneType: "final_island_revisit",
+      locationType: "island",
+      islandType: "final",
+      environment: ["laugh_tale", "banquet", "history"],
+      eventTags: ["final", "postgame", "revisit", "healing"],
+      storyMood: "healing",
+    });
+    openModal(
+      renderEncounterNauticalPanel(finalIslandRevisitPanelConfig(player)),
+      "encounter-nautical-modal no-backdrop-close"
+    );
     document.getElementById("finalIslandBossVoyageBtn")?.addEventListener("click", () => openFinalIslandBossVoyageCompass(player, island));
     document.getElementById("finalIslandDawnBanquetBtn")?.addEventListener("click", () => {
       applyFinalIslandDawnBanquet(player, island);
@@ -36718,6 +37061,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     emitSpectatorModalEvent("final-island-revisit", player, {
       title: "拉夫德魯・黎明紀錄殿",
       subtitle: `${player.name} 正在查看通關後的最終之島。`,
+      islandId: island.id,
     });
     return true;
   }
@@ -37546,7 +37890,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   }
 
   function buildSeaEventChoices(tile, player) {
-    const rand = createRng(`${state.gameState.seed}-${tile.id}-${player.id}-${state.gameState.log.length}`);
+    const rand = createRng(`${state.gameState.seed}-${tile.id}-${player.id}-${boardGameLogEntropy()}`);
     const pool = getSeaEventChoicePool(tile.zone, player);
     return Array.from({ length: 2 }, (_, index) => {
       const slotId = `${tile.id}-choice-${index}`;
@@ -37673,7 +38017,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   }
 
   function buildSeaTreasureChestChoices(player, tile, slotId = "", profileId = "standard") {
-    const rand = createRng(`${state.gameState.seed}-${tile?.id || "sea"}-${player?.id || "player"}-${slotId || "treasure"}-${profileId}-chests-${state.gameState.log.length}`);
+    const rand = createRng(`${state.gameState.seed}-${tile?.id || "sea"}-${player?.id || "player"}-${slotId || "treasure"}-${profileId}-chests-${boardGameLogEntropy()}`);
     const revealOrder = drawWeightedTreasureChestTypes(rand, 4, profileId);
     const derangements = [
       [1, 0, 3, 2],
@@ -37804,32 +38148,36 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     };
   }
 
-  function openSeaTreasureChestDraft(player, tile, effectDef, typeId, slotId = "") {
-    if (warnBoardLanTurnLocked(player)) return;
-    const profileId = effectDef?.chestProfile || (typeId === "chest" ? "standard" : "standard");
+  function seaTreasureChestDraftMarkup(effectDef = {}, profileId = "standard", choices = [], options = {}) {
     const profile = seaTreasureChestProfile(profileId);
-    const choices = buildSeaTreasureChestChoices(player, tile, slotId, profileId);
-    state.gameState.resolutionLock = true;
-    openModal(`
-      <div class="sea-chest-stage-shell">
+    const spectator = !!options.spectator;
+    const shuffling = spectator && !!options.shuffling;
+    const actionMarkup = spectator
+      ? (shuffling
+          ? '<button type="button" class="modal-btn primary" data-spectator-chest-shuffle disabled>洗牌中</button>'
+          : '<button type="button" class="modal-btn secondary" id="spectatorModalCloseBtn">關閉觀看</button>')
+      : '<button type="button" class="modal-btn primary" id="startSeaChestShuffleBtn">確認洗牌</button>';
+    return `
+      <div class="sea-chest-stage-shell${spectator ? " is-spectator" : ""}">
         <img class="sea-chest-stage-frame" src="images/board/sea_chest_ui/sea_chest_shuffle_panel_frame.webp" alt="" aria-hidden="true">
         <div class="sea-chest-stage-head">
           <h3 class="sea-chest-stage-title">${escapeModalText(effectDef.title || "漂流寶箱群")}</h3>
           <div class="sea-chest-stage-meta">${escapeModalText(profile.label || "標準比例")}候選權重：${escapeModalText(seaTreasureChestProfileOddsText(profileId))}</div>
         </div>
-        <div class="sea-chest-stage-note" data-sea-chest-stage-note>先確認 4 個候選寶箱；木箱是陷阱。按下確認洗牌後才會翻面洗牌。</div>
+        <div class="sea-chest-stage-note" data-sea-chest-stage-note>${shuffling ? "確認洗牌，寶箱開始翻面。" : (spectator ? "操作方正在確認寶箱並準備洗牌。" : "先確認 4 個候選寶箱；木箱是陷阱。按下確認洗牌後才會翻面洗牌。")}</div>
         <div class="sea-chest-draft-grid is-reveal" data-sea-chest-grid>
-          ${choices.map((choice) => {
+          ${(choices || []).map((choice) => {
             const chestType = seaTreasureChestType(choice.typeId);
             const finalOrder = Math.max(0, Math.round(Number(choice.finalIndex ?? choice.index ?? 0)));
             return `
             <button
               type="button"
-              class="sea-treasure-chest-card is-revealed"
+              class="sea-treasure-chest-card is-revealed${spectator ? " spectator-readonly-card" : ""}"
               data-sea-treasure-chest="${escapeModalText(choice.slotId)}"
               data-final-order="${finalOrder}"
               style="--shuffle-delay:${Math.min(360, Math.max(0, finalOrder) * 90)}ms"
-              aria-label="選擇第 ${finalOrder + 1} 個寶箱"
+              aria-label="${spectator ? "觀看" : "選擇"}第 ${finalOrder + 1} 個寶箱"
+              ${spectator ? 'tabindex="-1"' : ""}
               disabled
             >
               <span class="sea-chest-card-art sea-chest-flip">
@@ -37849,24 +38197,78 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
           `;
           }).join("")}
         </div>
+        <div class="modal-row sea-chest-shuffle-row">${actionMarkup}</div>
+      </div>
+    `;
+  }
+
+  function seaTreasureChestResultMarkup(options = {}) {
+    const chestType = seaTreasureChestType(options.chestTypeId);
+    const chestLabel = options.chestLabel || chestType.label || "寶箱";
+    const chestImage = options.chestImage || chestType.image || "";
+    return `
+      <div class="sea-chest-stage-shell is-result" data-chest-type="${escapeModalText(chestType.id || options.chestTypeId || "unknown")}">
+        <img class="sea-chest-stage-frame" src="images/board/item_reveal_ui/important_item_reveal_panel_frame.webp" alt="" aria-hidden="true">
+        <div class="sea-chest-stage-head">
+          <h3 class="sea-chest-stage-title">${escapeModalText(options.title || `${chestLabel}開啟`)}</h3>
+          <div class="sea-chest-stage-meta">${escapeModalText(options.desc || chestType.desc || "寶箱已打開。")}</div>
+          <div class="tier-strip">
+            <span class="tier-chip">${escapeModalText(chestLabel)}</span>
+            <span class="tier-chip">${escapeModalText(options.summary || "獎勵已取得")}</span>
+          </div>
+        </div>
+        <div class="sea-chest-result-card">
+          <div class="sea-chest-card-art reveal">
+            <img src="${escapeModalText(chestImage)}" alt="${escapeModalText(chestLabel)}" loading="lazy" onerror="this.closest('.sea-chest-card-art').classList.add('is-fallback'); this.remove();">
+            <span class="sea-chest-card-fallback">${escapeModalText(chestLabel)}</span>
+          </div>
+        </div>
         <div class="modal-row sea-chest-shuffle-row">
-          <button type="button" class="modal-btn primary" id="startSeaChestShuffleBtn">確認洗牌</button>
+          <button type="button" class="modal-btn ${options.actionId === "spectatorModalCloseBtn" ? "secondary" : "primary"}" id="${escapeModalText(options.actionId || "confirmSeaTreasureChestBtn")}">${escapeModalText(options.actionLabel || "確認")}</button>
         </div>
       </div>
-    `, "force-choice sea-chest-stage-modal no-backdrop-close");
+    `;
+  }
+
+  function openSeaTreasureChestDraft(player, tile, effectDef, typeId, slotId = "") {
+    if (warnBoardLanTurnLocked(player)) return;
+    const profileId = effectDef?.chestProfile || (typeId === "chest" ? "standard" : "standard");
+    const choices = buildSeaTreasureChestChoices(player, tile, slotId, profileId);
+    state.gameState.resolutionLock = true;
+    const spectatorDetail = {
+      playerName: player.name,
+      title: effectDef.title || "漂流寶箱群",
+      desc: effectDef.desc || "海上漂來四個寶箱。",
+      subtitle: `${player.name} 正在確認漂流寶箱。`,
+      profileId,
+      typeId,
+      choices: choices.map((choice) => ({
+        slotId: choice.slotId,
+        typeId: choice.typeId,
+        index: choice.index,
+        revealIndex: choice.revealIndex,
+        finalIndex: choice.finalIndex,
+      })),
+    };
+    emitSpectatorModalEvent("chest-draft", player, spectatorDetail, { clearDelay: 60000 });
+    openModal(seaTreasureChestDraftMarkup(effectDef, profileId, choices), "force-choice sea-chest-stage-modal no-backdrop-close");
     document.getElementById("startSeaChestShuffleBtn")?.addEventListener("click", (event) => {
-      startSeaTreasureChestShuffle(event.currentTarget);
+      startSeaTreasureChestShuffle(event.currentTarget, { player, spectatorDetail });
     });
     refs.modal.querySelectorAll("[data-sea-treasure-chest]").forEach((button) => {
       button.addEventListener("click", () => resolveSeaTreasureChestChoice(player, tile, effectDef, typeId, choices, button.dataset.seaTreasureChest));
     });
   }
 
-  function startSeaTreasureChestShuffle(startButton = null) {
+  function startSeaTreasureChestShuffle(startButton = null, options = {}) {
     const grid = refs.modal?.querySelector?.("[data-sea-chest-grid]");
     if (!grid) return;
     if (grid.dataset.shuffleStarted === "true") return;
     grid.dataset.shuffleStarted = "true";
+    const readonly = !!options.readonly;
+    if (!readonly && options.player && options.spectatorDetail) {
+      emitSpectatorModalEvent("chest-shuffle", options.player, options.spectatorDetail, { clearDelay: 60000 });
+    }
     const note = refs.modal.querySelector("[data-sea-chest-stage-note]");
     const buttons = Array.from(grid.querySelectorAll("[data-sea-treasure-chest]"));
     const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
@@ -37941,6 +38343,10 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         button.getAnimations?.().forEach((animation) => animation.cancel());
         button.style.order = String(finalOrder);
         button.disabled = false;
+        if (readonly) {
+          button.tabIndex = -1;
+          button.classList.add("spectator-readonly-card");
+        }
         button.classList.add("is-ready");
         const label = button.querySelector("[data-chest-label]");
         if (label) label.textContent = `寶箱 ${finalOrder + 1}`;
@@ -37958,7 +38364,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       button.classList.toggle("is-picked", String(button.dataset.seaTreasureChest) === String(choiceSlotId));
     });
     const chestType = seaTreasureChestType(choice.typeId);
-    const rand = createRng(`${state.gameState.seed}-${tile?.id || "sea"}-${player?.id || "player"}-${choice.slotId}-reward-${state.gameState.log.length}`);
+    const rand = createRng(`${state.gameState.seed}-${tile?.id || "sea"}-${player?.id || "player"}-${choice.slotId}-reward-${boardGameLogEntropy()}`);
     const reward = applySeaTreasureChestReward(player, tile, chestType, rand);
     const rewardTitle = reward.title || `${chestType.label}開啟`;
     emitSpectatorModalEvent("chest-result", player, {
@@ -37967,31 +38373,20 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       desc: reward.desc || chestType.desc,
       subtitle: `${player.name} 從漂流寶箱中抽中了${chestType.label}。`,
       summary: reward.summary || "獎勵已取得",
+      chestTypeId: chestType.id,
+      chestLabel: chestType.label,
+      chestImage: chestType.image || "",
       chips: reward.title ? ["寶藏海格", "陷阱", chestType.label] : ["寶藏海格", chestType.label],
     });
     state.gameState.resolutionLock = true;
-    openModal(`
-      <div class="sea-chest-stage-shell is-result">
-        <img class="sea-chest-stage-frame" src="images/board/item_reveal_ui/important_item_reveal_panel_frame.webp" alt="" aria-hidden="true">
-        <div class="sea-chest-stage-head">
-          <h3 class="sea-chest-stage-title">${escapeModalText(rewardTitle)}</h3>
-          <div class="sea-chest-stage-meta">${escapeModalText(reward.desc || chestType.desc || "寶箱已打開。")}</div>
-          <div class="tier-strip">
-            <span class="tier-chip">${escapeModalText(chestType.label)}</span>
-            <span class="tier-chip">${escapeModalText(reward.summary || "獎勵已取得")}</span>
-          </div>
-        </div>
-        <div class="sea-chest-result-card">
-          <div class="sea-chest-card-art reveal">
-            <img src="${escapeModalText(chestType.image || "")}" alt="${escapeModalText(chestType.label)}" loading="lazy" onerror="this.closest('.sea-chest-card-art').classList.add('is-fallback'); this.remove();">
-            <span class="sea-chest-card-fallback">${escapeModalText(chestType.label)}</span>
-          </div>
-        </div>
-        <div class="modal-row sea-chest-shuffle-row">
-          <button type="button" class="modal-btn primary" id="confirmSeaTreasureChestBtn">確認</button>
-        </div>
-      </div>
-    `, "force-choice sea-chest-stage-modal no-backdrop-close");
+    openModal(seaTreasureChestResultMarkup({
+      title: rewardTitle,
+      desc: reward.desc || chestType.desc,
+      summary: reward.summary || "獎勵已取得",
+      chestTypeId: chestType.id,
+      chestLabel: chestType.label,
+      chestImage: chestType.image || "",
+    }), "force-choice sea-chest-stage-modal no-backdrop-close");
     document.getElementById("confirmSeaTreasureChestBtn")?.addEventListener("click", () => {
       closeModal();
       addLog(`${player.name} 打開${chestType.label}：${reward.summary || "獎勵已取得"}。`);
@@ -38006,16 +38401,6 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const effectDef = preselectedEffectDef || drawSeaCardEffect(typeId, tile, player, slotId);
     const result = effectDef.apply ? (effectDef.apply(player, state.gameState, tile) || {}) : {};
     if (result.openTreasureChestDraft) {
-      emitSpectatorModalEvent("sea-result", player, {
-        playerName: player.name,
-        title: effectDef.title,
-        desc: effectDef.desc,
-        subtitle: `${player.name} 翻開了一張${SEA_EVENT_TYPE_INFO[typeId]?.type || "海域"}卡。`,
-        typeId,
-        cardBack: getSeaCardBackImage(typeId),
-        summary: "正在從 4 個寶箱中選擇",
-        chips: [SEA_EVENT_TYPE_INFO[typeId]?.type || "未知", "寶箱抽選"],
-      });
       recordMissionEvent(player, { type: "sea_event", seaType: typeId, zone: tile?.zone || "" });
       openSeaTreasureChestDraft(player, tile, effectDef, typeId, slotId);
       return;
@@ -38066,7 +38451,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         apply() { return { summary: "從 4 個寶箱中抽 1 個", openTreasureChestDraft: true }; },
       };
     }
-    const rand = createRng(`${state.gameState.seed}-${tile.id}-${player.id}-${slotId || typeId}-${state.gameState.log.length}`);
+    const rand = createRng(`${state.gameState.seed}-${tile.id}-${player.id}-${slotId || typeId}-${boardGameLogEntropy()}`);
     const pool = SEA_CARD_EFFECTS[typeId] || SEA_CARD_EFFECTS.money;
     return pool[Math.floor(rand() * pool.length)];
   }
@@ -38078,16 +38463,6 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       desc: "海上漂來四個外型一樣的寶箱，洗牌後只能選一個。",
       chestProfile: "standard",
     };
-    emitSpectatorModalEvent("sea-result", player, {
-      playerName: player.name,
-      title: effectDef.title,
-      desc: effectDef.desc,
-      subtitle: `${player.name} 正在選擇漂流寶箱。`,
-      typeId: "treasure",
-      cardBack: getSeaCardBackImage("treasure"),
-      summary: "正在從 4 個寶箱中選擇",
-      chips: ["寶箱海域", "寶箱抽選"],
-    });
     openSeaTreasureChestDraft(player, tile, effectDef, "treasure", tile?.id || "chest");
   }
 
@@ -62106,6 +62481,16 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     queueImportantItemReveal,
     isItemRevealPending: itemRevealIsPending,
     openSeaTreasureChestDraft,
+    spectatorUiQa: {
+      emit: (kind, detail = {}, options = {}, player = currentPlayer()) => emitSpectatorModalEvent(kind, player, detail, options),
+      render: (event = {}) => openSpectatorBoardModal(event),
+      supportedKinds: () => [
+        "sea-choice", "sea-result", "chest-draft", "chest-shuffle", "chest-result",
+        "shop", "hospital", "research-lab", "arena", "judicial-raid", "tavern",
+        "tavern-result", "battle-rewards", "mission-board", "final-island-revisit",
+        "final-boss-voyage-compass",
+      ],
+    },
     sendPlayerToImpelDown,
     openImpelDownModal,
     sendPlayerToMarineford,

@@ -299,6 +299,14 @@
     .home-menu-copy strong{font-size:17px;font-weight:950}
     .home-menu-copy small{color:#5f7f91;font-size:12px;font-weight:800;line-height:1.35}
     .home-menu-btn.primary .home-menu-copy small{color:#76501f}
+    .home-menu-btn:hover{
+      transform:translateY(-2px);
+      box-shadow:0 18px 34px rgba(43,103,132,.17);
+    }
+    .home-menu-btn:focus-visible{
+      outline:3px solid rgba(43,150,190,.28);
+      outline-offset:3px;
+    }
     .account-profile-menu{
       margin-top:14px;
       padding:16px;
@@ -602,6 +610,54 @@
       color:#edfaff;
     }
     .campaign-save-panel.home-campaign-panel{margin:18px 0 0}
+    .social-sheet{display:grid;gap:18px}
+    .social-sheet-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:18px;
+    }
+    .social-lead{
+      margin:7px 0 0;
+      color:#628398;
+      font-size:13px;
+      font-weight:800;
+      line-height:1.55;
+    }
+    .social-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .social-actions .ghost-btn,.social-actions .option-btn{width:auto;min-width:132px}
+    .social-status-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:12px;
+    }
+    .social-status-grid article{
+      min-height:88px;
+      padding:15px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.74);
+      background:linear-gradient(180deg,rgba(255,255,255,.68),rgba(224,245,251,.46));
+      display:grid;
+      align-content:center;
+      gap:5px;
+    }
+    .social-status-grid span{font-size:12px;color:#66879a;font-weight:850}
+    .social-status-grid strong{font-size:26px;color:#1f5d78;font-weight:950}
+    .social-guide,.social-help{
+      padding:14px 16px;
+      border-radius:17px;
+      border:1px solid rgba(81,158,188,.18);
+      background:rgba(255,255,255,.46);
+      color:#476f84;
+      font-size:13px;
+      font-weight:800;
+      line-height:1.65;
+    }
+    .social-guide.is-ready{
+      border-color:rgba(41,154,124,.22);
+      background:rgba(41,154,124,.09);
+      color:#2d745f;
+    }
     .campaign-save-head{
       display:flex;
       align-items:center;
@@ -1525,9 +1581,12 @@
     }
     @media (max-width:820px){
       .view[data-view="modeSelect"] .sheet,
-      .view[data-view="lobby"] .lobby-shell{
+      .view[data-view="lobby"] .lobby-shell,
+      .view[data-view="social"] .sheet,
+      .view[data-view="campaigns"] .campaign-save-panel{
         margin-top:140px;
       }
+      .social-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
     }
     @media (min-width:720px){
       .sheet-grid{grid-template-columns:1fr 1fr}
@@ -1555,6 +1614,9 @@
         text-align:left;
       }
       .home-menu-grid{grid-template-columns:1fr}
+      .social-sheet-head{flex-direction:column}
+      .social-actions{width:100%;justify-content:stretch}
+      .social-actions .ghost-btn,.social-actions .option-btn{flex:1 1 140px}
       .avatar-picker-head{
         align-items:flex-start;
         flex-direction:column;
@@ -1634,7 +1696,15 @@
       <nav class="home-menu-grid" aria-label="開始頁選單">
         <button type="button" class="home-menu-btn primary" id="openBoardFlowBtn">
           <span class="home-menu-icon" aria-hidden="true">⚓</span>
-          <span class="home-menu-copy"><strong>建立／加入航海房</strong><small>開始新房間，或輸入房號加入其他玩家</small></span>
+          <span class="home-menu-copy"><strong>開始航海</strong><small>建立新房間，或輸入房號加入其他玩家</small></span>
+        </button>
+        <button type="button" class="home-menu-btn" id="openCampaignsBtn">
+          <span class="home-menu-icon" aria-hidden="true">🧭</span>
+          <span class="home-menu-copy"><strong>繼續航海</strong><small id="campaignMenuHint">讀取這個帳號的個人與集合紀錄</small></span>
+        </button>
+        <button type="button" class="home-menu-btn" id="openSocialBtn">
+          <span class="home-menu-icon" aria-hidden="true">✉</span>
+          <span class="home-menu-copy"><strong>好友與聊天室</strong><small id="socialMenuHint">連接好友名單、邀請與私人訊息</small></span>
         </button>
         <button type="button" class="home-menu-btn" id="openPlayerProfileBtn">
           <span class="home-menu-icon" aria-hidden="true">☠</span>
@@ -1660,14 +1730,47 @@
           <div class="avatar-picker-grid" id="avatarPickerGrid"></div>
         </div>
       </section>
+    </section>
 
-      <section class="campaign-save-panel home-campaign-panel" id="boardCampaignPanel" aria-label="我的航海紀錄">
+    <section class="view" data-view="campaigns">
+      <div class="top-row">
+        <button type="button" class="back-link" id="backFromCampaignsBtn">返回首頁</button>
+        <div class="top-mark">Voyage Records</div>
+      </div>
+      <section class="campaign-save-panel" id="boardCampaignPanel" aria-label="我的航海紀錄">
         <div class="campaign-save-head">
           <h3>我的航海紀錄</h3>
           <span id="campaignAccountHint">只顯示目前登入帳號可使用的紀錄</span>
         </div>
         <div class="campaign-save-list" id="boardCampaignList"></div>
         <div class="campaign-save-empty" id="boardCampaignEmpty">正在讀取這個帳號的航海紀錄…</div>
+      </section>
+    </section>
+
+    <section class="view" data-view="social">
+      <div class="top-row">
+        <button type="button" class="back-link" id="backFromSocialBtn">返回首頁</button>
+        <div class="top-mark">Friends &amp; Chat</div>
+      </div>
+      <section class="sheet social-sheet">
+        <div class="sheet-head social-sheet-head">
+          <div>
+            <h2 class="sheet-title">好友與聊天室</h2>
+            <p class="social-lead">好友、在線狀態、房間邀請與私人訊息都沿用同一個登入帳號。</p>
+          </div>
+          <div class="social-actions">
+            <button type="button" class="ghost-btn" id="refreshSocialBtn">刷新</button>
+            <button type="button" class="option-btn" id="openFriendDockBtn">打開好友面板</button>
+          </div>
+        </div>
+        <div class="social-status-grid" aria-live="polite">
+          <article><span>好友</span><strong id="socialFriendCount">—</strong></article>
+          <article><span>目前線上</span><strong id="socialOnlineCount">—</strong></article>
+          <article><span>等待確認</span><strong id="socialRequestCount">—</strong></article>
+          <article><span>未讀訊息</span><strong id="socialUnreadCount">—</strong></article>
+        </div>
+        <div class="social-guide" id="socialConnectionText">正在連接好友服務…</div>
+        <div class="social-help">打開右側面板後：輸入玩家名稱可送出好友邀請；點擊好友可讀取正式聊天記錄並傳送私訊；身在等待室時，可從好友右側選單邀請對方加入房間。</div>
       </section>
     </section>
 
@@ -1757,8 +1860,8 @@
 
   </main>
 
-  <script src="js/board_shared.js?v=20260830-shared-campaign-v4"></script>
+  <script src="js/board_shared.js?v=20260831-home-social-v394"></script>
   <script src="/socket.io/socket.io.js"></script>
-  <script src="js/board_start.js?v=20260831-account-menu-v386"></script>
+  <script src="js/board_start.js?v=20260831-home-social-v394"></script>
 </body>
 </html>
