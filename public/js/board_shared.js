@@ -30,7 +30,12 @@
   }
 
   function avatarUrlById(id) {
-    return `images/board/avatars/${clamp(id, 1, 2000)}.webp`;
+    const avatarId = clamp(id, 1, 2000);
+    const portableAssets = new URLSearchParams(window.location.search).get("portable_assets") === "1";
+    const directory = portableAssets && avatarId <= 50
+      ? "images/board/mobile/avatars"
+      : "images/board/avatars";
+    return `${directory}/${avatarId}.webp`;
   }
 
   function readJson(key, fallback) {

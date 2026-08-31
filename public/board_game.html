@@ -27147,7 +27147,7 @@
           <img class="evolution-character-img before" id="evolutionHudCharacterBefore" src="" alt="" onerror="if(this.dataset.fallbackSrc){this.src=this.dataset.fallbackSrc;this.dataset.fallbackSrc='';}else{this.hidden=true;}">
           <img class="evolution-character-img after" id="evolutionHudCharacterAfter" src="" alt="" onerror="if(this.dataset.fallbackSrc){this.src=this.dataset.fallbackSrc;this.dataset.fallbackSrc='';}else{this.hidden=true;}">
         </div>
-        <img class="evolution-character-frame" id="evolutionHudCharacterFrame" src="images/board/evolution_ui/evolution_portrait_frame_v1.webp" alt="" aria-hidden="true">
+        <img class="evolution-character-frame" id="evolutionHudCharacterFrame" data-src="images/board/evolution_ui/evolution_portrait_frame_v1.webp" alt="" aria-hidden="true">
         <img class="evolution-material-img" id="evolutionHudMaterial" src="" alt="" onerror="this.hidden=true;">
       </div>
       <div class="evolution-dialogue" id="evolutionHudDialogue">
@@ -27160,11 +27160,11 @@
 
   <div class="item-reveal-hud" id="itemRevealHud" aria-live="polite" aria-atomic="true" aria-hidden="true">
     <section class="item-reveal-card">
-      <img class="item-reveal-panel-frame" src="images/board/item_reveal_ui/important_item_reveal_panel_frame.webp" alt="" aria-hidden="true">
+      <img class="item-reveal-panel-frame" id="itemRevealPanelFrame" data-src="images/board/item_reveal_ui/important_item_reveal_panel_frame.webp" alt="" aria-hidden="true">
       <div class="item-reveal-stage">
         <img class="item-reveal-image" id="itemRevealImage" src="" alt="" onerror="this.hidden=true;">
         <div class="postgame-clue-reveal" id="postgameClueReveal" hidden>
-          <img class="postgame-clue-reveal-frame" id="postgameClueRevealFrame" src="images/board/postgame_clue_ui/york_clue_playing_card_frame_v2.webp" alt="" aria-hidden="true">
+          <img class="postgame-clue-reveal-frame" id="postgameClueRevealFrame" data-src="images/board/postgame_clue_ui/york_clue_playing_card_frame_v2.webp" alt="" aria-hidden="true">
           <img class="postgame-clue-reveal-island" id="postgameClueRevealIsland" src="" alt="">
           <span class="postgame-clue-reveal-rank corner-top" id="postgameClueRevealRank">A</span>
           <span class="postgame-clue-reveal-rank corner-bottom" id="postgameClueRevealRankMirror" aria-hidden="true">A</span>
@@ -27179,7 +27179,7 @@
     </section>
   </div>
 
-  <script src="js/board_shared.js?v=20260831-home-social-v394"></script>
+  <script src="js/board_shared.js?v=20260831-ipad-memory-v396"></script>
   <script src="/socket.io/socket.io.js"></script>
   <script src="js/board_cards.js?v=20260827-zorojuro-enma-v348"></script>
   <script src="js/board_map_layout_override.js"></script>
@@ -27193,6 +27193,6 @@
   <script src="js/onepiece_prebattle_lines.js?v=20260819-zephyr-name-v4"></script>
   <script src="js/board_cosmetic_frame_preview.js?v=20260729-rocks-conqueror-frame-v1"></script>
   <script src="js/board_enemy_spawn_regions.js?v=20260829-regional-enemy-spawns-v381"></script>
-  <script src="js/board_game.js?v=20260831-home-social-v394"></script>
+  <script src="js/board_game.js?v=20260831-ipad-memory-v396"></script>
 </body>
 </html>

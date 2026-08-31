@@ -1,5 +1,14 @@
 ﻿# Dev Workflow
 
+## 修改紀錄：iPad 進入地圖記憶體降載 V396（2026-08-31）
+
+- 問題：iPad 由等待室進入 `board_fixed_viewport.html` 時，WebKit 顯示「重複發生問題」。實際線上 1 真人＋3 CPU 量測沒有重新導向循環或 JS 例外，但主地圖初始同時建立 116 張已解碼圖片；重複元素估算約 345.5 MiB、唯一圖片約 144.8 MiB，再加上 DPR 2、CSS 濾鏡、合成圖層與 iframe，會對 iOS WebContent 造成顯著記憶體壓力。
+- 修正：固定視角外框只在觸控行動裝置替內頁加入 `portable_assets=1`。地圖島嶼、海獸、礁石、船圖與 1～50 號頭像改讀 `public/images/board/mobile/` 的等比例 WebP 衍生檔；桌機、戰鬥、詳情與正式原圖維持原路徑。105 張衍生檔合計約 2.9 MB，原圖完全未覆寫。
+- 延遲載入：進化人物框、重要道具揭露框與約克線索牌框的初始 `src` 改成 `data-src`，只有真正播放該演出時才指定 `src`。沒有新增預載全部素材，避免第一次進房額外耗用 Render 流量；瀏覽器仍會依標準 HTTP cache 保存已使用的小圖。
+- 邊界：不改 `BOARD_GAME_STATE`、存檔、角色／道具／地圖 id、Socket.IO event、回合或戰鬥。主頁／共用模組 query 更新為 `20260831-ipad-memory-v396`。
+- 檔案：修改 `public/board_fixed_viewport.html`、`public/board_game.html`、`public/js/board_game.js`、`public/js/board_shared.js`、`scripts/board_fixed_viewport_qa.js`；新增 `public/images/board/mobile/` 105 張顯示衍生檔，並同步四份專案文件。
+- 驗證：`node --check` 通過主程式、共用模組與 QA；既有 8787 `npm start` 頁面回傳 200。固定視角 QA 於 1024×768、932×430、390×844 驗證 1920×900 內頁、query 保留、縮放點擊、96/96 張地圖圖片皆讀 mobile 路徑、三張隱藏大框初始請求為 0、browser errors 為 0；重複元素解碼估算降為約 50.7 MiB、唯一地圖圖片約 14.8 MiB，三尺寸皆 `failures=[]`。桌機 1920×900 未被導向固定外框且維持原圖。
+
 ## 修改紀錄：卡牌首頁裝置識別啟動修正 V395（2026-08-31）
 
 - 線上雙帳號回歸發現舊卡牌首頁的非 React 好友程式可能早於 Babel 主程式完成編譯，先呼叫尚未建立的 `getDeviceId`；不會阻斷登入與房間，但會留下 page error，並可能略過第一次好友登入。

@@ -53,6 +53,10 @@
       const sourceUrl = new URL("board_game.html", window.location.href);
       sourceUrl.search = window.location.search;
       sourceUrl.searchParams.set("desktop_frame", "1");
+      const portableTouch = window.matchMedia?.("(pointer: coarse)")?.matches
+        || Number(navigator.maxTouchPoints || 0) > 1
+        || /Android|iPhone|iPad|Mobile/i.test(navigator.userAgent || "");
+      if (portableTouch) sourceUrl.searchParams.set("portable_assets", "1");
       sourceUrl.hash = window.location.hash;
       frame.src = sourceUrl.href;
 

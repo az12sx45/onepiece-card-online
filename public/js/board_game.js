@@ -3,6 +3,19 @@
   const cardsModule = window.BoardCards;
   if (!shared || !cardsModule) return;
   const moveDamageClassModule = window.BoardMoveDamageClass || cardsModule;
+  const MOBILE_MAP_ASSET_MODE = new URLSearchParams(window.location.search).get("portable_assets") === "1";
+  const MOBILE_MAP_ASSET_PATTERN = /^images\/board\/(?:islands\/|decorations\/(?:sea_beasts|reefs)\/|ships\/)/;
+
+  function mapDisplayAssetUrl(source) {
+    const normalized = String(source || "").trim();
+    if (!MOBILE_MAP_ASSET_MODE || !MOBILE_MAP_ASSET_PATTERN.test(normalized)) return normalized;
+    return normalized.replace(/^images\/board\//, "images/board/mobile/");
+  }
+
+  function ensureDeferredImageSource(image) {
+    if (!image || image.getAttribute("src") || !image.dataset?.src) return;
+    image.src = image.dataset.src;
+  }
 
   function boardMoveDamageClass(moveEntry = {}) {
     if (typeof moveDamageClassModule?.moveDamageClassFor === "function") {
@@ -723,12 +736,14 @@
     turnTransitionKicker: document.getElementById("turnTransitionKicker"),
     missionCompleteToast: document.getElementById("missionCompleteToast"),
     evolutionHud: document.getElementById("evolutionHud"),
+    evolutionHudCharacterFrame: document.getElementById("evolutionHudCharacterFrame"),
     evolutionHudCharacterBefore: document.getElementById("evolutionHudCharacterBefore"),
     evolutionHudCharacterAfter: document.getElementById("evolutionHudCharacterAfter"),
     evolutionHudMaterial: document.getElementById("evolutionHudMaterial"),
     evolutionHudSub: document.getElementById("evolutionHudSub"),
     evolutionHudContinue: document.getElementById("evolutionHudContinue"),
     itemRevealHud: document.getElementById("itemRevealHud"),
+    itemRevealPanelFrame: document.getElementById("itemRevealPanelFrame"),
     itemRevealTitle: document.getElementById("itemRevealTitle"),
     itemRevealName: document.getElementById("itemRevealName"),
     itemRevealLine: document.getElementById("itemRevealLine"),
@@ -15493,21 +15508,23 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   function buildIslandVisual(island, islandState, _label, title, _meta, imageSrc = null, fallbackSrc = "") {
     const finalImageSrc = imageSrc || getIslandImageUrl(island, islandState);
     if (!finalImageSrc) {
-      return `<div class="island-generic-mark" aria-label="${escapeModalText(title)}"><img src="${ISLAND_IMAGE_MAP.unknown}" alt=""></div>`;
+      return `<div class="island-generic-mark" aria-label="${escapeModalText(title)}"><img src="${mapDisplayAssetUrl(ISLAND_IMAGE_MAP.unknown)}" alt=""></div>`;
     }
     const islandKind = finalImageSrc === ISLAND_IMAGE_MAP.unknown ? "unknown" : getEffectiveIslandKind(island, islandState);
+    const displayImageSrc = mapDisplayAssetUrl(finalImageSrc);
+    const displayFallbackSrc = mapDisplayAssetUrl(fallbackSrc);
     return `
       <div class="island-visual image-mode kind-${islandKind}">
         <div class="island-visual-art kind-${islandKind}">
           <div class="island-visual-glow"></div>
           <img
             class="island-visual-img"
-            src="${finalImageSrc}"
+            src="${displayImageSrc}"
             alt="${title}"
             loading="eager"
             decoding="async"
             draggable="false"
-            ${fallbackSrc ? `data-fallback-src="${escapeModalText(fallbackSrc)}"` : ""}
+            ${displayFallbackSrc ? `data-fallback-src="${escapeModalText(displayFallbackSrc)}"` : ""}
             onerror="if(this.dataset.fallbackSrc && this.src.indexOf(this.dataset.fallbackSrc) === -1){this.src=this.dataset.fallbackSrc;this.dataset.fallbackSrc='';}else{this.closest('.island-visual-art').classList.add('is-fallback');this.remove();}"
           >
           <div class="island-visual-fallback">${title}</div>
@@ -16805,6 +16822,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       return;
     }
     itemRevealActive = true;
+    ensureDeferredImageSource(refs.itemRevealPanelFrame);
     const image = itemImageForDisplay(itemDef);
     const clueBossDef = itemDef.effect?.kind === "postgame_york_clue"
       ? postgameBossDef(itemDef.effect.bossKey)
@@ -16866,6 +16884,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const config = evolutionEffectForCosts(costs);
     if (!config || !refs.evolutionHud || !refs.evolutionHudMaterial) return Promise.resolve();
     hideEvolutionHud();
+    ensureDeferredImageSource(refs.evolutionHudCharacterFrame);
     void refs.evolutionHud.offsetWidth;
     refs.evolutionHud.className = `evolution-hud show ${config.type}`;
     refs.evolutionHud.setAttribute("aria-hidden", "false");
@@ -20537,7 +20556,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       node.style.height = `${decoration.size || 64}px`;
       node.style.transform = `translate(-50%,-50%) rotate(${decoration.rotation || 0}deg)`;
       const img = document.createElement("img");
-      img.src = decoration.asset;
+      img.src = mapDisplayAssetUrl(decoration.asset);
       img.alt = decoration.label || decoration.presetId || "地圖貼紙";
       img.loading = "eager";
       img.decoding = "async";
@@ -20659,13 +20678,14 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       token.style.setProperty("--ship-flip", shipFlipForPlayer(visualPlayer));
       const shipSkin = shipSkinForPlayer(player, index);
       const shipImage = shipSkin?.image || "";
+      const shipDisplayImage = mapDisplayAssetUrl(shipImage);
       const shipName = shipSkin?.name || "玩家船隻";
       token.innerHTML = `
         <div class="wake"></div>
         ${shipBattleStatusIconHtml(player)}
         ${shipMoveLearnBadgeHtml(player)}
         <div class="boat${shipImage ? " has-ship-art" : ""}">
-          ${shipImage ? `<img class="ship-art" src="${shipImage}" alt="${shipName}" loading="eager" decoding="async" draggable="false" onerror="this.closest('.boat')?.classList.remove('has-ship-art'); this.remove();">` : ""}
+          ${shipDisplayImage ? `<img class="ship-art" src="${shipDisplayImage}" alt="${shipName}" loading="eager" decoding="async" draggable="false" onerror="this.closest('.boat')?.classList.remove('has-ship-art'); this.remove();">` : ""}
           <div class="mast"></div>
           <div class="sail"></div>
           <div class="flag"></div>

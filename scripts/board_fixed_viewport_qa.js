@@ -54,12 +54,37 @@ async function inspectFixedViewport(browser, spec) {
     const map = document.getElementById("boardGameMap")?.getBoundingClientRect();
     const turn = document.querySelector(".map-turn-banner")?.getBoundingClientRect();
     const tools = document.querySelector(".map-tools")?.getBoundingClientRect();
+    const mapImages = Array.from(document.querySelectorAll([
+      "#boardGameMap .island-visual-img",
+      "#boardGameMap .island-generic-mark img",
+      "#boardGameMap .map-decoration img",
+      "#boardGameMap .ship-art",
+      ".map-turn-avatar img",
+    ].join(",")));
+    const mapImageSources = mapImages.map((image) => image.getAttribute("src") || "");
+    const uniqueMapImages = new Map();
+    mapImages.forEach((image) => {
+      uniqueMapImages.set(image.currentSrc || image.src, image.naturalWidth * image.naturalHeight * 4);
+    });
+    const deferredFrameNames = [
+      "important_item_reveal_panel_frame.webp",
+      "evolution_portrait_frame_v1.webp",
+      "york_clue_playing_card_frame_v2.webp",
+    ];
+    const resourceNames = performance.getEntriesByType("resource").map((entry) => entry.name);
     return {
       href: location.href,
       viewport: [window.innerWidth, window.innerHeight],
       room: params.get("room"),
       online: params.get("online"),
       desktopFrame: params.get("desktop_frame"),
+      portableAssets: params.get("portable_assets"),
+      mapImageCount: mapImageSources.length,
+      mobileMapImageCount: mapImageSources.filter((source) => source.includes("images/board/mobile/")).length,
+      originalMapImageSources: mapImageSources.filter((source) => source.includes("images/board/") && !source.includes("images/board/mobile/")),
+      estimatedMapDecodedBytes: mapImages.reduce((sum, image) => sum + image.naturalWidth * image.naturalHeight * 4, 0),
+      estimatedUniqueMapDecodedBytes: Array.from(uniqueMapImages.values()).reduce((sum, bytes) => sum + bytes, 0),
+      deferredFrameRequests: resourceNames.filter((source) => deferredFrameNames.some((name) => source.includes(name))),
       map: map ? { left: map.left, top: map.top, width: map.width, height: map.height } : null,
       turn: turn ? { left: turn.left, top: turn.top, width: turn.width, height: turn.height } : null,
       tools: tools ? { left: tools.left, top: tools.top, width: tools.width, height: tools.height } : null,
@@ -146,6 +171,18 @@ async function inspectFixedViewport(browser, spec) {
     }
     if (result.inner.room !== "QA123" || result.inner.online !== "1" || result.inner.desktopFrame !== "1") {
       failures.push(`${spec.name}: URL parameters were not preserved`);
+    }
+    if (result.inner.portableAssets !== "1") {
+      failures.push(`${spec.name}: portable asset mode was not enabled`);
+    }
+    if (!result.inner.mapImageCount || result.inner.mobileMapImageCount !== result.inner.mapImageCount) {
+      failures.push(`${spec.name}: map still contains original-size display assets`);
+    }
+    if (result.inner.estimatedMapDecodedBytes > 64 * 1024 * 1024) {
+      failures.push(`${spec.name}: decoded map image estimate exceeds 64 MiB`);
+    }
+    if (result.inner.deferredFrameRequests.length) {
+      failures.push(`${spec.name}: hidden cinematic frames were requested during initial load`);
     }
     if (!result.clickProbe.found || result.clickProbe.clicked !== "1") {
       failures.push(`${spec.name}: scaled pointer target did not activate`);
