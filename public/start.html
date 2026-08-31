@@ -751,6 +751,22 @@
 
   <div id="root" class="min-h-dvh flex items-center justify-center p-6"></div>
   <script>
+    window.getDeviceId = window.getDeviceId || function(){
+      try{
+        const key = 'op_device_id';
+        let id = localStorage.getItem(key);
+        if(!id){
+          const arr = new Uint8Array(12);
+          (window.crypto?.getRandomValues ? window.crypto.getRandomValues(arr) : arr.fill(Math.floor(Math.random()*256)));
+          id = Array.from(arr).map((b)=>b.toString(16).padStart(2,'0')).join('');
+          localStorage.setItem(key, id);
+        }
+        return id;
+      }catch(_){
+        return 'legacy';
+      }
+    };
+
     (function initBGVideo(){
       const v = document.getElementById('bgVideo');
       if(!v) return;

@@ -10,6 +10,7 @@
 | `package-lock.json` | npm lockfile。 |
 | `AGENTS.md` | Codex 進入專案前必讀的短規則。 |
 | `.gitignore` | 排除 `node_modules/`、本機 Codex／QA 產物、本機備份／還原目錄、西洋棋暫緩內容、Board `incoming/` 原始來源及私人 save／campaign JSON；正式 runtime 素材仍納入版本庫。 |
+| `public/start.html`（裝置識別啟動 V395） | 在同步 script 階段先提供既有 `op_device_id` 的 `window.getDeviceId`，避免非 React 好友面板早於 Babel 主程式完成時產生 page error；卡牌與 Board 的登入、房間及存檔規則不變。 |
 | `public/board_start.html`、`public/js/board_start.js`、`public/js/board_shared.js`、`public/board_game.html`、`public/js/board_game.js`、`server/index.js`、`scripts/board_home_social_qa*.js`（首頁／正式社交 V394） | Board 先進四選單首頁，房間、紀錄與社交各自為第二層 view；共用好友面板移除 mock，接正式帳號驗證、presence、好友 CRUD、私訊歷史／即時訊息及 Board 等待室邀請。邀請沿用既有 `LOBBY_INVITE_*` 並以 `mode:"board"` 驗證 `boardRooms`，舊卡牌房維持 card mode。兩個 QA 腳本提供 fake PostgreSQL／雙登入桌機與平板完整互動回歸；正式 query 為 `20260831-home-social-v394`。 |
 | `public/js/board_game.js`、`public/board_game.html`、`scripts/spectator_modal_ui_qa.js`（觀看方正式介面 V393） | 補齊 `final-island-revisit` 與 `final-boss-voyage-compass` 專用觀看 renderer；前者共用航海情報 config，後者共用 13 張 cover-flow 並以不補完整快照的輕量事件同步目前卡片，觀看端維持唯讀。未知 kind 改走正式航海情報框而非藍色 HUD；專項 QA 以雙真人房測桌機／平板。功能實作於 V393，目前主頁 query 已由 V394 接續。 |
 | `public/js/board_game.js`、`public/board_game.html`（觀看端寶箱同步 V392） | 漂流寶箱以既有 `BOARD_GAME_EVENT` 依序傳 `chest-draft`／`chest-shuffle`／`chest-result`；觀看方重建與操作方相同的四箱、洗牌和實際箱種結果 UI，但不綁選箱操作。結果帶正式寶箱種類／圖片，不再落回通用藍框；正式主頁 query 已由 V393 接續更新。 |
