@@ -2,6 +2,163 @@
 
 本文件整理目前程式碼中大富翁 / Board 遊戲已存在的規則來源。這不是新設計稿；若與程式碼衝突，以目前程式碼為準，並應先更新程式或文件之一來消除衝突。
 
+## 正式桌遊選擇規則（V428）
+
+- 正式站的卡牌入口與既有登入流程保留；卡牌主選單的隱藏骰子通往共用桌遊啟動器。
+- 啟動器通過正式帳號驗證後，目前只有卡牌與《新世界航海錄》可進入。《霸海戰棋》盒面可見但不可操作，且不得載入其預覽影片或發布其 runtime。
+- 本機開發時，只有 loopback 且 `/api/board-runtime` 明確回報帳號資料庫未啟用，才可恢復西洋棋本機連結；這個例外不能在正式站或 LAN 位址啟用。
+- 這項入口整合不改任何戰鬥、回合、捕捉、角色、道具、campaign、`BOARD_GAME_STATE` 或 Socket.IO 同步規則。
+
+## 三合一桌遊啟動入口邊界（V427）
+
+- 開啟 `game_launcher_preview.html` 固定先停在系列主畫面；玩家點擊畫面或按任意非修飾鍵後，才能進入登入驗證。帳號成功前，三個桌遊連結必須維持 `inert` 與 `aria-hidden`，不可由鍵盤或滑鼠誤進。
+- 正式來源只接受同源 `AUTH_LOGIN`／`AUTH_REGISTER`、`PROFILE_GET` 與 `PRESENCE_SET`；有效既有 secret 仍須在點擊後重新驗證。密碼不得寫入 localStorage、URL 或錯誤訊息，送出後清空；被 `SESSION_KICK` 時清除 secret 並回登入。
+- 空白登入只准用於 loopback 且 `/api/board-runtime` 明確表示未連帳號資料庫的本機預覽；它會使用本機測試身分，不建立假 secret。非 loopback、資料庫已啟用、能力旗標逾時或未知時都不得啟用此捷徑。
+- 驗證成功只解鎖原收藏室，不改三個遊戲的內部登入安全邊界、房間、回合、角色、道具、存檔、`BOARD_GAME_STATE` 或任何 Socket.IO event 名稱；三條入口 href 與 V415／V417 核准構圖維持不變。
+
+## 共用好友與聊天室保留規則（V426）
+
+- 「好友與聊天室」、浮動好友 Dock、聊天 Tray 與邀請層是預定和《偉大航道爭霸戰》共用的正式介面，本機預覽也必須保留，不屬於可移除的無效功能。
+- 尚未接回正式帳號 secret 時，介面只顯示待接入狀態，不偽造好友、訊息或邀請；接回後沿用既有 `SOCIAL_*`、`DM_*` 與房間邀請事件。
+- 本機首頁仍隱藏無內容的玩家資料；繼續航海只有實際取得可用 campaign 才顯示。
+
+## 本機首頁入口顯示規則（V425；V426 恢復社交入口）
+
+- local-preview 首頁只顯示可以完成動作的入口：「開始航海」固定存在；「繼續航海」須等伺服器回傳至少一份可用紀錄才顯示。
+- 因本機預覽沒有登入 secret，「玩家資料」不顯示；好友與聊天室相關介面依 V426 保留並顯示待接入狀態。
+- 這些限制只屬本機預覽顯示層；正式帳號模式仍依原規則提供四入口，不修改房間、campaign、存檔或同步資料。
+
+## 本機登入預覽邊界（V424）
+
+- 僅當網址主機為 `127.0.0.1`、`localhost` 或 `::1`，且 `/api/board-runtime` 明確回報帳號資料庫關閉時，登入卡允許空白直接進入主畫面。
+- 本機預覽只建立本機測試玩家資料，不保存密碼或登入 secret，也不把帳密送到正式站；Board 房間與遊戲同步仍使用目前本機 Socket。
+- 正式網址、非 loopback 網址與已啟用資料庫的環境不得使用此捷徑，仍須通過原 `AUTH_LOGIN`／`PROFILE_GET`。此規則不新增存檔欄位、Socket.IO event 或 `BOARD_GAME_STATE` 內容。
+
+## 新世界航海錄入口呈現邊界（V422）
+
+- 一般進站先顯示全螢幕橫向主畫面；玩家可點擊視窗任意位置或按原本支援的鍵盤按鍵繼續。點擊後 auth／boot 只在同一背景中央顯示小視窗，不再建立左封面＋右表單的入口構圖。
+- 入口橫向背景、Logo、淡色遮罩與短橫向緊湊排版都只屬於顯示層；不存在新的開始按鈕指令、帳號欄位、localStorage key、Socket.IO event、存檔欄位或 `BOARD_GAME_STATE` 資料。
+- 有效 secret、無 secret、失效 secret、`view`／`room`／`campaign` 直達、`kicked=1` 與返回主畫面的行為仍依 V418；驗證成功前不得初始化 Board app，驗證成功後仍進原四入口。
+
+## 首次入獄青雉攔截規則（V419；透明立繪 V420；劇情一體化 V421）
+
+- 每名玩家各自只有一次青雉攔截機會。首次將因全隊瀕死、一般戰鬥／司法島敗北或罰款不足進推進城時，立即記錄 `aokijiFirstCaptureStorySeen=true`、恢復全隊 HP／PP、清除暫時能力階級，並暫停原本的入獄結算。
+- 選「接受青雉放行」：本次不進推進城；原事件屬於結束回合者照原順序換人，地圖全滅檢查則返回原回合。罰款不足時既有貝里歸零仍保留，不會因放行退回。同步用的選擇值維持 `leave`。
+- 選「直接挑戰青雉」：以 Marineford 青雉為基底建立劇情專屬 Lv99 資料；Marineford 本體仍為 Lv92，玩家青雉／庫山也不套用這次強化。此戰禁止中途離開、不能共鬥、沒有獎勵／掉落／血統提取；勝利視為本次獲准離開，敗北或投降才執行原本的推進城押送與換回合。同步用的選擇值維持 `fight`。
+- 青雉演出、二選一與選後回應都留在同一個全螢幕正式角色對話框，不顯示戰鬥 HP HUD、不跳出獨立選擇 modal，玩家可見文案不使用「逃跑」字樣；全段共用 `aokiji_capture_bicycle_sea_story_v1.webp`，並以三張劇情專用透明 WebP 疊在背景上。桌機與短橫向畫面都必須完整容納立繪雙臂。非控制玩家只能觀看，代理 CPU 直接接受放行，不建立額外戰鬥指令或第五顆按鈕。
+- 劇情旗標、pending 幕次與挑戰 battle snapshot 都包含在既有完整快照中；刷新、斷線重接與換觀看端後必須從相同狀態接回。第二次以後不再播放青雉劇情，直接套用既有推進城規則。
+
+## 新世界航海錄登入入口規則（V418；V422 更新畫面）
+
+- 一般開啟 `board_start.html` 固定先到主畫面；玩家按下「開始航海」後，有有效 secret 則經 `PROFILE_GET` 驗證後進四選單，沒有或失效才顯示登入／註冊。
+- 登入前不得初始化本機隨機 Board 身分、讀取 campaign、加入房間或顯示好友／聊天。登入成功只把既有雲端 user id、名稱、頭像、稱號與金幣映射到原 Board keys，不新增帳號 schema 或 `gameState` 欄位，也不保存密碼。
+- 帶 `view`／`room`／`campaign` 的正式續接網址可略過按鍵畫面，但仍必須先驗證帳號；驗證後才交給原有 lobby、個人分流／集合紀錄與固定成員規則。
+- 登入後首頁仍只有「開始航海、繼續航海、好友與聊天室、玩家資料」四入口；所有房間、campaign、社交、完整 `BOARD_GAME_STATE` 與回合規則維持不變。
+- 同帳號被其他裝置接管時會清除本頁 secret 並回 `board_start.html?kicked=1` 顯示重新登入，不再跨到卡牌首頁。
+
+## 啟動頁 Logo 避讓的規則邊界（V417）
+
+- Logo 的 `top:0`、560px 寬度與盒架 `z-index` 只改啟動頁顯示層；三個 `.game-pick` 的座標、300×400 邏輯尺寸、href、Hover 影片及四點透視不變。
+- 此調整不建立新按鈕、存檔欄位、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE` 資料，也不改卡牌、Board 或 Chess 規則。
+
+## 固定比例三盒示範成片的規則邊界（V416）
+
+- `game_launcher_three_box_hover_demo_fixed_v3.mp4` 只是 V415 固定 `1540×660` 啟動頁的離線展示成片；片中的游標移動與三支 V2 完整輪播不會由 runtime 自動執行，也不會產生點擊、登入、房間、進度、獎勵、存檔、Socket.IO event 或 `BOARD_GAME_STATE` 變更。
+- 錄製用 query、合成游標與 OBS 設定均未保留在正式頁；正式 Hover 仍維持原本滑鼠停留後才載入、一次只播一盒、離開釋放的規則。
+
+## 啟動頁固定比例的規則邊界（V415）
+
+- `1540×660` 固定畫布及其縮放比例只屬啟動頁顯示座標；較寬／較高視窗的深色留邊也不代表地圖邊界、遊戲場地或新增內容。
+- Logo、三盒與背景只會一起等比例縮放，三個 `.game-pick` 仍固定前往 `start.html`、`board_start.html`、`battle_chess/index.html`；外層 transform 不建立存檔欄位、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE` 資料，也不改 Hover 影片與三款遊戲規則。
+
+## 啟動頁三盒示範影片的規則邊界（V414）
+
+- `game_launcher_three_box_hover_demo_v2.mp4` 只用來展示滑鼠依序停在三盒、完整播放三支 V2 短片的結果；不會被啟動頁 runtime 自動呼叫，也不產生點擊、遊戲進度、存檔或同步事件。V413 錯誤 V1 已撤下，不屬正式展示素材。
+
+## 啟動頁真正 3:4 短片的規則邊界（V412）
+
+- V2 短片的 `810×1080` 動態裁框、平移、微縮放與鏡頭跳切只存在於離線剪輯成片，不是卡牌目標、Board 鏡頭／戰鬥座標或西洋棋移動規則。
+- 卡牌固定抽到 3 號香吉士、Board 固定五檔對覺醒路基、Chess 固定 KING「丹弓皇」都只用來錄製展示；不會寫入正式牌堆、敵人、骰子 RNG、棋局、角色 HP／PP、存檔或多人快照。
+- V2 仍為 muted、按需載入的本機展示層；替換 V1 影片來源不改三個 `.game-pick` 入口、V411 四點透視、觸控／reduced-motion 行為、BGM、Socket.IO event、localStorage key 或 `BOARD_GAME_STATE`。
+
+## 啟動頁影片四點透視的規則邊界（V411）
+
+- `.game-slot[data-preview-quad]`、動態 homography／`matrix3d` 與 `ResizeObserver` 只負責把 V410 影片畫面貼合各自桌遊盒正面的四角；它們不是遊戲座標、命中區、鏡頭或同步資料。
+- 透視計算不會改影片內容、三款入口、抽牌、骰子、遭遇、棋步、獎勵、存檔、Socket.IO event 或 `BOARD_GAME_STATE`；手機與 reduced-motion 原本不自動播放的規則也維持不變。
+
+## 三盒玩法短片的規則邊界（V410）
+
+- 三支 `public/videos/game_launcher/*.mp4` 只是候選啟動頁的本機展示層。影片中固定抽到香吉士、固定擲骰與固定 KING 局面只存在於錄製過程，不會覆寫正式牌堆、骰子 RNG、敵人分布、棋局或玩家存檔。
+- 影片永遠 muted，不參與三款遊戲 BGM／音效；`data-src` 按需載入、單盒播放、離開歸零與 reduced-motion／觸控停用只影響啟動頁效能和視覺，不產生 `BOARD_GAME_STATE`、Socket.IO event、localStorage key、獎勵或進度。
+- `.box-preview` 使用 `pointer-events:none` 並限制在各自盒彩框的梯形開口；三個 `.game-pick` 仍是唯一互動入口，固定連到 `start.html`、`board_start.html` 與 `battle_chess/index.html`。播放失敗時保留原封面，不阻止點擊進入遊戲。
+
+## TABLETOP SERIES 頂部 Logo 的規則邊界（V409）
+
+- `launcher_tabletop_series_logo_v1.png`、圖片 `alt` 與頁籤標題只提供啟動頁系列識別；Logo 裡的海浪、羅盤、卡牌、骰子與棋子不代表新增道具、骰種、卡牌規則、棋子能力或獎勵。
+- 三個 `.game-pick` 仍固定連到卡牌 `start.html`、Board `board_start.html` 與西洋棋 `battle_chess/index.html`。Logo 的 preload、縮放與響應式位置不建立存檔欄位、Socket.IO event 或 `BOARD_GAME_STATE` 資料，也不改登入、房間、回合、戰鬥或同步。
+
+## 啟動頁純盒面陳列的規則邊界（V408）
+
+- `game_launcher_preview.html` 的可見內容只保留背景與三個完整可點盒面；頁面不再顯示收藏系列名稱、引導句、預覽標籤或開發狀態文字。
+- 三個入口仍固定為卡牌 `start.html`、Board `board_start.html`、西洋棋 `battle_chess/index.html`；移除標題不改登入、等待室、遊戲狀態、存檔、多人同步或任何遊戲規則。
+- 隱藏的 `選擇遊戲` 標題與各盒 `aria-label` 只服務無障礙導覽，不是畫面上的第四組名稱。
+
+## Board 場景 BGM 的規則邊界（V407）
+
+- BGM 是本機表現層，不參與先攻、擲骰、傷害、掉落、回合或同步判定；不同玩家可因載入時間或本機音量設定而處於不同播放進度。
+- 海上與島嶼地圖使用長時間底樂；登島「留島／繼續」選擇不換曲。商店、研究所、醫院、競技場與酒館停留滿 8 秒才可切設施曲，海上／島嶼事件為 5 秒；在門檻前關閉或進入其他正式場景會取消原請求。
+- 正式戰鬥、漫畫劇情、推進城與頂上戰爭可立即轉場；同一場普通戰不因刷新、換人或共鬥交棒重播。Boss 遭遇視窗與正式開戰共用同一組首選曲，按下挑戰不另切一次；Boss 高潮至少在該戰 BGM 播放 45 秒後才允許一次升級，勝利使用獨立 victory scope。
+- 漫畫劇情以 `ending.id` 建立一個 story scope；章節、圖片和對話幕只更新畫面，不逐幕重選歌曲。劇情結束回地圖採延後恢復，若立即接 Boss 戰則由戰鬥請求直接取代，不會短暫插入地圖曲。
+- 有聲影片可取得巢狀 audio focus；卡塔庫栗見聞色與頂上戰爭霸王色播放期間分別將 BGM 壓低到設定音量的 8%／6%，並鎖住自動換曲，最後一個 focus 釋放後才恢復並處理期間收到的最後場景。五檔與六王銃既有完整暫停流程維持不變。
+- OST 依 `cueInSec`／`cueOutSec` 跳過首尾靜音並依 `gainDb` 修正音量；原 MP3 不裁切或覆寫。V407 不建立 `BOARD_GAME_STATE`、battle state、存檔或 Socket.IO 欄位，既有 `board_bgm_enabled` 與 `board_bgm_volume` key 保持不變。
+
+## 三款專屬盒彩框的規則邊界（V406）
+
+- 棕紅、海藍、黑紫盒框及各自的封面／反光四點座標，只決定 `game_launcher_preview.html` 的外觀；不同顏色、波紋、火紋、棋紋與寶石不代表任何遊戲屬性、稀有度、角色、技能或獎勵。
+- 三個 `.game-pick` 仍分別連到既有 `start.html`、`board_start.html` 與 `battle_chess/index.html`。逐框 homography、透明遮罩驗證與 cache query 不建立存檔欄位、Socket.IO event 或 `BOARD_GAME_STATE` 資料，也不改登入、房間、回合或戰鬥。
+
+## 四角透視封面的規則邊界（V405）
+
+- 三張 `*perspective*.png` 是由完整來源封面做四點投影後的顯示衍生圖；座標只對應啟動頁盒框像素，不是地圖、棋盤、碰撞、卡牌或按鈕座標。
+- `.game-pick` 的既有矩形連結仍是唯一互動範圍。四角映射、透明畫布、反光 polygon 與 hover 不建立存檔欄位、Socket.IO event 或 `BOARD_GAME_STATE` 資料，也不影響三款遊戲規則。
+
+## 使用者成品封面／霸海戰棋正名的規則邊界（V404）
+
+- `launcher_board_cover_logo_v3.png` 與 `launcher_chess_cover_logo_v3.png` 只取代候選啟動頁的封面顯示；圖片內人物、棋子、地圖與 Logo 不會新增角色、棋子、技能、地點或獎勵。
+- 「霸海戰棋」正名只更新啟動頁顯示名稱、`aria-label` 與圖片 `alt`；仍連到既有 `battle_chess/index.html`，不改 Chess 內部狀態、Board、卡牌、存檔、Socket.IO event 或 `BOARD_GAME_STATE`。
+- V404 不再載入 V400 的兩張 SVG Logo，但舊素材保留作歷史候選；移除視覺疊層不影響整盒連結的點擊範圍。
+
+## 右下全出血封面的規則邊界（V403）
+
+- V403 只讓封面圖片延伸到盒框右下透明開口後方，最終可見斜面仍由盒框圖片決定；這不擴大 `.game-pick` 點擊範圍，也不改任何地圖、碰撞或棋盤座標。
+- cache query、裁切 polygon 與全出血顯示不建立存檔欄位、Socket.IO event 或 `BOARD_GAME_STATE` 資料。
+
+## 盒面梯形透視的規則邊界（V402）
+
+- `.box-front` 的梯形 `clip-path`、封面填滿方式與 Logo 位置只調整候選啟動頁的視覺透視；梯形中的四個百分比不是地圖座標、碰撞範圍或可互動區域。
+- 整個 `.game-pick` 連結仍維持原矩形點擊範圍並分別前往既有三個入口。封面被壓縮或裁切不會建立存檔欄位、Socket.IO event、`BOARD_GAME_STATE` 資料，也不影響登入、房間、回合或戰鬥。
+
+## 原封面滿版補圖／挖空盒框的規則邊界（V401）
+
+- `launcher_board_box_preview_filled_v2.png`、`launcher_chess_box_preview_filled_v2.png`、兩張 V400 Logo 與 `launcher_box_frame_cutout_v3.webp` 只改候選啟動頁外觀；補圖中的島嶼、航線、棋子與能量不代表新增地圖節點、敵人、棋子能力或獎勵。
+- 三個桌遊盒仍只連到既有 `start.html`、`board_start.html` 與本機 `battle_chess/index.html`。盒框、Logo、hover、手機滑動及圖片預載不建立新存檔欄位、Socket.IO event 或 `BOARD_GAME_STATE` 資料，也不改登入、房間、回合、戰鬥或發布路由。
+
+## 航海錄／棋戰封面 Logo 的規則邊界（V400）
+
+- `launcher_board_logo_v1.svg` 與 `launcher_chess_logo_v1.svg` 只替兩張候選盒面提供正式 Logo；向量中的中文與裝飾不參與任何遊戲邏輯。
+- Logo 圖的載入、縮放或手機滑動不會建立新存檔欄位、Socket.IO event 或 `BOARD_GAME_STATE` 資料；整盒仍只連向原本三個入口。
+
+## 航海收藏室／實體盒殼預覽的規則邊界（V399）
+
+- V399 只替 `game_launcher_preview.html` 更換背景、實體盒殼、三款顯示名稱與響應式排版；移除封面上的按鈕／說明後，點整個盒子進入。這不新增任何卡牌、Board 或 Chess 遊戲規則。
+- 三個連結仍指向既有 `start.html`、`board_start.html` 與本機 `battle_chess/index.html`。根路由、登入身分、房間、存檔、Socket.IO event、`BOARD_GAME_STATE` 與 Render 發布範圍都沒有因此改變。
+- 手機盒架的水平滑動只負責選擇視覺；不保存進度、不同步房間，也不影響各遊戲的正式回合或載入流程。
+
+## 三遊戲啟動頁候選的規則邊界（V398）
+
+- `game_launcher_preview.html` 只呈現卡牌、Board 與 Chess 的盒裝啟動版型；不新增遊戲規則、帳號狀態、存檔欄位、Socket.IO event 或 `BOARD_GAME_STATE` 內容。
+- server 根路由、卡牌入口與 Board 入口維持原狀；西洋棋也尚未因此加入線上發布。正式入口切換須等使用者確認畫面與後續打包方式。
+
 ## 行動裝置進場素材預下載（V397）
 
 - 觸控平板／手機進入 Board 開始頁後，會依固定 manifest 背景下載 105 張 mobile 小圖與進化、重要道具、約克線索三張演出框；不預載其他角色、戰鬥或完整原圖。

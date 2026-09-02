@@ -10,6 +10,42 @@
 | `package-lock.json` | npm lockfile。 |
 | `AGENTS.md` | Codex 進入專案前必讀的短規則。 |
 | `.gitignore` | 排除 `node_modules/`、本機 Codex／QA 產物、本機備份／還原目錄、西洋棋暫緩內容、Board `incoming/` 原始來源及私人 save／campaign JSON；正式 runtime 素材仍納入版本庫。 |
+| `public/start.html`（V428 桌遊入口） | 原卡牌首頁及登入不變；登入後的隱藏骰子改連 `game_launcher_preview.html?from=card-secret`。 |
+| `public/game_launcher_preview.html`、`public/css/game_launcher_preview.css`、`public/js/game_launcher_preview.js`（V428 正式發布） | 共用登入與固定三盒收藏室。正式環境只啟用 `start.html`、`board_start.html`；Chess 盒沒有正式 `href` 或影片節點，本機 loopback 無 DB 預覽才由 `data-local-href` 開啟開發路徑。query 為 `20260903-launcher-board-release-v428`。 |
+| `public/images/game_launcher/`、`public/videos/game_launcher/`（V428 採用素材） | 正式部署只含收藏室背景、系列 Logo、三組盒彩框、三張透視封面、航海錄 Logo，以及卡牌／Board 兩支 Hover 影片；不含 Chess 預覽、展示長片或草稿。 |
+| `server/index.js` 的 `/api/board-runtime` | 唯讀回傳帳號資料庫能力，供 Board 與 launcher 嚴格區分正式驗證及 loopback 預覽；正式 release 不含 `CHESS_*` 後端。 |
+| `scripts/deployment_asset_manifest_qa.js`、`scripts/game_launcher_entry_qa.js` | V428 發布白名單／禁入檢查與 launcher 本機、正式帳號、響應式、連結及 Chess 隔離回歸。 |
+| `public/game_launcher_preview.html`、`public/css/game_launcher_preview.css`、`public/js/game_launcher_preview.js`（三合一啟動／共用登入 V427） | V427 原始登入狀態機設計紀錄；正式發布行為以 V428 為準。 |
+| `scripts/game_launcher_entry_qa.js` | V427 瀏覽器回歸：驗證本機 press→空白登入、失效 local secret 隔離、三盒精確座標、Hover 懶載／釋放、932×430／390×844 containment，以及隔離正式帳號的登入、profile、presence、既有 secret 重驗與密碼不落地。 |
+| `public/board_start.html`、`public/js/board_start.js`（共用好友／聊天室外殼 V426） | local-preview 恢復好友與聊天室入口、浮動 Dock、聊天 Tray、邀請層及社交直達頁，未接正式帳號時顯示待接入說明；玩家資料隱藏、campaign 依實際紀錄顯示，僅移除房間頁重複返回。入口 JS query 為 `20260902-social-shell-restored-v426`。 |
+| `public/board_start.html`、`public/js/board_start.js`（本機有效入口 V425） | local-preview 以實際可用性控制開始／繼續航海；V426 已將預定共用的好友與聊天室介面恢復。 |
+| `server/index.js`、`public/board_start.html`、`public/js/board_start.js`（本機直接登入預覽 V424） | `/api/board-runtime` 公開唯讀帳號資料庫能力旗標；只有 loopback 且 DB 關閉時可由登入卡直接建立無 secret 的本機測試身分。正式環境維持同源帳密驗證，Board 房間仍使用同源 Socket。 |
+| `public/board_start.html`（橫向主畫面／中央登入 V422） | press 階段使用獨立 `--board-entry-bg` 全螢幕顯示，整頁透明 `#boardEntryStartBtn` 保留原 `begin()`；auth／boot 沿用同背景並將既有卡片置中，短橫向有緊湊版。舊 `.entry-cover-wrap` DOM 已移除；登入後主頁 `--board-bg`、帳號與房間流程不變。 |
+| `public/images/board/backgrounds/board_entry_horizontal_v1.webp`、`board_entry_horizontal_v1.prompt.md` | V422 入口正式 1672×941 橫向 WebP 與完整內建 ImageGen 提示／接入規格；正式圖為 502,494 bytes。`backgrounds/incoming/board_entry_horizontal_v1_imagegen.png` 是同尺寸生成原稿，不由 runtime 引用。 |
+| `public/js/board_game.js`、`public/board_game.html`（首次入獄青雉劇情 V421） | 攔截首次推進城押送、全隊滿 HP／PP、同一全螢幕對話框內的放行／挑戰二選一、劇情專屬 Lv99 青雉、無獎勵挑戰、刷新恢復與完整快照同步；Marineford Lv92 與玩家青雉／庫山不受影響，內部選擇值仍為 `fight`／`leave`。 |
+| `public/images/board/story/aokiji_capture/source/aokiji_capture_{lazy,mercy,serious}_v3.webp`、`aokiji_capture_story_portraits_v2.prompt.md` | 三張青雉劇情專用透明 WebP 與生成／修正紀錄；慵懶圖為 646×969，放行、認真圖為 1024×1536，皆有有效 alpha 且完整保留雙臂與手掌，不使用戰鬥肖像。 |
+| `public/images/board/story/backgrounds/aokiji_capture/aokiji_capture_bicycle_sea_story_v1.webp`、`aokiji_capture_bicycle_sea_story_v1.prompt.md` | V421 青雉首次入獄劇情全段共用的海上腳踏車／冰路場景背景，以及內建 ImageGen 的正式生成提示紀錄；現身、說明、內嵌選項與兩種回應不切換其他背景。 |
+| `scripts/aokiji_first_capture_story_qa.js`、`scripts/aokiji_first_capture_lan_qa.js` | 青雉定向回歸：隔離瀏覽器情境覆蓋全滅、罰款、第二次入獄、Lv99 挑戰勝敗、全螢幕內嵌選項、統一背景及 1600×900／932×430 立繪與 HUD；LAN 腳本以 2 真人＋2 CPU 驗證完整快照、`fight`／`leave`、觀看權限、選擇刷新、放行與 CPU 自動處理。 |
+| `public/board_start.html`、`public/js/board_start.js`、`public/js/board_shared.js`（主畫面／登入入口 V418；V422 視覺更新） | 《新世界航海錄》先顯示橫向全螢幕封面與 Logo，再以同源 `AUTH_LOGIN`／`AUTH_REGISTER`／`PROFILE_GET` 驗證共用帳號；成功後才初始化原四選單、房間、campaign 與好友。支援既有 secret、直接 lobby/campaign 續接及 `kicked=1` 重登入；JS 邏輯與 Board query 仍為 `20260902-board-entry-auth-v418-final`。 |
+| `scripts/board_home_social_qa.js`、`scripts/board_home_social_qa_server.js` | V418 首屏／登入／雙帳號社交與房邀請回歸；隔離假帳號會實際通過 `AUTH_LOGIN`／`PROFILE_GET` 且斷言密碼未落地，另涵蓋 1600×900、1024×768、390×844、登入前無好友 dock、登入後四入口與雙真人 lobby。 |
+| `scripts/board_portable_asset_prefetch_qa.js` | 行動素材暖載回歸會先安裝隔離 QA 帳號並通過 V418 主畫面／PROFILE_GET，再檢查原 108 檔版本化快取、進場重用與一次失敗後重試閘門。 |
+| `public/game_launcher_preview.html`、`public/css/game_launcher_preview.css`（Logo 上移避讓 V417） | Logo 改為固定畫布 `top:0 / width:560px`，與靜態盒架保留約 27.1px、Hover 盒頂保留約 7.9px；三盒座標、尺寸、影片透視與入口不變。盒架置於 Logo 陰影上層，query 為 `20260901-logo-clearance-v19`。 |
+| `public/videos/game_launcher/game_launcher_three_box_hover_demo_fixed_v3.mp4`（固定比例三盒完整 Hover V416） | 直接按錄製當時 V415 核准的 `1540×660` 固定畫布錄製；33.32 秒、60fps、H.264 High、BT.709、無音軌、faststart。游標由左至右等待每支 V2 預覽真正結束後才換盒；V417 後正式頁 Logo 已上移，舊成片仍保留為 V415 畫面快照且不由 runtime 自動播放。 |
+| `public/game_launcher_preview.html`、`public/css/game_launcher_preview.css`、`public/js/game_launcher_preview.js`（固定核准構圖 V415） | 以使用者開啟的 `1540×660` 畫面為固定 7:3 設計畫布；Logo、背景與三個 `300×400` 桌遊盒保持原座標，所有視窗只做整張等比例縮放與置中留邊，不再進入手機橫向捲動或短視窗重排。Hover 影片、四點透視與三個原入口保留；query 為 `20260901-fixed-composition-v18`。 |
+| `public/videos/game_launcher/game_launcher_three_box_hover_demo_v2.mp4`（三盒完整 Hover 示範 V414） | 32.82 秒、1920×1080、60fps、H.264 High、BT.709 無聲影片；修正 V413 的半高頁面與錯誤時間裁切，游標由左至右依序停在三盒，每支 V2 預覽完整結束後才移至下一盒。僅為展示成片，不由 runtime 自動播放。 |
+| `public/game_launcher_preview.html`、`public/css/game_launcher_preview.css`、`public/js/game_launcher_preview.js`、`public/videos/game_launcher/*_v2.mp4`、`scripts/game_launcher_video/`（真正 3:4 動態短片／四點透視 V412） | 三支由 1920×1080／60fps 正式演出母帶重剪的 `720×960`、30fps、H.264 High、BT.709 無聲短片：維薩利亞抽到並打出 3 號香吉士後玩家 PK、五檔魯夫對覺醒路基的選招／骰子／命中、KING「丹弓皇」。renderer 依 JSON shot plan 做 cosine ease 平移／微縮放，直接取 810×1080 真直式視窗，不使用黑邊或模糊補圖。V411 的 `data-preview-quad`、homography `matrix3d`、160ms 延遲載入、單盒播放、離開釋放、reduced-motion、防失敗回退與三個原連結均保留；query 為 `20260901-hover-clips-v16`。 |
+| `public/game_launcher_preview.html`、`public/css/game_launcher_preview.css`、`public/images/game_launcher/launcher_tabletop_series_logo_v1.png`（頂部系列 Logo V409） | 透明 `2172×724` 手繪 `ONE PIECE`／`TABLETOP SERIES` 黃銅深海徽章；頁面以單張圖片放在三盒上方，桌機、手機與短橫向視窗分別縮放，不增加頁面文案或第四款遊戲名稱。query 為 `20260901-tabletop-series-logo-v11`。 |
+| `public/game_launcher_preview.html`、`public/css/game_launcher_preview.css`（純盒面陳列 V408） | 移除英文眉題、中文收藏名稱、引導句、預覽 chip 與底部開發狀態；只保留背景、三個可點盒面與隱藏無障礙標題。桌機維持落桌位置，手機維持水平 scroll snap；query 為 `20260901-titleless-shelf-v10`。 |
+| `public/js/bgm_metadata.js`、`public/js/choose_bgm.js`、`public/js/bgm_manager.js`、`public/js/board_game.js`、`public/js/board_battle.js`、`public/board_marineford.html`、兩個正式 HTML、`scripts/board_bgm_continuity_qa.js`（BGM 連貫性 V407） | 56 首 OST cue／音量校正、明確場景首選、可取消的短場景延遲、安全交叉淡化、同曲延續、戰鬥／劇情 scope、推進城／Marineford 接點及有聲影片 audio focus；不改原 MP3、遊戲規則、存檔或同步。正式 query 為 `20260901-bgm-continuity-v407`，戰鬥 iframe 為 `20260901-bgm-focus-v407`。 |
+| `public/images/game_launcher/launcher_{card,board,chess}_box_frame_cutout_v1.png`、三張逐框 `*perspective*` 圖、`scripts/build_game_launcher_perspective_covers.py`、候選 HTML／CSS（專屬盒彩框 V406） | 使用者完成去背的棕紅／海藍／黑紫 `1086×1448 RGBA` 盒框；三款封面改用各自 homography quad 並輸出 card V2、Board／Chess V5。工具同時斷言中央開口 `uncovered=0` 與外部透明區 `outer_spill=0`；候選頁分別 preload／顯示三框，反光 polygon 也逐框對齊，query 為 `20260901-themed-box-frames-v9`。 |
+| `scripts/build_game_launcher_perspective_covers.py`、`public/game_launcher_preview.html`、專用 CSS、`public/images/game_launcher/*perspective*.png`（四角透視 V405） | 依盒框透明內緣四條直線的交點，以 OpenCV homography 把三張完整封面四角映射到 `(74,158)`／`(887,176)`／`(887,1322)`／`(74,1266)`；輸出三張透明 `1086×1448` runtime 圖。HTML 不再用 CSS 假裁圖，hover 不縮放封面，query 為 `20260901-four-corner-perspective-v8`。 |
+| `public/game_launcher_preview.html`、`public/css/game_launcher_preview.css`、`public/images/game_launcher/launcher_board_cover_logo_v3.png`、`launcher_chess_cover_logo_v3.png`（使用者正式封面 V404） | 使用者提供、已含 Logo 的兩張完整來源封面；Chess 顯示名稱正名為「霸海戰棋」。V405 由這兩張來源產生四點透視 runtime 圖，V3 原檔與舊版本均保留。 |
+| `public/game_launcher_preview.html`、`public/css/game_launcher_preview.css`（右下全出血 V403） | 封面裁切完整延伸到右上／右下，斜底邊與護角由透明盒框自身遮出，避免 V402 右邊過早內縮造成空隙；V404 兩張成品封面沿用此盒面。 |
+| `public/game_launcher_preview.html`、`public/css/game_launcher_preview.css`（盒面梯形透視 V402） | 三盒正面依挖空盒框建立百分比透視範圍，封面以 `object-fit:fill` 鋪入盒框下方，Logo 上移內縮；V402 的右側內縮 polygon 已由 V403 全出血版本取代。 |
+| `public/game_launcher_preview.html`、`public/css/game_launcher_preview.css`、`public/images/game_launcher/launcher_board_box_preview_filled_v2.png`、`launcher_chess_box_preview_filled_v2.png`、`launcher_box_frame_cutout_v3.webp`（原封面滿版補圖／挖空盒框 V401） | Board／Chess 保留原封面人物構圖，只把底部預留面板補成海島航線／紅紫棋戰場景；三盒改用使用者提供、另存命名的單張透明挖空實體盒框。Logo 疊在補圖場景上，整盒可點且沒有封面按鈕／說明／輸入區。原 V1 封面與來源框均未覆蓋；V401 的矩形盒面已由 V402 梯形透視取代。 |
+| `public/images/game_launcher/launcher_board_logo_v1.svg`、`launcher_chess_logo_v1.svg`、`public/game_launcher_preview.html`、專用 CSS（封面 Logo V400） | 航海錄的青藍金海圖／羅盤向量 Logo 與棋戰的深紅黑金棋冠向量 Logo；使用精準中文字避免誤字。V401 沿用兩張 Logo 並改疊在滿版補圖的下方自然場景，盒面仍不放按鈕、類型或說明。 |
+| `public/game_launcher_preview.html`、`public/css/game_launcher_preview.css`、`public/images/game_launcher/launcher_gallery_background_v2.png`、`launcher_box_shell_v2.png`（航海收藏室／實體盒殼 V399） | 三遊戲候選啟動頁的生成式航海收藏室背景與第一版透明桌遊盒殼；背景仍是目前主流程，V399 的盒殼底圖＋四段遮罩已由 V401 單張挖空盒框取代，但素材保留不覆寫。名稱、整盒點擊、桌機三欄與手機水平 scroll snap 維持；仍不取代根路由或改發布清單。 |
+| `public/game_launcher_preview.html`、`public/css/game_launcher_preview.css`、`public/images/game_launcher/`（三遊戲桌遊盒候選 V398） | 隔離的共用啟動頁初版：卡牌沿用完整既有封面，Board／Chess 使用候選圖；V398 以 CSS 建立上緣、盒脊、盒厚、接觸陰影、hover 與 focus，現已由 V399 的生成式背景與實體盒殼呈現取代。頁面不取代 server 根路由，也不改三款遊戲正式入口或西洋棋發布範圍。 |
 | `public/board_start.html`、`public/board_game.html`、`public/js/board_start.js`、`public/js/board_shared.js`、`public/js/board_game.js`、`server/index.js`、`public/images/board/mobile/manifest-v397.json`、`scripts/build_board_mobile_prefetch_manifest.js`、`scripts/board_portable_asset_prefetch_qa.js`（行動裝置素材預下載 V397） | 平板／手機於 Board 開始頁依 manifest 背景下載 105 張 mobile 小圖與三張演出框，共 108 個檔案；使用 6 路並行、30 秒初次下載＋15 秒失敗重試的進場閘門、持續進度畫面及版本化 immutable cache，不提前建立／解碼圖片。重要道具與進化使用前會等待當次解碼；桌機與全部 Board 原圖不預載。正式 query 為 `20260831-portable-prefetch-v397`。 |
 | `public/board_fixed_viewport.html`、`public/board_game.html`、`public/js/board_game.js`、`public/js/board_shared.js`、`public/images/board/mobile/`、`scripts/board_fixed_viewport_qa.js`（iPad 地圖降載 V396） | 觸控裝置固定視角替內頁加入 `portable_assets=1`；地圖島嶼、海獸、礁石、船與 1～50 頭像改讀 105 張等比例 WebP 衍生檔，桌機與原圖不變。三張初始隱藏的大型演出框改成使用時才載入。QA 斷言三種行動尺寸、96/96 mobile 地圖圖、零隱藏框初始請求及解碼估算不超過 64 MiB；正式 query 為 `20260831-ipad-memory-v396`。 |
 | `public/start.html`（裝置識別啟動 V395） | 在同步 script 階段先提供既有 `op_device_id` 的 `window.getDeviceId`，避免非 React 好友面板早於 Babel 主程式完成時產生 page error；卡牌與 Board 的登入、房間及存檔規則不變。 |
@@ -283,9 +319,15 @@
 
 | 檔案 | 功能 |
 | --- | --- |
-| `public/js/bgm_metadata.js` | BGM metadata。 |
-| `public/js/choose_bgm.js` | BGM 選曲邏輯。 |
-| `public/js/bgm_manager.js` | BGM 播放管理，路徑指向 `audio/board_game/bgm_new/`。 |
+| `public/js/bgm_metadata.js` | 56 首正式場景 OST 的穩定 id、檔名、情緒／場景標籤，以及 V407 的 `cueInSec`、`cueOutSec`、`gainDb` 播放校準。 |
+| `public/js/choose_bgm.js` | 依場景標籤與有序 `preferredBgmIds` 選曲；保留目前仍適合的歌曲，不因「避免重複」而強制立即換曲。 |
+| `public/js/bgm_manager.js` | 父頁共用的 BGM 播放導演，路徑指向 `audio/board_game/bgm_new/`；負責延後／保留、最新請求、安全交叉淡化、cue 點淡出／淡入循環、音量、鎖定與巢狀 audio focus。 |
+| `public/js/board_game.js` | 地圖、島嶼、服務設施、海獸、普通戰、Boss、勝利、推進城、Marineford 與長篇劇情的正式 BGM 場景路由。 |
+| `public/js/board_battle.js`、`public/board_marineford.html` | 卡塔庫栗見聞色與 Marineford 霸王色等有聲演出的 BGM audio focus／恢復生命週期。 |
+| `public/audio/board_game/bgm/` | 20 首主題曲保留庫，不作 V407 頻繁場景自動切換來源。 |
+| `public/audio/board_game/bgm_new/` | 56 首正式場景 OST；按需要載入，不在開局一次預載約 262.33 MiB。 |
+| `public/audio/board_game/audio-analysis.md` | 音樂／音效庫存、OST cue 與音量政策、主要場景對照及素材授權注意事項。 |
+| `scripts/board_bgm_continuity_qa.js` | 純 Node 的 56 首資產、選曲、延後取消、播放失敗、同曲、cue loop、focus 與 Board 接線回歸。 |
 
 ## 特殊區域
 
@@ -438,7 +480,7 @@
 | `public/images/board/water_seven_ui/` | 水之七島正式圖片式介面素材；`water_seven_shipyard_upgrade_panel_frame.webp`、`water_seven_ship_part_marker_frame.webp`、`water_seven_upgrade_effect_row_frame.webp`、`water_seven_ship_equipment_slot_frame.webp` 與 `water_seven_slot_unlock_progress_row_frame.webp` 分別負責船塢總覽主框、五個永久升級部位標記、升級／裝備共用資料列、四個船體裝備孔位，以及開孔頁籤四列共用的孔位進度／費用／操作框。現有船圖、保利人物圖、十二件船隻裝備圖、各船視角／部位／孔位定位仍由 `public/images/board/water_seven/`、`public/images/board/items/` 與 `board_water_seven.html` 既有設定負責。 |
 | `public/images/board/water_seven_ui/incoming/` | 水之七島後續新版 UI 去背 WebP 素材收件資料夾；素材須驗收、改名並移出此處後才能由正式頁引用，正式頁不得直接引用 `incoming/`。 |
 | `public/images/board/ui/` | Board UI 素材。 |
-| `public/audio/board_game/` | Board BGM 與 SFX。 |
+| `public/audio/board_game/` | Board 音訊根目錄：`bgm/` 為 20 首主題曲保留庫、`bgm_new/` 為 56 首按需載入的正式場景 OST、`sfx/` 為 525 個音效素材。 |
 | `public/videos/` | 遊戲流程影片素材。 |
 
 ## 素材 README

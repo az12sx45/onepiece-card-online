@@ -1,8 +1,385 @@
-(function () {
+(async function () {
   const shared = window.BoardShared;
   if (!shared) return;
 
   const query = new URLSearchParams(location.search);
+  const entrySession = await runBoardEntryGate(query);
+  if (!entrySession?.ready) return;
+
+  function readEntryStorage(key, fallback = "") {
+    try {
+      return localStorage.getItem(key) || fallback;
+    } catch (_) {
+      return fallback;
+    }
+  }
+
+  function writeEntryStorage(key, value) {
+    try {
+      localStorage.setItem(key, String(value));
+    } catch (_) {}
+  }
+
+  function getEntryDeviceId() {
+    let value = String(readEntryStorage("op_device_id", "") || "").trim();
+    if (value) return value;
+    try {
+      const buffer = new Uint8Array(12);
+      window.crypto?.getRandomValues?.(buffer);
+      value = Array.from(buffer).map((byte) => byte.toString(16).padStart(2, "0")).join("");
+    } catch (_) {}
+    if (!value) value = `board-${Date.now().toString(36)}-${Math.floor(Math.random() * 1e8).toString(36)}`;
+    writeEntryStorage("op_device_id", value);
+    return value;
+  }
+
+  function clearEntrySecret() {
+    try {
+      localStorage.removeItem("opSecret");
+      localStorage.removeItem("op_secret");
+      localStorage.removeItem("op_user_id");
+    } catch (_) {}
+  }
+
+  function entryEmit(socket, eventName, payload, timeoutMs = 12000) {
+    return new Promise((resolve) => {
+      if (!socket) {
+        resolve({ ok: false, error: "socket unavailable" });
+        return;
+      }
+      try {
+        socket.timeout(timeoutMs).emit(eventName, payload, (error, result = {}) => {
+          if (error) {
+            resolve({ ok: false, error: "timeout" });
+            return;
+          }
+          resolve(result || { ok: false, error: "unknown" });
+        });
+      } catch (error) {
+        resolve({ ok: false, error: String(error?.message || error || "socket error") });
+      }
+    });
+  }
+
+  function normalizeEntryProfile(cloudProfile, usernameHint = "") {
+    const profile = cloudProfile && typeof cloudProfile === "object" ? cloudProfile : {};
+    const client = profile.stats?.client && typeof profile.stats.client === "object" ? profile.stats.client : {};
+    const userId = Math.max(0, Number(profile.user_id ?? profile.userId ?? 0) || 0);
+    const fallbackName = String(
+      usernameHint
+      || readEntryStorage("op_name", "")
+      || readEntryStorage("op_player_name", "")
+      || (userId ? `玩家${String(userId).slice(-4)}` : "")
+    ).trim();
+    const name = String(profile.name || "").trim() || fallbackName;
+    const avatar = Math.max(1, Math.min(2000, Number(profile.avatar || readEntryStorage("op_avatar", "") || 8) || 8));
+    const title = String(client.titles?.equipped || readEntryStorage("op_board_title", "") || "新世界啟航者").trim() || "新世界啟航者";
+    const coins = Math.max(0, Number(client.totals?.coins ?? readEntryStorage("op_board_coins", "") ?? 0) || 0);
+    return { userId, name, avatar, title, coins };
+  }
+
+  function persistEntryProfile(secret, cloudProfile, usernameHint = "") {
+    const normalized = normalizeEntryProfile(cloudProfile, usernameHint);
+    if (!normalized.userId || !String(secret || "").trim()) return null;
+    writeEntryStorage("opSecret", String(secret).trim());
+    writeEntryStorage("op_secret", String(secret).trim());
+    writeEntryStorage("op_user_id", normalized.userId);
+    writeEntryStorage("op_board_user_id", normalized.userId);
+    writeEntryStorage("op_name", normalized.name);
+    writeEntryStorage("op_player_name", normalized.name);
+    writeEntryStorage("op_avatar", normalized.avatar);
+    writeEntryStorage("op_player_avatar", normalized.avatar);
+    writeEntryStorage("op_board_title", normalized.title);
+    writeEntryStorage("op_board_coins", normalized.coins);
+    if (usernameHint) writeEntryStorage("op_last_username", usernameHint);
+    return normalized;
+  }
+
+  function translateEntryAuthError(error) {
+    const code = String(error || "").trim();
+    const messages = {
+      "missing credentials": "請輸入帳號與密碼。",
+      "invalid username/password": "帳號或密碼不正確。",
+      "username length 3~24": "帳號長度必須是 3～24 字。",
+      "username only a-z 0-9 _": "帳號只能使用英文字母、數字與底線。",
+      "password length 6~72": "密碼長度必須是 6～72 字。",
+      "username taken": "這個帳號已經有人使用。",
+      "already_logged_in": "此帳號目前正在其他裝置使用。",
+      "timeout": "伺服器沒有回應，請確認網路後重試。",
+      "socket unavailable": "登入元件尚未連線，請重新整理後再試。",
+    };
+    return messages[code] || (code ? `登入失敗：${code}` : "登入失敗，請稍後再試。");
+  }
+
+  async function resolveEntryRuntime() {
+    try {
+      const response = await fetch("/api/board-runtime", {
+        cache: "no-store",
+        credentials: "same-origin",
+      });
+      if (!response.ok) return null;
+      return await response.json();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  async function runBoardEntryGate(searchParams) {
+    const layer = document.getElementById("boardEntry");
+    const panels = Array.from(document.querySelectorAll("[data-entry-panel]"));
+    const startButton = document.getElementById("boardEntryStartBtn");
+    const authForm = document.getElementById("boardAuthForm");
+    const usernameInput = document.getElementById("boardAuthUsername");
+    const passwordInput = document.getElementById("boardAuthPassword");
+    const authTitle = document.getElementById("boardAuthTitle");
+    const authMessage = document.getElementById("boardAuthMessage");
+    const authSubmit = document.getElementById("boardAuthSubmitBtn");
+    const loginTab = document.getElementById("boardAuthLoginTab");
+    const registerTab = document.getElementById("boardAuthRegisterTab");
+    const authBack = document.getElementById("boardAuthBackBtn");
+    const bootMessage = document.getElementById("boardBootMessage");
+    const bootActions = document.getElementById("boardBootActions");
+    const bootRetry = document.getElementById("boardBootRetryBtn");
+    const bootLogin = document.getElementById("boardBootLoginBtn");
+
+    if (!layer || !startButton || !authForm) {
+      document.body.dataset.entryStage = "app";
+      return Promise.resolve({ ready: true, socket: null });
+    }
+
+    const entryRuntime = await resolveEntryRuntime();
+    const localPreviewAuth = entryRuntime?.accountDatabaseEnabled === false
+      && ["127.0.0.1", "localhost", "::1"].includes(location.hostname);
+    const entryAuthOrigin = "";
+    document.body.dataset.entryAuthSource = localPreviewAuth ? "local-preview" : "same-origin";
+    if (localPreviewAuth) {
+      if (registerTab) registerTab.hidden = true;
+      authForm.noValidate = true;
+      if (usernameInput) usernameInput.required = false;
+      if (passwordInput) passwordInput.required = false;
+    }
+
+    let stage = "press";
+    let mode = "login";
+    let entrySocket = null;
+    let resolved = false;
+    let retryAction = null;
+
+    const setStage = (nextStage) => {
+      stage = nextStage;
+      document.body.dataset.entryStage = nextStage;
+      panels.forEach((panel) => {
+        const active = panel.dataset.entryPanel === nextStage;
+        panel.hidden = !active;
+        panel.classList.toggle("is-active", active);
+      });
+      if (nextStage === "auth") window.setTimeout(() => usernameInput?.focus(), 40);
+    };
+
+    const setMode = (nextMode) => {
+      mode = nextMode === "register" ? "register" : "login";
+      const registering = mode === "register";
+      loginTab?.classList.toggle("is-active", !registering);
+      registerTab?.classList.toggle("is-active", registering);
+      loginTab?.setAttribute("aria-selected", String(!registering));
+      registerTab?.setAttribute("aria-selected", String(registering));
+      if (authTitle) authTitle.textContent = registering ? "建立帳號" : "帳號登入";
+      if (authSubmit) authSubmit.textContent = registering ? "建立帳號" : "登入";
+      if (passwordInput) passwordInput.autocomplete = registering ? "new-password" : "current-password";
+      if (authMessage) authMessage.textContent = "";
+    };
+
+    const ensureSocket = () => {
+      if (entrySocket) return entrySocket;
+      if (typeof window.io !== "function") return null;
+      const options = { transports: ["websocket", "polling"] };
+      entrySocket = entryAuthOrigin ? window.io(entryAuthOrigin, options) : window.io(options);
+      return entrySocket;
+    };
+
+    const showBootFailure = (message, retry) => {
+      retryAction = retry;
+      setStage("boot");
+      if (bootMessage) bootMessage.textContent = message;
+      if (bootActions) bootActions.hidden = false;
+    };
+
+    return new Promise((resolve) => {
+      const finish = (profile) => {
+        if (resolved) return;
+        resolved = true;
+        document.removeEventListener("keydown", handlePressKey);
+        document.body.dataset.entryStage = "app";
+        layer.setAttribute("aria-hidden", "true");
+        const appSocket = entryAuthOrigin ? null : entrySocket;
+        if (entryAuthOrigin && entrySocket) {
+          try { entrySocket.disconnect(); } catch (_) {}
+          entrySocket = null;
+        }
+        resolve({ ready: true, socket: appSocket, profile });
+      };
+
+      const validateSecret = async (secret, usernameHint = "") => {
+        const normalizedSecret = String(secret || "").trim();
+        if (!normalizedSecret) {
+          setStage("auth");
+          return;
+        }
+        setStage("boot");
+        if (bootMessage) bootMessage.textContent = "正在驗證雲端玩家帳號…";
+        if (bootActions) bootActions.hidden = true;
+        const socket = ensureSocket();
+        if (!socket) {
+          showBootFailure("登入元件載入失敗，請重新整理頁面。", () => location.reload());
+          return;
+        }
+        const result = await entryEmit(socket, "PROFILE_GET", { secret: normalizedSecret }, 12000);
+        if (!result?.ok) {
+          showBootFailure(translateEntryAuthError(result?.error), () => validateSecret(normalizedSecret, usernameHint));
+          return;
+        }
+        if (!result.profile) {
+          clearEntrySecret();
+          setStage("auth");
+          if (authMessage) authMessage.textContent = "登入已失效，請重新輸入帳號與密碼。";
+          return;
+        }
+        const normalized = persistEntryProfile(normalizedSecret, result.profile, usernameHint);
+        if (!normalized) {
+          showBootFailure("帳號資料不完整，請重新登入後再試。", () => validateSecret(normalizedSecret, usernameHint));
+          return;
+        }
+        finish(normalized);
+      };
+
+      const begin = () => {
+        if (stage !== "press") return;
+        const storedSecret = String(readEntryStorage("opSecret", "") || readEntryStorage("op_secret", "") || "").trim();
+        if (storedSecret) {
+          void validateSecret(storedSecret, readEntryStorage("op_last_username", ""));
+          return;
+        }
+        setStage("auth");
+      };
+
+      function handlePressKey(event) {
+        if (stage !== "press" || ["Tab", "Shift", "Control", "Alt", "Meta"].includes(event.key)) return;
+        event.preventDefault();
+        begin();
+      }
+
+      startButton.addEventListener("click", begin);
+      document.addEventListener("keydown", handlePressKey);
+      loginTab?.addEventListener("click", () => setMode("login"));
+      registerTab?.addEventListener("click", () => setMode("register"));
+      authBack?.addEventListener("click", () => {
+        if (authMessage) authMessage.textContent = "";
+        if (passwordInput) passwordInput.value = "";
+        setStage("press");
+      });
+      bootRetry?.addEventListener("click", () => {
+        if (bootActions) bootActions.hidden = true;
+        retryAction?.();
+      });
+      bootLogin?.addEventListener("click", () => {
+        clearEntrySecret();
+        if (passwordInput) passwordInput.value = "";
+        setStage("auth");
+      });
+      authForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const username = String(usernameInput?.value || "").trim().toLowerCase();
+        const password = String(passwordInput?.value || "");
+        if (localPreviewAuth && mode === "login") {
+          const previewName = username
+            || String(readEntryStorage("op_last_username", "")).trim()
+            || String(readEntryStorage("op_name", "")).trim()
+            || "本機測試玩家";
+          let previewUserId = 700000;
+          for (const char of previewName) previewUserId = ((previewUserId * 31) + char.codePointAt(0)) % 900000000;
+          previewUserId = Math.max(700000, previewUserId);
+          clearEntrySecret();
+          writeEntryStorage("op_last_username", previewName);
+          writeEntryStorage("op_user_id", previewUserId);
+          writeEntryStorage("op_board_user_id", previewUserId);
+          writeEntryStorage("op_name", previewName);
+          writeEntryStorage("op_player_name", previewName);
+          if (!readEntryStorage("op_avatar", "")) writeEntryStorage("op_avatar", 8);
+          if (!readEntryStorage("op_player_avatar", "")) writeEntryStorage("op_player_avatar", readEntryStorage("op_avatar", "8"));
+          if (!readEntryStorage("op_board_title", "")) writeEntryStorage("op_board_title", "本機航海測試");
+          if (passwordInput) passwordInput.value = "";
+          finish({
+            userId: previewUserId,
+            name: previewName,
+            avatar: Number(readEntryStorage("op_avatar", "8")) || 8,
+            title: readEntryStorage("op_board_title", "本機航海測試"),
+            coins: Number(readEntryStorage("op_board_coins", "0")) || 0,
+          });
+          return;
+        }
+        if (!username || !password) {
+          if (authMessage) authMessage.textContent = "請輸入帳號與密碼。";
+          return;
+        }
+        if (!/^[a-z0-9_]{3,24}$/.test(username)) {
+          if (authMessage) authMessage.textContent = "帳號需為 3～24 字，只能使用英文、數字與底線。";
+          return;
+        }
+        if (password.length < 6 || password.length > 72) {
+          if (authMessage) authMessage.textContent = "密碼長度必須是 6～72 字。";
+          return;
+        }
+        const socket = ensureSocket();
+        if (!socket) {
+          if (authMessage) authMessage.textContent = "登入元件載入失敗，請重新整理後再試。";
+          return;
+        }
+        if (authSubmit) {
+          authSubmit.disabled = true;
+          authSubmit.textContent = mode === "register" ? "建立中…" : "登入中…";
+        }
+        if (authMessage) authMessage.textContent = "";
+        const eventName = mode === "register" ? "AUTH_REGISTER" : "AUTH_LOGIN";
+        const result = await entryEmit(socket, eventName, { username, password, deviceId: getEntryDeviceId() }, 12000);
+        if (authSubmit) {
+          authSubmit.disabled = false;
+          authSubmit.textContent = mode === "register" ? "建立帳號" : "登入";
+        }
+        if (!result?.ok || !result.secret) {
+          if (authMessage) authMessage.textContent = translateEntryAuthError(result?.error);
+          return;
+        }
+        writeEntryStorage("op_last_username", username);
+        writeEntryStorage("opSecret", result.secret);
+        writeEntryStorage("op_secret", result.secret);
+        if (passwordInput) passwordInput.value = "";
+        await validateSecret(result.secret, username);
+      });
+
+      const savedUsername = readEntryStorage("op_last_username", "");
+      if (usernameInput && savedUsername) usernameInput.value = savedUsername;
+      setMode("login");
+      setStage("press");
+
+      const directView = String(searchParams.get("view") || "");
+      const shouldResumeDirectly = ["game", "lobby", "modeSelect", "campaigns", "social"].includes(directView)
+        || searchParams.has("room")
+        || searchParams.has("campaign");
+      if (searchParams.get("kicked") === "1") {
+        clearEntrySecret();
+        window.setTimeout(() => {
+          setStage("auth");
+          if (authMessage) {
+            authMessage.textContent = localPreviewAuth
+              ? "本機預覽模式：直接按登入即可進入。"
+              : "此帳號已在其他裝置登入，請重新登入後繼續。";
+          }
+        }, 0);
+      } else if (shouldResumeDirectly) {
+        window.setTimeout(begin, 0);
+      }
+    });
+  }
 
   const refs = {
     views: Array.from(document.querySelectorAll(".view")),
@@ -64,6 +441,8 @@
     portableAssetGateBar: document.getElementById("portableAssetGateBar"),
   };
 
+  const localPreviewMode = document.body.dataset.entryAuthSource === "local-preview";
+
   const initData = shared.init({
     page: "board",
     roomId: "",
@@ -79,7 +458,8 @@
       return 0;
     }
   })();
-  const accountProfileLocked = linkedAccountUserId > 0;
+  const accountProfileLocked = linkedAccountUserId > 0
+    && Boolean(String(readEntryStorage("opSecret", "") || readEntryStorage("op_secret", "")).trim());
   const BOARD_AVATAR_CHOICES = Array.from({ length: 50 }, (_, index) => index + 1);
 
   const AVATAR_HINTS = {
@@ -534,6 +914,7 @@
   }
 
   function renderSocialSummary(summary = socialSummaryFromState()) {
+    const waitingForSharedAccount = localPreviewMode && !summary.ready;
     if (refs.socialFriendCount) refs.socialFriendCount.textContent = summary.ready ? String(summary.friendCount || 0) : "—";
     if (refs.socialOnlineCount) refs.socialOnlineCount.textContent = summary.ready ? String(summary.onlineCount || 0) : "—";
     if (refs.socialRequestCount) refs.socialRequestCount.textContent = summary.ready ? String(summary.requestCount || 0) : "—";
@@ -542,12 +923,16 @@
       refs.socialConnectionText.classList.toggle("is-ready", !!summary.ready);
       refs.socialConnectionText.textContent = summary.ready
         ? `已連接正式帳號：${summary.friendCount || 0} 位好友，${summary.onlineCount || 0} 位目前在線。`
-        : (summary.loading ? "正在連接好友服務…" : (summary.error || "好友服務尚未連線。"));
+        : (waitingForSharedAccount
+          ? "共用好友與聊天室會在接回《偉大航道爭霸戰》帳號後啟用。"
+          : (summary.loading ? "正在連接好友服務…" : (summary.error || "好友服務尚未連線。")));
     }
     if (refs.socialMenuHint) {
       refs.socialMenuHint.textContent = summary.ready
         ? `${summary.onlineCount || 0} 位好友在線${summary.requestCount ? `・${summary.requestCount} 筆邀請待確認` : ""}`
-        : (accountProfileLocked ? "正在連接好友名單與私人訊息" : "登入正式帳號後啟用好友與私人訊息");
+        : (waitingForSharedAccount
+          ? "保留共用好友、邀請與私人訊息入口"
+          : (accountProfileLocked ? "正在連接好友名單與私人訊息" : "登入正式帳號後啟用好友與私人訊息"));
     }
   }
 
@@ -713,6 +1098,9 @@
     if (!refs.boardCampaignList || !refs.boardCampaignEmpty) return;
     refs.boardCampaignList.innerHTML = "";
     const campaigns = Array.isArray(state.campaigns) ? state.campaigns : [];
+    if (localPreviewMode && refs.openCampaignsBtn) {
+      refs.openCampaignsBtn.hidden = campaigns.length === 0;
+    }
     if (refs.campaignMenuHint) {
       refs.campaignMenuHint.textContent = campaigns.length
         ? `${campaigns.length} 份可使用的航海紀錄`
@@ -1174,9 +1562,9 @@
     void navigateToBoardGameWhenReady(`board_game.html?room=${encodeURIComponent(state.lobby.roomCode)}`);
   }
 
-  function connectBoardSocket() {
+  function connectBoardSocket(existingSocket = null) {
     if (boardSocket.socket) return;
-    if (!window.io) {
+    if (!window.io && !existingSocket) {
       if (!boardSocket.retryTimer) {
         boardSocket.retryTimer = setTimeout(() => {
           boardSocket.retryTimer = 0;
@@ -1185,9 +1573,9 @@
       }
       return;
     }
-    boardSocket.socket = window.io({ transports: ["websocket", "polling"] });
+    boardSocket.socket = existingSocket || window.io({ transports: ["websocket", "polling"] });
     shared.attachSocket?.(boardSocket.socket);
-    boardSocket.socket.on("connect", () => {
+    const handleConnect = () => {
       boardSocket.connected = true;
       state.online = true;
       requestOnlineRoomList();
@@ -1206,7 +1594,8 @@
         });
       }
       shared.showToast("已連上本地大富翁房間伺服器");
-    });
+    };
+    boardSocket.socket.on("connect", handleConnect);
     boardSocket.socket.on("disconnect", () => {
       boardSocket.connected = false;
       state.online = false;
@@ -1238,6 +1627,7 @@
         void navigateToBoardGameWhenReady(`board_game.html?room=${encodeURIComponent(lobby.roomCode)}&online=1${campaignQuery}`);
       }
     });
+    if (boardSocket.socket.connected) handleConnect();
   }
 
   function wireEvents() {
@@ -1315,6 +1705,9 @@
   }
 
   function bootInitialView() {
+    if (localPreviewMode) {
+      if (refs.openPlayerProfileBtn) refs.openPlayerProfileBtn.hidden = true;
+    }
     renderHome();
     renderRoomList();
     renderCampaignList();
@@ -1335,7 +1728,7 @@
       setView("modeSelect");
       return;
     }
-    if (view === "campaigns") {
+    if (view === "campaigns" && (!localPreviewMode || state.campaigns.length)) {
       setView("campaigns");
       return;
     }
@@ -1374,7 +1767,7 @@
   };
 
   window.setTimeout(startPortableAssetWarmup, 250);
-  connectBoardSocket();
+  connectBoardSocket(entrySession.socket);
   wireEvents();
   bootInitialView();
 })();

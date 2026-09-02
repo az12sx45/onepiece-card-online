@@ -7,6 +7,9 @@ const root = path.resolve(process.argv[2] || path.join(__dirname, ".."));
 const publicRoot = path.join(root, "public");
 const requiredFiles = [
   "public/start.html",
+  "public/game_launcher_preview.html",
+  "public/css/game_launcher_preview.css",
+  "public/js/game_launcher_preview.js",
   "public/board_start.html",
   "public/board_game.html",
   "public/board_fixed_viewport.html",
@@ -29,6 +32,7 @@ const requiredFiles = [
 ];
 const runtimeSources = [
   "public/start.html",
+  "public/game_launcher_preview.html",
   "public/board_start.html",
   "public/board_game.html",
   "public/board_fixed_viewport.html",
@@ -94,8 +98,15 @@ const startText = fs.readFileSync(path.join(publicRoot, "start.html"), "utf8");
 if(startText.includes("secret-mode-chess") || startText.includes("battle_chess/index.html")){
   errors.push("start.html still contains the postponed chess entrance");
 }
-if(!startText.includes("secret-mode-board") || !startText.includes("board_start.html?from=secret-route")){
-  errors.push("start.html Board secret entrance is missing");
+if(!startText.includes("secret-mode-board") || !startText.includes("game_launcher_preview.html?from=card-secret")){
+  errors.push("start.html tabletop launcher secret entrance is missing");
+}
+
+const launcherText = fs.readFileSync(path.join(publicRoot, "game_launcher_preview.html"), "utf8");
+if(/\shref=["']battle_chess\//i.test(launcherText)) errors.push("launcher contains a production chess link");
+if(launcherText.includes("chess_king_attack_preview")) errors.push("launcher contains the postponed chess preview");
+if(!launcherText.includes('href="start.html"') || !launcherText.includes('href="board_start.html"')){
+  errors.push("launcher card or Board link is missing");
 }
 
 const literalAssetPattern = /["'`](?:\.\/)?((?:images|audio|videos|fonts)\/[^"'`\s<>?#)]+)(?:\?[^"'`\s<>]*)?["'`]/g;

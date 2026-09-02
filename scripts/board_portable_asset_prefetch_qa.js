@@ -17,6 +17,28 @@ const IPAD_CONTEXT_OPTIONS = {
   userAgent: "Mozilla/5.0 (iPad; CPU OS 18_6 like Mac OS X) AppleWebKit/605.1.15 Version/18.6 Mobile/15E148 Safari/604.1",
 };
 
+async function installQaAccount(context) {
+  await context.addInitScript(() => {
+    localStorage.setItem("op_user_id", "91001");
+    localStorage.setItem("op_board_user_id", "91001");
+    localStorage.setItem("opSecret", "qa-board-secret-a");
+    localStorage.setItem("op_secret", "qa-board-secret-a");
+    localStorage.setItem("op_name", "航海測試甲");
+    localStorage.setItem("op_player_name", "航海測試甲");
+    localStorage.setItem("op_avatar", "8");
+    localStorage.setItem("op_player_avatar", "8");
+    localStorage.setItem("op_device_id", "qa-board-portable-device");
+  });
+}
+
+async function enterBoardApp(page) {
+  await page.waitForSelector('body[data-entry-stage="press"] #boardEntryStartBtn');
+  await page.click("#boardEntryStartBtn");
+  await page.waitForFunction(() => document.body.dataset.entryStage === "app"
+    && document.querySelector('[data-view="home"]')?.classList.contains("active")
+    && !!window.__BOARD_START_DEBUG__, null, { timeout: 20000 });
+}
+
 function isExpectedAssetUrl(source) {
   const url = new URL(source);
   return EXPECTED_ASSET_PATHS.has(url.pathname) && url.searchParams.get("v") === VERSION;
@@ -26,6 +48,7 @@ function isExpectedAssetUrl(source) {
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
   const browser = await chromium.launch({ headless: true, executablePath: CHROME_PATH });
   const context = await browser.newContext(IPAD_CONTEXT_OPTIONS);
+  await installQaAccount(context);
   const page = await context.newPage();
   const errors = [];
   const failures = [];
@@ -55,6 +78,7 @@ function isExpectedAssetUrl(source) {
   });
 
   await page.goto(`${ROOT_URL}/board_start.html?prefetch_qa=1`, { waitUntil: "domcontentloaded", timeout: 30000 });
+  await enterBoardApp(page);
   await page.waitForFunction(() => window.__BOARD_START_DEBUG__?.getState?.().portableAssetWarmup?.status === "complete", null, { timeout: 60000 });
   const warmup = await page.evaluate(({ assetPaths, version }) => {
     const state = window.__BOARD_START_DEBUG__.getState().portableAssetWarmup;
@@ -114,6 +138,7 @@ function isExpectedAssetUrl(source) {
   const navigationCacheEvents = cdpEvents.slice(navigationEventIndex);
   const cacheHits = navigationCacheEvents.filter((event) => event.fromDiskCache || event.fromPrefetchCache).length;
   const retryContext = await browser.newContext(IPAD_CONTEXT_OPTIONS);
+  await installQaAccount(retryContext);
   await retryContext.addInitScript(() => {
     window.addEventListener("board:portable-assets-progress", (event) => {
       sessionStorage.setItem("board_prefetch_retry_qa", JSON.stringify(event.detail || {}));
@@ -131,6 +156,7 @@ function isExpectedAssetUrl(source) {
     await route.continue();
   });
   await retryPage.goto(`${ROOT_URL}/board_start.html?prefetch_retry_qa=1`, { waitUntil: "domcontentloaded", timeout: 30000 });
+  await enterBoardApp(retryPage);
   await retryPage.waitForFunction(() => window.__BOARD_START_DEBUG__?.getState?.().portableAssetWarmup?.status === "partial", null, { timeout: 60000 });
   await retryPage.evaluate(() => {
     void window.__BOARD_START_DEBUG__.navigateToBoardGameWhenReady("board_game.html?room=QA397R&online=1");

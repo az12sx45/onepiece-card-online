@@ -540,7 +540,7 @@
   function translateSocialError(error, fallback = "好友服務暫時無法使用") {
     const code = String(error || "").trim();
     const map = {
-      "bad secret": "登入已失效，請回卡牌首頁重新登入。",
+      "bad secret": "登入已失效，請回新世界航海錄入口重新登入。",
       "not found": "找不到這個玩家名稱。",
       "cannot add self": "不能加入自己為好友。",
       "already friends": "你們已經是好友。",
@@ -586,7 +586,7 @@
     if (!secret) {
       state.socialReady = false;
       state.socialLoading = false;
-      state.socialError = "請先從卡牌遊戲登入帳號，好友與聊天才會啟用。";
+      state.socialError = "請先登入玩家帳號，好友與聊天才會啟用。";
       setHint(state.socialError);
       renderFriends();
       emitSocialUpdate();
@@ -627,7 +627,7 @@
     if (!secret) {
       state.socialReady = false;
       state.socialLoading = false;
-      state.socialError = "請先從卡牌遊戲登入帳號，好友與聊天才會啟用。";
+      state.socialError = "請先登入玩家帳號，好友與聊天才會啟用。";
       setHint(state.socialError);
       renderFriends();
       emitSocialUpdate();
@@ -715,7 +715,7 @@
         writeLocalValue("op_kicked_reason", info.reason || "takeover");
         ["op_secret", "opSecret"].forEach((key) => localStorage.removeItem(key));
       } catch (_) {}
-      location.href = "start.html?kicked=1";
+      location.href = "board_start.html?kicked=1";
     });
   }
 
@@ -1281,7 +1281,7 @@
     state.invites = [];
     state.socialReady = false;
     state.socialLoading = false;
-    state.socialError = socialSecret() ? "正在連接好友服務…" : "請先從卡牌遊戲登入帳號，好友與聊天才會啟用。";
+    state.socialError = socialSecret() ? "正在連接好友服務…" : "請先登入玩家帳號，好友與聊天才會啟用。";
 
     installSharedStyle();
     ensureUiShell();

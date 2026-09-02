@@ -1,6 +1,7 @@
 "use strict";
 
 const path = require("path");
+const bcrypt = require("bcryptjs");
 
 const profiles = new Map([
   [91001, {
@@ -23,6 +24,21 @@ const profiles = new Map([
     name: "航海測試丙",
     avatar: 7,
     stats: { client: { social: { friends: [], friend_in: [], friend_out: [91001] } } },
+  }],
+  [91004, {
+    user_id: 91004,
+    secret: "qa-board-secret-login",
+    name: "航海登入測試",
+    avatar: 6,
+    stats: { client: { social: { friends: [], friend_in: [], friend_out: [] }, totals: { coins: 4180 } } },
+  }],
+]);
+
+const users = new Map([
+  ["qa_board_guest", {
+    id: 91004,
+    username: "qa_board_guest",
+    password_hash: bcrypt.hashSync("qa-board-pass", 8),
   }],
 ]);
 
@@ -49,6 +65,10 @@ const fakePool = {
     const text = normalizeSql(sql);
     if (text.startsWith("create ") || text.startsWith("alter ")) return { rows: [], rowCount: 0 };
     if (text === "select now() as now") return { rows: [{ now: new Date().toISOString() }], rowCount: 1 };
+    if (text.includes("from users where username=$1")) {
+      const user = users.get(String(params[0] || "").toLowerCase());
+      return { rows: user ? [{ ...user }] : [], rowCount: user ? 1 : 0 };
+    }
     if (text.includes("from player_profiles where secret=$1")) {
       const profile = [...profiles.values()].find((entry) => entry.secret === String(params[0] || ""));
       const row = publicProfile(profile, true);
@@ -58,6 +78,10 @@ const fakePool = {
       const ids = Array.isArray(params[0]) ? params[0].map(Number) : [];
       const rows = ids.map((id) => publicProfile(profiles.get(id), text.includes(" stats"))).filter(Boolean);
       return { rows, rowCount: rows.length };
+    }
+    if (text.includes("select secret from player_profiles where user_id=$1")) {
+      const profile = profiles.get(Number(params[0]));
+      return { rows: profile ? [{ secret: profile.secret }] : [], rowCount: profile ? 1 : 0 };
     }
     if (text.includes("from player_profiles where user_id=$1")) {
       const row = publicProfile(profiles.get(Number(params[0])), text.includes("stats"));

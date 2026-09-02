@@ -6,7 +6,7 @@ const path = require("path");
 const { chromium } = require("playwright");
 
 const BASE_URL = process.env.BOARD_SOCIAL_QA_URL || "http://127.0.0.1:8797";
-const OUTPUT_DIR = path.join(__dirname, "..", ".codex", "qa", "board_home_social_v394");
+const OUTPUT_DIR = path.join(__dirname, "..", ".codex", "qa", "board_home_social_v418");
 const CHROME_PATH = process.env.CHROME_PATH || "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 
 function installAccount(context, account) {
@@ -27,11 +27,20 @@ async function waitForSocial(page) {
   await page.waitForFunction(() => window.BoardShared?.getState?.().socialReady === true, null, { timeout: 15000 });
 }
 
+async function enterBoardHome(page) {
+  await page.waitForSelector('body[data-entry-stage="press"] #boardEntryStartBtn');
+  assert.strictEqual(await page.locator('.page').isVisible(), false, "board app must stay hidden on the title screen");
+  assert.strictEqual(await page.locator('#boardFriendDock').count(), 0, "friend dock must not be created before account validation");
+  await page.click('#boardEntryStartBtn');
+  await page.waitForSelector('body[data-entry-stage="app"] [data-view="home"].active', { timeout: 15000 });
+}
+
 async function main() {
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
   const browser = await chromium.launch({ headless: true, executablePath: CHROME_PATH });
   const desktop = await browser.newContext({ viewport: { width: 1600, height: 900 } });
   const tablet = await browser.newContext({ viewport: { width: 1024, height: 768 } });
+  const mobileGuest = await browser.newContext({ viewport: { width: 390, height: 844 } });
   await installAccount(desktop, {
     userId: 91001,
     secret: "qa-board-secret-a",
@@ -49,8 +58,9 @@ async function main() {
 
   const desktopPage = await desktop.newPage();
   const tabletPage = await tablet.newPage();
+  const guestPage = await mobileGuest.newPage();
   const errors = [];
-  for (const [label, page] of [["desktop", desktopPage], ["tablet", tabletPage]]) {
+  for (const [label, page] of [["desktop", desktopPage], ["tablet", tabletPage], ["guest", guestPage]]) {
     page.on("pageerror", (error) => errors.push(`${label}:pageerror:${error.message}`));
     page.on("console", (message) => {
       if (message.type() === "error" && !message.text().includes("Failed to load resource")) {
@@ -64,10 +74,42 @@ async function main() {
     });
   }
 
+  await guestPage.goto(`${BASE_URL}/board_start.html`, { waitUntil: "networkidle" });
+  assert.strictEqual(await guestPage.locator('[data-entry-panel="press"]').isVisible(), true, "guest should see only the title screen first");
+  await guestPage.screenshot({ path: path.join(OUTPUT_DIR, "mobile-title.png"), fullPage: true });
+  await guestPage.click('#boardEntryStartBtn');
+  await guestPage.waitForSelector('body[data-entry-stage="auth"] [data-entry-panel="auth"].is-active');
+  assert.strictEqual(await guestPage.locator('#boardAuthUsername').isVisible(), true, "guest auth should show username field");
+  assert.strictEqual(await guestPage.locator('#boardAuthPassword').isVisible(), true, "guest auth should show password field");
+  assert.strictEqual(await guestPage.locator('.page').isVisible(), false, "guest must not see Board menus before login");
+  await guestPage.click('#boardAuthRegisterTab');
+  assert.strictEqual(await guestPage.locator('#boardAuthTitle').textContent(), "建立帳號");
+  await guestPage.screenshot({ path: path.join(OUTPUT_DIR, "mobile-register.png"), fullPage: true });
+  await guestPage.click('#boardAuthLoginTab');
+  await guestPage.fill('#boardAuthUsername', 'qa_board_guest');
+  await guestPage.fill('#boardAuthPassword', 'qa-board-pass');
+  await guestPage.click('#boardAuthSubmitBtn');
+  await guestPage.waitForSelector('body[data-entry-stage="app"] [data-view="home"].active', { timeout: 15000 });
+  assert.strictEqual(await guestPage.locator('#playerNameDisplay').textContent(), "航海登入測試", "credential login should sync PROFILE_GET name");
+  const guestStorage = await guestPage.evaluate(() => ({
+    secret: localStorage.getItem("opSecret"),
+    userId: localStorage.getItem("op_user_id"),
+    lastUsername: localStorage.getItem("op_last_username"),
+    lastPassword: localStorage.getItem("op_last_password"),
+  }));
+  assert.strictEqual(guestStorage.secret, "qa-board-secret-login");
+  assert.strictEqual(guestStorage.userId, "91004");
+  assert.strictEqual(guestStorage.lastUsername, "qa_board_guest");
+  assert.strictEqual(guestStorage.lastPassword, null, "Board login must never persist password");
+
   await Promise.all([
     desktopPage.goto(`${BASE_URL}/board_start.html`, { waitUntil: "networkidle" }),
     tabletPage.goto(`${BASE_URL}/board_start.html`, { waitUntil: "networkidle" }),
   ]);
+  assert.strictEqual(await desktopPage.locator('[data-entry-panel="press"]').isVisible(), true, "desktop should start on the title screen");
+  assert.strictEqual(await tabletPage.locator('[data-entry-panel="press"]').isVisible(), true, "tablet should start on the title screen");
+  await desktopPage.screenshot({ path: path.join(OUTPUT_DIR, "desktop-title.png"), fullPage: true });
+  await Promise.all([enterBoardHome(desktopPage), enterBoardHome(tabletPage)]);
   await Promise.all([waitForSocial(desktopPage), waitForSocial(tabletPage)]);
 
   assert.strictEqual(await desktopPage.locator('[data-view="home"]').isVisible(), true, "desktop should start at home menu");
@@ -126,6 +168,12 @@ async function main() {
   const result = {
     ok: true,
     roomCode,
+    titleScreen: true,
+    accountBoot: true,
+    loginUi: true,
+    credentialLogin: true,
+    passwordPersisted: false,
+    mobileViewport: "390x844",
     homeChoices: 4,
     friendAccepted: true,
     dmDelivered: true,

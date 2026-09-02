@@ -38,8 +38,6 @@
       if (PHASE_ALIASES[phase]) expanded.push(...PHASE_ALIASES[phase]);
     });
     if (context.battlePhase === "climax") expanded.push("battle_climax");
-    if (context.isForcedBattle) expanded.push("battle_intro", "battle_loop");
-    if (context.isBoss && String(context.phase || "").startsWith("battle")) expanded.push("battle_climax");
     return unique(expanded);
   }
 
@@ -54,8 +52,8 @@
     let desired = 2;
     if (phase.includes("battle")) desired = 3;
     if (phase === "danger" || context.dangerLevel >= 3) desired = Math.max(desired, 3);
-    if (context.isForcedBattle || context.dangerLevel >= 4) desired = Math.max(desired, 4);
-    if (context.isBoss || battlePhase === "climax" || context.dangerLevel >= 5) desired = 5;
+    if (context.isForcedBattle || context.isBoss || context.dangerLevel >= 4) desired = Math.max(desired, 4);
+    if (battlePhase === "climax" || context.dangerLevel >= 5 && !String(context.phase || "").includes("battle_intro")) desired = 5;
     if (phase === "shop" || phase === "town") desired = Math.min(desired, 2);
     if (phase === "victory") desired = Math.min(Math.max(desired, 2), 4);
     return Math.max(1, Math.min(5, desired));
@@ -123,6 +121,15 @@
     const matchedTags = [];
     const scoreParts = [];
     let score = 0;
+    const metaId = String(meta.id || "").toLowerCase();
+    const preferredIds = lowerTags(context.preferredBgmIds);
+    const preferredIndex = preferredIds.indexOf(metaId);
+
+    if (preferredIndex >= 0) {
+      const value = Math.max(70, 220 - preferredIndex * 65);
+      score += value;
+      scoreParts.push(`場景指定第 ${preferredIndex + 1} 順位 +${value}`);
+    }
 
     const phaseMatchCount = phases.filter((phase) => lowerTags(meta.phase).includes(phase)).length;
     if (phaseMatchCount) {
@@ -171,8 +178,13 @@
     score += priorityValue;
     scoreParts.push(`優先級 +${priorityValue.toFixed(1)}`);
 
+    const lastPlayedBgmId = String(context.lastPlayedBgmId || "").toLowerCase();
+    if (lastPlayedBgmId && metaId === lastPlayedBgmId) {
+      score += 22;
+      scoreParts.push("目前曲目可延續 +22");
+    }
     const recentlyPlayedIds = lowerTags(context.recentlyPlayedIds);
-    if (recentlyPlayedIds.includes(String(meta.id).toLowerCase())) {
+    if (recentlyPlayedIds.includes(metaId) && metaId !== lastPlayedBgmId) {
       const penalty = meta.avoidOveruse ? -30 : -14;
       score += penalty;
       scoreParts.push(`最近播過 ${penalty}`);
@@ -197,18 +209,25 @@
   function chooseBgm(context = {}) {
     const metadata = context.metadata || global.BGM_METADATA || [];
     const now = Number(context.now || Date.now());
-    const force = Boolean(context.force);
     const phases = expandPhases(context);
-    const allowIntensityFive = Boolean(context.isBoss || context.battlePhase === "climax" || phases.includes("battle_climax"));
+    const preferredIds = lowerTags(context.preferredBgmIds);
     const lastPlayedBgmId = String(context.lastPlayedBgmId || "").toLowerCase();
+    const allowIntensityFive = Boolean(context.battlePhase === "climax" || phases.includes("battle_climax") || context.allowIntensityFive);
     const profile = buildTagProfile(context);
 
     let candidates = metadata.filter((meta) => phaseMatches(meta, phases));
     if (!candidates.length) candidates = metadata.slice();
-    candidates = candidates.filter((meta) => allowIntensityFive || Number(meta.intensity || 1) < 5);
+    preferredIds.forEach((id) => {
+      const preferred = metadata.find((meta) => String(meta.id || "").toLowerCase() === id);
+      if (preferred && !candidates.includes(preferred)) candidates.push(preferred);
+    });
+    candidates = candidates.filter((meta) => allowIntensityFive || preferredIds.includes(String(meta.id || "").toLowerCase()) || Number(meta.intensity || 1) < 5);
+    if (context.forceRetune && lastPlayedBgmId) {
+      const alternatives = candidates.filter((meta) => String(meta.id || "").toLowerCase() !== lastPlayedBgmId);
+      if (alternatives.length) candidates = alternatives;
+    }
 
-    const filtered = candidates.filter((meta) => force || String(meta.id).toLowerCase() !== lastPlayedBgmId);
-    const scored = (filtered.length ? filtered : candidates).map((meta) => scoreOne(meta, context, phases, profile, now));
+    const scored = candidates.map((meta) => scoreOne(meta, context, phases, profile, now));
     const viable = scored.filter((item) => Number.isFinite(item.score));
     const pool = viable.length ? viable : scored;
     pool.sort((a, b) => {
@@ -224,10 +243,13 @@
       id: best.meta.id,
       filename: best.meta.filename,
       title: best.meta.title,
-      reason: filtered.length ? reason : `${reason}；候選只剩上一首，建議維持目前播放`,
+      reason,
       matchedTags: best.matchedTags,
       intensity: best.meta.intensity,
       shouldLoop: Boolean(best.meta.loop),
+      cueInSec: Math.max(0, Number(best.meta.cueInSec || 0)),
+      cueOutSec: Math.max(0, Number(best.meta.cueOutSec || 0)),
+      gainDb: Number(best.meta.gainDb || 0),
       sourceContext: best.meta.sourceContext,
       score: Math.round(best.score * 100) / 100,
     };

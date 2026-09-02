@@ -3067,6 +3067,23 @@
         ]);
       }
 
+      function marinefordHostBgmManager() {
+        const candidates = [];
+        try {
+          if (window.parent && window.parent !== window) candidates.push(window.parent);
+        } catch (_) {}
+        try {
+          if (window.opener && !window.opener.closed) candidates.push(window.opener);
+        } catch (_) {}
+        candidates.push(window);
+        for (const candidate of candidates) {
+          try {
+            if (candidate?.BgmManager) return candidate.BgmManager;
+          } catch (_) {}
+        }
+        return null;
+      }
+
       function playConquerorIntroVideo(page) {
         return new Promise((resolve) => {
           if (!page) {
@@ -3089,10 +3106,30 @@
           let prompted = false;
           let promptButton = null;
           let timeoutId = 0;
+          let bgmFocus = null;
+          const acquireBgmFocus = () => {
+            if (bgmFocus) return;
+            try {
+              bgmFocus = marinefordHostBgmManager()?.acquireAudioFocus?.("marineford-conqueror-video", {
+                volumeRatio: 0.06,
+                fadeOutMs: 260,
+                fadeInMs: 760,
+              }) || null;
+            } catch (_) {
+              bgmFocus = null;
+            }
+          };
+          const releaseBgmFocus = () => {
+            try { bgmFocus?.release?.(); } catch (_) {}
+            bgmFocus = null;
+          };
+          const onPageHide = () => finish();
           const finish = () => {
             if (done) return;
             done = true;
             clearTimeout(timeoutId);
+            window.removeEventListener("pagehide", onPageHide);
+            releaseBgmFocus();
             layer.classList.add("fade-out");
             setTimeout(() => {
               video.pause();
@@ -3112,6 +3149,7 @@
             video.muted = false;
             video.volume = 1;
             video.removeAttribute("muted");
+            acquireBgmFocus();
             const playPromise = video.play();
             if (playPromise?.then) {
               playPromise
@@ -3126,6 +3164,7 @@
                     finish();
                     return;
                   }
+                  releaseBgmFocus();
                   prompted = true;
                   clearTimeout(timeoutId);
                   layer.classList.add("needs-sound");
@@ -3147,6 +3186,7 @@
           };
           video.addEventListener("ended", finish, { once: true });
           video.addEventListener("error", finish, { once: true });
+          window.addEventListener("pagehide", onPageHide, { once: true });
           armTimeout(11200);
           startVideo();
         });

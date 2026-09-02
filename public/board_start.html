@@ -6,14 +6,17 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="航海王大富翁">
+  <meta name="apple-mobile-web-app-title" content="新世界航海錄">
   <meta name="theme-color" content="#06111d">
   <link rel="manifest" href="board_manifest.webmanifest">
   <link rel="apple-touch-icon" href="images/icon-192.png">
-  <title>航海王大富翁 | 出航入口</title>
+  <link rel="preload" as="image" href="images/board/backgrounds/board_entry_horizontal_v1.webp" fetchpriority="high">
+  <link rel="preload" as="image" href="images/game_launcher/launcher_board_logo_v1.svg">
+  <title>ONE PIECE 新世界航海錄 | 出航入口</title>
   <style>
     :root{
       --board-bg:url("images/board/backgrounds/board_bg_start.webp");
+      --board-entry-bg:url("images/board/backgrounds/board_entry_horizontal_v1.webp");
       --sky-1:#8fd3ff;
       --sky-2:#ebf9ff;
       --sea-1:#59bfe1;
@@ -62,6 +65,456 @@
       background:
         radial-gradient(ellipse at 50% 56%, rgba(255,255,255,.18), transparent 42%),
         linear-gradient(180deg, rgba(255,255,255,.05), transparent 34%, rgba(255,255,255,.03));
+    }
+    body[data-entry-stage]:not([data-entry-stage="app"]){overflow:hidden}
+    body[data-entry-stage]:not([data-entry-stage="app"]) .page{display:none}
+    .board-entry{
+      position:fixed;
+      inset:0;
+      z-index:9000;
+      display:grid;
+      grid-template-columns:minmax(360px,46vw) minmax(360px,1fr);
+      align-items:center;
+      gap:clamp(24px,5vw,78px);
+      padding:clamp(24px,5vw,72px);
+      overflow:hidden;
+      color:#eefaff;
+      background:
+        radial-gradient(circle at 74% 28%,rgba(45,206,213,.2),transparent 32%),
+        linear-gradient(104deg,rgba(2,17,30,.98) 0%,rgba(4,31,48,.92) 48%,rgba(4,24,38,.82) 100%),
+        var(--board-bg) center / cover no-repeat;
+    }
+    body[data-entry-stage="app"] .board-entry{display:none}
+    .board-entry::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        linear-gradient(90deg,rgba(2,14,26,.2),rgba(2,14,26,.04) 46%,rgba(2,14,26,.45)),
+        repeating-linear-gradient(116deg,transparent 0 22px,rgba(255,255,255,.012) 23px 24px);
+      mix-blend-mode:screen;
+    }
+    .board-entry::after{
+      content:"";
+      position:absolute;
+      left:-12vw;
+      right:-12vw;
+      bottom:-24vh;
+      height:48vh;
+      pointer-events:none;
+      opacity:.48;
+      background:
+        radial-gradient(ellipse at 25% 0,rgba(101,224,235,.32),transparent 42%),
+        radial-gradient(ellipse at 68% 0,rgba(255,213,117,.18),transparent 38%);
+      filter:blur(28px);
+    }
+    .entry-cover-wrap{
+      position:relative;
+      z-index:1;
+      justify-self:end;
+      width:min(440px,42vw);
+      height:min(86vh,680px);
+      display:grid;
+      place-items:center;
+      pointer-events:none;
+      filter:drop-shadow(0 28px 48px rgba(0,0,0,.42));
+    }
+    .entry-cover-wrap::before{
+      content:"";
+      position:absolute;
+      inset:7% 5%;
+      border-radius:48%;
+      background:rgba(62,201,214,.18);
+      filter:blur(34px);
+    }
+    .entry-cover-art{
+      position:relative;
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      user-select:none;
+      -webkit-user-drag:none;
+    }
+    .entry-panels{
+      position:relative;
+      z-index:2;
+      width:min(470px,100%);
+      justify-self:start;
+    }
+    .entry-panel{display:none;animation:entryPanelIn .3s ease both}
+    .entry-panel.is-active{display:block}
+    @keyframes entryPanelIn{
+      from{opacity:0;transform:translateY(12px)}
+      to{opacity:1;transform:none}
+    }
+    .entry-logo{
+      display:block;
+      width:min(430px,92%);
+      height:auto;
+      margin:0 auto 22px;
+      filter:drop-shadow(0 13px 24px rgba(0,0,0,.38));
+    }
+    .entry-kicker{
+      margin:0 0 14px;
+      color:#77dce2;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.22em;
+      text-align:center;
+    }
+    .entry-lead{
+      max-width:400px;
+      margin:0 auto 26px;
+      color:rgba(220,244,248,.78);
+      font-size:14px;
+      font-weight:700;
+      line-height:1.75;
+      text-align:center;
+    }
+    .entry-start-btn,
+    .entry-submit{
+      position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:min(340px,100%);
+      min-height:58px;
+      margin:0 auto;
+      border:1px solid rgba(255,226,145,.88);
+      border-radius:999px;
+      color:#2d210b;
+      font-size:18px;
+      font-weight:950;
+      letter-spacing:.12em;
+      cursor:pointer;
+      background:linear-gradient(135deg,#fff0b8 0%,#f3bf55 46%,#db9131 100%);
+      box-shadow:0 18px 38px rgba(0,0,0,.32),0 0 28px rgba(237,188,84,.17);
+      transition:transform .18s ease,filter .18s ease,box-shadow .18s ease;
+    }
+    .entry-start-btn:hover,
+    .entry-submit:hover{transform:translateY(-2px);filter:brightness(1.05);box-shadow:0 22px 44px rgba(0,0,0,.38),0 0 36px rgba(237,188,84,.26)}
+    .entry-start-btn:focus-visible,
+    .entry-submit:focus-visible,
+    .entry-tab:focus-visible,
+    .entry-link-btn:focus-visible,
+    .entry-field input:focus-visible{outline:3px solid rgba(105,225,234,.55);outline-offset:3px}
+    .entry-start-hint{
+      display:block;
+      margin-top:15px;
+      color:rgba(215,239,244,.58);
+      font-size:11px;
+      font-weight:850;
+      letter-spacing:.16em;
+      text-align:center;
+      animation:entryPulse 1.8s ease-in-out infinite;
+    }
+    @keyframes entryPulse{50%{opacity:.48}}
+    .entry-auth-card,
+    .entry-boot-card{
+      padding:clamp(22px,3vw,34px);
+      border:1px solid rgba(130,221,227,.3);
+      border-radius:28px;
+      background:linear-gradient(160deg,rgba(7,35,52,.92),rgba(4,21,35,.94));
+      box-shadow:0 28px 70px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.08);
+      backdrop-filter:blur(18px);
+    }
+    .entry-auth-title,
+    .entry-boot-title{
+      margin:0;
+      color:#fff4ce;
+      font-size:25px;
+      font-weight:950;
+      letter-spacing:.06em;
+      text-align:center;
+    }
+    .entry-auth-sub,
+    .entry-boot-sub{
+      margin:9px 0 20px;
+      color:#a8cdd5;
+      font-size:13px;
+      font-weight:700;
+      line-height:1.6;
+      text-align:center;
+    }
+    .entry-tabs{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:6px;
+      margin-bottom:18px;
+      padding:5px;
+      border-radius:16px;
+      background:rgba(1,13,23,.5);
+    }
+    .entry-tab{
+      min-height:42px;
+      border:0;
+      border-radius:12px;
+      color:#86aeb9;
+      font-size:14px;
+      font-weight:900;
+      cursor:pointer;
+      background:transparent;
+    }
+    .entry-tab.is-active{color:#26311f;background:linear-gradient(135deg,#fbe5a6,#eeb857);box-shadow:0 8px 18px rgba(0,0,0,.2)}
+    .entry-field{display:grid;gap:7px;margin-top:14px}
+    .entry-field span{color:#bfdae0;font-size:12px;font-weight:850}
+    .entry-field input{
+      width:100%;
+      height:50px;
+      border:1px solid rgba(123,198,207,.24);
+      border-radius:14px;
+      padding:0 15px;
+      color:#f4fbfc;
+      font:inherit;
+      font-weight:750;
+      background:rgba(0,12,22,.62);
+      outline:none;
+    }
+    .entry-field input::placeholder{color:rgba(168,205,213,.45)}
+    .entry-auth-message{
+      min-height:21px;
+      margin:12px 2px 0;
+      color:#ff9f9f;
+      font-size:12px;
+      font-weight:800;
+      line-height:1.5;
+      text-align:center;
+    }
+    .entry-submit{width:100%;min-height:52px;margin-top:13px;border-radius:15px;font-size:16px}
+    .entry-submit:disabled{cursor:wait;filter:grayscale(.18);opacity:.68;transform:none}
+    .entry-card-footer{display:flex;justify-content:center;gap:18px;margin-top:16px}
+    .entry-link-btn{
+      border:0;
+      padding:4px;
+      color:#8ecbd2;
+      font:inherit;
+      font-size:12px;
+      font-weight:850;
+      cursor:pointer;
+      background:transparent;
+    }
+    .entry-link-btn:hover{color:#fff0bc}
+    .entry-spinner{
+      width:48px;
+      height:48px;
+      margin:4px auto 18px;
+      border:4px solid rgba(121,213,221,.18);
+      border-top-color:#efc469;
+      border-radius:50%;
+      animation:entrySpin .8s linear infinite;
+    }
+    @keyframes entrySpin{to{transform:rotate(360deg)}}
+    .entry-boot-actions{display:flex;justify-content:center;gap:10px;margin-top:18px}
+    .entry-boot-actions[hidden]{display:none}
+    .entry-boot-actions .entry-link-btn{padding:10px 14px;border:1px solid rgba(129,210,218,.25);border-radius:12px;background:rgba(4,28,42,.72)}
+    @media (max-width:760px){
+      .board-entry{display:grid;grid-template-columns:1fr;padding:20px;background:linear-gradient(180deg,rgba(2,18,31,.4),rgba(2,18,31,.92)),var(--board-bg) center / cover no-repeat}
+      .entry-cover-wrap{position:absolute;inset:0;width:100%;height:100%;opacity:.34;filter:saturate(.88) drop-shadow(0 20px 44px rgba(0,0,0,.3))}
+      .entry-cover-art{object-fit:contain;object-position:center}
+      .entry-panels{justify-self:center;width:min(430px,100%)}
+      .entry-logo{width:min(360px,88%)}
+      .entry-auth-card,.entry-boot-card{background:linear-gradient(160deg,rgba(7,35,52,.96),rgba(4,21,35,.97))}
+    }
+    @media (max-height:620px) and (orientation:landscape){
+      .board-entry{grid-template-columns:minmax(260px,40vw) minmax(340px,1fr);padding:18px 5vw}
+      .entry-cover-wrap{height:94vh;width:min(390px,38vw)}
+      .entry-logo{width:min(330px,82%);margin-bottom:10px}
+      .entry-kicker{margin-bottom:8px}
+      .entry-lead{margin-bottom:15px;line-height:1.45}
+      .entry-auth-card{padding:18px 24px}
+      .entry-auth-sub{margin:5px 0 12px}
+      .entry-field{margin-top:9px}.entry-field input{height:43px}
+      .entry-tabs{margin-bottom:10px}.entry-submit{min-height:46px}
+    }
+    @media (prefers-reduced-motion:reduce){
+      .entry-panel,.entry-start-hint,.entry-spinner{animation:none}
+      .entry-start-btn,.entry-submit{transition:none}
+    }
+    /* 首次進站：保留既有入口邏輯，只把 press 階段呈現為全螢幕封面。 */
+    body[data-entry-stage="press"] .board-entry{
+      display:block;
+      padding:0;
+      background:
+        linear-gradient(180deg,rgba(2,18,31,.04) 0%,rgba(2,18,31,.01) 46%,rgba(2,18,31,.46) 100%),
+        var(--board-entry-bg) center center / cover no-repeat;
+    }
+    body[data-entry-stage="press"] .board-entry::before{
+      z-index:0;
+      background:
+        radial-gradient(ellipse at 50% 58%,rgba(255,255,255,.22),transparent 34%),
+        linear-gradient(180deg,rgba(3,18,30,.08),transparent 24%,transparent 68%,rgba(1,12,23,.48));
+      mix-blend-mode:normal;
+    }
+    body[data-entry-stage="press"] .board-entry::after{
+      left:-8vw;
+      right:-8vw;
+      bottom:-22vh;
+      height:42vh;
+      opacity:.32;
+      background:radial-gradient(ellipse at 50% 0,rgba(103,225,235,.42),transparent 56%);
+      filter:blur(34px);
+    }
+    body[data-entry-stage="press"] .entry-cover-wrap{display:none}
+    body[data-entry-stage="press"] .entry-panels{
+      position:absolute;
+      inset:0;
+      z-index:2;
+      width:100%;
+      max-width:none;
+    }
+    body[data-entry-stage="press"] [data-entry-panel="press"]{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      animation:none;
+    }
+    body[data-entry-stage="press"] .entry-kicker,
+    body[data-entry-stage="press"] .entry-lead{display:none}
+    body[data-entry-stage="press"] .entry-logo{
+      position:absolute;
+      left:50%;
+      top:56%;
+      z-index:2;
+      width:min(560px,72vw);
+      max-height:28vh;
+      margin:0;
+      transform:translate(-50%,-50%);
+      filter:
+        drop-shadow(0 3px 0 rgba(255,255,255,.35))
+        drop-shadow(0 15px 22px rgba(0,31,52,.48));
+      pointer-events:none;
+      animation:entryLogoFloat 4.2s ease-in-out infinite;
+    }
+    body[data-entry-stage="press"] .entry-start-btn{
+      position:absolute;
+      inset:0;
+      z-index:3;
+      width:100%;
+      height:100%;
+      min-height:0;
+      margin:0;
+      padding:0;
+      border:0;
+      border-radius:0;
+      color:transparent;
+      background:transparent;
+      box-shadow:none;
+      opacity:1;
+      cursor:pointer;
+      -webkit-tap-highlight-color:transparent;
+    }
+    body[data-entry-stage="press"] .entry-start-btn:hover{
+      transform:none;
+      filter:none;
+      box-shadow:none;
+    }
+    body[data-entry-stage="press"] .entry-start-btn:focus-visible{
+      outline:3px solid rgba(255,239,177,.9);
+      outline-offset:-10px;
+    }
+    body[data-entry-stage="press"] .entry-start-hint{
+      position:absolute;
+      left:50%;
+      bottom:max(24px,calc(env(safe-area-inset-bottom) + 18px));
+      z-index:4;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:5px;
+      margin:0;
+      color:#fff8d7;
+      font-size:clamp(18px,2vw,24px);
+      font-weight:950;
+      letter-spacing:.18em;
+      line-height:1.15;
+      text-shadow:0 2px 3px rgba(0,0,0,.9),0 0 18px rgba(10,74,100,.9);
+      transform:translateX(-50%);
+      pointer-events:none;
+      animation:entryContinuePulse 1.65s ease-in-out infinite;
+    }
+    body[data-entry-stage="press"] .entry-start-hint small{
+      color:rgba(235,250,255,.78);
+      font-size:10px;
+      font-weight:850;
+      letter-spacing:.2em;
+    }
+    @keyframes entryLogoFloat{
+      0%,100%{transform:translate(-50%,-50%)}
+      50%{transform:translate(-50%,calc(-50% - 5px))}
+    }
+    @keyframes entryContinuePulse{
+      0%,100%{opacity:.72;filter:drop-shadow(0 0 0 rgba(255,229,135,0))}
+      50%{opacity:1;filter:drop-shadow(0 0 9px rgba(255,229,135,.68))}
+    }
+    @media (max-width:760px){
+      body[data-entry-stage="press"] .board-entry{
+        display:block;
+        padding:0;
+        background:
+          linear-gradient(180deg,rgba(2,18,31,.03),transparent 48%,rgba(2,18,31,.5)),
+          var(--board-entry-bg) center center / cover no-repeat;
+      }
+      body[data-entry-stage="press"] .entry-logo{top:57%;width:min(470px,84vw);max-height:25vh}
+    }
+    @media (max-height:620px) and (orientation:landscape){
+      body[data-entry-stage="press"] .board-entry{display:block;padding:0}
+      body[data-entry-stage="press"] .entry-logo{top:53%;width:min(390px,54vw);max-height:31vh}
+      body[data-entry-stage="press"] .entry-start-hint{bottom:max(10px,calc(env(safe-area-inset-bottom) + 8px));font-size:17px}
+    }
+    body[data-entry-stage="auth"] .board-entry,
+    body[data-entry-stage="boot"] .board-entry{
+      grid-template-columns:1fr;
+      place-items:center;
+      gap:0;
+      padding:clamp(12px,4vw,36px);
+      overflow-x:hidden;
+      overflow-y:auto;
+      background:
+        linear-gradient(180deg,rgba(2,15,27,.28),rgba(2,15,27,.58)),
+        var(--board-entry-bg) center center / cover no-repeat;
+    }
+    body[data-entry-stage="auth"] .entry-cover-wrap,
+    body[data-entry-stage="boot"] .entry-cover-wrap{display:none}
+    body[data-entry-stage="auth"] .board-entry::after,
+    body[data-entry-stage="boot"] .board-entry::after{display:none}
+    body[data-entry-stage="auth"] .entry-panels,
+    body[data-entry-stage="boot"] .entry-panels{
+      position:relative;
+      z-index:2;
+      width:min(450px,calc(100vw - 24px));
+      max-width:none;
+      justify-self:center;
+      margin:auto;
+    }
+    body[data-entry-stage="auth"] .entry-auth-card,
+    body[data-entry-stage="boot"] .entry-boot-card{
+      max-height:calc(100dvh - 24px);
+      overflow:auto;
+    }
+    @media (max-height:620px) and (orientation:landscape){
+      body[data-entry-stage="auth"] .entry-panels,
+      body[data-entry-stage="boot"] .entry-panels{width:min(430px,calc(100vw - 24px))}
+      body[data-entry-stage="auth"] .entry-auth-card,
+      body[data-entry-stage="boot"] .entry-boot-card{padding:12px 20px;border-radius:20px}
+      body[data-entry-stage="auth"] .entry-auth-title,
+      body[data-entry-stage="boot"] .entry-boot-title{font-size:21px}
+      body[data-entry-stage="auth"] .entry-auth-sub{display:none}
+      body[data-entry-stage="auth"] .entry-tabs{margin:6px 0;padding:4px}
+      body[data-entry-stage="auth"] .entry-tab{min-height:34px;font-size:12px}
+      body[data-entry-stage="auth"] .entry-field{gap:3px;margin-top:6px}
+      body[data-entry-stage="auth"] .entry-field span{font-size:11px}
+      body[data-entry-stage="auth"] .entry-field input{height:38px;border-radius:11px}
+      body[data-entry-stage="auth"] .entry-auth-message{min-height:15px;margin-top:4px;line-height:1.2}
+      body[data-entry-stage="auth"] .entry-submit{min-height:40px;margin-top:5px;font-size:14px}
+      body[data-entry-stage="auth"] .entry-card-footer{margin-top:5px}
+      body[data-entry-stage="boot"] .entry-spinner{width:38px;height:38px;margin-bottom:10px}
+      body[data-entry-stage="boot"] .entry-boot-sub{margin:5px 0 10px}
+    }
+    @media (prefers-reduced-motion:reduce){
+      body[data-entry-stage="press"] .entry-logo,
+      body[data-entry-stage="press"] .entry-start-hint{animation:none}
     }
     .page{
       width:min(960px,100%);
@@ -264,6 +717,15 @@
       grid-template-columns:repeat(2,minmax(0,1fr));
       gap:12px;
       margin-top:16px;
+    }
+    .home-menu-btn[hidden]{display:none!important}
+    body[data-entry-auth-source="local-preview"] .home-menu-grid{
+      grid-template-columns:minmax(0,620px);
+      justify-content:center;
+    }
+    body[data-entry-auth-source="local-preview"] #openPlayerProfileBtn,
+    body[data-entry-auth-source="local-preview"] [data-view="modeSelect"] #backToMainBtn{
+      display:none!important;
     }
     .home-menu-btn{
       display:grid;
@@ -1706,15 +2168,64 @@
     }
   </style>
 </head>
-<body>
+<body data-entry-stage="press">
+  <section class="board-entry" id="boardEntry" aria-label="新世界航海錄登入入口">
+    <div class="entry-panels">
+      <section class="entry-panel is-active" data-entry-panel="press">
+        <div class="entry-kicker">ONE PIECE BOARD ADVENTURE</div>
+        <img class="entry-logo" src="images/game_launcher/launcher_board_logo_v1.svg" alt="ONE PIECE 新世界航海錄">
+        <p class="entry-lead">從自己的航海紀錄出發，與夥伴再次集合。</p>
+        <button type="button" class="entry-start-btn" id="boardEntryStartBtn" aria-label="點擊繼續">點擊繼續</button>
+        <span class="entry-start-hint"><span>點擊繼續</span><small>CLICK OR PRESS ANY KEY</small></span>
+      </section>
+
+      <section class="entry-panel" data-entry-panel="auth" hidden>
+        <div class="entry-auth-card">
+          <h1 class="entry-auth-title" id="boardAuthTitle">帳號登入</h1>
+          <p class="entry-auth-sub">沿用《偉大航道爭霸戰》的玩家帳號，登入後才會讀取房間、紀錄與好友。</p>
+          <div class="entry-tabs" role="tablist" aria-label="登入或註冊">
+            <button type="button" class="entry-tab is-active" id="boardAuthLoginTab" role="tab" aria-selected="true">登入</button>
+            <button type="button" class="entry-tab" id="boardAuthRegisterTab" role="tab" aria-selected="false">建立帳號</button>
+          </div>
+          <form id="boardAuthForm" autocomplete="on">
+            <label class="entry-field">
+              <span>帳號</span>
+              <input id="boardAuthUsername" name="username" type="text" minlength="3" maxlength="24" pattern="[a-zA-Z0-9_]+" autocomplete="username" placeholder="英文、數字或底線" required>
+            </label>
+            <label class="entry-field">
+              <span>密碼</span>
+              <input id="boardAuthPassword" name="password" type="password" minlength="6" maxlength="72" autocomplete="current-password" placeholder="至少 6 碼" required>
+            </label>
+            <div class="entry-auth-message" id="boardAuthMessage" role="alert" aria-live="polite"></div>
+            <button type="submit" class="entry-submit" id="boardAuthSubmitBtn">登入</button>
+          </form>
+          <div class="entry-card-footer">
+            <button type="button" class="entry-link-btn" id="boardAuthBackBtn">返回主畫面</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="entry-panel" data-entry-panel="boot" hidden>
+        <div class="entry-boot-card" role="status" aria-live="polite">
+          <div class="entry-spinner" aria-hidden="true"></div>
+          <h1 class="entry-boot-title">正在讀取航海紀錄</h1>
+          <p class="entry-boot-sub" id="boardBootMessage">正在驗證雲端玩家帳號…</p>
+          <div class="entry-boot-actions" id="boardBootActions" hidden>
+            <button type="button" class="entry-link-btn" id="boardBootRetryBtn">重試</button>
+            <button type="button" class="entry-link-btn" id="boardBootLoginBtn">改用其他帳號</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
   <main class="page">
     <div class="seagull" aria-hidden="true"></div>
 
     <section class="view active" data-view="home">
       <section class="hero">
-        <div class="mode-mark">Grand Line Board Game</div>
-        <h1>航海王大富翁</h1>
-        <div class="hero-sub">準備出航</div>
+        <div class="mode-mark">ONE PIECE BOARD ADVENTURE</div>
+        <h1>新世界航海錄</h1>
+        <div class="hero-sub">選擇這次的航海方式</div>
         <div class="sea-line" aria-hidden="true"></div>
       </section>
 
@@ -1906,8 +2417,8 @@
     </div>
   </div>
 
-  <script src="js/board_shared.js?v=20260831-portable-prefetch-v397"></script>
+  <script src="js/board_shared.js?v=20260902-board-entry-auth-v418-final"></script>
   <script src="/socket.io/socket.io.js"></script>
-  <script src="js/board_start.js?v=20260831-portable-prefetch-v397"></script>
+  <script src="js/board_start.js?v=20260902-social-shell-restored-v426"></script>
 </body>
 </html>

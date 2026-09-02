@@ -1246,7 +1246,7 @@ const avatarUrl = `images/avatars/${avatar}.webp`;
           const secret = String(localStorage.getItem('opSecret') || '').trim();
           if(secret) localStorage.setItem('op_secret', secret);
         }catch(_){ }
-        location.href = 'board_start.html?from=secret-route';
+        location.href = 'game_launcher_preview.html?from=card-secret';
       }
       const secretModeScene = document.getElementById('secretModeScene');
       return (<>
@@ -1306,7 +1306,7 @@ const avatarUrl = `images/avatars/${avatar}.webp`;
               className="secret-mode-object secret-mode-board"
               onClick={openSecretBoard}
               title="？？？"
-              aria-label="開啟航海王大富翁"
+              aria-label="開啟 ONE PIECE TABLETOP SERIES"
             >
               <img src="images/board/items/odd_dice.webp" alt="" aria-hidden="true"/>
             </button>

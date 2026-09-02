@@ -1,5 +1,255 @@
 ﻿# Dev Workflow
 
+## 修改紀錄：桌遊啟動器／最新版航海錄正式發布邊界 V428（2026-09-03）
+
+- 需求：把三盒桌遊啟動器與最新版《新世界航海錄》接到既有線上站，同時保留原《偉大航道爭霸戰》，《霸海戰棋》完成前不得發布或連入正式站。
+- 接法：網站 `/` 仍由既有 `start.html` 開啟卡牌；卡牌登入後的隱藏骰子改進 `game_launcher_preview.html?from=card-secret`。啟動器登入後只開放卡牌與航海錄；第三盒保留核准封面與排列，但正式帳號環境移除 `href`、標示 `aria-disabled` 並不建立影片節點。只有 loopback 且伺服器明確回報無帳號資料庫的開發預覽，才恢復本機西洋棋路徑。
+- 後端邊界：release 以 `origin/main` 的正式 `server/index.js` 為底，只加入唯讀 `/api/board-runtime`；未帶入開發中的 `CHESS_*` 房間、邀請或戰鬥事件。`public/battle_chess/`、`incoming/`、`secret_modes/`、私人 save/campaign、未採用素材及西洋棋預覽影片一律排除。
+- 發布內容：更新 V397～V427 的 Board 正式入口、首頁／社交、BGM、青雉首次入獄劇情與正式素材；新增 launcher HTML／CSS／JS、九張實際引用圖片及卡牌／航海錄兩支 Hover 影片。沒有改 `BOARD_GAME_STATE`、既有 id、存檔 schema 或 Board Socket.IO event 名稱。
+- 開發驗證：launcher 專項實跑通過本機 press→auth→gallery、正式帳號假伺服器登入／secret 重驗、1540×660 三盒固定座標、932×430 與 390×844 containment；正式模式確認 Chess `href=null` 且無 Chess video。發布工作只在由 `origin/main` 建立的 `codex/board-launcher-release-v428` worktree 精準 stage，不由 detached 開發目錄直接推送。
+- 發布候選驗證：`DEPLOYMENT_ASSET_MANIFEST_QA=PASS`（3964 檔、1300 個 literal assets、49 個 linked files，無 Chess／incoming／私人存檔）；PostgreSQL campaign/save、BGM continuity、正式首頁／好友／私訊／Board 邀請、108/108 行動素材暖載、固定視角三尺寸、刷新續接，以及青雉單機五情境與 2 真人＋2 CPU 完整快照均通過。`npm audit --omit=dev` 為 0 high／0 critical，仍有 Express 4 間接 `qs` 的 3 項 moderate，因自動修復會跨到 Express 5，本版不在發布途中做不相干的主版本升級。
+
+## 修改紀錄：三合一桌遊啟動／共用登入入口 V427（2026-09-03）
+
+- 需求：三盒桌遊收藏頁不能一開啟就直接露出遊戲選擇，要補上「全螢幕點擊進入 → 帳號登入／建立帳號 → 三盒收藏室」的正式啟動節奏。
+- 實作：`game_launcher_preview.html` 新增獨立全視窗 press、中央 auth 與 boot 失敗重試層；正式環境沿用同源 `AUTH_LOGIN`／`AUTH_REGISTER`／`PROFILE_GET`，驗證成功再送 `PRESENCE_SET` 並開放三個原連結。有效既有 secret 可在點擊後自動驗證；`SESSION_KICK` 會鎖回登入。密碼只存在送出當下的記憶體與表單，送出即清空，並移除舊 `op_last_password` 明文鍵。
+- 本機邊界：只有 loopback 且 `/api/board-runtime` 明確回報 `accountDatabaseEnabled:false` 時可空白登入；本機模式會清掉該 local origin 的失效 secret，建立和 Board 相同規則的穩定測試 user id。runtime 查詢有 8 秒中止與重試，非 loopback／狀態未知一律不開 bypass。
+- 相容：登入前以 `inert`／`aria-hidden` 鎖住收藏室及三個連結；登入後沿用原 `1540×660` 固定畫布、Logo、三個 `300×400` 盒座標、四點透視、160ms Hover 懶載／單盒播放／離開釋放，以及 `start.html`、`board_start.html`、`battle_chess/index.html` 三條 href。根路由仍維持既有卡牌入口，未改任何 Board 規則、存檔、`BOARD_GAME_STATE` 或 Socket.IO event 名稱。
+- 驗證：`node --check` 通過 launcher 與 `game_launcher_entry_qa.js`；8787 本機實跑 press→auth→空白登入→gallery，舊 local secret 被隔離，三盒座標仍為 `(180.656,213.813)`／`(619.984,213.813)`／`(1059.328,213.813)` 且皆 `300×400`，Hover 影片可播放並在離開後移除 `src`。932×430、390×844 登入卡皆在視窗內。8798 隔離帳號伺服器實際完成 `AUTH_LOGIN`→`PROFILE_GET`→`PRESENCE_SET`、重整後既有 secret 自動驗證，雙 secret key 與 user id 正確且密碼未落地；所有情境 `pageerror=[]`。
+
+## 修改紀錄：恢復共用好友／聊天室外殼 V426（2026-09-02）
+
+- 需求：浮動好友面板與聊天室屬於之後要和《偉大航道爭霸戰》共用的正式功能，不能視為無效入口移除。
+- 實作：local-preview 恢復首頁「好友與聊天室」、右側好友 Dock、聊天 Tray、邀請層與社交直達頁；未接正式帳號時明確標示為保留中的共用入口。玩家資料仍隱藏，繼續航海仍只在有實際紀錄時顯示；房間選擇頁保留好友浮動入口提示，只移除重複的底部返回按鈕。
+- 邊界：未新增假的好友或聊天資料，也未改 `SOCIAL_*`／`DM_*`／邀請 Socket.IO event；正式帳號接回後仍使用既有完整社交流程。
+- 驗證：1600×900 與 390×844 本機實跑皆顯示「開始航海」「好友與聊天室」及浮動好友／聊天外殼，社交頁提示正確且 `pageerror=[]`；8797 正式帳號 QA 仍為 `ok:true`，四入口、好友確認、私訊、房邀請及雙真人 lobby 全通過。
+
+## 修改紀錄：本機首頁只顯示有效入口 V425（2026-09-02）
+
+- 需求：本機預覽登入後的下一層只保留確實可用的按鈕，移除會進入空內容或尚未接上帳號服務的功能。
+- 實作：local-preview 首頁固定移除「好友與聊天室」與錯誤鎖定的「玩家資料」，並隱藏共用好友 Dock／聊天 Tray／邀請層；「繼續航海」只有伺服器實際回傳可用 campaign 時才顯示，沒有紀錄時只留下置中的「開始航海」。出航方式頁同步移除重複返回列與失效好友提示，保留頂部返回。
+- 邊界：所有條件都以 `data-entry-auth-source=local-preview` 限制；正式登入環境仍保留四入口與好友／玩家資料。帳號、房間、campaign、`BOARD_GAME_STATE` 與 Socket.IO event 均未改。
+- 驗證：Chrome 於 1600×900、390×844 空白登入後皆只顯示「開始航海」；好友 Dock、玩家資料與空 campaign 不可見，開始航海可進房間選擇、頂部返回可回首頁，兩尺寸 `pageerror=[]`。
+
+## 修改紀錄：本機直接登入預覽 V424（2026-09-02）
+
+- 需求：先讓 `127.0.0.1:8787/board_start.html` 可由登入卡直接進入下一個主畫面，正式帳密整合留待部署時接回。
+- 實作：`server/index.js` 新增唯讀 `/api/board-runtime` 能力旗標；只有 loopback 主機且伺服器明確回報未啟用帳號資料庫時，`board_start.js` 才進入 `local-preview`，可空白按「登入」建立本機測試身分。正式站、非 loopback 網址與已啟用資料庫環境仍走既有同源帳密驗證。
+- 安全／相容：本機預覽不保存密碼或 secret、不呼叫正式帳號伺服器，Board 房間仍連本機 Socket；同時修正入口在 top-level await 前讀取尚未初始化常數，造成登入事件未掛載的 TDZ 問題。未新增 `gameState` 欄位或 Socket.IO event。
+- 驗證：`node --check public/js/board_start.js` 與 `node --check server/index.js` 通過；8787 `/api/board-runtime` 回傳 `accountDatabaseEnabled:false`；Chrome 實跑空白登入由 `auth` 進入 `app`，`data-entry-auth-source=local-preview` 且未寫入 `opSecret`／`op_secret`。
+
+## 修改紀錄：新世界航海錄橫向主畫面／中央登入視窗 V422（2026-09-02）
+
+- 需求：登入入口改成和《偉大航道爭霸戰》相同的全螢幕主畫面節奏；使用者提供的直式角色封面重構成真正 16:9 橫向背景，點擊後不能再顯示左封面＋右登入版面，而是在同一背景上彈出中央小視窗。
+- 素材：以內建 ImageGen 參考使用者圖片生成 `public/images/board/backgrounds/board_entry_horizontal_v1.webp`（1672×941、502,494 bytes）；四名角色、骰子、海上航線、船與四邊金框都留在畫面內。正式頁只載入 WebP，原始 1672×941 PNG 保存在 `backgrounds/incoming/`，完整提示詞記錄於 `board_entry_horizontal_v1.prompt.md`。
+- 畫面：press 階段使用橫向圖全螢幕 `cover`，正式 SVG Logo 疊在中央，底部顯示閃爍「點擊繼續」；透明 `#boardEntryStartBtn` 覆蓋完整視窗，所以滑鼠、觸控與原鍵盤入口都能繼續。auth／boot 維持同一背景，只顯示中央登入或讀取卡；移除舊左側封面 DOM，短橫向畫面套用緊湊登入排版。
+- 邊界：只修改 `public/board_start.html` 與新增入口背景素材／提示紀錄；`board_start.js`、`begin()`、secret 驗證、登入／註冊、直接 room/campaign 續接、好友、房間、存檔、Socket.IO event 與 `BOARD_GAME_STATE` 全部不變。入口使用獨立 `--board-entry-bg`，登入後 Board 主頁原 `--board-bg` 不受影響。
+- 驗證：`npm start` 在 8787 正常提供頁面（本機未設定 `DATABASE_URL` 的既有警告不影響靜態入口）。`board_home_social_qa.js` 於乾淨 8797 QA server 通過 1600×900、1024×768、390×844 的主畫面、既有 secret boot、帳密登入、四入口、好友／私訊／房邀請與雙真人 lobby，結果 `ok:true / errors:[]`。另以 Chrome 932×430 定向量測，主畫面文件為 932×430、整頁按鈕邊界為 `(0,0)-(932,430)`、Logo 完整在視窗內；登入卡為 `(251,53)-(681,377)`、無水平或垂直 overflow、舊封面節點數為 0，背景 URL 正確且 `pageerror=[]`。
+
+## 修改紀錄：青雉 Lv99／劇情內嵌選項與海上背景 V421（2026-09-02）
+
+- 需求：首次入獄青雉要比一般版本更強，玩家的放行／挑戰二選一不能跳離劇情，也不能以「逃跑」描述；背景改為參考前期青雉騎腳踏車在海上閒晃的場景。
+- 規則：只把首次入獄攔截戰建立為劇情專屬 Lv99；Marineford 正式青雉仍維持 Lv92，玩家取得的青雉／庫山資料不受影響。挑戰仍禁止中途離開與共鬥，且不提供經驗、貝里、掉落物或血統因子。
+- 畫面：放行／挑戰選項直接嵌入既有全螢幕角色劇情對話框，選擇後在同一介面接續回應；玩家可見文案改用「接受青雉放行／直接挑戰青雉」，不使用「逃跑」字樣。青雉現身到兩種回應全段共用 `public/images/board/story/backgrounds/aokiji_capture/aokiji_capture_bicycle_sea_story_v1.webp`，三張透明立繪維持前景疊圖。
+- 同步／相容：沿用 `pendingAokijiCaptureStory`、每玩家 `impelDown.aokijiFirstCaptureStorySeen`、既有 battle snapshot 與完整 `BOARD_GAME_STATE`；內部選擇值仍為 `fight`／`leave`，不新增 Socket.IO event、localStorage key 或存檔欄位。
+- 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`public/images/board/story/backgrounds/aokiji_capture/aokiji_capture_bicycle_sea_story_v1.webp`、`public/images/board/story/backgrounds/aokiji_capture/aokiji_capture_bicycle_sea_story_v1.prompt.md`、`scripts/aokiji_first_capture_story_qa.js`、`scripts/aokiji_first_capture_lan_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
+- 驗證：`node --check` 通過 `public/js/board_game.js` 與兩支青雉 QA，`git diff --check` 通過本次程式／素材紀錄／文件。`npm start` 於 8787 啟動正式入口（本機未設定 `DATABASE_URL`，靜態頁與 Socket.IO QA 可正常使用）。`aokiji_first_capture_story_qa.js` 以五個隔離 BrowserContext 實跑桌機 1600×900、短橫向 932×430、罰款不足及挑戰強制勝／敗，結果 `ok:true / failures:[] / errors:[]`；確認兩顆選項留在同一劇情對話框、統一海面冰路背景、立繪完整、無 HUD／overflow，Lv99 青雉為 HP 952／攻 304／防 282／特攻 351／特防 295／速度 206。`aokiji_first_capture_lan_qa.js` 建立 2 真人＋2 CPU 房，確認 pending／release 完整快照一致、觀看端唯讀、控制端刷新可續選、同一背景與 CPU 自動放行，`failures:[] / errors:[]`。
+
+## 修改紀錄：青雉首次入獄透明立繪接入 V420（2026-09-02）
+
+- 需求：將使用者放入專案的三張青雉去背圖統一改成正式名稱並接上首次入獄劇情；劇情仍使用原對話框，不顯示戰鬥 HP UI，左右雙臂與手掌不可被裁切。
+- 素材：正式 runtime 檔名為 `source/aokiji_capture_lazy_v3.webp`、`aokiji_capture_mercy_v3.webp`、`aokiji_capture_serious_v3.webp`。慵懶圖為 646×969，放行與認真圖為 1024×1536；三張都是有有效 alpha 的 RGBA WebP。僅改名，不重繪、縮放或覆寫圖片內容。
+- 接入：`AOKIJI_CAPTURE_STORY_PORTRAITS` 改引用 V3 WebP，主頁 query 更新為 `20260902-aokiji-cutout-portraits-v420`；舊的不存在 `*_source_v2.png` runtime 路徑不再使用。劇情規則、台詞、選項、存檔欄位及多人完整快照結構皆不變。
+- 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`public/images/board/story/aokiji_capture/`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
+- 驗證：`node --check` 通過 `public/js/board_game.js` 與青雉單機 QA。以 Codex 內建 Playwright 依賴實跑 `aokiji_first_capture_story_qa.js` 的五個隔離 BrowserContext，桌機 1600×900 與短橫向 932×430 三姿勢皆成功載入且整張立繪位於視窗內，對話／選項無 overflow、劇情中 HP HUD 不可見；全滅放行、罰款不足、挑戰強制勝／敗均完成，結果 `ok:true / failures:[] / errors:[]`。三張正式 URL 均回應 HTTP 200，`git diff --check` 通過。
+
+## 修改紀錄：首次入獄青雉攔截劇情 V419（2026-09-02）
+
+- 需求：第一次原本要因全隊瀕死／戰敗或罰款不足送進推進城時，先讓青雉以正式角色對話格式說明規則，滿狀態後由真人選擇直接挑戰或道謝離開；不可拿戰鬥圖當立繪，也不可在劇情中顯示 HP HUD。
+- 素材：本版先完成懶散抬手、伸手放行、冰手認真三張 V2 來源圖與雙臂安全構圖；CSS 使用 `contain`，並為 560px 以下橫向畫面限制人物高度，避免容器伸出視窗。使用者後續完成的透明正式圖與 runtime 路徑已由 V420 接替。
+- 規則：新增每玩家一次的 `impelDown.aokijiFirstCaptureStorySeen` 與全局 `pendingAokijiCaptureStory`。首次攔截立即滿 HP／PP並保存原押送來源；放行後依來源繼續或換回合。挑戰沿用 Marineford 青雉，禁止逃跑／共鬥與所有獎勵；勝利放行，敗北／投降正式入獄。CPU 自動放行，觀看端按鈕唯讀。
+- 同步／恢復：pending、選擇、battle snapshot 均走既有完整 `BOARD_GAME_STATE`，沒有新增 Socket.IO event 或 localStorage key；劇情選擇前、選擇後、挑戰開始／結束都強制推送，刷新可恢復幕次與控制權。既有澤法爆炸 QA 先標記本旗標，避免其專項測試被新的一次性劇情攔截。
+- 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`public/images/board/story/aokiji_capture/`、`scripts/aokiji_first_capture_story_qa.js`、`scripts/aokiji_first_capture_lan_qa.js`、`scripts/postgame_zephyr_end_point_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
+- 驗證：`node --check` 通過主程式與三支相關 QA；`aokiji_first_capture_story_qa.js` 以五個隔離 BrowserContext 實跑全滅放行（1600×900／932×430）、罰款不足、挑戰強制勝／敗，確認台詞、兩顆選項、滿 HP／PP、無 HUD、無 overflow、每張立繪整體都在視窗內，`failures=0 / errors=0`。`aokiji_first_capture_lan_qa.js` 以本機 Socket.IO 建立 2 真人＋2 CPU 房，確認 pending／release 完整快照一致、觀看端不能選、控制端刷新仍可選、CPU 自動放行，`failures=[] / errors=[]`。`refresh_resume_qa.js` 與 `postgame_zephyr_end_point_qa.js` 均 exit 0；`git diff --check` 通過。`npm start` 已有 8787 正式服務持續監聽，本輪沿用該服務完成 HTTP、Chrome 與 Socket.IO 驗證。
+
+## 修改紀錄：新世界航海錄主畫面／登入入口 V418（2026-09-02）
+
+- 需求：從桌遊收藏點入 `board_start.html` 時，不再立即攤開玩家卡、房間、紀錄與好友；操作節奏改成和《偉大航道爭霸戰》一致的「主畫面 → 登入 → 主選單」。
+- 畫面：新增全螢幕《新世界航海錄》主畫面，只保留既有核准封面、正式 Logo、簡短引導與「開始航海」；第二層為深海金色登入／註冊卡。桌機左右分欄，390px 手機改為封面底圖＋置中表單；登入前 `.page`、好友 dock、聊天室與邀請框都不建立。
+- 帳號：沿用同源 Socket.IO 的 `AUTH_LOGIN`／`AUTH_REGISTER`／`PROFILE_GET`，有效既有 `opSecret` 只需在主畫面按一次便驗證進入，不重選名稱與頭像。驗證成功後才同步 `opSecret`／`op_secret`、`op_user_id`、Board user id、名稱、頭像、稱號與金幣，再初始化原 `BoardShared`、campaign 與房間流程；只記住最後帳號，不新增或保存密碼。
+- 銜接：登入後仍只顯示 V394 的「開始航海／繼續航海／好友與聊天室／玩家資料」四入口；`view=lobby|modeSelect|campaigns|social`、`room`、`campaign` 會先驗證身分再直達。`SESSION_KICK` 改回本頁 `?kicked=1` 登入畫面，不再跳到卡牌頁。
+- 驗證：`node --check` 通過；`board_home_social_qa` 以隔離假帳號實際送出 `AUTH_LOGIN`、取得 `PROFILE_GET` 並確認不保存密碼，再於 1600×900、1024×768、390×844 驗證主畫面、登入／註冊、有效 secret boot、四選單、好友接受、即時私訊、房邀請、雙真人同房及直達 lobby，結果 `ok:true / errors:[]`。`board_portable_asset_prefetch_qa` 亦在先通過帳號入口後通過：108/108 暖載、0 解碼預建、96 張地圖圖、26 次導覽快取命中、強制首敗後重試成功，`errors:[] / failures:[]`。
+- 邊界：不修改帳號 schema、`AUTH_*`／`PROFILE_GET` payload、房號、campaign schema、任何 `BOARD_*` event、`BOARD_GAME_STATE`、遊戲規則或三款遊戲的其他入口。
+- 修改檔案：`public/board_start.html`、`public/js/board_start.js`、`public/js/board_shared.js`、`scripts/board_home_social_qa.js`、`scripts/board_home_social_qa_server.js`、`scripts/board_portable_asset_prefetch_qa.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
+
+## 修改紀錄：啟動頁 Logo 上移避讓 V417（2026-09-01）
+
+- 問題：V415 的 Logo 為 `680×226.6625` 並位於 `y=30.35`，底部到 `257.0125`；盒架與三盒從 `y=213.8` 開始，因此靜態重疊約 43.2px，Hover 抬盒後重疊更大。
+- 修正：只把 `.launcher-brand` 改為 `top:0 / width:560px`，完整保留圖片且維持水平置中；Logo 新尺寸 `560×186.6625`、`x=490 / y=0`。`.game-shelf` 加入 `z-index:3`，避免陰影接觸時覆蓋盒面；三盒座標、尺寸、影片四點透視及 href 全部不動。HTML cache query 更新為 `20260901-logo-clearance-v19`。
+- 驗證：`1540×660` 下 Logo 與靜態盒架間距為 27.1375px；中盒 Hover 後頂端 `y=194.6`，仍有 7.9375px 淨空。`1280×720`、`390×844`、`932×430` 的換算回設計畫布間距均為約 27.1375px，頁面零 overflow；瀏覽器截圖確認 Logo 不裁切且不擋盒子。Hover 影片實播成功，離開後三支 `src/currentSrc` 全釋放，頁面 console warning／error 為 0。
+- 邊界：沒有修改三盒位置、V416 展示成片、三款遊戲入口、規則、存檔、Socket.IO event 或 `BOARD_GAME_STATE`。
+- 修改檔案：`public/game_launcher_preview.html`、`public/css/game_launcher_preview.css`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
+
+## 修改紀錄：固定比例三盒完整 Hover 成片 V416（2026-09-01）
+
+- 需求：依使用者已確認的正式啟動頁比例與位置重新錄製，不再沿用 V414 的 1920×1080 錄影構圖；Logo、背景與三盒必須和目前 `1540×660` 核准頁完全相同，並由左至右逐盒完整播完才移到下一盒。
+- 錄製：OBS Browser Source、Base／Output／來源全部固定 `1540×660`、60fps、1:1、BT.709；直接載入正式 `game_launcher_preview.html`，不經 iframe、Chrome 外框或桌面 DPI 擷取。錄影期間以一次性 query 控制器預載三支 V2 短片、加入白色游標，並逐支等待真正的 `ended` 事件；錄完已把 HTML／JS 還原為 V415 原始 SHA-256。
+- 輸出：新增 `public/videos/game_launcher/game_launcher_three_box_hover_demo_fixed_v3.mp4`，33.32 秒、H.264 High、1540×660、60fps、yuv420p、BT.709、無音軌、faststart，5,281,841 bytes，SHA-256 `C43992845B00A05AE9C21673CDB89A19F7C3595C7E3362CB0722E72ED503033C`。V414 的 V2 成片保留且未覆蓋。
+- 驗證：瀏覽器預演完成狀態為 `complete`，核准三盒座標仍為 `x≈180.6625 / 619.9875 / 1059.325`、`y=213.8`、各 `300×400`；OBS 四張原生 screenshot 與成片 5.5／14.8／24.0 秒抽幀均確認 Card／Board／Chess 正確貼合各自梯形盒面。OBS 實際輸出 2000 幀、成片 metadata 為 7:3／60fps 且只有一條視訊流。一次性 OBS profile／scene、WebSocket 開關、錄影控制程式與正式頁暫時 query 均在錄完後還原或移除。
+- 修改檔案：`public/videos/game_launcher/game_launcher_three_box_hover_demo_fixed_v3.mp4`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
+
+## 修改紀錄：啟動頁固定核准構圖 V415（2026-09-01）
+
+- 基準：直接量測使用者目前開啟且確認最滿意的正式候選頁，CSS viewport 為 `1540×660`。核准座標固定為 Logo `x=430 / y=30.35 / 680×226.6625`、盒架 `x=127 / y=213.8 / 1286×406.6`，三盒各 `300×400` 並位於 `x≈180.6625 / 619.9875 / 1059.325`、`y=213.8`。
+- 實作：新增 `1540×660` 的 `.launcher-stage`，把背景、暗角、Logo 與三盒包進同一張固定 7:3 設計畫布。移除會分別重排 Logo、間距、盒寬與手機橫向捲動的寬高 media query；JS 只依目前根視窗的可用寬高取單一比例、整張置中縮放，較寬或較高螢幕以深海黑留邊，不拉伸、不裁切、不改物件相對位置。query 更新為 `20260901-fixed-composition-v18`。
+- 互動：三個原 href、300×400 盒面、Hover 抬盒、160ms 按需影片、單盒播放、離開釋放、四點透視矩陣、觸控／reduced-motion 限制均保留；外層 transform 不改內部 300×400 邏輯座標。
+- 邊界：只修改隔離候選啟動頁及其專用 CSS／JS；未修改卡牌、Board、Chess 的入口、登入、房間、存檔、Socket.IO event、`BOARD_GAME_STATE` 或任何遊戲規則。
+- 驗證：重新載入原 `1540×660 @ DPR 1.25` 分頁後，Logo、盒架、shell 與三盒所有座標／尺寸逐項和修改前完全相同。另在 `1280×720`、`932×430`、`390×844`、`1920×1080` 重新載入，四種尺寸皆完整置中、零頁面 overflow，換算回設計畫布的最大幾何誤差小於 `0.00011px`；三盒 V2 影片逐盒實播成功，離開後 active/source 皆歸零。`node --check public/js/game_launcher_preview.js` 通過，頁面、V18 CSS／JS 均 HTTP 200，啟動頁自身 console warning／error 為 0。
+- 修改檔案：`public/game_launcher_preview.html`、`public/css/game_launcher_preview.css`、`public/js/game_launcher_preview.js`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`、`docs/DEV_WORKFLOW.md`。
+
+## 修改紀錄：啟動頁三盒完整 Hover 示範影片 V414（2026-09-01）
+
+- 修正：V413 錄影 fixture 的 iframe 在 OBS Browser Source 中只取得半高動態 viewport，造成頁面被壓在上半部；第一次又誤裁到播放前的靜止段，因此 V1 已自正式影片目錄撤下並移到 `_codex_artifacts/rejected/`。V414 改成直接渲染啟動頁 DOM，以固定 1920×1080 錄影畫布和獨立背景層保持正式頁比例。
+- 輸出：新增 `public/videos/game_launcher/game_launcher_three_box_hover_demo_v2.mp4`。錄影開始後才載入帶 `run` 參數的頁面，游標依序停在偉大航道爭霸戰、新世界航海錄、霸海戰棋；每盒均等待其 V2 預覽影片真正觸發 `ended` 後才移往下一盒，控制器於 33 秒自動停止。
+- 邊界：沒有修改正式啟動頁互動、三款遊戲入口、規則、存檔、同步或三支 V2 盒內短片；OBS WebSocket、隔離 profile／scene 均已還原與移除。
+- 驗證：錄影前以 OBS 原生 1920×1080 screenshot 分別確認完整背景、正常比例及 Card／Board／Chess 三盒實際播放畫面；成片 3 秒間隔接觸圖確認三段依序出現且沒有半高黑屏。V2 為 32.82 秒、H.264 High、1920×1080、60fps、BT.709、無音軌、6,842,320 bytes，SHA-256 `405677B05ACC17EB71313B985E06A7772C8BE16D1F93CE58D2D96E43F1BC0310`。
+
+## 維護紀錄：Codex 測試截圖與 QA 輸出清理（2026-09-01）
+
+- 範圍：只整理專案根目錄的 `_codex_artifacts`；先逐一解析絕對路徑並確認都位於該目錄，保留目前啟動頁 V2 所需的 `game_launcher_video_v2`，再移除 29 個 2026-08-24～2026-08-27 已結束測試的 QA 子目錄、13 張舊根目錄測試截圖，以及本次錄影的暫存逐幀圖、失敗 take、OBS 臨時設定與一次性 capture server。
+- 保留：`game_launcher_video_v2/contact_sheets/` 只留下 Card／Board／Chess 三張最終 V2 接觸圖，`filters/` 留下三份最終 FFmpeg filtergraph；正式 `public` 素材、遊戲程式、存檔、`tmp`、`backups`、`_codex_backups` 均未動。
+- 使用者確認「大清理」後，第二階段以固定絕對路徑、預期 byte 數、目錄邊界、reparse point 與 writer lock 兩階段驗證：永久刪除 5 個已完成啟動頁子代理 JSONL、封存的「0815」／舊 Board UI 接手／推進城示範共 8 個聊天室檔（10,617,787,453 bytes），18 個已確認不再使用的 Codex 生圖目錄（2,166,198,345 bytes），以及使用者 `.codex/qa`、`.codex/.tmp` 與專案 `.codex/qa`（384,235,447 bytes）。正在寫入的 `.codex/cache` 未刪。
+- 驗證：本次大清理合計移除 13,168,221,245 bytes，磁碟實測增加 13,173,760,000 bytes；目前聊天室 `01a0185f…`、未完成 FR-U 4、反方向受擊圖、`opposite_hit_support`、最近兩份正式 Logo 生圖及三支正式 V2 MP4 均存在。`session_index.jsonl` 的 3 行已刪聊天室舊索引已移除且目前聊天室索引保留；Codex 封存清單已不再顯示三個被刪舊聊天室。`_codex_artifacts` 仍只剩目前工作目錄的 6 個最終 QA 檔，共約 0.78 MiB。
+
+## 修改紀錄：啟動頁真正 3:4 動態取景 V412（2026-09-01）
+
+- 問題：V410 雖輸出為 `720×960`，內容仍是橫向實機畫面置中，上下用同幀模糊延伸；放進直式桌遊盒後，主要人物與動作只占中間一條，不能算真正的直式剪輯。使用者另指定 Board 改播戰鬥片段，不再使用擲骰航行遭遇。
+- 錄製：以隔離 OBS Browser Source 重新錄下三段 `1920×1080`、60fps 正式頁演出。卡牌為維薩利亞場地、抽到 `3` 號香吉士、打出後選玩家 PK；Board 為五檔魯夫對覺醒羅布・路基、選招、擲骰、出手與命中；Chess 為 KING「丹弓皇」。fixture／測試局面只存在錄影服務，未寫回正式牌堆、Board state 或棋局。
+- 剪輯工具：新增 `scripts/game_launcher_video/render_true_3x4.py` 與三份 `plans/*.json`。每鏡先依時間切段，以 cosine ease 追蹤 `panX/panY` 與最多 1.2 倍 zoom，再從 16:9 母帶取真正 `810×1080` 視窗並縮成 `720×960`；全片沒有 padding、黑邊或模糊補圖。工具會拒絕非 1920×1080 母帶、非 `_v2.mp4` 輸出與既有輸出，FFmpeg 使用 `-n` 防止覆蓋。
+- 成片：三支皆為 H.264 High、30fps、BT.709、yuv420p、無音軌、faststart。`card_sanji_duel_preview_v2.mp4` 為 8.40 秒／1,554,991 bytes／SHA-256 `EABF37EB247D6EA0E17AF056558344D850C1A29DE8E4D7D628F49FCF02BF8D08`；`board_battle_preview_v2.mp4` 為 8.50 秒／2,781,349 bytes／SHA-256 `8E9511275A0690B442CFDBD250C9169FF62E3988B3D677C36786C5D9A33F1798`；`chess_king_attack_preview_v2.mp4` 為 5.70 秒／1,536,652 bytes／SHA-256 `15F929A037203C058FD2135573D2C048794B20EEFBDCA205D84842CAA47D3DB8`。
+- 接入：`game_launcher_preview.html` 改讀三支 V2，CSS／JS query 更新為 `20260901-hover-clips-v16`。V411 的各盒 `data-preview-quad`、homography `matrix3d`、延遲載入、一次只播一盒、離開釋放、reduced-motion 與觸控停用規則全部沿用。
+- 邊界：只改隔離候選啟動頁的影片來源、版本化成片、可重建剪輯工具與文件；沒有改卡牌、Board、Chess 的正式入口、規則、存檔、同步、音樂、Socket.IO event 或 `BOARD_GAME_STATE`。
+- 驗證：三支母帶均確認為 1920×1080／60fps；三支 V2 均確認為 720×960／30fps／3:4／BT.709 且無音軌。逐段 2fps 接觸圖人工檢查香吉士卡面與 PK、五檔／路基／骰子／命中跳字、KING 題字／飛行／命中均位於直式裁框，未出現黑邊、模糊補邊或人物拉伸。`node --check public/js/game_launcher_preview.js` 與 `py -3 -m py_compile scripts/game_launcher_video/render_true_3x4.py` 通過；獨立 `PORT=8830 npm start` 成功監聽，候選頁、V16 CSS、V16 JS 均 HTTP 200，三支 V2 均以 `Range: bytes=0-1023` 回傳 HTTP 206／`video/mp4`。本機未設 `DATABASE_URL` 的提示為既有靜態預覽行為，測試服務完成後已關閉。
+
+## 修改紀錄：啟動頁影片四點透視 V411（2026-09-01）
+
+- 問題：V410 的三段影片已用各盒面的 `clip-path` 裁成梯形邊界，但影片內容本身仍維持水平矩形；盒框雖能遮住四邊，遊戲畫面的水平線與垂直線不會隨盒面傾斜，看起來仍像平面影片疊在盒子上。
+- 實作：三個 `.game-slot` 新增各自沿用 V406 盒框內緣的四點百分比座標。`game_launcher_preview.js` 依 `.box-front` 實際寬高建立 homography，輸出響應式 `matrix3d` 到 `--preview-warp`，把影片左上、右上、右下、左下真正映射到對應盒面四角；`ResizeObserver` 會在盒面尺寸改變時重算。影片改用 `object-fit:cover`、左上為 transform origin、取消影片本身的 clip-path，反光層仍使用原四點裁切，外框繼續位於最上層遮邊。
+- 穩定性：投影矩陣保存在 `.game-slot` CSS 變數，不掛在會被停止播放流程替換的 `<video>` 節點，因此切換盒子、離開後釋放媒體圖層再重新播放，四點透視都不會遺失。三支 V410 MP4 未重新編碼、改名或覆蓋；query 更新為 `20260901-hover-clips-v15`。
+- 邊界：只調整隔離候選啟動頁的 HTML／CSS／JS 顯示層；三個入口、影片內容、卡牌／Board／Chess 規則、登入、房間、存檔、Socket.IO event 與 `BOARD_GAME_STATE` 均不變。
+- 驗證：`node --check public/js/game_launcher_preview.js` 通過。瀏覽器 `1280×720` 逐盒播放確認三支影片內容均隨盒面傾斜、四角受各自外框遮住，切換時仍只有目前盒子的影片有 `currentSrc` 並播放。以 `300×400`、手機盒寬 `278×370.6667`、放大 `900×1200` 三種尺寸逐角反算，三盒最大四角誤差不超過 `2.274e-13 px`。獨立 `PORT=8829 npm start` 成功監聽；候選頁、V15 CSS、V15 JS 均 HTTP 200。本機未設 `DATABASE_URL` 的提示為既有靜態預覽行為，測試服務完成後已關閉。
+
+## 修改紀錄：三盒正式玩法 Hover 短片 V410（2026-09-01）
+
+- 需求：滑鼠移到桌遊盒時，不增加文字、按鈕或遮住封面，而是在盒面內播放各遊戲的精彩實機片段。三段內容固定為：卡牌抽到並打出 `3` 號香吉士後選玩家 PK；Board 擲骰、逐格航行並觸發海格遭遇；Chess 由 KING 以相鄰斜吃施放「丹弓皇」。
+- 錄製：三段均由正式程式流程實際觸發，不是另做假動畫。卡牌使用只存在於錄製程序的隔離房間配置，把真人手牌設為 `8`、下一抽設為 `3`、對手手牌設為 `2`，仍依正式 `DRAW → PLAY_CARD → PICK_TARGET → duel` 結算；Board 只在錄影頁暫存狀態中把 `route-island-8-island-9` 的海格設為遭遇格，正式點船、擲出 3、逐格航行到情報面板；Chess 使用正式 `king-bishop` 的 `d4 → e3` 相鄰斜吃與 `king-tankyudon` 動畫。這些錄影 fixture／FEN 都沒有寫進遊戲 runtime。
+- 素材：成片獨立放在 `public/videos/game_launcher/`，不混入三款遊戲原素材目錄。三支皆為 `720×960`、H.264 High、24fps、無音軌、faststart：`card_sanji_duel_preview_v1.mp4` 為 8.00 秒／464,771 bytes／SHA-256 `9F039D43208D99A5205C55F42B3D6B15123E37761AEA38D2EDC88DCD13B4069E`；`board_roll_encounter_preview_v1.mp4` 為 7.58 秒／543,694 bytes／SHA-256 `FB202D36820DC43F9DF7B4D19B283A44E89F73DD30B506D25533C39A3A5FDCA3`；`chess_king_attack_preview_v1.mp4` 為 5.50 秒／374,048 bytes／SHA-256 `9262E8FC3DC33B661F9A674BFA7C71EA9921D217A25CB5BCE2F92CB2FA56902D`。橫向實機畫面置於直式盒面的清楚中央視窗，上下以同幀暗化模糊延伸，不拉伸人物。
+- 播放：`game_launcher_preview.html` 的三個 `.box-front` 各加入一個沒有 `src` 的 muted／playsinline／loop `<video>`；`game_launcher_preview.js` 只在 `(hover:hover) and (pointer:fine)` 且未要求 reduced motion 時，停留 160ms 後才從 `data-src` 載入。一次只播放一盒，真正 `play()` 成功才淡入；離開、失焦、切換分頁或媒體偏好變更會立即停播、歸零並替換成乾淨 video 節點，既釋放硬體影片圖層又保留瀏覽器 HTTP 快取。影片 `pointer-events:none`，整盒原連結仍是唯一點擊區。三款影片分別沿用 V406 的梯形 clip-path，外框、反光和 hover 抬盒仍在影片之上；query 更新為 `20260901-hover-clips-v14`。
+- 邊界：只改隔離候選啟動頁、專用 CSS／JS、三支啟動頁影片與文件；沒有改卡牌牌組／香吉士規則、Board 擲骰／遭遇／`BOARD_GAME_STATE`、Chess KING 規則或三款入口，也沒有新增存檔欄位、localStorage key、Socket.IO event、登入或部署路由。
+- 驗證：`node --check public/js/game_launcher_preview.js` 通過；三支影片與 HTML／CSS／JS 皆 HTTP 200、影片支援 byte range。瀏覽器 `1280×720` 實測初始三支 `currentSrc` 全空、滑入後才載入與播放、切換時只有一支播放、離開後 `src`／`currentSrc` 清空且三盒完整復原；修正並複驗「播放過的中盒在另一盒播放時消失」的媒體合成層問題。`390×844` 觸控模擬為 `hover:false`、三支零載入、`scrollWidth=390`；`932×430` Logo bottom `134.48`、盒面 top `171.88`、零重疊且無頁面 overflow。reduced motion 模擬下滑入仍零載入；console warning／error 為 0。
+
+## 修改紀錄：手繪 TABLETOP SERIES 頂部 Logo V409（2026-09-01）
+
+- 需求：V408 移除冗長標題後仍需在三盒上方保留一枚真正畫出的系列 Logo；使用者否決像第四款遊戲名稱的「冒險港」，最後確認只使用主字 `ONE PIECE` 與小字 `TABLETOP SERIES`，不再加中文名稱、引導句或預覽標籤。
+- 素材：使用內建 ImageGen 產生透明 `2172×724 RGBA` 橫向徽章 `public/images/game_launcher/launcher_tabletop_series_logo_v1.png`，SHA-256 為 `2AE34A49D112F92FBE44BF30C4489AE9A1D7A2D100BF5669121E0BC4B5E91355`。黃銅、深海藍、海浪、羅盤、船舵、卡牌、骰子與棋子均燒在同一張圖內；字樣只有 `ONE PIECE`／`TABLETOP SERIES`。未採用的命名草稿只留在 ImageGen 生成紀錄，沒有接入或保留於專案 runtime 素材目錄。
+- 接入：`game_launcher_preview.html` 預載 Logo，頁面標題改為 `ONE PIECE TABLETOP SERIES`；可見 `h1` 只包含這張圖片與同名 `alt`，不使用 HTML／CSS 重排文字。Logo 絕對定位在盒架上方，桌機不改 V408 盒面落桌位置；手機縮至 92～96vw，短橫向視窗另外限制為 42vw。CSS query 更新為 `20260901-tabletop-series-logo-v11`。
+- 邊界：仍為隔離候選啟動頁；三個盒子的 href、V406 專屬盒框、透視封面、卡牌／Board／Chess 程式、根路由、部署、登入、房間、存檔、Socket.IO event 與 `BOARD_GAME_STATE` 全部不變。
+- 驗證：素材為 `Format32bppArgb`，四角 Alpha 皆為 0；瀏覽器實測 `1280×720`、`390×844`、`932×430`。桌機 Logo 與三盒完整同屏；手機 Logo `374.8×124.9`、第一盒完整顯示且頁面 `scrollWidth=390`；短橫向 Logo bottom `134.5`、盒面 top `171.9`，零重疊且頁面尺寸維持 `932×430`。圖片解碼完成、三個連結存在、console warning／error 為 0。另以 `PORT=8827 npm start` 啟動，候選頁、V11 CSS、Logo 與三個入口共 6 個網址均 HTTP 200；未設 `DATABASE_URL` 為既有本機靜態預覽提示。
+
+## 修改紀錄：啟動頁純盒面陳列 V408（2026-09-01）
+
+- 需求：使用者不喜歡頁面額外顯示的 `ONE PIECE GAME COLLECTION`、`偉大航道遊戲收藏`、引導句與「啟動首頁設計預覽」，並認為標題過多、過雜。
+- 介面：`game_launcher_preview.html` 移除整個可見標題區與底部預覽說明，只留下航海收藏室背景與三個完整可點桌遊盒；封面本身的正式 Logo 成為唯一可見名稱。瀏覽器頁籤標題縮成 `ONE PIECE`，另保留螢幕閱讀器專用的隱藏 `選擇遊戲` 標題。
+- 排版：桌機用單列滿高 grid 固定原本盒面落桌位置，移除標題後不讓盒子上飄；手機維持水平 scroll snap，改為在可視高度內置中。三個 href、盒彩框、封面、hover／focus 與盒面透視均不變；CSS query 更新為 `20260901-titleless-shelf-v10`。
+- 邊界：仍是隔離候選頁，不取代正式根路由，不改卡牌、Board、西洋棋程式、登入、房間、存檔或 Socket.IO event。
+- 驗證：現有 8787 服務下候選頁與三個入口均 HTTP 200；DOM 只剩一個不可見無障礙標題、三個遊戲連結與三張封面，五段不需要的可見文案均為 0。瀏覽器實測桌機 `1280×720` 與手機 `390×844`：桌機盒架位置維持 `top≈270 / bottom≈677`，手機第一盒完整顯示並保留左右滑動。
+
+## 修改紀錄：新世界航海錄 BGM 連貫性 V407（2026-09-01）
+
+- 問題：短 modal、換玩家、重複 render 與大量 `force:true` 會讓不同 `musicScope` 立刻換曲；選曲器又刻意排除正在播放的歌曲。新音檔尚未成功播放時，舊版管理器已先改寫 current 狀態，因此手機載入慢或 autoplay 失敗時可能出現中斷、錯歌或重疊。
+- 播放器：`bgm_manager.js` 改為「準備新音檔並成功 `play()` 後才交棒」，使用約 2.6～3.2 秒交叉淡化、最新請求序號、可取消的延後切換、同曲不重播、戰鬥／高潮保留期與鎖定後只處理最後場景。失敗會清理候選 Audio 並保留舊曲；既有公開 API、`board_bgm_enabled`／`board_bgm_volume` key 與父頁共用方式維持。
+- 片段：56 首 `bgm_new` OST 逐首加入 `cueInSec`、`cueOutSec` 與 `gainDb`，播放時跳過實測首尾靜音並於 cue 區間循環，不修改原始 MP3；循環點會先短淡出、回到 cue-in 再淡入，避免整首播完後硬跳接。音量修正限制在 -4～+6 dB；34 秒的 `more_and_more` 改為不循環且避免過度使用。20 首 `bgm/` 主題曲仍獨立保留，不在普通小場景間輪切。
+- 導演：海上、一般島嶼、冷／熱島、商店、酒館、醫院、研究所、海上事件、一般戰、13 名周目 Boss、洛克斯、高潮、勝利、推進城樓層、頂上戰爭及各段漫畫劇情均有明確首選曲。登島選擇沿用地圖曲；Boss 遭遇視窗直接沿用即將開戰的專屬曲，不先插播一次通用前奏；服務 modal 停留 8 秒、事件停留 5 秒後才換，期間關閉會取消；整段漫畫劇情只建立一個 story scope，不逐幕切歌。
+- 影片：新增可巢狀 audio focus。卡塔庫栗見聞色與頂上戰爭霸王色影片播放時把 BGM 壓至 8%／6%，期間連舊 `force` 也不能換曲；結束、錯誤、逾時或離頁均釋放並平滑恢復。既有五檔與六王銃專屬流程不改。
+- 邊界：只改 Board 音樂 metadata、選曲、播放控制、Board／戰鬥／Marineford 接點、cache query、專項 QA 與文件；沒有新增 `BOARD_GAME_STATE` 欄位、Socket.IO event、角色／道具／地圖 id 或存檔 schema，也沒有碰卡牌與西洋棋遊戲。
+- 驗證：`node --check` 通過六份修改／測試 JS；`node scripts/board_bgm_continuity_qa.js` 驗證 56／56 音檔、片段／音量、首選路由、14 組周目／洛克斯 Boss 接線、只保留最後解鎖請求、短場景取消、同曲延續、載入失敗回復、cue loop、focus 鎖與靜態接線並 PASS。`PORT=8798 npm start` 成功監聽；正式頁、三支 BGM JS 與 5.36 MiB 冷島 MP3 均 HTTP 200，MP3 支援 byte range。本機未設 `DATABASE_URL` 為既有靜態預覽提示；當次沒有可用瀏覽器控制連線，因此沒有宣稱額外互動式／聽感 QA。
+
+## 修改紀錄：三款專屬盒彩框／逐框透視 V406（2026-09-01）
+
+- 素材：將使用者完成去背的棕紅、海藍、黑紫盒框非破壞性另存為 `launcher_card_box_frame_cutout_v1.png`、`launcher_board_box_frame_cutout_v1.png`、`launcher_chess_box_frame_cutout_v1.png`；三張均為 `1086×1448 RGBA`。SHA-256 依序為 `B5CF8BA94BE335BC9087FC497383C25D3DEF86960BF9F8C38E0C3AA7CE3AA59E`、`2C7BD3EF0AB2E746F92BFA19A2ED661D5C18747D8860EF7EAD7EB5FACD4CE0AA`、`85896BEF4C9A5E1839378307E82AE1F45B291BC3BE85A77D38A22102742014B5`；Downloads 來源及 V405 共用框都保留。
+- 校準：三框的透明開口不同，`build_game_launcher_perspective_covers.py` 改為每個 job 各自保存 frame 與 homography quad。卡牌使用 `(74,155)`／`(887,172)`／`(887,1322)`／`(74,1265)`，Board 使用 `(70,133)`／`(882,154)`／`(882,1313)`／`(70,1255)`，Chess 使用 `(76,134)`／`(890,153)`／`(890,1357)`／`(75,1298)`；輸出升版為 card V2、Board／Chess V5。
+- 接入：候選頁三個 frame `src` 與 preload 分別改讀專屬框，三張封面改讀逐框透視成品；反光層也拆成三組 matching polygon。盒子 DOM、三個 href、hover、桌機三欄、手機水平 scroll snap 與 `1086:1448` 比例不變；CSS query 更新為 `20260901-themed-box-frames-v9`。
+- 防呆：重建工具會找出各框最大的封閉透明開口與外部透明畫布；任何開口未覆蓋或封面溢出外框都直接失敗，避免只靠目視判斷。
+- 邊界：只改隔離啟動頁、專用 CSS、版本化盒彩框／封面衍生圖、重建工具及文件；正式首頁、部署、登入、房間、存檔、Socket.IO event、遊戲規則與 `BOARD_GAME_STATE` 均未更動。
+- 驗證：三張合成圖以原尺寸目視，四角、斜底邊、右側盒脊、人物及 Logo 都正常；重建結果分別為開口 `902,861`／`911,217`／`947,272` pixels，三者皆 `uncovered=0`、`min_alpha=255`、`outer_spill=0`。既有 8787 服務下候選頁、V9 CSS、三框、三封面及三入口共 11 個網址皆 HTTP 200。瀏覽器控制當次沒有可用連線，因此未宣稱額外的互動式瀏覽器截圖。
+
+## 修改紀錄：四角透視封面校準 V405（2026-09-01）
+
+- 問題：V403／V404 仍是把正面圖片鋪在盒框後方再用 CSS 裁切，沒有把封面四個原始角真正映射到盒框四角；即使不露縫，圖面線條仍不像印刷在斜盒面上。
+- 校準：由 `launcher_box_frame_cutout_v3.webp` 透明開口的四條直邊線性擬合，交點約為左上 `(76,161)`、右上 `(885,179)`、右下 `(885,1319)`、左下 `(76,1264)`。正式輸出使用各向外約 2 px 的 `(74,158)`、`(887,176)`、`(887,1322)`、`(74,1266)`，讓抗鋸齒邊也由盒框而非頁面背景覆蓋。
+- 產物：新增 `scripts/build_game_launcher_perspective_covers.py`，以 OpenCV homography 將每張完整來源封面的四角一對一轉換到上述四點，輸出同為 `1086×1448` 的透明畫布：`launcher_card_cover_perspective_v1.png`、`launcher_board_cover_logo_perspective_v4.png`、`launcher_chess_cover_logo_perspective_v4.png`。來源 `cover.jpg` 與兩張 V3 使用者成品均未覆蓋。
+- 接入：候選頁三張 `src`／preload 改讀透視成品；`.box-front` 回到完整畫布，不再用 CSS polygon 假裁封面，圖片一律 `object-fit:contain`。反光層單獨使用同一四點 polygon，hover 只調色、不再放大封面，確保任何互動狀態四角都不偏移。CSS query 更新為 `20260901-four-corner-perspective-v8`。
+- 邊界：只改隔離啟動頁、專用 CSS、版本化衍生圖、重建工具與文件；三個 href、遊戲規則、正式首頁、部署、登入、房間、存檔、Socket.IO event 與 `BOARD_GAME_STATE` 均未更動。
+- 驗證：三張透視成品逐張與正式盒框原尺寸疊合目視，四角、Logo、人物及斜底邊皆對齊。再以盒框最大內部透明連通區 903,939 pixels 逐像素比對，三張成品的 `alpha=0` 未覆蓋像素皆為 0；既有 8787 服務下候選頁、V8 CSS、三張透視成品與盒框共 6 個網址均 HTTP 200。
+
+## 修改紀錄：使用者正式封面／霸海戰棋正名 V404（2026-09-01）
+
+- 素材：使用者提供兩張已含正式 Logo 的完整封面，非破壞性另存為 `public/images/game_launcher/launcher_board_cover_logo_v3.png`（`998×1360`、SHA-256 `801C9858A326099C0D8C024853FD43FD420FFD6A79C93868B19CC4B4312DC5EC`）與 `launcher_chess_cover_logo_v3.png`（`1086×1448`、SHA-256 `FD157C20872DE0364EF0A007581A7FA23CB6B53F221E85FCAD7333F36181C7EE`）。Downloads 來源、V1／V2 封面及舊 SVG Logo 全部保留、沒有覆蓋。
+- 接入：候選頁的 Board／Chess `src` 與 preload 改讀兩張 V3 成品；因 Logo 已燒進封面，移除兩個 `.box-logo` 節點、兩張 SVG preload 與未再使用的 CSS 規則，避免雙重 Logo。V403 全出血盒面與使用者挖空盒框繼續共用。
+- 正名：Chess 顯示名稱與 `aria-label`／`alt` 由「霸海棋戰」統一改為「霸海戰棋」，與使用者提供的成品 Logo 一致；遊戲 href 仍為既有 `battle_chess/index.html`。
+- 邊界：只改隔離啟動頁、專用素材／CSS 及文件；不改 Chess 內部規則、Board、卡牌、正式根路由、部署、登入、房間、存檔、同步或 `BOARD_GAME_STATE`。CSS query 更新為 `20260901-provided-cover-v7`。
+- 驗證：兩張 V3 成品依正式 V6 全出血 polygon 合成並疊上 `launcher_box_frame_cutout_v3.webp` 逐張目視，人物、Logo、右側與右下皆填滿且無空隙。既有 8787 服務下候選頁、V7 CSS、兩張新封面與盒框共 5 個網址均 HTTP 200；runtime `.box-logo` 節點為 0，舊名稱為 0，新名稱為 2。
+
+## 修改紀錄：右下全出血補滿 V403（2026-09-01）
+
+- 問題：V402 把右邊整條邊線由上到下提早內縮到 93%，但實際盒框開口的右側在大部分高度保持垂直，只有最底端才由黃銅護角收進去，因此右下透明開口可能露出頁面背景。
+- 修正：保留 V402 的正面範圍、圖片透視比例與斜底邊，將裁切改為 `polygon(0 0, 100% 0, 100% 100%, 0 94.5%)`。封面完整延伸到右上、右下與盒框底部，實際斜面和護角改由 `launcher_box_frame_cutout_v3.webp` 本身遮出，不再以 CSS 過早切掉圖片。
+- 邊界：只改候選啟動頁 CSS 與 cache query；封面、Logo、盒框、href、正式首頁、部署、存檔、同步與規則均未更動。query 更新為 `20260901-full-bleed-cover-v6`。
+- 驗證：用 `1086×1448` 正式 Board 封面依 V6 polygon 合成並疊上正式盒框目視，頂、左、右與右下透明開口均有圖，底邊由盒框自然遮成斜面且沒有黑縫；既有 8787 服務下候選頁與 V6 CSS 均 HTTP 200。
+
+## 修改紀錄：盒面梯形透視填滿 V402（2026-09-01）
+
+- 問題：V401 已把封面放進使用者提供的挖空盒框，但盒框正面不是矩形；上緣微斜、右下收窄且底邊往右下延伸，矩形 `.box-front` 會讓封面與實體盒角度不一致，斜邊附近也可能露出背景。
+- 校正：依 `launcher_box_frame_cutout_v3.webp` 的 `1086×1448` 透明開口量測，將盒面容器調為 `top:10.55%`、`left:5.25%`、`width:77.15%`、`height:81.1%`，並以 `polygon(0 0, 100% 2.5%, 93% 100%, 0 94.5%)` 建立響應式梯形。封面多鋪進盒框下方，由黃銅護角與盒邊遮住 overscan，因此四邊填滿、不留黑縫；同時提供 `-webkit-clip-path` 給 iPad／Safari。
+- 圖片：三張封面改用 `object-fit: fill` 服貼同一透視正面，不產生新裁圖、不覆寫原封面；Board／Chess 只做約 5% 的橫向透視壓縮。兩張 Logo 往內收為 `left:6%`／`width:84%` 並上移至 `bottom:6.5%`，避免被右下斜角與底框裁掉。
+- 邊界：只修改候選啟動頁專用 CSS 與 stylesheet query；三個 href、正式首頁、部署、登入、房間、存檔、同步、`BOARD_GAME_STATE`、遊戲規則與素材檔均未更動。query 更新為 `20260901-trapezoid-cover-v5`。
+- 驗證：以原尺寸封面、梯形遮罩及正式挖空盒框離線合成逐角目視，確認頂部、左右與斜底邊均由封面覆蓋且人物未被切掉；`PORT=8799 npm start` 成功監聽，候選頁、V5 CSS、盒框及兩張 filled 封面共 5 個網址皆 HTTP 200。本機未設 `DATABASE_URL` 的提示為既有靜態預覽行為。
+
+## 修改紀錄：原封面滿版補圖／挖空盒框 V401（2026-09-01）
+
+- 需求修正：保留使用者喜歡的 V398 `新世界航海錄`／`霸海戰棋` 原封面人物與構圖，不改用另一套重畫封面；只把兩張圖底部的深藍文字預留面板補成自然場景，再把 V400 的正式 Logo 放在補圖上，封面不再有空白輸入區。
+- 補圖：以原圖作 ImageGen 編修參考，新增 `launcher_board_box_preview_filled_v2.png`（海洋、島嶼與發光航線延伸）及 `launcher_chess_box_preview_filled_v2.png`（紅橙／紫色能量海面與棋盤延伸），皆為 `1086×1448`。原 `launcher_board_box_preview_v1.png`／`launcher_chess_box_preview_v1.png` 完整保留、沒有覆蓋；先前另外產生的滿版候選也沒有接入 runtime。
+- 盒框：使用者提供的挖空透明 WebP 非破壞性另存為 `launcher_box_frame_cutout_v3.webp`（`1086×1448`），以單一前景圖取代 V399 盒殼的底圖＋四段遮罩；中心顯示封面、右側保留實體盒脊、外圍保留透明區。三盒共用同一盒框，卡牌正式 `cover.jpg` 不變。
+- 接入：`game_launcher_preview.html` 預載並引用兩張 filled 封面與挖空盒框；Board／Chess 封面在透視正面採 `object-fit: cover`，V400 Logo 直接疊在下方延伸場景並上移避開盒框。整盒仍是唯一連結，沒有封面按鈕、說明、類型或輸入區；CSS query 更新為 `20260901-filled-cover-v4`。
+- 邊界：仍只修改隔離候選啟動頁、專用 CSS、版本化素材與文件；沒有更換 server 根路由、部署清單、登入、房間、存檔、Socket.IO event、`BOARD_GAME_STATE`、Board 規則或三款既有遊戲入口。
+- 驗證：獨立 `PORT=8799 npm start` 成功監聽；本機未設 `DATABASE_URL` 的資料庫提示符合既有行為，候選頁、CSS、盒框、兩張 filled 封面、兩張 Logo 與三個入口共 10 個網址均 HTTP 200。瀏覽器完成 1440×900、1024×768、932×430、390×844 檢查：所有圖片解碼成功，3 個盒框、2 個 Logo、3 個整盒連結皆存在，舊盒殼／舊候選封面 runtime 節點與封面按鈕皆為 0；頁面無橫向 overflow，手機盒架可正常滑到 Board／Chess，短橫向畫面三盒底部仍在 420px 內。
+
+## 修改紀錄：航海錄／棋戰封面 Logo V400（2026-09-01）
+
+- 需求：`新世界航海錄` 與 `霸海戰棋` 不能只在封面下方放普通文字，要像既有 `偉大航道爭霸戰` 一樣有正式封面 Logo，同時不能重新加入遮圖的說明或按鈕。
+- 素材：新增 `public/images/game_launcher/launcher_board_logo_v1.svg` 與 `launcher_chess_logo_v1.svg`。兩者以精準向量中文字製作，避免生成圖誤字；航海錄使用青藍海圖、古金羅盤與波浪線，棋戰使用深紅黑金、紫色棋局能量與棋冠紋章。Logo 背景透明，名稱保持 HTML 可讀的 `alt`。
+- 接入：Board／Chess 盒面的普通 `.box-title-mark` 改成 Logo 圖，限制於候選封面原本預留的底部深藍區；卡牌仍完全沿用既有 `cover.jpg`。三盒繼續以整盒作連結，沒有封面按鈕、遊戲類型或說明。
+- 邊界：只修改候選啟動頁與專用素材／CSS；不改三款遊戲入口、登入、房間、存檔、同步、Board 規則或發布清單。CSS query 更新為 `20260901-gallery-logo-v3`。
+- 驗證：1440×900 三盒同列與 390×844 水平滑動皆完成目視；兩張外部 SVG 均解碼為 300×78 natural size，手機實際顯示約 193×51，中文、外框及徽記保持可辨識。頁面無橫向 overflow，封面按鈕節點仍為 0。
+
+## 修改紀錄：航海收藏室背景／生圖實體盒殼 V399（2026-09-01）
+
+- 問題：V398 的純 CSS 漸層背景、假上緣與折角盒厚仍像網頁卡片，沒有真正桌遊盒的材質、側脊與陳列空間；同時三款名稱需要正式統一。
+- 視覺：以內建 ImageGen 分別產生 `1672×941` 的航海收藏室／海景／木桌背景 `public/images/game_launcher/launcher_gallery_background_v2.png`，以及 `1086×1448`、外圍透明的深藍木質桌遊盒殼 `launcher_box_shell_v2.png`。盒殼含實體上蓋厚度、右側書背、黃銅護角、繩結與浪紋；原始卡牌封面與兩張既有候選封面仍由 HTML 直接嵌入，沒有讓生成模型重畫文字或覆蓋來源圖。
+- 實作：重寫 `public/game_launcher_preview.html` 與專用 CSS；移除舊漸層海面、虛線航路、CSS 假盒頂／盒側／盒底，改以同一張透明盒殼的底層與四段前景遮罩把封面真正夾入正面凹槽。桌機三盒陳列在背景木桌，手機改成置中水平滑動與 scroll snap，保留鍵盤 focus、hover 抬盒與 reduced-motion。
+- 簡化：依回饋移除盒面上的遊戲類型、說明與啟動按鈕，整個桌遊盒即為可點選區。卡牌完整保留既有封面；Board／Chess 只在候選圖原本預留的深藍標題區放名稱，不遮住角色與棋盤主圖。
+- 名稱：三盒統一為 `ONE PIECE 偉大航道爭霸戰`、`ONE PIECE 新世界航海錄`、`ONE PIECE 霸海戰棋`；卡牌第一款名稱依使用者指定，Board／Chess 採本次新命名。
+- 邊界：仍是獨立預覽頁，沒有修改 server 根路由、登入、房間、存檔、`BOARD_GAME_STATE`、Socket.IO event、卡牌／Board 正式入口或 Render 發布清單；Chess 連結仍只供本機 junction 預覽。
+- 驗證：本機 8787 服務下新頁、CSS、兩張新素材與三個既有入口均 HTTP 200。瀏覽器實測 1440×900、1024×768、932×430、390×844；三個 `1086×1448` 盒殼、12 段邊框遮罩與全部封面皆完成解碼。桌機／平板三盒完整位於 viewport 且無頁面橫向 overflow；932×430 三盒底部為 420px，完整保留；390×844 頁面本身不橫溢，盒架可水平捲動 604px 並正常切換三盒。盒面按鈕、類型與說明節點皆為 0。
+
+## 修改紀錄：三遊戲桌遊盒啟動頁候選 V398（2026-09-01）
+
+- 需求：先提供卡牌、大富翁與西洋棋共用啟動頁的實際版型，三張遊戲圖都要像獨立桌遊盒，而不是一般平面選單；卡牌直接沿用既有正式封面，大富翁與西洋棋先使用本次確認中的候選圖。
+- 實作：新增隔離頁 `public/game_launcher_preview.html` 與專用樣式 `public/css/game_launcher_preview.css`。每盒以 HTML/CSS 建立正面、上緣、右側盒脊、下方盒厚、桌面接觸陰影、滑過抬起及鍵盤 focus；名稱、說明與入口按鈕保持 HTML，不燒進圖片。卡牌封面使用 `object-fit: contain`，不裁切或覆寫 `public/images/cover.jpg`。
+- 素材：將已展示的 Board／Chess ImageGen 候選各保留一份描述性副本於 `public/images/game_launcher/launcher_board_box_preview_v1.png` 與 `launcher_chess_box_preview_v1.png`；原生成檔不刪除，既有卡牌、Board 與西洋棋正式素材均未覆蓋。
+- 入口邊界：本頁仍是獨立候選網址，不修改 server 根路由 `/`、`public/start.html`、`public/board_start.html`、`BOARD_GAME_STATE`、登入／房間／存檔／同步或部署清單。三盒按鈕只由候選頁分別連到現有卡牌、Board 與本機 Chess 頁；正式線上入口與 EXE 打包方式等待使用者看圖後再決定。
+- 驗證：`npm start` 已於 8787 啟動靜態頁；`game_launcher_preview.html`、`start.html`、`board_start.html`、`battle_chess/index.html` 均 HTTP 200。瀏覽器實測 1440×900、1024×768、932×430、390×844：三張圖片解碼完成、三盒與名稱皆存在、桌機／平板三欄、手機單欄、無橫向 overflow；932×430 經短視窗壓縮後三盒完整位於 viewport，console warnings／errors 為空。
+
 ## 修改紀錄：行動裝置進場素材預下載 V397（2026-08-31）
 
 - 問題：V396 已降低 iPad 地圖圖片的解碼記憶體，但第一次真正需要圖片時仍可能受網路速度影響；Board 全部原圖約 1.93 GiB，不能一次預載，因此只建立觸控行動裝置進場必需清單。

@@ -64,6 +64,13 @@ const BOARD_CAMPAIGN_SCHEMA_VERSION = 1;
 const BOARD_DB_PERSISTENCE_ENABLED = Boolean(process.env.DATABASE_URL);
 const boardCampaignWriteQueues = new Map();
 
+// The shared launcher and Board entry use this read-only capability flag to
+// select formal same-origin authentication or the isolated loopback preview.
+app.get("/api/board-runtime", (_req, res) => {
+  res.setHeader("Cache-Control", "no-store");
+  res.json({ ok: true, accountDatabaseEnabled: BOARD_DB_PERSISTENCE_ENABLED });
+});
+
 async function ensureBoardPersistenceTables(){
   if(!BOARD_DB_PERSISTENCE_ENABLED) return;
   await pool.query(`

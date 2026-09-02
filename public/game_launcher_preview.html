@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#071522">
+  <title>ONE PIECE TABLETOP SERIES</title>
+  <link rel="icon" type="image/png" href="images/icon-192.png">
+  <link rel="preload" as="image" href="images/game_launcher/launcher_gallery_background_v2.png">
+  <link rel="preload" as="image" href="images/game_launcher/launcher_tabletop_series_logo_v1.png">
+  <link rel="preload" as="image" href="images/game_launcher/launcher_card_box_frame_cutout_v1.png">
+  <link rel="preload" as="image" href="images/game_launcher/launcher_board_box_frame_cutout_v1.png">
+  <link rel="preload" as="image" href="images/game_launcher/launcher_chess_box_frame_cutout_v1.png">
+  <link rel="preload" as="image" href="images/game_launcher/launcher_card_cover_perspective_v2.png">
+  <link rel="preload" as="image" href="images/game_launcher/launcher_board_cover_logo_perspective_v5.png">
+  <link rel="preload" as="image" href="images/game_launcher/launcher_chess_cover_logo_perspective_v5.png">
+  <link rel="stylesheet" href="css/game_launcher_preview.css?v=20260903-launcher-board-release-v428">
+  <script src="/socket.io/socket.io.js" defer></script>
+  <script src="js/game_launcher_preview.js?v=20260903-launcher-board-release-v428" defer></script>
+</head>
+<body data-launcher-entry-stage="press">
+  <section class="launcher-entry" id="launcherEntry" aria-label="ONE PIECE 桌遊系列登入入口">
+    <section class="launcher-entry-panel launcher-entry-press is-active" data-launcher-entry-panel="press">
+      <img class="launcher-entry-logo" src="images/game_launcher/launcher_tabletop_series_logo_v1.png" alt="ONE PIECE TABLETOP SERIES">
+      <button class="launcher-entry-start" id="launcherEntryStartBtn" type="button" aria-label="點擊進入桌遊系列">
+        <span class="launcher-entry-start-label">點擊進入</span>
+      </button>
+      <div class="launcher-entry-hint" aria-hidden="true">
+        <span>點擊進入</span>
+        <small>CLICK OR PRESS ANY KEY</small>
+      </div>
+    </section>
+
+    <section class="launcher-entry-panel launcher-entry-auth" data-launcher-entry-panel="auth" hidden>
+      <div class="launcher-auth-card" role="dialog" aria-modal="true" aria-labelledby="launcherAuthTitle">
+        <img class="launcher-auth-logo" src="images/game_launcher/launcher_tabletop_series_logo_v1.png" alt="">
+        <p class="launcher-auth-kicker">TABLETOP SERIES</p>
+        <h2 class="launcher-auth-title" id="launcherAuthTitle">航海者登入</h2>
+        <p class="launcher-auth-subtitle">登入一次，即可從同一座收藏室進入已開放的桌遊。</p>
+
+        <div class="launcher-auth-tabs" role="tablist" aria-label="帳號操作">
+          <button class="launcher-auth-tab is-active" id="launcherAuthLoginTab" type="button" role="tab" aria-selected="true">登入</button>
+          <button class="launcher-auth-tab" id="launcherAuthRegisterTab" type="button" role="tab" aria-selected="false">建立帳號</button>
+        </div>
+
+        <form class="launcher-auth-form" id="launcherAuthForm">
+          <label class="launcher-auth-field">
+            <span>帳號</span>
+            <input id="launcherAuthUsername" name="username" type="text" autocomplete="username" inputmode="text" minlength="3" maxlength="24" required>
+          </label>
+          <label class="launcher-auth-field">
+            <span>密碼</span>
+            <input id="launcherAuthPassword" name="password" type="password" autocomplete="current-password" minlength="6" maxlength="72" required>
+          </label>
+          <p class="launcher-auth-message" id="launcherAuthMessage" role="status" aria-live="polite"></p>
+          <button class="launcher-auth-submit" id="launcherAuthSubmitBtn" type="submit">登入</button>
+        </form>
+
+        <div class="launcher-auth-footer">
+          <button class="launcher-auth-back" id="launcherAuthBackBtn" type="button">返回標題</button>
+          <span>帳號可供系列遊戲共用</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="launcher-entry-panel launcher-entry-boot" data-launcher-entry-panel="boot" hidden>
+      <div class="launcher-boot-card" role="status" aria-live="polite">
+        <span class="launcher-boot-spinner" aria-hidden="true"></span>
+        <p class="launcher-boot-kicker">LOG POSE CONNECTING</p>
+        <h2>正在確認航海者資料</h2>
+        <p class="launcher-boot-message" id="launcherBootMessage">正在連接帳號伺服器…</p>
+        <div class="launcher-boot-actions" id="launcherBootActions" hidden>
+          <button id="launcherBootRetryBtn" type="button">重新嘗試</button>
+          <button id="launcherBootLoginBtn" type="button">改用其他帳號</button>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <div class="launcher-stage" aria-hidden="true" inert>
+    <main class="launcher-shell">
+      <h1 class="launcher-brand">
+        <img src="images/game_launcher/launcher_tabletop_series_logo_v1.png" alt="ONE PIECE TABLETOP SERIES">
+      </h1>
+
+      <section class="game-shelf" aria-label="遊戲選擇">
+      <article class="game-slot card-edition" data-preview-quad="7.119,10.908 81.492,12.015 81.492,91.068 7.076,87.226" style="--accent:#ffbd45; --accent-rgb:255,189,69;">
+        <a class="game-pick" href="start.html" aria-label="開啟 ONE PIECE 偉大航道爭霸戰">
+          <span class="game-box">
+            <span class="box-front">
+              <img class="box-art box-art-card" src="images/game_launcher/launcher_card_cover_perspective_v2.png" alt="ONE PIECE 偉大航道爭霸戰四點透視封面">
+              <video class="box-preview" data-src="videos/game_launcher/card_sanji_duel_preview_v2.mp4" muted playsinline loop preload="none" tabindex="-1" aria-hidden="true"></video>
+              <span class="box-shine" aria-hidden="true"></span>
+            </span>
+            <img class="box-frame-cutout" src="images/game_launcher/launcher_card_box_frame_cutout_v1.png" alt="" aria-hidden="true">
+          </span>
+          <span class="table-shadow" aria-hidden="true"></span>
+        </a>
+      </article>
+
+      <article class="game-slot board-edition" data-preview-quad="6.722,9.399 81.031,10.820 81.031,90.465 6.722,86.530" style="--accent:#54ead0; --accent-rgb:84,234,208;">
+        <a class="game-pick" href="board_start.html" aria-label="開啟 ONE PIECE 新世界航海錄">
+          <span class="game-box">
+            <span class="box-front">
+              <img class="box-art" src="images/game_launcher/launcher_board_cover_logo_perspective_v5.png" alt="ONE PIECE 新世界航海錄四點透視封面">
+              <video class="box-preview" data-src="videos/game_launcher/board_battle_preview_v2.mp4" muted playsinline loop preload="none" tabindex="-1" aria-hidden="true"></video>
+              <span class="box-shine" aria-hidden="true"></span>
+            </span>
+            <img class="box-frame-cutout" src="images/game_launcher/launcher_board_box_frame_cutout_v1.png" alt="" aria-hidden="true">
+          </span>
+          <span class="table-shadow" aria-hidden="true"></span>
+        </a>
+      </article>
+
+      <article class="game-slot chess-edition is-unavailable" data-local-only-game="chess" data-preview-quad="7.182,9.468 81.794,10.749 81.641,93.501 7.182,89.431" style="--accent:#c1a0ff; --accent-rgb:193,160,255;">
+        <a class="game-pick" data-local-href="battle_chess/index.html" aria-label="ONE PIECE 霸海戰棋尚未開放" aria-disabled="true" tabindex="-1" title="霸海戰棋製作中">
+          <span class="game-box">
+            <span class="box-front">
+              <img class="box-art" src="images/game_launcher/launcher_chess_cover_logo_perspective_v5.png" alt="ONE PIECE 霸海戰棋四點透視封面">
+              <span class="box-shine" aria-hidden="true"></span>
+            </span>
+            <img class="box-frame-cutout" src="images/game_launcher/launcher_chess_box_frame_cutout_v1.png" alt="" aria-hidden="true">
+          </span>
+          <span class="table-shadow" aria-hidden="true"></span>
+        </a>
+      </article>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

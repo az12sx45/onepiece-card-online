@@ -381,7 +381,7 @@
   const MARINEFORD_SNAPSHOT_KEY = "onepiece-board-marineford-snapshot-v1";
   const MARINEFORD_COMMAND_KEY = "onepiece-board-marineford-command-v1";
   const MARINEFORD_COMMAND_RESULT_KEY = "onepiece-board-marineford-command-result-v1";
-  const MARINEFORD_PAGE_VERSION = "20260724-marineford-direct-flow-v15";
+  const MARINEFORD_PAGE_VERSION = "20260901-bgm-focus-v407";
   const WATER_SEVEN_SNAPSHOT_KEY = "onepiece-board-water-seven-snapshot-v1";
   const GAME_SAVE_STORAGE_KEY = "onepiece-board-manual-save-v1";
   const FINAL_ISLAND_LAYOUT_VERSION = 1;
@@ -11618,6 +11618,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       routePrompt: null,
       tradePrompt: null,
       coopBattlePrompt: null,
+      pendingAokijiCaptureStory: null,
       activeTrade: null,
       activeSpar: null,
       islandDecision: null,
@@ -12208,6 +12209,17 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       repairMissedRecruitSyncedMoveChoices(player, { silent: true });
       repairMissedLateMoveChoices(player, { silent: true });
     });
+    const pendingAokijiCaptureStory = normalizePendingAokijiCaptureStory(game);
+    if (pendingAokijiCaptureStory) {
+      const activeAokijiStoryBattle = Boolean(
+        state.battleState?.isAokijiCaptureStoryBattle
+        && String(state.battleState.storyId || "") === String(pendingAokijiCaptureStory.id || "")
+      );
+      game.resolutionLock = pendingAokijiCaptureStory.phase !== "battle" || activeAokijiStoryBattle;
+      const pendingOwnerHasTurn = String(game.players?.[game.currentPlayerIndex]?.id || "") === String(pendingAokijiCaptureStory.playerId || "");
+      if (pendingAokijiCaptureStory.phase !== "battle") game.turnStep = "青雉首次攔截劇情";
+      else if (activeAokijiStoryBattle || pendingOwnerHasTurn) game.turnStep = "青雉挑戰";
+    }
     normalizeMapMarkers(game);
     const syncedRecruitCards = syncAvailableCardsWithCatalog(game);
     if (syncedRecruitCards > 0) {
@@ -12217,6 +12229,24 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     refreshPrisonerCrewBlockedEnemyIslands(game);
     if (state.battleState?.isSparBattle && options.source !== "lan") {
       state.battleState = null;
+    }
+    if (state.battleState?.isAokijiCaptureStoryBattle) {
+      const pendingMatchesBattle = pendingAokijiCaptureStory
+        && pendingAokijiCaptureStory.phase === "battle"
+        && String(pendingAokijiCaptureStory.id || "") === String(state.battleState.storyId || "");
+      if (!pendingMatchesBattle) {
+        state.battleState = null;
+      } else {
+        state.battleState.isStoryTrialBattle = true;
+        state.battleState.noEscape = true;
+        state.battleState.isNoEscape = true;
+        state.battleState.noCoop = true;
+        state.battleState.noRewards = true;
+        state.battleState.noDrops = true;
+        state.battleState.noLineageExtraction = true;
+        state.battleState.escapeThreshold = 0;
+        if (state.battleState.prebattleIntro) state.battleState.prebattleIntro.done = true;
+      }
     }
     if (state.battleState) {
       state.battleState.animating = false;
@@ -13409,7 +13439,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       mainMission: null,
       missionBoardChoices: null,
       completedMissionIds: [],
-      impelDown: { active: false },
+      impelDown: { active: false, aokijiFirstCaptureStorySeen: false },
       marinefordHold: { active: false },
       activeMapBuffs: [],
       nextDiceModifier: 0,
@@ -14564,6 +14594,150 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     return 2;
   }
 
+  const BOARD_STORY_BGM_PROFILES = Object.freeze({
+    opening_great_pirate_age: ["pirate_king_departure", "becoming_pirate_king"],
+    reverse_mountain_route_choice_story: ["to_the_grand_line", "to_the_ocean"],
+    yonko_bigmom_tea_party_story: ["fury", "erudrago_appears"],
+    yonko_shanks_story: ["reliable_friend", "party"],
+    yonko_kaido_story: ["spirit_of_zoro", "shinkenshoubu"],
+    yonko_blackbeard_story: ["stealth_night_shadow", "angry"],
+    postgame_world_unlock_story: ["storms_stars", "to_the_grand_line"],
+    postgame_egghead_rocks_arrival_story: ["erudrago_appears", "message_from_uunan"],
+    elbaph_disaster_intro: ["reliable_friend", "storms_stars"],
+    elbaph_god_knights_arrival: ["fury", "erudrago_appears"],
+    elbaph_killingham_clear: ["reliable_friend", "we_did_it"],
+    elbaph_sommers_clear: ["storms_stars", "reliable_friend"],
+    imu_aftermath: ["storms_stars", "mother_sea"],
+    treasure_banquet: ["mezase_one_piece", "message_from_uunan"],
+    true_history: ["message_from_uunan", "mother_sea"],
+    dawn_alliance: ["mezase_one_piece", "storms_stars"],
+  });
+
+  const BOARD_BOSS_BGM_PROFILES = Object.freeze({
+    postgame_shiki: ["hawks_wing", "duel", "shinkenshoubu"],
+    postgame_gild_tesoro: ["gold_uunan", "angry", "shinkenshoubu"],
+    postgame_zephyr: ["one_hour_evacuation", "fury", "shinkenshoubu"],
+    postgame_tot_musica: ["fury", "cant_escape_fight", "shinkenshoubu"],
+    postgame_douglas_bullet: ["gomugomu_vs_goegoe", "shinkenshoubu", "cant_lose"],
+    postgame_saga: ["stealth_night_shadow", "spirit_of_zoro", "duel"],
+    postgame_vinsmoke_judge: ["difficult", "cant_escape_fight", "fight_continues"],
+    postgame_rob_lucci_awakened: ["fight_continues", "cant_escape_fight", "shinkenshoubu"],
+    postgame_king: ["angry", "spirit_of_zoro", "shinkenshoubu"],
+    postgame_charlotte_katakuri: ["duel", "shinkenshoubu", "desperate_situation"],
+    postgame_patrick_redfield: ["stealth_night_shadow", "duel", "shinkenshoubu"],
+    postgame_oars: ["cant_escape_fight", "shinkenshoubu", "desperate_situation"],
+    postgame_aramaki: ["angry", "fight_continues", "shinkenshoubu"],
+    postgame_rocks: ["erudrago_appears", "shinkenshoubu", "fury"],
+    postgame_loki: ["shinkenshoubu", "duel", "storms_stars"],
+    final_imu: ["cant_lose", "shinkenshoubu", "storms_stars"],
+  });
+
+  function bgmStoryPreferredIds(ending = {}) {
+    const id = String(ending.id || "");
+    if (BOARD_STORY_BGM_PROFILES[id]) return BOARD_STORY_BGM_PROFILES[id].slice();
+    const text = `${id} ${ending.title || ""} ${ending.subtitle || ""} ${ending.theme || ""} ${ending.tone || ""}`.toLowerCase();
+    if (text.includes("treasure") || text.includes("寶藏") || text.includes("宴")) return ["gold_uunan", "party"];
+    if (text.includes("history") || text.includes("歷史") || text.includes("poneglyph")) return ["message_from_uunan", "mother_sea"];
+    if (text.includes("dawn") || text.includes("黎明") || text.includes("imu")) return ["storms_stars", "mother_sea"];
+    if (text.includes("farewell") || text.includes("離別")) return ["merry_farewell", "reliable_friend"];
+    return ["reliable_friend", "to_the_grand_line"];
+  }
+
+  function bgmStoryContext(ending = {}, player = currentPlayer()) {
+    const storyId = String(ending.id || "story");
+    return {
+      phase: "story",
+      musicScope: `board-story:${storyId}`,
+      sceneType: storyId,
+      locationType: player?.location?.kind || "story",
+      eventTags: ["story", storyId, ending.theme || ""],
+      storyMood: ending.tone || ending.theme || "cinematic",
+      preferredBgmIds: bgmStoryPreferredIds(ending),
+      minBgmHoldMs: 120000,
+    };
+  }
+
+  function bgmScenePreferredIds(context = {}) {
+    if (Array.isArray(context.preferredBgmIds) && context.preferredBgmIds.length) return context.preferredBgmIds.slice();
+    const scene = String(context.sceneType || "");
+    const env = new Set((Array.isArray(context.environment) ? context.environment : [context.environment]).filter(Boolean).map((entry) => String(entry).toLowerCase()));
+    if (scene === "sailing") return ["to_the_ocean", "to_the_grand_line", "pirate", "after_eating_grand_line"];
+    if (scene === "island_map" || scene === "landing") {
+      if (env.has("cold")) return ["grand_line_cold_island", "landing_at_town"];
+      if (env.has("hot")) return ["grand_line_hot_island", "landing_at_town"];
+      return ["landing_at_town", "village_harbor", "golden_island_shore"];
+    }
+    if (scene === "shop") return ["oden_store", "village_harbor"];
+    if (scene === "tavern") return ["sanjis_feast", "party"];
+    if (scene === "hospital") return ["chopper", "village_harbor"];
+    if (scene === "research") return ["miss_allsunday", "difficult"];
+    if (scene === "arena") return ["duel", "fight_continues"];
+    if (scene === "sea_event") return Number(context.dangerLevel || 0) >= 4
+      ? ["umi_no_namamono", "difficult"]
+      : ["to_the_ocean", "difficult"];
+    if (scene === "event_island") return ["difficult", "gold_uunan", "uunan_stone"];
+    if (scene === "impel_down") {
+      if (env.has("hot")) return ["grand_line_hot_island", "stealth_night_shadow"];
+      if (env.has("cold")) return ["grand_line_cold_island", "stealth_night_shadow"];
+      if (env.has("countdown") || env.has("alert")) return ["one_hour_evacuation", "escape"];
+      return ["stealth_night_shadow", "difficult"];
+    }
+    if (scene === "marineford") return ["cant_escape_fight", "fury", "shinkenshoubu"];
+    if (["enemy_island", "postgame_boss_island", "postgame_rocks_final"].includes(scene)) {
+      const enemyMusicKey = String(context.enemyMusicKey || (Array.isArray(context.enemyType) ? context.enemyType.at(-1) : "") || "");
+      if (BOARD_BOSS_BGM_PROFILES[enemyMusicKey]) return BOARD_BOSS_BGM_PROFILES[enemyMusicKey].slice();
+      return context.isBoss
+        ? ["shinkenshoubu", "cant_escape_fight", "fight_continues"]
+        : ["cant_escape_fight", "fight_continues", "duel"];
+    }
+    if (scene === "final_island_revisit") return ["reliable_friend", "party", "mother_sea"];
+    if (String(context.phase || "") === "menu") return ["becoming_pirate_king", "to_the_grand_line"];
+    return [];
+  }
+
+  function bgmPlaybackOptions(context = {}, options = {}) {
+    const phase = String(context.phase || "");
+    const scene = String(context.sceneType || "");
+    const next = { ...options };
+    if (phase === "story") return { ...next, force: false, transition: "immediate", transitionDelayMs: 0, fadeMs: Number(next.fadeMs ?? 3200) };
+    if (phase.startsWith("battle_") || phase === "victory") {
+      const immediate = phase === "battle_intro" || phase === "victory" || next.force === true;
+      return { ...next, force: false, transition: immediate ? "immediate" : "defer", transitionDelayMs: 0, fadeMs: Number(next.fadeMs ?? 2600) };
+    }
+    if (scene === "landing") return { ...next, force: false, transition: "inherit", transitionDelayMs: 0 };
+    if (["shop", "research", "hospital", "arena", "tavern"].includes(scene)) {
+      return { ...next, force: false, transition: "defer", transitionDelayMs: Number(next.transitionDelayMs ?? 8000), fadeMs: Number(next.fadeMs ?? 2600) };
+    }
+    if (["sea_event", "event_island", "final_island_revisit"].includes(scene)) {
+      return { ...next, force: false, transition: "defer", transitionDelayMs: Number(next.transitionDelayMs ?? 5000), fadeMs: Number(next.fadeMs ?? 2600) };
+    }
+    if (["enemy_island", "postgame_boss_island", "postgame_rocks_final", "impel_down", "marineford"].includes(scene)) {
+      return { ...next, force: false, transition: "immediate", transitionDelayMs: 0, fadeMs: Number(next.fadeMs ?? 3000) };
+    }
+    if (phase === "map") {
+      const status = window.BgmManager?.status?.() || {};
+      const hasCurrent = Boolean(status.currentChoice);
+      let meaningfulMapChange = false;
+      try {
+        const previous = status.currentContextKey ? JSON.parse(status.currentContextKey) : null;
+        meaningfulMapChange = previous?.phase === "map" && (
+          String(previous.sceneType || "") !== scene
+          || JSON.stringify(previous.environment || []) !== JSON.stringify(context.environment || [])
+        );
+      } catch (_error) {}
+      return {
+        ...next,
+        force: false,
+        transition: "defer",
+        transitionDelayMs: hasCurrent ? Number(next.transitionDelayMs ?? 2200) : 0,
+        fadeMs: Number(next.fadeMs ?? 3000),
+        minHoldMs: Number(next.minHoldMs ?? 45000),
+        forceRetune: next.forceRetune ?? meaningfulMapChange,
+      };
+    }
+    return { ...next, force: false, transition: next.transition || "defer", fadeMs: Number(next.fadeMs ?? 2800) };
+  }
+
   function bgmBattleContext(battle = state.battleState) {
     if (!battle) return null;
     if (!battle.bgmScopeId) {
@@ -14575,6 +14749,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const islandState = island ? getIslandState(island.id) : null;
     const playerHpRate = activeCard?.maxHp ? activeCard.currentHp / activeCard.maxHp : 1;
     const enemyHpRate = battle.enemyCombatant?.maxHp ? battle.enemyCombatant.currentHp / battle.enemyCombatant.maxHp : 1;
+    const enemyMusicKey = String(battle.postgameBossMechanic?.key || battle.postgameBossKey || battle.enemyCombatant?.key || "");
     const isBoss = battle.isJudicialRaid || battle.islandKind === "yonko" || battle.enemyTier === "T1";
     const isClimax = isBoss ? (playerHpRate < 0.35 || enemyHpRate < 0.45) : (playerHpRate < 0.25 || enemyHpRate < 0.3);
     const battlePhase = battle.result === "win" ? "" : (isClimax ? "climax" : ((battle.playerPerformedAction || battle.enemyPerformedAction) ? "loop" : "intro"));
@@ -14594,7 +14769,24 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         environment: battle.isSeaEncounter ? ["ocean"] : bgmIslandEnvironmentTags(island, islandState),
         eventTags: ["victory", "success", "clear"],
         storyMood: "happy",
+        preferredBgmIds: ["we_did_it", "party", "reliable_friend"],
       };
+    }
+    let preferredBgmIds;
+    if (battlePhase === "climax") {
+      preferredBgmIds = playerHpRate < 0.35
+        ? ["desperate_situation", "cant_lose", "overtaken"]
+        : ["overtaken", "gomugomu_bazooka", "cant_lose"];
+    } else if (BOARD_BOSS_BGM_PROFILES[enemyMusicKey]) {
+      preferredBgmIds = BOARD_BOSS_BGM_PROFILES[enemyMusicKey].slice();
+    } else if (battle.isImpelDown || battle.isMarineford || isBoss) {
+      preferredBgmIds = ["shinkenshoubu", "cant_escape_fight", "fight_continues"];
+    } else if (battle.isSeaEncounter) {
+      preferredBgmIds = ["umi_no_namamono", "fight_continues", "duel"];
+    } else if (!battle.isSeaEncounter && ["enemy", "postgame_boss", "postgame_egghead", "yonko", "judicial"].includes(battle.islandKind)) {
+      preferredBgmIds = ["cant_escape_fight", "fight_continues", "duel"];
+    } else {
+      preferredBgmIds = ["fight_continues", "duel", "cant_escape_fight"];
     }
     return {
       phase: `battle_${battlePhase}`,
@@ -14616,35 +14808,37 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       storyMood: battlePhase === "climax" ? "intense" : "tense",
       isCounterattack: enemyHpRate < 0.35 && playerHpRate > 0,
       minBgmHoldMs: 60000,
+      preferredBgmIds,
     };
   }
 
   function bgmMapContext() {
     const player = currentPlayer();
-    if (!player) return { phase: "menu", sceneType: "setup", eventTags: ["journey_start"], storyMood: "hopeful" };
+    if (!player) return { phase: "menu", musicScope: "board-setup", sceneType: "setup", eventTags: ["journey_start"], storyMood: "hopeful", preferredBgmIds: ["becoming_pirate_king", "to_the_grand_line"] };
     if (String(state.gameState.phase || "").startsWith("setup")) {
-      return { phase: "menu", sceneType: "setup", character: bgmCharacterTag(activeCrew(player)), eventTags: ["journey_start", "pirate_king"], storyMood: "hopeful" };
+      return { phase: "menu", musicScope: "board-setup", sceneType: "setup", eventTags: ["journey_start", "pirate_king"], storyMood: "hopeful", preferredBgmIds: ["becoming_pirate_king", "to_the_grand_line"] };
     }
     if (player.location?.kind === "route") {
       return {
         phase: "map",
+        musicScope: "board-map",
         sceneType: "sailing",
         locationType: "sea",
-        character: bgmCharacterTag(activeCrew(player)),
         environment: ["ocean"],
         eventTags: ["sailing", "journey", "grand_line"],
         dangerLevel: 1,
         storyMood: "adventurous",
+        preferredBgmIds: ["to_the_ocean", "to_the_grand_line", "pirate", "after_eating_grand_line"],
       };
     }
     const island = player.location?.islandId ? getIslandById(player.location.islandId) : null;
     const islandState = island ? getIslandState(island.id) : null;
     return {
       phase: "map",
+      musicScope: "board-map",
       sceneType: "island_map",
       locationType: "island",
       islandType: getEffectiveIslandKind(island || {}, islandState || {}),
-      character: bgmCharacterTag(activeCrew(player)),
       environment: bgmIslandEnvironmentTags(island, islandState),
       eventTags: ["landing", "island"],
       dangerLevel: ["postgame_boss", "postgame_egghead"].includes(island?.kind) ? 5 : island?.kind === "enemy" || island?.kind === "yonko" ? 3 : 1,
@@ -14655,7 +14849,10 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   function playBgmForContext(context, options = {}) {
     if (!context) return null;
     if (luffyGearFifthVideoBgmPaused) return window.BgmManager?.status?.().currentChoice || null;
-    return window.BgmManager?.chooseAndPlay?.(context, options) || null;
+    const enrichedContext = Array.isArray(context.preferredBgmIds) && context.preferredBgmIds.length
+      ? context
+      : { ...context, preferredBgmIds: bgmScenePreferredIds(context) };
+    return window.BgmManager?.chooseAndPlay?.(enrichedContext, bgmPlaybackOptions(enrichedContext, options)) || null;
   }
 
   function refreshBgmForState(options = {}) {
@@ -23685,6 +23882,9 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (
       !battle
       || battle.result !== "win"
+      || battle.isStoryTrialBattle
+      || battle.isAokijiCaptureStoryBattle
+      || battle.noLineageExtraction
       || (!state.gameState?.postgameWorld?.researchLabsActive && !isArenaBattle)
       || isFinalGateBlackTurnBattle(battle)
     ) {
@@ -25623,6 +25823,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (!refs.modalBack.classList.contains("open")) refreshBgmForState();
     recoverAnyPendingElbaphGateSequence();
     scheduleRecoveredResearchStoryIfNeeded();
+    schedulePendingAokijiCaptureStory();
     scheduleBoardLanStatePush("render");
   }
 
@@ -25670,6 +25871,13 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     return !!battle && (battle.isArenaBattle || battle.islandKind === "arena");
   }
 
+  function isPendingAokijiCaptureStoryBattle(battle) {
+    return !!battle && (
+      battle.isAokijiCaptureStoryBattle
+      || (battle.isStoryTrialBattle && String(battle.storyId || "") && String(battle.enemyCombatant?.key || "") === "aokiji")
+    );
+  }
+
   function resumePendingCoopBattleResult(player) {
     const pending = pendingCoopBattleResultForPlayer(player);
     if (!pending || String(currentPlayer()?.id || "") !== String(player?.id || "")) return false;
@@ -25712,6 +25920,15 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
 
   function canResumeBattle(player) {
     if (!player?.pendingBattle) return false;
+    if (isPendingAokijiCaptureStoryBattle(player.pendingBattle)) {
+      const pending = pendingAokijiCaptureStory();
+      return !!pending
+        && pending.phase === "battle"
+        && String(pending.playerId || "") === String(player.id || player.userId || "")
+        && String(pending.id || "") === String(player.pendingBattle.storyId || "")
+        && !isPlayerInImpelDown(player)
+        && !isPlayerInMarineford(player);
+    }
     if (player.pendingBattle.isSeaEncounter || player.pendingBattle.islandKind === "sea-encounter") {
       if (player.location.kind !== "route") return false;
       const tile = getTileByLocation(player.location.routeId, player.location.tileIndex);
@@ -25789,6 +26006,40 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     }
     ensureBattleRound(player, state.battleState);
     renderBattleInterface();
+    return true;
+  }
+
+  function resumeAokijiCaptureStoryBattle(player) {
+    if (!player?.pendingBattle) return false;
+    const pendingBattle = cloneBattleState(player.pendingBattle);
+    const pendingStory = pendingAokijiCaptureStory();
+    if (!isPendingAokijiCaptureStoryBattle(pendingBattle) || !pendingStory) return false;
+    if (String(pendingBattle.storyId || "") !== String(pendingStory.id || "")) return false;
+    closeModal();
+    state.battleState = pendingBattle;
+    state.battleState.playerId = player.id;
+    state.battleState.islandId = AOKIJI_CAPTURE_STORY_ISLAND_ID;
+    state.battleState.islandKind = "story_trial";
+    state.battleState.isAokijiCaptureStoryBattle = true;
+    state.battleState.isStoryTrialBattle = true;
+    state.battleState.noEscape = true;
+    state.battleState.isNoEscape = true;
+    state.battleState.noCoop = true;
+    state.battleState.noRewards = true;
+    state.battleState.noDrops = true;
+    state.battleState.noLineageExtraction = true;
+    state.battleState.escapeThreshold = 0;
+    if (state.battleState.prebattleIntro) state.battleState.prebattleIntro.done = true;
+    markBattleEntryTransition(state.battleState, "resume");
+    syncActivePlayerStatusBag(player, state.battleState);
+    initializeBattleCarryStates(player, state.battleState);
+    playBgmForContext(bgmBattleContext(state.battleState), { force: true });
+    state.gameState.resolutionLock = true;
+    state.gameState.turnStep = "青雉挑戰";
+    ensureBattleRound(player, state.battleState);
+    renderBattleInterface();
+    notifyBattleWindow();
+    scheduleBoardLanStatePush("aokiji-first-capture-battle-resume", 20, { force: true });
     return true;
   }
 
@@ -25929,6 +26180,9 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     }
     if (player.pendingBattle?.isSeaEncounter || player.pendingBattle?.islandKind === "sea-encounter") {
       return resumeSeaEncounterBattle(player);
+    }
+    if (isPendingAokijiCaptureStoryBattle(player.pendingBattle)) {
+      return resumeAokijiCaptureStoryBattle(player);
     }
     if (isPendingImpelDownBattle(player.pendingBattle)) {
       return resumeImpelDownBattle(player);
@@ -28323,7 +28577,6 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     openingStorySeed = seed;
     markOpeningStorySeenThisSession(seed);
     preloadFinalEndingAssets(OPENING_STORY_DEFINITION);
-    playBgmForContext({ phase: "story", sceneType: "opening", eventTags: ["roger", "great_pirate_age", "journey_start"], storyMood: "epic" });
     startFinalEndingCinematicSession(currentPlayer(), OPENING_STORY_DEFINITION, () => {
       const sameSetup = String(state.gameState?.seed || "") === seed && String(state.gameState?.phase || "").startsWith("setup");
       cancelOpeningStorySession();
@@ -29589,7 +29842,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (isPlayerInImpelDown(player)) {
       sendPlayerToMarineford(player, reason.includes("推進城") ? reason : `推進城${reason}`);
     } else {
-      sendPlayerToImpelDown(player, reason);
+      requestPlayerImpelDownCapture(player, reason, { source: "map_wipeout", resumeMode: "continue_turn" });
     }
     renderAll();
     return true;
@@ -29644,6 +29897,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     prison.hiddenEventMisses = Math.max(0, Math.min(IMPEL_DOWN_HIDDEN_EVENT_PITY_DRAWS, Math.floor(Number(prison.hiddenEventMisses || 0))));
     prison.capturedReason = String(prison.capturedReason || "");
     prison.capturedAtRound = Math.max(0, Math.floor(Number(prison.capturedAtRound || 0)));
+    prison.aokijiFirstCaptureStorySeen = Boolean(prison.aokijiFirstCaptureStorySeen);
     prison.rescueAttempts = Math.max(0, Math.floor(Number(prison.rescueAttempts || 0)));
     prison.teamId = String(prison.teamId || "");
     if (!prison.teamInvite || typeof prison.teamInvite !== "object" || Array.isArray(prison.teamInvite)) {
@@ -29884,8 +30138,404 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     return restored;
   }
 
+  const AOKIJI_CAPTURE_STORY_SCHEMA_VERSION = 1;
+  const AOKIJI_CAPTURE_STORY_PHASES = new Set(["intro", "choice", "leave-response", "fight-response", "battle"]);
+  const AOKIJI_CAPTURE_STORY_RESUME_MODES = new Set(["continue_turn", "end_turn"]);
+  const AOKIJI_CAPTURE_STORY_ISLAND_ID = "story_aokiji_first_capture";
+  const AOKIJI_CAPTURE_STORY_PORTRAITS = Object.freeze({
+    lazy: "images/board/story/aokiji_capture/source/aokiji_capture_lazy_v3.webp",
+    mercy: "images/board/story/aokiji_capture/source/aokiji_capture_mercy_v3.webp",
+    serious: "images/board/story/aokiji_capture/source/aokiji_capture_serious_v3.webp",
+  });
+  const AOKIJI_CAPTURE_STORY_BG = "images/board/story/backgrounds/aokiji_capture/aokiji_capture_bicycle_sea_story_v1.webp";
+  const AOKIJI_CAPTURE_DIALOGUE_CHOICES = Object.freeze([
+    Object.freeze({ id: "aokijiCaptureFightBtn", value: "fight", label: "我不相信你。要打就來吧。", tone: "fight" }),
+    Object.freeze({ id: "aokijiCaptureLeaveBtn", value: "leave", label: "……我相信你這一次。", tone: "trust" }),
+  ]);
+  const AOKIJI_CAPTURE_INTRO_STORY = Object.freeze({
+    id: "aokiji_first_capture_intro",
+    title: "青雉的攔截",
+    tone: "resolve",
+    finishLabel: "做出選擇",
+    showPoneglyphs: false,
+    chapters: [
+      {
+        scene: "aokiji-capture-lazy",
+        bg: AOKIJI_CAPTURE_STORY_BG,
+        beats: [
+          { speaker: "青雉", speakerImage: AOKIJI_CAPTURE_STORY_PORTRAITS.lazy, pose: "lazy", text: "啊啦啦……這可真狼狽。照規矩，你們現在應該要被押去推進城了。" },
+          { speaker: "青雉", speakerImage: AOKIJI_CAPTURE_STORY_PORTRAITS.lazy, pose: "lazy", text: "全員都倒下，或者連該繳的罰款也拿不出來……海軍可不會當作沒看見。" },
+        ],
+      },
+      {
+        scene: "aokiji-capture-mercy",
+        bg: AOKIJI_CAPTURE_STORY_BG,
+        beats: [
+          { speaker: "青雉", speakerImage: AOKIJI_CAPTURE_STORY_PORTRAITS.mercy, pose: "mercy", text: "不過嘛……我現在不是在值勤，只是出來散散步。" },
+          { speaker: "青雉", speakerImage: AOKIJI_CAPTURE_STORY_PORTRAITS.mercy, pose: "mercy", text: "是不是該放你們一馬呢……？不過，下不為例喔。" },
+        ],
+      },
+    ],
+  });
+  const AOKIJI_CAPTURE_LEAVE_RESPONSE_STORY = Object.freeze({
+    id: "aokiji_first_capture_leave_response",
+    title: "青雉的放行",
+    tone: "resolve",
+    finishLabel: "記住約定",
+    showPoneglyphs: false,
+    chapters: [{
+      scene: "aokiji-capture-mercy",
+      bg: AOKIJI_CAPTURE_STORY_BG,
+      beats: [{ speaker: "青雉", speakerImage: AOKIJI_CAPTURE_STORY_PORTRAITS.mercy, pose: "mercy", text: "好吧，這次就當作我們沒有遇見。記住，下不為例。" }],
+    }],
+  });
+  const AOKIJI_CAPTURE_CHOICE_STORY = Object.freeze({
+    id: "aokiji_first_capture_choice",
+    title: "青雉的試探",
+    tone: "resolve",
+    finishLabel: "做出回應",
+    showPoneglyphs: false,
+    chapters: [{
+      scene: "aokiji-capture-choice",
+      bg: AOKIJI_CAPTURE_STORY_BG,
+      beats: [{
+        speaker: "青雉",
+        speakerImage: AOKIJI_CAPTURE_STORY_PORTRAITS.lazy,
+        pose: "lazy",
+        text: "所以呢……你們要相信我這一次，還是打算用實力說話？",
+      }],
+    }],
+  });
+  const AOKIJI_CAPTURE_FIGHT_RESPONSE_STORY = Object.freeze({
+    id: "aokiji_first_capture_fight_response",
+    title: "青雉的試探",
+    tone: "resolve",
+    finishLabel: "開始戰鬥",
+    showPoneglyphs: false,
+    chapters: [{
+      scene: "aokiji-capture-serious",
+      bg: AOKIJI_CAPTURE_STORY_BG,
+      beats: [{ speaker: "青雉", speakerImage: AOKIJI_CAPTURE_STORY_PORTRAITS.serious, pose: "serious", text: "啊啦啦……果然還是要打啊。真麻煩。" }],
+    }],
+  });
+
+  function normalizePendingAokijiCaptureStory(game = state.gameState) {
+    if (!game) return null;
+    const raw = game.pendingAokijiCaptureStory;
+    if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
+      game.pendingAokijiCaptureStory = null;
+      return null;
+    }
+    const playerId = String(raw.playerId || "");
+    const player = (game.players || []).find((entry) => String(entry?.id || entry?.userId || "") === playerId);
+    if (!player || !playerId) {
+      game.pendingAokijiCaptureStory = null;
+      return null;
+    }
+    const pending = {
+      schemaVersion: AOKIJI_CAPTURE_STORY_SCHEMA_VERSION,
+      id: String(raw.id || `aokiji-capture-${playerId}-${Math.max(1, Number(game.round || 1))}`),
+      playerId,
+      reason: String(raw.reason || "戰敗"),
+      source: String(raw.source || "capture"),
+      phase: AOKIJI_CAPTURE_STORY_PHASES.has(String(raw.phase || "")) ? String(raw.phase) : "intro",
+      choice: ["leave", "fight"].includes(String(raw.choice || "")) ? String(raw.choice) : "",
+      createdAtRound: Math.max(1, Math.floor(Number(raw.createdAtRound || game.round || 1))),
+      resumeMode: AOKIJI_CAPTURE_STORY_RESUME_MODES.has(String(raw.resumeMode || "")) ? String(raw.resumeMode) : "end_turn",
+    };
+    const prison = normalizeImpelDownState(player);
+    prison.aokijiFirstCaptureStorySeen = true;
+    if (pending.phase === "battle") {
+      const activeBattleMatches = Boolean(
+        state.battleState?.isAokijiCaptureStoryBattle
+        && String(state.battleState.storyId || "") === pending.id
+      );
+      const savedBattleMatches = Boolean(
+        player.pendingBattle?.isAokijiCaptureStoryBattle
+        && String(player.pendingBattle.storyId || "") === pending.id
+      );
+      if (!activeBattleMatches && !savedBattleMatches) {
+        pending.phase = pending.choice === "fight" ? "fight-response" : "choice";
+      }
+    }
+    game.pendingAokijiCaptureStory = pending;
+    return pending;
+  }
+
+  function pendingAokijiCaptureStory() {
+    return normalizePendingAokijiCaptureStory(state.gameState);
+  }
+
+  function aokijiCaptureStoryPlayer(pending = pendingAokijiCaptureStory()) {
+    if (!pending) return null;
+    return (state.gameState?.players || []).find((entry) => String(entry?.id || entry?.userId || "") === String(pending.playerId || "")) || null;
+  }
+
+  function shouldInterceptFirstImpelDownCapture(player) {
+    if (!player || isPlayerInImpelDown(player) || isPlayerInMarineford(player)) return false;
+    if (pendingAokijiCaptureStory()) return false;
+    return !normalizeImpelDownState(player).aokijiFirstCaptureStorySeen;
+  }
+
+  function stageAokijiFirstCaptureStory(player, reason, options = {}) {
+    if (!shouldInterceptFirstImpelDownCapture(player)) return null;
+    const prison = normalizeImpelDownState(player);
+    const playerId = String(player.id || player.userId || "");
+    const round = Math.max(1, Number(state.gameState?.round || 1));
+    prison.aokijiFirstCaptureStorySeen = true;
+    restoreCrewForCapture(player, 1);
+    player.pendingBattle = null;
+    state.gameState.pendingMove = null;
+    state.gameState.movementAnimating = false;
+    state.gameState.diceRolling = false;
+    state.gameState.routePrompt = null;
+    state.gameState.islandDecision = null;
+    player.routeChoice = null;
+    const pending = {
+      schemaVersion: AOKIJI_CAPTURE_STORY_SCHEMA_VERSION,
+      id: `aokiji-capture-${playerId}-${round}-${Date.now().toString(36)}`,
+      playerId,
+      reason: String(reason || "戰敗"),
+      source: String(options.source || "capture"),
+      phase: "intro",
+      choice: "",
+      createdAtRound: round,
+      resumeMode: AOKIJI_CAPTURE_STORY_RESUME_MODES.has(String(options.resumeMode || "")) ? String(options.resumeMode) : "end_turn",
+    };
+    state.gameState.pendingAokijiCaptureStory = pending;
+    state.gameState.resolutionLock = true;
+    state.gameState.turnStep = "青雉首次攔截劇情";
+    addLog(`${player.name} 原本將因${pending.reason}被押往推進城；青雉現身攔下押送，全隊 HP 與技能次數已完全恢復。`);
+    scheduleBoardLanStatePush("aokiji-first-capture-stage", 20, { force: true });
+    return pending;
+  }
+
+  function requestPlayerImpelDownCapture(player, reason = "戰敗", options = {}) {
+    const pending = stageAokijiFirstCaptureStory(player, reason, options);
+    if (pending) return { intercepted: true, pending, prison: null };
+    return { intercepted: false, pending: null, prison: sendPlayerToImpelDown(player, reason) };
+  }
+
+  function aokijiCaptureDialogueChoiceOptions(player, canControl, options = {}) {
+    const watching = options.forceWatching === true || !canControl;
+    return {
+      inlineChoices: AOKIJI_CAPTURE_DIALOGUE_CHOICES,
+      choiceReadOnly: watching,
+      choiceWaitingText: options.waitingText || `正在等待 ${player?.name || "目前玩家"} 做出回應。`,
+      onDialogueChoice: watching ? null : (choice) => resolveAokijiCaptureStoryChoice(choice),
+    };
+  }
+
+  function markAokijiCaptureModalIdentity(pending, phase = pending?.phase || "") {
+    if (!refs.modal || !pending) return;
+    refs.modal.dataset.aokijiCaptureStoryId = String(pending.id || "");
+    refs.modal.dataset.aokijiCapturePhase = String(phase || "");
+  }
+
+  function clearPendingAokijiCaptureStory(player, pending) {
+    const active = pendingAokijiCaptureStory();
+    if (!active || (pending && String(active.id || "") !== String(pending.id || ""))) return false;
+    if (player && String(active.playerId || "") !== String(player.id || player.userId || "")) return false;
+    state.gameState.pendingAokijiCaptureStory = null;
+    state.gameState.resolutionLock = false;
+    state.gameState.turnStep = active.resumeMode === "continue_turn" ? "擲骰前進" : state.gameState.turnStep;
+    scheduleBoardLanStatePush("aokiji-first-capture-complete", 20, { force: true });
+    return true;
+  }
+
+  function completeAokijiCaptureRelease(player, pending, options = {}) {
+    if (!player || !pending || !clearPendingAokijiCaptureStory(player, pending)) return false;
+    closeModal();
+    addLog(options.fromBattle
+      ? `${player.name} 擊退青雉的試探；青雉遵守約定放行，本次不會被送進推進城。`
+      : `${player.name} 接受青雉的放行，本次不會被送進推進城。`);
+    renderAll();
+    if (pending.resumeMode === "end_turn") {
+      endTurn({
+        context: options.fromBattle ? "battle" : "event",
+        subtitle: options.fromBattle ? "青雉結束試探，準備切換到下一位玩家。" : "青雉暫時放行，準備切換到下一位玩家。",
+      });
+    }
+    return true;
+  }
+
+  function aokijiCaptureStoryBattleProfile() {
+    const source = MARINEFORD_BOSSES.find((entry) => String(entry?.key || "") === "aokiji") || MARINEFORD_BOSSES[0];
+    const profile = source ? safeJsonClone(source) : null;
+    return profile ? withEnemyLevel(profile, CHARACTER_MAX_LEVEL) : null;
+  }
+
+  function startAokijiCaptureStoryBattle(player, pending = pendingAokijiCaptureStory()) {
+    if (!player || !pending || pending.choice !== "fight") return false;
+    if (!canBoardLanControlCurrentPlayer(player)) return false;
+    const profile = aokijiCaptureStoryBattleProfile();
+    if (!profile) {
+      addLog("青雉的戰鬥資料無法載入，這次先依放行處理。");
+      return completeAokijiCaptureRelease(player, pending);
+    }
+    restoreCrewForCapture(player, 1);
+    ensureActiveCrewAlive(player);
+    const storyIsland = { id: AOKIJI_CAPTURE_STORY_ISLAND_ID, kind: "story_trial", name: "青雉的放行試煉", glyphId: "aokiji" };
+    const storyIslandState = {
+      enemyProfile: profile,
+      enemyTier: profile.tier,
+      maxHp: Math.max(1, Number(profile.maxHp || 720)),
+      currentHp: Math.max(1, Number(profile.maxHp || 720)),
+      isDefeated: false,
+    };
+    closeModal();
+    const battle = createBattleState(player, storyIsland, storyIslandState);
+    battle.isAokijiCaptureStoryBattle = true;
+    battle.isStoryTrialBattle = true;
+    battle.storyId = pending.id;
+    battle.storyCaptureReason = pending.reason;
+    battle.storyResumeMode = pending.resumeMode;
+    battle.noEscape = true;
+    battle.isNoEscape = true;
+    battle.noCoop = true;
+    battle.noRewards = true;
+    battle.noDrops = true;
+    battle.noLineageExtraction = true;
+    battle.escapeThreshold = 0;
+    battle.prebattleIntro = {
+      ...(battle.prebattleIntro || {}),
+      id: `aokiji-capture-intro-${pending.id}`,
+      key: `aokiji-capture-intro-${pending.id}`,
+      done: true,
+      cinematic: null,
+    };
+    battle.log = [`${player.name} 不接受青雉的放行，向青雉發起挑戰。`, "此戰無法逃跑，也不會獲得獎勵、掉落物或血統因子。"];
+    pending.phase = "battle";
+    state.gameState.pendingAokijiCaptureStory = pending;
+    state.gameState.resolutionLock = true;
+    state.gameState.turnStep = "青雉挑戰";
+    player.pendingBattle = null;
+    state.battleState = battle;
+    playBgmForContext(bgmBattleContext(battle), { force: true });
+    ensureBattleRound(player, battle);
+    renderBattleInterface();
+    notifyBattleWindow();
+    scheduleBoardLanStatePush("aokiji-first-capture-battle-start", 20, { force: true });
+    return true;
+  }
+
+  function resolveAokijiCaptureStoryChoice(choice, options = {}) {
+    const pending = pendingAokijiCaptureStory();
+    const player = aokijiCaptureStoryPlayer(pending);
+    const normalizedChoice = choice === "fight" ? "fight" : "leave";
+    if (!pending || !player || !["intro", "choice"].includes(pending.phase)) return false;
+    const cpuAuto = options.cpuAuto === true && isCpuPlayer(player) && canLocalDriveCpuPlayer(player);
+    if (!cpuAuto && !canBoardLanControlCurrentPlayer(player)) {
+      shared.showToast(`正在等待 ${player.name} 做出選擇。`);
+      return false;
+    }
+    pending.choice = normalizedChoice;
+    if (cpuAuto) {
+      pending.phase = "leave-response";
+      state.gameState.pendingAokijiCaptureStory = pending;
+      addLog(`${player.name} 由代理 CPU 接受青雉放行。`);
+      return completeAokijiCaptureRelease(player, pending);
+    }
+    pending.phase = normalizedChoice === "fight" ? "fight-response" : "leave-response";
+    state.gameState.pendingAokijiCaptureStory = pending;
+    state.gameState.resolutionLock = true;
+    state.gameState.turnStep = normalizedChoice === "fight" ? "回應青雉：接受挑戰" : "回應青雉：接受放行";
+    scheduleBoardLanStatePush("aokiji-first-capture-choice", 20, { force: true });
+    return playAokijiCaptureResponseStory(player, pending);
+  }
+
+  function openAokijiCaptureDialogueChoice(player, pending, options = {}) {
+    if (!player || !pending) return false;
+    const canControl = canBoardLanControlCurrentPlayer(player) && !options.forceWatching;
+    startFinalEndingCinematicSession(
+      player,
+      AOKIJI_CAPTURE_CHOICE_STORY,
+      () => {},
+      0,
+      0,
+      aokijiCaptureDialogueChoiceOptions(player, canControl, options)
+    );
+    markAokijiCaptureModalIdentity(pending, options.phase || pending.phase || "choice");
+    return true;
+  }
+
+  function playAokijiCaptureResponseStory(player, pending, options = {}) {
+    if (!player || !pending) return false;
+    const canControl = canBoardLanControlCurrentPlayer(player) && !options.forceWatching;
+    const isFight = pending.phase === "fight-response";
+    const ending = isFight ? AOKIJI_CAPTURE_FIGHT_RESPONSE_STORY : AOKIJI_CAPTURE_LEAVE_RESPONSE_STORY;
+    startFinalEndingCinematicSession(player, ending, () => {
+      if (!canControl) return;
+      if (isFight) {
+        startAokijiCaptureStoryBattle(player, pending);
+      } else {
+        completeAokijiCaptureRelease(player, pending);
+      }
+    });
+    markAokijiCaptureModalIdentity(pending, pending.phase);
+    return true;
+  }
+
+  function presentPendingAokijiCaptureStory() {
+    const pending = pendingAokijiCaptureStory();
+    const player = aokijiCaptureStoryPlayer(pending);
+    if (!pending || !player || state.battleState || pending.phase === "battle") return false;
+    const visibleId = String(refs.modal?.dataset?.aokijiCaptureStoryId || "");
+    const visiblePhase = String(refs.modal?.dataset?.aokijiCapturePhase || "");
+    if (refs.modalBack?.classList.contains("open") && !visibleId) return false;
+    if (isCpuPlayer(player) && canLocalDriveCpuPlayer(player)) {
+      if (["intro", "choice"].includes(pending.phase)) return resolveAokijiCaptureStoryChoice("leave", { cpuAuto: true });
+      return completeAokijiCaptureRelease(player, pending);
+    }
+    if (refs.modalBack?.classList.contains("open")) {
+      if (visibleId === pending.id && visiblePhase === pending.phase) return true;
+      if (!visibleId) return false;
+      if (visibleId !== pending.id) closeModal();
+    }
+    const canControl = canBoardLanControlCurrentPlayer(player);
+    if (pending.phase === "choice") {
+      return openAokijiCaptureDialogueChoice(player, pending, {
+        forceWatching: !canControl,
+        waitingText: `正在等待 ${player.name} 做出回應。`,
+      });
+    }
+    if (pending.phase === "leave-response") {
+      return playAokijiCaptureResponseStory(player, pending, { forceWatching: !canControl });
+    }
+    if (pending.phase === "fight-response") {
+      return playAokijiCaptureResponseStory(player, pending, { forceWatching: !canControl });
+    }
+    startFinalEndingCinematicSession(player, AOKIJI_CAPTURE_INTRO_STORY, () => {
+      if (canControl) {
+        const current = pendingAokijiCaptureStory();
+        if (!current || current.id !== pending.id) return;
+        current.phase = "choice";
+        state.gameState.pendingAokijiCaptureStory = current;
+        state.gameState.turnStep = "選擇接受放行或挑戰青雉";
+        scheduleBoardLanStatePush("aokiji-first-capture-choice-open", 20, { force: true });
+        openAokijiCaptureDialogueChoice(player, current);
+      } else {
+        openAokijiCaptureDialogueChoice(player, pending, { forceWatching: true, phase: "intro", waitingText: `正在等待 ${player.name} 做出回應。` });
+      }
+    });
+    markAokijiCaptureModalIdentity(pending, "intro");
+    return true;
+  }
+
+  function schedulePendingAokijiCaptureStory() {
+    [0, 220, 680].forEach((delay) => {
+      window.setTimeout(() => {
+        if (!boardLan.applying) presentPendingAokijiCaptureStory();
+      }, delay);
+    });
+  }
+
   function sendPlayerToImpelDown(player, reason = "戰敗") {
     if (!player) return null;
+    const pendingStory = state.gameState?.pendingAokijiCaptureStory;
+    if (pendingStory && String(pendingStory.playerId || "") === String(player.id || player.userId || "")) {
+      state.gameState.pendingAokijiCaptureStory = null;
+    }
     const prison = normalizeImpelDownState(player);
     const level = impelDownLevelForBounty(player.bounty);
     const rule = impelDownRuleForLevel(level);
@@ -30042,7 +30692,14 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const coins = Math.max(0, Number(player?.coins || 0));
     if (coins < loss) {
       if (player) player.coins = 0;
-      sendPlayerToImpelDown(player, `${reason}但貝里不足`);
+      const capture = requestPlayerImpelDownCapture(player, `${reason}但貝里不足`, { source: "berry_penalty", resumeMode: "end_turn" });
+      if (capture.intercepted) {
+        return {
+          summary: `需要 ${loss} 貝里，持有不足；青雉現身暫停押送`,
+          captured: false,
+          aokijiCaptureStoryPending: true,
+        };
+      }
       return {
         summary: `需要 ${loss} 貝里，持有不足，已被送進推進城`,
         captured: true,
@@ -32379,14 +33036,6 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       addLog(`${player.name} 乘著逆流翻越顛倒山，前方五條主航線即將展開。`);
       renderAll();
       scheduleBoardLanStatePush("reverse-mountain-story-start", 0, { force: true });
-      playBgmForContext({
-        phase: "story",
-        sceneType: "reverse_mountain",
-        locationType: "island",
-        islandType: "reverse-mountain",
-        eventTags: ["journey", "route_choice", "grand_line"],
-        storyMood: "epic",
-      });
       preloadFinalEndingAssets(REVERSE_MOUNTAIN_STORY_DEFINITION);
       startFinalEndingCinematicSession(player, REVERSE_MOUNTAIN_STORY_DEFINITION, () => {
         reverseMountainStoryActive = false;
@@ -37293,7 +37942,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     `;
   }
 
-  function finalEndingDialogueContentMarkup(ending, chapterIndex, beats, beatIndex) {
+  function finalEndingDialogueContentMarkup(ending, chapterIndex, beats, beatIndex, sessionOptions = {}) {
     const safeBeatIndex = Math.max(0, Math.min(beats.length - 1, Number(beatIndex) || 0));
     const chapter = ending.chapters[chapterIndex] || ending.chapters[0];
     const beat = beats[safeBeatIndex] || { speaker: chapter?.speaker || "旁白", text: chapter?.text || "" };
@@ -37304,6 +37953,20 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const speakerMarkup = speakerName ? `<div class="final-ending-speaker">${escapeModalText(speakerName)}</div>` : "";
     const portraitLayerClass = finalEndingSpeakerPortraitLayerClass(beat);
     const portraitStyle = finalEndingSpeakerPortraitStyle(beat);
+    const inlineChoices = last && Array.isArray(sessionOptions.inlineChoices)
+      ? sessionOptions.inlineChoices.filter((choice) => choice?.id && choice?.value && choice?.label)
+      : [];
+    const choiceActionsMarkup = inlineChoices.length ? `
+      <div class="final-ending-inline-choices" role="group" aria-label="劇情對話選項">
+        ${inlineChoices.map((choice) => {
+          const id = String(choice.id || "").replace(/[^\w-]/g, "");
+          const value = String(choice.value || "").replace(/[^\w-]/g, "");
+          const tone = String(choice.tone || "").replace(/[^\w-]/g, "");
+          return `<button type="button" class="final-ending-inline-choice ${tone ? `tone-${tone}` : ""}" id="${id}" data-final-ending-choice="${value}" disabled>${escapeModalText(choice.label)}</button>`;
+        }).join("")}
+      </div>
+      ${sessionOptions.choiceReadOnly ? `<p class="final-ending-inline-choice__waiting">${escapeModalText(sessionOptions.choiceWaitingText || "正在等待目前玩家做出回應。")}</p>` : ""}
+    ` : "";
     const portraitMarkup = speakerPortrait ? `
       <div class="final-ending-speaker-portrait${portraitLayerClass}"${portraitStyle} aria-hidden="true">
         <img src="${escapeModalText(speakerPortrait)}" alt="" loading="eager" decoding="async" draggable="false">
@@ -37318,10 +37981,12 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         </div>
         <p class="final-ending-lines"><span class="final-ending-line current">${escapeModalText(beat.text)}</span></p>
         <div class="final-ending-progress" aria-hidden="true">${finalEndingProgressMarkup(ending, chapterIndex)}</div>
-        <div class="final-ending-actions">
-          <button type="button" class="final-ending-btn ghost" id="finalEndingPrevBtn" ${chapterIndex <= 0 && safeBeatIndex <= 0 ? "disabled" : ""}>返回</button>
-          <button type="button" class="final-ending-btn primary" id="finalEndingNextBtn">${last ? escapeModalText(ending.finishLabel || "完成結局") : (lastBeat ? "下一幕" : "繼續")}</button>
-        </div>
+        ${inlineChoices.length ? choiceActionsMarkup : `
+          <div class="final-ending-actions">
+            <button type="button" class="final-ending-btn ghost" id="finalEndingPrevBtn" ${chapterIndex <= 0 && safeBeatIndex <= 0 ? "disabled" : ""}>返回</button>
+            <button type="button" class="final-ending-btn primary" id="finalEndingNextBtn">${last ? escapeModalText(ending.finishLabel || "完成結局") : (lastBeat ? "下一幕" : "繼續")}</button>
+          </div>
+        `}
       </div>
     `;
   }
@@ -37405,7 +38070,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     ].join(";");
   }
 
-  function finalEndingCinematicMarkup(player, ending, chapterIndex, beatIndex = 0) {
+  function finalEndingCinematicMarkup(player, ending, chapterIndex, beatIndex = 0, sessionOptions = {}) {
     const chapter = ending.chapters[chapterIndex] || ending.chapters[0];
     const beats = finalEndingChapterBeats(chapter);
     const safeBeatIndex = Math.max(0, Math.min(beats.length - 1, Number(beatIndex) || 0));
@@ -37446,18 +38111,19 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
           <img class="final-ending-robin" src="images/board/final_island/robin_reading_cutout.webp" alt="妮可·羅賓" loading="eager" decoding="async" draggable="false">
         ` : ""}
         <section class="${finalEndingDialogueClassName(beat)}" aria-live="polite">
-          ${finalEndingDialogueContentMarkup(ending, chapterIndex, beats, safeBeatIndex)}
+          ${finalEndingDialogueContentMarkup(ending, chapterIndex, beats, safeBeatIndex, sessionOptions)}
         </section>
       </div>
     `;
   }
 
-  function startFinalEndingCinematicSession(player, ending, onComplete, chapterIndex = 0, beatIndex = 0) {
+  function startFinalEndingCinematicSession(player, ending, onComplete, chapterIndex = 0, beatIndex = 0, sessionOptions = {}) {
     if (!ending || !Array.isArray(ending.chapters) || !ending.chapters.length) {
       addLog("目前無法播放這段劇情。");
       if (typeof onComplete === "function") onComplete();
       return;
     }
+    playBgmForContext(bgmStoryContext(ending, player), { transition: "immediate", fadeMs: 3200 });
     preloadFinalEndingAssets(ending);
     let currentChapterIndex = Math.max(0, Math.min(ending.chapters.length - 1, Number(chapterIndex) || 0));
     let currentChapter = ending.chapters[currentChapterIndex] || ending.chapters[0];
@@ -37467,11 +38133,26 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       window.clearTimeout(finalEndingAutoTimer);
       finalEndingAutoTimer = null;
     }
-    openModal(finalEndingCinematicMarkup(player, ending, currentChapterIndex, currentBeatIndex), "final-ending-fullscreen-modal no-backdrop-close force-choice");
+    openModal(finalEndingCinematicMarkup(player, ending, currentChapterIndex, currentBeatIndex, sessionOptions), "final-ending-fullscreen-modal no-backdrop-close force-choice");
     let canAdvance = false;
     let sessionCompleted = false;
     const screen = document.querySelector(".final-ending-screen");
     const dialogue = document.querySelector(".final-ending-dialogue");
+    const currentBeatHasInlineChoices = () => Boolean(
+      Array.isArray(sessionOptions.inlineChoices)
+      && sessionOptions.inlineChoices.length
+      && currentChapterIndex >= ending.chapters.length - 1
+      && currentBeatIndex >= currentBeats.length - 1
+    );
+    const updateInlineChoiceControls = (locked = !canAdvance) => {
+      const readOnly = sessionOptions.choiceReadOnly === true;
+      document.querySelectorAll("[data-final-ending-choice]").forEach((button) => {
+        button.disabled = readOnly || locked;
+      });
+      const skipButton = document.getElementById("finalEndingSkipBtn");
+      if (skipButton) skipButton.hidden = currentBeatHasInlineChoices();
+      screen?.classList.toggle("has-inline-choice", currentBeatHasInlineChoices());
+    };
     const renderOpeningStoryBeatExtras = (beat = {}) => {
       if (!screen || ending.id !== "opening_great_pirate_age") return;
       delete screen.dataset.openingEffect;
@@ -37497,6 +38178,16 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       clearFinalEndingAdvanceTimer();
       if (typeof onComplete === "function") onComplete();
     };
+    const completeInlineChoice = (choice) => {
+      if (sessionCompleted || sessionOptions.choiceReadOnly === true || !currentBeatHasInlineChoices()) return;
+      sessionCompleted = true;
+      if (finalEndingAutoTimer) {
+        window.clearTimeout(finalEndingAutoTimer);
+        finalEndingAutoTimer = null;
+      }
+      clearFinalEndingAdvanceTimer();
+      if (typeof sessionOptions.onDialogueChoice === "function") sessionOptions.onDialogueChoice(choice);
+    };
     const updatePlaybackControls = () => {
       const autoButton = document.getElementById("finalEndingAutoBtn");
       const speedSelect = document.getElementById("finalEndingSpeedSelect");
@@ -37511,7 +38202,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     };
     const scheduleAutoAdvance = () => {
       clearFinalEndingAdvanceTimer();
-      if (!storyPlaybackSettings.auto || !canAdvance) return;
+      if (!storyPlaybackSettings.auto || !canAdvance || currentBeatHasInlineChoices()) return;
       const beat = currentBeats[currentBeatIndex] || {};
       finalEndingAdvanceTimer = window.setTimeout(() => {
         finalEndingAdvanceTimer = null;
@@ -37527,12 +38218,14 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       canAdvance = false;
       const nextButton = document.getElementById("finalEndingNextBtn");
       if (nextButton) nextButton.disabled = true;
+      updateInlineChoiceControls(true);
       dialogue?.classList.add("waiting");
       const lockMs = Math.max(180, Math.round(FINAL_ENDING_ADVANCE_LOCK_MS / Math.max(0.5, Number(storyPlaybackSettings.speed || 1))));
       finalEndingAutoTimer = window.setTimeout(() => {
         canAdvance = true;
         const currentNextButton = document.getElementById("finalEndingNextBtn");
         if (currentNextButton) currentNextButton.disabled = false;
+        updateInlineChoiceControls(false);
         dialogue?.classList.remove("waiting");
         finalEndingAutoTimer = null;
         scheduleAutoAdvance();
@@ -37546,6 +38239,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       canAdvance = true;
       const currentNextButton = document.getElementById("finalEndingNextBtn");
       if (currentNextButton) currentNextButton.disabled = false;
+      updateInlineChoiceControls(false);
       dialogue?.classList.remove("waiting");
       scheduleAutoAdvance();
     };
@@ -37554,7 +38248,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       if (!dialogue) return;
       renderOpeningStoryBeatExtras(currentBeat);
       dialogue.className = `${finalEndingDialogueClassName(currentBeat)} waiting`;
-      dialogue.innerHTML = finalEndingDialogueContentMarkup(ending, currentChapterIndex, currentBeats, currentBeatIndex);
+      dialogue.innerHTML = finalEndingDialogueContentMarkup(ending, currentChapterIndex, currentBeats, currentBeatIndex, sessionOptions);
       armAdvanceLock();
     };
     const renderCurrentScene = () => {
@@ -37588,6 +38282,10 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     };
     const goNext = (_options = {}) => {
       clearFinalEndingAdvanceTimer();
+      if (currentBeatHasInlineChoices()) {
+        if (!canAdvance) releaseAdvanceLock();
+        return;
+      }
       if (!canAdvance) {
         releaseAdvanceLock();
         return;
@@ -37633,10 +38331,23 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     });
     document.getElementById("finalEndingSkipBtn")?.addEventListener("click", (event) => {
       event.stopPropagation();
+      if (currentBeatHasInlineChoices()) {
+        if (!canAdvance) releaseAdvanceLock();
+        return;
+      }
       completeSession();
     });
     dialogue?.addEventListener("click", (event) => {
       event.stopPropagation();
+      const inlineChoiceButton = event.target?.closest?.("[data-final-ending-choice]");
+      if (inlineChoiceButton) {
+        if (!canAdvance || inlineChoiceButton.disabled) {
+          if (!sessionOptions.choiceReadOnly) releaseAdvanceLock();
+          return;
+        }
+        completeInlineChoice(String(inlineChoiceButton.dataset.finalEndingChoice || ""));
+        return;
+      }
       const prevButton = event.target?.closest?.("#finalEndingPrevBtn");
       if (prevButton) {
         goPrev();
@@ -38540,6 +39251,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   function applyPostResolution(player, result) {
     if (warnBoardLanTurnLocked(player)) return;
     renderAll();
+    if (result.aokijiCaptureStoryPending) return;
     if (result.captured) {
       endTurn();
       return;
@@ -42055,7 +42767,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       locationType: "island",
       islandType: "arena",
       environment: ["colosseum", "battle"],
-    }, { force: true });
+    });
     openModal(arenaUiMarkup({
       islandName,
       researchPoints: lab.researchPoints,
@@ -42419,6 +43131,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       islandType: "postgame_egghead",
       character: bgmCharacterTag(activeCrew(player)),
       enemyType: [profile.tier, profile.role, profile.key],
+      enemyMusicKey: profile.key,
       isBoss: true,
       isForcedBattle: false,
       dangerLevel: 5,
@@ -42488,6 +43201,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       islandType: "postgame_boss",
       character: bgmCharacterTag(activeCrew(player)),
       enemyType: [profile.tier, profile.role, profile.key],
+      enemyMusicKey: bossDef.key,
       isBoss: true,
       isForcedBattle: false,
       dangerLevel: 5,
@@ -42577,6 +43291,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       islandType: island?.kind || "",
       character: bgmCharacterTag(activeCrew(player)),
       enemyType: [islandState?.enemyProfile?.tier, islandState?.enemyProfile?.role, islandState?.enemyProfile?.key],
+      enemyMusicKey: islandState?.enemyProfile?.key || "",
       isBoss: island?.kind === "yonko" || islandState?.enemyProfile?.tier === "T1",
       isForcedBattle: true,
       dangerLevel: island?.kind === "yonko" || islandState?.enemyProfile?.tier === "T1" ? 5 : 4,
@@ -45121,6 +45836,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
 
   function isCoopBattleEligible(battle = state.battleState) {
     if (!battle) return false;
+    if (battle.isStoryTrialBattle || battle.isAokijiCaptureStoryBattle || battle.noCoop) return false;
     if (battle.isJudicialRaid || battle.isMarineford) return false;
     if (battle.isImpelDown || battle.islandKind === "impel_down") return Boolean(battle.impelDown?.teamBattle);
     if (isElbaphGodKnightBattle(battle) || isFinalGateBattle(battle)) return false;
@@ -46803,6 +47519,24 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (!player) return null;
     if (warnBoardLanTurnLocked(player)) return null;
     closeModal();
+    const prison = normalizeImpelDownState(player);
+    const impelEnvironment = [
+      prison?.level === 4 ? "hot" : "",
+      prison?.level === 5 ? "cold" : "",
+      prison?.alerted ? "alert" : "",
+      prison?.allowEscape ? "countdown" : "",
+    ].filter(Boolean);
+    playBgmForContext({
+      phase: prison?.alerted || prison?.allowEscape ? "danger" : "event",
+      musicScope: `board-scenario:impel-down:${Number(prison?.level || 1)}`,
+      sceneType: "impel_down",
+      locationType: "prison",
+      islandType: "impel_down",
+      environment: impelEnvironment,
+      eventTags: ["impel_down", `level_${Number(prison?.level || 1)}`, prison?.status || ""],
+      dangerLevel: prison?.alerted ? 4 : 3,
+      storyMood: "tense",
+    }, { transition: "immediate", fadeMs: 3000 });
     writeImpelDownSnapshot(player);
     const overlay = ensureImpelDownPageOverlay();
     const frame = overlay.querySelector("iframe");
@@ -46884,6 +47618,18 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (!player) return null;
     if (warnBoardLanTurnLocked(player)) return null;
     closeModal();
+    const marinefordHold = normalizeMarinefordHold(player);
+    playBgmForContext({
+      phase: "danger",
+      musicScope: "board-scenario:marineford",
+      sceneType: "marineford",
+      locationType: "battlefield",
+      islandType: "marineford",
+      environment: ["war", "execution", marinefordHold?.rounds <= 2 ? "countdown" : ""].filter(Boolean),
+      eventTags: ["marineford", "war", `boss_${Number(marinefordHold?.bossIndex || 0)}`],
+      dangerLevel: 5,
+      storyMood: "intense",
+    }, { transition: "immediate", fadeMs: 3000 });
     writeMarinefordSnapshot(player);
     const overlay = ensureMarinefordPageOverlay();
     const frame = overlay.querySelector("iframe");
@@ -54693,6 +55439,9 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   }
 
   function getBattleRewards(battle) {
+    if (battle?.isStoryTrialBattle || battle?.isAokijiCaptureStoryBattle || battle?.noRewards) {
+      return { coins: 0, bounty: 0, exp: 0, item: "", itemText: "無道具", summary: "青雉試探戰不提供任何獎勵" };
+    }
     if (battle.isJudicialRaid || battle.islandKind === "judicial") {
       return { coins: 0, bounty: 0, exp: 0, item: "", itemText: "通關後統一發放", summary: "司法島共鬥獎勵會在通關後依貢獻統一發放" };
     }
@@ -55737,9 +56486,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         participant.active = false;
       }
       const survivors = activeJudicialRaidParticipants(raid);
-      finalizeBattleAndAdvanceTurn(player, () => {
-        sendPlayerToImpelDown(player, "司法島討伐戰敗北");
-        addJudicialRaidLog(`${player.name} 在司法島討伐戰敗北，退出本次討伐並被送進推進城。`);
+      const settleJudicialRaidDefeat = () => {
         if (!survivors.length) {
           raid.active = false;
           raid.failed = true;
@@ -55753,7 +56500,25 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
           raid.pendingJoinPlayerIds = [];
           addJudicialRaidLog("司法島討伐戰全員敗北，進度重置。");
         }
-      });
+      };
+      if (shouldInterceptFirstImpelDownCapture(player)) {
+        finalizeBattleAndAdvanceTurn(player, () => {
+          settleJudicialRaidDefeat();
+          addJudicialRaidLog(`${player.name} 在司法島討伐戰敗北並退出本次討伐；青雉現身，暫時攔下押送。`);
+        }, {
+          advanceTurn: false,
+          afterClear: () => {
+            requestPlayerImpelDownCapture(player, "司法島討伐戰敗北", { source: "judicial_loss", resumeMode: "end_turn" });
+            renderAll();
+          },
+        });
+      } else {
+        finalizeBattleAndAdvanceTurn(player, () => {
+          requestPlayerImpelDownCapture(player, "司法島討伐戰敗北", { source: "judicial_loss", resumeMode: "end_turn" });
+          addJudicialRaidLog(`${player.name} 在司法島討伐戰敗北，退出本次討伐並被送進推進城。`);
+          settleJudicialRaidDefeat();
+        });
+      }
       return;
     }
 
@@ -56307,11 +57072,69 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     return true;
   }
 
+  function finishAokijiCaptureStoryBattle(player, battle) {
+    if (!player || !battle?.isAokijiCaptureStoryBattle) return false;
+    const pending = pendingAokijiCaptureStory();
+    if (!pending || String(pending.id || "") !== String(battle.storyId || "")) {
+      addLog("青雉首次攔截狀態已失效；本場戰鬥不進行獎勵結算。");
+      finalizeBattleAndAdvanceTurn(player);
+      return true;
+    }
+    player.activeCrewIndex = Math.max(0, Number(battle.activeCrewIndex ?? player.activeCrewIndex ?? 0));
+    recalcPlayerDerivedStats(player);
+    if (battle.result === "round-pause" || battle.result === "knockout" || !battle.result) {
+      const savedBattle = cloneBattleState(battle);
+      savedBattle.isAokijiCaptureStoryBattle = true;
+      savedBattle.isStoryTrialBattle = true;
+      savedBattle.storyId = pending.id;
+      savedBattle.noEscape = true;
+      savedBattle.isNoEscape = true;
+      savedBattle.noCoop = true;
+      savedBattle.noRewards = true;
+      savedBattle.noDrops = true;
+      savedBattle.noLineageExtraction = true;
+      player.pendingBattle = savedBattle;
+      pending.phase = "battle";
+      state.gameState.pendingAokijiCaptureStory = pending;
+      addLog(`${player.name} 與青雉的試探戰暫時中止，下一次自己的回合會從目前進度繼續。`);
+      scheduleBoardLanStatePush("aokiji-first-capture-battle-pause", 20, { force: true });
+      finalizeBattleAndAdvanceTurn(player);
+      return true;
+    }
+    if (battle.result === "win") {
+      player.pendingBattle = null;
+      finalizeBattleAndAdvanceTurn(player, null, {
+        advanceTurn: false,
+        afterClear: () => completeAokijiCaptureRelease(player, pending, { fromBattle: true }),
+      });
+      return true;
+    }
+    player.pendingBattle = null;
+    finalizeBattleAndAdvanceTurn(player, null, {
+      advanceTurn: false,
+      afterClear: () => {
+        clearPendingAokijiCaptureStory(player, pending);
+        sendPlayerToImpelDown(player, pending.reason || "青雉挑戰失敗");
+        addLog(`${player.name} 沒能通過青雉的試探，依原判定被押往推進城。`);
+        renderAll();
+        scheduleBoardLanStatePush("aokiji-first-capture-battle-lose", 20, { force: true });
+        endTurn({ context: "battle", subtitle: "青雉完成押送，準備切換到下一位玩家。" });
+      },
+    });
+    return true;
+  }
+
   async function finishBattle() {
     const battle = state.battleState;
     if (!battle) return;
     if (battle.zorojuroEvolutionResolving) return;
     if (!canEndBattleTurn(battle)) return;
+    if (battle.isAokijiCaptureStoryBattle) {
+      const player = battlePlayer(null, battle);
+      if (player && warnBoardLanTurnLocked(player)) return;
+      finishAokijiCaptureStoryBattle(player, battle);
+      return;
+    }
     if (battle.result === "win" && !lineageExtractionResultPlayerReady(battle)) {
       notifyBattleWindow();
       return;
@@ -56649,8 +57472,19 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         player.finalGateElbaphStep = "";
         player.pendingBattle = null;
       }
-      sendPlayerToImpelDown(player, `${battlePlaceName} 挑戰失敗`);
+      const captureReason = `${battlePlaceName} 挑戰失敗`;
       addLog(`${battlePlaceName} 的敵人恢復全滿。`);
+      if (shouldInterceptFirstImpelDownCapture(player)) {
+        finalizeBattleAndAdvanceTurn(player, null, {
+          advanceTurn: false,
+          afterClear: () => {
+            requestPlayerImpelDownCapture(player, captureReason, { source: "battle_loss", resumeMode: "end_turn" });
+            renderAll();
+          },
+        });
+        return;
+      }
+      requestPlayerImpelDownCapture(player, captureReason, { source: "battle_loss", resumeMode: "end_turn" });
     } else if (battle.result === "round-pause" || !battle.result) {
       if (isSeaEncounter) {
         player.pendingBattle = cloneBattleState(battle);
@@ -62561,6 +63395,34 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         "tavern-result", "battle-rewards", "mission-board", "final-island-revisit",
         "final-boss-voyage-compass",
       ],
+    },
+    aokijiCaptureQa: {
+      definitions: () => ({
+        intro: safeJsonClone(AOKIJI_CAPTURE_INTRO_STORY),
+        choice: safeJsonClone(AOKIJI_CAPTURE_CHOICE_STORY),
+        leave: safeJsonClone(AOKIJI_CAPTURE_LEAVE_RESPONSE_STORY),
+        fight: safeJsonClone(AOKIJI_CAPTURE_FIGHT_RESPONSE_STORY),
+        choices: safeJsonClone(AOKIJI_CAPTURE_DIALOGUE_CHOICES),
+      }),
+      battleProfile: () => safeJsonClone(aokijiCaptureStoryBattleProfile()),
+      pending: () => {
+        const pending = pendingAokijiCaptureStory();
+        return pending ? safeJsonClone(pending) : null;
+      },
+      playerState: (player = currentPlayer()) => ({
+        playerId: String(player?.id || player?.userId || ""),
+        seen: Boolean(normalizeImpelDownState(player)?.aokijiFirstCaptureStorySeen),
+        inImpelDown: isPlayerInImpelDown(player),
+        pending: pendingAokijiCaptureStory(),
+      }),
+      shouldIntercept: shouldInterceptFirstImpelDownCapture,
+      triggerWipeout: (player = currentPlayer(), reason = "QA 全隊瀕死") => resolveCrewWipeoutIfNeeded(player, reason),
+      triggerBerryShortage: (player = currentPlayer(), amount = Math.max(1, Number(player?.coins || 0) + 1), reason = "QA 罰款") => applyBerryPenaltyOrCapture(player, amount, reason),
+      requestCapture: requestPlayerImpelDownCapture,
+      choose: resolveAokijiCaptureStoryChoice,
+      present: presentPendingAokijiCaptureStory,
+      startBattle: startAokijiCaptureStoryBattle,
+      resumeBattle: resumeAokijiCaptureStoryBattle,
     },
     sendPlayerToImpelDown,
     openImpelDownModal,

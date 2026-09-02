@@ -1,0 +1,875 @@
+:root {
+  color-scheme: dark;
+  --ink: #040b12;
+  --gold: #e8bd68;
+  --cream: #fff1ca;
+  --launcher-scale: 1;
+  --launcher-x: 0px;
+  --launcher-y: 0px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  height: 100%;
+  background: var(--ink);
+}
+
+body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  color: #f8f4e9;
+  font-family: "Microsoft JhengHei", "PingFang TC", system-ui, sans-serif;
+  background: #02070c;
+}
+
+.launcher-stage {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 1540px;
+  height: 660px;
+  overflow: hidden;
+  isolation: isolate;
+  background-color: #071522;
+  background-image: url("../images/game_launcher/launcher_gallery_background_v2.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  transform: translate3d(var(--launcher-x), var(--launcher-y), 0) scale(var(--launcher-scale));
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+.launcher-stage::before,
+.launcher-stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.launcher-stage::before {
+  z-index: 0;
+  background:
+    linear-gradient(to bottom, rgba(2, 8, 14, .66) 0%, rgba(2, 8, 14, .22) 24%, transparent 52%, rgba(1, 5, 9, .12) 100%),
+    radial-gradient(ellipse at 50% 8%, rgba(2, 8, 14, .18), transparent 58%);
+}
+
+.launcher-stage::after {
+  z-index: 0;
+  box-shadow: inset 0 0 150px rgba(0, 0, 0, .48);
+}
+
+.launcher-shell {
+  position: relative;
+  z-index: 1;
+  width: 1440px;
+  height: 660px;
+  min-height: 660px;
+  margin: 0 auto;
+  padding: 40px 77px 39.6px;
+  display: grid;
+  grid-template-rows: 1fr;
+  align-items: end;
+}
+
+.launcher-brand {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 50%;
+  width: 560px;
+  padding: 0;
+  margin: 0;
+  pointer-events: none;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 9px 9px rgba(0, 0, 0, .52));
+}
+
+.launcher-brand img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  user-select: none;
+}
+
+.game-shelf {
+  position: relative;
+  z-index: 3;
+  align-self: end;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: end;
+  gap: 48px;
+  width: 100%;
+  margin-top: 0;
+  padding: 0 8px 6.6px;
+}
+
+.game-slot {
+  min-width: 0;
+}
+
+.game-pick {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+  color: inherit;
+  text-decoration: none;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.game-box {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1086 / 1448;
+  transform-origin: center bottom;
+  filter: drop-shadow(0 24px 19px rgba(0, 0, 0, .52));
+  transition: transform .42s cubic-bezier(.2, .75, .2, 1), filter .35s ease;
+}
+
+.box-frame-cutout,
+.box-front {
+  position: absolute;
+  display: block;
+}
+
+.box-frame-cutout {
+  z-index: 3;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.box-front {
+  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+}
+
+.box-art {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  object-position: center;
+  background: transparent;
+  transition: filter .35s ease, opacity .24s ease;
+}
+
+.box-preview {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0;
+  pointer-events: none;
+  background: #02070c;
+  -webkit-clip-path: none;
+  clip-path: none;
+  transform: var(--preview-warp, scale(0));
+  transform-origin: 0 0;
+  backface-visibility: hidden;
+  transition: opacity .24s ease;
+  will-change: opacity, transform;
+}
+
+.game-slot.is-preview-playing .box-preview {
+  opacity: 1;
+}
+
+.game-slot.is-preview-playing .box-art {
+  opacity: 0;
+}
+
+.box-art-card {
+  object-position: center;
+  background: transparent;
+}
+
+.board-edition .box-art,
+.chess-edition .box-art {
+  object-fit: contain;
+}
+
+.box-shine {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(112deg, rgba(255, 255, 255, .18) 0%, rgba(255, 255, 255, .025) 17%, transparent 38%),
+    linear-gradient(to bottom, transparent 72%, rgba(2, 8, 13, .12) 100%);
+}
+
+.card-edition .box-shine {
+  -webkit-clip-path: polygon(7.119% 10.908%, 81.492% 12.015%, 81.492% 91.068%, 7.076% 87.226%);
+  clip-path: polygon(7.119% 10.908%, 81.492% 12.015%, 81.492% 91.068%, 7.076% 87.226%);
+}
+
+.board-edition .box-shine {
+  -webkit-clip-path: polygon(6.722% 9.399%, 81.031% 10.82%, 81.031% 90.465%, 6.722% 86.53%);
+  clip-path: polygon(6.722% 9.399%, 81.031% 10.82%, 81.031% 90.465%, 6.722% 86.53%);
+}
+
+.chess-edition .box-shine {
+  -webkit-clip-path: polygon(7.182% 9.468%, 81.794% 10.749%, 81.641% 93.501%, 7.182% 89.431%);
+  clip-path: polygon(7.182% 9.468%, 81.794% 10.749%, 81.641% 93.501%, 7.182% 89.431%);
+}
+
+.table-shadow {
+  position: absolute;
+  z-index: -1;
+  right: 2%;
+  bottom: -10px;
+  left: 0;
+  height: 34px;
+  display: block;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, .62);
+  filter: blur(9px);
+  transform: scaleX(.92);
+  transition: transform .4s ease, opacity .4s ease;
+}
+
+.game-pick:hover .game-box,
+.game-pick:focus-visible .game-box {
+  transform: translateY(-12px) scale(1.018);
+  filter: drop-shadow(0 32px 23px rgba(0, 0, 0, .58)) drop-shadow(0 0 14px rgba(var(--accent-rgb), .17));
+}
+
+.game-pick:hover .box-art,
+.game-pick:focus-visible .box-art {
+  filter: saturate(1.08) contrast(1.02);
+}
+
+.game-pick:hover .table-shadow,
+.game-pick:focus-visible .table-shadow {
+  opacity: .8;
+  transform: translateY(5px) scaleX(.82);
+}
+
+.game-pick:focus-visible {
+  border-radius: 12px;
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), .88), 0 0 0 7px rgba(3, 13, 21, .88);
+}
+
+.game-slot.is-unavailable .game-pick {
+  cursor: not-allowed;
+}
+
+.game-slot.is-unavailable .game-pick:hover .game-box,
+.game-slot.is-unavailable .game-pick:focus-visible .game-box {
+  transform: none;
+  filter: drop-shadow(0 24px 19px rgba(0, 0, 0, .52));
+}
+
+.game-slot.is-unavailable .game-pick:hover .box-art,
+.game-slot.is-unavailable .game-pick:focus-visible .box-art {
+  filter: none;
+}
+
+.game-slot.is-unavailable .game-pick:hover .table-shadow,
+.game-slot.is-unavailable .game-pick:focus-visible .table-shadow {
+  opacity: 1;
+  transform: none;
+}
+
+/* 三合一啟動流程。收藏室本身仍使用原本的 1540 × 660 固定構圖。 */
+.launcher-stage {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .55s ease, visibility .55s step-end;
+}
+
+body[data-launcher-entry-stage="gallery"] .launcher-stage {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity .55s ease, visibility 0s;
+}
+
+.launcher-entry {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  min-width: 100%;
+  min-height: 100%;
+  overflow: hidden;
+  isolation: isolate;
+  background-color: #061521;
+  background-image: url("../images/game_launcher/launcher_gallery_background_v2.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .55s ease, visibility 0s;
+}
+
+.launcher-entry::before,
+.launcher-entry::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.launcher-entry::before {
+  z-index: -2;
+  background:
+    radial-gradient(circle at 50% 15%, rgba(61, 171, 192, .16), transparent 38%),
+    linear-gradient(180deg, rgba(1, 8, 14, .32), rgba(1, 8, 14, .18) 45%, rgba(1, 6, 11, .68));
+}
+
+.launcher-entry::after {
+  z-index: -1;
+  box-shadow: inset 0 0 18vw rgba(0, 0, 0, .6);
+  background-image:
+    linear-gradient(90deg, transparent 49.75%, rgba(232, 189, 104, .13) 50%, transparent 50.25%),
+    radial-gradient(ellipse at center, transparent 42%, rgba(0, 0, 0, .28) 100%);
+  opacity: .74;
+}
+
+body[data-launcher-entry-stage="gallery"] .launcher-entry {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .55s ease, visibility .55s step-end;
+}
+
+.launcher-entry-panel {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.launcher-entry-panel[hidden] {
+  display: none !important;
+}
+
+.launcher-entry-press {
+  display: grid;
+  place-items: center;
+}
+
+.launcher-entry-logo {
+  position: absolute;
+  z-index: 2;
+  top: clamp(40px, 13vh, 118px);
+  left: 50%;
+  width: min(700px, 72vw);
+  max-height: 31vh;
+  object-fit: contain;
+  filter: drop-shadow(0 16px 24px rgba(0, 0, 0, .68));
+  transform: translateX(-50%);
+  animation: launcher-logo-arrive .8s cubic-bezier(.2, .75, .2, 1) both;
+  pointer-events: none;
+}
+
+.launcher-entry-start {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  cursor: pointer;
+  background: transparent;
+}
+
+.launcher-entry-start-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.launcher-entry-start:focus-visible {
+  box-shadow: inset 0 0 0 3px rgba(255, 220, 145, .92);
+}
+
+.launcher-entry-hint {
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  bottom: max(34px, calc(env(safe-area-inset-bottom) + 22px));
+  left: 0;
+  display: grid;
+  gap: 5px;
+  justify-items: center;
+  color: #fff0c5;
+  text-align: center;
+  text-shadow: 0 2px 8px #000, 0 0 18px rgba(88, 209, 219, .45);
+  pointer-events: none;
+  animation: launcher-hint-pulse 1.85s ease-in-out infinite;
+}
+
+.launcher-entry-hint::before {
+  content: "";
+  width: min(280px, 52vw);
+  height: 1px;
+  margin-bottom: 7px;
+  background: linear-gradient(90deg, transparent, rgba(243, 207, 132, .75), transparent);
+}
+
+.launcher-entry-hint span {
+  font-family: "Noto Serif TC", "Microsoft JhengHei", serif;
+  font-size: clamp(20px, 2vw, 30px);
+  font-weight: 800;
+  letter-spacing: .3em;
+  text-indent: .3em;
+}
+
+.launcher-entry-hint small {
+  color: rgba(218, 235, 238, .7);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(9px, .78vw, 12px);
+  letter-spacing: .25em;
+  text-indent: .25em;
+}
+
+.launcher-entry-auth,
+.launcher-entry-boot {
+  display: grid;
+  place-items: center;
+  padding: max(14px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(14px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+  background: rgba(0, 7, 13, .45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.launcher-auth-card,
+.launcher-boot-card {
+  position: relative;
+  width: min(440px, calc(100vw - 28px));
+  max-height: calc(100dvh - 28px);
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 1px solid rgba(231, 190, 105, .68);
+  border-radius: 24px;
+  background:
+    linear-gradient(145deg, rgba(18, 48, 61, .96), rgba(5, 19, 30, .98) 56%, rgba(4, 13, 22, .99)),
+    #071522;
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, .68),
+    inset 0 1px rgba(255, 242, 201, .12),
+    0 0 0 5px rgba(3, 13, 21, .66);
+  animation: launcher-card-arrive .42s cubic-bezier(.2, .78, .25, 1) both;
+}
+
+.launcher-auth-card::before,
+.launcher-boot-card::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 1px solid rgba(81, 213, 211, .16);
+  border-radius: 18px;
+  pointer-events: none;
+}
+
+.launcher-auth-card {
+  padding: 22px 30px 20px;
+}
+
+.launcher-auth-logo {
+  display: block;
+  width: min(250px, 70%);
+  max-height: 70px;
+  margin: 0 auto 4px;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 11px rgba(0, 0, 0, .58));
+}
+
+.launcher-auth-kicker,
+.launcher-boot-kicker {
+  margin: 0;
+  color: rgba(105, 225, 218, .76);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .27em;
+  text-align: center;
+}
+
+.launcher-auth-title,
+.launcher-boot-card h2 {
+  margin: 7px 0 4px;
+  color: #fff0c7;
+  font-family: "Noto Serif TC", "Microsoft JhengHei", serif;
+  font-size: 26px;
+  line-height: 1.25;
+  text-align: center;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, .7);
+}
+
+.launcher-auth-subtitle,
+.launcher-boot-message {
+  margin: 0 auto 13px;
+  color: rgba(218, 233, 235, .72);
+  font-size: 12px;
+  line-height: 1.55;
+  text-align: center;
+}
+
+.launcher-auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid rgba(115, 196, 196, .18);
+  border-radius: 13px;
+  background: rgba(0, 8, 14, .48);
+}
+
+body[data-launcher-auth-source="local-preview"] .launcher-auth-tabs {
+  grid-template-columns: 1fr;
+}
+
+.launcher-auth-tab,
+.launcher-auth-submit,
+.launcher-auth-back,
+.launcher-boot-actions button {
+  border: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.launcher-auth-tab {
+  min-height: 36px;
+  border-radius: 9px;
+  background: transparent;
+  color: rgba(223, 237, 238, .62);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.launcher-auth-tab.is-active {
+  color: #09202a;
+  background: linear-gradient(135deg, #f8d68e, #d6a84d);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, .25);
+}
+
+.launcher-auth-form {
+  display: grid;
+  gap: 0;
+}
+
+.launcher-auth-field {
+  display: grid;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.launcher-auth-field span {
+  padding-left: 3px;
+  color: rgba(238, 223, 185, .84);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .12em;
+}
+
+.launcher-auth-field input {
+  width: 100%;
+  height: 43px;
+  border: 1px solid rgba(117, 187, 190, .31);
+  border-radius: 12px;
+  outline: 0;
+  background: rgba(0, 8, 14, .7);
+  color: #fff8e7;
+  font: 600 16px/1 "Microsoft JhengHei", sans-serif;
+  padding: 0 14px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, .28);
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+
+.launcher-auth-field input:focus {
+  border-color: rgba(245, 207, 126, .88);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, .25), 0 0 0 3px rgba(240, 195, 101, .13);
+}
+
+.launcher-auth-message {
+  min-height: 18px;
+  margin: 7px 2px 0;
+  color: #ffb7a7;
+  font-size: 11px;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.launcher-auth-submit {
+  min-height: 44px;
+  margin-top: 3px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f7d385, #bd812e);
+  color: #10212a;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: .16em;
+  text-indent: .16em;
+  box-shadow: 0 9px 22px rgba(0, 0, 0, .34), inset 0 1px rgba(255, 255, 255, .38);
+}
+
+.launcher-auth-submit:hover,
+.launcher-auth-submit:focus-visible,
+.launcher-boot-actions button:hover,
+.launcher-boot-actions button:focus-visible {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.launcher-auth-submit:disabled {
+  cursor: wait;
+  filter: saturate(.45);
+  opacity: .72;
+}
+
+.launcher-auth-tab:disabled,
+.launcher-auth-back:disabled,
+.launcher-auth-field input:disabled {
+  cursor: wait;
+  opacity: .66;
+}
+
+.launcher-auth-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 11px;
+  color: rgba(192, 215, 219, .55);
+  font-size: 10px;
+}
+
+.launcher-auth-back {
+  padding: 4px 0;
+  background: transparent;
+  color: rgba(246, 218, 157, .76);
+  font-size: 11px;
+}
+
+.launcher-auth-back:hover,
+.launcher-auth-back:focus-visible {
+  color: #fff0c5;
+  text-decoration: underline;
+}
+
+.launcher-boot-card {
+  padding: 34px 30px 29px;
+  text-align: center;
+}
+
+.launcher-boot-spinner {
+  display: block;
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 15px;
+  border: 3px solid rgba(91, 210, 211, .2);
+  border-top-color: #f0c875;
+  border-right-color: #68d5d0;
+  border-radius: 50%;
+  animation: launcher-spinner .9s linear infinite;
+}
+
+.launcher-boot-message {
+  min-height: 20px;
+  margin: 7px 0 14px;
+}
+
+.launcher-boot-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.launcher-boot-actions[hidden] {
+  display: none;
+}
+
+.launcher-boot-actions button {
+  min-height: 40px;
+  border: 1px solid rgba(225, 186, 105, .42);
+  border-radius: 10px;
+  background: rgba(13, 48, 59, .9);
+  color: #f7e5b9;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+@keyframes launcher-logo-arrive {
+  from { opacity: 0; transform: translate(-50%, -14px) scale(.96); }
+  to { opacity: 1; transform: translate(-50%, 0) scale(1); }
+}
+
+@keyframes launcher-card-arrive {
+  from { opacity: 0; transform: translateY(14px) scale(.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes launcher-hint-pulse {
+  0%, 100% { opacity: .58; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(-3px); }
+}
+
+@keyframes launcher-spinner {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-height: 520px) {
+  .launcher-entry-logo {
+    top: 5vh;
+    width: min(500px, 58vw);
+    max-height: 25vh;
+  }
+
+  .launcher-entry-hint {
+    bottom: max(13px, calc(env(safe-area-inset-bottom) + 8px));
+  }
+
+  .launcher-auth-card {
+    width: min(420px, calc(100vw - 22px));
+    max-height: calc(100dvh - 18px);
+    padding: 12px 22px 11px;
+    border-radius: 19px;
+  }
+
+  .launcher-auth-card::before,
+  .launcher-boot-card::before {
+    inset: 6px;
+    border-radius: 14px;
+  }
+
+  .launcher-auth-logo {
+    width: 180px;
+    max-height: 42px;
+    margin-bottom: 0;
+  }
+
+  .launcher-auth-kicker,
+  .launcher-auth-subtitle {
+    display: none;
+  }
+
+  .launcher-auth-title,
+  .launcher-boot-card h2 {
+    margin: 2px 0 4px;
+    font-size: 20px;
+  }
+
+  .launcher-auth-tabs {
+    padding: 3px;
+  }
+
+  .launcher-auth-tab {
+    min-height: 31px;
+    font-size: 11px;
+  }
+
+  .launcher-auth-field {
+    grid-template-columns: 56px 1fr;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+  }
+
+  .launcher-auth-field span {
+    padding: 0;
+    font-size: 11px;
+    text-align: right;
+  }
+
+  .launcher-auth-field input {
+    height: 35px;
+    border-radius: 9px;
+  }
+
+  .launcher-auth-message {
+    min-height: 14px;
+    margin-top: 3px;
+    line-height: 1.2;
+  }
+
+  .launcher-auth-submit {
+    min-height: 36px;
+    margin-top: 1px;
+    font-size: 13px;
+  }
+
+  .launcher-auth-footer {
+    margin-top: 5px;
+  }
+
+  .launcher-boot-card {
+    padding: 23px 25px 18px;
+  }
+}
+
+@media (max-width: 520px) {
+  .launcher-entry-logo {
+    top: 17vh;
+    width: 88vw;
+    max-height: 27vh;
+  }
+
+  .launcher-entry-hint span {
+    font-size: 19px;
+  }
+
+  .launcher-auth-card {
+    padding-right: 22px;
+    padding-left: 22px;
+  }
+
+  .launcher-auth-footer span {
+    display: none;
+  }
+
+  .launcher-auth-footer {
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

@@ -1160,6 +1160,7 @@
   let activeKatakuriFutureSightEventId = "";
   let katakuriFutureSightTimer = null;
   let katakuriFutureSightLoadedHandler = null;
+  let katakuriFutureSightBgmFocus = null;
   let lastBattleIdentity = "";
   let lastRenderedKingFlameOn = null;
   let kingFlameTransitionTimer = null;
@@ -5432,6 +5433,8 @@
       refs.katakuriFutureSightVideo.load();
       refs.katakuriFutureSightVideo.muted = false;
     }
+    try { katakuriFutureSightBgmFocus?.release?.(); } catch (_error) {}
+    katakuriFutureSightBgmFocus = null;
     if (refs.katakuriFutureSightCinematic) refs.katakuriFutureSightCinematic.hidden = true;
   }
 
@@ -5440,6 +5443,15 @@
     if (activeKatakuriFutureSightEventId === event.id && !refs.katakuriFutureSightCinematic.hidden) return true;
     clearKatakuriFutureSightCinematic();
     activeKatakuriFutureSightEventId = event.id;
+    try {
+      katakuriFutureSightBgmFocus = battleHostBgmManager()?.acquireAudioFocus?.("katakuri-future-sight", {
+        volumeRatio: 0.08,
+        fadeOutMs: 280,
+        fadeInMs: 720,
+      }) || null;
+    } catch (_error) {
+      katakuriFutureSightBgmFocus = null;
+    }
     refs.katakuriFutureSightTitle.textContent = event.title || "預知未來";
     refs.katakuriFutureSightCinematic.hidden = false;
     const video = refs.katakuriFutureSightVideo;
