@@ -20,6 +20,7 @@ const APP_FILES = [
   'preload.js',
   'game-preload.js',
   'game-session-policy.js',
+  'runtime-asset-cache.js',
   'auth-service.js',
   'asset-store.js',
   'launcher.html',
@@ -199,6 +200,8 @@ function validateBmp(filePath, expectedWidth, expectedHeight, label) {
 function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
+  assert(packageJson.version === '1.1.1', 'Desktop launcher version must be 1.1.1 for the runtime cache release.');
+  assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
   assert(packageJson.build?.appId === 'com.onepiece.tabletop.desktop', 'Desktop appId changed unexpectedly.');
@@ -309,6 +312,7 @@ function validateAsar(asarPath) {
     'auth-service.js',
     'game-preload.js',
     'game-session-policy.js',
+    'runtime-asset-cache.js',
     'launcher.css',
     'launcher.html',
     'launcher.js',

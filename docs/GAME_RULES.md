@@ -2,6 +2,15 @@
 
 本文件整理目前程式碼中大富翁 / Board 遊戲已存在的規則來源。這不是新設計稿；若與程式碼衝突，以目前程式碼為準，並應先更新程式或文件之一來消除衝突。
 
+## 卡牌／桌面運行效能邊界（V433）
+
+- V433 是渲染與本機素材供應修正，不改卡牌或 Board 的角色、牌效、道具、戰鬥、回合、地圖、獎勵及勝敗條件，也不改任何既有 ID、Socket.IO event、localStorage key、持久存檔 schema 或 `BOARD_GAME_STATE`。
+- 卡牌 `STATE` 與帶日誌的 `EMIT` 可以合併在同一 animation frame 顯示，但收到狀態、播放事件及決定操作權的邏輯仍立即執行；場地、棄牌、玩家或日誌 fingerprint 未變時只保留原 DOM，不代表忽略新遊戲狀態。
+- 一次抽牌操作不論由影片 `ended`、點擊略過或 failsafe 完成，都只能送一個 `DRAW`。麻痺狀態同一 round／turn／draw／skipNext 組合只能自動送一次，離開條件後才解除防重；這是防止重複指令，不改麻痺原本跳過抽牌的效果。
+- 桌面已安裝素材仍須先通過 manifest／receipt／size／SHA 驗證。運行時 path／token 記憶體索引、單檔不超過 8 MiB 與 192 MiB 總量 LRU、以及大型檔案串流只改讀取方式；長度錯誤仍觸發清除索引與修復檢查，不得把損壞素材視為有效。
+- Card／Board 的 Electron partition 仍為非持久，`cache:false` 禁用 HTTP 磁碟快取，登入 localStorage 不可跨程序保存。一般關閉再開遊戲會保留本次啟動器程序內的非帳號設定與 Board 手動存檔，登出、被踢或切換素材位置才清除；選定 D 槽時，V8 code cache 與 Chromium session／GPU／network cache 也跟隨素材根目錄落在 D 槽。帳號密文狀態仍留在 userData，這不建立第二份帳號、房間或遊戲存檔。
+- C 槽只剩約 31 MiB 仍屬作業系統層風險；V433 不等於已清出磁碟空間，也沒有授權或執行使用者檔案刪除。
+
 ## 桌面啟動器與遊戲安裝邊界（V431～V432）
 
 - 桌面啟動器只改變媒體的取得位置，不改卡牌或 Board 的角色、道具、戰鬥、回合、地圖、存檔 schema、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`。網頁與桌面玩家仍能進同一正式房間。

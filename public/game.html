@@ -6,7 +6,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>偉大航道爭霸戰｜正式對戰</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/card-tailwind-v1.min.css?v=20260904-perf-v433">
   <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
   <style>
     
@@ -2739,7 +2739,7 @@ body::before{
           <div class="pname">P1</div>
         </div>
         <div class="cardwrap">
-          <img class="cardimg" src="images/cards/back.png" alt="">
+          <img class="cardimg" src="images/cards/back.webp" alt="">
         </div>
       </div>
 
@@ -2756,7 +2756,7 @@ body::before{
           <div class="pname">P2</div>
         </div>
         <div class="cardwrap">
-          <img class="cardimg" src="images/cards/back.png" alt="">
+          <img class="cardimg" src="images/cards/back.webp" alt="">
         </div>
       </div>
     </div>
@@ -3428,6 +3428,7 @@ function getDeviceId(){
 
 let me = { roomId: presetRoom || 'op-001', playerId: null, secret: localStorage.getItem('opSecret')||'' };
 let _autoSkipKey = null;   // 麻痺自動跳過用的防呆 key
+let _drawActionPending = null; // 抽牌指令送出後，等權威 STATE 證明狀態已前進才解鎖
 let state = null;
 let _idleWarnTimer = null;
 let _idleWarnEndsAt = 0;
@@ -3454,6 +3455,52 @@ function isCpuSkipFastMode(){
 let feed = [];          // 這個陣列就是畫面上顯示的對局日誌
 let _seenRound = null;  // 已顯示的輪次
 let _seenSrvLen = 0;    // 已同步的 server log 行數
+let _renderFrame = 0;   // 同一畫面更新週期只做一次完整渲染
+
+function scheduleRender(){
+  if (_renderFrame) return;
+  _renderFrame = requestAnimationFrame(()=>{
+    _renderFrame = 0;
+    render();
+  });
+}
+
+// 麻痺跳過屬於狀態處理，不依賴 requestAnimationFrame / 畫面是否在前景。
+function syncParalyzedAutoDraw(){
+  const my = state?.players?.[me.playerId];
+  const shouldAutoSkip = !!(
+    state?.turnStep === 'draw' &&
+    state?.turnIndex === me.playerId &&
+    my?.skipNext === true
+  );
+  if (!shouldAutoSkip) {
+    _autoSkipKey = null;
+    return false;
+  }
+
+  const autoSkipKey = `${state.roundNo ?? ''}:${state.turnIndex}:draw:skipNext`;
+  if (_autoSkipKey === autoSkipKey) return false;
+  _autoSkipKey = autoSkipKey;
+  sendAction('DRAW');
+  return true;
+}
+
+function syncDrawActionPendingFromState(){
+  const pending = _drawActionPending;
+  if (!pending || !pending.sent || !state) return false;
+
+  const deckLength = state.deck?.length ?? null;
+  const progressed = (
+    state.roundNo !== pending.roundNo ||
+    state.turnIndex !== pending.turnIndex ||
+    state.turnStep !== pending.turnStep ||
+    deckLength !== pending.deckLength
+  );
+  if (!progressed) return false;
+
+  _drawActionPending = null;
+  return true;
+}
 
 let localPending = null; // ★ 本地暫存
 
@@ -3615,16 +3662,33 @@ document.addEventListener('visibilitychange', ()=>{
 /* === 抽牌前播放 draw.mp4，播完才真正送 DRAW === */
 let _drawPlaying = false;
 function playDrawFxThenDraw(){
+  const currentPlayer = state?.players?.[me.playerId];
+  const canRequestDraw = !!(
+    state?.turnStep === 'draw' &&
+    state?.turnIndex === me.playerId &&
+    currentPlayer?.skipNext !== true
+  );
+  if (!canRequestDraw) return;
+
+  // 從點擊開始鎖定；影片結束不解鎖，必須等伺服器 STATE 證明抽牌已結算。
+  if (_drawPlaying || _drawActionPending) return;
+  _drawActionPending = {
+    roundNo: state?.roundNo ?? null,
+    turnIndex: state?.turnIndex ?? null,
+    turnStep: state?.turnStep ?? null,
+    deckLength: state?.deck?.length ?? null,
+    sent: false
+  };
+
   const ov  = document.getElementById('drawOverlay');
   const vid = document.getElementById('drawVideo');
 
   // 萬一沒有這兩個 DOM，就直接抽牌，不擋流程
   if (!ov || !vid) {
+    _drawActionPending.sent = true;
     sendAction('DRAW');
     return;
   }
-  // 影片正在播時，不要重複觸發
-  if (_drawPlaying) return;
   _drawPlaying = true;
 
   // 顯示 overlay
@@ -3635,8 +3699,21 @@ function playDrawFxThenDraw(){
   vid.muted  = false;
   vid.volume = 1.0;
 
-  // 清理 + 真正抽牌
-  function cleanup(){
+  let settled = false;
+  let failTimer = null;
+  const onEnded = ()=> settle();
+  const onSkip = ()=> settle();
+
+  // 清理 + 真正抽牌（ended、保險計時器、點擊跳過只能成功一次）
+  function settle(){
+    if (settled) return;
+    settled = true;
+    if (failTimer !== null) {
+      clearTimeout(failTimer);
+      failTimer = null;
+    }
+    vid.removeEventListener('ended', onEnded);
+    ov.removeEventListener('click', onSkip);
     try {
       vid.pause();
       vid.currentTime = 0;
@@ -3645,20 +3722,20 @@ function playDrawFxThenDraw(){
     _drawPlaying = false;
 
     // ⭐ 真正送抽牌指令在這裡
+    if (_drawActionPending) _drawActionPending.sent = true;
     sendAction('DRAW');
   }
 
-  // 影片播完 → cleanup
-  const onEnded = ()=> cleanup();
+  // 影片播完 → settle
   vid.addEventListener('ended', onEnded, { once:true });
 
-  let failTimer = null;
   function armFailsafe(){
+    if (settled) return;
     clearTimeout(failTimer);
     const dur = Number.isFinite(vid.duration) && vid.duration > 0
       ? vid.duration * 1000
       : 3000;  // 讀不到長度就抓 3 秒
-    failTimer = setTimeout(()=> cleanup(), dur + 600);
+    failTimer = setTimeout(settle, dur + 600);
   }
 
   // 嘗試正常有聲播放
@@ -3668,11 +3745,11 @@ function playDrawFxThenDraw(){
     // 若被瀏覽器擋，改靜音播放，點畫面也可跳過
     vid.muted = true;
     vid.play().then(()=>{
-      ov.addEventListener('click', ()=> cleanup(), { once:true });
+      ov.addEventListener('click', onSkip, { once:true });
       armFailsafe();
     }).catch(()=>{
       // 連靜音都播不了 → 直接抽牌，不卡住流程
-      cleanup();
+      settle();
     });
   });
 }
@@ -3814,7 +3891,8 @@ function playEnhanceFx(venueName, targetImg, cardId, key){
 }
 
 // 上一次渲染的快照
-let _prev = { chest: null, discardLen: 0, aliveMap: {} };
+let _prev = { deck: null, chest: null, discardLen: 0, aliveMap: {} };
+let _renderFingerprint = { venues: null, discard: null, players: null, log: null };
 
 /* ========= 名字工具 ========= */
 function pname(i){
@@ -4705,6 +4783,8 @@ const socketOnJoined = ({ playerId, secret })=>{
   } catch(e){
     console.warn('sessionStorage set op_pid failed', e);
   }
+  // STATE 可能比 JOINED 先到；取得 playerId 後立刻補做麻痺跳過判斷。
+  syncParalyzedAutoDraw();
 };
 socket.on('JOINED', socketOnJoined);
 
@@ -5071,6 +5151,10 @@ socket.on('STATE', (s)=>{
 
   state = s;
 
+// 這兩項是網路狀態副作用，必須立即執行，不能藏進 rAF render。
+syncDrawActionPendingFromState();
+syncParalyzedAutoDraw();
+
 const myNow = state?.players?.[me.playerId];
 const myAuto = !!(
   myNow?.client?.autoControlled ||
@@ -5267,7 +5351,7 @@ if (!myAuto) hideIdleWarning();
   // ★ 新增：收到新狀態後校正背景（若選的場地已不在本局場地清單就自動關閉）
   reconcileVenueBackground(s.venues);
 
-  render();
+  scheduleRender();
 });
 
 // === 決鬥動畫：輸家卡片先翻正面，再被火焰燒掉 ===
@@ -5357,7 +5441,7 @@ const isDraw = !hasWinner;
     if (!img) return;
     img.classList.remove('fx-flip','front-reveal');
     img.style.opacity = '1';
-    img.src = 'images/cards/back.png';
+    img.src = 'images/cards/back.webp';
   });
 
   // 標出 winner / loser（先記在 dataset，等等翻牌後才套樣式）
@@ -5469,7 +5553,7 @@ const isDraw = !hasWinner;
         if (!img) return;
         img.classList.remove('fx-flip','front-reveal');
         img.style.opacity = '1';
-        img.src = 'images/cards/back.png';
+        img.src = 'images/cards/back.webp';
       });
     }, 250);
   }, hideDelay);
@@ -5896,7 +5980,7 @@ if (e.type === 'duel_log') {
 
 // 用卡片 id 找正面圖片路徑
 function cardImageURL(id){
-  if (id == null) return 'images/cards/back.png';
+  if (id == null) return 'images/cards/back.webp';
 
   // 若前端有 CARD_TEXT（有些版本是這樣）
   if (window.CARD_TEXT && window.CARD_TEXT[id] && window.CARD_TEXT[id].img){
@@ -6055,7 +6139,7 @@ if (e.mode === 'all') {
   if (line) {
     const pretty = stripDuelPoints(formatLogWithNames(line));
     if (feed[feed.length - 1] !== pretty) feed.push(pretty);
-    render();
+    scheduleRender();
   }
 });
 
@@ -6304,8 +6388,9 @@ el.deckCnt.textContent = left;
    else           el.deckBtn.classList.remove('hot');
  }
 
-// 想要數字變動時有小彈跳效果，可加上這行（可選）
-onceFx?.(el.deckCnt, 'fx-pulse');
+// 牌數真的變動時才播小彈跳，避免每次 STATE/EMIT 都強制重排版
+if (_prev.deck !== null && _prev.deck !== left) onceFx?.(el.deckCnt, 'fx-pulse');
+_prev.deck = left;
 
   el.turnLbl.textContent = (state.turnIndex!=null) ? `P${state.turnIndex+1}` : '—';
   el.stepLbl.textContent = state.turnStep || '—';
@@ -6328,6 +6413,8 @@ onceFx?.(el.deckCnt, 'fx-pulse');
 
   // 場地（改：外層綁 onclick → onVenueClick('場地名')）
   // 場地（改：外層綁 onclick → onVenueClick('場地名')）
+const venuesFingerprint = JSON.stringify(state.venues || []);
+if (_renderFingerprint.venues !== venuesFingerprint) {
 el.venues.innerHTML = '';
 (state.venues || []).forEach(v => {
   const d = document.createElement('div');
@@ -6358,9 +6445,14 @@ el.venues.innerHTML = '';
 
   el.venues.appendChild(d);
 });
+_renderFingerprint.venues = venuesFingerprint;
+}
 
 
   // 棄牌（秘密棄牌＝卡背）
+  const nowLen = (state.discard || []).length;
+  const discardFingerprint = JSON.stringify([state.discard || [], state.myDeluxe || []]);
+  if (_renderFingerprint.discard !== discardFingerprint) {
   el.discard.innerHTML='';
   (state.discard||[]).forEach(item=>{
     const im=document.createElement('img');
@@ -6369,7 +6461,6 @@ el.venues.innerHTML = '';
     im.src = isBack ? 'images/cards/back.webp' : CARD(item);
     el.discard.appendChild(im);
   });
-  const nowLen = (state.discard || []).length;
   if (nowLen > _prev.discardLen) {
     const imgs = el.discard.querySelectorAll('img');
     const last = imgs[imgs.length - 1];
@@ -6381,9 +6472,22 @@ el.venues.innerHTML = '';
       el.discard.scrollLeft = el.discard.scrollWidth;
     });
   }catch{}
+  _renderFingerprint.discard = discardFingerprint;
+  }
   _prev.discardLen = nowLen;
 
   // 玩家
+  let roomTitlesFingerprint = '';
+  try { roomTitlesFingerprint = sessionStorage.getItem('opRoomTitles') || ''; } catch(e){}
+  const playersFingerprint = JSON.stringify([
+    state.players || [],
+    state.turnIndex,
+    state.venues || [],
+    state.myDeluxe || [],
+    me.playerId,
+    roomTitlesFingerprint
+  ]);
+  if (_renderFingerprint.players !== playersFingerprint) {
   el.players.innerHTML='';
   (state.players||[]).forEach((p)=>{
     const isTurn = state.turnIndex===p.id; const isMe = me.playerId===p.id;
@@ -6440,6 +6544,8 @@ el.venues.innerHTML = '';
     if (typeof wasAlive === 'boolean' && wasAlive && !p.alive) onceFx(box, 'fx-shake');
     _prev.aliveMap[p.id] = !!p.alive;
   });
+  _renderFingerprint.players = playersFingerprint;
+  }
 
     // 自己的出牌區
   const my = state.players?.[me.playerId];
@@ -6454,9 +6560,6 @@ el.venues.innerHTML = '';
   el.deckBtn.disabled = !canDraw;
   el.deckBtn.style.opacity = canDraw ? 1 : 0.6;
 
-  el.deckBtn.disabled = !canDraw;
-  el.deckBtn.style.opacity = canDraw ? 1 : 0.6;
-
   // ★ 抽牌提示泡泡：只有「自己回合 + 抽牌階段 + 沒麻痺」才顯示
   if (el.deckHint) {
     if (canDraw) {
@@ -6465,30 +6568,6 @@ el.venues.innerHTML = '';
       el.deckHint.classList.add('hidden');
     }
   }
-
-  // ② 被麻痺（skipNext=true）：自動幫你送一次 DRAW，當成「跳過抽牌」
-  if (
-    state.turnStep === 'draw' &&
-    isMyTurn &&
-    my &&
-    my.skipNext === true
-  ) {
-    // 直接送出 DRAW；伺服器會把這回合跳過並換人
-    sendAction('DRAW');
-  }
-
-
-  // ② 被麻痺（skipNext=true）：自動幫你送一次 DRAW，當成「跳過抽牌」
-  if (
-    state.turnStep === 'draw' &&
-    isMyTurn &&
-    my &&
-    my.skipNext === true
-  ) {
-    // 直接送出 DRAW；伺服器會把這回合跳過並換人
-    sendAction('DRAW');
-  }
-
 
 const canChoose = state.turnStep === 'choose' && state.turnIndex === me.playerId && my;
 
@@ -6571,8 +6650,10 @@ if (canChoose) {
 
 /* ====== D. render()：用 feed 畫畫面 ====== */
 const logBox = el.log;
+const logFingerprint = JSON.stringify(feed);
 
 // 重新生成列表
+if (_renderFingerprint.log !== logFingerprint) {
 logBox.innerHTML = '';
 feed.forEach(line=>{
   const li   = document.createElement('li');
@@ -6611,6 +6692,8 @@ feed.forEach(line=>{
 
 // ⭐ 每次更新後，自動拉到最下面（看到最新一行）
 logBox.scrollTop = logBox.scrollHeight;
+_renderFingerprint.log = logFingerprint;
+}
 
 
 // 下一局按鈕（依 viewerCanNext）
@@ -6633,7 +6716,7 @@ function addMsg(e){
   const line = msgToLogLine(e);
   if (!line) return;
   pushLogUnique(line);
-  render();
+  scheduleRender();
 }
 
 /* =======================

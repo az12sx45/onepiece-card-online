@@ -14,8 +14,9 @@ const {
   session
 } = require('electron');
 const { AuthService } = require('./auth-service');
-const { AssetStore, availableBytes, safeAssetPath } = require('./asset-store');
+const { AssetStore, availableBytes, blobPath, safeAssetPath } = require('./asset-store');
 const { resetDesktopGameWebCache, shouldBlockServiceWorkerRequest } = require('./game-session-policy');
+const { RuntimeAssetCache } = require('./runtime-asset-cache');
 
 const REMOTE_ORIGIN = 'https://onepiece-card-online.onrender.com';
 const LAUNCHER_SCHEME = 'opui';
@@ -26,6 +27,7 @@ const SMOKE_MEDIA_ASSETS = String(process.env.OP_DESKTOP_SMOKE_MEDIA_ASSETS || '
 const SCREENSHOT_PATH = String(process.env.OP_DESKTOP_SCREENSHOT_PATH || '').trim();
 const TEST_USER_DATA_PATH = String(process.env.OP_DESKTOP_USER_DATA || '').trim();
 const TEST_VIEWPORT = String(process.env.OP_DESKTOP_VIEWPORT || '').trim();
+const EXPLICIT_CACHE_ROOT = String(process.env.OP_DESKTOP_CACHE_ROOT || '').trim();
 const ALLOWED_GAME_IDS = new Set(['card', 'board']);
 const AUTH_STORAGE_KEYS = [
   'opSecret', 'op_secret', 'op_user_id', 'op_board_user_id', 'op_name',
@@ -40,6 +42,46 @@ const GAME_CONFIG = {
 if (TEST_USER_DATA_PATH && (SMOKE_MODE || !app.isPackaged)) {
   app.setPath('userData', path.resolve(TEST_USER_DATA_PATH));
 }
+
+function persistedCacheRoot(userDataPath) {
+  const stateDirectory = path.join(userDataPath, 'state');
+  let newest = null;
+  for (const fileName of ['launcher-state-a.json', 'launcher-state-b.json']) {
+    try {
+      const candidate = JSON.parse(fs.readFileSync(path.join(stateDirectory, fileName), 'utf8'));
+      if (
+        !Number.isSafeInteger(candidate?.generation) ||
+        typeof candidate?.cacheRoot !== 'string' ||
+        !path.isAbsolute(candidate.cacheRoot)
+      ) continue;
+      if (!newest || candidate.generation > newest.generation) newest = candidate;
+    } catch {
+      // First launch, an interrupted state slot, or an unavailable drive uses Electron's default path.
+    }
+  }
+  return newest?.cacheRoot || '';
+}
+
+function configureSessionDataPath() {
+  try {
+    const userDataPath = app.getPath('userData');
+    const cacheRoot = EXPLICIT_CACHE_ROOT
+      ? path.resolve(EXPLICIT_CACHE_ROOT)
+      : TEST_USER_DATA_PATH && (SMOKE_MODE || !app.isPackaged)
+        ? path.resolve(TEST_USER_DATA_PATH, 'download-cache')
+        : persistedCacheRoot(userDataPath);
+    if (!cacheRoot) return '';
+    const sessionDataPath = path.resolve(cacheRoot, 'runtime', 'chromium-session-v1');
+    fs.mkdirSync(sessionDataPath, { recursive: true });
+    app.setPath('sessionData', sessionDataPath);
+    return sessionDataPath;
+  } catch {
+    // The launcher can still start and let the player choose a different writable drive.
+    return '';
+  }
+}
+
+const SESSION_DATA_PATH = configureSessionDataPath();
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -60,7 +102,10 @@ let readyPromise = null;
 let smokeFinished = false;
 const gameWindows = new Map();
 const gameSessions = new Map();
-const tokenEntries = new Map();
+const gameSessionPromises = new Map();
+const runtimeRepairChecks = new Map();
+const runtimeAssetCache = new RuntimeAssetCache();
+const hardenedSessions = new WeakSet();
 
 function mimeForPath(filePath) {
   const extension = path.extname(filePath).toLowerCase();
@@ -201,10 +246,6 @@ async function installLauncherProtocol() {
   });
 }
 
-function assetToken(gameId, asset) {
-  return crypto.createHash('sha256').update(`${gameId}\0${asset.path}\0${asset.sha256}`).digest('hex');
-}
-
 function requestAssetPath(requestUrl) {
   try {
     const parsed = new URL(requestUrl);
@@ -222,47 +263,117 @@ function remoteAssetUrl(assetPath) {
 function hardenSession(targetSession) {
   targetSession.setPermissionCheckHandler(() => false);
   targetSession.setPermissionRequestHandler((_webContents, _permission, callback) => callback(false));
+  if (hardenedSessions.has(targetSession)) return;
+  hardenedSessions.add(targetSession);
   targetSession.on('will-download', (event) => event.preventDefault());
 }
 
-async function prepareGameSession(gameId) {
-  const targetSession = session.fromPartition(GAME_CONFIG[gameId].partition);
-  await resetDesktopGameWebCache(targetSession, REMOTE_ORIGIN);
-  if (gameSessions.has(gameId)) return gameSessions.get(gameId);
-  hardenSession(targetSession);
-  await targetSession.protocol.handle(CACHE_SCHEME, async (request) => {
-    try {
-      const parsed = new URL(request.url);
-      if (parsed.hostname !== 'asset') return new Response('Not found', { status: 404 });
-      const token = parsed.pathname.replace(/^\/+/, '');
-      const entry = tokenEntries.get(token);
-      if (!entry || entry.gameId !== gameId) return new Response('Not found', { status: 404 });
-      return streamFileResponse(request, entry.filePath, { mime: entry.mime, sha256: entry.sha256, remoteAsset: true });
-    } catch {
-      return new Response('Not found', { status: 404 });
-    }
+function gameSessionPaths(gameId) {
+  const cacheRoot = path.resolve(assetStore.cacheRoot);
+  return {
+    codeCache: path.join(cacheRoot, 'runtime', 'code-cache', gameId)
+  };
+}
+
+function buildRuntimeAssetIndex(gameId) {
+  const manifest = assetStore.getInstalledManifest(gameId);
+  if (!manifest) throw new Error('找不到已安裝的遊戲素材清單。');
+  return runtimeAssetCache.buildGame(gameId, manifest, {
+    filePathForAsset: (asset) => blobPath(assetStore.cacheRoot, asset.sha256)
   });
-  targetSession.webRequest.onBeforeRequest(
-    { urls: [`${REMOTE_ORIGIN}/sw.js*`, `${REMOTE_ORIGIN}/images/*`, `${REMOTE_ORIGIN}/audio/*`, `${REMOTE_ORIGIN}/videos/*`, `${REMOTE_ORIGIN}/fonts/*`] },
-    (details, callback) => {
-      if (shouldBlockServiceWorkerRequest(details, REMOTE_ORIGIN)) return callback({ cancel: true });
-      const assetPath = requestAssetPath(details.url);
-      if (!assetPath) return callback({});
-      assetStore.resolveAsset(gameId, assetPath).then((asset) => {
-        if (!asset) return callback({});
-        const token = assetToken(gameId, asset);
-        tokenEntries.set(token, { ...asset, gameId });
-        callback({ redirectURL: `${CACHE_SCHEME}://asset/${token}` });
-      }).catch(() => callback({}));
-    }
-  );
-  gameSessions.set(gameId, targetSession);
+}
+
+function queueRuntimeAssetRepair(entry, error) {
+  if (!entry || error?.code === 'ERR_RUNTIME_ASSET_STALE') return;
+  runtimeAssetCache.clearGame(entry.gameId);
+  const key = entry.gameId;
+  if (runtimeRepairChecks.has(key)) return;
+  const check = assetStore.resolveAsset(entry.gameId, entry.path).then((asset) => {
+    if (!asset || !assetStore.canLaunch(entry.gameId)) return;
+    const gameWindow = gameWindows.get(entry.gameId);
+    if (gameWindow && !gameWindow.isDestroyed()) buildRuntimeAssetIndex(entry.gameId);
+  }).catch(() => {}).finally(() => runtimeRepairChecks.delete(key));
+  runtimeRepairChecks.set(key, check);
+}
+
+async function storageSessionForGame(gameId) {
+  if (gameSessions.has(gameId)) return gameSessions.get(gameId);
+  const sessionPaths = gameSessionPaths(gameId);
+  await fsp.mkdir(sessionPaths.codeCache, { recursive: true });
+  const targetSession = session.fromPartition(GAME_CONFIG[gameId].partition, { cache: false });
+  targetSession.setCodeCachePath(sessionPaths.codeCache);
   return targetSession;
 }
 
+async function clearGameOriginStorage(targetSession) {
+  await resetDesktopGameWebCache(targetSession, REMOTE_ORIGIN);
+  await targetSession.clearStorageData({
+    origin: REMOTE_ORIGIN,
+    storages: ['localstorage']
+  });
+}
+
+async function prepareGameSession(gameId) {
+  if (gameSessionPromises.has(gameId)) return gameSessionPromises.get(gameId);
+  const pending = (async () => {
+    buildRuntimeAssetIndex(gameId);
+    const targetSession = await storageSessionForGame(gameId);
+    await resetDesktopGameWebCache(targetSession, REMOTE_ORIGIN);
+    if (gameSessions.has(gameId)) return gameSessions.get(gameId);
+    hardenSession(targetSession);
+    await targetSession.protocol.handle(CACHE_SCHEME, async (request) => {
+      try {
+        const parsed = new URL(request.url);
+        if (parsed.hostname !== 'asset') return new Response('Not found', { status: 404 });
+        const token = parsed.pathname.replace(/^\/+/, '');
+        const entry = runtimeAssetCache.lookupToken(gameId, token);
+        if (!entry) return new Response('Not found', { status: 404 });
+        return runtimeAssetCache.createResponse(request, entry, {
+          allowedOrigin: REMOTE_ORIGIN,
+          onFailure: queueRuntimeAssetRepair
+        });
+      } catch {
+        return new Response('Not found', { status: 404 });
+      }
+    });
+    targetSession.webRequest.onBeforeRequest(
+      { urls: [`${REMOTE_ORIGIN}/sw.js*`, `${REMOTE_ORIGIN}/images/*`, `${REMOTE_ORIGIN}/audio/*`, `${REMOTE_ORIGIN}/videos/*`, `${REMOTE_ORIGIN}/fonts/*`] },
+      (details, callback) => {
+        if (shouldBlockServiceWorkerRequest(details, REMOTE_ORIGIN)) return callback({ cancel: true });
+        const assetPath = requestAssetPath(details.url);
+        if (!assetPath) return callback({});
+        const entry = runtimeAssetCache.lookupPath(gameId, assetPath);
+        return callback(entry ? { redirectURL: `${CACHE_SCHEME}://asset/${entry.token}` } : {});
+      }
+    );
+    gameSessions.set(gameId, targetSession);
+    return targetSession;
+  })();
+  gameSessionPromises.set(gameId, pending);
+  try {
+    return await pending;
+  } finally {
+    if (gameSessionPromises.get(gameId) === pending) gameSessionPromises.delete(gameId);
+  }
+}
+
+function disposeGameSessions() {
+  runtimeAssetCache.clearAll();
+  runtimeRepairChecks.clear();
+  for (const targetSession of gameSessions.values()) {
+    try { targetSession.webRequest.onBeforeRequest(null); } catch { /* already disposed */ }
+    try {
+      if (targetSession.protocol.isProtocolHandled(CACHE_SCHEME)) targetSession.protocol.unhandle(CACHE_SCHEME);
+    } catch {
+      // The session may already be shutting down.
+    }
+  }
+  gameSessions.clear();
+  gameSessionPromises.clear();
+}
+
 async function chooseDefaultCacheRoot() {
-  const explicit = String(process.env.OP_DESKTOP_CACHE_ROOT || '').trim();
-  if (explicit) return path.resolve(explicit);
+  if (EXPLICIT_CACHE_ROOT) return path.resolve(EXPLICIT_CACHE_ROOT);
   const candidates = [path.join(app.getPath('documents'), 'ONE PIECE Tabletop Games')];
   if (process.platform === 'win32') {
     for (const drive of ['D:\\', 'E:\\']) {
@@ -336,6 +447,7 @@ function registerLauncherIpc() {
     authenticated = false;
     await closeGameWindows();
     await clearGameSessionStorage();
+    runtimeAssetCache.clearAll();
     await authService.clearAccount();
     const state = await composeState();
     await broadcastState();
@@ -359,6 +471,11 @@ function registerLauncherIpc() {
       properties: ['openDirectory', 'createDirectory', 'promptToCreate']
     });
     if (result.canceled || !result.filePaths[0]) return { ok: true, canceled: true, state: await composeState() };
+    await closeGameWindows();
+    await Promise.allSettled([...gameSessionPromises.values()]);
+    await Promise.allSettled([...runtimeRepairChecks.values()]);
+    await clearGameSessionStorage();
+    disposeGameSessions();
     await assetStore.setCacheRoot(result.filePaths[0]);
     await authService.setCacheRoot(assetStore.cacheRoot);
     return { ok: true, state: await composeState() };
@@ -445,18 +562,31 @@ async function launchGame(gameId) {
   gameWindows.set(gameId, window);
   hardenGameWindow(window);
   window.on('closed', () => {
+    if (gameWindows.get(gameId) !== window) return;
     gameWindows.delete(gameId);
+    runtimeAssetCache.clearGame(gameId);
     if (gameWindows.size === 0 && authenticated) authService.setPresence('desktop-launcher').catch(() => {});
   });
-  window.webContents.on('render-process-gone', () => gameWindows.delete(gameId));
+  window.webContents.on('render-process-gone', () => {
+    if (gameWindows.get(gameId) !== window) return;
+    gameWindows.delete(gameId);
+    runtimeAssetCache.clearGame(gameId);
+    if (gameWindows.size === 0 && authenticated) authService.setPresence('desktop-launcher').catch(() => {});
+  });
   try {
     await authService.setPresence(`desktop-${gameId}`);
     await window.loadURL(`${REMOTE_ORIGIN}${GAME_CONFIG[gameId].entry}?desktop=1`);
     return { ok: true };
   } catch (error) {
-    gameWindows.delete(gameId);
+    const failedWindowWasCurrent = gameWindows.get(gameId) === window;
+    if (failedWindowWasCurrent) {
+      gameWindows.delete(gameId);
+      runtimeAssetCache.clearGame(gameId);
+    }
     if (!window.isDestroyed()) window.destroy();
-    await authService.setPresence('desktop-launcher').catch(() => {});
+    if (failedWindowWasCurrent && gameWindows.size === 0 && authenticated) {
+      await authService.setPresence('desktop-launcher').catch(() => {});
+    }
     return { ok: false, error: publicError(error, '無法連線到遊戲伺服器，請稍後重試。') };
   }
 }
@@ -474,10 +604,8 @@ async function closeGameWindows() {
 
 async function clearGameSessionStorage() {
   const results = await Promise.allSettled([...ALLOWED_GAME_IDS].map(async (gameId) => {
-    const targetSession = gameSessions.get(gameId) || session.fromPartition(GAME_CONFIG[gameId].partition);
-    await targetSession.clearStorageData({
-      storages: ['localstorage', 'serviceworkers', 'cachestorage']
-    });
+    const targetSession = await storageSessionForGame(gameId);
+    await clearGameOriginStorage(targetSession);
   }));
   return results.every((result) => result.status === 'fulfilled');
 }
@@ -599,7 +727,7 @@ async function runVisualOrSmokeCapture() {
     await fsp.writeFile(path.resolve(SCREENSHOT_PATH), image.toPNG());
   }
   if (SMOKE_MODE) finishSmoke(
-    { stage: 'launcher-ready', dom, protocolSmoke, installedMediaSmoke, state: await composeState() },
+    { stage: 'launcher-ready', dom, protocolSmoke, installedMediaSmoke, sessionDataPath: app.getPath('sessionData'), state: await composeState() },
     dom.hasApi && dom.games === 3 && protocolSmoke?.ok === true && (!SMOKE_MEDIA_ASSETS || installedMediaSmoke?.ok === true) ? 0 : 1
   );
   else if (SCREENSHOT_PATH) app.quit();
@@ -638,6 +766,7 @@ async function initializeServices() {
     authenticated = false;
     await closeGameWindows();
     await clearGameSessionStorage();
+    runtimeAssetCache.clearAll();
     mainWindow?.webContents.send('launcher:session-kicked', {});
     await broadcastState();
   });
@@ -673,7 +802,10 @@ if (!gotLock) {
   });
 }
 
-app.on('before-quit', () => authService?.close());
+app.on('before-quit', () => {
+  runtimeAssetCache.clearAll();
+  authService?.close();
+});
 app.on('window-all-closed', () => app.quit());
 
 module.exports = { parseRange, streamFileResponse };

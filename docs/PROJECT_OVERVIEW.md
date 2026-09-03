@@ -6,6 +6,14 @@
 
 這是一個 One Piece 主題的多人線上大富翁式 RPG 桌遊：玩家在大廳組隊後進入地圖，透過擲骰移動、事件、角色養成、道具、任務、副本、四皇據點與最終戰推進遊戲。
 
+## 卡牌／桌面啟動器效能 V433（2026-09-04）
+
+- 《偉大航道爭霸戰》正式對戰頁改載預先編譯的本機 Tailwind CSS，不再讓 Tailwind CDN 在遊戲中監看 DOM 並即時編譯。Socket `STATE`／`EMIT` 的完整 render 會合併到同一 animation frame，場地、棄牌、玩家與日誌只有 fingerprint 改變才重建，減少每個動作都停頓一下的主執行緒工作。
+- 抽牌動畫所有完成路徑只能送一次 `DRAW`，麻痺跳過也以 round／turn／draw 狀態防重；決鬥卡背統一改用 `back.webp`。這些修正不改牌效、回合順序或多人協定。
+- 桌面啟動器把安裝 manifest 建成記憶體路由索引，素材請求不再每次 `stat`／hash。單檔不超過 8 MiB 的素材進入 192 MiB 上限的 LRU，較大音樂／影片直接串流，seek／換場取消時會關閉舊檔案串流；遊戲 session 仍非持久且使用 `cache:false`，V8 code cache 與 Chromium session／GPU／network cache 則跟著玩家選定的素材位置，目前選 D 槽便落在 D 槽。重開視窗會保留本次程序中的非帳號設定／手動存檔，舊視窗事件不會清掉新視窗快取。
+- 啟動器版本為 `1.1.1`。manifest、receipt 與 SHA-256 的下載／修復權威、帳號、Socket.IO、存檔與 `BOARD_GAME_STATE` 均未改；卡牌、Board 與網頁玩家仍共用正式 Render 狀態。
+- 三項新效能 QA 與既有 asset-store、Service Worker、package、catalog、已安裝 media smoke 均通過，`npm start` 的卡牌頁／CSS 為 HTTP 200；無 `DATABASE_URL` 的本機警告屬預期。本次實際安裝的測試版已驗證 Card／Board 五種媒體快取皆 hit，Chromium cache 也位於選定 D 槽。C 槽檢查時仍只剩約 31 MiB，系統操作風險尚未消失，本次沒有刪除使用者檔案。
+
 ## 桌面下載清單 V432（2026-09-04）
 
 - 桌面 manifest 對 SVG 以 Git committed blob 為發布位元組權威，避免 Windows `core.autocrlf` 的 CRLF 工作樹與 Render 的 LF 檔案產生不同 SHA。此修正不改遊戲內容、下載介面或帳號／同步架構，只確保 Card／Board 安裝能完整通過校驗。
