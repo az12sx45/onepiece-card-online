@@ -3343,6 +3343,18 @@ io.on("connection", (socket) => {
         room.sockets.set(socket.id, { userId:existing.userId, clientId:existing.clientId });
         joined = { ok:true, player:existing, reconnected:true };
       }else{
+        for(const [activeSocketId, activeMeta] of Array.from(room.sockets.entries())){
+          const sameUser = Number(activeMeta?.userId) === Number(profile.userId);
+          const sameClient = String(activeMeta?.clientId || "") === String(profile.clientId || "");
+          if(activeSocketId === socket.id || (!sameUser && !sameClient)) continue;
+          room.sockets.delete(activeSocketId);
+          const previousSocket = io.sockets.sockets.get(activeSocketId);
+          if(previousSocket){
+            previousSocket.emit("BOARD_SOCKET_FENCED", { roomCode:room.roomCode, reason:"newer_connection" });
+            previousSocket.leave(`board:${room.roomCode}`);
+            previousSocket.data.boardRoomCode = "";
+          }
+        }
         joined = upsertBoardPlayer(room, profile, socket.id);
       }
       if(!joined.ok) return cb?.({ ok:false, error:joined.error || "join_failed" });
@@ -3351,15 +3363,24 @@ io.on("connection", (socket) => {
       socket.join(`board:${room.roomCode}`);
       const socketMeta = room.sockets.get(socket.id) || profile;
       const canSeedState = boardSocketIsRoomHost(room, socketMeta);
+      const knownVersion = Math.max(0, Number(payload.knownVersion || 0));
+      const hasPendingState = payload.hasPendingState === true;
+      const canResumePendingState = !!room.gamePayload && hasPendingState && (
+        Number(room.gameVersion || 0) === knownVersion
+        || (
+          Number(room.gameVersion || 0) === knownVersion + 1
+          && String(room.gameSourceClientId || "") === String(profile.clientId || "")
+        )
+      );
       socket.emit("BOARD_LOBBY", { lobby: serializeBoardLobby(room) });
-      if(room.gamePayload){
+      if(room.gamePayload && !canResumePendingState){
         socket.emit("BOARD_GAME_STATE", {
           roomCode: room.roomCode,
           payload: room.gamePayload,
           version: room.gameVersion,
           sourceClientId: room.gameSourceClientId || "",
         });
-      }else{
+      }else if(!room.gamePayload){
         socket.to(`board:${room.roomCode}`).emit("BOARD_STATE_REQUEST", { roomCode: room.roomCode, requesterClientId: profile.clientId });
       }
       emitBoardLobby(room);
@@ -3367,6 +3388,7 @@ io.on("connection", (socket) => {
         ok:true,
         lobby: serializeBoardLobby(room),
         hasState: !!room.gamePayload,
+        stateCurrent: canResumePendingState,
         canSeedState,
         version: room.gameVersion,
       });
@@ -3381,14 +3403,26 @@ io.on("connection", (socket) => {
       const roomCode = sanitizeBoardRoomCode(message.roomCode || socket.data.boardRoomCode || "");
       const room = boardRooms.get(roomCode);
       if(!room) return cb?.({ ok:false, error:"not_found" });
+      const socketMeta = room.sockets.get(socket.id);
+      if(!socketMeta) return cb?.({ ok:false, error:"stale_socket", version:Number(room.gameVersion || 0) });
       let payload = message.payload;
       if(!isValidBoardSavePayload(payload)) return cb?.({ ok:false, error:"invalid_payload" });
-      const sourceClientId = String(message.sourceClientId || socket.data.boardProfile?.clientId || "");
+      const sourceClientId = String(socketMeta.clientId || "");
       if(!canAcceptBoardGameStateUpdate(room, socket, sourceClientId, payload, message.reason || "")){
         return cb?.({ ok:false, error:"not_your_turn" });
       }
+      const currentVersion = Math.max(0, Number(room.gameVersion || 0));
+      const declaredVersion = Number(message.version);
+      const declaredBaseVersion = Number(message.baseVersion);
+      const baseVersion = Number.isFinite(declaredBaseVersion)
+        ? declaredBaseVersion
+        : (Number.isFinite(declaredVersion) ? declaredVersion - 1 : -1);
+      const nextVersion = currentVersion + 1;
+      if(baseVersion !== currentVersion || (Number.isFinite(declaredVersion) && declaredVersion !== nextVersion)){
+        return cb?.({ ok:false, error:"stale_version", version:currentVersion });
+      }
       payload = boardPayloadWithPreservedSettings(room, socket, payload, message.reason || "");
-      const version = Math.max(Number(room.gameVersion || 0) + 1, Number(message.version || 0) || 0);
+      const version = nextVersion;
       room.gamePayload = payload;
       room.gameVersion = version;
       room.gameSourceClientId = sourceClientId;
@@ -3407,9 +3441,11 @@ io.on("connection", (socket) => {
       const roomCode = sanitizeBoardRoomCode(message.roomCode || socket.data.boardRoomCode || "");
       const room = boardRooms.get(roomCode);
       if(!room) return cb?.({ ok:false, error:"not_found" });
+      const socketMeta = room.sockets.get(socket.id);
+      if(!socketMeta) return cb?.({ ok:false, error:"stale_socket", stateVersion:Number(room.gameVersion || 0) });
       const event = message.event;
       if(!isValidBoardGameEvent(event)) return cb?.({ ok:false, error:"invalid_event" });
-      const sourceClientId = String(message.sourceClientId || socket.data.boardProfile?.clientId || "");
+      const sourceClientId = String(socketMeta.clientId || "");
       if(!canAcceptBoardGameEvent(room, socket, sourceClientId)){
         return cb?.({ ok:false, error:"not_your_turn" });
       }
@@ -3435,6 +3471,7 @@ io.on("connection", (socket) => {
       const roomCode = sanitizeBoardRoomCode(payload.roomCode || socket.data.boardRoomCode || "");
       const room = boardRooms.get(roomCode);
       if(!room) return cb?.({ ok:false, error:"not_found" });
+      if(!room.sockets.has(socket.id)) return cb?.({ ok:false, error:"stale_socket", version:Number(room.gameVersion || 0) });
       if(room.gamePayload){
         socket.emit("BOARD_GAME_STATE", {
           roomCode: room.roomCode,
@@ -3445,7 +3482,7 @@ io.on("connection", (socket) => {
       }else{
         socket.to(`board:${room.roomCode}`).emit("BOARD_STATE_REQUEST", { roomCode: room.roomCode, requesterClientId: payload.requesterClientId || "" });
       }
-      return cb?.({ ok:true });
+      return cb?.({ ok:true, version:Number(room.gameVersion || 0) });
     }catch(e){
       console.error("[BOARD_STATE_REQUEST] error:", e);
       return cb?.({ ok:false, error:String(e?.message || e) });
