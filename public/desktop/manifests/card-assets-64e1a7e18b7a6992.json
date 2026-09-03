@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "gameId": "card",
-  "releaseId": "assets-ed9554afd423405d",
-  "createdAt": "2026-09-03T13:53:55.062Z",
-  "assetSetSha256": "ed9554afd423405d888067d28c4fe8f8bedd399c29990c0b8a140ae9e9d86760",
+  "releaseId": "assets-64e1a7e18b7a6992",
+  "createdAt": "2026-09-03T16:09:46.186Z",
+  "assetSetSha256": "64e1a7e18b7a69924a8aab960bf0db69fb162261ed8f5795352ba115d16378ac",
   "totalFiles": 464,
-  "totalBytes": 692057506,
+  "totalBytes": 692057452,
   "byKind": {
     "image": {
       "files": 363,
-      "bytes": 411207802
+      "bytes": 411207748
     },
     "audio": {
       "files": 68,
@@ -2199,8 +2199,8 @@
       "path": "images/game_launcher/launcher_board_logo_v1.svg",
       "kind": "image",
       "mime": "image/svg+xml",
-      "size": 3698,
-      "sha256": "ec111d8d4807c3420fd0d75812868088e59993fbcbf33b06764a6dbd8ba2f7cc"
+      "size": 3644,
+      "sha256": "95ad37b2a1ba595eb396b4168549016b20b4de3b861857dfe422f9328643d662"
     },
     {
       "path": "images/game_launcher/launcher_card_box_frame_cutout_v1.png",

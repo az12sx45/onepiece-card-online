@@ -2,7 +2,7 @@
 
 本文件整理目前程式碼中大富翁 / Board 遊戲已存在的規則來源。這不是新設計稿；若與程式碼衝突，以目前程式碼為準，並應先更新程式或文件之一來消除衝突。
 
-## 桌面啟動器與遊戲安裝邊界（V431）
+## 桌面啟動器與遊戲安裝邊界（V431～V432）
 
 - 桌面啟動器只改變媒體的取得位置，不改卡牌或 Board 的角色、道具、戰鬥、回合、地圖、存檔 schema、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`。網頁與桌面玩家仍能進同一正式房間。
 - 玩家必須先通過正式帳號驗證才能安裝或啟動；renderer 傳來的 game id 仍由 main process 白名單複查。只允許 `card`、`board`，《霸海戰棋》在 catalog、UI 與 IPC 三層都保持不可下載／不可啟動。
@@ -12,6 +12,7 @@
 - 有效素材的完整 SHA 結果可用檔案 stat 指紋持久保存，重開後先走快速指紋比對，再由有限量背景稽核抽查；stat 改變、抽查失敗或執行時異常都要重算／修復。這只優化驗證，不降低 SHA-256 作為真實內容權威的規則。
 - 桌面遊戲採非持久 Electron session。開啟前清除 Service Worker／CacheStorage 並阻擋正式根 `/sw.js`，避免同一批媒體被二次快取；登入 localStorage 只存於當次程序，登出／`SESSION_KICK` 會關閉視窗並清除。密碼不得寫入檔案、URL、localStorage 或錯誤訊息。
 - 安裝器與啟動器不得內含 server、資料庫設定、帳密、私人存檔、`incoming`、備份或未發布西洋棋 runtime。Windows 圖示與安裝精靈插圖只是桌面包裝，不參與任何遊戲規則或同步狀態。
+- manifest 必須描述正式站實際供應的 Git committed bytes；Windows 換行轉換不得成為下載 SHA 的來源。這是素材完整性規則，不改任何角色、戰鬥、回合或多人規則。
 
 ## Windows 桌面圖片快取邊界（Beta V430）
 

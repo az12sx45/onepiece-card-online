@@ -1,5 +1,12 @@
 ﻿# Dev Workflow
 
+## 修改紀錄：桌面下載清單 Git 位元組一致性 V432（2026-09-04）
+
+- 正式部署後逐檔比對發現 `launcher_board_logo_v1.svg` 在 Windows 工作樹是 CRLF，但 Render 實際供應 Git `HEAD` 的 LF；V431 manifest 因此記錄錯誤的 3,698 bytes／SHA，會讓 Card 與 Board 下載在該共用 SVG 校驗失敗。
+- `build_desktop_asset_manifest.js` 現在對可能受 `core.autocrlf` 影響的 SVG 直接讀取 Git committed blob，manifest 描述的是正式部署會提供的位元組；`desktop_asset_manifest_qa.js` 也以同一 committed blob 驗證 size／SHA，避免乾淨工作樹掩蓋 EOL 轉換。新清單記錄該 SVG 為 3,644 bytes、SHA-256 `95ad37b2a1ba595eb396b4168549016b20b4de3b861857dfe422f9328643d662`，並移除兩份不可用的舊 immutable manifest。
+- 驗證：全素材 QA 通過 3,894／3,894；兩款 manifest 共 3,893 個唯一資產與 Git 正規化內容一致、缺檔 0、宣告衝突 0；game catalog、下載器、Service Worker 隔離、package QA 皆通過。新 NSIS 與實裝後 EXE 都以真實 receipt 驗證 6,378-byte MP3、1,465,396-byte MP4、`opcache` 命中及 Range 206。
+- 最終安裝檔：`ONE-PIECE-Tabletop-Launcher-1.1.0-x64.exe`，131,816,290 bytes，SHA-256 `EECA3DCDC7DB9A11FF10049F5AC9063BAAB3BC1DAF2EEBF79D1F9D59ED59139E`。修改範圍只有兩支 manifest script、重建的 desktop manifest／catalog、兩份新 game manifest 與四份文件；未碰使用者的 `r5.PNG`／`r6.PNG` 工作樹變更。
+
 ## 修改紀錄：ONE PIECE TABLETOP SERIES 桌面啟動器 V431（2026-09-03）
 
 - 需求：把原先約 2 GB、把所有圖片直接塞進去的桌面 Beta 改成遊戲公司式小型啟動器。玩家先安裝啟動器、登入共用帳號，再於遊戲庫查看《偉大航道爭霸戰》《新世界航海錄》《霸海戰棋》；前兩款可各自下載／暫停／修復／更新／啟動，西洋棋維持「製作中」且沒有可偽造的安裝或啟動 IPC。

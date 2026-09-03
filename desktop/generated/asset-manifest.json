@@ -8,7 +8,7 @@
     "videos": "6ec01c6dfb4b86197680f43dfc96603ed14c8ec7",
     "fonts": "58fb1e833fe9c80e4713ae953c1ce2fc43a5b9f4"
   },
-  "createdAt": "2026-09-03T13:53:55.062Z",
+  "createdAt": "2026-09-03T16:09:46.186Z",
   "includedRoots": [
     "images",
     "audio",
@@ -23,11 +23,11 @@
   ],
   "excludedForbiddenPaths": [],
   "totalFiles": 3894,
-  "totalBytes": 1949507492,
+  "totalBytes": 1949507438,
   "byKind": {
     "image": {
       "files": 3186,
-      "bytes": 1200753163
+      "bytes": 1200753109
     },
     "audio": {
       "files": 671,
@@ -22474,8 +22474,8 @@
     "images/game_launcher/launcher_board_logo_v1.svg": {
       "kind": "image",
       "mime": "image/svg+xml",
-      "size": 3698,
-      "sha256": "ec111d8d4807c3420fd0d75812868088e59993fbcbf33b06764a6dbd8ba2f7cc"
+      "size": 3644,
+      "sha256": "95ad37b2a1ba595eb396b4168549016b20b4de3b861857dfe422f9328643d662"
     },
     "images/game_launcher/launcher_card_box_frame_cutout_v1.png": {
       "kind": "image",

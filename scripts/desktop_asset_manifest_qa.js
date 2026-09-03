@@ -187,6 +187,20 @@ async function sha256File(absolutePath) {
   return hash.digest("hex");
 }
 
+function committedSvgRecord(assetPath) {
+  if (path.posix.extname(assetPath).toLowerCase() !== ".svg") return null;
+  const bytes = execFileSync("git", ["cat-file", "blob", `HEAD:public/${assetPath}`], {
+    cwd: ROOT,
+    encoding: "buffer",
+    maxBuffer: 32 * 1024 * 1024,
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+  return {
+    size: bytes.length,
+    sha256: crypto.createHash("sha256").update(bytes).digest("hex"),
+  };
+}
+
 async function mapConcurrent(values, limit, worker) {
   let cursor = 0;
   async function run() {
@@ -233,6 +247,7 @@ async function main() {
 
   const expectedByKind = { image: { files: 0, bytes: 0 }, audio: { files: 0, bytes: 0 }, video: { files: 0, bytes: 0 }, font: { files: 0, bytes: 0 } };
   const absolutePaths = new Map();
+  const committedSvgRecords = new Map();
   let calculatedBytes = 0;
   for (const assetPath of manifestPaths) {
     const record = manifest.files[assetPath];
@@ -242,7 +257,14 @@ async function main() {
     if (!Number.isSafeInteger(record.size) || record.size < 0 || typeof record.sha256 !== "string" || !/^[a-f0-9]{64}$/.test(record.sha256)) fail(`Invalid size/hash: ${assetPath}`);
     const absolutePath = validateAssetPath(assetPath);
     const info = await fs.promises.lstat(absolutePath);
-    if (info.isSymbolicLink() || !info.isFile() || info.size !== record.size) fail(`Physical size/type mismatch: ${assetPath}`);
+    if (info.isSymbolicLink() || !info.isFile()) fail(`Physical size/type mismatch: ${assetPath}`);
+    const committedSvg = committedSvgRecord(assetPath);
+    if (committedSvg) {
+      committedSvgRecords.set(assetPath, committedSvg);
+      if (committedSvg.size !== record.size) fail(`Committed SVG size mismatch: ${assetPath}`);
+    } else if (info.size !== record.size) {
+      fail(`Physical size/type mismatch: ${assetPath}`);
+    }
     absolutePaths.set(assetPath, absolutePath);
     calculatedBytes += record.size;
     expectedByKind[record.kind].files += 1;
@@ -254,7 +276,7 @@ async function main() {
   const hashPaths = quick ? selectQuickSample(manifestPaths) : manifestPaths;
   const failures = [];
   await mapConcurrent(hashPaths, 8, async (assetPath) => {
-    const actual = await sha256File(absolutePaths.get(assetPath));
+    const actual = committedSvgRecords.get(assetPath)?.sha256 || await sha256File(absolutePaths.get(assetPath));
     if (actual !== manifest.files[assetPath].sha256) failures.push(assetPath);
   });
   if (failures.length) fail(`SHA-256 mismatch: ${failures.sort(comparePaths).slice(0, 12).join(", ")}`);

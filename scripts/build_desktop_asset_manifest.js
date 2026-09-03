@@ -210,6 +210,23 @@ async function hashAsset(asset) {
     throw new Error(`Asset changed while hashing: ${asset.assetPath}`);
   }
   const type = metadataForPath(asset.assetPath);
+  // Render deploys bytes from Git, while core.autocrlf may materialise tracked SVGs
+  // with CRLF in a Windows worktree. Hash the committed blob so the download
+  // manifest always describes the exact bytes served in production.
+  if (path.posix.extname(asset.assetPath).toLowerCase() === ".svg") {
+    const bytes = execFileSync("git", ["cat-file", "blob", `HEAD:public/${asset.assetPath}`], {
+      cwd: ROOT,
+      encoding: "buffer",
+      maxBuffer: 32 * 1024 * 1024,
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+    return {
+      kind: type.kind,
+      mime: type.mime,
+      size: bytes.length,
+      sha256: crypto.createHash("sha256").update(bytes).digest("hex"),
+    };
+  }
   return { kind: type.kind, mime: type.mime, size: after.size, sha256: hash.digest("hex") };
 }
 
