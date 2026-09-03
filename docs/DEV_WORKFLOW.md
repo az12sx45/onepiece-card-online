@@ -1,5 +1,16 @@
 ﻿# Dev Workflow
 
+## 修改紀錄：Board 多人斷線重連防回朔與正式目錄整併 V429（2026-09-03）
+
+- 問題：真人回合在 Socket 斷線期間完成後，舊版會丟失最後一次完整快照；同時本機 CPU 仍可能繼續推進。重新連線時，server 的舊快照或較舊分頁又能覆蓋較新的本機進度，造成回合、畫面或獎勵突然回朔。
+- 客戶端：`public/js/board_game.js` 新增僅存在記憶體的單一 in-flight 與 latest-only pending 快照佇列。每次送出都攜帶 `baseVersion` 與下一版號；斷線或等待權威快照時鎖住真人控制與 CPU 自動行動，但允許斷線前已開始的動畫／結算完成並把最終狀態留在 pending。重連時若 server 回報 `stateCurrent` 便補送最新 pending；若 server 已有更新版本，則丟棄本機舊佇列並套用權威狀態，不盲目重送。任何低於目前確認版本的完整快照都直接拒絕，原有的交易結束與戰鬥追趕例外也不再允許低版本回寫。
+- 伺服器：`server/index.js` 對 `BOARD_GAME_STATE` 採 compare-and-set，只有 `baseVersion` 等於房間目前版本且宣告版本等於 `current + 1` 才接受，接受後版本固定遞增一；過期寫入回覆 `stale_version`。一般 Board 遊戲中，`userId` 或 `clientId` 相同時，後加入的遊戲 socket 會成為唯一控制者，舊 socket 收到新增的 `BOARD_SOCKET_FENCED` 後離開遊戲房；其後送出的狀態、事件或快照請求一律回覆 `stale_socket`。campaign 重連流程未改。
+- 相容：沒有改名既有 Socket.IO event、角色／道具 id、localStorage key 或持久 `gameState` schema；`pendingState`、`inFlightState`、`joinedOnce` 都只是頁面 runtime。`public/board_game.html` 的正式主程式 query 更新為 `20260903-reconnect-monotonic-v429`。
+- QA：新增 `scripts/board_reconnect_client_qa.js`，重現一名真人＋一名 CPU 在真人結算中斷線、離線完成結算、收到同版舊快照及重連補傳，確認 CPU 停止、最新 round／標記／貝里保留、只送一份 `baseVersion=42`／`version=43`；另注入低版本的 `trade-close` 與 `battle-*` 快照，確認兩者都不能改回合、標記、戰鬥畫面或 LAN 版本。新增 `scripts/board_state_monotonicity_qa.js`，使用真實 Socket.IO 驗證新鮮版本接受、過期版本拒絕且不廣播，以及新 socket 接管後舊 socket 的 state／event／request 全遭拒絕。
+- 回歸：`node --check` 通過 `server/index.js`、`public/js/board_game.js` 與兩支新增 QA；`board_reconnect_client_qa.js`、`board_state_monotonicity_qa.js`、`spar_lan_sync_qa.js`、`refresh_resume_qa.js`、`lan_refresh_flow_qa.js` 均為 PASS／`failures=[]`。最後一支以兩個瀏覽器完成建房、加入、換手、刷新、滿 HP 選角與雙視窗戰鬥顯示。`npm start` 已由唯一正式目錄啟動並監聽 8787；本機未設定 `DATABASE_URL` 的既有帳號資料庫警告不影響 Board 靜態頁與 Socket.IO 測試。
+- 目錄整理：先逐一確認工作樹狀態、commit 祖先關係與正式 `origin/main` 已包含歷史，再移除三個 C 槽重複 release worktree `2026-04-20-board-release-v389`、`2026-08-31-board-release-v394`、`2026-08-31-board-release-v396`，以及 D 槽暫存 `2026-09-03-board-launcher-release-v429`；本機 branches `codex/board-release-v389`、`codex/board-release-v394`、`codex/board-release-v396`、`codex/board-launcher-release-v428` 一併刪除。C 槽約釋放 5.64 GiB，D 槽約釋放 1.85 GiB，清理完成時 `git worktree list` 只保留正式開發目錄。刪除的是已驗證的重複工作樹／本機分支，檔案本身無資源回收筒備份，但其 commit 歷史仍在 `origin/main`；未碰 `tmp/`、`backups/`、`_codex_backups/`、素材來源或其他未判定為重複的日期資料夾。
+- 修改檔案：`server/index.js`、`public/js/board_game.js`、`public/board_game.html`、`scripts/board_reconnect_client_qa.js`、`scripts/board_state_monotonicity_qa.js`、`scripts/spar_lan_sync_qa.js`、`scripts/lan_refresh_flow_qa.js`、`docs/DEV_WORKFLOW.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`。
+
 ## 修改紀錄：桌遊啟動器／最新版航海錄正式發布邊界 V428（2026-09-03）
 
 - 需求：把三盒桌遊啟動器與最新版《新世界航海錄》接到既有線上站，同時保留原《偉大航道爭霸戰》，《霸海戰棋》完成前不得發布或連入正式站。
