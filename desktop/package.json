@@ -1,0 +1,88 @@
+{
+  "name": "onepiece-tabletop-desktop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Windows desktop launcher for the ONE PIECE tabletop series with a verified local image cache.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "smoke:win": "set OP_DESKTOP_SMOKE=1&& electron .",
+    "pack:win": "electron-builder --dir --win --x64",
+    "build:win": "electron-builder --win --x64"
+  },
+  "devDependencies": {
+    "electron": "44.1.1",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "com.onepiece.tabletop.desktop",
+    "productName": "ONE PIECE 桌遊啟動器",
+    "asar": true,
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "offline.html",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "../public/images",
+        "to": "images",
+        "filter": [
+          "**/*.png",
+          "**/*.PNG",
+          "**/*.jpg",
+          "**/*.JPG",
+          "**/*.jpeg",
+          "**/*.JPEG",
+          "**/*.jfif",
+          "**/*.JFIF",
+          "**/*.webp",
+          "**/*.WEBP",
+          "**/*.gif",
+          "**/*.GIF",
+          "**/*.svg",
+          "**/*.SVG",
+          "**/*.avif",
+          "**/*.AVIF",
+          "!battle_chess/**/*",
+          "!**/battle_chess/**/*",
+          "!incoming/**/*",
+          "!**/incoming/**/*",
+          "!private/**/*",
+          "!**/private/**/*",
+          "!backup/**/*",
+          "!**/backup/**/*",
+          "!backups/**/*",
+          "!**/backups/**/*",
+          "!ranks/r5.PNG",
+          "!ranks/r5.png",
+          "!ranks/r6.PNG",
+          "!ranks/r6.png"
+        ]
+      },
+      {
+        "from": "generated/image-manifest.json",
+        "to": "image-manifest.json"
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "ONE-PIECE-Tabletop-Desktop-${version}-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}

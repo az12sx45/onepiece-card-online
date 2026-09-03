@@ -1,5 +1,15 @@
 ﻿# Dev Workflow
 
+## 修改紀錄：Windows 桌面圖片快取 Beta V430（2026-09-03）
+
+- 需求：讓 Windows 玩家先下載圖片素材再遊玩，降低正式網站大量角色圖、介面圖首次顯示時的等待；登入、好友、聊天室、房間、雲端存檔與多人同步仍使用正式 Render 服務。
+- 架構：新增獨立 `desktop/` Electron 殼，固定載入 `https://onepiece-card-online.onrender.com/game_launcher_preview.html?desktop=1`。只有同源 `/images/*` 請求可依受控 manifest 改由安裝目錄讀取；找不到檔案、大小不符、SHA-256 不符或 realpath 逸出圖片根目錄時，不攔截原請求並回退正式 HTTP。沒有把 server、資料庫設定、帳密或私人存檔包進安裝檔。
+- 安全：renderer 維持 `nodeIntegration:false`、`contextIsolation:true`、`sandbox:true`，拒絕新視窗、外站導覽與權限要求；本機圖片只經 token 化的安全 custom protocol 提供，不把任意檔案路徑交給頁面。
+- 素材：`scripts/build_desktop_image_manifest.js` 以 Git `HEAD` 與實體目錄雙重比對，從正式 `public/images` 建立 3,185 筆相對路徑、大小與 SHA-256；總量 1,198,481,706 bytes。Git tree 中 `r5/r6` 各有大小寫不同的兩份檔案，Windows 無法無歧義保存，因此四個 URL 明列於 `excludedCaseCollisions` 並固定走線上。QA 另拒絕其他未提交圖片、大小寫碰撞、symlink、禁入目錄與雜湊不符；`battle_chess`、`incoming`、`private`、備份與非圖片檔不進圖片包。
+- 打包：Electron `44.1.1`、electron-builder `26.15.3` 固定版本；輸出 Windows x64 NSIS 安裝檔 `ONE-PIECE-Tabletop-Desktop-1.0.0-x64.exe`，大小 1,307,344,862 bytes，SHA-256 `A6AB3F425100FA216D5A141DCDB8853BF4F0B4FA5CA043E3FF238AA0134AA992`。Beta 尚未設定正式 app icon 或程式碼簽章，Windows 可能顯示未知發行者警告。
+- 驗證：manifest full QA 為 `PASS files=3185 hashed=3185 excludedCaseCollisions=4`；開發模式、`win-unpacked` 與 NSIS 靜默安裝後三層 smoke 均成功。smoke 逐張重算安裝包內全部 3,185 份雜湊，並確認指定 launcher URL、標題入口、開始按鈕、收藏室與三盒 DOM；安裝後報告 `cacheHits=9`、`remoteFallbacks=0`、`validationFailures=0`、`smokeVerificationFailures=0`，強制探測 `avatars/1.png` byte 數相同且回應 `X-OnePiece-Desktop-Cache: hit`。另以 `npm start` 在 8799 啟動正式 server，launcher、`/api/board-runtime` 與同一張圖片皆為 HTTP 200；本機未設定 `DATABASE_URL` 的既有警告符合預期。本版只本機化圖片，音樂與影片仍由網站串流。
+- 修改檔案：`.gitignore`、`desktop/main.js`、`desktop/preload.js`、`desktop/offline.html`、`desktop/package.json`、`desktop/package-lock.json`、`desktop/generated/image-manifest.json`、`scripts/build_desktop_image_manifest.js`、`scripts/desktop_image_manifest_qa.js`、`docs/DEV_WORKFLOW.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md`。
+
 ## 修改紀錄：Board 多人斷線重連防回朔與正式目錄整併 V429（2026-09-03）
 
 - 問題：真人回合在 Socket 斷線期間完成後，舊版會丟失最後一次完整快照；同時本機 CPU 仍可能繼續推進。重新連線時，server 的舊快照或較舊分頁又能覆蓋較新的本機進度，造成回合、畫面或獎勵突然回朔。

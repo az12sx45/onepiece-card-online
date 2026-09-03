@@ -9,11 +9,15 @@
 | `package.json` | Node 版本、依賴、`start` / `dev` scripts。 |
 | `package-lock.json` | npm lockfile。 |
 | `AGENTS.md` | Codex 進入專案前必讀的短規則。 |
+| `desktop/main.js`、`desktop/preload.js`、`desktop/offline.html` | V430 Windows Electron 桌面殼；載入正式 launcher，只把通過 manifest／size／SHA-256／realpath 驗證的同源 `/images/*` 轉到安裝目錄，失敗時回退原 HTTP。renderer 維持 sandbox、context isolation、無 Node API，並含可自動退出的 smoke 模式。 |
+| `desktop/package.json`、`desktop/package-lock.json` | V430 獨立且固定版本的 Electron 44.1.1／electron-builder 26.15.3 建置設定；只打包桌面殼、manifest 與正式圖片，產生 Windows x64 NSIS 安裝程式。 |
+| `desktop/generated/image-manifest.json` | 由正式 `public/images` 產生的 3,185 筆相對路徑、size、SHA-256、素材來源 commit 及四筆 Windows 大小寫衝突排除清單；安裝後圖片快取的唯一允許清單。 |
+| `scripts/build_desktop_image_manifest.js`、`scripts/desktop_image_manifest_qa.js` | 以 Git `HEAD` 與實體目錄雙重比對建立、驗證桌面圖片 manifest；拒絕 symlink、越界、未提交圖片、未聲明大小寫碰撞、禁入路徑與雜湊不一致，QA 預設全數 hash，`--quick` 才只抽固定樣本。 |
 | `server/index.js`、`public/js/board_game.js`、`public/board_game.html`（Board 斷線重連防回朔 V429） | `board_game.js` 以單一 in-flight／最新 pending 佇列送出含 `baseVersion` 的完整快照，斷線期間暫停控制與 CPU，重連後依 `stateCurrent` 或 server 新版決定補傳／套用；server 對 `BOARD_GAME_STATE` 採 CAS 單調版本，最後加入的同身分遊戲 socket 會 fencing 舊 socket。正式 query 為 `20260903-reconnect-monotonic-v429`。 |
 | `scripts/board_reconnect_client_qa.js` | 隔離客戶端回歸一名真人＋一名 CPU 的結算中斷線、CPU 暫停、離線最新狀態佇列、同版舊快照忽略與重連單次補傳；斷言 `baseVersion=42`、`version=43` 且 round／標記／貝里不回朔，並確認低版本 `trade-close`／`battle-*` 快照不能繞過版本保護。 |
 | `scripts/board_state_monotonicity_qa.js` | 使用真實 Socket.IO 驗證 server 接受目前版本的下一版、拒絕 `stale_version` 且不廣播，以及新 socket 接管後舊 socket 的 state／event／request 均回覆 `stale_socket`。 |
 | `scripts/spar_lan_sync_qa.js`、`scripts/refresh_resume_qa.js`、`scripts/lan_refresh_flow_qa.js` | V429 同步回歸組；PK 直接快照送出已補齊 `baseVersion`／下一版號，刷新恢復與兩瀏覽器建房、加入、換手、選角、戰鬥觀看均維持通過。`lan_refresh_flow_qa.js` 依現行 V418 入口先完成 press／本機登入再進 lobby。 |
-| `.gitignore` | 排除 `node_modules/`、本機 Codex／QA 產物、本機備份／還原目錄、西洋棋暫緩內容、Board `incoming/` 原始來源及私人 save／campaign JSON；正式 runtime 素材仍納入版本庫。 |
+| `.gitignore` | 排除 `node_modules/`、桌面 `dist`／log／user-data、本機 Codex／QA 產物、本機備份／還原目錄、西洋棋暫緩內容、Board `incoming/` 原始來源及私人 save／campaign JSON；正式 runtime 素材與受控 desktop manifest 仍納入版本庫。 |
 | `public/start.html`（V428 桌遊入口） | 原卡牌首頁及登入不變；登入後的隱藏骰子改連 `game_launcher_preview.html?from=card-secret`。 |
 | `public/game_launcher_preview.html`、`public/css/game_launcher_preview.css`、`public/js/game_launcher_preview.js`（V428 正式發布） | 共用登入與固定三盒收藏室。正式環境只啟用 `start.html`、`board_start.html`；Chess 盒沒有正式 `href` 或影片節點，本機 loopback 無 DB 預覽才由 `data-local-href` 開啟開發路徑。query 為 `20260903-launcher-board-release-v428`。 |
 | `public/images/game_launcher/`、`public/videos/game_launcher/`（V428 採用素材） | 正式部署只含收藏室背景、系列 Logo、三組盒彩框、三張透視封面、航海錄 Logo，以及卡牌／Board 兩支 Hover 影片；不含 Chess 預覽、展示長片或草稿。 |

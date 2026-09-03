@@ -6,6 +6,13 @@
 
 這是一個 One Piece 主題的多人線上大富翁式 RPG 桌遊：玩家在大廳組隊後進入地圖，透過擲骰移動、事件、角色養成、道具、任務、副本、四皇據點與最終戰推進遊戲。
 
+## Windows 桌面圖片快取 Beta V430（2026-09-03）
+
+- Windows x64 Beta 以 Electron 載入同一個正式桌遊啟動頁；HTML、JavaScript、登入、好友、聊天室、房間、雲端存檔及 Socket.IO 多人同步仍由正式網站提供，因此不會形成另一套遊戲狀態或分支版本。
+- 安裝檔內含正式 `public/images` 的 3,185 張圖片（1,198,481,706 bytes）與 SHA-256 manifest。同源 `/images/*` 只有在本機檔案通過路徑、大小與雜湊驗證時才切到本機 custom protocol；cache miss 或檔案損壞自動使用原 Render URL。`r5/r6` 的四個大小寫衝突 URL 因 Windows 檔案系統無法無歧義保存，明確排除並保留線上載入。
+- 桌面殼不含 server、資料庫密鑰、帳號密碼、私人存檔、西洋棋 runtime、備份或來源素材。音樂與影片仍在線上串流；Render 冷啟動或網路中斷仍可能影響登入與連線，但絕大多數圖片不再重複下載約 1.2 GB 素材。
+- renderer 不取得 Node API，啟用 context isolation 與 sandbox，並限制外部導覽、新視窗及權限。Beta 安裝檔目前未使用正式圖示或程式碼簽章。
+
 ## 多人斷線重連與快照單調版本 V429（2026-09-03）
 
 - Board 仍由 `public/js/board_game.js` 產生完整 `BOARD_GAME_STATE`，server 只保存、驗證與廣播；本版沒有建立第二套局部狀態協定，也沒有改持久存檔格式。
