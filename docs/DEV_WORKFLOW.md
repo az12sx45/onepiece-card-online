@@ -1,5 +1,13 @@
 ﻿# Dev Workflow
 
+## 修改紀錄：卡牌進場隱藏遮罩回歸修復 V434（2026-09-04）
+
+- 問題與原因：V433 改用預編譯 Tailwind 後，外部 CSS 先載入，但舊 inline `.modal { display:flex }` 在後方覆蓋 `.hidden { display:none }`，使空的通用對話框一進場便顯示全螢幕暗幕與中央空白橫框，並攔截所有操作。
+- 修正：`public/game.html` 對 `#modal.hidden`、`#coinOverlay.hidden`、`#playedOverlay.hidden`、`#drawHint.hidden`、`#chooseHint.hidden` 加入明確 `display:none`；既有流程移除 `.hidden` 時仍照原條件開啟，不改對話框內容、動畫或操作入口。
+- 回歸保護：`scripts/card_runtime_performance_qa.js` 檢查五條明確隱藏規則；`scripts/card_render_batch_browser_qa.js` 在實際載入後讀取所有進場遮罩、掛機提示與階段提示的 computed style，不依賴 `.hidden` class 本身來放行，確認沒有任何隱藏層暴露或攔截進場操作。
+- 相容邊界：只修正卡牌頁 CSS cascade 與 QA，不改牌效、抽牌、回合、Socket.IO event、帳號、localStorage、存檔、桌面素材清單或 Board `BOARD_GAME_STATE`。
+- 驗證：`CARD_RUNTIME_PERFORMANCE_QA=PASS`、`CARD_RENDER_BATCH_BROWSER_QA=PASS`（含 `overlays=hidden`）；兩支 QA 腳本均通過 `node --check`。`npm start` 後 `/game.html` 與靜態 CSS 均為 HTTP 200，頁面含 V434 selector 且沒有 Tailwind CDN。修改檔案另含四份專案文件，未碰使用者的 `r5.PNG`／`r6.PNG`。
+
 ## 修改紀錄：卡牌／桌面啟動器運行效能 V433（2026-09-04）
 
 - 卡牌頁不再於執行時載入 Tailwind CDN 編譯器；`styles/card-tailwind.input.css` 經固定 Tailwind 3.4.17 產生 `public/css/card-tailwind-v1.min.css`，`public/game.html` 直接載入版本化靜態 CSS。`STATE`、會新增日誌的 `EMIT` 與相容 `addMsg()` 改由 `requestAnimationFrame` 合併同影格完整渲染；場地、棄牌、玩家與日誌使用穩定 fingerprint，只重建真正變動的區塊，牌堆彈跳也只在張數改變時觸發。

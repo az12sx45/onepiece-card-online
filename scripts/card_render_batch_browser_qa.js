@@ -120,6 +120,28 @@ async function main() {
     await page.waitForFunction(() => typeof window.render === "function" && typeof window.scheduleRender === "function");
     const result = await page.evaluate(async () => {
       const qa = window.__CARD_RENDER_QA__;
+      const hiddenEntryElementIds = [
+        "modal",
+        "cardDexOverlay",
+        "duelFx",
+        "finalOverlay",
+        "coinOverlay",
+        "drawOverlay",
+        "playedOverlay",
+        "rewardModal",
+        "rewardOverlay",
+        "enhOverlay",
+        "lawSwapModal",
+        "luffyBoostModal",
+        "idleWarning",
+        "autoTakeoverBanner",
+        "drawHint",
+        "chooseHint"
+      ];
+      const exposedEntryElements = hiddenEntryElementIds.filter((id) => {
+        const node = document.getElementById(id);
+        return node && getComputedStyle(node).display !== "none";
+      });
       qa.emit("JOINED", { playerId: 0, secret: "qa-secret" });
       const state = {
         roundNo: 1,
@@ -139,6 +161,7 @@ async function main() {
       const nextFrame = () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
       qa.emit("STATE", structuredClone(state));
       await nextFrame();
+      const modalVisibleAfterState = getComputedStyle(document.getElementById("modal")).display !== "none";
 
       const venueNode = document.querySelector("#venues .venue-card");
       const discardNode = document.querySelector("#discard img");
@@ -215,6 +238,8 @@ async function main() {
         },
         tailwindRuntimeScripts: [...document.scripts].filter((script) => /tailwindcss/i.test(script.src)).length,
         localCssLoaded: [...document.styleSheets].some((sheet) => /card-tailwind-v1\.min\.css/.test(sheet.href || "")),
+        exposedEntryElements,
+        modalVisibleAfterState,
         counts: {
           venues: document.querySelectorAll("#venues .venue-card").length,
           discard: document.querySelectorAll("#discard img").length,
@@ -230,12 +255,14 @@ async function main() {
     assert(Object.values(result.stableAfterLog).every(Boolean), `unchanged DOM was rebuilt: ${JSON.stringify(result.stableAfterLog)}`);
     assert(Object.values(result.selectiveAfterPlayerChange).every(Boolean), `selective DOM update failed: ${JSON.stringify(result.selectiveAfterPlayerChange)}`);
     assert(result.tailwindRuntimeScripts === 0 && result.localCssLoaded, "compiled local Tailwind CSS was not the only Tailwind source");
+    assert(result.exposedEntryElements.length === 0, `hidden elements are exposed before game state: ${JSON.stringify(result.exposedEntryElements)}`);
+    assert(!result.modalVisibleAfterState, "generic modal intercepts the rendered entry screen");
     assert(result.autoSkipWithoutFrame.autoDrawBeforeJoin === 0, "paralyzed DRAW was sent before JOINED supplied player identity");
     assert(result.autoSkipWithoutFrame.autoDrawAfterJoin === 1, "JOINED did not immediately send the pending paralyzed DRAW");
     assert(result.autoSkipWithoutFrame.autoDrawAfterRepeatedState === 1, "repeated paralyzed STATE sent DRAW more than once");
     assert(result.autoSkipWithoutFrame.heldFrameCount === 1, "background-rAF fixture did not hold the scheduled render frame");
     assert(JSON.stringify(result.counts) === JSON.stringify({ venues: 1, discard: 1, players: 2 }), `unexpected rendered counts: ${JSON.stringify(result.counts)}`);
-    console.log(`CARD_RENDER_BATCH_BROWSER_QA=PASS batched=${result.batchedRenderCalls} stable=venues,discard,players selective=players-only autoSkipWithoutFrame=PASS css=local`);
+    console.log(`CARD_RENDER_BATCH_BROWSER_QA=PASS batched=${result.batchedRenderCalls} stable=venues,discard,players selective=players-only autoSkipWithoutFrame=PASS overlays=hidden css=local`);
   } finally {
     await browser.close();
     await new Promise((resolve) => server.close(resolve));

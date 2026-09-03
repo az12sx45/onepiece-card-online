@@ -219,6 +219,9 @@ async function main() {
   for (const selector of [".flex", ".grid", ".rounded-xl", ".text-amber-300"]) {
     assert(css.includes(selector), `compiled stylesheet is missing ${selector}`);
   }
+  for (const selector of ["#modal.hidden", "#coinOverlay.hidden", "#playedOverlay.hidden", "#drawHint.hidden", "#chooseHint.hidden"]) {
+    assert(html.includes(selector), `legacy component has no explicit hidden override: ${selector}`);
+  }
 
   const drawSource = extractFunction(html, "playDrawFxThenDraw");
   const syncDrawPendingSource = extractFunction(html, "syncDrawActionPendingFromState");
