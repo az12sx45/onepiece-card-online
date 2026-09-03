@@ -9,6 +9,7 @@
 | `package.json` | Node 版本、依賴、`start` / `dev` scripts。 |
 | `package-lock.json` | npm lockfile。 |
 | `AGENTS.md` | Codex 進入專案前必讀的短規則。 |
+| `.gitattributes` | V432 將 byte-addressed desktop catalog／manifest 固定為 `-text`，避免 Windows checkout 的 CRLF 轉換破壞 size／SHA。 |
 | `desktop/main.js`、`desktop/preload.js`、`desktop/launcher.html`、`desktop/launcher.css`、`desktop/launcher.js` | V431 本機桌遊發行啟動器：登入後呈現三款遊戲、簡介、下載管理、位置、更新／修復／啟動；main process 守住帳號、game id、視窗、下載與 `opui`／`opcache` protocol 邊界，renderer 只能呼叫窄 IPC。 |
 | `desktop/auth-service.js`、`desktop/game-preload.js`、`desktop/game-session-policy.js` | V431 共用帳號與遊戲 session：secret 以 Electron `safeStorage` 加密，密碼不保存；只讓已認證遊戲主框架取得 bootstrap。card／board 使用分離的非持久 partition，開啟前清 Service Worker／CacheStorage 並阻擋 `/sw.js`，登出／被踢再清 localStorage。 |
 | `desktop/asset-store.js` | V431 圖片／音樂／影片／字型下載器：安全 catalog／manifest、SHA-256 CAS、跨遊戲去重、Range 續傳、取消、有限重試、空間檢查、原子 receipt、last-known-good、差異更新、持久完整性指紋與有界背景抽查。 |
