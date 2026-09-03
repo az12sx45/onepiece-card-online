@@ -1,5 +1,18 @@
 ﻿# Dev Workflow
 
+## 修改紀錄：ONE PIECE TABLETOP SERIES 桌面啟動器 V431（2026-09-03）
+
+- 需求：把原先約 2 GB、把所有圖片直接塞進去的桌面 Beta 改成遊戲公司式小型啟動器。玩家先安裝啟動器、登入共用帳號，再於遊戲庫查看《偉大航道爭霸戰》《新世界航海錄》《霸海戰棋》；前兩款可各自下載／暫停／修復／更新／啟動，西洋棋維持「製作中」且沒有可偽造的安裝或啟動 IPC。
+- 視覺：新增深海船長室 16:9 背景、羅盤＋骰子＋船錨的透明徽章，以及 NSIS 航海艙側欄／標頭圖。正式 `.ico` 同時用於安裝檔、執行檔、桌面捷徑、開始功能表與解除安裝程式；NSIS 使用 164×314 側欄與 150×57 標頭。原始生成 PNG、正式轉檔、提示詞、尺寸與 SHA-256 分開保存在 `desktop/assets/`，不覆蓋遊戲既有素材。
+- 啟動器：`desktop/launcher.html`／CSS／JS 為完全本機 UI，不必先下載整款遊戲才能開啟；包含登入／註冊、三款遊戲庫、遊戲簡介、下載管理、空間與下載位置、目前版本狀態及失敗後啟動 last-known-good。正式版移除略過登入；設計預覽只允許 unpackaged 開發環境的明確環境變數。
+- 帳號：沿用正式 `AUTH_LOGIN`／`AUTH_REGISTER`／`PROFILE_GET`／`PRESENCE_SET`／`SESSION_KICK`；密碼不落地，secret 只用 Electron `safeStorage` 加密保存。暫時斷線、timeout 或 DB 延遲不會誤刪登入；只有伺服器明確拒絕權杖才清除。遊戲視窗採非持久 partition，主框架才可取得一次 localStorage bootstrap，登出／被踢會關閉視窗並清除 localStorage、Service Worker 與 CacheStorage。
+- 素材下載：由 `public/desktop/catalog-v1.json` 指到不可變的 card／board manifest，涵蓋圖片、音樂、影片與字型。下載後以 SHA-256 內容位址存入共用 CAS，相同檔案跨兩款遊戲只保存一次；支援 `.part` Range 續傳、有限並行、磁碟預留、取消、暫時錯誤重試、完整驗證、原子 receipt／manifest／last-known-good catalog，以及更新只取變更檔。有效性索引以檔案指紋避免每次啟動同步重算三千多份雜湊，並以有界背景抽查保留同大小毀損偵測。
+- 網頁邊界：遊戲 HTML、規則、帳號、好友、聊天室、房間、雲端存檔與多人同步仍走正式 Render；本機只攔截已安裝 receipt 中、路徑／大小／SHA 全部符合的 `/images`、`/audio`、`/videos`、`/fonts`。桌面 session 會清除並阻擋網站根 `/sw.js`，避免瀏覽器 Service Worker 再把同一批媒體寫進 CacheStorage；找不到或驗證失敗的素材仍回退正式 HTTP。
+- 清單：card 為 464 檔／692,057,506 bytes，board 為 3,442 檔／1,276,165,651 bytes；兩款合併後為 3,471 個唯一 blob／1,800,504,399 bytes。《霸海戰棋》沒有 manifest。Windows 大小寫碰撞、`incoming`、備份、私人資料、西洋棋 runtime、server 與資料庫密鑰不進任何遊戲包。
+- 建置：Electron `44.1.1`、electron-builder `26.15.3`、socket.io-client `4.8.1` 固定版本；NSIS 產生可選安裝位置、桌面與開始功能表捷徑的 `ONE-PIECE-Tabletop-Launcher-1.1.0-x64.exe`，最終為 131,816,373 bytes，SHA-256 `3041AC5E0C7640871AEED6B87AFD309C02887FAF7687B28440766E2A2040F2AA`。安裝包只含啟動器本身、兩支預覽短片、三款封面、帳號頭像及 catalog／manifest，不含 1.8 GB 遊戲素材。尚未配置商用程式碼簽章，因此 Windows SmartScreen 可能顯示未知發行者。
+- 驗證：`desktop_asset_manifest_qa.js` full（3,894／3,894 hash）、`desktop_game_catalog_qa.js`、`desktop_asset_store_qa.js`、`desktop_service_worker_isolation_qa.js`、`desktop_installed_media_smoke.js` 與 `desktop_launcher_package_qa.js` 均通過；fixture 覆蓋 Range 續傳、CAS 去重、差異更新、同大小毀損修復、重啟快速命中、last-known-good 與暫時錯誤重試。Electron 開發模式檢查 1440×900 登入與 960×640 遊戲庫，custom protocol 的 HEAD／一般 Range／suffix Range／416 均通過，並以真實 receipt 對 6,378-byte MP3 與 1,465,396-byte MP4 完成 HTTPS→`opcache` 命中、完整 SHA 與 Range 206。最終 NSIS 在 `D:\OnePieceDesktopBuilds\2026-09-03-launcher-v1\installed-final-v431` 靜默實裝成功，桌面／開始捷徑都指向存在的 EXE、內含 ICO 與來源 SHA 相同，安裝後 EXE 的 launcher smoke 與 media smoke 再次通過；正式產物不提交到 Git。
+- 修改檔案：`desktop/main.js`、`desktop/preload.js`、`desktop/game-preload.js`、`desktop/game-session-policy.js`、`desktop/auth-service.js`、`desktop/asset-store.js`、`desktop/launcher.html`、`desktop/launcher.css`、`desktop/launcher.js`、`desktop/package.json`、`desktop/package-lock.json`、`desktop/assets/`、`desktop/generated/asset-manifest.json`、`public/images/desktop_launcher/desktop_launcher_cabin_bg_v1.png`、`public/desktop/`、`scripts/build_desktop_asset_manifest.js`、`scripts/desktop_asset_manifest_qa.js`、`scripts/build_desktop_game_catalog.js`、`scripts/desktop_game_catalog_qa.js`、`scripts/desktop_asset_store_qa.js`、`scripts/desktop_service_worker_isolation_qa.js`、`scripts/desktop_installed_media_smoke.js`、`scripts/desktop_launcher_package_qa.js` 及四份專案文件。
+
 ## 修改紀錄：Windows 桌面圖片快取 Beta V430（2026-09-03）
 
 - 需求：讓 Windows 玩家先下載圖片素材再遊玩，降低正式網站大量角色圖、介面圖首次顯示時的等待；登入、好友、聊天室、房間、雲端存檔與多人同步仍使用正式 Render 服務。

@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "createdAt": "2026-09-03T13:53:55.062Z",
+  "sourceTrees": {
+    "images": "507e07d0dfbc4d96bf6f1739c4979096043cd9f1",
+    "audio": "71145f65e84fa61b975f706c99d428651b3161d1",
+    "videos": "6ec01c6dfb4b86197680f43dfc96603ed14c8ec7",
+    "fonts": "58fb1e833fe9c80e4713ae953c1ce2fc43a5b9f4"
+  },
+  "games": {
+    "card": {
+      "releaseId": "assets-ed9554afd423405d",
+      "manifestPath": "desktop/manifests/card-assets-ed9554afd423405d.json",
+      "manifestSha256": "0f357ec380087cff1bf0b5b0adceafe2d2838dc06e2b4f53157e9862af5905b5",
+      "totalFiles": 464,
+      "totalBytes": 692057506
+    },
+    "board": {
+      "releaseId": "assets-bf1761d0930fa453",
+      "manifestPath": "desktop/manifests/board-assets-bf1761d0930fa453.json",
+      "manifestSha256": "754773cc9362245b9a8262cdb928111c68cce1bf4112af8b511b5f1396641305",
+      "totalFiles": 3442,
+      "totalBytes": 1276165651
+    },
+    "chess": {
+      "available": false
+    }
+  }
+}

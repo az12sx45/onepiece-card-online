@@ -1,12 +1,13 @@
 {
   "name": "onepiece-tabletop-desktop",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
-  "description": "Windows desktop launcher for the ONE PIECE tabletop series with a verified local image cache.",
+  "description": "Windows launcher for ONE PIECE tabletop games with account login, verified game downloads and incremental updates.",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "smoke:win": "set OP_DESKTOP_SMOKE=1&& electron .",
+    "preview": "set OP_DESKTOP_PREVIEW=1&& electron .",
+    "smoke:win": "set OP_DESKTOP_SMOKE=1&& set OP_DESKTOP_PREVIEW=1&& electron .",
     "pack:win": "electron-builder --dir --win --x64",
     "build:win": "electron-builder --win --x64"
   },
@@ -16,7 +17,7 @@
   },
   "build": {
     "appId": "com.onepiece.tabletop.desktop",
-    "productName": "ONE PIECE 桌遊啟動器",
+    "productName": "ONE PIECE TABLETOP SERIES 啟動器",
     "asar": true,
     "directories": {
       "output": "dist"
@@ -24,52 +25,64 @@
     "files": [
       "main.js",
       "preload.js",
-      "offline.html",
+      "game-preload.js",
+      "game-session-policy.js",
+      "auth-service.js",
+      "asset-store.js",
+      "launcher.html",
+      "launcher.css",
+      "launcher.js",
+      "assets/one_piece_tabletop_launcher_icon_v1.ico",
       "package.json"
     ],
     "extraResources": [
       {
-        "from": "../public/images",
-        "to": "images",
+        "from": "../public/images/game_launcher",
+        "to": "launcher-assets/images/game_launcher",
         "filter": [
-          "**/*.png",
-          "**/*.PNG",
-          "**/*.jpg",
-          "**/*.JPG",
-          "**/*.jpeg",
-          "**/*.JPEG",
-          "**/*.jfif",
-          "**/*.JFIF",
-          "**/*.webp",
-          "**/*.WEBP",
-          "**/*.gif",
-          "**/*.GIF",
-          "**/*.svg",
-          "**/*.SVG",
-          "**/*.avif",
-          "**/*.AVIF",
-          "!battle_chess/**/*",
-          "!**/battle_chess/**/*",
-          "!incoming/**/*",
-          "!**/incoming/**/*",
-          "!private/**/*",
-          "!**/private/**/*",
-          "!backup/**/*",
-          "!**/backup/**/*",
-          "!backups/**/*",
-          "!**/backups/**/*",
-          "!ranks/r5.PNG",
-          "!ranks/r5.png",
-          "!ranks/r6.PNG",
-          "!ranks/r6.png"
+          "launcher_tabletop_series_logo_v1.png",
+          "launcher_card_cover_perspective_v2.png",
+          "launcher_board_cover_logo_perspective_v5.png",
+          "launcher_chess_cover_logo_perspective_v5.png"
         ]
       },
       {
-        "from": "generated/image-manifest.json",
-        "to": "image-manifest.json"
+        "from": "../public/images/desktop_launcher",
+        "to": "launcher-assets/images/desktop_launcher",
+        "filter": [
+          "desktop_launcher_cabin_bg_v1.png"
+        ]
+      },
+      {
+        "from": "../public/images/board/avatars",
+        "to": "launcher-assets/images/board/avatars",
+        "filter": [
+          "*.webp"
+        ]
+      },
+      {
+        "from": "../public/videos/game_launcher",
+        "to": "launcher-assets/videos/game_launcher",
+        "filter": [
+          "card_sanji_duel_preview_v2.mp4",
+          "board_battle_preview_v2.mp4"
+        ]
+      },
+      {
+        "from": "../public/desktop",
+        "to": "catalog",
+        "filter": [
+          "catalog-v1.json",
+          "manifests/*.json"
+        ]
+      },
+      {
+        "from": "assets/one_piece_tabletop_launcher_icon_v1.ico",
+        "to": "launcher-icon.ico"
       }
     ],
     "win": {
+      "icon": "assets/one_piece_tabletop_launcher_icon_v1.ico",
       "target": [
         {
           "target": "nsis",
@@ -78,11 +91,22 @@
           ]
         }
       ],
-      "artifactName": "ONE-PIECE-Tabletop-Desktop-${version}-${arch}.${ext}"
+      "artifactName": "ONE-PIECE-Tabletop-Launcher-${version}-${arch}.${ext}"
     },
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "ONE PIECE TABLETOP SERIES",
+      "installerIcon": "assets/one_piece_tabletop_launcher_icon_v1.ico",
+      "uninstallerIcon": "assets/one_piece_tabletop_launcher_icon_v1.ico",
+      "installerSidebar": "assets/one_piece_tabletop_installer_sidebar_v1.bmp",
+      "uninstallerSidebar": "assets/one_piece_tabletop_installer_sidebar_v1.bmp",
+      "installerHeader": "assets/one_piece_tabletop_installer_header_v1.bmp"
     }
+  },
+  "dependencies": {
+    "socket.io-client": "4.8.1"
   }
 }

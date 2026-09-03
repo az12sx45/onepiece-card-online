@@ -9,6 +9,15 @@
 | `package.json` | Node 版本、依賴、`start` / `dev` scripts。 |
 | `package-lock.json` | npm lockfile。 |
 | `AGENTS.md` | Codex 進入專案前必讀的短規則。 |
+| `desktop/main.js`、`desktop/preload.js`、`desktop/launcher.html`、`desktop/launcher.css`、`desktop/launcher.js` | V431 本機桌遊發行啟動器：登入後呈現三款遊戲、簡介、下載管理、位置、更新／修復／啟動；main process 守住帳號、game id、視窗、下載與 `opui`／`opcache` protocol 邊界，renderer 只能呼叫窄 IPC。 |
+| `desktop/auth-service.js`、`desktop/game-preload.js`、`desktop/game-session-policy.js` | V431 共用帳號與遊戲 session：secret 以 Electron `safeStorage` 加密，密碼不保存；只讓已認證遊戲主框架取得 bootstrap。card／board 使用分離的非持久 partition，開啟前清 Service Worker／CacheStorage 並阻擋 `/sw.js`，登出／被踢再清 localStorage。 |
+| `desktop/asset-store.js` | V431 圖片／音樂／影片／字型下載器：安全 catalog／manifest、SHA-256 CAS、跨遊戲去重、Range 續傳、取消、有限重試、空間檢查、原子 receipt、last-known-good、差異更新、持久完整性指紋與有界背景抽查。 |
+| `desktop/package.json`、`desktop/package-lock.json` | V431 Electron 44.1.1、electron-builder 26.15.3 與 socket.io-client 4.8.1 固定版本；以小型 x64 NSIS 包含啟動器專用視覺、兩支預覽、catalog／manifest，不內含完整遊戲素材。安裝路徑可選並建立桌面／開始捷徑。 |
+| `desktop/assets/launcher_emblem_v1.png`、`one_piece_tabletop_launcher_icon_v1.ico`、`installer_sidebar_art_v1.png`、`one_piece_tabletop_installer_{sidebar,header}_v1.bmp`、`DESKTOP_LAUNCHER_ART_PROMPTS.md` | V431 啟動器／安裝檔／捷徑圖示和 NSIS 側欄／標頭的版本化原稿、正式轉檔及內建 ImageGen 提示／尺寸／雜湊紀錄。 |
+| `public/images/desktop_launcher/desktop_launcher_cabin_bg_v1.png` | V431 本機 launcher 的 1672×941 深海船長室橫向背景；只作啟動器專用資源，不改 Board 或卡牌頁背景。 |
+| `desktop/generated/asset-manifest.json`、`public/desktop/catalog-v1.json`、`public/desktop/manifests/*.json` | V431 全素材稽核結果與可發布下載目錄。catalog 指向 card／board 的 immutable manifest；Chess 固定 unavailable。manifest 只列允許的 `images`、`audio`、`videos`、`fonts`，含 path／kind／mime／size／SHA-256。 |
+| `scripts/build_desktop_asset_manifest.js`、`scripts/desktop_asset_manifest_qa.js`、`scripts/build_desktop_game_catalog.js`、`scripts/desktop_game_catalog_qa.js` | V431 從正式引用與 Git／實體素材樹建立全素材權威表及兩款遊戲 catalog，拒絕 symlink、未追蹤素材、大小寫碰撞、禁入目錄、錯誤合計、未排序與雜湊漂移。 |
+| `scripts/desktop_asset_store_qa.js`、`scripts/desktop_service_worker_isolation_qa.js`、`scripts/desktop_installed_media_smoke.js`、`scripts/desktop_launcher_package_qa.js` | V431 下載／安全／包裝 QA：fixture 驗證續傳、去重、差異更新、同大小損壞、重啟快取、last-known-good 與重試；真 Electron media smoke 驗證已安裝 MP3／MP4 的 HTTPS→`opcache`、SHA 與 Range；另檢查 SW 隔離、ASAR 白名單、圖示層、NSIS 圖尺寸、catalog、win-unpacked 與最終 PE 安裝檔大小／SHA。 |
 | `desktop/main.js`、`desktop/preload.js`、`desktop/offline.html` | V430 Windows Electron 桌面殼；載入正式 launcher，只把通過 manifest／size／SHA-256／realpath 驗證的同源 `/images/*` 轉到安裝目錄，失敗時回退原 HTTP。renderer 維持 sandbox、context isolation、無 Node API，並含可自動退出的 smoke 模式。 |
 | `desktop/package.json`、`desktop/package-lock.json` | V430 獨立且固定版本的 Electron 44.1.1／electron-builder 26.15.3 建置設定；只打包桌面殼、manifest 與正式圖片，產生 Windows x64 NSIS 安裝程式。 |
 | `desktop/generated/image-manifest.json` | 由正式 `public/images` 產生的 3,185 筆相對路徑、size、SHA-256、素材來源 commit 及四筆 Windows 大小寫衝突排除清單；安裝後圖片快取的唯一允許清單。 |

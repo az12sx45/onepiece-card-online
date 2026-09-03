@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' opui:; img-src 'self' opui: data:; media-src 'self' opui:; style-src 'self'; script-src 'self'; connect-src 'none'; font-src 'self' opui:; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>ONE PIECE TABLETOP SERIES</title>
+  <link rel="stylesheet" href="launcher.css">
+  <script src="launcher.js" defer></script>
+</head>
+<body data-stage="boot">
+  <div class="app-backdrop" aria-hidden="true"></div>
+  <div class="app-vignette" aria-hidden="true"></div>
+
+  <section class="boot-screen screen is-active" id="bootScreen" aria-live="polite">
+    <img class="boot-logo" src="opui://launcher/images/game_launcher/launcher_tabletop_series_logo_v1.png" alt="ONE PIECE TABLETOP SERIES">
+    <span class="log-pose-loader" aria-hidden="true"></span>
+    <p id="bootMessage">正在連接偉大航道…</p>
+  </section>
+
+  <section class="auth-screen screen" id="authScreen" hidden>
+    <div class="auth-card">
+      <img class="auth-logo" src="opui://launcher/images/game_launcher/launcher_tabletop_series_logo_v1.png" alt="ONE PIECE TABLETOP SERIES">
+      <p class="eyebrow">CAPTAIN ACCOUNT</p>
+      <h1 id="authTitle">航海者登入</h1>
+      <p class="auth-copy">登入後管理桌遊、下載素材並接收更新。</p>
+      <div class="auth-tabs" role="tablist" aria-label="帳號操作">
+        <button class="auth-tab is-active" id="loginTab" type="button" role="tab" aria-selected="true">登入</button>
+        <button class="auth-tab" id="registerTab" type="button" role="tab" aria-selected="false">建立帳號</button>
+      </div>
+      <form id="authForm" autocomplete="on">
+        <label class="field"><span>帳號</span><input id="usernameInput" type="text" autocomplete="username" minlength="3" maxlength="24" required></label>
+        <label class="field"><span>密碼</span><input id="passwordInput" type="password" autocomplete="current-password" minlength="6" maxlength="72" required></label>
+        <p class="form-message" id="authMessage" role="status" aria-live="polite"></p>
+        <button class="gold-button auth-submit" id="authSubmit" type="submit">登入</button>
+      </form>
+      <button class="preview-skip" id="previewSkip" type="button" hidden>進入設計預覽</button>
+      <p class="security-note">密碼只用於本次驗證，不會儲存在電腦中。</p>
+    </div>
+  </section>
+
+  <main class="launcher-app screen" id="launcherApp" hidden>
+    <header class="topbar">
+      <img class="series-logo" src="opui://launcher/images/game_launcher/launcher_tabletop_series_logo_v1.png" alt="ONE PIECE TABLETOP SERIES">
+      <nav class="topnav" aria-label="啟動器導覽">
+        <button class="nav-button is-active" type="button" data-panel="library">遊戲庫</button>
+        <button class="nav-button" id="downloadsButton" type="button" data-panel="downloads">下載管理<span class="nav-dot" id="downloadDot" hidden></span></button>
+      </nav>
+      <div class="account-area">
+        <button class="storage-button" id="storageButton" type="button" title="下載位置"><span class="storage-icon" aria-hidden="true"></span><span id="storageSummary">讀取空間…</span></button>
+        <button class="account-chip" id="accountButton" type="button" aria-haspopup="menu" aria-expanded="false">
+          <img id="accountAvatar" src="opui://launcher/images/board/avatars/8.webp" alt="">
+          <span><strong id="accountName">航海者</strong><small id="accountTitle">TABLETOP MEMBER</small></span><i aria-hidden="true"></i>
+        </button>
+        <div class="account-menu" id="accountMenu" role="menu" hidden><button id="logoutButton" type="button" role="menuitem">登出帳號</button></div>
+      </div>
+    </header>
+
+    <section class="library-panel app-panel is-active" id="libraryPanel">
+      <aside class="game-rail" aria-label="桌遊選擇"><p class="rail-title">MY GAMES</p><div id="gameRail"></div></aside>
+      <section class="game-feature" id="gameFeature" aria-live="polite">
+        <video class="feature-video" id="featureVideo" muted playsinline loop preload="metadata"></video>
+        <div class="feature-art" id="featureArt" aria-hidden="true"></div><div class="feature-shade" aria-hidden="true"></div>
+        <div class="feature-content">
+          <div class="feature-cover-wrap"><img class="feature-cover" id="featureCover" src="" alt=""><span class="cover-glint" aria-hidden="true"></span></div>
+          <div class="feature-copy">
+            <div class="feature-kicker-row"><span class="status-pill" id="featureStatus">檢查中</span><span class="feature-version" id="featureVersion"></span></div>
+            <h2 id="featureTitle"></h2><p class="feature-tagline" id="featureTagline"></p><div class="feature-tags" id="featureTags"></div><p class="feature-description" id="featureDescription"></p>
+            <div class="install-progress" id="installProgress" hidden>
+              <div class="progress-head"><span id="progressLabel">正在準備下載…</span><strong id="progressPercent">0%</strong></div>
+              <div class="progress-track"><span id="progressBar"></span></div><p id="progressDetail"></p>
+            </div>
+            <div class="feature-actions"><button class="ghost-button" id="detailsButton" type="button">遊戲簡介</button><button class="gold-button primary-action" id="primaryAction" type="button">檢查中…</button><button class="ghost-button" id="existingLaunchAction" type="button" hidden>啟動現有版本</button><button class="cancel-button" id="cancelAction" type="button" hidden>暫停下載</button></div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section class="downloads-panel app-panel" id="downloadsPanel" hidden>
+      <div class="panel-heading"><div><p class="eyebrow">DOWNLOAD MANAGER</p><h2>下載與更新</h2></div><button class="ghost-button" id="changeLocationButton" type="button">變更下載位置</button></div>
+      <div class="download-list" id="downloadList"></div>
+    </section>
+  </main>
+
+  <dialog class="detail-dialog" id="detailDialog">
+    <button class="dialog-close" id="detailClose" type="button" aria-label="關閉">×</button><div class="dialog-visual"><img id="detailCover" src="" alt=""></div>
+    <div class="dialog-copy"><p class="eyebrow" id="detailEyebrow"></p><h2 id="detailTitle"></h2><p id="detailDescription"></p><ul id="detailFeatures"></ul><div class="dialog-meta" id="detailMeta"></div></div>
+  </dialog>
+
+  <dialog class="location-dialog" id="locationDialog">
+    <button class="dialog-close" id="locationClose" type="button" aria-label="關閉">×</button><p class="eyebrow">GAME STORAGE</p><h2>遊戲下載位置</h2>
+    <p>圖片、音樂與影片會安裝到這裡；帳號與雲端存檔仍留在伺服器。</p><div class="path-box" id="cachePath">讀取中…</div>
+    <div class="location-actions"><button class="ghost-button" id="pickLocationButton" type="button">選擇資料夾</button><button class="gold-button" id="locationDone" type="button">完成</button></div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>
