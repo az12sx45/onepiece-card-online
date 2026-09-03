@@ -93,6 +93,8 @@ async function waitForReason(page, reason) {
     roomCode,
     sourceClientId: profiles.host.clientId,
     reason: "spar-invite",
+    baseVersion: 0,
+    version: 1,
     payload: seedPayload,
   });
   const seededForGuest = await waitForReason(guest.page, "spar-invite");
@@ -103,6 +105,8 @@ async function waitForReason(page, reason) {
     roomCode,
     sourceClientId: profiles.guest.clientId,
     reason: "spar-accept",
+    baseVersion: Number(seedAck?.version || 0),
+    version: Number(seedAck?.version || 0) + 1,
     payload: acceptedPayload,
   });
   const acceptedForHost = await waitForReason(host.page, "spar-accept");
@@ -127,6 +131,8 @@ async function waitForReason(page, reason) {
     roomCode,
     sourceClientId: profiles.guest.clientId,
     reason: "spar-action",
+    baseVersion: Number(acceptAck?.version || 0),
+    version: Number(acceptAck?.version || 0) + 1,
     payload: guestActionPayload,
   });
   const actionForHost = await waitForReason(host.page, "spar-action");
@@ -140,6 +146,8 @@ async function waitForReason(page, reason) {
     roomCode,
     sourceClientId: profiles.guest.clientId,
     reason: "spar-turn-complete",
+    baseVersion: Number(guestActionAck?.version || 0),
+    version: Number(guestActionAck?.version || 0) + 1,
     payload: stashedPayload,
   });
   const bTurnForHost = await waitForReason(host.page, "spar-turn-complete");
@@ -150,6 +158,8 @@ async function waitForReason(page, reason) {
     roomCode,
     sourceClientId: profiles.outsider.clientId,
     reason: "turn-end",
+    baseVersion: Number(roundCompleteAck?.version || 0),
+    version: Number(roundCompleteAck?.version || 0) + 1,
     payload: bTurnPayload,
   });
   const cTurnForGuest = await waitForReason(guest.page, "turn-end");
@@ -164,6 +174,8 @@ async function waitForReason(page, reason) {
     roomCode,
     sourceClientId: profiles.guest.clientId,
     reason: "spar-turn-start",
+    baseVersion: Number(bTurnAck?.version || 0),
+    version: Number(bTurnAck?.version || 0) + 1,
     payload: cBattlePayload,
   });
   const cBattleForHost = await waitForReason(host.page, "spar-turn-start");
@@ -174,6 +186,8 @@ async function waitForReason(page, reason) {
     roomCode,
     sourceClientId: profiles.outsider.clientId,
     reason: "spar-action",
+    baseVersion: Number(cTurnStartAck?.version || 0),
+    version: Number(cTurnStartAck?.version || 0) + 1,
     payload: outsiderPayload,
   });
 

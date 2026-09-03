@@ -24,7 +24,14 @@ async function createDevice(browser, profile, errors) {
   captureErrors(page, errors, profile.name);
   await page.goto(`${ROOT_URL}/board_start.html?qa=${encodeURIComponent(profile.name)}`, { waitUntil: "domcontentloaded" });
   await page.waitForFunction(() => window.BoardShared && window.io, null, { timeout: 15000 });
-  return { ...profile, context, page };
+  await page.waitForFunction(() => document.body.dataset.entryStage === "press", null, { timeout: 10000 });
+  await page.click("#boardEntryStartBtn");
+  await page.waitForFunction(() => document.body.dataset.entryStage === "auth", null, { timeout: 10000 });
+  await page.fill("#boardAuthUsername", profile.name);
+  await page.click("#boardAuthSubmitBtn");
+  await page.waitForFunction(() => document.body.dataset.entryStage === "app", null, { timeout: 10000 });
+  const localUserId = await page.evaluate(() => Number(localStorage.getItem("op_board_user_id") || 0));
+  return { ...profile, userId: localUserId || profile.userId, context, page };
 }
 
 async function enterRoom(device, roomCode, create = false) {
