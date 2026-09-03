@@ -9717,9 +9717,12 @@
     version: 0,
     eventSequence: 0,
     awaitingInitialState: false,
+    joinedOnce: false,
     roomCode: sanitizeRoomCode(query.get("room") || state.lobby?.roomCode || ""),
     clientId: String(profile.clientId || profile.userId || `board-${Date.now()}`),
     lastSentKey: "",
+    pendingState: null,
+    inFlightState: null,
     lastAck: null,
     lastError: "",
     activeRemoteUiEventId: "",
@@ -12347,8 +12350,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
 
   function scheduleManualLoadLanSync(options = {}) {
     if (options.source === "lan" || !boardLan.enabled) return;
-    boardLan.lastSentKey = "";
-    scheduleBoardLanStatePush("load-save", 100, { force: true });
+    scheduleBoardLanStatePush("load-save", 100, { force: true, bypassDedupe: true });
   }
 
   async function openLoadGameModal() {
@@ -12859,47 +12861,140 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     return canBoardLanControlCurrentPlayer(currentPlayer());
   }
 
-  function pushBoardLanStateUnchecked(reason = "state") {
-    if (!boardLan.enabled || !boardLan.connected || boardLan.applying || !state.gameState) return;
-    if (boardLan.awaitingInitialState) return;
+  function createBoardLanPendingState(reason = "state", options = {}) {
+    if (!state.gameState || boardLan.applying) return null;
     const payload = createManualSavePayload();
-    if (!isValidManualSavePayload(payload)) return;
-    const key = boardLanContentKey(payload);
-    if (key && key === boardLan.lastSentKey) return;
-    boardLan.lastSentKey = key;
-    const outboundVersion = Math.max(0, Number(boardLan.version || 0)) + 1;
+    if (!isValidManualSavePayload(payload)) return null;
+    return {
+      payload,
+      key: boardLanContentKey(payload),
+      reason: String(reason || "state"),
+      bypassDedupe: options.bypassDedupe === true,
+    };
+  }
+
+  function queueBoardLanPendingState(entry = null) {
+    if (!entry?.payload) return false;
+    if (!entry.bypassDedupe && !boardLan.inFlightState && entry.key && entry.key === boardLan.lastSentKey) {
+      boardLan.pendingState = null;
+      return false;
+    }
+    if (boardLan.inFlightState && entry.key && entry.key === boardLan.inFlightState.key) {
+      boardLan.pendingState = null;
+      return false;
+    }
+    boardLan.pendingState = entry;
+    return true;
+  }
+
+  function preserveLatestBoardLanState(reason = "reconnect", options = {}) {
+    const entry = createBoardLanPendingState(reason, options);
+    if (!entry) return false;
+    return queueBoardLanPendingState(entry);
+  }
+
+  function clearBoardLanQueuedState() {
+    boardLan.pendingState = null;
+    boardLan.inFlightState = null;
+    window.clearTimeout(boardLan.pushTimer);
+    boardLan.pushTimer = 0;
+  }
+
+  function requestBoardLanAuthoritativeState(error = "stale_version") {
+    if (!boardLan.enabled) return;
+    boardLan.awaitingInitialState = true;
+    boardLan.initialStateCanSeed = false;
+    boardLan.initialStateRequestAttempts = 0;
+    boardLan.initialStateWaitStartedAt = Date.now();
+    boardLan.lastError = String(error || "stale_version");
+    showBoardLanInitialStateWait();
+    if (boardLan.connected && boardLan.socket) {
+      boardLan.socket.emit("BOARD_STATE_REQUEST", {
+        roomCode: boardLan.roomCode || state.lobby?.roomCode || "",
+        requesterClientId: boardLan.clientId,
+        knownVersion: Math.max(0, Number(boardLan.version || 0)),
+        hasPendingState: !!boardLan.pendingState,
+      });
+      scheduleBoardLanInitialStateRetry(420);
+    }
+  }
+
+  function flushBoardLanPendingState() {
+    if (!boardLan.enabled || !boardLan.connected || !boardLan.socket || boardLan.applying || boardLan.awaitingInitialState) return false;
+    if (boardLan.inFlightState || !boardLan.pendingState) return false;
+    const entry = boardLan.pendingState;
+    boardLan.pendingState = null;
+    if (!entry.bypassDedupe && entry.key && entry.key === boardLan.lastSentKey) return false;
+    const baseVersion = Math.max(0, Number(boardLan.version || 0));
+    const outboundVersion = baseVersion + 1;
+    boardLan.inFlightState = entry;
     boardLan.socket.emit("BOARD_GAME_STATE", {
       roomCode: boardLan.roomCode || state.lobby?.roomCode || "",
-      payload,
+      payload: entry.payload,
+      baseVersion,
       version: outboundVersion,
       sourceClientId: boardLan.clientId,
-      reason,
+      reason: entry.reason,
     }, (result = {}) => {
+      if (boardLan.inFlightState !== entry) return;
+      boardLan.inFlightState = null;
       boardLan.lastAck = result;
       boardLan.lastError = result.ok ? "" : String(result.error || "sync_failed");
-      if (!result.ok) {
-        boardLan.lastSentKey = "";
+      if (result.ok) {
+        boardLan.lastSentKey = entry.key;
+        boardLan.version = Math.max(boardLan.version, Number(result.version || outboundVersion));
+        if (boardLan.pendingState?.key && boardLan.pendingState.key === boardLan.lastSentKey) {
+          boardLan.pendingState = null;
+        }
+        flushBoardLanPendingState();
+        return;
       }
-      if (result.ok && Number(result.version) > boardLan.version) {
-        boardLan.version = Number(result.version);
+      preserveLatestBoardLanState(entry.reason, { bypassDedupe: entry.bypassDedupe });
+      if (String(result.error || "") === "stale_version") {
+        requestBoardLanAuthoritativeState(result.error);
+      } else if (String(result.error || "") === "stale_socket") {
+        boardLan.connected = false;
+        boardLan.awaitingInitialState = true;
+        boardLan.pendingState = null;
+        window.clearTimeout(cpuAuto.timer);
+        cpuAuto.timer = 0;
+        shared.showToast("這個帳號已由另一個分頁接手，本頁已停止操作。");
       }
     });
+    return true;
+  }
+
+  function pushBoardLanStateUnchecked(reason = "state", options = {}) {
+    if (!boardLan.enabled || boardLan.applying || !state.gameState) return;
+    if (boardLan.awaitingInitialState && !boardLan.joinedOnce) return;
+    const entry = createBoardLanPendingState(reason, options);
+    if (!entry || !queueBoardLanPendingState(entry)) return;
+    flushBoardLanPendingState();
   }
 
   function pushBoardLanState(reason = "state") {
+    // A turn animation that started while connected can finish after a brief
+    // disconnect. Preserve that final snapshot even though new input is locked.
+    if (boardLan.enabled && boardLan.joinedOnce && (!boardLan.connected || boardLan.awaitingInitialState)) {
+      pushBoardLanStateUnchecked(reason);
+      return;
+    }
     if (!canPushBoardLanState(reason)) return;
     pushBoardLanStateUnchecked(reason);
   }
 
   function scheduleBoardLanStatePush(reason = "state", delay = 160, options = {}) {
     if (!boardLan.enabled || boardLan.applying || !state.gameState) return;
-    if (boardLan.awaitingInitialState) return;
+    if (boardLan.awaitingInitialState && !boardLan.joinedOnce) return;
+    if (boardLan.joinedOnce && (!boardLan.connected || boardLan.awaitingInitialState)) {
+      pushBoardLanStateUnchecked(reason, { bypassDedupe: options.bypassDedupe === true });
+      return;
+    }
     if (!options.force && !canPushBoardLanState(reason)) return;
     clearTimeout(boardLan.pushTimer);
     boardLan.pushTimer = setTimeout(() => {
       boardLan.pushTimer = 0;
-      if (options.force) pushBoardLanStateUnchecked(reason);
-      else pushBoardLanState(reason);
+      pushBoardLanStateUnchecked(reason, { bypassDedupe: options.bypassDedupe === true });
     }, delay);
   }
 
@@ -13016,6 +13111,19 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     boardLan.initialStateWaitStartedAt = 0;
   }
 
+  function resumeBoardLanFromCurrentServerState(version = 0) {
+    boardLan.version = Math.max(boardLan.version, Number(version || 0));
+    boardLan.awaitingInitialState = false;
+    boardLan.initialStateCanSeed = false;
+    boardLan.lastError = "";
+    resetBoardLanInitialRestoreTracking();
+    if (refs.modal?.classList.contains("board-lan-initial-wait-modal")) closeModal();
+    flushBoardLanPendingState();
+    window.setTimeout(() => {
+      if (shouldRunCpuAutoStep()) scheduleCpuAutoStep(180);
+    }, 80);
+  }
+
   function showBoardLanInitialStateWait(options = {}) {
     if (!boardLan.awaitingInitialState) return;
     const waitStartedAt = Math.max(0, Number(boardLan.initialStateWaitStartedAt || 0));
@@ -13084,6 +13192,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         boardLan.socket.emit("BOARD_STATE_REQUEST", {
           roomCode: boardLan.roomCode || state.lobby?.roomCode || "",
           requesterClientId: boardLan.clientId,
+          knownVersion: Math.max(0, Number(boardLan.version || 0)),
+          hasPendingState: !!boardLan.pendingState,
         });
       }
       if (boardLan.initialStateRequestAttempts < 4) {
@@ -13095,29 +13205,6 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         }, 1800);
       }
     }, Math.max(120, Number(delay) || 700));
-  }
-
-  function isBoardLanTradeTerminalPayload(message = {}) {
-    const reason = String(message.reason || "");
-    if (reason !== "trade-complete" && reason !== "trade-close") return false;
-    const localGame = state.gameState;
-    const incomingGame = message.payload?.gameState;
-    if (!localGame || !incomingGame) return false;
-    const localTrade = normalizeActiveTrade(localGame.activeTrade);
-    const localPrompt = localGame.tradePrompt;
-    if (!localTrade && !localPrompt) return false;
-    if (incomingGame.activeTrade || incomingGame.tradePrompt) return false;
-    if (Number(localGame.currentPlayerIndex || 0) !== Number(incomingGame.currentPlayerIndex || 0)) return false;
-    if (String(localGame.phase || "") !== String(incomingGame.phase || "")) return false;
-    if (localTrade) {
-      const playerIds = activeTradePlayers(localTrade).map((player) => String(player.id));
-      const incomingIds = new Set((incomingGame.players || []).map((player) => String(player.id)));
-      return playerIds.length >= 2 && playerIds.every((id) => incomingIds.has(id));
-    }
-    if (localPrompt) {
-      return String(localPrompt.playerId || "") === String(incomingGame.pendingMove?.playerId || localPrompt.playerId || "");
-    }
-    return false;
   }
 
   function resumeTradeTerminalFlowFromLan(reason = "") {
@@ -13145,16 +13232,18 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (!boardLan.enabled || !message.payload) return;
     if (message.sourceClientId === boardLan.clientId && !boardLan.awaitingInitialState) return;
     const version = Number(message.version || 0);
-    const allowTradeTerminal = isBoardLanTradeTerminalPayload(message);
+    const reconnectHasPendingState = boardLan.awaitingInitialState && boardLan.joinedOnce && !!boardLan.pendingState;
+    if (reconnectHasPendingState && (!version || version <= boardLan.version)) return;
+    const authoritativeNewer = version > boardLan.version
+      && (boardLan.awaitingInitialState || message.sourceClientId !== boardLan.clientId);
+    if (authoritativeNewer && (boardLan.pendingState || boardLan.inFlightState)) {
+      clearBoardLanQueuedState();
+    }
     const reason = String(message.reason || "");
     const initialRestorePending = boardLan.awaitingInitialState;
-    const incomingHasBattle = !!message.payload?.battleState;
-    const localBattleKey = state.battleState ? boardLanContentKey({ gameState: state.gameState, battleState: state.battleState }) : "";
-    const incomingBattleKey = incomingHasBattle ? boardLanContentKey(message.payload) : "";
-    const allowBattleCatchup = incomingHasBattle && reason.startsWith("battle-") && (!state.battleState || incomingBattleKey !== localBattleKey);
-    if (version && version < boardLan.version && !allowTradeTerminal && !allowBattleCatchup) return;
+    if (version && version < boardLan.version) return;
     // turn-banner 會先播放交棒演出，再用同一份版本延後套用；這次內部續跑不能被重複版本保護擋掉。
-    if (version && version === boardLan.version && !message.__skipPreApplyUiEvent && !boardLan.awaitingInitialState && !allowTradeTerminal && !allowBattleCatchup) return;
+    if (version && version === boardLan.version && !message.__skipPreApplyUiEvent && !boardLan.awaitingInitialState) return;
     const transientDelay = Math.max(0, Number(boardLan.deferStateApplyUntil || 0) - Date.now());
     if (!initialRestorePending && !message.__skipTransientUiDelay && transientDelay > 0) {
       window.clearTimeout(boardLan.deferredApplyTimer);
@@ -13190,6 +13279,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         initialLanRestore: wasAwaitingInitialState,
       });
       if (applied) {
+        boardLan.joinedOnce = true;
         boardLan.awaitingInitialState = false;
         boardLan.initialStateCanSeed = false;
         resetBoardLanInitialRestoreTracking();
@@ -13211,6 +13301,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       }
       setTimeout(() => {
         boardLan.applying = false;
+        if (applied) flushBoardLanPendingState();
         if (applied && wasAwaitingInitialState && shouldRunCpuAutoStep()) {
           scheduleCpuAutoStep(180);
         }
@@ -13229,28 +13320,43 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     boardLan.socket = window.io({ transports: ["websocket", "polling"] });
     shared.attachSocket?.(boardLan.socket);
     boardLan.socket.on("connect", () => {
+      const reconnecting = boardLan.joinedOnce;
       boardLan.connected = true;
       boardLan.awaitingInitialState = true;
       boardLan.initialStateCanSeed = false;
       boardLan.initialStateRequestAttempts = 0;
       boardLan.initialStateWaitStartedAt = Date.now();
+      if (reconnecting) {
+        const queuedState = boardLan.pendingState;
+        preserveLatestBoardLanState(queuedState?.reason || "reconnect", { bypassDedupe: queuedState?.bypassDedupe === true });
+      }
       if (campaignInitialLoadRequested) showBoardLanInitialStateWait({ force: true });
       boardLan.socket.emit("BOARD_JOIN_GAME", {
         roomCode: boardLan.roomCode || state.lobby?.roomCode || "",
         profile: boardLanProfilePayload(),
+        ...(reconnecting ? {
+          knownVersion: Math.max(0, Number(boardLan.version || 0)),
+          hasPendingState: !!boardLan.pendingState,
+        } : {}),
       }, (result = {}) => {
         if (!result.ok) {
-          boardLan.awaitingInitialState = false;
           boardLan.initialStateCanSeed = false;
-          resetBoardLanInitialRestoreTracking();
           console.warn("[board LAN] join failed", result);
-          if (campaignInitialLoadRequested) showBoardCampaignInitialLoadFailure(result.error || "campaign_join_failed");
-          else openSetupStep();
+          if (reconnecting) {
+            boardLan.lastError = String(result.error || "reconnect_join_failed");
+            showBoardLanInitialStateWait();
+          } else {
+            boardLan.awaitingInitialState = false;
+            resetBoardLanInitialRestoreTracking();
+            if (campaignInitialLoadRequested) showBoardCampaignInitialLoadFailure(result.error || "campaign_join_failed");
+            else openSetupStep();
+          }
           return;
         }
+        boardLan.joinedOnce = true;
         const hasRemoteState = Boolean(result.hasState);
         boardLan.initialStateCanSeed = !hasRemoteState && result.canSeedState === true;
-        if (hasRemoteState) {
+        if (hasRemoteState && !(reconnecting && boardLan.pendingState)) {
           boardLan.version = Math.max(boardLan.version, Number(result.version || 0));
         }
         if (result.lobby?.roomCode) {
@@ -13270,6 +13376,10 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
             if (changedPlayers || changedIdentities) renderAll();
           }
         }
+        if (result.stateCurrent === true) {
+          resumeBoardLanFromCurrentServerState(result.version);
+          return;
+        }
         if (!boardLan.awaitingInitialState) return;
         if (!hasRemoteState && result.canSeedState === true && seedBoardLanInitialState("join")) return;
         showBoardLanInitialStateWait();
@@ -13277,9 +13387,30 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       });
     });
     boardLan.socket.on("disconnect", () => {
+      const interruptedState = boardLan.pendingState || boardLan.inFlightState;
       boardLan.connected = false;
+      boardLan.awaitingInitialState = true;
       boardLan.initialStateCanSeed = false;
+      window.clearTimeout(boardLan.pushTimer);
+      boardLan.pushTimer = 0;
+      window.clearTimeout(cpuAuto.timer);
+      cpuAuto.timer = 0;
+      boardLan.pendingState = null;
+      boardLan.inFlightState = null;
+      if (boardLan.joinedOnce) {
+        preserveLatestBoardLanState(interruptedState?.reason || "reconnect", { bypassDedupe: interruptedState?.bypassDedupe === true });
+      }
       resetBoardLanInitialRestoreTracking();
+    });
+    boardLan.socket.on("BOARD_SOCKET_FENCED", () => {
+      boardLan.connected = false;
+      boardLan.awaitingInitialState = true;
+      boardLan.initialStateCanSeed = false;
+      boardLan.lastError = "stale_socket";
+      clearBoardLanQueuedState();
+      window.clearTimeout(cpuAuto.timer);
+      cpuAuto.timer = 0;
+      shared.showToast("這個帳號已由另一個分頁接手，本頁已停止操作。");
     });
     boardLan.socket.on("BOARD_LOBBY", (message = {}) => {
       if (!message.lobby?.roomCode) return;
@@ -14530,7 +14661,9 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
 
   function canLocalDriveCpuPlayer(player = null) {
     if (!isCpuPlayer(player)) return false;
-    return !boardLan.enabled || localPlayerIsLobbyHost();
+    if (!boardLan.enabled) return true;
+    if (!boardLan.connected || boardLan.awaitingInitialState || boardLan.applying) return false;
+    return localPlayerIsLobbyHost();
   }
 
   function mapViewerPlayer() {
@@ -14539,6 +14672,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
 
   function canBoardLanControlPlayerIdentity(player = null) {
     if (!boardLan.enabled || !player) return true;
+    if (!boardLan.connected || boardLan.awaitingInitialState) return false;
     if (canLocalDriveCpuPlayer(player)) return true;
     const localClientId = String(boardLan.clientId || profile.clientId || "").trim();
     const playerClientId = String(player.clientId || "").trim();
@@ -63724,12 +63858,19 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       version: boardLan.version,
       applying: boardLan.applying,
       hasPushTimer: !!boardLan.pushTimer,
+      hasPendingState: !!boardLan.pendingState,
+      pendingReason: boardLan.pendingState?.reason || "",
+      pendingKey: boardLan.pendingState?.key ? boardLan.pendingState.key.slice(0, 120) : "",
+      hasInFlightState: !!boardLan.inFlightState,
+      inFlightReason: boardLan.inFlightState?.reason || "",
+      inFlightKey: boardLan.inFlightState?.key ? boardLan.inFlightState.key.slice(0, 120) : "",
       hasInitialStateRetryTimer: !!boardLan.initialStateRetryTimer,
       initialStateRequestAttempts: Number(boardLan.initialStateRequestAttempts || 0),
       initialStateWaitStartedAt: Number(boardLan.initialStateWaitStartedAt || 0),
       lastAck: boardLan.lastAck,
       lastError: boardLan.lastError,
       awaitingInitialState: boardLan.awaitingInitialState,
+      joinedOnce: boardLan.joinedOnce,
       initialStateCanSeed: boardLan.initialStateCanSeed,
       campaignInitialLoadRequested,
       lastSentKey: boardLan.lastSentKey ? boardLan.lastSentKey.slice(0, 120) : "",
