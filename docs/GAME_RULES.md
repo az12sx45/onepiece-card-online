@@ -9,7 +9,7 @@
 - 一次抽牌操作不論由影片 `ended`、點擊略過或 failsafe 完成，都只能送一個 `DRAW`。麻痺狀態同一 round／turn／draw／skipNext 組合只能自動送一次，離開條件後才解除防重；這是防止重複指令，不改麻痺原本跳過抽牌的效果。
 - 桌面已安裝素材仍須先通過 manifest／receipt／size／SHA 驗證。運行時 path／token 記憶體索引、單檔不超過 8 MiB 與 192 MiB 總量 LRU、以及大型檔案串流只改讀取方式；長度錯誤仍觸發清除索引與修復檢查，不得把損壞素材視為有效。
 - Card／Board 的 Electron partition 仍為非持久，`cache:false` 禁用 HTTP 磁碟快取，登入 localStorage 不可跨程序保存。一般關閉再開遊戲會保留本次啟動器程序內的非帳號設定與 Board 手動存檔，登出、被踢或切換素材位置才清除；選定 D 槽時，V8 code cache 與 Chromium session／GPU／network cache 也跟隨素材根目錄落在 D 槽。帳號密文狀態仍留在 userData，這不建立第二份帳號、房間或遊戲存檔。
-- C 槽只剩約 31 MiB 仍屬作業系統層風險；V433 不等於已清出磁碟空間，也沒有授權或執行使用者檔案刪除。
+- 效能診斷初期 C 槽曾為 `0 bytes` 可用，最後重測已恢復約 30.7 GiB；V433 沒有授權或執行使用者檔案刪除，且仍把可移動的遊戲快取放到選定的 D 槽來降低將來風險。
 
 ## 桌面啟動器與遊戲安裝邊界（V431～V432）
 

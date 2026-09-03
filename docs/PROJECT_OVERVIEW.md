@@ -12,7 +12,7 @@
 - 抽牌動畫所有完成路徑只能送一次 `DRAW`，麻痺跳過也以 round／turn／draw 狀態防重；決鬥卡背統一改用 `back.webp`。這些修正不改牌效、回合順序或多人協定。
 - 桌面啟動器把安裝 manifest 建成記憶體路由索引，素材請求不再每次 `stat`／hash。單檔不超過 8 MiB 的素材進入 192 MiB 上限的 LRU，較大音樂／影片直接串流，seek／換場取消時會關閉舊檔案串流；遊戲 session 仍非持久且使用 `cache:false`，V8 code cache 與 Chromium session／GPU／network cache 則跟著玩家選定的素材位置，目前選 D 槽便落在 D 槽。重開視窗會保留本次程序中的非帳號設定／手動存檔，舊視窗事件不會清掉新視窗快取。
 - 啟動器版本為 `1.1.1`。manifest、receipt 與 SHA-256 的下載／修復權威、帳號、Socket.IO、存檔與 `BOARD_GAME_STATE` 均未改；卡牌、Board 與網頁玩家仍共用正式 Render 狀態。
-- 三項新效能 QA 與既有 asset-store、Service Worker、package、catalog、已安裝 media smoke 均通過，`npm start` 的卡牌頁／CSS 為 HTTP 200；無 `DATABASE_URL` 的本機警告屬預期。本次實際安裝的測試版已驗證 Card／Board 五種媒體快取皆 hit，Chromium cache 也位於選定 D 槽。C 槽檢查時仍只剩約 31 MiB，系統操作風險尚未消失，本次沒有刪除使用者檔案。
+- 三項新效能 QA 與既有 asset-store、Service Worker、package、catalog、已安裝 media smoke 均通過，`npm start` 的卡牌頁／CSS 為 HTTP 200；無 `DATABASE_URL` 的本機警告屬預期。本次實際安裝的測試版已驗證 Card／Board 五種媒體快取皆 hit，Chromium cache 也位於選定 D 槽。效能診斷初期 C 槽曾為 `0 bytes` 可用，最後重測已恢復約 30.7 GiB；本次沒有刪除使用者檔案。
 
 ## 桌面下載清單 V432（2026-09-04）
 
