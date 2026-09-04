@@ -1,26 +1,26 @@
 {
   "schema": 1,
-  "createdAt": "2026-09-03T16:09:46.186Z",
+  "createdAt": "2026-09-04T19:23:12.957Z",
   "sourceTrees": {
-    "images": "507e07d0dfbc4d96bf6f1739c4979096043cd9f1",
+    "images": "793f92f49962c9f4759e121aba14afd2e6242f9b",
     "audio": "71145f65e84fa61b975f706c99d428651b3161d1",
     "videos": "6ec01c6dfb4b86197680f43dfc96603ed14c8ec7",
     "fonts": "58fb1e833fe9c80e4713ae953c1ce2fc43a5b9f4"
   },
   "games": {
     "card": {
-      "releaseId": "assets-64e1a7e18b7a6992",
-      "manifestPath": "desktop/manifests/card-assets-64e1a7e18b7a6992.json",
-      "manifestSha256": "c74d4152cf4ab40ce859ad5baf6bb4befd4687045fffd5cdd2bad4880c8a662f",
-      "totalFiles": 464,
-      "totalBytes": 692057452
+      "releaseId": "assets-dbae3ab023f964e3",
+      "manifestPath": "desktop/manifests/card-assets-dbae3ab023f964e3.json",
+      "manifestSha256": "dfd3799fc58b0595512a1bcf72ef531c96124ac8ebeb4417238d48c7597c2c6b",
+      "totalFiles": 467,
+      "totalBytes": 692068119
     },
     "board": {
-      "releaseId": "assets-d3f97f151da15f4a",
-      "manifestPath": "desktop/manifests/board-assets-d3f97f151da15f4a.json",
-      "manifestSha256": "52a6ec54d42d1ec76324e59c75e637cb430161b9e8bab72604848949b7501e53",
-      "totalFiles": 3442,
-      "totalBytes": 1276165597
+      "releaseId": "assets-c4ee32fd3b9ef4a3",
+      "manifestPath": "desktop/manifests/board-assets-c4ee32fd3b9ef4a3.json",
+      "manifestSha256": "75cb73c7313d198853fbead8569ad561e7f6d9df4f67b926073b9f4dcee28708",
+      "totalFiles": 3445,
+      "totalBytes": 1276172492
     },
     "chess": {
       "available": false

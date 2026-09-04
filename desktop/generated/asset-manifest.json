@@ -1,14 +1,14 @@
 {
   "schema": 2,
   "sourceRoot": "public",
-  "sourceCommit": "6e26278bed2e2ff94f67f8e231c8892a82d0dabb",
+  "sourceCommit": "f0e4b41708aa19ef509b413b11069a743a2cff53",
   "sourceTrees": {
-    "images": "507e07d0dfbc4d96bf6f1739c4979096043cd9f1",
+    "images": "793f92f49962c9f4759e121aba14afd2e6242f9b",
     "audio": "71145f65e84fa61b975f706c99d428651b3161d1",
     "videos": "6ec01c6dfb4b86197680f43dfc96603ed14c8ec7",
     "fonts": "58fb1e833fe9c80e4713ae953c1ce2fc43a5b9f4"
   },
-  "createdAt": "2026-09-03T16:09:46.186Z",
+  "createdAt": "2026-09-04T19:23:12.957Z",
   "includedRoots": [
     "images",
     "audio",
@@ -22,12 +22,12 @@
     "images/ranks/r6.png"
   ],
   "excludedForbiddenPaths": [],
-  "totalFiles": 3894,
-  "totalBytes": 1949507438,
+  "totalFiles": 3900,
+  "totalBytes": 1949525000,
   "byKind": {
     "image": {
-      "files": 3186,
-      "bytes": 1200753109
+      "files": 3192,
+      "bytes": 1200770671
     },
     "audio": {
       "files": 671,
@@ -13825,6 +13825,24 @@
       "size": 315844,
       "sha256": "9a2d1a9aa21ed4fa1471e2b4fc9b50805442ebd296fba4377ba707ceef7d6553"
     },
+    "images/board/cursors/board_cursor_nami_chart_pen_default_v1.png": {
+      "kind": "image",
+      "mime": "image/png",
+      "size": 1886,
+      "sha256": "854e14a5dc3b38982005396f3fd2799b5924e21d5e41e37b0a16e8ba19354d39"
+    },
+    "images/board/cursors/board_cursor_nami_chart_pen_pointer_v1.png": {
+      "kind": "image",
+      "mime": "image/png",
+      "size": 2595,
+      "sha256": "f46bbf1fd2549eaf12d077e535ddd47c5a36885ac5d8daac25a70978f8172d91"
+    },
+    "images/board/cursors/board_cursor_nami_chart_pen_pressed_v1.png": {
+      "kind": "image",
+      "mime": "image/png",
+      "size": 2414,
+      "sha256": "0b1908ea2298ffb7f6679b3aa16b8c87993732ff9bf5349fecf3746183310fa4"
+    },
     "images/board/decorations/reefs/reef_01.webp": {
       "kind": "image",
       "mime": "image/webp",
@@ -22776,6 +22794,24 @@
       "mime": "image/webp",
       "size": 744680,
       "sha256": "0a09420f83c0b1939ee7ce6efcab84c2632aab81e89f1c7760bf80eff8294417"
+    },
+    "images/ui/cursors/card_cursor_buggy_glove_default_v1.png": {
+      "kind": "image",
+      "mime": "image/png",
+      "size": 3164,
+      "sha256": "720aeba5ba287dfd61ecb937649e96c39f8dca19be2d873b323c01fcb240de90"
+    },
+    "images/ui/cursors/card_cursor_buggy_glove_pointer_v1.png": {
+      "kind": "image",
+      "mime": "image/png",
+      "size": 3775,
+      "sha256": "75c5cadd382521756424b9bd7c959de8bdc53e66052dbc2e1915a4b2508558d1"
+    },
+    "images/ui/cursors/card_cursor_buggy_glove_pressed_v1.png": {
+      "kind": "image",
+      "mime": "image/png",
+      "size": 3728,
+      "sha256": "4fcb180206df1dfa95338bd8766d11edcdfd5e841fa18501db433d8259cc4685"
     },
     "images/ui/playerbar.PNG": {
       "kind": "image",
