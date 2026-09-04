@@ -1,5 +1,11 @@
 ﻿# Dev Workflow
 
+## 修改紀錄：桌面啟動器更新查詢入口 V454（2026-09-05）
+
+- 新增 `public/desktop/launcher-release-v1.json`，提供正式站同源 HTTPS 的 stable／win32／x64 版本查詢入口；目前公開版本為 `1.1.2`。
+- 本次 manifest 只表示現行版本，未宣告 `artifact`，因此 1.1.2 啟動器檢查時只會顯示「目前已是最新版本」，不會下載或執行檔案。未來只有在已完成新版安裝檔簽章、大小、SHA-256 與下載網址驗證後，才可加入 artifact。
+- 發布範圍只有一份靜態 JSON 與四份文件，不改 Card／Board 程式、規則、存檔、帳號、Socket.IO event、localStorage key 或 `BOARD_GAME_STATE`；`public/images/ranks/r5.PNG`／`r6.PNG` 的既有工作樹差異未納入提交。
+
 ## 修改紀錄：卡牌進場隱藏遮罩回歸修復 V434（2026-09-04）
 
 - 問題與原因：V433 改用預編譯 Tailwind 後，外部 CSS 先載入，但舊 inline `.modal { display:flex }` 在後方覆蓋 `.hidden { display:none }`，使空的通用對話框一進場便顯示全螢幕暗幕與中央空白橫框，並攔截所有操作。

@@ -2,6 +2,13 @@
 
 本文件列出大富翁 / Board 遊戲維護時最常需要讀的檔案。備份、暫存、複製檔不列為主流程。
 
+## 桌面啟動器更新查詢入口（V454）
+
+| 檔案 | 功能 |
+| --- | --- |
+| `public/desktop/launcher-release-v1.json` | 正式站同源 stable／win32／x64 啟動器版本查詢；目前版本 1.1.2，未提供 artifact，因此只回報已是最新版。 |
+| `docs/DEV_WORKFLOW.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md` | 記錄 V454 發布範圍、更新資訊與不影響遊戲狀態的邊界。 |
+
 ## 根目錄
 
 | 檔案 | 功能 |
