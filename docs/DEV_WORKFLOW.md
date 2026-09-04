@@ -1,5 +1,14 @@
 ﻿# Dev Workflow
 
+## 修改紀錄：兩款遊戲專屬三態游標 V455（2026-09-05）
+
+- 需求：《偉大航道爭霸戰》使用巴奇白手套造型，《新世界航海錄》使用娜美海圖筆造型；兩款遊戲各自擁有預設、可點擊、按下三態，不能共用啟動器的 `opui://` 私有素材路徑。
+- 素材：以內建 ImageGen 產生兩張 RGBA 透明母圖，再輸出六張 48×48 正式 PNG。卡牌素材放在 `public/images/ui/cursors/`，Board 素材放在 `public/images/board/cursors/`，讓桌面下載 manifest 自動分到正確遊戲且不互相混入。
+- 接入：新增 `public/css/card-cursor-buggy-v1.css`、`public/css/board-cursor-nami-v1.css` 與共用 `public/js/game_cursor_feedback_v1.js`。CSS 只在 `hover:hover` 且 `pointer:fine` 套用；既有 `pointer` 元素由語意 selector 或執行時 computed cursor 採用亮起態，按下時短暫使用 pressed 圖並顯示不攔截操作的 300ms 光圈。
+- 範圍：Card 六個正式頁與 Board 九個獨立 document／iframe 均載入各自 CSS 與共用腳本。文字輸入仍使用 `text`，卡牌海報仍保留 `zoom-in`，Board 的 `grab`／`grabbing`／`crosshair`／`wait` 既有功能不在未按下時被覆蓋；touch-only 平板完全不啟用自訂游標或點擊光圈。
+- 驗證：`node --check` 通過共用腳本與 `scripts/game_cursor_qa.js`。Chrome 實跑 1440×900 卡牌入口、Board 入口及戰鬥 iframe，確認三態檔名、按下 class／光圈建立與清理、文字輸入、六張 48×48 RGBA 真透明素材及零水平溢出；932×430 觸控情境確認不套用游標且不產生回饋節點。結果為 `GAME_CURSOR_QA=PASS`。
+- 相容邊界：本次只新增客戶端游標外觀與輸入回饋，不改帳號、卡牌、角色、道具、回合、存檔、localStorage key、Socket.IO event、多人同步或 `BOARD_GAME_STATE`。
+
 ## 修改紀錄：桌面啟動器更新查詢入口 V454（2026-09-05）
 
 - 新增 `public/desktop/launcher-release-v1.json`，提供正式站同源 HTTPS 的 stable／win32／x64 版本查詢入口；目前公開版本為 `1.1.2`。

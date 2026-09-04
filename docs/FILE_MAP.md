@@ -2,6 +2,17 @@
 
 本文件列出大富翁 / Board 遊戲維護時最常需要讀的檔案。備份、暫存、複製檔不列為主流程。
 
+## 兩款遊戲專屬游標（V455）
+
+| 檔案 | 功能 |
+| --- | --- |
+| `public/images/ui/cursors/card_cursor_buggy_glove_{default,pointer,pressed}_v1.png` | 《偉大航道爭霸戰》48×48 RGBA 巴奇白手套三態游標；由 Card 桌面素材 manifest 收錄。 |
+| `public/images/board/cursors/board_cursor_nami_chart_pen_{default,pointer,pressed}_v1.png` | 《新世界航海錄》48×48 RGBA 娜美海圖筆三態游標；由 Board 桌面素材 manifest 收錄。 |
+| `public/css/card-cursor-buggy-v1.css`、`public/css/board-cursor-nami-v1.css` | 桌機精準指標專屬 cursor URL、互動／按下態、disabled／text 保護及兩款不同色的 300ms 點擊光圈；touch-only 不啟用。 |
+| `public/js/game_cursor_feedback_v1.js` | Card／Board 共用的無狀態游標回饋：辨識既有 computed `pointer`、切換 pressed class、建立／清除不攔截事件的光圈；不讀寫遊戲狀態。 |
+| `public/{start,game,result,profile,shop,tutorial}.html`、`public/board_start.html`、`public/board_fixed_viewport.html`、`public/board_game.html`、`public/board_battle.html`、`public/board_impel_down.html`、`public/board_marineford.html`、`public/board_water_seven.html`、`public/board_spar_selection_demo.html`、`public/board_york_clue_puzzle_formal_demo.html` | Card 六頁及 Board 九個正式 document／iframe 載入各自 CSS 與共用腳本；不改頁面狀態或同步接口。 |
+| `scripts/game_cursor_qa.js` | 靜態檢查 15 頁接點及六張 48×48 RGBA PNG；Chrome 驗證兩款三態、按下清理、透明 alpha、桌機零溢出與 932×430 觸控排除。 |
+
 ## 桌面啟動器更新查詢入口（V454）
 
 | 檔案 | 功能 |

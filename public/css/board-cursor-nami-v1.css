@@ -1,0 +1,80 @@
+@media (hover: hover) and (pointer: fine) {
+  html,
+  body {
+    cursor: url("../images/board/cursors/board_cursor_nami_chart_pen_default_v1.png") 2 2, default;
+  }
+
+  button:not(:disabled),
+  a[href],
+  [role="button"]:not([aria-disabled="true"]),
+  [onclick],
+  [tabindex]:not([tabindex="-1"]),
+  label[for],
+  summary,
+  input[type="button"]:not(:disabled),
+  input[type="submit"]:not(:disabled),
+  input[type="reset"]:not(:disabled),
+  input[type="checkbox"]:not(:disabled),
+  input[type="radio"]:not(:disabled),
+  .game-cursor-interactive,
+  .cursor-pointer {
+    cursor: url("../images/board/cursors/board_cursor_nami_chart_pen_pointer_v1.png") 2 2, pointer !important;
+  }
+
+  body.game-cursor-pressed,
+  body.game-cursor-pressed *:not(input):not(textarea):not(select):not([contenteditable="true"]),
+  button:not(:disabled):active,
+  a[href]:active,
+  [role="button"]:not([aria-disabled="true"]):active,
+  [onclick]:active,
+  .game-cursor-interactive:active,
+  .cursor-pointer:active {
+    cursor: url("../images/board/cursors/board_cursor_nami_chart_pen_pressed_v1.png") 2 2, pointer !important;
+  }
+
+  button:disabled,
+  [aria-disabled="true"],
+  input:disabled {
+    cursor: url("../images/board/cursors/board_cursor_nami_chart_pen_default_v1.png") 2 2, not-allowed !important;
+  }
+
+  input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]),
+  textarea,
+  [contenteditable="true"] {
+    cursor: text !important;
+  }
+}
+
+.game-cursor-click-pulse {
+  position: fixed;
+  z-index: 2147483647;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(100, 235, 238, .92);
+  border-radius: 50%;
+  background:
+    linear-gradient(rgba(255, 205, 91, .92), rgba(255, 205, 91, .92)) 50% 0 / 2px 7px no-repeat,
+    linear-gradient(rgba(255, 205, 91, .92), rgba(255, 205, 91, .92)) 100% 50% / 7px 2px no-repeat,
+    linear-gradient(rgba(255, 205, 91, .92), rgba(255, 205, 91, .92)) 50% 100% / 2px 7px no-repeat,
+    radial-gradient(circle, rgba(77, 228, 236, .42) 0 16%, transparent 45%);
+  box-shadow: 0 0 0 2px rgba(4, 19, 27, .76), 0 0 16px rgba(64, 221, 230, .7);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(.2);
+  animation: boardCursorPulseV1 300ms cubic-bezier(.18, .76, .2, 1) forwards;
+}
+
+@keyframes boardCursorPulseV1 {
+  0% { opacity: .94; transform: translate(-50%, -50%) scale(.2); }
+  58% { opacity: .52; }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.08); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-cursor-click-pulse { animation: gameCursorFadeV1 100ms linear forwards; }
+}
+
+@keyframes gameCursorFadeV1 {
+  from { opacity: .72; transform: translate(-50%, -50%) scale(.7); }
+  to { opacity: 0; transform: translate(-50%, -50%) scale(.7); }
+}
