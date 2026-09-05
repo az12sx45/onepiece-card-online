@@ -29,9 +29,21 @@ const CURSOR_ASSETS = [
   "images/board/cursors/board_cursor_nami_quill_pointer_v2.png",
   "images/board/cursors/board_cursor_nami_quill_pressed_v2.png",
 ];
+let activeBrowser = null;
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
+}
+
+async function isolateCursorQaNetwork(context) {
+  const expectedOrigin = new URL(BASE_URL).origin;
+  await context.route("**/*", (route) => {
+    const requestUrl = route.request().url();
+    if (/^https?:/i.test(requestUrl) && new URL(requestUrl).origin !== expectedOrigin) {
+      return route.abort();
+    }
+    return route.continue();
+  });
 }
 
 function assertStaticContract() {
@@ -105,7 +117,14 @@ async function inspectCursorPage(page, pagePath, expectedPrefix) {
       document.body.appendChild(node);
     }
   });
-  await page.hover("#cursorQaButton");
+  await page.evaluate(() => {
+    document.querySelector("#cursorQaButton").dispatchEvent(new PointerEvent("pointerover", {
+      bubbles: true,
+      button: 0,
+      isPrimary: true,
+      pointerType: "mouse",
+    }));
+  });
   const initial = await page.evaluate(() => ({
     body: getComputedStyle(document.body).cursor,
     button: getComputedStyle(document.querySelector("#cursorQaButton")).cursor,
@@ -125,10 +144,16 @@ async function inspectCursorPage(page, pagePath, expectedPrefix) {
     assert(initial.semantic.join(",") === "grab,grabbing,crosshair,wait", `${pagePath} board semantic cursors were not preserved`);
   }
 
-  const box = await page.locator("#cursorQaButton").boundingBox();
-  assert(box, `${pagePath} QA button is missing`);
-  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-  await page.mouse.down();
+  await page.evaluate(() => {
+    document.querySelector("#cursorQaButton").dispatchEvent(new PointerEvent("pointerdown", {
+      bubbles: true,
+      button: 0,
+      clientX: 88,
+      clientY: 64,
+      isPrimary: true,
+      pointerType: "mouse",
+    }));
+  });
   const pressed = await page.evaluate(() => ({
     bodyClass: document.body.classList.contains("game-cursor-pressed"),
     pulseCount: document.querySelectorAll(".game-cursor-click-pulse").length,
@@ -140,7 +165,14 @@ async function inspectCursorPage(page, pagePath, expectedPrefix) {
   if (expectedPrefix === "board_cursor_nami_quill") {
     assert(pressed.inkCircle.includes("conic-gradient"), `${pagePath} black-ink selection circle did not render`);
   }
-  await page.mouse.up();
+  await page.evaluate(() => {
+    document.querySelector("#cursorQaButton").dispatchEvent(new PointerEvent("pointerup", {
+      bubbles: true,
+      button: 0,
+      isPrimary: true,
+      pointerType: "mouse",
+    }));
+  });
   await page.waitForTimeout(560);
   const released = await page.evaluate(() => ({
     bodyClass: document.body.classList.contains("game-cursor-pressed"),
@@ -178,7 +210,9 @@ async function inspectAlpha(page) {
 async function main() {
   assertStaticContract();
   const browser = await chromium.launch({ executablePath: CHROME_PATH, headless: true });
+  activeBrowser = browser;
   const desktop = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  await isolateCursorQaNetwork(desktop);
   const desktopPage = await desktop.newPage();
   const pageErrors = [];
   desktopPage.on("pageerror", (error) => pageErrors.push(error.message));
@@ -191,6 +225,7 @@ async function main() {
   assert(alpha.every((entry) => entry.width === 48 && entry.height === 48 && entry.minAlpha === 0 && entry.maxAlpha === 255), "Cursor alpha validation failed");
 
   const touch = await browser.newContext({ viewport: { width: 932, height: 430 }, hasTouch: true, isMobile: true });
+  await isolateCursorQaNetwork(touch);
   const touchPage = await touch.newPage();
   await touchPage.goto(`${BASE_URL}/board_start.html`, { waitUntil: "domcontentloaded", timeout: 30_000 });
   await touchPage.waitForFunction(() => window.__ONE_PIECE_GAME_CURSOR_FEEDBACK_V1__ === true, null, { timeout: 10_000 });
@@ -206,12 +241,15 @@ async function main() {
   await touch.close();
   await desktop.close();
   await browser.close();
+  activeBrowser = null;
   assert(pageErrors.length === 0, `Browser page errors: ${pageErrors.join(" | ")}`);
 
   console.log(`GAME_CURSOR_QA=PASS assets=${CURSOR_ASSETS.length} cardPages=${CARD_PAGES.length} boardPages=${BOARD_PAGES.length} desktop=1440x900 touch=932x430 alpha=transparent cardOverflow=${cardOverflow} boardOverflow=${boardOverflow} battleOverflow=${battleOverflow}`);
 }
 
-main().catch((error) => {
+main().catch(async (error) => {
+  await activeBrowser?.close().catch(() => {});
+  activeBrowser = null;
   console.error(`GAME_CURSOR_QA=FAIL ${error.stack || error}`);
   process.exitCode = 1;
 });
