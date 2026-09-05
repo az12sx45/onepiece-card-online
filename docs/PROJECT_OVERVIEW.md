@@ -8,6 +8,7 @@
 - 大型圖片、音樂、影片與字型先從 Cloudflare R2 的 SHA-256 immutable CAS 取得，正式素材來源固定為 `game-assets.rihdi.tw`，R2 失敗才逐檔退回 Render；不論來源都要通過 manifest 的 size／SHA-256。Render 繼續提供遊戲程式、帳號、好友、聊天室、房間、存檔、WebSocket、catalog 與 manifest，所以桌面與網頁玩家仍共用同一線上遊戲狀態。
 - 1.1.3 內建 Ed25519 發布公鑰。未來高於本機版本的更新 manifest 必須對完整 release／artifact 欄位簽章，安裝檔還會再次驗證允許來源、canonical 檔名、bytes、SHA-256 與 Windows MZ／PE；竄改、未知 key 或未知演算法都會拒絕。對應私鑰只以目前 Windows 使用者 DPAPI 加密保存在 Local AppData，從不進 repo、啟動器或 R2。
 - R2 安裝檔發布器只建立 `desktop/launcher/releases/<version>/<filename>` 的 immutable 物件，預設 dry run，live 也使用條件式 PUT 並拒絕覆寫。安裝檔上傳與 Ed25519 release manifest 簽署／發布分開執行，避免未審核檔案直接變成自動更新。
+- 1.1.3 x64 正式安裝檔已發布至 `https://game-assets.rihdi.tw/desktop/launcher/releases/1.1.3/ONE-PIECE-Tabletop-Launcher-1.1.3-x64.exe`；大小 `152,106,399` bytes，SHA-256 `c51a5e5bd7a2fed5f27fce3a8745cb8abc37f72a8ed678c305eccfc2f7894e0b`。公開完整下載與原檔一致，Range `206` 及 Cloudflare `MISS`→`HIT` 已驗證；此版尚無商用 Authenticode 憑證。
 - 目前公開 `launcher-release-v1.json` 刻意仍是 `1.1.2` 且沒有 artifact：舊 1.1.2 尚未信任 R2 更新來源，1.1.3 因此先採一次人工安裝完成信任根升級；後續 1.1.4+ 才由 1.1.3 驗證簽章並自動下載。
 - 玩家選擇的下載位置不能是磁碟或網路分享根目錄。啟動器會用精確 ownership marker 管理快取；合法舊快取須先驗證 receipt／manifest 才能接管。寫入、清理與解除安裝前會逐層拒絕 symlink／junction 並確認 realpath 沒有離開快取根，且保留另一款遊戲仍引用的共用 SHA blob。
 - 三款盒面各新增 `lid_front_panel` 與 `box_shell_fixed` 共六張啟動器專用圖片，只隨啟動器安裝包配送並用於翻盒動畫，不會被誤列進 Card／Board 遊戲下載 manifest。
