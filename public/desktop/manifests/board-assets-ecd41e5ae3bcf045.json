@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "gameId": "board",
-  "releaseId": "assets-d3f97f151da15f4a",
-  "createdAt": "2026-09-03T16:09:46.186Z",
-  "assetSetSha256": "d3f97f151da15f4a824c867966203f4cde6258ecee62a2a647ca0eeed6ea7727",
-  "totalFiles": 3442,
-  "totalBytes": 1276165597,
+  "releaseId": "assets-ecd41e5ae3bcf045",
+  "createdAt": "2026-09-05T10:27:50.454Z",
+  "assetSetSha256": "ecd41e5ae3bcf045033b6f7ebcf9f53781451261ebf5724c5d5d02b4ae0a01b7",
+  "totalFiles": 3448,
+  "totalBytes": 1276179394,
   "byKind": {
     "image": {
-      "files": 2833,
-      "bytes": 803924632
+      "files": 2839,
+      "bytes": 803938429
     },
     "audio": {
       "files": 603,
@@ -15046,6 +15046,48 @@
       "mime": "image/webp",
       "size": 315844,
       "sha256": "9a2d1a9aa21ed4fa1471e2b4fc9b50805442ebd296fba4377ba707ceef7d6553"
+    },
+    {
+      "path": "images/board/cursors/board_cursor_nami_chart_pen_default_v1.png",
+      "kind": "image",
+      "mime": "image/png",
+      "size": 1886,
+      "sha256": "854e14a5dc3b38982005396f3fd2799b5924e21d5e41e37b0a16e8ba19354d39"
+    },
+    {
+      "path": "images/board/cursors/board_cursor_nami_chart_pen_pointer_v1.png",
+      "kind": "image",
+      "mime": "image/png",
+      "size": 2595,
+      "sha256": "f46bbf1fd2549eaf12d077e535ddd47c5a36885ac5d8daac25a70978f8172d91"
+    },
+    {
+      "path": "images/board/cursors/board_cursor_nami_chart_pen_pressed_v1.png",
+      "kind": "image",
+      "mime": "image/png",
+      "size": 2414,
+      "sha256": "0b1908ea2298ffb7f6679b3aa16b8c87993732ff9bf5349fecf3746183310fa4"
+    },
+    {
+      "path": "images/board/cursors/board_cursor_nami_quill_default_v2.png",
+      "kind": "image",
+      "mime": "image/png",
+      "size": 2067,
+      "sha256": "9cb4c780e493556edd0a77b442fd5f6c4c7ff036ae64162af887a9e88e3c60ea"
+    },
+    {
+      "path": "images/board/cursors/board_cursor_nami_quill_pointer_v2.png",
+      "kind": "image",
+      "mime": "image/png",
+      "size": 2675,
+      "sha256": "08130aea82f77c0a2259a63154fe331d696bf02db509d1c7977c2714be21779b"
+    },
+    {
+      "path": "images/board/cursors/board_cursor_nami_quill_pressed_v2.png",
+      "kind": "image",
+      "mime": "image/png",
+      "size": 2160,
+      "sha256": "9b488669bc54e18d6f67ec89bc977801fa3fe26041ef5792a7335bb4d4c1ae84"
     },
     {
       "path": "images/board/decorations/reefs/reef_01.webp",

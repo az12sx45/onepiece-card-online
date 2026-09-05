@@ -1,16 +1,16 @@
 {
   "schema": 1,
   "sourceRoot": "public/images",
-  "sourceCommit": "a64ef293f20431a61cd6a02a2cf20138e62a79a2",
-  "createdAt": "2026-09-03T11:31:06.004Z",
+  "sourceCommit": "7d4bfb3cc5ebcedd121e820839db8f4aff8af06a",
+  "createdAt": "2026-09-05T10:30:12.447Z",
   "excludedCaseCollisions": [
     "ranks/r5.PNG",
     "ranks/r5.png",
     "ranks/r6.PNG",
     "ranks/r6.png"
   ],
-  "totalFiles": 3185,
-  "totalBytes": 1198481706,
+  "totalFiles": 3198,
+  "totalBytes": 1200789363,
   "files": {
     "avatars/1.png": {
       "size": 570711,
@@ -6512,6 +6512,30 @@
       "size": 315844,
       "sha256": "9a2d1a9aa21ed4fa1471e2b4fc9b50805442ebd296fba4377ba707ceef7d6553"
     },
+    "board/cursors/board_cursor_nami_chart_pen_default_v1.png": {
+      "size": 1886,
+      "sha256": "854e14a5dc3b38982005396f3fd2799b5924e21d5e41e37b0a16e8ba19354d39"
+    },
+    "board/cursors/board_cursor_nami_chart_pen_pointer_v1.png": {
+      "size": 2595,
+      "sha256": "f46bbf1fd2549eaf12d077e535ddd47c5a36885ac5d8daac25a70978f8172d91"
+    },
+    "board/cursors/board_cursor_nami_chart_pen_pressed_v1.png": {
+      "size": 2414,
+      "sha256": "0b1908ea2298ffb7f6679b3aa16b8c87993732ff9bf5349fecf3746183310fa4"
+    },
+    "board/cursors/board_cursor_nami_quill_default_v2.png": {
+      "size": 2067,
+      "sha256": "9cb4c780e493556edd0a77b442fd5f6c4c7ff036ae64162af887a9e88e3c60ea"
+    },
+    "board/cursors/board_cursor_nami_quill_pointer_v2.png": {
+      "size": 2675,
+      "sha256": "08130aea82f77c0a2259a63154fe331d696bf02db509d1c7977c2714be21779b"
+    },
+    "board/cursors/board_cursor_nami_quill_pressed_v2.png": {
+      "size": 2160,
+      "sha256": "9b488669bc54e18d6f67ec89bc977801fa3fe26041ef5792a7335bb4d4c1ae84"
+    },
     "board/decorations/reefs/reef_01.webp": {
       "size": 716348,
       "sha256": "c7fac09fae66b57b3afb100e3b7cd5590e244938144014a40b652b4a30898d08"
@@ -12128,6 +12152,10 @@
       "size": 3540621,
       "sha256": "034ef50372f2d8fefe7d1d40eeead3421b8b6fc585686ccb8d221bfd3598fd0c"
     },
+    "desktop_launcher/desktop_launcher_cabin_bg_v1.png": {
+      "size": 2271457,
+      "sha256": "93097dc75c0b2997981e9b267256af5ccec23040fb0c1f716dfdd7570a87174a"
+    },
     "duel/duel_bg_haki_clash.webp": {
       "size": 339680,
       "sha256": "7fb29d03aa4993ce93fff307f5630aadb3befc3f6721a257dedd470e4955c5a8"
@@ -12471,6 +12499,30 @@
     "stickers/3.webp": {
       "size": 744680,
       "sha256": "0a09420f83c0b1939ee7ce6efcab84c2632aab81e89f1c7760bf80eff8294417"
+    },
+    "ui/cursors/card_cursor_buggy_glove_default_v1.png": {
+      "size": 3164,
+      "sha256": "720aeba5ba287dfd61ecb937649e96c39f8dca19be2d873b323c01fcb240de90"
+    },
+    "ui/cursors/card_cursor_buggy_glove_default_v2.png": {
+      "size": 3503,
+      "sha256": "68bfb9ae308225a7eb371c60f1361d8b0dcdc48a4f226eb5279720ec7998cba2"
+    },
+    "ui/cursors/card_cursor_buggy_glove_pointer_v1.png": {
+      "size": 3775,
+      "sha256": "75c5cadd382521756424b9bd7c959de8bdc53e66052dbc2e1915a4b2508558d1"
+    },
+    "ui/cursors/card_cursor_buggy_glove_pointer_v2.png": {
+      "size": 3909,
+      "sha256": "8f7dd891db1c9d58dd3ff7f1e744364001b23a617d8b1bdc32701e123835ef03"
+    },
+    "ui/cursors/card_cursor_buggy_glove_pressed_v1.png": {
+      "size": 3728,
+      "sha256": "4fcb180206df1dfa95338bd8766d11edcdfd5e841fa18501db433d8259cc4685"
+    },
+    "ui/cursors/card_cursor_buggy_glove_pressed_v2.png": {
+      "size": 4324,
+      "sha256": "cf39ca3c8ce5bd677f814be357acf10a28088266bbf5558ffd96dc103f1b2889"
     },
     "ui/playerbar.PNG": {
       "size": 1503284,

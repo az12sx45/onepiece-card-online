@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "gameId": "card",
-  "releaseId": "assets-dbae3ab023f964e3",
-  "createdAt": "2026-09-04T19:23:12.957Z",
-  "assetSetSha256": "dbae3ab023f964e396cab236c1761d5ce2e866cdd22c75193761a29d48dbdd11",
-  "totalFiles": 467,
-  "totalBytes": 692068119,
+  "releaseId": "assets-197d7c0144fe523a",
+  "createdAt": "2026-09-05T10:27:50.454Z",
+  "assetSetSha256": "197d7c0144fe523ae4dcc3539be0a204ed54d648766a5b7d297f6dca89d92b61",
+  "totalFiles": 470,
+  "totalBytes": 692079855,
   "byKind": {
     "image": {
-      "files": 366,
-      "bytes": 411218415
+      "files": 369,
+      "bytes": 411230151
     },
     "audio": {
       "files": 68,
@@ -2560,6 +2560,13 @@
       "sha256": "720aeba5ba287dfd61ecb937649e96c39f8dca19be2d873b323c01fcb240de90"
     },
     {
+      "path": "images/ui/cursors/card_cursor_buggy_glove_default_v2.png",
+      "kind": "image",
+      "mime": "image/png",
+      "size": 3503,
+      "sha256": "68bfb9ae308225a7eb371c60f1361d8b0dcdc48a4f226eb5279720ec7998cba2"
+    },
+    {
       "path": "images/ui/cursors/card_cursor_buggy_glove_pointer_v1.png",
       "kind": "image",
       "mime": "image/png",
@@ -2567,11 +2574,25 @@
       "sha256": "75c5cadd382521756424b9bd7c959de8bdc53e66052dbc2e1915a4b2508558d1"
     },
     {
+      "path": "images/ui/cursors/card_cursor_buggy_glove_pointer_v2.png",
+      "kind": "image",
+      "mime": "image/png",
+      "size": 3909,
+      "sha256": "8f7dd891db1c9d58dd3ff7f1e744364001b23a617d8b1bdc32701e123835ef03"
+    },
+    {
       "path": "images/ui/cursors/card_cursor_buggy_glove_pressed_v1.png",
       "kind": "image",
       "mime": "image/png",
       "size": 3728,
       "sha256": "4fcb180206df1dfa95338bd8766d11edcdfd5e841fa18501db433d8259cc4685"
+    },
+    {
+      "path": "images/ui/cursors/card_cursor_buggy_glove_pressed_v2.png",
+      "kind": "image",
+      "mime": "image/png",
+      "size": 4324,
+      "sha256": "cf39ca3c8ce5bd677f814be357acf10a28088266bbf5558ffd96dc103f1b2889"
     },
     {
       "path": "images/ui/playerbar.PNG",

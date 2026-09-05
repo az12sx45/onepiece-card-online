@@ -1,14 +1,14 @@
 {
   "schema": 2,
   "sourceRoot": "public",
-  "sourceCommit": "f0e4b41708aa19ef509b413b11069a743a2cff53",
+  "sourceCommit": "7d4bfb3cc5ebcedd121e820839db8f4aff8af06a",
   "sourceTrees": {
-    "images": "793f92f49962c9f4759e121aba14afd2e6242f9b",
+    "images": "637df2d301d7a3113eb3371161638bded94770e2",
     "audio": "71145f65e84fa61b975f706c99d428651b3161d1",
     "videos": "6ec01c6dfb4b86197680f43dfc96603ed14c8ec7",
     "fonts": "58fb1e833fe9c80e4713ae953c1ce2fc43a5b9f4"
   },
-  "createdAt": "2026-09-04T19:23:12.957Z",
+  "createdAt": "2026-09-05T10:27:50.454Z",
   "includedRoots": [
     "images",
     "audio",
@@ -22,12 +22,12 @@
     "images/ranks/r6.png"
   ],
   "excludedForbiddenPaths": [],
-  "totalFiles": 3900,
-  "totalBytes": 1949525000,
+  "totalFiles": 3906,
+  "totalBytes": 1949543638,
   "byKind": {
     "image": {
-      "files": 3192,
-      "bytes": 1200770671
+      "files": 3198,
+      "bytes": 1200789309
     },
     "audio": {
       "files": 671,
@@ -13843,6 +13843,24 @@
       "size": 2414,
       "sha256": "0b1908ea2298ffb7f6679b3aa16b8c87993732ff9bf5349fecf3746183310fa4"
     },
+    "images/board/cursors/board_cursor_nami_quill_default_v2.png": {
+      "kind": "image",
+      "mime": "image/png",
+      "size": 2067,
+      "sha256": "9cb4c780e493556edd0a77b442fd5f6c4c7ff036ae64162af887a9e88e3c60ea"
+    },
+    "images/board/cursors/board_cursor_nami_quill_pointer_v2.png": {
+      "kind": "image",
+      "mime": "image/png",
+      "size": 2675,
+      "sha256": "08130aea82f77c0a2259a63154fe331d696bf02db509d1c7977c2714be21779b"
+    },
+    "images/board/cursors/board_cursor_nami_quill_pressed_v2.png": {
+      "kind": "image",
+      "mime": "image/png",
+      "size": 2160,
+      "sha256": "9b488669bc54e18d6f67ec89bc977801fa3fe26041ef5792a7335bb4d4c1ae84"
+    },
     "images/board/decorations/reefs/reef_01.webp": {
       "kind": "image",
       "mime": "image/webp",
@@ -22801,17 +22819,35 @@
       "size": 3164,
       "sha256": "720aeba5ba287dfd61ecb937649e96c39f8dca19be2d873b323c01fcb240de90"
     },
+    "images/ui/cursors/card_cursor_buggy_glove_default_v2.png": {
+      "kind": "image",
+      "mime": "image/png",
+      "size": 3503,
+      "sha256": "68bfb9ae308225a7eb371c60f1361d8b0dcdc48a4f226eb5279720ec7998cba2"
+    },
     "images/ui/cursors/card_cursor_buggy_glove_pointer_v1.png": {
       "kind": "image",
       "mime": "image/png",
       "size": 3775,
       "sha256": "75c5cadd382521756424b9bd7c959de8bdc53e66052dbc2e1915a4b2508558d1"
     },
+    "images/ui/cursors/card_cursor_buggy_glove_pointer_v2.png": {
+      "kind": "image",
+      "mime": "image/png",
+      "size": 3909,
+      "sha256": "8f7dd891db1c9d58dd3ff7f1e744364001b23a617d8b1bdc32701e123835ef03"
+    },
     "images/ui/cursors/card_cursor_buggy_glove_pressed_v1.png": {
       "kind": "image",
       "mime": "image/png",
       "size": 3728,
       "sha256": "4fcb180206df1dfa95338bd8766d11edcdfd5e841fa18501db433d8259cc4685"
+    },
+    "images/ui/cursors/card_cursor_buggy_glove_pressed_v2.png": {
+      "kind": "image",
+      "mime": "image/png",
+      "size": 4324,
+      "sha256": "cf39ca3c8ce5bd677f814be357acf10a28088266bbf5558ffd96dc103f1b2889"
     },
     "images/ui/playerbar.PNG": {
       "kind": "image",
