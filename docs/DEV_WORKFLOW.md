@@ -1,5 +1,14 @@
 ﻿# Dev Workflow
 
+## 修改紀錄：娜美羽毛筆方向／拖曳與全螢幕卷軸 V457（2026-09-05）
+
+- 需求：《新世界航海錄》的羽毛筆改為筆尖朝左下；拖曳地圖與可抓取物件時不能跳回系統 `grab`／`grabbing`；兩款遊戲在全螢幕／無邊框顯示時隱藏右側白色根層卷軸。
+- 根因：V456 只在 `html`／`body` 套用羽毛筆，而且刻意保留原生拖曳語意；`.board-viewport` 等子元素的 `grab`／`grabbing` 因 CSS 優先序蓋掉自訂游標，舊 QA 也把這項覆蓋誤當成應保留行為。
+- 素材：保留所有 V2 原圖，新增 `board_cursor_nami_quill_*_v3.png`。三態均由核准 V2 精確逆時針旋轉 90 度，維持 48×48 RGBA 真透明；default／pointer 熱點校正在 `(4,43)`，pressed 校正在 `(5,43)`。
+- 接入：Board 九個正式頁改載入 `board-cursor-nami-v3.css`，主地圖、血統因子圓筒、水之七島船艦校位、Tot Musica 名單與原生 draggable 皆持續使用羽筆；拖曳按下時切到 pressed。Card 六頁改載入 `card-cursor-buggy-v3.css`，外觀仍沿用核准的 V2 巴奇白手套。兩款 V3 CSS 只隱藏 `html`／`body` 的卷軸外觀，不封鎖 overflow，因此滾輪、觸控與鍵盤捲動仍有效，聊天室／modal／清單等內層卷軸不受影響。
+- 邊界：文字輸入、卡牌海報放大、Board 準星／等待及 touch-only 原有語意不變；共用點擊腳本、帳號、房間、戰鬥、回合、存檔、`BOARD_GAME_STATE` 與 Socket.IO event 均未修改。
+- 驗證：`node --check scripts/game_cursor_qa.js` 通過；隔離 8847 伺服器實跑 15 頁，逐像素確認 V3 是 V2 的精確 90 度旋轉且筆尖位於左下，驗證拖曳前後都不掉筆、根層卷軸不可見但 Card／Board 各可滾動 640px、內層 overflow 未被鎖死及 932×430 touch-only 排除。結果為 `GAME_CURSOR_QA=PASS`。
+
 ## 修改紀錄：巴奇白手套／娜美羽毛筆游標 V456（2026-09-05）
 
 - 需求：依確認稿把卡牌游標改成只保留白手套與短袖口、完全沒有手臂；平常／可點擊使用張開手勢，按下時換成捏合手勢。《新世界航海錄》改用娜美畫海圖的白羽毛筆，筆尖為真正熱點。

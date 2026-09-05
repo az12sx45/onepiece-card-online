@@ -7,12 +7,13 @@
 | 檔案 | 功能 |
 | --- | --- |
 | `public/images/ui/cursors/card_cursor_buggy_glove_{default,pointer,pressed}_v2.png` | 《偉大航道爭霸戰》現行 48×48 RGBA 游標；只含白手套／袖口，pressed 使用獨立捏合原畫，由 Card 桌面素材 manifest 收錄。 |
-| `public/images/board/cursors/board_cursor_nami_quill_{default,pointer,pressed}_v2.png` | 《新世界航海錄》現行 48×48 RGBA 白羽毛筆三態游標；筆尖為熱點，由 Board 桌面素材 manifest 收錄。 |
-| `public/css/card-cursor-buggy-v2.css`、`public/css/board-cursor-nami-v2.css` | V456 桌機精準指標 cursor URL、互動／按下態及語意保護；Card 顯示紅金短回饋，Board 顯示不規則黑墨圈與墨點，touch-only 不啟用。 |
-| `public/images/{ui,board}/cursors/*_v1.png`、`public/css/{card-cursor-buggy,board-cursor-nami}-v1.css` | V455 可回復素材／樣式；現行 15 個正式頁面不再引用。 |
+| `public/images/board/cursors/board_cursor_nami_quill_{default,pointer,pressed}_v3.png` | 《新世界航海錄》現行 48×48 RGBA 白羽毛筆三態游標；由 V2 精確逆時針旋轉 90 度，筆尖朝左下且為熱點，由 Board 桌面素材 manifest 收錄。 |
+| `public/css/card-cursor-buggy-v3.css`、`public/css/board-cursor-nami-v3.css` | V457 桌機精準指標 cursor URL、互動／按下態與語意保護；Board 將既有拖曳面映射為羽筆狀態。兩者只隱藏 `html`／`body` 根層卷軸外觀，保留頁面及內層容器捲動。 |
+| `public/images/board/cursors/board_cursor_nami_quill_{default,pointer,pressed}_v2.png`、`public/css/{card-cursor-buggy,board-cursor-nami}-v2.css` | V456 可回復素材／樣式；Board V2 筆尖朝左上，現行 15 個正式頁面不再引用 V2 CSS。 |
+| `public/images/{ui,board}/cursors/*_v1.png`、`public/css/{card-cursor-buggy,board-cursor-nami}-v1.css` | V455 可回復素材／樣式；現行 15 個正式頁面不再引用 V1。 |
 | `public/js/game_cursor_feedback_v1.js` | Card／Board 共用的無狀態游標回饋：辨識既有 computed `pointer`、切換 pressed class、建立／清除不攔截事件的光圈；不讀寫遊戲狀態。 |
 | `public/{start,game,result,profile,shop,tutorial}.html`、`public/board_start.html`、`public/board_fixed_viewport.html`、`public/board_game.html`、`public/board_battle.html`、`public/board_impel_down.html`、`public/board_marineford.html`、`public/board_water_seven.html`、`public/board_spar_selection_demo.html`、`public/board_york_clue_puzzle_formal_demo.html` | Card 六頁及 Board 九個正式 document／iframe 載入各自 CSS 與共用腳本；不改頁面狀態或同步接口。 |
-| `scripts/game_cursor_qa.js` | 靜態檢查 15 頁接點及六張 48×48 RGBA PNG；Chrome 驗證兩款三態、按下清理、透明 alpha、桌機零溢出與 932×430 觸控排除。 |
+| `scripts/game_cursor_qa.js` | 靜態檢查 15 頁接點及六張現行 48×48 RGBA PNG；Chrome 逐像素驗證 Board V2→V3 精確旋轉、左下筆尖、拖曳羽筆、按下清理、根層卷軸隱藏但仍可滾動、桌機零水平溢出與 932×430 觸控排除。 |
 
 ## 桌面啟動器更新查詢入口（V454）
 
