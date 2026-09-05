@@ -5,6 +5,7 @@ const path = require("path");
 const ROOT = path.resolve(__dirname, "..");
 const PUBLIC_ROOT = path.join(ROOT, "public");
 const ASSET_MANIFEST_PATH = path.join(ROOT, "desktop", "generated", "asset-manifest.json");
+const ASSET_DELIVERY_CONFIG_PATH = path.join(ROOT, "config", "desktop-asset-delivery-v1.json");
 const CATALOG_PATH = path.join(PUBLIC_ROOT, "desktop", "catalog-v1.json");
 const ROOT_NAMES = ["images", "audio", "videos", "fonts"];
 const KINDS = ["image", "audio", "video", "font"];
@@ -29,6 +30,34 @@ function sha256Text(value) {
   return crypto.createHash("sha256").update(value, "utf8").digest("hex");
 }
 
+function validateAssetBlobBaseUrl(value, label) {
+  if (typeof value !== "string" || !value) fail(`${label} must be a non-empty string`);
+  let parsed;
+  try {
+    parsed = new URL(value);
+  } catch (error) {
+    fail(`${label} is not a valid URL`);
+  }
+  if (
+    parsed.protocol !== "https:" || parsed.username || parsed.password ||
+    parsed.search || parsed.hash || parsed.pathname === "/" || parsed.pathname.endsWith("/") ||
+    `${parsed.origin}${parsed.pathname}` !== value
+  ) {
+    fail(`${label} must be a normalized HTTPS URL without credentials, query, hash, or trailing slash`);
+  }
+  return value;
+}
+
+function validateAssetDeliveryConfig(config) {
+  const fields = ["schema", "assetBlobBaseUrl"];
+  if (!isPlainObject(config) || Object.keys(config).join(",") !== fields.join(",")) {
+    fail("Desktop asset delivery config fields/order are invalid");
+  }
+  if (config.schema !== 1) fail("Desktop asset delivery config schema is invalid");
+  validateAssetBlobBaseUrl(config.assetBlobBaseUrl, "Desktop asset delivery config assetBlobBaseUrl");
+  return config;
+}
+
 function isWithin(parent, child) {
   const relative = path.relative(parent, child);
   return relative === "" || (!relative.startsWith(`..${path.sep}`) && relative !== ".." && !path.isAbsolute(relative));
@@ -46,8 +75,17 @@ function validateAssetPath(assetPath) {
   }
 }
 
+const DESKTOP_ONLY_GAME_LAUNCHER_ASSETS = new Set([
+  "images/game_launcher/launcher_board_box_shell_fixed_v1.png",
+  "images/game_launcher/launcher_board_lid_front_panel_v1.png",
+  "images/game_launcher/launcher_card_box_shell_fixed_v1.png",
+  "images/game_launcher/launcher_card_lid_front_panel_v1.png",
+  "images/game_launcher/launcher_chess_box_shell_fixed_v1.png",
+  "images/game_launcher/launcher_chess_lid_front_panel_v1.png",
+]);
+
 function isSharedShell(assetPath) {
-  return (
+  return !isLauncherOnly(assetPath) && (
     assetPath === "images/icon-192.png" ||
     assetPath === "images/board/items/odd_dice.webp" ||
     assetPath.startsWith("images/game_launcher/") ||
@@ -56,7 +94,7 @@ function isSharedShell(assetPath) {
 }
 
 function isLauncherOnly(assetPath) {
-  return assetPath.startsWith("images/desktop_launcher/");
+  return assetPath.startsWith("images/desktop_launcher/") || DESKTOP_ONLY_GAME_LAUNCHER_ASSETS.has(assetPath);
 }
 
 function belongsToBoard(assetPath) {
@@ -143,10 +181,23 @@ function validateUnified(unified) {
   return paths;
 }
 
-function validateCatalog(catalog, unified) {
-  const catalogFields = ["schema", "createdAt", "sourceTrees", "games"];
-  if (!isPlainObject(catalog) || Object.keys(catalog).join(",") !== catalogFields.join(",")) fail("Catalog fields/order are invalid");
+function validateCatalog(catalog, unified, deliveryConfig) {
+  const catalogFieldsWithoutAssetOrigin = ["schema", "createdAt", "sourceTrees", "games"];
+  const catalogFieldsWithAssetOrigin = ["schema", "createdAt", "assetBlobBaseUrl", "sourceTrees", "games"];
+  const actualCatalogFields = isPlainObject(catalog) ? Object.keys(catalog) : [];
+  if (
+    actualCatalogFields.join(",") !== catalogFieldsWithoutAssetOrigin.join(",") &&
+    actualCatalogFields.join(",") !== catalogFieldsWithAssetOrigin.join(",")
+  ) {
+    fail("Catalog fields/order are invalid");
+  }
   if (catalog.schema !== 1 || catalog.createdAt !== unified.createdAt) fail("Catalog schema/createdAt is invalid");
+  if (catalog.assetBlobBaseUrl !== undefined) {
+    validateAssetBlobBaseUrl(catalog.assetBlobBaseUrl, "Catalog assetBlobBaseUrl");
+  }
+  if (catalog.assetBlobBaseUrl !== deliveryConfig.assetBlobBaseUrl) {
+    fail("Catalog assetBlobBaseUrl does not match desktop asset delivery config");
+  }
   if (JSON.stringify(catalog.sourceTrees) !== JSON.stringify(unified.sourceTrees)) fail("Catalog sourceTrees do not match unified manifest");
   if (!isPlainObject(catalog.games) || Object.keys(catalog.games).join(",") !== "card,board,chess") fail("Catalog games/order are invalid");
   for (const gameId of GAME_IDS) {
@@ -188,13 +239,18 @@ function validateGameManifest(gameId, manifest, expectedAssets, unified) {
 }
 
 async function main() {
+  const { value: deliveryConfigValue } = await readCanonicalJson(
+    ASSET_DELIVERY_CONFIG_PATH,
+    "Desktop asset delivery config",
+  );
+  const deliveryConfig = validateAssetDeliveryConfig(deliveryConfigValue);
   const { value: unified } = await readCanonicalJson(ASSET_MANIFEST_PATH, "Unified desktop asset manifest");
   const assetPaths = validateUnified(unified);
   const unassigned = assetPaths.filter((assetPath) => !belongsToCard(assetPath) && !belongsToBoard(assetPath) && !isLauncherOnly(assetPath));
   if (unassigned.length) fail(`Assets are outside all approved package boundaries: ${unassigned.slice(0, 20).join(", ")}`);
 
   const { value: catalog } = await readCanonicalJson(CATALOG_PATH, "Desktop game catalog");
-  validateCatalog(catalog, unified);
+  validateCatalog(catalog, unified, deliveryConfig);
 
   const manifestPaths = new Set();
   const allGameAssets = [];

@@ -2,6 +2,38 @@
 
 本文件列出大富翁 / Board 遊戲維護時最常需要讀的檔案。備份、暫存、複製檔不列為主流程。
 
+## 桌面啟動器 1.1.3／可信任更新與快取安全（V460）
+
+| 檔案 | 功能 |
+| --- | --- |
+| `desktop/package.json`、`desktop/package-lock.json` | 現行 Windows x64 啟動器版本 `1.1.3`；ASAR 採明確白名單，extraResources 只帶核准 launcher UI／頭像／預覽、目前 catalog 及其 Card／Board manifests，不內嵌完整遊戲素材。 |
+| `desktop/launcher-update-service.js`、`desktop/main.js` | 啟動器更新權威：從 Render 查 stable manifest；更新版本必須通過內建 Ed25519 公鑰簽章、允許的 Render／R2 HTTPS origin、canonical x64 檔名、大小、SHA-256 及 MZ／PE 驗證，才可下載並啟動 NSIS。 |
+| `scripts/desktop_launcher_update_qa.js` | 更新安全回歸：SemVer、Ed25519 正常與竄改、未知演算法／key、來源與 redirect、檔名、大小／SHA、PE、取消、重用已驗證安裝檔及 spawn。 |
+| `tools/desktop-r2-publisher/initialize-launcher-signing-key.js`、`launcher-manifest-signature.js`、`sign-launcher-release.ps1` | 建立／載入 DPAPI 保護的 Ed25519 私鑰、建立 canonical release bytes、簽署及驗證候選 manifest。私鑰只在 `%LOCALAPPDATA%\ONEPIECE-Tabletop\publisher\launcher-signing-key.json`，repo／啟動器只保存公鑰。 |
+| `tools/desktop-r2-publisher/launcher-manifest-signature-qa.js` | 以暫時金鑰檢查簽署、驗證、內容竄改、錯誤簽章／key，以及 Windows CurrentUser DPAPI protect／unprotect round trip。 |
+| `tools/desktop-r2-publisher/publish-launcher-artifact.js`、`publish-saved-launcher.ps1` | 經人工鎖定版本、bytes、SHA-256 且通過 MZ／PE 的 `.exe` 發布器；預設 dry run，live 只在 `desktop/launcher/releases/<version>/<filename>` 以 HEAD＋`If-None-Match: *` PUT＋HEAD 建立 immutable R2 物件，無刪除或覆寫。 |
+| `scripts/desktop_r2_launcher_publish_qa.js` | 安裝檔發布安全回歸：canonical key／檔名、dry run、條件式建立、既有相同物件略過、metadata／內容衝突拒絕、412 競態重驗及無 Delete API。 |
+| `desktop/asset-store.js` | 在既有 CAS／receipt／LKG／R2 fallback 外，正式素材來源固定為 `game-assets.rihdi.tw`，並拒絕磁碟或 UNC 根目錄、要求 `.onepiece-tabletop-cache-owner-v1.json`；舊快取只有 receipt／manifest 全部安全才接管。所有 managed 路徑在寫入／改名／清理／解除安裝前逐層拒絕 symlink／junction 並驗證 realpath containment，同時保護另一遊戲仍引用的 blob。 |
+| `scripts/desktop_asset_store_qa.js` | 除下載與 R2 fallback 外，覆蓋正式來源白名單、QA-only loopback 注入、ownership marker、合法／可疑舊快取、磁碟根、partial／CAS junction、receipt／manifest 越界或遭變更、單款解除安裝及跨遊戲共用 blob 保留。 |
+| `public/images/game_launcher/launcher_{card,board,chess}_lid_front_panel_v1.png`、`launcher_{card,board,chess}_box_shell_fixed_v1.png` | 三款遊戲各一張翻開封面與固定盒殼，共六張 launcher-only 圖；由 `desktop/package.json` 打包並走 `opui://launcher`，不屬於 Card／Board 下載內容。 |
+| `scripts/build_desktop_game_catalog.js`、`scripts/desktop_game_catalog_qa.js` | `DESKTOP_ONLY_GAME_LAUNCHER_ASSETS` 精確列出上述六張圖片；和 `images/desktop_launcher/` 一樣排除於 Card／Board manifest，避免玩家重複下載啟動器 UI。 |
+| `public/desktop/launcher-release-v1.json` | 目前刻意保留 `1.1.2`、無 artifact，作舊 1.1.2 到 1.1.3 的人工安裝橋接；1.1.3 已具備驗證未來 Ed25519 更新及從 R2 下載安裝檔的信任根。 |
+
+## 桌面 Cloudflare R2 素材分發（V459）
+
+| 檔案 | 功能 |
+| --- | --- |
+| `config/desktop-asset-delivery-v1.json` | 桌面大型素材公開來源的版本庫權威；目前指定 `https://game-assets.rihdi.tw/desktop/blobs/sha256`。建置時會拒絕不安全 URL，檔內不可放任何 R2 憑證。 |
+| Cloudflare R2／Cache Rules（外部正式設定） | Bucket 為 `onepiece-game-assets`；規則 `ONE PIECE R2 immutable assets` 精確比對完整 URI wildcard `https://game-assets.rihdi.tw/desktop/blobs/sha256/*`，設為 Cache eligible，Edge TTL／Browser TTL 採 origin。公網抽樣已通過 `MISS`→`HIT` 與 Range `206`。 |
+| `scripts/build_desktop_game_catalog.js`、`scripts/desktop_game_catalog_qa.js` | 從上述設定產生／驗證 catalog 的 `assetBlobBaseUrl`，並維持 Card／Board release、manifest SHA 與檔案／位元組總數一致。 |
+| `public/desktop/catalog-v1.json`、`public/desktop/manifests/*.json` | Render 提供的桌面控制面資料。Catalog 宣告 R2 CAS base URL；兩份 immutable manifest 仍是邏輯 path、MIME、size、SHA-256 與 receipt 的內容權威。 |
+| `desktop/asset-store.js` | 桌面安裝／更新下載器：以 manifest SHA 組出 `desktop/blobs/sha256/<前兩碼>/<完整 SHA-256>`，先試 R2，再逐檔退回 Render 原邏輯 URL；兩條路徑都通過 size／SHA 才提交既有 CAS／receipt／LKG。 |
+| `scripts/desktop_asset_store_qa.js` | 雙來源下載 fixture；驗證 R2 優先、Range 續傳、重試、R2 404／錯誤／錯誤位元組時的 Render fallback，以及失敗不污染 last-known-good。 |
+| `tools/desktop-r2-publisher/publish.js`、`package.json`、`package-lock.json` | 隔離的 R2 發布 CLI。讀正式 catalog／manifests、驗證本機與 Git committed SVG 位元組、跨遊戲 SHA 去重；預設 dry run，live 只 HEAD 與條件式 PUT，沒有刪除或覆寫。依賴只安裝在此工具目錄，`node_modules/` 不進版本庫。 |
+| `tools/desktop-r2-publisher/save-r2-credential.ps1`、`publish-saved-r2.ps1` | Windows 發布憑證橋：從剪貼簿分別保存 Access Key ID／Secret，以目前使用者 DPAPI 加密到 Local AppData；發布時短暫注入 process environment 並在結束後還原。不可把密鑰複製到 repo 或文件。 |
+| `tools/desktop-r2-publisher/README.md` | dry run、一次性 process environment、DPAPI 保存及 live 發布的操作說明；正式 bucket 是 `onepiece-game-assets`。首次 live upload 為 3486 個／1,800,547,515 bytes，第二輪為 uploaded 0／skipped 3486。 |
+| `scripts/desktop_r2_publish_qa.js` | 發布器安全回歸：清單去重、CAS key、來源 SHA、dry-run 無網路、既有物件 skip、metadata 衝突 fail-closed、412 競態重驗與無 Delete API。 |
+
 ## 多人續戰與戰鬥主指令（V458）
 
 | 檔案 | 功能 |
@@ -28,11 +60,11 @@
 | `public/desktop/manifests/board-assets-eb95373ee6ab1aa3.json`、`public/desktop/catalog-v1.json` | V457 現行 Board 桌面資產清單與 catalog；三張 V3 羽筆納入 Board 增量更新，Card record 維持 `assets-197d7c0144fe523a`。 |
 | `desktop/package.json`、`scripts/desktop_launcher_package_qa.js` | 安裝包只攜帶 catalog 當前兩份 manifest；正式站可暫留 SHA 鎖定的上一版 Board manifest 供 rollout 期間舊 catalog 讀取，不將歷史清單累積進安裝包。 |
 
-## 桌面啟動器更新查詢入口（V454）
+## 桌面啟動器更新查詢入口（V454 歷史）
 
 | 檔案 | 功能 |
 | --- | --- |
-| `public/desktop/launcher-release-v1.json` | 正式站同源 stable／win32／x64 啟動器版本查詢；目前版本 1.1.2，未提供 artifact，因此只回報已是最新版。 |
+| `public/desktop/launcher-release-v1.json` | V454 建立的正式站 stable／win32／x64 版本查詢入口；當時為 1.1.2 且未提供 artifact。現行 1.1.3 過渡與簽章規則以 V460 為準。 |
 | `docs/DEV_WORKFLOW.md`、`docs/PROJECT_OVERVIEW.md`、`docs/GAME_RULES.md`、`docs/FILE_MAP.md` | 記錄 V454 發布範圍、更新資訊與不影響遊戲狀態的邊界。 |
 
 ## 根目錄
@@ -44,8 +76,8 @@
 | `AGENTS.md` | Codex 進入專案前必讀的短規則。 |
 | `public/game.html`、`public/css/card-tailwind-v1.min.css`、`styles/card-tailwind.input.css`、根 `package.json`／`package-lock.json` | V433～V434 卡牌效能主流程：固定 Tailwind 3.4.17 預編譯靜態 CSS；`STATE`／`EMIT` 以 rAF 合併 render，場地／棄牌／玩家／日誌用 fingerprint 選擇性重建；抽牌與麻痺 `DRAW` 防重，決鬥卡背使用 `back.webp`。V434 另以具體 component ID 保證 `.hidden` 對話框與階段提示不受後載入 inline `display` 規則覆蓋，避免進場空遮罩攔截操作或錯誤提示暴露。`build:card-css` 可重建樣式，`qa:card-performance` 可重跑靜態／VM 回歸。 |
 | `desktop/runtime-asset-cache.js`、`desktop/main.js`（V433 runtime cache） | 由已驗證 manifest 建立 path／token 記憶體索引，request hot path 不做 `stat`／SHA；單檔不超過 8 MiB 的素材進 192 MiB LRU 並共用並行讀取，較大檔與 Range 走 stream，取消 seek／換場即關閉底層 file stream。長度錯誤排入完整性修復；非持久 game session 使用 `cache:false`，一般重開不清非帳號 localStorage，V8 code cache 放在 `runtime/code-cache/<gameId>`，Chromium session／GPU／network cache 在啟動前改到已儲存素材根目錄的 `runtime/chromium-session-v1`；window identity guard 防止舊視窗事件清除新索引。 |
-| `desktop/package.json`、`desktop/package-lock.json`（V433） | 桌面啟動器版本 `1.1.1`，ASAR 白名單加入 `runtime-asset-cache.js`；沒有在文件中推測尚未確認的新 installer 大小或 SHA-256。 |
-| `scripts/card_runtime_performance_qa.js`、`scripts/card_render_batch_browser_qa.js`、`scripts/desktop_runtime_asset_cache_qa.js`、`scripts/desktop_installed_media_smoke.js`、`scripts/desktop_launcher_package_qa.js`（V433～V434） | 效能／包裝回歸：驗證靜態 Tailwind、抽牌 pending／兩條完成路徑只送一次、背景無 rAF 時麻痺仍即時處理、同影格 STATE＋EMIT 只 render 一次、unchanged DOM 不重建、選擇性玩家更新、記憶索引 hot path I/O=0、8／192 MiB LRU、大檔取消確實 close 且不誤 repair、Range、損壞修復、非持久 `cache:false`、localStorage launch 邊界、window guard、所選根目錄 code／Chromium cache，以及 Card／Board 五類安裝後媒體與 1.1.1 ASAR／installer 內容。V434 再檢查明確隱藏 selector，並於瀏覽器載入後斷言所有隱藏遮罩的 computed `display:none`。 |
+| `desktop/package.json`、`desktop/package-lock.json`（V433 歷史） | V433 當時桌面啟動器為 `1.1.1`，ASAR 白名單加入 `runtime-asset-cache.js`；現行版本與包裝邊界以 V460 為準。 |
+| `scripts/card_runtime_performance_qa.js`、`scripts/card_render_batch_browser_qa.js`、`scripts/desktop_runtime_asset_cache_qa.js`、`scripts/desktop_installed_media_smoke.js`、`scripts/desktop_launcher_package_qa.js`（V433～V434 歷史） | 當時的效能／包裝回歸：驗證靜態 Tailwind、抽牌 pending／兩條完成路徑只送一次、背景無 rAF 時麻痺仍即時處理、同影格 STATE＋EMIT 只 render 一次、unchanged DOM 不重建、選擇性玩家更新、記憶索引 hot path I/O=0、8／192 MiB LRU、大檔取消確實 close 且不誤 repair、Range、損壞修復、非持久 `cache:false`、localStorage launch 邊界、window guard、所選根目錄 code／Chromium cache，以及當時 1.1.1 ASAR／installer 內容。V434 再檢查明確隱藏 selector，並於瀏覽器載入後斷言所有隱藏遮罩的 computed `display:none`；現行 package QA 以 V460 為準。 |
 | `.gitattributes` | V432 將 byte-addressed desktop catalog／manifest 固定為 `-text`，避免 Windows checkout 的 CRLF 轉換破壞 size／SHA。 |
 | `desktop/main.js`、`desktop/preload.js`、`desktop/launcher.html`、`desktop/launcher.css`、`desktop/launcher.js` | V431 本機桌遊發行啟動器：登入後呈現三款遊戲、簡介、下載管理、位置、更新／修復／啟動；main process 守住帳號、game id、視窗、下載與 `opui`／`opcache` protocol 邊界，renderer 只能呼叫窄 IPC。 |
 | `desktop/auth-service.js`、`desktop/game-preload.js`、`desktop/game-session-policy.js` | V431 共用帳號與遊戲 session：secret 以 Electron `safeStorage` 加密，密碼不保存；只讓已認證遊戲主框架取得 bootstrap。card／board 使用分離的非持久 partition，開啟前清 Service Worker／CacheStorage 並阻擋 `/sw.js`，登出／被踢再清 localStorage。 |

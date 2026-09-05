@@ -10,11 +10,15 @@ const path = require('node:path');
 
 const {
   AssetStore,
+  CACHE_OWNER_FILE,
   blobPath,
+  cacheOwnershipMarkerPath,
   canonicalJson,
+  encodeAssetBlobUrl,
   sha256Bytes,
   sha256File,
   validateCatalog,
+  validateCacheRootPath,
   validateIntegrityDocument,
   validateManifest
 } = require('../desktop/asset-store');
@@ -81,7 +85,7 @@ function makeManifest(gameId, releaseId, assets, createdAt = CREATED_AT) {
   return { document, bytes: Buffer.from(canonicalJson(document)) };
 }
 
-function makeCatalog(cardManifest, cardFileName, boardManifest, boardFileName) {
+function makeCatalog(cardManifest, cardFileName, boardManifest, boardFileName, assetBlobBaseUrl = '') {
   const createdAt = new Date(Math.max(
     Date.parse(cardManifest.document.createdAt),
     Date.parse(boardManifest.document.createdAt)
@@ -95,6 +99,7 @@ function makeCatalog(cardManifest, cardFileName, boardManifest, boardFileName) {
       videos: '3'.repeat(40),
       fonts: '4'.repeat(40)
     },
+    ...(assetBlobBaseUrl ? { assetBlobBaseUrl } : {}),
     games: {
       card: {
         releaseId: cardManifest.document.releaseId,
@@ -119,13 +124,54 @@ function clone(value) {
   return JSON.parse(JSON.stringify(value));
 }
 
-function runStrictValidationChecks(validCatalog, validManifest) {
-  assert.equal(validateCatalog(validCatalog).games.card.releaseId, validCatalog.games.card.releaseId);
+function runCacheRootBoundaryChecks(temporaryRoot) {
+  const filesystemRoot = path.parse(path.resolve(temporaryRoot)).root;
+  assert.throws(() => validateCacheRootPath(filesystemRoot), /根目錄/, 'A filesystem root must never be accepted as cacheRoot.');
+  assert.throws(() => validateCacheRootPath('relative-cache'), /位置不正確/, 'A relative cacheRoot must be rejected.');
+  if (process.platform === 'win32') {
+    assert.throws(
+      () => validateCacheRootPath('\\\\fixture-server\\fixture-share\\'),
+      /根目錄/,
+      'A UNC share root must never be accepted as cacheRoot.'
+    );
+  }
+  const nested = path.join(temporaryRoot, 'allowed-cache');
+  assert.equal(validateCacheRootPath(nested), path.resolve(nested));
+}
+
+function runStrictValidationChecks(validCatalog, validManifest, testAssetBlobBaseUrls) {
+  const validationOptions = { testAssetBlobBaseUrls };
+  assert.equal(validateCatalog(validCatalog, validationOptions).games.card.releaseId, validCatalog.games.card.releaseId);
+  if (validCatalog.assetBlobBaseUrl) {
+    const trailingSlash = clone(validCatalog);
+    trailingSlash.assetBlobBaseUrl += '/';
+    assert.equal(validateCatalog(trailingSlash, validationOptions).assetBlobBaseUrl, validCatalog.assetBlobBaseUrl);
+    assert.throws(
+      () => validateCatalog(validCatalog),
+      /允許清單/,
+      'A loopback asset source must require an explicit QA-only allowlist.'
+    );
+  }
+  const productionDelivery = clone(validCatalog);
+  productionDelivery.assetBlobBaseUrl = 'https://game-assets.rihdi.tw/desktop/blobs/sha256';
+  assert.equal(validateCatalog(productionDelivery).assetBlobBaseUrl, productionDelivery.assetBlobBaseUrl);
   assert.equal(validateManifest(validManifest, 'card').releaseId, validManifest.releaseId);
+
+  for (const unsafeBaseUrl of [
+    'http://example.com/desktop/blobs/sha256',
+    'https://cdn.example.com/desktop/blobs/sha256',
+    'https://user:secret@example.com/desktop/blobs/sha256',
+    'https://example.com/desktop/blobs/sha256?version=1',
+    'https://example.com/desktop/blobs/sha256#fragment'
+  ]) {
+    const unsafeDelivery = clone(validCatalog);
+    unsafeDelivery.assetBlobBaseUrl = unsafeBaseUrl;
+    assert.throws(() => validateCatalog(unsafeDelivery, validationOptions), /素材下載來源/);
+  }
 
   const unsafeCatalog = clone(validCatalog);
   unsafeCatalog.games.card.manifestPath = '../card.json';
-  assert.throws(() => validateCatalog(unsafeCatalog), /card/);
+  assert.throws(() => validateCatalog(unsafeCatalog, validationOptions), /card/);
 
   const badSetDigest = clone(validManifest);
   badSetDigest.assetSetSha256 = '0'.repeat(64);
@@ -244,12 +290,12 @@ class FixtureServer {
       return;
     }
 
+    this.assetRequests.set(fixturePath, this.count(fixturePath) + 1);
     const body = this.assets.get(fixturePath);
     if (!body) {
       response.writeHead(404).end();
       return;
     }
-    this.assetRequests.set(fixturePath, this.count(fixturePath) + 1);
 
     const hangs = this.hangBeforeHeaders.get(fixturePath) || 0;
     if (hangs > 0) {
@@ -359,12 +405,19 @@ async function createTemporaryRoot() {
   return fsp.mkdtemp(path.join(preferred, 'desktop-asset-store-'));
 }
 
+async function createDirectoryLink(target, linkPath) {
+  await fsp.mkdir(target, { recursive: true });
+  await fsp.symlink(target, linkPath, process.platform === 'win32' ? 'junction' : 'dir');
+}
+
 async function main() {
   const temporaryRoot = await createTemporaryRoot();
   const fixture = new FixtureServer();
+  const blobFixture = new FixtureServer();
   try {
     const bundledRoot = path.join(temporaryRoot, 'bundled');
     const cacheRoot = path.join(temporaryRoot, 'cache');
+    runCacheRootBoundaryChecks(temporaryRoot);
 
     const sharedBytes = Buffer.from('shared-launcher-art-v1');
     const initialVersionBytes = Buffer.from('card-version-one-content');
@@ -385,14 +438,120 @@ async function main() {
     const cardV1 = makeManifest('card', 'assets-card-v1', [slowAudio, shared, initialVersion]);
     const cardV2 = makeManifest('card', 'assets-card-v2', [slowAudio, shared, updatedVersion], UPDATED_AT);
     const boardV1 = makeManifest('board', 'assets-board-v1', [boardFont, shared]);
-    const catalogV1 = makeCatalog(cardV1, cardV1File, boardV1, boardV1File);
-    const catalogV2 = makeCatalog(cardV2, cardV2File, boardV1, boardV1File);
+    await fixture.start();
+    await blobFixture.start();
+    const assetBlobBaseUrl = `${blobFixture.origin}/desktop/blobs/sha256`;
+    const blobKey = (asset) => new URL(encodeAssetBlobUrl(assetBlobBaseUrl, asset.sha256)).pathname.replace(/^\/+/, '');
+    const catalogV1 = makeCatalog(cardV1, cardV1File, boardV1, boardV1File, assetBlobBaseUrl);
+    const catalogV2 = makeCatalog(cardV2, cardV2File, boardV1, boardV1File, assetBlobBaseUrl);
 
-    runStrictValidationChecks(catalogV1, cardV1.document);
+    const testAssetBlobBaseUrls = [assetBlobBaseUrl];
+    runStrictValidationChecks(catalogV1, cardV1.document, testAssetBlobBaseUrls);
     await writeBundledCatalog(bundledRoot, catalogV1, [
       [cardV1File, cardV1.bytes],
       [boardV1File, boardV1.bytes]
     ]);
+
+    const linkedExternalRoot = path.join(temporaryRoot, 'linked-external');
+    const linkedExternalSentinel = path.join(linkedExternalRoot, 'do-not-touch.txt');
+    await fsp.mkdir(linkedExternalRoot, { recursive: true });
+    await fsp.writeFile(linkedExternalSentinel, 'foreign cache data');
+
+    const linkedLegacyRoot = path.join(temporaryRoot, 'linked-legacy-cache');
+    await fsp.mkdir(linkedLegacyRoot, { recursive: true });
+    await createDirectoryLink(linkedExternalRoot, path.join(linkedLegacyRoot, 'blobs'));
+    const linkedLegacyStore = new AssetStore({
+      origin: fixture.origin,
+      bundledCatalogRoot: bundledRoot,
+      cacheRoot: linkedLegacyRoot,
+      testAssetBlobBaseUrls,
+      integrityAuditMaxFiles: 0
+    });
+    await assert.rejects(
+      linkedLegacyStore.init(),
+      /可疑.*衝突|符號連結|連接點|無法接管/,
+      'A legacy cache containing a managed-directory junction must never be claimed.'
+    );
+    assert.equal(fs.existsSync(cacheOwnershipMarkerPath(linkedLegacyRoot)), false);
+    assert.equal(await fsp.readFile(linkedExternalSentinel, 'utf8'), 'foreign cache data');
+
+    const linkedOwnedRoot = path.join(temporaryRoot, 'linked-owned-cache');
+    const linkedOwnedStore = new AssetStore({
+      origin: fixture.origin,
+      bundledCatalogRoot: bundledRoot,
+      cacheRoot: linkedOwnedRoot,
+      testAssetBlobBaseUrls,
+      integrityAuditMaxFiles: 0
+    });
+    await linkedOwnedStore.init();
+    const linkedPartialRoot = path.join(linkedOwnedRoot, 'partial');
+    await createDirectoryLink(linkedExternalRoot, linkedPartialRoot);
+    const foreignPartial = path.join(linkedExternalRoot, `${'f'.repeat(64)}.part`);
+    await fsp.writeFile(foreignPartial, 'foreign partial');
+    await assert.rejects(
+      linkedOwnedStore.downloadBlob(initialVersion, new AbortController().signal, () => {}),
+      /符號連結|連接點|離開下載位置/,
+      'A download must reject a substituted partial-directory junction before writing.'
+    );
+    await assert.rejects(
+      linkedOwnedStore.cleanupUnusedCache(),
+      /符號連結|連接點|離開下載位置/,
+      'Cache cleanup must reject a substituted managed-directory junction before deleting.'
+    );
+    assert.equal(await fsp.readFile(foreignPartial, 'utf8'), 'foreign partial');
+    assert.equal(await fsp.readFile(linkedExternalSentinel, 'utf8'), 'foreign cache data');
+    await fsp.unlink(linkedPartialRoot);
+
+    const linkedBlobPrefix = path.join(linkedOwnedRoot, 'blobs', 'sha256', initialVersion.sha256.slice(0, 2));
+    await fsp.mkdir(path.dirname(linkedBlobPrefix), { recursive: true });
+    await fsp.rm(linkedBlobPrefix, { recursive: true, force: true });
+    await createDirectoryLink(linkedExternalRoot, linkedBlobPrefix);
+    const foreignBlob = path.join(linkedExternalRoot, initialVersion.sha256);
+    await fsp.writeFile(foreignBlob, 'foreign blob');
+    await assert.rejects(
+      linkedOwnedStore.downloadBlob(initialVersion, new AbortController().signal, () => {}),
+      /符號連結|連接點|離開下載位置/,
+      'A download must reject a substituted CAS-prefix junction before replacing a blob.'
+    );
+    assert.equal(await fsp.readFile(foreignBlob, 'utf8'), 'foreign blob');
+
+    const suspiciousManifestRoot = path.join(temporaryRoot, 'suspicious-manifest-cache');
+    const suspiciousManifestFile = path.join(suspiciousManifestRoot, 'manifests', 'card', 'do-not-delete.txt');
+    await fsp.mkdir(path.dirname(suspiciousManifestFile), { recursive: true });
+    await fsp.writeFile(suspiciousManifestFile, 'foreign manifest data');
+    const suspiciousManifestStore = new AssetStore({
+      origin: fixture.origin,
+      bundledCatalogRoot: bundledRoot,
+      cacheRoot: suspiciousManifestRoot,
+      testAssetBlobBaseUrls,
+      integrityAuditMaxFiles: 0
+    });
+    await assert.rejects(
+      suspiciousManifestStore.init(),
+      /可疑.*衝突|無法接管/,
+      'A legacy root with suspicious manifests must not be claimed.'
+    );
+    assert.equal(fs.existsSync(cacheOwnershipMarkerPath(suspiciousManifestRoot)), false);
+    assert.equal(await fsp.readFile(suspiciousManifestFile, 'utf8'), 'foreign manifest data');
+
+    const suspiciousReceiptRoot = path.join(temporaryRoot, 'suspicious-receipt-cache');
+    const suspiciousReceiptFile = path.join(suspiciousReceiptRoot, 'receipts', 'card.json');
+    await fsp.mkdir(path.dirname(suspiciousReceiptFile), { recursive: true });
+    await fsp.writeFile(suspiciousReceiptFile, '{"schema":1,"gameId":"board"}\n');
+    const suspiciousReceiptStore = new AssetStore({
+      origin: fixture.origin,
+      bundledCatalogRoot: bundledRoot,
+      cacheRoot: suspiciousReceiptRoot,
+      testAssetBlobBaseUrls,
+      integrityAuditMaxFiles: 0
+    });
+    await assert.rejects(
+      suspiciousReceiptStore.init(),
+      /可疑.*衝突|無法接管/,
+      'A legacy root with a conflicting receipt must not be claimed.'
+    );
+    assert.equal(fs.existsSync(cacheOwnershipMarkerPath(suspiciousReceiptRoot)), false);
+    assert.equal(fs.existsSync(suspiciousReceiptFile), true);
 
     fixture.catalog = catalogV1;
     fixture.manifests.set(`desktop/manifests/${cardV1File}`, cardV1.bytes);
@@ -402,19 +561,31 @@ async function main() {
     fixture.assets.set(shared.path, sharedBytes);
     fixture.assets.set(initialVersion.path, initialVersionBytes);
     fixture.assets.set(boardFont.path, boardFontBytes);
-    fixture.slowPaths.add(slowAudio.path);
-    await fixture.start();
+    blobFixture.assets.set(blobKey(slowAudio), slowAudioBytes);
+    blobFixture.assets.set(blobKey(shared), sharedBytes);
+    blobFixture.assets.set(blobKey(initialVersion), initialVersionBytes);
+    blobFixture.assets.set(blobKey(boardFont), boardFontBytes);
+    blobFixture.slowPaths.add(blobKey(slowAudio));
 
     const store = new AssetStore({
       origin: fixture.origin,
       bundledCatalogRoot: bundledRoot,
       cacheRoot,
+      testAssetBlobBaseUrls,
       integrityAuditMaxFiles: 0,
       downloadRequestTimeoutMs: 150,
       downloadIdleTimeoutMs: 500,
       downloadRetryBaseMs: 10
     });
     await store.init();
+    const ownershipMarker = cacheOwnershipMarkerPath(cacheRoot);
+    assert.equal(path.basename(ownershipMarker), CACHE_OWNER_FILE);
+    assert.equal(fs.existsSync(ownershipMarker), true, 'A newly initialized cache must have a dedicated ownership marker.');
+    const markerDocument = JSON.parse(await fsp.readFile(ownershipMarker, 'utf8'));
+    assert.equal(path.resolve(markerDocument.cacheRoot), path.resolve(cacheRoot));
+    const originalCacheRoot = store.cacheRoot;
+    await assert.rejects(store.setCacheRoot(path.parse(cacheRoot).root), /根目錄/);
+    assert.equal(store.cacheRoot, originalCacheRoot, 'Rejecting a filesystem root must preserve the current cache location.');
     assert.equal(store.catalogSource, 'bundled');
 
     const invalidRemoteCatalog = clone(catalogV1);
@@ -428,6 +599,7 @@ async function main() {
     const acceptedCatalog = await store.refreshRemoteCatalog();
     assert.equal(acceptedCatalog.ok, true, 'Valid remote catalog should be accepted.');
     assert.equal(store.catalogSource, 'remote');
+    assert.equal(store.catalog.assetBlobBaseUrl, assetBlobBaseUrl, 'Validated remote catalog must retain the R2 blob base URL.');
 
     let pauseTriggered = false;
     const pauseListener = (progress) => {
@@ -451,18 +623,20 @@ async function main() {
     assert.equal(store.installGame('card').ok, true);
     await waitForInstall(store, 'card');
     assert.ok(
-      fixture.rangeRequests.some((request) => request.path === slowAudio.path && request.start === partialSize),
+      blobFixture.rangeRequests.some((request) => request.path === blobKey(slowAudio) && request.start === partialSize),
       'Resumed install must request exactly the remaining byte range.'
     );
     assert.equal(await sha256File(blobPath(cacheRoot, slowAudio.sha256)), slowAudio.sha256);
+    assert.equal(fixture.count(slowAudio.path), 0, 'A healthy R2 install must not request the Render logical asset path.');
+    assert.ok(blobFixture.count(blobKey(slowAudio)) >= 2, 'A healthy install must use the R2 content-addressed blob path.');
 
-    const sharedRequestsBeforeBoard = fixture.count(shared.path);
-    fixture.hangNext(boardFont.path, 1);
+    const sharedRequestsBeforeBoard = blobFixture.count(blobKey(shared));
+    blobFixture.hangNext(blobKey(boardFont), 1);
     assert.equal(store.installGame('board').ok, true);
     await waitForInstall(store, 'board');
-    assert.equal(fixture.count(boardFont.path), 2, 'A request timeout must resume through the bounded retry path.');
+    assert.equal(blobFixture.count(blobKey(boardFont)), 2, 'A request timeout must resume through the bounded retry path.');
     assert.equal(
-      fixture.count(shared.path),
+      blobFixture.count(blobKey(shared)),
       sharedRequestsBeforeBoard,
       'Board install must reuse the card game shared content-addressed blob.'
     );
@@ -483,14 +657,17 @@ async function main() {
     assert.equal((await store.refreshRemoteCatalog()).ok, true);
     assert.equal(store.gameStates.get('card')?.status, 'update');
     fixture.assets.set(updatedVersion.path, updatedVersionBytes);
+    blobFixture.assets.set(blobKey(updatedVersion), updatedVersionBytes);
     fixture.resetAssetRequests();
-    fixture.failNext(updatedVersion.path, 2, 503);
+    blobFixture.resetAssetRequests();
+    blobFixture.failNext(blobKey(updatedVersion), 2, 503);
 
     assert.equal(store.installGame('card').ok, true);
     await waitForInstall(store, 'card');
-    assert.equal(fixture.count(updatedVersion.path), 3, 'Transient HTTP 5xx failures must stop after bounded retry and then succeed.');
-    assert.equal(fixture.count(shared.path), 0, 'Update must reuse the unchanged shared image blob.');
-    assert.equal(fixture.count(slowAudio.path), 0, 'Update must reuse the unchanged audio blob.');
+    assert.equal(blobFixture.count(blobKey(updatedVersion)), 3, 'Transient HTTP 5xx failures must stop after bounded retry and then succeed.');
+    assert.equal(fixture.count(updatedVersion.path), 0, 'Successful R2 retries must not fall back to Render.');
+    assert.equal(blobFixture.count(blobKey(shared)), 0, 'Update must reuse the unchanged shared image blob.');
+    assert.equal(blobFixture.count(blobKey(slowAudio)), 0, 'Update must reuse the unchanged audio blob.');
     assert.equal(store.receipts.get('card')?.releaseId, 'assets-card-v2');
 
     const integrityPath = path.join(cacheRoot, 'state', 'blob-integrity-v1.json');
@@ -501,11 +678,15 @@ async function main() {
     tamperedIntegrity.records[0].size += 1;
     assert.throws(() => validateIntegrityDocument(tamperedIntegrity), /摘要不符/);
 
+    await fsp.unlink(ownershipMarker);
+    assert.equal(fs.existsSync(ownershipMarker), false, 'Legacy compatibility fixture must begin without an ownership marker.');
+
     let restartHashCalls = 0;
     const restartedStore = new AssetStore({
       origin: 'http://127.0.0.1:1',
       bundledCatalogRoot: bundledRoot,
       cacheRoot,
+      testAssetBlobBaseUrls,
       fetchImpl: async () => { throw new TypeError('offline fixture'); },
       hashFileImpl: async (filePath, signal) => {
         restartHashCalls += 1;
@@ -517,7 +698,9 @@ async function main() {
       downloadRetryBaseMs: 10
     });
     await restartedStore.init();
+    assert.equal(fs.existsSync(ownershipMarker), true, 'A valid legacy cache must receive an ownership marker on first upgraded init.');
     assert.equal(restartedStore.catalogSource, 'cached', 'Offline restart must load the last-known-good remote catalog.');
+    assert.equal(restartedStore.catalog.assetBlobBaseUrl, assetBlobBaseUrl, 'Last-known-good catalog must preserve the R2 source.');
     assert.equal(restartedStore.catalog.games.card.releaseId, 'assets-card-v2');
     assert.equal(restartedStore.gameStates.get('card')?.status, 'installed');
     assert.equal(restartedStore.canLaunch('card'), true);
@@ -532,7 +715,7 @@ async function main() {
 
     const latestCatalog = restartedStore.catalog;
     const latestManifestCache = restartedStore.cachedManifests;
-    restartedStore.catalog = validateCatalog(catalogV1);
+    restartedStore.catalog = validateCatalog(catalogV1, { testAssetBlobBaseUrls });
     restartedStore.catalogSource = 'bundled';
     restartedStore.cachedManifests = new Map();
     await assert.rejects(
@@ -559,6 +742,7 @@ async function main() {
     assert.equal(restartedStore.canLaunch('card'), false, 'Repair-required game must not launch.');
 
     fixture.resetAssetRequests();
+    blobFixture.resetAssetRequests();
     restartedStore.origin = fixture.origin;
     restartedStore.fetchImpl = globalThis.fetch;
     const repairStatuses = [];
@@ -576,7 +760,8 @@ async function main() {
       );
     }
     assert.equal(repairStatuses[0], 'preparing', 'Install must enter a cancellable preparing state before manifest and blob checks.');
-    assert.equal(fixture.count(updatedVersion.path), 1, 'Repair must redownload the corrupt blob only.');
+    assert.equal(blobFixture.count(blobKey(updatedVersion)), 1, 'Repair must redownload the corrupt blob from R2 only.');
+    assert.equal(fixture.count(updatedVersion.path), 0, 'Healthy R2 repair must not consume Render asset bandwidth.');
     assert.ok(await restartedStore.resolveAsset('card', updatedVersion.path));
     assert.equal(restartedStore.canLaunch('card'), true);
 
@@ -585,6 +770,7 @@ async function main() {
       origin: fixture.origin,
       bundledCatalogRoot: bundledRoot,
       cacheRoot,
+      testAssetBlobBaseUrls,
       hashFileImpl: async (filePath, signal) => {
         boundedAuditHashes += 1;
         return sha256File(filePath, signal);
@@ -603,6 +789,7 @@ async function main() {
       origin: fixture.origin,
       bundledCatalogRoot: bundledRoot,
       cacheRoot: path.join(temporaryRoot, 'manifest-probe-cache'),
+      testAssetBlobBaseUrls,
       integrityAuditMaxFiles: 0,
       manifestTimeoutMs: 100,
       downloadRequestTimeoutMs: 150,
@@ -610,7 +797,7 @@ async function main() {
       downloadRetryBaseMs: 10
     });
     await manifestProbe.init();
-    manifestProbe.catalog = validateCatalog(catalogV2);
+    manifestProbe.catalog = validateCatalog(catalogV2, { testAssetBlobBaseUrls });
     manifestProbe.catalogSource = 'remote';
     manifestProbe.cachedManifests.clear();
     fixture.hangNext(`desktop/manifests/${cardV2File}`);
@@ -634,11 +821,13 @@ async function main() {
       origin: fixture.origin,
       bundledCatalogRoot: bundledRoot,
       cacheRoot: mismatchRoot,
+      testAssetBlobBaseUrls,
       integrityAuditMaxFiles: 0,
       downloadRequestTimeoutMs: 150,
       downloadIdleTimeoutMs: 500,
       downloadRetryBaseMs: 10
     });
+    await mismatchStore.init();
     fixture.assets.set(updatedVersion.path, corruptBytes);
     fixture.resetAssetRequests();
     await assert.rejects(
@@ -649,13 +838,117 @@ async function main() {
     assert.equal(fixture.count(updatedVersion.path), 1, 'Hash mismatch must not be blindly retried.');
     fixture.assets.set(updatedVersion.path, updatedVersionBytes);
 
+    const fallbackRoot = path.join(temporaryRoot, 'r2-fallback-cache');
+    const fallbackStore = new AssetStore({
+      origin: fixture.origin,
+      bundledCatalogRoot: bundledRoot,
+      cacheRoot: fallbackRoot,
+      testAssetBlobBaseUrls,
+      integrityAuditMaxFiles: 0,
+      downloadRequestTimeoutMs: 150,
+      downloadIdleTimeoutMs: 500,
+      downloadRetryBaseMs: 10
+    });
+    await fallbackStore.init();
+    blobFixture.assets.delete(blobKey(updatedVersion));
+    fixture.resetAssetRequests();
+    blobFixture.resetAssetRequests();
+    await fallbackStore.downloadBlob(
+      updatedVersion,
+      new AbortController().signal,
+      () => {},
+      { assetBlobBaseUrl }
+    );
+    assert.equal(blobFixture.count(blobKey(updatedVersion)), 1, 'Missing R2 blob must be detected before fallback.');
+    assert.equal(fixture.count(updatedVersion.path), 1, 'Missing R2 blob must safely fall back to the Render logical path.');
+    assert.equal(await sha256File(blobPath(fallbackRoot, updatedVersion.sha256)), updatedVersion.sha256);
+    blobFixture.assets.set(blobKey(updatedVersion), updatedVersionBytes);
+
+    const boardReceiptPath = path.join(cacheRoot, 'receipts', 'board.json');
+    const boardManifestPath = restartedStore.receipts.get('board')?.manifestPath;
+    assert.ok(boardManifestPath, 'Board receipt must exist before the per-game uninstall test.');
+    const boardReceiptDigest = await sha256File(boardReceiptPath);
+    const boardManifestDigest = await sha256File(boardManifestPath);
+    const cardReceiptPath = path.join(cacheRoot, 'receipts', 'card.json');
+    const cardManifestRoot = path.join(cacheRoot, 'manifests', 'card');
+    const cardManifestPath = restartedStore.receipts.get('card')?.manifestPath;
+    assert.ok(cardManifestPath, 'Card manifest must exist before ownership and receipt guards are tested.');
+    const originalCardReceiptBytes = await fsp.readFile(cardReceiptPath);
+    const cardReceiptDigest = sha256Bytes(originalCardReceiptBytes);
+    const cardManifestDigest = await sha256File(cardManifestPath);
+
+    await fsp.unlink(ownershipMarker);
+    await assert.rejects(
+      restartedStore.uninstallGame('card'),
+      /擁有權標記/,
+      'Uninstall must fail closed when the cache ownership marker is absent.'
+    );
+    assert.equal(sha256Bytes(await fsp.readFile(cardReceiptPath)), cardReceiptDigest, 'A non-owned root must retain its receipt.');
+    assert.equal(await sha256File(cardManifestPath), cardManifestDigest, 'A non-owned root must retain its manifest.');
+    assert.equal(fs.existsSync(blobPath(cacheRoot, updatedVersion.sha256)), true, 'A non-owned root must retain its game blobs.');
+    await restartedStore.ensureCacheOwnership(cacheRoot);
+    assert.equal(fs.existsSync(ownershipMarker), true, 'A still-valid legacy cache may be reclaimed on explicit initialization.');
+
+    const traversalReceipt = JSON.parse(originalCardReceiptBytes.toString('utf8'));
+    traversalReceipt.manifestFile = '../outside.json';
+    await fsp.writeFile(cardReceiptPath, canonicalJson(traversalReceipt));
+    await assert.rejects(
+      restartedStore.uninstallGame('card'),
+      /收據/,
+      'Uninstall must reject a durable receipt whose manifest path was changed.'
+    );
+    assert.equal(await sha256File(cardManifestPath), cardManifestDigest, 'Receipt tampering must not delete the installed manifest.');
+    assert.equal(fs.existsSync(blobPath(cacheRoot, updatedVersion.sha256)), true, 'Receipt tampering must not delete game blobs.');
+    await fsp.writeFile(cardReceiptPath, originalCardReceiptBytes);
+
+    const cardRemoval = await restartedStore.uninstallGame('card');
+    assert.equal(cardRemoval.ok, true);
+    assert.ok(cardRemoval.removedBytes >= slowAudio.size + updatedVersion.size, 'Card uninstall must reclaim its unique installed blobs.');
+    assert.equal(fs.existsSync(cardReceiptPath), false, 'Card receipt must be removed.');
+    assert.equal(fs.existsSync(cardManifestRoot), false, 'Card installed manifest directory must be removed.');
+    assert.equal(fs.existsSync(blobPath(cacheRoot, slowAudio.sha256)), false, 'Card-only audio must be removed.');
+    assert.equal(fs.existsSync(blobPath(cacheRoot, updatedVersion.sha256)), false, 'Card-only image must be removed.');
+    assert.equal(fs.existsSync(blobPath(cacheRoot, shared.sha256)), true, 'Shared blob must survive while Board remains installed.');
+    assert.equal(fs.existsSync(blobPath(cacheRoot, boardFont.sha256)), true, 'Board-only blob must survive Card uninstall.');
+    assert.equal(await sha256File(boardReceiptPath), boardReceiptDigest, 'Board receipt must not change during Card uninstall.');
+    assert.equal(await sha256File(boardManifestPath), boardManifestDigest, 'Board manifest must not change during Card uninstall.');
+    assert.equal(restartedStore.gameStates.get('card')?.status, 'not-installed');
+    assert.equal(restartedStore.gameStates.get('card')?.removable, false);
+    assert.equal(restartedStore.gameStates.get('board')?.status, 'installed');
+    assert.ok(await restartedStore.resolveAsset('board', shared.path), 'Remaining game must still resolve a shared blob.');
+    assert.equal((await restartedStore.uninstallGame('card')).alreadyRemoved, true, 'Repeated uninstall must be idempotent.');
+
+    fixture.resetAssetRequests();
+    blobFixture.resetAssetRequests();
+    assert.equal(restartedStore.installGame('card').ok, true);
+    const blockedRemoval = await restartedStore.uninstallGame('card');
+    assert.equal(blockedRemoval.ok, false, 'Uninstall must be blocked while a download is active.');
+    assert.match(blockedRemoval.error, /暫停目前下載/);
+    assert.equal(restartedStore.cancelInstall('card').ok, true);
+    await waitUntil(() => !restartedStore.activeInstall, 'cancelled reinstall before uninstall');
+    assert.equal(restartedStore.installGame('card').ok, true);
+    await waitForInstall(restartedStore, 'card');
+    assert.equal(blobFixture.count(blobKey(shared)), 0, 'Reinstall must reuse the shared Board CAS blob without downloading it again.');
+    assert.equal(fixture.count(shared.path), 0, 'Reinstall must not fall back to Render for the shared Board blob.');
+    assert.equal(restartedStore.gameStates.get('card')?.removable, true);
+
+    assert.equal((await restartedStore.uninstallGame('card')).ok, true);
+    assert.equal((await restartedStore.uninstallGame('board')).ok, true);
+    assert.equal((await listFiles(path.join(cacheRoot, 'blobs', 'sha256'))).length, 0, 'Removing both games must leave no game CAS blobs.');
+    assert.equal(restartedStore.gameStates.get('board')?.status, 'not-installed');
+    assert.equal(restartedStore.gameStates.get('board')?.removable, false);
+
     console.log(
       `DESKTOP_ASSET_STORE_QA=PASS pauseResume=PASS dedup=PASS retryTimeout=PASS update=PASS ` +
       `persistentIntegrity=PASS boundedAudit=PASS lastKnownGood=PASS downgradeGuard=PASS ` +
-      `launchGuard=PASS corruptionRepair=PASS uniqueBlobs=${blobFiles.length}`
+      `launchGuard=PASS corruptionRepair=PASS r2Priority=PASS renderFallback=PASS ` +
+      `cacheOwnership=PASS legacyClaim=PASS rootBoundary=PASS managedLinkBoundary=PASS ` +
+      `assetOriginAllowlist=PASS receiptBoundary=PASS ` +
+      `perGameUninstall=PASS sharedBlobGuard=PASS uniqueBlobs=${blobFiles.length}`
     );
   } finally {
     await fixture.close().catch(() => {});
+    await blobFixture.close().catch(() => {});
     const resolvedTemporaryRoot = path.resolve(temporaryRoot);
     const safeParent = process.platform === 'win32' && fs.existsSync('D:\\')
       ? path.resolve('D:\\Codex_BuildCache\\qa')

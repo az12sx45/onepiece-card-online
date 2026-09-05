@@ -71,7 +71,7 @@ async function main() {
 
   const mainSource = sourceText('desktop/main.js');
   const prepareSection = functionSection(mainSource, 'async function prepareGameSession(gameId)', 'async function chooseDefaultCacheRoot()');
-  const launchSection = functionSection(mainSource, 'async function launchGame(gameId)', 'async function closeGameWindows()');
+  const launchSection = functionSection(mainSource, 'async function createGameWindow(gameId)', 'async function closeGameWindows()');
   const resetIndex = prepareSection.indexOf('await resetDesktopGameWebCache(targetSession, REMOTE_ORIGIN);');
   const cachedReturnIndex = prepareSection.indexOf('if (gameSessions.has(gameId))');
   const requestHookIndex = prepareSection.indexOf('targetSession.webRequest.onBeforeRequest(');
@@ -85,7 +85,7 @@ async function main() {
     'Hosted sw.js request is not synchronously cancelled by the desktop game session.'
   );
   assert.ok(
-    launchSection.indexOf('await prepareGameSession(gameId);') < launchSection.indexOf('await window.loadURL('),
+    launchSection.indexOf('await prepareGameSession(gameId)') < launchSection.indexOf('await window.loadURL('),
     'Desktop game session must be cleaned and hardened before hosted navigation starts.'
   );
   const cardPartition = /card: \{[^\n]+partition: '([^']+)'/.exec(mainSource)?.[1];

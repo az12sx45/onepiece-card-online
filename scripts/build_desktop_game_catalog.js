@@ -4,6 +4,7 @@ const path = require("path");
 
 const ROOT = path.resolve(__dirname, "..");
 const ASSET_MANIFEST_PATH = path.join(ROOT, "desktop", "generated", "asset-manifest.json");
+const ASSET_DELIVERY_CONFIG_PATH = path.join(ROOT, "config", "desktop-asset-delivery-v1.json");
 const PUBLIC_ROOT = path.join(ROOT, "public");
 const OUTPUT_ROOT = path.join(PUBLIC_ROOT, "desktop", "manifests");
 const CATALOG_PATH = path.join(PUBLIC_ROOT, "desktop", "catalog-v1.json");
@@ -32,6 +33,46 @@ function sha256Text(value) {
 
 function comparePaths(left, right) {
   return left < right ? -1 : left > right ? 1 : 0;
+}
+
+function validateAssetBlobBaseUrl(value, label) {
+  if (typeof value !== "string" || !value) fail(`${label} must be a non-empty string`);
+  let parsed;
+  try {
+    parsed = new URL(value);
+  } catch (error) {
+    fail(`${label} is not a valid URL`);
+  }
+  if (
+    parsed.protocol !== "https:" || parsed.username || parsed.password ||
+    parsed.search || parsed.hash || parsed.pathname === "/" || parsed.pathname.endsWith("/") ||
+    `${parsed.origin}${parsed.pathname}` !== value
+  ) {
+    fail(`${label} must be a normalized HTTPS URL without credentials, query, hash, or trailing slash`);
+  }
+  return value;
+}
+
+function validateAssetDeliveryConfig(config) {
+  const fields = ["schema", "assetBlobBaseUrl"];
+  if (!isPlainObject(config) || Object.keys(config).join(",") !== fields.join(",")) {
+    fail("Desktop asset delivery config fields/order are invalid");
+  }
+  if (config.schema !== 1) fail("Desktop asset delivery config schema is invalid");
+  validateAssetBlobBaseUrl(config.assetBlobBaseUrl, "Desktop asset delivery config assetBlobBaseUrl");
+  return config;
+}
+
+async function readCanonicalJson(filePath, label) {
+  const text = await fs.promises.readFile(filePath, "utf8");
+  let value;
+  try {
+    value = JSON.parse(text);
+  } catch (error) {
+    fail(`${label} is not valid JSON: ${error.message}`);
+  }
+  if (text !== canonicalJson(value)) fail(`${label} JSON is not canonical`);
+  return value;
 }
 
 function validateAssetPath(assetPath) {
@@ -92,8 +133,17 @@ function validateUnifiedManifest(manifest) {
   return assetPaths;
 }
 
+const DESKTOP_ONLY_GAME_LAUNCHER_ASSETS = new Set([
+  "images/game_launcher/launcher_board_box_shell_fixed_v1.png",
+  "images/game_launcher/launcher_board_lid_front_panel_v1.png",
+  "images/game_launcher/launcher_card_box_shell_fixed_v1.png",
+  "images/game_launcher/launcher_card_lid_front_panel_v1.png",
+  "images/game_launcher/launcher_chess_box_shell_fixed_v1.png",
+  "images/game_launcher/launcher_chess_lid_front_panel_v1.png",
+]);
+
 function isSharedShell(assetPath) {
-  return (
+  return !isLauncherOnly(assetPath) && (
     assetPath === "images/icon-192.png" ||
     assetPath === "images/board/items/odd_dice.webp" ||
     assetPath.startsWith("images/game_launcher/") ||
@@ -102,7 +152,7 @@ function isSharedShell(assetPath) {
 }
 
 function isLauncherOnly(assetPath) {
-  return assetPath.startsWith("images/desktop_launcher/");
+  return assetPath.startsWith("images/desktop_launcher/") || DESKTOP_ONLY_GAME_LAUNCHER_ASSETS.has(assetPath);
 }
 
 function belongsToBoard(assetPath) {
@@ -231,14 +281,11 @@ async function writeReplaceableJson(outputPath, value) {
 }
 
 async function main() {
-  const unifiedText = await fs.promises.readFile(ASSET_MANIFEST_PATH, "utf8");
-  let unified;
-  try {
-    unified = JSON.parse(unifiedText);
-  } catch (error) {
-    fail(`Unified desktop asset manifest is not valid JSON: ${error.message}`);
-  }
-  if (unifiedText !== canonicalJson(unified)) fail("Unified desktop asset manifest JSON is not canonical");
+  const deliveryConfig = validateAssetDeliveryConfig(await readCanonicalJson(
+    ASSET_DELIVERY_CONFIG_PATH,
+    "Desktop asset delivery config",
+  ));
+  const unified = await readCanonicalJson(ASSET_MANIFEST_PATH, "Unified desktop asset manifest");
   const assetPaths = validateUnifiedManifest(unified);
 
   const unassigned = assetPaths.filter((assetPath) => (
@@ -276,6 +323,7 @@ async function main() {
   const catalog = {
     schema: 1,
     createdAt: unified.createdAt,
+    assetBlobBaseUrl: deliveryConfig.assetBlobBaseUrl,
     sourceTrees: unified.sourceTrees,
     games: catalogGames,
   };

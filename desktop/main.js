@@ -10,25 +10,32 @@ const {
   BrowserWindow,
   dialog,
   ipcMain,
+  Menu,
   protocol,
-  session
+  session,
+  systemPreferences,
+  Tray
 } = require('electron');
 const { AuthService } = require('./auth-service');
 const { AssetStore, availableBytes, blobPath, safeAssetPath } = require('./asset-store');
 const { resetDesktopGameWebCache, shouldBlockServiceWorkerRequest } = require('./game-session-policy');
+const { LauncherUpdateService } = require('./launcher-update-service');
 const { RuntimeAssetCache } = require('./runtime-asset-cache');
 
 const REMOTE_ORIGIN = 'https://onepiece-card-online.onrender.com';
+const ASSET_ORIGIN = 'https://game-assets.rihdi.tw';
 const LAUNCHER_SCHEME = 'opui';
 const CACHE_SCHEME = 'opcache';
 const SMOKE_MODE = process.env.OP_DESKTOP_SMOKE === '1';
 const SMOKE_REPORT_PATH = String(process.env.OP_DESKTOP_SMOKE_REPORT || '').trim();
 const SMOKE_MEDIA_ASSETS = String(process.env.OP_DESKTOP_SMOKE_MEDIA_ASSETS || '').trim();
 const SCREENSHOT_PATH = String(process.env.OP_DESKTOP_SCREENSHOT_PATH || '').trim();
+const SCREENSHOT_VIEW = String(process.env.OP_DESKTOP_SCREENSHOT_VIEW || '').trim();
 const TEST_USER_DATA_PATH = String(process.env.OP_DESKTOP_USER_DATA || '').trim();
 const TEST_VIEWPORT = String(process.env.OP_DESKTOP_VIEWPORT || '').trim();
 const EXPLICIT_CACHE_ROOT = String(process.env.OP_DESKTOP_CACHE_ROOT || '').trim();
 const ALLOWED_GAME_IDS = new Set(['card', 'board']);
+const GAME_LAUNCH_PRESENTATION_MS = 1400;
 const AUTH_STORAGE_KEYS = [
   'opSecret', 'op_secret', 'op_user_id', 'op_board_user_id', 'op_name',
   'op_player_name', 'op_avatar', 'op_player_avatar', 'op_board_title',
@@ -95,12 +102,17 @@ protocol.registerSchemesAsPrivileged([
 ]);
 
 let mainWindow = null;
+let tray = null;
+let launcherHiddenForGame = false;
+let appQuitting = false;
 let authService = null;
 let assetStore = null;
+let launcherUpdateService = null;
 let authenticated = false;
 let readyPromise = null;
 let smokeFinished = false;
 const gameWindows = new Map();
+const gameLaunchPromises = new Map();
 const gameSessions = new Map();
 const gameSessionPromises = new Map();
 const runtimeRepairChecks = new Map();
@@ -214,6 +226,58 @@ function applicationIconPath() {
   return app.isPackaged
     ? path.join(process.resourcesPath, 'launcher-icon.ico')
     : path.join(__dirname, 'assets', 'one_piece_tabletop_launcher_icon_v1.ico');
+}
+
+function destroyTray() {
+  if (!tray || tray.isDestroyed()) {
+    tray = null;
+    return;
+  }
+  tray.destroy();
+  tray = null;
+}
+
+function restoreLauncherFromTray() {
+  if (appQuitting) return;
+  launcherHiddenForGame = false;
+  destroyTray();
+  if (!mainWindow || mainWindow.isDestroyed()) {
+    if (app.isReady()) createMainWindow();
+    return;
+  }
+  if (mainWindow.isMinimized()) mainWindow.restore();
+  mainWindow.show();
+  mainWindow.focus();
+}
+
+function ensureTray() {
+  if (tray && !tray.isDestroyed()) return tray;
+  tray = new Tray(applicationIconPath());
+  tray.setToolTip('ONE PIECE TABLETOP SERIES 啟動器');
+  tray.setContextMenu(Menu.buildFromTemplate([
+    { label: '顯示啟動器', click: restoreLauncherFromTray }
+  ]));
+  tray.on('click', restoreLauncherFromTray);
+  tray.on('double-click', restoreLauncherFromTray);
+  return tray;
+}
+
+function hideLauncherToTray() {
+  if (!mainWindow || mainWindow.isDestroyed()) return false;
+  try {
+    ensureTray();
+    launcherHiddenForGame = true;
+    mainWindow.hide();
+    return true;
+  } catch {
+    launcherHiddenForGame = false;
+    destroyTray();
+    return false;
+  }
+}
+
+function restoreLauncherAfterLastGame() {
+  if (gameWindows.size === 0 && launcherHiddenForGame) restoreLauncherFromTray();
 }
 
 function resolveLauncherResource(requestUrl) {
@@ -400,6 +464,10 @@ async function composeState(assetSnapshot) {
     authenticated,
     previewMode,
     profile: authenticated || previewMode ? (authService.accountSummary() || { name: '羅盤測試員', avatar: 8, title: 'LAUNCHER PREVIEW' }) : null,
+    preferences: authService?.getPreferences() || {
+      minimizeToTrayOnGameLaunch: false,
+      gameDisplayMode: 'borderless'
+    },
     ...assets
   };
 }
@@ -412,6 +480,11 @@ async function broadcastState(assetSnapshot) {
 function broadcastProgress(progress) {
   if (!mainWindow || mainWindow.isDestroyed()) return;
   mainWindow.webContents.send('launcher:progress', progress);
+}
+
+function broadcastLauncherUpdate() {
+  if (!mainWindow || mainWindow.isDestroyed() || !launcherUpdateService) return;
+  mainWindow.webContents.send('launcher:update-state', launcherUpdateService.getState());
 }
 
 function isLauncherSender(event) {
@@ -453,6 +526,50 @@ function registerLauncherIpc() {
     await broadcastState();
     return { ok: true, state };
   }));
+  ipcMain.handle('launcher:set-preferences', guarded(async (_event, preferences) => {
+    const keys = preferences && typeof preferences === 'object' && !Array.isArray(preferences)
+      ? Object.keys(preferences)
+      : [];
+    const allowedKeys = new Set(['minimizeToTrayOnGameLaunch', 'gameDisplayMode']);
+    const hasMinimizePreference = Object.prototype.hasOwnProperty.call(preferences || {}, 'minimizeToTrayOnGameLaunch');
+    const hasDisplayModePreference = Object.prototype.hasOwnProperty.call(preferences || {}, 'gameDisplayMode');
+    if (
+      keys.length < 1 ||
+      keys.length > allowedKeys.size ||
+      keys.some((key) => !allowedKeys.has(key)) ||
+      (hasMinimizePreference && typeof preferences.minimizeToTrayOnGameLaunch !== 'boolean') ||
+      (hasDisplayModePreference && !['borderless', 'fullscreen'].includes(preferences.gameDisplayMode))
+    ) {
+      return { ok: false, error: '啟動器設定格式不正確。' };
+    }
+    await authService.setPreferences(preferences);
+    const state = await composeState();
+    await broadcastState();
+    return { ok: true, state };
+  }));
+  ipcMain.handle('launcher:get-update-state', guarded(async () => ({
+    ok: true,
+    state: launcherUpdateService.getState()
+  })));
+  ipcMain.handle('launcher:check-update', guarded(async () => ({
+    ok: true,
+    state: await launcherUpdateService.checkForUpdates()
+  })));
+  ipcMain.handle('launcher:download-update', guarded(async () => ({
+    ok: true,
+    state: await launcherUpdateService.downloadUpdate()
+  })));
+  ipcMain.handle('launcher:apply-update', guarded(async () => {
+    if (gameLaunchPromises.size > 0 || gameWindows.size > 0) {
+      return { ok: false, error: '請先在遊戲中存檔並關閉所有遊戲，再重新啟動更新。' };
+    }
+    if (assetStore.activeInstall || assetStore.activeRemoval) {
+      return { ok: false, error: '請先等待遊戲下載或移除完成，再重新啟動更新。' };
+    }
+    const state = launcherUpdateService.getState();
+    await launcherUpdateService.installReadyUpdate();
+    return { ok: true, state: { ...state, status: 'applying', error: '' } };
+  }));
   ipcMain.handle('launcher:install-game', guarded(async (_event, gameId) => {
     if (!authenticated || authService.previewMode) return { ok: false, error: '請先以正式帳號登入。' };
     if (!ALLOWED_GAME_IDS.has(gameId)) return { ok: false, error: '此遊戲尚未開放下載。' };
@@ -462,15 +579,35 @@ function registerLauncherIpc() {
     if (!ALLOWED_GAME_IDS.has(gameId)) return { ok: false, error: '遊戲代號不正確。' };
     return assetStore.cancelInstall(gameId);
   }));
+  ipcMain.handle('launcher:uninstall-game', guarded(async (_event, gameId) => {
+    if (!authenticated || authService.previewMode) return { ok: false, error: '請先以正式帳號登入。' };
+    if (!ALLOWED_GAME_IDS.has(gameId)) return { ok: false, error: '遊戲代號不正確。' };
+    if (assetStore.activeInstall) return { ok: false, error: '請先暫停目前下載，再解除安裝。' };
+    if (gameLaunchPromises.has(gameId)) return { ok: false, error: '遊戲正在啟動，請稍後再解除安裝。' };
+    const openGameWindow = gameWindows.get(gameId);
+    if (openGameWindow && !openGameWindow.isDestroyed()) {
+      return { ok: false, error: '請先在遊戲中存檔並關閉該遊戲，再解除安裝。' };
+    }
+    await closeGameWindow(gameId);
+    const result = await assetStore.uninstallGame(gameId);
+    runtimeAssetCache.clearGame(gameId);
+    return { ...result, state: await composeState() };
+  }));
   ipcMain.handle('launcher:launch-game', guarded(async (_event, gameId) => launchGame(gameId)));
   ipcMain.handle('launcher:choose-cache-location', guarded(async () => {
-    if (assetStore.activeInstall) return { ok: false, error: '請先暫停目前下載。' };
+    if (assetStore.activeInstall || assetStore.activeRemoval) {
+      return { ok: false, error: '請先等待目前的下載或移除工作完成。' };
+    }
+    if (gameLaunchPromises.size > 0) return { ok: false, error: '遊戲正在啟動，請稍後再變更下載位置。' };
     const result = await dialog.showOpenDialog(mainWindow, {
       title: '選擇遊戲下載位置',
       defaultPath: assetStore.cacheRoot,
       properties: ['openDirectory', 'createDirectory', 'promptToCreate']
     });
     if (result.canceled || !result.filePaths[0]) return { ok: true, canceled: true, state: await composeState() };
+    if (assetStore.activeInstall || assetStore.activeRemoval || gameLaunchPromises.size > 0) {
+      return { ok: false, error: '啟動、下載或移除狀態已變更，請稍後再變更下載位置。' };
+    }
     await closeGameWindows();
     await Promise.allSettled([...gameSessionPromises.values()]);
     await Promise.allSettled([...runtimeRepairChecks.values()]);
@@ -520,6 +657,11 @@ function isAllowedGameNavigation(targetUrl) {
 
 function hardenGameWindow(window) {
   window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
+  window.webContents.on('before-input-event', (event, input) => {
+    if (input.type !== 'keyDown' || input.key !== 'F11' || input.alt || input.control || input.meta) return;
+    event.preventDefault();
+    window.setFullScreen(!window.isFullScreen());
+  });
   for (const eventName of ['will-navigate', 'will-frame-navigate', 'will-redirect']) {
     window.webContents.on(eventName, (event, legacyUrl) => {
       const targetUrl = event.url ?? legacyUrl;
@@ -528,25 +670,55 @@ function hardenGameWindow(window) {
   }
 }
 
-async function launchGame(gameId) {
+function focusGameWindow(window) {
+  if (window.isMinimized()) window.restore();
+  const shouldUseFullscreen = authService.getPreferences().gameDisplayMode === 'fullscreen';
+  if (window.isFullScreen() !== shouldUseFullscreen) window.setFullScreen(shouldUseFullscreen);
+  window.show();
+  window.focus();
+  if (authService.getPreferences().minimizeToTrayOnGameLaunch) hideLauncherToTray();
+  return { ok: true, focused: true };
+}
+
+function launchGame(gameId) {
   if (!authenticated || authService.previewMode) return { ok: false, error: '請先以正式帳號登入。' };
   if (!ALLOWED_GAME_IDS.has(gameId)) return { ok: false, error: '此遊戲仍在製作中。' };
   if (!assetStore.canLaunch(gameId)) return { ok: false, error: '請先完成遊戲下載或修復。' };
+  const activeLaunch = gameLaunchPromises.get(gameId);
+  if (activeLaunch) return activeLaunch;
+  if (gameLaunchPromises.size > 0) return { ok: false, error: '另一款遊戲正在啟動，請稍候片刻。' };
   const existing = gameWindows.get(gameId);
-  if (existing && !existing.isDestroyed()) {
-    existing.show();
-    existing.focus();
-    return { ok: true, focused: true };
-  }
+  if (existing && !existing.isDestroyed()) return focusGameWindow(existing);
+  const launchPromise = createGameWindow(gameId);
+  gameLaunchPromises.set(gameId, launchPromise);
+  return launchPromise.finally(() => {
+    if (gameLaunchPromises.get(gameId) === launchPromise) gameLaunchPromises.delete(gameId);
+  });
+}
+
+async function createGameWindow(gameId) {
+  const launchStartedAt = Date.now();
   const targetSession = await prepareGameSession(gameId);
+  if (!authenticated || authService.previewMode) return { ok: false, error: '請先以正式帳號登入。' };
+  if (!assetStore.canLaunch(gameId)) return { ok: false, error: '遊戲檔案狀態已變更，請重新檢查或下載。' };
+  const existing = gameWindows.get(gameId);
+  if (existing && !existing.isDestroyed()) return focusGameWindow(existing);
+  const shouldUseFullscreen = authService.getPreferences().gameDisplayMode === 'fullscreen';
   const window = new BrowserWindow({
     width: 1440,
     height: 900,
     minWidth: 960,
     minHeight: 640,
-    show: true,
+    show: false,
+    fullscreen: shouldUseFullscreen,
     autoHideMenuBar: true,
     backgroundColor: '#071b27',
+    titleBarStyle: 'hidden',
+    titleBarOverlay: {
+      color: '#071b27',
+      symbolColor: '#d8e3e6',
+      height: 38
+    },
     title: GAME_CONFIG[gameId].title,
     icon: applicationIconPath(),
     webPreferences: {
@@ -559,6 +731,7 @@ async function launchGame(gameId) {
       allowRunningInsecureContent: false
     }
   });
+  window.webContents.setAudioMuted(true);
   gameWindows.set(gameId, window);
   hardenGameWindow(window);
   window.on('closed', () => {
@@ -566,16 +739,37 @@ async function launchGame(gameId) {
     gameWindows.delete(gameId);
     runtimeAssetCache.clearGame(gameId);
     if (gameWindows.size === 0 && authenticated) authService.setPresence('desktop-launcher').catch(() => {});
+    restoreLauncherAfterLastGame();
   });
   window.webContents.on('render-process-gone', () => {
     if (gameWindows.get(gameId) !== window) return;
     gameWindows.delete(gameId);
     runtimeAssetCache.clearGame(gameId);
+    if (!window.isDestroyed()) window.destroy();
     if (gameWindows.size === 0 && authenticated) authService.setPresence('desktop-launcher').catch(() => {});
+    restoreLauncherAfterLastGame();
   });
   try {
     await authService.setPresence(`desktop-${gameId}`);
     await window.loadURL(`${REMOTE_ORIGIN}${GAME_CONFIG[gameId].entry}?desktop=1`);
+    if (gameWindows.get(gameId) !== window || window.isDestroyed() || !authenticated) {
+      if (!window.isDestroyed()) window.destroy();
+      restoreLauncherAfterLastGame();
+      return { ok: false, error: '遊戲啟動已取消。' };
+    }
+    const prefersReducedMotion = systemPreferences.getAnimationSettings().prefersReducedMotion;
+    const presentationDuration = prefersReducedMotion ? 80 : GAME_LAUNCH_PRESENTATION_MS;
+    const presentationRemaining = Math.max(0, presentationDuration - (Date.now() - launchStartedAt));
+    if (presentationRemaining > 0) await new Promise((resolve) => setTimeout(resolve, presentationRemaining));
+    if (gameWindows.get(gameId) !== window || window.isDestroyed() || !authenticated) {
+      if (!window.isDestroyed()) window.destroy();
+      restoreLauncherAfterLastGame();
+      return { ok: false, error: '遊戲啟動已取消。' };
+    }
+    window.show();
+    window.focus();
+    window.webContents.setAudioMuted(false);
+    if (authService.getPreferences().minimizeToTrayOnGameLaunch) hideLauncherToTray();
     return { ok: true };
   } catch (error) {
     const failedWindowWasCurrent = gameWindows.get(gameId) === window;
@@ -587,6 +781,7 @@ async function launchGame(gameId) {
     if (failedWindowWasCurrent && gameWindows.size === 0 && authenticated) {
       await authService.setPresence('desktop-launcher').catch(() => {});
     }
+    restoreLauncherAfterLastGame();
     return { ok: false, error: publicError(error, '無法連線到遊戲伺服器，請稍後重試。') };
   }
 }
@@ -600,6 +795,32 @@ async function closeGameWindows() {
   await Promise.all(pending);
   for (const window of gameWindows.values()) if (!window.isDestroyed()) window.close();
   gameWindows.clear();
+  restoreLauncherAfterLastGame();
+}
+
+async function closeGameWindow(gameId) {
+  await gameSessionPromises.get(gameId)?.catch(() => {});
+  await runtimeRepairChecks.get(gameId)?.catch(() => {});
+  const target = gameWindows.get(gameId);
+  if (target && !target.isDestroyed()) {
+    await new Promise((resolve) => {
+      let settled = false;
+      const done = () => {
+        if (settled) return;
+        settled = true;
+        resolve();
+      };
+      target.once('closed', done);
+      target.close();
+      setTimeout(() => {
+        if (!target.isDestroyed()) target.destroy();
+        done();
+      }, 1500).unref();
+    });
+  }
+  gameWindows.delete(gameId);
+  runtimeAssetCache.clearGame(gameId);
+  restoreLauncherAfterLastGame();
 }
 
 async function clearGameSessionStorage() {
@@ -619,6 +840,12 @@ function createMainWindow() {
     minHeight: 640,
     show: !SMOKE_MODE && !SCREENSHOT_PATH,
     autoHideMenuBar: true,
+    titleBarStyle: 'hidden',
+    titleBarOverlay: {
+      color: '#04111b',
+      symbolColor: '#c1cdd1',
+      height: 38
+    },
     backgroundColor: '#061520',
     title: 'ONE PIECE TABLETOP SERIES',
     icon: applicationIconPath(),
@@ -647,11 +874,178 @@ async function runVisualOrSmokeCapture() {
     finishSmoke({ stage: 'services', error: error.message }, 1);
     return;
   }
+  await mainWindow.webContents.executeJavaScript(`new Promise((resolve) => {
+    const deadline = Date.now() + 15000;
+    const check = () => {
+      if (document.body.dataset.stage === 'app' && document.querySelectorAll('.game-rail-item').length === 3) return resolve();
+      if (Date.now() >= deadline) return resolve();
+      setTimeout(check, 50);
+    };
+    check();
+  })`, true).catch(() => {});
+  let traySmoke = null;
+  const boxMotionViews = new Set(['box-crack', 'box-mid', 'box-open']);
+  if (SCREENSHOT_PATH && (SMOKE_MODE || !app.isPackaged)) {
+    mainWindow.show();
+    if (['game-card', 'game-board', 'game-chess'].includes(SCREENSHOT_VIEW)) {
+      await mainWindow.webContents.executeJavaScript(`selectGame(${JSON.stringify(SCREENSHOT_VIEW.replace('game-', ''))})`, true).catch(() => {});
+    } else if (boxMotionViews.has(SCREENSHOT_VIEW)) {
+      await mainWindow.webContents.executeJavaScript(`(async () => {
+        selectGame('board');
+        const feature = document.querySelector('#gameFeature');
+        feature?.classList.add('is-launch-opening');
+        await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+        const seekMs = ${JSON.stringify(SCREENSHOT_VIEW)} === 'box-crack' ? 400 : ${JSON.stringify(SCREENSHOT_VIEW)} === 'box-mid' ? 700 : 1250;
+        for (const animation of feature?.getAnimations({ subtree: true }) || []) {
+          const name = animation.animationName || '';
+          if (name.startsWith('box') || name === 'featureBoxLidOpen' || name === 'featureAmbientFade' || name === 'featureBoxShadowOpen') {
+            animation.currentTime = seekMs;
+            animation.pause();
+          }
+        }
+      })()`, true).catch(() => {});
+    } else if (SCREENSHOT_VIEW === 'downloads') {
+      await mainWindow.webContents.executeJavaScript(`switchPanel('downloads')`, true).catch(() => {});
+    } else if (SCREENSHOT_VIEW === 'uninstall') {
+      await mainWindow.webContents.executeJavaScript(`
+        snapshot.games.board = { ...(snapshot.games.board || {}), status: 'installed', message: '已安裝，可以遊玩', hasInstalled: true, removable: true, installedVersion: 'qa-installed' };
+        renderAll();
+        switchPanel('downloads');
+        openUninstallDialog('board');
+      `, true).catch(() => {});
+    } else if (['settings', 'settings-on', 'settings-update-current'].includes(SCREENSHOT_VIEW)) {
+      await mainWindow.webContents.executeJavaScript(`(async () => {
+        if (${JSON.stringify(SCREENSHOT_VIEW)} === 'settings-on') {
+          openSettingsDialog();
+          minimizeToTrayToggle.checked = true;
+          await saveSettings();
+        }
+        renderAll();
+        if (!settingsDialog.open) openSettingsDialog();
+        if (${JSON.stringify(SCREENSHOT_VIEW)} === 'settings-update-current') await runLauncherUpdateAction();
+      })()`, true).catch(() => {});
+    } else if (SCREENSHOT_VIEW === 'cursor-click') {
+      await mainWindow.webContents.executeJavaScript(`renderAll()`, true).catch(() => {});
+    }
+  }
+  if (SMOKE_MODE && SCREENSHOT_VIEW === 'tray-cycle') {
+    mainWindow.show();
+    const hideResult = hideLauncherToTray();
+    traySmoke = {
+      hideResult,
+      hidden: !mainWindow.isVisible(),
+      trayCreated: Boolean(tray && !tray.isDestroyed())
+    };
+    restoreLauncherFromTray();
+    traySmoke.restored = mainWindow.isVisible();
+    traySmoke.trayDestroyedAfterRestore = !tray;
+  }
+  if (SCREENSHOT_PATH) {
+    const captureDelay = boxMotionViews.has(SCREENSHOT_VIEW) ? 260 : SCREENSHOT_VIEW === 'cursor-click' ? 90 : 320;
+    await new Promise((resolve) => setTimeout(resolve, captureDelay));
+  }
+  await mainWindow.webContents.executeJavaScript(`Promise.all([...document.images].map((image) => image.complete ? Promise.resolve() : image.decode().catch(() => {}))).then(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))))`, true).catch(() => {});
+  if (SCREENSHOT_VIEW === 'cursor-click') {
+    await mainWindow.webContents.executeJavaScript(`(() => {
+      const rect = primaryAction.getBoundingClientRect();
+      primaryAction.dispatchEvent(new PointerEvent('pointerdown', {
+        bubbles: true,
+        isPrimary: true,
+        pointerType: 'mouse',
+        button: 0,
+        clientX: rect.left + rect.width / 2,
+        clientY: rect.top + rect.height / 2
+      }));
+    })()`, true).catch(() => {});
+    await new Promise((resolve) => setTimeout(resolve, 70));
+  }
   const dom = await mainWindow.webContents.executeJavaScript(`({
     title: document.title,
     stage: document.body.dataset.stage,
     games: document.querySelectorAll('.game-rail-item').length,
     cover: document.querySelector('#featureCover')?.getAttribute('src') || '',
+    coverNaturalWidth: document.querySelector('#featureCover')?.naturalWidth || 0,
+    frameNaturalWidth: document.querySelector('#featureFrame')?.naturalWidth || 0,
+    boxWidth: Math.round(document.querySelector('.feature-box-art')?.getBoundingClientRect().width || 0),
+    boxHeight: Math.round(document.querySelector('.feature-box-art')?.getBoundingClientRect().height || 0),
+    coverStyle: (() => { const node = document.querySelector('#featureCover'); const style = node && getComputedStyle(node); return style ? { display: style.display, visibility: style.visibility, opacity: style.opacity, zIndex: style.zIndex } : null; })(),
+    frameStyle: (() => { const node = document.querySelector('#featureFrame'); const style = node && getComputedStyle(node); return style ? { display: style.display, visibility: style.visibility, opacity: style.opacity, zIndex: style.zIndex } : null; })(),
+    loadedBoxCovers: [...document.querySelectorAll('.game-box-cover')].filter((image) => image.getAttribute('src') && image.naturalWidth > 0).length,
+    loadedBoxFrames: [...document.querySelectorAll('.game-box-frame')].filter((image) => image.getAttribute('src') && image.naturalWidth > 0).length,
+    brokenImages: [...document.images].filter((image) => image.getAttribute('src') && image.complete && image.naturalWidth === 0).map((image) => image.getAttribute('src')),
+    downloadsVisible: !document.querySelector('#downloadsPanel')?.hidden,
+    downloadRows: document.querySelectorAll('.download-row').length,
+    uninstallOpen: Boolean(document.querySelector('#uninstallDialog')?.open),
+    settingsOpen: Boolean(document.querySelector('#settingsDialog')?.open),
+    minimizeToTrayChecked: Boolean(document.querySelector('#minimizeToTrayToggle')?.checked),
+    settingsDisplayModeValues: [...document.querySelectorAll('input[name="gameDisplayMode"]')].map((input) => input.value),
+    settingsCheckedDisplayModes: [...document.querySelectorAll('input[name="gameDisplayMode"]:checked')].map((input) => input.value),
+    settingsHorizontalOverflow: (() => { const node = document.querySelector('#settingsDialog'); return Boolean(node && node.scrollWidth > node.clientWidth + 1); })(),
+    launcherUpdateStatus: document.querySelector('#launcherUpdateCard')?.dataset.status || '',
+    launcherUpdateActionText: document.querySelector('#launcherUpdateAction')?.textContent?.trim() || '',
+    launcherCurrentVersionText: document.querySelector('#launcherCurrentVersion')?.textContent?.trim() || '',
+    mediaState: document.querySelector('#gameFeature')?.dataset.mediaState || '',
+    videoOpacity: Number.parseFloat(getComputedStyle(document.querySelector('#featureVideo')).opacity || '0'),
+    artOpacity: Number.parseFloat(getComputedStyle(document.querySelector('#featureArt')).opacity || '0'),
+    launchOpening: document.querySelector('#gameFeature')?.classList.contains('is-launch-opening') || false,
+    lidTransform: getComputedStyle(document.querySelector('.feature-box-lid')).transform,
+    lidRotateYDeg: (() => { const transform = getComputedStyle(document.querySelector('.feature-box-lid')).transform; if (!transform || transform === 'none') return 0; const matrix = new DOMMatrixReadOnly(transform); return Math.abs(Math.atan2(matrix.m13, matrix.m11) * 180 / Math.PI); })(),
+    lidAnimation: getComputedStyle(document.querySelector('.feature-box-lid')).animationName,
+    lidOpacity: Number.parseFloat(getComputedStyle(document.querySelector('.feature-box-lid')).opacity || '0'),
+    lidOrigin: (() => { const node = document.querySelector('.feature-box-lid'); const style = getComputedStyle(node); const parts = style.transformOrigin.split(' ').map(Number.parseFloat); return { xRatio: node.offsetWidth ? parts[0] / node.offsetWidth : 1, yRatio: node.offsetHeight ? parts[1] / node.offsetHeight : 0 }; })(),
+    lidRectWidth: Math.round(document.querySelector('.feature-box-lid')?.getBoundingClientRect().width || 0),
+    baseRectWidth: Math.round(document.querySelector('#featureFrame')?.getBoundingClientRect().width || 0),
+    lidFrontBackface: getComputedStyle(document.querySelector('.feature-box-lid-front')).backfaceVisibility,
+    lidBackBackface: getComputedStyle(document.querySelector('.feature-box-lid-back')).backfaceVisibility,
+    lidFrontClip: getComputedStyle(document.querySelector('.feature-box-lid-front')).clipPath,
+    lidBackClip: getComputedStyle(document.querySelector('.feature-box-lid-back')).clipPath,
+    lidPanelNaturalWidth: document.querySelector('#featureCover')?.naturalWidth || 0,
+    fixedShellNaturalWidth: document.querySelector('#featureFrame')?.naturalWidth || 0,
+    trayOpacity: Number.parseFloat(getComputedStyle(document.querySelector('.feature-box-tray')).opacity || '0'),
+    trayFilter: getComputedStyle(document.querySelector('.feature-box-tray')).filter,
+    trayZ: Number.parseInt(getComputedStyle(document.querySelector('.feature-box-tray')).zIndex || '0', 10),
+    trayImageNaturalWidth: document.querySelector('.feature-box-tray-image')?.naturalWidth || 0,
+    revealFramesLoaded: [...document.querySelectorAll('.feature-box-reveal-frame')].filter((image) => image.complete && image.naturalWidth > 0).length,
+    visibleRevealFrames: [...document.querySelectorAll('.feature-box-reveal-frame')].filter((image) => Number.parseFloat(getComputedStyle(image).opacity || '0') > .01).length,
+    visibleRevealFrame: [...document.querySelectorAll('.feature-box-reveal-frame')].find((image) => Number.parseFloat(getComputedStyle(image).opacity || '0') > .01)?.className || '',
+    visibleRevealOpacity: (() => { const node = [...document.querySelectorAll('.feature-box-reveal-frame')].find((image) => Number.parseFloat(getComputedStyle(image).opacity || '0') > .01); return node ? Number.parseFloat(getComputedStyle(node).opacity || '0') : 0; })(),
+    revealFrameAnimations: [...document.querySelectorAll('.feature-box-reveal-frame')].map((image) => getComputedStyle(image).animationName),
+    revealOverflow: getComputedStyle(document.querySelector('.feature-box-reveal')).overflow,
+    revealClip: getComputedStyle(document.querySelector('.feature-box-reveal')).clipPath,
+    revealMask: getComputedStyle(document.querySelector('.feature-box-reveal')).webkitMaskImage || getComputedStyle(document.querySelector('.feature-box-reveal')).maskImage,
+    visibleRevealMask: (() => { const node = [...document.querySelectorAll('.feature-box-reveal-frame')].find((image) => Number.parseFloat(getComputedStyle(image).opacity || '0') > .01); return node ? (getComputedStyle(node).webkitMaskImage || getComputedStyle(node).maskImage) : ''; })(),
+    visibleRevealRect: (() => { const node = [...document.querySelectorAll('.feature-box-reveal-frame')].find((image) => Number.parseFloat(getComputedStyle(image).opacity || '0') > .01); const rect = node?.getBoundingClientRect(); return rect ? { left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom, width: rect.width, height: rect.height } : null; })(),
+    trayClip: getComputedStyle(document.querySelector('.feature-box-tray')).clipPath,
+    innerCoreOpacity: Number.parseFloat(getComputedStyle(document.querySelector('.feature-box-inner-core-svg')).opacity || '0'),
+    freeEdgeOpacity: Number.parseFloat(getComputedStyle(document.querySelector('.feature-box-free-edge-svg')).opacity || '0'),
+    freeEdgePath: document.querySelector('#featureEdgeCore')?.getAttribute('d') || '',
+    freeEdgeLineSegments: ((document.querySelector('#featureEdgeCore')?.getAttribute('d') || '').match(/\\bL\\b/g) || []).length,
+    freeEdgeHasClosedLeft: /\\bZ\\b/i.test(document.querySelector('#featureEdgeCore')?.getAttribute('d') || ''),
+    revealZ: Number.parseInt(getComputedStyle(document.querySelector('.feature-box-reveal')).zIndex || '0', 10),
+    fixedShellZ: Number.parseInt(getComputedStyle(document.querySelector('.game-box-fixed-shell')).zIndex || '0', 10),
+    innerCoreZ: Number.parseInt(getComputedStyle(document.querySelector('.feature-box-inner-core-svg')).zIndex || '0', 10),
+    freeEdgeZ: Number.parseInt(getComputedStyle(document.querySelector('.feature-box-free-edge-svg')).zIndex || '0', 10),
+    lidZ: Number.parseInt(getComputedStyle(document.querySelector('.feature-box-lid')).zIndex || '0', 10),
+    boxIsolation: getComputedStyle(document.querySelector('.feature-box-art')).isolation,
+    allBoxLayersDirectChildren: ['.feature-box-tray', '.feature-box-reveal', '.feature-box-inner-core-svg', '.game-box-fixed-shell', '.feature-box-free-edge-svg', '.feature-box-lid'].every((selector) => document.querySelector(selector)?.parentElement?.classList.contains('feature-box-art')),
+    legacyLightNodes: document.querySelectorAll('.feature-box-right-seam, .feature-box-player-wash').length,
+    leftLeakNodes: document.querySelectorAll('.feature-box-left-seam, .feature-box-edge-leak--left').length,
+    innerCoreCenter: (() => { const node = document.querySelector('#featureInnerCore'); const box = document.querySelector('.feature-box-art')?.getBoundingClientRect(); const rect = node?.getBoundingClientRect(); return box && rect ? { xRatio: (rect.left + rect.width / 2 - box.left) / box.width, yRatio: (rect.top + rect.height / 2 - box.top) / box.height } : null; })(),
+    forbiddenForwardRayNodes: document.querySelectorAll('.feature-box-forward-ray, .feature-box-forward-rays').length,
+    bodyCursor: (() => { const hadPressed = document.body.classList.contains('is-cursor-pressed'); document.body.classList.remove('is-cursor-pressed'); const cursor = getComputedStyle(document.body).cursor; document.body.classList.toggle('is-cursor-pressed', hadPressed); return cursor; })(),
+    pointerCursor: (() => { const hadPressed = document.body.classList.contains('is-cursor-pressed'); document.body.classList.remove('is-cursor-pressed'); const cursor = getComputedStyle(document.querySelector('#detailClose')).cursor; document.body.classList.toggle('is-cursor-pressed', hadPressed); return cursor; })(),
+    settingsOptionCursor: (() => { const hadPressed = document.body.classList.contains('is-cursor-pressed'); document.body.classList.remove('is-cursor-pressed'); const cursor = getComputedStyle(document.querySelector('.settings-option')).cursor; document.body.classList.toggle('is-cursor-pressed', hadPressed); return cursor; })(),
+    checkboxCursor: getComputedStyle(document.querySelector('#minimizeToTrayToggle')).cursor,
+    pressedCursor: (() => { const hadPressed = document.body.classList.contains('is-cursor-pressed'); document.body.classList.add('is-cursor-pressed'); const cursor = getComputedStyle(document.querySelector('#detailClose')).cursor; document.body.classList.toggle('is-cursor-pressed', hadPressed); return cursor; })(),
+    disabledCursor: (() => { const node = document.createElement('button'); node.disabled = true; document.body.appendChild(node); const cursor = getComputedStyle(node).cursor; node.remove(); return cursor; })(),
+    textCursor: getComputedStyle(document.querySelector('#usernameInput')).cursor,
+    cursorPulseCount: document.querySelectorAll('.launcher-cursor-click-pulse').length,
+    cursorPulseAriaHidden: document.querySelector('.launcher-cursor-click-pulse')?.getAttribute('aria-hidden') || '',
+    cursorPulsePointerEvents: (() => { const node = document.querySelector('.launcher-cursor-click-pulse'); return node ? getComputedStyle(node).pointerEvents : ''; })(),
+    cursorPulseAnimationName: (() => { const node = document.querySelector('.launcher-cursor-click-pulse'); return node ? getComputedStyle(node).animationName : ''; })(),
+    cursorPulseAnimationDuration: (() => { const node = document.querySelector('.launcher-cursor-click-pulse'); return node ? getComputedStyle(node).animationDuration : ''; })(),
+    pressedActiveRulePresent: [...document.styleSheets].some((sheet) => [...sheet.cssRules].some((rule) => rule.cssText?.includes('launcher_cursor_logpose_pressed_v1.png') && rule.cssText.includes(':active'))),
+    boxRect: (() => { const rect = document.querySelector('.feature-box-art')?.getBoundingClientRect(); return rect ? { left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom, width: rect.width, height: rect.height } : null; })(),
     hasApi: Boolean(window.onePieceDesktop)
   })`, true).catch((error) => ({ error: error.message }));
   let protocolSmoke = null;
@@ -666,6 +1060,22 @@ async function runVisualOrSmokeCapture() {
       const suffix = await targetSession.fetch(probeUrl, { headers: { Range: 'bytes=-257' } });
       const suffixBytes = (await suffix.arrayBuffer()).byteLength;
       const invalid = await targetSession.fetch(probeUrl, { headers: { Range: 'bytes=99999999999-' } });
+      const cursorAssets = [];
+      for (const fileName of [
+        'launcher_cursor_logpose_default_v1.png',
+        'launcher_cursor_logpose_pointer_v1.png',
+        'launcher_cursor_logpose_pressed_v1.png'
+      ]) {
+        const response = await targetSession.fetch(`${LAUNCHER_SCHEME}://launcher/images/desktop_launcher/${fileName}`);
+        const bytes = Buffer.from(await response.arrayBuffer());
+        cursorAssets.push({
+          fileName,
+          status: response.status,
+          contentType: response.headers.get('content-type'),
+          bytes: bytes.length,
+          png: bytes.length >= 24 && bytes.subarray(1, 4).toString('ascii') === 'PNG' && bytes.readUInt32BE(16) === 40 && bytes.readUInt32BE(20) === 40
+        });
+      }
       protocolSmoke = {
         headStatus: head.status,
         headLength: head.headers.get('content-length'),
@@ -675,10 +1085,12 @@ async function runVisualOrSmokeCapture() {
         suffixStatus: suffix.status,
         suffixBytes,
         invalidStatus: invalid.status,
-        invalidRange: invalid.headers.get('content-range')
+        invalidRange: invalid.headers.get('content-range'),
+        cursorAssets
       };
       protocolSmoke.ok = head.status === 200 && Number(protocolSmoke.headLength) > 1024 && partial.status === 206 &&
-        partialBytes === 1024 && suffix.status === 206 && suffixBytes === 257 && invalid.status === 416;
+        partialBytes === 1024 && suffix.status === 206 && suffixBytes === 257 && invalid.status === 416 &&
+        cursorAssets.every((asset) => asset.status === 200 && asset.contentType === 'image/png' && asset.png);
     } catch (error) {
       protocolSmoke = { ok: false, error: error.message };
     }
@@ -721,14 +1133,55 @@ async function runVisualOrSmokeCapture() {
       }
     }
   }
+  if (SCREENSHOT_PATH && SCREENSHOT_VIEW === 'cursor-click') {
+    await mainWindow.webContents.executeJavaScript(`(() => {
+      const rect = primaryAction.getBoundingClientRect();
+      primaryAction.dispatchEvent(new PointerEvent('pointerdown', {
+        bubbles: true,
+        isPrimary: true,
+        pointerType: 'mouse',
+        button: 0,
+        clientX: rect.left + rect.width / 2,
+        clientY: rect.top + rect.height / 2
+      }));
+    })()`, true).catch(() => {});
+    await new Promise((resolve) => setTimeout(resolve, 90));
+  }
   if (SCREENSHOT_PATH) {
     const image = await mainWindow.webContents.capturePage();
     await fsp.mkdir(path.dirname(path.resolve(SCREENSHOT_PATH)), { recursive: true });
     await fsp.writeFile(path.resolve(SCREENSHOT_PATH), image.toPNG());
   }
+  let cursorPulseCleanupReady = true;
+  if (SMOKE_MODE && SCREENSHOT_VIEW === 'cursor-click') {
+    await mainWindow.webContents.executeJavaScript(`document.dispatchEvent(new PointerEvent('pointerup', { bubbles: true, isPrimary: true, pointerType: 'mouse', button: 0 }))`, true).catch(() => {});
+    await new Promise((resolve) => setTimeout(resolve, 450));
+    cursorPulseCleanupReady = await mainWindow.webContents.executeJavaScript(`document.querySelectorAll('.launcher-cursor-click-pulse').length === 0 && !document.body.classList.contains('is-cursor-pressed')`, true).catch(() => false);
+  }
+  const viewReady = SCREENSHOT_VIEW === 'downloads'
+    ? dom.downloadsVisible && dom.downloadRows === 3
+    : SCREENSHOT_VIEW === 'cursor-click'
+      ? dom.cursorPulseCount === 1 && dom.cursorPulseAriaHidden === 'true' && dom.cursorPulsePointerEvents === 'none' && ['launcherCursorClickPulse', 'launcherCursorClickFade'].includes(dom.cursorPulseAnimationName) && ['0.32s', '0.12s'].includes(dom.cursorPulseAnimationDuration) && cursorPulseCleanupReady
+    : SCREENSHOT_VIEW === 'uninstall'
+      ? dom.downloadsVisible && dom.downloadRows === 3 && dom.uninstallOpen
+      : ['settings', 'settings-on', 'settings-update-current'].includes(SCREENSHOT_VIEW)
+        ? dom.settingsOpen && dom.settingsDisplayModeValues.length === 2 && dom.settingsDisplayModeValues.includes('borderless') && dom.settingsDisplayModeValues.includes('fullscreen') && dom.settingsCheckedDisplayModes.length === 1 && !dom.settingsHorizontalOverflow && (SCREENSHOT_VIEW !== 'settings-on' || dom.minimizeToTrayChecked) && (SCREENSHOT_VIEW !== 'settings-update-current' || (dom.launcherUpdateStatus === 'current' && dom.launcherUpdateActionText === '再次檢查' && dom.launcherCurrentVersionText.includes(app.getVersion())))
+        : SCREENSHOT_VIEW === 'box-crack'
+          ? dom.launchOpening && dom.videoOpacity === 0 && dom.artOpacity === 0 && dom.lidAnimation === 'featureBoxLidOpen' && dom.lidOrigin.xRatio <= .06 && dom.lidRotateYDeg >= 4 && dom.lidRotateYDeg <= 8 && dom.lidRectWidth > dom.baseRectWidth * .97 && dom.lidFrontClip.startsWith('polygon') && dom.lidBackClip.startsWith('polygon') && dom.lidPanelNaturalWidth === 1086 && dom.fixedShellNaturalWidth === 1086 && dom.trayImageNaturalWidth === 1086 && dom.revealFramesLoaded === 4 && dom.visibleRevealFrames === 1 && dom.visibleRevealFrame.includes('feature-box-reveal-frame--01') && dom.visibleRevealOpacity > .26 && dom.visibleRevealOpacity < .32 && dom.innerCoreOpacity > .08 && dom.innerCoreOpacity < .12 && dom.freeEdgeOpacity > .26 && dom.freeEdgeOpacity < .31 && dom.visibleRevealRect?.width <= dom.boxRect.width * 1.08 && dom.visibleRevealRect?.height <= dom.boxRect.height * 1.08 && dom.revealOverflow === 'visible' && dom.revealClip === 'none' && dom.revealMask === 'none' && dom.visibleRevealMask.includes('linear-gradient') && dom.freeEdgeLineSegments === 3 && !dom.freeEdgeHasClosedLeft && dom.legacyLightNodes === 0 && dom.leftLeakNodes === 0 && dom.trayZ < dom.fixedShellZ && dom.fixedShellZ < dom.revealZ && dom.revealZ < dom.innerCoreZ && dom.innerCoreZ < dom.freeEdgeZ && dom.freeEdgeZ < dom.lidZ && dom.boxIsolation === 'isolate' && dom.allBoxLayersDirectChildren && dom.innerCoreCenter?.xRatio >= .4 && dom.innerCoreCenter.xRatio <= .48 && dom.innerCoreCenter?.yRatio >= .45 && dom.innerCoreCenter.yRatio <= .55 && dom.forbiddenForwardRayNodes === 0
+        : SCREENSHOT_VIEW === 'box-mid'
+          ? dom.launchOpening && dom.videoOpacity === 0 && dom.artOpacity === 0 && dom.lidAnimation === 'featureBoxLidOpen' && dom.lidTransform.startsWith('matrix3d') && dom.lidRotateYDeg >= 16 && dom.lidRotateYDeg <= 19 && dom.lidRectWidth > dom.baseRectWidth * .95 && dom.lidFrontClip.startsWith('polygon') && dom.lidBackClip.startsWith('polygon') && dom.revealFramesLoaded === 4 && dom.visibleRevealFrames === 1 && dom.visibleRevealFrame.includes('feature-box-reveal-frame--01') && dom.visibleRevealOpacity > .41 && dom.visibleRevealOpacity < .47 && dom.innerCoreOpacity > .22 && dom.innerCoreOpacity < .27 && dom.freeEdgeOpacity > .43 && dom.freeEdgeOpacity < .49 && dom.visibleRevealRect?.width <= dom.boxRect.width * 1.08 && dom.visibleRevealRect?.height <= dom.boxRect.height * 1.08 && dom.revealOverflow === 'visible' && dom.revealClip === 'none' && dom.revealMask === 'none' && dom.visibleRevealMask.includes('linear-gradient') && dom.freeEdgeLineSegments === 3 && !dom.freeEdgeHasClosedLeft && dom.legacyLightNodes === 0 && dom.leftLeakNodes === 0 && dom.trayZ < dom.fixedShellZ && dom.fixedShellZ < dom.revealZ && dom.revealZ < dom.innerCoreZ && dom.innerCoreZ < dom.freeEdgeZ && dom.freeEdgeZ < dom.lidZ && dom.boxIsolation === 'isolate' && dom.allBoxLayersDirectChildren && dom.innerCoreCenter?.xRatio >= .4 && dom.innerCoreCenter.xRatio <= .48 && dom.innerCoreCenter?.yRatio >= .45 && dom.innerCoreCenter.yRatio <= .55 && dom.forbiddenForwardRayNodes === 0
+        : SCREENSHOT_VIEW === 'box-open'
+          ? dom.launchOpening && dom.videoOpacity === 0 && dom.artOpacity === 0 && dom.lidAnimation === 'featureBoxLidOpen' && dom.lidTransform.startsWith('matrix3d') && dom.lidOrigin.xRatio <= .06 && dom.lidOrigin.yRatio >= .45 && dom.lidOrigin.yRatio <= .55 && dom.lidRotateYDeg >= 18 && dom.lidRotateYDeg <= 24 && dom.lidRectWidth > dom.baseRectWidth * .9 && dom.lidFrontClip.startsWith('polygon') && dom.lidBackClip.startsWith('polygon') && dom.trayOpacity >= .95 && dom.revealFramesLoaded === 4 && dom.visibleRevealFrames === 1 && dom.visibleRevealFrame.includes('feature-box-reveal-frame--02') && dom.visibleRevealOpacity > .64 && dom.visibleRevealOpacity < .7 && dom.revealFrameAnimations.every((name) => name.startsWith('boxRevealFrame')) && dom.innerCoreOpacity > .39 && dom.innerCoreOpacity < .46 && dom.freeEdgeOpacity > .64 && dom.freeEdgeOpacity < .72 && dom.revealOverflow === 'visible' && dom.revealClip === 'none' && dom.revealMask === 'none' && dom.visibleRevealMask.includes('linear-gradient') && dom.visibleRevealRect?.top >= dom.boxRect.top - dom.boxRect.height * .15 && dom.visibleRevealRect?.right <= dom.boxRect.right + dom.boxRect.width * .15 && dom.visibleRevealRect?.bottom <= dom.boxRect.bottom + dom.boxRect.height * .15 && dom.visibleRevealRect?.width <= dom.boxRect.width * 1.26 && dom.visibleRevealRect?.height <= dom.boxRect.height * 1.26 && dom.freeEdgeLineSegments === 3 && !dom.freeEdgeHasClosedLeft && dom.legacyLightNodes === 0 && dom.leftLeakNodes === 0 && dom.trayZ < dom.fixedShellZ && dom.fixedShellZ < dom.revealZ && dom.revealZ < dom.innerCoreZ && dom.innerCoreZ < dom.freeEdgeZ && dom.freeEdgeZ < dom.lidZ && dom.boxIsolation === 'isolate' && dom.allBoxLayersDirectChildren && dom.innerCoreCenter?.xRatio >= .4 && dom.innerCoreCenter.xRatio <= .48 && dom.innerCoreCenter?.yRatio >= .45 && dom.innerCoreCenter.yRatio <= .55 && dom.lidPanelNaturalWidth === 1086 && dom.fixedShellNaturalWidth === 1086 && dom.lidFrontBackface === 'hidden' && dom.lidBackBackface === 'hidden' && dom.forbiddenForwardRayNodes === 0
+        : SCREENSHOT_VIEW === 'tray-cycle'
+          ? traySmoke?.hideResult === true && traySmoke.hidden === true && traySmoke.trayCreated === true && traySmoke.restored === true && traySmoke.trayDestroyedAfterRestore === true
+          : dom.boxWidth > 0 && dom.boxHeight > 0;
+  const mediaExclusive = dom.videoOpacity <= .001 || dom.artOpacity <= .001;
+  const cursorHas = (value, fileName) => value.includes(fileName) && /\b3\s+3\b/.test(value);
+  const cursorReady = cursorHas(dom.bodyCursor, 'launcher_cursor_logpose_default_v1.png') && cursorHas(dom.pointerCursor, 'launcher_cursor_logpose_pointer_v1.png') && cursorHas(dom.settingsOptionCursor, 'launcher_cursor_logpose_pointer_v1.png') && cursorHas(dom.checkboxCursor, 'launcher_cursor_logpose_pointer_v1.png') && cursorHas(dom.pressedCursor, 'launcher_cursor_logpose_pressed_v1.png') && cursorHas(dom.disabledCursor, 'launcher_cursor_logpose_default_v1.png') && dom.textCursor === 'text' && dom.pressedActiveRulePresent;
+  const visualReady = dom.stage === 'app' && dom.games === 3 && dom.loadedBoxCovers >= 7 && dom.loadedBoxFrames >= 7 && dom.brokenImages.length === 0 && mediaExclusive && cursorReady && viewReady;
   if (SMOKE_MODE) finishSmoke(
-    { stage: 'launcher-ready', dom, protocolSmoke, installedMediaSmoke, sessionDataPath: app.getPath('sessionData'), state: await composeState() },
-    dom.hasApi && dom.games === 3 && protocolSmoke?.ok === true && (!SMOKE_MEDIA_ASSETS || installedMediaSmoke?.ok === true) ? 0 : 1
+    { stage: 'launcher-ready', dom, protocolSmoke, installedMediaSmoke, traySmoke, sessionDataPath: app.getPath('sessionData'), state: await composeState() },
+    dom.hasApi && visualReady && protocolSmoke?.ok === true && (!SMOKE_MEDIA_ASSETS || installedMediaSmoke?.ok === true) ? 0 : 1
   );
   else if (SCREENSHOT_PATH) app.quit();
 }
@@ -742,12 +1195,24 @@ function finishSmoke(extra, code) {
     fs.writeFileSync(path.resolve(SMOKE_REPORT_PATH), report, 'utf8');
   }
   process.stdout.write(report, () => app.exit(code));
-  setTimeout(() => app.exit(code), 1200).unref();
+  setTimeout(() => app.exit(code), 1200);
 }
 
 async function initializeServices() {
   authService = new AuthService({ origin: REMOTE_ORIGIN, userDataPath: app.getPath('userData') });
   await authService.load();
+  const updateSession = session.fromPartition('onepiece-launcher-updates-v1');
+  hardenSession(updateSession);
+  launcherUpdateService = new LauncherUpdateService({
+    origin: REMOTE_ORIGIN,
+    allowedArtifactOrigins: [ASSET_ORIGIN],
+    currentVersion: app.getVersion(),
+    downloadRoot: path.join(app.getPath('userData'), 'launcher-updates'),
+    fetchImpl: (url, options) => updateSession.fetch(url, options),
+    quitImpl: () => app.quit()
+  });
+  launcherUpdateService.on('state', broadcastLauncherUpdate);
+  launcherUpdateService.on('progress', broadcastLauncherUpdate);
   const cacheRoot = authService.state.cacheRoot || await chooseDefaultCacheRoot();
   if (!authService.state.cacheRoot) await authService.setCacheRoot(cacheRoot);
   assetStore = new AssetStore({
@@ -767,6 +1232,7 @@ async function initializeServices() {
     await closeGameWindows();
     await clearGameSessionStorage();
     runtimeAssetCache.clearAll();
+    restoreLauncherFromTray();
     mainWindow?.webContents.send('launcher:session-kicked', {});
     await broadcastState();
   });
@@ -782,9 +1248,7 @@ if (!gotLock) {
       if (app.isReady()) createMainWindow();
       return;
     }
-    if (mainWindow.isMinimized()) mainWindow.restore();
-    mainWindow.show();
-    mainWindow.focus();
+    restoreLauncherFromTray();
   });
   app.whenReady().then(async () => {
     app.setAppUserModelId('com.onepiece.tabletop.desktop');
@@ -803,7 +1267,10 @@ if (!gotLock) {
 }
 
 app.on('before-quit', () => {
+  appQuitting = true;
+  destroyTray();
   runtimeAssetCache.clearAll();
+  launcherUpdateService?.dispose();
   authService?.close();
 });
 app.on('window-all-closed', () => app.quit());

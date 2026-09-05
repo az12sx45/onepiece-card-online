@@ -10,6 +10,11 @@ const { safeStorage } = require('electron');
 
 const STATE_SCHEMA = 1;
 const STATE_FILES = ['launcher-state-a.json', 'launcher-state-b.json'];
+const GAME_DISPLAY_MODES = new Set(['borderless', 'fullscreen']);
+const DEFAULT_PREFERENCES = Object.freeze({
+  minimizeToTrayOnGameLaunch: false,
+  gameDisplayMode: 'borderless'
+});
 
 function safeInteger(value, fallback = 0) {
   if (value === null || value === undefined || value === '') return fallback;
@@ -19,6 +24,14 @@ function safeInteger(value, fallback = 0) {
 
 function createDeviceId() {
   return `desktop-${crypto.randomBytes(16).toString('hex')}`;
+}
+
+function sanitizePreferences(value) {
+  const source = value && typeof value === 'object' ? value : {};
+  return {
+    minimizeToTrayOnGameLaunch: source.minimizeToTrayOnGameLaunch === true,
+    gameDisplayMode: GAME_DISPLAY_MODES.has(source.gameDisplayMode) ? source.gameDisplayMode : DEFAULT_PREFERENCES.gameDisplayMode
+  };
 }
 
 function sanitizeAccount(profile, username = '') {
@@ -56,7 +69,14 @@ class AuthService extends EventEmitter {
     super();
     this.origin = origin;
     this.stateDir = path.join(userDataPath, 'state');
-    this.state = { schemaVersion: STATE_SCHEMA, generation: 0, deviceId: createDeviceId(), account: null, cacheRoot: '' };
+    this.state = {
+      schemaVersion: STATE_SCHEMA,
+      generation: 0,
+      deviceId: createDeviceId(),
+      account: null,
+      cacheRoot: '',
+      preferences: { ...DEFAULT_PREFERENCES }
+    };
     this.secretMemory = '';
     this.socket = null;
     this.activePage = 'desktop-launcher';
@@ -81,6 +101,7 @@ class AuthService extends EventEmitter {
     if (candidates[0]) this.state = candidates[0];
     if (!this.state.deviceId) this.state.deviceId = createDeviceId();
     this.state.cacheRoot = typeof this.state.cacheRoot === 'string' ? this.state.cacheRoot : '';
+    this.state.preferences = sanitizePreferences(this.state.preferences);
     await this.decryptStoredSecret();
     return this.state;
   }
@@ -286,10 +307,38 @@ class AuthService extends EventEmitter {
     await this.save();
   }
 
+  getPreferences() {
+    return sanitizePreferences(this.state.preferences);
+  }
+
+  async setPreferences(preferences) {
+    const keys = preferences && typeof preferences === 'object' && !Array.isArray(preferences)
+      ? Object.keys(preferences)
+      : [];
+    const allowedKeys = new Set(['minimizeToTrayOnGameLaunch', 'gameDisplayMode']);
+    const hasMinimizePreference = Object.prototype.hasOwnProperty.call(preferences || {}, 'minimizeToTrayOnGameLaunch');
+    const hasDisplayModePreference = Object.prototype.hasOwnProperty.call(preferences || {}, 'gameDisplayMode');
+    if (
+      keys.length < 1 ||
+      keys.length > allowedKeys.size ||
+      keys.some((key) => !allowedKeys.has(key)) ||
+      (hasMinimizePreference && typeof preferences.minimizeToTrayOnGameLaunch !== 'boolean') ||
+      (hasDisplayModePreference && !GAME_DISPLAY_MODES.has(preferences.gameDisplayMode))
+    ) {
+      throw new Error('啟動器設定格式不正確。');
+    }
+    this.state.preferences = sanitizePreferences({
+      ...this.getPreferences(),
+      ...preferences
+    });
+    await this.save();
+    return this.getPreferences();
+  }
+
   close() {
     this.socket?.disconnect();
     this.socket = null;
   }
 }
 
-module.exports = { AuthService, isExplicitSecretRejection, sanitizeAccount };
+module.exports = { AuthService, isExplicitSecretRejection, sanitizeAccount, sanitizePreferences };

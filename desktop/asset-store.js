@@ -22,6 +22,14 @@ const INTEGRITY_MAX_ENTRIES = 20_000;
 const INTEGRITY_INDEX_MAX_BYTES = 12 * 1024 * 1024;
 const DEFAULT_AUDIT_MAX_FILES = 4;
 const DEFAULT_AUDIT_MAX_BYTES = 64 * 1024 * 1024;
+const CACHE_OWNER_SCHEMA = 1;
+const CACHE_OWNER_NAME = 'com.onepiece.tabletop.desktop';
+const CACHE_OWNER_FILE = '.onepiece-tabletop-cache-owner-v1.json';
+const CACHE_OWNER_MAX_BYTES = 4 * 1024;
+const RECEIPT_MAX_BYTES = 64 * 1024;
+const MANIFEST_MAX_BYTES = 8 * 1024 * 1024;
+const PRODUCTION_ASSET_BLOB_BASE_URL = 'https://game-assets.rihdi.tw/desktop/blobs/sha256';
+const MANAGED_CACHE_TOP_LEVEL = new Set(['blobs', 'partial', 'receipts', 'manifests', 'state']);
 
 const EXTENSIONS = new Map([
   ['.png', ['image', 'image/png']], ['.jpg', ['image', 'image/jpeg']],
@@ -100,7 +108,56 @@ function canonicalJson(value) {
   return `${JSON.stringify(value, null, 2)}\n`;
 }
 
-function validateCatalog(document) {
+function normalizeTestAssetBlobBaseUrls(values) {
+  if (values === undefined) return new Set();
+  if (!Array.isArray(values) || values.length > 8) throw new Error('測試素材來源白名單不正確。');
+  const normalized = new Set();
+  for (const value of values) {
+    if (typeof value !== 'string' || !value || value.length > 2048 || value.includes('\\')) {
+      throw new Error('測試素材來源白名單不正確。');
+    }
+    let parsed;
+    try {
+      parsed = new URL(value);
+    } catch {
+      throw new Error('測試素材來源白名單不正確。');
+    }
+    if (
+      !['127.0.0.1', 'localhost', '[::1]'].includes(parsed.hostname) ||
+      !['http:', 'https:'].includes(parsed.protocol) || parsed.username || parsed.password ||
+      parsed.search || parsed.hash || !parsed.pathname || parsed.pathname === '/'
+    ) throw new Error('測試素材來源白名單只允許本機來源。');
+    const pathname = parsed.pathname.replace(/\/+$/, '');
+    normalized.add(`${parsed.origin}${pathname}`);
+  }
+  return normalized;
+}
+
+function validateAssetBlobBaseUrl(value, { testAssetBlobBaseUrls } = {}) {
+  if (value === undefined || value === '') return '';
+  if (typeof value !== 'string' || !value || value.length > 2048 || value.includes('\\')) {
+    throw new Error('版本目錄的素材下載來源不正確。');
+  }
+  let parsed;
+  try {
+    parsed = new URL(value);
+  } catch {
+    throw new Error('版本目錄的素材下載來源不正確。');
+  }
+  if (parsed.username || parsed.password || parsed.search || parsed.hash || !parsed.hostname) {
+    throw new Error('版本目錄的素材下載來源不安全。');
+  }
+  const pathname = parsed.pathname.replace(/\/+$/, '');
+  const normalized = `${parsed.origin}${pathname}`;
+  const testAllowlist = normalizeTestAssetBlobBaseUrls(testAssetBlobBaseUrls);
+  const productionSource = parsed.protocol === 'https:' && normalized === PRODUCTION_ASSET_BLOB_BASE_URL;
+  if (!productionSource && !testAllowlist.has(normalized)) {
+    throw new Error('版本目錄的素材下載來源不在允許清單。');
+  }
+  return normalized;
+}
+
+function validateCatalog(document, options = {}) {
   if (!isPlainObject(document) || document.schema !== CATALOG_SCHEMA || !isPlainObject(document.games)) {
     throw new Error('版本目錄格式不正確。');
   }
@@ -116,6 +173,7 @@ function validateCatalog(document) {
   if (typeof document.createdAt !== 'string' || Number.isNaN(Date.parse(document.createdAt))) {
     throw new Error('版本目錄缺少有效日期。');
   }
+  const assetBlobBaseUrl = validateAssetBlobBaseUrl(document.assetBlobBaseUrl, options);
   const games = {};
   for (const gameId of ['card', 'board']) {
     const source = document.games[gameId];
@@ -137,6 +195,7 @@ function validateCatalog(document) {
     schema: CATALOG_SCHEMA,
     createdAt: document.createdAt,
     sourceTrees: isPlainObject(document.sourceTrees) ? { ...document.sourceTrees } : {},
+    ...(assetBlobBaseUrl ? { assetBlobBaseUrl } : {}),
     games: {
       ...games,
       chess: { available: false }
@@ -201,9 +260,82 @@ function encodeAssetUrl(origin, assetPath) {
   return `${origin}/${pathname}`;
 }
 
-async function atomicWriteJson(target, value) {
-  await fsp.mkdir(path.dirname(target), { recursive: true });
+function encodeAssetBlobUrl(assetBlobBaseUrl, sha256) {
+  if (!HASH_PATTERN.test(String(sha256 || '').toLowerCase())) throw new Error('素材雜湊不正確。');
+  const digest = String(sha256).toLowerCase();
+  return `${assetBlobBaseUrl}/${digest.slice(0, 2)}/${digest}`;
+}
+
+async function assertSafeManagedPath(cacheRoot, target, { allowMissing = true, leafKind = '' } = {}) {
+  const resolvedRoot = validateCacheRootPath(cacheRoot);
+  const resolvedTarget = path.resolve(target);
+  if (!isStrictChildPath(resolvedRoot, resolvedTarget)) throw new Error('快取檔案路徑不安全。');
+  const relative = path.relative(resolvedRoot, resolvedTarget);
+  const segments = relative.split(path.sep);
+  const ownerMarkerTemporary = segments.length === 1 && segments[0].startsWith(`${CACHE_OWNER_FILE}.`);
+  if (!MANAGED_CACHE_TOP_LEVEL.has(segments[0]) && segments[0] !== CACHE_OWNER_FILE && !ownerMarkerTemporary) {
+    throw new Error('快取檔案不屬於受管理目錄。');
+  }
+
+  const rootInfo = await fsp.lstat(resolvedRoot);
+  if (!rootInfo.isDirectory() || rootInfo.isSymbolicLink()) throw new Error('下載位置不是安全的資料夾。');
+  const realRoot = await fsp.realpath(resolvedRoot);
+  let current = resolvedRoot;
+  for (let index = 0; index < segments.length; index += 1) {
+    current = path.join(current, segments[index]);
+    const info = await lstatIfPresent(current);
+    if (!info) {
+      if (!allowMissing) throw new Error('快取檔案不存在。');
+      return resolvedTarget;
+    }
+    if (info.isSymbolicLink()) throw new Error('快取路徑含有符號連結或目錄連接點。');
+    const isLeaf = index === segments.length - 1;
+    if (!isLeaf && !info.isDirectory()) throw new Error('快取路徑的父層不是安全資料夾。');
+    if (isLeaf && leafKind === 'directory' && !info.isDirectory()) throw new Error('快取路徑不是安全資料夾。');
+    if (isLeaf && leafKind === 'file' && !info.isFile()) throw new Error('快取路徑不是安全檔案。');
+    const realCurrent = await fsp.realpath(current);
+    if (!samePath(realCurrent, realRoot) && !isStrictChildPath(realRoot, realCurrent)) {
+      throw new Error('快取路徑已離開下載位置。');
+    }
+  }
+  return resolvedTarget;
+}
+
+async function ensureSafeManagedDirectory(cacheRoot, directory) {
+  if (samePath(cacheRoot, directory)) {
+    const rootInfo = await fsp.lstat(validateCacheRootPath(cacheRoot));
+    if (!rootInfo.isDirectory() || rootInfo.isSymbolicLink()) throw new Error('下載位置不是安全的資料夾。');
+    return;
+  }
+  await assertSafeManagedPath(cacheRoot, directory, { allowMissing: true, leafKind: 'directory' });
+  await fsp.mkdir(directory, { recursive: true });
+  await assertSafeManagedPath(cacheRoot, directory, { allowMissing: false, leafKind: 'directory' });
+}
+
+async function removeSafeManagedPath(cacheRoot, target, { recursive = false, force = false, leafKind = '' } = {}) {
+  await assertSafeManagedPath(cacheRoot, target, { allowMissing: force, leafKind });
+  const info = await lstatIfPresent(target);
+  if (!info) {
+    if (force) return;
+    const error = new Error(`快取檔案不存在：${target}`);
+    error.code = 'ENOENT';
+    throw error;
+  }
+  if (recursive && !info.isDirectory()) throw new Error('拒絕遞迴移除非資料夾快取路徑。');
+  await fsp.rm(target, { recursive, force });
+}
+
+async function renameSafeManagedFile(cacheRoot, source, target) {
+  await assertSafeManagedPath(cacheRoot, source, { allowMissing: false, leafKind: 'file' });
+  await assertSafeManagedPath(cacheRoot, target, { allowMissing: true, leafKind: 'file' });
+  await fsp.rename(source, target);
+  await assertSafeManagedPath(cacheRoot, target, { allowMissing: false, leafKind: 'file' });
+}
+
+async function atomicWriteJson(cacheRoot, target, value) {
+  await ensureSafeManagedDirectory(cacheRoot, path.dirname(target));
   const temporary = `${target}.${process.pid}.${Date.now()}.${crypto.randomBytes(4).toString('hex')}.tmp`;
+  await assertSafeManagedPath(cacheRoot, temporary, { allowMissing: true, leafKind: 'file' });
   const handle = await fsp.open(temporary, 'wx');
   try {
     await handle.writeFile(canonicalJson(value), 'utf8');
@@ -211,12 +343,16 @@ async function atomicWriteJson(target, value) {
   } finally {
     await handle.close();
   }
-  await fsp.rename(temporary, target);
+  await assertSafeManagedPath(cacheRoot, temporary, { allowMissing: false, leafKind: 'file' });
+  await assertSafeManagedPath(cacheRoot, target, { allowMissing: true, leafKind: 'file' });
+  await renameSafeManagedFile(cacheRoot, temporary, target);
+  await assertSafeManagedPath(cacheRoot, target, { allowMissing: false, leafKind: 'file' });
 }
 
-async function atomicWriteBuffer(target, value) {
-  await fsp.mkdir(path.dirname(target), { recursive: true });
+async function atomicWriteBuffer(cacheRoot, target, value) {
+  await ensureSafeManagedDirectory(cacheRoot, path.dirname(target));
   const temporary = `${target}.${process.pid}.${Date.now()}.${crypto.randomBytes(4).toString('hex')}.tmp`;
+  await assertSafeManagedPath(cacheRoot, temporary, { allowMissing: true, leafKind: 'file' });
   const handle = await fsp.open(temporary, 'wx');
   try {
     await handle.writeFile(value);
@@ -224,7 +360,10 @@ async function atomicWriteBuffer(target, value) {
   } finally {
     await handle.close();
   }
-  await fsp.rename(temporary, target);
+  await assertSafeManagedPath(cacheRoot, temporary, { allowMissing: false, leafKind: 'file' });
+  await assertSafeManagedPath(cacheRoot, target, { allowMissing: true, leafKind: 'file' });
+  await renameSafeManagedFile(cacheRoot, temporary, target);
+  await assertSafeManagedPath(cacheRoot, target, { allowMissing: false, leafKind: 'file' });
 }
 
 async function nearestExistingDirectory(targetPath) {
@@ -259,6 +398,61 @@ function integrityIndexPath(cacheRoot) {
 function isStrictChildPath(root, candidate) {
   const relative = path.relative(path.resolve(root), path.resolve(candidate));
   return Boolean(relative) && !relative.startsWith(`..${path.sep}`) && relative !== '..' && !path.isAbsolute(relative);
+}
+
+function comparablePath(value) {
+  const resolved = path.resolve(value);
+  return process.platform === 'win32' ? resolved.toLowerCase() : resolved;
+}
+
+function samePath(left, right) {
+  return comparablePath(left) === comparablePath(right);
+}
+
+function validateCacheRootPath(value) {
+  const raw = typeof value === 'string' ? value.trim() : '';
+  if (!raw || raw.includes('\0') || !path.isAbsolute(raw)) throw new Error('下載位置不正確。');
+  const resolved = path.resolve(raw);
+  if (samePath(resolved, path.parse(resolved).root)) {
+    throw new Error('下載位置不能是磁碟或網路分享根目錄。');
+  }
+  return resolved;
+}
+
+function cacheOwnershipMarkerPath(cacheRoot) {
+  return path.join(validateCacheRootPath(cacheRoot), CACHE_OWNER_FILE);
+}
+
+function validateReceiptDocument(source, gameId) {
+  if (
+    !isPlainObject(source) || source.schema !== RECEIPT_SCHEMA || source.gameId !== gameId ||
+    !RELEASE_PATTERN.test(String(source.releaseId || '')) ||
+    !HASH_PATTERN.test(String(source.manifestSha256 || '').toLowerCase()) ||
+    !/^[a-z0-9._-]+\.json$/.test(String(source.manifestFile || '')) ||
+    typeof source.installedAt !== 'string' || Number.isNaN(Date.parse(source.installedAt))
+  ) throw new Error('遊戲安裝收據格式不正確。');
+  return {
+    ...source,
+    manifestSha256: String(source.manifestSha256).toLowerCase(),
+    manifestFile: String(source.manifestFile)
+  };
+}
+
+async function lstatIfPresent(target) {
+  try {
+    return await fsp.lstat(target);
+  } catch (error) {
+    if (error.code === 'ENOENT') return null;
+    throw error;
+  }
+}
+
+async function readRegularFile(target, maximumBytes, label) {
+  const info = await fsp.lstat(target);
+  if (!info.isFile() || info.isSymbolicLink() || info.size < 1 || info.size > maximumBytes) {
+    throw new Error(`${label}不是安全的一般檔案。`);
+  }
+  return fsp.readFile(target);
 }
 
 function nanosecondsFromStat(info, nanosecondsKey, millisecondsKey) {
@@ -346,12 +540,13 @@ class AssetStore extends EventEmitter {
     downloadRequestTimeoutMs = 15_000,
     downloadIdleTimeoutMs = 20_000,
     downloadRetryBaseMs = 300,
-    downloadMaxAttempts = 3
+    downloadMaxAttempts = 3,
+    testAssetBlobBaseUrls
   }) {
     super();
     this.origin = String(origin || '').replace(/\/+$/, '');
     this.bundledCatalogRoot = path.resolve(bundledCatalogRoot);
-    this.cacheRoot = path.resolve(cacheRoot);
+    this.cacheRoot = validateCacheRootPath(cacheRoot);
     this.fetchImpl = fetchImpl || globalThis.fetch;
     this.hashFileImpl = typeof hashFileImpl === 'function' ? hashFileImpl : sha256File;
     this.integrityAuditMaxFiles = Math.max(0, Math.min(64, Number(integrityAuditMaxFiles) || 0));
@@ -361,11 +556,15 @@ class AssetStore extends EventEmitter {
     this.downloadIdleTimeoutMs = Math.max(100, Number(downloadIdleTimeoutMs) || 20_000);
     this.downloadRetryBaseMs = Math.max(10, Number(downloadRetryBaseMs) || 300);
     this.downloadMaxAttempts = Math.max(1, Math.min(5, Number(downloadMaxAttempts) || 3));
+    this.catalogValidationOptions = {
+      testAssetBlobBaseUrls: [...normalizeTestAssetBlobBaseUrls(testAssetBlobBaseUrls)]
+    };
     this.catalog = null;
     this.catalogSource = 'bundled';
     this.receipts = new Map();
     this.gameStates = new Map();
     this.activeInstall = null;
+    this.activeRemoval = null;
     this.verifiedBlobs = new Map();
     this.invalidBlobs = new Map();
     this.integrityRecords = new Map();
@@ -382,6 +581,7 @@ class AssetStore extends EventEmitter {
 
   async init() {
     await fsp.mkdir(this.cacheRoot, { recursive: true });
+    await this.ensureCacheOwnership(this.cacheRoot);
     await this.loadIntegrityIndex();
     await this.loadBundledCatalog();
     await Promise.all(['card', 'board'].map((gameId) => this.loadReceipt(gameId)));
@@ -390,6 +590,168 @@ class AssetStore extends EventEmitter {
     const state = await this.getState();
     this.startBackgroundIntegrityAudit();
     return state;
+  }
+
+  async validateCacheOwnership(cacheRoot = this.cacheRoot) {
+    const resolved = validateCacheRootPath(cacheRoot);
+    const rootInfo = await fsp.lstat(resolved);
+    if (!rootInfo.isDirectory() || rootInfo.isSymbolicLink()) throw new Error('下載位置不是安全的資料夾。');
+    const markerPath = cacheOwnershipMarkerPath(resolved);
+    if (!isStrictChildPath(resolved, markerPath)) throw new Error('快取擁有權標記路徑不安全。');
+    if (!(await lstatIfPresent(markerPath))) throw new Error('快取擁有權標記不存在，已拒絕檔案操作。');
+    await assertSafeManagedPath(resolved, markerPath, { allowMissing: false, leafKind: 'file' });
+    const bytes = await readRegularFile(markerPath, CACHE_OWNER_MAX_BYTES, '快取擁有權標記');
+    let document;
+    try {
+      document = JSON.parse(bytes.toString('utf8'));
+    } catch {
+      throw new Error('快取擁有權標記格式不正確。');
+    }
+    const keys = isPlainObject(document) ? Object.keys(document).sort() : [];
+    if (
+      keys.join(',') !== 'cacheRoot,createdAt,owner,schema' || document.schema !== CACHE_OWNER_SCHEMA ||
+      document.owner !== CACHE_OWNER_NAME || typeof document.cacheRoot !== 'string' ||
+      !samePath(document.cacheRoot, resolved) || typeof document.createdAt !== 'string' ||
+      Number.isNaN(Date.parse(document.createdAt))
+    ) throw new Error('快取擁有權標記不符合目前下載位置。');
+    for (const directoryName of MANAGED_CACHE_TOP_LEVEL) {
+      await assertSafeManagedPath(resolved, path.join(resolved, directoryName), {
+        allowMissing: true,
+        leafKind: 'directory'
+      });
+    }
+    return document;
+  }
+
+  async assertSafeManifestDirectory(cacheRoot, gameId, { required = false } = {}) {
+    const manifestRoot = path.join(cacheRoot, 'manifests', gameId);
+    if (!isStrictChildPath(cacheRoot, manifestRoot)) throw new Error('遊戲清單目錄路徑不安全。');
+    const rootInfo = await lstatIfPresent(manifestRoot);
+    if (!rootInfo) {
+      if (required) throw new Error('遊戲安裝收據找不到對應清單。');
+      return;
+    }
+    await assertSafeManagedPath(cacheRoot, manifestRoot, { allowMissing: false, leafKind: 'directory' });
+    if (!rootInfo.isDirectory() || rootInfo.isSymbolicLink()) throw new Error('遊戲清單目錄含有可疑衝突。');
+    const entries = await fsp.readdir(manifestRoot, { withFileTypes: true });
+    for (const entry of entries) {
+      if (!/^[a-z0-9._-]+\.json$/.test(entry.name)) throw new Error('遊戲清單目錄含有可疑衝突。');
+      const manifestPath = path.join(manifestRoot, entry.name);
+      if (!isStrictChildPath(manifestRoot, manifestPath) || !isStrictChildPath(cacheRoot, manifestPath)) {
+        throw new Error('遊戲清單檔案路徑不安全。');
+      }
+      const info = await fsp.lstat(manifestPath);
+      if (!info.isFile() || info.isSymbolicLink()) throw new Error('遊戲清單目錄含有可疑衝突。');
+      await assertSafeManagedPath(cacheRoot, manifestPath, { allowMissing: false, leafKind: 'file' });
+      const bytes = await readRegularFile(manifestPath, MANIFEST_MAX_BYTES, '遊戲清單');
+      let document;
+      try {
+        document = JSON.parse(bytes.toString('utf8'));
+      } catch {
+        throw new Error('遊戲清單目錄含有無效資料。');
+      }
+      validateManifest(document, gameId);
+    }
+  }
+
+  async readReceiptFromRoot(cacheRoot, gameId) {
+    if (!GAME_IDS.has(gameId)) throw new Error('遊戲代號不正確。');
+    const receiptPath = path.join(cacheRoot, 'receipts', `${gameId}.json`);
+    if (!isStrictChildPath(cacheRoot, receiptPath)) throw new Error('遊戲安裝收據路徑不安全。');
+    await assertSafeManagedPath(cacheRoot, receiptPath, { allowMissing: false, leafKind: 'file' });
+    const receiptBytes = await readRegularFile(receiptPath, RECEIPT_MAX_BYTES, '遊戲安裝收據');
+    let source;
+    try {
+      source = validateReceiptDocument(JSON.parse(receiptBytes.toString('utf8')), gameId);
+    } catch (error) {
+      if (error.message === '遊戲安裝收據格式不正確。') throw error;
+      throw new Error('遊戲安裝收據格式不正確。');
+    }
+    const manifestRoot = path.join(cacheRoot, 'manifests', gameId);
+    const manifestPath = path.join(manifestRoot, source.manifestFile);
+    if (
+      !isStrictChildPath(cacheRoot, manifestRoot) || !isStrictChildPath(manifestRoot, manifestPath) ||
+      !isStrictChildPath(cacheRoot, manifestPath) || !samePath(path.dirname(manifestPath), manifestRoot)
+    ) throw new Error('遊戲安裝收據指向不安全的清單路徑。');
+    await assertSafeManagedPath(cacheRoot, manifestPath, { allowMissing: false, leafKind: 'file' });
+    const manifestBytes = await readRegularFile(manifestPath, MANIFEST_MAX_BYTES, '遊戲安裝清單');
+    if (sha256Bytes(manifestBytes) !== source.manifestSha256) throw new Error('遊戲安裝收據與清單摘要不符。');
+    let manifest;
+    try {
+      manifest = validateManifest(JSON.parse(manifestBytes.toString('utf8')), gameId);
+    } catch {
+      throw new Error('遊戲安裝收據指向無效清單。');
+    }
+    if (manifest.releaseId !== source.releaseId) throw new Error('遊戲安裝收據與清單版本不符。');
+    return {
+      ...source,
+      receiptPath,
+      manifestPath,
+      manifest,
+      assetIndex: new Map(manifest.assets.map((asset) => [asset.path.normalize('NFC').toLowerCase(), asset]))
+    };
+  }
+
+  async assertLegacyCacheSafeToClaim(cacheRoot) {
+    const receiptsRoot = path.join(cacheRoot, 'receipts');
+    const manifestsRoot = path.join(cacheRoot, 'manifests');
+    for (const directoryName of MANAGED_CACHE_TOP_LEVEL) {
+      const managedRoot = path.join(cacheRoot, directoryName);
+      if (!isStrictChildPath(cacheRoot, managedRoot)) throw new Error('舊快取資料夾路徑不安全。');
+      try {
+        await assertSafeManagedPath(cacheRoot, managedRoot, { allowMissing: true, leafKind: 'directory' });
+      } catch {
+        throw new Error('下載位置已有可疑的清單或收據衝突，無法接管。');
+      }
+    }
+
+    const receiptsInfo = await lstatIfPresent(receiptsRoot);
+    if (receiptsInfo) {
+      const entries = await fsp.readdir(receiptsRoot, { withFileTypes: true });
+      for (const entry of entries) {
+        const match = /^(card|board)\.json$/.exec(entry.name);
+        if (!match || !entry.isFile() || entry.isSymbolicLink()) {
+          throw new Error('下載位置已有可疑的清單或收據衝突，無法接管。');
+        }
+        try {
+          await this.readReceiptFromRoot(cacheRoot, match[1]);
+        } catch {
+          throw new Error('下載位置已有可疑的清單或收據衝突，無法接管。');
+        }
+      }
+    }
+
+    const manifestsInfo = await lstatIfPresent(manifestsRoot);
+    if (manifestsInfo) {
+      const entries = await fsp.readdir(manifestsRoot, { withFileTypes: true });
+      for (const entry of entries) {
+        if (!GAME_IDS.has(entry.name) || !entry.isDirectory() || entry.isSymbolicLink()) {
+          throw new Error('下載位置已有可疑的清單或收據衝突，無法接管。');
+        }
+        try {
+          await this.assertSafeManifestDirectory(cacheRoot, entry.name);
+        } catch {
+          throw new Error('下載位置已有可疑的清單或收據衝突，無法接管。');
+        }
+      }
+    }
+  }
+
+  async ensureCacheOwnership(cacheRoot = this.cacheRoot) {
+    const resolved = validateCacheRootPath(cacheRoot);
+    const rootInfo = await fsp.lstat(resolved);
+    if (!rootInfo.isDirectory() || rootInfo.isSymbolicLink()) throw new Error('下載位置不是安全的資料夾。');
+    const markerPath = cacheOwnershipMarkerPath(resolved);
+    const markerInfo = await lstatIfPresent(markerPath);
+    if (markerInfo) return this.validateCacheOwnership(resolved);
+    await this.assertLegacyCacheSafeToClaim(resolved);
+    await atomicWriteJson(resolved, markerPath, {
+      schema: CACHE_OWNER_SCHEMA,
+      owner: CACHE_OWNER_NAME,
+      cacheRoot: resolved,
+      createdAt: new Date().toISOString()
+    });
+    return this.validateCacheOwnership(resolved);
   }
 
   async loadIntegrityIndex() {
@@ -402,7 +764,8 @@ class AssetStore extends EventEmitter {
     this.integrityRevision = 0;
     try {
       const indexPath = integrityIndexPath(this.cacheRoot);
-      const info = await fsp.stat(indexPath);
+      await assertSafeManagedPath(this.cacheRoot, indexPath, { allowMissing: false, leafKind: 'file' });
+      const info = await fsp.lstat(indexPath);
       if (!info.isFile() || info.size > INTEGRITY_INDEX_MAX_BYTES) throw new Error('integrity index size');
       const parsed = validateIntegrityDocument(JSON.parse(await fsp.readFile(indexPath, 'utf8')));
       this.integrityRecords = parsed.records;
@@ -432,14 +795,16 @@ class AssetStore extends EventEmitter {
         recordsSha256: sha256Bytes(JSON.stringify(records)),
         records
       };
-      await atomicWriteJson(integrityIndexPath(cacheRoot), document);
+      await atomicWriteJson(cacheRoot, integrityIndexPath(cacheRoot), document);
       if (generation === this.integrityGeneration && revision === this.integrityRevision) this.integrityDirty = false;
     });
     return this.integrityWritePromise;
   }
 
   async fingerprintBlob(asset) {
-    const info = await fsp.stat(blobPath(this.cacheRoot, asset.sha256), { bigint: true });
+    const target = blobPath(this.cacheRoot, asset.sha256);
+    await assertSafeManagedPath(this.cacheRoot, target, { allowMissing: false, leafKind: 'file' });
+    const info = await fsp.lstat(target, { bigint: true });
     const fingerprint = blobFingerprint(info);
     if (!info.isFile() || fingerprint.size !== asset.size) return null;
     return fingerprint;
@@ -514,7 +879,7 @@ class AssetStore extends EventEmitter {
       this.markIntegrityDirty();
       if (!valid) {
         invalid += 1;
-        await fsp.rm(blobPath(this.cacheRoot, asset.sha256), { force: true });
+        await removeSafeManagedPath(this.cacheRoot, blobPath(this.cacheRoot, asset.sha256), { force: true, leafKind: 'file' });
         this.forgetVerifiedBlob(asset.sha256);
         for (const [gameId, receipt] of this.receipts) {
           if (!receipt.manifest.assets.some((entry) => entry.sha256 === asset.sha256)) continue;
@@ -531,7 +896,7 @@ class AssetStore extends EventEmitter {
   async loadBundledCatalog() {
     const catalogPath = path.join(this.bundledCatalogRoot, 'catalog-v1.json');
     const document = JSON.parse(await fsp.readFile(catalogPath, 'utf8'));
-    this.catalog = validateCatalog(document);
+    this.catalog = validateCatalog(document, this.catalogValidationOptions);
     this.catalogSource = 'bundled';
   }
 
@@ -567,13 +932,16 @@ class AssetStore extends EventEmitter {
     const root = this.lastKnownGoodRoot();
     try {
       const catalogPath = path.join(root, 'catalog-v1.json');
-      const info = await fsp.stat(catalogPath);
+      await assertSafeManagedPath(this.cacheRoot, catalogPath, { allowMissing: false, leafKind: 'file' });
+      const info = await fsp.lstat(catalogPath);
       if (!info.isFile() || info.size > 256 * 1024) throw new Error('cached catalog size');
-      const catalog = validateCatalog(JSON.parse(await fsp.readFile(catalogPath, 'utf8')));
+      const catalog = validateCatalog(JSON.parse(await fsp.readFile(catalogPath, 'utf8')), this.catalogValidationOptions);
       const results = new Map();
       for (const gameId of ['card', 'board']) {
         const entry = catalog.games[gameId];
-        const bytes = await fsp.readFile(path.join(root, 'manifests', path.posix.basename(entry.manifestPath)));
+        const manifestPath = path.join(root, 'manifests', path.posix.basename(entry.manifestPath));
+        await assertSafeManagedPath(this.cacheRoot, manifestPath, { allowMissing: false, leafKind: 'file' });
+        const bytes = await fsp.readFile(manifestPath);
         const result = this.validateManifestResult(bytes, entry, gameId);
         this.assertNotDowngrade(gameId, result, entry.manifestSha256);
         results.set(`${gameId}:${entry.manifestSha256}`, result);
@@ -612,9 +980,9 @@ class AssetStore extends EventEmitter {
     const root = this.lastKnownGoodRoot();
     for (const gameId of ['card', 'board']) {
       const result = results.get(`${gameId}:${catalog.games[gameId].manifestSha256}`);
-      await atomicWriteBuffer(path.join(root, 'manifests', result.fileName), result.bytes);
+      await atomicWriteBuffer(this.cacheRoot, path.join(root, 'manifests', result.fileName), result.bytes);
     }
-    await atomicWriteJson(path.join(root, 'catalog-v1.json'), catalog);
+    await atomicWriteJson(this.cacheRoot, path.join(root, 'catalog-v1.json'), catalog);
   }
 
   async refreshRemoteCatalog() {
@@ -630,7 +998,7 @@ class AssetStore extends EventEmitter {
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const bytes = Buffer.from(await response.arrayBuffer());
       if (bytes.length > 256 * 1024) throw new Error('版本目錄過大。');
-      const catalog = validateCatalog(JSON.parse(bytes.toString('utf8')));
+      const catalog = validateCatalog(JSON.parse(bytes.toString('utf8')), this.catalogValidationOptions);
       const results = new Map();
       for (const gameId of ['card', 'board']) {
         const result = await this.fetchRemoteManifest(catalog, gameId, controller.signal);
@@ -656,12 +1024,10 @@ class AssetStore extends EventEmitter {
   }
 
   async setCacheRoot(nextRoot) {
-    if (this.activeInstall) throw new Error('下載進行中，請先暫停。');
-    const raw = String(nextRoot || '').trim();
-    if (!raw) throw new Error('下載位置不正確。');
-    const resolved = path.resolve(raw);
-    if (!path.isAbsolute(resolved)) throw new Error('下載位置不正確。');
+    if (this.activeInstall || this.activeRemoval) throw new Error('下載或移除進行中，請稍後再變更位置。');
+    const resolved = validateCacheRootPath(nextRoot);
     await fsp.mkdir(resolved, { recursive: true });
+    await this.ensureCacheOwnership(resolved);
     this.cacheRoot = resolved;
     this.receipts.clear();
     this.cachedManifests.clear();
@@ -675,24 +1041,8 @@ class AssetStore extends EventEmitter {
   }
 
   async loadReceipt(gameId) {
-    const receiptPath = path.join(this.cacheRoot, 'receipts', `${gameId}.json`);
     try {
-      const source = JSON.parse(await fsp.readFile(receiptPath, 'utf8'));
-      if (
-        source?.schema !== RECEIPT_SCHEMA || source.gameId !== gameId || !RELEASE_PATTERN.test(String(source.releaseId || '')) ||
-        !HASH_PATTERN.test(String(source.manifestSha256 || '')) || !/^[a-z0-9._-]+\.json$/.test(String(source.manifestFile || ''))
-      ) throw new Error('receipt shape');
-      const manifestPath = path.join(this.cacheRoot, 'manifests', gameId, source.manifestFile);
-      const manifestBytes = await fsp.readFile(manifestPath);
-      if (sha256Bytes(manifestBytes) !== source.manifestSha256) throw new Error('receipt manifest hash');
-      const manifest = validateManifest(JSON.parse(manifestBytes.toString('utf8')), gameId);
-      if (manifest.releaseId !== source.releaseId) throw new Error('receipt release');
-      this.receipts.set(gameId, {
-        ...source,
-        manifestPath,
-        manifest,
-        assetIndex: new Map(manifest.assets.map((asset) => [asset.path.normalize('NFC').toLowerCase(), asset]))
-      });
+      this.receipts.set(gameId, await this.readReceiptFromRoot(this.cacheRoot, gameId));
     } catch {
       this.receipts.delete(gameId);
     }
@@ -753,6 +1103,7 @@ class AssetStore extends EventEmitter {
         status,
         message,
         hasInstalled,
+        removable: Boolean(receipt),
         installedVersion,
         remoteVersion: latest.releaseId,
         totalFiles: latest.totalFiles,
@@ -765,6 +1116,7 @@ class AssetStore extends EventEmitter {
       status: 'unavailable',
       message: '仍在製作與校準中',
       hasInstalled: false,
+      removable: false,
       remoteVersion: '',
       totalFiles: 0,
       totalBytes: 0
@@ -834,7 +1186,10 @@ class AssetStore extends EventEmitter {
       } catch (error) {
         if (signal?.aborted) throw abortError();
         if (timedOut) throw new Error('遊戲清單下載逾時，請稍後再試。');
-        const bundled = validateCatalog(JSON.parse(await fsp.readFile(path.join(this.bundledCatalogRoot, 'catalog-v1.json'), 'utf8')));
+        const bundled = validateCatalog(
+          JSON.parse(await fsp.readFile(path.join(this.bundledCatalogRoot, 'catalog-v1.json'), 'utf8')),
+          this.catalogValidationOptions
+        );
         const bundledEntry = bundled.games[gameId];
         if (bundledEntry.manifestSha256 !== entry.manifestSha256) throw new Error('新版本清單下載失敗，請稍後再試。');
         result = await this.readBundledManifest(bundledEntry, gameId, signal);
@@ -854,6 +1209,7 @@ class AssetStore extends EventEmitter {
 
   installGame(gameId) {
     if (!GAME_IDS.has(gameId)) return { ok: false, error: '此遊戲仍在製作中。' };
+    if (this.activeRemoval) return { ok: false, error: '正在移除遊戲，完成後才能開始下載。' };
     if (this.activeInstall) {
       if (this.activeInstall.gameId === gameId) return { ok: true, alreadyRunning: true };
       return { ok: false, error: '目前已有另一款遊戲正在下載，請先等待或暫停。' };
@@ -890,9 +1246,130 @@ class AssetStore extends EventEmitter {
     return { ok: true };
   }
 
+  async uninstallGame(gameId) {
+    if (!GAME_IDS.has(gameId)) return { ok: false, error: '遊戲代號不正確。' };
+    if (this.activeInstall) return { ok: false, error: '請先暫停目前下載，再解除安裝。' };
+    if (this.activeRemoval) return { ok: false, error: '已有遊戲正在移除，請稍候。' };
+
+    const cacheRoot = validateCacheRootPath(this.cacheRoot);
+    await this.validateCacheOwnership(cacheRoot);
+
+    const receipt = this.receipts.get(gameId);
+    if (!receipt) {
+      await this.refreshStates();
+      return { ok: true, alreadyRemoved: true, removedBytes: 0, removedFiles: 0, skipped: 0 };
+    }
+
+    const receiptPath = path.join(cacheRoot, 'receipts', `${gameId}.json`);
+    const manifestRoot = path.join(cacheRoot, 'manifests', gameId);
+    const partialRoot = path.join(cacheRoot, 'partial');
+    if (
+      !isStrictChildPath(cacheRoot, receiptPath) || !isStrictChildPath(cacheRoot, manifestRoot) ||
+      !isStrictChildPath(cacheRoot, partialRoot)
+    ) throw new Error('遊戲解除安裝路徑不安全。');
+
+    this.activeRemoval = { gameId };
+    this.emitProgress(gameId, {
+      ...(this.gameStates.get(gameId) || {}),
+      status: 'removing',
+      message: '正在移除本機遊戲素材'
+    }, true);
+
+    const candidates = new Set(receipt.manifest.assets.map((asset) => asset.sha256));
+    const latestEntry = this.catalog.games[gameId];
+    const latestCached = this.cachedManifests.get(`${gameId}:${latestEntry.manifestSha256}`)?.manifest;
+    for (const asset of latestCached?.assets || []) candidates.add(asset.sha256);
+
+    const protectedHashes = new Set();
+    for (const otherGameId of GAME_IDS) {
+      if (otherGameId === gameId) continue;
+      const otherReceipt = this.receipts.get(otherGameId);
+      for (const asset of otherReceipt?.manifest.assets || []) protectedHashes.add(asset.sha256);
+      const otherEntry = this.catalog.games[otherGameId];
+      const otherCached = this.cachedManifests.get(`${otherGameId}:${otherEntry.manifestSha256}`)?.manifest;
+      const otherStatus = this.gameStates.get(otherGameId)?.status;
+      const hasIncompleteDownload = ['paused', 'error', 'preparing', 'downloading', 'verifying'].includes(otherStatus);
+      if (otherReceipt || hasIncompleteDownload) {
+        for (const asset of otherCached?.assets || []) protectedHashes.add(asset.sha256);
+      }
+    }
+
+    const result = { ok: true, removedBytes: 0, removedFiles: 0, removedPartials: 0, skipped: 0 };
+    try {
+      await this.stateRefreshPromise.catch(() => {});
+      await this.backgroundAuditPromise.catch(() => {});
+
+      // Re-read the marker and durable receipt immediately before recursive
+      // deletion. A stale in-memory receipt can never authorize filesystem work.
+      await this.validateCacheOwnership(cacheRoot);
+      const durableReceipt = await this.readReceiptFromRoot(cacheRoot, gameId);
+      for (const field of ['schema', 'gameId', 'releaseId', 'manifestSha256', 'manifestFile', 'installedAt']) {
+        if (durableReceipt[field] !== receipt[field]) throw new Error('遊戲安裝收據在解除安裝前已被變更。');
+      }
+      if (!samePath(durableReceipt.receiptPath, receiptPath) || !samePath(durableReceipt.manifestPath, path.join(manifestRoot, receipt.manifestFile))) {
+        throw new Error('遊戲安裝收據路徑不安全。');
+      }
+      await this.assertSafeManifestDirectory(cacheRoot, gameId, { required: true });
+
+      // The receipt is the durable installed marker. Remove it first so a crash
+      // cannot make a partially removed game appear launchable on restart.
+      await removeSafeManagedPath(cacheRoot, receiptPath, { force: true, leafKind: 'file' });
+      this.receipts.delete(gameId);
+      try {
+        await removeSafeManagedPath(cacheRoot, manifestRoot, { recursive: true, force: true, leafKind: 'directory' });
+      } catch {
+        result.skipped += 1;
+      }
+
+      for (const sha256 of candidates) {
+        if (protectedHashes.has(sha256)) continue;
+        const blob = blobPath(cacheRoot, sha256);
+        const partial = path.join(partialRoot, `${sha256}.part`);
+        for (const [candidate, partialFile] of [[blob, false], [partial, true]]) {
+          if (!isStrictChildPath(cacheRoot, candidate)) {
+            result.skipped += 1;
+            continue;
+          }
+          try {
+            const info = await fsp.lstat(candidate);
+            if (!info.isFile() || info.isSymbolicLink()) {
+              result.skipped += 1;
+              continue;
+            }
+            await removeSafeManagedPath(cacheRoot, candidate, { leafKind: 'file' });
+            result.removedBytes += info.size;
+            if (partialFile) result.removedPartials += 1;
+            else result.removedFiles += 1;
+          } catch (error) {
+            if (error.code !== 'ENOENT') result.skipped += 1;
+          }
+        }
+        this.forgetVerifiedBlob(sha256);
+        this.invalidBlobs.delete(sha256);
+        const prefixPath = path.dirname(blob);
+        if (isStrictChildPath(cacheRoot, prefixPath)) {
+          try { await removeSafeManagedPath(cacheRoot, prefixPath, { leafKind: 'directory' }); } catch { /* shared or non-empty prefix */ }
+        }
+      }
+
+      await this.flushIntegrityIndex();
+      await this.refreshStates({ includeActiveGameId: gameId });
+      const state = await this.getState();
+      this.emit('state', state);
+      return result;
+    } catch (error) {
+      await this.refreshStates({ includeActiveGameId: gameId }).catch(() => {});
+      this.getState().then((state) => this.emit('state', state)).catch(() => {});
+      throw error;
+    } finally {
+      this.activeRemoval = null;
+    }
+  }
+
   async runInstall(gameId, signal) {
     const priorReceipt = this.receipts.get(gameId);
     const startingState = this.gameStates.get(gameId) || {};
+    const assetBlobBaseUrl = this.catalog.assetBlobBaseUrl || '';
     const repairing = startingState.status === 'repair';
     this.emitProgress(gameId, {
       status: 'preparing',
@@ -901,6 +1378,7 @@ class AssetStore extends EventEmitter {
       currentFile: '檢查版本資料…'
     }, true);
     throwIfAborted(signal);
+    await this.validateCacheOwnership(this.cacheRoot);
     const { bytes: manifestBytes, manifest, fileName } = await this.getManifest(gameId, { signal });
     if (this.activeInstall?.gameId === gameId) this.activeInstall.manifest = manifest;
     throwIfAborted(signal);
@@ -917,7 +1395,7 @@ class AssetStore extends EventEmitter {
         cachedFiles += 1;
         continue;
       }
-      await fsp.rm(blobPath(this.cacheRoot, asset.sha256), { force: true });
+      await removeSafeManagedPath(this.cacheRoot, blobPath(this.cacheRoot, asset.sha256), { force: true, leafKind: 'file' });
       this.forgetVerifiedBlob(asset.sha256);
       missing.push(asset);
     }
@@ -945,8 +1423,8 @@ class AssetStore extends EventEmitter {
 
     const normal = missing.filter((asset) => asset.size < LARGE_FILE_BYTES);
     const large = missing.filter((asset) => asset.size >= LARGE_FILE_BYTES);
-    await this.downloadQueue(gameId, normal, 4, runtime, signal);
-    await this.downloadQueue(gameId, large, 2, runtime, signal);
+    await this.downloadQueue(gameId, normal, 4, runtime, signal, assetBlobBaseUrl);
+    await this.downloadQueue(gameId, large, 2, runtime, signal, assetBlobBaseUrl);
     if (signal.aborted) throw new DOMException('Aborted', 'AbortError');
 
     this.emitProgress(gameId, { ...runtime, status: 'verifying', message: '正在驗證遊戲檔案', currentFile: '' }, true);
@@ -964,11 +1442,12 @@ class AssetStore extends EventEmitter {
     await this.flushIntegrityIndex();
     throwIfAborted(signal);
     const manifestTarget = path.join(this.cacheRoot, 'manifests', gameId, fileName);
-    await fsp.mkdir(path.dirname(manifestTarget), { recursive: true });
+    await ensureSafeManagedDirectory(this.cacheRoot, path.dirname(manifestTarget));
     const temporary = `${manifestTarget}.${process.pid}.${Date.now()}.tmp`;
+    await assertSafeManagedPath(this.cacheRoot, temporary, { allowMissing: true, leafKind: 'file' });
     await fsp.writeFile(temporary, manifestBytes, { flag: 'wx' });
-    await fsp.rm(manifestTarget, { force: true });
-    await fsp.rename(temporary, manifestTarget);
+    await removeSafeManagedPath(this.cacheRoot, manifestTarget, { force: true, leafKind: 'file' });
+    await renameSafeManagedFile(this.cacheRoot, temporary, manifestTarget);
     const receipt = {
       schema: RECEIPT_SCHEMA,
       gameId,
@@ -977,7 +1456,7 @@ class AssetStore extends EventEmitter {
       manifestFile: fileName,
       installedAt: new Date().toISOString()
     };
-    await atomicWriteJson(path.join(this.cacheRoot, 'receipts', `${gameId}.json`), receipt);
+    await atomicWriteJson(this.cacheRoot, path.join(this.cacheRoot, 'receipts', `${gameId}.json`), receipt);
     this.receipts.set(gameId, {
       ...receipt,
       manifestPath: manifestTarget,
@@ -993,7 +1472,7 @@ class AssetStore extends EventEmitter {
     }, true);
   }
 
-  async downloadQueue(gameId, assets, concurrency, runtime, signal) {
+  async downloadQueue(gameId, assets, concurrency, runtime, signal, assetBlobBaseUrl = '') {
     let cursor = 0;
     const worker = async () => {
       while (true) {
@@ -1007,7 +1486,7 @@ class AssetStore extends EventEmitter {
           lastReported = received;
           runtime.downloadedBytes += delta;
           this.emitProgress(gameId, { ...runtime, currentFile: path.posix.basename(asset.path) });
-        });
+        }, { assetBlobBaseUrl });
         runtime.completedFiles += 1;
         this.emitProgress(gameId, { ...runtime, currentFile: path.posix.basename(asset.path) }, true);
       }
@@ -1015,53 +1494,65 @@ class AssetStore extends EventEmitter {
     await Promise.all(Array.from({ length: Math.min(concurrency, Math.max(1, assets.length)) }, worker));
   }
 
-  async downloadBlob(asset, signal, onProgress) {
+  async downloadBlob(asset, signal, onProgress, { assetBlobBaseUrl = '' } = {}) {
+    const approvedAssetBlobBaseUrl = validateAssetBlobBaseUrl(assetBlobBaseUrl, this.catalogValidationOptions);
+    const sources = approvedAssetBlobBaseUrl
+      ? [
+          { url: encodeAssetBlobUrl(approvedAssetBlobBaseUrl, asset.sha256), immutable: true },
+          { url: encodeAssetUrl(this.origin, asset.path), immutable: false }
+        ]
+      : [{ url: encodeAssetUrl(this.origin, asset.path), immutable: false }];
     let lastError = null;
-    for (let attempt = 1; attempt <= this.downloadMaxAttempts; attempt += 1) {
-      throwIfAborted(signal);
-      try {
-        await this.downloadBlobOnce(asset, signal, onProgress);
-        return;
-      } catch (error) {
-        if (signal?.aborted) throw abortError();
-        lastError = error;
-        const networkFailure = error?.name === 'TypeError' || ['ECONNRESET', 'ECONNREFUSED', 'EAI_AGAIN', 'ENETUNREACH', 'ETIMEDOUT'].includes(error?.code);
-        if (attempt >= this.downloadMaxAttempts || (error?.retryable !== true && !networkFailure)) throw error;
-        const retryAfter = Number(error?.retryAfterMs) || this.downloadRetryBaseMs * (2 ** (attempt - 1));
-        await delayWithSignal(Math.min(5_000, retryAfter), signal);
+    for (const source of sources) {
+      for (let attempt = 1; attempt <= this.downloadMaxAttempts; attempt += 1) {
+        throwIfAborted(signal);
+        try {
+          await this.downloadBlobOnce(asset, signal, onProgress, source);
+          return;
+        } catch (error) {
+          if (signal?.aborted) throw abortError();
+          lastError = error;
+          const networkFailure = error?.name === 'TypeError' || ['ECONNRESET', 'ECONNREFUSED', 'EAI_AGAIN', 'ENETUNREACH', 'ETIMEDOUT'].includes(error?.code);
+          const retryable = error?.retryable === true || networkFailure;
+          if (attempt >= this.downloadMaxAttempts || !retryable) break;
+          const retryAfter = Number(error?.retryAfterMs) || this.downloadRetryBaseMs * (2 ** (attempt - 1));
+          await delayWithSignal(Math.min(5_000, retryAfter), signal);
+        }
       }
     }
     throw lastError || new Error(`下載失敗：${asset.path}`);
   }
 
-  async downloadBlobOnce(asset, signal, onProgress) {
+  async downloadBlobOnce(asset, signal, onProgress, source) {
     const target = blobPath(this.cacheRoot, asset.sha256);
     const partial = path.join(this.cacheRoot, 'partial', `${asset.sha256}.part`);
-    await fsp.mkdir(path.dirname(target), { recursive: true });
-    await fsp.mkdir(path.dirname(partial), { recursive: true });
+    await ensureSafeManagedDirectory(this.cacheRoot, path.dirname(target));
+    await ensureSafeManagedDirectory(this.cacheRoot, path.dirname(partial));
+    await assertSafeManagedPath(this.cacheRoot, target, { allowMissing: true, leafKind: 'file' });
+    await assertSafeManagedPath(this.cacheRoot, partial, { allowMissing: true, leafKind: 'file' });
     let start = 0;
-    try {
-      const info = await fsp.stat(partial);
+    const partialInfo = await lstatIfPresent(partial);
+    if (partialInfo) {
+      const info = await fsp.lstat(partial);
       if (info.isFile() && info.size <= asset.size) start = info.size;
-      else await fsp.rm(partial, { force: true });
-    } catch {
-      // No partial download yet.
+      else await removeSafeManagedPath(this.cacheRoot, partial, { force: true });
     }
     if (start === asset.size) {
       const digest = await this.hashFileImpl(partial, signal);
       if (digest === asset.sha256) {
-        await fsp.rm(target, { force: true });
-        await fsp.rename(partial, target);
+        await removeSafeManagedPath(this.cacheRoot, target, { force: true, leafKind: 'file' });
+        await renameSafeManagedFile(this.cacheRoot, partial, target);
         const fingerprint = await this.fingerprintBlob(asset);
         if (!fingerprint) throw new Error(`下載完成檔案大小不符：${asset.path}`);
         this.rememberVerifiedBlob(asset, fingerprint);
         onProgress(asset.size);
         return;
       }
-      await fsp.rm(partial, { force: true });
+      await removeSafeManagedPath(this.cacheRoot, partial, { force: true, leafKind: 'file' });
       start = 0;
     }
-    const headers = { 'Accept-Encoding': 'identity', 'Cache-Control': 'no-cache' };
+    const headers = { 'Accept-Encoding': 'identity' };
+    if (!source.immutable) headers['Cache-Control'] = 'no-cache';
     if (start > 0) headers.Range = `bytes=${start}-`;
     const requestController = new AbortController();
     let requestTimedOut = false;
@@ -1080,7 +1571,7 @@ class AssetStore extends EventEmitter {
     signal?.addEventListener('abort', relayAbort, { once: true });
     let response;
     try {
-      response = await this.fetchImpl(encodeAssetUrl(this.origin, asset.path), {
+      response = await this.fetchImpl(source.url, {
         cache: 'no-store', redirect: 'error', headers, signal: requestController.signal
       });
     } catch (error) {
@@ -1106,7 +1597,7 @@ class AssetStore extends EventEmitter {
     }
     if (start > 0 && response.status === 200) {
       start = 0;
-      await fsp.rm(partial, { force: true });
+      await removeSafeManagedPath(this.cacheRoot, partial, { force: true, leafKind: 'file' });
     } else if (start > 0) {
       if (response.status !== 206) {
         cleanupRequest();
@@ -1132,6 +1623,7 @@ class AssetStore extends EventEmitter {
       cleanupRequest();
       throw new Error(`下載沒有內容：${asset.path}`);
     }
+    await assertSafeManagedPath(this.cacheRoot, partial, { allowMissing: start === 0, leafKind: 'file' });
     const handle = await fsp.open(partial, start > 0 ? 'a' : 'w');
     let received = start;
     onProgress(received);
@@ -1174,13 +1666,14 @@ class AssetStore extends EventEmitter {
       error.retryable = true;
       throw error;
     }
+    await assertSafeManagedPath(this.cacheRoot, partial, { allowMissing: false, leafKind: 'file' });
     const digest = await this.hashFileImpl(partial, signal);
     if (digest !== asset.sha256) {
-      await fsp.rm(partial, { force: true });
+      await removeSafeManagedPath(this.cacheRoot, partial, { force: true, leafKind: 'file' });
       throw new Error(`下載驗證失敗：${asset.path}`);
     }
-    await fsp.rm(target, { force: true });
-    await fsp.rename(partial, target);
+    await removeSafeManagedPath(this.cacheRoot, target, { force: true, leafKind: 'file' });
+    await renameSafeManagedFile(this.cacheRoot, partial, target);
     const fingerprint = await this.fingerprintBlob(asset);
     if (!fingerprint) throw new Error(`下載完成檔案大小不符：${asset.path}`);
     this.rememberVerifiedBlob(asset, fingerprint);
@@ -1224,6 +1717,7 @@ class AssetStore extends EventEmitter {
 
   async cleanupUnusedCache({ completedGameId = '' } = {}) {
     const cacheRoot = path.resolve(this.cacheRoot);
+    await this.validateCacheOwnership(cacheRoot);
     const keepBlobHashes = new Set();
     const protectedPartialSizes = new Map();
     for (const receipt of this.receipts.values()) {
@@ -1272,17 +1766,18 @@ class AssetStore extends EventEmitter {
         if (keepBlobHashes.has(entry.name)) continue;
         const candidate = path.join(prefixPath, entry.name);
         if (!isStrictChildPath(cacheRoot, candidate)) continue;
+        await assertSafeManagedPath(cacheRoot, candidate, { allowMissing: false, leafKind: 'file' });
         try {
           const info = await fsp.lstat(candidate);
           if (!info.isFile() || info.isSymbolicLink()) continue;
-          await fsp.unlink(candidate);
+          await removeSafeManagedPath(cacheRoot, candidate, { leafKind: 'file' });
           result.removedBlobs += 1;
           result.removedBlobBytes += info.size;
           this.forgetVerifiedBlob(entry.name);
           this.invalidBlobs.delete(entry.name);
         } catch { result.skipped += 1; }
       }
-      try { await fsp.rmdir(prefixPath); } catch { /* non-empty or already gone */ }
+      try { await removeSafeManagedPath(cacheRoot, prefixPath, { leafKind: 'directory' }); } catch { /* non-empty or already gone */ }
     }
 
     const partialRoot = path.join(cacheRoot, 'partial');
@@ -1297,6 +1792,7 @@ class AssetStore extends EventEmitter {
       const sha256 = match[1];
       const candidate = path.join(partialRoot, entry.name);
       if (!isStrictChildPath(cacheRoot, candidate)) continue;
+      await assertSafeManagedPath(cacheRoot, candidate, { allowMissing: false, leafKind: 'file' });
       try {
         const info = await fsp.lstat(candidate);
         if (!info.isFile() || info.isSymbolicLink()) continue;
@@ -1304,14 +1800,16 @@ class AssetStore extends EventEmitter {
         let preserve = Number.isSafeInteger(expectedSize) && info.size > 0 && info.size <= expectedSize;
         if (preserve) {
           try {
-            const completed = await fsp.stat(blobPath(cacheRoot, sha256));
+            const completedPath = blobPath(cacheRoot, sha256);
+            await assertSafeManagedPath(cacheRoot, completedPath, { allowMissing: false, leafKind: 'file' });
+            const completed = await fsp.lstat(completedPath);
             if (completed.isFile() && completed.size === expectedSize) preserve = false;
           } catch {
             // A valid partial for another/current active game must survive.
           }
         }
         if (preserve) continue;
-        await fsp.unlink(candidate);
+        await removeSafeManagedPath(cacheRoot, candidate, { leafKind: 'file' });
         result.removedPartials += 1;
         result.removedPartialBytes += info.size;
       } catch { result.skipped += 1; }
@@ -1350,14 +1848,19 @@ class AssetStore extends EventEmitter {
 
 module.exports = {
   AssetStore,
+  CACHE_OWNER_FILE,
   availableBytes,
   blobPath,
+  cacheOwnershipMarkerPath,
   canonicalJson,
+  encodeAssetBlobUrl,
   encodeAssetUrl,
   safeAssetPath,
   sha256Bytes,
   sha256File,
   validateCatalog,
+  validateCacheRootPath,
+  validateAssetBlobBaseUrl,
   validateIntegrityDocument,
   validateManifest
 };

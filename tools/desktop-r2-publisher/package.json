@@ -1,0 +1,22 @@
+{
+  "name": "onepiece-desktop-r2-publisher",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Safe, content-addressed Cloudflare R2 publisher for ONE PIECE desktop game assets.",
+  "type": "commonjs",
+  "scripts": {
+    "dry-run": "node publish.js",
+    "launcher:dry-run": "node publish-launcher-artifact.js",
+    "launcher:live": "node publish-launcher-artifact.js --live",
+    "test": "npm run test:assets && npm run test:launcher && npm run test:signature",
+    "test:assets": "node ../../scripts/desktop_r2_publish_qa.js",
+    "test:launcher": "node ../../scripts/desktop_r2_launcher_publish_qa.js",
+    "test:signature": "node launcher-manifest-signature-qa.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "3.1127.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

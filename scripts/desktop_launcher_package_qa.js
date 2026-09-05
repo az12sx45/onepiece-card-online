@@ -24,6 +24,7 @@ const APP_FILES = [
   'game-preload.js',
   'game-session-policy.js',
   'runtime-asset-cache.js',
+  'launcher-update-service.js',
   'auth-service.js',
   'asset-store.js',
   'launcher.html',
@@ -40,14 +41,33 @@ const EXTRA_RESOURCES = [
     filter: [
       'launcher_tabletop_series_logo_v1.png',
       'launcher_card_cover_perspective_v2.png',
+      'launcher_card_box_frame_cutout_v1.png',
+      'launcher_card_lid_front_panel_v1.png',
+      'launcher_card_box_shell_fixed_v1.png',
       'launcher_board_cover_logo_perspective_v5.png',
-      'launcher_chess_cover_logo_perspective_v5.png'
+      'launcher_board_box_frame_cutout_v1.png',
+      'launcher_board_lid_front_panel_v1.png',
+      'launcher_board_box_shell_fixed_v1.png',
+      'launcher_chess_cover_logo_perspective_v5.png',
+      'launcher_chess_box_frame_cutout_v1.png',
+      'launcher_chess_lid_front_panel_v1.png',
+      'launcher_chess_box_shell_fixed_v1.png'
     ]
   },
   {
     from: '../public/images/desktop_launcher',
     to: 'launcher-assets/images/desktop_launcher',
-    filter: ['desktop_launcher_cabin_bg_v1.png']
+    filter: [
+      'desktop_launcher_cabin_bg_v1.png',
+      'launcher_box_core_frame_01_v1.png',
+      'launcher_box_center_light_01_v3.png',
+      'launcher_box_center_light_02_v3.png',
+      'launcher_box_center_light_03_v3.png',
+      'launcher_box_center_light_04_v3.png',
+      'launcher_cursor_logpose_default_v1.png',
+      'launcher_cursor_logpose_pointer_v1.png',
+      'launcher_cursor_logpose_pressed_v1.png'
+    ]
   },
   {
     from: '../public/images/board/avatars',
@@ -204,10 +224,25 @@ function validateBmp(filePath, expectedWidth, expectedHeight, label) {
   return `${width}x${height}x${bitDepth}`;
 }
 
+function validateCursorPng(filePath, label) {
+  const bytes = fs.readFileSync(filePath);
+  const pngSignature = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+  assert(bytes.length >= 33 && bytes.subarray(0, 8).equals(pngSignature), `${label} is not a PNG.`);
+  assert(bytes.toString('ascii', 12, 16) === 'IHDR', `${label} has no PNG IHDR.`);
+  const width = bytes.readUInt32BE(16);
+  const height = bytes.readUInt32BE(20);
+  const bitDepth = bytes[24];
+  const colourType = bytes[25];
+  assert(width === 40 && height === 40, `${label} must be 40x40.`);
+  assert(bitDepth === 8 && colourType === 6, `${label} must be 8-bit RGBA with real transparency.`);
+  assert(bytes.length <= 64 * 1024, `${label} is unexpectedly large for a cursor.`);
+  return `${width}x${height}x${bitDepth}-rgba`;
+}
+
 function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
-  assert(packageJson.version === '1.1.1', 'Desktop launcher version must be 1.1.1 for the runtime cache release.');
+  assert(packageJson.version === '1.1.3', 'Desktop launcher version must be 1.1.3 for the R2 launcher, settings and uninstall release.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
@@ -240,6 +275,9 @@ function validateSourcePackage() {
   const iconSizes = validateIco(ICON_PATH);
   const sidebar = validateBmp(SIDEBAR_PATH, 164, 314, 'Installer sidebar');
   const header = validateBmp(HEADER_PATH, 150, 57, 'Installer header');
+  const cursorDefault = validateCursorPng(path.join(PUBLIC_ROOT, 'images', 'desktop_launcher', 'launcher_cursor_logpose_default_v1.png'), 'Default Log Pose launcher cursor');
+  const cursorPointer = validateCursorPng(path.join(PUBLIC_ROOT, 'images', 'desktop_launcher', 'launcher_cursor_logpose_pointer_v1.png'), 'Pointer Log Pose launcher cursor');
+  const cursorPressed = validateCursorPng(path.join(PUBLIC_ROOT, 'images', 'desktop_launcher', 'launcher_cursor_logpose_pressed_v1.png'), 'Pressed Log Pose launcher cursor');
 
   const catalogPath = path.join(PUBLIC_ROOT, 'desktop', 'catalog-v1.json');
   const catalog = readJson(catalogPath, 'public desktop catalog');
@@ -272,7 +310,7 @@ function validateSourcePackage() {
     assert(!forbiddenText.includes(forbidden), `Full game asset tree is forbidden in launcher packaging: ${forbidden}`);
   }
 
-  return { packageJson, iconSizes, sidebar, header, catalog };
+  return { packageJson, iconSizes, sidebar, header, cursorDefault, cursorPointer, cursorPressed, catalog };
 }
 
 function collectExpectedLauncherAssets() {
@@ -285,10 +323,9 @@ function collectExpectedLauncherAssets() {
   for (const fileName of EXTRA_RESOURCES[0].filter) {
     add(path.join(PUBLIC_ROOT, 'images', 'game_launcher', fileName), `images/game_launcher/${fileName}`);
   }
-  add(
-    path.join(PUBLIC_ROOT, 'images', 'desktop_launcher', 'desktop_launcher_cabin_bg_v1.png'),
-    'images/desktop_launcher/desktop_launcher_cabin_bg_v1.png'
-  );
+  for (const fileName of EXTRA_RESOURCES[1].filter) {
+    add(path.join(PUBLIC_ROOT, 'images', 'desktop_launcher', fileName), `images/desktop_launcher/${fileName}`);
+  }
   const avatarRoot = path.join(PUBLIC_ROOT, 'images', 'board', 'avatars');
   for (const entry of fs.readdirSync(avatarRoot, { withFileTypes: true })) {
     if (entry.isFile() && path.extname(entry.name).toLowerCase() === '.webp') {
@@ -327,6 +364,7 @@ function validateAsar(asarPath) {
     'auth-service.js',
     'game-preload.js',
     'game-session-policy.js',
+    'launcher-update-service.js',
     'runtime-asset-cache.js',
     'launcher.css',
     'launcher.html',
@@ -437,6 +475,7 @@ function main() {
     `iconSizes=${source.iconSizes}`,
     `sidebar=${source.sidebar}`,
     `header=${source.header}`,
+    `cursors=${source.cursorDefault},${source.cursorPointer},${source.cursorPressed}`,
     'runtimeDeps=1',
     'games=card,board',
     'chess=unavailable'

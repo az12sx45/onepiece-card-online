@@ -12,6 +12,13 @@
   <div class="app-backdrop" aria-hidden="true"></div>
   <div class="app-vignette" aria-hidden="true"></div>
 
+  <header class="window-titlebar" id="windowTitlebar">
+    <div class="window-brand" aria-label="ONE PIECE TABLETOP SERIES">
+      <span class="window-brand-mark" aria-hidden="true"></span>
+      <span>TABLETOP SERIES</span>
+    </div>
+  </header>
+
   <section class="boot-screen screen is-active" id="bootScreen" aria-live="polite">
     <img class="boot-logo" src="opui://launcher/images/game_launcher/launcher_tabletop_series_logo_v1.png" alt="ONE PIECE TABLETOP SERIES">
     <span class="log-pose-loader" aria-hidden="true"></span>
@@ -52,17 +59,62 @@
           <img id="accountAvatar" src="opui://launcher/images/board/avatars/8.webp" alt="">
           <span><strong id="accountName">航海者</strong><small id="accountTitle">TABLETOP MEMBER</small></span><i aria-hidden="true"></i>
         </button>
-        <div class="account-menu" id="accountMenu" role="menu" hidden><button id="logoutButton" type="button" role="menuitem">登出帳號</button></div>
+        <div class="account-menu" id="accountMenu" role="menu" hidden>
+          <button id="settingsButton" type="button" role="menuitem"><span class="settings-menu-icon" aria-hidden="true"></span>啟動器設定</button>
+          <button id="logoutButton" type="button" role="menuitem">登出帳號</button>
+        </div>
       </div>
     </header>
 
     <section class="library-panel app-panel is-active" id="libraryPanel">
       <aside class="game-rail" aria-label="桌遊選擇"><p class="rail-title">MY GAMES</p><div id="gameRail"></div></aside>
-      <section class="game-feature" id="gameFeature" aria-live="polite">
+      <section class="game-feature" id="gameFeature" data-media-state="ambient" aria-live="polite">
         <video class="feature-video" id="featureVideo" muted playsinline loop preload="metadata"></video>
         <div class="feature-art" id="featureArt" aria-hidden="true"></div><div class="feature-shade" aria-hidden="true"></div>
         <div class="feature-content">
-          <div class="feature-cover-wrap"><img class="feature-cover" id="featureCover" src="" alt=""><span class="cover-glint" aria-hidden="true"></span></div>
+          <div class="feature-cover-wrap">
+            <span class="game-box-art feature-box-art">
+              <span class="feature-box-tray" aria-hidden="true">
+                <img class="feature-box-tray-image" src="opui://launcher/images/desktop_launcher/launcher_box_core_frame_01_v1.png" alt="" aria-hidden="true" draggable="false">
+              </span>
+              <span class="feature-box-reveal" aria-hidden="true">
+                <img class="feature-box-reveal-frame feature-box-reveal-frame--01" src="opui://launcher/images/desktop_launcher/launcher_box_center_light_01_v3.png" alt="" draggable="false">
+                <img class="feature-box-reveal-frame feature-box-reveal-frame--02" src="opui://launcher/images/desktop_launcher/launcher_box_center_light_02_v3.png" alt="" draggable="false">
+                <img class="feature-box-reveal-frame feature-box-reveal-frame--03" src="opui://launcher/images/desktop_launcher/launcher_box_center_light_04_v3.png" alt="" draggable="false">
+                <img class="feature-box-reveal-frame feature-box-reveal-frame--04" src="opui://launcher/images/desktop_launcher/launcher_box_center_light_03_v3.png" alt="" draggable="false">
+              </span>
+              <svg class="feature-box-inner-core-svg" viewBox="0 0 1086 1448" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                <defs>
+                  <radialGradient id="featureBoxInnerCoreGradient">
+                    <stop offset="0" stop-color="#fffef0" stop-opacity="1"></stop>
+                    <stop offset="0.16" stop-color="#ffe986" stop-opacity="0.92"></stop>
+                    <stop offset="0.45" stop-color="#efaa2c" stop-opacity="0.42"></stop>
+                    <stop offset="1" stop-color="#d66b0a" stop-opacity="0"></stop>
+                  </radialGradient>
+                </defs>
+                <ellipse id="featureInnerCore" rx="305" ry="405" fill="url(#featureBoxInnerCoreGradient)"></ellipse>
+              </svg>
+              <img class="game-box-frame game-box-fixed-shell" id="featureFrame" src="" alt="" aria-hidden="true">
+              <svg class="feature-box-free-edge-svg" viewBox="0 0 1086 1448" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                <defs>
+                  <filter id="featureBoxEdgeBlur" x="-25%" y="-25%" width="150%" height="150%">
+                    <feGaussianBlur stdDeviation="18"></feGaussianBlur>
+                  </filter>
+                </defs>
+                <path class="feature-box-free-edge-spill" id="featureEdgeSpill" fill="none" filter="url(#featureBoxEdgeBlur)"></path>
+                <path class="feature-box-free-edge-glow" id="featureEdgeGlow" fill="none"></path>
+                <path class="feature-box-free-edge-core" id="featureEdgeCore" fill="none"></path>
+              </svg>
+              <span class="feature-box-lid">
+                <span class="feature-box-lid-front">
+                  <img class="game-box-cover" id="featureCover" src="" alt="">
+                  <span class="cover-glint" aria-hidden="true"></span>
+                </span>
+                <span class="feature-box-lid-back" aria-hidden="true"></span>
+              </span>
+            </span>
+            <span class="feature-box-shadow" aria-hidden="true"></span>
+          </div>
           <div class="feature-copy">
             <div class="feature-kicker-row"><span class="status-pill" id="featureStatus">檢查中</span><span class="feature-version" id="featureVersion"></span></div>
             <h2 id="featureTitle"></h2><p class="feature-tagline" id="featureTagline"></p><div class="feature-tags" id="featureTags"></div><p class="feature-description" id="featureDescription"></p>
@@ -77,13 +129,18 @@
     </section>
 
     <section class="downloads-panel app-panel" id="downloadsPanel" hidden>
-      <div class="panel-heading"><div><p class="eyebrow">DOWNLOAD MANAGER</p><h2>下載與更新</h2></div><button class="ghost-button" id="changeLocationButton" type="button">變更下載位置</button></div>
-      <div class="download-list" id="downloadList"></div>
+      <div class="downloads-header">
+        <div class="panel-heading"><div><p class="eyebrow">DOWNLOAD MANAGER</p><h2>遊戲安裝管理</h2><p>下載、更新或個別移除遊戲；帳號與雲端進度不受影響。</p></div></div>
+        <div class="downloads-storage"><span>目前位置</span><strong id="downloadsCachePath">讀取中…</strong></div>
+        <button class="ghost-button" id="changeLocationButton" type="button">變更下載位置</button>
+      </div>
+      <div class="download-list-scroll"><div class="download-list" id="downloadList"></div></div>
     </section>
   </main>
 
   <dialog class="detail-dialog" id="detailDialog">
-    <button class="dialog-close" id="detailClose" type="button" aria-label="關閉">×</button><div class="dialog-visual"><img id="detailCover" src="" alt=""></div>
+    <button class="dialog-close" id="detailClose" type="button" aria-label="關閉">×</button>
+    <div class="dialog-visual"><span class="game-box-art detail-box-art"><img class="game-box-cover" id="detailCover" src="" alt=""><img class="game-box-frame" id="detailFrame" src="" alt="" aria-hidden="true"></span></div>
     <div class="dialog-copy"><p class="eyebrow" id="detailEyebrow"></p><h2 id="detailTitle"></h2><p id="detailDescription"></p><ul id="detailFeatures"></ul><div class="dialog-meta" id="detailMeta"></div></div>
   </dialog>
 
@@ -91,6 +148,68 @@
     <button class="dialog-close" id="locationClose" type="button" aria-label="關閉">×</button><p class="eyebrow">GAME STORAGE</p><h2>遊戲下載位置</h2>
     <p>圖片、音樂與影片會安裝到這裡；帳號與雲端存檔仍留在伺服器。</p><div class="path-box" id="cachePath">讀取中…</div>
     <div class="location-actions"><button class="ghost-button" id="pickLocationButton" type="button">選擇資料夾</button><button class="gold-button" id="locationDone" type="button">完成</button></div>
+  </dialog>
+
+  <dialog class="settings-dialog" id="settingsDialog">
+    <button class="dialog-close" id="settingsClose" type="button" aria-label="關閉">×</button>
+    <p class="eyebrow">LAUNCHER SETTINGS</p>
+    <h2>啟動器設定</h2>
+    <fieldset class="settings-group settings-display-group">
+      <legend>遊戲顯示模式</legend>
+      <p class="settings-group-note">套用在下一次開啟的遊戲視窗。</p>
+      <div class="display-mode-options" role="radiogroup" aria-label="遊戲顯示模式">
+        <label class="display-mode-option" for="gameDisplayBorderless">
+          <input id="gameDisplayBorderless" name="gameDisplayMode" type="radio" value="borderless" checked>
+          <span class="display-mode-mark" aria-hidden="true"><i></i></span>
+          <span class="display-mode-copy">
+            <strong>無邊框視窗</strong>
+            <small>保留縮放與切換視窗，使用深色遊戲視窗邊框。</small>
+          </span>
+        </label>
+        <label class="display-mode-option" for="gameDisplayFullscreen">
+          <input id="gameDisplayFullscreen" name="gameDisplayMode" type="radio" value="fullscreen">
+          <span class="display-mode-mark" aria-hidden="true"><i></i></span>
+          <span class="display-mode-copy">
+            <strong>全螢幕</strong>
+            <small>開啟遊戲時自動填滿目前使用的顯示器；遊戲中可按 F11 暫時切換。</small>
+          </span>
+        </label>
+      </div>
+    </fieldset>
+    <label class="settings-option" for="minimizeToTrayToggle">
+      <input id="minimizeToTrayToggle" type="checkbox">
+      <span class="settings-toggle" aria-hidden="true"><i></i></span>
+      <span class="settings-option-copy">
+        <strong>啟動遊戲後縮到系統匣</strong>
+        <small>遊戲開啟後隱藏啟動器；可從 Windows 右下角圖示重新顯示，關閉最後一款遊戲後會自動回來。</small>
+      </span>
+    </label>
+    <section class="launcher-update-card" id="launcherUpdateCard" data-status="idle" aria-labelledby="launcherUpdateTitle">
+      <div class="launcher-update-heading">
+        <span class="launcher-update-mark" aria-hidden="true"><i></i></span>
+        <span>
+          <strong id="launcherUpdateTitle">啟動器更新</strong>
+          <small id="launcherCurrentVersion">目前版本 —</small>
+        </span>
+      </div>
+      <p class="launcher-update-status" id="launcherUpdateStatus" role="status" aria-live="polite">尚未檢查更新。</p>
+      <div class="launcher-update-progress" id="launcherUpdateProgress" role="progressbar" aria-label="啟動器更新下載進度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" hidden>
+        <span><i id="launcherUpdateProgressBar"></i></span>
+        <small id="launcherUpdateProgressDetail">0%</small>
+      </div>
+      <button class="ghost-button launcher-update-action" id="launcherUpdateAction" type="button">檢查更新</button>
+    </section>
+    <div class="settings-actions"><button class="ghost-button" id="settingsCancel" type="button">取消</button><button class="gold-button" id="settingsSave" type="button">儲存設定</button></div>
+  </dialog>
+
+  <dialog class="uninstall-dialog" id="uninstallDialog">
+    <button class="dialog-close" id="uninstallClose" type="button" aria-label="關閉">×</button>
+    <div class="uninstall-mark" aria-hidden="true"><span></span></div>
+    <p class="eyebrow">REMOVE LOCAL GAME</p>
+    <h2 id="uninstallTitle">解除安裝遊戲？</h2>
+    <p id="uninstallDescription"></p>
+    <div class="uninstall-preserved"><strong>會保留</strong><span>帳號、雲端進度，以及其他遊戲仍在使用的共用素材</span></div>
+    <div class="uninstall-actions"><button class="ghost-button" id="uninstallCancel" type="button">取消</button><button class="danger-button" id="uninstallConfirm" type="button">解除安裝</button></div>
   </dialog>
 
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>

@@ -1,5 +1,30 @@
 ﻿# Dev Workflow
 
+## 修改紀錄：桌面啟動器 1.1.3／簽章更新與快取安全 V460（2026-09-06）
+
+- 版本與範圍：`desktop/package.json`／`package-lock.json` 升為 `1.1.3`，正式 Windows x64 包仍只包含本機啟動器、兩款遊戲所需的目前 catalog／manifest、核准的啟動器 UI 素材與兩支預覽影片；Card／Board 大型媒體不塞進 NSIS，而由安裝後的素材下載器取得。《霸海戰棋》仍只展示且不可安裝。
+- 素材來源：Card／Board 的圖片、音樂、影片與字型以 `public/desktop/catalog-v1.json` 的 `assetBlobBaseUrl` 指向 Cloudflare R2 immutable CAS；正式啟動器只接受 `https://game-assets.rihdi.tw/desktop/blobs/sha256`，測試來源只能由 QA 明確注入本機 loopback。R2 失敗時逐檔退回 Render，兩個來源都必須通過 manifest 的 size／SHA-256 才能進入 receipt／last-known-good。網頁程式、登入、聊天室、房間、存檔與 WebSocket 仍由 Render 負責。
+- 啟動器更新信任：`desktop/launcher-update-service.js` 內建經審查的 Ed25519 公鑰。只有版本高於本機的 `updateAvailable` manifest 才必須包含固定欄位的 `artifact` 與 `signature`；簽章覆蓋 schema、channel、platform、arch、version、publishedAt 及完整 artifact，未知演算法、未知 keyId、遭修改內容、錯誤簽章、非允許 HTTPS origin、錯誤檔名／大小／SHA-256 或非 MZ／PE 檔案都 fail closed。Render 與 `https://game-assets.rihdi.tw` 是目前唯二允許的安裝檔來源。
+- 簽章金鑰：私鑰只存在 `%LOCALAPPDATA%\ONEPIECE-Tabletop\publisher\launcher-signing-key.json`，以目前 Windows 使用者的 DPAPI 保護；repo 與啟動器只保存公鑰。`initialize-launcher-signing-key.js` 負責建立／檢查金鑰，`sign-launcher-release.ps1` 只在簽章子程序期間解密並注入 private PKCS8，輸出到 Local AppData 的候選區，不會直接覆寫公開 manifest。換電腦或 Windows 使用者時必須使用受控移轉方式或建立新版公鑰啟動器，不能只複製 DPAPI 密文。
+- 安裝檔發布：`publish-launcher-artifact.js`／`publish-saved-launcher.ps1` 只接受經人工確認版本、bytes 與 SHA-256 的 canonical x64 `.exe`，先驗證 MZ／PE，預設 dry run；live 只可寫入 `desktop/launcher/releases/<version>/<filename>`，使用 HEAD、`If-None-Match: *` 條件式 PUT 與發布後 HEAD，禁止刪除或覆寫既有版本。發布 artifact 與簽章 release manifest 是兩個分離步驟。
+- 1.1.2→1.1.3 過渡：`public/desktop/launcher-release-v1.json` 暫時保留 V454 的 `1.1.2` 且不宣告 artifact，避免舊 1.1.2 客戶端嘗試使用它尚未信任的 R2 更新來源。1.1.3 先以人工安裝完成信任根更新；之後的 1.1.4+ 才能由 1.1.3 驗證 Ed25519 manifest 並從 R2 自動更新。
+- 快取與解除安裝安全：`desktop/asset-store.js` 拒絕磁碟根／UNC 分享根作下載位置，快取根必須具有 `.onepiece-tabletop-cache-owner-v1.json` 且內容精確對應目前路徑；舊快取只有在 receipt／manifest 目錄及內容完整通過驗證後才會被接管。所有受管理父層在寫入、改名、清理或解除安裝前都會逐層 `lstat` 拒絕 symlink／junction，並用 `realpath` 確認仍在實際快取根內；另一款遊戲仍引用或正在下載的共用 SHA blob 不會被刪除。
+- 啟動器專用盒彩：`launcher_{card,board,chess}_{lid_front_panel,box_shell_fixed}_v1.png` 六張圖由 `desktop/package.json` 明確打包並經 `opui://launcher` 顯示；`build_desktop_game_catalog.js`／QA 將這六張與 `images/desktop_launcher/` 一樣視為 launcher-only，避免 Card／Board 下載清單重複攜帶只供啟動器翻盒動畫使用的素材。
+- 驗證：`DESKTOP_LAUNCHER_UPDATE_QA=PASS` 覆蓋 Ed25519 正常／竄改／未知 key／錯誤來源、下載大小與 SHA、PE、取消及啟動；`LAUNCHER_MANIFEST_SIGNATURE_QA=PASS` 覆蓋簽章 canonical bytes 與 Windows DPAPI round trip；`DESKTOP_R2_LAUNCHER_PUBLISH_QA=PASS` 覆蓋 canonical key、dry run、條件式建立、metadata 衝突與無 Delete API；`DESKTOP_ASSET_STORE_QA=PASS` 覆蓋正式來源白名單、ownership、合法舊快取接管、磁碟根、managed junction、receipt／manifest 路徑、單款解除安裝與共用 blob 保護。package、catalog、Service Worker 隔離、設定與安裝後媒體 smoke 亦已通過。
+- 修改範圍：桌面啟動器／下載器、R2 發布與簽章工具、對應 QA、六張新桌遊盒圖及三份專案文件；沒有修改 Card／Board 規則、資料 id、存檔、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`，因此 `docs/GAME_RULES.md` 不變。既有 `public/images/ranks/r5.PNG`／`r6.PNG` 工作樹差異未碰觸。
+
+## 修改紀錄：桌面遊戲素材 Cloudflare R2 分發 V459（2026-09-05）
+
+- 目的：把桌面啟動器安裝／更新 Card 與 Board 圖片、音樂、影片及字型時的約 1.8 GB 大檔流量移到物件儲存；Render 仍是帳號、API、HTML／JS／CSS、WebSocket、catalog 與 manifest 的控制面，不搬動網頁遊戲或多人狀態。
+- R2：專用 bucket 為 `onepiece-game-assets`，公開讀取使用自訂網域 `https://game-assets.rihdi.tw`；內容以 SHA-256 去重並固定寫入 `desktop/blobs/sha256/<前兩碼>/<完整 SHA-256>`。`config/desktop-asset-delivery-v1.json` 是 catalog 建置時唯一的素材來源設定，產出的 `public/desktop/catalog-v1.json` 會帶 `assetBlobBaseUrl`，禁止帳密、query、fragment、非 HTTPS 公網或尾端斜線。
+- CDN 快取：Cloudflare Cache Rule 名稱固定為 `ONE PIECE R2 immutable assets`，完整 URI wildcard 為 `https://game-assets.rihdi.tw/desktop/blobs/sha256/*`。命中範圍設為 Cache eligible；Edge TTL 與 Browser TTL 都採 origin，直接服從發布器寫入的 immutable Cache-Control，不另設容易和內容版本衝突的固定秒數。
+- 啟動器：新版本先用 R2 的 immutable CAS URL 下載，再以原 Render 邏輯路徑作逐檔 fallback；兩個來源最後都必須通過 manifest 宣告的 size／SHA-256 才能寫入既有 `opcache` 與 receipt。Range 續傳、重試、取消、last-known-good 與損壞修復語意保留；R2 缺檔、暫時錯誤或位元組不符不會直接破壞上一個可啟動版本。
+- 發布工具：`tools/desktop-r2-publisher/publish.js` 只讀正式 catalog 與 Card／Board immutable manifests，先驗證每個來源位元組，再按 SHA 去重。預設為不連網的 dry run；live 模式只執行 `HeadObject` 與帶 `If-None-Match: *` 的條件式 `PutObject`，使用正確 MIME、`public, max-age=31536000, immutable` 與 `sha256` metadata，既有物件若 metadata 不一致便停止，沒有刪除或覆寫路徑。
+- 憑證：R2 Access Key ID／Secret 只允許 bucket `onepiece-game-assets` 的 Object Read & Write。`save-r2-credential.ps1` 從剪貼簿逐欄接收後立即清空剪貼簿，使用目前 Windows 使用者的 DPAPI 加密到 `%LOCALAPPDATA%\ONEPIECE-Tabletop\publisher\r2-credentials.json`；`publish-saved-r2.ps1` 僅在發布程序期間解密成 process environment，結束後還原／清除。密鑰不得寫入 repo、文件、啟動器、安裝檔、catalog、manifest、命令歷史或 Git。
+- 相容性：網頁版仍直接由 Render 供應原路徑；既有啟動器會忽略新增的 catalog 欄位並繼續向 Render 下載。支援 R2 的新版啟動器也保留 Render fallback，已驗證的舊 receipt／CAS 可直接沿用，所以這次切換不要求玩家重抓相同 SHA 的素材。沒有更動 Card／Board 規則、帳號、房間、存檔、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`。
+- 驗證：`desktop_r2_publish_qa.js` 覆蓋兩份 manifest 去重、Git committed SVG 位元組、dry-run 無網路、既有物件略過、metadata 衝突拒絕、412 競態後重驗與無刪除路徑；`desktop_asset_store_qa.js` 覆蓋 R2 優先、Range 續傳／重試、SHA 失敗不污染 LKG 及 Render fallback；`desktop_game_catalog_qa.js` 鎖定正式 HTTPS 來源與設定檔一致。首次正式 live upload 已上傳 `3486` 個唯一 blob、共 `1,800,547,515` bytes，全部成功；緊接著第二輪得到 `uploaded=0`、`skipped=3486`，確認物件可重跑且沒有重複上傳。自訂網域實測第一個完整請求為 Cloudflare cache `MISS`，再次請求轉為 `HIT`，Range 請求回應 `206 Partial Content`。
+- 修改檔案：`config/desktop-asset-delivery-v1.json`、`desktop/asset-store.js`、`public/desktop/catalog-v1.json`、`scripts/build_desktop_game_catalog.js`、三支 R2／catalog／asset-store QA、`tools/desktop-r2-publisher/` 與三份專案文件；既有 `public/images/ranks/r5.PNG`／`r6.PNG` 工作樹差異未碰觸。
+
 ## 修改紀錄：多人續戰略過玩家擲骰／戰鬥四鍵排版 V458（2026-09-05）
 
 - 問題：玩家完成一輪戰鬥、回合交給下一名玩家，再輪回自己續戰後，點擊攻擊會沒有玩家骰便直接執行敵方；右下攻擊／夥伴／道具／逃跑四鍵也過度貼近外框且間距不一致。

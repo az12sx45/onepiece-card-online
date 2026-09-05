@@ -2,6 +2,27 @@
 
 本文件只整理目前 repo 內的大富翁 / Board 遊戲。舊卡牌房間與 `server/engine.js`、`server/cpu.js` 雖然存在，但不是本文件的主範圍。
 
+## 桌面啟動器 1.1.3 與可信任更新 V460（2026-09-06）
+
+- 目前桌面啟動器程式版本為 `1.1.3`。安裝包保留本機遊戲庫、登入、設定、下載／修復／單款移除、無邊框或全螢幕啟動及系統匣行為；Card／Board 大型素材不內嵌，仍依 catalog／manifest 安裝到玩家選定的快取根。《霸海戰棋》維持製作中且不可下載。
+- 大型圖片、音樂、影片與字型先從 Cloudflare R2 的 SHA-256 immutable CAS 取得，正式素材來源固定為 `game-assets.rihdi.tw`，R2 失敗才逐檔退回 Render；不論來源都要通過 manifest 的 size／SHA-256。Render 繼續提供遊戲程式、帳號、好友、聊天室、房間、存檔、WebSocket、catalog 與 manifest，所以桌面與網頁玩家仍共用同一線上遊戲狀態。
+- 1.1.3 內建 Ed25519 發布公鑰。未來高於本機版本的更新 manifest 必須對完整 release／artifact 欄位簽章，安裝檔還會再次驗證允許來源、canonical 檔名、bytes、SHA-256 與 Windows MZ／PE；竄改、未知 key 或未知演算法都會拒絕。對應私鑰只以目前 Windows 使用者 DPAPI 加密保存在 Local AppData，從不進 repo、啟動器或 R2。
+- R2 安裝檔發布器只建立 `desktop/launcher/releases/<version>/<filename>` 的 immutable 物件，預設 dry run，live 也使用條件式 PUT 並拒絕覆寫。安裝檔上傳與 Ed25519 release manifest 簽署／發布分開執行，避免未審核檔案直接變成自動更新。
+- 目前公開 `launcher-release-v1.json` 刻意仍是 `1.1.2` 且沒有 artifact：舊 1.1.2 尚未信任 R2 更新來源，1.1.3 因此先採一次人工安裝完成信任根升級；後續 1.1.4+ 才由 1.1.3 驗證簽章並自動下載。
+- 玩家選擇的下載位置不能是磁碟或網路分享根目錄。啟動器會用精確 ownership marker 管理快取；合法舊快取須先驗證 receipt／manifest 才能接管。寫入、清理與解除安裝前會逐層拒絕 symlink／junction 並確認 realpath 沒有離開快取根，且保留另一款遊戲仍引用的共用 SHA blob。
+- 三款盒面各新增 `lid_front_panel` 與 `box_shell_fixed` 共六張啟動器專用圖片，只隨啟動器安裝包配送並用於翻盒動畫，不會被誤列進 Card／Board 遊戲下載 manifest。
+- 這些變更只處理桌面配送、更新信任與本機快取安全，沒有修改 Board／Card 規則、資料 id、存檔或多人同步格式。
+
+## 桌面大型素材改由 Cloudflare R2 分發 V459（2026-09-05）
+
+- 桌面啟動器的 Card／Board 圖片、音樂、影片與字型使用獨立 Cloudflare R2 bucket `onepiece-game-assets`；公開下載入口為 `https://game-assets.rihdi.tw`，物件 key 依內容雜湊固定為 `desktop/blobs/sha256/<前兩碼>/<完整 SHA-256>`。相同內容即使被兩款遊戲或多個邏輯路徑引用，R2 也只保存／傳輸一個 immutable blob。
+- Cloudflare 規則 `ONE PIECE R2 immutable assets` 只比對完整 URI wildcard `https://game-assets.rihdi.tw/desktop/blobs/sha256/*`，設為 Cache eligible；Edge TTL／Browser TTL 皆採 origin。正式公網驗證已觀察到首請求 `MISS`、重複請求 `HIT`，影音續傳需要的 Range 回應為 `206`。
+- Render 繼續負責帳號、好友、聊天室、房間、雲端存檔、HTML／JS／CSS、WebSocket、catalog 與 manifest。網頁版完全維持原 Render URL；桌面新版只把安裝／更新的大型媒體下載改成 R2 優先，並在 R2 缺檔或暫時失敗時逐檔退回 Render。
+- 不論來源為 R2 或 Render，下載器都沿用 manifest 的 path／size／SHA-256 驗證、內容位址 `opcache`、receipt、差異更新、Range 續傳、修復及 last-known-good。既有已安裝玩家不會因換來源重抓內容相同的 1.8 GB 素材；舊啟動器看不懂 `assetBlobBaseUrl` 時仍照原方式使用 Render。
+- R2 發布由隔離的 `tools/desktop-r2-publisher/` 完成：預設 dry run，只在明確 `--live` 時以 bucket 限定的 Object Read & Write 憑證做 HEAD 與條件式 PUT，不提供刪除／覆寫。Windows 發布端可用 DPAPI 腳本把兩段憑證加密保存在目前使用者的 Local AppData，密鑰不進 repo、啟動器或公開檔案。
+- 第一輪正式發布已完成 `3486` 個唯一 blob／`1,800,547,515` bytes；第二輪相同清單為 `uploaded=0`、`skipped=3486`，確認完整物件集合已存在且差異發布不會重送相同 SHA。
+- 本變更只調整桌面素材配送來源，沒有建立第二套遊戲伺服器，也沒有變更 Card／Board 遊戲規則、持久存檔或多人同步協定。
+
 ## 多人續戰出招與戰鬥指令排版 V458（2026-09-05）
 
 - 多人戰鬥暫停並輪轉其他玩家後，回到原玩家會建立真正的新戰鬥輪：上一輪的已行動旗標、骰值、行動摘要與先攻順序都不再被共鬥 runtime 套回，因此點擊招式會先正常擲玩家骰，再依本輪優先度與速度執行敵方行動。
@@ -34,7 +55,7 @@
 
 ## 桌面啟動器更新查詢入口 V454（2026-09-05）
 
-- 正式站以 `public/desktop/launcher-release-v1.json` 提供 stable／win32／x64 啟動器版本查詢。現行 `1.1.2` manifest 沒有 artifact，代表沒有比目前版本更高、可下載的正式更新。
+- 正式站以 `public/desktop/launcher-release-v1.json` 提供 stable／win32／x64 啟動器版本查詢。V454 當時公開的 `1.1.2` manifest 沒有 artifact；目前仍暫留此內容作 1.1.2→1.1.3 人工升級橋接，正式現行啟動器版本與後續簽章規則以 V460 為準。
 - 這是桌面啟動器發行資訊，不參與 Board 或 Card 的遊戲素材 catalog，也不改帳號、房間、回合、存檔及多人同步。
 
 ## 卡牌進場隱藏遮罩修復 V434（2026-09-04）
@@ -47,7 +68,7 @@
 - 《偉大航道爭霸戰》正式對戰頁改載預先編譯的本機 Tailwind CSS，不再讓 Tailwind CDN 在遊戲中監看 DOM 並即時編譯。Socket `STATE`／`EMIT` 的完整 render 會合併到同一 animation frame，場地、棄牌、玩家與日誌只有 fingerprint 改變才重建，減少每個動作都停頓一下的主執行緒工作。
 - 抽牌動畫所有完成路徑只能送一次 `DRAW`，麻痺跳過也以 round／turn／draw 狀態防重；決鬥卡背統一改用 `back.webp`。這些修正不改牌效、回合順序或多人協定。
 - 桌面啟動器把安裝 manifest 建成記憶體路由索引，素材請求不再每次 `stat`／hash。單檔不超過 8 MiB 的素材進入 192 MiB 上限的 LRU，較大音樂／影片直接串流，seek／換場取消時會關閉舊檔案串流；遊戲 session 仍非持久且使用 `cache:false`，V8 code cache 與 Chromium session／GPU／network cache 則跟著玩家選定的素材位置，目前選 D 槽便落在 D 槽。重開視窗會保留本次程序中的非帳號設定／手動存檔，舊視窗事件不會清掉新視窗快取。
-- 啟動器版本為 `1.1.1`。manifest、receipt 與 SHA-256 的下載／修復權威、帳號、Socket.IO、存檔與 `BOARD_GAME_STATE` 均未改；卡牌、Board 與網頁玩家仍共用正式 Render 狀態。
+- V433 當時啟動器版本為 `1.1.1`；目前版本以文件頂端 V460 為準。manifest、receipt 與 SHA-256 的下載／修復權威、帳號、Socket.IO、存檔與 `BOARD_GAME_STATE` 均未改；卡牌、Board 與網頁玩家仍共用正式 Render 狀態。
 - 三項新效能 QA 與既有 asset-store、Service Worker、package、catalog、已安裝 media smoke 均通過，`npm start` 的卡牌頁／CSS 為 HTTP 200；無 `DATABASE_URL` 的本機警告屬預期。本次實際安裝的測試版已驗證 Card／Board 五種媒體快取皆 hit，Chromium cache 也位於選定 D 槽。效能診斷初期 C 槽曾為 `0 bytes` 可用，最後重測已恢復約 30.7 GiB；本次沒有刪除使用者檔案。
 
 ## 桌面下載清單 V432（2026-09-04）
