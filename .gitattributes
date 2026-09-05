@@ -1,4 +1,5 @@
 # Desktop download indexes are byte-addressed and must remain identical on Windows checkouts.
 /desktop/generated/*.json -text
+/config/desktop-asset-delivery-v1.json -text
 /public/desktop/*.json -text
 /public/desktop/manifests/*.json -text
