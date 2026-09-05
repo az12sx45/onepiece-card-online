@@ -8,6 +8,7 @@
 - 接入：Board 九個正式頁改載入 `board-cursor-nami-v3.css`，主地圖、血統因子圓筒、水之七島船艦校位、Tot Musica 名單與原生 draggable 皆持續使用羽筆；拖曳按下時切到 pressed。Card 六頁改載入 `card-cursor-buggy-v3.css`，外觀仍沿用核准的 V2 巴奇白手套。兩款 V3 CSS 只隱藏 `html`／`body` 的卷軸外觀，不封鎖 overflow，因此滾輪、觸控與鍵盤捲動仍有效，聊天室／modal／清單等內層卷軸不受影響。
 - 邊界：文字輸入、卡牌海報放大、Board 準星／等待及 touch-only 原有語意不變；共用點擊腳本、帳號、房間、戰鬥、回合、存檔、`BOARD_GAME_STATE` 與 Socket.IO event 均未修改。
 - 驗證：`node --check scripts/game_cursor_qa.js` 通過；隔離 8847 伺服器實跑 15 頁，逐像素確認 V3 是 V2 的精確 90 度旋轉且筆尖位於左下，驗證拖曳前後都不掉筆、根層卷軸不可見但 Card／Board 各可滾動 640px、內層 overflow 未被鎖死及 932×430 touch-only 排除。結果為 `GAME_CURSOR_QA=PASS`。
+- 桌面更新：重建 image／unified asset manifest 與遊戲 catalog，Board 更新為 `assets-eb95373ee6ab1aa3`（3451 檔）；Card 素材未變，沿用原 immutable manifest 與原 SHA。建置器現在會安全重用內容相同但建立時間較早的 immutable manifest，圖片清單以最後一次 `public/images` 變更 commit 為來源；舊 Board manifest 暫留正式站供 rollout 回退，但新版啟動器打包篩選只帶 catalog 當前引用的 Card／Board 兩份清單。
 
 ## 修改紀錄：巴奇白手套／娜美羽毛筆游標 V456（2026-09-05）
 

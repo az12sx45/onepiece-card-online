@@ -74,7 +74,8 @@
         "to": "catalog",
         "filter": [
           "catalog-v1.json",
-          "manifests/*.json"
+          "manifests/card-assets-197d7c0144fe523a.json",
+          "manifests/board-assets-eb95373ee6ab1aa3.json"
         ]
       },
       {

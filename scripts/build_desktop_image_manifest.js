@@ -201,14 +201,14 @@ async function hashImage(image) {
 }
 
 function getSourceCommit() {
-  const commit = execFileSync("git", ["rev-parse", "HEAD"], {
+  const commit = execFileSync("git", ["log", "-1", "--format=%H", "HEAD", "--", "public/images"], {
     cwd: ROOT,
     encoding: "utf8",
     stdio: ["ignore", "pipe", "pipe"],
   }).trim();
 
   if (!/^[0-9a-f]{40}(?:[0-9a-f]{24})?$/i.test(commit)) {
-    throw new Error(`Unexpected git commit id: ${commit}`);
+    throw new Error(`Unexpected public/images source commit id: ${commit}`);
   }
   return commit.toLowerCase();
 }

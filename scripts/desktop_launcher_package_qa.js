@@ -14,6 +14,9 @@ const MAX_LAUNCHER_ASSET_BYTES = 64 * 1024 * 1024;
 const MAX_CATALOG_BYTES = 8 * 1024 * 1024;
 const MAX_ASAR_BYTES = 32 * 1024 * 1024;
 const MAX_INSTALLER_BYTES = 256 * 1024 * 1024;
+const RETAINED_ROLLOUT_MANIFESTS = Object.freeze({
+  'board-assets-ecd41e5ae3bcf045.json': '97908b785417c4944971d1d2d5b3cd3708778f2f894a2f028394fa29b450ad3f'
+});
 
 const APP_FILES = [
   'main.js',
@@ -59,7 +62,11 @@ const EXTRA_RESOURCES = [
   {
     from: '../public/desktop',
     to: 'catalog',
-    filter: ['catalog-v1.json', 'manifests/*.json']
+    filter: [
+      'catalog-v1.json',
+      'manifests/card-assets-197d7c0144fe523a.json',
+      'manifests/board-assets-eb95373ee6ab1aa3.json'
+    ]
   },
   {
     from: 'assets/one_piece_tabletop_launcher_icon_v1.ico',
@@ -250,7 +257,15 @@ function validateSourcePackage() {
   }
   const manifestDirectory = path.join(PUBLIC_ROOT, 'desktop', 'manifests');
   const actualManifests = sorted(listFilesRecursive(manifestDirectory).map((filePath) => relativePosix(manifestDirectory, filePath)));
-  assertExactJson(actualManifests, sorted(referencedManifests), 'Packaged game manifest set');
+  assertExactJson(
+    actualManifests,
+    sorted([...referencedManifests, ...Object.keys(RETAINED_ROLLOUT_MANIFESTS)]),
+    'Current plus retained rollout manifest set'
+  );
+  for (const [fileName, expectedSha256] of Object.entries(RETAINED_ROLLOUT_MANIFESTS)) {
+    const retainedPath = path.join(manifestDirectory, fileName);
+    assert(sha256File(retainedPath) === expectedSha256, `Retained rollout manifest changed: ${fileName}`);
+  }
 
   const forbiddenText = JSON.stringify({ files: packageJson.build.files, extraResources: packageJson.build.extraResources }).toLowerCase();
   for (const forbidden of ['../public/images/**', '../public/audio', '../public/videos/**', '../public/fonts']) {

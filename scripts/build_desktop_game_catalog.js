@@ -188,6 +188,36 @@ async function writeImmutableJson(outputPath, value) {
   return text;
 }
 
+async function reuseExistingImmutableManifest(outputPath, manifest, catalogCreatedAt) {
+  let existingText;
+  try {
+    existingText = await fs.promises.readFile(outputPath, "utf8");
+  } catch (error) {
+    if (error.code === "ENOENT") return manifest;
+    throw error;
+  }
+
+  let existing;
+  try {
+    existing = JSON.parse(existingText);
+  } catch (error) {
+    fail(`Existing immutable manifest is not valid JSON: ${outputPath}`);
+  }
+  if (existingText !== canonicalJson(existing)) fail(`Existing immutable manifest is not canonical: ${outputPath}`);
+  if (typeof existing.createdAt !== "string" || Number.isNaN(Date.parse(existing.createdAt))) {
+    fail(`Existing immutable manifest createdAt is invalid: ${outputPath}`);
+  }
+  if (Date.parse(existing.createdAt) > Date.parse(catalogCreatedAt)) {
+    fail(`Existing immutable manifest is newer than the catalog build: ${outputPath}`);
+  }
+
+  const expectedWithOriginalTimestamp = { ...manifest, createdAt: existing.createdAt };
+  if (existingText !== canonicalJson(expectedWithOriginalTimestamp)) {
+    fail(`Immutable manifest already exists with different asset content: ${outputPath}`);
+  }
+  return existing;
+}
+
 async function writeReplaceableJson(outputPath, value) {
   const text = canonicalJson(value);
   await fs.promises.mkdir(path.dirname(outputPath), { recursive: true });
@@ -227,9 +257,11 @@ async function main() {
 
   const catalogGames = Object.create(null);
   for (const gameId of GAME_IDS) {
-    const manifest = manifests[gameId];
+    let manifest = manifests[gameId];
     const filename = `${gameId}-assets-${manifest.assetSetSha256.slice(0, 16)}.json`;
     const outputPath = path.join(OUTPUT_ROOT, filename);
+    manifest = await reuseExistingImmutableManifest(outputPath, manifest, unified.createdAt);
+    manifests[gameId] = manifest;
     const manifestText = await writeImmutableJson(outputPath, manifest);
     catalogGames[gameId] = {
       releaseId: manifest.releaseId,

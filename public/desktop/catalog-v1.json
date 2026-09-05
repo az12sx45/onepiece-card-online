@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "createdAt": "2026-09-05T10:27:50.454Z",
+  "createdAt": "2026-09-05T12:02:17.256Z",
   "sourceTrees": {
-    "images": "637df2d301d7a3113eb3371161638bded94770e2",
+    "images": "53f37f2954f2347da8b3cf04e2748abcd6f15efd",
     "audio": "71145f65e84fa61b975f706c99d428651b3161d1",
     "videos": "6ec01c6dfb4b86197680f43dfc96603ed14c8ec7",
     "fonts": "58fb1e833fe9c80e4713ae953c1ce2fc43a5b9f4"
@@ -16,11 +16,11 @@
       "totalBytes": 692079855
     },
     "board": {
-      "releaseId": "assets-ecd41e5ae3bcf045",
-      "manifestPath": "desktop/manifests/board-assets-ecd41e5ae3bcf045.json",
-      "manifestSha256": "97908b785417c4944971d1d2d5b3cd3708778f2f894a2f028394fa29b450ad3f",
-      "totalFiles": 3448,
-      "totalBytes": 1276179394
+      "releaseId": "assets-eb95373ee6ab1aa3",
+      "manifestPath": "desktop/manifests/board-assets-eb95373ee6ab1aa3.json",
+      "manifestSha256": "c1d6736b6687d1146397607607c9e9fe63f93acf2f83aa5fe5fc68cd34f32c82",
+      "totalFiles": 3451,
+      "totalBytes": 1276186364
     },
     "chess": {
       "available": false

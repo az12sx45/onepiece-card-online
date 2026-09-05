@@ -1,16 +1,16 @@
 {
   "schema": 1,
   "sourceRoot": "public/images",
-  "sourceCommit": "7d4bfb3cc5ebcedd121e820839db8f4aff8af06a",
-  "createdAt": "2026-09-05T10:30:12.447Z",
+  "sourceCommit": "f3d113308c6c76eef029c1eecfa7fead0e862307",
+  "createdAt": "2026-09-05T12:01:10.808Z",
   "excludedCaseCollisions": [
     "ranks/r5.PNG",
     "ranks/r5.png",
     "ranks/r6.PNG",
     "ranks/r6.png"
   ],
-  "totalFiles": 3198,
-  "totalBytes": 1200789363,
+  "totalFiles": 3201,
+  "totalBytes": 1200796333,
   "files": {
     "avatars/1.png": {
       "size": 570711,
@@ -6528,13 +6528,25 @@
       "size": 2067,
       "sha256": "9cb4c780e493556edd0a77b442fd5f6c4c7ff036ae64162af887a9e88e3c60ea"
     },
+    "board/cursors/board_cursor_nami_quill_default_v3.png": {
+      "size": 2061,
+      "sha256": "aa981ecd1081e2edebac89de1d74cafad3fa5652eb3cfca896c1f54fcae427af"
+    },
     "board/cursors/board_cursor_nami_quill_pointer_v2.png": {
       "size": 2675,
       "sha256": "08130aea82f77c0a2259a63154fe331d696bf02db509d1c7977c2714be21779b"
     },
+    "board/cursors/board_cursor_nami_quill_pointer_v3.png": {
+      "size": 2714,
+      "sha256": "f291b2bfd4cbf02bb54be5b89b873217b425b43912ea267fc308f6c3bb33e1dc"
+    },
     "board/cursors/board_cursor_nami_quill_pressed_v2.png": {
       "size": 2160,
       "sha256": "9b488669bc54e18d6f67ec89bc977801fa3fe26041ef5792a7335bb4d4c1ae84"
+    },
+    "board/cursors/board_cursor_nami_quill_pressed_v3.png": {
+      "size": 2195,
+      "sha256": "2dc5c42bd6f2ca88f5d0a6b2cc4f2352386f16f25b828ffd80fc81f75d1953b2"
     },
     "board/decorations/reefs/reef_01.webp": {
       "size": 716348,

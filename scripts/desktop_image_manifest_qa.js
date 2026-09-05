@@ -65,8 +65,8 @@ function validateManifestPath(manifestPath) {
   return absolutePath;
 }
 
-function getHeadCommit() {
-  return execFileSync("git", ["rev-parse", "HEAD"], {
+function getImageSourceCommit() {
+  return execFileSync("git", ["log", "-1", "--format=%H", "HEAD", "--", "public/images"], {
     cwd: ROOT,
     encoding: "utf8",
     stdio: ["ignore", "pipe", "pipe"],
@@ -240,9 +240,9 @@ async function main() {
 
   const tracked = getTrackedImageInventory();
   assertIncludedImagesMatchHead(tracked.excludedCaseCollisions);
-  const headCommit = getHeadCommit();
-  if (manifest.sourceCommit !== headCommit) {
-    fail(`sourceCommit mismatch: manifest=${manifest.sourceCommit} HEAD=${headCommit}`);
+  const imageSourceCommit = getImageSourceCommit();
+  if (manifest.sourceCommit !== imageSourceCommit) {
+    fail(`sourceCommit mismatch: manifest=${manifest.sourceCommit} public/images=${imageSourceCommit}`);
   }
   const excludedJson = JSON.stringify(manifest.excludedCaseCollisions);
   const expectedExcludedJson = JSON.stringify(tracked.excludedCaseCollisions);

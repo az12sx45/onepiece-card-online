@@ -166,7 +166,11 @@ function validateCatalog(catalog, unified) {
 function validateGameManifest(gameId, manifest, expectedAssets, unified) {
   const fields = ["schema", "gameId", "releaseId", "createdAt", "assetSetSha256", "totalFiles", "totalBytes", "byKind", "assets"];
   if (!isPlainObject(manifest) || Object.keys(manifest).join(",") !== fields.join(",")) fail(`${gameId} manifest fields/order are invalid`);
-  if (manifest.schema !== 1 || manifest.gameId !== gameId || manifest.createdAt !== unified.createdAt) fail(`${gameId} manifest identity is invalid`);
+  if (manifest.schema !== 1 || manifest.gameId !== gameId) fail(`${gameId} manifest identity is invalid`);
+  const manifestCreatedAt = Date.parse(manifest.createdAt);
+  if (typeof manifest.createdAt !== "string" || Number.isNaN(manifestCreatedAt) || manifestCreatedAt > Date.parse(unified.createdAt)) {
+    fail(`${gameId} manifest createdAt is invalid or newer than the catalog`);
+  }
   if (typeof manifest.assetSetSha256 !== "string" || !HASH_PATTERN.test(manifest.assetSetSha256)) fail(`${gameId} assetSetSha256 is invalid`);
   if (manifest.releaseId !== `assets-${manifest.assetSetSha256.slice(0, 16)}`) fail(`${gameId} releaseId is not derived from its asset set`);
   if (!Array.isArray(manifest.assets)) fail(`${gameId} assets is not an array`);

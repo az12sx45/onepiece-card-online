@@ -2,7 +2,7 @@
 
 本文件列出大富翁 / Board 遊戲維護時最常需要讀的檔案。備份、暫存、複製檔不列為主流程。
 
-## 兩款遊戲專屬游標（V455）
+## 兩款遊戲專屬游標（V457）
 
 | 檔案 | 功能 |
 | --- | --- |
@@ -14,6 +14,10 @@
 | `public/js/game_cursor_feedback_v1.js` | Card／Board 共用的無狀態游標回饋：辨識既有 computed `pointer`、切換 pressed class、建立／清除不攔截事件的光圈；不讀寫遊戲狀態。 |
 | `public/{start,game,result,profile,shop,tutorial}.html`、`public/board_start.html`、`public/board_fixed_viewport.html`、`public/board_game.html`、`public/board_battle.html`、`public/board_impel_down.html`、`public/board_marineford.html`、`public/board_water_seven.html`、`public/board_spar_selection_demo.html`、`public/board_york_clue_puzzle_formal_demo.html` | Card 六頁及 Board 九個正式 document／iframe 載入各自 CSS 與共用腳本；不改頁面狀態或同步接口。 |
 | `scripts/game_cursor_qa.js` | 靜態檢查 15 頁接點及六張現行 48×48 RGBA PNG；Chrome 逐像素驗證 Board V2→V3 精確旋轉、左下筆尖、拖曳羽筆、按下清理、根層卷軸隱藏但仍可滾動、桌機零水平溢出與 932×430 觸控排除。 |
+| `scripts/build_desktop_image_manifest.js`、`scripts/desktop_image_manifest_qa.js` | 圖片清單以最後一次修改 `public/images` 的 Git commit 作 `sourceCommit`，避免提交 derived manifest 後因整體 HEAD 前進而誤判失效。 |
+| `scripts/build_desktop_game_catalog.js`、`scripts/desktop_game_catalog_qa.js` | 依 unified asset set 建立 Card／Board immutable manifest；內容完全相同時可沿用既有較早 `createdAt` 與原檔 bytes，其他差異仍拒絕覆寫。 |
+| `public/desktop/manifests/board-assets-eb95373ee6ab1aa3.json`、`public/desktop/catalog-v1.json` | V457 現行 Board 桌面資產清單與 catalog；三張 V3 羽筆納入 Board 增量更新，Card record 維持 `assets-197d7c0144fe523a`。 |
+| `desktop/package.json`、`scripts/desktop_launcher_package_qa.js` | 安裝包只攜帶 catalog 當前兩份 manifest；正式站可暫留 SHA 鎖定的上一版 Board manifest 供 rollout 期間舊 catalog 讀取，不將歷史清單累積進安裝包。 |
 
 ## 桌面啟動器更新查詢入口（V454）
 
