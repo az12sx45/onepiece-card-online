@@ -1,0 +1,113 @@
+@media (hover: hover) and (pointer: fine) {
+  html,
+  body {
+    cursor: url("../images/board/cursors/board_cursor_nami_quill_default_v2.png") 4 4, default;
+  }
+
+  button:not(:disabled),
+  a[href],
+  [role="button"]:not([aria-disabled="true"]),
+  [onclick],
+  [tabindex]:not([tabindex="-1"]),
+  label[for],
+  summary,
+  input[type="button"]:not(:disabled),
+  input[type="submit"]:not(:disabled),
+  input[type="reset"]:not(:disabled),
+  input[type="checkbox"]:not(:disabled),
+  input[type="radio"]:not(:disabled),
+  .game-cursor-interactive,
+  .cursor-pointer {
+    cursor: url("../images/board/cursors/board_cursor_nami_quill_pointer_v2.png") 4 4, pointer !important;
+  }
+
+  body.game-cursor-pressed,
+  body.game-cursor-pressed *:not(input):not(textarea):not(select):not([contenteditable="true"]),
+  button:not(:disabled):active,
+  a[href]:active,
+  [role="button"]:not([aria-disabled="true"]):active,
+  [onclick]:active,
+  .game-cursor-interactive:active,
+  .cursor-pointer:active {
+    cursor: url("../images/board/cursors/board_cursor_nami_quill_pressed_v2.png") 4 5, pointer !important;
+  }
+
+  button:disabled,
+  [aria-disabled="true"],
+  input:disabled {
+    cursor: url("../images/board/cursors/board_cursor_nami_quill_default_v2.png") 4 4, not-allowed !important;
+  }
+
+  input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]),
+  textarea,
+  [contenteditable="true"] {
+    cursor: text !important;
+  }
+}
+
+.game-cursor-click-pulse {
+  position: fixed;
+  z-index: 2147483647;
+  width: 42px;
+  height: 37px;
+  border-radius: 52% 48% 55% 45% / 46% 55% 45% 54%;
+  background:
+    radial-gradient(circle at 5% 32%, rgba(6, 10, 14, .88) 0 1.8px, transparent 2.2px),
+    radial-gradient(circle at 94% 73%, rgba(6, 10, 14, .68) 0 1.4px, transparent 1.8px),
+    radial-gradient(circle at 86% 91%, rgba(6, 10, 14, .46) 0 1px, transparent 1.4px);
+  filter: drop-shadow(1px 1px 0 rgba(2, 5, 8, .38));
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(.48) rotate(-11deg);
+  animation: boardInkCircleV2 430ms cubic-bezier(.17, .7, .25, 1) forwards;
+}
+
+.game-cursor-click-pulse::before,
+.game-cursor-click-pulse::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(6, 10, 14, .88);
+}
+
+.game-cursor-click-pulse::before {
+  inset: 0;
+  border-radius: 52% 48% 55% 45% / 46% 55% 45% 54%;
+  background: conic-gradient(
+    from -62deg,
+    transparent 0 7deg,
+    rgba(7, 12, 17, .93) 10deg 90deg,
+    rgba(24, 29, 33, .72) 104deg 180deg,
+    rgba(5, 9, 14, .96) 193deg 284deg,
+    rgba(30, 34, 37, .66) 299deg 344deg,
+    transparent 350deg 360deg
+  );
+  -webkit-mask: radial-gradient(ellipse at center, transparent 0 55%, #000 58% 67%, transparent 71%);
+  mask: radial-gradient(ellipse at center, transparent 0 55%, #000 58% 67%, transparent 71%);
+}
+
+.game-cursor-click-pulse::after {
+  inset: 2px 1px 1px 3px;
+  border: 1px solid rgba(5, 9, 13, .5);
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  border-radius: 48% 52% 46% 54% / 55% 44% 56% 45%;
+  background: transparent;
+  transform: rotate(9deg);
+}
+
+@keyframes boardInkCircleV2 {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(.38) rotate(-17deg); }
+  20% { opacity: .96; }
+  66% { opacity: .88; transform: translate(-50%, -50%) scale(1) rotate(-7deg); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.08) rotate(-5deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-cursor-click-pulse { animation: gameCursorFadeV2 120ms linear forwards; }
+}
+
+@keyframes gameCursorFadeV2 {
+  from { opacity: .72; transform: translate(-50%, -50%) scale(.8); }
+  to { opacity: 0; transform: translate(-50%, -50%) scale(.8); }
+}

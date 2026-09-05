@@ -1,5 +1,13 @@
 ﻿# Dev Workflow
 
+## 修改紀錄：巴奇白手套／娜美羽毛筆游標 V456（2026-09-05）
+
+- 需求：依確認稿把卡牌游標改成只保留白手套與短袖口、完全沒有手臂；平常／可點擊使用張開手勢，按下時換成捏合手勢。《新世界航海錄》改用娜美畫海圖的白羽毛筆，筆尖為真正熱點。
+- 素材：由核准的透明 ImageGen 母圖等比例縮製六張獨立 48×48 RGBA PNG，新增 `card_cursor_buggy_glove_*_v2.png` 與 `board_cursor_nami_quill_*_v2.png`；V1 素材與 CSS 保留作可回復版本，不覆寫原圖。
+- 接入：Card 六頁改載入 `card-cursor-buggy-v2.css`，Board 九頁改載入 `board-cursor-nami-v2.css`；既有 `game_cursor_feedback_v1.js` 的無狀態事件橋不改。巴奇點擊仍採短紅金回饋；娜美的點擊回饋改成不規則黑墨手繪圈與小墨點，不再顯示藍色光圈。
+- 邊界：只改桌機精準游標與視覺回饋；touch-only、文字輸入、disabled、卡牌海報放大，以及 Board 既有拖曳／準星行為維持原狀。沒有改帳號、房間、卡牌、戰鬥、回合、存檔、`BOARD_GAME_STATE` 或 Socket.IO event。
+- 驗證：`node --check` 通過；隔離 8846 伺服器的 `game_cursor_qa.js` 實跑 Card／Board 三態、六張不同 SHA 的 48×48 RGBA 真透明 PNG、巴奇／筆尖熱點、黑墨圈、disabled／text／zoom-in／grab／grabbing／crosshair／wait、按下清理與零水平溢出；932×430 touch-only 不套用自訂游標。結果為 `GAME_CURSOR_QA=PASS`。
+
 ## 修改紀錄：兩款遊戲專屬三態游標 V455（2026-09-05）
 
 - 需求：《偉大航道爭霸戰》使用巴奇白手套造型，《新世界航海錄》使用娜美海圖筆造型；兩款遊戲各自擁有預設、可點擊、按下三態，不能共用啟動器的 `opui://` 私有素材路徑。

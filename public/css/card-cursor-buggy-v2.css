@@ -1,0 +1,83 @@
+@media (hover: hover) and (pointer: fine) {
+  html,
+  body {
+    cursor: url("../images/ui/cursors/card_cursor_buggy_glove_default_v2.png") 11 13, default;
+  }
+
+  button:not(:disabled),
+  a[href],
+  [role="button"]:not([aria-disabled="true"]),
+  [onclick],
+  [tabindex]:not([tabindex="-1"]),
+  label[for],
+  summary,
+  input[type="button"]:not(:disabled),
+  input[type="submit"]:not(:disabled),
+  input[type="reset"]:not(:disabled),
+  input[type="checkbox"]:not(:disabled),
+  input[type="radio"]:not(:disabled),
+  .game-cursor-interactive,
+  .cursor-pointer {
+    cursor: url("../images/ui/cursors/card_cursor_buggy_glove_pointer_v2.png") 11 13, pointer !important;
+  }
+
+  body.game-cursor-pressed,
+  body.game-cursor-pressed *:not(input):not(textarea):not(select):not([contenteditable="true"]),
+  button:not(:disabled):active,
+  a[href]:active,
+  [role="button"]:not([aria-disabled="true"]):active,
+  [onclick]:active,
+  .game-cursor-interactive:active,
+  .cursor-pointer:active {
+    cursor: url("../images/ui/cursors/card_cursor_buggy_glove_pressed_v2.png") 11 13, pointer !important;
+  }
+
+  button:disabled,
+  [aria-disabled="true"],
+  input:disabled {
+    cursor: url("../images/ui/cursors/card_cursor_buggy_glove_default_v2.png") 11 13, not-allowed !important;
+  }
+
+  input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]),
+  textarea,
+  [contenteditable="true"] {
+    cursor: text !important;
+  }
+
+  .poster,
+  .slot.clickable {
+    cursor: zoom-in !important;
+  }
+}
+
+.game-cursor-click-pulse {
+  position: fixed;
+  z-index: 2147483647;
+  width: 34px;
+  height: 34px;
+  border: 2px solid rgba(255, 77, 92, .88);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(255, 211, 92, .44) 0 12%, transparent 38%),
+    conic-gradient(from 20deg, rgba(48, 111, 255, .88), rgba(255, 73, 85, .92), rgba(255, 211, 92, .92), rgba(48, 111, 255, .88));
+  box-shadow: 0 0 0 2px rgba(8, 14, 32, .76), 0 0 16px rgba(255, 80, 92, .68);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(.22) rotate(-16deg);
+  animation: cardCursorPulseV2 300ms cubic-bezier(.18, .76, .2, 1) forwards;
+}
+
+@keyframes cardCursorPulseV2 {
+  0% { opacity: .95; transform: translate(-50%, -50%) scale(.22) rotate(-16deg); }
+  58% { opacity: .54; }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.05) rotate(12deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-cursor-click-pulse { animation: gameCursorFadeV2 100ms linear forwards; }
+}
+
+@keyframes gameCursorFadeV2 {
+  from { opacity: .72; transform: translate(-50%, -50%) scale(.7); }
+  to { opacity: 0; transform: translate(-50%, -50%) scale(.7); }
+}
