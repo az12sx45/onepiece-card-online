@@ -203,7 +203,10 @@ async function inspectCursorPage(page, pagePath, expectedPrefix) {
       pointerType: "mouse",
     }));
   });
-  await page.waitForTimeout(560);
+  await page.waitForFunction(() => (
+    !document.body.classList.contains("game-cursor-pressed") &&
+    document.querySelectorAll(".game-cursor-click-pulse").length === 0
+  ), null, { timeout: 1_500 });
   const released = await page.evaluate(() => ({
     bodyClass: document.body.classList.contains("game-cursor-pressed"),
     pulseCount: document.querySelectorAll(".game-cursor-click-pulse").length,
