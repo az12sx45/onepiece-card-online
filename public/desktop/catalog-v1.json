@@ -1,9 +1,9 @@
 {
   "schema": 1,
-  "createdAt": "2026-09-05T12:02:17.256Z",
+  "createdAt": "2026-09-05T17:03:24.334Z",
   "assetBlobBaseUrl": "https://game-assets.rihdi.tw/desktop/blobs/sha256",
   "sourceTrees": {
-    "images": "53f37f2954f2347da8b3cf04e2748abcd6f15efd",
+    "images": "c623345ef567087ed7642186274e35458cacfb67",
     "audio": "71145f65e84fa61b975f706c99d428651b3161d1",
     "videos": "6ec01c6dfb4b86197680f43dfc96603ed14c8ec7",
     "fonts": "58fb1e833fe9c80e4713ae953c1ce2fc43a5b9f4"

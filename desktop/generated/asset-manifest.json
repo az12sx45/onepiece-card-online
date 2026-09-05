@@ -1,14 +1,14 @@
 {
   "schema": 2,
   "sourceRoot": "public",
-  "sourceCommit": "f3d113308c6c76eef029c1eecfa7fead0e862307",
+  "sourceCommit": "53123f9b44a3aa0feda42f17f181ae450b166947",
   "sourceTrees": {
-    "images": "53f37f2954f2347da8b3cf04e2748abcd6f15efd",
+    "images": "c623345ef567087ed7642186274e35458cacfb67",
     "audio": "71145f65e84fa61b975f706c99d428651b3161d1",
     "videos": "6ec01c6dfb4b86197680f43dfc96603ed14c8ec7",
     "fonts": "58fb1e833fe9c80e4713ae953c1ce2fc43a5b9f4"
   },
-  "createdAt": "2026-09-05T12:02:17.256Z",
+  "createdAt": "2026-09-05T17:03:24.334Z",
   "includedRoots": [
     "images",
     "audio",
@@ -22,12 +22,12 @@
     "images/ranks/r6.png"
   ],
   "excludedForbiddenPaths": [],
-  "totalFiles": 3909,
-  "totalBytes": 1949550608,
+  "totalFiles": 3923,
+  "totalBytes": 1967080675,
   "byKind": {
     "image": {
-      "files": 3201,
-      "bytes": 1200796279
+      "files": 3215,
+      "bytes": 1218326346
     },
     "audio": {
       "files": 671,
@@ -22315,6 +22315,54 @@
       "size": 2271457,
       "sha256": "93097dc75c0b2997981e9b267256af5ccec23040fb0c1f716dfdd7570a87174a"
     },
+    "images/desktop_launcher/launcher_box_center_light_01_v3.png": {
+      "kind": "image",
+      "mime": "image/png",
+      "size": 501339,
+      "sha256": "b9c19798b9cc5ace537a5f6d0d002dc9ab3611127c7f03a83c8d9e38dedae34a"
+    },
+    "images/desktop_launcher/launcher_box_center_light_02_v3.png": {
+      "kind": "image",
+      "mime": "image/png",
+      "size": 1607728,
+      "sha256": "29f169ba30cddd80933f25d2222889777413e9abb64598cb7db6620b80171f87"
+    },
+    "images/desktop_launcher/launcher_box_center_light_03_v3.png": {
+      "kind": "image",
+      "mime": "image/png",
+      "size": 1862833,
+      "sha256": "ff148b5104f7d904db4f3d26843716ed319b5acf0a572fa32d3e4544490832a1"
+    },
+    "images/desktop_launcher/launcher_box_center_light_04_v3.png": {
+      "kind": "image",
+      "mime": "image/png",
+      "size": 1052560,
+      "sha256": "03171e42b0c35f7885a234cbc1f99af4fbef43f8fc9160a2cfceca86e3848f50"
+    },
+    "images/desktop_launcher/launcher_box_core_frame_01_v1.png": {
+      "kind": "image",
+      "mime": "image/png",
+      "size": 1340004,
+      "sha256": "d8e550dec54db0fefa2ba1e31bf26838315769f62a65b345c70daece6e026697"
+    },
+    "images/desktop_launcher/launcher_cursor_logpose_default_v1.png": {
+      "kind": "image",
+      "mime": "image/png",
+      "size": 3608,
+      "sha256": "900e361f0aa062916da40e72ece9d8c8ef23c5bc9df7ffce3d7d6f21324652a7"
+    },
+    "images/desktop_launcher/launcher_cursor_logpose_pointer_v1.png": {
+      "kind": "image",
+      "mime": "image/png",
+      "size": 4485,
+      "sha256": "f41522184c5b62a71a9b9ca14baacade1fb61eebf478a56b9a9b780d8c0b47f3"
+    },
+    "images/desktop_launcher/launcher_cursor_logpose_pressed_v1.png": {
+      "kind": "image",
+      "mime": "image/png",
+      "size": 3559,
+      "sha256": "7d8f72884ef9b40fad290fc4a21dc8ba1d0756acda66c8d64d95a33a0f1459c1"
+    },
     "images/duel/duel_bg_haki_clash.webp": {
       "kind": "image",
       "mime": "image/webp",
@@ -22519,11 +22567,23 @@
       "size": 965844,
       "sha256": "2c7bd3ef0ab2e746f92bfa19a2ed661d5c18747d8860ef7ead7eb5facd4ce0aa"
     },
+    "images/game_launcher/launcher_board_box_shell_fixed_v1.png": {
+      "kind": "image",
+      "mime": "image/png",
+      "size": 663247,
+      "sha256": "b65a25adc0e8c4bf45f9e2472f98ff7492c912bc97dcb4ab1e7e6773251fb025"
+    },
     "images/game_launcher/launcher_board_cover_logo_perspective_v5.png": {
       "kind": "image",
       "mime": "image/png",
       "size": 2271851,
       "sha256": "039534cc27759914d33c95fd7b3a80899a93b8b135f2607cf88f3b09fe3e59c8"
+    },
+    "images/game_launcher/launcher_board_lid_front_panel_v1.png": {
+      "kind": "image",
+      "mime": "image/png",
+      "size": 3216082,
+      "sha256": "d79b85c32fc7338451bf54f8f6ab35f4f3dded8f6bc61f8c97accb0f2579acf0"
     },
     "images/game_launcher/launcher_board_logo_v1.svg": {
       "kind": "image",
@@ -22537,11 +22597,23 @@
       "size": 908738,
       "sha256": "b5cf8ba94be335bc9087fc497383c25d3def86960bf9f8c38e0c3aa7ce3aa59e"
     },
+    "images/game_launcher/launcher_card_box_shell_fixed_v1.png": {
+      "kind": "image",
+      "mime": "image/png",
+      "size": 592811,
+      "sha256": "75ec513ddfbc483cdccbd7e4cdc7caf9da1a3fbae019ad26f3431075bd736af1"
+    },
     "images/game_launcher/launcher_card_cover_perspective_v2.png": {
       "kind": "image",
       "mime": "image/png",
       "size": 2190820,
       "sha256": "7da8f83de28979221e4f9db8918ec893dca4bff53da10aa864107f548d832991"
+    },
+    "images/game_launcher/launcher_card_lid_front_panel_v1.png": {
+      "kind": "image",
+      "mime": "image/png",
+      "size": 2767494,
+      "sha256": "f993cd9f5209e30c57c7b30ac925e698a0cde83b7d4d87fb6ee2a1b28639ba87"
     },
     "images/game_launcher/launcher_chess_box_frame_cutout_v1.png": {
       "kind": "image",
@@ -22549,11 +22621,23 @@
       "size": 1017526,
       "sha256": "85896bef4c9a5e1839378307e82ae1f45b291bc3be85a77d38a22102742014b5"
     },
+    "images/game_launcher/launcher_chess_box_shell_fixed_v1.png": {
+      "kind": "image",
+      "mime": "image/png",
+      "size": 622842,
+      "sha256": "78ac350e961510d8caf07ed0a37ed1d1a00db99cb9bdd954ad58c95feffc1f0c"
+    },
     "images/game_launcher/launcher_chess_cover_logo_perspective_v5.png": {
       "kind": "image",
       "mime": "image/png",
       "size": 2417798,
       "sha256": "8b406c9963f308c12e92f7f0bcbd1fb94ac1889a15bf92773f5387f2fc5a6d09"
+    },
+    "images/game_launcher/launcher_chess_lid_front_panel_v1.png": {
+      "kind": "image",
+      "mime": "image/png",
+      "size": 3291475,
+      "sha256": "915cac543018507a477742ba15c484e65e84408eaaf0f3af5f47c79e60c62c80"
     },
     "images/game_launcher/launcher_gallery_background_v2.png": {
       "kind": "image",
