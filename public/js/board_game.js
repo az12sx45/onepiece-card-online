@@ -265,7 +265,7 @@
   const SPAR_SELECTION_PAGE_VERSION = "20260827-formal-pk-v1";
   const BATTLE_COMMAND_KEY = "onepiece-board-battle-command-v1";
   const BATTLE_ENTRY_PLAYED_STORAGE_KEY = "onepiece-board-battle-entry-played-v1";
-  const BATTLE_PAGE_VERSION = "20260829-regional-enemy-spawns-v123";
+  const BATTLE_PAGE_VERSION = "20260905-battle-turn-resume-v124";
   const PLACEHOLDER_BATTLE_PORTRAIT = "images/board/battle/portraits/placeholder/normal.webp";
   const COSMETIC_FRAME_DEFS = {
     goldenDenDen: { id: "goldenDenDen", label: "黃金電話蟲框", unlockText: "司法島通關紀念" },
@@ -48233,6 +48233,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     battle.enemyDiceRoll = null;
     battle.playerActionSummary = "";
     battle.enemyActionSummary = "";
+    battle.firstActor = "";
+    battle.secondActor = "";
     resetRoundEffects(battle.playerRoundEffects);
     resetRoundEffects(battle.enemyCombatant.roundEffects);
     if (battle.playerRoundEffects.nextGuaranteedFirst) {
@@ -48242,20 +48244,26 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     applyJudicialOpeningBoost(battle);
     if (postgameBossMechanicRoundStart(player, battle)) {
       battle.awaitingRoundStartContinuation = true;
+      if (isCoopBattle(battle)) saveCoopBattleRuntime(player, battle);
       renderBattleInterface();
       return;
     }
     if (handleYonkoRoundStart(player, battle)) {
       battle.awaitingRoundStartContinuation = true;
+      if (isCoopBattle(battle)) saveCoopBattleRuntime(player, battle);
       renderBattleInterface();
       return;
     }
     if (handleFinalGateRoundStart(player, battle)) {
+      if (isCoopBattle(battle)) saveCoopBattleRuntime(player, battle);
       renderBattleInterface();
       return;
     }
     applyBattleStartStatusEffects(player, battle);
-    if (battle.result || battle.needsReplacement) return;
+    if (battle.result || battle.needsReplacement) {
+      if (isCoopBattle(battle)) saveCoopBattleRuntime(player, battle);
+      return;
+    }
     ensureSanjiRaidSuitTransformation(player, battle, battle.activeCrewIndex, { queueOpening: true });
     applyShipBattleOpeningEffects(player, battle);
     applyActiveCharacterPassiveOpening(player, battle);
@@ -48264,6 +48272,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     scheduleOpeningPassiveVisualsIfReady(player, battle);
     if (isCoopBattle(battle)) {
       battle.log.push(`共鬥第 ${battle.roundIndex} 輪開始，輪到 ${player.name} 出手。`);
+      saveCoopBattleRuntime(player, battle);
     } else {
       battle.log.push(`第 ${battle.roundIndex} 輪開始，請選擇 ${player.name} 的行動。`);
     }
@@ -48273,13 +48282,17 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (!battle || !player) return false;
     battle.awaitingRoundStartContinuation = false;
     applyBattleStartStatusEffects(player, battle);
-    if (battle.result || battle.needsReplacement) return false;
+    if (battle.result || battle.needsReplacement) {
+      if (isCoopBattle(battle)) saveCoopBattleRuntime(player, battle);
+      return false;
+    }
     ensureSanjiRaidSuitTransformation(player, battle, battle.activeCrewIndex, { queueOpening: true });
     applyShipBattleOpeningEffects(player, battle);
     applyActiveCharacterPassiveOpening(player, battle);
     queueFinalGateBlackTurnCastIfNeeded(player, battle);
     queueKyubiMaskOpeningVisualIfNeeded(player, battle);
     scheduleOpeningPassiveVisualsIfReady(player, battle);
+    if (isCoopBattle(battle)) saveCoopBattleRuntime(player, battle);
     return !(battle.result || battle.needsReplacement);
   }
 

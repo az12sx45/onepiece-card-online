@@ -1,5 +1,15 @@
 ﻿# Dev Workflow
 
+## 修改紀錄：多人續戰略過玩家擲骰／戰鬥四鍵排版 V458（2026-09-05）
+
+- 問題：玩家完成一輪戰鬥、回合交給下一名玩家，再輪回自己續戰後，點擊攻擊會沒有玩家骰便直接執行敵方；右下攻擊／夥伴／道具／逃跑四鍵也過度貼近外框且間距不一致。
+- 根因：`startBattleRound()` 只清除 battle 頂層的 `playerPerformedAction`、骰值與摘要，沒有把新輪狀態存回 `battle.coop.runtimes[playerId]`。`prepareCoopBattleCommandRuntime()` 在玩家點招時因此把上一輪 `playerPerformedAction=true` 套回，結算器便略過玩家。另有 `firstActor`／`secondActor` 沒在新輪清除，使續戰可能沿用上一輪敵方先攻。
+- 修正：新輪一律清空兩個先攻欄位，並在一般開輪、Boss／四皇開輪提示、最終關卡提示、開輪狀態中斷及提示續行完成後，把清空及開場效果處理後的狀態寫回既有共鬥 runtime。沒有改 `gameState` schema、角色／招式／道具 ID、localStorage key、Socket.IO event 或完整快照架構。
+- 排版：`board_battle.html` 的主指令網格改為桌機左右各 5.25% 安全內縮、水平與垂直共用 `clamp(8px, 1vw, 14px)`；1100px 以下縮小 gap，且 600px 以下低高度橫向畫面改為左右各 15% 內縮，讓兩列維持正 gap 且不碰框。其他招式／道具／替補網格未改。
+- 驗證：`node --check public/js/board_game.js` 與新 QA 通過。`BATTLE_TURN_RESUME_ACTION_QA=PASS` 實跑兩玩家交棒：續戰由第 1 輪進第 2 輪，全域與 runtime 的 performed／dice／summary 皆清空，舊 enemy-first 亦清空；由 iframe 點香吉士招式後先得到玩家骰 5、敵骰仍空、PP 25→24。四鍵在 1920×1080 的左右內距各 48.375px、gap 14px，在 932×430 的左右內距約 55.03px、水平／垂直 gap 約 6.95／6.86px，均無溢出。
+- 相容回歸：`battle_refresh_recovery_qa.js` 五種 queued／visual／fallback／observer／spar 同輪刷新接回通過；`lan_refresh_flow_qa.js` 的兩裝置房間、回合同步及雙方續戰 overlay 通過；`coop_battle_view_switch_qa.js` 的三人共鬥操作／觀看切換、窄版與圖片檢查通過。本機未設定 `DATABASE_URL` 的警告只影響 DB 功能，靜態 Board QA 正常。
+- 修改檔案：`public/js/board_game.js`、`public/board_game.html`、`public/board_battle.html`、`scripts/battle_turn_resume_action_qa.js` 及四份專案文件；既有 `public/images/ranks/r5.PNG`／`r6.PNG` 工作樹差異未碰觸。
+
 ## 修改紀錄：娜美羽毛筆方向／拖曳與全螢幕卷軸 V457（2026-09-05）
 
 - 需求：《新世界航海錄》的羽毛筆改為筆尖朝左下；拖曳地圖與可抓取物件時不能跳回系統 `grab`／`grabbing`；兩款遊戲在全螢幕／無邊框顯示時隱藏右側白色根層卷軸。

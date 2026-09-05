@@ -2,6 +2,15 @@
 
 本文件列出大富翁 / Board 遊戲維護時最常需要讀的檔案。備份、暫存、複製檔不列為主流程。
 
+## 多人續戰與戰鬥主指令（V458）
+
+| 檔案 | 功能 |
+| --- | --- |
+| `public/js/board_game.js` | 新戰鬥輪的正式狀態權威：清除上一輪先攻，並在一般、Boss 提示及狀態中斷路徑把新輪玩家狀態寫回既有共鬥 runtime。戰鬥 iframe 版號為 `20260905-battle-turn-resume-v124`。 |
+| `public/board_game.html` | 載入 `board_game.js?v=20260905-battle-turn-resume-v430`，避免網頁或桌面啟動器沿用舊程式。 |
+| `public/board_battle.html` | 右下 `battle-action-grid` 的 2×2 主指令排版；桌機採 5.25% 對稱安全內縮及等距 gap，低高度橫向畫面採 15% 內縮。 |
+| `scripts/battle_turn_resume_action_qa.js` | 兩玩家輪轉回歸：種入上一輪共鬥 runtime／敵方先攻，完成暫停交棒再續戰，斷言新輪全域與 runtime 均清空、重新計算玩家先攻、iframe 點招後先顯示玩家骰且 PP 只扣一次；另量測 1920×1080／932×430 四鍵邊界與等距。 |
+
 ## 兩款遊戲專屬游標（V457）
 
 | 檔案 | 功能 |
