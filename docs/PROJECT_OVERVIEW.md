@@ -1,5 +1,11 @@
 # Project Overview
 
+## Card Depth V1 全卡分層候選（2026-09-07，驗收通過／尚未發布）
+
+80 張一般／強化／豪華／豪華強化卡的美術審查與最終重建已完成，產出 240 個 WebP、13,632,032 bytes；原圖不變，人物、背景與固定文字框分層，免費模型僅在製作端執行。`docs/CARD_DEPTH_V1_ASSETS.json` 的全套素材雜湊核對通過。runtime 單元 4,901、最終 browser 2,262 項 PASS（80 組／320 個 HTTP 回應、0 page errors）；真實兩帳號 candidate 連續兩輪通過手牌、新抽牌、對手同步與兩處人物景深，第二輪另含 6 次出牌、基德重選與香吉士 PK 至自然結束。兩輪 page errors 為 0，仍各有 4 筆既有媒體 404。
+
+candidate 的自然禁選證據僅為技能禁選數字，沒有完成禁選卡片的真人阻擋案例。尚未 push／部署，正式站仍是下方 V3；部署後 live／SW 更新仍待驗收，完整證據、清單與回復點見 `docs/CARD_DEPTH_V1_RELEASE.md`。
+
 ## Card Finish 固定框修正 V3（2026-09-06，已發布）
 
 正式程式版本 `ff72fbfb` 已於 21:00:08（Asia/Taipei）驗證上線，公開三檔與 Git blob 完全一致。出牌 button 不再呈現固定黑框，金色提示光與卡面一起傾斜；併入 8°／12° 新角度。單元 4,441、browser 215、舊 SW baseline 19、postdeploy 139 項 PASS；乾淨桌機／手機模擬／reduced-motion 及既有 SW 更新均通過。正式雙帳號重跑 hand／drawn／對手同步亦 PASS。沒有修改遊戲規則或後端。驗收限制與回復方式見 `docs/CARD_FINISH_V1_RELEASE.md`。

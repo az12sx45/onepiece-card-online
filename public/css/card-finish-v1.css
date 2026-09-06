@@ -33,6 +33,59 @@
   margin: 0;
 }
 
+/* Optional, decoded artwork. The original img always remains below it.
+   An alpha-masked copy of that original preserves exact printed frame/text pixels. */
+[data-card-finish] > .card-finish-face > .card-finish-depth {
+  display: none;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+  contain: paint;
+}
+
+[data-card-finish][data-finish-engaged="true"][data-finish-depth="ready"][data-finish-locked="false"][data-finish-static="false"] > .card-finish-face > .card-finish-depth {
+  display: block;
+}
+
+[data-card-finish] .card-finish-depth > img {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  margin: 0;
+  object-fit: fill;
+  pointer-events: none;
+  user-select: none;
+  transform: none;
+}
+
+[data-card-finish] .card-finish-depth > .card-finish-depth-subject {
+  transform: translate(var(--finish-depth-x, 0px), var(--finish-depth-y, 0px));
+  will-change: transform;
+}
+
+[data-card-finish] .card-finish-depth > .card-finish-depth-foreground {
+  mask-size: 100% 100%;
+  -webkit-mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-position: center;
+  mask-mode: alpha;
+}
+
+button:disabled [data-card-finish] > .card-finish-face > .card-finish-depth,
+.card-frozen [data-card-finish] > .card-finish-face > .card-finish-depth,
+[data-card-finish].card-frozen > .card-finish-face > .card-finish-depth,
+[data-card-finish] > .card-finish-face.card-frozen > .card-finish-depth,
+[data-card-finish] > .card-finish-face:has(> img.card-frozen) > .card-finish-depth {
+  display: none !important;
+}
+
 [data-card-finish] > .card-finish-face::before,
 [data-card-finish] > .card-finish-face::after {
   content: "";
@@ -165,6 +218,10 @@ button:disabled [data-card-finish] > .card-finish-face::after,
 }
 
 @media (prefers-reduced-motion: reduce), (hover: none), (pointer: coarse) {
+  [data-card-finish] > .card-finish-face > .card-finish-depth {
+    display: none !important;
+  }
+
   #myPlayZone .choose-card:not(:disabled):not(.card-frozen) .card-finish-face {
     animation: none;
     box-shadow: 0 0 0 1px rgb(251 191 36 / .5), 0 6px 12px rgb(0 0 0 / .25);

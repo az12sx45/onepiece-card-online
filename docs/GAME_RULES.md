@@ -1,5 +1,13 @@
 # Game Rules
 
+## Card Depth V1 規則邊界（2026-09-07，候選驗收通過）
+
+全卡人物景深只是既有四處卡面的顯示層；不增加按鈕、操作、遊戲 state／Socket 事件，不改 PLAY_CARD、凍結、禁選、強化時序或 Board。原卡文字與數字固定，人物限制在既有框內；觸控、減少動態、省流量或載入失敗均保留原卡。最終 80 卡／240 檔已完成美術審查與重建，不以改遊戲規則迎合測試。
+
+單元 4,901 與最終全卡 browser 2,262 項 PASS（80 組／320 個 HTTP 回應、0 page errors）。真實兩帳號 candidate 連續兩輪確認手牌／新抽牌出牌、對手同步與兩處分層效果；第二輪另完成 6 次出牌，包含基德取回棄牌後繼續選牌、香吉士 PK 至自然結束，沿用既有規則。D 樹 `artifacts/card-finish-v1/` 的證據為 `real-candidate-2026-09-06T17-59-45-524Z.json` 與 `real-candidate-2026-09-06T18-00-44-158Z.json`；兩輪 page errors 0、既有媒體 404 各 4 筆。其中 `naturalDisabledSeen: true` 僅指技能禁選數字，`choiceDisabledBlocked: false`，兩輪均不能宣稱真人已驗證禁選卡片阻擋；禁選卡／凍結的 renderer fixture 結果必須與真人證據分開。
+
+尚未 push／部署，正式 live 與既有 SW 更新仍待驗收；詳細清單與發布狀態見 `docs/CARD_DEPTH_V1_RELEASE.md`。
+
 ## Card Finish V3 規則邊界（2026-09-06，已發布）
 
 正式 `ff72fbfb` 僅移動出牌提示框與光的視覺承載層、提高傾角，保留原 button 尺寸／handler／disabled／冰凍遮罩；不改原 inline 遊戲 script、PLAY_CARD、技能時序、帳號或 Socket。單元 4,441、browser 215、postdeploy 139 項 PASS；原遊戲 inline script 與回復點完全相同。正式雙帳號驗收與 QA 對基德「取回棄牌後繼續選牌」的既有規則修正，另記於 `docs/CARD_FINISH_V1_RELEASE.md`；沒有為測試更改遊戲規則。

@@ -1,5 +1,15 @@
 ﻿# Dev Workflow
 
+## Card Depth V1 全套 80 卡（2026-09-07，候選驗收通過／尚未發布）
+
+- 使用者同意免費模型的本機製作流程。新增 `tools/card-depth/` 製作、檢視、SAM 局部 alpha 修補及逐卡保護配方；模型與獨立 Python 環境在 D:/Codex_Tools，不修改遊戲套件、不把模型傳給玩家。
+- 最終 80 張已完成美術審查與重建，`public/card-depth/v1/` 共 240 個 WebP、13,632,032 bytes；80 個原圖 SHA 與 240 個分層素材 SHA／大小全數核對通過。清單為 `docs/CARD_DEPTH_V1_ASSETS.json`，LF SHA-256：`88d1f47444cfc6bedbdfce27648947530909f1f8323d4ff8842ce699092969db`。
+- Card Finish JS/CSS 按需載入背景、人物及固定框 alpha mask，原字與框沿用原圖；人工修補僅改 alpha，不重畫、不改原卡或共用遊戲規則。C／D 的 22 份頂層工具與 6 份 jobs 雜湊一致，模型／venv 不進 Git 或 public。
+- `npm start` 8849 成功；runtime 單元 4,901、最終全卡 browser 2,262 項 PASS，涵蓋 80 組／320 個真實 HTTP 回應，page errors 0。最終素材清單與精確 282 個候選路徑均通過唯讀核對；這不是正式站部署後驗收。
+- 真實兩帳號 candidate 連續兩輪 PASS：`real-candidate-2026-09-06T17-59-45-524Z.json` 的 hand、drawn、peerSync、depthHand、depthDrawn 均為 true；`real-candidate-2026-09-06T18-00-44-158Z.json` 另完成 6 次出牌，涵蓋基德取回後繼續選牌與香吉士 PK，直到自然 ended。兩份證據均在 D 樹 `artifacts/card-finish-v1/`，page errors 皆為 0，console 仍各有 4 筆既有媒體 404；不宣稱全站零 404。首輪基拉對話 QA 失敗證據仍保留。`naturalDisabledSeen` 只證明技能禁選數字；兩輪皆未完成禁選卡片的真人阻擋案例，不得把 `choiceDisabledBlocked: false` 改述為通過。
+- 本輪僅局部同步 C／D 的 `DEV_WORKFLOW.md`、`PROJECT_OVERVIEW.md`、`FILE_MAP.md`、`GAME_RULES.md` 頂端 Card Depth 狀態，保留各樹原有歷史與其他差異。三份新增驗收工具及來源／授權索引詳見 FILE_MAP。
+- 回復點 `01d6c760` / `codex/rollback-before-card-depth-v1` 已保留。尚未 push／部署，接續的部署、正式 live 與 SW 更新驗收由主流程完成；詳見 `docs/CARD_DEPTH_V1_RELEASE.md`，目前不宣稱正式上線。
+
 ## Card Finish 出牌固定框修正 V3（2026-09-06，已發布）
 
 - `public/css/card-finish-v1.css` 將出牌 button 固定背景／邊框／陰影／chooseCardGlow 移除，保留穩定 hit target；卡面金色細邊／呼吸提示／鍵盤焦點都跟隨 face 傾斜。冰凍遮罩及禁選維持原行為。

@@ -10,10 +10,11 @@ const publicDir = path.join(root, 'public');
 const base = new URL(process.env.CARD_QA_URL || 'https://onepiece-card-online.onrender.com');
 const mode = String(process.env.CARD_QA_MODE || 'candidate').toLowerCase();
 const chrome = process.env.CARD_QA_CHROME || 'C:/Program Files/Google/Chrome/Application/chrome.exe';
-const hits = { game: 0, css: 0, js: 0 };
+const hits = { game: 0, css: 0, js: 0, depthAssets: 0 };
+const depthRequired = process.env.CARD_QA_DEPTH === '1';
 const report = {
   result: 'FAIL', mode, roomsCreated: 0,
-  coverage: { hand: false, drawn: false, peerSync: false, finishHooks: false, naturalDisabledSeen: false, choiceDisabledBlocked: false, choiceDisabledReason: null },
+  coverage: { hand: false, drawn: false, peerSync: false, finishHooks: false, depthHand: false, depthDrawn: false, naturalDisabledSeen: false, choiceDisabledBlocked: false, choiceDisabledReason: null },
   routeHits: hits, actions: [], milestones: [], browserErrors: { page: 0, console: 0, categories: [] }
 };
 let currentStage = 'config';
@@ -68,6 +69,11 @@ async function installRoutes(context) {
       return route.fulfill({ response });
     }
     if (mode !== 'candidate') return route.continue();
+    if (depthRequired && url.origin === base.origin && /^\/card-depth\/v1\/(?:normal|enh|lux|lux-enh)\/(?:[0-9]|1[0-9])\/(?:background|subject|foreground)\.webp$/.test(url.pathname)) {
+      const file = path.join(publicDir, url.pathname.slice(1));
+      hits.depthAssets++;
+      return fs.existsSync(file) ? route.fulfill({ status:200, contentType:'image/webp', body:fs.readFileSync(file) }) : route.fulfill({ status:404, body:'missing candidate depth asset' });
+    }
     if (url.origin !== base.origin || !map.has(url.pathname)) return route.continue();
     const [key, file] = map.get(url.pathname);
     hits[key]++;
@@ -95,6 +101,67 @@ async function snapshot(page) {
 const publicKey = s => JSON.stringify(s && ({ roundNo:s.roundNo, turnIndex:s.turnIndex, turnStep:s.turnStep, deckCount:s.deckCount, discardCount:s.discardCount, chestLeft:s.chestLeft, pending:s.pending, players:s.players.map(p=>({id:p.id,alive:p.alive,frozen:p.frozen})) }));
 // Teach's covered cards may legitimately be hidden from one observer.
 const visibleDiscardsAgree = (a, b) => a.length === b.length && a.every((id, i) => id == null || b[i] == null || id === b[i]);
+const candidateRouteMiss = (routeHits, needsDepth) => {
+  const required = ['game', 'css', 'js'];
+  if (needsDepth) required.push('depthAssets');
+  return required.some(key => Number(routeHits[key] || 0) < 2);
+};
+const enhancementWaitBudget = status => {
+  const duration = Number(status?.duration), currentTime = Number(status?.currentTime);
+  const rate = Number(status?.playbackRate);
+  if (!Number.isFinite(duration) || duration <= 0 || !Number.isFinite(currentTime)) return 15000;
+  const remainingMs = Math.max(0, duration - currentTime) * 1000 / (Number.isFinite(rate) && rate > 0 ? rate : 1);
+  return Math.min(60000, Math.max(5000, Math.ceil(remainingMs + 3000)));
+};
+
+async function enhancementMediaStatus(page) {
+  return page.evaluate(() => {
+    const overlay = document.getElementById('enhOverlay');
+    const video = document.getElementById('enhVideo');
+    if (!overlay || !video) return { present:false, overlayVisible:false };
+    const rect = overlay.getBoundingClientRect(), style = getComputedStyle(overlay);
+    return {
+      present: true,
+      overlayVisible: !overlay.classList.contains('hidden') && style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity) !== 0 && rect.width > 0 && rect.height > 0,
+      currentTime: Number.isFinite(video.currentTime) ? Number(video.currentTime.toFixed(3)) : null,
+      duration: Number.isFinite(video.duration) ? Number(video.duration.toFixed(3)) : null,
+      playbackRate: Number.isFinite(video.playbackRate) ? video.playbackRate : null,
+      paused: video.paused,
+      ended: video.ended,
+      readyState: video.readyState,
+      networkState: video.networkState
+    };
+  }).catch(() => ({ present:false, overlayVisible:false }));
+}
+
+async function waitForEnhancementMedia(page) {
+  let before = await enhancementMediaStatus(page);
+  if (!before.overlayVisible) return { waited:false, elapsedMs:0, before, after:before };
+
+  // Metadata may arrive just after the overlay. Read only; never seek, click,
+  // pause, or remove the overlay merely to make the QA advance.
+  const metadataEnd = Date.now() + 5000;
+  while (before.overlayVisible && before.duration == null && Date.now() < metadataEnd) {
+    await sleep(100);
+    before = await enhancementMediaStatus(page);
+  }
+  if (!before.overlayVisible) return { waited:true, elapsedMs:0, before, after:before };
+
+  const budgetMs = enhancementWaitBudget(before), started = Date.now();
+  let after = before;
+  while (Date.now() - started < budgetMs) {
+    await sleep(100);
+    after = await enhancementMediaStatus(page);
+    if (!after.overlayVisible) {
+      const result = { waited:true, elapsedMs:Date.now()-started, budgetMs, before, after };
+      report.milestones.push({ enhancementMediaWait:result });
+      return result;
+    }
+  }
+  after = await enhancementMediaStatus(page);
+  fail('ENHANCEMENT_MEDIA_TIMEOUT', { budgetMs, before, after });
+}
+
 function isKidReplay(before, after, which) {
   const played = which === 'hand' ? before.own.hand : before.own.tempDraw;
   const kept = which === 'hand' ? before.own.tempDraw : before.own.hand;
@@ -136,8 +203,9 @@ async function waitPeerSync() {
 
 async function physicalClick(page, locator, timeout = 9000, allowDisabled = false) {
   locator = locator.first();
-  const end = Date.now() + timeout;
+  let end = Date.now() + timeout;
   let last = null;
+  let enhancementWaited = false;
   while (Date.now() < end) {
     if (await locator.count()) {
       last = await locator.evaluate(el => {
@@ -150,6 +218,12 @@ async function physicalClick(page, locator, timeout = 9000, allowDisabled = fals
         return { visible:r.width>0&&r.height>0&&cs.display!=='none'&&cs.visibility!=='hidden', disabled:!!el.disabled, hit:!!top&&(top===el||el.contains(top)), x, y, top:top?{tag:top.tagName,id:top.id||'',class:String(top.className||'').slice(0,120)}:null, overlays };
       }).catch(() => null);
       if (last?.visible && (allowDisabled || !last.disabled) && last.hit) { await page.mouse.click(last.x, last.y); return last; }
+      if (!enhancementWaited && last?.top?.id === 'enhVideo' && last.overlays?.includes('enhOverlay')) {
+        const media = await waitForEnhancementMedia(page);
+        enhancementWaited = true;
+        end += media.elapsedMs + 1000;
+        continue;
+      }
     }
     await sleep(100);
   }
@@ -243,6 +317,35 @@ async function resolvePending() {
   fail('PENDING_STEP_LIMIT');
 }
 
+async function inspectActiveDepth(page, which) {
+  if (!depthRequired) return;
+  const selector=which==='hand'?'#playHand':'#playDrawn';
+  const locator=page.locator(selector+' [data-card-finish]');
+  await locator.scrollIntoViewIfNeeded();
+  await page.waitForTimeout(180);
+  const bounds=await locator.boundingBox();
+  if (!bounds) fail('DEPTH_CARD_NOT_VISIBLE');
+  const viewport=page.viewportSize();
+  const x=bounds.x+bounds.width*.65;
+  const y=Math.max(8,Math.min(viewport.height-8,bounds.y+bounds.height*.40));
+  const before=await page.evaluate(()=>window.__finishActions.length);
+  await page.mouse.move(x,y);
+  await page.waitForFunction(sel=>document.querySelector(sel+' [data-card-finish]')?.dataset.finishDepth==='ready',selector,{timeout:15000}).catch(()=>fail('DEPTH_NOT_READY',{which}));
+  const visual=await locator.evaluate(el=>{
+    const original=el.querySelector('.card-finish-face > img');
+    const stack=el.querySelector('.card-finish-depth');
+    const front=stack?.querySelector('.card-finish-depth-foreground');
+    return {originalStillFirst:original===el.querySelector('img'),originalForeground:front?.src===original?.src,
+      masked:front?getComputedStyle(front).maskImage.includes('/foreground.webp'):false,
+      decoration:stack?.getAttribute('aria-hidden')==='true'&&getComputedStyle(stack).pointerEvents==='none',
+      one:document.querySelectorAll('[data-finish-depth="ready"]').length===1};
+  });
+  if(!Object.values(visual).every(Boolean))fail('DEPTH_LIVE_COMPOSITE_INVALID',visual);
+  if(await page.evaluate(()=>window.__finishActions.length)!==before)fail('DEPTH_HOVER_SENT_ACTION');
+  report.coverage[which==='hand'?'depthHand':'depthDrawn']=true;
+  report.milestones.push({depth:which,visual});
+}
+
 async function playTurn(which) {
   const pair = await waitPeerSync();
   const index = pair.findIndex(x => x.playerId === pair[0].turnIndex);
@@ -276,6 +379,7 @@ async function playTurn(which) {
   if(!disabled.hand&&!disabled.drawn&&(which==='hand'?chosen.own.hand:chosen.own.tempDraw)===9) which=which==='hand'?'drawn':'hand';
   const played=which==='hand'?chosen.own.hand:chosen.own.tempDraw;
   currentStage=`play:${which}`;
+  await inspectActiveDepth(page,which);
   const sentBefore=await page.evaluate(()=>window.__finishActions.filter(x=>x.type==='PLAY_CARD').length);
   await physicalClick(page,page.locator(which==='hand'?'#playHand':'#playDrawn'));
   if(played===11 && await page.locator('#kidDo').count()) await physicalClick(page,page.locator('#kidDo'));
@@ -341,7 +445,7 @@ async function main() {
       await playTurn(i%2?'drawn':'hand');
     }
     report.coverage.peerSync=true;
-    if(mode==='candidate'&&Object.values(hits).some(n=>n<2)) fail('CANDIDATE_ROUTE_MISS');
+    if(mode==='candidate'&&candidateRouteMiss(hits,depthRequired)) fail('CANDIDATE_ROUTE_MISS');
     report.result=report.coverage.hand&&report.coverage.drawn?'PASS':'INCOMPLETE_NATURAL_ROUND_END';
   } catch(e) {
     error=e instanceof QAError?e:new QAError('UNEXPECTED');
@@ -388,6 +492,11 @@ function selfTest() {
   check(!hasSinglePlay(0,[],'drawn'), 'missing outgoing play fails');
   check(!hasSinglePlay(0,[{which:'drawn'},{which:'drawn'}],'drawn'), 'duplicate outgoing plays fail');
   check(!hasSinglePlay(0,[{which:'hand'}],'drawn'), 'wrong outgoing slot fails');
+  check(!candidateRouteMiss({game:2,css:2,js:2,depthAssets:0},false), 'non-depth candidate ignores the optional depth route');
+  check(candidateRouteMiss({game:2,css:2,js:1,depthAssets:0},false), 'candidate still requires both base source hits');
+  check(candidateRouteMiss({game:2,css:2,js:2,depthAssets:0},true), 'depth candidate requires real depth asset hits');
+  check(enhancementWaitBudget({duration:15,currentTime:5,playbackRate:1})===13000, 'media wait budget follows actual remaining playback');
+  check(enhancementWaitBudget({duration:120,currentTime:0,playbackRate:1})===60000, 'media wait remains bounded');
   process.stdout.write(JSON.stringify({result:'PASS',mode:'self-test',checks})+'\n');
 }
 if (require.main === module) {

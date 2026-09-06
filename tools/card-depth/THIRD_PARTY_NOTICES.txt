@@ -1,0 +1,100 @@
+BiRefNet CPU segmentation tool references
+Verified 2026-09-07 (Asia/Taipei)
+
+Model download and expected checksum are listed by rembg's maintainer:
+https://github.com/danielgatis/rembg/blob/main/rembg/sessions/birefnet_general_lite.py
+https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-general-bb_swin_v1_tiny-epoch_232.onnx
+MD5: 4fab47adc4ff364be1713e97b7e66334
+SHA-256 observed on download: 5600024376f572a557870a5eb0afb1e5961636bef4e1e22132025467d0f03333
+Size: 224005088 bytes
+
+Approved general-model comparison download, separately verified:
+https://github.com/danielgatis/rembg/blob/main/rembg/sessions/birefnet_general.py
+https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-general-epoch_244.onnx
+MD5: 7a35a0141cbbc80de11d9c9a28f52697
+SHA-256 observed on download: 58f621f00f5d756097615970a88a791584600dcf7c45b18a0a6267535a1ebd3c
+Size: 972666916 bytes
+Upstream weights model card declares MIT:
+https://huggingface.co/ZhengPeng7/BiRefNet/raw/main/README.md
+This model was evaluated locally only. Its mask failed visual acceptance.
+
+Pre/post-processing reference:
+https://github.com/danielgatis/rembg/blob/main/rembg/sessions/base.py
+https://github.com/danielgatis/rembg/blob/main/rembg/sessions/birefnet_general.py
+Upstream model project: https://github.com/ZhengPeng7/BiRefNet
+The ONNX model and Python environment are outside this repository and are not published.
+Original game-card artwork has not been relicensed by these notices.
+
+SAM authoring-only pilot (added after the BiRefNet-general evaluation):
+Copyright (c) Meta Platforms, Inc. and affiliates. All rights reserved.
+Official model license: Apache License, Version 2.0, not MIT.
+The complete license is retained in SAM_APACHE_2_0.txt next to this notice.
+https://github.com/facebookresearch/segment-anything/blob/main/LICENSE
+https://github.com/facebookresearch/segment-anything#license
+Quantized ONNX export source and official checksums:
+https://github.com/danielgatis/rembg/blob/main/rembg/sessions/sam.py
+https://github.com/danielgatis/rembg/releases/download/v0.0.0/sam_vit_b_01ec64.encoder.quant.onnx
+MD5: 26fc0e01d2fa34ed2d3f91259118482d
+SHA-256 observed: 181301ce3500a86c38450b56e2b71dab8008a13b1812a0d6cc812f22651e143a
+Size: 108836115 bytes
+https://github.com/danielgatis/rembg/releases/download/v0.0.0/sam_vit_b_01ec64.decoder.quant.onnx
+MD5: 45391530307d1aee79b2a1507769e6c7
+SHA-256 observed: b11465135b7c93a1fd65141a4e2a96f1ddf2e3dab09b5eeab640bdf5f10aadbe
+Size: 8755366 bytes
+The model weights remain in D:/Codex_Tools/card-depth-sam-v1/models, outside Git/public.
+sam_refine.py adapts the MIT rembg ORT interface/preprocessing, with changes:
+OpenCV affine interpolation, separate encoder/decoder lifetimes, CPU/RAM limits,
+candidate selection rather than union, fixed pilot prompts, and provenance/QA output.
+Later local changes add explicit per-card JSON jobs, crop/rotation coordinate mapping,
+source/model-bound embedding NPZ caches, and cache-only decoder mode.
+No SAM model inference happens in the website and no card image is uploaded.
+
+rembg license
+https://github.com/danielgatis/rembg/blob/main/LICENSE.txt
+
+MIT License
+
+Copyright (c) 2020 Daniel Gatis
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+BiRefNet license
+https://github.com/ZhengPeng7/BiRefNet/blob/main/LICENSE
+
+MIT License
+
+Copyright (c) 2024 ZhengPeng
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

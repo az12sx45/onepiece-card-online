@@ -1,5 +1,18 @@
 # File Map
 
+## Card Depth V1 製作／驗收檔案（2026-09-07，候選通過／未發布）
+
+`tools/card-depth/` 為唯讀原卡的離線製作工具、逐卡保護與 alpha 修補配方；C／D 的 22 份頂層文字檔與 6 份 jobs 雜湊一致。模型／venv 不在 repo，`THIRD_PARTY_NOTICES.txt` 與 `SAM_APACHE_2_0.txt` 保留來源及授權。
+
+普通目錄 `public/card-depth/v1/{variant}/{id}/` 放 background.webp、subject.webp、foreground.webp（最後者僅 alpha mask）；最終 80 卡／240 檔、13,632,032 bytes 已完成美術審查、重建及逐檔雜湊核對。`docs/CARD_DEPTH_V1_ASSETS.json` 為完整清單，LF SHA-256：`88d1f47444cfc6bedbdfce27648947530909f1f8323d4ff8842ce699092969db`。runtime 沿用 `public/js/card_finish_v1.js`／`public/css/card-finish-v1.css`。
+
+- `scripts/card_depth_browser_qa.js`：全 80 卡與 lifecycle、桌機／觸控、失敗回退驗收；最終 2,262 項、80 組／320 個 HTTP 回應 PASS，page errors 0。
+- `scripts/card_depth_sw_qa.js`：既有 Service Worker 更新前／後的版本、快取及景深資源驗收；正式更新後結果仍待發布流程補記。
+- `scripts/card_depth_assets_live_qa.js`：從指定發布 commit 讀取三份公開程式與 `CARD_DEPTH_V1_ASSETS.json`，核對正式 HTTP 共 243 檔的 bytes／SHA；只讀正式站，報告寫在非公開 artifacts，不是遊戲測試。
+- 既有 `scripts/card_finish_unit_qa.js` 單元 4,901 項 PASS；`scripts/card_finish_live_qa.js` 的兩帳號 candidate 連續兩輪 PASS。D 樹 `artifacts/card-finish-v1/` 下的 `real-candidate-2026-09-06T17-59-45-524Z.json` 驗證 hand／drawn／peerSync／兩處景深，`real-candidate-2026-09-06T18-00-44-158Z.json` 另記錄 6 次出牌、基德重選與香吉士 PK 至自然 ended。兩輪 page errors 0、既有媒體 404 各 4 筆；自然禁選僅為技能禁選數字，未完成禁選卡片真人案例。
+
+`docs/CARD_DEPTH_V1_RELEASE.md` 由主流程補記發布狀態；製作／QA 證據在非公開 `artifacts/card-depth-v1/`，7 張獨立修補紀錄位於 `enh-corrections/REVIEW.md` 與 `lux-enh-b-corrections/REVIEW.md`。尚未 push／部署，不把 candidate 通過當成正式 live 或 SW 更新通過。
+
 ## Card Finish V3 出牌固定框修正（2026-09-06，已發布）
 
 正式 `ff72fbfb` 公開仍只有 `public/game.html`、`public/css/card-finish-v1.css`、`public/js/card_finish_v1.js`；引用 `20260906-finish-frame-v3`。button 保留互動／凍結遮罩，背景與固定框透明，face 負責會跟隨傾角的外觀與選牌提示。unit/browser QA 已更新；報告與截圖在隔離樹 `artifacts/card-finish-frame-v3`。真 SW baseline 19／postdeploy 139 項證據在 `artifacts/card-holo-release-v458/card-finish-frame-v3-*.json`，兩帳號正式測試在 `artifacts/card-finish-v1/real-live-*.json`，產物不發布。完整狀態見 `docs/CARD_FINISH_V1_RELEASE.md`。
