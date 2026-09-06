@@ -2,15 +2,32 @@
 
 日期：2026-09-06。使用者已授權「改成獨立實作、補完測試後再發布」。本文件取代上一輪 V458 GPL 候選的發布計畫；舊候選沒有上線。
 
-## 出牌固定框修正 V3（2026-09-06，發布準備）
+## 出牌固定框修正 V3（2026-09-06，已發布）
 
 - 使用者要求移除出牌卡背後不動的黑框並部署。原因為原 button 的 border／chooseCardGlow 留在原位，只有 child face 轉動。現在 button 保留原尺寸與 click handler，但背景／邊框透明、無陰影／動畫／transform；金色細邊與新的 finishChoiceGlow 都在會傾斜的 face 上，呼吸動畫不包含 transform。鍵盤 focus-visible 的可见提示亦跟著 face，不改原冰凍遮罩。
 - 併入前一輪尚未發布的 V2 角度：出牌 8°／圖鑑 12°。觸控與 reduced-motion 保持靜態，禁選不啟用呼吸光。僅傾斜時放寬卡面裁切；原卡圖、遊戲程式、動畫時序與 Socket 事件未改。
 - 三個公開檔案：`public/game.html`（僅兩個引用查詢更新）、`public/css/card-finish-v1.css`、`public/js/card_finish_v1.js`（僅角度數值）。新查詢版本 `20260906-finish-frame-v3`，不重新上傳媒體或舊 GPL 候選。
 - 本輪 `npm start` 在 8849 可開；單元 4,441 項、browser 215 項全部 PASS，0 page errors。新增固定層透明／無 transform、光在 child、8°／12° 邊角、復位與兩卡間隙點擊檢查；冰凍、娜美、enhancement、mobile/reduced 回歸通過。1440 強傾角截圖已目視確認沒有殘留固定框。測試為 renderer fixture，非本輪正式多人證據。
-- 已記錄真實舊 `op-card-v7.5` SW profile 的正式 V1 HTML/CSS/JS cache baseline，19 項 PASS；發布後仍待同 profile 與乾淨瀏覽器重新驗證。
-- 本次回復點為 `7655c7b9f6a4222316648e27dd228cc1c3755306`（程式對應 V1 986430ca）；使用本次發布提交的 scoped revert，不回退其他更新。尚未部署，完成後補記實際 commit、線上 SHA 與驗收結果。
+- 程式提交 `ff72fbfbe109f7d48ef56aebffec3c40d14886d9` 已推送正式 main；2026-09-06 21:00:08（Asia/Taipei）直接讀到正式新版。入口 https://onepiece-card-online.onrender.com/start.html 。Render 內部 deploy ID 未取得，以三份公開 code bytes 與該 Git blob 完全一致作為部署版本證據。
+- 真實舊 `op-card-v7.5` SW profile 的正式 V1 HTML/CSS/JS baseline 19 項、發布後 139 項全部 PASS。同一舊 profile 更新到 frame-v3 HTML/CSS/JS，乾淨桌機／觸控模擬／reduced-motion、四接點、卡圖比例、固定 button 透明及會傾斜的 face 光均通過；桌機／手機截圖已複核。四種代表卡圖的正式 SHA 亦相符。沿用 profile 的有限媒體節流限制，沒有宣稱全素材離線或實體手機驗收。
+- 本次回復點為 `7655c7b9f6a4222316648e27dd228cc1c3755306`（程式對應 V1 986430ca），本機分支 `codex/rollback-before-card-frame-v3`。需撤回時，在最新 main 執行 `git revert ff72fbfbe109f7d48ef56aebffec3c40d14886d9`，檢查 scoped 差異後依正式流程 push／驗證 Render；不回退其他更新、不整檔覆蓋 HTML。
 - 檔案與 QA／文件同步回 C 槽主來源，保留其中其他未發布修改。證據目錄 `D:/Codex_Release_Worktrees/card-holo-v458-release/artifacts/card-finish-frame-v3` 與 `artifacts/card-holo-release-v458`。
+
+### V3 公開檔案與驗收證據
+
+| 公開檔案 | 正式 SHA-256（與 ff72fbfb Git blob 相同） |
+| --- | --- |
+| `public/game.html` | `c478256c60cc90a9a85fa85d885f366bdd6764c42b0a73da43b7b486476d1d0e` |
+| `public/css/card-finish-v1.css` | `1f2e5b0753bcc73df6f1a50e3699f5afa81edd68e7cd599e2efff4af57f5c690` |
+| `public/js/card_finish_v1.js` | `b6f810e7c6c2b6db2174bcefa3cab90ccd368133990a6d566396e847a49a7c55` |
+
+- 程式提交共 10 檔，除上述三個公開檔案外只有兩份既有 QA 與五份文件。沒有 Board／launcher、rank 圖、舊 GPL 候選、卡圖、影音或後端變更；新動畫 CSS 與 JS 皆為既有獨立實作的延伸。
+- 舊 SW／資源腳本位於隔離樹 `artifacts/card-holo-release-v458/`，`service_worker_release_qa.js --phase capture-baseline` 及 `--phase postdeploy` 分別產出 `card-finish-frame-v3-baseline.json` 與 `card-finish-frame-v3-postdeploy-report.json`。它們是本機驗收工具／證據，不是正式公開檔案；code parity 以發布 commit blob 為準，不以含不同換行的工作檔替代。
+- 初次發布後真實對局報告 `artifacts/card-finish-v1/real-live-2026-09-06T13-01-02-436Z.json` 保留為 FAIL：QA 在第二次出普通基德時錯誤等待棄牌數增加。原 engine 正常把棄牌 `[13]` 轉成 `[11]`，13 回到 tempDraw、仍在 choose；這是測試未涵蓋的既有規則，不是新卡面或對手同步錯誤。
+- 僅修正 `scripts/card_finish_live_qa.js` 的驗收條件，核對基德完整取回／保留手牌／棄牌／行動者狀態，同時保留單一 PLAY_CARD 與 slot 驗證、雙端可見棄牌一致性。新增 `--self-test` 使用原 engine，18 項 PASS（包含未變狀態、錯誤取回、重複／缺漏出牌的負例）；C、D 語法檢查及自檢皆 PASS，未修改遊戲程式。
+- 修正 QA 後正式重跑 PASS：`artifacts/card-finish-v1/real-live-2026-09-06T13-06-34-303Z.json`。兩個已授權真人帳號、0 CPU，手牌 11 基德／新抽牌 13 基拉各恰好一個 PLAY_CARD，基拉選人完成、雙端回合及可見棄牌一致、私人手牌未洩漏；hand／drawn／peerSync／finishHooks 全 true，公開 HTML/CSS/JS route substitution 都是 0，page errors 0。此次沒有自然禁選案例，冰凍及娜美仍引用本輪 renderer fixture，沒有將歷史 V1 真人禁選當成本輪結果。
+- 該次 console 有 4 筆 HTTP 404，並非本次三個公開 code（另逐檔驗證）；影音採相同本機原素材映射以減少流量，未宣稱全站零 404 或全影音網路驗收。所有測試房已透過自身 ROOM_FINISHED／LEAVE_ROOM 清理，瀏覽器已關閉，未保存密碼／HAR／trace、未完成整季排行結算，也未動 Board 進度。
+- 最終 QA／文件補記使用 `[skip render]` 提交，不改任何 public 檔案、不重啟已驗收的服務；部署程式仍是 `ff72fbfb`。
 
 ### 前一輪 V2 本機紀錄（併入 V3，不單獨發布）
 

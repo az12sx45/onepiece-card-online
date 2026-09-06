@@ -4,7 +4,6 @@
 // stdin JSON or environment variables and are never written to reports/logs.
 const fs = require('node:fs');
 const path = require('node:path');
-const { chromium } = require(process.env.CARD_QA_PLAYWRIGHT || process.env.BOARD_QA_PLAYWRIGHT || 'playwright');
 
 const root = path.resolve(__dirname, '..');
 const publicDir = path.join(root, 'public');
@@ -94,6 +93,31 @@ async function snapshot(page) {
   });
 }
 const publicKey = s => JSON.stringify(s && ({ roundNo:s.roundNo, turnIndex:s.turnIndex, turnStep:s.turnStep, deckCount:s.deckCount, discardCount:s.discardCount, chestLeft:s.chestLeft, pending:s.pending, players:s.players.map(p=>({id:p.id,alive:p.alive,frozen:p.frozen})) }));
+// Teach's covered cards may legitimately be hidden from one observer.
+const visibleDiscardsAgree = (a, b) => a.length === b.length && a.every((id, i) => id == null || b[i] == null || id === b[i]);
+function isKidReplay(before, after, which) {
+  const played = which === 'hand' ? before.own.hand : before.own.tempDraw;
+  const kept = which === 'hand' ? before.own.tempDraw : before.own.hand;
+  if (played !== 11 || after.roundNo !== before.roundNo || after.turnIndex !== before.turnIndex ||
+      after.turnIndex !== after.playerId || after.turnStep !== 'choose' || after.pending ||
+      !after.own.alive || after.own.hand !== kept || !Number.isInteger(after.own.tempDraw) ||
+      after.own.tempDraw === 11 || after.deckCount !== before.deckCount ||
+      after.discardCount !== before.discardCount || after.lastDiscard !== 11) return false;
+  // Ordinary Kid appends 11, removes one prior non-Kid discard, and returns it
+  // as tempDraw. The pile length therefore stays unchanged on a successful play.
+  return before.discard.some((id, i) => {
+    if (id != null && id !== after.own.tempDraw) return false;
+    const expected = before.discard.slice();
+    expected.splice(i, 1); expected.push(11);
+    return visibleDiscardsAgree(expected, after.discard);
+  });
+}
+function playAcknowledged(before, after, which) {
+  const played = which === 'hand' ? before.own.hand : before.own.tempDraw;
+  return (after.discardCount > before.discardCount && after.discard.slice(before.discardCount).includes(played)) ||
+    isKidReplay(before, after, which);
+}
+const hasSinglePlay = (beforeCount, sent, which) => sent.length === beforeCount + 1 && sent[sent.length - 1]?.which === which;
 async function waitSnapshot(page, predicate, timeout = 12000) {
   const end = Date.now() + timeout;
   while (Date.now() < end) { const s = await snapshot(page); if (s && predicate(s)) return s; await sleep(100); }
@@ -103,7 +127,8 @@ async function waitPeerSync() {
   const end = Date.now() + 8000;
   while (Date.now() < end) {
     const pair = await Promise.all(pages.map(snapshot));
-    if (pair.every(Boolean) && publicKey(pair[0]) === publicKey(pair[1])) return pair;
+    if (pair.every(Boolean) && publicKey(pair[0]) === publicKey(pair[1]) &&
+        visibleDiscardsAgree(pair[0].discard, pair[1].discard)) return pair;
     await sleep(100);
   }
   fail('PEER_SYNC_TIMEOUT');
@@ -221,10 +246,12 @@ async function resolvePending() {
 async function playTurn(which) {
   const pair = await waitPeerSync();
   const index = pair.findIndex(x => x.playerId === pair[0].turnIndex);
-  if (index < 0 || pair[0].turnStep !== 'draw') fail('EXPECTED_HUMAN_DRAW');
+  if (index < 0 || !['draw','choose'].includes(pair[0].turnStep) || pair[0].pending) fail('EXPECTED_HUMAN_DRAW_OR_CHOICE');
   const page=pages[index], observer=pages[1-index];
-  currentStage=`draw:${which}`;
-  await physicalClick(page,page.locator('#btnDraw'));
+  if (pair[0].turnStep === 'draw') {
+    currentStage=`draw:${which}`;
+    await physicalClick(page,page.locator('#btnDraw'));
+  }
   const chosen=await waitSnapshot(page,s=>s.turnStep==='choose'&&s.turnIndex===s.playerId&&s.own.tempDraw!=null,12000);
   const observerState=await waitSnapshot(observer,s=>s.roundNo===chosen.roundNo&&s.turnIndex===chosen.turnIndex&&s.turnStep==='choose',8000);
   const actorSeen=observerState.players.find(p=>p.id===chosen.playerId);
@@ -248,14 +275,13 @@ async function playTurn(which) {
   }
   if(!disabled.hand&&!disabled.drawn&&(which==='hand'?chosen.own.hand:chosen.own.tempDraw)===9) which=which==='hand'?'drawn':'hand';
   const played=which==='hand'?chosen.own.hand:chosen.own.tempDraw;
-  const beforeCount=chosen.discardCount;
   currentStage=`play:${which}`;
   const sentBefore=await page.evaluate(()=>window.__finishActions.filter(x=>x.type==='PLAY_CARD').length);
   await physicalClick(page,page.locator(which==='hand'?'#playHand':'#playDrawn'));
   if(played===11 && await page.locator('#kidDo').count()) await physicalClick(page,page.locator('#kidDo'));
-  await waitSnapshot(page,s=>s.discardCount>beforeCount&&s.discard.slice(beforeCount).includes(played),9000);
+  await waitSnapshot(page,s=>playAcknowledged(chosen,s,which),9000);
   const sent=await page.evaluate(()=>window.__finishActions.filter(x=>x.type==='PLAY_CARD'));
-  if(sent.length!==sentBefore+1 || sent[sent.length-1].which!==which) fail('PLAY_EVENT_COUNT_OR_SLOT');
+  if(!hasSinglePlay(sentBefore,sent,which)) fail('PLAY_EVENT_COUNT_OR_SLOT');
   report.actions.push({actor:index,type:'PLAY_CARD',which,card:played});
   report.coverage[which]=true;
   await waitPeerSync();
@@ -291,11 +317,12 @@ async function saveFailure(error) {
   return path.relative(root,dir).replace(/\\/g,'/');
 }
 
-(async()=>{
+async function main() {
   let error=null;
   try {
     if(!['candidate','live'].includes(mode)) fail('BAD_MODE');
     const accounts=await credentials();
+    const { chromium } = require(process.env.CARD_QA_PLAYWRIGHT || process.env.BOARD_QA_PLAYWRIGHT || 'playwright');
     browser=await chromium.launch({headless:true,...(fs.existsSync(chrome)?{executablePath:chrome}:{})});
     for(let i=0;i<2;i++) {
       const context=await browser.newContext({viewport:{width:1440,height:950},serviceWorkers:'block'});
@@ -307,10 +334,10 @@ async function saveFailure(error) {
     await Promise.all(pages.map((p,i)=>login(p,accounts[i])));
     await createAndStartRoom();
     await playTurn('hand');
-    if((await waitPeerSync())[0].turnStep==='draw') await playTurn('drawn');
+    if(['draw','choose'].includes((await waitPeerSync())[0].turnStep)) await playTurn('drawn');
     for(let i=0;i<Number(process.env.CARD_QA_MORE_TURNS||0) && !report.coverage.choiceDisabledBlocked;i++) {
       const s=(await waitPeerSync())[0];
-      if(s.roundNo!==1 || s.turnStep!=='draw' || s.players.filter(p=>p.alive).length!==2) break;
+      if(s.roundNo!==1 || !['draw','choose'].includes(s.turnStep) || s.players.filter(p=>p.alive).length!==2) break;
       await playTurn(i%2?'drawn':'hand');
     }
     report.coverage.peerSync=true;
@@ -325,4 +352,45 @@ async function saveFailure(error) {
   fs.mkdirSync(path.dirname(out),{recursive:true});fs.writeFileSync(out,JSON.stringify(report,null,2));
   process.stdout.write(JSON.stringify(report)+'\n');
   if(error) process.exitCode=1;
-})();
+}
+
+function selfTest() {
+  const assert = require('node:assert/strict');
+  const { createInitialState, applyAction } = require('../server/engine');
+  let checks = 0;
+  const check = (value, label) => { assert.ok(value, label); checks++; };
+  const summarize = st => ({
+    playerId:0, roundNo:st.roundNo, turnIndex:st.turnIndex, turnStep:st.turnStep,
+    deckCount:st.deck.length, discardCount:st.discard.length, discard:st.discard,
+    lastDiscard:st.discard[st.discard.length-1], pending:st.pending, own:st.players[0]
+  });
+  const initial = createInitialState(2);
+  initial.turnIndex=0; initial.turnStep='choose'; initial.venues=[]; initial.discard=[13];
+  initial.players[0].hand=2; initial.players[0].tempDraw=11;
+  const before=summarize(initial);
+  const after=summarize(applyAction(initial,{playerId:0,type:'PLAY_CARD',payload:{which:'drawn'}}).state);
+  check(JSON.stringify(after.discard)==='[11]' && after.own.tempDraw===13 && after.turnStep==='choose', 'engine reproduces [13] to [11] and the returned choice');
+  check(playAcknowledged(before,after,'drawn'), 'ordinary Kid is acknowledged without pile growth');
+  check(!playAcknowledged(before,before,'drawn'), 'unchanged Kid state is not acknowledged');
+  check(!playAcknowledged({...before,own:{...before.own,tempDraw:7}}, {...after,discard:[13],lastDiscard:13},'drawn'), 'ordinary card with unchanged discard is not acknowledged');
+  check(!playAcknowledged(before,{...after,own:{...after.own,tempDraw:12}},'drawn'), 'returned card must come from the prior pile');
+  check(!playAcknowledged(before,{...after,own:{...after.own,hand:3}},'drawn'), 'kept card must match the selected slot');
+  check(!playAcknowledged(before,{...after,deckCount:before.deckCount-1},'drawn'), 'Kid does not draw from the deck');
+  check(!playAcknowledged(before,{...after,turnIndex:1},'drawn'), 'repeated choose belongs to the original actor');
+  check(!playAcknowledged(before,{...after,pending:{action:'killer'}},'drawn'), 'Kid replay cannot carry a pending effect');
+  check(playAcknowledged({...before,own:{...before.own,tempDraw:7}}, {...after,discard:[13,7],discardCount:2,lastDiscard:7},'drawn'), 'ordinary growing discard remains acknowledged');
+  const handBefore={...before,own:{...before.own,hand:11,tempDraw:2}};
+  check(playAcknowledged(handBefore,after,'hand'), 'Kid in the hand slot preserves its other card');
+  check(!visibleDiscardsAgree([13],[11]), 'same pile count cannot mask stale peer state');
+  check(visibleDiscardsAgree([11],[11]), 'matching public pile synchronizes');
+  check(visibleDiscardsAgree([null,11],[13,11]), 'Teach privacy differences remain valid');
+  check(hasSinglePlay(0,[{which:'drawn'}],'drawn'), 'one outgoing selected-slot play succeeds');
+  check(!hasSinglePlay(0,[],'drawn'), 'missing outgoing play fails');
+  check(!hasSinglePlay(0,[{which:'drawn'},{which:'drawn'}],'drawn'), 'duplicate outgoing plays fail');
+  check(!hasSinglePlay(0,[{which:'hand'}],'drawn'), 'wrong outgoing slot fails');
+  process.stdout.write(JSON.stringify({result:'PASS',mode:'self-test',checks})+'\n');
+}
+if (require.main === module) {
+  if (process.argv.includes('--self-test')) selfTest();
+  else main();
+}

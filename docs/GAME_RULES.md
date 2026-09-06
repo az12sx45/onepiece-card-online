@@ -1,8 +1,8 @@
 # Game Rules
 
-## Card Finish V3 規則邊界（2026-09-06，發布準備）
+## Card Finish V3 規則邊界（2026-09-06，已發布）
 
-僅移動出牌提示框與光的視覺承載層、提高傾角，保留原 button 尺寸／handler／disabled／冰凍遮罩；不改原 inline 遊戲 script、PLAY_CARD、技能時序、帳號或 Socket。單元 4,441、browser 215 項 PASS；正式上線後驗收另記於 `docs/CARD_FINISH_V1_RELEASE.md`。
+正式 `ff72fbfb` 僅移動出牌提示框與光的視覺承載層、提高傾角，保留原 button 尺寸／handler／disabled／冰凍遮罩；不改原 inline 遊戲 script、PLAY_CARD、技能時序、帳號或 Socket。單元 4,441、browser 215、postdeploy 139 項 PASS；原遊戲 inline script 與回復點完全相同。正式雙帳號驗收與 QA 對基德「取回棄牌後繼續選牌」的既有規則修正，另記於 `docs/CARD_FINISH_V1_RELEASE.md`；沒有為測試更改遊戲規則。
 
 ## Card Finish V1 規則邊界（2026-09-06，已發布）
 

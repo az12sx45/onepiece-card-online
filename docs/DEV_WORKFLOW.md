@@ -1,11 +1,14 @@
 ﻿# Dev Workflow
 
-## Card Finish 出牌固定框修正 V3（2026-09-06，發布準備）
+## Card Finish 出牌固定框修正 V3（2026-09-06，已發布）
 
 - `public/css/card-finish-v1.css` 將出牌 button 固定背景／邊框／陰影／chooseCardGlow 移除，保留穩定 hit target；卡面金色細邊／呼吸提示／鍵盤焦點都跟隨 face 傾斜。冰凍遮罩及禁選維持原行為。
 - 併入 V2 出牌 8°、圖鑑 12°；`game.html` 只更新兩個引用為 `20260906-finish-frame-v3`，`card_finish_v1.js` 不改其他邏輯。沒有改卡圖、規則、server、DB 或同步。
 - 兩份既有 QA 工具新增透明固定層／face 光／邊角等檢查：單元 4,441、browser 215 項 PASS、0 page errors，桌機與觸控／reduced、禁選與點擊皆通過。真 SW 舊 V1 baseline 19 項 PASS。npm start 8849 成功；本機無 DB，未拿 fixture 冒充正式登入。
-- 本次白名單為公開三檔、两份 QA 腳本與相關文件；全部同步 C 主來源，保留其他未發布修改。回復點 7655c7b9。使用者已要求部署，待正式上線與 post 驗收補記；詳見 `docs/CARD_FINISH_V1_RELEASE.md`。
+- 程式提交 `ff72fbfb` 已推送 main，21:00:08（Asia/Taipei）驗證正式三檔 bytes 與 Git blob 相同。postdeploy 139 項 PASS，真舊 SW profile 升級及乾淨桌機／觸控／reduced 皆通過。程式提交白名單為公開三檔、兩份 QA 腳本與五份文件；全部同步 C 主來源，保留其他未發布修改。
+- 正式雙帳號測試發現 QA 原先錯誤假設所有出牌都增加棄牌數，對基德正常取回棄牌誤判 timeout。只補正 `scripts/card_finish_live_qa.js`（C、D 同步），保留單次送出、原 slot、真 backend／Socket、peer 與隱私檢查；`--self-test` 原 engine 18 項及語法檢查 PASS。原失敗證據保留，回復點為 7655c7b9／`codex/rollback-before-card-frame-v3`，撤回用 scoped revert ff72fbfb。
+- 最終驗收、SHA、兩帳號報告及界線詳見 `docs/CARD_FINISH_V1_RELEASE.md`。QA／文件補記使用 `[skip render]`，不改 public、不重啟正式服務。
+- 21:06:34 的正式雙帳號重跑 PASS：手牌基德／新抽基拉各一次 PLAY_CARD，目標、對手公開 state、回合及私牌隱藏通過，四接點有效，code substitution 0、page errors 0。當次未自然遇到禁選，仍由 renderer fixture 覆蓋；4 筆其他 404 如實保留。報告 `artifacts/card-finish-v1/real-live-2026-09-06T13-06-34-303Z.json`，測試房與瀏覽器均已清理。
 
 ### 前一輪 V2 本機紀錄（歷史，併入 V3）
 
