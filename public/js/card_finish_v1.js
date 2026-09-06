@@ -35,7 +35,7 @@
     const horizontal = 2 * x - 1;
     const vertical = 2 * y - 1;
     const distance = Math.hypot(horizontal, vertical);
-    const angle = (context === 'choice' ? 2.5 : 6) * Math.sin(Math.min(distance, 1) * Math.PI / 2);
+    const angle = (context === 'choice' ? 8 : 12) * Math.sin(Math.min(distance, 1) * Math.PI / 2);
     const gain = distance > 0 ? angle / distance : 0;
     return {
       pitch: -vertical * gain,

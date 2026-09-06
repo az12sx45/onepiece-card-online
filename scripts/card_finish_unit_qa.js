@@ -32,7 +32,7 @@ equal(selectFinish(null, 'foil', '/images/cards/1.webp', base), 'foil', 'Catalog
 equal(selectFinish(null, 'plain', '/images/cards/enh/1.webp', base), 'plain', 'Catalogue plain preview follows its explicit mode');
 
 const bounds = { left: 100, top: 80, width: 200, height: 300 };
-for (const [context, limit] of [['choice', 2.5], ['catalogue', 6]]) {
+for (const [context, limit] of [['choice', 8], ['catalogue', 12]]) {
   const center = mapPointer(200, 230, bounds, context);
   equal(Math.abs(center.pitch), 0, 'Card center has no pitch');
   equal(Math.abs(center.yaw), 0, 'Card center has no yaw');
@@ -47,6 +47,8 @@ for (const [context, limit] of [['choice', 2.5], ['catalogue', 6]]) {
   }
   const left = mapPointer(100, 230, bounds, context);
   const right = mapPointer(300, 230, bounds, context);
+  equal(right.yaw, limit, 'Edge reaches the stronger requested angle');
+  equal(mapPointer(200, 80, bounds, context).pitch, limit, 'Top edge reaches the stronger requested angle');
   equal(left.yaw, -right.yaw, 'Horizontal tilt is symmetric');
   equal(mapPointer(NaN, Infinity, { left: 0, top: 0, width: 0, height: 0 }, context).yaw, 0, 'Invalid coordinates and empty geometry remain neutral');
 }

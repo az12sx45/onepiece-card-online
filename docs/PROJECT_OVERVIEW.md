@@ -1,5 +1,13 @@
 # Project Overview
 
+## Card Finish 固定框修正 V3（2026-09-06，發布準備）
+
+出牌 button 不再呈現固定黑框，金色提示光與卡面一起傾斜；併入 8°／12° 新角度。單元 4,441、browser 215 項 PASS，舊 SW baseline 19 項 PASS，正式部署／post 驗收待補。沒有修改遊戲規則或後端。完整狀態見 `docs/CARD_FINISH_V1_RELEASE.md`。
+
+### 前一輪 V2 候選紀錄（併入 V3）
+
+滑鼠傾角加強為出牌 8°／圖鑑 12°，靜態及禁選行為不改。單元 4,441、browser 193 項 PASS，修改已回到 C 槽主來源；未推送，正式站仍為下方 V1。細節見 `docs/CARD_FINISH_V1_RELEASE.md`。
+
 ## Card Finish V1 獨立實作已發布（2026-09-06）
 
 正式版 `986430ca` 已上線；公開三檔與提交 SHA 一致。新版單元／瀏覽器／發布前後資源與舊 SW 驗收均通過，正式雙帳號 hand／drawn、自然冰凍禁選與同步已驗證。不改原遊戲規則或後端，完整界線與回復方式見 `docs/CARD_FINISH_V1_RELEASE.md`。

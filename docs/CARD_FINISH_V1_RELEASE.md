@@ -2,6 +2,22 @@
 
 日期：2026-09-06。使用者已授權「改成獨立實作、補完測試後再發布」。本文件取代上一輪 V458 GPL 候選的發布計畫；舊候選沒有上線。
 
+## 出牌固定框修正 V3（2026-09-06，發布準備）
+
+- 使用者要求移除出牌卡背後不動的黑框並部署。原因為原 button 的 border／chooseCardGlow 留在原位，只有 child face 轉動。現在 button 保留原尺寸與 click handler，但背景／邊框透明、無陰影／動畫／transform；金色細邊與新的 finishChoiceGlow 都在會傾斜的 face 上，呼吸動畫不包含 transform。鍵盤 focus-visible 的可见提示亦跟著 face，不改原冰凍遮罩。
+- 併入前一輪尚未發布的 V2 角度：出牌 8°／圖鑑 12°。觸控與 reduced-motion 保持靜態，禁選不啟用呼吸光。僅傾斜時放寬卡面裁切；原卡圖、遊戲程式、動畫時序與 Socket 事件未改。
+- 三個公開檔案：`public/game.html`（僅兩個引用查詢更新）、`public/css/card-finish-v1.css`、`public/js/card_finish_v1.js`（僅角度數值）。新查詢版本 `20260906-finish-frame-v3`，不重新上傳媒體或舊 GPL 候選。
+- 本輪 `npm start` 在 8849 可開；單元 4,441 項、browser 215 項全部 PASS，0 page errors。新增固定層透明／無 transform、光在 child、8°／12° 邊角、復位與兩卡間隙點擊檢查；冰凍、娜美、enhancement、mobile/reduced 回歸通過。1440 強傾角截圖已目視確認沒有殘留固定框。測試為 renderer fixture，非本輪正式多人證據。
+- 已記錄真實舊 `op-card-v7.5` SW profile 的正式 V1 HTML/CSS/JS cache baseline，19 項 PASS；發布後仍待同 profile 與乾淨瀏覽器重新驗證。
+- 本次回復點為 `7655c7b9f6a4222316648e27dd228cc1c3755306`（程式對應 V1 986430ca）；使用本次發布提交的 scoped revert，不回退其他更新。尚未部署，完成後補記實際 commit、線上 SHA 與驗收結果。
+- 檔案與 QA／文件同步回 C 槽主來源，保留其中其他未發布修改。證據目錄 `D:/Codex_Release_Worktrees/card-holo-v458-release/artifacts/card-finish-frame-v3` 與 `artifacts/card-holo-release-v458`。
+
+### 前一輪 V2 本機紀錄（併入 V3，不單獨發布）
+
+出牌最大合成傾角由 2.5° 提高為 8°，圖鑑由 6° 提高為 12°；其餘光膜參數、動畫過渡與遊戲規則不改。僅傾斜中的按鈕允許卡面向外投影，禁選／冰凍及觸控靜態維持原呈現。兩個資源引用版本為 `20260906-finish-tilt-v2`。
+
+本輪已重跑單元 4,441 項與 browser 193 項，全部 PASS、0 page errors；新增強傾角邊／角、復位與兩卡間隙點擊檢查，桌機／手機模擬及 reduced-motion 回歸通過。大圖與二選一截圖已目視確認完整。未 push／部署，正式站仍是以下 V1；本輪結果不等同 V2 的正式連線或發布後驗收。
+
 ## 正式發布完成
 
 - 2026-09-06 19:30:48（Asia/Taipei）已由正式站直接讀到新版；Git／部署程式版本為 `986430ca300ea32bb0f06f4cdf9aba4b1a96db68`，已推送 `origin/main`。Render 內部 deploy ID 未透過控制台取得；以下以公開 bytes 與 Git blob 完全一致確認實際部署版本，不將 push 成功當成上線證據。

@@ -115,6 +115,49 @@ button:disabled [data-card-finish] > .card-finish-face::after,
   z-index: 2;
 }
 
+/* The button remains the stable hit target, not a second visible card frame.
+   All card decoration lives on the same face that receives the 3D tilt. */
+#myPlayZone :is(#playHand, #playDrawn) {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  animation: none;
+  transform: none;
+}
+
+#myPlayZone :is(#playHand, #playDrawn) > [data-card-finish] > .card-finish-face {
+  border-radius: 12px;
+  box-shadow: 0 8px 18px rgb(0 0 0 / .35);
+}
+
+#myPlayZone .card-finish-face > img {
+  border-radius: inherit;
+}
+
+@keyframes finishChoiceGlow {
+  0%, 100% { box-shadow: 0 0 0 1px rgb(251 191 36 / .4), 0 0 10px rgb(251 191 36 / .18); }
+  50% { box-shadow: 0 0 0 1px rgb(251 191 36 / .8), 0 0 18px rgb(251 191 36 / .4); }
+}
+
+#myPlayZone .choose-card:not(:disabled):not(.card-frozen) .card-finish-face {
+  animation: finishChoiceGlow 1.4s ease-in-out infinite;
+}
+
+#myPlayZone :is(#playHand, #playDrawn):focus-visible {
+  outline: none;
+}
+
+#myPlayZone :is(#playHand, #playDrawn):focus-visible .card-finish-face {
+  outline: 2px solid #fbbf24;
+  outline-offset: 3px;
+}
+
+/* Only an actively tilted, unlocked card may project outside its button.
+   Frozen/static cards keep the original mask and clipping behavior. */
+#myPlayZone :is(#playHand, #playDrawn):has([data-finish-engaged="true"]) {
+  overflow: visible;
+}
+
 [data-card-finish][data-finish-static="true"] > .card-finish-face {
   transform: none;
   transition: none;
@@ -122,6 +165,11 @@ button:disabled [data-card-finish] > .card-finish-face::after,
 }
 
 @media (prefers-reduced-motion: reduce), (hover: none), (pointer: coarse) {
+  #myPlayZone .choose-card:not(:disabled):not(.card-frozen) .card-finish-face {
+    animation: none;
+    box-shadow: 0 0 0 1px rgb(251 191 36 / .5), 0 6px 12px rgb(0 0 0 / .25);
+  }
+
   [data-card-finish] > .card-finish-face {
     transform: none;
     transition: none;

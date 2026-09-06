@@ -1,5 +1,19 @@
 ﻿# Dev Workflow
 
+## Card Finish 出牌固定框修正 V3（2026-09-06，發布準備）
+
+- `public/css/card-finish-v1.css` 將出牌 button 固定背景／邊框／陰影／chooseCardGlow 移除，保留穩定 hit target；卡面金色細邊／呼吸提示／鍵盤焦點都跟隨 face 傾斜。冰凍遮罩及禁選維持原行為。
+- 併入 V2 出牌 8°、圖鑑 12°；`game.html` 只更新兩個引用為 `20260906-finish-frame-v3`，`card_finish_v1.js` 不改其他邏輯。沒有改卡圖、規則、server、DB 或同步。
+- 兩份既有 QA 工具新增透明固定層／face 光／邊角等檢查：單元 4,441、browser 215 項 PASS、0 page errors，桌機與觸控／reduced、禁選與點擊皆通過。真 SW 舊 V1 baseline 19 項 PASS。npm start 8849 成功；本機無 DB，未拿 fixture 冒充正式登入。
+- 本次白名單為公開三檔、两份 QA 腳本與相關文件；全部同步 C 主來源，保留其他未發布修改。回復點 7655c7b9。使用者已要求部署，待正式上線與 post 驗收補記；詳見 `docs/CARD_FINISH_V1_RELEASE.md`。
+
+### 前一輪 V2 本機紀錄（歷史，併入 V3）
+
+- 依使用者要求，`public/js/card_finish_v1.js` 的滑鼠合成最大傾角：出牌 2.5°→8°、圖鑑 6°→12°；光膜強度、150ms 過渡、原點擊與遊戲流程不變。
+- `public/css/card-finish-v1.css` 只在卡片實際傾斜時放寬按鈕 overflow，防止卡面邊緣被裁切；冰凍／禁選／靜態時仍沿用原遮罩及裁切。game.html 的兩個引用更新為 `20260906-finish-tilt-v2`，未改 inline 遊戲程式。
+- 同步兩份 QA 工具：單元 4,441 assertions PASS；browser 193 checks PASS、0 page errors，包含 8°／12° 四邊與角落、復位、兩卡間隙不誤選、禁選／冰凍、桌機與手機模擬、reduced-motion。已目視檢查傾斜截圖，卡面完整。npm start 在 8849 可開；本機無資料庫，不宣稱這次新增正式登入／多人验收。
+- 上述五個程式／工具檔及紀錄同步到 C 槽主來源與隔離樹。沒有 commit、push 或部署；線上仍是已驗收的 986430ca。報告與截圖：`D:/Codex_Release_Worktrees/card-holo-v458-release/artifacts/card-finish-tilt-v2/`。
+
 ## Card Finish V1 正式發布完成（2026-09-06）
 
 - 已部署 `986430ca300ea32bb0f06f4cdf9aba4b1a96db68`；正式 game.html、新 CSS／JS 三檔 bytes 與 Git blob 相同，未帶入舊 GPL 候選或其他未發布修改。

@@ -9,7 +9,7 @@ const { chromium } = require(process.env.BOARD_QA_PLAYWRIGHT || 'playwright');
 const { createInitialState } = require('../server/engine');
 const root = path.resolve(__dirname, '..');
 const url = process.env.BOARD_QA_URL || 'http://127.0.0.1:8849';
-const out = path.join(root, 'artifacts/card-finish-v1');
+const out = path.resolve(root, process.env.CARD_QA_OUTPUT || 'artifacts/card-finish-v1');
 const report = { mode: 'renderer-fixture-and-dex', checks: [], errors: [], screenshots: [] };
 function check(value, label) { assert.ok(value, label); report.checks.push(label); }
 const inline = html => [...html.replace(/\r\n/g,'\n').matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)].filter(m => !/\bsrc\s*=/.test(m[1])).map(m => m[2]);
@@ -61,6 +61,30 @@ async function takeShot(page, name) {
 async function transformed(page, selector) {
   return page.locator(selector).evaluate(el => getComputedStyle(el).transform);
 }
+async function sweepTilt(page, selector, limit, tag) {
+  const surface=page.locator(selector);
+  await surface.evaluate(el=>el.scrollIntoView({block:'center',behavior:'instant'}));
+  await page.waitForTimeout(180);
+  for(const [x,y] of [[.03,.5],[.97,.5],[.5,.03],[.5,.97],[.03,.03],[.97,.97]]) {
+    const r=await surface.boundingBox();
+    await page.mouse.move(r.x+r.width*x,r.y+r.height*y);
+    await page.waitForTimeout(190);
+    const state=await surface.evaluate(el=>{
+      const face=el.querySelector('.card-finish-face'),css=face.style;
+      return {angle:Math.hypot(parseFloat(css.getPropertyValue('--finish-pitch')),parseFloat(css.getPropertyValue('--finish-yaw'))),
+        engaged:el.dataset.finishEngaged,overflow:el.closest('button')?getComputedStyle(el.closest('button')).overflow:null};
+    });
+    check(state.engaged==='true'&&state.angle>limit*.9&&state.angle<=limit+.001,tag+': strong edge/corner tilt '+x+','+y);
+    if(state.overflow!==null)check(state.overflow==='visible',tag+': active projection not clipped');
+    if(state.overflow!==null) {
+      const fixed=await surface.evaluate(el=>{const s=getComputedStyle(el.closest('button'));return {transform:s.transform,animation:s.animationName,shadow:s.boxShadow,background:s.backgroundColor,border:s.borderTopColor};});
+      check(fixed.transform==='none'&&fixed.animation==='none'&&fixed.shadow==='none'&&fixed.background==='rgba(0, 0, 0, 0)'&&fixed.border==='rgba(0, 0, 0, 0)',tag+': no fixed backing frame while face tilts');
+    }
+  }
+  await takeShot(page,tag+'-strong-angle.png');
+  await page.mouse.move(2,2); await page.waitForTimeout(190);
+  check(await surface.getAttribute('data-finish-engaged')===null,tag+': leave resets tilt');
+}
 (async () => {
   fs.mkdirSync(out, { recursive: true });
   const oldHtml = execFileSync('git', ['show', '14d089027b8af8ee80e64f18b88a02dca20b0fb2:public/game.html'], { cwd: root, encoding: 'utf8', maxBuffer: 4000000 });
@@ -91,16 +115,29 @@ async function transformed(page, selector) {
           if (spec.touch) check(await transformed(page,'#cardDexPreviewEnh >> ..') === 'none', tag + ': dex static on touch');
           else check((await transformed(page,'#cardDexPreviewEnh >> ..')).startsWith('matrix3d'), tag + ': dex uses perspective on pointer');
           await takeShot(page, 'dex-' + tag + '.png');
+          if(!spec.touch)await sweepTilt(page,'#cardDexPreviewEnh >> .. >> ..',12,'dex-'+tag);
         }
         await page.locator('#cardDexClose').click();
         check(await page.locator('#cardDexOverlay').isHidden(), tag + ': dex close ' + id);
       }
       await setFixture(page);
       check(await page.locator('#myPlayZone [data-card-finish]').count() === 2, tag + ': two original choice buttons each contain one finish');
+      const wrappers=await page.locator('#playHand,#playDrawn').evaluateAll(es=>es.map(e=>{const c=getComputedStyle(e),f=getComputedStyle(e.querySelector('.card-finish-face'));return {background:c.backgroundColor,border:c.borderTopColor,shadow:c.boxShadow,animation:c.animationName,transform:c.transform,faceAnimation:f.animationName};}));
+      check(wrappers.every(c=>c.background==='rgba(0, 0, 0, 0)'&&c.border==='rgba(0, 0, 0, 0)'&&c.shadow==='none'&&c.animation==='none'&&c.transform==='none'),tag+': both stationary button backings are transparent');
+      check(wrappers.every(c=>c.faceAnimation===(spec.touch?'none':'finishChoiceGlow')),tag+': glow belongs to moving face only, static on touch');
+      if(!spec.touch){
+        await sweepTilt(page,'#playHand [data-card-finish]',8,'choice-'+tag);
+        const a=await page.locator('#playHand').boundingBox(),b=await page.locator('#playDrawn').boundingBox();
+        await page.evaluate(()=>{window.__finishActions=[];});
+        await page.mouse.click((a.x+a.width+b.x)/2,Math.max(a.y,b.y)+Math.min(a.height,b.height)/2);
+        await page.waitForTimeout(80);
+        check((await page.evaluate(()=>window.__finishActions)).length===0,tag+': gap does not select either card');
+      }
       await expectAction(page,'#playHand','hand',spec.touch,tag + ': hand forwards exactly one original action');
       await expectAction(page,'#playDrawn','drawn',spec.touch,tag + ': drawn forwards exactly one original action');
       await setFixture(page,{frozen:true});
       check(await page.locator('#playHand').isDisabled(),tag + ': frozen hand is disabled');
+      check(await page.locator('#playHand .card-finish-face').evaluate(e=>getComputedStyle(e).animationName)==='none',tag+': frozen card has no selection glow');
       await noAction(page,'#playHand',spec.touch,tag + ': frozen physical tap emits nothing');
       const frozen = await page.locator('#playHand').evaluate(e => {const mask=getComputedStyle(e,'::after');return {content:mask.content,background:mask.backgroundImage,opacity:mask.opacity,pointer:mask.pointerEvents,z:Number(mask.zIndex),childZ:Number(getComputedStyle(e.querySelector('[data-card-finish]')).zIndex)};});
       check(frozen.content !== 'none' && frozen.background.includes('freeze-mask') && Number(frozen.opacity)>0 && frozen.pointer==='none',tag + ': original ice mask survives');
@@ -130,6 +167,7 @@ async function transformed(page, selector) {
       await takeShot(page,'choice-'+tag+'.png');
       await page.emulateMedia({reducedMotion:'reduce'}); await page.mouse.move(point.x+3,point.y+3);await page.waitForTimeout(80);
       check(await transformed(page,face)==='none',tag + ': reduced motion disables tilt');
+      check(await page.locator(face).evaluate(e=>getComputedStyle(e).animationName)==='none',tag+': reduced motion disables face pulse');
       await page.emulateMedia({reducedMotion:'no-preference'});
       await page.evaluate(()=>{state.venues=[];render();});await readyImages(page,'#imgHand,#imgDrawn');
       await page.waitForFunction(()=>document.querySelector('#playHand [data-card-finish]').dataset.finishSurface==='plain');

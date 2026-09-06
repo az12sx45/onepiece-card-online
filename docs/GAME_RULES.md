@@ -1,5 +1,9 @@
 # Game Rules
 
+## Card Finish V3 規則邊界（2026-09-06，發布準備）
+
+僅移動出牌提示框與光的視覺承載層、提高傾角，保留原 button 尺寸／handler／disabled／冰凍遮罩；不改原 inline 遊戲 script、PLAY_CARD、技能時序、帳號或 Socket。單元 4,441、browser 215 項 PASS；正式上線後驗收另記於 `docs/CARD_FINISH_V1_RELEASE.md`。
+
 ## Card Finish V1 規則邊界（2026-09-06，已發布）
 
 正式版 `986430ca` 已通過發布後真實 hand／drawn、自然青雉禁選、目標選擇與對手同步；原 inline 遊戲程式與 14d08902 完全相同。本次只有四接點與獨立視覺層，沒有變更 Card／Board 規則、帳號、存檔或 Socket 事件。完整驗收限制見 `docs/CARD_FINISH_V1_RELEASE.md`。

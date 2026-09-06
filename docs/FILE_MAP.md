@@ -1,5 +1,9 @@
 # File Map
 
+## Card Finish V3 出牌固定框修正（2026-09-06，發布準備）
+
+公開仍只有 `public/game.html`、`public/css/card-finish-v1.css`、`public/js/card_finish_v1.js`；新引用 `20260906-finish-frame-v3`。button 保留互動／凍結遮罩，背景與固定框透明，face 負責會跟隨傾角的外觀與選牌提示。兩份既有 unit/browser QA 更新；報告與截圖在隔離樹 `artifacts/card-finish-frame-v3`，真 SW 證據在 `artifacts/card-holo-release-v458`。完整狀態見 `docs/CARD_FINISH_V1_RELEASE.md`。
+
 ## Card Finish V1 獨立實作已發布（2026-09-06）
 
 正式部署為 `986430ca`，公開清單仍只有下表前三檔；最終驗收包括 live 雙帳號和 postdeploy 97 項 PASS。實際報告位於 `D:/Codex_Release_Worktrees/card-holo-v458-release/artifacts`；三份 QA 與五份文件亦同步回 C 槽主來源。完整結果及 SHA 見 `docs/CARD_FINISH_V1_RELEASE.md`。
