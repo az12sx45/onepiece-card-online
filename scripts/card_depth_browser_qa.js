@@ -59,7 +59,7 @@ function expectedSets() {
         id,
         enhanced: variant.enhanced,
         source: variant.source(id),
-        layers: Object.fromEntries(ROLES.map(role => [role, `/card-depth/v1/${variant.key}/${id}/${role}.webp`]))
+        layers: Object.fromEntries(ROLES.map(role => [role, `/images/card-depth/v1/${variant.key}/${id}/${role}.webp`]))
       });
     }
   }
@@ -98,7 +98,7 @@ function validateMappingAndInventory() {
   ];
   for (const source of invalid) check(depthFromSource(source, `${BASE.origin}/game.html`) === null, `invalid source is rejected: ${source}`);
 
-  const depthRoot = path.join(PUBLIC_ROOT, 'card-depth', 'v1');
+  const depthRoot = path.join(PUBLIC_ROOT, 'images', 'card-depth', 'v1');
   const actual = fs.existsSync(depthRoot)
     ? fs.readdirSync(depthRoot, { recursive: true, withFileTypes: true })
       .filter(entry => entry.isFile() && /\.webp$/i.test(entry.name))
@@ -137,11 +137,11 @@ async function openGame(browser, contextOptions = {}, initScript = null) {
   page.on('pageerror', error => report.errors.push(String(error)));
   page.on('request', request => {
     const pathname = new URL(request.url()).pathname;
-    if (pathname.startsWith('/card-depth/v1/')) depthRequests.push(pathname);
+    if (pathname.startsWith('/images/card-depth/v1/')) depthRequests.push(pathname);
   });
   page.on('response', response => {
     const pathname = new URL(response.url()).pathname;
-    if (pathname.startsWith('/card-depth/v1/')) depthResponses.push({ pathname, status: response.status(), contentType: response.headers()['content-type'] || '' });
+    if (pathname.startsWith('/images/card-depth/v1/')) depthResponses.push({ pathname, status: response.status(), contentType: response.headers()['content-type'] || '' });
   });
   await page.goto(`${BASE.origin}/game.html`, { waitUntil: 'domcontentloaded', timeout: 30000 });
   await page.waitForFunction(() => window.CardFinishV1 && document.querySelectorAll('[data-card-finish]').length === 4);
@@ -164,7 +164,7 @@ async function installDepthAssignmentRecorder(page) {
     const record = value => {
       try {
         const pathname = new URL(String(value), document.baseURI).pathname;
-        if (pathname.startsWith('/card-depth/v1/')) assignments.push(pathname);
+        if (pathname.startsWith('/images/card-depth/v1/')) assignments.push(pathname);
       } catch {}
     };
     Object.defineProperty(window, key, { configurable: true, value: assignments });
@@ -550,18 +550,18 @@ async function validateFourHooksAndActions(browser) {
       await waitReady(page, spec.selector);
       const state = await depthState(page.locator(spec.selector));
       validateReadyState(state, {
-        background: `/card-depth/v1/${spec.variant}/${spec.id}/background.webp`,
-        subject: `/card-depth/v1/${spec.variant}/${spec.id}/subject.webp`,
-        foreground: `/card-depth/v1/${spec.variant}/${spec.id}/foreground.webp`
+        background: `/images/card-depth/v1/${spec.variant}/${spec.id}/background.webp`,
+        subject: `/images/card-depth/v1/${spec.variant}/${spec.id}/subject.webp`,
+        foreground: `/images/card-depth/v1/${spec.variant}/${spec.id}/foreground.webp`
       }, spec.selector, spec.limit);
       const requested = depthRequests.slice(before);
       const assigned = await page.evaluate(start => window.__CARD_DEPTH_QA_IMAGE_SRC_ASSIGNMENTS__.slice(start), assignmentsBefore);
-      const expectedAssignments = ROLES.map(role => `/card-depth/v1/${spec.variant}/${spec.id}/${role}.webp`);
+      const expectedAssignments = ROLES.map(role => `/images/card-depth/v1/${spec.variant}/${spec.id}/${role}.webp`);
       check(assigned.length === 3 && new Set(assigned).size === 3 && expectedAssignments.every(pathname => assigned.includes(pathname)), `${spec.selector}: runtime assigns exactly its three depth image sources once`, { expected: expectedAssignments, assigned });
-      check(new Set(requested).size === 3 && ROLES.every(role => requested.includes(`/card-depth/v1/${spec.variant}/${spec.id}/${role}.webp`)), `${spec.selector}: one activation requests exactly its three depth files`, requested);
+      check(new Set(requested).size === 3 && ROLES.every(role => requested.includes(`/images/card-depth/v1/${spec.variant}/${spec.id}/${role}.webp`)), `${spec.selector}: one activation requests exactly its three depth files`, requested);
       check(await page.locator('[data-finish-depth="ready"]').count() === 1, `${spec.selector}: only one of four surfaces is depth-active at a time`);
       if (spec.selector.includes('playHand')) {
-        state.pixelMetrics = await validateRenderedMaskPixels(page, page.locator(spec.selector), `/card-depth/v1/${spec.variant}/${spec.id}/foreground.webp`, spec.selector);
+        state.pixelMetrics = await validateRenderedMaskPixels(page, page.locator(spec.selector), `/images/card-depth/v1/${spec.variant}/${spec.id}/foreground.webp`, spec.selector);
       }
       snapshots.push({ spec, state, assigned, requested });
     }
@@ -595,11 +595,11 @@ async function validateFourHooksAndActions(browser) {
       await page.waitForFunction(selector => document.querySelector(selector)?.closest('[data-card-finish]')?.dataset.finishDepth === 'ready', spec.selector);
       const state = await depthState(root);
       validateReadyState(state, {
-        background: `/card-depth/v1/${spec.variant}/3/background.webp`,
-        subject: `/card-depth/v1/${spec.variant}/3/subject.webp`,
-        foreground: `/card-depth/v1/${spec.variant}/3/foreground.webp`
+        background: `/images/card-depth/v1/${spec.variant}/3/background.webp`,
+        subject: `/images/card-depth/v1/${spec.variant}/3/subject.webp`,
+        foreground: `/images/card-depth/v1/${spec.variant}/3/foreground.webp`
       }, rootSelector, spec.limit);
-      const expectedAssignments = ROLES.map(role => `/card-depth/v1/${spec.variant}/3/${role}.webp`);
+      const expectedAssignments = ROLES.map(role => `/images/card-depth/v1/${spec.variant}/3/${role}.webp`);
       const assigned = await page.evaluate(start => window.__CARD_DEPTH_QA_IMAGE_SRC_ASSIGNMENTS__.slice(start), assignmentsBefore);
       const requested = depthRequests.slice(before);
       check(assigned.length === 3 && new Set(assigned).size === 3 && expectedAssignments.every(pathname => assigned.includes(pathname)), `${rootSelector}: dex runtime assigns exactly its three depth image sources once`, { expected: expectedAssignments, assigned });
@@ -643,11 +643,11 @@ async function validateRepeatedHoverResources(browser) {
     await installDepthAssignmentRecorder(page);
     await page.evaluate(() => performance.clearResourceTimings());
     const perCycle = [];
-    const expectedAssignments = ROLES.map(role => `/card-depth/v1/normal/3/${role}.webp`);
+    const expectedAssignments = ROLES.map(role => `/images/card-depth/v1/normal/3/${role}.webp`);
     for (let cycle = 0; cycle < 20; cycle += 1) {
       const before = depthRequests.length;
       const assignmentsBefore = await page.evaluate(() => window.__CARD_DEPTH_QA_IMAGE_SRC_ASSIGNMENTS__.length);
-      const timingsBefore = await page.evaluate(() => performance.getEntriesByType('resource').filter(entry => entry.name.includes('/card-depth/v1/')).length);
+      const timingsBefore = await page.evaluate(() => performance.getEntriesByType('resource').filter(entry => entry.name.includes('/images/card-depth/v1/')).length);
       await hover(page, '#playHand [data-card-finish]', cycle % 2 ? .74 : .28, cycle % 3 ? .3 : .72);
       await waitReady(page, '#playHand [data-card-finish]');
       check(await page.locator('.card-finish-depth').count() === 1, `hover cycle ${cycle + 1}: exactly one decoded composite is attached`);
@@ -656,7 +656,7 @@ async function validateRepeatedHoverResources(browser) {
       const requested = depthRequests.slice(before);
       const assigned = await page.evaluate(start => window.__CARD_DEPTH_QA_IMAGE_SRC_ASSIGNMENTS__.slice(start), assignmentsBefore);
       const timingEntries = await page.evaluate(start => performance.getEntriesByType('resource')
-        .filter(entry => entry.name.includes('/card-depth/v1/')).slice(start).map(entry => ({
+        .filter(entry => entry.name.includes('/images/card-depth/v1/')).slice(start).map(entry => ({
           path: new URL(entry.name).pathname,
           transferSize: entry.transferSize,
           encodedBodySize: entry.encodedBodySize,
@@ -669,7 +669,7 @@ async function validateRepeatedHoverResources(browser) {
       perCycle.push({ cycle: cycle + 1, assignments: assigned, requests: requested, resourceTimings: timingEntries });
     }
     const timing = await page.evaluate(() => {
-      const entries = performance.getEntriesByType('resource').filter(entry => entry.name.includes('/card-depth/v1/'));
+      const entries = performance.getEntriesByType('resource').filter(entry => entry.name.includes('/images/card-depth/v1/'));
       return {
         count: entries.length,
         transferSize: entries.reduce((sum, entry) => sum + (entry.transferSize || 0), 0),
@@ -771,11 +771,11 @@ async function validateStaticModes(browser) {
 async function validateMissingLayerFallback(browser) {
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, serviceWorkers: 'block' });
   await installPageRoutes(context);
-  const failedPath = '/card-depth/v1/normal/3/subject.webp';
+  const failedPath = '/images/card-depth/v1/normal/3/subject.webp';
   await context.route(`**${failedPath}`, route => route.fulfill({ status: 404, contentType: 'image/webp', body: '' }));
   const requests = [];
   const page = await context.newPage();
-  page.on('request', request => { const pathname = new URL(request.url()).pathname; if (pathname.startsWith('/card-depth/v1/')) requests.push(pathname); });
+  page.on('request', request => { const pathname = new URL(request.url()).pathname; if (pathname.startsWith('/images/card-depth/v1/')) requests.push(pathname); });
   try {
     await page.goto(`${BASE.origin}/game.html`, { waitUntil: 'domcontentloaded' });
     await page.waitForFunction(() => window.CardFinishV1);
@@ -798,7 +798,7 @@ async function validateSourceRace(browser) {
   let releaseOld;
   const oldGate = new Promise(resolve => { releaseOld = resolve; });
   const delayed = [];
-  await context.route('**/card-depth/v1/normal/3/*.webp', async route => {
+  await context.route('**/images/card-depth/v1/normal/3/*.webp', async route => {
     const pathname = new URL(route.request().url()).pathname;
     delayed.push(pathname);
     await oldGate;
@@ -822,11 +822,11 @@ async function validateSourceRace(browser) {
     await hover(page, '#playHand [data-card-finish]', .72, .28);
     await waitReady(page, '#playHand [data-card-finish]');
     let state = await depthState(page.locator('#playHand [data-card-finish]'));
-    check(state.depth.paths[0] === '/card-depth/v1/enh/3/background.webp' && state.original.src === '/images/cards/enh/3.webp', 'new source wins while old depth decodes are still pending', state);
+    check(state.depth.paths[0] === '/images/card-depth/v1/enh/3/background.webp' && state.original.src === '/images/cards/enh/3.webp', 'new source wins while old depth decodes are still pending', state);
     releaseOld();
     await page.waitForTimeout(600);
     state = await depthState(page.locator('#playHand [data-card-finish]'));
-    check(state.root.ready === 'ready' && state.depth.paths[0] === '/card-depth/v1/enh/3/background.webp' && !state.depth.paths.some(value => value.includes('/normal/3/')), 'late old-source completion cannot replace the current composite', state);
+    check(state.root.ready === 'ready' && state.depth.paths[0] === '/images/card-depth/v1/enh/3/background.webp' && !state.depth.paths.some(value => value.includes('/normal/3/')), 'late old-source completion cannot replace the current composite', state);
     report.scenarios.sourceRace = { delayed, final: state };
   } finally {
     releaseOld();
@@ -841,7 +841,7 @@ async function validateLeaveAndDestroyCancellation(browser) {
     let release;
     const gate = new Promise(resolve => { release = resolve; });
     let requestCount = 0;
-    await context.route('**/card-depth/v1/normal/3/*.webp', async route => {
+    await context.route('**/images/card-depth/v1/normal/3/*.webp', async route => {
       requestCount += 1;
       await gate;
       const pathname = new URL(route.request().url()).pathname;

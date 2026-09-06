@@ -93,7 +93,7 @@
         "to": "catalog",
         "filter": [
           "catalog-v1.json",
-          "manifests/card-assets-197d7c0144fe523a.json",
+          "manifests/card-assets-440918e609684317.json",
           "manifests/board-assets-eb95373ee6ab1aa3.json"
         ]
       },

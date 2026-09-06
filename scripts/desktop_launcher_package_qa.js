@@ -15,6 +15,7 @@ const MAX_CATALOG_BYTES = 8 * 1024 * 1024;
 const MAX_ASAR_BYTES = 32 * 1024 * 1024;
 const MAX_INSTALLER_BYTES = 256 * 1024 * 1024;
 const RETAINED_ROLLOUT_MANIFESTS = Object.freeze({
+  'card-assets-197d7c0144fe523a.json': '1c33fb0ea2d42ed11b868c861de9286af356f1717d5a81724cda285d3536c443',
   'board-assets-ecd41e5ae3bcf045.json': '97908b785417c4944971d1d2d5b3cd3708778f2f894a2f028394fa29b450ad3f'
 });
 
@@ -85,7 +86,7 @@ const EXTRA_RESOURCES = [
     to: 'catalog',
     filter: [
       'catalog-v1.json',
-      'manifests/card-assets-197d7c0144fe523a.json',
+      'manifests/card-assets-440918e609684317.json',
       'manifests/board-assets-eb95373ee6ab1aa3.json'
     ]
   },

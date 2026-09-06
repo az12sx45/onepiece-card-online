@@ -39,7 +39,7 @@
       const enhanced = !!match[2];
       const variant = match[1] === 'cards_lux' ? (enhanced ? 'lux-enh' : 'lux') : (enhanced ? 'enh' : 'normal');
       const key = `${variant}/${match[3]}`;
-      const prefix = `/card-depth/v1/${key}/`;
+      const prefix = `/images/card-depth/v1/${key}/`;
       return { key, enhanced, background: `${prefix}background.webp`, subject: `${prefix}subject.webp`, foreground: `${prefix}foreground.webp` };
     } catch (_) {
       return null;

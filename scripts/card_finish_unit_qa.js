@@ -35,7 +35,7 @@ for (const [directory, variant] of [['cards', 'normal'], ['cards/enh', 'enh'], [
   for (let id = 0; id < 20; id += 1) {
     const depth = depthFromSource(`images/${directory}/${id}.webp`, base);
     equal(depth.key, `${variant}/${id}`, 'Every original source has its exact depth variant');
-    for (const role of ['background', 'subject', 'foreground']) equal(depth[role], `/card-depth/v1/${variant}/${id}/${role}.webp`, 'Each depth role uses the versioned asset directory');
+    for (const role of ['background', 'subject', 'foreground']) equal(depth[role], `/images/card-depth/v1/${variant}/${id}/${role}.webp`, 'Each depth role uses the launcher-cached image directory');
   }
 }
 for (const source of [null, '', '/images/cards/20.webp', '/images/cards/-1.webp', '/images/cards/01.webp', '/images/cards/name.webp', '/images/cards/1.png', '/images/CARDS/1.webp', '/images/cards/1.webp.bak', 'https://other.test/images/cards/1.webp', 'data:image/webp;base64,test', 'http://[']) {
@@ -369,8 +369,8 @@ async function checkDepthLifecycle() {
   equal(composite.children.every((image) => image.getAttribute('alt') === '' && image.getAttribute('draggable') === 'false'), true, 'Decorative images add no labels or dragging');
   equal(composite.style.properties.get('--finish-depth-x'), '0.960px', 'Latest pointer controls subject displacement');
   equal(composite.children[0].style.properties.has('transform') || composite.children[2].style.properties.has('transform'), false, 'Background and printed foreground have no inline transform');
-  equal(composite.children[2].style.properties.get('mask-image'), 'url("/card-depth/v1/normal/1/foreground.webp")', 'Foreground displays original pixels only through its alpha mask');
-  equal(composite.children[2].style.properties.get('-webkit-mask-image'), 'url("/card-depth/v1/normal/1/foreground.webp")', 'Foreground supports the prefixed mask property');
+  equal(composite.children[2].style.properties.get('mask-image'), 'url("/images/card-depth/v1/normal/1/foreground.webp")', 'Foreground displays original pixels only through its alpha mask');
+  equal(composite.children[2].style.properties.get('-webkit-mask-image'), 'url("/images/card-depth/v1/normal/1/foreground.webp")', 'Foreground supports the prefixed mask property');
   equal(composite.children.some((image) => image.getAttribute('src')?.endsWith('/foreground.webp')), false, 'The mask preload never becomes a visible image');
   equal(depthHost.pendingFrames.size, 0, 'Completing assets starts no animation loop');
   poseDepth();
@@ -394,7 +394,7 @@ async function checkDepthLifecycle() {
   absent(first, 'Stale decode completion');
   equal(staleImages.every((image) => image.getAttribute('src') === null), true, 'Source change clears stale image sources');
   poseDepth();
-  equal(depthHost.requestedImages.slice(-3).every((image) => image.getAttribute('src').startsWith('/card-depth/v1/lux-enh/19/')), true, 'The new request follows the exact luxury enhancement source');
+  equal(depthHost.requestedImages.slice(-3).every((image) => image.getAttribute('src').startsWith('/images/card-depth/v1/lux-enh/19/')), true, 'The new request follows the exact luxury enhancement source');
   await completeImages();
   equal(first.root.getAttribute('data-finish-depth'), 'ready', 'Replacement source displays after its own decode');
 
