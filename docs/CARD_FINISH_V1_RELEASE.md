@@ -1,6 +1,49 @@
-# Card Finish V1 — 獨立實作預發布紀錄
+# Card Finish V1 — 獨立實作正式發布紀錄
 
 日期：2026-09-06。使用者已授權「改成獨立實作、補完測試後再發布」。本文件取代上一輪 V458 GPL 候選的發布計畫；舊候選沒有上線。
+
+## 正式發布完成
+
+- 2026-09-06 19:30:48（Asia/Taipei）已由正式站直接讀到新版；Git／部署程式版本為 `986430ca300ea32bb0f06f4cdf9aba4b1a96db68`，已推送 `origin/main`。Render 內部 deploy ID 未透過控制台取得；以下以公開 bytes 與 Git blob 完全一致確認實際部署版本，不將 push 成功當成上線證據。
+- 正式入口：https://onepiece-card-online.onrender.com/start.html 。對局頁：https://onepiece-card-online.onrender.com/game.html 。
+- 實際公開修改只有下表三檔。2026-09-06 19:31:53 直接 HTTP 200、Content-Type 正確，且三檔皆與該提交 Git blob 逐 byte／SHA-256 相同。其餘 9 個提交檔案為 QA 腳本／文件，不是新增公開素材。
+- 舊 Holo CSS、JS、NOTICE、LICENSE 的四個公開網址仍為 HTTP 404；原 GPL 來源及授權在本機保留。沒有發布比較頁、rank 圖、Board／launcher 修改、卡圖或媒體檔。
+- 正式回復點為 `14d089027b8af8ee80e64f18b88a02dca20b0fb2`。需撤回時，在最新 main 對發布提交執行 `git revert 986430ca300ea32bb0f06f4cdf9aba4b1a96db68`，檢查限定差異後推送並重新驗證 Render；不 force push／reset，也不整份覆寫 game.html。
+- 最後的驗收文件提交使用 `[skip render]`，只更新此紀錄與索引，不重啟已驗收的遊戲服務；依據 [Render 官方略過部署說明](https://render.com/docs/deploys#skipping-an-auto-deploy)。
+
+| 公開檔案 | SHA-256 |
+| --- | --- |
+| `public/game.html` | `b1b181dcb2a4c13e0df768e2bccc875eb92142f194b18a629f984bd907e17d54` |
+| `public/css/card-finish-v1.css` | `f88d6afd9dab24adaa76615af42e00ff76d7e878ea94e04e74510b209393c964` |
+| `public/js/card_finish_v1.js` | `a0ada07146f7e3bb173e1f2c23cdd8c55fa0d04f4c417cbd3314aafedf8512e7` |
+
+### 完成的驗收與界線
+
+- 單元 `4,437`、browser fixture `172`、predeploy `93`、postdeploy `97` 項全部 PASS。新提交與回復點的原 inline 遊戲 script 完全相同（只正規化 CRLF），沒有改出牌／強化／同步的原遊戲程式。
+- 正式 live 兩次真人對局均直接讀取公開 HTML／CSS／JS，三份 code route substitution 次數全部為 `0`；使用正式登入、backend、engine 和 Socket，沒有注入牌堆或模擬 Socket。
+- 第一個 live 案例自然抽到青雉：drawn 出牌與目標正常，對手凍結手牌的實體點擊不送 ACTION、不改 state，合法 drawn 可送出並同步。此房沒有涵蓋 hand，報告如實為 `INCOMPLETE_NATURAL_ROUND_END`，不單獨當成 hand/drawn 全覆蓋。
+- 第二個 live 案例為完整 PASS：hand 基拉、新抽 drawn 騙人布，各恰好一個 PLAY_CARD，技能目標與猜數字正常完成，對手的公開 state／棄牌／回合一致，私人手牌未洩漏；自然 disabled 數字 1 點擊被擋。兩次合併涵蓋 hand、drawn、自然冰凍禁選與 peer sync，page errors 都為 `0`。
+- Console 各有 4 筆 HTTP 404 訊息；不是本次三個公開檔案（已另逐檔驗證 200／雜湊），未將此結果宣稱為全站零 404。影音映射本機相同原素材以保留演出並減少流量；另有四張代表卡圖從正式站直接下載通過 SHA 比對。
+- 娜美 7+6／8 的兩種排列由 renderer fixture 驗證；沒有宣稱真人自然抽到。手機以 Chrome 觸控／視窗模擬驗收，包含 390、667、932 寬度，未宣稱實體手機驗收。
+- postdeploy 已驗證乾淨 desktop／mobile／reduced-motion、四卡面接點、圖鑑開關，以及既有 `op-card-v7.5` profile 重新整理取得新程式。舊 profile 建立時有 228 筆媒體預載使用 QA 空內容節流，因此此結果只证明舊使用者的程式更新，不是全素材離線驗收；沒有為此次效果升級 SW 或強迫重載所有卡圖。
+- 測試房透過自身 ROOM_FINISHED／LEAVE_ROOM 結束，測試瀏覽器已關閉；沒有保存密碼、HAR、trace，沒有完成整季排行結算，也沒有讀寫 Board 進度。
+
+### 證據與原始來源同步
+
+驗收產物在隔離發布樹 `D:/Codex_Release_Worktrees/card-holo-v458-release`：
+
+- `artifacts/card-finish-v1/browser-report.json`
+- `artifacts/card-finish-v1/live-release-files.json`
+- `artifacts/card-finish-v1/real-candidate-2026-09-06T11-21-38-886Z.json`
+- `artifacts/card-finish-v1/real-live-2026-09-06T11-31-28-593Z.json`
+- `artifacts/card-finish-v1/real-live-2026-09-06T11-32-41-807Z.json`
+- `artifacts/card-holo-release-v458/card-finish-predeploy-state.json`
+- `artifacts/card-holo-release-v458/card-finish-postdeploy-report.json`
+
+新獨立 CSS／JS、四個 HTML 接點、三份 QA 腳本與五份專案文件已同步回原 C 槽主來源。C 槽 game.html 的其他未發布修改保留，未整檔推上正式；正式合併版的驗收是在上述隔離樹執行。大型媒體未另行複製或重傳。
+
+以下為發布前歷史快照；其中「尚未 push／部署」描述的是當時階段，現在狀態以本節為準。
+
 
 ## 發布範圍
 

@@ -1,6 +1,10 @@
 # File Map
 
-## Card Finish V1 獨立實作候選（2026-09-06，尚未發布）
+## Card Finish V1 獨立實作已發布（2026-09-06）
+
+正式部署為 `986430ca`，公開清單仍只有下表前三檔；最終驗收包括 live 雙帳號和 postdeploy 97 項 PASS。實際報告位於 `D:/Codex_Release_Worktrees/card-holo-v458-release/artifacts`；三份 QA 與五份文件亦同步回 C 槽主來源。完整結果及 SHA 見 `docs/CARD_FINISH_V1_RELEASE.md`。
+
+### 發布前檔案與驗收快照（歷史）
 
 | 檔案 | 功能／狀態 |
 | --- | --- |

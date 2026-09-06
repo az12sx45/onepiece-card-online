@@ -1,6 +1,10 @@
 # Game Rules
 
-## Card Finish V1 規則邊界（2026-09-06，預發布）
+## Card Finish V1 規則邊界（2026-09-06，已發布）
+
+正式版 `986430ca` 已通過發布後真實 hand／drawn、自然青雉禁選、目標選擇與對手同步；原 inline 遊戲程式與 14d08902 完全相同。本次只有四接點與獨立視覺層，沒有變更 Card／Board 規則、帳號、存檔或 Socket 事件。完整驗收限制見 `docs/CARD_FINISH_V1_RELEASE.md`。
+
+### 發布前規則邊界紀錄（歷史）
 
 - Card Finish V1 只讀取現有卡圖、按鈕 disabled／冰凍狀態及選牌容器來顯示 plain／foil 外觀；不接管原點擊、不改 `PLAY_CARD` payload、目標選擇、出牌、禁選、強化動畫時序、勝負或多人事件。
 - 新版單元 `4,437` assertions、瀏覽器 `172` 項且 `0` page errors 均通過。正式雙帳號候選對局亦已確認手牌與抽牌各一次只送一個權威 `PLAY_CARD` 且另一端一致；手動騙人布 disabled 選項與 runner 自然遇到的青雉冰凍手牌，實體點擊都沒有送出事件或改變權威 state。

@@ -1,6 +1,13 @@
 ﻿# Dev Workflow
 
-## Card Finish V1 獨立實作預發布驗收（2026-09-06，尚未上線）
+## Card Finish V1 正式發布完成（2026-09-06）
+
+- 已部署 `986430ca300ea32bb0f06f4cdf9aba4b1a96db68`；正式 game.html、新 CSS／JS 三檔 bytes 與 Git blob 相同，未帶入舊 GPL 候選或其他未發布修改。
+- 單元 4,437、browser 172、predeploy 93、postdeploy 97 項 PASS。正式 live 雙帳號已完成 hand／drawn、自然青雉冰凍禁選、技能目標與對手同步；舊 SW 更新、乾淨桌機／觸控／減少動態也通過。手機為模擬，娜美禁選為 fixture；不宣稱全站零 404。
+- 新 runtime、三份 QA 腳本及五份文件同步回 C 槽主來源，其他未發布修改保留。回復點為 14d08902，使用發布提交的 scoped revert。完整 SHA、證據及限制見 `docs/CARD_FINISH_V1_RELEASE.md`。
+- 最後驗收文件以 `[skip render]` 提交，部署程式維持 986430ca，不再重啟服務。
+
+### 發布前驗收紀錄（歷史）
 
 - 公開候選範圍只有 `public/game.html`、`public/css/card-finish-v1.css`、`public/js/card_finish_v1.js`。新 CSS／JS 由獨立來源完成，`game.html` 只增加四個卡面接點、圖鑑容器 class 與兩個 versioned 引用；不改原 inline 遊戲程式。
 - 獨立來源審核無 blocker。`card_finish_unit_qa.js` 為 `4,437` assertions PASS；`card_finish_browser_qa.js` 為 `172` 項 PASS、`0` page errors。

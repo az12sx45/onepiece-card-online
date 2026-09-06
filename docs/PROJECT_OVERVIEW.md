@@ -1,6 +1,10 @@
 # Project Overview
 
-## Card Finish V1 獨立實作候選（2026-09-06，尚未發布）
+## Card Finish V1 獨立實作已發布（2026-09-06）
+
+正式版 `986430ca` 已上線；公開三檔與提交 SHA 一致。新版單元／瀏覽器／發布前後資源與舊 SW 驗收均通過，正式雙帳號 hand／drawn、自然冰凍禁選與同步已驗證。不改原遊戲規則或後端，完整界線與回復方式見 `docs/CARD_FINISH_V1_RELEASE.md`。
+
+### 發布前候選紀錄（歷史）
 
 - 本次以獨立 `card-finish-v1.css`／`card_finish_v1.js` 呈現圖鑑與二選一卡面，公開候選只有這兩檔及接入後的 `game.html`；舊 GPL 候選留在本機、保留原授權且不發布。
 - 獨立來源審核無 blocker；新版單元 `4,437` assertions 與瀏覽器 `172` 項／`0` page errors 均 PASS。
