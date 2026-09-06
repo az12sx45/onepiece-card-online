@@ -95,15 +95,28 @@ async function createFixture() {
     asset('audio/board.mp3', 'audio', 'audio/mpeg'),
     asset('images/shared.png', 'image', 'image/png')
   ];
+  const chessSourceRoot = path.join(root, 'external-chess-assets');
+  const chessBytes = Buffer.from([0x52, 0x49, 0x46, 0x46, 0x43, 0x48, 0x45, 0x53, 0x53]);
+  await writeFixtureFile(chessSourceRoot, 'pieces/king.webp', chessBytes);
+  const chessAssets = [{
+    path: 'images/chess/assets/pieces/king.webp',
+    kind: 'image',
+    mime: 'image/webp',
+    size: chessBytes.length,
+    sha256: digest(chessBytes)
+  }];
   const cardManifest = makeManifest('card', 'assets-card-fixture', cardAssets);
   const boardManifest = makeManifest('board', 'assets-board-fixture', boardAssets);
+  const chessManifest = makeManifest('chess', 'assets-chess-fixture', chessAssets);
   const cardManifestBytes = jsonBytes(cardManifest);
   const boardManifestBytes = jsonBytes(boardManifest);
+  const chessManifestBytes = jsonBytes(chessManifest);
   await writeFixtureFile(root, 'public/desktop/manifests/card-fixture.json', cardManifestBytes);
   await writeFixtureFile(root, 'public/desktop/manifests/board-fixture.json', boardManifestBytes);
+  await writeFixtureFile(root, 'public/desktop/manifests/chess-fixture.json', chessManifestBytes);
 
   const catalog = {
-    schema: 1,
+    schema: 2,
     createdAt: '2026-09-05T00:00:00.000Z',
     games: {
       card: {
@@ -119,14 +132,21 @@ async function createFixture() {
         manifestSha256: digest(boardManifestBytes),
         totalFiles: boardManifest.totalFiles,
         totalBytes: boardManifest.totalBytes
+      },
+      chess: {
+        releaseId: chessManifest.releaseId,
+        manifestPath: 'desktop/manifests/chess-fixture.json',
+        manifestSha256: digest(chessManifestBytes),
+        totalFiles: chessManifest.totalFiles,
+        totalBytes: chessManifest.totalBytes
       }
     }
   };
-  await writeFixtureFile(root, 'public/desktop/catalog-v1.json', jsonBytes(catalog));
+  await writeFixtureFile(root, 'public/desktop/catalog-v2.json', jsonBytes(catalog));
   git(root, ['add', '--', 'public']);
   git(root, ['commit', '--quiet', '-m', 'fixture']);
 
-  return { root, sources };
+  return { root, sources, chessBytes, chessSourceRoot };
 }
 
 class FakeHeadObjectCommand {
@@ -232,8 +252,8 @@ async function run() {
   const fixture = await createFixture();
   try {
     const inventory = await publisher.loadPublishInventory({ repoRoot: fixture.root });
-    assert.equal(inventory.logicalFiles, 5, 'Both manifests must contribute all logical files.');
-    assert.equal(inventory.uniqueFiles, 4, 'Shared SHA blobs must be deduplicated.');
+    assert.equal(inventory.logicalFiles, 6, 'All three manifests must contribute all logical files.');
+    assert.equal(inventory.uniqueFiles, 5, 'Shared SHA blobs must be deduplicated.');
     assert.equal(inventory.records.filter((record) => record.games.length === 2).length, 1, 'The shared blob must retain both game references.');
     for (const record of inventory.records) {
       assert.equal(record.key, `desktop/blobs/sha256/${record.sha256.slice(0, 2)}/${record.sha256}`);
@@ -244,8 +264,16 @@ async function run() {
     await fsp.writeFile(svgPath, '<svg>dirty working tree must be ignored</svg>\n', 'utf8');
     const svgRecord = inventory.records.find((record) => record.sources.includes('images/vector.svg'));
     assert.ok(svgRecord, 'SVG record is missing.');
-    const svgBytes = await publisher.createSourceReader(inventory)('images/vector.svg', svgRecord);
+    const sourceReader = publisher.createSourceReader(inventory, { chessSourceRoot: fixture.chessSourceRoot });
+    const svgBytes = await sourceReader('images/vector.svg', svgRecord);
     assert.deepEqual(svgBytes, fixture.sources['images/vector.svg'], 'SVG publishing bytes must come from Git HEAD.');
+    const chessRecord = inventory.records.find((record) => record.sources.includes('images/chess/assets/pieces/king.webp'));
+    assert.ok(chessRecord, 'Chess external asset record is missing.');
+    assert.deepEqual(
+      await sourceReader('images/chess/assets/pieces/king.webp', chessRecord),
+      fixture.chessBytes,
+      'Chess bytes must come from the explicitly approved external source root.'
+    );
 
     const networkTrap = {
       sends: 0,
@@ -257,15 +285,18 @@ async function run() {
     const dryResult = await publisher.publishInventory(inventory, {
       live: false,
       concurrency: 2,
+      chessSourceRoot: fixture.chessSourceRoot,
       liveContext: liveContext(networkTrap)
     });
     assert.equal(dryResult.mode, 'dry-run');
-    assert.equal(dryResult.verified, 4);
+    assert.equal(dryResult.verified, 5);
     assert.equal(dryResult.uploaded, 0);
     assert.equal(networkTrap.sends, 0, 'Dry-run must not issue an R2 request.');
 
     const secretSentinel = 'DO_NOT_PRINT_OR_PERSIST_THIS_SECRET';
-    const cli = spawnSync(process.execPath, [publisherPath, '--repo-root', fixture.root, '--json'], {
+    const cli = spawnSync(process.execPath, [
+      publisherPath, '--repo-root', fixture.root, '--chess-source', fixture.chessSourceRoot, '--json'
+    ], {
       cwd: fixture.root,
       encoding: 'utf8',
       windowsHide: true,
@@ -276,19 +307,20 @@ async function run() {
     assert.doesNotMatch(`${cli.stdout}\n${cli.stderr}`, new RegExp(secretSentinel), 'Dry-run output leaked a secret.');
     const cliResult = JSON.parse(cli.stdout.trim());
     assert.equal(cliResult.mode, 'dry-run');
-    assert.equal(cliResult.uniqueFiles, 4);
+    assert.equal(cliResult.uniqueFiles, 5);
 
     const first = inventory.records[0];
     const client = new FakeS3Client(new Map([[first.key, exactHead(first)]]));
     const liveResult = await publisher.publishInventory(inventory, {
       live: true,
       concurrency: 1,
+      chessSourceRoot: fixture.chessSourceRoot,
       liveContext: liveContext(client)
     });
     assert.equal(liveResult.skipped, 1, 'An exact existing blob must be skipped.');
-    assert.equal(liveResult.uploaded, 3, 'Missing blobs must be uploaded exactly once.');
+    assert.equal(liveResult.uploaded, 4, 'Missing blobs must be uploaded exactly once.');
     const puts = client.calls.filter((call) => call.operation === 'PUT');
-    assert.equal(puts.length, 3);
+    assert.equal(puts.length, 4);
     for (const call of puts) {
       const record = inventory.records.find((candidate) => candidate.key === call.input.Key);
       assert.ok(record, 'PUT used an unknown key.');
@@ -310,14 +342,14 @@ async function run() {
       { ...exactHead(first), Metadata: { sha256: '0'.repeat(64) } }
     ]]));
     await assertRejectsMessage(
-      () => publisher.publishRecord(first, publisher.createSourceReader(inventory), liveContext(mismatchClient)),
+      () => publisher.publishRecord(first, sourceReader, liveContext(mismatchClient)),
       /refusing overwrite/i
     );
     assert.equal(mismatchClient.calls.filter((call) => call.operation === 'PUT').length, 0, 'A mismatched object must never be overwritten.');
 
     const raceRecord = inventory.records[1];
     const raceClient = new FakeS3Client(new Map(), raceRecord.key);
-    const raceResult = await publisher.publishRecord(raceRecord, publisher.createSourceReader(inventory), liveContext(raceClient));
+    const raceResult = await publisher.publishRecord(raceRecord, sourceReader, liveContext(raceClient));
     assert.equal(raceResult.status, 'skipped-race', 'A valid object created during PUT must be re-HEADed and skipped.');
     assert.equal(raceClient.calls.filter((call) => call.operation === 'PUT').length, 1);
     assert.equal(raceClient.calls.filter((call) => call.operation === 'HEAD').length, 2);
@@ -326,7 +358,7 @@ async function run() {
     assert.ok(nonSvgRecord, 'Non-SVG fixture record is missing.');
     await fsp.writeFile(path.join(fixture.root, 'public', 'images', 'card.png'), Buffer.from('corrupt'));
     await assertRejectsMessage(
-      () => publisher.verifyRecordSources(nonSvgRecord, publisher.createSourceReader(inventory)),
+      () => publisher.verifyRecordSources(nonSvgRecord, sourceReader),
       /source (?:size|SHA-256) mismatch/i
     );
 

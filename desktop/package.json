@@ -1,6 +1,6 @@
 {
   "name": "onepiece-tabletop-desktop",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "private": true,
   "description": "Windows launcher for ONE PIECE tabletop games with account login, verified game downloads and incremental updates.",
   "main": "main.js",
@@ -92,9 +92,10 @@
         "from": "../public/desktop",
         "to": "catalog",
         "filter": [
-          "catalog-v1.json",
+          "catalog-v2.json",
           "manifests/card-assets-440918e609684317.json",
-          "manifests/board-assets-eb95373ee6ab1aa3.json"
+          "manifests/board-assets-eb95373ee6ab1aa3.json",
+          "manifests/chess-assets-4a14ed8c714c0b60.json"
         ]
       },
       {

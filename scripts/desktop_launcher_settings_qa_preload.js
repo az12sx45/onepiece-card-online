@@ -15,7 +15,7 @@ let state = {
   games: {
     card: { status: 'installed', hasInstalled: true, installedVersion: 'qa' },
     board: { status: 'installed', hasInstalled: true, installedVersion: 'qa' },
-    chess: { status: 'unavailable' }
+    chess: { status: 'not-installed', hasInstalled: false, remoteVersion: 'assets-chess-qa', totalFiles: 1, totalBytes: 1024 }
   }
 };
 
@@ -47,7 +47,7 @@ contextBridge.exposeInMainWorld('onePieceDesktop', Object.freeze({
     ok: true,
     state: {
       status: 'current',
-      currentVersion: '1.1.3',
+      currentVersion: '1.1.5',
       availableVersion: '',
       progress: 0,
       downloadedBytes: 0,
@@ -55,7 +55,7 @@ contextBridge.exposeInMainWorld('onePieceDesktop', Object.freeze({
       error: ''
     }
   }),
-  checkLauncherUpdate: async () => ({ ok: true, state: { status: 'current', currentVersion: '1.1.3' } }),
+  checkLauncherUpdate: async () => ({ ok: true, state: { status: 'current', currentVersion: '1.1.5' } }),
   downloadLauncherUpdate: async () => ({ ok: false, error: 'QA fixture has no downloadable update.' }),
   applyLauncherUpdate: async () => ({ ok: false, error: 'QA fixture has no applicable update.' }),
   installGame: async () => ({ ok: false, error: 'Not used by settings QA.' }),

@@ -18,6 +18,16 @@ const RETAINED_ROLLOUT_MANIFESTS = Object.freeze({
   'card-assets-197d7c0144fe523a.json': '1c33fb0ea2d42ed11b868c861de9286af356f1717d5a81724cda285d3536c443',
   'board-assets-ecd41e5ae3bcf045.json': '97908b785417c4944971d1d2d5b3cd3708778f2f894a2f028394fa29b450ad3f'
 });
+const STABLE_GAME_MANIFESTS = Object.freeze({
+  card: Object.freeze({
+    manifestPath: 'desktop/manifests/card-assets-440918e609684317.json',
+    manifestSha256: '46bc6d59f66c6ec5c26e2d7291c5b1ec65f466f6c2a70560c6a39ba11faed263'
+  }),
+  board: Object.freeze({
+    manifestPath: 'desktop/manifests/board-assets-eb95373ee6ab1aa3.json',
+    manifestSha256: 'c1d6736b6687d1146397607607c9e9fe63f93acf2f83aa5fe5fc68cd34f32c82'
+  })
+});
 
 const APP_FILES = [
   'main.js',
@@ -85,9 +95,10 @@ const EXTRA_RESOURCES = [
     from: '../public/desktop',
     to: 'catalog',
     filter: [
-      'catalog-v1.json',
+      'catalog-v2.json',
       'manifests/card-assets-440918e609684317.json',
-      'manifests/board-assets-eb95373ee6ab1aa3.json'
+      'manifests/board-assets-eb95373ee6ab1aa3.json',
+      'manifests/chess-assets-4a14ed8c714c0b60.json'
     ]
   },
   {
@@ -253,7 +264,7 @@ function validateCursorPng(filePath, label) {
 function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
-  assert(packageJson.version === '1.1.4', 'Desktop launcher version must be 1.1.4 for the GPU preference and persistent game cursor release.');
+  assert(packageJson.version === '1.1.5', 'Desktop launcher version must be 1.1.5 for the Chess download and launch release.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
@@ -290,12 +301,11 @@ function validateSourcePackage() {
   const cursorPointer = validateCursorPng(path.join(PUBLIC_ROOT, 'images', 'desktop_launcher', 'launcher_cursor_logpose_pointer_v1.png'), 'Pointer Log Pose launcher cursor');
   const cursorPressed = validateCursorPng(path.join(PUBLIC_ROOT, 'images', 'desktop_launcher', 'launcher_cursor_logpose_pressed_v1.png'), 'Pressed Log Pose launcher cursor');
 
-  const catalogPath = path.join(PUBLIC_ROOT, 'desktop', 'catalog-v1.json');
+  const catalogPath = path.join(PUBLIC_ROOT, 'desktop', 'catalog-v2.json');
   const catalog = readJson(catalogPath, 'public desktop catalog');
-  assert(catalog.schema === 1 && catalog.games && typeof catalog.games === 'object', 'Desktop catalog has an unsupported schema.');
-  assert(catalog.games.chess?.available === false, 'Chess must remain unavailable until its real package exists.');
+  assert(catalog.schema === 2 && catalog.games && typeof catalog.games === 'object', 'Desktop catalog has an unsupported schema.');
   const referencedManifests = [];
-  for (const gameId of ['card', 'board']) {
+  for (const gameId of ['card', 'board', 'chess']) {
     const game = catalog.games[gameId];
     assert(game && typeof game === 'object', `Desktop catalog is missing ${gameId}.`);
     assert(new RegExp(`^desktop/manifests/${gameId}-assets-[a-f0-9]{16}\\.json$`).test(game.manifestPath), `${gameId} catalog manifest path is not immutable.`);
@@ -303,6 +313,10 @@ function validateSourcePackage() {
     assert(fs.statSync(manifestPath, { throwIfNoEntry: false })?.isFile(), `${gameId} manifest is missing: ${game.manifestPath}`);
     assert(sha256File(manifestPath) === game.manifestSha256, `${gameId} manifest digest differs from the catalog.`);
     referencedManifests.push(relativePosix(path.join(PUBLIC_ROOT, 'desktop', 'manifests'), manifestPath));
+  }
+  for (const [gameId, expected] of Object.entries(STABLE_GAME_MANIFESTS)) {
+    assert(catalog.games[gameId].manifestPath === expected.manifestPath, `${gameId} manifest path changed during the Chess release.`);
+    assert(catalog.games[gameId].manifestSha256 === expected.manifestSha256, `${gameId} immutable manifest bytes changed during the Chess release.`);
   }
   const manifestDirectory = path.join(PUBLIC_ROOT, 'desktop', 'manifests');
   const actualManifests = sorted(listFilesRecursive(manifestDirectory).map((filePath) => relativePosix(manifestDirectory, filePath)));
@@ -435,8 +449,8 @@ function validateWinUnpacked(winUnpackedPath, source) {
   const catalogFiles = listFilesRecursive(catalogRoot);
   const sourceCatalogRoot = path.join(PUBLIC_ROOT, 'desktop');
   const expectedCatalogNames = sorted([
-    'catalog-v1.json',
-    ...['card', 'board'].map((gameId) => source.catalog.games[gameId].manifestPath.replace(/^desktop\//, ''))
+    'catalog-v2.json',
+    ...['card', 'board', 'chess'].map((gameId) => source.catalog.games[gameId].manifestPath.replace(/^desktop\//, ''))
   ]);
   const actualCatalogNames = sorted(catalogFiles.map((filePath) => relativePosix(catalogRoot, filePath)));
   assertExactJson(actualCatalogNames, expectedCatalogNames, 'win-unpacked catalog file set');
@@ -496,8 +510,7 @@ function main() {
     `header=${source.header}`,
     `cursors=${source.cursorDefault},${source.cursorPointer},${source.cursorPressed}`,
     'runtimeDeps=1',
-    'games=card,board',
-    'chess=unavailable'
+    'games=card,board,chess'
   ];
   if (options.winUnpacked) {
     const packaged = validateWinUnpacked(options.winUnpacked, source);

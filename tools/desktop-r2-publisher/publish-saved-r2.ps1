@@ -3,6 +3,11 @@ param(
   [ValidateRange(1, 16)]
   [int]$Concurrency = 3,
 
+  [string]$ChessSource = '',
+
+  [ValidateSet('all', 'card', 'board', 'chess')]
+  [string]$Game = 'all',
+
   [switch]$Json
 )
 
@@ -49,6 +54,10 @@ try {
   $env:R2_SECRET_ACCESS_KEY = Convert-ProtectedStringToPlainText ([string]$credential.secretAccessKeyProtected)
 
   $arguments = @($publisherPath, '--live', '--repo-root', $repoRoot, '--concurrency', [string]$Concurrency)
+  if (-not [string]::IsNullOrWhiteSpace($ChessSource)) {
+    $arguments += @('--chess-source', (Resolve-Path -LiteralPath $ChessSource).Path)
+  }
+  if ($Game -ne 'all') { $arguments += @('--game', $Game) }
   if ($Json) { $arguments += '--json' }
   & node @arguments
   if ($LASTEXITCODE -ne 0) {

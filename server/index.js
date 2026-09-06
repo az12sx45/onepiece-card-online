@@ -7,6 +7,7 @@ const { Server } = require("socket.io");
 const { pool } = require("./db");
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
+const { Chess } = require("chess.js");
 const {
   createInitialState,
   applyAction,
@@ -50,6 +51,99 @@ app.use(express.static(publicDir, {
     }
   },
 }));
+
+// Chess media stays in the existing desktop CAS. Local public files win above;
+// only static misses in this namespace may redirect to a verified blob hash.
+const CHESS_ASSET_PREFIX = "images/chess/assets/";
+const CHESS_BLOB_BASE_URL = "https://game-assets.rihdi.tw/desktop/blobs/sha256";
+let chessAssetRedirectCache = null;
+
+function validChessAssetPath(value){
+  if(typeof value !== "string" || !value.startsWith(CHESS_ASSET_PREFIX) || value.length > 1024) return false;
+  if(/[\\%?#\x00-\x1f\x7f]/.test(value)) return false;
+  return value.split("/").every((segment) => segment && segment !== "." && segment !== "..");
+}
+
+function verifyChessAssetManifest(catalog, manifestBytes){
+  const entry = catalog?.games?.chess;
+  if(catalog?.schema !== 2 || !entry || entry.available === false) throw new Error("chess_catalog_unavailable");
+  if(!/^desktop\/manifests\/chess-[a-zA-Z0-9._-]+\.json$/.test(entry.manifestPath || "")) throw new Error("chess_manifest_path_invalid");
+  if(!/^[a-f0-9]{64}$/.test(entry.manifestSha256 || "")) throw new Error("chess_manifest_digest_invalid");
+  if(!/^[a-zA-Z0-9._-]{1,120}$/.test(entry.releaseId || "")) throw new Error("chess_release_invalid");
+  if(!Number.isSafeInteger(entry.totalFiles) || entry.totalFiles < 1 || entry.totalFiles > 20000
+    || !Number.isSafeInteger(entry.totalBytes) || entry.totalBytes < 1) throw new Error("chess_totals_invalid");
+  if(!manifestBytes) return entry;
+  const digest = crypto.createHash("sha256").update(manifestBytes).digest("hex");
+  if(digest !== entry.manifestSha256) throw new Error("chess_manifest_digest_mismatch");
+  const manifest = JSON.parse(manifestBytes.toString("utf8"));
+  if(manifest.schema !== 1 || manifest.gameId !== "chess" || manifest.releaseId !== entry.releaseId
+    || manifest.totalFiles !== entry.totalFiles || manifest.totalBytes !== entry.totalBytes
+    || !Array.isArray(manifest.assets) || manifest.assets.length !== entry.totalFiles) throw new Error("chess_manifest_shape_invalid");
+  const redirects = new Map();
+  const totals = Object.fromEntries(["image", "audio", "video", "font"].map((kind) => [kind, { files:0, bytes:0 }]));
+  let totalBytes = 0;
+  for(const asset of manifest.assets){
+    if(!validChessAssetPath(asset?.path) || redirects.has(asset.path)
+      || !/^[a-f0-9]{64}$/.test(asset.sha256 || "")
+      || !Object.hasOwn(totals, asset.kind) || typeof asset.mime !== "string"
+      || !/^[a-z0-9.+-]+\/[a-zA-Z0-9.+-]+$/.test(asset.mime)
+      || !Number.isSafeInteger(asset.size) || asset.size <= 0) throw new Error("chess_asset_record_invalid");
+    redirects.set(asset.path, `${CHESS_BLOB_BASE_URL}/${asset.sha256.slice(0, 2)}/${asset.sha256}`);
+    totalBytes += asset.size;
+    totals[asset.kind].files += 1;
+    totals[asset.kind].bytes += asset.size;
+  }
+  if(!Number.isSafeInteger(totalBytes) || totalBytes !== entry.totalBytes) throw new Error("chess_asset_total_mismatch");
+  if(!manifest.byKind || Object.keys(manifest.byKind).some((kind) => !Object.hasOwn(totals, kind))) throw new Error("chess_kind_invalid");
+  for(const [kind, expected] of Object.entries(totals)){
+    if(manifest.byKind[kind]?.files !== expected.files || manifest.byKind[kind]?.bytes !== expected.bytes) throw new Error("chess_kind_total_mismatch");
+  }
+  return redirects;
+}
+
+async function readBoundedChessMetadata(filePath, maxBytes){
+  const stat = await fs.lstat(filePath);
+  if(!stat.isFile() || stat.size < 1 || stat.size > maxBytes) throw new Error("chess_metadata_size_invalid");
+  const bytes = await fs.readFile(filePath);
+  if(bytes.length !== stat.size || bytes.length > maxBytes) throw new Error("chess_metadata_changed");
+  return bytes;
+}
+
+async function loadChessAssetRedirects(){
+  const catalogBytes = await readBoundedChessMetadata(path.join(publicDir, "desktop", "catalog-v2.json"), 1024 * 1024);
+  const catalog = JSON.parse(catalogBytes.toString("utf8"));
+  const entry = verifyChessAssetManifest(catalog);
+  const manifestPath = path.join(publicDir, ...entry.manifestPath.split("/"));
+  const stat = await fs.lstat(manifestPath);
+  if(!stat.isFile() || stat.size < 1 || stat.size > 16 * 1024 * 1024) throw new Error("chess_metadata_size_invalid");
+  const key = `${crypto.createHash("sha256").update(catalogBytes).digest("hex")}:${stat.size}:${stat.mtimeMs}:${stat.ctimeMs}`;
+  if(chessAssetRedirectCache?.key === key) return chessAssetRedirectCache.promise;
+  const cache = { key, promise:null };
+  cache.promise = readBoundedChessMetadata(manifestPath, 16 * 1024 * 1024)
+    .then((bytes) => verifyChessAssetManifest(catalog, bytes))
+    .catch((error) => { if(chessAssetRedirectCache === cache) chessAssetRedirectCache = null; throw error; });
+  chessAssetRedirectCache = cache;
+  return cache.promise;
+}
+
+app.get("/images/chess/assets/*", async (req, res, next) => {
+  let logicalPath;
+  try { logicalPath = decodeURIComponent(req.path.slice(1)); }
+  catch (_) { return res.status(400).type("text/plain").send("Invalid Chess asset path."); }
+  if(!validChessAssetPath(logicalPath)) return res.status(400).type("text/plain").send("Invalid Chess asset path.");
+  try {
+    const redirects = await loadChessAssetRedirects();
+    const destination = redirects.get(logicalPath);
+    if(!destination) return next();
+    res.setHeader("Cache-Control", "no-store");
+    return res.redirect(302, destination);
+  } catch (_) {
+    // Never expose local filenames, catalog contents, or credentials in errors.
+    res.setHeader("Cache-Control", "no-store");
+    return res.status(503).type("text/plain").send("Chess assets temporarily unavailable.");
+  }
+});
+
 app.use("/api/board-save", (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET,PUT,DELETE,OPTIONS");
@@ -697,10 +791,304 @@ const io = new Server(server, {
 // room = { state, sockets: Map<sid,{playerId,secret,displayName,avatar}>, host, lobbyReady }
 const rooms = new Map();
 const boardRooms = new Map();
+const chessRooms = new Map();
 
 const MAX_ROOM_PLAYERS = 6;
 const BOARD_HOST_RECONNECT_GRACE_MS = 8000;
 const BOARD_CAMPAIGN_RECONNECT_GRACE_MS = 30000;
+const CHESS_START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+const CHESS_ROOM_IDLE_TTL_MS = 30 * 60 * 1000;
+const CHESS_BATTLEFIELD_IDS = [
+  "onigashima", "marineford", "whole-cake", "wano-flower-capital", "alabasta",
+  "skypiea-shandora", "enies-lobby", "fish-man-island", "dressrosa", "flagship",
+];
+const CHESS_FACTION_IDS = ["straw-hat-pirates", "onigashima-alliance"];
+const CHESS_DIFFICULTY_IDS = ["easy", "normal", "hard", "despair"];
+
+function sanitizeChessRoomCode(value){
+  return String(value || "")
+    .trim()
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g, "")
+    .slice(0, 8);
+}
+
+function makeChessRoomCode(){
+  for(let index = 0; index < 32; index += 1){
+    const code = `C${Math.floor(10000 + Math.random() * 90000)}`;
+    if(!chessRooms.has(code)) return code;
+  }
+  return `C${Date.now().toString(36).slice(-6).toUpperCase()}`;
+}
+
+function normalizeChessProfile(profile = {}){
+  const userId = Number(profile.userId || profile.user_id) || Math.floor(700000 + Math.random() * 200000);
+  const clientId = String(profile.clientId || profile.deviceId || `chess-${userId}`).trim().slice(0, 80) || `chess-${userId}`;
+  const name = String(profile.name || `玩家${String(userId).slice(-4)}`).trim().slice(0, 18) || `玩家${String(userId).slice(-4)}`;
+  return {
+    userId,
+    clientId,
+    name,
+    avatar: Math.max(1, Math.min(2000, Number(profile.avatar) || 1)),
+    title: String(profile.title || "新世界棋士").trim().slice(0, 24) || "新世界棋士",
+  };
+}
+
+function normalizeChessSettings(settings = {}, previous = {}){
+  const battlefieldIds = new Set(CHESS_BATTLEFIELD_IDS);
+  const factionIds = new Set(CHESS_FACTION_IDS);
+  const difficultyIds = new Set(CHESS_DIFFICULTY_IDS);
+  const mode = String(settings.mode || previous.mode || "online") === "cpu" ? "cpu" : "online";
+  const battlefieldId = battlefieldIds.has(String(settings.battlefieldId || ""))
+    ? String(settings.battlefieldId)
+    : (battlefieldIds.has(String(previous.battlefieldId || "")) ? String(previous.battlefieldId) : "onigashima");
+  const hostFaction = factionIds.has(String(settings.hostFaction || ""))
+    ? String(settings.hostFaction)
+    : (factionIds.has(String(previous.hostFaction || "")) ? String(previous.hostFaction) : "straw-hat-pirates");
+  const cpuDifficulty = difficultyIds.has(String(settings.cpuDifficulty || ""))
+    ? String(settings.cpuDifficulty)
+    : (difficultyIds.has(String(previous.cpuDifficulty || "")) ? String(previous.cpuDifficulty) : "normal");
+  return {
+    mode,
+    phase: ["waiting", "preparation"].includes(String(settings.phase || ""))
+      ? String(settings.phase)
+      : (previous.phase === "preparation" ? "preparation" : "waiting"),
+    battlefieldId,
+    hostFaction,
+    visibility: String(settings.visibility || previous.visibility || "public") === "private" ? "private" : "public",
+    allowSpectators: settings.allowSpectators == null
+      ? previous.allowSpectators !== false
+      : settings.allowSpectators !== false,
+    cpuDifficulty,
+  };
+}
+
+function oppositeChessFaction(factionId){
+  return factionId === "onigashima-alliance" ? "straw-hat-pirates" : "onigashima-alliance";
+}
+
+function normalizeChessLoadout(loadout = {}, previous = {}){
+  const factionId = CHESS_FACTION_IDS.includes(String(loadout.factionId || ""))
+    ? String(loadout.factionId)
+    : (CHESS_FACTION_IDS.includes(String(previous.factionId || "")) ? String(previous.factionId) : "straw-hat-pirates");
+  const battlefieldId = CHESS_BATTLEFIELD_IDS.includes(String(loadout.battlefieldId || ""))
+    ? String(loadout.battlefieldId)
+    : (CHESS_BATTLEFIELD_IDS.includes(String(previous.battlefieldId || "")) ? String(previous.battlefieldId) : "onigashima");
+  return { factionId, battlefieldId };
+}
+
+function chessLoadoutsReady(room){
+  return room.players.length === room.maxPlayers
+    && room.players.every((player) => CHESS_FACTION_IDS.includes(player.factionId) && CHESS_BATTLEFIELD_IDS.includes(player.battlefieldId));
+}
+
+function resolveChessBattlefield(room){
+  const choices = room.players.map((player) => player.battlefieldId);
+  const uniqueChoices = [...new Set(choices)];
+  const battlefieldId = uniqueChoices.length === 1
+    ? uniqueChoices[0]
+    : uniqueChoices[Math.floor(Math.random() * uniqueChoices.length)];
+  return {
+    battlefieldId,
+    battlefieldChoices: choices,
+    battlefieldResolution: uniqueChoices.length === 1 ? "unanimous" : "random-two",
+  };
+}
+
+function createChessRoom(roomCode, profile, settings = {}){
+  const host = normalizeChessProfile(profile);
+  const code = sanitizeChessRoomCode(roomCode) || makeChessRoomCode();
+  const hostColor = crypto.randomInt(0, 2) === 0 ? "w" : "b";
+  const room = {
+    roomCode: code,
+    roomId: code,
+    roomName: `${host.name} 的霸海棋局`,
+    hostUserId: host.userId,
+    status: "waiting",
+    maxPlayers: 2,
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+    settings: normalizeChessSettings({ ...settings, phase:"waiting" }),
+    players: [{ ...host, ...normalizeChessLoadout(settings), color:hostColor, isHost:true, ready:false, online:true, isCPU:false }],
+    spectators: new Map(),
+    sockets: new Map(),
+    chat: [{ system:true, text:"霸海戰棋房間已建立，等待另一位棋士或加入 CPU。", ts:Date.now() }],
+    fen: CHESS_START_FEN,
+    chess: new Chess(),
+    moveSequence: 0,
+    lastMove: null,
+    cleanupTimer: null,
+  };
+  chessRooms.set(code, room);
+  return room;
+}
+
+function chessPlayerOnline(room, player){
+  return Array.from(room?.sockets?.values?.() || []).some((meta) => (
+    meta.role === "player" && Number(meta.userId) === Number(player?.userId)
+  ));
+}
+
+function resetChessPreparation(room){
+  room.settings = normalizeChessSettings({ phase:"waiting" }, room.settings);
+  room.players.forEach((player) => { player.ready = !!player.isCPU; });
+}
+
+function chessRoomMember(room, socket){
+  const meta = room?.sockets?.get(socket.id);
+  if(!meta || meta.role !== "player") return null;
+  return room.players.find((player) => Number(player.userId) === Number(meta.userId)) || null;
+}
+
+function upsertChessPlayer(room, profile, socketId){
+  const normalized = normalizeChessProfile(profile);
+  let player = room.players.find((item) => Number(item.userId) === Number(normalized.userId));
+  if(!player){
+    if(room.status !== "waiting") return { ok:false, error:"playing" };
+    if(room.players.length >= room.maxPlayers) return { ok:false, error:"full" };
+    const usedColors = new Set(room.players.map((item) => item.color));
+    const host = room.players.find((item) => Number(item.userId) === Number(room.hostUserId)) || room.players[0];
+    player = {
+      ...normalized,
+      ...normalizeChessLoadout({ factionId:oppositeChessFaction(host?.factionId), battlefieldId:host?.battlefieldId }),
+      color:usedColors.has("w") ? "b" : "w",
+      isHost:false,
+      ready:false,
+      online:true,
+      isCPU:false,
+    };
+    room.players.push(player);
+    resetChessPreparation(room);
+    room.chat.push({ system:true, text:`${player.name} 已加入房間。`, ts:Date.now() });
+  }else{
+    Object.assign(player, normalized, { online:true });
+  }
+  room.sockets.set(socketId, { role:"player", userId:player.userId, clientId:player.clientId });
+  room.players.forEach((item) => {
+    item.isHost = Number(item.userId) === Number(room.hostUserId);
+    if(!item.isCPU) item.online = chessPlayerOnline(room, item);
+  });
+  room.updatedAt = Date.now();
+  return { ok:true, player };
+}
+
+function serializeChessLobby(room){
+  return {
+    roomId: room.roomCode,
+    roomCode: room.roomCode,
+    roomName: room.roomName,
+    hostUserId: room.hostUserId,
+    status: room.status,
+    maxPlayers: room.maxPlayers,
+    settings: { ...room.settings },
+    players: room.players.map((player) => ({
+      userId: player.userId,
+      clientId: player.clientId,
+      name: player.name,
+      avatar: player.avatar,
+      title: player.title,
+      color: player.color,
+      isHost: Number(player.userId) === Number(room.hostUserId),
+      ready: !!player.ready,
+      online: player.isCPU ? true : chessPlayerOnline(room, player),
+      isCPU: !!player.isCPU,
+      cpuDifficulty: player.cpuDifficulty || "",
+      factionId: player.factionId,
+      battlefieldId: player.battlefieldId,
+    })),
+    spectatorCount: room.spectators.size,
+    chat: room.chat.slice(-80),
+    game: {
+      fen: room.fen,
+      moveSequence: room.moveSequence,
+      lastMove: room.lastMove,
+    },
+  };
+}
+
+function serializeChessRoomList({ includePlaying = true } = {}){
+  return Array.from(chessRooms.values())
+    .filter((room) => room.settings.visibility === "public" && room.status !== "closed" && (includePlaying || room.status === "waiting"))
+    .sort((a, b) => Number(b.updatedAt || 0) - Number(a.updatedAt || 0))
+    .slice(0, 30)
+    .map((room) => ({
+      roomId: room.roomCode,
+      roomCode: room.roomCode,
+      title: room.roomName,
+      hostName: room.players.find((player) => Number(player.userId) === Number(room.hostUserId))?.name || "房主",
+      total: room.players.length,
+      maxPlayers: room.maxPlayers,
+      status: room.status,
+      battlefieldId: room.settings.battlefieldId,
+      allowSpectators: room.settings.allowSpectators,
+      spectatorCount: room.spectators.size,
+    }));
+}
+
+function emitChessRoomList(){
+  io.emit("CHESS_ROOM_LIST", { rooms:serializeChessRoomList() });
+}
+
+function emitChessLobby(room){
+  if(!room) return;
+  io.to(`chess:${room.roomCode}`).emit("CHESS_LOBBY", { lobby:serializeChessLobby(room) });
+  emitChessRoomList();
+}
+
+function scheduleChessRoomCleanup(room){
+  if(!room || room.cleanupTimer) return;
+  room.cleanupTimer = setTimeout(() => {
+    room.cleanupTimer = null;
+    const latest = chessRooms.get(room.roomCode);
+    if(!latest || latest.sockets.size > 0) return;
+    chessRooms.delete(room.roomCode);
+    emitChessRoomList();
+  }, CHESS_ROOM_IDLE_TTL_MS);
+}
+
+function cancelChessRoomCleanup(room){
+  if(!room?.cleanupTimer) return;
+  clearTimeout(room.cleanupTimer);
+  room.cleanupTimer = null;
+}
+
+function refreshChessRoomPresence(room){
+  if(!room) return;
+  room.players.forEach((player) => {
+    if(!player.isCPU) player.online = chessPlayerOnline(room, player);
+  });
+  const host = room.players.find((player) => Number(player.userId) === Number(room.hostUserId));
+  if(!host || (!host.isCPU && !host.online)){
+    const nextHost = room.players.find((player) => !player.isCPU && player.online) || room.players.find((player) => !player.isCPU);
+    if(nextHost) room.hostUserId = nextHost.userId;
+  }
+  room.players.forEach((player) => {
+    player.isHost = Number(player.userId) === Number(room.hostUserId);
+  });
+  room.updatedAt = Date.now();
+  if(room.sockets.size === 0) scheduleChessRoomCleanup(room);
+  else cancelChessRoomCleanup(room);
+}
+
+function chessFenLooksValid(value){
+  const parts = String(value || "").trim().split(/\s+/);
+  if(parts.length !== 6 || !/^[wb]$/.test(parts[1])) return false;
+  const ranks = parts[0].split("/");
+  if(ranks.length !== 8) return false;
+  return ranks.every((rank) => {
+    let files = 0;
+    for(const token of rank){
+      if(/[1-8]/.test(token)) files += Number(token);
+      else if(/[prnbqkPRNBQK]/.test(token)) files += 1;
+      else return false;
+    }
+    return files === 8;
+  });
+}
+
+function chessPieceCountFromFen(value){
+  return (String(value || "").split(" ")[0].match(/[prnbqkPRNBQK]/g) || []).length;
+}
 
 function sanitizeBoardRoomCode(value){
   return String(value || "")
@@ -3028,6 +3416,400 @@ function runCpuLoop(roomId){
 io.on("connection", (socket) => {
   let joinedRoom = null;
 
+  socket.on("CHESS_ROOM_LIST", (payload = {}, cb) => {
+    const rooms = serializeChessRoomList({ includePlaying:payload.includePlaying !== false });
+    socket.emit("CHESS_ROOM_LIST", { rooms });
+    cb?.({ ok:true, rooms });
+  });
+
+  socket.on("CHESS_JOIN_ROOM", (payload = {}, cb) => {
+    try{
+      const authenticatedProfile = socket.data.socialProfile;
+      if(!authenticatedProfile || !(Number(authenticatedProfile.userId) > 0)) return cb?.({ ok:false, error:"auth_required" });
+      const profile = normalizeChessProfile({ ...payload.profile, ...authenticatedProfile });
+      const wantsCreate = !!payload.create;
+      const wantsSpectate = payload.role === "spectator" || payload.spectate === true;
+      let roomCode = sanitizeChessRoomCode(payload.roomCode || payload.roomId || "");
+      let room = roomCode ? chessRooms.get(roomCode) : null;
+      if(!room && wantsCreate){
+        room = createChessRoom(roomCode || makeChessRoomCode(), profile, payload.settings || {});
+        roomCode = room.roomCode;
+      }
+      if(!room) return cb?.({ ok:false, error:"not_found" });
+      cancelChessRoomCleanup(room);
+
+      if(wantsSpectate){
+        if(!room.settings.allowSpectators) return cb?.({ ok:false, error:"spectators_disabled" });
+        room.spectators.set(socket.id, profile);
+        room.sockets.set(socket.id, { role:"spectator", userId:profile.userId, clientId:profile.clientId });
+      }else{
+        const existing = room.players.find((player) => Number(player.userId) === Number(profile.userId));
+        if(room.status === "playing" && !existing && !payload.allowPlayingJoin){
+          return cb?.({ ok:false, error:"playing" });
+        }
+        const joined = upsertChessPlayer(room, profile, socket.id);
+        if(!joined.ok) return cb?.({ ok:false, error:joined.error || "join_failed" });
+      }
+
+      socket.data.chessRoomCode = room.roomCode;
+      socket.data.chessProfile = profile;
+      socket.join(`chess:${room.roomCode}`);
+      refreshChessRoomPresence(room);
+      emitChessLobby(room);
+      return cb?.({
+        ok:true,
+        role:wantsSpectate ? "spectator" : "player",
+        lobby:serializeChessLobby(room),
+        rooms:serializeChessRoomList(),
+      });
+    }catch(error){
+      console.error("[CHESS_JOIN_ROOM] error:", error);
+      return cb?.({ ok:false, error:String(error?.message || error) });
+    }
+  });
+
+  socket.on("CHESS_UPDATE_SETTINGS", (payload = {}, cb) => {
+    try{
+      const roomCode = sanitizeChessRoomCode(payload.roomCode || socket.data.chessRoomCode || "");
+      const room = chessRooms.get(roomCode);
+      if(!room) return cb?.({ ok:false, error:"not_found" });
+      const member = chessRoomMember(room, socket);
+      if(!member) return cb?.({ ok:false, error:"not_joined" });
+      if(Number(member.userId) !== Number(room.hostUserId)) return cb?.({ ok:false, error:"host_only" });
+      if(room.status !== "waiting") return cb?.({ ok:false, error:"not_waiting" });
+      const settings = payload.settings || {};
+      if(settings.phase != null && !["waiting", "preparation"].includes(String(settings.phase))){
+        return cb?.({ ok:false, error:"invalid_phase" });
+      }
+      const next = normalizeChessSettings(settings, room.settings);
+      if(next.phase !== room.settings.phase){
+        if(room.settings.phase !== "waiting" || next.phase !== "preparation"){
+          return cb?.({ ok:false, error:"invalid_phase_transition" });
+        }
+        if(room.players.length !== room.maxPlayers) return cb?.({ ok:false, error:"need_opponent" });
+        if(room.players.some((player) => !player.isCPU && (!player.ready || !chessPlayerOnline(room, player)))){
+          return cb?.({ ok:false, error:"not_all_ready" });
+        }
+        // Waiting-room readiness is not a locked loadout. Reset both human
+        // seats atomically so every peer sees the same preparation snapshot.
+        room.players.forEach((player) => { player.ready = !!player.isCPU; });
+      }
+      room.settings = next;
+      room.updatedAt = Date.now();
+      emitChessLobby(room);
+      return cb?.({ ok:true, lobby:serializeChessLobby(room) });
+    }catch(error){
+      console.error("[CHESS_UPDATE_SETTINGS] error:", error);
+      return cb?.({ ok:false, error:String(error?.message || error) });
+    }
+  });
+
+  socket.on("CHESS_UPDATE_LOADOUT", (payload = {}, cb) => {
+    try{
+      const roomCode = sanitizeChessRoomCode(payload.roomCode || socket.data.chessRoomCode || "");
+      const room = chessRooms.get(roomCode);
+      if(!room) return cb?.({ ok:false, error:"not_found" });
+      if(room.status !== "waiting") return cb?.({ ok:false, error:"not_waiting" });
+      if(room.settings.phase !== "preparation") return cb?.({ ok:false, error:"not_preparation" });
+      if(room.players.length !== room.maxPlayers) return cb?.({ ok:false, error:"need_opponent" });
+      const member = chessRoomMember(room, socket);
+      if(!member) return cb?.({ ok:false, error:"not_joined" });
+      const next = normalizeChessLoadout(payload, member);
+      Object.assign(member, next, { ready:false });
+      room.updatedAt = Date.now();
+      emitChessLobby(room);
+      return cb?.({ ok:true, lobby:serializeChessLobby(room) });
+    }catch(error){
+      console.error("[CHESS_UPDATE_LOADOUT] error:", error);
+      return cb?.({ ok:false, error:String(error?.message || error) });
+    }
+  });
+
+  socket.on("CHESS_LOBBY_READY", (payload = {}, cb) => {
+    try{
+      const roomCode = sanitizeChessRoomCode(payload.roomCode || socket.data.chessRoomCode || "");
+      const room = chessRooms.get(roomCode);
+      if(!room) return cb?.({ ok:false, error:"not_found" });
+      if(room.status !== "waiting") return cb?.({ ok:false, error:"not_waiting" });
+      const member = chessRoomMember(room, socket);
+      if(!member) return cb?.({ ok:false, error:"not_joined" });
+      if(payload.ready !== false && !chessLoadoutsReady(room)) return cb?.({ ok:false, error:"loadout_required" });
+      member.ready = typeof payload.ready === "boolean" ? payload.ready : !member.ready;
+      room.chat.push({ system:true, text:`${member.name}${member.ready ? "已準備完成" : "取消了準備"}。`, ts:Date.now() });
+      room.updatedAt = Date.now();
+      emitChessLobby(room);
+      return cb?.({ ok:true, lobby:serializeChessLobby(room) });
+    }catch(error){
+      console.error("[CHESS_LOBBY_READY] error:", error);
+      return cb?.({ ok:false, error:String(error?.message || error) });
+    }
+  });
+
+  socket.on("CHESS_LOBBY_CHAT", (payload = {}, cb) => {
+    try{
+      const roomCode = sanitizeChessRoomCode(payload.roomCode || socket.data.chessRoomCode || "");
+      const room = chessRooms.get(roomCode);
+      if(!room) return cb?.({ ok:false, error:"not_found" });
+      const meta = room.sockets.get(socket.id);
+      if(!meta) return cb?.({ ok:false, error:"not_joined" });
+      const profile = meta.role === "spectator"
+        ? room.spectators.get(socket.id)
+        : room.players.find((player) => Number(player.userId) === Number(meta.userId));
+      const text = String(payload.text || "").trim().slice(0, 240);
+      if(!text) return cb?.({ ok:false, error:"empty" });
+      room.chat.push({ name:profile?.name || "觀戰者", avatar:profile?.avatar || 1, userId:profile?.userId || 0, text, ts:Date.now() });
+      room.updatedAt = Date.now();
+      emitChessLobby(room);
+      return cb?.({ ok:true });
+    }catch(error){
+      console.error("[CHESS_LOBBY_CHAT] error:", error);
+      return cb?.({ ok:false, error:String(error?.message || error) });
+    }
+  });
+
+  socket.on("CHESS_ADD_CPU", (payload = {}, cb) => {
+    try{
+      const roomCode = sanitizeChessRoomCode(payload.roomCode || socket.data.chessRoomCode || "");
+      const room = chessRooms.get(roomCode);
+      if(!room) return cb?.({ ok:false, error:"not_found" });
+      const member = chessRoomMember(room, socket);
+      if(!member) return cb?.({ ok:false, error:"not_joined" });
+      if(Number(member.userId) !== Number(room.hostUserId)) return cb?.({ ok:false, error:"host_only" });
+      if(room.status !== "waiting") return cb?.({ ok:false, error:"not_waiting" });
+      if(room.players.length >= room.maxPlayers) return cb?.({ ok:false, error:"full" });
+      const difficulty = normalizeChessSettings({ cpuDifficulty:payload.difficulty }, room.settings).cpuDifficulty;
+      const labels = { easy:"簡單", normal:"普通", hard:"困難", despair:"絕望" };
+      const host = room.players.find((player) => Number(player.userId) === Number(room.hostUserId)) || room.players[0];
+      const hostBattlefieldIndex = Math.max(0, CHESS_BATTLEFIELD_IDS.indexOf(host?.battlefieldId));
+      room.settings = normalizeChessSettings({ mode:"cpu", cpuDifficulty:difficulty }, room.settings);
+      room.players.push({
+        userId:-9001,
+        clientId:"chess-cpu-1",
+        name:`CPU・${labels[difficulty]}`,
+        avatar:1,
+        title:"電腦棋士",
+        color:room.players.some((player) => player.color === "w") ? "b" : "w",
+        isHost:false,
+        ready:true,
+        online:true,
+        isCPU:true,
+        cpuDifficulty:difficulty,
+        factionId:oppositeChessFaction(host?.factionId),
+        battlefieldId:CHESS_BATTLEFIELD_IDS[(hostBattlefieldIndex + 1) % CHESS_BATTLEFIELD_IDS.length],
+      });
+      resetChessPreparation(room);
+      room.chat.push({ system:true, text:`CPU・${labels[difficulty]} 已加入房間。`, ts:Date.now() });
+      room.updatedAt = Date.now();
+      emitChessLobby(room);
+      return cb?.({ ok:true, lobby:serializeChessLobby(room) });
+    }catch(error){
+      console.error("[CHESS_ADD_CPU] error:", error);
+      return cb?.({ ok:false, error:String(error?.message || error) });
+    }
+  });
+
+  socket.on("CHESS_REMOVE_CPU", (payload = {}, cb) => {
+    try{
+      const roomCode = sanitizeChessRoomCode(payload.roomCode || socket.data.chessRoomCode || "");
+      const room = chessRooms.get(roomCode);
+      if(!room) return cb?.({ ok:false, error:"not_found" });
+      const member = chessRoomMember(room, socket);
+      if(!member) return cb?.({ ok:false, error:"not_joined" });
+      if(Number(member.userId) !== Number(room.hostUserId)) return cb?.({ ok:false, error:"host_only" });
+      if(room.status !== "waiting") return cb?.({ ok:false, error:"not_waiting" });
+      const cpu = room.players.find((player) => player.isCPU);
+      if(!cpu) return cb?.({ ok:false, error:"cpu_only" });
+      room.players = room.players.filter((player) => !player.isCPU);
+      room.settings = normalizeChessSettings({ mode:"online" }, room.settings);
+      resetChessPreparation(room);
+      room.chat.push({ system:true, text:`${cpu.name} 已離開房間。`, ts:Date.now() });
+      room.updatedAt = Date.now();
+      emitChessLobby(room);
+      return cb?.({ ok:true, lobby:serializeChessLobby(room) });
+    }catch(error){
+      console.error("[CHESS_REMOVE_CPU] error:", error);
+      return cb?.({ ok:false, error:String(error?.message || error) });
+    }
+  });
+
+  socket.on("CHESS_START_GAME", (payload = {}, cb) => {
+    try{
+      const roomCode = sanitizeChessRoomCode(payload.roomCode || socket.data.chessRoomCode || "");
+      const room = chessRooms.get(roomCode);
+      if(!room) return cb?.({ ok:false, error:"not_found" });
+      const member = chessRoomMember(room, socket);
+      if(!member) return cb?.({ ok:false, error:"not_joined" });
+      if(Number(member.userId) !== Number(room.hostUserId)) return cb?.({ ok:false, error:"host_only" });
+      if(room.status !== "waiting") return cb?.({ ok:false, error:"not_waiting" });
+      if(room.settings.phase !== "preparation") return cb?.({ ok:false, error:"not_preparation" });
+      if(room.players.length !== room.maxPlayers) return cb?.({ ok:false, error:"need_opponent" });
+      if(!chessLoadoutsReady(room)) return cb?.({ ok:false, error:"loadout_required" });
+      if(room.players.some((player) => !player.isCPU && (!player.ready || !chessPlayerOnline(room, player)))) return cb?.({ ok:false, error:"not_all_ready" });
+      const whitePlayer = room.players.find((player) => player.color === "w") || room.players[0];
+      const blackPlayer = room.players.find((player) => player.color === "b") || room.players[1];
+      const battlefield = resolveChessBattlefield(room);
+      room.settings = {
+        ...normalizeChessSettings({
+          hostFaction:whitePlayer.factionId,
+          battlefieldId:battlefield.battlefieldId,
+        }, room.settings),
+        battlefieldChoices:battlefield.battlefieldChoices,
+        battlefieldResolution:battlefield.battlefieldResolution,
+        whiteFaction:whitePlayer.factionId,
+        blackFaction:blackPlayer.factionId,
+      };
+      room.status = "playing";
+      room.chess = new Chess();
+      room.fen = CHESS_START_FEN;
+      room.moveSequence = 0;
+      room.lastMove = null;
+      room.updatedAt = Date.now();
+      emitChessLobby(room);
+      io.to(`chess:${room.roomCode}`).emit("CHESS_NAV_GAME", { lobby:serializeChessLobby(room) });
+      return cb?.({ ok:true, lobby:serializeChessLobby(room) });
+    }catch(error){
+      console.error("[CHESS_START_GAME] error:", error);
+      return cb?.({ ok:false, error:String(error?.message || error) });
+    }
+  });
+
+  socket.on("CHESS_JOIN_GAME", (payload = {}, cb) => {
+    try{
+      const roomCode = sanitizeChessRoomCode(payload.roomCode || socket.data.chessRoomCode || "");
+      const room = chessRooms.get(roomCode);
+      if(!room) return cb?.({ ok:false, error:"not_found" });
+      const authenticatedProfile = socket.data.socialProfile;
+      if(!authenticatedProfile || !(Number(authenticatedProfile.userId) > 0)) return cb?.({ ok:false, error:"auth_required" });
+      const profile = normalizeChessProfile({ ...(payload.profile || socket.data.chessProfile || {}), ...authenticatedProfile });
+      const wantsSpectate = payload.role === "spectator" || payload.spectate === true;
+      if(wantsSpectate){
+        if(!room.settings.allowSpectators) return cb?.({ ok:false, error:"spectators_disabled" });
+        room.spectators.set(socket.id, profile);
+        room.sockets.set(socket.id, { role:"spectator", userId:profile.userId, clientId:profile.clientId });
+      }else{
+        const existing = room.players.find((player) => Number(player.userId) === Number(profile.userId));
+        if(!existing) return cb?.({ ok:false, error:"not_room_member" });
+        const joined = upsertChessPlayer(room, profile, socket.id);
+        if(!joined.ok) return cb?.({ ok:false, error:joined.error || "join_failed" });
+      }
+      socket.data.chessRoomCode = room.roomCode;
+      socket.data.chessProfile = profile;
+      socket.join(`chess:${room.roomCode}`);
+      refreshChessRoomPresence(room);
+      emitChessLobby(room);
+      return cb?.({ ok:true, role:wantsSpectate ? "spectator" : "player", lobby:serializeChessLobby(room) });
+    }catch(error){
+      console.error("[CHESS_JOIN_GAME] error:", error);
+      return cb?.({ ok:false, error:String(error?.message || error) });
+    }
+  });
+
+  socket.on("CHESS_MOVE", (payload = {}, cb) => {
+    try{
+      const roomCode = sanitizeChessRoomCode(payload.roomCode || socket.data.chessRoomCode || "");
+      const room = chessRooms.get(roomCode);
+      if(!room) return cb?.({ ok:false, error:"not_found" });
+      if(room.status !== "playing") return cb?.({ ok:false, error:"not_playing" });
+      const member = chessRoomMember(room, socket);
+      if(!member || member.isCPU) return cb?.({ ok:false, error:"not_player" });
+      const beforeFen = String(payload.beforeFen || "").trim();
+      const move = payload.move && typeof payload.move === "object" ? payload.move : {};
+      if(beforeFen !== room.fen) return cb?.({ ok:false, error:"stale_state", game:{ fen:room.fen, moveSequence:room.moveSequence } });
+      if(Number(payload.moveSequence) !== Number(room.moveSequence)) return cb?.({ ok:false, error:"stale_sequence", game:{ fen:room.fen, moveSequence:room.moveSequence } });
+      const turnColor = String(beforeFen.split(/\s+/)[1] || "");
+      let moveActor = member;
+      if(turnColor !== member.color){
+        const cpu = room.players.find((player) => player.isCPU && player.color === turnColor);
+        const hostCanDriveCpu = cpu && Number(member.userId) === Number(room.hostUserId) && payload.cpu === true;
+        if(!hostCanDriveCpu) return cb?.({ ok:false, error:"not_your_turn" });
+        moveActor = cpu;
+      }
+      if(!/^[a-h][1-8]$/.test(String(move.from || "")) || !/^[a-h][1-8]$/.test(String(move.to || ""))){
+        return cb?.({ ok:false, error:"invalid_move" });
+      }
+      if(move.promotion != null && String(move.promotion) !== "" && !/^[qrbn]$/.test(String(move.promotion))) return cb?.({ ok:false, error:"invalid_promotion" });
+      // Keep one server-owned engine per room: rebuilding from a FEN would
+      // lose repetition history. Client afterFen/SAN/capture flags are advisory.
+      if(!room.chess || room.chess.fen() !== room.fen) return cb?.({ ok:false, error:"invalid_server_state" });
+      let legalMove;
+      try {
+        legalMove = room.chess.move({ from:String(move.from), to:String(move.to),
+          ...(move.promotion ? { promotion:String(move.promotion) } : {}) });
+      } catch (_) { return cb?.({ ok:false, error:"illegal_move", game:{ fen:room.fen, moveSequence:room.moveSequence } }); }
+      if(!legalMove) return cb?.({ ok:false, error:"illegal_move" });
+      room.fen = room.chess.fen();
+      room.moveSequence += 1;
+      room.lastMove = {
+        from:legalMove.from,
+        to:legalMove.to,
+        promotion:legalMove.promotion || "",
+        san:legalMove.san,
+        captured:!!legalMove.captured,
+        byUserId:moveActor.userId,
+        sequence:room.moveSequence,
+        at:Date.now(),
+      };
+      room.updatedAt = Date.now();
+      const gameOver = room.chess.isGameOver();
+      if(gameOver) room.status = "ended";
+      const committed = { roomCode:room.roomCode, game:{ fen:room.fen, moveSequence:room.moveSequence, lastMove:room.lastMove, gameOver } };
+      io.to(`chess:${room.roomCode}`).emit("CHESS_MOVE_COMMITTED", committed);
+      if(gameOver) emitChessLobby(room);
+      return cb?.({ ok:true, ...committed });
+    }catch(error){
+      console.error("[CHESS_MOVE] error:", error);
+      return cb?.({ ok:false, error:String(error?.message || error) });
+    }
+  });
+
+  socket.on("CHESS_GAME_OVER", (payload = {}, cb) => {
+    try{
+      const roomCode = sanitizeChessRoomCode(payload.roomCode || socket.data.chessRoomCode || "");
+      const room = chessRooms.get(roomCode);
+      if(!room) return cb?.({ ok:false, error:"not_found" });
+      const member = chessRoomMember(room, socket);
+      if(!member) return cb?.({ ok:false, error:"not_joined" });
+      if(!room.chess?.isGameOver()) return cb?.({ ok:false, error:"not_game_over" });
+      room.status = "ended";
+      room.updatedAt = Date.now();
+      emitChessLobby(room);
+      return cb?.({ ok:true });
+    }catch(error){
+      console.error("[CHESS_GAME_OVER] error:", error);
+      return cb?.({ ok:false, error:String(error?.message || error) });
+    }
+  });
+
+  socket.on("CHESS_LEAVE_ROOM", (payload = {}, cb) => {
+    try{
+      const roomCode = sanitizeChessRoomCode(payload.roomCode || socket.data.chessRoomCode || "");
+      const room = chessRooms.get(roomCode);
+      if(!room) return cb?.({ ok:true, gone:true });
+      const meta = room.sockets.get(socket.id);
+      room.sockets.delete(socket.id);
+      room.spectators.delete(socket.id);
+      socket.leave(`chess:${room.roomCode}`);
+      if(meta?.role === "player" && room.status === "waiting"){
+        const leaving = room.players.find((player) => Number(player.userId) === Number(meta.userId));
+        room.players = room.players.filter((player) => player.isCPU || Number(player.userId) !== Number(meta.userId));
+        resetChessPreparation(room);
+        if(leaving) room.chat.push({ system:true, text:`${leaving.name} 已離開房間。`, ts:Date.now() });
+      }
+      socket.data.chessRoomCode = "";
+      refreshChessRoomPresence(room);
+      if(room.players.every((player) => player.isCPU) && room.sockets.size === 0){
+        chessRooms.delete(room.roomCode);
+        emitChessRoomList();
+      }else{
+        emitChessLobby(room);
+      }
+      return cb?.({ ok:true });
+    }catch(error){
+      console.error("[CHESS_LEAVE_ROOM] error:", error);
+      return cb?.({ ok:false, error:String(error?.message || error) });
+    }
+  });
+
   socket.on("BOARD_ROOM_LIST", (_payload = {}, cb) => {
     const rooms = serializeBoardRoomList();
     socket.emit("BOARD_ROOM_LIST", { rooms });
@@ -3512,6 +4294,7 @@ if(existing){
 lockTouch(uid, did, socket.id);
 
     socket.data.userId = uid;
+    socket.data.socialProfile = { userId:uid, name:String(prof.name || ""), avatar:Number(prof.avatar) || 1 };
     markOnline(uid, socket.id);
 
     return cb?.({ ok:true, me:{ userId: uid, name: prof.name || "", avatar: Number(prof.avatar)||1 } });
@@ -3545,6 +4328,7 @@ if(existing){
 lockTouch(uid, did, socket.id);
 
     socket.data.userId = uid;
+    socket.data.socialProfile = { userId:uid, name:String(prof.name || ""), avatar:Number(prof.avatar) || 1 };
     markOnline(uid, socket.id);
 
     const p = normalizePresencePage(page);
@@ -3654,7 +4438,8 @@ socket.on("LOBBY_INVITE_SEND", async ({ secret, toUserId, roomId, mode }, cb) =>
     const fromId = Number(prof.user_id);
     const toId = Number(toUserId);
     const rid = String(roomId||"").trim().toUpperCase();
-    const inviteMode = String(mode||"card").trim().toLowerCase() === "board" ? "board" : "card";
+    const requestedMode = String(mode||"card").trim().toLowerCase();
+    const inviteMode = requestedMode === "board" ? "board" : (requestedMode === "chess" ? "chess" : "card");
 
     if(!(fromId>0)) return cb?.({ ok:false, error:"bad from" });
     if(!(toId>0)) return cb?.({ ok:false, error:"bad to" });
@@ -3662,11 +4447,15 @@ socket.on("LOBBY_INVITE_SEND", async ({ secret, toUserId, roomId, mode }, cb) =>
     if(toId === fromId) return cb?.({ ok:false, error:"cannot invite self" });
 
     // verify the matching game room exists and is still waiting
-    const room = inviteMode === "board" ? boardRooms.get(rid) : rooms.get(rid);
+    const room = inviteMode === "board" ? boardRooms.get(rid) : (inviteMode === "chess" ? chessRooms.get(rid) : rooms.get(rid));
     if(!room) return cb?.({ ok:false, error:"room not found" });
     if(inviteMode === "board"){
       if(room.status !== "waiting") return cb?.({ ok:false, error:"room already started" });
       const senderInRoom = (room.players || []).some(player => Number(player?.userId) === fromId && !boardPlayerIsCpu(player));
+      if(!senderInRoom) return cb?.({ ok:false, error:"not room member" });
+    }else if(inviteMode === "chess"){
+      if(room.status !== "waiting") return cb?.({ ok:false, error:"room already started" });
+      const senderInRoom = (room.players || []).some(player => Number(player?.userId) === fromId && !player?.isCPU);
       if(!senderInRoom) return cb?.({ ok:false, error:"not room member" });
     }else if(room.phase !== 'lobby'){
       return cb?.({ ok:false, error:"room already started" });
@@ -3703,7 +4492,7 @@ socket.on("LOBBY_INVITE_SEND", async ({ secret, toUserId, roomId, mode }, cb) =>
     lobbyInvites.set(inviteId, inv);
 
     emitToUser(toId, "EMIT", {
-      type: inviteMode === "board" ? "board_lobby_invite" : "lobby_invite",
+      type: inviteMode === "board" ? "board_lobby_invite" : (inviteMode === "chess" ? "chess_lobby_invite" : "lobby_invite"),
       invite: {
         inviteId,
         fromId,
@@ -3754,10 +4543,13 @@ socket.on("LOBBY_INVITE_RESPOND", async ({ secret, inviteId, action }, cb) => {
     if(act !== 'accept') return cb?.({ ok:false, error:"bad action" });
 
     // verify the corresponding card/Board room still exists and is waiting
-    const inviteMode = String(inv.mode||"card") === "board" ? "board" : "card";
-    const room = inviteMode === "board" ? boardRooms.get(String(inv.roomId)) : rooms.get(String(inv.roomId));
+    const storedMode = String(inv.mode||"card");
+    const inviteMode = storedMode === "board" ? "board" : (storedMode === "chess" ? "chess" : "card");
+    const room = inviteMode === "board" ? boardRooms.get(String(inv.roomId)) : (inviteMode === "chess" ? chessRooms.get(String(inv.roomId)) : rooms.get(String(inv.roomId)));
     if(!room) return cb?.({ ok:false, error:"room not found" });
     if(inviteMode === "board"){
+      if(room.status !== "waiting") return cb?.({ ok:false, error:"room already started" });
+    }else if(inviteMode === "chess"){
       if(room.status !== "waiting") return cb?.({ ok:false, error:"room already started" });
     }else if(room.phase !== 'lobby'){
       return cb?.({ ok:false, error:"room already started" });
@@ -5315,6 +6107,30 @@ broadcastState(room);
       }
     }catch(e){
       console.error("[BOARD disconnect] error:", e);
+    }
+
+    try{
+      const chessCode = sanitizeChessRoomCode(socket.data?.chessRoomCode || "");
+      const chessRoom = chessRooms.get(chessCode);
+      if(chessRoom){
+        const meta = chessRoom.sockets.get(socket.id);
+        chessRoom.sockets.delete(socket.id);
+        chessRoom.spectators.delete(socket.id);
+        if(meta?.role === "player"){
+          const player = chessRoom.players.find((item) => Number(item.userId) === Number(meta.userId));
+          if(player && !player.isCPU) player.online = false;
+        }
+        refreshChessRoomPresence(chessRoom);
+        if(chessRoom.players.every((player) => player.isCPU) && chessRoom.sockets.size === 0){
+          chessRooms.delete(chessRoom.roomCode);
+          emitChessRoomList();
+        }else{
+          emitChessLobby(chessRoom);
+        }
+      }
+      socket.data.chessRoomCode = "";
+    }catch(e){
+      console.error("[CHESS disconnect] error:", e);
     }
 
     if (!joinedRoom) return;

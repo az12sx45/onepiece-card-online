@@ -51,7 +51,7 @@ const SCREENSHOT_VIEW = String(process.env.OP_DESKTOP_SCREENSHOT_VIEW || '').tri
 const TEST_USER_DATA_PATH = String(process.env.OP_DESKTOP_USER_DATA || '').trim();
 const TEST_VIEWPORT = String(process.env.OP_DESKTOP_VIEWPORT || '').trim();
 const EXPLICIT_CACHE_ROOT = String(process.env.OP_DESKTOP_CACHE_ROOT || '').trim();
-const ALLOWED_GAME_IDS = new Set(['card', 'board']);
+const ALLOWED_GAME_IDS = new Set(['card', 'board', 'chess']);
 const GAME_LAUNCH_PRESENTATION_MS = 1400;
 const AUTH_STORAGE_KEYS = [
   'opSecret', 'op_secret', 'op_user_id', 'op_board_user_id', 'op_name',
@@ -60,7 +60,8 @@ const AUTH_STORAGE_KEYS = [
 ];
 const GAME_CONFIG = {
   card: { title: '偉大航道爭霸戰', entry: '/start.html', partition: 'onepiece-card-desktop-v1' },
-  board: { title: '新世界航海錄', entry: '/board_start.html', partition: 'onepiece-board-desktop-v1' }
+  board: { title: '新世界航海錄', entry: '/board_start.html', partition: 'onepiece-board-desktop-v1' },
+  chess: { title: '霸海戰棋', entry: '/chess/index.html', partition: 'onepiece-chess-desktop-v1' }
 };
 
 if (TEST_USER_DATA_PATH && (SMOKE_MODE || !app.isPackaged)) {

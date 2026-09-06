@@ -60,10 +60,10 @@ const GAMES = [
     title: '霸海戰棋',
     english: 'PIRATE WAR CHESS',
     tagline: '棋局不只分勝負，每一次吃子都是角色交鋒。',
-    description: '以西洋棋對局為骨架，將海賊角色化為不同棋子，並在移動與吃子時呈現專屬演出。目前仍在逐角製作與棋盤校準，尚未開放下載。',
-    detailDescription: '以西洋棋規則作為戰術骨架，再把角色個性帶進每一次移動與吃子。不同陣營與角色將擁有專屬棋子造型、移動表現和攻擊演出；目前仍在逐一製作角色並校準棋盤，完成正式版本前不會開放下載。',
-    tags: ['角色棋子', '專屬演出', '製作中'],
-    features: ['角色化棋子與陣營配置', '移動、吃子的專屬演出', '製作中，完成後才開放下載'],
+    description: '以西洋棋對局為骨架，將海賊角色化為不同棋子，每一次移動與吃子都有專屬演出。現已完成，可與其他玩家線上對弈，也能單人挑戰 CPU。',
+    detailDescription: '以西洋棋規則作為戰術骨架，再把角色個性帶進每一次移動與吃子。不同陣營與角色擁有專屬棋子造型、移動表現和攻擊演出；可以隨時挑戰 CPU 熟悉戰術，也可登入後與其他玩家進行線上對弈。',
+    tags: ['角色棋子', '專屬演出', '線上與 CPU'],
+    features: ['角色化棋子與陣營配置', '移動、吃子的專屬演出', '線上玩家對弈與單人 CPU 挑戰'],
     cover: 'opui://launcher/images/game_launcher/launcher_chess_cover_logo_perspective_v5.png',
     frame: 'opui://launcher/images/game_launcher/launcher_chess_box_frame_cutout_v1.png',
     lidFront: 'opui://launcher/images/game_launcher/launcher_chess_lid_front_panel_v1.png',
@@ -91,7 +91,7 @@ let snapshot = {
   cacheRoot: '',
   freeBytes: null,
   preferences: { minimizeToTrayOnGameLaunch: false, gameDisplayMode: 'borderless' },
-  games: Object.fromEntries(GAMES.map((game) => [game.id, { status: game.id === 'chess' ? 'unavailable' : 'checking' }]))
+  games: Object.fromEntries(GAMES.map((game) => [game.id, { status: 'checking' }]))
 };
 let authMode = 'login';
 let toastTimer = 0;

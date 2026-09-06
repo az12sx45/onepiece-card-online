@@ -7,8 +7,8 @@ const path = require('node:path');
 const { execFileSync } = require('node:child_process');
 
 const DEFAULT_REPO_ROOT = path.resolve(__dirname, '..', '..');
-const CATALOG_RELATIVE_PATH = 'public/desktop/catalog-v1.json';
-const GAME_IDS = Object.freeze(['card', 'board']);
+const CATALOG_RELATIVE_PATH = 'public/desktop/catalog-v2.json';
+const GAME_IDS = Object.freeze(['card', 'board', 'chess']);
 const ASSET_ROOTS = new Set(['images', 'audio', 'videos', 'fonts']);
 const HASH_PATTERN = /^[a-f0-9]{64}$/;
 const MANIFEST_PATH_PATTERN = /^desktop\/manifests\/[a-z0-9._-]+\.json$/;
@@ -120,20 +120,24 @@ function validateManifest(document, gameId, catalogEntry) {
   ) fail(`${gameId} manifest totals are invalid.`);
 }
 
-async function loadPublishInventory({ repoRoot = DEFAULT_REPO_ROOT } = {}) {
+async function loadPublishInventory({ repoRoot = DEFAULT_REPO_ROOT, gameIds = GAME_IDS } = {}) {
   const resolvedRoot = path.resolve(repoRoot);
   const publicRoot = path.join(resolvedRoot, 'public');
   const catalogPath = path.join(resolvedRoot, ...CATALOG_RELATIVE_PATH.split('/'));
   if (!strictChildPath(resolvedRoot, catalogPath)) fail('Catalog path escaped the repository root.');
   const { document: catalog } = await readJsonWithBytes(catalogPath, 'Desktop catalog', 256 * 1024);
-  if (!isPlainObject(catalog) || catalog.schema !== 1 || !isPlainObject(catalog.games)) fail('Desktop catalog shape is invalid.');
+  if (!isPlainObject(catalog) || catalog.schema !== 2 || !isPlainObject(catalog.games)) fail('Desktop catalog shape is invalid.');
 
   const recordsByHash = new Map();
   let logicalFiles = 0;
   let logicalBytes = 0;
   const manifests = Object.create(null);
 
-  for (const gameId of GAME_IDS) {
+  const selectedGameIds = [...gameIds];
+  if (!selectedGameIds.length || selectedGameIds.some((gameId) => !GAME_IDS.includes(gameId))) {
+    fail('Desktop publish game selection is invalid.');
+  }
+  for (const gameId of selectedGameIds) {
     const entry = catalog.games[gameId];
     if (!isPlainObject(entry)) fail(`Desktop catalog is missing ${gameId}.`);
     const manifestPath = String(entry.manifestPath || '');
@@ -215,17 +219,36 @@ function readGitHeadBlob(repoRoot, assetPath) {
   }
 }
 
-function createSourceReader(inventory) {
+function createSourceReader(inventory, { chessSourceRoot = '' } = {}) {
   const publicRoot = path.resolve(inventory.publicRoot);
+  const resolvedChessSourceRoot = chessSourceRoot ? path.resolve(chessSourceRoot) : '';
   let realPublicRootPromise = null;
+  let realChessSourceRootPromise = null;
   const realPublicRoot = () => {
     if (!realPublicRootPromise) realPublicRootPromise = fsp.realpath(publicRoot);
     return realPublicRootPromise;
   };
+  const realChessSourceRoot = () => {
+    if (!resolvedChessSourceRoot) fail('Chess assets require --chess-source <release public/assets directory>.');
+    if (!realChessSourceRootPromise) realChessSourceRootPromise = fsp.realpath(resolvedChessSourceRoot);
+    return realChessSourceRootPromise;
+  };
   return async function readVerifiedSource(assetPath, expected) {
     validateAssetPath(assetPath);
     let bytes;
-    if (path.posix.extname(assetPath).toLowerCase() === '.svg') {
+    const chessPrefix = 'images/chess/assets/';
+    if (assetPath.startsWith(chessPrefix)) {
+      const relativePath = assetPath.slice(chessPrefix.length);
+      if (!relativePath || path.posix.normalize(relativePath) !== relativePath) fail(`Invalid Chess asset source path: ${assetPath}`);
+      const sourceRoot = await realChessSourceRoot();
+      const absolutePath = path.resolve(sourceRoot, ...relativePath.split('/'));
+      if (!strictChildPath(sourceRoot, absolutePath)) fail(`Chess asset escaped its source root: ${assetPath}`);
+      const info = await fsp.lstat(absolutePath);
+      if (!info.isFile() || info.isSymbolicLink()) fail(`Chess asset source is not a regular file: ${assetPath}`);
+      const resolvedAssetPath = await fsp.realpath(absolutePath);
+      if (!strictChildPath(sourceRoot, resolvedAssetPath)) fail(`Chess asset real path escaped its source root: ${assetPath}`);
+      bytes = await fsp.readFile(resolvedAssetPath);
+    } else if (path.posix.extname(assetPath).toLowerCase() === '.svg') {
       bytes = readGitHeadBlob(inventory.repoRoot, assetPath);
     } else {
       const absolutePath = path.resolve(publicRoot, ...assetPath.split('/'));
@@ -334,6 +357,7 @@ async function publishInventory(inventory, {
   live = false,
   concurrency = DEFAULT_CONCURRENCY,
   liveContext = null,
+  chessSourceRoot = '',
   onProgress = null
 } = {}) {
   const normalizedConcurrency = Number(concurrency);
@@ -343,7 +367,7 @@ async function publishInventory(inventory, {
   if (live && (!liveContext?.client || !liveContext?.bucket || !liveContext?.HeadObjectCommand || !liveContext?.PutObjectCommand)) {
     fail('Live R2 context is incomplete.');
   }
-  const readSource = createSourceReader(inventory);
+  const readSource = createSourceReader(inventory, { chessSourceRoot });
   let completed = 0;
   const results = await mapConcurrent(inventory.records, normalizedConcurrency, async (record) => {
     const result = await publishRecord(record, readSource, live ? liveContext : null);
@@ -411,7 +435,15 @@ function createAwsLiveContext(configuration) {
 }
 
 function parseArguments(argv) {
-  const options = { live: false, json: false, repoRoot: DEFAULT_REPO_ROOT, concurrency: DEFAULT_CONCURRENCY, help: false };
+  const options = {
+    live: false,
+    json: false,
+    repoRoot: DEFAULT_REPO_ROOT,
+    concurrency: DEFAULT_CONCURRENCY,
+    chessSourceRoot: String(process.env.CHESS_ASSET_SOURCE || '').trim(),
+    gameIds: [],
+    help: false
+  };
   for (let index = 0; index < argv.length; index += 1) {
     const argument = argv[index];
     if (argument === '--live') options.live = true;
@@ -427,14 +459,27 @@ function parseArguments(argv) {
       if (index >= argv.length) fail('--concurrency requires a number.');
       options.concurrency = Number(argv[index]);
     } else if (argument.startsWith('--concurrency=')) options.concurrency = Number(argument.slice('--concurrency='.length));
+    else if (argument === '--chess-source') {
+      index += 1;
+      if (index >= argv.length) fail('--chess-source requires a path.');
+      options.chessSourceRoot = path.resolve(argv[index]);
+    } else if (argument.startsWith('--chess-source=')) options.chessSourceRoot = path.resolve(argument.slice('--chess-source='.length));
+    else if (argument === '--game') {
+      index += 1;
+      if (index >= argv.length) fail('--game requires card, board, or chess.');
+      options.gameIds.push(String(argv[index]).trim().toLowerCase());
+    } else if (argument.startsWith('--game=')) options.gameIds.push(String(argument.slice('--game='.length)).trim().toLowerCase());
     else fail(`Unknown argument: ${argument}`);
   }
+  if (!options.gameIds.length) options.gameIds = [...GAME_IDS];
+  options.gameIds = [...new Set(options.gameIds)];
+  if (options.gameIds.some((gameId) => !GAME_IDS.includes(gameId))) fail('--game requires card, board, or chess.');
   return options;
 }
 
 function usage() {
   return [
-    'Usage: node tools/desktop-r2-publisher/publish.js [--live] [--repo-root PATH] [--concurrency 1-16] [--json]',
+    'Usage: node tools/desktop-r2-publisher/publish.js [--live] [--repo-root PATH] [--game card|board|chess] [--chess-source PATH] [--concurrency 1-16] [--json]',
     '',
     'Without --live, every source is verified locally and no network request is made.',
     'Live environment: R2_ACCOUNT_ID, R2_BUCKET, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY.'
@@ -447,7 +492,7 @@ async function main(argv = process.argv.slice(2), env = process.env) {
     process.stdout.write(`${usage()}\n`);
     return { ok: true, help: true };
   }
-  const inventory = await loadPublishInventory({ repoRoot: options.repoRoot });
+  const inventory = await loadPublishInventory({ repoRoot: options.repoRoot, gameIds: options.gameIds });
   let liveContext = null;
   if (options.live) liveContext = createAwsLiveContext(loadLiveConfiguration(env));
   try {
@@ -455,6 +500,7 @@ async function main(argv = process.argv.slice(2), env = process.env) {
       live: options.live,
       concurrency: options.concurrency,
       liveContext,
+      chessSourceRoot: options.chessSourceRoot,
       onProgress: options.json ? null : ({ completed, total, record, result: itemResult }) => {
         if (completed === total || completed % 25 === 0) {
           process.stdout.write(`[${completed}/${total}] ${itemResult.status} ${record.key}\n`);

@@ -1,13 +1,21 @@
 # Desktop R2 publisher
 
-This tool reads the formal `public/desktop/catalog-v1.json` plus the Card and
-Board manifests, verifies every source byte against its declared size and
-SHA-256, and deduplicates uploads by content hash.
+This tool reads the formal `public/desktop/catalog-v2.json` plus the Card,
+Board, and Chess manifests, verifies every source byte against its declared
+size and SHA-256, and deduplicates uploads by content hash. The large Chess
+media tree remains outside Git and must be supplied through the reviewed
+release package's `public/assets` directory.
 
 The default command is a local-only dry run. It performs no network requests:
 
 ```powershell
 node tools/desktop-r2-publisher/publish.js
+```
+
+To verify or publish only Chess media, pass its exact reviewed source root:
+
+```powershell
+node tools/desktop-r2-publisher/publish.js --game chess --chess-source "D:\航海王西洋棋\GRAND-LINE-BATTLE-多人發布版-v1\public\assets"
 ```
 
 For a real upload, install this tool's isolated dependency and provide R2
@@ -20,7 +28,7 @@ $env:R2_ACCOUNT_ID = "..."
 $env:R2_BUCKET = "..."
 $env:R2_ACCESS_KEY_ID = "..."
 $env:R2_SECRET_ACCESS_KEY = "..."
-node publish.js --live
+node publish.js --live --chess-source "D:\航海王西洋棋\GRAND-LINE-BATTLE-多人發布版-v1\public\assets"
 ```
 
 Credentials are never written by the publisher. Live mode only sends

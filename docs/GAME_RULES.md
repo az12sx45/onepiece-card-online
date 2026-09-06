@@ -1,5 +1,15 @@
 # Game Rules
 
+## 霸海戰棋桌面與多人規則（2026-09-07）
+
+- 《霸海戰棋》只在桌面啟動器 `1.1.5` 的 `catalog-v2` 中開放下載；`catalog-v1` 仍讓舊 `1.1.4` 保持 Chess unavailable。新增第三款不能改變 Card／Board 的角色、規則、房間、存檔、Socket 事件或 `BOARD_GAME_STATE`。
+- 新建 Chess 房一律從 `waiting` 開始。只有房主、兩個有效座位均已就緒且真人在線時，才可進入 `preparation`；切換階段會一次清除上一階段的 ready。之後玩家各自選 faction／battlefield 並重新 ready，房主才可開始。一般 lobby snapshot 不得擅自把本人的 ready 取消。
+- 兩邊各自選擇 faction，允許選到相同 faction；CPU 加入時預設採房主的相反 faction。戰場若雙方一致就直接採用，不一致時從兩個選擇中隨機決定。CPU 由房主加入／移除並套用既有難度，觀戰者不能佔玩家座位或走棋。好友邀請沿用既有社交系統的 Chess mode；中途重連只在同一仍存活的 server process 內回到原座位／房間。
+- 正式走棋權威在 server 的 `chess.js@1.4.0`。玩家只提交起點、終點與必要 promotion；server 檢查房間 phase、玩家座位、棋子顏色、輪次與 move sequence，並自行算出合法 move、FEN、SAN、capture、checkmate、stalemate、insufficient material、fifty-move／threefold draw 等終局。非法步、錯方走棋、過期序號、客戶端 FEN／SAN／capture 與自行送出的 `CHESS_GAME_OVER` 都不能改變棋局。
+- server 承諾 move 後才廣播 `CHESS_MOVE_COMMITTED`，兩端及觀戰者以同一權威序號前進；客戶端動畫或本機 AI 只負責呈現／提出候選，不是規則權威。CPU 回合亦必須經相同 server 合法步與終局檢查。
+- Chess 房目前只保存在單一 Node process 的 `chessRooms` 記憶體。Render 重啟會使活動房失效；多 instance 尚無共享房間或棋局持久化，不能宣稱可無縫跨 instance 接回。沒有 socket 的房間只按現行 idle TTL 於該 process 清理。
+- Chess 大型素材安裝、更新、修復或單款移除不屬於棋局規則。檔案必須通過 manifest 的 size／SHA，再由本機 CAS 提供；移除 Chess 時仍保留 Card／Board 正在引用的共用 blobs。正式 browser 共用啟動頁暫不開放 Chess，直到 R2 CORS 與 browser QA 完成。
+
 ## Card Depth visible V2 規則邊界（2026-09-07，已發布）
 
 截至本段，V1 `40929bca` 已於 2026-09-07 02:08:49（Asia/Taipei）上線；正式素材 243／243、SW 74 項、browser-live 2,262 項（80 組／320 個 HTTP、0 page errors）PASS。下方 V1「尚未發布」是保留的歷史快照。V1 部署後真人測試遇到非本輪擁有的既有四人房 `MENU_NOT_READY`，未操作或退出，不能宣稱正式真人驗收通過。

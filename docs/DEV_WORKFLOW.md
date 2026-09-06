@@ -1,5 +1,19 @@
 ﻿# Dev Workflow
 
+## 霸海戰棋桌面發布整合（2026-09-07，R2 素材已上傳／分階段發布中）
+
+- 來源與邊界：正式接入來源固定為 `D:\航海王西洋棋\GRAND-LINE-BATTLE-多人發布版-v1`。執行程式整理至 `public/chess/`；大型美術只建立 `images/chess/assets/*` 邏輯路徑，不複製進 Git 或 Render 的 `public`。本輪不碰 Card／Board 的遊戲規則、素材 id、localStorage key、Socket event 或 `BOARD_GAME_STATE`。
+- 桌面素材清單：新增 `config/desktop-chess-assets-v1.json`、`public/desktop/manifests/chess-assets-4a14ed8c714c0b60.json` 與 `public/desktop/catalog-v2.json`。Chess 清單為 `1,380` 檔／`330,834,762` bytes，manifest SHA-256 為 `ea710d9921d2826200dd41a808e222c7c337dd4a4f276e338eb4324f4a18adad`；同一 `catalog-v2` 繼續引用既有 Card `710` 檔／`705,711,887` bytes 與 Board `3,451` 檔／`1,276,186,364` bytes，兩者 release id、manifest SHA 與位元組不變。
+- 舊版相容：`public/desktop/catalog-v1.json` 保持原位元組與 Chess unavailable。只有 `1.1.5` 啟動器讀取 schema 2 的 `catalog-v2.json`、辨識 `card|board|chess`，並以獨立 `onepiece-chess-desktop-v1` partition 開啟 `/chess/index.html`；舊 `1.1.4` 不會因第三款資料結構而中斷原兩款遊戲的下載或更新。
+- R2 發布：publisher 新增明確 `--game chess` 與 `--chess-source <release public/assets>`，逐檔驗證來源 realpath、大小及 SHA，沿用只 HEAD／條件式 PUT、無刪除／無覆寫的 CAS 流程。正式結果為 `1,370` 個 unique blobs／`329,861,974` bytes，`uploaded=1367`、`skipped=3`；抽樣完整 GET 為 HTTP `200`，Range `0-1023` 為 `206` 且 Cloudflare cache `HIT`。
+- 程式供應：Express 的本機靜態檔優先；只有缺少的 `/images/chess/assets/*` 才會經已驗證的 `catalog-v2`／Chess manifest 映射，`302` 到精確 SHA-256 R2 CAS。越界路徑拒絕、未知項目 `404`、清單暫時失效 `503`。桌面安裝完成後同一路徑由本機 CAS 攔截，遊戲執行中不必逐張從網站重載。
+- 多人權威：root 新增固定 `chess.js@1.4.0`。伺服器維護 authenticated Chess room、等待室／準備階段、CPU／觀戰／好友邀請與斷線重接；`CHESS_MOVE` 只接受 `from`／`to`／`promotion`，重新驗證座位、顏色、回合及序號，再由 server 計算 FEN、SAN、吃子與將死／和棋。客戶端偽造 FEN、非法步或自行宣告 `CHESS_GAME_OVER` 都不能改變權威棋局。
+- 房間限制：目前 `chessRooms` 仍是單一 Node process 的記憶體狀態；Render 重啟會結束進行中的 Chess 房，亦不能直接水平擴成多 instance。無 socket 的房間只在現行 process 內依 idle TTL 清理；未新增資料庫棋局保存。
+- 啟動器候選：`desktop/package.json` 為 `1.1.5`，x64 installer `ONE-PIECE-Tabletop-Launcher-1.1.5-x64.exe` 為 `152,185,039` bytes，SHA-256 `a49462b5a9a0990e82a8fe4883a6c785c93b7b1c2c891391d49067bec3e938aa`。本段建立時，正式 `public/desktop/launcher-release-v1.json` 仍鎖在 `1.1.4`；必須先部署程式／catalog 並以未公開 1.1.5 驗收，再上傳 installer、簽署並以第二次提交提升 stable manifest，避免未驗收版本被自動更新。
+- 驗證：來源 release integrity、Chess bundle、真 Socket.IO 多人 protocol、Chess R2 fallback、三遊戲 catalog、R2 publisher、三遊戲 AssetStore 安裝／更新／解除安裝、Service Worker partition、runtime cache、source／packaged launcher package 與 Electron media smoke 均 PASS。packaged smoke 實際命中 Card image／audio／video、Board audio／video 與 Chess image 的本機 cache／Range `206`，並保留 NVIDIA GTX 1050 Ti／D3D11 硬體加速。
+- 瀏覽器邊界：正式共用瀏覽器啟動頁仍不開放 Chess。R2 抽樣回應目前沒有 `Access-Control-Allow-Origin`；在 Cloudflare R2 CORS 正式設定並完成 browser QA 前，不把直接網頁版當成已支援。這不影響 Electron 由同源本機攔截器供應已安裝 Chess 素材。
+- 回復方式：Stage A 可對本輪程式／catalog／server 提交做 scoped revert，既有 `catalog-v1`、Card／Board manifests 與 R2 immutable blobs 保留；若 Stage B 已提升 1.1.5，發布新的較高版修正版，不覆寫或刪除已簽署 installer／CAS，也不要把 stable manifest 反降回較舊版本。
+
 ## Card Depth visible V2／桌面素材包（2026-09-07，已發布）
 
 截至本段，V2 `248610c5` 已於 2026-09-07 02:56:35（Asia/Taipei）切換到 Render；下方「V1 尚未發布」只保留為當時的歷史快照，不再代表目前線上狀態。R2、公開位元組、browser 與舊 SW profile 的 V2 postdeploy 均已完成。

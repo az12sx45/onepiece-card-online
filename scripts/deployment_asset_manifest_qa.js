@@ -20,6 +20,14 @@ const requiredFiles = [
   "public/board_spar_selection_demo.html",
   "public/board_york_clue_puzzle_formal_demo.html",
   "public/board_manifest.webmanifest",
+  "public/chess/index.html",
+  "public/chess/battle-game.html",
+  "public/chess/battle-chess.css",
+  "public/chess/battle-chess.js",
+  "public/chess/battle-start-v1.js",
+  "public/chess/battle-room-runtime-v1.js",
+  "public/chess/pre-match-lobby.js",
+  "public/desktop/catalog-v2.json",
   "public/js/board_shared.js",
   "public/js/board_start.js",
   "public/js/board_game.js",
@@ -42,6 +50,19 @@ const runtimeSources = [
   "public/board_water_seven.html",
   "public/board_spar_selection_demo.html",
   "public/board_york_clue_puzzle_formal_demo.html",
+  "public/chess/index.html",
+  "public/chess/battle-game.html",
+  "public/chess/battle-chess.css",
+  "public/chess/battle-chess.js",
+  "public/chess/battle-game-loader-v1.js",
+  "public/chess/battle-game-social-shell-v1.js",
+  "public/chess/battle-room-runtime-v1.js",
+  "public/chess/battle-social-v1.js",
+  "public/chess/battle-start-v1.js",
+  "public/chess/battlefield-profile-frame.js",
+  "public/chess/multiplayer-config.js",
+  "public/chess/player-header-ui.js",
+  "public/chess/pre-match-lobby.js",
   "public/js/battle_hit_effect_settings.js",
   "public/js/battle_sfx_catalog.js",
   "public/js/bgm_manager.js",
@@ -96,17 +117,17 @@ if(fs.existsSync(path.join(publicRoot, "images", "secret_modes"))) errors.push("
 
 const startText = fs.readFileSync(path.join(publicRoot, "start.html"), "utf8");
 if(startText.includes("secret-mode-chess") || startText.includes("battle_chess/index.html")){
-  errors.push("start.html still contains the postponed chess entrance");
+  errors.push("start.html still contains the retired local Chess entrance");
 }
 if(!startText.includes("secret-mode-board") || !startText.includes("game_launcher_preview.html?from=card-secret")){
   errors.push("start.html tabletop launcher secret entrance is missing");
 }
 
 const launcherText = fs.readFileSync(path.join(publicRoot, "game_launcher_preview.html"), "utf8");
-if(/\shref=["']battle_chess\//i.test(launcherText)) errors.push("launcher contains a production chess link");
-if(launcherText.includes("chess_king_attack_preview")) errors.push("launcher contains the postponed chess preview");
+if(/\shref=["'](?:battle_chess|chess)\//i.test(launcherText)) errors.push("browser launcher contains a production Chess link before R2 CORS approval");
+if(launcherText.includes("chess_king_attack_preview")) errors.push("launcher contains an unreviewed Chess preview video");
 if(!launcherText.includes('href="start.html"') || !launcherText.includes('href="board_start.html"')){
-  errors.push("launcher card or Board link is missing");
+  errors.push("launcher Card or Board link is missing");
 }
 
 const literalAssetPattern = /["'`](?:\.\/)?((?:images|audio|videos|fonts)\/[^"'`\s<>?#)]+)(?:\?[^"'`\s<>]*)?["'`]/g;

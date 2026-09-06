@@ -6,11 +6,23 @@ const ROOT = path.resolve(__dirname, "..");
 const PUBLIC_ROOT = path.join(ROOT, "public");
 const ASSET_MANIFEST_PATH = path.join(ROOT, "desktop", "generated", "asset-manifest.json");
 const ASSET_DELIVERY_CONFIG_PATH = path.join(ROOT, "config", "desktop-asset-delivery-v1.json");
-const CATALOG_PATH = path.join(PUBLIC_ROOT, "desktop", "catalog-v1.json");
+const CHESS_ASSET_CONFIG_PATH = path.join(ROOT, "config", "desktop-chess-assets-v1.json");
+const CATALOG_PATH = path.join(PUBLIC_ROOT, "desktop", "catalog-v2.json");
 const ROOT_NAMES = ["images", "audio", "videos", "fonts"];
 const KINDS = ["image", "audio", "video", "font"];
 const GAME_IDS = ["card", "board"];
+const CATALOG_GAME_IDS = ["card", "board", "chess"];
 const HASH_PATTERN = /^[a-f0-9]{64}$/;
+const STABLE_GAME_MANIFESTS = Object.freeze({
+  card: Object.freeze({
+    manifestPath: "desktop/manifests/card-assets-440918e609684317.json",
+    manifestSha256: "46bc6d59f66c6ec5c26e2d7291c5b1ec65f466f6c2a70560c6a39ba11faed263",
+  }),
+  board: Object.freeze({
+    manifestPath: "desktop/manifests/board-assets-eb95373ee6ab1aa3.json",
+    manifestSha256: "c1d6736b6687d1146397607607c9e9fe63f93acf2f83aa5fe5fc68cd34f32c82",
+  }),
+});
 
 function fail(message) {
   throw new Error(message);
@@ -112,6 +124,7 @@ function belongsToCard(assetPath) {
   if (assetPath.startsWith("images/")) {
     return (
       !assetPath.startsWith("images/board/") &&
+      !assetPath.startsWith("images/chess/assets/") &&
       !assetPath.startsWith("images/game_launcher/") &&
       !isLauncherOnly(assetPath)
     );
@@ -191,7 +204,10 @@ function validateCatalog(catalog, unified, deliveryConfig) {
   ) {
     fail("Catalog fields/order are invalid");
   }
-  if (catalog.schema !== 1 || catalog.createdAt !== unified.createdAt) fail("Catalog schema/createdAt is invalid");
+  if (
+    catalog.schema !== 2 || typeof catalog.createdAt !== "string" || Number.isNaN(Date.parse(catalog.createdAt)) ||
+    Date.parse(catalog.createdAt) < Date.parse(unified.createdAt)
+  ) fail("Catalog schema/createdAt is invalid");
   if (catalog.assetBlobBaseUrl !== undefined) {
     validateAssetBlobBaseUrl(catalog.assetBlobBaseUrl, "Catalog assetBlobBaseUrl");
   }
@@ -200,18 +216,64 @@ function validateCatalog(catalog, unified, deliveryConfig) {
   }
   if (JSON.stringify(catalog.sourceTrees) !== JSON.stringify(unified.sourceTrees)) fail("Catalog sourceTrees do not match unified manifest");
   if (!isPlainObject(catalog.games) || Object.keys(catalog.games).join(",") !== "card,board,chess") fail("Catalog games/order are invalid");
-  for (const gameId of GAME_IDS) {
+  for (const gameId of CATALOG_GAME_IDS) {
     const record = catalog.games[gameId];
     const fields = ["releaseId", "manifestPath", "manifestSha256", "totalFiles", "totalBytes"];
     if (!isPlainObject(record) || Object.keys(record).join(",") !== fields.join(",")) fail(`Catalog ${gameId} fields/order are invalid`);
     if (typeof record.releaseId !== "string" || !/^assets-[a-f0-9]{16}$/.test(record.releaseId)) fail(`Catalog ${gameId} releaseId is invalid`);
     if (typeof record.manifestPath !== "string" || !new RegExp(`^desktop/manifests/${gameId}-assets-[a-f0-9]{16}\\.json$`).test(record.manifestPath)) fail(`Catalog ${gameId} manifestPath is invalid`);
     if (typeof record.manifestSha256 !== "string" || !HASH_PATTERN.test(record.manifestSha256)) fail(`Catalog ${gameId} manifestSha256 is invalid`);
-    if (!Number.isSafeInteger(record.totalFiles) || record.totalFiles < 0 || !Number.isSafeInteger(record.totalBytes) || record.totalBytes < 0) fail(`Catalog ${gameId} totals are invalid`);
+    if (!Number.isSafeInteger(record.totalFiles) || record.totalFiles < 1 || !Number.isSafeInteger(record.totalBytes) || record.totalBytes < 1) fail(`Catalog ${gameId} totals are invalid`);
   }
-  if (!isPlainObject(catalog.games.chess) || Object.keys(catalog.games.chess).join(",") !== "available" || catalog.games.chess.available !== false) {
-    fail("Chess must remain explicitly unavailable without a manifest");
+  for (const [gameId, expected] of Object.entries(STABLE_GAME_MANIFESTS)) {
+    if (catalog.games[gameId].manifestPath !== expected.manifestPath) fail(`${gameId} manifest path changed during the Chess release`);
+    if (catalog.games[gameId].manifestSha256 !== expected.manifestSha256) fail(`${gameId} immutable manifest bytes changed during the Chess release`);
   }
+}
+
+async function readChessManifest(catalog) {
+  const { value: config } = await readCanonicalJson(CHESS_ASSET_CONFIG_PATH, "Desktop Chess asset config");
+  if (
+    !isPlainObject(config) || Object.keys(config).join(",") !== "schema,manifestPath,manifestSha256" ||
+    config.schema !== 1 || !/^desktop\/manifests\/chess-assets-[a-f0-9]{16}\.json$/.test(String(config.manifestPath || "")) ||
+    !HASH_PATTERN.test(String(config.manifestSha256 || ""))
+  ) fail("Desktop Chess asset config is invalid");
+  const { text, value: manifest } = await readCanonicalJson(
+    path.resolve(PUBLIC_ROOT, ...config.manifestPath.split("/")),
+    "Chess immutable manifest",
+  );
+  if (sha256Text(text) !== config.manifestSha256) fail("Chess immutable manifest SHA-256 differs from config");
+  const record = catalog.games.chess;
+  if (
+    record.manifestPath !== config.manifestPath || record.manifestSha256 !== config.manifestSha256 ||
+    record.releaseId !== manifest.releaseId || record.totalFiles !== manifest.totalFiles || record.totalBytes !== manifest.totalBytes
+  ) fail("Chess catalog entry differs from its immutable manifest/config");
+  const fields = ["schema", "gameId", "releaseId", "createdAt", "assetSetSha256", "totalFiles", "totalBytes", "byKind", "assets"];
+  if (!isPlainObject(manifest) || Object.keys(manifest).join(",") !== fields.join(",") || manifest.schema !== 1 || manifest.gameId !== "chess") {
+    fail("Chess immutable manifest fields/identity are invalid");
+  }
+  if (typeof manifest.createdAt !== "string" || Number.isNaN(Date.parse(manifest.createdAt)) || Date.parse(manifest.createdAt) > Date.parse(catalog.createdAt)) {
+    fail("Chess immutable manifest createdAt is invalid or newer than catalog");
+  }
+  if (!Array.isArray(manifest.assets) || manifest.assets.length < 1) fail("Chess immutable manifest contains no assets");
+  let previousPath = "";
+  for (const asset of manifest.assets) {
+    validateAssetPath(asset?.path);
+    if (!asset.path.startsWith("images/chess/assets/")) fail(`Chess asset escaped its logical prefix: ${asset.path}`);
+    if (previousPath && previousPath >= asset.path) fail("Chess manifest assets are not strictly sorted");
+    previousPath = asset.path;
+    if (
+      !isPlainObject(asset) || Object.keys(asset).join(",") !== "path,kind,mime,size,sha256" ||
+      !KINDS.includes(asset.kind) || typeof asset.mime !== "string" || !asset.mime ||
+      !Number.isSafeInteger(asset.size) || asset.size < 1 || !HASH_PATTERN.test(String(asset.sha256 || ""))
+    ) fail(`Chess manifest asset metadata is invalid: ${asset.path}`);
+  }
+  if (manifest.assetSetSha256 !== sha256Text(JSON.stringify(manifest.assets))) fail("Chess assetSetSha256 mismatch");
+  if (manifest.releaseId !== `assets-${manifest.assetSetSha256.slice(0, 16)}`) fail("Chess releaseId is not derived from its asset set");
+  if (manifest.totalFiles !== manifest.assets.length) fail("Chess totalFiles mismatch");
+  if (manifest.totalBytes !== manifest.assets.reduce((sum, asset) => sum + asset.size, 0)) fail("Chess totalBytes mismatch");
+  if (JSON.stringify(manifest.byKind) !== JSON.stringify(expectedByKind(manifest.assets))) fail("Chess byKind totals mismatch");
+  return manifest;
 }
 
 function validateGameManifest(gameId, manifest, expectedAssets, unified) {
@@ -251,6 +313,9 @@ async function main() {
 
   const { value: catalog } = await readCanonicalJson(CATALOG_PATH, "Desktop game catalog");
   validateCatalog(catalog, unified, deliveryConfig);
+  const chessManifest = await readChessManifest(catalog);
+  const expectedCatalogCreatedAt = new Date(Math.max(Date.parse(unified.createdAt), Date.parse(chessManifest.createdAt))).toISOString();
+  if (catalog.createdAt !== expectedCatalogCreatedAt) fail("Catalog createdAt does not cover both unified and Chess manifests");
 
   const manifestPaths = new Set();
   const allGameAssets = [];
@@ -271,6 +336,7 @@ async function main() {
     if (!catalogRecord.manifestPath.endsWith(`${manifest.assetSetSha256.slice(0, 16)}.json`)) fail(`${gameId} manifest filename does not contain its asset-set hash`);
     allGameAssets.push(...manifest.assets);
   }
+  allGameAssets.push(...chessManifest.assets);
 
   const sharedPaths = assetPaths.filter(isSharedShell);
   for (const sharedPath of sharedPaths) {
@@ -294,9 +360,9 @@ async function main() {
   }
   const casBytes = [...uniqueBlobs.values()].reduce((sum, size) => sum + size, 0);
   console.log(
-    `DESKTOP_GAME_CATALOG_QA=PASS cardFiles=${catalog.games.card.totalFiles} boardFiles=${catalog.games.board.totalFiles} ` +
+    `DESKTOP_GAME_CATALOG_QA=PASS cardFiles=${catalog.games.card.totalFiles} boardFiles=${catalog.games.board.totalFiles} chessFiles=${catalog.games.chess.totalFiles} ` +
     `sharedFiles=${sharedPaths.length} launcherOnlyFiles=${assetPaths.filter(isLauncherOnly).length} ` +
-    `logicalBytes=${logicalBytes} casBlobs=${uniqueBlobs.size} casBytes=${casBytes} chess=unavailable`,
+    `logicalBytes=${logicalBytes} casBlobs=${uniqueBlobs.size} casBytes=${casBytes}`,
   );
 }
 

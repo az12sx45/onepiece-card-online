@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#06111c" />
+    <meta name="description" content="ONE PIECE 霸海戰棋正式棋局" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./battle-chess.css?v=battle-hud-info-layout-v56-20260907" />
+    <title>ONE PIECE 霸海戰棋｜正式棋局</title>
+    <style>.battle-load-failure{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;padding:24px;background:#06111c;color:#f4d88a;font:700 18px/1.6 system-ui,sans-serif;text-align:center}</style>
+  </head>
+  <body>
+    <main class="battle-shell" aria-label="ONE PIECE 霸海戰棋">
+      <section id="pre-match-lobby" class="pre-match-lobby" data-stage="matchmaking" data-faction="straw-hat-pirates" aria-label="霸海戰棋房間與備戰">
+        <div class="pre-match-lobby__backdrop" aria-hidden="true"></div>
+        <div class="pre-match-lobby__panel">
+          <section id="room-waiting-view" class="room-stage room-stage--waiting">
+            <header class="room-waiting-header">
+              <div>
+                <span class="pre-match-lobby__eyebrow">GRAND LINE · MATCH ROOM</span>
+                <h1 id="chess-lobby-name">霸海戰棋等待室</h1>
+                <p id="chess-lobby-status" hidden></p>
+              </div>
+              <div class="room-code-badge">
+                <span>房間代碼</span><strong id="chess-lobby-code">—</strong>
+                <button id="copy-chess-room-code" type="button">複製</button>
+              </div>
+            </header>
+            <div class="room-waiting-layout">
+              <div class="room-waiting-main">
+                <section class="room-panel room-players-panel">
+                  <header><div><small>PLAYERS</small><h2>對局席位</h2></div><span id="chess-player-count">0/2</span></header>
+                  <div id="chess-player-seats" class="chess-player-seats"></div>
+                </section>
+                <section class="room-panel room-settings-panel">
+                  <header><div><small>ROOM SETTINGS</small><h2>房間設定</h2></div><span id="chess-settings-lock">由房主設定</span></header>
+                  <div class="room-settings-grid">
+                    <label><span>房間公開方式</span><select id="chess-room-visibility"><option value="public">公開房間</option><option value="private">私人房間</option></select></label>
+                    <label><span>CPU 強度</span><select id="chess-cpu-difficulty"><option value="easy">簡單・約 1320</option><option value="normal">普通・約 1600</option><option value="hard">困難・約 2000</option><option value="despair">絕望・約 2400</option></select></label>
+                    <label class="room-toggle-setting"><input id="chess-room-spectators" type="checkbox" checked /><span>允許玩家觀戰</span></label>
+                    <button id="chess-add-cpu" class="room-secondary-action" type="button">加入 CPU</button>
+                  </div>
+                  <div class="room-setting-summary"><span id="chess-room-faction-label" hidden></span><span id="chess-room-battlefield-label" hidden></span><b id="chess-spectator-count">0 人觀戰</b></div>
+                </section>
+              </div>
+              <section class="room-panel room-chat-panel">
+                <header><div><small>ROOM CHAT</small><h2>房間聊天室</h2></div><button id="invite-chess-friend" type="button">邀請好友</button></header>
+                <div id="chess-lobby-chat" class="chess-lobby-chat"></div>
+                <div class="chess-lobby-chat-input"><input id="chess-lobby-chat-input" type="text" maxlength="180" placeholder="輸入訊息…" /><button id="chess-lobby-chat-send" type="button">送出</button></div>
+              </section>
+            </div>
+            <footer class="room-waiting-actions">
+              <button id="leave-chess-room" class="room-danger-action" type="button">離開房間</button>
+              <p id="chess-lobby-message" aria-live="polite"></p>
+              <button id="toggle-waiting-ready" class="room-secondary-action waiting-ready-action" type="button">準備</button>
+              <button id="advance-room-setup" class="room-primary-action waiting-next-action" type="button">等待全員準備</button>
+            </footer>
+          </section>
+
+          <section id="room-setup-view" class="room-stage room-stage--setup" hidden>
+            <div id="prep-player-choices" class="prep-player-choices"></div>
+            <div class="preparation-choice-scroll">
+              <section class="lobby-choice-group">
+                <div class="lobby-choice-group__title"><span>01</span><div><h2>選擇陣營</h2><p>兩側各半集中呈現，角色以正面出陣隊形排列。</p></div></div>
+                <div class="faction-carousel">
+                  <div class="faction-carousel__viewport">
+                    <article class="faction-showcase faction-showcase--straw-hat" data-faction-showcase="straw-hat-pirates" data-faction-side="player" aria-hidden="false">
+                      <div class="faction-showcase__lineup">
+                        <img class="faction-character faction-character--outer-left" data-lineup-art="usopp" src="/images/chess/assets/characters/straw-hat-pirates/usopp-pawn/candidate-v1/standing/front.webp" alt="騙人布" />
+                        <img class="faction-character faction-character--left" data-lineup-art="franky" src="/images/chess/assets/characters/straw-hat-pirates/franky-rook/candidate-v1/standing/front.webp" alt="佛朗基" />
+                        <img class="faction-character faction-character--inner-left" data-lineup-art="zoro" src="/images/chess/assets/characters/straw-hat-pirates/zoro-bishop/candidate-v1/standing/front.png" alt="索隆" />
+                        <img class="faction-character faction-character--leader" data-lineup-art="luffy" src="/images/chess/assets/characters/straw-hat-pirates/luffy-king/candidate-v1/standing/front.webp" alt="魯夫" />
+                        <img class="faction-character faction-character--inner-right" data-lineup-art="jinbe" src="/images/chess/assets/characters/straw-hat-pirates/jinbe-queen/candidate-v1/standing/front.webp" alt="吉貝爾" />
+                        <img class="faction-character faction-character--outer-right" data-lineup-art="sanji" src="/images/chess/assets/characters/straw-hat-pirates/sanji-knight/candidate-v1/standing/front.webp" alt="香吉士" />
+                      </div>
+                    </article>
+                    <article class="faction-showcase faction-showcase--onigashima" data-faction-showcase="onigashima-alliance" data-faction-side="player" aria-hidden="true">
+                      <div class="faction-showcase__lineup">
+                        <img class="faction-character faction-character--outer-left" data-lineup-art="beast" src="/images/chess/assets/characters/onigashima-alliance/beast-pawn/candidate-v1/standing/front.webp" alt="百獸小兵" />
+                        <img class="faction-character faction-character--left" data-lineup-art="jack" src="/images/chess/assets/characters/onigashima-alliance/jack-rook/candidate-v1/standing/front.webp" alt="Jack" />
+                        <img class="faction-character faction-character--inner-left" data-lineup-art="king" src="/images/chess/assets/characters/onigashima-alliance/king-bishop/candidate-v1/standing/front.webp" alt="King" />
+                        <img class="faction-character faction-character--leader" data-lineup-art="kaido" src="/images/chess/assets/characters/onigashima-alliance/kaido-king/candidate-v1/standing/front.webp" alt="凱多" />
+                        <img class="faction-character faction-character--inner-right" data-lineup-art="big-mom" src="/images/chess/assets/characters/onigashima-alliance/big-mom-queen/candidate-v1/standing/front.webp" alt="BIG MOM" />
+                        <img class="faction-character faction-character--outer-right" data-lineup-art="queen" src="/images/chess/assets/characters/onigashima-alliance/queen-knight/candidate-v1/standing/front.webp" alt="Queen" />
+                      </div>
+                    </article>
+                    <div class="faction-duel-divider" aria-hidden="true"><span>VS</span></div>
+                    <article class="faction-showcase faction-showcase--straw-hat" data-faction-showcase="straw-hat-pirates" data-faction-side="opponent" aria-hidden="true">
+                      <div class="faction-showcase__lineup">
+                        <img class="faction-character faction-character--outer-left" data-lineup-art="usopp" src="/images/chess/assets/characters/straw-hat-pirates/usopp-pawn/candidate-v1/standing/front.webp" alt="騙人布" />
+                        <img class="faction-character faction-character--left" data-lineup-art="franky" src="/images/chess/assets/characters/straw-hat-pirates/franky-rook/candidate-v1/standing/front.webp" alt="佛朗基" />
+                        <img class="faction-character faction-character--inner-left" data-lineup-art="zoro" src="/images/chess/assets/characters/straw-hat-pirates/zoro-bishop/candidate-v1/standing/front.png" alt="索隆" />
+                        <img class="faction-character faction-character--leader" data-lineup-art="luffy" src="/images/chess/assets/characters/straw-hat-pirates/luffy-king/candidate-v1/standing/front.webp" alt="魯夫" />
+                        <img class="faction-character faction-character--inner-right" data-lineup-art="jinbe" src="/images/chess/assets/characters/straw-hat-pirates/jinbe-queen/candidate-v1/standing/front.webp" alt="吉貝爾" />
+                        <img class="faction-character faction-character--outer-right" data-lineup-art="sanji" src="/images/chess/assets/characters/straw-hat-pirates/sanji-knight/candidate-v1/standing/front.webp" alt="香吉士" />
+                      </div>
+                    </article>
+                    <article class="faction-showcase faction-showcase--onigashima" data-faction-showcase="onigashima-alliance" data-faction-side="opponent" aria-hidden="false">
+                      <div class="faction-showcase__lineup">
+                        <img class="faction-character faction-character--outer-left" data-lineup-art="beast" src="/images/chess/assets/characters/onigashima-alliance/beast-pawn/candidate-v1/standing/front.webp" alt="百獸小兵" />
+                        <img class="faction-character faction-character--left" data-lineup-art="jack" src="/images/chess/assets/characters/onigashima-alliance/jack-rook/candidate-v1/standing/front.webp" alt="Jack" />
+                        <img class="faction-character faction-character--inner-left" data-lineup-art="king" src="/images/chess/assets/characters/onigashima-alliance/king-bishop/candidate-v1/standing/front.webp" alt="King" />
+                        <img class="faction-character faction-character--leader" data-lineup-art="kaido" src="/images/chess/assets/characters/onigashima-alliance/kaido-king/candidate-v1/standing/front.webp" alt="凱多" />
+                        <img class="faction-character faction-character--inner-right" data-lineup-art="big-mom" src="/images/chess/assets/characters/onigashima-alliance/big-mom-queen/candidate-v1/standing/front.webp" alt="BIG MOM" />
+                        <img class="faction-character faction-character--outer-right" data-lineup-art="queen" src="/images/chess/assets/characters/onigashima-alliance/queen-knight/candidate-v1/standing/front.webp" alt="Queen" />
+                      </div>
+                    </article>
+                  </div>
+                  <div class="faction-carousel__footer">
+                    <div class="faction-carousel__player-picker">
+                      <button id="faction-prev" class="faction-carousel__arrow faction-carousel__arrow--prev" type="button" aria-label="上一個我方陣營">‹</button>
+                      <strong id="player-faction-name">草帽海賊團</strong>
+                      <button id="faction-next" class="faction-carousel__arrow faction-carousel__arrow--next" type="button" aria-label="下一個我方陣營">›</button>
+                    </div>
+                    <div class="faction-carousel__footer-divider" aria-hidden="true"></div>
+                    <div class="faction-carousel__opponent-name"><strong id="opponent-faction-name">鬼島聯軍</strong></div>
+                  </div>
+                  <div class="faction-carousel__pagination" hidden>
+                    <button class="faction-option is-selected" data-faction="straw-hat-pirates" type="button" aria-pressed="true"><span></span>草帽海賊團</button>
+                    <button class="faction-option" data-faction="onigashima-alliance" type="button" aria-pressed="false"><span></span>鬼島聯軍</button>
+                  </div>
+                </div>
+              </section>
+
+              <section class="lobby-choice-group lobby-choice-group--battlefield">
+                <div class="battlefield-carousel">
+                  <div class="lobby-battlefield-grid">
+                    <button class="lobby-battlefield-card" data-battlefield="onigashima" style="--lobby-thumb:url('/images/chess/assets/board/battlefields/onigashima/background-full-redraw-v4-20260902.webp')" type="button"><img class="lobby-battlefield-card__board" src="/images/chess/assets/board/battlefields/onigashima/board.webp" alt="" /><span>鬼島<small>骷髏穹頂</small></span><i>✓</i></button>
+                    <button class="lobby-battlefield-card" data-battlefield="marineford" style="--lobby-thumb:url('/images/chess/assets/board/battlefields/marineford/background-full-redraw-v4-20260902.webp')" type="button"><img class="lobby-battlefield-card__board" src="/images/chess/assets/board/battlefields/marineford/board.webp" alt="" /><span>馬林福特<small>海軍本部</small></span><i>✓</i></button>
+                    <button class="lobby-battlefield-card" data-battlefield="whole-cake" style="--lobby-thumb:url('/images/chess/assets/board/battlefields/whole-cake/background-full-redraw-v4-20260902.webp')" type="button"><img class="lobby-battlefield-card__board" src="/images/chess/assets/board/battlefields/whole-cake/board.webp" alt="" /><span>萬國<small>蛋糕城</small></span><i>✓</i></button>
+                    <button class="lobby-battlefield-card" data-battlefield="wano-flower-capital" style="--lobby-thumb:url('/images/chess/assets/board/battlefields/wano-flower-capital/background-full-redraw-v4-20260902.webp')" type="button"><img class="lobby-battlefield-card__board" src="/images/chess/assets/board/battlefields/wano-flower-capital/board.webp" alt="" /><span>和之國<small>花之都</small></span><i>✓</i></button>
+                    <button class="lobby-battlefield-card" data-battlefield="alabasta" style="--lobby-thumb:url('/images/chess/assets/board/battlefields/alabasta/background-full-redraw-v4-20260902.webp')" type="button"><img class="lobby-battlefield-card__board" src="/images/chess/assets/board/battlefields/alabasta/board.webp" alt="" /><span>阿拉巴斯坦<small>王宮沙漠</small></span><i>✓</i></button>
+                    <button class="lobby-battlefield-card" data-battlefield="skypiea-shandora" style="--lobby-thumb:url('/images/chess/assets/board/battlefields/skypiea-shandora/background-full-redraw-v4-20260902.webp')" type="button"><img class="lobby-battlefield-card__board" src="/images/chess/assets/board/battlefields/skypiea-shandora/board.webp" alt="" /><span>空島<small>黃金香朵拉</small></span><i>✓</i></button>
+                    <button class="lobby-battlefield-card" data-battlefield="enies-lobby" style="--lobby-thumb:url('/images/chess/assets/board/battlefields/enies-lobby/background-full-redraw-v4-20260902.webp')" type="button"><img class="lobby-battlefield-card__board" src="/images/chess/assets/board/battlefields/enies-lobby/board.webp" alt="" /><span>司法島<small>不夜之島</small></span><i>✓</i></button>
+                    <button class="lobby-battlefield-card" data-battlefield="fish-man-island" style="--lobby-thumb:url('/images/chess/assets/board/battlefields/fish-man-island/background-full-redraw-v4-20260902.webp')" type="button"><img class="lobby-battlefield-card__board" src="/images/chess/assets/board/battlefields/fish-man-island/board.webp" alt="" /><span>魚人島<small>龍宮城</small></span><i>✓</i></button>
+                    <button class="lobby-battlefield-card" data-battlefield="dressrosa" style="--lobby-thumb:url('/images/chess/assets/board/battlefields/dressrosa/background-full-redraw-v4-20260902.webp')" type="button"><img class="lobby-battlefield-card__board" src="/images/chess/assets/board/battlefields/dressrosa/board.webp" alt="" /><span>德雷斯羅薩<small>鬥牛競技場</small></span><i>✓</i></button>
+                    <button class="lobby-battlefield-card lobby-battlefield-card--flagship" data-battlefield="flagship" style="--lobby-thumb:url('/images/chess/assets/board/flagship-board-v2.png')" type="button"><img class="lobby-battlefield-card__board" src="/images/chess/assets/board/flagship-board-v2.png" alt="" /><span>旗艦棋盤<small>偉大航道</small></span><i>✓</i></button>
+                  </div>
+                  <button id="battlefield-prev" class="battlefield-carousel__arrow battlefield-carousel__arrow--prev" type="button" aria-label="上一個戰場">‹</button>
+                  <button id="battlefield-next" class="battlefield-carousel__arrow battlefield-carousel__arrow--next" type="button" aria-label="下一個戰場">›</button>
+                  <div class="battlefield-carousel__footer" aria-live="polite"><span><strong id="battlefield-carousel-name">鬼島</strong></span></div>
+                </div>
+              </section>
+            </div>
+            <footer class="pre-match-lobby__footer">
+              <button id="leave-room-setup" class="room-footer-link" type="button">← 離開房間</button>
+              <div class="prep-footer-status"><span id="lobby-selection-summary" hidden></span><span id="prep-lobby-message" aria-live="polite"></span></div>
+              <div class="prep-ready-actions"><button id="toggle-chess-ready" class="room-secondary-action" type="button">鎖定選擇</button><button id="start-chess-match" class="room-primary-action" type="button">等待雙方鎖定</button></div>
+            </footer>
+          </section>
+        </div>
+      </section>
+
+      <div id="battle-game-canvas" class="battle-canvas" aria-label="8乘8正式西洋棋棋盤"></div>
+      <section id="battlefield-reveal" class="battlefield-reveal" aria-label="本局戰場抽選" aria-live="polite" hidden>
+        <div class="battlefield-reveal__panel">
+          <small>BATTLEFIELD SELECTION</small>
+          <h2>戰場抽選</h2>
+          <div id="battlefield-reveal-art" class="battlefield-reveal__art">
+            <img id="battlefield-reveal-board" src="/images/chess/assets/board/battlefields/onigashima/board.webp" alt="" />
+            <strong id="battlefield-reveal-name">鬼島・骷髏穹頂</strong>
+          </div>
+          <div class="battlefield-reveal__choices"><span id="battlefield-reveal-choice-a">鬼島・骷髏穹頂</span><i>VS</i><span id="battlefield-reveal-choice-b">馬林福特・海軍本部</span></div>
+          <p id="battlefield-reveal-status">正在決定本局戰場</p>
+        </div>
+      </section>
+      <div id="battle-effects-stage" class="battle-effects-stage" aria-hidden="true">
+        <div id="battle-rengoku-afterimage-layer" class="battle-rengoku-afterimage-layer"></div>
+        <img id="battle-rengoku-charge-fx" class="battle-rengoku-fx battle-rengoku-charge-fx" alt="" />
+        <img id="battle-rengoku-dash-fx" class="battle-rengoku-fx battle-rengoku-dash-fx" alt="" />
+        <img id="battle-rengoku-impact-fx" class="battle-rengoku-fx battle-rengoku-impact-fx" alt="" />
+        <div id="battle-attack-title" class="battle-attack-title"><span id="battle-attack-title-style">一刀流</span><strong id="battle-attack-title-name">大震撼</strong></div>
+        <div id="battle-vertical-split" class="battle-vertical-split"><i class="battle-split-half battle-split-left"></i><i class="battle-split-half battle-split-right"></i></div>
+      </div>
+
+      <header class="battle-hud player-header">
+        <article id="player-card-local" class="player-card player-card--local">
+          <span class="player-card__avatar"><img id="player-local-avatar" alt="" hidden /><i id="player-local-avatar-fallback" class="player-card__avatar-fallback"></i></span>
+          <span class="player-card__content"><small class="player-card__eyebrow">PLAYER</small><strong id="player-local-name" class="player-card__name">玩家船長</strong><span class="player-card__meta"><span class="player-card__rank"><small>段位</small><b id="player-local-rank">—</b></span><span id="player-local-record" class="player-card__record">—</span><span class="player-card__speed"><small>平均</small><b id="player-local-speed">—</b></span></span><span id="player-local-faction" class="player-card__faction">—</span></span>
+        </article>
+        <div class="battle-hud__state-sink" aria-live="polite"><span id="turn-label">準備棋局</span><strong id="status-label">正在載入 32 枚棋子…</strong></div>
+        <article id="player-card-opponent" class="player-card player-card--opponent">
+          <span class="player-card__avatar"><img id="player-opponent-avatar" alt="" hidden /><i id="player-opponent-avatar-fallback" class="player-card__avatar-fallback"></i></span>
+          <span class="player-card__content"><small class="player-card__eyebrow">RIVAL</small><strong id="player-opponent-name" class="player-card__name">對手</strong><span class="player-card__meta"><span class="player-card__rank"><small>段位</small><b id="player-opponent-rank">—</b></span><span id="player-opponent-record" class="player-card__record">—</span><span class="player-card__speed"><small>平均</small><b id="player-opponent-speed">—</b></span></span><span id="player-opponent-faction" class="player-card__faction">—</span></span>
+        </article>
+      </header>
+
+      <aside id="piece-profile" class="piece-profile" aria-live="polite" aria-hidden="true">
+        <div class="piece-profile__backdrop" aria-hidden="true">
+          <span class="piece-profile__backdrop-portrait"></span>
+          <span class="piece-profile__backdrop-name"></span>
+          <span class="piece-profile__backdrop-role"></span>
+        </div>
+        <img id="piece-profile-frame" class="piece-profile__frame" src="/images/chess/assets/ui/battle-hud-v1/piece-profile-frame-v1.png" alt="" aria-hidden="true" />
+        <div class="piece-profile__portrait"><img id="piece-profile-image" alt="" /></div>
+        <div class="piece-profile__copy"><strong id="piece-profile-name">—</strong><span id="piece-profile-role">—</span><small id="piece-profile-faction">—</small></div>
+      </aside>
+
+      <section class="battle-dock battle-dock--state-sink" aria-label="棋局狀態控制">
+        <div class="match-setup">
+          <label><span>選擇陣營</span><select id="bottom-faction"><option value="straw-hat-pirates">草帽海賊團</option><option value="onigashima-alliance">鬼島聯軍</option></select></label>
+          <label><span>該陣營棋色</span><select id="bottom-color"><option value="w">白方・先手</option><option value="b">黑方・後手</option></select></label>
+          <label><span>觀看視角</span><select id="view-color"><option value="w">白方視角</option><option value="b">黑方視角</option></select></label>
+          <label><span>戰場</span><select id="battlefield-theme"><option value="onigashima">鬼島・骷髏穹頂</option><option value="marineford">馬林福特・海軍本部</option><option value="whole-cake">萬國・蛋糕城</option><option value="wano-flower-capital">和之國・花之都</option><option value="alabasta">阿拉巴斯坦・王宮沙漠</option><option value="skypiea-shandora">空島・黃金香朵拉</option><option value="enies-lobby">司法島・不夜之島</option><option value="fish-man-island">魚人島・龍宮城</option><option value="dressrosa">德雷斯羅薩・鬥牛競技場</option><option value="flagship">旗艦棋盤</option></select></label>
+          <button id="new-game" class="dock-button dock-button--primary" type="button">開始新棋局</button><button id="undo-move" class="dock-button" type="button">悔棋一步</button>
+        </div>
+        <div class="selection-status"><span id="selection-label">尚未選擇棋子</span><small>點擊棋子選擇合法位置。</small></div>
+        <div class="move-log"><span>棋譜</span><div id="move-history">—</div></div>
+      </section>
+
+      <div id="promotion-dialog" class="promotion-dialog" role="dialog" aria-modal="true" aria-labelledby="promotion-title" hidden><div class="promotion-card"><p>PAWN PROMOTION</p><h2 id="promotion-title">兵卒升變</h2><span>選擇要換成的角色職業</span><div class="promotion-options"><button type="button" data-promotion="q">皇后</button><button type="button" data-promotion="r">城堡</button><button type="button" data-promotion="b">主教</button><button type="button" data-promotion="n">騎士</button></div></div></div>
+      <div id="game-result" class="game-result" aria-live="assertive" hidden><span>棋局結束</span><strong id="game-result-text"></strong></div>
+    </main>
+    <script src="./multiplayer-config.js?v=release-v1-20260907"></script>
+    <script src="./battle-social-v1.js?v=avatar-slot-fit-v2-20260905"></script>
+    <script src="./battle-game-social-shell-v1.js?v=multiplayer-release-v1-20260907"></script>
+    <script src="./battle-game-loader-v1.js?v=multiplayer-release-v1-20260907"></script>
+  </body>
+</html>

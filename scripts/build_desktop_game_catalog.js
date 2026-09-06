@@ -5,9 +5,10 @@ const path = require("path");
 const ROOT = path.resolve(__dirname, "..");
 const ASSET_MANIFEST_PATH = path.join(ROOT, "desktop", "generated", "asset-manifest.json");
 const ASSET_DELIVERY_CONFIG_PATH = path.join(ROOT, "config", "desktop-asset-delivery-v1.json");
+const CHESS_ASSET_CONFIG_PATH = path.join(ROOT, "config", "desktop-chess-assets-v1.json");
 const PUBLIC_ROOT = path.join(ROOT, "public");
 const OUTPUT_ROOT = path.join(PUBLIC_ROOT, "desktop", "manifests");
-const CATALOG_PATH = path.join(PUBLIC_ROOT, "desktop", "catalog-v1.json");
+const CATALOG_PATH = path.join(PUBLIC_ROOT, "desktop", "catalog-v2.json");
 const ROOT_NAMES = ["images", "audio", "videos", "fonts"];
 const KINDS = ["image", "audio", "video", "font"];
 const GAME_IDS = ["card", "board"];
@@ -170,6 +171,7 @@ function belongsToCard(assetPath) {
   if (assetPath.startsWith("images/")) {
     return (
       !assetPath.startsWith("images/board/") &&
+      !assetPath.startsWith("images/chess/assets/") &&
       !assetPath.startsWith("images/game_launcher/") &&
       !isLauncherOnly(assetPath)
     );
@@ -215,6 +217,46 @@ function buildGameManifest(gameId, createdAt, assets) {
     byKind: calculateByKind(assets),
     assets,
   };
+}
+
+function validateChessAssetConfig(config) {
+  if (
+    !isPlainObject(config) || Object.keys(config).join(",") !== "schema,manifestPath,manifestSha256" ||
+    config.schema !== 1 ||
+    !/^desktop\/manifests\/chess-assets-[a-f0-9]{16}\.json$/.test(String(config.manifestPath || "")) ||
+    !HASH_PATTERN.test(String(config.manifestSha256 || ""))
+  ) fail("Desktop Chess asset config is invalid");
+  return config;
+}
+
+function validateChessManifest(manifest) {
+  if (
+    !isPlainObject(manifest) || manifest.schema !== 1 || manifest.gameId !== "chess" ||
+    !Array.isArray(manifest.assets) || !/^assets-[a-f0-9]{16}$/.test(String(manifest.releaseId || "")) ||
+    !HASH_PATTERN.test(String(manifest.assetSetSha256 || "")) ||
+    sha256Text(JSON.stringify(manifest.assets)) !== manifest.assetSetSha256 ||
+    typeof manifest.createdAt !== "string" || Number.isNaN(Date.parse(manifest.createdAt))
+  ) fail("Desktop Chess manifest is invalid");
+  let totalBytes = 0;
+  let previousPath = "";
+  for (const asset of manifest.assets) {
+    validateAssetPath(asset?.path);
+    if (!asset.path.startsWith("images/chess/assets/")) fail(`Chess asset escaped its package: ${asset.path}`);
+    if (previousPath && previousPath >= asset.path) fail("Chess manifest assets are not strictly sorted");
+    previousPath = asset.path;
+    if (
+      !KINDS.includes(asset.kind) || typeof asset.mime !== "string" || !asset.mime ||
+      !Number.isSafeInteger(asset.size) || asset.size < 1 || !HASH_PATTERN.test(String(asset.sha256 || ""))
+    ) fail(`Chess manifest contains invalid metadata: ${asset.path}`);
+    totalBytes += asset.size;
+  }
+  if (manifest.totalFiles !== manifest.assets.length || manifest.totalBytes !== totalBytes) {
+    fail("Desktop Chess manifest totals are invalid");
+  }
+  if (JSON.stringify(calculateByKind(manifest.assets)) !== JSON.stringify(manifest.byKind)) {
+    fail("Desktop Chess manifest kind totals are invalid");
+  }
+  return manifest;
 }
 
 async function writeImmutableJson(outputPath, value) {
@@ -287,6 +329,16 @@ async function main() {
   ));
   const unified = await readCanonicalJson(ASSET_MANIFEST_PATH, "Unified desktop asset manifest");
   const assetPaths = validateUnifiedManifest(unified);
+  const chessConfig = validateChessAssetConfig(await readCanonicalJson(
+    CHESS_ASSET_CONFIG_PATH,
+    "Desktop Chess asset config",
+  ));
+  const chessManifestPath = path.join(PUBLIC_ROOT, ...chessConfig.manifestPath.split("/"));
+  const chessManifestText = await fs.promises.readFile(chessManifestPath, "utf8");
+  const chessManifest = validateChessManifest(JSON.parse(chessManifestText));
+  if (chessManifestText !== canonicalJson(chessManifest) || sha256Text(chessManifestText) !== chessConfig.manifestSha256) {
+    fail("Desktop Chess manifest bytes do not match its config");
+  }
 
   const unassigned = assetPaths.filter((assetPath) => (
     !belongsToCard(assetPath) && !belongsToBoard(assetPath) && !isLauncherOnly(assetPath)
@@ -318,11 +370,17 @@ async function main() {
       totalBytes: manifest.totalBytes,
     };
   }
-  catalogGames.chess = { available: false };
+  catalogGames.chess = {
+    releaseId: chessManifest.releaseId,
+    manifestPath: chessConfig.manifestPath,
+    manifestSha256: chessConfig.manifestSha256,
+    totalFiles: chessManifest.totalFiles,
+    totalBytes: chessManifest.totalBytes,
+  };
 
   const catalog = {
-    schema: 1,
-    createdAt: unified.createdAt,
+    schema: 2,
+    createdAt: new Date(Math.max(Date.parse(unified.createdAt), Date.parse(chessManifest.createdAt))).toISOString(),
     assetBlobBaseUrl: deliveryConfig.assetBlobBaseUrl,
     sourceTrees: unified.sourceTrees,
     games: catalogGames,
@@ -335,7 +393,8 @@ async function main() {
   console.log(
     `DESKTOP_GAME_CATALOG=PASS cardFiles=${manifests.card.totalFiles} cardBytes=${manifests.card.totalBytes} ` +
     `boardFiles=${manifests.board.totalFiles} boardBytes=${manifests.board.totalBytes} ` +
-    `sharedFiles=${sharedCount} sharedBytes=${sharedBytes} launcherOnlyFiles=${launcherOnlyCount} chess=unavailable`,
+    `chessFiles=${chessManifest.totalFiles} chessBytes=${chessManifest.totalBytes} ` +
+    `sharedFiles=${sharedCount} sharedBytes=${sharedBytes} launcherOnlyFiles=${launcherOnlyCount}`,
   );
 }
 

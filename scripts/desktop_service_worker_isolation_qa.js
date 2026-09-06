@@ -90,8 +90,13 @@ async function main() {
   );
   const cardPartition = /card: \{[^\n]+partition: '([^']+)'/.exec(mainSource)?.[1];
   const boardPartition = /board: \{[^\n]+partition: '([^']+)'/.exec(mainSource)?.[1];
-  assert.ok(cardPartition && boardPartition, 'Card and Board desktop session partitions are required.');
-  assert.notEqual(cardPartition, boardPartition, 'Card and Board must use separate Electron session partitions.');
+  const chessConfig = /chess: \{[^\n]+entry: '([^']+)'[^\n]+partition: '([^']+)'/.exec(mainSource);
+  const chessEntry = chessConfig?.[1];
+  const chessPartition = chessConfig?.[2];
+  assert.ok(cardPartition && boardPartition && chessPartition, 'Card, Board and Chess desktop session partitions are required.');
+  assert.equal(new Set([cardPartition, boardPartition, chessPartition]).size, 3, 'All three games must use separate Electron session partitions.');
+  assert.equal(chessEntry, '/chess/index.html', 'Chess desktop entry URL changed unexpectedly.');
+  assert.match(mainSource, /const ALLOWED_GAME_IDS = new Set\(\['card', 'board', 'chess'\]\);/, 'Chess is missing from the desktop IPC allowlist.');
 
   const hostedStart = sourceText('public/start.html');
   const hostedWorker = sourceText('public/sw.js');
@@ -100,7 +105,7 @@ async function main() {
 
   console.log(
     'DESKTOP_SERVICE_WORKER_ISOLATION_QA=PASS ' +
-    'games=card,board clear=serviceworkers,cachestorage swRequest=cancel hostedSource=unchanged-by-design'
+    'games=card,board,chess clear=serviceworkers,cachestorage swRequest=cancel hostedSource=unchanged-by-design'
   );
 }
 

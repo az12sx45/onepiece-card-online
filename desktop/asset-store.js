@@ -6,14 +6,16 @@ const fsp = require('node:fs/promises');
 const path = require('node:path');
 const { EventEmitter } = require('node:events');
 
-const CATALOG_SCHEMA = 1;
+const CATALOG_SCHEMA = 2;
+const CATALOG_FILE = 'catalog-v2.json';
 const MANIFEST_SCHEMA = 1;
 const RECEIPT_SCHEMA = 1;
 const HASH_PATTERN = /^[a-f0-9]{64}$/;
 const RELEASE_PATTERN = /^[a-z0-9][a-z0-9._-]{0,95}$/;
 const MANIFEST_PATH_PATTERN = /^desktop\/manifests\/[a-z0-9._-]+\.json$/;
 const ASSET_ROOTS = new Set(['images', 'audio', 'videos', 'fonts']);
-const GAME_IDS = new Set(['card', 'board']);
+const GAME_ID_LIST = Object.freeze(['card', 'board', 'chess']);
+const GAME_IDS = new Set(GAME_ID_LIST);
 const RESERVED_SEGMENTS = new Set(['incoming', 'backup', 'backups', 'private', 'battle_chess']);
 const DOWNLOAD_RESERVE_BYTES = 512 * 1024 * 1024;
 const LARGE_FILE_BYTES = 32 * 1024 * 1024;
@@ -161,7 +163,7 @@ function validateCatalog(document, options = {}) {
   if (!isPlainObject(document) || document.schema !== CATALOG_SCHEMA || !isPlainObject(document.games)) {
     throw new Error('版本目錄格式不正確。');
   }
-  if (Object.keys(document.games).join(',') !== 'card,board,chess' || !isPlainObject(document.games.chess) || document.games.chess.available !== false) {
+  if (Object.keys(document.games).join(',') !== GAME_ID_LIST.join(',')) {
     throw new Error('版本目錄的遊戲邊界不正確。');
   }
   if (!isPlainObject(document.sourceTrees) || Object.keys(document.sourceTrees).join(',') !== 'images,audio,videos,fonts') {
@@ -175,7 +177,7 @@ function validateCatalog(document, options = {}) {
   }
   const assetBlobBaseUrl = validateAssetBlobBaseUrl(document.assetBlobBaseUrl, options);
   const games = {};
-  for (const gameId of ['card', 'board']) {
+  for (const gameId of GAME_ID_LIST) {
     const source = document.games[gameId];
     if (!isPlainObject(source) || source.available === false) throw new Error(`版本目錄缺少 ${gameId}。`);
     const releaseId = String(source.releaseId || '');
@@ -196,10 +198,7 @@ function validateCatalog(document, options = {}) {
     createdAt: document.createdAt,
     sourceTrees: isPlainObject(document.sourceTrees) ? { ...document.sourceTrees } : {},
     ...(assetBlobBaseUrl ? { assetBlobBaseUrl } : {}),
-    games: {
-      ...games,
-      chess: { available: false }
-    }
+    games
   };
 }
 
@@ -584,7 +583,7 @@ class AssetStore extends EventEmitter {
     await this.ensureCacheOwnership(this.cacheRoot);
     await this.loadIntegrityIndex();
     await this.loadBundledCatalog();
-    await Promise.all(['card', 'board'].map((gameId) => this.loadReceipt(gameId)));
+    await Promise.all(GAME_ID_LIST.map((gameId) => this.loadReceipt(gameId)));
     await this.loadLastKnownGoodCatalog();
     await this.refreshStates();
     const state = await this.getState();
@@ -709,7 +708,7 @@ class AssetStore extends EventEmitter {
     if (receiptsInfo) {
       const entries = await fsp.readdir(receiptsRoot, { withFileTypes: true });
       for (const entry of entries) {
-        const match = /^(card|board)\.json$/.exec(entry.name);
+        const match = /^(card|board|chess)\.json$/.exec(entry.name);
         if (!match || !entry.isFile() || entry.isSymbolicLink()) {
           throw new Error('下載位置已有可疑的清單或收據衝突，無法接管。');
         }
@@ -894,7 +893,7 @@ class AssetStore extends EventEmitter {
   }
 
   async loadBundledCatalog() {
-    const catalogPath = path.join(this.bundledCatalogRoot, 'catalog-v1.json');
+    const catalogPath = path.join(this.bundledCatalogRoot, CATALOG_FILE);
     const document = JSON.parse(await fsp.readFile(catalogPath, 'utf8'));
     this.catalog = validateCatalog(document, this.catalogValidationOptions);
     this.catalogSource = 'bundled';
@@ -931,13 +930,13 @@ class AssetStore extends EventEmitter {
   async loadLastKnownGoodCatalog() {
     const root = this.lastKnownGoodRoot();
     try {
-      const catalogPath = path.join(root, 'catalog-v1.json');
+      const catalogPath = path.join(root, CATALOG_FILE);
       await assertSafeManagedPath(this.cacheRoot, catalogPath, { allowMissing: false, leafKind: 'file' });
       const info = await fsp.lstat(catalogPath);
       if (!info.isFile() || info.size > 256 * 1024) throw new Error('cached catalog size');
       const catalog = validateCatalog(JSON.parse(await fsp.readFile(catalogPath, 'utf8')), this.catalogValidationOptions);
       const results = new Map();
-      for (const gameId of ['card', 'board']) {
+      for (const gameId of GAME_ID_LIST) {
         const entry = catalog.games[gameId];
         const manifestPath = path.join(root, 'manifests', path.posix.basename(entry.manifestPath));
         await assertSafeManagedPath(this.cacheRoot, manifestPath, { allowMissing: false, leafKind: 'file' });
@@ -948,7 +947,7 @@ class AssetStore extends EventEmitter {
       }
       const bundledCreatedAt = Date.parse(this.catalog.createdAt);
       const cachedCreatedAt = Date.parse(catalog.createdAt);
-      const matchesInstalled = ['card', 'board'].some((gameId) => (
+      const matchesInstalled = GAME_ID_LIST.some((gameId) => (
         this.receipts.get(gameId)?.manifestSha256 === catalog.games[gameId].manifestSha256
       ));
       if (cachedCreatedAt < bundledCreatedAt && !matchesInstalled) return false;
@@ -978,18 +977,18 @@ class AssetStore extends EventEmitter {
 
   async persistLastKnownGoodCatalog(catalog, results) {
     const root = this.lastKnownGoodRoot();
-    for (const gameId of ['card', 'board']) {
+    for (const gameId of GAME_ID_LIST) {
       const result = results.get(`${gameId}:${catalog.games[gameId].manifestSha256}`);
       await atomicWriteBuffer(this.cacheRoot, path.join(root, 'manifests', result.fileName), result.bytes);
     }
-    await atomicWriteJson(this.cacheRoot, path.join(root, 'catalog-v1.json'), catalog);
+    await atomicWriteJson(this.cacheRoot, path.join(root, CATALOG_FILE), catalog);
   }
 
   async refreshRemoteCatalog() {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 8_000);
     try {
-      const response = await this.fetchImpl(`${this.origin}/desktop/catalog-v1.json?launcher=${encodeURIComponent(process.versions.electron || 'desktop')}`, {
+      const response = await this.fetchImpl(`${this.origin}/desktop/${CATALOG_FILE}?launcher=${encodeURIComponent(process.versions.electron || 'desktop')}`, {
         cache: 'no-store',
         redirect: 'error',
         headers: { Accept: 'application/json', 'Accept-Encoding': 'identity' },
@@ -1000,7 +999,7 @@ class AssetStore extends EventEmitter {
       if (bytes.length > 256 * 1024) throw new Error('版本目錄過大。');
       const catalog = validateCatalog(JSON.parse(bytes.toString('utf8')), this.catalogValidationOptions);
       const results = new Map();
-      for (const gameId of ['card', 'board']) {
+      for (const gameId of GAME_ID_LIST) {
         const result = await this.fetchRemoteManifest(catalog, gameId, controller.signal);
         results.set(`${gameId}:${catalog.games[gameId].manifestSha256}`, result);
       }
@@ -1033,7 +1032,7 @@ class AssetStore extends EventEmitter {
     this.cachedManifests.clear();
     await this.loadIntegrityIndex();
     await this.loadBundledCatalog();
-    await Promise.all(['card', 'board'].map((gameId) => this.loadReceipt(gameId)));
+    await Promise.all(GAME_ID_LIST.map((gameId) => this.loadReceipt(gameId)));
     await this.loadLastKnownGoodCatalog();
     await this.refreshStates();
     this.startBackgroundIntegrityAudit();
@@ -1074,7 +1073,7 @@ class AssetStore extends EventEmitter {
   }
 
   async computeStates({ includeActiveGameId = '' } = {}) {
-    for (const gameId of ['card', 'board']) {
+    for (const gameId of GAME_ID_LIST) {
       if (this.activeInstall?.gameId === gameId && includeActiveGameId !== gameId) continue;
       const latest = this.catalog.games[gameId];
       const receipt = this.receipts.get(gameId);
@@ -1112,15 +1111,6 @@ class AssetStore extends EventEmitter {
         completedFiles: 0
       });
     }
-    this.gameStates.set('chess', {
-      status: 'unavailable',
-      message: '仍在製作與校準中',
-      hasInstalled: false,
-      removable: false,
-      remoteVersion: '',
-      totalFiles: 0,
-      totalBytes: 0
-    });
     if (this.integrityDirty) await this.flushIntegrityIndex();
   }
 
@@ -1187,7 +1177,7 @@ class AssetStore extends EventEmitter {
         if (signal?.aborted) throw abortError();
         if (timedOut) throw new Error('遊戲清單下載逾時，請稍後再試。');
         const bundled = validateCatalog(
-          JSON.parse(await fsp.readFile(path.join(this.bundledCatalogRoot, 'catalog-v1.json'), 'utf8')),
+          JSON.parse(await fsp.readFile(path.join(this.bundledCatalogRoot, CATALOG_FILE), 'utf8')),
           this.catalogValidationOptions
         );
         const bundledEntry = bundled.games[gameId];

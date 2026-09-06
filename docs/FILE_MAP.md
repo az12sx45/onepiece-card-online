@@ -1,5 +1,28 @@
 # File Map
 
+## 霸海戰棋／桌面啟動器 1.1.5 發布檔案（2026-09-07，R2 已上傳／分階段發布中）
+
+| 檔案／位置 | 功能／狀態 |
+| --- | --- |
+| `public/chess/index.html`、`battle-start-v1.css`、`battle-start-v1.js`、`battle-game-social-shell-v1.js`、`battle-social-v1.js` | Chess 正式入口、登入後遊戲選單／房間／社交殼。正式路徑是 `/chess/index.html`，不是舊 junction 或 `battle_chess` 測試路徑。 |
+| `public/chess/battle-game.html`、`battle-chess.css`、`battle-chess.js`、`battle-click-priority-fix.js`、`battle-game-loader-v1.js`、`battle-room-runtime-v1.js`、`player-header-ui.js`、`pre-match-lobby.js`、`battlefield-profile-frame.js`、`multiplayer-config.js`、`favicon.svg` | 正式棋局 UI／runtime／兩階段等待室與 multiplayer bridge。`pre-match-lobby.js` 保留收到 snapshot 時的 ready；核心 Chess runtime 來源 SHA-256 為 `8152210695F4D9A3D8B723F4E39B26DA21DE5BC40BAEBC8A448B4BEE4329016D`。 |
+| `public/chess/assets/vendor/stockfish-18.0.0/` | Stockfish 18 lite single JS／WASM、`COPYING.txt` 與 `SOURCE.md`；保留上游授權／來源。這是本機 vendor，不從 R2 Chess image manifest 下載。 |
+| `public/chess/images/board/avatars/{50.webp,cpu2.webp}` | 兩張必要本機 avatar。正式 bundle 合計 22 required files：16 program、4 vendor／license、2 avatar；大型 Chess 圖片不在本目錄。 |
+| `public/desktop/manifests/chess-assets-4a14ed8c714c0b60.json` | `images/chess/assets/*` 的 immutable 邏輯清單：`1,380` 檔／`330,834,762` bytes，SHA-256 `ea710d9921d2826200dd41a808e222c7c337dd4a4f276e338eb4324f4a18adad`。 |
+| `config/desktop-chess-assets-v1.json`、`scripts/build_desktop_chess_manifest.js` | 將外部正式來源 `D:\航海王西洋棋\GRAND-LINE-BATTLE-多人發布版-v1\public\assets` 驗證並映射成上述版本化 manifest；不把外部素材複製進 Git。 |
+| `public/desktop/catalog-v2.json`、`scripts/build_desktop_game_catalog.js` | schema 2 三遊戲控制面；Chess 指向新 manifest，Card 仍為 `710` 檔／`705,711,887` bytes、Board 為 `3,451` 檔／`1,276,186,364` bytes，既有 release／manifest SHA 不變。build 明確排除 `images/chess/assets/`，避免被 Card 收入。 |
+| `public/desktop/catalog-v1.json` | 舊 `1.1.4` 啟動器的相容權威，原位元組不變且 Chess 仍 unavailable；不得用 schema 2 整份覆寫。 |
+| `desktop/asset-store.js`、`desktop/main.js`、`desktop/launcher.js` | `1.1.5` 支援 `card|board|chess` 的下載／更新／修復／單款移除與啟動。Chess entry 為 `/chess/index.html`，partition 為 `onepiece-chess-desktop-v1`；沿用 receipt／LKG／CAS、Range、SHA、realpath／junction 安全及跨遊戲共用 blob 保護。 |
+| `desktop/package.json`、`desktop/package-lock.json` | 版本 `1.1.5`；extraResources 帶 `catalog-v2` 和 Card／Board／Chess 三份精確 manifest，不內嵌 330 MB Chess 大型圖片。 |
+| `desktop/dist/ONE-PIECE-Tabletop-Launcher-1.1.5-x64.exe`（建置產物，非 Git） | x64 NSIS 候選；`152,185,039` bytes，SHA-256 `a49462b5a9a0990e82a8fe4883a6c785c93b7b1c2c891391d49067bec3e938aa`。Stage A 驗收前 `public/desktop/launcher-release-v1.json` 仍為已簽署 1.1.4；1.1.5 installer 上傳與 stable manifest 提升必須另作 Stage B。 |
+| `server/index.js`、根 `package.json`、`package-lock.json` | `chess.js@1.4.0` 權威多人房與走棋；支援 authenticated waiting／preparation／playing、CPU、觀戰、邀請、重連。server 忽略 client FEN／SAN／capture、自行驗證 move 與終局；Chess rooms 仍是單 process 記憶體。另提供經 catalog／manifest 驗證的 `/images/chess/assets/*` → R2 CAS `302` fallback。 |
+| `tools/desktop-r2-publisher/{publish.js,publish-saved-r2.ps1,README.md}` | 新增 `--game chess`／`--chess-source`，驗證外部來源 realpath／SHA 後發布 immutable CAS。正式 `1,370` unique blobs／`329,861,974` bytes，`uploaded=1367`、`skipped=3`；無 Delete、無覆寫。 |
+| `scripts/chess_release_bundle_qa.js`、`chess_multiplayer_protocol_qa.js`、`chess_asset_fallback_qa.js` | bundle／真 Socket.IO protocol／R2 fallback 專項。覆蓋兩階段 ready、loadout、觀戰、CPU、重接、move sequence、非法步、偽造 FEN／game over、將死、三次重複、合法 redirect、未知／越界／暫時錯誤。 |
+| `scripts/desktop_game_catalog_qa.js`、`desktop_asset_store_qa.js`、`desktop_r2_publish_qa.js`、`desktop_installed_media_smoke.js`、`desktop_launcher_package_qa.js`、`desktop_service_worker_isolation_qa.js` | 三遊戲 catalog、外部 Chess publisher source、安全安裝／更新／解除安裝、三 partition、source／packaged package 與 Electron 媒體 smoke。catalog QA 為 Card `710`、Board `3451`、Chess `1380`、shared `13`、launcher-only `15`；logical `2,312,733,013` bytes、CAS `5,064` blobs／`2,143,507,691` bytes。 |
+| `scripts/deployment_asset_manifest_qa.js` | 將 Chess core／catalog-v2 納入 Render 必備程式檢查，但仍禁止共用 browser launcher 指向 Chess；待 R2 CORS 與 browser QA 完成前不宣稱 browser 版可用。 |
+
+正式 browser 共用啟動頁仍停用 Chess；目前支持範圍是 1.1.5 桌面啟動器。R2 抽樣缺少 `Access-Control-Allow-Origin`，不影響 Electron 本機同源攔截。若回滾 Stage A，保留 `catalog-v1`、Card／Board manifests 與已存在的 immutable CAS；若 stable 1.1.5 已發布，使用更高版本修正，不刪除或覆寫既有簽署產物。
+
 ## Card Depth visible V2／桌面素材包檔案（2026-09-07，已發布）
 
 截至本段，V2 `248610c5` 已於 2026-09-07 02:56:35（Asia/Taipei）上線。正式 5 份程式／清單與 240 aliases 共 245／245 HTTP bytes／SHA PASS；80 組卡 browser 2,273 項（320 HTTP／0 page errors）與原 V1 profile 的 SW postdeploy 77 項均 PASS。R2 211 個新 CAS 物件已完成完整 GET／SHA 核對；下方「V1 未發布」只是歷史快照。

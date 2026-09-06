@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#050b16" />
+    <meta name="description" content="ONE PIECE 霸海戰棋啟動頁" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./battle-start-v1.css?v=room-button-text-v3-20260905" />
+    <title>ONE PIECE 霸海戰棋</title>
+  </head>
+  <body data-entry-stage="press" data-app-view="home">
+    <div class="launch-backdrop" aria-hidden="true"></div>
+    <picture aria-hidden="true">
+      <source media="(orientation: portrait)" srcset="/images/chess/assets/ui/launch/launcher-login-background-portrait-v1.png" />
+      <img class="launch-poster" src="/images/chess/assets/ui/launch/launcher-login-background-v1.png" alt="" />
+    </picture>
+    <div class="launch-vignette" aria-hidden="true"></div>
+
+    <main class="launch-shell">
+      <section id="battleEntry" class="entry-layer" aria-label="霸海戰棋啟動畫面">
+        <div class="entry-panel entry-press is-active" data-entry-panel="press">
+          <button id="battleEntryStartBtn" class="entry-continue" type="button" aria-label="點擊頁面任意位置或按 Enter 繼續">
+            <img src="/images/chess/assets/ui/launch/launcher-battle-chess-logo-v1.png" alt="ONE PIECE 霸海戰棋" />
+            <span>點擊任意處・按 ENTER 繼續</span>
+          </button>
+        </div>
+
+        <div class="entry-panel entry-auth" data-entry-panel="auth" hidden>
+          <form id="battleAuthForm" class="entry-card" autocomplete="on">
+            <div class="entry-card__crest" aria-hidden="true">♚</div>
+            <h1 id="battleAuthTitle">帳號登入</h1>
+            <div class="entry-tabs" role="tablist" aria-label="帳號模式">
+              <button id="battleAuthLoginTab" class="is-active" type="button" role="tab" aria-selected="true">登入</button>
+              <button id="battleAuthRegisterTab" type="button" role="tab" aria-selected="false">建立帳號</button>
+            </div>
+            <label class="entry-field"><span>帳號</span><input id="battleAuthUsername" name="username" type="text" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]+" autocomplete="username" autocapitalize="none" spellcheck="false" required /></label>
+            <label class="entry-field"><span>密碼</span><input id="battleAuthPassword" name="password" type="password" minlength="6" maxlength="72" autocomplete="current-password" required /></label>
+            <p id="battleAuthRuntimeNote" class="entry-runtime-note" aria-live="polite"></p>
+            <p id="battleAuthMessage" class="entry-message" aria-live="assertive"></p>
+            <button id="battleAuthSubmitBtn" class="entry-primary" type="submit">登入</button>
+            <button id="battleAuthBackBtn" class="entry-text-button" type="button">返回封面</button>
+          </form>
+        </div>
+
+        <div class="entry-panel entry-boot" data-entry-panel="boot" hidden>
+          <div class="entry-card entry-card--boot">
+            <div class="entry-loader" aria-hidden="true"></div>
+            <p id="battleBootMessage">正在準備玩家資料…</p>
+            <div id="battleBootActions" class="entry-boot-actions" hidden>
+              <button id="battleBootRetryBtn" class="entry-primary" type="button">重試</button>
+              <button id="battleBootLoginBtn" class="entry-text-button" type="button">重新登入</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="battleApp" class="app-layer" aria-hidden="true" hidden>
+        <header class="app-topbar">
+          <button id="playerSummary" class="player-summary" type="button" aria-expanded="false" hidden>
+            <span class="player-avatar"><img id="playerAvatar" alt="" /></span>
+            <span><strong id="playerName">—</strong><small id="playerTitle">—</small></span>
+          </button>
+          <button id="logoutBtn" class="logout-button" type="button">切換帳號</button>
+        </header>
+
+        <section class="app-view app-view--home is-active" data-app-panel="home">
+          <div class="menu-card">
+            <div class="menu-kicker">GRAND LINE BATTLE</div>
+            <div class="menu-actions">
+              <button id="startMatchBtn" class="menu-button menu-button--primary" type="button"><span class="menu-button__icon">⚔</span><span><strong>開始遊戲</strong><small>尋找對手並進入備戰</small></span><b>›</b></button>
+              <button id="openProfileBtn" class="menu-button" type="button"><span class="menu-button__icon">♕</span><span><strong>個人頁面</strong><small>玩家資料與戰績・即將開放</small></span><b>›</b></button>
+              <button id="openShopBtn" class="menu-button" type="button"><span class="menu-button__icon">♦</span><span><strong>商店</strong><small>商品與造型・即將開放</small></span><b>›</b></button>
+              <button id="continueMatchBtn" class="menu-button" type="button" hidden><span class="menu-button__icon">↻</span><span><strong>繼續對局</strong><small>回到可恢復的棋局</small></span><b>›</b></button>
+              <button id="openSocialBtn" class="menu-button" type="button" hidden><span class="menu-button__icon">☸</span><span><strong>好友與聊天室</strong><small id="socialMenuHint">準備連線共用好友資料</small></span><i id="socialMenuBadge" hidden>0</i><b>›</b></button>
+            </div>
+          </div>
+        </section>
+
+        <section class="app-view" data-app-panel="play" hidden>
+          <div class="content-card match-entry-card room-browser-card">
+            <button class="view-back" type="button" data-back-home>‹ 返回主選單</button>
+            <p class="content-card__kicker">BATTLE MATCH</p>
+            <h2>選擇對戰房間</h2>
+            <p id="chessRoomConnectionText" class="content-card__lead">正在連接霸海戰棋房間服務…</p>
+            <div class="room-choice-grid">
+              <article class="room-choice-card room-choice-card--create">
+                <span class="room-choice-card__icon" aria-hidden="true">♚</span>
+                <div><small>HOST A MATCH</small><h3>創建房間</h3><p>先等待真人或加入 CPU；對手就位後再選陣營與戰場。</p></div>
+                <button id="createRoomBtn" class="room-choice-action room-choice-action--primary" type="button">建立新的霸海棋局 <b>›</b></button>
+              </article>
+
+              <article class="room-choice-card">
+                <span class="room-choice-card__icon" aria-hidden="true">↪</span>
+                <div><small>JOIN BY CODE</small><h3>加入房間</h3><p>輸入好友分享的房號，進入雙人等待室。</p></div>
+                <label class="room-code-field"><span class="sr-only">房間代碼</span><input id="chessRoomCodeInput" type="text" maxlength="8" inputmode="text" autocomplete="off" placeholder="輸入房號，例如 C12345" /></label>
+                <button id="joinRoomBtn" class="room-choice-action" type="button">加入房間 <b>›</b></button>
+              </article>
+
+              <article class="room-choice-card">
+                <span class="room-choice-card__icon" aria-hidden="true">◉</span>
+                <div><small>WATCH A BATTLE</small><h3>觀戰</h3><p>只顯示允許觀戰、正在交鋒中的公開棋局。</p></div>
+                <button id="spectateRoomBtn" class="room-choice-action" type="button">查看觀戰房間 <b>›</b></button>
+              </article>
+            </div>
+
+            <section class="public-room-section" aria-labelledby="public-room-title">
+              <header><div><small>PUBLIC LOBBY</small><h3 id="public-room-title">公開房間</h3></div><button id="refreshChessRoomsBtn" type="button">刷新</button></header>
+              <div id="chessRoomList" class="public-room-list" aria-live="polite"></div>
+              <p id="chessRoomEmpty" class="public-room-empty">目前沒有公開的霸海棋局</p>
+              <p id="chessRoomMessage" class="room-browser-message" aria-live="polite"></p>
+            </section>
+          </div>
+        </section>
+
+        <section class="app-view" data-app-panel="social" hidden>
+          <div class="content-card">
+            <button class="view-back" type="button" data-back-home>‹ 返回主選單</button>
+            <p class="content-card__kicker">NAKAMA NETWORK</p>
+            <h2>好友與聊天室</h2>
+            <p id="socialConnectionText" class="content-card__lead">正在連接共用好友服務…</p>
+            <div class="social-stats">
+              <div><strong id="socialFriendCount">0</strong><span>好友</span></div><div><strong id="socialOnlineCount">0</strong><span>上線</span></div><div><strong id="socialRequestCount">0</strong><span>邀請</span></div><div><strong id="socialUnreadCount">0</strong><span>未讀</span></div>
+            </div>
+            <button id="openFriendDockBtn" class="entry-primary" type="button">開啟右側好友面板</button>
+            <p class="content-card__note">進入等待室後，可從右側好友面板直接送出霸海戰棋房間邀請。</p>
+          </div>
+        </section>
+
+        <section class="app-view" data-app-panel="profile" hidden>
+          <div class="content-card profile-card">
+            <button class="view-back" type="button" data-back-home>‹ 返回主選單</button>
+            <p class="content-card__kicker">PLAYER PROFILE</p>
+            <span class="profile-card__avatar"><img id="profileAvatar" alt="" /></span>
+            <h2 id="profileName">—</h2><p id="profileTitle">—</p>
+            <dl><div><dt>玩家 ID</dt><dd id="profileUserId">—</dd></div><div><dt>帳號來源</dt><dd>偉大航道共用帳號</dd></div></dl>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <aside id="friendDock" class="friend-dock is-collapsed" aria-label="好友與聊天室" hidden>
+      <div class="friend-dock__me">
+        <span class="friend-avatar"><img id="dockAvatar" alt="" /></span><span><strong id="dockName">—</strong><small>好友與聊天室</small></span><button id="friendDockToggle" type="button" title="展開或縮小" aria-expanded="false">+</button>
+      </div>
+      <button id="friendDockOpen" class="friend-dock__open" type="button">好友與聊天室</button>
+      <div class="friend-dock__content">
+        <div class="friend-add"><input id="friendAddInput" type="text" maxlength="24" placeholder="輸入好友名稱…" /><button id="friendAddBtn" type="button">加入</button></div>
+        <div id="friendList" class="friend-list"></div><p id="friendHint" class="friend-hint" hidden></p>
+      </div>
+    </aside>
+    <div id="chatTray" class="chat-tray" aria-label="私人聊天視窗"></div>
+    <div id="toastRegion" class="toast-region" aria-live="polite"></div>
+
+    <script src="./multiplayer-config.js?v=release-v1-20260907"></script>
+    <script src="./battle-social-v1.js?v=avatar-slot-fit-v2-20260905"></script>
+    <script src="./battle-start-v1.js?v=multiplayer-release-v1-20260907"></script>
+  </body>
+</html>

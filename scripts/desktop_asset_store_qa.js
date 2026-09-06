@@ -85,13 +85,14 @@ function makeManifest(gameId, releaseId, assets, createdAt = CREATED_AT) {
   return { document, bytes: Buffer.from(canonicalJson(document)) };
 }
 
-function makeCatalog(cardManifest, cardFileName, boardManifest, boardFileName, assetBlobBaseUrl = '') {
+function makeCatalog(cardManifest, cardFileName, boardManifest, boardFileName, chessManifest, chessFileName, assetBlobBaseUrl = '') {
   const createdAt = new Date(Math.max(
     Date.parse(cardManifest.document.createdAt),
-    Date.parse(boardManifest.document.createdAt)
+    Date.parse(boardManifest.document.createdAt),
+    Date.parse(chessManifest.document.createdAt)
   )).toISOString();
   return {
-    schema: 1,
+    schema: 2,
     createdAt,
     sourceTrees: {
       images: '1'.repeat(40),
@@ -115,7 +116,13 @@ function makeCatalog(cardManifest, cardFileName, boardManifest, boardFileName, a
         totalFiles: boardManifest.document.totalFiles,
         totalBytes: boardManifest.document.totalBytes
       },
-      chess: { available: false }
+      chess: {
+        releaseId: chessManifest.document.releaseId,
+        manifestPath: `desktop/manifests/${chessFileName}`,
+        manifestSha256: sha256Bytes(chessManifest.bytes),
+        totalFiles: chessManifest.document.totalFiles,
+        totalBytes: chessManifest.document.totalBytes
+      }
     }
   };
 }
@@ -172,6 +179,22 @@ function runStrictValidationChecks(validCatalog, validManifest, testAssetBlobBas
   const unsafeCatalog = clone(validCatalog);
   unsafeCatalog.games.card.manifestPath = '../card.json';
   assert.throws(() => validateCatalog(unsafeCatalog, validationOptions), /card/);
+
+  const unavailableChessCatalog = clone(validCatalog);
+  unavailableChessCatalog.games.chess = { available: false };
+  assert.throws(
+    () => validateCatalog(unavailableChessCatalog, validationOptions),
+    /chess/,
+    'Launcher 1.1.5 must require the downloadable Chess manifest.'
+  );
+
+  const legacyCatalog = clone(validCatalog);
+  legacyCatalog.schema = 1;
+  assert.throws(
+    () => validateCatalog(legacyCatalog, validationOptions),
+    /格式/,
+    'Launcher 1.1.5 must not confuse the retained catalog-v1 contract with catalog-v2.'
+  );
 
   const badSetDigest = clone(validManifest);
   badSetDigest.assetSetSha256 = '0'.repeat(64);
@@ -258,7 +281,7 @@ class FixtureServer {
       return;
     }
 
-    if (fixturePath === 'desktop/catalog-v1.json') {
+    if (fixturePath === 'desktop/catalog-v2.json') {
       const body = Buffer.from(canonicalJson(this.catalog));
       response.writeHead(200, {
         'Content-Type': 'application/json; charset=utf-8',
@@ -364,7 +387,7 @@ class FixtureServer {
 
 async function writeBundledCatalog(root, catalog, manifests) {
   await fsp.mkdir(path.join(root, 'manifests'), { recursive: true });
-  await fsp.writeFile(path.join(root, 'catalog-v1.json'), canonicalJson(catalog));
+  await fsp.writeFile(path.join(root, 'catalog-v2.json'), canonicalJson(catalog));
   for (const [fileName, bytes] of manifests) {
     await fsp.writeFile(path.join(root, 'manifests', fileName), bytes);
   }
@@ -423,6 +446,7 @@ async function main() {
     const initialVersionBytes = Buffer.from('card-version-one-content');
     const updatedVersionBytes = Buffer.from('card-version-two-content');
     const boardFontBytes = Buffer.from('board-font-fixture');
+    const chessPieceBytes = Buffer.from('chess-piece-fixture');
     const slowAudioBytes = Buffer.alloc(3 * 1024 * 1024);
     for (let index = 0; index < slowAudioBytes.length; index += 1) slowAudioBytes[index] = index % 251;
 
@@ -431,25 +455,30 @@ async function main() {
     const initialVersion = makeAsset('images/version.png', initialVersionBytes);
     const updatedVersion = makeAsset('images/version.png', updatedVersionBytes);
     const boardFont = makeAsset('fonts/board.woff2', boardFontBytes);
+    const chessPiece = makeAsset('images/chess/assets/king.png', chessPieceBytes);
 
     const cardV1File = 'card-assets-v1.json';
     const cardV2File = 'card-assets-v2.json';
     const boardV1File = 'board-assets-v1.json';
+    const chessV1File = 'chess-assets-v1.json';
     const cardV1 = makeManifest('card', 'assets-card-v1', [slowAudio, shared, initialVersion]);
     const cardV2 = makeManifest('card', 'assets-card-v2', [slowAudio, shared, updatedVersion], UPDATED_AT);
     const boardV1 = makeManifest('board', 'assets-board-v1', [boardFont, shared]);
+    const chessV1 = makeManifest('chess', 'assets-chess-v1', [chessPiece, shared]);
     await fixture.start();
     await blobFixture.start();
     const assetBlobBaseUrl = `${blobFixture.origin}/desktop/blobs/sha256`;
     const blobKey = (asset) => new URL(encodeAssetBlobUrl(assetBlobBaseUrl, asset.sha256)).pathname.replace(/^\/+/, '');
-    const catalogV1 = makeCatalog(cardV1, cardV1File, boardV1, boardV1File, assetBlobBaseUrl);
-    const catalogV2 = makeCatalog(cardV2, cardV2File, boardV1, boardV1File, assetBlobBaseUrl);
+    const catalogV1 = makeCatalog(cardV1, cardV1File, boardV1, boardV1File, chessV1, chessV1File, assetBlobBaseUrl);
+    const catalogV2 = makeCatalog(cardV2, cardV2File, boardV1, boardV1File, chessV1, chessV1File, assetBlobBaseUrl);
 
     const testAssetBlobBaseUrls = [assetBlobBaseUrl];
     runStrictValidationChecks(catalogV1, cardV1.document, testAssetBlobBaseUrls);
+    assert.equal(validateManifest(chessV1.document, 'chess').releaseId, 'assets-chess-v1');
     await writeBundledCatalog(bundledRoot, catalogV1, [
       [cardV1File, cardV1.bytes],
-      [boardV1File, boardV1.bytes]
+      [boardV1File, boardV1.bytes],
+      [chessV1File, chessV1.bytes]
     ]);
 
     const linkedExternalRoot = path.join(temporaryRoot, 'linked-external');
@@ -557,14 +586,17 @@ async function main() {
     fixture.manifests.set(`desktop/manifests/${cardV1File}`, cardV1.bytes);
     fixture.manifests.set(`desktop/manifests/${cardV2File}`, cardV2.bytes);
     fixture.manifests.set(`desktop/manifests/${boardV1File}`, boardV1.bytes);
+    fixture.manifests.set(`desktop/manifests/${chessV1File}`, chessV1.bytes);
     fixture.assets.set(slowAudio.path, slowAudioBytes);
     fixture.assets.set(shared.path, sharedBytes);
     fixture.assets.set(initialVersion.path, initialVersionBytes);
     fixture.assets.set(boardFont.path, boardFontBytes);
+    fixture.assets.set(chessPiece.path, chessPieceBytes);
     blobFixture.assets.set(blobKey(slowAudio), slowAudioBytes);
     blobFixture.assets.set(blobKey(shared), sharedBytes);
     blobFixture.assets.set(blobKey(initialVersion), initialVersionBytes);
     blobFixture.assets.set(blobKey(boardFont), boardFontBytes);
+    blobFixture.assets.set(blobKey(chessPiece), chessPieceBytes);
     blobFixture.slowPaths.add(blobKey(slowAudio));
 
     const store = new AssetStore({
@@ -600,6 +632,7 @@ async function main() {
     assert.equal(acceptedCatalog.ok, true, 'Valid remote catalog should be accepted.');
     assert.equal(store.catalogSource, 'remote');
     assert.equal(store.catalog.assetBlobBaseUrl, assetBlobBaseUrl, 'Validated remote catalog must retain the R2 blob base URL.');
+    assert.equal(store.gameStates.get('chess')?.status, 'not-installed', 'Chess must be downloadable from the validated catalog.');
 
     let pauseTriggered = false;
     const pauseListener = (progress) => {
@@ -642,8 +675,14 @@ async function main() {
     );
     assert.ok(await store.resolveAsset('card', shared.path));
     assert.ok(await store.resolveAsset('board', shared.path));
+
+    const sharedRequestsBeforeChess = blobFixture.count(blobKey(shared));
+    assert.equal(store.installGame('chess').ok, true);
+    await waitForInstall(store, 'chess');
+    assert.equal(blobFixture.count(blobKey(shared)), sharedRequestsBeforeChess, 'Chess install must reuse the shared CAS blob.');
+    assert.ok(await store.resolveAsset('chess', chessPiece.path));
     const blobFiles = await listFiles(path.join(cacheRoot, 'blobs', 'sha256'));
-    assert.equal(blobFiles.length, 4, 'Two games should store four unique blobs, not five logical paths.');
+    assert.equal(blobFiles.length, 5, 'Three games should store five unique blobs, not seven logical paths.');
 
     fixture.catalog = catalogV2;
     fixture.manifests.set(`desktop/manifests/${cardV2File}`, Buffer.from('{}\n'));
@@ -704,9 +743,9 @@ async function main() {
     assert.equal(restartedStore.catalog.games.card.releaseId, 'assets-card-v2');
     assert.equal(restartedStore.gameStates.get('card')?.status, 'installed');
     assert.equal(restartedStore.canLaunch('card'), true);
-    const hotPaths = [slowAudio.path, shared.path, updatedVersion.path, boardFont.path];
+    const hotPaths = [slowAudio.path, shared.path, updatedVersion.path, boardFont.path, chessPiece.path];
     await Promise.all(Array.from({ length: 12 }, () => Promise.all(hotPaths.map((assetPath) => (
-      restartedStore.resolveAsset(assetPath === boardFont.path ? 'board' : 'card', assetPath)
+      restartedStore.resolveAsset(assetPath === boardFont.path ? 'board' : (assetPath === chessPiece.path ? 'chess' : 'card'), assetPath)
     )))));
     assert.equal(restartHashCalls, 0, 'Restarted request hot path must trust unchanged persistent fingerprints without hashing each blob.');
     assert.equal((await restartedStore.refreshRemoteCatalog()).ok, false);
@@ -869,6 +908,11 @@ async function main() {
     assert.ok(boardManifestPath, 'Board receipt must exist before the per-game uninstall test.');
     const boardReceiptDigest = await sha256File(boardReceiptPath);
     const boardManifestDigest = await sha256File(boardManifestPath);
+    const chessReceiptPath = path.join(cacheRoot, 'receipts', 'chess.json');
+    const chessManifestPath = restartedStore.receipts.get('chess')?.manifestPath;
+    assert.ok(chessManifestPath, 'Chess receipt must exist before the per-game uninstall test.');
+    const chessReceiptDigest = await sha256File(chessReceiptPath);
+    const chessManifestDigest = await sha256File(chessManifestPath);
     const cardReceiptPath = path.join(cacheRoot, 'receipts', 'card.json');
     const cardManifestRoot = path.join(cacheRoot, 'manifests', 'card');
     const cardManifestPath = restartedStore.receipts.get('card')?.manifestPath;
@@ -912,10 +956,14 @@ async function main() {
     assert.equal(fs.existsSync(blobPath(cacheRoot, boardFont.sha256)), true, 'Board-only blob must survive Card uninstall.');
     assert.equal(await sha256File(boardReceiptPath), boardReceiptDigest, 'Board receipt must not change during Card uninstall.');
     assert.equal(await sha256File(boardManifestPath), boardManifestDigest, 'Board manifest must not change during Card uninstall.');
+    assert.equal(await sha256File(chessReceiptPath), chessReceiptDigest, 'Chess receipt must not change during Card uninstall.');
+    assert.equal(await sha256File(chessManifestPath), chessManifestDigest, 'Chess manifest must not change during Card uninstall.');
     assert.equal(restartedStore.gameStates.get('card')?.status, 'not-installed');
     assert.equal(restartedStore.gameStates.get('card')?.removable, false);
     assert.equal(restartedStore.gameStates.get('board')?.status, 'installed');
+    assert.equal(restartedStore.gameStates.get('chess')?.status, 'installed');
     assert.ok(await restartedStore.resolveAsset('board', shared.path), 'Remaining game must still resolve a shared blob.');
+    assert.ok(await restartedStore.resolveAsset('chess', shared.path), 'Chess must still resolve a shared blob after Card uninstall.');
     assert.equal((await restartedStore.uninstallGame('card')).alreadyRemoved, true, 'Repeated uninstall must be idempotent.');
 
     fixture.resetAssetRequests();
@@ -934,16 +982,20 @@ async function main() {
 
     assert.equal((await restartedStore.uninstallGame('card')).ok, true);
     assert.equal((await restartedStore.uninstallGame('board')).ok, true);
-    assert.equal((await listFiles(path.join(cacheRoot, 'blobs', 'sha256'))).length, 0, 'Removing both games must leave no game CAS blobs.');
+    assert.equal(fs.existsSync(blobPath(cacheRoot, shared.sha256)), true, 'Shared blob must survive while Chess remains installed.');
+    assert.equal((await restartedStore.uninstallGame('chess')).ok, true);
+    assert.equal((await listFiles(path.join(cacheRoot, 'blobs', 'sha256'))).length, 0, 'Removing all three games must leave no game CAS blobs.');
     assert.equal(restartedStore.gameStates.get('board')?.status, 'not-installed');
     assert.equal(restartedStore.gameStates.get('board')?.removable, false);
+    assert.equal(restartedStore.gameStates.get('chess')?.status, 'not-installed');
+    assert.equal(restartedStore.gameStates.get('chess')?.removable, false);
 
     console.log(
       `DESKTOP_ASSET_STORE_QA=PASS pauseResume=PASS dedup=PASS retryTimeout=PASS update=PASS ` +
       `persistentIntegrity=PASS boundedAudit=PASS lastKnownGood=PASS downgradeGuard=PASS ` +
       `launchGuard=PASS corruptionRepair=PASS r2Priority=PASS renderFallback=PASS ` +
       `cacheOwnership=PASS legacyClaim=PASS rootBoundary=PASS managedLinkBoundary=PASS ` +
-      `assetOriginAllowlist=PASS receiptBoundary=PASS ` +
+      `assetOriginAllowlist=PASS receiptBoundary=PASS chessPackage=PASS ` +
       `perGameUninstall=PASS sharedBlobGuard=PASS uniqueBlobs=${blobFiles.length}`
     );
   } finally {
