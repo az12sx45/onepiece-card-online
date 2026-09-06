@@ -1,6 +1,6 @@
 # Game Rules
 
-## Card Depth visible V2 規則邊界（2026-09-07，R2 已完成；V2 待 Render 發布）
+## Card Depth visible V2 規則邊界（2026-09-07，已發布）
 
 截至本段，V1 `40929bca` 已於 2026-09-07 02:08:49（Asia/Taipei）上線；正式素材 243／243、SW 74 項、browser-live 2,262 項（80 組／320 個 HTTP、0 page errors）PASS。下方 V1「尚未發布」是保留的歷史快照。V1 部署後真人測試遇到非本輪擁有的既有四人房 `MENU_NOT_READY`，未操作或退出，不能宣稱正式真人驗收通過。
 
@@ -8,7 +8,7 @@ V2 僅調整既有四處卡面的載入時機：可見卡於 idle 預載，最�
 
 `/images/card-depth/v1/` 的 240 份 alias 只為既有 launcher 1.1.4 相容；玩家須按「下載更新」完成一次素材下載及 SHA 驗證，之後遊戲中由本機供應。新增 13,632,032 logical bytes；去重後 211 blobs／13,479,592 bytes 已發布到 immutable R2 CAS，完整重跑為 `uploaded=0`／`skipped=3697`。這不是自動更新，也不改存檔或遊戲狀態。
 
-Card 的 `PLAY_CARD`、技能選目標、強化影片時序、凍結／禁選、勝負、帳號、Socket／DB，以及 Board 規則與 `BOARD_GAME_STATE` 一律不變。V2 正式部署、現有啟動器更新及 postdeploy 驗收尚待補記；既有 candidate 的技能禁選數字不等同「禁選卡片真人阻擋」通過。回滾僅優先撤回 V2 顯示策略，保留 alias／catalog／CAS，避免已更新 receipt 遭反降版阻擋。詳見 `docs/CARD_DEPTH_VISIBLE_V2_RELEASE.md`。
+Card 的 `PLAY_CARD`、技能選目標、強化影片時序、凍結／禁選、勝負、帳號、Socket／DB，以及 Board 規則與 `BOARD_GAME_STATE` 一律不變。V2 `248610c5` 已發布；245／245 個正式資源、browser 2,273 項與舊 SW profile postdeploy 77 項 PASS，可見卡不需 hover 即可進入 `ready`。現有 launcher 的遊戲素材更新仍由玩家點一次「下載更新」，不是自動改 receipt，也不需重裝啟動器。回滾僅優先撤回 V2 顯示策略，保留 alias／catalog／CAS，避免已更新 receipt 遭反降版阻擋。詳見 `docs/CARD_DEPTH_VISIBLE_V2_RELEASE.md`。
 
 ## Card Depth V1 規則邊界（2026-09-07，候選驗收通過）
 

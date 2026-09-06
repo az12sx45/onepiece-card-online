@@ -1,6 +1,6 @@
 # Project Overview
 
-## Card Depth visible V2／桌面一次下載（2026-09-07，R2 已完成；V2 待 Render 發布）
+## Card Depth visible V2／桌面一次下載（2026-09-07，已發布）
 
 截至本段，Card Depth V1 `40929bca` 已於 2026-09-07 02:08:49（Asia/Taipei）上線。正式 243／243 檔案 bytes／SHA、SW 舊 profile 74 項、browser-live 2,262 項（80 組／320 個 HTTP、0 page errors）已通過；下方未發布敘述保留為歷史快照。部署後真人 runner 因非本輪擁有的既有四人房 `MENU_NOT_READY` 停止，未操作或退出該房，不能寫成正式真人 PASS。
 
@@ -8,7 +8,7 @@ V2 將可見卡改為 idle 預載，hover 僅更新角度／反光等互動視�
 
 240 份原位元組分層資源另提供 `/images/card-depth/v1/` 路徑，讓現有 launcher 1.1.4 沿用素材下載與本機攔截；既有玩家須按「下載更新」，不是自動下載或重新安裝啟動器。新增 logical bytes 為 13,632,032；去重後 211 個 SHA／13,479,592 bytes 已以 immutable CAS 上傳。首次為 `uploaded=211`／`skipped=3486`，完整重跑為 `uploaded=0`／`skipped=3697`。更新完成後遊戲中讀本機；網頁程式、帳號、房間與同步仍走原正式服務。
 
-目前 V2 的獨立 SW 更新前基線 82 項、unit 4,983、browser 2,273（80 組）、desktop bundle／manifest／catalog／cache／package 與 R2 dry-run 已 PASS，R2 211 個新 CAS 物件也已發布並以零新增重跑確認；正式部署、現有啟動器更新及 postdeploy 結果待主流程補記。沒有更改規則、Socket、DB 或 Board。回滾保留 aliases／catalog／CAS，優先撤回 V2 顯示策略，避免向已更新客戶端提供較舊 manifest 而觸發反降版。完整範圍、證據與待驗事項見 `docs/CARD_DEPTH_VISIBLE_V2_RELEASE.md`。
+目前 V2 `248610c5` 已於 02:56:35 切換 Render。正式 5 份程式／清單與 240 aliases 共 245／245 HTTP bytes／SHA PASS；browser 2,273（80 組／320 HTTP／0 page errors）與延續原 V1 profile 的 SW postdeploy 77 項均 PASS。R2 211 個新 CAS 物件已發布、全部 GET／SHA 驗證，重跑為零新增。現有 launcher 1.1.4 不需重裝；關閉再開後按一次「下載更新」會補齊約 12.9 MiB 去重素材。本輪沒有改動使用者已安裝 receipt，實際 UI 點按保留為交付後確認。沒有更改規則、Socket、DB 或 Board；回滾保留 aliases／catalog／CAS，優先撤回 V2 顯示策略。完整範圍與證據見 `docs/CARD_DEPTH_VISIBLE_V2_RELEASE.md`。
 
 ## Card Depth V1 全卡分層候選（2026-09-07，驗收通過／尚未發布）
 

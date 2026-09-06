@@ -1,8 +1,10 @@
 # Card Depth visible V2 — 可見卡預載與桌面素材包
 
-## 狀態（2026-09-07，截至本段）
+## 狀態（2026-09-07，已發布）
 
-V1 已於 `40929bcade833267f48599135f9fdd29215f53d5` 正式上線，Render 切換時間為 2026-09-07 02:08:49（Asia/Taipei）。V2 的 R2 素材發布已完成，正式 release commit、Render 切換時間、現有啟動器實際更新與 postdeploy 結果尚待填入，不能預填 PASS。
+V2 程式提交 `248610c5ead4e0fd00edd726fc380ef7c68e5e3c` 已推送正式 `main`，Render 於 2026-09-07 02:56:35（Asia/Taipei）切換。正式 5 份程式／清單與 240 份 alias 共 245／245 個 HTTP 200，bytes／SHA-256 均與 Git 一致；80 組卡片的正式 browser QA 2,273 項 PASS（320 HTTP、0 page errors），原 V1 Service Worker profile 升級驗收 77 項 PASS。R2 新增內容亦已完成完整 GET／SHA 核對。
+
+現有 launcher 1.1.4 不需重裝，關閉再開後可取得新 catalog，玩家在《偉大航道爭霸戰》按一次「下載更新」即可補齊 211 個去重內容／13,479,592 bytes（約 12.9 MiB）；完成後重開遊戲仍讀取本機 CAS。本輪已驗證 catalog、manifest、下載來源及執行時路徑，但沒有動作使用者目前安裝中的按鈕與 receipt，不把自動化驗證改述為已代使用者實際點過更新。
 
 本輪正式工作樹為 `D:/Codex_Release_Worktrees/card-depth-desktop-bundle-v1`。舊 `docs/CARD_DEPTH_V1_RELEASE.md` 及四份專案文件下方的「尚未發布」段落保留為當時歷史快照；目前狀態以本文件及四份文件頂端新段落為準，不刪除或改寫舊失敗證據。
 
@@ -42,14 +44,14 @@ V1 原始分層清單仍為 `docs/CARD_DEPTH_V1_ASSETS.json`，240 檔／13,632,
 
 `desktop/generated/image-manifest.json`、`desktop/generated/asset-manifest.json`、`public/desktop/catalog-v1.json` 需與 alias inventory 一致。`desktop/package.json` 與 package QA 同步目前引用與 retained manifests，僅維持後續建置一致性；本次不發布新 installer，也不改 `public/desktop/launcher-release-v1.json`。
 
-## 發布順序與待驗項
+## 發布順序與完成結果
 
 1. 在新正式工作樹的實體素材目錄核對 240 個 alias 與 V1 原檔的 SHA／大小；不得寫入舊發布樹的 `public/images` junction 或混入 r5／r6、Board、備份／模型等未授權差異。
 2. alias inventory 進入正式本機 Git HEAD 後，依序建立 image manifest、unified asset manifest、game catalog；生成器要求 HEAD 與實體素材一致，僅 stage 不足。核對 Card 新增範圍及 Board 清單完全不變。
 3. `desktop_card_depth_bundle_qa.js`、manifest／catalog／package、asset-store／runtime cache／SW isolation、R2 publisher fixture 與 dry-run、Card unit 4,983、browser 2,273（80 組）均已通過。
 4. 沿用 `tools/desktop-r2-publisher/publish.js`／`publish-saved-r2.ps1`，以 `desktop/blobs/sha256/<前兩碼>/<SHA>` 發布 immutable 內容；首次上傳 211 個、略過 3,486 個，完整重跑新增 0、略過 3,697 個，沒有覆寫、刪除或競態提交。
-5. R2 位元組驗證完成後，才發布 Render 的 aliases、catalog、immutable manifest 與 runtime；正式 commit／切換時間／live hash 結果：**待主流程**。
-6. 用現有 launcher 1.1.4 驗證按更新後只抓新增內容、本機 `X-OnePiece-Desktop-Cache: hit`、foreground mask、重開不重抓、Render fallback 與修復；執行 V2 browser 80 卡及獨立舊 SW profile postdeploy。桌面、正式真人、V2 browser／postdeploy 結果：**待主流程**。
+5. R2 完整驗證後發布 Render aliases、catalog、immutable manifest 與 runtime；正式 commit 為 `248610c5`，02:56:35 切換。5 份程式／清單與 240 aliases 合計 245／245 個 HTTP 200，14,048,400 bytes 與 Git HEAD 逐位元組／SHA 一致。
+6. 正式 V2 browser 為 2,273 項／80 組／320 HTTP PASS，0 page errors；延續原 V1 profile 的 SW postdeploy 為 77 項 PASS，一般／強化卡皆在 `engaged=null` 時已 `ready`，證明不需 hover。沒有使用真人帳號重跑對戰；不觸碰先前非本輪擁有的四人房。使用者實際啟動器點按更新保留為交付後的界面確認，其資源清單、差異數量、R2 內容與原子切換流程已由自動化 QA 驗證。
 
 ## V2 獨立 Service Worker 基線
 
@@ -57,7 +59,7 @@ V1 原始分層清單仍為 `docs/CARD_DEPTH_V1_ASSETS.json`，240 檔／13,632,
 
 已完成的更新前基線位於 `D:/Codex_Release_Worktrees/card-holo-v458-release/artifacts/card-depth-visible-v2/sw/depth-v1-baseline.json`，**82 assertions PASS**：正式 `40929bca`、舊 query `20260907-depth-v1`、12 份 `/card-depth/v1/` 代表素材與 Git blob／SW cache 一致，controller 為既有 `op-card-v7.5`。新 alias 12 個 HTTP 404 僅記錄為尚未發布觀察，alias cache entries 為 0。
 
-profile 固定在同一證據根的 `profiles/depth-v1`。postdeploy 必須延續此 profile 及 nonce，使用新 query `20260907-depth-visible-v2` 與 `/images/card-depth/v1/` 代表素材，驗證可見卡不需 hover 即完成載入、舊 cache key 保留與新 bytes 一致。本輪優先從原證據樹執行已鎖定腳本，指定新的正式 release commit，不需搬移 profile；新正式工作樹內的同名腳本只作程式交付。若日後改變證據位置，須另外記錄與驗證 baseline／profile 的延續關係，不能新建乾淨 profile 冒充升級。V2 postdeploy 目前**尚未執行**。
+profile 固定在同一證據根的 `profiles/depth-v1`。postdeploy 已延續同一 profile 及 nonce，使用新 query `20260907-depth-visible-v2` 與 `/images/card-depth/v1/` 代表素材，結果為 77 項 PASS、`oldProfileRefresh=PASS`。舊 V1 CSS／JS cache key 與 SHA 保留，新 V2 game／CSS／JS 與 6 份代表 alias 已由原 SW 正確快取；一般／強化卡均在 `engaged=null` 時 `ready`。報告為 `D:/Codex_Release_Worktrees/card-holo-v458-release/artifacts/card-depth-visible-v2/sw/visible-v2-postdeploy-report.json`；未新建 profile 冒充升級。
 
 ## 回滾
 
