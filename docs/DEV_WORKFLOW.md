@@ -1,5 +1,18 @@
 ﻿# Dev Workflow
 
+## Card Finish V1 獨立實作預發布驗收（2026-09-06，尚未上線）
+
+- 公開候選範圍只有 `public/game.html`、`public/css/card-finish-v1.css`、`public/js/card_finish_v1.js`。新 CSS／JS 由獨立來源完成，`game.html` 只增加四個卡面接點、圖鑑容器 class 與兩個 versioned 引用；不改原 inline 遊戲程式。
+- 獨立來源審核無 blocker。`card_finish_unit_qa.js` 為 `4,437` assertions PASS；`card_finish_browser_qa.js` 為 `172` 項 PASS、`0` page errors。
+- 正式雙帳號已在 production backend／engine／Socket 建立 `0 CPU` 雙真人候選對局。手動驗收的手牌／新抽牌各一次權威 `PLAY_CARD` 均只送一次且另一端一致，騙人布數字 `1` disabled 的實體點擊也沒有送事件。連續 `card_finish_live_qa.js` candidate runner 另自然遇到青雉冰凍：冰凍手牌實體點擊不送 `ACTION`、state 不變，之後香吉士 drawn 與兩次 `PICK_TARGET` 正常完成；hand／drawn／peer sync／finish hooks／自然禁選與禁選攔截皆為 true，page errors 為 `0`。
+- `card_finish_release_qa.js --phase predeploy` 為 `93` 項 PASS，涵蓋 desktop／mobile／reduced、四份實際資源 SHA 與舊 `op-card-v7.5` Service Worker profile。娜美兩牌禁選仍只有 fixture 覆蓋，尚未自然遇到；正式站上線後的 live／postdeploy 也尚未執行，因此不能視為已部署。
+- 未 commit、push 或部署，也未修改 server、DB、卡牌規則、Board、存檔或同步。詳細來源邊界、回復方式與驗收限制見 `docs/CARD_FINISH_V1_RELEASE.md`。
+
+### Card V458 舊 GPL 候選（歷史，未上線）
+
+- 前次五檔候選為當時的 `public/game.html`、`public/css/card-holo-v1.css`、`public/js/card_holo_v1.js`、`public/third_party/pokemon-cards-css/NOTICE.md` 與 `LICENSE.txt`。相關檔案留在本機且維持原授權，不納入 Card Finish V1 發布，也不以改標方式重新發布。
+- 舊 38／82／51 項 QA 與未完成真實出牌的狀態只作歷史紀錄，詳見 `docs/CARD_HOLO_V458_RELEASE_REPORT.md`。
+
 ## 修改紀錄：桌面啟動器 1.1.4 發布準備 V463（2026-09-06，R2 已上傳／Render 待驗證）
 
 - 內容與邊界：`1.1.4` Windows x64 安裝包已納入 V461 高效能 GPU 偏好與 V462 桌面遊戲游標接管；沒有新增 Card／Board gameplay、同步或存檔變更。《霸海戰棋》維持 disabled，`public/images/ranks/r5.PNG`、`r6.PNG` 繼續排除且未修改。

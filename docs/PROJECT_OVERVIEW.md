@@ -1,5 +1,14 @@
 # Project Overview
 
+## Card Finish V1 獨立實作候選（2026-09-06，尚未發布）
+
+- 本次以獨立 `card-finish-v1.css`／`card_finish_v1.js` 呈現圖鑑與二選一卡面，公開候選只有這兩檔及接入後的 `game.html`；舊 GPL 候選留在本機、保留原授權且不發布。
+- 獨立來源審核無 blocker；新版單元 `4,437` assertions 與瀏覽器 `172` 項／`0` page errors 均 PASS。
+- 正式雙帳號候選對局已證實手牌、新抽牌各一次只提交一個權威 `PLAY_CARD` 且兩端一致，手動騙人布 disabled 及連續 runner 自然遇到的青雉冰凍都證實實體點擊不送事件；runner 的 hand／drawn／peer sync／finish hooks／自然禁選與禁選攔截全為 true、page errors 為 `0`。這是正式 backend／engine／Socket 加瀏覽器三資源替換，不是正式部署。
+- 預發布 Service Worker／資源 QA 為 `93` 項 PASS；娜美兩牌禁選仍只由 fixture 覆蓋，公開 live／postdeploy 尚待上線後執行。目前未 commit、push 或部署，亦未改卡牌規則、server、DB、存檔、Board 或同步。詳見 `docs/CARD_FINISH_V1_RELEASE.md`。
+
+前次 Card V458 GPL 五檔候選與舊 QA 只作未上線歷史紀錄，詳見 `docs/CARD_HOLO_V458_RELEASE_REPORT.md`。
+
 本文件只整理目前 repo 內的大富翁 / Board 遊戲。舊卡牌房間與 `server/engine.js`、`server/cpu.js` 雖然存在，但不是本文件的主範圍。
 
 ## 桌面啟動器 1.1.4 發布準備 V463（2026-09-06，R2 已上傳／Render 待驗證）

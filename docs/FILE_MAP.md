@@ -1,5 +1,23 @@
 # File Map
 
+## Card Finish V1 獨立實作候選（2026-09-06，尚未發布）
+
+| 檔案 | 功能／狀態 |
+| --- | --- |
+| `public/game.html` | 只增加四個 `[data-card-finish]` 卡面接點、圖鑑容器 class 與兩個新資源引用；原 inline 遊戲流程不變。 |
+| `public/css/card-finish-v1.css` | 獨立卡面外觀、觸控／reduced-motion 靜態與 disabled／冰凍呈現；不接管點擊。 |
+| `public/js/card_finish_v1.js` | 依實際圖片與既有 DOM 狀態套用 plain／foil 顯示；不送遊戲事件。以上三檔是唯一的新公開候選範圍。 |
+| `scripts/card_finish_unit_qa.js` | 新版單元回歸，`4,437` assertions PASS。 |
+| `scripts/card_finish_browser_qa.js` | 真正瀏覽器 fixture，`172` 項 PASS、`0` page errors。 |
+| `scripts/card_finish_live_qa.js` | 正式雙帳號、雙隔離瀏覽器 candidate／live runner；帳密只由 stdin JSON 或環境變數提供。candidate 一房連續流程 PASS：hand／drawn／peer sync／finish hooks／青雉冰凍自然禁選與實體禁選攔截全為 true，page errors 為 `0`。公開 live 仍待部署後執行。 |
+| `artifacts/card-holo-release-v458/card_finish_release_qa.js`、`card-finish-predeploy-state.json` | 預發布資源／Service Worker 驗收：desktop／mobile／reduced、四份實際資源 SHA 與既有 `op-card-v7.5` profile 共 `93` 項 PASS；postdeploy 尚未執行。 |
+| `docs/CARD_FINISH_V1_RELEASE.md` | 獨立來源邊界、三檔發布白名單、真實候選對局證據、自然案例限制與回復方式。 |
+
+### Card V458 舊 GPL 候選（本機歷史，不發布）
+
+- 前次候選的 `public/game.html` bytes、`public/css/card-holo-v1.css`、`public/js/card_holo_v1.js`、`public/third_party/pokemon-cards-css/NOTICE.md` 與 `LICENSE.txt` 是舊五檔範圍；保留原授權，不納入 Card Finish V1。
+- `docs/CARD_HOLO_V458_RELEASE_REPORT.md` 保留舊候選停止發布、舊 QA 與未完成驗收的歷史紀錄。
+
 本文件列出大富翁 / Board 遊戲維護時最常需要讀的檔案。備份、暫存、複製檔不列為主流程。
 
 ## 桌面啟動器 1.1.4 發布準備（V463，R2 已上傳／Render 待驗證）

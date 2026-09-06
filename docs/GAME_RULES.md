@@ -1,5 +1,12 @@
 # Game Rules
 
+## Card Finish V1 規則邊界（2026-09-06，預發布）
+
+- Card Finish V1 只讀取現有卡圖、按鈕 disabled／冰凍狀態及選牌容器來顯示 plain／foil 外觀；不接管原點擊、不改 `PLAY_CARD` payload、目標選擇、出牌、禁選、強化動畫時序、勝負或多人事件。
+- 新版單元 `4,437` assertions、瀏覽器 `172` 項且 `0` page errors 均通過。正式雙帳號候選對局亦已確認手牌與抽牌各一次只送一個權威 `PLAY_CARD` 且另一端一致；手動騙人布 disabled 選項與 runner 自然遇到的青雉冰凍手牌，實體點擊都沒有送出事件或改變權威 state。
+- 連續 runner 的 hand／drawn／peer sync／finish hooks／自然禁選與禁選攔截均為 true，預發布 Service Worker／資源 QA 亦為 `93` 項 PASS。娜美兩牌禁選仍只由 fixture 覆蓋，公開 live／postdeploy 尚待上線後執行，所以不能把它另稱為已自然遇到或已部署驗證。
+- 本候選不修改 Card／Board 規則、server、DB、帳號、存檔、同步、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`，且尚未 commit、push 或部署。詳見 `docs/CARD_FINISH_V1_RELEASE.md`；前次 GPL 候選只作未上線歷史紀錄，見 `docs/CARD_HOLO_V458_RELEASE_REPORT.md`。
+
 本文件整理目前程式碼中大富翁 / Board 遊戲已存在的規則來源。這不是新設計稿；若與程式碼衝突，以目前程式碼為準，並應先更新程式或文件之一來消除衝突。
 
 ## 多人戰鬥續戰規則（V458）

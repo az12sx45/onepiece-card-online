@@ -6,6 +6,8 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>偉大航道爭霸戰｜正式對戰</title>
+  <link rel="stylesheet" href="css/card-finish-v1.css?v=20260906-finish-v1">
+  <script defer src="js/card_finish_v1.js?v=20260906-finish-v1"></script>
   <link rel="stylesheet" href="css/card-cursor-buggy-v3.css?v=20260906-game-cursors-v4">
   <script defer src="js/game_cursor_feedback_v1.js?v=20260906-game-cursors-v4"></script>
   <link rel="stylesheet" href="css/card-tailwind-v1.min.css?v=20260904-perf-v433">
@@ -2641,10 +2643,18 @@ body::before{
 
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
     <button id="playHand" class="border border-[#2f353c] rounded-xl overflow-hidden">
-      <img id="imgHand" src=""/>
+      <span data-card-finish="plain" data-finish-context="choice">
+        <span class="card-finish-face">
+          <img id="imgHand" src="" draggable="false"/>
+        </span>
+      </span>
     </button>
     <button id="playDrawn" class="border border-[#2f353c] rounded-xl overflow-hidden">
-      <img id="imgDrawn" src=""/>
+      <span data-card-finish="plain" data-finish-context="choice">
+        <span class="card-finish-face">
+          <img id="imgDrawn" src="" draggable="false"/>
+        </span>
+      </span>
     </button>
   </div>
 </div>
@@ -2699,15 +2709,15 @@ body::before{
       </div>
 
       <!-- 內容 -->
-      <div class="flex flex-col md:flex-row gap-3 md:gap-4 p-3 md:p-4 overflow-hidden">
+      <div class="card-finish-dex-body flex flex-col md:flex-row gap-3 md:gap-4 p-3 md:p-4 overflow-hidden">
         <!-- 左邊：卡片列表 -->
-        <div class="flex-1 overflow-y-auto pr-1">
+        <div class="card-finish-dex-list flex-1 overflow-y-auto pr-1">
           <div id="cardDexGrid"
                class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-5 lg:grid-cols-6 gap-2 text-[10px] md:text-xs"></div>
         </div>
 
         <!-- 右邊：大圖預覽 -->
-        <div class="w-full md:w-[50%] shrink-0 border-t md:border-t-0 md:border-l border-slate-700/70 pt-3 md:pt-0 md:pl-4">
+        <div class="card-finish-dex-detail w-full md:w-[50%] shrink-0 border-t md:border-t-0 md:border-l border-slate-700/70 pt-3 md:pt-0 md:pl-4">
           <div id="cardDexPreviewEmpty"
                class="text-[11px] md:text-xs text-slate-300/80 italic">
             點左邊任一張卡片，可以查看大圖與強化版本。
@@ -2716,16 +2726,22 @@ body::before{
           <div id="cardDexPreview" class="hidden">
             <div class="text-xs md:text-sm font-semibold mb-1" id="cardDexPreviewTitle"></div>
 
-            <div class="grid grid-cols-2 gap-2 mb-2">
+            <div class="card-finish-dex-pair grid grid-cols-2 gap-2 mb-2">
               <div class="flex flex-col items-center">
                 <div class="text-[10px] md:text-xs mb-1 opacity-75">一般</div>
-                <img id="cardDexPreviewBase"
-                     class="w-full max-w-[480px] rounded-lg border border-slate-600/80 shadow-lg bg-black/40 object-contain" />
+                <div data-card-finish="plain">
+                  <div class="card-finish-face">
+                    <img id="cardDexPreviewBase" alt="一般卡片" draggable="false" />
+                  </div>
+                </div>
               </div>
               <div class="flex flex-col items-center">
                 <div class="text-[10px] md:text-xs mb-1 opacity-75">強化</div>
-                <img id="cardDexPreviewEnh"
-                     class="w-full max-w-[480px] rounded-lg border border-rose-500/80 shadow-lg bg-black/40 object-contain" />
+                <div data-card-finish="foil">
+                  <div class="card-finish-face">
+                    <img id="cardDexPreviewEnh" alt="強化卡片" draggable="false" />
+                  </div>
+                </div>
               </div>
             </div>
 

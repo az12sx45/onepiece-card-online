@@ -1,0 +1,203 @@
+/* Independently implemented from the supplied requirements, 2026-09-06.
+   Original card images remain the visible artwork; this file adds optical layers. */
+
+[data-card-finish] {
+  display: block;
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: 2 / 3;
+  touch-action: auto;
+}
+
+[data-card-finish] > .card-finish-face {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  isolation: isolate;
+  box-shadow: 0 0 0 1px rgb(157 179 194 / .34), 0 0 0 3px #0a1622, 0 7px 16px rgb(0 0 0 / .24);
+  transform-origin: 50% 50%;
+  transform: none;
+  transition: transform 150ms cubic-bezier(.2, .65, .3, 1);
+}
+
+[data-card-finish] > .card-finish-face > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  object-fit: contain;
+  margin: 0;
+}
+
+[data-card-finish] > .card-finish-face::before,
+[data-card-finish] > .card-finish-face::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 160ms ease-out;
+}
+
+/* A wide, weak reflection preserves small printed text in the image. */
+[data-card-finish] > .card-finish-face::before {
+  background: radial-gradient(
+    ellipse 72% 48% at var(--finish-light-x, 50%) var(--finish-light-y, 40%),
+    rgb(255 252 236 / .24) 0%,
+    rgb(232 246 255 / .10) 30%,
+    transparent 72%
+  );
+}
+
+/* A sparse diagonal spectrum reads as a thin surface film, without a texture asset. */
+[data-card-finish][data-finish-surface="foil"] > .card-finish-face::after {
+  background: linear-gradient(
+    var(--finish-band-angle, 117deg),
+    transparent 20%,
+    rgb(143 200 251 / .50) 34%,
+    rgb(209 169 238 / .64) 40%,
+    rgb(251 203 152 / .62) 46%,
+    rgb(177 230 198 / .56) 52%,
+    rgb(132 201 226 / .48) 58%,
+    transparent 72%
+  );
+  background-size: 165% 145%;
+  background-position: var(--finish-film-x, 50%) var(--finish-film-y, 50%);
+  mix-blend-mode: soft-light;
+  opacity: .12;
+}
+
+[data-card-finish][data-finish-engaged="true"] > .card-finish-face::before {
+  opacity: .8;
+}
+
+[data-card-finish][data-finish-engaged="true"][data-finish-surface="foil"] > .card-finish-face::after {
+  opacity: .36;
+}
+
+[data-card-finish][data-finish-engaged="true"] > .card-finish-face {
+  transform: perspective(900px) rotateX(var(--finish-pitch, 0deg)) rotateY(var(--finish-yaw, 0deg));
+  will-change: transform;
+}
+
+[data-card-finish][data-finish-surface="foil"] > .card-finish-face {
+  box-shadow: 0 0 0 1px rgb(200 182 128 / .54), 0 0 0 3px #0a1622, 0 7px 16px rgb(0 0 0 / .24);
+}
+
+[data-card-finish][data-finish-locked="true"] > .card-finish-face,
+button:disabled [data-card-finish] > .card-finish-face,
+.card-frozen [data-card-finish] > .card-finish-face,
+[data-card-finish].card-frozen > .card-finish-face {
+  transform: none;
+  transition: none;
+  will-change: auto;
+}
+
+[data-card-finish][data-finish-locked="true"] > .card-finish-face::before,
+[data-card-finish][data-finish-locked="true"] > .card-finish-face::after,
+button:disabled [data-card-finish] > .card-finish-face::before,
+button:disabled [data-card-finish] > .card-finish-face::after,
+.card-frozen [data-card-finish] > .card-finish-face::before,
+.card-frozen [data-card-finish] > .card-finish-face::after,
+[data-card-finish].card-frozen > .card-finish-face::before,
+[data-card-finish].card-frozen > .card-finish-face::after {
+  opacity: 0;
+  transition: none;
+}
+
+#myPlayZone .card-frozen::after {
+  z-index: 2;
+}
+
+[data-card-finish][data-finish-static="true"] > .card-finish-face {
+  transform: none;
+  transition: none;
+  will-change: auto;
+}
+
+@media (prefers-reduced-motion: reduce), (hover: none), (pointer: coarse) {
+  [data-card-finish] > .card-finish-face {
+    transform: none;
+    transition: none;
+    will-change: auto;
+  }
+
+  [data-card-finish] > .card-finish-face::before,
+  [data-card-finish] > .card-finish-face::after {
+    transition: none;
+  }
+
+  [data-card-finish] > .card-finish-face::before {
+    opacity: 0;
+  }
+}
+
+/* Optional layout hooks for the two existing catalogue preview cards. */
+#cardDexOverlay .card-finish-dex-body {
+  display: grid;
+  grid-template-columns: minmax(11rem, .8fr) minmax(0, 1.5fr);
+  gap: 1rem;
+  min-height: 0;
+  overflow: hidden;
+}
+
+#cardDexOverlay .card-finish-dex-list,
+#cardDexOverlay .card-finish-dex-detail {
+  width: auto;
+  max-width: none;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+#cardDexOverlay .card-finish-dex-detail {
+  padding: .75rem;
+}
+
+#cardDexOverlay .card-finish-dex-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  justify-items: center;
+  gap: clamp(.625rem, 2vw, 1.5rem);
+  min-width: 0;
+}
+
+#cardDexOverlay .card-finish-dex-pair [data-card-finish] {
+  width: 100%;
+  max-width: 20rem;
+}
+
+@media (max-width: 600px) {
+  #cardDexOverlay .card-finish-dex-body {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(7rem, .7fr) minmax(0, 1.3fr);
+    gap: .5rem;
+  }
+
+  #cardDexOverlay .card-finish-dex-detail {
+    padding: .5rem;
+  }
+}
+
+@media (min-width: 601px) and (max-height: 500px) {
+  #cardDexOverlay .card-finish-dex-body {
+    grid-template-columns: minmax(10rem, .85fr) minmax(0, 1.5fr);
+    gap: .625rem;
+  }
+
+  #cardDexOverlay .card-finish-dex-detail {
+    padding: .375rem;
+  }
+
+  #cardDexOverlay .card-finish-dex-pair [data-card-finish] {
+    max-width: min(20rem, calc((100dvh - 9rem) * 2 / 3));
+  }
+}
