@@ -1,72 +1,157 @@
-/* New World Log Pose cursor V3: Nami's quill points down-left and remains visible while dragging. */
-@media (hover: hover) and (pointer: fine) {
-  html,
-  body {
-    cursor: url("../images/board/cursors/board_cursor_nami_quill_default_v3.png") 4 43, default;
+/* New World Log Pose cursor V4: Nami's quill points down-left and survives native cursor overrides. */
+@media (any-hover: hover) and (any-pointer: fine) {
+  :root {
+    --game-cursor-default: url("../images/board/cursors/board_cursor_nami_quill_default_v3.png") 4 43, default;
+    --game-cursor-pointer: url("../images/board/cursors/board_cursor_nami_quill_pointer_v3.png") 4 43, pointer;
+    --game-cursor-pressed: url("../images/board/cursors/board_cursor_nami_quill_pressed_v3.png") 5 43, pointer;
   }
 
-  /* Preserve the themed quill over Board surfaces that previously requested native grab cursors. */
-  :where(
+  html,
+  html::before,
+  html::after,
+  html *,
+  html *::before,
+  html *::after {
+    cursor: var(--game-cursor-default) !important;
+  }
+
+  :is(
+    button:not(:disabled),
+    a[href],
+    [role="button"]:not([aria-disabled="true"]),
+    [onclick],
+    [tabindex]:not([tabindex="-1"]),
+    label[for],
+    summary,
+    select:not(:disabled),
+    input[type="button"]:not(:disabled),
+    input[type="submit"]:not(:disabled),
+    input[type="reset"]:not(:disabled),
+    input[type="checkbox"]:not(:disabled),
+    input[type="radio"]:not(:disabled),
+    input[type="range"]:not(:disabled),
+    input[type="file"]:not(:disabled),
+    [draggable="true"],
+    [aria-grabbed="true"],
+    .game-cursor-interactive,
+    .cursor-pointer,
+    .cursor-grab,
+    .cursor-grabbing,
+    .cursor-zoom-in,
+    .cursor-zoom-out,
     .board-viewport,
     .lineage-cylinder-scene,
     .ship-stage.tuning .ship-marker,
     .ship-stage.slot-tuning .slot,
-    .tot-musica-roster-card,
-    [draggable="true"]
-  ) {
-    cursor: url("../images/board/cursors/board_cursor_nami_quill_pointer_v3.png") 4 43, grab !important;
+    .tot-musica-roster-card
+  ),
+  :is(
+    button:not(:disabled), a[href], [role="button"]:not([aria-disabled="true"]), [onclick],
+    [tabindex]:not([tabindex="-1"]), label[for], summary, select:not(:disabled),
+    input[type="button"]:not(:disabled), input[type="submit"]:not(:disabled),
+    input[type="reset"]:not(:disabled), input[type="checkbox"]:not(:disabled),
+    input[type="radio"]:not(:disabled), input[type="range"]:not(:disabled),
+    input[type="file"]:not(:disabled), [draggable="true"], [aria-grabbed="true"],
+    .game-cursor-interactive, .cursor-pointer, .cursor-grab, .cursor-grabbing,
+    .cursor-zoom-in, .cursor-zoom-out, .board-viewport, .lineage-cylinder-scene,
+    .ship-stage.tuning .ship-marker, .ship-stage.slot-tuning .slot, .tot-musica-roster-card
+  ) *,
+  :is(
+    button:not(:disabled), a[href], [role="button"]:not([aria-disabled="true"]), [onclick],
+    [tabindex]:not([tabindex="-1"]), label[for], summary, select:not(:disabled),
+    input[type="button"]:not(:disabled), input[type="submit"]:not(:disabled),
+    input[type="reset"]:not(:disabled), input[type="checkbox"]:not(:disabled),
+    input[type="radio"]:not(:disabled), input[type="range"]:not(:disabled),
+    input[type="file"]:not(:disabled), [draggable="true"], [aria-grabbed="true"],
+    .game-cursor-interactive, .cursor-pointer, .cursor-grab, .cursor-grabbing,
+    .cursor-zoom-in, .cursor-zoom-out, .board-viewport, .lineage-cylinder-scene,
+    .ship-stage.tuning .ship-marker, .ship-stage.slot-tuning .slot, .tot-musica-roster-card
+  )::before,
+  :is(
+    button:not(:disabled), a[href], [role="button"]:not([aria-disabled="true"]), [onclick],
+    [tabindex]:not([tabindex="-1"]), label[for], summary, select:not(:disabled),
+    input[type="button"]:not(:disabled), input[type="submit"]:not(:disabled),
+    input[type="reset"]:not(:disabled), input[type="checkbox"]:not(:disabled),
+    input[type="radio"]:not(:disabled), input[type="range"]:not(:disabled),
+    input[type="file"]:not(:disabled), [draggable="true"], [aria-grabbed="true"],
+    .game-cursor-interactive, .cursor-pointer, .cursor-grab, .cursor-grabbing,
+    .cursor-zoom-in, .cursor-zoom-out, .board-viewport, .lineage-cylinder-scene,
+    .ship-stage.tuning .ship-marker, .ship-stage.slot-tuning .slot, .tot-musica-roster-card
+  )::after,
+  :is(
+    button:not(:disabled), a[href], [role="button"]:not([aria-disabled="true"]), [onclick],
+    [tabindex]:not([tabindex="-1"]), label[for], summary, select:not(:disabled),
+    input[type="button"]:not(:disabled), input[type="submit"]:not(:disabled),
+    input[type="reset"]:not(:disabled), input[type="checkbox"]:not(:disabled),
+    input[type="radio"]:not(:disabled), input[type="range"]:not(:disabled),
+    input[type="file"]:not(:disabled), [draggable="true"], [aria-grabbed="true"],
+    .game-cursor-interactive, .cursor-pointer, .cursor-grab, .cursor-grabbing,
+    .cursor-zoom-in, .cursor-zoom-out, .board-viewport, .lineage-cylinder-scene,
+    .ship-stage.tuning .ship-marker, .ship-stage.slot-tuning .slot, .tot-musica-roster-card
+  ) *::before,
+  :is(
+    button:not(:disabled), a[href], [role="button"]:not([aria-disabled="true"]), [onclick],
+    [tabindex]:not([tabindex="-1"]), label[for], summary, select:not(:disabled),
+    input[type="button"]:not(:disabled), input[type="submit"]:not(:disabled),
+    input[type="reset"]:not(:disabled), input[type="checkbox"]:not(:disabled),
+    input[type="radio"]:not(:disabled), input[type="range"]:not(:disabled),
+    input[type="file"]:not(:disabled), [draggable="true"], [aria-grabbed="true"],
+    .game-cursor-interactive, .cursor-pointer, .cursor-grab, .cursor-grabbing,
+    .cursor-zoom-in, .cursor-zoom-out, .board-viewport, .lineage-cylinder-scene,
+    .ship-stage.tuning .ship-marker, .ship-stage.slot-tuning .slot, .tot-musica-roster-card
+  ) *::after {
+    cursor: var(--game-cursor-pointer) !important;
   }
 
-  :where(
-    .board-viewport.dragging,
-    .lineage-cylinder-scene.is-dragging,
-    .ship-stage.tuning .ship-marker:active,
-    .ship-stage.slot-tuning .slot:active,
-    .tot-musica-roster-card:active,
-    [draggable="true"]:active,
-    [aria-grabbed="true"]
-  ) {
-    cursor: url("../images/board/cursors/board_cursor_nami_quill_pressed_v3.png") 5 43, grabbing !important;
-  }
-
-  button:not(:disabled),
-  a[href],
-  [role="button"]:not([aria-disabled="true"]),
-  [onclick],
-  [tabindex]:not([tabindex="-1"]),
-  label[for],
-  summary,
-  input[type="button"]:not(:disabled),
-  input[type="submit"]:not(:disabled),
-  input[type="reset"]:not(:disabled),
-  input[type="checkbox"]:not(:disabled),
-  input[type="radio"]:not(:disabled),
-  .game-cursor-interactive,
-  .cursor-pointer {
-    cursor: url("../images/board/cursors/board_cursor_nami_quill_pointer_v3.png") 4 43, pointer !important;
+  .poster,
+  .poster *,
+  .poster::before,
+  .poster::after,
+  .poster *::before,
+  .poster *::after,
+  .slot.clickable,
+  .slot.clickable *,
+  .slot.clickable::before,
+  .slot.clickable::after,
+  .slot.clickable *::before,
+  .slot.clickable *::after {
+    cursor: var(--game-cursor-pointer) !important;
   }
 
   body.game-cursor-pressed,
-  body.game-cursor-pressed *:not(input):not(textarea):not(select):not([contenteditable="true"]),
+  body.game-cursor-pressed *,
+  body.game-cursor-pressed::before,
+  body.game-cursor-pressed::after,
+  body.game-cursor-pressed *::before,
+  body.game-cursor-pressed *::after,
   button:not(:disabled):active,
+  button:not(:disabled):active *,
   a[href]:active,
+  a[href]:active *,
   [role="button"]:not([aria-disabled="true"]):active,
+  [role="button"]:not([aria-disabled="true"]):active *,
   [onclick]:active,
+  [onclick]:active *,
   .game-cursor-interactive:active,
-  .cursor-pointer:active {
-    cursor: url("../images/board/cursors/board_cursor_nami_quill_pressed_v3.png") 5 43, pointer !important;
+  .game-cursor-interactive:active *,
+  .cursor-pointer:active,
+  .cursor-pointer:active *,
+  .board-viewport.dragging,
+  .board-viewport.dragging *,
+  .lineage-cylinder-scene.is-dragging,
+  .lineage-cylinder-scene.is-dragging *,
+  [aria-grabbed="true"],
+  [aria-grabbed="true"] * {
+    cursor: var(--game-cursor-pressed) !important;
   }
 
-  button:disabled,
-  [aria-disabled="true"],
-  input:disabled {
-    cursor: url("../images/board/cursors/board_cursor_nami_quill_default_v3.png") 4 43, not-allowed !important;
-  }
-
-  input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]),
-  textarea,
-  [contenteditable="true"] {
-    cursor: text !important;
+  :is(button:disabled, [aria-disabled="true"], input:disabled),
+  :is(button:disabled, [aria-disabled="true"], input:disabled) *,
+  :is(button:disabled, [aria-disabled="true"], input:disabled)::before,
+  :is(button:disabled, [aria-disabled="true"], input:disabled)::after,
+  :is(button:disabled, [aria-disabled="true"], input:disabled) *::before,
+  :is(button:disabled, [aria-disabled="true"], input:disabled) *::after {
+    cursor: var(--game-cursor-default) !important;
   }
 }
 

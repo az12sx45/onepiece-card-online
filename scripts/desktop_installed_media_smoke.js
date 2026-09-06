@@ -100,6 +100,7 @@ function main() {
   const sessionDataInsideCache = !!report?.sessionDataPath && sessionDataRelative !== '..' &&
     !sessionDataRelative.startsWith(`..${path.sep}`) && !path.isAbsolute(sessionDataRelative);
   const passed = child.status === 0 && report?.ok === true && report?.installedMediaSmoke?.ok === true &&
+    report?.gpu?.requestedPreference === 'high-performance' &&
     report.installedMediaSmoke.results.length === chosen.length && report.installedMediaSmoke.results.every((result) => result.cacheHeader === 'hit') &&
     sessionDataInsideCache;
   fs.rmSync(fixtureRoot, { recursive: true, force: true });
@@ -108,6 +109,7 @@ function main() {
   }
   const summary = report.installedMediaSmoke.results.map((result) => `${result.gameId}:${result.contentType}:${result.fullBytes}:range${result.rangeStatus}`).join(',');
   console.log(`DESKTOP_INSTALLED_MEDIA_SMOKE=PASS source=${options.exe ? 'packaged' : 'dev'} cache=hit chromiumCache=selected-root assets=${summary}`);
+  console.log(`DESKTOP_GPU_DIAGNOSTICS=${JSON.stringify(report.gpu)}`);
 }
 
 try {

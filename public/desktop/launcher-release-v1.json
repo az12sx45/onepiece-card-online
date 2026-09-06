@@ -3,6 +3,17 @@
   "channel": "stable",
   "platform": "win32",
   "arch": "x64",
-  "version": "1.1.2",
-  "publishedAt": "2026-09-04T06:34:01.000Z"
+  "version": "1.1.4",
+  "publishedAt": "2026-09-06T01:14:28.000Z",
+  "artifact": {
+    "fileName": "ONE-PIECE-Tabletop-Launcher-1.1.4-x64.exe",
+    "bytes": 152113427,
+    "sha256": "f6edd9313eb51bbc8e75ac52cdd55a7df26a39ec47090c0c97efab8b9d90bcb9",
+    "url": "https://game-assets.rihdi.tw/desktop/launcher/releases/1.1.4/ONE-PIECE-Tabletop-Launcher-1.1.4-x64.exe"
+  },
+  "signature": {
+    "algorithm": "Ed25519",
+    "keyId": "launcher-ed25519-cadd711c990664d5715de23131cadf45",
+    "value": "g0VQTksONDCYJxf0MlMxtQ4tyWX0m7h9eash0PvUe5hRhb95yi55sgRKqMJJ6xTaEmrbu4GKP5+LTNH1iXeEAA=="
+  }
 }

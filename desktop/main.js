@@ -16,11 +16,28 @@ const {
   systemPreferences,
   Tray
 } = require('electron');
+
+function configureGpuPreference(commandLine) {
+  // Prefer a discrete GPU without bypassing Chromium's driver safety checks.
+  // Explicit troubleshooting / power-saving switches remain authoritative.
+  if (commandLine.hasSwitch('disable-gpu')) return 'software';
+  if (commandLine.hasSwitch('force_low_power_gpu')) return 'low-power';
+  if (!commandLine.hasSwitch('force_high_performance_gpu')) {
+    commandLine.appendSwitch('force_high_performance_gpu');
+  }
+  return 'high-performance';
+}
+
+const GPU_PREFERENCE = configureGpuPreference(app.commandLine);
+let gpuInfoUpdated = false;
+app.on('gpu-info-update', () => { gpuInfoUpdated = true; });
+
 const { AuthService } = require('./auth-service');
 const { AssetStore, availableBytes, blobPath, safeAssetPath } = require('./asset-store');
 const { resetDesktopGameWebCache, shouldBlockServiceWorkerRequest } = require('./game-session-policy');
 const { LauncherUpdateService } = require('./launcher-update-service');
 const { RuntimeAssetCache } = require('./runtime-asset-cache');
+const { installGameCursorPolicy } = require('./game-cursor-policy');
 
 const REMOTE_ORIGIN = 'https://onepiece-card-online.onrender.com';
 const ASSET_ORIGIN = 'https://game-assets.rihdi.tw';
@@ -732,6 +749,17 @@ async function createGameWindow(gameId) {
     }
   });
   window.webContents.setAudioMuted(true);
+  try {
+    installGameCursorPolicy(window.webContents, gameId, {
+      origin: REMOTE_ORIGIN,
+      resourceRoot: app.isPackaged
+        ? path.join(process.resourcesPath, 'cursor-policy')
+        : path.join(__dirname, '..', 'public')
+    });
+  } catch {
+    // Missing optional UI resources must not prevent launching the game.
+    console.warn('[cursor] Local cursor policy unavailable; using the hosted page theme.');
+  }
   gameWindows.set(gameId, window);
   hardenGameWindow(window);
   window.on('closed', () => {
@@ -1180,10 +1208,36 @@ async function runVisualOrSmokeCapture() {
   const cursorReady = cursorHas(dom.bodyCursor, 'launcher_cursor_logpose_default_v1.png') && cursorHas(dom.pointerCursor, 'launcher_cursor_logpose_pointer_v1.png') && cursorHas(dom.settingsOptionCursor, 'launcher_cursor_logpose_pointer_v1.png') && cursorHas(dom.checkboxCursor, 'launcher_cursor_logpose_pointer_v1.png') && cursorHas(dom.pressedCursor, 'launcher_cursor_logpose_pressed_v1.png') && cursorHas(dom.disabledCursor, 'launcher_cursor_logpose_default_v1.png') && dom.textCursor === 'text' && dom.pressedActiveRulePresent;
   const visualReady = dom.stage === 'app' && dom.games === 3 && dom.loadedBoxCovers >= 7 && dom.loadedBoxFrames >= 7 && dom.brokenImages.length === 0 && mediaExclusive && cursorReady && viewReady;
   if (SMOKE_MODE) finishSmoke(
-    { stage: 'launcher-ready', dom, protocolSmoke, installedMediaSmoke, traySmoke, sessionDataPath: app.getPath('sessionData'), state: await composeState() },
+    { stage: 'launcher-ready', dom, protocolSmoke, installedMediaSmoke, traySmoke, gpu: await collectGpuDiagnostics(), sessionDataPath: app.getPath('sessionData'), state: await composeState() },
     dom.hasApi && visualReady && protocolSmoke?.ok === true && (!SMOKE_MEDIA_ASSETS || installedMediaSmoke?.ok === true) ? 0 : 1
   );
   else if (SCREENSHOT_PATH) app.quit();
+}
+
+async function collectGpuDiagnostics() {
+  let timeout;
+  try {
+    return await Promise.race([
+      app.getGPUInfo('complete').then((info) => ({
+        requestedPreference: GPU_PREFERENCE,
+        featureStatus: gpuInfoUpdated ? app.getGPUFeatureStatus() : null,
+        devices: (info.gpuDevice || []).map((device) => ({
+          active: device.active,
+          name: device.deviceString,
+          vendorId: device.vendorId,
+          deviceId: device.deviceId
+        })),
+        renderer: info.auxAttributes?.glRenderer || ''
+      })),
+      new Promise((resolve) => {
+        timeout = setTimeout(() => resolve({ requestedPreference: GPU_PREFERENCE, unavailable: 'timeout' }), 3000);
+      })
+    ]);
+  } catch (error) {
+    return { requestedPreference: GPU_PREFERENCE, unavailable: error.message };
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 function finishSmoke(extra, code) {

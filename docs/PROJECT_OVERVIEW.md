@@ -2,6 +2,35 @@
 
 本文件只整理目前 repo 內的大富翁 / Board 遊戲。舊卡牌房間與 `server/engine.js`、`server/cpu.js` 雖然存在，但不是本文件的主範圍。
 
+## 桌面啟動器 1.1.4 發布準備 V463（2026-09-06，R2 已上傳／Render 待驗證）
+
+- `1.1.4` 已建置，內容整合 V461 GPU 高效能偏好與 V462 桌面遊戲游標接管；沒有新增 Card／Board gameplay、同步或存檔變更。《霸海戰棋》仍 disabled，`r5.PNG`／`r6.PNG` 仍排除且未修改。
+- Windows x64 安裝檔為 `ONE-PIECE-Tabletop-Launcher-1.1.4-x64.exe`，大小 `152,113,427` bytes，SHA-256 `f6edd9313eb51bbc8e75ac52cdd55a7df26a39ec47090c0c97efab8b9d90bcb9`；本機位於 `D:\OnePieceDesktopBuilds\release-1.1.4\`，同一 immutable installer 已上傳至 `https://game-assets.rihdi.tw/desktop/launcher/releases/1.1.4/ONE-PIECE-Tabletop-Launcher-1.1.4-x64.exe`。
+- Ed25519 signed stable manifest 已驗證並提升到正式來源檔。更新服務確認 `1.1.3 → 1.1.4` 為可更新、同版 `1.1.4` 不提示更新；`1.1.2` 仍需手動安裝新信任根版本。
+- GPU、cursor、update／signature、R2 publisher、Service Worker、deployment manifest、catalog、source／packaged／installer package 與 packaged media smoke 均通過；packaged cursor 為 168 assertions PASS，媒體為 Range 206／cache hit，NVIDIA GPU active。8797 三入口 HTTP 200；本機無資料庫，因此不宣稱新增登入 QA。
+- R2 完整下載已以 HTTP 200 驗證 `152,113,427` bytes 與 SHA 一致（cache MISS），Range `0-63` 亦為 HTTP 206、MZ 64 bytes（cache HIT）。Render source 部署仍待驗證，因此目前仍不代表完整正式發布；V461／V462 的 local-only 敘述保留其歷史語意。
+
+## 桌面遊戲游標全框架接管 V462（2026-09-06）
+
+- Card／Board 將沿用目前巴奇白手套與娜美羽毛筆圖片／熱點，以 V4 樣式把桌面環境常見的 `text`、`zoom`、`grab`、`wait` 外觀統一成 theme default／pointer／pressed；文字輸入 caret、點擊及實際拖曳功能都不改。媒體條件改用 `any-hover`／`any-pointer`，讓觸控螢幕加滑鼠的混合裝置仍能顯示自訂游標。
+- 回饋腳本只在 pointer event 發生時做必要處理，預載三態圖，能把既有 V1 guard 原位升級且不產生雙圈；沒有新增 mousemove、每影格工作或全 DOM 輪詢。
+- 桌面端新增 frame policy，在主 frame、動態 iframe 與可信任父層所建立的 `about:blank`／`about:srcdoc` 注入打包內同一份 CSS／script。主程序與 renderer 都會驗證正式 exact origin，不新增 IPC、子 frame Node 權限或第二份規則來源。
+- Card 六頁、Board 九頁會同步升 query；啟動器包新增 policy module，extraResources 直接複用三個 public 檔案。GPU V461 維持不變，遊戲規則、帳號、同步與存檔也不受影響。
+- 本機十五頁 `GAME_CURSOR_QA` 已通過 Card 6 頁、Board 9 頁、touch、legacy、動態 native cursor 與拖曳。Electron 44.1.1 fallback fixture 在 source 為 168 項／1.67 秒 PASS，本機已安裝 ASAR＋resources 為 168 項／3.78 秒 PASS，獨立重跑亦為 168 項／1.5 秒 PASS。source／已安裝 package QA 均通過 235 個 ASAR entries、77 個 launcher files、catalog＋Card／Board 兩份 manifest 共 3 檔及三份資源 SHA 一致；Chess 仍未開放，只有兩款可玩。
+- 已 hotpatch 本機 `D:\ONE PIECE TABLETOP SERIES\resources\app.asar`，SHA-256 `8c66dc3d3aa840482aa57cdbfdf853b407f10dbcb8b5e256754838aa76d139ee`，三份 cursor-policy 資源亦已複製到 `resources\cursor-policy\`。ASAR 既有內容只修改 `main.js`／`package.json` 並新增 policy module；復原沿用 `D:\Codex_BuildCache\launcher-gpu-v461\app-gpu.asar`（SHA-256 `f923dd67a1a043ade779cfdb23a9655ed20981b262b99ad90b315c25bbed731b`），沒有重複備份。
+- 實際 executable media smoke 已以 packaged 模式通過；Card／Board image／audio／video 都是本機 cache hit 且 Range 206，GTX 1050 Ti active、Intel HD 630 inactive，high-performance 及 GPU compositing／rasterization／video decode／WebGL 都保留 enabled。首輪 120 秒 fixture timeout 經加入有界 load／execute／teardown 診斷後重跑通過，診斷只改 QA、不改 product；8797 `npm start` 三個入口 HTTP 200 後已正常停服。
+- 本輪未重建 NSIS、發布 Render／R2 或改動 1.1.3 版號，其他玩家尚未取得此修正；帳號、快取、遊戲儲存、規則及同步皆未修改。驗證不等於完整遊戲壓力／FPS benchmark，OS 對話框、原生 titlebar 與網頁外 native drag 也不屬於 Web cursor 接管範圍。
+
+## 桌面啟動器高效能 GPU 偏好 V461（2026-09-06）
+
+- 1.1.3 啟動器在 Electron 最早期預設要求 `force_high_performance_gpu`，讓 Chromium 優先選擇高效能顯示 adapter；玩家明確以 `disable-gpu` 啟動時維持軟體模式，以 `force_low_power_gpu` 啟動時維持省電模式，不會偷偷覆蓋疑難排解或省電選擇。
+- 此功能不關閉硬體加速、不繞過 Chromium GPU blocklist，也不修改 Windows 登錄檔。沒有獨顯時會繼續使用可用 adapter；多獨顯環境仍由 Chromium／系統選擇，不能宣稱會自動 benchmark 並保證使用所有顯示卡中最快者。
+- GPU 詳細資料只在 smoke QA 收集，摘要包含 requested preference、active adapters、renderer 與 feature status；查詢最多等待 3 秒，失敗或逾時只留下診斷，不影響一般啟動流程或遊戲 UI。
+- 專項 GPU preference QA 與 launcher package QA 均通過；開發版及已安裝 1.1.3 executable smoke 亦通過。實機由 NVIDIA GeForce GTX 1050 Ti active、Intel HD 630 inactive，ANGLE D3D11 renderer 及 GPU compositing／rasterization／video decode／WebGL 均啟用。Card／Board 的 image／audio／video 抽樣也通過 Range 206 與本機 cache hit；這是接點 smoke，不代表完成整場遊戲效能 benchmark。
+- 已把唯一改動的 `main.js` 套入本機 `D:\ONE PIECE TABLETOP SERIES\resources\app.asar`；185 個內檔逐一雜湊比對只此檔改變，新 ASAR SHA-256 為 `f923dd67a1a043ade779cfdb23a9655ed20981b262b99ad90b315c25bbed731b`。原始約 3 MB ASAR 唯一 rollback 保存在 `D:\Codex_BuildCache\launcher-gpu-v461\app-before-gpu.asar`，SHA-256 為 `b87de74b5971f8bb0937b3bb918c7c2ad274094ad1431fdbf564e560e432772e`。
+- 本輪未發布 Render／R2、未重建 NSIS，也沒有改動 1.1.3 版號；R2 原始 1.1.3 安裝包不含此修正，所以目前只有這台電腦的已安裝啟動器取得 GPU 偏好，其他玩家要等未來新版配送。帳號、素材快取、遊戲儲存與 Windows 登錄檔均未修改。
+- 這是桌面啟動參數與 smoke 診斷調整，沒有更動 Card／Board 規則、畫面、同步或存檔。
+
 ## 桌面啟動器 1.1.3 與可信任更新 V460（2026-09-06）
 
 - 目前桌面啟動器程式版本為 `1.1.3`。安裝包保留本機遊戲庫、登入、設定、下載／修復／單款移除、無邊框或全螢幕啟動及系統匣行為；Card／Board 大型素材不內嵌，仍依 catalog／manifest 安裝到玩家選定的快取根。《霸海戰棋》維持製作中且不可下載。

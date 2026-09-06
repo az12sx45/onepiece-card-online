@@ -23,6 +23,7 @@ const APP_FILES = [
   'preload.js',
   'game-preload.js',
   'game-session-policy.js',
+  'game-cursor-policy.js',
   'runtime-asset-cache.js',
   'launcher-update-service.js',
   'auth-service.js',
@@ -91,6 +92,15 @@ const EXTRA_RESOURCES = [
   {
     from: 'assets/one_piece_tabletop_launcher_icon_v1.ico',
     to: 'launcher-icon.ico'
+  },
+  {
+    from: '../public/css',
+    to: 'cursor-policy/css',
+    filter: ['board-cursor-nami-v3.css', 'card-cursor-buggy-v3.css']
+  },
+  {
+    from: '../public/js/game_cursor_feedback_v1.js',
+    to: 'cursor-policy/js/game_cursor_feedback_v1.js'
   }
 ];
 
@@ -242,7 +252,7 @@ function validateCursorPng(filePath, label) {
 function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
-  assert(packageJson.version === '1.1.3', 'Desktop launcher version must be 1.1.3 for the R2 launcher, settings and uninstall release.');
+  assert(packageJson.version === '1.1.4', 'Desktop launcher version must be 1.1.4 for the GPU preference and persistent game cursor release.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
@@ -364,6 +374,7 @@ function validateAsar(asarPath) {
     'auth-service.js',
     'game-preload.js',
     'game-session-policy.js',
+    'game-cursor-policy.js',
     'launcher-update-service.js',
     'runtime-asset-cache.js',
     'launcher.css',
@@ -399,6 +410,13 @@ function validateWinUnpacked(winUnpackedPath, source) {
   const asarBytes = fs.statSync(asarPath).size;
   assert(asarBytes <= MAX_ASAR_BYTES, `app.asar is too large for the small launcher (${asarBytes} bytes).`);
   const asarEntries = validateAsar(asarPath);
+
+  const cursorPolicyRoot = path.join(resourcesRoot, 'cursor-policy');
+  const cursorPolicyFiles = ['css/board-cursor-nami-v3.css', 'css/card-cursor-buggy-v3.css', 'js/game_cursor_feedback_v1.js'];
+  assertExactJson(sorted(listFilesRecursive(cursorPolicyRoot).map((filePath) => relativePosix(cursorPolicyRoot, filePath))), sorted(cursorPolicyFiles), 'cursor policy file set');
+  for (const relativeName of cursorPolicyFiles) {
+    assert(sha256File(path.join(cursorPolicyRoot, relativeName)) === sha256File(path.join(PUBLIC_ROOT, relativeName)), `Packaged cursor policy differs: ${relativeName}`);
+  }
 
   const expectedAssets = collectExpectedLauncherAssets();
   const launcherAssetRoot = path.join(resourcesRoot, 'launcher-assets');

@@ -1,6 +1,6 @@
 {
   "name": "onepiece-tabletop-desktop",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "private": true,
   "description": "Windows launcher for ONE PIECE tabletop games with account login, verified game downloads and incremental updates.",
   "main": "main.js",
@@ -27,6 +27,7 @@
       "preload.js",
       "game-preload.js",
       "game-session-policy.js",
+      "game-cursor-policy.js",
       "runtime-asset-cache.js",
       "launcher-update-service.js",
       "auth-service.js",
@@ -99,6 +100,15 @@
       {
         "from": "assets/one_piece_tabletop_launcher_icon_v1.ico",
         "to": "launcher-icon.ico"
+      },
+      {
+        "from": "../public/css",
+        "to": "cursor-policy/css",
+        "filter": ["board-cursor-nami-v3.css", "card-cursor-buggy-v3.css"]
+      },
+      {
+        "from": "../public/js/game_cursor_feedback_v1.js",
+        "to": "cursor-policy/js/game_cursor_feedback_v1.js"
       }
     ],
     "win": {

@@ -1,5 +1,40 @@
 ﻿# Dev Workflow
 
+## 修改紀錄：桌面啟動器 1.1.4 發布準備 V463（2026-09-06，R2 已上傳／Render 待驗證）
+
+- 內容與邊界：`1.1.4` Windows x64 安裝包已納入 V461 高效能 GPU 偏好與 V462 桌面遊戲游標接管；沒有新增 Card／Board gameplay、同步或存檔變更。《霸海戰棋》維持 disabled，`public/images/ranks/r5.PNG`、`r6.PNG` 繼續排除且未修改。
+- 產物：本機候選為 `D:\OnePieceDesktopBuilds\release-1.1.4\ONE-PIECE-Tabletop-Launcher-1.1.4-x64.exe`，大小 `152,113,427` bytes，SHA-256 `f6edd9313eb51bbc8e75ac52cdd55a7df26a39ec47090c0c97efab8b9d90bcb9`。同一 immutable installer 已上傳至 `https://game-assets.rihdi.tw/desktop/launcher/releases/1.1.4/ONE-PIECE-Tabletop-Launcher-1.1.4-x64.exe`；完整下載為 HTTP 200、bytes／SHA 一致（cache MISS），Range `0-63` 為 HTTP 206、MZ 64 bytes（cache HIT）。
+- 更新信任：Ed25519 signed candidate 已驗證並提升為 `public/desktop/launcher-release-v1.json`。更新服務驗證 `current=1.1.3` 回傳 `updateAvailable=true`，同版 `1.1.4` 回傳 `false`；舊 `1.1.2` 因未內建新信任根，仍需手動安裝新版。
+- QA：GPU preference、Web cursor、source／packaged Electron cursor `168` assertions、update service、signature、R2 publisher、Service Worker isolation、deployment manifest、catalog，以及 source／packaged／installer package QA 均 PASS。packaged media 的 Range `206`、cache hit 與 NVIDIA active GPU smoke 亦 PASS；`npm start` 於 8797 的三個入口回 HTTP 200。因本機沒有資料庫，本輪不宣稱新增正式登入驗證。
+- 待發布驗證：R2 完整下載與 Range 已通過；Render source 尚待部署與線上驗證，因此 V463 仍不記為完整正式發布。V461／V462 的本機 hotpatch 紀錄保留為當時歷史狀態。
+
+## 修改紀錄：桌面遊戲游標全框架接管 V462（2026-09-06）
+
+- 目標：修正 Card／Board 在桌面啟動器內仍會因頁面原生 `text`、`zoom`、`grab`、`wait` 或動態 iframe 樣式而暫時跳回系統游標的問題；沿用已核准的巴奇白手套與娜美羽毛筆三態圖片及既有熱點，不重畫、不改素材檔名。
+- Web 樣式：`public/css/card-cursor-buggy-v3.css` 與 `board-cursor-nami-v3.css` 升為 V4 規則，改以 `any-hover:hover`＋`any-pointer:fine` 支援同時具備觸控與滑鼠的裝置，讓一般、可互動與按下狀態一致使用各遊戲 theme cursor。原生文字、縮放、抓取、等待等游標外觀會被 theme 取代，但文字輸入 caret、點擊行為與明確拖曳功能本身不變。
+- Web 回饋：`public/js/game_cursor_feedback_v1.js` 加入 V4 guard，只處理必要的 pointer event；遇到 runtime inline `cursor:... !important` 時才做最小範圍修正，並預載三態圖。舊 V1 已存在時會升級同一 guard，不重複綁定或產生雙圈；不增加 `mousemove`、`requestAnimationFrame` 或全 DOM 輪詢。
+- 網頁接點：Card 六頁與 Board 九個正式 document／iframe 的 CSS、JS query 統一升版，避免沿用舊 V3 CSS／V1 feedback 快取；既有十五頁範圍、圖片路徑及黑墨／紅金點擊效果維持不變。
+- 桌面框架：新增 `desktop/game-cursor-policy.js`，在 `webContents` 的主 frame／`frame-created`／`dom-ready` 注入打包內同一份 theme CSS 與 feedback script。只允許遊戲正式 exact origin，繼承的 `about:blank`／`about:srcdoc` 還必須有可信任父 frame，且 payload 會在 renderer 再驗證 origin；不新增 IPC、`nodeIntegrationInSubFrames` 或 renderer Node 權限。`desktop/main.js` 在遊戲正式 launch 前安裝 policy，V461 GPU 偏好保持原樣。
+- 打包：`desktop/package.json` 將 `game-cursor-policy.js` 列入 ASAR 白名單，並把兩份 public CSS 與 `game_cursor_feedback_v1.js` 原位元組複用到 `cursor-policy/` extraResources；不複製第二套游標規則或圖片。source 與本機已安裝版的 `desktop_launcher_package_qa` 均 PASS，結果為 `235` 個 ASAR entries、`77` 個 launcher files、catalog 加 Card／Board 兩份 manifest 共 `3` 檔，三份 cursor-policy 資源與 public 原檔 SHA 完全一致；Chess 仍是 disabled，只有 Card／Board 兩款可玩。
+- Web／框架驗證：本機 `GAME_CURSOR_QA=PASS`，涵蓋 Card 6 頁、Board 9 頁、touch、legacy guard、動態 native cursor 與 explicit drag。Electron 44.1.1 的 fallback fixture `desktop_game_cursor_qa` 在 source 為 `168` 項 assertions／`1.67s` PASS，在本機已安裝 ASAR＋resources 為 `168` 項／`3.78s` PASS，另一次獨立重跑為 `168` 項／`1.5s` PASS；涵蓋主／子／about frame、origin、inline `!important`、三態、input／drag 與 cached resources。
+- 本機套用：已 hotpatch `D:\ONE PIECE TABLETOP SERIES\resources\app.asar`，SHA-256 為 `8c66dc3d3aa840482aa57cdbfdf853b407f10dbcb8b5e256754838aa76d139ee`，並把三份實際資源複製到 `resources\cursor-policy\`。相較原有內容只變更 ASAR 既有 `main.js`／`package.json` 並新增 `game-cursor-policy.js`；復原檔重用 `D:\Codex_BuildCache\launcher-gpu-v461\app-gpu.asar`，SHA-256 `f923dd67a1a043ade779cfdb23a9655ed20981b262b99ad90b315c25bbed731b`，沒有再建立重複備份。
+- 已安裝回歸：`DESKTOP_INSTALLED_MEDIA_SMOKE=PASS source=packaged cache=hit chromiumCache=selected-root`；Card image／audio／video 與 Board audio／video 都由本機命中並通過 Range `206`。V461 的 high-performance request 保留，NVIDIA GeForce GTX 1050 Ti active、Intel HD 630 inactive，GPU compositing／rasterization／video decode／WebGL 均 enabled；GPU preference 與 Service Worker isolation QA 也 PASS。這些是游標、媒體及啟動接點驗證，不宣稱為完整遊戲長時間壓力或 FPS benchmark。
+- QA 診斷：已安裝 fixture 第一輪曾在 120 秒逾時；測試腳本補上 stage、bounded `loadURL`／`executeJavaScript` 與 teardown 診斷後重跑 3.78 秒通過，沒有因診斷而修改 product。`npm start` 在本機 8797 的 `start.html`、`board_start.html`、`board_game.html` 都回 HTTP 200，檢查後已正常停止 server。
+- 發布與相容：版本維持 `1.1.3`；本輪不重建 NSIS、不發布 Render／R2，其他玩家尚未取得 V462。只處理網頁內容區的桌面游標 UI；OS 對話框、原生視窗 titlebar 與網頁外的 native drag 不在此 cursor policy 範圍。本機套用沒有修改帳號、素材快取、遊戲儲存、Card／Board 規則、同步、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`。
+
+## 修改紀錄：桌面啟動器高效能 GPU 偏好 V461（2026-09-06）
+
+- 目的：讓桌面啟動器與其開啟的 Card／Board Electron 視窗預設向 Chromium 要求高效能 GPU，改善多顯示卡 Windows 電腦可能把遊戲分配到省電顯示核心的情況；這是 adapter 選擇偏好，不是效能保證或遊戲渲染架構重寫。
+- 啟動順序：`desktop/main.js` 在載入任何專案模組、建立 `BrowserWindow` 及 `app.whenReady()` 前只呼叫一次 `configureGpuPreference(app.commandLine)`。一般情況加入 `force_high_performance_gpu`；若啟動參數已明確指定 `disable-gpu`，保留軟體模式，若指定 `force_low_power_gpu`，保留省電模式，不追加互相衝突的 switch。既有 `force_high_performance_gpu` 亦不重複加入。
+- 安全邊界：不呼叫 `app.disableHardwareAcceleration()`，也不加入 `ignore-gpu-blocklist`，不修改 Windows 登錄檔或玩家系統設定。只有一張顯示卡或沒有獨顯時，仍由 Chromium 在安全清單內選擇可用 adapter；多張獨顯時本功能也不會自行 benchmark 並保證挑出絕對最快的一張。
+- 診斷：只有既有 smoke 模式會以 `app.getGPUInfo('complete')` 收集 `requestedPreference`、active adapters、renderer 與 feature status。查詢設有 3 秒上限，逾時或 API 失敗只寫入 `unavailable` 診斷，不會拖慢或阻擋一般玩家啟動；正式 UI、日誌及遊戲狀態不新增 GPU 資訊。
+- QA：新增 `scripts/desktop_gpu_preference_qa.js`，靜態與 VM fixture 驗證 software／low-power／high-performance 三條路徑、冪等性、設定時機及未關閉硬體加速；結果為 `DESKTOP_GPU_PREFERENCE_QA=PASS`。`scripts/desktop_launcher_package_qa.js` 亦為 PASS。開發版及已安裝 1.1.3 executable 的 smoke 都通過，實機回報 active adapter 為 `NVIDIA GeForce GTX 1050 Ti`、renderer 為 ANGLE D3D11，`Intel(R) HD Graphics 630` 為 inactive；`gpu_compositing`、`rasterization`、`video_decode` 與 WebGL 都是 enabled。
+- 媒體回歸：Card／Board 抽樣的 image／audio／video 均通過完整讀取、Range `206` 與 `cache=hit`。這些結果證明 GPU request、硬體加速狀態與本機媒體供應接點正常，不等於完整遊戲場景的 FPS、延遲或長時間效能 benchmark。
+- 補充驗證：`node --check`、`git diff --check`、`desktop_runtime_asset_cache_qa`、`desktop_service_worker_isolation_qa` 均通過；`npm start` 在本機 8797 成功啟動，`board_start.html`、`board_game.html`、`start.html` 皆 HTTP 200，檢查後停止測試 server。本機未設定 DATABASE_URL，因此此項僅確認靜態頁面可開，不宣稱驗證正式帳號與資料庫。既有 `r5.PNG`／`r6.PNG` 未修改。
+- 本機套用：已把驗證後的 `main.js` 單檔套入 `D:\ONE PIECE TABLETOP SERIES\resources\app.asar`。套用前後共 `185` 個 ASAR 內檔逐一比對 SHA，只有 `main.js` 改變；新 ASAR SHA-256 為 `f923dd67a1a043ade779cfdb23a9655ed20981b262b99ad90b315c25bbed731b`。唯一 rollback 位於 `D:\Codex_BuildCache\launcher-gpu-v461\app-before-gpu.asar`，大小約 3 MB，原 SHA-256 為 `b87de74b5971f8bb0937b3bb918c7c2ad274094ad1431fdbf564e560e432772e`。
+- 發布狀態：本輪沒有發布 Render／R2、沒有重建 NSIS，也沒有變更 `1.1.3` 版號；R2 上 immutable 1.1.3 原始安裝包保持不變，因此其他玩家尚未取得本次 GPU preference，必須等未來新版安裝包才會配送。這次本機 ASAR 套用沒有修改帳號、素材快取、遊戲儲存或 Windows 登錄檔。
+- 相容範圍：沒有修改啟動器 UI、Card／Board 規則、戰鬥、同步、資料 id、存檔、localStorage key、Socket.IO event 或 `BOARD_GAME_STATE`。
+
 ## 修改紀錄：桌面啟動器 1.1.3／簽章更新與快取安全 V460（2026-09-06）
 
 - 版本與範圍：`desktop/package.json`／`package-lock.json` 升為 `1.1.3`，正式 Windows x64 包仍只包含本機啟動器、兩款遊戲所需的目前 catalog／manifest、核准的啟動器 UI 素材與兩支預覽影片；Card／Board 大型媒體不塞進 NSIS，而由安裝後的素材下載器取得。《霸海戰棋》仍只展示且不可安裝。

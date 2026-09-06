@@ -2,6 +2,48 @@
 
 本文件列出大富翁 / Board 遊戲維護時最常需要讀的檔案。備份、暫存、複製檔不列為主流程。
 
+## 桌面啟動器 1.1.4 發布準備（V463，R2 已上傳／Render 待驗證）
+
+| 檔案／流程 | 功能 |
+| --- | --- |
+| `desktop/main.js`、`desktop/game-cursor-policy.js`、`desktop/package.json` | `1.1.4` 包整合 V461 GPU 偏好與 V462 cursor policy；沒有新增 gameplay、同步或存檔變更。Chess 維持 disabled，`r5.PNG`／`r6.PNG` 維持排除且未修改。 |
+| `D:\OnePieceDesktopBuilds\release-1.1.4\ONE-PIECE-Tabletop-Launcher-1.1.4-x64.exe`（本機，非 repo） | 建置產物；`152,113,427` bytes，SHA-256 `f6edd9313eb51bbc8e75ac52cdd55a7df26a39ec47090c0c97efab8b9d90bcb9`。 |
+| R2 `desktop/launcher/releases/1.1.4/ONE-PIECE-Tabletop-Launcher-1.1.4-x64.exe` | 同一 immutable installer 已上傳；完整下載 HTTP 200、`152,113,427` bytes、SHA 一致（cache MISS），Range `0-63` 為 HTTP 206、MZ 64 bytes（cache HIT）。公開 URL 為 `https://game-assets.rihdi.tw/desktop/launcher/releases/1.1.4/ONE-PIECE-Tabletop-Launcher-1.1.4-x64.exe`。 |
+| `public/desktop/launcher-release-v1.json` | Ed25519 signed candidate 已驗證並提升；更新服務確認 current `1.1.3` 對 `1.1.4` 為 `updateAvailable=true`，同版為 `false`。`1.1.2` 缺少新信任根，仍需手動安裝新版。 |
+| V463 QA | GPU／cursor source＋packaged 168 assertions、update service／signature／R2 publisher／SW isolation、deployment manifest／catalog、source＋packaged＋installer package 與 packaged media Range 206／cache hit／NVIDIA active 均 PASS；8797 三入口 HTTP 200。本機無 DB，不宣稱新增登入 QA。 |
+| V463 待驗證 | R2 完整下載與 Range 已通過；Render source 部署與線上驗證尚未完成，目前不可視為完整正式發布。V461／V462 local-only 段落保留其歷史狀態。 |
+
+## 桌面遊戲游標全框架接管（V462）
+
+| 檔案 | 功能 |
+| --- | --- |
+| `public/css/card-cursor-buggy-v3.css`、`public/css/board-cursor-nami-v3.css` | V4 cursor 規則；沿用既有圖與熱點，使用 `any-hover`／`any-pointer` 支援觸控＋滑鼠，讓一般／互動／按下 theme 外觀接管原生 text／zoom／grab／wait cursor，但不改輸入 caret、點擊或拖曳功能。 |
+| `public/js/game_cursor_feedback_v1.js` | V4 pointer-only guard；預載三態、必要時處理 inline `cursor:... !important`、原位升級舊 V1 guard 且不重複光圈；沒有 mousemove、rAF 或全 DOM polling。 |
+| Card 六個正式頁、Board 九個正式 document／iframe | CSS 與 feedback query 統一升版，避免舊快取遮蔽 V4；頁面範圍、游標圖片、熱點及點擊效果維持既有來源。 |
+| `desktop/game-cursor-policy.js` | 在 webContents 主 frame／`frame-created`／`dom-ready` 注入打包內 theme CSS／feedback；驗證 exact game origin，繼承 `about:blank`／`about:srcdoc` 必須有可信任父 frame，並在 renderer 再驗證。無新 IPC 或 `nodeIntegrationInSubFrames`。 |
+| `desktop/main.js` | 遊戲正式 launch 前安裝 cursor policy；不更動 V461 的 `configureGpuPreference()` 或其他遊戲啟動狀態。 |
+| `desktop/package.json`、`scripts/desktop_launcher_package_qa.js` | ASAR 加入 policy module，extraResources 的 `cursor-policy/` 直接打包兩份 public CSS 與一份 public feedback script；source／已安裝 package QA 均 PASS，為 235 ASAR entries、77 launcher files、catalog＋Card／Board 兩份 manifest 共 3 檔，三份資源 SHA 與 public 完全一致。Chess 仍 disabled，只有 Card／Board 可玩。 |
+| `scripts/desktop_game_cursor_qa.js` | Electron 44.1.1 fallback fixture：source 實跑 168 assertions／1.67 秒 PASS，本機已安裝 ASAR＋resources 實跑相同 168 項／3.78 秒 PASS，獨立重跑 168 項／1.5 秒亦 PASS。覆蓋主／子／about frame、origin、inline `!important`、三態、input／drag 與 cached resources。首輪 120 秒逾時後只為 QA 加入 stage、bounded loadURL／executeJS／teardown 診斷，未修改 product。 |
+| `scripts/game_cursor_qa.js` | 本機十五頁 Web 回歸 `GAME_CURSOR_QA=PASS`：Card 6、Board 9、touch、legacy guard、動態 native cursor、typing／click／explicit drag 功能邊界均通過。 |
+| GPU／Service Worker／media 回歸 | V461 GPU preference 與 Service Worker isolation PASS；開發版及實際已安裝 executable media smoke 均 PASS。packaged smoke 為 cache hit／selected-root，Card image／audio／video 與 Board audio／video 全部 Range 206；GTX 1050 Ti active、Intel HD 630 inactive，high-performance 與 GPU compositing／rasterization／video decode／WebGL enabled。 |
+| `D:\ONE PIECE TABLETOP SERIES\resources\app.asar`（本機，非 repo） | 已 hotpatch；SHA-256 `8c66dc3d3aa840482aa57cdbfdf853b407f10dbcb8b5e256754838aa76d139ee`。既有 ASAR 內容只修改 `main.js`／`package.json` 並新增 `game-cursor-policy.js`；版本仍是 1.1.3。 |
+| `D:\ONE PIECE TABLETOP SERIES\resources\cursor-policy\`（本機，非 repo） | 已複製兩份 CSS 與 `game_cursor_feedback_v1.js`，三檔 SHA 已由 package QA 確認與 public 原檔一致。 |
+| `D:\Codex_BuildCache\launcher-gpu-v461\app-gpu.asar`（本機 rollback，非 repo） | 重用 V461 復原檔，SHA-256 `f923dd67a1a043ade779cfdb23a9655ed20981b262b99ad90b315c25bbed731b`；沒有建立第二份重複備份。 |
+| V462 發布／驗證邊界 | 未重建 NSIS、未發布 Render／R2、未改 1.1.3 版號，其他玩家尚未取得；不改帳號、素材快取、遊戲儲存、規則或同步。8797 `npm start` 三個入口 HTTP 200 後已停服。結果不代表完整遊戲壓力／FPS benchmark；OS 對話框、原生 titlebar、網頁外 native drag 不在 Web cursor 範圍。 |
+
+## 桌面啟動器高效能 GPU 偏好（V461）
+
+| 檔案 | 功能 |
+| --- | --- |
+| `desktop/main.js` | `configureGpuPreference()` 在載入專案模組、建立視窗及 ready 前執行一次；預設追加 `force_high_performance_gpu`，但尊重既有 `disable-gpu`／`force_low_power_gpu`。不關閉硬體加速、不使用 `ignore-gpu-blocklist`、不修改 Windows 登錄檔。 |
+| `desktop/main.js` 的 `collectGpuDiagnostics()` | 僅供 smoke 回報 requested preference、GPU devices 的 active／name／vendorId／deviceId、GL renderer 與 feature status；3 秒逾時後回傳 unavailable，不進一般啟動 critical path。 |
+| `scripts/desktop_gpu_preference_qa.js` | 擷取並以 VM 測試 preference 函式，檢查 software、low-power、high-performance、冪等、早於專案模組／視窗／ready，以及沒有關閉硬體加速；實跑結果為 `DESKTOP_GPU_PREFERENCE_QA=PASS`。 |
+| `scripts/desktop_installed_media_smoke.js` | 安裝後媒體 smoke 追加 `gpu.requestedPreference === "high-performance"` 並輸出 `DESKTOP_GPU_DIAGNOSTICS`。開發版與已安裝 1.1.3 executable 均 PASS；實機為 GTX 1050 Ti active、Intel HD 630 inactive、ANGLE D3D11，GPU compositing／rasterization／video decode／WebGL enabled；Card／Board image／audio／video 抽樣 Range 206 且 cache hit。這不是完整遊戲效能 benchmark。 |
+| `scripts/desktop_launcher_package_qa.js` | 本輪 package 結構回歸為 PASS；沒有重建 NSIS 或改動 1.1.3 版號。 |
+| `D:\ONE PIECE TABLETOP SERIES\resources\app.asar`（本機安裝檔，非 repo） | 已套用驗證後的 `main.js`；185 個內檔逐一 SHA 比對只有此檔改變。套用後 ASAR SHA-256 `f923dd67a1a043ade779cfdb23a9655ed20981b262b99ad90b315c25bbed731b`。 |
+| `D:\Codex_BuildCache\launcher-gpu-v461\app-before-gpu.asar`（本機 rollback，非 repo） | 唯一一份約 3 MB 的套用前 rollback；SHA-256 `b87de74b5971f8bb0937b3bb918c7c2ad274094ad1431fdbf564e560e432772e`。本輪未改帳號、快取、遊戲儲存或 Windows 登錄檔。 |
+| R2 1.1.3 immutable 安裝包 | 本輪沒有發布或覆寫；原始 1.1.3 安裝包尚未包含 GPU preference，其他玩家需等未來新版安裝包。 |
+
 ## 桌面啟動器 1.1.3／可信任更新與快取安全（V460）
 
 | 檔案 | 功能 |
