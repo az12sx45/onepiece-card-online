@@ -408,6 +408,7 @@ async function cleanup() {
       }), ownedRoom); } catch {}
     }
   }
+  for (const context of contexts) { try { await context.unrouteAll({ behavior: 'ignoreErrors' }); } catch {} }
   for (const context of contexts) { try { await context.close(); } catch {} }
   try { if(browser) await browser.close(); } catch {}
 }

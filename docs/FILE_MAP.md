@@ -1,5 +1,20 @@
 # File Map
 
+## Card Depth visible V2／桌面素材包檔案（2026-09-07，R2 已完成；V2 待 Render 發布）
+
+截至本段，V1 `40929bca` 已於 2026-09-07 02:08:49（Asia/Taipei）上線；243／243 live hash、SW 舊 profile 74 項及 browser-live 2,262 項（80 組／320 個 HTTP、0 page errors）PASS。下方「V1 未發布」僅為歷史快照。V1 真人 live 因既有非 owned 四人房 `MENU_NOT_READY` 未完成，非 PASS。V2 的 R2 211 個新 CAS 物件已完成，正式 Render 部署與 postdeploy 結果待主流程，不將 V1 證據當成 V2 通過。
+
+- `public/js/card_finish_v1.js`、`public/css/card-finish-v1.css`、`public/game.html`：V2 可見卡 idle 預載與 query `20260907-depth-visible-v2`；最多 2 工作並行、4 surfaces。hover 僅更新角度／反光；web 只 visible-lazy，手機／觸控與減少動態採靜態呈現，省流量或不支援遮罩時不載分層素材。
+- `public/images/card-depth/v1/{normal|enh|lux|lux-enh}/{0..19}/{background,subject,foreground}.webp`：240 個相同位元組 aliases，沿用現有 launcher 1.1.4 的 `/images` 攔截。保留 `public/card-depth/v1/` 原路徑；素材 logical size 13,632,032 bytes，211 unique blobs／13,479,592 bytes 已上傳至 immutable R2 CAS。
+- `desktop/generated/image-manifest.json`、`desktop/generated/asset-manifest.json`、`public/desktop/catalog-v1.json`、`public/desktop/manifests/card-assets-440918e609684317.json`：新 Card 清單為 710 檔／705,711,887 bytes；Board 繼續引用 `board-assets-eb95373ee6ab1aa3.json`。既有玩家按「下載更新」才會下載新增素材，不是自動下載。
+- `desktop/package.json`、`scripts/desktop_launcher_package_qa.js`：只同步後續打包所引用的新 Card manifest 與保留的舊清單；本次不要求發新版 installer，也不更新 installer 簽章 manifest。
+- `scripts/desktop_card_depth_bundle_qa.js`：桌面 alias／manifest／原位元組／本機素材路徑回歸；`scripts/card_finish_unit_qa.js`、`scripts/card_depth_browser_qa.js`：V2 載入時機、生命週期、輸入回退與完整 80 卡驗收，最終結果由主流程補記。
+- `scripts/card_depth_visible_v2_sw_qa.js`：獨立 V2 更新前／後驗證，輸出 `artifacts/card-depth-visible-v2/sw/`。更新前 baseline 在舊發布樹已完成 82 項 PASS；新 alias 的 12 個 404 是尚未部署觀察。postdeploy 仍待執行，不改舊 `card_depth_sw_qa.js`／V1 profile／報告。
+- `tools/desktop-r2-publisher/publish.js`、`publish-saved-r2.ps1`：沿用正式 CAS 去重、來源 SHA／bytes、HEAD／conditional PUT 與 Render fallback；首次 `uploaded=211`／`skipped=3486`，完整重跑 `uploaded=0`／`skipped=3697`。不增加模型或把原卡送到推論服務。
+- `docs/CARD_DEPTH_VISIBLE_V2_RELEASE.md`：本輪權威狀態、舊 V1 postdeploy 證據位置、待驗項及回滾邊界。原 `CARD_DEPTH_V1_RELEASE.md` 與 `CARD_DEPTH_V1_ASSETS.json` 保留歷史／製作 provenance；回滾保留 aliases、catalog、immutable manifests 與 CAS，避免反降版。
+
+本輪只處理 Card 顯示與素材交付，不改 Card／Board 規則、Socket、DB、帳號、存檔或 Board 程式。四份文件的舊歷史段落保留，不整份覆蓋其他工作樹文件。
+
 ## Card Depth V1 製作／驗收檔案（2026-09-07，候選通過／未發布）
 
 `tools/card-depth/` 為唯讀原卡的離線製作工具、逐卡保護與 alpha 修補配方；C／D 的 22 份頂層文字檔與 6 份 jobs 雜湊一致。模型／venv 不在 repo，`THIRD_PARTY_NOTICES.txt` 與 `SAM_APACHE_2_0.txt` 保留來源及授權。

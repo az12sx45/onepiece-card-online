@@ -30,6 +30,27 @@ const report = {
   realAssetSweep: null,
   scenarios: {}
 };
+const runtimeDynamicGroups = new Set();
+let depthAssetPrefix = '';
+let depthPathToGroup = new Map();
+let depthCatalog = new Map();
+
+function depthGroups(paths) {
+  return new Set(paths.map(pathname => depthPathToGroup.get(pathname)).filter(Boolean));
+}
+
+function recordRuntimeGroups(paths, label) {
+  const groups = depthGroups(paths);
+  groups.forEach(group => runtimeDynamicGroups.add(group));
+  check(groups.size < 80, `${label}: runtime never bulk-loads all 80 card-depth groups`, [...groups]);
+  return groups;
+}
+
+function depthAsset(variant, id, role) {
+  const set = depthCatalog.get(`${variant}/${id}`);
+  assert.ok(set && set.layers[role], `Unknown depth asset ${variant}/${id}/${role}`);
+  return set.layers[role];
+}
 
 function loadSharp() {
   const candidates = [];
@@ -50,16 +71,19 @@ function check(value, label, detail) {
   report.checks.push({ label, ...(detail === undefined ? {} : { detail }) });
 }
 
-function expectedSets() {
+function expectedSets(depthFromSource) {
   const sets = [];
   for (const variant of VARIANTS) {
     for (let id = 0; id < 20; id += 1) {
+      const source = variant.source(id);
+      const mapped = depthFromSource(source, `${BASE.origin}/game.html`);
       sets.push({
         variant: variant.key,
         id,
         enhanced: variant.enhanced,
-        source: variant.source(id),
-        layers: Object.fromEntries(ROLES.map(role => [role, `/images/card-depth/v1/${variant.key}/${id}/${role}.webp`]))
+        source,
+        mapped,
+        layers: Object.fromEntries(ROLES.map(role => [role, mapped?.[role] || '']))
       });
     }
   }
@@ -79,10 +103,10 @@ function validateMappingAndInventory() {
   delete require.cache[require.resolve(modulePath)];
   const { depthFromSource } = require(modulePath);
   check(typeof depthFromSource === 'function', 'runtime exports the pure depthFromSource mapping contract');
-  const sets = expectedSets();
+  const sets = expectedSets(depthFromSource);
   const expectedFiles = new Set();
   for (const set of sets) {
-    const mapped = depthFromSource(set.source, `${BASE.origin}/game.html`);
+    const mapped = set.mapped;
     check(Boolean(mapped), `${set.variant}/${set.id}: original card source maps to depth assets`);
     check(mapped.key === `${set.variant}/${set.id}` && mapped.enhanced === set.enhanced,
       `${set.variant}/${set.id}: mapping preserves variant, id and enhanced state`, mapped);
@@ -91,6 +115,10 @@ function validateMappingAndInventory() {
       expectedFiles.add(path.normalize(localFile(set.layers[role])).toLowerCase());
     }
   }
+  depthCatalog = new Map(sets.map(set => [`${set.variant}/${set.id}`, set]));
+  depthPathToGroup = new Map(sets.flatMap(set => ROLES.map(role => [set.layers[role], `${set.variant}/${set.id}`])));
+  depthAssetPrefix = depthAsset('normal', 0, 'background').replace(/normal\/0\/background\.webp$/, '');
+  check(depthAssetPrefix.startsWith('/') && depthAssetPrefix.endsWith('/') && depthAssetPrefix !== depthAsset('normal', 0, 'background'), 'runtime mapping supplies a discoverable same-origin depth asset prefix', depthAssetPrefix);
   const invalid = [
     '/images/cards/20.webp', '/images/cards/-1.webp', '/images/cards/3.png',
     '/images/cards/enh/x.webp', '/images/cards_lux/03.webp',
@@ -98,7 +126,7 @@ function validateMappingAndInventory() {
   ];
   for (const source of invalid) check(depthFromSource(source, `${BASE.origin}/game.html`) === null, `invalid source is rejected: ${source}`);
 
-  const depthRoot = path.join(PUBLIC_ROOT, 'images', 'card-depth', 'v1');
+  const depthRoot = localFile(depthAssetPrefix);
   const actual = fs.existsSync(depthRoot)
     ? fs.readdirSync(depthRoot, { recursive: true, withFileTypes: true })
       .filter(entry => entry.isFile() && /\.webp$/i.test(entry.name))
@@ -137,11 +165,11 @@ async function openGame(browser, contextOptions = {}, initScript = null) {
   page.on('pageerror', error => report.errors.push(String(error)));
   page.on('request', request => {
     const pathname = new URL(request.url()).pathname;
-    if (pathname.startsWith('/images/card-depth/v1/')) depthRequests.push(pathname);
+    if (pathname.startsWith(depthAssetPrefix)) depthRequests.push(pathname);
   });
   page.on('response', response => {
     const pathname = new URL(response.url()).pathname;
-    if (pathname.startsWith('/images/card-depth/v1/')) depthResponses.push({ pathname, status: response.status(), contentType: response.headers()['content-type'] || '' });
+    if (pathname.startsWith(depthAssetPrefix)) depthResponses.push({ pathname, status: response.status(), contentType: response.headers()['content-type'] || '' });
   });
   await page.goto(`${BASE.origin}/game.html`, { waitUntil: 'domcontentloaded', timeout: 30000 });
   await page.waitForFunction(() => window.CardFinishV1 && document.querySelectorAll('[data-card-finish]').length === 4);
@@ -149,7 +177,7 @@ async function openGame(browser, contextOptions = {}, initScript = null) {
 }
 
 async function installDepthAssignmentRecorder(page) {
-  await page.evaluate(() => {
+  await page.evaluate(prefix => {
     const key = '__CARD_DEPTH_QA_IMAGE_SRC_ASSIGNMENTS__';
     if (Array.isArray(window[key])) {
       window[key].length = 0;
@@ -164,7 +192,7 @@ async function installDepthAssignmentRecorder(page) {
     const record = value => {
       try {
         const pathname = new URL(String(value), document.baseURI).pathname;
-        if (pathname.startsWith('/images/card-depth/v1/')) assignments.push(pathname);
+        if (pathname.startsWith(prefix)) assignments.push(pathname);
       } catch {}
     };
     Object.defineProperty(window, key, { configurable: true, value: assignments });
@@ -181,7 +209,7 @@ async function installDepthAssignmentRecorder(page) {
         return descriptor.set.call(this, value);
       }
     });
-  });
+  }, depthAssetPrefix);
 }
 
 async function setChoiceFixture(page, handSource = '/images/cards/3.webp', drawnSource = '/images/cards/enh/3.webp') {
@@ -358,8 +386,8 @@ async function validateRenderedMaskPixels(page, root, maskPath, label) {
   return metrics;
 }
 
-function validateReadyState(state, expected, label, limit) {
-  check(state.root.ready === 'ready' && state.root.engaged === 'true' && state.root.locked === 'false' && state.root.static === 'false', `${label}: depth is ready only on an active fine-pointer surface`, state.root);
+function validateReadyState(state, expected, label) {
+  check(state.root.ready === 'ready' && state.root.locked === 'false' && state.root.static === 'false', `${label}: visible fine-pointer surface becomes depth-ready without pointer engagement`, state.root);
   check(state.original?.complete && state.original.naturalWidth > 0 && state.original.display !== 'none' && state.original.visibility !== 'hidden' && Number(state.original.opacity) > 0, `${label}: original card remains loaded and visible as fallback`, state.original);
   check(state.depth?.ariaHidden === 'true' && state.depth.pointerEvents === 'none' && state.depth.display !== 'none', `${label}: decorative composite is aria-hidden, visible and pointer transparent`, state.depth);
   check(state.depth?.childCount === 3 && JSON.stringify(state.depth.classes) === JSON.stringify([
@@ -370,8 +398,13 @@ function validateReadyState(state, expected, label, limit) {
   check(state.depth.maskPath === expected.foreground && /100%/.test(state.depth.maskSize) && state.depth.maskRepeat === 'no-repeat', `${label}: foreground clone uses the exact alpha mask at full size`, { maskPath: state.depth.maskPath, maskSize: state.depth.maskSize, maskRepeat: state.depth.maskRepeat });
   check(state.depth.alt.every(value => value === '') && state.depth.draggable.every(value => value === 'false') && state.depth.pointerChildren.every(value => value === 'none'), `${label}: all decorative images are empty-alt, non-draggable and pointer transparent`);
   check(state.depth.transforms[0] === 'none' && state.depth.transforms[2] === 'none' && state.depth.transforms[1] !== 'none', `${label}: only the subject receives parallax translation`, state.depth.transforms);
+}
+
+function validateTiltState(state, label, limit) {
+  check(state.root.ready === 'ready' && state.root.engaged === 'true', `${label}: hover engages tilt without replacing the ready composite`, state.root);
   const angle = Math.hypot(state.pitch, state.yaw);
   check(angle > limit * .85 && angle <= limit + .01, `${label}: edge hover preserves the ${limit}-degree tilt limit`, angle);
+  check(state.depthX !== '' && state.depthY !== '', `${label}: hover updates only the subject parallax coordinates`, { x: state.depthX, y: state.depthY });
 }
 
 async function inspectRealAssets(page, sets) {
@@ -536,36 +569,50 @@ async function validateFourHooksAndActions(browser) {
   const session = await openGame(browser);
   const { context, page, depthRequests } = session;
   try {
-    await setChoiceFixture(page);
     await installDepthAssignmentRecorder(page);
+    await page.mouse.move(2, 2);
     const choiceSpecs = [
       { selector: '#playHand [data-card-finish]', variant: 'normal', id: 3, source: '/images/cards/3.webp', limit: 8 },
       { selector: '#playDrawn [data-card-finish]', variant: 'enh', id: 3, source: '/images/cards/enh/3.webp', limit: 8 }
     ];
+    const choiceRequestStart = depthRequests.length;
+    const choiceAssignmentStart = await page.evaluate(() => window.__CARD_DEPTH_QA_IMAGE_SRC_ASSIGNMENTS__.length);
+    await setChoiceFixture(page);
+    await Promise.all(choiceSpecs.map(spec => waitReady(page, spec.selector)));
+    const choiceRequested = depthRequests.slice(choiceRequestStart);
+    const choiceAssigned = await page.evaluate(start => window.__CARD_DEPTH_QA_IMAGE_SRC_ASSIGNMENTS__.slice(start), choiceAssignmentStart);
+    const choiceGroups = recordRuntimeGroups(choiceRequested, 'two visible play choices');
+    check(choiceGroups.size === 2 && choiceGroups.has('normal/3') && choiceGroups.has('enh/3'), 'only the two visible play choices auto-load their depth groups', [...choiceGroups]);
     const snapshots = [];
     for (const spec of choiceSpecs) {
-      const before = depthRequests.length;
-      const assignmentsBefore = await page.evaluate(() => window.__CARD_DEPTH_QA_IMAGE_SRC_ASSIGNMENTS__.length);
+      const expected = {
+        background: depthAsset(spec.variant, spec.id, 'background'),
+        subject: depthAsset(spec.variant, spec.id, 'subject'),
+        foreground: depthAsset(spec.variant, spec.id, 'foreground')
+      };
+      const expectedAssignments = ROLES.map(role => expected[role]);
+      const requested = choiceRequested.filter(pathname => expectedAssignments.includes(pathname));
+      const assigned = choiceAssigned.filter(pathname => expectedAssignments.includes(pathname));
+      const idleState = await depthState(page.locator(spec.selector));
+      validateReadyState(idleState, expected, spec.selector);
+      check(idleState.root.engaged === null && Math.hypot(idleState.pitch, idleState.yaw) < .01 && idleState.depthX === '' && idleState.depthY === '', `${spec.selector}: idle auto-load does not fake pointer tilt or parallax`, idleState);
+      check(assigned.length === 3 && new Set(assigned).size === 3 && expectedAssignments.every(pathname => assigned.includes(pathname)), `${spec.selector}: visible-idle load assigns exactly its three depth image sources once`, { expected: expectedAssignments, assigned });
+      check(requested.length >= 3 && new Set(requested).size === 3 && requested.every(pathname => expectedAssignments.includes(pathname)), `${spec.selector}: visible-idle load requests only its three-file set (mask paint may reuse the foreground URL)`, requested);
+
+      const beforeHoverRequests = depthRequests.length;
+      const beforeHoverAssignments = await page.evaluate(() => window.__CARD_DEPTH_QA_IMAGE_SRC_ASSIGNMENTS__.length);
       await hover(page, spec.selector);
-      await waitReady(page, spec.selector);
+      await page.waitForFunction(selector => document.querySelector(selector)?.getAttribute('data-finish-engaged') === 'true', spec.selector);
       const state = await depthState(page.locator(spec.selector));
-      validateReadyState(state, {
-        background: `/images/card-depth/v1/${spec.variant}/${spec.id}/background.webp`,
-        subject: `/images/card-depth/v1/${spec.variant}/${spec.id}/subject.webp`,
-        foreground: `/images/card-depth/v1/${spec.variant}/${spec.id}/foreground.webp`
-      }, spec.selector, spec.limit);
-      const requested = depthRequests.slice(before);
-      const assigned = await page.evaluate(start => window.__CARD_DEPTH_QA_IMAGE_SRC_ASSIGNMENTS__.slice(start), assignmentsBefore);
-      const expectedAssignments = ROLES.map(role => `/images/card-depth/v1/${spec.variant}/${spec.id}/${role}.webp`);
-      check(assigned.length === 3 && new Set(assigned).size === 3 && expectedAssignments.every(pathname => assigned.includes(pathname)), `${spec.selector}: runtime assigns exactly its three depth image sources once`, { expected: expectedAssignments, assigned });
-      check(new Set(requested).size === 3 && ROLES.every(role => requested.includes(`/images/card-depth/v1/${spec.variant}/${spec.id}/${role}.webp`)), `${spec.selector}: one activation requests exactly its three depth files`, requested);
-      check(await page.locator('[data-finish-depth="ready"]').count() === 1, `${spec.selector}: only one of four surfaces is depth-active at a time`);
+      validateTiltState(state, spec.selector, spec.limit);
+      check(depthRequests.length === beforeHoverRequests && await page.evaluate(() => window.__CARD_DEPTH_QA_IMAGE_SRC_ASSIGNMENTS__.length) === beforeHoverAssignments, `${spec.selector}: hover changes presentation only and performs no depth load`);
+      check(await page.locator('[data-finish-depth="ready"]').count() === 2 && await page.locator('[data-finish-engaged="true"]').count() === 1, `${spec.selector}: multiple visible cards stay ready while only one is pointer-engaged`);
       if (spec.selector.includes('playHand')) {
-        state.pixelMetrics = await validateRenderedMaskPixels(page, page.locator(spec.selector), `/images/card-depth/v1/${spec.variant}/${spec.id}/foreground.webp`, spec.selector);
+        state.pixelMetrics = await validateRenderedMaskPixels(page, page.locator(spec.selector), depthAsset(spec.variant, spec.id, 'foreground'), spec.selector);
       }
-      snapshots.push({ spec, state, assigned, requested });
+      snapshots.push({ spec, idleState, state, assigned, requested });
     }
-    check(await page.locator(choiceSpecs[0].selector).getAttribute('data-finish-depth') === null && await page.locator(`${choiceSpecs[0].selector} .card-finish-depth`).count() === 0, 'activating drawn card synchronously releases the hand composite');
+    check(await page.locator(choiceSpecs[0].selector).getAttribute('data-finish-depth') === 'ready' && await page.locator(`${choiceSpecs[0].selector} .card-finish-depth`).count() === 1, 'engaging the drawn card does not release the hand card visible-idle composite');
 
     const actionsBefore = await page.evaluate(() => window.__depthActions.length);
     const handBox = await page.locator('#playHand').boundingBox();
@@ -575,8 +622,10 @@ async function validateFourHooksAndActions(browser) {
 
     await page.mouse.move(2, 2);
     await page.waitForTimeout(80);
-    check(await page.locator('[data-finish-depth="ready"]').count() === 0 && await page.locator('.card-finish-depth').count() === 0, 'pointer leave removes the decoded composite instead of retaining a hidden cache');
+    check(await page.locator('[data-finish-depth="ready"]').count() === 2 && await page.locator('.card-finish-depth').count() === 2 && await page.locator('[data-finish-engaged="true"]').count() === 0, 'pointer leave clears tilt but preserves visible-idle composites');
 
+    const dexRequestStart = depthRequests.length;
+    const dexAssignmentStart = await page.evaluate(() => window.__CARD_DEPTH_QA_IMAGE_SRC_ASSIGNMENTS__.length);
     await page.locator('#cardDexBtn').click();
     await page.locator('.card-dex-thumb[data-id="3"]').click();
     await page.waitForFunction(() => ['cardDexPreviewBase', 'cardDexPreviewEnh'].every(id => { const image = document.getElementById(id); return image?.complete && image.naturalWidth > 0; }));
@@ -584,28 +633,38 @@ async function validateFourHooksAndActions(browser) {
       { selector: '#cardDexPreviewBase', variant: 'normal', limit: 12 },
       { selector: '#cardDexPreviewEnh', variant: 'enh', limit: 12 }
     ];
+    await Promise.all(dexSpecs.map(spec => page.waitForFunction(selector => document.querySelector(selector)?.closest('[data-card-finish]')?.dataset.finishDepth === 'ready', spec.selector)));
+    const dexRequested = depthRequests.slice(dexRequestStart);
+    const dexAssigned = await page.evaluate(start => window.__CARD_DEPTH_QA_IMAGE_SRC_ASSIGNMENTS__.slice(start), dexAssignmentStart);
+    const dexGroups = recordRuntimeGroups(dexRequested, 'two visible card-dex previews');
+    check(dexGroups.size === 2 && dexGroups.has('normal/3') && dexGroups.has('enh/3'), 'opening the dex auto-loads only its two visible preview groups', [...dexGroups]);
     for (const spec of dexSpecs) {
       const root = page.locator(spec.selector).locator('xpath=ancestor::*[@data-card-finish][1]');
       const rootSelector = `${spec.selector} >> xpath=ancestor::*[@data-card-finish][1]`;
-      const before = depthRequests.length;
-      const assignmentsBefore = await page.evaluate(() => window.__CARD_DEPTH_QA_IMAGE_SRC_ASSIGNMENTS__.length);
+      const expected = {
+        background: depthAsset(spec.variant, 3, 'background'),
+        subject: depthAsset(spec.variant, 3, 'subject'),
+        foreground: depthAsset(spec.variant, 3, 'foreground')
+      };
+      const expectedAssignments = ROLES.map(role => expected[role]);
+      const assigned = dexAssigned.filter(pathname => expectedAssignments.includes(pathname));
+      const requested = dexRequested.filter(pathname => expectedAssignments.includes(pathname));
+      const idleState = await depthState(root);
+      validateReadyState(idleState, expected, rootSelector);
+      check(idleState.root.engaged === null, `${rootSelector}: card-dex auto-load remains idle before hover`, idleState.root);
+      check(assigned.length === 3 && new Set(assigned).size === 3 && expectedAssignments.every(pathname => assigned.includes(pathname)), `${rootSelector}: dex visible-idle load assigns exactly three sources once`, { expected: expectedAssignments, assigned });
+      check(requested.every(pathname => expectedAssignments.includes(pathname)), `${rootSelector}: cache-dependent dex network observations contain no foreign depth asset`, { expected: expectedAssignments, observed: requested });
+      const beforeHoverRequests = depthRequests.length;
+      const beforeHoverAssignments = await page.evaluate(() => window.__CARD_DEPTH_QA_IMAGE_SRC_ASSIGNMENTS__.length);
       await root.scrollIntoViewIfNeeded();
       const box = await root.boundingBox();
       await page.mouse.move(box.x + box.width * .78, box.y + box.height * .24);
-      await page.waitForFunction(selector => document.querySelector(selector)?.closest('[data-card-finish]')?.dataset.finishDepth === 'ready', spec.selector);
+      await page.waitForFunction(selector => document.querySelector(selector)?.closest('[data-card-finish]')?.dataset.finishEngaged === 'true', spec.selector);
       const state = await depthState(root);
-      validateReadyState(state, {
-        background: `/images/card-depth/v1/${spec.variant}/3/background.webp`,
-        subject: `/images/card-depth/v1/${spec.variant}/3/subject.webp`,
-        foreground: `/images/card-depth/v1/${spec.variant}/3/foreground.webp`
-      }, rootSelector, spec.limit);
-      const expectedAssignments = ROLES.map(role => `/images/card-depth/v1/${spec.variant}/3/${role}.webp`);
-      const assigned = await page.evaluate(start => window.__CARD_DEPTH_QA_IMAGE_SRC_ASSIGNMENTS__.slice(start), assignmentsBefore);
-      const requested = depthRequests.slice(before);
-      check(assigned.length === 3 && new Set(assigned).size === 3 && expectedAssignments.every(pathname => assigned.includes(pathname)), `${rootSelector}: dex runtime assigns exactly its three depth image sources once`, { expected: expectedAssignments, assigned });
-      check(requested.every(pathname => expectedAssignments.includes(pathname)), `${rootSelector}: cache-dependent network observations contain no foreign depth asset`, { expected: expectedAssignments, observed: requested });
-      check(await page.locator('[data-finish-depth="ready"]').count() === 1, `${rootSelector}: dex also obeys global single-active ownership`);
-      snapshots.push({ spec, state, assigned, requested });
+      validateTiltState(state, rootSelector, spec.limit);
+      check(depthRequests.length === beforeHoverRequests && await page.evaluate(() => window.__CARD_DEPTH_QA_IMAGE_SRC_ASSIGNMENTS__.length) === beforeHoverAssignments, `${rootSelector}: dex hover performs no depth load`);
+      check(await page.locator('[data-finish-depth="ready"]').count() === 4 && await page.locator('[data-finish-engaged="true"]').count() === 1, `${rootSelector}: all four visible hooks can remain ready but only one is engaged`);
+      snapshots.push({ spec, idleState, state, assigned, requested });
     }
     check(await page.locator('[data-card-finish]').count() === 4, 'all four original game attachment points remain present');
     const maxBefore = depthRequests.length;
@@ -620,14 +679,13 @@ async function validateFourHooksAndActions(browser) {
       CardFinishV1.refresh();
     });
     await page.waitForFunction(() => document.querySelector('#cardDepthQaFifth img')?.complete && document.querySelector('#cardDepthQaFifth img')?.naturalWidth > 0);
-    await hover(page, '#cardDepthQaFifth');
-    await page.waitForTimeout(250);
+    await page.waitForTimeout(400);
     const fifth = await page.locator('#cardDepthQaFifth').evaluate(element => ({
       surface: element.getAttribute('data-finish-surface'),
       ready: element.getAttribute('data-finish-depth'),
       depthChildren: element.querySelectorAll('.card-finish-depth').length
     }));
-    check(fifth.surface === null && fifth.ready === null && fifth.depthChildren === 0 && depthRequests.length === maxBefore, 'MAX_SURFACES=4 leaves a fifth injected display inert and request-free', fifth);
+    check(fifth.surface === null && fifth.ready === null && fifth.depthChildren === 0 && depthRequests.length === maxBefore, 'MAX_SURFACES=4 leaves a fifth visible display inert and request-free without requiring hover', fifth);
     await page.evaluate(() => document.getElementById('cardDepthQaFifth')?.remove());
     report.scenarios.fourHooks = snapshots;
   } finally {
@@ -639,37 +697,51 @@ async function validateRepeatedHoverResources(browser) {
   const session = await openGame(browser);
   const { context, page, depthRequests } = session;
   try {
-    await setChoiceFixture(page, '/images/cards/3.webp', '/images/cards/8.webp');
     await installDepthAssignmentRecorder(page);
     await page.evaluate(() => performance.clearResourceTimings());
+    await page.mouse.move(2, 2);
+    await setChoiceFixture(page, '/images/cards/3.webp', '/images/cards/8.webp');
+    await Promise.all([
+      waitReady(page, '#playHand [data-card-finish]'),
+      waitReady(page, '#playDrawn [data-card-finish]')
+    ]);
+    // Ready is set when the composite attaches; allow its CSS mask paint request
+    // to enter Resource Timing before proving later pointer events are inert.
+    await page.waitForTimeout(150);
     const perCycle = [];
-    const expectedAssignments = ROLES.map(role => `/images/card-depth/v1/normal/3/${role}.webp`);
+    const expectedAssignments = ROLES.map(role => depthAsset('normal', 3, role));
+    const initialAssignments = await page.evaluate(() => window.__CARD_DEPTH_QA_IMAGE_SRC_ASSIGNMENTS__.filter(pathname => pathname.includes('/normal/3/')));
+    const initialRequests = depthRequests.filter(pathname => expectedAssignments.includes(pathname));
+    check(initialAssignments.length === 3 && new Set(initialAssignments).size === 3, 'visible-idle setup assigns the hand depth assets exactly once before any hover', initialAssignments);
+    check(initialRequests.length >= 3 && new Set(initialRequests).size === 3 && initialRequests.every(pathname => expectedAssignments.includes(pathname)), 'visible-idle setup requests only the hand three-file set before any hover', initialRequests);
+    recordRuntimeGroups(depthRequests, 'repeated-hover visible-idle setup');
     for (let cycle = 0; cycle < 20; cycle += 1) {
       const before = depthRequests.length;
       const assignmentsBefore = await page.evaluate(() => window.__CARD_DEPTH_QA_IMAGE_SRC_ASSIGNMENTS__.length);
-      const timingsBefore = await page.evaluate(() => performance.getEntriesByType('resource').filter(entry => entry.name.includes('/images/card-depth/v1/')).length);
+      const timingsBefore = await page.evaluate(prefix => performance.getEntriesByType('resource').filter(entry => new URL(entry.name).pathname.startsWith(prefix)).length, depthAssetPrefix);
       await hover(page, '#playHand [data-card-finish]', cycle % 2 ? .74 : .28, cycle % 3 ? .3 : .72);
-      await waitReady(page, '#playHand [data-card-finish]');
-      check(await page.locator('.card-finish-depth').count() === 1, `hover cycle ${cycle + 1}: exactly one decoded composite is attached`);
+      await page.waitForFunction(() => document.querySelector('#playHand [data-card-finish]')?.dataset.finishEngaged === 'true');
+      const engaged = await depthState(page.locator('#playHand [data-card-finish]'));
+      check(engaged.root.ready === 'ready' && engaged.root.engaged === 'true' && Math.hypot(engaged.pitch, engaged.yaw) > 0 && engaged.depthX !== '' && engaged.depthY !== '', `hover cycle ${cycle + 1}: existing composite only receives tilt/parallax`, engaged);
       await page.mouse.move(2, 2);
-      await page.waitForFunction(() => !document.querySelector('.card-finish-depth') && !document.querySelector('[data-finish-depth="ready"]'));
+      await page.waitForFunction(() => !document.querySelector('[data-finish-engaged="true"]'));
+      const idle = await depthState(page.locator('#playHand [data-card-finish]'));
+      check(idle.root.ready === 'ready' && idle.root.engaged === null && idle.depthX === '' && idle.depthY === '', `hover cycle ${cycle + 1}: leave clears tilt/parallax but keeps visible-idle depth ready`, idle);
       const requested = depthRequests.slice(before);
       const assigned = await page.evaluate(start => window.__CARD_DEPTH_QA_IMAGE_SRC_ASSIGNMENTS__.slice(start), assignmentsBefore);
-      const timingEntries = await page.evaluate(start => performance.getEntriesByType('resource')
-        .filter(entry => entry.name.includes('/images/card-depth/v1/')).slice(start).map(entry => ({
+      const timingEntries = await page.evaluate(({ start, prefix }) => performance.getEntriesByType('resource')
+        .filter(entry => new URL(entry.name).pathname.startsWith(prefix)).slice(start).map(entry => ({
           path: new URL(entry.name).pathname,
           transferSize: entry.transferSize,
           encodedBodySize: entry.encodedBodySize,
           decodedBodySize: entry.decodedBodySize,
           duration: entry.duration
-        })), timingsBefore);
-      check(assigned.length === 3 && new Set(assigned).size === 3 && expectedAssignments.every(pathname => assigned.includes(pathname)), `hover cycle ${cycle + 1}: app-level decode lifecycle assigns exactly three assets`, { expected: expectedAssignments, assigned });
-      check(requested.every(pathname => expectedAssignments.includes(pathname)), `hover cycle ${cycle + 1}: cache-dependent network observations contain no foreign depth asset`, { expected: expectedAssignments, observed: requested });
-      check(timingEntries.every(entry => expectedAssignments.includes(entry.path)), `hover cycle ${cycle + 1}: resource timings contain no foreign depth asset`, timingEntries);
-      perCycle.push({ cycle: cycle + 1, assignments: assigned, requests: requested, resourceTimings: timingEntries });
+        })), { start: timingsBefore, prefix: depthAssetPrefix });
+      check(assigned.length === 0 && requested.length === 0 && timingEntries.length === 0, `hover cycle ${cycle + 1}: hover/leave performs zero image assignment and zero network work`, { assigned, requested, timingEntries });
+      perCycle.push({ cycle: cycle + 1, assignments: assigned, requests: requested, resourceTimings: timingEntries, engaged, idle });
     }
-    const timing = await page.evaluate(() => {
-      const entries = performance.getEntriesByType('resource').filter(entry => entry.name.includes('/images/card-depth/v1/'));
+    const timing = await page.evaluate(prefix => {
+      const entries = performance.getEntriesByType('resource').filter(entry => new URL(entry.name).pathname.startsWith(prefix));
       return {
         count: entries.length,
         transferSize: entries.reduce((sum, entry) => sum + (entry.transferSize || 0), 0),
@@ -684,17 +756,17 @@ async function validateRepeatedHoverResources(browser) {
           duration: entry.duration
         }))
       };
-    });
+    }, depthAssetPrefix);
     const assignmentCount = await page.evaluate(() => window.__CARD_DEPTH_QA_IMAGE_SRC_ASSIGNMENTS__.length);
-    check(assignmentCount === 60, '20 enter/leave cycles perform exactly 60 app-level depth source assignments', assignmentCount);
-    check(depthRequests.every(pathname => expectedAssignments.includes(pathname)) && timing.entries.every(entry => expectedAssignments.includes(entry.path)), '20 enter/leave cycles expose no unexpected network or timing resource', { requests: depthRequests, timings: timing.entries });
-    check(timing.count > 0, '20 enter/leave cycles produce measurable browser resource timing evidence', timing);
+    check(assignmentCount === 6, 'two visible cards assign six depth sources once; 20 hover cycles add none', assignmentCount);
+    check(new Set(depthRequests).size === 6 && depthGroups(depthRequests).size === 2 && timing.entries.every(entry => depthGroups([entry.path]).size === 1), '20 hover cycles expose only the two visible-idle three-file sets and no hover-triggered resource', { requests: depthRequests, timings: timing.entries });
+    check(timing.count >= 6, 'visible-idle loads produce measurable browser resource timing evidence before hover', timing);
     check(Number.isFinite(timing.transferSize) && Number.isFinite(timing.decodedBodySize) && timing.decodedBodySize > 0, 'resource timing reports actual transferred/decoded byte totals', timing);
-    check(await page.locator('.card-finish-depth').count() === 0, '20-cycle exit leaves no decoded depth image nodes in the DOM');
+    check(await page.locator('.card-finish-depth').count() === 2 && await page.locator('[data-finish-depth="ready"]').count() === 2, '20-cycle exit retains the two currently visible ready composites');
     report.scenarios.repeatedHover = {
       perCycle,
       timing,
-      conclusion: 'DOM image ownership is released on every leave. Per-cycle and aggregate transferSize are reported verbatim; zero-transfer entries indicate browser HTTP/memory-cache reuse. This QA does not measure or claim renderer/GPU memory release.'
+      conclusion: 'Visible cards load once during idle time. Pointer movement only changes tilt/parallax and performs no later source assignment or request. Transfer totals are reported verbatim; this QA does not measure or claim renderer/GPU memory release.'
     };
   } finally {
     await context.close();
@@ -707,12 +779,13 @@ async function validateLockedAndFrozen(browser) {
   try {
     await setChoiceFixture(page, '/images/cards/3.webp', '/images/cards/8.webp');
     const root = '#playHand [data-card-finish]';
+    const handRequestCount = () => depthRequests.filter(pathname => pathname.includes('/normal/3/')).length;
     await page.evaluate(() => { document.getElementById('playHand').disabled = true; CardFinishV1.refresh(); });
     await page.waitForFunction(() => document.querySelector('#playHand [data-card-finish]')?.dataset.finishLocked === 'true');
-    const beforeDisabled = depthRequests.length;
+    const beforeDisabled = handRequestCount();
     await hover(page, root);
     await page.waitForTimeout(250);
-    check(depthRequests.length === beforeDisabled && await page.locator(`${root} .card-finish-depth`).count() === 0, 'disabled choice neither requests nor attaches depth assets');
+    check(handRequestCount() === beforeDisabled && await page.locator(`${root} .card-finish-depth`).count() === 0, 'disabled choice neither requests nor attaches its depth assets');
     const actionsBefore = await page.evaluate(() => window.__depthActions.length);
     const disabledBox = await page.locator('#playHand').boundingBox();
     await page.mouse.click(disabledBox.x + disabledBox.width / 2, disabledBox.y + disabledBox.height / 2);
@@ -725,10 +798,10 @@ async function validateLockedAndFrozen(browser) {
       CardFinishV1.refresh();
     });
     await page.waitForFunction(() => document.querySelector('#playHand [data-card-finish]')?.dataset.finishLocked === 'true');
-    const beforeFrozen = depthRequests.length;
+    const beforeFrozen = handRequestCount();
     await hover(page, root);
     await page.waitForTimeout(250);
-    check(depthRequests.length === beforeFrozen && await page.locator(`${root} .card-finish-depth`).count() === 0, 'frozen choice neither requests nor attaches depth assets');
+    check(handRequestCount() === beforeFrozen && await page.locator(`${root} .card-finish-depth`).count() === 0, 'frozen choice neither requests nor attaches its depth assets');
     check(await page.locator('#imgHand').evaluate(image => image.complete && image.naturalWidth > 0 && getComputedStyle(image).display !== 'none'), 'locked/frozen fallback keeps the original card visible');
     report.scenarios.lockedFrozen = { requests: depthRequests };
   } finally {
@@ -755,11 +828,11 @@ async function validateStaticModes(browser) {
     const { context, page, depthRequests } = session;
     try {
       await setChoiceFixture(page);
-      await hover(page, '#playHand [data-card-finish]');
-      await page.waitForTimeout(300);
+      await page.waitForTimeout(500);
       const state = await depthState(page.locator('#playHand [data-card-finish]'));
-      check(depthRequests.length === 0 && !state.depth && state.root.ready === null, `${mode.name}: unsupported/static mode makes no depth request and attaches no composite`, { requests: depthRequests, state });
-      if (mode.expectStatic) check(state.root.static === 'true' && state.root.engaged === null, `${mode.name}: finish controller marks the surface static and unengaged`, state.root);
+      check(depthRequests.length === 0 && !state.depth && state.root.ready === null && state.root.engaged === null, `${mode.name}: visible card stays request-free and depth-free without pointer activation`, { requests: depthRequests, state });
+      if (mode.expectStatic) check(state.root.static === 'true', `${mode.name}: finish controller marks the surface static`, state.root);
+      else check(state.root.static === 'false', `${mode.name}: data-saving/capability mode disables depth without misreporting pointer capability`, state.root);
       check(state.original?.complete && state.original.naturalWidth > 0, `${mode.name}: original card remains the fallback`);
       report.scenarios[mode.name] = state;
     } finally {
@@ -771,21 +844,21 @@ async function validateStaticModes(browser) {
 async function validateMissingLayerFallback(browser) {
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, serviceWorkers: 'block' });
   await installPageRoutes(context);
-  const failedPath = '/images/card-depth/v1/normal/3/subject.webp';
+  const failedPath = depthAsset('normal', 3, 'subject');
   await context.route(`**${failedPath}`, route => route.fulfill({ status: 404, contentType: 'image/webp', body: '' }));
   const requests = [];
   const page = await context.newPage();
-  page.on('request', request => { const pathname = new URL(request.url()).pathname; if (pathname.startsWith('/images/card-depth/v1/')) requests.push(pathname); });
+  page.on('request', request => { const pathname = new URL(request.url()).pathname; if (pathname.startsWith(depthAssetPrefix)) requests.push(pathname); });
   try {
     await page.goto(`${BASE.origin}/game.html`, { waitUntil: 'domcontentloaded' });
     await page.waitForFunction(() => window.CardFinishV1);
     await setChoiceFixture(page, '/images/cards/3.webp', '/images/cards/8.webp');
-    await hover(page, '#playHand [data-card-finish]');
-    await page.waitForTimeout(800);
+    await page.waitForTimeout(1200);
     const state = await depthState(page.locator('#playHand [data-card-finish]'));
     check(requests.includes(failedPath), 'controlled failure actually requests the designated missing subject');
-    check(state.root.ready === null && !state.depth, 'one 404 layer prevents partial composite attachment');
+    check(state.root.ready === null && state.root.engaged === null && !state.depth, 'one auto-loaded 404 layer prevents partial composite attachment without pointer input');
     check(state.original?.complete && state.original.naturalWidth > 0 && Number(state.original.opacity) > 0, '404 fallback leaves the original card visible');
+    recordRuntimeGroups(requests, 'controlled missing-layer fallback');
     report.scenarios.missingLayer = { controlledFailure: failedPath, requests, state };
   } finally {
     await context.close();
@@ -798,7 +871,7 @@ async function validateSourceRace(browser) {
   let releaseOld;
   const oldGate = new Promise(resolve => { releaseOld = resolve; });
   const delayed = [];
-  await context.route('**/images/card-depth/v1/normal/3/*.webp', async route => {
+  await context.route(`**${depthAssetPrefix}normal/3/*.webp`, async route => {
     const pathname = new URL(route.request().url()).pathname;
     delayed.push(pathname);
     await oldGate;
@@ -810,23 +883,22 @@ async function validateSourceRace(browser) {
     await page.goto(`${BASE.origin}/game.html`, { waitUntil: 'domcontentloaded' });
     await page.waitForFunction(() => window.CardFinishV1);
     await setChoiceFixture(page, '/images/cards/3.webp', '/images/cards/8.webp');
-    await hover(page, '#playHand [data-card-finish]');
     for (let attempt = 0; attempt < 100 && delayed.length < 3; attempt += 1) await page.waitForTimeout(20);
-    check(delayed.length === 3, 'race fixture holds all three old-source depth requests before source replacement', delayed);
+    check(delayed.length === 3, 'visible-idle race fixture holds all three old-source depth requests before source replacement', delayed);
     await page.evaluate(() => {
       const image = document.getElementById('imgHand');
       image.src = '/images/cards/enh/3.webp';
       CardFinishV1.refresh();
     });
     await page.waitForFunction(() => { const image = document.getElementById('imgHand'); return image.complete && image.naturalWidth > 0 && new URL(image.currentSrc || image.src).pathname === '/images/cards/enh/3.webp'; });
-    await hover(page, '#playHand [data-card-finish]', .72, .28);
     await waitReady(page, '#playHand [data-card-finish]');
     let state = await depthState(page.locator('#playHand [data-card-finish]'));
-    check(state.depth.paths[0] === '/images/card-depth/v1/enh/3/background.webp' && state.original.src === '/images/cards/enh/3.webp', 'new source wins while old depth decodes are still pending', state);
+    check(state.root.engaged === null && state.depth.paths[0] === depthAsset('enh', 3, 'background') && state.original.src === '/images/cards/enh/3.webp', 'new visible source auto-load wins while old depth decodes are still pending', state);
     releaseOld();
     await page.waitForTimeout(600);
     state = await depthState(page.locator('#playHand [data-card-finish]'));
-    check(state.root.ready === 'ready' && state.depth.paths[0] === '/images/card-depth/v1/enh/3/background.webp' && !state.depth.paths.some(value => value.includes('/normal/3/')), 'late old-source completion cannot replace the current composite', state);
+    check(state.root.ready === 'ready' && state.root.engaged === null && state.depth.paths[0] === depthAsset('enh', 3, 'background') && !state.depth.paths.some(value => value.includes('/normal/3/')), 'late old-source completion cannot replace the current idle composite', state);
+    recordRuntimeGroups([...delayed, ...ROLES.map(role => depthAsset('enh', 3, role))], 'rapid source replacement race');
     report.scenarios.sourceRace = { delayed, final: state };
   } finally {
     releaseOld();
@@ -834,46 +906,77 @@ async function validateSourceRace(browser) {
   }
 }
 
-async function validateLeaveAndDestroyCancellation(browser) {
-  for (const mode of ['leave', 'destroy']) {
-    const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, serviceWorkers: 'block' });
-    await installPageRoutes(context);
-    let release;
-    const gate = new Promise(resolve => { release = resolve; });
-    let requestCount = 0;
-    await context.route('**/images/card-depth/v1/normal/3/*.webp', async route => {
-      requestCount += 1;
-      await gate;
-      const pathname = new URL(route.request().url()).pathname;
-      try { await route.fulfill({ status: 200, contentType: 'image/webp', body: fs.readFileSync(localFile(pathname)) }); } catch {}
+async function validateOffscreenVisibility(browser) {
+  const session = await openGame(browser);
+  const { context, page, depthRequests } = session;
+  try {
+    await installDepthAssignmentRecorder(page);
+    await page.evaluate(() => {
+      const root = document.querySelector('#playHand [data-card-finish]');
+      root.style.cssText = 'position:fixed;left:40px;top:2000px;width:240px;height:360px;display:block;z-index:1';
+      CardFinishV1.refresh();
     });
-    const page = await context.newPage();
-    try {
-      await page.goto(`${BASE.origin}/game.html`, { waitUntil: 'domcontentloaded' });
-      await page.waitForFunction(() => window.CardFinishV1);
-      await setChoiceFixture(page, '/images/cards/3.webp', '/images/cards/8.webp');
-      await hover(page, '#playHand [data-card-finish]');
-      await page.waitForFunction(() => document.querySelector('#playHand [data-card-finish]')?.dataset.finishEngaged === 'true');
-      await page.waitForTimeout(100);
-      if (mode === 'leave') await page.mouse.move(2, 2);
-      else await page.evaluate(() => CardFinishV1.destroy());
-      release();
-      await page.waitForTimeout(600);
-      const state = await depthState(page.locator('#playHand [data-card-finish]'));
-      check(requestCount > 0, `${mode}: cancellation case began a real depth load`);
-      check(state.root.ready === null && !state.depth && state.root.engaged === null, `${mode}: late decodes cannot attach after cancellation`, state);
-      check(state.original?.complete && state.original.naturalWidth > 0, `${mode}: cancellation keeps original fallback visible`);
-      if (mode === 'destroy') {
-        const before = requestCount;
-        await hover(page, '#playHand [data-card-finish]');
-        await page.waitForTimeout(250);
-        check(requestCount === before, 'destroy removes pointer listeners and prevents new depth requests');
-      }
-      report.scenarios[`${mode}Cancellation`] = { requestCount, state };
-    } finally {
-      release();
-      await context.close();
-    }
+    await page.waitForTimeout(100);
+    await setChoiceFixture(page, '/images/cards/3.webp', '/images/cards/8.webp');
+    await waitReady(page, '#playDrawn [data-card-finish]');
+    await page.waitForTimeout(350);
+    const offscreenRequests = depthRequests.filter(pathname => pathname.includes('/normal/3/'));
+    const offscreenAssignments = await page.evaluate(() => window.__CARD_DEPTH_QA_IMAGE_SRC_ASSIGNMENTS__.filter(pathname => pathname.includes('/normal/3/')));
+    let state = await depthState(page.locator('#playHand [data-card-finish]'));
+    check(offscreenRequests.length === 0 && offscreenAssignments.length === 0 && state.root.ready === null && !state.depth, 'offscreen registered card performs zero depth assignment/request while another visible card can become ready', { offscreenRequests, offscreenAssignments, state });
+
+    const before = depthRequests.length;
+    await page.evaluate(() => { document.querySelector('#playHand [data-card-finish]').style.top = '100px'; });
+    await waitReady(page, '#playHand [data-card-finish]');
+    state = await depthState(page.locator('#playHand [data-card-finish]'));
+    const enteredRequests = depthRequests.slice(before).filter(pathname => pathname.includes('/normal/3/'));
+    check(enteredRequests.length >= 3 && new Set(enteredRequests).size === 3 && state.root.engaged === null, 'moving the card into the viewport auto-loads only one three-file group without hover', { enteredRequests, state });
+    recordRuntimeGroups(depthRequests, 'offscreen-to-visible transition');
+
+    await page.evaluate(() => { document.querySelector('#playHand [data-card-finish]').style.top = '2000px'; });
+    await page.waitForFunction(() => !document.querySelector('#playHand [data-card-finish]')?.hasAttribute('data-finish-depth'));
+    state = await depthState(page.locator('#playHand [data-card-finish]'));
+    check(state.root.ready === null && state.root.engaged === null && !state.depth, 'leaving the viewport releases the composite while retaining the original fallback', state);
+    report.scenarios.offscreenVisibility = { offscreenRequests, offscreenAssignments, enteredRequests, final: state };
+  } finally {
+    await context.close();
+  }
+}
+
+async function validateDestroyCancellation(browser) {
+  const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, serviceWorkers: 'block' });
+  await installPageRoutes(context);
+  let release;
+  const gate = new Promise(resolve => { release = resolve; });
+  const requests = [];
+  await context.route(`**${depthAssetPrefix}normal/3/*.webp`, async route => {
+    requests.push(new URL(route.request().url()).pathname);
+    await gate;
+    const pathname = new URL(route.request().url()).pathname;
+    try { await route.fulfill({ status: 200, contentType: 'image/webp', body: fs.readFileSync(localFile(pathname)) }); } catch {}
+  });
+  const page = await context.newPage();
+  try {
+    await page.goto(`${BASE.origin}/game.html`, { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => window.CardFinishV1);
+    await setChoiceFixture(page, '/images/cards/3.webp', '/images/cards/8.webp');
+    for (let attempt = 0; attempt < 100 && requests.length < 3; attempt += 1) await page.waitForTimeout(20);
+    check(requests.length === 3, 'destroy cancellation begins the visible-idle three-file depth load without hover', requests);
+    await page.evaluate(() => CardFinishV1.destroy());
+    release();
+    await page.waitForTimeout(600);
+    const state = await depthState(page.locator('#playHand [data-card-finish]'));
+    check(state.root.ready === null && !state.depth && state.root.engaged === null, 'destroy prevents late visible-idle decodes from attaching', state);
+    check(state.original?.complete && state.original.naturalWidth > 0, 'destroy cancellation keeps original fallback visible');
+    const before = requests.length;
+    await hover(page, '#playHand [data-card-finish]');
+    await page.waitForTimeout(250);
+    check(requests.length === before, 'destroy removes pointer/visibility listeners and prevents new depth requests');
+    recordRuntimeGroups(requests, 'destroy cancellation');
+    report.scenarios.destroyCancellation = { requests, state };
+  } finally {
+    release();
+    await context.close();
   }
 }
 
@@ -890,7 +993,10 @@ async function main() {
     await validateStaticModes(browser);
     await validateMissingLayerFallback(browser);
     await validateSourceRace(browser);
-    await validateLeaveAndDestroyCancellation(browser);
+    await validateOffscreenVisibility(browser);
+    await validateDestroyCancellation(browser);
+    check(runtimeDynamicGroups.size > 0 && runtimeDynamicGroups.size < 80, 'all dynamic runtime scenarios touch only displayed/tested card groups, never the full 80-card catalog', [...runtimeDynamicGroups]);
+    report.runtimeDynamicGroups = [...runtimeDynamicGroups];
     check(report.errors.length === 0, 'browser emitted no unhandled page errors', report.errors);
     report.result = 'PASS';
   } catch (error) {

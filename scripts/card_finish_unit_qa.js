@@ -35,7 +35,7 @@ for (const [directory, variant] of [['cards', 'normal'], ['cards/enh', 'enh'], [
   for (let id = 0; id < 20; id += 1) {
     const depth = depthFromSource(`images/${directory}/${id}.webp`, base);
     equal(depth.key, `${variant}/${id}`, 'Every original source has its exact depth variant');
-    for (const role of ['background', 'subject', 'foreground']) equal(depth[role], `/images/card-depth/v1/${variant}/${id}/${role}.webp`, 'Each depth role uses the launcher-cached image directory');
+    for (const role of ['background', 'subject', 'foreground']) equal(depth[role], `/images/card-depth/v1/${variant}/${id}/${role}.webp`, 'Each depth role uses the launcher-compatible versioned asset directory');
   }
 }
 for (const source of [null, '', '/images/cards/20.webp', '/images/cards/-1.webp', '/images/cards/01.webp', '/images/cards/name.webp', '/images/cards/1.png', '/images/CARDS/1.webp', '/images/cards/1.webp.bak', 'https://other.test/images/cards/1.webp', 'data:image/webp;base64,test', 'http://[']) {
@@ -75,9 +75,11 @@ for (const [context, limit] of [['choice', 8], ['catalogue', 12]]) {
 
 // A small event/observer host exercises the real controller's scheduling and
 // teardown. Browser layout and the optical appearance require separate UI QA.
-function makeHost() {
+function makeHost(options = {}) {
   const observers = new Set();
+  const intersections = new Set();
   const requestedImages = [];
+  const requestedSources = [];
   const pendingDecodes = new Map();
   function mutation(target, attributeName) {
     observers.forEach((observer) => {
@@ -142,8 +144,9 @@ function makeHost() {
     setAttribute(name, value) {
       this.attributes.set(name, String(value)); mutation(this, name);
       if (this.generated && this.tagName === 'IMG' && name === 'src') {
-        if (!String(value).startsWith('/card-depth/')) { this.naturalWidth = 1242; this.naturalHeight = 1863; }
+        if (!String(value).startsWith('/images/card-depth/')) { this.naturalWidth = 1242; this.naturalHeight = 1863; }
         requestedImages.push(this);
+        requestedSources.push(String(value));
       }
     }
     removeAttribute(name) {
@@ -181,6 +184,11 @@ function makeHost() {
     observe(target, options) { this.targets.set(target, options); }
     disconnect() { this.targets.clear(); this.records = []; }
   }
+  class Intersection {
+    constructor(callback, settings) { this.callback = callback; this.settings = settings; this.targets = new Set(); intersections.add(this); }
+    observe(target) { this.targets.add(target); }
+    disconnect() { this.targets.clear(); }
+  }
   const body = new Element('body');
   const overlay = body.append(new Element('div'));
   const cards = [];
@@ -201,7 +209,10 @@ function makeHost() {
   const connection = new Events(); connection.saveData = false;
   const css = { enabled: true, supports() { return this.enabled; } };
   const pendingFrames = new Map();
+  const pendingIdle = new Map();
+  const pendingTimers = new Map();
   let frameId = 0;
+  let taskId = 0;
   const window = new Events();
   Object.assign(window, {
     document, MutationObserver: Observer,
@@ -209,8 +220,15 @@ function makeHost() {
     matchMedia: (query) => query.includes('reduced-motion') ? reduced : fine,
     getComputedStyle: (element) => element.computed,
     requestAnimationFrame: (callback) => { frameId += 1; pendingFrames.set(frameId, callback); return frameId; },
-    cancelAnimationFrame: (id) => pendingFrames.delete(id)
+    cancelAnimationFrame: (id) => pendingFrames.delete(id),
+    IntersectionObserver: Intersection,
+    setTimeout: (callback, delay) => { taskId += 1; pendingTimers.set(taskId, { callback, delay }); return taskId; },
+    clearTimeout: (id) => pendingTimers.delete(id)
   });
+  if (options.idle !== false) {
+    window.requestIdleCallback = (callback, settings) => { taskId += 1; pendingIdle.set(taskId, { callback, settings }); return taskId; };
+    window.cancelIdleCallback = (id) => pendingIdle.delete(id);
+  }
   vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../public/js/card_finish_v1.js'), 'utf8'), { window, URL });
   function flushMutations() {
     for (let round = 0; round < 20; round += 1) {
@@ -231,7 +249,21 @@ function makeHost() {
     pendingFrames.clear();
     callbacks.forEach((callback) => callback(16));
   }
-  return { window, document, cards, overlay, fine, reduced, connection, css, pendingFrames, observers, requestedImages, pendingDecodes, flushMutations, flushFrame };
+  function setIntersection(card, visible, ratio = visible ? 1 : 0) {
+    intersections.forEach((observer) => {
+      if (observer.targets.has(card.root)) observer.callback([{ target: card.root, isIntersecting: visible, intersectionRatio: ratio }]);
+    });
+  }
+  function flushIdle() {
+    const callbacks = [...pendingIdle.values()]; pendingIdle.clear();
+    callbacks.forEach(({ callback }) => callback({ didTimeout: false, timeRemaining: () => 50 }));
+  }
+  function flushTimers() {
+    const callbacks = [...pendingTimers.values()]; pendingTimers.clear();
+    callbacks.forEach(({ callback }) => callback());
+  }
+  return { window, document, cards, overlay, fine, reduced, connection, css, pendingFrames, pendingIdle, pendingTimers,
+    observers, intersections, requestedImages, requestedSources, pendingDecodes, flushMutations, flushFrame, setIntersection, flushIdle, flushTimers };
 }
 
 const host = makeHost();
@@ -332,151 +364,267 @@ equal([...choice.root.events.values()].reduce((total, listeners) => total + list
 equal(host.pendingDecodes.size, 0, 'Destroy releases all unfinished depth image decodes');
 
 async function checkDepthLifecycle() {
-  const depthHost = makeHost();
-  const first = depthHost.cards[0], second = depthHost.cards[1];
-  const poseDepth = (card = first) => { card.root.dispatch('pointermove'); depthHost.flushFrame(); };
   const settle = () => new Promise((resolve) => setImmediate(resolve));
-  const completeImages = async () => {
-    for (let stage = 0; stage < 3; stage += 1) {
-      [...depthHost.pendingDecodes.values()].forEach((decode) => decode.resolve());
-      await settle(); depthHost.flushMutations();
-    }
-  };
+  const depthCount = (fixture) => fixture.requestedSources.filter((src) => src.startsWith('/images/card-depth/')).length;
+  const readyCount = (fixture) => fixture.cards.filter((card) => card.root.getAttribute('data-finish-depth') === 'ready').length;
   const absent = (card, label) => {
     equal(card.root.getAttribute('data-finish-depth'), null, label + ': no ready metadata');
-    equal(card.face.querySelector('.card-finish-depth'), null, label + ': original image is the only artwork');
-    equal(card.face.children[0], card.picture, label + ': original image stays first');
+    equal(card.face.querySelector('.card-finish-depth'), null, label + ': original is the only artwork');
+    equal(card.face.children[0], card.picture, label + ': original stays first');
   };
-  equal(depthHost.requestedImages.length, 0, 'Initial mount never fetches depth images');
-  depthHost.cards[4].root.dispatch('pointermove'); depthHost.flushFrame();
-  equal(depthHost.requestedImages.length, 0, 'The fifth surface cannot fetch depth images');
-  poseDepth();
-  equal(depthHost.requestedImages.length, 3, 'First eligible hover requests only its three images');
-  equal(depthHost.pendingDecodes.size, 3, 'All three layers must decode');
-  absent(first, 'While decoding');
-  const decodes = [...depthHost.pendingDecodes.values()];
-  decodes[0].resolve(); decodes[1].resolve(); await settle();
-  absent(first, 'Two layers ready');
-  decodes[2].resolve(); await settle(); depthHost.flushMutations();
-  absent(first, 'The three assets are decoded but source clone is pending');
-  equal(depthHost.pendingDecodes.size, 1, 'Source clone decode also gates readiness');
-  equal(depthHost.requestedImages.at(-1).getAttribute('src'), 'https://card.test/images/cards/1.webp', 'Fixed foreground reuses the exact original source');
-  await completeImages();
-  equal(first.root.getAttribute('data-finish-depth'), 'ready', 'Only the complete composite becomes ready');
-  const composite = first.face.querySelector('.card-finish-depth');
-  equal(composite.getAttribute('aria-hidden'), 'true', 'The decorative subtree is hidden from accessibility');
-  equal(composite.children.length, 3, 'Composite has exactly three ordered layers');
-  equal(composite.children.every((image) => image.getAttribute('alt') === '' && image.getAttribute('draggable') === 'false'), true, 'Decorative images add no labels or dragging');
-  equal(composite.style.properties.get('--finish-depth-x'), '0.960px', 'Latest pointer controls subject displacement');
-  equal(composite.children[0].style.properties.has('transform') || composite.children[2].style.properties.has('transform'), false, 'Background and printed foreground have no inline transform');
-  equal(composite.children[2].style.properties.get('mask-image'), 'url("/images/card-depth/v1/normal/1/foreground.webp")', 'Foreground displays original pixels only through its alpha mask');
-  equal(composite.children[2].style.properties.get('-webkit-mask-image'), 'url("/images/card-depth/v1/normal/1/foreground.webp")', 'Foreground supports the prefixed mask property');
-  equal(composite.children.some((image) => image.getAttribute('src')?.endsWith('/foreground.webp')), false, 'The mask preload never becomes a visible image');
-  equal(depthHost.pendingFrames.size, 0, 'Completing assets starts no animation loop');
-  poseDepth();
-  equal(depthHost.requestedImages.length, 4, 'Further movement reuses three decoded assets and the cached source clone');
-  poseDepth(second);
-  absent(first, 'Hover moves directly to another surface');
-  equal(first.root.getAttribute('data-finish-engaged'), null, 'The former surface immediately loses tilt');
-  equal(composite.children.every((image) => image.getAttribute('src') === null), true, 'The former surface releases all decoded image sources');
-  equal(depthHost.pendingDecodes.size, 3, 'Only the new surface owns pending decodes');
-  await completeImages();
-  equal(second.root.getAttribute('data-finish-depth'), 'ready', 'The new surface can show its own composite');
-  second.root.dispatch('pointerleave');
-  absent(second, 'Pointer leaves');
+  const pose = (fixture, card = fixture.cards[0]) => { card.root.dispatch('pointermove'); fixture.flushFrame(); };
+  const startIdle = async (fixture) => {
+    fixture.flushIdle(); fixture.flushTimers(); await settle(); fixture.flushMutations();
+  };
+  const completeImages = async (fixture) => {
+    for (let stage = 0; stage < 20; stage += 1) {
+      [...fixture.pendingDecodes.values()].forEach((decode) => decode.resolve());
+      await settle(); fixture.flushMutations();
+      if (!fixture.pendingDecodes.size) return;
+    }
+    throw new Error('Decode work did not settle within the fixture bound');
+  };
+  const reenter = async (fixture, card = fixture.cards[0]) => {
+    fixture.setIntersection(card, false); fixture.setIntersection(card, true);
+    fixture.flushMutations(); await startIdle(fixture);
+  };
+  const destroy = async (fixture) => {
+    fixture.window.CardFinishV1.destroy(); await settle(); fixture.flushMutations();
+    equal(fixture.pendingIdle.size + fixture.pendingTimers.size + fixture.pendingFrames.size, 0, 'Destroy removes idle, timer and RAF work');
+    equal(fixture.pendingDecodes.size, 0, 'Destroy releases pending decodes');
+    equal([...fixture.intersections].every((observer) => observer.targets.size === 0), true, 'Destroy disconnects intersection observers');
+  };
 
-  poseDepth();
-  const staleImages = depthHost.requestedImages.slice(-3);
-  const staleDecodes = [...depthHost.pendingDecodes.values()];
-  first.picture.setAttribute('src', '/images/cards_lux/enh/19.webp'); depthHost.flushMutations();
+  const css = fs.readFileSync(path.join(__dirname, '../public/css/card-finish-v1.css'), 'utf8');
+  const readyRule = css.split(/\r?\n/).find((line) => line.includes('[data-finish-depth="ready"]'));
+  equal(!!readyRule && !readyRule.includes('data-finish-engaged'), true, 'A complete depth composite is visible without hover engagement');
+
+  const h = makeHost();
+  const first = h.cards[0], second = h.cards[1];
+  equal(h.requestedImages.length, 0, 'Initial mount never fetches before a visibility observation');
+  equal(h.pendingIdle.size, 0, 'Unobserved surfaces do not schedule speculative idle loads');
+  h.setIntersection(h.cards[4], true); pose(h, h.cards[4]); await startIdle(h);
+  equal(depthCount(h), 0, 'Fifth surface remains request-free even when observed and pointed at');
+  h.setIntersection(first, true, 0); await startIdle(h);
+  equal(depthCount(h), 0, 'Zero intersection area is not eligible');
+  h.setIntersection(first, true);
+  equal(h.pendingIdle.size, 1, 'Visible original schedules exactly one controlled idle task');
+  h.window.CardFinishV1.refresh(); h.flushMutations();
+  equal(h.pendingIdle.size, 1, 'Repeated sync does not duplicate the idle task');
+  equal(depthCount(h), 0, 'Visibility alone does not start a synchronous download');
+  await startIdle(h);
+  equal(depthCount(h), 3, 'Idle loads exactly the visible card three assets without any hover');
+  equal(h.pendingDecodes.size, 3, 'All three assets have independent decode gates');
+  absent(first, 'Assets pending');
+  const decodes = [...h.pendingDecodes.values()];
+  decodes[0].resolve(); decodes[1].resolve(); await settle();
+  absent(first, 'Only two assets decoded');
+  decodes[2].resolve(); await settle(); h.flushMutations();
+  absent(first, 'Source clone is still pending');
+  equal(h.pendingDecodes.size, 1, 'Source clone independently gates readiness');
+  equal(h.requestedSources.at(-1), 'https://card.test/images/cards/1.webp', 'Foreground clone reuses exact original URL');
+  await completeImages(h);
+  equal(first.root.getAttribute('data-finish-depth'), 'ready', 'Idle completion automatically attaches the full composite');
+  equal(first.root.getAttribute('data-finish-engaged'), null, 'Automatic readiness does not invent hover engagement');
+  const composite = first.face.querySelector('.card-finish-depth');
+  equal(composite.getAttribute('aria-hidden'), 'true', 'Decorative subtree is hidden from accessibility');
+  equal(composite.children.length, 3, 'Visible subtree has exactly three ordered role images');
+  equal(composite.children.map((image) => image.getAttribute('class')).join(','), 'card-finish-depth-background,card-finish-depth-subject,card-finish-depth-foreground', 'Layer order is background, subject and original clone');
+  equal(composite.children.every((image) => image.getAttribute('alt') === '' && image.getAttribute('draggable') === 'false'), true, 'Decorative images add no labels or dragging');
+  equal(composite.style.properties.size, 0, 'Idle pose has neutral subject displacement');
+  equal(composite.children[2].style.properties.get('mask-image'), 'url("/images/card-depth/v1/normal/1/foreground.webp")', 'Clone uses standard alpha mask');
+  equal(composite.children[2].style.properties.get('-webkit-mask-image'), 'url("/images/card-depth/v1/normal/1/foreground.webp")', 'Clone uses prefixed alpha mask');
+  equal(composite.children.some((image) => image.getAttribute('src')?.endsWith('/foreground.webp')), false, 'Mask preloader is never a visible white layer');
+  equal(h.pendingFrames.size, 0, 'Automatic readiness starts no animation loop');
+
+  h.setIntersection(second, true); await startIdle(h); await completeImages(h);
+  equal(readyCount(h), 2, 'Two visible surfaces remain depth-ready simultaneously');
+  pose(h);
+  equal(composite.style.properties.get('--finish-depth-x'), '0.960px', 'Eligible hover keeps existing bounded subject parallax');
+  pose(h, second);
+  equal(first.root.getAttribute('data-finish-engaged'), null, 'Switching hover clears only the former engagement');
+  equal(first.face.querySelector('.card-finish-depth'), composite, 'Switching hover retains the former decoded subtree');
+  equal(h.cards.filter((card) => card.root.getAttribute('data-finish-engaged') === 'true').length, 1, 'Only one surface is engaged among multiple ready cards');
+  const retained = depthCount(h);
+  for (const event of ['pointerleave', 'pointercancel', 'blur', 'scroll', 'resize']) {
+    pose(h);
+    if (event.startsWith('pointer')) first.root.dispatch(event);
+    else h.window.dispatch(event);
+    await settle(); h.flushMutations();
+    equal(first.face.querySelector('.card-finish-depth'), composite, event + ': retains existing depth');
+    equal(first.root.getAttribute('data-finish-depth'), 'ready', event + ': remains ready');
+    equal(first.root.getAttribute('data-finish-engaged'), null, event + ': clears engagement');
+    equal(first.face.style.properties.size + composite.style.properties.size, 0, event + ': returns to neutral pose');
+  }
+  for (let cycle = 0; cycle < 20; cycle += 1) {
+    pose(h); first.root.dispatch('pointerleave');
+    h.flushIdle(); await settle();
+  }
+  equal(depthCount(h), retained, 'Twenty hover cycles make no additional depth source assignments');
+  equal(readyCount(h), 2, 'Hover cycles do not evict visible composites');
+
+  h.setIntersection(first, false); h.flushMutations();
+  absent(first, 'Offscreen invalidation');
+  equal(composite.children.every((image) => image.getAttribute('src') === null), true, 'Offscreen invalidation clears retained image sources');
+  equal(second.root.getAttribute('data-finish-depth'), 'ready', 'Offscreen cleanup affects only its own surface');
+  h.setIntersection(first, true); h.setIntersection(first, false);
+  equal(h.pendingIdle.size, 0, 'Leaving viewport cancels idle work before requests');
+  await startIdle(h); equal(depthCount(h), retained, 'Cancelled idle work is request-free');
+  await reenter(h);
+  const oldImages = h.requestedImages.slice(-3), oldDecodes = [...h.pendingDecodes.values()];
+  first.picture.setAttribute('src', '/images/cards_lux/enh/19.webp'); h.flushMutations();
   absent(first, 'Source changes while loading');
-  staleDecodes.forEach((decode) => decode.resolve()); await settle();
-  absent(first, 'Stale decode completion');
-  equal(staleImages.every((image) => image.getAttribute('src') === null), true, 'Source change clears stale image sources');
-  poseDepth();
-  equal(depthHost.requestedImages.slice(-3).every((image) => image.getAttribute('src').startsWith('/images/card-depth/v1/lux-enh/19/')), true, 'The new request follows the exact luxury enhancement source');
-  await completeImages();
-  equal(first.root.getAttribute('data-finish-depth'), 'ready', 'Replacement source displays after its own decode');
+  oldDecodes.forEach((decode) => decode.resolve()); await settle();
+  absent(first, 'Late old-source completions');
+  equal(oldImages.every((image) => image.getAttribute('src') === null), true, 'Source invalidation clears old image sources');
+  await startIdle(h);
+  equal(h.requestedSources.slice(-3).every((src) => src.startsWith('/images/card-depth/v1/lux-enh/19/')), true, 'Replacement automatically requests only the new exact variant');
+  await completeImages(h);
+  equal(first.root.getAttribute('data-finish-depth'), 'ready', 'Replacement becomes ready without another pointer event');
 
   for (const [label, block, unblock] of [
-    ['Disabled button', () => first.parent.setAttribute('disabled', ''), () => first.parent.removeAttribute('disabled')],
-    ['Frozen source', () => first.picture.setAttribute('class', 'card-frozen'), () => first.picture.removeAttribute('class')],
+    ['Disabled', () => first.parent.setAttribute('disabled', ''), () => first.parent.removeAttribute('disabled')],
+    ['Frozen', () => first.picture.setAttribute('class', 'card-frozen'), () => first.picture.removeAttribute('class')],
     ['Hidden ancestor', () => first.parent.setAttribute('hidden', ''), () => first.parent.removeAttribute('hidden')],
-    ['Reduced motion', () => { depthHost.reduced.matches = true; depthHost.reduced.dispatch('change'); }, () => { depthHost.reduced.matches = false; depthHost.reduced.dispatch('change'); }],
-    ['Coarse pointer', () => { depthHost.fine.matches = false; depthHost.fine.dispatch('change'); }, () => { depthHost.fine.matches = true; depthHost.fine.dispatch('change'); }],
-    ['Save Data', () => { depthHost.connection.saveData = true; depthHost.connection.dispatch('change'); }, () => { depthHost.connection.saveData = false; depthHost.connection.dispatch('change'); }]
+    ['Reduced motion', () => { h.reduced.matches = true; h.reduced.dispatch('change'); }, () => { h.reduced.matches = false; h.reduced.dispatch('change'); }],
+    ['Coarse pointer', () => { h.fine.matches = false; h.fine.dispatch('change'); }, () => { h.fine.matches = true; h.fine.dispatch('change'); }],
+    ['Save Data', () => { h.connection.saveData = true; h.connection.dispatch('change'); }, () => { h.connection.saveData = false; h.connection.dispatch('change'); }],
+    ['No CSS mask', () => { h.css.enabled = false; h.window.dispatch('resize'); }, () => { h.css.enabled = true; h.window.dispatch('resize'); }],
+    ['Document hidden', () => { h.document.hidden = true; h.document.dispatch('visibilitychange'); }, () => { h.document.hidden = false; h.document.dispatch('visibilitychange'); }]
   ]) {
-    poseDepth(); await completeImages();
-    block(); depthHost.flushMutations();
+    await startIdle(h); await completeImages(h);
+    block(); h.flushMutations(); await settle();
     absent(first, label);
-    const requests = depthHost.requestedImages.length;
-    poseDepth();
-    equal(depthHost.requestedImages.length, requests, label + ': cannot start more image requests');
-    unblock(); depthHost.flushMutations();
+    const count = depthCount(h);
+    pose(h); await startIdle(h);
+    equal(depthCount(h), count, label + ': idle and pointer cannot load assets');
+    unblock(); h.flushMutations(); await startIdle(h); await completeImages(h);
+    equal(first.root.getAttribute('data-finish-depth'), 'ready', label + ': becoming eligible restores idle depth without hover');
   }
-  for (const event of ['pointerleave', 'pointercancel']) {
-    poseDepth(); first.root.dispatch(event); await completeImages(); absent(first, event + ' during loading');
-  }
-  for (const event of ['blur', 'scroll']) {
-    poseDepth(); await completeImages(); depthHost.window.dispatch(event); absent(first, event);
-  }
-  poseDepth(); depthHost.document.hidden = true; depthHost.document.dispatch('visibilitychange'); await completeImages();
-  absent(first, 'Document hidden during loading');
-  depthHost.document.hidden = false; depthHost.document.dispatch('visibilitychange');
-  const beforeTouch = depthHost.requestedImages.length;
-  first.root.dispatch('pointermove', { pointerType: 'touch' }); depthHost.flushFrame();
-  equal(depthHost.requestedImages.length, beforeTouch, 'Touch never requests depth assets');
-  depthHost.css.enabled = false; poseDepth();
-  equal(depthHost.requestedImages.length, beforeTouch, 'Missing CSS mask support prevents asset requests');
-  absent(first, 'Missing CSS mask support');
-  depthHost.css.enabled = true;
 
-  poseDepth(); [...depthHost.pendingDecodes.values()][1].reject(); await settle();
-  absent(first, 'One asset decode fails');
-  equal(depthHost.pendingDecodes.size, 0, 'A failed composite releases its other pending images');
-  const afterFailure = depthHost.requestedImages.length;
-  poseDepth();
-  equal(depthHost.requestedImages.length, afterFailure, 'An asset failure is not retried on every pointer frame');
-  first.root.dispatch('pointerleave');
-  poseDepth();
-  depthHost.requestedImages[depthHost.requestedImages.length - 1].naturalWidth = 600;
-  await completeImages(); absent(first, 'Mismatched layer dimensions');
-  first.root.dispatch('pointerleave');
-  first.picture.setAttribute('src', '/images/cards/20.webp'); depthHost.flushMutations();
-  const beforeInvalid = depthHost.requestedImages.length;
-  poseDepth();
-  equal(depthHost.requestedImages.length, beforeInvalid, 'An invalid original path sends no depth requests');
-  first.picture.setAttribute('src', '/images/cards/8.webp'); first.picture.setAttribute('srcset', '/other.webp 2x'); depthHost.flushMutations();
-  poseDepth(); equal(depthHost.requestedImages.length, beforeInvalid, 'An unknown responsive image stays on its original');
-  first.picture.removeAttribute('srcset'); depthHost.flushMutations();
-  first.picture.currentSrc = 'https://card.test/images/cards/3.webp';
-  poseDepth(); equal(depthHost.requestedImages.length, beforeInvalid, 'A stale currentSrc cannot be cloned into the new card');
-  first.picture.currentSrc = 'https://card.test/images/cards/8.webp';
-  first.root.dispatch('pointerleave');
-  poseDepth();
-  [...depthHost.pendingDecodes.values()].forEach((decode) => decode.resolve()); await settle();
-  equal(depthHost.pendingDecodes.size, 1, 'Source clone is independently pending');
-  [...depthHost.pendingDecodes.values()][0].reject(); await settle(); absent(first, 'Original source clone decode fails');
-  first.root.dispatch('pointerleave');
-  poseDepth();
-  [...depthHost.pendingDecodes.values()].forEach((decode) => decode.resolve()); await settle();
-  const staleClone = [...depthHost.pendingDecodes.values()][0];
+  h.setIntersection(second, false);
+  await reenter(h);
+  [...h.pendingDecodes.values()][1].reject(); await settle(); h.flushMutations();
+  absent(first, 'One asset decode failure');
+  equal(h.pendingDecodes.size, 0, 'A failed asset releases its sibling decodes');
+  const afterFailure = depthCount(h);
+  for (let cycle = 0; cycle < 3; cycle += 1) { pose(h); first.root.dispatch('pointerleave'); await startIdle(h); }
+  equal(depthCount(h), afterFailure, 'Failure does not retry on hover/leave or repeated idle');
+  await reenter(h);
+  h.requestedImages.at(-1).naturalWidth = 600;
+  await completeImages(h); absent(first, 'Mismatched layer dimensions');
+  for (const source of ['/images/cards/20.webp', 'https://other.test/images/cards/3.webp', '/images/cards/01.webp']) {
+    first.picture.setAttribute('src', source); h.flushMutations();
+    const before = depthCount(h); await startIdle(h);
+    equal(depthCount(h), before, 'Invalid or foreign source stays request-free: ' + source);
+    absent(first, 'Invalid source');
+  }
+  first.picture.setAttribute('src', '/images/cards/8.webp');
+  first.picture.setAttribute('srcset', '/other.webp 2x'); h.flushMutations();
+  const beforeResponsive = depthCount(h); await startIdle(h);
+  equal(depthCount(h), beforeResponsive, 'Responsive source stays on original fallback');
+  first.picture.removeAttribute('srcset'); first.picture.currentSrc = 'https://card.test/images/cards/3.webp'; h.flushMutations();
+  await startIdle(h); equal(depthCount(h), beforeResponsive, 'Stale currentSrc cannot be cloned');
+  first.picture.currentSrc = 'https://card.test/images/cards/8.webp'; first.picture.dispatch('load'); h.flushMutations();
+  await startIdle(h);
+  [...h.pendingDecodes.values()].forEach((decode) => decode.resolve()); await settle();
+  equal(h.pendingDecodes.size, 1, 'Foreground clone has its own pending decode');
+  [...h.pendingDecodes.values()][0].reject(); await settle();
+  absent(first, 'Foreground clone decode failure');
+  await reenter(h);
+  [...h.pendingDecodes.values()].forEach((decode) => decode.resolve()); await settle();
+  const oldClone = [...h.pendingDecodes.values()][0];
   first.picture.setAttribute('src', '/images/cards/3.webp');
   first.picture.currentSrc = 'https://card.test/images/cards/3.webp';
-  depthHost.flushMutations(); staleClone.resolve(); await settle();
-  absent(first, 'Source changes during cached foreground clone decode');
-  const beforeUnloaded = depthHost.requestedImages.length;
-  first.picture.complete = false; poseDepth();
-  equal(depthHost.requestedImages.length, beforeUnloaded, 'An original image that has not loaded cannot start depth');
-  first.picture.complete = true; first.picture.dispatch('load');
-  poseDepth();
-  depthHost.window.CardFinishV1.destroy();
-  await completeImages(); absent(first, 'Destroy during loading');
-  equal(depthHost.pendingDecodes.size, 0, 'Destroy retains no pending depth images');
-  equal(depthHost.pendingFrames.size, 0, 'Depth teardown retains no frame');
-  equal(depthHost.document.scans, 1, 'Depth lifecycle performs no document-wide scans');
-  equal(first.root.events.has('pointerdown') || first.root.events.has('click'), false, 'Depth installs no pointerdown or click handler');
-  equal(depthHost.connection.events.get('change').size, 0, 'Destroy removes Save Data change listener');
-}
+  first.picture.complete = false; h.flushMutations();
+  oldClone.resolve(); await settle();
+  absent(first, 'Source changes during original clone decode');
+  const beforeUnloaded = depthCount(h); await startIdle(h);
+  equal(depthCount(h), beforeUnloaded, 'Incomplete original cannot start an idle depth load');
+  first.picture.complete = true; first.picture.dispatch('load'); h.flushMutations();
+  await startIdle(h);
+  const outstanding = [...h.pendingDecodes.values()];
+  await destroy(h);
+  outstanding.forEach((decode) => decode.resolve()); await settle(); absent(first, 'Late completions after destroy');
+  const afterDestroy = depthCount(h);
+  h.setIntersection(first, true); pose(h); await startIdle(h);
+  equal(depthCount(h), afterDestroy, 'Destroyed controller cannot start new work');
+  equal(first.root.events.has('pointerdown') || first.root.events.has('click'), false, 'No pointerdown or click handlers are installed');
+  equal(h.connection.events.get('change').size, 0, 'Destroy removes Save Data listener');
+  equal(h.document.scans, 2, 'Only initial load and the explicit refresh scan the document');
 
+  const interrupted = makeHost();
+  const interruptedCard = interrupted.cards[0];
+  interrupted.setIntersection(interruptedCard, true); await startIdle(interrupted);
+  const offscreenCompletions = [...interrupted.pendingDecodes.values()];
+  interrupted.setIntersection(interruptedCard, false);
+  equal(interrupted.pendingDecodes.size, 0, 'Going offscreen during decode releases all pending images');
+  offscreenCompletions.forEach((decode) => decode.resolve()); await settle();
+  absent(interruptedCard, 'Offscreen late decode completion');
+  await reenter(interrupted);
+  const staticCompletions = [...interrupted.pendingDecodes.values()];
+  interrupted.reduced.matches = true; interrupted.reduced.dispatch('change');
+  staticCompletions.forEach((decode) => decode.resolve()); await settle();
+  absent(interruptedCard, 'Reduced motion during pending decode');
+  equal(interrupted.pendingIdle.size, 0, 'Static transition leaves no queued idle retry');
+  await destroy(interrupted);
+
+  const capped = makeHost();
+  for (let index = 0; index < 4; index += 1) {
+    capped.cards[index].picture.setAttribute('src', '/images/cards/' + index + '.webp');
+    capped.setIntersection(capped.cards[index], true);
+  }
+  capped.flushMutations();
+  equal(capped.pendingIdle.size, 4, 'Four eligible hooks have at most four idle jobs');
+  equal([...capped.intersections].every((observer) => observer.settings.rootMargin === '0px'), true, 'Intersection observation does not prefetch beyond the viewport');
+  await startIdle(capped);
+  equal(depthCount(capped), 6, 'At most two card jobs start their three assets concurrently');
+  equal(capped.pendingDecodes.size, 6, 'Only two card asset groups are pending');
+  const firstBatch = [...capped.pendingDecodes.entries()];
+  firstBatch.slice(0, 3).forEach(([, decode]) => decode.resolve()); await settle();
+  equal(depthCount(capped), 6, 'A slot remains occupied while its original clone decodes');
+  const cloneEntry = [...capped.pendingDecodes.entries()].find(([image]) => !image.getAttribute('src').startsWith('/images/card-depth/'));
+  cloneEntry[1].resolve(); await settle(); capped.flushMutations();
+  equal(depthCount(capped), 9, 'Finishing one complete card admits exactly one queued card');
+  equal(capped.pendingDecodes.size, 6, 'The queue keeps at most two pending card groups');
+  await completeImages(capped);
+  equal(depthCount(capped), 12, 'All four current surfaces eventually load exactly their twelve assets');
+  equal(readyCount(capped), 4, 'MAX_SURFACES permits four independently ready surfaces');
+  equal(capped.pendingIdle.size + capped.pendingFrames.size, 0, 'Finished queue leaves no perpetual scheduler');
+  await destroy(capped);
+
+  const queued = makeHost();
+  queued.cards.slice(0, 4).forEach((card, index) => {
+    card.picture.setAttribute('src', '/images/cards/' + index + '.webp');
+    queued.setIntersection(card, true);
+  });
+  queued.flushMutations(); await startIdle(queued);
+  queued.setIntersection(queued.cards[2], false);
+  queued.cards[3].picture.setAttribute('src', '/images/cards/9.webp'); queued.flushMutations();
+  await startIdle(queued); await completeImages(queued);
+  equal(queued.requestedSources.some((src) => src.startsWith('/images/card-depth/v1/normal/2/')), false, 'Offscreen queued card never starts requests');
+  equal(queued.requestedSources.some((src) => src.startsWith('/images/card-depth/v1/normal/3/')), false, 'Replaced queued generation never starts old requests');
+  equal(queued.requestedSources.filter((src) => src.startsWith('/images/card-depth/v1/normal/9/')).length, 3, 'Latest queued generation loads exactly its own assets');
+  await destroy(queued);
+
+  const queuedDestroy = makeHost();
+  queuedDestroy.cards.slice(0, 4).forEach((card) => queuedDestroy.setIntersection(card, true));
+  await startIdle(queuedDestroy);
+  equal(depthCount(queuedDestroy), 6, 'Queued teardown starts with two loading and two waiting cards');
+  const destroyedCompletions = [...queuedDestroy.pendingDecodes.values()];
+  await destroy(queuedDestroy);
+  destroyedCompletions.forEach((decode) => decode.resolve()); await settle();
+  equal(depthCount(queuedDestroy), 6, 'Destroy does not start either queued card after slots are released');
+  equal(readyCount(queuedDestroy), 0, 'Destroyed queued work cannot attach any composite');
+
+  const fallback = makeHost({ idle: false });
+  fallback.setIntersection(fallback.cards[0], true);
+  equal(fallback.pendingTimers.size, 1, 'No requestIdleCallback uses one cancellable fallback timer');
+  equal(fallback.requestedSources.length, 0, 'Fallback scheduling is not synchronous loading');
+  fallback.setIntersection(fallback.cards[0], false);
+  equal(fallback.pendingTimers.size, 0, 'Offscreen transition cancels fallback timer');
+  fallback.setIntersection(fallback.cards[0], true); await startIdle(fallback); await completeImages(fallback);
+  equal(readyCount(fallback), 1, 'Fallback timer automatically loads only its visible card');
+  await destroy(fallback);
+}
 checkDepthLifecycle().then(() => process.stdout.write(`CARD_FINISH_UNIT_QA=PASS (${checks} assertions)\n`)).catch((error) => { console.error(error); process.exitCode = 1; });

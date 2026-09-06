@@ -1,5 +1,18 @@
 ﻿# Dev Workflow
 
+## Card Depth visible V2／桌面素材包（2026-09-07，R2 已完成；V2 待 Render 發布）
+
+截至本段，V1 已正式上線；下方「V1 尚未發布」只保留為當時的歷史快照，不再代表目前線上狀態。V2 的 R2 素材已完成，Render 部署與 postdeploy 結果尚待主流程補記，不能沿用 V1 的 PASS 當作 V2 驗收。
+
+- V1：`40929bcade833267f48599135f9fdd29215f53d5` 已於 2026-09-07 02:08:49（Asia/Taipei）切換到 Render。243／243 live bytes／SHA、既有 SW profile 74 項、browser-live 2,262 項（80 組／320 個 HTTP、0 page errors）PASS；證據詳見 `docs/CARD_DEPTH_VISIBLE_V2_RELEASE.md`。V1 部署後真人 runner 在既有非本輪擁有的四人房第 2 回合遇到 `MENU_NOT_READY`，未操作或退出該房，這次正式真人驗收不是 PASS。
+- V2 顯示契約：符合條件且位於可見區域的卡片於 idle 預載；hover 不再作為首次載入門檻，只更新既有角度／反光等互動視覺。最多 2 個載入工作並行、最多 4 個既有 surfaces；手機／觸控與減少動態維持靜態，省流量或不支援遮罩時不載分層素材並保留輕量 CSS 角度／反光。web 只載入可見卡，不在進頁時預抓全套 80 卡。
+- 桌面相容：新增 `public/images/card-depth/v1/` 的 240 個相同位元組 aliases，原 `public/card-depth/v1/` 保留。現有 launcher 1.1.4 可沿用 `/images/*` 攔截器及 Card manifest；既有玩家須在遊戲庫按「下載更新」，不是自動下載，也不是更新啟動器 installer。完成下載及驗證後遊戲中由本機 CAS 供應，未更新的舊 receipt 仍可回退 Render。
+- 新增量為 240 logical files／13,632,032 bytes，CAS 去重後為 211 unique blobs／13,479,592 bytes。首次 immutable R2 發布為 `uploaded=211`、`skipped=3486`，立即完整重跑為 `uploaded=0`、`skipped=3697`；新 Card 清單為 710 檔／705,711,887 bytes，Board 清單及其 SHA 不變。
+- 本輪範圍為 Card Finish JS／CSS／HTML query、aliases、desktop 清單／打包清單、對應 QA 與文件；不改 Card／Board 規則、Socket event、DB、帳號或存檔。模型／venv 仍只在製作端，不進 R2 素材包或 public。
+- V2 獨立 SW 基線已在舊發布樹完成 82 項 PASS，確認 V1 query、12 份舊路徑代表素材及 `op-card-v7.5`；12 個 alias 404 只作尚未發布觀察。V2 unit 4,983、browser 2,273（80 組）、desktop bundle／manifest／catalog／cache／package 與 R2 dry-run 均已通過；Render、現有啟動器實際更新及正式 postdeploy 仍待主流程。舊 V1 script、profile 與報告不改寫。
+- 文件交付：本段同步 `DEV_WORKFLOW.md`、`PROJECT_OVERVIEW.md`、`GAME_RULES.md`、`FILE_MAP.md`，新增 `CARD_DEPTH_VISIBLE_V2_RELEASE.md`；文件存在與限定 `git diff --check` 檢查，不另執行模型或部署。
+- 回滾優先僅撤回 V2 runtime／預載策略，保留 alias、catalog、immutable manifest 與 CAS，避免已更新 receipt 觸發反降版保護；不要拿 V1 之前的回復點撤銷這次更新。
+
 ## Card Depth V1 全套 80 卡（2026-09-07，候選驗收通過／尚未發布）
 
 - 使用者同意免費模型的本機製作流程。新增 `tools/card-depth/` 製作、檢視、SAM 局部 alpha 修補及逐卡保護配方；模型與獨立 Python 環境在 D:/Codex_Tools，不修改遊戲套件、不把模型傳給玩家。

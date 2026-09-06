@@ -45,7 +45,7 @@
   contain: paint;
 }
 
-[data-card-finish][data-finish-engaged="true"][data-finish-depth="ready"][data-finish-locked="false"][data-finish-static="false"] > .card-finish-face > .card-finish-depth {
+[data-card-finish][data-finish-depth="ready"][data-finish-locked="false"][data-finish-static="false"] > .card-finish-face > .card-finish-depth {
   display: block;
 }
 

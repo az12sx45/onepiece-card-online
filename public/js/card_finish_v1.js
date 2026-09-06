@@ -1,9 +1,10 @@
 /* Independently implemented from the supplied requirements, 2026-09-06.
-   Visual-only Pointer Events controller; no game, storage, or socket access. */
+   Visual-only card presentation controller; no game, storage, or socket access. */
 (function cardFinishModule(global) {
   'use strict';
 
   const MAX_SURFACES = 4;
+  const MAX_DEPTH_LOADS = 2;
   const POINTER_PROPERTIES = [
     '--finish-pitch', '--finish-yaw', '--finish-light-x', '--finish-light-y',
     '--finish-band-angle', '--finish-film-x', '--finish-film-y'
@@ -39,6 +40,7 @@
       const enhanced = !!match[2];
       const variant = match[1] === 'cards_lux' ? (enhanced ? 'lux-enh' : 'lux') : (enhanced ? 'enh' : 'normal');
       const key = `${variant}/${match[3]}`;
+      // Keep desktop depth media under the launcher's existing images/* cache boundary.
       const prefix = `/images/card-depth/v1/${key}/`;
       return { key, enhanced, background: `${prefix}background.webp`, subject: `${prefix}subject.webp`, foreground: `${prefix}foreground.webp` };
     } catch (_) {
@@ -89,6 +91,28 @@
   let stopped = false;
   let listening = false;
   let activeReset = null;
+  let activeDepthLoads = 0;
+  const depthLoadQueue = [];
+
+  function pumpDepthLoads() {
+    while (activeDepthLoads < MAX_DEPTH_LOADS && depthLoadQueue.length) {
+      const task = depthLoadQueue.shift();
+      if (task.cancelled) continue;
+      activeDepthLoads += 1;
+      Promise.resolve().then(() => task.cancelled ? null : task.run()).catch(() => {}).finally(() => {
+        activeDepthLoads -= 1;
+        pumpDepthLoads();
+      });
+    }
+  }
+
+  function enqueueDepthLoad(run, priority) {
+    const task = { cancelled: false, run };
+    if (priority) depthLoadQueue.unshift(task);
+    else depthLoadQueue.push(task);
+    pumpDepthLoads();
+    return task;
+  }
 
   function hasMotionInput() {
     return finePointer.matches && !reducedMotion.matches;
@@ -125,9 +149,26 @@
     let depth = null;
     let depthGeneration = 0;
     let attemptedSource = null;
+    let idleHandle = null;
+    let idleKind = '';
+    let loadTask = null;
+    let inViewport = typeof global.IntersectionObserver !== 'function';
 
     function sourceStamp() {
       return picture ? ['src', 'srcset', 'sizes'].map((name) => picture.getAttribute(name) || '').join('\n') : '';
+    }
+
+    function cancelIdleLoad() {
+      if (idleHandle === null) return;
+      if (idleKind === 'idle' && typeof global.cancelIdleCallback === 'function') global.cancelIdleCallback(idleHandle);
+      else global.clearTimeout(idleHandle);
+      idleHandle = null;
+      idleKind = '';
+    }
+
+    function cancelQueuedLoad() {
+      if (loadTask) loadTask.cancelled = true;
+      loadTask = null;
     }
 
     function releaseDepth() {
@@ -135,37 +176,48 @@
       root.removeAttribute('data-finish-depth');
       if (depth) {
         depth.container.remove();
-        // Keep no decoded image cache: one hovered card owns 3 assets and 1 source clone.
+        // Keep no decoded image cache: a visible card owns 3 assets and 1 source clone.
         depth.images.forEach((image) => image.removeAttribute('src'));
         depth = null;
       }
     }
 
+    function invalidateDepth() {
+      cancelIdleLoad();
+      cancelQueuedLoad();
+      attemptedSource = null;
+      releaseDepth();
+    }
+
     function depthMayDisplay(stamp) {
-      return !disposed && activeReset === reset && !!lastPoint && available && hasDepthInput() &&
+      return !disposed && available && inViewport && hasDepthInput() &&
         !document.hidden && isVisible(root) && !isFrozen() && stamp === sourceStamp() &&
         !!picture && picture.complete && picture.naturalWidth > 0;
     }
 
     function moveSubject(bounds) {
-      if (!depth || !lastPoint) return;
+      if (!depth) return;
+      if (!lastPoint) {
+        depth.container.style.removeProperty('--finish-depth-x');
+        depth.container.style.removeProperty('--finish-depth-y');
+        return;
+      }
       const point = mapDepthPointer(lastPoint.x, lastPoint.y, bounds, depth.spec.enhanced);
       depth.container.style.setProperty('--finish-depth-x', `${point.x.toFixed(3)}px`);
       depth.container.style.setProperty('--finish-depth-y', `${point.y.toFixed(3)}px`);
     }
 
-    function requestDepth(bounds) {
-      const stamp = sourceStamp();
+    function beginDepthLoad(stamp) {
       if (depth && depth.stamp !== stamp) releaseDepth();
-      if (attemptedSource === stamp || !depthMayDisplay(stamp)) return;
+      if (attemptedSource === stamp || !depthMayDisplay(stamp)) return Promise.resolve();
       attemptedSource = stamp;
       // The source image remains first and authoritative, including its load lifecycle.
       // Responsive sources are not present in the four hooks; an unknown one falls back.
-      if (picture.getAttribute('srcset')) return;
+      if (picture.getAttribute('srcset')) return Promise.resolve();
       const spec = depthFromSource(picture.getAttribute('src'), document.baseURI);
-      if (!spec) return;
+      if (!spec) return Promise.resolve();
       const originalSource = new URL(picture.getAttribute('src'), document.baseURI).href;
-      if (picture.currentSrc && picture.currentSrc !== originalSource) return;
+      if (picture.currentSrc && picture.currentSrc !== originalSource) return Promise.resolve();
       const container = document.createElement('span');
       container.setAttribute('class', 'card-finish-depth');
       container.setAttribute('aria-hidden', 'true');
@@ -181,9 +233,9 @@
       });
       const generation = ++depthGeneration;
       depth = { container, images, spec, stamp };
-      moveSubject(bounds);
+      moveSubject(root.getBoundingClientRect());
       // No partial composite is attached. A missing layer or failed decode retains the original.
-      Promise.all(images.map((image, index) => {
+      return Promise.all(images.map((image, index) => {
         image.setAttribute('src', spec[['background', 'subject', 'foreground'][index]]);
         return typeof image.decode === 'function' ? image.decode() : Promise.reject(new Error('Image decode unavailable'));
       })).then(async () => {
@@ -215,21 +267,52 @@
       });
     }
 
+    function queueDepth(priority) {
+      const stamp = sourceStamp();
+      if (!depthMayDisplay(stamp) || attemptedSource === stamp || loadTask || (depth && depth.stamp === stamp)) return;
+      cancelIdleLoad();
+      const task = enqueueDepthLoad(() => beginDepthLoad(stamp), priority);
+      loadTask = task;
+      const originalRun = task.run;
+      task.run = () => Promise.resolve(originalRun()).finally(() => { if (loadTask === task) loadTask = null; });
+    }
+
+    function scheduleDepth() {
+      const stamp = sourceStamp();
+      if (idleHandle !== null || loadTask || attemptedSource === stamp || (depth && depth.stamp === stamp) || !depthMayDisplay(stamp)) return;
+      const run = () => {
+        idleHandle = null;
+        idleKind = '';
+        queueDepth(false);
+      };
+      if (typeof global.requestIdleCallback === 'function') {
+        idleKind = 'idle';
+        idleHandle = global.requestIdleCallback(run, { timeout: 300 });
+      } else {
+        idleKind = 'timer';
+        idleHandle = global.setTimeout(run, 80);
+      }
+    }
+
     function isFrozen() {
       return !!root.closest('button:disabled, .card-frozen') ||
         !!(face && face.classList.contains('card-frozen')) ||
         !!(picture && picture.classList.contains('card-frozen'));
     }
 
-    function reset() {
+    function clearPointer() {
       if (scheduledFrame) global.cancelAnimationFrame(scheduledFrame);
       scheduledFrame = 0;
       lastPoint = null;
-      if (activeReset === reset) activeReset = null;
-      attemptedSource = null;
-      releaseDepth();
+      if (activeReset === clearPointer) activeReset = null;
       root.removeAttribute('data-finish-engaged');
       if (face) POINTER_PROPERTIES.forEach((name) => face.style.removeProperty(name));
+      if (depth) moveSubject(root.getBoundingClientRect());
+    }
+
+    function reset() {
+      clearPointer();
+      invalidateDepth();
     }
 
     function sync() {
@@ -261,7 +344,8 @@
       setAttribute(root, 'data-finish-static', isStatic ? 'true' : 'false');
       available = !!face && !!picture && isVisible(root) && !isFrozen();
       setAttribute(root, 'data-finish-locked', available ? 'false' : 'true');
-      if (!available || isStatic || document.hidden) reset();
+      if (!available || !inViewport || isStatic || document.hidden || !hasDepthInput()) reset();
+      else scheduleDepth();
 
       if (needsObserver) {
         mutationObserver.disconnect();
@@ -290,13 +374,13 @@
     function renderPoint() {
       scheduledFrame = 0;
       if (!lastPoint || !available || !hasMotionInput() || document.hidden) {
-        reset();
+        clearPointer();
         return;
       }
       // The stationary root supplies geometry; only its child face is transformed.
       const bounds = root.getBoundingClientRect();
       if (!(bounds.width > 0 && bounds.height > 0) || isFrozen()) {
-        reset();
+        clearPointer();
         return;
       }
       const point = mapPointer(lastPoint.x, lastPoint.y, bounds, root.getAttribute('data-finish-context'));
@@ -307,18 +391,18 @@
       ];
       POINTER_PROPERTIES.forEach((name, index) => face.style.setProperty(name, values[index]));
       setAttribute(root, 'data-finish-engaged', 'true');
-      requestDepth(bounds);
+      queueDepth(true);
       moveSubject(bounds);
       // No self-scheduling loop: the next frame requires a new pointer event.
     }
 
     function onPointer(event) {
       if (event.pointerType !== 'mouse' || !hasMotionInput() || document.hidden || !available || isFrozen()) {
-        reset();
+        clearPointer();
         return;
       }
-      if (activeReset && activeReset !== reset) activeReset();
-      activeReset = reset;
+      if (activeReset && activeReset !== clearPointer) activeReset();
+      activeReset = clearPointer;
       lastPoint = { x: event.clientX, y: event.clientY };
       if (!scheduledFrame) scheduledFrame = global.requestAnimationFrame(renderPoint);
     }
@@ -326,13 +410,15 @@
     const pointerOptions = { passive: true };
     root.addEventListener('pointerenter', onPointer, pointerOptions);
     root.addEventListener('pointermove', onPointer, pointerOptions);
-    root.addEventListener('pointerleave', reset, pointerOptions);
-    root.addEventListener('pointercancel', reset, pointerOptions);
-    const resizeObserver = typeof global.ResizeObserver === 'function' ? new global.ResizeObserver(() => { reset(); sync(); }) : null;
+    root.addEventListener('pointerleave', clearPointer, pointerOptions);
+    root.addEventListener('pointercancel', clearPointer, pointerOptions);
+    const resizeObserver = typeof global.ResizeObserver === 'function' ? new global.ResizeObserver(() => { clearPointer(); sync(); }) : null;
     const intersectionObserver = typeof global.IntersectionObserver === 'function' ? new global.IntersectionObserver((entries) => {
-      if (entries.some((entry) => !entry.isIntersecting)) reset();
+      const entry = entries.find((candidate) => candidate.target === root) || entries[0];
+      inViewport = !!(entry && entry.isIntersecting && entry.intersectionRatio > 0);
+      if (!inViewport) reset();
       sync();
-    }) : null;
+    }, { root: null, rootMargin: '0px', threshold: .01 }) : null;
     if (resizeObserver) resizeObserver.observe(root);
     if (intersectionObserver) intersectionObserver.observe(root);
     sync();
@@ -340,6 +426,7 @@
     return {
       sync,
       reset,
+      clearPointer,
       destroy() {
         disposed = true;
         reset();
@@ -349,26 +436,26 @@
         if (picture) picture.removeEventListener('load', onImageLoad);
         root.removeEventListener('pointerenter', onPointer, pointerOptions);
         root.removeEventListener('pointermove', onPointer, pointerOptions);
-        root.removeEventListener('pointerleave', reset, pointerOptions);
-        root.removeEventListener('pointercancel', reset, pointerOptions);
+        root.removeEventListener('pointerleave', clearPointer, pointerOptions);
+        root.removeEventListener('pointercancel', clearPointer, pointerOptions);
         ['data-finish-surface', 'data-finish-static', 'data-finish-locked'].forEach((name) => root.removeAttribute(name));
       }
     };
   }
 
-  function resetAll() {
-    surfaces.forEach((surface) => surface.reset());
+  function clearPointers() {
+    surfaces.forEach((surface) => surface.clearPointer());
   }
 
   function syncAll() {
-    surfaces.forEach((surface) => { surface.reset(); surface.sync(); });
+    surfaces.forEach((surface) => { surface.clearPointer(); surface.sync(); });
   }
 
   function listen() {
     if (listening) return;
     listening = true;
-    global.addEventListener('blur', resetAll);
-    global.addEventListener('scroll', resetAll, { capture: true, passive: true });
+    global.addEventListener('blur', clearPointers);
+    global.addEventListener('scroll', clearPointers, { capture: true, passive: true });
     global.addEventListener('resize', syncAll, { passive: true });
     document.addEventListener('visibilitychange', syncAll);
     finePointer.addEventListener('change', syncAll);
@@ -395,8 +482,8 @@
     stopped = true;
     surfaces.forEach((surface) => surface.destroy());
     surfaces.clear();
-    global.removeEventListener('blur', resetAll);
-    global.removeEventListener('scroll', resetAll, true);
+    global.removeEventListener('blur', clearPointers);
+    global.removeEventListener('scroll', clearPointers, true);
     global.removeEventListener('resize', syncAll);
     document.removeEventListener('visibilitychange', syncAll);
     document.removeEventListener('DOMContentLoaded', refresh);
