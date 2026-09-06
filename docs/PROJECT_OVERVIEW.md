@@ -1,18 +1,18 @@
 # Project Overview
 
-## 霸海戰棋正式桌面整合（2026-09-07，1.1.5 發布候選）
+## 霸海戰棋正式桌面整合（2026-09-07，1.1.5 已發布）
 
 《霸海戰棋》的正式執行頁已隔離在 `public/chess/`，桌面入口為 `/chess/index.html`，並使用獨立 `onepiece-chess-desktop-v1` Electron partition。Git／Render 只帶必要 HTML、CSS、JavaScript、Stockfish 18 lite single vendor／授權與兩張本機 avatar；`1,380` 個大型圖片素材不進 Git／Render，改由 Cloudflare R2 immutable CAS 配送，下載後保存到玩家選定的本機素材庫。
 
 Chess manifest 是 `assets-4a14ed8c714c0b60`，共 `330,834,762` bytes，SHA-256 `ea710d9921d2826200dd41a808e222c7c337dd4a4f276e338eb4324f4a18adad`。正式 R2 發布去重成 `1,370` blobs／`329,861,974` bytes，已上傳 `1,367`、既有相同物件略過 `3`；抽樣完整與 Range 下載均通過。新的 `catalog-v2.json` 同時列出 Card、Board 與 Chess；Card／Board 的既有 release id、manifest SHA、檔案數及位元組保持不變。`catalog-v1.json` 仍完全保留給 1.1.4 舊啟動器，Chess 在舊 catalog 仍是 unavailable。
 
-桌面啟動器 `1.1.5` 會顯示第三盒、提供下載／更新／修復／單獨移除，並沿用跨遊戲 SHA CAS 去重與 receipt／LKG 安全檢查。啟動 Chess 時，已安裝的 `/images/chess/assets/*` 由本機攔截器供應；沒有本機素材的 server 路徑只會依已驗證的 catalog／manifest 重導到精確 R2 blob。正式 stable 更新 manifest 在 Stage A 保持 `1.1.4`，待 Render 與未公開 1.1.5 驗收完成後才以簽章 Stage B 提升，避免自動更新先於服務端上線。
+桌面啟動器 `1.1.5` 會顯示第三盒、提供下載／更新／修復／單獨移除，並沿用跨遊戲 SHA CAS 去重與 receipt／LKG 安全檢查。啟動 Chess 時，已安裝的 `/images/chess/assets/*` 由本機攔截器供應；沒有本機素材的 server 路徑只會依已驗證的 catalog／manifest 重導到精確 R2 blob。Stage A `41f4f886e343a85489d05b0f1f56115a6af30361` 已先部署並完成正式端 bytes／SHA 驗收；之後才上傳、完整下載核對 installer，並將 Ed25519 signed stable manifest 提升為 `1.1.5`（`publishedAt=2026-09-06T20:20:45.031Z`）。正式安裝檔為 `152,185,039` bytes，SHA-256 `a49462b5a9a0990e82a8fe4883a6c785c93b7b1c2c891391d49067bec3e938aa`，網址為 `https://game-assets.rihdi.tw/desktop/launcher/releases/1.1.5/ONE-PIECE-Tabletop-Launcher-1.1.5-x64.exe`。
 
 多人棋局以 `server/index.js` 與 `chess.js@1.4.0` 為權威。伺服器負責 authenticated room、等待／準備／開局、CPU、觀戰、好友邀請、斷線重接、合法步、FEN／SAN、吃子、將死與和棋；客戶端只提出 `from`／`to`／`promotion`，不能用自帶 FEN 或 game-over 宣告改寫結果。準備階段的 ready 不再因收到一般 lobby snapshot 被清掉。
 
 目前 Chess room 只存在單一 Node process 記憶體：Render 重啟會中止當時棋局，水平多 instance 也尚未支援共享房間。正式共用瀏覽器啟動頁則繼續停用 Chess，因 R2 CORS 尚未完成；這是 browser 發布邊界，不影響桌面啟動器的同源本機素材供應。
 
-本輪已通過來源 integrity、22 檔正式 bundle、真 Socket.IO protocol、權威非法步／偽造狀態／將死／三次重複／CPU、R2 fallback、catalog、publisher、AssetStore 三遊戲生命週期、Service Worker isolation、source／packaged Electron package 與本機媒體／GPU smoke。這些證據覆蓋發行與多人接點，不等同長時間多房壓力測試。
+本輪已通過來源 integrity、22 檔正式 bundle、真 Socket.IO protocol、權威非法步／偽造狀態／將死／三次重複／CPU、R2 fallback、catalog、publisher、AssetStore 三遊戲生命週期、Service Worker isolation、source／packaged Electron package 與本機媒體／GPU smoke。Stage A 後再由全新空快取透過正式 catalog 與 R2 完整下載、驗證及安裝 `1,370` 個 unique Chess blobs，receipt 對上 `1,380` logical files／`330,834,762` bytes；installer 的完整 GET、SHA-256、Range `206` 與 `MZ` 亦通過。這些證據覆蓋發行與多人接點，不等同長時間多房壓力測試。
 
 ## Card Depth visible V2／桌面一次下載（2026-09-07，已發布）
 

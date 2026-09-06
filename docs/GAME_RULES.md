@@ -9,6 +9,7 @@
 - server 承諾 move 後才廣播 `CHESS_MOVE_COMMITTED`，兩端及觀戰者以同一權威序號前進；客戶端動畫或本機 AI 只負責呈現／提出候選，不是規則權威。CPU 回合亦必須經相同 server 合法步與終局檢查。
 - Chess 房目前只保存在單一 Node process 的 `chessRooms` 記憶體。Render 重啟會使活動房失效；多 instance 尚無共享房間或棋局持久化，不能宣稱可無縫跨 instance 接回。沒有 socket 的房間只按現行 idle TTL 於該 process 清理。
 - Chess 大型素材安裝、更新、修復或單款移除不屬於棋局規則。檔案必須通過 manifest 的 size／SHA，再由本機 CAS 提供；移除 Chess 時仍保留 Card／Board 正在引用的共用 blobs。正式 browser 共用啟動頁暫不開放 Chess，直到 R2 CORS 與 browser QA 完成。
+- `1.1.5` 的 signed stable manifest 已於 `2026-09-06T20:20:45.031Z` 發布；這只開放已驗證啟動器與素材下載，不改上述棋局規則。舊 `1.1.4` 仍可繼續使用原 Card／Board catalog，並在設定中檢查更新後升級。
 
 ## Card Depth visible V2 規則邊界（2026-09-07，已發布）
 

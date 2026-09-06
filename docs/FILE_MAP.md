@@ -1,6 +1,6 @@
 # File Map
 
-## 霸海戰棋／桌面啟動器 1.1.5 發布檔案（2026-09-07，R2 已上傳／分階段發布中）
+## 霸海戰棋／桌面啟動器 1.1.5 發布檔案（2026-09-07，已發布）
 
 | 檔案／位置 | 功能／狀態 |
 | --- | --- |
@@ -14,14 +14,15 @@
 | `public/desktop/catalog-v1.json` | 舊 `1.1.4` 啟動器的相容權威，原位元組不變且 Chess 仍 unavailable；不得用 schema 2 整份覆寫。 |
 | `desktop/asset-store.js`、`desktop/main.js`、`desktop/launcher.js` | `1.1.5` 支援 `card|board|chess` 的下載／更新／修復／單款移除與啟動。Chess entry 為 `/chess/index.html`，partition 為 `onepiece-chess-desktop-v1`；沿用 receipt／LKG／CAS、Range、SHA、realpath／junction 安全及跨遊戲共用 blob 保護。 |
 | `desktop/package.json`、`desktop/package-lock.json` | 版本 `1.1.5`；extraResources 帶 `catalog-v2` 和 Card／Board／Chess 三份精確 manifest，不內嵌 330 MB Chess 大型圖片。 |
-| `desktop/dist/ONE-PIECE-Tabletop-Launcher-1.1.5-x64.exe`（建置產物，非 Git） | x64 NSIS 候選；`152,185,039` bytes，SHA-256 `a49462b5a9a0990e82a8fe4883a6c785c93b7b1c2c891391d49067bec3e938aa`。Stage A 驗收前 `public/desktop/launcher-release-v1.json` 仍為已簽署 1.1.4；1.1.5 installer 上傳與 stable manifest 提升必須另作 Stage B。 |
+| `D:\OnePieceDesktopBuilds\release-1.1.5\ONE-PIECE-Tabletop-Launcher-1.1.5-x64.exe`（建置產物，非 Git） | 已發布 x64 NSIS installer；`152,185,039` bytes，SHA-256 `a49462b5a9a0990e82a8fe4883a6c785c93b7b1c2c891391d49067bec3e938aa`。R2 immutable URL 完整 GET 與本機一致，Range `0-63` 為 `206`／`MZ`／cache `HIT`。 |
+| `public/desktop/launcher-release-v1.json` | stable `1.1.5` 發布入口；artifact URL 指向上述 R2 installer，`publishedAt=2026-09-06T20:20:45.031Z`，並由 `launcher-ed25519-cadd711c990664d5715de23131cadf45` 簽署。正式檔與 DPAPI 候選逐 byte 相同且簽章驗證通過。 |
 | `server/index.js`、根 `package.json`、`package-lock.json` | `chess.js@1.4.0` 權威多人房與走棋；支援 authenticated waiting／preparation／playing、CPU、觀戰、邀請、重連。server 忽略 client FEN／SAN／capture、自行驗證 move 與終局；Chess rooms 仍是單 process 記憶體。另提供經 catalog／manifest 驗證的 `/images/chess/assets/*` → R2 CAS `302` fallback。 |
 | `tools/desktop-r2-publisher/{publish.js,publish-saved-r2.ps1,README.md}` | 新增 `--game chess`／`--chess-source`，驗證外部來源 realpath／SHA 後發布 immutable CAS。正式 `1,370` unique blobs／`329,861,974` bytes，`uploaded=1367`、`skipped=3`；無 Delete、無覆寫。 |
 | `scripts/chess_release_bundle_qa.js`、`chess_multiplayer_protocol_qa.js`、`chess_asset_fallback_qa.js` | bundle／真 Socket.IO protocol／R2 fallback 專項。覆蓋兩階段 ready、loadout、觀戰、CPU、重接、move sequence、非法步、偽造 FEN／game over、將死、三次重複、合法 redirect、未知／越界／暫時錯誤。 |
 | `scripts/desktop_game_catalog_qa.js`、`desktop_asset_store_qa.js`、`desktop_r2_publish_qa.js`、`desktop_installed_media_smoke.js`、`desktop_launcher_package_qa.js`、`desktop_service_worker_isolation_qa.js` | 三遊戲 catalog、外部 Chess publisher source、安全安裝／更新／解除安裝、三 partition、source／packaged package 與 Electron 媒體 smoke。catalog QA 為 Card `710`、Board `3451`、Chess `1380`、shared `13`、launcher-only `15`；logical `2,312,733,013` bytes、CAS `5,064` blobs／`2,143,507,691` bytes。 |
 | `scripts/deployment_asset_manifest_qa.js` | 將 Chess core／catalog-v2 納入 Render 必備程式檢查，但仍禁止共用 browser launcher 指向 Chess；待 R2 CORS 與 browser QA 完成前不宣稱 browser 版可用。 |
 
-正式 browser 共用啟動頁仍停用 Chess；目前支持範圍是 1.1.5 桌面啟動器。R2 抽樣缺少 `Access-Control-Allow-Origin`，不影響 Electron 本機同源攔截。若回滾 Stage A，保留 `catalog-v1`、Card／Board manifests 與已存在的 immutable CAS；若 stable 1.1.5 已發布，使用更高版本修正，不刪除或覆寫既有簽署產物。
+正式 browser 共用啟動頁仍停用 Chess；目前支持範圍是已發布的 1.1.5 桌面啟動器。R2 抽樣缺少 `Access-Control-Allow-Origin`，不影響 Electron 本機同源攔截。Stage A `41f4f886e343a85489d05b0f1f56115a6af30361` 已通過正式 bytes／SHA 與空快取完整安裝；回滾時保留 `catalog-v1`、Card／Board manifests 與 immutable CAS／installer。已升至 1.1.5 的客戶端不會自動降版，後續修正應發布更高版本。
 
 ## Card Depth visible V2／桌面素材包檔案（2026-09-07，已發布）
 
