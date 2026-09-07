@@ -1,5 +1,21 @@
 # File Map
 
+## 桌面完整本機執行包／啟動器 1.1.6（2026-09-07）
+
+| 檔案／位置 | 功能／狀態 |
+| --- | --- |
+| `config/desktop-program-packages-v1.json` | Card／Board／Chess 入口及允許的 document/style/script/data/WASM 白名單；保存 v2 catalog／manifest SHA 基線。 |
+| `scripts/build_desktop_program_catalog.js`、`desktop_program_package_common.js`、`desktop_program_catalog_qa.js` | 從 Git `HEAD` 讀正式程式 bytes，與既有 v2 媒體合併為 schema 3；驗證排序、路徑、SHA、引用、重建決定性及 v2 不變。 |
+| `public/desktop/catalog-v3.json`、`public/desktop/manifests/{card-package-ca025698d8851a35,board-package-68ec6b205918f818,chess-package-cdab9e869c05f12d}.json` | 三遊戲完整 runtime 身分與不可變清單：Card 739、Board 3485、Chess 1406 檔；共 5630 logical／5145 unique。 |
+| `public/vendor/`、`public/css/card-entry-tailwind-v1.min.css` | 固定 React／ReactDOM／Babel／Socket.IO client 與 Card 入口 Tailwind CSS；`vendor/licenses/` 保存版本授權。 |
+| `desktop/program-runtime.js`、`asset-store.js`、`runtime-asset-cache.js`、`main.js` | schema 3 安裝／receipt、同 HTTPS origin 的本機靜態攔截、API/Socket passthrough、啟動前遠端身分確認與 fail-open Render fallback。 |
+| `server/index.js` | 在 static middleware 前提供 `GET /api/desktop-runtime-package/:gameId`；逐項驗證 catalog/config/manifest 及正式 program SHA，unknown 404、任何不一致 503、全部 no-store。 |
+| `tools/desktop-r2-publisher/publish.js`、`publish-saved-r2.ps1`、`README.md` | v2 預設保持相容；顯式 schema 3 會從 Git HEAD／核准 Chess 來源發布完整 runtime CAS。正式結果 uploaded 81、skipped 5064，無刪除／覆寫。 |
+| `scripts/desktop_program_runtime_qa.js`、`desktop_program_protocol_electron_qa.js`、`desktop_runtime_package_endpoint_qa.js`、`desktop_r2_program_publish_qa.js` | exact handshake、URL/origin、document/CSS/JS/Worker/WASM/media 本機命中、API/Socket 網路、fail-open、伺服器 tamper 與 immutable publisher 專項。 |
+| `desktop/package.json`、`desktop/package-lock.json`、`scripts/desktop_launcher_package_qa.js` | 啟動器 1.1.6；ASAR 新增 `program-runtime.js` 並內建 v2/v3 catalogs 與 manifests。正式 win-unpacked：236 ASAR entries、77 launcher files、8 catalog files。 |
+| `D:\OnePieceDesktopBuilds\release-1.1.6\ONE-PIECE-Tabletop-Launcher-1.1.6-x64.exe`（非 Git） | x64 NSIS：152,434,817 bytes；SHA-256 `21b31db506c146d0bef1785b5cf8f5efd9a8a56317a474d4c44ff11e7686c335`。 |
+| `public/desktop/launcher-release-v1.json` | Ed25519 簽署 stable 1.1.6；artifact 指向 R2 immutable 1.1.6 installer，舊 1.1.5 可檢查並安裝更新。 |
+
 ## 霸海戰棋好友邀請／CPU 防卡熱修 V2 檔案（2026-09-07）
 
 | 檔案／位置 | 功能／狀態 |

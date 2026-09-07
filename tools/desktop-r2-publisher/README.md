@@ -61,7 +61,8 @@ the clipboard and protected with the current user's Windows DPAPI key:
 ```powershell
 .\save-r2-credential.ps1 -Field AccessKeyId
 .\save-r2-credential.ps1 -Field SecretAccessKey
-.\publish-saved-r2.ps1
+.\publish-saved-r2.ps1 -CatalogVersion 3 `
+  -ChessSource "D:\航海王西洋棋\GRAND-LINE-BATTLE-多人發布版-v1\public\assets"
 ```
 
 The encrypted document lives outside the repository under the current user's

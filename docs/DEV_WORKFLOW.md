@@ -1,5 +1,16 @@
 ﻿# Dev Workflow
 
+## 三遊戲完整本機執行包／啟動器 1.1.6（2026-09-07）
+
+- 目標與邊界：Card、Board、Chess 的 HTML、CSS、JS、Worker、WASM、JSON、圖片、音樂、影片與字型在玩家完成遊戲下載後均由安裝位置的內容位址快取供應；正式網址與 origin 仍是 `https://onepiece-card-online.onrender.com`，帳號、好友、聊天室、房間、存檔與 Socket.IO 仍由 Render 處理。未改角色、規則、資料 id、localStorage key、Socket event 或 `BOARD_GAME_STATE`。
+- 防混版：`catalog-v3.json` 與 schema 3 manifest 納入程式及媒體。每次開啟遊戲前，啟動器以不經本機攔截的 `GET /api/desktop-runtime-package/:gameId` 驗證 Render 現行 `releaseId`、manifest SHA-256 與 `entryPath`；三者完全吻合才在相同 HTTPS URL 上供應本機檔。逾時、503、缺檔、SHA 不符或版本不同時會整套回退 Render，不允許新舊程式混用。
+- 本機依賴：Card 入口的 React 18.3.1、ReactDOM 18.3.1、Babel 7.24.7、Tailwind 3.4.17 編譯 CSS，以及三遊戲 Socket.IO client 4.8.1 改為 `public/vendor/` 固定版本並保存 license；不再依賴執行時 CDN 或動態 `/socket.io/socket.io.js` 程式檔。Card 舊預覽 avatar `a1/a2` 修正為現存 `1/2`。
+- 清單結果：Card `739` 檔／`710,948,844` bytes（program `29`）、Board `3,485` 檔／`1,284,459,311` bytes（program `34`）、Chess `1,406` 檔／`340,094,107` bytes（program `26`）；合計 `5,630` logical／`2,335,502,262` bytes、CAS `5,145` unique／`2,166,067,173` bytes。既有 `catalog-v2` 與三份舊 manifest bytes/SHA 保持不變。
+- R2：schema 3 正式發布逐檔驗證 `5,145` 個 unique blobs；`uploaded=81`、`skipped=5064`、`skippedRace=0`。發布器只使用 HEAD 與 `If-None-Match: *` PUT，沒有刪除或覆寫。DPAPI wrapper 新增顯式 `-CatalogVersion 3`，預設仍為 v2 以保護舊流程。
+- 啟動器：`desktop/package.json` 升為 `1.1.6`。x64 NSIS 位於 `D:\OnePieceDesktopBuilds\release-1.1.6\ONE-PIECE-Tabletop-Launcher-1.1.6-x64.exe`，`152,434,817` bytes，SHA-256 `21b31db506c146d0bef1785b5cf8f5efd9a8a56317a474d4c44ff11e7686c335`；immutable R2 URL 為 `https://game-assets.rihdi.tw/desktop/launcher/releases/1.1.6/ONE-PIECE-Tabletop-Launcher-1.1.6-x64.exe`。`launcher-release-v1.json` 沿用既有 Ed25519 key 簽署，舊版 1.1.5 可由設定內檢查更新取得。
+- 驗證：program catalog、Git HEAD bytes、legacy v2 不變、AssetStore、runtime CAS、Service Worker isolation、HTTPS protocol Electron fixture、Render runtime endpoint、launcher update/settings/cursor/GPU、source／win-unpacked／installer package、R2 publisher、Chess bundle/fallback/multiplayer 與 deployment manifest 均 PASS。Electron fixture 實際確認 document/CSS/JS/Worker/WASM/image 本機命中、URL/origin 不變、API 走網路；正式站切換後仍須以 live endpoint、乾淨安裝與既有 1.1.5 更新路徑作 postdeploy 驗收。
+- 回復：發布前 main 回復點為遠端 branch `codex/rollback-before-desktop-local-runtime-v1`，commit `46585bcb77776417447a8927bbfb51a9d65611b1`。需要停止新更新時先 scoped revert 1.1.6 release manifest／Render 程式；既有 v2、1.1.5 installer 與 R2 immutable blobs 均保留，不刪除已發布物件。
+
 ## 霸海戰棋好友邀請／CPU 首步防卡修正 V2（2026-09-07）
 
 - 問題與根因：等待室原本只有「邀請好友」按鈕，實際好友面板 CSS 未載入棋局頁，且其層級低於等待室；玩家加入 CPU 後的首步則可能停在動態行走圖的 `Image` Promise，保持 `locked=true`、`faceoff` 且尚未提交任何棋步，因此外觀看似黑屏，並非 Stockfish 或伺服器先走錯步。
