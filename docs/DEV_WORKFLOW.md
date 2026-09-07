@@ -6,7 +6,7 @@
 - V1 退化與 V2 修正：首版守衛把動態貼圖限制為 3.5 秒，失敗後用站立圖代替行走影格，且動畫例外會直接提交棋步；這會讓棋子瞬移，攻擊暗場中斷時還可能留下全黑棋盤。V2 在桌面模式把已安裝的 `opcache` 資源先以 `fetch` 讀成 blob，再經 `createImageBitmap`／canvas 交給 Phaser，避免 Electron 自訂協定的 `Image` 事件停住；等待上限改為 15 秒，不再用站立圖冒充動畫，也絕不由守衛靜默提交棋步。若演出仍失敗，會回復原 FEN、棋盤貼圖、鏡頭、棋子與輸入狀態後回報錯誤。
 - 既有修正：`battle-social-v1.css` 與專用好友選擇框讓線上好友可直接收到 Chess room invite；房間離開 waiting 階段時強制關閉邀請框。CPU／遠端套步 runtime 以 `try/finally` 清除 `cpuThinking`／`applyingRemote`，不再留下永久輸入鎖。
 - 發布邊界：只更動 `public/chess/`、Chess QA 與本段文件；不改 server Socket event、權威 chess.js 規則、Card／Board、R2 圖片清單或桌面啟動器。此為 Render 網頁程式熱修，已安裝的 1.1.5 不需重新安裝或下載 330 MB 素材。
-- V2 發布前驗證：JS syntax、桌面 blob／bitmap 動態貼圖、動畫失敗不得提交、FEN／棋盤／鏡頭／暫存物件復原、邀請層級與 cache-bust、正式 Chess bundle（18 program／24 required）、真 Socket.IO protocol、R2 fallback、部署素材清單及三遊戲 Service Worker isolation全數 PASS。正式 Electron opcache 的玩家與 CPU 連續走子／吃子、雙帳號邀請接受與 live bytes 仍須在部署前後各自驗收，不能以模擬測試代替。
+- V2 發布與正式驗收：程式提交 `e4e76f67` 已推送 `main` 並由 Render 提供；三個公開熱修檔案與 Git 的 bytes／SHA-256 完全一致。JS syntax、桌面 blob／bitmap 動態貼圖、動畫失敗不得提交、FEN／棋盤／鏡頭／暫存物件復原、邀請層級與 cache-bust、正式 Chess bundle（18 program／24 required）、真 Socket.IO protocol、R2 fallback、部署素材清單及三遊戲 Service Worker isolation 全數 PASS。已安裝 Electron 1.1.5 在不攔截正式站的條件下完成玩家 `e2→e4`、CPU `e7→e5` 與近距離吃子：走路、攻擊、受擊及回位動畫完整，棋盤每次取樣均為 `visible=true`／`alpha=1`／`willRender=true`，`bitmapLoadCount=18`、`imageLoadCount=0`、`recoveryCount=0`，console、page error 與 request failure 均為 0；六筆正式素材請求由 Render 邏輯網址轉交 `opcache://asset` 的 D 槽已安裝 CAS。證據位於 `D:\OnePieceDesktopQA\chess-v2-production-final\`。雙帳號好友邀請接受仍是獨立多人驗收項目，不能由本次 CPU 棋局代替。
 
 ## 霸海戰棋桌面發布整合（2026-09-07，啟動器 1.1.5 已發布）
 

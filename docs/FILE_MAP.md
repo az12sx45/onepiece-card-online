@@ -10,6 +10,8 @@
 | `public/chess/battle-game.html`、`index.html`、`battle-game-loader-v1.js` | 載入上述 CSS／guard 並使用 `invite-picker-v1-20260907`、`desktop-bitmap-loader-v2-20260907`、`cpu-move-recovery-v2-20260907` cache-bust。 |
 | `scripts/chess_friend_invite_ui_qa.js`、`chess_cpu_move_recovery_qa.js` | 驗證邀請框層級／關閉／cache-bust、桌面 bitmap 載入、動畫失敗不提交、FEN／棋盤／鏡頭復原與 runtime finally 防線。 |
 
+正式熱修提交為 `e4e76f67`；安裝版連正式站的走子／CPU／吃子截圖與狀態報告保存在 `D:\OnePieceDesktopQA\chess-v2-production-final\`。大型棋盤、棋子與動畫影格仍不在上述程式目錄，而由已安裝的 D 槽 CAS 經 `opcache://asset` 提供。
+
 ## 霸海戰棋／桌面啟動器 1.1.5 發布檔案（2026-09-07，已發布）
 
 | 檔案／位置 | 功能／狀態 |

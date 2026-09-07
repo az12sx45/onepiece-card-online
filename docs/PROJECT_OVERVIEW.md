@@ -6,6 +6,8 @@
 
 桌面素材已安裝但 Chromium 對 `opcache` 動態 `Image` 沒有可靠送出 load／error 時，Chess 改由 `fetch` 讀取已安裝位元組，經 blob、`createImageBitmap` 與 canvas 建立 Phaser 貼圖，讓真正的行走與攻擊影格完整播放。首版的 3.5 秒站立圖回退及「動畫失敗仍直接完成棋步」已移除；守衛現在最多等待 15 秒，失敗時把 FEN、棋盤、鏡頭與動畫物件回到走棋前並回報錯誤，不能用瞬移掩蓋載圖問題。CPU 思考與遠端棋步套用仍有 `finally` 防線，畫面層失敗不能長期留下 `battle-network-input-locked`。伺服器仍是唯一走棋權威，沒有改 FEN、回合或終局規則。
 
+正式修正版 `e4e76f67` 已上線。已安裝 Electron 1.1.5 直接連正式站的實測完成玩家第一步、CPU 回應及一次吃子；三種演出期間棋盤與鏡頭都持續可見，無 console／page／network error，所有動態影格由 D 槽本機 CAS 的 `opcache://asset` 解碼，沒有回退到站立圖或網路圖片。
+
 ## 霸海戰棋正式桌面整合（2026-09-07，1.1.5 已發布）
 
 《霸海戰棋》的正式執行頁已隔離在 `public/chess/`，桌面入口為 `/chess/index.html`，並使用獨立 `onepiece-chess-desktop-v1` Electron partition。Git／Render 只帶必要 HTML、CSS、JavaScript、Stockfish 18 lite single vendor／授權與兩張本機 avatar；`1,380` 個大型圖片素材不進 Git／Render，改由 Cloudflare R2 immutable CAS 配送，下載後保存到玩家選定的本機素材庫。
