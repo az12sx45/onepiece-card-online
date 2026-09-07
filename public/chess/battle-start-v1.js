@@ -147,7 +147,7 @@
       }
       const script = document.createElement("script");
       script.dataset.battleSocketClient = "1";
-      script.src = `${serverOrigin}/socket.io/socket.io.js`;
+      script.src = `${serverOrigin}/vendor/socket.io-client/4.8.1/socket.io.min.js?v=20260907-local-runtime-v1`;
       script.onload = () => resolve(typeof window.io === "function");
       script.onerror = () => resolve(false);
       document.head.appendChild(script);

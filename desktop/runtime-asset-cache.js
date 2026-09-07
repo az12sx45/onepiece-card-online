@@ -87,6 +87,7 @@ class RuntimeAssetCache {
         key: normalizeAssetKey(asset.path),
         token,
         filePath,
+        kind: typeof asset.kind === 'string' ? asset.kind : '',
         mime: asset.mime,
         size: asset.size,
         sha256: asset.sha256

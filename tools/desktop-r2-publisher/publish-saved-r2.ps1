@@ -1,5 +1,8 @@
 [CmdletBinding()]
 param(
+  [ValidateSet(2, 3)]
+  [int]$CatalogVersion = 2,
+
   [ValidateRange(1, 16)]
   [int]$Concurrency = 3,
 
@@ -53,7 +56,13 @@ try {
   $env:R2_ACCESS_KEY_ID = Convert-ProtectedStringToPlainText ([string]$credential.accessKeyIdProtected)
   $env:R2_SECRET_ACCESS_KEY = Convert-ProtectedStringToPlainText ([string]$credential.secretAccessKeyProtected)
 
-  $arguments = @($publisherPath, '--live', '--repo-root', $repoRoot, '--concurrency', [string]$Concurrency)
+  $arguments = @(
+    $publisherPath,
+    '--live',
+    '--repo-root', $repoRoot,
+    '--catalog-version', [string]$CatalogVersion,
+    '--concurrency', [string]$Concurrency
+  )
   if (-not [string]::IsNullOrWhiteSpace($ChessSource)) {
     $arguments += @('--chess-source', (Resolve-Path -LiteralPath $ChessSource).Path)
   }

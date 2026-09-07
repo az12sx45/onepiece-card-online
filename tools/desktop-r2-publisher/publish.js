@@ -8,13 +8,40 @@ const { execFileSync } = require('node:child_process');
 
 const DEFAULT_REPO_ROOT = path.resolve(__dirname, '..', '..');
 const CATALOG_RELATIVE_PATH = 'public/desktop/catalog-v2.json';
+const CATALOG_RELATIVE_PATHS = Object.freeze({
+  2: CATALOG_RELATIVE_PATH,
+  3: 'public/desktop/catalog-v3.json'
+});
 const GAME_IDS = Object.freeze(['card', 'board', 'chess']);
 const ASSET_ROOTS = new Set(['images', 'audio', 'videos', 'fonts']);
+const RESERVED_SEGMENTS = new Set(['incoming', 'backup', 'backups', 'private', 'battle_chess']);
+const PACKAGE_KINDS = Object.freeze([
+  'document', 'style', 'script', 'data', 'wasm',
+  'image', 'audio', 'video', 'font'
+]);
 const HASH_PATTERN = /^[a-f0-9]{64}$/;
 const MANIFEST_PATH_PATTERN = /^desktop\/manifests\/[a-z0-9._-]+\.json$/;
 const IMMUTABLE_CACHE_CONTROL = 'public, max-age=31536000, immutable';
 const OBJECT_PREFIX = 'desktop/blobs/sha256';
 const DEFAULT_CONCURRENCY = 3;
+const PACKAGE_EXTENSIONS = new Map([
+  ['.html', ['document', 'text/html']], ['.css', ['style', 'text/css']],
+  ['.js', ['script', 'text/javascript']], ['.mjs', ['script', 'text/javascript']],
+  ['.json', ['data', 'application/json']], ['.webmanifest', ['data', 'application/manifest+json']],
+  ['.txt', ['data', 'text/plain']], ['.md', ['data', 'text/markdown']],
+  ['.wasm', ['wasm', 'application/wasm']],
+  ['.png', ['image', 'image/png']], ['.jpg', ['image', 'image/jpeg']],
+  ['.jpeg', ['image', 'image/jpeg']], ['.jfif', ['image', 'image/jpeg']],
+  ['.webp', ['image', 'image/webp']], ['.gif', ['image', 'image/gif']],
+  ['.svg', ['image', 'image/svg+xml']], ['.avif', ['image', 'image/avif']],
+  ['.mp3', ['audio', 'audio/mpeg']], ['.wav', ['audio', 'audio/wav']],
+  ['.ogg', ['audio', 'audio/ogg']], ['.m4a', ['audio', 'audio/mp4']],
+  ['.aac', ['audio', 'audio/aac']], ['.flac', ['audio', 'audio/flac']],
+  ['.mp4', ['video', 'video/mp4']], ['.webm', ['video', 'video/webm']],
+  ['.mov', ['video', 'video/quicktime']], ['.m4v', ['video', 'video/x-m4v']],
+  ['.woff', ['font', 'font/woff']], ['.woff2', ['font', 'font/woff2']],
+  ['.ttf', ['font', 'font/ttf']], ['.otf', ['font', 'font/otf']]
+]);
 
 function fail(message) {
   throw new Error(message);
@@ -55,6 +82,22 @@ function validateAssetPath(value) {
   return { path: value };
 }
 
+function validatePackagePath(value) {
+  if (
+    typeof value !== 'string' || !value || value.includes('\\') || value.includes('\0') ||
+    value !== value.normalize('NFC') || path.posix.isAbsolute(value) || path.win32.isAbsolute(value) ||
+    path.posix.normalize(value) !== value
+  ) fail(`Unsafe package path: ${String(value)}`);
+  const parts = value.split('/');
+  if (parts.some((part) => !part || part === '.' || part === '..')) fail(`Unsafe package path: ${value}`);
+  if (parts.map((part) => part.toLowerCase()).some((part) => RESERVED_SEGMENTS.has(part))) {
+    fail(`Package path contains a reserved segment: ${value}`);
+  }
+  const type = PACKAGE_EXTENSIONS.get(path.posix.extname(value).toLowerCase());
+  if (!type) fail(`Package path has an unsupported extension: ${value}`);
+  return { path: value, kind: type[0], mime: type[1] };
+}
+
 function objectKeyForSha256(value) {
   const sha256 = String(value || '').toLowerCase();
   if (!HASH_PATTERN.test(sha256)) fail('Cannot build an R2 key from an invalid SHA-256.');
@@ -71,38 +114,48 @@ async function readJsonWithBytes(filePath, label, maximumBytes) {
   }
 }
 
-function validateManifest(document, gameId, catalogEntry) {
-  if (!isPlainObject(document) || document.schema !== 1 || document.gameId !== gameId || !Array.isArray(document.assets)) {
+function validateManifest(document, gameId, catalogEntry, catalogSchema = 2) {
+  const manifestSchema = catalogSchema === 3 ? 3 : 1;
+  if (!isPlainObject(document) || document.schema !== manifestSchema || document.gameId !== gameId || !Array.isArray(document.assets)) {
     fail(`${gameId} manifest shape is invalid.`);
   }
   if (
     document.releaseId !== catalogEntry.releaseId || document.totalFiles !== catalogEntry.totalFiles ||
     document.totalBytes !== catalogEntry.totalBytes
   ) fail(`${gameId} manifest does not match the catalog.`);
+  if (catalogSchema === 3) {
+    const entryPath = String(document.entryPath || '');
+    const checkedEntry = validatePackagePath(entryPath);
+    if (
+      checkedEntry.kind !== 'document' || entryPath !== catalogEntry.entryPath ||
+      !document.assets.some((asset) => asset?.path === entryPath)
+    ) fail(`${gameId} manifest entryPath is invalid.`);
+  }
   if (typeof document.createdAt !== 'string' || Number.isNaN(Date.parse(document.createdAt))) {
     fail(`${gameId} manifest createdAt is invalid.`);
   }
   if (!HASH_PATTERN.test(String(document.assetSetSha256 || '')) || sha256Bytes(JSON.stringify(document.assets)) !== document.assetSetSha256) {
     fail(`${gameId} manifest asset-set digest is invalid.`);
   }
+  if (catalogSchema === 3 && document.releaseId !== `package-${document.assetSetSha256.slice(0, 16)}`) {
+    fail(`${gameId} package release id is not derived from its asset-set digest.`);
+  }
 
   const seenPaths = new Set();
-  const byKind = {
-    image: { files: 0, bytes: 0 },
-    audio: { files: 0, bytes: 0 },
-    video: { files: 0, bytes: 0 },
-    font: { files: 0, bytes: 0 }
-  };
+  const kindNames = catalogSchema === 3 ? PACKAGE_KINDS : ['image', 'audio', 'video', 'font'];
+  const byKind = Object.fromEntries(kindNames.map((kind) => [kind, { files: 0, bytes: 0 }]));
   let totalBytes = 0;
   let previousPath = '';
   for (const asset of document.assets) {
     if (!isPlainObject(asset)) fail(`${gameId} manifest contains a malformed asset.`);
-    const checkedPath = validateAssetPath(asset.path);
+    const checkedPath = catalogSchema === 3 ? validatePackagePath(asset.path) : validateAssetPath(asset.path);
     const foldedPath = checkedPath.path.toLowerCase();
     const size = Number(asset.size);
     const sha256 = String(asset.sha256 || '').toLowerCase();
     if (
-      !Object.prototype.hasOwnProperty.call(byKind, asset.kind) || typeof asset.mime !== 'string' || !asset.mime ||
+      !Object.prototype.hasOwnProperty.call(byKind, asset.kind) ||
+      (catalogSchema === 3 && (asset.kind !== checkedPath.kind || asset.mime !== checkedPath.mime)) ||
+      typeof asset.mime !== 'string' || !asset.mime ||
       !Number.isSafeInteger(size) || size < 1 || !HASH_PATTERN.test(sha256)
     ) fail(`${gameId} manifest contains invalid metadata for ${checkedPath.path}.`);
     if (seenPaths.has(foldedPath)) fail(`${gameId} manifest contains a duplicate path: ${checkedPath.path}`);
@@ -120,13 +173,16 @@ function validateManifest(document, gameId, catalogEntry) {
   ) fail(`${gameId} manifest totals are invalid.`);
 }
 
-async function loadPublishInventory({ repoRoot = DEFAULT_REPO_ROOT, gameIds = GAME_IDS } = {}) {
+async function loadPublishInventory({ repoRoot = DEFAULT_REPO_ROOT, gameIds = GAME_IDS, catalogVersion = 2 } = {}) {
   const resolvedRoot = path.resolve(repoRoot);
   const publicRoot = path.join(resolvedRoot, 'public');
-  const catalogPath = path.join(resolvedRoot, ...CATALOG_RELATIVE_PATH.split('/'));
+  const normalizedCatalogVersion = Number(catalogVersion);
+  const catalogRelativePath = CATALOG_RELATIVE_PATHS[normalizedCatalogVersion];
+  if (!catalogRelativePath) fail('Desktop publish catalogVersion must be 2 or 3.');
+  const catalogPath = path.join(resolvedRoot, ...catalogRelativePath.split('/'));
   if (!strictChildPath(resolvedRoot, catalogPath)) fail('Catalog path escaped the repository root.');
   const { document: catalog } = await readJsonWithBytes(catalogPath, 'Desktop catalog', 256 * 1024);
-  if (!isPlainObject(catalog) || catalog.schema !== 2 || !isPlainObject(catalog.games)) fail('Desktop catalog shape is invalid.');
+  if (!isPlainObject(catalog) || catalog.schema !== normalizedCatalogVersion || !isPlainObject(catalog.games)) fail('Desktop catalog shape is invalid.');
 
   const recordsByHash = new Map();
   let logicalFiles = 0;
@@ -142,17 +198,24 @@ async function loadPublishInventory({ repoRoot = DEFAULT_REPO_ROOT, gameIds = GA
     if (!isPlainObject(entry)) fail(`Desktop catalog is missing ${gameId}.`);
     const manifestPath = String(entry.manifestPath || '');
     const manifestSha256 = String(entry.manifestSha256 || '').toLowerCase();
+    const entryPath = normalizedCatalogVersion === 3 ? String(entry.entryPath || '') : '';
     if (
       !MANIFEST_PATH_PATTERN.test(manifestPath) || !HASH_PATTERN.test(manifestSha256) ||
       typeof entry.releaseId !== 'string' || !entry.releaseId || !Number.isSafeInteger(entry.totalFiles) ||
-      entry.totalFiles < 1 || !Number.isSafeInteger(entry.totalBytes) || entry.totalBytes < 1
+      entry.totalFiles < 1 || !Number.isSafeInteger(entry.totalBytes) || entry.totalBytes < 1 ||
+      (normalizedCatalogVersion === 3 && validatePackagePath(entryPath).kind !== 'document')
     ) fail(`Desktop catalog ${gameId} entry is invalid.`);
     const absoluteManifestPath = path.join(publicRoot, ...manifestPath.split('/'));
     if (!strictChildPath(publicRoot, absoluteManifestPath)) fail(`${gameId} manifest path escaped public/.`);
     const { bytes, document } = await readJsonWithBytes(absoluteManifestPath, `${gameId} manifest`, 8 * 1024 * 1024);
     if (sha256Bytes(bytes) !== manifestSha256) fail(`${gameId} manifest bytes do not match the catalog digest.`);
-    validateManifest(document, gameId, entry);
-    manifests[gameId] = { path: manifestPath, sha256: manifestSha256, releaseId: document.releaseId };
+    validateManifest(document, gameId, entry, normalizedCatalogVersion);
+    manifests[gameId] = {
+      path: manifestPath,
+      sha256: manifestSha256,
+      releaseId: document.releaseId,
+      ...(normalizedCatalogVersion === 3 ? { entryPath } : {})
+    };
 
     for (const asset of document.assets) {
       const sha256 = String(asset.sha256).toLowerCase();
@@ -192,7 +255,8 @@ async function loadPublishInventory({ repoRoot = DEFAULT_REPO_ROOT, gameIds = GA
   return {
     repoRoot: resolvedRoot,
     publicRoot,
-    catalogPath: CATALOG_RELATIVE_PATH,
+    catalogSchema: normalizedCatalogVersion,
+    catalogPath: catalogRelativePath,
     catalogCreatedAt: catalog.createdAt,
     manifests,
     logicalFiles,
@@ -215,7 +279,7 @@ function readGitHeadBlob(repoRoot, assetPath) {
     });
   } catch (error) {
     const detail = Buffer.isBuffer(error?.stderr) ? error.stderr.toString('utf8').trim() : '';
-    fail(`Cannot read committed SVG bytes for ${assetPath}${detail ? `: ${detail}` : ''}`);
+    fail(`Cannot read committed Git HEAD bytes for ${assetPath}${detail ? `: ${detail}` : ''}`);
   }
 }
 
@@ -234,7 +298,8 @@ function createSourceReader(inventory, { chessSourceRoot = '' } = {}) {
     return realChessSourceRootPromise;
   };
   return async function readVerifiedSource(assetPath, expected) {
-    validateAssetPath(assetPath);
+    if (inventory.catalogSchema === 3) validatePackagePath(assetPath);
+    else validateAssetPath(assetPath);
     let bytes;
     const chessPrefix = 'images/chess/assets/';
     if (assetPath.startsWith(chessPrefix)) {
@@ -248,7 +313,7 @@ function createSourceReader(inventory, { chessSourceRoot = '' } = {}) {
       const resolvedAssetPath = await fsp.realpath(absolutePath);
       if (!strictChildPath(sourceRoot, resolvedAssetPath)) fail(`Chess asset real path escaped its source root: ${assetPath}`);
       bytes = await fsp.readFile(resolvedAssetPath);
-    } else if (path.posix.extname(assetPath).toLowerCase() === '.svg') {
+    } else if (inventory.catalogSchema === 3 || path.posix.extname(assetPath).toLowerCase() === '.svg') {
       bytes = readGitHeadBlob(inventory.repoRoot, assetPath);
     } else {
       const absolutePath = path.resolve(publicRoot, ...assetPath.split('/'));
@@ -439,6 +504,7 @@ function parseArguments(argv) {
     live: false,
     json: false,
     repoRoot: DEFAULT_REPO_ROOT,
+    catalogVersion: 2,
     concurrency: DEFAULT_CONCURRENCY,
     chessSourceRoot: String(process.env.CHESS_ASSET_SOURCE || '').trim(),
     gameIds: [],
@@ -454,6 +520,11 @@ function parseArguments(argv) {
       if (index >= argv.length) fail('--repo-root requires a path.');
       options.repoRoot = path.resolve(argv[index]);
     } else if (argument.startsWith('--repo-root=')) options.repoRoot = path.resolve(argument.slice('--repo-root='.length));
+    else if (argument === '--catalog-version') {
+      index += 1;
+      if (index >= argv.length) fail('--catalog-version requires 2 or 3.');
+      options.catalogVersion = Number(argv[index]);
+    } else if (argument.startsWith('--catalog-version=')) options.catalogVersion = Number(argument.slice('--catalog-version='.length));
     else if (argument === '--concurrency') {
       index += 1;
       if (index >= argv.length) fail('--concurrency requires a number.');
@@ -474,14 +545,15 @@ function parseArguments(argv) {
   if (!options.gameIds.length) options.gameIds = [...GAME_IDS];
   options.gameIds = [...new Set(options.gameIds)];
   if (options.gameIds.some((gameId) => !GAME_IDS.includes(gameId))) fail('--game requires card, board, or chess.');
+  if (![2, 3].includes(options.catalogVersion)) fail('--catalog-version requires 2 or 3.');
   return options;
 }
 
 function usage() {
   return [
-    'Usage: node tools/desktop-r2-publisher/publish.js [--live] [--repo-root PATH] [--game card|board|chess] [--chess-source PATH] [--concurrency 1-16] [--json]',
+    'Usage: node tools/desktop-r2-publisher/publish.js [--live] [--catalog-version 2|3] [--repo-root PATH] [--game card|board|chess] [--chess-source PATH] [--concurrency 1-16] [--json]',
     '',
-    'Without --live, every source is verified locally and no network request is made.',
+    'Without --live, every source is verified locally and no network request is made. catalog-version defaults to legacy v2.',
     'Live environment: R2_ACCOUNT_ID, R2_BUCKET, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY.'
   ].join('\n');
 }
@@ -492,7 +564,11 @@ async function main(argv = process.argv.slice(2), env = process.env) {
     process.stdout.write(`${usage()}\n`);
     return { ok: true, help: true };
   }
-  const inventory = await loadPublishInventory({ repoRoot: options.repoRoot, gameIds: options.gameIds });
+  const inventory = await loadPublishInventory({
+    repoRoot: options.repoRoot,
+    gameIds: options.gameIds,
+    catalogVersion: options.catalogVersion
+  });
   let liveContext = null;
   if (options.live) liveContext = createAwsLiveContext(loadLiveConfiguration(env));
   try {
@@ -508,7 +584,11 @@ async function main(argv = process.argv.slice(2), env = process.env) {
       }
     });
     if (options.json) process.stdout.write(`${JSON.stringify(result)}\n`);
-    else process.stdout.write(`DESKTOP_R2_PUBLISH=PASS mode=${result.mode} uniqueFiles=${result.uniqueFiles} uniqueBytes=${result.uniqueBytes} uploaded=${result.uploaded} skipped=${result.skipped + result.skippedRace}\n`);
+    else process.stdout.write(
+      `DESKTOP_R2_PUBLISH=PASS mode=${result.mode} catalog=v${options.catalogVersion} ` +
+      `uniqueFiles=${result.uniqueFiles} uniqueBytes=${result.uniqueBytes} uploaded=${result.uploaded} ` +
+      `skipped=${result.skipped + result.skippedRace}\n`
+    );
     return result;
   } finally {
     if (typeof liveContext?.client?.destroy === 'function') liveContext.client.destroy();
@@ -524,6 +604,7 @@ if (require.main === module) {
 
 module.exports = {
   CATALOG_RELATIVE_PATH,
+  CATALOG_RELATIVE_PATHS,
   DEFAULT_CONCURRENCY,
   IMMUTABLE_CACHE_CONTROL,
   OBJECT_PREFIX,

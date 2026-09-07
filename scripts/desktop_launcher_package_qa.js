@@ -36,6 +36,7 @@ const APP_FILES = [
   'game-session-policy.js',
   'game-cursor-policy.js',
   'runtime-asset-cache.js',
+  'program-runtime.js',
   'launcher-update-service.js',
   'auth-service.js',
   'asset-store.js',
@@ -96,9 +97,11 @@ const EXTRA_RESOURCES = [
     to: 'catalog',
     filter: [
       'catalog-v2.json',
+      'catalog-v3.json',
       'manifests/card-assets-440918e609684317.json',
       'manifests/board-assets-eb95373ee6ab1aa3.json',
-      'manifests/chess-assets-4a14ed8c714c0b60.json'
+      'manifests/chess-assets-4a14ed8c714c0b60.json',
+      'manifests/*-package-*.json'
     ]
   },
   {
@@ -264,7 +267,7 @@ function validateCursorPng(filePath, label) {
 function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
-  assert(packageJson.version === '1.1.5', 'Desktop launcher version must be 1.1.5 for the Chess download and launch release.');
+  assert(packageJson.version === '1.1.6', 'Desktop launcher version must be 1.1.6 for local static program delivery.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
@@ -314,6 +317,23 @@ function validateSourcePackage() {
     assert(sha256File(manifestPath) === game.manifestSha256, `${gameId} manifest digest differs from the catalog.`);
     referencedManifests.push(relativePosix(path.join(PUBLIC_ROOT, 'desktop', 'manifests'), manifestPath));
   }
+  const catalogV3Path = path.join(PUBLIC_ROOT, 'desktop', 'catalog-v3.json');
+  const catalogV3 = readJson(catalogV3Path, 'public desktop program catalog');
+  assert(catalogV3.schema === 3 && catalogV3.games && typeof catalogV3.games === 'object', 'Desktop program catalog has an unsupported schema.');
+  const referencedProgramManifests = [];
+  for (const gameId of ['card', 'board', 'chess']) {
+    const game = catalogV3.games[gameId];
+    assert(game && typeof game === 'object', `Desktop program catalog is missing ${gameId}.`);
+    assert(new RegExp(`^desktop/manifests/${gameId}-package-[a-f0-9]{16}\\.json$`).test(game.manifestPath), `${gameId} program manifest path is not immutable.`);
+    assert(typeof game.entryPath === 'string' && game.entryPath.endsWith('.html'), `${gameId} program entryPath is invalid.`);
+    const manifestPath = path.join(PUBLIC_ROOT, ...game.manifestPath.split('/'));
+    assert(fs.statSync(manifestPath, { throwIfNoEntry: false })?.isFile(), `${gameId} program manifest is missing: ${game.manifestPath}`);
+    assert(sha256File(manifestPath) === game.manifestSha256, `${gameId} program manifest digest differs from catalog-v3.`);
+    const manifest = readJson(manifestPath, `${gameId} desktop program manifest`);
+    assert(manifest.schema === 3 && manifest.gameId === gameId, `${gameId} program manifest schema is invalid.`);
+    assert(manifest.releaseId === game.releaseId && manifest.entryPath === game.entryPath, `${gameId} program identity differs from catalog-v3.`);
+    referencedProgramManifests.push(relativePosix(path.join(PUBLIC_ROOT, 'desktop', 'manifests'), manifestPath));
+  }
   for (const [gameId, expected] of Object.entries(STABLE_GAME_MANIFESTS)) {
     assert(catalog.games[gameId].manifestPath === expected.manifestPath, `${gameId} manifest path changed during the Chess release.`);
     assert(catalog.games[gameId].manifestSha256 === expected.manifestSha256, `${gameId} immutable manifest bytes changed during the Chess release.`);
@@ -322,7 +342,7 @@ function validateSourcePackage() {
   const actualManifests = sorted(listFilesRecursive(manifestDirectory).map((filePath) => relativePosix(manifestDirectory, filePath)));
   assertExactJson(
     actualManifests,
-    sorted([...referencedManifests, ...Object.keys(RETAINED_ROLLOUT_MANIFESTS)]),
+    sorted([...referencedManifests, ...referencedProgramManifests, ...Object.keys(RETAINED_ROLLOUT_MANIFESTS)]),
     'Current plus retained rollout manifest set'
   );
   for (const [fileName, expectedSha256] of Object.entries(RETAINED_ROLLOUT_MANIFESTS)) {
@@ -335,7 +355,7 @@ function validateSourcePackage() {
     assert(!forbiddenText.includes(forbidden), `Full game asset tree is forbidden in launcher packaging: ${forbidden}`);
   }
 
-  return { packageJson, iconSizes, sidebar, header, cursorDefault, cursorPointer, cursorPressed, catalog };
+  return { packageJson, iconSizes, sidebar, header, cursorDefault, cursorPointer, cursorPressed, catalog, catalogV3 };
 }
 
 function collectExpectedLauncherAssets() {
@@ -392,6 +412,7 @@ function validateAsar(asarPath) {
     'game-cursor-policy.js',
     'launcher-update-service.js',
     'runtime-asset-cache.js',
+    'program-runtime.js',
     'launcher.css',
     'launcher.html',
     'launcher.js',
@@ -450,7 +471,11 @@ function validateWinUnpacked(winUnpackedPath, source) {
   const sourceCatalogRoot = path.join(PUBLIC_ROOT, 'desktop');
   const expectedCatalogNames = sorted([
     'catalog-v2.json',
-    ...['card', 'board', 'chess'].map((gameId) => source.catalog.games[gameId].manifestPath.replace(/^desktop\//, ''))
+    'catalog-v3.json',
+    ...['card', 'board', 'chess'].map((gameId) => source.catalog.games[gameId].manifestPath.replace(/^desktop\//, '')),
+    ...listFilesRecursive(path.join(sourceCatalogRoot, 'manifests'))
+      .map((filePath) => relativePosix(sourceCatalogRoot, filePath))
+      .filter((relativeName) => /^manifests\/(?:card|board|chess)-package-[a-f0-9]{16}\.json$/.test(relativeName))
   ]);
   const actualCatalogNames = sorted(catalogFiles.map((filePath) => relativePosix(catalogRoot, filePath)));
   assertExactJson(actualCatalogNames, expectedCatalogNames, 'win-unpacked catalog file set');

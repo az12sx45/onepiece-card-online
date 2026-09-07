@@ -39,6 +39,7 @@ const immutableDeferredBoardAssets = new Set([
   "images/board/item_reveal_ui/important_item_reveal_panel_frame.webp",
   "images/board/postgame_clue_ui/york_clue_playing_card_frame_v2.webp",
 ]);
+app.get("/api/desktop-runtime-package/:gameId", desktopRuntimePackageEndpoint);
 app.use(express.static(publicDir, {
   setHeaders(res, filePath) {
     const relativePath = path.relative(publicDir, filePath).replace(/\\/g, "/");
@@ -51,6 +52,358 @@ app.use(express.static(publicDir, {
     }
   },
 }));
+
+/* =========================
+ * Desktop runtime packages
+ *  - The launcher may only trust a package after the catalog, manifest and
+ *    every configured program file agree with the bytes deployed by Render.
+ *  - Media remains content-addressed separately; this endpoint validates the
+ *    executable/document portion of the package before the launcher uses it.
+ * ========================= */
+const DESKTOP_RUNTIME_PACKAGE_GAME_IDS = Object.freeze(["card", "board", "chess"]);
+const DESKTOP_RUNTIME_PACKAGE_GAME_ID_SET = new Set(DESKTOP_RUNTIME_PACKAGE_GAME_IDS);
+const DESKTOP_RUNTIME_PACKAGE_KINDS = Object.freeze([
+  "document", "style", "script", "data", "wasm",
+  "image", "audio", "video", "font",
+]);
+const DESKTOP_RUNTIME_PROGRAM_KINDS = new Set(["document", "style", "script", "data", "wasm"]);
+const DESKTOP_RUNTIME_PACKAGE_HASH = /^[a-f0-9]{64}$/;
+const DESKTOP_RUNTIME_PACKAGE_RELEASE = /^package-[a-f0-9]{16}$/;
+const DESKTOP_RUNTIME_PACKAGE_MANIFEST = /^desktop\/manifests\/(card|board|chess)-package-[a-f0-9]{16}\.json$/;
+const DESKTOP_RUNTIME_PACKAGE_RESERVED_SEGMENTS = new Set(["incoming", "backup", "backups", "private", "battle_chess"]);
+const DESKTOP_RUNTIME_PACKAGE_EXTENSIONS = new Map([
+  [".html", ["document", "text/html"]], [".css", ["style", "text/css"]],
+  [".js", ["script", "text/javascript"]], [".mjs", ["script", "text/javascript"]],
+  [".json", ["data", "application/json"]], [".webmanifest", ["data", "application/manifest+json"]],
+  [".txt", ["data", "text/plain"]], [".md", ["data", "text/markdown"]],
+  [".wasm", ["wasm", "application/wasm"]],
+  [".png", ["image", "image/png"]], [".jpg", ["image", "image/jpeg"]],
+  [".jpeg", ["image", "image/jpeg"]], [".jfif", ["image", "image/jpeg"]],
+  [".webp", ["image", "image/webp"]], [".gif", ["image", "image/gif"]],
+  [".svg", ["image", "image/svg+xml"]], [".avif", ["image", "image/avif"]],
+  [".mp3", ["audio", "audio/mpeg"]], [".wav", ["audio", "audio/wav"]],
+  [".ogg", ["audio", "audio/ogg"]], [".m4a", ["audio", "audio/mp4"]],
+  [".aac", ["audio", "audio/aac"]], [".flac", ["audio", "audio/flac"]],
+  [".mp4", ["video", "video/mp4"]], [".webm", ["video", "video/webm"]],
+  [".mov", ["video", "video/quicktime"]], [".m4v", ["video", "video/x-m4v"]],
+  [".woff", ["font", "font/woff"]], [".woff2", ["font", "font/woff2"]],
+  [".ttf", ["font", "font/ttf"]], [".otf", ["font", "font/otf"]],
+]);
+const DESKTOP_RUNTIME_PACKAGE_CATALOG_PATH = path.join(publicDir, "desktop", "catalog-v3.json");
+const DESKTOP_RUNTIME_PACKAGE_CONFIG_PATH = path.join(__dirname, "..", "config", "desktop-program-packages-v1.json");
+const DESKTOP_RUNTIME_PACKAGE_METADATA_LIMIT = 16 * 1024 * 1024;
+const DESKTOP_RUNTIME_PACKAGE_CONFIG_LIMIT = 512 * 1024;
+const DESKTOP_RUNTIME_PACKAGE_PROGRAM_LIMIT = 128 * 1024 * 1024;
+const DESKTOP_RUNTIME_PACKAGE_PROGRAM_TOTAL_LIMIT = 256 * 1024 * 1024;
+const desktopRuntimePackageCache = new Map();
+
+function desktopRuntimePackageError(code){
+  const error = new Error(code);
+  error.code = code;
+  return error;
+}
+
+function desktopRuntimePackagePlainObject(value){
+  if(!value || typeof value !== "object" || Array.isArray(value)) return false;
+  const prototype = Object.getPrototypeOf(value);
+  return prototype === Object.prototype || prototype === null;
+}
+
+function desktopRuntimePackageSha256(value){
+  return crypto.createHash("sha256").update(value).digest("hex");
+}
+
+function desktopRuntimePackagePath(value){
+  if(typeof value !== "string" || !value || value.length > 1024 || value !== value.normalize("NFC")) return null;
+  if(value.includes("\\") || value.includes("\0") || path.posix.isAbsolute(value) || path.win32.isAbsolute(value)) return null;
+  if(path.posix.normalize(value) !== value) return null;
+  const parts = value.split("/");
+  if(parts.some((part) => !part || part === "." || part === "..")) return null;
+  if(parts.map((part) => part.toLowerCase()).some((part) => DESKTOP_RUNTIME_PACKAGE_RESERVED_SEGMENTS.has(part))) return null;
+  const type = DESKTOP_RUNTIME_PACKAGE_EXTENSIONS.get(path.posix.extname(value).toLowerCase());
+  return type ? { path:value, kind:type[0], mime:type[1] } : null;
+}
+
+function desktopRuntimePackagePublicFile(logicalPath){
+  const valid = desktopRuntimePackagePath(logicalPath);
+  if(!valid) throw desktopRuntimePackageError("desktop_runtime_path_invalid");
+  const absolutePath = path.resolve(publicDir, ...logicalPath.split("/"));
+  const relation = path.relative(publicDir, absolutePath);
+  if(!relation || relation === ".." || relation.startsWith(`..${path.sep}`) || path.isAbsolute(relation)) {
+    throw desktopRuntimePackageError("desktop_runtime_path_invalid");
+  }
+  return { ...valid, absolutePath };
+}
+
+function desktopRuntimePackageStatKey(stat){
+  return `${stat.size}:${stat.mtimeMs}:${stat.ctimeMs}`;
+}
+
+async function desktopRuntimePackageFileStat(filePath, maximumBytes){
+  let stat;
+  try { stat = await fs.lstat(filePath); }
+  catch (_) { throw desktopRuntimePackageError("desktop_runtime_file_missing"); }
+  if(!stat.isFile() || stat.size < 1 || stat.size > maximumBytes) {
+    throw desktopRuntimePackageError("desktop_runtime_file_invalid");
+  }
+  return stat;
+}
+
+async function desktopRuntimePackageStableRead(filePath, expectedStat, maximumBytes){
+  let bytes;
+  try { bytes = await fs.readFile(filePath); }
+  catch (_) { throw desktopRuntimePackageError("desktop_runtime_file_unreadable"); }
+  if(!Buffer.isBuffer(bytes) || bytes.length !== expectedStat.size || bytes.length < 1 || bytes.length > maximumBytes) {
+    throw desktopRuntimePackageError("desktop_runtime_file_changed");
+  }
+  const finalStat = await desktopRuntimePackageFileStat(filePath, maximumBytes);
+  if(desktopRuntimePackageStatKey(finalStat) !== desktopRuntimePackageStatKey(expectedStat)) {
+    throw desktopRuntimePackageError("desktop_runtime_file_changed");
+  }
+  return bytes;
+}
+
+function desktopRuntimePackageJson(bytes, code){
+  try { return JSON.parse(bytes.toString("utf8")); }
+  catch (_) { throw desktopRuntimePackageError(code); }
+}
+
+function desktopRuntimePackageHttpsBase(value){
+  if(typeof value !== "string" || !value) return false;
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === "https:" && !parsed.username && !parsed.password && !parsed.search && !parsed.hash
+      && parsed.pathname !== "/" && !parsed.pathname.endsWith("/") && `${parsed.origin}${parsed.pathname}` === value;
+  } catch (_) {
+    return false;
+  }
+}
+
+function validateDesktopRuntimePackageConfig(config){
+  if(!desktopRuntimePackagePlainObject(config) || Object.keys(config).join(",") !== "schema,legacyBaseline,games"
+    || config.schema !== 1 || !desktopRuntimePackagePlainObject(config.games)) {
+    throw desktopRuntimePackageError("desktop_runtime_config_invalid");
+  }
+  if(Object.keys(config.games).join(",") !== DESKTOP_RUNTIME_PACKAGE_GAME_IDS.join(",")) {
+    throw desktopRuntimePackageError("desktop_runtime_config_invalid");
+  }
+  const games = Object.create(null);
+  for(const gameId of DESKTOP_RUNTIME_PACKAGE_GAME_IDS){
+    const game = config.games[gameId];
+    const entry = desktopRuntimePackagePath(game?.entryPath);
+    if(!desktopRuntimePackagePlainObject(game) || Object.keys(game).join(",") !== "entryPath,programFiles"
+      || !entry || entry.kind !== "document"
+      || !Array.isArray(game.programFiles) || game.programFiles.length < 1 || game.programFiles.length > 500) {
+      throw desktopRuntimePackageError("desktop_runtime_config_invalid");
+    }
+    let previous = "";
+    const folded = new Set();
+    const programFiles = [];
+    for(const logicalPath of game.programFiles){
+      const valid = desktopRuntimePackagePath(logicalPath);
+      const key = String(logicalPath || "").normalize("NFC").toLowerCase();
+      if(!valid || (previous && previous >= valid.path) || folded.has(key)) {
+        throw desktopRuntimePackageError("desktop_runtime_config_invalid");
+      }
+      previous = valid.path;
+      folded.add(key);
+      programFiles.push(valid.path);
+    }
+    if(!folded.has(entry.path.toLowerCase())) throw desktopRuntimePackageError("desktop_runtime_config_invalid");
+    games[gameId] = { entryPath:entry.path, programFiles };
+  }
+  return games;
+}
+
+function validateDesktopRuntimePackageCatalog(catalog){
+  if(!desktopRuntimePackagePlainObject(catalog)
+    || Object.keys(catalog).join(",") !== "schema,createdAt,assetBlobBaseUrl,sourceTrees,games"
+    || catalog.schema !== 3 || typeof catalog.createdAt !== "string" || Number.isNaN(Date.parse(catalog.createdAt))
+    || !desktopRuntimePackagePlainObject(catalog.sourceTrees)
+    || Object.keys(catalog.sourceTrees).join(",") !== "images,audio,videos,fonts"
+    || Object.values(catalog.sourceTrees).some((tree) => typeof tree !== "string" || !/^[a-f0-9]{40}(?:[a-f0-9]{24})?$/.test(tree))
+    || !desktopRuntimePackageHttpsBase(catalog.assetBlobBaseUrl)
+    || !desktopRuntimePackagePlainObject(catalog.games)
+    || Object.keys(catalog.games).join(",") !== DESKTOP_RUNTIME_PACKAGE_GAME_IDS.join(",")) {
+    throw desktopRuntimePackageError("desktop_runtime_catalog_invalid");
+  }
+  const games = Object.create(null);
+  for(const gameId of DESKTOP_RUNTIME_PACKAGE_GAME_IDS){
+    const record = catalog.games[gameId];
+    const match = String(record?.manifestPath || "").match(DESKTOP_RUNTIME_PACKAGE_MANIFEST);
+    const entry = desktopRuntimePackagePath(record?.entryPath);
+    if(!desktopRuntimePackagePlainObject(record)
+      || Object.keys(record).join(",") !== "releaseId,manifestPath,manifestSha256,entryPath,totalFiles,totalBytes"
+      || !DESKTOP_RUNTIME_PACKAGE_RELEASE.test(String(record.releaseId || ""))
+      || !match || match[1] !== gameId || !DESKTOP_RUNTIME_PACKAGE_HASH.test(String(record.manifestSha256 || ""))
+      || !entry || entry.kind !== "document" || !Number.isSafeInteger(record.totalFiles) || record.totalFiles < 1
+      || record.totalFiles > 20000 || !Number.isSafeInteger(record.totalBytes) || record.totalBytes < 1
+      || record.manifestPath !== `desktop/manifests/${gameId}-${record.releaseId}.json`) {
+      throw desktopRuntimePackageError("desktop_runtime_catalog_invalid");
+    }
+    games[gameId] = {
+      releaseId:record.releaseId,
+      manifestPath:record.manifestPath,
+      manifestSha256:record.manifestSha256,
+      entryPath:entry.path,
+      totalFiles:record.totalFiles,
+      totalBytes:record.totalBytes,
+    };
+  }
+  return games;
+}
+
+function validateDesktopRuntimePackageManifest(manifest, gameId, catalogRecord, gameConfig){
+  if(!desktopRuntimePackagePlainObject(manifest)
+    || Object.keys(manifest).join(",") !== "schema,gameId,releaseId,createdAt,entryPath,assetSetSha256,totalFiles,totalBytes,byKind,assets"
+    || manifest.schema !== 3 || manifest.gameId !== gameId
+    || manifest.releaseId !== catalogRecord.releaseId || manifest.entryPath !== catalogRecord.entryPath
+    || manifest.entryPath !== gameConfig.entryPath || !Array.isArray(manifest.assets)
+    || manifest.assets.length < 1 || manifest.assets.length > 20000
+    || typeof manifest.createdAt !== "string" || Number.isNaN(Date.parse(manifest.createdAt))
+    || !DESKTOP_RUNTIME_PACKAGE_HASH.test(String(manifest.assetSetSha256 || ""))) {
+    throw desktopRuntimePackageError("desktop_runtime_manifest_identity_invalid");
+  }
+  const assets = new Map();
+  const folded = new Set();
+  const totals = Object.fromEntries(DESKTOP_RUNTIME_PACKAGE_KINDS.map((kind) => [kind, { files:0, bytes:0 }]));
+  let previous = "";
+  let totalBytes = 0;
+  for(const record of manifest.assets){
+    const valid = desktopRuntimePackagePath(record?.path);
+    const key = String(record?.path || "").normalize("NFC").toLowerCase();
+    if(!desktopRuntimePackagePlainObject(record) || Object.keys(record).join(",") !== "path,kind,mime,size,sha256"
+      || !valid || record.kind !== valid.kind || record.mime !== valid.mime
+      || !Number.isSafeInteger(record.size) || record.size < 1 || !DESKTOP_RUNTIME_PACKAGE_HASH.test(String(record.sha256 || ""))
+      || (previous && previous >= valid.path) || folded.has(key)) {
+      throw desktopRuntimePackageError("desktop_runtime_manifest_asset_invalid");
+    }
+    previous = valid.path;
+    folded.add(key);
+    totalBytes += record.size;
+    if(!Number.isSafeInteger(totalBytes)) throw desktopRuntimePackageError("desktop_runtime_manifest_totals_invalid");
+    totals[record.kind].files += 1;
+    totals[record.kind].bytes += record.size;
+    assets.set(record.path, record);
+  }
+  if(manifest.assetSetSha256 !== desktopRuntimePackageSha256(JSON.stringify(manifest.assets))
+    || manifest.releaseId !== `package-${manifest.assetSetSha256.slice(0, 16)}`
+    || manifest.totalFiles !== manifest.assets.length || manifest.totalFiles !== catalogRecord.totalFiles
+    || manifest.totalBytes !== totalBytes || manifest.totalBytes !== catalogRecord.totalBytes
+    || !desktopRuntimePackagePlainObject(manifest.byKind)
+    || Object.keys(manifest.byKind).join(",") !== DESKTOP_RUNTIME_PACKAGE_KINDS.join(",")) {
+    throw desktopRuntimePackageError("desktop_runtime_manifest_totals_invalid");
+  }
+  for(const kind of DESKTOP_RUNTIME_PACKAGE_KINDS){
+    const actual = manifest.byKind[kind];
+    const expected = totals[kind];
+    if(!desktopRuntimePackagePlainObject(actual) || actual.files !== expected.files || actual.bytes !== expected.bytes) {
+      throw desktopRuntimePackageError("desktop_runtime_manifest_totals_invalid");
+    }
+  }
+  const configured = new Set(gameConfig.programFiles);
+  for(const record of manifest.assets){
+    if(DESKTOP_RUNTIME_PROGRAM_KINDS.has(record.kind) && !configured.has(record.path)) {
+      throw desktopRuntimePackageError("desktop_runtime_manifest_program_set_invalid");
+    }
+  }
+  for(const logicalPath of gameConfig.programFiles){
+    if(!assets.has(logicalPath)) throw desktopRuntimePackageError("desktop_runtime_manifest_program_missing");
+  }
+  return assets;
+}
+
+async function prepareDesktopRuntimePackageVerification(gameId){
+  const catalogStat = await desktopRuntimePackageFileStat(DESKTOP_RUNTIME_PACKAGE_CATALOG_PATH, DESKTOP_RUNTIME_PACKAGE_METADATA_LIMIT);
+  const configStat = await desktopRuntimePackageFileStat(DESKTOP_RUNTIME_PACKAGE_CONFIG_PATH, DESKTOP_RUNTIME_PACKAGE_CONFIG_LIMIT);
+  const [catalogBytes, configBytes] = await Promise.all([
+    desktopRuntimePackageStableRead(DESKTOP_RUNTIME_PACKAGE_CATALOG_PATH, catalogStat, DESKTOP_RUNTIME_PACKAGE_METADATA_LIMIT),
+    desktopRuntimePackageStableRead(DESKTOP_RUNTIME_PACKAGE_CONFIG_PATH, configStat, DESKTOP_RUNTIME_PACKAGE_CONFIG_LIMIT),
+  ]);
+  const catalog = validateDesktopRuntimePackageCatalog(desktopRuntimePackageJson(catalogBytes, "desktop_runtime_catalog_invalid"));
+  const config = validateDesktopRuntimePackageConfig(desktopRuntimePackageJson(configBytes, "desktop_runtime_config_invalid"));
+  const catalogRecord = catalog[gameId];
+  const gameConfig = config[gameId];
+  const manifestFile = desktopRuntimePackagePublicFile(catalogRecord.manifestPath);
+  const manifestStat = await desktopRuntimePackageFileStat(manifestFile.absolutePath, DESKTOP_RUNTIME_PACKAGE_METADATA_LIMIT);
+  const programFiles = [];
+  let programBytes = 0;
+  for(const logicalPath of gameConfig.programFiles){
+    const file = desktopRuntimePackagePublicFile(logicalPath);
+    const stat = await desktopRuntimePackageFileStat(file.absolutePath, DESKTOP_RUNTIME_PACKAGE_PROGRAM_LIMIT);
+    programBytes += stat.size;
+    if(!Number.isSafeInteger(programBytes) || programBytes > DESKTOP_RUNTIME_PACKAGE_PROGRAM_TOTAL_LIMIT) {
+      throw desktopRuntimePackageError("desktop_runtime_program_total_invalid");
+    }
+    programFiles.push({ ...file, stat });
+  }
+  const key = desktopRuntimePackageSha256(JSON.stringify({
+    catalog:[desktopRuntimePackageSha256(catalogBytes), desktopRuntimePackageStatKey(catalogStat)],
+    config:[desktopRuntimePackageSha256(configBytes), desktopRuntimePackageStatKey(configStat)],
+    manifest:[catalogRecord.manifestPath, desktopRuntimePackageStatKey(manifestStat)],
+    programs:programFiles.map((file) => [file.path, desktopRuntimePackageStatKey(file.stat)]),
+  }));
+  return { key, catalogRecord, gameConfig, manifestFile, manifestStat, programFiles };
+}
+
+async function verifyDesktopRuntimePackage(gameId){
+  const prepared = await prepareDesktopRuntimePackageVerification(gameId);
+  const cached = desktopRuntimePackageCache.get(gameId);
+  if(cached?.key === prepared.key) return cached.promise;
+  const pending = (async () => {
+    const manifestBytes = await desktopRuntimePackageStableRead(
+      prepared.manifestFile.absolutePath,
+      prepared.manifestStat,
+      DESKTOP_RUNTIME_PACKAGE_METADATA_LIMIT
+    );
+    if(desktopRuntimePackageSha256(manifestBytes) !== prepared.catalogRecord.manifestSha256) {
+      throw desktopRuntimePackageError("desktop_runtime_manifest_digest_mismatch");
+    }
+    const manifest = desktopRuntimePackageJson(manifestBytes, "desktop_runtime_manifest_invalid");
+    const assets = validateDesktopRuntimePackageManifest(
+      manifest,
+      gameId,
+      prepared.catalogRecord,
+      prepared.gameConfig
+    );
+    for(const file of prepared.programFiles){
+      const bytes = await desktopRuntimePackageStableRead(file.absolutePath, file.stat, DESKTOP_RUNTIME_PACKAGE_PROGRAM_LIMIT);
+      const record = assets.get(file.path);
+      if(!record || record.size !== bytes.length || record.sha256 !== desktopRuntimePackageSha256(bytes)) {
+        throw desktopRuntimePackageError("desktop_runtime_program_digest_mismatch");
+      }
+    }
+    return Object.freeze({
+      ok:true,
+      schema:1,
+      gameId,
+      releaseId:prepared.catalogRecord.releaseId,
+      manifestSha256:prepared.catalogRecord.manifestSha256,
+      entryPath:prepared.catalogRecord.entryPath,
+    });
+  })();
+  const cacheEntry = { key:prepared.key, promise:pending };
+  desktopRuntimePackageCache.set(gameId, cacheEntry);
+  try { return await pending; }
+  catch (error) {
+    if(desktopRuntimePackageCache.get(gameId) === cacheEntry) desktopRuntimePackageCache.delete(gameId);
+    throw error;
+  }
+}
+
+async function desktopRuntimePackageEndpoint(req, res){
+  res.setHeader("Cache-Control", "no-store");
+  const gameId = String(req.params.gameId || "");
+  if(!DESKTOP_RUNTIME_PACKAGE_GAME_ID_SET.has(gameId)) {
+    return res.status(404).json({ ok:false, error:"unknown_game" });
+  }
+  try {
+    return res.json(await verifyDesktopRuntimePackage(gameId));
+  } catch (error) {
+    console.warn(`[desktop-runtime-package] ${gameId} ${String(error?.code || "verification_failed")}`);
+    return res.status(503).json({ ok:false, error:"desktop_runtime_package_unavailable" });
+  }
+}
 
 // Chess media stays in the existing desktop CAS. Local public files win above;
 // only static misses in this namespace may redirect to a verified blob hash.

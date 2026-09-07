@@ -43,7 +43,7 @@
     if (typeof window.io !== "function") {
       await new Promise((resolve) => {
         const script = document.createElement("script");
-        script.src = `${serverOrigin}/socket.io/socket.io.js`;
+        script.src = `${serverOrigin}/vendor/socket.io-client/4.8.1/socket.io.min.js?v=20260907-local-runtime-v1`;
         script.onload = resolve;
         script.onerror = resolve;
         document.head.appendChild(script);

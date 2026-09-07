@@ -1,10 +1,10 @@
 # Desktop R2 publisher
 
-This tool reads the formal `public/desktop/catalog-v2.json` plus the Card,
-Board, and Chess manifests, verifies every source byte against its declared
-size and SHA-256, and deduplicates uploads by content hash. The large Chess
-media tree remains outside Git and must be supplied through the reviewed
-release package's `public/assets` directory.
+This tool supports both the legacy media-only `public/desktop/catalog-v2.json`
+and the program-inclusive `public/desktop/catalog-v3.json`. It verifies every
+source byte against its declared size and SHA-256, then deduplicates uploads by
+content hash. The large Chess media tree remains outside Git and must be
+supplied through the reviewed release package's `public/assets` directory.
 
 The default command is a local-only dry run. It performs no network requests:
 
@@ -12,10 +12,28 @@ The default command is a local-only dry run. It performs no network requests:
 node tools/desktop-r2-publisher/publish.js
 ```
 
+The command above intentionally keeps the legacy v2 flow as its default. Build
+and verify the three v3 package manifests after all game-program changes have
+been committed:
+
+```powershell
+node scripts/build_desktop_program_catalog.js
+node scripts/desktop_program_catalog_qa.js
+```
+
+Then run a local-only v3 publish verification. For v3, every repository-backed
+file is read from Git `HEAD`, never from a dirty working tree:
+
+```powershell
+node tools/desktop-r2-publisher/publish.js --catalog-version 3 `
+  --chess-source "D:\航海王西洋棋\GRAND-LINE-BATTLE-多人發布版-v1\public\assets"
+```
+
 To verify or publish only Chess media, pass its exact reviewed source root:
 
 ```powershell
-node tools/desktop-r2-publisher/publish.js --game chess --chess-source "D:\航海王西洋棋\GRAND-LINE-BATTLE-多人發布版-v1\public\assets"
+node tools/desktop-r2-publisher/publish.js --catalog-version 3 --game chess `
+  --chess-source "D:\航海王西洋棋\GRAND-LINE-BATTLE-多人發布版-v1\public\assets"
 ```
 
 For a real upload, install this tool's isolated dependency and provide R2
@@ -28,7 +46,8 @@ $env:R2_ACCOUNT_ID = "..."
 $env:R2_BUCKET = "..."
 $env:R2_ACCESS_KEY_ID = "..."
 $env:R2_SECRET_ACCESS_KEY = "..."
-node publish.js --live --chess-source "D:\航海王西洋棋\GRAND-LINE-BATTLE-多人發布版-v1\public\assets"
+node publish.js --live --catalog-version 3 `
+  --chess-source "D:\航海王西洋棋\GRAND-LINE-BATTLE-多人發布版-v1\public\assets"
 ```
 
 Credentials are never written by the publisher. Live mode only sends
@@ -54,6 +73,14 @@ Published object keys use this immutable layout:
 
 ```text
 desktop/blobs/sha256/<first-two-hex>/<64-character-sha256>
+```
+
+The v3 package/publisher fixture checks are independent and make no network
+requests:
+
+```powershell
+node scripts/desktop_program_catalog_qa.js
+node scripts/desktop_r2_program_publish_qa.js
 ```
 
 ## Launcher installer releases

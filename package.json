@@ -7,6 +7,7 @@
     "start": "node server/index.js",
     "dev": "nodemon server/index.js",
     "build:card-css": "tailwindcss -i ./styles/card-tailwind.input.css -o ./public/css/card-tailwind-v1.min.css --content ./public/game.html --minify",
+    "build:card-entry-css": "tailwindcss -i ./styles/card-tailwind.input.css -o ./public/css/card-entry-tailwind-v1.min.css --content ./public/start.html,./public/tutorial.html --minify",
     "qa:card-performance": "node scripts/card_runtime_performance_qa.js"
   },
   "dependencies": {
@@ -17,8 +18,11 @@
     "socket.io": "^4.7.5"
   },
   "devDependencies": {
+    "@babel/standalone": "7.24.7",
     "jsdom": "^29.0.2",
     "nodemon": "^3.1.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
     "tailwindcss": "3.4.17"
   },
   "engines": {

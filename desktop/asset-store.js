@@ -6,10 +6,13 @@ const fsp = require('node:fs/promises');
 const path = require('node:path');
 const { EventEmitter } = require('node:events');
 
-const CATALOG_SCHEMA = 2;
-const CATALOG_FILE = 'catalog-v2.json';
-const MANIFEST_SCHEMA = 1;
+const CATALOG_SCHEMA = 3;
+const CATALOG_FILE = 'catalog-v3.json';
+const LEGACY_CATALOG_FILE = 'catalog-v2.json';
+const MANIFEST_SCHEMA = 3;
+const LEGACY_MANIFEST_SCHEMA = 1;
 const RECEIPT_SCHEMA = 1;
+const RUNTIME_PACKAGE_SCHEMA = 1;
 const HASH_PATTERN = /^[a-f0-9]{64}$/;
 const RELEASE_PATTERN = /^[a-z0-9][a-z0-9._-]{0,95}$/;
 const MANIFEST_PATH_PATTERN = /^desktop\/manifests\/[a-z0-9._-]+\.json$/;
@@ -34,6 +37,11 @@ const PRODUCTION_ASSET_BLOB_BASE_URL = 'https://game-assets.rihdi.tw/desktop/blo
 const MANAGED_CACHE_TOP_LEVEL = new Set(['blobs', 'partial', 'receipts', 'manifests', 'state']);
 
 const EXTENSIONS = new Map([
+  ['.html', ['document', 'text/html']], ['.css', ['style', 'text/css']],
+  ['.js', ['script', 'text/javascript']], ['.mjs', ['script', 'text/javascript']],
+  ['.json', ['data', 'application/json']], ['.webmanifest', ['data', 'application/manifest+json']],
+  ['.txt', ['data', 'text/plain']], ['.md', ['data', 'text/markdown']],
+  ['.wasm', ['wasm', 'application/wasm']],
   ['.png', ['image', 'image/png']], ['.jpg', ['image', 'image/jpeg']],
   ['.jpeg', ['image', 'image/jpeg']], ['.jfif', ['image', 'image/jpeg']],
   ['.webp', ['image', 'image/webp']], ['.gif', ['image', 'image/gif']],
@@ -106,6 +114,16 @@ function safeAssetPath(value) {
   return type ? { path: value, kind: type[0], mime: type[1] } : null;
 }
 
+function safePackagePath(value) {
+  if (typeof value !== 'string' || !value || value.includes('\\') || value.includes('\0')) return null;
+  if (value !== value.normalize('NFC') || path.posix.isAbsolute(value) || path.win32.isAbsolute(value) || path.posix.normalize(value) !== value) return null;
+  const parts = value.split('/');
+  if (parts.some((part) => !part || part === '.' || part === '..')) return null;
+  if (parts.map((part) => part.normalize('NFC').toLowerCase()).some((part) => RESERVED_SEGMENTS.has(part))) return null;
+  const type = EXTENSIONS.get(path.posix.extname(value).toLowerCase());
+  return type ? { path: value, kind: type[0], mime: type[1] } : null;
+}
+
 function canonicalJson(value) {
   return `${JSON.stringify(value, null, 2)}\n`;
 }
@@ -160,7 +178,8 @@ function validateAssetBlobBaseUrl(value, { testAssetBlobBaseUrls } = {}) {
 }
 
 function validateCatalog(document, options = {}) {
-  if (!isPlainObject(document) || document.schema !== CATALOG_SCHEMA || !isPlainObject(document.games)) {
+  const schema = Number(document?.schema);
+  if (!isPlainObject(document) || ![2, CATALOG_SCHEMA].includes(schema) || !isPlainObject(document.games)) {
     throw new Error('版本目錄格式不正確。');
   }
   if (Object.keys(document.games).join(',') !== GAME_ID_LIST.join(',')) {
@@ -183,18 +202,31 @@ function validateCatalog(document, options = {}) {
     const releaseId = String(source.releaseId || '');
     const manifestPath = String(source.manifestPath || '');
     const manifestSha256 = String(source.manifestSha256 || '').toLowerCase();
+    const entryPath = schema === CATALOG_SCHEMA ? String(source.entryPath || '') : '';
     const totalFiles = Number(source.totalFiles);
     const totalBytes = Number(source.totalBytes);
-    if (!RELEASE_PATTERN.test(releaseId) || !MANIFEST_PATH_PATTERN.test(manifestPath) || !HASH_PATTERN.test(manifestSha256)) {
+    const entry = entryPath ? safePackagePath(entryPath) : null;
+    if (
+      !RELEASE_PATTERN.test(releaseId) || !MANIFEST_PATH_PATTERN.test(manifestPath) || !HASH_PATTERN.test(manifestSha256) ||
+      (schema === CATALOG_SCHEMA && (!entry || entry.kind !== 'document'))
+    ) {
       throw new Error(`${gameId} 版本資訊不安全。`);
     }
     if (!Number.isSafeInteger(totalFiles) || totalFiles < 1 || !Number.isSafeInteger(totalBytes) || totalBytes < 1) {
       throw new Error(`${gameId} 版本大小不正確。`);
     }
-    games[gameId] = { available: true, releaseId, manifestPath, manifestSha256, totalFiles, totalBytes };
+    games[gameId] = {
+      available: true,
+      releaseId,
+      manifestPath,
+      manifestSha256,
+      ...(schema === CATALOG_SCHEMA ? { entryPath } : {}),
+      totalFiles,
+      totalBytes
+    };
   }
   return {
-    schema: CATALOG_SCHEMA,
+    schema,
     createdAt: document.createdAt,
     sourceTrees: isPlainObject(document.sourceTrees) ? { ...document.sourceTrees } : {},
     ...(assetBlobBaseUrl ? { assetBlobBaseUrl } : {}),
@@ -203,7 +235,8 @@ function validateCatalog(document, options = {}) {
 }
 
 function validateManifest(document, expectedGameId) {
-  if (!isPlainObject(document) || document.schema !== MANIFEST_SCHEMA || document.gameId !== expectedGameId) {
+  const schema = Number(document?.schema);
+  if (!isPlainObject(document) || ![LEGACY_MANIFEST_SCHEMA, MANIFEST_SCHEMA].includes(schema) || document.gameId !== expectedGameId) {
     throw new Error(`${expectedGameId} 遊戲清單格式不正確。`);
   }
   if (!GAME_IDS.has(document.gameId) || !RELEASE_PATTERN.test(String(document.releaseId || '')) || !Array.isArray(document.assets)) {
@@ -213,15 +246,18 @@ function validateManifest(document, expectedGameId) {
     throw new Error(`${expectedGameId} 遊戲清單缺少有效日期。`);
   }
   const assetSetSha256 = String(document.assetSetSha256 || '').toLowerCase();
-  if (document.assets.length < 1 || document.assets.length > 10_000 || !HASH_PATTERN.test(assetSetSha256) || sha256Bytes(JSON.stringify(document.assets)) !== assetSetSha256) {
+  if (document.assets.length < 1 || document.assets.length > 20_000 || !HASH_PATTERN.test(assetSetSha256) || sha256Bytes(JSON.stringify(document.assets)) !== assetSetSha256) {
     throw new Error(`${expectedGameId} 遊戲清單內容摘要不符。`);
   }
   const assets = [];
   const foldedPaths = new Set();
   let totalBytes = 0;
-  const byKind = { image: { files: 0, bytes: 0 }, audio: { files: 0, bytes: 0 }, video: { files: 0, bytes: 0 }, font: { files: 0, bytes: 0 } };
+  const kindNames = schema === MANIFEST_SCHEMA
+    ? ['document', 'style', 'script', 'data', 'wasm', 'image', 'audio', 'video', 'font']
+    : ['image', 'audio', 'video', 'font'];
+  const byKind = Object.fromEntries(kindNames.map((kind) => [kind, { files: 0, bytes: 0 }]));
   for (const source of document.assets) {
-    const validPath = safeAssetPath(source?.path);
+    const validPath = schema === MANIFEST_SCHEMA ? safePackagePath(source?.path) : safeAssetPath(source?.path);
     const size = Number(source?.size);
     const sha256 = String(source?.sha256 || '').toLowerCase();
     if (!validPath || source.kind !== validPath.kind || source.mime !== validPath.mime || !Number.isSafeInteger(size) || size < 1 || !HASH_PATTERN.test(sha256)) {
@@ -238,14 +274,20 @@ function validateManifest(document, expectedGameId) {
   }
   const sorted = [...assets].sort((left, right) => left.path < right.path ? -1 : left.path > right.path ? 1 : 0);
   if (assets.some((asset, index) => asset.path !== sorted[index].path)) throw new Error(`${expectedGameId} 遊戲清單未排序。`);
-  if (document.totalFiles !== assets.length || document.totalBytes !== totalBytes || JSON.stringify(document.byKind) !== JSON.stringify(byKind)) {
+  const entryPath = schema === MANIFEST_SCHEMA ? String(document.entryPath || '') : '';
+  const entry = entryPath ? safePackagePath(entryPath) : null;
+  if (
+    (schema === MANIFEST_SCHEMA && (!entry || entry.kind !== 'document' || !assets.some((asset) => asset.path === entryPath))) ||
+    document.totalFiles !== assets.length || document.totalBytes !== totalBytes || JSON.stringify(document.byKind) !== JSON.stringify(byKind)
+  ) {
     throw new Error(`${expectedGameId} 遊戲清單合計不符。`);
   }
   return {
-    schema: MANIFEST_SCHEMA,
+    schema,
     gameId: document.gameId,
     releaseId: document.releaseId,
     createdAt: document.createdAt,
+    ...(schema === MANIFEST_SCHEMA ? { entryPath } : {}),
     assetSetSha256,
     totalFiles: assets.length,
     totalBytes,
@@ -437,6 +479,29 @@ function validateReceiptDocument(source, gameId) {
   };
 }
 
+function validateRuntimePackageResponse(document, expectedGameId) {
+  if (
+    !isPlainObject(document) || Object.keys(document).join(',') !== 'ok,schema,gameId,releaseId,manifestSha256,entryPath' ||
+    document.ok !== true || document.schema !== RUNTIME_PACKAGE_SCHEMA || document.gameId !== expectedGameId ||
+    !GAME_IDS.has(expectedGameId)
+  ) throw new Error('執行版本身分格式不正確。');
+  const entryPath = String(document.entryPath || '');
+  const entry = safePackagePath(entryPath);
+  if (
+    !RELEASE_PATTERN.test(String(document.releaseId || '')) ||
+    !HASH_PATTERN.test(String(document.manifestSha256 || '').toLowerCase()) ||
+    !entry || entry.kind !== 'document'
+  ) throw new Error('執行版本身分欄位不正確。');
+  return {
+    ok: true,
+    schema: RUNTIME_PACKAGE_SCHEMA,
+    gameId: expectedGameId,
+    releaseId: String(document.releaseId),
+    manifestSha256: String(document.manifestSha256).toLowerCase(),
+    entryPath
+  };
+}
+
 async function lstatIfPresent(target) {
   try {
     return await fsp.lstat(target);
@@ -559,6 +624,7 @@ class AssetStore extends EventEmitter {
       testAssetBlobBaseUrls: [...normalizeTestAssetBlobBaseUrls(testAssetBlobBaseUrls)]
     };
     this.catalog = null;
+    this.catalogFile = CATALOG_FILE;
     this.catalogSource = 'bundled';
     this.receipts = new Map();
     this.gameStates = new Map();
@@ -893,10 +959,24 @@ class AssetStore extends EventEmitter {
   }
 
   async loadBundledCatalog() {
-    const catalogPath = path.join(this.bundledCatalogRoot, CATALOG_FILE);
-    const document = JSON.parse(await fsp.readFile(catalogPath, 'utf8'));
-    this.catalog = validateCatalog(document, this.catalogValidationOptions);
-    this.catalogSource = 'bundled';
+    let lastError = null;
+    for (const fileName of [CATALOG_FILE, LEGACY_CATALOG_FILE]) {
+      try {
+        const catalogPath = path.join(this.bundledCatalogRoot, fileName);
+        const document = JSON.parse(await fsp.readFile(catalogPath, 'utf8'));
+        const catalog = validateCatalog(document, this.catalogValidationOptions);
+        const expectedSchema = fileName === CATALOG_FILE ? CATALOG_SCHEMA : 2;
+        if (catalog.schema !== expectedSchema) throw new Error('版本目錄檔名與格式不一致。');
+        this.catalog = catalog;
+        this.catalogFile = fileName;
+        this.catalogSource = 'bundled';
+        return;
+      } catch (error) {
+        lastError = error;
+        if (error.code !== 'ENOENT' && fileName === CATALOG_FILE) throw error;
+      }
+    }
+    throw lastError || new Error('找不到內建版本目錄。');
   }
 
   lastKnownGoodRoot() {
@@ -908,7 +988,10 @@ class AssetStore extends EventEmitter {
       throw new Error(`${gameId} 遊戲清單摘要不符。`);
     }
     const manifest = validateManifest(JSON.parse(bytes.toString('utf8')), gameId);
+    const expectedManifestSchema = entry.entryPath ? MANIFEST_SCHEMA : LEGACY_MANIFEST_SCHEMA;
     if (
+      manifest.schema !== expectedManifestSchema ||
+      (expectedManifestSchema === MANIFEST_SCHEMA && manifest.entryPath !== entry.entryPath) ||
       manifest.releaseId !== entry.releaseId || manifest.totalFiles !== entry.totalFiles ||
       manifest.totalBytes !== entry.totalBytes
     ) {
@@ -930,11 +1013,12 @@ class AssetStore extends EventEmitter {
   async loadLastKnownGoodCatalog() {
     const root = this.lastKnownGoodRoot();
     try {
-      const catalogPath = path.join(root, CATALOG_FILE);
+      const catalogPath = path.join(root, this.catalogFile);
       await assertSafeManagedPath(this.cacheRoot, catalogPath, { allowMissing: false, leafKind: 'file' });
       const info = await fsp.lstat(catalogPath);
       if (!info.isFile() || info.size > 256 * 1024) throw new Error('cached catalog size');
       const catalog = validateCatalog(JSON.parse(await fsp.readFile(catalogPath, 'utf8')), this.catalogValidationOptions);
+      if (catalog.schema !== this.catalog.schema) throw new Error('cached catalog schema');
       const results = new Map();
       for (const gameId of GAME_ID_LIST) {
         const entry = catalog.games[gameId];
@@ -981,14 +1065,14 @@ class AssetStore extends EventEmitter {
       const result = results.get(`${gameId}:${catalog.games[gameId].manifestSha256}`);
       await atomicWriteBuffer(this.cacheRoot, path.join(root, 'manifests', result.fileName), result.bytes);
     }
-    await atomicWriteJson(this.cacheRoot, path.join(root, CATALOG_FILE), catalog);
+    await atomicWriteJson(this.cacheRoot, path.join(root, this.catalogFile), catalog);
   }
 
   async refreshRemoteCatalog() {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 8_000);
     try {
-      const response = await this.fetchImpl(`${this.origin}/desktop/${CATALOG_FILE}?launcher=${encodeURIComponent(process.versions.electron || 'desktop')}`, {
+      const response = await this.fetchImpl(`${this.origin}/desktop/${this.catalogFile}?launcher=${encodeURIComponent(process.versions.electron || 'desktop')}`, {
         cache: 'no-store',
         redirect: 'error',
         headers: { Accept: 'application/json', 'Accept-Encoding': 'identity' },
@@ -998,6 +1082,7 @@ class AssetStore extends EventEmitter {
       const bytes = Buffer.from(await response.arrayBuffer());
       if (bytes.length > 256 * 1024) throw new Error('版本目錄過大。');
       const catalog = validateCatalog(JSON.parse(bytes.toString('utf8')), this.catalogValidationOptions);
+      if (catalog.schema !== this.catalog.schema) throw new Error('線上版本目錄格式與啟動器不一致。');
       const results = new Map();
       for (const gameId of GAME_ID_LIST) {
         const result = await this.fetchRemoteManifest(catalog, gameId, controller.signal);
@@ -1177,7 +1262,7 @@ class AssetStore extends EventEmitter {
         if (signal?.aborted) throw abortError();
         if (timedOut) throw new Error('遊戲清單下載逾時，請稍後再試。');
         const bundled = validateCatalog(
-          JSON.parse(await fsp.readFile(path.join(this.bundledCatalogRoot, CATALOG_FILE), 'utf8')),
+          JSON.parse(await fsp.readFile(path.join(this.bundledCatalogRoot, this.catalogFile), 'utf8')),
           this.catalogValidationOptions
         );
         const bundledEntry = bundled.games[gameId];
@@ -1812,6 +1897,53 @@ class AssetStore extends EventEmitter {
     return this.receipts.get(gameId)?.manifest || null;
   }
 
+  getInstalledRuntimeIdentity(gameId) {
+    const receipt = this.receipts.get(gameId);
+    const manifest = receipt?.manifest;
+    if (!receipt || manifest?.schema !== MANIFEST_SCHEMA) return null;
+    const entry = safePackagePath(manifest.entryPath);
+    if (!entry || entry.kind !== 'document' || !receipt.assetIndex.has(manifest.entryPath.normalize('NFC').toLowerCase())) return null;
+    return {
+      gameId,
+      releaseId: receipt.releaseId,
+      manifestSha256: receipt.manifestSha256,
+      entryPath: manifest.entryPath
+    };
+  }
+
+  async confirmRuntimePackage(gameId, { fetchImpl, timeoutMs = 3_000 } = {}) {
+    const installed = this.getInstalledRuntimeIdentity(gameId);
+    if (!installed) return { enabled: false, reason: 'legacy-or-missing-package' };
+    const fetchRuntime = typeof fetchImpl === 'function' ? fetchImpl : this.fetchImpl;
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), Math.max(250, Math.min(10_000, Number(timeoutMs) || 3_000)));
+    try {
+      const response = await fetchRuntime(
+        `${this.origin}/api/desktop-runtime-package/${encodeURIComponent(gameId)}?launcher=${encodeURIComponent(process.versions.electron || 'desktop')}`,
+        {
+          cache: 'no-store',
+          redirect: 'error',
+          headers: { Accept: 'application/json', 'Accept-Encoding': 'identity' },
+          signal: controller.signal
+        }
+      );
+      if (!response?.ok) return { enabled: false, reason: `runtime-http-${Number(response?.status) || 0}` };
+      const bytes = Buffer.from(await response.arrayBuffer());
+      if (!bytes.length || bytes.length > 64 * 1024) return { enabled: false, reason: 'runtime-identity-size' };
+      const remote = validateRuntimePackageResponse(JSON.parse(bytes.toString('utf8')), gameId);
+      if (
+        remote.releaseId !== installed.releaseId ||
+        remote.manifestSha256 !== installed.manifestSha256 ||
+        remote.entryPath !== installed.entryPath
+      ) return { enabled: false, reason: 'runtime-identity-mismatch' };
+      return { enabled: true, ...installed };
+    } catch (error) {
+      return { enabled: false, reason: error?.name === 'AbortError' ? 'runtime-identity-timeout' : 'runtime-identity-unavailable' };
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
   canLaunch(gameId) {
     const state = this.gameStates.get(gameId);
     return (
@@ -1821,8 +1953,8 @@ class AssetStore extends EventEmitter {
   }
 
   async resolveAsset(gameId, assetPath) {
-    const validated = safeAssetPath(assetPath);
     const receipt = this.receipts.get(gameId);
+    const validated = receipt?.manifest?.schema === MANIFEST_SCHEMA ? safePackagePath(assetPath) : safeAssetPath(assetPath);
     if (!validated || !receipt) return null;
     const asset = receipt.assetIndex.get(validated.path.normalize('NFC').toLowerCase());
     if (!asset || !(await this.verifyBlob(asset))) {
@@ -1846,11 +1978,13 @@ module.exports = {
   encodeAssetBlobUrl,
   encodeAssetUrl,
   safeAssetPath,
+  safePackagePath,
   sha256Bytes,
   sha256File,
   validateCatalog,
   validateCacheRootPath,
   validateAssetBlobBaseUrl,
   validateIntegrityDocument,
-  validateManifest
+  validateManifest,
+  validateRuntimePackageResponse
 };

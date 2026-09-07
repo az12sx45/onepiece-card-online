@@ -37,6 +37,7 @@ const { AssetStore, availableBytes, blobPath, safeAssetPath } = require('./asset
 const { resetDesktopGameWebCache, shouldBlockServiceWorkerRequest } = require('./game-session-policy');
 const { LauncherUpdateService } = require('./launcher-update-service');
 const { RuntimeAssetCache } = require('./runtime-asset-cache');
+const { HttpsProgramRuntime } = require('./program-runtime');
 const { installGameCursorPolicy } = require('./game-cursor-policy');
 
 const REMOTE_ORIGIN = 'https://onepiece-card-online.onrender.com';
@@ -135,6 +136,7 @@ const gameSessions = new Map();
 const gameSessionPromises = new Map();
 const runtimeRepairChecks = new Map();
 const runtimeAssetCache = new RuntimeAssetCache();
+const gameProgramRuntimes = new Map();
 const hardenedSessions = new WeakSet();
 
 function mimeForPath(filePath) {
@@ -418,6 +420,20 @@ async function prepareGameSession(gameId) {
         return new Response('Not found', { status: 404 });
       }
     });
+    try {
+      const programRuntime = new HttpsProgramRuntime({
+        gameId,
+        origin: REMOTE_ORIGIN,
+        assetCache: runtimeAssetCache,
+        networkFetch: (request) => targetSession.fetch(request, { bypassCustomProtocolHandlers: true }),
+        onFailure: queueRuntimeAssetRepair
+      });
+      await targetSession.protocol.handle('https', (request) => programRuntime.handle(request));
+      gameProgramRuntimes.set(gameId, programRuntime);
+    } catch (error) {
+      gameProgramRuntimes.delete(gameId);
+      console.warn(`[program-runtime] ${gameId} HTTPS interception unavailable; using Render.`, error?.message || error);
+    }
     targetSession.webRequest.onBeforeRequest(
       { urls: [`${REMOTE_ORIGIN}/sw.js*`, `${REMOTE_ORIGIN}/images/*`, `${REMOTE_ORIGIN}/audio/*`, `${REMOTE_ORIGIN}/videos/*`, `${REMOTE_ORIGIN}/fonts/*`] },
       (details, callback) => {
@@ -442,14 +458,25 @@ async function prepareGameSession(gameId) {
 function disposeGameSessions() {
   runtimeAssetCache.clearAll();
   runtimeRepairChecks.clear();
-  for (const targetSession of gameSessions.values()) {
+  for (const [gameId, targetSession] of gameSessions) {
+    gameProgramRuntimes.get(gameId)?.disable('session-disposed');
     try { targetSession.webRequest.onBeforeRequest(null); } catch { /* already disposed */ }
     try {
-      if (targetSession.protocol.isProtocolHandled(CACHE_SCHEME)) targetSession.protocol.unhandle(CACHE_SCHEME);
+      if (targetSession.protocol.isProtocolHandled(CACHE_SCHEME)) {
+        Promise.resolve(targetSession.protocol.unhandle(CACHE_SCHEME)).catch(() => {});
+      }
+    } catch {
+      // The session may already be shutting down.
+    }
+    try {
+      if (gameProgramRuntimes.has(gameId)) {
+        Promise.resolve(targetSession.protocol.unhandle('https')).catch(() => {});
+      }
     } catch {
       // The session may already be shutting down.
     }
   }
+  gameProgramRuntimes.clear();
   gameSessions.clear();
   gameSessionPromises.clear();
 }
@@ -766,6 +793,7 @@ async function createGameWindow(gameId) {
   window.on('closed', () => {
     if (gameWindows.get(gameId) !== window) return;
     gameWindows.delete(gameId);
+    gameProgramRuntimes.get(gameId)?.disable('window-closed');
     runtimeAssetCache.clearGame(gameId);
     if (gameWindows.size === 0 && authenticated) authService.setPresence('desktop-launcher').catch(() => {});
     restoreLauncherAfterLastGame();
@@ -773,6 +801,7 @@ async function createGameWindow(gameId) {
   window.webContents.on('render-process-gone', () => {
     if (gameWindows.get(gameId) !== window) return;
     gameWindows.delete(gameId);
+    gameProgramRuntimes.get(gameId)?.disable('renderer-gone');
     runtimeAssetCache.clearGame(gameId);
     if (!window.isDestroyed()) window.destroy();
     if (gameWindows.size === 0 && authenticated) authService.setPresence('desktop-launcher').catch(() => {});
@@ -780,6 +809,22 @@ async function createGameWindow(gameId) {
   });
   try {
     await authService.setPresence(`desktop-${gameId}`);
+    const programRuntime = gameProgramRuntimes.get(gameId);
+    if (programRuntime) {
+      programRuntime.disable('checking-remote-identity');
+      const authorization = await assetStore.confirmRuntimePackage(gameId, {
+        fetchImpl: (url, options = {}) => targetSession.fetch(url, {
+          ...options,
+          bypassCustomProtocolHandlers: true
+        })
+      });
+      if (authorization.enabled) programRuntime.authorize(authorization);
+      else programRuntime.disable(authorization.reason);
+      console.info(
+        `[program-runtime] ${gameId} ${authorization.enabled ? 'local-program-enabled' : 'render-fallback'} ` +
+        `reason=${authorization.reason || 'remote-match'} release=${authorization.releaseId || 'none'}`
+      );
+    }
     await window.loadURL(`${REMOTE_ORIGIN}${GAME_CONFIG[gameId].entry}?desktop=1`);
     if (gameWindows.get(gameId) !== window || window.isDestroyed() || !authenticated) {
       if (!window.isDestroyed()) window.destroy();
@@ -804,6 +849,7 @@ async function createGameWindow(gameId) {
     const failedWindowWasCurrent = gameWindows.get(gameId) === window;
     if (failedWindowWasCurrent) {
       gameWindows.delete(gameId);
+      gameProgramRuntimes.get(gameId)?.disable('launch-failed');
       runtimeAssetCache.clearGame(gameId);
     }
     if (!window.isDestroyed()) window.destroy();
