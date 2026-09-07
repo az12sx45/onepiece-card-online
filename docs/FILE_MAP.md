@@ -1,14 +1,14 @@
 # File Map
 
-## 霸海戰棋好友邀請／CPU 防卡熱修檔案（2026-09-07）
+## 霸海戰棋好友邀請／CPU 防卡熱修 V2 檔案（2026-09-07）
 
 | 檔案／位置 | 功能／狀態 |
 | --- | --- |
 | `public/chess/battle-social-v1.css`、`battle-social-v1.js`、`pre-match-lobby.js` | 棋局頁共用好友 dock／聊天室／toast 樣式及專用邀請選擇框；等待室內可直接邀請線上好友，層級高於 lobby，房間開始或離開時自動關閉。 |
-| `public/chess/battle-texture-load-guard-v1.js` | Electron 本機 CAS 動態貼圖的 3.5 秒逾時、行走站立圖回退、動畫例外後合法步復原與必定解鎖；提供唯讀 `__BATTLE_TEXTURE_GUARD__.getState()` 供驗收。 |
+| `public/chess/battle-texture-load-guard-v1.js` | Electron 本機 CAS 動態貼圖以 `fetch` → blob → `createImageBitmap` → canvas 載入，15 秒只作故障上限；不再用站立圖取代動畫或靜默提交棋步。失敗時復原 FEN、棋盤、鏡頭、暫存動畫物件及輸入鎖；提供唯讀 `__BATTLE_TEXTURE_GUARD__.getState()` 供驗收。 |
 | `public/chess/battle-room-runtime-v1.js` | CPU 思考及遠端 committed move 加入 `try/finally` 與 authoritative FEN 復原；debug state 額外顯示 `cpuThinking`。 |
-| `public/chess/battle-game.html`、`index.html`、`battle-game-loader-v1.js` | 載入上述 CSS／guard 並使用 `invite-picker-v1-20260907`、`cpu-image-timeout-v1-20260907` cache-bust。 |
-| `scripts/chess_friend_invite_ui_qa.js`、`chess_cpu_move_recovery_qa.js` | 驗證邀請框層級／關閉／cache-bust，以及模擬 opcache 圖片永不完成時的逾時回退、合法步復原與 runtime finally 防線。 |
+| `public/chess/battle-game.html`、`index.html`、`battle-game-loader-v1.js` | 載入上述 CSS／guard 並使用 `invite-picker-v1-20260907`、`desktop-bitmap-loader-v2-20260907`、`cpu-move-recovery-v2-20260907` cache-bust。 |
+| `scripts/chess_friend_invite_ui_qa.js`、`chess_cpu_move_recovery_qa.js` | 驗證邀請框層級／關閉／cache-bust、桌面 bitmap 載入、動畫失敗不提交、FEN／棋盤／鏡頭復原與 runtime finally 防線。 |
 
 ## 霸海戰棋／桌面啟動器 1.1.5 發布檔案（2026-09-07，已發布）
 

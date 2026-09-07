@@ -22,7 +22,7 @@ function zIndex(source, selector) {
 
 assert.match(battleHtml, /battle-social-v1\.css\?v=invite-picker-v1-20260907/);
 assert.match(battleHtml, /battle-social-v1\.js\?v=invite-picker-v1-20260907/);
-assert.match(battleHtml, /battle-game-loader-v1\.js\?v=cpu-image-timeout-v1-20260907/);
+assert.match(battleHtml, /battle-game-loader-v1\.js\?v=desktop-bitmap-loader-v2-20260907/);
 assert.match(loader, /pre-match-lobby\.js\?v=invite-picker-v1-20260907/);
 assert.match(lobby, /BattleSocial\?\.openInvitePicker\?\.\(\)/);
 assert.match(lobby, /BattleSocial\?\.setRoomContext\?\.\(\{ roomCode:room\.roomCode \|\| "", mode:"chess", status:"playing" \}\)/);
