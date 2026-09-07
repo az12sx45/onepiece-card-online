@@ -366,19 +366,29 @@
     if (runtime.session?.role !== "player" || (!runtime.session.localPreview && !runtime.player?.isHost)) return;
     runtime.cpuThinking = true;
     updateInputLock(snapshot);
-    const difficulty = runtime.cpu.cpuDifficulty || runtime.session.lobby.settings?.cpuDifficulty || "normal";
-    await new Promise((resolve) => setTimeout(resolve, 180));
-    let move = null;
     try {
-      move = await stockfishMove(snapshot.fen, difficulty);
+      const difficulty = runtime.cpu.cpuDifficulty || runtime.session.lobby.settings?.cpuDifficulty || "normal";
+      await new Promise((resolve) => setTimeout(resolve, 180));
+      let move = null;
+      try {
+        move = await stockfishMove(snapshot.fen, difficulty);
+      } catch (error) {
+        stopEngine(error);
+      }
+      if (!move) move = chooseCpuMove(legalMoves(), difficulty, runtime.cpu.color);
+      if (move) {
+        const moved = await chessApi()?.move?.(move.from, move.to, move.promotion || "q");
+        if (!moved) throw new Error("cpu_move_not_applied");
+      }
     } catch (error) {
-      stopEngine(error);
+      runtime.lastError = String(error?.message || error || "cpu_move_failed");
+      const current = chessApi()?.getState?.();
+      if (current?.fen !== runtime.authoritativeFen) chessApi()?.loadFen?.(runtime.authoritativeFen);
+    } finally {
+      runtime.cpuThinking = false;
+      const latest = chessApi()?.getState?.();
+      if (latest) updateInputLock(latest);
     }
-    if (!move) move = chooseCpuMove(legalMoves(), difficulty, runtime.cpu.color);
-    if (move) await chessApi()?.move?.(move.from, move.to, move.promotion || "q");
-    runtime.cpuThinking = false;
-    const latest = chessApi()?.getState?.();
-    if (latest) updateInputLock(latest);
   }
 
   async function applyCommittedMove(message = {}) {
@@ -410,13 +420,25 @@
     }
     runtime.applyingRemote = true;
     updateInputLock(current);
-    const moved = await chessApi()?.move?.(move.from, move.to, move.promotion || "q");
-    runtime.applyingRemote = false;
-    const after = chessApi()?.getState?.();
-    if (!moved || after?.fen !== game.fen) chessApi()?.loadFen?.(game.fen);
-    runtime.authoritativeFen = game.fen;
-    runtime.moveSequence = Number(game.moveSequence) || runtime.moveSequence;
-    runtime.lastHistoryLength = chessApi()?.getState?.()?.history?.length || 0;
+    try {
+      const moved = await chessApi()?.move?.(move.from, move.to, move.promotion || "q");
+      const after = chessApi()?.getState?.();
+      if (!moved || after?.fen !== game.fen) chessApi()?.loadFen?.(game.fen);
+      runtime.authoritativeFen = game.fen;
+      runtime.moveSequence = Number(game.moveSequence) || runtime.moveSequence;
+      runtime.lastHistoryLength = chessApi()?.getState?.()?.history?.length || 0;
+      runtime.lastError = "";
+    } catch (error) {
+      runtime.lastError = String(error?.message || error || "remote_move_failed");
+      chessApi()?.loadFen?.(game.fen);
+      runtime.authoritativeFen = game.fen;
+      runtime.moveSequence = Number(game.moveSequence) || runtime.moveSequence;
+      runtime.lastHistoryLength = chessApi()?.getState?.()?.history?.length || 0;
+    } finally {
+      runtime.applyingRemote = false;
+      const latest = chessApi()?.getState?.();
+      if (latest) updateInputLock(latest);
+    }
   }
 
   function poll() {
@@ -430,7 +452,12 @@
       return;
     }
     if (!runtime.applyingRemote && !runtime.submitting && !snapshot.locked && cpuTurn(snapshot) && snapshot.fen === runtime.authoritativeFen) {
-      driveCpu(snapshot);
+      void driveCpu(snapshot).catch((error) => {
+        runtime.cpuThinking = false;
+        runtime.lastError = String(error?.message || error || "cpu_move_failed");
+        const latest = chessApi()?.getState?.();
+        if (latest) updateInputLock(latest);
+      });
     }
     if (snapshot.gameOver && !runtime.gameOverReported) {
       runtime.gameOverReported = true;
@@ -480,6 +507,7 @@
       moveSequence:runtime.moveSequence,
       applyingRemote:runtime.applyingRemote,
       submitting:runtime.submitting,
+      cpuThinking:runtime.cpuThinking,
       lastError:runtime.lastError,
       lastSubmission:runtime.lastSubmission,
       lastCommit:runtime.lastCommit,

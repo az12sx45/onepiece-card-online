@@ -874,6 +874,7 @@
     if (state.started) return;
     state.started = true;
     state.lobby = room;
+    window.BattleSocial?.setRoomContext?.({ roomCode:room.roomCode || "", mode:"chess", status:"playing" });
     await revealBattlefieldChoice(room);
     document.body.classList.add("is-room-entered");
     document.body.classList.remove("is-pre-match-lobby");
@@ -991,8 +992,8 @@
   refs.chatInput.addEventListener("keydown", (event) => { if (event.key === "Enter") sendChat(); });
   refs.inviteFriend.addEventListener("click", () => {
     window.BattleSocial?.setRoomContext?.({ roomCode:state.lobby?.roomCode || "", mode:"chess", status:state.lobby?.status || "waiting" });
-    window.BattleSocial?.openDock?.();
-    setMessage("請在好友右側按「邀」送出房間邀請。");
+    window.BattleSocial?.openInvitePicker?.();
+    setMessage("請選擇要邀請加入這個房間的好友。");
   });
   refs.leave.addEventListener("click", leaveRoom);
 

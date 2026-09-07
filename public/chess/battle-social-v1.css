@@ -1,0 +1,173 @@
+:root {
+  --battle-social-gold: #e7c778;
+  --battle-social-panel: rgba(5, 17, 29, .97);
+  --battle-social-line: rgba(240, 208, 131, .42);
+}
+
+.friend-dock,
+.chat-tray,
+.toast-region,
+.battle-invite-picker {
+  color: #edf2f1;
+  font-family: "Microsoft JhengHei UI", "Microsoft JhengHei", system-ui, sans-serif;
+}
+
+.friend-dock button,
+.friend-action,
+.chat-window button,
+.battle-invite-picker button {
+  border: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.friend-avatar {
+  display: block;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  overflow: hidden;
+  border: 1px solid rgba(240, 208, 131, .6);
+  border-radius: 50%;
+  background: #132c3e;
+}
+
+.friend-avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.friend-dock {
+  position: fixed;
+  top: max(72px, calc(env(safe-area-inset-top) + 62px));
+  right: max(12px, env(safe-area-inset-right));
+  z-index: 330;
+  display: flex;
+  flex-direction: column;
+  width: min(330px, calc(100vw - 24px));
+  height: min(620px, calc(100dvh - 88px));
+  overflow: hidden;
+  border: 1px solid var(--battle-social-line);
+  border-radius: 18px;
+  background: var(--battle-social-panel);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .68);
+  backdrop-filter: blur(16px);
+}
+
+.friend-dock[hidden] { display: none !important; }
+.friend-dock.is-collapsed { width: 198px; height: 126px; }
+.friend-dock.is-collapsed .friend-dock__content { display: none; }
+.friend-dock:not(.is-collapsed) .friend-dock__open { display: none; }
+.friend-dock__me { display: flex; align-items: center; gap: 9px; padding: 10px; border-bottom: 1px solid rgba(255, 255, 255, .08); }
+.friend-dock__me > span:nth-child(2) { display: grid; min-width: 0; flex: 1; }
+.friend-dock__me strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
+.friend-dock__me small { color: #8fa4b2; font-size: 10px; }
+.friend-dock__me button { width: 31px; height: 31px; border-radius: 9px; background: rgba(255, 255, 255, .08); color: #e8d59d; }
+.friend-dock__open { min-height: 38px; margin: 12px; border: 1px solid rgba(240, 208, 131, .35) !important; border-radius: 11px; background: rgba(240, 208, 131, .12); color: #f2d98f; font-weight: 850; }
+.friend-dock__content { min-height: 0; display: flex; flex: 1; flex-direction: column; }
+.friend-add { display: flex; gap: 7px; padding: 10px; border-bottom: 1px solid rgba(255, 255, 255, .08); }
+.friend-add input,
+.chat-input input {
+  width: 100%;
+  min-width: 0;
+  min-height: 39px;
+  padding: 0 13px;
+  border: 1px solid rgba(122, 169, 189, .4);
+  border-radius: 12px;
+  outline: none;
+  background: rgba(0, 7, 14, .62);
+  color: #fff;
+}
+.friend-add input:focus,
+.chat-input input:focus { border-color: rgba(96, 213, 222, .86); box-shadow: 0 0 0 3px rgba(88, 200, 212, .12); }
+.friend-add button { padding: 0 12px; border-radius: 11px; background: rgba(240, 208, 131, .17); color: #f6dda0; font-weight: 800; }
+.friend-add input:disabled,
+.friend-add button:disabled { opacity: .46; cursor: not-allowed; }
+.friend-list { min-height: 0; flex: 1; overflow: auto; padding: 8px; }
+.friend-section { padding: 8px 7px 5px; color: #7fa6b8; font-size: 10px; font-weight: 900; letter-spacing: .1em; }
+.friend-row { display: flex; align-items: center; gap: 9px; padding: 9px 7px; border-radius: 12px; }
+.friend-row:hover { background: rgba(255, 255, 255, .05); }
+.friend-row__meta { min-width: 0; display: grid; flex: 1; }
+.friend-row__meta strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; }
+.friend-row__meta small { color: #8fa4b2; font-size: 10px; }
+.friend-row__actions { display: flex; gap: 5px; }
+.friend-action { min-width: 30px; height: 30px; padding: 0 8px; border-radius: 9px; background: rgba(88, 200, 212, .12); color: #bcecf0; font-size: 11px; }
+.friend-action--gold { background: rgba(240, 208, 131, .14); color: #f4dc9b; }
+.friend-action--danger { background: rgba(255, 105, 95, .1); color: #ffb0a8; }
+.friend-empty { margin: 9px; padding: 13px; border: 1px dashed rgba(139, 183, 200, .25); border-radius: 12px; color: #94aab7; font-size: 11px; line-height: 1.55; }
+.friend-hint { margin: 0; padding: 9px 11px; border-top: 1px solid rgba(255, 255, 255, .08); color: #e9ad8f; font-size: 10px; line-height: 1.4; }
+
+.chat-tray { position: fixed; left: max(12px, env(safe-area-inset-left)); bottom: max(12px, env(safe-area-inset-bottom)); z-index: 335; display: flex; flex-direction: row-reverse; align-items: flex-end; gap: 9px; max-width: calc(100vw - 24px); overflow-x: auto; pointer-events: none; }
+.chat-window { pointer-events: auto; width: 285px; height: min(390px, calc(100dvh - 24px)); display: flex; flex-direction: column; flex: 0 0 auto; overflow: hidden; border: 1px solid rgba(240, 208, 131, .38); border-radius: 16px; background: var(--battle-social-panel); box-shadow: 0 18px 55px rgba(0, 0, 0, .66); }
+.chat-window.is-minimized { height: 48px; }
+.chat-window.is-minimized .chat-log,
+.chat-window.is-minimized .chat-input { display: none; }
+.chat-header { min-height: 48px; display: flex; align-items: center; gap: 9px; padding: 8px 9px; border-bottom: 1px solid rgba(255, 255, 255, .08); background: rgba(28, 59, 76, .45); }
+.chat-header .friend-avatar { width: 31px; height: 31px; }
+.chat-header__meta { display: grid; min-width: 0; flex: 1; cursor: pointer; }
+.chat-header__meta strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; }
+.chat-header__meta small { color: #8fa4b2; font-size: 9px; }
+.chat-header button { width: 28px; height: 28px; border-radius: 8px; background: rgba(255, 255, 255, .07); color: #d8e3e8; }
+.chat-log { min-height: 0; flex: 1; overflow: auto; display: flex; flex-direction: column; gap: 7px; padding: 10px; }
+.chat-message { align-self: flex-start; max-width: 86%; padding: 8px 10px; border-radius: 12px; background: rgba(255, 255, 255, .08); color: #e7edf0; font-size: 11px; line-height: 1.4; white-space: pre-wrap; word-break: break-word; }
+.chat-message.is-me { align-self: flex-end; background: rgba(240, 208, 131, .15); color: #fff1c4; }
+.chat-message time { display: block; margin-top: 3px; color: #7f96a4; font-size: 9px; }
+.chat-input { display: flex; gap: 7px; padding: 9px; border-top: 1px solid rgba(255, 255, 255, .08); }
+.chat-input button { padding: 0 11px; border-radius: 10px; background: rgba(240, 208, 131, .17); color: #f5dda0; }
+
+.toast-region { position: fixed; left: 50%; bottom: max(18px, env(safe-area-inset-bottom)); z-index: 350; display: grid; gap: 8px; width: min(420px, calc(100vw - 24px)); transform: translateX(-50%); pointer-events: none; }
+.toast { padding: 11px 14px; border: 1px solid rgba(240, 208, 131, .4); border-radius: 12px; background: rgba(5, 17, 29, .96); box-shadow: 0 14px 40px rgba(0, 0, 0, .55); color: #f5e7bc; font-size: 12px; text-align: center; }
+.toast--invite { display: grid; gap: 7px; pointer-events: auto; }
+.toast--invite strong { font-family: "Noto Serif TC", serif; font-size: 14px; letter-spacing: .05em; }
+.toast--invite > span:not(.toast__actions) { color: #b7cbd2; font-size: 11px; }
+.toast__actions { display: flex; justify-content: center; gap: 8px; margin-top: 2px; }
+.toast__actions button { min-width: 88px; padding: 8px 12px; border: 1px solid rgba(240, 208, 131, .3); border-radius: 9px; background: rgba(240, 208, 131, .16); color: #f7e1a5; cursor: pointer; }
+.toast__actions button:last-child { background: rgba(255, 255, 255, .06); color: #c7d3d8; }
+.toast__actions button:disabled { opacity: .5; cursor: wait; }
+
+.battle-invite-picker {
+  position: fixed;
+  inset: 0;
+  z-index: 360;
+  display: grid;
+  place-items: center;
+  padding: 22px;
+  background: rgba(1, 6, 12, .78);
+  backdrop-filter: blur(8px);
+}
+.battle-invite-picker[hidden] { display: none !important; }
+.battle-invite-picker__panel { width: min(520px, calc(100vw - 30px)); max-height: min(650px, calc(100dvh - 30px)); overflow: hidden; border: 1px solid rgba(231, 199, 120, .62); border-radius: 18px; background: linear-gradient(160deg, rgba(13, 35, 48, .99), rgba(3, 12, 21, .99) 68%); box-shadow: 0 30px 90px rgba(0, 0, 0, .78), inset 0 1px rgba(255, 245, 206, .08); }
+.battle-invite-picker__header { display: flex; align-items: center; gap: 14px; padding: 18px 20px 14px; border-bottom: 1px solid rgba(255, 255, 255, .09); }
+.battle-invite-picker__header > span { display: grid; min-width: 0; flex: 1; }
+.battle-invite-picker__header small { color: #c8a85c; letter-spacing: .18em; font-size: 9px; font-weight: 900; }
+.battle-invite-picker__header strong { margin-top: 3px; color: #fff2c2; font-size: 21px; letter-spacing: .08em; }
+.battle-invite-picker__close { width: 34px; height: 34px; border-radius: 10px; background: rgba(255, 255, 255, .08); color: #dbe5e7; font-size: 20px !important; }
+.battle-invite-picker__room { margin: 0; padding: 11px 20px; border-bottom: 1px solid rgba(255, 255, 255, .07); color: #9db0b9; font-size: 12px; }
+.battle-invite-picker__room b { color: #f1d484; letter-spacing: .1em; }
+.battle-invite-picker__list { display: grid; gap: 8px; max-height: min(450px, calc(100dvh - 190px)); padding: 14px; overflow: auto; }
+.battle-invite-picker__friend { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; align-items: center; gap: 11px; padding: 10px 11px; border: 1px solid rgba(255, 255, 255, .08); border-radius: 13px; background: rgba(255, 255, 255, .035); }
+.battle-invite-picker__friend > span:nth-child(2) { display: grid; min-width: 0; }
+.battle-invite-picker__friend strong { overflow: hidden; color: #eef3ef; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
+.battle-invite-picker__friend small { margin-top: 3px; color: #879ba6; font-size: 10px; }
+.battle-invite-picker__friend.is-online small { color: #69d5a1; }
+.battle-invite-picker__friend button { min-width: 92px; min-height: 36px; padding: 0 14px; border: 1px solid rgba(231, 199, 120, .38); border-radius: 10px; background: linear-gradient(180deg, rgba(231, 199, 120, .24), rgba(151, 105, 37, .18)); color: #f7dfa0; font-weight: 850; }
+.battle-invite-picker__friend button:disabled { opacity: .42; cursor: not-allowed; filter: grayscale(.6); }
+.battle-invite-picker__empty { margin: 4px; padding: 24px 18px; border: 1px dashed rgba(139, 183, 200, .25); border-radius: 13px; color: #99adb7; line-height: 1.6; text-align: center; }
+
+@media (max-width: 560px) {
+  .friend-dock { top: max(68px, calc(env(safe-area-inset-top) + 58px)); right: max(8px, env(safe-area-inset-right)); width: calc(100vw - 16px); height: calc(100dvh - 78px); }
+  .friend-dock.is-collapsed { top: max(12px, env(safe-area-inset-top)); right: max(82px, calc(env(safe-area-inset-right) + 74px)); bottom: auto; width: 54px; height: 54px; border-radius: 50%; }
+  .friend-dock.is-collapsed .friend-dock__me { height: 100%; padding: 5px; border: 0; }
+  .friend-dock.is-collapsed .friend-dock__me > span:nth-child(2),
+  .friend-dock.is-collapsed .friend-dock__open { display: none; }
+  .friend-dock.is-collapsed .friend-avatar { width: 42px; height: 42px; }
+  .friend-dock.is-collapsed .friend-dock__me > button { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; }
+  .chat-window { width: min(285px, calc(100vw - 24px)); }
+  .battle-invite-picker { padding: 10px; }
+  .battle-invite-picker__panel { width: calc(100vw - 20px); }
+  .battle-invite-picker__friend { grid-template-columns: 40px minmax(0, 1fr) auto; padding: 9px; }
+  .battle-invite-picker__friend button { min-width: 76px; padding-inline: 10px; }
+}

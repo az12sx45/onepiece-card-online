@@ -1,5 +1,12 @@
 ﻿# Dev Workflow
 
+## 霸海戰棋好友邀請／CPU 首步防卡修正（2026-09-07）
+
+- 問題與根因：等待室原本只有「邀請好友」按鈕，實際好友面板 CSS 未載入棋局頁，且其層級低於等待室；玩家加入 CPU 後的首步則可能停在動態行走圖的 `Image` Promise，保持 `locked=true`、`faceoff` 且尚未提交任何棋步，因此外觀看似黑屏，並非 Stockfish 或伺服器先走錯步。
+- 修正：新增 `battle-social-v1.css` 與專用好友選擇框，線上好友可直接送出 Chess room invite；房間離開 waiting 階段時強制關閉邀請框。新增 `battle-texture-load-guard-v1.js`，動態貼圖 3.5 秒未完成即回退既有站立圖完成移動，動畫例外亦保證解除鎖定並安全提交原合法步；CPU／遠端套步 runtime 以 `try/finally` 清除 `cpuThinking`／`applyingRemote`，不再留下永久輸入鎖。
+- 發布邊界：只更動 `public/chess/`、Chess QA 與本段文件；不改 server Socket event、權威 chess.js 規則、Card／Board、R2 圖片清單或桌面啟動器。此為 Render 網頁程式熱修，已安裝的 1.1.5 不需重新安裝或下載 330 MB 素材。
+- 發布前驗證：JS syntax、邀請層級／cache-bust、模擬永不完成圖片的逾時回退與合法步復原、正式 Chess bundle（18 program／24 required）、真 Socket.IO protocol、R2 fallback、部署素材清單及三遊戲 Service Worker isolation 全數 PASS。正式 Electron opcache 的玩家與 CPU 連續走子、雙帳號邀請接受與 live bytes 需於 Render 切換後再驗收。
+
 ## 霸海戰棋桌面發布整合（2026-09-07，啟動器 1.1.5 已發布）
 
 - 來源與邊界：正式接入來源固定為 `D:\航海王西洋棋\GRAND-LINE-BATTLE-多人發布版-v1`。執行程式整理至 `public/chess/`；大型美術只建立 `images/chess/assets/*` 邏輯路徑，不複製進 Git 或 Render 的 `public`。本輪不碰 Card／Board 的遊戲規則、素材 id、localStorage key、Socket event 或 `BOARD_GAME_STATE`。

@@ -1,13 +1,23 @@
 # File Map
 
+## 霸海戰棋好友邀請／CPU 防卡熱修檔案（2026-09-07）
+
+| 檔案／位置 | 功能／狀態 |
+| --- | --- |
+| `public/chess/battle-social-v1.css`、`battle-social-v1.js`、`pre-match-lobby.js` | 棋局頁共用好友 dock／聊天室／toast 樣式及專用邀請選擇框；等待室內可直接邀請線上好友，層級高於 lobby，房間開始或離開時自動關閉。 |
+| `public/chess/battle-texture-load-guard-v1.js` | Electron 本機 CAS 動態貼圖的 3.5 秒逾時、行走站立圖回退、動畫例外後合法步復原與必定解鎖；提供唯讀 `__BATTLE_TEXTURE_GUARD__.getState()` 供驗收。 |
+| `public/chess/battle-room-runtime-v1.js` | CPU 思考及遠端 committed move 加入 `try/finally` 與 authoritative FEN 復原；debug state 額外顯示 `cpuThinking`。 |
+| `public/chess/battle-game.html`、`index.html`、`battle-game-loader-v1.js` | 載入上述 CSS／guard 並使用 `invite-picker-v1-20260907`、`cpu-image-timeout-v1-20260907` cache-bust。 |
+| `scripts/chess_friend_invite_ui_qa.js`、`chess_cpu_move_recovery_qa.js` | 驗證邀請框層級／關閉／cache-bust，以及模擬 opcache 圖片永不完成時的逾時回退、合法步復原與 runtime finally 防線。 |
+
 ## 霸海戰棋／桌面啟動器 1.1.5 發布檔案（2026-09-07，已發布）
 
 | 檔案／位置 | 功能／狀態 |
 | --- | --- |
 | `public/chess/index.html`、`battle-start-v1.css`、`battle-start-v1.js`、`battle-game-social-shell-v1.js`、`battle-social-v1.js` | Chess 正式入口、登入後遊戲選單／房間／社交殼。正式路徑是 `/chess/index.html`，不是舊 junction 或 `battle_chess` 測試路徑。 |
-| `public/chess/battle-game.html`、`battle-chess.css`、`battle-chess.js`、`battle-click-priority-fix.js`、`battle-game-loader-v1.js`、`battle-room-runtime-v1.js`、`player-header-ui.js`、`pre-match-lobby.js`、`battlefield-profile-frame.js`、`multiplayer-config.js`、`favicon.svg` | 正式棋局 UI／runtime／兩階段等待室與 multiplayer bridge。`pre-match-lobby.js` 保留收到 snapshot 時的 ready；核心 Chess runtime 來源 SHA-256 為 `8152210695F4D9A3D8B723F4E39B26DA21DE5BC40BAEBC8A448B4BEE4329016D`。 |
+| `public/chess/battle-game.html`、`battle-chess.css`、`battle-chess.js`、`battle-click-priority-fix.js`、`battle-game-loader-v1.js`、`battle-room-runtime-v1.js`、`battle-texture-load-guard-v1.js`、`player-header-ui.js`、`pre-match-lobby.js`、`battlefield-profile-frame.js`、`multiplayer-config.js`、`favicon.svg` | 正式棋局 UI／runtime／兩階段等待室與 multiplayer bridge。`pre-match-lobby.js` 保留收到 snapshot 時的 ready；貼圖守衛只為演出失敗提供回退，不改核心棋規。 |
 | `public/chess/assets/vendor/stockfish-18.0.0/` | Stockfish 18 lite single JS／WASM、`COPYING.txt` 與 `SOURCE.md`；保留上游授權／來源。這是本機 vendor，不從 R2 Chess image manifest 下載。 |
-| `public/chess/images/board/avatars/{50.webp,cpu2.webp}` | 兩張必要本機 avatar。正式 bundle 合計 22 required files：16 program、4 vendor／license、2 avatar；大型 Chess 圖片不在本目錄。 |
+| `public/chess/images/board/avatars/{50.webp,cpu2.webp}` | 兩張必要本機 avatar。熱修後正式 bundle 合計 24 required files：18 program、4 vendor／license、2 avatar；大型 Chess 圖片不在本目錄。 |
 | `public/desktop/manifests/chess-assets-4a14ed8c714c0b60.json` | `images/chess/assets/*` 的 immutable 邏輯清單：`1,380` 檔／`330,834,762` bytes，SHA-256 `ea710d9921d2826200dd41a808e222c7c337dd4a4f276e338eb4324f4a18adad`。 |
 | `config/desktop-chess-assets-v1.json`、`scripts/build_desktop_chess_manifest.js` | 將外部正式來源 `D:\航海王西洋棋\GRAND-LINE-BATTLE-多人發布版-v1\public\assets` 驗證並映射成上述版本化 manifest；不把外部素材複製進 Git。 |
 | `public/desktop/catalog-v2.json`、`scripts/build_desktop_game_catalog.js` | schema 2 三遊戲控制面；Chess 指向新 manifest，Card 仍為 `710` 檔／`705,711,887` bytes、Board 為 `3,451` 檔／`1,276,186,364` bytes，既有 release／manifest SHA 不變。build 明確排除 `images/chess/assets/`，避免被 Card 收入。 |

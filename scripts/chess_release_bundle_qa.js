@@ -9,7 +9,7 @@ const root = path.resolve(__dirname, "..");
 const publicDir = path.join(root, "public");
 const chessDir = path.join(publicDir, "chess");
 const programFiles = ["index.html", "battle-game.html", "battle-start-v1.css", "battle-start-v1.js",
-  "battle-social-v1.js", "battle-chess.css", "battle-chess.js", "battle-game-loader-v1.js",
+  "battle-social-v1.css", "battle-social-v1.js", "battle-chess.css", "battle-chess.js", "battle-texture-load-guard-v1.js", "battle-game-loader-v1.js",
   "battle-game-social-shell-v1.js", "battle-room-runtime-v1.js", "battle-click-priority-fix.js",
   "battlefield-profile-frame.js", "player-header-ui.js", "pre-match-lobby.js", "multiplayer-config.js", "favicon.svg"];
 const vendorFiles = ["COPYING.txt", "SOURCE.md", "stockfish-18-lite-single.js", "stockfish-18-lite-single.wasm"];

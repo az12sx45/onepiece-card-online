@@ -12,10 +12,11 @@
 
   const scripts = [
     "./battle-chess.js?v=same-faction-v1-20260903",
+    "./battle-texture-load-guard-v1.js?v=cpu-image-timeout-v1-20260907",
     "./battlefield-profile-frame.js?v=battlefield-profile-frames-v4-20260902",
     "./player-header-ui.js?v=first-white-move-timer-v2-20260907",
     "./battle-click-priority-fix.js?v=piece-priority-v1-20260829",
-    "./pre-match-lobby.js?v=faction-full-shell-v31-20260906",
+    "./pre-match-lobby.js?v=invite-picker-v1-20260907",
     "./battle-room-runtime-v1.js?v=hud-avatar-fit-v2-20260906",
   ];
   let chain = Promise.resolve();

@@ -270,7 +270,7 @@
     const roomCode = String(state.roomContext?.roomCode || "").trim().toUpperCase();
     if (!roomCode || state.roomContext?.status !== "waiting") {
       toast("請先建立並進入等待中的西洋棋房間。");
-      return;
+      return false;
     }
     const result = await emitAck("LOBBY_INVITE_SEND", {
       secret: secret(),
@@ -280,14 +280,101 @@
     });
     if (!result.ok) {
       toast(translateError(result.error, "房間邀請送出失敗。"));
-      return;
+      return false;
     }
     toast(`已邀請 ${friend.name || "好友"} 加入房間 ${roomCode}`);
+    return true;
+  }
+
+  function closeInvitePicker() {
+    if (refs.invitePicker) refs.invitePicker.hidden = true;
+  }
+
+  function ensureInvitePicker() {
+    if (refs.invitePicker) return refs.invitePicker;
+    const picker = document.createElement("div");
+    picker.id = "battleInvitePicker";
+    picker.className = "battle-invite-picker";
+    picker.hidden = true;
+    picker.innerHTML = `
+      <section class="battle-invite-picker__panel" role="dialog" aria-modal="true" aria-labelledby="battleInvitePickerTitle">
+        <header class="battle-invite-picker__header">
+          <span><small>NAKAMA INVITATION</small><strong id="battleInvitePickerTitle">邀請好友</strong></span>
+          <button class="battle-invite-picker__close" type="button" aria-label="關閉">×</button>
+        </header>
+        <p class="battle-invite-picker__room">霸海戰棋房間 <b data-invite-room>—</b></p>
+        <div class="battle-invite-picker__list" data-invite-list></div>
+      </section>`;
+    document.body.appendChild(picker);
+    refs.invitePicker = picker;
+    refs.invitePickerList = picker.querySelector("[data-invite-list]");
+    refs.invitePickerRoom = picker.querySelector("[data-invite-room]");
+    picker.querySelector(".battle-invite-picker__close")?.addEventListener("click", closeInvitePicker);
+    picker.addEventListener("click", (event) => { if (event.target === picker) closeInvitePicker(); });
+    return picker;
+  }
+
+  function renderInvitePicker() {
+    if (!refs.invitePicker || refs.invitePicker.hidden || !refs.invitePickerList) return;
+    const roomCode = String(state.roomContext?.roomCode || "").trim().toUpperCase();
+    refs.invitePickerRoom.textContent = roomCode || "—";
+    refs.invitePickerList.replaceChildren();
+    const friends = [...state.friends].sort((left, right) =>
+      Number(Boolean(right.online)) - Number(Boolean(left.online)) || String(left.name || "").localeCompare(String(right.name || ""), "zh-Hant"));
+    if (!friends.length) {
+      const empty = document.createElement("p");
+      empty.className = "battle-invite-picker__empty";
+      empty.textContent = state.loading ? "正在讀取好友名單…" : (state.error || "目前沒有可邀請的好友，請先在好友面板加入對方。");
+      refs.invitePickerList.appendChild(empty);
+      return;
+    }
+    friends.forEach((friend) => {
+      const row = document.createElement("article");
+      row.className = `battle-invite-picker__friend${friend.online ? " is-online" : ""}`;
+      const avatar = document.createElement("span");
+      avatar.className = "friend-avatar";
+      const image = document.createElement("img");
+      image.alt = "";
+      setImage(image, friend.avatar, friend.name);
+      avatar.appendChild(image);
+      const meta = document.createElement("span");
+      const name = document.createElement("strong");
+      name.textContent = friend.name || `#${friend.userId}`;
+      const status = document.createElement("small");
+      status.textContent = friend.online ? (friend.activity || "線上") : "目前離線";
+      meta.append(name, status);
+      const invite = document.createElement("button");
+      invite.type = "button";
+      invite.textContent = friend.online ? "邀請" : "離線";
+      invite.disabled = !friend.online;
+      invite.addEventListener("click", async () => {
+        invite.disabled = true;
+        invite.textContent = "送出中…";
+        const sent = await sendChessInvite(friend);
+        invite.textContent = sent ? "已送出" : (friend.online ? "重試" : "離線");
+        invite.disabled = sent || !friend.online;
+      });
+      row.append(avatar, meta, invite);
+      refs.invitePickerList.appendChild(row);
+    });
+  }
+
+  async function openInvitePicker() {
+    const roomCode = String(state.roomContext?.roomCode || "").trim().toUpperCase();
+    if (!roomCode || state.roomContext?.status !== "waiting") {
+      toast("請先建立並進入等待中的西洋棋房間。");
+      return;
+    }
+    ensureInvitePicker().hidden = false;
+    renderInvitePicker();
+    if (!state.localPreview && state.socket?.connected) await fetchFriends();
+    renderInvitePicker();
   }
 
   function renderFriends() {
     if (!refs.friendList) return;
     refs.friendList.replaceChildren();
+    renderInvitePicker();
 
     if (state.localPreview) {
       const empty = document.createElement("div");
@@ -584,6 +671,7 @@
     refs.friendDockOpen.addEventListener("click", () => setDockExpanded(true));
     refs.friendAddBtn.addEventListener("click", addFriend);
     refs.friendAddInput.addEventListener("keydown", (event) => { if (event.key === "Enter") addFriend(); });
+    document.addEventListener("keydown", (event) => { if (event.key === "Escape" && refs.invitePicker && !refs.invitePicker.hidden) closeInvitePicker(); });
   }
 
   function init(options = {}) {
@@ -624,9 +712,11 @@
   window.BattleSocial = {
     init,
     openDock() { setDockExpanded(true); if (!state.localPreview && state.socket?.connected) fetchFriends(); },
+    openInvitePicker,
     refresh: fetchFriends,
     setRoomContext(context) {
       state.roomContext = context && typeof context === "object" ? { ...context } : null;
+      if (!state.roomContext || state.roomContext.status !== "waiting") closeInvitePicker();
       renderFriends();
     },
     getSummary: summary,

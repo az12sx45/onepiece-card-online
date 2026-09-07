@@ -1,5 +1,11 @@
 # Project Overview
 
+## 霸海戰棋好友邀請與 CPU 首步容錯（2026-09-07）
+
+棋局等待室現在會開啟獨立的好友選擇框，直接列出線上／離線好友並對線上好友送出目前 Chess room 邀請；好友 dock、聊天室、toast 與邀請框都有高於等待室的固定層級，棋局開始或離開房間會自動收起邀請框，不會用暗層遮住戰場。
+
+桌面素材已安裝但 Chromium 的動態 `Image` 載入沒有回傳 load／error 時，Chess 不再永久停在首步。新的貼圖守衛會在 3.5 秒後以既有站立圖完成移動；若其他動畫準備仍拋錯，也會清理動畫旗標、解除棋盤鎖並保留原本已驗證的合法步。CPU 思考與遠端棋步套用另有 `finally` 防線，畫面層失敗不能長期留下 `battle-network-input-locked`。伺服器仍是唯一走棋權威，沒有改 FEN、回合或終局規則。
+
 ## 霸海戰棋正式桌面整合（2026-09-07，1.1.5 已發布）
 
 《霸海戰棋》的正式執行頁已隔離在 `public/chess/`，桌面入口為 `/chess/index.html`，並使用獨立 `onepiece-chess-desktop-v1` Electron partition。Git／Render 只帶必要 HTML、CSS、JavaScript、Stockfish 18 lite single vendor／授權與兩張本機 avatar；`1,380` 個大型圖片素材不進 Git／Render，改由 Cloudflare R2 immutable CAS 配送，下載後保存到玩家選定的本機素材庫。
