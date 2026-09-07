@@ -16,6 +16,8 @@
 | `D:\OnePieceDesktopBuilds\release-1.1.6\ONE-PIECE-Tabletop-Launcher-1.1.6-x64.exe`（非 Git） | x64 NSIS：152,434,817 bytes；SHA-256 `21b31db506c146d0bef1785b5cf8f5efd9a8a56317a474d4c44ff11e7686c335`。 |
 | `public/desktop/launcher-release-v1.json` | Ed25519 簽署 stable 1.1.6；artifact 指向 R2 immutable 1.1.6 installer，舊 1.1.5 可檢查並安裝更新。 |
 
+正式 Render commit `89b45358` 已完成 5 份 metadata、89 個 program bytes／SHA、三個 runtime identity、unknown 404 與完整 installer SHA postdeploy 驗收；回復 branch 為 `codex/rollback-before-desktop-local-runtime-v1`（`46585bcb`）。
+
 ## 霸海戰棋好友邀請／CPU 防卡熱修 V2 檔案（2026-09-07）
 
 | 檔案／位置 | 功能／狀態 |
