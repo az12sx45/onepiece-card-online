@@ -2,6 +2,7 @@
 
 ## Board 省流量與完整下載發布（2026-09-10）
 
+- 正式 release `85cc4552` 已上 main；2026-09-10 02:21:38（Asia/Taipei）Render 確認新 Board package，02:21:49 health、三款 runtime identity 200／no-store、4 份 metadata 與 36 份 Board 程式公開 GET／size／SHA 全數通過。正式驗證腳本／報告在 `D:\Codex_QA\board-state-wire-release-20260910\verify-production.cjs`／`production-verify-report.json`；未在正式服務建立測試房或操作真人存檔。文件補記以 `[skip render]` 提交。
 - 使用者已授權上線；以 `origin/main` 的 `9fee7f7f` 建立獨立 `codex/board-state-wire-v1` 發行樹。只納入 Board 同步、下載所需 HTML／publisher 修正與文件，不帶其他開發中的遊戲／圖片或 launcher binary 改動。
 - `public/js/board_state_wire.js`、`board_state_receiver.js`、`server/board-state-wire.js` 及 `board_game.js`／`server/index.js` 接線：新接收端 opt-in 區塊差異，還原完整快照；原權限、CAS、存檔、事件名與規則保留，舊版／失配／重連 full 恢復。
 - Board package 的 10 份 HTML 加固定 release 註解以產生新 CAS key；`tools/desktop-r2-publisher/publish.js` 對新 document 使用 binary／no-transform transport metadata，manifest MIME 仍為 text/html。舊 object 不覆寫，精準相容舊 metadata；白名單增加兩份 JS。Card／Chess 套件版本維持原值。
