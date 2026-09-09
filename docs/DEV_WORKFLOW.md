@@ -6,6 +6,7 @@
 - `public/js/board_state_wire.js`、`board_state_receiver.js`、`server/board-state-wire.js` 及 `board_game.js`／`server/index.js` 接線：新接收端 opt-in 區塊差異，還原完整快照；原權限、CAS、存檔、事件名與規則保留，舊版／失配／重連 full 恢復。
 - Board package 的 10 份 HTML 加固定 release 註解以產生新 CAS key；`tools/desktop-r2-publisher/publish.js` 對新 document 使用 binary／no-transform transport metadata，manifest MIME 仍為 text/html。舊 object 不覆寫，精準相容舊 metadata；白名單增加兩份 JS。Card／Chess 套件版本維持原值。
 - 發布來源驗證：codec 823 checks；4 Socket.IO 連線 13 類／17 有效版本；兩瀏覽器建房、加入、交棒、刷新、待續戰鬥恢復並解碼 3 次差異；publisher v2/v3、語法／diff 檢查通過。`PORT=18890 npm start` 啟動正常，本機沒有 DATABASE_URL。
+- 完整包 `package-0f7755bca2f64ff4`：36 程式，既有完整包只新增 13 blobs／5,334,946 bytes。R2 全 3,170 unique HEAD 與 13 新檔公開 GET／SHA 通過。`scripts/desktop_board_wire_update_qa.js --live-download --full-upgrade` 以已安裝 1.1.6 原 ASAR 在隔離快取完成更新至可啟動，36 程式 SHA、HTML 續傳與 runtime MIME 通過；玩家原 ASAR／receipt／manifest／3,168 來源 blobs 全部未改。
 - 量測為模擬壓縮 WebSocket 應用資料，小改約 99%、跨存檔約 46%；不能視為 Render 帳單百分比。完整發布身分、R2 實際 GET、桌面更新與回復紀錄見 `docs/BOARD_STATE_WIRE_RELEASE_20260910.md`；同步設計見 `docs/BOARD_STATE_WIRE_20260910.md`。
 
 ## 三遊戲完整本機執行包／啟動器 1.1.6（2026-09-07）

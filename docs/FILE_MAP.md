@@ -7,7 +7,8 @@
 - `config/desktop-program-packages-v1.json`：Board 程式白名單 36 檔。`public/desktop/catalog-v3.json` 與新 Board manifest 由已提交 bytes 重建。
 - `tools/desktop-r2-publisher/publish.js`、`scripts/desktop_r2_program_publish_qa.js`：HTML binary／no-transform 傳輸 metadata 與新舊 immutable 驗證。
 - `scripts/board_state_wire_qa.js`、`board_state_wire_integration_qa.js`、`lan_refresh_flow_qa.js`、`board_reconnect_client_qa.js`：codec／恢復、四連線、新舊相容與兩瀏覽器驗證。
-- `docs/BOARD_STATE_WIRE_20260910.md`、`BOARD_STATE_WIRE_RELEASE_20260910.md`：設計、量測界線、發布与回復結果。
+- `scripts/desktop_board_wire_update_qa.js`：已安裝 1.1.6 的原始 ASAR 下載碼，在隔離 QA 快取驗證公開新檔、Range 續傳及 runtime MIME；`--live-download --full-upgrade` 由舊 receipt 完整更新並檢查來源 cache 未改，live 網路須顯式旗標。
+- `docs/BOARD_STATE_WIRE_20260910.md`、`BOARD_STATE_WIRE_RELEASE_20260910.md`：設計、量測界線、發布與回復結果。
 
 ## 桌面完整本機執行包／啟動器 1.1.6（2026-09-07）
 
