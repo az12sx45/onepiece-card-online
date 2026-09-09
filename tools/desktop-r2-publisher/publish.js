@@ -22,6 +22,8 @@ const PACKAGE_KINDS = Object.freeze([
 const HASH_PATTERN = /^[a-f0-9]{64}$/;
 const MANIFEST_PATH_PATTERN = /^desktop\/manifests\/[a-z0-9._-]+\.json$/;
 const IMMUTABLE_CACHE_CONTROL = 'public, max-age=31536000, immutable';
+const DOCUMENT_BLOB_CONTENT_TYPE = 'application/octet-stream';
+const DOCUMENT_BLOB_CACHE_CONTROL = `${IMMUTABLE_CACHE_CONTROL}, no-transform`;
 const OBJECT_PREFIX = 'desktop/blobs/sha256';
 const DEFAULT_CONCURRENCY = 3;
 const PACKAGE_EXTENSIONS = new Map([
@@ -349,14 +351,33 @@ function isPreconditionFailedError(error) {
   return error?.$metadata?.httpStatusCode === 412 || error?.name === 'PreconditionFailed';
 }
 
+function transportMetadataForRecord(record) {
+  // CAS downloads are verified bytes, not directly rendered pages. The launcher
+  // supplies the manifest MIME locally after verification. Keep HTML away from
+  // CDN page rewriting without changing its logical manifest metadata.
+  return record.kind === 'document'
+    ? { contentType: DOCUMENT_BLOB_CONTENT_TYPE, cacheControl: DOCUMENT_BLOB_CACHE_CONTROL }
+    : { contentType: record.mime, cacheControl: IMMUTABLE_CACHE_CONTROL };
+}
+
 function validateRemoteHead(record, response) {
   const metadata = isPlainObject(response?.Metadata) ? response.Metadata : {};
   const remoteSha256 = String(metadata.sha256 || '').toLowerCase();
   const problems = [];
   if (Number(response?.ContentLength) !== record.size) problems.push(`size=${String(response?.ContentLength)}`);
   if (remoteSha256 !== record.sha256) problems.push(`metadata.sha256=${remoteSha256 || 'missing'}`);
-  if (String(response?.ContentType || '').toLowerCase() !== record.mime.toLowerCase()) problems.push(`content-type=${String(response?.ContentType || 'missing')}`);
-  if (String(response?.CacheControl || '') !== IMMUTABLE_CACHE_CONTROL) problems.push(`cache-control=${String(response?.CacheControl || 'missing')}`);
+  const expected = transportMetadataForRecord(record);
+  const contentType = String(response?.ContentType || '').toLowerCase();
+  const cacheControl = String(response?.CacheControl || '');
+  const matchesCurrent = contentType === expected.contentType.toLowerCase() && cacheControl === expected.cacheControl;
+  // Existing document keys are immutable too. Recognize only their exact old
+  // profile; never rewrite metadata or accept mixed/unknown transport profiles.
+  const matchesLegacyDocument = record.kind === 'document'
+    && contentType === record.mime.toLowerCase() && cacheControl === IMMUTABLE_CACHE_CONTROL;
+  if (!matchesCurrent && !matchesLegacyDocument) {
+    problems.push(`content-type=${String(response?.ContentType || 'missing')}`);
+    problems.push(`cache-control=${String(response?.CacheControl || 'missing')}`);
+  }
   if (problems.length) fail(`R2 object already exists with mismatched metadata; refusing overwrite: ${record.key} (${problems.join(', ')}).`);
   return true;
 }
@@ -380,6 +401,7 @@ async function publishRecord(record, readSource, liveContext) {
   if (!liveContext) return { status: 'verified', bytes: record.size };
   const existing = await headRemoteObject(record, liveContext);
   if (existing) return { status: 'skipped', bytes: record.size };
+  const transport = transportMetadataForRecord(record);
 
   try {
     await liveContext.client.send(new liveContext.PutObjectCommand({
@@ -387,8 +409,8 @@ async function publishRecord(record, readSource, liveContext) {
       Key: record.key,
       Body: bytes,
       ContentLength: record.size,
-      ContentType: record.mime,
-      CacheControl: IMMUTABLE_CACHE_CONTROL,
+      ContentType: transport.contentType,
+      CacheControl: transport.cacheControl,
       Metadata: { sha256: record.sha256 },
       IfNoneMatch: '*'
     }));

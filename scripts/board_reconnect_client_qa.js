@@ -128,7 +128,7 @@ function socketMockSource() {
       errors.push(`console:${message.text()}`);
     }
   });
-  await page.route("**/socket.io/socket.io.js", (route) => route.fulfill({
+  await page.route(/\/(?:socket\.io\/socket\.io\.js|vendor\/socket\.io-client\/[^/]+\/socket\.io\.min\.js)(?:\?.*)?$/, (route) => route.fulfill({
     status: 200,
     contentType: "application/javascript",
     body: socketMockSource(),

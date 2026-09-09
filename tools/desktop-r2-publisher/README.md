@@ -8,6 +8,16 @@ supplied through the reviewed release package's `public/assets` directory.
 
 The default command is a local-only dry run. It performs no network requests:
 
+New `document` blobs are uploaded as `application/octet-stream` with
+`public, max-age=31536000, immutable, no-transform`. They are byte-addressed
+downloads; the launcher uses the unchanged manifest MIME (for example
+`text/html`) when serving verified content locally. Existing documents may
+retain the exact legacy MIME/immutable-cache profile. Neither profile permits
+overwriting an existing key, and mixed or unknown metadata is rejected. This
+policy does not repair already cached HTML transforms: a new Board release
+uses new document hashes and verifies every public GET before switching its
+catalog. Other asset kinds retain their original upload metadata.
+
 ```powershell
 node tools/desktop-r2-publisher/publish.js
 ```

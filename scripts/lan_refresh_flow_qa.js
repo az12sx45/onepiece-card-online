@@ -205,6 +205,13 @@ async function enterRoom(device, roomCode, create = false) {
       failures.push(`resumed battle owner mismatch: ${guestBattle.playerId}/${hostBattle.playerId}`);
     }
 
+    const wireStatuses = await Promise.all([host.page, guest.page].map((page) => page.evaluate(() => (
+      window.__BOARD_GAME_DEBUG__.boardLanStatus().wire
+    ))));
+    if (wireStatuses.some((wire) => !wire || wire.recovering)
+      || wireStatuses.reduce((sum, wire) => sum + Number(wire?.deltaFrames || 0), 0) < 1) {
+      failures.push(`browser wire transport did not finish a delta: ${JSON.stringify(wireStatuses)}`);
+    }
     console.log(JSON.stringify({
       ok: failures.length === 0 && errors.length === 0,
       roomCode,
@@ -213,6 +220,7 @@ async function enterRoom(device, roomCode, create = false) {
       freshRecruitCount: prepared.freshRows.length,
       guestBattle,
       hostBattle,
+      wireStatuses,
       failures,
       errors,
     }, null, 2));

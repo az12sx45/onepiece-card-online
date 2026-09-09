@@ -1,5 +1,13 @@
 ﻿# Dev Workflow
 
+## Board 省流量與完整下載發布（2026-09-10）
+
+- 使用者已授權上線；以 `origin/main` 的 `9fee7f7f` 建立獨立 `codex/board-state-wire-v1` 發行樹。只納入 Board 同步、下載所需 HTML／publisher 修正與文件，不帶其他開發中的遊戲／圖片或 launcher binary 改動。
+- `public/js/board_state_wire.js`、`board_state_receiver.js`、`server/board-state-wire.js` 及 `board_game.js`／`server/index.js` 接線：新接收端 opt-in 區塊差異，還原完整快照；原權限、CAS、存檔、事件名與規則保留，舊版／失配／重連 full 恢復。
+- Board package 的 10 份 HTML 加固定 release 註解以產生新 CAS key；`tools/desktop-r2-publisher/publish.js` 對新 document 使用 binary／no-transform transport metadata，manifest MIME 仍為 text/html。舊 object 不覆寫，精準相容舊 metadata；白名單增加兩份 JS。Card／Chess 套件版本維持原值。
+- 發布來源驗證：codec 823 checks；4 Socket.IO 連線 13 類／17 有效版本；兩瀏覽器建房、加入、交棒、刷新、待續戰鬥恢復並解碼 3 次差異；publisher v2/v3、語法／diff 檢查通過。`PORT=18890 npm start` 啟動正常，本機沒有 DATABASE_URL。
+- 量測為模擬壓縮 WebSocket 應用資料，小改約 99%、跨存檔約 46%；不能視為 Render 帳單百分比。完整發布身分、R2 實際 GET、桌面更新與回復紀錄見 `docs/BOARD_STATE_WIRE_RELEASE_20260910.md`；同步設計見 `docs/BOARD_STATE_WIRE_20260910.md`。
+
 ## 三遊戲完整本機執行包／啟動器 1.1.6（2026-09-07）
 
 - 目標與邊界：Card、Board、Chess 的 HTML、CSS、JS、Worker、WASM、JSON、圖片、音樂、影片與字型在玩家完成遊戲下載後均由安裝位置的內容位址快取供應；正式網址與 origin 仍是 `https://onepiece-card-online.onrender.com`，帳號、好友、聊天室、房間、存檔與 Socket.IO 仍由 Render 處理。未改角色、規則、資料 id、localStorage key、Socket event 或 `BOARD_GAME_STATE`。

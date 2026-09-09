@@ -176,6 +176,36 @@ class FakeS3Client {
   }
 }
 
+function fakeContext(client) {
+  return {
+    client,
+    bucket: 'fixture-bucket',
+    HeadObjectCommand: FakeHeadObjectCommand,
+    PutObjectCommand: FakePutObjectCommand
+  };
+}
+
+class RacingS3Client extends FakeS3Client {
+  constructor(racedHead) {
+    super();
+    this.racedHead = racedHead;
+  }
+
+  async send(command) {
+    if (command instanceof FakePutObjectCommand) {
+      this.calls.push({ operation: 'PUT', input: command.input });
+      assert.equal(command.input.IfNoneMatch, '*');
+      assert.ok(!this.objects.has(command.input.Key));
+      this.objects.set(command.input.Key, this.racedHead);
+      const error = new Error('Another publisher created this key.');
+      error.name = 'PreconditionFailed';
+      error.$metadata = { httpStatusCode: 412 };
+      throw error;
+    }
+    return super.send(command);
+  }
+}
+
 async function expectReject(action, pattern) {
   let error = null;
   try { await action(); } catch (caught) { error = caught; }
@@ -198,6 +228,7 @@ async function main() {
     assert.equal(inventory.logicalFiles, 9);
     assert.equal(inventory.uniqueFiles, 9);
     assert.deepEqual(inventory.manifests.card.entryPath, 'start.html');
+    const originalRecords = JSON.stringify(inventory.records);
     for (const record of inventory.records) {
       assert.match(record.key, /^desktop\/blobs\/sha256\/[a-f0-9]{2}\/[a-f0-9]{64}$/);
     }
@@ -254,10 +285,87 @@ async function main() {
     assert.equal(liveResult.uploaded, 9);
     assert.equal(fakeClient.calls.filter((call) => call.operation === 'PUT').length, 9);
     for (const call of fakeClient.calls.filter((item) => item.operation === 'PUT')) {
+      const record = inventory.records.find((item) => item.key === call.input.Key);
       assert.equal(call.input.IfNoneMatch, '*');
       assert.equal(digest(call.input.Body), call.input.Metadata.sha256);
       assert.equal(call.input.Key, publisher.objectKeyForSha256(call.input.Metadata.sha256));
+      if (record.kind === 'document') {
+        assert.equal(record.mime, 'text/html', 'Manifest execution MIME must remain HTML.');
+        assert.equal(call.input.ContentType, 'application/octet-stream', 'New HTML blobs must bypass CDN page rewriting.');
+        assert.equal(call.input.CacheControl, 'public, max-age=31536000, immutable, no-transform');
+      } else {
+        assert.equal(call.input.ContentType, record.mime, 'Non-document transport MIME must not change.');
+        assert.equal(call.input.CacheControl, publisher.IMMUTABLE_CACHE_CONTROL);
+      }
     }
+    assert.equal(JSON.stringify(inventory.records), originalRecords, 'Publishing must not mutate manifest metadata.');
+
+    const documentRecord = inventory.records.find((record) => record.sources.includes('board_start.html'));
+    const currentHead = fakeClient.objects.get(documentRecord.key);
+    const legacyHead = {
+      ...currentHead,
+      ContentType: 'text/html',
+      CacheControl: publisher.IMMUTABLE_CACHE_CONTROL
+    };
+    const currentAgain = await publisher.publishRecord(documentRecord, reader, fakeContext(fakeClient));
+    assert.equal(currentAgain.status, 'skipped');
+    assert.equal(fakeClient.calls.filter((call) => call.operation === 'PUT').length, 9, 'New-profile immutable keys must be skipped.');
+    const legacyClient = new FakeS3Client();
+    legacyClient.objects.set(documentRecord.key, legacyHead);
+    const legacyAgain = await publisher.publishRecord(documentRecord, reader, fakeContext(legacyClient));
+    assert.equal(legacyAgain.status, 'skipped');
+    assert.equal(legacyClient.calls.filter((call) => call.operation === 'PUT').length, 0, 'Legacy document metadata must not be overwritten.');
+    assert.equal(legacyClient.objects.get(documentRecord.key), legacyHead);
+
+    const invalidHeads = [
+      { ...currentHead, ContentType: 'text/html' },
+      { ...currentHead, CacheControl: publisher.IMMUTABLE_CACHE_CONTROL },
+      { ...currentHead, ContentType: 'application/x-unknown' },
+      { ...currentHead, CacheControl: 'public, max-age=60' },
+      { ...currentHead, ContentLength: documentRecord.size + 1 },
+      { ...currentHead, Metadata: { sha256: '0'.repeat(64) } },
+      { ...legacyHead, ContentLength: documentRecord.size + 1 },
+      { ...legacyHead, Metadata: { sha256: '0'.repeat(64) } }
+    ];
+    for (const head of invalidHeads) {
+      const invalidClient = new FakeS3Client();
+      invalidClient.objects.set(documentRecord.key, head);
+      await expectReject(
+        () => publisher.publishRecord(documentRecord, reader, fakeContext(invalidClient)),
+        /mismatched metadata; refusing overwrite/i
+      );
+      assert.equal(invalidClient.calls.filter((call) => call.operation === 'PUT').length, 0);
+      assert.equal(invalidClient.objects.get(documentRecord.key), head);
+    }
+
+    const scriptRecord = inventory.records.find((record) => record.kind === 'script');
+    const invalidScriptClient = new FakeS3Client();
+    invalidScriptClient.objects.set(scriptRecord.key, {
+      ...fakeClient.objects.get(scriptRecord.key),
+      ContentType: 'application/octet-stream',
+      CacheControl: 'public, max-age=31536000, immutable, no-transform'
+    });
+    await expectReject(
+      () => publisher.publishRecord(scriptRecord, reader, fakeContext(invalidScriptClient)),
+      /mismatched metadata; refusing overwrite/i
+    );
+    assert.equal(invalidScriptClient.calls.filter((call) => call.operation === 'PUT').length, 0);
+
+    for (const head of [currentHead, legacyHead]) {
+      const raceClient = new RacingS3Client(head);
+      const raceResult = await publisher.publishRecord(documentRecord, reader, fakeContext(raceClient));
+      assert.equal(raceResult.status, 'skipped-race');
+      assert.equal(raceClient.calls.filter((call) => call.operation === 'PUT').length, 1);
+      assert.equal(raceClient.objects.get(documentRecord.key), head);
+    }
+    const invalidRaceHead = { ...currentHead, Metadata: { sha256: '0'.repeat(64) } };
+    const invalidRaceClient = new RacingS3Client(invalidRaceHead);
+    await expectReject(
+      () => publisher.publishRecord(documentRecord, reader, fakeContext(invalidRaceClient)),
+      /mismatched metadata; refusing overwrite/i
+    );
+    assert.equal(invalidRaceClient.calls.filter((call) => call.operation === 'PUT').length, 1);
+    assert.equal(invalidRaceClient.objects.get(documentRecord.key), invalidRaceHead);
 
     const catalogPath = path.join(fixture.root, 'public', 'desktop', 'catalog-v3.json');
     const originalCatalog = await fsp.readFile(catalogPath);
@@ -271,7 +379,8 @@ async function main() {
 
     process.stdout.write(
       `DESKTOP_R2_PROGRAM_PUBLISH_QA=PASS logical=${inventory.logicalFiles} unique=${inventory.uniqueFiles} ` +
-      `dryVerified=${dryResult.verified} uploaded=${liveResult.uploaded} gitHeadOnly=PASS immutable=PASS legacyDefault=v2\n`
+      `dryVerified=${dryResult.verified} uploaded=${liveResult.uploaded} gitHeadOnly=PASS immutable=PASS ` +
+      `documentTransport=PASS legacyDocument=PASS metadataReject=PASS race=PASS manifestMime=PASS legacyDefault=v2\n`
     );
   } finally {
     const tempRoot = path.resolve(os.tmpdir());

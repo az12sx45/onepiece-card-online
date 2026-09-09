@@ -1,5 +1,9 @@
 # Project Overview
 
+## Board 同步省流量發布（2026-09-10）
+
+`board-copy-v1` 只減少重複傳輸，遊戲仍取得完整權威快照；舊版與重連保留完整同步。新版 Board 的所有 HTML 用新 CAS 位址與 binary／no-transform 下載 metadata，避免 CDN 改寫破壞 SHA；執行時仍以 manifest 的 text/html 供應，不改玩法。此遊戲更新相容既有啟動器 1.1.6。發布進度、套件版本及驗證見 `docs/BOARD_STATE_WIRE_RELEASE_20260910.md`。
+
 ## 桌面完整本機執行模式（啟動器 1.1.6）
 
 玩家在啟動器完成某款遊戲的下載／更新後，該款遊戲的網頁程式與全部靜態素材都保存在同一個可選安裝資料根目錄，並從已驗證的本機 CAS 讀取。遊戲視窗仍顯示正式 Render HTTPS 網址，因此既有同源 API、Socket.IO、localStorage、多人房與帳號流程不需要改寫；網路只負責線上狀態和每次啟動的輕量版本身分確認，不再於遊玩中逐張下載圖片、音樂、影片或程式依賴。

@@ -8,6 +8,8 @@ const { pool } = require("./db");
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const { Chess } = require("chess.js");
+const { createBoardStateSender } = require("./board-state-wire");
+const boardStateSender = createBoardStateSender();
 const {
   createInitialState,
   applyAction,
@@ -4497,6 +4499,7 @@ io.on("connection", (socket) => {
       socket.data.boardProfile = profile;
       socket.join(`board:${room.roomCode}`);
       const socketMeta = room.sockets.get(socket.id) || profile;
+      boardStateSender.reset(socket, payload.stateEncoding);
       const canSeedState = boardSocketIsRoomHost(room, socketMeta);
       const knownVersion = Math.max(0, Number(payload.knownVersion || 0));
       const hasPendingState = payload.hasPendingState === true;
@@ -4509,12 +4512,12 @@ io.on("connection", (socket) => {
       );
       socket.emit("BOARD_LOBBY", { lobby: serializeBoardLobby(room) });
       if(room.gamePayload && !canResumePendingState){
-        socket.emit("BOARD_GAME_STATE", {
+        boardStateSender.send(socket, {
           roomCode: room.roomCode,
           payload: room.gamePayload,
           version: room.gameVersion,
           sourceClientId: room.gameSourceClientId || "",
-        });
+        }, { full: true });
       }else if(!room.gamePayload){
         socket.to(`board:${room.roomCode}`).emit("BOARD_STATE_REQUEST", { roomCode: room.roomCode, requesterClientId: profile.clientId });
       }
@@ -4563,7 +4566,7 @@ io.on("connection", (socket) => {
       room.gameSourceClientId = sourceClientId;
       room.gameUpdatedAt = Date.now();
       room.updatedAt = Date.now();
-      socket.to(`board:${room.roomCode}`).emit("BOARD_GAME_STATE", { roomCode: room.roomCode, payload, version, sourceClientId, reason: message.reason || "" });
+      boardStateSender.broadcast(io, socket, { roomCode: room.roomCode, payload, version, sourceClientId, reason: message.reason || "" });
       return cb?.({ ok:true, version });
     }catch(e){
       console.error("[BOARD_GAME_STATE] error:", e);
@@ -4608,12 +4611,12 @@ io.on("connection", (socket) => {
       if(!room) return cb?.({ ok:false, error:"not_found" });
       if(!room.sockets.has(socket.id)) return cb?.({ ok:false, error:"stale_socket", version:Number(room.gameVersion || 0) });
       if(room.gamePayload){
-        socket.emit("BOARD_GAME_STATE", {
+        boardStateSender.send(socket, {
           roomCode: room.roomCode,
           payload: room.gamePayload,
           version: room.gameVersion,
           sourceClientId: room.gameSourceClientId || "",
-        });
+        }, { full: true });
       }else{
         socket.to(`board:${room.roomCode}`).emit("BOARD_STATE_REQUEST", { roomCode: room.roomCode, requesterClientId: payload.requesterClientId || "" });
       }

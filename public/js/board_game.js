@@ -9732,6 +9732,17 @@
     remoteMovementLocations: new Map(),
   };
   const campaignInitialLoadRequested = boardLan.enabled && Boolean(state.campaignContext.campaignId);
+  const boardStateReceiver = window.BoardStateWire && window.BoardStateReceiver?.create({
+    roomCode: boardLan.roomCode,
+    onMessage: applyBoardLanPayload,
+    requestFull: () => {
+      if (!boardLan.connected) return;
+      boardLan.socket.emit("BOARD_STATE_REQUEST", {
+        roomCode: boardLan.roomCode,
+        requesterClientId: boardLan.clientId,
+      });
+    },
+  });
 
   const START_ISLAND_ID = "loguetown";
   const INVERSION_MOUNTAIN_ID = "reverse-mountain";
@@ -13320,6 +13331,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     boardLan.socket = window.io({ transports: ["websocket", "polling"] });
     shared.attachSocket?.(boardLan.socket);
     boardLan.socket.on("connect", () => {
+      boardStateReceiver?.reset();
       const reconnecting = boardLan.joinedOnce;
       boardLan.connected = true;
       boardLan.awaitingInitialState = true;
@@ -13334,6 +13346,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       boardLan.socket.emit("BOARD_JOIN_GAME", {
         roomCode: boardLan.roomCode || state.lobby?.roomCode || "",
         profile: boardLanProfilePayload(),
+        ...(boardStateReceiver ? { stateEncoding: window.BoardStateWire.codec } : {}),
         ...(reconnecting ? {
           knownVersion: Math.max(0, Number(boardLan.version || 0)),
           hasPendingState: !!boardLan.pendingState,
@@ -13387,6 +13400,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       });
     });
     boardLan.socket.on("disconnect", () => {
+      boardStateReceiver?.reset();
       const interruptedState = boardLan.pendingState || boardLan.inFlightState;
       boardLan.connected = false;
       boardLan.awaitingInitialState = true;
@@ -13437,7 +13451,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         scheduleBoardLanInitialStateRetry(320);
       }
     });
-    boardLan.socket.on("BOARD_GAME_STATE", applyBoardLanPayload);
+    boardLan.socket.on("BOARD_GAME_STATE", boardStateReceiver?.receive || applyBoardLanPayload);
     boardLan.socket.on("BOARD_GAME_EVENT", applyBoardLanGameEvent);
     boardLan.socket.on("BOARD_STATE_REQUEST", () => {
       if (boardLan.awaitingInitialState) {
@@ -63863,6 +63877,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     createManualSavePayload,
     normalizeLoadedGameState,
     boardLanStatus: () => ({
+      wire: boardStateReceiver?.status() || null,
       enabled: boardLan.enabled,
       connected: boardLan.connected,
       hasSocket: !!boardLan.socket,

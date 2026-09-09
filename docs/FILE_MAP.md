@@ -1,5 +1,14 @@
 # File Map
 
+## Board 省流量發布（2026-09-10）
+
+- `public/js/board_state_wire.js`、`board_state_receiver.js`、`server/board-state-wire.js`：差異編碼、接收基準／完整恢復與每 socket 廣播；接入 `board_game.js`、`server/index.js`。
+- `public/board_*.html`：package 內 10 份文件的無行為 release 註解；`board_game.html` 載入兩個新 JS 並更換 query。
+- `config/desktop-program-packages-v1.json`：Board 程式白名單 36 檔。`public/desktop/catalog-v3.json` 與新 Board manifest 由已提交 bytes 重建。
+- `tools/desktop-r2-publisher/publish.js`、`scripts/desktop_r2_program_publish_qa.js`：HTML binary／no-transform 傳輸 metadata 與新舊 immutable 驗證。
+- `scripts/board_state_wire_qa.js`、`board_state_wire_integration_qa.js`、`lan_refresh_flow_qa.js`、`board_reconnect_client_qa.js`：codec／恢復、四連線、新舊相容與兩瀏覽器驗證。
+- `docs/BOARD_STATE_WIRE_20260910.md`、`BOARD_STATE_WIRE_RELEASE_20260910.md`：設計、量測界線、發布与回復結果。
+
 ## 桌面完整本機執行包／啟動器 1.1.6（2026-09-07）
 
 | 檔案／位置 | 功能／狀態 |
