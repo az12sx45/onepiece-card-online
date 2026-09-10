@@ -4,6 +4,10 @@
 
 使用者回報朋友在正式房間以 1 真人＋3 CPU 遊玩，CPU 只停留地圖「停靠結算」、沒有彈窗。以目前正式 `6a6f22c1`／Board `package-0f7755bca2f64ff4` 為基線，在 `D:\Codex_Release_Worktrees\board-state-wire-v1`、`codex/board-cpu-arrival-v1` 修正；此紀錄目前為本機候選，正式發布完成後補驗證與新 package。
 
+- 修正程式 commit：`5889ecc9e1686b136fd6a623b8fc8962a49408d0`。
+- 新 Board package：`package-40947c7bd7fe4b29`，manifest SHA-256 `c3a7b45fae657b8d911c41074808b8fb86f19fe8d5afdb75fafa142e2509cb91`。
+- 清單 3,487 檔／1,284,470,988 bytes／36 程式；相對省流量完整包只增加 `board_game.html` 和 `js/board_game.js` 兩個 blob、4,317,685 bytes。Card／Chess releaseId 與 manifest 保持原值。
+
 ## 原因與修正
 
 - 正式本機大廳建立 1 真人＋3 CPU，自然航行在第 4 輪重現：CPU2 移動中完成「偉大航道第一步」，經驗獎勵令凱洛特升到 Lv.15 並排入新招式學習。移動完成先開海域選擇，再由 CPU 自動替換招式；舊程式無條件關閉共用 modal，留下 `resolutionLock=true`、無 pendingMove／battle／modal，CPU 永遠等待演出。
@@ -19,6 +23,7 @@
 - 修後 targeted 六例全 PASS、0 頁面／console 錯誤：四種背景學技保留同一個原海格 DOM 與 handler、原 CPU 完成事件並交棒；可見 CPU 連續兩招與真人確認替換／跳過下一招仍正常。證據在上述 QA 目錄的 `targeted-baseline-final` 和 `targeted-fixed`。沒有把難以用合法牌組觸發的 learn／skip 自動資料分支當作已單獨覆蓋；這兩分支由同一個視窗保護實作及獨立 review 確認。
 - `scripts/lan_refresh_flow_qa.js` 真雙 Chromium context 建房／加入／開始／交棒／刷新／待續戰鬥恢復 PASS，12 名招募、guest 3 次差異解碼、0 恢復／failure／error；host 與 guest 戰鬥 overlay 都正常開啟。JS 語法、scoped diff check 與獨立程式 review PASS。
 - 額外隨機長跑在固定重現已通過後主動取消，未計為 PASS。正式公開程式／package 驗證待補；不能把本機修正當作朋友已更新。
+- 桌面 catalog QA PASS：91 份程式、340 個本機引用、0 遺漏媒體／外部程式引用、legacy v2 bytes 不變、Git HEAD 與 deterministic 重建相符。真本機 Board runtime identity 已回 200、新 package／SHA，不能省略正式上線後的同項驗證。
 
 ## 發布與回復
 
