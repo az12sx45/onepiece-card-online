@@ -2,7 +2,7 @@
 
 ## 範圍與來源
 
-正式來源 `D:\Codex_Release_Worktrees\board-state-wire-v1`，branch `codex/launcher-social-v1`，以已發布 `48cd79c9` 為基線。維持 Board CPU 停靠修正與省流量版；不改三款遊戲規則、動畫、state schema、帳號 id、既有 Socket.IO event 或素材。此文件先記錄本機驗證；正式 commit、下載連結與公開驗證在發布完成後補記。
+正式來源 `D:\Codex_Release_Worktrees\board-state-wire-v1`，branch `codex/launcher-social-v1`，以已發布 `48cd79c9` 為基線。維持 Board CPU 停靠修正與省流量版；不改三款遊戲規則、動畫、state schema、帳號 id、既有 Socket.IO event 或素材。正式 release `943798b1` 已於 2026-09-10 16:25（Asia/Taipei）在 Render 生效。
 
 ## 玩家名稱
 
@@ -45,5 +45,9 @@
 - Board 真雙瀏覽器建房／加入／開始／交棒／刷新／待續戰鬥恢復通過：12 招募、guest 3 delta／0 recoveries、0 errors。證據 `board-lan-report.log`；只改社交和 presence，BOARD_GAME_STATE 維持原協定。
 
 ## 使用者更新方式
+
+2026-09-10 16:25:48 正式驗證通過：health、三款 runtime identity（200／no-store）、5 份 metadata（含簽署更新清單）及 26 份 Chess 程式的公開 GET／size／SHA 全數一致。既有 updater 以 currentVersion=1.1.6 讀取正式更新清單，回報 availableVersion=1.1.7。R2 installer 公開 HEAD=200／152,891,899 bytes；同一更新程式已實際從 R2 下載完整包並完成簽章／SHA／PE 驗證，status=ready。驗證未執行安裝或改動使用者安裝；背景 NSIS 參數由 updater QA 驗證。證據為 `production-verify-report.json`、`live-updater-report.json`、`in-app-update-report.json`；18894／18895 本機 QA 服務已停止。
+
+首次安裝連結：https://game-assets.rihdi.tw/desktop/launcher/releases/1.1.7/ONE-PIECE-Tabletop-Launcher-1.1.7-x64.exe 。既有玩家使用下列內建更新即可。
 
 既有 1.1.6 可在「帳號 → 啟動器設定 → 檢查更新 → 下載更新 → 安裝並重新啟動」更新至 1.1.7。沿用既有簽章／SHA 驗證及 NSIS `--updated /S --force-run` 背景更新，不用另開瀏覽器下載或走手動安裝精靈；保留安裝位置、設定和遊戲素材。啟動器本體仍使用完整安裝更新包（約 153 MB），不是宣稱二進位增量 patch；三款遊戲繼續使用 SHA 增量下載。1.1.7 的自動檢查與彈窗是這次新增，舊版先從原設定頁檢查即可。

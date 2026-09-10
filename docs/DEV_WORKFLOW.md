@@ -2,6 +2,8 @@
 
 ## 啟動器 1.1.7：好友聊天、取名、活動與更新提醒（2026-09-10）
 
+- 正式 release `943798b1` 於 16:25（Asia/Taipei）在 Render 生效；health、三款 runtime identity、5 份 metadata、26 份 Chess 程式公開完整性通過。R2 installer 152,891,899 bytes 已發布，既有 1.1.6 updater 實際下載至 ready，並確認正式清單提供 1.1.7。使用者可在帳號／啟動器設定內更新並重新啟動，不需手動下載安裝；本體仍為完整更新包，遊戲為增量。補記文件使用 `[skip render]`，本機 QA 服務已停止。
+
 - 範圍：desktop auth/main/preload、launcher HTML/JS、新 social-service 與 social/account/updates UI；server/player-display.js、server/index.js 的公開代稱／改名通知／活動分類；Chess social 與兩個入口 query。修正新註冊跳過取名造成 #43，登入帳號不作公開名稱。
 - 新增 launcher_social_qa_server.js、launcher_social_electron_qa.js、chess_social_identity_qa.js；同步 package 1.1.7／lock、打包白名單與 QA、四份專案文件。真多視窗 30 checks、Chess 名稱刷新／訊息去重、多人協定及 updater QA 通過；npm start 可開頁。完整驗證與發布狀態見 docs/LAUNCHER_SOCIAL_RELEASE_20260910.md。
 
