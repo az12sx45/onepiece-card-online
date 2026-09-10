@@ -33,6 +33,7 @@ let gpuInfoUpdated = false;
 app.on('gpu-info-update', () => { gpuInfoUpdated = true; });
 
 const { AuthService } = require('./auth-service');
+const { SocialService } = require('./social-service');
 const { AssetStore, availableBytes, blobPath, safeAssetPath } = require('./asset-store');
 const { resetDesktopGameWebCache, shouldBlockServiceWorkerRequest } = require('./game-session-policy');
 const { LauncherUpdateService } = require('./launcher-update-service');
@@ -125,6 +126,13 @@ let tray = null;
 let launcherHiddenForGame = false;
 let appQuitting = false;
 let authService = null;
+let socialService = null;
+let updateCheckAt = 0;
+async function checkRemoteUpdates() {
+  if (!assetStore || !launcherUpdateService || Date.now() - updateCheckAt < 60000) return;
+  updateCheckAt = Date.now();
+  await Promise.allSettled([assetStore.refreshRemoteCatalog(), launcherUpdateService.checkForUpdates()]);
+}
 let assetStore = null;
 let launcherUpdateService = null;
 let authenticated = false;
@@ -555,6 +563,19 @@ function registerLauncherIpc() {
   };
 
   ipcMain.handle('launcher:get-state', guarded(async () => composeState()));
+  ipcMain.handle('launcher:set-display-name', guarded(async (_event, name) => {
+    if (!authenticated) return { ok: false, error: 'not authenticated' };
+    const result = await authService.setDisplayName(name);
+    if (!result.ok) return result;
+    await socialService.start();
+    await broadcastState();
+    return { ok: true, state: await composeState() };
+  }));
+  ipcMain.handle('launcher:get-social-state', guarded(async () => ({ ok: true, state: socialService.snapshot() })));
+  ipcMain.handle('launcher:social-request', guarded(async (_event, action, payload) => {
+    if (!authenticated) return { ok: false, error: 'not authenticated' };
+    return socialService.request(action, payload);
+  }));
   ipcMain.handle('launcher:enter-preview', guarded(async () => {
     if (!authService.previewMode) return { ok: false, error: '正式版不提供略過登入。' };
     return composeState();
@@ -691,6 +712,8 @@ async function authenticate(mode, credentials) {
   valid.password = '';
   if (!result?.ok) return { ok: false, error: String(result?.error || 'unknown').slice(0, 100) };
   authenticated = true;
+  socialService.start().catch(() => {});
+  assetStore.refreshRemoteCatalog().catch(() => {});
   const state = await composeState();
   await broadcastState();
   return { ok: true, state };
@@ -727,6 +750,7 @@ function focusGameWindow(window) {
 
 function launchGame(gameId) {
   if (!authenticated || authService.previewMode) return { ok: false, error: '請先以正式帳號登入。' };
+  if (authService.accountSummary()?.needsDisplayName) return { ok: false, error: '請先設定玩家名稱。' };
   if (!ALLOWED_GAME_IDS.has(gameId)) return { ok: false, error: '此遊戲仍在製作中。' };
   if (!assetStore.canLaunch(gameId)) return { ok: false, error: '請先完成遊戲下載或修復。' };
   const activeLaunch = gameLaunchPromises.get(gameId);
@@ -789,13 +813,14 @@ async function createGameWindow(gameId) {
     console.warn('[cursor] Local cursor policy unavailable; using the hosted page theme.');
   }
   gameWindows.set(gameId, window);
+  window.on('focus', () => { if (authenticated) authService.setPresence(`desktop-${gameId}`).catch(() => {}); });
   hardenGameWindow(window);
   window.on('closed', () => {
     if (gameWindows.get(gameId) !== window) return;
     gameWindows.delete(gameId);
     gameProgramRuntimes.get(gameId)?.disable('window-closed');
     runtimeAssetCache.clearGame(gameId);
-    if (gameWindows.size === 0 && authenticated) authService.setPresence('desktop-launcher').catch(() => {});
+    if (authenticated) authService.setPresence(gameWindows.size ? `desktop-${[...gameWindows.keys()].at(-1)}` : 'desktop-launcher').catch(() => {});
     restoreLauncherAfterLastGame();
   });
   window.webContents.on('render-process-gone', () => {
@@ -804,7 +829,7 @@ async function createGameWindow(gameId) {
     gameProgramRuntimes.get(gameId)?.disable('renderer-gone');
     runtimeAssetCache.clearGame(gameId);
     if (!window.isDestroyed()) window.destroy();
-    if (gameWindows.size === 0 && authenticated) authService.setPresence('desktop-launcher').catch(() => {});
+    if (authenticated) authService.setPresence(gameWindows.size ? `desktop-${[...gameWindows.keys()].at(-1)}` : 'desktop-launcher').catch(() => {});
     restoreLauncherAfterLastGame();
   });
   try {
@@ -1301,6 +1326,10 @@ function finishSmoke(extra, code) {
 
 async function initializeServices() {
   authService = new AuthService({ origin: REMOTE_ORIGIN, userDataPath: app.getPath('userData') });
+  socialService = new SocialService(authService);
+  socialService.on('state', (state) => {
+    if (mainWindow && !mainWindow.isDestroyed()) mainWindow.webContents.send('launcher:social-state', state);
+  });
   await authService.load();
   const updateSession = session.fromPartition('onepiece-launcher-updates-v1');
   hardenSession(updateSession);
@@ -1326,6 +1355,7 @@ async function initializeServices() {
   await assetStore.init();
   const restored = await authService.restore();
   authenticated = restored?.ok === true && authService.previewMode !== true;
+  if (authenticated) socialService.start().catch(() => {});
   assetStore.on('state', (state) => broadcastState(state).catch(() => {}));
   assetStore.on('progress', broadcastProgress);
   authService.on('kicked', async () => {
@@ -1337,7 +1367,10 @@ async function initializeServices() {
     mainWindow?.webContents.send('launcher:session-kicked', {});
     await broadcastState();
   });
-  assetStore.refreshRemoteCatalog().catch(() => {});
+  checkRemoteUpdates().catch(() => {});
+  const updateTimer = setInterval(() => checkRemoteUpdates().catch(() => {}), 5 * 60 * 1000);
+  updateTimer.unref();
+  app.on('browser-window-focus', () => checkRemoteUpdates().catch(() => {}));
 }
 
 const gotLock = app.requestSingleInstanceLock();

@@ -5,6 +5,7 @@ const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
 const { pool } = require("./db");
+const { withDisplayNames } = require("./player-display");
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const { Chess } = require("chess.js");
@@ -1067,6 +1068,10 @@ function isOnline(userId){ return onlineUsers.has(userId); }
 function normalizePresencePage(p){
   const s = String(p||"").trim().toLowerCase();
   if(!s) return "";
+  if(s === "desktop-launcher") return s;
+  if(s === "desktop-board" || s.startsWith("board")) return "board";
+  if(s === "desktop-chess" || s.startsWith("chess")) return "chess";
+  if(s === "desktop-card") return "game";
   if(s.includes("game")) return "game";
   if(s.includes("start")) return "start";
   if(s.includes("profile")) return "profile";
@@ -1119,7 +1124,7 @@ async function getProfileBySecret(secret){
     "SELECT user_id, name, avatar, stats FROM player_profiles WHERE secret=$1",
     [secret]
   );
-  return r.rows?.[0] || null;
+  return r.rows?.[0] ? (await withDisplayNames(pool, [r.rows[0]]))[0] : null;
 }
 function ensureSocial(client){
   if(!client || typeof client!=="object") return;
@@ -4732,7 +4737,7 @@ socket.on("FRIENDS_GET", async ({ secret }, cb) => {
       "SELECT user_id, name, avatar FROM player_profiles WHERE user_id = ANY($1::int[])",
       [wantIds]
     );
-    const rows = r.rows || [];
+    const rows = await withDisplayNames(pool, r.rows || []);
     const byId = new Map(rows.map(x=>[Number(x.user_id), x]));
 
     const friendList = friends
@@ -4936,7 +4941,7 @@ socket.on("FRIEND_ADD_BY_NAME", async ({ secret, name }, cb) => {
       [targetName]
     );
     if(!t.rows.length) return cb?.({ ok:false, error:"not found" });
-    const other = t.rows[0];
+    const other = (await withDisplayNames(pool, [t.rows[0]]))[0];
     const otherId = Number(other.user_id);
     if(otherId === myId) return cb?.({ ok:false, error:"cannot add self" });
 
@@ -5345,7 +5350,7 @@ socket.on("PROFILE_PUBLIC_GET", async ({ userId }, cb) => {
       [uid]
     );
 
-    const p = rows[0] || null;
+    const p = rows[0] ? (await withDisplayNames(pool, [rows[0]]))[0] : null;
     if (!p) return cb?.({ ok: false, error: "not found" });
 
     // ✅ 不回 secret，避免被拿去冒用
@@ -5427,6 +5432,11 @@ socket.on("PROFILE_UPDATE", async ({ secret, patch }, cb) => {
       [secret, nameParam, avatarParam, statsParam, titlesParam, bountiesParam, recentParam]
     );
 
+    if (nameParam !== null && rows[0]?.user_id) {
+      const uid = Number(rows[0].user_id);
+      const friendIds = rows[0].stats?.client?.social?.friends || [];
+      for (const id of [uid, ...friendIds]) emitToUser(Number(id), "FRIENDS_DIRTY", { by:"profile", userId:uid });
+    }
     cb?.({ ok: true, profile: rows[0] });
   } catch (err) {
     console.error("[PROFILE_UPDATE] error:", err);

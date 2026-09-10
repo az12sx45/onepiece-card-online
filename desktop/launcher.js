@@ -178,6 +178,9 @@ const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 function setStage(stage) {
   if (stage === 'auth') closeLauncherOverlays();
+  window.LauncherSocial?.setAccount(stage === 'app' ? snapshot : null);
+  window.LauncherUpdates?.setAccount(stage === 'app' ? snapshot : null);
+  window.LauncherAccount?.setAccount(stage === 'app' ? snapshot : null);
   document.body.dataset.stage = stage;
   for (const [name, element] of [['boot', bootScreen], ['auth', authScreen], ['app', launcherApp]]) {
     const active = name === stage;
@@ -653,6 +656,9 @@ function renderAll() {
   renderFeature();
   renderAccount();
   renderDownloads();
+  window.LauncherSocial?.setAccount(snapshot);
+  window.LauncherUpdates?.setAccount(snapshot);
+  window.LauncherAccount?.setAccount(snapshot);
 }
 
 function showApp(nextSnapshot) {
@@ -829,12 +835,12 @@ function openDetails() {
 }
 
 function switchPanel(panelName) {
-  const downloads = panelName === 'downloads';
-  libraryPanel.hidden = downloads;
-  downloadsPanel.hidden = !downloads;
-  libraryPanel.classList.toggle('is-active', !downloads);
-  downloadsPanel.classList.toggle('is-active', downloads);
+  for (const [name, panel] of [['library', libraryPanel], ['downloads', downloadsPanel], ['social', $('#socialPanel')]]) {
+    panel.hidden = name !== panelName;
+    panel.classList.toggle('is-active', name === panelName);
+  }
   document.querySelectorAll('.nav-button[data-panel]').forEach((button) => button.classList.toggle('is-active', button.dataset.panel === panelName));
+  window.LauncherSocial?.onVisible();
   syncFeatureMedia();
 }
 

@@ -15,6 +15,8 @@ const MAX_CATALOG_BYTES = 8 * 1024 * 1024;
 const MAX_ASAR_BYTES = 32 * 1024 * 1024;
 const MAX_INSTALLER_BYTES = 256 * 1024 * 1024;
 const RETAINED_ROLLOUT_MANIFESTS = Object.freeze({
+  'board-package-68ec6b205918f818.json': '80c4c8135e9bea62bffef7936326289b31e2d6b2062bb4864c83ae4df6f0365b',
+  'board-package-0f7755bca2f64ff4.json': '9ddb9b90c4e7ddbf3183cc25de503ecade57a0924c5125d079d4f3b473bf1149',
   'card-assets-197d7c0144fe523a.json': '1c33fb0ea2d42ed11b868c861de9286af356f1717d5a81724cda285d3536c443',
   'board-assets-ecd41e5ae3bcf045.json': '97908b785417c4944971d1d2d5b3cd3708778f2f894a2f028394fa29b450ad3f'
 });
@@ -39,6 +41,11 @@ const APP_FILES = [
   'program-runtime.js',
   'launcher-update-service.js',
   'auth-service.js',
+  'social-service.js',
+  'launcher-social.js',
+  'launcher-social.css',
+  'launcher-updates-ui.js',
+  'launcher-account-ui.js',
   'asset-store.js',
   'launcher.html',
   'launcher.css',
@@ -267,7 +274,7 @@ function validateCursorPng(filePath, label) {
 function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
-  assert(packageJson.version === '1.1.6', 'Desktop launcher version must be 1.1.6 for local static program delivery.');
+  assert(packageJson.version === '1.1.7', 'Desktop launcher version must be 1.1.7 for social and name onboarding.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');

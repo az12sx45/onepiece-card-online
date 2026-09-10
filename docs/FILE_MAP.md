@@ -1,5 +1,15 @@
 # File Map
 
+## 啟動器社交 1.1.7（2026-09-10）
+
+- desktop/social-service.js：主程序好友與私訊，沿用 AuthService 的 socket/deviceId，受限 IPC。
+- desktop/launcher-social.js、launcher-social.css：分欄好友／邀請／聊天與響應式 UI。
+- desktop/launcher-account-ui.js、launcher-updates-ui.js：首次取名與已偵測新版提醒。
+- server/player-display.js、server/index.js：未取名公開代稱、改名通知與遊戲 presence 類別。
+- public/chess/battle-social-v1.js：已開聊天標題刷新、DM id 去重；index.html／battle-game.html 更新 query。
+- scripts/launcher_social_qa_server.js、launcher_social_electron_qa.js、chess_social_identity_qa.js：隔離 DB、真 Electron／Socket.IO 互動與 Chess 元件回歸。
+- docs/LAUNCHER_SOCIAL_RELEASE_20260910.md：來源、範圍、驗證、发布與回復。
+
 ## CPU 停靠結算修正（2026-09-10）
 
 - public/js/board_game.js：CPU 學招式完成／失效佇列清理的 modal 所有權保護。

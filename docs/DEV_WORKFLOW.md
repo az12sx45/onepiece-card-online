@@ -1,5 +1,10 @@
 ﻿# Dev Workflow
 
+## 啟動器 1.1.7：好友聊天、取名、活動與更新提醒（2026-09-10）
+
+- 範圍：desktop auth/main/preload、launcher HTML/JS、新 social-service 與 social/account/updates UI；server/player-display.js、server/index.js 的公開代稱／改名通知／活動分類；Chess social 與兩個入口 query。修正新註冊跳過取名造成 #43，登入帳號不作公開名稱。
+- 新增 launcher_social_qa_server.js、launcher_social_electron_qa.js、chess_social_identity_qa.js；同步 package 1.1.7／lock、打包白名單與 QA、四份專案文件。真多視窗 30 checks、Chess 名稱刷新／訊息去重、多人協定及 updater QA 通過；npm start 可開頁。完整驗證與發布狀態見 docs/LAUNCHER_SOCIAL_RELEASE_20260910.md。
+
 ## Board CPU 停靠結算視窗修正（2026-09-10）
 
 - 正式 release `0b12c706` 已發布：2026-09-10 15:22:25（Asia/Taipei）Render 回傳 Board `package-40947c7bd7fe4b29`，15:22:37 health、三款 runtime identity、4 份 metadata 與 36 份 Board 程式公開 GET／size／SHA 全數通過。R2 `uploaded=2`／`skipped=3168`，兩份新檔公開 GET 與 HTML binary／no-transform metadata 通過；上一版完整包只新增 4,317,685 bytes。證據在 `D:\Codex_QA\board-cpu-arrival-20260910`；文件補記用 `[skip render]`，不再觸發重啟。

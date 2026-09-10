@@ -1,0 +1,31 @@
+'use strict';
+const fs = require('node:fs'); const path = require('node:path'); const assert = require('node:assert/strict');
+const { app, BrowserWindow } = require('electron');
+const ROOT = path.resolve(__dirname, '..'), OUT = 'D:/Codex_QA/launcher-social-20260910';
+fs.mkdirSync(OUT, { recursive: true }); app.setPath('userData', path.join(OUT, 'chess-component'));
+let window;
+app.whenReady().then(async () => {
+  const html = path.join(OUT, 'chess-component.html'); fs.writeFileSync(html, '<!doctype html><html><body></body></html>');
+  window = new BrowserWindow({ show: false, webPreferences: { contextIsolation: true, nodeIntegration: false } });
+  await window.loadFile(html);
+  await window.webContents.executeJavaScript(`
+    localStorage.setItem('opSecret','isolated-fixture'); localStorage.setItem('op_user_id','44');
+    window.qaFriend={userId:43,name:'',avatar:8,online:true,page:'chess'};
+    window.qaHandlers={};
+    window.io=()=>({connected:true,on:(event,fn)=>{qaHandlers[event]=fn},timeout(){return this},emit(event,payload,cb){if(cb)cb(null,event==='FRIENDS_GET'?{ok:true,friends:[qaFriend],requestsIn:[],requestsOut:[]}:event==='DM_HISTORY'?{ok:true,messages:[]}:{ok:true});}}); true;
+  `);
+  await window.webContents.executeJavaScript(fs.readFileSync(path.join(ROOT, 'public/chess/battle-social-v1.js'), 'utf8'));
+  await window.webContents.executeJavaScript(fs.readFileSync(path.join(ROOT, 'public/chess/battle-game-social-shell-v1.js'), 'utf8'));
+  await new Promise(r => setTimeout(r, 100));
+  await window.webContents.executeJavaScript("document.querySelector('[title=\"私人訊息\"]').click(); true");
+  const before = await window.webContents.executeJavaScript("document.querySelector('.chat-header__meta strong').textContent");
+  assert.equal(before, '玩家 43（尚未取名）');
+  await window.webContents.executeJavaScript("qaFriend={...qaFriend,name:'好友新名稱',page:'board'}; BattleSocial.refresh(); true");
+  await new Promise(r => setTimeout(r, 100));
+  const after = await window.webContents.executeJavaScript("({name:document.querySelector('.chat-header__meta strong').textContent,activity:document.querySelector('.chat-header__meta small').textContent})");
+  assert.equal(after.name, '好友新名稱'); assert.match(after.activity, /航海錄/);
+  await window.webContents.executeJavaScript("qaHandlers.DM_NEW({id:'one',from:43,to:44,body:'測試',ts:1}); qaHandlers.DM_NEW({id:'one',from:43,to:44,body:'測試',ts:1}); true");
+  assert.equal(await window.webContents.executeJavaScript("document.querySelectorAll('.chat-message').length"), 1);
+  fs.writeFileSync(path.join(OUT, 'chess-identity-report.json'), JSON.stringify({ ok: true, before, after, duplicateMessages: false }, null, 2));
+  console.log('CHESS_SOCIAL_IDENTITY_QA=PASS');
+}).catch(e => { console.error(e); process.exitCode = 1; }).finally(() => { window?.destroy(); app.exit(process.exitCode || 0); });

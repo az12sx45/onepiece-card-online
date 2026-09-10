@@ -38,11 +38,12 @@ function sanitizeAccount(profile, username = '') {
   const source = profile && typeof profile === 'object' ? profile : {};
   const client = source.stats?.client && typeof source.stats.client === 'object' ? source.stats.client : {};
   const userId = safeInteger(source.user_id ?? source.userId);
-  const name = String(source.name || username || (userId ? `玩家${String(userId).slice(-4)}` : '航海者')).trim().slice(0, 40) || '航海者';
+  const needsDisplayName = !String(source.name || '').trim();
+  const name = String(source.name || (userId ? `玩家 ${userId}（尚未取名）` : '航海者')).trim().slice(0, 40) || '航海者';
   const avatar = Math.max(1, Math.min(50, safeInteger(source.avatar, 8)));
   const title = String(client.titles?.equipped || '偉大航道航海者').trim().slice(0, 60) || '偉大航道航海者';
   const coins = safeInteger(client.totals?.coins);
-  return { username: String(username || '').trim().toLowerCase().slice(0, 24), userId, name, avatar, title, coins };
+  return { username: String(username || '').trim().toLowerCase().slice(0, 24), userId, name, avatar, title, coins, needsDisplayName };
 }
 
 function validCipher(value) {
@@ -161,7 +162,11 @@ class AuthService extends EventEmitter {
       });
       this.socket.on('connect', () => {
         if (this.secretMemory) this.setPresence(this.activePage).catch(() => {});
+        this.emit('social-event', 'connect');
       });
+      for (const event of ['disconnect', 'FRIENDS_DIRTY', 'DM_NEW']) {
+        this.socket.on(event, (payload) => this.emit('social-event', event, payload));
+      }
       this.socket.on('SESSION_KICK', (payload) => {
         this.clearAccount().finally(() => this.emit('kicked', { reason: String(payload?.reason || 'takeover') }));
       });
@@ -260,6 +265,20 @@ class AuthService extends EventEmitter {
     return account;
   }
 
+  async setDisplayName(value) {
+    if (!this.secretMemory || !this.state.account) return { ok: false, error: 'not authenticated' };
+    const name = String(value || '').replace(/\s+/g, ' ').trim();
+    if (!name || name.length > 16) return { ok: false, error: 'bad_name' };
+    const secret = this.secretMemory;
+    const result = await this.emitAck('PROFILE_UPDATE', { secret, patch: { name } });
+    if (secret !== this.secretMemory) return { ok: false, error: 'session changed' };
+    if (!result?.ok || !result.profile) return { ok: false, error: result?.error || 'profile unavailable' };
+    this.state.account = { ...sanitizeAccount(result.profile, this.state.account.username), secretCipher: this.state.account.secretCipher };
+    await this.save();
+    await this.setPresence(this.activePage);
+    return { ok: true, account: this.accountSummary() };
+  }
+
   getSecretForGame() {
     return this.secretMemory;
   }
@@ -284,6 +303,7 @@ class AuthService extends EventEmitter {
 
   async clearAccount() {
     this.secretMemory = '';
+    this.emit('social-event', 'reset');
     this.state.account = null;
     await this.save();
     const tombstone = {

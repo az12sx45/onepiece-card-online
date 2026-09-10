@@ -21,6 +21,23 @@
 
   const refs = {};
 
+  function playerName(person) { return String(person?.name || '').trim() || `玩家 ${person?.userId || ''}（尚未取名）`; }
+  function playerActivity(person) {
+    if (!person?.online) return "離線";
+    const page = String(person.page || '');
+    if (page.includes('board')) return "正在玩・新世界航海錄";
+    if (page.includes('chess')) return "正在玩・霸海戰棋";
+    if (['game', 'start', 'result', 'shop', 'profile', 'desktop-card'].includes(page)) return "正在玩・偉大航道爭霸戰";
+    return page === 'desktop-launcher' ? "啟動器・在線上" : "線上";
+  }
+  function updateChatHeader(chat, person) {
+    chat.friend = person;
+    chat.nameNode.textContent = playerName(person);
+    chat.statusNode.textContent = playerActivity(person);
+    chat.element.setAttribute('aria-label', `與 ${playerName(person)} 的私人訊息`);
+    setImage(chat.avatarNode, person.avatar, playerName(person));
+  }
+
   function byId(id) { return document.getElementById(id); }
   function readStorage(key, fallback = "") {
     try { return localStorage.getItem(key) || fallback; } catch (_) { return fallback; }
@@ -232,7 +249,7 @@
     const meta = document.createElement("span");
     meta.className = "friend-row__meta";
     const name = document.createElement("strong");
-    name.textContent = person.name || `#${person.userId}`;
+    name.textContent = playerName(person);
     const sub = document.createElement("small");
     sub.textContent = subtitle;
     meta.append(name, sub);
@@ -339,7 +356,7 @@
       avatar.appendChild(image);
       const meta = document.createElement("span");
       const name = document.createElement("strong");
-      name.textContent = friend.name || `#${friend.userId}`;
+      name.textContent = playerName(friend);
       const status = document.createElement("small");
       status.textContent = friend.online ? (friend.activity || "線上") : "目前離線";
       meta.append(name, status);
@@ -428,6 +445,8 @@
   function appendMessage(peerId, message) {
     const chat = state.chats.get(Number(peerId));
     if (!chat) return;
+    if (message.id && chat.messageIds.has(String(message.id))) return;
+    if (message.id) chat.messageIds.add(String(message.id));
     const item = document.createElement("div");
     item.className = `chat-message${Number(message.from) === Number(state.profile?.userId) ? " is-me" : ""}`;
     item.appendChild(document.createTextNode(String(message.body || "")));
@@ -506,7 +525,7 @@
     const meta = document.createElement("span");
     meta.className = "chat-header__meta";
     const name = document.createElement("strong");
-    name.textContent = friend.name || `#${peerId}`;
+    name.textContent = playerName(friend);
     const status = document.createElement("small");
     status.textContent = friend.online ? (friend.activity || "線上") : "離線";
     meta.append(name, status);
@@ -533,7 +552,9 @@
     inputWrap.append(input, send);
     win.append(header, log, inputWrap);
     refs.chatTray.appendChild(win);
-    state.chats.set(peerId, { element: win, log, input, friend });
+    const chat = { element: win, log, input, friend, nameNode: name, statusNode: status, avatarNode: img, messageIds: new Set() };
+    state.chats.set(peerId, chat);
+    updateChatHeader(chat, friend);
     min.addEventListener("click", () => win.classList.toggle("is-minimized"));
     meta.addEventListener("click", () => win.classList.remove("is-minimized"));
     close.addEventListener("click", () => closeChat(peerId));
@@ -584,6 +605,10 @@
     state.friends = Array.isArray(result.friends) ? result.friends.slice(0, 200) : [];
     state.requestsIn = Array.isArray(result.requestsIn) ? result.requestsIn.slice(0, 200) : [];
     state.requestsOut = Array.isArray(result.requestsOut) ? result.requestsOut.slice(0, 200) : [];
+    for (const [peerId, chat] of state.chats) {
+      const friend = state.friends.find(person => Number(person.userId) === peerId);
+      if (friend) updateChatHeader(chat, friend);
+    }
     state.ready = true;
     state.error = "";
     setHint("");
