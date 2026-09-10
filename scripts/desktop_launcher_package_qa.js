@@ -15,6 +15,7 @@ const MAX_CATALOG_BYTES = 8 * 1024 * 1024;
 const MAX_ASAR_BYTES = 32 * 1024 * 1024;
 const MAX_INSTALLER_BYTES = 256 * 1024 * 1024;
 const RETAINED_ROLLOUT_MANIFESTS = Object.freeze({
+  'chess-package-cdab9e869c05f12d.json': '9eeda0136c2781bb29196f67ac97350a94dba0fa826b3af4f117b4f69cd49043',
   'board-package-68ec6b205918f818.json': '80c4c8135e9bea62bffef7936326289b31e2d6b2062bb4864c83ae4df6f0365b',
   'board-package-0f7755bca2f64ff4.json': '9ddb9b90c4e7ddbf3183cc25de503ecade57a0924c5125d079d4f3b473bf1149',
   'card-assets-197d7c0144fe523a.json': '1c33fb0ea2d42ed11b868c861de9286af356f1717d5a81724cda285d3536c443',
@@ -409,24 +410,7 @@ function validateAsar(asarPath) {
   const asar = loadAsarApi();
   const entries = asar.listPackage(asarPath).map((entry) => entry.replace(/^[/\\]+/, '').replaceAll('\\', '/'));
   const applicationEntries = sorted(entries.filter((entry) => entry && entry !== 'node_modules' && !entry.startsWith('node_modules/')));
-  const expectedEntries = sorted([
-    'asset-store.js',
-    'assets',
-    'assets/one_piece_tabletop_launcher_icon_v1.ico',
-    'auth-service.js',
-    'game-preload.js',
-    'game-session-policy.js',
-    'game-cursor-policy.js',
-    'launcher-update-service.js',
-    'runtime-asset-cache.js',
-    'program-runtime.js',
-    'launcher.css',
-    'launcher.html',
-    'launcher.js',
-    'main.js',
-    'package.json',
-    'preload.js'
-  ]);
+  const expectedEntries = sorted(['assets', ...APP_FILES]);
   assertExactJson(applicationEntries, expectedEntries, 'app.asar application file set');
   assert(entries.includes('node_modules/socket.io-client/package.json'), 'app.asar is missing socket.io-client.');
   for (const entry of entries) {
