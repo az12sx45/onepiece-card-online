@@ -3,6 +3,8 @@
 ## CPU 停靠結算修正（2026-09-10）
 
 - public/js/board_game.js：CPU 學招式完成／失效佇列清理的 modal 所有權保護。
+- public/board_game.html：`js/board_game.js?v=20260910-cpu-arrival-v1` 入口版本。
+- public/desktop/catalog-v3.json、public/desktop/manifests/board-package-40947c7bd7fe4b29.json：本輪 Board 程式與媒體完整清單；Card／Chess 套件沿用原值。
 - scripts/board_cpu_arrival_qa.js：真實 1 真人＋3 CPU 大廳、自然航行及學技碰撞的固定重現／回歸。
 - docs/BOARD_CPU_ARRIVAL_FIX_20260910.md：原因、修正界線、驗證、套件與回復。
 

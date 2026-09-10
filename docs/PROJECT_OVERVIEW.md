@@ -1,8 +1,8 @@
 # Project Overview
 
-2026-09-10 02:21（Asia/Taipei）：Board 省流量版 release `85cc4552` 已在 Render 生效，桌面 package 為 `package-0f7755bca2f64ff4`。正式三款 runtime identity、4 份 metadata 與 36 份 Board 程式完整性通過；玩家需更新 Board 並重開遊戲。完整驗證範圍與回復見 `docs/BOARD_STATE_WIRE_RELEASE_20260910.md`。
+2026-09-10 15:22（Asia/Taipei）：Board CPU 停靠結算修正版 release `0b12c706` 已在 Render 生效，桌面 package 為 `package-40947c7bd7fe4b29`。正式三款 runtime identity、4 份 metadata 與 36 份 Board 程式完整性通過；玩家需更新 Board 並重開遊戲。上一版完整包只新增約 4.3 MB，相容既有啟動器 1.1.6。完整驗證範圍與回復見 `docs/BOARD_CPU_ARRIVAL_FIX_20260910.md`；02:21 的省流量前版 `85cc4552` 紀錄保留在 `docs/BOARD_STATE_WIRE_RELEASE_20260910.md`。
 
-## CPU 停靠結算修正（2026-09-10，本機候選）
+## CPU 停靠結算修正（2026-09-10，已發布）
 
 自動學招式保留正在處理的事件視窗，正常完成事件後才交棒，不使用清鎖跳過結算。重現、驗證及發布狀態見 docs/BOARD_CPU_ARRIVAL_FIX_20260910.md。
 

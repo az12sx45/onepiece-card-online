@@ -2,6 +2,8 @@
 
 ## Board CPU 停靠結算視窗修正（2026-09-10）
 
+- 正式 release `0b12c706` 已發布：2026-09-10 15:22:25（Asia/Taipei）Render 回傳 Board `package-40947c7bd7fe4b29`，15:22:37 health、三款 runtime identity、4 份 metadata 與 36 份 Board 程式公開 GET／size／SHA 全數通過。R2 `uploaded=2`／`skipped=3168`，兩份新檔公開 GET 與 HTML binary／no-transform metadata 通過；上一版完整包只新增 4,317,685 bytes。證據在 `D:\Codex_QA\board-cpu-arrival-20260910`；文件補記用 `[skip render]`，不再觸發重啟。
+- 修後六例 targeted 回歸、真雙瀏覽器建房／加入／交棒／刷新／待續戰鬥恢復、catalog QA 與獨立 review 通過。C 主開發樹與既有 D launcher 發行樹已精準回套相同兩函式／入口 query 與四份文件，無關修改保留；18891 本機 QA server 已停止。
 - 範圍：public/js/board_game.js 的 CPU 學招式／失效佇列清理，只關閉該次持有的學技 UI，保留海格等結算視窗與事件處理器；不改選招策略、獎勵、回合、資料／存檔與同步協定。
 - 原因：1 真人＋3 CPU 自然第 4 輪，任務經驗觸發升級學技；CPU 自動替換後誤關海格視窗，留下 resolutionLock。固定案例亦已重現修前失敗。PORT=18891 npm start 與 JS 語法檢查通過；修後與發布驗證見 docs/BOARD_CPU_ARRIVAL_FIX_20260910.md。
 - 工具／文件：新增 scripts/board_cpu_arrival_qa.js、docs/BOARD_CPU_ARRIVAL_FIX_20260910.md，同步 PROJECT_OVERVIEW.md、FILE_MAP.md、GAME_RULES.md。
