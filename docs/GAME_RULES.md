@@ -1,5 +1,9 @@
 # Game Rules
 
+## CPU 停靠結算修正（2026-09-10）
+
+只保護學技流程與事件視窗的界線。CPU 原選招策略、學習時序、事件獎勵與結算條件不變；不以逾時直接交棒或清鎖跳過待處理事件。驗證及發布狀態見 docs/BOARD_CPU_ARRIVAL_FIX_20260910.md。
+
 ## Board 省流量與下載完整性（2026-09-10）
 
 上傳及 server 快取仍為完整 `BOARD_GAME_STATE`，傳輸差異在接收端還原完整 JSON 後才進原套用流程；權限、版本 CAS、回合、戰鬥、存檔、id 與 event 名稱不變。資料基準不寫入 gameState；首次加入、失配、重連與舊版均可完整同步。HTML release 註解與 R2 binary metadata 只改下載表示，不改 DOM 行為或執行 MIME。發布及回復見 `docs/BOARD_STATE_WIRE_RELEASE_20260910.md`。

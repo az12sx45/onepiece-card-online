@@ -61106,15 +61106,23 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   function devObserverApplyMoveLearnDecision(player, card, newMove, decision, jobIndex = 0) {
     const queue = state.gameState.pendingMoveLearnQueue || [];
     if (!player || !card || !newMove || !decision) return "";
+    const moveLearnPanel = refs.modalBack?.classList.contains("open")
+      ? refs.modal?.querySelector(".move-learn-ui")
+      : null;
     const removeJob = () => {
       const index = Math.floor(Number(jobIndex));
       if (index >= 0 && index < queue.length) queue.splice(index, 1);
       else queue.shift();
     };
-    const continueForPlayer = () => processNextPendingMoveLearn({ playerId: player.id });
+    const continueForPlayer = () => {
+      // Background CPU learning must preserve the landing modal and its handlers.
+      // Only an existing learning panel owns closing and opening the next panel.
+      if (!moveLearnPanel || !refs.modal?.contains(moveLearnPanel)) return;
+      closeModal();
+      processNextPendingMoveLearn({ playerId: player.id });
+    };
     if (decision.type === "known") {
       removeJob();
-      closeModal();
       syncMoveLearnQueueAfterChange("move-learn-known");
       continueForPlayer();
       return `${cardDisplayName(card)} 已會 ${newMove.name}。`;
@@ -61124,7 +61132,6 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       addLog(`${cardDisplayName(card)} 學會了 ${newMove.name}。`);
       recordMainMissionEvent(player, { type: "move_learned", cardId: card.id, moveId: newMove.id });
       removeJob();
-      closeModal();
       syncMoveLearnQueueAfterChange("move-learn-auto");
       continueForPlayer();
       return `自動學會技能：${cardDisplayName(card)} / ${newMove.name}`;
@@ -61136,14 +61143,12 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       addLog(`${cardDisplayName(card)} 遺忘了 ${decision.oldMove.name}，學會了 ${newMove.name}。`);
       recordMainMissionEvent(player, { type: "move_learned", cardId: card.id, moveId: newMove.id });
       removeJob();
-      closeModal();
       syncMoveLearnQueueAfterChange("move-learn-replace");
       continueForPlayer();
       return `自動替換技能：${cardDisplayName(card)} 忘掉 ${decision.oldMove.name}，學 ${newMove.name}`;
     }
     addLog(`${cardDisplayName(card)} 判斷後暫時沒有學習 ${newMove.name}。`);
     removeJob();
-    closeModal();
     syncMoveLearnQueueAfterChange("move-learn-skip");
     continueForPlayer();
     return `自動放棄技能：${cardDisplayName(card)} / ${newMove.name}`;
@@ -61162,10 +61167,15 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       const job = queue[index];
       const context = moveLearnJobContext(job);
       if (!context.player || !context.card || !context.newMove) {
+        const moveLearnPanel = refs.modalBack?.classList.contains("open")
+          ? refs.modal?.querySelector(".move-learn-ui")
+          : null;
         queue.splice(index, 1);
-        closeModal();
         renderAll();
-        processNextPendingMoveLearn(targetPlayerId ? { playerId: targetPlayerId } : {});
+        if (moveLearnPanel && refs.modal?.contains(moveLearnPanel)) {
+          closeModal();
+          processNextPendingMoveLearn(targetPlayerId ? { playerId: targetPlayerId } : {});
+        }
         return "清除失效的技能學習佇列。";
       }
       if (targetPlayerId && String(context.player.id || "") !== targetPlayerId) continue;

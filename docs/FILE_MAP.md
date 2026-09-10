@@ -1,5 +1,11 @@
 # File Map
 
+## CPU 停靠結算修正（2026-09-10）
+
+- public/js/board_game.js：CPU 學招式完成／失效佇列清理的 modal 所有權保護。
+- scripts/board_cpu_arrival_qa.js：真實 1 真人＋3 CPU 大廳、自然航行及學技碰撞的固定重現／回歸。
+- docs/BOARD_CPU_ARRIVAL_FIX_20260910.md：原因、修正界線、驗證、套件與回復。
+
 ## Board 省流量發布（2026-09-10）
 
 - `public/js/board_state_wire.js`、`board_state_receiver.js`、`server/board-state-wire.js`：差異編碼、接收基準／完整恢復與每 socket 廣播；接入 `board_game.js`、`server/index.js`。

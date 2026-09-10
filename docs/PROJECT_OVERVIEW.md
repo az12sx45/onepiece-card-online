@@ -2,6 +2,10 @@
 
 2026-09-10 02:21（Asia/Taipei）：Board 省流量版 release `85cc4552` 已在 Render 生效，桌面 package 為 `package-0f7755bca2f64ff4`。正式三款 runtime identity、4 份 metadata 與 36 份 Board 程式完整性通過；玩家需更新 Board 並重開遊戲。完整驗證範圍與回復見 `docs/BOARD_STATE_WIRE_RELEASE_20260910.md`。
 
+## CPU 停靠結算修正（2026-09-10，本機候選）
+
+自動學招式保留正在處理的事件視窗，正常完成事件後才交棒，不使用清鎖跳過結算。重現、驗證及發布狀態見 docs/BOARD_CPU_ARRIVAL_FIX_20260910.md。
+
 ## Board 同步省流量發布（2026-09-10）
 
 `board-copy-v1` 只減少重複傳輸，遊戲仍取得完整權威快照；舊版與重連保留完整同步。新版 Board 的所有 HTML 用新 CAS 位址與 binary／no-transform 下載 metadata，避免 CDN 改寫破壞 SHA；執行時仍以 manifest 的 text/html 供應，不改玩法。此遊戲更新相容既有啟動器 1.1.6。發布進度、套件版本及驗證見 `docs/BOARD_STATE_WIRE_RELEASE_20260910.md`。

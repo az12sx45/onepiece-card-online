@@ -1,6 +1,13 @@
 ﻿# Dev Workflow
 
+## Board CPU 停靠結算視窗修正（2026-09-10）
+
+- 範圍：public/js/board_game.js 的 CPU 學招式／失效佇列清理，只關閉該次持有的學技 UI，保留海格等結算視窗與事件處理器；不改選招策略、獎勵、回合、資料／存檔與同步協定。
+- 原因：1 真人＋3 CPU 自然第 4 輪，任務經驗觸發升級學技；CPU 自動替換後誤關海格視窗，留下 resolutionLock。固定案例亦已重現修前失敗。PORT=18891 npm start 與 JS 語法檢查通過；修後與發布驗證見 docs/BOARD_CPU_ARRIVAL_FIX_20260910.md。
+- 工具／文件：新增 scripts/board_cpu_arrival_qa.js、docs/BOARD_CPU_ARRIVAL_FIX_20260910.md，同步 PROJECT_OVERVIEW.md、FILE_MAP.md、GAME_RULES.md。
+
 ## Board 省流量與完整下載發布（2026-09-10）
+
 
 - 正式 release `85cc4552` 已上 main；2026-09-10 02:21:38（Asia/Taipei）Render 確認新 Board package，02:21:49 health、三款 runtime identity 200／no-store、4 份 metadata 與 36 份 Board 程式公開 GET／size／SHA 全數通過。正式驗證腳本／報告在 `D:\Codex_QA\board-state-wire-release-20260910\verify-production.cjs`／`production-verify-report.json`；未在正式服務建立測試房或操作真人存檔。文件補記以 `[skip render]` 提交。
 - 使用者已授權上線；以 `origin/main` 的 `9fee7f7f` 建立獨立 `codex/board-state-wire-v1` 發行樹。只納入 Board 同步、下載所需 HTML／publisher 修正與文件，不帶其他開發中的遊戲／圖片或 launcher binary 改動。
