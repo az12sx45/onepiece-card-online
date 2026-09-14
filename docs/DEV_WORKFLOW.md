@@ -4,7 +4,7 @@
 
 - 使用者授權實作與部署；最新 main 建立 `D:\Codex_Release_Worktrees\board-voyage-records-v1`。一周目保存整隊、獨立紀錄、原團集合、私人副本、名稱管理、最近 5 次自動備份及舊檔明確匯入；移除跨房最新備份，加入帳號身份與版本衝突檢查。
 - 檔案：`server/index.js`、`server/board-voyage-records.js`、`public/js/board_game.js`、`public/js/board_start.js`、兩個 Board HTML；新增 server／browser 定向 QA，配合 desktop v3 manifest／catalog。同步 PROJECT_OVERVIEW、GAME_RULES、FILE_MAP 及 `BOARD_VOYAGE_RECORDS_20260914.md`。
-- 本機 `PORT=18914 npm start`、JS 語法、CRLF-aware diff 檢查通過。最終 server 104、多人 browser 20、正式 auth browser 11 checks 全 PASS；既有 LAN refresh／交棒／戰鬥恢復也通過。前端 VM 48 assertions 通過。資料使用隔離 file／mock PostgreSQL。程式 `a8ae9555`、Board `package-682d04d78ff3aeba`；R2 4 個新檔共 4,486,101 bytes 已上傳且公開 GET／SHA 通過，Render 發布狀態見專題紀錄。
+- 本機 `PORT=18914 npm start`、JS 語法、CRLF-aware diff 檢查通過。最終 server 104、多人 browser 20、正式 auth browser 11 checks 全 PASS；既有 LAN refresh／交棒／戰鬥恢復也通過。前端 VM 48 assertions 通過。資料使用隔離 file／mock PostgreSQL。程式 `a8ae9555`、Board `package-682d04d78ff3aeba`；R2 4 個新檔共 4,486,101 bytes 已上傳且公開 GET／SHA 通過，Release `ca3a54a3` 於 23:03（Asia/Taipei）生效；正式 health、三款 runtime、4 份 metadata、36 份 Board 程式 SHA 及舊介面 410 全通過。正式未登入 LIST 拒絕，本機 QA 服務已停止。完整證據見專題紀錄；本次文件補記使用 `[skip render]`。
 
 ## 啟動器 1.1.7：好友聊天、取名、活動與更新提醒（2026-09-10）
 

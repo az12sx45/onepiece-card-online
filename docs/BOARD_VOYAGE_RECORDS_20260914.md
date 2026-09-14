@@ -4,7 +4,7 @@
 
 2026-09-14 使用者授權實作及部署。從正式 main `3ac13b7bfd3324a86b7d7186d9985d7cfbd5b58f` 建立 `D:\Codex_Release_Worktrees\board-voyage-records-v1`／`codex/board-voyage-records-v1`。基線公開 Board package 為 `package-40947c7bd7fe4b29`；7 份正式入口、程式與 metadata 已核對 Git HEAD 大小和 SHA。C 槽舊開發樹不是本輪發布來源。
 
-程式提交 `a8ae9555e60b4f365903838a84ff5d718e2b8120`，本機驗收完成。2026-09-14 22:56（Asia/Taipei）已上傳並從公開網址完整驗證 4 個新 R2 blobs，共 4,486,101 bytes。Board package 為 `package-682d04d78ff3aeba`，manifest SHA-256 為 `c1f3910abfd961cbdf686005ac336425040a20eaf5858377d5120b22061c6017`。正在推送 matching metadata 與程式至 main；Render 結果於發布後補記。既有兩張 ranks 圖片的大小寫 checkout 差異不納入提交。
+程式提交 `a8ae9555e60b4f365903838a84ff5d718e2b8120`，本機驗收完成。2026-09-14 22:56（Asia/Taipei）已上傳並從公開網址完整驗證 4 個新 R2 blobs，共 4,486,101 bytes。Board package 為 `package-682d04d78ff3aeba`，manifest SHA-256 為 `c1f3910abfd961cbdf686005ac336425040a20eaf5858377d5120b22061c6017`。Release `ca3a54a3c69dd4d1951bf5b37e076928dd1779bb` 已推送 main；2026-09-14 23:03（Asia/Taipei）Render 新版公開驗證通過。既有兩張 ranks 圖片的大小寫 checkout 差異不納入提交。
 
 ## 使用方式
 
@@ -50,3 +50,11 @@ JS 語法與辨識 CRLF 的 diff 空白檢查通過；保留原檔未修改行�
 本輪採固定來源 commit、package、manifest SHA 與 4 條 path／SHA／size／MIME 白名單的外部 delta wrapper，呼叫未修改的 `loadPublishInventory` 與 `publishInventory`。dry-run 4/4、實際上傳 `uploaded=4`／`skipped=0`／`skippedRace=0`；原 3,166 個既有 unique blobs 未重傳或重新全量驗證。先前 full dry-run 為耗時手動中止，不列為通過。R2 公開 GET 4/4 大小和 SHA 完全符合，HTML metadata 經既有 publisher 的 no-transform／binary 規則檢查。
 
 證據：`D:/Codex_QA/board-voyage-records-20260914/release/delta-live-1789397773382.json`、`r2-verify.json`；操作 helper 與 DPAPI wrapper 在同目錄，沒有把認證資料寫入專案。桌面若已完整下載上一包，新增內容為 4,486,101 bytes（約 4.49 MB）；需更新 Board 後重新開啟。
+
+## 正式上線結果
+
+2026-09-14 23:03:03.647（Asia/Taipei）首次觀測正式 Board `package-682d04d78ff3aeba`；23:03:07.316 完成 `board_voyage_records_release_verify.js`：40 checks／45 次 HTTP 回應，health 1、三款 runtime identity 200／no-store、4 份 catalog／manifest、36 份 Board 程式大小／SHA 及 HTML MIME 全通過，舊 `GET /api/board-save/RECOVERED` 為 410。共接收 9,728,191 body bytes，證據為 `D:/Codex_QA/board-voyage-records-20260914/release/live-verify.json`。正式入口：`https://onepiece-card-online.onrender.com/board_start.html?view=campaigns`。
+
+23:03:52.562 額外完成唯讀正式權限檢查：`/api/board-runtime` 表示 DB 已啟用；未登入 Socket 送 `BOARD_CAMPAIGN_LIST {}` 得到 `{ok:false,error:"auth_required"}`，沒有紀錄資料。證據 `release/live-unauth-1789398232562.json`。上述公開驗證未建立或修改正式帳號、房間、真人存檔；完整登入／續玩功能驗收是本機隔離 fixture 證據。
+
+本輪本機 QA 18914 listener（PID 18460）已核對後停止。C 槽四份專案文件同步正式來源與完成狀態；文件補記使用 `[skip render]`，避免再觸發伺服器重啟。
