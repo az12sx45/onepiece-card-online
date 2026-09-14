@@ -11,6 +11,7 @@ const bcrypt = require("bcryptjs");
 const { Chess } = require("chess.js");
 const { createBoardStateSender } = require("./board-state-wire");
 const boardStateSender = createBoardStateSender();
+const voyageRecords = require("./board-voyage-records");
 const {
   createInitialState,
   applyAction,
@@ -510,7 +511,7 @@ app.use("/api/board-save", (req, res, next) => {
 
 const BOARD_SAVE_DIR = path.join(__dirname, "data", "board_saves");
 const BOARD_CAMPAIGN_DIR = path.join(__dirname, "data", "board_campaigns");
-const BOARD_CAMPAIGN_SCHEMA_VERSION = 1;
+const BOARD_CAMPAIGN_SCHEMA_VERSION = 2;
 const BOARD_DB_PERSISTENCE_ENABLED = Boolean(process.env.DATABASE_URL);
 const boardCampaignWriteQueues = new Map();
 
@@ -594,8 +595,9 @@ function isValidBoardCampaign(campaign){
     && typeof campaign === "object"
     && sanitizeBoardCampaignId(campaign.campaignId)
     && Array.isArray(campaign.members)
-    && campaign.memberRecords
-    && typeof campaign.memberRecords === "object"
+    && (Number(campaign.schemaVersion) === 2
+      ? voyageRecords.validPayload(campaign.payload) && Number(campaign.revision) >= 1
+      : campaign.memberRecords && typeof campaign.memberRecords === "object")
   );
 }
 
@@ -626,45 +628,48 @@ async function readBoardCampaign(campaignId){
   return campaign;
 }
 
-async function writeBoardCampaign(campaign){
-  if(!isValidBoardCampaign(campaign)) throw new Error("invalid campaign");
-  const normalized = {
-    ...campaign,
-    schemaVersion: BOARD_CAMPAIGN_SCHEMA_VERSION,
-    campaignId: sanitizeBoardCampaignId(campaign.campaignId),
-    updatedAt: Date.now(),
-  };
+async function writeBoardCampaign(campaign, expectedRevision = null){
+  if(!isValidBoardCampaign(campaign)) throw new Error("invalid_campaign");
+  const normalized = { ...campaign, campaignId:sanitizeBoardCampaignId(campaign.campaignId), updatedAt:Date.now() };
   if(BOARD_DB_PERSISTENCE_ENABLED){
     await waitForBoardPersistence();
-    await pool.query(
+    const result = await pool.query(
       `INSERT INTO board_campaigns(campaign_id,payload,updated_at)
        VALUES($1,$2,$3)
        ON CONFLICT(campaign_id) DO UPDATE
-       SET payload=EXCLUDED.payload, updated_at=EXCLUDED.updated_at`,
-      [normalized.campaignId, normalized, normalized.updatedAt]
+       SET payload=EXCLUDED.payload, updated_at=EXCLUDED.updated_at
+       WHERE $4::bigint >= 0 AND COALESCE((board_campaigns.payload->>'revision')::bigint,0)=$4::bigint
+       RETURNING campaign_id`,
+      [normalized.campaignId, normalized, normalized.updatedAt, expectedRevision == null ? -1 : expectedRevision]
     );
+    if(!result.rowCount) throw new Error("revision_conflict");
     return normalized;
   }
-  await fs.mkdir(BOARD_CAMPAIGN_DIR, { recursive: true });
-  const filePath = boardCampaignFilePath(normalized.campaignId);
-  const tempPath = `${filePath}.${process.pid}.${Date.now()}.tmp`;
-  await fs.writeFile(tempPath, JSON.stringify(normalized), "utf8");
+  // Each caller holds the per-record queue. Compare before an atomic replacement.
   try{
-    await fs.rename(tempPath, filePath);
-  }catch(error){
-    if(!["EPERM", "EEXIST", "EACCES"].includes(String(error?.code || ""))) throw error;
-    // Windows/OneDrive/防毒軟體偶爾會短暫鎖住既有 JSON；同一 campaign
-    // 已由 write queue 串行化，因此可安全改用覆寫後移除暫存檔。
-    await fs.copyFile(tempPath, filePath);
-    await fs.unlink(tempPath).catch(() => {});
-  }
+    const current = await readBoardCampaign(normalized.campaignId);
+    if(expectedRevision == null || Number(current.revision || 0) !== Number(expectedRevision)) throw new Error("revision_conflict");
+  }catch(error){ if(error?.code !== "ENOENT") throw error; }
+  await fs.mkdir(BOARD_CAMPAIGN_DIR, { recursive:true });
+  const filePath = boardCampaignFilePath(normalized.campaignId);
+  const tempPath = `${filePath}.${process.pid}.${crypto.randomBytes(6).toString("hex")}.tmp`;
+  await fs.writeFile(tempPath, JSON.stringify(normalized), "utf8");
+  try { await fs.rename(tempPath, filePath); }
+  catch(error){ await fs.unlink(tempPath).catch(() => {}); throw error; }
   return normalized;
 }
 
-async function listBoardCampaigns(){
+async function listBoardCampaigns(identityUserId = null){
   if(BOARD_DB_PERSISTENCE_ENABLED){
     await waitForBoardPersistence();
-    const result = await pool.query("SELECT payload FROM board_campaigns ORDER BY updated_at DESC");
+    const result = identityUserId == null
+      ? await pool.query("SELECT payload FROM board_campaigns ORDER BY updated_at DESC")
+      : await pool.query(
+        `SELECT payload FROM board_campaigns
+         WHERE EXISTS (SELECT 1 FROM jsonb_array_elements(payload->'members') member WHERE member->>'userId'=$1)
+         ORDER BY updated_at DESC`,
+        [String(Number(identityUserId))]
+      );
     return result.rows.map((row) => row.payload).filter(isValidBoardCampaign);
   }
   let entries = [];
@@ -731,136 +736,11 @@ async function readValidBoardSavePayload(roomCode){
   return { roomCode: safeRoom, payload, raw };
 }
 
-function boardSaveTimestamp(payload, stat){
-  const savedAt = Date.parse(payload?.serverSavedAt || payload?.savedAt || "");
-  return Number.isFinite(savedAt) ? savedAt : Number(stat?.mtimeMs || 0);
-}
-
-async function readLatestValidBoardSavePayload(excludeRoomCode = ""){
-  const exclude = sanitizeBoardSaveRoomCode(excludeRoomCode);
-  if(BOARD_DB_PERSISTENCE_ENABLED){
-    await waitForBoardPersistence();
-    const result = await pool.query(
-      `SELECT room_code,payload,saved_at
-       FROM board_saves
-       WHERE room_code<>$1
-       ORDER BY saved_at DESC
-       LIMIT 1`,
-      [exclude]
-    );
-    if(!result.rows.length || !isValidBoardSavePayload(result.rows[0].payload)) return null;
-    return {
-      roomCode: result.rows[0].room_code,
-      payload: result.rows[0].payload,
-      timestamp: Number(result.rows[0].saved_at || 0),
-      modifiedAt: Number(result.rows[0].saved_at || 0),
-    };
-  }
-  let entries = [];
-  try {
-    entries = await fs.readdir(BOARD_SAVE_DIR, { withFileTypes: true });
-  } catch (error) {
-    if (error?.code === "ENOENT") return null;
-    throw error;
-  }
-  const candidates = [];
-  for (const entry of entries) {
-    if (!entry.isFile() || !entry.name.toLowerCase().endsWith(".json")) continue;
-    const roomCode = sanitizeBoardSaveRoomCode(path.basename(entry.name, ".json"));
-    if (!roomCode || roomCode === exclude) continue;
-    const filePath = boardSaveFilePath(roomCode);
-    try {
-      const [raw, stat] = await Promise.all([fs.readFile(filePath, "utf8"), fs.stat(filePath)]);
-      const payload = JSON.parse(raw);
-      if (!isValidBoardSavePayload(payload)) continue;
-      candidates.push({
-        roomCode,
-        payload,
-        timestamp: boardSaveTimestamp(payload, stat),
-        modifiedAt: Number(stat.mtimeMs || 0),
-      });
-    } catch (_) {
-      // Ignore broken or in-progress save files when searching fallback saves.
-    }
-  }
-  candidates.sort((a, b) => (b.timestamp - a.timestamp) || (b.modifiedAt - a.modifiedAt));
-  return candidates[0] || null;
-}
-
-app.get("/api/board-save/:roomCode", async (req, res) => {
-  const roomCode = sanitizeBoardSaveRoomCode(req.params.roomCode);
-  try {
-    const { payload } = await readValidBoardSavePayload(roomCode);
-    return res.json({ ok: true, roomCode, payload });
-  } catch (error) {
-    if (error?.code === "INVALID_SAVE") {
-      return res.status(422).json({ ok: false, error: "invalid save" });
-    }
-    if (error?.code === "ENOENT") {
-      const fallback = await readLatestValidBoardSavePayload(roomCode);
-      if (fallback?.payload) {
-        return res.json({ ok: true, roomCode, fallbackRoomCode: fallback.roomCode, payload: fallback.payload });
-      }
-      return res.status(404).json({ ok: false, error: "not found" });
-    }
-    console.error("[board-save:get] failed:", error);
-    return res.status(500).json({ ok: false, error: "read failed" });
-  }
-});
-
-app.put("/api/board-save/:roomCode", async (req, res) => {
-  const roomCode = sanitizeBoardSaveRoomCode(req.params.roomCode || req.body?.roomCode);
-  const payload = req.body?.payload || req.body;
-  if (!isValidBoardSavePayload(payload)) {
-    return res.status(400).json({ ok: false, error: "invalid save payload" });
-  }
-  const normalized = {
-    ...payload,
-    roomCode: payload.roomCode || roomCode,
-    serverSavedAt: new Date().toISOString(),
-  };
-  try {
-    if(BOARD_DB_PERSISTENCE_ENABLED){
-      await waitForBoardPersistence();
-      const savedAtMs = Date.parse(normalized.serverSavedAt) || Date.now();
-      await pool.query(
-        `INSERT INTO board_saves(room_code,payload,saved_at)
-         VALUES($1,$2,$3)
-         ON CONFLICT(room_code) DO UPDATE
-         SET payload=EXCLUDED.payload, saved_at=EXCLUDED.saved_at`,
-        [roomCode, normalized, savedAtMs]
-      );
-    }else{
-      await fs.mkdir(BOARD_SAVE_DIR, { recursive: true });
-      const filePath = boardSaveFilePath(roomCode);
-      const tempPath = `${filePath}.${process.pid}.${Date.now()}.tmp`;
-      await fs.writeFile(tempPath, JSON.stringify(normalized), "utf8");
-      await fs.rename(tempPath, filePath);
-    }
-    return res.json({ ok: true, roomCode, savedAt: normalized.savedAt, serverSavedAt: normalized.serverSavedAt });
-  } catch (error) {
-    console.error("[board-save:put] failed:", error);
-    return res.status(500).json({ ok: false, error: "write failed" });
-  }
-});
-
-app.delete("/api/board-save/:roomCode", async (req, res) => {
-  const roomCode = sanitizeBoardSaveRoomCode(req.params.roomCode);
-  try {
-    if(BOARD_DB_PERSISTENCE_ENABLED){
-      await waitForBoardPersistence();
-      const result = await pool.query("DELETE FROM board_saves WHERE room_code=$1", [roomCode]);
-      return res.json({ ok: true, roomCode, deleted: result.rowCount > 0 });
-    }
-    await fs.unlink(boardSaveFilePath(roomCode));
-    return res.json({ ok: true, roomCode, deleted: true });
-  } catch (error) {
-    if (error?.code === "ENOENT") {
-      return res.json({ ok: true, roomCode, deleted: false });
-    }
-    console.error("[board-save:delete] failed:", error);
-    return res.status(500).json({ ok: false, error: "delete failed" });
-  }
+// Old room files remain untouched. Only an authenticated exact-room import is
+// exposed through BOARD_CAMPAIGN_SAVE; never return another room's latest save.
+app.all("/api/board-save/:roomCode", (_req, res) => {
+  res.setHeader("Cache-Control", "no-store");
+  return res.status(410).json({ ok:false, error:"use_authenticated_voyage_records" });
 });
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "public", "start.html"));
@@ -1466,6 +1346,20 @@ function makeBoardRoomCode(){
   return `B${Date.now().toString(36).slice(-5).toUpperCase()}`;
 }
 
+function authenticatedBoardProfile(socket, supplied = {}){
+  const authenticated = socket.data.socialProfile;
+  if(authenticated && Number(authenticated.userId) > 0){
+    return normalizeBoardProfile({ ...supplied, ...authenticated, clientId:socket.data.boardProfile?.clientId || supplied.clientId || `board-${authenticated.userId}`, title:socket.data.boardProfile?.title || supplied.title });
+  }
+  const address = String(socket.handshake?.address || socket.conn?.remoteAddress || "");
+  const loopback = ["127.0.0.1", "::1", "::ffff:127.0.0.1"].includes(address);
+  if(!BOARD_DB_PERSISTENCE_ENABLED && loopback){
+    if(!socket.data.boardDevelopmentProfile && Number(supplied.userId) > 0) socket.data.boardDevelopmentProfile = normalizeBoardProfile(supplied);
+    return socket.data.boardDevelopmentProfile || null;
+  }
+  return null;
+}
+
 function normalizeBoardProfile(profile = {}){
   const userId = Number(profile.userId) || Math.floor(100000 + Math.random() * 900000);
   const clientId = String(profile.clientId || `board-${userId}`).trim() || `board-${userId}`;
@@ -1605,41 +1499,6 @@ function boardCampaignCrewSummary(player = {}){
   }));
 }
 
-function boardCampaignSharedStateFromPayload(payload = {}){
-  const game = payload?.gameState || {};
-  const world = game?.postgameWorld || {};
-  return {
-    postgameUnlocked: world.unlocked === true,
-    finalIslandUnlocked: game.finalIslandUnlocked === true,
-    researchLabsActive: world.researchLabsActive === true,
-    eggheadUnlocked: world.eggheadUnlocked === true,
-    finalEndingCleared: game.finalEndingCleared === true,
-  };
-}
-
-function mergeBoardCampaignSharedState(previous = {}, incoming = {}){
-  const merged = { ...previous };
-  ["postgameUnlocked", "finalIslandUnlocked", "researchLabsActive", "eggheadUnlocked", "finalEndingCleared"].forEach((key) => {
-    merged[key] = previous?.[key] === true || incoming?.[key] === true;
-  });
-  return merged;
-}
-
-function applyBoardCampaignSharedState(payload, shared = {}){
-  const clone = boardCampaignClone(payload);
-  const game = clone?.gameState;
-  if(!game) return clone;
-  if(shared.finalIslandUnlocked) game.finalIslandUnlocked = true;
-  if(shared.finalEndingCleared) game.finalEndingCleared = true;
-  if(shared.postgameUnlocked || shared.researchLabsActive || shared.eggheadUnlocked){
-    if(!game.postgameWorld || typeof game.postgameWorld !== "object") game.postgameWorld = {};
-    if(shared.postgameUnlocked) game.postgameWorld.unlocked = true;
-    if(shared.researchLabsActive) game.postgameWorld.researchLabsActive = true;
-    if(shared.eggheadUnlocked) game.postgameWorld.eggheadUnlocked = true;
-  }
-  return clone;
-}
-
 function boardCampaignHumanPlayers(payload = {}){
   const players = Array.isArray(payload?.gameState?.players) ? payload.gameState.players : [];
   return players.filter((player) => {
@@ -1661,21 +1520,37 @@ function boardCampaignRecordSummary(record = {}){
   };
 }
 
-function boardCampaignBasePayload(campaign, memberKey = ""){
-  const key = String(memberKey || "");
-  return campaign?.branchRecords?.[key]?.payload
-    || campaign?.basePayload
-    || Object.values(campaign?.branchRecords || {}).find((record) => isValidBoardSavePayload(record?.payload))?.payload
-    || null;
+function boardCampaignBasePayload(campaign){
+  // v1 remains readable as an intact base world; private branches are explicit copies.
+  return Number(campaign?.schemaVersion) === 2 ? campaign.payload : campaign?.basePayload || null;
 }
 
-function boardCampaignProgressId(room, payload = {}){
-  if(room?.campaignId) return sanitizeBoardCampaignId(room.campaignId);
-  if(payload?.campaignContext?.campaignId) return sanitizeBoardCampaignId(payload.campaignContext.campaignId);
-  if(room?.roomCode && room?.createdAt){
-    return sanitizeBoardCampaignId(`${room.roomCode}-${Number(room.createdAt).toString(36)}`);
+function boardCampaignProgressId(room){
+  if(!room) return "";
+  if(room.campaignId) return room.campaignId;
+  if(!room._pendingCampaignId) room._pendingCampaignId = voyageRecords.newId();
+  return room._pendingCampaignId;
+}
+
+function boardCampaignContextForRoom(room){
+  return { schemaVersion:2, campaignId:room.campaignId, revision:Number(room.campaignRevision || 0), mode:room.campaignMode || "gather", roomName:room.roomName, memberUserIds:(room.campaignMembers || []).map((member) => Number(member.userId)), parentCampaignId:room.campaignParentId || "" };
+}
+
+function detachBoardSocketFromOtherRooms(socket, nextRoomCode){
+  for(const oldRoom of boardRooms.values()){
+    if(oldRoom.roomCode === nextRoomCode || !oldRoom.sockets.has(socket.id)) continue;
+    const oldMeta = oldRoom.sockets.get(socket.id);
+    oldRoom.sockets.delete(socket.id);
+    socket.leave(`board:${oldRoom.roomCode}`);
+    const oldPlayer = oldRoom.players.find((player) => Number(player.userId) === Number(oldMeta.userId));
+    if(oldPlayer && !boardRoomPlayerOnline(oldRoom, oldPlayer)){ oldPlayer.online = false; oldPlayer.ready = false; }
+    cleanupBoardRoom(oldRoom.roomCode);
+    if(boardRooms.has(oldRoom.roomCode)) emitBoardLobby(oldRoom);
   }
-  return sanitizeBoardCampaignId(payload?.roomCode || room?.roomCode || "");
+}
+
+function boardCampaignMembersPresent(room){
+  return (room.campaignMembers || []).every((member) => room.players.some((player) => Number(player.userId) === Number(member.userId) && !boardPlayerIsCpu(player) && boardRoomPlayerOnline(room, player)));
 }
 
 function boardCampaignFindMember(campaign, identity = {}){
@@ -1698,42 +1573,24 @@ function serializeBoardCampaign(campaign, identity = {}){
   const member = boardCampaignFindMember(campaign, identity);
   if(!member) return null;
   const activeGather = boardCampaignActiveGatherRoom(campaign.campaignId);
-  const branch = campaign?.branchRecords?.[member.key] || null;
+  const payload = boardCampaignBasePayload(campaign);
+  const branch = campaign?.branchRecords?.[member.key];
+  const checkpoints = [...(campaign.backups || []), ...(campaign.manualSave ? [campaign.manualSave] : [])];
   return {
-    campaignId: campaign.campaignId,
-    roomName: campaign.roomName || "共有航海紀錄",
-    schemaVersion: Number(campaign.schemaVersion || BOARD_CAMPAIGN_SCHEMA_VERSION),
-    createdAt: Number(campaign.createdAt || 0),
-    updatedAt: Number(campaign.updatedAt || 0),
-    shared: boardCampaignClone(campaign.shared || {}),
-    memberKey: member.key,
-    seatIndex: Number(member.seatIndex || 0),
-    branch: branch ? {
-      revision: Number(branch.revision || 0),
-      savedAt: String(branch.savedAt || ""),
-      hasBattle: Boolean(branch.payload?.battleState),
-      round: Math.max(1, Number(branch.payload?.gameState?.round || 1)),
-      turnStep: String(branch.payload?.gameState?.turnStep || branch.payload?.gameState?.phase || ""),
-    } : null,
-    members: (campaign.members || []).map((entry) => ({
-      key: entry.key,
-      userId: Number(entry.userId || 0),
-      name: String(entry.name || "玩家"),
-      avatar: Number(entry.avatar || 1),
-      title: String(entry.title || "航海士"),
-      seatIndex: Number(entry.seatIndex || 0),
-      latest: boardCampaignRecordSummary(campaign.memberRecords?.[entry.key]),
-    })),
-    activeGatherRoom: activeGather ? {
-      roomCode: activeGather.roomCode,
-      hostName: activeGather.players.find((player) => Number(player.userId) === Number(activeGather.hostUserId))?.name || "房主",
-      joinedHumans: activeGather.players.filter((player) => !boardPlayerIsCpu(player)).length,
-    } : null,
+    campaignId:campaign.campaignId, schemaVersion:Number(campaign.schemaVersion || 1), revision:Number(campaign.revision || 0),
+    name:campaign.roomName || "我的航海錄", roomName:campaign.roomName || "我的航海錄",
+    createdAt:Number(campaign.createdAt || 0), updatedAt:Number(campaign.updatedAt || 0),
+    parentCampaignId:campaign.parentCampaignId || "", memberKey:member.key, seatIndex:Number(member.seatIndex || 0),
+    progress:voyageRecords.progress(payload, campaign),
+    backups:checkpoints.sort((a,b) => Number(b.revision)-Number(a.revision)).map((entry) => ({ revision:entry.revision, ...voyageRecords.progress(entry.payload, entry) })),
+    legacyBranch:branch && voyageRecords.validPayload(branch.payload) ? { revision:Number(branch.revision || 0), ...voyageRecords.progress(branch.payload, branch) } : null,
+    members:campaign.members.map((entry) => ({ key:entry.key, userId:Number(entry.userId), name:String(entry.name || "玩家"), avatar:Number(entry.avatar || 1), title:String(entry.title || "航海士"), seatIndex:Number(entry.seatIndex || 0), latest:boardCampaignRecordSummary({ player:payload?.gameState?.players?.[entry.seatIndex], revision:campaign.revision, savedAt:campaign.savedAt }) })),
+    activeGatherRoom:activeGather ? { roomCode:activeGather.roomCode, hostName:activeGather.players.find((player) => Number(player.userId) === Number(activeGather.hostUserId))?.name || "房主", joinedHumans:activeGather.players.filter((player) => !boardPlayerIsCpu(player) && boardRoomPlayerOnline(activeGather, player)).length } : null,
   };
 }
 
 async function boardCampaignsForIdentity(identity = {}){
-  const campaigns = await listBoardCampaigns();
+  const campaigns = await listBoardCampaigns(identity.userId);
   return campaigns
     .map((campaign) => serializeBoardCampaign(campaign, identity))
     .filter(Boolean)
@@ -1780,7 +1637,7 @@ function createBoardCampaignRoom(campaign, profile, mode = "gather"){
   });
   basePlayers.forEach((player, index) => {
     const userId = Number(player?.userId ?? player?.id);
-    if(userId > 0 || playersBySeat[index]) return;
+    if(playersBySeat[index]) return;
     playersBySeat[index] = {
       userId,
       clientId: String(player?.clientId || `board-cpu-${roomCode}-${index + 1}`),
@@ -1791,7 +1648,9 @@ function createBoardCampaignRoom(campaign, profile, mode = "gather"){
       ready: true,
       online: true,
       isCPU: true,
-      isOriginalCPU: true,
+      isOriginalCPU: userId <= 0,
+      isProxyCPU: userId > 0,
+      proxyOwnerUserId: userId > 0 ? userId : 0,
     };
   });
   const players = playersBySeat.filter(Boolean).slice(0, 4);
@@ -1806,7 +1665,7 @@ function createBoardCampaignRoom(campaign, profile, mode = "gather"){
     updatedAt: Date.now(),
     players,
     chat: [
-      { system:true, text: mode === "solo" ? "已從共有航海紀錄開啟個別分支。" : "集合等待室已開啟；所有真人準備後才會開始。", ts:Date.now() },
+      { system:true, text: mode === "solo" ? "已開啟個人航海紀錄。" : "集合等待室已開啟；所有真人準備後才會開始。", ts:Date.now() },
     ],
     sockets: new Map(),
     gamePayload: null,
@@ -1816,6 +1675,9 @@ function createBoardCampaignRoom(campaign, profile, mode = "gather"){
     campaignId: campaign.campaignId,
     campaignMode: mode === "solo" ? "solo" : "gather",
     campaignBaseMemberKey: opener.key,
+    campaignRevision: Number(campaign.revision || 0),
+    campaignMembers: boardCampaignClone(campaign.members),
+    campaignParentId: campaign.parentCampaignId || "",
     campaignStartedHumanUserIds: mode === "solo" ? [normalizedProfile.userId] : [],
   };
   room.players.forEach((player) => {
@@ -1855,157 +1717,65 @@ function joinBoardCampaignRoom(room, profile, socketId){
   return { ok:true, player };
 }
 
-function boardCampaignGatherPayloadIsStable(payload){
-  const game = payload?.gameState || {};
-  return !payload?.battleState
-    && !game.pendingMove
-    && !game.routePrompt
-    && !game.tradePrompt
-    && !game.coopBattlePrompt
-    && !game.activeTrade
-    && !game.activeSpar
-    && !game.islandDecision
-    && !game.movementAnimating
-    && !game.diceRolling
-    && !game.resolutionLock
-    && !game.battleExitLock;
-}
-
 function assembleBoardCampaignPayload(campaign, room){
-  const base = boardCampaignBasePayload(campaign, room.campaignBaseMemberKey);
+  const base = boardCampaignBasePayload(campaign);
   if(!isValidBoardSavePayload(base)) return null;
-  let payload = applyBoardCampaignSharedState(base, campaign.shared || {});
-  const game = payload.gameState;
-  const players = Array.isArray(game.players) ? game.players : [];
-  (campaign.members || []).forEach((member) => {
-    const recordPlayer = campaign.memberRecords?.[member.key]?.player;
-    if(!recordPlayer) return;
-    const lobbyPlayer = room.players.find((entry) => Number(entry.userId) === Number(member.userId));
-    const proxy = !lobbyPlayer || boardPlayerIsCpu(lobbyPlayer);
-    const nextPlayer = boardCampaignClone(recordPlayer);
-    nextPlayer.id = String(member.userId);
-    nextPlayer.userId = Number(member.userId);
-    nextPlayer.clientId = String(lobbyPlayer?.clientId || `board-proxy-${campaign.campaignId}-${member.userId}`);
-    nextPlayer.name = String(member.name || nextPlayer.name || "玩家");
-    nextPlayer.avatar = Number(member.avatar || nextPlayer.avatar || 1);
-    nextPlayer.title = String(member.title || nextPlayer.title || "航海士");
-    nextPlayer.isCPU = proxy;
-    nextPlayer.isCpu = false;
-    nextPlayer.cpu = false;
-    nextPlayer.isProxyCPU = proxy;
-    nextPlayer.proxyOwnerUserId = proxy ? Number(member.userId) : 0;
-    nextPlayer.isHost = Number(member.userId) === Number(room.hostUserId);
-    nextPlayer.isMe = false;
-    players[Number(member.seatIndex || 0)] = nextPlayer;
+  const payload = boardCampaignClone(base);
+  // Keep all gameplay, pending movement, trades and battle state from one snapshot.
+  (payload.gameState.players || []).forEach((player, index) => {
+    const lobby = room.players[index];
+    if(!lobby) return;
+    player.clientId = lobby.clientId;
+    player.isCPU = boardPlayerIsCpu(lobby);
+    player.isCpu = false; player.cpu = false;
+    player.isProxyCPU = Boolean(lobby.isProxyCPU);
+    player.proxyOwnerUserId = Number(lobby.proxyOwnerUserId || 0);
+    player.isHost = Number(lobby.userId) === Number(room.hostUserId);
+    player.isMe = false;
   });
-  game.players = players.filter(Boolean).slice(0, 4);
-  game.currentPlayerIndex = Math.max(0, Math.min(game.players.length - 1, Number(game.currentPlayerIndex || 0)));
-  if(room.campaignMode === "gather"){
-    payload.battleState = null;
-    payload.boardUiEvent = null;
-    game.pendingMove = null;
-    game.routePrompt = null;
-    game.tradePrompt = null;
-    game.coopBattlePrompt = null;
-    game.activeTrade = null;
-    game.activeSpar = null;
-    game.islandDecision = null;
-    game.movementAnimating = false;
-    game.diceRolling = false;
-    game.resolutionLock = false;
-    game.battleExitLock = false;
-  }
   payload.roomCode = room.roomCode;
-  payload.savedAt = new Date().toISOString();
-  payload.campaignContext = {
-    schemaVersion: BOARD_CAMPAIGN_SCHEMA_VERSION,
-    campaignId: campaign.campaignId,
-    mode: room.campaignMode,
-    baseMemberKey: room.campaignBaseMemberKey,
-    startedHumanUserIds: room.players.filter((player) => !boardPlayerIsCpu(player)).map((player) => Number(player.userId)),
-  };
+  payload.schemaVersion = 2;
+  payload.campaignContext = boardCampaignContextForRoom(room);
   return payload;
 }
 
-async function saveBoardCampaignProgressUnlocked(room, identity, payload){
-  if(!isValidBoardSavePayload(payload)) return { ok:false, error:"invalid_payload" };
-  const callerKey = boardCampaignMemberKey(identity);
-  const humanPlayers = boardCampaignHumanPlayers(payload);
-  const callerPlayer = humanPlayers.find((player) => boardCampaignMemberKey(player) === callerKey)
-    || humanPlayers.find((player) => Number(player.userId || player.id) === Number(identity?.userId));
-  if(!callerPlayer) return { ok:false, error:"player_not_found" };
-  const campaignId = boardCampaignProgressId(room, payload);
-  if(!campaignId) return { ok:false, error:"invalid_campaign_id" };
-  let campaign = null;
-  try{
-    campaign = await readBoardCampaign(campaignId);
-  }catch(error){
-    if(error?.code !== "ENOENT") throw error;
-  }
-  const nowIso = new Date().toISOString();
-  if(!campaign){
-    const members = humanPlayers.map((player, seatIndex) => ({
-      key: boardCampaignMemberKey(player),
-      userId: Number(player.userId || player.id),
-      clientId: String(player.clientId || ""),
-      name: String(player.name || `玩家${seatIndex + 1}`),
-      avatar: Number(player.avatar || 1),
-      title: String(player.title || "航海士"),
-      seatIndex: Math.max(0, (payload.gameState.players || []).indexOf(player)),
-      joinedAt: Date.now(),
-    })).filter((member) => member.key);
-    const memberRecords = {};
-    const branchRecords = {};
-    members.forEach((member) => {
-      const player = humanPlayers.find((entry) => boardCampaignMemberKey(entry) === member.key);
-      memberRecords[member.key] = { revision:1, savedAt:nowIso, player:boardCampaignClone(player) };
-      branchRecords[member.key] = { revision:1, savedAt:nowIso, payload:boardCampaignClone(payload) };
-    });
-    campaign = {
-      schemaVersion: BOARD_CAMPAIGN_SCHEMA_VERSION,
-      campaignId,
-      roomName: String(room?.roomName || payload?.campaignContext?.roomName || "共有航海紀錄"),
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-      shared: boardCampaignSharedStateFromPayload(payload),
-      members,
-      memberRecords,
-      branchRecords,
-      basePayload: boardCampaignClone(payload),
-    };
-  }else{
-    const member = boardCampaignFindMember(campaign, identity);
-    if(!member) return { ok:false, error:"not_campaign_member" };
-    member.clientId = String(identity?.clientId || member.clientId || "");
-    member.name = String(identity?.name || callerPlayer.name || member.name || "玩家");
-    member.avatar = Number(identity?.avatar || callerPlayer.avatar || member.avatar || 1);
-    member.title = String(identity?.title || callerPlayer.title || member.title || "航海士");
-    const previousRevision = Number(campaign.memberRecords?.[member.key]?.revision || 0);
-    campaign.memberRecords[member.key] = {
-      revision: previousRevision + 1,
-      savedAt: nowIso,
-      player: boardCampaignClone(callerPlayer),
-    };
-    const previousBranchRevision = Number(campaign.branchRecords?.[member.key]?.revision || 0);
-    campaign.branchRecords[member.key] = {
-      revision: previousBranchRevision + 1,
-      savedAt: nowIso,
-      payload: boardCampaignClone(payload),
-    };
-    campaign.shared = mergeBoardCampaignSharedState(campaign.shared, boardCampaignSharedStateFromPayload(payload));
-  }
-  campaign = await writeBoardCampaign(campaign);
-  return {
-    ok:true,
-    campaignId:campaign.campaignId,
-    campaign:serializeBoardCampaign(campaign, identity),
-  };
-}
-
-async function saveBoardCampaignProgress(room, identity, payload){
-  const campaignId = boardCampaignProgressId(room, payload);
-  if(!campaignId) return { ok:false, error:"invalid_campaign_id" };
-  return withBoardCampaignWriteLock(campaignId, () => saveBoardCampaignProgressUnlocked(room, identity, payload));
+async function saveBoardCampaignProgress(room, identity, message = {}){
+  if(!room || !isValidBoardSavePayload(room.gamePayload)) return { ok:false, error:"room_has_no_state" };
+  const campaignId = boardCampaignProgressId(room);
+  return withBoardCampaignWriteLock(campaignId, async () => {
+    if(Number(message.baseVersion) !== Number(room.gameVersion)) return { ok:false, error:"state_conflict", version:Number(room.gameVersion) };
+    const expected = Number(message.expectedRevision);
+    if(!Number.isSafeInteger(expected) || expected !== Number(room.campaignRevision || 0)) return { ok:false, error:"revision_conflict", revision:Number(room.campaignRevision || 0) };
+    let current;
+    try { current = await readBoardCampaign(campaignId); }
+    catch(error){ if(error?.code !== "ENOENT") throw error; }
+    if(current && !boardCampaignFindMember(current, identity)) return { ok:false, error:"not_campaign_member" };
+    if(current && Number(current.schemaVersion) !== 2) return { ok:false, error:"legacy_copy_required" };
+    if(current && Number(current.revision) !== expected) return { ok:false, error:"revision_conflict", revision:Number(current.revision) };
+    if(Number(message.baseVersion) !== Number(room.gameVersion)) return { ok:false, error:"state_conflict", version:Number(room.gameVersion) };
+    const savedVersion = Number(room.gameVersion);
+    const authoritativePayload = boardCampaignClone(room.gamePayload);
+    let next;
+    if(current){
+      next = voyageRecords.save(current, authoritativePayload, { name:message.name, saveKind:message.saveKind, mode:room.campaignMode });
+    }else{
+      const members = voyageRecords.membersFromRoom(room, authoritativePayload);
+      if(!members.some((member) => Number(member.userId) === Number(identity.userId))) return { ok:false, error:"not_campaign_member" };
+      next = voyageRecords.create({ campaignId, payload:authoritativePayload, members, name:message.name || room.roomName, saveKind:message.saveKind === "auto" ? "auto" : "manual" });
+    }
+    next = await writeBoardCampaign(next, current ? expected : null);
+    room.campaignId = next.campaignId;
+    delete room._pendingCampaignId;
+    room.campaignRevision = next.revision;
+    room.campaignMembers = boardCampaignClone(next.members);
+    room.campaignMode = next.members.length > 1 ? "gather" : "solo";
+    room.campaignParentId = next.parentCampaignId || "";
+    room.campaignStartedHumanUserIds = next.members.map((member) => Number(member.userId));
+    room.roomName = next.roomName;
+    const campaignContext = boardCampaignContextForRoom(room);
+    room.gamePayload.campaignContext = campaignContext;
+    return { ok:true, campaignId:next.campaignId, revision:next.revision, version:savedVersion, campaign:serializeBoardCampaign(next, identity), campaignContext };
+  });
 }
 
 function serializeBoardLobby(room){
@@ -2020,6 +1790,8 @@ function serializeBoardLobby(room){
     maxPlayers: room.maxPlayers,
     campaignId: room.campaignId || "",
     campaignMode: room.campaignMode || "",
+    campaignRevision: Number(room.campaignRevision || 0),
+    campaignContext: room.campaignId ? boardCampaignContextForRoom(room) : null,
     campaignBaseMemberKey: room.campaignBaseMemberKey || "",
     players: room.players.map((item) => {
       const isCPU = boardPlayerIsCpu(item);
@@ -2027,7 +1799,7 @@ function serializeBoardLobby(room){
       return {
         userId: item.userId,
         clientId: item.clientId,
-        name: isCPU ? boardCpuDisplayName(item, cpuOrdinal) : item.name,
+        name: isCPU && !(room.campaignMode === "gather" && item.isProxyCPU) ? boardCpuDisplayName(item, cpuOrdinal) : item.name,
         avatar: item.avatar,
         title: item.title,
         isHost: Number(item.userId) === Number(room.hostUserId),
@@ -2188,7 +1960,7 @@ function boardSocketIsRoomHost(room, socketMeta = {}){
 }
 
 function boardSocketCanDriveActor(actor, room, socketMeta = {}, sourceClientId = ""){
-  if (boardPlayerIsCpu(actor) && boardSocketIsRoomHost(room, socketMeta)) return true;
+  if (boardPlayerIsCpu(actor)) return boardSocketIsRoomHost(room, socketMeta);
   return boardActorMatchesSocket(actor, socketMeta, sourceClientId);
 }
 
@@ -2270,6 +2042,9 @@ function canAcceptBoardSparStateUpdate(previousPayload, nextPayload, socket, sou
 
 function boardActorMatchesSocket(actor, socketMeta = {}, sourceClientId = ""){
   if (!actor) return true;
+  const verifiedActorUserId = Number(actor.userId || actor.id);
+  const verifiedSocketUserId = Number(socketMeta.userId);
+  if(verifiedActorUserId > 0 && verifiedSocketUserId > 0 && verifiedActorUserId !== verifiedSocketUserId) return false;
   const actorClientId = String(actor.clientId || "").trim();
   const socketClientId = String(socketMeta.clientId || sourceClientId || "").trim();
   const fallbackClientId = String(actor.userId || actor.id || "").trim();
@@ -2360,6 +2135,8 @@ function serializeBoardRoomList(){
       title: room.roomName,
       campaignId: room.campaignId || "",
       campaignMode: room.campaignMode || "",
+    campaignRevision: Number(room.campaignRevision || 0),
+    campaignContext: room.campaignId ? boardCampaignContextForRoom(room) : null,
     }));
 }
 
@@ -2387,6 +2164,11 @@ function clearBoardCampaignDisconnectTimer(room, userId){
 
 function scheduleBoardCampaignProxyTakeover(room, userId){
   if(!room?.campaignId) return;
+  if(room.campaignMode === "gather"){
+    const player = room.players.find((entry) => Number(entry.userId) === Number(userId));
+    if(player){ player.online = false; if(room.status === "waiting") player.ready = false; }
+    return;
+  }
   if(!room._campaignDisconnectTimers) room._campaignDisconnectTimers = new Map();
   clearBoardCampaignDisconnectTimer(room, userId);
   const timer = setTimeout(() => {
@@ -3775,6 +3557,21 @@ function runCpuLoop(roomId){
 // ——— Socket.IO ———
 io.on("connection", (socket) => {
   let joinedRoom = null;
+  // Pin Board identity to verified account state before any lobby or state handler.
+  socket.use((packet, next) => {
+    const event = String(packet[0] || "");
+    if(!event.startsWith("BOARD_")) return next();
+    const data = packet[1] && typeof packet[1] === "object" ? packet[1] : {};
+    const profile = authenticatedBoardProfile(socket, data.profile || socket.data.boardProfile || {});
+    if(!profile && (BOARD_DB_PERSISTENCE_ENABLED || event.startsWith("BOARD_CAMPAIGN_"))){
+      const ack = packet.findLast((entry) => typeof entry === "function");
+      ack?.({ ok:false, error:"auth_required" });
+      return;
+    }
+    if(profile) data.profile = profile;
+    packet[1] = data;
+    return next();
+  });
 
   socket.on("CHESS_ROOM_LIST", (payload = {}, cb) => {
     const rooms = serializeChessRoomList({ includePlaying:payload.includePlaying !== false });
@@ -4178,82 +3975,112 @@ io.on("connection", (socket) => {
 
   socket.on("BOARD_CAMPAIGN_LIST", async (payload = {}, cb) => {
     try{
-      const profile = normalizeBoardProfile(payload.profile || socket.data.boardProfile || {});
+      const profile = authenticatedBoardProfile(socket, payload.profile);
+      if(!profile) return cb?.({ ok:false, error:"auth_required" });
       const campaigns = await boardCampaignsForIdentity(profile);
       socket.emit("BOARD_CAMPAIGN_LIST", { campaigns });
       return cb?.({ ok:true, campaigns });
-    }catch(error){
-      console.error("[BOARD_CAMPAIGN_LIST] error:", error);
-      return cb?.({ ok:false, error:String(error?.message || error) });
-    }
+    }catch(error){ return cb?.({ ok:false, error:String(error?.message || error) }); }
   });
 
   socket.on("BOARD_CAMPAIGN_OPEN", async (payload = {}, cb) => {
     try{
-      const profile = normalizeBoardProfile(payload.profile || socket.data.boardProfile || {});
-      const campaignId = sanitizeBoardCampaignId(payload.campaignId || "");
-      const mode = String(payload.mode || "gather") === "solo" ? "solo" : "gather";
-      const campaign = await readBoardCampaign(campaignId);
+      const profile = authenticatedBoardProfile(socket, payload.profile);
+      if(!profile) return cb?.({ ok:false, error:"auth_required" });
+      let campaign = await readBoardCampaign(sanitizeBoardCampaignId(payload.campaignId));
       if(!boardCampaignFindMember(campaign, profile)) return cb?.({ ok:false, error:"not_campaign_member" });
-      let room = mode === "gather" ? boardCampaignActiveGatherRoom(campaignId) : null;
-      if(room){
-        const joined = joinBoardCampaignRoom(room, profile, socket.id);
-        if(!joined.ok) return cb?.({ ok:false, error:joined.error || "join_failed" });
-      }else{
-        const created = createBoardCampaignRoom(campaign, profile, mode);
-        if(!created.ok) return cb?.({ ok:false, error:created.error || "campaign_open_failed" });
-        room = created.room;
-        room.sockets.set(socket.id, {
-          userId:profile.userId,
-          clientId:profile.clientId,
-          // 個別遊玩會從開始頁立刻導向遊戲頁；允許同一裝置的新分頁連線接手這個暫存席位。
-          campaignNavigationPending:mode === "solo",
+      let mode = ["solo", "copy"].includes(String(payload.mode)) ? String(payload.mode) : "gather";
+      const needsCopy = mode === "copy" || payload.backupRevision != null || payload.legacyBranch === true || (mode === "solo" && campaign.members.length > 1);
+      if(needsCopy){
+        campaign = await writeBoardCampaign(voyageRecords.copy(campaign, profile, payload));
+        mode = "solo";
+      }else if(Number(campaign.schemaVersion) !== 2){
+        // Preserve all v1 branches and source files. Migrate only the intact base world.
+        const legacy = campaign;
+        const migrationId = `VL${crypto.createHash("sha256").update(legacy.campaignId).digest("hex").slice(0,24).toUpperCase()}`;
+        campaign = await withBoardCampaignWriteLock(migrationId, async () => {
+          try { return await readBoardCampaign(migrationId); }
+          catch(error){ if(error?.code !== "ENOENT") throw error; }
+          try { return await writeBoardCampaign(voyageRecords.create({ campaignId:migrationId, payload:boardCampaignBasePayload(legacy), members:legacy.members, name:legacy.roomName, parentCampaignId:legacy.campaignId })); }
+          catch(error){ if(error?.message !== "revision_conflict") throw error; return readBoardCampaign(migrationId); }
         });
       }
+      if(campaign.members.length === 1) mode = "solo";
+      let room = mode === "gather" ? boardCampaignActiveGatherRoom(campaign.campaignId) : null;
+      if(room){
+        const joined = joinBoardCampaignRoom(room, profile, socket.id);
+        if(!joined.ok) return cb?.(joined);
+      }else{
+        const created = createBoardCampaignRoom(campaign, profile, mode);
+        if(!created.ok) return cb?.(created);
+        room = created.room;
+        room.sockets.set(socket.id, { userId:profile.userId, clientId:profile.clientId, campaignNavigationPending:mode === "solo" });
+      }
+      detachBoardSocketFromOtherRooms(socket, room.roomCode);
       socket.data.boardRoomCode = room.roomCode;
       socket.data.boardProfile = profile;
       socket.join(`board:${room.roomCode}`);
       if(mode === "solo" && !room.gamePayload){
         room.gamePayload = assembleBoardCampaignPayload(campaign, room);
         if(!isValidBoardSavePayload(room.gamePayload)) return cb?.({ ok:false, error:"campaign_assemble_failed" });
-        room.gameVersion = 1;
-        room.gameUpdatedAt = Date.now();
+        room.gameVersion = 1; room.gameUpdatedAt = Date.now();
       }
       emitBoardLobby(room);
-      return cb?.({
-        ok:true,
-        mode,
-        navigate:mode === "solo",
-        roomCode:room.roomCode,
-        lobby:serializeBoardLobby(room),
-        hasState:!!room.gamePayload,
-      });
+      return cb?.({ ok:true, campaignId:campaign.campaignId, revision:campaign.revision, campaign:serializeBoardCampaign(campaign, profile), mode, navigate:mode === "solo", roomCode:room.roomCode, lobby:serializeBoardLobby(room), hasState:!!room.gamePayload });
     }catch(error){
-      if(error?.code === "ENOENT") return cb?.({ ok:false, error:"campaign_not_found" });
-      console.error("[BOARD_CAMPAIGN_OPEN] error:", error);
-      return cb?.({ ok:false, error:String(error?.message || error) });
+      return cb?.({ ok:false, error:error?.code === "ENOENT" ? "campaign_not_found" : String(error?.message || error) });
     }
   });
 
   socket.on("BOARD_CAMPAIGN_SAVE", async (message = {}, cb) => {
     try{
+      const profile = authenticatedBoardProfile(socket, message.profile);
+      if(!profile) return cb?.({ ok:false, error:"auth_required" });
+      if(message.action === "import" || message.action === "importLegacyRoom"){
+        let payload = message.payload;
+        if(message.action === "importLegacyRoom"){
+          const originalRoom = String(message.roomCode || "").trim();
+          if(!originalRoom || ["LOCAL", "RECOVERED"].includes(originalRoom.toUpperCase())) return cb?.({ ok:false, error:"original_room_required" });
+          payload = (await readValidBoardSavePayload(originalRoom)).payload;
+        }
+        if(!voyageRecords.validPayload(payload)) return cb?.({ ok:false, error:"invalid_payload" });
+        const player = payload.gameState.players.find((entry) => Number(entry.userId ?? entry.id) === Number(profile.userId));
+        if(!player) return cb?.({ ok:false, error:"not_save_member" });
+        const member = { key:boardCampaignMemberKey(profile), userId:profile.userId, name:profile.name, avatar:profile.avatar, title:profile.title, seatIndex:payload.gameState.players.indexOf(player) };
+        const source = { schemaVersion:2, campaignId:"", revision:0, roomName:message.name || "舊存檔", members:[member], payload };
+        const campaign = await writeBoardCampaign(voyageRecords.copy(source, profile, { name:message.name || "匯入的個人航海錄" }));
+        return cb?.({ ok:true, campaignId:campaign.campaignId, revision:campaign.revision, campaign:serializeBoardCampaign(campaign, profile) });
+      }
+      if(message.action === "rename"){
+        const id = sanitizeBoardCampaignId(message.campaignId);
+        return await withBoardCampaignWriteLock(id, async () => {
+          const campaign = await readBoardCampaign(id);
+          if(!boardCampaignFindMember(campaign, profile)) return cb?.({ ok:false, error:"not_campaign_member" });
+          if(Number(campaign.schemaVersion) !== 2) return cb?.({ ok:false, error:"legacy_copy_required" });
+          if(Number(message.expectedRevision) !== Number(campaign.revision)) return cb?.({ ok:false, error:"revision_conflict", revision:campaign.revision });
+          const next = { ...campaign, roomName:voyageRecords.nameOf(message.name), revision:campaign.revision + 1 };
+          next.payload = boardCampaignClone(campaign.payload);
+          next.payload.campaignContext = voyageRecords.context(next);
+          const saved = await writeBoardCampaign(next, campaign.revision);
+          for(const active of boardRooms.values()){
+            if(active.campaignId !== id || Number(active.campaignRevision) !== Number(campaign.revision)) continue;
+            active.campaignRevision = saved.revision; active.roomName = saved.roomName;
+            const campaignContext = boardCampaignContextForRoom(active);
+            if(active.gamePayload) active.gamePayload.campaignContext = campaignContext;
+            io.to(`board:${active.roomCode}`).emit("BOARD_CAMPAIGN_SAVED", { campaign:serializeBoardCampaign(saved, profile), campaignContext, version:Number(active.gameVersion) });
+          }
+          return cb?.({ ok:true, campaignId:id, revision:saved.revision, campaign:serializeBoardCampaign(saved, profile) });
+        });
+      }
       const roomCode = sanitizeBoardRoomCode(message.roomCode || socket.data.boardRoomCode || "");
       const room = boardRooms.get(roomCode);
-      const profile = normalizeBoardProfile(message.profile || socket.data.boardProfile || {});
-      if(room){
-        const socketMeta = room.sockets.get(socket.id);
-        if(!socketMeta || Number(socketMeta.userId) !== Number(profile.userId)){
-          return cb?.({ ok:false, error:"not_joined" });
-        }
-      }
-      const result = await saveBoardCampaignProgress(room, profile, message.payload);
+      const socketMeta = room?.sockets.get(socket.id);
+      if(!room || !socketMeta || Number(socketMeta.userId) !== Number(profile.userId)) return cb?.({ ok:false, error:"not_joined" });
+      const result = await saveBoardCampaignProgress(room, profile, message);
       if(!result.ok) return cb?.(result);
-      socket.emit("BOARD_CAMPAIGN_SAVED", { campaign:result.campaign });
+      io.to(`board:${room.roomCode}`).emit("BOARD_CAMPAIGN_SAVED", { campaign:result.campaign, campaignContext:result.campaignContext, version:result.version });
       return cb?.(result);
-    }catch(error){
-      console.error("[BOARD_CAMPAIGN_SAVE] error:", error);
-      return cb?.({ ok:false, error:String(error?.message || error) });
-    }
+    }catch(error){ return cb?.({ ok:false, error:error?.code === "ENOENT" ? "save_not_found" : String(error?.message || error) }); }
   });
 
   socket.on("BOARD_JOIN_ROOM", (payload = {}, cb) => {
@@ -4299,7 +4126,10 @@ io.on("connection", (socket) => {
         const meta = normalizeBoardProfile(payload.profile || socket.data.boardProfile || {});
         const player = room.players.find((item) => Number(item.userId) === Number(meta.userId));
         if(player){
-          if(room.campaignId){
+          if(room.campaignId && room.campaignMode === "gather"){
+            player.online = false; player.ready = false;
+            emitBoardLobby(room);
+          }else if(room.campaignId){
             player.clientId = `board-proxy-${room.campaignId}-${player.userId}`;
             player.isCPU = true;
             player.isProxyCPU = true;
@@ -4428,19 +4258,18 @@ io.on("connection", (socket) => {
         return cb?.({ ok:false, error:"host_only" });
       }
       if(room.campaignId){
+        if(!boardCampaignMembersPresent(room)) return cb?.({ ok:false, error:"campaign_members_missing" });
         const joinedHumans = room.players.filter((player) => !boardPlayerIsCpu(player));
         const notReady = joinedHumans.filter((player) => !player.ready);
         if(notReady.length) return cb?.({ ok:false, error:"not_all_ready" });
         const campaign = await readBoardCampaign(room.campaignId);
-        const basePayload = boardCampaignBasePayload(campaign, room.campaignBaseMemberKey);
-        if(room.campaignMode === "gather" && !boardCampaignGatherPayloadIsStable(basePayload)){
-          return cb?.({ ok:false, error:"campaign_branch_busy" });
-        }
+        if(Number(campaign.revision) !== Number(room.campaignRevision)) return cb?.({ ok:false, error:"revision_conflict", revision:campaign.revision });
         room.gamePayload = assembleBoardCampaignPayload(campaign, room);
         if(!isValidBoardSavePayload(room.gamePayload)) return cb?.({ ok:false, error:"campaign_assemble_failed" });
         room.gameVersion = Math.max(1, Number(room.gameVersion || 0) + 1);
         room.gameUpdatedAt = Date.now();
         room.campaignStartedHumanUserIds = joinedHumans.map((player) => Number(player.userId));
+        for(const meta of room.sockets.values()) meta.campaignNavigationPending = true;
       }
       room.status = "playing";
       room.updatedAt = Date.now();
@@ -4565,6 +4394,8 @@ io.on("connection", (socket) => {
         return cb?.({ ok:false, error:"stale_version", version:currentVersion });
       }
       payload = boardPayloadWithPreservedSettings(room, socket, payload, message.reason || "");
+      if(room.campaignId && Number(room.campaignRevision) > 0) payload.campaignContext = boardCampaignContextForRoom(room);
+      else if(payload.campaignContext) { payload = { ...payload }; delete payload.campaignContext; }
       const version = nextVersion;
       room.gamePayload = payload;
       room.gameVersion = version;

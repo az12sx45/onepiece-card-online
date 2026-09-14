@@ -1180,6 +1180,18 @@
     }
     .campaign-action.secondary{color:#eafaff;background:linear-gradient(135deg,#177d8d,#28a6ae)}
     .campaign-action:disabled{cursor:not-allowed;opacity:.55}
+    .campaign-save-card > div{min-width:0}
+    .campaign-save-title,.campaign-save-meta,.campaign-member-chip{overflow-wrap:anywhere}
+    .campaign-manage{grid-column:1/-1;border-top:1px solid #ffffff24;padding-top:12px;min-width:0}
+    .campaign-manage summary{cursor:pointer;color:#ffe2a0;padding:4px 0 10px}
+    .campaign-record-note{font-size:13px;line-height:1.7;color:#b7dce4;margin:8px 0}
+    .campaign-rename-form,.campaign-backup-row{display:flex;gap:12px;align-items:end;margin:10px 0;flex-wrap:wrap}
+    .campaign-rename-form label,.campaign-backup-row > span{flex:1;min-width:180px;color:#d8eff1;font-size:14px}
+    .campaign-rename-form input,.campaign-import-select{display:block;box-sizing:border-box;width:100%;max-width:100%;margin-top:6px;padding:10px 12px;border:1px solid #5dbab55c;border-radius:8px;background:#071c2e;color:#e9f5f4;font:inherit}
+    .campaign-backup-row{align-items:center;padding:8px 0;border-top:1px solid #ffffff16}
+    .campaign-backup-row small{display:block;color:#96bbc5;margin-top:4px}
+    .campaign-import{margin-top:20px}
+    #refreshCampaignsBtn{min-width:100px}
     .campaign-save-empty{padding:14px;text-align:center;color:#a9d6df;border:1px dashed rgba(169,214,223,.28);border-radius:15px}
     .sheet-footer{
       margin-top:14px;
@@ -2289,13 +2301,27 @@
         <button type="button" class="back-link" id="backFromCampaignsBtn">返回首頁</button>
         <div class="top-mark">Voyage Records</div>
       </div>
-      <section class="campaign-save-panel" id="boardCampaignPanel" aria-label="我的航海紀錄">
+      <section class="campaign-save-panel" id="boardCampaignPanel" aria-label="我的航海錄">
         <div class="campaign-save-head">
-          <h3>我的航海紀錄</h3>
+          <h3>我的航海錄</h3>
           <span id="campaignAccountHint">只顯示目前登入帳號可使用的紀錄</span>
+          <button type="button" class="campaign-action secondary" id="refreshCampaignsBtn">重新整理</button>
         </div>
+        <p class="campaign-record-note">一周目就能保存整場航海。原團成員共用同一份紀錄；想自己先玩，請另存個人副本。</p>
         <div class="campaign-save-list" id="boardCampaignList"></div>
         <div class="campaign-save-empty" id="boardCampaignEmpty">正在讀取這個帳號的航海紀錄…</div>
+        <details class="campaign-manage campaign-import" id="campaignImportPanel">
+          <summary>匯入舊航海存檔</summary>
+          <p class="campaign-record-note">舊存檔會另存為你的個人副本，完整保留船員、道具與地圖，其他原玩家由 CPU 代管。原檔仍保留。</p>
+          <label for="campaignLocalSave">這台裝置中屬於你的舊紀錄</label>
+          <select class="campaign-import-select" id="campaignLocalSave"></select>
+          <button type="button" class="campaign-action secondary" id="importLocalCampaignBtn">將選取的本機存檔另存副本</button>
+          <form class="campaign-rename-form" id="importLegacyRoomForm">
+            <label>原存檔房號<input id="campaignLegacyRoom" maxlength="32" pattern="[A-Za-z0-9_-]+" placeholder="輸入原房號" required></label>
+            <button type="submit" class="campaign-action secondary">匯入原房號雲端存檔</button>
+          </form>
+          <p class="campaign-record-note">只查詢指定原房號並驗證你的成員身分；無法確認歸屬的共用備份不會自動載入。</p>
+        </details>
       </section>
     </section>
 
@@ -2422,6 +2448,6 @@
 
   <script src="js/board_shared.js?v=20260902-board-entry-auth-v418-final"></script>
   <script src="/vendor/socket.io-client/4.8.1/socket.io.min.js?v=20260907-local-runtime-v1"></script>
-  <script src="js/board_start.js?v=20260902-social-shell-restored-v426"></script>
+  <script src="js/board_start.js?v=20260914-voyage-records-v1"></script>
 </body>
 </html>

@@ -749,6 +749,7 @@
     cpuStrategyBtn: document.getElementById("cpuStrategyBtn"),
     saveGameBtn: document.getElementById("saveGameBtn"),
     loadGameBtn: document.getElementById("loadGameBtn"),
+    voyageRecordStatus: document.getElementById("voyageRecordStatus"),
     mapTurnBanner: document.getElementById("mapTurnBanner"),
     boardViewport: document.getElementById("boardViewport"),
     boardPanZoomLayer: document.getElementById("boardPanZoomLayer"),
@@ -9678,6 +9679,7 @@
     campaignContext: {
       campaignId: String(query.get("campaign") || "").trim(),
       mode: String(query.get("campaignMode") || "").trim(),
+      revision: 0,
     },
     battleWindow: null,
     impelDownWindow: null,
@@ -9731,6 +9733,15 @@
     deferStateApplyUntil: 0,
     remoteMovementLocations: new Map(),
   };
+  const campaignSaveState = {
+    inFlight: null,
+    autoTimer: 0,
+    lastAutoAttemptAt: 0,
+    lastAutoCheckpoint: "",
+    status: "idle",
+    error: "",
+  };
+  const CAMPAIGN_AUTO_SAVE_INTERVAL_MS = 60000;
   const campaignInitialLoadRequested = boardLan.enabled && Boolean(state.campaignContext.campaignId);
   const boardStateReceiver = window.BoardStateWire && window.BoardStateReceiver?.create({
     roomCode: boardLan.roomCode,
@@ -11796,11 +11807,39 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     return sanitizeRoomCode(payload?.roomCode || state.lobby?.roomCode || query.get("room") || "") || "LOCAL";
   }
 
+  function manualSaveStorageScope(payload = null) {
+    return {
+      ownerUserId: String(profile.userId || ""),
+      campaignId: String(payload?.campaignContext?.campaignId || state.campaignContext?.campaignId || ""),
+      roomCode: manualSaveRoomCode(payload),
+    };
+  }
+
   function manualSaveStorageKeys(payload = null) {
-    const roomCode = manualSaveRoomCode(payload);
-    const keys = [`${GAME_SAVE_STORAGE_KEY}:${roomCode}`];
-    if (!keys.includes(GAME_SAVE_STORAGE_KEY)) keys.push(GAME_SAVE_STORAGE_KEY);
-    return keys;
+    const scope = manualSaveStorageScope(payload);
+    const voyage = scope.campaignId ? `campaign:${scope.campaignId}` : `room:${scope.roomCode}`;
+    return [`${GAME_SAVE_STORAGE_KEY}:user:${encodeURIComponent(scope.ownerUserId)}:${voyage}`];
+  }
+
+  function manualSaveMemberIds(players = []) {
+    return [...new Set(players.map((player) => String(player?.userId ?? player?.id ?? "").trim()).filter(Boolean))].sort();
+  }
+
+  function manualSaveMatchesCurrentVoyage(payload, options = {}) {
+    if (!isValidManualSavePayload(payload)) return false;
+    const userId = String(profile.userId || "");
+    const savedMembers = manualSaveMemberIds(payload.gameState.players || []);
+    if (!userId || !savedMembers.includes(userId)) return false;
+    if (payload.storageScope && String(payload.storageScope.ownerUserId || "") !== userId) return false;
+    const currentCampaignId = String(state.campaignContext?.campaignId || state.lobby?.campaignId || "");
+    const savedCampaignId = String(payload.campaignContext?.campaignId || "");
+    if (!options.legacy && currentCampaignId) return savedCampaignId === currentCampaignId;
+    if (savedCampaignId && savedCampaignId !== currentCampaignId) return false;
+    const currentRoom = sanitizeRoomCode(state.lobby?.roomCode || boardLan.roomCode || query.get("room") || "");
+    const savedRoom = sanitizeRoomCode(payload.roomCode || "");
+    if (!currentRoom || !savedRoom || currentRoom !== savedRoom) return false;
+    const livePlayers = state.lobby?.players?.length ? state.lobby.players : state.gameState?.players || [];
+    return JSON.stringify(savedMembers) === JSON.stringify(manualSaveMemberIds(livePlayers));
   }
 
   function parseManualSavePayload(raw) {
@@ -11810,142 +11849,197 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   }
 
   function writeLocalManualSavePayload(payload) {
-    const raw = JSON.stringify(payload);
-    let wrote = false;
-    let lastError = null;
-    manualSaveStorageKeys(payload).forEach((key) => {
-      try {
-        localStorage.setItem(key, raw);
-        wrote = true;
-      } catch (error) {
-        lastError = error;
-      }
-    });
-    if (!wrote && lastError) throw lastError;
+    const scopedPayload = { ...payload, storageScope: manualSaveStorageScope(payload) };
+    localStorage.setItem(manualSaveStorageKeys(payload)[0], JSON.stringify(scopedPayload));
   }
 
   function readManualSavePayload() {
     for (const key of manualSaveStorageKeys()) {
       try {
         const payload = parseManualSavePayload(localStorage.getItem(key));
-        if (payload) return payload;
+        if (manualSaveMatchesCurrentVoyage(payload)) return payload;
       } catch (error) {
-        console.warn("Unable to read manual save.", error);
+        console.warn("Unable to read scoped manual save.", error);
       }
     }
     return null;
   }
 
-  function manualSaveContentKey(payload) {
-    const game = payload?.gameState || {};
-    return [
-      payload?.savedAt || "",
-      payload?.roomCode || "",
-      game.seed || "",
-      game.round || "",
-      game.currentPlayerIndex || "",
-      Boolean(payload?.battleState),
-    ].join("|");
-  }
-
-  function isSameManualSavePayload(a, b) {
-    return Boolean(a && b && manualSaveContentKey(a) === manualSaveContentKey(b));
-  }
-
-  const GLOBAL_BOARD_SAVE_ROOM_CODE = "RECOVERED";
-
-  async function writeServerManualSavePayload(payload, options = {}) {
-    const roomCode = manualSaveRoomCode(payload);
-    const roomCodes = [roomCode];
-    if (options.updateGlobal && roomCode !== GLOBAL_BOARD_SAVE_ROOM_CODE) {
-      roomCodes.push(GLOBAL_BOARD_SAVE_ROOM_CODE);
-    }
-    const results = [];
-    for (const targetRoomCode of roomCodes) {
-      const response = await fetch(`/api/board-save/${encodeURIComponent(targetRoomCode)}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ payload }),
-      });
-      if (!response.ok) {
-        throw new Error(`server save failed (${targetRoomCode}): ${response.status}`);
+  function readLegacyManualSavePayload() {
+    // Historical unscoped saves are offered only after both room and the entire
+    // roster match. They are never silently applied or rebound to another user.
+    for (const key of [`${GAME_SAVE_STORAGE_KEY}:${manualSaveRoomCode()}`, GAME_SAVE_STORAGE_KEY]) {
+      try {
+        const payload = parseManualSavePayload(localStorage.getItem(key));
+        if (manualSaveMatchesCurrentVoyage(payload, { legacy: true })) return { key, payload };
+      } catch (error) {
+        console.warn("Unable to inspect legacy manual save.", error);
       }
-      results.push(await response.json());
     }
-    return results[0] || null;
+    return null;
   }
 
-  function shouldWriteBoardCampaignProgress(payload) {
-    return Boolean(
-      payload?.campaignContext?.campaignId
-      || state.lobby?.campaignId
-      || payload?.gameState?.postgameWorld?.unlocked
-    );
+  function boardCampaignManagerUrl(options = {}) {
+    const params = new URLSearchParams({ view: "campaigns" });
+    const campaignId = String(state.campaignContext?.campaignId || "");
+    if (campaignId) params.set("campaign", campaignId);
+    if (options.importLocal) params.set("importLocal", options.importLocal);
+    return `board_start.html?${params}`;
   }
 
-  async function writeBoardCampaignProgress(payload) {
-    if (!shouldWriteBoardCampaignProgress(payload)) return { skipped: true };
-    if (!boardLan.socket || !boardLan.connected) {
-      throw new Error("campaign save requires an online Board room");
+  function openBoardCampaignManager(options = {}) {
+    location.href = boardCampaignManagerUrl(options);
+  }
+
+  function applyBoardCampaignContext(context = null) {
+    if (!context?.campaignId) return false;
+    const previous = state.campaignContext || {};
+    const sameCampaign = String(previous.campaignId || "") === String(context.campaignId);
+    if (sameCampaign && Number(context.revision || 0) < Number(previous.revision || 0)) return false;
+    state.campaignContext = {
+      ...(sameCampaign ? previous : {}),
+      ...safeJsonClone(context),
+      revision: Math.max(sameCampaign ? Number(previous.revision || 0) : 0, Number(context.revision || 0)),
+    };
+    state.lobby.campaignId = String(context.campaignId);
+    state.lobby.campaignMode = String(context.mode || state.lobby.campaignMode || "standard");
+    renderVoyageRecordStatus();
+    return true;
+  }
+
+  function renderVoyageRecordStatus() {
+    const context = state.campaignContext || {};
+    const name = String(context.roomName || state.lobby?.roomName || "本場航海");
+    const revision = Math.max(0, Number(context.revision || 0));
+    const suffix = campaignSaveState.status === "saving" ? "保存中…"
+      : campaignSaveState.status === "error" ? "雲端未保存"
+        : context.campaignId ? `版本 ${revision}` : "尚未建立紀錄";
+    if (refs.voyageRecordStatus) {
+      refs.voyageRecordStatus.textContent = `${name} · ${suffix}`;
+      refs.voyageRecordStatus.title = campaignSaveState.error || `${name} · ${suffix}`;
+      refs.voyageRecordStatus.dataset.status = campaignSaveState.status;
     }
+    if (refs.saveGameBtn) {
+      refs.saveGameBtn.disabled = campaignSaveState.status === "saving";
+      refs.saveGameBtn.textContent = campaignSaveState.status === "saving" ? "保存中…" : "手動存檔";
+      refs.saveGameBtn.title = "保存整場隊伍、船員、道具、地圖與回合到這份航海錄";
+    }
+  }
+
+  function boardCampaignErrorText(error) {
+    const code = String(error?.code || error?.message || error || "");
+    const messages = {
+      state_conflict: "房間進度剛剛更新，本次未寫入。請等同步完成後再存一次。",
+      stale_version: "房間進度剛剛更新，本次未寫入。請等同步完成後再存一次。",
+      campaign_conflict: "這份紀錄已有更新版本，本次未覆寫。請到我的航海錄載入最新版本，或另存新紀錄。",
+      revision_conflict: "這份紀錄已有更新版本，本次未覆寫。請到我的航海錄載入最新版本，或另存新紀錄。",
+      unauthenticated: "帳號連線尚未完成，請重新登入後再保存。",
+      auth_required: "帳號連線尚未完成，請重新登入後再保存。",
+      stale_socket: "這個帳號已由另一個分頁接手，請使用最新的分頁保存。",
+      sync_pending: "房間還在同步，這次沒有保存到雲端。請稍候再試。",
+      disconnected: "尚未連上航海房，這次沒有保存到雲端。",
+      auto_checkpoint_unstable: "目前尚未到穩定回合，自動備份將稍後重試。",
+      timeout: "伺服器尚未確認保存結果。請到我的航海錄確認最新版本後再操作。",
+    };
+    return messages[code] || `航海錄未能保存（${code || "連線失敗"}），請稍候再試。`;
+  }
+
+  async function flushBoardStateBeforeCampaignSave() {
+    if (!boardLan.enabled || !boardLan.socket || !boardLan.connected) throw new Error("disconnected");
+    if (boardLan.awaitingInitialState || !boardLan.joinedOnce) throw new Error("sync_pending");
+    const startedAt = Date.now();
+    const initialAck = boardLan.lastAck;
+    // Let queued turn hand-offs retain their original reason and authority.
+    while (boardLan.pushTimer || boardLan.pendingState || boardLan.inFlightState || boardLan.applying) {
+      if (!boardLan.connected) throw new Error("disconnected");
+      if (boardLan.awaitingInitialState || (boardLan.lastAck !== initialAck && boardLan.lastAck?.ok === false)) {
+        throw new Error(boardLan.lastError || "sync_pending");
+      }
+      if (Date.now() - startedAt > 12000) throw new Error("sync_pending");
+      flushBoardLanPendingState();
+      await new Promise((resolve) => window.setTimeout(resolve, 40));
+    }
+    const reason = state.battleState ? "battle" : "manual-save";
+    if (canPushBoardLanState(reason)) {
+      // Only the active controller may upload local changes. Other members save
+      // the room's already-authoritative snapshot using the current version.
+      const currentPayload = createManualSavePayload();
+      if (boardLanContentKey(currentPayload) !== boardLan.lastSentKey) {
+        pushBoardLanStateUnchecked(reason);
+        while (boardLan.pendingState || boardLan.inFlightState) {
+          if (!boardLan.connected) throw new Error("disconnected");
+          if (boardLan.awaitingInitialState || (boardLan.lastAck !== initialAck && boardLan.lastAck?.ok === false)) throw new Error(boardLan.lastError || "sync_pending");
+          if (Date.now() - startedAt > 12000) throw new Error("sync_pending");
+          await new Promise((resolve) => window.setTimeout(resolve, 40));
+        }
+      }
+    }
+    if (boardLan.lastAck !== initialAck && boardLan.lastAck?.ok === false) throw new Error(boardLan.lastError || "sync_pending");
+    if (boardLan.awaitingInitialState || !boardLan.connected || boardLan.applying) throw new Error("sync_pending");
+    return Math.max(0, Number(boardLan.version || 0));
+  }
+
+  async function writeBoardCampaignProgress(options = {}) {
+    const baseVersion = await flushBoardStateBeforeCampaignSave();
     return new Promise((resolve, reject) => {
       let settled = false;
       const timeout = window.setTimeout(() => {
         if (settled) return;
         settled = true;
-        reject(new Error("campaign save timeout"));
-      }, 12000);
+        reject(new Error("timeout"));
+      }, 15000);
       boardLan.socket.emit("BOARD_CAMPAIGN_SAVE", {
         roomCode: boardLan.roomCode || state.lobby?.roomCode || "",
         profile: boardLanProfilePayload(),
-        payload,
+        baseVersion,
+        expectedRevision: Math.max(0, Number(state.campaignContext?.revision || 0)),
+        saveKind: options.saveKind === "auto" ? "auto" : "manual",
       }, (result = {}) => {
         if (settled) return;
         settled = true;
         window.clearTimeout(timeout);
         if (!result.ok) {
-          reject(new Error(String(result.error || "campaign save failed")));
+          const error = new Error(String(result.error || "save_failed"));
+          error.code = result.error;
+          reject(error);
           return;
         }
-        if (result.campaignId) {
-          state.campaignContext = {
-            ...(state.campaignContext || {}),
-            campaignId: String(result.campaignId),
-            mode: String(state.lobby?.campaignMode || state.campaignContext?.mode || "standard"),
-          };
-        }
+        applyBoardCampaignContext(result.campaignContext || result.lobby?.campaignContext || {
+          campaignId: result.campaignId,
+          revision: result.revision,
+          roomName: result.campaign?.roomName,
+          mode: state.lobby?.campaignMode || state.campaignContext?.mode || "standard",
+        });
         resolve(result);
       });
     });
   }
 
-  async function readServerManualSavePayload() {
-    const roomCode = GLOBAL_BOARD_SAVE_ROOM_CODE;
-    const response = await fetch(`/api/board-save/${encodeURIComponent(roomCode)}`, {
-      method: "GET",
-      cache: "no-store",
-    });
-    if (response.status === 404) return null;
-    if (!response.ok) {
-      throw new Error(`server save read failed: ${response.status}`);
-    }
-    const data = await response.json();
-    return isValidManualSavePayload(data?.payload) ? data.payload : null;
+  function boardCampaignAutoCheckpoint() {
+    const game = state.gameState;
+    if (!boardLan.enabled || !boardLan.connected || boardLan.awaitingInitialState || boardLan.applying || !game) return "";
+    if (!canBoardLanControlCurrentPlayer(currentPlayer()) || String(game.phase || "").startsWith("setup")) return "";
+    if (state.battleState || game.movementAnimating || game.diceRolling || game.resolutionLock || game.battleExitLock
+      || game.pendingMove || game.routePrompt || game.tradePrompt || game.activeTrade || game.activeSpar
+      || game.coopBattlePrompt || game.islandDecision) return "";
+    return [game.seed, game.round, game.currentPlayerIndex].join("|");
   }
 
-  async function deleteServerManualSavePayload() {
-    const roomCodes = [...new Set([manualSaveRoomCode(), GLOBAL_BOARD_SAVE_ROOM_CODE])];
-    const results = [];
-    for (const roomCode of roomCodes) {
-      const response = await fetch(`/api/board-save/${encodeURIComponent(roomCode)}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) {
-        throw new Error(`server save delete failed (${roomCode}): ${response.status}`);
+  function scheduleBoardCampaignAutoSave() {
+    const checkpoint = boardCampaignAutoCheckpoint();
+    if (!checkpoint || checkpoint === campaignSaveState.lastAutoCheckpoint || campaignSaveState.autoTimer || campaignSaveState.inFlight) return;
+    const remaining = Math.max(1200, CAMPAIGN_AUTO_SAVE_INTERVAL_MS - (Date.now() - campaignSaveState.lastAutoAttemptAt));
+    campaignSaveState.autoTimer = window.setTimeout(async () => {
+      campaignSaveState.autoTimer = 0;
+      if (boardCampaignAutoCheckpoint() !== checkpoint || campaignSaveState.inFlight) {
+        scheduleBoardCampaignAutoSave();
+        return;
       }
-      results.push(await response.json());
-    }
-    return results;
+      campaignSaveState.lastAutoAttemptAt = Date.now();
+      const saved = await saveManualGame({ silent: true, saveKind: "auto", successLog: false });
+      if (saved?.campaignSaved) campaignSaveState.lastAutoCheckpoint = checkpoint;
+      else scheduleBoardCampaignAutoSave();
+    }, remaining);
   }
 
   function summarizeManualSave(payload) {
@@ -11997,7 +12091,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   }
 
   function openSaveLoadUi(options = {}) {
-    const extraClasses = ["save-load-nautical-modal"];
+    const extraClasses = ["save-load-nautical-modal", "voyage-record-modal"];
     if (manualLoadModalActive && resumeSetupAfterManualLoadClose) {
       extraClasses.push("backdrop-close");
     }
@@ -12275,87 +12369,68 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   }
 
   async function saveManualGame(options = {}) {
-    if (!state.gameState) return;
-    const saveOptions = options && typeof options === "object" && typeof options.preventDefault !== "function"
-      ? options
-      : {};
+    if (!state.gameState) return false;
+    const saveOptions = options && typeof options === "object" && typeof options.preventDefault !== "function" ? options : {};
+    if (campaignSaveState.inFlight) return campaignSaveState.inFlight;
     const silent = Boolean(saveOptions.silent);
-    const successLog = saveOptions.successLog === false
-      ? ""
-      : (typeof saveOptions.successLog === "string" ? saveOptions.successLog : "已手動存檔。");
-    const payload = createManualSavePayload({ excludeSpar: true });
-    let localSaved = false;
-    let serverSaved = false;
-    let campaignSaved = false;
-    let campaignSaveRequired = shouldWriteBoardCampaignProgress(payload);
-    let campaignError = null;
-    let lastError = null;
-    try {
-      writeLocalManualSavePayload(payload);
-      localSaved = true;
-    } catch (error) {
-      lastError = error;
-      console.warn("Local manual save failed.", error);
-    }
-    try {
-      await writeServerManualSavePayload(payload, { updateGlobal: !silent });
-      serverSaved = true;
-    } catch (error) {
-      lastError = error;
-      console.warn("Server manual save failed.", error);
-    }
-    if (campaignSaveRequired) {
-      try {
-        const campaignResult = await writeBoardCampaignProgress(payload);
-        campaignSaved = campaignResult?.ok === true;
-      } catch (error) {
-        campaignError = error;
-        lastError = error;
-        console.warn("Shared campaign save failed.", error);
+    const saveKind = saveOptions.saveKind === "auto" ? "auto" : "manual";
+    if (saveKind === "auto" && !boardCampaignAutoCheckpoint()) return false;
+    campaignSaveState.status = "saving";
+    campaignSaveState.error = "";
+    renderVoyageRecordStatus();
+    const operation = (async () => {
+      let payload = createManualSavePayload();
+      let localSaved = false;
+      let campaignSaved = false;
+      let campaignResult = null;
+      let cloudError = null;
+      if (boardLan.enabled) {
+        try {
+          campaignResult = await writeBoardCampaignProgress({ saveKind });
+          campaignSaved = campaignResult?.ok === true;
+          payload = createManualSavePayload();
+        } catch (error) {
+          cloudError = error;
+          console.warn("Voyage record save failed.", error);
+        }
       }
-    }
-    if (localSaved || serverSaved) {
-      if (successLog) addLog(successLog);
-      if (silent) return { localSaved, serverSaved, campaignSaved, payload };
-      renderAll();
-      const saveTarget = localSaved && serverSaved
-        ? "本機瀏覽器，並同步備份到伺服器"
-        : localSaved
-          ? "本機瀏覽器（伺服器備份暫時失敗）"
-          : "伺服器備份（本機瀏覽器暫時無法寫入）";
+      try {
+        writeLocalManualSavePayload(payload);
+        localSaved = true;
+      } catch (error) {
+        console.warn("Scoped local save failed.", error);
+      }
+      campaignSaveState.status = boardLan.enabled && !campaignSaved ? "error" : "saved";
+      campaignSaveState.error = cloudError ? boardCampaignErrorText(cloudError) : "";
+      renderVoyageRecordStatus();
+      const result = { ok: boardLan.enabled ? campaignSaved : localSaved, localSaved, serverSaved: campaignSaved, campaignSaved, payload, campaign: campaignResult?.campaign };
+      if (silent) return result;
+      const context = state.campaignContext || {};
+      const title = campaignSaved ? "航海錄已保存" : localSaved ? "已保存本機副本" : "存檔失敗";
+      const description = campaignSaved
+        ? "整場玩家、船員、道具、地圖與回合已保存。隊伍成員都能在自己的「我的航海錄」看到同一份紀錄。"
+        : boardLan.enabled
+          ? `${boardCampaignErrorText(cloudError)}${localSaved ? "本機副本已保留；共同航海錄尚未確認保存。" : "本機副本也未能寫入。"}`
+          : "目前離線，只保存到這個帳號與航海房的本機副本。可回開始頁把本機副本另存為新航海錄。";
       openSaveLoadUi({
-        title: "存檔完成",
-        subtitle: campaignSaveRequired && !campaignSaved ? "個人紀錄已保存，共有航海同步失敗" : "航海進度已記錄",
-        bodyHtml: `
-          <div class="save-load-message ${campaignSaveRequired && !campaignSaved ? "is-warning" : ""}">
-            <strong>存檔位置：${escapeModalText(saveTarget)}</strong>
-            <p>目前進度已存到${escapeModalText(saveTarget)}。${campaignSaveRequired
-              ? (campaignSaved
-                ? "你的最新位置、船員與培養紀錄也已寫入共有航海紀錄；之後在集合等待室會載入這一版。"
-                : `共有航海紀錄尚未同步：${escapeModalText(campaignError?.message || "請確認伺服器連線後再存一次")}`)
-              : "手動存檔會同步更新跨房號雲端紀錄；之後從任何房號按「讀檔」都能讀回。"}</p>
-          </div>
-        `,
-        actions: [{ id: "saveOkBtn", label: "知道了" }],
+        title,
+        subtitle: campaignSaved ? `${context.roomName || state.lobby?.roomName || "我的航海錄"} · 版本 ${context.revision || 0}` : "航海紀錄保存結果",
+        bodyHtml: `<div class="save-load-message ${boardLan.enabled && !campaignSaved ? "is-warning" : ""}"><strong>${escapeModalText(title)}</strong><p>${escapeModalText(description)}</p></div>`,
+        actions: [
+          { id: "saveOkBtn", label: "繼續航海" },
+          { id: "saveManageBtn", label: "我的航海錄", tone: "secondary" },
+        ],
       });
       document.getElementById("saveOkBtn")?.addEventListener("click", closeModal);
-      return { localSaved, serverSaved, campaignSaved, payload };
-    }
-    {
-      console.error("Manual save failed.", lastError);
-      if (silent) return false;
-      openSaveLoadUi({
-        title: "存檔失敗",
-        subtitle: "航海紀錄未能寫入",
-        bodyHtml: `
-          <div class="save-load-message is-error">
-            <strong>本機與伺服器皆未寫入成功</strong>
-            <p>平板瀏覽器與伺服器備份都沒有寫入成功。可能是網站資料被瀏覽器封鎖，或伺服器尚未重啟。</p>
-          </div>
-        `,
-        actions: [{ id: "saveFailOkBtn", label: "知道了" }],
-      });
-      document.getElementById("saveFailOkBtn")?.addEventListener("click", closeModal);
+      document.getElementById("saveManageBtn")?.addEventListener("click", () => openBoardCampaignManager());
+      return result;
+    })();
+    campaignSaveState.inFlight = operation;
+    try {
+      return await operation;
+    } finally {
+      campaignSaveState.inFlight = null;
+      renderVoyageRecordStatus();
     }
   }
 
@@ -12367,85 +12442,33 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   async function openLoadGameModal() {
     manualLoadModalActive = true;
     resumeSetupAfterManualLoadClose = String(state.gameState?.phase || "").startsWith("setup");
-    const loadModalSessionId = ++manualLoadModalSessionId;
+    ++manualLoadModalSessionId;
+    const localPayload = readManualSavePayload();
+    const legacy = localPayload ? null : readLegacyManualSavePayload();
+    const payload = localPayload || legacy?.payload || null;
+    const context = state.campaignContext || {};
+    const actions = [
+      { id: "openVoyageRecordsBtn", label: "開啟我的航海錄" },
+      ...(payload ? [{ id: "importLocalVoyageBtn", label: "本機副本另存新紀錄", tone: "secondary" }] : []),
+      ...(!boardLan.enabled && payload ? [{ id: "loadOfflineVoyageBtn", label: "讀取這份本機副本", tone: "secondary" }] : []),
+      { id: "cancelLoadSaveBtn", label: "繼續航海", tone: "secondary" },
+    ];
     openSaveLoadUi({
-      title: "讀取存檔",
-      subtitle: "正在搜尋航海紀錄",
+      title: "我的航海錄",
+      subtitle: context.campaignId ? `${context.roomName || state.lobby?.roomName || "本場航海"} · 版本 ${context.revision || 0}` : "從一周目開始，保存每一場航海",
       bodyHtml: `
         <div class="save-load-message">
-          <span class="save-load-spinner" aria-hidden="true"></span>
-          <strong>正在檢查本機與伺服器備份</strong>
-          <p>正在檢查可讀取的存檔，請稍候。</p>
+          <strong>每份紀錄都是一整場共同進度</strong>
+          <p>回開始頁選擇紀錄，可直接繼續單人航海、邀原成員集合、查看最近五次自動備份，或另存個人副本。個人副本獨立進行，不會合併回原團。</p>
+          <p>離開前請先按「手動存檔」保存最新進度。</p>
+          ${payload ? `<p class="voyage-local-summary">${legacy ? "房號及成員相符的舊本機存檔" : "此航海的本機副本"}：${escapeModalText(formatSaveTime(payload.savedAt))} · 第 ${Number(payload.gameState.round || 1)} 輪。可在開始頁確認內容後另存新紀錄。</p>` : ""}
         </div>
       `,
+      actions,
     });
-    const localPayload = readManualSavePayload();
-    let serverPayload = null;
-    let serverError = null;
-    try {
-      serverPayload = await readServerManualSavePayload();
-    } catch (error) {
-      serverError = error;
-      console.warn("Unable to read server manual save.", error);
-    }
-    if (!manualLoadModalActive || loadModalSessionId !== manualLoadModalSessionId) return;
-    if (!localPayload && !serverPayload) {
-      openSaveLoadUi({
-        title: "沒有可讀取的存檔",
-        subtitle: "找不到航海紀錄",
-        bodyHtml: `
-          <div class="save-load-message is-warning">
-            <strong>目前沒有可恢復的進度</strong>
-            <p>${serverError ? "本機瀏覽器沒有存檔，伺服器備份也暫時讀不到。" : "先按右上角「存檔」保存目前進度，之後就能在這裡讀回來。"}</p>
-          </div>
-        `,
-        actions: [{ id: "noSaveOkBtn", label: "知道了" }],
-      });
-      document.getElementById("noSaveOkBtn")?.addEventListener("click", closeManualLoadModal);
-      return;
-    }
-    if (localPayload && serverPayload && !isSameManualSavePayload(localPayload, serverPayload)) {
-      openSaveLoadUi({
-        title: "選擇讀取進度",
-        subtitle: "本機與伺服器紀錄不同",
-        bodyHtml: `
-          <p class="save-load-record-note">本機存檔與伺服器存檔是不同進度，請選擇要讀取哪一份。讀取只會改目前遊戲畫面，不會刪掉另一份。</p>
-          <div class="save-load-record-grid is-double has-note">
-            ${renderManualSaveSummaryCard(localPayload, "本機瀏覽器")}
-            ${renderManualSaveSummaryCard(serverPayload, "伺服器備份")}
-          </div>
-        `,
-        actions: [
-          { id: "loadLocalSaveBtn", label: "讀本機瀏覽器" },
-          { id: "loadServerSaveBtn", label: "讀伺服器備份" },
-          { id: "deleteSaveBtn", label: "刪除全部存檔", tone: "danger" },
-          { id: "cancelLoadSaveBtn", label: "取消", tone: "secondary" },
-        ],
-      });
-      document.getElementById("loadLocalSaveBtn")?.addEventListener("click", () => loadManualGame(localPayload));
-      document.getElementById("loadServerSaveBtn")?.addEventListener("click", () => loadManualGame(serverPayload, { rebindServerSavePlayer: true }));
-      document.getElementById("deleteSaveBtn")?.addEventListener("click", confirmDeleteManualSave);
-      document.getElementById("cancelLoadSaveBtn")?.addEventListener("click", closeManualLoadModal);
-      return;
-    }
-    const payload = serverPayload || localPayload;
-    const sourceLabel = localPayload && serverPayload ? "本機瀏覽器 / 伺服器備份" : serverPayload ? "伺服器備份" : "本機瀏覽器";
-    openSaveLoadUi({
-      title: "讀取存檔",
-      subtitle: "讀取後會覆蓋目前這一局",
-      bodyHtml: `
-        <div class="save-load-record-grid is-single">
-          ${renderManualSaveSummaryCard(payload, sourceLabel)}
-        </div>
-      `,
-      actions: [
-        { id: "confirmLoadSaveBtn", label: "讀取存檔" },
-        { id: "deleteSaveBtn", label: "刪除全部存檔", tone: "danger" },
-        { id: "cancelLoadSaveBtn", label: "取消", tone: "secondary" },
-      ],
-    });
-    document.getElementById("confirmLoadSaveBtn")?.addEventListener("click", () => loadManualGame(payload, { rebindServerSavePlayer: payload === serverPayload }));
-    document.getElementById("deleteSaveBtn")?.addEventListener("click", confirmDeleteManualSave);
+    document.getElementById("openVoyageRecordsBtn")?.addEventListener("click", () => openBoardCampaignManager());
+    document.getElementById("importLocalVoyageBtn")?.addEventListener("click", () => openBoardCampaignManager({ importLocal: legacy?.key || manualSaveStorageKeys(payload)[0] }));
+    document.getElementById("loadOfflineVoyageBtn")?.addEventListener("click", () => loadManualGame(payload));
     document.getElementById("cancelLoadSaveBtn")?.addEventListener("click", closeManualLoadModal);
   }
 
@@ -12487,9 +12510,14 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     return !!battle.playerAction && !!battle.enemyAction;
   }
 
+  function battleRefreshRecoveryStorageKey() {
+    const scope = manualSaveStorageScope();
+    return `${BATTLE_REFRESH_RECOVERY_STORAGE_KEY}:user:${encodeURIComponent(scope.ownerUserId)}:room:${scope.roomCode}:seed:${encodeURIComponent(String(state.gameState?.seed || ""))}`;
+  }
+
   function readBattleRefreshRecoveryCheckpoint() {
     try {
-      const raw = sessionStorage.getItem(BATTLE_REFRESH_RECOVERY_STORAGE_KEY);
+      const raw = sessionStorage.getItem(battleRefreshRecoveryStorageKey());
       const checkpoint = raw ? JSON.parse(raw) : null;
       return checkpoint && typeof checkpoint === "object" ? checkpoint : null;
     } catch (_error) {
@@ -12503,7 +12531,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         const checkpoint = readBattleRefreshRecoveryCheckpoint();
         if (checkpoint?.battleKey && checkpoint.battleKey !== battleRefreshRecoveryBattleKey(battle)) return false;
       }
-      sessionStorage.removeItem(BATTLE_REFRESH_RECOVERY_STORAGE_KEY);
+      sessionStorage.removeItem(battleRefreshRecoveryStorageKey());
       return true;
     } catch (_error) {
       return false;
@@ -12542,7 +12570,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       judicialRaid: battle.isJudicialRaid ? safeJsonClone(state.gameState?.judicialRaid || null) : null,
     };
     try {
-      sessionStorage.setItem(BATTLE_REFRESH_RECOVERY_STORAGE_KEY, JSON.stringify(checkpoint));
+      sessionStorage.setItem(battleRefreshRecoveryStorageKey(), JSON.stringify(checkpoint));
       return true;
     } catch (error) {
       console.warn("[battle refresh] unable to save recovery checkpoint", error);
@@ -12661,57 +12689,18 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     state.gameState.pendingMove = liveFlow.pendingMove ? safeJsonClone(liveFlow.pendingMove) : null;
   }
 
-  function replaceLoadedPlayerIdentityRefs(root, oldPlayerIds, oldClientIds, nextUserId, nextClientId) {
-    if (!root || typeof root !== "object") return;
-    Object.entries(root).forEach(([key, value]) => {
-      if (value && typeof value === "object") {
-        replaceLoadedPlayerIdentityRefs(value, oldPlayerIds, oldClientIds, nextUserId, nextClientId);
-        return;
-      }
-      if (/clientId$/i.test(key) && oldClientIds.has(String(value || ""))) {
-        root[key] = nextClientId;
-        return;
-      }
-      if (typeof value === "string" && oldPlayerIds.has(value)) {
-        root[key] = String(nextUserId);
-        return;
-      }
-      if (typeof value === "number" && oldPlayerIds.has(String(value))) {
-        root[key] = Number(nextUserId);
-      }
-    });
-  }
-
-  function rebindServerSavePlayerToLocalProfile(game, options = {}) {
-    if (!options.rebindServerSavePlayer || options.source === "lan" || !boardLan.enabled || !game?.players?.length) return;
-    const humanPlayers = game.players.filter((player) => !isCpuPlayer(player));
-    if (!humanPlayers.length || humanPlayers.some((player) => boardPlayerMatchesLocalUser(player))) return;
-    const current = game.players[Number(game.currentPlayerIndex || 0)];
-    const player = current && !isCpuPlayer(current) ? current : humanPlayers[0];
-    const nextUserId = Number(profile.userId) || Number(player.userId || player.id) || 1;
-    const nextClientId = String(profile.clientId || nextUserId || player.clientId || "").trim() || String(nextUserId);
-    const oldPlayerIds = new Set([player.id, player.userId].map((value) => String(value || "").trim()).filter(Boolean));
-    const oldClientIds = new Set([player.clientId].map((value) => String(value || "").trim()).filter(Boolean));
-    replaceLoadedPlayerIdentityRefs(game, oldPlayerIds, oldClientIds, nextUserId, nextClientId);
-    player.id = String(nextUserId);
-    player.userId = nextUserId;
-    player.clientId = nextClientId;
-    player.isHost = true;
-    player.isMe = true;
-    player.isCPU = false;
-    player.isCpu = false;
-    player.cpu = false;
-    if (state.lobby?.roomCode) {
-      state.lobby.hostUserId = nextUserId;
-      state.lobby.hostName = player.name || profile.name || state.lobby.hostName;
-    }
-  }
-
   function loadManualGame(payload = readManualSavePayload(), options = {}) {
     if (!payload?.gameState?.boardData) {
       if (options.silent) return false;
       openLoadGameModal();
       return;
+    }
+    if (options.source !== "lan" && (boardLan.enabled || !manualSaveMatchesCurrentVoyage(payload, { legacy: !payload.storageScope }))) {
+      if (!options.silent) {
+        shared.showToast("請從我的航海錄選擇紀錄；多人續玩需使用同一份紀錄集合。");
+        void openLoadGameModal();
+      }
+      return false;
     }
     const preserveOpeningStory = options.source === "lan"
       && openingStoryActive
@@ -12720,14 +12709,10 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const liveFlow = captureLiveFlowStateForLoad(payload.gameState, options);
     state.gameState = safeJsonClone(payload.gameState);
     if (payload.campaignContext?.campaignId) {
-      state.campaignContext = safeJsonClone(payload.campaignContext);
+      applyBoardCampaignContext(payload.campaignContext);
     } else if (state.lobby?.campaignId) {
-      state.campaignContext = {
-        campaignId: String(state.lobby.campaignId || ""),
-        mode: String(state.lobby.campaignMode || ""),
-      };
+      applyBoardCampaignContext({ campaignId: String(state.lobby.campaignId), mode: String(state.lobby.campaignMode || "") });
     }
-    rebindServerSavePlayerToLocalProfile(state.gameState, options);
     state.battleState = payload.battleState ? safeJsonClone(payload.battleState) : null;
     state.boardUiEvent = null;
     if (!normalizeLoadedGameState(options)) {
@@ -12797,18 +12782,9 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     return true;
   }
 
-  async function loadServerManualGame(roomCode = manualSaveRoomCode()) {
-    const normalizedRoomCode = sanitizeRoomCode(roomCode) || manualSaveRoomCode();
-    const response = await fetch(`/api/board-save/${encodeURIComponent(normalizedRoomCode)}`, {
-      method: "GET",
-      cache: "no-store",
-    });
-    if (!response.ok) throw new Error(`server save read failed: ${response.status}`);
-    const data = await response.json();
-    const payload = data?.payload;
-    if (!isValidManualSavePayload(payload)) throw new Error("invalid server save payload");
-    loadManualGame(payload, { rebindServerSavePlayer: true });
-    return summarizeManualSave(payload);
+  async function loadServerManualGame() {
+    await openLoadGameModal();
+    return { ok: false, requiresRecordSelection: true };
   }
 
   function boardLanProfilePayload() {
@@ -13141,9 +13117,9 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const force = options.force === true || campaignInitialLoadRequested;
     if (!force && (!waitStartedAt || Date.now() - waitStartedAt < 2400)) return;
     if (refs.modal?.classList.contains("board-lan-initial-wait-modal")) return;
-    const title = campaignInitialLoadRequested ? "正在讀取個人航海紀錄" : "正在連接航海房";
+    const title = campaignInitialLoadRequested ? "正在讀取航海錄" : "正在連接航海房";
     const description = campaignInitialLoadRequested
-      ? "正在載入你在這份共有航海紀錄中的最新個人進度，完成後會直接回到地圖。"
+      ? "正在載入這份航海錄的整場進度，完成後會回到保存時的地圖與回合。"
       : "正在向房主取得同一局遊戲資料，完成後會自動進入，不需要重新整理。";
     openModal(`
       <div style="display:grid;gap:14px;place-items:center;text-align:center;padding:clamp(24px,5vw,56px);">
@@ -13162,11 +13138,11 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     resetBoardLanInitialRestoreTracking();
     openModal(`
       <div style="display:grid;gap:16px;place-items:center;text-align:center;padding:clamp(24px,5vw,56px);">
-        <div style="font-size:clamp(25px,3vw,42px);font-weight:900;color:#f6d58a;">個人航海紀錄載入失敗</div>
+        <div style="font-size:clamp(25px,3vw,42px);font-weight:900;color:#f6d58a;">${error === "auth_required" ? "帳號尚未登入" : "航海錄載入失敗"}</div>
         <p style="max-width:680px;margin:0;color:#d9e8ef;font-size:clamp(16px,1.7vw,22px);line-height:1.65;">
-          為了保護你原本的進度，本頁不會建立新的航海紀錄。請回到開始頁重新選擇。
+          ${error === "auth_required" ? "請回到開始頁登入玩家帳號，再開啟你的航海錄。" : "請回到開始頁的我的航海錄，重新選擇要繼續的紀錄。"}
         </p>
-        <a href="board_start.html" style="display:inline-flex;align-items:center;justify-content:center;min-width:210px;padding:12px 22px;border:1px solid #f6d58a;border-radius:12px;background:linear-gradient(180deg,#c89435,#7d4a16);color:#fff;text-decoration:none;font-weight:900;box-shadow:0 10px 24px rgba(0,0,0,.28);">
+        <a href="board_start.html?view=campaigns" style="display:inline-flex;align-items:center;justify-content:center;min-width:210px;padding:12px 22px;border:1px solid #f6d58a;border-radius:12px;background:linear-gradient(180deg,#c89435,#7d4a16);color:#fff;text-decoration:none;font-weight:900;box-shadow:0 10px 24px rgba(0,0,0,.28);">
           返回開始頁
         </a>
       </div>
@@ -13241,6 +13217,10 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
 
   function applyBoardLanPayload(message = {}) {
     if (!boardLan.enabled || !message.payload) return;
+    if (message.roomCode && sanitizeRoomCode(message.roomCode) !== boardLan.roomCode) return;
+    // A save changes only outer record metadata, so accept it even when the
+    // game snapshot version or source client would otherwise be deduplicated.
+    applyBoardCampaignContext(message.campaignContext || message.payload.campaignContext);
     if (message.sourceClientId === boardLan.clientId && !boardLan.awaitingInitialState) return;
     const version = Number(message.version || 0);
     const reconnectHasPendingState = boardLan.awaitingInitialState && boardLan.joinedOnce && !!boardLan.pendingState;
@@ -13312,7 +13292,10 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       }
       setTimeout(() => {
         boardLan.applying = false;
-        if (applied) flushBoardLanPendingState();
+        if (applied) {
+          flushBoardLanPendingState();
+          scheduleBoardCampaignAutoSave();
+        }
         if (applied && wasAwaitingInitialState && shouldRunCpuAutoStep()) {
           scheduleCpuAutoStep(180);
         }
@@ -13330,7 +13313,26 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (!boardLan.enabled || !window.io || boardLan.socket) return false;
     boardLan.socket = window.io({ transports: ["websocket", "polling"] });
     shared.attachSocket?.(boardLan.socket);
-    boardLan.socket.on("connect", () => {
+    let joiningSocketId = "";
+    let runtimeReady = false;
+    let accountDatabaseEnabled = true;
+    const joinAuthenticatedBoardRoom = () => {
+      if (!boardLan.socket.connected || joiningSocketId === boardLan.socket.id) return;
+      if (!runtimeReady) {
+        boardLan.connected = false;
+        boardLan.awaitingInitialState = true;
+        showBoardLanInitialStateWait({ force: true });
+        return;
+      }
+      if (accountDatabaseEnabled && !shared.getState?.().socialReady) {
+        boardLan.connected = false;
+        boardLan.awaitingInitialState = true;
+        const social = shared.getState?.() || {};
+        if (!social.socialLoading && social.socialError) showBoardCampaignInitialLoadFailure("auth_required");
+        else showBoardLanInitialStateWait({ force: true });
+        return;
+      }
+      joiningSocketId = boardLan.socket.id;
       boardStateReceiver?.reset();
       const reconnecting = boardLan.joinedOnce;
       boardLan.connected = true;
@@ -13355,6 +13357,13 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         if (!result.ok) {
           boardLan.initialStateCanSeed = false;
           console.warn("[board LAN] join failed", result);
+          if (result.error === "auth_required" || result.error === "unauthenticated") {
+            joiningSocketId = "";
+            boardLan.connected = false;
+            boardLan.awaitingInitialState = true;
+            showBoardCampaignInitialLoadFailure("auth_required");
+            return;
+          }
           if (reconnecting) {
             boardLan.lastError = String(result.error || "reconnect_join_failed");
             showBoardLanInitialStateWait();
@@ -13375,11 +13384,12 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         if (result.lobby?.roomCode) {
           state.lobby = result.lobby;
           if (result.lobby.campaignId) {
-            state.campaignContext = {
-              ...(state.campaignContext || {}),
+            applyBoardCampaignContext(result.campaignContext || result.lobby?.campaignContext || {
               campaignId: String(result.lobby.campaignId),
               mode: String(result.lobby.campaignMode || state.campaignContext?.mode || ""),
-            };
+              roomName: result.lobby.roomName,
+              revision: Number(result.lobby.campaignRevision || 0),
+            });
           }
           shared.saveLobby(state.lobby);
           const changedPlayers = syncSetupPlayersFromLobby();
@@ -13398,8 +13408,31 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         showBoardLanInitialStateWait();
         scheduleBoardLanInitialStateRetry(hasRemoteState ? 360 : 520);
       });
+    };
+    boardLan.socket.on("connect", joinAuthenticatedBoardRoom);
+    window.addEventListener("board:social-updated", (event) => {
+      if (!boardLan.socket.connected || !runtimeReady || !accountDatabaseEnabled) return;
+      if (event.detail?.ready) joinAuthenticatedBoardRoom();
+      else if (!event.detail?.loading && event.detail?.error && !joiningSocketId) showBoardCampaignInitialLoadFailure("auth_required");
     });
+    const runtimeTimeout = window.setTimeout(() => {
+      if (runtimeReady) return;
+      runtimeReady = true;
+      joinAuthenticatedBoardRoom();
+    }, 6000);
+    fetch("/api/board-runtime", { cache: "no-store", credentials: "same-origin" })
+      .then((response) => response.ok ? response.json() : null)
+      .then((runtime) => {
+        accountDatabaseEnabled = runtime?.accountDatabaseEnabled !== false;
+      })
+      .catch(() => {})
+      .finally(() => {
+        window.clearTimeout(runtimeTimeout);
+        runtimeReady = true;
+        joinAuthenticatedBoardRoom();
+      });
     boardLan.socket.on("disconnect", () => {
+      joiningSocketId = "";
       boardStateReceiver?.reset();
       const interruptedState = boardLan.pendingState || boardLan.inFlightState;
       boardLan.connected = false;
@@ -13430,11 +13463,12 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       if (!message.lobby?.roomCode) return;
       state.lobby = message.lobby;
       if (message.lobby.campaignId) {
-        state.campaignContext = {
-          ...(state.campaignContext || {}),
+        applyBoardCampaignContext(message.campaignContext || message.lobby?.campaignContext || {
           campaignId: String(message.lobby.campaignId),
           mode: String(message.lobby.campaignMode || state.campaignContext?.mode || ""),
-        };
+          roomName: message.lobby.roomName,
+          revision: Number(message.lobby.campaignRevision || 0),
+        });
       }
       shared.saveLobby(state.lobby);
       const changedPlayers = syncSetupPlayersFromLobby();
@@ -13451,6 +13485,15 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         scheduleBoardLanInitialStateRetry(320);
       }
     });
+    boardLan.socket.on("BOARD_CAMPAIGN_SAVED", (message = {}) => {
+      if (message.roomCode && sanitizeRoomCode(message.roomCode) !== boardLan.roomCode) return;
+      applyBoardCampaignContext(message.campaignContext || message.lobby?.campaignContext || {
+        campaignId: message.campaign?.campaignId,
+        revision: message.campaign?.revision,
+        roomName: message.campaign?.roomName,
+        mode: state.lobby?.campaignMode || "standard",
+      });
+    });
     boardLan.socket.on("BOARD_GAME_STATE", boardStateReceiver?.receive || applyBoardLanPayload);
     boardLan.socket.on("BOARD_GAME_EVENT", applyBoardLanGameEvent);
     boardLan.socket.on("BOARD_STATE_REQUEST", () => {
@@ -13461,48 +13504,6 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       setTimeout(() => pushBoardLanState("request"), 120);
     });
     return true;
-  }
-
-  function confirmDeleteManualSave() {
-    openSaveLoadUi({
-      title: "確認刪除存檔",
-      subtitle: "此操作無法復原",
-      bodyHtml: `
-        <div class="save-load-message is-error">
-          <strong>本機與伺服器紀錄都會被清除</strong>
-          <p>將刪除目前瀏覽器的手動存檔，以及伺服器上的跨房號備份。刪除後無法復原，確定要繼續嗎？</p>
-        </div>
-      `,
-      actions: [
-        { id: "confirmDeleteSaveBtn", label: "確認刪除", tone: "danger" },
-        { id: "cancelDeleteSaveBtn", label: "取消", tone: "secondary" },
-      ],
-    });
-    document.getElementById("confirmDeleteSaveBtn")?.addEventListener("click", deleteManualSave);
-    document.getElementById("cancelDeleteSaveBtn")?.addEventListener("click", closeManualLoadModal);
-  }
-
-  async function deleteManualSave() {
-    manualSaveStorageKeys().forEach((key) => localStorage.removeItem(key));
-    let serverDeleted = false;
-    try {
-      await deleteServerManualSavePayload();
-      serverDeleted = true;
-    } catch (error) {
-      console.warn("Unable to delete server manual save.", error);
-    }
-    openSaveLoadUi({
-      title: "存檔已刪除",
-      subtitle: serverDeleted ? "本機與伺服器紀錄已清除" : "伺服器備份未能同步清除",
-      bodyHtml: `
-        <div class="save-load-message ${serverDeleted ? "" : "is-warning"}">
-          <strong>${serverDeleted ? "航海紀錄已清除" : "本機紀錄已清除"}</strong>
-          <p>目前瀏覽器裡的手動存檔已清除。${serverDeleted ? "伺服器備份也已同步清除。" : "伺服器備份暫時無法清除。"}</p>
-        </div>
-      `,
-      actions: [{ id: "deleteSaveOkBtn", label: "知道了" }],
-    });
-    document.getElementById("deleteSaveOkBtn")?.addEventListener("click", closeManualLoadModal);
   }
 
   function createFreshGameSeed() {
@@ -20569,6 +20570,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   }
 
   function renderHeader() {
+    renderVoyageRecordStatus();
     refs.gameRoomTitle.textContent = state.lobby.roomName || "偉大航道正式遊戲";
     refs.gameRoomCode.textContent = state.lobby.roomCode || "—";
     refs.currentTurnName.textContent = currentPlayer()?.name || "—";
@@ -25973,6 +25975,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     scheduleRecoveredResearchStoryIfNeeded();
     schedulePendingAokijiCaptureStory();
     scheduleBoardLanStatePush("render");
+    scheduleBoardCampaignAutoSave();
   }
 
   function syncTurnActionButtons() {
@@ -28893,7 +28896,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   }
 
   function setupLoadSaveButtonMarkup() {
-    return `<button type="button" class="modal-btn" id="setupLoadGameBtn">讀取存檔</button>`;
+    return `<button type="button" class="modal-btn" id="setupLoadGameBtn">我的航海錄</button>`;
   }
 
   function bindSetupLoadSaveButton() {
@@ -29522,7 +29525,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     closeModal();
     renderAll();
     scheduleBoardLanStatePush("draft-complete", 80, { force: true });
-    void saveManualGame({ silent: true, successLog: "已自動保存開局選角進度。" });
+    scheduleBoardCampaignAutoSave();
   }
 
   function recalcPlayerDerivedStats(player) {
@@ -63881,9 +63884,15 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     rewindBeforeFinalGate: rewindCurrentPlayerBeforeFinalGate,
     openSetupStep,
     saveManualGame,
+    getCampaignSaveState: () => ({ status: campaignSaveState.status, error: campaignSaveState.error, lastAutoCheckpoint: campaignSaveState.lastAutoCheckpoint }),
+    manualSaveStorageKeys,
+    readManualSavePayload,
+    readLegacyManualSavePayload,
+    manualSaveMatchesCurrentVoyage,
+    boardCampaignAutoCheckpoint,
+    scheduleBoardCampaignAutoSave,
     loadManualGame,
     loadServerManualGame,
-    readManualSavePayload,
     createManualSavePayload,
     normalizeLoadedGameState,
     boardLanStatus: () => ({
@@ -63924,7 +63933,6 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     runCpuAutoStep,
     pushBoardLanState,
     recoverAnyPendingElbaphGateSequence,
-    deleteManualSave,
     grantBattleCarryItems: grantBattleCarryItemsForTesting,
     grantBattleCarryItem: grantBattleCarryItemForTesting,
     grantGameItems: grantGameItemsForTesting,

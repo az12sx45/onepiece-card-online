@@ -364,7 +364,10 @@
     }
     #focusPlayerBtn{min-width:126px}
     #viewWholeMapBtn{min-width:96px}
-    #saveGameBtn,#loadGameBtn{min-width:72px}
+    #saveGameBtn,#loadGameBtn{min-width:88px}
+    .voyage-record-status{max-width:230px;min-width:0;color:#e5c78b;font-size:12px;line-height:1.35;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .voyage-record-status[data-status="error"]{color:#ffb69b}
+    @media(max-width:600px){.voyage-record-status{flex:1 1 100%;max-width:100%;text-align:right}#saveGameBtn,#loadGameBtn{min-width:80px}}
     .map-tool-btn:disabled{
       opacity:.58;
       cursor:not-allowed;
@@ -9517,6 +9520,24 @@
       .save-load-heading{top:12.8%}.save-load-message{padding-right:5%;padding-left:5%}.save-load-record-grid.is-double .save-record-card{height:78%}
       .save-record-line{padding-right:5%;padding-left:5%}.save-load-actions{gap:.8%}.save-load-actions.count-4 .save-load-action{height:69%}
     }
+    /* Record management dialogs use normal flow so long names and phones remain readable. */
+    .board-modal.save-load-nautical-modal.voyage-record-modal{width:min(660px,94vw);height:auto;aspect-ratio:auto;max-height:90dvh;padding:24px;border:1px solid #8e794b;border-radius:16px;background:linear-gradient(145deg,#102e3b,#06121e);box-shadow:0 20px 80px #000b;overflow:auto}
+    .voyage-record-modal .save-load-ui{height:auto;overflow:visible}
+    .voyage-record-modal .save-load-panel-frame{display:none}
+    .voyage-record-modal .save-load-heading{position:relative;inset:auto;width:100%;height:auto;gap:10px;padding:0;text-align:left;align-items:flex-start;overflow:visible}
+    .voyage-record-modal .save-load-heading h3{font-size:25px;line-height:1.3;max-width:100%;white-space:normal;overflow-wrap:anywhere}
+    .voyage-record-modal .save-load-heading span{font-size:13px;line-height:1.5;max-width:100%;white-space:normal;overflow-wrap:anywhere;letter-spacing:0}
+    .voyage-record-modal .save-load-body{position:relative;inset:auto;width:100%;height:auto;margin:20px 0;display:block;overflow:visible}
+    .voyage-record-modal .save-load-message{width:100%;height:auto;padding:16px;align-items:flex-start;border:1px solid #29565a;border-radius:10px;background:#071a25;text-align:left;overflow:visible}
+    .voyage-record-modal .save-load-message strong{font-size:17px;line-height:1.5;overflow:visible}
+    .voyage-record-modal .save-load-message p{display:block;font-size:14px;line-height:1.8;font-weight:500;overflow:visible;-webkit-line-clamp:unset;margin:10px 0 0}
+    .voyage-record-modal .voyage-local-summary{border-top:1px solid #285354;padding-top:10px;color:#90d6cc}
+    .voyage-record-modal .save-load-actions{position:relative;inset:auto;width:100%;height:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+    .voyage-record-modal .save-load-actions .save-load-action{width:100%;height:auto;min-height:46px;aspect-ratio:auto;border:1px solid #ab8a46;border-radius:8px;padding:10px;background:#534326;font-size:14px;white-space:normal}
+    .voyage-record-modal .save-load-actions .save-load-action.secondary{background:#123a42;border-color:#357276}
+    .voyage-record-modal .save-load-action img{display:none}
+    .voyage-record-modal .save-load-action span{position:relative;inset:auto;width:100%;height:auto;display:block;overflow:visible;overflow-wrap:anywhere}
+    @media(max-width:480px){.board-modal.save-load-nautical-modal.voyage-record-modal{padding:18px}.voyage-record-modal .save-load-actions{grid-template-columns:1fr}}
     /* Formal full-screen move learning and replacement UI. */
     .board-modal.move-learn-nautical-modal{
       width:min(98vw,calc(96dvh * 1.77577));height:auto;aspect-ratio:1671/941;max-width:none;max-height:96dvh;
@@ -27371,8 +27392,9 @@
             <span class="cpu-speed-hint" id="cpuSpeedHint">房主</span>
             <button type="button" class="cpu-strategy-btn" id="cpuStrategyBtn">CPU指令</button>
           </div>
-          <button type="button" class="map-tool-btn" id="saveGameBtn">存檔</button>
-          <button type="button" class="map-tool-btn" id="loadGameBtn">讀檔</button>
+          <span class="voyage-record-status" id="voyageRecordStatus" role="status" aria-live="polite">尚未建立紀錄</span>
+          <button type="button" class="map-tool-btn" id="saveGameBtn">手動存檔</button>
+          <button type="button" class="map-tool-btn" id="loadGameBtn">我的航海錄</button>
         </div>
         <div class="map-turn-banner" id="mapTurnBanner" aria-live="polite"></div>
         <div class="board-viewport" id="boardViewport">
@@ -27486,6 +27508,6 @@
   <script src="js/board_enemy_spawn_regions.js?v=20260829-regional-enemy-spawns-v381"></script>
   <script src="js/board_state_wire.js?v=20260910-state-wire-v1"></script>
   <script src="js/board_state_receiver.js?v=20260910-state-wire-v1"></script>
-  <script src="js/board_game.js?v=20260910-cpu-arrival-v1"></script>
+  <script src="js/board_game.js?v=20260914-voyage-records-v1"></script>
 </body>
 </html>

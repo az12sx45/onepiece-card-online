@@ -1,5 +1,11 @@
 ﻿# Dev Workflow
 
+## 我的航海錄多紀錄改版（2026-09-14）
+
+- 使用者授權實作與部署；最新 main 建立 `D:\Codex_Release_Worktrees\board-voyage-records-v1`。一周目保存整隊、獨立紀錄、原團集合、私人副本、名稱管理、最近 5 次自動備份及舊檔明確匯入；移除跨房最新備份，加入帳號身份與版本衝突檢查。
+- 檔案：`server/index.js`、`server/board-voyage-records.js`、`public/js/board_game.js`、`public/js/board_start.js`、兩個 Board HTML；新增 server／browser 定向 QA，配合 desktop v3 manifest／catalog。同步 PROJECT_OVERVIEW、GAME_RULES、FILE_MAP 及 `BOARD_VOYAGE_RECORDS_20260914.md`。
+- 本機 `PORT=18914 npm start`、JS 語法、CRLF-aware diff 檢查通過。最終 server 104、多人 browser 20、正式 auth browser 11 checks 全 PASS；既有 LAN refresh／交棒／戰鬥恢復也通過。資料使用隔離 file／mock PostgreSQL；發布狀態以專題紀錄後續補記為準。
+
 ## 啟動器 1.1.7：好友聊天、取名、活動與更新提醒（2026-09-10）
 
 - 正式 release `943798b1` 於 16:25（Asia/Taipei）在 Render 生效；health、三款 runtime identity、5 份 metadata、26 份 Chess 程式公開完整性通過。R2 installer 152,891,899 bytes 已發布，既有 1.1.6 updater 實際下載至 ready，並確認正式清單提供 1.1.7。使用者可在帳號／啟動器設定內更新並重新啟動，不需手動下載安裝；本體仍為完整更新包，遊戲為增量。補記文件使用 `[skip render]`，本機 QA 服務已停止。

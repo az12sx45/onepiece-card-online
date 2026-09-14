@@ -1,5 +1,15 @@
 # File Map
 
+## 我的航海錄（2026-09-14）
+
+- `server/board-voyage-records.js`：完整紀錄 v2、備份、私人副本；遊戲 state 視為不透明快照，不合併世界。
+- `server/index.js`：已驗證身份、成員清單／原團等待室、完整保存、revision CAS、舊檔匯入與持久化。
+- `public/js/board_game.js`、`public/board_game.html`：手動／自動保存、帳號與紀錄本機隔離、衝突處理、管理入口。
+- `public/js/board_start.js`、`public/board_start.html`：我的航海錄、名稱／備份管理、原團集合、個人副本及舊紀錄匯入。
+- `scripts/board_voyage_records_server_qa.js`、`scripts/board_voyage_records_browser_qa.js`：隔離持久化、授權／衝突與真瀏覽器續玩驗證。
+- `scripts/board_voyage_records_auth_browser_qa.js`：延遲帳號驗證的真瀏覽器登入／集合回歸；`scripts/board_voyage_records_release_verify.js`：唯讀核對 R2 新 blobs、正式 runtime identity 與程式／metadata SHA。
+- `docs/BOARD_VOYAGE_RECORDS_20260914.md`：操作、相容性、驗收、發布與回復紀錄。桌面更新沿用 Board v3 catalog／immutable manifest。
+
 ## 啟動器社交 1.1.7（2026-09-10）
 
 - desktop/social-service.js：主程序好友與私訊，沿用 AuthService 的 socket/deviceId，受限 IPC。

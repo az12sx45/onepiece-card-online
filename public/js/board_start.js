@@ -809,9 +809,23 @@
       campaign_locked: "這場遊戲已經開始，不能中途加入。請等大家存檔後重新集合。",
       campaign_already_connected: "這名玩家已經在目前的集合局中，不能重複連入。",
       campaign_fixed_roster: "共有航海紀錄的成員與 CPU 席位不能在等待室更動。",
+      auth_required: "請先完成帳號登入，再開啟我的航海錄。",
+      campaign_conflict: "紀錄已有較新的版本，已重新讀取清單，請再操作一次。",
+      stale_campaign_revision: "紀錄已有較新的版本，請重新讀取清單。",
+      campaign_members_missing: "請等原團所有成員加入並準備，再一起續航。",
+      campaign_backup_not_found: "這份備份已不在最近紀錄中，請重新讀取清單。",
+      backup_not_found: "這份備份已不在最近紀錄中，請重新讀取清單。",
+      revision_conflict: "這份紀錄已有新版本，請重新整理後再操作。",
+      state_conflict: "遊戲正在同步新的進度，請稍後再試。",
+      members_missing: "請等原團所有成員加入並準備，再一起續航。",
+      legacy_copy_required: "這是舊版分流紀錄，請先另存個人副本。",
+      not_save_member: "這份舊存檔沒有你的帳號，無法匯入。",
+      save_not_found: "找不到指定原房號的存檔，請確認房號。",
+      original_room_required: "請輸入原存檔房號；共用 RECOVERED 備份不能直接匯入。",
+      copy_flow_busy: "這份紀錄仍有交易或切磋等待玩家回應；請原團先完成，再另存個人副本。",
       not_all_ready: "所有已進入等待室的真人玩家都要先按準備。",
       campaign_branch_busy: "建立者的紀錄仍在戰鬥、移動或事件中，請回遊戲完成結算後重新存檔。",
-      campaign_assemble_failed: "無法組合大家的最新紀錄，請重新整理後再試。",
+      campaign_assemble_failed: "無法載入這份完整紀錄，請重新整理後再試。",
     };
     shared.showToast(map[error] || fallbackText);
     return true;
@@ -1063,8 +1077,8 @@
       card.innerHTML = `
         <div class="board-room-top">
           <div>
-            <div class="board-room-name">${room.title}</div>
-            <div class="board-room-host">房主 ${room.hostName}</div>
+            <div class="board-room-name">${escapeCampaignText(room.title)}</div>
+            <div class="board-room-host">房主 ${escapeCampaignText(room.hostName)}</div>
           </div>
           <div class="board-room-status ${isFull ? "busy" : "waiting"}">${isFull ? "已滿" : "可加入"}</div>
         </div>
@@ -1099,7 +1113,7 @@
     refs.boardCampaignList.innerHTML = "";
     const campaigns = Array.isArray(state.campaigns) ? state.campaigns : [];
     if (localPreviewMode && refs.openCampaignsBtn) {
-      refs.openCampaignsBtn.hidden = campaigns.length === 0;
+      refs.openCampaignsBtn.hidden = false;
     }
     if (refs.campaignMenuHint) {
       refs.campaignMenuHint.textContent = campaigns.length
@@ -1109,37 +1123,48 @@
     refs.boardCampaignEmpty.style.display = campaigns.length ? "none" : "block";
     refs.boardCampaignEmpty.textContent = onlineReady()
       ? (accountProfileLocked
-        ? "這個登入帳號目前沒有共有航海紀錄。完成一周目並存檔後會顯示在這裡。"
-        : "目前是本機測試玩家；登入正式帳號後會載入該帳號的航海紀錄。")
+        ? "尚未有航海紀錄。開始新航海後隨時存檔，一周目也會保存在這裡。"
+        : "這個本機測試玩家尚未存檔。正式帳號的紀錄會在登入後顯示。")
       : "正在連接伺服器並讀取這個帳號的航海紀錄…";
     campaigns.forEach((campaign) => {
       const card = document.createElement("article");
       card.className = "campaign-save-card";
+      card.dataset.campaignId = campaign.campaignId;
       const currentMember = (campaign.members || []).find((member) => member.key === campaign.memberKey)
         || (campaign.members || []).find((member) => Number(member.userId) === Number(profile.userId));
       const personalLocation = currentMember?.latest?.location?.label || "位置已保存";
       const personalCrew = Array.isArray(currentMember?.latest?.crew) ? currentMember.latest.crew : [];
       const crewNames = personalCrew.slice(0, 3).map((entry) => entry.name).filter(Boolean).join("、");
-      const turnStep = String(campaign.branch?.turnStep || "等待行動");
+      const progress = campaign.progress || campaign.branch || {};
+      const turnStep = progress.hasBattle ? "戰鬥中（包含續戰進度）" : String(progress.turnStep || "整場進度已保存");
+      const isSolo = (campaign.members || []).length === 1;
       const members = (campaign.members || []).map((member) => `
         <span class="campaign-member-chip" title="${escapeCampaignText(member.latest?.location?.label || "位置已保存")}">
           <img src="${shared.avatarUrlById(member.avatar || 1)}" alt="${escapeCampaignText(member.name)}">
           <span>${escapeCampaignText(member.name)}</span>
         </span>
       `).join("");
-      const gatherLabel = campaign.activeGatherRoom ? "加入集合等待室" : "開啟集合等待室";
+      const gatherLabel = campaign.activeGatherRoom ? "加入原團集合" : "邀原成員集合";
+      const backups = (campaign.backups || []).map((backup) => `
+        <div class="campaign-backup-row">
+          <span>第 ${Math.max(1, Number(backup.round || 1))} 回合 · ${escapeCampaignText(formatCampaignTime(backup.savedAt))}<small>${backup.saveKind === "auto" ? "自動備份" : "手動保存"} · 版本 ${Number(backup.revision || 0)}</small></span>
+          <button type="button" class="campaign-action secondary" data-backup-revision="${Number(backup.revision || 0)}">另存副本續玩</button>
+        </div>
+      `).join("");
       card.innerHTML = `
         <div>
           <div class="campaign-save-title">
-            <span>${escapeCampaignText(campaign.roomName || "共有航海紀錄")}</span>
-            <span class="campaign-save-badge">${campaign.shared?.postgameUnlocked ? "二周目" : "共有"}</span>
+            <span>${escapeCampaignText(campaign.name || campaign.roomName || "航海紀錄")}</span>
+            <span class="campaign-save-badge">${Number(progress.cycle || (campaign.shared?.postgameUnlocked ? 2 : 1))} 周目</span>
+            <span class="campaign-save-badge">${campaign.parentCampaignId ? "個人副本" : isSolo ? "單人航海" : "共同航海"}</span>
             ${campaign.activeGatherRoom ? '<span class="campaign-save-badge">集合中</span>' : ""}
           </div>
           <div class="campaign-save-meta">
             <span>紀錄 ${escapeCampaignText(campaign.campaignId)}</span>
             <span>${campaign.members?.length || 0} 名成員</span>
-            <span>你的進度：${escapeCampaignText(formatCampaignTime(campaign.branch?.savedAt))}</span>
-            <span>第 ${Math.max(1, Number(campaign.branch?.round || 1))} 輪</span>
+            <span>保存：${escapeCampaignText(formatCampaignTime(progress.savedAt || campaign.updatedAt))}</span>
+            <span>第 ${Math.max(1, Number(progress.round || 1))} 回合</span>
+            <span>${progress.saveKind === "auto" ? "自動備份" : "手動保存"} · 版本 ${Number(campaign.revision || 1)}</span>
           </div>
           <div class="campaign-personal-summary">
             <span>此帳號：${escapeCampaignText(currentMember?.name || profile.name)}</span>
@@ -1148,14 +1173,35 @@
             <span>狀態：${escapeCampaignText(turnStep)}</span>
           </div>
           <div class="campaign-save-members">${members}</div>
+          ${campaign.parentCampaignId ? `<p class="campaign-record-note">來源紀錄 ${escapeCampaignText(campaign.parentCampaignId)}；此副本獨立保存。</p>` : ""}
         </div>
         <div class="campaign-save-actions">
-          <button type="button" class="campaign-action" data-campaign-solo="${escapeCampaignText(campaign.campaignId)}">繼續個人航海</button>
-          <button type="button" class="campaign-action secondary" data-campaign-gather="${escapeCampaignText(campaign.campaignId)}">${gatherLabel}</button>
+          <button type="button" class="campaign-action" data-campaign-continue>${isSolo ? "繼續航海" : gatherLabel}</button>
+          <button type="button" class="campaign-action secondary" data-campaign-copy>另存個人副本</button>
         </div>
+        <details class="campaign-manage">
+          <summary>管理名稱與備份</summary>
+          <form class="campaign-rename-form">
+            <label>紀錄名稱<input data-campaign-name maxlength="60" required value="${escapeCampaignText(campaign.name || campaign.roomName || "航海紀錄")}"></label>
+            <button class="campaign-action secondary" type="submit" data-campaign-rename>儲存名稱</button>
+          </form>
+          <p class="campaign-record-note">保留最近 5 次自動備份。從備份另存個人副本，原團進度會繼續保留。</p>
+          ${backups || '<p class="campaign-record-note">尚未有自動備份；遊戲中的穩定回合會自動保存。</p>'}
+          ${campaign.legacyBranch ? '<button type="button" class="campaign-action secondary" data-legacy-branch>將舊個人分流另存副本</button>' : ""}
+        </details>
       `;
-      card.querySelector("[data-campaign-solo]")?.addEventListener("click", () => openBoardCampaign(campaign.campaignId, "solo"));
-      card.querySelector("[data-campaign-gather]")?.addEventListener("click", () => openBoardCampaign(campaign.campaignId, "gather"));
+      card.querySelector("[data-campaign-continue]").addEventListener("click", () => openBoardCampaign(campaign.campaignId, isSolo ? "solo" : "gather"));
+      card.querySelector("[data-campaign-copy]").addEventListener("click", () => openBoardCampaign(campaign.campaignId, "copy"));
+      card.querySelectorAll("[data-backup-revision]").forEach((button) => button.addEventListener("click", () => openBoardCampaign(campaign.campaignId, "copy", { backupRevision: Number(button.dataset.backupRevision) })));
+      card.querySelector("[data-legacy-branch]")?.addEventListener("click", () => openBoardCampaign(campaign.campaignId, "copy", { legacyBranch: true }));
+      card.querySelector("form").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const name = card.querySelector("[data-campaign-name]").value.trim();
+        if (!name) return;
+        const result = await campaignRequest("BOARD_CAMPAIGN_SAVE", { action: "rename", campaignId: campaign.campaignId, name, expectedRevision: Number(campaign.revision || 0) });
+        if (result?.ok) shared.showToast("航海紀錄名稱已保存。");
+        requestCampaignList();
+      });
       refs.boardCampaignList.appendChild(card);
     });
   }
@@ -1163,34 +1209,99 @@
   function requestCampaignList() {
     if (!onlineReady()) return false;
     boardSocket.socket.emit("BOARD_CAMPAIGN_LIST", { profile: boardProfilePayload() }, (result = {}) => {
-      if (!result.ok) return;
+      if (!result.ok) {
+        if (refs.boardCampaignEmpty && !state.campaigns?.length) refs.boardCampaignEmpty.textContent = result.error === "auth_required" ? "正在驗證帳號，登入完成後會載入紀錄。" : "紀錄暫時讀取失敗，請按重新整理。";
+        return;
+      }
       state.campaigns = Array.isArray(result.campaigns) ? result.campaigns : [];
       renderCampaignList();
     });
     return true;
   }
 
-  function openBoardCampaign(campaignId, mode) {
+  let campaignOperationPending = false;
+  let campaignAccountReady = false;
+  async function campaignRequest(eventName, message) {
+    if (campaignOperationPending) return null;
+    if (!onlineReady()) { shared.showToast("請先連上遊戲伺服器。"); return null; }
+    campaignOperationPending = true;
+    document.querySelectorAll("#boardCampaignPanel button").forEach((button) => { button.disabled = true; });
+    let result;
+    try {
+      result = await new Promise((resolve) => boardSocket.socket.timeout(15000).emit(eventName, { ...message, profile: boardProfilePayload() }, (error, response) => resolve(error ? { ok: false, error: "timeout" } : response || { ok: false })));
+      handleSocketError(result, "操作未確認完成，請重新整理紀錄後再確認。");
+      return result;
+    } finally {
+      campaignOperationPending = false;
+      document.querySelectorAll("#boardCampaignPanel button").forEach((button) => { button.disabled = false; });
+    }
+  }
+
+  async function openBoardCampaign(campaignId, mode, options = {}) {
     commitPlayerName({ render: false });
     if (!onlineReady()) {
       shared.showToast("共有航海紀錄需要先連上遊戲伺服器。");
       connectBoardSocket();
       return;
     }
-    boardSocket.socket.emit("BOARD_CAMPAIGN_OPEN", {
-      campaignId,
-      mode,
-      profile: boardProfilePayload(),
-    }, (result = {}) => {
-      if (handleSocketError(result, "開啟共有航海紀錄失敗")) return;
+    const result = await campaignRequest("BOARD_CAMPAIGN_OPEN", { campaignId, mode, ...options });
+      if (!result?.ok) { requestCampaignList(); return; }
       if (result.lobby) saveAndRenderLobby(result.lobby);
       if (result.navigate && result.roomCode) {
-        void navigateToBoardGameWhenReady(`board_game.html?room=${encodeURIComponent(result.roomCode)}&online=1&campaign=${encodeURIComponent(campaignId)}&campaignMode=solo`);
+        void navigateToBoardGameWhenReady(`board_game.html?room=${encodeURIComponent(result.roomCode)}&online=1&campaign=${encodeURIComponent(result.campaignId || result.lobby?.campaignId || campaignId)}&campaignMode=${encodeURIComponent(result.mode || "solo")}`);
         return;
       }
       setView("lobby");
       requestCampaignList();
+  }
+
+  function matchingLocalCampaignSaves() {
+    const result = [];
+    const uid = Number(profile.userId);
+    if (!(uid > 0)) return result;
+    try {
+      for (let index = 0; index < localStorage.length; index += 1) {
+        const key = localStorage.key(index);
+        if (!key?.startsWith("onepiece-board-manual-save-v1")) continue;
+        const scoped = key.match(/:user:(\d+):/);
+        if (scoped && Number(scoped[1]) !== uid) continue;
+        try {
+          const payload = JSON.parse(localStorage.getItem(key));
+          if (!payload?.gameState?.boardData || !Array.isArray(payload.gameState.players)) continue;
+          if (payload.storageScope?.ownerUserId && Number(payload.storageScope.ownerUserId) !== uid) continue;
+          if (!payload.gameState.players.some((player) => Number(player.userId || player.id) === uid)) continue;
+          result.push({ key, payload });
+        } catch (_) {}
+      }
+    } catch (_) {}
+    return result.sort((a, b) => String(b.payload.savedAt || "").localeCompare(String(a.payload.savedAt || "")));
+  }
+
+  function renderLocalCampaignSaves() {
+    const select = document.getElementById("campaignLocalSave");
+    if (!select) return;
+    select.replaceChildren();
+    matchingLocalCampaignSaves().forEach(({ key, payload }) => {
+      const option = document.createElement("option");
+      option.value = key;
+      option.textContent = `${payload.roomCode || "本機"} · 第 ${Number(payload.gameState.round || 1)} 回合 · ${formatCampaignTime(payload.savedAt)}`;
+      select.appendChild(option);
     });
+    if (!select.options.length) select.add(new Option("這台裝置沒有可匯入的本機紀錄", ""));
+    document.getElementById("importLocalCampaignBtn").disabled = !select.value;
+    const selected = query.get("importLocal");
+    if (selected && Array.from(select.options).some((option) => option.value === selected)) {
+      select.value = selected;
+      document.getElementById("campaignImportPanel").open = true;
+    }
+  }
+
+  async function importCampaignSave(message) {
+    const result = await campaignRequest("BOARD_CAMPAIGN_SAVE", message);
+    if (result?.ok) {
+      shared.showToast("已另存為獨立航海紀錄，可在清單中繼續。");
+      requestCampaignList();
+    }
   }
 
   function toggleRoomList(forceOpen) {
@@ -1433,7 +1544,7 @@
         </div>
         <div class="seat-tags">
           ${player.isHost ? '<span class="seat-tag host">房主</span>' : ""}
-          ${isProxyCpu ? '<span class="seat-tag cpu">CPU 代管</span>' : (isCpu ? '<span class="seat-tag cpu">CPU</span>' : "")}
+          ${isProxyCpu ? `<span class="seat-tag cpu">${state.lobby.campaignMode === "gather" ? "等待原成員加入" : "CPU 代管"}</span>` : (isCpu ? '<span class="seat-tag cpu">CPU</span>' : "")}
           ${isMe ? '<span class="seat-tag me">你</span>' : ""}
           <span class="seat-tag ${player.ready ? "ready" : "wait"}">${player.ready ? "已準備" : "待命"}</span>
           ${canRemoveCpu ? `<button type="button" class="seat-remove-cpu" data-remove-cpu="${player.userId}">移除</button>` : ""}
@@ -1446,7 +1557,9 @@
     refs.boardReadyBtn.textContent = currentLobbyPlayer()?.ready ? "取消準備" : "準備";
     const joinedHumans = state.lobby.players.filter((player) => !isCpuLobbyPlayer(player));
     const allJoinedHumansReady = joinedHumans.length > 0 && joinedHumans.every((player) => player.ready);
-    refs.boardStartBtn.disabled = !isLobbyHost() || (state.lobby.campaignId && !allJoinedHumansReady);
+    const missingOriginalMembers = state.lobby.campaignMode === "gather" && state.lobby.players.some((player) => player.isProxyCPU);
+    refs.boardStartBtn.disabled = !isLobbyHost() || (state.lobby.campaignId && (!allJoinedHumansReady || missingOriginalMembers));
+    refs.boardStartBtn.title = missingOriginalMembers ? "等待原團所有成員加入並準備" : "";
     refs.boardStartBtn.style.display = isLobbyHost() ? "" : "none";
     refs.boardAddCpuBtn.disabled = !isLobbyHost() || state.lobby.players.length >= Number(state.lobby.maxPlayers || 4) || Boolean(state.lobby.campaignId);
     refs.boardAddCpuBtn.style.display = isLobbyHost() && !state.lobby.campaignId ? "" : "none";
@@ -1578,9 +1691,11 @@
     const handleConnect = () => {
       boardSocket.connected = true;
       state.online = true;
+      if (!localPreviewMode && !shared.getState?.().socialReady) return;
       requestOnlineRoomList();
       requestCampaignList();
-      const targetRoomCode = state.lobby?.roomCode || (query.get("room") ? sanitizeRoomCode(query.get("room")) : "");
+      const visitingRecords = query.get("view") === "campaigns" || query.get("records") === "1" || query.has("importLocal");
+      const targetRoomCode = visitingRecords ? "" : state.lobby?.roomCode || (query.get("room") ? sanitizeRoomCode(query.get("room")) : "");
       if (targetRoomCode) {
         boardSocket.socket.emit("BOARD_JOIN_ROOM", {
           roomCode: targetRoomCode,
@@ -1596,9 +1711,13 @@
       shared.showToast("已連上本地大富翁房間伺服器");
     };
     boardSocket.socket.on("connect", handleConnect);
+    window.addEventListener("board:social-updated", (event) => {
+      if (event.detail?.ready && !campaignAccountReady && boardSocket.socket.connected) handleConnect();
+    });
     boardSocket.socket.on("disconnect", () => {
       boardSocket.connected = false;
       state.online = false;
+      campaignAccountReady = false;
       shared.showToast("大富翁房間伺服器已斷線，暫時回到單機等待室。");
     });
     boardSocket.socket.on("BOARD_ROOM_LIST", (message = {}) => {
@@ -1667,7 +1786,22 @@
       shared.refreshFriends?.();
       renderSocialSummary();
     });
-    window.addEventListener("board:social-updated", (event) => renderSocialSummary(event.detail || {}));
+    window.addEventListener("board:social-updated", (event) => {
+      renderSocialSummary(event.detail || {});
+      if (event.detail?.ready && !campaignAccountReady) requestCampaignList();
+      campaignAccountReady = Boolean(event.detail?.ready);
+    });
+    document.getElementById("refreshCampaignsBtn")?.addEventListener("click", () => { requestCampaignList(); renderLocalCampaignSaves(); });
+    document.getElementById("campaignImportPanel")?.addEventListener("toggle", (event) => { if (event.target.open) renderLocalCampaignSaves(); });
+    document.getElementById("importLocalCampaignBtn")?.addEventListener("click", () => {
+      const key = document.getElementById("campaignLocalSave").value;
+      const save = matchingLocalCampaignSaves().find((entry) => entry.key === key);
+      if (save) void importCampaignSave({ action: "import", payload: save.payload });
+    });
+    document.getElementById("importLegacyRoomForm")?.addEventListener("submit", (event) => {
+      event.preventDefault();
+      void importCampaignSave({ action: "importLegacyRoom", roomCode: document.getElementById("campaignLegacyRoom").value.trim().toUpperCase() });
+    });
     refs.createBoardRoomBtn.addEventListener("click", createRoom);
     refs.joinBoardRoomBtn.addEventListener("click", () => joinRoom(refs.roomCodeInput.value));
     refs.refreshBoardRoomsBtn.addEventListener("click", () => {
@@ -1728,8 +1862,9 @@
       setView("modeSelect");
       return;
     }
-    if (view === "campaigns" && (!localPreviewMode || state.campaigns.length)) {
+    if (view === "campaigns" || query.get("records") === "1" || query.get("importLocal")) {
       setView("campaigns");
+      renderLocalCampaignSaves();
       return;
     }
     if (view === "social") {
