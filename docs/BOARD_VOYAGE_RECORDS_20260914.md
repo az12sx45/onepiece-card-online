@@ -4,7 +4,7 @@
 
 2026-09-14 使用者授權實作及部署。從正式 main `3ac13b7bfd3324a86b7d7186d9985d7cfbd5b58f` 建立 `D:\Codex_Release_Worktrees\board-voyage-records-v1`／`codex/board-voyage-records-v1`。基線公開 Board package 為 `package-40947c7bd7fe4b29`；7 份正式入口、程式與 metadata 已核對 Git HEAD 大小和 SHA。C 槽舊開發樹不是本輪發布來源。
 
-本機驗收完成，正在發布。完成後將補記程式與 release commit、Board package 以及線上證據。既有兩張 ranks 圖片的大小寫 checkout 差異不納入提交。
+程式提交 `a8ae9555e60b4f365903838a84ff5d718e2b8120`，本機驗收完成。2026-09-14 22:56（Asia/Taipei）已上傳並從公開網址完整驗證 4 個新 R2 blobs，共 4,486,101 bytes。Board package 為 `package-682d04d78ff3aeba`，manifest SHA-256 為 `c1f3910abfd961cbdf686005ac336425040a20eaf5858377d5120b22061c6017`。正在推送 matching metadata 與程式至 main；Render 結果於發布後補記。既有兩張 ranks 圖片的大小寫 checkout 差異不納入提交。
 
 ## 使用方式
 
@@ -33,7 +33,7 @@
 
 最終 20 項 browser 重跑通過，報告 `D:/Codex_QA/board-voyage-records-20260914/browser-final/report.json`。既有 `scripts/lan_refresh_flow_qa.js` 亦通過雙端建房／加入／開始／交棒／刷新與戰鬥恢复，guest 3 次 delta 解碼、0 recoveries、0 errors。
 
-`scripts/board_voyage_records_auth_browser_qa.js` 通過 11 checks／0 errors：三個隔離固定帳號走正式 PROFILE_GET／SOCIAL_AUTH；10 次 auth 實際延遲 402–452ms，5 次新局／刷新／集合的 JOIN 全在 auth ACK 後發送，並驗證正式身份下的共同保存、他帳號隔離與原團恢復。報告 `D:/Codex_QA/board-voyage-records-20260914/auth-browser/mu1cvkm2/report.json`。前端另以定向 VM 檢查本機 scope、同步 ACK 失敗、版本衝突、auth capability 與 auto checkpoint 節流。
+`scripts/board_voyage_records_auth_browser_qa.js` 通過 11 checks／0 errors：三個隔離固定帳號走正式 PROFILE_GET／SOCIAL_AUTH；10 次 auth 實際延遲 402–452ms，5 次新局／刷新／集合的 JOIN 全在 auth ACK 後發送，並驗證正式身份下的共同保存、他帳號隔離與原團恢復。報告 `D:/Codex_QA/board-voyage-records-20260914/auth-browser/mu1cvkm2/report.json`。前端定向 VM 48 assertions 全通過：24 項本機 scope／同步 ACK、14 項 auth capability 與 10 項 auto checkpoint 節流；報告在 `D:/Codex_QA/board-voyage-records-20260914/frontend/frontend-vm-result.json`。
 
 JS 語法與辨識 CRLF 的 diff 空白檢查通過；保留原檔未修改行的混合換行。所有 QA 使用隔離資料，不能將 mock PostgreSQL 或 fixture 視為正式真人存檔驗收。
 
@@ -42,3 +42,11 @@ JS 語法與辨識 CRLF 的 diff 空白檢查通過；保留原檔未修改行�
 提交明確程式白名單後，`scripts/build_desktop_program_catalog.js` 從 Git HEAD 重建 Board v3 manifest／catalog；新 immutable blobs 以既有 R2 publisher 發布、核對公開 GET 大小與 SHA，再推 matching 程式與 metadata 至 main。Card／Chess package、舊 manifests／blobs 與 launcher installer 保持原值。
 
 發布後核對三款 runtime identity、Board metadata 及全部 Board 程式公開 bytes。桌面玩家需下載 Board 更新並重新開啟遊戲。回退不得刪除 v2 紀錄，也不得重新開啟舊共享 RECOVERED 路徑；應保留存檔模組並針對故障功能修正，避免舊版按個人分流格式覆蓋新資料。
+
+## 桌面增量發布證據
+
+`build_desktop_program_catalog.js` 與 `desktop_program_catalog_qa.js` 通過：全部 91 份程式、340 references、0 unresolved media／external references、Git HEAD source bytes 一致。既有 `desktop_r2_program_publish_qa.js` 通過 immutable／metadata／條件寫入驗證。新 Board 清單保持 3,487 個檔案、36 份程式；Card／Chess package 和其餘 3,483 個 Board 邏輯檔案與 baseline 相同。
+
+本輪採固定來源 commit、package、manifest SHA 與 4 條 path／SHA／size／MIME 白名單的外部 delta wrapper，呼叫未修改的 `loadPublishInventory` 與 `publishInventory`。dry-run 4/4、實際上傳 `uploaded=4`／`skipped=0`／`skippedRace=0`；原 3,166 個既有 unique blobs 未重傳或重新全量驗證。先前 full dry-run 為耗時手動中止，不列為通過。R2 公開 GET 4/4 大小和 SHA 完全符合，HTML metadata 經既有 publisher 的 no-transform／binary 規則檢查。
+
+證據：`D:/Codex_QA/board-voyage-records-20260914/release/delta-live-1789397773382.json`、`r2-verify.json`；操作 helper 與 DPAPI wrapper 在同目錄，沒有把認證資料寫入專案。桌面若已完整下載上一包，新增內容為 4,486,101 bytes（約 4.49 MB）；需更新 Board 後重新開啟。
