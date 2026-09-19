@@ -24,3 +24,9 @@ scoped 程式與文件提交後，從 Git HEAD 建置 v3 desktop catalog／manif
 先 dry-run、上傳新增 blob、公開 GET 核對大小／SHA，之後推送 matching 程式與 metadata。成功必須以正式 runtime、程式與 manifest 讀回確認，不能只用 Git push 作完成證據。正式 Card package 與發布結果於完成後補記。
 
 回復時使用本次基線 profile.html 與 catalog，保留不可變歷史 manifest／blob，不回退已生效的 Board 修正。
+
+## 個人頁發布準備結果
+
+來源提交 `0242bd83f6a1695e2c5b7bf650e92cb80227f162`；Card `package-ca251af687e50daf`，manifest SHA-256 `a112d313b2ed51ef1b7e1362c15f26b3b6b6b64287d4516abf6870846954c5cc`。套件仍為 739 個檔案；只有 profile.html 更新，新增下載 153,741 bytes。
+
+catalog QA 全部通過：三款遊戲共 92 份程式、343 個引用，Git HEAD／runtime／deterministic build 核對通過，legacy v2 不變。單檔 immutable dry-run、R2 上傳 1/1 及公開 GET 的 bytes／SHA／no-transform metadata 核對通過；證據位於外部 release 子目錄。Board／Chess 套件完全保留。接下來推送正式 main，等待 Render 切換並核對公開頁面。
