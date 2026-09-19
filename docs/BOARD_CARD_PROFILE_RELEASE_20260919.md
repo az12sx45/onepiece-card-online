@@ -1,0 +1,26 @@
+# 航海錄與個人頁發布（2026-09-19）
+
+## 正式來源與範圍
+
+使用者要求部署目前更新的《新世界航海錄》及《偉大航道爭霸戰》個人頁。正式來源為 `D:/Codex_Release_Worktrees/board-voyage-records-v1`，本次基線 `b70e2e104a0cb286bdbd33fa90da085c263a2f54`。
+
+航海錄觀看動作修正已在正式服務生效；2026-09-19 23:54:33（Asia/Taipei）重新完整讀回，`board_spectator_release_verify.js` 通過 41 checks，Board 為 `package-7be289c0375a59c2`。證據：`D:/Codex_QA/profile-deploy-20260919/board-before/live-verify.json`。該結果核對 health、三款 runtime identity、catalog／manifest、37 份 Board 程式 SHA／size，以及舊存檔端點關閉；不冒充新一輪真人連線遊玩驗收。
+
+個人頁僅合併 C 樹 `artifacts/profile-card-finish-20260919/profile.before.html` 到 `public/profile.html` 的卡片放大視窗差異，保留 D 樹新版 cursor query、本地 Socket.IO vendor 與其他正式內容。使用既有 Card Finish／Depth visible V2；一般豪華卡反光、強化卡 foil、桌機人物景深，觸控／reduced-motion 靜態顯示。保留懸賞令獨立靜態預覽、原圖與失敗回退，新增關閉按鈕、焦點管理及視窗尺寸限制。
+
+不包含 Card 對戰排版示範、索隆深度示範、歷史 C 樹 Board 程式、既有 ranks 大小寫差異。沒有改遊戲規則、帳號資料、存檔、Socket event 或後端。
+
+## 本機驗證
+
+- `PORT=18929 npm start` 使用既有外部依賴啟動成功，未修改 node_modules；沒有 DATABASE_URL，帳號由隔離 fixture 驗證畫面。
+- QA 重用原個人頁 runner，輸出至 `D:/Codex_QA/profile-deploy-20260919`，sourcePath 指向正式 D 樹，並先攔截本地 vendor／既有 socket script，避免真實帳號連線。保留 C 樹原測試證據。
+- 61 checks PASS、0 uncaught page errors；涵蓋一般／強化收藏點擊、景深、傾斜、切換與清理、按鈕／Escape／遮罩關閉、懸賞令、原图與分層失敗回退、手機直橫向及 reduced-motion。桌機與手機模擬截圖已檢視，不等於實體手機或真實帳號驗收。
+- 檔案 SHA-256 `bc60257f14ed68281315f9e8bada222519ac4eb7aef0c9f44bb5708dfbc6a7c6`，Git 發布以 LF blob 另行核對。`git -c core.whitespace=cr-at-eol diff --check` 通過；反向移除四個 scoped 區塊後與原正式頁內容相同。
+
+## 發布方式
+
+scoped 程式與文件提交後，從 Git HEAD 建置 v3 desktop catalog／manifest。僅更新 Card 的 profile.html immutable blob；Board／Chess 與舊 manifest 保留。
+
+先 dry-run、上傳新增 blob、公開 GET 核對大小／SHA，之後推送 matching 程式與 metadata。成功必須以正式 runtime、程式與 manifest 讀回確認，不能只用 Git push 作完成證據。正式 Card package 與發布結果於完成後補記。
+
+回復時使用本次基線 profile.html 與 catalog，保留不可變歷史 manifest／blob，不回退已生效的 Board 修正。

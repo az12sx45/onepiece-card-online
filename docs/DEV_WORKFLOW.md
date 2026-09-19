@@ -1,5 +1,11 @@
 ﻿# Dev Workflow
 
+## 航海錄與 Card 個人頁部署（2026-09-19）
+
+- 正式 D 樹基線 b70e2e10；航海錄完整播放已公開驗證 41 checks PASS，package-7be289c0375a59c2。下方「候選」段落保留為開發階段紀錄。
+- 本次只將 C 樹個人頁卡片視窗差異合併至 public/profile.html，保留正式 vendor／cursor；Card v3 catalog／manifest 配合發布，Board／Chess 不變。
+- npm start 18929 成功；詳細本機 QA、R2 與正式讀回結果見 [發布紀錄](BOARD_CARD_PROFILE_RELEASE_20260919.md)。同步 PROJECT_OVERVIEW、FILE_MAP 與原 Board 發布紀錄；玩法未改，不新增遊戲規則。
+
 ## 觀看動作完整播放候選（2026-09-19）
 
 - 範圍：修正擲骰被覆蓋、移動跳格、戰鬥搶播／提早清場與下一回合在戰鬥頁後方播放；正式 D 樹實作，本機候選尚未發布。

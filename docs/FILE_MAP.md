@@ -1,5 +1,11 @@
 # File Map
 
+## 航海錄與個人頁發布（2026-09-19）
+
+- public/profile.html：收藏放大視窗接入既有 Card Finish／Depth，懸賞令維持靜態；保留正式 cursor 與本地 Socket.IO 引用。
+- public/desktop/catalog-v3.json、desktop/manifests/card-package-*.json：個人頁對應的 Card 增量套件；Board／Chess 不變。
+- docs/BOARD_CARD_PROFILE_RELEASE_20260919.md：正式來源、發布順序、本機／公開完整性證據與回復方式；外部 QA 證據置於 D:/Codex_QA/profile-deploy-20260919。
+
 ## 觀看連續播放（2026-09-19）
 
 - public/js/board_remote_playback.js：解碼後的展示佇列、計時與戰鬥／地圖等待；不持久化。

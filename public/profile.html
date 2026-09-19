@@ -6,6 +6,8 @@
   <title>玩家頁｜偉大航道爭霸戰</title>
   <link rel="stylesheet" href="css/card-cursor-buggy-v3.css?v=20260906-game-cursors-v4">
   <script defer src="js/game_cursor_feedback_v1.js?v=20260906-game-cursors-v4"></script>
+  <link rel="stylesheet" href="css/card-finish-v1.css?v=20260907-depth-visible-v2">
+  <script defer src="js/card_finish_v1.js?v=20260907-depth-visible-v2"></script>
 
   <style>
     :root{
@@ -800,19 +802,38 @@
     }
     /* === card image viewer === */
     .imgModal{
-      width:min(520px, 92vw);
-      aspect-ratio: 2 / 3;
+      width:min(520px, calc(100vw - 64px), calc((100vh - 120px) * 2 / 3));
+      width:min(520px, calc(100vw - 64px), calc((100dvh - 120px) * 2 / 3));
+      min-width:0;
+    }
+    .imgModalToolbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:12px;
+    }
+    #imgModalTitle{font-size:13px;font-weight:800;color:#ffd36a;}
+    #imgModalClose{flex-shrink:0;}
+    #imgModalCard > .card-finish-face{
+      border-radius:12px;
+    }
+    #imgModalCard[hidden]{display:none;}
+    #imgModalPoster:not([hidden]){
+      display:block;
+      width:100%;
+      aspect-ratio:2 / 3;
+      object-fit:contain;
       border-radius:16px;
-      overflow:hidden;
-      border:1px solid rgba(35,52,85,.9);
       background:rgba(2,6,23,.75);
-      box-shadow: 0 18px 60px rgba(0,0,0,.5);
+      box-shadow:0 18px 60px rgba(0,0,0,.5);
     }
     #imgModalPic{
       width:100%;
-      height:100%;
+      height:auto;
       object-fit:contain;
       display:block;
+      border-radius:inherit;
       background:rgba(0,0,0,.15);
     }
     .slot.clickable{ cursor: zoom-in; }
@@ -1239,9 +1260,18 @@
 </div>
 
   <!-- card image viewer modal -->
-  <div class="modalBack" id="imgModalBack" role="dialog" aria-modal="true">
+  <div class="modalBack" id="imgModalBack" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="imgModalTitle">
     <div class="imgModal">
-      <img id="imgModalPic" alt="card-large" />
+      <div class="imgModalToolbar">
+        <span id="imgModalTitle">豪華卡片</span>
+        <button class="btn" type="button" id="imgModalClose">關閉</button>
+      </div>
+      <div id="imgModalCard" data-card-finish="plain">
+        <div class="card-finish-face">
+          <img id="imgModalPic" alt="豪華卡片" draggable="false" />
+        </div>
+      </div>
+      <img id="imgModalPoster" alt="懸賞令" hidden />
     </div>
   </div>
 
@@ -1812,27 +1842,52 @@ function openModal(id){ const el=document.getElementById(id); if(el) el.style.di
 function closeModal(id){ const el=document.getElementById(id); if(el) el.style.display='none'; }
 
 // ===== card viewer =====
+let __imgModalReturnFocus = null;
 function openImgModal(src){
   const back = document.getElementById('imgModalBack');
-  const pic  = document.getElementById('imgModalPic');
-  if(!back || !pic) return;
+  const card = document.getElementById('imgModalCard');
+  const cardPic = document.getElementById('imgModalPic');
+  const posterPic = document.getElementById('imgModalPoster');
+  if(!back || !card || !cardPic || !posterPic) return;
+  if(back.style.display !== 'flex') __imgModalReturnFocus = document.activeElement;
+  const isCard = /\/images\/cards_lux\/(?:enh\/)?\d+\.(?:webp|png)(?:[?#]|$)/i.test(src);
+  const enhanced = /\/images\/cards_lux\/enh\/\d+\.(?:webp|png)(?:[?#]|$)/i.test(src);
+  const label = isCard ? (enhanced ? '豪華強化卡片' : '豪華卡片') : '懸賞令';
+  card.hidden = !isCard;
+  posterPic.hidden = isCard;
+  card.dataset.cardFinish = enhanced ? 'foil' : 'plain';
+  const pic = isCard ? cardPic : posterPic;
+  (isCard ? posterPic : cardPic).removeAttribute('src');
+  document.getElementById('imgModalTitle').textContent = label;
+  pic.alt = label;
   pic.src = src;
   back.style.display = 'flex';
+  back.setAttribute('aria-hidden', 'false');
+  document.getElementById('imgModalClose').focus({ preventScroll:true });
 }
 function closeImgModal(){
   const back = document.getElementById('imgModalBack');
   const pic  = document.getElementById('imgModalPic');
   if(!back || !pic) return;
   back.style.display = 'none';
-  pic.src = '';
+  back.setAttribute('aria-hidden', 'true');
+  pic.removeAttribute('src');
+  document.getElementById('imgModalPoster')?.removeAttribute('src');
+  if(__imgModalReturnFocus?.isConnected) __imgModalReturnFocus.focus({ preventScroll:true });
+  __imgModalReturnFocus = null;
 }
+document.getElementById('imgModalClose')?.addEventListener('click', closeImgModal);
 document.getElementById('imgModalBack')?.addEventListener('click', (ev)=>{
   if(ev.target && ev.target.id === 'imgModalBack') closeImgModal();
 });
 document.addEventListener('keydown', (ev)=>{
-  if(ev.key === 'Escape'){
-    const back = document.getElementById('imgModalBack');
-    if(back && back.style.display === 'flex') closeImgModal();
+  const back = document.getElementById('imgModalBack');
+  if(back && back.style.display === 'flex'){
+    if(ev.key === 'Escape') closeImgModal();
+    if(ev.key === 'Tab'){
+      ev.preventDefault();
+      document.getElementById('imgModalClose').focus({ preventScroll:true });
+    }
   }
 });
 

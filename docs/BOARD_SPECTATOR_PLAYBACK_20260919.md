@@ -1,5 +1,9 @@
 # 航海錄觀看動作連續播放修正（2026-09-19）
 
+## 正式讀回補記（2026-09-19 23:54，Asia/Taipei）
+
+後續部署工作已確認 release b70e2e10／Board package-7be289c0375a59c2 正式生效。既有 live verifier 通過 41 checks，核對 37 份 Board 程式、三款 runtime 與 metadata；證據及同輪 Card 個人頁發布見 [合併發布紀錄](BOARD_CARD_PROFILE_RELEASE_20260919.md)。下方「準備／等待切換」敘述為先前階段，沒有重新執行真人對局。
+
 ## 來源與發布狀態
 
 正式來源 `D:\Codex_Release_Worktrees\board-voyage-records-v1`，基線 `dc7d77d5`。本輪唯讀比對公開 board_game.js SHA 相符，board_battle.js 排除 checkout CRLF 差異後相同。C 槽歷史樹只更新文件指向；既有 ranks 大小寫差異不在修改範圍。
