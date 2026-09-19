@@ -1,5 +1,9 @@
 ﻿# Dev Workflow
 
+## 航海錄與 Card 個人頁已部署（2026-09-20）
+
+release 457673be 已生效；2026-09-20 00:06:21 公開完整性 42 checks／43 回應通過，正式頁面隔離 UI fixture 67 checks／0 errors。Card package-ca251af687e50daf，Board package-7be289c0375a59c2。詳見 [完整發布與限制](BOARD_CARD_PROFILE_RELEASE_20260919.md)；此次收尾只補文件，使用 [skip render]，不重啟已驗證服務。
+
 ## 航海錄與 Card 個人頁部署（2026-09-19）
 
 - 正式 D 樹基線 b70e2e10；航海錄完整播放已公開驗證 41 checks PASS，package-7be289c0375a59c2。下方「候選」段落保留為開發階段紀錄。
