@@ -7014,3 +7014,5 @@ UI / RWD：
 - 驗證：`node --check` 通過主程式與兩支 PK QA。`spar_formal_battle_qa.js` 以四名玩家實際完成 A→C 第一輪、確認 `battleState=null`／戰況已暫存／目前玩家=B／B 未被鎖，再完成 B→C 換手、恢復第二輪、C 先選／A 回應、替補與結算後目前玩家=D；兩輪皆保持主線 HP、PP、出戰位置與攜帶物不變，`errors=[]`、`failures=[]`。`spar_lan_sync_qa.js` 以三個瀏覽器 context 驗證同步版本 `1→2→3→4→5→6`，涵蓋 A/C 結算後換 B、B 普通換到 C、C 恢復 PK 與非參戰者改寫遭 `not_your_turn` 拒絕，結果 `failures=[]`。另重跑準備室 1600×900／1024×768、同格交易停靠及一般暴擊戰鬥回歸，分別為 `failures=[]`、`failures=[]`、45/45 通過。
 
 
+
+發布前補強（2026-09-19）：大型戰鬥觀看畫面以既有事件分段傳送並完整還原，保留每段 64 KiB 上限；新增 board_battle_visual_transport_qa.js 及本輪 board_spectator_release_verify.js，桌面清單加入播放模組。詳見 BOARD_SPECTATOR_PLAYBACK_20260919.md。

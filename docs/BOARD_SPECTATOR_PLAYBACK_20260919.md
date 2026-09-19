@@ -9,10 +9,11 @@
 ## 根因及修改
 
 - 原觀看端新 UI 事件會清除上一事件；移動事件直接連續改座標，集中抵達會跳格。新增 board_remote_playback.js 在解碼後依收到順序播放；骰子完成翻滾與 3 秒結果展示、移動按來源步速逐格顯示、事件視窗至少展示 1.5 秒。相同演出的相鄰快照只留最新一份，不合併不同動作。
-- 原戰鬥頁優先讀最新 API 覆蓋傳入快照，再取消上一招計時器。父頁以既有 BOARD_GAME_EVENT 的 battle/visual 通道補送各招唯讀畫面，避免完整狀態 latest-pending 合併漏掉中間招式；iframe 去重並依完整時間播放。顯示事件沿用 64 KiB 上限，超大畫面仍走原完整快照；本次不宣稱所有 Boss 畫面大小或流量帳單均已驗證。
+- 原戰鬥頁優先讀最新 API 覆蓋傳入快照，再取消上一招計時器。父頁以既有 BOARD_GAME_EVENT 的 battle/visual 通道補送各招唯讀畫面，避免完整狀態 latest-pending 合併漏掉中間招式；iframe 去重並依完整時間播放。較大的 Boss／合作戰畫面分成 battle/visual-part，完成還原後才播放；每段仍小於原 64 KiB 上限，支援至既有 wire 的 30 MiB 上限。未改存檔或 server event 名稱。
 - 慢載入 iframe 暫存的招式依序交付，覆蓋層真正顯示後才開始計時。戰鬥結束與 260 ms 關閉動畫完成後，才播放下一段地圖動作，避免演出藏在戰鬥頁後方。
 - 真人與 CPU 在播放期间等待，結束後按最新權威快照恢復操作。斷線／分頁接手清除待播內容；重連、刷新直接恢復伺服器進度。保留 wire 解碼、版本守衛、玩家身份與持久存檔。
 - 同一回合的例行快照保留觀看事件視窗；換回合、移動、戰鬥或新事件仍切換畫面。
+- 大型事件第一段到達時先保留接收順序，後續片段直接組裝；其他玩家交錯送來的結算／地圖更新等前一事件完整後再進播放佇列。使用首段 sequence，避免尾段 sequence 誤刪交錯訊息；逾時／拒絕／斷線釋放保留位置。
 
 ## 檔案
 
@@ -20,6 +21,7 @@
 - QA：scripts/board_remote_playback_qa.js、board_battle_spectator_playback_qa.js、board_spectator_playback_browser_qa.js。原 board_reconnect_client_qa.js 補齊 mock Socket 的 connected/id，符合現行 JOIN guard；第一次舊 fixture 在 JOIN 前 timeout 的結果未列為通過。
 - DEV_WORKFLOW、PROJECT_OVERVIEW、GAME_RULES、FILE_MAP 同步。不改卡牌、素材、Socket.IO event 名稱、數值、資料 id、localStorage key 或持久 gameState 欄位。
 - 發布清單 config/desktop-program-packages-v1.json 加入新播放模組，Board 程式由 36 增至 37 檔；以來源提交重建 v3 catalog/manifest，先驗證新增 immutable blobs，再推正式 main。Card/Chess package 與既有 ranks 差異排除。
+- 發布前另新增 scripts/board_battle_visual_transport_qa.js 驗證分段還原、亂序／重複／損壞拒絕、逾時及緩衝上限；scripts/board_spectator_release_verify.js 依本次基線核對 R2 新檔與正式 runtime/metadata/程式。
 
 ## 驗證
 
@@ -31,10 +33,18 @@
 
 本機受控測試不等於真人跨網路對局、自然通關、所有技能或正式部署驗收。
 
-## 最終雙頁結果
+## 分段傳送前雙頁結果（已保存歷史證據）
 
 最終房間 B6886，result.json 的 failures/errors 均為空。地圖兩骰各展示 3010／3122 ms，移動間隔 320／329 ms；慢載入戰鬥依骰子→攻擊順序播放 1799／2176 ms。兩份實際 notifyBattleWindow 事件為 32093／32140 bytes，均低於既有上限。
 
 戰鬥終止快照等待最後一招，退場完成後地圖骰子才開始（open=false、closing=false、battle active=false）。伺服器接受交棒後，觀看端在佇列期間拒絕有效 luffy_pistol 指令，排隊完成後恢復 canControl/canAct。桌機 1280×720、手機橫向 844×390 截圖可見完整骰面、人物與觀看提示；390×844 直向維持原旋轉裝置提示。
 
-證據目錄的 file-hashes.json 記錄六個受驗檔案，最終 board_game.js SHA-256 為 210bfe489ff7a593106e4db48df754630b03052c946fc9f4de3e43adadcf5cc1。早期失敗包含 iframe 先播最新招式、入場前開始計時及地圖提前 260 ms 在退場動畫後播放，均已修正後重新驗證；不能把中間失敗紀錄当作最終通過。
+這批證據已保存在 before-large-event-chunking 子目錄；當時 board_game.js SHA-256 為 210bfe489ff7a593106e4db48df754630b03052c946fc9f4de3e43adadcf5cc1。早期失敗包含 iframe 先播最新招式、入場前開始計時及地圖提前 260 ms 在退場動畫後播放，均已修正後重新驗證；不能把中間失敗紀錄當作最終通過。
+
+## 最終大型事件雙頁結果
+
+最終房間 B9023，result.json 為 ok=true，failures/errors 均為空。兩份 notifyBattleWindow 事件 103473／103520 bytes，各拆成 5 段；最大事件 32940 bytes，含外層訊息 33011 bytes，所有 server ACK 成功。重組後完整保留 182 行多語言紀錄與尾端內容；慢 iframe 按骰子→攻擊順序顯示 1787／2189 ms。
+
+地圖兩骰 3005／3108 ms、逐格移動 330／328 ms，戰鬥退場後才開始地圖骰子。真實伺服器交棒、播放時指令鎖定、結束恢復、刷新與 modal 保留均通過。桌機與手機橫向最終截圖已目視確認。file-hashes.json 保存六個受驗檔案的本機 bytes/hash；CRLF 與發布 Git blob 的 LF 由套件 QA 分別核對。
+
+分段傳送與順序接收確定性測試 58 checks，地圖 13、戰鬥 41 重跑通過；包含 30 MiB 上限、亂序、重複、損壞、來源隔離、逾時與記憶體回收。交錯結算／地圖訊息、多來源同 id、完成順序倒置與逾時自動恢復均覆蓋。未完成片段只鎖控制權與後續狀態，不阻止 iframe 播放已收齊的前段，避免等待片段時造成既有佇列停滯。

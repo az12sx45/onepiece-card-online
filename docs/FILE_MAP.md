@@ -849,3 +849,5 @@
 | `server/index.js`（PK 快照授權 V346） | 延續 `BOARD_GAME_STATE` 完整快照架構；允許該場兩名真人參戰者送出 `spar-*` 與 `isSparBattle` 更新，維持階段／回合／玩家位置不變檢查，拒絕非參戰 socket 改寫。沒有新增 Socket.IO event。 |
 | `scripts/spar_formal_battle_qa.js` | 正式頁端對端驗證：二周目同格邀請、五欄船指令、6+6 秘密選三、滿 HP／PP 三對三、己方裝備可見／對方裝備隱藏、雙方裝備 runtime、替補與主線資料隔離；另以 A／B／C／D 四人斷言 A 選→C 回應→B 普通回合→C 選→A 回應→D 普通回合。若隨機暴擊造成自然瀕死，QA 會先完成合法替補再檢查回合交棒，不把正常等待換人誤判成卡死。 |
 | `scripts/spar_lan_sync_qa.js` | 以三個獨立瀏覽器 context 加入同一 Socket.IO 房間；驗證 A/C 切磋一輪後把戰況暫存並換 B、B 可正常換到 C、C 能恢復戰況、同步版本依序遞增，以及非參戰 B 在 C 的 PK 回合改寫狀態時被 `not_your_turn` 拒絕。 |
+
+發布前補強（2026-09-19）：大型戰鬥觀看畫面以既有事件分段傳送並完整還原，保留每段 64 KiB 上限；新增 board_battle_visual_transport_qa.js 及本輪 board_spectator_release_verify.js，桌面清單加入播放模組。詳見 BOARD_SPECTATOR_PLAYBACK_20260919.md。

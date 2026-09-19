@@ -16,6 +16,14 @@ async function createDevice(browser, profile, errors) {
     localStorage.setItem("op_player_name", entry.name);
     // Capture the production socket before board_game.js creates it. No second
     // connection or production-only test hook is introduced by this fixture.
+    window.__playbackQaWire = [];
+    window.__playbackQaHeldBattleParts = [];
+    window.__playbackQaReleaseBattleParts = () => {
+      window.__playbackQaHoldBattleParts = false;
+      const pending = window.__playbackQaHeldBattleParts.splice(0);
+      pending.forEach((deliver) => deliver());
+      return pending.length;
+    };
     let originalIo;
     Object.defineProperty(window, "io", {
       configurable: true,
@@ -24,6 +32,38 @@ async function createDevice(browser, profile, errors) {
         originalIo = new Proxy(value, {
           apply(target, thisArg, args) {
             const socket = Reflect.apply(target, thisArg, args);
+            const socketEmit = socket.emit;
+            socket.emit = function tracedEmit(eventName, ...values) {
+              const heldEvent = values[0]?.event;
+              if (eventName === "BOARD_GAME_EVENT" && window.__playbackQaHoldBattleParts
+                && heldEvent?.type === "visual-part" && Number(heldEvent.index) > 0) {
+                window.__playbackQaHeldBattleParts.push(() => this.emit(eventName, ...values));
+                return this;
+              }
+              if (eventName === "BOARD_GAME_EVENT") {
+                const message = values[0] || {};
+                const event = message.event || {};
+                const record = {
+                  id: event.id || "", channel: event.channel || "", type: event.type || "",
+                  eventId: event.visualId || event.eventId || "", transferId: event.transferId || "",
+                  index: event.index ?? event.chunkIndex ?? null,
+                  count: event.total ?? event.count ?? event.chunkCount ?? null,
+                  bytes: new TextEncoder().encode(JSON.stringify(event)).length,
+                  messageBytes: new TextEncoder().encode(JSON.stringify(message)).length,
+                  ack: null,
+                };
+                window.__playbackQaWire.push(record);
+                const callbackIndex = values.length - 1;
+                if (typeof values[callbackIndex] === "function") {
+                  const callback = values[callbackIndex];
+                  values[callbackIndex] = (...callbackValues) => {
+                    record.ack = callbackValues[0] || null;
+                    return callback(...callbackValues);
+                  };
+                }
+              }
+              return socketEmit.call(this, eventName, ...values);
+            };
             window.__playbackQaSocket = socket;
             return socket;
           },
@@ -118,6 +158,8 @@ async function battlePlaybackCheck(host, guest, report, stamp, roomCode) {
           id: playback?.eventId || "", pending: playback?.pending || 0,
           active: playback?.active || false, type: view?.battle?.visualEvent?.type || "",
           canControl: view?.battle?.canControl ?? null, canAct: view?.battle?.canAct ?? null,
+          logLines: view?.battle?.log?.length || 0,
+          logTail: String(view?.battle?.log?.at(-1) || "").slice(-70),
           diceOpen: frame?.contentDocument?.getElementById("diceBonusFx")?.classList.contains("active") || false,
           mapDiceOpen: document.getElementById("diceHud")?.classList.contains("open") || false,
           mapDiceTitle: document.getElementById("diceHudTitle")?.textContent || "",
@@ -153,6 +195,12 @@ async function battlePlaybackCheck(host, guest, report, stamp, roomCode) {
     report.battleEvents = await host.page.evaluate((suffix) => {
       const debug = window.__BOARD_GAME_DEBUG__;
       const battle = debug.getState().battleState;
+      // A real getBattleView includes the accumulated battle log. Exercise the
+      // production sender with a controlled long multilingual battle history.
+      battle.log.push(...Array.from({ length: 180 }, (_, index) => (
+        `大型觀看事件 ${index}：中文招式紀錄、日本語バトル、한국어 전투、🎲⚓\\\"\n`.repeat(4)
+      )));
+      window.__playbackQaWire = [];
       const base = debug.getBattleView();
       const events = [
         { id: `qa-battle-dice-${suffix}`, type: "dice", side: "player", theme: "attack", title: "觀看連續戰鬥骰子", subtitle: "決定攻擊", maxFace: 6, settle: 4, duration: 1200, moveType: "attack" },
@@ -163,7 +211,9 @@ async function battlePlaybackCheck(host, guest, report, stamp, roomCode) {
         debug.notifyBattleWindow();
         const wireEvent = { id: event.id, channel: "battle", type: "visual", view: debug.getBattleView() };
         wireEvent.view.battle.canControl = false;
-        return { id: event.id, type: event.type, duration: event.duration, bytes: new TextEncoder().encode(JSON.stringify(wireEvent)).length };
+        return { id: event.id, type: event.type, duration: event.duration,
+          sourceBytes: new TextEncoder().encode(JSON.stringify(wireEvent)).length, logLines: battle.log.length,
+          logTail: String(battle.log.at(-1)).slice(-70) };
       });
     }, stamp);
     await guest.page.waitForTimeout(180);
@@ -171,6 +221,8 @@ async function battlePlaybackCheck(host, guest, report, stamp, roomCode) {
     releaseBattleScript();
     await guest.page.waitForFunction((id) => document.getElementById("battlePageFrame")?.contentWindow?.__BOARD_BATTLE_DEBUG__?.spectatorPlaybackState?.().eventId === id,
       report.battleEvents[0].id, { timeout: 15000 });
+    // Capture after the card entrance reveal, while the queued dice still runs.
+    await guest.page.waitForTimeout(800);
     await guest.page.screenshot({ path: path.join(OUTPUT_DIR, "spectator-battle-desktop-dice.png") });
     await guest.page.setViewportSize({ width: 390, height: 844 });
     await guest.page.waitForTimeout(150);
@@ -216,13 +268,23 @@ async function battlePlaybackCheck(host, guest, report, stamp, roomCode) {
       && document.getElementById("diceHud")?.classList.contains("open"), null, { timeout: 10000 });
     await guest.page.waitForFunction(() => !document.getElementById("diceHud")?.classList.contains("open"), null, { timeout: 6000 });
     report.battleTrace = await guest.page.evaluate(() => { clearInterval(window.__battleTraceTimer); return window.__battleTrace; });
+    report.battleWireFrames = await host.page.evaluate(() => window.__playbackQaWire.filter((entry) => entry.channel === "battle"));
     report.battleHolds = report.battleEvents.map((event) => {
       const start = report.battleTrace.findIndex((row) => row.id === event.id && row.active);
       const end = start < 0 ? null : report.battleTrace.slice(start + 1).find((row) => row.id !== event.id || !row.active);
       return { id: event.id, durationMs: start >= 0 && end ? end.t - report.battleTrace[start].t : 0 };
     });
     if (!report.battleScriptBuffered) report.failures.push("late iframe fixture did not hold battle script");
-    if (report.battleEvents.some((event) => event.bytes >= 65536)) report.failures.push("battle event exceeds server size limit");
+    if (report.battleEvents.some((event) => event.sourceBytes <= 65536)) report.failures.push("large battle fixture did not exceed the server event size limit");
+    if (report.battleWireFrames.length < 4 || report.battleWireFrames.some((frame) => frame.type === "visual")) report.failures.push("large production battle events were not transmitted as chunks");
+    if (report.battleWireFrames.some((frame) => frame.bytes > 65536 || frame.messageBytes > 65536)) report.failures.push("battle chunk exceeds the server event size limit");
+    if (report.battleWireFrames.some((frame) => frame.ack?.ok !== true)) report.failures.push("battle chunk was not acknowledged by the server");
+    for (const event of report.battleEvents) {
+      const frames = report.battleWireFrames.filter((frame) => frame.eventId === event.id);
+      if (!frames.length || frames.length !== frames[0].count || frames.some((frame, index) => frame.index !== index)) report.failures.push(`incomplete outgoing battle chunk sequence: ${event.id}`);
+      const displayed = report.battleTrace.find((row) => row.id === event.id && row.active);
+      if (!displayed || displayed.logLines !== event.logLines || displayed.logTail !== event.logTail) report.failures.push(`chunked battle view lost multilingual log content: ${event.id}`);
+    }
     if (report.battleHolds[0].durationMs < 1770 || report.battleHolds[1].durationMs < 2020) report.failures.push(`battle events cut short: ${JSON.stringify(report.battleHolds)}`);
     const battleEventOrder = [...new Set(report.battleTrace.filter((row) => row.active && row.id).map((row) => row.id))];
     if (JSON.stringify(battleEventOrder) !== JSON.stringify(report.battleEvents.map((event) => event.id))) report.failures.push(`battle FIFO order mismatch: ${JSON.stringify(battleEventOrder)}`);
@@ -310,6 +372,118 @@ async function battleControlHandoffCheck(host, guest, report, stamp, roomCode) {
     return { playerId: String(view.player.id), canControl: view.battle.canControl, canAct: view.battle.canAct };
   });
   if (!report.handoffAfterPlayback.canControl || !report.handoffAfterPlayback.canAct) report.failures.push("new controller did not regain input after playback drained");
+}
+
+async function interleavedBattleIngressCheck(host, guest, report, stamp, roomCode) {
+  // Guest now owns the battle after the real handoff. Reload the previous host
+  // to receive that authoritative ownership before observing guest's actions.
+  await host.page.reload({ waitUntil: "domcontentloaded" });
+  await waitForGame(host);
+  await host.page.waitForFunction(() => {
+    const debug = window.__BOARD_GAME_DEBUG__;
+    return debug.getBattleView()?.battle?.canControl === false
+      && document.getElementById("battlePageOverlay")?.classList.contains("ready");
+  }, null, { timeout: 15000 });
+  await host.page.evaluate(() => {
+    window.__interleavedTrace = [];
+    window.__interleavedTimer = setInterval(() => {
+      const overlay = document.getElementById("battlePageOverlay");
+      const viewer = document.getElementById("battlePageFrame")?.contentWindow?.__BOARD_BATTLE_DEBUG__;
+      const playback = viewer?.spectatorPlaybackState?.();
+      const row = {
+        t: Date.now(), id: playback?.eventId || "", active: playback?.active || false,
+        pending: playback?.pending || 0, open: overlay?.classList.contains("open") || false,
+        closing: overlay?.classList.contains("closing") || false,
+        hasBattle: Boolean(window.__BOARD_GAME_DEBUG__.getState().battleState),
+        mapOpen: document.getElementById("diceHud")?.classList.contains("open") || false,
+        mapTitle: document.getElementById("diceHudTitle")?.textContent || "",
+      };
+      const previous = window.__interleavedTrace.at(-1);
+      if (!previous || Object.keys(row).some((key) => key !== "t" && row[key] !== previous[key])) window.__interleavedTrace.push(row);
+    }, 15);
+  });
+  try {
+    report.interleavedEvents = await guest.page.evaluate((suffix) => {
+      const debug = window.__BOARD_GAME_DEBUG__;
+      const battle = debug.getState().battleState;
+      battle.log.push(...Array.from({ length: 180 }, (_, index) => `分段交錯 ${index} 中文・日本語・한국어・🎲⚓`.repeat(8)));
+      window.__playbackQaWire = [];
+      window.__playbackQaHoldBattleParts = true;
+      const events = [
+        { id: `qa-interleaved-dice-${suffix}`, type: "dice", side: "player", theme: "attack", title: "分段交錯骰子", maxFace: 6, settle: 4, duration: 1200, moveType: "attack" },
+        { id: `qa-interleaved-attack-${suffix}`, type: "attack", side: "player", targetSide: "enemy", actorName: "玩家", targetName: battle.enemyCombatant.name, moveName: "分段交錯攻擊", moveType: "attack", damage: 12, hitDamages: [12], diceFace: 4, duration: 1650 },
+      ];
+      return events.map((event) => {
+        battle.visualEvent = event;
+        debug.notifyBattleWindow();
+        const view = debug.getBattleView();
+        view.battle.canControl = false;
+        return { id: event.id, sourceBytes: new TextEncoder().encode(JSON.stringify({ id: event.id, channel: "battle", type: "visual", view })).length };
+      });
+    }, stamp);
+    await guest.page.waitForFunction(() => {
+      const firstParts = window.__playbackQaWire.filter((entry) => entry.type === "visual-part" && entry.index === 0);
+      return firstParts.length === 2 && firstParts.every((entry) => entry.ack?.ok);
+    }, null, { timeout: 8000 });
+    report.interleavedTerminalVersionBefore = await guest.page.evaluate(() => window.__BOARD_GAME_DEBUG__.boardLanStatus().version);
+    await guest.page.evaluate(() => {
+      const debug = window.__BOARD_GAME_DEBUG__;
+      const state = debug.getState();
+      state.battleState = null;
+      state.boardUiEvent = null;
+      state.gameState.players.forEach((player) => { player.pendingBattle = null; });
+      state.gameState.resolutionLock = false;
+      state.gameState.battleExitLock = false;
+      state.gameState.turnStep = "擲骰前進";
+      debug.renderAll();
+      debug.notifyBattleWindow();
+      debug.pushBoardLanState("battle-finish");
+    });
+    const createdAt = Date.now();
+    report.interleavedMapAck = await emitEvents(guest, roomCode, [{
+      id: `qa-interleaved-map-${stamp}`, channel: "ui", type: "dice", title: "分段完成後地圖骰子",
+      subtitle: "終局快照與地圖事件插在第一段和剩餘段之間", theme: "move", maxFace: 6, result: 5, settleDelay: 260,
+      createdAt, expiresAt: createdAt + 15000,
+    }]);
+    await guest.page.waitForFunction((before) => window.__BOARD_GAME_DEBUG__.boardLanStatus().version > before
+      && !window.__BOARD_GAME_DEBUG__.boardLanStatus().hasInFlightState,
+    report.interleavedTerminalVersionBefore, { timeout: 8000 });
+    await host.page.waitForTimeout(350);
+    report.interleavedBeforeCompletion = await host.page.evaluate(() => ({
+      hasBattle: Boolean(window.__BOARD_GAME_DEBUG__.getState().battleState),
+      open: document.getElementById("battlePageOverlay")?.classList.contains("open"),
+      closing: document.getElementById("battlePageOverlay")?.classList.contains("closing"),
+      mapOpen: document.getElementById("diceHud")?.classList.contains("open"),
+      playback: document.getElementById("battlePageFrame")?.contentWindow?.__BOARD_BATTLE_DEBUG__?.spectatorPlaybackState?.(),
+    }));
+    report.interleavedReleasedParts = await guest.page.evaluate(() => window.__playbackQaReleaseBattleParts());
+    await host.page.waitForFunction((id) => document.getElementById("battlePageFrame")?.contentWindow?.__BOARD_BATTLE_DEBUG__?.spectatorPlaybackState?.().eventId === id,
+      report.interleavedEvents[0].id, { timeout: 10000 });
+    await host.page.waitForFunction(() => document.getElementById("diceHudTitle")?.textContent === "分段完成後地圖骰子"
+      && document.getElementById("diceHud")?.classList.contains("open"), null, { timeout: 12000 });
+    await host.page.waitForFunction(() => !document.getElementById("diceHud")?.classList.contains("open"), null, { timeout: 6000 });
+    report.interleavedTrace = await host.page.evaluate(() => { clearInterval(window.__interleavedTimer); return window.__interleavedTrace; });
+    report.interleavedWire = await guest.page.evaluate(() => window.__playbackQaWire);
+    report.interleavedHolds = report.interleavedEvents.map((event) => {
+      const index = report.interleavedTrace.findIndex((row) => row.active && row.id === event.id);
+      const end = index < 0 ? null : report.interleavedTrace.slice(index + 1).find((row) => !row.active || row.id !== event.id);
+      return { id: event.id, durationMs: index >= 0 && end ? end.t - report.interleavedTrace[index].t : 0 };
+    });
+    const first = report.interleavedBeforeCompletion;
+    if (!first.hasBattle || !first.open || first.closing || first.mapOpen || first.playback?.active) report.failures.push("interleaved state or map escaped before battle parts completed");
+    const order = [...new Set(report.interleavedTrace.filter((row) => row.active && row.id).map((row) => row.id))];
+    if (JSON.stringify(order) !== JSON.stringify(report.interleavedEvents.map((event) => event.id))) report.failures.push("interleaved battle playback FIFO order mismatch");
+    if (report.interleavedHolds[0].durationMs < 1770 || report.interleavedHolds[1].durationMs < 2020) report.failures.push("interleaved battle presentation was cut short");
+    const mapStart = report.interleavedTrace.find((row) => row.mapOpen && row.mapTitle === "分段完成後地圖骰子");
+    if (!mapStart || mapStart.active || mapStart.open || mapStart.closing) report.failures.push("interleaved map dice started before all battle presentation finished");
+    const parts = report.interleavedWire.filter((frame) => frame.type === "visual-part");
+    const mapSequence = report.interleavedMapAck[0]?.sequence || 0;
+    if (!parts.length || !report.interleavedReleasedParts || parts.some((frame) => !frame.ack?.ok || frame.bytes > 65536 || frame.messageBytes > 65536)) report.failures.push("interleaved parts did not receive valid server acknowledgements");
+    if (parts.filter((frame) => frame.index === 0).some((frame) => frame.ack.sequence >= mapSequence)
+      || parts.filter((frame) => frame.index > 0).some((frame) => frame.ack.sequence <= mapSequence)) report.failures.push("server did not receive map event between first and remaining battle parts");
+  } finally {
+    await guest.page.evaluate(() => window.__playbackQaReleaseBattleParts());
+  }
 }
 
 async function main() {
@@ -487,6 +661,7 @@ async function main() {
     if (report.refresh.localUserId !== guest.userId || report.refresh.phase !== "main") report.failures.push("guest identity or phase lost after refresh");
     await battlePlaybackCheck(host, guest, report, stamp, roomCode);
     await battleControlHandoffCheck(host, guest, report, stamp, roomCode);
+    await interleavedBattleIngressCheck(host, guest, report, stamp, roomCode);
     for (const ack of [...report.diceAcks, ...report.movementAcks, report.modalSnapshot]) if (!ack?.ok) report.failures.push(`server rejected fixture: ${JSON.stringify(ack)}`);
     report.ok = report.errors.length === 0 && report.failures.length === 0;
   } catch (error) {

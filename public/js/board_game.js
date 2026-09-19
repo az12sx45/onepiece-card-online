@@ -9747,6 +9747,10 @@
     },
     onIdle: resumeAfterRemoteBoardPlayback,
   });
+  const battleVisualIngress = window.BoardRemotePlayback.createBattleVisualIngress({
+    deliver: (kind, message) => remotePlayback.enqueue(kind, message),
+    onIdle: resumeAfterRemoteBoardPlayback,
+  });
   const campaignSaveState = {
     inFlight: null,
     autoTimer: 0,
@@ -13028,7 +13032,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
 
   function remoteBoardPlaybackBusy() {
     const map = remotePlayback.status();
-    return map.active || map.pending > 0 || boardLan.pendingRemoteBattleViews.length > 0
+    return map.active || map.pending > 0 || battleVisualIngress.status().pending > 0 || boardLan.pendingRemoteBattleViews.length > 0
       || !!state.battleWindow?.__BOARD_BATTLE_DEBUG__?.spectatorPlaybackState?.().active
       || !!document.getElementById("battlePageOverlay")?.classList.contains("closing");
   }
@@ -13058,6 +13062,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
 
   function resetRemoteBoardPlayback() {
     remotePlayback.reset();
+    battleVisualIngress.reset();
     window.clearTimeout(boardLan.deferredApplyTimer);
     boardLan.deferredApplyTimer = 0;
     boardLan.deferStateApplyUntil = 0;
@@ -13079,7 +13084,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     }
     if (message.sourceClientId === boardLan.clientId) return;
     if (Number(message.version || 0) && Number(message.version) <= boardLan.version) return;
-    remotePlayback.enqueue("state", message);
+    battleVisualIngress.receive("state", message);
   }
 
   function receiveBoardLanGameEvent(message = {}) {
@@ -13088,7 +13093,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (message.sourceClientId === boardLan.clientId) return;
     if (Number(message.sequence || 0) && Number(message.sequence) <= boardLan.eventSequence) return;
     if (Number(message.event.expiresAt || 0) && Number(message.event.expiresAt) <= Date.now()) return;
-    remotePlayback.enqueue("event", message);
+    battleVisualIngress.receive("event", message);
   }
 
   function remoteMovementVisualPlayer(player) {
@@ -47747,10 +47752,16 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const remoteView = safeJsonClone(view);
     remoteView.battle.canControl = false;
     const event = { id: visual.id, channel: "battle", type: "visual", view: remoteView };
-    // Keep the existing server event size limit. Ordinary full-state sync is
-    // still the fallback for an unusually large display view.
-    if (new TextEncoder().encode(JSON.stringify(event)).length > 64 * 1024) return;
-    if (!emitBoardLanGameEvent(event)) return;
+    // Preserve large boss/co-op views too, without raising the server's per-event
+    // limit or persisting presentation data in the authoritative snapshot.
+    let parts;
+    try {
+      parts = window.BoardRemotePlayback.splitBattleVisualEvent(event);
+    } catch (error) {
+      boardLan.lastError = String(error?.message || "battle_visual_encode_failed");
+      return;
+    }
+    if (!parts.every((part) => emitBoardLanGameEvent(part))) return;
     boardLan.sentBattleVisualIds.add(visual.id);
     if (boardLan.sentBattleVisualIds.size > 120) boardLan.sentBattleVisualIds.delete(boardLan.sentBattleVisualIds.values().next().value);
   }

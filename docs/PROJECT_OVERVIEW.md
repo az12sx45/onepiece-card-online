@@ -2077,3 +2077,5 @@ Board 遊戲正式流程的圖片路徑集中在 `public/images/board/**`，避�
 - 2026-08-20 核准五張 1672×941 彩色漫畫並接入正式澤法戰；依序呈現炸藥岩倒數歸零、澤法迎向爆炸、終結點島嶼崩裂、海床連鎖反應與新世界陷落。
 - `board_zephyr_explosion_story_preview.html` 保留為獨立逐幕比對頁；正式戰鬥改讀同目錄五張 WebP，字幕與幕名由 HTML 疊入。`incoming/` 只保存 ImageGen PNG 原圖，正式頁沒有引用。
 - 炸藥岩倒數歸零後先鎖住戰鬥並播放五幕；劇情未完成前不先扣船員 HP，完成後才把全隊設為 0 HP 並走原本「全員瀕死」結果、返回地圖與推進城結算。澤法 2000 HP、4 次倒數、攻擊／解除選擇、四顆戰鬥按鈕及 `BOARD_GAME_STATE` 權威不變。
+
+發布前補強（2026-09-19）：大型戰鬥觀看畫面以既有事件分段傳送並完整還原，保留每段 64 KiB 上限；新增 board_battle_visual_transport_qa.js 及本輪 board_spectator_release_verify.js，桌面清單加入播放模組。詳見 BOARD_SPECTATOR_PLAYBACK_20260919.md。
