@@ -41,10 +41,18 @@
 
 這批證據已保存在 before-large-event-chunking 子目錄；當時 board_game.js SHA-256 為 210bfe489ff7a593106e4db48df754630b03052c946fc9f4de3e43adadcf5cc1。早期失敗包含 iframe 先播最新招式、入場前開始計時及地圖提前 260 ms 在退場動畫後播放，均已修正後重新驗證；不能把中間失敗紀錄當作最終通過。
 
-## 最終大型事件雙頁結果
+## 大型事件雙頁結果（順序接收前，已保存歷史證據）
 
 最終房間 B9023，result.json 為 ok=true，failures/errors 均為空。兩份 notifyBattleWindow 事件 103473／103520 bytes，各拆成 5 段；最大事件 32940 bytes，含外層訊息 33011 bytes，所有 server ACK 成功。重組後完整保留 182 行多語言紀錄與尾端內容；慢 iframe 按骰子→攻擊順序顯示 1787／2189 ms。
 
 地圖兩骰 3005／3108 ms、逐格移動 330／328 ms，戰鬥退場後才開始地圖骰子。真實伺服器交棒、播放時指令鎖定、結束恢復、刷新與 modal 保留均通過。桌機與手機橫向最終截圖已目視確認。file-hashes.json 保存六個受驗檔案的本機 bytes/hash；CRLF 與發布 Git blob 的 LF 由套件 QA 分別核對。
 
 分段傳送與順序接收確定性測試 58 checks，地圖 13、戰鬥 41 重跑通過；包含 30 MiB 上限、亂序、重複、損壞、來源隔離、逾時與記憶體回收。交錯結算／地圖訊息、多來源同 id、完成順序倒置與逾時自動恢復均覆蓋。未完成片段只鎖控制權與後續狀態，不阻止 iframe 播放已收齊的前段，避免等待片段時造成既有佇列停滯。
+
+## 最終交錯訊息驗證與發布準備
+
+最終正式 Socket.IO 雙頁房間 B4551 全部通過，errors/failures=[]。113811／113890 bytes 的兩段演出首片 ACK sequence 20／21 後，先送入終止快照 version 16 與地圖事件 sequence 22，再送剩餘片段 23–30。收齊之前 battleState 與覆蓋層保持，地圖未提前播放；收齊後骰子→攻擊完整播放 1799／2197 ms，覆蓋層關閉後才播地圖。先前大型事件、逐格移動、modal、刷新、控制權交接、桌機與手機橫向驗證亦全通過。
+
+before-interleaved-ingress 保存上一輪 B9023 證據；根目錄 result.json／file-hashes.json 與截圖為最終版。正式來源提交 ea81faf0ba72d148e5e171b8ced6d28a24e9f88e；Board package-7be289c0375a59c2，manifest SHA-256 9cbfec4e51a7e5aa14d15206b8c8eaa17fa66cfde1bbb05ce8c2383e13bf195a。37 個程式檔、總計 3488 檔；新增／更新五個 immutable blobs 共 5194322 bytes，其餘素材與 Card／Chess 套件完全不變。
+
+desktop_program_catalog_qa.js 通過 Git HEAD、runtime、341 個參照與可重建核對；legacy v2 未變。發布 dry-run 五檔核對通過後，五檔已上傳 R2；正式切換與公開讀回驗證結果於後續補記。
