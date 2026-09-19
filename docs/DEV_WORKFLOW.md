@@ -1,5 +1,11 @@
 ﻿# Dev Workflow
 
+## 觀看動作完整播放候選（2026-09-19）
+
+- 範圍：修正擲骰被覆蓋、移動跳格、戰鬥搶播／提早清場與下一回合在戰鬥頁後方播放；正式 D 樹實作，本機候選尚未發布。
+- 檔案：public/js/board_remote_playback.js、board_game.js、board_battle.js、兩個 Board HTML、三份新 QA 與 reconnect mock；同步本四份文件及 [完整紀錄](BOARD_SPECTATOR_PLAYBACK_20260919.md)。
+- 驗證：18919 npm start、JS 語法、地圖 13／戰鬥 41／wire 611 checks、原雙頁建房至刷新與 reconnect PASS。新雙頁受控動作／慢 iframe／戰鬥交棒測試與證據見完整紀錄；未測正式帳號或存檔。
+
 ## 我的航海錄多紀錄改版（2026-09-14）
 
 - 使用者授權實作與部署；最新 main 建立 `D:\Codex_Release_Worktrees\board-voyage-records-v1`。一周目保存整隊、獨立紀錄、原團集合、私人副本、名稱管理、最近 5 次自動備份及舊檔明確匯入；移除跨房最新備份，加入帳號身份與版本衝突檢查。

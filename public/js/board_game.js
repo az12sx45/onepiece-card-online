@@ -265,7 +265,7 @@
   const SPAR_SELECTION_PAGE_VERSION = "20260827-formal-pk-v1";
   const BATTLE_COMMAND_KEY = "onepiece-board-battle-command-v1";
   const BATTLE_ENTRY_PLAYED_STORAGE_KEY = "onepiece-board-battle-entry-played-v1";
-  const BATTLE_PAGE_VERSION = "20260905-battle-turn-resume-v124";
+  const BATTLE_PAGE_VERSION = "20260919-spectator-playback-v125";
   const PLACEHOLDER_BATTLE_PORTRAIT = "images/board/battle/portraits/placeholder/normal.webp";
   const COSMETIC_FRAME_DEFS = {
     goldenDenDen: { id: "goldenDenDen", label: "黃金電話蟲框", unlockText: "司法島通關紀念" },
@@ -9732,7 +9732,21 @@
     remoteUiExpiryTimer: 0,
     deferStateApplyUntil: 0,
     remoteMovementLocations: new Map(),
+    pendingRemoteBattleViews: [],
+    remoteBattleFlushTimer: 0,
+    sentBattleVisualIds: new Set(),
   };
+  const remotePlayback = window.BoardRemotePlayback.create({
+    apply: (kind, message) => kind === "event" ? applyBoardLanGameEvent(message) : applyBoardLanPayload(message),
+    duration: remoteBoardPlaybackDuration,
+    blocked: ({ kind, message }) => {
+      const battlePending = boardLan.pendingRemoteBattleViews.length > 0
+        || !!state.battleWindow?.__BOARD_BATTLE_DEBUG__?.spectatorPlaybackState?.().active
+        || !!document.getElementById("battlePageOverlay")?.classList.contains("closing");
+      return battlePending && (kind === "state" ? !message.payload?.battleState : message.event?.channel !== "battle");
+    },
+    onIdle: resumeAfterRemoteBoardPlayback,
+  });
   const campaignSaveState = {
     inFlight: null,
     autoTimer: 0,
@@ -9745,7 +9759,7 @@
   const campaignInitialLoadRequested = boardLan.enabled && Boolean(state.campaignContext.campaignId);
   const boardStateReceiver = window.BoardStateWire && window.BoardStateReceiver?.create({
     roomCode: boardLan.roomCode,
-    onMessage: applyBoardLanPayload,
+    onMessage: receiveBoardLanPayload,
     requestFull: () => {
       if (!boardLan.connected) return;
       boardLan.socket.emit("BOARD_STATE_REQUEST", {
@@ -12706,6 +12720,18 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       && openingStoryActive
       && String(payload.gameState.seed || "") === String(openingStorySeed || "")
       && payload.gameState.phase === "setup-order";
+    const remoteModalId = boardLan.activeRemoteUiEventId;
+    const incomingGame = payload.gameState;
+    const sameRemoteTurn = incomingGame.phase === state.gameState?.phase
+      && incomingGame.round === state.gameState?.round
+      && incomingGame.players?.[incomingGame.currentPlayerIndex]?.id === currentPlayer()?.id
+      && incomingGame.turnStep === state.gameState?.turnStep
+      && !!incomingGame.resolutionLock === !!state.gameState?.resolutionLock;
+    const preserveRemoteModal = options.source === "lan" && !options.initialLanRestore
+      && !!remoteModalId && !payload.battleState
+      && refs.modalBack?.dataset?.boardUiEventId === remoteModalId
+      && (payload.boardUiEvent?.id === remoteModalId || (!payload.boardUiEvent && sameRemoteTurn
+        && !incomingGame.pendingMove && !incomingGame.movementAnimating && !incomingGame.diceRolling));
     const liveFlow = captureLiveFlowStateForLoad(payload.gameState, options);
     state.gameState = safeJsonClone(payload.gameState);
     if (payload.campaignContext?.campaignId) {
@@ -12741,7 +12767,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (!preserveOpeningStory) {
       cancelOpeningStorySession();
       clearManualLoadModalSession();
-      closeModal();
+      if (!preserveRemoteModal) closeModal();
     }
     state.autoCenterEnabled = true;
     if (!state.battleState) closeBattlePageOverlay();
@@ -13000,6 +13026,71 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     return true;
   }
 
+  function remoteBoardPlaybackBusy() {
+    const map = remotePlayback.status();
+    return map.active || map.pending > 0 || boardLan.pendingRemoteBattleViews.length > 0
+      || !!state.battleWindow?.__BOARD_BATTLE_DEBUG__?.spectatorPlaybackState?.().active
+      || !!document.getElementById("battlePageOverlay")?.classList.contains("closing");
+  }
+
+  function resumeAfterRemoteBoardPlayback() {
+    if (!boardLan.connected || boardLan.awaitingInitialState || remoteBoardPlaybackBusy()) return;
+    renderAll();
+    if (state.battleState) notifyBattleWindow();
+    scheduleAutoResumeBattleForCurrentPlayer();
+    scheduleAutoResumePendingMoveForCurrentPlayer();
+    if (shouldRunCpuAutoStep()) scheduleCpuAutoStep(180);
+  }
+
+  function remoteBoardPlaybackDuration(event, item) {
+    if (!event?.id || handledBoardUiEventIds.has(event.id)) return 0;
+    if (item.kind === "event" && Number(item.message.sequence || 0) <= boardLan.eventSequence) return 0;
+    if (event.channel === "movement") {
+      const player = state.gameState?.players?.find((entry) => String(entry.id) === String(event.playerId));
+      return Math.max(140, Math.min(1000, Number(event.stepDurationMs) || mapMovementStepDelay(player)));
+    }
+    if (event.channel && event.channel !== "ui") return 0;
+    if (event.type === "dice") return Math.max(260, Number(event.settleDelay) || diceRollDuration()) + 3000;
+    if (event.type === "turn-banner") return Math.max(0, Number(event.transitionDelay) || TURN_HANDOFF_TRANSITION_DELAY_MS);
+    if (event.type === "spectator-modal") return 1500;
+    return Math.max(1700, Number(event.duration) || 0);
+  }
+
+  function resetRemoteBoardPlayback() {
+    remotePlayback.reset();
+    window.clearTimeout(boardLan.deferredApplyTimer);
+    boardLan.deferredApplyTimer = 0;
+    boardLan.deferStateApplyUntil = 0;
+    clearRemoteBoardUiEvent();
+    boardLan.remoteMovementLocations.clear();
+    boardLan.pendingRemoteBattleViews.length = 0;
+    window.clearTimeout(boardLan.remoteBattleFlushTimer);
+    boardLan.remoteBattleFlushTimer = 0;
+    state.battleWindow?.__BOARD_BATTLE_DEBUG__?.resetSpectatorPlayback?.();
+  }
+
+  function receiveBoardLanPayload(message = {}) {
+    if (!message.payload || (message.roomCode && sanitizeRoomCode(message.roomCode) !== boardLan.roomCode)) return;
+    applyBoardCampaignContext(message.campaignContext || message.payload.campaignContext);
+    if (boardLan.awaitingInitialState) {
+      resetRemoteBoardPlayback();
+      applyBoardLanPayload(message);
+      return;
+    }
+    if (message.sourceClientId === boardLan.clientId) return;
+    if (Number(message.version || 0) && Number(message.version) <= boardLan.version) return;
+    remotePlayback.enqueue("state", message);
+  }
+
+  function receiveBoardLanGameEvent(message = {}) {
+    if (!message.event || boardLan.awaitingInitialState || !boardLan.connected) return;
+    if (message.roomCode && sanitizeRoomCode(message.roomCode) !== boardLan.roomCode) return;
+    if (message.sourceClientId === boardLan.clientId) return;
+    if (Number(message.sequence || 0) && Number(message.sequence) <= boardLan.eventSequence) return;
+    if (Number(message.event.expiresAt || 0) && Number(message.event.expiresAt) <= Date.now()) return;
+    remotePlayback.enqueue("event", message);
+  }
+
   function remoteMovementVisualPlayer(player) {
     if (!player) return player;
     const entry = boardLan.remoteMovementLocations.get(String(player.id || ""));
@@ -13052,7 +13143,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       banner.setAttribute("aria-hidden", "true");
       delete banner.dataset.boardUiEventId;
     }
-    cancelDiceAnimation(activeId);
+    if (activeId) cancelDiceAnimation(activeId);
     boardLan.activeRemoteUiEventId = "";
     boardLan.activeRemoteUiStateVersion = 0;
   }
@@ -13065,11 +13156,20 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (sequence) boardLan.eventSequence = sequence;
     const event = message.event;
     if (Number(event.expiresAt || 0) > 0 && Number(event.expiresAt) <= Date.now()) return;
+    if (event.channel === "battle" && event.type === "visual" && event.view?.battle) {
+      const view = safeJsonClone(event.view);
+      view.battle.canControl = false;
+      boardLan.pendingRemoteBattleViews.push(view);
+      if (!state.battleWindow || state.battleWindow.closed) openBattleWindow();
+      flushRemoteBattleViews();
+      return;
+    }
     if (event.channel === "movement" && event.type === "move-step") {
       applyRemoteMovementEvent(event);
       return;
     }
     if (event.channel !== "ui") return;
+    if (handledBoardUiEventIds.has(event.id)) return;
     if (boardLan.activeRemoteUiEventId && boardLan.activeRemoteUiEventId !== event.id) {
       clearRemoteBoardUiEvent(boardLan.activeRemoteUiEventId);
     }
@@ -13280,7 +13380,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         if (wasAwaitingInitialState && incomingUiEvent?.type === "turn-banner") {
           if (incomingUiEvent.id) handledBoardUiEventIds.add(incomingUiEvent.id);
         } else {
-          handleBoardUiEvent(incomingUiEvent);
+          if (incomingUiEvent) applyBoardLanGameEvent({ event: incomingUiEvent, stateVersion: version });
         }
         restorePinnedSpectatorModalIfNeeded(incomingUiEvent);
       }
@@ -13434,6 +13534,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     boardLan.socket.on("disconnect", () => {
       joiningSocketId = "";
       boardStateReceiver?.reset();
+      resetRemoteBoardPlayback();
       const interruptedState = boardLan.pendingState || boardLan.inFlightState;
       boardLan.connected = false;
       boardLan.awaitingInitialState = true;
@@ -13450,6 +13551,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       resetBoardLanInitialRestoreTracking();
     });
     boardLan.socket.on("BOARD_SOCKET_FENCED", () => {
+      resetRemoteBoardPlayback();
       boardLan.connected = false;
       boardLan.awaitingInitialState = true;
       boardLan.initialStateCanSeed = false;
@@ -13494,8 +13596,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         mode: state.lobby?.campaignMode || "standard",
       });
     });
-    boardLan.socket.on("BOARD_GAME_STATE", boardStateReceiver?.receive || applyBoardLanPayload);
-    boardLan.socket.on("BOARD_GAME_EVENT", applyBoardLanGameEvent);
+    boardLan.socket.on("BOARD_GAME_STATE", boardStateReceiver?.receive || receiveBoardLanPayload);
+    boardLan.socket.on("BOARD_GAME_EVENT", receiveBoardLanGameEvent);
     boardLan.socket.on("BOARD_STATE_REQUEST", () => {
       if (boardLan.awaitingInitialState) {
         if (!seedBoardLanInitialState("join")) scheduleBoardLanInitialStateRetry(220);
@@ -14678,6 +14780,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (!isCpuPlayer(player)) return false;
     if (!boardLan.enabled) return true;
     if (!boardLan.connected || boardLan.awaitingInitialState || boardLan.applying) return false;
+    if (remoteBoardPlaybackBusy()) return false;
     return localPlayerIsLobbyHost();
   }
 
@@ -14688,6 +14791,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   function canBoardLanControlPlayerIdentity(player = null) {
     if (!boardLan.enabled || !player) return true;
     if (!boardLan.connected || boardLan.awaitingInitialState) return false;
+    if (remoteBoardPlaybackBusy()) return false;
     if (canLocalDriveCpuPlayer(player)) return true;
     const localClientId = String(boardLan.clientId || profile.clientId || "").trim();
     const playerClientId = String(player.clientId || "").trim();
@@ -16056,6 +16160,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       playerId: player.id,
       location: safeJsonClone(player.location),
       stepsRemaining: Math.max(0, Number(pending?.stepsRemaining || 0)),
+      stepDurationMs: mapMovementStepDelay(player),
     });
   }
 
@@ -47576,6 +47681,11 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   function closeBattlePageOverlay() {
     const overlay = document.getElementById("battlePageOverlay");
     if (!overlay) return;
+    const playback = state.battleWindow?.__BOARD_BATTLE_DEBUG__?.spectatorPlaybackState?.();
+    if (boardLan.connected && !boardLan.awaitingInitialState
+      && (boardLan.pendingRemoteBattleViews.length || playback?.active || playback?.pending)) {
+      return;
+    }
     clearBattlePageOverlayOpenTimers();
     clearBattlePrebattleIntroRecoveryTimer();
     overlay.setAttribute("aria-hidden", "true");
@@ -47587,6 +47697,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         overlay.classList.remove("open", "closing");
       }
       battlePageOverlayCloseTimer = null;
+      remotePlayback.resume();
+      resumeAfterRemoteBoardPlayback();
     }, 260);
   }
 
@@ -47604,12 +47716,53 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     return snapshot;
   }
 
+  function isBattlePresentationReady() {
+    const overlay = document.getElementById("battlePageOverlay");
+    return !!overlay?.classList.contains("open") && overlay.classList.contains("ready")
+      && !overlay.classList.contains("transitioning") && !overlay.classList.contains("closing");
+  }
+
+  function flushRemoteBattleViews() {
+    window.clearTimeout(boardLan.remoteBattleFlushTimer);
+    boardLan.remoteBattleFlushTimer = 0;
+    if (!boardLan.pendingRemoteBattleViews.length) return;
+    if (!isBattlePresentationReady()) {
+      boardLan.remoteBattleFlushTimer = window.setTimeout(flushRemoteBattleViews, 50);
+      return;
+    }
+    const frame = document.getElementById("battlePageFrame");
+    if (!frame?.dataset.loaded || !state.battleWindow || state.battleWindow.closed) return;
+    const viewer = state.battleWindow.__BOARD_BATTLE_DEBUG__;
+    if (!viewer?.refresh) return;
+    while (boardLan.pendingRemoteBattleViews.length) {
+      const view = boardLan.pendingRemoteBattleViews.shift();
+      // Deliver the buffered batch before polling the latest authoritative view.
+      viewer.refresh(view);
+    }
+  }
+
+  function emitBattleVisualForSpectators(view) {
+    const visual = view?.battle?.visualEvent;
+    if (!visual?.id || boardLan.sentBattleVisualIds.has(visual.id) || !canPushBoardLanState("battle-sync")) return;
+    const remoteView = safeJsonClone(view);
+    remoteView.battle.canControl = false;
+    const event = { id: visual.id, channel: "battle", type: "visual", view: remoteView };
+    // Keep the existing server event size limit. Ordinary full-state sync is
+    // still the fallback for an unusually large display view.
+    if (new TextEncoder().encode(JSON.stringify(event)).length > 64 * 1024) return;
+    if (!emitBoardLanGameEvent(event)) return;
+    boardLan.sentBattleVisualIds.add(visual.id);
+    if (boardLan.sentBattleVisualIds.size > 120) boardLan.sentBattleVisualIds.delete(boardLan.sentBattleVisualIds.values().next().value);
+  }
+
   function notifyBattleWindow() {
     const snapshot = writeBattleSnapshot();
     if (state.battleState && !boardLan.applying) {
+      emitBattleVisualForSpectators(snapshot.view);
       scheduleBattleLanStatePush("battle-sync", 35);
     }
     if (!state.battleWindow || state.battleWindow.closed) return;
+    flushRemoteBattleViews();
     const targetOrigin = window.location.protocol === "file:" ? "*" : window.location.origin;
     state.battleWindow.postMessage({ type: "board-battle-update", snapshot }, targetOrigin);
   }
@@ -54991,6 +55144,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (!command || command.id === lastProcessedBattleCommandId) return;
     lastProcessedBattleCommandId = command.id;
     if (!state.battleState) return;
+    if (boardLan.enabled && remoteBoardPlaybackBusy()) return;
     if (state.battleState.isSparBattle) {
       processSparBattleCommand(command);
       return;
@@ -60485,6 +60639,12 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     setupBoardPanZoom();
     window.addEventListener("message", (event) => {
       if (event.origin && event.origin !== window.location.origin && event.origin !== "null") return;
+      if (event?.data?.type === "board-battle-playback-idle" && event.source === state.battleWindow) {
+        remotePlayback.resume();
+        if (!state.battleState) closeBattlePageOverlay();
+        resumeAfterRemoteBoardPlayback();
+        return;
+      }
       if (event?.data?.type === "board-battle-command" && event.data.command) {
         processBattlePageCommand(event.data.command);
         return;
@@ -63896,6 +64056,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     createManualSavePayload,
     normalizeLoadedGameState,
     boardLanStatus: () => ({
+      playback: remotePlayback.status(),
       wire: boardStateReceiver?.status() || null,
       enabled: boardLan.enabled,
       connected: boardLan.connected,
@@ -63922,6 +64083,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       campaignInitialLoadRequested,
       lastSentKey: boardLan.lastSentKey ? boardLan.lastSentKey.slice(0, 120) : "",
     }),
+    hasPendingRemoteBattleViews: () => boardLan.pendingRemoteBattleViews.length > 0,
+    isBattlePresentationReady,
     cpuAutoStatus: () => ({
       busy: cpuAuto.busy,
       hasTimer: !!cpuAuto.timer,

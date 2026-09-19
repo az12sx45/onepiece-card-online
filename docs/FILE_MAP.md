@@ -1,5 +1,12 @@
 # File Map
 
+## 觀看連續播放（2026-09-19）
+
+- public/js/board_remote_playback.js：解碼後的展示佇列、計時與戰鬥／地圖等待；不持久化。
+- board_game.js：逐格步速、觀看事件、戰鬥暫存與控制权；board_battle.js：各招唯讀畫面、順序播放；兩個 HTML 更新載入版本。
+- scripts/board_remote_playback_qa.js、board_battle_spectator_playback_qa.js、board_spectator_playback_browser_qa.js：定時計時與雙頁 Socket 回歸；board_reconnect_client_qa.js 補 connected/id fixture。
+- docs/BOARD_SPECTATOR_PLAYBACK_20260919.md：範圍、證據與尚未發布狀態。
+
 ## 我的航海錄（2026-09-14）
 
 - `server/board-voyage-records.js`：完整紀錄 v2、備份、私人副本；遊戲 state 視為不透明快照，不合併世界。

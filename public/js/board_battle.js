@@ -1157,6 +1157,17 @@
   };
   let processedLogLength = null;
   let lastVisualEventId = "";
+  const spectatorBattlePlayback = createSpectatorBattlePlayback({
+    schedule: (callback, delay) => window.setTimeout(callback, delay),
+    cancel: (timer) => window.clearTimeout(timer),
+    onAdvance: () => {
+      refresh();
+      if (!spectatorBattlePlayback.status().active) {
+        const targetOrigin = window.location.protocol === "file:" ? "*" : window.location.origin;
+        window.parent?.postMessage({ type: "board-battle-playback-idle" }, targetOrigin);
+      }
+    },
+  });
   let activeKatakuriFutureSightEventId = "";
   let katakuriFutureSightTimer = null;
   let katakuriFutureSightLoadedHandler = null;
@@ -1789,7 +1800,7 @@
   }
 
   function viewerCanControlBattle(view = latestView) {
-    return !!view?.battle?.canControl;
+    return !spectatorBattlePlayback.status().active && !!view?.battle?.canControl;
   }
 
   function viewerBattleLockMessage(view = latestView) {
@@ -8297,7 +8308,7 @@
 
   function callLineageExtractionAction(methodName, commandType, args, payload) {
     const extraction = latestView?.battle?.lineageExtraction;
-    if (!extraction?.canControl) {
+    if (spectatorBattlePlayback.status().active || !extraction?.canControl) {
       showStatus("這不是你的血統因子抽取操作權。");
       return false;
     }
@@ -8377,17 +8388,84 @@
     });
   }
 
+  // Presentation is transient: authoritative game state continues advancing in
+  // the parent while immutable spectator views finish their local animation.
+  function createSpectatorBattlePlayback({ schedule, cancel, onAdvance }) {
+    const seen = new Set();
+    const pending = [];
+    let active = null;
+    let timer = null;
+    const remember = (id) => {
+      seen.add(id);
+      if (seen.size > 512) seen.delete(seen.values().next().value);
+    };
+    const durationFor = (event) => {
+      const supplied = Number(event.duration);
+      const duration = Number.isFinite(supplied) && supplied > 0 ? supplied : (event.type === "prepare" ? 520 : 900);
+      const tail = event.type === "prepare" ? 0 : event.type === "dice" ? 620 : event.type === "nika-heartbeat" ? 180 : 420;
+      return Math.min(60000, Math.max(event.type === "dice" ? 1200 : 0, duration) + tail);
+    };
+    const capture = (view) => {
+      const event = view?.battle?.visualEvent;
+      const id = String(event?.id || "");
+      if (!id || seen.has(id)) return;
+      remember(id);
+      // Observe local event IDs too, so losing control cannot replay our action.
+      if (view.battle.canControl !== false) return;
+      const snapshot = JSON.parse(JSON.stringify(view));
+      snapshot.battle.canControl = false;
+      snapshot.battle.canAct = false;
+      snapshot.battle.canFinish = false;
+      if (snapshot.battle.lineageExtraction) snapshot.battle.lineageExtraction.canControl = false;
+      pending.push(snapshot);
+      // Bound memory after an exceptionally long suspended/background session.
+      if (pending.length > 128) pending.shift();
+    };
+    return {
+      select(authoritativeView, receivedView = null) {
+        // Posted spectator snapshots may be older than the parent's newest view;
+        // preserve their event before polling that view. Local/extraction updates
+        // still use the authoritative API without replaying an obsolete snapshot.
+        if (receivedView?.battle?.canControl === false) capture(receivedView);
+        else capture(authoritativeView);
+        if (!active && pending.length) {
+          active = pending.shift();
+          timer = schedule(() => {
+            timer = null;
+            active = null;
+            onAdvance();
+          }, durationFor(active.battle.visualEvent));
+        }
+        return active || authoritativeView;
+      },
+      status() {
+        return { active: !!active || pending.length > 0, pending: pending.length, eventId: String(active?.battle?.visualEvent?.id || "") };
+      },
+      reset() {
+        if (timer !== null) cancel(timer);
+        timer = null;
+        active = null;
+        pending.length = 0;
+        // Keep deduplication across reconnects: the latest full-state restore
+        // can still contain the event whose presentation was just discarded.
+      },
+    };
+  }
+
   function refresh(snapshotView = null) {
     const api = controller();
+    // The iframe's first refresh precedes its parent's load callback. Let that
+    // callback deliver buffered events before reading a newer authoritative view.
+    if (!snapshotView?.battle && api?.hasPendingRemoteBattleViews?.()) return;
     const viewOptions = selectedCoopViewPlayerId ? { coopViewPlayerId: selectedCoopViewPlayerId } : undefined;
-    if (snapshotView) {
-      latestView = api?.getBattleView?.(viewOptions) || snapshotView;
-    } else if (api?.getBattleView) {
-      latestView = api.getBattleView(viewOptions);
-    } else {
-      latestView = readSnapshotView();
-    }
-    latestView = followCurrentCoopActor(latestView, api);
+    const authoritativeView = api?.getBattleView
+      ? api.getBattleView(viewOptions)
+      : (snapshotView || readSnapshotView());
+    const spectatorView = snapshotView?.battle?.canControl === false || authoritativeView?.battle?.canControl === false;
+    if (spectatorView && api?.isBattlePresentationReady?.() === false) return;
+    latestView = spectatorBattlePlayback.select(authoritativeView, snapshotView);
+    // A queued actor/round must not be replaced by a fresh parent API lookup.
+    latestView = followCurrentCoopActor(latestView, spectatorBattlePlayback.status().active ? null : api);
     if (!latestView) {
       latestView = null;
       lastBattleIdentity = "";
@@ -8541,6 +8619,8 @@
     selectedCoopViewPlayerId: () => selectedCoopViewPlayerId,
     coopViewMenuOpen: () => coopViewMenuOpen,
     latestView: () => latestView,
+    spectatorPlaybackState: () => spectatorBattlePlayback.status(),
+    resetSpectatorPlayback: () => spectatorBattlePlayback.reset(),
     refresh,
     fitBattleViewport,
     playTotMusicaDualSyncFx,
@@ -8574,6 +8654,7 @@
   };
 
   window.addEventListener("pagehide", () => {
+    spectatorBattlePlayback.reset();
     clearLucciRokuoganFx();
     clearZephyrExplosionStory();
     clearKatakuriFutureSightCinematic();

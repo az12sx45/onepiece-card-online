@@ -73,6 +73,7 @@
         "js/board_lineage_extraction.js",
         "js/board_map_layout_override.js",
         "js/board_missions.js",
+        "js/board_remote_playback.js",
         "js/board_shared.js",
         "js/board_start.js",
         "js/board_state_receiver.js",

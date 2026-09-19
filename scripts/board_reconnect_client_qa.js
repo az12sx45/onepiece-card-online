@@ -10,6 +10,8 @@ function socketMockSource() {
     class FakeSocket {
       constructor() {
         this.handlers = {};
+        this.connected = true;
+        this.id = "qa-reconnect-socket-1";
         this.joinCount = 0;
         this.serverVersion = 42;
         this.serverPayload = null;
@@ -31,9 +33,12 @@ function socketMockSource() {
         entries.forEach((entry) => entry.handler(payload));
       }
       disconnectForQa() {
+        this.connected = false;
         this.fire("disconnect", "transport close");
       }
       reconnectForQa() {
+        this.connected = true;
+        this.id = "qa-reconnect-socket-" + (this.joinCount + 1);
         this.fire("connect");
       }
       emit(name, payload, callback) {
