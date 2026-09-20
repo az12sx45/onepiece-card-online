@@ -31,4 +31,6 @@
 
 狀態：本機驗證完成，正在發布。程式提交後從 Git HEAD 建立 Board v3 manifest/catalog，先 dry-run、上傳 immutable blob 並公開 GET 核對 size/SHA，再推送 matching 程式與 metadata；最後讀回正式 health、三款 runtime identity、manifest 與全部 Board 程式。
 
+程式提交 `ddf3d469`，新 Board 為 `package-d5357a5866ea75d8`，manifest SHA-256 `c0640aa57e5f1fe7093ca1ead4d2362a34f4320e2bb41fb11ca4539431c08c80`。本次只需新增五個程式 blob，合計 5,239,391 bytes（約 5 MB）；Card／Chess package 與 legacy v2 保持不變。desktop_program_catalog_qa 與 publisher fixture PASS，無未解析媒體或外部程式引用。發布 dry-run 3,171 個 unique blobs 的全部來源 size/SHA 通過，未發送網路請求；隨後開始正式 immutable 上傳。
+
 回復保留歷史 immutable manifests/blobs，以基線五個 Board 程式恢復後重建匹配套件；不得修改玩家帳號、世界存檔、已領獎紀錄或無關圖片。

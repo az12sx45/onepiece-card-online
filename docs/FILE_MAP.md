@@ -6,6 +6,7 @@
 - board_battle.js／board_battle.html：唯讀戰鬥提示；board_missions.js：第 83／89 話門檻說明。
 - scripts/board_quick_voyage_qa.js、board_battle_decision_hints_qa.js、board_mission_guidance_qa.js、board_draft_passive_browser_qa.js：定向瀏覽器驗證；board_spectator_release_verify.js 支援指定發布基線。
 - docs/BOARD_VOYAGE_QUALITY_20260920.md：範圍、驗證、部署與回復；證據 D:/Codex_QA/board-quality-20260920/。
+- public/desktop/catalog-v3.json、desktop/manifests/board-package-d5357a5866ea75d8.json：匹配五份 Board 程式的桌面增量更新，Card／Chess 套件不變。
 
 ## 航海錄與個人頁發布（2026-09-19）
 
