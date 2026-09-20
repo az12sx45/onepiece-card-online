@@ -1,5 +1,13 @@
 # 航海錄操作與任務提示更新（2026-09-20）
 
+## 已部署
+
+正式 release `cf5cf4e7283cdaf28d7f2b48f77c6a50aad16c93` 已推送 main 並在 Render 生效。2026-09-20 23:47:00（Asia/Taipei）公開完整性驗證通過 41 checks：health、三款 runtime identity、catalog／三份 manifests、全部 37 份 Board 程式 size/SHA 及舊存檔端點 410。新 Board 為 `package-d5357a5866ea75d8`；Card／Chess 套件保持不變。
+
+R2 正式上傳 `uploaded=5 / skipped=3166`；五份新增檔公開 GET／size／SHA 全通過，共 5,239,391 bytes。正式 URL 的選人 UI 再測 35 個候選 × 桌機／手機直橫向，0 page errors，被動效果、換行、捲動、關閉與邀請按鈕正常；這是匿名隔離預覽，沒有操作真實帳號或房間。
+
+證據為 `release/r2-verify.json`、`release/live-verify.json`、`live-draft/report.json`（皆在本文 QA 根目錄）。網頁重新整理即可使用；桌面版下載航海錄遊戲更新後重開，不需重裝啟動器。正式入口：[新世界航海錄](https://onepiece-card-online.onrender.com/board_start.html)。
+
 ## 正式來源與範圍
 
 正式來源 `D:/Codex_Release_Worktrees/board-voyage-records-v1`，基線 `33e2356bfce44db308c15b7918efb69c077f79f5`。使用者授權實作並部署五項改善；只發布 Board，既有 ranks 圖片差異與 Card／Chess 程式不納入。
@@ -29,7 +37,7 @@
 
 ## 發布與回復
 
-狀態：本機驗證完成，正在發布。程式提交後從 Git HEAD 建立 Board v3 manifest/catalog，先 dry-run、上傳 immutable blob 並公開 GET 核對 size/SHA，再推送 matching 程式與 metadata；最後讀回正式 health、三款 runtime identity、manifest 與全部 Board 程式。
+狀態：已完成發布及公開讀回。程式提交後從 Git HEAD 建立 Board v3 manifest/catalog，經 dry-run、上傳 immutable blob、公開 GET size/SHA、matching 程式與 metadata 推送，再核對正式 health、三款 runtime identity、manifest 與全部 Board 程式。
 
 程式提交 `ddf3d469`，新 Board 為 `package-d5357a5866ea75d8`，manifest SHA-256 `c0640aa57e5f1fe7093ca1ead4d2362a34f4320e2bb41fb11ca4539431c08c80`。本次只需新增五個程式 blob，合計 5,239,391 bytes（約 5 MB）；Card／Chess package 與 legacy v2 保持不變。desktop_program_catalog_qa 與 publisher fixture PASS，無未解析媒體或外部程式引用。發布 dry-run 3,171 個 unique blobs 的全部來源 size/SHA 通過，未發送網路請求；隨後開始正式 immutable 上傳。
 

@@ -1,8 +1,10 @@
 ﻿# Dev Workflow
 
-## 航海錄操作與任務提示（2026-09-20，發布中）
+## 航海錄操作與任務提示（2026-09-20，已部署）
 
 正式 D 樹實作快速航行、戰鬥提示、主線 A/S 委託保留、開局被動效果與完成通知。範圍：Board 兩個 HTML、三支 JS、四支新 QA、發布 verifier 基線參數及雙頁快速骰子測試；同步 PROJECT_OVERVIEW、GAME_RULES、FILE_MAP。npm start 18920、快速模式／戰鬥／選人 UI、120 話主線、雙頁 LAN 刷新與同步回歸通過。最終驗證與發布進度見 [本次紀錄](BOARD_VOYAGE_QUALITY_20260920.md)。
+
+release cf5cf4e7／Board package-d5357a5866ea75d8 已生效，23:47 公開完整性 41 checks 通過；R2 五份新檔 size/SHA 通過。正式選人 UI 35 候選 × 三尺寸，0 errors。832 項任務、20 項快速航行、45 項戰鬥提示及多人回歸均通過。此次收尾只補文件，提交使用 [skip render]。
 
 ## 航海錄與 Card 個人頁已部署（2026-09-20）
 

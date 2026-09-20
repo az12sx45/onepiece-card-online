@@ -1,6 +1,6 @@
 # File Map
 
-## 航海錄操作與任務提示（2026-09-20）
+## 航海錄操作與任務提示（2026-09-20，已部署）
 
 - board_game.js／board_game.html：快速模式、骰子與開箱節奏、主線委託保留、選人被動、完成通知與手機排版。
 - board_battle.js／board_battle.html：唯讀戰鬥提示；board_missions.js：第 83／89 話門檻說明。
