@@ -9,6 +9,7 @@ const { execFileSync } = require("node:child_process");
 const ROOT = path.resolve(__dirname, "..");
 const OUTPUT = process.env.BOARD_QA_OUTPUT || "D:/Codex_QA/board-spectator-playback-20260919/release";
 const ORIGIN = "https://onepiece-card-online.onrender.com";
+const BASELINE = process.env.BOARD_QA_BASELINE || "dc7d77d527f9f64c842946322e410e1c4e088c59";
 const mode = process.argv.includes("--r2") ? "r2" : "live";
 const digest = bytes => crypto.createHash("sha256").update(bytes).digest("hex");
 const catalog = JSON.parse(fs.readFileSync(path.join(ROOT, "public/desktop/catalog-v3.json")));
@@ -26,8 +27,8 @@ async function get(url, expectedStatus = 200){
 async function main(){
   fs.mkdirSync(OUTPUT, { recursive:true });
   if(mode === "r2"){
-    const baseline = JSON.parse(execFileSync("git", ["show", "dc7d77d527f9f64c842946322e410e1c4e088c59:public/desktop/catalog-v3.json"], { cwd:ROOT, encoding:"utf8", windowsHide:true }));
-    const old = JSON.parse(execFileSync("git", ["show", `dc7d77d527f9f64c842946322e410e1c4e088c59:public/${baseline.games.board.manifestPath}`], { cwd:ROOT, encoding:"utf8", maxBuffer:16*1024*1024, windowsHide:true }));
+    const baseline = JSON.parse(execFileSync("git", ["show", `${BASELINE}:public/desktop/catalog-v3.json`], { cwd:ROOT, encoding:"utf8", windowsHide:true }));
+    const old = JSON.parse(execFileSync("git", ["show", `${BASELINE}:public/${baseline.games.board.manifestPath}`], { cwd:ROOT, encoding:"utf8", maxBuffer:16*1024*1024, windowsHide:true }));
     const known = new Set(old.assets.map(asset => asset.sha256));
     const changed = manifest.assets.filter(asset => !known.has(asset.sha256));
     assert(changed.length > 0, "Expected updated Board program blobs");

@@ -6,6 +6,7 @@ const ROOT_URL = process.env.BOARD_QA_URL || "http://127.0.0.1:18919";
 const CHROME_PATH = process.env.BOARD_QA_CHROME || "C:/Program Files/Google/Chrome/Application/chrome.exe";
 const OUTPUT_DIR = process.env.BOARD_QA_OUTPUT || "D:/Codex_QA/board-spectator-playback-20260919";
 const VIEWPORT = { width: Number(process.env.BOARD_QA_WIDTH || 1280), height: Number(process.env.BOARD_QA_HEIGHT || 720) };
+const QUICK_DICE = process.env.BOARD_QA_QUICK_DICE === "1";
 
 async function createDevice(browser, profile, errors) {
   const context = await browser.newContext({ viewport: VIEWPORT });
@@ -488,7 +489,7 @@ async function interleavedBattleIngressCheck(host, guest, report, stamp, roomCod
 
 async function main() {
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
-  const report = { ok: false, url: ROOT_URL, viewport: VIEWPORT, errors: [], failures: [] };
+  const report = { ok: false, url: ROOT_URL, viewport: VIEWPORT, quickDice: QUICK_DICE, errors: [], failures: [] };
   const browser = await chromium.launch({ executablePath: CHROME_PATH, headless: process.env.BOARD_QA_HEADED !== "1" });
   let host;
   let guest;
@@ -543,29 +544,39 @@ async function main() {
           rolling: orb.classList.contains("rolling"),
           settled: orb.classList.contains("settled"),
           face: document.getElementById("diceHudFaceImage")?.alt,
+          coins: Number(window.__BOARD_GAME_DEBUG__.getCurrentPlayer()?.coins || 0),
         };
         const prior = window.__diceTrace.at(-1);
-        if (!prior || ["open", "title", "rolling", "settled", "face"].some((key) => prior[key] !== row[key])) window.__diceTrace.push(row);
+        if (!prior || ["open", "title", "rolling", "settled", "face", "coins"].some((key) => prior[key] !== row[key])) window.__diceTrace.push(row);
       };
       window.__diceObserver = new MutationObserver(capture);
       window.__diceObserver.observe(document.getElementById("diceHud"), { subtree: true, childList: true, attributes: true });
+      window.__diceCheckpointTimer = setInterval(capture, 25);
       capture();
     });
     const createdAt = Date.now();
     const diceEvents = [2, 5].map((result, index) => ({
       ...fixture, id: `qa-dice-${index}-${stamp}`, channel: "ui", type: "dice", title: `連續骰子 ${index + 1}`,
-      subtitle: "完整三秒結果", theme: "move", maxFace: 6, result, settleDelay: 260,
-      createdAt, expiresAt: createdAt + 3660,
+      subtitle: QUICK_DICE ? "快速航行結果停留" : "完整三秒結果", theme: "move", maxFace: 6, result,
+      settleDelay: QUICK_DICE ? 650 : 260,
+      ...(QUICK_DICE ? { duration: 1200 } : {}),
+      createdAt, expiresAt: createdAt + (QUICK_DICE ? 1600 : 3660),
     }));
     report.diceAcks = await emitEvents(host, roomCode, diceEvents);
-    await host.page.evaluate(() => {
+    report.diceCheckpoint = await host.page.evaluate(() => {
       const debug = window.__BOARD_GAME_DEBUG__;
       // A later game snapshot must not cut off either queued visual event.
-      debug.getLocalBoardPlayer().coins += 1;
+      const before = Number(debug.getLocalBoardPlayer().coins || 0);
+      debug.getLocalBoardPlayer().coins = before + 1;
       debug.pushBoardLanState("qa-playback-during-dice");
+      return { before, after: before + 1 };
     });
-    await guest.page.waitForTimeout(7400);
-    report.diceTrace = await guest.page.evaluate(() => { window.__diceObserver.disconnect(); return window.__diceTrace; });
+    await guest.page.waitForTimeout(QUICK_DICE ? 3400 : 7400);
+    report.diceTrace = await guest.page.evaluate(() => {
+      window.__diceObserver.disconnect();
+      clearInterval(window.__diceCheckpointTimer);
+      return window.__diceTrace;
+    });
     report.diceHolds = diceEvents.map((event) => {
       const settledIndex = report.diceTrace.findIndex((row) => row.title === event.title && row.open && row.settled);
       if (settledIndex < 0) return { title: event.title, holdMs: 0, error: "result never displayed" };
@@ -573,7 +584,17 @@ async function main() {
       const end = report.diceTrace.slice(settledIndex + 1).find((entry) => !entry.open || entry.title !== event.title || !entry.settled);
       return { title: event.title, holdMs: end ? Math.round(end.t - row.t) : 0, face: row.face };
     });
-    for (const hold of report.diceHolds) if (hold.holdMs < 2950) report.failures.push(`dice cut short: ${JSON.stringify(hold)}`);
+    for (const hold of report.diceHolds) {
+      if (hold.holdMs < (QUICK_DICE ? 500 : 2950)) report.failures.push(`dice cut short: ${JSON.stringify(hold)}`);
+      if (QUICK_DICE && hold.holdMs > 900) report.failures.push(`quick dice retained a full-length hold: ${JSON.stringify(hold)}`);
+    }
+    if (QUICK_DICE) {
+      const shownTitles = [...new Set(report.diceTrace.filter((row) => row.open).map((row) => row.title))];
+      if (JSON.stringify(shownTitles) !== JSON.stringify(diceEvents.map((event) => event.title))) report.failures.push("quick dice FIFO order mismatch");
+      if (report.diceTrace.some((row) => row.open && row.coins !== report.diceCheckpoint.before)) report.failures.push("state checkpoint interrupted quick dice playback");
+      if (report.diceTrace.at(-1)?.coins !== report.diceCheckpoint.after) report.failures.push("state checkpoint missing after both quick dice finished");
+      if (report.diceHolds.some((hold, index) => hold.face !== `骰面 ${diceEvents[index].result}`)) report.failures.push("quick dice displayed the wrong result");
+    }
 
     report.movementFixture = await guest.page.evaluate((playerId) => {
       const debug = window.__BOARD_GAME_DEBUG__;

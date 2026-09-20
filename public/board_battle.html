@@ -3882,6 +3882,33 @@
       border-radius: 8px;
     }
 
+    .battle-decision-hints {
+      position: absolute;
+      z-index: 65;
+      left: 34%;
+      top: 23%;
+      width: 32%;
+      max-height: 43%;
+      overflow: auto;
+      overscroll-behavior: contain;
+      padding: 12px 14px;
+      border: 1px solid rgba(222, 185, 110, .55);
+      border-radius: 12px;
+      background: rgba(6, 27, 39, .94);
+      color: #e9f2e9;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, .25);
+      font-family: "Microsoft JhengHei", sans-serif;
+      font-size: 15px;
+      line-height: 1.55;
+      overflow-wrap: anywhere;
+    }
+
+    .battle-decision-hints[hidden] { display: none; }
+    .battle-decision-hints > strong { color: #f1d68d; font-size: 16px; }
+    .battle-decision-hints ul { margin: 7px 0 0; padding-left: 1.15em; }
+    .battle-decision-hints li + li { margin-top: 7px; }
+    .battle-decision-hints .is-danger { color: #ffd2ad; }
+
     .action-panel {
       position: absolute;
       z-index: 70;
@@ -11241,6 +11268,11 @@
       <div class="black-turn-demon-name-text" id="enemyDemonName">敵人</div>
     </article>
 
+    <aside class="battle-decision-hints" id="battleDecisionHints" tabindex="0" role="region" aria-label="現在該考慮什麼" aria-live="polite" hidden>
+      <strong>現在該考慮什麼</strong>
+      <ul id="battleDecisionHintList"></ul>
+    </aside>
+
     <section class="layout-item info-panel" data-layout-id="infoPanel">
       <div class="info-title" id="infoTitle">選擇技能</div>
       <div class="info-content" id="infoContent"></div>
@@ -11310,6 +11342,6 @@
   </aside>
 
   <script src="js/board_lineage_extraction.js?v=20260805-postgame-boss-enemy-frames-v1"></script>
-  <script src="js/board_battle.js?v=20260919-spectator-playback-v1"></script>
+  <script src="js/board_battle.js?v=20260920-battle-decision-hints-v1"></script>
 </body>
 </html>

@@ -265,7 +265,7 @@
   const SPAR_SELECTION_PAGE_VERSION = "20260827-formal-pk-v1";
   const BATTLE_COMMAND_KEY = "onepiece-board-battle-command-v1";
   const BATTLE_ENTRY_PLAYED_STORAGE_KEY = "onepiece-board-battle-entry-played-v1";
-  const BATTLE_PAGE_VERSION = "20260919-spectator-playback-v125";
+  const BATTLE_PAGE_VERSION = "20260920-battle-decision-hints-v1";
   const PLACEHOLDER_BATTLE_PORTRAIT = "images/board/battle/portraits/placeholder/normal.webp";
   const COSMETIC_FRAME_DEFS = {
     goldenDenDen: { id: "goldenDenDen", label: "黃金電話蟲框", unlockText: "司法島通關紀念" },
@@ -743,6 +743,7 @@
     setupDraftTopStrip: document.getElementById("setupDraftTopStrip"),
     focusPlayerBtn: document.getElementById("focusPlayerBtn"),
     viewWholeMapBtn: document.getElementById("viewWholeMapBtn"),
+    quickVoyageBtn: document.getElementById("quickVoyageBtn"),
     cpuSpeedControl: document.getElementById("cpuSpeedControl"),
     cpuSpeedSelect: document.getElementById("cpuSpeedSelect"),
     cpuSpeedHint: document.getElementById("cpuSpeedHint"),
@@ -814,6 +815,8 @@
     return style;
   }
   let missionCompleteToastTimer = null;
+  const missionCompleteToastQueue = [];
+  let activeMissionCompleteToastKey = "";
   let evolutionHudTimer = null;
   let evolutionHudStoryLineTimer = null;
   let evolutionHudLineTimer = null;
@@ -13054,7 +13057,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       return Math.max(140, Math.min(1000, Number(event.stepDurationMs) || mapMovementStepDelay(player)));
     }
     if (event.channel && event.channel !== "ui") return 0;
-    if (event.type === "dice") return Math.max(260, Number(event.settleDelay) || diceRollDuration()) + 3000;
+    if (event.type === "dice") return boardDiceEventTiming(event).duration;
     if (event.type === "turn-banner") return Math.max(0, Number(event.transitionDelay) || TURN_HANDOFF_TRANSITION_DELAY_MS);
     if (event.type === "spectator-modal") return 1500;
     return Math.max(1700, Number(event.duration) || 0);
@@ -13362,6 +13365,11 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       return;
     }
     boardLan.remoteMovementLocations.clear();
+    const previousMissionPlayer = !initialRestorePending && reason !== "load-save"
+      ? safeJsonClone((state.gameState?.players || []).find(canReceiveMissionCompleteToast) || null)
+      : null;
+    const previousMissionSeed = state.gameState?.seed;
+    let remoteMissionCompletions = [];
     boardLan.version = Math.max(boardLan.version, version);
     boardLan.applying = true;
     let applied = false;
@@ -13375,6 +13383,10 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         initialLanRestore: wasAwaitingInitialState,
       });
       if (applied) {
+        const restoredMissionPlayer = (state.gameState?.players || []).find((player) => String(player.id) === String(previousMissionPlayer?.id));
+        if (previousMissionSeed === state.gameState?.seed) {
+          remoteMissionCompletions = newlyCompletedMissions(previousMissionPlayer, restoredMissionPlayer);
+        }
         boardLan.joinedOnce = true;
         boardLan.awaitingInitialState = false;
         boardLan.initialStateCanSeed = false;
@@ -13398,6 +13410,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       setTimeout(() => {
         boardLan.applying = false;
         if (applied) {
+          const notificationPlayer = (state.gameState?.players || []).find((player) => String(player.id) === String(previousMissionPlayer?.id));
+          if (previousMissionSeed === state.gameState?.seed) remoteMissionCompletions.forEach((mission) => showMissionCompleteToast(mission, notificationPlayer));
           flushBoardLanPendingState();
           scheduleBoardCampaignAutoSave();
         }
@@ -18115,20 +18129,55 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     return `${log.length}-${hash >>> 0}`;
   }
 
-  function showMissionCompleteToast(mission) {
+  function canReceiveMissionCompleteToast(player) {
+    if (!player || isCpuPlayer(player)) return false;
+    if (!boardLan.enabled) return true;
+    return boardPlayerMatchesLocalUser(player)
+      || Boolean(boardLan.clientId && String(player.clientId || "") === String(boardLan.clientId));
+  }
+
+  function newlyCompletedMissions(previousPlayer, player) {
+    if (!previousPlayer || !player || String(previousPlayer.id) !== String(player.id)) return [];
+    const before = new Set([
+      ...(previousPlayer.completedMissionIds || []),
+      ...(previousPlayer.mainMission?.claimedMissionIds || []),
+      ...(previousPlayer.activeMissions || []).filter((entry) => entry.completed).map((entry) => entry.missionId),
+      ...(previousPlayer.mainMission?.completed ? [previousPlayer.mainMission.currentMissionId] : []),
+    ]);
+    const completedIds = [
+      ...(player.mainMission?.completed ? [player.mainMission.currentMissionId] : []),
+      ...(player.activeMissions || []).filter((entry) => entry.completed).map((entry) => entry.missionId),
+    ];
+    return [...new Set(completedIds)].filter((id) => id && !before.has(id)).map((id) => mainMissionDef(id) || missionDef(id)).filter(Boolean);
+  }
+
+  function showMissionCompleteToast(mission, player = currentPlayer()) {
+    if (!mission || !canReceiveMissionCompleteToast(player) || boardLan.applying) return;
+    const key = `${state.gameState?.seed || ""}:${player.id}:${mission.id}`;
+    if (key === activeMissionCompleteToastKey || missionCompleteToastQueue.some((entry) => entry.key === key)) return;
+    missionCompleteToastQueue.push({ key, mission });
+    if (!activeMissionCompleteToastKey) showNextMissionCompleteToast();
+  }
+
+  function showNextMissionCompleteToast() {
     const toast = refs.missionCompleteToast || document.getElementById("missionCompleteToast");
-    if (!toast || !mission) return;
+    const entry = missionCompleteToastQueue.shift();
+    if (!toast || !entry) return;
+    const { mission, key } = entry;
+    activeMissionCompleteToastKey = key;
     const title = toast.querySelector("[data-mission-toast-title]");
     const sub = toast.querySelector("[data-mission-toast-sub]");
-    if (title) title.textContent = `任務完成：${mission.title || "未知任務"}`;
-    if (sub) sub.textContent = "可以從船內任務或任務島領取獎勵。";
+    if (title) title.textContent = `${mainMissionDef(mission) ? "主線" : "委託"}完成：${mission.title || "未知任務"}`;
+    if (sub) sub.textContent = "點自己的船 → 任務，領取已完成的獎勵。";
     toast.classList.remove("show");
     void toast.offsetWidth;
     toast.classList.add("show");
     window.clearTimeout(missionCompleteToastTimer);
     missionCompleteToastTimer = window.setTimeout(() => {
       toast.classList.remove("show");
-    }, 3200);
+      activeMissionCompleteToastKey = "";
+      if (missionCompleteToastQueue.length) showNextMissionCompleteToast();
+    }, 5200);
   }
 
   function teamMoveAverage(player) {
@@ -20688,6 +20737,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     renderSetupDraftTopStrip();
     renderMapTurnBanner();
     renderCpuSpeedControl();
+    renderQuickVoyageControl();
   }
 
   function renderCpuSpeedControl() {
@@ -21827,7 +21877,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         ${canOpenMoveLearnPanelFor(player)
           ? shipCommandSecondaryButtonMarkup("learn", pendingMoveLearnCountForPlayer(player) ? `學習技能 ${pendingMoveLearnCountForPlayer(player)}` : "學習技能")
           : shipCommandSecondaryButtonMarkup("learn", "技能未解鎖", { disabled: true, title: "目前沒有可學習的新技能" })}
-        ${shipCommandSecondaryButtonMarkup("mission", "任務")}
+          ${shipCommandSecondaryButtonMarkup("mission", missionClaimableCount(player) ? `任務・${missionClaimableCount(player)} 可領` : "任務")}
         ${shipCommandSecondaryButtonMarkup("fleet", "船團資訊")}
         ${shipCommandSecondaryButtonMarkup("ship", "船隻資訊")}
         ${sparPartners.length ? shipCommandSecondaryButtonMarkup("spar", "切磋 PK") : ""}
@@ -24853,7 +24903,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (nextProgress >= target) {
       progressState.completed = true;
       if (options.notify !== false) {
-        showMissionCompleteToast(mission);
+        showMissionCompleteToast(mission, player);
         addLog(`${player.name} 的主線任務「${mission.title}」已達成，可以從任務日誌領取獎勵。`);
       }
     }
@@ -25120,6 +25170,53 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     return BOARD_MISSION_TIERS.find((tier) => tier.id === grade) || { id: grade || "E", label: `${grade || "E"}級`, refreshCost: 300 };
   }
 
+  function mainlineNeededMissionGrade(player) {
+    if (player?.mainMission?.completed) return "";
+    const event = mainMissionDef(player?.mainMission?.currentMissionId)?.goal?.event;
+    return event === "mission_grade_a" ? "A" : event === "mission_grade_s" ? "S" : "";
+  }
+
+  function mainlineMissionGuidance(player) {
+    const grade = mainlineNeededMissionGrade(player);
+    const threshold = Number(missionTierInfo(grade || "A").threshold || 0);
+    const unlockText = `A／S 級委託需懸賞 ${formatBountyShort(missionTierInfo("A").threshold)}。`;
+    if (!grade) return unlockText;
+    const currentBounty = playerBountyValue(player);
+    if (currentBounty < threshold) {
+      return `主線需要 ${grade} 級委託；需懸賞 ${formatBountyShort(threshold)}，目前 ${formatBountyShort(currentBounty)}。先完成其他委託或戰鬥提升懸賞。`;
+    }
+    const alreadyAccepted = activeMissionEntries(player).some((entry) => missionDef(entry)?.grade === grade);
+    return alreadyAccepted
+      ? `已接取主線需要的 ${grade} 級委託，可查看任務日誌。`
+      : `主線需要 ${grade} 級委託，任務牆會保留一格可接的對應委託。`;
+  }
+
+  function reserveMainlineMissionChoice(player, choiceIds, pool = BOARD_MISSIONS) {
+    const choices = choiceIds.slice();
+    const grade = mainlineNeededMissionGrade(player);
+    if (!grade || !missionUnlockedGrades(player).includes(grade)) return choices;
+    const activeIds = new Set(activeMissionEntries(player).map((entry) => entry.missionId));
+    const completedIds = new Set(player?.completedMissionIds || []);
+    if ([...activeIds, ...completedIds].some((id) => missionDef(id)?.grade === grade)) return choices;
+    const eligible = (mission) => mission?.grade === grade && !mission.postgameOnly && !activeIds.has(mission.id) && !completedIds.has(mission.id);
+    if (choices.some((id) => eligible(missionDef(id)))) return choices;
+    const reserved = pool.find(eligible);
+    if (!reserved) return choices;
+    if (choices.length < 4) choices.push(reserved.id);
+    else {
+      const freeIndex = choices.findIndex((id) => !activeIds.has(id) && !missionDef(id)?.researchCommission);
+      // Accepted commissions remain in activeMissions and the journal even if
+      // an old saved wall has no unaccepted card left to replace.
+      choices[freeIndex >= 0 ? freeIndex : 0] = reserved.id;
+    }
+    return choices;
+  }
+
+  function missionClaimableCount(player) {
+    return activeMissionEntries(player).filter((entry) => entry.completed).length
+      + (player?.mainMission?.currentMissionId && player.mainMission.completed ? 1 : 0);
+  }
+
   function formatBountyShort(value) {
     const amount = Math.max(0, Math.round(Number(value || 0)));
     if (amount >= 100000000) {
@@ -25146,7 +25243,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const active = activeMissionEntries(player);
     const main = mainMissionEntry(player, { refresh: true, notify: false });
     const mainDef = mainMissionDef(main);
-    const mainText = mainDef ? `主線：${mainDef.title}（${missionProgressText(main)}）` : "主線：全破";
+    const mainText = mainDef ? `主線：${mainDef.title}（${main?.completed ? "已完成・可領獎" : missionProgressText(main)}）` : "主線：全破";
     if (!active.length) return mainText;
     const completed = active.filter((entry) => entry.completed).length;
     if (active.length === 1) {
@@ -25275,7 +25372,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       changed = true;
       if (active.progress >= target) {
         active.completed = true;
-        showMissionCompleteToast(mission);
+        showMissionCompleteToast(mission, player);
         addLog(`共同任務「${mission.title}」已達成，參與玩家可從船內任務或任務島領取獎勵。`);
       }
     });
@@ -25355,6 +25452,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       tierLabel: missionTierInfo(mission.grade).label || `${mission.grade || "E"}級`,
       type: mission.type || "委託",
       special: mission.special || "",
+      mainlineNeeded: mission.grade === mainlineNeededMissionGrade(player),
       condition: mission.condition || "",
       coins: Math.max(0, Math.round(Number(mission.coins || 0))),
       bountyText: formatBountyShort(mission.bounty || 0),
@@ -25394,6 +25492,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       coins: Number(player?.coins || 0),
       highestGrade,
       tierLine: tier.line || "牆上貼著新的委託。",
+      mainlineGuidance: mainlineMissionGuidance(player),
       refreshCost,
       refreshed: Boolean(player?.missionBoardChoices?.refreshed),
       canRefresh: !player?.missionBoardChoices?.refreshed && Number(player?.coins || 0) >= refreshCost,
@@ -25418,7 +25517,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (pool.length < 4) {
       pool = availableMissions.filter((mission) => unlocked.has(mission.grade) && !activeIds.has(mission.id));
     }
-    if (!pool.length) pool = availableMissions.slice();
+    if (!pool.length) pool = availableMissions.filter((mission) => unlocked.has(mission.grade) && !activeIds.has(mission.id));
     const rand = createRng(`${state.gameState.seed}-mission-board-${player?.id || "p"}-${island?.id || "ship"}-${state.gameState.round || 1}-${refreshToken}`);
     const shuffled = shuffleArray(pool.slice(), rand);
     const choices = shuffled.slice(0, 4);
@@ -25426,7 +25525,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       const researchChoice = shuffled.find((mission) => mission.researchCommission);
       if (researchChoice) choices[Math.min(3, choices.length)] = researchChoice;
     }
-    return choices.map((mission) => mission.id);
+    return reserveMainlineMissionChoice(player, choices.map((mission) => mission.id), shuffled);
   }
 
   function beginMissionBoardVisit(player, island) {
@@ -25461,6 +25560,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       } else {
         board.acceptedThisVisit = Math.max(0, Number(board.acceptedThisVisit || 0));
       }
+      board.choices = reserveMainlineMissionChoice(player, board.choices);
       return board.choices;
     }
     player.missionBoardChoices = {
@@ -25508,6 +25608,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (island) ensureMissionBoardChoices(player, island);
     const mission = missionDef(missionId);
     if (!player || !mission) return { ok: false, reason: "找不到這張任務。" };
+    if (!missionUnlockedGrades(player).includes(mission.grade)) return { ok: false, reason: `${mission.grade} 級委託需懸賞 ${formatBountyShort(missionTierInfo(mission.grade).threshold)}。` };
+    if (mission.postgameOnly && !state.gameState?.postgameWorld?.researchLabsActive) return { ok: false, reason: "這張委託需全破並開放血統研究所。" };
     if (player.completedMissionIds?.includes(mission.id)) return { ok: false, reason: "這張任務已完成過。" };
     if (activeMissionEntry(player, mission.id)) return { ok: false, reason: "這張任務已經接取。" };
     if (activeMissionEntries(player).length >= MISSION_ACTIVE_LIMIT) return { ok: false, reason: `最多只能同時接 ${MISSION_ACTIVE_LIMIT} 個任務。` };
@@ -25622,7 +25724,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       if (active.progress >= target) {
         active.completed = true;
         completedCount += 1;
-        showMissionCompleteToast(mission);
+        showMissionCompleteToast(mission, player);
         addLog(`${player.name} 的任務「${mission.title}」已達成，可以從船內任務或任務島領取獎勵。`);
       }
     });
@@ -25657,7 +25759,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     });
   }
 
-  function renderMissionCard(mission, activeList, selectedId, sharedList = sharedMissionEntries()) {
+  function renderMissionCard(mission, activeList, selectedId, sharedList = sharedMissionEntries(), player = currentPlayer()) {
     if (!mission) return "";
     const isSelected = selectedId === mission.id;
     const active = (activeList || []).find((entry) => entry.missionId === mission.id);
@@ -25675,6 +25777,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
           <span class="type-icon" aria-hidden="true"></span>
           <span class="tag">${escapeModalText(tier.label || `${mission.grade}級`)}</span>
           <span class="tag">${escapeModalText(mission.type || "委託")}</span>
+          ${mission.grade === mainlineNeededMissionGrade(player) ? `<span class="tag special-tag mainline-tag">主線需要</span>` : ""}
           ${mission.special ? `<span class="tag special-tag">${escapeModalText(mission.special)}</span>` : ""}
         </div>
         <div class="condition">${escapeModalText(mission.condition || "")}</div>
@@ -25808,7 +25911,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
                 <span>新聞王 摩爾岡斯</span>
                 <span>任務仲介</span>
               </div>
-              <span>${escapeModalText(tier.line || "牆上貼著新的委託。")}</span>
+              <span class="mission-mainline-guidance">${escapeModalText(mainlineMissionGuidance(player))}</span>
             </div>
           </aside>
           <section class="panel board-panel">
@@ -25819,7 +25922,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
               <button type="button" class="refresh-btn" id="refreshMissionBoardBtn" ${canRefresh ? "" : "disabled"}>${player.missionBoardChoices?.refreshed ? "本次已刷新" : `刷新 ${formatCoin(refreshCost)} B`}</button>
             </div>
             <div class="mission-wall">
-              ${missions.map((mission) => renderMissionCard(mission, activeList, selected?.id, sharedList)).join("") || `<div class="empty-note">目前沒有可接任務。</div>`}
+              ${missions.map((mission) => renderMissionCard(mission, activeList, selected?.id, sharedList, player)).join("") || `<div class="empty-note">目前沒有可接任務。</div>`}
             </div>
           </section>
           ${renderMissionDetail(player, selected)}
@@ -25939,10 +26042,12 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
           <strong>${selectedMission ? `${selectedIsMain ? `第 ${selectedMission.order || 120} 話・` : ""}${escapeModalText(selectedMission.title)}` : "尚未接取任務"}</strong>
           <span>${selectedMission ? `${escapeModalText(selectedMission.grade)}級・${escapeModalText(selectedMission.type || "委託")}${selectedIsMain ? `・第 ${selectedMission.chapter || 1} 章` : ""}` : "前往任務島尋找新的航海委託"}</span>
         </div>
-        <div class="mission-journal-detail-copy">
+        <div class="mission-journal-detail-copy" tabindex="0" aria-label="任務條件">
           ${selectedMission ? `
             <strong>任務條件</strong>
-            <span>${escapeModalText(selectedMission.condition || "依任務指示完成目標")}</span>
+            ${selectedIsMain && mainlineNeededMissionGrade(player)
+              ? `<span class="mission-mainline-guidance">${escapeModalText(`接取或完成 1 個 ${mainlineNeededMissionGrade(player)}級任務。懸賞需 ${formatBountyShort(missionTierInfo(mainlineNeededMissionGrade(player)).threshold)}，目前 ${formatBountyShort(playerBountyValue(player))}。`)}</span>`
+              : `<span>${escapeModalText(selectedMission.condition || "依任務指示完成目標")}</span>`}
           ` : `<span>接取任務後，條件與進度會顯示在這裡。</span>`}
         </div>
         <div class="mission-journal-progress">
@@ -27053,6 +27158,59 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   }
 
   const DICE_UI_ASSET_BASE = "images/board/dice_ui/";
+  const QUICK_VOYAGE_STORAGE_KEY = "onepiece-board-quick-voyage-v1";
+  let quickVoyagePreferences = loadQuickVoyagePreferences();
+
+  function loadQuickVoyagePreferences() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(QUICK_VOYAGE_STORAGE_KEY) || "{}");
+      return { enabled: saved?.enabled === true, seenSeaChest: saved?.seenSeaChest === true };
+    } catch (_error) {
+      return { enabled: false, seenSeaChest: false };
+    }
+  }
+
+  function saveQuickVoyagePreferences() {
+    try {
+      localStorage.setItem(QUICK_VOYAGE_STORAGE_KEY, JSON.stringify(quickVoyagePreferences));
+    } catch (_error) {
+      // Presentation preferences still work for this session when storage is unavailable.
+    }
+  }
+
+  function renderQuickVoyageControl() {
+    const button = refs.quickVoyageBtn;
+    if (!button) return;
+    button.textContent = `快速航行：${quickVoyagePreferences.enabled ? "開" : "關"}`;
+    button.setAttribute("aria-pressed", String(quickVoyagePreferences.enabled));
+    button.title = "縮短你操作的日常擲骰與重複開箱；首次開箱、劇情與 Boss 演出保留完整。觀看方跟隨操作方速度。";
+  }
+
+  function toggleQuickVoyageMode() {
+    quickVoyagePreferences.enabled = !quickVoyagePreferences.enabled;
+    saveQuickVoyagePreferences();
+    renderQuickVoyageControl();
+    shared.showToast(quickVoyagePreferences.enabled
+      ? "快速航行已開啟：縮短日常擲骰與重複開箱，劇情與 Boss 演出完整保留。"
+      : "快速航行已關閉：恢復完整日常演出。");
+  }
+
+  function movementDiceTiming(player) {
+    if (quickVoyagePreferences.enabled) return { settleDelay: 650, resultHoldMs: 550, duration: 1200 };
+    const settleDelay = isCpuPlayer(player)
+      ? cpuTurnDelay(diceRollDuration(), player, 900)
+      : diceRollDuration();
+    return { settleDelay, resultHoldMs: 3000, duration: settleDelay + 3000 };
+  }
+
+  function boardDiceEventTiming(event = {}) {
+    const settleDelay = Math.max(260, Number(event.settleDelay) || diceRollDuration());
+    // Existing duration is presentation metadata. Old peers/events retain the full hold.
+    const resultHoldMs = event.theme === "move" && Number(event.duration) > settleDelay
+      ? Math.max(300, Number(event.duration) - settleDelay)
+      : 3000;
+    return { settleDelay, resultHoldMs, duration: settleDelay + resultHoldMs };
+  }
 
   function diceRollDuration() {
     return 2400 + Math.floor(Math.random() * 801);
@@ -27303,7 +27461,9 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       const settleDelay = Number.isFinite(Number(options.settleDelay))
         ? Math.max(260, Number(options.settleDelay))
         : diceRollDuration();
-      const resultHoldMs = 3000;
+      const resultHoldMs = Number.isFinite(Number(options.resultHoldMs))
+        ? Math.max(300, Number(options.resultHoldMs))
+        : 3000;
       const faceLabels = Array.isArray(options.faceLabels) ? options.faceLabels : null;
       const faceLabel = typeof options.faceLabel === "function"
         ? options.faceLabel
@@ -27357,7 +27517,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   function boardUiEventLifetimeMs(event = {}, options = {}) {
     const explicit = Math.max(0, Number(options.clearDelay || 0));
     if (event.type === "spectator-modal") return Math.max(6000, explicit || 60000);
-    if (event.type === "dice") return Math.max(3600, Number(event.settleDelay || 0) + 3400);
+    if (event.type === "dice") return Math.max(1800, boardDiceEventTiming(event).duration + 400);
     if (event.type === "turn-banner") return Math.max(1800, Number(event.duration || 0) + 500);
     if (["postgame-world-unlock", "postgame-egghead-reveal", "final-boss-voyage"].includes(event.type)) {
       return Math.max(5000, Number(event.duration || 0) + 3000);
@@ -27882,7 +28042,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     ), "sea-chest-stage-modal");
     if (options.shuffling) {
       const shuffleButton = refs.modal?.querySelector?.("[data-spectator-chest-shuffle]");
-      window.setTimeout(() => startSeaTreasureChestShuffle(shuffleButton, { readonly: true }), 40);
+      window.setTimeout(() => startSeaTreasureChestShuffle(shuffleButton, { readonly: true, quickVoyage: detail.quickVoyage === true }), 40);
     }
   }
 
@@ -28062,6 +28222,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
           <span class="type-icon" aria-hidden="true"></span>
           <span class="tag">${escapeModalText(mission.tierLabel || `${mission.grade || "E"}級`)}</span>
           <span class="tag">${escapeModalText(mission.type || "委託")}</span>
+          ${mission.mainlineNeeded ? `<span class="tag special-tag mainline-tag">主線需要</span>` : ""}
           ${mission.special ? `<span class="tag special-tag">${escapeModalText(mission.special)}</span>` : ""}
         </div>
         <div class="condition">${escapeModalText(mission.condition || "")}</div>
@@ -28154,7 +28315,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
                 <span>${escapeModalText(detail.islandName || "任務島")}</span>
                 <span>觀看中</span>
               </div>
-              <span>${escapeModalText(detail.tierLine || "牆上貼著新的委託。")}</span>
+              <span class="mission-mainline-guidance">${escapeModalText(detail.mainlineGuidance || detail.tierLine || "牆上貼著新的委託。")}</span>
             </div>
           </aside>
           <section class="panel board-panel">
@@ -28359,6 +28520,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         {
           settle: event.result,
           settleDelay: event.settleDelay,
+          resultHoldMs: boardDiceEventTiming(event).resultHoldMs,
           faceLabels: event.faceLabels,
           remoteEventId: event.__remote ? event.id : "",
         }
@@ -29504,9 +29666,10 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         <strong class="draft-detail-name">${escapeModalText(cardDisplayName(card))}</strong>
         <div class="draft-detail-title">${escapeModalText(card.roleType)}・${escapeModalText(card.attribute)}・移動 ${Number(card.move || 0) >= 0 ? "+" : ""}${Number(card.move || 0)}</div>
         <div class="draft-detail-stats">${statRows}</div>
-        <div class="draft-detail-passive">
+        <div class="draft-detail-passive" tabindex="0" role="region" aria-label="被動效果與招式">
           <strong>被動・${escapeModalText(card.passive || "無")}</strong>
-          <div class="draft-detail-moves">招式：${escapeModalText(moves || "無")}</div>
+          <div class="draft-detail-passive-effect">${escapeModalText(characterPassiveEffectText(card) || "此角色沒有額外的被動效果說明。")}</div>
+          <details class="draft-detail-moves"><summary>查看招式</summary>${escapeModalText(moves || "無")}</details>
         </div>
         <button type="button" class="draft-detail-confirm" id="draftConfirmPickBtn" data-card-id="${escapeModalText(card.id)}" ${isLocked ? "disabled" : ""}>${isLocked ? "等待船長決定" : "邀請夥伴登船"}</button>
         <img class="draft-boarding-stamp" id="draftBoardingStamp" src="${draftRecruitAsset("draft_boarding_stamp.webp")}" alt="" aria-hidden="true">
@@ -33069,12 +33232,9 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const baseDice = Math.max(1, Math.min(moveCap, rawDice + Number(player.nextDiceModifier || 0)));
     const shipMove = usingPreset ? { dice: rawDice, logs: [] } : applyShipMovementBonuses(player, rawDice, baseDice, moveCap);
     const dice = shipMove.dice;
-    const settleDelay = usingPreset
-      ? 0
-      : isCpuPlayer(player)
-        ? cpuTurnDelay(diceRollDuration(), player, 900)
-        : diceRollDuration();
-    const diceAnimationEndsAt = usingPreset ? 0 : Date.now() + settleDelay + 3000;
+    const diceTiming = usingPreset ? { settleDelay: 0, resultHoldMs: 0, duration: 0 } : movementDiceTiming(player);
+    const { settleDelay, resultHoldMs } = diceTiming;
+    const diceAnimationEndsAt = usingPreset ? 0 : Date.now() + diceTiming.duration;
     state.gameState.diceRolling = true;
     state.gameState.lastRoll = dice;
     recordMainMissionEvent(player, { type: "dice_roll", roll: dice });
@@ -33099,8 +33259,9 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
           maxFace: moveCap,
           result: rawDice,
           settleDelay,
+          duration: diceTiming.duration,
         }, { immediate: true });
-        await animateDice("move", `${player.name} 擲骰前進`, `骰面正在翻滾，本回合移動範圍 1 ~ ${moveCap}…`, moveCap, { settle: rawDice, settleDelay });
+        await animateDice("move", `${player.name} 擲骰前進`, `骰面正在翻滾，本回合移動範圍 1 ~ ${moveCap}…`, moveCap, { settle: rawDice, settleDelay, resultHoldMs });
       }
     } finally {
       state.gameState.diceRolling = false;
@@ -39285,6 +39446,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       subtitle: `${player.name} 正在確認漂流寶箱。`,
       profileId,
       typeId,
+      quickVoyage: quickVoyagePreferences.enabled && quickVoyagePreferences.seenSeaChest,
       choices: choices.map((choice) => ({
         slotId: choice.slotId,
         typeId: choice.typeId,
@@ -39296,7 +39458,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     emitSpectatorModalEvent("chest-draft", player, spectatorDetail, { clearDelay: 60000 });
     openModal(seaTreasureChestDraftMarkup(effectDef, profileId, choices), "force-choice sea-chest-stage-modal no-backdrop-close");
     document.getElementById("startSeaChestShuffleBtn")?.addEventListener("click", (event) => {
-      startSeaTreasureChestShuffle(event.currentTarget, { player, spectatorDetail });
+      startSeaTreasureChestShuffle(event.currentTarget, { player, spectatorDetail, quickVoyage: spectatorDetail.quickVoyage });
     });
     refs.modal.querySelectorAll("[data-sea-treasure-chest]").forEach((button) => {
       button.addEventListener("click", () => resolveSeaTreasureChestChoice(player, tile, effectDef, typeId, choices, button.dataset.seaTreasureChest));
@@ -39309,6 +39471,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (grid.dataset.shuffleStarted === "true") return;
     grid.dataset.shuffleStarted = "true";
     const readonly = !!options.readonly;
+    const quickVoyage = options.quickVoyage === true;
     if (!readonly && options.player && options.spectatorDetail) {
       emitSpectatorModalEvent("chest-shuffle", options.player, options.spectatorDetail, { clearDelay: 60000 });
     }
@@ -39332,12 +39495,12 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         if (label) label.textContent = "翻成背面";
       });
       setNote("寶箱翻成背面，準備洗牌。");
-    }, 180);
+    }, quickVoyage ? 60 : 180);
     window.setTimeout(() => {
       if (!stillOpen()) return;
       grid.classList.add("is-shuffling");
       const finalOrders = buttons.map((button) => Math.max(0, Math.round(Number(button.dataset.finalOrder || 0))));
-      const shufflePasses = [
+      const shufflePasses = quickVoyage ? [finalOrders] : [
         [2, 0, 3, 1],
         [1, 3, 0, 2],
         [3, 2, 1, 0],
@@ -39364,18 +39527,18 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
             { transform: `translate(${offsetX * .34 - direction * sweep * .72}px,${offsetY + Math.max(12, after.height * .1)}px) rotate(${-direction * 5}deg) scale(.97)`, zIndex: "6", offset: .62 },
             { transform: "translate(0,0) rotate(0deg) scale(1)", zIndex: "2" },
           ], {
-            duration: reduceMotion ? 1 : 680,
-            delay: reduceMotion ? 0 : index * 50,
+            duration: reduceMotion ? 1 : quickVoyage ? 420 : 680,
+            delay: reduceMotion ? 0 : index * (quickVoyage ? 20 : 50),
             easing: "cubic-bezier(.18,.78,.2,1)",
             fill: "both",
           });
         });
-        setNote(`寶箱洗牌中，第 ${passIndex + 1} 輪交叉換位。`);
+        setNote(quickVoyage ? "快速航行：寶箱洗牌中。" : `寶箱洗牌中，第 ${passIndex + 1} 輪交叉換位。`);
       };
       shufflePasses.forEach((orders, passIndex) => {
         window.setTimeout(() => runShufflePass(orders, passIndex), reduceMotion ? 0 : passIndex * 860);
       });
-    }, reduceMotion ? 260 : 980);
+    }, reduceMotion ? 260 : quickVoyage ? 480 : 980);
     window.setTimeout(() => {
       if (!stillOpen()) return;
       grid.classList.remove("is-shuffling");
@@ -39395,7 +39558,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         if (label) label.textContent = `寶箱 ${finalOrder + 1}`;
       });
       setNote("選一個寶箱打開。木寶箱是陷阱。");
-    }, reduceMotion ? 520 : 4550);
+    }, reduceMotion ? 520 : quickVoyage ? 1100 : 4550);
   }
 
   function resolveSeaTreasureChestChoice(player, tile, effectDef, typeId, choices, choiceSlotId) {
@@ -39431,6 +39594,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       chestImage: chestType.image || "",
     }), "force-choice sea-chest-stage-modal no-backdrop-close");
     document.getElementById("confirmSeaTreasureChestBtn")?.addEventListener("click", () => {
+      quickVoyagePreferences.seenSeaChest = true;
+      saveQuickVoyagePreferences();
       closeModal();
       addLog(`${player.name} 打開${chestType.label}：${reward.summary || "獎勵已取得"}。`);
       recordMissionEvent(player, { type: "chest_open", zone: tile?.zone || "", chestType: chestType.id, seaType: typeId });
@@ -49344,6 +49509,47 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     return devonKyubiMaskCounterAttribute(player, battle) || naturalAttribute;
   }
 
+  // Presentation only: read the same stages, round effects and Boss counters that
+  // the battle resolver uses. Do not predict damage or write to the saved battle.
+  function battleDecisionHints(player, battle) {
+    const active = player?.crew?.[Number(battle?.activeCrewIndex || 0)];
+    const enemy = battle?.enemyCombatant;
+    if (!active || !enemy || Number(active.currentHp || 0) <= 0 || battle.result) return [];
+    const hints = [];
+    const add = (id, text, tone = "info") => hints.push({ id, text, tone });
+    const mechanic = battle.postgameBossMechanic;
+    if (mechanic?.key === "postgame_gild_tesoro" && Number(mechanic.phase || 1) <= 2) {
+      const key = postgameBossMechanicCrewKey(active, battle.activeCrewIndex);
+      const gold = Number(mechanic.goldByCrew?.[key] ?? mechanic.controlByCrew?.[key] ?? 0);
+      if (gold === 2) {
+        const hasBench = (player.crew || []).some((card, index) => index !== Number(battle.activeCrewIndex) && Number(card?.currentHp || 0) > 0);
+        add("tesoro-next-hit", hasBench
+          ? "金流淹沒 2/3：再被敵方招式命中且仍存活會強制替補；可先考慮換人。"
+          : "金流淹沒 2/3：再被命中一次且仍存活，會取消指令並封住下次行動；目前沒有可替補夥伴。", "danger");
+      }
+    }
+    if (isYonkoBattleKey(battle, "yonko_shanks")) {
+      add("shanks-attribute", "香克斯會看穿非克制攻擊；選招時先確認「有效／0 傷害」提示，再考慮威力。", "danger");
+    }
+    [["enemy", enemy.roundEffects, "敵方"], ["player", battle.playerRoundEffects, "我方"]].forEach(([side, effects, label]) => {
+      const ratio = Number(effects?.shieldRatio || 0);
+      const nextRatio = Number(effects?.nextShieldRatio || 0);
+      if (ratio > 0) {
+        add(`${side}-shield`, `${label}護盾本回合減傷 ${Math.round(ratio * 100)}%${nextRatio > 0 ? `；下回合仍有 ${Math.round(nextRatio * 100)}% 護盾` : "，回合結束後消失"}。${side === "enemy" ? "可留意穿盾招式，或趁機補給。" : "留意護盾結束後的承傷。"}`);
+      } else if (nextRatio > 0) {
+        add(`${side}-shield-next`, `${label}護盾將於下回合生效（減傷 ${Math.round(nextRatio * 100)}%）；目前尚未生效。`);
+      }
+    });
+    if (Number(enemy.stages?.sdef || 0) > 0) {
+      add("enemy-special-defense", "敵方特防提高：物理招式可避開這項提升；仍須比較屬性與招式效果。");
+    }
+    const maxHp = cardMaxHp(active);
+    if (Number(active.currentHp || 0) / maxHp <= 0.3) {
+      add("low-hp", "我方生命剩三成以下：留意補血或換人，並確認剩餘道具與夥伴 HP。", "danger");
+    }
+    return hints;
+  }
+
   function getBattleItemOptions(player) {
     ensurePlayerInventoryState(player);
     return Object.values(GAME_ITEMS)
@@ -49523,6 +49729,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         moves: (enemy.moveSet || []).map((moveEntry) => serializeBattleMove(moveEntry, "enemy", player, battle)),
       },
       attributeMatchup: attributeMatchupView,
+      decisionHints: battleDecisionHints(player, battle),
       battle: {
         islandId: battle.islandId,
         islandKind: battle.islandKind,
@@ -60586,6 +60793,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       setCpuTurnSpeed(event.target.value);
     });
     refs.cpuStrategyBtn?.addEventListener("click", openCpuStrategyModal);
+    refs.quickVoyageBtn?.addEventListener("click", toggleQuickVoyageMode);
     refs.saveGameBtn?.addEventListener("click", saveManualGame);
     refs.loadGameBtn?.addEventListener("click", openLoadGameModal);
     const activateShipTokenFromEvent = (event) => {
@@ -63681,6 +63889,18 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       claimHumanReady: claimCompletedHumanMainMissions,
       claimCpuReady: claimCompletedCpuMainMissions,
       usesCpuBaseline: mainMissionUsesCpuGoalBaseline,
+      commissionGrade: mainlineNeededMissionGrade,
+      commissionGuidance: mainlineMissionGuidance,
+      buildChoices: buildMissionChoices,
+      ensureChoices: ensureMissionBoardChoices,
+      openBoard: openMissionBoardModal,
+      acceptCommission: acceptMission,
+      recordCommission: recordMissionEvent,
+      claimCommission: claimActiveMissionReward,
+      claimableCount: missionClaimableCount,
+      showCompleteToast: showMissionCompleteToast,
+      newlyCompleted: newlyCompletedMissions,
+      toastQueue: () => ({ active: activeMissionCompleteToastKey, queued: missionCompleteToastQueue.map((entry) => entry.key) }),
     },
     getIslandById,
     getIslandState,

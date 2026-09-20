@@ -1,5 +1,12 @@
 # File Map
 
+## 航海錄操作與任務提示（2026-09-20）
+
+- board_game.js／board_game.html：快速模式、骰子與開箱節奏、主線委託保留、選人被動、完成通知與手機排版。
+- board_battle.js／board_battle.html：唯讀戰鬥提示；board_missions.js：第 83／89 話門檻說明。
+- scripts/board_quick_voyage_qa.js、board_battle_decision_hints_qa.js、board_mission_guidance_qa.js、board_draft_passive_browser_qa.js：定向瀏覽器驗證；board_spectator_release_verify.js 支援指定發布基線。
+- docs/BOARD_VOYAGE_QUALITY_20260920.md：範圍、驗證、部署與回復；證據 D:/Codex_QA/board-quality-20260920/。
+
 ## 航海錄與個人頁發布（2026-09-19）
 
 - public/profile.html：收藏放大視窗接入既有 Card Finish／Depth，懸賞令維持靜態；保留正式 cursor 與本地 Socket.IO 引用。

@@ -875,6 +875,8 @@
     statusPopover: document.getElementById("statusPopover"),
     matchupChip: document.getElementById("attributeMatchupChip"),
     matchupCurrent: document.getElementById("attributeMatchupCurrent"),
+    decisionHints: document.getElementById("battleDecisionHints"),
+    decisionHintList: document.getElementById("battleDecisionHintList"),
     playerHudName: document.getElementById("playerHudName"),
     playerHudMeta: document.getElementById("playerHudMeta"),
     playerStatusIcons: document.getElementById("playerStatusIcons"),
@@ -8234,7 +8236,21 @@
     });
   }
 
+  function renderDecisionHints(view) {
+    if (!refs.decisionHints || !refs.decisionHintList) return;
+    const hints = Array.isArray(view?.decisionHints) ? view.decisionHints : [];
+    const visible = hints.length > 0 && !actionDisabled(view) && !view?.battle?.animating
+      && !view?.battle?.result && !view?.battle?.postgameBossMechanic?.prompt
+      && !view?.battle?.yonkoPrompt && !view?.battle?.judicialSwitchPrompt
+      && !totMusicaDualAwaitingEvent && !totMusicaDualAnimationActive;
+    refs.decisionHints.hidden = !visible;
+    if (!visible) return;
+    const markup = hints.map((hint) => `<li class="${hint.tone === "danger" ? "is-danger" : ""}" data-hint-id="${escapeHtml(hint.id || "")}">${escapeHtml(hint.text || "")}</li>`).join("");
+    if (refs.decisionHintList.innerHTML !== markup) refs.decisionHintList.innerHTML = markup;
+  }
+
   function renderPanel(view) {
+    renderDecisionHints(view);
     if (totMusicaDualAwaitingEvent || totMusicaDualAnimationActive) {
       refs.actionPanel?.classList.add("is-hidden");
       return;
@@ -8467,6 +8483,7 @@
     // A queued actor/round must not be replaced by a fresh parent API lookup.
     latestView = followCurrentCoopActor(latestView, spectatorBattlePlayback.status().active ? null : api);
     if (!latestView) {
+      renderDecisionHints(null);
       latestView = null;
       lastBattleIdentity = "";
       lastCoopCommandPlayerId = "";
@@ -8483,6 +8500,7 @@
       return;
     }
     if (!latestView.battle) {
+      renderDecisionHints(null);
       lastBattleIdentity = "";
       lastCoopCommandPlayerId = "";
       syncPrebattleIntro(null);

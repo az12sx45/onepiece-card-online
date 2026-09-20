@@ -364,6 +364,8 @@
     }
     #focusPlayerBtn{min-width:126px}
     #viewWholeMapBtn{min-width:96px}
+    #quickVoyageBtn{min-width:122px;white-space:nowrap}
+    #quickVoyageBtn[aria-pressed="true"]{color:#a4f6dd;filter:brightness(1.16) drop-shadow(0 0 5px rgba(77,211,172,.4))}
     #saveGameBtn,#loadGameBtn{min-width:88px}
     .voyage-record-status{max-width:230px;min-width:0;color:#e5c78b;font-size:12px;line-height:1.35;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .voyage-record-status[data-status="error"]{color:#ffb69b}
@@ -461,10 +463,11 @@
       width:min(520px, calc(100vw - 32px));
       min-height:88px;
       transform:translate(-50%, -18px) scale(.98);
-      z-index:360;
+      z-index:26000;
       pointer-events:none;
       opacity:0;
-      padding:14px 46px 15px;
+      padding:14px clamp(26px,8vw,46px) 15px;
+      overflow-wrap:anywhere;
       border-radius:0;
       border:0;
       color:#fff7cf;
@@ -479,6 +482,13 @@
       opacity:1;
       transform:translate(-50%, 0) scale(1);
     }
+    .mission-mainline-guidance{
+      padding:10px 14px;border:1px solid rgba(230,190,111,.6);border-radius:8px;
+      color:#ffdf9b;background:rgba(7,29,36,.95);font-size:13px;line-height:1.5;
+      white-space:normal;overflow-wrap:anywhere;
+    }
+    .broker-text .mission-mainline-guidance{display:block;min-height:0;max-height:100%;overflow:auto;padding:0;border:0;border-radius:0;background:none;font:inherit;line-height:inherit}
+    .mainline-tag{color:#654010;background:#f6d687;border:1px solid #967032;border-radius:4px;padding:2px 6px}
     .mission-toast-kicker{
       display:block;
       font-size:12px;
@@ -14353,15 +14363,31 @@
       left:52.3%;
       width:38.2%;
       height:23.5%;
-      overflow:hidden;
+      overflow:auto;
+      overscroll-behavior:contain;
+      overflow-wrap:anywhere;
       padding:1.5% 2%;
       color:#4c2d17;
-      font-size:clamp(9px,1.25vh,14px);
+      font-size:clamp(12px,1.45vh,15px);
       font-weight:800;
       line-height:1.32;
     }
     .draft-detail-passive strong{display:block;color:#7a3017;font-size:1.16em;margin-bottom:4px}
     .draft-detail-moves{margin-top:5px;font-size:.88em;color:#6a4427}
+    .draft-detail-moves summary{cursor:pointer}
+    @media (max-height:520px) and (min-width:601px){
+      .draft-detail-overlay .draft-detail-panel{width:min(880px,96vw);height:calc(100vh - 110px);min-height:260px;aspect-ratio:auto;display:grid;grid-template-columns:27% 25% 1fr;grid-template-rows:38px minmax(0,1fr) 44px;gap:10px;padding:14px;border:2px solid #b58b46;border-radius:14px;background:#102b35}
+      .draft-detail-panel > .frame{display:none}
+      .draft-detail-panel .draft-detail-portrait{position:static;grid-column:1;grid-row:1 / 3;width:100%;height:100%;min-height:0}
+      .draft-detail-panel .draft-detail-grade{top:8px;left:8px;width:30px;font-size:22px}
+      .draft-detail-panel .draft-detail-role-icon{display:none}
+      .draft-detail-panel .draft-detail-name{position:static;grid-column:1;grid-row:3;width:auto;height:auto;font-size:18px}
+      .draft-detail-panel .draft-detail-title{position:static;grid-column:2 / 4;grid-row:1;width:auto;height:auto;padding-right:32px;font-size:14px}
+      .draft-detail-panel .draft-detail-stats{position:static;grid-column:2;grid-row:2;width:auto;height:auto}
+      .draft-detail-panel .draft-detail-stat{font-size:13px}
+      .draft-detail-panel .draft-detail-passive{position:static;grid-column:3;grid-row:2;width:auto;height:auto;padding:10px;background:#f3dfb1;border-radius:8px;font-size:14px;line-height:1.45}
+      .draft-detail-panel .draft-detail-confirm{position:static;grid-column:2 / 4;grid-row:3;width:auto;height:auto;border:1px solid #e2b96b;border-radius:8px;background:#754326;font-size:18px}
+    }
     .draft-detail-confirm{
       position:absolute;
       z-index:7;
@@ -14379,6 +14405,24 @@
       text-shadow:0 2px 3px #2b0c04;
     }
     .draft-detail-confirm:disabled{cursor:not-allowed;opacity:.64}
+    @media (max-width:600px) and (orientation:portrait){
+      .draft-detail-overlay{overflow:auto;align-items:start;padding:12px 8px}
+      .draft-detail-overlay .draft-detail-panel{
+        width:100%;aspect-ratio:auto;min-height:560px;padding:18px;
+        display:grid;grid-template-columns:1fr 1fr;gap:12px;
+        border:2px solid #b58b46;border-radius:16px;background:#102b35;
+      }
+      .draft-detail-panel > .frame{display:none}
+      .draft-detail-panel .draft-detail-portrait{position:static;grid-column:1;grid-row:1 / 4;width:100%;height:180px;align-self:end}
+      .draft-detail-panel .draft-detail-grade{top:12px;left:12px;width:32px;font-size:24px}
+      .draft-detail-panel .draft-detail-role-icon{display:none}
+      .draft-detail-panel .draft-detail-name{position:static;grid-column:1 / -1;width:auto;height:auto;font-size:20px}
+      .draft-detail-panel .draft-detail-title{position:static;grid-column:2;width:auto;height:auto;padding-right:14px;font-size:13px}
+      .draft-detail-panel .draft-detail-stats{position:static;grid-column:2;grid-row:2 / 4;width:auto;height:140px}
+      .draft-detail-panel .draft-detail-stat{font-size:13px}
+      .draft-detail-panel .draft-detail-passive{position:static;grid-column:1 / -1;width:auto;height:auto;max-height:220px;padding:14px;background:#f3dfb1;border-radius:9px;font-size:14px;line-height:1.55}
+      .draft-detail-panel .draft-detail-confirm{position:static;grid-column:1 / -1;width:auto;height:auto;min-height:48px;padding:10px;background:#754326;border:1px solid #e2b96b;border-radius:9px;font-size:18px}
+    }
     .draft-boarding-stamp{
       position:absolute;
       z-index:12;
@@ -24469,9 +24513,10 @@
     .mission-journal-detail-title strong{color:#ffe6a3;font-size:clamp(13px,1.5vw,23px)}
     .mission-journal-detail-title span{margin-top:3px;color:#8bd0d5;font-size:clamp(9px,.78vw,12px);font-weight:850}
     .mission-journal-detail-copy{
-      position:absolute;z-index:2;top:31%;left:51.5%;width:38%;height:11.5%;display:flex;flex-direction:column;justify-content:center;gap:3px;overflow:hidden;color:#d9eef0;font-size:clamp(9px,.84vw,13px);line-height:1.25;text-shadow:0 2px 2px #000;
+      position:absolute;z-index:2;top:31%;left:51.5%;width:38%;height:11.5%;display:flex;flex-direction:column;justify-content:flex-start;gap:3px;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;color:#d9eef0;font-size:clamp(9px,.84vw,13px);line-height:1.25;text-shadow:0 2px 2px #000;
     }
-    .mission-journal-detail-copy strong{color:#f4d58d}.mission-journal-detail-copy span{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+    .mission-journal-detail-copy strong{color:#f4d58d;flex-shrink:0}.mission-journal-detail-copy span{display:block;flex-shrink:0;white-space:normal;overflow-wrap:anywhere}
+    .mission-journal-detail-copy .mission-mainline-guidance{margin:0;padding:0;background:none;border:0;border-radius:0;font-size:inherit;line-height:inherit}
     .mission-journal-progress{
       position:absolute;z-index:2;top:45.7%;left:37.6%;width:52.2%;height:6.6%;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:1.3%;padding:0 3.4%;
       color:#f6e4b3;font-size:clamp(9px,.8vw,12px);font-weight:900;text-shadow:0 2px 2px #000;
@@ -27378,6 +27423,7 @@
         <div class="board-tools">
           <button type="button" class="map-tool-btn" id="focusPlayerBtn">回到目前玩家</button>
           <button type="button" class="map-tool-btn" id="viewWholeMapBtn">查看全圖</button>
+          <button type="button" class="map-tool-btn" id="quickVoyageBtn" aria-pressed="false">快速航行：關</button>
           <div class="cpu-speed-control" id="cpuSpeedControl">
             <span class="cpu-speed-label">CPU</span>
             <select class="cpu-speed-select" id="cpuSpeedSelect" aria-label="CPU 回合倍速">
@@ -27501,7 +27547,7 @@
   <script src="js/bgm_manager.js?v=20260901-bgm-continuity-v407"></script>
   <script src="js/board_items.js?v=20260827-zorojuro-enma-v348"></script>
   <script src="js/board_york_clue_puzzle.js?v=20260824-york-tier3-practice-v307"></script>
-  <script src="js/board_missions.js?v=20260817-main-mission-flow-v2"></script>
+  <script src="js/board_missions.js?v=20260920-mainline-guidance-v1"></script>
   <script src="js/battle_hit_effect_settings.js?v=20260505-cast-sfx-v1"></script>
   <script src="js/onepiece_prebattle_lines.js?v=20260819-zephyr-name-v4"></script>
   <script src="js/board_cosmetic_frame_preview.js?v=20260729-rocks-conqueror-frame-v1"></script>
@@ -27509,6 +27555,6 @@
   <script src="js/board_state_wire.js?v=20260910-state-wire-v1"></script>
   <script src="js/board_state_receiver.js?v=20260910-state-wire-v1"></script>
   <script src="js/board_remote_playback.js?v=20260919-spectator-playback-v1"></script>
-  <script src="js/board_game.js?v=20260919-spectator-playback-v1"></script>
+  <script src="js/board_game.js?v=20260920-voyage-quality-v1"></script>
 </body>
 </html>

@@ -222,14 +222,14 @@
     Q(80, 8, "A", "3D2Y", "完成頂上戰爭篇", mainGoal("marineford_clear"), 60000, 250000000, 8800, [mainItem("舊時代的記憶")]),
 
     Q(81, 9, "A", "進化的力量", "讓任一船員完成進化", mainGoal("evolved_crew"), 22000, 60000000, 2640, [mainItem("奧義修行卷")]),
-    Q(82, 9, "A", "B級強敵", "擊敗 1 名 B級以上敵人", mainGoal("defeat_tier", 1, { minRank: "B" }), 24000, 65000000, 2860),
-    Q(83, 9, "A", "A級委託", "接取或完成 1 個 A級任務", mainGoal("main_event", 1, { event: "mission_grade_a" }), 28000, 75000000, 3300),
+    Q(82, 9, "A", "B級強敵", "擊敗 1 名 B級以上敵人。下一話的 A級委託需懸賞 30億，請提前累積。", mainGoal("defeat_tier", 1, { minRank: "B" }), 24000, 65000000, 2860),
+    Q(83, 9, "A", "A級委託", "接取或完成 1 個 A級任務（任務島解鎖門檻：懸賞 30億）", mainGoal("main_event", 1, { event: "mission_grade_a" }), 28000, 75000000, 3300),
     Q(84, 9, "A", "強化船體", "船體永久改造總等級達到 5", mainGoal("ship_upgrades", 5), 30000, 80000000, 3300, [mainItem("船匠工具箱", 2)]),
     Q(85, 9, "A", "高階攜帶物", "裝備 1 個 A級以上角色攜帶物", mainGoal("main_event", 1, { event: "equip_high_held" }), 30000, 80000000, 3520),
     Q(86, 9, "A", "攜帶物實戰", "讓角色攜帶物在戰鬥中觸發", mainGoal("held_trigger"), 32000, 85000000, 3960),
     Q(87, 9, "A", "A級敵島", "在 A級以上敵人島獲勝", mainGoal("enemy_island_win", 1, { minRank: "A" }), 35000, 100000000, 4400),
-    Q(88, 9, "A", "完整隊形", "全隊無人瀕死贏得 1 場戰鬥", mainGoal("no_ko_battle_win"), 32000, 90000000, 3960),
-    Q(89, 9, "A", "S級委託", "接取或完成 1 個 S級任務", mainGoal("main_event", 1, { event: "mission_grade_s" }), 40000, 120000000, 5500, [mainItem("戰鬥記憶貝")]),
+    Q(88, 9, "A", "完整隊形", "全隊無人瀕死贏得 1 場戰鬥。下一話的 S級委託同樣需懸賞 30億。", mainGoal("no_ko_battle_win"), 32000, 90000000, 3960),
+    Q(89, 9, "A", "S級委託", "接取或完成 1 個 S級任務（任務島解鎖門檻：懸賞 30億）", mainGoal("main_event", 1, { event: "mission_grade_s" }), 40000, 120000000, 5500, [mainItem("戰鬥記憶貝")]),
     Q(90, 9, "A", "挑戰四皇的資格", "懸賞金達到 30 億", mainGoal("bounty_total", 3000000000), 50000, 150000000, 6600, [mainItem("修行石塊")]),
 
     Q(91, 10, "S", "第一位四皇", "抵達任一尚未攻破的四皇島", mainGoal("visit_island_kind", 1, { islandKind: "yonko" }), 30000, 80000000, 3300),
