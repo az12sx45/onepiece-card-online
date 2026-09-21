@@ -6,8 +6,8 @@ const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
 const { execFileSync } = require("node:child_process");
-const { validateOutput } = require("./build_board_move_fx_release_candidate");
-const { validateConfig } = require("./build_desktop_program_catalog");
+const { validateOutput, normalizedText } = require("./build_board_move_fx_release_candidate");
+const { validateConfig, buildManifest } = require("./build_desktop_program_catalog");
 const { canonicalJson, sha256Bytes, validateCatalog, validateManifest } = require("./desktop_program_package_common");
 const ROOT = path.resolve(__dirname, "..");
 const PUBLIC = path.join(ROOT, "public");
@@ -63,13 +63,24 @@ function verify(candidatePath) {
   assert.equal(manifest.totalFiles, oldManifest.totalFiles + 591);
   assert.deepEqual(manifest.assets.filter(item => !oldManifest.assets.some(old => old.path === item.path)).map(item => item.path), inputs.addedPaths);
   let checkedBytes = 0;
+  const committed = new Map();
+  const gitTextDifferences = [];
   for (const [relative, expected] of replacements) {
     const asset = assets.get(relative);
     assert.ok(asset, `Candidate missing ${relative}`);
     for (const key of ["kind", "mime", "size", "sha256"]) assert.equal(asset[key], expected[key], `${relative} ${key}`);
     const bytes = readHead(`public/${relative}`);
-    assert.equal(bytes.length, expected.size, `Committed size: ${relative}`);
-    assert.equal(sha256Bytes(bytes), expected.sha256, `Committed SHA: ${relative}`);
+    if (programs.includes(relative)) {
+      const reviewed = fs.readFileSync(path.join(directory, "program-bytes", relative));
+      assert.equal(reviewed.length, expected.size, `Reviewed size: ${relative}`);
+      assert.equal(sha256Bytes(reviewed), expected.sha256, `Reviewed SHA: ${relative}`);
+      assert.ok(normalizedText(bytes).equals(normalizedText(reviewed)), `Committed program content differs from reviewed candidate: ${relative}`);
+      if (!bytes.equals(reviewed)) gitTextDifferences.push({ path: relative, candidateSize: reviewed.length, committedSize: bytes.length, candidateSha256: expected.sha256, committedSha256: sha256Bytes(bytes), reason: "Git preserved existing CRLF; UTF-8 content is identical after newline normalization" });
+    } else {
+      assert.equal(bytes.length, expected.size, `Committed media size: ${relative}`);
+      assert.equal(sha256Bytes(bytes), expected.sha256, `Committed media SHA: ${relative}`);
+    }
+    committed.set(relative, { ...asset, size: bytes.length, sha256: sha256Bytes(bytes) });
     checkedBytes += bytes.length;
   }
   for (const old of oldManifest.assets) {
@@ -80,12 +91,18 @@ function verify(candidatePath) {
     return old && canonicalJson(item) !== canonicalJson(old);
   }).map(item => item.path);
   assert.deepEqual(changed, ["board_battle.html", "board_game.html", "js/board_battle.js", "js/board_game.js"]);
+  const promotedManifest = validateManifest(buildManifest("board", manifest.entryPath, manifest.createdAt, oldManifest.assets.filter(item => !committed.has(item.path)), [...committed.values()]), "board");
+  const promotedManifestPath = `desktop/manifests/board-${promotedManifest.releaseId}.json`;
+  const promotedManifestBytes = Buffer.from(canonicalJson(promotedManifest));
+  const promotedCatalog = { ...catalog, games: { ...catalog.games, board: { releaseId: promotedManifest.releaseId, manifestPath: promotedManifestPath, manifestSha256: sha256Bytes(promotedManifestBytes), entryPath: promotedManifest.entryPath, totalFiles: promotedManifest.totalFiles, totalBytes: promotedManifest.totalBytes } } };
+  validateCatalog(promotedCatalog);
+  const promotedCatalogBytes = Buffer.from(canonicalJson(promotedCatalog));
   const currentBytes = fs.readFileSync(path.join(PUBLIC, "desktop/catalog-v3.json"));
-  assert.ok(currentBytes.equals(baselineBytes) || currentBytes.equals(catalogBytes), "Public catalog changed outside this release");
+  assert.ok(currentBytes.equals(baselineBytes) || currentBytes.equals(promotedCatalogBytes), "Public catalog changed outside this release");
   const legacyBytes = readAt(inputs.baselineHEAD, "public/desktop/catalog-v2.json");
   assert.ok(fs.readFileSync(path.join(PUBLIC, "desktop/catalog-v2.json")).equals(legacyBytes), "Legacy v2 unchanged");
   assert.equal(git(["rev-parse", "HEAD"]).toString("utf8").trim(), head, "HEAD stable during verification");
-  return { head, catalog, manifestPath, manifestBytes, catalogBytes, checkedBytes };
+  return { head, catalog: promotedCatalog, manifestPath: promotedManifestPath, manifestBytes: promotedManifestBytes, catalogBytes: promotedCatalogBytes, checkedBytes, gitTextDifferences, reviewedCandidate: manifest.releaseId };
 }
 
 function main(argv = process.argv.slice(2)) {
@@ -104,7 +121,7 @@ function main(argv = process.argv.slice(2)) {
     assert.ok(fs.readFileSync(destination).equals(result.manifestBytes));
     assert.ok(fs.readFileSync(catalogPath).equals(result.catalogBytes));
   }
-  console.log(JSON.stringify({ ok: true, promoted: argv.includes("--promote"), head: result.head, board: result.catalog.games.board, checkedPrograms: 39, checkedMedia: 589, checkedBytes: result.checkedBytes, cardChessAndLegacyUnchanged: true }));
+  console.log(JSON.stringify({ ok: true, promoted: argv.includes("--promote"), head: result.head, board: result.catalog.games.board, reviewedCandidate: result.reviewedCandidate, gitTextDifferences: result.gitTextDifferences, checkedPrograms: 39, checkedMedia: 589, checkedBytes: result.checkedBytes, cardChessAndLegacyUnchanged: true }));
 }
 if (require.main === module) { try { main(); } catch (error) { console.error(error.stack); process.exitCode = 1; } }
 module.exports = { verify, main };
