@@ -1099,6 +1099,39 @@
   let currentMode = null;
   let selectedBattleItemId = "";
   let latestView = null;
+  let moveFxPlayer = null;
+  let warmedMoveFxSignature = "";
+
+  function moveFxRuntime() {
+    if (!moveFxPlayer && window.BoardMoveFx && refs.stage) {
+      moveFxPlayer = window.BoardMoveFx.create({
+        stage: refs.stage,
+        layer: refs.stage.querySelector(".battle-fx-layer") || refs.stage,
+        resolveAnchor: (side) => side === "enemy" ? refs.enemyCard : refs.playerCard,
+      });
+    }
+    return moveFxPlayer;
+  }
+
+  function warmMoveFxForView(view) {
+    const event = view?.battle?.visualEvent;
+    const moves = [
+      ...(view?.activeCard?.moves || []),
+      ...(view?.enemy?.moves || []),
+      event,
+      event?.realWorld,
+      event?.songWorld,
+    ].filter((move) => move?.moveId || move?.id).map((move) => ({ ...move, moveId: move.moveId || move.id, moveName: move.moveName || move.name }));
+    const signature = moves.map((move) => `${move.moveId}:${move.moveName || ""}:${move.moveType || move.type || ""}`).join("|");
+    if (!signature || signature === warmedMoveFxSignature) return;
+    warmedMoveFxSignature = signature;
+    void moveFxRuntime()?.warm(moves);
+  }
+
+  function moveFxSound(event, phase, fallback = "") {
+    const mapped = window.BoardMoveFx?.soundFor(window.BoardMoveFxCatalog, event, phase);
+    return mapped === undefined ? fallback : mapped;
+  }
   let activeZephyrExplosionStoryEventId = "";
   let zephyrExplosionStoryIndex = 0;
   let zephyrExplosionStoryChanging = false;
@@ -3391,8 +3424,11 @@
   function clearImpactFxTimers(clearHp = true) {
     impactFxTimers.forEach((timer) => clearTimeout(timer));
     impactFxTimers = [];
+    moveFxPlayer?.clear();
+    refs.impactFx?.classList.remove("active");
     clearDamageNumbers();
     refs.stage?.classList.remove("combo-sequence");
+    refs.speedlinesFx?.classList.remove("show");
     clearAllPortraitEffectFx();
     clearJudgeCloneInterceptors();
     setImpactEffect("");
@@ -4063,6 +4099,10 @@
     refs.totMusicaDualFx.classList.add("show", "persistent-stage", "player-resolving");
     animateTotMusicaWorldDice("real", realRolls);
     animateTotMusicaWorldDice("song", songRolls);
+    [real, song].forEach((world) => {
+      if (world.moveId) void moveFxRuntime()?.warm(world);
+      playCastEffectSound(moveFxSound(world, "cast", world.castSfx));
+    });
 
     scheduleTotMusicaDualFx(() => {
       // Additional dice share the same visual slot, but synchronization is
@@ -4087,6 +4127,9 @@
     }, collideAt);
 
     scheduleTotMusicaDualFx(() => {
+      [[real, refs.totMusicaRealFrame], [song, refs.totMusicaSongFrame]].forEach(([world, frame]) => {
+        if (world.moveId && !world.direct) moveFxRuntime()?.play(world, { actorSide: "player", targetSide: "player", anchorElement: frame });
+      });
       if (!synchronized) {
         refs.totMusicaDualFx?.classList.add("collision-failed", "judged", bothAttackRolls ? "result-mismatch" : "result-barrier");
         refs.totMusicaDualResult.textContent = bothAttackRolls
@@ -4129,6 +4172,11 @@
         setTotMusicaDualImage(refs.totMusicaBossPortrait, bossAfter, ["hitEnemySide", "hit", "hurt", "dizzy", "normal"]);
         setTotMusicaHpUi(refs.totMusicaBossHpText, refs.totMusicaBossHpFill, bossAfter.currentHp, bossAfter.maxHp);
         restartAnimation(refs.totMusicaBossFrame, "portrait-hit");
+        [real, song].forEach((world) => {
+          if (!world.direct || !world.hit) return;
+          moveFxRuntime()?.play(world, { actorSide: "player", targetSide: "enemy", anchorElement: refs.totMusicaBossFrame });
+          playHitEffectSound(moveFxSound(world, "hit", world.hitSfx));
+        });
         spawnBattleDamageNumber({
           amount: event.damage,
           critical: !!event.critical,
@@ -4271,6 +4319,7 @@
       refs.totMusicaBossFrame?.classList.toggle("boss-high-reveal", !continueFromPlayerHigh);
       refs.totMusicaDualFx?.classList.add("enemy-camera-high", "boss-revealed", "enemy-present", "enemy-rolling");
       animateTotMusicaWorldDice("boss", bossRolls);
+      playCastEffectSound(moveFxSound(event, "cast", event.castSfx));
     };
     if (continueFromPlayerHigh) revealBossForEnemy();
     else scheduleTotMusicaDualFx(revealBossForEnemy, revealAt);
@@ -4299,6 +4348,12 @@
           : song.raidSuitStealth ? ["stealth", "normal", "idle", "morale"] : ["normal", "idle", "morale"]);
       if (dealsDamage && real.hit && !real.fatalGuard) restartAnimation(refs.totMusicaRealFrame, "portrait-hit");
       if (dealsDamage && song.hit && !song.fatalGuard) restartAnimation(refs.totMusicaSongFrame, "portrait-hit");
+      [[real, refs.totMusicaRealFrame], [song, refs.totMusicaSongFrame]].forEach(([world, frame]) => {
+        if (dealsDamage ? world.hit || world.fatalGuard : world.affected) {
+          moveFxRuntime()?.play(event, { actorSide: "enemy", targetSide: "player", anchorElement: frame });
+        }
+      });
+      if (dealsDamage && (real.hit || song.hit || real.fatalGuard || song.fatalGuard)) playHitEffectSound(moveFxSound(event, "hit", event.hitSfx));
       setTotMusicaHpUi(refs.totMusicaRealHpText, refs.totMusicaRealHpFill, real.currentHp, real.maxHp);
       setTotMusicaHpUi(refs.totMusicaSongHpText, refs.totMusicaSongHpFill, song.currentHp, song.maxHp);
       refs.totMusicaRealMove.textContent = dealsDamage ? (real.fatalGuard ? "不屈・致命傷已抵銷" : real.hit ? `受到 ${Math.max(0, Number(real.damage || 0))} 傷害` : "攻擊落空") : (real.affected ? "效果命中" : "效果未命中");
@@ -5418,6 +5473,12 @@
     const kind = effectKind(effectFx);
     const direction = effectFx.direction === "down" || kind === "debuff" ? "down" : "up";
     clearPortraitEffectFx(card);
+    if (effectFx.moveEvent && moveFxRuntime()?.ready(effectFx.moveEvent)) {
+      // This move's authored sprite owns its visual. Keep status icon chronology
+      // without adding the generic CSS particles or power-up sound on top.
+      if (effectFx.eventId) scheduleImpactFx(() => releaseStatusIconDelay(side, effectFx.eventId), 260);
+      return;
+    }
     card.style.setProperty("--effect-color", effectColor(kind));
     card.style.setProperty("--effect-blur", `${STATUS_PARTICLE_TUNING.blur}px`);
     card.style.setProperty("--effect-glow-small", `${Math.round(10 * STATUS_PARTICLE_TUNING.glow)}px`);
@@ -5526,7 +5587,7 @@
     refs.diceBonusOrb.classList.remove("settled");
     refs.diceBonusFx.classList.remove("settled");
     refs.diceBonusFx.classList.add("active");
-    playCastEffectSound(event.castSfx);
+    if (!event.isExtraDice) playCastEffectSound(moveFxSound(event, "cast", event.castSfx));
     const maxFace = Number(event.maxFace || 6);
     const isResolvedTotal = event.type === "bonus" && event.firstDie && event.secondDie;
     const diceDuration = isResolvedTotal ? 90 : Math.max(1200, Number(event.duration || 1450));
@@ -5633,7 +5694,13 @@
         const fatalGuardHit = !!event.fatalGuard && isFinalHit;
         const delay = firstDelay + index * hitGap;
         scheduleImpactFx(() => {
-          playSpeedlines();
+          let spriteLaunched = false;
+          if (moveFxRuntime()?.ready(event)) {
+            refs.speedlinesFx?.classList.remove("show");
+            spriteLaunched = moveFxPlayer.play(event, { phase: "launch", actorSide: side, targetSide, durationMs: contactDelay });
+          } else {
+            playSpeedlines();
+          }
           playPortraitAction(side, "attack", attackDuration);
           scheduleImpactFx(() => {
             const cloneBlocked = side === "player" && targetSide === "enemy" && !!judgeCloneBlocks[index];
@@ -5665,18 +5732,28 @@
             }
             const hitEffectFile = didConnect || cloneBlocked ? inferHitEffectFile(event, index, hitDamages.length) : "";
             const impactAnchor = cloneIntercept?.querySelector(".judge-clone-guard") || (didHitShikiIsland ? shikiArchipelagoSlot(shikiIslandHitTargetId) || refs.shikiArchipelagoStage : null);
-            positionImpactFx(targetSide, impactAnchor);
-            setImpactEffect("", hitEffectFile);
-            setDirectionalImpactEffect(side, targetSide, hitEffectFile);
-            refs.impactFx?.classList.toggle("enemy", side === "enemy");
-            refs.impactFx?.classList.toggle("is-combo-hit", isCombo);
-            refs.impactFx?.classList.toggle("is-heavy-hit", !isCombo && damage >= 90);
-            if (hitEffectFile) {
-              const rotation = isCombo ? [-7, 5, -3, 8, -5, 4][index % 6] : 0;
-              refs.impactFx?.style.setProperty("--hit-rotation", `${rotation}deg`);
-              playHitEffectSound(event.hitSfx);
+            const spritePlayed = (didConnect || cloneBlocked) && moveFxRuntime()?.play(event, {
+              phase: "impact", actorSide: side, targetSide, anchorElement: impactAnchor,
+              durationMs: Math.min(hitDuration, moveFxPlayer.resolve(event)?.durationMs || hitDuration),
+              frameStart: spriteLaunched ? moveFxPlayer.resolve(event)?.launchFrames : undefined,
+            });
+            if (spritePlayed) {
+              refs.impactFx?.classList.remove("active");
+              setImpactEffect("");
+            } else if (didConnect || cloneBlocked) {
+              positionImpactFx(targetSide, impactAnchor);
+              setImpactEffect("", hitEffectFile);
+              setDirectionalImpactEffect(side, targetSide, hitEffectFile);
+              refs.impactFx?.classList.toggle("enemy", side === "enemy");
+              refs.impactFx?.classList.toggle("is-combo-hit", isCombo);
+              refs.impactFx?.classList.toggle("is-heavy-hit", !isCombo && damage >= 90);
+              if (hitEffectFile) {
+                const rotation = isCombo ? [-7, 5, -3, 8, -5, 4][index % 6] : 0;
+                refs.impactFx?.style.setProperty("--hit-rotation", `${rotation}deg`);
+              }
+              restartAnimation(refs.impactFx, "active");
             }
-            restartAnimation(refs.impactFx, "active");
+            if (didConnect || cloneBlocked) playHitEffectSound(moveFxSound(event, "hit", event.hitSfx));
             const suppressFatalGuardLeadHit = !!event.fatalGuard && !isFinalHit && damage <= 0;
             if (!suppressFatalGuardLeadHit && (!didHitShikiIsland || damage > 0 || cloneBlocked || fatalGuardHit)) {
               spawnBattleDamageNumber({
@@ -5702,7 +5779,7 @@
               if (shikiIslandHitDestroyed[index]) playShikiIslandBreakAtImpact(event, shikiIslandHitTargetId);
             }
             if (didConnect && isFinalHit && effectFx) {
-              scheduleImpactFx(() => playStatusEffectFx(effectFx.targetSide || defender, { ...effectFx, eventId: event.id }), hitDuration + 1000);
+              scheduleImpactFx(() => playStatusEffectFx(effectFx.targetSide || defender, { ...effectFx, eventId: event.id, moveEvent: event }), hitDuration + 1000);
             }
           }, contactDelay);
         }, delay);
@@ -5716,23 +5793,31 @@
       scheduleImpactFx(clearJudgeCloneInterceptors, firstDelay + hitGap * Math.max(0, hitDamages.length - 1) + contactDelay + hitDuration + 560);
     } else if (event.type === "heal") {
       playPortraitAction(side, "morale", 900);
-      playStatusEffectFx(effectFx?.targetSide || explicitTargetSide || side, { ...(effectFx || { kind: "heal", direction: "up", label: "治癒" }), eventId: event.id });
+      playStatusEffectFx(effectFx?.targetSide || explicitTargetSide || side, { ...(effectFx || { kind: "heal", direction: "up", label: "治癒" }), eventId: event.id, moveEvent: event });
     } else if (moveType === "buff" || moveType === "shield") {
       playPortraitAction(side, "morale", 900);
-      playStatusEffectFx(effectFx?.targetSide || explicitTargetSide || side, { ...(effectFx || { kind: moveType === "shield" ? "shield" : "speed", direction: "up", label: "能力提升" }), eventId: event.id });
+      playStatusEffectFx(effectFx?.targetSide || explicitTargetSide || side, { ...(effectFx || { kind: moveType === "shield" ? "shield" : "speed", direction: "up", label: "能力提升" }), eventId: event.id, moveEvent: event });
     } else if (moveType === "debuff" || moveType === "control") {
       playPortraitAction(targetSide, "dizzy", 900);
-      playStatusEffectFx(effectFx?.targetSide || explicitTargetSide || defender, { ...(effectFx || { kind: "debuff", direction: "down", label: "能力下降" }), eventId: event.id });
+      playStatusEffectFx(effectFx?.targetSide || explicitTargetSide || defender, { ...(effectFx || { kind: "debuff", direction: "down", label: "能力下降" }), eventId: event.id, moveEvent: event });
     } else {
       playPortraitAction(side, "morale", 760);
-      if (effectFx) playStatusEffectFx(effectFx.targetSide || explicitTargetSide || side, { ...effectFx, eventId: event.id });
+      if (effectFx) playStatusEffectFx(effectFx.targetSide || explicitTargetSide || side, { ...effectFx, eventId: event.id, moveEvent: event });
     }
     refs.impactFx.classList.toggle("enemy", side === "enemy");
     if (event.type !== "attack") {
       const impactKind = effectFx ? effectKind(effectFx) : (event.type === "heal" ? "heal" : (moveType === "debuff" || moveType === "control" ? "debuff" : (moveType === "shield" ? "shield" : "speed")));
       positionImpactFx(targetSide);
       setImpactEffect(impactKind);
-      scheduleImpactFx(() => restartAnimation(refs.impactFx, "active"), 360);
+      scheduleImpactFx(() => {
+        if (moveFxRuntime()?.play(event, { phase: "impact", actorSide: side, targetSide })) {
+          refs.impactFx?.classList.remove("active");
+          setImpactEffect("");
+        } else {
+          restartAnimation(refs.impactFx, "active");
+        }
+        playHitEffectSound(moveFxSound(event, "hit", event.hitSfx));
+      }, 360);
     }
     if (event.type !== "attack" && event.damage) {
       scheduleImpactFx(() => spawnBattleDamageNumber({
@@ -5959,6 +6044,7 @@
   function handleVisualEvent(view) {
     const event = view?.battle?.visualEvent;
     if (!event || event.id === lastVisualEventId) return;
+    if (event.moveId) void moveFxRuntime()?.warm(event);
     lastVisualEventId = event.id;
     if (event.type !== "attack") clearImpactFxTimers();
     if (event.type !== "kyubi-mask") clearKyubiMaskFx();
@@ -8483,6 +8569,8 @@
     // A queued actor/round must not be replaced by a fresh parent API lookup.
     latestView = followCurrentCoopActor(latestView, spectatorBattlePlayback.status().active ? null : api);
     if (!latestView) {
+      moveFxPlayer?.clear();
+      warmedMoveFxSignature = "";
       renderDecisionHints(null);
       latestView = null;
       lastBattleIdentity = "";
@@ -8500,6 +8588,8 @@
       return;
     }
     if (!latestView.battle) {
+      moveFxPlayer?.clear();
+      warmedMoveFxSignature = "";
       renderDecisionHints(null);
       lastBattleIdentity = "";
       lastCoopCommandPlayerId = "";
@@ -8516,6 +8606,7 @@
       return;
     }
     resetBattleSessionVisualState(latestView);
+    warmMoveFxForView(latestView);
     applyBattleBackground(latestView);
     renderHud(latestView);
     renderCards(latestView);
@@ -8596,6 +8687,7 @@
     });
     window.addEventListener("focus", refresh);
     window.addEventListener("resize", fitBattleViewport);
+    window.addEventListener("pagehide", () => moveFxPlayer?.clear());
     window.addEventListener("orientationchange", () => window.requestAnimationFrame(fitBattleViewport));
     window.visualViewport?.addEventListener("resize", fitBattleViewport);
     window.addEventListener("click", () => {
@@ -8626,6 +8718,8 @@
   }
 
   window.__BOARD_BATTLE_DEBUG__ = {
+    moveFxRuntime,
+    moveFxSound,
     diceRollingTitle,
     diceRollingSubtitle,
     diceSettledTitleForEvent,

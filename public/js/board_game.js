@@ -265,7 +265,7 @@
   const SPAR_SELECTION_PAGE_VERSION = "20260827-formal-pk-v1";
   const BATTLE_COMMAND_KEY = "onepiece-board-battle-command-v1";
   const BATTLE_ENTRY_PLAYED_STORAGE_KEY = "onepiece-board-battle-entry-played-v1";
-  const BATTLE_PAGE_VERSION = "20260920-battle-decision-hints-v1";
+  const BATTLE_PAGE_VERSION = "20260921-gpt-move-fx-v1";
   const PLACEHOLDER_BATTLE_PORTRAIT = "images/board/battle/portraits/placeholder/normal.webp";
   const COSMETIC_FRAME_DEFS = {
     goldenDenDen: { id: "goldenDenDen", label: "黃金電話蟲框", unlockText: "司法島通關紀念" },
@@ -8874,6 +8874,8 @@
       {
         side: "player",
         moveType: move.category || "attack",
+        moveId: move.id,
+        moveName: move.name,
         castSfx: battleCastSfxForMove(move),
         suppressVisual: true,
         onFirstDie: (value) => { firstDiceFace = Number(value || 0); },
@@ -9008,7 +9010,10 @@
         playerId: String(worldPlayer.id || ""),
         playerName: worldPlayer.name || "共鬥玩家",
         cosmeticFrameId: activeCrewCosmeticFrameId(worldPlayer, card) || defaultCharacterCosmeticFrameId(card),
+        moveId: result?.move?.id || "",
         moveName: result?.move?.name || result?.actionName || (result?.switched ? "免費調度" : "行動未成立"),
+        castSfx: result?.move ? battleCastSfxForMove(result.move) : "",
+        hitSfx: result?.move ? battleHitSfxForMove(result.move) : "",
         moveType: result?.move?.category || "",
         moveAttribute: String(result?.move?.attribute || card.attribute || "無"),
         direct: !!result?.direct,
@@ -9206,6 +9211,7 @@
         side: "enemy",
         targetSide: "player",
         actorName: battle.enemyCombatant.name,
+        moveId: moveEntry.id,
         moveName: moveEntry.name,
         moveType: moveEntry.category || moveEntry.type || "attack",
         blocked: true,
@@ -9240,6 +9246,8 @@
       {
         side: "enemy",
         moveType: isComboBattleMove(moveEntry) ? "combo" : (moveEntry.category || moveEntry.type || "attack"),
+        moveId: moveEntry.id,
+        moveName: moveEntry.name,
         castSfx: battleCastSfxForMove(moveEntry),
         suppressVisual: true,
         onDiceResolved: (rolls) => { diceRolls = (Array.isArray(rolls) ? rolls : []).map((value) => Number(value || 0)).filter((value) => value > 0); },
@@ -9341,7 +9349,10 @@
       side: "enemy",
       targetSide: "player",
       actorName: battle.enemyCombatant.name,
+      moveId: moveEntry.id,
       moveName: moveEntry.name,
+      castSfx: battleCastSfxForMove(moveEntry),
+      hitSfx: battleHitSfxForMove(moveEntry),
       moveType: moveEntry.category || moveEntry.type || "attack",
       dealsDamage,
       continueFromPlayerHigh,
@@ -28704,6 +28715,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       side: options.side || "",
       sideLabel,
       actorName,
+      moveId: options.moveId || "",
+      moveName: options.moveName || "",
       moveType: options.moveType || theme,
       isExtraDice: !!options.isExtraDice,
       extraDiceOrdinal: Number(options.extraDiceOrdinal || 0),
@@ -28795,6 +28808,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         actorName,
         extraDiceReason: third ? "名刀『日蝕』" : rule.logLabel,
         triggerThreshold: third ? thirdThreshold : rule.threshold,
+        moveId: options.moveId || "",
+        moveName: options.moveName || "",
         moveType: options.moveType || theme,
         bonusText: `總點數 ${total}，${battleDiceBonusText(options.moveType || theme, total)}`,
         duration: 1800,
@@ -50430,7 +50445,9 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       subtitle: "切磋加成骰",
       maxFace: 6,
       settle: diceFace,
+      moveId: moveEntry.id,
       moveName: moveEntry.name,
+      castSfx: battleCastSfxForMove(moveEntry),
       moveType: isComboBattleMove(moveEntry) ? "combo" : (moveEntry.category || moveEntry.type || "attack"),
       bonusText: battleDiceBonusText(moveEntry.category || moveEntry.type || "attack", diceFace),
       duration: 1250,
@@ -50511,6 +50528,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const hitEffect = hit && totalDamage > 0 ? battleHitEffectForMove(moveEntry, diceFace, hitDamages) : "";
     sparSetVisualEvent(battle, attacker, {
       type: battleMoveDealsDamage(moveEntry) ? "attack" : ((moveEntry.category || moveEntry.type) === "heal" ? "heal" : "status"),
+      moveId: moveEntry.id,
       moveName: moveEntry.name,
       moveType: moveEntry.category || moveEntry.type || "attack",
       damage: totalDamage,
@@ -50519,7 +50537,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       criticalCount: Math.max(0, Number(attackVisualMeta.criticalCount || 0)),
       criticalHitIndexes: Array.isArray(attackVisualMeta.criticalHitIndexes) ? attackVisualMeta.criticalHitIndexes.slice() : [],
       hitEffect,
-      hitSfx: hitEffect ? battleHitSfxForMove(moveEntry, hitEffect) : "",
+      hitSfx: hit ? battleHitSfxForMove(moveEntry, hitEffect) : "",
       diceFace,
       miss: !hit,
       effectFx,
@@ -52958,6 +52976,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   }
 
   function battleHitSfxForMove(moveEntry = {}, hitEffectFile = "") {
+    const mapped = window.BoardMoveFx?.soundFor(window.BoardMoveFxCatalog, moveEntry, "hit");
+    if (mapped !== undefined) return mapped;
     if (moveEntry.hitSfx) return String(moveEntry.hitSfx);
     const choice = battleHitEffectChoiceForMove(moveEntry.id);
     if (typeof choice.sfx === "string") return choice.sfx;
@@ -52967,6 +52987,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   }
 
   function battleCastSfxForMove(moveEntry = {}) {
+    const mapped = window.BoardMoveFx?.soundFor(window.BoardMoveFxCatalog, moveEntry, "cast");
+    if (mapped !== undefined) return mapped;
     if (moveEntry.castSfx) return String(moveEntry.castSfx);
     const choice = battleHitEffectChoiceForMove(moveEntry.id);
     if (typeof choice.castSfx === "string") return choice.castSfx;
@@ -53727,6 +53749,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       id: `prepare-${Date.now()}-${Math.random().toString(36).slice(2)}`,
       type: "prepare",
       side,
+      moveId: moveEntry.id,
       moveName: moveEntry.name,
       moveType: moveEntry.category || moveEntry.type || "attack",
     }, battle);
@@ -53736,6 +53759,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const diceFace = await rollBattleActionDiceWithPassives(theme, `${side === "player" ? battleActiveCard(player, battle).name : battle.enemyCombatant.name} 使用 ${moveEntry.name}`, "決定招式最終效果…", battle, 6, {
       side,
       moveType: isComboBattleMove(moveEntry) ? "combo" : (moveEntry.category || moveEntry.type || "attack"),
+      moveId: moveEntry.id,
+      moveName: moveEntry.name,
       castSfx: battleCastSfxForMove(moveEntry),
       onFirstDie: (value) => { firstDiceFace = Number(value || 0); },
       onDiceResolved: side === "player"
@@ -53954,6 +53979,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         startCombatant: battleVisualSnapshotSide(attackStartSnapshot, attackTargetSide),
         startSnapshot: safeJsonClone(attackStartSnapshot),
         finalSnapshot: safeJsonClone(attackFinalSnapshot),
+        moveId: moveEntry.id,
         moveName: moveEntry.name,
         moveType: moveEntry.category || moveEntry.type || "attack",
         specialFx: isLucciRokuoganVisual ? "lucci-rokuogan" : "",
@@ -54059,7 +54085,9 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         id: `heal-${Date.now()}-${Math.random().toString(36).slice(2)}`,
         type: "heal",
         side,
+        moveId: moveEntry.id,
         moveName: moveEntry.name,
+        hitSfx: battleHitSfxForMove(moveEntry),
         moveType: moveEntry.category || moveEntry.type || "heal",
         amount: baseHeal,
         diceFace,
@@ -54093,7 +54121,9 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         id: `status-${Date.now()}-${Math.random().toString(36).slice(2)}`,
         type: "status",
         side,
+        moveId: moveEntry.id,
         moveName: moveEntry.name,
+        hitSfx: battleHitSfxForMove(moveEntry),
         moveType: moveEntry.category || moveEntry.type || "status",
         amount: healingDone,
         diceFace,

@@ -175,6 +175,7 @@ function harness() {
   const context = {
     spectatorBattlePlayback: h.playback,
     selectedCoopViewPlayerId: "", latestView: null, currentMode: null,
+    moveFxPlayer: null, warmedMoveFxSignature: "", warmMoveFxForView: () => {},
     lastBattleIdentity: "", lastCoopCommandPlayerId: "",
     controller: () => ({
       getBattleView: () => authoritative,

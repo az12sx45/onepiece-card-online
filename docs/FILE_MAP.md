@@ -1,5 +1,24 @@
 # File Map
 
+## 招式素材正式發布（2026-09-21）
+
+- `scripts/promote_board_move_fx_release.js`：將凍結候選與已提交 Git HEAD 的 628 個輸入逐項核對，再提升 Board v3 catalog／manifest。
+- `scripts/build_desktop_program_catalog.js`、`scripts/desktop_program_media_guard_qa.js`：通用打包前阻止丟失現有 v3 額外媒體，含不寫入 metadata 的隔離回歸。
+- `docs/BOARD_MOVE_FX_RELEASE_20260921.md`：本次發布版本、公開讀回、瀏覽器及正式資料保護結果；素材來源與本機 QA 仍見原實作紀錄。
+
+## 航海錄招式演出（2026-09-21，本機候選）
+
+- `public/js/board_move_fx.js`：圖片影格播放器、精準招式／變體查找、有限快取；`board_move_fx_catalog.js`：遊戲使用的生成目錄。
+- `public/board_move_fx_preview.html`、`public/js/board_move_fx_preview_data.js`：不連帳號／房間／存檔的獨立試播頁及完整角色招式清單。
+- `public/images/board/battle/move-fx/v1/`：GPT 生成後本機去背的 RGBA WebP；`public/audio/board_game/move-fx/v1/`：遊戲內使用的短版混音 OGG。
+- `public/js/board_game.js`、`board_battle.js`、兩個 Board HTML：視覺事件補上穩定招式 ID、音效與播放器載入；命中／連擊／觀戰時間保持原值。
+- `scripts/data/board_move_fx_v1.json`、`build_board_move_fx_catalog.js`：可重建的固定逐招對照；`process_board_move_fx_atlas.py`：本機色鍵去背；`qa_board_move_fx_assets.py`：透明度、影格、來源及總覽圖檢查。
+- `scripts/build_board_move_sfx.py`、`scripts/data/board_move_sfx*_v1.json`：音效配方；`docs/BOARD_MOVE_SFX_PROVENANCE_V1_FINAL.json`、`BOARD_MOVE_SFX_PROVENANCE_V1_VARIANTS_FINAL.json`：原素材授權來源、雜湊、混音紀錄。
+- `scripts/board_move_fx_qa.js`、`board_move_fx_integration_qa.js`、`board_move_fx_browser_qa.js`、`board_move_fx_qa_isolation.js`：播放器、接線、隔離真瀏覽器驗證；`docs/BOARD_MOVE_FX_20260921.md`：交付與限制。
+- `config/desktop-program-packages-v1.json`：Board 兩支新核心 JS 白名單；`scripts/build_board_move_fx_release_candidate.js`：只輸出獨立候選目錄，凍結 589 筆新媒體與可審查套件，不改公開 catalog。
+- `docs/BOARD_MOVE_FX_PROVENANCE_V1.json`、`BOARD_MOVE_FX_BROWSER_QA_V1.json`：102 組 GPT 原圖／完整提示詞／去背與影格 SHA，以及真瀏覽器最終驗收。
+- `docs/BOARD_MOVE_FX_RELEASE_INPUTS_V1.json`：新增 589 媒體與 39 程式的候選範圍／原始與正規化 SHA；未提交、未發布。
+
 ## 航海錄操作與任務提示（2026-09-20，已部署）
 
 - board_game.js／board_game.html：快速模式、骰子與開箱節奏、主線委託保留、選人被動、完成通知與手機排版。

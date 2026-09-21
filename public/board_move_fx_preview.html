@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>航海錄｜招式演出圖鑑</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#081922;color:#f1eee4;font-family:"Microsoft JhengHei","Noto Sans TC",sans-serif}button,input,select{font:inherit}button,select,input{border:1px solid #62787d;border-radius:8px;background:#102b36;color:inherit;padding:10px 12px}button{cursor:pointer}button:disabled{opacity:.5;cursor:wait}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #e9c377;outline-offset:2px}header{max-width:1480px;margin:auto;padding:25px 28px 18px;border-bottom:1px solid #28424b}header small{color:#9ec0c5;letter-spacing:.18em}h1{font-size:clamp(23px,3vw,34px);margin:8px 0}header p{color:#bdcdd0;margin:0;line-height:1.6}.layout{max-width:1480px;margin:auto;padding:22px 28px;display:grid;grid-template-columns:310px minmax(0,1fr);gap:22px}.panel{background:#0d232d;border:1px solid #38515a;border-radius:16px;padding:20px}.controls{display:flex;flex-direction:column;gap:16px;align-self:start}label{display:flex;flex-direction:column;gap:7px;font-size:14px;color:#bfd0d3}label.inline{flex-direction:row;align-items:center;gap:10px}input[type=checkbox]{width:18px;height:18px}select,input[type=search]{width:100%;min-width:0}.count{color:#92aaaf;font-size:12px;margin:0}.play{background:#deba70;color:#132731;font-weight:bold;border-color:#f0d599;padding:13px}.stage-header{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px}.stage-header h2{font-size:22px;margin:0 0 6px}.stage-header p{color:#b8c9cc;margin:0;font-size:14px}.tag{white-space:nowrap;border:1px solid #8ca39e;color:#d4e3ca;border-radius:30px;padding:5px 10px;font-size:12px}.scene{position:relative;isolation:isolate;height:440px;overflow:hidden;border-radius:12px;background:#102f3b}.backdrop{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.58}.fighter{position:absolute;top:16%;height:70%;width:30%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}.fighter.left{left:9%}.fighter.right{right:9%}.fighter img{max-height:100%;max-width:100%;object-fit:contain}.fighter img[hidden]{display:none}.fighter span{padding:7px 12px;background:#09202de8;border:1px solid #76959a;border-radius:6px;white-space:nowrap;font-weight:bold}.status{min-height:42px;line-height:1.6;margin:14px 0 4px;color:#c9d9db;font-size:14px}.frames-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:22px}.frames-heading h3{font-size:15px;margin:0}.frames-heading small{color:#9fb6bc}.frames{width:100%;height:112px;display:block;margin:12px 0;border:1px solid #46616a;border-radius:8px;background:#123641}.scrub{display:grid;grid-template-columns:1fr 120px;gap:20px;align-items:center}.frame-focus{width:120px;height:120px;display:block;background:#13343f;border:1px solid #49636c;border-radius:8px}input[type=range]{padding:0;accent-color:#e4c27c}.hint{font-size:12px;line-height:1.7;color:#9fb3b8;margin:15px 0 0}footer{max-width:1480px;margin:auto;padding:0 28px 28px;color:#8da9ad;font-size:12px}@media(max-width:850px){.layout{grid-template-columns:1fr;padding:15px;gap:15px}header{padding:20px 16px}.controls{display:grid;grid-template-columns:1fr 1fr;padding:15px;gap:12px}.controls .wide{grid-column:1/-1}.scene{height:370px}.panel{padding:14px}.frames{height:82px}.fighter{width:33%}.fighter.left{left:6%}.fighter.right{right:6%}.stage-header h2{font-size:19px}}@media(max-height:500px) and (min-width:700px){header{padding:10px 20px}header h1{font-size:24px}header p{display:none}.layout{grid-template-columns:255px 1fr;padding:14px;gap:14px}.controls{display:flex}.scene{height:275px}.frames-heading{margin-top:12px}}
+  </style>
+</head>
+<body>
+  <header><small>航海錄 · 招式圖鑑</small><h1>讓每一招，都有自己的氣勢。</h1><p>挑選角色與招式，查看攻擊、輔助演出與音效，也能逐格欣賞細節。</p></header>
+  <main class="layout">
+    <section class="panel controls" aria-label="招式選擇">
+      <label class="wide">搜尋角色或招式<input id="search" type="search" placeholder="例如：香吉士、雷鳴、火拳" autocomplete="off"></label>
+      <label>角色<select id="owner"><option value="">全部角色</option></select></label>
+      <label>招式<select id="move" aria-label="選擇招式"></select></label>
+      <p class="count wide" id="count"></p>
+      <label>施放方向<select id="direction"><option value="player">我方 → 敵方</option><option value="enemy">敵方 → 我方</option></select></label>
+      <label>演出方式<select id="action"><option value="single">一般施放</option><option value="combo">連續施放</option><option value="miss">攻擊落空</option></select></label>
+      <label class="inline"><input id="sound" type="checkbox" checked>播放音效</label>
+      <button id="play" class="play wide" type="button">播放招式</button>
+      <p class="hint wide">這裡只展示招式演出，不會變更隊伍、存檔或戰鬥結果。</p>
+    </section>
+    <section class="panel" aria-label="招式展示">
+      <div class="stage-header"><div><h2 id="moveTitle">橡膠手槍</h2><p id="ownerTitle">蒙其·D·魯夫</p></div><span class="tag" id="type">攻擊</span></div>
+      <div class="scene" id="stage"><img class="backdrop" src="images/board/battle/battle_bg_demo.png" alt=""><div class="fighter left" id="playerTarget"><img id="playerPortrait" alt="" hidden><span>我方</span></div><div class="fighter right" id="enemyTarget"><img id="enemyPortrait" alt="" hidden><span>敵方</span></div></div>
+      <p id="status" class="status" role="status" aria-live="polite">選好招式後，按「播放招式」。</p>
+      <div class="frames-heading"><h3>逐格欣賞</h3><small id="frameLabel">第 1 格</small></div>
+      <canvas id="frames" class="frames" width="1024" height="128" aria-label="招式完整動作"></canvas>
+      <div class="scrub"><label>移動滑桿查看細節<input id="frame" type="range" min="0" max="7" value="3"></label><canvas id="focusFrame" class="frame-focus" width="240" height="240" aria-label="所選動作細節"></canvas></div>
+    </section>
+  </main>
+  <footer>可用搜尋快速找到不同進化、裝備與敵方角色的招式。</footer>
+  <script src="js/board_move_fx_catalog.js?v=20260921-gpt-move-fx-v1"></script>
+  <script src="js/board_move_fx.js?v=20260921-gpt-move-fx-v1"></script>
+  <script src="js/board_move_fx_preview_data.js?v=20260921-gpt-move-fx-v1"></script>
+  <script>
+  (() => {
+    const byId = (id) => document.getElementById(id);
+    const source = window.BoardMoveFxPreviewData || [];
+    const rows = source.filter((row, index) => source.findIndex((entry) => entry.moveId === row.moveId && entry.ownerId === row.ownerId && entry.moveName === row.moveName && entry.moveType === row.moveType) === index);
+    const fx = BoardMoveFx.create({stage: byId('stage'), resolveAnchor: (side) => byId(side === 'enemy' ? 'enemyTarget' : 'playerTarget')});
+    const types = {attack:'攻擊',special:'特殊攻擊',combo:'連續攻擊',heal:'恢復',buff:'強化',shield:'防禦',debuff:'弱化',control:'牽制'};
+    let selected = null, filtered = [], sheet = null, profile = null, selectionToken = 0, timers = [], playingAudio = [];
+    function stop() {timers.forEach(clearTimeout);timers=[];playingAudio.forEach((sound) => {sound.pause();sound.currentTime=0});playingAudio=[];fx.clear()}
+    function eventFor(row) {return {id:'preview-'+Date.now(),moveId:row.moveId,moveName:row.moveName,moveType:row.moveType,type:row.damageClass==='status'?(row.moveType==='heal'?'heal':'status'):'attack'}}
+    function sound(src) {if(!byId('sound').checked||!src)return;const audio=new Audio(src);audio.volume=.28;playingAudio.push(audio);audio.play().catch(()=>{byId('status').textContent='音效尚未播放，請再按一次「播放招式」。'})}
+    function drawFrame(context, index, x, y, width, height) {const sw=sheet.naturalWidth/profile.columns,sh=sheet.naturalHeight/profile.rows;const scale=Math.min(width/sw,height/sh);context.drawImage(sheet,(index%profile.columns)*sw,Math.floor(index/profile.columns)*sh,sw,sh,x+(width-sw*scale)/2,y+(height-sh*scale)/2,sw*scale,sh*scale)}
+    function scrub() {const canvas=byId('focusFrame'),context=canvas.getContext('2d');context.clearRect(0,0,canvas.width,canvas.height);if(!sheet||!profile)return;const index=Number(byId('frame').value);drawFrame(context,index,0,0,canvas.width,canvas.height);byId('frameLabel').textContent=`第 ${index+1}／${profile.frames} 格`}
+    async function choose() {
+      stop();selected=filtered[Number(byId('move').value)]||null;const token=++selectionToken;sheet=null;profile=null;
+      const frameCanvas=byId('frames');frameCanvas.getContext('2d').clearRect(0,0,frameCanvas.width,frameCanvas.height);scrub();
+      if(!selected){byId('play').disabled=true;byId('moveTitle').textContent='沒有符合的招式';byId('ownerTitle').textContent='換個關鍵字試試';return}
+      byId('moveTitle').textContent=selected.moveName;byId('ownerTitle').textContent=selected.ownerName;byId('type').textContent=types[selected.moveType]||'招式';byId('status').textContent='招式準備中…';byId('play').disabled=true;
+      const direction=byId('direction').value;['player','enemy'].forEach((side)=>{const img=byId(side+'Portrait');img.hidden=side!==direction||!selected.portrait;if(!img.hidden){img.src=selected.portrait;img.onerror=()=>{img.hidden=true}}});
+      const event=eventFor(selected);profile=fx.resolve(event);const ready=await fx.warm(event);if(token!==selectionToken)return;
+      if(!profile||!ready[0]){byId('status').textContent='這招的圖像正在準備，先試其他招式。';return}
+      const image=new Image();image.onload=()=>{if(token!==selectionToken)return;sheet=image;const context=frameCanvas.getContext('2d');for(let i=0;i<profile.frames;i++)drawFrame(context,i,i*frameCanvas.width/profile.frames,0,frameCanvas.width/profile.frames,frameCanvas.height);byId('frame').max=String(profile.frames-1);byId('frame').value=String(Math.min(3,profile.frames-1));scrub()};image.src=profile.sheet;
+      byId('play').disabled=false;byId('status').textContent='已準備好。按「播放招式」欣賞完整演出。';
+    }
+    function filter() {const text=byId('search').value.trim().toLowerCase(),owner=byId('owner').value;filtered=rows.filter((row)=>(!owner||row.ownerId===owner)&&(!text||`${row.ownerName} ${row.moveName} ${row.moveId}`.toLowerCase().includes(text)));byId('move').replaceChildren(...filtered.map((row,index)=>{const option=document.createElement('option');option.value=index;option.textContent=`${row.moveName} — ${row.ownerName}`;return option}));byId('count').textContent=`找到 ${filtered.length} 個招式版本`;void choose()}
+    const owners=[...new Map(rows.map((row)=>[row.ownerId,row.ownerName])).entries()].sort((a,b)=>a[1].localeCompare(b[1],'zh-Hant'));owners.forEach(([id,name])=>{const option=document.createElement('option');option.value=id;option.textContent=name;byId('owner').appendChild(option)});
+    byId('search').addEventListener('input',filter);byId('owner').addEventListener('change',filter);byId('move').addEventListener('change',choose);byId('direction').addEventListener('change',choose);byId('frame').addEventListener('input',scrub);byId('sound').addEventListener('change',()=>{if(!byId('sound').checked)playingAudio.forEach((audio)=>audio.pause())});
+    byId('play').addEventListener('click',()=>{
+      if(!selected||!profile)return;stop();const event=eventFor(selected),side=byId('direction').value;event.side=side;event.targetSide=event.type==='attack'||['debuff','control'].includes(event.moveType)?(side==='player'?'enemy':'player'):side;event.miss=byId('action').value==='miss'&&event.type==='attack';
+      sound(BoardMoveFx.soundFor(BoardMoveFxCatalog,event,'cast'));const count=byId('action').value==='combo'&&event.type==='attack'?3:1;byId('status').textContent=event.miss?'攻擊落空。':`${selected.ownerName} 施放「${selected.moveName}」`;
+      for(let i=0;i<count;i++){const delay=i*660;timers.push(setTimeout(()=>{const launched=fx.play(event,{phase:'launch',actorSide:side,targetSide:event.targetSide,durationMs:340});timers.push(setTimeout(()=>{fx.play(event,{phase:'impact',actorSide:side,targetSide:event.targetSide,frameStart:launched?profile.launchFrames:undefined});if(!event.miss)sound(BoardMoveFx.soundFor(BoardMoveFxCatalog,event,'hit'))},340))},delay))}
+    });
+    window.addEventListener('pagehide',stop);window.__BOARD_MOVE_FX_PREVIEW__={fx,select(moveId,moveName){byId('search').value=moveId;byId('owner').value='';filter();const index=filtered.findIndex((row)=>row.moveId===moveId&&(!moveName||row.moveName===moveName));if(index>=0){byId('move').value=String(index);return choose()}return Promise.resolve()},selected:()=>selected};filter();
+  })();
+  </script>
+</body>
+</html>

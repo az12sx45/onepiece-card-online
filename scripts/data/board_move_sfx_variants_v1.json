@@ -1,0 +1,316 @@
+[
+  {
+    "id": "variant_00",
+    "sourceMoveId": "prison_buggy_muggy_ball",
+    "name": "特製巴其玉",
+    "characterId": "prison_buggy",
+    "category": "special",
+    "damageClass": "special",
+    "power": 96,
+    "effects": {
+      "bonusOnHighDice": 20
+    },
+    "art": "bomb_burst",
+    "soundFamily": "bomb_burst",
+    "ownerId": "prison_buggy_escape_alliance"
+  },
+  {
+    "id": "variant_01",
+    "sourceMoveId": "prison_mr3_candle_champion",
+    "name": "蠟燭冠軍",
+    "characterId": "prison_mr3",
+    "category": "shield",
+    "damageClass": "status",
+    "power": 0,
+    "effects": {
+      "shieldRatio": 0.5,
+      "selfStages": {
+        "def": 1
+      }
+    },
+    "art": "wax_weapon",
+    "soundFamily": "wax_weapon",
+    "ownerId": "prison_mr3_candle_strategist"
+  },
+  {
+    "id": "variant_02",
+    "sourceMoveId": "prison_crocodile_desert_spada",
+    "name": "Desert Spada",
+    "characterId": "prison_crocodile",
+    "category": "special",
+    "damageClass": "special",
+    "power": 116,
+    "effects": {
+      "enemyStagesOnHit": {
+        "def": -1,
+        "spd": -1
+      },
+      "critRateBonus": 0.1
+    },
+    "art": "sand_blade",
+    "soundFamily": "sand_blade",
+    "ownerId": "prison_crocodile_desert_alliance"
+  },
+  {
+    "id": "variant_03",
+    "sourceMoveId": "prison_crocodile_ground_secco",
+    "name": "地乾",
+    "characterId": "prison_crocodile",
+    "category": "special",
+    "damageClass": "special",
+    "power": 156,
+    "effects": {
+      "strongerVsDebuffed": 0.2
+    },
+    "art": "sand_erosion",
+    "soundFamily": "sand_erosion",
+    "ownerId": "prison_crocodile_desert_alliance"
+  },
+  {
+    "id": "variant_04",
+    "sourceMoveId": "prison_crocodile_desert_la_spada",
+    "name": "新月形沙丘",
+    "characterId": "prison_crocodile",
+    "category": "attack",
+    "damageClass": "special",
+    "power": 124,
+    "effects": {
+      "ignoreDefenseRatio": 0.1,
+      "statusOnSix": {
+        "bleed": 2
+      }
+    },
+    "art": "sand_blade",
+    "soundFamily": "sand_blade",
+    "ownerId": "prison_crocodile_desert_alliance"
+  },
+  {
+    "id": "variant_05",
+    "sourceMoveId": "prison_buggy_split_counter",
+    "name": "四分五裂反擊",
+    "characterId": "buggy",
+    "category": "shield",
+    "damageClass": "status",
+    "power": 0,
+    "effects": {
+      "shieldRatio": 0.35,
+      "reflectRatio": 0.08
+    },
+    "art": "guard_shield",
+    "soundFamily": "guard_shield",
+    "ownerId": "prison_buggy"
+  },
+  {
+    "id": "variant_06",
+    "sourceMoveId": "prison_mr3_candle_service_set",
+    "name": "蠟燭服務套餐",
+    "characterId": "mr3",
+    "category": "special",
+    "damageClass": "physical",
+    "power": 104,
+    "effects": {
+      "enemyStagesOnHit": {
+        "def": -1
+      },
+      "shieldRatioBeforeAttack": 0.25
+    },
+    "art": "wax_cage",
+    "soundFamily": "wax_cage",
+    "ownerId": "prison_mr3"
+  },
+  {
+    "id": "variant_07",
+    "sourceMoveId": "prison_mr2_bon_clay_late_step",
+    "name": "人妖拳法踢擊",
+    "characterId": "mr2_bon_clay",
+    "category": "buff",
+    "damageClass": "status",
+    "power": 0,
+    "effects": {
+      "selfStages": {
+        "spd": 2,
+        "evasion": 1
+      }
+    },
+    "art": "power_aura",
+    "soundFamily": "power_aura",
+    "ownerId": "prison_mr2_bon_clay"
+  },
+  {
+    "id": "variant_08",
+    "sourceMoveId": "prison_mr1_spiral_hollow",
+    "name": "滅裂斬",
+    "characterId": "mr1_daz_bones",
+    "category": "special",
+    "damageClass": "special",
+    "power": 118,
+    "effects": {
+      "ignoreDefenseRatio": 0.15
+    },
+    "art": "blade_barrage",
+    "soundFamily": "blade_barrage",
+    "ownerId": "prison_mr1_daz_bones"
+  },
+  {
+    "id": "variant_09",
+    "sourceMoveId": "postgame_shiki_slash_wave",
+    "name": "斬波",
+    "characterId": "postgameShikiEnterFinalDuel",
+    "category": "attack",
+    "damageClass": "special",
+    "power": 250,
+    "effects": {
+      "priority": 1
+    },
+    "art": "wind_blade",
+    "soundFamily": "wind_blade",
+    "ownerId": "postgameShikiEnterFinalDuel"
+  },
+  {
+    "id": "variant_10",
+    "sourceMoveId": "postgame_shiki_lion_ground_scroll",
+    "name": "獅子威・地卷",
+    "characterId": "postgameShikiEnterFinalDuel",
+    "category": "special",
+    "damageClass": "physical",
+    "power": 264,
+    "effects": {
+      "enemyStagesOnHit": {
+        "spd": -1
+      }
+    },
+    "art": "stone_crush",
+    "soundFamily": "stone_crush",
+    "ownerId": "postgameShikiEnterFinalDuel"
+  },
+  {
+    "id": "variant_11",
+    "sourceMoveId": "postgame_shiki_lion_thousand_cutting_valley",
+    "name": "獅子・千切谷",
+    "characterId": "postgameShikiEnterFinalDuel",
+    "category": "attack",
+    "damageClass": "special",
+    "power": 292,
+    "effects": {
+      "multiHit": 2
+    },
+    "art": "wind_blade",
+    "soundFamily": "wind_blade",
+    "ownerId": "postgameShikiEnterFinalDuel"
+  },
+  {
+    "id": "variant_12",
+    "sourceMoveId": "sanji_sky_walk",
+    "name": "隱形・消失",
+    "characterId": "sanji_raid_suit",
+    "category": "buff",
+    "damageClass": "status",
+    "power": 0,
+    "effects": {
+      "selfStages": {
+        "spd": 2,
+        "evasion": 2
+      },
+      "guaranteedFirstNextTurn": true,
+      "sanjiRaidSuitStealth": true
+    },
+    "art": "speed_dash",
+    "soundFamily": "speed_dash",
+    "ownerId": "sanji_raid_suit"
+  },
+  {
+    "id": "variant_13",
+    "sourceMoveId": "sanji_bien_cuit_grill_shot",
+    "name": "隱形黑・流星蕎麥麵",
+    "characterId": "sanji_raid_suit",
+    "category": "attack",
+    "damageClass": "physical",
+    "power": 150,
+    "effects": {
+      "strongerIfFaster": 0.25,
+      "statusOnHighDice": {
+        "burn": 2
+      }
+    },
+    "art": "kick_sweep",
+    "soundFamily": "kick_sweep",
+    "ownerId": "sanji_raid_suit"
+  },
+  {
+    "id": "variant_14",
+    "sourceMoveId": "sanji_poele_a_frire_spectrum",
+    "name": "隱形黑・急襲連踢",
+    "characterId": "sanji_raid_suit",
+    "category": "attack",
+    "damageClass": "physical",
+    "power": 64,
+    "effects": {
+      "multiHit": 1,
+      "comboAtkRatio": 0.085,
+      "enemyStagesOnHit": {
+        "def": -1,
+        "spd": -1
+      }
+    },
+    "art": "kick_sweep",
+    "soundFamily": "kick_sweep",
+    "ownerId": "sanji_raid_suit"
+  },
+  {
+    "id": "variant_15",
+    "sourceMoveId": "sanji_hell_memories",
+    "name": "戰鬥服・地獄回憶",
+    "characterId": "sanji_raid_suit",
+    "category": "special",
+    "damageClass": "physical",
+    "power": 180,
+    "effects": {
+      "ignoreDefenseRatio": 0.15,
+      "bossDamageBonus": 0.25,
+      "statusOnHighDice": {
+        "burn": 2
+      }
+    },
+    "art": "fire_kick",
+    "soundFamily": "fire_kick",
+    "ownerId": "sanji_raid_suit"
+  },
+  {
+    "id": "variant_16",
+    "sourceMoveId": "sanji_blue_walk",
+    "name": "隱形黑・空中加速",
+    "characterId": "sanji_raid_suit",
+    "category": "buff",
+    "damageClass": "status",
+    "power": 0,
+    "effects": {
+      "selfStages": {
+        "spd": 3,
+        "atk": 1
+      },
+      "cleanseSelfStatDown": [
+        "spd"
+      ],
+      "sanjiRaidSuitStealth": true
+    },
+    "art": "speed_dash",
+    "soundFamily": "speed_dash",
+    "ownerId": "sanji_raid_suit"
+  },
+  {
+    "id": "variant_17",
+    "sourceMoveId": "sanji_mouton_shot_nw",
+    "name": "隱形黑・魔神風腳",
+    "characterId": "sanji_raid_suit",
+    "category": "special",
+    "damageClass": "physical",
+    "power": 196,
+    "effects": {
+      "strongerIfFaster": 0.3,
+      "pierceShieldOnHighDice": true
+    },
+    "art": "blue_fire_kick",
+    "soundFamily": "blue_fire_kick",
+    "ownerId": "sanji_raid_suit"
+  }
+]

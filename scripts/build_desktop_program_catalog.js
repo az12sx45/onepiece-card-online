@@ -209,6 +209,48 @@ async function writeAtomicJson(outputPath, value, { immutable = false } = {}) {
   return bytes;
 }
 
+function assertMediaRetained(gameId, currentManifest, rebuiltPaths) {
+  const mediaKinds = new Set(['image', 'audio', 'video', 'font']);
+  const missing = currentManifest.assets.filter((asset) => mediaKinds.has(asset.kind) && !rebuiltPaths.has(asset.path));
+  if (missing.length) {
+    fail(
+      `Refusing legacy-v2 rebuild: ${gameId} would lose ${missing.length} existing v3 media files ` +
+      `(first: ${missing[0].path}). No metadata was written. ` +
+      'Preserve the current v3 media through a scoped release; for Board move FX use scripts/promote_board_move_fx_release.js.'
+    );
+  }
+}
+
+async function verifyExistingMediaRetained(config, legacyCatalog, publicRoot = PUBLIC_ROOT) {
+  let currentCatalog;
+  try {
+    const current = await readCanonicalJson(path.join(publicRoot, 'desktop', 'catalog-v3.json'), 'Current catalog-v3');
+    currentCatalog = validateCatalog(current.value);
+  } catch (error) {
+    if (error.code === 'ENOENT') return; // The initial v3 build has no existing package to preserve.
+    throw error;
+  }
+  // Check every game before main can write even the first immutable manifest.
+  for (const gameId of GAME_IDS) {
+    const currentRecord = currentCatalog.games[gameId];
+    const current = await readCanonicalJson(path.join(publicRoot, ...currentRecord.manifestPath.split('/')), `Current ${gameId} manifest`);
+    if (sha256Bytes(current.bytes) !== currentRecord.manifestSha256) fail(`Current ${gameId} manifest digest differs from catalog-v3.`);
+    const currentManifest = validateManifest(current.value, gameId);
+    for (const field of ['releaseId', 'entryPath', 'totalFiles', 'totalBytes']) {
+      if (currentManifest[field] !== currentRecord[field]) fail(`Current ${gameId} manifest ${field} differs from catalog-v3.`);
+    }
+    const legacyRecord = legacyCatalog.games[gameId];
+    const legacy = await readCanonicalJson(path.join(publicRoot, ...legacyRecord.manifestPath.split('/')), `Legacy ${gameId} manifest`);
+    const legacyDigest = sha256Bytes(legacy.bytes);
+    if (legacyDigest !== config.legacyBaseline.manifestSha256ByGame[gameId] || legacyDigest !== legacyRecord.manifestSha256) {
+      fail(`Legacy ${gameId} manifest bytes changed; refusing compatibility release.`);
+    }
+    const legacyAssets = validateLegacyManifest(legacy.value, gameId, legacyRecord);
+    const rebuiltPaths = new Set([...legacyAssets.map((asset) => asset.path), ...config.games[gameId].programFiles]);
+    assertMediaRetained(gameId, currentManifest, rebuiltPaths);
+  }
+}
+
 async function main() {
   const { value: configValue } = await readCanonicalJson(CONFIG_PATH, 'Desktop program package config', 256 * 1024);
   const config = validateConfig(configValue);
@@ -218,6 +260,7 @@ async function main() {
     fail('Legacy catalog-v2 bytes changed; refusing to generate a mixed compatibility release.');
   }
   const legacyCatalog = validateLegacyCatalog(legacyCatalogValue);
+  await verifyExistingMediaRetained(config, legacyCatalog);
   const buildCreatedAt = new Date().toISOString();
   const built = Object.create(null);
   const catalogGames = Object.create(null);
@@ -300,5 +343,7 @@ module.exports = {
   validateLegacyManifest,
   programRecordsFromHead,
   buildManifest,
+  assertMediaRetained,
+  verifyExistingMediaRetained,
   main
 };

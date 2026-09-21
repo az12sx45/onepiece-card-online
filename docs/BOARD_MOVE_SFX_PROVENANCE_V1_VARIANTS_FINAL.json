@@ -1,0 +1,1494 @@
+{
+  "generator": "build_board_move_sfx.py v1",
+  "sourceRoot": "D:\\Codex_Release_Worktrees\\board-voyage-records-v1\\public",
+  "sourceAuthor": "Taira Komori / 小森平",
+  "sourceTerms": "https://taira-komori.net/freesounden.html",
+  "rightsNote": "Derived audio is for incorporation into this game; do not present it as an independent reusable sound-effects library or claim the source sounds as original recordings.",
+  "sampleRate": 44100,
+  "channels": 1,
+  "moves": [
+    {
+      "id": "variant_00",
+      "name": "特製巴其玉",
+      "classification": {
+        "role": "attack",
+        "kind": "explosion",
+        "physical": "cannon",
+        "power": 96.0,
+        "heavy": true,
+        "multi": false,
+        "family": "bomb_burst"
+      },
+      "cast": "bomb_burst__ec1999edd5__cast.ogg",
+      "hit": "bomb_burst__d574187c90__hit.ogg"
+    },
+    {
+      "id": "variant_01",
+      "name": "蠟燭冠軍",
+      "classification": {
+        "role": "support",
+        "kind": "shield",
+        "physical": null,
+        "power": 0.0,
+        "heavy": false,
+        "multi": false,
+        "family": "wax_weapon"
+      },
+      "cast": "wax_weapon__d812c548e4__cast.ogg",
+      "hit": null
+    },
+    {
+      "id": "variant_02",
+      "name": "Desert Spada",
+      "classification": {
+        "role": "attack",
+        "kind": "sand",
+        "physical": "slash",
+        "power": 116.0,
+        "heavy": true,
+        "multi": false,
+        "family": "sand_blade"
+      },
+      "cast": "sand_blade__a3d704a6dc__cast.ogg",
+      "hit": "sand_blade__22d255d110__hit.ogg"
+    },
+    {
+      "id": "variant_03",
+      "name": "地乾",
+      "classification": {
+        "role": "attack",
+        "kind": "sand",
+        "physical": "punch",
+        "power": 156.0,
+        "heavy": true,
+        "multi": false,
+        "family": "sand_erosion"
+      },
+      "cast": "sand_erosion__2f5ff0f960__cast.ogg",
+      "hit": "sand_erosion__f2a4a8d692__hit.ogg"
+    },
+    {
+      "id": "variant_04",
+      "name": "新月形沙丘",
+      "classification": {
+        "role": "attack",
+        "kind": "sand",
+        "physical": "slash",
+        "power": 124.0,
+        "heavy": true,
+        "multi": false,
+        "family": "sand_blade"
+      },
+      "cast": "sand_blade__a3d704a6dc__cast.ogg",
+      "hit": "sand_blade__22d255d110__hit.ogg"
+    },
+    {
+      "id": "variant_05",
+      "name": "四分五裂反擊",
+      "classification": {
+        "role": "support",
+        "kind": "shield",
+        "physical": null,
+        "power": 0.0,
+        "heavy": false,
+        "multi": false,
+        "family": "guard_shield"
+      },
+      "cast": "guard_shield__17a10c83d2__cast.ogg",
+      "hit": null
+    },
+    {
+      "id": "variant_06",
+      "name": "蠟燭服務套餐",
+      "classification": {
+        "role": "attack",
+        "kind": "wax",
+        "physical": "pierce",
+        "power": 104.0,
+        "heavy": true,
+        "multi": false,
+        "family": "wax_cage"
+      },
+      "cast": "wax_cage__63fcfb46e6__cast.ogg",
+      "hit": "wax_cage__9858891063__hit.ogg"
+    },
+    {
+      "id": "variant_07",
+      "name": "人妖拳法踢擊",
+      "classification": {
+        "role": "support",
+        "kind": "buff",
+        "physical": null,
+        "power": 0.0,
+        "heavy": false,
+        "multi": false,
+        "family": "power_aura"
+      },
+      "cast": "power_aura__69cbfb4d48__cast.ogg",
+      "hit": null
+    },
+    {
+      "id": "variant_08",
+      "name": "滅裂斬",
+      "classification": {
+        "role": "attack",
+        "kind": "slash",
+        "physical": "slash",
+        "power": 118.0,
+        "heavy": true,
+        "multi": true,
+        "family": "blade_barrage"
+      },
+      "cast": "blade_barrage__929fbdffcd__cast.ogg",
+      "hit": "blade_barrage__add1979952__hit.ogg"
+    },
+    {
+      "id": "variant_09",
+      "name": "斬波",
+      "classification": {
+        "role": "attack",
+        "kind": "wind",
+        "physical": "slash",
+        "power": 250.0,
+        "heavy": true,
+        "multi": false,
+        "family": "wind_blade"
+      },
+      "cast": "wind_blade__a83a024832__cast.ogg",
+      "hit": "wind_blade__31e38b79fd__hit.ogg"
+    },
+    {
+      "id": "variant_10",
+      "name": "獅子威・地卷",
+      "classification": {
+        "role": "attack",
+        "kind": "stone",
+        "physical": "metal",
+        "power": 264.0,
+        "heavy": true,
+        "multi": false,
+        "family": "stone_crush"
+      },
+      "cast": "stone_crush__0aad77d96c__cast.ogg",
+      "hit": "stone_crush__a8f672ee45__hit.ogg"
+    },
+    {
+      "id": "variant_11",
+      "name": "獅子・千切谷",
+      "classification": {
+        "role": "attack",
+        "kind": "wind",
+        "physical": "slash",
+        "power": 292.0,
+        "heavy": true,
+        "multi": true,
+        "family": "wind_blade"
+      },
+      "cast": "wind_blade__a83a024832__cast.ogg",
+      "hit": "wind_blade__297f643370__hit.ogg"
+    },
+    {
+      "id": "variant_12",
+      "name": "隱形・消失",
+      "classification": {
+        "role": "support",
+        "kind": "speed",
+        "physical": null,
+        "power": 0.0,
+        "heavy": false,
+        "multi": false,
+        "family": "speed_dash"
+      },
+      "cast": "speed_dash__7446f55ceb__cast.ogg",
+      "hit": null
+    },
+    {
+      "id": "variant_13",
+      "name": "隱形黑・流星蕎麥麵",
+      "classification": {
+        "role": "attack",
+        "kind": "kick",
+        "physical": "kick",
+        "power": 150.0,
+        "heavy": true,
+        "multi": false,
+        "family": "kick_sweep"
+      },
+      "cast": "kick_sweep__36f2a5172e__cast.ogg",
+      "hit": "kick_sweep__2c84afcc09__hit.ogg"
+    },
+    {
+      "id": "variant_14",
+      "name": "隱形黑・急襲連踢",
+      "classification": {
+        "role": "attack",
+        "kind": "kick",
+        "physical": "kick",
+        "power": 64.0,
+        "heavy": false,
+        "multi": true,
+        "family": "kick_sweep"
+      },
+      "cast": "kick_sweep__8d02d910c5__cast.ogg",
+      "hit": "kick_sweep__e27b606488__hit.ogg"
+    },
+    {
+      "id": "variant_15",
+      "name": "戰鬥服・地獄回憶",
+      "classification": {
+        "role": "attack",
+        "kind": "fire",
+        "physical": "kick",
+        "power": 180.0,
+        "heavy": true,
+        "multi": false,
+        "family": "fire_kick"
+      },
+      "cast": "fire_kick__8b46583e9f__cast.ogg",
+      "hit": "fire_kick__87503620f9__hit.ogg"
+    },
+    {
+      "id": "variant_16",
+      "name": "隱形黑・空中加速",
+      "classification": {
+        "role": "support",
+        "kind": "speed",
+        "physical": null,
+        "power": 0.0,
+        "heavy": false,
+        "multi": false,
+        "family": "speed_dash"
+      },
+      "cast": "speed_dash__7446f55ceb__cast.ogg",
+      "hit": null
+    },
+    {
+      "id": "variant_17",
+      "name": "隱形黑・魔神風腳",
+      "classification": {
+        "role": "attack",
+        "kind": "bluefire",
+        "physical": "kick",
+        "power": 196.0,
+        "heavy": true,
+        "multi": false,
+        "family": "blue_fire_kick"
+      },
+      "cast": "blue_fire_kick__c7b235b7fe__cast.ogg",
+      "hit": "blue_fire_kick__f823eea787__hit.ogg"
+    }
+  ],
+  "files": {
+    "bomb_burst__ec1999edd5__cast.ogg": {
+      "file": "bomb_burst__ec1999edd5__cast.ogg",
+      "sha256": "783d649eebe52287f44a680caafd560393bb85a86ab19b364bd11e6212c4af8c",
+      "bytes": 7583,
+      "duration": 0.4078,
+      "peakDbfs": -2.301,
+      "rmsDbfs": -13.654,
+      "clippedSamples": 0,
+      "sources": [
+        {
+          "source": "audio/board_game/sfx/arms01/arms01/launcher1.mp3",
+          "duration": 0.36,
+          "gain": 0.78,
+          "delay": 0,
+          "pitch": 0.92,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "c1a81692c7f8ec26473d1d51dbb6d1998369c68183b01fcbcc04e0acaa2f1cb1",
+          "sourceDuration": 1.305329,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "arms01/launcher1",
+          "selectedStart": 0.047143,
+          "selectedDuration": 0.359977
+        },
+        {
+          "source": "audio/board_game/sfx/arms01/arms01/small_explosion3.mp3",
+          "duration": 0.33,
+          "gain": 0.24,
+          "delay": 0,
+          "pitch": 1.1,
+          "selection": "peak",
+          "reverse": true,
+          "sourceSha256": "cf0a41257afc806e2baab8ea3c2727d3c6b997824fe869f848a720f3111a8e9c",
+          "sourceDuration": 5.002018,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "arms01/small_explosion3",
+          "selectedStart": 0.037982,
+          "selectedDuration": 0.329977
+        }
+      ]
+    },
+    "bomb_burst__d574187c90__hit.ogg": {
+      "file": "bomb_burst__d574187c90__hit.ogg",
+      "sha256": "df33cc82e3a78927899bf61a8dea757028a888d89fd52283e7bbcd705a6425fc",
+      "bytes": 11558,
+      "duration": 0.962063,
+      "peakDbfs": -2.132,
+      "rmsDbfs": -13.554,
+      "clippedSamples": 0,
+      "sources": [
+        {
+          "source": "audio/board_game/sfx/arms01/arms01/small_explosion2.mp3",
+          "duration": 0.6,
+          "gain": 0.9,
+          "delay": 0,
+          "pitch": 0.92,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "df75c58f004e2dbafe4bcc881658dabe8d0c729fa9915296c3010ccaa3b1b494",
+          "sourceDuration": 3,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "arms01/small_explosion2",
+          "selectedStart": 0.009478,
+          "selectedDuration": 0.599977
+        },
+        {
+          "source": "audio/board_game/sfx/arms01/arms01/small_explosion3.mp3",
+          "duration": 0.92,
+          "gain": 0.8,
+          "delay": 0.02,
+          "pitch": 0.9,
+          "selection": "peak",
+          "reverse": false,
+          "sourceSha256": "cf0a41257afc806e2baab8ea3c2727d3c6b997824fe869f848a720f3111a8e9c",
+          "sourceDuration": 5.002018,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "arms01/small_explosion3",
+          "selectedStart": 0.037982,
+          "selectedDuration": 0.919977
+        }
+      ]
+    },
+    "wax_weapon__d812c548e4__cast.ogg": {
+      "file": "wax_weapon__d812c548e4__cast.ogg",
+      "sha256": "ce36572729fb6c4a5cdb29ae62fbaf82f3480146e43711304211255ee8e34dd1",
+      "bytes": 9931,
+      "duration": 0.846077,
+      "peakDbfs": -1.283,
+      "rmsDbfs": -17.672,
+      "clippedSamples": 0,
+      "sources": [
+        {
+          "source": "audio/board_game/sfx/magic01/magic01/reflection.mp3",
+          "duration": 0.62,
+          "gain": 0.8,
+          "delay": 0,
+          "pitch": 1,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "704ebf879801694915e7ad562abb9be648a6d8d808a54dc07a5496f8930208d4",
+          "sourceDuration": 1.07102,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "magic01/reflection",
+          "selectedStart": 0.021066,
+          "selectedDuration": 0.62
+        },
+        {
+          "source": "audio/board_game/sfx/magic01/magic01/sword1.mp3",
+          "duration": 0.7,
+          "gain": 0.28,
+          "delay": 0.1,
+          "pitch": 1,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "351fca36a5f9e4e6129a20510d3c5a4d4aa03e40990b90d79fc25f1fd354238c",
+          "sourceDuration": 2.28,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "magic01/sword1",
+          "selectedStart": 0.033583,
+          "selectedDuration": 0.699977
+        }
+      ]
+    },
+    "sand_blade__a3d704a6dc__cast.ogg": {
+      "file": "sand_blade__a3d704a6dc__cast.ogg",
+      "sha256": "f9f3ff3d4890737936fc70bfa4cad9326e6a119ebd7e5b2d3629b2a8833f04b9",
+      "bytes": 7941,
+      "duration": 0.382063,
+      "peakDbfs": -2.69,
+      "rmsDbfs": -15.356,
+      "clippedSamples": 0,
+      "sources": [
+        {
+          "source": "audio/board_game/sfx/jidaigeki01/jidaigeki01/extract_sword1.mp3",
+          "duration": 0.36,
+          "gain": 0.78,
+          "delay": 0,
+          "pitch": 0.92,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "9a43b64d0c4ee613e8bcb50478b4a0d28d9c1ffbc8e393877879b6ccc1cea80e",
+          "sourceDuration": 1.032018,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "jidaigeki01/extract_sword1",
+          "selectedStart": 0.032222,
+          "selectedDuration": 0.359977
+        },
+        {
+          "source": "audio/board_game/sfx/horror01/horror01/horror_wind.mp3",
+          "duration": 0.33,
+          "gain": 0.24,
+          "delay": 0,
+          "pitch": 1.1,
+          "selection": "peak",
+          "reverse": true,
+          "sourceSha256": "55cbc9f8e62c157b05a5052bc3862a4b1944ee3217bd9a01e6bef56f0ed5eb99",
+          "sourceDuration": 8.76,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "horror01/horror_wind",
+          "selectedStart": 3.916667,
+          "selectedDuration": 0.329977
+        }
+      ]
+    },
+    "sand_blade__22d255d110__hit.ogg": {
+      "file": "sand_blade__22d255d110__hit.ogg",
+      "sha256": "3fede88dadda937fb64d59a816a23be1392f549b5553285ea862b099ee5f2158",
+      "bytes": 11879,
+      "duration": 0.902063,
+      "peakDbfs": -2.259,
+      "rmsDbfs": -16.659,
+      "clippedSamples": 0,
+      "sources": [
+        {
+          "source": "audio/board_game/sfx/jidaigeki01/jidaigeki01/cut_with_sword3.mp3",
+          "duration": 0.6,
+          "gain": 0.9,
+          "delay": 0,
+          "pitch": 0.92,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "742756b7b10166ad2d7fd7b284020c110e04956d1a4339a153f2283a3c2d88c4",
+          "sourceDuration": 1.080204,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "jidaigeki01/cut_with_sword3",
+          "selectedStart": 0.030045,
+          "selectedDuration": 0.599977
+        },
+        {
+          "source": "audio/board_game/sfx/horror01/horror01/horror_wind.mp3",
+          "duration": 0.88,
+          "gain": 0.5,
+          "delay": 0,
+          "pitch": 1.2,
+          "selection": "peak",
+          "reverse": false,
+          "sourceSha256": "55cbc9f8e62c157b05a5052bc3862a4b1944ee3217bd9a01e6bef56f0ed5eb99",
+          "sourceDuration": 8.76,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "horror01/horror_wind",
+          "selectedStart": 3.916667,
+          "selectedDuration": 0.879977
+        }
+      ]
+    },
+    "sand_erosion__2f5ff0f960__cast.ogg": {
+      "file": "sand_erosion__2f5ff0f960__cast.ogg",
+      "sha256": "4d78d3012f392eb6e425b7c2ac64ef84a8a6401adf9147e9db44e55f4d156668",
+      "bytes": 6998,
+      "duration": 0.4078,
+      "peakDbfs": -2.131,
+      "rmsDbfs": -18.364,
+      "clippedSamples": 0,
+      "sources": [
+        {
+          "source": "audio/board_game/sfx/attack01/attack01/swish1_2.mp3",
+          "duration": 0.36,
+          "gain": 0.78,
+          "delay": 0,
+          "pitch": 0.92,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "aab9da69b69e3e72ab26190bc0c2772d9f0ff98848824203e7884674214b7b34",
+          "sourceDuration": 0.360544,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "attack01/swish1_2",
+          "selectedStart": 0.006349,
+          "selectedDuration": 0.359977
+        },
+        {
+          "source": "audio/board_game/sfx/horror01/horror01/horror_wind.mp3",
+          "duration": 0.33,
+          "gain": 0.24,
+          "delay": 0,
+          "pitch": 1.1,
+          "selection": "peak",
+          "reverse": true,
+          "sourceSha256": "55cbc9f8e62c157b05a5052bc3862a4b1944ee3217bd9a01e6bef56f0ed5eb99",
+          "sourceDuration": 8.76,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "horror01/horror_wind",
+          "selectedStart": 3.916667,
+          "selectedDuration": 0.329977
+        }
+      ]
+    },
+    "sand_erosion__f2a4a8d692__hit.ogg": {
+      "file": "sand_erosion__f2a4a8d692__hit.ogg",
+      "sha256": "d8ca458657d064872efeab97f994bbc01a52be23c664730713cae799ac5e3480",
+      "bytes": 11437,
+      "duration": 0.902063,
+      "peakDbfs": -1.801,
+      "rmsDbfs": -13.278,
+      "clippedSamples": 0,
+      "sources": [
+        {
+          "source": "audio/board_game/sfx/horror01/horror01/horror_wind.mp3",
+          "duration": 0.88,
+          "gain": 0.5,
+          "delay": 0,
+          "pitch": 1.2,
+          "selection": "peak",
+          "reverse": false,
+          "sourceSha256": "55cbc9f8e62c157b05a5052bc3862a4b1944ee3217bd9a01e6bef56f0ed5eb99",
+          "sourceDuration": 8.76,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "horror01/horror_wind",
+          "selectedStart": 3.916667,
+          "selectedDuration": 0.879977
+        }
+      ]
+    },
+    "guard_shield__17a10c83d2__cast.ogg": {
+      "file": "guard_shield__17a10c83d2__cast.ogg",
+      "sha256": "34e2dae0fc5a1c2b39f2d2521fa4c0c3f175de3fb0608226754c40fcebea04b4",
+      "bytes": 9931,
+      "duration": 0.846077,
+      "peakDbfs": -1.283,
+      "rmsDbfs": -17.672,
+      "clippedSamples": 0,
+      "sources": [
+        {
+          "source": "audio/board_game/sfx/magic01/magic01/reflection.mp3",
+          "duration": 0.62,
+          "gain": 0.8,
+          "delay": 0,
+          "pitch": 1,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "704ebf879801694915e7ad562abb9be648a6d8d808a54dc07a5496f8930208d4",
+          "sourceDuration": 1.07102,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "magic01/reflection",
+          "selectedStart": 0.021066,
+          "selectedDuration": 0.62
+        },
+        {
+          "source": "audio/board_game/sfx/magic01/magic01/sword1.mp3",
+          "duration": 0.7,
+          "gain": 0.28,
+          "delay": 0.1,
+          "pitch": 1,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "351fca36a5f9e4e6129a20510d3c5a4d4aa03e40990b90d79fc25f1fd354238c",
+          "sourceDuration": 2.28,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "magic01/sword1",
+          "selectedStart": 0.033583,
+          "selectedDuration": 0.699977
+        }
+      ]
+    },
+    "wax_cage__63fcfb46e6__cast.ogg": {
+      "file": "wax_cage__63fcfb46e6__cast.ogg",
+      "sha256": "89e13e4100879ab3ca2779c0f9bdf4188f8adc2923b7d7aa0a64db5acaca2d85",
+      "bytes": 6962,
+      "duration": 0.382063,
+      "peakDbfs": -1.334,
+      "rmsDbfs": -17.531,
+      "clippedSamples": 0,
+      "sources": [
+        {
+          "source": "audio/board_game/sfx/attack01/attack01/swish1_3.mp3",
+          "duration": 0.36,
+          "gain": 0.78,
+          "delay": 0,
+          "pitch": 0.92,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "8750ef099600dc1fd83566a1f45ace63a2afbe8a9813ea096c1ebc949fd1984e",
+          "sourceDuration": 0.401338,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "attack01/swish1_3",
+          "selectedStart": 0.006395,
+          "selectedDuration": 0.359977
+        },
+        {
+          "source": "audio/board_game/sfx/magic01/magic01/bubble_attack1.mp3",
+          "duration": 0.33,
+          "gain": 0.24,
+          "delay": 0,
+          "pitch": 1.1,
+          "selection": "peak",
+          "reverse": true,
+          "sourceSha256": "c48ff43f447b7b5502b7387552943d99bc0542b63ba615ef55bc896e4808bb19",
+          "sourceDuration": 1.985941,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "magic01/bubble_attack1",
+          "selectedStart": 0.006735,
+          "selectedDuration": 0.329977
+        }
+      ]
+    },
+    "wax_cage__9858891063__hit.ogg": {
+      "file": "wax_cage__9858891063__hit.ogg",
+      "sha256": "a17e68a7b00b8afccf4b4720ad3a399a8e0abb03afab203857acf3aab409a254",
+      "bytes": 8356,
+      "duration": 0.662063,
+      "peakDbfs": -2.297,
+      "rmsDbfs": -21.818,
+      "clippedSamples": 0,
+      "sources": [
+        {
+          "source": "audio/board_game/sfx/jidaigeki01/jidaigeki01/stab_lightly.mp3",
+          "duration": 0.6,
+          "gain": 0.9,
+          "delay": 0,
+          "pitch": 0.92,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "0346bc8dcd04da8153f93ef281fbab2de790f1bc23e74ea48e9c64795e1b2e95",
+          "sourceDuration": 0.153673,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "jidaigeki01/stab_lightly",
+          "selectedStart": 0,
+          "selectedDuration": 0.167029
+        },
+        {
+          "source": "audio/board_game/sfx/magic01/magic01/bubble_attack1.mp3",
+          "duration": 0.64,
+          "gain": 0.36,
+          "delay": 0,
+          "pitch": 0.67,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "c48ff43f447b7b5502b7387552943d99bc0542b63ba615ef55bc896e4808bb19",
+          "sourceDuration": 1.985941,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "magic01/bubble_attack1",
+          "selectedStart": 0.006735,
+          "selectedDuration": 0.639977
+        }
+      ]
+    },
+    "power_aura__69cbfb4d48__cast.ogg": {
+      "file": "power_aura__69cbfb4d48__cast.ogg",
+      "sha256": "ac8456537ecaaa9b49d80eb8149ddfb47006e737e99e48470b1ca72e8d31f802",
+      "bytes": 13780,
+      "duration": 0.872086,
+      "peakDbfs": -1.822,
+      "rmsDbfs": -16.267,
+      "clippedSamples": 0,
+      "sources": [
+        {
+          "source": "audio/board_game/sfx/magic01/magic01/magic_waves1.mp3",
+          "duration": 0.85,
+          "gain": 0.6,
+          "delay": 0,
+          "pitch": 1,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "c227936780b03665aba584b19781a005bcd6530b2513f2c51c9c9e22f2ed75de",
+          "sourceDuration": 1.711338,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "magic01/magic_waves1",
+          "selectedStart": 0.016259,
+          "selectedDuration": 0.85
+        },
+        {
+          "source": "audio/board_game/sfx/magic01/magic01/reflection.mp3",
+          "duration": 0.6,
+          "gain": 0.25,
+          "delay": 0.2,
+          "pitch": 1.15,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "704ebf879801694915e7ad562abb9be648a6d8d808a54dc07a5496f8930208d4",
+          "sourceDuration": 1.07102,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "magic01/reflection",
+          "selectedStart": 0.021066,
+          "selectedDuration": 0.599977
+        }
+      ]
+    },
+    "blade_barrage__929fbdffcd__cast.ogg": {
+      "file": "blade_barrage__929fbdffcd__cast.ogg",
+      "sha256": "73e0a26b06379fbc397d7501457b6490e01c0581bd5e180fc923d92b7c8bde55",
+      "bytes": 7959,
+      "duration": 0.382063,
+      "peakDbfs": -2.222,
+      "rmsDbfs": -15.945,
+      "clippedSamples": 0,
+      "sources": [
+        {
+          "source": "audio/board_game/sfx/jidaigeki01/jidaigeki01/extract_sword1.mp3",
+          "duration": 0.36,
+          "gain": 0.78,
+          "delay": 0,
+          "pitch": 0.92,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "9a43b64d0c4ee613e8bcb50478b4a0d28d9c1ffbc8e393877879b6ccc1cea80e",
+          "sourceDuration": 1.032018,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "jidaigeki01/extract_sword1",
+          "selectedStart": 0.032222,
+          "selectedDuration": 0.359977
+        }
+      ]
+    },
+    "blade_barrage__add1979952__hit.ogg": {
+      "file": "blade_barrage__add1979952__hit.ogg",
+      "sha256": "6f6764c81184db15ecd01a6b89da3ce1a35b6da8965e66fde6d5bb7176326083",
+      "bytes": 8305,
+      "duration": 0.532608,
+      "peakDbfs": -1.343,
+      "rmsDbfs": -14.784,
+      "clippedSamples": 0,
+      "sources": [
+        {
+          "source": "audio/board_game/sfx/jidaigeki01/jidaigeki01/cut_with_sword3.mp3",
+          "duration": 0.26,
+          "gain": 0.72,
+          "delay": 0,
+          "pitch": 0.92,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "742756b7b10166ad2d7fd7b284020c110e04956d1a4339a153f2283a3c2d88c4",
+          "sourceDuration": 1.080204,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "jidaigeki01/cut_with_sword3",
+          "selectedStart": 0.030045,
+          "selectedDuration": 0.259977
+        },
+        {
+          "source": "audio/board_game/sfx/jidaigeki01/jidaigeki01/cut_with_sword3.mp3",
+          "duration": 0.26,
+          "gain": 0.72,
+          "delay": 0.105,
+          "pitch": 0.9550000000000001,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "742756b7b10166ad2d7fd7b284020c110e04956d1a4339a153f2283a3c2d88c4",
+          "sourceDuration": 1.080204,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "jidaigeki01/cut_with_sword3",
+          "selectedStart": 0.030045,
+          "selectedDuration": 0.259977
+        },
+        {
+          "source": "audio/board_game/sfx/jidaigeki01/jidaigeki01/cut_with_sword3.mp3",
+          "duration": 0.26,
+          "gain": 0.72,
+          "delay": 0.225,
+          "pitch": 0.99,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "742756b7b10166ad2d7fd7b284020c110e04956d1a4339a153f2283a3c2d88c4",
+          "sourceDuration": 1.080204,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "jidaigeki01/cut_with_sword3",
+          "selectedStart": 0.030045,
+          "selectedDuration": 0.259977
+        }
+      ]
+    },
+    "wind_blade__a83a024832__cast.ogg": {
+      "file": "wind_blade__a83a024832__cast.ogg",
+      "sha256": "94593f9f6172946636c79ffcc7e5d0ae431d366d85436c7c9c58c648c6e79d8e",
+      "bytes": 7873,
+      "duration": 0.382063,
+      "peakDbfs": -2.441,
+      "rmsDbfs": -14.694,
+      "clippedSamples": 0,
+      "sources": [
+        {
+          "source": "audio/board_game/sfx/jidaigeki01/jidaigeki01/extract_sword1.mp3",
+          "duration": 0.36,
+          "gain": 0.78,
+          "delay": 0,
+          "pitch": 0.92,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "9a43b64d0c4ee613e8bcb50478b4a0d28d9c1ffbc8e393877879b6ccc1cea80e",
+          "sourceDuration": 1.032018,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "jidaigeki01/extract_sword1",
+          "selectedStart": 0.032222,
+          "selectedDuration": 0.359977
+        },
+        {
+          "source": "audio/board_game/sfx/attack01/attack01/kungfu_wind4.mp3",
+          "duration": 0.33,
+          "gain": 0.24,
+          "delay": 0,
+          "pitch": 1.1,
+          "selection": "peak",
+          "reverse": true,
+          "sourceSha256": "08fa0860fa1bec9ddf2d6f01b77de5c9a008042f67dc1ce304db736e3a0c60aa",
+          "sourceDuration": 0.764649,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "attack01/kungfu_wind4",
+          "selectedStart": 0.137415,
+          "selectedDuration": 0.329977
+        }
+      ]
+    },
+    "wind_blade__31e38b79fd__hit.ogg": {
+      "file": "wind_blade__31e38b79fd__hit.ogg",
+      "sha256": "ddc80b1e4b6355a24978ebf71c01855a8ad3dc65600d9d7bf5770e4ef5f7d1f9",
+      "bytes": 10796,
+      "duration": 0.82576,
+      "peakDbfs": -1.973,
+      "rmsDbfs": -13.709,
+      "clippedSamples": 0,
+      "sources": [
+        {
+          "source": "audio/board_game/sfx/jidaigeki01/jidaigeki01/cut_with_sword3.mp3",
+          "duration": 0.6,
+          "gain": 0.9,
+          "delay": 0,
+          "pitch": 0.92,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "742756b7b10166ad2d7fd7b284020c110e04956d1a4339a153f2283a3c2d88c4",
+          "sourceDuration": 1.080204,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "jidaigeki01/cut_with_sword3",
+          "selectedStart": 0.030045,
+          "selectedDuration": 0.599977
+        },
+        {
+          "source": "audio/board_game/sfx/attack01/attack01/kungfu_wind4.mp3",
+          "duration": 0.73,
+          "gain": 0.7,
+          "delay": 0.05,
+          "pitch": 0.96,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "08fa0860fa1bec9ddf2d6f01b77de5c9a008042f67dc1ce304db736e3a0c60aa",
+          "sourceDuration": 0.764649,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "attack01/kungfu_wind4",
+          "selectedStart": 0.017166,
+          "selectedDuration": 0.729977
+        }
+      ]
+    },
+    "stone_crush__0aad77d96c__cast.ogg": {
+      "file": "stone_crush__0aad77d96c__cast.ogg",
+      "sha256": "4efee3d07ba9182f2ed0d2b46cf84f58b11ca334278c850d3d637f4dcef6ddee",
+      "bytes": 6519,
+      "duration": 0.382063,
+      "peakDbfs": -1.821,
+      "rmsDbfs": -15.713,
+      "clippedSamples": 0,
+      "sources": [
+        {
+          "source": "audio/board_game/sfx/attack01/attack01/swing2.mp3",
+          "duration": 0.36,
+          "gain": 0.78,
+          "delay": 0,
+          "pitch": 0.92,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "a058a3109f6cf5d3117298043430e03168f8344190c4dc60f87ff34db24f0a49",
+          "sourceDuration": 0.606417,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "attack01/swing2",
+          "selectedStart": 0.04458,
+          "selectedDuration": 0.359977
+        },
+        {
+          "source": "audio/board_game/sfx/magic01/magic01/rumble_of_earth.mp3",
+          "duration": 0.33,
+          "gain": 0.24,
+          "delay": 0,
+          "pitch": 1.1,
+          "selection": "peak",
+          "reverse": true,
+          "sourceSha256": "226d9666d37e38c0d3c95316d12142afb581dd9deb0f794b9c0028a25b1bb2b8",
+          "sourceDuration": 20,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "magic01/rumble_of_earth",
+          "selectedStart": 10.004717,
+          "selectedDuration": 0.329977
+        }
+      ]
+    },
+    "stone_crush__a8f672ee45__hit.ogg": {
+      "file": "stone_crush__a8f672ee45__hit.ogg",
+      "sha256": "ba1fa87468419a5de4a3a92aca00db8a98534f6ec24cd8c27078373ba674181f",
+      "bytes": 11615,
+      "duration": 0.992063,
+      "peakDbfs": -1.569,
+      "rmsDbfs": -11.623,
+      "clippedSamples": 0,
+      "sources": [
+        {
+          "source": "audio/board_game/sfx/sf01/sf01/g_robot_punch1.mp3",
+          "duration": 0.6,
+          "gain": 0.9,
+          "delay": 0,
+          "pitch": 0.92,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "d99e4633f332266cbde9bc7764a83210a69d06b78042e96b698de19ab5d6f275",
+          "sourceDuration": 2.074785,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "sf01/g_robot_punch1",
+          "selectedStart": 0,
+          "selectedDuration": 0.599977
+        },
+        {
+          "source": "audio/board_game/sfx/magic01/magic01/rumble_of_earth.mp3",
+          "duration": 0.97,
+          "gain": 0.56,
+          "delay": 0,
+          "pitch": 0.95,
+          "selection": "peak",
+          "reverse": false,
+          "sourceSha256": "226d9666d37e38c0d3c95316d12142afb581dd9deb0f794b9c0028a25b1bb2b8",
+          "sourceDuration": 20,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "magic01/rumble_of_earth",
+          "selectedStart": 10.004717,
+          "selectedDuration": 0.969977
+        }
+      ]
+    },
+    "wind_blade__297f643370__hit.ogg": {
+      "file": "wind_blade__297f643370__hit.ogg",
+      "sha256": "cf76985fe647bac375ea8209a5e794a626b84be5ecccef0cbb00b98f009fdcfe",
+      "bytes": 10176,
+      "duration": 0.802063,
+      "peakDbfs": -2.144,
+      "rmsDbfs": -13.648,
+      "clippedSamples": 0,
+      "sources": [
+        {
+          "source": "audio/board_game/sfx/jidaigeki01/jidaigeki01/cut_with_sword3.mp3",
+          "duration": 0.26,
+          "gain": 0.72,
+          "delay": 0,
+          "pitch": 0.92,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "742756b7b10166ad2d7fd7b284020c110e04956d1a4339a153f2283a3c2d88c4",
+          "sourceDuration": 1.080204,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "jidaigeki01/cut_with_sword3",
+          "selectedStart": 0.030045,
+          "selectedDuration": 0.259977
+        },
+        {
+          "source": "audio/board_game/sfx/jidaigeki01/jidaigeki01/cut_with_sword3.mp3",
+          "duration": 0.26,
+          "gain": 0.72,
+          "delay": 0.105,
+          "pitch": 0.9550000000000001,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "742756b7b10166ad2d7fd7b284020c110e04956d1a4339a153f2283a3c2d88c4",
+          "sourceDuration": 1.080204,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "jidaigeki01/cut_with_sword3",
+          "selectedStart": 0.030045,
+          "selectedDuration": 0.259977
+        },
+        {
+          "source": "audio/board_game/sfx/jidaigeki01/jidaigeki01/cut_with_sword3.mp3",
+          "duration": 0.26,
+          "gain": 0.72,
+          "delay": 0.225,
+          "pitch": 0.99,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "742756b7b10166ad2d7fd7b284020c110e04956d1a4339a153f2283a3c2d88c4",
+          "sourceDuration": 1.080204,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "jidaigeki01/cut_with_sword3",
+          "selectedStart": 0.030045,
+          "selectedDuration": 0.259977
+        },
+        {
+          "source": "audio/board_game/sfx/attack01/attack01/kungfu_wind4.mp3",
+          "duration": 0.73,
+          "gain": 0.7,
+          "delay": 0.05,
+          "pitch": 0.96,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "08fa0860fa1bec9ddf2d6f01b77de5c9a008042f67dc1ce304db736e3a0c60aa",
+          "sourceDuration": 0.764649,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "attack01/kungfu_wind4",
+          "selectedStart": 0.017166,
+          "selectedDuration": 0.729977
+        }
+      ]
+    },
+    "speed_dash__7446f55ceb__cast.ogg": {
+      "file": "speed_dash__7446f55ceb__cast.ogg",
+      "sha256": "9e951c491522b4d8472ad91867d79d5e0ce023daa46fe5a90d450f0ec8c7b5ad",
+      "bytes": 7290,
+      "duration": 0.472086,
+      "peakDbfs": -1.994,
+      "rmsDbfs": -10.461,
+      "clippedSamples": 0,
+      "sources": [
+        {
+          "source": "audio/board_game/sfx/attack01/attack01/kungfu_wind2.mp3",
+          "duration": 0.45,
+          "gain": 0.65,
+          "delay": 0,
+          "pitch": 1,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "8c0a7a823345f509d7537f70820d258fab8f0462aa6d712a51244d1906fef83a",
+          "sourceDuration": 0.519683,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "attack01/kungfu_wind2",
+          "selectedStart": 0.017166,
+          "selectedDuration": 0.45
+        },
+        {
+          "source": "audio/board_game/sfx/magic01/magic01/vanishing1.mp3",
+          "duration": 0.38,
+          "gain": 0.3,
+          "delay": 0.05,
+          "pitch": 1,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "694c7eb67de4934346184325685108aba1e4c0494c44026a687acdf71fbff9a5",
+          "sourceDuration": 3.255692,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "magic01/vanishing1",
+          "selectedStart": 0.104898,
+          "selectedDuration": 0.38
+        }
+      ]
+    },
+    "kick_sweep__36f2a5172e__cast.ogg": {
+      "file": "kick_sweep__36f2a5172e__cast.ogg",
+      "sha256": "45a3da2126b953dfeba215d382cc6448ecf570acbe97a6adce7b19301f34fb0e",
+      "bytes": 6174,
+      "duration": 0.4078,
+      "peakDbfs": -1.395,
+      "rmsDbfs": -9.265,
+      "clippedSamples": 0,
+      "sources": [
+        {
+          "source": "audio/board_game/sfx/attack01/attack01/kungfu_wind2.mp3",
+          "duration": 0.36,
+          "gain": 0.78,
+          "delay": 0,
+          "pitch": 0.92,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "8c0a7a823345f509d7537f70820d258fab8f0462aa6d712a51244d1906fef83a",
+          "sourceDuration": 0.519683,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "attack01/kungfu_wind2",
+          "selectedStart": 0.017166,
+          "selectedDuration": 0.359977
+        }
+      ]
+    },
+    "kick_sweep__2c84afcc09__hit.ogg": {
+      "file": "kick_sweep__2c84afcc09__hit.ogg",
+      "sha256": "5d861afef7356dbe480574072c078e14d231c2368be1d9331b94ad35c4030978",
+      "bytes": 8140,
+      "duration": 0.528753,
+      "peakDbfs": -2.275,
+      "rmsDbfs": -9.468,
+      "clippedSamples": 0,
+      "sources": [
+        {
+          "source": "audio/board_game/sfx/attack01/attack01/kick2.mp3",
+          "duration": 0.6,
+          "gain": 0.9,
+          "delay": 0,
+          "pitch": 0.92,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "26161a1bd0f19db5589c784e322257294880aa943e891776dde2f673bb94819f",
+          "sourceDuration": 0.466145,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "attack01/kick2",
+          "selectedStart": 0,
+          "selectedDuration": 0.506667
+        }
+      ]
+    },
+    "kick_sweep__8d02d910c5__cast.ogg": {
+      "file": "kick_sweep__8d02d910c5__cast.ogg",
+      "sha256": "ae4479601f6ffebae3a1574526aee86973d013f6668635fae807b8d8e9aad69e",
+      "bytes": 6299,
+      "duration": 0.4078,
+      "peakDbfs": -1.698,
+      "rmsDbfs": -9.668,
+      "clippedSamples": 0,
+      "sources": [
+        {
+          "source": "audio/board_game/sfx/attack01/attack01/kungfu_wind2.mp3",
+          "duration": 0.36,
+          "gain": 0.78,
+          "delay": 0,
+          "pitch": 1.04,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "8c0a7a823345f509d7537f70820d258fab8f0462aa6d712a51244d1906fef83a",
+          "sourceDuration": 0.519683,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "attack01/kungfu_wind2",
+          "selectedStart": 0.017166,
+          "selectedDuration": 0.359977
+        }
+      ]
+    },
+    "kick_sweep__e27b606488__hit.ogg": {
+      "file": "kick_sweep__e27b606488__hit.ogg",
+      "sha256": "5285af0704c4de4245702319c948572dd77c31a193c0c499555d21eb12f12bd5",
+      "bytes": 8301,
+      "duration": 0.495125,
+      "peakDbfs": -2.214,
+      "rmsDbfs": -11.62,
+      "clippedSamples": 0,
+      "sources": [
+        {
+          "source": "audio/board_game/sfx/attack01/attack01/kick1.mp3",
+          "duration": 0.26,
+          "gain": 0.72,
+          "delay": 0,
+          "pitch": 1.04,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "0b946ee14616116b52b0e6b94dedab807654d16296deea47839ea16b97d43322",
+          "sourceDuration": 0.275351,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "attack01/kick1",
+          "selectedStart": 0,
+          "selectedDuration": 0.259977
+        },
+        {
+          "source": "audio/board_game/sfx/attack01/attack01/kick1.mp3",
+          "duration": 0.26,
+          "gain": 0.72,
+          "delay": 0.105,
+          "pitch": 1.075,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "0b946ee14616116b52b0e6b94dedab807654d16296deea47839ea16b97d43322",
+          "sourceDuration": 0.275351,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "attack01/kick1",
+          "selectedStart": 0,
+          "selectedDuration": 0.256122
+        },
+        {
+          "source": "audio/board_game/sfx/attack01/attack01/kick1.mp3",
+          "duration": 0.26,
+          "gain": 0.72,
+          "delay": 0.225,
+          "pitch": 1.11,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "0b946ee14616116b52b0e6b94dedab807654d16296deea47839ea16b97d43322",
+          "sourceDuration": 0.275351,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "attack01/kick1",
+          "selectedStart": 0,
+          "selectedDuration": 0.24805
+        }
+      ]
+    },
+    "fire_kick__8b46583e9f__cast.ogg": {
+      "file": "fire_kick__8b46583e9f__cast.ogg",
+      "sha256": "ef25c49a43dbfabd3fd404f7d8900a6e114644bcf1fc36b71f893c3f885c87bf",
+      "bytes": 6824,
+      "duration": 0.382063,
+      "peakDbfs": -1.617,
+      "rmsDbfs": -10.627,
+      "clippedSamples": 0,
+      "sources": [
+        {
+          "source": "audio/board_game/sfx/attack01/attack01/kungfu_wind2.mp3",
+          "duration": 0.36,
+          "gain": 0.78,
+          "delay": 0,
+          "pitch": 0.92,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "8c0a7a823345f509d7537f70820d258fab8f0462aa6d712a51244d1906fef83a",
+          "sourceDuration": 0.519683,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "attack01/kungfu_wind2",
+          "selectedStart": 0.017166,
+          "selectedDuration": 0.359977
+        },
+        {
+          "source": "audio/board_game/sfx/magic01/magic01/fire3.mp3",
+          "duration": 0.33,
+          "gain": 0.24,
+          "delay": 0,
+          "pitch": 1.1,
+          "selection": "peak",
+          "reverse": true,
+          "sourceSha256": "1f10a4a12c3d4adc126a7e3bff07897e816a02677ce49b8ccaa57fd74c087f5b",
+          "sourceDuration": 3.987029,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "magic01/fire3",
+          "selectedStart": 0.866599,
+          "selectedDuration": 0.329977
+        }
+      ]
+    },
+    "fire_kick__87503620f9__hit.ogg": {
+      "file": "fire_kick__87503620f9__hit.ogg",
+      "sha256": "510edce0db8fe8f1692deead53968459034d667db5f657e6c6720ce0b83a4883",
+      "bytes": 13037,
+      "duration": 0.997075,
+      "peakDbfs": -1.911,
+      "rmsDbfs": -12.1,
+      "clippedSamples": 0,
+      "sources": [
+        {
+          "source": "audio/board_game/sfx/attack01/attack01/kick2.mp3",
+          "duration": 0.6,
+          "gain": 0.9,
+          "delay": 0,
+          "pitch": 0.92,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "26161a1bd0f19db5589c784e322257294880aa943e891776dde2f673bb94819f",
+          "sourceDuration": 0.466145,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "attack01/kick2",
+          "selectedStart": 0,
+          "selectedDuration": 0.506667
+        },
+        {
+          "source": "audio/board_game/sfx/magic01/magic01/fire3.mp3",
+          "duration": 0.95,
+          "gain": 0.7,
+          "delay": 0.025,
+          "pitch": 1,
+          "selection": "peak",
+          "reverse": false,
+          "sourceSha256": "1f10a4a12c3d4adc126a7e3bff07897e816a02677ce49b8ccaa57fd74c087f5b",
+          "sourceDuration": 3.987029,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "magic01/fire3",
+          "selectedStart": 0.866599,
+          "selectedDuration": 0.95
+        }
+      ]
+    },
+    "blue_fire_kick__c7b235b7fe__cast.ogg": {
+      "file": "blue_fire_kick__c7b235b7fe__cast.ogg",
+      "sha256": "ee5dc6891815a294bd609d25ab7b3d4919727bdd399bf75dcd5177a11abf638f",
+      "bytes": 6608,
+      "duration": 0.382063,
+      "peakDbfs": -2.078,
+      "rmsDbfs": -10.531,
+      "clippedSamples": 0,
+      "sources": [
+        {
+          "source": "audio/board_game/sfx/attack01/attack01/kungfu_wind2.mp3",
+          "duration": 0.36,
+          "gain": 0.78,
+          "delay": 0,
+          "pitch": 0.92,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "8c0a7a823345f509d7537f70820d258fab8f0462aa6d712a51244d1906fef83a",
+          "sourceDuration": 0.519683,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "attack01/kungfu_wind2",
+          "selectedStart": 0.017166,
+          "selectedDuration": 0.359977
+        },
+        {
+          "source": "audio/board_game/sfx/magic01/magic01/fire2.mp3",
+          "duration": 0.33,
+          "gain": 0.24,
+          "delay": 0,
+          "pitch": 1.1,
+          "selection": "peak",
+          "reverse": true,
+          "sourceSha256": "dbfb688263ee73d0469eb2bc9659e2776ac91d3f4654d41b37784fe3621436b3",
+          "sourceDuration": 5.381224,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "magic01/fire2",
+          "selectedStart": 1.61449,
+          "selectedDuration": 0.329977
+        }
+      ]
+    },
+    "blue_fire_kick__f823eea787__hit.ogg": {
+      "file": "blue_fire_kick__f823eea787__hit.ogg",
+      "sha256": "dffee0e99f9560e47bde1d04f21c6380554eb659afaa794cce250003233cfd9b",
+      "bytes": 11898,
+      "duration": 0.922063,
+      "peakDbfs": -2.072,
+      "rmsDbfs": -11.657,
+      "clippedSamples": 0,
+      "sources": [
+        {
+          "source": "audio/board_game/sfx/attack01/attack01/kick2.mp3",
+          "duration": 0.6,
+          "gain": 0.9,
+          "delay": 0,
+          "pitch": 0.92,
+          "selection": "onset",
+          "reverse": false,
+          "sourceSha256": "26161a1bd0f19db5589c784e322257294880aa943e891776dde2f673bb94819f",
+          "sourceDuration": 0.466145,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "attack01/kick2",
+          "selectedStart": 0,
+          "selectedDuration": 0.506667
+        },
+        {
+          "source": "audio/board_game/sfx/magic01/magic01/fire2.mp3",
+          "duration": 0.9,
+          "gain": 0.64,
+          "delay": 0,
+          "pitch": 1.15,
+          "selection": "peak",
+          "reverse": false,
+          "sourceSha256": "dbfb688263ee73d0469eb2bc9659e2776ac91d3f4654d41b37784fe3621436b3",
+          "sourceDuration": 5.381224,
+          "author": "Taira Komori / 小森平",
+          "sourceKey": "magic01/fire2",
+          "selectedStart": 1.61449,
+          "selectedDuration": 0.899977
+        }
+      ]
+    }
+  },
+  "sourcePreservation": [
+    {
+      "source": "audio/board_game/sfx/arms01/arms01/launcher1.mp3",
+      "sha256": "c1a81692c7f8ec26473d1d51dbb6d1998369c68183b01fcbcc04e0acaa2f1cb1",
+      "unchanged": true
+    },
+    {
+      "source": "audio/board_game/sfx/arms01/arms01/small_explosion3.mp3",
+      "sha256": "cf0a41257afc806e2baab8ea3c2727d3c6b997824fe869f848a720f3111a8e9c",
+      "unchanged": true
+    },
+    {
+      "source": "audio/board_game/sfx/arms01/arms01/small_explosion2.mp3",
+      "sha256": "df75c58f004e2dbafe4bcc881658dabe8d0c729fa9915296c3010ccaa3b1b494",
+      "unchanged": true
+    },
+    {
+      "source": "audio/board_game/sfx/magic01/magic01/reflection.mp3",
+      "sha256": "704ebf879801694915e7ad562abb9be648a6d8d808a54dc07a5496f8930208d4",
+      "unchanged": true
+    },
+    {
+      "source": "audio/board_game/sfx/magic01/magic01/sword1.mp3",
+      "sha256": "351fca36a5f9e4e6129a20510d3c5a4d4aa03e40990b90d79fc25f1fd354238c",
+      "unchanged": true
+    },
+    {
+      "source": "audio/board_game/sfx/jidaigeki01/jidaigeki01/extract_sword1.mp3",
+      "sha256": "9a43b64d0c4ee613e8bcb50478b4a0d28d9c1ffbc8e393877879b6ccc1cea80e",
+      "unchanged": true
+    },
+    {
+      "source": "audio/board_game/sfx/horror01/horror01/horror_wind.mp3",
+      "sha256": "55cbc9f8e62c157b05a5052bc3862a4b1944ee3217bd9a01e6bef56f0ed5eb99",
+      "unchanged": true
+    },
+    {
+      "source": "audio/board_game/sfx/jidaigeki01/jidaigeki01/cut_with_sword3.mp3",
+      "sha256": "742756b7b10166ad2d7fd7b284020c110e04956d1a4339a153f2283a3c2d88c4",
+      "unchanged": true
+    },
+    {
+      "source": "audio/board_game/sfx/attack01/attack01/swish1_2.mp3",
+      "sha256": "aab9da69b69e3e72ab26190bc0c2772d9f0ff98848824203e7884674214b7b34",
+      "unchanged": true
+    },
+    {
+      "source": "audio/board_game/sfx/attack01/attack01/swish1_3.mp3",
+      "sha256": "8750ef099600dc1fd83566a1f45ace63a2afbe8a9813ea096c1ebc949fd1984e",
+      "unchanged": true
+    },
+    {
+      "source": "audio/board_game/sfx/magic01/magic01/bubble_attack1.mp3",
+      "sha256": "c48ff43f447b7b5502b7387552943d99bc0542b63ba615ef55bc896e4808bb19",
+      "unchanged": true
+    },
+    {
+      "source": "audio/board_game/sfx/jidaigeki01/jidaigeki01/stab_lightly.mp3",
+      "sha256": "0346bc8dcd04da8153f93ef281fbab2de790f1bc23e74ea48e9c64795e1b2e95",
+      "unchanged": true
+    },
+    {
+      "source": "audio/board_game/sfx/magic01/magic01/magic_waves1.mp3",
+      "sha256": "c227936780b03665aba584b19781a005bcd6530b2513f2c51c9c9e22f2ed75de",
+      "unchanged": true
+    },
+    {
+      "source": "audio/board_game/sfx/attack01/attack01/kungfu_wind4.mp3",
+      "sha256": "08fa0860fa1bec9ddf2d6f01b77de5c9a008042f67dc1ce304db736e3a0c60aa",
+      "unchanged": true
+    },
+    {
+      "source": "audio/board_game/sfx/attack01/attack01/swing2.mp3",
+      "sha256": "a058a3109f6cf5d3117298043430e03168f8344190c4dc60f87ff34db24f0a49",
+      "unchanged": true
+    },
+    {
+      "source": "audio/board_game/sfx/magic01/magic01/rumble_of_earth.mp3",
+      "sha256": "226d9666d37e38c0d3c95316d12142afb581dd9deb0f794b9c0028a25b1bb2b8",
+      "unchanged": true
+    },
+    {
+      "source": "audio/board_game/sfx/sf01/sf01/g_robot_punch1.mp3",
+      "sha256": "d99e4633f332266cbde9bc7764a83210a69d06b78042e96b698de19ab5d6f275",
+      "unchanged": true
+    },
+    {
+      "source": "audio/board_game/sfx/attack01/attack01/kungfu_wind2.mp3",
+      "sha256": "8c0a7a823345f509d7537f70820d258fab8f0462aa6d712a51244d1906fef83a",
+      "unchanged": true
+    },
+    {
+      "source": "audio/board_game/sfx/magic01/magic01/vanishing1.mp3",
+      "sha256": "694c7eb67de4934346184325685108aba1e4c0494c44026a687acdf71fbff9a5",
+      "unchanged": true
+    },
+    {
+      "source": "audio/board_game/sfx/attack01/attack01/kick2.mp3",
+      "sha256": "26161a1bd0f19db5589c784e322257294880aa943e891776dde2f673bb94819f",
+      "unchanged": true
+    },
+    {
+      "source": "audio/board_game/sfx/attack01/attack01/kick1.mp3",
+      "sha256": "0b946ee14616116b52b0e6b94dedab807654d16296deea47839ea16b97d43322",
+      "unchanged": true
+    },
+    {
+      "source": "audio/board_game/sfx/magic01/magic01/fire3.mp3",
+      "sha256": "1f10a4a12c3d4adc126a7e3bff07897e816a02677ce49b8ccaa57fd74c087f5b",
+      "unchanged": true
+    },
+    {
+      "source": "audio/board_game/sfx/magic01/magic01/fire2.mp3",
+      "sha256": "dbfb688263ee73d0469eb2bc9659e2776ac91d3f4654d41b37784fe3621436b3",
+      "unchanged": true
+    }
+  ],
+  "inputInventorySha256": "97d515589431bc22e2c53533886cc6d897fd58d7781d819c6243a2ad199bd364",
+  "inputFamilyMapSha256": null
+}
