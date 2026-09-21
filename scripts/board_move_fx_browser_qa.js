@@ -36,7 +36,13 @@ async function prepareBattle(host) {
 async function instrument(page) {
   await page.evaluate(() => {
     const original = HTMLMediaElement.prototype.play;
-    window.__fxQa = { audio: [], samples: [], numbers: [], running: false, started: 0 };
+    window.__fxQa = { audio: [], samples: [], numbers: [], fxPlays: [], running: false, started: 0 };
+    const fx = window.__BOARD_BATTLE_DEBUG__.moveFxRuntime(), originalFxPlay = fx.play;
+    fx.play = function(event, options = {}) {
+      const played = originalFxPlay.call(this, event, options);
+      if (window.__fxQa.running && played) window.__fxQa.fxPlays.push({ phase: options.phase || "impact", duration: options.durationMs, time: performance.now() - window.__fxQa.started });
+      return played;
+    };
     HTMLMediaElement.prototype.play = function (...args) { const item = { src: this.src.split("/").at(-1), time: performance.now(), accepted: null }; if (this.src.includes("move-fx/v1/")) window.__fxQa.audio.push(item); const promise = original.apply(this, args); promise?.then(()=>{item.accepted=true},()=>{item.accepted=false}); return promise; };
     const layer = document.getElementById("damagePop");
     new MutationObserver((records) => records.forEach((record) => record.addedNodes.forEach((node) => {
@@ -49,7 +55,7 @@ async function instrument(page) {
       if (qa.running) {
         const canvas = document.querySelector(".board-move-fx-canvas"); let alpha = 0;
         if (canvas && canvas.width) { sampleContext.clearRect(0, 0, 96, 64); sampleContext.drawImage(canvas, 0, 0, 96, 64); const bytes = sampleContext.getImageData(0, 0, 96, 64).data; for (let i = 3; i < bytes.length; i += 4) if (bytes[i]) alpha++; }
-        qa.samples.push({ time: performance.now() - qa.started, alpha, active: window.__BOARD_BATTLE_DEBUG__.moveFxRuntime().status().active, legacy: document.getElementById("impactFx")?.classList.contains("active"), particles: document.querySelectorAll(".effect-particle-layer").length });
+        qa.samples.push({ time: performance.now() - qa.started, alpha, active: window.__BOARD_BATTLE_DEBUG__.moveFxRuntime().status().active, queued: window.__BOARD_BATTLE_DEBUG__.spectatorPlaybackState().active, legacy: document.getElementById("impactFx")?.classList.contains("active"), particles: document.querySelectorAll(".effect-particle-layer").length });
       }
       requestAnimationFrame(sample);
     }
@@ -70,11 +76,19 @@ async function runCase(page, spec, capture) {
     if (type !== "attack") { event.damage = 0; event.hitDamages = []; }
     if (!spec.cold) await fx.warm(event);
     fx.clear();
-    const qa = window.__fxQa; qa.audio = []; qa.samples = []; qa.numbers = []; qa.running = true; qa.started = performance.now();
+    const qa = window.__fxQa; qa.audio = []; qa.samples = []; qa.numbers = []; qa.fxPlays = []; qa.running = true; qa.started = performance.now();
     battle.animating = true; battle.visualEvent = { ...event, id: event.id + "-cast", type: "dice", diceFace: 3, baseDiceFace: 3, duration: 1650 };
     debug.notifyBattleWindow(); window.__BOARD_BATTLE_DEBUG__.refresh();
     await new Promise((done) => setTimeout(done, 1900));
-    qa.started = performance.now(); battle.visualEvent = event; debug.notifyBattleWindow(); window.__BOARD_BATTLE_DEBUG__.refresh();
+    qa.started = performance.now(); qa.samples = []; qa.fxPlays = []; battle.visualEvent = event;
+    if (spec.spectator) {
+      event.duration = (spec.hits?.length || 1) > 1 ? 1250 + spec.hits.length * 620 : 1850;
+      const remoteView = JSON.parse(JSON.stringify(window.__BOARD_BATTLE_DEBUG__.latestView()));
+      remoteView.battle.visualEvent = event;
+      remoteView.battle.canControl = false; remoteView.battle.canAct = false;
+      window.__BOARD_BATTLE_DEBUG__.refresh(remoteView);
+    }
+    debug.notifyBattleWindow(); window.__BOARD_BATTLE_DEBUG__.refresh();
     qa.profile = fx.resolve(event);
     // The same snapshot may be redelivered by local sync; it must not replay SFX.
     window.__BOARD_BATTLE_DEBUG__.refresh();
@@ -82,7 +96,7 @@ async function runCase(page, spec, capture) {
   const contact = spec.type === "status" ? 420 : ((spec.hits?.length || 1) > 1 ? 645 : 875);
   if (capture) { await page.waitForTimeout(contact); await screenshot(page, capture); }
   await page.waitForTimeout(3000 - (capture ? contact : 0));
-  const result = await page.evaluate(() => { const qa = window.__fxQa; qa.running = false; return { audio: qa.audio, samples: qa.samples, numbers: qa.numbers, profile: { family: qa.profile.familyId, animation: qa.profile.animation, castSound:qa.profile.castSound, sound:qa.profile.sound }, state: window.__BOARD_BATTLE_DEBUG__.moveFxRuntime().status(), overflow: document.documentElement.scrollWidth > innerWidth + 2, portrait:document.body.classList.contains('battle-phone-portrait'), orientationNotice:getComputedStyle(document.getElementById('battleOrientationNotice')).display, hud: [...document.querySelectorAll("#playerHudMeta,#enemyHudMeta")].map((el)=>({ text:el.textContent, visible:!!el.getBoundingClientRect().width })) }; });
+  const result = await page.evaluate(() => { const qa = window.__fxQa; qa.running = false; return { audio: qa.audio, samples: qa.samples, numbers: qa.numbers, fxPlays: qa.fxPlays, profile: { family: qa.profile.familyId, animation: qa.profile.animation, castSound:qa.profile.castSound, sound:qa.profile.sound }, state: window.__BOARD_BATTLE_DEBUG__.moveFxRuntime().status(), overflow: document.documentElement.scrollWidth > innerWidth + 2, portrait:document.body.classList.contains('battle-phone-portrait'), orientationNotice:getComputedStyle(document.getElementById('battleOrientationNotice')).display, hud: [...document.querySelectorAll("#playerHudMeta,#enemyHudMeta")].map((el)=>({ text:el.textContent, visible:!!el.getBoundingClientRect().width })) }; });
   result.label = spec.label; report.cases.push(result);
   const visible = result.samples.filter((x)=>x.alpha > 0), hitSounds = result.audio.filter((x)=>x.src.includes("__hit.")), castSounds = result.audio.filter((x)=>x.src.includes("__cast."));
   check(`${spec.label}: cast once`, castSounds.length === 1, castSounds.length);
@@ -96,6 +110,11 @@ async function runCase(page, spec, capture) {
   if (spec.expectedArt) check(`${spec.label}: variant art`, result.profile.family === spec.expectedArt, result.profile);
   if (spec.expectedAnimation) check(`${spec.label}: variant animation`, result.profile.animation === spec.expectedAnimation,result.profile);
   if (spec.type === "status") check(`${spec.label}: full aura duration`, visible.at(-1)?.time - visible[0]?.time >= 540);
+  if (!spec.miss && !spec.cold && spec.type !== "status" && !result.portrait) {
+    const impacts = result.fxPlays.filter((play)=>play.phase === "impact"), expectedDuration = (spec.hits?.length || 1) > 1 ? 420 : 700;
+    check(`${spec.label}: complete readable hit windows`, impacts.length === (spec.hits?.length || 1) && impacts.every((play)=>play.duration === expectedDuration && result.samples.some((sample)=>sample.time >= play.time + expectedDuration - 100 && sample.time <= play.time + expectedDuration - 25 && sample.alpha > 0)), impacts);
+    if (spec.spectator) check(`${spec.label}: spectator waits through the complete hit`, impacts.every((play)=>result.samples.filter((sample)=>sample.time >= play.time && sample.time < play.time + expectedDuration).every((sample)=>sample.queued)));
+  }
   return result;
 }
 
@@ -126,6 +145,7 @@ async function runCase(page, spec, capture) {
     await runCase(battle,{label:"phase-attack",moveId:"postgame_shiki_lion_ground_scroll",moveType:"special",expectedArt:"stone_crush",expectedAnimation:"projectile"});
     await runCase(battle,{label:"phase-control",moveId:"postgame_shiki_lion_ground_scroll",type:"status",moveType:"control",expectedArt:"stone_crush",expectedAnimation:"aura"});
     await battle.setViewportSize({width:932,height:430}); await runCase(battle,{label:"phone-landscape",moveId:"luffy_pistol",hits:[123],side:"enemy"},"battle-phone-landscape.png");
+    await runCase(battle,{label:"spectator-readable",moveId:"luffy_pistol",hits:[123],side:"enemy",spectator:true},"battle-spectator-readable.png");
     await battle.setViewportSize({width:390,height:844}); await runCase(battle,{label:"phone-portrait",moveId:"ace_fist",hits:[123]},"battle-phone-portrait.png");
     // Fresh decoder entry is held beyond the complete hit; loading must not replay it late.
     const sheet = await battle.evaluate(()=>BoardMoveFxCatalog.families.room_cut.sheet);

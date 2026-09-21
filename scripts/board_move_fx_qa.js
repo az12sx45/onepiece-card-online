@@ -85,14 +85,25 @@ function harness(options = {}) {
     assert.deepEqual(h.calls.findLast((call) => call.name === "drawImage").args.slice(1, 5), [768, 0, 256, 256]);
   });
   h.advance(100);
-  check("impact advances through decay frames at sheet FPS", () => {
+  check("impact advances across the requested readable window", () => {
     const draw = h.calls.findLast((call) => call.name === "drawImage");
-    assert.deepEqual(draw.args.slice(1, 5), [256, 256, 256, 256]);
+    assert.deepEqual(draw.args.slice(1, 5), [0, 256, 256, 256]);
   });
   check("scaled-stage anchor remains aligned", () => assert.deepEqual(h.calls.findLast((call) => call.name === "translate").args, [700, 274]));
   check("battle event stays immutable", () => assert.equal(JSON.stringify(event), original));
   h.advance(300);
   check("finished animation has no pending frames", () => { assert.equal(h.frames.size, 0); assert.equal(h.fx.status().active, 0); });
+  check("single-hit 700 ms window is not recapped to sheet FPS", () => {
+    h.fx.play(event, { durationMs: 700, frameStart: 4 }); h.advance(699);
+    assert.equal(h.fx.status().active, 1);
+    assert.deepEqual(h.calls.findLast((call) => call.name === "drawImage").args.slice(1, 3), [768, 256]);
+    h.advance(1); assert.equal(h.fx.status().active, 0);
+  });
+  check("combo 420 ms window survives a four-frame impact slice", () => {
+    h.fx.play(event, { durationMs: 420, frameStart: 4 }); h.advance(419);
+    assert.equal(h.fx.status().active, 1);
+    h.advance(1); assert.equal(h.fx.status().active, 0);
+  });
   check("launch frame does not require target damage", () => assert.equal(h.fx.play({ ...event, damage: 0 }, { phase: "launch", durationMs: 340 }), true));
   h.advance(100);
   check("launch progresses from actor toward target", () => { const x = h.calls.findLast((call) => call.name === "translate").args[0]; assert.ok(x > 260 && x < 740); });

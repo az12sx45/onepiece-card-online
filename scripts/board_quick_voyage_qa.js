@@ -51,6 +51,7 @@ ${marker}`) });
     });
     check("quick mode is opt-in", !baseline.preference.enabled && !baseline.preference.seenSeaChest);
     check("normal dice retains 5.4-6.2 seconds", baseline.timing.duration >= 5400 && baseline.timing.duration <= 6200);
+    await page.locator("#boardToolsToggle").click();
     await page.locator("#quickVoyageBtn").click();
     const quick = await page.evaluate(() => {
       const q = window.__quickVoyageQa;
@@ -131,6 +132,7 @@ ${marker}`) });
 
     for (const viewport of [{ width: 1440, height: 900 }, { width: 932, height: 430 }, { width: 390, height: 844 }]) {
       await page.setViewportSize(viewport);
+      if (await page.locator("#boardToolsPanel").isHidden()) await page.locator("#boardToolsToggle").click();
       const layout = await page.evaluate(() => {
         const button = document.getElementById("quickVoyageBtn"), r = button.getBoundingClientRect();
         return { width: innerWidth, overflow: document.documentElement.scrollWidth > innerWidth + 2, visible: r.width > 0 && r.left >= 0 && r.right <= innerWidth + 2, pressed: button.getAttribute("aria-pressed"), textFits: button.scrollWidth <= button.clientWidth + 2 };
@@ -148,6 +150,7 @@ ${marker}`) });
       d.getState().gameState.phase = "main";
       d.closeModal();
     });
+    await page.locator("#boardToolsToggle").click();
     await page.locator("#quickVoyageBtn").click();
     const disabled = await page.evaluate(() => window.__quickVoyageQa.timing(window.__BOARD_GAME_DEBUG__.getCurrentPlayer()));
     check("toggle off restores normal duration", disabled.duration >= 5400 && disabled.duration <= 6200);

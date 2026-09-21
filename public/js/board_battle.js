@@ -5734,7 +5734,7 @@
             const impactAnchor = cloneIntercept?.querySelector(".judge-clone-guard") || (didHitShikiIsland ? shikiArchipelagoSlot(shikiIslandHitTargetId) || refs.shikiArchipelagoStage : null);
             const spritePlayed = (didConnect || cloneBlocked) && moveFxRuntime()?.play(event, {
               phase: "impact", actorSide: side, targetSide, anchorElement: impactAnchor,
-              durationMs: Math.min(hitDuration, moveFxPlayer.resolve(event)?.durationMs || hitDuration),
+              durationMs: hitDuration,
               frameStart: spriteLaunched ? moveFxPlayer.resolve(event)?.launchFrames : undefined,
             });
             if (spritePlayed) {

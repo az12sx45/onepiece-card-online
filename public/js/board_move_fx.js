@@ -283,7 +283,10 @@
       const frameStart = phase === "launch" || fullSequence ? 0 : clamp(Math.floor(number(playOptions.frameStart, profile.impactStart)), 0, profile.frames - 1);
       const frameCount = phase === "launch" ? profile.launchFrames : profile.frames - frameStart;
       const requestedDuration = number(playOptions.durationMs, phase === "launch" ? 340 : profile.durationMs);
-      const duration = clamp(phase === "impact" && !fullSequence && profile.frames > 1 ? Math.min(requestedDuration, frameCount / profile.fps * 1000) : requestedDuration, 80, 5000);
+      // The battle's contact/pose window owns playback timing. Re-applying the
+      // sheet FPS to its remaining 4-5 impact frames compressed a requested
+      // 700 ms hit to 200-250 ms, making the artwork flash past unreadably.
+      const duration = clamp(requestedDuration, 80, 5000);
       active.push({ profile, record, phase, actorSide, targetSide, duration, frameStart, frameCount, start: now(), anchorElement: playOptions.anchorElement, actorElement: playOptions.actorElement });
       if (active.length > 24) active.shift();
       trimCache(record);

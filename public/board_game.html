@@ -27395,6 +27395,43 @@
       text-shadow:0 1px 0 rgba(255,231,176,.62);
     }
   </style>
+  <style>
+    /* Keep the map clear; all existing tool controls live in one disclosure. */
+    .board-tools#boardTools{
+      top:max(12px,env(safe-area-inset-top));
+      right:max(12px,env(safe-area-inset-right));
+      transform:none;
+      z-index:60;
+    }
+    .board-tools-toggle{
+      display:grid;place-items:center;width:48px;height:48px;padding:0;
+      border:1px solid #b99a5c;border-radius:10px;cursor:pointer;
+      background:linear-gradient(145deg,#17384a,#071820);color:#f8e6b9;
+      box-shadow:inset 0 0 0 3px rgba(218,180,103,.1),0 4px 12px #0008;
+    }
+    .board-tools-toggle:hover,.board-tools-toggle[aria-expanded="true"]{background:#234b59;border-color:#f0d497}
+    .board-tools-toggle:focus-visible,.board-tools-panel :focus-visible{outline:2px solid #8ce8df;outline-offset:3px}
+    .board-tools-icon{display:flex;flex-direction:column;gap:5px;width:22px}
+    .board-tools-icon span{display:block;width:100%;height:2px;border-radius:2px;background:currentColor}
+    .board-tools-panel{
+      position:absolute;top:56px;right:0;box-sizing:border-box;
+      display:flex;flex-direction:column;gap:8px;
+      width:min(304px,calc(100vw - 24px));
+      max-height:calc(100vh - 84px - env(safe-area-inset-top));
+      max-height:calc(100dvh - 84px - env(safe-area-inset-top));
+      overflow:auto;overscroll-behavior:contain;padding:16px;
+      border:1px solid #a78d59;border-radius:12px;
+      background:linear-gradient(155deg,rgba(19,47,61,.98),rgba(4,19,29,.98));
+      box-shadow:0 12px 32px #0009;
+    }
+    .board-tools-panel[hidden]{display:none}
+    .board-tools-heading{color:#efd69f;font-size:15px;font-weight:900;letter-spacing:.12em;padding:0 4px 8px;border-bottom:1px solid #c8a56255}
+    .board-tools-panel .map-tool-btn{width:100%;flex-shrink:0;min-height:44px;font-size:13px}
+    .board-tools-panel .cpu-speed-control{flex-wrap:wrap;justify-content:center;gap:8px;padding:8px;flex-shrink:0}
+    .board-tools-panel .cpu-speed-hint{display:inline}
+    .board-tools-panel .cpu-speed-select,.board-tools-panel .cpu-strategy-btn{min-height:44px}
+    .board-tools-panel .voyage-record-status{flex:none;max-width:100%;padding:4px;white-space:normal;overflow-wrap:anywhere;text-align:center}
+  </style>
 </head>
 <body>
   <main class="page">
@@ -27420,7 +27457,12 @@
 
     <section class="layout">
       <section class="board-card">
-        <div class="board-tools">
+        <div class="board-tools" id="boardTools">
+          <button type="button" class="board-tools-toggle" id="boardToolsToggle" aria-label="開啟航海選單" aria-expanded="false" aria-controls="boardToolsPanel" title="航海選單">
+            <span class="board-tools-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+          </button>
+          <div class="board-tools-panel" id="boardToolsPanel" role="region" aria-label="航海操作" hidden>
+          <div class="board-tools-heading">航海選單</div>
           <button type="button" class="map-tool-btn" id="focusPlayerBtn">回到目前玩家</button>
           <button type="button" class="map-tool-btn" id="viewWholeMapBtn">查看全圖</button>
           <button type="button" class="map-tool-btn" id="quickVoyageBtn" aria-pressed="false">快速航行：關</button>
@@ -27441,6 +27483,7 @@
           <span class="voyage-record-status" id="voyageRecordStatus" role="status" aria-live="polite">尚未建立紀錄</span>
           <button type="button" class="map-tool-btn" id="saveGameBtn">手動存檔</button>
           <button type="button" class="map-tool-btn" id="loadGameBtn">我的航海錄</button>
+          </div>
         </div>
         <div class="map-turn-banner" id="mapTurnBanner" aria-live="polite"></div>
         <div class="board-viewport" id="boardViewport">
@@ -27550,13 +27593,13 @@
   <script src="js/board_missions.js?v=20260920-mainline-guidance-v1"></script>
   <script src="js/battle_hit_effect_settings.js?v=20260505-cast-sfx-v1"></script>
   <script src="js/board_move_fx_catalog.js?v=20260921-gpt-move-fx-v1"></script>
-  <script src="js/board_move_fx.js?v=20260921-gpt-move-fx-v1"></script>
+  <script src="js/board_move_fx.js?v=20260921-readable-move-fx-v2"></script>
   <script src="js/onepiece_prebattle_lines.js?v=20260819-zephyr-name-v4"></script>
   <script src="js/board_cosmetic_frame_preview.js?v=20260729-rocks-conqueror-frame-v1"></script>
   <script src="js/board_enemy_spawn_regions.js?v=20260829-regional-enemy-spawns-v381"></script>
   <script src="js/board_state_wire.js?v=20260910-state-wire-v1"></script>
   <script src="js/board_state_receiver.js?v=20260910-state-wire-v1"></script>
   <script src="js/board_remote_playback.js?v=20260919-spectator-playback-v1"></script>
-  <script src="js/board_game.js?v=20260921-enemy-victory-service-v1"></script>
+  <script src="js/board_game.js?v=20260921-tools-menu-v1"></script>
 </body>
 </html>

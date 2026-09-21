@@ -53,7 +53,7 @@ async function openBattlePage(host, context, query) {
   await host.evaluate((suffix) => window.open(`board_battle.html?${suffix}`, "_blank"), query);
   const battlePage = await popupPromise;
   await battlePage.waitForLoadState("domcontentloaded");
-  await battlePage.waitForFunction(() => document.getElementById("playerPortrait") && document.getElementById("enemyPortrait"), null, { timeout: 15000 });
+  await battlePage.waitForFunction(() => window.__BOARD_BATTLE_DEBUG__?.latestView()?.battle && document.getElementById("playerPortrait") && document.getElementById("enemyPortrait"), null, { timeout: 30000 });
   return battlePage;
 }
 
@@ -94,6 +94,9 @@ async function openBattlePage(host, context, query) {
       actorCombatant: JSON.parse(JSON.stringify(roger)),
     };
     debug.notifyBattleWindow();
+    // The production iframe and this QA popup coexist. Deliver the snapshot
+    // here too instead of racing this popup's 1200 ms polling interval.
+    window.__BOARD_BATTLE_DEBUG__.refresh();
     await new Promise((resolve) => setTimeout(resolve, 180));
     const card = document.getElementById("playerCard");
     const image = document.getElementById("playerPortrait");
@@ -164,6 +167,7 @@ async function openBattlePage(host, context, query) {
       duration: 3000,
     };
     debug.notifyBattleWindow();
+    window.__BOARD_BATTLE_DEBUG__.refresh();
     const sample = () => ({
       src: document.getElementById("playerPortrait")?.getAttribute("src") || "",
       hpWidth: document.getElementById("playerHpFill")?.style.width || "",

@@ -741,6 +741,9 @@
     turnStepName: document.getElementById("turnStepName"),
     gamePlayerStrip: document.getElementById("gamePlayerStrip"),
     setupDraftTopStrip: document.getElementById("setupDraftTopStrip"),
+    boardTools: document.getElementById("boardTools"),
+    boardToolsToggle: document.getElementById("boardToolsToggle"),
+    boardToolsPanel: document.getElementById("boardToolsPanel"),
     focusPlayerBtn: document.getElementById("focusPlayerBtn"),
     viewWholeMapBtn: document.getElementById("viewWholeMapBtn"),
     quickVoyageBtn: document.getElementById("quickVoyageBtn"),
@@ -50551,6 +50554,12 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (Number(sparActiveCard(defender)?.currentHp || 0) <= 0) sparTryReviveDefender(battle, defender, attacker);
     const finalHp = sparHpSnapshot(battle);
     const hitEffect = hit && totalDamage > 0 ? battleHitEffectForMove(moveEntry, diceFace, hitDamages) : "";
+    const isAttackVisual = battleMoveDealsDamage(moveEntry);
+    // Use the normal battle presentation budget, including the final hit and
+    // follow-up status effect; long combos must finish before the iframe closes.
+    const visualDuration = isAttackVisual
+      ? (hit && hitDamages.length > 1 ? Math.max(1850, 1250 + hitDamages.length * 620) : 1850) + (hit && effectFx ? 1900 : 0)
+      : 1800;
     sparSetVisualEvent(battle, attacker, {
       type: battleMoveDealsDamage(moveEntry) ? "attack" : ((moveEntry.category || moveEntry.type) === "heal" ? "heal" : "status"),
       moveId: moveEntry.id,
@@ -50568,9 +50577,9 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       effectFx,
       startHpByPlayerId: startHp,
       finalHpByPlayerId: finalHp,
-      duration: hitDamages.length > 1 ? Math.max(1900, 1200 + hitDamages.length * 520) : 1800,
+      duration: visualDuration,
     });
-    await wait(Math.min(4200, Number(battle.visualEvent.duration || 1800) + 250));
+    await wait(visualDuration + (isAttackVisual ? 420 : 250));
   }
 
   function sparApplyRoundEnd(battle) {
@@ -60827,7 +60836,42 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     document.body.classList.add("board-game-no-friends");
   }
 
+  function setBoardToolsOpen(open, restoreFocus = false) {
+    if (!refs.boardToolsToggle || !refs.boardToolsPanel) return;
+    refs.boardToolsPanel.hidden = !open;
+    refs.boardToolsToggle.setAttribute("aria-expanded", String(!!open));
+    refs.boardToolsToggle.setAttribute("aria-label", open ? "收起航海選單" : "開啟航海選單");
+    if (restoreFocus) refs.boardToolsToggle.focus({ preventScroll: true });
+  }
+
   function bindEvents() {
+    refs.boardToolsToggle?.addEventListener("click", () => {
+      setBoardToolsOpen(refs.boardToolsPanel?.hidden);
+    });
+    document.addEventListener("pointerdown", (event) => {
+      if (refs.boardToolsPanel && !refs.boardToolsPanel.hidden && !refs.boardTools?.contains(event.target)) {
+        setBoardToolsOpen(false);
+      }
+    }, true);
+    refs.boardTools?.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape" || refs.boardToolsPanel?.hidden) return;
+      event.preventDefault();
+      event.stopPropagation();
+      setBoardToolsOpen(false, true);
+    });
+    refs.boardTools?.addEventListener("focusout", (event) => {
+      if (event.relatedTarget && !refs.boardTools.contains(event.relatedTarget)) setBoardToolsOpen(false);
+    });
+    refs.boardToolsPanel?.addEventListener("click", (event) => {
+      const action = event.target.closest("button");
+      if (!action || action.disabled || action === refs.quickVoyageBtn || action === refs.saveGameBtn) return;
+      setBoardToolsOpen(false, action === refs.focusPlayerBtn || action === refs.viewWholeMapBtn);
+      if (refs.modalBack?.classList.contains("open")) {
+        const control = [...refs.modal.querySelectorAll("button:not(:disabled),select:not(:disabled),input:not(:disabled),a[href]")]
+          .find((element) => element.getClientRects().length);
+        control?.focus({ preventScroll: true });
+      }
+    });
     refs.backToLobbyBtn?.addEventListener("click", () => {
       const lobbyUrl = `board_start.html?view=lobby&room=${encodeURIComponent(state.lobby.roomCode || "")}`;
       if (new URLSearchParams(window.location.search).get("desktop_frame") === "1" && window.top !== window.self) {

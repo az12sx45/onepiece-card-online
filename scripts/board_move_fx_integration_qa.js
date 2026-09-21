@@ -19,7 +19,7 @@ function harness(ready = true) {
   const queue = new Map();
   const record = (name, ...args) => calls.push({ name, time, args });
   const element = () => ({ classList: { remove() {}, toggle() {}, add() {} }, style: { setProperty() {} } });
-  const fx = { ready: () => ready, resolve: () => ({ durationMs: 400, launchFrames: 4 }), play: (event, options) => { record("sprite", options.phase, options.targetSide, options.anchorElement); return ready; } };
+  const fx = { ready: () => ready, resolve: () => ({ durationMs: 400, launchFrames: 4 }), play: (event, options) => { record("sprite", options.phase, options.targetSide, options.anchorElement, options.durationMs); return ready; } };
   const sandbox = {
     refs: { stage: element(), impactFx: element(), speedlinesFx: element(), enemyCard: element(), playerCard: element() },
     clearImpactFxTimers() {}, playLucciRokuoganFx: () => { record("lucci"); return true; },
@@ -57,9 +57,11 @@ check("sprite, sound, HP and number share existing contact", () => {
   assert.equal(one.calls.find((call) => call.name === "sprite" && call.args[0] === "impact").time, 820);
 });
 check("ready sprite suppresses CSS speedlines and impact", () => assert.equal(one.calls.filter((call) => ["speedlines", "legacy-impact"].includes(call.name)).length, 0));
+check("single impact uses the complete 700 ms hit pose", () => assert.equal(one.calls.find((call) => call.name === "sprite" && call.args[0] === "impact").args[3], 700));
 const combo = harness(); combo.play({ ...event, hitDamages: [10, 20, 30] }); combo.advance(2400);
 check("combo contacts stay 590,1250,1910 without extra damage", () => assert.deepEqual(combo.calls.filter((call) => call.name === "hp").map((call) => call.time), [590, 1250, 1910]));
 check("combo damage numbers preserve each damage", () => assert.deepEqual(combo.calls.filter((call) => call.name === "number").map((call) => call.args[0]), [10, 20, 30]));
+check("every combo impact gets the complete 420 ms hit pose", () => assert.deepEqual(combo.calls.filter((call) => call.name === "sprite" && call.args[0] === "impact").map((call) => call.args[3]), [420, 420, 420]));
 const cold = harness(false); cold.play(event); cold.advance(1000);
 check("unready art retains legacy effect at same contact", () => assert.equal(cold.calls.find((call) => call.name === "legacy-impact").time, 820));
 const miss = harness(); miss.play({ ...event, miss: true, damage: 0, hitDamages: [0] }); miss.advance(1000);

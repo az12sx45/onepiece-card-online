@@ -1,5 +1,12 @@
 # File Map
 
+## 航海選單與攻擊特效（2026-09-21）
+
+- `public/board_game.html`／`public/js/board_game.js`：三橫線選單、原控制項、鍵盤與手機版；切磋完整演出等待。
+- `public/js/board_move_fx.js`／`board_battle.js`／`public/board_battle.html`：命中圖片遵守700／420ms受擊窗口及載入版本。
+- `scripts/board_move_fx_qa.js`、`board_move_fx_integration_qa.js`、`board_move_fx_browser_qa.js`、`battle_impact_order_qa.js`、`board_quick_voyage_qa.js`：完整影格／傷害時點、觀看播放與選單內操作回歸。
+- `docs/BOARD_MENU_PACING_20260921.md`：驗證、部署與資料保護紀錄。
+
 ## 敵人島勝利後進島（2026-09-21）
 
 - `public/js/board_game.js`：戰後必要進島狀態、播放關閉後重試、擲骰攔截、服務結束清理及共鬥回合選擇；`public/board_game.html` 更新載入版本。
