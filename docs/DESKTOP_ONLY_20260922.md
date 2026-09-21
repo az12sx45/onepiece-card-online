@@ -34,10 +34,20 @@ Git HEAD 與三個 manifest 逐一核對：Card 29、Board 43、Chess 23 個程�
 | 三套件 Git 程式來源 | Card 29、Board 43、Chess 23 SHA 全符合 manifest；正式 Linux 三 runtime API 在部署前均 200，版本維持 |
 | 保護檔 | `protected-baseline.json`／`protected-after.json`，30/30 SHA 不變 |
 
-目前尚未推送／部署；待 R2 CORS、完整 LAN 無 console error 回歸及公开驗證後补上生效時間與 commit。
+來源提交為 `c87d4954d71e80acbc08a616056a28a4d6779885`。使用者登入 Cloudflare 後已完成 CORS 修復，部署前 LAN 與分流檢查均通過，公開生效仍需另驗。
 
 初次雙頁 LAN 的房間、加入、開始、交棒、刷新、續戰與 delta wire 均成功；console 發現 R2 未回 CORS，使跨網域音效 fetch 和字型被擋。此為 redirect 整合必須修復的問題，保留首輪報告，修正後重新完整執行。
 
 R2 原有公開素材的跨來源讀取遵循 [Cloudflare CORS 文件](https://developers.cloudflare.com/r2/buckets/cors/)，僅開 GET／HEAD 與 Range 讀取，不允許上傳或修改；如有既存規則須保留。配置前後與 public Range/CORS 證據另存 QA 目錄。
 
-既有 DPAPI publisher key 的 `GetBucketCors` 回 403 AccessDenied，未執行任何 Put、更未覆寫未知設定。`r2-cors/cors-error.json` 保存去敏證據；Cloudflare 控制台需要登入，已請使用者在該頁完成。一般分流及舊啟動器相容實作已可審閱，素材 fallback 的跨來源讀取修復完成前暫不推送。
+既有 DPAPI publisher key 的 `GetBucketCors` 回 403 AccessDenied，未執行任何 Put、更未覆寫未知設定。`r2-cors/cors-error.json` 保存去敏證據。使用者完成 Cloudflare 登入後，控制台確認原本無 CORS 規則；新增 public read-only `AllowedOrigins: [*]`、`AllowedMethods: [GET, HEAD]`、`AllowedHeaders: [Range]`、ExposeHeaders 為 Content-Length／Content-Range／ETag／Accept-Ranges、MaxAgeSeconds 3600。未改憑證、物件或寫入權限。
+
+OPTIONS 立即生效，舊 CDN HIT 回應仍缺標頭，因此僅針對 `game-assets.rihdi.tw` 做 hostname purge；未清除其他網站的快取。其後 canonical 公開網址的 image/audio/font × 三個 Origin × HEAD/Range/OPTIONS **27/27 PASS**，只讀 576 bytes 媒體。證據：`r2-cors/dashboard-change.json`、`hostname-purge.json`、`public-cors-after-purge.json`。
+
+修復後完整雙頁 LAN **PASS、failures/errors 均空**，涵蓋建房／加入／開始／回合交棒／刷新身份／續戰／delta wire；證據 `lan-refresh-after-cors.json`。本機分流 verifier **131/131 PASS**，含 90 個去重程式 HTTP、七個媒體樣本 R2 302 零 body、分段 MIME/CORS、安裝檔可用，證據 `local-release-after-purge.json`。三套件 95 logical 程式以 Git HEAD 逐 SHA 核對也全過，另存 `program-git-sha.json`。
+
+公開 verifier 的 WebSocket 拒絕斷言更正：Engine.IO 對拒絕的 HTTP Upgrade 回 400 與精確字串 `desktop_required`，而 polling 回 403。現在同時要求沒有 101 upgrade、拒絕狀態及精確原因，不能把任意 400 當成功。真請求與六個判定案例見 `websocket-rejection-probe.json`。
+
+CORS 後重啟獨立 Electron QA 時自動審核拒絕該程式啟動，原因僅為 `blocked by policy`；沒有換殼重試以繞過。先前的真 Electron 66/66 結果仍保留，新增的 CORS 原生解碼改透過內建 Chromium 與 loopback fixture 驗證，不宣稱 Electron 69/69。
+
+內建 Chromium 最終 **3/3 PASS**：三個未加 cache-bust 的 R2 正式網址跨域 fetch、逐 SHA／size 核對，圖片 `createImageBitmap`、音效 `decodeAudioData`、字型 `FontFace.load` 均成功；讀取合計 77,094 bytes。證據 `cors-browser/chromium-cors-report.json`，不操作正式帳號與房間。全部部署前必要檢查完成，接續推送與公開驗收。

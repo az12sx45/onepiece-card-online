@@ -4,6 +4,8 @@
 
 使用者同意保留下載頁、關閉一般網頁遊玩並部署。新增 `server/desktop-distribution.js`、`public/desktop-download.html`，於 `server/index.js` 掛接 HTTP／Socket.IO 分流；新增四支 distribution QA，原 LAN QA 支援明確測試 UA。一般瀏覽器導至下載頁、遊戲程式與連線拒絕；桌面 1.1.7 保留帳號／社交／更新／多人連線，6,192 個素材路徑只回 R2 重新導向。服務工作者退役保留瀏覽器存檔。同步四份專案文件，隔離 `npm start` 18927；測試、R2 CORS 與部署證據見 [本次紀錄](DESKTOP_ONLY_20260922.md)。
 
+使用者登入 Cloudflare 後完成公開素材 GET/HEAD CORS 與限定素材 hostname 的 CDN purge；27/27 跨來源檢查、完整 LAN 零錯誤、本機分流 131/131、Git 95 logical 程式 SHA 通過。公開 verifier 修正 Engine.IO 400 拒絕 upgrade 的精確原因判定；不調整產品 gate 或套件。首次 CORS 後 Electron 重跑受工具政策阻擋，既有真 Electron 66/66 與後續 Chromium 解碼證據分別記錄。
+
 ## 戰鬥圖片與技能音效時序（2026-09-21，已部署）
 
 修復致死受擊後站回、替補／結果提早出現、倒地重播與輪詢重設圖片；技能音由擲骰移至實際施放。修改兩個 Board HTML、board_battle.js、board_game.js（四個 castSfx 及 iframe 版本），新增倒地與瀏覽器 QA、擴充 FX 音效 QA；發布 builder 移除39硬限制並加31項fixture。更新四份專案文件，隔離 npm start 18926，完整證據見 [本次紀錄](BOARD_BATTLE_ORDER_20260921.md)。

@@ -32,9 +32,27 @@ async function browserWebSocketStatus() {
       'Sec-WebSocket-Key': crypto.randomBytes(16).toString('base64') } });
     request.setTimeout(15000, () => request.destroy(new Error('websocket probe timeout')));
     request.on('error', reject);
-    request.on('response', response => { response.resume(); resolve(response.statusCode); });
-    request.on('upgrade', (response, socket) => { socket.destroy(); resolve(response.statusCode); });
+    request.on('response', response => {
+      const chunks = [];
+      response.on('data', chunk => chunks.push(chunk));
+      response.on('error', reject);
+      response.on('end', () => {
+        const bytes = Buffer.concat(chunks);
+        bytesRead += bytes.length;
+        resolve({ status: response.statusCode, upgraded: false, body: bytes.toString('utf8') });
+      });
+    });
+    request.on('upgrade', (response, socket) => {
+      socket.destroy();
+      resolve({ status: response.statusCode, upgraded: true, body: '' });
+    });
   });
+}
+function isBrowserSocketRejection(response) {
+  // Engine.IO uses HTTP 400 with a plain-text reason for denied upgrades;
+  // polling uses 403. Require the explicit distribution reason in either case.
+  return response.upgraded === false && [400, 403].includes(response.status)
+    && response.body.trim() === 'desktop_required';
 }
 async function main() {
   const health = await get('/health');
@@ -58,7 +76,8 @@ async function main() {
   check('retired worker', worker.status === 200 && worker.bytes.includes('registration.unregister') && !worker.bytes.includes('caches.delete'));
   const polling = await get('/socket.io/?EIO=4&transport=polling', { 'User-Agent': browserUA, Origin: base });
   check('browser socket rejected polling', polling.status === 403);
-  check('browser socket rejected websocket', await browserWebSocketStatus() === 403);
+  const websocket = await browserWebSocketStatus();
+  check('browser socket rejected websocket', isBrowserSocketRejection(websocket), websocket);
   const catalogResponse = await get('/desktop/catalog-v3.json');
   const catalog = JSON.parse(catalogResponse.bytes);
   const allMedia = new Map();
