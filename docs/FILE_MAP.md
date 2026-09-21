@@ -7,6 +7,7 @@
 - `scripts/board_battle_knockout_timing_qa.js`、`board_battle_order_browser_qa.js`：倒地完整生命週期與真瀏覽器新舊版本比較；既有 FX QA 補技能音效階段。
 - `scripts/build_board_program_update.js`／`board_program_update_qa.js`：基線程式集合完全相符的凍結與更新、39／43檔 fixture。
 - `docs/BOARD_BATTLE_ORDER_20260921.md`：原因、實作、各層驗證與公開部署證據。
+- `public/desktop/catalog-v3.json`／`public/desktop/manifests/board-package-41425d61d6f49184.json`：本次四個程式更新，43 程式與 4,112 媒體路徑集合不變。
 
 ## 場景配樂與操作音效（2026-09-21）
 

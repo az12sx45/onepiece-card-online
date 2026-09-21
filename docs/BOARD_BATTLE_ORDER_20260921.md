@@ -27,4 +27,4 @@
 
 ## 發布
 
-來源提交、候選、R2 與公開 runtime／瀏覽器驗收於實際完成後記錄。
+來源提交 `141e7fdd42c4023b4066984846e28d4b3b8fb0e7` 已凍結，候選 `package-41425d61d6f49184` build／inspect／promote 通過。Manifest `eeb5e84246d69618029b6e89151ba93dab48777427dff9b947ec311cb2cd6089`，4,155 檔／1,397,173,371 bytes；4,112 媒體全部沿用，僅更新 `board_battle.html`、`board_game.html`、`js/board_battle.js`、`js/board_game.js` 四個程式。R2 與公開 runtime／瀏覽器驗收於實際完成後追加。
