@@ -31,8 +31,10 @@ function isDesktopRenderer(headers = {}) {
 }
 
 function isLauncherProcess(headers = {}) {
-  return !headers.origin && !Object.keys(headers).some(key => key.toLowerCase().startsWith('sec-fetch-'))
-    && /^(?:node|node-XMLHttpRequest)?$/i.test(String(headers['user-agent'] || ''));
+  // Proxies may synthesize a User-Agent for the launcher's headerless WebSocket.
+  // Browser requests carry Origin or Fetch Metadata. This compatibility branch
+  // still permits only the account/social events in installSocketGuard.
+  return !headers.origin && !Object.keys(headers).some(key => key.toLowerCase().startsWith('sec-fetch-'));
 }
 
 function requestPath(req) {

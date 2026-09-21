@@ -7,7 +7,7 @@
 - `/`、`/download` 顯示約 11 KB 的三遊戲下載入口，沒有外部字型、圖片或配樂；只再讀取小型 launcher-release metadata。Windows 安裝檔仍直接來自 R2，1.1.7 無需重裝。
 - 一般瀏覽器的舊遊戲 HTML 回零 body 的 302 到 `/download`；JS、CSS、WASM 等遊戲程式回 403，遊戲 Socket.IO 握手拒絕。URL 的 `desktop=1`、Referer 等均不授權。
 - 既有 Electron renderer 依預設 UA 相容辨認。這是正常客戶端入口限制，不是不可偽造的裝置認證。原帳號與房間控制權驗證保持，已取得的離線程式不可遠端收回。
-- Node 主程序的既有無 UA／`node`／`node-XMLHttpRequest` 連線限於登入、註冊、個人檔案、好友及私訊事件；遊戲事件另在 packet middleware 拒絕。真 renderer 正常使用三遊戲事件。
+- Node 主程序不依賴代理可能補上的 UA，沒有 Origin／Fetch Metadata 的連線只允許 14 個既有登入、註冊、個人檔案、好友及私訊事件；遊戲事件另在 packet middleware 拒絕。帶瀏覽器 Origin／Fetch Metadata 的普通連線拒絕握手，真 renderer 正常使用三遊戲事件。
 - `/health`、`/api/*`、catalog／package manifest／launcher metadata 保持服務。所有 v3 manifests 驗 SHA 後建立 6,192 個唯一媒體路徑，請求只回 R2 SHA blob 302、不傳素材 body。未列名媒體 404，R2 失敗不再由 Render 傳同一素材備援。
 - 觸控 Windows 筆電的 `images/board/mobile/manifest-v397.json` 為唯一 images 下的小型 JSON 例外，僅 Electron 可讀。
 - 舊 `/sw.js` 對一般瀏覽器提供退役 worker：更新啟用後解除註冊並轉下載頁。保留 localStorage、IndexedDB、CacheStorage，並不自動搬移僅存在舊瀏覽器的存檔；既有雲端紀錄仍走原帳號服務。已開啟且離線的舊頁面不能即時撤回。
@@ -27,7 +27,7 @@ Git HEAD 與三個 manifest 逐一核對：Card 29、Board 43、Chess 23 個程�
 
 | 驗證 | 結果與證據 |
 | --- | --- |
-| 真 HTTP／Socket.IO fixtures | 119/119，`gate/desktop-distribution-gate-report.json`；Chrome、Electron、Node 三種 UA／兩種 transport、媒體、metadata、編碼與 worker |
+| 真 HTTP／Socket.IO fixtures | 135/135，`gate/desktop-distribution-gate-report.json`；包含任意 proxy UA／瀏覽器 UA 的 originless main 白名單與遊戲拒絕、Origin／Fetch Metadata 拒絕、兩種 transport、媒體、metadata、編碼與 worker |
 | Chrome 下載頁與 worker | 38/38，`browser-report.json`；1366／390／320px、每頁兩請求合計 11,074 bytes；真 worker 更新後保留三種 storage 哨兵 |
 | 真 Electron 44／既有 AuthService | 66/66、errors 0，`D:/Codex_QA/desktop-distribution-20260922/electron/desktop-distribution-electron-report.json`；實際登入／註冊／restore 類別使用隔離 fixture，沒有正式帳號操作 |
 | 既有 Electron program protocol | PASS，同上目錄 `program-stdout.log`；HTML/CSS/JS/worker/WASM/image 本機讀取，API 保持 network；程式 cache 停用後 media 仍走 opcache |
@@ -51,3 +51,9 @@ OPTIONS 立即生效，舊 CDN HIT 回應仍缺標頭，因此僅針對 `game-as
 CORS 後重啟獨立 Electron QA 時自動審核拒絕該程式啟動，原因僅為 `blocked by policy`；沒有換殼重試以繞過。先前的真 Electron 66/66 結果仍保留，新增的 CORS 原生解碼改透過內建 Chromium 與 loopback fixture 驗證，不宣稱 Electron 69/69。
 
 內建 Chromium 最終 **3/3 PASS**：三個未加 cache-bust 的 R2 正式網址跨域 fetch、逐 SHA／size 核對，圖片 `createImageBitmap`、音效 `decodeAudioData`、字型 `FontFace.load` 均成功；讀取合計 77,094 bytes。證據 `cors-browser/chromium-cors-report.json`，不操作正式帳號與房間。全部部署前必要檢查完成，接續推送與公開驗收。
+
+## 公開代理相容修正
+
+首次發布 `e999374e639e6bc40bf3bea9cbd1885890b79f58` 於 2026-09-22 01:20:07（台北）上線，公開 release 134/134、三尺寸瀏覽器 38/38 均通過，但補驗實際預設 Node Socket.IO 發現無自訂標頭的主程序 WebSocket 回 `desktop_required`；polling 及 Electron renderer 兩種 transport 正常。另以 raw Upgrade 驗證：無 UA 被拒、明確 node UA 成功。推測代理補入 UA；未取得代理內部標頭，不當成已觀測事實。
+
+為維持下載版連線，01:27:33 完成回復 `9e0744d92b8047e9e4b8be9261508bc1eba51689`（Render `dep-daomh40ae00c73c51vig`）。修正 `isLauncherProcess` 改依 Origin／Fetch Metadata 判別相容主程序，不依賴 UA 值；14 事件白名單、所有遊戲 packet 拒絕與原帳號驗證均維持。新增公開 Socket verifier，直接使用舊啟動器相同預設 client headers，防止本機測試漏掉正式代理差異。首次失敗證據 `public-socket-report.json` 保留；修正版必須重新公開驗收後才算完成部署。

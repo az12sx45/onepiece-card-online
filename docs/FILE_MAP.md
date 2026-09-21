@@ -6,6 +6,7 @@
 - `server/index.js`：在 static 前安裝 HTTP 分流，Socket.IO 握手及 packet middleware，停供動態 client bundle。
 - `public/desktop-download.html`：三遊戲共用 Windows 下載入口，簽署 release metadata 的既有 URL，無大型圖片／音樂。
 - `scripts/desktop_distribution_gate_qa.js`、`desktop_distribution_browser_qa.js`、`desktop_distribution_electron_qa.js`、`desktop_distribution_release_verify.js`：隔離 gate、Chrome／舊 worker、真 Electron／AuthService 及公開 release 驗證。
+- `scripts/desktop_distribution_socket_verify.js`：公開代理下預設無自訂標頭主程序與 Electron renderer 的 WebSocket／polling、主程序遊戲 packet 拒絕及瀏覽器握手拒絕。
 - `scripts/lan_refresh_flow_qa.js`：選用 `BOARD_QA_USER_AGENT`，用於分流後的雙頁回歸；此 UA 測試本身不等同真 Electron 驗收。
 - `docs/DESKTOP_ONLY_20260922.md`：範圍、兼容界線、CORS、QA、保護及公開部署證據。
 

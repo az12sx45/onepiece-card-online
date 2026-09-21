@@ -22,6 +22,9 @@ const fixtureRoot = fs.mkdtempSync(path.join(OUTPUT, 'fixtures-'));
 const ASSET_BASE = 'https://game-assets.rihdi.tw/desktop/blobs/sha256';
 const BROWSER = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/140.0.0.0 Safari/537.36';
 const ELECTRON = `${BROWSER} Electron/37.3.1`;
+// Reverse proxies may supply any User-Agent for a headerless launcher request.
+// Without browser Origin/Fetch metadata it receives social access only.
+const LAUNCHER_HEADERS = [{}, { 'User-Agent': 'node' }, { 'User-Agent': 'node-XMLHttpRequest' }, { 'User-Agent': 'proxy-synthesized-agent/1.0' }, { 'User-Agent': BROWSER }];
 const SOCIAL_EVENTS = ['AUTH_REGISTER', 'AUTH_LOGIN', 'PROFILE_GET', 'PROFILE_UPDATE', 'PROFILE_PUBLIC_GET', 'SOCIAL_AUTH', 'PRESENCE_SET', 'FRIENDS_GET', 'FRIEND_ADD_BY_NAME', 'FRIEND_REQUEST_ACCEPT', 'FRIEND_REQUEST_DECLINE', 'FRIEND_REMOVE', 'DM_HISTORY', 'DM_SEND'];
 const sha = value => crypto.createHash('sha256').update(value).digest('hex');
 const report = { ok: null, startedAt: new Date().toISOString(), fixtureRoot, checks: [], socketDelivered: [], errors: [] };
@@ -175,13 +178,16 @@ function emitAck(socket, event) {
     });
     await check('Socket.IO client bundle is not exposed', async () => assert.notEqual((await request(port, '/socket.io/socket.io.js')).status, 200));
     for (const transport of ['websocket', 'polling']) {
-      for (const headers of [{ 'User-Agent': BROWSER, Origin: origin }, { 'User-Agent': BROWSER }, { 'User-Agent': 'node', Origin: origin }, { 'User-Agent': 'node', 'Sec-Fetch-Site': 'same-origin' }]) await check(`${transport} browser-like handshake rejected ${JSON.stringify(headers)}`, async () => { await openSocket(origin, transport, headers, false); });
+      for (const launcherHeaders of LAUNCHER_HEADERS) for (const browserMarker of [{ Origin: origin }, { 'Sec-Fetch-Site': 'same-origin' }]) {
+        const headers = { ...launcherHeaders, ...browserMarker };
+        await check(`${transport} browser-origin/fetch handshake rejected ${JSON.stringify(headers)}`, async () => { await openSocket(origin, transport, headers, false); });
+      }
       await check(`${transport} Electron game socket remains usable`, async () => {
         const socket = await openSocket(origin, transport, { 'User-Agent': ELECTRON, Origin: origin });
         try { assert.deepEqual(await emitAck(socket, 'BOARD_GAME_STATE'), { ok: true, event: 'BOARD_GAME_STATE' }); }
         finally { socket.disconnect(); }
       });
-      for (const headers of [{}, { 'User-Agent': 'node' }, { 'User-Agent': 'node-XMLHttpRequest' }]) await check(`${transport} Node launcher social allowed but game events blocked ${JSON.stringify(headers)}`, async () => {
+      for (const headers of LAUNCHER_HEADERS) await check(`${transport} launcher/proxy social allowed but game events blocked ${JSON.stringify(headers)}`, async () => {
         const socket = await openSocket(origin, transport, headers);
         try {
           for (const event of SOCIAL_EVENTS) assert.deepEqual(await emitAck(socket, event), { ok: true, event });

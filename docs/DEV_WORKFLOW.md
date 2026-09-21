@@ -6,6 +6,8 @@
 
 使用者登入 Cloudflare 後完成公開素材 GET/HEAD CORS 與限定素材 hostname 的 CDN purge；27/27 跨來源檢查、完整 LAN 零錯誤、本機分流 131/131、Git 95 logical 程式 SHA 通過。公開 verifier 修正 Engine.IO 400 拒絕 upgrade 的精確原因判定；不調整產品 gate 或套件。首次 CORS 後 Electron 重跑受工具政策阻擋，既有真 Electron 66/66 與後續 Chromium 解碼證據分別記錄。
 
+首輪正式發布後補驗發現 Render 代理下舊啟動器預設 WebSocket 被 UA 條件誤擋，已先回復上一版。`server/desktop-distribution.js` 改用 Origin／Fetch Metadata 辨認主程序相容通道，仍限 14 個帳號社交事件；`desktop_distribution_gate_qa.js` 擴充至 135/135，新增 `desktop_distribution_socket_verify.js` 檢查公開雙 transport／main 遊戲拒絕及瀏覽器握手限制。詳細首輪失敗、回復及最後上線證據集中於本次紀錄。
+
 ## 戰鬥圖片與技能音效時序（2026-09-21，已部署）
 
 修復致死受擊後站回、替補／結果提早出現、倒地重播與輪詢重設圖片；技能音由擲骰移至實際施放。修改兩個 Board HTML、board_battle.js、board_game.js（四個 castSfx 及 iframe 版本），新增倒地與瀏覽器 QA、擴充 FX 音效 QA；發布 builder 移除39硬限制並加31項fixture。更新四份專案文件，隔離 npm start 18926，完整證據見 [本次紀錄](BOARD_BATTLE_ORDER_20260921.md)。
