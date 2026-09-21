@@ -13057,6 +13057,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (state.battleState) notifyBattleWindow();
     scheduleAutoResumeBattleForCurrentPlayer();
     scheduleAutoResumePendingMoveForCurrentPlayer();
+    scheduleTurnStartIslandServiceChoiceForCurrentPlayer();
     if (shouldRunCpuAutoStep()) scheduleCpuAutoStep(180);
   }
 
@@ -17284,6 +17285,9 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         console.error("item reveal idle callback failed", error);
       }
     });
+    if (currentPlayer()?.pendingIslandServiceChoice?.requiredEntry === true) {
+      scheduleTurnStartIslandServiceChoiceForCurrentPlayer();
+    }
   }
 
   function waitForItemRevealIdle(callback) {
@@ -26209,11 +26213,12 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const player = currentPlayer();
     const resumable = canResumeBattle(player);
     const modalOpen = !!refs.modalBack?.classList.contains("open");
-    const actionLocked = isGameActionLocked() || modalOpen || !!player?.pendingPostgameBossVoyage;
+    const requiredIslandEntry = player?.pendingIslandServiceChoice?.requiredEntry === true;
+    const actionLocked = isGameActionLocked() || modalOpen || !!player?.pendingPostgameBossVoyage || requiredIslandEntry;
     const lanTurnLocked = !canBoardLanControlCurrentPlayer(player);
     refs.rollDiceBtn.disabled = actionLocked || lanTurnLocked;
     refs.useItemBtn.disabled = actionLocked || lanTurnLocked;
-    refs.rollDiceBtn.textContent = resumable ? "繼續戰鬥" : "擲骰前進";
+    refs.rollDiceBtn.textContent = resumable ? "繼續戰鬥" : requiredIslandEntry ? "進入島嶼" : "擲骰前進";
     const serviceAction = currentIslandServiceAction(currentPlayer());
     if (refs.inspectTileBtn) {
       refs.inspectTileBtn.textContent = serviceAction ? `進入${serviceAction.label.replace(/島$/, "")}` : "查看目前格子";
@@ -27166,6 +27171,9 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     refs.modalBack.classList.remove("open");
     syncTurnActionButtons();
     refreshBgmForState();
+    if (currentPlayer()?.pendingIslandServiceChoice?.requiredEntry === true) {
+      scheduleTurnStartIslandServiceChoiceForCurrentPlayer();
+    }
   }
 
   const DICE_UI_ASSET_BASE = "images/board/dice_ui/";
@@ -28500,6 +28508,18 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       return playFinalBossVoyageCinematic(event);
     }
     if (event.type === "spectator-modal") {
+      const servicePlayer = currentPlayer();
+      const requiredService = servicePlayer?.pendingIslandServiceChoice;
+      if (requiredService?.requiredEntry === true
+        && String(event.playerId || "") === String(servicePlayer.id || "")
+        && servicePlayer.location?.kind === "island"
+        && String(requiredService.islandId || "") === String(servicePlayer.location.islandId || "")
+        && event.detail?.kind === requiredService.serviceKind
+        && (boardPlayerMatchesLocalUser(servicePlayer) || (isCpuPlayer(servicePlayer) && localPlayerIsLobbyHost()))) {
+        // A refreshed owner must restore the real service, not its own read-only broadcast.
+        scheduleTurnStartIslandServiceChoiceForCurrentPlayer();
+        return 0;
+      }
       if (event.detail?.kind === "sea-choice") {
         const player = currentPlayer();
         const ownsChoice = player
@@ -33216,6 +33236,10 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (state.gameState.phase !== "main" || state.gameState.pendingMove || state.gameState.movementAnimating || state.gameState.diceRolling || state.battleState || state.gameState.resolutionLock) return;
     const player = currentPlayer();
     if (warnBoardLanTurnLocked(player)) return;
+    if (player?.pendingIslandServiceChoice?.requiredEntry === true) {
+      openPendingIslandServiceChoice(player);
+      return;
+    }
     if (player?.pendingPostgameBossVoyage) {
       await processPendingPostgameBossVoyageForCurrentPlayer();
       return;
@@ -40119,6 +40143,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   }
 
   function finishIslandServiceTurn() {
+    clearPendingIslandServiceChoice(currentPlayer());
     closeModal();
     endTurn();
     schedulePendingMoveLearn();
@@ -57986,7 +58011,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
           : grantSharedEnemyIslandClearRewards(player, battle, baseRewards, battlePlaceName, serviceKind);
         const postBattleChoicePlayers = isCoopBattle(battle) ? rewardRecipients : sharedClearParticipants;
         const markedChoicePlayers = markPendingIslandServiceChoiceForPlayers(postBattleChoicePlayers, island, serviceKind, battle, player);
-        clearPendingIslandServiceChoice(player);
+        markPendingIslandServiceChoice(player, island, serviceKind, battle, { requiredEntry: true });
         addLog(`${player.name} 擊敗了 ${island.name}。`);
         addLog(`${player.name} 的勝利獎勵：${rewards.summary}。`);
         if (sharedClearParticipants.length) {
@@ -58070,13 +58095,10 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       finalizeBattleAndAdvanceTurn(player, null, {
         advanceTurn: false,
         afterClear: () => {
-          enterIslandService({
-            player,
-            island,
-            islandState,
-            kind: immediateServiceKind,
-            label: serviceIslandLabel(immediateServiceKind),
-          });
+          // The LAN battle overlay remains locked during its closing animation.
+          // Keep the required entry in the snapshot until this service is finished.
+          openPendingIslandServiceChoice(player);
+          scheduleTurnStartIslandServiceChoiceForCurrentPlayer();
         },
       });
       return;
@@ -60522,7 +60544,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     return true;
   }
 
-  function markPendingIslandServiceChoice(player, island, serviceKind, battle) {
+  function markPendingIslandServiceChoice(player, island, serviceKind, battle, options = {}) {
     if (!player || !island?.id || !isServiceIslandKind(serviceKind)) return false;
     if (player.location?.kind !== "island" || String(player.location.islandId || "") !== String(island.id)) return false;
     player.pendingIslandServiceChoice = {
@@ -60532,6 +60554,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       enemyKey: battle?.enemyCombatant?.key || battle?.enemyCombatant?.name || "",
       round: Math.max(1, Number(state.gameState?.round || 1)),
       createdAt: Date.now(),
+      ...(options.requiredEntry === true ? { requiredEntry: true } : {}),
     };
     return true;
   }
@@ -60601,6 +60624,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   function cpuShouldEnterPendingIslandService(action) {
     const player = action?.player;
     if (!player || !isCpuPlayer(player)) return false;
+    if (action.choice?.requiredEntry === true) return true;
     if (action.kind === "hospital") return devObserverNeedsRecovery(player, true);
     if (action.kind === "research_lab") {
       return devObserverNeedsRecovery(player, true) || Boolean(devObserverDesiredResearchLabExtractor(player));
@@ -60618,6 +60642,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const liveAction = pendingIslandServiceChoiceAction(action?.player);
     if (!liveAction || String(liveAction.player?.id || "") !== String(currentPlayer()?.id || "")) return false;
     if (!canBoardLanControlCurrentPlayer(liveAction.player)) return false;
+    if (liveAction.choice?.requiredEntry === true) return openPendingIslandServiceChoice(liveAction.player);
     const enter = decision === "enter";
     clearPendingIslandServiceChoice(liveAction.player);
     releasePendingIslandServiceChoiceLock();
@@ -60640,6 +60665,14 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   function openPendingIslandServiceChoice(player = currentPlayer()) {
     const action = pendingIslandServiceChoiceAction(player);
     if (!action || !canOpenPendingIslandServiceChoice(player)) return false;
+    if (action.choice?.requiredEntry === true) {
+      if (refs.modalBack?.classList.contains("open") || pendingCoopBattleResultForPlayer(player) || itemRevealIsPending()) return false;
+      releasePendingIslandServiceChoiceLock();
+      state.gameState.turnStep = `${action.island.name}：進入${action.label}`;
+      const entered = enterIslandService(action);
+      if (entered) scheduleBoardLanStatePush("post-battle-island-required-entry", 80, { force: true });
+      return entered;
+    }
     state.gameState.resolutionLock = true;
     state.gameState.turnStep = `${action.island.name}：進島或出發`;
     const turnsLeft = isTemporaryEnemyIslandService(action.island, action.islandState)

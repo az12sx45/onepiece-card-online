@@ -1,5 +1,9 @@
 ﻿# Dev Workflow
 
+## 敵人島勝利後進島修復（2026-09-21）
+
+修正 LAN 戰鬥畫面關閉的 260ms 操作鎖使立即進島失敗。`public/js/board_game.js` 保留當回合勝利者的必要進島狀態，等播放結束後直接開服務、阻擋擲骰並支援讀檔恢復；其他共鬥者仍於自己回合二選一。更新 `public/board_game.html` 載入版本及四份專案文件，新增定向瀏覽器／狀態 QA。隔離 npm start 18922；驗證、發布與保護紀錄見 [修復紀錄](BOARD_ENEMY_VICTORY_SERVICE_20260921.md)。
+
 ## 招式素材發布作業（2026-09-21）
 
 接續已完成的素材接線，核對並發布 102 圖集、487 OGG、39 程式的 Board v3 package。新增 `scripts/promote_board_move_fx_release.js` 以 Git HEAD bytes 核對候選後提升 metadata；通用 v2-based builder 加入額外媒體防漏檢查。正式資料與既有 rank 修改先記錄 SHA，使用隔離 npm start／Chrome／多人同步回歸。發布流程與本次結果見 [發布紀錄](BOARD_MOVE_FX_RELEASE_20260921.md)。

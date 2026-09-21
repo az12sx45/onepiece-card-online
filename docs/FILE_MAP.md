@@ -1,5 +1,12 @@
 # File Map
 
+## 敵人島勝利後進島（2026-09-21）
+
+- `public/js/board_game.js`：戰後必要進島狀態、播放關閉後重試、擲骰攔截、服務結束清理及共鬥回合選擇；`public/board_game.html` 更新載入版本。
+- `scripts/board_enemy_victory_service_qa.js`、`scripts/board_enemy_service_state_qa.js`：真實 Chrome／Socket.IO 受控勝利流程，以及進島狀態、相容性與操作門控回歸。
+- `scripts/build_board_program_update.js`：以既有 v3 完整媒體清單保留所有素材，從 Git HEAD 更新 Board 程式並產生可核對的增量候選。
+- `docs/BOARD_ENEMY_VICTORY_SERVICE_20260921.md`：原因、修改、隔離測試、公開部署與資料保護證據。
+
 ## 招式素材正式發布（2026-09-21）
 
 - `scripts/promote_board_move_fx_release.js`：將凍結候選與已提交 Git HEAD 的 628 個輸入逐項核對，再提升 Board v3 catalog／manifest。
