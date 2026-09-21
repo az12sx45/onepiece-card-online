@@ -1,0 +1,86 @@
+{
+  "generator": "built-in image_gen",
+  "createdAt": "2026-09-21",
+  "totalExpected": 6,
+  "totalSaved": 6,
+  "images": [
+    {
+      "key": "tailwind",
+      "variant": 3,
+      "title": "順風航線",
+      "source": "C:/Users/王曜瑋/.codex/generated_images/01a0c34f-e284-7760-81a8-101215295f2b/exec-093e446e-ecae-40ec-823c-3d3206120a4d.png",
+      "prompt": "Use case: illustration-story. Asset type: a complete landscape 3:2 event illustration for the One Piece game New World Voyage Records, event Tailwind Sailing variant 3. Depict actual recognizable One Piece character Nami with long orange hair, Log Pose on wrist, iconic blue-white striped top, pointing a clear safe course from the Thousand Sunny's bow while a powerful favorable wind fills the sails and the ship surges FORWARD through turquoise wave crests. Only Nami visible, full dynamic ship scenery and sunny distant island, exhilarating positive journey. Dramatic low viewpoint alongside the bow, Nami central and clearly readable face. Faithful One Piece character identity, polished anime adventure illustration, fine confident line art and painterly ship/ocean details, deep navy shadows, teal sea, warm golden sunlight, fits an elegant dark pirate RPG. No words, labels, text, UI, frames, borders, watermark, montage or panels. One finished full landscape picture.",
+      "destination": "D:\\Codex_Release_Worktrees\\board-voyage-records-v1\\public\\images\\board\\sea_event_reveal\\v2\\tailwind-3.webp",
+      "sourceSha256": "0f87d89ed9e0be7c0f62321154bbbbbb0bb24af9fded38f8c6c2b734bdfc3e56",
+      "sha256": "d3219e4adabd8eff1721902ade351a779ad0a729b8b36491f27b6b15b3cb1cd2",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 350582
+    },
+    {
+      "key": "helpful-current",
+      "variant": 3,
+      "title": "海流助航",
+      "prompt": "Use case: illustration-story. Create ONE complete 3:2 landscape picture for One Piece New World Voyage Records event 'Helpful Current', third unique variant. Actual recognizable Jinbe, broad blue-skinned whale-shark fish-man with tusks, black topknot, orange patterned kimono, stands confidently at the Thousand Sunny helm. Camera from near wheel looking over Jinbe's shoulder but face in clear three-quarter view, dramatically curving luminous teal ocean current leads the ship swiftly FORWARD toward a distant tropical island. Show clean rounded current bands and golden reflections with triumphant calm atmosphere, ship sail and wooden deck details. Only Jinbe visible. Faithful One Piece character design, polished anime linework and painted adventure RPG background, deep navy shadows, teal water, gold sunbeams, matching elegant pirate board game aesthetic. No text, arrows, labels, UI, frames, montage or watermark. One finished standalone illustration.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c34f-e284-7760-81a8-101215295f2b\\exec-5926c6e3-1657-4a18-8f45-627a180bd8d2.png",
+      "destination": "D:\\Codex_Release_Worktrees\\board-voyage-records-v1\\public\\images\\board\\sea_event_reveal\\v2\\helpful-current-3.webp",
+      "sourceSha256": "7e9919442ae31e7f556e5bb6093e9b3c14694d5878f78c34b09325b3094eb724",
+      "sha256": "8c146745840c900366ac512eb62d3c1eef6361908b8a383981d58bc3b69b79e3",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 304088
+    },
+    {
+      "key": "reverse-waves",
+      "variant": 3,
+      "title": "逆浪拖行",
+      "prompt": "Use case: illustration-story. Create a single complete 3:2 landscape scene for One Piece New World Voyage Records event 'Reverse Waves', third variant. Actual recognizable Jinbe, blue whale-shark fish-man helmsman with tusks and black topknot and orange patterned kimono, struggles at the Thousand Sunny's great wooden wheel while a HUGE opposing sea current pushes the ship backward. Low side-deck angle, Jinbe clearly visible in foreground left, ship tilted, angry towering turquoise breaker beyond the bow on right, sail blown backward, rain spray, alarm but determined expression. Only Jinbe visible. Dramatic polished One Piece anime character illustration with authentic identity, cinematic navy shadows, storm teal ocean, small warm brass lantern accents, elegant pirate RPG artwork. No gore. No text, caption, arrows, interface, border, montage, panel, or watermark. One original finished full scene.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c34f-e284-7760-81a8-101215295f2b\\exec-ed641d88-719a-4289-8c22-85d92d870c63.png",
+      "destination": "D:\\Codex_Release_Worktrees\\board-voyage-records-v1\\public\\images\\board\\sea_event_reveal\\v2\\reverse-waves-3.webp",
+      "sourceSha256": "9cf0ad5a2a3ca2d26f9d6c77a151803c382ed76915f2a593218d6060e685d536",
+      "sha256": "ab561162fb230aeb4a3e4d2f63e3642cab6c3a7bad79018dbf5df6510565eb11",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 347368
+    },
+    {
+      "key": "storm-shelter",
+      "variant": 3,
+      "title": "暴風亂流",
+      "prompt": "Use case: illustration-story. One complete landscape 3:2 event picture for One Piece New World Voyage Records, 'Storm Shelter' variant3. Actual recognizable Nami (orange hair, Log Pose, blue and white striped top) clutches a soaked nautical chart on the Thousand Sunny's deck, worried but decisive, pointing toward a nearby warmly lit harbor town of merchants. The ship has been driven sideways by violent storm wind into shelter, dramatic waves in foreground, ropes and sails strained, rain-dark navy sky left and warm GOLD harbor lanterns ahead right. Low wide camera on deck behind rail, Nami prominent in center with clear face, only Nami visible. Cinematic polished authentic One Piece anime illustration, detailed wood ropes waves, navy teal and antique gold pirate RPG palette, atmospheric rain, no text or logos or captions or interface or border or panels or watermark, no generic replacement character. One finished full scene.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c34f-e284-7760-81a8-101215295f2b\\exec-54e90f70-dab9-4789-9ae5-f8238c116ff3.png",
+      "destination": "D:\\Codex_Release_Worktrees\\board-voyage-records-v1\\public\\images\\board\\sea_event_reveal\\v2\\storm-shelter-3.webp",
+      "sourceSha256": "9ed441bbf6ce18a1afb7af4f3fd1657e200fe1a507ebd7c8a85e715a63daf0f4",
+      "sha256": "d7072b84aa7f2ab8fa74bd82caa9b49ea85fc932a6113e10d5ba6869a1907a4e",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 321848
+    },
+    {
+      "key": "crosswind",
+      "variant": 3,
+      "title": "亂風偏航",
+      "prompt": "Use case: illustration-story. Generate one complete 3:2 landscape event artwork for the One Piece game New World Voyage Records: 'Crosswind Course Deviation', distinct variant3. Actual recognizable Nami with long orange hair, blue-white striped top and Log Pose bracelet stands on Thousand Sunny deck studying a spinning Log Pose while fiercely crossing winds whip her orange hair and sails in opposing directions, the ship veers toward a different distant island. Strong diagonal composition from elevated crow's nest viewpoint, Nami's expressive surprised face clearly visible, swirling pale wind ribbons in dark teal clouds and ocean, tilted horizon. ONLY Nami is visible. Faithful original One Piece identity, elegant polished anime adventure RPG illustration, crisp character linework, detailed ropes and wood, deep navy, teal, warm golden highlights. No written text, compass letters, diagrams, arrows, labels, UI, frame, montage, panels or watermark. One finished standalone scene.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c34f-e284-7760-81a8-101215295f2b\\exec-b2cd634d-9ffc-4d6a-ba8d-c212773a29c8.png",
+      "destination": "D:\\Codex_Release_Worktrees\\board-voyage-records-v1\\public\\images\\board\\sea_event_reveal\\v2\\crosswind-3.webp",
+      "sourceSha256": "211e5233188a4203270c19b9281a8b41b0d82b53b075bcce69e56df82e475c99",
+      "sha256": "4fba94ae6260c32fc708c587d568807a88d35566ead87db47193a987d49459e1",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 372938
+    },
+    {
+      "key": "cold-fog",
+      "variant": 3,
+      "title": "濕冷霧潮",
+      "prompt": "Use case: illustration-story. One complete 3:2 landscape event artwork for One Piece New World Voyage Records, 'Cold Wet Fog Tide' third distinct variant. Actual recognizable Brook the very tall skeletal Straw Hat musician with black afro, round eye sockets and gentleman pirate coat, and actual recognizable Usopp with long nose, black curly hair, goggles and yellow bandana, are huddled shivering beside a warm brass lantern on Thousand Sunny's soaked deck. Usopp peers into thick cold blue sea fog, Brook tries to hold a frost-covered nautical chart with bony fingers, mast and sail fade into dense fog, barely visible icy teal waves beyond rail. Comedic chilled expressions, unmistakable ONE PIECE character identities, no other characters. Wide close medium view with both faces readable and nautical environment, polished anime linework and painterly pirate RPG detail, dark navy and icy teal balanced with rich gold lantern light. No words, labels, letters on chart, interface, borders, panels or watermarks. One full finished illustration, not a sheet.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c34f-e284-7760-81a8-101215295f2b\\exec-591163c7-08b7-4b43-866a-245c0a218a41.png",
+      "destination": "D:\\Codex_Release_Worktrees\\board-voyage-records-v1\\public\\images\\board\\sea_event_reveal\\v2\\cold-fog-3.webp",
+      "sourceSha256": "18e70e6866e4b541e6581aa511294cde120cc514489445c487b59b3397d461f3",
+      "sha256": "28571e30aa887a4a2851f2716623a3da7ec84d5afce43154b90d7be8cf78c5ec",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 301500
+    }
+  ]
+}

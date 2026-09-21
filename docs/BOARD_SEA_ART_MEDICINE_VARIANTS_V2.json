@@ -1,0 +1,198 @@
+{
+  "createdAt": "2026-09-21T10:00:55.195Z",
+  "version": "v2",
+  "entries": [
+    {
+      "key": "medical-ship",
+      "variant": 2,
+      "prompt": "Use case: illustration-story. Create one finished landscape 3:2 game event illustration for One Piece Voyage Records, full image, no panels, no text, no watermark. Scene: aboard the Thousand Sunny, Tony Tony Chopper (small brown reindeer doctor, blue nose, distinctive blue-and-pink hat with white X, antlers) kneels to carefully bandage a seated Monkey D. Luffy's scraped forearm; Luffy has black hair, straw hat, red sleeveless vest, scar under left eye, smiling with relief. A white-sailed drifting medical supply boat approaches in the visible background. Mood: rescued at sea and crew healing. Different composition: intimate three-quarter deck angle with Chopper foreground left and Luffy right, medicine bag beside them. Recognizable official One Piece character designs, beautiful hand-drawn anime illustration, confident black ink lines, cel-shaded forms and richly painted nautical environment, expressive faces. Deep navy sea, teal shadows, warm brass-gold late-afternoon light, mature pirate adventure RPG atmosphere. Complete scene edge to edge, 1536x1024 landscape, only one scene.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c350-b500-76a0-bcce-c32a7b340588\\exec-839aec15-469d-40b9-bde6-c2bd982989b5.png",
+      "output": "public/images/board/sea_event_reveal/v2/medical-ship-2.webp",
+      "generator": "built-in image_gen",
+      "visualReview": "Recognizable characters, coherent event scene, full landscape composition, no captions.",
+      "sourceSha256": "3a9f3f91b3a8a73a8d5de071c5d5635ecdfcda7a919316f634d192599c24c7ef",
+      "outputSha256": "2f7f429a62e519ec826d5e1a4d572e91f018715fbc5b1c6132741af683fa8f4f",
+      "bytes": 296062,
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "key": "medical-ship",
+      "variant": 3,
+      "prompt": "Use case: illustration-story. Create one finished 1536x1024 landscape 3:2 game event illustration for One Piece Voyage Records. Recognizable canonical One Piece character designs, polished hand-drawn anime illustration with strong ink lines, clear expressive faces and richly painted nautical scenery. Deep navy and teal shadows, warm brass-gold highlights, mature seafaring RPG mood. One full scene edge to edge. No panels, text, numerals, UI, border or watermark. Inside the Thousand Sunny infirmary, Tony Tony Chopper, small brown reindeer doctor with blue nose and pink-and-blue antlered hat bearing white X, checks a seated Roronoa Zoro's bandaged shoulder with a stethoscope. Zoro is muscular with short vivid green hair, three gold earrings and green robe, looking calmly reassured. Clean bandage rolls and small green medicine bottles in foreground, golden sunbeams through a round brass porthole illuminate deep teal cabin wood. Camera at side with Chopper centered, medium-wide composition. Depict successful crew healing after drifting medical supplies arrived, no blood.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c350-b500-76a0-bcce-c32a7b340588\\exec-233aa37e-e71e-44fd-b5d5-543d87a96485.png",
+      "output": "public/images/board/sea_event_reveal/v2/medical-ship-3.webp",
+      "generator": "built-in image_gen",
+      "visualReview": "Recognizable characters, coherent event scene, full landscape composition, no captions.",
+      "sourceSha256": "d3165940f30ea833743e054959746b862c32cd22ceaa89559581d23673bcd920",
+      "outputSha256": "ad87e89eb72795e9777fe9de921176a6d680052fa33d35b1c96969ef8e78c240",
+      "bytes": 238656,
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "key": "spirit-tonic",
+      "variant": 2,
+      "prompt": "Use case: illustration-story. Create one finished 1536x1024 landscape 3:2 game event illustration for One Piece Voyage Records. Recognizable canonical One Piece character designs, polished hand-drawn anime illustration with strong ink lines, clear expressive faces and richly painted nautical scenery. Deep navy and teal shadows, warm brass-gold highlights, mature seafaring RPG mood. One full scene edge to edge. No panels, text, numerals, UI, border or watermark. Tony Tony Chopper, recognizable small reindeer doctor in blue and pink hat with white X and antlers, offers a clear bottle of luminous turquoise revitalizing tonic to Usopp, the tan-skinned long-nosed sniper with curly black hair, goggles and yellow bandana. Usopp straightens proudly and stretches after taking the tonic, cheerful energy returning. On the Thousand Sunny wooden deck beside coiled rope, glowing sea at dawn, subtle turquoise sparkling medicinal vapor rising from bottle. Medium-wide eye-level framing. Convey restored stamina for special moves, not treasure or combat.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c350-b500-76a0-bcce-c32a7b340588\\exec-31440a03-02db-462c-9487-e7a359f2a0dc.png",
+      "output": "public/images/board/sea_event_reveal/v2/spirit-tonic-2.webp",
+      "generator": "built-in image_gen",
+      "visualReview": "Recognizable characters, coherent event scene, full landscape composition, no captions.",
+      "sourceSha256": "bb4a53f5ae979019ab868e70947398af8cb77b93e64bf45aae91c0f202c126c5",
+      "outputSha256": "384bb3d5e73c155c7daef22423ec286477a72410e802fa2ba135d3a79055690f",
+      "bytes": 278412,
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "key": "spirit-tonic",
+      "variant": 3,
+      "prompt": "Use case: illustration-story. Create one finished 1536x1024 landscape 3:2 game event illustration for One Piece Voyage Records. Recognizable canonical One Piece character designs, polished hand-drawn anime illustration with strong ink lines, clear expressive faces and richly painted nautical scenery. Deep navy and teal shadows, warm brass-gold highlights, mature seafaring RPG mood. One full scene edge to edge. No panels, text, numerals, UI, border or watermark. Roronoa Zoro, muscular young swordsman with short green hair, scar over closed left eye, green robe and three swords at his waist, sits on deck beside a wooden barrel. He holds a small luminous turquoise tonic bottle, his previously weary expression returning to focused confidence. Chopper the small brown reindeer doctor with blue nose, antlers and his distinctive blue/pink hat with white X watches proudly beside him. Thin turquoise medicinal sparkles curl above the bottle, dramatic gentle evening sea breeze and golden rays behind sails. Heroic low three-quarter camera angle, tonic and refreshed faces clear. Show restorative special-move energy and renewed alertness, no combat.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c350-b500-76a0-bcce-c32a7b340588\\exec-09b42ebd-f930-4671-9071-1db35b1ccdcd.png",
+      "output": "public/images/board/sea_event_reveal/v2/spirit-tonic-3.webp",
+      "generator": "built-in image_gen",
+      "visualReview": "Recognizable characters, coherent event scene, full landscape composition, no captions.",
+      "sourceSha256": "7e54d303b1c2e95577e4c1c42d016a8d085d13d6b51519059444c9ab976dc121",
+      "outputSha256": "c737abc4dee263c9e04d3f0bf705b4c046f4cb15495617daf0b674c6daf718f8",
+      "bytes": 283914,
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "key": "medical-kit",
+      "variant": 2,
+      "prompt": "Use case: illustration-story. Create one finished 1536x1024 landscape 3:2 game event illustration for One Piece Voyage Records. Recognizable canonical One Piece character designs, polished hand-drawn anime illustration with strong ink lines, clear expressive faces and richly painted nautical scenery. Deep navy and teal shadows, warm brass-gold highlights, mature seafaring RPG mood. One full scene edge to edge. No panels, text, numerals, UI, border or watermark. Tony Tony Chopper, recognizable small brown reindeer doctor with blue nose and antlered pink/blue X hat, has opened a polished dark-wood brass-trimmed medical supply case on Thousand Sunny deck. The foreground medical kit contains clean rolled bandages, medicine bottles, small herb packets and a shining turquoise tonic. Chopper offers the supplies toward Monkey D. Luffy, recognizable black hair, straw hat, scar under left eye and red vest, who joyfully gives a thumbs-up. Both relieved and healthy, warm sun at sea. High three-quarter composition focused on the open medical kit between them, beautiful detailed hands and objects. Convey HP and move energy restored together.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c350-b500-76a0-bcce-c32a7b340588\\exec-fe749061-3500-4d58-8b6d-c12fc1de211e.png",
+      "output": "public/images/board/sea_event_reveal/v2/medical-kit-2.webp",
+      "generator": "built-in image_gen",
+      "visualReview": "Recognizable characters, coherent event scene, full landscape composition, no captions.",
+      "sourceSha256": "9f1e8821c477fd10952ea59d75b6875d1530a1ff9947f4583e389c8547d6bde6",
+      "outputSha256": "c3314b65dbceb1e96be2e3fccd80c4a55961efc00756f1125151a09bd3a19a8e",
+      "bytes": 330810,
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "key": "medical-kit",
+      "variant": 3,
+      "prompt": "Use case: illustration-story. Create one finished 1536x1024 landscape 3:2 game event illustration for One Piece Voyage Records. Recognizable canonical One Piece character designs, polished hand-drawn anime illustration with strong ink lines, clear expressive faces and richly painted nautical scenery. Deep navy and teal shadows, warm brass-gold highlights, mature seafaring RPG mood. One full scene edge to edge. No panels, text, numerals, UI, border or watermark. In Thousand Sunny's warmly lit infirmary, Usopp, recognizable tan long-nosed sniper with curly black hair, goggles and yellow bandana, opens a neatly equipped wooden medical supply kit on the table. Tony Tony Chopper, the small brown reindeer doctor with blue nose, antlers and blue/pink hat bearing white X, joyfully inspects gleaming amber and teal tonic bottles and pristine white bandages. Usopp holds up a clean roll of bandages with a relieved confident grin. Warm gold porthole sunlight against rich dark navy cabin, close to medium view centered on kit and faces. Mood of an excellent recovery supply found at sea, both health and move energy restored.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c350-b500-76a0-bcce-c32a7b340588\\exec-b0bb7598-f919-4cf7-97d3-4204466a59d6.png",
+      "output": "public/images/board/sea_event_reveal/v2/medical-kit-3.webp",
+      "generator": "built-in image_gen",
+      "visualReview": "Recognizable characters, coherent event scene, full landscape composition, no captions.",
+      "sourceSha256": "46318b5692783cbf7dfafe71dcdea6369dde2070bbe819d0918028a81ab90afe",
+      "outputSha256": "baf2a63a0d77a7a5e3cd92f363a903f26718f1cb1e440083e0f09210900c9cc9",
+      "bytes": 285720,
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "key": "medicine-side-effect",
+      "variant": 2,
+      "prompt": "Use case: illustration-story. Create one finished 1536x1024 landscape 3:2 game event illustration for One Piece Voyage Records. Recognizable canonical One Piece character designs, polished hand-drawn anime illustration with strong ink lines, clear expressive faces and richly painted nautical scenery. Deep navy and teal shadows, warm brass-gold highlights, mature seafaring RPG mood. One full scene edge to edge. No panels, text, numerals, UI, border or watermark. Monkey D. Luffy, unmistakable black tousled hair, straw hat, red sleeveless vest, scar beneath left eye, staggers a little on Thousand Sunny deck after swallowing the wrong medicine, dizzy spiral eyes and one hand to temple, knees bent, still comical not horrific. Tony Tony Chopper, small brown reindeer doctor with blue nose and blue/pink X hat and antlers, startled beside him, urgently reads an unlabelled amber vial. Tilted horizon, swaying ropes and faint violet medicine fumes visually convey dizziness and slowed sailing. Warm gold sunset with stormy navy-teal sea, close expressive composition. Non-graphic mild medicine mishap, no injury detail or gore.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c350-b500-76a0-bcce-c32a7b340588\\exec-28b9ce6b-a627-42c0-aed6-0db50ef9e053.png",
+      "output": "public/images/board/sea_event_reveal/v2/medicine-side-effect-2.webp",
+      "generator": "built-in image_gen",
+      "visualReview": "Recognizable characters, coherent event scene, full landscape composition, no captions.",
+      "sourceSha256": "350ec68aedd29d950b3ccf09323c6d016fda0131a7ab7152a7ed2a5b2410f900",
+      "outputSha256": "2c4356543483c089d2383556e36e05b7e07be8631fdf8dacf79eddc481aad53c",
+      "bytes": 272402,
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "key": "medicine-side-effect",
+      "variant": 3,
+      "prompt": "Use case: illustration-story. Create one finished 1536x1024 landscape 3:2 game event illustration for One Piece Voyage Records. Recognizable canonical One Piece character designs, polished hand-drawn anime illustration with strong ink lines, clear expressive faces and richly painted nautical scenery. Deep navy and teal shadows, warm brass-gold highlights, mature seafaring RPG mood. One full scene edge to edge. No panels, text, numerals, UI, border or watermark. Usopp, recognizable long-nosed tan-skinned sniper with curly black hair, yellow bandana and goggles, sits awkwardly against a barrel on Thousand Sunny deck, comically woozy from an unknown medicine. A little sweat, spinning dazed expression and one hand holding the rail, legs wobbly; Tony Tony Chopper the small brown blue-nosed reindeer doctor in antlered blue/pink X hat checks his forehead in concern. An unlabelled purple medicine bottle rests on the deck nearby, seasick tilted brass compass and slack rope suggest temporarily slowed sailing. Ocean dusk, lanterns, navy-teal water. Medium-wide side composition. Mild non-graphic medicinal side effect, not serious injury.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c350-b500-76a0-bcce-c32a7b340588\\exec-cf82a4dc-1cbe-4175-a13d-3ff95e13b3f4.png",
+      "output": "public/images/board/sea_event_reveal/v2/medicine-side-effect-3.webp",
+      "generator": "built-in image_gen",
+      "visualReview": "Recognizable characters, coherent event scene, full landscape composition, no captions.",
+      "sourceSha256": "7e46b01cd30e0f5e57f45d576993c1c12ecbbcb3c2b4b92e68bb3265c112de4f",
+      "outputSha256": "0f77684006487fd6facaecb0c97859051468bf15a53ad609f9c750f84a4115e7",
+      "bytes": 270140,
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "key": "spirit-drain",
+      "variant": 2,
+      "prompt": "Use case: illustration-story. Create one finished 1536x1024 landscape 3:2 game event illustration for One Piece Voyage Records. Recognizable canonical One Piece character designs, polished hand-drawn anime illustration with strong ink lines, clear expressive faces and richly painted nautical scenery. Deep navy and teal shadows, warm brass-gold highlights, mature seafaring RPG mood. One full scene edge to edge. No panels, text, numerals, UI, border or watermark. Roronoa Zoro, identifiable short green hair, scar over closed left eye, three earrings and deep green robe with three swords, exhausted after a medicine's draining effect, sits slumped on the ship deck with one elbow on his knee, his hand loosely around a sheathed sword. Tony Tony Chopper the blue-nosed small reindeer doctor with antlers and blue/pink X hat looks worried holding the nearly empty amber medicine bottle. Very subtle faded blue energy wisps drift away from Zoro's shoulder into the night air, conveying lost energy for special moves. Warm lantern glow, dark navy sea beyond the wooden railing. Medium shot with both readable faces, dramatic but gentle, no physical injury.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c350-b500-76a0-bcce-c32a7b340588\\exec-fba80dea-68d6-4afd-a8e7-e74fea940cad.png",
+      "output": "public/images/board/sea_event_reveal/v2/spirit-drain-2.webp",
+      "generator": "built-in image_gen",
+      "visualReview": "Recognizable characters, coherent event scene, full landscape composition, no captions.",
+      "sourceSha256": "597d0833b60f0c34c22b9d9b3b475f4c5dc386134429f05391381ad8e2a3c311",
+      "outputSha256": "dd339e81c3b1f7980b434ddaefcb8fa9f4dca0ed2aae92ae865cf5f303166707",
+      "bytes": 215846,
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "key": "spirit-drain",
+      "variant": 3,
+      "prompt": "Use case: illustration-story. Create one finished 1536x1024 landscape 3:2 game event illustration for One Piece Voyage Records. Recognizable canonical One Piece character designs, polished hand-drawn anime illustration with strong ink lines, clear expressive faces and richly painted nautical scenery. Deep navy and teal shadows, warm brass-gold highlights, mature seafaring RPG mood. One full scene edge to edge. No panels, text, numerals, UI, border or watermark. Usopp, recognizable long nose, curly black hair, tan skin, yellow bandana with goggles, slumps exhausted over a sturdy wooden deck table aboard Thousand Sunny, head resting against crossed forearms beside his green slingshot. Monkey D. Luffy with straw hat, black hair, red vest and under-eye scar looks concerned beside him. An uncorked dark blue medicine bottle and fading pale blue wisps show a tonic that drained his focus, he is awake but too tired to use his special moves. Warm gold lamp against cold navy sea and sails, close intimate cabin-door viewpoint. Mild exhaustion only, no injuries, convey lost mental stamina rather than sleep or treasure.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c350-b500-76a0-bcce-c32a7b340588\\exec-6f8f9536-af7c-47e7-b8ae-4fda5258b9dd.png",
+      "output": "public/images/board/sea_event_reveal/v2/spirit-drain-3.webp",
+      "generator": "built-in image_gen",
+      "visualReview": "Recognizable characters, coherent event scene, full landscape composition, no captions.",
+      "sourceSha256": "4721d41cec21a92ea5ecb00477cc91f48b98a238e662c35f501cc645c9051093",
+      "outputSha256": "95596c62c9811c37cd8a81719cc3cc755829fe61892deedcdaede6e271c73f8d",
+      "bytes": 228178,
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "key": "toxic-reaction",
+      "variant": 2,
+      "prompt": "Use case: illustration-story. Create one finished 1536x1024 landscape 3:2 game event illustration for One Piece Voyage Records. Recognizable canonical One Piece character designs, polished hand-drawn anime illustration with strong ink lines, clear expressive faces and richly painted nautical scenery. Deep navy and teal shadows, warm brass-gold highlights, mature seafaring RPG mood. One full scene edge to edge. No panels, text, numerals, UI, border or watermark. Monkey D. Luffy, recognizable straw hat, messy black hair, scar under left eye and red vest, sits on the Thousand Sunny deck looking pale and nauseated, one hand on his stomach and brow sweating lightly. Tony Tony Chopper, small brown reindeer doctor with blue nose, antlers and his blue/pink white-X hat, urgently prepares medicine while holding a clean white cloth. A tipped unlabelled vial spills a little purple liquid in foreground, stylized purple vapour and dim blue energy wisps convey both lost vitality and move stamina. Dramatic low deck-level camera, dark teal ocean and golden cabin light. Non-graphic cartoon medicine mishap, no wounds, blood or vomiting.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c350-b500-76a0-bcce-c32a7b340588\\exec-f18e4b8f-685b-4a76-b17b-aa06178b073a.png",
+      "output": "public/images/board/sea_event_reveal/v2/toxic-reaction-2.webp",
+      "generator": "built-in image_gen",
+      "visualReview": "Recognizable characters, coherent event scene, full landscape composition, no captions.",
+      "sourceSha256": "a85e2f7f08413dfd83637b5ef8e964d3f0f2dcd6b3a0cf2291d9f2bf17a0d807",
+      "outputSha256": "c5b1760eb5c58cfbab2ef58e4f26d5a6186016c4857ba3c9b2be3ca55d51ec2c",
+      "bytes": 239258,
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "key": "toxic-reaction",
+      "variant": 3,
+      "prompt": "Use case: illustration-story. Create one finished 1536x1024 landscape 3:2 game event illustration for One Piece Voyage Records. Recognizable canonical One Piece character designs, polished hand-drawn anime illustration with strong ink lines, expressive faces and richly painted nautical scenery. Deep navy and teal shadows, warm brass-gold light, mature seafaring RPG mood. One full scene edge to edge, no panels, text, numerals, UI, border or watermark. Scene: inside the Thousand Sunny cabin at dawn, Usopp, unmistakable tan long-nosed sniper with curly black hair, goggles and yellow bandana, weakly slumps on a bench with a queasy pale expression and one hand on his stomach; a subtle violet haze fading into blue wisps around him indicates a medicine that drained both health and special-move energy. Tony Tony Chopper, small brown reindeer doctor with blue nose, antlers and his blue/pink hat bearing white X, carefully checks a purple medicine vial against the light, worried but acting to help. Round porthole ocean view and golden morning rim light. A spilled unlabelled purple bottle in foreground establishes the cause. Medium-wide diagonal composition centered on both faces, distinct from other scenes. Mild cartoon toxic reaction only, no wounds, blood, vomiting or horror.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c350-b500-76a0-bcce-c32a7b340588\\exec-f0171a14-d451-4e47-8e4c-b21a3e191e0f.png",
+      "output": "public/images/board/sea_event_reveal/v2/toxic-reaction-3.webp",
+      "generator": "built-in image_gen",
+      "visualReview": "Recognizable characters, coherent event scene, full landscape composition, no captions.",
+      "sourceSha256": "0d3481b9a6c5219524f1348049e28fc714dd2f96fafd776ae1d140edcf80e34c",
+      "outputSha256": "99c02291676739da3b6607c3907451bfa8c96711ff541dc825521f5e198d3963",
+      "bytes": 242596,
+      "dimensions": [
+        1536,
+        1024
+      ]
+    }
+  ]
+}

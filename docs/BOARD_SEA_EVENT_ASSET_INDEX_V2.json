@@ -1,0 +1,732 @@
+{
+  "ok": true,
+  "verifiedAt": "2026-09-21T12:09:26.338965+00:00",
+  "events": 24,
+  "variantsPerEvent": 3,
+  "totalFiles": 72,
+  "totalBytes": 21812054,
+  "uniqueImages": 72,
+  "sourcePngAndOutputHashesVerified": true,
+  "assets": [
+    {
+      "path": "public/images/board/sea_event_reveal/v2/ancient-relic-chest-1.webp",
+      "key": "ancient-relic-chest",
+      "variant": 1,
+      "size": 268072,
+      "sha256": "e26f1d10dbb490640892950eedc27aa0f1a5505102d844c34d64562941ba7be4",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_TREASURE_MEDICINE_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/ancient-relic-chest-2.webp",
+      "key": "ancient-relic-chest",
+      "variant": 2,
+      "size": 329558,
+      "sha256": "8ec67623f46eda8126cd3445fa1d324822a8323adf5f7339e2f959e7ba98d421",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_TREASURE_MEDICINE_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/ancient-relic-chest-3.webp",
+      "key": "ancient-relic-chest",
+      "variant": 3,
+      "size": 310614,
+      "sha256": "37cf3032da5066c71fae29c825fc514c9249eb017669e47e6607c43a9bf036ef",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_COMPLETION_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/black-market-1.webp",
+      "key": "black-market",
+      "variant": 1,
+      "size": 248722,
+      "sha256": "077e760237199a5b4aa5c033a828acd63051b2ced772555d05803208f994895a",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MONEY_WEATHER_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/black-market-2.webp",
+      "key": "black-market",
+      "variant": 2,
+      "size": 246710,
+      "sha256": "3956388406f728fe303c2237bf55c216991eb3f1bc9690987c69b3137823ea79",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MONEY_WEATHER_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/black-market-3.webp",
+      "key": "black-market",
+      "variant": 3,
+      "size": 174030,
+      "sha256": "4cbb135a8f0f21f10613701a2df803d536b34e5d7ca5b71310dd76b554368762",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_COMPLETION_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/charm-chest-1.webp",
+      "key": "charm-chest",
+      "variant": 1,
+      "size": 241850,
+      "sha256": "70cda34e2be8923a017e1a2ac5a13a70fb2a1cc4830c2f8629a5ff993f07d1c6",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_TREASURE_MEDICINE_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/charm-chest-2.webp",
+      "key": "charm-chest",
+      "variant": 2,
+      "size": 310420,
+      "sha256": "126f647b240ca750f834a71288b1b3d4f961a44df259f86ec8588b87ee70c86f",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_TREASURE_MEDICINE_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/charm-chest-3.webp",
+      "key": "charm-chest",
+      "variant": 3,
+      "size": 284778,
+      "sha256": "b2995177a5114c81737671a0279c6e28a91047f37719553729c493565c960aa0",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_COMPLETION_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/cold-fog-1.webp",
+      "key": "cold-fog",
+      "variant": 1,
+      "size": 219150,
+      "sha256": "9d1666e4c1c88a962b05241f69df4e62aa00639b8a397ffd163ef08c444d20c5",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MONEY_WEATHER_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/cold-fog-2.webp",
+      "key": "cold-fog",
+      "variant": 2,
+      "size": 237554,
+      "sha256": "426630fb52b09f5016c590237be24a9e24b4bc2ee3abd30c424e22b9a4719f80",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MONEY_WEATHER_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/cold-fog-3.webp",
+      "key": "cold-fog",
+      "variant": 3,
+      "size": 301500,
+      "sha256": "28571e30aa887a4a2851f2716623a3da7ec84d5afce43154b90d7be8cf78c5ec",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_WEATHER_VARIANTS_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/crosswind-1.webp",
+      "key": "crosswind",
+      "variant": 1,
+      "size": 369854,
+      "sha256": "cac4b3b0fe60ecee3e0105b18e150c9a0aade42665ad20f6dc9b8e48851d407e",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MONEY_WEATHER_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/crosswind-2.webp",
+      "key": "crosswind",
+      "variant": 2,
+      "size": 263484,
+      "sha256": "16eb4fc4de15baf49f8068e06d80c75bc666768df214bb4dfde0375d3c5a57d3",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MONEY_WEATHER_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/crosswind-3.webp",
+      "key": "crosswind",
+      "variant": 3,
+      "size": 372938,
+      "sha256": "4fba94ae6260c32fc708c587d568807a88d35566ead87db47193a987d49459e1",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_WEATHER_VARIANTS_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/drifting-chests-1.webp",
+      "key": "drifting-chests",
+      "variant": 1,
+      "size": 384188,
+      "sha256": "93bb0cc4cdd9d5eff3a6a1ec0be5f2ea253decb9e1559c83e63352366a73b824",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_TREASURE_MEDICINE_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/drifting-chests-2.webp",
+      "key": "drifting-chests",
+      "variant": 2,
+      "size": 362762,
+      "sha256": "8de46b3d8f7c7dd569df6da00d57473db3d9d041a918f2f32476360110a9c247",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_TREASURE_MEDICINE_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/drifting-chests-3.webp",
+      "key": "drifting-chests",
+      "variant": 3,
+      "size": 477340,
+      "sha256": "22ff99db417fff04da3e9310dc11b24667ee406962601309b27fc5345d7378fc",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_COMPLETION_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/fake-chest-1.webp",
+      "key": "fake-chest",
+      "variant": 1,
+      "size": 319834,
+      "sha256": "8632da5dc176f325b00bdaa1d5c52e4225c8c84bc6c262e1223f90905bb25c47",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_TREASURE_MEDICINE_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/fake-chest-2.webp",
+      "key": "fake-chest",
+      "variant": 2,
+      "size": 271936,
+      "sha256": "407608ce3b2e33c2a57231928225ea64a828c3a8e6dc34915886ab6a52a5118c",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_TREASURE_MEDICINE_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/fake-chest-3.webp",
+      "key": "fake-chest",
+      "variant": 3,
+      "size": 299482,
+      "sha256": "cdb0bd2ea4a41024763846d185ee7d686594c5c6ccf9b9e3b47f9f048355c47e",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_COMPLETION_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/helpful-current-1.webp",
+      "key": "helpful-current",
+      "variant": 1,
+      "size": 375030,
+      "sha256": "1d8e8c54d2d269d8d997784a386d94af5093ce47d7955c3f34ea339b3e1416a9",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MONEY_WEATHER_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/helpful-current-2.webp",
+      "key": "helpful-current",
+      "variant": 2,
+      "size": 365460,
+      "sha256": "1597ac7673f6fe18bacbe101af8f9d56dc1042f2f8a0a6bdf67e21ac36800554",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MONEY_WEATHER_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/helpful-current-3.webp",
+      "key": "helpful-current",
+      "variant": 3,
+      "size": 304088,
+      "sha256": "8c146745840c900366ac512eb62d3c1eef6361908b8a383981d58bc3b69b79e3",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_WEATHER_VARIANTS_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/hull-damage-1.webp",
+      "key": "hull-damage",
+      "variant": 1,
+      "size": 457632,
+      "sha256": "a41247cf4b904db92a258a55a8df26606cfd839672896e365680e5803c3a860f",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MONEY_WEATHER_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/hull-damage-2.webp",
+      "key": "hull-damage",
+      "variant": 2,
+      "size": 357494,
+      "sha256": "98aa97045685fcb0fbc61c4380d5761616ffe733b35efa43b3d69ac6b5033a3a",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MONEY_WEATHER_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/hull-damage-3.webp",
+      "key": "hull-damage",
+      "variant": 3,
+      "size": 303066,
+      "sha256": "432c0c8487a7433809ac62095314cb2b3082ad5b7e37db540977381b18cb95a7",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_COMPLETION_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/medical-kit-1.webp",
+      "key": "medical-kit",
+      "variant": 1,
+      "size": 276770,
+      "sha256": "dc458a3e679c0de7b926ac491ebc97a60fb00dd560ffad1b4bd79f4560fbf812",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_TREASURE_MEDICINE_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/medical-kit-2.webp",
+      "key": "medical-kit",
+      "variant": 2,
+      "size": 330810,
+      "sha256": "c3314b65dbceb1e96be2e3fccd80c4a55961efc00756f1125151a09bd3a19a8e",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MEDICINE_VARIANTS_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/medical-kit-3.webp",
+      "key": "medical-kit",
+      "variant": 3,
+      "size": 285720,
+      "sha256": "baf2a63a0d77a7a5e3cd92f363a903f26718f1cb1e440083e0f09210900c9cc9",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MEDICINE_VARIANTS_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/medical-ship-1.webp",
+      "key": "medical-ship",
+      "variant": 1,
+      "size": 210654,
+      "sha256": "dae8afc56f17664c0f6300df5a47885660c8c5f8986469fab94fe9d74015a01f",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_TREASURE_MEDICINE_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/medical-ship-2.webp",
+      "key": "medical-ship",
+      "variant": 2,
+      "size": 296062,
+      "sha256": "2f7f429a62e519ec826d5e1a4d572e91f018715fbc5b1c6132741af683fa8f4f",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MEDICINE_VARIANTS_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/medical-ship-3.webp",
+      "key": "medical-ship",
+      "variant": 3,
+      "size": 238656,
+      "sha256": "ad87e89eb72795e9777fe9de921176a6d680052fa33d35b1c96969ef8e78c240",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MEDICINE_VARIANTS_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/medicine-side-effect-1.webp",
+      "key": "medicine-side-effect",
+      "variant": 1,
+      "size": 223690,
+      "sha256": "e528ea4168e49a48dea2865421350d9701c3a963c4c7d841995cca2eebf344d4",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_TREASURE_MEDICINE_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/medicine-side-effect-2.webp",
+      "key": "medicine-side-effect",
+      "variant": 2,
+      "size": 272402,
+      "sha256": "2c4356543483c089d2383556e36e05b7e07be8631fdf8dacf79eddc481aad53c",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MEDICINE_VARIANTS_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/medicine-side-effect-3.webp",
+      "key": "medicine-side-effect",
+      "variant": 3,
+      "size": 270140,
+      "sha256": "0f77684006487fd6facaecb0c97859051468bf15a53ad609f9c750f84a4115e7",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MEDICINE_VARIANTS_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/merchant-dividend-1.webp",
+      "key": "merchant-dividend",
+      "variant": 1,
+      "size": 353998,
+      "sha256": "65d8fc738d8dc0dda69b6ff08a2b2ff0050f079fb380074e4209ea707efc7d04",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MONEY_WEATHER_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/merchant-dividend-2.webp",
+      "key": "merchant-dividend",
+      "variant": 2,
+      "size": 252196,
+      "sha256": "7114f2ffb387d7313bf3ec365c1d893182c9e89f37fa78a824dea20bf0972bc0",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MONEY_WEATHER_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/merchant-dividend-3.webp",
+      "key": "merchant-dividend",
+      "variant": 3,
+      "size": 339008,
+      "sha256": "a1cb60e695596a1477623aa146150281e82cc6088b8631d0c3c482b0a4eaf972",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_COMPLETION_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/naval-inspection-1.webp",
+      "key": "naval-inspection",
+      "variant": 1,
+      "size": 275008,
+      "sha256": "cb1dccdfc0ba843c95fae2f6e2af297242a1f628f68b2c715c93ba0851b6afb1",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MONEY_WEATHER_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/naval-inspection-2.webp",
+      "key": "naval-inspection",
+      "variant": 2,
+      "size": 204772,
+      "sha256": "847c0909b44476256e4fc62af87d56033201d8ed09cdac7cee1dd5ffe43f2b18",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MONEY_WEATHER_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/naval-inspection-3.webp",
+      "key": "naval-inspection",
+      "variant": 3,
+      "size": 288066,
+      "sha256": "648e18df59a4462544cae994c64a4040b329aa78d1e992e28d8b1202d71ea128",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_COMPLETION_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/picked-chest-1.webp",
+      "key": "picked-chest",
+      "variant": 1,
+      "size": 228016,
+      "sha256": "787551cc8201829e5ed56c2c7f5569d3b248458891627a6d8b88a33407b3e574",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_TREASURE_MEDICINE_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/picked-chest-2.webp",
+      "key": "picked-chest",
+      "variant": 2,
+      "size": 255978,
+      "sha256": "22959a74d45b9f048ecc0216a215fdcf702f337c7348ae43e1f099a0648d3d07",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_TREASURE_MEDICINE_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/picked-chest-3.webp",
+      "key": "picked-chest",
+      "variant": 3,
+      "size": 257516,
+      "sha256": "35dce60ad88996a566cb7b0e10249c025e8380bedd7f45c4791213a9f0760be7",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_COMPLETION_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/reverse-waves-1.webp",
+      "key": "reverse-waves",
+      "variant": 1,
+      "size": 341276,
+      "sha256": "f5a9cfa59b38bbe63a9677443c2bf237fd6c637263b18f59802012cf83e726db",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MONEY_WEATHER_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/reverse-waves-2.webp",
+      "key": "reverse-waves",
+      "variant": 2,
+      "size": 392272,
+      "sha256": "f6e214652078386ef8032f76019415429a2995563414a72ee60d677934134c9f",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MONEY_WEATHER_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/reverse-waves-3.webp",
+      "key": "reverse-waves",
+      "variant": 3,
+      "size": 347368,
+      "sha256": "ab561162fb230aeb4a3e4d2f63e3642cab6c3a7bad79018dbf5df6510565eb11",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_WEATHER_VARIANTS_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/route-ticket-chest-1.webp",
+      "key": "route-ticket-chest",
+      "variant": 1,
+      "size": 256270,
+      "sha256": "b64dbc96c6499940ada3aafdb16744de2dd499702cc837fdf69c7d7f0c837e95",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_TREASURE_MEDICINE_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/route-ticket-chest-2.webp",
+      "key": "route-ticket-chest",
+      "variant": 2,
+      "size": 280882,
+      "sha256": "9ac83d43b4ff12081221505e0736817c425a9e9108dfd3ae1f965a59f3e9b114",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_TREASURE_MEDICINE_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/route-ticket-chest-3.webp",
+      "key": "route-ticket-chest",
+      "variant": 3,
+      "size": 416774,
+      "sha256": "a92ab64ad51ad8e320ebda3a6526da4685bda6f6b84182abc3e0acfd2b22690f",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_COMPLETION_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/spirit-drain-1.webp",
+      "key": "spirit-drain",
+      "variant": 1,
+      "size": 183376,
+      "sha256": "d0b64341985d67284e12b1c60ec3f6149948808265de61e761387af982177cd5",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_TREASURE_MEDICINE_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/spirit-drain-2.webp",
+      "key": "spirit-drain",
+      "variant": 2,
+      "size": 215846,
+      "sha256": "dd339e81c3b1f7980b434ddaefcb8fa9f4dca0ed2aae92ae865cf5f303166707",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MEDICINE_VARIANTS_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/spirit-drain-3.webp",
+      "key": "spirit-drain",
+      "variant": 3,
+      "size": 228178,
+      "sha256": "95596c62c9811c37cd8a81719cc3cc755829fe61892deedcdaede6e271c73f8d",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MEDICINE_VARIANTS_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/spirit-tonic-1.webp",
+      "key": "spirit-tonic",
+      "variant": 1,
+      "size": 223024,
+      "sha256": "945089ec1ecadb112f14320d6f8b8d92e18fa3c8114fb8549b6d2b09c83f91ed",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_TREASURE_MEDICINE_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/spirit-tonic-2.webp",
+      "key": "spirit-tonic",
+      "variant": 2,
+      "size": 278412,
+      "sha256": "384bb3d5e73c155c7daef22423ec286477a72410e802fa2ba135d3a79055690f",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MEDICINE_VARIANTS_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/spirit-tonic-3.webp",
+      "key": "spirit-tonic",
+      "variant": 3,
+      "size": 283914,
+      "sha256": "c737abc4dee263c9e04d3f0bf705b4c046f4cb15495617daf0b674c6daf718f8",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MEDICINE_VARIANTS_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/storm-shelter-1.webp",
+      "key": "storm-shelter",
+      "variant": 1,
+      "size": 416540,
+      "sha256": "652b19d7f5be0f61e2c257e310cc2ad9a0b29ae7323ca2df5c076499420088a2",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MONEY_WEATHER_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/storm-shelter-2.webp",
+      "key": "storm-shelter",
+      "variant": 2,
+      "size": 419892,
+      "sha256": "0bee52a197f1e494c4726fe7e1adcbf979cf002691a879f04a56de809a8d5f94",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MONEY_WEATHER_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/storm-shelter-3.webp",
+      "key": "storm-shelter",
+      "variant": 3,
+      "size": 321848,
+      "sha256": "d7072b84aa7f2ab8fa74bd82caa9b49ea85fc932a6113e10d5ba6869a1907a4e",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_WEATHER_VARIANTS_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/supply-rescue-1.webp",
+      "key": "supply-rescue",
+      "variant": 1,
+      "size": 418664,
+      "sha256": "45bf19efe15b5095749d096c99e7ab4aad82e20642d34d729b07d49b24c95fd9",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MONEY_WEATHER_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/supply-rescue-2.webp",
+      "key": "supply-rescue",
+      "variant": 2,
+      "size": 403418,
+      "sha256": "c0db1af50f4c587a860378720e5bb4f0b0d5aa580da6b899bf9e5127da9cf9f2",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MONEY_WEATHER_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/supply-rescue-3.webp",
+      "key": "supply-rescue",
+      "variant": 3,
+      "size": 365392,
+      "sha256": "53c9547fe22a2f45e8c3d28445951ffa626df8d58552f3d0b130a693e5c214ac",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MONEY_WEATHER_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/tailwind-1.webp",
+      "key": "tailwind",
+      "variant": 1,
+      "size": 370246,
+      "sha256": "6d8abb84082506678c92abe7af68d27f660750d26e9146b310792892fbd3c062",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MONEY_WEATHER_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/tailwind-2.webp",
+      "key": "tailwind",
+      "variant": 2,
+      "size": 287572,
+      "sha256": "78758e3641cc9b07443b54df489857c8cb4c607d7f674b91ee093f54c9f23ecd",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MONEY_WEATHER_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/tailwind-3.webp",
+      "key": "tailwind",
+      "variant": 3,
+      "size": 350582,
+      "sha256": "d3219e4adabd8eff1721902ade351a779ad0a729b8b36491f27b6b15b3cb1cd2",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_WEATHER_VARIANTS_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/toxic-reaction-1.webp",
+      "key": "toxic-reaction",
+      "variant": 1,
+      "size": 162830,
+      "sha256": "a7a62eda8b4b366e6a2d7391ee9b1f2097b4065a65160b135c1aac787c9003ba",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_TREASURE_MEDICINE_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/toxic-reaction-2.webp",
+      "key": "toxic-reaction",
+      "variant": 2,
+      "size": 239258,
+      "sha256": "c5b1760eb5c58cfbab2ef58e4f26d5a6186016c4857ba3c9b2be3ca55d51ec2c",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MEDICINE_VARIANTS_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/toxic-reaction-3.webp",
+      "key": "toxic-reaction",
+      "variant": 3,
+      "size": 242596,
+      "sha256": "99c02291676739da3b6607c3907451bfa8c96711ff541dc825521f5e198d3963",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_MEDICINE_VARIANTS_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/wreck-vault-1.webp",
+      "key": "wreck-vault",
+      "variant": 1,
+      "size": 355954,
+      "sha256": "fe3b2ae9d78e422a6815d51ba9f528f3804f792621646c8d4a6de4ca90194f1b",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_TREASURE_MEDICINE_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/wreck-vault-2.webp",
+      "key": "wreck-vault",
+      "variant": 2,
+      "size": 360958,
+      "sha256": "376bd09e60afb34b85f6d4128594a9ac607ab24cf3fa0298087d675910395040",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_TREASURE_MEDICINE_V2.json"
+    },
+    {
+      "path": "public/images/board/sea_event_reveal/v2/wreck-vault-3.webp",
+      "key": "wreck-vault",
+      "variant": 3,
+      "size": 331704,
+      "sha256": "3fe9d94e782c897df0b7022deeb615114ec9a7e554a6f31e79be1c4f07937c02",
+      "width": 1536,
+      "height": 1024,
+      "provenance": "BOARD_SEA_ART_COMPLETION_V2.json"
+    }
+  ]
+}

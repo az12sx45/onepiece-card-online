@@ -27993,6 +27993,12 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   }
 
   function seaEventResultUiMarkup(options = {}) {
+    const illustrated = window.BoardSeaEventVisuals?.resultMarkup({
+      ...options,
+      typeLabel: SEA_EVENT_TYPE_INFO[options.typeId]?.type || "海域事件",
+      actionMarkup: seaEventUiActionMarkup(options.action || { label: "確認" }),
+    });
+    if (illustrated) return illustrated;
     const typeId = options.typeId || "unknown";
     const info = SEA_EVENT_TYPE_INFO[typeId] || { type: "未知海域" };
     const chips = Array.isArray(options.chips)
@@ -28043,6 +28049,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
 
   function spectatorSeaEventResultModal(detail = {}) {
     openSpectatorModal(seaEventResultUiMarkup({
+      visual: detail.visual,
+      outcomes: detail.outcomes,
       title: detail.title || "事件結果",
       subtitle: detail.subtitle || `${detail.playerName || "玩家"} 已揭曉海域卡。`,
       typeId: detail.typeId || "unknown",
@@ -28070,6 +28078,9 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
 
   function spectatorSeaTreasureChestResultModal(detail = {}) {
     openSpectatorModal(seaTreasureChestResultMarkup({
+      artTitle: detail.artTitle,
+      visual: detail.visual,
+      outcomes: detail.outcomes,
       title: detail.title || "寶箱開啟",
       desc: detail.desc || detail.subtitle || "寶箱已打開。",
       summary: detail.summary || "獎勵已取得",
@@ -39452,6 +39463,17 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const chestType = seaTreasureChestType(options.chestTypeId);
     const chestLabel = options.chestLabel || chestType.label || "寶箱";
     const chestImage = options.chestImage || chestType.image || "";
+    const illustrated = window.BoardSeaEventVisuals?.resultMarkup({
+      ...options,
+      artTitle: options.artTitle || "漂流寶箱群",
+      chestLabel,
+      chestImage,
+      typeLabel: "寶藏海格",
+      isTrap: chestType.id === "wood",
+      chips: chestType.id === "wood" ? ["陷阱", chestLabel] : [chestLabel],
+      actionMarkup: `<button type="button" class="modal-btn ${options.actionId === "spectatorModalCloseBtn" ? "secondary" : "primary"}" id="${escapeModalText(options.actionId || "confirmSeaTreasureChestBtn")}">${escapeModalText(options.actionLabel || "確認")}</button>`,
+    });
+    if (illustrated) return illustrated;
     return `
       <div class="sea-chest-stage-shell is-result" data-chest-type="${escapeModalText(chestType.id || options.chestTypeId || "unknown")}">
         <img class="sea-chest-stage-frame" src="${portablePrefetchedBoardAssetUrl("images/board/item_reveal_ui/important_item_reveal_panel_frame.webp")}" alt="" aria-hidden="true">
@@ -39613,9 +39635,14 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     });
     const chestType = seaTreasureChestType(choice.typeId);
     const rand = createRng(`${state.gameState.seed}-${tile?.id || "sea"}-${player?.id || "player"}-${choice.slotId}-reward-${boardGameLogEntropy()}`);
+    const revealBefore = window.BoardSeaEventVisuals?.capture(player);
     const reward = applySeaTreasureChestReward(player, tile, chestType, rand);
     const rewardTitle = reward.title || `${chestType.label}開啟`;
+    const artTitle = effectDef.title || "漂流寶箱群";
+    const reveal = seaEventRevealDetails(player, artTitle, revealBefore, reward);
     emitSpectatorModalEvent("chest-result", player, {
+      ...reveal,
+      artTitle,
       playerName: player.name,
       title: rewardTitle,
       desc: reward.desc || chestType.desc,
@@ -39628,6 +39655,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     });
     state.gameState.resolutionLock = true;
     openModal(seaTreasureChestResultMarkup({
+      ...reveal,
+      artTitle,
       title: rewardTitle,
       desc: reward.desc || chestType.desc,
       summary: reward.summary || "獎勵已取得",
@@ -39646,16 +39675,31 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     });
   }
 
+  function seaEventRevealDetails(player, title, before, result) {
+    const visuals = window.BoardSeaEventVisuals;
+    if (!visuals || !before) return {};
+    return {
+      visual: visuals.pick(title),
+      outcomes: visuals.outcomes(before, visuals.capture(player), result, (id) => {
+        const item = gameItemDef(id);
+        return item ? { ...item, image: itemImageForDisplay(item) } : null;
+      }),
+    };
+  }
+
   function triggerSeaEvent(player, tile, typeId, slotId = "", preselectedEffectDef = null) {
     if (warnBoardLanTurnLocked(player)) return;
     const effectDef = preselectedEffectDef || drawSeaCardEffect(typeId, tile, player, slotId);
+    const revealBefore = window.BoardSeaEventVisuals?.capture(player);
     const result = effectDef.apply ? (effectDef.apply(player, state.gameState, tile) || {}) : {};
     if (result.openTreasureChestDraft) {
       recordMissionEvent(player, { type: "sea_event", seaType: typeId, zone: tile?.zone || "" });
       openSeaTreasureChestDraft(player, tile, effectDef, typeId, slotId);
       return;
     }
+    const reveal = seaEventRevealDetails(player, effectDef.title, revealBefore, result);
     emitSpectatorModalEvent("sea-result", player, {
+      ...reveal,
       playerName: player.name,
       title: effectDef.title,
       desc: effectDef.desc,
@@ -39675,6 +39719,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     }
     state.gameState.resolutionLock = true;
     openModal(seaEventResultUiMarkup({
+      ...reveal,
       title: effectDef.title,
       subtitle: `${player.name} 翻開了一張${SEA_EVENT_TYPE_INFO[typeId]?.type || "海域"}卡。`,
       typeId,

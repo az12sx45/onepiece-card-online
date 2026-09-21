@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>海域事件圖鑑｜新世界航海錄</title>
+  <link rel="stylesheet" href="css/board_sea_event_reveal.css?v=20260921-sea-reveal-v2">
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#143943,#07131c 58%);color:#e9e4d4;font-family:"Microsoft JhengHei",sans-serif;min-height:100vh}button,select{font:inherit}button,select{border:1px solid #476367;border-radius:6px;background:#112e37;color:#e7e6d5;padding:10px 13px;cursor:pointer}button:hover{border-color:#d2b575}button:focus-visible,select:focus-visible{outline:3px solid #8adde0;outline-offset:3px}.page{max-width:1216px;margin:auto;padding:30px 24px 70px}.masthead{display:flex;justify-content:space-between;gap:20px;align-items:center;border-bottom:1px solid #9d875936;padding-bottom:23px}.brand{font-size:11px;letter-spacing:.28em;color:#c5ad77}h1{font-size:clamp(26px,4vw,40px);letter-spacing:.1em;font-weight:600;margin:10px 0}.intro{color:#98b6b9;font-size:13px;line-height:1.8;margin:0}.counts{border-left:1px solid #9c845c59;padding-left:24px;color:#e6c78c;font-size:25px;white-space:nowrap}.counts small{font-size:11px;display:block;letter-spacing:.15em;color:#9bb1b3;margin-top:5px}.controls{display:flex;gap:10px;align-items:end;flex-wrap:wrap;padding:22px 0}.controls label{display:grid;gap:7px;font-size:11px;color:#95afb2}.controls select{min-width:200px}.variant-buttons{display:flex;gap:6px}.variant-buttons button[aria-pressed="true"]{background:#725834;border-color:#d7bb7f;color:#fff0cf}.controls .random{margin-left:auto;background:#705331;border-color:#b39259}.preview-stage{scroll-margin-top:15px}.preview-status{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;color:#8faeb0;font-size:11px;margin:12px 2px 30px}.gallery-heading{display:flex;align-items:center;justify-content:space-between;gap:20px;border-top:1px solid #9d875936;padding-top:23px}.gallery-heading h2{font-size:20px;font-weight:500;letter-spacing:.12em}.gallery-heading span{font-size:12px;color:#99b1b3}.gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.gallery-card{border:1px solid #47636770;background:#0c222b;border-radius:9px;overflow:hidden;min-width:0}.gallery-card h3{font-size:14px;margin:14px 13px 10px;color:#dfc187}.gallery-images{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:0 7px 8px}.gallery-images button{position:relative;padding:0;aspect-ratio:3/2;overflow:hidden;border-radius:4px;background:#183b46}.gallery-images img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .3s}.gallery-images button:hover img{transform:scale(1.08)}.gallery-images span{position:absolute;bottom:3px;right:4px;font-size:9px;background:#071019aa;padding:1px 4px}.gallery-card p{margin:0 13px 12px;font-size:10px;color:#8caaad}.preview-stage .sea-reveal-actions button{min-width:200px}.preview-note{font-size:12px;color:#839da1;line-height:1.8;margin-top:25px}@media(max-width:700px){.page{padding:22px 14px 45px}.masthead{align-items:start}.counts{font-size:19px;padding-left:14px}.controls{gap:9px}.controls label{flex:1}.controls select{min-width:0;width:100%}.controls .random{margin:0}.gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.gallery-heading span{display:none}.gallery-images{gap:2px;padding:0 4px 6px}.gallery-card h3{font-size:12px}.preview-status{line-height:1.6}}@media(max-width:420px){.counts{display:none}.controls .random{flex:1}.variant-buttons{flex:1}.variant-buttons button{flex:1;padding:10px}.gallery{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="masthead"><div><div class="brand">ONE PIECE · 新世界航海錄</div><h1>海域事件圖鑑</h1><p class="intro">翻開未知航路，讓每次際遇都有自己的畫面。</p></div><div class="counts">24 <small>事件・每種 3 幅</small></div></header>
+    <div class="controls">
+      <label>事件<select id="eventSelect" aria-label="選擇事件"></select></label>
+      <div style="display:grid;gap:7px"><span style="font-size:11px;color:#95afb2" id="variantLabel">插畫版本</span><div class="variant-buttons" id="variantButtons" role="group" aria-labelledby="variantLabel"><button data-variant="0" aria-label="插畫第一版">一</button><button data-variant="1" aria-label="插畫第二版">二</button><button data-variant="2" aria-label="插畫第三版">三</button></div></div>
+      <button class="random" id="randomBtn">隨機揭曉</button>
+      <button id="nextBtn">下一個事件 →</button>
+    </div>
+    <div class="preview-stage" id="previewStage"></div>
+    <div class="preview-status"><span id="previewStatus" aria-live="polite"></span><span>展示用獎勵數值・正式遊戲依當次實際結果顯示</span></div>
+    <section aria-label="全部事件插畫"><div class="gallery-heading"><h2>航路上的 24 種際遇</h2><span>點選縮圖，觀看該版本的揭曉演出</span></div><div class="gallery" id="gallery"></div></section>
+    <p class="preview-note">這是海域事件圖鑑，可切換全部事件與插畫版本、重播動畫。頁面使用展示用獎勵數值，不連線房間或修改存檔。</p>
+  </main>
+  <script src="js/board_items.js"></script>
+  <script src="js/board_sea_event_visuals.js?v=20260921-sea-reveal-v2"></script>
+  <script src="js/board_sea_event_preview.js?v=20260921-sea-reveal-v2"></script>
+</body>
+</html>

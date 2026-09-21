@@ -1,0 +1,253 @@
+{
+  "version": "v2",
+  "createdAt": "2026-09-21T12:06:11.525369+00:00",
+  "generator": "built-in image_gen",
+  "preservedExistingCount": 61,
+  "completionExpected": 11,
+  "completionSaved": 11,
+  "entries": [
+    {
+      "key": "merchant-dividend",
+      "variant": 3,
+      "generator": "built-in image_gen",
+      "prompt": "Use case: illustration-story. Asset type: one complete 3:2 landscape event-reveal image for Voyage Records pirate RPG. Real recognizable One Piece characters with faithful iconic character designs; cinematic polished Japanese adventure anime illustration, crisp inked details, dark navy shadows, luminous teal seas and gold highlights, warm ship wood. Distinct expressive faces, coherent anatomy, readable central composition with clear event action. No captions, no written text, no title, no UI, no borders, no watermark, no panel grid. Show only the explicitly named characters, no extra Straw Hat crewmates, no repeated characters. Event: Nami, recognizable orange-haired One Piece navigator with her blue shoulder tattoo, delightedly receives a sack of shiny gold Berries as fair merchant trade profit beside crates on a ship. New variant scene: Nami alone smiling triumphantly in the Thousand Sunny treasure cabin, holding open a merchant payment chest filled with gold coins, shipping crates stacked behind, strong jade-blue porthole light and lantern-gold glow. Coins clearly signal trade-profit reward, new dramatic frontal composition.. Single finished image, clear character identity.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c351-ecad-76c2-a8f2-11401844792f\\exec-acbf04dd-12a4-4129-ac6d-adfcc8960cbc.png",
+      "output": "public/images/board/sea_event_reveal/v2/merchant-dividend-3.webp",
+      "recoveredFromInterruptedGeneration": true,
+      "provenance": {
+        "session": "rollout-2026-09-21T17-35-21-01a0c351-ecad-76c2-a8f2-11401844792f.jsonl",
+        "line": 237,
+        "generationId": "exec-acbf04dd-12a4-4129-ac6d-adfcc8960cbc"
+      },
+      "sourceSha256": "9b22c41e68e266be2d056cd3b7fbdf5393776e1084e0d10b5ea95a8fe83c0fb6",
+      "outputSha256": "a1cb60e695596a1477623aa146150281e82cc6088b8631d0c3c482b0a4eaf972",
+      "bytes": 339008,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "quality": 88,
+      "visualReview": "Viewed original: recognizable One Piece character identities; event-specific action; full landscape scene with navy, teal and gold palette; no overlay text or panels."
+    },
+    {
+      "key": "black-market",
+      "variant": 3,
+      "generator": "built-in image_gen",
+      "prompt": "Use case: illustration-story. Asset type: one complete 3:2 landscape event-reveal image for Voyage Records pirate RPG. Real recognizable One Piece characters with faithful iconic character designs; cinematic polished Japanese adventure anime illustration, crisp inked details, dark navy shadows, luminous teal seas and gold highlights, warm ship wood. Distinct expressive faces, coherent anatomy, readable central composition with clear event action. No captions, no written text, no title, no UI, no borders, no watermark, no panel grid. Show only the explicitly named characters, no extra Straw Hat crewmates, no repeated characters. Event: Nami and Nico Robin purchase a small mysterious sealed treasure item, passing gold Berries across the counter to a shadowy merchant in a lantern-lit pirate port bazaar. New variant scene: Very close dramatic over-the-shoulder view behind a masked black-market dealer: Nami and Nico Robin across the table, Nami slides gold Berries forward while Robin receives a mysterious sealed dark-blue treasure box. Deep emerald candle-lit pirate warehouse, measured cautious expressions, ornate trade goods behind.. Single finished image, clear character identity.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c351-ecad-76c2-a8f2-11401844792f\\exec-5a5f6294-087f-4392-8f8f-df16654a90c2.png",
+      "output": "public/images/board/sea_event_reveal/v2/black-market-3.webp",
+      "recoveredFromInterruptedGeneration": true,
+      "provenance": {
+        "session": "rollout-2026-09-21T17-35-21-01a0c351-ecad-76c2-a8f2-11401844792f.jsonl",
+        "line": 238,
+        "generationId": "exec-5a5f6294-087f-4392-8f8f-df16654a90c2"
+      },
+      "sourceSha256": "b6c8c0eee6ae8d90c7c6ce11a167ed6e55f72f6a95fe19732a2acffa0f05dbdf",
+      "outputSha256": "4cbb135a8f0f21f10613701a2df803d536b34e5d7ca5b71310dd76b554368762",
+      "bytes": 174030,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "quality": 88,
+      "visualReview": "Viewed original: recognizable One Piece character identities; event-specific action; full landscape scene with navy, teal and gold palette; no overlay text or panels."
+    },
+    {
+      "key": "drifting-chests",
+      "variant": 3,
+      "generator": "built-in image_gen",
+      "prompt": "Use case: illustration-story. Create ONE complete landscape 1536x1024 event-reveal illustration for Voyage Records One Piece pirate RPG. Actual recognizable One Piece anime characters with canonical distinctive faces, hair and clothing, no generic pirate substitutions. Polished cinematic anime cel painting, dark navy ocean and shadows, teal accents, antique gold rimlight, rich atmospheric detail, appealing expressive faces, clear hands. Full bleed single scene, no panels, no collage, no text or letters or numbers or watermark or UI.\nScene: Luffy (straw hat, black hair, red vest, scar under eye) and orange-haired Nami spot four ornate floating treasure chests near the Thousand Sunny.\nVariant 3 composition: Sweeping high angle, Luffy and Usopp aboard a dinghy approaching four floating chests, Sunny behind.\nThis is a fresh distinct composition, not a crop.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c352-3ab0-7d72-98cd-55947fb4e91a\\exec-be572805-191a-42ce-b49e-f5fe5da22fa6.png",
+      "output": "public/images/board/sea_event_reveal/v2/drifting-chests-3.webp",
+      "recoveredFromInterruptedGeneration": true,
+      "provenance": {
+        "session": "rollout-2026-09-21T17-35-41-01a0c352-3ab0-7d72-98cd-55947fb4e91a.jsonl",
+        "line": 155,
+        "generationId": "exec-be572805-191a-42ce-b49e-f5fe5da22fa6"
+      },
+      "sourceSha256": "aac146b89532c508806e65fe7b924876cc9fce464cc5b25b7edd09338cea8e5e",
+      "outputSha256": "22ff99db417fff04da3e9310dc11b24667ee406962601309b27fc5345d7378fc",
+      "bytes": 477340,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "quality": 88,
+      "visualReview": "Viewed original: recognizable One Piece character identities; event-specific action; full landscape scene with navy, teal and gold palette; no overlay text or panels."
+    },
+    {
+      "key": "route-ticket-chest",
+      "variant": 3,
+      "generator": "built-in image_gen",
+      "prompt": "Use case: illustration-story. Create ONE complete landscape 1536x1024 event-reveal illustration for Voyage Records One Piece pirate RPG. Actual recognizable One Piece anime characters with canonical distinctive faces, hair and clothing, no generic pirate substitutions. Polished cinematic anime cel painting, dark navy ocean and shadows, teal accents, antique gold rimlight, rich atmospheric detail, appealing expressive faces, clear hands. Full bleed single scene, no panels, no collage, no text or letters or numbers or watermark or UI.\nScene: Actual One Piece Nami with flowing orange hair and shoulder tattoo finds a brass-bound treasure chest containing a rolled nautical chart, a beautifully engraved blank navigation ticket, and Log Pose. Route-discovery theme; the paper has no readable text.\nVariant 3 composition: Dynamic ocean cliff setting: Nami lifts a rolled chart from chest, Luffy looks toward distant island.\nThis is a fresh distinct composition, not a crop.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c352-3ab0-7d72-98cd-55947fb4e91a\\exec-bfd55397-9a6c-43df-9997-b205c073d2a1.png",
+      "output": "public/images/board/sea_event_reveal/v2/route-ticket-chest-3.webp",
+      "recoveredFromInterruptedGeneration": true,
+      "provenance": {
+        "session": "rollout-2026-09-21T17-35-41-01a0c352-3ab0-7d72-98cd-55947fb4e91a.jsonl",
+        "line": 156,
+        "generationId": "exec-bfd55397-9a6c-43df-9997-b205c073d2a1"
+      },
+      "sourceSha256": "458f402e9bd558ee1bd43b27b0b2ecdb5d88400c7bbf4e5a3fc60ac8d10ae72d",
+      "outputSha256": "a92ab64ad51ad8e320ebda3a6526da4685bda6f6b84182abc3e0acfd2b22690f",
+      "bytes": 416774,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "quality": 88,
+      "visualReview": "Viewed original: recognizable One Piece character identities; event-specific action; full landscape scene with navy, teal and gold palette; no overlay text or panels."
+    },
+    {
+      "key": "charm-chest",
+      "variant": 3,
+      "generator": "built-in image_gen",
+      "prompt": "Use case: illustration-story. Create ONE complete landscape 1536x1024 event-reveal illustration for Voyage Records One Piece pirate RPG. Actual recognizable One Piece anime characters with canonical distinctive faces, hair and clothing, no generic pirate substitutions. Polished cinematic anime cel painting, dark navy ocean and shadows, teal accents, antique gold rimlight, rich atmospheric detail, appealing expressive faces, clear hands. Full bleed single scene, no panels, no collage, no text or letters or numbers or watermark or UI.\nScene: Actual One Piece Nico Robin with long black hair and signature calm intelligent expression discovers a chest of intricate protective amulets, hanging talismans and shimmering charm pendants.\nVariant 3 composition: Cinematic wider view in ruined coastal shrine: Robin kneels beside chest with soft teal charm glow.\nThis is a fresh distinct composition, not a crop.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c352-3ab0-7d72-98cd-55947fb4e91a\\exec-1d39dd2d-8db7-4cf0-ba9f-0fa64d449057.png",
+      "output": "public/images/board/sea_event_reveal/v2/charm-chest-3.webp",
+      "recoveredFromInterruptedGeneration": true,
+      "provenance": {
+        "session": "rollout-2026-09-21T17-35-41-01a0c352-3ab0-7d72-98cd-55947fb4e91a.jsonl",
+        "line": 161,
+        "generationId": "exec-1d39dd2d-8db7-4cf0-ba9f-0fa64d449057"
+      },
+      "sourceSha256": "ced9851ab545d6615b9bb0a6adfa7684828cae6ff5536377a4296ce6a6390141",
+      "outputSha256": "b2995177a5114c81737671a0279c6e28a91047f37719553729c493565c960aa0",
+      "bytes": 284778,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "quality": 88,
+      "visualReview": "Viewed original: recognizable One Piece character identities; event-specific action; full landscape scene with navy, teal and gold palette; no overlay text or panels."
+    },
+    {
+      "key": "picked-chest",
+      "variant": 3,
+      "generator": "built-in image_gen",
+      "prompt": "Use case: illustration-story. Create ONE complete landscape 1536x1024 event-reveal illustration for Voyage Records One Piece pirate RPG. Actual recognizable One Piece anime characters with canonical distinctive faces, hair and clothing, no generic pirate substitutions. Polished cinematic anime cel painting, dark navy ocean and shadows, teal accents, antique gold rimlight, rich atmospheric detail, appealing expressive faces, clear hands. Full bleed single scene, no panels, no collage, no text or letters or numbers or watermark or UI.\nScene: Actual One Piece Usopp (very long nose, curly black hair, goggles and beige hat) and orange-haired Nami examine a treasure chest with visibly tampered broken lock and pry marks; investigation rather than reward.\nVariant 3 composition: High angle Sunny workshop, Usopp points to scratch marks and scattered cheap trinkets, Nami thinks.\nThis is a fresh distinct composition, not a crop.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c352-3ab0-7d72-98cd-55947fb4e91a\\exec-fdf94fcd-a6f8-4f5b-815e-406508887606.png",
+      "output": "public/images/board/sea_event_reveal/v2/picked-chest-3.webp",
+      "recoveredFromInterruptedGeneration": true,
+      "provenance": {
+        "session": "rollout-2026-09-21T17-35-41-01a0c352-3ab0-7d72-98cd-55947fb4e91a.jsonl",
+        "line": 166,
+        "generationId": "exec-fdf94fcd-a6f8-4f5b-815e-406508887606"
+      },
+      "sourceSha256": "87fb9f6ae1f212b2a5d2714f963a3117cd6cd00d6fb2a3d35f6a6cd91be73361",
+      "outputSha256": "35dce60ad88996a566cb7b0e10249c025e8380bedd7f45c4791213a9f0760be7",
+      "bytes": 257516,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "quality": 88,
+      "visualReview": "Viewed original: recognizable One Piece character identities; event-specific action; full landscape scene with navy, teal and gold palette; no overlay text or panels."
+    },
+    {
+      "key": "fake-chest",
+      "variant": 3,
+      "generator": "built-in image_gen",
+      "prompt": "Use case: illustration-story. Create ONE complete landscape 1536x1024 event-reveal illustration for Voyage Records One Piece pirate RPG. Actual recognizable One Piece anime characters with canonical distinctive faces, hair and clothing, no generic pirate substitutions. Polished cinematic anime cel painting, dark navy ocean and shadows, teal accents, antique gold rimlight, rich atmospheric detail, appealing expressive faces, clear hands. Full bleed single scene, no panels, no collage, no text or letters or numbers or watermark or UI.\nScene: Actual One Piece Usopp (very long nose, black curly hair, goggles) and Luffy (straw hat, black hair, red vest) discover a suspicious cheap decoy treasure chest, fake gilded wooden coins, loose false bottom; comedic disappointment, do not imply a real valuable reward.\nVariant 3 composition: Dusk beach close-up: Usopp taps painted fake gems while Luffy scratches head, clearly puzzled.\nThis is a fresh distinct composition, not a crop.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c352-3ab0-7d72-98cd-55947fb4e91a\\exec-ab69dedc-2e10-4596-88dd-46f9180a73d4.png",
+      "output": "public/images/board/sea_event_reveal/v2/fake-chest-3.webp",
+      "recoveredFromInterruptedGeneration": true,
+      "provenance": {
+        "session": "rollout-2026-09-21T17-35-41-01a0c352-3ab0-7d72-98cd-55947fb4e91a.jsonl",
+        "line": 167,
+        "generationId": "exec-ab69dedc-2e10-4596-88dd-46f9180a73d4"
+      },
+      "sourceSha256": "8a5010c8ff30358682d9935b214f08eece7e14eb27777a0e3e47326b0c340faf",
+      "outputSha256": "cdb0bd2ea4a41024763846d185ee7d686594c5c6ccf9b9e3b47f9f048355c47e",
+      "bytes": 299482,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "quality": 88,
+      "visualReview": "Viewed original: recognizable One Piece character identities; event-specific action; full landscape scene with navy, teal and gold palette; no overlay text or panels."
+    },
+    {
+      "key": "wreck-vault",
+      "variant": 3,
+      "generator": "built-in image_gen",
+      "prompt": "Use case: illustration-story. Create ONE complete landscape 1536x1024 event-reveal illustration for Voyage Records One Piece pirate RPG. Actual recognizable One Piece anime characters with canonical distinctive faces, hair and clothing, no generic pirate substitutions. Polished cinematic anime cel painting, dark navy ocean and shadows, teal accents, antique gold rimlight, rich atmospheric detail, appealing expressive faces, clear hands. Full bleed single scene, no panels, no collage, no text or letters or numbers or watermark or UI.\nScene: Actual One Piece Nico Robin (long black hair) and Franky (bright blue hair, enormous mechanical forearms, open Hawaiian shirt) explore an ancient sunken ship vault, coral-encrusted strongbox and treasure hold.\nVariant 3 composition: Wide ruined ship interior, Robin studies recovered chest beside Franky's mechanical arms, moonlight through broken hull.\nThis is a fresh distinct composition, not a crop.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c352-3ab0-7d72-98cd-55947fb4e91a\\exec-b8a71679-2c27-4803-97ae-0e0a49515bb6.png",
+      "output": "public/images/board/sea_event_reveal/v2/wreck-vault-3.webp",
+      "recoveredFromInterruptedGeneration": true,
+      "provenance": {
+        "session": "rollout-2026-09-21T17-35-41-01a0c352-3ab0-7d72-98cd-55947fb4e91a.jsonl",
+        "line": 172,
+        "generationId": "exec-b8a71679-2c27-4803-97ae-0e0a49515bb6"
+      },
+      "sourceSha256": "4b3b2da8b6da8838875a95d80bc3f6541b1f54e7be3ec356b23a7c8cc61a3d32",
+      "outputSha256": "3fe9d94e782c897df0b7022deeb615114ec9a7e554a6f31e79be1c4f07937c02",
+      "bytes": 331704,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "quality": 88,
+      "visualReview": "Viewed original: recognizable One Piece character identities; event-specific action; full landscape scene with navy, teal and gold palette; no overlay text or panels."
+    },
+    {
+      "key": "ancient-relic-chest",
+      "variant": 3,
+      "generator": "built-in image_gen",
+      "prompt": "Use case: illustration-story. Create ONE complete landscape 1536x1024 event-reveal illustration for Voyage Records One Piece pirate RPG. Actual recognizable One Piece anime characters with canonical distinctive faces, hair and clothing, no generic pirate substitutions. Polished cinematic anime cel painting, dark navy ocean and shadows, teal accents, antique gold rimlight, rich atmospheric detail, appealing expressive faces, clear hands. Full bleed single scene, no panels, no collage, no text or letters or numbers or watermark or UI.\nScene: Actual One Piece Nico Robin, long black hair and composed archaeological curiosity, opens an ancient relic chest containing weathered stone fragments and an intricate old golden artifact, no modern text.\nVariant 3 composition: Luffy peers with curiosity while Robin brushes dust from ancient gold artifact inside sunken-ruin chest.\nThis is a fresh distinct composition, not a crop.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c352-3ab0-7d72-98cd-55947fb4e91a\\exec-d7785ece-cd23-400f-a039-b87bd1647022.png",
+      "output": "public/images/board/sea_event_reveal/v2/ancient-relic-chest-3.webp",
+      "recoveredFromInterruptedGeneration": true,
+      "provenance": {
+        "session": "rollout-2026-09-21T17-35-41-01a0c352-3ab0-7d72-98cd-55947fb4e91a.jsonl",
+        "line": 173,
+        "generationId": "exec-d7785ece-cd23-400f-a039-b87bd1647022"
+      },
+      "sourceSha256": "00b4a4bba1a5fc175672059612fcd292c3fbaae1a0b655a39b8010053b444c8e",
+      "outputSha256": "37cf3032da5066c71fae29c825fc514c9249eb017669e47e6607c43a9bf036ef",
+      "bytes": 310614,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "quality": 88,
+      "visualReview": "Viewed original: recognizable One Piece character identities; event-specific action; full landscape scene with navy, teal and gold palette; no overlay text or panels."
+    },
+    {
+      "key": "hull-damage",
+      "variant": 3,
+      "generator": "built-in image_gen",
+      "prompt": "Use case: illustration-story. Create one complete landscape 1536x1024 event-reveal artwork for the One Piece pirate RPG Voyage Records, event HULL DAMAGE, third distinct variation. Actual recognizable Franky from One Piece, tall muscular cyborg with bright blue swept-up hair, metal nose, gigantic mechanical forearms and red open tropical Hawaiian shirt, stands outside the Thousand Sunny at a coastal repair dock. Franky inspects a clearly broken section of wooden hull just above the waterline, splintered planks and repair timber prominently visible. Actual recognizable Usopp with very long nose, curly black hair and goggles crouches on the wooden dock holding a hammer and fresh replacement plank, concerned but working determinedly. Wide low angle from the dock at twilight, the Sunny lion figurehead visible high in background, torn wood in foreground right, readable faces at center. Repair costs and ship damage event, no injury or battle. Polished hand-drawn Japanese adventure anime, confident inked character lines, painted nautical detail, deep navy water and shadows, luminous teal reflections, rich warm brass-gold lantern illumination, matching a dark elegant pirate board RPG. Only these two named characters. One finished edge-to-edge picture, no words, labels, captions, watermark, UI, border, collage, panels, repeated characters or generic replacement pirates.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c3da-01ef-7281-a281-e082990bd9eb\\exec-7b29755f-566f-4f8a-866a-05c89c74bf28.png",
+      "output": "public/images/board/sea_event_reveal/v2/hull-damage-3.webp",
+      "recoveredFromInterruptedGeneration": false,
+      "visualReview": "Viewed generated original: clearly recognizable Franky and Usopp inspect damaged ship hull and replacement boards; scene matches event and navy/teal/gold RPG palette.",
+      "sourceSha256": "ecb0e8f3187ae1076721145d33faad33d131d5b74e395b9802ab2827630896f0",
+      "outputSha256": "432c0c8487a7433809ac62095314cb2b3082ad5b7e37db540977381b18cb95a7",
+      "bytes": 303066,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "quality": 88
+    },
+    {
+      "key": "naval-inspection",
+      "variant": 3,
+      "generator": "built-in image_gen",
+      "prompt": "Use case: illustration-story. Asset type: ONE complete 1536x1024 landscape event-reveal picture for One Piece Voyage Records pirate RPG, NAVAL INSPECTION third distinct variant. Depict canonical recognizable One Piece characters Smoker, the broad muscular Marine with short white hair, two cigars, open white officer coat with dark fur collar and brass-gold epaulettes, inspecting a crate on a wooden harbor customs table. Across the table actual recognizable Nami, orange-haired navigator with blue left shoulder tattoo and green-white striped top, reluctantly places a small sack of gold coins on the inspection counter, worried about losing money. Smoker holds an opened cargo lid and sternly checks its contents; coins, official plain ledger with no readable writing, ship ropes and crates make the inspection fee clear. Distinct side-view composition in daylight under a canvas awning: Smoker at left and Nami at right, Thousand Sunny and a white marine vessel moored in teal harbor behind them. Show only these two characters, readable faces, hands and event objects. No battle or violence. Polished Japanese adventure anime illustration, faithful iconic One Piece facial designs, crisp inked character lines, richly painted wood and sea, elegant dark navy shadows, teal sea and warm antique-gold sunshine, cinematic pirate board-game atmosphere. Single full-bleed finished scene, no letters, text, captions, logos, UI, border, collage, panels, watermark, duplicate characters or generic pirate replacements.",
+      "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c3da-01ef-7281-a281-e082990bd9eb\\exec-ffb0ce78-b344-402a-a0e2-5441ee4a9e03.png",
+      "output": "public/images/board/sea_event_reveal/v2/naval-inspection-3.webp",
+      "recoveredFromInterruptedGeneration": false,
+      "visualReview": "Viewed generated original: recognizable Smoker inspecting cargo and Nami reluctantly surrendering coins; distinctive daylight harbor composition; event and style match.",
+      "sourceSha256": "302ddb3ca16067bfd67b69913beabaa7a1aa6bff4d05c76625d48d00eb14bc21",
+      "outputSha256": "648e18df59a4462544cae994c64a4040b329aa78d1e992e28d8b1202d71ea128",
+      "bytes": 288066,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "quality": 88
+    }
+  ]
+}

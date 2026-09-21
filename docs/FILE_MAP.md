@@ -1,5 +1,15 @@
 # File Map
 
+## 海格結果展示（2026-09-21）
+
+- `public/js/board_sea_event_visuals.js`／`public/css/board_sea_event_reveal.css`：24 事件插畫目錄、獨立展示亂數、實際結果圖示、揭曉動畫與響應式版面。
+- `public/js/board_game.js`／`public/board_game.html`：正式結果接線及既有觀看事件 detail；不改規則與持久狀態。
+- `public/board_sea_event_preview.html`／`public/js/board_sea_event_preview.js`：不連房間／存檔的逐事件圖鑑與動畫預覽。
+- `public/images/board/sea_event_reveal/v2/`、`docs/BOARD_SEA_ART_*_V2.json`：GPT 原作角色場景 WebP 與逐張提示詞／來源／SHA。
+- `scripts/board_sea_event_reveal_qa.js`：隔離 Chrome／雙頁 LAN、實際結果、CPU、手機與素材驗證。
+- `scripts/build_board_sea_event_release.js`／`scripts/board_sea_event_release_builder_qa.js`：固定發布基線，凍結已提交的 41 個程式與 72 張新圖，保留 4,040 舊媒體；獨立候選驗證及明確 promote，24 項隔離 QA。
+- `config/desktop-program-packages-v1.json`：兩個核心檔新增白名單。`docs/BOARD_SEA_EVENT_ASSET_INDEX_V2.json`：72 張輸出與 GPT 原檔的雜湊、尺寸及來源統整。`docs/BOARD_SEA_EVENT_REVEAL_20260921.md`：完整範圍與驗證／部署紀錄。
+
 ## 航海選單與攻擊特效（2026-09-21）
 
 - `public/board_game.html`／`public/js/board_game.js`：三橫線選單、原控制項、鍵盤與手機版；切磋完整演出等待。
