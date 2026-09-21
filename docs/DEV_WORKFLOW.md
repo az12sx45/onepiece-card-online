@@ -1,5 +1,9 @@
 # Dev Workflow
 
+## 戰鬥圖片與技能音效時序（2026-09-21，發布中）
+
+修復致死受擊後站回、替補／結果提早出現、倒地重播與輪詢重設圖片；技能音由擲骰移至實際施放。修改兩個 Board HTML、board_battle.js、board_game.js（四個 castSfx 及 iframe 版本），新增倒地與瀏覽器 QA、擴充 FX 音效 QA；發布 builder 移除39硬限制並加31項fixture。更新四份專案文件，隔離 npm start 18926，完整證據見 [本次紀錄](BOARD_BATTLE_ORDER_20260921.md)。
+
 ## 場景配樂與操作音效（2026-09-21，已部署）
 
 補大廳 BGM、修復副本重繪回地圖曲，新增海格與戰敗音樂、650ms 短場景轉場；八個正式入口接入父子共用操作音效、聲音面板與裝置音量偏好。修改 Board 主 JS／大廳 JS／BGM manager、八 HTML、桌面白名單；新增音效 JS／CSS、音樂室、三支 QA 與發布 builder／QA，更新四份文件。隔離 npm start 18925，來源、驗證與部署證據見 [本次紀錄](BOARD_SCENE_AUDIO_20260921.md)。

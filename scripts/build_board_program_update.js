@@ -87,7 +87,6 @@ function collect(baselineRef, createdAt) {
     protectedFiles.set(relative, bytes);
   }
   const names = config.games.board.programFiles;
-  assert.equal(names.length, 39, 'Expected reviewed 39-program Board inventory.');
   const previousPrograms = previous.assets.filter(asset => !MEDIA.has(asset.kind)).map(asset => asset.path);
   assert.deepEqual(previousPrograms, names, 'Configured program paths must exactly match the v3 program inventory.');
   // Git's diff accounts for checkout line-ending conversion; hashes below always

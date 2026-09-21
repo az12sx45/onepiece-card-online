@@ -265,7 +265,7 @@
   const SPAR_SELECTION_PAGE_VERSION = "20260827-formal-pk-v1";
   const BATTLE_COMMAND_KEY = "onepiece-board-battle-command-v1";
   const BATTLE_ENTRY_PLAYED_STORAGE_KEY = "onepiece-board-battle-entry-played-v1";
-  const BATTLE_PAGE_VERSION = "20260921-gpt-move-fx-v1";
+  const BATTLE_PAGE_VERSION = "20260921-battle-order-v1";
   const PLACEHOLDER_BATTLE_PORTRAIT = "images/board/battle/portraits/placeholder/normal.webp";
   const COSMETIC_FRAME_DEFS = {
     goldenDenDen: { id: "goldenDenDen", label: "黃金電話蟲框", unlockText: "司法島通關紀念" },
@@ -50724,6 +50724,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       criticalCount: Math.max(0, Number(attackVisualMeta.criticalCount || 0)),
       criticalHitIndexes: Array.isArray(attackVisualMeta.criticalHitIndexes) ? attackVisualMeta.criticalHitIndexes.slice() : [],
       hitEffect,
+      castSfx: battleCastSfxForMove(moveEntry),
       hitSfx: hit ? battleHitSfxForMove(moveEntry, hitEffect) : "",
       diceFace,
       miss: !hit,
@@ -54201,6 +54202,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         shikiIslandVisualIslands: Array.isArray(attackVisualMeta.shikiIslandVisualIslands) ? safeJsonClone(attackVisualMeta.shikiIslandVisualIslands) : [],
         shikiIslandDestroyed: !!attackVisualMeta.shikiIslandDestroyed,
         hitEffect: hitEffectFile,
+        castSfx: battleCastSfxForMove(moveEntry),
         hitSfx: hitCheck.hit ? battleHitSfxForMove(moveEntry, hitEffectFile) : "",
         startHp: beforeDamageSnapshot ? {
           player: beforeDamageSnapshot.player?.currentHp ?? null,
@@ -54274,6 +54276,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         side,
         moveId: moveEntry.id,
         moveName: moveEntry.name,
+        castSfx: battleCastSfxForMove(moveEntry),
         hitSfx: battleHitSfxForMove(moveEntry),
         moveType: moveEntry.category || moveEntry.type || "heal",
         amount: baseHeal,
@@ -54310,6 +54313,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         side,
         moveId: moveEntry.id,
         moveName: moveEntry.name,
+        castSfx: battleCastSfxForMove(moveEntry),
         hitSfx: battleHitSfxForMove(moveEntry),
         moveType: moveEntry.category || moveEntry.type || "status",
         amount: healingDone,

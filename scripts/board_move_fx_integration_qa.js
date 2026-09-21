@@ -31,7 +31,8 @@ function harness(ready = true) {
     applyDisplayedHitDamage: (...args) => record("hp", ...args), playStageShake: () => record("shake"),
     inferHitEffectFile: () => "punch_mark.webp", positionImpactFx() {}, setImpactEffect() {}, setDirectionalImpactEffect() {},
     restartAnimation: () => record("legacy-impact"), playHitEffectSound: (sound) => record("sound", sound),
-    moveFxSound: () => "audio/new-hit.ogg", eventCriticalAtHit: () => false,
+    playCastEffectSound: (sound) => record("cast", sound),
+    moveFxSound: (_event, phase) => phase === "cast" ? "audio/new-cast.ogg" : "audio/new-hit.ogg", eventCriticalAtHit: () => false,
     spawnBattleDamageNumber: (options) => record("number", options.amount), finishDisplayedAttackHp: () => record("finish-hp"), clearJudgeCloneInterceptors() {},
     playStatusEffectFx: (...args) => record("status", ...args), effectKind: () => "heal",
   };
@@ -49,7 +50,11 @@ function harness(ready = true) {
 let checks = 0;
 function check(description, action) { action(); checks += 1; }
 const event = { id: "move-1", moveId: "luffy_pistol", type: "attack", side: "player", targetSide: "enemy", damage: 42, hitDamages: [42] };
-const one = harness(); one.play(event); one.advance(819);
+const one = harness(); one.play(event); one.advance(479);
+check("single cast is silent until the launch", () => assert.equal(one.calls.filter((call) => call.name === "cast").length, 0));
+one.advance(480);
+check("single cast starts with its first launch", () => assert.deepEqual(one.calls.filter((call) => call.name === "cast").map((call) => call.time), [480]));
+one.advance(819);
 check("no HP loss before current single contact time", () => assert.equal(one.calls.filter((call) => call.name === "hp").length, 0));
 one.advance(820);
 check("sprite, sound, HP and number share existing contact", () => {
@@ -62,15 +67,55 @@ const combo = harness(); combo.play({ ...event, hitDamages: [10, 20, 30] }); com
 check("combo contacts stay 590,1250,1910 without extra damage", () => assert.deepEqual(combo.calls.filter((call) => call.name === "hp").map((call) => call.time), [590, 1250, 1910]));
 check("combo damage numbers preserve each damage", () => assert.deepEqual(combo.calls.filter((call) => call.name === "number").map((call) => call.args[0]), [10, 20, 30]));
 check("every combo impact gets the complete 420 ms hit pose", () => assert.deepEqual(combo.calls.filter((call) => call.name === "sprite" && call.args[0] === "impact").map((call) => call.args[3]), [420, 420, 420]));
+check("combo cast plays once at first launch while hits follow each contact", () => {
+  assert.deepEqual(combo.calls.filter((call) => call.name === "cast").map((call) => call.time), [360]);
+  assert.deepEqual(combo.calls.filter((call) => call.name === "sound").map((call) => call.time), [590, 1250, 1910]);
+});
 const cold = harness(false); cold.play(event); cold.advance(1000);
 check("unready art retains legacy effect at same contact", () => assert.equal(cold.calls.find((call) => call.name === "legacy-impact").time, 820));
+check("cold artwork does not move cast before the launch", () => assert.deepEqual(cold.calls.filter((call) => call.name === "cast").map((call) => call.time), [480]));
 const miss = harness(); miss.play({ ...event, miss: true, damage: 0, hitDamages: [0] }); miss.advance(1000);
 check("miss applies neither HP damage nor contact sound", () => assert.equal(miss.calls.filter((call) => ["hp", "sound"].includes(call.name)).length, 0));
+check("a missed attack still casts exactly once at launch", () => assert.deepEqual(miss.calls.filter((call) => call.name === "cast").map((call) => call.time), [480]));
 const lucci = harness(); lucci.play({ ...event, specialFx: "lucci-rokuogan" }); lucci.advance(10000);
 check("Lucci remains on existing cinematic path", () => assert.deepEqual(lucci.calls.map((call) => call.name), ["lucci"]));
 const support = harness(); support.play({ id: "heal", moveId: "heal_move", type: "heal", side: "player", amount: 10 }); support.advance(1000);
 check("support passes move identity into particle suppression", () => assert.equal(support.calls.find((call) => call.name === "status").args[1].moveEvent.moveId, "heal_move"));
 check("support sprite uses existing 360ms status effect moment", () => assert.equal(support.calls.find((call) => call.name === "sprite").time, 360));
+check("support cast waits for the visible effect", () => assert.deepEqual(support.calls.filter((call) => call.name === "cast").map((call) => call.time), [360]));
+
+check("ordinary and extra dice never start a skill sound", () => {
+  const diceStart = battle.indexOf("  function playDiceFx(");
+  const diceEnd = battle.indexOf("  function previewMovePortrait(", diceStart);
+  assert.ok(diceStart > 0 && diceEnd > diceStart);
+  const calls = [], timers = [];
+  const node = () => ({ classList: { add() {}, remove() {}, toggle() {} }, style: {}, textContent: "" });
+  const sandbox = {
+    refs: Object.fromEntries(["diceBonusFx", "diceBonusTitle", "diceBonusSubtitle", "diceBonusOrb", "diceBonusSecondOrb", "diceBonusThirdOrb"].map((key) => [key, node()])),
+    diceFxTimer: null, resolvedDiceEvent: (value) => value, clearTimeout() {}, clearDiceTicker() {},
+    applyDiceFxTheme: () => "attack", setDiceOrbValue() {}, startDiceTicker() {}, requestAnimationFrame: (callback) => callback(),
+    diceRollingTitle: () => "rolling", diceRollingSubtitle: () => "rolling", diceSettledTitleForEvent: () => "settled", diceSettledSubtitleForEvent: () => "settled",
+    playStageShake() {}, setTimeout: (callback) => { timers.push(callback); return timers.length; },
+    playCastEffectSound: (...args) => calls.push(args), playHitEffectSound: (...args) => calls.push(args), moveFxSound: () => "audio/must-not-play.ogg",
+  };
+  vm.runInNewContext(`${battle.slice(diceStart, diceEnd)}; this.play = playDiceFx;`, sandbox);
+  for (const isExtraDice of [false, true]) {
+    sandbox.play({ ...event, type: "dice", settle: 3, duration: 1650, isExtraDice });
+    while (timers.length) timers.shift()();
+  }
+  assert.equal(calls.length, 0);
+});
+
+check("ordinary and spar result events preserve legacy cast fallbacks", () => {
+  for (const marker of ['hitSfx: hit ? battleHitSfxForMove(moveEntry, hitEffect)', 'hitSfx: hitCheck.hit ? battleHitSfxForMove(moveEntry, hitEffectFile)']) {
+    const at = game.indexOf(marker);
+    assert.ok(at > 0 && /castSfx: battleCastSfxForMove\(moveEntry\),\s*$/.test(game.slice(at - 80, at)));
+  }
+  for (const kind of ["heal", "status"]) {
+    const at = game.indexOf(`id: \`${kind}-\${Date.now()}-`);
+    assert.ok(at > 0 && /castSfx: battleCastSfxForMove\(moveEntry\),\s*hitSfx: battleHitSfxForMove\(moveEntry\)/.test(game.slice(at, at + 650)));
+  }
+});
 
 const soundContext = { window: { BoardMoveFx: runtime, BoardMoveFxCatalog: { moves: { test_move: { sound: "audio/test.ogg", castSound: "audio/windup.ogg" } }, families: {} } }, battleHitEffectChoiceForMove: () => ({ sfx: "old-custom.mp3" }), battleHitEffectSettings: () => ({}) };
 const soundsStart = game.indexOf("  function battleHitSfxForMove(");
@@ -87,4 +132,4 @@ check("new scripts precede battle/game consumers", () => {
     assert.ok(catalogAt > 0 && runtimeAt > catalogAt && consumerAt > runtimeAt);
   });
 });
-console.log(JSON.stringify({ ok: true, checks, scope: "production single/combo contact, HP ordering, no generated-effect duplication, support, Lucci, catalog SFX, legacy fallback" }));
+console.log(JSON.stringify({ ok: true, checks, scope: "silent dice, first-launch cast, single/combo contact sound and HP ordering, no generated-effect duplication, support, Lucci, catalog SFX, legacy fallback" }));

@@ -1,5 +1,13 @@
 # File Map
 
+## 戰鬥圖片與技能音效時序（2026-09-21）
+
+- `public/js/board_battle.js`：受擊／倒地／結果展示 gate、角色與事件去重、相同圖片短路、實際技能階段發聲。
+- `public/js/board_game.js`、`public/board_game.html`、`public/board_battle.html`：結果事件 castSfx、iframe／腳本版本。
+- `scripts/board_battle_knockout_timing_qa.js`、`board_battle_order_browser_qa.js`：倒地完整生命週期與真瀏覽器新舊版本比較；既有 FX QA 補技能音效階段。
+- `scripts/build_board_program_update.js`／`board_program_update_qa.js`：基線程式集合完全相符的凍結與更新、39／43檔 fixture。
+- `docs/BOARD_BATTLE_ORDER_20260921.md`：原因、實作、各層驗證與公開部署證據。
+
 ## 場景配樂與操作音效（2026-09-21）
 
 - `public/js/board_audio_ui.js`／`public/css/board_audio_ui.css`：操作音效快取、即時備援、父子共用與音量面板；八個正式 Board HTML 載入。

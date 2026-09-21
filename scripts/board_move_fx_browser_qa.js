@@ -9,7 +9,8 @@ if (!/^http:\/\/(127\.0\.0\.1|localhost):\d+$/.test(URL)) throw new Error("Local
 const OUTPUT = process.env.BOARD_QA_OUTPUT || path.resolve("work/board-move-fx-browser");
 const CHROME = process.env.BOARD_QA_CHROME || "C:/Program Files/Google/Chrome/Application/chrome.exe";
 const EXPECTED_FAMILIES = Number(process.env.BOARD_QA_FAMILIES || 102);
-const report = { checks: [], errors: [], cases: [], screenshots: [], decode: [] };
+const AUDIT_ASSETS = process.env.BOARD_QA_ASSET_DECODE !== "0";
+const report = { checks: [], errors: [], cases: [], screenshots: [], decode: [], assetAudit: AUDIT_ASSETS ? "complete catalog" : "unchanged catalog audit skipped; exercised assets still load and play" };
 const check = (name, pass, detail = null) => report.checks.push({ name, pass: !!pass, detail });
 function monitor(page, label) { page.on("pageerror", (error) => report.errors.push(`${label}: ${error.message}`)); }
 async function screenshot(page, file) { await page.screenshot({ path: path.join(OUTPUT, file), fullPage: false }); report.screenshots.push(file); }
@@ -36,14 +37,19 @@ async function prepareBattle(host) {
 async function instrument(page) {
   await page.evaluate(() => {
     const original = HTMLMediaElement.prototype.play;
-    window.__fxQa = { audio: [], samples: [], numbers: [], fxPlays: [], running: false, started: 0 };
+    window.__fxQa = { audio: [], samples: [], numbers: [], fxPlays: [], running: false, started: 0, phase: "idle" };
     const fx = window.__BOARD_BATTLE_DEBUG__.moveFxRuntime(), originalFxPlay = fx.play;
     fx.play = function(event, options = {}) {
       const played = originalFxPlay.call(this, event, options);
       if (window.__fxQa.running && played) window.__fxQa.fxPlays.push({ phase: options.phase || "impact", duration: options.durationMs, time: performance.now() - window.__fxQa.started });
       return played;
     };
-    HTMLMediaElement.prototype.play = function (...args) { const item = { src: this.src.split("/").at(-1), time: performance.now(), accepted: null }; if (this.src.includes("move-fx/v1/")) window.__fxQa.audio.push(item); const promise = original.apply(this, args); promise?.then(()=>{item.accepted=true},()=>{item.accepted=false}); return promise; };
+    HTMLMediaElement.prototype.play = function (...args) {
+      const qa = window.__fxQa;
+      const item = { src: this.src.split("/").at(-1), time: performance.now() - qa.started, phase: qa.phase, eventId: window.__BOARD_BATTLE_DEBUG__.latestView()?.battle?.visualEvent?.id, accepted: null };
+      if (qa.running && this.src.includes("move-fx/v1/")) qa.audio.push(item);
+      const promise = original.apply(this, args); promise?.then(()=>{item.accepted=true},()=>{item.accepted=false}); return promise;
+    };
     const layer = document.getElementById("damagePop");
     new MutationObserver((records) => records.forEach((record) => record.addedNodes.forEach((node) => {
       if (node.nodeType === 1 && node.classList.contains("damage-number")) window.__fxQa.numbers.push({ kind: node.dataset.damageKind, value: Number(node.dataset.damageValue || 0), time: performance.now() - window.__fxQa.started });
@@ -76,11 +82,21 @@ async function runCase(page, spec, capture) {
     if (type !== "attack") { event.damage = 0; event.hitDamages = []; }
     if (!spec.cold) await fx.warm(event);
     fx.clear();
-    const qa = window.__fxQa; qa.audio = []; qa.samples = []; qa.numbers = []; qa.fxPlays = []; qa.running = true; qa.started = performance.now();
+    const qa = window.__fxQa; qa.audio = []; qa.samples = []; qa.numbers = []; qa.fxPlays = []; qa.running = true; qa.started = performance.now(); qa.phase = "prepare";
+    battle.animating = true; battle.visualEvent = { ...event, id: event.id + "-prepare", type: "prepare", duration: 520 };
+    debug.notifyBattleWindow(); window.__BOARD_BATTLE_DEBUG__.refresh();
+    await new Promise((done) => setTimeout(done, 550));
+    qa.phase = "dice";
     battle.animating = true; battle.visualEvent = { ...event, id: event.id + "-cast", type: "dice", diceFace: 3, baseDiceFace: 3, duration: 1650 };
     debug.notifyBattleWindow(); window.__BOARD_BATTLE_DEBUG__.refresh();
-    await new Promise((done) => setTimeout(done, 1900));
-    qa.started = performance.now(); qa.samples = []; qa.fxPlays = []; battle.visualEvent = event;
+    await new Promise((done) => setTimeout(done, 2300));
+    if (spec.extraDice) {
+      qa.phase = "extra-dice";
+      battle.visualEvent = { ...event, id: event.id + "-extra-dice", type: "dice", diceFace: 3, baseDiceFace: 3, duration: 1650, isExtraDice: true };
+      debug.notifyBattleWindow(); window.__BOARD_BATTLE_DEBUG__.refresh();
+      await new Promise((done) => setTimeout(done, 2300));
+    }
+    qa.started = performance.now(); qa.phase = "action"; qa.samples = []; qa.fxPlays = []; battle.visualEvent = event;
     if (spec.spectator) {
       event.duration = (spec.hits?.length || 1) > 1 ? 1250 + spec.hits.length * 620 : 1850;
       const remoteView = JSON.parse(JSON.stringify(window.__BOARD_BATTLE_DEBUG__.latestView()));
@@ -96,13 +112,24 @@ async function runCase(page, spec, capture) {
   const contact = spec.type === "status" ? 420 : ((spec.hits?.length || 1) > 1 ? 645 : 875);
   if (capture) { await page.waitForTimeout(contact); await screenshot(page, capture); }
   await page.waitForTimeout(3000 - (capture ? contact : 0));
-  const result = await page.evaluate(() => { const qa = window.__fxQa; qa.running = false; return { audio: qa.audio, samples: qa.samples, numbers: qa.numbers, fxPlays: qa.fxPlays, profile: { family: qa.profile.familyId, animation: qa.profile.animation, castSound:qa.profile.castSound, sound:qa.profile.sound }, state: window.__BOARD_BATTLE_DEBUG__.moveFxRuntime().status(), overflow: document.documentElement.scrollWidth > innerWidth + 2, portrait:document.body.classList.contains('battle-phone-portrait'), orientationNotice:getComputedStyle(document.getElementById('battleOrientationNotice')).display, hud: [...document.querySelectorAll("#playerHudMeta,#enemyHudMeta")].map((el)=>({ text:el.textContent, visible:!!el.getBoundingClientRect().width })) }; });
+  await page.evaluate(() => { window.__fxQa.audioBeforeRedelivery = window.__fxQa.audio.length; window.__BOARD_BATTLE_DEBUG__.refresh(); });
+  await page.waitForTimeout(650);
+  const result = await page.evaluate(() => { const qa = window.__fxQa; qa.running = false; return { audio: qa.audio, audioBeforeRedelivery: qa.audioBeforeRedelivery, samples: qa.samples, numbers: qa.numbers, fxPlays: qa.fxPlays, profile: { family: qa.profile.familyId, animation: qa.profile.animation, castSound:qa.profile.castSound, sound:qa.profile.sound }, state: window.__BOARD_BATTLE_DEBUG__.moveFxRuntime().status(), overflow: document.documentElement.scrollWidth > innerWidth + 2, portrait:document.body.classList.contains('battle-phone-portrait'), orientationNotice:getComputedStyle(document.getElementById('battleOrientationNotice')).display, hud: [...document.querySelectorAll("#playerHudMeta,#enemyHudMeta")].map((el)=>({ text:el.textContent, visible:!!el.getBoundingClientRect().width })) }; });
   result.label = spec.label; report.cases.push(result);
   const visible = result.samples.filter((x)=>x.alpha > 0), hitSounds = result.audio.filter((x)=>x.src.includes("__hit.")), castSounds = result.audio.filter((x)=>x.src.includes("__cast."));
   check(`${spec.label}: cast once`, castSounds.length === 1, castSounds.length);
+  check(`${spec.label}: no skill audio during prepare or dice`, result.audio.every((item) => item.phase === "action"), result.audio.map(({phase, time}) => ({phase, time})));
+  const expectedCastAt = spec.type === "status" || (spec.hits?.length || 1) > 1 ? 360 : 480;
+  check(`${spec.label}: cast waits for launch or effect`, castSounds.length === 1 && castSounds[0].time >= expectedCastAt - 30 && castSounds[0].time <= expectedCastAt + 220, castSounds);
+  check(`${spec.label}: settled snapshot redelivery never replays audio`, result.audio.length === result.audioBeforeRedelivery);
   check(`${spec.label}: cast matches selected variant`,castSounds[0]?.src === result.profile.castSound?.split('/').at(-1));
   check(`${spec.label}: audio playback accepted`,result.audio.every((item)=>item.accepted===true));
   check(`${spec.label}: hit sound count`, hitSounds.length === (spec.miss || spec.type === "status" ? 0 : (spec.hits?.length || 1)), hitSounds.length);
+  if (!spec.miss && spec.type !== "status") check(`${spec.label}: hit sound follows visible contact`, hitSounds.every((sound, index) => {
+    const expected = (spec.hits?.length || 1) > 1 ? 590 + index * 660 : 820;
+    const number = result.numbers[index];
+    return sound.time >= expected - 30 && sound.time <= expected + 220 && number && Math.abs(number.time - sound.time) < 100;
+  }), { sounds: hitSounds, numbers: result.numbers });
   check(`${spec.label}: alpha`, spec.miss || spec.cold ? visible.length === 0 : visible.length > 0, visible.length);
   check(`${spec.label}: cleanup`, result.state.active === 0 && result.samples.at(-1).alpha === 0);
   if (!spec.cold && !spec.guard) check(`${spec.label}: no generic VFX`, !result.samples.some((x)=>x.legacy || x.particles > 0));
@@ -135,7 +162,7 @@ async function runCase(page, spec, capture) {
     const host = await context.newPage(); monitor(host,"host"); await prepareBattle(host);
     const popup = context.waitForEvent("page"); await host.evaluate(()=>window.open("board_battle.html?move_fx_qa=1","_blank")); const battle = await popup; monitor(battle,"battle");
     await battle.waitForLoadState("domcontentloaded"); await battle.waitForFunction(()=>window.__BOARD_BATTLE_DEBUG__?.latestView()?.battle, null,{ timeout:30000 }); await instrument(battle);
-    await runCase(battle,{label:"single",moveId:"luffy_pistol",hits:[123]},"battle-single-desktop.png");
+    await runCase(battle,{label:"single",moveId:"luffy_pistol",hits:[123],extraDice:true},"battle-single-desktop.png");
     check('battle: sprite stays below damage numbers',await battle.evaluate(()=>{const canvas=document.querySelector('.board-move-fx-canvas'),numbers=document.getElementById('damagePop');return canvas?.parentElement===numbers.parentElement && Number(getComputedStyle(canvas).zIndex)<Number(getComputedStyle(numbers).zIndex)}));
     await runCase(battle,{label:"combo",moveId:"luffy_gatling",hits:[40,41,42]});
     await runCase(battle,{label:"miss",moveId:"luffy_pistol",hits:[0],miss:true});
@@ -149,11 +176,12 @@ async function runCase(page, spec, capture) {
     await battle.setViewportSize({width:390,height:844}); await runCase(battle,{label:"phone-portrait",moveId:"ace_fist",hits:[123]},"battle-phone-portrait.png");
     // Fresh decoder entry is held beyond the complete hit; loading must not replay it late.
     const sheet = await battle.evaluate(()=>BoardMoveFxCatalog.families.room_cut.sheet);
-    await context.route(`**/${sheet.split("?")[0]}*`, async(route)=>{await new Promise((done)=>setTimeout(done,3300));await route.continue();});
+    await context.route(`**/${sheet.split("?")[0]}*`, async(route)=>{await new Promise((done)=>setTimeout(done,5000));await route.continue();});
     await runCase(battle,{label:"slowload",moveId:"law_room",cold:true,hits:[123]});
     await battle.waitForTimeout(750);
     check("slowload: no late animation",await battle.evaluate(()=>window.__BOARD_BATTLE_DEBUG__.moveFxRuntime().status().active===0));
     await context.unrouteAll({behavior:"wait"});
+    if (AUDIT_ASSETS) {
     report.decode = await preview.evaluate(async()=>{
       const results=[];for(const [name,family] of Object.entries(BoardMoveFxCatalog.families)){
         const image=new Image();image.src=family.sheet;
@@ -170,6 +198,7 @@ async function runCase(page, spec, capture) {
       await context.close();return results;
     });
     check('audio: all catalog assets decode without silence or clipping',report.audioDecode.length>=450&&report.audioDecode.every((row)=>row.ok),report.audioDecode.length);
+    }
     check("browser: no JS errors",report.errors.length===0,report.errors);
     await context.close();
   } finally { await browser.close(); report.ok=report.checks.every((item)=>item.pass);fs.writeFileSync(path.join(OUTPUT,"report.json"),JSON.stringify(report,null,2));console.log(JSON.stringify({ok:report.ok,checks:report.checks.length,failed:report.checks.filter((x)=>!x.pass),output:OUTPUT})); }

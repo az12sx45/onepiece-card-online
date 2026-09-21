@@ -1092,6 +1092,7 @@
     player: "",
     enemy: "",
   };
+  const knockoutActions = { player: null, enemy: null };
   const PLACEHOLDER_BATTLE_PORTRAIT = "images/board/battle/portraits/placeholder/normal.webp";
   const JUDGE_CLONE_GUARD_ASSET = "images/board/battle/postgame_mechanic_effects/judge_clone_guard/judge_clone_guard.webp";
   const missingPortraitSrc = new Set();
@@ -1192,6 +1193,7 @@
   };
   let processedLogLength = null;
   let lastVisualEventId = "";
+  const playedVisualEventIds = new Set();
   const spectatorBattlePlayback = createSpectatorBattlePlayback({
     schedule: (callback, delay) => window.setTimeout(callback, delay),
     cancel: (timer) => window.clearTimeout(timer),
@@ -1248,6 +1250,7 @@
   let judgeCloneGuardTimer = null;
   let visualHpOverride = null;
   let completedImpactEventId = "";
+  let pendingAttackPresentation = null;
   const statusIconDelays = {
     player: null,
     enemy: null,
@@ -3037,7 +3040,7 @@
         wrap.classList.remove("has-portrait");
       }
     };
-    img.src = src;
+    if (img.getAttribute("src") !== src) img.src = src;
     img.classList.remove("is-empty");
     wrap.classList.add("has-portrait");
   }
@@ -3054,6 +3057,19 @@
   function currentCombatantHp(side) {
     const source = displayedCombatant(side, side === "player" ? latestView?.activeCard : latestView?.enemy);
     return Number(source?.currentHp ?? 1);
+  }
+
+  function attackPresentationPending(view = latestView) {
+    const event = view?.battle?.visualEvent;
+    if (event?.type !== "attack") return false;
+    if (pendingAttackPresentation?.eventId !== event.id) {
+      // The authority adds a 420 ms effect tail and a 1450 ms knockout lead-in.
+      // A restored snapshot with a stale animating flag must not gate forever.
+      const duration = Math.max(1850, Math.min(60000, Number(event.duration) || 1850));
+      pendingAttackPresentation = { eventId: event.id, until: Date.now() + duration + 2400 };
+    }
+    return completedImpactEventId !== event.id
+      || (!!view?.battle?.animating && Date.now() < pendingAttackPresentation.until);
   }
 
   function markKnockoutPortraitHidden(side) {
@@ -3088,6 +3104,7 @@
     clearTimeout(knockoutTimers[`${side}Fade`]);
     clearTimeout(knockoutTimers[`${side}Announce`]);
     knockoutVisualStarted[side] = false;
+    knockoutActions[side] = null;
     portraitState[side] = "normal";
     if (side === "player") {
       clearTimeout(nikaAwakeningHeartbeatTimer);
@@ -3099,7 +3116,7 @@
   }
 
   function syncPlayerAwakeningStandby(view = latestView) {
-    const keepPortrait = shouldKeepPlayerPortraitOnKnockout(view);
+    const keepPortrait = shouldKeepPlayerPortraitOnKnockout(view) && !attackPresentationPending(view);
     refs.stage?.classList.toggle("nika-awakening-standby", keepPortrait);
     refs.playerCard?.classList.toggle("nika-awakening-standby", keepPortrait);
     if (!keepPortrait) {
@@ -3141,7 +3158,9 @@
         lastCombatantKeys[side] = "";
         return;
       }
-      if (nextKey !== lastCombatantKeys[side]) {
+      const revived = currentCombatantHp(side) > 0 && !attackPresentationPending(view)
+        && (knockoutActions[side] || knockoutVisualStarted[side]);
+      if (nextKey !== lastCombatantKeys[side] || revived) {
         lastCombatantKeys[side] = nextKey;
         resetPortraitVisual(side);
       }
@@ -3229,7 +3248,14 @@
     clearTimeout(portraitTimers[side]);
     setPortraitState(side, state);
     restartPortraitMotion(side, state);
-    portraitTimers[side] = setTimeout(() => setPortraitState(side, "normal"), duration);
+    const combatantKey = combatantVisualKey(side, latestView);
+    portraitTimers[side] = setTimeout(() => {
+      if (combatantKey !== combatantVisualKey(side, latestView)) return;
+      // A lethal contact must not stand back up while the authority finishes
+      // the action and sends its knockout event. The latter owns the fade.
+      if (state === "hit" && currentCombatantHp(side) <= 0) showKnockoutPose(side);
+      else setPortraitState(side, "normal");
+    }, duration);
   }
 
   function playRaidSuitStealthMiss(duration = 980) {
@@ -3268,15 +3294,21 @@
 
   function playKnockoutAction(side, label = "") {
     if (!["player", "enemy"].includes(side)) return;
+    if (attackPresentationPending()) return;
+    const key = combatantVisualKey(side, latestView);
+    if (knockoutActions[side]?.key === key) return;
     const card = side === "player" ? refs.playerCard : refs.enemyCard;
-    const alreadyShowingKnockout = knockoutVisualStarted[side];
+    const alreadyShowingKnockout = knockoutVisualStarted[side] || portraitState[side] === "hit";
     const fadeDelay = alreadyShowingKnockout ? KNOCKOUT_REPEAT_FADE_DELAY_MS : KNOCKOUT_FADE_DELAY_MS;
+    const action = { key, readyAt: Date.now() + fadeDelay + KNOCKOUT_FADE_DURATION_MS + REPLACEMENT_PANEL_KO_BUFFER_MS };
+    knockoutActions[side] = action;
     clearTimeout(portraitTimers[side]);
     clearTimeout(knockoutTimers[side]);
     clearTimeout(knockoutTimers[`${side}Fade`]);
     clearTimeout(knockoutTimers[`${side}Announce`]);
     card.classList.remove("portrait-ko");
     if (side === "player" && shouldKeepPlayerPortraitOnKnockout()) {
+      action.readyAt = Date.now();
       knockoutVisualStarted.player = true;
       card.classList.remove("portrait-attack");
       card.classList.add("portrait-hit", "nika-awakening-standby");
@@ -3294,10 +3326,11 @@
     if (side === "player") {
       playerKnockoutPanelReadyAt = Math.max(
         playerKnockoutPanelReadyAt,
-        Date.now() + fadeDelay + KNOCKOUT_FADE_DURATION_MS + REPLACEMENT_PANEL_KO_BUFFER_MS
+        action.readyAt
       );
     }
     knockoutTimers[`${side}Fade`] = setTimeout(() => {
+      if (knockoutActions[side] !== action || combatantVisualKey(side, latestView) !== key) return;
       card.classList.remove("portrait-attack", "portrait-hit", "portrait-ko");
       void card.offsetWidth;
       card.classList.add("portrait-ko");
@@ -3305,6 +3338,7 @@
     }, fadeDelay);
     if (label) {
       knockoutTimers[`${side}Announce`] = setTimeout(() => {
+        if (knockoutActions[side] !== action || combatantVisualKey(side, latestView) !== key) return;
         playCutIn(`${label} ${side === "player" ? "瀕死" : "倒下"}！`);
       }, fadeDelay + KNOCKOUT_FADE_DURATION_MS + KNOCKOUT_ANNOUNCE_AFTER_FADE_BUFFER_MS);
     }
@@ -4101,7 +4135,6 @@
     animateTotMusicaWorldDice("song", songRolls);
     [real, song].forEach((world) => {
       if (world.moveId) void moveFxRuntime()?.warm(world);
-      playCastEffectSound(moveFxSound(world, "cast", world.castSfx));
     });
 
     scheduleTotMusicaDualFx(() => {
@@ -4128,7 +4161,10 @@
 
     scheduleTotMusicaDualFx(() => {
       [[real, refs.totMusicaRealFrame], [song, refs.totMusicaSongFrame]].forEach(([world, frame]) => {
-        if (world.moveId && !world.direct) moveFxRuntime()?.play(world, { actorSide: "player", targetSide: "player", anchorElement: frame });
+        if (!world.direct) {
+          playCastEffectSound(moveFxSound(world, "cast", world.castSfx));
+          if (world.moveId) moveFxRuntime()?.play(world, { actorSide: "player", targetSide: "player", anchorElement: frame });
+        }
       });
       if (!synchronized) {
         refs.totMusicaDualFx?.classList.add("collision-failed", "judged", bothAttackRolls ? "result-mismatch" : "result-barrier");
@@ -4151,6 +4187,9 @@
       const impactAt = launchAt + TOT_MUSICA_ATTACK_TRAVEL_MS;
       const revealAt = impactAt - TOT_MUSICA_BOSS_REVEAL_HOLD_MS;
       scheduleTotMusicaDualFx(() => {
+        [real, song].forEach((world) => {
+          if (world.direct) playCastEffectSound(moveFxSound(world, "cast", world.castSfx));
+        });
         refs.totMusicaDualFx?.classList.add("launch-upward");
         if (partialStrike) refs.totMusicaDualFx?.classList.add("split-upward");
         refs.stage?.classList.add("tot-musica-wave-launching");
@@ -4319,12 +4358,12 @@
       refs.totMusicaBossFrame?.classList.toggle("boss-high-reveal", !continueFromPlayerHigh);
       refs.totMusicaDualFx?.classList.add("enemy-camera-high", "boss-revealed", "enemy-present", "enemy-rolling");
       animateTotMusicaWorldDice("boss", bossRolls);
-      playCastEffectSound(moveFxSound(event, "cast", event.castSfx));
     };
     if (continueFromPlayerHigh) revealBossForEnemy();
     else scheduleTotMusicaDualFx(revealBossForEnemy, revealAt);
 
     scheduleTotMusicaDualFx(() => {
+      playCastEffectSound(moveFxSound(event, "cast", event.castSfx));
       refs.totMusicaDualFx?.classList.remove("enemy-rolling");
       refs.totMusicaDualFx?.classList.add(dealsDamage ? "enemy-striking" : "enemy-status-cast");
       refs.totMusicaBossFrame?.classList.remove("boss-high-reveal");
@@ -4860,6 +4899,7 @@
     processedLogLength = null;
     visualHpOverride = null;
     completedImpactEventId = "";
+    pendingAttackPresentation = null;
     activePrebattleIntroId = "";
     activePrebattleIntroKey = "";
     lastCompletedPrebattleIntroAckKey = "";
@@ -4904,6 +4944,8 @@
     replacementPanelAutoKoKey = "";
     knockoutHiddenCombatantKeys.player = "";
     knockoutHiddenCombatantKeys.enemy = "";
+    resetPortraitVisual("player");
+    resetPortraitVisual("enemy");
     playerKnockoutPanelReadyAt = 0;
     refs.speedlinesFx?.classList.remove("show");
     refs.cutInFx?.classList.remove("show");
@@ -5587,7 +5629,6 @@
     refs.diceBonusOrb.classList.remove("settled");
     refs.diceBonusFx.classList.remove("settled");
     refs.diceBonusFx.classList.add("active");
-    if (!event.isExtraDice) playCastEffectSound(moveFxSound(event, "cast", event.castSfx));
     const maxFace = Number(event.maxFace || 6);
     const isResolvedTotal = event.type === "bonus" && event.firstDie && event.secondDie;
     const diceDuration = isResolvedTotal ? 90 : Math.max(1200, Number(event.duration || 1450));
@@ -5694,6 +5735,7 @@
         const fatalGuardHit = !!event.fatalGuard && isFinalHit;
         const delay = firstDelay + index * hitGap;
         scheduleImpactFx(() => {
+          if (index === 0) playCastEffectSound(moveFxSound(event, "cast", event.castSfx));
           let spriteLaunched = false;
           if (moveFxRuntime()?.ready(event)) {
             refs.speedlinesFx?.classList.remove("show");
@@ -5810,6 +5852,7 @@
       positionImpactFx(targetSide);
       setImpactEffect(impactKind);
       scheduleImpactFx(() => {
+        playCastEffectSound(moveFxSound(event, "cast", event.castSfx));
         if (moveFxRuntime()?.play(event, { phase: "impact", actorSide: side, targetSide })) {
           refs.impactFx?.classList.remove("active");
           setImpactEffect("");
@@ -6043,9 +6086,13 @@
 
   function handleVisualEvent(view) {
     const event = view?.battle?.visualEvent;
-    if (!event || event.id === lastVisualEventId) return;
+    if (!event || event.id === lastVisualEventId || playedVisualEventIds.has(event.id)) return;
     if (event.moveId) void moveFxRuntime()?.warm(event);
     lastVisualEventId = event.id;
+    if (event.id) {
+      playedVisualEventIds.add(event.id);
+      if (playedVisualEventIds.size > 512) playedVisualEventIds.delete(playedVisualEventIds.values().next().value);
+    }
     if (event.type !== "attack") clearImpactFxTimers();
     if (event.type !== "kyubi-mask") clearKyubiMaskFx();
     if (event.type !== "sanji-raid-suit-transform") clearSanjiRaidSuitFx();
@@ -6147,6 +6194,7 @@
       clearTimeout(knockoutTimers.enemyFade);
       clearTimeout(knockoutTimers.enemyAnnounce);
       knockoutVisualStarted.enemy = false;
+      knockoutActions.enemy = null;
       clearKnockoutPortraitHidden("enemy");
       refs.enemyCard?.classList.remove("portrait-ko", "portrait-hit");
       playImpactFx({ ...event, type: "heal" });
@@ -7369,8 +7417,9 @@
     const delay = Math.max(80, Math.min(2600, Number(readyAt || 0) - Date.now()));
     replacementPanelTimer = setTimeout(() => {
       replacementPanelTimer = null;
-      if (!latestView?.battle?.needsReplacement) return;
-      currentMode = "replacement";
+      const battle = latestView?.battle;
+      if (!battle?.needsReplacement && !battle?.result && !battle?.canFinish) return;
+      currentMode = battle.needsReplacement ? "replacement" : "result";
       renderPanel(latestView);
     }, delay);
   }
@@ -7379,6 +7428,10 @@
     if (!replacementNeedsKnockoutDelay(view)) {
       if (!view?.battle?.needsReplacement) clearReplacementPanelGate();
       return true;
+    }
+    if (attackPresentationPending(view)) {
+      scheduleReplacementPanelRender(Date.now() + 160);
+      return false;
     }
     const key = replacementPanelKnockoutKey(view);
     if (replacementPanelGateKey !== key) {
@@ -7390,7 +7443,25 @@
       replacementPanelAutoKoKey = key;
       playKnockoutAction("player", view?.activeCard?.name || "");
     }
-    const readyAt = Math.max(playerKnockoutPanelReadyAt || 0, Date.now());
+    const readyAt = Math.max(playerKnockoutPanelReadyAt || 0, knockoutActions.player?.readyAt || 0, Date.now());
+    if (Date.now() >= readyAt) return true;
+    scheduleReplacementPanelRender(readyAt);
+    return false;
+  }
+
+  function battleResultPresentationReady(view) {
+    if (attackPresentationPending(view)) {
+      scheduleReplacementPanelRender(Date.now() + 160);
+      return false;
+    }
+    let readyAt = 0;
+    ["player", "enemy"].forEach((side) => {
+      if (currentCombatantHp(side) > 0 || (side === "player" && shouldKeepPlayerPortraitOnKnockout(view))) return;
+      const key = combatantVisualKey(side, view);
+      if (!key) return;
+      playKnockoutAction(side, side === "player" ? view?.activeCard?.name : view?.enemy?.name);
+      readyAt = Math.max(readyAt, knockoutActions[side]?.readyAt || 0);
+    });
     if (Date.now() >= readyAt) return true;
     scheduleReplacementPanelRender(readyAt);
     return false;
@@ -8356,6 +8427,10 @@
       return;
     }
     refs.infoPanel?.classList.remove("dialogue-hidden");
+    if ((view?.battle?.result || view?.battle?.canFinish) && !view?.battle?.needsReplacement && !battleResultPresentationReady(view)) {
+      renderReplacementWaiting(view);
+      return;
+    }
     if (!viewerCanControlBattle(view)) {
       currentMode = null;
       renderSpectatorPanel(view);
@@ -8447,6 +8522,7 @@
     clearTimeout(knockoutTimers.enemyFade);
     clearTimeout(knockoutTimers.enemyAnnounce);
     knockoutVisualStarted.enemy = false;
+    knockoutActions.enemy = null;
     clearKnockoutPortraitHidden("enemy");
     refs.enemyCard?.classList.remove("portrait-attack", "portrait-hit", "portrait-ko", "judge-clone-guard-active");
     portraitState.enemy = "normal";
