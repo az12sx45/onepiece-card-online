@@ -9,6 +9,7 @@
 - `scripts/board_sea_event_reveal_qa.js`：隔離 Chrome／雙頁 LAN、實際結果、CPU、手機與素材驗證。
 - `scripts/build_board_sea_event_release.js`／`scripts/board_sea_event_release_builder_qa.js`：固定發布基線，凍結已提交的 41 個程式與 72 張新圖，保留 4,040 舊媒體；獨立候選驗證及明確 promote，24 項隔離 QA。
 - `config/desktop-program-packages-v1.json`：兩個核心檔新增白名單。`docs/BOARD_SEA_EVENT_ASSET_INDEX_V2.json`：72 張輸出與 GPT 原檔的雜湊、尺寸及來源統整。`docs/BOARD_SEA_EVENT_REVEAL_20260921.md`：完整範圍與驗證／部署紀錄。
+- `public/desktop/catalog-v3.json`／`public/desktop/manifests/board-package-b3342dbd8b206231.json`：已發布的 Board 套件，4,153 檔；Card／Chess、v2 與既有 4,040 媒體保持。
 
 ## 航海選單與攻擊特效（2026-09-21）
 
