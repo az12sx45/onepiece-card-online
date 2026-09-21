@@ -27,4 +27,14 @@
 
 ## 發布
 
-來源提交 `141e7fdd42c4023b4066984846e28d4b3b8fb0e7` 已凍結，候選 `package-41425d61d6f49184` build／inspect／promote 通過。Manifest `eeb5e84246d69618029b6e89151ba93dab48777427dff9b947ec311cb2cd6089`，4,155 檔／1,397,173,371 bytes；4,112 媒體全部沿用，僅更新 `board_battle.html`、`board_game.html`、`js/board_battle.js`、`js/board_game.js` 四個程式。R2 與公開 runtime／瀏覽器驗收於實際完成後追加。
+來源提交 `141e7fdd42c4023b4066984846e28d4b3b8fb0e7` 已凍結，候選 `package-41425d61d6f49184` build／inspect／promote 通過。Manifest `eeb5e84246d69618029b6e89151ba93dab48777427dff9b947ec311cb2cd6089`，4,155 檔／1,397,173,371 bytes；4,112 媒體全部沿用，僅更新 `board_battle.html`、`board_game.html`、`js/board_battle.js`、`js/board_game.js` 四個程式。
+
+- Release `9e0744d92b8047e9e4b8be9261508bc1eba51689` fast-forward 推送至 origin/main；公開 runtime 於 **2026-09-21 23:25:12（UTC+8）** 讀回新 release／manifest，轉換紀錄在 `release/runtime-transition.json`。
+- 完整來源 dry-run：4,155 logical／3,838 unique，全部核對通過。精確四檔 delta 共 5,229,404 bytes 上傳成功，公開 R2 GET size／SHA **4/4** 通過。工具拒絕範圍外程式、任何媒體與 Card／Chess／v2 變更；證據在 `r2-dry-run.json`、`release/r2-*-delta-*.json`、`release/r2-verify.json`。
+- 正式站 health、三遊戲 runtime、catalog／manifest SHA、43 程式 size／SHA 與舊端點關閉驗證 **47 checks** 通過，`release/live-verify.json`。
+- 正式站真 Chrome 擊倒演出 **38/38**、JS errors 0；五情境含玩家／敵方致死、結果／替補提前到達、多段連擊手機橫向、尼卡待覺醒。逐 frame 與圖片 src 變更記錄在 `public-browser/battle-order-report.json`，桌機與橫向截圖已檢視。
+- 正式站技能音效 **29/29**、JS errors 0；prepare／首骰／追加骰技能音為 0，攻擊 cast 505ms 單次，命中音 864.9ms 與傷害數字同步，輔助 cast 386.3ms 單次，同事件重送不重播，所有播放請求成功。並驗證實際載入兩支 JS SHA 與來源提交一致；證據 `public-audio/public-audio-report.json`。
+- 公開瀏覽器僅用一次性 context 中的展示 fixture，導覽前封鎖非 GET／HEAD 與 WebSocket，未寫入正式房間或存檔。此為公開程式自動化驗收，不代表真人遠端連線／實體手機測試。
+- 部署後重驗 27 份保護檔共 37,659,300 bytes，size／SHA 全部與本輪基線相同；未提交 V1 素材保留，18926 本輪 npm 服務已停止。`protected-baseline.json`、`protected-after.json` 可比對。
+
+正式入口：https://onepiece-card-online.onrender.com/board_start.html 。網頁重新整理；桌面版更新約 5.2 MB 後重開。收尾僅文件提交使用 `[skip render]`，保持已驗收程式與套件不變。

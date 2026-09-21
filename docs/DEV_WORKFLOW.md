@@ -1,10 +1,10 @@
 # Dev Workflow
 
-## 戰鬥圖片與技能音效時序（2026-09-21，發布中）
+## 戰鬥圖片與技能音效時序（2026-09-21，已部署）
 
 修復致死受擊後站回、替補／結果提早出現、倒地重播與輪詢重設圖片；技能音由擲骰移至實際施放。修改兩個 Board HTML、board_battle.js、board_game.js（四個 castSfx 及 iframe 版本），新增倒地與瀏覽器 QA、擴充 FX 音效 QA；發布 builder 移除39硬限制並加31項fixture。更新四份專案文件，隔離 npm start 18926，完整證據見 [本次紀錄](BOARD_BATTLE_ORDER_20260921.md)。
 
-來源 `141e7fdd4`，候選 `package-41425d61d6f49184` 已凍結／重驗／提升；只改四個既有程式，素材與程式路徑集合不变。R2 與公開驗收尚待完成。
+來源 `141e7fdd4`、release `9e0744d92`，正式 `package-41425d61d6f49184` 已於 23:25:12 生效。4,155 logical／3,838 unique 完整來源核對通過，四個約 5.2 MB 更新檔 R2 公開 SHA 通過；正式 runtime／metadata／43 程式 47 checks、公開擊倒畫面 38、公開技能音效 29 checks 全數通過，JS errors 0。27 份保護檔一致，18926 測試服務已關閉；收尾文件以 `[skip render]` 提交。
 
 ## 場景配樂與操作音效（2026-09-21，已部署）
 
