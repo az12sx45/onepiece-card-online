@@ -13,7 +13,10 @@ function captureErrors(page, errors, label) {
 }
 
 async function createDevice(browser, profile, errors) {
-  const context = await browser.newContext({ viewport: { width: 1280, height: 720 } });
+  const context = await browser.newContext({
+    viewport: { width: 1280, height: 720 },
+    ...(process.env.BOARD_QA_USER_AGENT ? { userAgent: process.env.BOARD_QA_USER_AGENT } : {}),
+  });
   await context.addInitScript((entry) => {
     localStorage.setItem("op_board_user_id", String(entry.userId));
     localStorage.setItem("op_board_client_id", entry.clientId);

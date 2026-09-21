@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#071522">
+  <meta name="description" content="下載 ONE PIECE 桌遊啟動器，在 Windows 電腦遊玩新世界航海錄、偉大航道爭霸戰與航海王西洋棋。">
+  <title>桌面版下載｜ONE PIECE 桌遊系列</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root { color-scheme: dark; --bg:#071522; --panel:#102535; --line:#294150; --text:#eff2ec; --muted:#b1c1c9; --gold:#efd49a; --teal:#8cd4ca; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:radial-gradient(ellipse at 78% 10%,#163847 0,transparent 48%),var(--bg); color:var(--text); font-family:"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif; line-height:1.75; }
+    a { color:inherit; }
+    .wrap { width:min(1100px,100% - 64px); margin:0 auto; }
+    header { display:flex; align-items:center; justify-content:space-between; gap:20px; padding:29px 0; border-bottom:1px solid var(--line); }
+    .brand { display:flex; align-items:center; gap:13px; }
+    .brand-mark { display:grid; place-items:center; width:39px; height:39px; border:1px solid #a88c54; border-radius:50%; color:var(--gold); font-family:Georgia,serif; font-size:22px; }
+    .brand-name { font-size:13px; font-weight:700; letter-spacing:.17em; line-height:1.5; }
+    .brand-name span { display:block; color:var(--muted); font-size:10px; font-weight:400; letter-spacing:.26em; }
+    .edition { color:var(--teal); font-size:12px; letter-spacing:.12em; white-space:nowrap; }
+    .hero { display:grid; grid-template-columns:1.12fr 1fr; align-items:center; gap:70px; padding:83px 0 66px; }
+    .eyebrow { margin:0 0 20px; color:var(--gold); font-size:12px; font-weight:700; letter-spacing:.2em; }
+    h1 { margin:0 0 24px; font-size:clamp(34px,4.1vw,51px); line-height:1.4; letter-spacing:.025em; font-weight:800; }
+    h1 span { color:var(--gold); }
+    .intro { max-width:420px; margin:0; color:var(--muted); font-size:16px; }
+    .status { display:inline-flex; align-items:center; gap:9px; margin:26px 0 0; color:var(--teal); font-size:13px; }
+    .status::before { content:""; width:6px; height:6px; border-radius:50%; background:var(--teal); }
+    .download-card { padding:31px; background:linear-gradient(145deg,#163344,#0b1c2a); border:1px solid #49606a; border-radius:16px; box-shadow:0 18px 50px #0003; }
+    .card-heading { display:flex; align-items:center; gap:15px; margin-bottom:22px; }
+    .windows { display:grid; grid-template-columns:repeat(2,13px); gap:4px; padding:13px; background:#203d4c; border-radius:12px; }
+    .windows i { width:13px; height:13px; background:var(--gold); }
+    .card-heading h2 { margin:0; font-size:22px; letter-spacing:.04em; }
+    .card-heading p { margin:0; color:var(--muted); font-size:13px; }
+    .download { display:flex; align-items:center; justify-content:center; gap:12px; min-height:58px; padding:12px 18px; border:1px solid #f6dfb5; border-radius:8px; background:var(--gold); color:#17222a; font-size:17px; font-weight:800; text-decoration:none; transition:background .15s; }
+    .download:hover { background:#f9e5bc; }
+    .download:focus-visible { outline:3px solid var(--teal); outline-offset:5px; }
+    .download .arrow { font-size:24px; line-height:1; }
+    .release { margin:12px 0 20px; color:var(--muted); text-align:center; font-size:12px; font-variant-numeric:tabular-nums; }
+    .steps { margin:0; padding:19px 0 0; border-top:1px solid var(--line); list-style:none; counter-reset:step; }
+    .steps li { display:flex; gap:12px; margin:8px 0; color:#d5e0e4; font-size:13px; }
+    .steps li::before { counter-increment:step; content:counter(step); flex:0 0 21px; height:21px; margin-top:1px; border:1px solid #49606a; border-radius:50%; text-align:center; color:var(--gold); font-size:11px; line-height:19px; }
+    .games { padding:0 0 43px; }
+    .section-label { margin:0 0 16px; color:var(--muted); font-size:12px; font-weight:400; letter-spacing:.16em; }
+    .game-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+    .game { position:relative; padding:23px 24px; border:1px solid var(--line); border-radius:10px; background:#0c1e2bc9; }
+    .game-tag { color:var(--teal); font-size:11px; letter-spacing:.13em; }
+    .game h3 { margin:8px 0 6px; font-size:20px; letter-spacing:.025em; }
+    .game p { margin:0; color:var(--muted); font-size:13px; }
+    .notes { display:grid; grid-template-columns:1fr 1fr; gap:36px; padding:28px 0 36px; border-top:1px solid var(--line); }
+    .notes h2 { margin:0 0 7px; color:var(--gold); font-size:15px; }
+    .notes p { margin:0; color:var(--muted); font-size:13px; }
+    .mobile-note { padding-top:10px; }
+    footer { padding:22px 0 30px; border-top:1px solid var(--line); color:#93a9b5; font-size:11px; }
+    footer p { margin:0; }
+    @media (max-width:820px) {
+      .wrap { width:min(620px,100% - 40px); }
+      header { padding:23px 0; }
+      .hero { grid-template-columns:1fr; gap:34px; padding:46px 0 38px; }
+      h1 { font-size:40px; }
+      .intro { max-width:100%; }
+      .game-grid { grid-template-columns:1fr; gap:10px; }
+      .game { padding:17px 22px; }
+      .game h3 { margin:3px 0; }
+      .games { padding-bottom:30px; }
+      .notes { gap:24px; }
+    }
+    @media (max-width:460px) {
+      .wrap { width:calc(100% - 36px); }
+      .brand-name { font-size:11px; letter-spacing:.12em; }
+      .brand-name span { font-size:9px; }
+      .brand { gap:10px; }
+      .brand-mark { width:34px; height:34px; }
+      .edition { font-size:10px; }
+      h1 { font-size:34px; }
+      .intro { font-size:15px; }
+      .download-card { padding:23px; }
+      .download { font-size:16px; }
+      .notes { grid-template-columns:1fr; }
+    }
+    @media (prefers-reduced-motion:reduce) { * { transition:none!important; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand"><span class="brand-mark" aria-hidden="true">N</span><div class="brand-name">ONE PIECE<span>TABLETOP SERIES</span></div></div>
+      <span class="edition">桌面版・下載入口</span>
+    </header>
+    <main>
+      <section class="hero" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">你的航程，繼續前進</p>
+          <h1 id="page-title">下一段冒險，<br><span>從桌面啟航。</span></h1>
+          <p class="intro">遊戲已改由桌面啟動器進入。下載後選擇你的遊戲，讓熟悉的夥伴與冒險，在電腦上繼續。</p>
+          <p class="status">原有帳號、雲端存檔與多人連線持續服務</p>
+        </div>
+        <section class="download-card" aria-labelledby="download-title">
+          <div class="card-heading">
+            <span class="windows" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            <div><h2 id="download-title">桌遊啟動器</h2><p>Windows 64 位元</p></div>
+          </div>
+          <a id="download-link" class="download" href="https://game-assets.rihdi.tw/desktop/launcher/releases/1.1.7/ONE-PIECE-Tabletop-Launcher-1.1.7-x64.exe" referrerpolicy="no-referrer"><span class="arrow" aria-hidden="true">↓</span>下載 Windows 桌面版</a>
+          <p id="release-info" class="release">v1.1.7 · 安裝檔約 153 MB</p>
+          <ol class="steps">
+            <li>下載並安裝啟動器。</li>
+            <li>使用原本帳號登入啟動器。</li>
+            <li>選擇遊戲，完成內容下載後開始遊玩。</li>
+          </ol>
+        </section>
+      </section>
+      <section class="games" aria-labelledby="games-title">
+        <h2 id="games-title" class="section-label">一個啟動器，三種冒險</h2>
+        <div class="game-grid">
+          <article class="game"><span class="game-tag">航海・桌遊冒險</span><h3>新世界航海錄</h3><p>擲骰出航，招募夥伴，探索新世界。</p></article>
+          <article class="game"><span class="game-tag">卡牌・策略對決</span><h3>偉大航道爭霸戰</h3><p>組織你的陣容，展開卡牌對戰。</p></article>
+          <article class="game"><span class="game-tag">棋盤・戰術交鋒</span><h3>霸海戰棋</h3><p>在棋盤上佈局，走出致勝的一步。</p></article>
+        </div>
+      </section>
+      <section class="notes" aria-label="下載與遊玩說明">
+        <div><h2>已經安裝過？</h2><p>直接開啟既有啟動器，在下載管理內更新遊戲，再進入遊玩即可。使用原本帳號，接續已保存在雲端的航海錄。</p></div>
+        <div><h2>請使用 Windows 電腦</h2><p>目前提供 Windows 64 位元桌面版，手機與平板暫不支援。請在 Windows 電腦開啟此頁下載。</p><p class="mobile-note">登入、雲端存檔與多人對戰仍需網路連線。</p></div>
+      </section>
+    </main>
+    <footer><p>ONE PIECE TABLETOP SERIES · 遊戲內容下載至電腦；登入、雲端存檔與多人連線持續服務。</p></footer>
+  </div>
+  <script>
+    (() => {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 5000);
+      fetch('/desktop/launcher-release-v1.json', { cache: 'no-store', signal: controller.signal, headers: { Accept: 'application/json' } })
+        .then(response => { if (!response.ok) throw new Error('release unavailable'); return response.json(); })
+        .then(release => {
+          if (release?.schema !== 1 || release.channel !== 'stable' || release.platform !== 'win32' || release.arch !== 'x64') return;
+          if (!/^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$/.test(release.version || '')) return;
+          const artifact = release.artifact;
+          if (!artifact || !/^https:\/\/game-assets\.rihdi\.tw\/desktop\/launcher\/releases\/[0-9A-Za-z][0-9A-Za-z._-]*\/[0-9A-Za-z][0-9A-Za-z._-]*\.exe$/.test(artifact.url || '')) return;
+          if (!Number.isSafeInteger(artifact.bytes) || artifact.bytes <= 0) return;
+          document.getElementById('download-link').href = artifact.url;
+          document.getElementById('release-info').textContent = `v${release.version} · 安裝檔約 ${Math.ceil(artifact.bytes / 1000000)} MB`;
+        })
+        .catch(() => { /* Keep the verified release link when metadata is unavailable. */ })
+        .finally(() => clearTimeout(timer));
+    })();
+  </script>
+</body>
+</html>

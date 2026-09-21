@@ -10,6 +10,7 @@ const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const { Chess } = require("chess.js");
 const { createBoardStateSender } = require("./board-state-wire");
+const { createDesktopDistribution } = require("./desktop-distribution");
 const boardStateSender = createBoardStateSender();
 const voyageRecords = require("./board-voyage-records");
 const {
@@ -36,6 +37,8 @@ console.log("[env] DATABASE_URL exists:", !!process.env.DATABASE_URL);
 const app = express();
 app.use(express.json({ limit: "30mb" }));
 const publicDir = path.join(__dirname, "..", "public");
+const desktopDistribution = createDesktopDistribution({ publicDir });
+app.use(desktopDistribution.middleware);
 const portableAssetVersion = "20260831-portable-prefetch-v397";
 const portableAssetManifestPath = "images/board/mobile/manifest-v397.json";
 const immutableDeferredBoardAssets = new Set([
@@ -1018,6 +1021,8 @@ ensurePlayerNameUniqueIndex();
 
 const server = http.createServer(app);
 const io = new Server(server, {
+  serveClient: false,
+  allowRequest: desktopDistribution.allowSocketRequest,
   cors: { origin: "*" },
   maxHttpBufferSize: 30 * 1024 * 1024,
   perMessageDeflate: {
@@ -3556,6 +3561,7 @@ function runCpuLoop(roomId){
 
 // ——— Socket.IO ———
 io.on("connection", (socket) => {
+  desktopDistribution.installSocketGuard(socket);
   let joinedRoom = null;
   // Pin Board identity to verified account state before any lobby or state handler.
   socket.use((packet, next) => {

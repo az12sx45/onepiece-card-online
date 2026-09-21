@@ -1,5 +1,14 @@
 # File Map
 
+## 桌面入口限制（2026-09-22）
+
+- `server/desktop-distribution.js`：metadata 白名單、桌面 renderer 相容識別、一般瀏覽器限制、R2 媒體索引及退役 service worker、Node 啟動器社交事件白名單。
+- `server/index.js`：在 static 前安裝 HTTP 分流，Socket.IO 握手及 packet middleware，停供動態 client bundle。
+- `public/desktop-download.html`：三遊戲共用 Windows 下載入口，簽署 release metadata 的既有 URL，無大型圖片／音樂。
+- `scripts/desktop_distribution_gate_qa.js`、`desktop_distribution_browser_qa.js`、`desktop_distribution_electron_qa.js`、`desktop_distribution_release_verify.js`：隔離 gate、Chrome／舊 worker、真 Electron／AuthService 及公開 release 驗證。
+- `scripts/lan_refresh_flow_qa.js`：選用 `BOARD_QA_USER_AGENT`，用於分流後的雙頁回歸；此 UA 測試本身不等同真 Electron 驗收。
+- `docs/DESKTOP_ONLY_20260922.md`：範圍、兼容界線、CORS、QA、保護及公開部署證據。
+
 ## 戰鬥圖片與技能音效時序（2026-09-21）
 
 - `public/js/board_battle.js`：受擊／倒地／結果展示 gate、角色與事件去重、相同圖片短路、實際技能階段發聲。
