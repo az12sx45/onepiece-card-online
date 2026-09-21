@@ -2182,6 +2182,7 @@
       transition:width .18s ease;
     }
   </style>
+  <link rel="stylesheet" href="css/board_audio_ui.css?v=20260921-board-audio-v1">
 </head>
 <body data-entry-stage="press">
   <section class="board-entry" id="boardEntry" aria-label="新世界航海錄登入入口">
@@ -2234,6 +2235,7 @@
     </div>
   </section>
   <main class="page">
+    <div data-board-audio-controls style="display:flex;justify-content:flex-end;position:relative;z-index:30"></div>
     <div class="seagull" aria-hidden="true"></div>
 
     <section class="view active" data-view="home">
@@ -2448,6 +2450,10 @@
 
   <script src="js/board_shared.js?v=20260902-board-entry-auth-v418-final"></script>
   <script src="/vendor/socket.io-client/4.8.1/socket.io.min.js?v=20260907-local-runtime-v1"></script>
-  <script src="js/board_start.js?v=20260914-voyage-records-v1"></script>
+  <script src="js/bgm_metadata.js?v=20260921-board-audio-v1"></script>
+  <script src="js/choose_bgm.js?v=20260921-board-audio-v1"></script>
+  <script src="js/bgm_manager.js?v=20260921-board-audio-v1"></script>
+  <script src="js/board_audio_ui.js?v=20260921-board-audio-v1"></script>
+  <script src="js/board_start.js?v=20260921-board-audio-v1"></script>
 </body>
 </html>

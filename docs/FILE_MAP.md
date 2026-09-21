@@ -1,5 +1,14 @@
 # File Map
 
+## 場景配樂與操作音效（2026-09-21）
+
+- `public/js/board_audio_ui.js`／`public/css/board_audio_ui.css`：操作音效快取、即時備援、父子共用與音量面板；八個正式 Board HTML 載入。
+- `public/js/bgm_manager.js`、`board_start.js`、`board_game.js`：手勢解鎖、大廳配樂、場景優先序、海格／副本／結果轉場。
+- `public/board_audio_preview.html`／`public/js/board_audio_preview.js`：22 場景與 10 種音效的試聽室，不接房間／進度。
+- `scripts/board_audio_ui_qa.js`、`board_audio_scene_qa.js`、`board_audio_browser_qa.js`：音效、場景及正式瀏覽器驗證；`board_bgm_continuity_qa.js` 保留既有回歸。
+- `scripts/build_board_audio_release.js`／`board_audio_release_builder_qa.js`：固定基線的 43 程式凍結、清單提升及隔離 fixture；`config/desktop-program-packages-v1.json` 加入音效兩個核心檔。
+- `docs/BOARD_SCENE_AUDIO_20260921.md`：曲庫、音效來源、範圍、測試及發布證據。
+
 ## 海格結果展示（2026-09-21）
 
 - `public/js/board_sea_event_visuals.js`／`public/css/board_sea_event_reveal.css`：24 事件插畫目錄、獨立展示亂數、實際結果圖示、揭曉動畫與響應式版面。

@@ -99,6 +99,9 @@ function createSandbox() {
       this.playCalls += 1;
       if (this.playMode === "reject") return Promise.reject(new Error("autoplay rejected"));
       this.paused = false;
+      if (this.playMode === "defer") {
+        return new Promise((resolve) => { this.resolvePlay = () => { this.paused = false; resolve(); }; });
+      }
       return Promise.resolve();
     }
 
@@ -307,14 +310,113 @@ async function testAudioFocus() {
   assert.strictEqual(env.sandbox.BgmManager.status().audioFocusCount, 0, "focus release must be idempotent");
 }
 
+async function testOutgoingCrossfadeControls() {
+  const env = createSandbox();
+  const manager = env.sandbox.BgmManager;
+  const first = await startTrack(env, "to_the_ocean");
+  manager.chooseAndPlay(preferred("oden_store", "shop"), { transition: "immediate", fadeMs: 1400 });
+  await flushMicrotasks();
+  const second = env.FakeAudio.instances.at(-1);
+  await env.clock.advance(300);
+  assert.ok(!first.paused && !second.paused && first.volume > 0 && second.volume > 0, "ordinary crossfade must keep both cues audible during transition");
+  await env.clock.advance(1200);
+  assert.ok(first.paused && first.removedSrc, "ordinary crossfade must retire its previous cue");
+  assert.ok(!second.paused && second.volume > 0, "ordinary crossfade must retain its new cue");
+
+  manager.chooseAndPlay(preferred("fight_continues", "battle_intro"), { transition: "immediate", fadeMs: 2800 });
+  await flushMicrotasks();
+  await env.clock.advance(150);
+  manager.setEnabled(false);
+  await env.clock.advance(550);
+  assert.ok(env.FakeAudio.instances.every((audio) => audio.paused), "mute must stop both current and outgoing audio within its 500ms fade");
+  manager.setEnabled(true);
+  await flushMicrotasks();
+  await env.clock.advance(3000);
+  assert.strictEqual(env.FakeAudio.instances.filter((audio) => !audio.paused).length, 1, "unmute must not revive an outgoing cue");
+  assert.strictEqual(manager.status().currentChoice.id, "fight_continues");
+}
+
+async function testOutgoingVolumeAndFocus() {
+  const env = createSandbox();
+  const manager = env.sandbox.BgmManager;
+  const first = await startTrack(env, "to_the_ocean");
+  manager.chooseAndPlay(preferred("oden_store", "shop"), { transition: "immediate", fadeMs: 2800 });
+  await flushMicrotasks();
+  await env.clock.advance(350);
+  manager.setVolume(0.08);
+  await env.clock.advance(220);
+  assert.ok(first.volume <= 0.08 * Math.pow(10, -1.18 / 20), "volume slider must also reduce the outgoing cue");
+  const beforeFocus = first.volume;
+  const focus = manager.acquireAudioFocus("outgoing-video", { volumeRatio: 0.1, fadeOutMs: 100, fadeInMs: 100 });
+  await env.clock.advance(130);
+  assert.ok(first.volume > 0 && first.volume < beforeFocus * 0.12, "audio focus must duck the outgoing cue as well as the current cue");
+  const ducked = first.volume;
+  focus.release();
+  await env.clock.advance(130);
+  assert.ok(first.volume > ducked && first.volume < beforeFocus, "focus release may restore level while preserving the outgoing fade envelope");
+  await env.clock.advance(2100);
+  assert.ok(first.paused && first.removedSrc, "volume/focus changes must never extend the original crossfade deadline");
+  assert.strictEqual(env.FakeAudio.instances.filter((audio) => !audio.paused).length, 1, "focus release must not strand retired audio");
+}
+
+async function testRapidCrossfadeAndStop() {
+  const env = createSandbox();
+  const manager = env.sandbox.BgmManager;
+  await startTrack(env, "to_the_ocean");
+  for (const id of ["oden_store", "chopper", "fight_continues", "shinkenshoubu"]) {
+    manager.chooseAndPlay(preferred(id), { transition: "immediate", fadeMs: 1400 });
+    await flushMicrotasks();
+    await env.clock.advance(160);
+  }
+  const focus = manager.acquireAudioFocus("rapid-video", { volumeRatio: 0.1, fadeOutMs: 50, fadeInMs: 50 });
+  await env.clock.advance(80);
+  focus.release();
+  await env.clock.advance(1500);
+  assert.strictEqual(manager.status().currentChoice.id, "shinkenshoubu", "rapid selection must retain the last requested cue");
+  assert.strictEqual(env.FakeAudio.instances.filter((audio) => !audio.paused).length, 1, "rapid crossfades and focus release must retire every older cue");
+
+  manager.chooseAndPlay(preferred("to_the_ocean"), { transition: "immediate", fadeMs: 2800 });
+  await flushMicrotasks();
+  await env.clock.advance(120);
+  manager.stop({ fadeMs: 100 });
+  manager.setVolume(1);
+  const stoppingFocus = manager.acquireAudioFocus("stop-video", { volumeRatio: 0.1, fadeOutMs: 0, fadeInMs: 0 });
+  stoppingFocus.release();
+  await env.clock.advance(150);
+  assert.ok(env.FakeAudio.instances.every((audio) => audio.paused), "explicit stop cannot be canceled by volume or audio focus changes");
+}
+
+async function testMutedInFlightCannotRevive() {
+  const env = createSandbox();
+  const manager = env.sandbox.BgmManager;
+  await startTrack(env, "to_the_ocean");
+  env.playModes.push("defer");
+  manager.chooseAndPlay(preferred("oden_store", "shop"), { transition: "immediate", fadeMs: 0 });
+  const cancelled = env.FakeAudio.instances.at(-1);
+  manager.setEnabled(false);
+  assert.ok(cancelled.paused && cancelled.removedSrc, "mute must immediately cancel its still-loading candidate");
+  manager.setEnabled(true);
+  await flushMicrotasks();
+  const replacement = env.FakeAudio.instances.at(-1);
+  assert.notStrictEqual(replacement, cancelled, "unmute must create a fresh latest-scene candidate");
+  cancelled.resolvePlay();
+  await flushMicrotasks();
+  await env.clock.advance(550);
+  assert.ok(cancelled.paused && cancelled.removedSrc, "late play resolution must not revive a canceled same-scene candidate");
+  assert.ok(!replacement.paused, "late cancellation must leave the replacement playing");
+  assert.strictEqual(manager.status().currentChoice.id, "oden_store");
+  assert.strictEqual(env.FakeAudio.instances.filter((audio) => !audio.paused).length, 1);
+  assert.strictEqual(manager.status().unlocked, true, "a stale canceled candidate must not relock the active manager");
+}
+
 function testStaticWiring() {
   const board = fs.readFileSync(path.join(publicDir, "js", "board_game.js"), "utf8");
   const battle = fs.readFileSync(path.join(publicDir, "js", "board_battle.js"), "utf8");
   const marineford = fs.readFileSync(path.join(publicDir, "board_marineford.html"), "utf8");
   const metadata = fs.readFileSync(path.join(publicDir, "js", "bgm_metadata.js"), "utf8");
   assert.match(board, /function startFinalEndingCinematicSession[\s\S]*?playBgmForContext\(bgmStoryContext\(ending, player\)/);
-  assert.match(board, /function openImpelDownWindow[\s\S]*?sceneType:\s*"impel_down"/);
-  assert.match(board, /function openMarinefordWindow[\s\S]*?sceneType:\s*"marineford"/);
+  assert.match(board, /function openImpelDownWindow[\s\S]*?playBgmForContext\(bgmScenarioContext\("impel_down", player\)\)/);
+  assert.match(board, /function openMarinefordWindow[\s\S]*?playBgmForContext\(bgmScenarioContext\("marineford", player\)\)/);
   assert.match(board, /musicScope:\s*"board-map"/);
   const bossProfileSource = board.match(/const BOARD_BOSS_BGM_PROFILES = Object\.freeze\(\{([\s\S]*?)\n\s*\}\);/)?.[1] || "";
   assert.ok(bossProfileSource, "boss BGM profile table must be present");
@@ -356,6 +458,10 @@ async function main() {
   await testDeferredCancellation();
   await testFailureAndCueLoop();
   await testAudioFocus();
+  await testOutgoingCrossfadeControls();
+  await testOutgoingVolumeAndFocus();
+  await testRapidCrossfadeAndStop();
+  await testMutedInFlightCannotRevive();
   testStaticWiring();
   console.log("board_bgm_continuity_qa: PASS");
 }

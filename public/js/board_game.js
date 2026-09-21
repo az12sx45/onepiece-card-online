@@ -14954,6 +14954,10 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       if (env.has("hot")) return ["grand_line_hot_island", "landing_at_town"];
       return ["landing_at_town", "village_harbor", "golden_island_shore"];
     }
+    if (scene === "water_seven") return ["village_harbor", "oden_store"];
+    if (scene === "spar_selection") return ["duel", "fight_continues"];
+    if (scene === "york_puzzle") return ["miss_allsunday", "uunan_stone"];
+    if (scene === "mission_board") return ["gold_uunan", "village_harbor"];
     if (scene === "shop") return ["oden_store", "village_harbor"];
     if (scene === "tavern") return ["sanjis_feast", "party"];
     if (scene === "hospital") return ["chopper", "village_harbor"];
@@ -14964,9 +14968,9 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       : ["to_the_ocean", "difficult"];
     if (scene === "event_island") return ["difficult", "gold_uunan", "uunan_stone"];
     if (scene === "impel_down") {
+      if (env.has("countdown") || env.has("alert")) return ["one_hour_evacuation", "escape"];
       if (env.has("hot")) return ["grand_line_hot_island", "stealth_night_shadow"];
       if (env.has("cold")) return ["grand_line_cold_island", "stealth_night_shadow"];
-      if (env.has("countdown") || env.has("alert")) return ["one_hour_evacuation", "escape"];
       return ["stealth_night_shadow", "difficult"];
     }
     if (scene === "marineford") return ["cant_escape_fight", "fury", "shinkenshoubu"];
@@ -14986,17 +14990,21 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const phase = String(context.phase || "");
     const scene = String(context.sceneType || "");
     const next = { ...options };
+    if (["defeat", "escape"].includes(phase)) return { ...next, force: false, transition: "immediate", transitionDelayMs: 0, fadeMs: Number(next.fadeMs ?? 1600) };
     if (phase === "story") return { ...next, force: false, transition: "immediate", transitionDelayMs: 0, fadeMs: Number(next.fadeMs ?? 3200) };
     if (phase.startsWith("battle_") || phase === "victory") {
       const immediate = phase === "battle_intro" || phase === "victory" || next.force === true;
       return { ...next, force: false, transition: immediate ? "immediate" : "defer", transitionDelayMs: 0, fadeMs: Number(next.fadeMs ?? 2600) };
     }
     if (scene === "landing") return { ...next, force: false, transition: "inherit", transitionDelayMs: 0 };
-    if (["shop", "research", "hospital", "arena", "tavern"].includes(scene)) {
-      return { ...next, force: false, transition: "defer", transitionDelayMs: Number(next.transitionDelayMs ?? 8000), fadeMs: Number(next.fadeMs ?? 2600) };
+    if (["shop", "research", "hospital", "arena", "tavern", "mission_board"].includes(scene)) {
+      return { ...next, force: false, transition: "defer", transitionDelayMs: Number(next.transitionDelayMs ?? 650), fadeMs: Number(next.fadeMs ?? 1600) };
     }
-    if (["sea_event", "event_island", "final_island_revisit"].includes(scene)) {
-      return { ...next, force: false, transition: "defer", transitionDelayMs: Number(next.transitionDelayMs ?? 5000), fadeMs: Number(next.fadeMs ?? 2600) };
+    if (["sea_event", "sea_result", "sea_chest", "event_island", "final_island_revisit"].includes(scene)) {
+      return { ...next, force: false, transition: "defer", transitionDelayMs: Number(next.transitionDelayMs ?? 650), fadeMs: Number(next.fadeMs ?? 1600) };
+    }
+    if (["water_seven", "spar_selection", "york_puzzle"].includes(scene)) {
+      return { ...next, force: false, transition: "immediate", transitionDelayMs: 0, fadeMs: Number(next.fadeMs ?? 1800) };
     }
     if (["enemy_island", "postgame_boss_island", "postgame_rocks_final", "impel_down", "marineford"].includes(scene)) {
       return { ...next, force: false, transition: "immediate", transitionDelayMs: 0, fadeMs: Number(next.fadeMs ?? 3000) };
@@ -15039,6 +15047,17 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const enemyMusicKey = String(battle.postgameBossMechanic?.key || battle.postgameBossKey || battle.enemyCombatant?.key || "");
     const isBoss = battle.isJudicialRaid || battle.islandKind === "yonko" || battle.enemyTier === "T1";
     const isClimax = isBoss ? (playerHpRate < 0.35 || enemyHpRate < 0.45) : (playerHpRate < 0.25 || enemyHpRate < 0.3);
+    if (["lose", "knockout", "escape"].includes(battle.result)) {
+      const escaped = battle.result === "escape";
+      return {
+        phase: escaped ? "escape" : "defeat",
+        musicScope: `${battle.result}-${battle.bgmScopeId}`,
+        sceneType: "battle_result",
+        eventTags: [battle.result, escaped ? "escape" : "recovery"],
+        storyMood: escaped ? "relieved" : "bittersweet",
+        preferredBgmIds: escaped ? ["escape", "storms_stars"] : ["mother_sea", "storms_stars"],
+      };
+    }
     const battlePhase = battle.result === "win" ? "" : (isClimax ? "climax" : ((battle.playerPerformedAction || battle.enemyPerformedAction) ? "loop" : "intro"));
     if (battle.result === "win") {
       return {
@@ -15133,18 +15152,120 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     };
   }
 
+  // Audio-only contexts read existing state; no gameplay or snapshot fields are added.
+  function bgmScenarioContext(scene, player = currentPlayer()) {
+    if (scene === "impel_down") {
+      const prison = player?.impelDown || {};
+      return {
+        phase: prison.alerted || prison.allowEscape ? "danger" : "event",
+        musicScope: `board-scenario:impel-down:${Number(prison.level || 1)}`,
+        sceneType: "impel_down", locationType: "prison", islandType: "impel_down",
+        environment: [prison.level === 4 ? "hot" : "", prison.level === 5 ? "cold" : "", prison.alerted ? "alert" : "", prison.allowEscape ? "countdown" : ""].filter(Boolean),
+        eventTags: ["impel_down", `level_${Number(prison.level || 1)}`, prison.status || ""],
+        dangerLevel: prison.alerted ? 4 : 3, storyMood: "tense",
+      };
+    }
+    if (scene === "marineford") {
+      const hold = player?.marinefordHold || {};
+      return {
+        phase: hold.finished ? (hold.win ? "victory" : "defeat") : "danger",
+        musicScope: hold.finished ? `board-scenario:marineford:${hold.win ? "win" : "lose"}` : "board-scenario:marineford",
+        sceneType: "marineford", locationType: "battlefield", islandType: "marineford",
+        environment: ["war", "execution", hold.rounds <= 2 ? "countdown" : ""].filter(Boolean),
+        eventTags: ["marineford", "war", `boss_${Number(hold.bossIndex || 0)}`],
+        dangerLevel: 5, storyMood: hold.finished ? (hold.win ? "happy" : "bittersweet") : "intense",
+        ...(hold.finished ? { preferredBgmIds: hold.win ? ["we_did_it", "reliable_friend"] : ["mother_sea", "storms_stars"] } : {}),
+      };
+    }
+    return {
+      phase: scene === "water_seven" ? "town" : "event",
+      musicScope: `board-scenario:${scene}`, sceneType: scene,
+      eventTags: [scene], storyMood: scene === "york_puzzle" ? "mysterious" : scene === "spar_selection" ? "serious" : "warm",
+    };
+  }
+
+  function bgmOpenScenarioContext() {
+    const scenarios = [["impelDownPageOverlay", "impel_down"], ["marinefordPageOverlay", "marineford"], ["waterSevenPageOverlay", "water_seven"], ["sparSelectionOverlay", "spar_selection"], ["yorkPuzzleOverlay", "york_puzzle"]];
+    for (const [id, scene] of scenarios) {
+      const overlay = document.getElementById(id);
+      if (!overlay?.isConnected || overlay.hidden || overlay.classList.contains("closing")) continue;
+      if (id !== "yorkPuzzleOverlay" && !overlay.classList.contains("open")) continue;
+      return bgmScenarioContext(scene);
+    }
+    return null;
+  }
+
+  const boardPresentationCueEvents = new Set();
+  function playBoardPresentationCue(kind, eventId = "") {
+    if (!kind) return;
+    const key = eventId ? String(eventId) : "";
+    if (key && boardPresentationCueEvents.has(key)) return;
+    if (key) {
+      boardPresentationCueEvents.add(key);
+      if (boardPresentationCueEvents.size > 256) boardPresentationCueEvents.delete(boardPresentationCueEvents.values().next().value);
+    }
+    try { window.BoardAudio?.playCue?.(kind); } catch (_) { /* Optional audio never blocks an action. */ }
+  }
+
+  function bgmSeaPresentation(detail = {}, stage = "result") {
+    const visual = window.BoardSeaEventVisuals?.resolve?.(detail);
+    const type = String(detail.typeId || visual?.type || (stage.startsWith("chest") ? "treasure" : ""));
+    const loss = type === "encounter" || detail.chestTypeId === "wood" || visual?.tone === "loss" || (detail.outcomes || []).some((row) => row?.tone === "loss");
+    const drawing = stage === "draw" || stage === "chest-draft" || stage === "chest-shuffle";
+    const treasure = type === "treasure" || type === "chest" || stage.startsWith("chest");
+    const healing = type === "medicine" && !loss;
+    const preferredBgmIds = drawing
+      ? (treasure ? ["gold_uunan", "uunan_stone"] : ["difficult", "to_the_ocean"])
+      : loss ? ["difficult", "stealth_night_shadow"]
+        : healing ? ["chopper", "mother_sea"]
+          : type === "weather" ? ["to_the_ocean", "storms_stars"]
+            : ["gold_uunan", "we_did_it"];
+    return {
+      cue: drawing ? "draw" : loss ? "danger" : healing ? "heal" : "reward",
+      context: {
+        phase: loss && !drawing ? "danger" : "event",
+        musicScope: `board-sea:${stage}:${loss ? "loss" : type || "unknown"}`,
+        sceneType: stage.startsWith("chest") ? "sea_chest" : drawing ? "sea_event" : "sea_result",
+        locationType: "sea", environment: ["ocean"],
+        eventTags: [type, drawing ? "draw" : loss ? "danger" : "reward"],
+        storyMood: loss ? "tense" : healing ? "healing" : drawing ? "curious" : "happy",
+        preferredBgmIds,
+      },
+    };
+  }
+
+  function playBoardModalAudio(event = {}) {
+    const detail = event.detail || {};
+    const kind = String(detail.kind || "");
+    if (["sea-choice", "sea-result", "chest-draft", "chest-shuffle", "chest-result"].includes(kind)) {
+      const audio = bgmSeaPresentation(detail, kind === "sea-choice" ? "draw" : kind === "sea-result" ? "result" : kind);
+      playBgmForContext(audio.context);
+      playBoardPresentationCue(audio.cue, event.id);
+      return;
+    }
+    const scenes = { shop: "shop", hospital: "hospital", "research-lab": "research", arena: "arena", "judicial-raid": "enemy_island", tavern: "tavern", "tavern-result": "tavern", "mission-board": "mission_board", "final-island-revisit": "final_island_revisit", "final-boss-voyage-compass": "final_island_revisit" };
+    const scene = scenes[kind];
+    if (kind === "battle-rewards") {
+      playBgmForContext({ phase: "victory", musicScope: `board-battle-rewards:${event.id || "current"}`, sceneType: "battle_result", preferredBgmIds: ["we_did_it", "party"] });
+    } else if (scene) {
+      playBgmForContext({ phase: scene === "shop" ? "shop" : scene === "enemy_island" ? "danger" : "event", musicScope: `board-service:${scene}`, sceneType: scene, isBoss: kind === "judicial-raid" });
+    }
+    if (kind === "tavern-result" || detail.purchase) playBoardPresentationCue("reward", event.id);
+  }
+
   function playBgmForContext(context, options = {}) {
     if (!context) return null;
     if (luffyGearFifthVideoBgmPaused) return window.BgmManager?.status?.().currentChoice || null;
     const enrichedContext = Array.isArray(context.preferredBgmIds) && context.preferredBgmIds.length
       ? context
       : { ...context, preferredBgmIds: bgmScenePreferredIds(context) };
+    if (["victory", "defeat"].includes(context.phase)) playBoardPresentationCue(context.phase, `bgm-result:${context.musicScope || context.sceneType}:${context.phase}`);
     return window.BgmManager?.chooseAndPlay?.(enrichedContext, bgmPlaybackOptions(enrichedContext, options)) || null;
   }
 
   function refreshBgmForState(options = {}) {
     if (state.battleState) return playBgmForContext(bgmBattleContext(state.battleState), options);
-    return playBgmForContext(bgmMapContext(), options);
+    return playBgmForContext(bgmOpenScenarioContext() || bgmMapContext(), options);
   }
 
   function activeCrew(player) {
@@ -22063,6 +22184,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       overlay.classList.add("ready");
     }
     overlay.classList.add("open");
+    playBgmForContext(bgmScenarioContext("spar_selection"));
     notifySparSelectionWindow();
     return true;
   }
@@ -22071,6 +22193,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const overlay = document.getElementById("sparSelectionOverlay");
     if (!overlay) return;
     overlay.classList.remove("open", "ready");
+    refreshBgmForState();
   }
 
   function resumePendingMoveAfterSpar() {
@@ -25888,6 +26011,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   }
 
   function openMissionBoardModal(player, island, islandState, selectedId = "", message = "", options = {}) {
+    playBgmForContext({ phase: "event", musicScope: "board-service:mission_board", sceneType: "mission_board" });
     normalizePlayerMissionState(player);
     if (options?.newVisit) beginMissionBoardVisit(player, island);
     else ensureMissionBoardChoices(player, island);
@@ -27628,7 +27752,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
 
   function emitSpectatorModalEvent(kind, player, detail = {}, options = {}) {
     if (!kind || !player) return null;
-    return emitBoardUiEvent("spectator-modal", {
+    const event = emitBoardUiEvent("spectator-modal", {
       player,
       title: detail.title || "",
       subtitle: detail.subtitle || "",
@@ -27639,6 +27763,9 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       clearDelay: options.clearDelay,
       skipStatePush: options.skipStatePush === true,
     });
+    if (["sea-choice", "sea-result", "chest-draft", "chest-shuffle", "chest-result"].includes(kind)) playBoardModalAudio(event || { detail: { kind, ...detail } });
+    else if (kind === "tavern-result") playBoardPresentationCue("reward", event?.id);
+    return event;
   }
 
   function clearPostgameWorldCinematicTimers() {
@@ -28433,6 +28560,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
 
   function openSpectatorBoardModal(event = {}) {
     const detail = event.detail || {};
+    playBoardModalAudio(event);
     if (detail.kind === "sea-choice") {
       pinSpectatorModalEvent(event);
       spectatorSeaChoiceModal(detail);
@@ -48060,6 +48188,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (!overlay) return;
     overlay.classList.add("closing");
     overlay.classList.remove("ready", "transitioning");
+    refreshBgmForState();
     window.setTimeout(() => {
       overlay.classList.remove("open", "closing");
     }, 260);
@@ -48077,6 +48206,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   }
 
   function notifyImpelDownWindow(player = currentPlayer()) {
+    if (!state.battleState && document.getElementById("impelDownPageOverlay")?.classList.contains("open") && !document.getElementById("impelDownPageOverlay")?.classList.contains("closing")) playBgmForContext(bgmScenarioContext("impel_down", player));
     writeImpelDownSnapshot(player);
     if (!state.impelDownWindow || state.impelDownWindow.closed) return;
     const targetOrigin = window.location.protocol === "file:" ? "*" : window.location.origin;
@@ -48087,24 +48217,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (!player) return null;
     if (warnBoardLanTurnLocked(player)) return null;
     closeModal();
-    const prison = normalizeImpelDownState(player);
-    const impelEnvironment = [
-      prison?.level === 4 ? "hot" : "",
-      prison?.level === 5 ? "cold" : "",
-      prison?.alerted ? "alert" : "",
-      prison?.allowEscape ? "countdown" : "",
-    ].filter(Boolean);
-    playBgmForContext({
-      phase: prison?.alerted || prison?.allowEscape ? "danger" : "event",
-      musicScope: `board-scenario:impel-down:${Number(prison?.level || 1)}`,
-      sceneType: "impel_down",
-      locationType: "prison",
-      islandType: "impel_down",
-      environment: impelEnvironment,
-      eventTags: ["impel_down", `level_${Number(prison?.level || 1)}`, prison?.status || ""],
-      dangerLevel: prison?.alerted ? 4 : 3,
-      storyMood: "tense",
-    }, { transition: "immediate", fadeMs: 3000 });
+    normalizeImpelDownState(player);
+    playBgmForContext(bgmScenarioContext("impel_down", player));
     writeImpelDownSnapshot(player);
     const overlay = ensureImpelDownPageOverlay();
     const frame = overlay.querySelector("iframe");
@@ -48159,6 +48273,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (!overlay) return;
     overlay.classList.add("closing");
     overlay.classList.remove("ready", "transitioning");
+    refreshBgmForState();
     window.setTimeout(() => {
       overlay.classList.remove("open", "closing");
     }, 260);
@@ -48176,6 +48291,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   }
 
   function notifyMarinefordWindow(player = currentPlayer()) {
+    if (!state.battleState && document.getElementById("marinefordPageOverlay")?.classList.contains("open") && !document.getElementById("marinefordPageOverlay")?.classList.contains("closing")) playBgmForContext(bgmScenarioContext("marineford", player));
     writeMarinefordSnapshot(player);
     if (!state.marinefordWindow || state.marinefordWindow.closed) return;
     const targetOrigin = window.location.protocol === "file:" ? "*" : window.location.origin;
@@ -48186,18 +48302,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (!player) return null;
     if (warnBoardLanTurnLocked(player)) return null;
     closeModal();
-    const marinefordHold = normalizeMarinefordHold(player);
-    playBgmForContext({
-      phase: "danger",
-      musicScope: "board-scenario:marineford",
-      sceneType: "marineford",
-      locationType: "battlefield",
-      islandType: "marineford",
-      environment: ["war", "execution", marinefordHold?.rounds <= 2 ? "countdown" : ""].filter(Boolean),
-      eventTags: ["marineford", "war", `boss_${Number(marinefordHold?.bossIndex || 0)}`],
-      dangerLevel: 5,
-      storyMood: "intense",
-    }, { transition: "immediate", fadeMs: 3000 });
+    normalizeMarinefordHold(player);
+    playBgmForContext(bgmScenarioContext("marineford", player));
     writeMarinefordSnapshot(player);
     const overlay = ensureMarinefordPageOverlay();
     const frame = overlay.querySelector("iframe");
@@ -48395,6 +48501,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     overlay.classList.add("closing");
     overlay.classList.remove("ready", "transitioning");
     state.waterSevenWindow = null;
+    refreshBgmForState();
     if (state.gameState) state.gameState.resolutionLock = false;
     window.setTimeout(() => {
       overlay.classList.remove("open", "closing");
@@ -48413,6 +48520,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     recordMainMissionEvent(player, { type: "water_seven_open" });
     closeModal();
     closeShipActionMenu();
+    playBgmForContext(bgmScenarioContext("water_seven", player));
     writeWaterSevenSnapshot(player);
     const shipId = waterSevenShipIdForPlayer(player);
     const pageUrl = new URL("board_water_seven.html", window.location.href);
@@ -57416,6 +57524,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     window.removeEventListener("message", session.messageHandler);
     session.overlay.remove();
     yorkPuzzleOverlaySession = null;
+    refreshBgmForState();
     if (session.pendingWorldReveal && options.afterSuccess) {
       announceYorkTrackingWorldReveal(session.player, { immediate: false, skipCinematic: false });
     } else {
@@ -57477,6 +57586,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       iframe.contentWindow?.postMessage({ type: "york-puzzle-result", channel, ...result }, window.location.origin);
     };
     yorkPuzzleOverlaySession = { overlay, iframe, player, channel, puzzleVariant, messageHandler, pendingWorldReveal: false };
+    playBgmForContext(bgmScenarioContext("york_puzzle", player));
     window.addEventListener("message", messageHandler);
     iframe.addEventListener("load", () => iframe.focus(), { once: true });
     return true;
@@ -60909,7 +61019,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     });
     refs.boardToolsPanel?.addEventListener("click", (event) => {
       const action = event.target.closest("button");
-      if (!action || action.disabled || action === refs.quickVoyageBtn || action === refs.saveGameBtn) return;
+      if (!action || action.disabled || action.closest(".board-audio") || action === refs.quickVoyageBtn || action === refs.saveGameBtn) return;
       setBoardToolsOpen(false, action === refs.focusPlayerBtn || action === refs.viewWholeMapBtn);
       if (refs.modalBack?.classList.contains("open")) {
         const control = [...refs.modal.querySelectorAll("button:not(:disabled),select:not(:disabled),input:not(:disabled),a[href]")]

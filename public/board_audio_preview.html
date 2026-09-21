@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>航海錄・音樂室</title>
+  <link rel="stylesheet" href="css/board_audio_ui.css?v=20260921-board-audio-v1">
+  <style>
+    :root{color-scheme:dark;font-family:"Microsoft JhengHei",system-ui,sans-serif;color:#ecf4ef;background:#071a25}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 20% 0,#15505c 0,transparent 55%),#071a25;min-height:100vh}
+    main{max-width:1120px;margin:auto;padding:32px 24px 64px}header{display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .eyebrow{color:#89c5c7;letter-spacing:.25em;font-size:12px}h1{color:#e6c57d;font-size:clamp(28px,5vw,44px);margin:8px 0}h2{font-size:20px;color:#e6c57d;margin:32px 0 14px}
+    p{color:#b4cdcf;line-height:1.8}.player{margin:28px 0;padding:22px;border:1px solid #987e46;border-radius:16px;background:#091c26cc;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
+    .player small{display:block;color:#95c5c3;margin-bottom:8px}.player strong{display:block;font-size:20px;overflow-wrap:anywhere}.player p{margin:8px 0 0;font-size:13px}
+    .scenes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.scene{min-height:100px;text-align:left;padding:18px;background:linear-gradient(135deg,#153542,#0a202a);border:1px solid #34505b;border-radius:12px;color:#eef4f2;cursor:pointer}
+    .scene strong{display:block;font-size:16px}.scene span{display:block;margin-top:9px;font-size:12px;color:#9ebdc3}.scene[aria-pressed="true"]{border-color:#e5bd6b;box-shadow:inset 0 0 0 1px #e5bd6b;background:linear-gradient(135deg,#325353,#182e33)}
+    button{font:inherit}button:focus-visible,a:focus-visible{outline:3px solid #7de3d4;outline-offset:4px}.sfx{display:flex;flex-wrap:wrap;gap:10px}.sfx button,.pause{background:#1c3940;color:#f3dfb1;border:1px solid #7e714b;border-radius:9px;padding:12px 18px;min-height:44px;cursor:pointer}
+    a{color:#9fe3d9;text-decoration:none}footer{margin-top:28px;font-size:14px;color:#9ab6bd}.hint{font-size:13px}
+    @media(max-width:760px){.scenes{grid-template-columns:repeat(2,minmax(0,1fr))}main{padding:20px 16px 40px}.player{padding:16px;grid-template-columns:1fr}.pause{justify-self:start}}
+  </style>
+</head>
+<body><main>
+  <header><div><div class="eyebrow">VOYAGE RECORDS</div><h1>航海音樂室</h1></div><div data-board-audio-controls></div></header>
+  <p>從啟航、港口到決戰，選一個場景，聽聽這段旅程的配樂。</p>
+  <section class="player" aria-label="正在播放"><div><small id="sceneLabel">準備出航</small><strong id="trackTitle">點選場景開始試聽</strong><p id="playbackHint">音樂與操作音效可以分別調整音量。</p></div><button class="pause" id="musicToggle" type="button" data-board-sfx="confirm">暫停音樂</button></section>
+  <h2>場景配樂</h2><div class="scenes" id="sceneList"></div>
+  <h2>操作與事件音效</h2><div class="sfx" id="sfxList"></div>
+  <p class="hint">此頁只供試聽；不會建立房間或變更航海進度。</p>
+  <footer><a href="board_start.html">← 進入航海錄</a>　 ·　 <a href="board_sea_event_preview.html">海格插畫圖鑑</a></footer>
+</main>
+<script src="js/bgm_metadata.js?v=20260921-board-audio-v1"></script>
+<script src="js/choose_bgm.js?v=20260921-board-audio-v1"></script>
+<script src="js/bgm_manager.js?v=20260921-board-audio-v1"></script>
+<script src="js/board_audio_ui.js?v=20260921-board-audio-v1"></script>
+<script src="js/board_audio_preview.js?v=20260921-board-audio-v1"></script>
+</body></html>

@@ -27433,6 +27433,7 @@
     .board-tools-panel .voyage-record-status{flex:none;max-width:100%;padding:4px;white-space:normal;overflow-wrap:anywhere;text-align:center}
   </style>
   <link rel="stylesheet" href="css/board_sea_event_reveal.css?v=20260921-sea-reveal-v2">
+  <link rel="stylesheet" href="css/board_audio_ui.css?v=20260921-board-audio-v1">
 </head>
 <body>
   <main class="page">
@@ -27464,6 +27465,7 @@
           </button>
           <div class="board-tools-panel" id="boardToolsPanel" role="region" aria-label="航海操作" hidden>
           <div class="board-tools-heading">航海選單</div>
+          <div data-board-audio-controls></div>
           <button type="button" class="map-tool-btn" id="focusPlayerBtn">回到目前玩家</button>
           <button type="button" class="map-tool-btn" id="viewWholeMapBtn">查看全圖</button>
           <button type="button" class="map-tool-btn" id="quickVoyageBtn" aria-pressed="false">快速航行：關</button>
@@ -27588,7 +27590,7 @@
   <script src="js/board_map_layout_override.js"></script>
   <script src="js/bgm_metadata.js?v=20260901-bgm-continuity-v407"></script>
   <script src="js/choose_bgm.js?v=20260901-bgm-continuity-v407"></script>
-  <script src="js/bgm_manager.js?v=20260901-bgm-continuity-v407"></script>
+  <script src="js/bgm_manager.js?v=20260921-board-audio-v1"></script>
   <script src="js/board_items.js?v=20260827-zorojuro-enma-v348"></script>
   <script src="js/board_york_clue_puzzle.js?v=20260824-york-tier3-practice-v307"></script>
   <script src="js/board_missions.js?v=20260920-mainline-guidance-v1"></script>
@@ -27602,6 +27604,7 @@
   <script src="js/board_state_receiver.js?v=20260910-state-wire-v1"></script>
   <script src="js/board_remote_playback.js?v=20260919-spectator-playback-v1"></script>
   <script src="js/board_sea_event_visuals.js?v=20260921-sea-reveal-v2"></script>
-  <script src="js/board_game.js?v=20260921-sea-reveal-v2"></script>
+  <script src="js/board_audio_ui.js?v=20260921-board-audio-v1"></script>
+  <script src="js/board_game.js?v=20260921-board-audio-v1"></script>
 </body>
 </html>

@@ -1,6 +1,11 @@
 (async function () {
   const shared = window.BoardShared;
   if (!shared) return;
+  window.BgmManager?.chooseAndPlay?.({
+    phase: "menu", sceneType: "lobby", musicScope: "board-entry",
+    eventTags: ["journey_start", "pirate_king"], storyMood: "hopeful",
+    preferredBgmIds: ["becoming_pirate_king", "to_the_grand_line"],
+  }, { transition: "immediate", fadeMs: 1800 });
 
   const query = new URLSearchParams(location.search);
   const entrySession = await runBoardEntryGate(query);

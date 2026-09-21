@@ -62,10 +62,12 @@
     switchLocks: new Set(),
     audioFocus: new Map(),
     audioFocusSerial: 0,
+    outgoingAudios: new Map(),
   };
 
   const audioFadeTokens = new WeakMap();
   const audioLoopCleanups = new WeakMap();
+  const cancelledAudios = new WeakSet();
 
   function clamp(value, min = 0, max = 1) {
     return Math.max(min, Math.min(max, Number(value || 0)));
@@ -231,6 +233,8 @@
 
   function stopAudio(audio, clearSource = true) {
     if (!audio) return;
+    cancelledAudios.add(audio);
+    state.outgoingAudios.delete(audio);
     audioFadeTokens.set(audio, Number(audioFadeTokens.get(audio) || 0) + 1);
     const cleanupLoop = audioLoopCleanups.get(audio);
     if (cleanupLoop) cleanupLoop();
@@ -239,6 +243,68 @@
     if (!clearSource) return;
     try { audio.removeAttribute("src"); } catch (_error) {}
     try { audio.load(); } catch (_error) {}
+  }
+
+  function outgoingLevel(entry, time = frameNow()) {
+    const progress = entry.levelDuration ? Math.min(1, Math.max(0, (time - entry.levelStartedAt) / entry.levelDuration)) : 1;
+    return entry.levelFrom + (entry.levelTo - entry.levelFrom) * progress;
+  }
+
+  function updateOutgoingVolume(audio, entry, time = frameNow()) {
+    const remaining = Math.max(0, 1 - (time - entry.startedAt) / entry.duration);
+    try { audio.volume = clamp(outgoingLevel(entry, time) * entry.initialRatio * remaining); } catch (_error) {}
+  }
+
+  function retireAudio(audio, choice, durationMs) {
+    if (!audio) return;
+    const duration = Math.max(0, Number(durationMs || 0));
+    const level = targetVolume(choice);
+    if (!duration || !level || !audio.volume) {
+      stopAudio(audio);
+      return;
+    }
+    // A retiring cue must never loop or be revived by a canceled fade-in.
+    audioFadeTokens.set(audio, Number(audioFadeTokens.get(audio) || 0) + 1);
+    audioLoopCleanups.get(audio)?.();
+    audioLoopCleanups.delete(audio);
+    const time = frameNow();
+    const entry = {
+      choice, duration, startedAt: time, deadline: time + duration,
+      initialRatio: Math.min(1, clamp(audio.volume) / level),
+      levelFrom: level, levelTo: level, levelStartedAt: time, levelDuration: 0,
+      stopping: false,
+    };
+    state.outgoingAudios.set(audio, entry);
+    const tick = (now) => {
+      if (state.outgoingAudios.get(audio) !== entry || entry.stopping) return;
+      if (now >= entry.deadline) { stopAudio(audio); return; }
+      updateOutgoingVolume(audio, entry, now);
+      nextFrame(tick);
+    };
+    nextFrame(tick);
+  }
+
+  function retargetOutgoingAudios(durationMs) {
+    const time = frameNow();
+    state.outgoingAudios.forEach((entry, audio) => {
+      if (entry.stopping) return;
+      entry.levelFrom = outgoingLevel(entry, time);
+      entry.levelTo = targetVolume(entry.choice);
+      entry.levelStartedAt = time;
+      entry.levelDuration = Math.max(0, Number(durationMs || 0));
+      updateOutgoingVolume(audio, entry, time);
+    });
+  }
+
+  function stopOutgoingAudios(durationMs = 0) {
+    const time = frameNow();
+    state.outgoingAudios.forEach((entry, audio) => {
+      entry.stopping = true;
+      entry.stopDeadline = Math.min(entry.deadline, entry.stopDeadline ?? Infinity, time + Math.max(0, Number(durationMs || 0)));
+      void fadeAudio(audio, 0, Math.max(0, entry.stopDeadline - time)).then((finished) => {
+        if (finished && state.outgoingAudios.get(audio) === entry) stopAudio(audio);
+      });
+    });
   }
 
   function installCueLoop(audio, choice) {
@@ -381,24 +447,29 @@
     state.inFlightRequest = request;
 
     try {
-      await waitForMetadata(nextAudio);
+      // Start playback in the gesture call stack; waiting for metadata first
+      // loses activation on mobile browsers. The candidate stays silent until
+      // its cue is ready and the current request has been checked below.
+      const ready = waitForMetadata(nextAudio);
+      const playing = nextAudio.play();
+      await Promise.all([ready, playing]);
       seekToCue(nextAudio, choice);
       installCueLoop(nextAudio, choice);
-      await nextAudio.play();
     } catch (_error) {
+      const wasCancelled = cancelledAudios.has(nextAudio);
       if (state.inFlightAudio === nextAudio) {
         state.inFlightAudio = null;
         state.inFlightRequest = null;
       }
       stopAudio(nextAudio);
-      if (requestIsCurrent(request)) {
+      if (!wasCancelled && requestIsCurrent(request)) {
         state.unlocked = false;
         state.pendingContext = state.desiredRequest || request;
       }
       return state.currentChoice;
     }
 
-    if (!requestIsCurrent(request) || !state.enabled || state.switchLocks.size && !request.options.ignoreLock) {
+    if (cancelledAudios.has(nextAudio) || !requestIsCurrent(request) || !state.enabled || state.switchLocks.size && !request.options.ignoreLock) {
       if (requestIsCurrent(request) && state.switchLocks.size && !request.options.ignoreLock) {
         state.queuedRequest = state.desiredRequest || request;
       }
@@ -411,6 +482,7 @@
     }
 
     const oldAudio = state.currentAudio;
+    const oldChoice = state.currentChoice;
     state.currentAudio = nextAudio;
     state.inFlightAudio = null;
     state.inFlightRequest = null;
@@ -420,9 +492,7 @@
     const fadeMs = request.options.fadeMs;
     void fadeAudio(nextAudio, targetVolume(choice), fadeMs);
     if (oldAudio && oldAudio !== nextAudio) {
-      void fadeAudio(oldAudio, 0, fadeMs).then(() => {
-        if (state.currentAudio !== oldAudio) stopAudio(oldAudio);
-      });
+      retireAudio(oldAudio, oldChoice, fadeMs);
     }
     return choice;
   }
@@ -472,8 +542,7 @@
     const choice = choiceForRequest(request);
     if (!choice) return state.currentChoice;
     if (state.currentChoice?.id === choice.id && state.currentAudio && !request.options.restart) {
-      commitRequestContext(request, state.currentChoice);
-      void fadeAudio(state.currentAudio, targetVolume(state.currentChoice), request.options.fadeMs);
+      void performTransition(choice, request);
       return state.currentChoice;
     }
     void performTransition(choice, request);
@@ -548,6 +617,7 @@
   }
 
   async function fadeOut(durationMs = DEFAULT_FADE_MS) {
+    stopOutgoingAudios(durationMs);
     const audio = state.currentAudio;
     if (!audio) return;
     await fadeAudio(audio, 0, durationMs);
@@ -571,7 +641,11 @@
   function stop(options = {}) {
     clearTransitionTimer();
     clearHoldTimer();
+    if (state.inFlightAudio) stopAudio(state.inFlightAudio);
+    state.inFlightAudio = null;
+    state.inFlightRequest = null;
     const audio = state.currentAudio;
+    const choice = state.currentChoice;
     state.currentAudio = null;
     state.currentChoice = null;
     state.currentContextKey = "";
@@ -583,8 +657,9 @@
       state.queuedRequest = null;
       state.pendingContext = null;
     }
-    if (!audio) return;
-    void fadeAudio(audio, 0, Number(options.fadeMs ?? 500)).then(() => stopAudio(audio));
+    const fadeMs = Number(options.fadeMs ?? 500);
+    if (audio) retireAudio(audio, choice, fadeMs);
+    stopOutgoingAudios(fadeMs);
   }
 
   function setEnabled(enabled) {
@@ -601,6 +676,7 @@
     state.volume = clamp(value);
     storageSet("board_bgm_volume", String(state.volume));
     if (state.currentAudio) void fadeAudio(state.currentAudio, targetVolume(state.currentChoice), 180);
+    retargetOutgoingAudios(180);
   }
 
   function releaseSwitchLock(key) {
@@ -620,6 +696,7 @@
     state.audioFocus.set(id, entry);
     state.switchLocks.add(key);
     if (state.currentAudio) void fadeAudio(state.currentAudio, targetVolume(state.currentChoice), entry.fadeOutMs);
+    retargetOutgoingAudios(entry.fadeOutMs);
     let released = false;
     return Object.freeze({
       id,
@@ -629,12 +706,14 @@
         state.audioFocus.delete(id);
         state.switchLocks.delete(key);
         if (state.currentAudio) void fadeAudio(state.currentAudio, targetVolume(state.currentChoice), entry.fadeInMs);
+        retargetOutgoingAudios(entry.fadeInMs);
         if (!state.switchLocks.size) flushLatestRequest();
       },
     });
   }
 
   global.BgmManager = Object.freeze({
+    unlock,
     chooseAndPlay,
     playForContext: chooseAndPlay,
     crossfade,
@@ -666,6 +745,8 @@
         unlocked: state.unlocked,
         volume: state.volume,
         currentChoice: state.currentChoice,
+        playing: Boolean(state.currentAudio && !state.currentAudio.paused),
+        currentTime: Number(state.currentAudio?.currentTime || 0),
         currentContextKey: state.currentContextKey,
         currentScopeKey: state.currentScopeKey,
         currentPhaseGroup: state.currentPhaseGroup,
