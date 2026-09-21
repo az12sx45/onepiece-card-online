@@ -150,7 +150,8 @@ async function main() {
           record.error = error.message;
           check(`${test.name} ${transport} completes`, false, { error: error.message });
         } finally {
-          if (socket) { socket.disconnect(); socket.io.close(); socket.removeAllListeners(); }
+          // Each probe owns a forceNew manager; disconnect closes its transport.
+          if (socket) { socket.disconnect(); socket.removeAllListeners(); }
           record.finishedAt = new Date().toISOString(); save();
         }
       }

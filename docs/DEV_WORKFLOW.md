@@ -8,6 +8,8 @@
 
 首輪正式發布後補驗發現 Render 代理下舊啟動器預設 WebSocket 被 UA 條件誤擋，已先回復上一版。`server/desktop-distribution.js` 改用 Origin／Fetch Metadata 辨認主程序相容通道，仍限 14 個帳號社交事件；`desktop_distribution_gate_qa.js` 擴充至 135/135，新增 `desktop_distribution_socket_verify.js` 檢查公開雙 transport／main 遊戲拒絕及瀏覽器握手限制。詳細首輪失敗、回復及最後上線證據集中於本次紀錄。
 
+最終來源 `4916d0a8a` 於 01:39:00 上線。公開 Socket 10/10、release 134/134、三尺寸 Chrome 38/38 全通過，30 保護檔不變；套件及啟動器不需重下載。新增 verifier 的清理呼叫改用 Socket.IO 既有 disconnect API，保留首次工具失敗報告，完整重跑通過；這項 QA 修正和收尾文件以 `[skip render]` 提交。
+
 ## 戰鬥圖片與技能音效時序（2026-09-21，已部署）
 
 修復致死受擊後站回、替補／結果提早出現、倒地重播與輪詢重設圖片；技能音由擲骰移至實際施放。修改兩個 Board HTML、board_battle.js、board_game.js（四個 castSfx 及 iframe 版本），新增倒地與瀏覽器 QA、擴充 FX 音效 QA；發布 builder 移除39硬限制並加31項fixture。更新四份專案文件，隔離 npm start 18926，完整證據見 [本次紀錄](BOARD_BATTLE_ORDER_20260921.md)。

@@ -57,3 +57,14 @@ CORS 後重啟獨立 Electron QA 時自動審核拒絕該程式啟動，原因�
 首次發布 `e999374e639e6bc40bf3bea9cbd1885890b79f58` 於 2026-09-22 01:20:07（台北）上線，公開 release 134/134、三尺寸瀏覽器 38/38 均通過，但補驗實際預設 Node Socket.IO 發現無自訂標頭的主程序 WebSocket 回 `desktop_required`；polling 及 Electron renderer 兩種 transport 正常。另以 raw Upgrade 驗證：無 UA 被拒、明確 node UA 成功。推測代理補入 UA；未取得代理內部標頭，不當成已觀測事實。
 
 為維持下載版連線，01:27:33 完成回復 `9e0744d92b8047e9e4b8be9261508bc1eba51689`（Render `dep-daomh40ae00c73c51vig`）。修正 `isLauncherProcess` 改依 Origin／Fetch Metadata 判別相容主程序，不依賴 UA 值；14 事件白名單、所有遊戲 packet 拒絕與原帳號驗證均維持。新增公開 Socket verifier，直接使用舊啟動器相同預設 client headers，防止本機測試漏掉正式代理差異。首次失敗證據 `public-socket-report.json` 保留；修正版必須重新公開驗收後才算完成部署。
+
+## 最終上線與驗收
+
+修正版 `4916d0a8a69cf41af2194b4faf0ed0ce970937a8` 於 **2026-09-22 01:39:00（台北）**正式上線，Render `dep-daomkp7f3r2c73d94qtg` 顯示 Live，資料庫連線及 Board PostgreSQL ready。回復動作自動關閉的 Auto-Deploy 已恢復 On Commit，本次修正以 Manual Deploy latest commit 發布。
+
+- `public-socket-final-verified.json`：**10/10 PASS**。預設無自訂標頭 launcher main、Electron UA renderer 的 WebSocket／polling 全可連；main 兩種 transport 的唯讀 `BOARD_ROOM_LIST` 都回 `desktop_required`；普通 Origin／Fetch Metadata 連線均明確拒絕。這是真 Node 公開代理連線測試，非正式帳號登入或真人多人遊玩。
+- `public-release-final.json`：**134/134 PASS**，2026-09-22 01:40:25（台北）。三套件 runtime identity 與 manifest 正確，90 個去重程式全驗公開 bytes/SHA；普通 HTML 302、程式 403、素材 R2 302 零 body、Range/CORS、安裝檔 HEAD 可用。一次完整校驗讀取 24,782,807 bytes，不代表玩家每局流量。
+- `public-browser-final/browser-report.json`：**38/38 PASS、0 errors**。1366／390／320px，下載頁每次兩請求、合計 11,074 bytes；worker 退役保留三種儲存。測試瀏覽器與 loopback fixture 均正常關閉。
+- `protected-final.json`：**30/30** 檔案 SHA／大小不變，共 37,661,647 bytes；三套遊戲 package、launcher 1.1.7 及既有未提交素材維持。
+
+Socket verifier 首次執行因清理使用不存在的 `socket.io.close` 中止；當時 main WebSocket 已連線且遊戲拒絕兩項均過。移除該呼叫，沿用每例 forceNew socket 的 `disconnect()` 清理後，完整 10 項通過；`public-socket-final.json` 保留工具失敗紀錄。此為 QA 修正，不需要重部署產品。收尾文件與 QA 清理修正使用 `[skip render]` 提交。
