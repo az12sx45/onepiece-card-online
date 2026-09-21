@@ -47,4 +47,8 @@
 
 ## 公開發布
 
-依使用者「續續完成並部屬」指示執行；來源、套件、R2、公开 HTTP 與保護檔證據待完成後填入。
+依使用者「續續完成並部屬」指示執行。來源提交 `f66dc1fce7111d0f894b7779c634b8b94d8768d8`，凍結候選位於 `D:/Codex_QA/board-sea-event-20260921/release-candidate`，已重新讀取驗證後 promote。
+
+- Board 套件：`package-b3342dbd8b206231`；manifest SHA256 `b767e1c146e47ec6c29497c0fcfb59e096b6a0eac450a1d3fdbf0a45bdde877f`。
+- 4,153 logical files／1,397,133,580 bytes；保留 4,040 舊媒體，更新 2 舊程式、新增 2 程式與 72 圖；僅 `public/desktop/catalog-v3.json` 及新 Board manifest 變動。
+- R2、公開 HTTP 與保護檔驗證待實際發布完成後補記。
