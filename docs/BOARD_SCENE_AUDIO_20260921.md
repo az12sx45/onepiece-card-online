@@ -38,7 +38,7 @@
 
 - `scripts/board_audio_ui_qa.js`：54/54，真 Chromium 手勢、8 MP3 解碼、靜音保存、父子共用、節流、錯誤備援與四尺寸設定面板。
 - `scripts/board_audio_scene_qa.js`：126/126，場景路由、24 海格、短場景取消、同事件去重、實際 chooser／manager 轉場。去重記錄限最近 256 筆；戰鬥獎勵按事件 ID 區分，本機酒館招募結果與觀看方皆播一次獎勵音效。
-- `scripts/board_bgm_continuity_qa.js`：既有連貫性與新增四組音轨生命週期回歸通過，涵蓋切歌靜音、舊曲音量／focus、快速選曲／stop、延遲載入取消。
+- `scripts/board_bgm_continuity_qa.js`：既有連貫性與新增四組音軌生命週期回歸通過，涵蓋切歌靜音、舊曲音量／focus、快速選曲／stop、延遲載入取消。
 - `scripts/board_audio_browser_qa.js`：本機 94/94，JavaScript 錯誤 0；22 首實際 MP3 播放進度前進、10 種音效每次單一 source 且輸出波形非零。同曲不重播、快速切換保留最後請求、404 時保留舊曲；八頁、桌機／手機直式／橫式、popover／Escape／焦點及實際 fixed wrapper 父子音訊共用通過。另修正既有選單的通用按鈕事件自動收起聲音設定；10 張截圖留存並目視抽查。
 - `scripts/lan_refresh_flow_qa.js`：隔離雙頁 LAN 建房／加入／開局、訪客重整、交棒／戰鬥回歸通過，errors／failures 空。
 - 真 Chrome 最後追加切歌靜音專項 4/4：先確認新舊 MP3 同時播放，立即暫停後 650ms 全部停止或無聲，恢復只播新曲；證據 `browser-transition/board-audio-browser-report.json`。原 94 項報告保留。
@@ -46,4 +46,12 @@
 
 來源提交 `b1a2e5705259bded123fc1ff11050cb8f9706f9a`。候選已依提交內容凍結、驗證及提升為 Board `package-866f9d61a53eca35`，manifest SHA256 `e87d3e98fe27610f25d292fb3e595b6bfa8cefd44dff13d60c9e8bc644d67b75`；4,155 檔、1,397,169,339 bytes，13 個程式變更，沒有新增／修改媒體。兩個 web-only 音樂室檔案同樣凍結與 SHA 核對。Card／Chess、v2 及所有舊媒體保持。
 
-R2、正式 HTTP 與部署後保護檔驗證待實際發布完成後補記；發布前 27 份保護檔 size／SHA 全部相符。
+Release 提交 `8b48ba1fd41d3a8a11c55a0f17aa0d808820f27c` 已推送正式 main。完整來源 dry-run 核對 4,155 logical／3,838 unique 檔全部通過；13 個 immutable blobs、5,515,331 bytes 上傳成功，公開 R2 GET size／SHA 13/13 通過（21:36:29）。證據 `r2-dry-run.json`、`release/r2-live-delta-1789997750565.json`、`release/r2-verify.json`。
+
+正式站於 2026-09-21 21:42:05（Asia/Taipei）切換到 `package-866f9d61a53eca35`；21:42:25 公開唯讀校驗 47/47：三遊戲 runtime 身份、43 個程式逐檔 size／SHA、舊存檔端點仍關閉，另核對 catalog／三份 manifest 的原始 bytes。兩個 web-only 音樂室檔案公開 GET／SHA 同樣通過。證據 `release/runtime-transition.json`、`release/live-verify.json`、`release/web-preview-verify.json`。
+
+發布前後 27 份保護檔 size／SHA 全部相符（`protected-baseline.json`／`protected-after.json`）；本次隔離 npm start 已關閉，18925 沒有殘留監聽。正式資料、既有 rank 修改與未提交 V1 圖片皆保留。網頁重新整理；桌面版更新約 5.5 MB 後重開。
+
+公開 Chrome 最終覆蓋 **97/97**，JavaScript errors 0；22 個場景的真 MP3 進度、10 提示音單次來源與非零波形、切歌靜音、八頁、三尺寸與實際 touch fixed wrapper 通過，10 張截圖留存並目視抽查。首次完整公開跑為 93/97，四個 MP3 在固定 260ms 視窗內尚在緩衝；保留 `public-browser/board-audio-browser-report-initial.json`，只針對四個失敗進度項目重測。QA 改為最多八秒等待真正播放前進，四項分別於 324／425／216／214ms 成功，未改產品程式。最終報告 `public-browser/board-audio-browser-report.json` 保留每項 `initialTimingResult` 與 retry provenance，沒有掩蓋原失敗或以 playing flag 代替進度。
+
+QA 與本次發布文件以 `[skip render]` 收尾提交，避免僅文件／驗證腳本更新再次觸發部署；正式程式與 frozen package 保持同一份 SHA。

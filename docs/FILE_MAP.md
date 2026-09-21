@@ -8,6 +8,7 @@
 - `scripts/board_audio_ui_qa.js`、`board_audio_scene_qa.js`、`board_audio_browser_qa.js`：音效、場景及正式瀏覽器驗證；`board_bgm_continuity_qa.js` 保留既有回歸。
 - `scripts/build_board_audio_release.js`／`board_audio_release_builder_qa.js`：固定基線的 43 程式凍結、清單提升及隔離 fixture；`config/desktop-program-packages-v1.json` 加入音效兩個核心檔。
 - `docs/BOARD_SCENE_AUDIO_20260921.md`：曲庫、音效來源、範圍、測試及發布證據。
+- `public/desktop/catalog-v3.json`／`public/desktop/manifests/board-package-866f9d61a53eca35.json`：正式 43 程式＋4,112 媒體，合計 4,155 檔；兩個音樂室檔案屬 web-only。
 
 ## 海格結果展示（2026-09-21）
 

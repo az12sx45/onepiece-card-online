@@ -8,6 +8,8 @@ const { chromium } = require(process.env.BOARD_QA_PLAYWRIGHT || 'C:/Users/王曜
 const args = process.argv.slice(2);
 const originIndex = args.indexOf('--origin');
 const ORIGIN = originIndex >= 0 ? args[originIndex + 1] : 'http://127.0.0.1:18925';
+const retryIndex = args.indexOf('--retry-playheads');
+const RETRY_REPORT = retryIndex >= 0 ? args[retryIndex + 1] : null;
 if (!ORIGIN || !/^https?:\/\//.test(ORIGIN)) throw new Error('Use --origin http(s)://host');
 const OUTPUT = process.env.BOARD_QA_OUTPUT || 'D:/Codex_QA/board-audio-20260921/browser';
 const CHROME = 'C:/Program Files/Google/Chrome/Application/chrome.exe';
@@ -89,9 +91,14 @@ async function newContext(browser, options = {}) {
 async function playing(page, id, timeout = 20000) {
   await page.waitForFunction(id => { const s = window.BgmManager?.status(); return s?.playing && s.currentChoice?.id === id; }, id, { timeout });
   const before = await page.evaluate(() => BgmManager.status());
-  await wait(260);
+  const observedAt = Date.now();
+  // A remote MP3 can briefly buffer after play() resolves. Require measurable
+  // playback progress, allowing at most eight seconds instead of a fixed 260ms.
+  try {
+    await page.waitForFunction(({ id, from }) => { const s = BgmManager.status(); return s.playing && s.currentChoice?.id === id && s.currentTime > from + 0.08; }, { id, from: before.currentTime }, { timeout: 8000, polling: 100 });
+  } catch (error) { if (error.name !== 'TimeoutError') throw error; }
   const after = await page.evaluate(() => BgmManager.status());
-  return { before: before.currentTime, after: after.currentTime, id: after.currentChoice.id, advanced: after.currentTime > before.currentTime + 0.08, startedAt: after.currentStartedAt };
+  return { before: before.currentTime, after: after.currentTime, id: after.currentChoice.id, advanced: after.playing && after.currentChoice.id === id && after.currentTime > before.currentTime + 0.08, observedInMs: Date.now() - observedAt, maximumProgressWaitMs: 8000, startedAt: after.currentStartedAt };
 }
 
 async function layout(page, label) {
@@ -264,12 +271,57 @@ async function formal(browser) {
   await touchContext.close();
 }
 
+async function retryPlayheads(browser) {
+  const initial = JSON.parse(fs.readFileSync(RETRY_REPORT, 'utf8'));
+  if (initial.origin !== ORIGIN || initial.fatal || !initial.finishedAt) throw new Error('Retry requires a completed report from this exact origin');
+  const failed = initial.checks.filter(item => !item.ok);
+  if (!failed.length || failed.some(item => !/^scene \d+ \S+: real MP3 playhead advances$/.test(item.name) && !['rapid scene requests settle on latest', 'formal lobby starts actual music after entry click'].includes(item.name))) throw new Error('Only failed MP3 progress timing checks are accepted by --retry-playheads');
+  const retryStartedAt = new Date().toISOString();
+  const context = await newContext(browser); const page = await context.newPage();
+  try {
+    await page.goto(`${ORIGIN}/board_audio_preview.html`, { waitUntil: 'domcontentloaded' });
+    for (const item of failed) {
+      const match = /^scene (\d+) (\S+):/.exec(item.name);
+      let result;
+      if (match) {
+        await page.locator(`[data-scene-index="${Number(match[1]) - 1}"]`).click();
+        result = await playing(page, match[2]);
+      } else if (item.name === 'rapid scene requests settle on latest') {
+        await page.locator('[data-scene-index="1"]').click(); await page.locator('[data-scene-index="5"]').click(); await page.locator('[data-scene-index="7"]').click();
+        result = await playing(page, 'chopper');
+      } else {
+        await page.goto(`${ORIGIN}/board_start.html`, { waitUntil: 'domcontentloaded' });
+        await page.waitForFunction(() => window.BoardAudio && window.BgmManager);
+        await page.locator('#boardEntryStartBtn').click();
+        result = await playing(page, 'becoming_pirate_king');
+      }
+      check(item.name, result.advanced, result);
+    }
+  } finally { await context.close(); }
+  const rerun = report.checks.slice();
+  const updates = new Map(rerun.map(item => [item.name, item]));
+  const errors = [...initial.errors, ...report.errors];
+  const audioResponses = [...initial.audioResponses, ...report.audioResponses];
+  const blockedWrites = [...initial.blockedWrites, ...report.blockedWrites];
+  Object.assign(report, initial, {
+    checks: initial.checks.map(item => updates.has(item.name) ? { ...updates.get(item.name), initialTimingResult: item, retriedWithBoundedProgressWait: true } : item),
+    errors, audioResponses, blockedWrites,
+    timingRetry: { initialReport: path.resolve(RETRY_REPORT), startedAt: retryStartedAt, completedAt: new Date().toISOString(), previousProgressWindowMs: 260, maximumProgressWaitMs: 8000, rerunChecks: rerun, retainedSuccessfulChecks: initial.checks.filter(item => item.ok).length }
+  });
+  save();
+}
+
 async function main() {
   const browser = await chromium.launch({ headless: true, executablePath: CHROME });
   try {
-    if (args.includes('--transition-only')) await transitionOnly(browser);
+    if (RETRY_REPORT) await retryPlayheads(browser);
+    else if (args.includes('--transition-only')) await transitionOnly(browser);
     else { await preview(browser); await fallbackAndFrames(browser); await formal(browser); }
-    check('no browser JavaScript exceptions', report.errors.length === 0, report.errors);
+    if (RETRY_REPORT) {
+      const errorCheck = report.checks.find(item => item.name === 'no browser JavaScript exceptions');
+      if (!errorCheck) throw new Error('Initial report lacks JavaScript exception check');
+      errorCheck.ok = report.errors.length === 0; errorCheck.detail = report.errors;
+    } else check('no browser JavaScript exceptions', report.errors.length === 0, report.errors);
     report.finishedAt = new Date().toISOString(); report.ok = report.checks.every(item => item.ok); save();
     console.log(JSON.stringify({ ok: report.ok, passed: report.checks.filter(item => item.ok).length, checks: report.checks.length, report: output }));
     if (!report.ok) process.exitCode = 1;
