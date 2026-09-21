@@ -44,4 +44,6 @@
 - 真 Chrome 最後追加切歌靜音專項 4/4：先確認新舊 MP3 同時播放，立即暫停後 650ms 全部停止或無聲，恢復只播新曲；證據 `browser-transition/board-audio-browser-report.json`。原 94 項報告保留。
 - `scripts/build_board_audio_release.js`／`scripts/board_audio_release_builder_qa.js`：固定基線，凍結 Git HEAD 的 43 程式與兩個 web-only 音樂室檔案；僅准兩個新增程式及本次 11 個既有程式變更，保留所有媒體／Card／Chess／v2；只在 explicit promote 寫正式 metadata。隔離 fixture 最終 41/41，涵蓋來源污染、候選竄改、清單限制及 no-write inspect。
 
-來源提交、套件、R2、正式 HTTP 與保護檔驗證待實際部署完成後補記。
+來源提交 `b1a2e5705259bded123fc1ff11050cb8f9706f9a`。候選已依提交內容凍結、驗證及提升為 Board `package-866f9d61a53eca35`，manifest SHA256 `e87d3e98fe27610f25d292fb3e595b6bfa8cefd44dff13d60c9e8bc644d67b75`；4,155 檔、1,397,169,339 bytes，13 個程式變更，沒有新增／修改媒體。兩個 web-only 音樂室檔案同樣凍結與 SHA 核對。Card／Chess、v2 及所有舊媒體保持。
+
+R2、正式 HTTP 與部署後保護檔驗證待實際發布完成後補記；發布前 27 份保護檔 size／SHA 全部相符。
