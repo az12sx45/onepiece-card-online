@@ -4,6 +4,8 @@
 
 接續已完成的素材接線，核對並發布 102 圖集、487 OGG、39 程式的 Board v3 package。新增 `scripts/promote_board_move_fx_release.js` 以 Git HEAD bytes 核對候選後提升 metadata；通用 v2-based builder 加入額外媒體防漏檢查。正式資料與既有 rank 修改先記錄 SHA，使用隔離 npm start／Chrome／多人同步回歸。發布流程與本次結果見 [發布紀錄](BOARD_MOVE_FX_RELEASE_20260921.md)。
 
+13:38:49 正式套件 `package-2fc489ad68999481` 生效；R2 595/595、Render 新媒體 589/589、runtime／程式 43 checks、公開 Chrome 64/64 通過。24 正式資料檔及既有 rank、v2 保持；來源 commit `61d1e3c6d`，release `7a454cb60`。原觀戰 fixture 兩項時序／取樣失敗與隔離修正證據已如實記錄。收尾文件使用 `[skip render]`。
+
 ## 航海錄招式圖像與音效（2026-09-21，本機候選）
 
 正式 D 樹新增依招式 ID／裝備／階段選擇的 GPT 點陣多影格動畫；素材在本機色鍵去背，播放端只繪製既有圖片。覆蓋 1,471 個招式 ID、18 個變體及已知動態招式別名，起手／命中音效獨立，保留原戰鬥命中時間。變更 Board 兩個入口 HTML、board_game.js、board_battle.js；新增播放器、目錄、獨立試播頁、素材／音效建置與 QA。完整檔案、素材來源及驗證見 [本次紀錄](BOARD_MOVE_FX_20260921.md)。本機服務使用隔離資料；尚未發布、未改桌面 package 清單。
