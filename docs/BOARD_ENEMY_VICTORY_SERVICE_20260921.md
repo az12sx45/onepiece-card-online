@@ -24,4 +24,8 @@
 - 原 remote playback 13、battle spectator 41、state wire 611 項通過。舊 CPU post-coop QA 的虛構 `CPUQA` 房沒有建立連線，online case 3 項失敗，不能計為 LAN 驗收；其他 CPU／舊標記情境由新狀態 QA 與本次真房間測試確認。
 - 新 `build_board_program_update.js` 的隔離打包工具檢查 8/8 通過；從現有 v3 保留全部 4,040 媒體，包含本日 589 招式素材，只更新既有 39 程式中的修改檔案，候選與正式 metadata 分開核對。
 
-修前對照、補充案例及公開部署正在執行；完整結果於完成後補記。所有瀏覽器案例為自動化受控戰鬥胜利 fixture，不代表遠端真人完整遊玩或實體手機驗收。
+修前 `55810f4f9` 使用相同 Chrome／多人 fixture 已重現：單打與共鬥的當回合勝利者都停在「擲骰前進」，沒有島內服務或待恢復標記。修後完整三案例 `solo-online`、`coop-online`、`legacy-optional-cpu` 全過，`errors=[]`、`failures=[]`；額外覆蓋重要道具等待 2.5 秒後才繼續、完整存檔載入經正規化後恢復服務。
+
+來源 commit `9b2965bb1`，Board 候選 `package-0f54c185d7d65dcb`（4,079 檔／1,375,298,938 bytes；manifest SHA256 `1184aca1248ce65074d3fb22b74ff2c0f03f57631e556aa028580dda872d7415`），僅 `board_game.html`、`js/board_game.js` 兩個新程式 hash，所有媒體及 Card／Chess 套件保留。公開部署正在執行，完成後補記正式讀回。
+
+證據置於 `D:\Codex_QA\board-enemy-service-20260921`：`baseline/report.json`、`fixed/report.json`、`release-candidate/release-inputs.json`。所有瀏覽器案例為自動化受控戰鬥勝利 fixture，不代表遠端真人完整遊玩或實體手機驗收。
