@@ -24,4 +24,12 @@
 
 ## 發布狀態
 
-待本輪回歸完成後，從已提交 source 使用 `build_board_program_update.js` 產生候選、保留全部 4,040 媒體與 39 程式；僅發布本輪變動的五份 Board 程式。R2／Render 與公開 SHA 驗收完成前不標記已部署。
+來源 `31105cc54`，release `b2a05a028`，Board `package-a2d57271de06415c`，manifest SHA256 `40c274ba7be567668a9332d2682cc5344a8c71998e05b2bb8b5120adb11640a3`。使用 `build_board_program_update.js` 保留全部 4,040 媒體與 39 程式；本次只變更五份 Board 程式，Card／Chess 套件維持原值。
+
+4,079 logical files／3,762 unique blobs 全量 Git HEAD 來源 dry-run 通過。五個新增 immutable blobs 共 5,232,050 bytes（約 5.2 MB）已上傳，2026-09-21 16:37:29 公開 GET size／SHA256 5/5 通過後推送 main 觸發 Render。27 份保護檔案（24 正式資料、兩張既存 rank 修改、catalog-v2）size／SHA 全數不變；18923 隔離 QA 服務已停止。
+
+**已部署**：2026-09-21 16:43:28 正式 runtime 切換至 `package-a2d57271de06415c`；16:44:16 完成 43 項公開驗收，三款 identity、catalog／manifest、全部 39 份 Board 程式 size／SHA256、舊 RECOVERED 410 均通過。公開 Chrome 1440×900、932×430、390×844 選單開關／範圍與新 JS query 正常，errors=[]，已檢視截圖；使用全新未登入 context、無房間，攔截非 GET／HEAD 請求，沒有操作正式存檔。
+
+證據包含 `release-candidate/release-inputs.json`、`r2-dry-run.json`、`release/r2-verify.json`、`release/live-verify.json`、`release/runtime-transition.json`、`live-smoke/report.json`、`protected-after.json`。收尾文件提交使用 `[skip render]`，不再次重啟正式服務。
+
+正式入口：https://onepiece-card-online.onrender.com/board_start.html 。網頁重新整理；桌面版下載約 5.2 MB 航海錄更新後重開，不需要重裝啟動器。
