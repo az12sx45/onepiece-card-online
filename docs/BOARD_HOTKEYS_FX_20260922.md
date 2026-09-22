@@ -26,3 +26,7 @@
 專用發布builder隔離Git fixture 41/41通過（release-builder-qa/hotkeys-release-qa-xYL0o8/report.json）；限定五支既有程式變動、兩支新程式，保留4166媒體，共4214路徑。候選竄改、HEAD漂移、舊metadata變更皆拒絕；原未提交ranks／sea v1保留，fixture promote成功，正式發版另有公開檢查。獨立審查確認特殊主航線也已由R鍵涵蓋。
 
 攻擊實際Canvas前後比較162/162通過（attack/readability-report.json），五種桌機／橫屏／縮放舞台／連擊／觀戰情境均390×390→507×507，普通命中700→940ms、末段連擊420→660ms，前段不延長；JS errors空。保留首次報告的單一baseline RAF容差失敗（同時執行另一QA造成52.5ms抖動），合理RAF容差重跑通過。既有KO真Chrome回歸38/38通過（attack/ko-regression/battle-order-report.json），純FX40/40、音效／接觸23/23亦通過。圖像、HP、音效及倒地時序各自驗證，沒有調整傷害或提早音效。發布前29份保護檔全部一致（protected-prepackage.json）。
+
+驗收範圍：932×430原生縮放已測；額外手動transform的scaled-stage fixture可能受舞台震動keyframe短暫覆蓋，因此不當作完整持續縮放人工驗收。這次沒有真人或真Electron測試。
+
+來源03038f59be13db49efba39d9991700c3a8ca0b08已凍結並promote套件package-9995344f7ee4324c，manifest SHA ff18528aaaa3586668c1bbcd29f4d5bcd27d5e96352ef8c4bc16025f2b9f8a61。48支程式、4166媒體共4214路徑；R2上傳與公開生效仍待驗收。
