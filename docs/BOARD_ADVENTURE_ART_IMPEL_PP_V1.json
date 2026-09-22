@@ -1,0 +1,435 @@
+{
+  "schema": 1,
+  "group": "impel-pp",
+  "tool": "built-in image_gen.imagegen",
+  "referenceFiles": [
+    "public/images/board/sea_event_reveal/v2/drifting-chests-1.webp",
+    "public/images/board/sea_event_reveal/v2/medical-ship-2.webp"
+  ],
+  "runtimeSize": [
+    1536,
+    1024
+  ],
+  "format": "WebP",
+  "webpQuality": 90,
+  "webpMethod": 6,
+  "assets": [
+    {
+      "id": "impel-patrol-1",
+      "prompt": "Use case: illustration-story. Asset type: a full-screen event-result illustration for the One Piece adventure board game Voyage Records. Create ONE complete landscape anime scene, exactly 1536x1024 pixels, 3:2. Faithful recognizable One Piece character faces, hairstyles, costumes and proportions; polished cinematic Japanese adventure anime, crisp inked outlines and cel-shaded people, richly hand-painted environments, dark navy shadows, luminous teal accents and warm golden highlights. Match the polished finish of the project's sea-event illustrations: clear expressive faces, textured stone/wood and atmospheric depth. This is a standalone illustration, not a card or interface. No text, lettering, numbers, speech bubbles, UI, borders, panels, collage, watermarks or logos. Frame all important anatomy and props comfortably inside the image. Inside Impel Down: Monkey D. Luffy in his recognizable straw hat, red sleeveless vest and blue shorts is in the near foreground, alert with one clenched fist, while prison-uniform Buggy with red clown nose and blue hair crouches beside him. Both have just spotted a patrol of uniformed Impel Down jail guards carrying lanterns beyond a heavy barred archway. Long torch reflections stretch over wet stone. Show the moment of danger and readiness before a patrol battle, not defeated enemies or rewards. Cinematic low three-quarter camera, Luffy central and clearly recognizable, guards receding into depth, teal gloom and amber torchlight.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c479-fe96-7dc3-b5c0-ce13ec606401\\exec-64999d82-b3f4-49ae-9944-4b8489314275.png",
+      "sourceSha256": "a27e8470767d9a05855068bcbb2626ce4cef323c43e25540bb954eb32cf5ce25",
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "sourceBytes": 2439017,
+      "finalPath": "public/images/board/adventure_reveal/v1/impel-patrol-1.webp",
+      "finalSha256": "8c51b804bfce808b5c1de71c90502371c23e6370268f5dd377fd470d7b65a418",
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "finalBytes": 330658,
+      "sourceVisualReviewed": true,
+      "finalVisualReviewed": true,
+      "generatedAt": "2026-09-22T04:33:08.449120+00:00",
+      "visualReviewNotes": "Source PNG and final WebP individually inspected; distinct full-scene composition, recognizable One Piece cast and event-appropriate result; no UI or collage."
+    },
+    {
+      "id": "impel-patrol-2",
+      "prompt": "Use case: illustration-story. Asset type: a full-screen event-result illustration for the One Piece adventure board game Voyage Records. Create ONE complete landscape anime scene, exactly 1536x1024 pixels, 3:2. Faithful recognizable One Piece character faces, hairstyles, costumes and proportions; polished cinematic Japanese adventure anime, crisp inked outlines and cel-shaded people, richly hand-painted environments, dark navy shadows, luminous teal accents and warm golden highlights. Match the polished finish of the project's sea-event illustrations: clear expressive faces, textured stone/wood and atmospheric depth. This is a standalone illustration, not a card or interface. No text, lettering, numbers, speech bubbles, UI, borders, panels, collage, watermarks or logos. Frame all important anatomy and props comfortably inside the image. A distinct Impel Down patrol encounter. Bon Clay (Mr.2), faithfully recognizable with his swan-themed shoulder costume, makeup and expressive face, and Mr.3 with his characteristic large curled 3-shaped hair and glasses, halt on a winding prison stairway and look sharply toward a line of approaching Impel Down jail guards below. Bon Clay takes a protective martial-arts stance, Mr.3 points at approaching lanterns; cold prison masonry, iron bars and warm torchlight. High diagonal composition looking across the stairwell, expressive characters large in frame. An impending patrol battle, no victory or prize.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c479-fe96-7dc3-b5c0-ce13ec606401\\exec-118687b1-0bd5-46bc-a1e0-abedeb649bbb.png",
+      "sourceSha256": "24d15740e377e85e28c174eeae3b22da8b195273906df491e4b0a0e66066993a",
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "sourceBytes": 2534177,
+      "finalPath": "public/images/board/adventure_reveal/v1/impel-patrol-2.webp",
+      "finalSha256": "aa572aa641d9f8a13b8e164638d11140a209146a2c818c0dbeb2138bbba6424c",
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "finalBytes": 313618,
+      "sourceVisualReviewed": true,
+      "finalVisualReviewed": true,
+      "generatedAt": "2026-09-22T04:33:09.067495+00:00",
+      "visualReviewNotes": "Source PNG and final WebP individually inspected; distinct full-scene composition, recognizable One Piece cast and event-appropriate result; no UI or collage."
+    },
+    {
+      "id": "impel-patrol-3",
+      "prompt": "Use case: illustration-story. Asset type: a full-screen event-result illustration for the One Piece adventure board game Voyage Records. Create ONE complete landscape anime scene, exactly 1536x1024 pixels, 3:2. Faithful recognizable One Piece character faces, hairstyles, costumes and proportions; polished cinematic Japanese adventure anime, crisp inked outlines and cel-shaded people, richly hand-painted environments, dark navy shadows, luminous teal accents and warm golden highlights. Match the polished finish of the project's sea-event illustrations: clear expressive faces, textured stone/wood and atmospheric depth. This is a standalone illustration, not a card or interface. No text, lettering, numbers, speech bubbles, UI, borders, panels, collage, watermarks or logos. Frame all important anatomy and props comfortably inside the image. A distinct Impel Down patrol alert scene. Faithfully recognizable Jinbe, the blue-skinned whale-shark fish-man in an orange patterned kimono, stands protectively beside Monkey D. Luffy in straw hat and red vest as a heavy iron gate opens and uniformed Impel Down jail guards spill into the distant vaulted corridor. Both heroes are ready to fight but nobody is injured or defeated. Central wide composition at eye level, luminous cyan shafts through high prison windows, amber lamps and navy stone shadows; real One Piece faces and rich cinematic adventure detail.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c479-fe96-7dc3-b5c0-ce13ec606401\\exec-a367e76c-12dc-418d-8641-47129cf36425.png",
+      "sourceSha256": "56fe0ff4c998fd28749231694a4fc43ea49e875dc8d024c7eb294600f4c10202",
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "sourceBytes": 2509266,
+      "finalPath": "public/images/board/adventure_reveal/v1/impel-patrol-3.webp",
+      "finalSha256": "e9952f68f6c09a256bf591279c73cd3c5714bfe9bcb332ab1a2084b2cc9fe505",
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "finalBytes": 344598,
+      "sourceVisualReviewed": true,
+      "finalVisualReviewed": true,
+      "generatedAt": "2026-09-22T04:33:09.697756+00:00",
+      "visualReviewNotes": "Source PNG and final WebP individually inspected; distinct full-scene composition, recognizable One Piece cast and event-appropriate result; no UI or collage."
+    },
+    {
+      "id": "impel-key-1",
+      "prompt": "Use case: illustration-story. Asset type: a full-screen event-result illustration for the One Piece adventure board game Voyage Records. Create ONE complete landscape anime scene, exactly 1536x1024 pixels, 3:2. Faithful recognizable One Piece character faces, hairstyles, costumes and proportions; polished cinematic Japanese adventure anime, crisp inked outlines and cel-shaded people, richly hand-painted environments, dark navy shadows, luminous teal accents and warm golden highlights. Match the polished finish of the project's sea-event illustrations: clear expressive faces, textured stone/wood and atmospheric depth. This is a standalone illustration, not a card or interface. No text, lettering, numbers, speech bubbles, UI, borders, panels, collage, watermarks or logos. Frame all important anatomy and props comfortably inside the image. Inside Impel Down, Mr.3 with his unmistakable curled 3-shaped hair, glasses and striped prison clothing proudly holds a large brass jail key next to a heavy iron gate. Monkey D. Luffy is on the same side of the gate wearing his red vest, blue shorts, and EXACTLY ONE straw hat, on top of his head; nothing hangs on his back. Luffy smiles at the found key while a partially open doorway reveals a stone stairwell. Medium-wide frontal two-character composition, both faces and the key clear, no overlapping characters. Golden key glint and lantern light against deep teal prison stone. No duplicate hat or duplicate objects. This is finding access to a route, not treasure, money or a recruited character.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c479-fe96-7dc3-b5c0-ce13ec606401\\exec-0dc998df-4116-4fde-af2a-8c2b04d566a9.png",
+      "rejectedGenerations": [
+        {
+          "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c479-fe96-7dc3-b5c0-ce13ec606401\\exec-25fe9141-d575-4d5d-ae7d-b5179b0f106f.png",
+          "prompt": "Use case: illustration-story. Asset type: a full-screen event-result illustration for the One Piece adventure board game Voyage Records. Create ONE complete landscape anime scene, exactly 1536x1024 pixels, 3:2. Faithful recognizable One Piece character faces, hairstyles, costumes and proportions; polished cinematic Japanese adventure anime, crisp inked outlines and cel-shaded people, richly hand-painted environments, dark navy shadows, luminous teal accents and warm golden highlights. Match the polished finish of the project's sea-event illustrations: clear expressive faces, textured stone/wood and atmospheric depth. This is a standalone illustration, not a card or interface. No text, lettering, numbers, speech bubbles, UI, borders, panels, collage, watermarks or logos. Frame all important anatomy and props comfortably inside the image. Inside an Impel Down stone cell corridor, Mr.3 with his recognizable curled 3-shaped hair, glasses and striped prison clothing proudly holds a newly found large brass jail key next to a heavy iron lock. Monkey D. Luffy, straw hat and red vest, looks excitedly through the now partly opened cell gate toward a stairwell leading between prison floors. The key is the obvious central story object, not treasure or coins. Medium-wide over-the-shoulder framing with both expressive faces clear, golden key glint against deep teal prison stone.",
+          "reason": "Duplicate straw hat on Luffy; new clean illustration generated before delivery",
+          "sourceSha256": "723681ffa97f9f184a6bc1f198e4d5fc4c7bf3618c75658476ae7adca1cfd463"
+        }
+      ],
+      "sourceSha256": "a1541eccdf852ce86cf684500171e819039557296c3e034139c4cd4f31a01db2",
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "sourceBytes": 2276957,
+      "finalPath": "public/images/board/adventure_reveal/v1/impel-key-1.webp",
+      "finalSha256": "7bd9f7ed86ac626013da0b0a93decc91180169a2aaf4ab47dfef3643293f28aa",
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "finalBytes": 275390,
+      "sourceVisualReviewed": true,
+      "finalVisualReviewed": true,
+      "generatedAt": "2026-09-22T05:01:09.585258+00:00",
+      "visualReviewNotes": "Source PNG and final WebP individually inspected; distinct full-scene composition, recognizable One Piece cast and event-appropriate result; no UI or collage."
+    },
+    {
+      "id": "impel-key-2",
+      "prompt": "Use case: illustration-story. Asset type: a full-screen event-result illustration for the One Piece adventure board game Voyage Records. Create ONE complete landscape anime scene, exactly 1536x1024 pixels, 3:2. Faithful recognizable One Piece character faces, hairstyles, costumes and proportions; polished cinematic Japanese adventure anime, crisp inked outlines and cel-shaded people, richly hand-painted environments, dark navy shadows, luminous teal accents and warm golden highlights. Match the polished finish of the project's sea-event illustrations: clear expressive faces, textured stone/wood and atmospheric depth. This is a standalone illustration, not a card or interface. No text, lettering, numbers, speech bubbles, UI, borders, panels, collage, watermarks or logos. Frame all important anatomy and props comfortably inside the image. A distinct found-key event in Impel Down. Buggy the Clown in striped prison clothes, blue hair and red clown nose, triumphantly raises a ring of old brass keys he has discovered beside a deserted guard desk. Mr.3 with his unmistakable 3-shaped hair and glasses leans in astonished; in the background a barred gate reveals stairs upward and downward. Close low-angle foreground keys, complete upper-body characters, warm lantern illumination and dark navy stone. The scene means access to a route, not money or a recruited character.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c479-fe96-7dc3-b5c0-ce13ec606401\\exec-676aa2a4-2500-4ce8-9cba-24f1c4afb2b6.png",
+      "sourceSha256": "dc8e5bf2820e55ecb308b11f8fce2d2f5212e78d274cf1cd248c44a7937db99f",
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "sourceBytes": 2367373,
+      "finalPath": "public/images/board/adventure_reveal/v1/impel-key-2.webp",
+      "finalSha256": "ebed3c89716b59751bef33e08d5835a772de61434f5a5ec3b0255668e0bbd119",
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "finalBytes": 302020,
+      "sourceVisualReviewed": true,
+      "finalVisualReviewed": true,
+      "generatedAt": "2026-09-22T05:01:10.188671+00:00",
+      "visualReviewNotes": "Source PNG and final WebP individually inspected; distinct full-scene composition, recognizable One Piece cast and event-appropriate result; no UI or collage."
+    },
+    {
+      "id": "impel-key-3",
+      "prompt": "Use case: illustration-story. Asset type: a full-screen event-result illustration for the One Piece adventure board game Voyage Records. Create ONE complete landscape anime scene, exactly 1536x1024 pixels, 3:2. Faithful recognizable One Piece character faces, hairstyles, costumes and proportions; polished cinematic Japanese adventure anime, crisp inked outlines and cel-shaded people, richly hand-painted environments, dark navy shadows, luminous teal accents and warm golden highlights. Match the polished finish of the project's sea-event illustrations: clear expressive faces, textured stone/wood and atmospheric depth. This is a standalone illustration, not a card or interface. No text, lettering, numbers, speech bubbles, UI, borders, panels, collage, watermarks or logos. Frame all important anatomy and props comfortably inside the image. A distinct found-key event in Impel Down. Bon Clay in his recognizable swan-themed outfit and makeup quietly passes a large iron jail key to Monkey D. Luffy, straw hat resting against his back, red vest and blue shorts, beside a just-unlocked grated stairway. Both exchange relieved determined smiles, while golden torchlight shines through the moving iron bars. Side-on cinematic composition with hands and key clearly readable in the center; cold turquoise depth down the stairs and rich prison masonry. Do not show escape outside the prison or treasure.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c479-fe96-7dc3-b5c0-ce13ec606401\\exec-1e2466cb-63ab-4c68-a55f-c240ee3dae89.png",
+      "sourceSha256": "62fbf5615b626470fb85b407a6cb8a47663bed472ab6d9a6d531c44e26230ab7",
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "sourceBytes": 2491109,
+      "finalPath": "public/images/board/adventure_reveal/v1/impel-key-3.webp",
+      "finalSha256": "88ee185b0016e9000ca29d6f200473ce425659bac482f92a5c17d0fe47544888",
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "finalBytes": 329246,
+      "sourceVisualReviewed": true,
+      "finalVisualReviewed": true,
+      "generatedAt": "2026-09-22T05:01:12.963069+00:00",
+      "visualReviewNotes": "Source PNG and final WebP individually inspected; distinct full-scene composition, recognizable One Piece cast and event-appropriate result; no UI or collage."
+    },
+    {
+      "id": "impel-magellan-1",
+      "prompt": "Use case: illustration-story. Asset type: a full-screen event-result illustration for the One Piece adventure board game Voyage Records. Create ONE complete landscape anime scene, exactly 1536x1024 pixels, 3:2. Faithful recognizable One Piece character faces, hairstyles, costumes and proportions; polished cinematic Japanese adventure anime, crisp inked outlines and cel-shaded people, richly hand-painted environments, dark navy shadows, luminous teal accents and warm golden highlights. Match the polished finish of the project's sea-event illustrations: clear expressive faces, textured stone/wood and atmospheric depth. This is a standalone illustration, not a card or interface. No text, lettering, numbers, speech bubbles, UI, borders, panels, collage, watermarks or logos. Frame all important anatomy and props comfortably inside the image. Magellan, the unmistakable imposing One Piece Impel Down chief warden, black horned warden uniform, bat-like wings, pale face and dark facial hair, towers in a vaulted stone prison hall. Three huge translucent purple venom dragon heads rise from his poison aura and curl behind him like Hydra. His stern face and uniform remain clear; alarm lanterns and iron prison gates frame the scene. This is the dangerous encounter before battle, no defeated hero, no death or graphic injury. Dramatic centered low-angle wide shot, violet venom contrasted with navy shadows and gold torchlight.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c479-fe96-7dc3-b5c0-ce13ec606401\\exec-5d9aaa82-1283-4b79-824b-33c1c2375be3.png",
+      "sourceSha256": "8bdc6aff104cfdf1fa0acaa82842c2129e809863fa44ac4173f932822f4e1fe6",
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "sourceBytes": 2783564,
+      "finalPath": "public/images/board/adventure_reveal/v1/impel-magellan-1.webp",
+      "finalSha256": "81c7ead25a6f1d06a859aa6f4d7d01eb6ee6ef24a59c6378322b1174d6152fd3",
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "finalBytes": 359490,
+      "sourceVisualReviewed": true,
+      "finalVisualReviewed": true,
+      "generatedAt": "2026-09-22T05:05:49.058314+00:00",
+      "visualReviewNotes": "Source PNG and final WebP individually inspected; distinct full-scene composition, recognizable One Piece cast and event-appropriate result; no UI or collage."
+    },
+    {
+      "id": "impel-magellan-2",
+      "prompt": "Use case: illustration-story. Asset type: a full-screen event-result illustration for the One Piece adventure board game Voyage Records. Create ONE complete landscape anime scene, exactly 1536x1024 pixels, 3:2. Faithful recognizable One Piece character faces, hairstyles, costumes and proportions; polished cinematic Japanese adventure anime, crisp inked outlines and cel-shaded people, richly hand-painted environments, dark navy shadows, luminous teal accents and warm golden highlights. Match the polished finish of the project's sea-event illustrations: clear expressive faces, textured stone/wood and atmospheric depth. This is a standalone illustration, not a card or interface. No text, lettering, numbers, speech bubbles, UI, borders, panels, collage, watermarks or logos. Frame all important anatomy and props comfortably inside the image. A distinct Magellan danger encounter inside Impel Down. Monkey D. Luffy in straw hat, red vest and blue shorts is seen in a large three-quarter foreground defensive stance, looking toward the imposing horned warden Magellan farther along a stone bridge. Magellan's bat-winged black uniform and unmistakable face are visible as a great purple venom dragon pours around him and coils above the bridge. Dynamic diagonal perspective, poisonous violet mist, teal shadows and torchlit golden edges. Suspense before combat, no victory, no fallen or poisoned bodies.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c479-fe96-7dc3-b5c0-ce13ec606401\\exec-77ea3d2f-a04f-4708-b948-c27b1996344d.png",
+      "sourceSha256": "ad9ad2329401bf8e2b12d1e326e6fc1e4113a4f37c97a0215b66d154e510b2e1",
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "sourceBytes": 2603196,
+      "finalPath": "public/images/board/adventure_reveal/v1/impel-magellan-2.webp",
+      "finalSha256": "b699c2ff30c77c591ec36d4b0041c7e76414585f7bc8cb417e482f3714df69e2",
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "finalBytes": 350108,
+      "sourceVisualReviewed": true,
+      "finalVisualReviewed": true,
+      "generatedAt": "2026-09-22T05:05:49.714563+00:00",
+      "visualReviewNotes": "Source PNG and final WebP individually inspected; distinct full-scene composition, recognizable One Piece cast and event-appropriate result; no UI or collage."
+    },
+    {
+      "id": "impel-magellan-3",
+      "prompt": "Use case: illustration-story. Asset type: a full-screen event-result illustration for the One Piece adventure board game Voyage Records. Create ONE complete landscape anime scene, exactly 1536x1024 pixels, 3:2. Faithful recognizable One Piece character faces, hairstyles, costumes and proportions; polished cinematic Japanese adventure anime, crisp inked outlines and cel-shaded people, richly hand-painted environments, dark navy shadows, luminous teal accents and warm golden highlights. Match the polished finish of the project's sea-event illustrations: clear expressive faces, textured stone/wood and atmospheric depth. This is a standalone illustration, not a card or interface. No text, lettering, numbers, speech bubbles, UI, borders, panels, collage, watermarks or logos. Frame all important anatomy and props comfortably inside the image. A distinct cinematic Magellan alert scene. Frame Magellan in profile turning toward the viewer beneath a massive Impel Down iron portcullis: huge horned black warden uniform, bat-like wings, pale face and dark facial hair unmistakably faithful to One Piece. A towering purple venom hydra snakes from his hand and along the damp stone floor, with jail guards watching from a safely distant balcony. Wide side composition, luminous purple liquid texture, gold warning lamps, cold navy prison architecture. Imminent high-risk battle, no gore, nobody defeated, no rewards.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c479-fe96-7dc3-b5c0-ce13ec606401\\exec-205548db-119b-4c47-9954-1fa795ae1a12.png",
+      "sourceSha256": "f87be09d92dd40c31dacb4256f518a8b856a6d8a019c923f0bffebe5973b5837",
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "sourceBytes": 2659147,
+      "finalPath": "public/images/board/adventure_reveal/v1/impel-magellan-3.webp",
+      "finalSha256": "44dbcf52adde057ee07e48198f073eb119b96e671f21fc731be858c8d4ff2f0d",
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "finalBytes": 360336,
+      "sourceVisualReviewed": true,
+      "finalVisualReviewed": true,
+      "generatedAt": "2026-09-22T05:05:50.383745+00:00",
+      "visualReviewNotes": "Source PNG and final WebP individually inspected; distinct full-scene composition, recognizable One Piece cast and event-appropriate result; no UI or collage."
+    },
+    {
+      "id": "impel-ivankov-1",
+      "prompt": "Use case: illustration-story. Asset type: a full-screen event-result illustration for the One Piece adventure board game Voyage Records. Create ONE complete landscape anime scene, exactly 1536x1024 pixels, 3:2. Faithful recognizable One Piece character faces, hairstyles, costumes and proportions; polished cinematic Japanese adventure anime, crisp inked outlines and cel-shaded people, richly hand-painted environments, dark navy shadows, luminous teal accents and warm golden highlights. Match the polished finish of the project's sea-event illustrations: clear expressive faces, textured stone/wood and atmospheric depth. This is a standalone illustration, not a card or interface. No text, lettering, numbers, speech bubbles, UI, borders, panels, collage, watermarks or logos. Frame all important anatomy and props comfortably inside the image. Emporio Ivankov, faithfully recognizable with enormous purple afro, small jeweled crown, dramatic long lashes and makeup, ruffled collar and flamboyant full costume, swings open a concealed stone doorway inside Impel Down. Monkey D. Luffy in straw hat and red vest looks in with relieved surprise as warm safe light spills from a secret refuge beyond. Ivankov gestures invitingly toward rest, food and recovery in the hidden passage. Cinematic wide scene with Ivankov the clear focal character; golden refuge light against teal prison shadows, no words or treatment needles.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c479-fe96-7dc3-b5c0-ce13ec606401\\exec-a1057a76-df68-40c1-a9ef-d64ef1f5fe28.png",
+      "sourceSha256": "e3b830867f9aef3898230b29eacd392b2e858ae74db500d6d5fbc6f7ce9782f2",
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "sourceBytes": 2610330,
+      "finalPath": "public/images/board/adventure_reveal/v1/impel-ivankov-1.webp",
+      "finalSha256": "351818b0a0e62ee697ca8d06591c29010f900f70691489bb45286fb037bad401",
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "finalBytes": 374530,
+      "sourceVisualReviewed": true,
+      "finalVisualReviewed": true,
+      "generatedAt": "2026-09-22T05:13:46.251646+00:00",
+      "visualReviewNotes": "Source PNG and final WebP individually inspected; distinct full-scene composition, recognizable One Piece cast and event-appropriate result; no UI or collage."
+    },
+    {
+      "id": "impel-ivankov-2",
+      "prompt": "Use case: illustration-story. Asset type: a full-screen event-result illustration for the One Piece adventure board game Voyage Records. Create ONE complete landscape anime scene, exactly 1536x1024 pixels, 3:2. Faithful recognizable One Piece character faces, hairstyles, costumes and proportions; polished cinematic Japanese adventure anime, crisp inked outlines and cel-shaded people, richly hand-painted environments, dark navy shadows, luminous teal accents and warm golden highlights. Match the polished finish of the project's sea-event illustrations: clear expressive faces, textured stone/wood and atmospheric depth. This is a standalone illustration, not a card or interface. No text, lettering, numbers, speech bubbles, UI, borders, panels, collage, watermarks or logos. Frame all important anatomy and props comfortably inside the image. A distinct recovery-passage encounter in Impel Down's hidden Newkama refuge. Emporio Ivankov, enormous purple afro, little crown, characteristic makeup and flamboyant ruffled costume, warmly encourages a tired but relieved Monkey D. Luffy seated at a stone table with water, nourishing soup and folded bandages. Bon Clay smiles nearby. All recognizable One Piece character designs; safe recovery atmosphere without showing a combat victory or adding treasure. Intimate medium-wide triangular composition, amber lantern glow, teal shadows, detailed stone refuge and colorful drapery.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c479-fe96-7dc3-b5c0-ce13ec606401\\exec-3f4a83fe-eb29-4c1a-bf31-6d604867fcdd.png",
+      "sourceSha256": "22239f7ddafa0aa763e3a9dfe5c46a6a1c7ee3b889ad969663054b9d4e7691f9",
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "sourceBytes": 2431679,
+      "finalPath": "public/images/board/adventure_reveal/v1/impel-ivankov-2.webp",
+      "finalSha256": "f1f2f294e6b5d6218c26d8987b52360f157ee18b351eff7db08cac111fd23cf9",
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "finalBytes": 322100,
+      "sourceVisualReviewed": true,
+      "finalVisualReviewed": true,
+      "generatedAt": "2026-09-22T05:13:46.852041+00:00",
+      "visualReviewNotes": "Source PNG and final WebP individually inspected; distinct full-scene composition, recognizable One Piece cast and event-appropriate result; no UI or collage."
+    },
+    {
+      "id": "impel-ivankov-3",
+      "prompt": "Use case: illustration-story. Asset type: a full-screen event-result illustration for the One Piece adventure board game Voyage Records. Create ONE complete landscape anime scene, exactly 1536x1024 pixels, 3:2. Faithful recognizable One Piece character faces, hairstyles, costumes and proportions; polished cinematic Japanese adventure anime, crisp inked outlines and cel-shaded people, richly hand-painted environments, dark navy shadows, luminous teal accents and warm golden highlights. Match the polished finish of the project's sea-event illustrations: clear expressive faces, textured stone/wood and atmospheric depth. This is a standalone illustration, not a card or interface. No text, lettering, numbers, speech bubbles, UI, borders, panels, collage, watermarks or logos. Frame all important anatomy and props comfortably inside the image. A distinct hidden healing-route scene inside Impel Down. Emporio Ivankov with purple afro, crown and dramatic makeup stands in front of an opened secret passage beside Inazuma, faithfully recognizable with half orange and half white hair and clothing and scissor-like hands. Ivankov presents the newly revealed warm refuge to Monkey D. Luffy, who peers from the foreground. Rest supplies and clean bandages inside hint at full recovery. Broad cinematic composition across cut stone walls, beautiful warm gold light leading through deep navy and teal prison shadows. No fighting, no wounds, no text.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c479-fe96-7dc3-b5c0-ce13ec606401\\exec-7b2d74d0-e73e-4689-82aa-678e5c594110.png",
+      "sourceSha256": "2e23d915bb50431c3705fb004abcadd0bed61e7f8fbbf24e8409a1bed710abce",
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "sourceBytes": 2583119,
+      "finalPath": "public/images/board/adventure_reveal/v1/impel-ivankov-3.webp",
+      "finalSha256": "6fa5d5883be1cd22495adb43836710fbb97cce177dac4176cb4c640f9d5917c5",
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "finalBytes": 362970,
+      "sourceVisualReviewed": true,
+      "finalVisualReviewed": true,
+      "generatedAt": "2026-09-22T05:13:47.563573+00:00",
+      "visualReviewNotes": "Source PNG and final WebP individually inspected; distinct full-scene composition, recognizable One Piece cast and event-appropriate result; no UI or collage."
+    },
+    {
+      "id": "impel-hidden-1",
+      "prompt": "Use case: illustration-story. Asset type: a full-screen event-result illustration for the One Piece adventure board game Voyage Records. Create ONE complete landscape anime scene, exactly 1536x1024 pixels, 3:2. Faithful recognizable One Piece character faces, hairstyles, costumes and proportions; polished cinematic Japanese adventure anime, crisp inked outlines and cel-shaded people, richly hand-painted environments, dark navy shadows, luminous teal accents and warm golden highlights. Match the polished finish of the project's sea-event illustrations: clear expressive faces, textured stone/wood and atmospheric depth. This is a standalone illustration, not a card or interface. No text, lettering, numbers, speech bubbles, UI, borders, panels, collage, watermarks or logos. Frame all important anatomy and props comfortably inside the image. Discovery of hidden prisoners inside Impel Down, before any recruitment decision. Monkey D. Luffy, recognizable straw hat, red vest and blue shorts, raises a small lantern toward a concealed barred cell behind loose stonework. Beyond the bars are several intriguing prisoner silhouettes, kept indistinct rather than presenting one as an awarded companion. Luffy's curious excited face is large and clear. Wide cinematic over-the-shoulder view with lantern and bars in the center, golden light cutting through navy and teal prison darkness, no treasure or victory symbols.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c479-fe96-7dc3-b5c0-ce13ec606401\\exec-d05d9e90-3a4c-41c4-9866-16733fadc76b.png",
+      "sourceSha256": "14c4efa798320807e83833bd23ccddd90fb16d4d9fbaf80dcd50584ffe1452b2",
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "sourceBytes": 2335743,
+      "finalPath": "public/images/board/adventure_reveal/v1/impel-hidden-1.webp",
+      "finalSha256": "60a048c2fbb9ad099930924b43f1682cfa749ee67f98027e44a5da08da578995",
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "finalBytes": 291350,
+      "sourceVisualReviewed": true,
+      "finalVisualReviewed": true,
+      "generatedAt": "2026-09-22T05:19:43.695129+00:00",
+      "visualReviewNotes": "Source PNG and final WebP individually inspected; distinct full-scene composition, recognizable One Piece cast and event-appropriate result; no UI or collage."
+    },
+    {
+      "id": "impel-hidden-2",
+      "prompt": "Use case: illustration-story. Asset type: a full-screen event-result illustration for the One Piece adventure board game Voyage Records. Create ONE complete landscape anime scene, exactly 1536x1024 pixels, 3:2. Faithful recognizable One Piece character faces, hairstyles, costumes and proportions; polished cinematic Japanese adventure anime, crisp inked outlines and cel-shaded people, richly hand-painted environments, dark navy shadows, luminous teal accents and warm golden highlights. Match the polished finish of the project's sea-event illustrations: clear expressive faces, textured stone/wood and atmospheric depth. This is a standalone illustration, not a card or interface. No text, lettering, numbers, speech bubbles, UI, borders, panels, collage, watermarks or logos. Frame all important anatomy and props comfortably inside the image. A distinct hidden-prisoner discovery in Impel Down. Buggy the Clown with red nose, blue hair and striped prison uniform, and Mr.3 with curled 3-shaped hair and glasses, cautiously pull back an old hanging prison curtain to reveal an unexpected row of locked cells deeper in the stone wall. Distant shadowed prisoner figures watch from behind bars, not yet released. The recognizable two One Piece characters share startled curiosity. Side-facing medium-wide composition, strong warm lantern glow, turquoise reflected moisture, detailed iron bars, no reward or recruitment confirmation.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c479-fe96-7dc3-b5c0-ce13ec606401\\exec-9b536366-c2d9-4af0-b7ce-fedeb46a5717.png",
+      "sourceSha256": "8fada1ce4fde70a897bf0315b8e3408768cefc5747b3cef7618a5e0fb2e7218b",
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "sourceBytes": 2553384,
+      "finalPath": "public/images/board/adventure_reveal/v1/impel-hidden-2.webp",
+      "finalSha256": "8c640cbd903b759b58c589c0c81c137181e8d9e989f4250f9e76e482c4ef4d9e",
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "finalBytes": 349436,
+      "sourceVisualReviewed": true,
+      "finalVisualReviewed": true,
+      "generatedAt": "2026-09-22T05:19:44.539442+00:00",
+      "visualReviewNotes": "Source PNG and final WebP individually inspected; distinct full-scene composition, recognizable One Piece cast and event-appropriate result; no UI or collage."
+    },
+    {
+      "id": "impel-hidden-3",
+      "prompt": "Use case: illustration-story. Asset type: a full-screen event-result illustration for the One Piece adventure board game Voyage Records. Create ONE complete landscape anime scene, exactly 1536x1024 pixels, 3:2. Faithful recognizable One Piece character faces, hairstyles, costumes and proportions; polished cinematic Japanese adventure anime, crisp inked outlines and cel-shaded people, richly hand-painted environments, dark navy shadows, luminous teal accents and warm golden highlights. Match the polished finish of the project's sea-event illustrations: clear expressive faces, textured stone/wood and atmospheric depth. This is a standalone illustration, not a card or interface. No text, lettering, numbers, speech bubbles, UI, borders, panels, collage, watermarks or logos. Frame all important anatomy and props comfortably inside the image. A distinct secret-cell discovery inside Impel Down. Bon Clay, recognizable swan-themed costume, short hair and makeup, stands beside Monkey D. Luffy in red vest and straw hat at a hidden stair landing, holding a lantern toward a massive barred chamber. A few shadowed prisoners can be glimpsed inside, still behind the bars; do not single one out as an acquired reward. Bon Clay gestures with surprise while Luffy leans forward curiously. Wide frontal cinematic composition with layered prison depth, amber light and navy-teal shadows, no combat or escape victory.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c479-fe96-7dc3-b5c0-ce13ec606401\\exec-b15540d5-7069-4b8e-a9c5-d393fc9e3016.png",
+      "sourceSha256": "c770596bb7c021375d36da89d851a1b628488db1d8731658c664d2849acb3b40",
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "sourceBytes": 2691299,
+      "finalPath": "public/images/board/adventure_reveal/v1/impel-hidden-3.webp",
+      "finalSha256": "c9fbca6942c455db77d179314dbaa0bbdb29fef843e2f538b26f2c5629d75626",
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "finalBytes": 377114,
+      "sourceVisualReviewed": true,
+      "finalVisualReviewed": true,
+      "generatedAt": "2026-09-22T05:19:45.404132+00:00",
+      "visualReviewNotes": "Source PNG and final WebP individually inspected; distinct full-scene composition, recognizable One Piece cast and event-appropriate result; no UI or collage."
+    },
+    {
+      "id": "judicial-pp-1",
+      "prompt": "Use case: illustration-story. Asset type: a full-screen event-result illustration for the One Piece adventure board game Voyage Records. Create ONE complete landscape anime scene, exactly 1536x1024 pixels, 3:2. Faithful recognizable One Piece character faces, hairstyles, costumes and proportions; polished cinematic Japanese adventure anime, crisp inked outlines and cel-shaded people, richly hand-painted environments, dark navy shadows, luminous teal accents and warm golden highlights. Match the polished finish of the project's sea-event illustrations: clear expressive faces, textured stone/wood and atmospheric depth. This is a standalone illustration, not a card or interface. No text, lettering, numbers, speech bubbles, UI, borders, panels, collage, watermarks or logos. Frame all important anatomy and props comfortably inside the image. Skill-ammunition resupply at Enies Lobby, not a battle victory. Faithfully recognizable Usopp with long nose, goggles and tool straps opens a sturdy wooden supply crate packed with neatly arranged sling-shot ammunition, powder pouches and safe mechanical supplies; Franky with blue pompadour, metal nose, star-marked massive forearms and an open Hawaiian shirt helps beside him, setting cola bottles into the crate. Behind them are Enies Lobby's white courthouse architecture and a stone bridge over ocean mist. Complete lively medium-wide scene; clear full resupply crate as focus, cheerful determined faces, teal sea and warm golden daylight. No treasure coins or medical healing props.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c479-fe96-7dc3-b5c0-ce13ec606401\\exec-3e56ac23-58db-4f0a-842b-15a6c5b32939.png",
+      "sourceSha256": "69873e7fda5a916a76998cf803cfe5f735d4012be080ebf07a0570c66eaebb63",
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "sourceBytes": 2913927,
+      "finalPath": "public/images/board/adventure_reveal/v1/judicial-pp-1.webp",
+      "finalSha256": "bc62ccd85e95c6f0057713d4fdb0d986afc8eaeb58bf0b10973659f09be7bcb5",
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "finalBytes": 422706,
+      "sourceVisualReviewed": true,
+      "finalVisualReviewed": true,
+      "generatedAt": "2026-09-22T05:23:21.278750+00:00",
+      "visualReviewNotes": "Source PNG and final WebP individually inspected; distinct full-scene composition, recognizable One Piece cast and event-appropriate result; no UI or collage."
+    },
+    {
+      "id": "judicial-pp-2",
+      "prompt": "Use case: illustration-story. Asset type: a full-screen event-result illustration for the One Piece adventure board game Voyage Records. Create ONE complete landscape anime scene, exactly 1536x1024 pixels, 3:2. Faithful recognizable One Piece character faces, hairstyles, costumes and proportions; polished cinematic Japanese adventure anime, crisp inked outlines and cel-shaded people, richly hand-painted environments, dark navy shadows, luminous teal accents and warm golden highlights. Match the polished finish of the project's sea-event illustrations: clear expressive faces, textured stone/wood and atmospheric depth. This is a standalone illustration, not a card or interface. No text, lettering, numbers, speech bubbles, UI, borders, panels, collage, watermarks or logos. Frame all important anatomy and props comfortably inside the image. A distinct full skill-supply crate event in Enies Lobby. Franky, faithful blue pompadour, square metal nose, large star-marked forearms and open Hawaiian shirt, kneels beside a fully stocked wooden ammunition and equipment crate, giving a confident thumbs-up as Usopp with long nose and goggles checks pouches for his slingshot. Crate visibly holds brass fittings, bundled projectiles, tools and capped cola bottles, not money. Low-angle cinematic composition on a white stone Enies Lobby bridge with courthouse towers in the background, luminous teal ocean, navy shadows and golden light. Restore readiness, no explosions or fighting.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c479-fe96-7dc3-b5c0-ce13ec606401\\exec-2b30ca68-3fc3-49e5-ad51-d9abaf57f105.png",
+      "sourceSha256": "7082401bf3b66839781cc5317499b468fa58e23a429007d503b26578ebda0cf5",
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "sourceBytes": 2808142,
+      "finalPath": "public/images/board/adventure_reveal/v1/judicial-pp-2.webp",
+      "finalSha256": "fa3311e1ab7b4f1a2452a1d538f98b868d325821edc014fb86d8768f5b496645",
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "finalBytes": 409348,
+      "sourceVisualReviewed": true,
+      "finalVisualReviewed": true,
+      "generatedAt": "2026-09-22T05:23:21.948958+00:00",
+      "visualReviewNotes": "Source PNG and final WebP individually inspected; distinct full-scene composition, recognizable One Piece cast and event-appropriate result; no UI or collage."
+    },
+    {
+      "id": "judicial-pp-3",
+      "prompt": "Use case: illustration-story. Asset type: a full-screen event-result illustration for the One Piece adventure board game Voyage Records. Create ONE complete landscape anime scene, exactly 1536x1024 pixels, 3:2. Faithful recognizable One Piece character faces, hairstyles, costumes and proportions; polished cinematic Japanese adventure anime, crisp inked outlines and cel-shaded people, richly hand-painted environments, dark navy shadows, luminous teal accents and warm golden highlights. Match the polished finish of the project's sea-event illustrations: clear expressive faces, textured stone/wood and atmospheric depth. This is a standalone illustration, not a card or interface. No text, lettering, numbers, speech bubbles, UI, borders, panels, collage, watermarks or logos. Frame all important anatomy and props comfortably inside the image. A distinct skill-readiness resupply event on an Enies Lobby courthouse terrace. Sanji, faithfully recognizable blond fringe covering one eye, curled eyebrow, black suit and tie, brings a compact supply tray and refreshment bottles to Usopp, unmistakable long nose, goggles and slingshot equipment, who is refilling his ammunition pouches from a large open wooden crate brimming with organized projectiles and tools. Emphasize the full ammunition crate and renewed team readiness, not wounds, money or victory. Side-on cinematic composition, expressive faces, white judicial towers and sea bridge behind, rich teal navy and warm gold lighting.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c479-fe96-7dc3-b5c0-ce13ec606401\\exec-eedb5957-9511-4833-a342-6dfbbdd0ffb6.png",
+      "sourceSha256": "f56469a3dd1675f77043fe824805081c7a379580fa28bfda633da58772183df8",
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "sourceBytes": 2694115,
+      "finalPath": "public/images/board/adventure_reveal/v1/judicial-pp-3.webp",
+      "finalSha256": "881e2f90a8520af4f54d9886b07ed3433222b85ac42f28d941c8edcf0816b037",
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "finalBytes": 393030,
+      "sourceVisualReviewed": true,
+      "finalVisualReviewed": true,
+      "generatedAt": "2026-09-22T05:23:22.646976+00:00",
+      "visualReviewNotes": "Source PNG and final WebP individually inspected; distinct full-scene composition, recognizable One Piece cast and event-appropriate result; no UI or collage."
+    }
+  ],
+  "validation": {
+    "assetCount": 18,
+    "totalFinalBytes": 6268048,
+    "exactDimensions": [
+      1536,
+      1024
+    ],
+    "allSourcesPreserved": true,
+    "allSourceAndFinalHashesVerified": true,
+    "allFinalWebpDecoded": true,
+    "allImagesIndividuallyVisuallyReviewed": true,
+    "reviewedAt": "2026-09-22T05:24:15.833728+00:00"
+  }
+}

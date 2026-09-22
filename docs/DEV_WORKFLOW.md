@@ -1,5 +1,9 @@
 # Dev Workflow
 
+## 抽選插畫與個人圖鑑（2026-09-22，本機驗證完成）
+
+新增寶箱／推進城／司法島 18 種 × 3 張 GPT 插畫與 126 張個人收藏。修改四個 Board HTML、主遊戲／海格／推進城／戰鬥 JS；新增 catalog、collection JS、共用 CSS 與 server/board-art-collection.js，PROFILE_UPDATE 對收藏採原子聯集。同步四份文件、三份來源 JSON、桌面白名單、五支QA與專用發布builder，擴充既有海格QA；隔離 npm start 18929，驗證及下載版發布證據見 [本次紀錄](BOARD_ADVENTURE_ART_20260922.md)。收藏73、runtime44、海格雙頁222、結算18、builder24、原擊倒68與LAN回歸通過，126張Chrome解碼。修復小螢幕确认按鈕、延遲storage跨帳號與第六階段結算舊引用問題；尚未發布。
+
 ## 遊戲改由桌面啟動器進入（2026-09-22）
 
 使用者同意保留下載頁、關閉一般網頁遊玩並部署。新增 `server/desktop-distribution.js`、`public/desktop-download.html`，於 `server/index.js` 掛接 HTTP／Socket.IO 分流；新增四支 distribution QA，原 LAN QA 支援明確測試 UA。一般瀏覽器導至下載頁、遊戲程式與連線拒絕；桌面 1.1.7 保留帳號／社交／更新／多人連線，6,192 個素材路徑只回 R2 重新導向。服務工作者退役保留瀏覽器存檔。同步四份專案文件，隔離 `npm start` 18927；測試、R2 CORS 與部署證據見 [本次紀錄](DESKTOP_ONLY_20260922.md)。

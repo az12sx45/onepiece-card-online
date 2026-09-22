@@ -204,6 +204,14 @@ async function main() {
         return { event: structuredClone(s.boardUiEvent), player: window.BoardSeaEventVisuals.capture(p) };
       }, type);
       const pair = await pairedReveal(host.page, guest.page, `chest-${type}`, evidence.event);
+      if (evidence.event.detail.chestVisual) {
+        const collection = await host.page.evaluate(visual => {
+          const art = window.BoardAdventureArt.resolve(visual);
+          return { id: art.id, saved: !!window.BoardArtCollection.snapshot()[art.id], variants: Object.keys(window.BoardArtCollection.snapshot()).filter(id => id.startsWith(`${visual.group}:${visual.key}:`)) };
+        }, evidence.event.detail.chestVisual);
+        check(`chest-${type}: only actual variant collected`, collection.saved && collection.variants.length === 1, collection);
+        check(`chest-${type}: original sea art remains visible`, await host.page.locator('.sea-reveal-origin img').count() === 1);
+      }
       check(`chest-${type}: actual chest icon`, pair.owner.chest.includes(`chest_${type}.webp`) && pair.owner.chest === pair.viewer.chest, pair);
       if (type === "wood") check("wood trap adverse actual outcome", pair.owner.outcomes.some(row => /-|拘捕|陷阱/.test(row.text)), pair.owner.outcomes);
       else check(`chest-${type}: actual item icon`, pair.owner.outcomes.some(row => row.itemId && row.image), pair.owner.outcomes);
@@ -252,6 +260,11 @@ async function main() {
     const recovered = await guest.page.evaluate(playerId => { const d = window.__BOARD_GAME_DEBUG__, s = d.getState(); return { connected: d.boardLanStatus().connected, playerCount: s.gameState.players.length, player: window.BoardSeaEventVisuals.capture(s.gameState.players.find(p => String(p.id) === String(playerId))) }; }, report.prepared.playerId);
     const owner = await host.page.evaluate(() => window.BoardSeaEventVisuals.capture(window.__BOARD_GAME_DEBUG__.getCurrentPlayer()));
     check("spectator refresh preserves actual result state", recovered.connected && recovered.playerCount === 2 && JSON.stringify(recovered.player) === JSON.stringify(owner), { recovered, owner });
+    if (await guest.page.evaluate(() => !!window.BoardArtCollection)) {
+      check("spectating and refreshing do not unlock personal art", Object.keys(await guest.page.evaluate(() => window.BoardArtCollection.snapshot())).length === 0);
+      const artCopies = await Promise.all([host.page, guest.page].map(page => page.evaluate(playerId => window.__BOARD_GAME_DEBUG__.getState().gameState.players.find(p => String(p.id) === String(playerId)).adventureArt, report.prepared.playerId)));
+      check("cosmetic collection survives full LAN snapshot and refresh", JSON.stringify(artCopies[0]) === JSON.stringify(artCopies[1]) && Object.keys(artCopies[0]).length > 0, artCopies);
+    }
     // Confirmation ends a real LAN turn. Exercise the same production CPU handler
     // in a separate offline page so fixture resets cannot conflict with authority.
     const cpuPage = await host.context.newPage();

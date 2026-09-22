@@ -11,6 +11,7 @@ const bcrypt = require("bcryptjs");
 const { Chess } = require("chess.js");
 const { createBoardStateSender } = require("./board-state-wire");
 const { createDesktopDistribution } = require("./desktop-distribution");
+const { sanitizeProfileStats, PROFILE_STATS_SQL } = require("./board-art-collection");
 const boardStateSender = createBoardStateSender();
 const voyageRecords = require("./board-voyage-records");
 const {
@@ -5229,7 +5230,7 @@ socket.on("PROFILE_UPDATE", async ({ secret, patch }, cb) => {
     }
 
     // ✅ stats：JSONB 合併（保留 stats.client.shop / stats.client.titles / …）
-    const statsParam = has("stats") ? JSON.stringify(patch.stats ?? {}) : null;
+    const statsParam = has("stats") ? JSON.stringify(sanitizeProfileStats(patch.stats)) : null;
 
     // ✅ JSON 欄位：沒傳就保留；有傳才覆蓋
     const titlesParam   = has("titles")         ? JSON.stringify(patch.titles ?? []) : null;
@@ -5254,10 +5255,7 @@ socket.on("PROFILE_UPDATE", async ({ secret, patch }, cb) => {
         name = COALESCE($2, player_profiles.name),
         avatar = COALESCE($3, player_profiles.avatar),
 
-        stats = CASE
-          WHEN $4::jsonb IS NULL THEN player_profiles.stats
-          ELSE (player_profiles.stats || $4::jsonb)
-        END,
+        stats = ${PROFILE_STATS_SQL},
 
         titles = COALESCE($5::jsonb, player_profiles.titles),
         bounties = COALESCE($6::jsonb, player_profiles.bounties),

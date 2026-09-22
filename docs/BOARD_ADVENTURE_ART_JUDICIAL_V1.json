@@ -1,0 +1,418 @@
+{
+  "schema": 1,
+  "group": "judicial",
+  "generator": "built-in GPT image_gen",
+  "scope": [
+    "attack",
+    "defense",
+    "speed",
+    "shield",
+    "revive",
+    "burst"
+  ],
+  "styleReferencesInspected": [
+    "public/images/board/sea_event_reveal/v2/drifting-chests-1.webp",
+    "public/images/board/sea_event_reveal/v2/medical-ship-2.webp"
+  ],
+  "format": "WebP quality 90 method 6; no creative edits",
+  "assets": [
+    {
+      "key": "judicial-attack-1",
+      "resultId": "attack",
+      "variant": 1,
+      "prompt": "Use case: illustration-story. Create ONE complete cinematic One Piece game result illustration, EXACTLY 1536 x 1024 pixels, landscape 3:2. Faithful recognizable One Piece character faces, anatomy and signature costume details. Polished Japanese adventure anime: crisp expressive ink linework, rich clean cel shading with finely hand-painted architectural detail, deep navy shadows, luminous marine teal, antique golden sunlight and subtle airborne spray. Match the finish of premium painted anime game key art, not photorealism. Location is Enies Lobby, pale stone courthouse towers and the sea bridge above immense turquoise waterfalls. This is an illustrated supportive buff result, do not depict loot/items/stat numbers that are not awarded. Full scene edge to edge, coherent perspective, no text, no letters, no numerals, no UI, no card border, no watermark, no collage, no multi-panel layout. Show Monkey D. Luffy in his classic red vest, blue shorts, straw hat tied behind his neck, determined grin and left-eye scar, launching forward at center with one clenched fist drawn back; Roronoa Zoro with green hair and three sheathed/held katanas and blond Sanji in black suit charge alongside several steps behind him. Low camera near cracked white bridge paving; spiraling ocean wind and warm gold rimlight unite the trio. Strong forward momentum represents attack and speed opening boosts, with no enemy being hit. Three distinct anatomically clean figures, Luffy dominant, sea and courthouse clearly visible.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c47a-1cf8-7b83-afd2-ac60b9e9214b\\exec-73ebe375-7444-4270-b99a-84eee19b7696.png",
+      "sourceSha256": "30012829a210d3c64a91dede26822421b2b11da438dd034c391a32593c4e13a0",
+      "sourceBytes": 2803344,
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "finalPath": "public/images/board/adventure_reveal/v1/judicial-attack-1.webp",
+      "finalSha256": "e5ce9056397c232b3e9fd15afdf5298573525377952eea2a89eab8821f12ab28",
+      "finalBytes": 394748,
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "inspection": "Generated output inspected individually before encoding; final decoded and inspected separately",
+      "generator": "built-in GPT image_gen"
+    },
+    {
+      "key": "judicial-attack-2",
+      "resultId": "attack",
+      "variant": 2,
+      "prompt": "Use case: illustration-story. Create ONE complete cinematic One Piece game result illustration, EXACTLY 1536 x 1024 pixels, landscape 3:2. Faithful recognizable One Piece character faces, anatomy and signature costume details. Polished Japanese adventure anime: crisp expressive ink linework, rich clean cel shading with finely hand-painted architectural detail, deep navy shadows, luminous marine teal, antique golden sunlight and subtle airborne spray. Match the finish of premium painted anime game key art, not photorealism. Location is Enies Lobby, pale stone courthouse towers and the sea bridge above immense turquoise waterfalls. This is an illustrated supportive buff result, do not depict loot/items/stat numbers that are not awarded. Full scene edge to edge, coherent perspective, no text, no letters, no numerals, no UI, no card border, no watermark, no collage, no multi-panel layout. Show Roronoa Zoro as dominant foreground character in a controlled three-sword battle-ready stance, short green hair, white shirt, green waist sash, black trousers, one katana in each hand and one held cleanly in his mouth. Behind him Luffy runs along the courthouse balustrade in red vest. Diagonal side composition, wide bridge approach toward the enormous courthouse, flying dust and teal wind trails suggesting the whole crew is preparing an aggressive opening strike. Gold backlight outlines the swords; avoid impacts, injuries or defeated enemies. Composition correction: EXACTLY TWO CHARACTERS IN THE ENTIRE IMAGE: foreground Zoro and background Luffy only. No Sanji, no Nami, no Chopper, no Usopp, no Robin, no duplicated people, no background crowd. The long empty marble bridge and white courthouse occupy the remaining space. Zoro holds precisely three swords: two in hands, one in mouth.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c47a-1cf8-7b83-afd2-ac60b9e9214b\\exec-97eaf62b-0660-4808-9984-81e7d5e9a79e.png",
+      "sourceSha256": "271e52ec86e894902901d6f0d3eb5af4c8dbc790ebfe889567aead52a7c3f4a4",
+      "sourceBytes": 2983698,
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "finalPath": "public/images/board/adventure_reveal/v1/judicial-attack-2.webp",
+      "finalSha256": "fc67bb9649908557daf347eeb5b78bcc6b2f9798f3e8f209088d74f0e72e43dd",
+      "finalBytes": 451588,
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "inspection": "Generated output inspected individually before encoding; final decoded and inspected separately",
+      "generator": "built-in GPT image_gen"
+    },
+    {
+      "key": "judicial-attack-3",
+      "resultId": "attack",
+      "variant": 3,
+      "prompt": "Use case: illustration-story. Create ONE complete cinematic One Piece game result illustration, EXACTLY 1536 x 1024 pixels, landscape 3:2. Faithful recognizable One Piece character faces, anatomy and signature costume details. Polished Japanese adventure anime: crisp expressive ink linework, rich clean cel shading with finely hand-painted architectural detail, deep navy shadows, luminous marine teal, antique golden sunlight and subtle airborne spray. Match the finish of premium painted anime game key art, not photorealism. Location is Enies Lobby, pale stone courthouse towers and the sea bridge above immense turquoise waterfalls. This is an illustrated supportive buff result, do not depict loot/items/stat numbers that are not awarded. Full scene edge to edge, coherent perspective, no text, no letters, no numerals, no UI, no card border, no watermark, no collage, no multi-panel layout. Show Sanji, recognizably blond hair covering one eye, curled eyebrow and fitted black double-breasted suit, springing forward with one knee high and the other leg extending into an elegant running leap; Luffy follows farther back with a raised fist, and Nami in her Enies Lobby outfit urges the charge from the bridge. Side-on sweeping composition, long clear silhouettes across broken courthouse stairs, teal ocean spray below and low golden sunlight. Portray coordinated attack readiness and speed, not healing or treasure.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c47a-1cf8-7b83-afd2-ac60b9e9214b\\exec-cd029ab3-7a26-4f77-b283-0e60f91a9f56.png",
+      "sourceSha256": "3c5f9140eca104784688bc7eb0e620f3e44b7f8af31bd116b682f7d9d3ddd1c5",
+      "sourceBytes": 2854472,
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "finalPath": "public/images/board/adventure_reveal/v1/judicial-attack-3.webp",
+      "finalSha256": "37fdb150d5abe5594ab593b503ee1dcafcbb5b0d756d6ba67f2fac5494ffc37a",
+      "finalBytes": 409670,
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "inspection": "Generated output inspected individually before encoding; final decoded and inspected separately",
+      "generator": "built-in GPT image_gen"
+    },
+    {
+      "key": "judicial-defense-1",
+      "resultId": "defense",
+      "variant": 1,
+      "prompt": "Use case: illustration-story. Create ONE complete cinematic One Piece game result illustration, EXACTLY 1536 x 1024 pixels, landscape 3:2. Faithful recognizable One Piece character faces, anatomy and signature costume details. Polished Japanese adventure anime: crisp expressive ink linework, rich clean cel shading with finely hand-painted architectural detail, deep navy shadows, luminous marine teal, antique golden sunlight and subtle airborne spray. Match the finish of premium painted anime game key art, not photorealism. Location is Enies Lobby, pale stone courthouse towers and the sea bridge above immense turquoise waterfalls. This is an illustrated supportive buff result, do not depict loot/items/stat numbers that are not awarded. Full scene edge to edge, coherent perspective, no text, no letters, no numerals, no UI, no card border, no watermark, no collage, no multi-panel layout. Roronoa Zoro stands squarely in the foreground, green hair, white shirt and green haramaki, crossing two katanas in a stable defensive X while protecting Nami behind him. Distinct small pieces of harmless stone debris stop at the blades, his boots planted on the courthouse stair landing. Frontal symmetrical heroic defense composition with broken marble columns, navy shade and a narrow warm golden rim. Show durable defensive preparation, not a magical invincibility bubble or enemy harm.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c47a-1cf8-7b83-afd2-ac60b9e9214b\\exec-4bc47c77-229c-4424-9b88-adcc3f5c4af9.png",
+      "sourceSha256": "f94b522a7ad7600801957d8caf3dc47119d3b7588eaef801073468538a4d553e",
+      "sourceBytes": 2856660,
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "finalPath": "public/images/board/adventure_reveal/v1/judicial-defense-1.webp",
+      "finalSha256": "cb62adc64aa08a1ad315566df3283c17a9a4d2b564ada213444d40fc2c1b1d9d",
+      "finalBytes": 418764,
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "inspection": "Generated output inspected individually before encoding; final decoded and inspected separately",
+      "generator": "built-in GPT image_gen"
+    },
+    {
+      "key": "judicial-defense-2",
+      "resultId": "defense",
+      "variant": 2,
+      "prompt": "Use case: illustration-story. Create ONE complete cinematic One Piece game result illustration, EXACTLY 1536 x 1024 pixels, landscape 3:2. Faithful recognizable One Piece character faces, anatomy and signature costume details. Polished Japanese adventure anime: crisp expressive ink linework, rich clean cel shading with finely hand-painted architectural detail, deep navy shadows, luminous marine teal, antique golden sunlight and subtle airborne spray. Match the finish of premium painted anime game key art, not photorealism. Location is Enies Lobby, pale stone courthouse towers and the sea bridge above immense turquoise waterfalls. This is an illustrated supportive buff result, do not depict loot/items/stat numbers that are not awarded. Full scene edge to edge, coherent perspective, no text, no letters, no numerals, no UI, no card border, no watermark, no collage, no multi-panel layout. Franky, recognizable bright blue pompadour, square jaw, open Hawaiian shirt, huge cyborg forearms with blue star tattoos, crouches low and locks his mechanical forearms together like a solid barricade, shielding Chopper and Usopp behind him on an Enies Lobby bridge. Low three-quarter camera emphasizes metal weight and planted feet, mechanical plates catch antique golden light against pale courthouse arches and deep teal sea spray. Clear faces and clean hands, fierce protective courage, no written symbols or numbers.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c47a-1cf8-7b83-afd2-ac60b9e9214b\\exec-bce1d33a-c213-4b6e-81a7-0b314e32a086.png",
+      "sourceSha256": "51ec1dba9167559cd3b0eb4e4137c1ad7de49138bd7248138707612d3657bbe9",
+      "sourceBytes": 2892786,
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "finalPath": "public/images/board/adventure_reveal/v1/judicial-defense-2.webp",
+      "finalSha256": "a08d7f47225cdbcac391ae8c4da7af0cb7c9e33c5dcfa13f5ddd891c58465b98",
+      "finalBytes": 421602,
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "inspection": "Generated output inspected individually before encoding; final decoded and inspected separately",
+      "generator": "built-in GPT image_gen"
+    },
+    {
+      "key": "judicial-defense-3",
+      "resultId": "defense",
+      "variant": 3,
+      "prompt": "Use case: illustration-story. Create ONE complete cinematic One Piece game result illustration, EXACTLY 1536 x 1024 pixels, landscape 3:2. Faithful recognizable One Piece character faces, anatomy and signature costume details. Polished Japanese adventure anime: crisp expressive ink linework, rich clean cel shading with finely hand-painted architectural detail, deep navy shadows, luminous marine teal, antique golden sunlight and subtle airborne spray. Match the finish of premium painted anime game key art, not photorealism. Location is Enies Lobby, pale stone courthouse towers and the sea bridge above immense turquoise waterfalls. This is an illustrated supportive buff result, do not depict loot/items/stat numbers that are not awarded. Full scene edge to edge, coherent perspective, no text, no letters, no numerals, no UI, no card border, no watermark, no collage, no multi-panel layout. Sanji in his black suit braces sideways beside a broken courthouse doorway, one elegant raised shoe deflecting a falling timber away from Nico Robin, who stands safely inside in her Enies Lobby dark outfit with long black hair. Strong vertical doorway within a wide landscape composition, controlled precise defensive posture, marble dust, a warm gold shaft of light and dark blue-green shadows. Show a fortified protective opening stance with no injury and no full magic dome.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c47a-1cf8-7b83-afd2-ac60b9e9214b\\exec-d2855663-f8b9-4462-9712-a3056314aac8.png",
+      "sourceSha256": "bf4f0109e67c0c40fa9fe1d0d3a040b13a495b9c307abcaa32ec320cded4fd0e",
+      "sourceBytes": 2888345,
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "finalPath": "public/images/board/adventure_reveal/v1/judicial-defense-3.webp",
+      "finalSha256": "a2ec865e98a39c5c7cea94140157fe27d2bb9fc432d425de873f24a312b9b69a",
+      "finalBytes": 381350,
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "inspection": "Generated output inspected individually before encoding; final decoded and inspected separately",
+      "generator": "built-in GPT image_gen"
+    },
+    {
+      "key": "judicial-speed-1",
+      "resultId": "speed",
+      "variant": 1,
+      "prompt": "Use case: illustration-story. Create ONE complete cinematic One Piece game result illustration, EXACTLY 1536 x 1024 pixels, landscape 3:2. Faithful recognizable One Piece character faces, anatomy and signature costume details. Polished Japanese adventure anime: crisp expressive ink linework, rich clean cel shading with finely hand-painted architectural detail, deep navy shadows, luminous marine teal, antique golden sunlight and subtle airborne spray. Match the finish of premium painted anime game key art, not photorealism. Location is Enies Lobby, pale stone courthouse towers and the sea bridge above immense turquoise waterfalls. This is an illustrated supportive buff result, do not depict loot/items/stat numbers that are not awarded. Full scene edge to edge, coherent perspective, no text, no letters, no numerals, no UI, no card border, no watermark, no collage, no multi-panel layout. Monkey D. Luffy in a red vest and blue shorts dashes low across the Enies Lobby bridge, recognizable straw hat streaming from its neck cord, focused expressive eyes and cheek scar. Long lateral tracking composition, his hand skims above the paving, pale steam curls and teal motion ribbons trace an agile route between marble pillars, crisp sharp face while the environment carries painted speed strokes. Distant courthouse and waterfalls frame the clear path. Convey speed and accurate movement rather than a landed attack.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c47a-1cf8-7b83-afd2-ac60b9e9214b\\exec-9aa4fbed-c0a0-41d3-b9e9-64fd2102da10.png",
+      "sourceSha256": "f2dc45caaab781706be6875f23bec5b0c13939267106749592170b164c077195",
+      "sourceBytes": 2686768,
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "finalPath": "public/images/board/adventure_reveal/v1/judicial-speed-1.webp",
+      "finalSha256": "5ab244d3ba27159ae71687955fbd9152a506f163c937f94d784afb725d37b9bf",
+      "finalBytes": 363128,
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "inspection": "Generated output inspected individually before encoding; final decoded and inspected separately",
+      "generator": "built-in GPT image_gen"
+    },
+    {
+      "key": "judicial-speed-2",
+      "resultId": "speed",
+      "variant": 2,
+      "prompt": "Use case: illustration-story. Create ONE complete cinematic One Piece game result illustration, EXACTLY 1536 x 1024 pixels, landscape 3:2. Faithful recognizable One Piece character faces, anatomy and signature costume details. Polished Japanese adventure anime: crisp expressive ink linework, rich clean cel shading with finely hand-painted architectural detail, deep navy shadows, luminous marine teal, antique golden sunlight and subtle airborne spray. Match the finish of premium painted anime game key art, not photorealism. Location is Enies Lobby, pale stone courthouse towers and the sea bridge above immense turquoise waterfalls. This is an illustrated supportive buff result, do not depict loot/items/stat numbers that are not awarded. Full scene edge to edge, coherent perspective, no text, no letters, no numerals, no UI, no card border, no watermark, no collage, no multi-panel layout. Nami with orange hair, recognizable blue shoulder tattoo and Enies Lobby adventure outfit leads an agile sprint down courthouse stairs, holding her blue Clima-Tact close and pointing toward a precise open route with the other hand; Sanji follows at a smaller scale behind her. High oblique view with strong zigzag stair geometry, a gleaming teal wind current guides their feet, golden rail highlights and foaming ocean far below. Athletic purposeful movement, unobstructed readable faces, no combat hit.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c47a-1cf8-7b83-afd2-ac60b9e9214b\\exec-a2c8cc1f-5c6c-487b-8515-acc75f98638c.png",
+      "sourceSha256": "26aace6bd26db67c0a61f47e21efb67325420340a1b872a8592a1734b7544d3d",
+      "sourceBytes": 3045047,
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "finalPath": "public/images/board/adventure_reveal/v1/judicial-speed-2.webp",
+      "finalSha256": "4a6f65c8d0c15f10071814813953ad9f759f97633d7439173227252eee8db66d",
+      "finalBytes": 457346,
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "inspection": "Generated output inspected individually before encoding; final decoded and inspected separately",
+      "generator": "built-in GPT image_gen"
+    },
+    {
+      "key": "judicial-speed-3",
+      "resultId": "speed",
+      "variant": 3,
+      "prompt": "Use case: illustration-story. Create ONE complete cinematic One Piece game result illustration, EXACTLY 1536 x 1024 pixels, landscape 3:2. Faithful recognizable One Piece character faces, anatomy and signature costume details. Polished Japanese adventure anime: crisp expressive ink linework, rich clean cel shading with finely hand-painted architectural detail, deep navy shadows, luminous marine teal, antique golden sunlight and subtle airborne spray. Match the finish of premium painted anime game key art, not photorealism. Location is Enies Lobby, pale stone courthouse towers and the sea bridge above immense turquoise waterfalls. This is an illustrated supportive buff result, do not depict loot/items/stat numbers that are not awarded. Full scene edge to edge, coherent perspective, no text, no letters, no numerals, no UI, no card border, no watermark, no collage, no multi-panel layout. Usopp as Sogeking, unmistakable long nose, yellow sunlike mask with goggles and red cape, stands on the Enies Lobby bridge railing with his long Kabuto slingshot carefully aimed at a distant empty hanging target shape with no markings; Chopper races beneath him toward the next arch. Dynamic off-center composition with streaming cape, clean taut slingshot strings and precise sightline, speed streaks in the sea wind, dark navy courthouse shadows and golden morning glow. Express accuracy and swift assault route, not treasure or healing.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c47a-1cf8-7b83-afd2-ac60b9e9214b\\exec-94b96993-0400-4092-b212-a60c2e5864c1.png",
+      "sourceSha256": "5f7997624efd99fa9b247d2bf67a775c7fae8a8a465fe20bcb0debac707df86d",
+      "sourceBytes": 2837133,
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "finalPath": "public/images/board/adventure_reveal/v1/judicial-speed-3.webp",
+      "finalSha256": "f1fcb02c926fdbc800af29791a67d6af6f995f4dcc2eafb98cce1e2afe437e94",
+      "finalBytes": 411212,
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "inspection": "Generated output inspected individually before encoding; final decoded and inspected separately",
+      "generator": "built-in GPT image_gen"
+    },
+    {
+      "key": "judicial-shield-1",
+      "resultId": "shield",
+      "variant": 1,
+      "prompt": "Use case: illustration-story. Create ONE complete cinematic One Piece game result illustration, EXACTLY 1536 x 1024 pixels, landscape 3:2. Faithful recognizable One Piece character faces, anatomy and signature costume details. Polished Japanese adventure anime: crisp expressive ink linework, rich clean cel shading with finely hand-painted architectural detail, deep navy shadows, luminous marine teal, antique golden sunlight and subtle airborne spray. Match the finish of premium painted anime game key art, not photorealism. Location is Enies Lobby, pale stone courthouse towers and the sea bridge above immense turquoise waterfalls. This is an illustrated supportive buff result, do not depict loot/items/stat numbers that are not awarded. Full scene edge to edge, coherent perspective, no text, no letters, no numerals, no UI, no card border, no watermark, no collage, no multi-panel layout. Bartolomeo from One Piece, faithfully recognizable vivid green swept spiky hair, angular face, small nose ring and purple long coat, calmly demonstrates his Barrier-Barrier power on an Enies Lobby sea bridge. His index and middle fingers are crossed in the signature gesture. A broad luminous translucent green protective wall gently holds back ocean mist. Luffy and Nami stand safely behind it, smiling and admiring the shimmering refraction. Peaceful protective support scene, frontal heroic composition, white courthouse towers and blue waterfalls, warm antique-gold rimlight. No confrontation, no incoming projectiles, no injured people, no debris, no damaged architecture. Exactly three named characters.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c47a-1cf8-7b83-afd2-ac60b9e9214b\\exec-56dd272f-aa3a-4cdd-8ddb-5db3d849d0c1.png",
+      "sourceSha256": "c797e68a7fc590a02b4b5f7efa4aade49a0a376880531094e389538d674e8710",
+      "sourceBytes": 2791115,
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "finalPath": "public/images/board/adventure_reveal/v1/judicial-shield-1.webp",
+      "finalSha256": "42172d4ed5948b6685a0a6b1180baeb625bec30d81cb433de9bb25e9eeaea74d",
+      "finalBytes": 384026,
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "inspection": "Generated output inspected individually before encoding; final decoded and inspected separately",
+      "generator": "built-in GPT image_gen"
+    },
+    {
+      "key": "judicial-shield-2",
+      "resultId": "shield",
+      "variant": 2,
+      "prompt": "Use case: illustration-story. Create ONE complete cinematic One Piece game result illustration, EXACTLY 1536 x 1024 pixels, landscape 3:2. Faithful recognizable One Piece character faces, anatomy and signature costume details. Polished Japanese adventure anime: crisp expressive ink linework, rich clean cel shading with finely hand-painted architectural detail, deep navy shadows, luminous marine teal, antique golden sunlight and subtle airborne spray. Match the finish of premium painted anime game key art, not photorealism. Location is Enies Lobby, pale stone courthouse towers and the sea bridge above immense turquoise waterfalls. This is an illustrated supportive buff result, do not depict loot/items/stat numbers that are not awarded. Full scene edge to edge, coherent perspective, no text, no letters, no numerals, no UI, no card border, no watermark, no collage, no multi-panel layout. Bartolomeo from One Piece, recognizable vivid green punk hair, angular face and purple coat, kneels sideways on a clean Enies Lobby courthouse terrace, fingers crossed calmly. His tall translucent emerald barrier shields Zoro and Sanji from a strong but peaceful sea breeze; their clothes ripple outside the still sheltered space. Wide diagonal architectural composition, profile view of Bartolomeo, sunlit arches and softly sparkling ocean mist refracted in the glasslike wall. Calm cooperative protective support scene, no confrontation, projectiles, injuries or debris. Exactly three named characters.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c47a-1cf8-7b83-afd2-ac60b9e9214b\\exec-0b2976cf-ec4f-4aec-9ef1-7557a0c01140.png",
+      "sourceSha256": "60185f5bb50afdcd1c5785e40ed2973990060e9a4e5f0176b1a84c8e385dc5fa",
+      "sourceBytes": 2803945,
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "finalPath": "public/images/board/adventure_reveal/v1/judicial-shield-2.webp",
+      "finalSha256": "7e4ea853a2a18f0715194a5f44ea5a04ffe2a8155068cf14de2c161285ba3ac5",
+      "finalBytes": 405054,
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "inspection": "Generated output inspected individually before encoding; final decoded and inspected separately",
+      "generator": "built-in GPT image_gen"
+    },
+    {
+      "key": "judicial-shield-3",
+      "resultId": "shield",
+      "variant": 3,
+      "prompt": "Use case: illustration-story. Create ONE complete cinematic One Piece game result illustration, EXACTLY 1536 x 1024 pixels, landscape 3:2. Faithful recognizable One Piece character faces, anatomy and signature costume details. Polished Japanese adventure anime: crisp expressive ink linework, rich clean cel shading with finely hand-painted architectural detail, deep navy shadows, luminous marine teal, antique golden sunlight and subtle airborne spray. Match the finish of premium painted anime game key art, not photorealism. Location is Enies Lobby, pale stone courthouse towers and the sea bridge above immense turquoise waterfalls. This is an illustrated supportive buff result, do not depict loot/items/stat numbers that are not awarded. Full scene edge to edge, coherent perspective, no text, no letters, no numerals, no UI, no card border, no watermark, no collage, no multi-panel layout. Bartolomeo from One Piece with vivid green spiky hair and flowing purple coat kneels on one knee on an intact Enies Lobby bridge landing, serenely crossing his fingers to create a faceted translucent emerald canopy over Chopper and Usopp. The two look up with delight at sea spray beading harmlessly on the clear roof. Low camera looks upward past the three friendly characters toward white courthouse towers, blue waterfalls and broad golden sunbeams. Peaceful temporary protective support demonstration, no battle, enemies, weapons, injuries or falling rubble. Exactly three named characters.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c47a-1cf8-7b83-afd2-ac60b9e9214b\\exec-95cd1668-1db5-40eb-94c0-c60128e4a058.png",
+      "sourceSha256": "0f681055d224283edc5f99f9f18708497a586b72c5d0962bfe1199596b13dbdb",
+      "sourceBytes": 2992400,
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "finalPath": "public/images/board/adventure_reveal/v1/judicial-shield-3.webp",
+      "finalSha256": "ad1767616284fbaf5807f61d686d8ff712f3dd7c525e39abd251aac7794ceb9f",
+      "finalBytes": 449104,
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "inspection": "Generated output inspected individually before encoding; final decoded and inspected separately",
+      "generator": "built-in GPT image_gen"
+    },
+    {
+      "key": "judicial-revive-1",
+      "resultId": "revive",
+      "variant": 1,
+      "prompt": "Use case: illustration-story. Create ONE complete cinematic One Piece game result illustration, EXACTLY 1536 x 1024 pixels, landscape 3:2. Faithful recognizable One Piece character faces, anatomy and signature costume details. Polished Japanese adventure anime: crisp expressive ink linework, rich clean cel shading with finely hand-painted architectural detail, deep navy shadows, luminous marine teal, antique golden sunlight and subtle airborne spray. Match the finish of premium painted anime game key art, not photorealism. Location is Enies Lobby, pale stone courthouse towers and the sea bridge above immense turquoise waterfalls. This is an illustrated supportive buff result, do not depict loot/items/stat numbers that are not awarded. Full scene edge to edge, coherent perspective, no text, no letters, no numerals, no UI, no card border, no watermark, no collage, no multi-panel layout. Tony Tony Chopper, faithful small reindeer doctor with brown fur, antlers and pink hat, kneels beside exhausted Luffy on a sheltered Enies Lobby bridge landing. Luffy in his red vest is visibly conscious again, opening his eyes and pushing up on one elbow as Chopper steadies his shoulder and a neatly wrapped bandage. A small open medical satchel beside them, sea mist and distant white courthouse, intimate three-quarter composition, gentle golden light returns to their faces. Depict a fallen crew member getting back up, no blood, no ghost, no magical resurrection beam.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c47a-1cf8-7b83-afd2-ac60b9e9214b\\exec-54f20865-510b-4a88-a2e8-fcbbc037dd46.png",
+      "sourceSha256": "32818528839df1afe1ea2d02aff94ceca1b6fff9b8deb1558cdb401a6b4dbe1a",
+      "sourceBytes": 2756054,
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "finalPath": "public/images/board/adventure_reveal/v1/judicial-revive-1.webp",
+      "finalSha256": "dc510a9369fb8bea2bdb8a65918cf16b97309a22347dc614217d453c96d43c92",
+      "finalBytes": 370366,
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "inspection": "Generated output inspected individually before encoding; final decoded and inspected separately",
+      "generator": "built-in GPT image_gen"
+    },
+    {
+      "key": "judicial-revive-2",
+      "resultId": "revive",
+      "variant": 2,
+      "prompt": "Use case: illustration-story. Create ONE complete cinematic One Piece game result illustration, EXACTLY 1536 x 1024 pixels, landscape 3:2. Faithful recognizable One Piece character faces, anatomy and signature costume details. Polished Japanese adventure anime: crisp expressive ink linework, rich clean cel shading with finely hand-painted architectural detail, deep navy shadows, luminous marine teal, antique golden sunlight and subtle airborne spray. Match the finish of premium painted anime game key art, not photorealism. Location is Enies Lobby, pale stone courthouse towers and the sea bridge above immense turquoise waterfalls. This is an illustrated supportive buff result, do not depict loot/items/stat numbers that are not awarded. Full scene edge to edge, coherent perspective, no text, no letters, no numerals, no UI, no card border, no watermark, no collage, no multi-panel layout. Nico Robin with long black hair and her dark Enies Lobby outfit gently supports exhausted green-haired Zoro as he rises from one knee; Tony Tony Chopper stands close checking him with a relieved determined expression. Zoro's three sword scabbards remain visible at his waist, his posture shows strength returning. Wide side composition under a fractured courthouse colonnade, warm gold light through the arches, teal ocean behind. Emotional rescue of one fallen companion, not a party victory celebration, no blood, no extra rewards.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c47a-1cf8-7b83-afd2-ac60b9e9214b\\exec-17a94705-5186-49e0-8a78-1ff80df5fde5.png",
+      "sourceSha256": "0b185efbdc77810acae3f2f6ebb9aa0b7451ae9fe2e9d6cc4b3945776ef67ec8",
+      "sourceBytes": 2802565,
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "finalPath": "public/images/board/adventure_reveal/v1/judicial-revive-2.webp",
+      "finalSha256": "8badb841b02fa9273888bba61ecf2e00a3035d872ab6e557c8996ed2855d9cb6",
+      "finalBytes": 390500,
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "inspection": "Generated output inspected individually before encoding; final decoded and inspected separately",
+      "generator": "built-in GPT image_gen"
+    },
+    {
+      "key": "judicial-revive-3",
+      "resultId": "revive",
+      "variant": 3,
+      "prompt": "Use case: illustration-story. Create ONE complete cinematic One Piece game result illustration, EXACTLY 1536 x 1024 pixels, landscape 3:2. Faithful recognizable One Piece character faces, anatomy and signature costume details. Polished Japanese adventure anime: crisp expressive ink linework, rich clean cel shading with finely hand-painted architectural detail, deep navy shadows, luminous marine teal, antique golden sunlight and subtle airborne spray. Match the finish of premium painted anime game key art, not photorealism. Location is Enies Lobby, pale stone courthouse towers and the sea bridge above immense turquoise waterfalls. This is an illustrated supportive buff result, do not depict loot/items/stat numbers that are not awarded. Full scene edge to edge, coherent perspective, no text, no letters, no numerals, no UI, no card border, no watermark, no collage, no multi-panel layout. Sanji in a rumpled but recognizable black suit has regained consciousness and is sitting upright against the Enies Lobby bridge balustrade; Chopper offers a small cup of medicine while Nami kneels on his other side helping him stand. Sanji gives a weak reassuring smile, the companions are relieved and focused. Close-to-medium landscape composition with three clear faces, medical wraps and spray-damp stone, deep blue-green shadows, warm sunlit hands, immense waterfall glimpsed beyond the rail. Non-graphic field rescue and recovery, no magical halo or loot.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c47a-1cf8-7b83-afd2-ac60b9e9214b\\exec-cfc9c74a-15ab-4a56-9bd1-01b203cb2e78.png",
+      "sourceSha256": "698c832477dd27ee8a13cbe4c19fac4bbe5b5bf090503ec4c67e60b51d430dc4",
+      "sourceBytes": 2862684,
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "finalPath": "public/images/board/adventure_reveal/v1/judicial-revive-3.webp",
+      "finalSha256": "87aef98a38c6c4b87f5e09f3a4e434704551178a79bf7cc9aacc96c51ded0ec1",
+      "finalBytes": 404940,
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "inspection": "Generated output inspected individually before encoding; final decoded and inspected separately",
+      "generator": "built-in GPT image_gen"
+    },
+    {
+      "key": "judicial-burst-1",
+      "resultId": "burst",
+      "variant": 1,
+      "prompt": "Create one complete polished anime adventure illustration, exactly 1536 x 1024 pixels, landscape 3:2. A peaceful scene featuring recognizable One Piece characters. Precise expressive ink linework, rich cel shading, finely painted architecture, deep navy shadows, luminous marine teal and antique golden afternoon sunlight. Location: Enies Lobby, white stone courthouse towers, monumental sea bridges and immense turquoise waterfalls. Edge-to-edge cohesive scenic illustration, no collage or separate panels, no text, no letters, no numbers, no UI, no watermark or card border. The scene conveys companionship and renewed confidence. Monkey D. Luffy wears his classic red sleeveless vest, blue shorts and straw hat on his back, standing on broad intact white stone courthouse steps. He gives a confident warm grin and reaches an open hand back toward his friends. Behind him stand Roronoa Zoro with green hair, white shirt and green sash, and Sanji with blond hair and a neat black suit, both smiling quietly. Exactly three people, each appears once. Their relaxed but purposeful posture suggests they are ready to continue the journey together. Dramatic low-angle composition, flowing clouds, sunlit waterfall mist, subtle decorative gold and teal swirls in the sunlight. Empty hands, peaceful surroundings.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c47a-1cf8-7b83-afd2-ac60b9e9214b\\exec-145c1879-00c1-409e-be3a-1e0e19f43f74.png",
+      "sourceSha256": "a0f910b248740ce6ef152166d93d17a964d453bcbf23911b057c686a3fa32b9d",
+      "sourceBytes": 2874308,
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "finalPath": "public/images/board/adventure_reveal/v1/judicial-burst-1.webp",
+      "finalSha256": "cde289e03b810cca057e60a4b8389776aa2d874524915fc6fedb159b41487319",
+      "finalBytes": 432848,
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "inspection": "Generated output inspected individually before encoding; final decoded and inspected separately",
+      "generator": "built-in GPT image_gen"
+    },
+    {
+      "key": "judicial-burst-2",
+      "resultId": "burst",
+      "variant": 2,
+      "prompt": "Create one complete polished anime adventure illustration, exactly 1536 x 1024 pixels, landscape 3:2. A peaceful scene featuring recognizable One Piece characters. Precise expressive ink linework, rich cel shading, finely painted architecture, deep navy shadows, luminous marine teal and antique golden afternoon sunlight. Location: Enies Lobby, white stone courthouse towers, monumental sea bridges and immense turquoise waterfalls. Edge-to-edge cohesive scenic illustration, no collage or separate panels, no text, no letters, no numbers, no UI, no watermark or card border. The scene conveys companionship and renewed confidence. Usopp as Sogeking stands proudly on a broad safe stone terrace, wearing his iconic golden sun-shaped long-nosed mask, round goggles and flowing red cape. His left palm rests on his chest while his right open hand gestures toward the shining sea route. Luffy with black hair, red vest and straw hat, and tiny Tony Tony Chopper with reindeer antlers and pink hat, listen with cheerful hopeful expressions beside him. Exactly these three characters, each appears once. Sweeping upward diagonal composition, cape in ocean breeze, the enormous courthouse and waterfall horizon beyond. Quiet symbolic gold and teal ribbons of sunlight connect the companions. Peaceful friendly encouragement scene with empty hands.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c47a-1cf8-7b83-afd2-ac60b9e9214b\\exec-53fee236-0da4-4f3b-a377-5b62234ab172.png",
+      "sourceSha256": "626dad1e8b68368563a4da19b5ac9894d8cdc8a73aac193fd20726c7905f40c3",
+      "sourceBytes": 2886110,
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "finalPath": "public/images/board/adventure_reveal/v1/judicial-burst-2.webp",
+      "finalSha256": "421033edbadaef74dff87065364fd0d2083e214a174de3b12ea03d3ff5dc86b7",
+      "finalBytes": 437422,
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "inspection": "Generated output inspected individually before encoding; final decoded and inspected separately",
+      "generator": "built-in GPT image_gen"
+    },
+    {
+      "key": "judicial-burst-3",
+      "resultId": "burst",
+      "variant": 3,
+      "prompt": "Create one complete polished anime adventure illustration, exactly 1536 x 1024 pixels, landscape 3:2. A peaceful scene featuring recognizable One Piece characters. Precise expressive ink linework, rich cel shading, finely painted architecture, deep navy shadows, luminous marine teal and antique golden afternoon sunlight. Location: Enies Lobby, white stone courthouse towers, monumental sea bridges and immense turquoise waterfalls. Edge-to-edge cohesive scenic illustration, no collage or separate panels, no text, no letters, no numbers, no UI, no watermark or card border. The scene conveys companionship and renewed confidence. Nico Robin stands in the foreground wearing her dark Enies Lobby outfit with long black hair and a gentle determined smile. Beside her stand Nami with orange hair and a blue-and-white striped top, and Roronoa Zoro with green hair, white shirt and green sash. Exactly three characters, each appears once. The friends share a quiet confident glance and begin walking together across the wide intact white stone sea bridge. Panoramic eye-level composition, clear expressive faces, relaxed open hands, navy clouds parting to reveal warm golden sunlight on the vast turquoise waterfall mist and distant courthouse towers. Their friendship and willingness to continue is the central emotion. Peaceful scene.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c47a-1cf8-7b83-afd2-ac60b9e9214b\\exec-4854f03c-5ab3-421d-a9d9-10629b01c4bd.png",
+      "sourceSha256": "e2aec884000f975ec110777aa3f7782e7be257997b905aba9b957e2e6eb39155",
+      "sourceBytes": 2634162,
+      "sourceDimensions": [
+        1536,
+        1024
+      ],
+      "finalPath": "public/images/board/adventure_reveal/v1/judicial-burst-3.webp",
+      "finalSha256": "a9d592d1c431ad85c0c7ebe8292b05ebdd9d6365f6c5d4921eb89d05967a4c27",
+      "finalBytes": 380874,
+      "finalDimensions": [
+        1536,
+        1024
+      ],
+      "inspection": "Generated output inspected individually before encoding; final decoded and inspected separately",
+      "generator": "built-in GPT image_gen"
+    }
+  ],
+  "updatedAt": "2026-09-22T05:36:17.708540+00:00",
+  "count": 18
+}

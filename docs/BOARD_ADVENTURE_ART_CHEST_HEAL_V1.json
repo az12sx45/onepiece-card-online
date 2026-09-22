@@ -1,0 +1,375 @@
+{
+  "version": 1,
+  "generator": "built-in image_gen",
+  "scope": "Five chest result categories and judicial-heal, three independent scene variants each",
+  "referencePaths": [
+    "public/images/board/sea_event_reveal/v2/drifting-chests-1.webp",
+    "public/images/board/sea_event_reveal/v2/medical-ship-2.webp"
+  ],
+  "assets": [
+    {
+      "key": "chest-wood-1",
+      "prompt": "Use case: illustration-story. Asset: One Piece Voyage Records adventure result scene, chest-wood-1. Create one complete 1536x1024 landscape illustration (3:2). Faithful recognizable Monkey D. Luffy in straw hat, black hair, red vest and blue shorts has just opened a rough weathered wooden chest on the Thousand Sunny deck: it is definitely a TRAP, a spring-loaded puff of dark violet smoke and harmless snapping rope loops bursts out; Luffy recoils with startled comical alarm, no injury or gore, no coins or successful treasure. Dynamic low three-quarter view, chest large in foreground, ocean rigging and teal waves behind. Cinematic polished Japanese adventure anime, crisp confident ink outlines and rich cel shading, expressive faithful One Piece face, detailed painted wood and ocean, dark navy shadows, luminous teal ambient light and warm golden rim highlights, finish like high-quality anime feature-film illustration. One continuous scene, no text, letters, UI, borders, panels, collage, watermark. Clearly wooden chest with iron straps, never gold or gem chest. Do not crop face or essential chest.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c415-3ebc-7341-b24f-3dc6ec6a412c\\exec-a870133c-49ea-4009-9a37-c03d31ab5a1f.png",
+      "inspection": {
+        "passed": true,
+        "notes": "Inspected native generated output: recognizable named One Piece characters, single coherent trap scene, wooden chest, no successful treasure, no text."
+      },
+      "sourceSha256": "1edde6fa0ffae20b205555b722933fa935f7d2ac9a73d165bc7f20886a73a187",
+      "sourceBytes": 2614681,
+      "sourceWidth": 1536,
+      "sourceHeight": 1024,
+      "finalPath": "public/images/board/adventure_reveal/v1/chest-wood-1.webp",
+      "sha256": "f8487c6317fd389f9761219bcbdd7e961488668f3cb4f5edc68397189993fa11",
+      "bytes": 328954,
+      "width": 1536,
+      "height": 1024,
+      "format": "WebP",
+      "quality": 90
+    },
+    {
+      "key": "chest-wood-2",
+      "prompt": "Use case: illustration-story. Asset: One Piece Voyage Records adventure result scene. Create one complete 1536x1024 landscape illustration, 3:2. Cinematic polished Japanese adventure anime, faithful recognizable named One Piece character designs, expressive faces, crisp inked linework, rich cel shading, detailed hand-painted seafaring environment, dark navy shadows, luminous teal light and warm golden highlights. Single continuous scene, no text, letters, UI, borders, panels, collage, watermark. Faithful Usopp with long nose, curly black hair, goggles and utility overalls crouches on a moonlit ruined-island quay, pulling open a plain weathered WOODEN chest with dark iron bands. The chest is unmistakably a TRAP: a hidden spring mechanism shoots a large tangling rope net upward; Usopp jumps sideways with terrified comic expression. Small smoke burst, no injuries, no gore, no gold or coins. Full chest visible near center, Usopp face visible on right, sweeping rope motion leads into navy ocean and ruined arch on left. Chest must read as cheap rough wood, not jeweled treasure. Variant composition is a wide eye-level side view.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c415-3ebc-7341-b24f-3dc6ec6a412c\\exec-73ba10f7-d641-4abb-965f-5d15fa2c55fe.png",
+      "inspection": {
+        "passed": true,
+        "notes": "Inspected native generated output: recognizable named One Piece characters, single coherent trap scene, wooden chest, no successful treasure, no text."
+      },
+      "sourceSha256": "cd618bc8ab736cde068979014075ea5e8d92a052cfc8cfd7859d717d6b829e0a",
+      "sourceBytes": 2794646,
+      "sourceWidth": 1536,
+      "sourceHeight": 1024,
+      "finalPath": "public/images/board/adventure_reveal/v1/chest-wood-2.webp",
+      "sha256": "43a850e197a7bfb12157c97d31b4a8a8cc874732ed91775a10e23b653819dc35",
+      "bytes": 398886,
+      "width": 1536,
+      "height": 1024,
+      "format": "WebP",
+      "quality": 90
+    },
+    {
+      "key": "chest-wood-3",
+      "prompt": "Use case: illustration-story. Asset: One Piece Voyage Records adventure result scene. Create one complete 1536x1024 landscape illustration, 3:2. Cinematic polished Japanese adventure anime, faithful recognizable named One Piece character designs, expressive faces, crisp inked linework, rich cel shading, detailed hand-painted seafaring environment, dark navy shadows, luminous teal light and warm golden highlights. Single continuous scene, no text, letters, UI, borders, panels, collage, watermark. Faithful orange-haired Nami in her recognizable blue-and-white striped top and jeans and Tony Tony Chopper with antlers and blue/pink X hat discover a WOODEN chest trap in a derelict ship cabin. The open rough iron-banded wooden box emits a swirling violet sleeping-smoke cloud from a visible old trap mechanism. Nami covers her nose and pulls startled Chopper away; both concerned, no injuries or gore. Neither character celebrates; no coins, jewels or successful reward. High diagonal viewpoint across the chest toward characters, overturned rope coil, blue twilight through broken portholes and golden lantern rimlight. Clearly rough timber box, not gold.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c415-3ebc-7341-b24f-3dc6ec6a412c\\exec-31ab99ac-e7a7-4687-8a08-4387f4c18b65.png",
+      "inspection": {
+        "passed": true,
+        "notes": "Inspected native generated output: recognizable named One Piece characters, single coherent trap scene, wooden chest, no successful treasure, no text."
+      },
+      "sourceSha256": "7ef98488e2c014f488ba426af483f74501f272239acbc94417f15039b9cae65f",
+      "sourceBytes": 2479321,
+      "sourceWidth": 1536,
+      "sourceHeight": 1024,
+      "finalPath": "public/images/board/adventure_reveal/v1/chest-wood-3.webp",
+      "sha256": "d429d713019c0a007f52ec3d98ff36cd7395b971ea36994368050bbbb3ce8d89",
+      "bytes": 302092,
+      "width": 1536,
+      "height": 1024,
+      "format": "WebP",
+      "quality": 90
+    },
+    {
+      "key": "chest-copper-1",
+      "prompt": "Use case: illustration-story. Asset: One Piece Voyage Records adventure result scene. Create one complete 1536x1024 landscape illustration, 3:2. Cinematic polished Japanese adventure anime, faithful recognizable named One Piece character designs, expressive faces, crisp inked linework, rich cel shading, detailed hand-painted seafaring environment, dark navy shadows, luminous teal light and warm golden highlights. Single continuous scene, no text, letters, UI, borders, panels, collage, watermark. Faithful orange-haired Nami with her recognizable blue-and-white striped top and jeans kneels beside an open COPPER treasure chest on the Thousand Sunny deck in morning sun. Rich reddish-brown copper panels and copper clasps, subtle green patina at corners, absolutely distinct from gold or silver. She smiles as she finds a modest small pouch of ordinary coins and wrapped practical sailing supplies inside, no jewels, no crowns, no weapons. Three-quarter medium-wide shot with her face and whole chest readable, ocean turquoise wave line behind and mast framing left. Warm rewarding but modest result; detailed copper reflections and deck planks.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c415-3ebc-7341-b24f-3dc6ec6a412c\\exec-07090cba-7704-4d0b-9b4d-58a4f63b7461.png",
+      "inspection": {
+        "passed": true,
+        "notes": "Inspected native output: faithful One Piece character, copper material, modest reward and sailing supplies, complete scene without text."
+      },
+      "sourceSha256": "0d51dfe72559347c7576697d7e45e755af2f48509a1fb444faf983c423e58c0d",
+      "sourceBytes": 2748505,
+      "sourceWidth": 1536,
+      "sourceHeight": 1024,
+      "finalPath": "public/images/board/adventure_reveal/v1/chest-copper-1.webp",
+      "sha256": "8ab57f3d61cbaeff01b32752978ba0329e23b448d5e516c673ce5e5b90f58074",
+      "bytes": 394062,
+      "width": 1536,
+      "height": 1024,
+      "format": "WebP",
+      "quality": 90
+    },
+    {
+      "key": "chest-copper-2",
+      "prompt": "Use case: illustration-story. Asset: One Piece Voyage Records adventure result scene. Create one complete 1536x1024 landscape illustration, 3:2. Cinematic polished Japanese adventure anime, faithful recognizable named One Piece character designs, expressive faces, crisp inked linework, rich cel shading, detailed hand-painted seafaring environment, dark navy shadows, luminous teal light and warm golden highlights. Single continuous scene, no text, letters, UI, borders, panels, collage, watermark. Faithful Sanji with blonde fringe covering one eye, curled eyebrow and black double-breasted suit lifts the lid of a reddish COPPER-bound chest at a rocky island landing. Modest ordinary coins and anonymous neatly wrapped provisioning bundles visible inside, no named special items or gemstones. Sanji pleased and calm, sea breeze moving jacket; copper chest dominates lower left, Sanji on right in full torso, sunlit turquoise surf and small boat behind. Side-profile low-angle composition, detailed reddish copper with muted green age patina, visually copper rather than gold.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c415-3ebc-7341-b24f-3dc6ec6a412c\\exec-71f28d01-2443-45d8-9220-7ecaec8b6cfd.png",
+      "inspection": {
+        "passed": true,
+        "notes": "Inspected native output: faithful One Piece character, copper material, modest reward and sailing supplies, complete scene without text."
+      },
+      "sourceSha256": "1e5a4ff4a91f839b580d9406b404704c3acaf26576fb9a3bf6bf75ab282635e9",
+      "sourceBytes": 2751863,
+      "sourceWidth": 1536,
+      "sourceHeight": 1024,
+      "finalPath": "public/images/board/adventure_reveal/v1/chest-copper-2.webp",
+      "sha256": "d3485470dd3ef73f62bf5aa061e71119b44a61ed34419db618426eeb6fbdc91a",
+      "bytes": 400356,
+      "width": 1536,
+      "height": 1024,
+      "format": "WebP",
+      "quality": 90
+    },
+    {
+      "key": "chest-copper-3",
+      "prompt": "Use case: illustration-story. Asset: One Piece Voyage Records adventure result scene. Create one complete 1536x1024 landscape illustration, 3:2. Cinematic polished Japanese adventure anime, faithful recognizable named One Piece character designs, expressive faces, crisp inked linework, rich cel shading, detailed hand-painted seafaring environment, dark navy shadows, luminous teal light and warm golden highlights. Single continuous scene, no text, letters, UI, borders, panels, collage, watermark. Faithful Usopp with long nose, curly hair, goggles and utility overalls proudly raises a small ordinary coin pouch from an open COPPER chest on a sheltered ship workbench. The chest has broad warm red-brown copper panels and sturdy copper corners, shallow green patina, visibly not gold, with generic fabric-wrapped practical supplies still inside. Cheerful modest reward, no jewels or major treasure hoard. Close overhead diagonal composition across copper chest with Usopp's excited face center-left, ship tools softly out of focus behind, open blue sea visible through cabin doorway. Rich metallic material rendering.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c415-3ebc-7341-b24f-3dc6ec6a412c\\exec-6cfa3261-3cf6-4b75-a59a-d780d82fd0d8.png",
+      "inspection": {
+        "passed": true,
+        "notes": "Inspected native output: faithful One Piece character, copper material, modest reward and sailing supplies, complete scene without text."
+      },
+      "sourceSha256": "bc43e7f651c5b43ec81c1d4c6b2bd645d46d55f2c1dc003f9cfaa814cf9276df",
+      "sourceBytes": 2608850,
+      "sourceWidth": 1536,
+      "sourceHeight": 1024,
+      "finalPath": "public/images/board/adventure_reveal/v1/chest-copper-3.webp",
+      "sha256": "7728f9978248f3a6aa6b5abdda214339f906b055b7cfcf4bc29a7a218ce4db1c",
+      "bytes": 337450,
+      "width": 1536,
+      "height": 1024,
+      "format": "WebP",
+      "quality": 90
+    },
+    {
+      "key": "chest-silver-1",
+      "prompt": "Use case: illustration-story. Asset: One Piece Voyage Records adventure result scene. Create one complete 1536x1024 landscape illustration, 3:2. Cinematic polished Japanese adventure anime, faithful recognizable named One Piece character designs, expressive faces, crisp inked linework, rich cel shading, detailed hand-painted seafaring environment, dark navy shadows, luminous teal light and warm golden highlights. Single continuous scene, no text, letters, UI, borders, panels, collage, watermark. Faithful Nico Robin, recognizable adult woman with straight black hair and calm intelligent eyes, wearing her purple adventure jacket, discovers a polished SILVER chest in an ancient seaside stone ruin. Broad bright cool silver panels and engraved silver hardware, blue velvet lining. She opens it with an elegant thoughtful smile; moderate ordinary gold coins and anonymous wrapped sailing supplies visible within, no gems, no swords or special powers. Chest in center foreground, Robin seated to left in three-quarter view, sea through broken arches to right; noon turquoise water reflects cool light onto silver; warm soft rim highlights.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c415-3ebc-7341-b24f-3dc6ec6a412c\\exec-07cfd447-d174-4bd4-a77a-992f48062fa2.png",
+      "inspection": {
+        "passed": true,
+        "notes": "Inspected native output: recognizable One Piece character, silver chest clearly different from copper, useful supplies and ordinary coins, no text or panels."
+      },
+      "sourceSha256": "ca11a1b0b5201ac3f08021d80998408a39d8179609fb4e3e8a252896ce18e7b3",
+      "sourceBytes": 2972443,
+      "sourceWidth": 1536,
+      "sourceHeight": 1024,
+      "finalPath": "public/images/board/adventure_reveal/v1/chest-silver-1.webp",
+      "sha256": "9493928a7c6519cc8d4d9f1434b46c05e04265b5f5299fd9e5eb8d4c32418f5a",
+      "bytes": 443516,
+      "width": 1536,
+      "height": 1024,
+      "format": "WebP",
+      "quality": 90
+    },
+    {
+      "key": "chest-silver-2",
+      "prompt": "Use case: illustration-story. Asset: One Piece Voyage Records adventure result scene. Create one complete 1536x1024 landscape illustration, 3:2. Cinematic polished Japanese adventure anime, faithful recognizable named One Piece character designs, expressive faces, crisp inked linework, rich cel shading, detailed hand-painted seafaring environment, dark navy shadows, luminous teal light and warm golden highlights. Single continuous scene, no text, letters, UI, borders, panels, collage, watermark. Faithful green-haired Roronoa Zoro with three sheathed swords at his belt, white shirt and green haramaki, crouches to open a gleaming SILVER chest on a wet ship deck after rain. Broad cool white-metal panels and silver clasps, distinctly not gold/copper. Moderate coin pouch and generic bundled useful supplies inside. Zoro looks mildly impressed, no combat pose or drawn blades. Low frontal wide composition with chest large central and Zoro behind to right; deep blue clouds receding and warm beam of sun making silver edges shimmer; readable happy discovery, no jewels.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c415-3ebc-7341-b24f-3dc6ec6a412c\\exec-884ac5d7-a550-4683-ac68-13a7c1775728.png",
+      "inspection": {
+        "passed": true,
+        "notes": "Inspected native output: recognizable One Piece character, silver chest clearly different from copper, useful supplies and ordinary coins, no text or panels."
+      },
+      "sourceSha256": "5c4c76c7c73dfbd198adb188950213df1c55f801d26bddbd5570c4ad1dc55f5e",
+      "sourceBytes": 2737298,
+      "sourceWidth": 1536,
+      "sourceHeight": 1024,
+      "finalPath": "public/images/board/adventure_reveal/v1/chest-silver-2.webp",
+      "sha256": "2761e0b70de0f1c2bd1c16cf39cf46246d6fff1e2f2bcb2068c139e8e585b0d4",
+      "bytes": 361336,
+      "width": 1536,
+      "height": 1024,
+      "format": "WebP",
+      "quality": 90
+    },
+    {
+      "key": "chest-silver-3",
+      "prompt": "Use case: illustration-story. Asset: One Piece Voyage Records adventure result scene. Create one complete 1536x1024 landscape illustration, 3:2. Cinematic polished Japanese adventure anime, faithful recognizable named One Piece character designs, expressive faces, crisp inked linework, rich cel shading, detailed hand-painted seafaring environment, dark navy shadows, luminous teal light and warm golden highlights. Single continuous scene, no text, letters, UI, borders, panels, collage, watermark. Faithful Monkey D. Luffy in straw hat red vest and blue shorts and small Tony Tony Chopper in blue/pink X hat lean excitedly around an open SILVER chest on a tropical cove beach. Cool polished silver ribbing and white-metal panels, blue interior fabric. A sensible stash of ordinary coins and wrapped supply packages inside, no precious gems or unique magical objects. Joyful character faces, whole silver chest visible, Luffy left and Chopper right; medium-wide elevated diagonal composition, sunlit teal surf and little ship behind; bright silver distinct from gold.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c415-3ebc-7341-b24f-3dc6ec6a412c\\exec-ffe17786-5f0d-4e84-8df0-897aa26d8b87.png",
+      "inspection": {
+        "passed": true,
+        "notes": "Inspected native output: recognizable One Piece character, silver chest clearly different from copper, useful supplies and ordinary coins, no text or panels."
+      },
+      "sourceSha256": "0576d64d596320f279dc3f6b7eb2c3914ad179c0a5ce48bc41e3586cd614c98b",
+      "sourceBytes": 2811764,
+      "sourceWidth": 1536,
+      "sourceHeight": 1024,
+      "finalPath": "public/images/board/adventure_reveal/v1/chest-silver-3.webp",
+      "sha256": "eab7ffd8ccf26b518be4f0df5f40308c3d5d36168d370836e3503f83becc1a47",
+      "bytes": 399864,
+      "width": 1536,
+      "height": 1024,
+      "format": "WebP",
+      "quality": 90
+    },
+    {
+      "key": "chest-gold-1",
+      "prompt": "Use case: illustration-story. Asset: One Piece Voyage Records adventure result scene. Create one complete 1536x1024 landscape illustration, 3:2. Cinematic polished Japanese adventure anime, faithful recognizable named One Piece character designs, expressive faces, crisp inked linework, rich cel shading, detailed hand-painted seafaring environment, dark navy shadows, luminous teal light and warm golden highlights. Single continuous scene, no text, letters, UI, borders, panels, collage, watermark. Faithful Monkey D. Luffy in straw hat, red vest and blue shorts throws his head back in a broad delighted grin behind an open ornate GOLD chest on the Thousand Sunny deck at sunset. Entire chest is gilded gold metal with embossed ocean-wave motifs, rich deep-red lining, substantial heap of ordinary gold coins and fabric-wrapped useful supplies inside. Rewarding adventure discovery, no gemstones, no crown, no unique weapon or Devil Fruit, no claiming a specific extra reward. Chest occupies lower center, Luffy seated behind with arms raised, Sunny lion figurehead and glowing ocean horizon left. Warm golden treasure light balances navy/teal shadows, low heroic wide-angle composition, full face and chest visible.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c415-3ebc-7341-b24f-3dc6ec6a412c\\exec-2675f36b-59a4-41a8-90d4-5572a0adc332.png",
+      "inspection": {
+        "passed": true,
+        "notes": "Inspected native output: recognizable One Piece characters, richly gilded gold chest, varied deck/grotto/cabin composition, coins and generic supplies, no unique ungranted reward."
+      },
+      "sourceSha256": "0dd6c1615a7d07f2056db8968588e15b40be3f2db68721a72653b76d89992eb7",
+      "sourceBytes": 2873072,
+      "sourceWidth": 1536,
+      "sourceHeight": 1024,
+      "finalPath": "public/images/board/adventure_reveal/v1/chest-gold-1.webp",
+      "sha256": "a6200195a4debc074c57b0c917ecfbf81197afbf8cccdbd86237ea5e9ca6c0a5",
+      "bytes": 474858,
+      "width": 1536,
+      "height": 1024,
+      "format": "WebP",
+      "quality": 90
+    },
+    {
+      "key": "chest-gold-2",
+      "prompt": "Use case: illustration-story. Asset: One Piece Voyage Records adventure result scene. Create one complete 1536x1024 landscape illustration, 3:2. Cinematic polished Japanese adventure anime, faithful recognizable named One Piece character designs, expressive faces, crisp inked linework, rich cel shading, detailed hand-painted seafaring environment, dark navy shadows, luminous teal light and warm golden highlights. Single continuous scene, no text, letters, UI, borders, panels, collage, watermark. Faithful Nami with orange hair and recognizable blue-white striped top plus Nico Robin in a purple adventure jacket stand over an open ornate GOLD treasure chest recovered from a coral-lined seaside grotto. Nami is delighted counting a handful of ordinary coins; Robin calmly holds the broad solid-gold lid. Chest has warm yellow gilded metal panels, intricate nautical wave engravings and burgundy fabric, substantial ordinary gold coins and anonymous wrapped practical supplies, no jewels, no weapons, no Devil Fruit. Different composition: high diagonal view from inside the grotto toward sparkling teal lagoon, chest lower right, characters center left, shafts of golden sun illuminating suspended sea mist. Faithful facial designs and realistic hands.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c415-3ebc-7341-b24f-3dc6ec6a412c\\exec-b726e9c0-7575-452b-b0e4-cb61c27991b0.png",
+      "inspection": {
+        "passed": true,
+        "notes": "Inspected native output: recognizable One Piece characters, richly gilded gold chest, varied deck/grotto/cabin composition, coins and generic supplies, no unique ungranted reward."
+      },
+      "sourceSha256": "a9f70db0bb2422bfa2dcdf7ebd3e56f59c1c07b0cedad9b7bf29ce8700b5596f",
+      "sourceBytes": 2993163,
+      "sourceWidth": 1536,
+      "sourceHeight": 1024,
+      "finalPath": "public/images/board/adventure_reveal/v1/chest-gold-2.webp",
+      "sha256": "05d10683301065f00878ababa53c3d7f652c51304b55c6b6d10d1b7aa6f6d742",
+      "bytes": 457134,
+      "width": 1536,
+      "height": 1024,
+      "format": "WebP",
+      "quality": 90
+    },
+    {
+      "key": "chest-gold-3",
+      "prompt": "Use case: illustration-story. Asset: One Piece Voyage Records adventure result scene. Create one complete 1536x1024 landscape illustration, 3:2. Cinematic polished Japanese adventure anime, faithful recognizable named One Piece character designs, expressive faces, crisp inked linework, rich cel shading, detailed hand-painted seafaring environment, dark navy shadows, luminous teal light and warm golden highlights. Single continuous scene, no text, letters, UI, borders, panels, collage, watermark. Faithful Franky from One Piece, recognizable blue pompadour, metal nose, huge bare forearms and open red Hawaiian shirt, triumphantly lifts the lid of a large GOLD chest in the Thousand Sunny ship's treasure-storage cabin. Broad polished warm gold panels and gold nautical relief decoration, deep red interior. A generous pile of ordinary gold coins and generic useful wrapped sailing supplies is visible; no gems, no Devil Fruits, no weapons. Franky looks proudly delighted, his full face visible; muscular hands naturally placed. Broad eye-level composition with chest on left and Franky center-right, brass portholes reveal deep teal ocean, golden lanterns and rich navy shadows, different setting from other variants. One gold chest only, full scene.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c415-3ebc-7341-b24f-3dc6ec6a412c\\exec-9107bf94-e341-4b70-9a28-56ad39f4c6b8.png",
+      "inspection": {
+        "passed": true,
+        "notes": "Inspected native output: recognizable One Piece characters, richly gilded gold chest, varied deck/grotto/cabin composition, coins and generic supplies, no unique ungranted reward."
+      },
+      "sourceSha256": "e7a2da5334ebcb396f80caf22e83ad5e71c3aa233dd205a66edbeea6f6dbac8f",
+      "sourceBytes": 2646101,
+      "sourceWidth": 1536,
+      "sourceHeight": 1024,
+      "finalPath": "public/images/board/adventure_reveal/v1/chest-gold-3.webp",
+      "sha256": "7073856a674934aceaa3eee8411dee346bd8399dd10671a9d5e160479f1759ce",
+      "bytes": 382294,
+      "width": 1536,
+      "height": 1024,
+      "format": "WebP",
+      "quality": 90
+    },
+    {
+      "key": "chest-gem-1",
+      "prompt": "Use case: illustration-story. Asset: One Piece Voyage Records adventure result scene. Create one complete 1536x1024 landscape illustration, 3:2. Cinematic polished Japanese adventure anime, faithful recognizable named One Piece character designs, expressive faces, crisp inked linework, rich cel shading, detailed hand-painted seafaring environment, dark navy shadows, luminous teal light and warm golden highlights. Single continuous scene, no text, letters, UI, borders, panels, collage, watermark. Faithful orange-haired Nami and straw-hatted Monkey D. Luffy joyfully open an extremely rare GEM-INLAID chest inside an ancient ocean temple. Chest exterior is magnificent deep cobalt-blue enamel with ornate gold filigree and securely mounted large emerald, ruby and sapphire jewels on the OUTSIDE, obviously a jewel chest rather than an ordinary gold chest. Interior has purple velvet, many ordinary gold coins and a few anonymous satin-wrapped rare sailing-supply bundles, NO loose gemstones, unique weapons, Devil Fruits or magical powers. Nami kneels on left, Luffy amazed on right, chest foreground center, huge fractured stone window with teal ocean behind. Low symmetrical heroic scene, sparkling inset gems and warm gold illumination, luxurious but grounded anime adventure.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c415-3ebc-7341-b24f-3dc6ec6a412c\\exec-d3773a00-96bf-4298-8030-676bffb8b6cc.png",
+      "inspection": {
+        "passed": true,
+        "notes": "Inspected native output: recognizable One Piece characters, gem-inlaid chest material, distinct temple/night-deck/dock compositions, coins and generic supplies without unique special rewards."
+      },
+      "sourceSha256": "569a1bbbc774be1a9de2be940c09a6b3a0f9c6e092bd9b5350d7ddd8b86fee9f",
+      "sourceBytes": 3055539,
+      "sourceWidth": 1536,
+      "sourceHeight": 1024,
+      "finalPath": "public/images/board/adventure_reveal/v1/chest-gem-1.webp",
+      "sha256": "e26b2844972212ebd6118e16baff81620d6904ed4718acf971424cd55198f75e",
+      "bytes": 494188,
+      "width": 1536,
+      "height": 1024,
+      "format": "WebP",
+      "quality": 90
+    },
+    {
+      "key": "chest-gem-2",
+      "prompt": "Use case: illustration-story. Asset: One Piece Voyage Records adventure result scene. Create one complete 1536x1024 landscape illustration, 3:2. Cinematic polished Japanese adventure anime, faithful recognizable named One Piece character designs, expressive faces, crisp inked linework, rich cel shading, detailed hand-painted seafaring environment, dark navy shadows, luminous teal light and warm golden highlights. Single continuous scene, no text, letters, UI, borders, panels, collage, watermark. Faithful Nico Robin with straight black hair and purple adventure jacket and Brook the cheerful tall afro-haired skeleton gentleman wearing a dark formal suit stand beside an open GEM-INLAID chest on the Thousand Sunny deck under a starry navy night sky. Brook is friendly and elegant, not scary; Robin smiles thoughtfully. Chest exterior deep emerald enamel and intricate golden sea-scroll filigree with multiple large firmly inset sapphire and ruby gems, not loose jewels. Interior purple velvet, many ordinary coins and neatly tied generic precious supply bundles, no named magical relic, Devil Fruit or unique weapon. Side-angle medium-wide scene, chest lower left, Robin center, Brook right with bowing delighted posture, face clearly visible. Teal moonlight and warm golden lantern light sparkle on mounted chest gems; rich polished anime finish.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c415-3ebc-7341-b24f-3dc6ec6a412c\\exec-6b443075-1407-4aea-a0d8-0fee74072ec2.png",
+      "inspection": {
+        "passed": true,
+        "notes": "Inspected native output: recognizable One Piece characters, gem-inlaid chest material, distinct temple/night-deck/dock compositions, coins and generic supplies without unique special rewards."
+      },
+      "sourceSha256": "48bb057252e9ce51a0045d605b8ee5ae464f5823e1900b0c2105bc860081f610",
+      "sourceBytes": 2530893,
+      "sourceWidth": 1536,
+      "sourceHeight": 1024,
+      "finalPath": "public/images/board/adventure_reveal/v1/chest-gem-2.webp",
+      "sha256": "cde4e320ef650a05213d9c6ffe727520f14ac9f6e5112e9f2c26bd5b647dc138",
+      "bytes": 341732,
+      "width": 1536,
+      "height": 1024,
+      "format": "WebP",
+      "quality": 90
+    },
+    {
+      "key": "chest-gem-3",
+      "prompt": "Use case: illustration-story. Asset: One Piece Voyage Records adventure result scene. Create one complete 1536x1024 landscape illustration, 3:2. Cinematic polished Japanese adventure anime, faithful recognizable named One Piece character designs, expressive faces, crisp inked linework, rich cel shading, detailed hand-painted seafaring environment, dark navy shadows, luminous teal light and warm golden highlights. Single continuous scene, no text, letters, UI, borders, panels, collage, watermark. Faithful Jinbe from One Piece, large broad blue whale-shark fish-man with tusks and topknot wearing his orange patterned kimono, kneels proudly beside small Tony Tony Chopper in blue-and-pink X hat at a seaside stone dock. They have just opened one luxurious GEM-INLAID chest salvaged onto the dock. Chest deep royal-violet enamel with ornate gold filigree, broad gold corners and large green/blue/red gems securely mounted on exterior; interior purple velvet containing ordinary gold coins and anonymous tied supply bundles only. No loose gems, no magic fruit or weapons. Chopper leans forward in delighted curiosity while Jinbe smiles warmly. Elevated three-quarter wide composition, whole jewel chest lower center, ocean spray and Thousand Sunny sails behind, late-afternoon gold and luminous teal light; distinct from temple and night deck variants.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c415-3ebc-7341-b24f-3dc6ec6a412c\\exec-687af74e-0b24-4aee-af4d-67bd8db13eb2.png",
+      "inspection": {
+        "passed": true,
+        "notes": "Inspected native output: recognizable One Piece characters, gem-inlaid chest material, distinct temple/night-deck/dock compositions, coins and generic supplies without unique special rewards."
+      },
+      "sourceSha256": "e032cb7ffc15174eecb635e3ba2b9c89a6d004d383993ce3caace2ed95fe4c77",
+      "sourceBytes": 2733874,
+      "sourceWidth": 1536,
+      "sourceHeight": 1024,
+      "finalPath": "public/images/board/adventure_reveal/v1/chest-gem-3.webp",
+      "sha256": "68b11b822ec426b684440027ab32c6ab1bf4bc1a5f308813aaff99a733b58055",
+      "bytes": 411342,
+      "width": 1536,
+      "height": 1024,
+      "format": "WebP",
+      "quality": 90
+    },
+    {
+      "key": "judicial-heal-1",
+      "prompt": "Use case: illustration-story. Asset: One Piece Voyage Records adventure result scene. Create one complete 1536x1024 landscape illustration, 3:2. Cinematic polished Japanese adventure anime, faithful recognizable named One Piece character designs, expressive faces, crisp inked linework, rich cel shading, detailed hand-painted seafaring environment, dark navy shadows, luminous teal light and warm golden highlights. Single continuous scene, no text, letters, UI, borders, panels, collage, watermark. Adventure result: Enies Lobby LUXURY EMERGENCY MEDICAL SUPPLIES fully restore the team's HP. Faithful Tony Tony Chopper as recognizable tiny reindeer doctor with antlers and pink X hat stands central on an open overflowing deluxe first-aid case in the Enies Lobby courthouse courtyard, handing clean bandages to smiling straw-hatted Luffy. Healthy green-haired Zoro and orange-haired Nami sit nearby stretching after treatment; Sanji and Robin relaxed in background ready to continue. Everybody looks restored and lively, no unconscious people, no serious injury, no blood. Clearly show abundant pristine bandages, white towels, simple unlabelled medicine bottles and water, gentle teal highlights suggesting renewed vitality, not spellcasting. Wide group composition with foreground medical case, monumental white courthouse arches and distant bridge over the sea, sunlit navy/teal/gold atmosphere. No money or treasure, no text, HP meters or UI.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c415-3ebc-7341-b24f-3dc6ec6a412c\\exec-22cb7fcd-14a5-419c-b9df-4a56e200185a.png",
+      "inspection": {
+        "passed": true,
+        "notes": "Inspected native output: faithful Chopper and multiple Straw Hat teammates, Enies Lobby treatment scene, medical supplies and visibly restored team, three distinct compositions, no money or graphic injury."
+      },
+      "sourceSha256": "0cbd41611cca9fca51bffb4c9f96bd39baefeae4f855659b1c88244e1026358f",
+      "sourceBytes": 2684823,
+      "sourceWidth": 1536,
+      "sourceHeight": 1024,
+      "finalPath": "public/images/board/adventure_reveal/v1/judicial-heal-1.webp",
+      "sha256": "22d41029034e0707f3b695caf24c395021ea7aafe2a667712cfc83049c974e94",
+      "bytes": 382146,
+      "width": 1536,
+      "height": 1024,
+      "format": "WebP",
+      "quality": 90
+    },
+    {
+      "key": "judicial-heal-2",
+      "prompt": "Use case: illustration-story. Asset: One Piece Voyage Records adventure result scene. Create one complete 1536x1024 landscape illustration, 3:2. Cinematic polished Japanese adventure anime, faithful recognizable named One Piece character designs, expressive faces, crisp inked linework, rich cel shading, detailed hand-painted seafaring environment, dark navy shadows, luminous teal light and warm golden highlights. Single continuous scene, no text, letters, UI, borders, panels, collage, watermark. Adventure result: luxury emergency first-aid supplies restore HP to the entire party at Enies Lobby. Faithful Tony Tony Chopper in his pink X hat carefully finishes a clean bandage around Usopp's forearm, Usopp recognizably long-nosed with curly hair and goggles and a relieved happy smile. Nami stands beside them helping with a white towel; in the mid-background Luffy and Zoro stand lively stretching with clean small bandages, ready for adventure again. A large deluxe first-aid kit with orderly unlabelled medicine bottles, abundant clean rolls of bandage, fresh towels and water on a stone bench fills the lower right. Safe quiet treatment staging beside Enies Lobby's grand white stone bridge, ocean waterfalls in distance, golden late-afternoon light and cool teal shadows. Close diagonal composition focused on Chopper and Usopp's friendly interaction while showing recovered teammates. No blood, severe injuries, money, gems, weapons being awarded, no text or health UI.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c415-3ebc-7341-b24f-3dc6ec6a412c\\exec-60611774-b22f-4977-a28e-dba553dac01c.png",
+      "inspection": {
+        "passed": true,
+        "notes": "Inspected native output: faithful Chopper and multiple Straw Hat teammates, Enies Lobby treatment scene, medical supplies and visibly restored team, three distinct compositions, no money or graphic injury."
+      },
+      "sourceSha256": "0455336bc7a4df1bd2a18f9f18c87ac7f19512fa26cd362413685a86dcb3177c",
+      "sourceBytes": 2745167,
+      "sourceWidth": 1536,
+      "sourceHeight": 1024,
+      "finalPath": "public/images/board/adventure_reveal/v1/judicial-heal-2.webp",
+      "sha256": "2c88cf09a6014b73313f90d9f5f7ee5ac653b785169784450594a7ba67407f64",
+      "bytes": 385104,
+      "width": 1536,
+      "height": 1024,
+      "format": "WebP",
+      "quality": 90
+    },
+    {
+      "key": "judicial-heal-3",
+      "prompt": "Use case: illustration-story. Asset: One Piece Voyage Records adventure result scene. Create one complete 1536x1024 landscape illustration, 3:2. Cinematic polished Japanese adventure anime, faithful recognizable named One Piece character designs, expressive faces, crisp inked linework, rich cel shading, detailed hand-painted seafaring environment, dark navy shadows, luminous teal light and warm golden highlights. Single continuous scene, no text, letters, UI, borders, panels, collage, watermark. Adventure result: luxurious emergency medical supplies fully restore party HP during the Enies Lobby adventure. Faithful Tony Tony Chopper in pink X hat with antlers proudly opens a large well-stocked first-aid case on a treatment table in a white-stone Enies Lobby courthouse side hall. Faithful Nico Robin with straight black hair in dark-purple outfit warmly helps by passing a fresh bandage, while blond Sanji in black suit carries clean water and folded towels; straw-hatted Luffy and long-nosed Usopp sit behind smiling, refreshed and ready to continue. Focus on professional care and the whole party feeling well, not treasure or combat. Abundant clean bandages, unlabeled medicine bottles, towels, simple first-aid supplies. Eye-level deep composition looking along table toward enormous arched windows and teal ocean light; warm golden lamps, navy shadows, refined peaceful ensemble scene. Everyone conscious and healthy, no blood, no severe wounds, no currency, no magic resurrection, no lettering or UI.",
+      "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0c415-3ebc-7341-b24f-3dc6ec6a412c\\exec-c219ed87-b223-4930-8730-4d22c012c85d.png",
+      "inspection": {
+        "passed": true,
+        "notes": "Inspected native output: faithful Chopper and multiple Straw Hat teammates, Enies Lobby treatment scene, medical supplies and visibly restored team, three distinct compositions, no money or graphic injury."
+      },
+      "sourceSha256": "99051ee5c6c2605549eb568e2938e0cdf054da7090b777fd7d3bf662dd1f8a00",
+      "sourceBytes": 2340992,
+      "sourceWidth": 1536,
+      "sourceHeight": 1024,
+      "finalPath": "public/images/board/adventure_reveal/v1/judicial-heal-3.webp",
+      "sha256": "371412e0f10576825e046c46a8d0487d27dcf8028e2f23406fccbd4cab3269f9",
+      "bytes": 301540,
+      "width": 1536,
+      "height": 1024,
+      "format": "WebP",
+      "quality": 90
+    }
+  ],
+  "updatedAt": "2026-09-22T05:26:11.408244+00:00",
+  "count": 18,
+  "totalBytes": 6996854,
+  "uniqueSha256": 18
+}

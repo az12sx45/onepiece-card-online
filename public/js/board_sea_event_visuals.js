@@ -24,6 +24,7 @@
     return {key:def.key,variant};
   }
   function resolve(options={}){
+    if(options.adventureVisual){const art=root.BoardAdventureArt?.resolve(options.adventureVisual);if(art)return art;}
     const visual=options.visual||{};
     const def=definition(options.artTitle||options.title)||keys.get(String(visual.key||''));
     if(!def)return null;
@@ -55,7 +56,8 @@
     const def=resolve(options);if(!def)return '';
     const chips=[options.typeLabel,...(options.chips||[])].filter(Boolean);
     const chest=options.chestImage&&safeImage(options.chestImage)?`<img class="sea-reveal-chest" src="${esc(options.chestImage)}" alt="${esc(options.chestLabel||'抽中的寶箱')}">`:'';
-    return `<section class="sea-reveal" data-tone="${options.isTrap?'loss':def.tone}" aria-label="${esc(options.title||def.title)}"><header class="sea-reveal-header"><div class="sea-reveal-kicker">海域卡已揭曉</div><h3>${esc(options.title||def.title)}</h3><p>${esc(options.subtitle||'')}</p></header><div class="sea-reveal-body"><div class="sea-reveal-scene">${artMarkup(options)}${chest}<span class="sea-reveal-scene-caption">${esc(options.chestLabel||def.title)}</span></div><div class="sea-reveal-details"><div class="sea-reveal-chips">${chips.map(v=>`<span>${esc(v)}</span>`).join('')}</div><p class="sea-reveal-description">${esc(options.desc||'')}</p>${outcomeMarkup(options.outcomes)}<div class="sea-reveal-summary" role="status"><small>航海結果</small><strong>${esc(options.summary||'效果已套用')}</strong></div></div></div><footer class="sea-reveal-actions">${options.actionMarkup||''}</footer></section>`;
+    const origin=options.adventureVisual&&options.visual?`<div class="sea-reveal-origin"><small>這次遇見的海域事件</small>${artMarkup({visual:options.visual},'sea-reveal-origin-art')}</div>`:'';
+    return `<section class="sea-reveal" data-tone="${options.isTrap?'loss':def.tone}" aria-label="${esc(options.title||def.title)}"><header class="sea-reveal-header"><div class="sea-reveal-kicker">海域卡已揭曉</div><h3>${esc(options.title||def.title)}</h3><p>${esc(options.subtitle||'')}</p></header><div class="sea-reveal-body"><div class="sea-reveal-scene">${artMarkup(options)}${chest}<span class="sea-reveal-scene-caption">${esc(options.chestLabel||def.title)}</span></div><div class="sea-reveal-details"><div class="sea-reveal-chips">${chips.map(v=>`<span>${esc(v)}</span>`).join('')}</div><p class="sea-reveal-description">${esc(options.desc||'')}</p>${outcomeMarkup(options.outcomes)}<div class="sea-reveal-summary" role="status"><small>航海結果</small><strong>${esc(options.summary||'效果已套用')}</strong></div>${origin}</div></div><footer class="sea-reveal-actions">${options.actionMarkup||''}</footer></section>`;
   }
   const api=Object.freeze({definitions:Object.freeze(definitions),pick,resolve,capture,outcomes,artMarkup,outcomeMarkup,resultMarkup,icons:Object.freeze(ICONS)});
   root.BoardSeaEventVisuals=api;

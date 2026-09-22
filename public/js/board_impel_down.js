@@ -640,6 +640,7 @@
     });
   }
 
+  let eventDrawPending = false;
   function renderEvent(cmd = commandState()) {
     const eventArt = $("eventArt");
     if (!eventArt) return;
@@ -647,6 +648,15 @@
     const copy = $("eventRevealCopy");
     if (title) title.textContent = cmd?.title || "推進城事件";
     if (copy) copy.textContent = cmd?.text || "等待事件揭曉。";
+    const revealedArt = window.BoardAdventureArt?.resolve(view?.eventVisual);
+    if (revealedArt && view?.status === 'event' && !eventDrawPending && (!localSpin || (localSpin.type === 'event' && localSpin.settled)) && !localDice?.rolling) {
+      const key = `art:${view.eventVisualId || ''}:${revealedArt.id}`;
+      if (eventArt.dataset.spinKey !== key) {
+        eventArt.dataset.spinKey = key;
+        eventArt.innerHTML = window.BoardAdventureArt.artMarkup(view.eventVisual);
+      }
+      return;
+    }
     if (localSpin?.type === "event") {
       const key = `event:${localSpin.resultId}:${(localSpin.reelItems || []).map((entry) => entry?.id || entry?.title || entry?.name || "").join("|")}`;
       if (eventArt.dataset.spinKey === key && eventArt.querySelector(".reward-spin")) {
@@ -674,8 +684,12 @@
       eventArt.dataset.spinKey = "";
       eventArt.innerHTML = "";
     } else {
-      eventArt.dataset.spinKey = "";
-      eventArt.innerHTML = staticEventArtMarkup(staticEventArtPath());
+      const path = staticEventArtPath();
+      const key = `static:${path}`;
+      if (eventArt.dataset.spinKey !== key) {
+        eventArt.dataset.spinKey = key;
+        eventArt.innerHTML = staticEventArtMarkup(path);
+      }
     }
   }
 
@@ -865,7 +879,14 @@
     if (localSpin || localDice?.rolling || pendingAction) return;
     const status = view?.status || "locked";
     if (status === "locked") animateDiceRoll(await resolveCommandResult(apiCall("impelRollEscape", "rollEscape")));
-    else if (status === "free") animateEventSpin(await resolveCommandResult(apiCall("impelDrawEvent", "drawEvent")));
+    else if (status === "free") {
+      eventDrawPending = true;
+      try {
+        const result = await resolveCommandResult(apiCall("impelDrawEvent", "drawEvent"));
+        requestView();
+        animateEventSpin(result);
+      } finally { eventDrawPending = false; }
+    }
     else if (status === "event") {
       apiCall("impelResolveEventPrimary", "resolveEventPrimary");
       rerenderAfter(80);

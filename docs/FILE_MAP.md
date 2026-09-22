@@ -1,5 +1,15 @@
 # File Map
 
+## 抽選插畫與圖鑑（2026-09-22）
+
+- `public/js/board_adventure_art.js`：42組／126張插畫目錄、合法ID、獨立視覺隨機、集合正規化。
+- `public/js/board_art_collection.js`、`public/css/board_adventure_art.css`：帳號本機／雲端收藏、分類／鎖定／放大介面、抽選圖片排版。
+- `server/board-art-collection.js`、`server/index.js`：既有 PROFILE_UPDATE 的收藏白名單與原子聯集。
+- `public/images/board/adventure_reveal/v1/`、`docs/BOARD_ADVENTURE_ART_*_V1.json`：54張新WebP与三批GPT原稿來源。
+- `docs/BOARD_ADVENTURE_ART_20260922.md`：範圍、保存相容性、驗證與發布證據。
+- `scripts/board_art_collection_qa.js`、`board_adventure_runtime_qa.js`、`board_adventure_settlement_qa.js`、`board_adventure_art_asset_qa.py`：真SQL／個人收藏UI、遊戲bridge／動畫時序、6階段等待與重入、126圖及54原稿完整性。
+- `scripts/build_board_adventure_art_release.js`、`board_adventure_art_release_builder_qa.js`：固定基線的Board凍結／promote、65變動檔與既有媒體保護fixture。
+
 ## 桌面入口限制（2026-09-22）
 
 - `server/desktop-distribution.js`：metadata 白名單、桌面 renderer 相容識別、一般瀏覽器限制、R2 媒體索引及退役 service worker、Node 啟動器社交事件白名單。

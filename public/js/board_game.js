@@ -12294,6 +12294,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     ensureJudicialRaidState();
     game.players.forEach((player, index) => {
       player.id ||= `p${index + 1}`;
+      player.adventureArt = window.BoardAdventureArt?.normalizeCollection(player.adventureArt) || {};
       player.name ||= `玩家 ${index + 1}`;
       const lobbyPlayer = (state.lobby?.players || []).find((entry) => Number(entry?.userId) === Number(player.userId || player.id));
       player.clientId ||= String(lobbyPlayer?.clientId || player.userId || player.id || `board-player-${index + 1}`);
@@ -26318,6 +26319,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     (state.gameState?.players || []).forEach((player) => {
       ensurePlayerResearchLabState(player);
       ensurePostgameResearchStarterExtractor(player);
+      if (!isCpuPlayer(player) && boardPlayerMatchesLocalUser(player)) window.BoardArtCollection?.merge(player.adventureArt);
     });
     renderHeader();
     renderPlayerStrip();
@@ -28207,6 +28209,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     openSpectatorModal(seaTreasureChestResultMarkup({
       artTitle: detail.artTitle,
       visual: detail.visual,
+      chestVisual: detail.chestVisual,
       outcomes: detail.outcomes,
       title: detail.title || "寶箱開啟",
       desc: detail.desc || detail.subtitle || "寶箱已打開。",
@@ -30478,6 +30481,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const validStatuses = new Set(["locked", "wait_event", "free", "event", "move", "recruit", "escaped"]);
     prison.status = validStatuses.has(prison.status) ? prison.status : (prison.active ? "locked" : "free");
     prison.eventId = String(prison.eventId || "");
+    if (!window.BoardAdventureArt?.resolve(prison.eventVisual) || prison.eventVisual?.group !== 'impel') prison.eventVisual = null;
+    prison.eventVisualId = typeof prison.eventVisualId === 'string' ? prison.eventVisualId.slice(0, 120) : '';
     prison.moveFromEvent = String(prison.moveFromEvent || "");
     prison.allowEscape = Boolean(prison.allowEscape);
     prison.focusRecruitId = String(prison.focusRecruitId || "");
@@ -31589,9 +31594,14 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
 
   function applyImpelDownEventToTargets(player, eventDef) {
     const targets = eventDef?.id === "hidden" ? [player] : impelDownFloorGroup(player);
+    const eventVisual = window.BoardAdventureArt?.pick('impel', eventDef.id) || null;
+    const eventVisualId = `impel-art-${Date.now()}-${eventVisual?.key || eventDef.id}-${eventVisual?.variant ?? 0}`;
     (targets.length ? targets : [player]).filter(Boolean).forEach((entry) => {
       const entryState = normalizeImpelDownState(entry);
       entryState.eventId = eventDef.id;
+      entryState.eventVisual = eventVisual;
+      entryState.eventVisualId = eventVisualId;
+      recordAdventureArt(entry, eventVisual);
       entryState.lastEventId = eventDef.id;
       entryState.status = "event";
       entryState.moveFromEvent = "";
@@ -31708,6 +31718,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       status: prison.status,
       allowEscape: Boolean(prison.allowEscape),
       event: prison.eventId ? impelDownEventById(prison.eventId) : null,
+      eventVisual: prison.eventVisual || null,
+      eventVisualId: prison.eventVisualId || '',
       events: impelDownEventPool(player).map((event) => ({ ...event })),
       rule: {
         ...rule,
@@ -39593,6 +39605,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const chestImage = options.chestImage || chestType.image || "";
     const illustrated = window.BoardSeaEventVisuals?.resultMarkup({
       ...options,
+      adventureVisual: options.chestVisual,
       artTitle: options.artTitle || "漂流寶箱群",
       chestLabel,
       chestImage,
@@ -39768,6 +39781,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const rewardTitle = reward.title || `${chestType.label}開啟`;
     const artTitle = effectDef.title || "漂流寶箱群";
     const reveal = seaEventRevealDetails(player, artTitle, revealBefore, reward);
+    reveal.chestVisual = window.BoardAdventureArt?.pick('chest', chestType.id) || null;
+    recordAdventureArt(player, reveal.chestVisual);
     emitSpectatorModalEvent("chest-result", player, {
       ...reveal,
       artTitle,
@@ -39806,13 +39821,24 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   function seaEventRevealDetails(player, title, before, result) {
     const visuals = window.BoardSeaEventVisuals;
     if (!visuals || !before) return {};
+    const visual = visuals.pick(title);
+    recordAdventureArt(player, visual);
     return {
-      visual: visuals.pick(title),
+      visual,
       outcomes: visuals.outcomes(before, visuals.capture(player), result, (id) => {
         const item = gameItemDef(id);
         return item ? { ...item, image: itemImageForDisplay(item) } : null;
       }),
     };
+  }
+
+  function recordAdventureArt(player, visual) {
+    const art = window.BoardAdventureArt?.resolve(visual);
+    if (!art || !player || isCpuPlayer(player)) return false;
+    player.adventureArt = window.BoardAdventureArt.normalizeCollection(player.adventureArt);
+    if (!player.adventureArt[art.id]) player.adventureArt[art.id] = Date.now();
+    if (boardPlayerMatchesLocalUser(player)) window.BoardArtCollection?.merge(player.adventureArt);
+    return true;
   }
 
   function triggerSeaEvent(player, tile, typeId, slotId = "", preselectedEffectDef = null) {
@@ -57088,6 +57114,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     player.coins += reward.coins;
     grantExpToLivingCrew(player, battle.activeCrewIndex, reward.exp, `擊敗 ${defeatedName}`);
     const bonus = applyJudicialPhaseBonus(player, randomJudicialPhaseBonus());
+    bonus.visual = window.BoardAdventureArt?.pick('judicial', bonus.id) || null;
+    recordAdventureArt(player, bonus.visual);
     raid.phaseRewardClaimedKeys.push(rewardKey);
     const payload = { ...reward, bounty, bonus };
     addLog(`${player.name} 擊敗 ${defeatedName}，獲得 ${reward.coins} 貝里、${formatCoin(bounty)} 賞金、${reward.exp} EXP，突破補給：${bonus.label}。`);
@@ -57198,13 +57226,15 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       battle.raidPhaseReward = phaseReward;
       raid = ensureJudicialRaidState();
       const nextPhaseIndex = Math.max(Number(raid.phaseIndex || 0) + 1, defeatedPhaseIndex + 1);
-      if (nextPhaseIndex < JUDICIAL_RAID_PHASES.length) {
-        const nextEnemy = getJudicialRaidEnemyProfile(nextPhaseIndex);
+      const hasNextPhase = nextPhaseIndex < JUDICIAL_RAID_PHASES.length;
+      const nextEnemy = hasNextPhase ? getJudicialRaidEnemyProfile(nextPhaseIndex) : null;
+      if (phaseReward) {
         battle.visualEvent = {
           id: `judicial-phase-${Date.now()}-${Math.random().toString(36).slice(2)}`,
           type: "raid-phase-reward",
           defeatedName,
-          nextEnemyName: nextEnemy?.name || "下一名敵人",
+          nextEnemyName: nextEnemy?.name || "",
+          finalVictory: !hasNextPhase,
           phaseIndex: defeatedPhaseIndex,
           nextPhaseIndex,
           phaseTotal: JUDICIAL_RAID_PHASES.length,
@@ -57215,10 +57245,15 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         };
         notifyBattleWindow();
         await waitBattleWindowVisual(battle.visualEvent, 11000);
+      }
+      if (hasNextPhase) {
         promptJudicialRaidNextSwitch(battle, player, defeatedName, nextPhaseIndex, nextEnemy);
         return;
       }
       finalizeBattleAndAdvanceTurn(player, () => {
+        // Battle view polling normalizes this shared object during the reveal.
+        // Settle against the current state, not the reference held before await.
+        raid = ensureJudicialRaidState();
         raid.active = false;
         raid.cleared = true;
         raid.failed = false;

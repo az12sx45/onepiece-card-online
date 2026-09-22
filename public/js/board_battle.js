@@ -5919,6 +5919,10 @@
     raidFxTimers = [];
     clearInterval(playRaidPhaseRewardFx.spinTicker);
     const bonus = event.bonus || event.reward?.bonus || {};
+    const artScene = document.getElementById('raidRewardScene');
+    if (artScene) artScene.innerHTML = '';
+    const selectedArt = window.BoardAdventureArt?.resolve(bonus.visual);
+    if (selectedArt) { const preload = new Image(); preload.src = selectedArt.image; }
     const bonusIndex = Number.isFinite(Number(bonus.index)) ? Number(bonus.index) : 0;
     const segments = bonus.segments || event.segments || [
       { id: "heal", label: "急救補給", iconKey: "heal" },
@@ -5943,7 +5947,7 @@
     setRaidRewardIcon(refs.raidRewardIcon, { id: "unknown", label: "補給抽選中" });
     refs.raidRewardLabel.textContent = "補給抽選中";
     refs.raidRewardDescription.textContent = "補給箱高速轉動中，停住前不會揭曉結果。";
-    refs.raidNextEnemyName.textContent = event.nextEnemyName ? `下一名敵人：${event.nextEnemyName}` : "下一名敵人登場";
+    refs.raidNextEnemyName.textContent = event.finalVictory ? "司法島全數突破！" : event.nextEnemyName ? `下一名敵人：${event.nextEnemyName}` : "下一名敵人登場";
     refs.raidRewardWheel.innerHTML = reelItems.map((entry, index) => `
       <div class="raid-slot-item ${index === targetIndex ? "is-winning" : ""}">
         <span class="raid-slot-icon">${raidRewardIconMarkup(entry)}</span>
@@ -5967,6 +5971,7 @@
       refs.raidPhaseFx.classList.add("settled");
       refs.raidRewardWheel.style.transform = `translateY(${slotEnd}px)`;
       setRaidRewardIcon(refs.raidRewardIcon, bonus.id ? bonus : targetSegment);
+      if (artScene && selectedArt) artScene.innerHTML = window.BoardAdventureArt.artMarkup(bonus.visual);
       refs.raidRewardLabel.textContent = bonus.label || "補給完成";
       refs.raidRewardDescription.textContent = bonus.appliedText
         ? `${bonus.description || "獲得突破補給。"}（${bonus.appliedText}）`
