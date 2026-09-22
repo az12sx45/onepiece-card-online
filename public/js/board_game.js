@@ -57203,10 +57203,55 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     return true;
   }
 
+  const judicialSettlementsInFlight = new WeakSet();
+
+  function completeJudicialRaidAfterReveal(battle, player) {
+    // A restored snapshot owns its own continuation; an old timer must not
+    // settle a battle object that has already been replaced.
+    if (state.battleState !== battle) return;
+    finalizeBattleAndAdvanceTurn(player, () => {
+      const raid = ensureJudicialRaidState();
+      if (raid.cleared && !raid.active) return;
+      const islandState = getIslandState(raid.islandId);
+      raid.active = false;
+      raid.cleared = true;
+      raid.failed = false;
+      raid.clearCount = Math.max(0, Number(raid.clearCount || 0)) + 1;
+      raid.lastClearedAtRound = Math.max(1, Number(state.gameState.round || 1));
+      if (islandState) {
+        islandState.isDefeated = true;
+        islandState.currentKind = "judicial";
+        islandState.currentHp = 0;
+      }
+      addJudicialRaidLog(`司法島討伐戰第 ${raid.clearCount} 次通關！`);
+      grantJudicialRaidRewards();
+    });
+  }
+
   async function finishJudicialRaidBattle(battle) {
     const player = battlePlayer(null, battle);
     if (!player) return;
-    if (battle._judicialSettlementDone) return;
+    if (battle._judicialSettlementDone) {
+      const finalPhase = JUDICIAL_RAID_PHASES.indexOf(battle.raidEnemyKey) === JUDICIAL_RAID_PHASES.length - 1;
+      if (!finalPhase || battle.result !== "win" || !battle.raidPhaseReward || judicialSettlementsInFlight.has(battle)) return;
+      judicialSettlementsInFlight.add(battle);
+      // Loading during the new final-phase reveal preserves the already-paid
+      // bonus. Re-present it without rerolling, kill credit or another reward.
+      battle.visualEvent = {
+        id: `judicial-phase-resume-${Date.now()}`,
+        type: "raid-phase-reward", finalVictory: true,
+        defeatedName: battle.enemyCombatant.name, nextEnemyName: "",
+        phaseIndex: JUDICIAL_RAID_PHASES.length - 1,
+        phaseTotal: JUDICIAL_RAID_PHASES.length,
+        reward: battle.raidPhaseReward, bonus: battle.raidPhaseReward.bonus,
+        duration: 11000,
+      };
+      notifyBattleWindow();
+      await waitBattleWindowVisual(battle.visualEvent, 11000);
+      completeJudicialRaidAfterReveal(battle, player);
+      return;
+    }
+    judicialSettlementsInFlight.add(battle);
     battle._judicialSettlementDone = true;
     let raid = ensureJudicialRaidState();
     const islandState = getIslandState(raid.islandId);
@@ -57246,27 +57291,12 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         notifyBattleWindow();
         await waitBattleWindowVisual(battle.visualEvent, 11000);
       }
+      if (state.battleState !== battle) return;
       if (hasNextPhase) {
         promptJudicialRaidNextSwitch(battle, player, defeatedName, nextPhaseIndex, nextEnemy);
         return;
       }
-      finalizeBattleAndAdvanceTurn(player, () => {
-        // Battle view polling normalizes this shared object during the reveal.
-        // Settle against the current state, not the reference held before await.
-        raid = ensureJudicialRaidState();
-        raid.active = false;
-        raid.cleared = true;
-        raid.failed = false;
-        raid.clearCount = Math.max(0, Number(raid.clearCount || 0)) + 1;
-        raid.lastClearedAtRound = Math.max(1, Number(state.gameState.round || 1));
-        if (islandState) {
-          islandState.isDefeated = true;
-          islandState.currentKind = "judicial";
-          islandState.currentHp = 0;
-        }
-        addJudicialRaidLog(`司法島討伐戰第 ${raid.clearCount} 次通關！`);
-        grantJudicialRaidRewards();
-      });
+      completeJudicialRaidAfterReveal(battle, player);
       return;
     }
 
