@@ -265,7 +265,7 @@
   const SPAR_SELECTION_PAGE_VERSION = "20260827-formal-pk-v1";
   const BATTLE_COMMAND_KEY = "onepiece-board-battle-command-v1";
   const BATTLE_ENTRY_PLAYED_STORAGE_KEY = "onepiece-board-battle-entry-played-v1";
-  const BATTLE_PAGE_VERSION = "20260921-battle-order-v1";
+  const BATTLE_PAGE_VERSION = "20260922-attack-readable-v3";
   const PLACEHOLDER_BATTLE_PORTRAIT = "images/board/battle/portraits/placeholder/normal.webp";
   const COSMETIC_FRAME_DEFS = {
     goldenDenDen: { id: "goldenDenDen", label: "黃金電話蟲框", unlockText: "司法島通關紀念" },
@@ -61068,6 +61068,118 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (restoreFocus) refs.boardToolsToggle.focus({ preventScroll: true });
   }
 
+  let boardHotkeys = null;
+  const BOARD_HOTKEY_PANEL_SELECTORS = Object.freeze({
+    inventory: "#closeItemModalBtn", missions: "#journalCloseMissionBtn",
+    crew: "#closeCrewManageBtn", fleet: "#closeFleetInfoBtn", ship: "#closeShipInfoBtn",
+  });
+
+  function boardHotkeyPanelId() {
+    if (!refs.modalBack?.classList.contains("open") || refs.modalBack.dataset.forceChoice === "true") return "";
+    return Object.entries(BOARD_HOTKEY_PANEL_SELECTORS).find(([, selector]) => refs.modal.querySelector(selector))?.[0] || "";
+  }
+
+  function closeBoardHotkeyPanels() {
+    document.querySelector("dialog.adventure-gallery[open]")?.close();
+    if (boardHotkeyPanelId() || refs.modal?.classList.contains("hotkey-route-choice-modal")) closeModal();
+    closeShipActionMenu();
+    setBoardToolsOpen(false);
+  }
+
+  function canRunBoardHotkey(id) {
+    const game = state.gameState;
+    const player = currentPlayer();
+    if (!game || game.phase !== "main" || !player || state.battleState || game.diceRolling
+      || game.movementAnimating || game.resolutionLock || turnHandoffVisualLock || remoteBoardPlaybackBusy()
+      || openingStoryActive || state.finalIslandRevealActive || itemRevealIsPending() || refs.evolutionHud?.classList.contains("show")) return false;
+    const dialog = document.querySelector("dialog[open]");
+    if (dialog && !dialog.classList.contains("adventure-gallery")) return false;
+    const modalOpen = refs.modalBack?.classList.contains("open");
+    const routeChoiceOpen = modalOpen && refs.modal?.classList.contains("hotkey-route-choice-modal");
+    if (modalOpen && !boardHotkeyPanelId() && !routeChoiceOpen) return false;
+    if (["focusPlayer", "wholeMap", "settings"].includes(id)) return true;
+    if (id.startsWith("direction")) {
+      const prompt = game.routePrompt;
+      return !dialog && (!modalOpen || routeChoiceOpen) && !isCpuPlayer(player)
+        && canBoardLanControlCurrentPlayer(player) && prompt?.playerId === player.id && Array.isArray(prompt.routeIds)
+        && !game.islandDecision && !game.tradePrompt && !game.activeTrade && !game.coopBattlePrompt && !activeSparBlocksCurrentTurn();
+    }
+    if (id === "gallery") return !isGameActionLocked();
+    return !isCpuPlayer(player) && canOpenShipActionsFor(player)
+      && player.pendingIslandServiceChoice?.requiredEntry !== true;
+  }
+
+  function openBoardHotkeyPanel(id) {
+    if (!canRunBoardHotkey(id)) return false;
+    const alreadyOpen = id === "gallery" ? !!document.querySelector("dialog.adventure-gallery[open]") : boardHotkeyPanelId() === id;
+    closeBoardHotkeyPanels();
+    if (alreadyOpen) return true;
+    const player = currentPlayer();
+    if (id === "inventory") openBackpackModal();
+    else if (id === "missions") openMissionJournalModal(player);
+    else if (id === "crew") openCrewManagementModal(player);
+    else if (id === "fleet") openFleetInfoModal(player);
+    else if (id === "ship") openShipInfoModal(player);
+    else if (id === "gallery") window.BoardArtCollection?.open();
+    return true;
+  }
+
+  function chooseBoardHotkeyDirection(direction) {
+    const id = { north: "directionUp", south: "directionDown", west: "directionLeft", east: "directionRight", special: "directionSpecial" }[direction];
+    if (!canRunBoardHotkey(id)) return false;
+    const prompt = state.gameState.routePrompt;
+    const routes = (prompt.routeIds || []).map(getRouteById).filter((route) => route && routeDirectionFromIsland(route, prompt.islandId) === direction);
+    if (!routes.length) return false;
+    closeBoardHotkeyPanels();
+    if (routes.length === 1) {
+      chooseRouteFromMap(routes[0].id);
+      return true;
+    }
+    // Some junctions have several routes on one compass heading. Keep the
+    // existing route prompt authoritative and let Tab/Enter choose explicitly.
+    openModal(`<h3 class="modal-title">選擇${escapeModalText(directionLabel(direction))}航線</h3>
+      <p class="modal-sub">同一方向有多條航線，使用 Tab 切換、Enter 確認。</p>
+      <div class="modal-row">${routes.map((route) => {
+        const targetId = route.from === prompt.islandId ? route.to : route.from;
+        return `<button type="button" class="modal-btn primary" data-hotkey-route="${escapeModalText(route.id)}">${escapeModalText(getIslandById(targetId)?.name || route.name || "航線")}</button>`;
+      }).join("")}</div><div class="modal-row"><button type="button" class="modal-btn secondary" id="closeHotkeyRoutesBtn">返回地圖</button></div>`, "hotkey-route-choice-modal backdrop-close");
+    refs.modal.querySelectorAll("[data-hotkey-route]").forEach((button) => button.addEventListener("click", () => {
+      if (!canRunBoardHotkey(id) || !state.gameState.routePrompt?.routeIds?.includes(button.dataset.hotkeyRoute)) return;
+      closeModal();
+      chooseRouteFromMap(button.dataset.hotkeyRoute);
+    }));
+    document.getElementById("closeHotkeyRoutesBtn")?.addEventListener("click", closeModal);
+    refs.modal.querySelector("[data-hotkey-route]")?.focus({ preventScroll: true });
+    return true;
+  }
+
+  function setupBoardHotkeys() {
+    if (!window.BoardHotkeys) return;
+    const panel = (id, label, defaultKey) => ({ id, label, defaultKey, description: "再次按下可收起；按另一個清單的快捷鍵可直接切換。", run: () => openBoardHotkeyPanel(id) });
+    boardHotkeys = window.BoardHotkeys.create({
+      owner: () => String(shared.getState()?.profile?.userId || ""),
+      canRun: canRunBoardHotkey,
+      actions: [
+        { id: "roll", label: "擲骰／繼續行動", defaultKey: "Space", description: "僅在自己的回合、可以行動時使用。", run: () => {
+          if (!canRunBoardHotkey("roll")) return false;
+          closeBoardHotkeyPanels();
+          rollDice();
+          return true;
+        } },
+        panel("inventory", "背包", "B"), panel("missions", "任務", "Q"), panel("crew", "船員", "C"),
+        panel("fleet", "船團資訊", "F"), panel("ship", "船隻資訊", "V"), panel("gallery", "冒險插畫圖鑑", "G"),
+        { id: "focusPlayer", label: "回到目前玩家", defaultKey: "Home", run: () => { closeBoardHotkeyPanels(); state.autoCenterEnabled = true; autoCenterOnCurrentPlayer(); return true; } },
+        { id: "wholeMap", label: "查看全圖", defaultKey: "M", run: () => { closeBoardHotkeyPanels(); viewWholeMap(); return true; } },
+        ...[["directionUp", "向上／北方航線", "ArrowUp", "north"], ["directionDown", "向下／南方航線", "ArrowDown", "south"],
+          ["directionLeft", "向左／西方航線", "ArrowLeft", "west"], ["directionRight", "向右／東方航線", "ArrowRight", "east"],
+          ["directionSpecial", "主航線", "R", "special"]]
+          .map(([id, label, defaultKey, direction]) => ({ id, label, defaultKey, description: "擲骰後等待選擇航線時使用；同方向多條航線可用 Tab／Enter 選擇。", run: () => chooseBoardHotkeyDirection(direction) })),
+        { id: "settings", label: "快捷鍵設定", defaultKey: "K", run: () => { closeBoardHotkeyPanels(); boardHotkeys.openSettings(); return true; } },
+      ],
+    });
+    document.getElementById("boardHotkeysBtn")?.addEventListener("click", () => { setBoardToolsOpen(false); boardHotkeys.openSettings(); });
+  }
+
   function bindEvents() {
     refs.boardToolsToggle?.addEventListener("click", () => {
       setBoardToolsOpen(refs.boardToolsPanel?.hidden);
@@ -64846,6 +64958,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   applyBoardMapVisualStyle();
   initGameState();
   bindEvents();
+  setupBoardHotkeys();
   if (!campaignInitialLoadRequested) renderAll();
   setupDeveloperObserverPanel();
   const boardLanStarted = setupBoardLanSocket();

@@ -126,6 +126,8 @@
     const cache = new Map();
     const active = [];
     const cacheLimit = clamp(Math.floor(number(options.cacheLimit, 24)), 2, 64);
+    const attackScale = clamp(number(options.attackScale, 1), .5, 2);
+    const attackImpactHoldMs = clamp(number(options.attackImpactHoldMs, 0), 0, 500);
     let canvas = null;
     let context = null;
     let frameHandle = null;
@@ -235,7 +237,7 @@
       const tileWidth = (image.naturalWidth || image.width) / profile.columns;
       const tileHeight = (image.naturalHeight || image.height) / profile.rows;
       const frame = entry.frameStart + Math.min(entry.frameCount - 1, Math.floor(progress * entry.frameCount));
-      const width = Math.min(profile.width, logicalWidth * .48) * profile.scale;
+      const width = Math.min(profile.width, logicalWidth * .48) * profile.scale * entry.presentationScale;
       const height = width * tileHeight / tileWidth;
       const fadeIn = launching ? clamp(progress / .08, 0, 1) : 1;
       const fadeOut = clamp((1 - progress) / (launching ? .14 : .26), 0, 1);
@@ -286,8 +288,12 @@
       // The battle's contact/pose window owns playback timing. Re-applying the
       // sheet FPS to its remaining 4-5 impact frames compressed a requested
       // 700 ms hit to 200-250 ms, making the artwork flash past unreadably.
-      const duration = clamp(requestedDuration, 80, 5000);
-      active.push({ profile, record, phase, actorSide, targetSide, duration, frameStart, frameCount, start: now(), anchorElement: playOptions.anchorElement, actorElement: playOptions.actorElement });
+      const attack = event.type === "attack" || (!["heal", "status"].includes(event.type) && profile.damageClass !== "status");
+      // Enlarge only attack artwork and hold its impact frames a little longer.
+      // Launch/contact, HP, portrait poses and authoritative KO timing stay owned by the caller.
+      const impactHoldMs = clamp(number(playOptions.impactHoldMs, attackImpactHoldMs), 0, 500);
+      const duration = clamp(requestedDuration + (attack && phase === "impact" ? impactHoldMs : 0), 80, 5000);
+      active.push({ profile, record, phase, actorSide, targetSide, duration, presentationScale: attack ? attackScale : 1, frameStart, frameCount, start: now(), anchorElement: playOptions.anchorElement, actorElement: playOptions.actorElement });
       if (active.length > 24) active.shift();
       trimCache(record);
       if (frameHandle === null) frameHandle = raf(paint);

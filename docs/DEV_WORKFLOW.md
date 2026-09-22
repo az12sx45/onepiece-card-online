@@ -1,5 +1,9 @@
 # Dev Workflow
 
+## 攻擊圖放大與快捷鍵（2026-09-22，進行中）
+
+依使用者順序先做攻擊圖尺寸／停留及自訂鍵盤操作，再部署，最後檢查卡頓。修改board_battle.html/js、board_move_fx.js、board_game.html/js，新增board_hotkeys.js/css與專用QA／發布builder；快捷鍵偏好僅存本機帳號key，沿用既有動作與LAN控制權，不改gameState或Socket事件。正式來源D槽，隔離npm start 18931；完整檔案、預設鍵、驗證與發布證據見[本次紀錄](BOARD_HOTKEYS_FX_20260922.md)。
+
 ## 抽選插畫與個人圖鑑（2026-09-22，已部署）
 
 新增寶箱／推進城／司法島 18 種 × 3 張 GPT 插畫與 126 張個人收藏。修改四個 Board HTML、主遊戲／海格／推進城／戰鬥 JS；新增 catalog、collection JS、共用 CSS 與 server/board-art-collection.js，PROFILE_UPDATE 對收藏採原子聯集。同步四份文件、三份來源 JSON、桌面白名單、五支QA與專用發布builder，擴充既有海格QA；隔離 npm start 18929，驗證及下載版發布證據見 [本次紀錄](BOARD_ADVENTURE_ART_20260922.md)。收藏73、runtime44、海格雙頁222、結算21、builder24、原擊倒68與LAN回歸通過，126張Chrome解碼。修復小螢幕確認按鈕、延遲storage跨帳號、第六階段結算舊引用與等待中刷新恢復；真Chrome末階段正常9／恢复4項均通過。

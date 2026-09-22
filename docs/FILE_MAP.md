@@ -1,5 +1,16 @@
 # File Map
 
+## 快捷鍵與攻擊圖（2026-09-22）
+
+- public/js/board_hotkeys.js、public/css/board_hotkeys.css：自訂按鍵、衝突選擇、輸入保護與設定面板。
+- public/js/board_game.js：快捷鍵對既有選單／擲骰／合法航線／視角的接入；public/board_game.html：設定入口。
+- public/js/board_move_fx.js、public/js/board_battle.js：Canvas攻擊圖縮放與額外命中停留，傷害及音效時機仍走既有流程。
+- scripts/board_hotkeys_game_qa.js：真Chrome遊戲鍵盤、清單切換、事件／身份鎖與方向選路。
+- scripts/board_hotkeys_settings_qa.js：真Chrome改鍵、衝突、帳號隔離及四尺寸設定畫面。
+- scripts/board_attack_readability_qa.js：固定Git基線對比真Canvas攻擊尺寸、連擊停留與音效／接觸；另沿用KO回歸。
+- scripts/build_board_hotkeys_fx_release.js、board_hotkeys_fx_release_builder_qa.js：限定本次五支舊程式加兩支新程式，保留既有媒體的Git凍結發布與隔離fixture。
+- docs/BOARD_HOTKEYS_FX_20260922.md：範圍、驗證、部署與之後的卡頓檢查。
+
 ## 抽選插畫與圖鑑（2026-09-22）
 
 - `public/js/board_adventure_art.js`：42組／126張插畫目錄、合法ID、獨立視覺隨機、集合正規化。

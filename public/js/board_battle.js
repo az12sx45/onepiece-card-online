@@ -1109,6 +1109,8 @@
         stage: refs.stage,
         layer: refs.stage.querySelector(".battle-fx-layer") || refs.stage,
         resolveAnchor: (side) => side === "enemy" ? refs.enemyCard : refs.playerCard,
+        attackScale: 1.3,
+        attackImpactHoldMs: 240,
       });
     }
     return moveFxPlayer;
@@ -5777,6 +5779,7 @@
             const spritePlayed = (didConnect || cloneBlocked) && moveFxRuntime()?.play(event, {
               phase: "impact", actorSide: side, targetSide, anchorElement: impactAnchor,
               durationMs: hitDuration,
+              impactHoldMs: isFinalHit ? undefined : 0,
               frameStart: spriteLaunched ? moveFxPlayer.resolve(event)?.launchFrames : undefined,
             });
             if (spritePlayed) {
