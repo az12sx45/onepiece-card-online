@@ -9,6 +9,7 @@
 - `docs/BOARD_ADVENTURE_ART_20260922.md`：範圍、保存相容性、驗證與發布證據。
 - `scripts/board_art_collection_qa.js`、`board_adventure_runtime_qa.js`、`board_adventure_settlement_qa.js`、`board_adventure_art_asset_qa.py`：真SQL／個人收藏UI、遊戲bridge／動畫時序、6階段等待與重入、126圖及54原稿完整性。
 - `scripts/build_board_adventure_art_release.js`、`board_adventure_art_release_builder_qa.js`：固定基線的Board凍結／promote、65變動檔與既有媒體保護fixture。
+- `public/desktop/manifests/board-package-ba5b139c7f2fd8cf.json`、`public/desktop/catalog-v3.json`：已部署的46程式／4166媒體完整Board套件；公開SHA與R2增量驗收見本次紀錄。
 
 ## 桌面入口限制（2026-09-22）
 

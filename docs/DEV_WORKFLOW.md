@@ -1,8 +1,10 @@
 # Dev Workflow
 
-## 抽選插畫與個人圖鑑（2026-09-22，本機驗證完成）
+## 抽選插畫與個人圖鑑（2026-09-22，已部署）
 
-新增寶箱／推進城／司法島 18 種 × 3 張 GPT 插畫與 126 張個人收藏。修改四個 Board HTML、主遊戲／海格／推進城／戰鬥 JS；新增 catalog、collection JS、共用 CSS 與 server/board-art-collection.js，PROFILE_UPDATE 對收藏採原子聯集。同步四份文件、三份來源 JSON、桌面白名單、五支QA與專用發布builder，擴充既有海格QA；隔離 npm start 18929，驗證及下載版發布證據見 [本次紀錄](BOARD_ADVENTURE_ART_20260922.md)。收藏73、runtime44、海格雙頁222、結算21、builder24、原擊倒68與LAN回歸通過，126張Chrome解碼。修復小螢幕確認按鈕、延遲storage跨帳號、第六階段結算舊引用與等待中刷新恢復；首份未发布候選已撤回，重新封裝，尚未發布。
+新增寶箱／推進城／司法島 18 種 × 3 張 GPT 插畫與 126 張個人收藏。修改四個 Board HTML、主遊戲／海格／推進城／戰鬥 JS；新增 catalog、collection JS、共用 CSS 與 server/board-art-collection.js，PROFILE_UPDATE 對收藏採原子聯集。同步四份文件、三份來源 JSON、桌面白名單、五支QA與專用發布builder，擴充既有海格QA；隔離 npm start 18929，驗證及下載版發布證據見 [本次紀錄](BOARD_ADVENTURE_ART_20260922.md)。收藏73、runtime44、海格雙頁222、結算21、builder24、原擊倒68與LAN回歸通過，126張Chrome解碼。修復小螢幕確認按鈕、延遲storage跨帳號、第六階段結算舊引用與等待中刷新恢復；真Chrome末階段正常9／恢复4項均通過。
+
+最終來源57ecf1eef、metadata f8d5c6d25，套件package-ba5b139c7f2fd8cf已部署；Render dep-dap1onv40ujc73btcou0成功，14:18:55公開runtime確認。R2增量65檔共26,156,979 bytes逐檔公開SHA／CORS通過；正式distribution137、Socket10、下載頁38及公開圖鑑8項全通過。28份保護檔不變，catalog-v3僅預期版本更新；保留原本未提交素材，測試服務已停止。發布證據、完整SHA與驗收限制集中在本次紀錄，收尾文件以[skip render]提交。
 
 ## 遊戲改由桌面啟動器進入（2026-09-22）
 

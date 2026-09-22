@@ -23,7 +23,7 @@
 
 ## 驗證與發布
 
-本機驗證完成，尚未部署。隔離測試目錄 `D:/Codex_QA/draw-result-art-20260922`，`npm start` port 18929 使用既有資料隔離 preload、停用 DB 連線；未用正式存檔測試。保護基線記錄於 protected-baseline.json，29份檔案初次核對全部不變，既有 ranks/r5.PNG、r6.PNG 與未追蹤 sea_event_reveal/v1 不提交。
+本機及正式發布驗證完成。隔離測試目錄 `D:/Codex_QA/draw-result-art-20260922`，`npm start` port 18929 使用既有資料隔離 preload、停用 DB 連線；未用正式存檔測試。保護基線記錄於 protected-baseline.json，29份檔案初次核對全部不變；發布後28份仍完全相同，只有預期的catalog-v3版本目錄改動。既有 ranks/r5.PNG、r6.PNG 與未追蹤 sea_event_reveal/v1 不提交。任務自己的18929測試服務已停止。
 
 - 素材：54個不同WebP，共20,629,444 bytes；完整PNG來源SHA、WebP SHA、1536×1024解碼與精確檔名集合通過。既有72張與基線Git bytes完全一致，Chrome126/126全部解碼。
 - `board_art_collection_qa.js`：73項通過，實際PGlite PostgreSQL引擎執行從server抽出的完整UPSERT，兩client聯集／最早時間／其它stats保留；真Chrome離線補存、重開、未解鎖不取圖、三尺寸、帳號切換與登出。
@@ -37,4 +37,14 @@
 
 末階段修正後，真Chrome重新驗證正常結算9/9與新context還原途中快照4/4，均無JS錯誤。恢復前後皆為同一judicial:burst第3張，phaseClaims維持1、finalClaims從0至1、endTurn僅1次；ordinary load清除visualEvent仍由raidPhaseReward恢復，另有VM覆蓋。此為隔離Chrome與LAN快照測試，非正式帳號、實體手機或Electron人工遊玩驗收。
 
-新增三支程式進入既有桌面白名單，專用builder固定本次來源基線，只更新Board。最終候選來源57ecf1eef3971a9e08986ac62ee261e05a820b55，套件package-ba5b139c7f2fd8cf、manifest SHA ac05f7cdbf3d0b10110e68e7782b3071598857c7fd8ca2da27cf4b5d5ad29eaa；4212項、1,417,830,546 logical bytes。公開R2與runtime待發布後補驗。網頁遊玩gate、啟動器版本、Card／Chess及catalog-v2保留。
+新增三支程式進入既有桌面白名單，專用builder固定本次來源基線，只更新Board。最終候選來源57ecf1eef3971a9e08986ac62ee261e05a820b55，套件package-ba5b139c7f2fd8cf、manifest SHA ac05f7cdbf3d0b10110e68e7782b3071598857c7fd8ca2da27cf4b5d5ad29eaa；4212項、1,417,830,546 logical bytes。網頁遊玩gate、啟動器1.1.7、Card／Chess及catalog-v2保留。
+
+### 正式發布證據
+
+- 最終metadata提交 `f8d5c6d258046c85171732ba626aa971ac5d10c1` 已推送main。Render `dep-dap1onv40ujc73btcou0` 自動部署成功，UI顯示 `Deploy succeeded | Live`，耗時5m49s；正式PostgreSQL於14:18:29就緒，14:18:55（UTC+8）公開runtime首次確認新releaseId及manifest SHA一致。
+- 全量R2 dry-run驗證3895個unique Git來源。最終候選與初版的4112保留媒體、54新媒體及35個未變程式逐項相同；另對最終65變動檔重新驗證Git HEAD SHA，再以條件寫入上傳。65/65上傳成功，合計26,156,979 bytes；公開GET逐檔驗證大小／SHA及CORS，65/65通過。證據在 `release/r2-composite-source-verification.json`、`r2-live-delta-1790057431298.json`、`r2-public-verification.json`。此為相對上一套件約26.2MB增量，不把1.42GB logical總量當作本次下載量。
+- `desktop_distribution_release_verify.js` 正式137/137通過：三遊戲runtime、manifest、程式bytes、網頁遊玩限制與素材R2重新導向；`desktop_distribution_socket_verify.js` 10/10通過，主程序社交通道／renderer及雙transport相容，瀏覽器遊戲連線仍拒絕。
+- `desktop_distribution_browser_qa.js` 正式38/38通過，三尺寸下載頁與隔離舊worker退役。公開新版JS／CSS與R2圖片另在全新Chrome context驗證8/8：126張目錄、42组、未解鎖零取圖、四分類真圖解碼、放大、手機版面及零JS錯誤。該圖鑑驗收使用離線假profile與隔離storage，未向正式PROFILE_UPDATE或遊戲房間寫入；截圖只表示測試收藏，不是使用者實際解鎖進度。
+- `release/runtime-deployment.json`、`render-deployment.json`、`live-distribution.json`、`live-socket.json`、`public-gallery-report.json` 與 `public-browser/browser-report.json` 保留正式證據；`protected-final.json` 記錄28份保護檔不變。本次不宣稱真Electron、實體手機或遠端四人實玩測試。
+
+使用方式：重新開啟既有啟動器，在航海錄完成「下載更新」；大廳或航海選單進入「冒險插畫圖鑑」。已遇見版本依帳號保存；更新前無逐張紀錄，收藏自本次更新後開始累積。
