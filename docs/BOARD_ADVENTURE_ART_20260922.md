@@ -35,4 +35,6 @@
 - `lan_refresh_flow_qa.js`：建立／加入／開始／交棒／重整恢復與戰鬥iframe均通過，failures與errors為空；既有`board_battle_knockout_timing_qa.js` 68項通過，致死展示與擲骰無技能音回歸保持。
 - `board_adventure_art_release_builder_qa.js`：24項隔離Git fixture通過，46程式、54新圖、4112保留媒體，共4212 logical files，65個更新檔；防缺圖／額外檔／舊素材更動／候選竄改與顯式promote驗證。語法及git diff --check通過。
 
-新增三支程式進入既有桌面白名單，專用builder固定本次來源基線，只更新Board。公開R2、desktop package及runtime SHA待發布後填入。網頁遊玩gate、啟動器版本、Card／Chess及catalog-v2保留。
+末階段修正後，真Chrome重新驗證正常結算9/9與新context還原途中快照4/4，均無JS錯誤。恢復前後皆為同一judicial:burst第3張，phaseClaims維持1、finalClaims從0至1、endTurn僅1次；ordinary load清除visualEvent仍由raidPhaseReward恢復，另有VM覆蓋。此為隔離Chrome與LAN快照測試，非正式帳號、實體手機或Electron人工遊玩驗收。
+
+新增三支程式進入既有桌面白名單，專用builder固定本次來源基線，只更新Board。最終候選來源57ecf1eef3971a9e08986ac62ee261e05a820b55，套件package-ba5b139c7f2fd8cf、manifest SHA ac05f7cdbf3d0b10110e68e7782b3071598857c7fd8ca2da27cf4b5d5ad29eaa；4212項、1,417,830,546 logical bytes。公開R2與runtime待發布後補驗。網頁遊玩gate、啟動器版本、Card／Chess及catalog-v2保留。
