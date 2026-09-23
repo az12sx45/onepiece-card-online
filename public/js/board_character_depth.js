@@ -1843,7 +1843,15 @@
     state.onImageLoad = () => {
       if (state.disposed) return;
       const stamp = sourceStamp(image);
-      if (stamp !== state.stamp || image.classList.contains("is-empty")) releaseDepth(state);
+      // Clearing an image also mutates its class/style. Do not clean it again
+      // from our own MutationObserver records: that starves timers and freezes
+      // the battle iframe (and its same-process parent) at battle close.
+      if (image.classList.contains("is-empty")) {
+        if (state.depth || state.pendingStamp) releaseDepth(state);
+        state.stamp = stamp;
+        return;
+      }
+      if (stamp !== state.stamp) releaseDepth(state);
       state.stamp = stamp;
       if (state.depth?.layer) syncLayerBaseTransform(state);
       maybeDepth(state);

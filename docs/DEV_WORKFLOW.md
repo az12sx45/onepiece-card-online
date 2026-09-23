@@ -7129,3 +7129,17 @@ UI / RWD：
 - 5 個更新 blob 的完整公開 GET／SHA／CORS、55 項 live release、142 項 distribution 檢查通過。證據：D:/Codex_QA/board-battle-recovery-20260924/{delivery.json,runtime-deployment.json,r2-public-verification.json,public-release,distribution-release.json}。
 - 本次一真人身分＋一 CPU 的四項定向測試、舊故障重新載入恢復、八個視覺場景及實際按鈕出招已通過。使用者實際存檔未被覆寫；其遊戲視窗於末次唯讀視窗清單中已關閉，未宣稱替玩家重新開局或完成真人驗收。
 - 追加多人觀看回歸未列為通過：兩瀏覽器＋CPU 主端已交棒、觀看端不能下指令，但觀看端未在 15／70 秒內清空 battleState；尚未與基線比對，不據此歸因於本次修改。既有整套 spectator suite 超過五分鐘未完成，隔離測試程序已停止。保留 lan-item、lan-item-retry、lan-playback/incomplete.json 作接續，未聲稱全面多人驗收完成。
+
+### 2026-09-24：無招式待機與戰鬥關閉凍結修正
+
+- 延續正式 worktree `D:/Codex_Release_Worktrees/board-battle-depth-20260923`，基線 `2d0e40572a925869af5d78031578c4b03b7589e4` / `package-b42b02c7fb5e35d8`。使用者明確要求修正可能停滯並部署；保留 ranks/r5.PNG、r6.PNG 既有未提交差異。
+- `public/js/board_game.js`：共用既有裝備／PP 合法性選招，CPU 無可用招式時先補充技能次數、嘗試合法逃跑，最後待機；待機使用既有 action 結構，敵方照常行動，不補 HP／PP、不判勝。失效的已排入招式仍完成該次行動。舊存檔只有「敵方已完成＋我方未完成＋精確回合末交棒日誌」才接回交棒，不重播回合末效果。
+- Tot Musica 的單人分隊與多人雙世界支援沒有任何可用招式時待機；CPU 先直接攻擊、換可攻擊夥伴、使用可用輔助招式，再待機。各世界仍須各選一個行動，待機不算同步命中，魔王照常行動。普通待機 API 不可繞過雙世界流程。
+- `public/js/board_character_depth.js`：is-empty 圖像只在仍有圖層或待載入工作時清理，避免清理 class/style 再觸發 MutationObserver 的無限微任務循環。正式深度與整框傾斜保留。
+- `public/js/board_battle.js`：無招式時顯示待機；旁觀動畫計時改為當次 DOM render 完成後開始，避免大量日誌／圖像布局吃掉可見時間。主頁在已播完戰鬥但地圖事件先於終止快照到達時，先關閉戰鬥展示再播放地圖事件，不修改權威快照。兩個 HTML 更新程式版本 query。
+- 本機實際 npm start 18943、隔離 Chromium 與真實 Socket.IO 房間：`board_battle_no_action_qa.js` 的 wait／pp-item／stale／reload／empty-enemy／choice／human 通過；844x390 人類待機及艾尼路／吉貝爾強制無效道具回歸通過。`board_spectator_playback_browser_qa.js` 完整兩視窗流程通過，包括建立／加入房間、狀態推送、重整、唯讀控制、延後 iframe、Unicode 分塊與戰鬥／地圖交錯。測試的終止快照斷言改用持續觀測 trace，避免 screenshot 等待後單點已正常播完的假失敗；持續時間門檻不變。
+- `board_battle_frame_tilt_qa.js`：1440x900、844x390、觸控模擬、reduced-motion 的八個模型／原圖場景及 12 次清空／重建圖層通過；layout 與角色寬高不變、整框倾斜、內圖無二次旋轉、真實攻擊按鈕完成、頁面錯誤 0。並通過 playback 41、remote 13、transport 58 項檢查。Tot Musica 定向測試與部署結果另記。
+- 新增 `board_tot_musica_no_action_qa.js` 與 `build_board_stall_completion_release.js`；後者固定上述基線，只允許兩個 HTML＋三個 JS 更新，保留 6,361 檔、6,310 媒體、51 程式及 Card／Chess／v2 記錄。證據位於 `D:/Codex_QA/board-stall-completion-20260924`。以上是自動測試，不代表真人／實體手機／外網多人驗收。
+- LATTICE 本階段 tools/list 無 callable API；已讀 games.json 接續正式 project_id `fc1f1991-a190-4cd1-8933-947297d0ebbe`，未假稱任務、圖譜或驗收持久寫入。
+
+- 最終本機補驗：Tot Musica 人工按鈕與 CPU 共用自動操作邏輯的單人／多人雙世界共四案例通過；有可用招式時拒絕待機、PP 保持 0、兩世界待機後正常交棒或進入下一輪。舊版艾尼路／吉貝爾無效道具故障再次重現，重新載入本次程式後恢復；HP、道具與敵方 PP 未重複結算。

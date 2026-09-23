@@ -67,6 +67,15 @@ async function prepareBattle(host){
  report.attack=await host.evaluate(()=>{const b=window.__BOARD_GAME_DEBUG__.getState().battleState;return {result:b.result,roundResolved:b.roundResolved,log:b.log.slice(-10)}});
  assert.ok(report.attack.roundResolved||report.attack.result);
  }
+ // Closing and reopening a populated portrait must not self-trigger the source observer forever.
+ for(let cycle=0;cycle<3;cycle++){
+ await battle.evaluate(()=>{const img=document.querySelector('#enemyPortrait');window.__qaSavedPortrait=img.getAttribute('src');img.classList.add('is-empty');img.removeAttribute('src')});
+ await battle.waitForFunction(()=>!document.querySelector('#enemyPortraitWrap .board-character-depth-model-layer') && !document.querySelector('#enemyPortraitWrap').hasAttribute('data-board-depth-ready'),null,{timeout:5000});
+ await battle.evaluate(()=>new Promise(resolve=>setTimeout(resolve,50)));
+ await battle.evaluate(()=>{const img=document.querySelector('#enemyPortrait');img.classList.remove('is-empty');img.setAttribute('src',window.__qaSavedPortrait)});
+ await battle.waitForFunction(()=>document.querySelector('#enemyPortraitWrap')?.hasAttribute('data-board-depth-ready'),null,{timeout:15000});
+ }
+ report.lifecycleCycles=(report.lifecycleCycles||0)+3;
  await context.close();
  }assert.equal(report.errors.length,0);report.ok=true;}finally{fs.writeFileSync(path.join(OUT,'report.json'),JSON.stringify(report,null,2));await browser.close()}
 })().catch(e=>{console.error(e);process.exitCode=1});

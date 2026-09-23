@@ -8619,6 +8619,7 @@
       };
     }
     if (action?.type === "escape") return { type: "escape" };
+    if (action?.type === "wait") return { type: "wait" };
     return { type: "move", moveId: String(action?.moveId || "") };
   }
 
@@ -8647,6 +8648,7 @@
         return !battle.isJudicialRaid && !battle.isMarineford && !battle.noEscape && !battle.isNoEscape && Number(getTeamEffects(player).escapeThreshold || 0) > 0;
       }
       const card = player.crew?.[activeIndex];
+      if (action.type === "wait") return Number(card?.currentHp || 0) > 0 && !getUnlockedMoves(card).some((entry) => Number(entry.currentPP ?? entry.pp ?? 0) > 0);
       return !!getUnlockedMoves(card).find((entry) => entry.id === action.moveId && Number(entry.currentPP ?? entry.pp ?? 0) > 0);
     };
     const normalizedReal = normalizeTotMusicaWorldAction(realAction);
@@ -8693,6 +8695,7 @@
         return action.targetIndex == null || Number.isInteger(Number(action.targetIndex));
       }
       if (action.type === "escape") return !battle.noEscape && !battle.isNoEscape && Number(getTeamEffects(player).escapeThreshold || 0) > 0;
+      if (action.type === "wait") return Number(player.crew?.[activeIndex]?.currentHp || 0) > 0 && !getUnlockedMoves(player.crew[activeIndex]).some((entry) => Number(entry.currentPP ?? entry.pp ?? 0) > 0);
       return !!getUnlockedMoves(player.crew?.[activeIndex]).find((entry) => entry.id === action.moveId && Number(entry.currentPP ?? entry.pp ?? 0) > 0);
     })();
     if (!valid) {
@@ -8818,6 +8821,11 @@
     const runtime = playerWorlds ? coopBattleRuntimeFor(player, battle, true) : null;
     const activeIndex = Number(runtime?.activeCrewIndex ?? (world === "real" ? mechanic.realActiveIndex : mechanic.songActiveIndex));
     const action = normalizeTotMusicaWorldAction(rawAction);
+    if (action.type === "wait") {
+      const card = setTotMusicaActiveWorldCrew(player, battle, mechanic, world, activeIndex);
+      battle.log.push(`${label}的 ${cardDisplayName(card)} 沒有可用招式，本輪待機；不形成同步攻擊，魔王照常行動。`);
+      return { world, label, playerId: String(player.id || ""), attribute: card?.attribute || "無", direct: false, hit: false, damage: 0, diceFace: 0, firstDiceFace: 0, diceRolls: [], move: null, actionName: "待機", cardIndex: activeIndex };
+    }
     if (action.type === "switch") {
       if (!indices.includes(action.nextIndex) || Number(player.crew?.[action.nextIndex]?.currentHp || 0) <= 0) return { world, label, direct: false, hit: false, damage: 0, diceFace: 0, firstDiceFace: 0, diceRolls: [], move: null, cardIndex: activeIndex };
       const fromName = cardDisplayName(player.crew?.[activeIndex]);
@@ -9760,7 +9768,17 @@
       const battlePending = boardLan.pendingRemoteBattleViews.length > 0
         || !!state.battleWindow?.__BOARD_BATTLE_DEBUG__?.spectatorPlaybackState?.().active
         || !!document.getElementById("battlePageOverlay")?.classList.contains("closing");
-      return battlePending && (kind === "state" ? !message.payload?.battleState : message.event?.channel !== "battle");
+      if (battlePending) return kind === "state" ? !message.payload?.battleState : message.event?.channel !== "battle";
+      // A map event can beat the sender's debounced terminal snapshot. Close
+      // the finished presentation before showing that event, without changing
+      // authoritative battle state or blocking the later snapshot behind it.
+      const mapEvent = kind === "event" && (message.event?.channel === "movement"
+        || message.event?.channel === "ui" && ["dice", "turn-banner", "spectator-modal"].includes(message.event?.type));
+      if (mapEvent && document.getElementById("battlePageOverlay")?.classList.contains("open")) {
+        closeBattlePageOverlay();
+        return true;
+      }
+      return false;
     },
     onIdle: resumeAfterRemoteBoardPlayback,
   });
@@ -47260,6 +47278,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     }
     if (action.type === "katakuri-defense") return `防禦 ${Math.round(Number(action.reduction || 0) * 100)}%`;
     if (action.type === "zephyr-disarm") return "阻止最後終結點引爆";
+    if (action.type === "wait") return "沒有可用招式，待機一回合";
     if (action.type === "escape") return "嘗試逃跑";
     if (action.type === "surrender") return "投降";
     return "已選行動";
@@ -49970,6 +49989,11 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         roundPauseReturnsToMap: (state.gameState.players || []).length > 1,
         canFinish: canControlBattle && canEndBattleTurn(battle) && (!lineageExtractionView || lineageExtractionView.allResolved),
         canAct: canControlBattle && !coopRescueWait && !handoffPending && !battlePrebattleIntroPending(battle) && !openingPassiveVisualPending(battle) && !battle.yonkoPrompt?.pending && !postgameBossMechanicPromptPending(battle) && !battle.animating && !hasQueuedPlayerAction && !battle.roundResolved && !battle.result && !battle.needsReplacement,
+        canWait: canControlBattle && !battle.isSparBattle && postgameBossMechanicFor(battle)?.key !== "postgame_tot_musica" && !coopRescueWait && !handoffPending && !hasQueuedPlayerAction
+          && !battlePrebattleIntroPending(battle) && !openingPassiveVisualPending(battle)
+          && !battle.yonkoPrompt?.pending && !postgameBossMechanicPromptPending(battle)
+          && !battle.animating && !battle.roundResolved && !battle.result && !battle.needsReplacement
+          && !usablePlayerBattleMoves(player, battle, getUnlockedMoves(activeCard)).length,
         handoffPending,
         coopInfo: coopReady,
         coopRescueWait,
@@ -51097,8 +51121,27 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       actorCrewIndex,
     };
     battle.enemyAction = chooseEnemyAction(battle);
-    const plannedEnemyAction = safeJsonClone(battle.enemyAction);
     void resolvePlannedBattleActions(player, battle);
+    return true;
+  }
+
+  function queuePlayerBattleWait() {
+    const battle = state.battleState;
+    if (!battle || battle.isSparBattle || postgameBossMechanicFor(battle)?.key === "postgame_tot_musica" || battle.yonkoPrompt?.pending || postgameBossMechanicPromptPending(battle)
+      || battlePrebattleIntroPending(battle) || openingPassiveVisualPending(battle) || battle.animating
+      || battle.playerAction || battle.roundResolved || battle.result || battle.needsReplacement || coopBattleHandoffPending(battle)) return false;
+    const player = isCoopBattle(battle) ? battleCommandPlayer(battle) : battlePlayer(null, battle);
+    if (!player || (isCoopBattle(battle) ? warnBoardLanBattleLocked(player, battle) : warnBoardLanTurnLocked(player))) return false;
+    if (isCoopBattle(battle)) prepareCoopBattleCommandRuntime(player, battle);
+    const card = battleActiveCard(player, battle);
+    if (!card || card.currentHp <= 0 || usablePlayerBattleMoves(player, battle, getUnlockedMoves(card)).length) return false;
+    voidPostgameOarsPrediction(battle, "本回合沒有可用招式，待機");
+    const action = { type: "wait", actorCrewIndex: battle.activeCrewIndex };
+    if (isCoopBattle(battle)) return queueCoopBattleAction(player, battle, action);
+    battle.playerAction = action;
+    battle.enemyAction = chooseEnemyAction(battle);
+    void resolvePlannedBattleActions(player, battle);
+    return true;
   }
 
   function queuePostgameZephyrDisarm() {
@@ -51584,11 +51627,11 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (!plannedPlayerAction || !plannedEnemyAction) return false;
     if (battle.yonkoPrompt?.pending || battle.animating) return false;
     // Older saves may have finished both animations and round-end effects, but
-    // a no-effect item left the player completion flag unset. Finish only the
+    // a no-effect item or stale move left the completion flag unset. Finish only the
     // handoff in that exact state; replaying the round would heal/damage twice.
     const lastResolutionLog = (battle.log || []).filter((entry) =>
       entry !== "頁面刷新後已接回本輪尚未完成的戰鬥結算。").at(-1);
-    const recoverCompletedItemRound = plannedPlayerAction.type === "item"
+    const recoverCompletedActionRound = !!plannedPlayerAction.type
       && !battle.playerPerformedAction && battle.enemyPerformedAction
       && !battle.result && !battle.roundResolved && !battle.needsReplacement
       && lastResolutionLog === "共鬥行動結束，交棒中。";
@@ -51597,9 +51640,9 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     battle.enemyAction = plannedEnemyAction;
     battle.__coopSingleActionHandoff = true;
     try {
-      if (recoverCompletedItemRound) {
+      if (recoverCompletedActionRound) {
         battle.playerPerformedAction = true;
-        battle.log.push("已接回無效道具後的交棒，保留本輪已結算的生命值與效果。");
+        battle.log.push("已接回未完成的交棒，保留本輪已結算的生命值與效果。");
       } else {
         await resolvePlannedBattleActions(player, battle);
       }
@@ -53773,6 +53816,14 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       renderBattleInterface();
       return;
     }
+    if (side === "player" && action.type === "wait") {
+      battle.playerPerformedAction = true;
+      recordJudicialRaidContribution(battle, player, { turnsActed: 1 });
+      battle.log.push(`${battleActiveCard(player, battle)?.name || player.name} 沒有可用招式，本回合待機；敵方照常行動。`);
+      renderBattleInterface();
+      notifyBattleWindow();
+      return;
+    }
     if (side === "player" && action.type === "katakuri-defense") {
       const mechanic = postgameBossMechanicFor(battle);
       if (mechanic?.key !== "postgame_charlotte_katakuri" || mechanic.defenseActionKey !== action.actionKey) {
@@ -53940,7 +53991,15 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       return;
     }
     const moveEntry = getMoveByAction(side, action, player, battle);
-    if (!moveEntry || (moveEntry.currentPP ?? 0) <= 0) return;
+    if (!moveEntry || (moveEntry.currentPP ?? 0) <= 0) {
+      if (side === "player") {
+        battle.playerPerformedAction = true;
+        recordJudicialRaidContribution(battle, player, { turnsActed: 1 });
+      } else battle.enemyPerformedAction = true;
+      battle.log.push(`${side === "player" ? player.name : "敵人"} 原定招式已無法使用，本次行動結束。`);
+      renderBattleInterface();
+      return;
+    }
     if (await isBattleActionBlockedByStatus(side, player, battle)) {
       if (side === "player") battle.playerPerformedAction = true;
       else battle.enemyPerformedAction = true;
@@ -55647,6 +55706,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     else if (command.type === "tot-world-action") queueTotMusicaWorldAction(command.payload?.world, command.payload?.action);
     else if (command.type === "item") queuePlayerBattleItem(command.payload?.itemId, command.payload?.targetIndex, command.payload?.targetPlayerId, command.payload?.targetSide);
     else if (command.type === "rescue-wait") battleWaitForRescue();
+    else if (command.type === "wait") queuePlayerBattleWait();
     else if (command.type === "yonkoSoulChoice") resolveBigMomSoulChoice(command.payload?.choice);
     else if (command.type === "judicial-next-switch") void startJudicialRaidNextPhaseAfterSwitch(command.payload?.nextIndex);
     else if (command.type === "escape") attemptEscape();
@@ -63752,24 +63812,25 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     return "";
   }
 
+  function usablePlayerBattleMoves(player, battle, moves) {
+    const contexts = player && battle ? activePlayerCarryContexts(player, battle) : [];
+    const extraPP = player && battle && (activeBlackbeardCaptureTurns(player, battle) > 0 || activeFinalGateBlackTurns(player, battle) > 0) ? 1 : 0;
+    return (moves || []).filter((move) => {
+      if (Number(move.currentPP ?? move.pp ?? 0) <= extraPP) return false;
+      const attack = ["attack", "special"].includes(move.category);
+      return contexts.every((ctx) => {
+        const effect = battleCarryItemEffect(ctx.item);
+        if (!attack && (ctx.item.id === "assault_vest" || effect.kind === "sdef_bonus_block_support_skills")) return false;
+        const choice = ["choice_band", "choice_glasses", "choice_scarf"].includes(ctx.item.id) || /^choice_lock_/.test(effect.kind || "");
+        return !attack || !choice || !ctx.state.lockedSkillId || ctx.state.lockedSkillId === move.id;
+      });
+    });
+  }
+
   function devObserverUsableBattleMoves(view) {
     const battle = state.battleState;
     const player = state.gameState?.players?.find((entry) => String(entry.id) === String(view?.player?.id));
-    const select = () => {
-      const contexts = player && battle ? activePlayerCarryContexts(player, battle) : [];
-      const extraPP = player && battle && (activeBlackbeardCaptureTurns(player, battle) > 0 || activeFinalGateBlackTurns(player, battle) > 0) ? 1 : 0;
-      return (view?.activeCard?.moves || []).filter((move) => {
-        if (Number(move.currentPP ?? move.pp ?? 0) <= extraPP) return false;
-        const attack = ["attack", "special"].includes(move.category);
-        return contexts.every((ctx) => {
-          const effect = battleCarryItemEffect(ctx.item);
-          if (!attack && (ctx.item.id === "assault_vest" || effect.kind === "sdef_bonus_block_support_skills")) return false;
-          const choice = ["choice_band", "choice_glasses", "choice_scarf"].includes(ctx.item.id) || /^choice_lock_/.test(effect.kind || "");
-          return !attack || !choice || !ctx.state.lockedSkillId || ctx.state.lockedSkillId === move.id;
-        });
-      });
-    };
-    // Match the command player's runtime, including co-op equipment locks.
+    const select = () => usablePlayerBattleMoves(player, battle, view?.activeCard?.moves);
     return player && isCoopBattle(battle)
       ? withCoopBattleRuntime(player, battle, select, { save: false })
       : select();
@@ -63851,8 +63912,10 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       const move = getUnlockedMoves(card)
         .filter((entry) => postgameBossMechanicDirectMove(entry) && Number(entry.currentPP ?? entry.pp ?? 0) > 0)
         .sort((a, b) => Number(b.power || 0) - Number(a.power || 0))[0];
-      const action = move ? { type: "move", moveId: move.id } : null;
-      return action && queueTotMusicaWorldAction(world, action) ? `${world === "real" ? "現實世界" : "歌世界"}完成行動選擇。` : "目前沒有可用的直接攻擊。";
+      const replacement = (worldPlayer.crew || []).findIndex((entry, index) => index !== activeIndex && Number(entry.currentHp || 0) > 0 && getUnlockedMoves(entry).some((skill) => postgameBossMechanicDirectMove(skill) && Number(skill.currentPP ?? skill.pp ?? 0) > 0));
+      const support = getUnlockedMoves(card).find((entry) => Number(entry.currentPP ?? entry.pp ?? 0) > 0);
+      const action = move ? { type: "move", moveId: move.id } : replacement >= 0 ? { type: "switch", nextIndex: replacement } : support ? { type: "move", moveId: support.id } : { type: "wait" };
+      return queueTotMusicaWorldAction(world, action) ? `${world === "real" ? "現實世界" : "歌世界"}完成行動選擇。` : "等待可執行的雙世界指令。";
     }
     const choose = (world) => {
       const indices = world === "real" ? mechanic.realIndices : mechanic.songIndices;
@@ -63863,12 +63926,13 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         .sort((a, b) => Number(b.power || 0) - Number(a.power || 0))[0];
       if (move) return { type: "move", moveId: move.id };
       const replacement = indices.find((index) => index !== activeIndex && Number(player.crew?.[index]?.currentHp || 0) > 0 && getUnlockedMoves(player.crew[index]).some((entry) => postgameBossMechanicDirectMove(entry) && Number(entry.currentPP ?? entry.pp ?? 0) > 0));
-      return Number.isInteger(replacement) ? { type: "switch", nextIndex: replacement } : null;
+      const support = getUnlockedMoves(card).find((entry) => Number(entry.currentPP ?? entry.pp ?? 0) > 0);
+      return Number.isInteger(replacement) ? { type: "switch", nextIndex: replacement } : support ? { type: "move", moveId: support.id } : { type: "wait" };
     };
     const realAction = choose("real");
     const songAction = choose("song");
     if (!realAction || !songAction) return "";
-    return queueTotMusicaAction(realAction, songAction) ? "雙世界同步攻擊。" : "";
+    return queueTotMusicaAction(realAction, songAction) ? "雙世界完成行動選擇。" : "";
   }
 
   function devObserverBattleStep() {
@@ -63993,12 +64057,19 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       return `換上更適合的角色：${view.player.crew[switchIndex]?.name || switchIndex}`;
     }
     const move = chooseDevObserverBattleMove(view);
-    if (move) {
-      queuePlayerBattleMove(move.id);
-      return `使用招式：${move.name}`;
-    }
-    attemptEscape();
-    return "沒有可用招式，嘗試逃跑。";
+    if (move && queuePlayerBattleMove(move.id)) return `使用招式：${move.name}`;
+    const ppItem = (view.player?.battleItems || []).find((item) => {
+      if (item.effectKind !== "restore_skill_use") return false;
+      const actor = state.gameState.players.find((entry) => String(entry.id) === String(view.player?.id));
+      const maxUses = Number(gameItemDef(item.id)?.effect?.maxUsesPerBattle || 0);
+      const key = isCoopBattle(battle) ? `${actor?.id}:${item.id}` : item.id;
+      return actor && (!maxUses || Number(battle.itemUseCounts?.[key] || 0) < maxUses)
+        && canSelectBattleItemTargetInModal(item, actor, battle, actor.crew?.[view.player.activeCrewIndex], view.player.activeCrewIndex);
+    });
+    if (!move && ppItem && queuePlayerBattleItem(ppItem.id, view.player.activeCrewIndex)) return `補充技能次數：${ppItem.name}`;
+    if (!move && attemptEscape()) return "沒有可用招式，嘗試逃跑。";
+    if (!move && queuePlayerBattleWait()) return "沒有可用招式，本回合待機，敵方照常行動。";
+    return "等待可執行的戰鬥指令。";
   }
 
   async function performDevObserverStep() {
@@ -64742,6 +64813,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     },
     battleJudicialNextSwitch: startJudicialRaidNextPhaseAfterSwitch,
     battleUseItem: queuePlayerBattleItem,
+    battleWait: queuePlayerBattleWait,
     battleWaitForRescue,
     battleYonkoSoulChoice: resolveBigMomSoulChoice,
     battleOarsPrediction: lockPostgameOarsPredictions,

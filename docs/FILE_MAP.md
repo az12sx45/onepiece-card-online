@@ -967,3 +967,11 @@
 
 `public/js/board_game.js` 的 `devObserverUsableBattleMoves` 在 `chooseDevObserverBattleMove` 評分前依實際共鬥角色 runtime 過濾 PP 與裝備限制。回合與戰鬥仍由原有 queue/resolver 控制。無合法招式且不可逃跑的最終退路仍未實作，見 DEV_WORKFLOW 的同日調查與外部 QA 證據；本次候選尚未發布。
 2026-09-24：board_game.js 道具行動完成與舊存檔交棒；board_character_depth.js/css 整框傾斜；scripts/board_battle_item_handoff_qa.js、board_battle_frame_tilt_qa.js 為定向回歸；build_board_battle_recovery_release.js 為固定基線的五檔發布工具。詳 DEV_WORKFLOW。
+
+### 2026-09-24 戰鬥停滯回歸與發布
+
+- `public/js/board_game.js`：普通／雙世界待機合法性、CPU 無招式退路、過期行動交棒恢復與旁觀戰鬥／地圖展示順序。
+- `public/js/board_battle.js`：待機按鈕、雙世界選擇、旁觀可見播放時間。`public/js/board_character_depth.js`：空角色圖之清理防重入。
+- `scripts/board_battle_no_action_qa.js`：隔離本機 Socket.IO 七種無行動案例；`scripts/board_tot_musica_no_action_qa.js`：單人分隊／多人雙世界無 PP 待機與合法性防護。
+- `scripts/board_battle_frame_tilt_qa.js`：整框傾斜、桌機／窄螢幕與圖層清空重建；`scripts/board_spectator_playback_browser_qa.js`：多人動畫、狀態與終止展示回歸。
+- `scripts/build_board_stall_completion_release.js`：固定 2d0e40572a 基線的五程式檔離線候選、讀回核驗與明確 promote。

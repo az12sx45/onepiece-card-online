@@ -293,7 +293,9 @@ async function battlePlaybackCheck(host, guest, report, stamp, roomCode) {
     if (earlyVisual) report.failures.push(`battle playback started behind hidden overlay: ${earlyVisual.id}`);
     report.afterBattleMapStart = report.battleTrace.find((row) => row.mapDiceOpen && row.mapDiceTitle === "戰後地圖骰子");
     if (!report.afterBattleMapStart || report.afterBattleMapStart.active || report.afterBattleMapStart.open) report.failures.push("map dice started before battle visuals and overlay finished");
-    if (!report.battleAfterTerminal.open || !report.battleAfterTerminal.playback?.active) report.failures.push("terminal snapshot closed battle before queued visuals ended");
+    if (report.battleTrace.some((row) => row.t >= report.battleTerminalAt && row.active && (!row.open || row.closing))) {
+      report.failures.push("terminal snapshot closed battle before queued visuals ended");
+    }
     if (report.battleReadonly.canControl !== false || report.battleReadonly.before !== report.battleReadonly.after) report.failures.push("spectator battle command mutated authoritative action");
   } finally {
     releaseBattleScript();

@@ -1197,8 +1197,20 @@
   let lastVisualEventId = "";
   const playedVisualEventIds = new Set();
   const spectatorBattlePlayback = createSpectatorBattlePlayback({
-    schedule: (callback, delay) => window.setTimeout(callback, delay),
-    cancel: (timer) => window.clearTimeout(timer),
+    // Start the hold after refresh finishes rendering this snapshot. Large
+    // co-op logs/portraits must not consume the event's visible playback time.
+    schedule: (callback, delay) => {
+      const job = { frame: 0, timer: 0 };
+      job.frame = window.requestAnimationFrame(() => {
+        job.frame = 0;
+        job.timer = window.setTimeout(callback, delay);
+      });
+      return job;
+    },
+    cancel: (job) => {
+      window.cancelAnimationFrame(job.frame);
+      window.clearTimeout(job.timer);
+    },
     onAdvance: () => {
       refresh();
       if (!spectatorBattlePlayback.status().active) {
@@ -7187,6 +7199,26 @@
     refs.infoPanel?.classList.remove("is-hidden");
     refs.infoTitle.textContent = "";
     const moves = (view?.activeCard?.moves || []).slice(0, 4);
+    if (view?.battle?.canWait) {
+      refs.infoContent.innerHTML = `
+        <section class="battle-command-ui" aria-label="招式">
+          <img class="battle-command-panel-frame" src="images/board/battle_switch_ui/battle_switch_panel_frame.webp" alt="" aria-hidden="true">
+          <header class="battle-command-heading"><strong>沒有可用招式</strong><span>可換人、補充技能次數，或待機。</span></header>
+          <div class="battle-command-body battle-command-grid">
+            <button class="battle-command-choice" type="button" data-battle-wait ${actionDisabled(view) ? "disabled" : ""}>
+              <img class="battle-command-choice-frame" src="images/board/battle_command_ui/battle_command_choice_button_frame.webp" alt="" aria-hidden="true">
+              <span class="battle-command-choice-copy"><strong class="battle-command-choice-name">待機一回合</strong><span class="battle-command-choice-meta">敵方照常行動，不回復 HP 或技能次數。</span></span>
+            </button>
+          </div>
+        </section>`;
+      refs.infoContent.querySelector("[data-battle-wait]")?.addEventListener("click", () => {
+        callBattleAction("battleWait", "wait", {});
+        currentMode = null;
+        renderClosedPanel();
+        showStatus("本回合待機，敵方照常行動。");
+      });
+      return;
+    }
     if (!moves.length) {
       refs.infoContent.innerHTML = `
         <section class="battle-command-ui" aria-label="招式">
@@ -8197,6 +8229,7 @@
     if (action.type === "switch") return `換上 ${(state.crew || []).find((card) => Number(card.index) === Number(action.nextIndex))?.name || "夥伴"}`;
     if (action.type === "item") return (latestView?.player?.battleItems || []).find((item) => item.id === action.itemId)?.name || "使用道具";
     if (action.type === "escape") return "嘗試逃跑";
+    if (action.type === "wait") return "沒有可用招式，待機";
     const move = (state.crew || []).flatMap((card) => card.moves || []).find((entry) => entry.id === action.moveId);
     return move?.displayName || move?.name || "使用招式";
   }
@@ -8228,6 +8261,9 @@
     const back = `<button class="tot-musica-world-back" type="button" data-tot-world-back="${world}">返回四項指令</button>`;
     if (!mode) return totMusicaWorldCommandButtons(world);
     if (mode === "attack") {
+      if (!(card.moves || []).some((move) => Number(move.currentPP ?? move.pp ?? 0) > 0)) {
+        return `<div class="tot-musica-world-mode-head"><b>沒有可用招式</b>${back}</div><div class="tot-musica-world-option-grid"><button class="postgame-world-action" type="button" data-tot-world-action="wait" data-tot-world="${world}"><strong>待機一回合</strong><small>本世界不形成同步攻擊，魔王照常行動。</small></button></div>`;
+      }
       return `<div class="tot-musica-world-mode-head"><b>選擇招式</b>${back}</div><div class="tot-musica-world-option-grid">${(card.moves || []).slice(0, 4).map((move) => {
         const detail = moveDetailLines(move);
         return `<button class="postgame-world-action" type="button" data-tot-world-action="move" data-tot-world="${world}" data-tot-value="${escapeHtml(move.id)}" ${Number(move.currentPP || 0) <= 0 ? "disabled" : ""}><strong>${escapeHtml(move.displayName || move.name)}</strong><small>${escapeHtml(detail.compactLine)}・PP ${escapeHtml(move.currentPP)}</small></button>`;
@@ -8282,7 +8318,7 @@
     }));
     refs.infoContent.querySelectorAll("[data-tot-world-action]").forEach((button) => button.addEventListener("click", () => {
       const type = button.dataset.totWorldAction;
-      const action = type === "move" ? { type, moveId: button.dataset.totValue } : type === "switch" ? { type, nextIndex: Number(button.dataset.totValue) } : { type: "escape" };
+      const action = type === "move" ? { type, moveId: button.dataset.totValue } : type === "switch" ? { type, nextIndex: Number(button.dataset.totValue) } : { type: type === "wait" ? "wait" : "escape" };
       selectTotMusicaSequentialAction(action, button.dataset.totWorld);
     }));
     refs.infoContent.querySelectorAll("[data-tot-world-item]").forEach((button) => button.addEventListener("click", () => {
