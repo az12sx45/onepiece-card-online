@@ -7122,3 +7122,10 @@ UI / RWD：
 - scripts/board_battle_frame_tilt_qa.js：1440x900、844x390、844x390 觸控模擬、低動態偏好，共八個模型／完整原圖場景；layout offset 寬高位置與角色尺寸不變，整框矩陣傾斜、內層不重複旋轉、移開重設、攻擊 class 及一次真正按鈕出招完成結算均通過，頁面錯誤零。觸控為瀏覽器模擬，不代表實體手機验收。
 - scripts/build_board_battle_recovery_release.js：從 073283a0d 固定基線保留 6,361 檔、6,310 媒體及 51 程式允許清單，只更新五個 Board 程式；Card／Chess／v2 不變，rank 圖檔未提交差異保留。語法與 CRLF diff 檢查通過。發布結果另記。
 - 前一日突擊背心＋所有攻擊 PP=0 且無法逃跑的另一案例尚未新增待機規則，不能宣稱本次修復所有可能停滯。LATTICE 此階段未提供可呼叫工具，沒有假稱任務或驗收寫入。
+
+#### 2026-09-24 正式發布確認
+
+- source 45405560be1c227b8f9173edc45a2340be6c5920；package commit 963ffd59d；正式 runtime 已讀回 package-b42b02c7fb5e35d8，manifest SHA e1d22cd95f054d29900fd26c8e170cea702624d1ca731077fef6b3ce088a8bbc。6,361 檔／1,531,192,110 bytes，Card、Chess、v2 與原媒體記錄保持一致。
+- 5 個更新 blob 的完整公開 GET／SHA／CORS、55 項 live release、142 項 distribution 檢查通過。證據：D:/Codex_QA/board-battle-recovery-20260924/{delivery.json,runtime-deployment.json,r2-public-verification.json,public-release,distribution-release.json}。
+- 本次一真人身分＋一 CPU 的四項定向測試、舊故障重新載入恢復、八個視覺場景及實際按鈕出招已通過。使用者實際存檔未被覆寫；其遊戲視窗於末次唯讀視窗清單中已關閉，未宣稱替玩家重新開局或完成真人驗收。
+- 追加多人觀看回歸未列為通過：兩瀏覽器＋CPU 主端已交棒、觀看端不能下指令，但觀看端未在 15／70 秒內清空 battleState；尚未與基線比對，不據此歸因於本次修改。既有整套 spectator suite 超過五分鐘未完成，隔離測試程序已停止。保留 lan-item、lan-item-retry、lan-playback/incomplete.json 作接續，未聲稱全面多人驗收完成。

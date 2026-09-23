@@ -23,3 +23,10 @@ scripts/build_board_battle_depth_release.js 固定基線、限定兩項既有程
 正式發布已驗證（2026-09-23T15:35:14.344Z）：package-59115d76bca49c75；manifest SHA d4008360d0d6c3cba695a66c4c7915f47ad9b2c102f053bd3f3cebbf15f6a834。2,141 個公開 blob 的完整 GET/SHA/CORS 通過；版本接口、55 項發布檢查、142 項發送路徑檢查通過。1440×900 / 844×390 實際初始化戰鬥 20 個來源場景、60 個指標姿勢及兩次攻擊到可返回地圖完成，瀏覽器錯誤 0。以上為自動 QA，非真人或實體手機驗收。7 張完整原圖備援與其他頁面延後範圍不變。LATTICE 未提供工具，不聲稱已寫入任務驗收。
 
 2026-09-24 更新：上述「不旋轉整張卡」已由使用者要求取代。完整 combat-card 現在連外框一起傾斜（Card 相同 12 度映射／900px 透視），布局尺寸保留，內部圖像不二次旋轉。驗證見 DEV_WORKFLOW 2026-09-24。
+
+#### 2026-09-24 正式發布確認
+
+- source 45405560be1c227b8f9173edc45a2340be6c5920；package commit 963ffd59d；正式 runtime 已讀回 package-b42b02c7fb5e35d8，manifest SHA e1d22cd95f054d29900fd26c8e170cea702624d1ca731077fef6b3ce088a8bbc。6,361 檔／1,531,192,110 bytes，Card、Chess、v2 與原媒體記錄保持一致。
+- 5 個更新 blob 的完整公開 GET／SHA／CORS、55 項 live release、142 項 distribution 檢查通過。證據：D:/Codex_QA/board-battle-recovery-20260924/{delivery.json,runtime-deployment.json,r2-public-verification.json,public-release,distribution-release.json}。
+- 本次一真人身分＋一 CPU 的四項定向測試、舊故障重新載入恢復、八個視覺場景及實際按鈕出招已通過。使用者實際存檔未被覆寫；其遊戲視窗於末次唯讀視窗清單中已關閉，未宣稱替玩家重新開局或完成真人驗收。
+- 追加多人觀看回歸未列為通過：兩瀏覽器＋CPU 主端已交棒、觀看端不能下指令，但觀看端未在 15／70 秒內清空 battleState；尚未與基線比對，不據此歸因於本次修改。既有整套 spectator suite 超過五分鐘未完成，隔離測試程序已停止。保留 lan-item、lan-item-retry、lan-playback/incomplete.json 作接續，未聲稱全面多人驗收完成。
