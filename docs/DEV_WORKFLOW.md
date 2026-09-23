@@ -7101,3 +7101,5 @@ UI / RWD：
 範圍：board_battle.html、board_battle.js、board_character_depth.js/css、board-depth/v1、Electron manifest 路由、程式清單及發布工具。1,072 張分層、7 張原图備援；外框尺寸固定。原圖、Card/Chess、其他 Board 頁面與存檔不變。驗證及發布記錄見 BOARD_BATTLE_DEPTH_20260923.md 與 D:/Codex_QA/board-battle-depth-20260923。
 
 2026-09-23 發布驗收：補列深度 manifest JSON 至 programFiles，修正 desktop_runtime_manifest_program_set_invalid；套件內容與 SHA 不變，重新核對實際 runtime endpoint。
+
+正式發布已驗證（2026-09-23T15:35:14.344Z）：package-59115d76bca49c75；manifest SHA d4008360d0d6c3cba695a66c4c7915f47ad9b2c102f053bd3f3cebbf15f6a834。2,141 個公開 blob 的完整 GET/SHA/CORS 通過；版本接口、55 項發布檢查、142 項發送路徑檢查通過。1440×900 / 844×390 實際初始化戰鬥 20 個來源場景、60 個指標姿勢及兩次攻擊到可返回地圖完成，瀏覽器錯誤 0。以上為自動 QA，非真人或實體手機驗收。7 張完整原圖備援與其他頁面延後範圍不變。LATTICE 未提供工具，不聲稱已寫入任務驗收。

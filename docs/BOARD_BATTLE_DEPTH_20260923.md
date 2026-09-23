@@ -19,3 +19,5 @@ scripts/build_board_battle_depth_release.js 固定基線、限定兩項既有程
 本機驗證：npm start 可服務頁面（未設定資料庫，未接觸玩家資料）；Node 語法檢查通過；1440×900 與 844×390 實際初始化戰鬥共 20 個來源場景、60 個指標姿勢通過，瀏覽器錯誤 0，原圖與卡框 layout 尺寸維持，浮點投影誤差低於 0.001 px。King angry 實際戰鬥截圖已檢視、可辨識且未見破裂；7 個備援不建立模型圖層。
 
 部署驗收修正：runtime 嚴格驗證所有 data 檔也必須列在 programFiles；已補列 images/board-depth/v1/manifest.json，總數為 51（50 個程式＋1 個圖層目錄）。包內檔案 bytes、releaseId、manifest SHA 皆不變。加入實際 runtime endpoint 驗證防止再漏列。
+
+正式發布已驗證（2026-09-23T15:35:14.344Z）：package-59115d76bca49c75；manifest SHA d4008360d0d6c3cba695a66c4c7915f47ad9b2c102f053bd3f3cebbf15f6a834。2,141 個公開 blob 的完整 GET/SHA/CORS 通過；版本接口、55 項發布檢查、142 項發送路徑檢查通過。1440×900 / 844×390 實際初始化戰鬥 20 個來源場景、60 個指標姿勢及兩次攻擊到可返回地圖完成，瀏覽器錯誤 0。以上為自動 QA，非真人或實體手機驗收。7 張完整原圖備援與其他頁面延後範圍不變。LATTICE 未提供工具，不聲稱已寫入任務驗收。
