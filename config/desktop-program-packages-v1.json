@@ -65,6 +65,7 @@
         "css/board_hotkeys.css",
         "css/board_lineage_extraction.css",
         "css/board_sea_event_reveal.css",
+        "images/board-depth/v1/manifest.json",
         "js/battle_hit_effect_settings.js",
         "js/bgm_manager.js",
         "js/bgm_metadata.js",

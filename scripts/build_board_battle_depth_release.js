@@ -198,11 +198,11 @@ function createBuilder(root = ROOT, baselineRef = BASELINE) {
     const config = validateConfig(checkedJson(configBytes, 'Program config'));
     const priorConfig = validateConfig(checkedJson(readAt(baseline, CONFIG), 'Baseline program config'));
     const expectedConfig = JSON.parse(JSON.stringify(priorConfig));
-    expectedConfig.games.board.programFiles.push(...NEW_PROGRAMS);
+    expectedConfig.games.board.programFiles.push(...NEW_PROGRAMS, LAYER_MANIFEST);
     expectedConfig.games.board.programFiles.sort(comparePaths);
     assert.deepEqual(config, expectedConfig, 'Config may only add the two character-depth programs.');
     assert.equal(priorConfig.games.board.programFiles.length, 48, 'Expected 48 baseline Board programs.');
-    assert.equal(config.games.board.programFiles.length, 50, 'Expected 50 candidate Board programs.');
+    assert.equal(config.games.board.programFiles.length, 51, 'Expected 51 candidate Board program/data files.');
     const protectedFiles = new Map([[CATALOG, baselineBytes], [V2, readAt(baseline, V2)]]);
     assert.equal(sha256Bytes(protectedFiles.get(V2)), config.legacyBaseline.catalogSha256, 'Legacy v2 baseline SHA');
     const manifests = {};
@@ -241,7 +241,7 @@ function createBuilder(root = ROOT, baselineRef = BASELINE) {
     const layerManifestBytes = readAt(sourceHead, `public/${LAYER_MANIFEST}`);
     const inventory = layerInventory(layerManifestBytes, oldByPath);
     const mediaNames = inventory.paths;
-    const names = config.games.board.programFiles;
+    const names = config.games.board.programFiles.filter(name => name !== LAYER_MANIFEST);
     const sourcePaths = [CONFIG, SERVER, ...names.map(name => `public/${name}`), `public/${PREFIX}`];
     // Diff respects checkout CRLF rules. All package bytes still come from Git blobs.
     git(['diff', '--quiet', 'HEAD', '--', ...sourcePaths]);

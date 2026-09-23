@@ -17,3 +17,5 @@ scripts/build_board_battle_depth_release.js 固定基線、限定兩項既有程
 發布需在 Git 來源凍結後建立並驗證候選、上傳內容定址 R2、核對公開 SHA、提升目錄，再驗證公開 runtime releaseId。LATTICE 工具目前未提供，故本次不聲稱持久任務或圖譜已寫入。
 
 本機驗證：npm start 可服務頁面（未設定資料庫，未接觸玩家資料）；Node 語法檢查通過；1440×900 與 844×390 實際初始化戰鬥共 20 個來源場景、60 個指標姿勢通過，瀏覽器錯誤 0，原圖與卡框 layout 尺寸維持，浮點投影誤差低於 0.001 px。King angry 實際戰鬥截圖已檢視、可辨識且未見破裂；7 個備援不建立模型圖層。
+
+部署驗收修正：runtime 嚴格驗證所有 data 檔也必須列在 programFiles；已補列 images/board-depth/v1/manifest.json，總數為 51（50 個程式＋1 個圖層目錄）。包內檔案 bytes、releaseId、manifest SHA 皆不變。加入實際 runtime endpoint 驗證防止再漏列。

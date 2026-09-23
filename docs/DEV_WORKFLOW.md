@@ -7099,3 +7099,5 @@ UI / RWD：
 
 ## 2026-09-23 戰鬥頁優先立體效果
 範圍：board_battle.html、board_battle.js、board_character_depth.js/css、board-depth/v1、Electron manifest 路由、程式清單及發布工具。1,072 張分層、7 張原图備援；外框尺寸固定。原圖、Card/Chess、其他 Board 頁面與存檔不變。驗證及發布記錄見 BOARD_BATTLE_DEPTH_20260923.md 與 D:/Codex_QA/board-battle-depth-20260923。
+
+2026-09-23 發布驗收：補列深度 manifest JSON 至 programFiles，修正 desktop_runtime_manifest_program_set_invalid；套件內容與 SHA 不變，重新核對實際 runtime endpoint。
