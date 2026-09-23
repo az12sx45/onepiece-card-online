@@ -960,3 +960,5 @@
 | `scripts/spar_lan_sync_qa.js` | 以三個獨立瀏覽器 context 加入同一 Socket.IO 房間；驗證 A/C 切磋一輪後把戰況暫存並換 B、B 可正常換到 C、C 能恢復戰況、同步版本依序遞增，以及非參戰 B 在 C 的 PK 回合改寫狀態時被 `not_your_turn` 拒絕。 |
 
 發布前補強（2026-09-19）：大型戰鬥觀看畫面以既有事件分段傳送並完整還原，保留每段 64 KiB 上限；新增 board_battle_visual_transport_qa.js 及本輪 board_spectator_release_verify.js，桌面清單加入播放模組。詳見 BOARD_SPECTATOR_PLAYBACK_20260919.md。
+
+- 戰鬥頁深度：public/js/board_character_depth.js、public/css/board_character_depth.css、public/images/board-depth/v1/manifest.json；發布器 scripts/build_board_battle_depth_release.js；設計及驗證 docs/BOARD_BATTLE_DEPTH_20260923.md。

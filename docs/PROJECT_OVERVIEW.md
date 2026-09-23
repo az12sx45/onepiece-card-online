@@ -2147,3 +2147,5 @@ Board 遊戲正式流程的圖片路徑集中在 `public/images/board/**`，避�
 - 炸藥岩倒數歸零後先鎖住戰鬥並播放五幕；劇情未完成前不先扣船員 HP，完成後才把全隊設為 0 HP 並走原本「全員瀕死」結果、返回地圖與推進城結算。澤法 2000 HP、4 次倒數、攻擊／解除選擇、四顆戰鬥按鈕及 `BOARD_GAME_STATE` 權威不變。
 
 發布前補強（2026-09-19）：大型戰鬥觀看畫面以既有事件分段傳送並完整還原，保留每段 64 KiB 上限；新增 board_battle_visual_transport_qa.js 及本輪 board_spectator_release_verify.js，桌面清單加入播放模組。詳見 BOARD_SPECTATOR_PLAYBACK_20260919.md。
+
+- 2026-09-23：戰鬥頁先行加入模型角色分層及固定尺寸框光；其他頁面暫不啟用。7 張未通過遮罩檢查的圖採完整原圖傾斜，詳見 BOARD_BATTLE_DEPTH_20260923.md。

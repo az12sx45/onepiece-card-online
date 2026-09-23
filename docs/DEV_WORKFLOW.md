@@ -7096,3 +7096,6 @@ UI / RWD：
 
 
 發布前補強（2026-09-19）：大型戰鬥觀看畫面以既有事件分段傳送並完整還原，保留每段 64 KiB 上限；新增 board_battle_visual_transport_qa.js 及本輪 board_spectator_release_verify.js，桌面清單加入播放模組。詳見 BOARD_SPECTATOR_PLAYBACK_20260919.md。
+
+## 2026-09-23 戰鬥頁優先立體效果
+範圍：board_battle.html、board_battle.js、board_character_depth.js/css、board-depth/v1、Electron manifest 路由、程式清單及發布工具。1,072 張分層、7 張原图備援；外框尺寸固定。原圖、Card/Chess、其他 Board 頁面與存檔不變。驗證及發布記錄見 BOARD_BATTLE_DEPTH_20260923.md 與 D:/Codex_QA/board-battle-depth-20260923。

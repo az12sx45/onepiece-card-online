@@ -92,6 +92,9 @@ function createDesktopDistribution({ publicDir, enabled = process.env.OP_DESKTOP
     }
     // Touch-capable Windows laptops still use Board's small prefetch index.
     if (pathname === '/images/board/mobile/manifest-v397.json' && isDesktopRenderer(req.headers)) return next();
+    // The reviewed Board depth catalog is package metadata fetched at runtime,
+    // not media redirected through R2. Allow only this exact JSON for Electron.
+    if (pathname === '/images/board-depth/v1/manifest.json' && isDesktopRenderer(req.headers)) return next();
     // No unknown media falls through to Render's static file handler.
     if (/^\/(?:images|audio|videos|fonts)(?:\/|$)/i.test(pathname)
       || /\.(?:png|jpe?g|webp|gif|avif|svg|mp3|ogg|wav|m4a|mp4|webm|otf|ttf|woff2?)$/i.test(pathname)) {

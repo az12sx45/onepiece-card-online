@@ -1304,3 +1304,5 @@ Board 多人模式不是 server authoritative。實際規則在前端執行，se
 - 角色圖只可顯示在鏤空框的實際人物內孔，左右不得穿出金屬直條，上方不得蓋住橫樑，下方不得進入姓名木牌；帽子、角、頭髮與肩部都受同一裁切窗限制。
 
 發布前補強（2026-09-19）：大型戰鬥觀看畫面以既有事件分段傳送並完整還原，保留每段 64 KiB 上限；新增 board_battle_visual_transport_qa.js 及本輪 board_spectator_release_verify.js，桌面清單加入播放模組。詳見 BOARD_SPECTATOR_PLAYBACK_20260919.md。
+
+- 2026-09-23 戰鬥深度效果只影響呈現；不改角色能力、傷害、回合、存檔、多人同步或點擊行為。

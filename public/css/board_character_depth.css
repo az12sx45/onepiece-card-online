@@ -1,0 +1,316 @@
+/* Visual-only character art depth. The original image and its frame keep their layout size. */
+.board-character-depth-surface,
+.board-character-depth-projection {
+  perspective: var(--board-character-depth-perspective, 900px);
+}
+
+.board-character-depth-image {
+  rotate: var(--board-character-depth-axis, 0 1 0) var(--board-character-depth-angle, 0deg);
+  backface-visibility: hidden;
+  transition: rotate 180ms cubic-bezier(.2, .75, .25, 1);
+}
+
+.board-character-depth-model-host,
+.board-character-depth-model-positioned {
+  position: relative;
+}
+
+.board-character-depth-model-layer,
+.board-character-depth-model-backplate,
+.board-character-depth-alpha-layer {
+  position: absolute;
+  display: block;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+  user-select: none;
+  contain: paint;
+}
+
+.board-character-depth-model-container {
+  perspective: none !important;
+}
+
+.board-character-depth-model-face {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: inherit;
+  backface-visibility: hidden;
+  transform: perspective(var(--board-character-depth-face-perspective, 900px))
+    rotateX(var(--board-character-depth-pitch, 0deg))
+    rotateY(var(--board-character-depth-yaw, 0deg));
+  transform-origin: center;
+  transition: transform 150ms cubic-bezier(.2, .65, .3, 1);
+}
+
+.board-character-depth-model-background,
+.board-character-depth-model-subject {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  margin: 0;
+  pointer-events: none;
+}
+
+/* Card finish keeps its inpainted background fixed and moves the cut-out subject. */
+.board-character-depth-model-background {
+  transform: none;
+}
+
+.board-character-depth-model-subject {
+  mask-image: var(--board-character-depth-mask-url);
+  -webkit-mask-image: var(--board-character-depth-mask-url);
+  mask-mode: alpha;
+  mask-size: var(--board-character-depth-mask-fit, cover);
+  -webkit-mask-size: var(--board-character-depth-mask-fit, cover);
+  mask-position: var(--board-character-depth-mask-position, center);
+  -webkit-mask-position: var(--board-character-depth-mask-position, center);
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  transform: translate(var(--board-character-depth-subject-x, 0px),
+    var(--board-character-depth-subject-y, 0px));
+  transition: transform 180ms cubic-bezier(.2, .75, .25, 1);
+}
+
+/* A reviewed static-only layer reconstructs the original at its neutral pose. */
+.board-character-depth-model-layer.board-character-depth-motion-static .board-character-depth-model-face,
+.board-character-depth-model-layer.board-character-depth-motion-static .board-character-depth-model-subject {
+  transform: none !important;
+  transition: none !important;
+}
+
+.board-character-depth-motion-static.board-character-depth-image,
+.board-character-depth-motion-static .board-character-depth-image {
+  rotate: none !important;
+  transition: none !important;
+}
+
+.board-character-depth-motion-static > .board-character-depth-light {
+  opacity: 0 !important;
+  transition: none !important;
+}
+
+.board-character-depth-alpha-shadow {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  margin: 0;
+  opacity: .28;
+  pointer-events: none;
+  filter: brightness(0) blur(5px);
+  transform: translate(var(--board-character-depth-bg-x, 0px),
+    calc(var(--board-character-depth-bg-y, 0px) + 5px)) scale(1.02);
+  transform-origin: center;
+  transition: transform 180ms cubic-bezier(.2, .75, .25, 1);
+}
+
+.board-character-depth-alpha-inline {
+  filter: drop-shadow(var(--board-character-depth-bg-x, 0px)
+    calc(var(--board-character-depth-bg-y, 0px) + 3px) 3px rgba(3, 12, 23, .45));
+  transition: filter 180ms cubic-bezier(.2, .75, .25, 1);
+}
+
+.board-character-depth-model-image {
+  visibility: hidden !important;
+  rotate: none !important;
+}
+
+.board-character-depth-light {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: block;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0;
+  background:
+    radial-gradient(circle at var(--board-character-depth-light-x, 32%) var(--board-character-depth-light-y, 24%),
+      rgba(255, 245, 204, .48), rgba(171, 235, 249, .13) 25%, transparent 54%),
+    linear-gradient(125deg, transparent 34%, rgba(255, 255, 255, .07) 49%, transparent 64%);
+  mix-blend-mode: screen;
+  transition: opacity 180ms ease;
+}
+
+[data-board-depth-ready] > .board-character-depth-light {
+  opacity: var(--board-character-depth-light-opacity, .12);
+}
+
+.portrait-wrap:not(.has-portrait) > .board-character-depth-light {
+  opacity: 0;
+}
+
+/* Combat motion owns its pose; the depth layer must never alter an action. */
+.combat-card.portrait-attack .board-character-depth-image,
+.combat-card.portrait-hit .board-character-depth-image,
+.combat-card.portrait-switch-in .board-character-depth-image,
+.combat-card.portrait-ko .board-character-depth-image,
+.combat-card.yonko-phase-transform .board-character-depth-image,
+.combat-card.nika-awakening-standby .board-character-depth-image,
+.combat-card.nika-awakening-heartbeat .board-character-depth-image,
+.combat-card.black-turn-donor .board-character-depth-image,
+.combat-card.black-turn-receiver .board-character-depth-image {
+  rotate: none !important;
+  transition: none !important;
+}
+
+.combat-card:is(.portrait-attack, .portrait-hit, .portrait-switch-in, .portrait-ko,
+  .yonko-phase-transform, .nika-awakening-standby, .nika-awakening-heartbeat,
+  .black-turn-donor, .black-turn-receiver) [data-board-depth-ready] > .board-character-depth-light {
+  opacity: .12;
+  transition: none;
+}
+
+.battle-fighter.attack .board-character-depth-image,
+.battle-fighter.hit .board-character-depth-image {
+  rotate: none !important;
+  transition: none !important;
+}
+
+.combat-card:is(.portrait-attack, .portrait-hit, .portrait-switch-in, .portrait-ko,
+  .yonko-phase-transform, .nika-awakening-standby, .nika-awakening-heartbeat,
+  .black-turn-donor, .black-turn-receiver) .board-character-depth-model-image,
+.battle-fighter:is(.attack, .hit) .board-character-depth-model-image {
+  visibility: visible !important;
+}
+
+.combat-card:is(.portrait-attack, .portrait-hit, .portrait-switch-in, .portrait-ko,
+  .yonko-phase-transform, .nika-awakening-standby, .nika-awakening-heartbeat,
+  .black-turn-donor, .black-turn-receiver) :is(.board-character-depth-model-layer, .board-character-depth-model-backplate, .board-character-depth-alpha-layer),
+.battle-fighter:is(.attack, .hit) :is(.board-character-depth-model-layer, .board-character-depth-model-backplate, .board-character-depth-alpha-layer) {
+  display: none !important;
+}
+
+.combat-card:is(.portrait-attack, .portrait-hit, .portrait-switch-in, .portrait-ko,
+  .yonko-phase-transform, .nika-awakening-standby, .nika-awakening-heartbeat,
+  .black-turn-donor, .black-turn-receiver) .board-character-depth-alpha-inline,
+.battle-fighter:is(.attack, .hit) .board-character-depth-alpha-inline {
+  filter: none !important;
+  transition: none !important;
+}
+
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .board-character-depth-image {
+    rotate: none !important;
+    transition: none !important;
+  }
+
+  .board-character-depth-light {
+    opacity: 0;
+    transition: none;
+  }
+
+  .board-character-depth-model-face {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .board-character-depth-model-subject {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .board-character-depth-alpha-shadow {
+    transform: translateY(5px) scale(1.02) !important;
+    transition: none !important;
+  }
+
+  .board-character-depth-alpha-inline {
+    filter: drop-shadow(0 3px 3px rgba(3, 12, 23, .45)) !important;
+    transition: none !important;
+  }
+
+  .portrait-wrap:not(.has-portrait) > .board-character-depth-light {
+    opacity: 0;
+  }
+}
+
+/* Battle optical 3D frame. Every new painted pixel stays inside the existing card box. */
+.combat-card.board-frame-inset-host {
+  --board-inset-light-x: 50%;
+  --board-inset-light-y: 32%;
+  --board-inset-light-strength: .5;
+}
+
+.combat-card.board-frame-inset-host > .board-frame-inset-edge,
+.combat-card.board-frame-inset-host > .board-frame-inset-rail {
+  box-sizing: border-box;
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  z-index: 11;
+  transform: none;
+  overflow: hidden;
+}
+
+/* The edge lies just inside the existing border. Masking removes the center,
+   so the portrait, name and combat controls retain their original pixels. */
+.combat-card.board-frame-inset-host > .board-frame-inset-edge {
+  inset: 2px;
+  border-radius: max(3px, calc(var(--battle-panel-radius, 18px) - 2px));
+  border: 2px solid rgba(255, 230, 166, .55);
+  padding: 8px;
+  background:
+    radial-gradient(ellipse 75% 60% at var(--board-inset-light-x) var(--board-inset-light-y),
+      rgba(255, 251, 231, .42) 0%,
+      rgba(172, 218, 255, .27) 42%,
+      transparent 76%),
+    linear-gradient(135deg,
+      rgba(255, 225, 164, .6) 0%, rgba(64, 105, 125, .28) 30%,
+      rgba(4, 12, 24, .48) 60%, rgba(245, 183, 105, .5) 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  box-shadow: inset 0 2px 3px rgba(255, 255, 255, .54), inset 0 -4px 7px rgba(0, 0, 0, .6);
+  opacity: .83;
+  transition: opacity 150ms ease;
+}
+
+/* A recessed second rail gives the original printed frame a raised lip while
+   staying inside its existing outer bounds. */
+.combat-card.board-frame-inset-host > .board-frame-inset-rail {
+  inset: 8px;
+  border-radius: max(2px, calc(var(--battle-panel-radius, 18px) - 8px));
+  border-top: 1px solid rgba(255, 247, 215, .55);
+  border-left: 1px solid rgba(208, 223, 222, .33);
+  border-right: 1px solid rgba(5, 12, 20, .56);
+  border-bottom: 2px solid rgba(0, 4, 10, .68);
+  box-shadow: inset 0 2px 3px rgba(255, 244, 194, .2), inset 0 -4px 6px rgba(0, 0, 0, .35);
+  opacity: .86;
+}
+
+.combat-card.board-frame-inset-host.board-frame-inset-engaged > .board-frame-inset-edge,
+.combat-card.board-frame-inset-host.board-frame-inset-engaged > .board-frame-inset-rail {
+  opacity: 1;
+}
+
+.combat-card.board-frame-inset-host:is(.portrait-attack, .portrait-hit, .portrait-switch-in,
+  .portrait-ko, .yonko-phase-transform, .nika-awakening-standby,
+  .nika-awakening-heartbeat, .black-turn-donor, .black-turn-receiver)
+  > :is(.board-frame-inset-edge, .board-frame-inset-rail) {
+  opacity: .18;
+  transition: none;
+}
+
+/* An image-specific custom frame already has a sculpted lip. Keep added paint
+   restrained there and leave its source artwork and transform unchanged. */
+.combat-card.cosmetic-frame-hide-base.board-frame-inset-host > .board-frame-inset-edge,
+.combat-card.cosmetic-frame-hide-base.board-frame-inset-host > .board-frame-inset-rail {
+  opacity: .68;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .combat-card.board-frame-inset-host > :is(.board-frame-inset-edge, .board-frame-inset-rail) {
+    transition: none;
+  }
+}

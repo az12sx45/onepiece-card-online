@@ -2556,9 +2556,19 @@
 
   function applyCosmeticFrame(card, frameId) {
     if (!card) return;
+    const frame = frameId && frameId !== "nikaFrame" ? COSMETIC_FRAME_CONFIGS[frameId] : null;
+    if (frame) {
+      const layers = Object.entries(frame.layers || {}).filter(([, layer]) => !!layer?.asset);
+      const current = Array.from(card.querySelectorAll(":scope > .cosmetic-frame-layer"));
+      if (card.classList.contains("cosmetic-frame-active") &&
+          card.classList.contains("cosmetic-frame-hide-base") === (frame.showBaseFrame === false) &&
+          current.length === layers.length &&
+          current.every((img, index) =>
+            img.dataset.frameId === frameId &&
+            img.dataset.layerId === layers[index][0] &&
+            img.getAttribute("src") === layers[index][1].asset)) return;
+    }
     clearCosmeticFrame(card);
-    if (!frameId || frameId === "nikaFrame") return;
-    const frame = COSMETIC_FRAME_CONFIGS[frameId];
     if (!frame) return;
     const anchor = card.querySelector(".card-inner");
     Object.entries(frame.layers || {}).forEach(([layerId, layer]) => {
