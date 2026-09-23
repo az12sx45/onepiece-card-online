@@ -23,3 +23,5 @@
 - `water_seven_ship_depth_qa.js` 比對六船五個升級視角及裝備／開孔頁，涵蓋桌機與 932x430、36 個原圖 SHA、指標不改布局、F4、GPU context loss／restore、觸控／reduced-motion、無 WebGL／深度檔遺失備援。最終執行結果與發布結果記在 DEV_WORKFLOW。
 - 證據：`D:/Codex_QA/water-seven-ship-depth-20260924`。以上為隔離瀏覽器自動測試，不接觸使用者存檔，也不代表實體手機驗收。
 - LATTICE 本階段沒有 callable API；沿用已知正式 project_id，沒有假稱寫入持久任務、圖譜或驗收。
+
+正式端補強：普通 img 的跨站 CDN 快取可能缺少 CORS header。3D renderer 改以 cache=reload 的 CORS fetch 取得 texture bytes，再用短期 Blob URL 解碼並回收；首次公開 3D smoke 曾安全回退原圖，不列為成功，最終發布驗收見 DEV_WORKFLOW。

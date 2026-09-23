@@ -7156,3 +7156,5 @@ UI / RWD：
 新增模型推論的 36 視角高度資料與獨立 WebGL 呈現，保留原圖、尺寸、UI 和改造規則。主頁僅更新版本 query，允許清單加入兩個程式。原／新版主遊戲升級、開孔、裝備、卸下、離開重進與 iframe 重載結果完全相同。檔案範圍、模型來源、驗證腳本及限制詳 docs/BOARD_WATER_SEVEN_DEPTH_20260924.md；最終版面 QA 與部署結果另記。
 
 水之七島最終本機驗證：84 組舊／新版版面及頁面狀態完全一致（六艘船 × 七種升級／裝備／開孔場景 × 1440x900／932x430）。36 原圖 SHA 與高度網格完整性通過；另六項桌機／窄螢幕互動生命週期及觸控、reduced-motion、無 WebGL、深度檔失敗備援通過；正式主頁功能舊／新版結果一致，頁面錯誤 0。測試先前的背景頁動畫未完成、遺失 context 後重新取 extension、窄螢幕游標落在按鈕等 QA 問題已定位，保留報告並針對修正的互動／備援重新通過，不將初次整套執行誤標成功。證據 browser-final（84 layoutEqual/stateEqual）、interaction-final（ok=true，6 項）、functions（ok=true）。
+
+水之七島正式端補驗：第一版 package-b66ee43a49bf77d3 的 57 項程式／版本及 144 項下載檢查通過，但真正開頁发现原 img 先快取的 CDN 無 CORS header 回應讓 WebGL 解碼失敗，呈現安全回退原圖，故未當作 3D 完成交付。修正 board_water_seven_depth.js 為 fetch(mode=cors, credentials=omit, cache=reload) 取得新鮮可讀 bytes，再以短期 Blob URL 上傳 texture 並於 finally 撤銷；原 UI、船圖與資料不變。六艘船用正式站資源加本機候選 renderer 的瀏覽器測試全部通過，GPU error=0，Canvas 與原圖尺寸一致；此結果標為候選覆寫測試，最終正式端無覆寫驗收另記。新增 build_water_seven_ship_cors_release.js，以 9a74f0467 為固定基線，仅更新 renderer 與三個 cache-version 入口，53 程式、6310 媒體與6363總檔不變。

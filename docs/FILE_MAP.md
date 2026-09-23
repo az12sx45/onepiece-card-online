@@ -977,3 +977,5 @@
 - `scripts/build_board_stall_completion_release.js`：固定 2d0e40572a 基線的五程式檔離線候選、讀回核驗與明確 promote。
 
 2026-09-24：public/js/board_water_seven_depth.js 為水之七島獨立呈現模組，board_water_seven_depth_data.json 為 36 視角數字深度資料；scripts/build_water_seven_ship_depth.py 負責離線推論、water_seven_ship_depth_qa.js 比對布局、water_seven_ship_function_qa.js 比對正式改造功能，build_water_seven_ship_release.js 建立限定發布候選。詳 BOARD_WATER_SEVEN_DEPTH_20260924.md。
+
+2026-09-24：scripts/build_water_seven_ship_cors_release.js 固定 9a74f0467 基線，限定四程式更新，處理正式 CDN texture 快取的 CORS 讀取；原資料與素材不變。

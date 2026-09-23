@@ -170,13 +170,21 @@
       resize(); canvas.style.display = "block"; image.style.opacity = "0";
       stage.setAttribute("data-ship-depth-ready", "true"); return;
     }
-    const bitmap = new Image(); bitmap.crossOrigin = "anonymous";
-    bitmap.src = new URL(key, location.href).href;
+    const bitmap = new Image();
+    let objectUrl;
     try {
+      // The ordinary img may already have cached the redirected CDN response
+      // without CORS headers. Request fresh CORS-readable bytes for WebGL;
+      // reusing that non-CORS image cache can taint or reject the texture.
+      const response = await fetch(new URL(key, location.href), { mode: "cors", credentials: "omit", cache: "reload" });
+      if (!response.ok) throw Error("Ship texture unavailable");
+      objectUrl = URL.createObjectURL(await response.blob());
+      bitmap.src = objectUrl;
       await bitmap.decode();
       if (disposed || lost || token !== generation || source() !== key || suspended()) return;
       install(entry, bitmap, key);
     } catch (error) { if (token === generation) { lastError = error.message; original(); } }
+    finally { if (objectUrl) URL.revokeObjectURL(objectUrl); }
   }
   function pointer(event) {
     if (!fine.matches || reduced.matches || suspended() || event.target.closest("button,input,select,textarea,.ship-marker,.slot")) return reset();
