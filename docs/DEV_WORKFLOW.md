@@ -7143,3 +7143,10 @@ UI / RWD：
 - LATTICE 本階段 tools/list 無 callable API；已讀 games.json 接續正式 project_id `fc1f1991-a190-4cd1-8933-947297d0ebbe`，未假稱任務、圖譜或驗收持久寫入。
 
 - 最終本機補驗：Tot Musica 人工按鈕與 CPU 共用自動操作邏輯的單人／多人雙世界共四案例通過；有可用招式時拒絕待機、PP 保持 0、兩世界待機後正常交棒或進入下一輪。舊版艾尼路／吉貝爾無效道具故障再次重現，重新載入本次程式後恢復；HP、道具與敵方 PP 未重複結算。
+
+#### 2026-09-24 停滯修正正式部署確認
+
+- source `96ea72da742bd0aa14037473b2061d4c99c29881`，package commit `6cc42d30f`；正式 runtime 已於 2026-09-24 02:19（Asia/Taipei）讀回 `package-44cba2090f7b33a2`，manifest SHA `24b2942d9acf6909f54a6f29c0a2446f70179ba26cfc1092c64ac8ce33b15bdc`。6,361 檔／1,531,200,880 bytes。
+- 五個更新 blob 公開完整 GET／SHA／CORS、55 項正式 runtime／程式檔檢查與 142 項下載發送路徑檢查均通過；Card／Chess 套件未改，既有 ranks 未提交差異保留。
+- 共 16 份最終通過的本機回歸報告，包含普通無招式七案例、窄螢幕待機、原始無效道具與舊版 reload 恢復、多人交棒與完整播放、八個視覺場景／12 次圖層生命週期、雙世界人工與 CPU 操作。測試過程的舊故障／診斷失敗留作溯源，不列為最終通過。單人雙世界直接進入下一輪是既有行為，QA 已按真實結算判斷。
+- 發布證據：`D:/Codex_QA/board-stall-completion-20260924/{delivery.json,validation-summary.json,runtime-deployment.json,r2-public-verification.json,public-release/live-verify.json,distribution-release.json}`。此次完成目前已重現的停滯修正，不保證不存在尚未發現的問題；未宣稱真人、實體手機或外網多人驗收，未改動玩家實際存檔。
