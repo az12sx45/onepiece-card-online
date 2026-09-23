@@ -314,3 +314,23 @@
     transition: none;
   }
 }
+
+/* The Card finish rotates the complete face, including its printed border.
+   Only its projection changes; layout width, height and spacing stay intact. */
+.combat-card.board-frame-inset-host .board-character-depth-model-face {
+  transform: none;
+}
+.combat-card.board-frame-inset-host .board-character-depth-image {
+  rotate: none;
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .combat-card.board-frame-inset-host.board-frame-inset-engaged:not(:is(
+    .portrait-attack, .portrait-hit, .portrait-switch-in, .portrait-ko,
+    .yonko-phase-transform, .nika-awakening-standby, .nika-awakening-heartbeat,
+    .black-turn-donor, .black-turn-receiver)) {
+    animation: none;
+    transform: perspective(900px) rotateX(var(--board-frame-pitch, 0deg)) rotateY(var(--board-frame-yaw, 0deg));
+    transition: transform 150ms cubic-bezier(.2, .65, .3, 1);
+    will-change: transform;
+  }
+}

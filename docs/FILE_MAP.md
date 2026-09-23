@@ -962,3 +962,8 @@
 發布前補強（2026-09-19）：大型戰鬥觀看畫面以既有事件分段傳送並完整還原，保留每段 64 KiB 上限；新增 board_battle_visual_transport_qa.js 及本輪 board_spectator_release_verify.js，桌面清單加入播放模組。詳見 BOARD_SPECTATOR_PLAYBACK_20260919.md。
 
 - 戰鬥頁深度：public/js/board_character_depth.js、public/css/board_character_depth.css、public/images/board-depth/v1/manifest.json；發布器 scripts/build_board_battle_depth_release.js；設計及驗證 docs/BOARD_BATTLE_DEPTH_20260923.md。
+
+### 2026-09-23 CPU 合法選招候選
+
+`public/js/board_game.js` 的 `devObserverUsableBattleMoves` 在 `chooseDevObserverBattleMove` 評分前依實際共鬥角色 runtime 過濾 PP 與裝備限制。回合與戰鬥仍由原有 queue/resolver 控制。無合法招式且不可逃跑的最終退路仍未實作，見 DEV_WORKFLOW 的同日調查與外部 QA 證據；本次候選尚未發布。
+2026-09-24：board_game.js 道具行動完成與舊存檔交棒；board_character_depth.js/css 整框傾斜；scripts/board_battle_item_handoff_qa.js、board_battle_frame_tilt_qa.js 為定向回歸；build_board_battle_recovery_release.js 為固定基線的五檔發布工具。詳 DEV_WORKFLOW。

@@ -7103,3 +7103,22 @@ UI / RWD：
 2026-09-23 發布驗收：補列深度 manifest JSON 至 programFiles，修正 desktop_runtime_manifest_program_set_invalid；套件內容與 SHA 不變，重新核對實際 runtime endpoint。
 
 正式發布已驗證（2026-09-23T15:35:14.344Z）：package-59115d76bca49c75；manifest SHA d4008360d0d6c3cba695a66c4c7915f47ad9b2c102f053bd3f3cebbf15f6a834。2,141 個公開 blob 的完整 GET/SHA/CORS 通過；版本接口、55 項發布檢查、142 項發送路徑檢查通過。1440×900 / 844×390 實際初始化戰鬥 20 個來源場景、60 個指標姿勢及兩次攻擊到可返回地圖完成，瀏覽器錯誤 0。以上為自動 QA，非真人或實體手機驗收。7 張完整原圖備援與其他頁面延後範圍不變。LATTICE 未提供工具，不聲稱已寫入任務驗收。
+
+### 2026-09-23：一名真人＋一名 CPU 戰鬥停滯調查（本機候選，未發布）
+
+- 正式已發布基線：`073283a0d` / `package-59115d76bca49c75`。本次修改位於 `D:\Codex_Release_Worktrees\board-battle-depth-20260923`，分支 `codex/board-cpu-battle-stall-20260923`；保留既有 ranks 圖檔差異。
+- 已重現：CPU 裝備武裝頭巾（choice_band）、鎖定橡膠手槍且該招 PP=0 時，仍反覆選擇橡膠機關槍。正式 queue 拒絕招式，CPU 卻持續報告使用招式，canAct=true、playerAction=null、同一回合不前進。
+- 本機修正 `public/js/board_game.js`：新增 `devObserverUsableBattleMoves`，CPU/開發觀戰選招依指令玩家的共鬥 runtime 排除裝備鎖定、禁止輔助招式及額外 PP 不足的招式；使用既有執行規則，沒有新增 state 欄位、傷害規則、Socket.IO event 或視覺尺寸調整。
+- 驗證：使用現行 npm start 的 18943 本機服務、真實 Socket.IO 暫時房間與隔離 Chromium context，每個房間為一名真人身分＋一名大廳建立的 CPU。一般敵人及戰鬥中重新載入能返回地圖；裝備锁定招式 PP=0 與 PP=25 兩種修正測試也能完成該輪；瀏覽器錯誤為零。裝備/PP 為定向測試種子，不是使用者存檔，也不代表真人或外網驗收。JS 語法、兩頁 HTTP 200、保留原有 CRLF 的 diff 檢查通過。
+- **尚未修復的第二種停滯**：單一存活角色裝備突擊防彈背心、所有攻擊 PP=0、沒有逃跑資格時，CPU 改為反覆嘗試逃跑，仍不前進。不可把上述選招修正宣稱為全面解決。建議先補 PP／換可用夥伴，最後新增待機一回合、敵方照常行動的退路；已向使用者詢問此新增規則偏好，尚未實作、未發布。
+- 使用者實際卡住的敵人、角色和階段仍未取得，未宣稱與上述測試相同。LATTICE tools 未提供可呼叫 API，未聲稱已寫入新任務或驗收。
+- 證據與可重跑腳本：`D:\Codex_QA\board-cpu-battle-stall-20260923`，`verification.json` 的 `ok=true` 僅指九項已列檢查，`allStallsResolved=false`；第二種停滯保存在 `assault-fixed/cpu-arrival-report.json`。
+### 2026-09-24：艾尼路／吉貝爾無效道具交棒及整張卡框傾斜
+
+- 實際玩家畫面唯讀診斷確認：CPU 使用活絡藥油，但吉貝爾沒有麻痺；敵方與回合末效果已完成，playerPerformedAction=false，停在「共鬥行動結束，交棒中」。不是 PP 用完；現場證據保存於 D:/Codex_QA/board-enel-jinbe-live-20260924。
+- public/js/board_game.js：CPU 依 effectKind、目標 HP 與使用上限選擇補血道具；被正式 queue 接受才回報使用。道具無效果仍結束這次行動，實際消耗才計道具貢獻。舊存檔只有符合已完成回合末效果的精確停滯狀態時補交棒，不重播扣血、回血或耗 PP。同時納入前一日已測試的裝備／PP 合法選招過濾；沒有新增持久欄位或 Socket.IO 契約。
+- public/js/board_character_depth.js、public/css/board_character_depth.css：依 public/js/card_finish_v1.js 的 12 度指標映射與 card-finish-v1.css 的 900px 透視，旋轉完整 combat-card，外框、原印刷邊緣與人物同層；取消內圖二次旋轉，保留模型分層小幅視差。寬高與排版不變，動作期間回復原攻擊／受擊動畫，觸控及減少動畫保持靜態。兩個 HTML 更新版本 query。
+- scripts/board_battle_item_handoff_qa.js：本機 npm start 18943、隔離 Chromium、真實 Socket.IO 房間（一真人身分一 CPU）驗證舊版重現→新版 reload 恢復、CPU 避開藥油、強制無效道具不消耗且交棒、正常補血只消耗一次。生命值／道具／敵 PP 比對通過。證據 D:/Codex_QA/board-battle-recovery-20260924。
+- scripts/board_battle_frame_tilt_qa.js：1440x900、844x390、844x390 觸控模擬、低動態偏好，共八個模型／完整原圖場景；layout offset 寬高位置與角色尺寸不變，整框矩陣傾斜、內層不重複旋轉、移開重設、攻擊 class 及一次真正按鈕出招完成結算均通過，頁面錯誤零。觸控為瀏覽器模擬，不代表實體手機验收。
+- scripts/build_board_battle_recovery_release.js：從 073283a0d 固定基線保留 6,361 檔、6,310 媒體及 51 程式允許清單，只更新五個 Board 程式；Card／Chess／v2 不變，rank 圖檔未提交差異保留。語法與 CRLF diff 檢查通過。發布結果另記。
+- 前一日突擊背心＋所有攻擊 PP=0 且無法逃跑的另一案例尚未新增待機規則，不能宣稱本次修復所有可能停滯。LATTICE 此階段未提供可呼叫工具，沒有假稱任務或驗收寫入。

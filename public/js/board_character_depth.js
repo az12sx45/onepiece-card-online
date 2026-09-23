@@ -2069,7 +2069,7 @@
   else init();
 })();
 
-/* Battle frame: fixed dimensions: stationary bevel, Card-directional light. */
+/* Card-matched whole-face tilt: frame and portrait share one fixed layout box. */
 (() => {
   'use strict';
   if (location.pathname.split('/').pop().toLowerCase() !== 'board_battle.html') return;
@@ -2079,10 +2079,13 @@
   const busy = '.portrait-attack, .portrait-hit, .portrait-switch-in, .portrait-ko, ' +
     '.yonko-phase-transform, .nika-awakening-standby, .nika-awakening-heartbeat, ' +
     '.black-turn-donor, .black-turn-receiver';
-  let active = null, frame = 0, queued = null;
+  let active = null, frame = 0, queued = null, bounds = null;
   const reset = host => {
     if (!host) return;
+    queued = null; bounds = null;
     host.classList.remove('board-frame-inset-engaged');
+    host.style.removeProperty('--board-frame-pitch');
+    host.style.removeProperty('--board-frame-yaw');
     host.style.setProperty('--board-inset-light-x', '50%');
     host.style.setProperty('--board-inset-light-y', '32%');
     host.style.setProperty('--board-inset-light-strength', '.5');
@@ -2108,7 +2111,12 @@
     if (!queued || reduced.matches) return;
     const {host, x, y} = queued;
     queued = null;
-    if (!host.isConnected || host.matches(busy)) return;
+    if (!host.isConnected || host.matches(busy)) { reset(host); return; }
+    const dx = 2 * x - 1, dy = 2 * y - 1, distance = Math.hypot(dx, dy);
+    const angle = 12 * Math.sin(Math.min(distance, 1) * Math.PI / 2);
+    const gain = distance > 0 ? angle / distance : 0;
+    host.style.setProperty('--board-frame-pitch', `${(-dy * gain).toFixed(3)}deg`);
+    host.style.setProperty('--board-frame-yaw', `${(dx * gain).toFixed(3)}deg`);
     host.style.setProperty('--board-inset-light-x', `${(24 + 52 * x).toFixed(1)}%`);
     host.style.setProperty('--board-inset-light-y', `${(18 + 64 * y).toFixed(1)}%`);
     host.style.setProperty('--board-inset-light-strength', '1');
@@ -2120,9 +2128,10 @@
       if (event.pointerType !== 'mouse' || !fine.matches || reduced.matches) return;
       const host = event.target instanceof Element ? event.target.closest('.board-frame-inset-host') : null;
       if (host !== active) { reset(active); active = host; }
-      if (!host || host.matches(busy)) return;
-      const surface = host.querySelector('[data-board-character-depth]') || host;
-      const rect = surface.getBoundingClientRect();
+      if (!host) return;
+      if (host.matches(busy)) { reset(host); return; }
+      // Cache the neutral box so transformed bounds cannot feed back into tilt.
+      const rect = bounds || (bounds = host.getBoundingClientRect());
       if (rect.width < 1 || rect.height < 1) return;
       queued = {host,
         x:Math.max(0,Math.min(1,(event.clientX-rect.left)/rect.width)),
@@ -2137,10 +2146,19 @@
     }, {passive:true});
     document.addEventListener('pointercancel',()=>{reset(active);active=null},{passive:true});
     window.addEventListener('blur',()=>{reset(active);active=null});
+    window.addEventListener('resize',()=>{reset(active);active=null});
+    window.addEventListener('scroll',()=>{reset(active);active=null},{passive:true,capture:true});
+    for (const query of [fine,reduced]) query.addEventListener('change',()=>{reset(active);active=null});
     const pending = new Set();let scan=0;
     new MutationObserver(records => {
       for (const record of records) {
-        if (record.type === 'attributes') {pending.add(record.target.parentElement || document.body);continue;}
+        if (record.type === 'attributes') {
+          if (record.attributeName === 'class') {
+            if (active && active.matches(busy) && active.classList.contains('board-frame-inset-engaged')) reset(active);
+            continue;
+          }
+          pending.add(record.target.parentElement || document.body);continue;
+        }
         for (const node of record.addedNodes) {
           if (node instanceof Element && !node.classList.contains('board-frame-inset-edge') &&
               !node.classList.contains('board-frame-inset-rail')) pending.add(node);
@@ -2148,7 +2166,7 @@
       }
       if (!pending.size || scan) return;
       scan=requestAnimationFrame(()=>{scan=0;for(const root of pending)attach(root);pending.clear()});
-    }).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['src']});
+    }).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['src','class']});
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded',start,{once:true});
   else start();

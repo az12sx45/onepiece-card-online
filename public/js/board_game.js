@@ -51583,12 +51583,26 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const plannedEnemyAction = safeJsonClone(battle.enemyAction);
     if (!plannedPlayerAction || !plannedEnemyAction) return false;
     if (battle.yonkoPrompt?.pending || battle.animating) return false;
+    // Older saves may have finished both animations and round-end effects, but
+    // a no-effect item left the player completion flag unset. Finish only the
+    // handoff in that exact state; replaying the round would heal/damage twice.
+    const lastResolutionLog = (battle.log || []).filter((entry) =>
+      entry !== "頁面刷新後已接回本輪尚未完成的戰鬥結算。").at(-1);
+    const recoverCompletedItemRound = plannedPlayerAction.type === "item"
+      && !battle.playerPerformedAction && battle.enemyPerformedAction
+      && !battle.result && !battle.roundResolved && !battle.needsReplacement
+      && lastResolutionLog === "共鬥行動結束，交棒中。";
     prepareCoopBattleCommandRuntime(player, battle);
     battle.playerAction = plannedPlayerAction;
     battle.enemyAction = plannedEnemyAction;
     battle.__coopSingleActionHandoff = true;
     try {
-      await resolvePlannedBattleActions(player, battle);
+      if (recoverCompletedItemRound) {
+        battle.playerPerformedAction = true;
+        battle.log.push("已接回無效道具後的交棒，保留本輪已結算的生命值與效果。");
+      } else {
+        await resolvePlannedBattleActions(player, battle);
+      }
     } finally {
       delete battle.__coopSingleActionHandoff;
     }
@@ -53898,7 +53912,13 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         ? coopBattleParticipants(battle).reduce((sum, entry) => sum + (entry.crew || []).reduce((crewSum, card) => crewSum + Math.max(0, Number(card.currentHp || 0)), 0), 0)
         : Number(battleActiveCard(player, battle)?.currentHp || 0);
       const targetWasAwaitingRescue = isCoopBattle(battle) && coopBattleParticipantAwaitingRescue(targetPlayer, battle);
+      const itemUseKey = isCoopBattle(battle) ? `${player.id}:${action.itemId}` : action.itemId;
+      const usesBefore = Number(battle.itemUseCounts?.[itemUseKey] || 0);
       applyBattleItemAction(side, action, player, battle);
+      const itemConsumed = Number(battle.itemUseCounts?.[itemUseKey] || 0) > usesBefore;
+      // An attempted command is complete even when its target no longer needs
+      // the item. Consumption and mission credit remain with the actual effect.
+      if (side === "player") battle.playerPerformedAction = true;
       const afterHp = isCoopBattle(battle)
         ? coopBattleParticipants(battle).reduce((sum, entry) => sum + (entry.crew || []).reduce((crewSum, card) => crewSum + Math.max(0, Number(card.currentHp || 0)), 0), 0)
         : Number(battleActiveCard(player, battle)?.currentHp || 0);
@@ -53907,7 +53927,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         recordJudicialRaidContribution(battle, player, {
           healingDone: Math.max(0, afterHp - beforeHp),
           turnsActed: 1,
-          itemsUsed: battle.playerPerformedAction ? 1 : 0,
+          itemsUsed: itemConsumed ? 1 : 0,
           rescuesDone: targetRescued ? 1 : 0,
         });
       }
@@ -63732,8 +63752,31 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     return "";
   }
 
+  function devObserverUsableBattleMoves(view) {
+    const battle = state.battleState;
+    const player = state.gameState?.players?.find((entry) => String(entry.id) === String(view?.player?.id));
+    const select = () => {
+      const contexts = player && battle ? activePlayerCarryContexts(player, battle) : [];
+      const extraPP = player && battle && (activeBlackbeardCaptureTurns(player, battle) > 0 || activeFinalGateBlackTurns(player, battle) > 0) ? 1 : 0;
+      return (view?.activeCard?.moves || []).filter((move) => {
+        if (Number(move.currentPP ?? move.pp ?? 0) <= extraPP) return false;
+        const attack = ["attack", "special"].includes(move.category);
+        return contexts.every((ctx) => {
+          const effect = battleCarryItemEffect(ctx.item);
+          if (!attack && (ctx.item.id === "assault_vest" || effect.kind === "sdef_bonus_block_support_skills")) return false;
+          const choice = ["choice_band", "choice_glasses", "choice_scarf"].includes(ctx.item.id) || /^choice_lock_/.test(effect.kind || "");
+          return !attack || !choice || !ctx.state.lockedSkillId || ctx.state.lockedSkillId === move.id;
+        });
+      });
+    };
+    // Match the command player's runtime, including co-op equipment locks.
+    return player && isCoopBattle(battle)
+      ? withCoopBattleRuntime(player, battle, select, { save: false })
+      : select();
+  }
+
   function chooseDevObserverBattleMove(view) {
-    const moves = (view?.activeCard?.moves || []).filter((move) => Number(move.currentPP ?? move.pp ?? 0) > 0);
+    const moves = devObserverUsableBattleMoves(view);
     const attacks = moves.filter(devObserverBattleMoveCanDamage);
     const hpRatio = Number(view?.activeCard?.currentHp || 0) / Math.max(1, Number(view?.activeCard?.maxHp || 1));
     const enemyHpRatio = Number(view?.enemy?.currentHp || 0) / Math.max(1, Number(view?.enemy?.maxHp || 1));
@@ -63929,9 +63972,17 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     }
     const hpRatio = Number(view.activeCard?.currentHp || 0) / Math.max(1, Number(view.activeCard?.maxHp || 1));
     if (hpRatio < 0.35) {
-      const healItem = (view.player?.battleItems || []).find((item) => /heal|回復|治療|食物|藥|food/i.test(`${item.id} ${item.name} ${item.desc} ${item.effectKind}`));
-      if (healItem) {
-        queuePlayerBattleItem(healItem.id, view.player.activeCrewIndex);
+      const commandPlayer = state.gameState.players.find((entry) => String(entry.id) === String(view.player?.id));
+      const healItem = (view.player?.battleItems || []).find((item) => {
+        if (!["heal_hp", "heal_hp_percent", "heal_percent_and_cure_status",
+          "heal_party_percent_battle", "heal_party_percent_outside_battle"].includes(item.effectKind)) return false;
+        const maxUses = Number(gameItemDef(item.id)?.effect?.maxUsesPerBattle || 0);
+        const useKey = isCoopBattle(battle) ? `${commandPlayer?.id}:${item.id}` : item.id;
+        if (maxUses > 0 && Number(battle.itemUseCounts?.[useKey] || 0) >= maxUses) return false;
+        const index = Number(view.player.activeCrewIndex || 0);
+        return commandPlayer && canSelectBattleItemTargetInModal(item, commandPlayer, battle, commandPlayer.crew?.[index], index);
+      });
+      if (healItem && queuePlayerBattleItem(healItem.id, view.player.activeCrewIndex)) {
         return `使用補品：${healItem.name}`;
       }
     }

@@ -2149,3 +2149,5 @@ Board 遊戲正式流程的圖片路徑集中在 `public/images/board/**`，避�
 發布前補強（2026-09-19）：大型戰鬥觀看畫面以既有事件分段傳送並完整還原，保留每段 64 KiB 上限；新增 board_battle_visual_transport_qa.js 及本輪 board_spectator_release_verify.js，桌面清單加入播放模組。詳見 BOARD_SPECTATOR_PLAYBACK_20260919.md。
 
 - 2026-09-23：戰鬥頁先行加入模型角色分層及固定尺寸框光；其他頁面暫不啟用。7 張未通過遮罩檢查的圖採完整原圖傾斜，詳見 BOARD_BATTLE_DEPTH_20260923.md。
+
+2026-09-24：修正 CPU 將活絡藥油誤當補血與無效道具未交棒；舊卡住回合支援保留 HP/PP 的恢復。戰鬥主角色卡連外框依爭霸戰相同指標映射一起傾斜，保持排版尺寸；觸控／低動態靜態。詳 DEV_WORKFLOW。
