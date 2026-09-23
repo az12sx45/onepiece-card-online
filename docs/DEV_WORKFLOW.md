@@ -7158,3 +7158,10 @@ UI / RWD：
 水之七島最終本機驗證：84 組舊／新版版面及頁面狀態完全一致（六艘船 × 七種升級／裝備／開孔場景 × 1440x900／932x430）。36 原圖 SHA 與高度網格完整性通過；另六項桌機／窄螢幕互動生命週期及觸控、reduced-motion、無 WebGL、深度檔失敗備援通過；正式主頁功能舊／新版結果一致，頁面錯誤 0。測試先前的背景頁動畫未完成、遺失 context 後重新取 extension、窄螢幕游標落在按鈕等 QA 問題已定位，保留報告並針對修正的互動／備援重新通過，不將初次整套執行誤標成功。證據 browser-final（84 layoutEqual/stateEqual）、interaction-final（ok=true，6 項）、functions（ok=true）。
 
 水之七島正式端補驗：第一版 package-b66ee43a49bf77d3 的 57 項程式／版本及 144 項下載檢查通過，但真正開頁发现原 img 先快取的 CDN 無 CORS header 回應讓 WebGL 解碼失敗，呈現安全回退原圖，故未當作 3D 完成交付。修正 board_water_seven_depth.js 為 fetch(mode=cors, credentials=omit, cache=reload) 取得新鮮可讀 bytes，再以短期 Blob URL 上傳 texture 並於 finally 撤銷；原 UI、船圖與資料不變。六艘船用正式站資源加本機候選 renderer 的瀏覽器測試全部通過，GPU error=0，Canvas 與原圖尺寸一致；此結果標為候選覆寫測試，最終正式端無覆寫驗收另記。新增 build_water_seven_ship_cors_release.js，以 9a74f0467 為固定基線，仅更新 renderer 與三個 cache-version 入口，53 程式、6310 媒體與6363總檔不變。
+
+#### 2026-09-24 水之七島正式部署完成
+
+- 最終 source `e89561cc2e60527d50c90d7497ebd4deedd6ff30`，package commit `71857d9e63ac07e3018480f09f3b5df94ebc7efa`。正式 runtime 已讀回 `package-510515ffd82e4151`，manifest SHA `8b85f286b6d59f5b539283f6aa07588acbb8c8de03ea034163160f30d4df235b`；6,363 檔／1,531,881,028 bytes。
+- 2026-09-24 02:56（Asia/Taipei）最終驗證：四個更新檔案完整公開 GET／SHA／CORS、57 項正式 runtime／程式檔、144 項下載發送路徑檢查全部通過。未覆寫任何網路回應的正式站 Chromium smoke 六艘船全部成功，GPU error=0、深度 canvas 與原圖尺寸相等、頁面錯誤 0，已排除前版跨站快取問題。
+- 完整本機套件 90 項與 36 原圖雜湊通過；CORS 修正後六項互動生命週期回歸通過；主遊戲原／新版升級、開孔、裝卸、重進與 iframe 重載結果一致。Card／Chess 與原船圖不變，ranks/r5.PNG、r6.PNG 的既有未提交變更保留。
+- 證據：`D:/Codex_QA/water-seven-ship-depth-20260924/delivery.json`、`cors-fix/{runtime-deployment.json,r2-public-verification.json,public-release/live-verify.json,distribution-release.json,public-smoke.json,public-ship-preview.png}`。為隔離瀏覽器自動測試，未宣稱真人或實體手機驗收，未改玩家實際存檔。LATTICE 無 callable API，未假稱持久寫入。
