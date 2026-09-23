@@ -7150,3 +7150,9 @@ UI / RWD：
 - 五個更新 blob 公開完整 GET／SHA／CORS、55 項正式 runtime／程式檔檢查與 142 項下載發送路徑檢查均通過；Card／Chess 套件未改，既有 ranks 未提交差異保留。
 - 共 16 份最終通過的本機回歸報告，包含普通無招式七案例、窄螢幕待機、原始無效道具與舊版 reload 恢復、多人交棒與完整播放、八個視覺場景／12 次圖層生命週期、雙世界人工與 CPU 操作。測試過程的舊故障／診斷失敗留作溯源，不列為最終通過。單人雙世界直接進入下一輪是既有行為，QA 已按真實結算判斷。
 - 發布證據：`D:/Codex_QA/board-stall-completion-20260924/{delivery.json,validation-summary.json,runtime-deployment.json,r2-public-verification.json,public-release/live-verify.json,distribution-release.json}`。此次完成目前已重現的停滯修正，不保證不存在尚未發現的問題；未宣稱真人、實體手機或外網多人驗收，未改動玩家實際存檔。
+
+### 2026-09-24 水之七島船隻深度表面
+
+新增模型推論的 36 視角高度資料與獨立 WebGL 呈現，保留原圖、尺寸、UI 和改造規則。主頁僅更新版本 query，允許清單加入兩個程式。原／新版主遊戲升級、開孔、裝備、卸下、離開重進與 iframe 重載結果完全相同。檔案範圍、模型來源、驗證腳本及限制詳 docs/BOARD_WATER_SEVEN_DEPTH_20260924.md；最終版面 QA 與部署結果另記。
+
+水之七島最終本機驗證：84 組舊／新版版面及頁面狀態完全一致（六艘船 × 七種升級／裝備／開孔場景 × 1440x900／932x430）。36 原圖 SHA 與高度網格完整性通過；另六項桌機／窄螢幕互動生命週期及觸控、reduced-motion、無 WebGL、深度檔失敗備援通過；正式主頁功能舊／新版結果一致，頁面錯誤 0。測試先前的背景頁動畫未完成、遺失 context 後重新取 extension、窄螢幕游標落在按鈕等 QA 問題已定位，保留報告並針對修正的互動／備援重新通過，不將初次整套執行誤標成功。證據 browser-final（84 layoutEqual/stateEqual）、interaction-final（ok=true，6 項）、functions（ok=true）。

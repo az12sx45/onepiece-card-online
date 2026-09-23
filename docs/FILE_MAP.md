@@ -975,3 +975,5 @@
 - `scripts/board_battle_no_action_qa.js`：隔離本機 Socket.IO 七種無行動案例；`scripts/board_tot_musica_no_action_qa.js`：單人分隊／多人雙世界無 PP 待機與合法性防護。
 - `scripts/board_battle_frame_tilt_qa.js`：整框傾斜、桌機／窄螢幕與圖層清空重建；`scripts/board_spectator_playback_browser_qa.js`：多人動畫、狀態與終止展示回歸。
 - `scripts/build_board_stall_completion_release.js`：固定 2d0e40572a 基線的五程式檔離線候選、讀回核驗與明確 promote。
+
+2026-09-24：public/js/board_water_seven_depth.js 為水之七島獨立呈現模組，board_water_seven_depth_data.json 為 36 視角數字深度資料；scripts/build_water_seven_ship_depth.py 負責離線推論、water_seven_ship_depth_qa.js 比對布局、water_seven_ship_function_qa.js 比對正式改造功能，build_water_seven_ship_release.js 建立限定發布候選。詳 BOARD_WATER_SEVEN_DEPTH_20260924.md。

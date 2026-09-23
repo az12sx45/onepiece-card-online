@@ -92,6 +92,8 @@
         "js/board_start.js",
         "js/board_state_receiver.js",
         "js/board_state_wire.js",
+        "js/board_water_seven_depth.js",
+        "js/board_water_seven_depth_data.json",
         "js/board_york_clue_puzzle.js",
         "js/choose_bgm.js",
         "js/game_cursor_feedback_v1.js",
