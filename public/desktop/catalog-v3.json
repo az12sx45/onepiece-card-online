@@ -1,6 +1,6 @@
 {
   "schema": 3,
-  "createdAt": "2026-09-23T18:47:35.090Z",
+  "createdAt": "2026-09-24T12:59:41.255Z",
   "assetBlobBaseUrl": "https://game-assets.rihdi.tw/desktop/blobs/sha256",
   "sourceTrees": {
     "images": "ebfdbe924ea188b8f08ccebd9ef616176728be38",
@@ -18,9 +18,9 @@
       "totalBytes": 710951490
     },
     "board": {
-      "releaseId": "package-510515ffd82e4151",
-      "manifestPath": "desktop/manifests/board-package-510515ffd82e4151.json",
-      "manifestSha256": "8b85f286b6d59f5b539283f6aa07588acbb8c8de03ea034163160f30d4df235b",
+      "releaseId": "package-c84296185eafd825",
+      "manifestPath": "desktop/manifests/board-package-c84296185eafd825.json",
+      "manifestSha256": "7e682e1fe5874c22f90a2a2ab0ccadae84bd970d454f55698b74841bb325270c",
       "entryPath": "board_start.html",
       "totalFiles": 6363,
       "totalBytes": 1531881028
