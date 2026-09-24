@@ -1,5 +1,11 @@
 # Dev Workflow
 
+## 2026-09-25 啟動器個人頁與商店 1.1.8 正式發布
+
+正式程式由隔離發行樹提交 `23b6c5fed`，簽署更新清單提交 `58dd185e8` 至 `origin/main`；正式 D 槽來源只定向同步相關檔案，保留同時進行的 Board 未提交工作。1.1.8 安裝檔為 221,792,955 bytes，SHA-256 `f00c94b92017c840f6a3fa12d3de33f1b0b7dfcdb781c347eebd61c515d7dca5`，公開 URL 為 `https://game-assets.rihdi.tw/desktop/launcher/releases/1.1.8/ONE-PIECE-Tabletop-Launcher-1.1.8-x64.exe`。公開 HEAD、Range 的 MZ／PE 標頭與完整 GET 的 SHA 均通過。公開 `/desktop/launcher-release-v1.json` 與本機簽署候選逐位元組一致，Ed25519 驗簽通過；1.1.7 查詢可更新，1.1.8 查詢為最新版。
+
+公開商店預覽回 87 件商品，含透明圓形的 12 款重畫頭像、20 首既有 OP、3 首原創 BGM、頁面裝扮與好友留言板；三遊戲 runtime 未改。隔離 Chromium 89／89、真封裝 Electron 46／46、原創曲與 OP 實際播放、白鬍子／巴其從 NSIS 抽出與來源 SHA 比對通過。最終公開分發驗證 144／144、Socket 相容 10／10，報告位於 `D:\\Codex_QA\\launcher-avatar-review\\`。正式帳號購買與留言的 PostgreSQL 交易未以真帳號操作；OP 的付費再散布授權尚未核對。Windows Authenticode 為 NotSigned。LATTICE 官方狀態仍是 `BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，沒有把這次任務或圖譜宣稱為已持久記錄。
+
 ## 2026-09-25 啟動器 12 款角色頭像重畫
 
 範圍：`public/images/board/avatars/51.webp`～`62.webp` 全部依既有頭像 1–50 的規格重畫；GPT 以各角色既有遊戲肖像為身分、服裝與配色參考，以 `49.webp` 為透明正圓裁切參考。新圖為 735×735 RGBA WebP，圓外透明、圓內近景頭肩像；不沿用前版不透明方圖、羅盤構圖。白鬍子 61 與巴其 62 的失敗候選已由對照遊戲原肖像的新圖取代，專案正式素材與原稿目錄各只保留每個 ID 的一份現行檔。
@@ -8,7 +14,7 @@
 
 驗證：在隔離 1.1.8 發布樹與正式 D 槽來源各讀回 12／12 個檔案及素材清單；每張 WebP 均為 735×735 RGBA、四角 Alpha=0、外接圓半徑加 1px 以外 Alpha=0，PNG／WebP 位元組 SHA-256 與清單相符。另以 160px 縮圖及遊戲原肖像目視對照五官、帽飾與衣著，尤其重查白鬍子黑頭巾、月牙鬍、紅披肩及巴其紅鼻、藍髮、交叉骨紋與船長帽。對照圖在 `D:\Codex_QA\launcher-avatar-redraw-20260925\`。本輪是素材及文件修訂；未改 Board 回合、遊戲存檔或 `BOARD_GAME_STATE`。
 
-## 啟動器個人頁、好友留言與商店 1.1.8（2026-09-25，發布候選）
+## 啟動器個人頁、好友留言與商店 1.1.8（2026-09-25，發布前候選快照）
 
 從正式來源 `D:\Codex_Release_Worktrees\board-voyage-records-v1` 定向移植至 `D:\Codex_Release_Worktrees\launcher-profile-shop-1.1.8`，以 `origin/main` 的 `9021210c9` 為基線；保留同時進行的 Board 角色景深、海上事件及排行圖修改。啟動器新增三款遊戲資料、好友參觀與留言、可自行布置的個人頁及航海者商店，商品總數 87：既有頭像／牆面／旗幟、GPT 新繪 12 位《航海王》角色頭像、3 種版型、3 張背景、2 款相框、6 張角色貼紙、3 首原創 Ogg、既有 20 首 OP MP3、留言板。OP 沿用 `public/audio/bgm/track01.mp3`～`track20.mp3` 的原位元組及順序；是否具付費再散布授權尚未核對。頭像與裝扮的原稿、輸出、曲目 SHA 分別見 `docs/LAUNCHER_AVATARS_20260925.json`、`LAUNCHER_PROFILE_ART_20260924.json`、`LAUNCHER_PROFILE_BGM_20260924.json`、`LAUNCHER_OP_BGM_20260925.json`。
 

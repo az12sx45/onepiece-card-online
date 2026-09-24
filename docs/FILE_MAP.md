@@ -1,5 +1,12 @@
 # File Map
 
+## 2026-09-25 啟動器 1.1.8 發行入口
+
+| 檔案 | 用途 |
+| --- | --- |
+| `public/desktop/launcher-release-v1.json` | 正式 stable 1.1.8 的 Ed25519 簽署更新清單；指向已驗證 221,792,955 bytes／SHA-256 `f00c94b92017c840f6a3fa12d3de33f1b0b7dfcdb781c347eebd61c515d7dca5` 的 R2 安裝檔。 |
+| `docs/DEV_WORKFLOW.md` | 1.1.8 程式、安裝檔、公開更新及驗證紀錄。 |
+
 ## 2026-09-25 啟動器頭像重畫檔案
 
 | 檔案 | 用途 |
