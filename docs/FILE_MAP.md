@@ -1,6 +1,6 @@
 # File Map
 
-## 2026-09-25 啟動器 1.1.9 房間與擴充商店（本機候選）
+## 2026-09-25 啟動器 1.1.9 房間與擴充商店（已部署）
 
 | 檔案 | 用途 |
 | --- | --- |
@@ -10,13 +10,14 @@
 | `public/images/launcher_room/scenes/`、`furniture/`、`chibi/`、`frames/` | 3 張場景、10 件家具、6 位既有角色 Q 版、2 款相框 WebP；貼紙／背景重用這些圖。 |
 | `tools/launcher-room/source-png/`、`prepare_art.py`、`build_art_manifest.py`、`docs/LAUNCHER_ROOM_ART_20260925.json` | GPT PNG 原稿、透明精靈轉檔與 21 張資產的來源／輸出 SHA-256 清單。 |
 | `scripts/launcher_profile_shop_qa.js`、`profile_shop_ownership_sql_qa.js`、`launcher_room_browser_qa.js`、`desktop_launcher_package_qa.js` | 目錄與權限、PGlite 真 JSONB 相容、隔離 Chromium 房間操作與封裝完整性驗證。 |
+| `public/desktop/launcher-release-v1.json` | 目前 stable 1.1.9 的 Ed25519 簽署清單，672 bytes／SHA-256 `1e9947c2202335fb00dd2c4fd7677b27248bda36d18e8272d2983dce7a4eb3de`；指向 226,157,553 bytes／SHA-256 `60c580af768eeb896e8f724c6001b715ad56ad1b531b9041ab2a8ddabb7def19` 的公開 NSIS 安裝檔。 |
+| `D:\Codex_QA\launcher-room-1.1.9\` | 簽署清單、R2 完整下載與 Range、真封裝 Electron、公開商店／Socket／下載頁驗證報告；`docs/DEV_WORKFLOW.md` 記錄發行 commit 與限制。 |
 
-## 2026-09-25 啟動器 1.1.8 發行入口
+## 2026-09-25 啟動器 1.1.8 舊發行紀錄
 
 | 檔案 | 用途 |
 | --- | --- |
-| `public/desktop/launcher-release-v1.json` | 正式 stable 1.1.8 的 Ed25519 簽署更新清單；指向已驗證 221,792,955 bytes／SHA-256 `f00c94b92017c840f6a3fa12d3de33f1b0b7dfcdb781c347eebd61c515d7dca5` 的 R2 安裝檔。 |
-| `docs/DEV_WORKFLOW.md` | 1.1.8 程式、安裝檔、公開更新及驗證紀錄。 |
+| `docs/DEV_WORKFLOW.md` | 保留 1.1.8 程式、221,792,955 bytes 安裝檔、SHA-256 `f00c94b92017c840f6a3fa12d3de33f1b0b7dfcdb781c347eebd61c515d7dca5` 與當時公開更新驗證；目前清單已升為上方的 1.1.9。 |
 
 ## 2026-09-25 啟動器頭像重畫檔案
 
