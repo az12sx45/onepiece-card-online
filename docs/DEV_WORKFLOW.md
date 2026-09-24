@@ -7185,3 +7185,7 @@ UI / RWD：
 - 使用者認為重新建模不像，改要求只把既有傾斜稍微加強。停止模型接入；六船／36 視角原圖與深度資料全部沿用。
 - public/js/board_water_seven_depth.js 僅把 uMotion 係數 12→16，未縮放最大位移 3→4 CSS px；原光照、布局、校準、互動、狀態與觸控偏好不變。board_water_seven.html、board_game.html、board_game.js 只更新版本字串為 20260924-ship-relief-v3。
 - scripts/build_water_seven_ship_motion_release.js 固定 e8bfcad5f 基線，限定以上四個程式差異，保留 6363 路徑、6310 媒體、53 程式及 Card／Chess／v2；原 ranks 未提交變更保留。測試與部署結果另記於本段下方，證據 D:/Codex_QA/water-seven-ship-motion-20260924。
+
+- 最終本機六項互動／備援及 36 原圖雜湊通過（interactions-verified/report.json），包含桌機／窄螢幕移動時布局不变、移開回復／停止繪圖、校準、context loss/restore、觸控、reduced-motion、無 WebGL／深度資料失敗備援與升級按鈕。最初 npm start 缺相依及桌面入口攔截的失敗留存，使用子程序 NODE_PATH 指向現有依賴、OP_DESKTOP_ONLY=0 後完成實際 npm start；沒有改全域設定、node_modules 或資料庫。
+- 2026-09-24 21:07（Asia/Taipei）正式 runtime 已切換 `package-c84296185eafd825`，manifest SHA `7e682e1fe5874c22f90a2a2ab0ccadae84bd970d454f55698b74841bb325270c`；source e02c50310d0b377cb6bc214e8cc482fa5ff9b65c，package commit 0b469f47932c686a1db5ad39eeb2b2309a24ebc6。四個更新 blob 完整 GET／SHA／CORS、57 項正式 runtime／程式檔、144 項下載檢查與六艘船正式頁無覆寫 smoke 全部通過。
+- 證據 delivery.json、runtime-deployment.json、r2-public-verification.json、public-release/live-verify.json、distribution-release.json、public-smoke.json 均位於上述 QA 目錄。僅宣稱瀏覽器自動驗證，未聲稱實體手機或真人驗收；未改玩家存檔。LATTICE 本階段仍無 callable API，未假稱持久寫入。
