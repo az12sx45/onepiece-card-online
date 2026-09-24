@@ -5,7 +5,8 @@ const ACTIONS = Object.freeze({ add: 'FRIEND_ADD_BY_NAME', accept: 'FRIEND_REQUE
 function person(value) {
   const userId = Number(value?.userId);
   if (!Number.isSafeInteger(userId) || userId <= 0) return null;
-  return { userId, name: String(value.name || `玩家${userId}`).slice(0, 80), avatar: Math.max(1, Math.min(50, Number(value.avatar) || 1)), online: value.online === true, page: String(value.page || '').slice(0, 80) };
+  const avatarId = Number(value.avatar);
+  return { userId, name: String(value.name || `玩家${userId}`).slice(0, 80), avatar: Number.isSafeInteger(avatarId) && avatarId >= 1 && avatarId <= 62 ? avatarId : 8, online: value.online === true, page: String(value.page || '').slice(0, 80) };
 }
 function message(value) {
   if (!value?.id || !(Number(value.from) > 0)) return null;
@@ -76,7 +77,7 @@ class SocialService extends EventEmitter {
     if (this.refreshing) return this.refreshing;
     const epoch = this.epoch;
     const pending = (async () => {
-      const result = await this.auth.emitAck('FRIENDS_GET', { secret: this.auth.getSecretForGame() });
+      const result = await this.auth.emitAck('FRIENDS_GET', { secret: this.auth.getSecretForGame(), launcher: true });
       if (epoch !== this.epoch) return;
       if (result?.ok) {
         for (const key of ['friends', 'requestsIn', 'requestsOut']) this[key] = (Array.isArray(result[key]) ? result[key] : []).slice(0, 200).map(person).filter(Boolean);

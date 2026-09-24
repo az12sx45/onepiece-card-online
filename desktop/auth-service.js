@@ -41,9 +41,13 @@ function sanitizeAccount(profile, username = '') {
   const needsDisplayName = !String(source.name || '').trim();
   const name = String(source.name || (userId ? `玩家 ${userId}（尚未取名）` : '航海者')).trim().slice(0, 40) || '航海者';
   const avatar = Math.max(1, Math.min(50, safeInteger(source.avatar, 8)));
+  const equippedAvatar = safeInteger(source.stats?.launcherAppearanceV1?.avatarId);
+  const ownedAvatars = Array.isArray(source.stats?.launcherOwnedV1?.items) ? source.stats.launcherOwnedV1.items : [];
+  const launcherAvatar = equippedAvatar >= 51 && equippedAvatar <= 62 && ownedAvatars.includes(`ava-${equippedAvatar}`)
+    ? equippedAvatar : avatar;
   const title = String(client.titles?.equipped || '偉大航道航海者').trim().slice(0, 60) || '偉大航道航海者';
   const coins = safeInteger(client.totals?.coins);
-  return { username: String(username || '').trim().toLowerCase().slice(0, 24), userId, name, avatar, title, coins, needsDisplayName };
+  return { username: String(username || '').trim().toLowerCase().slice(0, 24), userId, name, avatar, launcherAvatar, title, coins, needsDisplayName };
 }
 
 function validCipher(value) {
@@ -277,6 +281,99 @@ class AuthService extends EventEmitter {
     await this.save();
     await this.setPresence(this.activePage);
     return { ok: true, account: this.accountSummary() };
+  }
+
+  async launcherRequest(eventName, payload = {}) {
+    if (!this.secretMemory || !this.state.account || this.previewMode) return { ok: false, error: 'not authenticated' };
+    const secret = this.secretMemory;
+    const result = await this.emitAck(eventName, { secret, ...payload });
+    return secret === this.secretMemory ? result : { ok: false, error: 'session changed' };
+  }
+
+  async getLauncherProfile(userId = 0) {
+    const id = Number(userId);
+    if (!Number.isSafeInteger(id) || id < 0) return { ok: false, error: 'bad userId' };
+    return this.launcherRequest('LAUNCHER_PROFILE_GET', { userId: id });
+  }
+
+  async getLauncherShop(options = {}) {
+    if (options?.preview === true && this.previewMode) {
+      return this.emitAck('LAUNCHER_SHOP_GET', { preview: true });
+    }
+    return this.launcherRequest('LAUNCHER_SHOP_GET');
+  }
+
+  async changeLauncherShopItem(action, itemId) {
+    const customItems = new Set([
+      'layout-default', 'layout-grand-line', 'layout-bounty-board', 'layout-captain-quarters',
+      'background-default', 'background-luffy', 'background-zoro', 'background-nami',
+      'frame-none', 'frame-luffy', 'frame-zoro',
+      'decor-header-luffy', 'decor-header-chopper', 'decor-side-zoro', 'decor-side-nami',
+      'decor-footer-ace', 'decor-footer-robin',
+      'decor-none-header', 'decor-none-side', 'decor-none-footer',
+      'bgm-none', 'bgm-harbor', 'bgm-night-watch', 'bgm-voyage', 'guestbook-1'
+    ]);
+    if (typeof itemId !== 'string' || !(/^(?:ava-(?:[1-9]|[1-5][0-9]|6[0-2])|(?:wall|flag)-(?:[1-9]|[1-4][0-9]|50)|bgm-op-(?:0[1-9]|1[0-9]|20))$/.test(itemId) || customItems.has(itemId))) {
+      return { ok: false, error: 'invalid item' };
+    }
+    const eventName = action === 'buy' ? 'LAUNCHER_SHOP_BUY' : action === 'equip' ? 'LAUNCHER_SHOP_EQUIP' : '';
+    if (!eventName) return { ok: false, error: 'invalid action' };
+    const result = await this.launcherRequest(eventName, { itemId });
+    if (result?.ok && result.profile && result.shop && this.state.account) {
+      this.state.account = {
+        ...this.state.account,
+        name: String(result.profile.name || this.state.account.name),
+        avatar: (() => {
+          const id = safeInteger(result.profile.avatar);
+          return id >= 1 && id <= 50 ? id : this.state.account.avatar;
+        })(),
+        launcherAvatar: (() => {
+          const id = safeInteger(result.profile.avatar);
+          return id >= 1 && id <= 62 ? id : this.state.account.launcherAvatar || this.state.account.avatar;
+        })(),
+        title: String(result.profile.title || this.state.account.title),
+        coins: safeInteger(result.shop.wallet?.coins, this.state.account.coins)
+      };
+      await this.save();
+    }
+    return result;
+  }
+
+  async buyLauncherItem(itemId) { return this.changeLauncherShopItem('buy', itemId); }
+  async equipLauncherItem(itemId) { return this.changeLauncherShopItem('equip', itemId); }
+
+  async getLauncherComments(userId = 0, beforeId = 0) {
+    const id = Number(userId);
+    const before = Number(beforeId);
+    if (!Number.isSafeInteger(id) || id < 0 || !Number.isSafeInteger(before) || before < 0) {
+      return { ok: false, error: 'invalid comment page' };
+    }
+    return this.launcherRequest('LAUNCHER_COMMENTS_GET', { userId: id, beforeId: before });
+  }
+
+  async postLauncherComment(userId = 0, body = '') {
+    const id = Number(userId);
+    if (!Number.isSafeInteger(id) || id < 0 || typeof body !== 'string' || !body.trim() || body.length > 280) {
+      return { ok: false, error: 'invalid comment' };
+    }
+    return this.launcherRequest('LAUNCHER_COMMENT_POST', { userId: id, body });
+  }
+
+  async deleteLauncherComment(messageId) {
+    const id = Number(messageId);
+    if (!Number.isSafeInteger(id) || id <= 0) return { ok: false, error: 'invalid comment' };
+    return this.launcherRequest('LAUNCHER_COMMENT_DELETE', { messageId: id });
+  }
+
+  async saveLauncherDecorationPlacement(slot, placement) {
+    if (!['header', 'side', 'footer'].includes(slot) || !placement || typeof placement !== 'object') {
+      return { ok: false, error: 'invalid placement' };
+    }
+    const { x, y, scale } = placement;
+    if (![x, y, scale].every(Number.isFinite) || x < 5 || x > 95 || y < 5 || y > 95 || scale < 0.5 || scale > 1.5) {
+      return { ok: false, error: 'invalid placement' };
+    }
+    return this.launcherRequest('LAUNCHER_DECORATION_PLACEMENT_SET', { slot, placement: { x, y, scale } });
   }
 
   getSecretForGame() {

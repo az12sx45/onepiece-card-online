@@ -1,5 +1,26 @@
 # File Map
 
+## 2026-09-25 啟動器頭像重畫檔案
+
+| 檔案 | 用途 |
+| --- | --- |
+| `public/images/board/avatars/51.webp`～`62.webp` | 12 款 735×735 RGBA 透明正圓角色頭像；61 白鬍子與 62 巴其使用對照遊戲肖像後的新稿。 |
+| `tools/launcher-profile/avatar-source-png/51-sanji.png`～`62-buggy.png` | 12 張 GPT PNG 原稿，每個 ID 保留一份現行來源。 |
+| `docs/LAUNCHER_AVATARS_20260925.json` | 角色、原稿／輸出路徑、大小、SHA-256 與圓形 Alpha 規格。 |
+
+## 啟動器個人頁與商店 1.1.8（2026-09-25）
+
+| 檔案 | 用途 |
+| --- | --- |
+| `desktop/launcher.html`、`launcher.js`、`launcher-social.js`、`social-service.js`、`launcher-profile-shop.js/css` | 個人頁、三遊戲資料、好友參觀／頭像與留言、商店及裝扮 UI。 |
+| `desktop/auth-service.js`、`main.js`、`preload.js`、`package.json`／lock | 限定 IPC／Socket 橋接、`opui` 媒體讀取與 1.1.8 安裝封裝白名單。 |
+| `server/launcher-profile-shop.js`、`launcher-guestbook.js`、`chess-match-records.js`、`profile-social-stats.js`、`index.js`、`board-art-collection.js`、`desktop-distribution.js` | 87 件商品、獨立展示室錢包、原子購買／持有權、好友局部資料更新、展示白名單、留言、權威棋局紀錄與桌面事件通道。 |
+| `public/images/board/avatars/51.webp`～`62.webp`、`tools/launcher-profile/avatar-source-png/`、`docs/LAUNCHER_AVATARS_20260925.json` | 12 款 GPT 《航海王》角色頭像、PNG 原稿與 SHA。 |
+| `public/images/profile_decor/`、`tools/launcher-profile/source-png/`、`docs/LAUNCHER_PROFILE_ART_20260924.json` | 11 款個人頁背景／相框／貼紙 WebP、PNG 原稿與 SHA。 |
+| `public/audio/bgm/track01.mp3`～`track20.mp3`、`docs/LAUNCHER_OP_BGM_20260925.json` | 沿用既有 20 首 OP 檔案，保持編號與 SHA；此輪由桌面啟動器封裝。 |
+| `public/audio/profile_bgm/`、`tools/launcher-profile/compose_bgm.py`、`docs/LAUNCHER_PROFILE_BGM_20260924.json` | 三首原創 Ogg、生成腳本及來源清單。 |
+| `scripts/launcher_profile_shop_qa.js`、`profile_shop_ownership_sql_qa.js`、`launcher_guestbook_qa.js`、`chess_match_records_qa.js`、`launcher_social_avatar_qa.js`、`launcher_profile_shop_browser_qa.js`、`desktop_launcher_package_qa.js`、`desktop_distribution_gate_qa.js` | 購買／留言／頭像／棋局、Chromium UI、封裝素材與分流回歸驗證。 |
+
 ## 快捷鍵與攻擊圖（2026-09-22）
 
 - public/js/board_hotkeys.js、public/css/board_hotkeys.css：自訂按鍵、衝突選擇、輸入保護與設定面板。

@@ -1,0 +1,196 @@
+{
+  "date": "2026-09-24",
+  "generator": "OpenAI image_gen built-in, one independent call per bitmap asset",
+  "sourceDirectory": "tools/launcher-profile/source-png",
+  "notes": "Canonical One Piece characters only; GPT PNG originals are retained in source-png. Local Pillow WebP conversion preserves generated alpha for stickers and frames.",
+  "items": [
+    {
+      "id": "bg-luffy",
+      "sourceFile": "exec-6c6952c8-9aad-43e1-af47-e16f8d52829f.png",
+      "sourceSha256": "481d553938617caa2baba0549277cc3c88b28f5e1caac013d2e1fd474b306097",
+      "sourcePixels": [
+        1672,
+        941
+      ],
+      "output": "public/images/profile_decor/bg-luffy.webp",
+      "outputSha256": "2a97efec18456279d8f376d0b51a291316f064001f6fd7260ef8e6991c236550",
+      "outputPixels": [
+        1599,
+        900
+      ],
+      "bytes": 267342,
+      "transparent": false
+    },
+    {
+      "id": "bg-zoro",
+      "sourceFile": "exec-f0c2702a-293e-46e1-afe6-c9d7c7b2f95a.png",
+      "sourceSha256": "b7cd12c766b434bbec39ffc62e91313b963013cdf99542887077e4d2bf5d91be",
+      "sourcePixels": [
+        1672,
+        941
+      ],
+      "output": "public/images/profile_decor/bg-zoro.webp",
+      "outputSha256": "b33f45e29f339a37f3a9370276370a25b579e29fb68130d74296a87d6c78b704",
+      "outputPixels": [
+        1599,
+        900
+      ],
+      "bytes": 162286,
+      "transparent": false
+    },
+    {
+      "id": "bg-nami",
+      "sourceFile": "exec-044bf8b3-5ebf-418c-9191-c36588ee5a20.png",
+      "sourceSha256": "cd99e906675d62d2e58a283ed660b3a7541b29deb538b9eb8ee0f72f8761f602",
+      "sourcePixels": [
+        1672,
+        941
+      ],
+      "output": "public/images/profile_decor/bg-nami.webp",
+      "outputSha256": "b5f26993d6a85da78dde3560bf421142ed5829d17857c89806e0fefa1e851811",
+      "outputPixels": [
+        1599,
+        900
+      ],
+      "bytes": 282598,
+      "transparent": false
+    },
+    {
+      "id": "frame-luffy",
+      "sourceFile": "exec-8a715541-2d62-46ed-bb81-1b04d0e2cc1b.png",
+      "sourceSha256": "efa5013abde7d225383229202b10928a3cde7cf0cad9c09b7623bf0c459263f5",
+      "sourcePixels": [
+        1672,
+        941
+      ],
+      "output": "public/images/profile_decor/frame-luffy.webp",
+      "outputSha256": "8c7aab5201bc455cac8f9ee12f2651f88e2b3c3a406556d0a5888207d5ffa018",
+      "outputPixels": [
+        1599,
+        900
+      ],
+      "bytes": 359420,
+      "transparent": true
+    },
+    {
+      "id": "frame-zoro",
+      "sourceFile": "exec-60340f2c-6c8f-4c52-8eac-40cc7b1a9c43.png",
+      "sourceSha256": "eb9e3118d1485a87bed51ee4529b98e466d7765e00334a8a44662b46004915f0",
+      "sourcePixels": [
+        1672,
+        941
+      ],
+      "output": "public/images/profile_decor/frame-zoro.webp",
+      "outputSha256": "729e30dff5746ece73647d6445c5904b8c9a05df0debc3eecba54c6df8562c61",
+      "outputPixels": [
+        1599,
+        900
+      ],
+      "bytes": 344886,
+      "transparent": true
+    },
+    {
+      "id": "sticker-luffy",
+      "sourceFile": "exec-f78e9ef1-cee9-4266-8e02-1aba22df8005.png",
+      "sourceSha256": "a99367bdd192ddb73f97179dc353888086e79ee4c32379e504fff7df52c5a840",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "output": "public/images/profile_decor/sticker-luffy.webp",
+      "outputSha256": "d8f40c21b1cd62cf7fa294cbd8c02ddcb509b2e86678f7af0d5bf66bdd07f148",
+      "outputPixels": [
+        640,
+        640
+      ],
+      "bytes": 132210,
+      "transparent": true
+    },
+    {
+      "id": "sticker-zoro",
+      "sourceFile": "exec-d11cd916-8186-4758-bf94-379595604fdd.png",
+      "sourceSha256": "b09ead3749a9c07a37c1c03a5f5a466182189b24b43c4a4a09d78517efe04c48",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "output": "public/images/profile_decor/sticker-zoro.webp",
+      "outputSha256": "51b833c2108f9683ae7a3cd4e0a7f56901ec8e8173c5ab517683aedca5ea2c81",
+      "outputPixels": [
+        640,
+        640
+      ],
+      "bytes": 131732,
+      "transparent": true
+    },
+    {
+      "id": "sticker-nami",
+      "sourceFile": "exec-7263adda-80cb-4ddc-b947-63f41003db82.png",
+      "sourceSha256": "b6c0cb70a58e8f57c2c39dfb2bfecadbddd222433d972ff8f7789a5e353a20d4",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "output": "public/images/profile_decor/sticker-nami.webp",
+      "outputSha256": "8147e20837203aeeba729a9241662e888abedc597a815277cb9dc07eea733959",
+      "outputPixels": [
+        640,
+        640
+      ],
+      "bytes": 163622,
+      "transparent": true
+    },
+    {
+      "id": "sticker-chopper",
+      "sourceFile": "exec-eae0750e-41e9-4107-bb0c-33de32d2f6d1.png",
+      "sourceSha256": "297624c2bc7f64bcd9c9dab58ccd02cff683898a836a9a99c0bb817acece0e3a",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "output": "public/images/profile_decor/sticker-chopper.webp",
+      "outputSha256": "f8b615d01eebf42cafcdec216dc0752cf7e533e7717c3ee7fe84add5fe718f61",
+      "outputPixels": [
+        640,
+        640
+      ],
+      "bytes": 107538,
+      "transparent": true
+    },
+    {
+      "id": "sticker-ace",
+      "sourceFile": "exec-822b9346-efcb-4cf7-9419-4110a1d4746b.png",
+      "sourceSha256": "921484209368209ad84b001e34dba5ee62dc3c158dd2e82b4cf44b6197aedb82",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "output": "public/images/profile_decor/sticker-ace.webp",
+      "outputSha256": "805ceb2a5a480f88c10ed921b59658ed5cc4d9d3d1c726f34d208e7e30ddc965",
+      "outputPixels": [
+        640,
+        640
+      ],
+      "bytes": 162200,
+      "transparent": true
+    },
+    {
+      "id": "sticker-robin",
+      "sourceFile": "exec-e8f926a5-cd9f-4ba3-86c2-ae7905ab803d.png",
+      "sourceSha256": "5806ba8a5f6ab744942136aae75d387d66f7fcdb582d0c33435f22dbd23277d7",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "output": "public/images/profile_decor/sticker-robin.webp",
+      "outputSha256": "b60cc7ea4479b2c4633e5d6e905a6c76d41cd1914656ec299c97b92411c67bdd",
+      "outputPixels": [
+        640,
+        640
+      ],
+      "bytes": 133904,
+      "transparent": true
+    }
+  ],
+  "originalGeneratedDirectory": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e"
+}

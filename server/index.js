@@ -12,6 +12,10 @@ const { Chess } = require("chess.js");
 const { createBoardStateSender } = require("./board-state-wire");
 const { createDesktopDistribution } = require("./desktop-distribution");
 const { sanitizeProfileStats, PROFILE_STATS_SQL } = require("./board-art-collection");
+const { updateProfileSocial } = require("./profile-social-stats");
+const launcherProfileShop = require("./launcher-profile-shop");
+const launcherGuestbook = require("./launcher-guestbook");
+const { completedChessMatch, recordCompletedChessMatch, sanitizeChessStatsPatch } = require("./chess-match-records");
 const boardStateSender = createBoardStateSender();
 const voyageRecords = require("./board-voyage-records");
 const {
@@ -1184,6 +1188,22 @@ function chessRoomMember(room, socket){
   const meta = room?.sockets?.get(socket.id);
   if(!meta || meta.role !== "player") return null;
   return room.players.find((player) => Number(player.userId) === Number(meta.userId)) || null;
+}
+
+function recordChessResult(room){
+  if(!process.env.DATABASE_URL || room?.chessMatchRecorded) return Promise.resolve({ recorded:false });
+  if(room.chessMatchRecordPromise) return room.chessMatchRecordPromise;
+  const match = completedChessMatch(room);
+  if(!match) return Promise.resolve({ recorded:false });
+  const pending = recordCompletedChessMatch(pool, match)
+    .then((result) => { if(result.recorded) room.chessMatchRecorded = true; return result; })
+    .catch((error) => {
+      console.error("[CHESS_MATCH_RECORD] error:", error);
+      return { recorded:false, error:String(error?.message || error) };
+    })
+    .finally(() => { if(room.chessMatchRecordPromise === pending) room.chessMatchRecordPromise = null; });
+  room.chessMatchRecordPromise = pending;
+  return pending;
 }
 
 function upsertChessPlayer(room, profile, socketId){
@@ -3827,6 +3847,14 @@ io.on("connection", (socket) => {
       room.fen = CHESS_START_FEN;
       room.moveSequence = 0;
       room.lastMove = null;
+      room.matchId = crypto.randomUUID();
+      room.matchParticipants = room.players.map((player) => ({
+        color:player.color,
+        userId:player.isCPU ? null : Number(player.userId),
+        isCPU:!!player.isCPU,
+      }));
+      room.chessMatchRecorded = false;
+      room.chessMatchRecordPromise = null;
       room.updatedAt = Date.now();
       emitChessLobby(room);
       io.to(`chess:${room.roomCode}`).emit("CHESS_NAV_GAME", { lobby:serializeChessLobby(room) });
@@ -3918,7 +3946,10 @@ io.on("connection", (socket) => {
       if(gameOver) room.status = "ended";
       const committed = { roomCode:room.roomCode, game:{ fen:room.fen, moveSequence:room.moveSequence, lastMove:room.lastMove, gameOver } };
       io.to(`chess:${room.roomCode}`).emit("CHESS_MOVE_COMMITTED", committed);
-      if(gameOver) emitChessLobby(room);
+      if(gameOver){
+        emitChessLobby(room);
+        void recordChessResult(room);
+      }
       return cb?.({ ok:true, ...committed });
     }catch(error){
       console.error("[CHESS_MOVE] error:", error);
@@ -3926,7 +3957,7 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("CHESS_GAME_OVER", (payload = {}, cb) => {
+  socket.on("CHESS_GAME_OVER", async (payload = {}, cb) => {
     try{
       const roomCode = sanitizeChessRoomCode(payload.roomCode || socket.data.chessRoomCode || "");
       const room = chessRooms.get(roomCode);
@@ -3937,6 +3968,7 @@ io.on("connection", (socket) => {
       room.status = "ended";
       room.updatedAt = Date.now();
       emitChessLobby(room);
+      await recordChessResult(room);
       return cb?.({ ok:true });
     }catch(error){
       console.error("[CHESS_GAME_OVER] error:", error);
@@ -4552,7 +4584,7 @@ lockTouch(uid, did, socket.id);
 });
 
 
-socket.on("FRIENDS_GET", async ({ secret }, cb) => {
+socket.on("FRIENDS_GET", async ({ secret, launcher } = {}, cb) => {
   try{
     const prof = await getProfileBySecret(String(secret||"").trim());
     if(!prof) return cb?.({ ok:false, error:"bad secret" });
@@ -4571,12 +4603,16 @@ socket.on("FRIENDS_GET", async ({ secret }, cb) => {
       return cb?.({ ok:true, friends:[], requestsIn:[], requestsOut:[] });
     }
 
+    const launcherView = launcher === true;
     const r = await pool.query(
-      "SELECT user_id, name, avatar FROM player_profiles WHERE user_id = ANY($1::int[])",
+      launcherView
+        ? "SELECT user_id, name, avatar, jsonb_build_object('launcherOwnedV1', stats->'launcherOwnedV1', 'launcherAppearanceV1', stats->'launcherAppearanceV1') AS stats FROM player_profiles WHERE user_id = ANY($1::int[])"
+        : "SELECT user_id, name, avatar FROM player_profiles WHERE user_id = ANY($1::int[])",
       [wantIds]
     );
     const rows = await withDisplayNames(pool, r.rows || []);
     const byId = new Map(rows.map(x=>[Number(x.user_id), x]));
+    const visibleAvatar = x => launcherView ? launcherProfileShop.launcherAvatarForRow(x) : Number(x.avatar)||1;
 
     const friendList = friends
       .map(id=>{
@@ -4586,7 +4622,7 @@ socket.on("FRIENDS_GET", async ({ secret }, cb) => {
         return {
           userId: uid,
           name: String(x.name||""),
-          avatar: Number(x.avatar)||1,
+          avatar: visibleAvatar(x),
           online: isOnline(uid),
           page: userPage.get(uid) || "",
           activity: (isOnline(uid)
@@ -4601,7 +4637,7 @@ socket.on("FRIENDS_GET", async ({ secret }, cb) => {
         const x = byId.get(id);
         if(!x) return null;
         const uid = Number(x.user_id);
-        return { userId: uid, name: String(x.name||""), avatar: Number(x.avatar)||1, online: isOnline(uid) };
+        return { userId: uid, name: String(x.name||""), avatar: visibleAvatar(x), online: isOnline(uid) };
       })
       .filter(Boolean);
 
@@ -4610,7 +4646,7 @@ socket.on("FRIENDS_GET", async ({ secret }, cb) => {
         const x = byId.get(id);
         if(!x) return null;
         const uid = Number(x.user_id);
-        return { userId: uid, name: String(x.name||""), avatar: Number(x.avatar)||1, online: isOnline(uid) };
+        return { userId: uid, name: String(x.name||""), avatar: visibleAvatar(x), online: isOnline(uid) };
       })
       .filter(Boolean);
 
@@ -4808,8 +4844,8 @@ socket.on("FRIEND_ADD_BY_NAME", async ({ secret, name }, cb) => {
     myClient.social.friend_out = Array.from(new Set(myClient.social.friend_out.map(n=>Number(n)).filter(n=>Number.isFinite(n)&&n>0)));
     oClient.social.friend_in = Array.from(new Set(oClient.social.friend_in.map(n=>Number(n)).filter(n=>Number.isFinite(n)&&n>0)));
 
-    await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [myStats, myId]);
-    await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [oStats, otherId]);
+    await updateProfileSocial(pool, myId, myClient.social);
+    await updateProfileSocial(pool, otherId, oClient.social);
 
     // notify online friend docks
     emitToUser(myId, "FRIENDS_DIRTY", { by:"request_out", userId: otherId });
@@ -4862,8 +4898,8 @@ socket.on("FRIEND_REQUEST_ACCEPT", async ({ secret, userId }, cb) => {
     myClient.social.friends = Array.from(new Set(myClient.social.friends.map(n=>Number(n)).filter(n=>Number.isFinite(n)&&n>0)));
     oClient.social.friends = Array.from(new Set(oClient.social.friends.map(n=>Number(n)).filter(n=>Number.isFinite(n)&&n>0)));
 
-    await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [myStats, myId]);
-    await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [oStats, otherId]);
+    await updateProfileSocial(pool, myId, myClient.social);
+    await updateProfileSocial(pool, otherId, oClient.social);
 
     emitToUser(myId, "FRIENDS_DIRTY", { by:"accept", userId: otherId });
     emitToUser(otherId, "FRIENDS_DIRTY", { by:"accept", userId: myId });
@@ -4896,7 +4932,7 @@ socket.on("FRIEND_REQUEST_DECLINE", async ({ secret, userId }, cb) => {
     if(!t.rows.length){
       // still remove on my side
       myClient.social.friend_in = myClient.social.friend_in.filter(n=>Number(n)!==otherId);
-      await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [myStats, myId]);
+      await updateProfileSocial(pool, myId, myClient.social);
       return cb?.({ ok:true });
     }
     const other = t.rows[0];
@@ -4907,8 +4943,8 @@ socket.on("FRIEND_REQUEST_DECLINE", async ({ secret, userId }, cb) => {
     myClient.social.friend_in = myClient.social.friend_in.filter(n=>Number(n)!==otherId);
     oClient.social.friend_out = oClient.social.friend_out.filter(n=>Number(n)!==myId);
 
-    await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [myStats, myId]);
-    await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [oStats, otherId]);
+    await updateProfileSocial(pool, myId, myClient.social);
+    await updateProfileSocial(pool, otherId, oClient.social);
 
     emitToUser(myId, "FRIENDS_DIRTY", { by:"decline", userId: otherId });
     emitToUser(otherId, "FRIENDS_DIRTY", { by:"decline", userId: myId });
@@ -4934,7 +4970,7 @@ socket.on("FRIEND_REMOVE", async ({ secret, userId }, cb) => {
     myClient.social.friends = myClient.social.friends.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0 && n!==otherId);
     myClient.social.friend_in = myClient.social.friend_in.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0 && n!==otherId);
     myClient.social.friend_out = myClient.social.friend_out.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0 && n!==otherId);
-    await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [myStats, myId]);
+    await updateProfileSocial(pool, myId, myClient.social);
 
     // mutual remove if other exists
     const t = await pool.query("SELECT stats FROM player_profiles WHERE user_id=$1", [otherId]);
@@ -4945,7 +4981,7 @@ socket.on("FRIEND_REMOVE", async ({ secret, userId }, cb) => {
       oClient.social.friends = oClient.social.friends.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0 && n!==myId);
       oClient.social.friend_in = oClient.social.friend_in.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0 && n!==myId);
       oClient.social.friend_out = oClient.social.friend_out.map(n=>Number(n)).filter(n=>Number.isFinite(n) && n>0 && n!==myId);
-      await pool.query("UPDATE player_profiles SET stats=$1 WHERE user_id=$2", [oStats, otherId]);
+      await updateProfileSocial(pool, otherId, oClient.social);
     }
 
     emitToUser(myId, "FRIENDS_DIRTY", { by:"remove", userId: otherId });
@@ -5162,11 +5198,81 @@ socket.on("PROFILE_GET", async ({ secret }, cb) => {
 }
 });
 
+// The launcher receives a narrow profile view. Friend visits require the
+// requesting account's secret and an accepted friendship; no social/private
+// stats or account secret leave this endpoint.
+socket.on("LAUNCHER_PROFILE_GET", async ({ secret, userId = 0 } = {}, cb) => {
+  try {
+    const boardSummaryForUser = async (targetId) => {
+      const campaigns = await boardCampaignsForIdentity({ userId: targetId });
+      const latest = campaigns[0] || null;
+      const member = latest?.members?.find((entry) => Number(entry.userId) === targetId);
+      return {
+        available: true,
+        campaigns: campaigns.length,
+        latestSavedAt: latest ? Number(latest.updatedAt || 0) || null : null,
+        crewCount: Array.isArray(member?.latest?.crew) ? member.latest.crew.length : 0,
+        bounty: Math.max(0, Number(member?.latest?.bounty || 0)),
+        source: 'saved-campaign'
+      };
+    };
+    cb?.(await launcherProfileShop.getLauncherProfile(pool, String(secret || '').trim(), userId, boardSummaryForUser));
+  } catch (error) {
+    console.error('[LAUNCHER_PROFILE_GET] error:', error);
+    cb?.({ ok: false, error: 'profile unavailable' });
+  }
+});
+
+socket.on("LAUNCHER_SHOP_GET", async ({ secret, preview = false } = {}, cb) => {
+  try { cb?.(await launcherProfileShop.getLauncherShop(pool, String(secret || '').trim(), preview === true)); }
+  catch (error) { console.error('[LAUNCHER_SHOP_GET] error:', error); cb?.({ ok: false, error: 'shop unavailable' }); }
+});
+
+for (const [eventName, action] of [['LAUNCHER_SHOP_BUY', 'buy'], ['LAUNCHER_SHOP_EQUIP', 'equip']]) {
+  socket.on(eventName, async ({ secret, itemId } = {}, cb) => {
+    try {
+      const normalizedSecret = String(secret || '').trim();
+      const result = await launcherProfileShop.changeLauncherItem(pool, normalizedSecret, itemId, action);
+      cb?.(result);
+      if (result.ok && action === 'equip' && /^ava-/.test(String(itemId))) {
+        try {
+          const profile = await getProfileBySecret(normalizedSecret);
+          const ids = profile?.stats?.client?.social?.friends || [];
+          for (const id of [profile?.user_id, ...ids]) emitToUser(Number(id), 'FRIENDS_DIRTY', { by: 'profile', userId: Number(profile.user_id) });
+        } catch (error) { console.warn('[LAUNCHER_SHOP_EQUIP] friend refresh failed:', error); }
+      }
+    } catch (error) {
+      console.error(`[${eventName}] error:`, error);
+      cb?.({ ok: false, error: 'shop unavailable' });
+    }
+  });
+}
+
+socket.on('LAUNCHER_DECORATION_PLACEMENT_SET', async ({ secret, slot, placement } = {}, cb) => {
+  try { cb?.(await launcherProfileShop.setLauncherDecorationPlacement(pool, String(secret || '').trim(), slot, placement)); }
+  catch (error) { console.error('[LAUNCHER_DECORATION_PLACEMENT_SET] error:', error); cb?.({ ok: false, error: 'placement unavailable' }); }
+});
+
+socket.on('LAUNCHER_COMMENTS_GET', async ({ secret, userId = 0, beforeId = 0 } = {}, cb) => {
+  try { cb?.(await launcherGuestbook.getLauncherComments(pool, String(secret || '').trim(), userId, beforeId)); }
+  catch (error) { console.error('[LAUNCHER_COMMENTS_GET] error:', error); cb?.({ ok: false, error: 'comments unavailable' }); }
+});
+
+socket.on('LAUNCHER_COMMENT_POST', async ({ secret, userId = 0, body } = {}, cb) => {
+  try { cb?.(await launcherGuestbook.postLauncherComment(pool, String(secret || '').trim(), userId, body)); }
+  catch (error) { console.error('[LAUNCHER_COMMENT_POST] error:', error); cb?.({ ok: false, error: 'comment unavailable' }); }
+});
+
+socket.on('LAUNCHER_COMMENT_DELETE', async ({ secret, messageId } = {}, cb) => {
+  try { cb?.(await launcherGuestbook.deleteLauncherComment(pool, String(secret || '').trim(), messageId)); }
+  catch (error) { console.error('[LAUNCHER_COMMENT_DELETE] error:', error); cb?.({ ok: false, error: 'comment unavailable' }); }
+});
+
 // ====== 公開參觀：用 user_id 取得玩家資料（唯讀，不回 secret） ======
-socket.on("PROFILE_PUBLIC_GET", async ({ userId }, cb) => {
+socket.on("PROFILE_PUBLIC_GET", async ({ userId } = {}, cb) => {
   try {
     const uid = Number(userId);
-    if (!Number.isFinite(uid) || uid <= 0) {
+    if (!Number.isSafeInteger(uid) || uid <= 0) {
       return cb?.({ ok: false, error: "bad userId" });
     }
 
@@ -5177,9 +5283,6 @@ socket.on("PROFILE_PUBLIC_GET", async ({ userId }, cb) => {
         name,
         avatar,
         stats,
-        titles,
-        bounties,
-        recent_matches,
         updated_at
       FROM player_profiles
       WHERE user_id = $1
@@ -5191,8 +5294,7 @@ socket.on("PROFILE_PUBLIC_GET", async ({ userId }, cb) => {
     const p = rows[0] ? (await withDisplayNames(pool, [rows[0]]))[0] : null;
     if (!p) return cb?.({ ok: false, error: "not found" });
 
-    // ✅ 不回 secret，避免被拿去冒用
-    return cb?.({ ok: true, profile: p });
+    return cb?.({ ok: true, profile: launcherProfileShop.toCardPublicProfile(p) });
   } catch (err) {
     console.error("[PROFILE_PUBLIC_GET] error:", err);
     return cb?.({ ok: false, error: String(err.message || err) });
@@ -5230,7 +5332,7 @@ socket.on("PROFILE_UPDATE", async ({ secret, patch }, cb) => {
     }
 
     // ✅ stats：JSONB 合併（保留 stats.client.shop / stats.client.titles / …）
-    const statsParam = has("stats") ? JSON.stringify(sanitizeProfileStats(patch.stats)) : null;
+    const statsParam = has("stats") ? JSON.stringify(sanitizeProfileStats(launcherProfileShop.sanitizeLauncherStatsPatch(sanitizeChessStatsPatch(patch.stats)))) : null;
 
     // ✅ JSON 欄位：沒傳就保留；有傳才覆蓋
     const titlesParam   = has("titles")         ? JSON.stringify(patch.titles ?? []) : null;

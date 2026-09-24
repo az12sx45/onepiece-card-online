@@ -1,6 +1,6 @@
 {
   "name": "onepiece-tabletop-desktop",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "private": true,
   "description": "Windows launcher for ONE PIECE tabletop games with account login, verified game downloads and incremental updates.",
   "main": "main.js",
@@ -35,6 +35,8 @@
       "social-service.js",
       "launcher-social.js",
       "launcher-social.css",
+      "launcher-profile-shop.js",
+      "launcher-profile-shop.css",
       "launcher-updates-ui.js",
       "launcher-account-ui.js",
       "asset-store.js",
@@ -50,6 +52,7 @@
         "to": "launcher-assets/images/game_launcher",
         "filter": [
           "launcher_tabletop_series_logo_v1.png",
+          "launcher_gallery_background_v2.png",
           "launcher_card_cover_perspective_v2.png",
           "launcher_card_box_frame_cutout_v1.png",
           "launcher_card_lid_front_panel_v1.png",
@@ -87,6 +90,72 @@
         ]
       },
       {
+        "from": "../public/images/walls",
+        "to": "launcher-assets/images/walls",
+        "filter": [
+          "*.webp"
+        ]
+      },
+      {
+        "from": "../public/images/flags",
+        "to": "launcher-assets/images/flags",
+        "filter": [
+          "*.webp"
+        ]
+      },
+      {
+        "from": "../public/images/profile_decor",
+        "to": "launcher-assets/images/profile_decor",
+        "filter": [
+          "bg-luffy.webp",
+          "bg-zoro.webp",
+          "bg-nami.webp",
+          "frame-luffy.webp",
+          "frame-zoro.webp",
+          "sticker-luffy.webp",
+          "sticker-zoro.webp",
+          "sticker-nami.webp",
+          "sticker-chopper.webp",
+          "sticker-ace.webp",
+          "sticker-robin.webp"
+        ]
+      },
+      {
+        "from": "../public/audio/profile_bgm",
+        "to": "launcher-assets/audio/profile_bgm",
+        "filter": [
+          "harbor.ogg",
+          "night-watch.ogg",
+          "voyage.ogg"
+        ]
+      },
+      {
+        "from": "../public/audio/bgm",
+        "to": "launcher-assets/audio/bgm",
+        "filter": [
+          "track01.mp3",
+          "track02.mp3",
+          "track03.mp3",
+          "track04.mp3",
+          "track05.mp3",
+          "track06.mp3",
+          "track07.mp3",
+          "track08.mp3",
+          "track09.mp3",
+          "track10.mp3",
+          "track11.mp3",
+          "track12.mp3",
+          "track13.mp3",
+          "track14.mp3",
+          "track15.mp3",
+          "track16.mp3",
+          "track17.mp3",
+          "track18.mp3",
+          "track19.mp3",
+          "track20.mp3"
+        ]
+      },
+      {
         "from": "../public/videos/game_launcher",
         "to": "launcher-assets/videos/game_launcher",
         "filter": [
@@ -113,7 +182,10 @@
       {
         "from": "../public/css",
         "to": "cursor-policy/css",
-        "filter": ["board-cursor-nami-v3.css", "card-cursor-buggy-v3.css"]
+        "filter": [
+          "board-cursor-nami-v3.css",
+          "card-cursor-buggy-v3.css"
+        ]
       },
       {
         "from": "../public/js/game_cursor_feedback_v1.js",

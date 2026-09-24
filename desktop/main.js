@@ -48,6 +48,7 @@ const CACHE_SCHEME = 'opcache';
 const SMOKE_MODE = process.env.OP_DESKTOP_SMOKE === '1';
 const SMOKE_REPORT_PATH = String(process.env.OP_DESKTOP_SMOKE_REPORT || '').trim();
 const SMOKE_MEDIA_ASSETS = String(process.env.OP_DESKTOP_SMOKE_MEDIA_ASSETS || '').trim();
+const SMOKE_PROFILE_ASSETS = process.env.OP_DESKTOP_SMOKE_PROFILE_ASSETS === '1';
 const SCREENSHOT_PATH = String(process.env.OP_DESKTOP_SCREENSHOT_PATH || '').trim();
 const SCREENSHOT_VIEW = String(process.env.OP_DESKTOP_SCREENSHOT_VIEW || '').trim();
 const TEST_USER_DATA_PATH = String(process.env.OP_DESKTOP_USER_DATA || '').trim();
@@ -317,7 +318,12 @@ function resolveLauncherResource(requestUrl) {
     const allowed = [
       /^images\/game_launcher\/[A-Za-z0-9._-]+$/,
       /^images\/desktop_launcher\/[A-Za-z0-9._-]+$/,
-      /^images\/board\/avatars\/(?:[1-9]|[1-4][0-9]|50)\.webp$/,
+      /^images\/board\/avatars\/(?:[1-9]|[1-5][0-9]|6[0-2])\.webp$/,
+      /^images\/walls\/[1-8]\.webp$/,
+      /^images\/flags\/(?:[1-9]|1[0-5])\.webp$/,
+      /^images\/profile_decor\/(?:bg-(?:luffy|zoro|nami)|frame-(?:luffy|zoro)|sticker-(?:luffy|zoro|nami|chopper|ace|robin))\.webp$/,
+      /^audio\/profile_bgm\/(?:harbor|night-watch|voyage)\.ogg$/,
+      /^audio\/bgm\/track(?:0[1-9]|1[0-9]|20)\.mp3$/,
       /^videos\/game_launcher\/[A-Za-z0-9._-]+$/
     ];
     if (!allowed.some((pattern) => pattern.test(relativePath))) return null;
@@ -572,6 +578,42 @@ function registerLauncherIpc() {
     return { ok: true, state: await composeState() };
   }));
   ipcMain.handle('launcher:get-social-state', guarded(async () => ({ ok: true, state: socialService.snapshot() })));
+  ipcMain.handle('launcher:get-profile', guarded(async (_event, userId = 0) => {
+    if (!authenticated) return { ok: false, error: 'not authenticated' };
+    return authService.getLauncherProfile(userId);
+  }));
+  ipcMain.handle('launcher:get-shop', guarded(async (_event, options = {}) => {
+    if (!authenticated && !authService.previewMode) return { ok: false, error: 'not authenticated' };
+    return authService.getLauncherShop(authService.previewMode && options?.preview === true ? { preview: true } : {});
+  }));
+  ipcMain.handle('launcher:buy-item', guarded(async (_event, itemId) => {
+    if (!authenticated) return { ok: false, error: 'not authenticated' };
+    const result = await authService.buyLauncherItem(itemId);
+    if (result.ok) await broadcastState();
+    return result;
+  }));
+  ipcMain.handle('launcher:equip-item', guarded(async (_event, itemId) => {
+    if (!authenticated) return { ok: false, error: 'not authenticated' };
+    const result = await authService.equipLauncherItem(itemId);
+    if (result.ok) await broadcastState();
+    return result;
+  }));
+  ipcMain.handle('launcher:comments-get', guarded(async (_event, userId = 0, beforeId = 0) => {
+    if (!authenticated) return { ok: false, error: 'not authenticated' };
+    return authService.getLauncherComments(userId, beforeId);
+  }));
+  ipcMain.handle('launcher:comment-post', guarded(async (_event, userId = 0, body = '') => {
+    if (!authenticated) return { ok: false, error: 'not authenticated' };
+    return authService.postLauncherComment(userId, body);
+  }));
+  ipcMain.handle('launcher:comment-delete', guarded(async (_event, messageId) => {
+    if (!authenticated) return { ok: false, error: 'not authenticated' };
+    return authService.deleteLauncherComment(messageId);
+  }));
+  ipcMain.handle('launcher:decoration-placement-set', guarded(async (_event, slot, placement) => {
+    if (!authenticated) return { ok: false, error: 'not authenticated' };
+    return authService.saveLauncherDecorationPlacement(slot, placement);
+  }));
   ipcMain.handle('launcher:social-request', guarded(async (_event, action, payload) => {
     if (!authenticated) return { ok: false, error: 'not authenticated' };
     return socialService.request(action, payload);
@@ -1150,6 +1192,7 @@ async function runVisualOrSmokeCapture() {
   })`, true).catch((error) => ({ error: error.message }));
   let protocolSmoke = null;
   let installedMediaSmoke = null;
+  let profileAssetsSmoke = null;
   if (SMOKE_MODE) {
     const probeUrl = `${LAUNCHER_SCHEME}://launcher/videos/game_launcher/board_battle_preview_v2.mp4`;
     try {
@@ -1193,6 +1236,62 @@ async function runVisualOrSmokeCapture() {
         cursorAssets.every((asset) => asset.status === 200 && asset.contentType === 'image/png' && asset.png);
     } catch (error) {
       protocolSmoke = { ok: false, error: error.message };
+    }
+    if (SMOKE_PROFILE_ASSETS) {
+      try {
+        const targetSession = mainWindow.webContents.session;
+        const assets = [
+          'images/profile_decor/bg-luffy.webp', 'images/profile_decor/bg-zoro.webp', 'images/profile_decor/bg-nami.webp',
+          'images/profile_decor/frame-luffy.webp', 'images/profile_decor/frame-zoro.webp',
+          'images/profile_decor/sticker-luffy.webp', 'images/profile_decor/sticker-zoro.webp',
+          'images/profile_decor/sticker-nami.webp', 'images/profile_decor/sticker-chopper.webp',
+          'images/profile_decor/sticker-ace.webp', 'images/profile_decor/sticker-robin.webp',
+          'audio/profile_bgm/harbor.ogg', 'audio/profile_bgm/night-watch.ogg', 'audio/profile_bgm/voyage.ogg',
+          ...Array.from({ length: 12 }, (_, index) => `images/board/avatars/${index + 51}.webp`),
+          ...Array.from({ length: 20 }, (_, index) => `audio/bgm/track${String(index + 1).padStart(2, '0')}.mp3`)
+        ];
+        const results = [];
+        for (const assetPath of assets) {
+          const assetUrl = `${LAUNCHER_SCHEME}://launcher/${assetPath}`;
+          const head = await targetSession.fetch(assetUrl, { method: 'HEAD' });
+          const ranged = await targetSession.fetch(assetUrl, { headers: { Range: 'bytes=0-127' } });
+          const bytes = Buffer.from(await ranged.arrayBuffer());
+          const ogg = assetPath.endsWith('.ogg');
+          const mp3 = assetPath.endsWith('.mp3');
+          const audioSignature = mp3 ? (bytes.subarray(0, 3).toString('ascii') === 'ID3' ||
+            (bytes[0] === 0xff && (bytes[1] & 0xe0) === 0xe0)) : false;
+          results.push({
+            path: assetPath,
+            headStatus: head.status,
+            contentType: head.headers.get('content-type'),
+            length: Number(head.headers.get('content-length')),
+            rangeStatus: ranged.status,
+            rangeBytes: bytes.length,
+            signature: bytes.subarray(0, 4).toString('ascii'),
+            ok: head.status === 200 && Number(head.headers.get('content-length')) > 128 &&
+              head.headers.get('content-type') === (ogg ? 'audio/ogg' : mp3 ? 'audio/mpeg' : 'image/webp') &&
+              ranged.status === 206 && bytes.length === 128 &&
+              (mp3 ? audioSignature : bytes.subarray(0, 4).toString('ascii') === (ogg ? 'OggS' : 'RIFF'))
+          });
+        }
+        const playback = await mainWindow.webContents.executeJavaScript(`(async () => {
+          const audio = new Audio('opui://launcher/audio/profile_bgm/harbor.ogg');
+          audio.muted = true;
+          try {
+            await audio.play();
+            await new Promise((resolve) => setTimeout(resolve, 800));
+            const result = { played: !audio.paused && audio.currentTime > 0.1, currentTime: audio.currentTime,
+              duration: audio.duration, readyState: audio.readyState, error: audio.error?.code || null };
+            audio.pause(); audio.removeAttribute('src'); audio.load();
+            return result;
+          } catch (error) {
+            return { played: false, error: error?.message || String(error), mediaError: audio.error?.code || null };
+          }
+        })()`, true);
+        profileAssetsSmoke = { ok: results.every((result) => result.ok) && playback.played === true, results, playback };
+      } catch (error) {
+        profileAssetsSmoke = { ok: false, error: error.message };
+      }
     }
     if (SMOKE_MEDIA_ASSETS) {
       try {
@@ -1280,8 +1379,8 @@ async function runVisualOrSmokeCapture() {
   const cursorReady = cursorHas(dom.bodyCursor, 'launcher_cursor_logpose_default_v1.png') && cursorHas(dom.pointerCursor, 'launcher_cursor_logpose_pointer_v1.png') && cursorHas(dom.settingsOptionCursor, 'launcher_cursor_logpose_pointer_v1.png') && cursorHas(dom.checkboxCursor, 'launcher_cursor_logpose_pointer_v1.png') && cursorHas(dom.pressedCursor, 'launcher_cursor_logpose_pressed_v1.png') && cursorHas(dom.disabledCursor, 'launcher_cursor_logpose_default_v1.png') && dom.textCursor === 'text' && dom.pressedActiveRulePresent;
   const visualReady = dom.stage === 'app' && dom.games === 3 && dom.loadedBoxCovers >= 7 && dom.loadedBoxFrames >= 7 && dom.brokenImages.length === 0 && mediaExclusive && cursorReady && viewReady;
   if (SMOKE_MODE) finishSmoke(
-    { stage: 'launcher-ready', dom, protocolSmoke, installedMediaSmoke, traySmoke, gpu: await collectGpuDiagnostics(), sessionDataPath: app.getPath('sessionData'), state: await composeState() },
-    dom.hasApi && visualReady && protocolSmoke?.ok === true && (!SMOKE_MEDIA_ASSETS || installedMediaSmoke?.ok === true) ? 0 : 1
+    { stage: 'launcher-ready', dom, protocolSmoke, profileAssetsSmoke, installedMediaSmoke, traySmoke, gpu: await collectGpuDiagnostics(), sessionDataPath: app.getPath('sessionData'), state: await composeState() },
+    dom.hasApi && visualReady && protocolSmoke?.ok === true && (!SMOKE_PROFILE_ASSETS || profileAssetsSmoke?.ok === true) && (!SMOKE_MEDIA_ASSETS || installedMediaSmoke?.ok === true) ? 0 : 1
   );
   else if (SCREENSHOT_PATH) app.quit();
 }

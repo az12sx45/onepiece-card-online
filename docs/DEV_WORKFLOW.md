@@ -1,5 +1,23 @@
 # Dev Workflow
 
+## 2026-09-25 啟動器 12 款角色頭像重畫
+
+範圍：`public/images/board/avatars/51.webp`～`62.webp` 全部依既有頭像 1–50 的規格重畫；GPT 以各角色既有遊戲肖像為身分、服裝與配色參考，以 `49.webp` 為透明正圓裁切參考。新圖為 735×735 RGBA WebP，圓外透明、圓內近景頭肩像；不沿用前版不透明方圖、羅盤構圖。白鬍子 61 與巴其 62 的失敗候選已由對照遊戲原肖像的新圖取代，專案正式素材與原稿目錄各只保留每個 ID 的一份現行檔。
+
+檔案：`public/images/board/avatars/51.webp`～`62.webp`、`tools/launcher-profile/avatar-source-png/51-sanji.png`～`62-buggy.png`、`docs/LAUNCHER_AVATARS_20260925.json`。PNG 保留 GPT 原稿；JSON 記錄每張 PNG／WebP 的 SHA-256、大小、角色與來源，供重建及封裝核對。
+
+驗證：在隔離 1.1.8 發布樹與正式 D 槽來源各讀回 12／12 個檔案及素材清單；每張 WebP 均為 735×735 RGBA、四角 Alpha=0、外接圓半徑加 1px 以外 Alpha=0，PNG／WebP 位元組 SHA-256 與清單相符。另以 160px 縮圖及遊戲原肖像目視對照五官、帽飾與衣著，尤其重查白鬍子黑頭巾、月牙鬍、紅披肩及巴其紅鼻、藍髮、交叉骨紋與船長帽。對照圖在 `D:\Codex_QA\launcher-avatar-redraw-20260925\`。本輪是素材及文件修訂；未改 Board 回合、遊戲存檔或 `BOARD_GAME_STATE`。
+
+## 啟動器個人頁、好友留言與商店 1.1.8（2026-09-25，發布候選）
+
+從正式來源 `D:\Codex_Release_Worktrees\board-voyage-records-v1` 定向移植至 `D:\Codex_Release_Worktrees\launcher-profile-shop-1.1.8`，以 `origin/main` 的 `9021210c9` 為基線；保留同時進行的 Board 角色景深、海上事件及排行圖修改。啟動器新增三款遊戲資料、好友參觀與留言、可自行布置的個人頁及航海者商店，商品總數 87：既有頭像／牆面／旗幟、GPT 新繪 12 位《航海王》角色頭像、3 種版型、3 張背景、2 款相框、6 張角色貼紙、3 首原創 Ogg、既有 20 首 OP MP3、留言板。OP 沿用 `public/audio/bgm/track01.mp3`～`track20.mp3` 的原位元組及順序；是否具付費再散布授權尚未核對。頭像與裝扮的原稿、輸出、曲目 SHA 分別見 `docs/LAUNCHER_AVATARS_20260925.json`、`LAUNCHER_PROFILE_ART_20260924.json`、`LAUNCHER_PROFILE_BGM_20260924.json`、`LAUNCHER_OP_BGM_20260925.json`。
+
+程式範圍：`desktop/auth-service.js`、`main.js`、`preload.js`、`social-service.js`、`launcher.html/js`、`launcher-social.js`、`launcher-profile-shop.js/css`、`package.json`／lock；`server/index.js`、`launcher-profile-shop.js`、`launcher-guestbook.js`、`chess-match-records.js`、`board-art-collection.js`、`profile-social-stats.js`、`desktop-distribution.js`；新 WebP、PNG 原稿、Ogg、`tools/launcher-profile/compose_bgm.py` 與定向 QA。商店改用伺服器獨立 `launcherWalletV1`：首次 100 展示室金幣，每個 UTC 日期首次開商店／購買補 20，最多 500；舊 Card 遊戲金幣與快照更新均不增減此錢包。好友動作只合併 `stats.client.social`，避免較舊社交快照覆蓋付款後的錢包。保留新版 main 的 Board depth manifest 分流，僅擴增桌面啟動器 Socket 白名單；三遊戲 package 與 `BOARD_GAME_STATE` 不變。桌面版升為 1.1.8，`desktop/package.json` 將本次頁面、頭像、裝飾、原創曲與 20 首既有 OP 封裝；未修改玩家已安裝 1.1.7。
+
+驗證：隔離 1.1.8 發布樹的 `node --check` 21 檔與 scoped `git diff --check` 通過；`launcher_profile_shop_qa.js`、`profile_shop_ownership_sql_qa.js`（PGlite，含舊 Card 快照及獨立錢包）、`launcher_guestbook_qa.js`（PGlite）、`chess_match_records_qa.js`、`launcher_social_avatar_qa.js` 通過；`desktop_distribution_gate_qa.js` 135／135，隔離 Chromium `launcher_profile_shop_browser_qa.js` 89／89，報告在 `D:\Codex_QA\launcher-profile-shop-release-118\renderer\report.json`。隔離 `npm start` 18951 的 `/health`、`/download`、兩份桌面清單皆 HTTP 200，真 Socket `LAUNCHER_SHOP_GET` 預覽回 87 件商品；無 `DATABASE_URL`，不代表真帳號交易成功，測試服務已停止。
+
+`desktop npm ci` 後建置 Windows x64 NSIS 1.1.8 候選，安裝檔 `D:\Codex_Release_Worktrees\launcher-profile-shop-1.1.8\desktop\dist\ONE-PIECE-Tabletop-Launcher-1.1.8-x64.exe` 為 221,792,955 bytes，SHA-256 `f00c94b92017c840f6a3fa12d3de33f1b0b7dfcdb781c347eebd61c515d7dca5`。來源、win-unpacked 與 installer 封裝 QA 均通過：243 ASAR entries、147 個啟動器檔案、29 個歷史 catalog manifest；最新 main 的 catalog 總量為 25,478,967 bytes，故 QA 容量上限由 24 MiB 調至 32 MiB，仍逐檔檢查精確名單與 SHA，沒有刪除歷史 manifest。真打包 EXE 在隔離預覽 userData 執行 `D:\Codex_QA\launcher-avatar-review\smoke-packaged-redraw.json`，46／46 新 `opui` 媒體 HEAD／Range／MIME 及原創曲實際播放通過。新版 Publisher dry-run 驗 SHA／大小；1.1.8 unsigned／Ed25519 signed candidate 保存在 D:\Codex_QA\launcher-profile-shop-release-118-circular，由桌面版內建公鑰驗證通過。真封裝 Electron 另實際播放 OP track01 至 0.861 秒、無媒體錯誤；證據為 D:\Codex_QA\launcher-avatar-review\packaged-op-playback-cdp.json。Windows Authenticode 為 NotSigned；R2、Render 與正式 PostgreSQL 仍未驗收，repo／公開更新清單仍為 1.1.7。本節只代表本機發行候選，尚未推送或部署。
+
 ## 攻擊圖放大與快捷鍵（2026-09-22，進行中）
 
 依使用者順序先做攻擊圖尺寸／停留及自訂鍵盤操作，再部署，最後檢查卡頓。修改board_battle.html/js、board_move_fx.js、board_game.html/js，新增board_hotkeys.js/css與專用QA／發布builder；快捷鍵偏好僅存本機帳號key，沿用既有動作與LAN控制權，不改gameState或Socket事件。正式來源D槽，隔離npm start 18931；完整檔案、預設鍵、驗證與發布證據見[本次紀錄](BOARD_HOTKEYS_FX_20260922.md)。

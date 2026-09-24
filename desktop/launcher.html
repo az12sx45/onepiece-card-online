@@ -7,10 +7,12 @@
   <title>ONE PIECE TABLETOP SERIES</title>
   <link rel="stylesheet" href="launcher.css">
   <link rel="stylesheet" href="launcher-social.css">
+  <link rel="stylesheet" href="launcher-profile-shop.css">
   <script src="launcher.js" defer></script>
   <script src="launcher-social.js" defer></script>
   <script src="launcher-updates-ui.js" defer></script>
   <script src="launcher-account-ui.js" defer></script>
+  <script src="launcher-profile-shop.js" defer></script>
 </head>
 <body data-stage="boot">
   <div class="app-backdrop" aria-hidden="true"></div>
@@ -57,6 +59,8 @@
         <button class="nav-button is-active" type="button" data-panel="library">遊戲庫</button>
         <button class="nav-button" id="downloadsButton" type="button" data-panel="downloads">下載管理<span class="nav-dot" id="downloadDot" hidden></span></button>
         <button class="nav-button" id="socialButton" type="button" data-panel="social">好友與聊天<span class="social-badge" id="socialBadge" hidden></span></button>
+        <button class="nav-button" id="profileButton" type="button" data-panel="profile">個人頁</button>
+        <button class="nav-button" id="shopButton" type="button" data-panel="shop">商店</button>
       </nav>
       <div class="account-area">
         <button class="storage-button" id="storageButton" type="button" title="下載位置"><span class="storage-icon" aria-hidden="true"></span><span id="storageSummary">讀取空間…</span></button>
@@ -65,6 +69,7 @@
           <span><strong id="accountName">航海者</strong><small id="accountTitle">TABLETOP MEMBER</small></span><i aria-hidden="true"></i>
         </button>
         <div class="account-menu" id="accountMenu" role="menu" hidden>
+          <button id="accountProfileButton" type="button" role="menuitem">查看個人頁</button>
           <button id="settingsButton" type="button" role="menuitem"><span class="settings-menu-icon" aria-hidden="true"></span>啟動器設定</button>
           <button id="logoutButton" type="button" role="menuitem">登出帳號</button>
         </div>
@@ -153,14 +158,54 @@
       <section class="social-conversation" aria-label="私人訊息">
         <div class="social-welcome" id="socialWelcome"><span class="social-welcome-mark" aria-hidden="true">✧</span><p class="eyebrow">BETTER TOGETHER</p><h2>下一場，和好友一起。</h2><p>選擇左側好友，聊聊近況、約一場對戰。<br>三款遊戲共用同一份好友與聊天紀錄。</p><button class="ghost-button" id="socialWelcomeAdd" type="button">新增好友</button></div>
         <div class="social-chat" id="socialChat" hidden>
-          <header class="social-chat-header"><button class="social-back" id="socialBack" type="button" aria-label="返回好友清單">‹</button><img id="socialPeerAvatar" alt=""><div><h2 id="socialPeerName"></h2><p id="socialPeerActivity"></p></div><button class="social-remove" id="socialRemove" type="button">移除好友</button></header>
+          <header class="social-chat-header"><button class="social-back" id="socialBack" type="button" aria-label="返回好友清單">‹</button><img id="socialPeerAvatar" alt=""><div><h2 id="socialPeerName"></h2><p id="socialPeerActivity"></p></div><button class="ghost-button social-visit" id="socialVisitProfile" type="button">參觀個人頁</button><button class="social-remove" id="socialRemove" type="button">移除好友</button></header>
           <div class="social-chat-notice" id="socialChatNotice" role="status" hidden></div>
           <div class="social-messages" id="socialMessages" role="log" aria-label="聊天紀錄" aria-live="polite"></div>
           <form class="social-composer" id="socialComposer"><label class="sr-social" for="socialMessageInput">輸入訊息</label><textarea id="socialMessageInput" rows="2" maxlength="400" placeholder="輸入訊息，Enter 送出…"></textarea><div><small id="socialMessageCount">0 / 400</small><button class="gold-button" id="socialSend" type="submit">送出 <span aria-hidden="true">↗</span></button></div></form>
         </div>
       </section>
     </section>
+    <section class="voyage-panel app-panel" id="profilePanel" hidden aria-label="個人頁">
+      <div class="voyage-scroll">
+        <header class="voyage-heading"><div><p class="eyebrow">CAPTAIN'S LOG</p><h2 id="profilePageTitle">個人頁</h2><p id="profilePageHint">三款遊戲的航行紀錄與珍藏。</p></div><div class="voyage-heading-actions"><button class="ghost-button" id="profileBackToFriends" type="button" hidden>返回好友聊天</button><button class="ghost-button" id="profileRefresh" type="button">重新整理</button></div></header>
+        <p class="voyage-status" id="profileStatus" role="status" aria-live="polite"></p>
+        <section class="captain-hero" aria-label="玩家名片"><div class="captain-hero-art" aria-hidden="true"></div><div class="captain-hero-body"><img id="profileHeroAvatar" alt="玩家頭像"><div class="captain-hero-copy"><p class="eyebrow" id="profileHeroKind">MY VOYAGE</p><h3 id="profileHeroName">航海者</h3><p id="profileHeroTitle">偉大航道航海者</p><small id="profileHeroId"></small></div><button class="gold-button" id="profileShopShortcut" type="button">前往商店</button></div></section>
+        <section class="captain-cabin" aria-label="個人頁佈置">
+          <div class="voyage-section-heading captain-cabin-heading"><div><p class="eyebrow">YOUR CABIN</p><h3>船長展示室</h3></div><button class="ghost-button" id="profileDecorEdit" type="button" hidden>調整佈置</button></div>
+          <div class="captain-cabin-stage" id="profileCabinStage" data-layout="default">
+            <div class="captain-cabin-wall" id="profileCabinWall" aria-hidden="true"></div>
+            <img class="captain-cabin-background" id="profileCabinBackground" alt="" hidden>
+            <div class="captain-cabin-frame" id="profileCabinFrame" aria-hidden="true" hidden></div>
+            <div class="captain-cabin-stickers" id="profileCabinStickers" aria-hidden="true"></div>
+            <div class="captain-cabin-identity"><img id="profileCabinFlag" alt="" hidden><div><span id="profileCabinLayout">原始展示室</span><strong id="profileCabinName">航海者</strong><small id="profileCabinCaption">收藏你的航海風格</small></div></div>
+          </div>
+          <div class="captain-cabin-music"><div><strong id="profileBgmName">尚未設定個人頁音樂</strong><small>音樂由參觀者自行選擇播放</small></div><button class="ghost-button" id="profileBgmToggle" type="button" disabled>播放音樂</button></div>
+          <audio id="profileBgmAudio" preload="none" loop></audio>
+          <div class="captain-cabin-editor" id="profileDecorEditor" hidden><p>貼紙固定在三個展示槽位，可調整位置與大小。佈置與音樂可在商店購買並套用。</p><div id="profileDecorControls"></div><p class="voyage-status" id="profileDecorStatus" role="status" aria-live="polite"></p><button class="ghost-button" id="profileDecorShop" type="button">前往佈置商店</button></div>
+        </section>
+        <div class="voyage-section-heading"><div><p class="eyebrow">THREE SEAS, ONE CAPTAIN</p><h3>遊戲紀錄</h3></div><span>只顯示已由遊戲或伺服器保存的資料</span></div>
+        <div class="voyage-game-stats" id="profileGameStats"></div>
+        <div class="voyage-section-heading"><div><p class="eyebrow">TREASURE LOCKER</p><h3>我的蒐藏</h3></div><span id="profileCollectionCount"></span></div>
+        <div class="voyage-collection-tabs" id="profileCollectionTabs" role="tablist" aria-label="蒐藏分類"></div>
+        <div class="voyage-collection-grid" id="profileCollectionGrid"></div>
+        <section class="captain-guestbook" aria-label="好友留言板"><div class="voyage-section-heading"><div><p class="eyebrow">THE LOGBOOK</p><h3>好友留言板</h3></div><span id="profileGuestbookCount"></span></div><p class="voyage-status" id="profileGuestbookStatus" role="status" aria-live="polite"></p><div id="profileGuestbookLocked" class="captain-guestbook-locked" hidden><strong>留言板尚未開放</strong><p>頁主可在商店解鎖，讓好友留下航行中的話。</p><button class="ghost-button" id="profileGuestbookShop" type="button" hidden>前往商店解鎖</button></div><div class="captain-guestbook-list" id="profileGuestbookList"></div><button class="ghost-button captain-guestbook-more" id="profileGuestbookMore" type="button" hidden>載入較早留言</button><form id="profileGuestbookForm" class="captain-guestbook-form" hidden><label for="profileGuestbookInput">留下訊息</label><textarea id="profileGuestbookInput" maxlength="240" rows="3" placeholder="和船長打聲招呼…"></textarea><div><small id="profileGuestbookLength">0 / 240</small><button class="gold-button" id="profileGuestbookPost" type="submit">發表留言</button></div></form></section>
+      </div>
+    </section>
+    <section class="voyage-panel app-panel" id="shopPanel" hidden aria-label="商店">
+      <div class="voyage-scroll">
+        <header class="voyage-heading"><div><p class="eyebrow">PIRATE'S MARKET</p><h2>航海者商店</h2><p>用展示室金幣收藏頭像、音樂，裝扮你的跨遊戲名片。展示室金幣與遊戲金幣分開計算。</p></div><div class="shop-wallet"><span>展示室金幣</span><strong id="shopWallet">—</strong><small id="shopWalletMeta">每日補給</small></div></header>
+        <p class="voyage-status" id="shopStatus" role="status" aria-live="polite"></p>
+        <div class="shop-feature"><div><p class="eyebrow">MAKE IT YOURS</p><h3>打造你的船長展示室</h3><p>選購頭像、背景、相框、排版、角色貼紙與航海王 OP、原創配樂；也可為個人頁開放好友留言。商品與展示室金幣以雲端帳號為準。</p></div><img src="opui://launcher/images/board/avatars/49.webp" alt="尼卡頭像展示"></div>
+        <div class="voyage-section-heading"><div><p class="eyebrow">COLLECTIBLES</p><h3>挑選裝扮</h3></div><span id="shopItemCount"></span></div>
+        <div class="voyage-collection-tabs" id="shopCategoryTabs" role="tablist" aria-label="商品分類"></div>
+        <div class="shop-reset-actions" id="shopResetActions"></div>
+        <div class="shop-grid" id="shopGrid"></div>
+      </div>
+    </section>
   </main>
+
+  <dialog class="social-dialog shop-confirm" id="shopConfirmDialog"><button class="dialog-close" id="shopConfirmClose" type="button" aria-label="關閉">×</button><p class="eyebrow">CONFIRM PURCHASE</p><h2 id="shopConfirmName">確認購買</h2><p id="shopConfirmCopy"></p><div class="shop-confirm-preview"><img id="shopConfirmImage" alt=""><strong id="shopConfirmPrice"></strong></div><p class="social-form-hint" id="shopConfirmHint" role="status"></p><div class="social-dialog-actions"><button class="ghost-button" id="shopConfirmCancel" type="button">取消</button><button class="gold-button" id="shopConfirmBuy" type="button">確認購買</button></div></dialog>
+  <dialog class="social-dialog" id="profileCommentDeleteDialog"><p class="eyebrow">MANAGE LOGBOOK</p><h2>刪除這則留言？</h2><p>刪除後，這則留言將從個人頁移除。</p><p class="social-form-hint" id="profileCommentDeleteHint" role="status"></p><div class="social-dialog-actions"><button class="ghost-button" id="profileCommentDeleteCancel" type="button">取消</button><button class="danger-button" id="profileCommentDeleteConfirm" type="button">刪除留言</button></div></dialog>
 
   <dialog class="social-dialog" id="socialAddDialog"><button class="dialog-close" id="socialAddClose" type="button" aria-label="關閉">×</button><p class="eyebrow">ADD A FRIEND</p><h2>邀請好友加入</h2><p>輸入對方顯示的玩家名稱，對方接受後就能聊天。</p><form id="socialAddForm"><label class="field"><span>玩家名稱</span><input id="socialAddName" maxlength="80" required autocomplete="off" placeholder="輸入玩家名稱"></label><p class="social-form-hint" id="socialAddHint" role="status"></p><button class="gold-button" id="socialAddSubmit" type="submit">送出好友邀請</button></form></dialog>
   <dialog class="social-dialog" id="socialRemoveDialog"><p class="eyebrow">MANAGE FRIENDSHIP</p><h2>移除好友？</h2><p id="socialRemoveCopy"></p><div class="social-dialog-actions"><button class="ghost-button" id="socialRemoveCancel" type="button">取消</button><button class="danger-button" id="socialRemoveConfirm" type="button">移除好友</button></div></dialog>

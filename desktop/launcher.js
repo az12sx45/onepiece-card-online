@@ -181,6 +181,7 @@ function setStage(stage) {
   window.LauncherSocial?.setAccount(stage === 'app' ? snapshot : null);
   window.LauncherUpdates?.setAccount(stage === 'app' ? snapshot : null);
   window.LauncherAccount?.setAccount(stage === 'app' ? snapshot : null);
+  window.LauncherProfileShop?.setAccount(stage === 'app' ? snapshot : null);
   document.body.dataset.stage = stage;
   for (const [name, element] of [['boot', bootScreen], ['auth', authScreen], ['app', launcherApp]]) {
     const active = name === stage;
@@ -563,7 +564,8 @@ function renderAccount() {
   const profile = snapshot.profile || {};
   $('#accountName').textContent = profile.name || profile.username || '航海者';
   $('#accountTitle').textContent = profile.title || 'TABLETOP MEMBER';
-  const avatar = Math.max(1, Math.min(50, Number(profile.avatar) || 8));
+  const avatar = [profile.launcherAvatar, profile.avatar].map(Number)
+    .find(id => Number.isSafeInteger(id) && id >= 1 && id <= 62) || 8;
   $('#accountAvatar').src = `opui://launcher/images/board/avatars/${avatar}.webp`;
   storageSummary.textContent = Number.isFinite(snapshot.freeBytes) ? `可用 ${formatBytes(snapshot.freeBytes)}` : '下載位置';
   cachePath.textContent = snapshot.cacheRoot || '尚未選擇下載位置';
@@ -659,6 +661,7 @@ function renderAll() {
   window.LauncherSocial?.setAccount(snapshot);
   window.LauncherUpdates?.setAccount(snapshot);
   window.LauncherAccount?.setAccount(snapshot);
+  window.LauncherProfileShop?.setAccount(snapshot);
 }
 
 function showApp(nextSnapshot) {
@@ -835,14 +838,16 @@ function openDetails() {
 }
 
 function switchPanel(panelName) {
-  for (const [name, panel] of [['library', libraryPanel], ['downloads', downloadsPanel], ['social', $('#socialPanel')]]) {
+  for (const [name, panel] of [['library', libraryPanel], ['downloads', downloadsPanel], ['social', $('#socialPanel')], ['profile', $('#profilePanel')], ['shop', $('#shopPanel')]]) {
     panel.hidden = name !== panelName;
     panel.classList.toggle('is-active', name === panelName);
   }
   document.querySelectorAll('.nav-button[data-panel]').forEach((button) => button.classList.toggle('is-active', button.dataset.panel === panelName));
   window.LauncherSocial?.onVisible();
+  window.LauncherProfileShop?.onVisible(panelName);
   syncFeatureMedia();
 }
+window.launcherSwitchPanel = switchPanel;
 
 async function chooseCacheLocation() {
   if (!api) return;
@@ -949,7 +954,10 @@ cancelAction.addEventListener('click', async () => {
 detailsButton.addEventListener('click', openDetails);
 $('#detailClose').addEventListener('click', () => detailDialog.close());
 detailDialog.addEventListener('click', (event) => { if (event.target === detailDialog) detailDialog.close(); });
-document.querySelectorAll('.nav-button[data-panel]').forEach((button) => button.addEventListener('click', () => switchPanel(button.dataset.panel)));
+document.querySelectorAll('.nav-button[data-panel]').forEach((button) => button.addEventListener('click', () => {
+  if (button.dataset.panel === 'profile') window.LauncherProfileShop?.openProfile(0);
+  else switchPanel(button.dataset.panel);
+}));
 $('#storageButton').addEventListener('click', () => locationDialog.showModal());
 $('#changeLocationButton').addEventListener('click', () => locationDialog.showModal());
 $('#locationClose').addEventListener('click', () => locationDialog.close());
@@ -965,6 +973,7 @@ $('#accountButton').addEventListener('click', () => {
   $('#accountButton').setAttribute('aria-expanded', String(!accountMenu.hidden));
 });
 $('#settingsButton').addEventListener('click', openSettingsDialog);
+$('#accountProfileButton').addEventListener('click', () => { closeAccountMenu(); window.LauncherProfileShop?.openProfile(0); });
 $('#settingsClose').addEventListener('click', () => settingsDialog.close());
 $('#settingsCancel').addEventListener('click', () => settingsDialog.close());
 $('#settingsSave').addEventListener('click', saveSettings);

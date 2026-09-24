@@ -1,0 +1,43 @@
+{
+  "date": "2026-09-24",
+  "source": "Project-authored note sequences and local NumPy synthesis; no external audio samples or One Piece OST copied.",
+  "renderer": "tools/launcher-profile/compose_bgm.py",
+  "items": [
+    {
+      "id": "bgm-harbor",
+      "title": "暮港歸航",
+      "output": "public/audio/profile_bgm/harbor.ogg",
+      "sha256": "1c63d24b20701d5b662228151edb175b82c1c6d8779c77bfe8ccd0731cedf8f6",
+      "bytes": 490094,
+      "seconds": 40.851,
+      "codec": "Ogg Vorbis",
+      "sampleRate": 32000,
+      "channels": 2,
+      "bpm": 94
+    },
+    {
+      "id": "bgm-night-watch",
+      "title": "星夜航線",
+      "output": "public/audio/profile_bgm/night-watch.ogg",
+      "sha256": "17d65304f38ddd79c11f7e2db99be30ae684a2f44279874ecab5e8d06e169534",
+      "bytes": 438160,
+      "seconds": 46.829,
+      "codec": "Ogg Vorbis",
+      "sampleRate": 32000,
+      "channels": 2,
+      "bpm": 82
+    },
+    {
+      "id": "bgm-voyage",
+      "title": "破曉揚帆",
+      "output": "public/audio/profile_bgm/voyage.ogg",
+      "sha256": "c545faea002effb70a3d675ce682d0e119043f934fc44ee537fc82bc4a6066f6",
+      "bytes": 415369,
+      "seconds": 33.103,
+      "codec": "Ogg Vorbis",
+      "sampleRate": 32000,
+      "channels": 2,
+      "bpm": 116
+    }
+  ]
+}

@@ -25,7 +25,13 @@ const ELECTRON = `${BROWSER} Electron/37.3.1`;
 // Reverse proxies may supply any User-Agent for a headerless launcher request.
 // Without browser Origin/Fetch metadata it receives social access only.
 const LAUNCHER_HEADERS = [{}, { 'User-Agent': 'node' }, { 'User-Agent': 'node-XMLHttpRequest' }, { 'User-Agent': 'proxy-synthesized-agent/1.0' }, { 'User-Agent': BROWSER }];
-const SOCIAL_EVENTS = ['AUTH_REGISTER', 'AUTH_LOGIN', 'PROFILE_GET', 'PROFILE_UPDATE', 'PROFILE_PUBLIC_GET', 'SOCIAL_AUTH', 'PRESENCE_SET', 'FRIENDS_GET', 'FRIEND_ADD_BY_NAME', 'FRIEND_REQUEST_ACCEPT', 'FRIEND_REQUEST_DECLINE', 'FRIEND_REMOVE', 'DM_HISTORY', 'DM_SEND'];
+const SOCIAL_EVENTS = [
+  'AUTH_REGISTER', 'AUTH_LOGIN', 'PROFILE_GET', 'PROFILE_UPDATE', 'PROFILE_PUBLIC_GET',
+  'LAUNCHER_PROFILE_GET', 'LAUNCHER_SHOP_GET', 'LAUNCHER_SHOP_BUY', 'LAUNCHER_SHOP_EQUIP',
+  'LAUNCHER_DECORATION_PLACEMENT_SET', 'LAUNCHER_COMMENTS_GET', 'LAUNCHER_COMMENT_POST', 'LAUNCHER_COMMENT_DELETE',
+  'SOCIAL_AUTH', 'PRESENCE_SET', 'FRIENDS_GET', 'FRIEND_ADD_BY_NAME',
+  'FRIEND_REQUEST_ACCEPT', 'FRIEND_REQUEST_DECLINE', 'FRIEND_REMOVE', 'DM_HISTORY', 'DM_SEND'
+];
 const sha = value => crypto.createHash('sha256').update(value).digest('hex');
 const report = { ok: null, startedAt: new Date().toISOString(), fixtureRoot, checks: [], socketDelivered: [], errors: [] };
 let caseNumber = 0;

@@ -10,8 +10,9 @@ const PUBLIC_ROOT = path.join(ROOT, 'public');
 const PACKAGE_PATH = path.join(DESKTOP_ROOT, 'package.json');
 const PACKAGE_LOCK_PATH = path.join(DESKTOP_ROOT, 'package-lock.json');
 
-const MAX_LAUNCHER_ASSET_BYTES = 64 * 1024 * 1024;
-const MAX_CATALOG_BYTES = 8 * 1024 * 1024;
+const MAX_LAUNCHER_ASSET_BYTES = 128 * 1024 * 1024;
+// Immutable historical program manifests are retained for existing installs.
+const MAX_CATALOG_BYTES = 32 * 1024 * 1024;
 const MAX_ASAR_BYTES = 32 * 1024 * 1024;
 const MAX_INSTALLER_BYTES = 256 * 1024 * 1024;
 const RETAINED_ROLLOUT_MANIFESTS = Object.freeze({
@@ -45,6 +46,8 @@ const APP_FILES = [
   'social-service.js',
   'launcher-social.js',
   'launcher-social.css',
+  'launcher-profile-shop.js',
+  'launcher-profile-shop.css',
   'launcher-updates-ui.js',
   'launcher-account-ui.js',
   'asset-store.js',
@@ -61,6 +64,7 @@ const EXTRA_RESOURCES = [
     to: 'launcher-assets/images/game_launcher',
     filter: [
       'launcher_tabletop_series_logo_v1.png',
+      'launcher_gallery_background_v2.png',
       'launcher_card_cover_perspective_v2.png',
       'launcher_card_box_frame_cutout_v1.png',
       'launcher_card_lid_front_panel_v1.png',
@@ -94,6 +98,36 @@ const EXTRA_RESOURCES = [
     from: '../public/images/board/avatars',
     to: 'launcher-assets/images/board/avatars',
     filter: ['*.webp']
+  },
+  {
+    from: '../public/images/walls',
+    to: 'launcher-assets/images/walls',
+    filter: ['*.webp']
+  },
+  {
+    from: '../public/images/flags',
+    to: 'launcher-assets/images/flags',
+    filter: ['*.webp']
+  },
+  {
+    from: '../public/images/profile_decor',
+    to: 'launcher-assets/images/profile_decor',
+    filter: [
+      'bg-luffy.webp', 'bg-zoro.webp', 'bg-nami.webp',
+      'frame-luffy.webp', 'frame-zoro.webp',
+      'sticker-luffy.webp', 'sticker-zoro.webp', 'sticker-nami.webp',
+      'sticker-chopper.webp', 'sticker-ace.webp', 'sticker-robin.webp'
+    ]
+  },
+  {
+    from: '../public/audio/profile_bgm',
+    to: 'launcher-assets/audio/profile_bgm',
+    filter: ['harbor.ogg', 'night-watch.ogg', 'voyage.ogg']
+  },
+  {
+    from: '../public/audio/bgm',
+    to: 'launcher-assets/audio/bgm',
+    filter: Array.from({ length: 20 }, (_, index) => `track${String(index + 1).padStart(2, '0')}.mp3`)
   },
   {
     from: '../public/videos/game_launcher',
@@ -275,7 +309,7 @@ function validateCursorPng(filePath, label) {
 function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
-  assert(packageJson.version === '1.1.7', 'Desktop launcher version must be 1.1.7 for social and name onboarding.');
+  assert(packageJson.version === '1.1.8', 'Desktop launcher version must be 1.1.8 for profile and shop.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
@@ -311,6 +345,49 @@ function validateSourcePackage() {
   const cursorDefault = validateCursorPng(path.join(PUBLIC_ROOT, 'images', 'desktop_launcher', 'launcher_cursor_logpose_default_v1.png'), 'Default Log Pose launcher cursor');
   const cursorPointer = validateCursorPng(path.join(PUBLIC_ROOT, 'images', 'desktop_launcher', 'launcher_cursor_logpose_pointer_v1.png'), 'Pointer Log Pose launcher cursor');
   const cursorPressed = validateCursorPng(path.join(PUBLIC_ROOT, 'images', 'desktop_launcher', 'launcher_cursor_logpose_pressed_v1.png'), 'Pressed Log Pose launcher cursor');
+
+  for (const [directory, resourceTo, manifestName, outputPrefix] of [
+    [path.join(PUBLIC_ROOT, 'images', 'profile_decor'), 'launcher-assets/images/profile_decor', 'LAUNCHER_PROFILE_ART_20260924.json', 'public/images/profile_decor/'],
+    [path.join(PUBLIC_ROOT, 'audio', 'profile_bgm'), 'launcher-assets/audio/profile_bgm', 'LAUNCHER_PROFILE_BGM_20260924.json', 'public/audio/profile_bgm/']
+  ]) {
+    const resource = EXTRA_RESOURCES.find((entry) => entry.to === resourceTo);
+    assertExactJson(sorted(fs.readdirSync(directory)), sorted(resource.filter), `${resourceTo} source file set`);
+    const manifest = readJson(path.join(ROOT, 'docs', manifestName), manifestName);
+    assert(Array.isArray(manifest.items) && manifest.items.length === resource.filter.length, `${manifestName} item count differs from the package.`);
+    for (const item of manifest.items) {
+      assert(typeof item.output === 'string' && item.output.startsWith(outputPrefix), `${manifestName} contains a path outside ${outputPrefix}.`);
+      assert(resource.filter.includes(path.basename(item.output)), `${manifestName} references an unapproved file.`);
+      assert(sha256File(path.join(ROOT, ...item.output.split('/'))) === item.outputSha256 ||
+        sha256File(path.join(ROOT, ...item.output.split('/'))) === item.sha256, `${manifestName} digest differs: ${item.output}`);
+    }
+  }
+  const artManifest = readJson(path.join(ROOT, 'docs', 'LAUNCHER_PROFILE_ART_20260924.json'), 'launcher profile source art manifest');
+  assert(artManifest.sourceDirectory === 'tools/launcher-profile/source-png', 'Profile art source directory changed.');
+  const artSourceRoot = path.join(ROOT, ...artManifest.sourceDirectory.split('/'));
+  assertExactJson(sorted(fs.readdirSync(artSourceRoot)), sorted(artManifest.items.map((item) => item.sourceFile)), 'GPT source PNG file set');
+  for (const item of artManifest.items) {
+    assert(/^exec-[a-f0-9-]+\.png$/.test(item.sourceFile), `Profile art source file name is unsafe: ${item.sourceFile}`);
+    assert(sha256File(path.join(artSourceRoot, item.sourceFile)) === item.sourceSha256, `GPT source PNG digest differs: ${item.sourceFile}`);
+  }
+  const avatarManifest = readJson(path.join(ROOT, 'docs', 'LAUNCHER_AVATARS_20260925.json'), 'launcher avatar manifest');
+  assert(Array.isArray(avatarManifest.items) && avatarManifest.items.length === 12, 'New avatar manifest must contain 12 characters.');
+  assertExactJson(sorted(avatarManifest.items.map((item) => String(item.avatarId))),
+    sorted(Array.from({ length: 12 }, (_, index) => String(index + 51))), 'New avatar IDs');
+  for (const item of avatarManifest.items) {
+    assert(item.sourcePng.startsWith('tools/launcher-profile/avatar-source-png/'), `Avatar PNG source path is unsafe: ${item.sourcePng}`);
+    assert(item.asset === `public/images/board/avatars/${item.avatarId}.webp`, `Avatar output path differs: ${item.avatarId}`);
+    assert(sha256File(path.join(ROOT, ...item.sourcePng.split('/'))) === item.sourceSha256, `Avatar PNG digest differs: ${item.avatarId}`);
+    assert(sha256File(path.join(ROOT, ...item.asset.split('/'))) === item.assetSha256, `Avatar WebP digest differs: ${item.avatarId}`);
+  }
+  const opManifest = readJson(path.join(ROOT, 'docs', 'LAUNCHER_OP_BGM_20260925.json'), 'launcher OP music manifest');
+  const opResource = EXTRA_RESOURCES.find((resource) => resource.to === 'launcher-assets/audio/bgm');
+  assert(Array.isArray(opManifest.items) && opManifest.items.length === 20, 'OP music manifest must contain 20 tracks.');
+  assertExactJson(sorted(fs.readdirSync(path.join(PUBLIC_ROOT, 'audio', 'bgm'))), sorted(opResource.filter), 'OP music source set');
+  for (const item of opManifest.items) {
+    assert(item.asset === `public/audio/bgm/track${String(item.track).padStart(2, '0')}.mp3`, `OP music path differs: ${item.track}`);
+    const filePath = path.join(ROOT, ...item.asset.split('/'));
+    assert(fs.statSync(filePath).size === item.bytes && sha256File(filePath) === item.sha256, `OP music digest differs: ${item.track}`);
+  }
 
   const catalogPath = path.join(PUBLIC_ROOT, 'desktop', 'catalog-v2.json');
   const catalog = readJson(catalogPath, 'public desktop catalog');
@@ -348,18 +425,18 @@ function validateSourcePackage() {
   }
   const manifestDirectory = path.join(PUBLIC_ROOT, 'desktop', 'manifests');
   const actualManifests = sorted(listFilesRecursive(manifestDirectory).map((filePath) => relativePosix(manifestDirectory, filePath)));
-  assertExactJson(
-    actualManifests,
-    sorted([...referencedManifests, ...referencedProgramManifests, ...Object.keys(RETAINED_ROLLOUT_MANIFESTS)]),
-    'Current plus retained rollout manifest set'
-  );
+  const requiredManifests = new Set([...referencedManifests, ...referencedProgramManifests, ...Object.keys(RETAINED_ROLLOUT_MANIFESTS)]);
+  for (const fileName of requiredManifests) assert(actualManifests.includes(fileName), `Required rollout manifest is missing: ${fileName}`);
+  for (const fileName of actualManifests) {
+    assert(requiredManifests.has(fileName) || /^(?:card|board|chess)-package-[a-f0-9]{16}\.json$/.test(fileName), `Unapproved manifest name: ${fileName}`);
+  }
   for (const [fileName, expectedSha256] of Object.entries(RETAINED_ROLLOUT_MANIFESTS)) {
     const retainedPath = path.join(manifestDirectory, fileName);
     assert(sha256File(retainedPath) === expectedSha256, `Retained rollout manifest changed: ${fileName}`);
   }
 
   const forbiddenText = JSON.stringify({ files: packageJson.build.files, extraResources: packageJson.build.extraResources }).toLowerCase();
-  for (const forbidden of ['../public/images/**', '../public/audio', '../public/videos/**', '../public/fonts']) {
+  for (const forbidden of ['../public/images/**', '../public/audio/**', '../public/videos/**', '../public/fonts']) {
     assert(!forbiddenText.includes(forbidden), `Full game asset tree is forbidden in launcher packaging: ${forbidden}`);
   }
 
@@ -385,7 +462,24 @@ function collectExpectedLauncherAssets() {
       add(path.join(avatarRoot, entry.name), `images/board/avatars/${entry.name}`);
     }
   }
-  for (const fileName of EXTRA_RESOURCES[3].filter) {
+  for (const [kind, maximum] of [['walls', 8], ['flags', 15]]) {
+    const resourceRoot = path.join(PUBLIC_ROOT, 'images', kind);
+    const actual = sorted(fs.readdirSync(resourceRoot).filter((fileName) => fileName.endsWith('.webp')));
+    const required = sorted(Array.from({ length: maximum }, (_, index) => `${index + 1}.webp`));
+    assertExactJson(actual, required, `${kind} launcher artwork set`);
+    for (const fileName of required) add(path.join(resourceRoot, fileName), `images/${kind}/${fileName}`);
+  }
+  for (const [resourceTo, publicPath] of [
+    ['launcher-assets/images/profile_decor', path.join(PUBLIC_ROOT, 'images', 'profile_decor')],
+    ['launcher-assets/audio/profile_bgm', path.join(PUBLIC_ROOT, 'audio', 'profile_bgm')],
+    ['launcher-assets/audio/bgm', path.join(PUBLIC_ROOT, 'audio', 'bgm')]
+  ]) {
+    const resource = EXTRA_RESOURCES.find((entry) => entry.to === resourceTo);
+    const packagedPrefix = resourceTo.replace(/^launcher-assets\//, '');
+    for (const fileName of resource.filter) add(path.join(publicPath, fileName), `${packagedPrefix}/${fileName}`);
+  }
+  const videoResource = EXTRA_RESOURCES.find((resource) => resource.to === 'launcher-assets/videos/game_launcher');
+  for (const fileName of videoResource.filter) {
     add(path.join(PUBLIC_ROOT, 'videos', 'game_launcher', fileName), `videos/game_launcher/${fileName}`);
   }
   return expected;

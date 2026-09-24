@@ -15,7 +15,8 @@
   };
   const el = (tag, cls, text) => { const node = document.createElement(tag); if (cls) node.className = cls; if (text != null) node.textContent = text; return node; };
   function avatar(img, p) {
-    img.src = `opui://launcher/images/board/avatars/${Math.max(1, Math.min(50, Number(p.avatar) || 1))}.webp`;
+    const avatarId = Number(p.avatar);
+    img.src = `opui://launcher/images/board/avatars/${Number.isSafeInteger(avatarId) && avatarId >= 1 && avatarId <= 62 ? avatarId : 8}.webp`;
     img.onerror = () => { img.onerror = null; img.src = 'opui://launcher/images/board/avatars/8.webp'; };
   }
   const errors = { 'not authenticated': '請先登入帳號。', 'not friends': '你們目前不是好友，請先送出好友邀請。', 'not found': '找不到這個玩家名稱，請確認拼字。', 'already friends': '你們已經是好友了。', 'request already sent': '已送出邀請，等待對方接受。', 'cannot add self': '無法將自己加入好友。', 'no name': '請輸入玩家名稱。', 'invalid message': '請輸入 1～400 字的訊息。', timeout: '連線逾時，請稍後再試。', offline: '目前無法連線，請稍後再試。' };
@@ -133,6 +134,7 @@
   $('socialSearch').oninput = renderList;
   $('socialRefresh').onclick = async () => { const result = await request('refresh'); if (!result.ok) notice(errorText(result.error)); if (peer) await openPeer(peer); };
   $('socialBack').onclick = () => { drafts.set(peer, $('socialMessageInput').value); peer = 0; render(); };
+  $('socialVisitProfile').onclick = () => { if (data.friends.some(p => p.userId === peer)) window.LauncherProfileShop?.openProfile(peer); };
   $('socialComposer').onsubmit = send; $('socialMessageInput').oninput = updateCounter;
   $('socialMessageInput').onkeydown = event => { if (event.key === 'Enter' && !event.shiftKey && !event.isComposing && event.keyCode !== 229) send(event); };
   let removing = 0;

@@ -1,0 +1,147 @@
+{
+  "version": 1,
+  "date": "2026-09-25",
+  "source": "Existing user-provided Card game OP playlist in public/game.html",
+  "items": [
+    {
+      "track": 1,
+      "title": "We Are",
+      "asset": "public/audio/bgm/track01.mp3",
+      "bytes": 3929145,
+      "sha256": "50f89aa9c47d5dd00107ea0329ad02a773ab923d873dc1845f3df3fd573b7b06"
+    },
+    {
+      "track": 2,
+      "title": "Believe",
+      "asset": "public/audio/bgm/track02.mp3",
+      "bytes": 1846579,
+      "sha256": "2f452c0b699e2d639810697c36dded02c922d3b20c7a90b5de22df46c0b455f5"
+    },
+    {
+      "track": 3,
+      "title": "ヒカリへ",
+      "asset": "public/audio/bgm/track03.mp3",
+      "bytes": 1808606,
+      "sha256": "bdb8323583fe4a77d108b320944c38bf92274a5b7152f52cc7589d4fe1b716c4"
+    },
+    {
+      "track": 4,
+      "title": "BON VOYAGE",
+      "asset": "public/audio/bgm/track04.mp3",
+      "bytes": 2233194,
+      "sha256": "fa7bb1ce4ff1374608a8b6f97c7b146df6c408555e3ac6ad0dd6549ee762ec72"
+    },
+    {
+      "track": 5,
+      "title": "ココロのちず",
+      "asset": "public/audio/bgm/track05.mp3",
+      "bytes": 2158795,
+      "sha256": "8b76a7ebb1b18875722a9127b8be6f5db87522e17f7556715dbc78e0afee6e72"
+    },
+    {
+      "track": 6,
+      "title": "BRAND NEW WORLD",
+      "asset": "public/audio/bgm/track06.mp3",
+      "bytes": 1957972,
+      "sha256": "cdb2361cca3bddb8da3a8e7e71ccabe8c92cdf2b670b5be9a92768cceebee998"
+    },
+    {
+      "track": 7,
+      "title": "We Are 麥わら海賊團版",
+      "asset": "public/audio/bgm/track07.mp3",
+      "bytes": 2120550,
+      "sha256": "1100fb8a9061305aadb78058f1a2a571af4fd7d624d09669f1181962a77172e2"
+    },
+    {
+      "track": 8,
+      "title": "Crazy Rainbow",
+      "asset": "public/audio/bgm/track08.mp3",
+      "bytes": 1857211,
+      "sha256": "90961a639947bd3ffe09818a47f938dbd11df1c1dfd31f2e96a4dba9f0007565"
+    },
+    {
+      "track": 9,
+      "title": "Jungle P",
+      "asset": "public/audio/bgm/track09.mp3",
+      "bytes": 1644914,
+      "sha256": "4cae2f5d0535edff02fd5dc3d4228270edf521f8ad507e31766a1c866c827378"
+    },
+    {
+      "track": 10,
+      "title": "We Are 10 週年版",
+      "asset": "public/audio/bgm/track10.mp3",
+      "bytes": 1253504,
+      "sha256": "1ae0cd0a71c966485433b0d7e6b3d4636dcfa857234210a5e73fbf9a774d5938"
+    },
+    {
+      "track": 11,
+      "title": "Share The World",
+      "asset": "public/audio/bgm/track11.mp3",
+      "bytes": 1703196,
+      "sha256": "2047a18e1e3f9f9fa44224c5a7556c7c752bc075f9741a4f3ebe23c41c2bed07"
+    },
+    {
+      "track": 12,
+      "title": "風をさがして",
+      "asset": "public/audio/bgm/track12.mp3",
+      "bytes": 2058287,
+      "sha256": "44459226849f2724f9e93ab8a464c2e76ceced6e1d24ba8eae4ec450864bc6cd"
+    },
+    {
+      "track": 13,
+      "title": "One day",
+      "asset": "public/audio/bgm/track13.mp3",
+      "bytes": 2133477,
+      "sha256": "01fd634a3c80f07ca77c9199c842f7fc5b70adc19bff66ad9a06ae022ad9fd60"
+    },
+    {
+      "track": 14,
+      "title": "Fight Together",
+      "asset": "public/audio/bgm/track14.mp3",
+      "bytes": 2114257,
+      "sha256": "fd4c1ad6633a7adb1e12ec0b3a88b46f40b934df36fbf7959a04b0a863238c95"
+    },
+    {
+      "track": 15,
+      "title": "We Go",
+      "asset": "public/audio/bgm/track15.mp3",
+      "bytes": 6208512,
+      "sha256": "a60b5e4025addf1b0780fd24a9df63f2a4fd3f3854fe16ca3e2e1973e7cda2a4"
+    },
+    {
+      "track": 16,
+      "title": "Hands Up",
+      "asset": "public/audio/bgm/track16.mp3",
+      "bytes": 4023968,
+      "sha256": "b791437a1bc13eb63b3a2b636a4ea7e8d33fdd702ca874f80cf3d15731ccd266"
+    },
+    {
+      "track": 17,
+      "title": "Wake up",
+      "asset": "public/audio/bgm/track17.mp3",
+      "bytes": 2644743,
+      "sha256": "782b34e9e9c61c643cbc37e63e7380df4df9fc5bb211cc9ff69d9c50d6f276a3"
+    },
+    {
+      "track": 18,
+      "title": "Hard Knock Days",
+      "asset": "public/audio/bgm/track18.mp3",
+      "bytes": 5992695,
+      "sha256": "004dd9eda9ede0176f77adb41316a13f30ad631539f89cb404ce51380dd06d20"
+    },
+    {
+      "track": 19,
+      "title": "We Can",
+      "asset": "public/audio/bgm/track19.mp3",
+      "bytes": 6050165,
+      "sha256": "c8966c3425543d20c757a6a7bdd5b45a720261142595f1bce8b76412c2fa57b8"
+    },
+    {
+      "track": 20,
+      "title": "Hope",
+      "asset": "public/audio/bgm/track20.mp3",
+      "bytes": 6009414,
+      "sha256": "4886dcd102a05e75a598b3a2768e10dc6d0c222a19cae66bb2eb3503f79160de"
+    }
+  ]
+}
