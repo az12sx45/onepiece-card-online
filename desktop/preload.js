@@ -24,6 +24,7 @@ contextBridge.exposeInMainWorld('onePieceDesktop', Object.freeze({
   postLauncherComment: (userId, body) => ipcRenderer.invoke('launcher:comment-post', userId, body),
   deleteLauncherComment: (messageId) => ipcRenderer.invoke('launcher:comment-delete', messageId),
   saveLauncherDecorationPlacement: (slot, placement) => ipcRenderer.invoke('launcher:decoration-placement-set', slot, placement),
+  saveLauncherRoom: (room) => ipcRenderer.invoke('launcher:room-set', room),
   socialRequest: (action, payload) => ipcRenderer.invoke('launcher:social-request', action, payload),
   getSocialState: () => ipcRenderer.invoke('launcher:get-social-state'),
   onSocialState: (callback) => subscribe('launcher:social-state', callback),

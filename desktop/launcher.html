@@ -8,10 +8,12 @@
   <link rel="stylesheet" href="launcher.css">
   <link rel="stylesheet" href="launcher-social.css">
   <link rel="stylesheet" href="launcher-profile-shop.css">
+  <link rel="stylesheet" href="launcher-room.css">
   <script src="launcher.js" defer></script>
   <script src="launcher-social.js" defer></script>
   <script src="launcher-updates-ui.js" defer></script>
   <script src="launcher-account-ui.js" defer></script>
+  <script src="launcher-room.js" defer></script>
   <script src="launcher-profile-shop.js" defer></script>
 </head>
 <body data-stage="boot">
@@ -183,6 +185,12 @@
           <audio id="profileBgmAudio" preload="none" loop></audio>
           <div class="captain-cabin-editor" id="profileDecorEditor" hidden><p>貼紙固定在三個展示槽位，可調整位置與大小。佈置與音樂可在商店購買並套用。</p><div id="profileDecorControls"></div><p class="voyage-status" id="profileDecorStatus" role="status" aria-live="polite"></p><button class="ghost-button" id="profileDecorShop" type="button">前往佈置商店</button></div>
         </section>
+        <section class="voyage-room" id="profileRoom" aria-label="自由擺設房間">
+          <div class="voyage-section-heading room-heading"><div><p class="eyebrow">MY LITTLE WORLD</p><h3>航海夥伴房間</h3><p>把千陽號的回憶帶進房間，讓夥伴在你的收藏之間活動。</p></div><button class="ghost-button" id="roomEditToggle" type="button" hidden>佈置房間</button></div>
+          <p class="voyage-status" id="roomStatus" role="status" aria-live="polite"></p>
+          <div class="room-stage-scroll"><div class="room-stage" id="roomStage" tabindex="0" aria-label="房間擺設預覽"><img class="room-scene" id="roomScene" alt=""><div class="room-objects" id="roomObjects"></div><div class="room-character-layer" id="roomCharacters"></div><div class="room-stage-caption" id="roomCaption">你的航海房間</div></div></div>
+          <div class="room-editor" id="roomEditor" hidden><div class="room-editor-top"><strong>自由佈置</strong><span>拖曳物件到想要的位置；選取後可用方向鍵微調。</span></div><div class="room-editor-tabs" id="roomEditorTabs" role="tablist" aria-label="房間物件分類"></div><div class="room-editor-items" id="roomEditorItems"></div><div class="room-selection" id="roomSelection" hidden></div><div class="room-editor-actions"><button class="ghost-button" id="roomShopButton" type="button">前往房間商店</button><div><button class="ghost-button" id="roomCancel" type="button">取消</button><button class="gold-button" id="roomSave" type="button">儲存房間</button></div></div></div>
+        </section>
         <div class="voyage-section-heading"><div><p class="eyebrow">THREE SEAS, ONE CAPTAIN</p><h3>遊戲紀錄</h3></div><span>只顯示已由遊戲或伺服器保存的資料</span></div>
         <div class="voyage-game-stats" id="profileGameStats"></div>
         <div class="voyage-section-heading"><div><p class="eyebrow">TREASURE LOCKER</p><h3>我的蒐藏</h3></div><span id="profileCollectionCount"></span></div>
@@ -193,9 +201,9 @@
     </section>
     <section class="voyage-panel app-panel" id="shopPanel" hidden aria-label="商店">
       <div class="voyage-scroll">
-        <header class="voyage-heading"><div><p class="eyebrow">PIRATE'S MARKET</p><h2>航海者商店</h2><p>用展示室金幣收藏頭像、音樂，裝扮你的跨遊戲名片。展示室金幣與遊戲金幣分開計算。</p></div><div class="shop-wallet"><span>展示室金幣</span><strong id="shopWallet">—</strong><small id="shopWalletMeta">每日補給</small></div></header>
+        <header class="voyage-heading"><div><p class="eyebrow">PIRATE'S MARKET</p><h2>航海者商店</h2><p>用展示室金幣收藏頭像、音樂、房間場景、家具與 Q 版夥伴。展示室金幣與遊戲金幣分開計算。</p></div><div class="shop-wallet"><span>展示室金幣</span><strong id="shopWallet">—</strong><small id="shopWalletMeta">每日補給</small></div></header>
         <p class="voyage-status" id="shopStatus" role="status" aria-live="polite"></p>
-        <div class="shop-feature"><div><p class="eyebrow">MAKE IT YOURS</p><h3>打造你的船長展示室</h3><p>選購頭像、背景、相框、排版、角色貼紙與航海王 OP、原創配樂；也可為個人頁開放好友留言。商品與展示室金幣以雲端帳號為準。</p></div><img src="opui://launcher/images/board/avatars/49.webp" alt="尼卡頭像展示"></div>
+        <div class="shop-feature"><div><p class="eyebrow">MAKE IT YOURS</p><h3>打造你的航海房間</h3><p>選購航海王角色頭像、千陽號房間場景、家具與會走動的 Q 版夥伴，再搭配背景、相框、貼紙、音樂及好友留言板。商品與展示室金幣以雲端帳號為準。</p></div><img src="opui://launcher/images/board/avatars/49.webp" alt="尼卡頭像展示"></div>
         <div class="voyage-section-heading"><div><p class="eyebrow">COLLECTIBLES</p><h3>挑選裝扮</h3></div><span id="shopItemCount"></span></div>
         <div class="voyage-collection-tabs" id="shopCategoryTabs" role="tablist" aria-label="商品分類"></div>
         <div class="shop-reset-actions" id="shopResetActions"></div>

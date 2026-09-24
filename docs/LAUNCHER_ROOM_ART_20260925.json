@@ -1,0 +1,387 @@
+{
+  "version": "1.1.9",
+  "date": "2026-09-25",
+  "generator": "OpenAI built-in image_gen, one independent generation per bitmap asset",
+  "processing": "Local PNG-to-WebP conversion; transparent sprite alpha retained and checked",
+  "canonicalCharactersOnly": true,
+  "items": [
+    {
+      "id": "scenes/sunny-deck",
+      "promptIntent": "Empty Thousand Sunny deck; large clear wood floor for freely placed room objects; no people.",
+      "sourcePng": "tools/launcher-room/source-png/sunny-deck.png",
+      "sourceSha256": "0130e9756f185a8a2daf438ba35bc1e604b38817011c5eb81e5e6816480590b1",
+      "sourcePixels": [
+        1672,
+        941
+      ],
+      "asset": "public/images/launcher_room/scenes/sunny-deck.webp",
+      "assetSha256": "920c57af1559299f2af9db4b16a90671f4da346f7eacc91e27e52272203e6d0e",
+      "assetPixels": [
+        1600,
+        900
+      ],
+      "assetBytes": 255950,
+      "alpha": "opaque-background"
+    },
+    {
+      "id": "scenes/sunny-kitchen",
+      "promptIntent": "Empty Thousand Sunny galley; sea-view portholes, back-wall kitchen, clear floor; no people.",
+      "sourcePng": "tools/launcher-room/source-png/sunny-kitchen.png",
+      "sourceSha256": "65dc4b3cc6b2c6bf89a9f5fe9ccb6e76c577bfad4498cd454fc37604bd98baad",
+      "sourcePixels": [
+        1672,
+        941
+      ],
+      "asset": "public/images/launcher_room/scenes/sunny-kitchen.webp",
+      "assetSha256": "e9080c9d2105f87ab01ed6680d1bc0c96084fb1de62725821438b50bd9ac0e1a",
+      "assetPixels": [
+        1600,
+        900
+      ],
+      "assetBytes": 158760,
+      "alpha": "opaque-background"
+    },
+    {
+      "id": "scenes/sunny-library",
+      "promptIntent": "Empty Thousand Sunny library; bookshelves and portholes at the back, clear floor; no people.",
+      "sourcePng": "tools/launcher-room/source-png/sunny-library.png",
+      "sourceSha256": "8dd86f8804578afb8f201b5a341c2ac2ac53a216c6358154e8ca2db407d342b9",
+      "sourcePixels": [
+        1672,
+        941
+      ],
+      "asset": "public/images/launcher_room/scenes/sunny-library.webp",
+      "assetSha256": "e6b6e6bc3a384f7db50277b5a83b5e89c7588b724b3cc4fba97813c0ad62cc56",
+      "assetPixels": [
+        1600,
+        900
+      ],
+      "assetBytes": 191528,
+      "alpha": "opaque-background"
+    },
+    {
+      "id": "furniture/helm",
+      "promptIntent": "Thousand Sunny ship helm on a movable pedestal; standalone transparent anime prop.",
+      "sourcePng": "tools/launcher-room/source-png/helm.png",
+      "sourceSha256": "1770b1b39475dc875e3139d6acb0406fb6990df3acc5c10bbd5454f2d20a7832",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "asset": "public/images/launcher_room/furniture/helm.webp",
+      "assetSha256": "03f353a8ccff5c1bdb73ab65c1244a83bf2a8d77c3bfbfcd65bb257e3920e893",
+      "assetPixels": [
+        1254,
+        1254
+      ],
+      "assetBytes": 226510,
+      "alpha": "transparent-cutout"
+    },
+    {
+      "id": "furniture/map-table",
+      "promptIntent": "Nami nautical chart table with maps and compass; standalone transparent anime prop.",
+      "sourcePng": "tools/launcher-room/source-png/map-table.png",
+      "sourceSha256": "68dec20ac41e6b1ab51b56971be48878cc4b780df8397bd441e2e327c833dd3d",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "asset": "public/images/launcher_room/furniture/map-table.webp",
+      "assetSha256": "e4197de47207179c6946f691ea9158e6dee9bc3906a53af809cd1cfbdb3ffd1c",
+      "assetPixels": [
+        1254,
+        1254
+      ],
+      "assetBytes": 271182,
+      "alpha": "transparent-cutout"
+    },
+    {
+      "id": "furniture/treasure-chest",
+      "promptIntent": "Straw Hat pirate treasure chest, closed; standalone transparent anime prop.",
+      "sourcePng": "tools/launcher-room/source-png/treasure-chest.png",
+      "sourceSha256": "45c02936ba8e96a113298b56347387b61ccf2a1e0829b343a9f59ae4c1403929",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "asset": "public/images/launcher_room/furniture/treasure-chest.webp",
+      "assetSha256": "1969e9db1acb91deb4e4b3c5ff0653f2395f6073eddd4d4fbf97c75c73a3a476",
+      "assetPixels": [
+        1254,
+        1254
+      ],
+      "assetBytes": 170606,
+      "alpha": "transparent-cutout"
+    },
+    {
+      "id": "furniture/tangerine-tree",
+      "promptIntent": "Nami tangerine tree in ship planter; standalone transparent anime prop.",
+      "sourcePng": "tools/launcher-room/source-png/tangerine-tree.png",
+      "sourceSha256": "7186a50efc8d4952db185aae757c5c2bc00c15102d77fa75c2e33edd0fd3ecdd",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "asset": "public/images/launcher_room/furniture/tangerine-tree.webp",
+      "assetSha256": "73b18c97aedd1d4bce31f1084b9d81bdf4cbf344755080606abe6568753b21f4",
+      "assetPixels": [
+        1254,
+        1254
+      ],
+      "assetBytes": 255880,
+      "alpha": "transparent-cutout"
+    },
+    {
+      "id": "furniture/swords-rack",
+      "promptIntent": "Zoro three-sword rack with sheathed katana; standalone transparent anime prop.",
+      "sourcePng": "tools/launcher-room/source-png/swords-rack.png",
+      "sourceSha256": "d9d457e8bb70c6e127cf41f0fd2bb2e5dcff7be9b5aef34f4f119a07ed6187b2",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "asset": "public/images/launcher_room/furniture/swords-rack.webp",
+      "assetSha256": "5ffb916d8c42e3d205bd220247f122214c4ebd199290c72b215ad7da7cbad2e2",
+      "assetPixels": [
+        1254,
+        1254
+      ],
+      "assetBytes": 221342,
+      "alpha": "transparent-cutout"
+    },
+    {
+      "id": "furniture/kitchen-table",
+      "promptIntent": "Sanji galley dining table; standalone transparent anime prop.",
+      "sourcePng": "tools/launcher-room/source-png/kitchen-table.png",
+      "sourceSha256": "8c72771f4d3b476384df101bb91109becedb7a74228bc802d8628cc9630c4b2c",
+      "sourcePixels": [
+        1536,
+        1024
+      ],
+      "asset": "public/images/launcher_room/furniture/kitchen-table.webp",
+      "assetSha256": "ba53c7a8c778005a4554755787a6be908d5763a1b5b38e9f81d7ce8037f7b559",
+      "assetPixels": [
+        1536,
+        1024
+      ],
+      "assetBytes": 208622,
+      "alpha": "transparent-cutout"
+    },
+    {
+      "id": "furniture/bookshelf",
+      "promptIntent": "Robin ship library bookcase; standalone transparent anime prop.",
+      "sourcePng": "tools/launcher-room/source-png/bookshelf.png",
+      "sourceSha256": "08388a458e85634f08ed4fcfe9a328ddcc9e8fb48e9ea44a4393b8e522f7dadc",
+      "sourcePixels": [
+        1199,
+        1312
+      ],
+      "asset": "public/images/launcher_room/furniture/bookshelf.webp",
+      "assetSha256": "a737ea7287b41dc7b2351ee23b5ddad7852f1a4bbcec3c95868d88d22f5d71e5",
+      "assetPixels": [
+        1199,
+        1312
+      ],
+      "assetBytes": 205752,
+      "alpha": "transparent-cutout"
+    },
+    {
+      "id": "furniture/medicine-cabinet",
+      "promptIntent": "Chopper medical cabinet; standalone transparent anime prop.",
+      "sourcePng": "tools/launcher-room/source-png/medicine-cabinet.png",
+      "sourceSha256": "fd10f976e981a1cd0318999f34183b6a14fa84dd2802a4bbc743cb760910e2f4",
+      "sourcePixels": [
+        1297,
+        1212
+      ],
+      "asset": "public/images/launcher_room/furniture/medicine-cabinet.webp",
+      "assetSha256": "3643c63379e3e83efd556673a401a24ede6b39e1bbfcf1aa164e04c53ca6f943",
+      "assetPixels": [
+        1297,
+        1212
+      ],
+      "assetBytes": 261738,
+      "alpha": "transparent-cutout"
+    },
+    {
+      "id": "furniture/piano",
+      "promptIntent": "Brook upright piano; standalone transparent anime prop.",
+      "sourcePng": "tools/launcher-room/source-png/piano.png",
+      "sourceSha256": "cf95ebba0897efa7179470d06612d3ec636cc0695d0f6a8db8ab06ceda0702fb",
+      "sourcePixels": [
+        1374,
+        1145
+      ],
+      "asset": "public/images/launcher_room/furniture/piano.webp",
+      "assetSha256": "a01e345fc41547e78273b690d10d0fd8d14fb53814b34e1d343391f715a9b4f5",
+      "assetPixels": [
+        1374,
+        1145
+      ],
+      "assetBytes": 218986,
+      "alpha": "transparent-cutout"
+    },
+    {
+      "id": "furniture/tool-bench",
+      "promptIntent": "Franky ship workshop bench; standalone transparent anime prop.",
+      "sourcePng": "tools/launcher-room/source-png/tool-bench.png",
+      "sourceSha256": "5f84820c344ed202adb038bf271e10531b9e83a387746890b11467cda5e8ac7a",
+      "sourcePixels": [
+        1374,
+        1145
+      ],
+      "asset": "public/images/launcher_room/furniture/tool-bench.webp",
+      "assetSha256": "5519e20182ebda42956db37a75582a2c522438efbb4dfe48be37c7ee3cacf19c",
+      "assetPixels": [
+        1374,
+        1145
+      ],
+      "assetBytes": 256914,
+      "alpha": "transparent-cutout"
+    },
+    {
+      "id": "chibi/luffy",
+      "promptIntent": "Canonical Monkey D. Luffy, full-body chibi room sprite, existing game portrait reference.",
+      "sourcePng": "tools/launcher-room/source-png/luffy.png",
+      "sourceSha256": "9a755492506dd6bbd220f698664922fc7d3e53332ea487a3b76f9f4eeb0f5a07",
+      "sourcePixels": [
+        1145,
+        1374
+      ],
+      "asset": "public/images/launcher_room/chibi/luffy.webp",
+      "assetSha256": "7e9cbdf9449be798256e6c50ada4b804ec0c75fe2f7167d874bc70628b811d13",
+      "assetPixels": [
+        512,
+        768
+      ],
+      "assetBytes": 135334,
+      "alpha": "transparent-cutout"
+    },
+    {
+      "id": "chibi/zoro",
+      "promptIntent": "Canonical Roronoa Zoro, full-body chibi room sprite, existing game portrait reference.",
+      "sourcePng": "tools/launcher-room/source-png/zoro.png",
+      "sourceSha256": "3093d55d686777c41e3933bf6fe1d1127daf3be5381cf7728b79001114ffa5d4",
+      "sourcePixels": [
+        1024,
+        1536
+      ],
+      "asset": "public/images/launcher_room/chibi/zoro.webp",
+      "assetSha256": "d1c0ebaeddd1209d728d0897b0f19a3d600505f305a0b60d2d19189891c8f304",
+      "assetPixels": [
+        512,
+        768
+      ],
+      "assetBytes": 161696,
+      "alpha": "transparent-cutout"
+    },
+    {
+      "id": "chibi/nami",
+      "promptIntent": "Canonical Nami, full-body chibi room sprite, existing game portrait reference.",
+      "sourcePng": "tools/launcher-room/source-png/nami.png",
+      "sourceSha256": "b9f684857b2781b71f48c4180134be57921f19e7665ff48772434a1975a82a5f",
+      "sourcePixels": [
+        1024,
+        1536
+      ],
+      "asset": "public/images/launcher_room/chibi/nami.webp",
+      "assetSha256": "b890fe28456ec6ff4884a1f07035c8298179a268845d5577c7c5843de738c79b",
+      "assetPixels": [
+        512,
+        768
+      ],
+      "assetBytes": 131592,
+      "alpha": "transparent-cutout"
+    },
+    {
+      "id": "chibi/chopper",
+      "promptIntent": "Canonical Tony Tony Chopper, full-body chibi room sprite, existing game portrait reference.",
+      "sourcePng": "tools/launcher-room/source-png/chopper.png",
+      "sourceSha256": "fccdc5f9293c7cb0afc246db7f680889aabb7b2cf59b50cb7940f125516a9709",
+      "sourcePixels": [
+        1223,
+        1286
+      ],
+      "asset": "public/images/launcher_room/chibi/chopper.webp",
+      "assetSha256": "5ae5ea6e68d49680347a374987e51e2ffb1ef4d151e4615dc9b68710a2aec1fd",
+      "assetPixels": [
+        512,
+        768
+      ],
+      "assetBytes": 122922,
+      "alpha": "transparent-cutout"
+    },
+    {
+      "id": "chibi/sanji",
+      "promptIntent": "Canonical Sanji, full-body chibi room sprite, existing game portrait reference.",
+      "sourcePng": "tools/launcher-room/source-png/sanji.png",
+      "sourceSha256": "1127e8db3b7daf2da4e6d4493d5a0595d8cec0a03956489aa1f60f42d8de2632",
+      "sourcePixels": [
+        1024,
+        1536
+      ],
+      "asset": "public/images/launcher_room/chibi/sanji.webp",
+      "assetSha256": "8ccbf552ec1ffa2e393237f29e6f681afb0b5eb3b556928ee2d57a012a400a38",
+      "assetPixels": [
+        512,
+        768
+      ],
+      "assetBytes": 138106,
+      "alpha": "transparent-cutout"
+    },
+    {
+      "id": "chibi/robin",
+      "promptIntent": "Canonical Nico Robin, full-body chibi room sprite, existing game portrait reference.",
+      "sourcePng": "tools/launcher-room/source-png/robin.png",
+      "sourceSha256": "ee2855c491e2a98c933166da10f7509e5d6bbe29e6f331e0b63a349d2149409f",
+      "sourcePixels": [
+        1024,
+        1536
+      ],
+      "asset": "public/images/launcher_room/chibi/robin.webp",
+      "assetSha256": "b815bb643e6929ae0c59690b68f8b9fd6d8a0a269debfef3724fda448f9f78b8",
+      "assetPixels": [
+        512,
+        768
+      ],
+      "assetBytes": 153608,
+      "alpha": "transparent-cutout"
+    },
+    {
+      "id": "frames/straw-hat",
+      "promptIntent": "Straw Hat pirate portrait frame, transparent outer area and open center.",
+      "sourcePng": "tools/launcher-room/source-png/straw-hat.png",
+      "sourceSha256": "53dc9d04c1bfccb67ba0c297964ca93c17ca20b047ffcc4e0a02313faff9e810",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "asset": "public/images/launcher_room/frames/straw-hat.webp",
+      "assetSha256": "4b316d8460ff3179acc6d7f38edb97a4df7f50b8f6e62301970db155e2fff01f",
+      "assetPixels": [
+        1254,
+        1254
+      ],
+      "assetBytes": 311112,
+      "alpha": "transparent-cutout"
+    },
+    {
+      "id": "frames/ship-wheel",
+      "promptIntent": "Thousand Sunny wheel portrait frame, transparent outer area and open center.",
+      "sourcePng": "tools/launcher-room/source-png/ship-wheel.png",
+      "sourceSha256": "fa981f8b78242b2b80c9c6170ecc9b99633492cf76b2b975ab2296f248986b22",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "asset": "public/images/launcher_room/frames/ship-wheel.webp",
+      "assetSha256": "9d6cafbadda37b407fe7ff45613c30b97a0f9b852e0f0c6b89d1f27420a006cd",
+      "assetPixels": [
+        1254,
+        1254
+      ],
+      "assetBytes": 304144,
+      "alpha": "transparent-cutout"
+    }
+  ]
+}

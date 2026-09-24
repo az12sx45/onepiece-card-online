@@ -74,10 +74,68 @@ const CATALOG = Object.freeze([
       asset: `opui://launcher/audio/bgm/track${number}.mp3`
     };
   }),
-  { id: 'guestbook-1', type: 'guestbook', key: 'guestbook', name: '好友留言板', rarity: 'rare' }
+  { id: 'guestbook-1', type: 'guestbook', key: 'guestbook', name: '好友留言板', rarity: 'rare' },
+  ...[
+    ['sunny-deck', '千陽號甲板', 'rare'],
+    ['sunny-kitchen', '千陽號廚房', 'epic'],
+    ['sunny-library', '千陽號圖書室', 'epic']
+  ].map(([key, name, rarity]) => ({
+    id: `room-scene-${key}`, type: 'room_scene', key, name, rarity,
+    asset: `opui://launcher/images/launcher_room/scenes/${key}.webp`
+  })),
+  ...[
+    ['helm', '千陽號舵輪', 'rare'],
+    ['map-table', '娜美的航海圖桌', 'rare'],
+    ['treasure-chest', '草帽一行人的寶箱', 'common'],
+    ['tangerine-tree', '娜美的橘子樹', 'epic'],
+    ['swords-rack', '索隆的刀架', 'rare'],
+    ['kitchen-table', '香吉士的餐桌', 'common'],
+    ['bookshelf', '羅賓的書架', 'rare'],
+    ['medicine-cabinet', '喬巴的醫藥櫃', 'rare'],
+    ['piano', '布魯克的鋼琴', 'epic'],
+    ['tool-bench', '佛朗基的工作台', 'epic']
+  ].map(([key, name, rarity]) => ({
+    id: `room-furniture-${key}`, type: 'room_furniture', key, name, rarity,
+    asset: `opui://launcher/images/launcher_room/furniture/${key}.webp`
+  })),
+  ...[
+    ['luffy', '魯夫', 'legend'], ['zoro', '索隆', 'epic'],
+    ['nami', '娜美', 'epic'], ['chopper', '喬巴', 'epic'],
+    ['sanji', '香吉士', 'epic'], ['robin', '羅賓', 'epic']
+  ].map(([key, name, rarity]) => ({
+    id: `room-character-${key}`, type: 'room_character', key, name: `Q版${name}`, rarity,
+    asset: `opui://launcher/images/launcher_room/chibi/${key}.webp`
+  })),
+  ...[
+    ['header', 'luffy', '魯夫'], ['header', 'chopper', '喬巴'],
+    ['side', 'zoro', '索隆'], ['side', 'nami', '娜美'],
+    ['footer', 'sanji', '香吉士'], ['footer', 'robin', '羅賓']
+  ].map(([slot, key, name]) => ({
+    id: `decor-${slot}-${key}-chibi`, type: 'decoration', key: `${slot}-${key}-chibi`, slot,
+    name: `Q版${name}貼紙`, rarity: 'rare',
+    asset: `opui://launcher/images/launcher_room/chibi/${key}.webp`
+  })),
+  ...[
+    ['sunny-deck', '千陽號甲板背景'], ['sunny-kitchen', '千陽號廚房背景'],
+    ['sunny-library', '千陽號圖書室背景']
+  ].map(([key, name]) => ({
+    id: `background-${key}`, type: 'background', key, name, rarity: 'rare',
+    asset: `opui://launcher/images/launcher_room/scenes/${key}.webp`
+  })),
+  { id: 'frame-sunny', type: 'frame', key: 'sunny', name: '千陽號相框', rarity: 'epic', asset: 'opui://launcher/images/launcher_room/frames/ship-wheel.webp' },
+  { id: 'frame-straw-hat', type: 'frame', key: 'straw-hat', name: '草帽海賊團相框', rarity: 'epic', asset: 'opui://launcher/images/launcher_room/frames/straw-hat.webp' },
+  { id: 'layout-sunny-deck', type: 'layout', key: 'sunny-deck', name: '千陽號甲板排版', rarity: 'rare' },
+  { id: 'layout-sunny-kitchen', type: 'layout', key: 'sunny-kitchen', name: '千陽號廚房排版', rarity: 'rare' },
+  { id: 'layout-sunny-library', type: 'layout', key: 'sunny-library', name: '千陽號圖書室排版', rarity: 'rare' }
 ].map(item => Object.freeze({ ...item, price: item.price ?? PRICES[item.rarity] })));
 const BY_ID = new Map(CATALOG.map(item => [item.id, item]));
-const LAUNCHER_ITEM_TYPES = Object.freeze(['layout', 'background', 'frame', 'decoration', 'bgm', 'guestbook']);
+const LAUNCHER_ITEM_TYPES = Object.freeze(['layout', 'background', 'frame', 'decoration', 'bgm', 'guestbook', 'room_scene', 'room_furniture', 'room_character']);
+const ROOM_ITEM_TYPES = Object.freeze(['room_scene', 'room_furniture', 'room_character']);
+const ROOM_DEFAULT_SCENE = 'room-scene-default';
+const ROOM_MAX_FURNITURE = 24;
+const ROOM_MAX_CHARACTERS = 3;
+const ROOM_WIDTH = 960;
+const ROOM_HEIGHT = 540;
 const DECORATION_SLOTS = Object.freeze(['header', 'side', 'footer']);
 const DEFAULT_DECORATION_PLACEMENT = Object.freeze({
   header: Object.freeze({ x: 50, y: 12, scale: 1 }),
@@ -139,6 +197,48 @@ const launcherOwnedItemIds = stats => [...new Set((Array.isArray(object(stats.la
   .filter(id => typeof id === 'string' && (LAUNCHER_ITEM_TYPES.includes(BY_ID.get(id)?.type) ||
     (BY_ID.get(id)?.type === 'avatar' && BY_ID.get(id)?.key >= LAUNCHER_AVATAR_MIN && BY_ID.get(id)?.key <= LAUNCHER_AVATAR_MAX))))];
 const guestbookUnlocked = stats => launcherOwnedItemIds(stats).includes('guestbook-1');
+const validRoomCoordinate = (x, y) => typeof x === 'number' && Number.isFinite(x) && x >= 0 && x <= ROOM_WIDTH &&
+  typeof y === 'number' && Number.isFinite(y) && y >= 0 && y <= ROOM_HEIGHT;
+const roundRoomNumber = value => Math.round(value * 100) / 100;
+const validFurniturePlacement = value => object(value) === value && validRoomCoordinate(value.x, value.y) &&
+  typeof value.scale === 'number' && Number.isFinite(value.scale) && value.scale >= 0.5 && value.scale <= 1.5 &&
+  typeof value.flip === 'boolean';
+const validCharacterPlacement = value => object(value) === value && validRoomCoordinate(value.x, value.y);
+function normalizedRoomEntries(entries, type, owned, limit) {
+  const seen = new Set();
+  const result = [];
+  for (const value of Array.isArray(entries) ? entries : []) {
+    if (result.length >= limit) break;
+    const id = value?.itemId;
+    if (typeof id !== 'string' || !owned.has(id) || BY_ID.get(id)?.type !== type || seen.has(id)) continue;
+    if (type === 'room_furniture' ? !validFurniturePlacement(value) : !validCharacterPlacement(value)) continue;
+    seen.add(id);
+    result.push(type === 'room_furniture' ? {
+      itemId: id, x: roundRoomNumber(value.x), y: roundRoomNumber(value.y),
+      scale: roundRoomNumber(value.scale), flip: value.flip
+    } : { itemId: id, x: roundRoomNumber(value.x), y: roundRoomNumber(value.y) });
+  }
+  return result;
+}
+function launcherRoom(stats) {
+  const owned = new Set(launcherOwnedItemIds(stats));
+  const saved = object(object(stats).launcherRoomV1);
+  const revision = Number.isSafeInteger(saved.revision) && saved.revision >= 0 ? saved.revision : 0;
+  const sceneId = saved.sceneId === ROOM_DEFAULT_SCENE ||
+    (owned.has(saved.sceneId) && BY_ID.get(saved.sceneId)?.type === 'room_scene') ? saved.sceneId : ROOM_DEFAULT_SCENE;
+  return {
+    revision, sceneId,
+    placements: normalizedRoomEntries(saved.placements, 'room_furniture', owned, ROOM_MAX_FURNITURE),
+    characters: normalizedRoomEntries(saved.characters, 'room_character', owned, ROOM_MAX_CHARACTERS)
+  };
+}
+function launcherRoomItems(room) {
+  return {
+    scene: BY_ID.get(room.sceneId) || null,
+    placements: room.placements.map(entry => ({ ...entry, item: BY_ID.get(entry.itemId) })),
+    characters: room.characters.map(entry => ({ ...entry, item: BY_ID.get(entry.itemId) }))
+  };
+}
 const validPlacement = value => {
   const x = Number(value?.x);
   const y = Number(value?.y);
@@ -178,7 +278,8 @@ const appearanceItems = appearance => ({
 });
 function sanitizeLauncherStatsPatch(stats) {
   if (!stats || typeof stats !== 'object' || Array.isArray(stats)) return {};
-  const { launcherOwnedV1: _owned, launcherAppearanceV1: _appearance, launcherWalletV1: _wallet, ...safe } = stats;
+  const { launcherOwnedV1: _owned, launcherAppearanceV1: _appearance, launcherWalletV1: _wallet,
+    launcherRoomV1: _room, ...safe } = stats;
   return safe;
 }
 const cardCollection = client => ({
@@ -203,9 +304,13 @@ function toPublicProfile(row, isSelf = false, boardSummary = null) {
     return { id, title: entry.title, group: adventureArtGroups[entry.group], variant: entry.variant + 1, variantLabel: `插畫 ${entry.variant + 1}/3` };
   });
   const customAppearance = launcherAppearance(stats);
+  const room = launcherRoom(stats);
   const avatar = launcherAvatarForRow(row, customAppearance);
-  const launcherAvatarIds = launcherOwnedItemIds(stats)
+  const launcherItemIds = launcherOwnedItemIds(stats);
+  const launcherAvatarIds = launcherItemIds
     .map(id => BY_ID.get(id)).filter(item => item?.type === 'avatar').map(item => item.key);
+  const launcherItems = launcherItemIds.slice(0, 150).map(id => BY_ID.get(id))
+    .filter(Boolean).map(item => ({ id: item.id, name: item.name, type: item.type, ...(item.asset ? { asset: item.asset } : {}) }));
   const cardItems = cardCollection(client);
   cardItems.avatars = [...new Set([...cardItems.avatars, ...launcherAvatarIds])].sort((a, b) => a - b);
   return {
@@ -220,10 +325,11 @@ function toPublicProfile(row, isSelf = false, boardSummary = null) {
       card: cardItems,
       board: { artworks: artIds.length, artworkTotal: adventureArt.length, artworkIds: artIds, artworkEntries },
       chess: { items: 0 },
-      launcher: { ownedItems: launcherOwnedItemIds(stats).length, itemIds: launcherOwnedItemIds(stats), avatarIds: launcherAvatarIds }
+      launcher: { ownedItems: launcherItemIds.length, itemIds: launcherItemIds, items: launcherItems, avatarIds: launcherAvatarIds }
     },
     appearance: { wallId: boundedId(object(stats.wall).id, 8), flagId: boundedId(object(stats.wall).flagId, 15), ...customAppearance },
     appearanceItems: appearanceItems(customAppearance),
+    room, roomItems: launcherRoomItems(room),
     guestbookUnlocked: guestbookUnlocked(stats),
     updatedAt: row.updated_at || null
   };
@@ -246,6 +352,9 @@ function toShop(row) {
       frames: newOwned.filter(id => BY_ID.get(id)?.type === 'frame'),
       decorations: newOwned.filter(id => BY_ID.get(id)?.type === 'decoration'),
       bgms: newOwned.filter(id => BY_ID.get(id)?.type === 'bgm'),
+      roomScenes: newOwned.filter(id => BY_ID.get(id)?.type === 'room_scene'),
+      roomFurniture: newOwned.filter(id => BY_ID.get(id)?.type === 'room_furniture'),
+      roomCharacters: newOwned.filter(id => BY_ID.get(id)?.type === 'room_character'),
       guestbook: guestbookUnlocked(stats)
     },
     equipped: {
@@ -327,7 +436,7 @@ async function getLauncherShop(pool, secret, preview = false) {
     ok: true,
     shop: {
       catalog: CATALOG, wallet: null, preview: true,
-      owned: { avatars: [], walls: [], flags: [], layouts: [], backgrounds: [], frames: [], decorations: [], bgms: [], guestbook: false },
+      owned: { avatars: [], walls: [], flags: [], layouts: [], backgrounds: [], frames: [], decorations: [], bgms: [], roomScenes: [], roomFurniture: [], roomCharacters: [], guestbook: false },
       equipped: { avatar: 8, wall: 1, flag: 1, ...launcherAppearance({}) }
     }
   };
@@ -407,6 +516,7 @@ async function changeLauncherItem(pool, secret, itemId, action) {
         stats.launcherOwnedV1 = { ...object(stats.launcherOwnedV1), items: [...launcherOwned, item.id] };
       }
     } else if (action === 'equip') {
+      if (ROOM_ITEM_TYPES.includes(item.type)) { await db.query('ROLLBACK'); return { ok: false, error: 'invalid_action' }; }
       if (item.type === 'guestbook') { await db.query('ROLLBACK'); return { ok: false, error: 'invalid_action' }; }
       if (!alreadyOwned) { await db.query('ROLLBACK'); return { ok: false, error: 'not_owned' }; }
       if (item.type === 'avatar' && launcherAvatar) {
@@ -471,4 +581,61 @@ async function setLauncherDecorationPlacement(pool, secret, slot, placement) {
   }
 }
 
-module.exports = { CATALOG, toPublicProfile, toCardPublicProfile, toShop, getLauncherProfile, getLauncherShop, changeLauncherItem, setLauncherDecorationPlacement, sanitizeLauncherStatsPatch, guestbookUnlocked, launcherAvatarForRow };
+async function setLauncherRoom(pool, secret, snapshot) {
+  if (!secret) return { ok: false, error: 'bad secret' };
+  if (object(snapshot) !== snapshot || !Number.isSafeInteger(snapshot.revision) || snapshot.revision < 0 ||
+    typeof snapshot.sceneId !== 'string' || !Array.isArray(snapshot.placements) ||
+    !Array.isArray(snapshot.characters) || snapshot.placements.length > ROOM_MAX_FURNITURE ||
+    snapshot.characters.length > ROOM_MAX_CHARACTERS) return { ok: false, error: 'invalid_room' };
+  const scene = snapshot.sceneId === ROOM_DEFAULT_SCENE ? null : BY_ID.get(snapshot.sceneId);
+  if (snapshot.sceneId !== ROOM_DEFAULT_SCENE && scene?.type !== 'room_scene') return { ok: false, error: 'invalid_room' };
+  const seen = new Set();
+  for (const placement of snapshot.placements) {
+    if (BY_ID.get(placement?.itemId)?.type !== 'room_furniture' || !validFurniturePlacement(placement) ||
+      seen.has(placement.itemId)) return { ok: false, error: 'invalid_room' };
+    seen.add(placement.itemId);
+  }
+  for (const character of snapshot.characters) {
+    if (BY_ID.get(character?.itemId)?.type !== 'room_character' || !validCharacterPlacement(character) ||
+      seen.has(character.itemId)) return { ok: false, error: 'invalid_room' };
+    seen.add(character.itemId);
+  }
+  const db = await pool.connect();
+  try {
+    await db.query('BEGIN');
+    const found = await db.query('SELECT user_id, name, avatar, stats, updated_at FROM player_profiles WHERE secret=$1 FOR UPDATE', [secret]);
+    const row = found.rows[0];
+    if (!row) { await db.query('ROLLBACK'); return { ok: false, error: 'bad secret' }; }
+    const stats = { ...object(row.stats) };
+    const current = launcherRoom(stats);
+    if (snapshot.revision !== current.revision) {
+      await db.query('ROLLBACK');
+      return { ok: false, error: 'revision_conflict', profile: toPublicProfile(row, true), shop: toShop(row) };
+    }
+    if (current.revision === Number.MAX_SAFE_INTEGER) { await db.query('ROLLBACK'); return { ok: false, error: 'invalid_room' }; }
+    const owned = new Set(launcherOwnedItemIds(stats));
+    if ((scene && !owned.has(scene.id)) || [...snapshot.placements, ...snapshot.characters].some(entry => !owned.has(entry.itemId))) {
+      await db.query('ROLLBACK');
+      return { ok: false, error: 'not_owned' };
+    }
+    stats.launcherRoomV1 = {
+      revision: current.revision + 1,
+      sceneId: snapshot.sceneId,
+      placements: normalizedRoomEntries(snapshot.placements, 'room_furniture', owned, ROOM_MAX_FURNITURE),
+      characters: normalizedRoomEntries(snapshot.characters, 'room_character', owned, ROOM_MAX_CHARACTERS)
+    };
+    const updated = await db.query(
+      'UPDATE player_profiles SET stats=$1::jsonb, updated_at=now() WHERE user_id=$2 RETURNING user_id, name, avatar, stats, updated_at',
+      [JSON.stringify(stats), row.user_id]
+    );
+    await db.query('COMMIT');
+    return { ok: true, profile: toPublicProfile(updated.rows[0], true), shop: toShop(updated.rows[0]) };
+  } catch (error) {
+    await db.query('ROLLBACK').catch(() => {});
+    throw error;
+  } finally {
+    db.release();
+  }
+}
+
+module.exports = { CATALOG, toPublicProfile, toCardPublicProfile, toShop, getLauncherProfile, getLauncherShop, changeLauncherItem, setLauncherDecorationPlacement, setLauncherRoom, sanitizeLauncherStatsPatch, guestbookUnlocked, launcherAvatarForRow };

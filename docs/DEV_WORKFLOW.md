@@ -1,5 +1,13 @@
 # Dev Workflow
 
+## 2026-09-25 啟動器自由擺設房間與商店擴充 1.1.9（本機整合候選）
+
+範圍：以已發布 1.1.8 的 `origin/main` 提交 `070976596` 建立隔離工作樹 `D:\Codex_Release_Worktrees\launcher-room-shop-1.1.9`。商店保留原有 87 件 ID 與售價，新增 33 件後共 120 件：千陽號甲板／廚房／圖書室場景 3、家具 10、既有《航海王》角色魯夫／索隆／娜美／喬巴／香吉士／羅賓的 Q 版房客 6、同六人的個人頁貼紙 6、場景背景 3、相框 2、排版 3。21 張 GPT 點陣原稿分別為場景 3、家具 10、Q 版角色 6、相框 2；貼紙與背景重用對應圖檔，未新增原創角色。來源 PNG、正式 WebP、尺寸、Alpha 與 SHA-256 見 `docs/LAUNCHER_ROOM_ART_20260925.json`；產生與轉檔使用 `tools/launcher-room/prepare_art.py`、`build_art_manifest.py`。舊商店、頭像、BGM 及三款遊戲套件不改 ID。
+
+個人頁增加 960×540 的獨立房間；頁主可購買場景／家具／房客，拖曳或鍵盤調整位置、縮放／翻轉家具，儲存完整配置。最多擺放 24 件不同家具、3 名不同 Q 版角色；角色在房間顯示時於可見地板區域自主短距離移動，頁面隱藏或使用者偏好減少動態時停止。雙向好友可唯讀參觀，收藏清單回傳伺服器固定商品的安全摘要。`stats.launcherRoomV1` 保存 `revision`、`sceneId`、`placements`、`characters`；`LAUNCHER_ROOM_SET` 在 PostgreSQL `FOR UPDATE` 交易內核對購買擁有權、座標與版本衝突，舊 Card `PROFILE_UPDATE` 不得覆寫。變更檔案：`server/launcher-profile-shop.js`、`index.js`、`desktop-distribution.js`；`desktop/launcher-room.js/css`、`launcher-profile-shop.js/css`、`launcher.html`、`main.js`、`preload.js`、`auth-service.js`、`package.json`／lock；`public/images/launcher_room/`、來源工具與素材清單，以及相關 QA。Board／Card／Chess 回合、傷害、存檔與 `BOARD_GAME_STATE` 不變。
+
+目前驗證：`node scripts/launcher_profile_shop_qa.js` 通過 120 件 catalog、購買／持有權、房間配置、好友唯讀、座標／上限／版本拒絕；`node scripts/profile_shop_ownership_sql_qa.js` 以 PGlite 核對真正 JSONB 合併下的房間保存、舊 Card 偽造 patch 拒絕及付款資料保留；`node --check` 四個 server／QA 檔與 scoped `git diff --check` 通過。隔離 Chromium `scripts/launcher_room_browser_qa.js` 17／17，含拖曳、儲存 payload、Q 版移動、背景隱藏／減少動態、好友唯讀、390px 窄版及晚到回應；報告在 `D:\Codex_QA\launcher-room-browser\report.json`。五件由本輪定向製作的家具另於 `D:\Codex_QA\launcher-room-five-furniture\qa.json` 驗明透明角落與 SHA，140px 縮圖目視可辨。以上為本機／隔離測試；安裝檔封裝、正式帳號交易、R2／Render 公開版與更新清單仍需後續發布驗證，勿以本節視為已部署。
+
 ## 2026-09-25 啟動器個人頁與商店 1.1.8 正式發布
 
 正式程式由隔離發行樹提交 `23b6c5fed`，簽署更新清單提交 `58dd185e8` 至 `origin/main`；正式 D 槽來源只定向同步相關檔案，保留同時進行的 Board 未提交工作。1.1.8 安裝檔為 221,792,955 bytes，SHA-256 `f00c94b92017c840f6a3fa12d3de33f1b0b7dfcdb781c347eebd61c515d7dca5`，公開 URL 為 `https://game-assets.rihdi.tw/desktop/launcher/releases/1.1.8/ONE-PIECE-Tabletop-Launcher-1.1.8-x64.exe`。公開 HEAD、Range 的 MZ／PE 標頭與完整 GET 的 SHA 均通過。公開 `/desktop/launcher-release-v1.json` 與本機簽署候選逐位元組一致，Ed25519 驗簽通過；1.1.7 查詢可更新，1.1.8 查詢為最新版。

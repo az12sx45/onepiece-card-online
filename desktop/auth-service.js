@@ -313,7 +313,16 @@ class AuthService extends EventEmitter {
       'decor-none-header', 'decor-none-side', 'decor-none-footer',
       'bgm-none', 'bgm-harbor', 'bgm-night-watch', 'bgm-voyage', 'guestbook-1'
     ]);
-    if (typeof itemId !== 'string' || !(/^(?:ava-(?:[1-9]|[1-5][0-9]|6[0-2])|(?:wall|flag)-(?:[1-9]|[1-4][0-9]|50)|bgm-op-(?:0[1-9]|1[0-9]|20))$/.test(itemId) || customItems.has(itemId))) {
+    for (const id of [
+      'background-sunny-deck', 'background-sunny-kitchen', 'background-sunny-library',
+      'frame-sunny', 'frame-straw-hat',
+      'layout-sunny-deck', 'layout-sunny-kitchen', 'layout-sunny-library',
+      'decor-header-luffy-chibi', 'decor-header-chopper-chibi',
+      'decor-side-zoro-chibi', 'decor-side-nami-chibi',
+      'decor-footer-sanji-chibi', 'decor-footer-robin-chibi'
+    ]) customItems.add(id);
+    const roomProduct = /^room-(?:scene-(?:sunny-deck|sunny-kitchen|sunny-library)|furniture-(?:helm|map-table|treasure-chest|tangerine-tree|swords-rack|kitchen-table|bookshelf|medicine-cabinet|piano|tool-bench)|character-(?:luffy|zoro|nami|chopper|sanji|robin))$/.test(itemId);
+    if (typeof itemId !== 'string' || !(/^(?:ava-(?:[1-9]|[1-5][0-9]|6[0-2])|(?:wall|flag)-(?:[1-9]|[1-4][0-9]|50)|bgm-op-(?:0[1-9]|1[0-9]|20))$/.test(itemId) || roomProduct || customItems.has(itemId))) {
       return { ok: false, error: 'invalid item' };
     }
     const eventName = action === 'buy' ? 'LAUNCHER_SHOP_BUY' : action === 'equip' ? 'LAUNCHER_SHOP_EQUIP' : '';
@@ -374,6 +383,26 @@ class AuthService extends EventEmitter {
       return { ok: false, error: 'invalid placement' };
     }
     return this.launcherRequest('LAUNCHER_DECORATION_PLACEMENT_SET', { slot, placement: { x, y, scale } });
+  }
+
+  async saveLauncherRoom(room) {
+    if (!room || typeof room !== 'object' || Array.isArray(room)) return { ok: false, error: 'invalid_room' };
+    const { revision, sceneId, placements, characters } = room;
+    if (!Number.isSafeInteger(revision) || revision < 0 || typeof sceneId !== 'string' ||
+        !Array.isArray(placements) || placements.length > 24 || !Array.isArray(characters) || characters.length > 3) {
+      return { ok: false, error: 'invalid_room' };
+    }
+    const sceneValid = sceneId === 'room-scene-default' || /^room-scene-(?:sunny-deck|sunny-kitchen|sunny-library)$/.test(sceneId);
+    const unique = values => new Set(values.map(value => value.itemId)).size === values.length;
+    const coordinates = entry => entry && Number.isFinite(entry.x) && Number.isFinite(entry.y) &&
+      entry.x >= 0 && entry.x <= 960 && entry.y >= 0 && entry.y <= 540;
+    if (!sceneValid || !unique(placements) || !unique(characters) ||
+        !placements.every(entry => coordinates(entry) && /^room-furniture-(?:helm|map-table|treasure-chest|tangerine-tree|swords-rack|kitchen-table|bookshelf|medicine-cabinet|piano|tool-bench)$/.test(entry.itemId) &&
+          Number.isFinite(entry.scale) && entry.scale >= .5 && entry.scale <= 1.5 && typeof entry.flip === 'boolean') ||
+        !characters.every(entry => coordinates(entry) && /^room-character-(?:luffy|zoro|nami|chopper|sanji|robin)$/.test(entry.itemId))) {
+      return { ok: false, error: 'invalid_room' };
+    }
+    return this.launcherRequest('LAUNCHER_ROOM_SET', { revision, sceneId, placements, characters });
   }
 
   getSecretForGame() {

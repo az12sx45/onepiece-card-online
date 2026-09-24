@@ -5,7 +5,7 @@
 const assert = require('node:assert/strict');
 const { PGlite } = require(process.env.BOARD_QA_PGLITE || 'D:/Codex_QA/draw-result-art-20260922/deps/node_modules/@electric-sql/pglite');
 const { PROFILE_STATS_SQL } = require('../server/board-art-collection');
-const { changeLauncherItem, getLauncherShop, sanitizeLauncherStatsPatch } = require('../server/launcher-profile-shop');
+const { changeLauncherItem, getLauncherShop, setLauncherRoom, sanitizeLauncherStatsPatch } = require('../server/launcher-profile-shop');
 const { updateProfileSocial } = require('../server/profile-social-stats');
 
 const db = new PGlite();
@@ -115,6 +115,25 @@ const sorted = values => [...values].sort((a, b) => String(a).localeCompare(Stri
     assert.deepEqual((await profile('protected')).stats.launcherOwnedV1.items, ['guestbook-1']);
     assert.deepEqual((await profile('protected')).stats.launcherAppearanceV1, { layoutId: 'layout-grand-line' });
     assert.equal((await profile('protected')).stats.client.totals.coins, 8);
+
+    assert.equal((await changeLauncherItem(pool, 'protected', 'room-scene-sunny-deck', 'buy')).ok, true);
+    assert.equal((await changeLauncherItem(pool, 'protected', 'room-furniture-helm', 'buy')).ok, true);
+    assert.equal((await changeLauncherItem(pool, 'protected', 'room-character-luffy', 'buy')).ok, true);
+    const roomSaved = await setLauncherRoom(pool, 'protected', {
+      revision: 0, sceneId: 'room-scene-sunny-deck',
+      placements: [{ itemId: 'room-furniture-helm', x: 300, y: 210, scale: 1, flip: false }],
+      characters: [{ itemId: 'room-character-luffy', x: 480, y: 420 }]
+    });
+    assert.equal(roomSaved.ok, true);
+    const roomBeforePatch = (await profile('protected')).stats.launcherRoomV1;
+    await patch('protected', sanitizeLauncherStatsPatch({
+      launcherRoomV1: { revision: 999, sceneId: 'room-scene-default', placements: [], characters: [] },
+      client: { totals: { games: 11 } }
+    }));
+    assert.deepEqual((await profile('protected')).stats.launcherRoomV1, roomBeforePatch);
+    assert.equal((await profile('protected')).stats.client.totals.games, 11);
+    assert.equal((await setLauncherRoom(pool, 'protected', { ...roomBeforePatch, revision: 0 })).error, 'revision_conflict');
+    assert.deepEqual((await profile('protected')).stats.launcherRoomV1, roomBeforePatch);
 
     await patch('launcher-only-avatar', { client: { totals: { coins: 200 } } });
     assert.equal((await changeLauncherItem(pool, 'launcher-only-avatar', 'ava-52', 'buy')).ok, true);

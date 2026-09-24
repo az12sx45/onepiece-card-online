@@ -48,6 +48,8 @@ const APP_FILES = [
   'launcher-social.css',
   'launcher-profile-shop.js',
   'launcher-profile-shop.css',
+  'launcher-room.js',
+  'launcher-room.css',
   'launcher-updates-ui.js',
   'launcher-account-ui.js',
   'asset-store.js',
@@ -117,6 +119,20 @@ const EXTRA_RESOURCES = [
       'frame-luffy.webp', 'frame-zoro.webp',
       'sticker-luffy.webp', 'sticker-zoro.webp', 'sticker-nami.webp',
       'sticker-chopper.webp', 'sticker-ace.webp', 'sticker-robin.webp'
+    ]
+  },
+  {
+    from: '../public/images/launcher_room',
+    to: 'launcher-assets/images/launcher_room',
+    filter: [
+      'scenes/sunny-deck.webp', 'scenes/sunny-kitchen.webp', 'scenes/sunny-library.webp',
+      'furniture/helm.webp', 'furniture/map-table.webp', 'furniture/treasure-chest.webp',
+      'furniture/tangerine-tree.webp', 'furniture/swords-rack.webp', 'furniture/kitchen-table.webp',
+      'furniture/bookshelf.webp', 'furniture/medicine-cabinet.webp', 'furniture/piano.webp',
+      'furniture/tool-bench.webp',
+      'chibi/luffy.webp', 'chibi/zoro.webp', 'chibi/nami.webp', 'chibi/chopper.webp',
+      'chibi/sanji.webp', 'chibi/robin.webp',
+      'frames/straw-hat.webp', 'frames/ship-wheel.webp'
     ]
   },
   {
@@ -309,7 +325,7 @@ function validateCursorPng(filePath, label) {
 function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
-  assert(packageJson.version === '1.1.8', 'Desktop launcher version must be 1.1.8 for profile and shop.');
+  assert(packageJson.version === '1.1.9', 'Desktop launcher version must be 1.1.9 for the room and expanded shop.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
@@ -378,6 +394,26 @@ function validateSourcePackage() {
     assert(item.asset === `public/images/board/avatars/${item.avatarId}.webp`, `Avatar output path differs: ${item.avatarId}`);
     assert(sha256File(path.join(ROOT, ...item.sourcePng.split('/'))) === item.sourceSha256, `Avatar PNG digest differs: ${item.avatarId}`);
     assert(sha256File(path.join(ROOT, ...item.asset.split('/'))) === item.assetSha256, `Avatar WebP digest differs: ${item.avatarId}`);
+  }
+  const roomManifest = readJson(path.join(ROOT, 'docs', 'LAUNCHER_ROOM_ART_20260925.json'), 'launcher room art manifest');
+  const roomResource = EXTRA_RESOURCES.find(resource => resource.to === 'launcher-assets/images/launcher_room');
+  assert(roomManifest.version === '1.1.9' && roomManifest.canonicalCharactersOnly === true,
+    'Room art manifest is not the approved canonical-character release.');
+  assert(Array.isArray(roomManifest.items) && roomManifest.items.length === roomResource.filter.length,
+    'Room art manifest must cover every packaged room image.');
+  assertExactJson(sorted(roomManifest.items.map(item => item.asset.replace(/^public\/images\/launcher_room\//, ''))),
+    sorted(roomResource.filter), 'Room art manifest output set');
+  const roomSourceRoot = path.join(ROOT, 'tools', 'launcher-room', 'source-png');
+  assertExactJson(sorted(fs.readdirSync(roomSourceRoot)),
+    sorted(roomManifest.items.map(item => path.basename(item.sourcePng))), 'GPT room art source PNG set');
+  for (const item of roomManifest.items) {
+    assert(/^tools\/launcher-room\/source-png\/[a-z0-9-]+\.png$/.test(item.sourcePng), `Room source path is unsafe: ${item.sourcePng}`);
+    assert(/^public\/images\/launcher_room\/(?:scenes|furniture|chibi|frames)\/[a-z0-9-]+\.webp$/.test(item.asset), `Room asset path is unsafe: ${item.asset}`);
+    const source = path.join(ROOT, ...item.sourcePng.split('/'));
+    const asset = path.join(ROOT, ...item.asset.split('/'));
+    assert(sha256File(source) === item.sourceSha256, `GPT room source digest differs: ${item.sourcePng}`);
+    assert(fs.statSync(asset).size === item.assetBytes && sha256File(asset) === item.assetSha256,
+      `Packaged room art digest differs: ${item.asset}`);
   }
   const opManifest = readJson(path.join(ROOT, 'docs', 'LAUNCHER_OP_BGM_20260925.json'), 'launcher OP music manifest');
   const opResource = EXTRA_RESOURCES.find((resource) => resource.to === 'launcher-assets/audio/bgm');
@@ -471,6 +507,7 @@ function collectExpectedLauncherAssets() {
   }
   for (const [resourceTo, publicPath] of [
     ['launcher-assets/images/profile_decor', path.join(PUBLIC_ROOT, 'images', 'profile_decor')],
+    ['launcher-assets/images/launcher_room', path.join(PUBLIC_ROOT, 'images', 'launcher_room')],
     ['launcher-assets/audio/profile_bgm', path.join(PUBLIC_ROOT, 'audio', 'profile_bgm')],
     ['launcher-assets/audio/bgm', path.join(PUBLIC_ROOT, 'audio', 'bgm')]
   ]) {

@@ -1,6 +1,6 @@
 {
   "name": "onepiece-tabletop-desktop",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "private": true,
   "description": "Windows launcher for ONE PIECE tabletop games with account login, verified game downloads and incremental updates.",
   "main": "main.js",
@@ -37,6 +37,8 @@
       "launcher-social.css",
       "launcher-profile-shop.js",
       "launcher-profile-shop.css",
+      "launcher-room.js",
+      "launcher-room.css",
       "launcher-updates-ui.js",
       "launcher-account-ui.js",
       "asset-store.js",
@@ -118,6 +120,33 @@
           "sticker-chopper.webp",
           "sticker-ace.webp",
           "sticker-robin.webp"
+        ]
+      },
+      {
+        "from": "../public/images/launcher_room",
+        "to": "launcher-assets/images/launcher_room",
+        "filter": [
+          "scenes/sunny-deck.webp",
+          "scenes/sunny-kitchen.webp",
+          "scenes/sunny-library.webp",
+          "furniture/helm.webp",
+          "furniture/map-table.webp",
+          "furniture/treasure-chest.webp",
+          "furniture/tangerine-tree.webp",
+          "furniture/swords-rack.webp",
+          "furniture/kitchen-table.webp",
+          "furniture/bookshelf.webp",
+          "furniture/medicine-cabinet.webp",
+          "furniture/piano.webp",
+          "furniture/tool-bench.webp",
+          "chibi/luffy.webp",
+          "chibi/zoro.webp",
+          "chibi/nami.webp",
+          "chibi/chopper.webp",
+          "chibi/sanji.webp",
+          "chibi/robin.webp",
+          "frames/straw-hat.webp",
+          "frames/ship-wheel.webp"
         ]
       },
       {

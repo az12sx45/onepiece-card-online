@@ -5253,6 +5253,16 @@ socket.on('LAUNCHER_DECORATION_PLACEMENT_SET', async ({ secret, slot, placement 
   catch (error) { console.error('[LAUNCHER_DECORATION_PLACEMENT_SET] error:', error); cb?.({ ok: false, error: 'placement unavailable' }); }
 });
 
+socket.on('LAUNCHER_ROOM_SET', async ({ secret, revision, sceneId, placements, characters } = {}, cb) => {
+  try {
+    cb?.(await launcherProfileShop.setLauncherRoom(pool, String(secret || '').trim(),
+      { revision, sceneId, placements, characters }));
+  } catch (error) {
+    console.error('[LAUNCHER_ROOM_SET] error:', error);
+    cb?.({ ok: false, error: 'room unavailable' });
+  }
+});
+
 socket.on('LAUNCHER_COMMENTS_GET', async ({ secret, userId = 0, beforeId = 0 } = {}, cb) => {
   try { cb?.(await launcherGuestbook.getLauncherComments(pool, String(secret || '').trim(), userId, beforeId)); }
   catch (error) { console.error('[LAUNCHER_COMMENTS_GET] error:', error); cb?.({ ok: false, error: 'comments unavailable' }); }

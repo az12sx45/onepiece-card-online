@@ -1,5 +1,16 @@
 # File Map
 
+## 2026-09-25 啟動器 1.1.9 房間與擴充商店（本機候選）
+
+| 檔案 | 用途 |
+| --- | --- |
+| `server/launcher-profile-shop.js`、`index.js`、`desktop-distribution.js` | 120 件商品目錄、帳號持有權、`launcherRoomV1` 正規化／公開安全摘要、`LAUNCHER_ROOM_SET` 交易與桌面事件白名單；舊 `PROFILE_UPDATE` 不得覆寫房間。 |
+| `desktop/launcher-room.js/css`、`launcher.html`、`launcher-profile-shop.js/css` | 個人頁自由擺設房間、角色短距離活動、好友唯讀參觀、120 件分類商品與安全的收藏名稱。 |
+| `desktop/main.js`、`preload.js`、`auth-service.js`、`package.json`／lock | 房間 IPC、`opui` 媒體白名單與 21 張新圖的 Windows 封裝清單。 |
+| `public/images/launcher_room/scenes/`、`furniture/`、`chibi/`、`frames/` | 3 張場景、10 件家具、6 位既有角色 Q 版、2 款相框 WebP；貼紙／背景重用這些圖。 |
+| `tools/launcher-room/source-png/`、`prepare_art.py`、`build_art_manifest.py`、`docs/LAUNCHER_ROOM_ART_20260925.json` | GPT PNG 原稿、透明精靈轉檔與 21 張資產的來源／輸出 SHA-256 清單。 |
+| `scripts/launcher_profile_shop_qa.js`、`profile_shop_ownership_sql_qa.js`、`launcher_room_browser_qa.js`、`desktop_launcher_package_qa.js` | 目錄與權限、PGlite 真 JSONB 相容、隔離 Chromium 房間操作與封裝完整性驗證。 |
+
 ## 2026-09-25 啟動器 1.1.8 發行入口
 
 | 檔案 | 用途 |

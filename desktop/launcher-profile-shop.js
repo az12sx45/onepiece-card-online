@@ -10,8 +10,9 @@
   const COLLECTION_TABS = [
     ['avatars', '頭像'], ['walls', '牆面'], ['flags', '旗幟'], ['launcher', '展示室'], ['titles', '榮譽'], ['board', '航海圖鑑'], ['chess', '戰棋']
   ];
-  const SHOP_TABS = [['avatar', '頭像'], ['background', '背景'], ['frame', '相框'], ['wall', '牆面'], ['flag', '旗幟'], ['layout', '排版'], ['decoration', '貼紙'], ['bgm', '音樂'], ['guestbook', '留言板']];
-  const TYPE_LABEL = { avatar: '頭像', background: '背景', frame: '相框', wall: '牆面', flag: '旗幟', layout: '排版', decoration: '貼紙', bgm: '音樂', guestbook: '留言板' };
+  const SHOP_TABS = [['avatar', '頭像'], ['room_scene', '房間場景'], ['room_furniture', '房間家具'], ['room_character', 'Q版夥伴'], ['background', '背景'], ['frame', '相框'], ['wall', '牆面'], ['flag', '旗幟'], ['layout', '排版'], ['decoration', '貼紙'], ['bgm', '音樂'], ['guestbook', '留言板']];
+  const TYPE_LABEL = { avatar: '頭像', room_scene: '房間場景', room_furniture: '房間家具', room_character: 'Q版夥伴', background: '背景', frame: '相框', wall: '牆面', flag: '旗幟', layout: '排版', decoration: '貼紙', bgm: '音樂', guestbook: '留言板' };
+  const ROOM_TYPES = ['room_scene', 'room_furniture', 'room_character'];
   const SLOTS = [['header', '上方'], ['side', '側邊'], ['footer', '下方']];
   const RARITY = { common: '普通', rare: '稀有', epic: '史詩', legend: '傳說' };
   const MAX_AVATAR_ID = 62;
@@ -66,6 +67,7 @@
   let decorBusy = false;
   let bgmSource = '';
   let bgmPlayRequest = 0;
+  let roomEditorRequested = false;
 
   function status(target, message, error = false) {
     const node = $(target);
@@ -164,10 +166,11 @@
       return;
     }
     if (category === 'launcher') {
-      const ids = Array.isArray(profile?.collection?.launcher?.itemIds) ? profile.collection.launcher.itemIds.filter(id => typeof id === 'string' && /^[a-z0-9-]{3,64}$/.test(id)).slice(0, 50) : [];
+      const ids = Array.isArray(profile?.collection?.launcher?.itemIds) ? profile.collection.launcher.itemIds.filter(id => typeof id === 'string' && /^[a-z0-9-]{3,64}$/.test(id)).slice(0, 150) : [];
+      const summaries = Array.isArray(profile?.collection?.launcher?.items) ? profile.collection.launcher.items : [];
       $('profileCollectionCount').textContent = `${ids.length} 件展示室收藏`;
       for (const id of ids) {
-        const item = safeCatalog().find(entry => entry.id === id);
+        const item = summaries.find(entry => entry?.id === id) || safeCatalog().find(entry => entry.id === id);
         textCollection(grid, item?.name || id, TYPE_LABEL[item?.type] || '展示室收藏');
       }
       if (!ids.length) emptyCollection('尚未收藏展示室佈置或音樂。');
@@ -235,7 +238,7 @@
     const items = profile?.appearanceItems || {};
     const stage = $('profileCabinStage');
     const layoutId = String(appearance.layoutId || 'layout-default');
-    stage.dataset.layout = ['layout-grand-line', 'layout-bounty-board', 'layout-captain-quarters'].includes(layoutId) ? layoutId : 'layout-default';
+    stage.dataset.layout = ['layout-grand-line', 'layout-bounty-board', 'layout-captain-quarters', 'layout-sunny-deck', 'layout-sunny-kitchen', 'layout-sunny-library'].includes(layoutId) ? layoutId : 'layout-default';
     const wall = imageFor('wall', appearance.wallId);
     $('profileCabinWall').style.backgroundImage = wall ? `url("${wall}")` : '';
     const background = $('profileCabinBackground');
@@ -304,7 +307,7 @@
       list.append(card);
     }
   }
-  function renderProfile() { renderHero(); renderCabin(); renderGames(); renderCollectionTabs(); renderCollection(); renderGuestbook(); }
+  function renderProfile() { renderHero(); renderCabin(); window.LauncherRoom?.setProfile(profile, { accountId, preview }); renderGames(); renderCollectionTabs(); renderCollection(); renderGuestbook(); }
   async function loadProfile() {
     const requestId = ++profileRequest;
     commentRequest++; comments = null; commentNextBeforeId = 0; commentHasMore = false;
@@ -319,6 +322,7 @@
       if (requestId !== profileRequest) return;
       if (!result?.ok || !result.profile) { profile = null; renderProfile(); status('profileStatus', errorText(result?.error), true); return; }
       profile = result.profile; renderProfile(); status('profileStatus', '');
+      if (roomEditorRequested && profile.isSelf) { roomEditorRequested = false; window.LauncherRoom?.openEditor(); }
       loadComments();
     } catch {
       if (requestId === profileRequest) { profile = null; renderProfile(); status('profileStatus', errorText('offline'), true); }
@@ -406,11 +410,16 @@
         ['background', 'frame'].includes(item.type) ? !!safeImageAsset(item.asset) :
         item.type === 'decoration' ? !!safeImageAsset(item.asset) && SLOTS.some(([slot]) => slot === item.slot) :
         item.type === 'bgm' ? !!safeAudioAsset(item.asset) :
-        item.type === 'layout' ? ['layout-grand-line', 'layout-bounty-board', 'layout-captain-quarters'].includes(item.id) :
+        item.type === 'layout' ? ['layout-grand-line', 'layout-bounty-board', 'layout-captain-quarters', 'layout-sunny-deck', 'layout-sunny-kitchen', 'layout-sunny-library'].includes(item.id) :
+        ROOM_TYPES.includes(item.type) ? !!safeImageAsset(item.asset) :
         item.id === 'guestbook-1'));
   }
   function owned(item) {
     if (item.type === 'guestbook') return shop?.owned?.guestbook === true;
+    if (ROOM_TYPES.includes(item.type)) {
+      const field = { room_scene: 'roomScenes', room_furniture: 'roomFurniture', room_character: 'roomCharacters' }[item.type];
+      return Array.isArray(shop?.owned?.[field]) && shop.owned[field].includes(item.id);
+    }
     if (['background', 'frame', 'layout', 'decoration', 'bgm'].includes(item.type)) {
       const field = { background: 'backgrounds', frame: 'frames', layout: 'layouts', decoration: 'decorations', bgm: 'bgms' }[item.type];
       return Array.isArray(shop?.owned?.[field]) && shop.owned[field].includes(item.id);
@@ -420,6 +429,7 @@
   }
   function equipped(item) {
     if (item.type === 'guestbook') return owned(item);
+    if (ROOM_TYPES.includes(item.type)) return false;
     if (item.type === 'background') return shop?.equipped?.backgroundId === item.id;
     if (item.type === 'frame') return shop?.equipped?.frameId === item.id;
     if (item.type === 'layout') return shop?.equipped?.layoutId === item.id;
@@ -473,9 +483,13 @@
       const bottom = el('div', 'shop-item-bottom');
       const isOwned = owned(item), isEquipped = equipped(item);
       bottom.append(el('span', '', isOwned ? item.type === 'guestbook' ? '已解鎖' : '已收藏' : `${fmt(item.price)} 金幣`));
-      const button = el('button', '', shop?.preview ? '登入後購買' : isEquipped ? item.type === 'guestbook' ? '已開放' : '使用中' : isOwned ? '套用' : wallet < number(item.price) ? '金幣不足' : '購買');
+      const button = el('button', '', shop?.preview ? '登入後購買' : isEquipped ? item.type === 'guestbook' ? '已開放' : '使用中' : isOwned ? ROOM_TYPES.includes(item.type) ? '佈置' : '套用' : wallet < number(item.price) ? '金幣不足' : '購買');
       button.type = 'button'; button.disabled = shopBusy || shop?.preview || isEquipped || (!isOwned && wallet < number(item.price));
-      button.onclick = () => { if (isOwned) equip(item); else confirmPurchase(item); };
+      button.onclick = () => {
+        if (isOwned && ROOM_TYPES.includes(item.type)) { roomEditorRequested = true; window.LauncherProfileShop?.openProfile(0); }
+        else if (isOwned) equip(item);
+        else confirmPurchase(item);
+      };
       bottom.append(button); body.append(bottom); article.append(visual, body); grid.append(article);
     }
   }
@@ -521,7 +535,7 @@
     finally { shopBusy = false; $('shopConfirmBuy').disabled = false; renderShop(); }
   }
   async function equip(item) {
-    if (shopBusy || !owned(item) || item.type === 'guestbook') return;
+    if (shopBusy || !owned(item) || item.type === 'guestbook' || ROOM_TYPES.includes(item.type)) return;
     return equipById(item.id, String(item.name || item.id).slice(0, 80));
   }
   async function equipById(itemId, label) {
@@ -561,7 +575,7 @@
       const isPreview = snapshot?.previewMode === true;
       if (id === accountId && isPreview === preview) return;
       stopBgm(); bgmSource = '';
-      accountId = id; preview = isPreview; viewUserId = 0; profile = null; shop = null;
+      accountId = id; preview = isPreview; viewUserId = 0; profile = null; shop = null; roomEditorRequested = false;
       profileRequest++; shopRequest++; commentRequest++; comments = null; commentHasMore = false; commentNextBeforeId = 0; pendingPurchase = null; pendingCommentDelete = null;
       if ($('shopConfirmDialog').open) $('shopConfirmDialog').close();
       if ($('profileCommentDeleteDialog').open) $('profileCommentDeleteDialog').close();
@@ -579,8 +593,21 @@
     },
     onVisible(panel) {
       if (panel !== 'profile') stopBgm();
+      window.LauncherRoom?.onVisible(panel);
       if (panel === 'profile' && !profile) loadProfile();
       if (panel === 'shop') loadShop();
+    },
+    openShopCategory(category) {
+      if (!SHOP_TABS.some(([id]) => id === category)) return;
+      shopTab = category;
+      window.launcherSwitchPanel?.('shop');
+      renderShopTabs(); renderShop();
+    },
+    onRoomSaved(nextProfile, nextShop) {
+      if (!nextProfile?.isSelf || !profile?.isSelf || nextProfile.userId !== profile.userId) return;
+      profile = nextProfile;
+      if (nextShop) shop = nextShop;
+      renderProfile();
     }
   };
   document.addEventListener('visibilitychange', () => { if (document.hidden) stopBgm(); });
