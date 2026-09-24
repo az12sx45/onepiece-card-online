@@ -9811,7 +9811,7 @@
   const START_ISLAND_ID = "loguetown";
   const INVERSION_MOUNTAIN_ID = "reverse-mountain";
   const WATER_SEVEN_ISLAND_ID = "island-24";
-  const WATER_SEVEN_PAGE_VERSION = "20260924-ship-relief-v2";
+  const WATER_SEVEN_PAGE_VERSION = "20260924-ship-relief-v3";
   const JUDICIAL_ISLAND_ID = "island-25";
   const JUDICIAL_RAID_PHASES = ["spandam", "blueno", "kalifa", "jabra", "kaku", "lucci"];
   const JUDICIAL_RAID_UI_ASSETS = Object.freeze({

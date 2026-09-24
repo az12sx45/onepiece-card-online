@@ -7165,3 +7165,23 @@ UI / RWD：
 - 2026-09-24 02:56（Asia/Taipei）最終驗證：四個更新檔案完整公開 GET／SHA／CORS、57 項正式 runtime／程式檔、144 項下載發送路徑檢查全部通過。未覆寫任何網路回應的正式站 Chromium smoke 六艘船全部成功，GPU error=0、深度 canvas 與原圖尺寸相等、頁面錯誤 0，已排除前版跨站快取問題。
 - 完整本機套件 90 項與 36 原圖雜湊通過；CORS 修正後六項互動生命週期回歸通過；主遊戲原／新版升級、開孔、裝卸、重進與 iframe 重載結果一致。Card／Chess 與原船圖不變，ranks/r5.PNG、r6.PNG 的既有未提交變更保留。
 - 證據：`D:/Codex_QA/water-seven-ship-depth-20260924/delivery.json`、`cors-fix/{runtime-deployment.json,r2-public-verification.json,public-release/live-verify.json,distribution-release.json,public-smoke.json,public-ship-preview.png}`。為隔離瀏覽器自動測試，未宣稱真人或實體手機驗收，未改玩家實際存檔。LATTICE 無 callable API，未假稱持久寫入。
+
+### 2026-09-24 水之七島免費完整 3D 試作（未交付模型）
+
+- 使用者要求只用免費方案。獨立試作目錄 `D:/3d素材/WaterSeven_Free3D_20260924`，保留參考原圖、無登入 API 試作腳本與失敗報告。正式遊戲程式、圖片、介面、規則、存檔與發布包未改。
+- 本機核對 GTX 1050 Ti／4096 MiB VRAM、約 16 GB RAM；不符合兩款大型模型官方常規需求。改用 Microsoft TRELLIS.2 官方 ZeroGPU 免費頁。公開 API 的 TRELLIS start_session 回傳 404、Hunyuan shape_generation error=null；改用官方網頁後成功生成 1024 彩色多角度千陽號預覽。
+- GLB 匯出被官方每日 GPU quota 拒絕，提示等待約 24 小時或登入帳號取得額度。沒有付費、充值或繞過限制。仍無 GLB，不能宣稱完整模型已交付、品質驗收或部署。詳試作目錄 result.md。LATTICE 本輪無 callable API，未聲稱持久寫入。
+
+### 2026-09-24 千陽號本機 Blender 幾何樣品
+
+- 使用者改要求本機製作。新增獨立目錄 `D:/3d素材/WaterSeven_Local3D_20260924`，以 Blender 5.1 程式建模，無外站生成或付費。本次為一艘千陽號重新建模樣品，尚未接入或部署，並非原船圖精準重建；其他五艘未做完整模型。
+- build_sunny.py 建立船殼木板、甲板、欄杆、舷窗、船塢門、圓頂房、獅子首、三桅收帆、索具、植栽、錨與舵；792 個元件合併為 25 個材質網格，166012 三角面。交付 .blend（1848576 bytes）、.glb（4817088 bytes）及兩張 Blender CPU 渲染圖，沒有外部貼圖依賴。
+- verify_model.py 實際重開 Blender 原稿與重新匯入 GLB，有限數值／網格／依賴驗證通過，SHA 保存於 validation.json。驗證中重設 factory settings 曾觸發 Blender 清理 extension wheels 的鎖檔警告，已改為僅刪除驗證程序內場景物件；另以正常 Blender 啟動讀回原 Higgsfield addon 啟用成功、無錯誤，未存入偏好設定。
+- index.html／server.cjs／開啟本機預覽.ps1：純本機 http://127.0.0.1:18947，內建瀏覽器已目視確認原圖對照、船首、船尾、甲板及環繞切換，console error/warn 空。Three.js 使用現有本機套件的獨立副本並保留 LICENSE，不改 node_modules。
+- 正式遊戲程式、圖片、尺寸、改造功能和存檔未修改；原船圖 SHA 仍為 14c9abceb565fbefc7eef09f9888ea2e7370970f22341b388a80cda93bff5fa0。接入前仍需相機／部位標記對齊及遊戲功能與效能驗證。本輪僅更新開發紀錄。
+
+### 2026-09-24 水之七島原船圖視差微調
+
+- 使用者認為重新建模不像，改要求只把既有傾斜稍微加強。停止模型接入；六船／36 視角原圖與深度資料全部沿用。
+- public/js/board_water_seven_depth.js 僅把 uMotion 係數 12→16，未縮放最大位移 3→4 CSS px；原光照、布局、校準、互動、狀態與觸控偏好不變。board_water_seven.html、board_game.html、board_game.js 只更新版本字串為 20260924-ship-relief-v3。
+- scripts/build_water_seven_ship_motion_release.js 固定 e8bfcad5f 基線，限定以上四個程式差異，保留 6363 路徑、6310 媒體、53 程式及 Card／Chess／v2；原 ranks 未提交變更保留。測試與部署結果另記於本段下方，證據 D:/Codex_QA/water-seven-ship-motion-20260924。

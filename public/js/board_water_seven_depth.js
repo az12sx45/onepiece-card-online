@@ -122,8 +122,8 @@
     current = current.map((value, i) => Math.abs(target[i] - value) < .003 ? target[i] : value + (target[i] - value) * .18);
     gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
     gl.uniform2fv(locations.uFit, fit);
-    // Maximum silhouette displacement is 3 CSS px at the unzoomed image.
-    gl.uniform2f(locations.uMotion, current[0] * 12 / Math.max(1, layer.clientWidth), -current[1] * 12 / Math.max(1, layer.clientHeight));
+    // Maximum silhouette displacement is 4 CSS px at the unzoomed image.
+    gl.uniform2f(locations.uMotion, current[0] * 16 / Math.max(1, layer.clientWidth), -current[1] * 16 / Math.max(1, layer.clientHeight));
     gl.uniform2fv(locations.uPointer, current);
     gl.drawElements(gl.TRIANGLES, count, gl.UNSIGNED_SHORT, 0);
     renderedFrames++;

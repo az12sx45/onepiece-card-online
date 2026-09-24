@@ -25,3 +25,5 @@
 - LATTICE 本階段沒有 callable API；沿用已知正式 project_id，沒有假稱寫入持久任務、圖譜或驗收。
 
 正式端補強：普通 img 的跨站 CDN 快取可能缺少 CORS header。3D renderer 改以 cache=reload 的 CORS fetch 取得 texture bytes，再用短期 Blob URL 解碼並回收；首次公開 3D smoke 曾安全回退原圖，不列為成功，最終發布驗收見 DEV_WORKFLOW。
+
+2026-09-24 使用者看過重新建模樣品後，要求沿用現有船圖，僅稍微加強既有傾斜／視差。renderer 的 uMotion 係數由 12 改為 16：未縮放圖像最大位移 3→4 CSS px（約 +33%），其餘光照、平滑速度、原點回復、觸控／reduced-motion 靜態行為不變。三個快取版本入口同步 v3。獨立 Blender 樣品不接入發布包。
