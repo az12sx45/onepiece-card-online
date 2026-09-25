@@ -332,7 +332,7 @@ class AuthService extends EventEmitter {
       'decor-side-zoro-chibi', 'decor-side-nami-chibi',
       'decor-footer-sanji-chibi', 'decor-footer-robin-chibi'
     ]) customItems.add(id);
-    const roomProduct = /^room-(?:scene-(?:sunny-deck|sunny-kitchen|sunny-library)|furniture-(?:helm|map-table|treasure-chest|tangerine-tree|swords-rack|kitchen-table|bookshelf|medicine-cabinet|piano|tool-bench)|character-(?:luffy|zoro|nami|chopper|sanji|robin))$/.test(itemId);
+    const roomProduct = /^room-(?:scene-(?:sunny-deck|sunny-kitchen|sunny-library)|furniture-(?:helm|map-table|treasure-chest|tangerine-tree|swords-rack|kitchen-table|bookshelf|medicine-cabinet|piano|tool-bench)|character-(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe))$/.test(itemId);
     if (typeof itemId !== 'string' || !(/^(?:ava-(?:[1-9]|[1-5][0-9]|6[0-2])|(?:wall|flag)-(?:[1-9]|[1-4][0-9]|50)|bgm-op-(?:0[1-9]|1[0-9]|20))$/.test(itemId) || roomProduct || customItems.has(itemId))) {
       return { ok: false, error: 'invalid item' };
     }
@@ -351,8 +351,7 @@ class AuthService extends EventEmitter {
           const id = safeInteger(result.profile.avatar);
           return id >= 1 && id <= 62 ? id : this.state.account.launcherAvatar || this.state.account.avatar;
         })(),
-        title: String(result.profile.title || this.state.account.title),
-        coins: safeInteger(result.shop.wallet?.coins, this.state.account.coins)
+        title: String(result.profile.title || this.state.account.title)
       };
       await this.save();
     }
@@ -400,7 +399,7 @@ class AuthService extends EventEmitter {
     if (!room || typeof room !== 'object' || Array.isArray(room)) return { ok: false, error: 'invalid_room' };
     const { revision, sceneId, placements, characters } = room;
     if (!Number.isSafeInteger(revision) || revision < 0 || typeof sceneId !== 'string' ||
-        !Array.isArray(placements) || placements.length > 24 || !Array.isArray(characters) || characters.length > 3) {
+        !Array.isArray(placements) || placements.length > 24 || !Array.isArray(characters) || characters.length > 8) {
       return { ok: false, error: 'invalid_room' };
     }
     const sceneValid = sceneId === 'room-scene-default' || /^room-scene-(?:sunny-deck|sunny-kitchen|sunny-library)$/.test(sceneId);
@@ -409,11 +408,40 @@ class AuthService extends EventEmitter {
       entry.x >= 0 && entry.x <= 960 && entry.y >= 0 && entry.y <= 540;
     if (!sceneValid || !unique(placements) || !unique(characters) ||
         !placements.every(entry => coordinates(entry) && /^room-furniture-(?:helm|map-table|treasure-chest|tangerine-tree|swords-rack|kitchen-table|bookshelf|medicine-cabinet|piano|tool-bench)$/.test(entry.itemId) &&
-          Number.isFinite(entry.scale) && entry.scale >= .5 && entry.scale <= 1.5 && typeof entry.flip === 'boolean') ||
-        !characters.every(entry => coordinates(entry) && /^room-character-(?:luffy|zoro|nami|chopper|sanji|robin)$/.test(entry.itemId))) {
+          Number.isFinite(entry.scale) && entry.scale >= .5 && entry.scale <= 1.5 &&
+          (entry.rotation === undefined || Number.isInteger(entry.rotation) && entry.rotation >= 0 && entry.rotation <= 3) &&
+          (entry.flip === undefined || typeof entry.flip === 'boolean') &&
+          (entry.rotation !== undefined || typeof entry.flip === 'boolean') &&
+          (entry.rotation === undefined || entry.flip === undefined || entry.flip === (entry.rotation === 2))) ||
+        !characters.every(entry => coordinates(entry) && /^room-character-(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe)$/.test(entry.itemId))) {
       return { ok: false, error: 'invalid_room' };
     }
     return this.launcherRequest('LAUNCHER_ROOM_SET', { revision, sceneId, placements, characters });
+  }
+
+  async launcherCharacterRequest(eventName, itemId, action) {
+    if (typeof itemId !== 'string' ||
+        !/^room-character-(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe)$/.test(itemId)) {
+      return { ok: false, error: 'invalid_character' };
+    }
+    return this.launcherRequest(eventName, action ? { itemId, action } : { itemId });
+  }
+
+  async getLauncherCharacter(itemId) {
+    return this.launcherCharacterRequest('LAUNCHER_CHARACTER_GET', itemId);
+  }
+
+  async interactLauncherCharacter(itemId, action) {
+    if (action !== 'talk') return { ok: false, error: 'invalid_action' };
+    return this.launcherCharacterRequest('LAUNCHER_CHARACTER_INTERACT', itemId, action);
+  }
+
+  async startLauncherCharacterWork(itemId) {
+    return this.launcherCharacterRequest('LAUNCHER_CHARACTER_WORK_START', itemId);
+  }
+
+  async claimLauncherCharacterWork(itemId) {
+    return this.launcherCharacterRequest('LAUNCHER_CHARACTER_WORK_CLAIM', itemId);
   }
 
   getSecretForGame() {

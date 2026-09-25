@@ -625,6 +625,22 @@ function registerLauncherIpc() {
     if (!authenticated) return { ok: false, error: 'not authenticated' };
     return authService.saveLauncherRoom(room);
   }));
+  for (const [channel, method] of [
+    ['launcher:character-get', 'getLauncherCharacter'],
+    ['launcher:character-work-start', 'startLauncherCharacterWork'],
+    ['launcher:character-work-claim', 'claimLauncherCharacterWork']
+  ]) {
+    ipcMain.handle(channel, guarded(async (_event, itemId) => {
+      if (!authenticated) return { ok: false, error: 'not authenticated' };
+      const result = await authService[method](itemId);
+      if (result.ok && method === 'claimLauncherCharacterWork') await broadcastState();
+      return result;
+    }));
+  }
+  ipcMain.handle('launcher:character-interact', guarded(async (_event, itemId, action) => {
+    if (!authenticated) return { ok: false, error: 'not authenticated' };
+    return authService.interactLauncherCharacter(itemId, action);
+  }));
   ipcMain.handle('launcher:social-request', guarded(async (_event, action, payload) => {
     if (!authenticated) return { ok: false, error: 'not authenticated' };
     return socialService.request(action, payload);

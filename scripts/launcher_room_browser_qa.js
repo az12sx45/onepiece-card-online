@@ -85,20 +85,27 @@ async function main() {
       const friend = {
         ...copy(mine), userId: 44, name: '好友航海士', isSelf: false,
         room: { revision: 1, sceneId: items[0].id,
-          placements: [{ itemId: items[1].id, x: 390, y: 405, scale: 1, flip: true }],
+          placements: [{ itemId: items[1].id, x: 390, y: 405, scale: 1.5, flip: true }],
           characters: [{ itemId: items[2].id, x: 530, y: 0 }] },
         roomItems: { scene: items[0],
-          placements: [{ itemId: items[1].id, x: 390, y: 405, scale: 1, flip: true, item: items[1] }],
+          placements: [{ itemId: items[1].id, x: 390, y: 405, scale: 1.5, flip: true, item: items[1] }],
           characters: [{ itemId: items[2].id, x: 530, y: 0, item: items[2] }] }
       };
       const shop = {
-        catalog, wallet: { coins: 500, dailyGrant: 20, cap: 500 },
+        catalog, wallet: { coins: 460, dailyGrant: 20, cap: 500 },
         owned: { avatars: [], walls: [], flags: [], layouts: [], backgrounds: [], frames: [], decorations: [], bgms: [],
           roomScenes: [items[0].id], roomFurniture: [items[1].id, 'room-furniture-map-table'],
           roomCharacters: catalog.filter(item => item.type === 'room_character').map(item => item.id), guestbook: false },
         equipped: { avatar: 8, wall: 1, flag: 1, decorations: {} }
       };
-      window.__roomQa = { mine, friend, shop, calls: [], saved: null };
+      const companionFor = itemId => ({
+        itemId, name: catalog.find(item => item.id === itemId)?.name || itemId,
+        role: '船長', description: '喜歡冒險，也關心每位同伴。', affinity: 0, maxAffinity: 100,
+        nextTalkAt: null, talksRemainingToday: 6,
+        work: { state: 'idle', readyAt: null, reward: 10, remainingStartsToday: 6,
+          characterStartsRemainingToday: 2, remainingClaimsToday: 6 }
+      });
+      window.__roomQa = { mine, friend, shop, calls: [], saved: null, companions: {}, companionFor };
       window.onePieceDesktop = {
         async getLauncherProfile(userId = 0) { return { ok: true, profile: copy(userId === 44 ? friend : mine) }; },
         async getLauncherShop() { return { ok: true, shop: copy(shop) }; },
@@ -113,6 +120,39 @@ async function main() {
             characters: mine.room.characters.map(entry => ({ ...entry, item: byId(entry.itemId) }))
           };
           return { ok: true, profile: copy(mine), shop: copy(shop) };
+        },
+        async getLauncherCharacter(itemId) {
+          window.__roomQa.calls.push(`character-get:${itemId}`);
+          const companion = window.__roomQa.companions[itemId] ||= companionFor(itemId);
+          if (companion.work.state === 'working' && Date.parse(companion.work.readyAt) <= Date.now())
+            companion.work.state = 'ready';
+          return { ok: true, character: copy(companion), wallet: copy(shop.wallet) };
+        },
+        async interactLauncherCharacter(itemId, action) {
+          window.__roomQa.calls.push(`character-interact:${itemId}:${action}`);
+          const companion = window.__roomQa.companions[itemId];
+          if (action !== 'talk' || !companion) return { ok: false, error: 'invalid_action' };
+          companion.affinity += 2; companion.talksRemainingToday--;
+          companion.nextTalkAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+          return { ok: true, character: copy(companion), wallet: copy(shop.wallet) };
+        },
+        async startLauncherCharacterWork(itemId) {
+          window.__roomQa.calls.push(`character-start:${itemId}`);
+          const companion = window.__roomQa.companions[itemId];
+          if (!companion) return { ok: false, error: 'invalid_character' };
+          companion.work.state = 'working';
+          companion.work.readyAt = new Date(Date.now() + 5 * 60 * 1000).toISOString();
+          companion.work.remainingStartsToday--; companion.work.characterStartsRemainingToday--;
+          return { ok: true, character: copy(companion), wallet: copy(shop.wallet) };
+        },
+        async claimLauncherCharacterWork(itemId) {
+          window.__roomQa.calls.push(`character-claim:${itemId}`);
+          const companion = window.__roomQa.companions[itemId];
+          if (!companion || Date.parse(companion.work.readyAt) > Date.now())
+            return { ok: false, error: 'work_not_ready' };
+          companion.work.state = 'idle'; companion.work.readyAt = null;
+          companion.affinity++; shop.wallet.coins += 10;
+          return { ok: true, claimed: true, character: copy(companion), wallet: copy(shop.wallet) };
         }
       };
       window.launcherSwitchPanel = name => {
@@ -121,6 +161,11 @@ async function main() {
       };
       document.getElementById('bootScreen').hidden = true;
     }, { items: products, catalog: CATALOG });
+    await page.addScriptTag({ content: read('launcher-room-dialogue.js') });
+    check('canonical relationship dialogue loads before room renderer', await page.evaluate(() =>
+      window.OnePieceRoomDialogue?.KEYS?.length === 10 &&
+      window.OnePieceRoomDialogue?.hasPair?.('zoro', 'sanji') &&
+      window.OnePieceRoomDialogue?.hasPair?.('luffy', 'jinbe')));
     await page.addScriptTag({ content: read('launcher-room.js') });
     await page.addScriptTag({ content: read('launcher-profile-shop.js') });
     assert.ok(await page.evaluate(() => !!window.LauncherProfileShop), `Profile renderer did not initialize: ${errors.join(' | ')}`);
@@ -143,8 +188,12 @@ async function main() {
       facing.push(await furniture.getAttribute('data-rotation'));
       views.push(await furniture.locator('.room-object').getAttribute('src'));
       await page.locator('#roomStage').screenshot({ path: path.join(output, `furniture-direction-${turn}.png`) });
-      await page.locator('#roomSelection .room-rotate').click();
+      await furniture.locator('.room-canvas-rotate').nth(1).click();
     }
+    check('selected furniture exposes on-canvas turn controls without a size slider',
+      await furniture.locator('.room-canvas-controls').isVisible() &&
+      await page.locator('#roomSelection input[type="range"]').count() === 0 &&
+      await page.locator('#roomSelection .room-rotate').count() === 0);
     check('furniture cycles four cardinal directions', facing.join(',') === '0,1,2,3' && await furniture.getAttribute('data-rotation') === '0');
     check('four furniture views use four distinct art files', new Set(views).size === 4 && views.every((url, index) => url.endsWith(`/helm/${index}.webp`)));
     check('four furniture views decode into visible pixels', await furniture.locator('.room-object').evaluate(async image => {
@@ -154,8 +203,20 @@ async function main() {
         candidate.onerror = () => resolve(false); candidate.src = src;
       })))).every(Boolean);
     }));
+    await furniture.locator('.room-canvas-rotate').first().click();
+    check('on-canvas left turn reverses one bearing', await furniture.getAttribute('data-rotation') === '3');
     await page.locator('#roomStage').press('r');
-    check('R shortcut rotates selected furniture', await furniture.getAttribute('data-rotation') === '1');
+    check('R shortcut rotates selected furniture', await furniture.getAttribute('data-rotation') === '0');
+    await furniture.locator('.room-canvas-rotate').nth(1).click();
+    check('on-canvas right turn restores selected bearing', await furniture.getAttribute('data-rotation') === '1');
+    check('furniture uses a fixed character-calibrated base size', await furniture.evaluate(node => {
+      const width = Number.parseFloat(node.style.getPropertyValue('--room-width'));
+      const height = Number.parseFloat(node.style.getPropertyValue('--room-height'));
+      const depth = Number.parseFloat(node.style.getPropertyValue('--room-size'));
+      const groundY = Number.parseFloat(node.style.top) / 100 * 540;
+      return Math.abs(width - 140 / 960 * 100) < .01 && Math.abs(height - 148 / 540 * 100) < .01 &&
+        Math.abs(depth - (.72 + .35 * (groundY - 267) / (515 - 267))) < .01;
+    }));
     check('furniture has projected grid footprint', await furniture.evaluate(node => {
       const [width, height] = node.dataset.footprint.split('x').map(Number);
       return Number.isInteger(Number(node.dataset.gridCol)) && Number.isInteger(Number(node.dataset.gridRow)) && width > 0 && height > 0;
@@ -297,7 +358,7 @@ async function main() {
     check('partner replies sequentially', await page.locator('#roomCharacters .room-speech:not([hidden])').count() === 1);
     check('partner body responds while first actor changes pose', await page.evaluate(() => {
       const speaker = document.querySelector('#roomCharacters .room-speech:not([hidden])');
-      return speaker?.parentElement?.dataset.pose?.startsWith('talk_') &&
+      return ['talk_happy', 'talk_annoyed', 'surprised', 'focused_use'].includes(speaker?.parentElement?.dataset.pose) &&
         [...document.querySelectorAll('#roomCharacters .room-character-shell')].some(node => node !== speaker.parentElement && node.dataset.pose === 'wave');
     }));
     await page.evaluate(() => {
@@ -312,6 +373,57 @@ async function main() {
     await page.locator('#roomStage').scrollIntoViewIfNeeded();
     await page.screenshot({ path: path.join(output, 'owner-room-viewport-1280.png') });
     await page.screenshot({ path: path.join(output, 'owner-room-1280.png'), fullPage: true });
+    await page.evaluate(() => {
+      // Isolate one actor so an overlapping crew member cannot intercept a real pointer click.
+      const qa = window.__roomQa;
+      const entry = { itemId: 'room-character-luffy', x: 120, y: 450 };
+      qa.mine.room.characters = [entry];
+      qa.mine.roomItems.characters = [{ ...entry, item: qa.shop.catalog.find(item => item.id === entry.itemId) }];
+      window.LauncherProfileShop.openProfile(0);
+    });
+    await page.waitForFunction(() => document.querySelectorAll('#roomCharacters .room-character-shell').length === 1);
+    const captain = page.locator('#roomCharacters [data-room-key="c:room-character-luffy"]');
+    await captain.click();
+    await page.waitForFunction(() => document.getElementById('roomCompanionAffinity').textContent === '0 / 100' &&
+      window.__roomQa.calls.includes('character-get:room-character-luffy'));
+    check('clicking a placed character opens details and affection',
+      await page.locator('#roomCompanionPanel').isVisible() &&
+      (await page.locator('#roomCompanionName').textContent()).includes('魯夫') &&
+      (await page.locator('#roomCompanionRole').textContent()) === '船長' &&
+      await page.locator('#roomCompanionProgress').getAttribute('value') === '0');
+    check('owner interaction controls are available with server character record',
+      await page.locator('#roomCompanionTalk').isEnabled() &&
+      await page.locator('#roomCompanionWorkStart').isEnabled() &&
+      await page.locator('#roomCompanionWorkClaim').isHidden());
+    await page.locator('#roomCompanionTalk').click();
+    await page.waitForFunction(() => document.getElementById('roomCompanionAffinity').textContent === '2 / 100');
+    check('chat raises affection and enforces returned cooldown in UI',
+      await page.locator('#roomCompanionTalk').isDisabled() &&
+      await page.evaluate(() => window.__roomQa.calls.includes('character-interact:room-character-luffy:talk')));
+    await page.locator('#roomCompanionWorkStart').click();
+    await page.waitForFunction(() => document.getElementById('roomCompanionWork').textContent.includes('正在工作'));
+    check('five minute character work starts without immediate coin payout', await page.evaluate(() => {
+      const qa = window.__roomQa;
+      const companion = qa.companions['room-character-luffy'];
+      const remaining = Date.parse(companion.work.readyAt) - Date.now();
+      return companion.work.state === 'working' && remaining > 4 * 60 * 1000 &&
+        qa.shop.wallet.coins === 460 && qa.calls.includes('character-start:room-character-luffy');
+    }));
+    await page.evaluate(() => {
+      const work = window.__roomQa.companions['room-character-luffy'].work;
+      work.state = 'ready'; work.readyAt = new Date(Date.now() - 1000).toISOString();
+    });
+    await page.locator('#roomCompanionClose').click();
+    await captain.click();
+    await page.waitForFunction(() => !document.getElementById('roomCompanionWorkClaim').hidden);
+    check('finished work exposes claim only after server refresh', await page.locator('#roomCompanionWorkClaim').isEnabled());
+    await page.locator('#roomCompanionWorkClaim').click();
+    await page.waitForFunction(() => document.getElementById('roomCompanionAffinity').textContent === '3 / 100');
+    check('claim updates affection and the same shop wallet', await page.evaluate(() =>
+      window.__roomQa.shop.wallet.coins === 470 &&
+      window.__roomQa.calls.includes('character-claim:room-character-luffy') &&
+      document.getElementById('roomCompanionWorkStart').hidden === false));
+    await page.locator('#roomCompanionClose').click();
     await page.evaluate(() => window.LauncherProfileShop.openShopCategory('room_scene'));
     await page.waitForFunction(() => document.getElementById('shopItemCount').textContent.includes('3 件'));
     check('scene shop shows all three products', await page.locator('#shopGrid .shop-item').count() === 3);
@@ -325,6 +437,19 @@ async function main() {
     check('friend room readonly', await page.locator('#roomEditToggle').isHidden() && await page.locator('#roomEditor').isHidden());
     check('friend canonical chibi visible', await page.locator('#roomCharacters .room-chibi').count() === 1);
     check('legacy flip migrates to rear-facing furniture', await page.locator('#roomObjects .room-object-shell').first().getAttribute('data-rotation') === '2');
+    check('old saved furniture scale cannot stretch character-calibrated display size', await page.locator('#roomObjects .room-object-shell').first().evaluate(node => {
+      const groundY = Number.parseFloat(node.style.top) / 100 * 540;
+      const depth = Number.parseFloat(node.style.getPropertyValue('--room-size'));
+      return Math.abs(depth - (.72 + .35 * (groundY - 267) / (515 - 267))) < .01 &&
+        Math.abs(Number.parseFloat(node.style.getPropertyValue('--room-width')) - 140 / 960 * 100) < .01;
+    }));
+    const friendRequestsBefore = await page.evaluate(() => window.__roomQa.calls.length);
+    await page.locator('#roomCharacters [data-room-key="c:room-character-luffy"]').click({ force: true });
+    check('friend sees companion details but no interaction controls',
+      await page.locator('#roomCompanionPanel').isVisible() &&
+      await page.locator('#roomCompanionActions').isHidden() &&
+      await page.evaluate(before => window.__roomQa.calls.length === before, friendRequestsBefore));
+    await page.locator('#roomCompanionClose').click();
     check('off-floor saved character receives valid walk bounds', await page.locator('#roomCharacters .room-character-shell').first().evaluate(node => {
       const top = Number.parseFloat(node.style.top);
       return Number.isFinite(top) && top >= 267 / 540 * 100 && top <= 515 / 540 * 100;

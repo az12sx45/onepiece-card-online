@@ -138,6 +138,25 @@ const ROOM_MAX_FURNITURE = 24;
 const ROOM_MAX_CHARACTERS = 8;
 const ROOM_WIDTH = 960;
 const ROOM_HEIGHT = 540;
+const COMPANION_MAX_AFFINITY = 100;
+const COMPANION_TALK_COOLDOWN_MS = 10 * 60 * 1000;
+const COMPANION_TALKS_PER_DAY = 6;
+const COMPANION_WORK_DURATION_MS = 5 * 60 * 1000;
+const COMPANION_WORK_REWARD = 10;
+const COMPANION_WORKS_PER_DAY = 6;
+const COMPANION_WORKS_PER_CHARACTER_PER_DAY = 2;
+const COMPANION_DETAILS = Object.freeze({
+  luffy: ['船長', '喜歡冒險與熱鬧的夥伴，總會先奔向有趣的地方。'],
+  zoro: ['劍士', '常在船上練刀，認定的目標會一路堅持。'],
+  nami: ['航海士', '留意航線、天氣與船上的每一筆開銷。'],
+  chopper: ['船醫', '關心夥伴的健康，也喜歡研究新的醫療知識。'],
+  sanji: ['廚師', '用料理照顧大家，對食材與火候格外講究。'],
+  robin: ['考古學家', '喜歡閱讀，總能從線索裡發現新的故事。'],
+  usopp: ['狙擊手', '愛講冒險故事，也會動手製作有趣的裝置。'],
+  franky: ['船匠', '熱衷改造與修理，會仔細照看船上的設備。'],
+  brook: ['音樂家', '用音樂陪伴航程，總想讓夥伴聽見新旋律。'],
+  jinbe: ['舵手', '熟悉海流，行事沉穩，重視夥伴一起前進。']
+});
 const DECORATION_SLOTS = Object.freeze(['header', 'side', 'footer']);
 const DEFAULT_DECORATION_PLACEMENT = Object.freeze({
   header: Object.freeze({ x: 50, y: 12, scale: 1 }),
@@ -245,6 +264,73 @@ function launcherRoomItems(room) {
     characters: room.characters.map(entry => ({ ...entry, item: BY_ID.get(entry.itemId) }))
   };
 }
+
+const validIsoTime = value => typeof value === 'string' && Number.isFinite(Date.parse(value)) &&
+  new Date(value).toISOString() === value;
+const dailyCount = (day, value, today, limit) => day === today && Number.isSafeInteger(value) && value >= 0
+  ? Math.min(value, limit) : 0;
+function launcherCompanionState(stats, now = new Date()) {
+  const saved = object(object(stats).launcherCompanionsV1);
+  const today = utcDay(now);
+  const characters = {};
+  for (const key of Object.keys(COMPANION_DETAILS)) {
+    const id = `room-character-${key}`;
+    const value = object(object(saved.characters)[id]);
+    const active = object(value.activeWork);
+    const activeWork = validIsoTime(active.startedAt) && validIsoTime(active.readyAt) &&
+      Date.parse(active.readyAt) - Date.parse(active.startedAt) === COMPANION_WORK_DURATION_MS
+      ? { startedAt: active.startedAt, readyAt: active.readyAt } : null;
+    characters[id] = {
+      affinity: Number.isSafeInteger(value.affinity) && value.affinity >= 0
+        ? Math.min(value.affinity, COMPANION_MAX_AFFINITY) : 0,
+      talkDay: today,
+      talksToday: dailyCount(value.talkDay, value.talksToday, today, COMPANION_TALKS_PER_DAY),
+      lastTalkAt: validIsoTime(value.lastTalkAt) ? value.lastTalkAt : null,
+      workStartsDay: today,
+      worksStartedToday: dailyCount(value.workStartsDay, value.worksStartedToday, today, COMPANION_WORKS_PER_CHARACTER_PER_DAY),
+      lastClaimAt: validIsoTime(value.lastClaimAt) ? value.lastClaimAt : null,
+      activeWork
+    };
+  }
+  return {
+    workStartsDay: today,
+    workStartsToday: dailyCount(saved.workStartsDay, saved.workStartsToday, today, COMPANION_WORKS_PER_DAY),
+    claimsDay: today,
+    claimsToday: dailyCount(saved.claimsDay, saved.claimsToday, today, COMPANION_WORKS_PER_DAY),
+    characters
+  };
+}
+const activeCompanionJobs = state => Object.values(state.characters).filter(value => value.activeWork).length;
+function launcherCompanionPublic(stats, itemId, now = new Date()) {
+  const key = String(itemId || '').replace(/^room-character-/, '');
+  if (!COMPANION_DETAILS[key] || itemId !== `room-character-${key}`) return null;
+  const state = launcherCompanionState(stats, now);
+  const value = state.characters[itemId];
+  const nextTalkTime = value.lastTalkAt ? Date.parse(value.lastTalkAt) + COMPANION_TALK_COOLDOWN_MS : 0;
+  const nextDayTime = Date.parse(`${utcDay(now)}T00:00:00.000Z`) + 86400000;
+  const nextTalkAt = value.talksToday >= COMPANION_TALKS_PER_DAY
+    ? new Date(Math.max(nextTalkTime, nextDayTime)).toISOString()
+    : nextTalkTime > now.getTime() ? new Date(nextTalkTime).toISOString() : null;
+  const active = value.activeWork;
+  return {
+    itemId, name: BY_ID.get(itemId).name, role: COMPANION_DETAILS[key][0], description: COMPANION_DETAILS[key][1],
+    affinity: value.affinity, maxAffinity: COMPANION_MAX_AFFINITY,
+    nextTalkAt, talksRemainingToday: COMPANION_TALKS_PER_DAY - value.talksToday,
+    work: {
+      state: !active ? 'idle' : Date.parse(active.readyAt) <= now.getTime() ? 'ready' : 'working',
+      readyAt: active?.readyAt || null, lastClaimAt: value.lastClaimAt, reward: COMPANION_WORK_REWARD,
+      remainingClaimsToday: COMPANION_WORKS_PER_DAY - state.claimsToday,
+      remainingStartsToday: Math.max(0, Math.min(
+        COMPANION_WORKS_PER_DAY - state.workStartsToday,
+        COMPANION_WORKS_PER_DAY - state.claimsToday - activeCompanionJobs(state)
+      )),
+      characterStartsRemainingToday: COMPANION_WORKS_PER_CHARACTER_PER_DAY - value.worksStartedToday
+    }
+  };
+}
+function launcherCompanionsPublic(stats, room, now = new Date()) {
+  return room.characters.map(entry => launcherCompanionPublic(stats, entry.itemId, now)).filter(Boolean);
+}
 const validPlacement = value => {
   const x = Number(value?.x);
   const y = Number(value?.y);
@@ -285,7 +371,7 @@ const appearanceItems = appearance => ({
 function sanitizeLauncherStatsPatch(stats) {
   if (!stats || typeof stats !== 'object' || Array.isArray(stats)) return {};
   const { launcherOwnedV1: _owned, launcherAppearanceV1: _appearance, launcherWalletV1: _wallet,
-    launcherRoomV1: _room, launcherCardV1: _card, ...safe } = stats;
+    launcherRoomV1: _room, launcherCardV1: _card, launcherCompanionsV1: _companions, ...safe } = stats;
   return safe;
 }
 const validCardText = (value, min, max) => typeof value === 'string' && value.trim().length >= min &&
@@ -350,7 +436,7 @@ function toPublicProfile(row, isSelf = false, boardSummary = null) {
     },
     appearance: { wallId: boundedId(object(stats.wall).id, 8), flagId: boundedId(object(stats.wall).flagId, 15), ...customAppearance },
     appearanceItems: appearanceItems(customAppearance),
-    room, roomItems: launcherRoomItems(room),
+    room, roomItems: launcherRoomItems(room), companions: launcherCompanionsPublic(stats, room),
     guestbookUnlocked: guestbookUnlocked(stats),
     updatedAt: row.updated_at || null
   };
@@ -692,4 +778,107 @@ async function setLauncherRoom(pool, secret, snapshot) {
   }
 }
 
-module.exports = { CATALOG, toPublicProfile, toCardPublicProfile, toShop, getLauncherProfile, getLauncherShop, changeLauncherItem, setLauncherDecorationPlacement, setLauncherCard, setLauncherRoom, sanitizeLauncherStatsPatch, guestbookUnlocked, launcherAvatarForRow };
+// Only the account that owns and has placed a character can advance its
+// companion state. A row lock serializes work claims with shop purchases and
+// prevents two sockets from receiving the same reward.
+async function launcherCharacterAction(pool, secret, itemId, action, now = new Date()) {
+  if (!secret) return { ok: false, error: 'bad secret' };
+  if (typeof itemId !== 'string' || BY_ID.get(itemId)?.type !== 'room_character') {
+    return { ok: false, error: 'invalid_character' };
+  }
+  if (!['get', 'talk', 'start', 'claim'].includes(action)) return { ok: false, error: 'invalid_action' };
+  const db = await pool.connect();
+  try {
+    await db.query('BEGIN');
+    const found = await db.query('SELECT user_id, name, avatar, stats, updated_at FROM player_profiles WHERE secret=$1 FOR UPDATE', [secret]);
+    const row = found.rows[0];
+    if (!row) { await db.query('ROLLBACK'); return { ok: false, error: 'bad secret' }; }
+    const stats = { ...object(row.stats) };
+    if (!launcherOwnedItemIds(stats).includes(itemId)) {
+      await db.query('ROLLBACK'); return { ok: false, error: 'not_owned' };
+    }
+    if (!launcherRoom(stats).characters.some(entry => entry.itemId === itemId)) {
+      await db.query('ROLLBACK'); return { ok: false, error: 'not_placed' };
+    }
+    const state = launcherCompanionState(stats, now);
+    const character = state.characters[itemId];
+    const { wallet, changed: walletChanged } = prepareLauncherWallet(stats, now);
+    stats.launcherWalletV1 = wallet;
+    const fail = async error => {
+      if (walletChanged) {
+        await db.query('UPDATE player_profiles SET stats=$1::jsonb, updated_at=now() WHERE user_id=$2',
+          [JSON.stringify(stats), row.user_id]);
+        await db.query('COMMIT');
+      } else {
+        await db.query('ROLLBACK');
+      }
+      return { ok: false, error, character: launcherCompanionPublic(stats, itemId, now), wallet: launcherWalletPublic(stats) };
+    };
+    let changed = walletChanged;
+    let claimed = false;
+    if (action === 'talk') {
+      if (character.talksToday >= COMPANION_TALKS_PER_DAY) return fail('talk_daily_limit');
+      if (character.lastTalkAt && Date.parse(character.lastTalkAt) + COMPANION_TALK_COOLDOWN_MS > now.getTime()) {
+        return fail('talk_cooldown');
+      }
+      character.lastTalkAt = now.toISOString();
+      character.talksToday += 1;
+      character.affinity = Math.min(COMPANION_MAX_AFFINITY, character.affinity + 2);
+      changed = true;
+    } else if (action === 'start') {
+      if (character.activeWork) return fail('work_active');
+      if (state.workStartsToday >= COMPANION_WORKS_PER_DAY ||
+          state.claimsToday + activeCompanionJobs(state) >= COMPANION_WORKS_PER_DAY ||
+          character.worksStartedToday >= COMPANION_WORKS_PER_CHARACTER_PER_DAY) return fail('work_daily_limit');
+      character.activeWork = {
+        startedAt: now.toISOString(),
+        readyAt: new Date(now.getTime() + COMPANION_WORK_DURATION_MS).toISOString()
+      };
+      state.workStartsToday += 1;
+      character.worksStartedToday += 1;
+      changed = true;
+    } else if (action === 'claim') {
+      if (!character.activeWork && !character.lastClaimAt) return fail('no_active_work');
+      if (character.activeWork) {
+        if (Date.parse(character.activeWork.readyAt) > now.getTime()) return fail('work_not_ready');
+        if (state.claimsToday >= COMPANION_WORKS_PER_DAY) return fail('work_daily_limit');
+        if (wallet.coins > LAUNCHER_WALLET_CAP_COINS - COMPANION_WORK_REWARD) return fail('wallet_full');
+        stats.launcherWalletV1 = { ...wallet, coins: wallet.coins + COMPANION_WORK_REWARD };
+        state.claimsToday += 1;
+        character.affinity = Math.min(COMPANION_MAX_AFFINITY, character.affinity + 1);
+        character.activeWork = null;
+        character.lastClaimAt = now.toISOString();
+        claimed = true;
+        changed = true;
+      }
+    }
+    if (action !== 'get') stats.launcherCompanionsV1 = state;
+    let current = row;
+    if (changed) {
+      const updated = await db.query(
+        'UPDATE player_profiles SET stats=$1::jsonb, updated_at=now() WHERE user_id=$2 RETURNING user_id, name, avatar, stats, updated_at',
+        [JSON.stringify(stats), row.user_id]
+      );
+      current = updated.rows[0];
+    }
+    await db.query('COMMIT');
+    return {
+      ok: true,
+      character: launcherCompanionPublic(current.stats, itemId, now),
+      wallet: launcherWalletPublic(current.stats),
+      ...(action === 'claim' ? { claimed } : {})
+    };
+  } catch (error) {
+    await db.query('ROLLBACK').catch(() => {});
+    throw error;
+  } finally {
+    db.release();
+  }
+}
+const getLauncherCharacter = (pool, secret, itemId, now) => launcherCharacterAction(pool, secret, itemId, 'get', now);
+const interactLauncherCharacter = (pool, secret, itemId, action, now) =>
+  launcherCharacterAction(pool, secret, itemId, action === 'talk' ? 'talk' : '', now);
+const startLauncherCharacterWork = (pool, secret, itemId, now) => launcherCharacterAction(pool, secret, itemId, 'start', now);
+const claimLauncherCharacterWork = (pool, secret, itemId, now) => launcherCharacterAction(pool, secret, itemId, 'claim', now);
+
+module.exports = { CATALOG, toPublicProfile, toCardPublicProfile, toShop, getLauncherProfile, getLauncherShop, changeLauncherItem, setLauncherDecorationPlacement, setLauncherCard, setLauncherRoom, getLauncherCharacter, interactLauncherCharacter, startLauncherCharacterWork, claimLauncherCharacterWork, sanitizeLauncherStatsPatch, guestbookUnlocked, launcherAvatarForRow };

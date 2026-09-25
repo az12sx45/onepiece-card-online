@@ -49,6 +49,7 @@ const APP_FILES = [
   'launcher-profile-shop.js',
   'launcher-profile-shop.css',
   'launcher-room.js',
+  'launcher-room-dialogue.js',
   'launcher-room.css',
   'launcher-updates-ui.js',
   'launcher-account-ui.js',
@@ -379,7 +380,7 @@ function validateCursorPng(filePath, label) {
 function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
-  assert(packageJson.version === '1.1.11', 'Desktop launcher version must be 1.1.11 for the spatial room and action sprites.');
+  assert(packageJson.version === '1.1.12', 'Desktop launcher version must be 1.1.12 for companion interactions and room layout.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');

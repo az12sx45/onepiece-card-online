@@ -5263,6 +5263,21 @@ socket.on('LAUNCHER_ROOM_SET', async ({ secret, revision, sceneId, placements, c
   }
 });
 
+for (const [eventName, handler] of [
+  ['LAUNCHER_CHARACTER_GET', (secret, itemId) => launcherProfileShop.getLauncherCharacter(pool, secret, itemId)],
+  ['LAUNCHER_CHARACTER_WORK_START', (secret, itemId) => launcherProfileShop.startLauncherCharacterWork(pool, secret, itemId)],
+  ['LAUNCHER_CHARACTER_WORK_CLAIM', (secret, itemId) => launcherProfileShop.claimLauncherCharacterWork(pool, secret, itemId)]
+]) {
+  socket.on(eventName, async ({ secret, itemId } = {}, cb) => {
+    try { cb?.(await handler(String(secret || '').trim(), itemId)); }
+    catch (error) { console.error(`[${eventName}] error:`, error); cb?.({ ok: false, error: 'character unavailable' }); }
+  });
+}
+socket.on('LAUNCHER_CHARACTER_INTERACT', async ({ secret, itemId, action } = {}, cb) => {
+  try { cb?.(await launcherProfileShop.interactLauncherCharacter(pool, String(secret || '').trim(), itemId, action)); }
+  catch (error) { console.error('[LAUNCHER_CHARACTER_INTERACT] error:', error); cb?.({ ok: false, error: 'character unavailable' }); }
+});
+
 socket.on('LAUNCHER_CARD_SET', async ({ secret, displayName, tagline, avatarId } = {}, cb) => {
   try {
     const normalizedSecret = String(secret || '').trim();

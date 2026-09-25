@@ -689,6 +689,14 @@
       profile = nextProfile;
       if (nextShop) shop = nextShop;
       renderProfile();
+    },
+    onCompanionWalletChanged(wallet) {
+      if (!accountId || !wallet || !Number.isFinite(Number(wallet.coins))) return;
+      shopRequest++;
+      if (shop && !shop.preview) {
+        shop = { ...shop, wallet: { ...shop.wallet, ...wallet } };
+        renderShop();
+      }
     }
   };
   document.addEventListener('visibilitychange', () => { if (document.hidden) stopBgm(); });
