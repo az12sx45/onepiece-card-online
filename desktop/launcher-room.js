@@ -15,11 +15,14 @@
   const ASSET = /^opui:\/\/launcher\/images\/launcher_room\/(scenes|furniture|chibi)\/[a-z0-9-]+\.webp$/i;
   const CHARACTER_KEYS = new Set(['luffy', 'zoro', 'nami', 'chopper', 'sanji', 'robin', 'usopp', 'franky', 'brook', 'jinbe']);
   const MOODS = new Set(['happy', 'surprised', 'focused', 'annoyed']);
+  const POSES = new Set(['idle', 'walk1', 'walk2', 'talk_happy', 'talk_annoyed', 'surprised', 'focused_use', 'sit', 'wave']);
   const CARDINAL = ['正向', '右轉', '背向', '左轉'];
-  const CHARACTER_STARTS = [
-    [125, 395], [300, 405], [480, 395], [660, 405], [835, 395],
-    [210, 495], [480, 495], [750, 495]
-  ];
+  const FLOOR = Object.freeze({ columns: 16, rows: 8, top: 267, bottom: 515, backLeft: 164, backRight: 796, frontLeft: 28, frontRight: 932 });
+  const FURNITURE_FOOTPRINTS = {
+    helm: [2, 2], 'map-table': [3, 2], 'treasure-chest': [2, 1], 'tangerine-tree': [2, 2],
+    'swords-rack': [2, 1], 'kitchen-table': [3, 2], bookshelf: [2, 1],
+    'medicine-cabinet': [2, 1], piano: [3, 2], 'tool-bench': [2, 2]
+  };
   const FURNITURE_ACTIONS = {
     'helm': { verb: '掌舵', mood: 'focused', line: '這個方向的風正好，航線交給我吧。' },
     'map-table': { verb: '看海圖', mood: 'focused', line: '把航線標清楚，下一站就不會走錯。' },
@@ -86,10 +89,65 @@
     ? item.rotation : item?.flip === true ? 2 : 0;
   const keyForCharacter = item => CHARACTER_KEYS.has(item?.key) ? item.key : CHARACTER_KEYS.has(String(item?.id || '').replace(/^room-character-/, '')) ? String(item.id).replace(/^room-character-/, '') : '';
   const keyForFurniture = item => String(item?.key || item?.id || '').replace(/^room-furniture-/, '');
-  const portraitFor = (item, mood) => {
-    const key = keyForCharacter(item);
-    return key && MOODS.has(mood) ? `opui://launcher/images/launcher_room/emotions/${key}-${mood}.webp` : assetFor(item);
-  };
+  const cellId = (col, row) => `${col}:${row}`;
+  function gridPoint(col, row) {
+    const depth = row / FLOOR.rows;
+    const left = FLOOR.backLeft + (FLOOR.frontLeft - FLOOR.backLeft) * depth;
+    const right = FLOOR.backRight + (FLOOR.frontRight - FLOOR.backRight) * depth;
+    return { x: left + (right - left) * col / FLOOR.columns, y: FLOOR.top + (FLOOR.bottom - FLOOR.top) * depth };
+  }
+  function footprint(entry, item, kind) {
+    if (kind === 'character') return { width: 1, height: 1 };
+    const base = FURNITURE_FOOTPRINTS[keyForFurniture(item)] || [2, 2];
+    const rotated = rotationFor(entry) % 2 === 1;
+    return { width: Math.max(1, Math.ceil((rotated ? base[1] : base[0]) * entry.scale)),
+      height: Math.max(1, Math.ceil((rotated ? base[0] : base[1]) * entry.scale)) };
+  }
+  function cellForPosition(entry, span) {
+    const depth = clamp((entry.y - FLOOR.top) / (FLOOR.bottom - FLOOR.top), 0, 1, .5);
+    const left = FLOOR.backLeft + (FLOOR.frontLeft - FLOOR.backLeft) * depth;
+    const right = FLOOR.backRight + (FLOOR.frontRight - FLOOR.backRight) * depth;
+    return { col: Math.round(clamp((entry.x - left) / (right - left) * FLOOR.columns - span.width / 2, 0, FLOOR.columns - span.width, 0)),
+      row: Math.round(clamp(depth * FLOOR.rows - span.height, 0, FLOOR.rows - span.height, 0)) };
+  }
+  function anchorForCell(cell, span) { return gridPoint(cell.col + span.width / 2, cell.row + span.height); }
+  function cellsInFootprint(cell, span) {
+    const result = [];
+    for (let row = cell.row; row < cell.row + span.height; row++)
+      for (let col = cell.col; col < cell.col + span.width; col++) result.push(cellId(col, row));
+    return result;
+  }
+  function nearestVacant(requested, span, occupied) {
+    let best = null; let score = Infinity;
+    for (let row = 0; row <= FLOOR.rows - span.height; row++) for (let col = 0; col <= FLOOR.columns - span.width; col++) {
+      const cell = { col, row };
+      if (cellsInFootprint(cell, span).some(key => occupied.has(key))) continue;
+      const distance = Math.abs(col - requested.col) + Math.abs(row - requested.row) * 1.25;
+      if (distance < score) { best = cell; score = distance; }
+    }
+    return best;
+  }
+  function layoutRoom(room, omitKey = '') {
+    const occupied = new Set(); const placements = new Map();
+    for (const [kind, list] of [['furniture', room.placements], ['character', room.characters]]) for (const entry of list) {
+      const key = `${kind === 'furniture' ? 'f' : 'c'}:${entry.itemId}`;
+      if (key === omitKey) continue;
+      const item = resolvedItem(entry.itemId, kind);
+      if (!item) continue;
+      const span = footprint(entry, item, kind);
+      const requested = cellForPosition(entry, span);
+      const cell = nearestVacant(requested, span, occupied);
+      if (!cell) continue;
+      const layout = { key, entry, item, kind, cell, span, anchor: anchorForCell(cell, span) };
+      placements.set(key, layout);
+      for (const id of cellsInFootprint(cell, span)) occupied.add(id);
+    }
+    return { occupied, placements };
+  }
+  function positionInCell(entry, cell, span) {
+    const anchor = anchorForCell(cell, span);
+    entry.x = round(anchor.x); entry.y = round(anchor.y);
+  }
   const blankRoom = () => ({ revision: 0, sceneId: DEFAULT_SCENE, placements: [], characters: [] });
   function copyRoom(source) {
     const room = source && typeof source === 'object' ? source : {};
@@ -127,6 +185,7 @@
   let interactionIndex = 0;
   let dialogueIndex = 0;
   let viewEpoch = 0;
+  let walkBlocked = new Set();
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   function status(message = '', error = false) {
@@ -173,19 +232,80 @@
       walker.node.classList.remove('is-walking', 'is-interacting', 'is-conversing', 'is-using-furniture');
       const speech = walker.node.querySelector('.room-speech');
       if (speech) speech.hidden = true;
+      setPose(walker, 'idle');
     }
     walkers = [];
     interaction = null;
     nextInteractionAt = 0;
   }
   function canAnimate() { return visible && !editing && !!profile && !document.hidden && !motion.matches; }
+  function setPose(walker, pose) {
+    const next = POSES.has(pose) ? pose : 'idle';
+    if (walker.pose === next) return;
+    walker.pose = next; walker.node.dataset.pose = next;
+    const sprite = walker.node.querySelector('.room-chibi');
+    if (!sprite) return;
+    const fallback = assetFor(walker.item);
+    sprite.onerror = () => { sprite.onerror = null; sprite.src = fallback; sprite.dataset.artFallback = 'true'; };
+    sprite.dataset.artFallback = 'false';
+    sprite.src = walker.key ? `opui://launcher/images/launcher_room/action_frames/${walker.key}/${next}.webp` : fallback;
+  }
+  function cellBlocked(cell, blocked) {
+    return cell.col < 0 || cell.row < 0 || cell.col >= FLOOR.columns || cell.row >= FLOOR.rows || blocked.has(cellId(cell.col, cell.row));
+  }
+  function blockedFor(walker, exempt = []) {
+    const blocked = new Set(walkBlocked);
+    for (const other of walkers) {
+      if (other === walker || exempt.includes(other)) continue;
+      blocked.add(cellId(other.cell.col, other.cell.row));
+      if (other.route?.length) {
+        const reserved = other.route[other.route.length - 1];
+        blocked.add(cellId(reserved.col, reserved.row));
+      }
+    }
+    return blocked;
+  }
+  function routeBetween(start, goal, blocked) {
+    if (cellBlocked(goal, blocked)) return null;
+    const startKey = cellId(start.col, start.row); const goalKey = cellId(goal.col, goal.row);
+    if (startKey === goalKey) return [];
+    const pending = [start]; const seen = new Set([startKey]); const previous = new Map();
+    for (let head = 0; head < pending.length; head++) {
+      const cell = pending[head];
+      for (const [dc, dr] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        const next = { col: cell.col + dc, row: cell.row + dr };
+        const key = cellId(next.col, next.row);
+        if (seen.has(key) || cellBlocked(next, blocked)) continue;
+        seen.add(key); previous.set(key, cell); pending.push(next);
+        if (key === goalKey) {
+          const route = [next]; let current = cell;
+          while (cellId(current.col, current.row) !== startKey) {
+            route.unshift(current); current = previous.get(cellId(current.col, current.row));
+          }
+          return route;
+        }
+      }
+    }
+    return null;
+  }
+  function routeTo(walker, goal, exempt = []) {
+    const route = routeBetween(walker.cell, goal, blockedFor(walker, exempt));
+    if (!route) return false;
+    walker.route = route; walker.targetCell = goal;
+    return true;
+  }
   function chooseDestination(walker) {
-    const anchor = { x: clamp(walker.anchor.x, 65, 895, 480), y: clamp(walker.anchor.y, 345, 485, 430) };
-    const bounds = { xMin: Math.max(65, anchor.x - 115), xMax: Math.min(895, anchor.x + 115), yMin: Math.max(345, anchor.y - 35), yMax: Math.min(485, anchor.y + 35) };
-    walker.targetX = bounds.xMin + Math.random() * (bounds.xMax - bounds.xMin);
-    walker.targetY = bounds.yMin + Math.random() * (bounds.yMax - bounds.yMin);
-    walker.pause = 500 + Math.random() * 1500;
-    walker.mode = 'wander';
+    walker.mode = 'wander'; walker.route = []; walker.targetCell = null;
+    const options = [];
+    for (let row = Math.max(0, walker.cell.row - 2); row <= Math.min(FLOOR.rows - 1, walker.cell.row + 2); row++)
+      for (let col = Math.max(0, walker.cell.col - 3); col <= Math.min(FLOOR.columns - 1, walker.cell.col + 3); col++) {
+        const distance = Math.abs(col - walker.cell.col) + Math.abs(row - walker.cell.row);
+        if (distance >= 1 && distance <= 4) options.push({ col, row });
+      }
+    options.sort(() => Math.random() - .5);
+    for (const candidate of options) if (routeTo(walker, candidate)) break;
+    walker.pause = 350 + Math.random() * 650;
+    if (!walker.route.length) setPose(walker, 'idle');
   }
   function keepSpeechInsideStage(walker) {
     walker.node.classList.toggle('is-near-left', walker.x < 165);
@@ -196,7 +316,7 @@
     if (speech) speech.hidden = true;
     walker.node.classList.remove('is-interacting', 'is-conversing', 'is-using-furniture');
   }
-  function showSpeech(walker, message, mood, action = '', usingFurniture = false) {
+  function showSpeech(walker, message, mood, action = '', usingFurniture = false, furnitureKey = '') {
     for (const other of walkers) hideSpeech(other);
     const speech = walker.node.querySelector('.room-speech');
     if (!speech) return;
@@ -204,13 +324,12 @@
     const actionNode = speech.querySelector('.room-speech-action');
     actionNode.textContent = action;
     actionNode.hidden = !action;
-    const face = speech.querySelector('.room-speech-face');
-    const fallback = assetFor(walker.item);
-    face.onerror = () => { face.onerror = null; face.src = fallback; };
-    face.src = portraitFor(walker.item, mood);
-    speech.dataset.mood = mood;
+    speech.dataset.mood = MOODS.has(mood) ? mood : 'happy';
     speech.hidden = false;
     walker.node.classList.add('is-interacting', usingFurniture ? 'is-using-furniture' : 'is-conversing');
+    const pose = usingFurniture ? (['kitchen-table', 'piano'].includes(furnitureKey) ? 'sit' : 'focused_use')
+      : mood === 'annoyed' ? 'talk_annoyed' : mood === 'surprised' ? 'surprised' : mood === 'focused' ? 'focused_use' : 'talk_happy';
+    setPose(walker, pose);
   }
   function pairDialogue(first, second) {
     const direct = PAIR_LINES[`${first.key}:${second.key}`];
@@ -236,12 +355,15 @@
     const first = walkers[interactionIndex % walkers.length];
     if (chat) {
       const second = walkers[(interactionIndex + 1) % walkers.length];
-      const centerX = clamp((first.x + second.x) / 2, 125, 835, 480);
-      const centerY = clamp((first.y + second.y) / 2, 355, 475, 425);
-      first.targetX = centerX - 36; first.targetY = centerY;
-      second.targetX = centerX + 36; second.targetY = centerY;
-      first.pause = 0; second.pause = 0;
-      first.mode = 'approach'; second.mode = 'approach';
+      const adjacent = [[1, 0], [-1, 0], [0, 1], [0, -1]]
+        .map(([dc, dr]) => ({ col: first.cell.col + dc, row: first.cell.row + dr }))
+        .filter(cell => !cellBlocked(cell, blockedFor(second)))
+        .sort((a, b) => Math.abs(a.col - second.cell.col) + Math.abs(a.row - second.cell.row) - Math.abs(b.col - second.cell.col) - Math.abs(b.row - second.cell.row));
+      const meeting = adjacent.find(cell => routeTo(second, cell));
+      if (!meeting) { nextInteractionAt = now + 1600; interactionIndex++; return; }
+      first.route = []; first.targetCell = first.cell; first.pause = 0;
+      second.pause = 0; first.mode = 'approach'; second.mode = 'approach';
+      setPose(first, 'wave');
       interaction = { type: 'chat', actors: [first, second], lines: pairDialogue(first, second), phase: 'approach', expires: now + 8500, holdUntil: 0 };
     } else if (furnishings.length) {
       const preferredTargets = furnishings.filter(value => CHARACTER_LINES[first.key]?.furniture?.[keyForFurniture(value.item)]);
@@ -249,16 +371,28 @@
       const target = choices[interactionIndex % choices.length];
       const action = FURNITURE_ACTIONS[keyForFurniture(target.item)];
       const preferred = CHARACTER_LINES[first.key]?.furniture?.[keyForFurniture(target.item)];
-      first.targetX = clamp(target.entry.x + 28, 65, 895, 480);
-      first.targetY = clamp(target.entry.y + 18, 345, 485, 430);
+      const targetLayout = layoutRoom(activeRoom()).placements.get(`f:${target.entry.itemId}`);
+      if (!targetLayout) { nextInteractionAt = now + 1600; interactionIndex++; return; }
+      const spots = [];
+      for (let col = targetLayout.cell.col; col < targetLayout.cell.col + targetLayout.span.width; col++) {
+        spots.push({ col, row: targetLayout.cell.row - 1 }, { col, row: targetLayout.cell.row + targetLayout.span.height });
+      }
+      for (let row = targetLayout.cell.row; row < targetLayout.cell.row + targetLayout.span.height; row++) {
+        spots.push({ col: targetLayout.cell.col - 1, row }, { col: targetLayout.cell.col + targetLayout.span.width, row });
+      }
+      spots.sort((a, b) => Math.abs(a.col - first.cell.col) + Math.abs(a.row - first.cell.row) - Math.abs(b.col - first.cell.col) - Math.abs(b.row - first.cell.row));
+      const adjacent = spots.find(cell => routeTo(first, cell));
+      if (!adjacent) { nextInteractionAt = now + 1600; interactionIndex++; return; }
       first.pause = 0; first.mode = 'approach';
-      interaction = { type: 'furniture', actors: [first], line: preferred?.[0] || action.line, mood: preferred?.[1] || action.mood, action: action.verb, phase: 'approach', expires: now + 8500, holdUntil: 0 };
+      interaction = { type: 'furniture', actors: [first], furnitureKey: keyForFurniture(target.item),
+        target: targetLayout, line: preferred?.[0] || action.line, mood: preferred?.[1] || action.mood,
+        action: action.verb, phase: 'approach', expires: now + 8500, holdUntil: 0 };
     }
     interactionIndex++;
   }
   function finishInteraction(now) {
     if (!interaction) return;
-    for (const walker of interaction.actors) { hideSpeech(walker); chooseDestination(walker); }
+    for (const walker of interaction.actors) { hideSpeech(walker); setPose(walker, 'idle'); chooseDestination(walker); }
     interaction = null;
     dialogueIndex++;
     nextInteractionAt = now + 4200 + Math.random() * 2100;
@@ -267,23 +401,26 @@
     const event = interaction;
     if (!event) return;
     if (event.phase === 'approach') {
-      const arrived = event.actors.every(walker => Math.hypot(walker.targetX - walker.x, walker.targetY - walker.y) < 8);
+      const arrived = event.actors.every(walker => !walker.route.length);
       if (!arrived && now < event.expires) return;
+      if (!arrived) { finishInteraction(now); return; }
       event.phase = 'speaking-first'; event.holdUntil = now + 2600;
       for (const walker of event.actors) { walker.mode = 'interact'; walker.node.classList.remove('is-walking'); }
       if (event.type === 'chat') {
-        event.actors[0].node.style.setProperty('--facing', '1');
-        event.actors[1].node.style.setProperty('--facing', '-1');
+        event.actors[0].node.style.setProperty('--facing', event.actors[1].x < event.actors[0].x ? '-1' : '1');
+        event.actors[1].node.style.setProperty('--facing', event.actors[0].x < event.actors[1].x ? '-1' : '1');
+        setPose(event.actors[1], 'wave');
         showSpeech(event.actors[0], event.lines[0][0], event.lines[0][1], '和夥伴交談');
       } else {
-        event.actors[0].node.style.setProperty('--facing', '-1');
-        showSpeech(event.actors[0], event.line, event.mood, event.action, true);
+        event.actors[0].node.style.setProperty('--facing', event.target.anchor.x < event.actors[0].x ? '-1' : '1');
+        showSpeech(event.actors[0], event.line, event.mood, event.action, true, event.furnitureKey);
       }
       return;
     }
     if (now < event.holdUntil) return;
     if (event.type === 'chat' && event.phase === 'speaking-first') {
       event.phase = 'speaking-second'; event.holdUntil = now + 2600;
+      setPose(event.actors[0], 'wave');
       showSpeech(event.actors[1], event.lines[1][0], event.lines[1][1], '回應夥伴');
     } else finishInteraction(now);
   }
@@ -295,20 +432,40 @@
     startInteraction(now);
     for (const walker of walkers) {
       if (walker.mode === 'interact') continue;
-      if (walker.pause > 0 && walker.mode === 'wander') { walker.pause -= delta; walker.node.classList.remove('is-walking'); continue; }
-      const dx = walker.targetX - walker.x;
-      const dy = walker.targetY - walker.y;
+      if (walker.pause > 0 && walker.mode === 'wander') {
+        walker.pause -= delta; walker.node.classList.remove('is-walking'); setPose(walker, 'idle'); continue;
+      }
+      if (!walker.route.length) {
+        walker.node.classList.remove('is-walking');
+        if (walker.mode === 'wander') chooseDestination(walker);
+        continue;
+      }
+      const nextCell = walker.route[0];
+      if (walkers.some(other => other !== walker && other.cell.col === nextCell.col && other.cell.row === nextCell.row)) {
+        walker.blockedFor = (walker.blockedFor || 0) + delta;
+        if (walker.blockedFor > 900 && walker.mode === 'wander') chooseDestination(walker);
+        walker.node.classList.remove('is-walking'); setPose(walker, 'idle'); continue;
+      }
+      walker.blockedFor = 0;
+      const target = anchorForCell(nextCell, { width: 1, height: 1 });
+      const dx = target.x - walker.x;
+      const dy = target.y - walker.y;
       const distance = Math.hypot(dx, dy);
-      if (distance < 2) { walker.node.classList.remove('is-walking'); if (walker.mode === 'wander') chooseDestination(walker); continue; }
-      const step = Math.min(distance, delta * .05);
-      walker.x += dx / distance * step;
-      walker.y += dy / distance * step;
+      const step = Math.min(distance, delta * .083);
+      if (distance <= step || distance < 1) {
+        walker.x = target.x; walker.y = target.y; walker.cell = nextCell; walker.route.shift();
+        walker.node.dataset.gridCol = String(nextCell.col); walker.node.dataset.gridRow = String(nextCell.row);
+      } else { walker.x += dx / distance * step; walker.y += dy / distance * step; }
       walker.node.style.left = `${walker.x / WIDTH * 100}%`;
       walker.node.style.top = `${walker.y / HEIGHT * 100}%`;
-      walker.node.style.zIndex = String(100 + Math.round(walker.y));
+      walker.node.style.zIndex = String(10 + Math.round(walker.y));
+      walker.node.style.setProperty('--room-depth', String(.72 + .35 * (walker.y - FLOOR.top) / (FLOOR.bottom - FLOOR.top)));
       walker.node.style.setProperty('--facing', dx < 0 ? '-1' : '1');
       keepSpeechInsideStage(walker);
       walker.node.classList.add('is-walking');
+      walker.stepClock += delta;
+      setPose(walker, Math.floor(walker.stepClock / 150) % 2 ? 'walk2' : 'walk1');
+      if (!walker.route.length) { walker.node.classList.remove('is-walking'); setPose(walker, 'idle'); }
     }
     updateInteraction(now);
     animationId = requestAnimationFrame(frame);
@@ -316,34 +473,82 @@
   function refreshAnimation() {
     stopAnimation();
     if (!canAnimate()) return;
+    const room = activeRoom();
+    const layout = layoutRoom(room);
+    walkBlocked = layoutRoom({ placements: room.placements, characters: [] }).occupied;
     for (const placement of activeRoom().characters) {
       const node = [...$('roomCharacters').children].find(child => child.dataset.roomKey === `c:${placement.itemId}`);
       if (!node) continue;
       const item = resolvedItem(placement.itemId, 'character');
-      const startX = clamp(placement.x, 65, 895, 480);
-      const startY = clamp(placement.y, 345, 485, 430);
+      const placed = layout.placements.get(`c:${placement.itemId}`);
+      if (!placed) continue;
+      const startX = placed.anchor.x;
+      const startY = placed.anchor.y;
       node.style.left = `${startX / WIDTH * 100}%`;
       node.style.top = `${startY / HEIGHT * 100}%`;
-      const walker = { node, item, key: keyForCharacter(item), anchor: placement, x: startX, y: startY, pause: Math.random() * 900, targetX: startX, targetY: startY, mode: 'wander' };
+      const walker = { node, item, key: keyForCharacter(item), cell: placed.cell, x: startX, y: startY,
+        pause: Math.random() * 350, route: [], targetCell: null, mode: 'wander', stepClock: 0, pose: '' };
       keepSpeechInsideStage(walker);
-      chooseDestination(walker);
       walkers.push(walker);
+      setPose(walker, 'idle');
     }
+    for (const walker of walkers) chooseDestination(walker);
     if (walkers.length) { nextInteractionAt = performance.now() + 1800; animationId = requestAnimationFrame(frame); }
   }
-  function positionNode(node, entry, kind) {
-    node.style.left = `${entry.x / WIDTH * 100}%`;
-    node.style.top = `${entry.y / HEIGHT * 100}%`;
-    node.style.zIndex = String((kind === 'character' ? 100 : 20) + Math.round(entry.y));
+  function positionNode(node, placed) {
+    const { entry, kind, span, anchor, cell } = placed;
+    node.style.left = `${anchor.x / WIDTH * 100}%`;
+    node.style.top = `${anchor.y / HEIGHT * 100}%`;
+    node.style.zIndex = String(10 + Math.round(anchor.y));
+    node.style.setProperty('--room-depth', String(round(.72 + .35 * (anchor.y - FLOOR.top) / (FLOOR.bottom - FLOOR.top))));
+    node.dataset.gridCol = String(cell.col); node.dataset.gridRow = String(cell.row);
+    node.dataset.footprint = `${span.width}x${span.height}`;
     if (kind === 'furniture') {
       node.style.setProperty('--room-scale', String(entry.scale));
+      node.style.setProperty('--room-size', String(round(entry.scale * (.72 + .35 * (anchor.y - FLOOR.top) / (FLOOR.bottom - FLOOR.top)))));
+      node.style.setProperty('--room-width', `${Math.min(27, 12 + span.width * 2.5)}%`);
       node.dataset.rotation = String(rotationFor(entry));
-      node.style.setProperty('--room-bearing', `${rotationFor(entry) * 90}deg`);
     }
+  }
+  function drawFloorGrid(layout) {
+    const floor = $('roomStage').querySelector('.room-floor-grid');
+    floor.replaceChildren();
+    const ns = 'http://www.w3.org/2000/svg';
+    const path = document.createElementNS(ns, 'path');
+    const lines = [];
+    for (let row = 0; row <= FLOOR.rows; row++) {
+      const left = gridPoint(0, row); const right = gridPoint(FLOOR.columns, row);
+      lines.push(`M ${left.x} ${left.y} L ${right.x} ${right.y}`);
+    }
+    for (let col = 0; col <= FLOOR.columns; col++) {
+      const back = gridPoint(col, 0); const front = gridPoint(col, FLOOR.rows);
+      lines.push(`M ${back.x} ${back.y} L ${front.x} ${front.y}`);
+    }
+    path.setAttribute('d', lines.join(' ')); path.setAttribute('class', 'room-grid-lines'); floor.append(path);
+    for (const placed of layout.placements.values()) {
+      const { cell, span, key, kind } = placed;
+      const corners = [gridPoint(cell.col, cell.row), gridPoint(cell.col + span.width, cell.row),
+        gridPoint(cell.col + span.width, cell.row + span.height), gridPoint(cell.col, cell.row + span.height)];
+      const tile = document.createElementNS(ns, 'polygon');
+      tile.setAttribute('points', corners.map(point => `${point.x},${point.y}`).join(' '));
+      tile.setAttribute('class', `room-grid-footprint ${kind === 'furniture' ? 'is-furniture' : 'is-character'}${selected && key === `${selected.kind === 'furniture' ? 'f' : 'c'}:${selected.itemId}` ? ' is-selected' : ''}`);
+      floor.append(tile);
+    }
+  }
+  function furnitureView(item, rotation) {
+    const key = keyForFurniture(item);
+    return /^[a-z0-9-]+$/.test(key) ? `opui://launcher/images/launcher_room/furniture_views/${key}/${rotation}.webp` : assetFor(item);
+  }
+  function showFurnitureView(sprite, item, rotation) {
+    const fallback = assetFor(item);
+    sprite.onerror = () => { sprite.onerror = null; sprite.src = fallback; sprite.dataset.artFallback = 'true'; };
+    sprite.dataset.artFallback = 'false';
+    sprite.src = furnitureView(item, rotation);
   }
   function renderStage() {
     stopAnimation();
     const room = activeRoom();
+    const layout = layoutRoom(room);
     const scene = resolvedItem(room.sceneId, 'scene');
     const image = $('roomScene');
     image.src = assetFor(scene) || SCENE_FALLBACK;
@@ -353,10 +558,13 @@
     stage.classList.toggle('is-editing', editing);
     stage.setAttribute('aria-label', `${profile?.name || '航海者'}的航海夥伴房間${editing ? '，可拖曳，用方向鍵微調，按 R 旋轉家具' : ''}`);
     if (!stage.querySelector('.room-floor-grid')) {
-      const floor = el('div', 'room-floor-grid');
-      floor.setAttribute('aria-hidden', 'true');
-      image.after(floor);
+      const plane = el('div', 'room-floor-plane'); plane.setAttribute('aria-hidden', 'true');
+      const floor = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      floor.setAttribute('class', 'room-floor-grid'); floor.setAttribute('viewBox', `0 0 ${WIDTH} ${HEIGHT}`);
+      floor.setAttribute('preserveAspectRatio', 'none'); floor.setAttribute('aria-hidden', 'true');
+      image.after(plane, floor);
     }
+    drawFloorGrid(layout);
     $('roomCaption').textContent = profile ? `${profile.name || '航海者'}的航海夥伴房間` : '登入後展示你的航海房間';
     const furniture = $('roomObjects'); furniture.replaceChildren();
     const characters = $('roomCharacters'); characters.replaceChildren();
@@ -364,31 +572,34 @@
       const item = resolvedItem(entry.itemId, 'furniture');
       const source = assetFor(item);
       if (!source) continue;
+      const placed = layout.placements.get(`f:${entry.itemId}`);
+      if (!placed) continue;
       const node = el('div', 'room-object-shell');
       const sprite = el('img', 'room-object');
-      sprite.src = source; sprite.alt = item.name || '家具'; sprite.draggable = false;
+      showFurnitureView(sprite, item, rotationFor(entry)); sprite.alt = item.name || '家具'; sprite.draggable = false;
       const direction = el('span', 'room-direction', CARDINAL[rotationFor(entry)]);
       direction.setAttribute('aria-hidden', 'true');
       node.append(sprite, direction);
       node.dataset.roomKey = `f:${entry.itemId}`;
       node.classList.toggle('is-selected', !!selected && selected.kind === 'furniture' && selected.itemId === entry.itemId);
-      positionNode(node, entry, 'furniture'); furniture.append(node);
+      positionNode(node, placed); furniture.append(node);
     }
     for (const entry of room.characters) {
       const item = resolvedItem(entry.itemId, 'character');
       const source = assetFor(item);
       if (!source) continue;
+      const placed = layout.placements.get(`c:${entry.itemId}`);
+      if (!placed) continue;
       const node = el('div', 'room-character-shell');
       const sprite = el('img', 'room-chibi');
       sprite.src = source; sprite.alt = item.name || '航海夥伴'; sprite.draggable = false;
       const speech = el('div', 'room-speech'); speech.hidden = true;
       speech.setAttribute('role', 'status'); speech.setAttribute('aria-live', 'polite');
-      const portrait = el('img', 'room-speech-face'); portrait.alt = ''; portrait.draggable = false;
-      speech.append(portrait, el('span', 'room-speech-text'), el('small', 'room-speech-action'));
+      speech.append(el('span', 'room-speech-text'), el('small', 'room-speech-action'));
       node.append(sprite, speech);
       node.dataset.roomKey = `c:${entry.itemId}`;
       node.classList.toggle('is-selected', !!selected && selected.kind === 'character' && selected.itemId === entry.itemId);
-      positionNode(node, entry, 'character'); characters.append(node);
+      positionNode(node, placed); characters.append(node);
     }
     refreshAnimation();
   }
@@ -397,6 +608,7 @@
     for (const node of $('roomStage').querySelectorAll('[data-room-key]')) {
       node.classList.toggle('is-selected', node.dataset.roomKey === `${kind === 'furniture' ? 'f' : 'c'}:${itemId}`);
     }
+    if (editing) drawFloorGrid(layoutRoom(draft));
     renderSelection();
   }
   function markChanged() {
@@ -407,13 +619,24 @@
   function moveSelection(x, y) {
     const entry = itemBySelection();
     if (!entry) return;
-    entry.x = round(clamp(x, 20, 940, entry.x));
-    entry.y = round(clamp(y, selected.kind === 'character' ? 290 : 60, 520, entry.y));
     const key = `${selected.kind === 'furniture' ? 'f' : 'c'}:${entry.itemId}`;
+    const item = resolvedItem(entry.itemId, selected.kind);
+    const span = footprint(entry, item, selected.kind);
+    const other = layoutRoom(draft, key);
+    const desired = cellForPosition({ x, y }, span);
+    if (cellsInFootprint(desired, span).some(id => other.occupied.has(id))) {
+      status('這些地板格已被其他擺設佔用，請選空位。', true); return false;
+    }
+    const before = `${entry.x}:${entry.y}`;
+    positionInCell(entry, desired, span);
+    if (`${entry.x}:${entry.y}` === before) return true;
     const node = [...$('roomStage').querySelectorAll('[data-room-key]')].find(element => element.dataset.roomKey === key);
-    if (node) positionNode(node, entry, selected.kind);
+    const layout = layoutRoom(draft);
+    if (node) positionNode(node, layout.placements.get(key));
+    drawFloorGrid(layout);
     markChanged();
     renderSelection();
+    return true;
   }
   function renderSelection() {
     const panel = $('roomSelection'); panel.replaceChildren();
@@ -421,15 +644,25 @@
     panel.hidden = !entry || !editing;
     if (!entry || !editing) return;
     const item = resolvedItem(entry.itemId, selected.kind);
-    panel.append(el('strong', '', item?.name || '已選物件'), el('small', '', `座標 ${Math.round(entry.x)}, ${Math.round(entry.y)} · 拖曳或方向鍵微調${selected.kind === 'furniture' ? ' · R 旋轉' : ''}`));
+    const placed = layoutRoom(draft).placements.get(`${selected.kind === 'furniture' ? 'f' : 'c'}:${entry.itemId}`);
+    panel.append(el('strong', '', item?.name || '已選物件'), el('small', '', `地板 ${placed ? `${placed.cell.col + 1} 欄、${placed.cell.row + 1} 排` : '待擺放'} · 拖曳或方向鍵移動${selected.kind === 'furniture' ? ' · R 旋轉' : ''}`));
     if (selected.kind === 'furniture') {
       const size = el('label', 'room-size-label'); size.append(el('span', '', '大小'));
       const slider = el('input'); slider.type = 'range'; slider.min = '.5'; slider.max = '1.5'; slider.step = '.05'; slider.value = String(entry.scale);
       const output = el('output', '', `${Math.round(entry.scale * 100)}%`);
       slider.oninput = () => {
-        entry.scale = Number(slider.value); output.textContent = `${Math.round(entry.scale * 100)}%`;
+        const previous = entry.scale;
+        entry.scale = Number(slider.value);
+        const key = `f:${entry.itemId}`;
+        const span = footprint(entry, item, 'furniture');
+        const other = layoutRoom(draft, key);
+        const cell = nearestVacant(cellForPosition(entry, span), span, other.occupied);
+        if (!cell) { entry.scale = previous; slider.value = String(previous); status('地板空間不足，無法放大這件家具。', true); return; }
+        positionInCell(entry, cell, span); output.textContent = `${Math.round(entry.scale * 100)}%`;
         const node = [...$('roomObjects').children].find(child => child.dataset.roomKey === `f:${entry.itemId}`);
-        if (node) positionNode(node, entry, 'furniture');
+        const layout = layoutRoom(draft);
+        if (node) positionNode(node, layout.placements.get(key));
+        drawFloorGrid(layout);
         markChanged();
       };
       size.append(slider, output); panel.append(size);
@@ -449,14 +682,24 @@
   function rotateSelection() {
     if (!editing || selected?.kind !== 'furniture') return;
     const entry = itemBySelection(); if (!entry) return;
-    entry.rotation = (rotationFor(entry) + 1) % 4;
+    const prior = rotationFor(entry);
+    entry.rotation = (prior + 1) % 4;
     entry.flip = entry.rotation === 2;
+    const key = `f:${entry.itemId}`;
+    const span = footprint(entry, resolvedItem(entry.itemId, 'furniture'), 'furniture');
+    const other = layoutRoom(draft, key);
+    const cell = nearestVacant(cellForPosition(entry, span), span, other.occupied);
+    if (!cell) { entry.rotation = prior; entry.flip = prior === 2; status('地板空間不足，這裡無法旋轉家具。', true); return; }
+    positionInCell(entry, cell, span);
+    const layout = layoutRoom(draft);
     const node = [...$('roomObjects').children].find(child => child.dataset.roomKey === `f:${entry.itemId}`);
     if (node) {
-      positionNode(node, entry, 'furniture');
+      positionNode(node, layout.placements.get(key));
+      showFurnitureView(node.querySelector('.room-object'), resolvedItem(entry.itemId, 'furniture'), entry.rotation);
       const direction = node.querySelector('.room-direction');
       if (direction) direction.textContent = CARDINAL[entry.rotation];
     }
+    drawFloorGrid(layout);
     markChanged(); renderSelection();
   }
   function renderEditorTabs() {
@@ -477,10 +720,14 @@
     if (existing) { setSelected(kind, item.id); $('roomStage').focus(); return; }
     if (list.length >= (kind === 'furniture' ? 24 : ROOM_MAX_CHARACTERS)) { status(kind === 'furniture' ? '房間最多擺 24 件家具。' : `房間最多邀請 ${ROOM_MAX_CHARACTERS} 位夥伴。`, true); return; }
     const index = list.length;
-    const characterStart = CHARACTER_STARTS[index] || [480, 430];
-    list.push(kind === 'furniture'
-      ? { itemId: item.id, x: 340 + index % 4 * 95, y: 350 + Math.floor(index / 4) * 26, scale: 1, rotation: 0, flip: false }
-      : { itemId: item.id, x: characterStart[0], y: characterStart[1] });
+    const entry = kind === 'furniture'
+      ? { itemId: item.id, x: [300, 705, 480, 610][index % 4], y: 385 + Math.floor(index / 4) * 28, scale: 1, rotation: 0, flip: false }
+      : { itemId: item.id, x: 190 + index % 5 * 145, y: 400 + Math.floor(index / 5) * 60 };
+    const span = footprint(entry, item, kind);
+    const cell = nearestVacant(cellForPosition(entry, span), span, layoutRoom(draft).occupied);
+    if (!cell) { status('房間地板沒有足夠空位，請先移動或收起其他擺設。', true); return; }
+    positionInCell(entry, cell, span);
+    list.push(entry);
     markChanged(); renderStage(); renderEditorItems(); setSelected(kind, item.id); $('roomStage').focus();
   }
   function renderEditorItems() {
@@ -526,7 +773,7 @@
       if (openEpoch !== viewEpoch || openAccountId !== accountId || openUserId !== profile?.userId || !isOwner()) return;
       if (!result?.ok || !result.shop) { status('商品無法讀取，請稍後再試。', true); return; }
       shop = result.shop; draft = copyRoom(profile?.room); editing = true; dirty = false; selected = null;
-      status('選擇場景、家具或夥伴；拖曳擺設，按 R 旋轉家具，最後儲存。'); render();
+      status('選擇場景、家具或夥伴；拖曳至空白地板格，按 R 旋轉家具，最後儲存。'); render();
     } catch { if (openEpoch === viewEpoch) status('目前無法連線，請稍後再試。', true); }
     finally { loading = false; renderEditor(); }
   }
@@ -604,11 +851,18 @@
   $('roomStage').addEventListener('keydown', event => {
     if (!editing || !selected) return;
     const entry = itemBySelection(); if (!entry) return;
-    const step = event.shiftKey ? 10 : 1;
-    if (event.key === 'ArrowLeft') moveSelection(entry.x - step, entry.y);
-    else if (event.key === 'ArrowRight') moveSelection(entry.x + step, entry.y);
-    else if (event.key === 'ArrowUp') moveSelection(entry.x, entry.y - step);
-    else if (event.key === 'ArrowDown') moveSelection(entry.x, entry.y + step);
+    const key = `${selected.kind === 'furniture' ? 'f' : 'c'}:${entry.itemId}`;
+    const placed = layoutRoom(draft).placements.get(key);
+    const step = event.shiftKey ? 2 : 1;
+    const moveCell = (dc, dr) => {
+      if (!placed) return;
+      const point = anchorForCell({ col: placed.cell.col + dc, row: placed.cell.row + dr }, placed.span);
+      moveSelection(point.x, point.y);
+    };
+    if (event.key === 'ArrowLeft') moveCell(-step, 0);
+    else if (event.key === 'ArrowRight') moveCell(step, 0);
+    else if (event.key === 'ArrowUp') moveCell(0, -step);
+    else if (event.key === 'ArrowDown') moveCell(0, step);
     else if ((event.key === 'r' || event.key === 'R') && selected.kind === 'furniture') rotateSelection();
     else if (event.key === 'Delete' || event.key === 'Backspace') $('roomSelection').querySelector('.room-remove')?.click();
     else return;

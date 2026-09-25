@@ -60,6 +60,18 @@ const APP_FILES = [
   'package.json'
 ];
 
+const ROOM_DEPTH_FURNITURE = ['bookshelf', 'helm', 'kitchen-table', 'map-table', 'medicine-cabinet', 'piano', 'swords-rack', 'tangerine-tree', 'tool-bench', 'treasure-chest'];
+const ROOM_DEPTH_CHARACTERS = ['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopper', 'robin', 'franky', 'brook', 'jinbe'];
+const ROOM_DEPTH_ACTION_OVERRIDES = new Set([
+  ...['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopper', 'robin', 'brook'].map(key => `${key}/walk2`),
+  'franky/talk_annoyed', 'jinbe/sit'
+]);
+const ROOM_ACTION_POSES = ['idle', 'walk1', 'walk2', 'talk_happy', 'talk_annoyed', 'surprised', 'focused_use', 'sit', 'wave'];
+const ROOM_DEPTH_ASSETS = [
+  ...ROOM_DEPTH_FURNITURE.flatMap(key => [0, 1, 2, 3].map(rotation => `furniture_views/${key}/${rotation}.webp`)),
+  ...ROOM_DEPTH_CHARACTERS.flatMap(key => ROOM_ACTION_POSES.map(pose => `action_frames/${key}/${pose}.webp`))
+];
+
 const EXTRA_RESOURCES = [
   {
     from: '../public/images/game_launcher',
@@ -173,7 +185,8 @@ const EXTRA_RESOURCES = [
       'emotions/jinbe-surprised.webp',
       'emotions/jinbe-focused.webp',
       'emotions/jinbe-annoyed.webp',
-      'frames/straw-hat.webp', 'frames/ship-wheel.webp'
+      'frames/straw-hat.webp', 'frames/ship-wheel.webp',
+      ...ROOM_DEPTH_ASSETS
     ]
   },
   {
@@ -366,7 +379,7 @@ function validateCursorPng(filePath, label) {
 function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
-  assert(packageJson.version === '1.1.10', 'Desktop launcher version must be 1.1.10 for the interactive room.');
+  assert(packageJson.version === '1.1.11', 'Desktop launcher version must be 1.1.11 for the spatial room and action sprites.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
@@ -443,10 +456,16 @@ function validateSourcePackage() {
   const roomExpansion = readJson(path.join(ROOT, 'docs', 'LAUNCHER_ROOM_EXPANSION_ART_20260925.json'), 'launcher room expansion art manifest');
   assert(roomExpansion.version === '1.1.10' && roomExpansion.canonicalCharactersOnly === true,
     'Room expansion manifest must identify the canonical release.');
+  const roomDepth = readJson(path.join(ROOT, 'docs', 'LAUNCHER_ROOM_DEPTH_ART_20260925.json'), 'launcher room depth/action art manifest');
+  assert(roomDepth.version === '1.1.11' && roomDepth.canonicalCharactersOnly === true,
+    'Room depth/action manifest must identify the canonical release.');
   assert(Array.isArray(roomManifest.items) && roomManifest.items.length === 21 &&
-    Array.isArray(roomExpansion.items) && roomExpansion.items.length === 44,
-    'Room art manifests must cover the original 21 assets and 44 new character assets.');
-  assertExactJson(sorted([...roomManifest.items, ...roomExpansion.items].map(item => item.asset.replace(/^public\/images\/launcher_room\//, ''))),
+    Array.isArray(roomExpansion.items) && roomExpansion.items.length === 44 &&
+    Array.isArray(roomDepth.items) && roomDepth.items.length === ROOM_DEPTH_ASSETS.length,
+    'Room art manifests must cover original, expansion, and 1.1.11 assets.');
+  assertExactJson(sorted(roomDepth.items.map(item => item.asset.replace(/^public\/images\/launcher_room\//, ''))),
+    sorted(ROOM_DEPTH_ASSETS), 'Room depth/action art asset set');
+  assertExactJson(sorted([...roomManifest.items, ...roomExpansion.items, ...roomDepth.items].map(item => item.asset.replace(/^public\/images\/launcher_room\//, ''))),
     sorted(roomResource.filter), 'Room art manifest output set');
   const roomSourceRoot = path.join(ROOT, 'tools', 'launcher-room', 'source-png');
   for (const item of [...roomManifest.items, ...roomExpansion.items]) {
@@ -457,6 +476,23 @@ function validateSourcePackage() {
     assert(sha256File(source) === item.sourceSha256, `GPT room source digest differs: ${item.sourcePng}`);
     assert(fs.statSync(asset).size === item.assetBytes && sha256File(asset) === item.assetSha256,
       `Packaged room art digest differs: ${item.asset}`);
+  }
+  for (const item of roomDepth.items) {
+    const assetRelative = item.asset.replace(/^public\/images\/launcher_room\//, '');
+    const furniture = /^furniture_views\/([a-z0-9-]+)\/[0-3]\.webp$/.exec(assetRelative);
+    const action = /^action_frames\/([a-z0-9-]+)\/([a-z0-9_]+)\.webp$/.exec(assetRelative);
+    assert(furniture || action, `Room depth/action asset path is unsafe: ${item.asset}`);
+    if (furniture) assert(ROOM_DEPTH_FURNITURE.includes(furniture[1]), `Unknown room furniture: ${item.asset}`);
+    if (action) assert(ROOM_DEPTH_CHARACTERS.includes(action[1]) && ROOM_ACTION_POSES.includes(action[2]), `Unknown room action pose: ${item.asset}`);
+    const sourceName = furniture ? furniture[1]
+      : ROOM_DEPTH_ACTION_OVERRIDES.has(`${action[1]}/${action[2]}`) ? `${action[1]}-${action[2]}` : action[1];
+    const sourcePng = `tools/launcher-room/${furniture ? 'furniture-source-png' : 'action-source-png'}/${sourceName}.png`;
+    assert(item.sourcePng === sourcePng, `Room depth/action source does not match its asset: ${item.asset}`);
+    const source = path.join(ROOT, ...sourcePng.split('/'));
+    const asset = path.join(ROOT, ...item.asset.split('/'));
+    assert(sha256File(source) === item.sourceSha256, `GPT room depth/action source digest differs: ${sourcePng}`);
+    assert(fs.statSync(asset).size === item.assetBytes && sha256File(asset) === item.assetSha256,
+      `Packaged room depth/action art digest differs: ${item.asset}`);
   }
   const opManifest = readJson(path.join(ROOT, 'docs', 'LAUNCHER_OP_BGM_20260925.json'), 'launcher OP music manifest');
   const opResource = EXTRA_RESOURCES.find((resource) => resource.to === 'launcher-assets/audio/bgm');

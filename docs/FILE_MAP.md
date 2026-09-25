@@ -1,5 +1,16 @@
 # File Map
 
+## 2026-09-25 啟動器 1.1.11 房間佈置與動作
+
+| 檔案 | 用途 |
+| --- | --- |
+| `desktop/launcher-room.js/css` | 透視地板格、家具佔地與四向視角、角色路徑及全身動作影格。 |
+| `public/images/launcher_room/furniture_views/`、`action_frames/` | 40 張家具四視角與 90 張十位原作角色的全身動作圖。 |
+| `tools/launcher-room/furniture-source-png/`、`action-source-png/`、`prepare_furniture_views.py`、`prepare_action_frames.py`、`build_depth_art_manifest.py`、`review_depth_art.py` | 30 張 GPT 原稿、裁切處理、輸出 SHA／Alpha 清單與動作／方向 contact 檢查。 |
+| `docs/LAUNCHER_ROOM_DEPTH_ART_20260925.json` | 1.1.11 新增的 130 張圖與 30 張 GPT 原稿來源及逐檔 SHA。 |
+| `desktop/main.js`、`package.json`／lock、`scripts/desktop_launcher_package_qa.js` | 1.1.11 安裝封裝、受限媒體路徑與逐檔檢查。 |
+| `scripts/launcher_room_browser_qa.js` | 真 Chromium 家具落格、遮擋、角色跨步、對話及家具動作驗證。 |
+
 ## 2026-09-25 啟動器 1.1.10 名片與房間
 
 | 檔案 | 用途 |

@@ -323,6 +323,8 @@ function resolveLauncherResource(requestUrl) {
       /^images\/flags\/(?:[1-9]|1[0-5])\.webp$/,
       /^images\/profile_decor\/(?:bg-(?:luffy|zoro|nami)|frame-(?:luffy|zoro)|sticker-(?:luffy|zoro|nami|chopper|ace|robin))\.webp$/,
       /^images\/launcher_room\/(?:scenes\/(?:sunny-deck|sunny-kitchen|sunny-library)|furniture\/(?:helm|map-table|treasure-chest|tangerine-tree|swords-rack|kitchen-table|bookshelf|medicine-cabinet|piano|tool-bench)|chibi\/(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe)|emotions\/(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe)-(?:happy|surprised|focused|annoyed)|frames\/(?:straw-hat|ship-wheel))\.webp$/,
+      /^images\/launcher_room\/furniture_views\/(?:bookshelf|helm|kitchen-table|map-table|medicine-cabinet|piano|swords-rack|tangerine-tree|tool-bench|treasure-chest)\/[0-3]\.webp$/,
+      /^images\/launcher_room\/action_frames\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\/(?:idle|walk1|walk2|talk_happy|talk_annoyed|surprised|focused_use|sit|wave)\.webp$/,
       /^audio\/profile_bgm\/(?:harbor|night-watch|voyage)\.ogg$/,
       /^audio\/bgm\/track(?:0[1-9]|1[0-9]|20)\.mp3$/,
       /^videos\/game_launcher\/[A-Za-z0-9._-]+$/
@@ -1265,6 +1267,11 @@ async function runVisualOrSmokeCapture() {
             .flatMap(name => ['happy', 'surprised', 'focused', 'annoyed']
               .map(mood => `images/launcher_room/emotions/${name}-${mood}.webp`)),
           ...['straw-hat', 'ship-wheel'].map(name => `images/launcher_room/frames/${name}.webp`),
+          ...['bookshelf', 'helm', 'kitchen-table', 'map-table', 'medicine-cabinet', 'piano', 'swords-rack', 'tangerine-tree', 'tool-bench', 'treasure-chest']
+            .flatMap(name => [0, 1, 2, 3].map(direction => `images/launcher_room/furniture_views/${name}/${direction}.webp`)),
+          ...['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopper', 'robin', 'franky', 'brook', 'jinbe']
+            .flatMap(name => ['idle', 'walk1', 'walk2', 'talk_happy', 'talk_annoyed', 'surprised', 'focused_use', 'sit', 'wave']
+              .map(pose => `images/launcher_room/action_frames/${name}/${pose}.webp`)),
           ...Array.from({ length: 12 }, (_, index) => `images/board/avatars/${index + 51}.webp`),
           ...Array.from({ length: 20 }, (_, index) => `audio/bgm/track${String(index + 1).padStart(2, '0')}.mp3`)
         ];

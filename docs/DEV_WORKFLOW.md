@@ -1,5 +1,17 @@
 # Dev Workflow
 
+## 2026-09-25 啟動器房間空間佈置與角色動作 1.1.11（候選）
+
+範圍：針對 1.1.10 房間家具像貼紙、人物位移時無跨步動作、情緒只在對話框頭像出現的回饋，改造桌面啟動器的房間展示。參考《排球少年!! FLY HIGH》集訓基地的家具布置和房客活動概念，視覺素材仍以本專案的《航海王》千陽號與原作草帽成員製作，不複製對方介面或角色。從 `origin/main` 的 `1072dfa93` 建立隔離工作樹 `D:\Codex_Release_Worktrees\launcher-room-world-1.1.11`，保留正式 D 槽既有 Board 未提交工作與 1.1.10 已發布安裝檔。
+
+實作：房間改以透視地板格、佔地、深度排序與四方向獨立家具視角顯示擺設；編輯格線只在編輯時出現，拖曳對齊可用格位並避免家具重疊。十位既有原作角色各有待機、交替跨步、不同說話情緒、驚訝、使用家具、坐下、招手等全身動作影格；對話氣泡不再用肖像代替角色表情。新增 10 張 GPT 角色九姿勢原稿、10 張 GPT 家具四視角原稿，另以 GPT 補畫 8 張明顯抬腿的跨步與 2 張裁切修正原稿，合計 30 張 PNG 來源，轉為 90 張角色影格與 40 張家具視角 WebP；逐幀來源、Alpha、像素尺寸與 SHA-256 見 `LAUNCHER_ROOM_DEPTH_ART_20260925.json`。房間持有權、好友唯讀、既有儲存座標與四方向欄位保持相容；三款遊戲規則、存檔與 `BOARD_GAME_STATE` 不改。
+
+變更檔案：`desktop/launcher-room.js/css`、必要的 `launcher.html` 房間標記、`main.js`、`package.json`／lock；`public/images/launcher_room/action_frames/`、`furniture_views/`、`tools/launcher-room/action-source-png/`、`furniture-source-png/`、生成圖處理／檢查工具、素材清單；`scripts/launcher_room_browser_qa.js`、`desktop_launcher_package_qa.js` 及四份專案文件。
+
+定向驗證：`build_depth_art_manifest.py` 驗過 130 個輸出素材的 Alpha 外緣、尺寸、來源與 SHA；`review_depth_art.py` 的 10 位角色步行／情緒和 10 件家具方向圖沒有低差異組。完整 Chromium 房間 QA 49／49：六家具與六角色同房、格位碰撞、四向解碼與無回退、深度遮擋、人物本體動作、好友唯讀及 390px 橫向捲動通過；截圖與報告在 `D:\Codex_QA\launcher-room-browser\`。`launcher_profile_shop_browser_qa.js` 97／97、`desktop_distribution_gate_qa.js` 135／135、名片／持有權 SQL／留言板回歸均通過；`desktop_launcher_package_qa.js` 來源檢查通過。`npm start` 在隔離的本機 18787 埠開啟靜態頁；未設 `DATABASE_URL`，不視為正式帳號交易驗收。公開部署證據待完成後補記。
+
+Windows x64 NSIS 1.1.11 已由隔離工作樹建置，`desktop_launcher_package_qa.js` 的來源、win-unpacked、installer 三層通過：245 個 ASAR entries、342 個 launcher files、安裝檔 235,406,029 bytes，SHA-256 `e396e46ee659f1ef1ff621b35f1889c7fbf04cb1df8655fbfffbba9bf542a8e4`。真封裝 Electron 隔離 userData 啟動 smoke `ok=true`，241／241 `opui` 素材 HEAD／Range／MIME 通過，BGM 可播放；報告在 `D:\\Codex_QA\\launcher-room-world-1.1.11\\smoke-packaged.json`。Authenticode 為 NotSigned。公開部署證據待完成後補記。
+
 ## 2026-09-25 啟動器個人名片與互動房間 1.1.10
 
 範圍：從已部署 1.1.9 的 `origin/main` 建立隔離工作樹 `D:\Codex_Release_Worktrees\launcher-room-interactions-1.1.10`；保留正式 D 槽來源的其他未提交 Board 工作。移除舊船長展示室與個人頁商店捷徑，名片可編輯顯示名稱／簡介／頭像，已購裝飾移至名片，頭像與相框改為圓形。房間新增編輯格線、家具 0–3 四向擬似透視、最多八位角色的活動與家具互動；商品 120→124，新增騙人布、佛朗基、布魯克、甚平。`launcherCardV1` 使用 `LAUNCHER_CARD_SET` 獨立交易驗證付費頭像持有權；`launcherRoomV1` 保持舊 `flip` 相容，舊 Card patch 不得覆寫名片或房間。三款遊戲規則、存檔與 `BOARD_GAME_STATE` 不變。

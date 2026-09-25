@@ -1,0 +1,2260 @@
+{
+  "schema": 1,
+  "frameSize": [
+    256,
+    256
+  ],
+  "poses": [
+    "idle",
+    "walk1",
+    "walk2",
+    "talk_happy",
+    "talk_annoyed",
+    "surprised",
+    "focused_use",
+    "sit",
+    "wave"
+  ],
+  "characters": [
+    {
+      "character": "luffy",
+      "source": "tools/launcher-room/action-source-png/luffy.png",
+      "sourceSha256": "92e95ea03ebd6d1c6f72caaf0c2ba397e245d8df2e7a246fd4c15a6216758fbc",
+      "sourcePixels": [
+        1254,
+        1254
+      ],
+      "poseOverrideSha256": {
+        "walk2": "6a176b7e77354c7b73358542d66565804b885367cae59b5817da7b8e81ed8757"
+      },
+      "cuts": {
+        "x": [
+          452,
+          819
+        ],
+        "y": [
+          419,
+          828
+        ],
+        "occupancy": {
+          "x": [
+            0,
+            0
+          ],
+          "y": [
+            0,
+            0
+          ]
+        }
+      },
+      "scale": 0.584541,
+      "frames": [
+        {
+          "pose": "idle",
+          "path": "public/images/launcher_room/action_frames/luffy/idle.webp",
+          "bytes": 39818,
+          "sha256": "a6456783afe677a03e1053bd5989d850a6befabd0f2c0c573d91b7f4d8cc6a4c",
+          "source": "tools/launcher-room/action-source-png/luffy.png",
+          "sourcePng": "tools/launcher-room/action-source-png/luffy.png",
+          "sourceSha256": "92e95ea03ebd6d1c6f72caaf0c2ba397e245d8df2e7a246fd4c15a6216758fbc",
+          "sourceRegion": [
+            0,
+            0,
+            452,
+            419
+          ],
+          "sourceBounds": [
+            118,
+            8,
+            354,
+            416
+          ]
+        },
+        {
+          "pose": "walk1",
+          "path": "public/images/launcher_room/action_frames/luffy/walk1.webp",
+          "bytes": 40368,
+          "sha256": "548b459dae0edac8abb4930df64732234e82450c6c74a1357b1eeafc8304a0e2",
+          "source": "tools/launcher-room/action-source-png/luffy.png",
+          "sourcePng": "tools/launcher-room/action-source-png/luffy.png",
+          "sourceSha256": "92e95ea03ebd6d1c6f72caaf0c2ba397e245d8df2e7a246fd4c15a6216758fbc",
+          "sourceRegion": [
+            452,
+            0,
+            819,
+            419
+          ],
+          "sourceBounds": [
+            76,
+            10,
+            305,
+            411
+          ]
+        },
+        {
+          "pose": "walk2",
+          "path": "public/images/launcher_room/action_frames/luffy/walk2.webp",
+          "bytes": 37740,
+          "sha256": "cc6e6b0561a6a1f79ae7a05340f01c8b8b4449c16783ed50530f4fe1e01a31b2",
+          "source": "tools/launcher-room/action-source-png/luffy-walk2.png",
+          "sourcePng": "tools/launcher-room/action-source-png/luffy-walk2.png",
+          "sourceSha256": "6a176b7e77354c7b73358542d66565804b885367cae59b5817da7b8e81ed8757",
+          "sourceRegion": [
+            0,
+            0,
+            1145,
+            1374
+          ],
+          "sourceBounds": [
+            213,
+            47,
+            941,
+            1329
+          ]
+        },
+        {
+          "pose": "talk_happy",
+          "path": "public/images/launcher_room/action_frames/luffy/talk_happy.webp",
+          "bytes": 47356,
+          "sha256": "cbbd41df8be7da44cf27b8e9af8aff65f8e74fbc65f11accd084ed38f52e4851",
+          "source": "tools/launcher-room/action-source-png/luffy.png",
+          "sourcePng": "tools/launcher-room/action-source-png/luffy.png",
+          "sourceSha256": "92e95ea03ebd6d1c6f72caaf0c2ba397e245d8df2e7a246fd4c15a6216758fbc",
+          "sourceRegion": [
+            0,
+            419,
+            452,
+            828
+          ],
+          "sourceBounds": [
+            83,
+            5,
+            388,
+            409
+          ]
+        },
+        {
+          "pose": "talk_annoyed",
+          "path": "public/images/launcher_room/action_frames/luffy/talk_annoyed.webp",
+          "bytes": 43362,
+          "sha256": "bf30faca69725245e0ccad7021a0472973a23bd79c92a09251eed629f81d91ff",
+          "source": "tools/launcher-room/action-source-png/luffy.png",
+          "sourcePng": "tools/launcher-room/action-source-png/luffy.png",
+          "sourceSha256": "92e95ea03ebd6d1c6f72caaf0c2ba397e245d8df2e7a246fd4c15a6216758fbc",
+          "sourceRegion": [
+            452,
+            419,
+            819,
+            828
+          ],
+          "sourceBounds": [
+            64,
+            5,
+            309,
+            409
+          ]
+        },
+        {
+          "pose": "surprised",
+          "path": "public/images/launcher_room/action_frames/luffy/surprised.webp",
+          "bytes": 45900,
+          "sha256": "087d4cff551e912ff7cab3a3dc28847e9c3607f56ec145cf87a44f0130f789c9",
+          "source": "tools/launcher-room/action-source-png/luffy.png",
+          "sourcePng": "tools/launcher-room/action-source-png/luffy.png",
+          "sourceSha256": "92e95ea03ebd6d1c6f72caaf0c2ba397e245d8df2e7a246fd4c15a6216758fbc",
+          "sourceRegion": [
+            819,
+            419,
+            1254,
+            828
+          ],
+          "sourceBounds": [
+            82,
+            5,
+            341,
+            408
+          ]
+        },
+        {
+          "pose": "focused_use",
+          "path": "public/images/launcher_room/action_frames/luffy/focused_use.webp",
+          "bytes": 41550,
+          "sha256": "de74b92043592456ac32ab5857d97b5bb675a9b277eb69979bd102f10f7fe429",
+          "source": "tools/launcher-room/action-source-png/luffy.png",
+          "sourcePng": "tools/launcher-room/action-source-png/luffy.png",
+          "sourceSha256": "92e95ea03ebd6d1c6f72caaf0c2ba397e245d8df2e7a246fd4c15a6216758fbc",
+          "sourceRegion": [
+            0,
+            828,
+            452,
+            1254
+          ],
+          "sourceBounds": [
+            116,
+            9,
+            389,
+            417
+          ]
+        },
+        {
+          "pose": "sit",
+          "path": "public/images/launcher_room/action_frames/luffy/sit.webp",
+          "bytes": 37202,
+          "sha256": "ba34d7825897904f123d3c72f27c4e5fb9d8f20f48e28511bc0a8429bbef88dd",
+          "source": "tools/launcher-room/action-source-png/luffy.png",
+          "sourcePng": "tools/launcher-room/action-source-png/luffy.png",
+          "sourceSha256": "92e95ea03ebd6d1c6f72caaf0c2ba397e245d8df2e7a246fd4c15a6216758fbc",
+          "sourceRegion": [
+            452,
+            828,
+            819,
+            1254
+          ],
+          "sourceBounds": [
+            65,
+            29,
+            307,
+            410
+          ]
+        },
+        {
+          "pose": "wave",
+          "path": "public/images/launcher_room/action_frames/luffy/wave.webp",
+          "bytes": 42904,
+          "sha256": "4cb64fd1514f87869db16eaf045e3d6cadeef214300c9f0e204eff5f6f0ae42e",
+          "source": "tools/launcher-room/action-source-png/luffy.png",
+          "sourcePng": "tools/launcher-room/action-source-png/luffy.png",
+          "sourceSha256": "92e95ea03ebd6d1c6f72caaf0c2ba397e245d8df2e7a246fd4c15a6216758fbc",
+          "sourceRegion": [
+            819,
+            828,
+            1254,
+            1254
+          ],
+          "sourceBounds": [
+            59,
+            1,
+            335,
+            415
+          ]
+        }
+      ]
+    },
+    {
+      "character": "zoro",
+      "source": "tools/launcher-room/action-source-png/zoro.png",
+      "sourceSha256": "31ed0f449c518418b67042b7f67b198e5d457e7d7c202abf5edb73f22693150e",
+      "sourcePixels": [
+        1222,
+        1287
+      ],
+      "poseOverrideSha256": {
+        "walk2": "2ba2776ce440eba73aa75ea661356188c07ce20ca6eb63bf3521f3ded1e79643"
+      },
+      "cuts": {
+        "x": [
+          422,
+          802
+        ],
+        "y": [
+          433,
+          860
+        ],
+        "occupancy": {
+          "x": [
+            0,
+            0
+          ],
+          "y": [
+            0,
+            0
+          ]
+        }
+      },
+      "scale": 0.574822,
+      "frames": [
+        {
+          "pose": "idle",
+          "path": "public/images/launcher_room/action_frames/zoro/idle.webp",
+          "bytes": 37114,
+          "sha256": "3335d4e7e8a3eb84991cf2f87e52feca267558fc669dff8dcf7ac8c224c14699",
+          "source": "tools/launcher-room/action-source-png/zoro.png",
+          "sourcePng": "tools/launcher-room/action-source-png/zoro.png",
+          "sourceSha256": "31ed0f449c518418b67042b7f67b198e5d457e7d7c202abf5edb73f22693150e",
+          "sourceRegion": [
+            0,
+            0,
+            422,
+            433
+          ],
+          "sourceBounds": [
+            113,
+            12,
+            306,
+            429
+          ]
+        },
+        {
+          "pose": "walk1",
+          "path": "public/images/launcher_room/action_frames/zoro/walk1.webp",
+          "bytes": 39646,
+          "sha256": "5a8e2c80036e1e75c60e6af006802005f99483786309f7183332d881b2addd7a",
+          "source": "tools/launcher-room/action-source-png/zoro.png",
+          "sourcePng": "tools/launcher-room/action-source-png/zoro.png",
+          "sourceSha256": "31ed0f449c518418b67042b7f67b198e5d457e7d7c202abf5edb73f22693150e",
+          "sourceRegion": [
+            422,
+            0,
+            802,
+            433
+          ],
+          "sourceBounds": [
+            72,
+            12,
+            307,
+            428
+          ]
+        },
+        {
+          "pose": "walk2",
+          "path": "public/images/launcher_room/action_frames/zoro/walk2.webp",
+          "bytes": 34794,
+          "sha256": "ade8929951d7e620729244c17b7fa13ee086a83d351ea26f80edae52bf0d8757",
+          "source": "tools/launcher-room/action-source-png/zoro-walk2.png",
+          "sourcePng": "tools/launcher-room/action-source-png/zoro-walk2.png",
+          "sourceSha256": "2ba2776ce440eba73aa75ea661356188c07ce20ca6eb63bf3521f3ded1e79643",
+          "sourceRegion": [
+            0,
+            0,
+            1222,
+            1287
+          ],
+          "sourceBounds": [
+            302,
+            34,
+            927,
+            1251
+          ]
+        },
+        {
+          "pose": "talk_happy",
+          "path": "public/images/launcher_room/action_frames/zoro/talk_happy.webp",
+          "bytes": 42638,
+          "sha256": "580e1d4d60dffb0727852a6c0ffa74572ef86c7b115cdfdaa8d90c13e575fbbe",
+          "source": "tools/launcher-room/action-source-png/zoro.png",
+          "sourcePng": "tools/launcher-room/action-source-png/zoro.png",
+          "sourceSha256": "31ed0f449c518418b67042b7f67b198e5d457e7d7c202abf5edb73f22693150e",
+          "sourceRegion": [
+            0,
+            433,
+            422,
+            860
+          ],
+          "sourceBounds": [
+            102,
+            8,
+            352,
+            426
+          ]
+        },
+        {
+          "pose": "talk_annoyed",
+          "path": "public/images/launcher_room/action_frames/zoro/talk_annoyed.webp",
+          "bytes": 42060,
+          "sha256": "ecf035a2279877a8e5f02cf3f697e7b63c1e476515564ef2b5fc42117288b822",
+          "source": "tools/launcher-room/action-source-png/zoro.png",
+          "sourcePng": "tools/launcher-room/action-source-png/zoro.png",
+          "sourceSha256": "31ed0f449c518418b67042b7f67b198e5d457e7d7c202abf5edb73f22693150e",
+          "sourceRegion": [
+            422,
+            433,
+            802,
+            860
+          ],
+          "sourceBounds": [
+            77,
+            6,
+            302,
+            426
+          ]
+        },
+        {
+          "pose": "surprised",
+          "path": "public/images/launcher_room/action_frames/zoro/surprised.webp",
+          "bytes": 44060,
+          "sha256": "1a49d297a4ce36f80e5f4864043f6bc0fefbbf847f66bee0b8dad65e88fdfbb1",
+          "source": "tools/launcher-room/action-source-png/zoro.png",
+          "sourcePng": "tools/launcher-room/action-source-png/zoro.png",
+          "sourceSha256": "31ed0f449c518418b67042b7f67b198e5d457e7d7c202abf5edb73f22693150e",
+          "sourceRegion": [
+            802,
+            433,
+            1222,
+            860
+          ],
+          "sourceBounds": [
+            81,
+            5,
+            353,
+            426
+          ]
+        },
+        {
+          "pose": "focused_use",
+          "path": "public/images/launcher_room/action_frames/zoro/focused_use.webp",
+          "bytes": 40376,
+          "sha256": "5f938f296831adaa53624a1956e534649daec19d8022cb4ee5dd8d297f23b9d9",
+          "source": "tools/launcher-room/action-source-png/zoro.png",
+          "sourcePng": "tools/launcher-room/action-source-png/zoro.png",
+          "sourceSha256": "31ed0f449c518418b67042b7f67b198e5d457e7d7c202abf5edb73f22693150e",
+          "sourceRegion": [
+            0,
+            860,
+            422,
+            1287
+          ],
+          "sourceBounds": [
+            73,
+            6,
+            322,
+            408
+          ]
+        },
+        {
+          "pose": "sit",
+          "path": "public/images/launcher_room/action_frames/zoro/sit.webp",
+          "bytes": 36370,
+          "sha256": "5fa6efa8108e057e9400d56bf6e21ce460cda23bca94781bf93ca278f2270783",
+          "source": "tools/launcher-room/action-source-png/zoro.png",
+          "sourcePng": "tools/launcher-room/action-source-png/zoro.png",
+          "sourceSha256": "31ed0f449c518418b67042b7f67b198e5d457e7d7c202abf5edb73f22693150e",
+          "sourceRegion": [
+            422,
+            860,
+            802,
+            1287
+          ],
+          "sourceBounds": [
+            79,
+            5,
+            291,
+            406
+          ]
+        },
+        {
+          "pose": "wave",
+          "path": "public/images/launcher_room/action_frames/zoro/wave.webp",
+          "bytes": 39530,
+          "sha256": "0296634ea069bee4d993e4f7089e92c207c22b3884b4c0fe363f56d9f2e0a730",
+          "source": "tools/launcher-room/action-source-png/zoro.png",
+          "sourcePng": "tools/launcher-room/action-source-png/zoro.png",
+          "sourceSha256": "31ed0f449c518418b67042b7f67b198e5d457e7d7c202abf5edb73f22693150e",
+          "sourceRegion": [
+            802,
+            860,
+            1222,
+            1287
+          ],
+          "sourceBounds": [
+            75,
+            3,
+            333,
+            409
+          ]
+        }
+      ]
+    },
+    {
+      "character": "nami",
+      "source": "tools/launcher-room/action-source-png/nami.png",
+      "sourceSha256": "2518f7a489fd536621e2be5fe7d1405dbaaef5a50d92c4c87567c64153724262",
+      "sourcePixels": [
+        1226,
+        1283
+      ],
+      "poseOverrideSha256": {
+        "walk2": "220ef77a6ee777c90de5ee8fd4c16d5759af9fc2c2be2372c35b6963827b37bd"
+      },
+      "cuts": {
+        "x": [
+          433,
+          805
+        ],
+        "y": [
+          431,
+          853
+        ],
+        "occupancy": {
+          "x": [
+            0,
+            0
+          ],
+          "y": [
+            0,
+            5
+          ]
+        }
+      },
+      "scale": 0.57619,
+      "frames": [
+        {
+          "pose": "idle",
+          "path": "public/images/launcher_room/action_frames/nami/idle.webp",
+          "bytes": 33248,
+          "sha256": "13c2be522f4cebbb6fefeec7929d7db4735ef1a2876d88c02fe81e31e8ee9922",
+          "source": "tools/launcher-room/action-source-png/nami.png",
+          "sourcePng": "tools/launcher-room/action-source-png/nami.png",
+          "sourceSha256": "2518f7a489fd536621e2be5fe7d1405dbaaef5a50d92c4c87567c64153724262",
+          "sourceRegion": [
+            0,
+            0,
+            433,
+            431
+          ],
+          "sourceBounds": [
+            129,
+            10,
+            317,
+            430
+          ]
+        },
+        {
+          "pose": "walk1",
+          "path": "public/images/launcher_room/action_frames/nami/walk1.webp",
+          "bytes": 34490,
+          "sha256": "f41bdcdf5b07025005e51baf5d3a2eb01a379e7ec091641ace76b02f127d26f4",
+          "source": "tools/launcher-room/action-source-png/nami.png",
+          "sourcePng": "tools/launcher-room/action-source-png/nami.png",
+          "sourceSha256": "2518f7a489fd536621e2be5fe7d1405dbaaef5a50d92c4c87567c64153724262",
+          "sourceRegion": [
+            433,
+            0,
+            805,
+            431
+          ],
+          "sourceBounds": [
+            74,
+            10,
+            282,
+            426
+          ]
+        },
+        {
+          "pose": "walk2",
+          "path": "public/images/launcher_room/action_frames/nami/walk2.webp",
+          "bytes": 30050,
+          "sha256": "84cf8b176c696dc9ca361a33d140f9f0b8d3884980b05d177f46bd2c65387f06",
+          "source": "tools/launcher-room/action-source-png/nami-walk2.png",
+          "sourcePng": "tools/launcher-room/action-source-png/nami-walk2.png",
+          "sourceSha256": "220ef77a6ee777c90de5ee8fd4c16d5759af9fc2c2be2372c35b6963827b37bd",
+          "sourceRegion": [
+            0,
+            0,
+            1024,
+            1536
+          ],
+          "sourceBounds": [
+            154,
+            55,
+            870,
+            1472
+          ]
+        },
+        {
+          "pose": "talk_happy",
+          "path": "public/images/launcher_room/action_frames/nami/talk_happy.webp",
+          "bytes": 36568,
+          "sha256": "74c43c284c0e07b0142d4f75b29281bc3339ea9cdc55a5abe382b94f37bce842",
+          "source": "tools/launcher-room/action-source-png/nami.png",
+          "sourcePng": "tools/launcher-room/action-source-png/nami.png",
+          "sourceSha256": "2518f7a489fd536621e2be5fe7d1405dbaaef5a50d92c4c87567c64153724262",
+          "sourceRegion": [
+            0,
+            431,
+            433,
+            853
+          ],
+          "sourceBounds": [
+            117,
+            3,
+            367,
+            422
+          ]
+        },
+        {
+          "pose": "talk_annoyed",
+          "path": "public/images/launcher_room/action_frames/nami/talk_annoyed.webp",
+          "bytes": 36620,
+          "sha256": "9e715169fe40d99fd266be7c8e03f43e4f574f4dfe5630401e7a9dfaaeccfbb0",
+          "source": "tools/launcher-room/action-source-png/nami.png",
+          "sourcePng": "tools/launcher-room/action-source-png/nami.png",
+          "sourceSha256": "2518f7a489fd536621e2be5fe7d1405dbaaef5a50d92c4c87567c64153724262",
+          "sourceRegion": [
+            433,
+            431,
+            805,
+            853
+          ],
+          "sourceBounds": [
+            69,
+            4,
+            312,
+            421
+          ]
+        },
+        {
+          "pose": "surprised",
+          "path": "public/images/launcher_room/action_frames/nami/surprised.webp",
+          "bytes": 37742,
+          "sha256": "36ad9e8022a0336780be55e9b3ebb9525396023cad6e0b497cab58d1c962ace2",
+          "source": "tools/launcher-room/action-source-png/nami.png",
+          "sourcePng": "tools/launcher-room/action-source-png/nami.png",
+          "sourceSha256": "2518f7a489fd536621e2be5fe7d1405dbaaef5a50d92c4c87567c64153724262",
+          "sourceRegion": [
+            805,
+            431,
+            1226,
+            853
+          ],
+          "sourceBounds": [
+            78,
+            5,
+            304,
+            417
+          ]
+        },
+        {
+          "pose": "focused_use",
+          "path": "public/images/launcher_room/action_frames/nami/focused_use.webp",
+          "bytes": 35658,
+          "sha256": "87ec5ff94677dd21276cea5afd199ae58fb6a6cd1b25cb091132a171381f0667",
+          "source": "tools/launcher-room/action-source-png/nami.png",
+          "sourcePng": "tools/launcher-room/action-source-png/nami.png",
+          "sourceSha256": "2518f7a489fd536621e2be5fe7d1405dbaaef5a50d92c4c87567c64153724262",
+          "sourceRegion": [
+            0,
+            853,
+            433,
+            1283
+          ],
+          "sourceBounds": [
+            117,
+            0,
+            350,
+            412
+          ]
+        },
+        {
+          "pose": "sit",
+          "path": "public/images/launcher_room/action_frames/nami/sit.webp",
+          "bytes": 31774,
+          "sha256": "3e80966c5aab4991e4fcff46c7f883085304e0900d06fc0d03a72d668b81c7bf",
+          "source": "tools/launcher-room/action-source-png/nami.png",
+          "sourcePng": "tools/launcher-room/action-source-png/nami.png",
+          "sourceSha256": "2518f7a489fd536621e2be5fe7d1405dbaaef5a50d92c4c87567c64153724262",
+          "sourceRegion": [
+            433,
+            853,
+            805,
+            1283
+          ],
+          "sourceBounds": [
+            67,
+            9,
+            271,
+            408
+          ]
+        },
+        {
+          "pose": "wave",
+          "path": "public/images/launcher_room/action_frames/nami/wave.webp",
+          "bytes": 33876,
+          "sha256": "bf75c120cedc738765132352530169385563f0db2f1bcd4d2d14b0058a49d95f",
+          "source": "tools/launcher-room/action-source-png/nami.png",
+          "sourcePng": "tools/launcher-room/action-source-png/nami.png",
+          "sourceSha256": "2518f7a489fd536621e2be5fe7d1405dbaaef5a50d92c4c87567c64153724262",
+          "sourceRegion": [
+            805,
+            853,
+            1226,
+            1283
+          ],
+          "sourceBounds": [
+            61,
+            1,
+            297,
+            415
+          ]
+        }
+      ]
+    },
+    {
+      "character": "usopp",
+      "source": "tools/launcher-room/action-source-png/usopp.png",
+      "sourceSha256": "aba8993af31d6faa9bb19086404edd29d1b3d9889bda15d32262bb505ada7cb0",
+      "sourcePixels": [
+        1223,
+        1286
+      ],
+      "poseOverrideSha256": {
+        "walk2": "ae5d04b1c747b537fe9fb558c62f220606e7fa8c953ffd09b7df73ba5cc7f0bb"
+      },
+      "cuts": {
+        "x": [
+          433,
+          827
+        ],
+        "y": [
+          431,
+          858
+        ],
+        "occupancy": {
+          "x": [
+            0,
+            0
+          ],
+          "y": [
+            0,
+            0
+          ]
+        }
+      },
+      "scale": 0.574822,
+      "frames": [
+        {
+          "pose": "idle",
+          "path": "public/images/launcher_room/action_frames/usopp/idle.webp",
+          "bytes": 45498,
+          "sha256": "a48b887d1fb8ff9c5d42dd25fd2d4af3df2f05b0daea9c9e9b44359323ea45f7",
+          "source": "tools/launcher-room/action-source-png/usopp.png",
+          "sourcePng": "tools/launcher-room/action-source-png/usopp.png",
+          "sourceSha256": "aba8993af31d6faa9bb19086404edd29d1b3d9889bda15d32262bb505ada7cb0",
+          "sourceRegion": [
+            0,
+            0,
+            433,
+            431
+          ],
+          "sourceBounds": [
+            97,
+            6,
+            376,
+            427
+          ]
+        },
+        {
+          "pose": "walk1",
+          "path": "public/images/launcher_room/action_frames/usopp/walk1.webp",
+          "bytes": 45788,
+          "sha256": "7c7ff92a5c47acda7ac68e88cdf1cb4309666421c394d11a201b9f9437753dbc",
+          "source": "tools/launcher-room/action-source-png/usopp.png",
+          "sourcePng": "tools/launcher-room/action-source-png/usopp.png",
+          "sourceSha256": "aba8993af31d6faa9bb19086404edd29d1b3d9889bda15d32262bb505ada7cb0",
+          "sourceRegion": [
+            433,
+            0,
+            827,
+            431
+          ],
+          "sourceBounds": [
+            41,
+            6,
+            321,
+            424
+          ]
+        },
+        {
+          "pose": "walk2",
+          "path": "public/images/launcher_room/action_frames/usopp/walk2.webp",
+          "bytes": 33764,
+          "sha256": "fb77ecf425930e6e6e6b146e5fd50a339a555d50022ef00b8bddd93d3e75da5a",
+          "source": "tools/launcher-room/action-source-png/usopp-walk2.png",
+          "sourcePng": "tools/launcher-room/action-source-png/usopp-walk2.png",
+          "sourceSha256": "ae5d04b1c747b537fe9fb558c62f220606e7fa8c953ffd09b7df73ba5cc7f0bb",
+          "sourceRegion": [
+            0,
+            0,
+            1024,
+            1536
+          ],
+          "sourceBounds": [
+            91,
+            27,
+            969,
+            1506
+          ]
+        },
+        {
+          "pose": "talk_happy",
+          "path": "public/images/launcher_room/action_frames/usopp/talk_happy.webp",
+          "bytes": 45558,
+          "sha256": "e860faacde3a71cb0e18c008c3f47aeffd9bb6c4f9baa91ab980550fcb82e11c",
+          "source": "tools/launcher-room/action-source-png/usopp.png",
+          "sourcePng": "tools/launcher-room/action-source-png/usopp.png",
+          "sourceSha256": "aba8993af31d6faa9bb19086404edd29d1b3d9889bda15d32262bb505ada7cb0",
+          "sourceRegion": [
+            0,
+            431,
+            433,
+            858
+          ],
+          "sourceBounds": [
+            71,
+            5,
+            395,
+            426
+          ]
+        },
+        {
+          "pose": "talk_annoyed",
+          "path": "public/images/launcher_room/action_frames/usopp/talk_annoyed.webp",
+          "bytes": 49076,
+          "sha256": "5db1e5f1fae3b9be196f5b5e397668fa01f039fe3593f27b364643f008ee6b5f",
+          "source": "tools/launcher-room/action-source-png/usopp.png",
+          "sourcePng": "tools/launcher-room/action-source-png/usopp.png",
+          "sourceSha256": "aba8993af31d6faa9bb19086404edd29d1b3d9889bda15d32262bb505ada7cb0",
+          "sourceRegion": [
+            433,
+            431,
+            827,
+            858
+          ],
+          "sourceBounds": [
+            51,
+            5,
+            346,
+            426
+          ]
+        },
+        {
+          "pose": "surprised",
+          "path": "public/images/launcher_room/action_frames/usopp/surprised.webp",
+          "bytes": 47610,
+          "sha256": "8ffa31a720e3b11280ddb1390f4c40e0003585258003badfa32ff9bc63fe8559",
+          "source": "tools/launcher-room/action-source-png/usopp.png",
+          "sourcePng": "tools/launcher-room/action-source-png/usopp.png",
+          "sourceSha256": "aba8993af31d6faa9bb19086404edd29d1b3d9889bda15d32262bb505ada7cb0",
+          "sourceRegion": [
+            827,
+            431,
+            1223,
+            858
+          ],
+          "sourceBounds": [
+            50,
+            13,
+            363,
+            425
+          ]
+        },
+        {
+          "pose": "focused_use",
+          "path": "public/images/launcher_room/action_frames/usopp/focused_use.webp",
+          "bytes": 43462,
+          "sha256": "bf97179db012d95967d5285309b76354d73151af29a6b3b1e3127e162c8bb947",
+          "source": "tools/launcher-room/action-source-png/usopp.png",
+          "sourcePng": "tools/launcher-room/action-source-png/usopp.png",
+          "sourceSha256": "aba8993af31d6faa9bb19086404edd29d1b3d9889bda15d32262bb505ada7cb0",
+          "sourceRegion": [
+            0,
+            858,
+            433,
+            1286
+          ],
+          "sourceBounds": [
+            54,
+            20,
+            355,
+            409
+          ]
+        },
+        {
+          "pose": "sit",
+          "path": "public/images/launcher_room/action_frames/usopp/sit.webp",
+          "bytes": 40822,
+          "sha256": "7a9ef68157fa1d9784dbea39d158e822c7162f75bd9e6c11ce86f6afeb942da8",
+          "source": "tools/launcher-room/action-source-png/usopp.png",
+          "sourcePng": "tools/launcher-room/action-source-png/usopp.png",
+          "sourceSha256": "aba8993af31d6faa9bb19086404edd29d1b3d9889bda15d32262bb505ada7cb0",
+          "sourceRegion": [
+            433,
+            858,
+            827,
+            1286
+          ],
+          "sourceBounds": [
+            39,
+            2,
+            325,
+            416
+          ]
+        },
+        {
+          "pose": "wave",
+          "path": "public/images/launcher_room/action_frames/usopp/wave.webp",
+          "bytes": 46806,
+          "sha256": "2676446b0da996e4204e20c3dee14eb1ac3857caea17826e2d001d08e8cc3d34",
+          "source": "tools/launcher-room/action-source-png/usopp.png",
+          "sourcePng": "tools/launcher-room/action-source-png/usopp.png",
+          "sourceSha256": "aba8993af31d6faa9bb19086404edd29d1b3d9889bda15d32262bb505ada7cb0",
+          "sourceRegion": [
+            827,
+            858,
+            1223,
+            1286
+          ],
+          "sourceBounds": [
+            50,
+            2,
+            348,
+            418
+          ]
+        }
+      ]
+    },
+    {
+      "character": "sanji",
+      "source": "tools/launcher-room/action-source-png/sanji.png",
+      "sourceSha256": "0e894f0643ee242679d1232debcefd0c2bc949222d4763c8ca1bd5c263acdb39",
+      "sourcePixels": [
+        1222,
+        1287
+      ],
+      "poseOverrideSha256": {
+        "walk2": "899d8e86a47f93bf7194f8abdb31b2c042353d4566ae27e5ffd138e2f83c89a9"
+      },
+      "cuts": {
+        "x": [
+          429,
+          823
+        ],
+        "y": [
+          428,
+          854
+        ],
+        "occupancy": {
+          "x": [
+            0,
+            0
+          ],
+          "y": [
+            0,
+            0
+          ]
+        }
+      },
+      "scale": 0.594595,
+      "frames": [
+        {
+          "pose": "idle",
+          "path": "public/images/launcher_room/action_frames/sanji/idle.webp",
+          "bytes": 32386,
+          "sha256": "e7ec847e75bc2ca53781263854a7b53d8c9c7b7447c7da5dfd9a162f0afe5075",
+          "source": "tools/launcher-room/action-source-png/sanji.png",
+          "sourcePng": "tools/launcher-room/action-source-png/sanji.png",
+          "sourceSha256": "0e894f0643ee242679d1232debcefd0c2bc949222d4763c8ca1bd5c263acdb39",
+          "sourceRegion": [
+            0,
+            0,
+            429,
+            428
+          ],
+          "sourceBounds": [
+            134,
+            12,
+            329,
+            419
+          ]
+        },
+        {
+          "pose": "walk1",
+          "path": "public/images/launcher_room/action_frames/sanji/walk1.webp",
+          "bytes": 33818,
+          "sha256": "f7bf03b8d7edcb9465593dede9ba2387f7402e6b1f91b1ed38b12c2b314a851c",
+          "source": "tools/launcher-room/action-source-png/sanji.png",
+          "sourcePng": "tools/launcher-room/action-source-png/sanji.png",
+          "sourceSha256": "0e894f0643ee242679d1232debcefd0c2bc949222d4763c8ca1bd5c263acdb39",
+          "sourceRegion": [
+            429,
+            0,
+            823,
+            428
+          ],
+          "sourceBounds": [
+            77,
+            14,
+            291,
+            415
+          ]
+        },
+        {
+          "pose": "walk2",
+          "path": "public/images/launcher_room/action_frames/sanji/walk2.webp",
+          "bytes": 29656,
+          "sha256": "ffcb821ea3bb310b5af54b831be55494e523e1dd941d5cd280657cd351925884",
+          "source": "tools/launcher-room/action-source-png/sanji-walk2.png",
+          "sourcePng": "tools/launcher-room/action-source-png/sanji-walk2.png",
+          "sourceSha256": "899d8e86a47f93bf7194f8abdb31b2c042353d4566ae27e5ffd138e2f83c89a9",
+          "sourceRegion": [
+            0,
+            0,
+            1024,
+            1536
+          ],
+          "sourceBounds": [
+            137,
+            64,
+            888,
+            1459
+          ]
+        },
+        {
+          "pose": "talk_happy",
+          "path": "public/images/launcher_room/action_frames/sanji/talk_happy.webp",
+          "bytes": 36906,
+          "sha256": "1aeae675cef8924b1def8097b9dfb7e7e9e8752ab91ff65cc4782b4a7b454276",
+          "source": "tools/launcher-room/action-source-png/sanji.png",
+          "sourcePng": "tools/launcher-room/action-source-png/sanji.png",
+          "sourceSha256": "0e894f0643ee242679d1232debcefd0c2bc949222d4763c8ca1bd5c263acdb39",
+          "sourceRegion": [
+            0,
+            428,
+            429,
+            854
+          ],
+          "sourceBounds": [
+            92,
+            10,
+            366,
+            417
+          ]
+        },
+        {
+          "pose": "talk_annoyed",
+          "path": "public/images/launcher_room/action_frames/sanji/talk_annoyed.webp",
+          "bytes": 37132,
+          "sha256": "748789bf410352c0c4a433385233e668739eb772945a0fdc28042e3b17109b60",
+          "source": "tools/launcher-room/action-source-png/sanji.png",
+          "sourcePng": "tools/launcher-room/action-source-png/sanji.png",
+          "sourceSha256": "0e894f0643ee242679d1232debcefd0c2bc949222d4763c8ca1bd5c263acdb39",
+          "sourceRegion": [
+            429,
+            428,
+            823,
+            854
+          ],
+          "sourceBounds": [
+            70,
+            14,
+            357,
+            419
+          ]
+        },
+        {
+          "pose": "surprised",
+          "path": "public/images/launcher_room/action_frames/sanji/surprised.webp",
+          "bytes": 39816,
+          "sha256": "255d04657d456c31b00900e28ab921f13ab695c5d0f21d88b8d4b59b1da59ddb",
+          "source": "tools/launcher-room/action-source-png/sanji.png",
+          "sourcePng": "tools/launcher-room/action-source-png/sanji.png",
+          "sourceSha256": "0e894f0643ee242679d1232debcefd0c2bc949222d4763c8ca1bd5c263acdb39",
+          "sourceRegion": [
+            823,
+            428,
+            1222,
+            854
+          ],
+          "sourceBounds": [
+            42,
+            12,
+            322,
+            419
+          ]
+        },
+        {
+          "pose": "focused_use",
+          "path": "public/images/launcher_room/action_frames/sanji/focused_use.webp",
+          "bytes": 33650,
+          "sha256": "6c3d6d2352688e7ae60249b36055887992afe79903f87b7ee67b8088ed0bb221",
+          "source": "tools/launcher-room/action-source-png/sanji.png",
+          "sourcePng": "tools/launcher-room/action-source-png/sanji.png",
+          "sourceSha256": "0e894f0643ee242679d1232debcefd0c2bc949222d4763c8ca1bd5c263acdb39",
+          "sourceRegion": [
+            0,
+            854,
+            429,
+            1287
+          ],
+          "sourceBounds": [
+            117,
+            12,
+            328,
+            412
+          ]
+        },
+        {
+          "pose": "sit",
+          "path": "public/images/launcher_room/action_frames/sanji/sit.webp",
+          "bytes": 33618,
+          "sha256": "dabbde9af8c812168f1b7ff421724053664e984ff312f41befa0b14e68ff0905",
+          "source": "tools/launcher-room/action-source-png/sanji.png",
+          "sourcePng": "tools/launcher-room/action-source-png/sanji.png",
+          "sourceSha256": "0e894f0643ee242679d1232debcefd0c2bc949222d4763c8ca1bd5c263acdb39",
+          "sourceRegion": [
+            429,
+            854,
+            823,
+            1287
+          ],
+          "sourceBounds": [
+            64,
+            17,
+            333,
+            405
+          ]
+        },
+        {
+          "pose": "wave",
+          "path": "public/images/launcher_room/action_frames/sanji/wave.webp",
+          "bytes": 33582,
+          "sha256": "502df503eaba809c72bc22db69f2b17a997e8fc47c19ca0e8252c2e77656d9e1",
+          "source": "tools/launcher-room/action-source-png/sanji.png",
+          "sourcePng": "tools/launcher-room/action-source-png/sanji.png",
+          "sourceSha256": "0e894f0643ee242679d1232debcefd0c2bc949222d4763c8ca1bd5c263acdb39",
+          "sourceRegion": [
+            823,
+            854,
+            1222,
+            1287
+          ],
+          "sourceBounds": [
+            38,
+            9,
+            289,
+            414
+          ]
+        }
+      ]
+    },
+    {
+      "character": "chopper",
+      "source": "tools/launcher-room/action-source-png/chopper.png",
+      "sourceSha256": "cf8016ea11e1c1b8cf2fe0afe9ca2df0de7211704f91f460204645f3b51271bc",
+      "sourcePixels": [
+        1223,
+        1286
+      ],
+      "poseOverrideSha256": {
+        "walk2": "071a63411f850b08dd2ffb8c012bf478786b92cfa0411907a472d11674b0cd0e"
+      },
+      "cuts": {
+        "x": [
+          411,
+          810
+        ],
+        "y": [
+          438,
+          862
+        ],
+        "occupancy": {
+          "x": [
+            0,
+            0
+          ],
+          "y": [
+            0,
+            0
+          ]
+        }
+      },
+      "scale": 0.569412,
+      "frames": [
+        {
+          "pose": "idle",
+          "path": "public/images/launcher_room/action_frames/chopper/idle.webp",
+          "bytes": 46824,
+          "sha256": "80d0e6f1040aea92bf126f1ff099a46dace359ef49663fa5e3b4b0112fc998eb",
+          "source": "tools/launcher-room/action-source-png/chopper.png",
+          "sourcePng": "tools/launcher-room/action-source-png/chopper.png",
+          "sourceSha256": "cf8016ea11e1c1b8cf2fe0afe9ca2df0de7211704f91f460204645f3b51271bc",
+          "sourceRegion": [
+            0,
+            0,
+            411,
+            438
+          ],
+          "sourceBounds": [
+            35,
+            9,
+            384,
+            434
+          ]
+        },
+        {
+          "pose": "walk1",
+          "path": "public/images/launcher_room/action_frames/chopper/walk1.webp",
+          "bytes": 45758,
+          "sha256": "dfba499059e6c0369080701f797a7a91dff7504c0ee6b97c8aa9c839a8b809db",
+          "source": "tools/launcher-room/action-source-png/chopper.png",
+          "sourcePng": "tools/launcher-room/action-source-png/chopper.png",
+          "sourceSha256": "cf8016ea11e1c1b8cf2fe0afe9ca2df0de7211704f91f460204645f3b51271bc",
+          "sourceRegion": [
+            411,
+            0,
+            810,
+            438
+          ],
+          "sourceBounds": [
+            31,
+            15,
+            354,
+            433
+          ]
+        },
+        {
+          "pose": "walk2",
+          "path": "public/images/launcher_room/action_frames/chopper/walk2.webp",
+          "bytes": 45844,
+          "sha256": "7c71c7b0b4e5101c1a79512a8bff8ae8797f342fb3c05827635555caab803cb2",
+          "source": "tools/launcher-room/action-source-png/chopper-walk2.png",
+          "sourcePng": "tools/launcher-room/action-source-png/chopper-walk2.png",
+          "sourceSha256": "071a63411f850b08dd2ffb8c012bf478786b92cfa0411907a472d11674b0cd0e",
+          "sourceRegion": [
+            0,
+            0,
+            1223,
+            1286
+          ],
+          "sourceBounds": [
+            86,
+            43,
+            1118,
+            1239
+          ]
+        },
+        {
+          "pose": "talk_happy",
+          "path": "public/images/launcher_room/action_frames/chopper/talk_happy.webp",
+          "bytes": 49246,
+          "sha256": "2eb624c87446ef89d31c6ea37e1dbd8e193b79e8d542049c49dceb769f70f895",
+          "source": "tools/launcher-room/action-source-png/chopper.png",
+          "sourcePng": "tools/launcher-room/action-source-png/chopper.png",
+          "sourceSha256": "cf8016ea11e1c1b8cf2fe0afe9ca2df0de7211704f91f460204645f3b51271bc",
+          "sourceRegion": [
+            0,
+            438,
+            411,
+            862
+          ],
+          "sourceBounds": [
+            24,
+            8,
+            372,
+            422
+          ]
+        },
+        {
+          "pose": "talk_annoyed",
+          "path": "public/images/launcher_room/action_frames/chopper/talk_annoyed.webp",
+          "bytes": 49372,
+          "sha256": "3523c5b6749cd360966b35a6dc62f56a59b1ecb4fe0fc4bf87d7baeabdecd125",
+          "source": "tools/launcher-room/action-source-png/chopper.png",
+          "sourcePng": "tools/launcher-room/action-source-png/chopper.png",
+          "sourceSha256": "cf8016ea11e1c1b8cf2fe0afe9ca2df0de7211704f91f460204645f3b51271bc",
+          "sourceRegion": [
+            411,
+            438,
+            810,
+            862
+          ],
+          "sourceBounds": [
+            21,
+            9,
+            382,
+            423
+          ]
+        },
+        {
+          "pose": "surprised",
+          "path": "public/images/launcher_room/action_frames/chopper/surprised.webp",
+          "bytes": 48228,
+          "sha256": "5db3765fa8cbac7d0dbd54127c27f1182e72470913d0790b0bb5df8e868a8cb4",
+          "source": "tools/launcher-room/action-source-png/chopper.png",
+          "sourcePng": "tools/launcher-room/action-source-png/chopper.png",
+          "sourceSha256": "cf8016ea11e1c1b8cf2fe0afe9ca2df0de7211704f91f460204645f3b51271bc",
+          "sourceRegion": [
+            810,
+            438,
+            1223,
+            862
+          ],
+          "sourceBounds": [
+            20,
+            5,
+            372,
+            418
+          ]
+        },
+        {
+          "pose": "focused_use",
+          "path": "public/images/launcher_room/action_frames/chopper/focused_use.webp",
+          "bytes": 44560,
+          "sha256": "16b238b68a52e0f409c37abea3092749e22db30a6c9b40a5ec978d819389836b",
+          "source": "tools/launcher-room/action-source-png/chopper.png",
+          "sourcePng": "tools/launcher-room/action-source-png/chopper.png",
+          "sourceSha256": "cf8016ea11e1c1b8cf2fe0afe9ca2df0de7211704f91f460204645f3b51271bc",
+          "sourceRegion": [
+            0,
+            862,
+            411,
+            1286
+          ],
+          "sourceBounds": [
+            39,
+            5,
+            391,
+            402
+          ]
+        },
+        {
+          "pose": "sit",
+          "path": "public/images/launcher_room/action_frames/chopper/sit.webp",
+          "bytes": 44248,
+          "sha256": "f6f12f9812a425128cf985d31264524a0c52ca43ae35147247151c7b3a10d886",
+          "source": "tools/launcher-room/action-source-png/chopper.png",
+          "sourcePng": "tools/launcher-room/action-source-png/chopper.png",
+          "sourceSha256": "cf8016ea11e1c1b8cf2fe0afe9ca2df0de7211704f91f460204645f3b51271bc",
+          "sourceRegion": [
+            411,
+            862,
+            810,
+            1286
+          ],
+          "sourceBounds": [
+            31,
+            12,
+            361,
+            397
+          ]
+        },
+        {
+          "pose": "wave",
+          "path": "public/images/launcher_room/action_frames/chopper/wave.webp",
+          "bytes": 43114,
+          "sha256": "4090b7bf1d508733fe877b4b58d441a7eecbfb928ecba92abb654ca06b4d50d0",
+          "source": "tools/launcher-room/action-source-png/chopper.png",
+          "sourcePng": "tools/launcher-room/action-source-png/chopper.png",
+          "sourceSha256": "cf8016ea11e1c1b8cf2fe0afe9ca2df0de7211704f91f460204645f3b51271bc",
+          "sourceRegion": [
+            810,
+            862,
+            1223,
+            1286
+          ],
+          "sourceBounds": [
+            45,
+            3,
+            373,
+            405
+          ]
+        }
+      ]
+    },
+    {
+      "character": "robin",
+      "source": "tools/launcher-room/action-source-png/robin.png",
+      "sourceSha256": "44b7490b3cc018b47bd587089f0e74a60d5114462f5dd6a5a1327f0f8d2ec0d8",
+      "sourcePixels": [
+        1223,
+        1286
+      ],
+      "poseOverrideSha256": {
+        "walk2": "e8f3de6ce5972537592aee6a83421d72b8306d5d096daed49349c682ec697daf"
+      },
+      "cuts": {
+        "x": [
+          428,
+          835
+        ],
+        "y": [
+          447,
+          871
+        ],
+        "occupancy": {
+          "x": [
+            0,
+            0
+          ],
+          "y": [
+            0,
+            16
+          ]
+        }
+      },
+      "scale": 0.55,
+      "frames": [
+        {
+          "pose": "idle",
+          "path": "public/images/launcher_room/action_frames/robin/idle.webp",
+          "bytes": 27162,
+          "sha256": "c8a641df3ed2012b644a9004ba48c4163f143820305e6f3fa3bfb676342a489e",
+          "source": "tools/launcher-room/action-source-png/robin.png",
+          "sourcePng": "tools/launcher-room/action-source-png/robin.png",
+          "sourceSha256": "44b7490b3cc018b47bd587089f0e74a60d5114462f5dd6a5a1327f0f8d2ec0d8",
+          "sourceRegion": [
+            0,
+            0,
+            428,
+            447
+          ],
+          "sourceBounds": [
+            138,
+            5,
+            317,
+            445
+          ]
+        },
+        {
+          "pose": "walk1",
+          "path": "public/images/launcher_room/action_frames/robin/walk1.webp",
+          "bytes": 28482,
+          "sha256": "9d6ffe5512622cd26adcf1a081cc6310b560952b7441124fe1d769551f66796d",
+          "source": "tools/launcher-room/action-source-png/robin.png",
+          "sourcePng": "tools/launcher-room/action-source-png/robin.png",
+          "sourceSha256": "44b7490b3cc018b47bd587089f0e74a60d5114462f5dd6a5a1327f0f8d2ec0d8",
+          "sourceRegion": [
+            428,
+            0,
+            835,
+            447
+          ],
+          "sourceBounds": [
+            77,
+            7,
+            307,
+            441
+          ]
+        },
+        {
+          "pose": "walk2",
+          "path": "public/images/launcher_room/action_frames/robin/walk2.webp",
+          "bytes": 27244,
+          "sha256": "abeb03ea055a2db3118ad0ebd435b805565ccf6478d568906b8264b8674d0134",
+          "source": "tools/launcher-room/action-source-png/robin-walk2.png",
+          "sourcePng": "tools/launcher-room/action-source-png/robin-walk2.png",
+          "sourceSha256": "e8f3de6ce5972537592aee6a83421d72b8306d5d096daed49349c682ec697daf",
+          "sourceRegion": [
+            0,
+            0,
+            1024,
+            1536
+          ],
+          "sourceBounds": [
+            109,
+            25,
+            913,
+            1487
+          ]
+        },
+        {
+          "pose": "talk_happy",
+          "path": "public/images/launcher_room/action_frames/robin/talk_happy.webp",
+          "bytes": 30060,
+          "sha256": "c4397e7c1ab49530e0fdfdb6359ea5be30f5a257745d4e38d9c59ea1334d1094",
+          "source": "tools/launcher-room/action-source-png/robin.png",
+          "sourcePng": "tools/launcher-room/action-source-png/robin.png",
+          "sourceSha256": "44b7490b3cc018b47bd587089f0e74a60d5114462f5dd6a5a1327f0f8d2ec0d8",
+          "sourceRegion": [
+            0,
+            447,
+            428,
+            871
+          ],
+          "sourceBounds": [
+            100,
+            3,
+            367,
+            424
+          ]
+        },
+        {
+          "pose": "talk_annoyed",
+          "path": "public/images/launcher_room/action_frames/robin/talk_annoyed.webp",
+          "bytes": 29294,
+          "sha256": "43f59255ba4ac89f085015708f1569d99481534bab01792a72e8399093a89c4d",
+          "source": "tools/launcher-room/action-source-png/robin.png",
+          "sourcePng": "tools/launcher-room/action-source-png/robin.png",
+          "sourceSha256": "44b7490b3cc018b47bd587089f0e74a60d5114462f5dd6a5a1327f0f8d2ec0d8",
+          "sourceRegion": [
+            428,
+            447,
+            835,
+            871
+          ],
+          "sourceBounds": [
+            63,
+            4,
+            345,
+            424
+          ]
+        },
+        {
+          "pose": "surprised",
+          "path": "public/images/launcher_room/action_frames/robin/surprised.webp",
+          "bytes": 30192,
+          "sha256": "17c0bd685aa5ed558d29543766f177ec864b12f5f6fbe54987e3c1d83251f263",
+          "source": "tools/launcher-room/action-source-png/robin.png",
+          "sourcePng": "tools/launcher-room/action-source-png/robin.png",
+          "sourceSha256": "44b7490b3cc018b47bd587089f0e74a60d5114462f5dd6a5a1327f0f8d2ec0d8",
+          "sourceRegion": [
+            835,
+            447,
+            1223,
+            871
+          ],
+          "sourceBounds": [
+            67,
+            3,
+            291,
+            423
+          ]
+        },
+        {
+          "pose": "focused_use",
+          "path": "public/images/launcher_room/action_frames/robin/focused_use.webp",
+          "bytes": 26326,
+          "sha256": "9ab4c3668256d13d490b6994b2da9c258a26b6d74cc30f34d56d086dc5d05f80",
+          "source": "tools/launcher-room/action-source-png/robin.png",
+          "sourcePng": "tools/launcher-room/action-source-png/robin.png",
+          "sourceSha256": "44b7490b3cc018b47bd587089f0e74a60d5114462f5dd6a5a1327f0f8d2ec0d8",
+          "sourceRegion": [
+            0,
+            871,
+            428,
+            1286
+          ],
+          "sourceBounds": [
+            117,
+            9,
+            316,
+            407
+          ]
+        },
+        {
+          "pose": "sit",
+          "path": "public/images/launcher_room/action_frames/robin/sit.webp",
+          "bytes": 24982,
+          "sha256": "a7885a815198572896e10751119b77a46c82e474c17535093d6907075ef25372",
+          "source": "tools/launcher-room/action-source-png/robin.png",
+          "sourcePng": "tools/launcher-room/action-source-png/robin.png",
+          "sourceSha256": "44b7490b3cc018b47bd587089f0e74a60d5114462f5dd6a5a1327f0f8d2ec0d8",
+          "sourceRegion": [
+            428,
+            871,
+            835,
+            1286
+          ],
+          "sourceBounds": [
+            85,
+            20,
+            318,
+            402
+          ]
+        },
+        {
+          "pose": "wave",
+          "path": "public/images/launcher_room/action_frames/robin/wave.webp",
+          "bytes": 27402,
+          "sha256": "2492bec298e7e7e7caffcf24b1cccce927df693c0b17563a7b1da47fccac355f",
+          "source": "tools/launcher-room/action-source-png/robin.png",
+          "sourcePng": "tools/launcher-room/action-source-png/robin.png",
+          "sourceSha256": "44b7490b3cc018b47bd587089f0e74a60d5114462f5dd6a5a1327f0f8d2ec0d8",
+          "sourceRegion": [
+            835,
+            871,
+            1223,
+            1286
+          ],
+          "sourceBounds": [
+            74,
+            0,
+            284,
+            408
+          ]
+        }
+      ]
+    },
+    {
+      "character": "franky",
+      "source": "tools/launcher-room/action-source-png/franky.png",
+      "sourceSha256": "62422c01cbdaecdf364c189b0295669e3658866d3fa63906fc6310ce09522f69",
+      "sourcePixels": [
+        1222,
+        1287
+      ],
+      "poseOverrideSha256": {
+        "talk_annoyed": "ce40349733fb12b6b1920d937ed7ea38bcd7d3d4c966d35b4c345884b94e298c"
+      },
+      "cuts": {
+        "x": [
+          418,
+          826
+        ],
+        "y": [
+          428,
+          842
+        ],
+        "occupancy": {
+          "x": [
+            0,
+            41
+          ],
+          "y": [
+            0,
+            0
+          ]
+        }
+      },
+      "scale": 0.578947,
+      "frames": [
+        {
+          "pose": "idle",
+          "path": "public/images/launcher_room/action_frames/franky/idle.webp",
+          "bytes": 55114,
+          "sha256": "bbf8fd90b56fa99b9ee613f79621bbde62196e2f5cff2996e99b3301f2577e96",
+          "source": "tools/launcher-room/action-source-png/franky.png",
+          "sourcePng": "tools/launcher-room/action-source-png/franky.png",
+          "sourceSha256": "62422c01cbdaecdf364c189b0295669e3658866d3fa63906fc6310ce09522f69",
+          "sourceRegion": [
+            0,
+            0,
+            418,
+            428
+          ],
+          "sourceBounds": [
+            21,
+            11,
+            401,
+            427
+          ]
+        },
+        {
+          "pose": "walk1",
+          "path": "public/images/launcher_room/action_frames/franky/walk1.webp",
+          "bytes": 48780,
+          "sha256": "d493fd0292cffb8fd1716ae1189fe378ee4f0671dcd47824e02ad8cd178882c8",
+          "source": "tools/launcher-room/action-source-png/franky.png",
+          "sourcePng": "tools/launcher-room/action-source-png/franky.png",
+          "sourceSha256": "62422c01cbdaecdf364c189b0295669e3658866d3fa63906fc6310ce09522f69",
+          "sourceRegion": [
+            418,
+            0,
+            826,
+            428
+          ],
+          "sourceBounds": [
+            26,
+            9,
+            408,
+            427
+          ]
+        },
+        {
+          "pose": "walk2",
+          "path": "public/images/launcher_room/action_frames/franky/walk2.webp",
+          "bytes": 47970,
+          "sha256": "8098d6291fa39f31b91fd6b0db29e0f87fbd37671abefe10b8cd5e4a9832d50c",
+          "source": "tools/launcher-room/action-source-png/franky.png",
+          "sourcePng": "tools/launcher-room/action-source-png/franky.png",
+          "sourceSha256": "62422c01cbdaecdf364c189b0295669e3658866d3fa63906fc6310ce09522f69",
+          "sourceRegion": [
+            826,
+            0,
+            1222,
+            428
+          ],
+          "sourceBounds": [
+            0,
+            11,
+            363,
+            427
+          ]
+        },
+        {
+          "pose": "talk_happy",
+          "path": "public/images/launcher_room/action_frames/franky/talk_happy.webp",
+          "bytes": 48804,
+          "sha256": "9b5a5eb9bbfd98a5c6b05470f317914b8a0ea8160055d054e4fa04b3ee8cce15",
+          "source": "tools/launcher-room/action-source-png/franky.png",
+          "sourcePng": "tools/launcher-room/action-source-png/franky.png",
+          "sourceSha256": "62422c01cbdaecdf364c189b0295669e3658866d3fa63906fc6310ce09522f69",
+          "sourceRegion": [
+            0,
+            428,
+            418,
+            842
+          ],
+          "sourceBounds": [
+            10,
+            7,
+            410,
+            412
+          ]
+        },
+        {
+          "pose": "talk_annoyed",
+          "path": "public/images/launcher_room/action_frames/franky/talk_annoyed.webp",
+          "bytes": 45126,
+          "sha256": "23aca9b68af9d821f818e88f502b452a7b81608b9e2042acc87e9ed6af60d036",
+          "source": "tools/launcher-room/action-source-png/franky-talk_annoyed.png",
+          "sourcePng": "tools/launcher-room/action-source-png/franky-talk_annoyed.png",
+          "sourceSha256": "ce40349733fb12b6b1920d937ed7ea38bcd7d3d4c966d35b4c345884b94e298c",
+          "sourceRegion": [
+            0,
+            0,
+            1312,
+            1199
+          ],
+          "sourceBounds": [
+            56,
+            15,
+            1298,
+            1185
+          ]
+        },
+        {
+          "pose": "surprised",
+          "path": "public/images/launcher_room/action_frames/franky/surprised.webp",
+          "bytes": 51624,
+          "sha256": "c46ab17e90986bcfac9440e4e94e68e1ed5eb0131fe2af607a850f9dcd0803e1",
+          "source": "tools/launcher-room/action-source-png/franky.png",
+          "sourcePng": "tools/launcher-room/action-source-png/franky.png",
+          "sourceSha256": "62422c01cbdaecdf364c189b0295669e3658866d3fa63906fc6310ce09522f69",
+          "sourceRegion": [
+            826,
+            428,
+            1222,
+            842
+          ],
+          "sourceBounds": [
+            0,
+            2,
+            385,
+            410
+          ]
+        },
+        {
+          "pose": "focused_use",
+          "path": "public/images/launcher_room/action_frames/franky/focused_use.webp",
+          "bytes": 43382,
+          "sha256": "3ccdabf79237f59ea1c5a931b2ae4ff7b4f160f47ea461b24b0ebf2c0cd217a4",
+          "source": "tools/launcher-room/action-source-png/franky.png",
+          "sourcePng": "tools/launcher-room/action-source-png/franky.png",
+          "sourceSha256": "62422c01cbdaecdf364c189b0295669e3658866d3fa63906fc6310ce09522f69",
+          "sourceRegion": [
+            0,
+            842,
+            418,
+            1287
+          ],
+          "sourceBounds": [
+            52,
+            11,
+            352,
+            417
+          ]
+        },
+        {
+          "pose": "sit",
+          "path": "public/images/launcher_room/action_frames/franky/sit.webp",
+          "bytes": 46150,
+          "sha256": "f95c6fe3c3d64560e31398aeca5da9d0e9470b172a431b590f93498ed97aed62",
+          "source": "tools/launcher-room/action-source-png/franky.png",
+          "sourcePng": "tools/launcher-room/action-source-png/franky.png",
+          "sourceSha256": "62422c01cbdaecdf364c189b0295669e3658866d3fa63906fc6310ce09522f69",
+          "sourceRegion": [
+            418,
+            842,
+            826,
+            1287
+          ],
+          "sourceBounds": [
+            46,
+            9,
+            346,
+            412
+          ]
+        },
+        {
+          "pose": "wave",
+          "path": "public/images/launcher_room/action_frames/franky/wave.webp",
+          "bytes": 52286,
+          "sha256": "1462b1efc34e8ef24b470c63faa8d55eb181679a408b339a53aa139b3fb890ff",
+          "source": "tools/launcher-room/action-source-png/franky.png",
+          "sourcePng": "tools/launcher-room/action-source-png/franky.png",
+          "sourceSha256": "62422c01cbdaecdf364c189b0295669e3658866d3fa63906fc6310ce09522f69",
+          "sourceRegion": [
+            826,
+            842,
+            1222,
+            1287
+          ],
+          "sourceBounds": [
+            27,
+            2,
+            374,
+            418
+          ]
+        }
+      ]
+    },
+    {
+      "character": "brook",
+      "source": "tools/launcher-room/action-source-png/brook.png",
+      "sourceSha256": "08fcaba52c460d33b65bc98982ed66f6b8d16c456a5de48bbc763c6e602a316f",
+      "sourcePixels": [
+        1223,
+        1286
+      ],
+      "poseOverrideSha256": {
+        "walk2": "c5a2be2475959d290590376d5c9585822d9674dd8f870da198ed955e76f21f78"
+      },
+      "cuts": {
+        "x": [
+          431,
+          842
+        ],
+        "y": [
+          429,
+          857
+        ],
+        "occupancy": {
+          "x": [
+            0,
+            0
+          ],
+          "y": [
+            0,
+            0
+          ]
+        }
+      },
+      "scale": 0.57346,
+      "frames": [
+        {
+          "pose": "idle",
+          "path": "public/images/launcher_room/action_frames/brook/idle.webp",
+          "bytes": 27166,
+          "sha256": "3c42f6d2be08555343d331ffd3352c58cbfc1abc040fb591fa3385a7bbdffc84",
+          "source": "tools/launcher-room/action-source-png/brook.png",
+          "sourcePng": "tools/launcher-room/action-source-png/brook.png",
+          "sourceSha256": "08fcaba52c460d33b65bc98982ed66f6b8d16c456a5de48bbc763c6e602a316f",
+          "sourceRegion": [
+            0,
+            0,
+            431,
+            429
+          ],
+          "sourceBounds": [
+            136,
+            6,
+            289,
+            427
+          ]
+        },
+        {
+          "pose": "walk1",
+          "path": "public/images/launcher_room/action_frames/brook/walk1.webp",
+          "bytes": 28698,
+          "sha256": "95b3a7c4840d98f9f5ff1ef419f006fbcde6f1703973de428dcb028d7fc6f185",
+          "source": "tools/launcher-room/action-source-png/brook.png",
+          "sourcePng": "tools/launcher-room/action-source-png/brook.png",
+          "sourceSha256": "08fcaba52c460d33b65bc98982ed66f6b8d16c456a5de48bbc763c6e602a316f",
+          "sourceRegion": [
+            431,
+            0,
+            842,
+            429
+          ],
+          "sourceBounds": [
+            67,
+            9,
+            298,
+            421
+          ]
+        },
+        {
+          "pose": "walk2",
+          "path": "public/images/launcher_room/action_frames/brook/walk2.webp",
+          "bytes": 25054,
+          "sha256": "9639856c6ff8b959189c2ba251124599b85887c76eb17c0d24e9e9ca0396b75c",
+          "source": "tools/launcher-room/action-source-png/brook-walk2.png",
+          "sourcePng": "tools/launcher-room/action-source-png/brook-walk2.png",
+          "sourceSha256": "c5a2be2475959d290590376d5c9585822d9674dd8f870da198ed955e76f21f78",
+          "sourceRegion": [
+            0,
+            0,
+            1024,
+            1536
+          ],
+          "sourceBounds": [
+            132,
+            10,
+            930,
+            1497
+          ]
+        },
+        {
+          "pose": "talk_happy",
+          "path": "public/images/launcher_room/action_frames/brook/talk_happy.webp",
+          "bytes": 35152,
+          "sha256": "40eb0a4fa55329174d98b14feca2096f5ea0eec1dc91f38b235aa6b2f3995a22",
+          "source": "tools/launcher-room/action-source-png/brook.png",
+          "sourcePng": "tools/launcher-room/action-source-png/brook.png",
+          "sourceSha256": "08fcaba52c460d33b65bc98982ed66f6b8d16c456a5de48bbc763c6e602a316f",
+          "sourceRegion": [
+            0,
+            429,
+            431,
+            857
+          ],
+          "sourceBounds": [
+            48,
+            4,
+            377,
+            425
+          ]
+        },
+        {
+          "pose": "talk_annoyed",
+          "path": "public/images/launcher_room/action_frames/brook/talk_annoyed.webp",
+          "bytes": 31758,
+          "sha256": "9ce1bb14a235c6b61eca32c99605f86b4c2ce014755eb7b6e1e9bf9b733c8919",
+          "source": "tools/launcher-room/action-source-png/brook.png",
+          "sourcePng": "tools/launcher-room/action-source-png/brook.png",
+          "sourceSha256": "08fcaba52c460d33b65bc98982ed66f6b8d16c456a5de48bbc763c6e602a316f",
+          "sourceRegion": [
+            431,
+            429,
+            842,
+            857
+          ],
+          "sourceBounds": [
+            56,
+            4,
+            376,
+            424
+          ]
+        },
+        {
+          "pose": "surprised",
+          "path": "public/images/launcher_room/action_frames/brook/surprised.webp",
+          "bytes": 35468,
+          "sha256": "49c7a7cd2ad58d5fbb66a2bf1dd3489cbb00818e6384a49a4aa5c9995646bbc9",
+          "source": "tools/launcher-room/action-source-png/brook.png",
+          "sourcePng": "tools/launcher-room/action-source-png/brook.png",
+          "sourceSha256": "08fcaba52c460d33b65bc98982ed66f6b8d16c456a5de48bbc763c6e602a316f",
+          "sourceRegion": [
+            842,
+            429,
+            1223,
+            857
+          ],
+          "sourceBounds": [
+            37,
+            6,
+            324,
+            428
+          ]
+        },
+        {
+          "pose": "focused_use",
+          "path": "public/images/launcher_room/action_frames/brook/focused_use.webp",
+          "bytes": 29524,
+          "sha256": "a92d1341cffd3d466662731828f1b99729ff1ca84c0acd488a65867a32e3d59b",
+          "source": "tools/launcher-room/action-source-png/brook.png",
+          "sourcePng": "tools/launcher-room/action-source-png/brook.png",
+          "sourceSha256": "08fcaba52c460d33b65bc98982ed66f6b8d16c456a5de48bbc763c6e602a316f",
+          "sourceRegion": [
+            0,
+            857,
+            431,
+            1286
+          ],
+          "sourceBounds": [
+            109,
+            11,
+            307,
+            414
+          ]
+        },
+        {
+          "pose": "sit",
+          "path": "public/images/launcher_room/action_frames/brook/sit.webp",
+          "bytes": 27238,
+          "sha256": "9b4d2433dfb0fe64b61cf1a607fff178a2d8e75d19f7f05f64de66a818543eac",
+          "source": "tools/launcher-room/action-source-png/brook.png",
+          "sourcePng": "tools/launcher-room/action-source-png/brook.png",
+          "sourceSha256": "08fcaba52c460d33b65bc98982ed66f6b8d16c456a5de48bbc763c6e602a316f",
+          "sourceRegion": [
+            431,
+            857,
+            842,
+            1286
+          ],
+          "sourceBounds": [
+            77,
+            17,
+            278,
+            410
+          ]
+        },
+        {
+          "pose": "wave",
+          "path": "public/images/launcher_room/action_frames/brook/wave.webp",
+          "bytes": 28628,
+          "sha256": "8e51998944c3b2069fb89c4a6cf921114c9635498106514a949739900a612d88",
+          "source": "tools/launcher-room/action-source-png/brook.png",
+          "sourcePng": "tools/launcher-room/action-source-png/brook.png",
+          "sourceSha256": "08fcaba52c460d33b65bc98982ed66f6b8d16c456a5de48bbc763c6e602a316f",
+          "sourceRegion": [
+            842,
+            857,
+            1223,
+            1286
+          ],
+          "sourceBounds": [
+            78,
+            1,
+            302,
+            408
+          ]
+        }
+      ]
+    },
+    {
+      "character": "jinbe",
+      "source": "tools/launcher-room/action-source-png/jinbe.png",
+      "sourceSha256": "881bd4c56575b4966de6aac35e9594009ce9b68b81ae1c4e72ceee8a28cea51c",
+      "sourcePixels": [
+        1230,
+        1278
+      ],
+      "poseOverrideSha256": {
+        "sit": "976adbc98dab6d2a69d029aab3f3f469904067ed92e9846c5772140f5552be50"
+      },
+      "cuts": {
+        "x": [
+          423,
+          826
+        ],
+        "y": [
+          431,
+          845
+        ],
+        "occupancy": {
+          "x": [
+            0,
+            0
+          ],
+          "y": [
+            0,
+            53
+          ]
+        }
+      },
+      "scale": 0.574822,
+      "frames": [
+        {
+          "pose": "idle",
+          "path": "public/images/launcher_room/action_frames/jinbe/idle.webp",
+          "bytes": 60164,
+          "sha256": "1cc1f268e19813d7b62625035c52ff0046d95ce73e2c27ee07677c5796ac53c9",
+          "source": "tools/launcher-room/action-source-png/jinbe.png",
+          "sourcePng": "tools/launcher-room/action-source-png/jinbe.png",
+          "sourceSha256": "881bd4c56575b4966de6aac35e9594009ce9b68b81ae1c4e72ceee8a28cea51c",
+          "sourceRegion": [
+            0,
+            0,
+            423,
+            431
+          ],
+          "sourceBounds": [
+            21,
+            8,
+            409,
+            426
+          ]
+        },
+        {
+          "pose": "walk1",
+          "path": "public/images/launcher_room/action_frames/jinbe/walk1.webp",
+          "bytes": 58682,
+          "sha256": "3b60afa0d2e67d8927175120a39a55e136af7051e55baf9d473cb40186f52f28",
+          "source": "tools/launcher-room/action-source-png/jinbe.png",
+          "sourcePng": "tools/launcher-room/action-source-png/jinbe.png",
+          "sourceSha256": "881bd4c56575b4966de6aac35e9594009ce9b68b81ae1c4e72ceee8a28cea51c",
+          "sourceRegion": [
+            423,
+            0,
+            826,
+            431
+          ],
+          "sourceBounds": [
+            12,
+            9,
+            371,
+            425
+          ]
+        },
+        {
+          "pose": "walk2",
+          "path": "public/images/launcher_room/action_frames/jinbe/walk2.webp",
+          "bytes": 60674,
+          "sha256": "0c19cffb0b37cd33114ac205bc4983223766ecf6e13e54e7417f454b21fd370b",
+          "source": "tools/launcher-room/action-source-png/jinbe.png",
+          "sourcePng": "tools/launcher-room/action-source-png/jinbe.png",
+          "sourceSha256": "881bd4c56575b4966de6aac35e9594009ce9b68b81ae1c4e72ceee8a28cea51c",
+          "sourceRegion": [
+            826,
+            0,
+            1230,
+            431
+          ],
+          "sourceBounds": [
+            2,
+            8,
+            377,
+            429
+          ]
+        },
+        {
+          "pose": "talk_happy",
+          "path": "public/images/launcher_room/action_frames/jinbe/talk_happy.webp",
+          "bytes": 63360,
+          "sha256": "f9d6fdf5996b69ecb5d3b6eb9d975c3fa22b818556d530731428ee482c43794c",
+          "source": "tools/launcher-room/action-source-png/jinbe.png",
+          "sourcePng": "tools/launcher-room/action-source-png/jinbe.png",
+          "sourceSha256": "881bd4c56575b4966de6aac35e9594009ce9b68b81ae1c4e72ceee8a28cea51c",
+          "sourceRegion": [
+            0,
+            431,
+            423,
+            845
+          ],
+          "sourceBounds": [
+            13,
+            5,
+            413,
+            414
+          ]
+        },
+        {
+          "pose": "talk_annoyed",
+          "path": "public/images/launcher_room/action_frames/jinbe/talk_annoyed.webp",
+          "bytes": 63834,
+          "sha256": "ed2c23d4cd7d5b6d29e2df96b77dfd4d4cb59202b8d376a4d61ca8003c36c03c",
+          "source": "tools/launcher-room/action-source-png/jinbe.png",
+          "sourcePng": "tools/launcher-room/action-source-png/jinbe.png",
+          "sourceSha256": "881bd4c56575b4966de6aac35e9594009ce9b68b81ae1c4e72ceee8a28cea51c",
+          "sourceRegion": [
+            423,
+            431,
+            826,
+            845
+          ],
+          "sourceBounds": [
+            11,
+            3,
+            402,
+            414
+          ]
+        },
+        {
+          "pose": "surprised",
+          "path": "public/images/launcher_room/action_frames/jinbe/surprised.webp",
+          "bytes": 62508,
+          "sha256": "f58ec7ff7fdef1f23155d0e6c04756dae25be939735e8c71da23ce0413ad82e4",
+          "source": "tools/launcher-room/action-source-png/jinbe.png",
+          "sourcePng": "tools/launcher-room/action-source-png/jinbe.png",
+          "sourceSha256": "881bd4c56575b4966de6aac35e9594009ce9b68b81ae1c4e72ceee8a28cea51c",
+          "sourceRegion": [
+            826,
+            431,
+            1230,
+            845
+          ],
+          "sourceBounds": [
+            11,
+            3,
+            389,
+            412
+          ]
+        },
+        {
+          "pose": "focused_use",
+          "path": "public/images/launcher_room/action_frames/jinbe/focused_use.webp",
+          "bytes": 60258,
+          "sha256": "17edea6da7fc32324ff91e05d358191c0f0355e6c69d8e2fd97d256b7d5fadf8",
+          "source": "tools/launcher-room/action-source-png/jinbe.png",
+          "sourcePng": "tools/launcher-room/action-source-png/jinbe.png",
+          "sourceSha256": "881bd4c56575b4966de6aac35e9594009ce9b68b81ae1c4e72ceee8a28cea51c",
+          "sourceRegion": [
+            0,
+            845,
+            423,
+            1278
+          ],
+          "sourceBounds": [
+            24,
+            0,
+            400,
+            410
+          ]
+        },
+        {
+          "pose": "sit",
+          "path": "public/images/launcher_room/action_frames/jinbe/sit.webp",
+          "bytes": 62138,
+          "sha256": "b919aa4fe6736f512cefe3b8dfe194d2c670461e136d34169a85fc55d9faa06e",
+          "source": "tools/launcher-room/action-source-png/jinbe-sit.png",
+          "sourcePng": "tools/launcher-room/action-source-png/jinbe-sit.png",
+          "sourceSha256": "976adbc98dab6d2a69d029aab3f3f469904067ed92e9846c5772140f5552be50",
+          "sourceRegion": [
+            0,
+            0,
+            1230,
+            1278
+          ],
+          "sourceBounds": [
+            62,
+            45,
+            1179,
+            1249
+          ]
+        },
+        {
+          "pose": "wave",
+          "path": "public/images/launcher_room/action_frames/jinbe/wave.webp",
+          "bytes": 62754,
+          "sha256": "c1ec03e63fbdfb93e303d12f6017e3e7491cced1d62851fb3f041c3b36918d77",
+          "source": "tools/launcher-room/action-source-png/jinbe.png",
+          "sourcePng": "tools/launcher-room/action-source-png/jinbe.png",
+          "sourceSha256": "881bd4c56575b4966de6aac35e9594009ce9b68b81ae1c4e72ceee8a28cea51c",
+          "sourceRegion": [
+            826,
+            845,
+            1230,
+            1278
+          ],
+          "sourceBounds": [
+            5,
+            1,
+            388,
+            408
+          ]
+        }
+      ]
+    }
+  ]
+}
