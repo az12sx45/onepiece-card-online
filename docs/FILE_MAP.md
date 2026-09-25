@@ -10,6 +10,7 @@
 | `docs/LAUNCHER_ROOM_DEPTH_ART_20260925.json` | 1.1.11 新增的 130 張圖與 30 張 GPT 原稿來源及逐檔 SHA。 |
 | `desktop/main.js`、`package.json`／lock、`scripts/desktop_launcher_package_qa.js` | 1.1.11 安裝封裝、受限媒體路徑與逐檔檢查。 |
 | `scripts/launcher_room_browser_qa.js` | 真 Chromium 家具落格、遮擋、角色跨步、對話及家具動作驗證。 |
+| `public/desktop/launcher-release-v1.json` | 1.1.11 Ed25519 簽署的公開更新清單，對應 R2 NSIS 安裝檔的大小、SHA-256 與下載網址。 |
 
 ## 2026-09-25 啟動器 1.1.10 名片與房間
 

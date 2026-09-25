@@ -1,6 +1,6 @@
 # Dev Workflow
 
-## 2026-09-25 啟動器房間空間佈置與角色動作 1.1.11（候選）
+## 2026-09-25 啟動器房間空間佈置與角色動作 1.1.11（已部署）
 
 範圍：針對 1.1.10 房間家具像貼紙、人物位移時無跨步動作、情緒只在對話框頭像出現的回饋，改造桌面啟動器的房間展示。參考《排球少年!! FLY HIGH》集訓基地的家具布置和房客活動概念，視覺素材仍以本專案的《航海王》千陽號與原作草帽成員製作，不複製對方介面或角色。從 `origin/main` 的 `1072dfa93` 建立隔離工作樹 `D:\Codex_Release_Worktrees\launcher-room-world-1.1.11`，保留正式 D 槽既有 Board 未提交工作與 1.1.10 已發布安裝檔。
 
@@ -8,9 +8,11 @@
 
 變更檔案：`desktop/launcher-room.js/css`、必要的 `launcher.html` 房間標記、`main.js`、`package.json`／lock；`public/images/launcher_room/action_frames/`、`furniture_views/`、`tools/launcher-room/action-source-png/`、`furniture-source-png/`、生成圖處理／檢查工具、素材清單；`scripts/launcher_room_browser_qa.js`、`desktop_launcher_package_qa.js` 及四份專案文件。
 
-定向驗證：`build_depth_art_manifest.py` 驗過 130 個輸出素材的 Alpha 外緣、尺寸、來源與 SHA；`review_depth_art.py` 的 10 位角色步行／情緒和 10 件家具方向圖沒有低差異組。完整 Chromium 房間 QA 49／49：六家具與六角色同房、格位碰撞、四向解碼與無回退、深度遮擋、人物本體動作、好友唯讀及 390px 橫向捲動通過；截圖與報告在 `D:\Codex_QA\launcher-room-browser\`。`launcher_profile_shop_browser_qa.js` 97／97、`desktop_distribution_gate_qa.js` 135／135、名片／持有權 SQL／留言板回歸均通過；`desktop_launcher_package_qa.js` 來源檢查通過。`npm start` 在隔離的本機 18787 埠開啟靜態頁；未設 `DATABASE_URL`，不視為正式帳號交易驗收。公開部署證據待完成後補記。
+定向驗證：`build_depth_art_manifest.py` 驗過 130 個輸出素材的 Alpha 外緣、尺寸、來源與 SHA；`review_depth_art.py` 的 10 位角色步行／情緒和 10 件家具方向圖沒有低差異組。完整 Chromium 房間 QA 49／49：六家具與六角色同房、格位碰撞、四向解碼與無回退、深度遮擋、人物本體動作、好友唯讀及 390px 橫向捲動通過；截圖與報告在 `D:\Codex_QA\launcher-room-browser\`。`launcher_profile_shop_browser_qa.js` 97／97、`desktop_distribution_gate_qa.js` 135／135、名片／持有權 SQL／留言板回歸均通過；`desktop_launcher_package_qa.js` 來源檢查通過。`npm start` 在隔離的本機 18787 埠開啟靜態頁；未設 `DATABASE_URL`，不視為正式帳號交易驗收。
 
-Windows x64 NSIS 1.1.11 已由隔離工作樹建置，`desktop_launcher_package_qa.js` 的來源、win-unpacked、installer 三層通過：245 個 ASAR entries、342 個 launcher files、安裝檔 235,406,029 bytes，SHA-256 `e396e46ee659f1ef1ff621b35f1889c7fbf04cb1df8655fbfffbba9bf542a8e4`。真封裝 Electron 隔離 userData 啟動 smoke `ok=true`，241／241 `opui` 素材 HEAD／Range／MIME 通過，BGM 可播放；報告在 `D:\\Codex_QA\\launcher-room-world-1.1.11\\smoke-packaged.json`。Authenticode 為 NotSigned。公開部署證據待完成後補記。
+Windows x64 NSIS 1.1.11 已由隔離工作樹建置，`desktop_launcher_package_qa.js` 的來源、win-unpacked、installer 三層通過：245 個 ASAR entries、342 個 launcher files、安裝檔 235,406,029 bytes，SHA-256 `e396e46ee659f1ef1ff621b35f1889c7fbf04cb1df8655fbfffbba9bf542a8e4`。真封裝 Electron 隔離 userData 啟動 smoke `ok=true`，241／241 `opui` 素材 HEAD／Range／MIME 通過，BGM 可播放；報告在 `D:\Codex_QA\\launcher-room-world-1.1.11\\smoke-packaged.json`。Authenticode 為 NotSigned。
+
+正式程式提交 `19c968305`、簽署更新清單提交 `356050b64` 已推送 `origin/main`；Render 自動部署 `dep-dar1gkf6j8us73blfn9g` 於 2026-09-25 06:51:58 UTC 顯示 `Deploy succeeded | Live`，正式 PostgreSQL 啟動日誌顯示連線與 Board persistence ready。R2 公開安裝檔為 `https://game-assets.rihdi.tw/desktop/launcher/releases/1.1.11/ONE-PIECE-Tabletop-Launcher-1.1.11-x64.exe`；HEAD 200、Range 206／MZ、完整 GET 235,406,029 bytes 與本機 SHA-256 `e396e46ee659f1ef1ff621b35f1889c7fbf04cb1df8655fbfffbba9bf542a8e4` 一致。公開 `/desktop/launcher-release-v1.json` 與簽署候選逐位元組一致：676 bytes，SHA-256 `0a023f59dd04f4bd8ac5c5d8466d2caff793b1f2d42d3672e5b97dd15a1e3b37`，Ed25519 驗簽通過；1.1.10 查詢可更新，1.1.11 為最新版。公開分發 144／144、Socket 10／10、下載頁 Chromium 38／38 通過，1366／390／320px 皆顯示 v1.1.11 與正確安裝檔網址；報告在 `D:\Codex_QA\\launcher-room-world-1.1.11\\`。本機未使用正式玩家帳號操作 PostgreSQL 購買或房間保存；PGlite 回歸與正式服務資料庫 ready 不能代替真人帳號驗收。LATTICE 官方狀態仍為 `BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，本輪未聲稱任務或圖譜已持久記錄。
 
 ## 2026-09-25 啟動器個人名片與互動房間 1.1.10
 
@@ -38,7 +40,7 @@ Windows x64 NSIS 1.1.10 由隔離工作樹建置，`desktop_launcher_package_qa.
 
 正式程式由隔離發行樹提交 `23b6c5fed`，簽署更新清單提交 `58dd185e8` 至 `origin/main`；正式 D 槽來源只定向同步相關檔案，保留同時進行的 Board 未提交工作。1.1.8 安裝檔為 221,792,955 bytes，SHA-256 `f00c94b92017c840f6a3fa12d3de33f1b0b7dfcdb781c347eebd61c515d7dca5`，公開 URL 為 `https://game-assets.rihdi.tw/desktop/launcher/releases/1.1.8/ONE-PIECE-Tabletop-Launcher-1.1.8-x64.exe`。公開 HEAD、Range 的 MZ／PE 標頭與完整 GET 的 SHA 均通過。公開 `/desktop/launcher-release-v1.json` 與本機簽署候選逐位元組一致，Ed25519 驗簽通過；1.1.7 查詢可更新，1.1.8 查詢為最新版。
 
-公開商店預覽回 87 件商品，含透明圓形的 12 款重畫頭像、20 首既有 OP、3 首原創 BGM、頁面裝扮與好友留言板；三遊戲 runtime 未改。隔離 Chromium 89／89、真封裝 Electron 46／46、原創曲與 OP 實際播放、白鬍子／巴其從 NSIS 抽出與來源 SHA 比對通過。最終公開分發驗證 144／144、Socket 相容 10／10，報告位於 `D:\\Codex_QA\\launcher-avatar-review\\`。正式帳號購買與留言的 PostgreSQL 交易未以真帳號操作；OP 的付費再散布授權尚未核對。Windows Authenticode 為 NotSigned。LATTICE 官方狀態仍是 `BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，沒有把這次任務或圖譜宣稱為已持久記錄。
+公開商店預覽回 87 件商品，含透明圓形的 12 款重畫頭像、20 首既有 OP、3 首原創 BGM、頁面裝扮與好友留言板；三遊戲 runtime 未改。隔離 Chromium 89／89、真封裝 Electron 46／46、原創曲與 OP 實際播放、白鬍子／巴其從 NSIS 抽出與來源 SHA 比對通過。最終公開分發驗證 144／144、Socket 相容 10／10，報告位於 `D:\Codex_QA\\launcher-avatar-review\\`。正式帳號購買與留言的 PostgreSQL 交易未以真帳號操作；OP 的付費再散布授權尚未核對。Windows Authenticode 為 NotSigned。LATTICE 官方狀態仍是 `BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，沒有把這次任務或圖譜宣稱為已持久記錄。
 
 ## 2026-09-25 啟動器 12 款角色頭像重畫
 
