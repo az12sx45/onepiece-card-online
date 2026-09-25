@@ -1,10 +1,10 @@
 # Dev Workflow
 
-## 2026-09-25 啟動器房間比例、夥伴互動與展示室金幣 1.1.12（發行候選）
+## 2026-09-25 啟動器房間比例、夥伴互動與展示室金幣 1.1.12（已部署）
 
 範圍：回應 1.1.11 角色走路不自然、家具尺寸不一致與圖面操作不直覺的回饋。以 `D:\Codex_Release_Worktrees\launcher-room-social-economy-1.1.12` 隔離工作樹修改啟動器房間與角色社交，保留正式 D 槽的 Board 未提交修改。十位角色仍限既有《航海王》草帽成員；不新增原創角色，也不複製原作逐字台詞。
 
-房間呈現與操作：十件家具依各自造型與 Q 版人物的畫面比例設定固定視覺尺寸，與人物共同按地板深度縮放；新編輯配置的家具 `scale` 固定為 1，既有保存的縮放值仍可讀取，但畫面不再用它任意拉大單件家具。家具佔用固定格位，轉向只交換寬深與四張視角圖；編輯者直接在圖面拖曳至可用格位、選取家具後在圖上按 ↶／↷ 轉四向或收起。方向鍵與 R 仍可操作。角色步行沿地面格位移動，交替使用左右跨步影格，停下後切換待機、交談或家具動作；這次的人物接地效果仍須以封裝版目視複查。
+房間呈現與操作：十件家具依各自造型與 Q 版人物的畫面比例設定固定視覺尺寸，與人物共同按地板深度縮放；新編輯配置的家具 `scale` 固定為 1，既有保存的縮放值仍可讀取，但畫面不再用它任意拉大單件家具。家具佔用固定格位，轉向只交換寬深與四張視角圖；編輯者直接在圖面拖曳至可用格位、選取家具後在圖上按 ↶／↷ 轉四向或收起。方向鍵與 R 仍可操作。角色步行沿地面格位移動，交替使用左右跨步影格，停下後切換待機、交談或家具動作；接地與轉向已在 125px 對照圖及封裝版影格檢查。
 
 2026-09-25 步行與時期修正：取消先前高抬膝的八張 `walk2` 成品，以原 GPT 九格圖中的低抬腳步為主；香吉士採用經 125px 對照確認的 GPT 低抬腳重畫。角色平常沿同一列走動，向左／右轉時翻轉整張全身圖（頭與軀幹一起），前往家具和工作仍可依格位尋路。白短袖、綠腰封的索隆是兩年前造型，九張動作圖與商店備用 Q 版圖改為雙眼張開且無左眼疤；另一期的綠袍個人頁商品保留獨立造型。新增 `LAUNCHER_ROOM_WALK_ART_20260925.json` 與 `LAUNCHER_ROOM_ZORO_ART_OVERLAY_20260925.json` 鎖定 GPT 來源、輸出 SHA 與尺寸，舊版素材清單不回寫。
 
@@ -14,7 +14,9 @@
 
 變更檔案：`desktop/launcher-room.js/css`、`launcher-room-dialogue.js`、`launcher.html`、`auth-service.js`、`preload.js`、`main.js`、`package.json`／lock；`server/launcher-profile-shop.js`、`index.js`、`desktop-distribution.js`；`public/images/launcher_room/action_frames/` 中八張步行圖與索隆九張動作圖、`chibi/zoro.webp`，對應 `tools/launcher-room/` GPT 來源、處理程式和兩份 1.1.12 素材清單；`scripts/launcher_room_dialogue_qa.js`、`launcher_character_economy_qa.js` 及房間／封裝相關 QA、四份專案文件。原房間商品 ID、持有權、方向與 `launcherRoomV1` 版本保留相容；三款遊戲規則與存檔不動。
 
-已執行驗證：對話 QA 通過十位角色、160 句點擊互動台詞及 45 種關係共 102 組雙人對話；PGlite 交易、商店／持有權、桌機／窄版 Chromium 房間 62／62、素材 review 與來源／封裝清單 QA 均通過。九格索隆眼睛與縮小角色圖已目視確認，`git diff --check` 通過。最終 Windows 安裝檔、R2／Render、公開更新清單與正式玩家帳號交易仍待驗；目前不宣稱 1.1.12 已發布。
+已執行驗證：對話 QA 通過十位角色、160 句點擊互動台詞及 45 種關係共 102 組雙人對話；PGlite 交易、商店／持有權、桌機／窄版 Chromium 房間 62／62、素材 review 與來源／封裝清單 QA 均通過。九格索隆眼睛與縮小角色圖已目視確認，`git diff --check` 通過。Windows x64 安裝版封裝 QA、真 Electron 啟動及 241／241 個人頁素材回應均通過；正式 D 槽選擇性同步 48 項逐檔驗證，正式樹封裝 QA 與房間瀏覽器 62／62 再通過。
+
+正式發布：程式／素材提交 `fe3b522e3`、Ed25519 簽署清單提交 `5d45075de` 已推送 `main` 並由 Render 公開。R2 安裝檔 [1.1.12](https://game-assets.rihdi.tw/desktop/launcher/releases/1.1.12/ONE-PIECE-Tabletop-Launcher-1.1.12-x64.exe) 為 235,450,909 bytes，SHA-256 `6fcfbb1b59b8b960eb017a9302a15a2c70074208c203c5bb6e7e6c617232566d`；公開完整 GET 與本機 SHA 相同，HEAD 200、Range 206。公開更新清單為 676 bytes、SHA-256 `c494220f4ce020ac9d6601ea7243bdd1627212518c80a8b3cabbae4d81b87abc`，與 Git 逐位元組相同且驗簽通過；公開發行驗證 144／144、Socket 10／10、下載頁 Chromium 38／38 通過。證據位於 `D:\Codex_QA\launcher-room-social-economy-1.1.12\`。未用正式玩家帳號實際購買／領幣、未做人類實際遊玩或實體裝置驗收；Windows Authenticode 狀態為 NotSigned。
 
 ## 2026-09-25 啟動器房間空間佈置與角色動作 1.1.11（已部署）
 
