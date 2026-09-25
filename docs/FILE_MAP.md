@@ -10,6 +10,8 @@
 | `public/images/launcher_room/chibi/`、`emotions/`、`tools/launcher-room/source-png/`、`docs/LAUNCHER_ROOM_EXPANSION_ART_20260925.json` | 四位新增原作角色全身圖與十位角色四種情緒圖、GPT PNG 原稿和輸出 SHA 清單。 |
 | `desktop/package.json`／lock、`scripts/desktop_launcher_package_qa.js` | 1.1.10 Windows 封裝與新增素材逐檔驗證。 |
 | `scripts/launcher_profile_shop_qa.js`、`profile_shop_ownership_sql_qa.js`、`launcher_profile_shop_browser_qa.js`、`launcher_room_browser_qa.js` | 名片／房間權限、真正 JSONB 相容、桌機與窄版 UI 回歸。 |
+| `public/desktop/launcher-release-v1.json` | stable 1.1.10 的 Ed25519 簽署清單：676 bytes／SHA-256 `3d27b490400e1879851dcf44f217c2fa021df75d08f17d73c246692e848c7dc1`；指向 227,150,255 bytes／SHA-256 `241a851d14259b69f8fbf4894c3aa0af2adef95e5bfe2e310975d826647b580e` 的公開安裝檔。 |
+| `D:\Codex_QA\launcher-room-1.1.10\` | 真封裝 Electron、簽署清單、R2 完整下載與公開分發 144／144、Socket 10／10、下載頁 38／38 驗證報告。 |
 
 ## 2026-09-25 啟動器 1.1.9 房間與擴充商店（已部署）
 
