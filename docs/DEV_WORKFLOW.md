@@ -6,13 +6,15 @@
 
 房間呈現與操作：十件家具依各自造型與 Q 版人物的畫面比例設定固定視覺尺寸，與人物共同按地板深度縮放；新編輯配置的家具 `scale` 固定為 1，既有保存的縮放值仍可讀取，但畫面不再用它任意拉大單件家具。家具佔用固定格位，轉向只交換寬深與四張視角圖；編輯者直接在圖面拖曳至可用格位、選取家具後在圖上按 ↶／↷ 轉四向或收起。方向鍵與 R 仍可操作。角色步行沿地面格位移動，交替使用左右跨步影格，停下後切換待機、交談或家具動作；這次的人物接地效果仍須以封裝版目視複查。
 
+2026-09-25 步行與時期修正：取消先前高抬膝的八張 `walk2` 成品，以原 GPT 九格圖中的低抬腳步為主；香吉士採用經 125px 對照確認的 GPT 低抬腳重畫。角色平常沿同一列走動，向左／右轉時翻轉整張全身圖（頭與軀幹一起），前往家具和工作仍可依格位尋路。白短袖、綠腰封的索隆是兩年前造型，九張動作圖與商店備用 Q 版圖改為雙眼張開且無左眼疤；另一期的綠袍個人頁商品保留獨立造型。新增 `LAUNCHER_ROOM_WALK_ART_20260925.json` 與 `LAUNCHER_ROOM_ZORO_ART_OVERLAY_20260925.json` 鎖定 GPT 來源、輸出 SHA 與尺寸，舊版素材清單不回寫。
+
 對話與互動：`desktop/launcher-room-dialogue.js` 包含十位原作角色的人設簡介、每人至少六句獨立閒聊與四句回應、45 種角色配對共 102 組雙人對話，以及聊天／做事／親近／休息四類各四句可供情境選用的台詞。對話為依角色關係新寫的短句；角色可依家具活動說不同台詞。點擊已擺放角色顯示姓名、職責、簡介、親密度與工作狀態；目前頁主可聊天、安排工作及到時領取獎勵，雙向好友只看展示資料，沒有操作按鈕。
 
 金幣與權限：新 `stats.launcherCompanionsV1` 記錄各角色親密度和工作，與商店既有 `stats.launcherWalletV1` 共用同一筆伺服器交易。只有購買且已擺入自己房間的角色能互動；聊天每次親密度 +2，每角色每 10 分鐘一次、每 UTC 日最多六次。工作需五分鐘，領取後得 10 枚展示室金幣且親密度 +1；帳號每 UTC 日最多開始／領取六次、單角色每天最多開始兩次。展示室錢包維持 500 枚上限，滿額時不能領獎；領獎與商店購買使用 PostgreSQL 列鎖序列化，避免重複給幣。這筆金幣可在原啟動器商店買商品，不進 Card／Board／Chess 金幣與 `BOARD_GAME_STATE`。
 
-變更檔案：`desktop/launcher-room.js/css`、`launcher-room-dialogue.js`、`launcher.html`、`auth-service.js`、`preload.js`、`main.js`、`package.json`／lock；`server/launcher-profile-shop.js`、`index.js`、`desktop-distribution.js`；`scripts/launcher_room_dialogue_qa.js`、`launcher_character_economy_qa.js` 及房間／封裝相關 QA、四份專案文件。原房間商品 ID、持有權、方向與 `launcherRoomV1` 版本保留相容；三款遊戲規則與存檔不動。
+變更檔案：`desktop/launcher-room.js/css`、`launcher-room-dialogue.js`、`launcher.html`、`auth-service.js`、`preload.js`、`main.js`、`package.json`／lock；`server/launcher-profile-shop.js`、`index.js`、`desktop-distribution.js`；`public/images/launcher_room/action_frames/` 中八張步行圖與索隆九張動作圖、`chibi/zoro.webp`，對應 `tools/launcher-room/` GPT 來源、處理程式和兩份 1.1.12 素材清單；`scripts/launcher_room_dialogue_qa.js`、`launcher_character_economy_qa.js` 及房間／封裝相關 QA、四份專案文件。原房間商品 ID、持有權、方向與 `launcherRoomV1` 版本保留相容；三款遊戲規則與存檔不動。
 
-已執行驗證：`node scripts/launcher_room_dialogue_qa.js` 通過，涵蓋十位角色、160 句點擊互動台詞及 45 種關係共 102 組雙人對話。其餘伺服器交易、Chromium 桌機／手機房間操作、真封裝 Electron、安裝檔、R2／Render、公開更新清單與正式玩家帳號交易均待驗；目前不宣稱 1.1.12 已發布。
+已執行驗證：對話 QA 通過十位角色、160 句點擊互動台詞及 45 種關係共 102 組雙人對話；PGlite 交易、商店／持有權、桌機／窄版 Chromium 房間 62／62、素材 review 與來源／封裝清單 QA 均通過。九格索隆眼睛與縮小角色圖已目視確認，`git diff --check` 通過。最終 Windows 安裝檔、R2／Render、公開更新清單與正式玩家帳號交易仍待驗；目前不宣稱 1.1.12 已發布。
 
 ## 2026-09-25 啟動器房間空間佈置與角色動作 1.1.11（已部署）
 

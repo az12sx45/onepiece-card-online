@@ -1,0 +1,200 @@
+{
+  "version": "1.1.12",
+  "date": "2026-09-25",
+  "generator": "GPT character action atlases and selected grounded stride redraws",
+  "canonicalCharactersOnly": true,
+  "items": [
+    {
+      "key": "luffy",
+      "sourcePng": "tools/launcher-room/action-source-png/luffy.png",
+      "sourceSha256": "92e95ea03ebd6d1c6f72caaf0c2ba397e245d8df2e7a246fd4c15a6216758fbc",
+      "sourceRegion": [
+        819,
+        0,
+        1254,
+        419
+      ],
+      "asset": "public/images/launcher_room/action_frames/luffy/walk2.webp",
+      "assetSha256": "a6f9fa30502ccef91b34da50908e14d395b5c47b7c2329a5fe098be8316f24f5",
+      "assetBytes": 40088,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alphaBounds": [
+        61,
+        12,
+        194,
+        248
+      ]
+    },
+    {
+      "key": "zoro",
+      "sourcePng": "tools/launcher-room/action-source-png/zoro.png",
+      "sourceSha256": "f52eaefd6483ce9707da91cb082342360bb1bac340434836cfddfd31e81b6574",
+      "sourceRegion": [
+        802,
+        0,
+        1222,
+        433
+      ],
+      "asset": "public/images/launcher_room/action_frames/zoro/walk2.webp",
+      "assetSha256": "f3e38abacae92ff1127ed6a0d301063515fb4d8c9635f0fdcd7af6b27fd358c9",
+      "assetBytes": 38900,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alphaBounds": [
+        62,
+        11,
+        194,
+        248
+      ]
+    },
+    {
+      "key": "nami",
+      "sourcePng": "tools/launcher-room/action-source-png/nami.png",
+      "sourceSha256": "2518f7a489fd536621e2be5fe7d1405dbaaef5a50d92c4c87567c64153724262",
+      "sourceRegion": [
+        805,
+        0,
+        1226,
+        431
+      ],
+      "asset": "public/images/launcher_room/action_frames/nami/walk2.webp",
+      "assetSha256": "af88685a071ad265b30aca9dd9dc84ec812909fc05df983f0f0678553662f504",
+      "assetBytes": 34328,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alphaBounds": [
+        67,
+        9,
+        189,
+        248
+      ]
+    },
+    {
+      "key": "usopp",
+      "sourcePng": "tools/launcher-room/action-source-png/usopp.png",
+      "sourceSha256": "aba8993af31d6faa9bb19086404edd29d1b3d9889bda15d32262bb505ada7cb0",
+      "sourceRegion": [
+        827,
+        0,
+        1223,
+        431
+      ],
+      "asset": "public/images/launcher_room/action_frames/usopp/walk2.webp",
+      "assetSha256": "caa1b2a2da9dd72aaee69425e54a20e86c7aacd3b6cbc573bc48fceef8840a93",
+      "assetBytes": 45922,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alphaBounds": [
+        46,
+        6,
+        210,
+        248
+      ]
+    },
+    {
+      "key": "sanji",
+      "sourcePng": "tools/launcher-room/action-source-png/sanji-walk2-grounded.png",
+      "sourceSha256": "77fb34eba7f554c949963bd6fe078524ae803b54ccf85e8a367a6cc54e626a3b",
+      "sourceRegion": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "asset": "public/images/launcher_room/action_frames/sanji/walk2.webp",
+      "assetSha256": "f9aa4a2c288408368a9a6689ab3380a52ecf10dfaa97269292eca205beb12120",
+      "assetBytes": 34646,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alphaBounds": [
+        58,
+        6,
+        197,
+        248
+      ]
+    },
+    {
+      "key": "chopper",
+      "sourcePng": "tools/launcher-room/action-source-png/chopper.png",
+      "sourceSha256": "cf8016ea11e1c1b8cf2fe0afe9ca2df0de7211704f91f460204645f3b51271bc",
+      "sourceRegion": [
+        810,
+        0,
+        1223,
+        438
+      ],
+      "asset": "public/images/launcher_room/action_frames/chopper/walk2.webp",
+      "assetSha256": "6169ca7cb4624ec54e5ae711340dfe389f853f4bb6919211554069bb79e52af9",
+      "assetBytes": 47318,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alphaBounds": [
+        30,
+        9,
+        226,
+        248
+      ]
+    },
+    {
+      "key": "robin",
+      "sourcePng": "tools/launcher-room/action-source-png/robin.png",
+      "sourceSha256": "44b7490b3cc018b47bd587089f0e74a60d5114462f5dd6a5a1327f0f8d2ec0d8",
+      "sourceRegion": [
+        835,
+        0,
+        1223,
+        447
+      ],
+      "asset": "public/images/launcher_room/action_frames/robin/walk2.webp",
+      "assetSha256": "afe87e998e8a8d5d2fc5c980053108cec1475480c9a7e362f61df1b21582102e",
+      "assetBytes": 28962,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alphaBounds": [
+        65,
+        8,
+        190,
+        248
+      ]
+    },
+    {
+      "key": "brook",
+      "sourcePng": "tools/launcher-room/action-source-png/brook.png",
+      "sourceSha256": "08fcaba52c460d33b65bc98982ed66f6b8d16c456a5de48bbc763c6e602a316f",
+      "sourceRegion": [
+        842,
+        0,
+        1223,
+        429
+      ],
+      "asset": "public/images/launcher_room/action_frames/brook/walk2.webp",
+      "assetSha256": "e9029471cf984c5593225c9aadafb57c7ddad748f0f5468fdd70acdd6f9232a2",
+      "assetBytes": 29044,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alphaBounds": [
+        58,
+        8,
+        197,
+        248
+      ]
+    }
+  ]
+}

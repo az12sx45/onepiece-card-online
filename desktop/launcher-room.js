@@ -460,20 +460,31 @@
     if (!route) return false;
     walker.route = route; walker.targetCell = goal;
     walker.stepDistance = 0;
+    // Flip the one full-body sprite when a directed route starts sideways;
+    // the head and torso cannot turn independently.
+    if (route.length && route[0].col !== walker.cell.col)
+      walker.node.style.setProperty('--facing', route[0].col < walker.cell.col ? '-1' : '1');
     return true;
   }
   function chooseDestination(walker) {
     walker.mode = 'wander'; walker.route = []; walker.targetCell = null;
     walker.stepDistance = 0;
     const options = [];
-    for (let row = Math.max(0, walker.cell.row - 2); row <= Math.min(FLOOR.rows - 1, walker.cell.row + 2); row++)
-      for (let col = Math.max(0, walker.cell.col - 3); col <= Math.min(FLOOR.columns - 1, walker.cell.col + 3); col++) {
-        const distance = Math.abs(col - walker.cell.col) + Math.abs(row - walker.cell.row);
-        if (distance >= 1 && distance <= 4) options.push({ col, row });
-      }
+    // The current GPT walking art is drawn from the front/side. Keep casual
+    // roaming along a deck row, so a sideways sprite never slides backwards
+    // through the room. Directed furniture and work routes still use the grid.
+    for (let col = Math.max(0, walker.cell.col - 4); col <= Math.min(FLOOR.columns - 1, walker.cell.col + 4); col++) {
+      const distance = Math.abs(col - walker.cell.col);
+      if (distance >= 1) options.push({ col, row: walker.cell.row });
+    }
     options.sort(() => Math.random() - .5);
-    for (const candidate of options) if (routeTo(walker, candidate)) break;
+    for (const candidate of options) {
+      const route = routeBetween(walker.cell, candidate, blockedFor(walker));
+      if (!route || route.some(cell => cell.row !== walker.cell.row)) continue;
+      walker.route = route; walker.targetCell = candidate; break;
+    }
     walker.pause = 350 + Math.random() * 650;
+    if (walker.route.length) walker.node.style.setProperty('--facing', walker.route[0].col < walker.cell.col ? '-1' : '1');
     if (!walker.route.length) setPose(walker, 'idle');
   }
   function keepSpeechInsideStage(walker) {

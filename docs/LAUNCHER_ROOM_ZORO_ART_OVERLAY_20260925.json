@@ -1,0 +1,95 @@
+{
+  "schema": 1,
+  "version": "1.1.12",
+  "character": "zoro",
+  "status": "verified",
+  "historicalManifestSha256": {
+    "LAUNCHER_ROOM_ART_20260925.json": "c81ad058510d5b1f12a17bb5288e4f3325f8aae2def49c35854550bc89832570",
+    "LAUNCHER_ROOM_EXPANSION_ART_20260925.json": "708b7f046595191f425cde21900737e661103c283090942006515f109db3baab",
+    "LAUNCHER_ROOM_DEPTH_ART_20260925.json": "da9fd1fbe377d8fafdfb0be2118961cec65445da22bb7d47739aef35fb749ee1"
+  },
+  "sources": [
+    {
+      "path": "tools/launcher-room/action-source-png/zoro.png",
+      "sha256": "f52eaefd6483ce9707da91cb082342360bb1bac340434836cfddfd31e81b6574",
+      "bytes": 1482224
+    },
+    {
+      "path": "tools/launcher-room/source-png/zoro.png",
+      "sha256": "6c62e5a3a2de37e21ba372b8741de8e0349762596896af946a6dffc709a3cc19",
+      "bytes": 1621013
+    }
+  ],
+  "assets": [
+    {
+      "path": "public/images/launcher_room/action_frames/zoro/focused_use.webp",
+      "sha256": "ec8a2ae469a1e94bc82c8f9b89aba7cd2a6215db0393258a3c14860633c4105a",
+      "bytes": 40400,
+      "sourcePng": "tools/launcher-room/action-source-png/zoro.png",
+      "sourceSha256": "f52eaefd6483ce9707da91cb082342360bb1bac340434836cfddfd31e81b6574"
+    },
+    {
+      "path": "public/images/launcher_room/action_frames/zoro/idle.webp",
+      "sha256": "87e53acc4f63e4074413c647a798d82f9e84bf6822ac1f4b4cdbcb5432e3a567",
+      "bytes": 36718,
+      "sourcePng": "tools/launcher-room/action-source-png/zoro.png",
+      "sourceSha256": "f52eaefd6483ce9707da91cb082342360bb1bac340434836cfddfd31e81b6574"
+    },
+    {
+      "path": "public/images/launcher_room/action_frames/zoro/sit.webp",
+      "sha256": "77018b5aaac077b4cd70a0095dfad1c5b66de6104c722374abbd92bc96255688",
+      "bytes": 36126,
+      "sourcePng": "tools/launcher-room/action-source-png/zoro.png",
+      "sourceSha256": "f52eaefd6483ce9707da91cb082342360bb1bac340434836cfddfd31e81b6574"
+    },
+    {
+      "path": "public/images/launcher_room/action_frames/zoro/surprised.webp",
+      "sha256": "f7151d9d25749bf5c136b3cc3df357897cb979ca9461802626bb6e5eed2619a7",
+      "bytes": 43948,
+      "sourcePng": "tools/launcher-room/action-source-png/zoro.png",
+      "sourceSha256": "f52eaefd6483ce9707da91cb082342360bb1bac340434836cfddfd31e81b6574"
+    },
+    {
+      "path": "public/images/launcher_room/action_frames/zoro/talk_annoyed.webp",
+      "sha256": "a88a2ac8e0626078c5575132d8b6e993e0174591c9ef7e78cc645d4cf68f0529",
+      "bytes": 41632,
+      "sourcePng": "tools/launcher-room/action-source-png/zoro.png",
+      "sourceSha256": "f52eaefd6483ce9707da91cb082342360bb1bac340434836cfddfd31e81b6574"
+    },
+    {
+      "path": "public/images/launcher_room/action_frames/zoro/talk_happy.webp",
+      "sha256": "d1e89d2f819028789f35765ef2abde43ca2abe87b2bced7d36532d918a85acc3",
+      "bytes": 42270,
+      "sourcePng": "tools/launcher-room/action-source-png/zoro.png",
+      "sourceSha256": "f52eaefd6483ce9707da91cb082342360bb1bac340434836cfddfd31e81b6574"
+    },
+    {
+      "path": "public/images/launcher_room/action_frames/zoro/walk1.webp",
+      "sha256": "775ea68aacd6aa9756bfad39900897c0d84067a85c6e6ae0fe694c7e93410e39",
+      "bytes": 39320,
+      "sourcePng": "tools/launcher-room/action-source-png/zoro.png",
+      "sourceSha256": "f52eaefd6483ce9707da91cb082342360bb1bac340434836cfddfd31e81b6574"
+    },
+    {
+      "path": "public/images/launcher_room/action_frames/zoro/walk2.webp",
+      "sha256": "f3e38abacae92ff1127ed6a0d301063515fb4d8c9635f0fdcd7af6b27fd358c9",
+      "bytes": 38900,
+      "sourcePng": "tools/launcher-room/action-source-png/zoro.png",
+      "sourceSha256": "f52eaefd6483ce9707da91cb082342360bb1bac340434836cfddfd31e81b6574"
+    },
+    {
+      "path": "public/images/launcher_room/action_frames/zoro/wave.webp",
+      "sha256": "5e300ddc13ac6918b2e8e03a3a1f0d89b3129dd7614e9ec59d5b15634513f591",
+      "bytes": 39418,
+      "sourcePng": "tools/launcher-room/action-source-png/zoro.png",
+      "sourceSha256": "f52eaefd6483ce9707da91cb082342360bb1bac340434836cfddfd31e81b6574"
+    },
+    {
+      "path": "public/images/launcher_room/chibi/zoro.webp",
+      "sha256": "0caf1648726e1bfa7999e162cce915483fe18e8d211a9522436b902803ceaacc",
+      "bytes": 159582,
+      "sourcePng": "tools/launcher-room/source-png/zoro.png",
+      "sourceSha256": "6c62e5a3a2de37e21ba372b8741de8e0349762596896af946a6dffc709a3cc19"
+    }
+  ]
+}

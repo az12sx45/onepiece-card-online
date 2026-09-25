@@ -68,6 +68,17 @@ const ROOM_DEPTH_ACTION_OVERRIDES = new Set([
   'franky/talk_annoyed', 'jinbe/sit'
 ]);
 const ROOM_ACTION_POSES = ['idle', 'walk1', 'walk2', 'talk_happy', 'talk_annoyed', 'surprised', 'focused_use', 'sit', 'wave'];
+const ZORO_OVERLAY_PATH = path.join(ROOT, 'docs', 'LAUNCHER_ROOM_ZORO_ART_OVERLAY_20260925.json');
+const ZORO_HISTORICAL_MANIFEST_SHA256 = Object.freeze({
+  'LAUNCHER_ROOM_ART_20260925.json': 'c81ad058510d5b1f12a17bb5288e4f3325f8aae2def49c35854550bc89832570',
+  'LAUNCHER_ROOM_EXPANSION_ART_20260925.json': '708b7f046595191f425cde21900737e661103c283090942006515f109db3baab',
+  'LAUNCHER_ROOM_DEPTH_ART_20260925.json': 'da9fd1fbe377d8fafdfb0be2118961cec65445da22bb7d47739aef35fb749ee1'
+});
+const ZORO_ACTION_SOURCE = 'tools/launcher-room/action-source-png/zoro.png';
+const ZORO_CHIBI_SOURCE = 'tools/launcher-room/source-png/zoro.png';
+const ZORO_CHIBI_ASSET = 'public/images/launcher_room/chibi/zoro.webp';
+const ZORO_ACTION_ASSETS = ROOM_ACTION_POSES.map(pose => `public/images/launcher_room/action_frames/zoro/${pose}.webp`);
+const ZORO_WALK2_ASSET = 'public/images/launcher_room/action_frames/zoro/walk2.webp';
 const ROOM_DEPTH_ASSETS = [
   ...ROOM_DEPTH_FURNITURE.flatMap(key => [0, 1, 2, 3].map(rotation => `furniture_views/${key}/${rotation}.webp`)),
   ...ROOM_DEPTH_CHARACTERS.flatMap(key => ROOM_ACTION_POSES.map(pose => `action_frames/${key}/${pose}.webp`))
@@ -377,6 +388,114 @@ function validateCursorPng(filePath, label) {
   return `${width}x${height}x${bitDepth}-rgba`;
 }
 
+function validateZoroArtOverlay(roomManifest, roomDepth, roomWalk) {
+  for (const [name, historicalSha256] of Object.entries(ZORO_HISTORICAL_MANIFEST_SHA256)) {
+    assert(sha256File(path.join(ROOT, 'docs', name)) === historicalSha256,
+      `Immutable room art manifest changed: ${name}`);
+  }
+  const chibi = roomManifest.items.filter(item => item.asset === ZORO_CHIBI_ASSET);
+  const action = roomDepth.items.filter(item => ZORO_ACTION_ASSETS.includes(item.asset));
+  assert(chibi.length === 1 && action.length === ROOM_ACTION_POSES.length,
+    'Historical Zoro chibi/action item count changed.');
+  assert(chibi[0].sourcePng === ZORO_CHIBI_SOURCE, 'Historical Zoro chibi source path changed.');
+  assertExactJson(sorted(action.map(item => item.asset)), sorted(ZORO_ACTION_ASSETS), 'Historical Zoro action asset set');
+  const actionSourceRows = action.filter(item => item.asset !== ZORO_WALK2_ASSET);
+  assert(actionSourceRows.every(item => item.sourcePng === ZORO_ACTION_SOURCE &&
+    item.sourceSha256 === actionSourceRows[0].sourceSha256),
+  'Historical Zoro action source path or digest changed.');
+
+  const currentSourceSha = new Map([
+    [ZORO_ACTION_SOURCE, sha256File(path.join(ROOT, ...ZORO_ACTION_SOURCE.split('/')))],
+    [ZORO_CHIBI_SOURCE, sha256File(path.join(ROOT, ...ZORO_CHIBI_SOURCE.split('/')))]
+  ]);
+  const historicalSourceSha = new Map([
+    [ZORO_ACTION_SOURCE, actionSourceRows[0].sourceSha256],
+    [ZORO_CHIBI_SOURCE, chibi[0].sourceSha256]
+  ]);
+  const changedSourcePaths = sorted([...currentSourceSha.keys()].filter(source =>
+    currentSourceSha.get(source) !== historicalSourceSha.get(source)));
+  const historicalAssets = [chibi[0], ...action];
+  const changedAssetPaths = sorted(historicalAssets.filter(item =>
+    sha256File(path.join(ROOT, ...item.asset.split('/'))) !== item.assetSha256).map(item => item.asset));
+
+  const actionManifest = readJson(path.join(ROOT, 'tools', 'launcher-room', 'action-source-png', 'action-manifest.json'),
+    'Zoro action frame manifest');
+  const activeZoro = actionManifest.characters?.filter(item => item.character === 'zoro') || [];
+  assert(activeZoro.length === 1 && activeZoro[0].source === ZORO_ACTION_SOURCE &&
+    activeZoro[0].sourceSha256 === currentSourceSha.get(ZORO_ACTION_SOURCE),
+  'Active Zoro atlas/source digest differs from action manifest.');
+  const activeFrames = activeZoro[0].frames;
+  assert(Array.isArray(activeFrames) && activeFrames.length === ROOM_ACTION_POSES.length,
+    'Active Zoro action frame count differs.');
+  assertExactJson(sorted(activeFrames.map(frame => frame.path)), sorted(ZORO_ACTION_ASSETS),
+    'Active Zoro action frame set');
+  const activeFrameByAsset = new Map(activeFrames.map(frame => [frame.path, frame]));
+  for (const [index, pose] of ROOM_ACTION_POSES.entries()) {
+    const asset = ZORO_ACTION_ASSETS[index];
+    const frame = activeFrameByAsset.get(asset);
+    const file = path.join(ROOT, ...asset.split('/'));
+    assert(frame.pose === pose && frame.sourcePng === ZORO_ACTION_SOURCE &&
+      frame.sourceSha256 === currentSourceSha.get(ZORO_ACTION_SOURCE) &&
+      frame.sha256 === sha256File(file) && frame.bytes === fs.statSync(file).size,
+    `Active Zoro action frame differs from action manifest: ${pose}`);
+  }
+
+  const zoroWalk = roomWalk.items.filter(item => item.key === 'zoro');
+  assert(zoroWalk.length === 1 && zoroWalk[0].asset === ZORO_WALK2_ASSET,
+    'Grounded walk manifest lacks exactly one Zoro frame.');
+
+  const overlayExists = fs.existsSync(ZORO_OVERLAY_PATH);
+  const overlay = overlayExists
+    ? readJson(ZORO_OVERLAY_PATH, '1.1.12 Zoro art overlay')
+    : { schema: 1, version: '1.1.12', character: 'zoro', status: 'candidate',
+      historicalManifestSha256: ZORO_HISTORICAL_MANIFEST_SHA256, sources: [], assets: [] };
+  assertExactJson(sorted(Object.keys(overlay)), sorted([
+    'schema', 'version', 'character', 'status', 'historicalManifestSha256', 'sources', 'assets'
+  ]), 'Zoro overlay keys');
+  assert(overlay.schema === 1 && overlay.version === '1.1.12' && overlay.character === 'zoro' &&
+    ['candidate', 'verified'].includes(overlay.status), 'Zoro overlay identity or status is invalid.');
+  assertExactJson(overlay.historicalManifestSha256, ZORO_HISTORICAL_MANIFEST_SHA256,
+    'Zoro overlay historical manifest digests');
+  assert(Array.isArray(overlay.sources) && Array.isArray(overlay.assets),
+    'Zoro overlay must contain source and asset arrays.');
+
+  if (overlay.status === 'candidate') {
+    assert(overlay.sources.length === 0 && overlay.assets.length === 0,
+      'Candidate Zoro overlay cannot assert unverified art.');
+    assert(changedSourcePaths.length === 0 && changedAssetPaths.every(asset => asset === ZORO_WALK2_ASSET),
+      'Zoro art changed before a verified overlay was produced.');
+    return { status: 'candidate', sources: new Set(), assets: new Set() };
+  }
+
+  assertExactJson(changedSourcePaths, sorted([ZORO_ACTION_SOURCE, ZORO_CHIBI_SOURCE]),
+    'Verified Zoro source changes');
+  assert(changedAssetPaths.includes(ZORO_CHIBI_ASSET) &&
+    changedAssetPaths.some(asset => ZORO_ACTION_ASSETS.includes(asset)),
+  'Verified Zoro overlay requires changed chibi and action art.');
+  assert(zoroWalk[0].sourcePng === ZORO_ACTION_SOURCE &&
+    zoroWalk[0].sourceSha256 === currentSourceSha.get(ZORO_ACTION_SOURCE),
+  'Grounded Zoro walk source must be the corrected atlas.');
+  const expectedSources = changedSourcePaths.map(source => ({
+    path: source,
+    sha256: currentSourceSha.get(source),
+    bytes: fs.statSync(path.join(ROOT, ...source.split('/'))).size
+  }));
+  const expectedAssets = changedAssetPaths.map(asset => {
+    const file = path.join(ROOT, ...asset.split('/'));
+    const sourcePng = asset === ZORO_CHIBI_ASSET ? ZORO_CHIBI_SOURCE
+      : activeFrameByAsset.get(asset).sourcePng;
+    return { path: asset, sha256: sha256File(file), bytes: fs.statSync(file).size,
+      sourcePng, sourceSha256: currentSourceSha.get(sourcePng) };
+  });
+  assertExactJson(overlay.sources, expectedSources, 'Zoro overlay changed source set and digests');
+  assertExactJson(overlay.assets, expectedAssets, 'Zoro overlay changed asset set and digests');
+  const walkOverride = expectedAssets.find(item => item.path === ZORO_WALK2_ASSET);
+  assert(walkOverride && walkOverride.sha256 === zoroWalk[0].assetSha256 &&
+    walkOverride.bytes === zoroWalk[0].assetBytes,
+  'Zoro walk overlay differs from grounded walk manifest.');
+  return { status: 'verified', sources: new Set(changedSourcePaths), assets: new Set(changedAssetPaths) };
+}
+
 function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
@@ -458,6 +577,28 @@ function validateSourcePackage() {
   assert(roomExpansion.version === '1.1.10' && roomExpansion.canonicalCharactersOnly === true,
     'Room expansion manifest must identify the canonical release.');
   const roomDepth = readJson(path.join(ROOT, 'docs', 'LAUNCHER_ROOM_DEPTH_ART_20260925.json'), 'launcher room depth/action art manifest');
+  const roomWalk = readJson(path.join(ROOT, 'docs', 'LAUNCHER_ROOM_WALK_ART_20260925.json'), 'launcher grounded walk art manifest');
+  assert(roomWalk.version === '1.1.12' && roomWalk.canonicalCharactersOnly === true &&
+    Array.isArray(roomWalk.items) && roomWalk.items.length === 8,
+  'Grounded walk manifest must cover eight canonical GPT poses.');
+  const groundedWalkKeys = sorted(['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopper', 'robin', 'brook']);
+  assertExactJson(sorted(roomWalk.items.map(item => item.key)), groundedWalkKeys, 'Grounded walk character set');
+  const groundedWalkByAsset = new Map();
+  for (const item of roomWalk.items) {
+    assert(item.asset === `public/images/launcher_room/action_frames/${item.key}/walk2.webp`, `Unexpected grounded walk path: ${item.asset}`);
+    assert([`tools/launcher-room/action-source-png/${item.key}.png`,
+      `tools/launcher-room/action-source-png/${item.key}-walk2-grounded.png`].includes(item.sourcePng),
+    `Unexpected grounded walk source: ${item.sourcePng}`);
+    assert(Array.isArray(item.sourceRegion) && item.sourceRegion.length === 4 &&
+      item.sourceRegion.every(Number.isInteger), `Invalid grounded walk crop: ${item.key}`);
+    assertExactJson(item.assetPixels, [256, 256], `Grounded walk dimensions: ${item.key}`);
+    const sourcePath = path.join(ROOT, ...item.sourcePng.split('/'));
+    const assetPath = path.join(ROOT, ...item.asset.split('/'));
+    assert(sha256File(sourcePath) === item.sourceSha256, `GPT grounded walk source differs: ${item.key}`);
+    assert(fs.statSync(assetPath).size === item.assetBytes && sha256File(assetPath) === item.assetSha256,
+      `Grounded walk frame differs: ${item.key}`);
+    groundedWalkByAsset.set(item.asset, item);
+  }
   assert(roomDepth.version === '1.1.11' && roomDepth.canonicalCharactersOnly === true,
     'Room depth/action manifest must identify the canonical release.');
   assert(Array.isArray(roomManifest.items) && roomManifest.items.length === 21 &&
@@ -468,15 +609,20 @@ function validateSourcePackage() {
     sorted(ROOM_DEPTH_ASSETS), 'Room depth/action art asset set');
   assertExactJson(sorted([...roomManifest.items, ...roomExpansion.items, ...roomDepth.items].map(item => item.asset.replace(/^public\/images\/launcher_room\//, ''))),
     sorted(roomResource.filter), 'Room art manifest output set');
+  const zoroOverlay = validateZoroArtOverlay(roomManifest, roomDepth, roomWalk);
   const roomSourceRoot = path.join(ROOT, 'tools', 'launcher-room', 'source-png');
   for (const item of [...roomManifest.items, ...roomExpansion.items]) {
     assert(/^tools\/launcher-room\/source-png\/[a-z0-9-]+\.png$/.test(item.sourcePng), `Room source path is unsafe: ${item.sourcePng}`);
     assert(/^public\/images\/launcher_room\/(?:scenes|furniture|chibi|frames|emotions)\/[a-z0-9-]+\.webp$/.test(item.asset), `Room asset path is unsafe: ${item.asset}`);
     const source = path.join(ROOT, ...item.sourcePng.split('/'));
     const asset = path.join(ROOT, ...item.asset.split('/'));
-    assert(sha256File(source) === item.sourceSha256, `GPT room source digest differs: ${item.sourcePng}`);
-    assert(fs.statSync(asset).size === item.assetBytes && sha256File(asset) === item.assetSha256,
-      `Packaged room art digest differs: ${item.asset}`);
+    if (!zoroOverlay.sources.has(item.sourcePng)) {
+      assert(sha256File(source) === item.sourceSha256, `GPT room source digest differs: ${item.sourcePng}`);
+    }
+    if (!zoroOverlay.assets.has(item.asset)) {
+      assert(fs.statSync(asset).size === item.assetBytes && sha256File(asset) === item.assetSha256,
+        `Packaged room art digest differs: ${item.asset}`);
+    }
   }
   for (const item of roomDepth.items) {
     const assetRelative = item.asset.replace(/^public\/images\/launcher_room\//, '');
@@ -491,9 +637,13 @@ function validateSourcePackage() {
     assert(item.sourcePng === sourcePng, `Room depth/action source does not match its asset: ${item.asset}`);
     const source = path.join(ROOT, ...sourcePng.split('/'));
     const asset = path.join(ROOT, ...item.asset.split('/'));
-    assert(sha256File(source) === item.sourceSha256, `GPT room depth/action source digest differs: ${sourcePng}`);
-    assert(fs.statSync(asset).size === item.assetBytes && sha256File(asset) === item.assetSha256,
-      `Packaged room depth/action art digest differs: ${item.asset}`);
+    if (!zoroOverlay.sources.has(sourcePng)) {
+      assert(sha256File(source) === item.sourceSha256, `GPT room depth/action source digest differs: ${sourcePng}`);
+    }
+    if (!groundedWalkByAsset.has(item.asset) && !zoroOverlay.assets.has(item.asset)) {
+      assert(fs.statSync(asset).size === item.assetBytes && sha256File(asset) === item.assetSha256,
+        `Packaged room depth/action art digest differs: ${item.asset}`);
+    }
   }
   const opManifest = readJson(path.join(ROOT, 'docs', 'LAUNCHER_OP_BGM_20260925.json'), 'launcher OP music manifest');
   const opResource = EXTRA_RESOURCES.find((resource) => resource.to === 'launcher-assets/audio/bgm');
@@ -556,7 +706,8 @@ function validateSourcePackage() {
     assert(!forbiddenText.includes(forbidden), `Full game asset tree is forbidden in launcher packaging: ${forbidden}`);
   }
 
-  return { packageJson, iconSizes, sidebar, header, cursorDefault, cursorPointer, cursorPressed, catalog, catalogV3 };
+  return { packageJson, iconSizes, sidebar, header, cursorDefault, cursorPointer, cursorPressed,
+    catalog, catalogV3, zoroOverlayStatus: zoroOverlay.status };
 }
 
 function collectExpectedLauncherAssets() {
@@ -730,6 +881,10 @@ function validateInstaller(installerPath, packageJson) {
 function main() {
   const options = parseArguments(process.argv.slice(2));
   const source = validateSourcePackage();
+  if (options.winUnpacked || options.installer) {
+    assert(source.zoroOverlayStatus === 'verified',
+      'Release package requires a verified Zoro art overlay; candidate art cannot be shipped.');
+  }
   const parts = [
     'DESKTOP_LAUNCHER_PACKAGE_QA=PASS',
     `iconSizes=${source.iconSizes}`,
@@ -737,7 +892,8 @@ function main() {
     `header=${source.header}`,
     `cursors=${source.cursorDefault},${source.cursorPointer},${source.cursorPressed}`,
     'runtimeDeps=1',
-    'games=card,board,chess'
+    'games=card,board,chess',
+    `zoroArt=${source.zoroOverlayStatus}`
   ];
   if (options.winUnpacked) {
     const packaged = validateWinUnpacked(options.winUnpacked, source);

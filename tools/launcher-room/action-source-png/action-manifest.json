@@ -24,9 +24,7 @@
         1254,
         1254
       ],
-      "poseOverrideSha256": {
-        "walk2": "6a176b7e77354c7b73358542d66565804b885367cae59b5817da7b8e81ed8757"
-      },
+      "poseOverrideSha256": {},
       "cuts": {
         "x": [
           452,
@@ -94,22 +92,22 @@
         {
           "pose": "walk2",
           "path": "public/images/launcher_room/action_frames/luffy/walk2.webp",
-          "bytes": 37740,
-          "sha256": "cc6e6b0561a6a1f79ae7a05340f01c8b8b4449c16783ed50530f4fe1e01a31b2",
-          "source": "tools/launcher-room/action-source-png/luffy-walk2.png",
-          "sourcePng": "tools/launcher-room/action-source-png/luffy-walk2.png",
-          "sourceSha256": "6a176b7e77354c7b73358542d66565804b885367cae59b5817da7b8e81ed8757",
+          "bytes": 40088,
+          "sha256": "a6f9fa30502ccef91b34da50908e14d395b5c47b7c2329a5fe098be8316f24f5",
+          "source": "tools/launcher-room/action-source-png/luffy.png",
+          "sourcePng": "tools/launcher-room/action-source-png/luffy.png",
+          "sourceSha256": "92e95ea03ebd6d1c6f72caaf0c2ba397e245d8df2e7a246fd4c15a6216758fbc",
           "sourceRegion": [
+            819,
             0,
-            0,
-            1145,
-            1374
+            1254,
+            419
           ],
           "sourceBounds": [
-            213,
-            47,
-            941,
-            1329
+            96,
+            7,
+            324,
+            411
           ]
         },
         {
@@ -243,14 +241,12 @@
     {
       "character": "zoro",
       "source": "tools/launcher-room/action-source-png/zoro.png",
-      "sourceSha256": "31ed0f449c518418b67042b7f67b198e5d457e7d7c202abf5edb73f22693150e",
+      "sourceSha256": "f52eaefd6483ce9707da91cb082342360bb1bac340434836cfddfd31e81b6574",
       "sourcePixels": [
         1222,
         1287
       ],
-      "poseOverrideSha256": {
-        "walk2": "2ba2776ce440eba73aa75ea661356188c07ce20ca6eb63bf3521f3ded1e79643"
-      },
+      "poseOverrideSha256": {},
       "cuts": {
         "x": [
           422,
@@ -258,7 +254,7 @@
         ],
         "y": [
           433,
-          860
+          861
         ],
         "occupancy": {
           "x": [
@@ -271,16 +267,16 @@
           ]
         }
       },
-      "scale": 0.574822,
+      "scale": 0.572104,
       "frames": [
         {
           "pose": "idle",
           "path": "public/images/launcher_room/action_frames/zoro/idle.webp",
-          "bytes": 37114,
-          "sha256": "3335d4e7e8a3eb84991cf2f87e52feca267558fc669dff8dcf7ac8c224c14699",
+          "bytes": 36718,
+          "sha256": "87e53acc4f63e4074413c647a798d82f9e84bf6822ac1f4b4cdbcb5432e3a567",
           "source": "tools/launcher-room/action-source-png/zoro.png",
           "sourcePng": "tools/launcher-room/action-source-png/zoro.png",
-          "sourceSha256": "31ed0f449c518418b67042b7f67b198e5d457e7d7c202abf5edb73f22693150e",
+          "sourceSha256": "f52eaefd6483ce9707da91cb082342360bb1bac340434836cfddfd31e81b6574",
           "sourceRegion": [
             0,
             0,
@@ -288,20 +284,20 @@
             433
           ],
           "sourceBounds": [
-            113,
-            12,
-            306,
-            429
+            112,
+            11,
+            307,
+            430
           ]
         },
         {
           "pose": "walk1",
           "path": "public/images/launcher_room/action_frames/zoro/walk1.webp",
-          "bytes": 39646,
-          "sha256": "5a8e2c80036e1e75c60e6af006802005f99483786309f7183332d881b2addd7a",
+          "bytes": 39320,
+          "sha256": "775ea68aacd6aa9756bfad39900897c0d84067a85c6e6ae0fe694c7e93410e39",
           "source": "tools/launcher-room/action-source-png/zoro.png",
           "sourcePng": "tools/launcher-room/action-source-png/zoro.png",
-          "sourceSha256": "31ed0f449c518418b67042b7f67b198e5d457e7d7c202abf5edb73f22693150e",
+          "sourceSha256": "f52eaefd6483ce9707da91cb082342360bb1bac340434836cfddfd31e81b6574",
           "sourceRegion": [
             422,
             0,
@@ -309,7 +305,7 @@
             433
           ],
           "sourceBounds": [
-            72,
+            71,
             12,
             307,
             428
@@ -318,147 +314,147 @@
         {
           "pose": "walk2",
           "path": "public/images/launcher_room/action_frames/zoro/walk2.webp",
-          "bytes": 34794,
-          "sha256": "ade8929951d7e620729244c17b7fa13ee086a83d351ea26f80edae52bf0d8757",
-          "source": "tools/launcher-room/action-source-png/zoro-walk2.png",
-          "sourcePng": "tools/launcher-room/action-source-png/zoro-walk2.png",
-          "sourceSha256": "2ba2776ce440eba73aa75ea661356188c07ce20ca6eb63bf3521f3ded1e79643",
+          "bytes": 38900,
+          "sha256": "f3e38abacae92ff1127ed6a0d301063515fb4d8c9635f0fdcd7af6b27fd358c9",
+          "source": "tools/launcher-room/action-source-png/zoro.png",
+          "sourcePng": "tools/launcher-room/action-source-png/zoro.png",
+          "sourceSha256": "f52eaefd6483ce9707da91cb082342360bb1bac340434836cfddfd31e81b6574",
           "sourceRegion": [
-            0,
+            802,
             0,
             1222,
-            1287
+            433
           ],
           "sourceBounds": [
-            302,
-            34,
-            927,
-            1251
+            88,
+            14,
+            319,
+            428
           ]
         },
         {
           "pose": "talk_happy",
           "path": "public/images/launcher_room/action_frames/zoro/talk_happy.webp",
-          "bytes": 42638,
-          "sha256": "580e1d4d60dffb0727852a6c0ffa74572ef86c7b115cdfdaa8d90c13e575fbbe",
+          "bytes": 42270,
+          "sha256": "d1e89d2f819028789f35765ef2abde43ca2abe87b2bced7d36532d918a85acc3",
           "source": "tools/launcher-room/action-source-png/zoro.png",
           "sourcePng": "tools/launcher-room/action-source-png/zoro.png",
-          "sourceSha256": "31ed0f449c518418b67042b7f67b198e5d457e7d7c202abf5edb73f22693150e",
+          "sourceSha256": "f52eaefd6483ce9707da91cb082342360bb1bac340434836cfddfd31e81b6574",
           "sourceRegion": [
             0,
             433,
             422,
-            860
+            861
           ],
           "sourceBounds": [
-            102,
-            8,
+            100,
+            7,
             352,
-            426
+            427
           ]
         },
         {
           "pose": "talk_annoyed",
           "path": "public/images/launcher_room/action_frames/zoro/talk_annoyed.webp",
-          "bytes": 42060,
-          "sha256": "ecf035a2279877a8e5f02cf3f697e7b63c1e476515564ef2b5fc42117288b822",
+          "bytes": 41632,
+          "sha256": "a88a2ac8e0626078c5575132d8b6e993e0174591c9ef7e78cc645d4cf68f0529",
           "source": "tools/launcher-room/action-source-png/zoro.png",
           "sourcePng": "tools/launcher-room/action-source-png/zoro.png",
-          "sourceSha256": "31ed0f449c518418b67042b7f67b198e5d457e7d7c202abf5edb73f22693150e",
+          "sourceSha256": "f52eaefd6483ce9707da91cb082342360bb1bac340434836cfddfd31e81b6574",
           "sourceRegion": [
             422,
             433,
             802,
-            860
+            861
           ],
           "sourceBounds": [
-            77,
+            76,
             6,
-            302,
-            426
+            301,
+            427
           ]
         },
         {
           "pose": "surprised",
           "path": "public/images/launcher_room/action_frames/zoro/surprised.webp",
-          "bytes": 44060,
-          "sha256": "1a49d297a4ce36f80e5f4864043f6bc0fefbbf847f66bee0b8dad65e88fdfbb1",
+          "bytes": 43948,
+          "sha256": "f7151d9d25749bf5c136b3cc3df357897cb979ca9461802626bb6e5eed2619a7",
           "source": "tools/launcher-room/action-source-png/zoro.png",
           "sourcePng": "tools/launcher-room/action-source-png/zoro.png",
-          "sourceSha256": "31ed0f449c518418b67042b7f67b198e5d457e7d7c202abf5edb73f22693150e",
+          "sourceSha256": "f52eaefd6483ce9707da91cb082342360bb1bac340434836cfddfd31e81b6574",
           "sourceRegion": [
             802,
             433,
             1222,
-            860
+            861
           ],
           "sourceBounds": [
-            81,
-            5,
-            353,
-            426
+            80,
+            4,
+            352,
+            427
           ]
         },
         {
           "pose": "focused_use",
           "path": "public/images/launcher_room/action_frames/zoro/focused_use.webp",
-          "bytes": 40376,
-          "sha256": "5f938f296831adaa53624a1956e534649daec19d8022cb4ee5dd8d297f23b9d9",
+          "bytes": 40400,
+          "sha256": "ec8a2ae469a1e94bc82c8f9b89aba7cd2a6215db0393258a3c14860633c4105a",
           "source": "tools/launcher-room/action-source-png/zoro.png",
           "sourcePng": "tools/launcher-room/action-source-png/zoro.png",
-          "sourceSha256": "31ed0f449c518418b67042b7f67b198e5d457e7d7c202abf5edb73f22693150e",
+          "sourceSha256": "f52eaefd6483ce9707da91cb082342360bb1bac340434836cfddfd31e81b6574",
           "sourceRegion": [
             0,
-            860,
+            861,
             422,
             1287
           ],
           "sourceBounds": [
-            73,
-            6,
-            322,
+            72,
+            5,
+            323,
             408
           ]
         },
         {
           "pose": "sit",
           "path": "public/images/launcher_room/action_frames/zoro/sit.webp",
-          "bytes": 36370,
-          "sha256": "5fa6efa8108e057e9400d56bf6e21ce460cda23bca94781bf93ca278f2270783",
+          "bytes": 36126,
+          "sha256": "77018b5aaac077b4cd70a0095dfad1c5b66de6104c722374abbd92bc96255688",
           "source": "tools/launcher-room/action-source-png/zoro.png",
           "sourcePng": "tools/launcher-room/action-source-png/zoro.png",
-          "sourceSha256": "31ed0f449c518418b67042b7f67b198e5d457e7d7c202abf5edb73f22693150e",
+          "sourceSha256": "f52eaefd6483ce9707da91cb082342360bb1bac340434836cfddfd31e81b6574",
           "sourceRegion": [
             422,
-            860,
+            861,
             802,
             1287
           ],
           "sourceBounds": [
-            79,
-            5,
-            291,
+            76,
+            4,
+            292,
             406
           ]
         },
         {
           "pose": "wave",
           "path": "public/images/launcher_room/action_frames/zoro/wave.webp",
-          "bytes": 39530,
-          "sha256": "0296634ea069bee4d993e4f7089e92c207c22b3884b4c0fe363f56d9f2e0a730",
+          "bytes": 39418,
+          "sha256": "5e300ddc13ac6918b2e8e03a3a1f0d89b3129dd7614e9ec59d5b15634513f591",
           "source": "tools/launcher-room/action-source-png/zoro.png",
           "sourcePng": "tools/launcher-room/action-source-png/zoro.png",
-          "sourceSha256": "31ed0f449c518418b67042b7f67b198e5d457e7d7c202abf5edb73f22693150e",
+          "sourceSha256": "f52eaefd6483ce9707da91cb082342360bb1bac340434836cfddfd31e81b6574",
           "sourceRegion": [
             802,
-            860,
+            861,
             1222,
             1287
           ],
           "sourceBounds": [
-            75,
-            3,
-            333,
+            74,
+            2,
+            334,
             409
           ]
         }
@@ -472,9 +468,7 @@
         1226,
         1283
       ],
-      "poseOverrideSha256": {
-        "walk2": "220ef77a6ee777c90de5ee8fd4c16d5759af9fc2c2be2372c35b6963827b37bd"
-      },
+      "poseOverrideSha256": {},
       "cuts": {
         "x": [
           433,
@@ -542,22 +536,22 @@
         {
           "pose": "walk2",
           "path": "public/images/launcher_room/action_frames/nami/walk2.webp",
-          "bytes": 30050,
-          "sha256": "84cf8b176c696dc9ca361a33d140f9f0b8d3884980b05d177f46bd2c65387f06",
-          "source": "tools/launcher-room/action-source-png/nami-walk2.png",
-          "sourcePng": "tools/launcher-room/action-source-png/nami-walk2.png",
-          "sourceSha256": "220ef77a6ee777c90de5ee8fd4c16d5759af9fc2c2be2372c35b6963827b37bd",
+          "bytes": 34328,
+          "sha256": "af88685a071ad265b30aca9dd9dc84ec812909fc05df983f0f0678553662f504",
+          "source": "tools/launcher-room/action-source-png/nami.png",
+          "sourcePng": "tools/launcher-room/action-source-png/nami.png",
+          "sourceSha256": "2518f7a489fd536621e2be5fe7d1405dbaaef5a50d92c4c87567c64153724262",
           "sourceRegion": [
+            805,
             0,
-            0,
-            1024,
-            1536
+            1226,
+            431
           ],
           "sourceBounds": [
-            154,
-            55,
-            870,
-            1472
+            75,
+            10,
+            286,
+            424
           ]
         },
         {
@@ -696,9 +690,7 @@
         1223,
         1286
       ],
-      "poseOverrideSha256": {
-        "walk2": "ae5d04b1c747b537fe9fb558c62f220606e7fa8c953ffd09b7df73ba5cc7f0bb"
-      },
+      "poseOverrideSha256": {},
       "cuts": {
         "x": [
           433,
@@ -766,22 +758,22 @@
         {
           "pose": "walk2",
           "path": "public/images/launcher_room/action_frames/usopp/walk2.webp",
-          "bytes": 33764,
-          "sha256": "fb77ecf425930e6e6e6b146e5fd50a339a555d50022ef00b8bddd93d3e75da5a",
-          "source": "tools/launcher-room/action-source-png/usopp-walk2.png",
-          "sourcePng": "tools/launcher-room/action-source-png/usopp-walk2.png",
-          "sourceSha256": "ae5d04b1c747b537fe9fb558c62f220606e7fa8c953ffd09b7df73ba5cc7f0bb",
+          "bytes": 45922,
+          "sha256": "caa1b2a2da9dd72aaee69425e54a20e86c7aacd3b6cbc573bc48fceef8840a93",
+          "source": "tools/launcher-room/action-source-png/usopp.png",
+          "sourcePng": "tools/launcher-room/action-source-png/usopp.png",
+          "sourceSha256": "aba8993af31d6faa9bb19086404edd29d1b3d9889bda15d32262bb505ada7cb0",
           "sourceRegion": [
+            827,
             0,
-            0,
-            1024,
-            1536
+            1223,
+            431
           ],
           "sourceBounds": [
-            91,
-            27,
-            969,
-            1506
+            53,
+            7,
+            338,
+            428
           ]
         },
         {
@@ -920,9 +912,7 @@
         1222,
         1287
       ],
-      "poseOverrideSha256": {
-        "walk2": "899d8e86a47f93bf7194f8abdb31b2c042353d4566ae27e5ffd138e2f83c89a9"
-      },
+      "poseOverrideSha256": {},
       "cuts": {
         "x": [
           429,
@@ -990,22 +980,22 @@
         {
           "pose": "walk2",
           "path": "public/images/launcher_room/action_frames/sanji/walk2.webp",
-          "bytes": 29656,
-          "sha256": "ffcb821ea3bb310b5af54b831be55494e523e1dd941d5cd280657cd351925884",
-          "source": "tools/launcher-room/action-source-png/sanji-walk2.png",
-          "sourcePng": "tools/launcher-room/action-source-png/sanji-walk2.png",
-          "sourceSha256": "899d8e86a47f93bf7194f8abdb31b2c042353d4566ae27e5ffd138e2f83c89a9",
+          "bytes": 34646,
+          "sha256": "f9aa4a2c288408368a9a6689ab3380a52ecf10dfaa97269292eca205beb12120",
+          "source": "tools/launcher-room/action-source-png/sanji-walk2-grounded.png",
+          "sourcePng": "tools/launcher-room/action-source-png/sanji-walk2-grounded.png",
+          "sourceSha256": "77fb34eba7f554c949963bd6fe078524ae803b54ccf85e8a367a6cc54e626a3b",
           "sourceRegion": [
             0,
             0,
-            1024,
-            1536
+            1254,
+            1254
           ],
           "sourceBounds": [
-            137,
-            64,
-            888,
-            1459
+            251,
+            51,
+            916,
+            1207
           ]
         },
         {
@@ -1144,9 +1134,7 @@
         1223,
         1286
       ],
-      "poseOverrideSha256": {
-        "walk2": "071a63411f850b08dd2ffb8c012bf478786b92cfa0411907a472d11674b0cd0e"
-      },
+      "poseOverrideSha256": {},
       "cuts": {
         "x": [
           411,
@@ -1214,22 +1202,22 @@
         {
           "pose": "walk2",
           "path": "public/images/launcher_room/action_frames/chopper/walk2.webp",
-          "bytes": 45844,
-          "sha256": "7c71c7b0b4e5101c1a79512a8bff8ae8797f342fb3c05827635555caab803cb2",
-          "source": "tools/launcher-room/action-source-png/chopper-walk2.png",
-          "sourcePng": "tools/launcher-room/action-source-png/chopper-walk2.png",
-          "sourceSha256": "071a63411f850b08dd2ffb8c012bf478786b92cfa0411907a472d11674b0cd0e",
+          "bytes": 47318,
+          "sha256": "6169ca7cb4624ec54e5ae711340dfe389f853f4bb6919211554069bb79e52af9",
+          "source": "tools/launcher-room/action-source-png/chopper.png",
+          "sourcePng": "tools/launcher-room/action-source-png/chopper.png",
+          "sourceSha256": "cf8016ea11e1c1b8cf2fe0afe9ca2df0de7211704f91f460204645f3b51271bc",
           "sourceRegion": [
-            0,
+            810,
             0,
             1223,
-            1286
+            438
           ],
           "sourceBounds": [
-            86,
-            43,
-            1118,
-            1239
+            18,
+            12,
+            362,
+            431
           ]
         },
         {
@@ -1368,9 +1356,7 @@
         1223,
         1286
       ],
-      "poseOverrideSha256": {
-        "walk2": "e8f3de6ce5972537592aee6a83421d72b8306d5d096daed49349c682ec697daf"
-      },
+      "poseOverrideSha256": {},
       "cuts": {
         "x": [
           428,
@@ -1438,22 +1424,22 @@
         {
           "pose": "walk2",
           "path": "public/images/launcher_room/action_frames/robin/walk2.webp",
-          "bytes": 27244,
-          "sha256": "abeb03ea055a2db3118ad0ebd435b805565ccf6478d568906b8264b8674d0134",
-          "source": "tools/launcher-room/action-source-png/robin-walk2.png",
-          "sourcePng": "tools/launcher-room/action-source-png/robin-walk2.png",
-          "sourceSha256": "e8f3de6ce5972537592aee6a83421d72b8306d5d096daed49349c682ec697daf",
+          "bytes": 28962,
+          "sha256": "afe87e998e8a8d5d2fc5c980053108cec1475480c9a7e362f61df1b21582102e",
+          "source": "tools/launcher-room/action-source-png/robin.png",
+          "sourcePng": "tools/launcher-room/action-source-png/robin.png",
+          "sourceSha256": "44b7490b3cc018b47bd587089f0e74a60d5114462f5dd6a5a1327f0f8d2ec0d8",
           "sourceRegion": [
+            835,
             0,
-            0,
-            1024,
-            1536
+            1223,
+            447
           ],
           "sourceBounds": [
-            109,
-            25,
-            913,
-            1487
+            63,
+            5,
+            290,
+            441
           ]
         },
         {
@@ -1816,9 +1802,7 @@
         1223,
         1286
       ],
-      "poseOverrideSha256": {
-        "walk2": "c5a2be2475959d290590376d5c9585822d9674dd8f870da198ed955e76f21f78"
-      },
+      "poseOverrideSha256": {},
       "cuts": {
         "x": [
           431,
@@ -1886,22 +1870,22 @@
         {
           "pose": "walk2",
           "path": "public/images/launcher_room/action_frames/brook/walk2.webp",
-          "bytes": 25054,
-          "sha256": "9639856c6ff8b959189c2ba251124599b85887c76eb17c0d24e9e9ca0396b75c",
-          "source": "tools/launcher-room/action-source-png/brook-walk2.png",
-          "sourcePng": "tools/launcher-room/action-source-png/brook-walk2.png",
-          "sourceSha256": "c5a2be2475959d290590376d5c9585822d9674dd8f870da198ed955e76f21f78",
+          "bytes": 29044,
+          "sha256": "e9029471cf984c5593225c9aadafb57c7ddad748f0f5468fdd70acdd6f9232a2",
+          "source": "tools/launcher-room/action-source-png/brook.png",
+          "sourcePng": "tools/launcher-room/action-source-png/brook.png",
+          "sourceSha256": "08fcaba52c460d33b65bc98982ed66f6b8d16c456a5de48bbc763c6e602a316f",
           "sourceRegion": [
+            842,
             0,
-            0,
-            1024,
-            1536
+            1223,
+            429
           ],
           "sourceBounds": [
-            132,
-            10,
-            930,
-            1497
+            69,
+            4,
+            311,
+            423
           ]
         },
         {

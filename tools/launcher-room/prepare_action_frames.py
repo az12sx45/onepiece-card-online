@@ -58,7 +58,8 @@ def split_lines(alpha: np.ndarray, axis: int) -> tuple[int, int]:
     return cuts[0], cuts[1]
 
 
-def process(character: str, *, allow_touching: bool = False) -> dict:
+def process(character: str, *, allow_touching: bool = False,
+            prefer_atlas_walk2: bool = False) -> dict:
     sheet_path = SOURCE / f"{character}.png"
     sheet = Image.open(sheet_path).convert("RGBA")
     if min(sheet.size) < 900 or not 0.85 <= sheet.width / sheet.height <= 1.15:
@@ -97,7 +98,13 @@ def process(character: str, *, allow_touching: bool = False) -> dict:
         source_path = sheet_path
         pose_scale = scale
         override = pose_overrides[pose]
-        if override.exists():
+        grounded_override = SOURCE / f"{character}-walk2-grounded.png"
+        # The supplementary 1.1.11 walk2 art raises a knee high enough to look
+        # like a hop at room wandering speed. Select a reviewed grounded GPT
+        # redraw where available, otherwise use the original atlas stride.
+        if pose == "walk2" and prefer_atlas_walk2 and grounded_override.exists():
+            override = grounded_override
+        if override.exists() and not (prefer_atlas_walk2 and pose == "walk2" and override != grounded_override):
             source_path = override
             cell = Image.open(override).convert("RGBA")
             region = (0, 0, cell.width, cell.height)
@@ -134,7 +141,8 @@ def process(character: str, *, allow_touching: bool = False) -> dict:
                        "sourceRegion": region, "sourceBounds": bbox})
     return {"character": character, "source": str(sheet_path.relative_to(ROOT)).replace("\\", "/"),
             "sourceSha256": sha256(sheet_path), "sourcePixels": sheet.size,
-            "poseOverrideSha256": {pose: sha256(path) for pose, path in pose_overrides.items() if path.exists()},
+            "poseOverrideSha256": {pose: sha256(path) for pose, path in pose_overrides.items()
+                                   if path.exists() and not (prefer_atlas_walk2 and pose == "walk2")},
             "cuts": {"x": xs[1:3], "y": ys[1:3], "occupancy": cut_occupancy},
             "scale": round(scale, 6), "frames": frames}
 
@@ -143,10 +151,13 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("characters", nargs="*", choices=CHARACTERS)
     parser.add_argument("--allow-touching", action="store_true")
+    parser.add_argument("--prefer-atlas-walk2", action="store_true",
+                        help="Use the grounded opposite stride in the original GPT atlas.")
     args = parser.parse_args()
     characters = args.characters or CHARACTERS
     manifest = {"schema": 1, "frameSize": [FRAME_SIZE, FRAME_SIZE],
-                "poses": POSES, "characters": [process(c, allow_touching=args.allow_touching)
+                "poses": POSES, "characters": [process(c, allow_touching=args.allow_touching,
+                                                        prefer_atlas_walk2=args.prefer_atlas_walk2)
                                               for c in characters]}
     if len(characters) == len(CHARACTERS):
         out = SOURCE / "action-manifest.json"

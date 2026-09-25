@@ -5,11 +5,13 @@
 | 檔案 | 用途 |
 | --- | --- |
 | `desktop/launcher-room.js/css`、`launcher.html` | 固定家具視覺比例、圖面拖曳／四向旋轉、角色步行與點擊詳情／親密度／工作面板。 |
+| `tools/launcher-room/action-source-png/zoro.png`、`source-png/zoro.png`、`action_frames/zoro/`、`chibi/zoro.webp` | GPT 修正兩年前白衣索隆雙眼與左眼傷疤；九格動作和商店 Q 版備用圖一致。 |
+| `tools/launcher-room/prepare_action_frames.py`、`sanji-walk2-grounded.png`、`build_walk_art_manifest.py`、`build_zoro_art_overlay.js`、`docs/LAUNCHER_ROOM_WALK_ART_20260925.json`、`LAUNCHER_ROOM_ZORO_ART_OVERLAY_20260925.json` | 重產低抬腳影格並鎖定 GPT 來源／輸出 SHA；歷史素材清單保持不變。 |
 | `desktop/launcher-room-dialogue.js` | 十位原作角色人設、角色家具台詞、45 種配對的 102 組雙人對話及點擊互動台詞；先於房間主程式載入。 |
 | `server/launcher-profile-shop.js` | `launcherCompanionsV1` 的親密度、聊天冷卻、五分鐘工作與展示室金幣領取交易；驗持有權及已擺放狀態。 |
 | `server/index.js`、`desktop-distribution.js`、`desktop/auth-service.js`、`preload.js` | 啟動器角色資料／聊天／派工／領幣的 Socket、桌面橋接與事件白名單。 |
-| `desktop/main.js`、`package.json`／lock、`scripts/desktop_launcher_package_qa.js` | 新對話模組的本機載入與 Windows 安裝封裝清單；封裝與安裝檔驗證待完成。 |
-| `scripts/launcher_room_dialogue_qa.js`、`launcher_character_economy_qa.js`、`launcher_room_browser_qa.js` | 對話資料、伺服器金幣交易與真 Chromium 房間操作驗證；目前僅對話資料 QA 已通過，其餘待驗。 |
+| `desktop/main.js`、`package.json`／lock、`scripts/desktop_launcher_package_qa.js` | 新對話模組的本機載入與 Windows 安裝封裝清單；來源及索隆美術 overlay QA 已通過，最終安裝檔驗證待完成。 |
+| `scripts/launcher_room_dialogue_qa.js`、`launcher_character_economy_qa.js`、`launcher_room_browser_qa.js` | 對話資料、伺服器金幣交易與真 Chromium 房間操作驗證；定向交易及房間瀏覽器 62／62 已通過。 |
 | `public/desktop/launcher-release-v1.json` | 目前仍為已發布的 1.1.11 更新清單；1.1.12 簽署與公開發布待驗。 |
 
 ## 2026-09-25 啟動器 1.1.11 房間佈置與動作
