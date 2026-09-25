@@ -296,6 +296,17 @@ class AuthService extends EventEmitter {
     return this.launcherRequest('LAUNCHER_PROFILE_GET', { userId: id });
   }
 
+  async saveLauncherCard(card) {
+    if (!card || typeof card !== 'object') return { ok: false, error: 'invalid card' };
+    const displayName = typeof card.displayName === 'string' ? card.displayName.replace(/\s+/g, ' ').trim() : '';
+    const tagline = typeof card.tagline === 'string' ? card.tagline.trim() : '';
+    const avatarId = Number(card.avatarId);
+    if (!displayName || displayName.length > 32 || tagline.length > 120 || !Number.isInteger(avatarId) || avatarId < 0 || avatarId > 62) {
+      return { ok: false, error: 'invalid card' };
+    }
+    return this.launcherRequest('LAUNCHER_CARD_SET', { displayName, tagline, avatarId });
+  }
+
   async getLauncherShop(options = {}) {
     if (options?.preview === true && this.previewMode) {
       return this.emitAck('LAUNCHER_SHOP_GET', { preview: true });

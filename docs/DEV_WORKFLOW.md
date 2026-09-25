@@ -1,5 +1,15 @@
 # Dev Workflow
 
+## 2026-09-25 啟動器個人名片與互動房間 1.1.10
+
+範圍：從已部署 1.1.9 的 `origin/main` 建立隔離工作樹 `D:\Codex_Release_Worktrees\launcher-room-interactions-1.1.10`；保留正式 D 槽來源的其他未提交 Board 工作。移除舊船長展示室與個人頁商店捷徑，名片可編輯顯示名稱／簡介／頭像，已購裝飾移至名片，頭像與相框改為圓形。房間新增編輯格線、家具 0–3 四向擬似透視、最多八位角色的活動與家具互動；商品 120→124，新增騙人布、佛朗基、布魯克、甚平。`launcherCardV1` 使用 `LAUNCHER_CARD_SET` 獨立交易驗證付費頭像持有權；`launcherRoomV1` 保持舊 `flip` 相容，舊 Card patch 不得覆寫名片或房間。三款遊戲規則、存檔與 `BOARD_GAME_STATE` 不變。
+
+變更檔案：`server/launcher-profile-shop.js`、`index.js`、`desktop-distribution.js`；`desktop/launcher.html`、`launcher-profile-shop.js/css`、`launcher-room.js/css`、`auth-service.js`、`main.js`、`preload.js`、`package.json`／lock；`public/images/launcher_room/chibi/`、`emotions/`、`tools/launcher-room/source-png/`、`prepare_chibi_emotions.py`、`docs/LAUNCHER_ROOM_EXPANSION_ART_20260925.json`；名片／房間／封裝定向 QA 與本文件、`PROJECT_OVERVIEW.md`、`GAME_RULES.md`、`FILE_MAP.md`。
+
+定向驗證：`launcher_profile_shop_qa.js`、`profile_shop_ownership_sql_qa.js` 通過名片輸入／付費頭像持有權、好友讀取、八位房客與四向座標、舊翻轉相容、JSONB 保存及舊 Card 偽造 patch 拒絕；既有留言板與好友頭像回歸通過。`desktop_distribution_gate_qa.js` 135／135、個人頁 Chromium 97／97、房間 Chromium 32／32 通過；桌機與 390px、好友唯讀、八人同房、四方向與實際情緒肖像解碼皆查核。`node --check` 13 支 JS、`git diff --check` 通過。本機 `npm start` 在 18980 提供下載頁與 health HTTP 200；未設定 `DATABASE_URL`，不可視為正式 PostgreSQL 驗收。美術來源與 44 張新增圖的 SHA／Alpha 記在 `LAUNCHER_ROOM_EXPANSION_ART_20260925.json`，已目視十人全身和 40 情緒 contact。
+
+Windows x64 NSIS 1.1.10 候選由隔離工作樹建置，`desktop_launcher_package_qa.js` 的來源、win-unpacked、installer 三層通過：245 ASAR entries、212 個 launcher files；安裝檔 227,150,255 bytes，SHA-256 `241a851d14259b69f8fbf4894c3aa0af2adef95e5bfe2e310975d826647b580e`，低於更新器 256 MiB 限制。真封裝 Electron 隔離 userData 啟動 smoke `ok=true`，111／111 `opui` 素材 HEAD／Range／MIME 通過（含新增 44 圖），BGM 播放、程式頁、游標與協定測試通過，broken images 0；證據在 `D:\Codex_QA\launcher-room-1.1.10\smoke-packaged.json`。Authenticode 為 NotSigned。R2、Render、公開更新清單與正式玩家帳號交易結果於發行後補記。
+
 ## 2026-09-25 啟動器自由擺設房間與商店擴充 1.1.9（已部署）
 
 範圍：以已發布 1.1.8 的 `origin/main` 提交 `070976596` 建立隔離工作樹 `D:\Codex_Release_Worktrees\launcher-room-shop-1.1.9`。商店保留原有 87 件 ID 與售價，新增 33 件後共 120 件：千陽號甲板／廚房／圖書室場景 3、家具 10、既有《航海王》角色魯夫／索隆／娜美／喬巴／香吉士／羅賓的 Q 版房客 6、同六人的個人頁貼紙 6、場景背景 3、相框 2、排版 3。21 張 GPT 點陣原稿分別為場景 3、家具 10、Q 版角色 6、相框 2；貼紙與背景重用對應圖檔，未新增原創角色。來源 PNG、正式 WebP、尺寸、Alpha 與 SHA-256 見 `docs/LAUNCHER_ROOM_ART_20260925.json`；產生與轉檔使用 `tools/launcher-room/prepare_art.py`、`build_art_manifest.py`。舊商店、頭像、BGM 及三款遊戲套件不改 ID。

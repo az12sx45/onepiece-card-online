@@ -5,7 +5,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const {
   CATALOG, toPublicProfile, toCardPublicProfile, getLauncherProfile, getLauncherShop, changeLauncherItem,
-  setLauncherDecorationPlacement, setLauncherRoom, sanitizeLauncherStatsPatch
+  setLauncherDecorationPlacement, setLauncherCard, setLauncherRoom, sanitizeLauncherStatsPatch
 } = require('../server/launcher-profile-shop');
 
 const clone = value => JSON.parse(JSON.stringify(value));
@@ -66,14 +66,15 @@ const pool = {
 };
 
 (async () => {
-  assert.equal(CATALOG.length, 120);
+  assert.equal(CATALOG.length, 124);
   assert.equal(new Set(CATALOG.map(item => item.id)).size, CATALOG.length);
   assert.deepEqual(
     ['room_scene', 'room_furniture', 'room_character'].map(type => CATALOG.filter(item => item.type === type).length),
-    [3, 10, 6]
+    [3, 10, 10]
   );
   assert.equal(CATALOG.find(item => item.id === 'frame-sunny').asset, 'opui://launcher/images/launcher_room/frames/ship-wheel.webp');
   assert.equal(CATALOG.find(item => item.id === 'room-character-luffy').asset, 'opui://launcher/images/launcher_room/chibi/luffy.webp');
+  assert.equal(CATALOG.find(item => item.id === 'room-character-jinbe').asset, 'opui://launcher/images/launcher_room/chibi/jinbe.webp');
   assert.equal(CATALOG.find(item => item.id === 'decor-header-luffy-chibi').slot, 'header');
   assert.deepEqual(CATALOG.filter(item => item.type === 'avatar').map(item => item.key),
     Array.from({ length: 32 }, (_, index) => index + 31));
@@ -98,9 +99,11 @@ const pool = {
   assert.match(fs.readFileSync(path.join(__dirname, '../server/index.js'), 'utf8'), /sanitizeLauncherStatsPatch\(sanitizeChessStatsPatch\(patch\.stats\)\)/);
   assert.equal((await getLauncherShop(pool, '', true)).shop.preview, true);
   assert.equal((await getLauncherShop(pool, '', true)).shop.wallet, null);
-  assert.deepEqual(sanitizeLauncherStatsPatch({ launcherOwnedV1: { items: ['guestbook-1'] }, launcherAppearanceV1: { bgmId: 'bgm-harbor' }, launcherWalletV1: { coins: 999999 }, launcherRoomV1: { revision: 999999, sceneId: 'room-scene-sunny-deck' }, client: { totals: { coins: 2 } } }), { client: { totals: { coins: 2 } } });
+  assert.deepEqual(sanitizeLauncherStatsPatch({ launcherOwnedV1: { items: ['guestbook-1'] }, launcherAppearanceV1: { bgmId: 'bgm-harbor' }, launcherWalletV1: { coins: 999999 }, launcherRoomV1: { revision: 999999, sceneId: 'room-scene-sunny-deck' }, launcherCardV1: { displayName: '偽造名片' }, client: { totals: { coins: 2 } } }), { client: { totals: { coins: 2 } } });
   assert.match(fs.readFileSync(path.join(__dirname, '../server/desktop-distribution.js'), 'utf8'), /'LAUNCHER_ROOM_SET'/);
+  assert.match(fs.readFileSync(path.join(__dirname, '../server/desktop-distribution.js'), 'utf8'), /'LAUNCHER_CARD_SET'/);
   assert.match(fs.readFileSync(path.join(__dirname, '../server/index.js'), 'utf8'), /socket\.on\('LAUNCHER_ROOM_SET'/);
+  assert.match(fs.readFileSync(path.join(__dirname, '../server/index.js'), 'utf8'), /socket\.on\('LAUNCHER_CARD_SET'/);
   assert.equal(toPublicProfile({ user_id: 99, name: '未購買', avatar: 1,
     stats: { launcherAppearanceV1: { backgroundId: 'background-zoro', frameId: 'frame-luffy', bgmId: 'bgm-voyage' } } }).appearance.backgroundId, 'background-default');
 
@@ -152,10 +155,23 @@ const pool = {
   ]);
   assert.ok(!JSON.stringify(own).includes('never-expose'));
   assert.ok(!JSON.stringify(own).includes('mine'));
+  assert.deepEqual(own.profile.card, { displayName: '航海士', tagline: '', avatarId: 0 });
+  assert.equal((await setLauncherCard(pool, 'mine', { displayName: '', tagline: '', avatarId: 0 })).error, 'invalid_card');
+  assert.equal((await setLauncherCard(pool, 'mine', { displayName: 'A'.repeat(33), tagline: '', avatarId: 0 })).error, 'invalid_card');
+  assert.equal((await setLauncherCard(pool, 'mine', { displayName: '測試', tagline: 'X'.repeat(121), avatarId: 0 })).error, 'invalid_card');
+  assert.equal((await setLauncherCard(pool, 'mine', { displayName: '測試\n注入', tagline: '', avatarId: 0 })).error, 'invalid_card');
+  assert.equal((await setLauncherCard(pool, 'mine', { displayName: '測試', tagline: '', avatarId: 31 })).error, 'not_owned');
+  assert.equal((await setLauncherCard(pool, 'mine', { displayName: ' 航海士・新版 ', tagline: ' 向新世界出發 ', avatarId: 2 })).ok, true);
+  assert.deepEqual(rows.get(1).stats.launcherCardV1, { displayName: '航海士・新版', tagline: '向新世界出發', avatarId: 2 });
+  assert.equal(rows.get(1).name, '航海士');
+  assert.equal((await getLauncherProfile(pool, 'mine')).profile.card.avatarId, 2);
+  assert.deepEqual((await getLauncherProfile(pool, 'friend', 1)).profile.card,
+    { displayName: '航海士・新版', tagline: '向新世界出發', avatarId: 2 });
 
   const friend = await getLauncherProfile(pool, 'mine', 2);
   assert.equal(friend.profile.isSelf, false);
   assert.equal(friend.profile.name, '夥伴');
+  assert.deepEqual(friend.profile.card, { displayName: '夥伴', tagline: '', avatarId: 0 });
   assert.equal(friend.profile.guestbookUnlocked, true);
   assert.deepEqual(friend.profile.room, { revision: 0, sceneId: 'room-scene-default', placements: [], characters: [] });
   assert.deepEqual(friend.profile.roomItems, { scene: null, placements: [], characters: [] });
@@ -202,7 +218,8 @@ const pool = {
   assert.equal(roomSaved.ok, true);
   assert.equal(roomSaved.profile.room.revision, 1);
   assert.deepEqual(roomSaved.profile.room.placements[0],
-    { itemId: 'room-furniture-helm', x: 391.12, y: 210.46, scale: 1.2, flip: false });
+    { itemId: 'room-furniture-helm', x: 391.12, y: 210.46, scale: 1.2, rotation: 0, flip: false });
+  assert.equal(roomSaved.profile.room.placements[1].rotation, 2);
   assert.deepEqual(roomSaved.profile.room.characters[0], { itemId: 'room-character-luffy', x: 123.46, y: 456.79 });
   assert.equal(roomSaved.profile.roomItems.scene.asset, 'opui://launcher/images/launcher_room/scenes/sunny-deck.webp');
   assert.equal(roomSaved.profile.roomItems.placements[0].item.id, 'room-furniture-helm');
@@ -226,11 +243,23 @@ const pool = {
   assert.equal((await setLauncherRoom(pool, 'room-owner', { ...revisionOne, placements: [{ ...roomSnapshot.placements[0], x: 961 }] })).error, 'invalid_room');
   assert.equal((await setLauncherRoom(pool, 'room-owner', { ...revisionOne, placements: [{ ...roomSnapshot.placements[0], scale: 1.6 }] })).error, 'invalid_room');
   assert.equal((await setLauncherRoom(pool, 'room-owner', { ...revisionOne, placements: [{ ...roomSnapshot.placements[0], flip: 'false' }] })).error, 'invalid_room');
+  assert.equal((await setLauncherRoom(pool, 'room-owner', { ...revisionOne, placements: [{ ...roomSnapshot.placements[0], rotation: 4 }] })).error, 'invalid_room');
+  assert.equal((await setLauncherRoom(pool, 'room-owner', { ...revisionOne, placements: [{ ...roomSnapshot.placements[0], rotation: 1, flip: true }] })).error, 'invalid_room');
   assert.equal((await setLauncherRoom(pool, 'room-owner', { ...revisionOne, placements: [roomSnapshot.placements[0], roomSnapshot.placements[0]] })).error, 'invalid_room');
   assert.equal((await setLauncherRoom(pool, 'room-owner', { ...revisionOne, characters: Array(4).fill(roomSnapshot.characters[0]) })).error, 'invalid_room');
   assert.equal((await setLauncherRoom(pool, 'room-owner', { ...revisionOne, characters: [{ itemId: 'room-character-robin', x: 10, y: 10 }] })).error, 'not_owned');
   assert.equal((await setLauncherRoom(pool, 'room-owner', { ...revisionOne, placements: [{ ...roomSnapshot.placements[0], itemId: 'room-furniture-not-real' }] })).error, 'invalid_room');
   assert.equal(rows.get(7).stats.launcherRoomV1.revision, 1);
+  assert.equal((await setLauncherRoom(pool, 'room-owner', { ...revisionOne, placements: [{ itemId: 'room-furniture-helm', x: 300, y: 210, scale: 1, rotation: 3 }] })).ok, true);
+  assert.equal(rows.get(7).stats.launcherRoomV1.placements[0].rotation, 3);
+  assert.equal(rows.get(7).stats.launcherRoomV1.placements[0].flip, false);
+  const eightCrew = ['luffy', 'nami', 'zoro', 'chopper', 'sanji', 'robin', 'usopp', 'franky'];
+  for (const key of eightCrew.slice(2)) assert.equal((await changeLauncherItem(pool, 'room-owner', `room-character-${key}`, 'buy')).ok, true);
+  const crewSnapshot = { revision: 2, sceneId: 'room-scene-sunny-deck', placements: [],
+    characters: eightCrew.map((key, index) => ({ itemId: `room-character-${key}`, x: 100 + index * 90, y: 390 })) };
+  assert.equal((await setLauncherRoom(pool, 'room-owner', crewSnapshot)).profile.room.characters.length, 8);
+  assert.equal((await setLauncherRoom(pool, 'room-owner', { ...crewSnapshot, revision: 3,
+    characters: [...crewSnapshot.characters, { itemId: 'room-character-brook', x: 820, y: 390 }] })).error, 'invalid_room');
 
   assert.equal((await getLauncherShop(pool, 'mine')).shop.wallet.coins, 12);
   assert.equal((await getLauncherShop(pool, 'zero')).shop.wallet.coins, 100);
@@ -239,6 +268,7 @@ const pool = {
   assert.equal(rows.get(4).stats.client.totals.coins, 0);
   assert.equal((await getLauncherShop(pool, 'legacy')).shop.wallet.coins, 9);
   assert.equal((await changeLauncherItem(pool, 'mine', 'ava-31', 'buy')).shop.wallet.coins, 7);
+  assert.equal((await setLauncherCard(pool, 'mine', { displayName: '航海士・新版', tagline: '向新世界出發', avatarId: 31 })).profile.card.avatarId, 31);
   assert.equal(rows.get(1).stats.client.totals.coins, 12);
   assert.equal((await changeLauncherItem(pool, 'mine', 'ava-31', 'buy')).error, 'already_owned');
   assert.equal((await changeLauncherItem(pool, 'mine', 'ava-49', 'buy')).error, 'insufficient_coins');

@@ -7,15 +7,45 @@
 .room-stage:focus-visible { outline: 2px solid #71d5c9; outline-offset: -4px; }
 .room-stage.is-editing { cursor: crosshair; touch-action: none; }
 .room-scene { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; user-select: none; }
+.room-floor-grid { display: none; position: absolute; z-index: 3; left: 4%; right: 4%; bottom: -2%; height: 46%; pointer-events: none; opacity: .85; transform: perspective(560px) rotateX(38deg); transform-origin: 50% 100%; border: 1px solid #ffe5a893; background-image: linear-gradient(to right, #f5d99b99 1px, transparent 1px), linear-gradient(to bottom, #f5d99b99 1px, transparent 1px); background-size: 5% 20%; box-shadow: 0 0 0 2px #082c3588, inset 0 0 35px #fae2a522; }
+.room-stage.is-editing .room-floor-grid { display: block; }
 .room-stage::after { position: absolute; z-index: 900; inset: 0; content: ''; pointer-events: none; background: linear-gradient(180deg, #04141b2e, transparent 25%, transparent 69%, #04141b7d); }
 .room-objects, .room-character-layer { position: absolute; inset: 0; pointer-events: none; }
-.room-object, .room-chibi { position: absolute; display: block; max-width: none; object-fit: contain; pointer-events: auto; user-select: none; -webkit-user-drag: none; filter: drop-shadow(0 10px 8px #03171bb0); }
-.room-object { width: 17%; height: 31%; transform: translate(-50%, -93%) scale(var(--room-scale, 1)) scaleX(var(--facing, 1)); transform-origin: 50% 95%; }
-.room-chibi { width: 10%; height: 25%; transform: translate(-50%, -93%) scaleX(var(--facing, 1)); transform-origin: 50% 93%; }
-.room-chibi.is-walking { animation: room-step .38s ease-in-out infinite alternate; }
-@keyframes room-step { from { transform: translate(-50%, -93%) scaleX(var(--facing, 1)); } to { transform: translate(-50%, -96%) scaleX(var(--facing, 1)); } }
-.room-stage.is-editing .room-object, .room-stage.is-editing .room-chibi { cursor: grab; }
-.room-stage.is-editing .room-object:active, .room-stage.is-editing .room-chibi:active { cursor: grabbing; }
+.room-object-shell, .room-character-shell { position: absolute; display: block; max-width: none; pointer-events: auto; user-select: none; transform-origin: 50% 95%; }
+.room-object-shell { width: 17%; height: 31%; transform: translate(-50%, -93%) scale(var(--room-scale, 1)); }
+.room-object-shell::before { position: absolute; z-index: 0; left: 11%; right: 11%; bottom: 0; height: 16%; content: ''; border: 1px solid #e7c67e75; border-radius: 50%; background: #10333cc4; box-shadow: 0 5px 0 #071b22b8, 0 10px 11px #071b22b0; transform: rotate(var(--room-bearing, 0deg)) skewX(-13deg); }
+.room-object { position: relative; z-index: 1; display: block; width: 100%; height: 100%; object-fit: contain; user-select: none; -webkit-user-drag: none; filter: drop-shadow(0 10px 8px #03171bb0); transform-origin: 50% 80%; }
+.room-object-shell[data-rotation='0'] .room-object { transform: rotateY(0); }
+.room-object-shell[data-rotation='1'] .room-object { transform: perspective(340px) rotateY(-43deg) skewY(-5deg); }
+.room-object-shell[data-rotation='2'] .room-object { transform: perspective(340px) rotateY(180deg) scale(.88) skewY(2deg); filter: brightness(.67) saturate(.8) drop-shadow(0 10px 8px #03171bb0); }
+.room-object-shell[data-rotation='3'] .room-object { transform: perspective(340px) rotateY(43deg) skewY(5deg) scaleX(-1); }
+.room-direction { display: none; position: absolute; z-index: 5; left: 50%; bottom: -12px; min-width: 42px; padding: 2px 5px; transform: translateX(-50%); border: 1px solid #e7bd69; border-radius: 12px; background: #08242fe8; color: #ffe5aa; font-size: 9px; font-weight: 700; text-align: center; white-space: nowrap; pointer-events: none; }
+.room-stage.is-editing .room-direction { display: block; }
+.room-character-shell { width: 10%; height: 25%; transform: translate(-50%, -93%); }
+.room-chibi { display: block; width: 100%; height: 100%; object-fit: contain; user-select: none; -webkit-user-drag: none; filter: drop-shadow(0 10px 8px #03171bb0); transform: scaleX(var(--facing, 1)); transform-origin: 50% 93%; }
+.room-character-shell.is-walking .room-chibi { animation: room-step .38s ease-in-out infinite alternate; }
+.room-character-shell.is-interacting .room-chibi { filter: drop-shadow(0 0 12px #f5d397b8) drop-shadow(0 10px 8px #03171bb0); }
+.room-character-shell.is-conversing .room-chibi { animation: room-converse 1.2s ease-in-out infinite alternate; }
+.room-character-shell.is-using-furniture .room-chibi { animation: room-use .9s ease-in-out infinite alternate; }
+@keyframes room-step { from { transform: scaleX(var(--facing, 1)) translateY(0); } to { transform: scaleX(var(--facing, 1)) translateY(-4%); } }
+@keyframes room-converse { from { transform: scaleX(var(--facing, 1)) rotate(-2deg); } to { transform: scaleX(var(--facing, 1)) rotate(2deg) translateY(-2%); } }
+@keyframes room-use { from { transform: scaleX(var(--facing, 1)) rotate(-4deg); } to { transform: scaleX(var(--facing, 1)) rotate(4deg) translateY(-3%); } }
+.room-speech { position: absolute; z-index: 30; left: 50%; bottom: 98%; display: grid; grid-template-columns: 38px minmax(0, 1fr); align-items: center; gap: 2px 7px; width: 205px; min-height: 55px; padding: 7px 9px; transform: translateX(-50%); border: 1px solid #f4d28e; border-radius: 10px; background: #082430f2; box-shadow: 0 7px 18px #001219b8; color: #fff0cc; font-size: 11px; font-weight: 600; line-height: 1.4; pointer-events: none; }
+.room-speech[hidden] { display: none; }
+.room-speech::after { position: absolute; top: 100%; left: calc(50% - 7px); width: 12px; height: 12px; content: ''; transform: translateY(-7px) rotate(45deg); border-right: 1px solid #f4d28e; border-bottom: 1px solid #f4d28e; background: #082430f2; }
+.room-speech-face { grid-row: span 2; width: 38px; height: 38px; border: 1px solid #e7bd6988; border-radius: 50%; background: #133b46; object-fit: contain; }
+.room-speech[data-mood='happy'] .room-speech-face { border-color: #f8d88b; box-shadow: 0 0 7px #ffdc8d99; }
+.room-speech[data-mood='surprised'] .room-speech-face { border-color: #89e1e8; box-shadow: 0 0 7px #89e1e899; }
+.room-speech[data-mood='focused'] .room-speech-face { border-color: #a4c4f7; box-shadow: 0 0 7px #a4c4f799; }
+.room-speech[data-mood='annoyed'] .room-speech-face { border-color: #f39b8f; box-shadow: 0 0 7px #f39b8f99; }
+.room-speech-text { min-width: 0; overflow-wrap: anywhere; }
+.room-speech-action { grid-column: 2; color: #a4d9d2; font-size: 9px; font-weight: 500; }
+.room-character-shell.is-near-left .room-speech { left: 0; transform: none; }
+.room-character-shell.is-near-right .room-speech { right: 0; left: auto; transform: none; }
+.room-character-shell.is-near-left .room-speech::after { left: 28px; }
+.room-character-shell.is-near-right .room-speech::after { right: 28px; left: auto; }
+.room-stage.is-editing .room-object-shell, .room-stage.is-editing .room-character-shell { cursor: grab; }
+.room-stage.is-editing .room-object-shell:active, .room-stage.is-editing .room-character-shell:active { cursor: grabbing; }
 .room-stage.is-editing .is-selected { outline: 2px solid #ffe4a9; outline-offset: 3px; border-radius: 9px; filter: drop-shadow(0 0 11px #ffe6acbd) drop-shadow(0 8px 9px #03171ba0); }
 .room-stage-caption { position: absolute; z-index: 950; left: 17px; bottom: 14px; max-width: calc(100% - 34px); padding: 7px 12px; overflow: hidden; border: 1px solid #e7bd6969; border-radius: 7px; background: #061b27bd; color: #f8e5b7; font-size: 11px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; pointer-events: none; }
 .room-editor { margin-top: 13px; padding: 17px; border: 1px solid #e7bd6959; border-radius: 13px; background: linear-gradient(145deg, #153541, #091f2b); }
@@ -49,4 +79,4 @@
 .room-editor-actions button:disabled { opacity: .5; cursor: default; }
 @media (max-width: 760px) { .room-heading { align-items: start; } .room-editor-items { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); } }
 @media (max-width: 560px) { .room-heading { flex-direction: row; } .room-heading > div { min-width: 0; } .room-heading > .ghost-button { min-width: 82px; padding: 6px; } .room-editor { padding: 11px; } .room-editor-actions { align-items: stretch; flex-direction: column; } .room-editor-actions > div { justify-content: flex-end; } .room-selection { align-items: start; flex-direction: column; } .room-size-label { margin-left: 0; } }
-@media (prefers-reduced-motion: reduce) { .room-chibi.is-walking { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .room-character-shell.is-walking .room-chibi, .room-character-shell.is-conversing .room-chibi, .room-character-shell.is-using-furniture .room-chibi { animation: none; } }

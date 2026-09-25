@@ -5263,6 +5263,24 @@ socket.on('LAUNCHER_ROOM_SET', async ({ secret, revision, sceneId, placements, c
   }
 });
 
+socket.on('LAUNCHER_CARD_SET', async ({ secret, displayName, tagline, avatarId } = {}, cb) => {
+  try {
+    const normalizedSecret = String(secret || '').trim();
+    const result = await launcherProfileShop.setLauncherCard(pool, normalizedSecret, { displayName, tagline, avatarId });
+    cb?.(result);
+    if (result.ok) {
+      try {
+        const profile = await getProfileBySecret(normalizedSecret);
+        const ids = profile?.stats?.client?.social?.friends || [];
+        for (const id of [profile?.user_id, ...ids]) emitToUser(Number(id), 'FRIENDS_DIRTY', { by: 'profile', userId: Number(profile.user_id) });
+      } catch (error) { console.warn('[LAUNCHER_CARD_SET] friend refresh failed:', error); }
+    }
+  } catch (error) {
+    console.error('[LAUNCHER_CARD_SET] error:', error);
+    cb?.({ ok: false, error: 'card unavailable' });
+  }
+});
+
 socket.on('LAUNCHER_COMMENTS_GET', async ({ secret, userId = 0, beforeId = 0 } = {}, cb) => {
   try { cb?.(await launcherGuestbook.getLauncherComments(pool, String(secret || '').trim(), userId, beforeId)); }
   catch (error) { console.error('[LAUNCHER_COMMENTS_GET] error:', error); cb?.({ ok: false, error: 'comments unavailable' }); }

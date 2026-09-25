@@ -6,8 +6,11 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const { CATALOG } = require('../server/launcher-profile-shop');
-const { chromium } = require(process.env.BOARD_QA_PLAYWRIGHT ||
-  'C:/Users/王曜瑋/AppData/Local/OpenAI/Codex/runtimes/cua_node/7f75cff94511d5f8/bin/node_modules/playwright');
+const runtimeRoot = 'C:/Users/王曜瑋/AppData/Local/OpenAI/Codex/runtimes/cua_node';
+const bundledPlaywright = fs.existsSync(runtimeRoot) ? fs.readdirSync(runtimeRoot)
+  .map(name => path.join(runtimeRoot, name, 'bin/node_modules/playwright'))
+  .find(candidate => fs.existsSync(path.join(candidate, 'package.json'))) : null;
+const { chromium } = require(process.env.BOARD_QA_PLAYWRIGHT || bundledPlaywright || 'playwright');
 
 const root = path.resolve(__dirname, '..');
 const addedAvatars = CATALOG.filter(item => item.type === 'avatar' && Number(item.key) >= 51 && Number(item.key) <= 62).sort((a, b) => Number(a.key) - Number(b.key));
@@ -23,7 +26,7 @@ function check(name, condition, detail) {
 }
 const read = file => fs.readFileSync(path.join(root, 'desktop', file), 'utf8');
 const ownProfile = {
-  userId: 42, name: '測試船長', title: '偉大航道航海者', avatar: 8, isSelf: true,
+  userId: 42, name: '測試船長', title: '偉大航道航海者', avatar: 8, card: { displayName: '測試船長', tagline: '偉大航道航海者', avatarId: 0 }, isSelf: true,
   games: {
     card: { available: true, games: 12, wins: 7 },
     board: { available: true, campaigns: 2, crewCount: 5, bounty: 1500, latestCoins: 300, completed: 1 },
@@ -36,10 +39,24 @@ const ownProfile = {
   }
 };
 const friendProfile = {
-  userId: 44, name: '好友航海士', title: '海上探險家', avatar: 51, isSelf: false,
+  userId: 44, name: '好友航海士', title: '海上探險家', avatar: 51, card: { displayName: '好友航海士', tagline: '海上探險家', avatarId: 0 }, isSelf: false,
   games: { card: { available: true, games: 3, wins: 2 }, board: { available: false }, chess: { available: false } },
   collection: { card: { avatars: [51], walls: [], flags: [], titles: 0, bountyPosters: 0 }, board: { artworks: 0, artworkTotal: 20, artworkIds: [] }, chess: {} }
 };
+const roomProducts = ['room-scene-sunny-deck', 'room-furniture-helm', 'room-character-luffy', 'room-character-zoro']
+  .map(id => CATALOG.find(item => item.id === id));
+assert(roomProducts.every(Boolean), 'Integrated room fixture products are missing');
+for (const [profile, count] of [[ownProfile, 2], [friendProfile, 1]]) {
+  const [scene, furniture, ...characters] = roomProducts;
+  const placement = { itemId: furniture.id, x: 440, y: 410, scale: 1, rotation: 0, flip: false };
+  const people = characters.slice(0, count).map((item, index) => ({ itemId: item.id, x: 220 + index * 480, y: 430 }));
+  profile.room = { revision: 1, sceneId: scene.id, placements: [placement], characters: people };
+  profile.roomItems = {
+    scene,
+    placements: [{ ...placement, item: furniture }],
+    characters: people.map(entry => ({ ...entry, item: characters.find(item => item.id === entry.itemId) }))
+  };
+}
 const initialShop = {
   catalog: [
     { id: 'ava-31', type: 'avatar', key: 31, name: '路奇', rarity: 'common', price: 5 },
@@ -82,6 +99,7 @@ async function main() {
   const browser = await chromium.launch({ headless: true, executablePath: chrome });
   try {
     const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+    await page.emulateMedia({ reducedMotion: 'reduce' });
     page.on('pageerror', error => report.errors.push(error.stack || error.message));
     const isAudio = url => /\.(?:ogg|mp3)$/i.test(url);
     page.on('requestfailed', request => {
@@ -128,11 +146,11 @@ async function main() {
       boot.hidden = true;
       boot.classList.remove('is-active');
     });
-    await page.addStyleTag({ content: read('launcher.css') + '\n' + read('launcher-social.css') + '\n' + read('launcher-profile-shop.css') });
+    await page.addStyleTag({ content: read('launcher.css') + '\n' + read('launcher-social.css') + '\n' + read('launcher-profile-shop.css') + '\n' + read('launcher-room.css') });
     await page.evaluate(({ mine, friend, shop }) => {
       const copy = value => structuredClone(value);
       window.__profileShopQa = {
-        profiles: { 42: mine, 44: friend }, shop, calls: [], profileError: '', shopError: '', buyError: '', equipError: '',
+        profiles: { 42: mine, 44: friend }, shop, calls: [], profileError: '', shopError: '', buyError: '', equipError: '', cardError: '',
         social: { userId: 42, ready: true, friends: [{ userId: 44, name: '好友航海士', avatar: 51, online: true, page: 'desktop-launcher' }], requestsIn: [], requestsOut: [], unread: {}, conversations: {} }
       };
       const qa = window.__profileShopQa;
@@ -142,6 +160,12 @@ async function main() {
           if (qa.profileError) return { ok: false, error: qa.profileError };
           const profile = qa.profiles[userId || 42];
           return profile ? { ok: true, profile: copy(profile) } : { ok: false, error: 'not friends' };
+        },
+        async saveLauncherCard(card) {
+          qa.calls.push(['card', copy(card)]);
+          if (qa.cardError) return { ok: false, error: qa.cardError };
+          qa.profiles[42].card = copy(card);
+          return { ok: true, profile: copy(qa.profiles[42]), shop: copy(qa.shop) };
         },
         async getLauncherShop() {
           qa.calls.push(['shop']);
@@ -172,6 +196,7 @@ async function main() {
         async socialRequest(action, payload) { qa.calls.push(['social', action, payload]); return { ok: true }; }
       };
     }, { mine: ownProfile, friend: friendProfile, shop: initialShop });
+    await page.addScriptTag({ content: read('launcher-room.js') });
     await page.addScriptTag({ content: read('launcher-profile-shop.js') });
     await page.addScriptTag({ content: read('launcher-social.js') });
     check('all launcher panels exist', await page.evaluate(() =>
@@ -206,6 +231,15 @@ async function main() {
     await page.locator('#profileButton').click();
     if (report.errors.length) throw new Error(report.errors.join('\n'));
     await page.waitForFunction(() => document.getElementById('profileHeroName').textContent === '測試船長');
+    await page.waitForFunction(() => document.querySelectorAll('#roomCharacters .room-chibi').length === 2 &&
+      document.getElementById('roomScene').complete && document.getElementById('roomScene').naturalWidth > 0);
+    check('top card and canonical room render together in integrated profile', await page.locator('#roomCharacters .room-chibi').count() === 2 &&
+      await page.locator('#profileHero').isVisible());
+    await page.setViewportSize({ width: 1440, height: 1500 });
+    await page.locator('#profilePanel .voyage-scroll').evaluate(node => { node.scrollTop = 0; });
+    const integratedFile = path.join(out, 'profile-room-integrated-1440.png');
+    await page.screenshot({ path: integratedFile }); report.screenshots.push(integratedFile); save();
+    await page.setViewportSize({ width: 1440, height: 900 });
     const own = await page.evaluate(() => ({
       heading: document.getElementById('profilePageTitle').textContent,
       games: [...document.querySelectorAll('#profileGameStats .voyage-game-card')].map(e => e.dataset.game),
@@ -231,13 +265,19 @@ async function main() {
     const friend = await page.evaluate(() => ({
       heading: document.getElementById('profilePageTitle').textContent,
       backVisible: !document.getElementById('profileBackToFriends').hidden,
-      shopShortcutVisible: getComputedStyle(document.getElementById('profileShopShortcut')).display !== 'none',
+      cardEditHidden: document.getElementById('profileCardEdit').hidden,
+      noShopShortcut: !document.getElementById('profileShopShortcut'),
       board: document.querySelector('[data-game="board"]').textContent,
       call: window.__profileShopQa.calls.at(-1)
     }));
-    check('social friend visit fetches friend id and hides own shop shortcut', friend.heading === '好友個人頁' &&
-      friend.backVisible && !friend.shopShortcutVisible && friend.call[0] === 'profile' && friend.call[1] === 44, friend);
+    check('social friend visit fetches friend id and keeps card read-only', friend.heading === '好友個人頁' &&
+      friend.backVisible && friend.cardEditHidden && friend.noShopShortcut && friend.call[0] === 'profile' && friend.call[1] === 44, friend);
     check('friend profile renders avatar 51', await page.locator('#profileHeroAvatar').evaluate(img => img.getAttribute('src')?.endsWith('/51.webp') && img.complete && img.naturalWidth > 0));
+    const friendFile = path.join(out, 'profile-friend-readonly-1440.png');
+    await page.setViewportSize({ width: 1440, height: 1500 });
+    await page.locator('#profilePanel .voyage-scroll').evaluate(node => { node.scrollTop = 0; });
+    await page.screenshot({ path: friendFile }); report.screenshots.push(friendFile); save();
+    await page.setViewportSize({ width: 1440, height: 900 });
     check('friend missing board data uses truthful empty state', friend.board.includes('尚無可讀取的雲端航海存檔'));
     await page.locator('#profileBackToFriends').click();
     check('friend back button returns to social panel', await page.locator('#socialPanel').evaluate(node => !node.hidden) &&
@@ -245,9 +285,28 @@ async function main() {
 
     await page.locator('#profileButton').click();
     await page.waitForFunction(() => document.getElementById('profileHeroName').textContent === '測試船長');
-    await page.locator('#profileShopShortcut').click();
+    check('own card edit is visible and redundant captain showroom is gone', await page.locator('#profileCardEdit').isVisible() &&
+      await page.locator('#profileCabinStage').count() === 0 && await page.locator('#roomShopButton').count() === 0);
+    await page.locator('#profileCardEdit').click();
+    check('card editor offers free avatar and only owned premium avatars', await page.locator('#profileCardAvatar option').count() === 32 &&
+      await page.locator('#profileCardAvatar option[value="31"]').count() === 1 && await page.locator('#profileCardAvatar option[value="49"]').count() === 0);
+    await page.locator('#profileCardTagline').fill('向偉大航道出發！');
+    await page.locator('#profileCardSave').click();
+    await page.waitForFunction(() => document.getElementById('profileHeroTitle').textContent === '向偉大航道出發！');
+    check('own card saves editable tagline and follows equipped avatar', await page.locator('#profileCardEditor').isHidden() &&
+      await page.evaluate(() => window.__profileShopQa.calls.some(call => call[0] === 'card' && call[1].avatarId === 0)));
+    await page.evaluate(() => { window.__profileShopQa.cardError = 'invalid card'; });
+    await page.locator('#profileCardEdit').click();
+    await page.locator('#profileCardName').fill('伺服器拒絕的名稱');
+    await page.locator('#profileCardSave').click();
+    await page.waitForFunction(() => document.getElementById('profileCardStatus').textContent.includes('名片內容不正確'));
+    check('card save failure keeps draft and existing public card', await page.locator('#profileCardEditor').isVisible() &&
+      await page.locator('#profileHeroName').textContent() === '測試船長');
+    await page.evaluate(() => { window.__profileShopQa.cardError = ''; });
+    await page.locator('#profileCardCancel').click();
+    await page.locator('#shopButton').click();
     await page.waitForFunction(() => document.getElementById('shopWallet').textContent === '12');
-    check('profile shop shortcut selects shop navigation', await page.locator('#shopButton').evaluate(node => node.classList.contains('is-active')));
+    check('global shop navigation remains available', await page.locator('#shopButton').evaluate(node => node.classList.contains('is-active')));
     check('shop displays real balance and disables unaffordable item', await page.locator('#shopGrid .shop-item').count() === 2 &&
       await page.locator('#shopGrid .shop-item').nth(1).locator('button').isDisabled() &&
       (await page.locator('#shopGrid .shop-item').nth(1).locator('button').textContent()) === '金幣不足');
@@ -433,9 +492,10 @@ async function main() {
     });
     await page.evaluate(() => window.LauncherProfileShop.openProfile());
     await page.waitForFunction(() => document.getElementById('profileHeroName').textContent === '測試船長');
-    check('locked guestbook shows store call to action and hides composer', await page.locator('#profileGuestbookLocked').isVisible() &&
-      await page.locator('#profileGuestbookForm').isHidden() && await page.locator('#profileGuestbookShop').isVisible());
-    await page.locator('#profileGuestbookShop').click();
+    check('locked guestbook explains unlock and hides composer without shop shortcut', await page.locator('#profileGuestbookLocked').isVisible() &&
+      await page.locator('#profileGuestbookForm').isHidden() && await page.locator('#profileGuestbookShop').count() === 0);
+    await page.locator('#shopButton').click();
+    await page.getByRole('tab', { name: '留言板' }).last().click();
     await page.waitForFunction(() => document.getElementById('shopWallet').textContent === '100');
     check('guestbook catalog is purchasable before unlock', await page.locator('#shopGrid .shop-item').count() === 1 &&
       (await page.locator('#shopGrid .shop-item button').textContent()) === '購買');
@@ -477,22 +537,28 @@ async function main() {
       await page.screenshot({ path: productFile }); report.screenshots.push(productFile); save();
     }
     await page.locator('#profileButton').click();
-    await page.waitForFunction(() => document.getElementById('profileCabinStage').dataset.layout === 'layout-grand-line');
-    check('owned layout, character background, frame and fixed sticker render on profile', await page.locator('#profileCabinStickers [data-slot="header"]').count() === 1 &&
+    await page.waitForFunction(() => document.getElementById('profileHero').dataset.layout === 'layout-grand-line');
+    check('owned layout, character background, frame and sticker render on top card', await page.locator('#profileHeroStickers [data-slot="header"]').count() === 1 &&
       await page.locator('#profileBgmToggle').isEnabled() &&
-      await page.locator('#profileCabinBackground').evaluate(node => !node.hidden && node.complete && node.naturalWidth > 0) &&
-      await page.locator('#profileCabinFrame').evaluate(node => !node.hidden && getComputedStyle(node).borderImageSource.includes('frame-luffy.webp')));
+      await page.locator('#profileHeroArt').evaluate(node => getComputedStyle(node).backgroundImage.includes('bg-luffy.webp')) &&
+      await page.locator('#profileHeroFrame').evaluate(node => !node.hidden && getComputedStyle(node).backgroundImage.includes('frame-luffy.webp')));
     check('selected BGM never auto plays on profile open', await page.evaluate(() => window.__profileShopQa.playCalls === 0));
-    await page.locator('#profileDecorEdit').click();
+    check('all equipped avatar frames stay round including square source art', await page.locator('#profileHeroFrame').evaluate(node => {
+      const avatar = document.querySelector('.captain-hero-avatar');
+      return getComputedStyle(avatar).borderRadius === '50%' && getComputedStyle(node).borderRadius === '50%' &&
+        getComputedStyle(node).maskImage.includes('radial-gradient') && avatar.clientWidth === avatar.clientHeight;
+    }));
+    await page.locator('#profileCardEdit').click();
     const headerSlot = page.locator('.captain-decor-slot[data-slot="header"]');
     for (const [field, value] of [['x', '72'], ['y', '28'], ['scale', '1.25']]) await headerSlot.locator(`input[data-field="${field}"]`).evaluate((input, next) => { input.value = next; input.dispatchEvent(new Event('input', { bubbles: true })); }, value);
     await headerSlot.locator('button').click();
-    await page.waitForFunction(() => document.querySelector('#profileCabinStickers [data-slot="header"]')?.style.left === '72%');
-    check('sticker placement saves bounded position and scale', await page.evaluate(() => {
-      const sticker = document.querySelector('#profileCabinStickers [data-slot="header"]');
+    await page.waitForFunction(() => document.querySelector('#profileHeroStickers [data-slot="header"]')?.style.left === '72%');
+    check('purchased sticker position and scale remain editable on card', await page.evaluate(() => {
+      const sticker = document.querySelector('#profileHeroStickers [data-slot="header"]');
       return sticker.style.top === '28%' && sticker.style.getPropertyValue('--scale') === '1.25' &&
         window.__profileShopQa.calls.some(call => call[0] === 'placement' && call[1] === 'header' && call[2].x === 72);
     }));
+    await page.locator('#profileCardCancel').click();
     await page.locator('#profileBgmToggle').click();
     check('BGM plays only after explicit user click', await page.evaluate(() => window.__profileShopQa.playCalls === 1) &&
       (await page.locator('#profileBgmToggle').textContent()) === '停止音樂');
@@ -501,13 +567,13 @@ async function main() {
     for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height: 850 });
       await page.locator('#profilePanel .voyage-scroll').evaluate(node => { node.scrollTop = 0; });
-      check(`character background stays visible at ${width}px`, await page.locator('#profileCabinBackground').evaluate(node => {
-        const img = node.getBoundingClientRect(), stage = document.getElementById('profileCabinStage').getBoundingClientRect();
-        return img.width > 0 && img.height >= 295 && stage.width <= innerWidth && stage.height >= 295;
+      check(`character background stays visible on card at ${width}px`, await page.locator('#profileHeroArt').evaluate(node => {
+        const art = node.getBoundingClientRect(), card = document.getElementById('profileHero').getBoundingClientRect();
+        return art.width > 0 && art.height >= 180 && card.width <= innerWidth && card.height >= 180;
       }));
       const custom = path.join(out, `profile-custom-${width}.png`);
       await page.screenshot({ path: custom }); report.screenshots.push(custom); save();
-      await page.locator('#profileCabinStage').evaluate(node => node.scrollIntoView({ block: 'center', inline: 'nearest' }));
+      await page.locator('#profileHero').evaluate(node => node.scrollIntoView({ block: 'center', inline: 'nearest' }));
       await page.waitForTimeout(180);
       const stageFile = path.join(out, `profile-custom-stage-${width}.png`);
       await page.screenshot({ path: stageFile }); report.screenshots.push(stageFile); save();
@@ -524,7 +590,7 @@ async function main() {
     await page.locator('#socialVisitProfile').click();
     await page.waitForFunction(() => document.getElementById('profileHeroName').textContent === '好友航海士');
     check('friend BGM remains silent until visitor clicks', await page.evaluate(() => window.__profileShopQa.playCalls === 1) &&
-      await page.locator('#profileDecorEdit').isHidden() && await page.locator('#profileGuestbookForm').isVisible());
+      await page.locator('#profileCardEdit').isHidden() && await page.locator('#profileGuestbookForm').isVisible());
     await page.locator('#profileBgmToggle').click();
     check('friend BGM starts on explicit visitor action', await page.evaluate(() => window.__profileShopQa.playCalls === 2));
     await page.locator('#profileGuestbookInput').fill('從你的好友頁留下問候。');
@@ -641,8 +707,13 @@ async function main() {
     const opMobile = await page.evaluate(() => {
       const panel = document.getElementById('shopPanel');
       const bounds = panel.getBoundingClientRect();
+      const app = document.getElementById('launcherApp').getBoundingClientRect();
+      const profile = document.getElementById('profilePanel').getBoundingClientRect();
+      const appStyle = getComputedStyle(document.getElementById('launcherApp'));
+      const topbar = document.querySelector('.topbar').getBoundingClientRect();
       return { pageWidth: document.documentElement.scrollWidth, panelWidth: panel.scrollWidth, visibleWidth: panel.clientWidth,
-        left: bounds.left, right: bounds.right };
+        left: bounds.left, right: bounds.right, appLeft: app.left, appRight: app.right, profileLeft: profile.left, profileRight: profile.right,
+        appPadding: [appStyle.paddingLeft, appStyle.paddingRight], gridColumns: appStyle.gridTemplateColumns, topbarWidth: topbar.width, topbarRight: topbar.right };
     });
     check('twenty OP tracks fit the 390px shop viewport', opMobile.pageWidth <= 391 &&
       opMobile.panelWidth <= opMobile.visibleWidth + 1 && opMobile.left >= -1 && opMobile.right <= 391, opMobile);
@@ -674,7 +745,36 @@ async function main() {
     check('selected OP MP3 plays on explicit click', await page.locator('#profileBgmAudio').evaluate(audio => !audio.paused && audio.currentTime > 0.1));
     await page.locator('#profileBgmToggle').click();
     check('OP MP3 stops from profile control', await page.locator('#profileBgmAudio').evaluate(audio => audio.paused && audio.currentTime === 0));
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.locator('#profileCardEdit').click();
+    const cardMobile = await page.evaluate(() => ({
+      page: document.documentElement.scrollWidth,
+      panel: document.getElementById('profilePanel').scrollWidth,
+      width: document.getElementById('profilePanel').clientWidth,
+      avatarRadius: getComputedStyle(document.querySelector('.captain-hero-avatar')).borderRadius,
+      frameRadius: getComputedStyle(document.getElementById('profileHeroFrame')).borderRadius
+    }));
+    check('390px card editor fits and avatar/frame remain circular', cardMobile.page <= 391 && cardMobile.panel <= cardMobile.width + 1 &&
+      cardMobile.avatarRadius === '50%' && cardMobile.frameRadius === '50%', cardMobile);
+    const editorFile = path.join(out, 'profile-card-editor-390.png');
+    await page.locator('#profileHero').scrollIntoViewIfNeeded();
+    await page.screenshot({ path: editorFile }); report.screenshots.push(editorFile); save();
+    await page.evaluate(() => {
+      const qa = window.__profileShopQa;
+      window.onePieceDesktop.saveLauncherCard = card => {
+        qa.calls.push(['card-pending', structuredClone(card)]);
+        return new Promise(resolve => { qa.resolveCard = resolve; });
+      };
+    });
+    await page.locator('#profileCardName').fill('切換前的名稱');
+    await page.locator('#profileCardSave').click();
+    await page.waitForFunction(() => typeof window.__profileShopQa.resolveCard === 'function');
     await page.evaluate(() => window.LauncherProfileShop.setAccount({ previewMode: true }));
+    await page.evaluate(() => window.__profileShopQa.resolveCard({ ok: true, profile: { ...window.__profileShopQa.profiles[42], card: { displayName: '切換前的名稱', tagline: '', avatarId: 0 } } }));
+    await page.waitForTimeout(40);
+    check('late card save after account switch cannot restore previous profile', await page.locator('#profileHeroName').textContent() === '航海者' &&
+      await page.locator('#profileCardEditor').isHidden() && await page.locator('#profileCardEdit').isHidden());
+    await page.setViewportSize({ width: 1440, height: 900 });
     await page.locator('#shopButton').click();
     await page.waitForFunction(() => document.getElementById('shopStatus').textContent.includes('設計預覽可查看商品'));
     await page.getByRole('tab', { name: '排版' }).last().click();

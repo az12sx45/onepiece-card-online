@@ -5,8 +5,11 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { chromium } = require(process.env.BOARD_QA_PLAYWRIGHT ||
-  'C:/Users/王曜瑋/AppData/Local/OpenAI/Codex/runtimes/cua_node/7f75cff94511d5f8/bin/node_modules/playwright');
+const runtimeRoot = 'C:/Users/王曜瑋/AppData/Local/OpenAI/Codex/runtimes/cua_node';
+const bundledPlaywright = fs.existsSync(runtimeRoot) ? fs.readdirSync(runtimeRoot)
+  .map(name => path.join(runtimeRoot, name, 'bin/node_modules/playwright'))
+  .find(candidate => fs.existsSync(path.join(candidate, 'package.json'))) : null;
+const { chromium } = require(process.env.BOARD_QA_PLAYWRIGHT || bundledPlaywright || 'playwright');
 const { CATALOG } = require('../server/launcher-profile-shop');
 
 const root = path.resolve(__dirname, '..');
@@ -15,6 +18,11 @@ const read = file => fs.readFileSync(path.join(root, 'desktop', file), 'utf8');
 const roomIds = ['room-scene-sunny-deck', 'room-furniture-helm', 'room-character-luffy'];
 const products = roomIds.map(id => CATALOG.find(item => item.id === id));
 assert(products.every(Boolean), 'Room catalog fixture is incomplete.');
+const canonicalCharacters = CATALOG.filter(item => item.type === 'room_character');
+assert(canonicalCharacters.length >= 10, 'Ten canonical character products are required.');
+const moods = ['happy', 'surprised', 'focused', 'annoyed'];
+for (const item of canonicalCharacters) for (const mood of moods)
+  assert(fs.existsSync(path.join(root, 'public/images/launcher_room/emotions', `${item.key}-${mood}.webp`)), `Missing generated portrait: ${item.key}-${mood}`);
 fs.mkdirSync(output, { recursive: true });
 
 async function main() {
@@ -52,16 +60,16 @@ async function main() {
       const friend = {
         ...copy(mine), userId: 44, name: '好友航海士', isSelf: false,
         room: { revision: 1, sceneId: items[0].id,
-          placements: [{ itemId: items[1].id, x: 390, y: 405, scale: 1, flip: false }],
+          placements: [{ itemId: items[1].id, x: 390, y: 405, scale: 1, flip: true }],
           characters: [{ itemId: items[2].id, x: 530, y: 0 }] },
         roomItems: { scene: items[0],
-          placements: [{ itemId: items[1].id, x: 390, y: 405, scale: 1, flip: false, item: items[1] }],
+          placements: [{ itemId: items[1].id, x: 390, y: 405, scale: 1, flip: true, item: items[1] }],
           characters: [{ itemId: items[2].id, x: 530, y: 0, item: items[2] }] }
       };
       const shop = {
         catalog, wallet: { coins: 500, dailyGrant: 20, cap: 500 },
         owned: { avatars: [], walls: [], flags: [], layouts: [], backgrounds: [], frames: [], decorations: [], bgms: [],
-          roomScenes: [items[0].id], roomFurniture: [items[1].id], roomCharacters: [items[2].id], guestbook: false },
+          roomScenes: [items[0].id], roomFurniture: [items[1].id], roomCharacters: catalog.filter(item => item.type === 'room_character').map(item => item.id), guestbook: false },
         equipped: { avatar: 8, wall: 1, flag: 1, decorations: {} }
       };
       window.__roomQa = { mine, friend, shop, calls: [], saved: null };
@@ -72,7 +80,7 @@ async function main() {
         async saveLauncherRoom(room) {
           window.__roomQa.calls.push('save'); window.__roomQa.saved = copy(room);
           mine.room = { ...copy(room), revision: room.revision + 1 };
-          const byId = id => items.find(item => item.id === id);
+          const byId = id => catalog.find(item => item.id === id);
           mine.roomItems = {
             scene: byId(mine.room.sceneId) || null,
             placements: mine.room.placements.map(entry => ({ ...entry, item: byId(entry.itemId) })),
@@ -89,46 +97,93 @@ async function main() {
     }, { items: products, catalog: CATALOG });
     await page.addScriptTag({ content: read('launcher-room.js') });
     await page.addScriptTag({ content: read('launcher-profile-shop.js') });
+    assert.ok(await page.evaluate(() => !!window.LauncherProfileShop), `Profile renderer did not initialize: ${errors.join(' | ')}`);
     await page.evaluate(() => window.LauncherProfileShop.setAccount({ authenticated: true, profile: { userId: 42 } }));
     await page.evaluate(() => window.LauncherProfileShop.openProfile(0));
     await page.waitForFunction(() => document.getElementById('profileHeroName').textContent === '測試船長');
     check('owner edit button visible', await page.locator('#roomEditToggle').isVisible());
     await page.locator('#roomEditToggle').click();
     await page.waitForSelector('#roomEditor:not([hidden])');
+    check('room editor has no shop jump button', await page.locator('#roomShopButton').count() === 0);
+    check('floor grid only appears while editing', await page.locator('.room-floor-grid').isVisible());
     check('free room scene shown', await page.locator('#roomEditorItems .room-palette-item').count() === 2);
     await page.locator('#roomEditorItems .room-palette-item').nth(1).click();
     await page.getByRole('tab', { name: '家具' }).click();
     await page.locator('#roomEditorItems .room-palette-item').first().click();
-    await page.getByRole('tab', { name: '夥伴' }).click();
-    await page.locator('#roomEditorItems .room-palette-item').first().click();
-    check('furniture and chibi both placed', await page.locator('#roomObjects img').count() === 1 && await page.locator('#roomCharacters img').count() === 1);
-    const furniture = page.locator('#roomObjects img').first();
+    const facing = [];
+    const furniture = page.locator('#roomObjects .room-object-shell').first();
+    for (let turn = 0; turn < 4; turn++) {
+      facing.push(await furniture.getAttribute('data-rotation'));
+      await page.locator('#roomStage').screenshot({ path: path.join(output, `furniture-direction-${turn}.png`) });
+      await page.locator('#roomSelection .room-rotate').click();
+    }
+    check('furniture cycles four cardinal directions', facing.join(',') === '0,1,2,3' && await furniture.getAttribute('data-rotation') === '0');
+    await page.locator('#roomStage').press('r');
+    check('R shortcut rotates selected furniture', await furniture.getAttribute('data-rotation') === '1');
+    const transforms = await page.evaluate(() => {
+      const node = document.querySelector('#roomObjects .room-object-shell');
+      return [0, 1, 2, 3].map(rotation => { node.dataset.rotation = String(rotation); return getComputedStyle(node.querySelector('.room-object')).transform; });
+    });
+    check('four furniture directions render differently', new Set(transforms).size === 4);
+    await furniture.evaluate(node => { node.dataset.rotation = '1'; });
     const before = await furniture.evaluate(node => node.style.left);
     const box = await furniture.boundingBox();
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
     await page.mouse.down(); await page.mouse.move(box.x + box.width / 2 + 65, box.y + box.height / 2 + 20, { steps: 4 }); await page.mouse.up();
     check('pointer drag moved furniture', await furniture.evaluate(node => node.style.left) !== before);
     await page.locator('#roomStage').press('ArrowRight');
+    await page.getByRole('tab', { name: '夥伴' }).click();
+    for (let index = 0; index < 8; index++) await page.locator('#roomEditorItems .room-palette-item').nth(index).click();
+    check('eight canonical chibis can share room', await page.locator('#roomObjects .room-object-shell').count() === 1 && await page.locator('#roomCharacters .room-character-shell').count() === 8);
+    await page.locator('#profileRoom').screenshot({ path: path.join(output, 'edit-room-eight-1280.png') });
+    await page.locator('#roomEditorItems .room-palette-item').nth(8).click();
+    check('ninth chibi is rejected', await page.locator('#roomCharacters .room-character-shell').count() === 8 && (await page.locator('#roomStatus').textContent()).includes('8 位'));
     await page.locator('#roomSave').click();
     check('server payload contains editable room', await page.evaluate(() => {
       const saved = window.__roomQa.saved;
       return saved?.revision === 0 && saved?.sceneId === 'room-scene-sunny-deck' &&
         saved?.placements?.[0]?.itemId === 'room-furniture-helm' && saved?.placements?.[0]?.x > 340 &&
-        saved?.characters?.[0]?.itemId === 'room-character-luffy';
+        saved?.placements?.[0]?.rotation === 1 && saved?.placements?.[0]?.flip === false &&
+        saved?.characters?.length === 8 && saved.characters[0]?.itemId === 'room-character-luffy';
     }));
     await page.evaluate(() => { Math.random = () => .9; });
     await page.locator('#roomCancel').click();
-    const chibiStart = await page.locator('#roomCharacters img').first().evaluate(node => node.style.left);
+    check('floor grid hidden outside editing', await page.locator('.room-floor-grid').isHidden());
+    const chibiStart = await page.locator('#roomCharacters .room-character-shell').first().evaluate(node => node.style.left);
     await page.waitForTimeout(2200);
-    const chibiMoved = await page.locator('#roomCharacters img').first().evaluate(node => node.style.left);
+    const chibiMoved = await page.locator('#roomCharacters .room-character-shell').first().evaluate(node => node.style.left);
     check('canonical chibi walks when room is visible', chibiMoved !== chibiStart);
+    await page.waitForFunction(() => document.querySelectorAll('#roomCharacters .room-speech:not([hidden])').length === 1, undefined, { timeout: 9000 });
+    const firstSpeech = await page.locator('#roomCharacters .room-speech:not([hidden]) .room-speech-text').textContent();
+    const firstPortrait = await page.locator('#roomCharacters .room-speech:not([hidden]) .room-speech-face').getAttribute('src');
+    const emotionReady = fs.existsSync(path.join(root, 'public/images/launcher_room/emotions/luffy-happy.webp'));
+    check('first character speaks with emotion portrait or base-art fallback', !!firstSpeech &&
+      firstPortrait.startsWith('opui://launcher/images/launcher_room/') && (!emotionReady || firstPortrait.includes('/emotions/')));
+    if (emotionReady) {
+      await page.waitForFunction(() => {
+        const portrait = document.querySelector('#roomCharacters .room-speech:not([hidden]) .room-speech-face');
+        return portrait && portrait.complete;
+      }, undefined, { timeout: 3000 });
+      check('generated emotion portrait decoded', await page.locator('#roomCharacters .room-speech:not([hidden]) .room-speech-face').evaluate(image =>
+        image.naturalWidth > 1 && image.src.includes('/emotions/')));
+    }
+    check('one active speech bubble stays inside stage', await page.locator('#roomCharacters .room-speech:not([hidden])').evaluate(node => {
+      const bubble = node.getBoundingClientRect(); const stage = document.querySelector('#roomStage').getBoundingClientRect();
+      return bubble.left >= stage.left - 1 && bubble.right <= stage.right + 1 && bubble.top >= stage.top - 1 && bubble.bottom <= stage.bottom + 1;
+    }));
+    await page.locator('#roomStage').screenshot({ path: path.join(output, 'dialogue-room-stage-1280.png') });
+    await page.waitForFunction(first => {
+      const current = document.querySelector('#roomCharacters .room-speech:not([hidden]) .room-speech-text');
+      return current && current.textContent !== first;
+    }, firstSpeech, { timeout: 7000 });
+    check('partner replies sequentially', await page.locator('#roomCharacters .room-speech:not([hidden])').count() === 1);
     await page.evaluate(() => {
       Object.defineProperty(document, 'hidden', { configurable: true, value: true });
       document.dispatchEvent(new Event('visibilitychange'));
     });
-    const hiddenStart = await page.locator('#roomCharacters img').first().evaluate(node => node.style.left);
+    const hiddenStart = await page.locator('#roomCharacters .room-character-shell').first().evaluate(node => node.style.left);
     await page.waitForTimeout(350);
-    check('chibi pauses when document is hidden', await page.locator('#roomCharacters img').first().evaluate(node => node.style.left) === hiddenStart);
+    check('chibi pauses and bubble clears when document is hidden', await page.locator('#roomCharacters .room-character-shell').first().evaluate(node => node.style.left) === hiddenStart && await page.locator('#roomCharacters .room-speech:not([hidden])').count() === 0);
     await page.evaluate(() => { delete document.hidden; document.dispatchEvent(new Event('visibilitychange')); });
     await page.locator('#profileRoom').screenshot({ path: path.join(output, 'owner-room-section-1280.png') });
     await page.locator('#roomStage').scrollIntoViewIfNeeded();
@@ -140,18 +195,25 @@ async function main() {
     await page.getByRole('tab', { name: '房間家具' }).click();
     check('furniture shop shows ten products', await page.locator('#shopGrid .shop-item').count() === 10);
     await page.getByRole('tab', { name: 'Q版夥伴' }).click();
-    check('canonical chibi shop shows six products', await page.locator('#shopGrid .shop-item').count() === 6);
+    check('canonical chibi shop shows ten products', await page.locator('#shopGrid .shop-item').count() === 10);
     await page.locator('#shopPanel').screenshot({ path: path.join(output, 'chibi-shop-1280.png') });
     await page.evaluate(() => window.LauncherProfileShop.openProfile(44));
     await page.waitForFunction(() => document.getElementById('profileHeroName').textContent === '好友航海士');
     check('friend room readonly', await page.locator('#roomEditToggle').isHidden() && await page.locator('#roomEditor').isHidden());
-    check('friend canonical chibi visible', await page.locator('#roomCharacters img').count() === 1);
-    check('off-floor saved character receives valid walk bounds', await page.locator('#roomCharacters img').first().evaluate(node => {
+    check('friend canonical chibi visible', await page.locator('#roomCharacters .room-chibi').count() === 1);
+    check('legacy flip migrates to rear-facing furniture', await page.locator('#roomObjects .room-object-shell').first().getAttribute('data-rotation') === '2');
+    check('off-floor saved character receives valid walk bounds', await page.locator('#roomCharacters .room-character-shell').first().evaluate(node => {
       const top = Number.parseFloat(node.style.top);
       return Number.isFinite(top) && top >= 345 / 540 * 100 && top <= 485 / 540 * 100;
     }));
+    await page.waitForFunction(() => {
+      const text = document.querySelector('#roomCharacters .room-speech:not([hidden]) .room-speech-action');
+      return text && text.textContent === '掌舵';
+    }, undefined, { timeout: 11000 });
+    check('single chibi visits furniture and acts', await page.locator('#roomCharacters .room-speech:not([hidden])').count() === 1);
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    check('reduced motion stops walking animation', await page.locator('#roomCharacters .is-walking').count() === 0);
+    await page.waitForFunction(() => !document.querySelector('#roomCharacters .room-speech:not([hidden])'), undefined, { timeout: 1500 });
+    check('reduced motion stops walking and speech', await page.locator('#roomCharacters .is-walking').count() === 0 && await page.locator('#roomCharacters .room-speech:not([hidden])').count() === 0);
     await page.setViewportSize({ width: 390, height: 844 });
     check('narrow viewport scrolls room internally', await page.evaluate(() =>
       document.documentElement.scrollWidth <= window.innerWidth + 1 &&
@@ -162,6 +224,28 @@ async function main() {
     await page.waitForFunction(() => document.getElementById('profileHeroName').textContent === '測試船長');
     await page.locator('#roomEditToggle').click();
     await page.waitForSelector('#roomEditor:not([hidden])');
+    check('narrow owner editor remains usable', await page.locator('#roomSave').isVisible() && await page.locator('#roomEditorTabs').isVisible() && await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1));
+    const narrowBubbles = await page.evaluate(async () => {
+      const node = document.querySelector('#roomCharacters .room-character-shell');
+      const speech = node?.querySelector('.room-speech');
+      const stage = document.querySelector('#roomStage').getBoundingClientRect();
+      if (!node || !speech) return [];
+      const oldPosition = node.style.left;
+      const bounds = [];
+      for (const [x, side] of [[65, 'is-near-left'], [895, 'is-near-right']]) {
+        node.style.left = `${x / 960 * 100}%`;
+        node.classList.remove('is-near-left', 'is-near-right'); node.classList.add(side);
+        speech.hidden = false; speech.querySelector('.room-speech-text').textContent = '測試對話氣泡位置';
+        await new Promise(resolve => requestAnimationFrame(resolve));
+        const bubble = speech.getBoundingClientRect();
+        bounds.push({ bubbleLeft: bubble.left, bubbleRight: bubble.right, stageLeft: stage.left, stageRight: stage.right });
+      }
+      speech.hidden = true; node.style.left = oldPosition; node.classList.remove('is-near-left', 'is-near-right');
+      return bounds;
+    });
+    check('narrow left and right speech bubbles stay inside room', narrowBubbles.length === 2 && narrowBubbles.every(bubble =>
+      bubble.bubbleLeft >= bubble.stageLeft - 1 && bubble.bubbleRight <= bubble.stageRight + 1));
+    await page.locator('#profileRoom').screenshot({ path: path.join(output, 'edit-room-390.png') });
     await page.evaluate(() => {
       window.onePieceDesktop.saveLauncherRoom = room => new Promise(resolve => {
         window.__roomQa.pendingRoomSave = { room, resolve };

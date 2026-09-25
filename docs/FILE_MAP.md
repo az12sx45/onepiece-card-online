@@ -1,5 +1,16 @@
 # File Map
 
+## 2026-09-25 啟動器 1.1.10 名片與房間
+
+| 檔案 | 用途 |
+| --- | --- |
+| `server/launcher-profile-shop.js`、`index.js`、`desktop-distribution.js` | 124 件目錄、獨立 `launcherCardV1` 名片交易與持有權驗證、房間四向旋轉與最多八位角色、Socket 事件白名單。 |
+| `desktop/launcher.html`、`launcher-profile-shop.js/css`、`auth-service.js`、`main.js`、`preload.js` | 移除展示室與商店捷徑、頂部名片編輯、圓形頭像與相框、IPC／Socket 呼叫及素材路徑白名單。 |
+| `desktop/launcher-room.js/css` | 2.5D 地板格線、四方向家具、八位角色活動、對話／家具活動與情緒肖像。 |
+| `public/images/launcher_room/chibi/`、`emotions/`、`tools/launcher-room/source-png/`、`docs/LAUNCHER_ROOM_EXPANSION_ART_20260925.json` | 四位新增原作角色全身圖與十位角色四種情緒圖、GPT PNG 原稿和輸出 SHA 清單。 |
+| `desktop/package.json`／lock、`scripts/desktop_launcher_package_qa.js` | 1.1.10 Windows 封裝與新增素材逐檔驗證。 |
+| `scripts/launcher_profile_shop_qa.js`、`profile_shop_ownership_sql_qa.js`、`launcher_profile_shop_browser_qa.js`、`launcher_room_browser_qa.js` | 名片／房間權限、真正 JSONB 相容、桌機與窄版 UI 回歸。 |
+
 ## 2026-09-25 啟動器 1.1.9 房間與擴充商店（已部署）
 
 | 檔案 | 用途 |

@@ -322,7 +322,7 @@ function resolveLauncherResource(requestUrl) {
       /^images\/walls\/[1-8]\.webp$/,
       /^images\/flags\/(?:[1-9]|1[0-5])\.webp$/,
       /^images\/profile_decor\/(?:bg-(?:luffy|zoro|nami)|frame-(?:luffy|zoro)|sticker-(?:luffy|zoro|nami|chopper|ace|robin))\.webp$/,
-      /^images\/launcher_room\/(?:scenes\/(?:sunny-deck|sunny-kitchen|sunny-library)|furniture\/(?:helm|map-table|treasure-chest|tangerine-tree|swords-rack|kitchen-table|bookshelf|medicine-cabinet|piano|tool-bench)|chibi\/(?:luffy|zoro|nami|chopper|sanji|robin)|frames\/(?:straw-hat|ship-wheel))\.webp$/,
+      /^images\/launcher_room\/(?:scenes\/(?:sunny-deck|sunny-kitchen|sunny-library)|furniture\/(?:helm|map-table|treasure-chest|tangerine-tree|swords-rack|kitchen-table|bookshelf|medicine-cabinet|piano|tool-bench)|chibi\/(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe)|emotions\/(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe)-(?:happy|surprised|focused|annoyed)|frames\/(?:straw-hat|ship-wheel))\.webp$/,
       /^audio\/profile_bgm\/(?:harbor|night-watch|voyage)\.ogg$/,
       /^audio\/bgm\/track(?:0[1-9]|1[0-9]|20)\.mp3$/,
       /^videos\/game_launcher\/[A-Za-z0-9._-]+$/
@@ -582,6 +582,10 @@ function registerLauncherIpc() {
   ipcMain.handle('launcher:get-profile', guarded(async (_event, userId = 0) => {
     if (!authenticated) return { ok: false, error: 'not authenticated' };
     return authService.getLauncherProfile(userId);
+  }));
+  ipcMain.handle('launcher:card-set', guarded(async (_event, card) => {
+    if (!authenticated) return { ok: false, error: 'not authenticated' };
+    return authService.saveLauncherCard(card);
   }));
   ipcMain.handle('launcher:get-shop', guarded(async (_event, options = {}) => {
     if (!authenticated && !authService.previewMode) return { ok: false, error: 'not authenticated' };
@@ -1255,7 +1259,11 @@ async function runVisualOrSmokeCapture() {
           ...['sunny-deck', 'sunny-kitchen', 'sunny-library'].map(name => `images/launcher_room/scenes/${name}.webp`),
           ...['helm', 'map-table', 'treasure-chest', 'tangerine-tree', 'swords-rack', 'kitchen-table',
             'bookshelf', 'medicine-cabinet', 'piano', 'tool-bench'].map(name => `images/launcher_room/furniture/${name}.webp`),
-          ...['luffy', 'zoro', 'nami', 'chopper', 'sanji', 'robin'].map(name => `images/launcher_room/chibi/${name}.webp`),
+          ...['luffy', 'zoro', 'nami', 'chopper', 'sanji', 'robin', 'usopp', 'franky', 'brook', 'jinbe']
+            .map(name => `images/launcher_room/chibi/${name}.webp`),
+          ...['luffy', 'zoro', 'nami', 'chopper', 'sanji', 'robin', 'usopp', 'franky', 'brook', 'jinbe']
+            .flatMap(name => ['happy', 'surprised', 'focused', 'annoyed']
+              .map(mood => `images/launcher_room/emotions/${name}-${mood}.webp`)),
           ...['straw-hat', 'ship-wheel'].map(name => `images/launcher_room/frames/${name}.webp`),
           ...Array.from({ length: 12 }, (_, index) => `images/board/avatars/${index + 51}.webp`),
           ...Array.from({ length: 20 }, (_, index) => `audio/bgm/track${String(index + 1).padStart(2, '0')}.mp3`)

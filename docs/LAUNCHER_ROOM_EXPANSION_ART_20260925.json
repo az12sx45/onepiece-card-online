@@ -1,0 +1,933 @@
+{
+  "version": "1.1.10",
+  "date": "2026-09-25",
+  "generator": "OpenAI built-in image_gen, one independent generation per full-body sprite and per emotion atlas",
+  "processing": "Local PNG-to-WebP conversion; each generated four-expression atlas cropped to four 256x256 transparent portraits",
+  "canonicalCharactersOnly": true,
+  "items": [
+    {
+      "id": "chibi/usopp",
+      "character": "usopp",
+      "mood": null,
+      "sourcePng": "tools/launcher-room/source-png/usopp.png",
+      "sourceSha256": "4f527cec0ce932db319ec90776aa33d09eed2fb98eacb6324a3885f34f9fb1e9",
+      "asset": "public/images/launcher_room/chibi/usopp.webp",
+      "assetSha256": "e85e5130b9ea3cfe9e398cbab43b84908ba2841c71baebbd2927c6ea02166e59",
+      "assetBytes": 54564,
+      "assetPixels": [
+        512,
+        768
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        88,
+        104,
+        423,
+        724
+      ]
+    },
+    {
+      "id": "chibi/franky",
+      "character": "franky",
+      "mood": null,
+      "sourcePng": "tools/launcher-room/source-png/franky.png",
+      "sourceSha256": "22a937e2512ba253807a28f28f5c3880fc2b3cee0c8efa83ab5a95f70108e6bb",
+      "asset": "public/images/launcher_room/chibi/franky.webp",
+      "assetSha256": "cdc734d6302f3ebbfbcf8b2a172b1f5b04e6d8bc480427be252025b94fcc3507",
+      "assetBytes": 67520,
+      "assetPixels": [
+        512,
+        768
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        40,
+        94,
+        471,
+        724
+      ]
+    },
+    {
+      "id": "chibi/brook",
+      "character": "brook",
+      "mood": null,
+      "sourcePng": "tools/launcher-room/source-png/brook.png",
+      "sourceSha256": "da7ddf640f1fcbbec60cae63cf5328388eb8642ae6d2bc64dc0af5dfa1077c8f",
+      "asset": "public/images/launcher_room/chibi/brook.webp",
+      "assetSha256": "35dcd22e4805c9fad5ed96bae1a9f2a953fdccfb78260557eea7efeacbb1e502",
+      "assetBytes": 53836,
+      "assetPixels": [
+        512,
+        768
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        84,
+        36,
+        427,
+        724
+      ]
+    },
+    {
+      "id": "chibi/jinbe",
+      "character": "jinbe",
+      "mood": null,
+      "sourcePng": "tools/launcher-room/source-png/jinbe.png",
+      "sourceSha256": "4ab4bf6ad6a7e32c04d8c408ac5a27533d45a7013e938e23bc0bb9beb62fa437",
+      "asset": "public/images/launcher_room/chibi/jinbe.webp",
+      "assetSha256": "9668323b9e04ea5fa900edf7713f8a18646cc3647f2512fe6b8c58c5c16c7121",
+      "assetBytes": 64030,
+      "assetPixels": [
+        512,
+        768
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        51,
+        116,
+        461,
+        724
+      ]
+    },
+    {
+      "id": "emotions/luffy-happy",
+      "character": "luffy",
+      "mood": "happy",
+      "sourcePng": "tools/launcher-room/source-png/luffy-emotions-sheet.png",
+      "sourceSha256": "1304df2e38229241ff0ad6532262dfbd06d0b252ac5bf689d195c61640d97dd2",
+      "asset": "public/images/launcher_room/emotions/luffy-happy.webp",
+      "assetSha256": "6ea3fe3d7b3432aa7d2fe95647d35f33dbbe736f4187efa83621a6e866585c5c",
+      "assetBytes": 19244,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        10,
+        10,
+        243,
+        245
+      ]
+    },
+    {
+      "id": "emotions/luffy-surprised",
+      "character": "luffy",
+      "mood": "surprised",
+      "sourcePng": "tools/launcher-room/source-png/luffy-emotions-sheet.png",
+      "sourceSha256": "1304df2e38229241ff0ad6532262dfbd06d0b252ac5bf689d195c61640d97dd2",
+      "asset": "public/images/launcher_room/emotions/luffy-surprised.webp",
+      "assetSha256": "e53aa136996145d291e16f099e2f591d69722478a73b8a69d006e33e27ac8d43",
+      "assetBytes": 18970,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        13,
+        10,
+        247,
+        245
+      ]
+    },
+    {
+      "id": "emotions/luffy-focused",
+      "character": "luffy",
+      "mood": "focused",
+      "sourcePng": "tools/launcher-room/source-png/luffy-emotions-sheet.png",
+      "sourceSha256": "1304df2e38229241ff0ad6532262dfbd06d0b252ac5bf689d195c61640d97dd2",
+      "asset": "public/images/launcher_room/emotions/luffy-focused.webp",
+      "assetSha256": "250cfef6ef6f75dfa031537cd98b973be096e59f38076116eabfcd14858f88b2",
+      "assetBytes": 18776,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        13,
+        3,
+        246,
+        239
+      ]
+    },
+    {
+      "id": "emotions/luffy-annoyed",
+      "character": "luffy",
+      "mood": "annoyed",
+      "sourcePng": "tools/launcher-room/source-png/luffy-emotions-sheet.png",
+      "sourceSha256": "1304df2e38229241ff0ad6532262dfbd06d0b252ac5bf689d195c61640d97dd2",
+      "asset": "public/images/launcher_room/emotions/luffy-annoyed.webp",
+      "assetSha256": "118243ee14b934c297533f81fc604ee5710db13b2ca25555fb6ec4453279edd7",
+      "assetBytes": 18434,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        11,
+        5,
+        245,
+        238
+      ]
+    },
+    {
+      "id": "emotions/zoro-happy",
+      "character": "zoro",
+      "mood": "happy",
+      "sourcePng": "tools/launcher-room/source-png/zoro-emotions-sheet.png",
+      "sourceSha256": "b07dbe55e08c9a2a2c8232d46f0c7c27191f65707d4e576ee3aeed5db00c2057",
+      "asset": "public/images/launcher_room/emotions/zoro-happy.webp",
+      "assetSha256": "19949e485ae86a3a9d5c98c88a513c3290044bd3bb205dbe26c5726533171aae",
+      "assetBytes": 18690,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        30,
+        6,
+        230,
+        251
+      ]
+    },
+    {
+      "id": "emotions/zoro-surprised",
+      "character": "zoro",
+      "mood": "surprised",
+      "sourcePng": "tools/launcher-room/source-png/zoro-emotions-sheet.png",
+      "sourceSha256": "b07dbe55e08c9a2a2c8232d46f0c7c27191f65707d4e576ee3aeed5db00c2057",
+      "asset": "public/images/launcher_room/emotions/zoro-surprised.webp",
+      "assetSha256": "18ef5dfb3281bb50ba2d2d44fec742d5ed0a9cd6e497387be5f20c61d742ed01",
+      "assetBytes": 18884,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        33,
+        5,
+        227,
+        251
+      ]
+    },
+    {
+      "id": "emotions/zoro-focused",
+      "character": "zoro",
+      "mood": "focused",
+      "sourcePng": "tools/launcher-room/source-png/zoro-emotions-sheet.png",
+      "sourceSha256": "b07dbe55e08c9a2a2c8232d46f0c7c27191f65707d4e576ee3aeed5db00c2057",
+      "asset": "public/images/launcher_room/emotions/zoro-focused.webp",
+      "assetSha256": "261ec02aeee70c5090229c24d01e1cb65df9da7ba7c63566a2188b26e011e2ba",
+      "assetBytes": 19154,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        32,
+        3,
+        233,
+        249
+      ]
+    },
+    {
+      "id": "emotions/zoro-annoyed",
+      "character": "zoro",
+      "mood": "annoyed",
+      "sourcePng": "tools/launcher-room/source-png/zoro-emotions-sheet.png",
+      "sourceSha256": "b07dbe55e08c9a2a2c8232d46f0c7c27191f65707d4e576ee3aeed5db00c2057",
+      "asset": "public/images/launcher_room/emotions/zoro-annoyed.webp",
+      "assetSha256": "1936da654401f6a2c438e31c8beed0937bfed6c45dccbe2cda6b9072e85f0caa",
+      "assetBytes": 18698,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        32,
+        3,
+        232,
+        248
+      ]
+    },
+    {
+      "id": "emotions/nami-happy",
+      "character": "nami",
+      "mood": "happy",
+      "sourcePng": "tools/launcher-room/source-png/nami-emotions-sheet.png",
+      "sourceSha256": "f19bf59564f530df94a80cf91c6b29ae480114ad753a736c97d224cdb8459cfc",
+      "asset": "public/images/launcher_room/emotions/nami-happy.webp",
+      "assetSha256": "9b84a741ab5a7dea19597355ff68d3cf39172173ce35cf8c0e9f46a8d8eec7d8",
+      "assetBytes": 22040,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        24,
+        1,
+        237,
+        256
+      ]
+    },
+    {
+      "id": "emotions/nami-surprised",
+      "character": "nami",
+      "mood": "surprised",
+      "sourcePng": "tools/launcher-room/source-png/nami-emotions-sheet.png",
+      "sourceSha256": "f19bf59564f530df94a80cf91c6b29ae480114ad753a736c97d224cdb8459cfc",
+      "asset": "public/images/launcher_room/emotions/nami-surprised.webp",
+      "assetSha256": "927d5aac1770f77df406bf0fe5854dac0a2099f06e629288dce177d2165cc370",
+      "assetBytes": 22798,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        11,
+        2,
+        237,
+        256
+      ]
+    },
+    {
+      "id": "emotions/nami-focused",
+      "character": "nami",
+      "mood": "focused",
+      "sourcePng": "tools/launcher-room/source-png/nami-emotions-sheet.png",
+      "sourceSha256": "f19bf59564f530df94a80cf91c6b29ae480114ad753a736c97d224cdb8459cfc",
+      "asset": "public/images/launcher_room/emotions/nami-focused.webp",
+      "assetSha256": "375a0e64815c351d7c6e8775ab5187802b8dfe410751bd5ad0322dda3bfe198a",
+      "assetBytes": 22894,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        27,
+        0,
+        250,
+        243
+      ]
+    },
+    {
+      "id": "emotions/nami-annoyed",
+      "character": "nami",
+      "mood": "annoyed",
+      "sourcePng": "tools/launcher-room/source-png/nami-emotions-sheet.png",
+      "sourceSha256": "f19bf59564f530df94a80cf91c6b29ae480114ad753a736c97d224cdb8459cfc",
+      "asset": "public/images/launcher_room/emotions/nami-annoyed.webp",
+      "assetSha256": "7137ae2974b0b633ed80f7733b803480543c50c44167aed28a41d37d57255005",
+      "assetBytes": 22262,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        17,
+        0,
+        239,
+        243
+      ]
+    },
+    {
+      "id": "emotions/chopper-happy",
+      "character": "chopper",
+      "mood": "happy",
+      "sourcePng": "tools/launcher-room/source-png/chopper-emotions-sheet.png",
+      "sourceSha256": "ee3d01a576f6197a3c55c353cdff5dbd59884e9811b839d13ee8d53583ada943",
+      "asset": "public/images/launcher_room/emotions/chopper-happy.webp",
+      "assetSha256": "37407aa5e195df80a7bab0547adb457921836fc46ec43299a6520e63d2a6c1a4",
+      "assetBytes": 18738,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        13,
+        27,
+        253,
+        245
+      ]
+    },
+    {
+      "id": "emotions/chopper-surprised",
+      "character": "chopper",
+      "mood": "surprised",
+      "sourcePng": "tools/launcher-room/source-png/chopper-emotions-sheet.png",
+      "sourceSha256": "ee3d01a576f6197a3c55c353cdff5dbd59884e9811b839d13ee8d53583ada943",
+      "asset": "public/images/launcher_room/emotions/chopper-surprised.webp",
+      "assetSha256": "da556c380ba44331f42728524297c9e1347488ee6070d4a060d279078debdda1",
+      "assetBytes": 18618,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        5,
+        28,
+        241,
+        250
+      ]
+    },
+    {
+      "id": "emotions/chopper-focused",
+      "character": "chopper",
+      "mood": "focused",
+      "sourcePng": "tools/launcher-room/source-png/chopper-emotions-sheet.png",
+      "sourceSha256": "ee3d01a576f6197a3c55c353cdff5dbd59884e9811b839d13ee8d53583ada943",
+      "asset": "public/images/launcher_room/emotions/chopper-focused.webp",
+      "assetSha256": "31fbf7cb3af79a2a72b040b4f58d552d4ae945ff55ebffd64d9d00a89a569a6f",
+      "assetBytes": 18334,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        15,
+        18,
+        253,
+        234
+      ]
+    },
+    {
+      "id": "emotions/chopper-annoyed",
+      "character": "chopper",
+      "mood": "annoyed",
+      "sourcePng": "tools/launcher-room/source-png/chopper-emotions-sheet.png",
+      "sourceSha256": "ee3d01a576f6197a3c55c353cdff5dbd59884e9811b839d13ee8d53583ada943",
+      "asset": "public/images/launcher_room/emotions/chopper-annoyed.webp",
+      "assetSha256": "a82508184b02d8195b700e98a4b03d9eb1399577a16a0a2959a9fd24dd3a94a7",
+      "assetBytes": 17558,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        7,
+        23,
+        244,
+        233
+      ]
+    },
+    {
+      "id": "emotions/sanji-happy",
+      "character": "sanji",
+      "mood": "happy",
+      "sourcePng": "tools/launcher-room/source-png/sanji-emotions-sheet.png",
+      "sourceSha256": "fd52ab5c56aa64942501c24d23ef2999a85c5808324f87687eca4817ef9d3efd",
+      "asset": "public/images/launcher_room/emotions/sanji-happy.webp",
+      "assetSha256": "aa9100982ebaaf26399b859fc44120217a64aa7143ccfbf77e65d36f2912d3d9",
+      "assetBytes": 18962,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        20,
+        4,
+        231,
+        252
+      ]
+    },
+    {
+      "id": "emotions/sanji-surprised",
+      "character": "sanji",
+      "mood": "surprised",
+      "sourcePng": "tools/launcher-room/source-png/sanji-emotions-sheet.png",
+      "sourceSha256": "fd52ab5c56aa64942501c24d23ef2999a85c5808324f87687eca4817ef9d3efd",
+      "asset": "public/images/launcher_room/emotions/sanji-surprised.webp",
+      "assetSha256": "a859288a71eeb39a62459194beb8bc2f712e0bcc2d22e5529b2719a9a12e703d",
+      "assetBytes": 18974,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        28,
+        3,
+        237,
+        252
+      ]
+    },
+    {
+      "id": "emotions/sanji-focused",
+      "character": "sanji",
+      "mood": "focused",
+      "sourcePng": "tools/launcher-room/source-png/sanji-emotions-sheet.png",
+      "sourceSha256": "fd52ab5c56aa64942501c24d23ef2999a85c5808324f87687eca4817ef9d3efd",
+      "asset": "public/images/launcher_room/emotions/sanji-focused.webp",
+      "assetSha256": "ae851fdd3862ece97192bba0fe3398d308c271e4d5456dd1d91db2e6c7fed8d4",
+      "assetBytes": 18934,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        21,
+        3,
+        231,
+        248
+      ]
+    },
+    {
+      "id": "emotions/sanji-annoyed",
+      "character": "sanji",
+      "mood": "annoyed",
+      "sourcePng": "tools/launcher-room/source-png/sanji-emotions-sheet.png",
+      "sourceSha256": "fd52ab5c56aa64942501c24d23ef2999a85c5808324f87687eca4817ef9d3efd",
+      "asset": "public/images/launcher_room/emotions/sanji-annoyed.webp",
+      "assetSha256": "149e09feac6988efb16d127c21d92e64a534cba889e52e93e80052589342e0e9",
+      "assetBytes": 18678,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        26,
+        3,
+        233,
+        248
+      ]
+    },
+    {
+      "id": "emotions/robin-happy",
+      "character": "robin",
+      "mood": "happy",
+      "sourcePng": "tools/launcher-room/source-png/robin-emotions-sheet.png",
+      "sourceSha256": "be151ba5da223a21ea565b29d967aad8ae3a34faf3883c84e7b4c0936dd5d259",
+      "asset": "public/images/launcher_room/emotions/robin-happy.webp",
+      "assetSha256": "5eda8807c0d144b63b9bbee76348b32c6093214fbe9411d023d4d2bcd212588f",
+      "assetBytes": 17832,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        38,
+        8,
+        250,
+        251
+      ]
+    },
+    {
+      "id": "emotions/robin-surprised",
+      "character": "robin",
+      "mood": "surprised",
+      "sourcePng": "tools/launcher-room/source-png/robin-emotions-sheet.png",
+      "sourceSha256": "be151ba5da223a21ea565b29d967aad8ae3a34faf3883c84e7b4c0936dd5d259",
+      "asset": "public/images/launcher_room/emotions/robin-surprised.webp",
+      "assetSha256": "f0c2f4b4c4a0f5ac17ff19cfb8b4537115b3f88cbba2867ac02edad318ac867b",
+      "assetBytes": 17776,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        21,
+        7,
+        232,
+        251
+      ]
+    },
+    {
+      "id": "emotions/robin-focused",
+      "character": "robin",
+      "mood": "focused",
+      "sourcePng": "tools/launcher-room/source-png/robin-emotions-sheet.png",
+      "sourceSha256": "be151ba5da223a21ea565b29d967aad8ae3a34faf3883c84e7b4c0936dd5d259",
+      "asset": "public/images/launcher_room/emotions/robin-focused.webp",
+      "assetSha256": "71a649c88dacd00cda29c9ca5b8d60fda377e4e0a2bc26b529460d918adab3fd",
+      "assetBytes": 18098,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        34,
+        1,
+        250,
+        243
+      ]
+    },
+    {
+      "id": "emotions/robin-annoyed",
+      "character": "robin",
+      "mood": "annoyed",
+      "sourcePng": "tools/launcher-room/source-png/robin-emotions-sheet.png",
+      "sourceSha256": "be151ba5da223a21ea565b29d967aad8ae3a34faf3883c84e7b4c0936dd5d259",
+      "asset": "public/images/launcher_room/emotions/robin-annoyed.webp",
+      "assetSha256": "ddac22e5680fc08d29da378bdbde70f05e5df836c3fb9d11d3d29d0a8cf25343",
+      "assetBytes": 17032,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        24,
+        4,
+        236,
+        245
+      ]
+    },
+    {
+      "id": "emotions/usopp-happy",
+      "character": "usopp",
+      "mood": "happy",
+      "sourcePng": "tools/launcher-room/source-png/usopp-emotions-sheet.png",
+      "sourceSha256": "7287f49c0c5480ee8510db4efd1bd787effd5a3a0438a12763dc300967a7c35b",
+      "asset": "public/images/launcher_room/emotions/usopp-happy.webp",
+      "assetSha256": "044f4d63b006753c9d27686fdfac201600d98630562a380a4245f311fa8d5c16",
+      "assetBytes": 18038,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        15,
+        7,
+        231,
+        243
+      ]
+    },
+    {
+      "id": "emotions/usopp-surprised",
+      "character": "usopp",
+      "mood": "surprised",
+      "sourcePng": "tools/launcher-room/source-png/usopp-emotions-sheet.png",
+      "sourceSha256": "7287f49c0c5480ee8510db4efd1bd787effd5a3a0438a12763dc300967a7c35b",
+      "asset": "public/images/launcher_room/emotions/usopp-surprised.webp",
+      "assetSha256": "1bb666d878c1c2f9ce6d65963a45aaf921f8e846c2eca545e6e2e845373586ef",
+      "assetBytes": 18082,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        18,
+        11,
+        236,
+        246
+      ]
+    },
+    {
+      "id": "emotions/usopp-focused",
+      "character": "usopp",
+      "mood": "focused",
+      "sourcePng": "tools/launcher-room/source-png/usopp-emotions-sheet.png",
+      "sourceSha256": "7287f49c0c5480ee8510db4efd1bd787effd5a3a0438a12763dc300967a7c35b",
+      "asset": "public/images/launcher_room/emotions/usopp-focused.webp",
+      "assetSha256": "ef90145f9a0bb0009b7d6ead9e190fc97fcfacdfa82b28a7724533c3a7f4f4ae",
+      "assetBytes": 17670,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        17,
+        4,
+        235,
+        237
+      ]
+    },
+    {
+      "id": "emotions/usopp-annoyed",
+      "character": "usopp",
+      "mood": "annoyed",
+      "sourcePng": "tools/launcher-room/source-png/usopp-emotions-sheet.png",
+      "sourceSha256": "7287f49c0c5480ee8510db4efd1bd787effd5a3a0438a12763dc300967a7c35b",
+      "asset": "public/images/launcher_room/emotions/usopp-annoyed.webp",
+      "assetSha256": "3feff6cdc99070e8afae990df03d0d12c64b17026ab95d3e8d4f29744a10a6cd",
+      "assetBytes": 17346,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        16,
+        4,
+        236,
+        236
+      ]
+    },
+    {
+      "id": "emotions/franky-happy",
+      "character": "franky",
+      "mood": "happy",
+      "sourcePng": "tools/launcher-room/source-png/franky-emotions-sheet.png",
+      "sourceSha256": "a65c3d7d9bf126736c352f7dbef6e2741dc7dd3d74215b27dcd1937b1654691b",
+      "asset": "public/images/launcher_room/emotions/franky-happy.webp",
+      "assetSha256": "7dde4f5422ffd4b276ac33012eab0bb89ed1b43152aea7aa4fb978dbe7149270",
+      "assetBytes": 20308,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        0,
+        0,
+        256,
+        256
+      ]
+    },
+    {
+      "id": "emotions/franky-surprised",
+      "character": "franky",
+      "mood": "surprised",
+      "sourcePng": "tools/launcher-room/source-png/franky-emotions-sheet.png",
+      "sourceSha256": "a65c3d7d9bf126736c352f7dbef6e2741dc7dd3d74215b27dcd1937b1654691b",
+      "asset": "public/images/launcher_room/emotions/franky-surprised.webp",
+      "assetSha256": "7e8394fc37409f6d8d0f6dc45d985931609e8dd99958710f526a051608e96295",
+      "assetBytes": 19806,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        0,
+        0,
+        254,
+        256
+      ]
+    },
+    {
+      "id": "emotions/franky-focused",
+      "character": "franky",
+      "mood": "focused",
+      "sourcePng": "tools/launcher-room/source-png/franky-emotions-sheet.png",
+      "sourceSha256": "a65c3d7d9bf126736c352f7dbef6e2741dc7dd3d74215b27dcd1937b1654691b",
+      "asset": "public/images/launcher_room/emotions/franky-focused.webp",
+      "assetSha256": "17b35ce213e9a0c1f8d4cb45939b6d38c7c31cc9f9c9bd7a6f5f801d4f84cc83",
+      "assetBytes": 19970,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        1,
+        0,
+        256,
+        251
+      ]
+    },
+    {
+      "id": "emotions/franky-annoyed",
+      "character": "franky",
+      "mood": "annoyed",
+      "sourcePng": "tools/launcher-room/source-png/franky-emotions-sheet.png",
+      "sourceSha256": "a65c3d7d9bf126736c352f7dbef6e2741dc7dd3d74215b27dcd1937b1654691b",
+      "asset": "public/images/launcher_room/emotions/franky-annoyed.webp",
+      "assetSha256": "f2ec38e0b498ad29b9824fd7a1c5b53c4f59face70708d23210be520550cb292",
+      "assetBytes": 20016,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        0,
+        0,
+        256,
+        251
+      ]
+    },
+    {
+      "id": "emotions/brook-happy",
+      "character": "brook",
+      "mood": "happy",
+      "sourcePng": "tools/launcher-room/source-png/brook-emotions-sheet.png",
+      "sourceSha256": "54bf17eff314f28f4fd15d0ae2d4e7eed8c95c79776fece73e4db0ab69b3d9ea",
+      "asset": "public/images/launcher_room/emotions/brook-happy.webp",
+      "assetSha256": "426e8f98049b72be990cb753aaebe2495ce45f68a75b9154fcf84868755f7135",
+      "assetBytes": 15642,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        32,
+        0,
+        243,
+        256
+      ]
+    },
+    {
+      "id": "emotions/brook-surprised",
+      "character": "brook",
+      "mood": "surprised",
+      "sourcePng": "tools/launcher-room/source-png/brook-emotions-sheet.png",
+      "sourceSha256": "54bf17eff314f28f4fd15d0ae2d4e7eed8c95c79776fece73e4db0ab69b3d9ea",
+      "asset": "public/images/launcher_room/emotions/brook-surprised.webp",
+      "assetSha256": "ce86d4ae078ef359b75cf78807d9a2986241ba3f647696c5ba0a8022674ec5ab",
+      "assetBytes": 15336,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        24,
+        0,
+        229,
+        256
+      ]
+    },
+    {
+      "id": "emotions/brook-focused",
+      "character": "brook",
+      "mood": "focused",
+      "sourcePng": "tools/launcher-room/source-png/brook-emotions-sheet.png",
+      "sourceSha256": "54bf17eff314f28f4fd15d0ae2d4e7eed8c95c79776fece73e4db0ab69b3d9ea",
+      "asset": "public/images/launcher_room/emotions/brook-focused.webp",
+      "assetSha256": "66d84bfd28436a99be4cafc44a7cde94a0ebab29847f286f214322ac1ff403c0",
+      "assetBytes": 15754,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        32,
+        0,
+        236,
+        242
+      ]
+    },
+    {
+      "id": "emotions/brook-annoyed",
+      "character": "brook",
+      "mood": "annoyed",
+      "sourcePng": "tools/launcher-room/source-png/brook-emotions-sheet.png",
+      "sourceSha256": "54bf17eff314f28f4fd15d0ae2d4e7eed8c95c79776fece73e4db0ab69b3d9ea",
+      "asset": "public/images/launcher_room/emotions/brook-annoyed.webp",
+      "assetSha256": "cee78a7a0b7a00362b3e56908c037841f7294fe97ca4c3b967d6f1da75745d8e",
+      "assetBytes": 15314,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        29,
+        0,
+        229,
+        245
+      ]
+    },
+    {
+      "id": "emotions/jinbe-happy",
+      "character": "jinbe",
+      "mood": "happy",
+      "sourcePng": "tools/launcher-room/source-png/jinbe-emotions-sheet.png",
+      "sourceSha256": "6e1375b6c98f1e564e968e3ba35bdd0f769836ac5c9ad5cfde18e332d0a70033",
+      "asset": "public/images/launcher_room/emotions/jinbe-happy.webp",
+      "assetSha256": "7b994a83b34164c54be89a5be3eb34ef687378376b723b3c5fd7175947be8d27",
+      "assetBytes": 18044,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        7,
+        5,
+        249,
+        245
+      ]
+    },
+    {
+      "id": "emotions/jinbe-surprised",
+      "character": "jinbe",
+      "mood": "surprised",
+      "sourcePng": "tools/launcher-room/source-png/jinbe-emotions-sheet.png",
+      "sourceSha256": "6e1375b6c98f1e564e968e3ba35bdd0f769836ac5c9ad5cfde18e332d0a70033",
+      "asset": "public/images/launcher_room/emotions/jinbe-surprised.webp",
+      "assetSha256": "5349923d8588bb3cff21418a5f9863f104ad464d942226b6727e3409d7af32b0",
+      "assetBytes": 18018,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        4,
+        6,
+        249,
+        245
+      ]
+    },
+    {
+      "id": "emotions/jinbe-focused",
+      "character": "jinbe",
+      "mood": "focused",
+      "sourcePng": "tools/launcher-room/source-png/jinbe-emotions-sheet.png",
+      "sourceSha256": "6e1375b6c98f1e564e968e3ba35bdd0f769836ac5c9ad5cfde18e332d0a70033",
+      "asset": "public/images/launcher_room/emotions/jinbe-focused.webp",
+      "assetSha256": "f1c27a1cec13a484025fc7bb67a74420a7ac5f79e92960fc333a7ab15e857935",
+      "assetBytes": 18018,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        8,
+        4,
+        252,
+        246
+      ]
+    },
+    {
+      "id": "emotions/jinbe-annoyed",
+      "character": "jinbe",
+      "mood": "annoyed",
+      "sourcePng": "tools/launcher-room/source-png/jinbe-emotions-sheet.png",
+      "sourceSha256": "6e1375b6c98f1e564e968e3ba35bdd0f769836ac5c9ad5cfde18e332d0a70033",
+      "asset": "public/images/launcher_room/emotions/jinbe-annoyed.webp",
+      "assetSha256": "e67de1b51f241c056de78d38016243994748596ac218e3d5fe543c1b3fdf1363",
+      "assetBytes": 18158,
+      "assetPixels": [
+        256,
+        256
+      ],
+      "alpha": "transparent-cutout",
+      "alphaBounds": [
+        6,
+        4,
+        249,
+        246
+      ]
+    }
+  ]
+}

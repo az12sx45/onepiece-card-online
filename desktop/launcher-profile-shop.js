@@ -44,6 +44,7 @@
     'already_owned': '已經收藏這件商品。', 'not_owned': '尚未收藏這件商品。',
     'guestbook_locked': '留言板尚未解鎖。', 'not_friends': '目前只有好友可以留言。',
     'invalid placement': '佈置位置不正確，請重新調整。', 'rate_limited': '留言太頻繁，請稍後再試。',
+    'invalid card': '名片內容不正確，請檢查名稱、簡介與頭像。', 'invalid_card': '名片內容不正確，請檢查名稱、簡介與頭像。',
     timeout: '伺服器回應逾時，請重新整理確認結果。', offline: '目前無法連線，請稍後再試。'
   })[String(code || '')] || '操作未完成，請稍後再試。';
 
@@ -64,7 +65,9 @@
   let commentHasMore = false;
   let commentBusy = false;
   let pendingCommentDelete = null;
+  let cardBusy = false;
   let decorBusy = false;
+  let cardMutation = 0;
   let bgmSource = '';
   let bgmPlayRequest = 0;
   let roomEditorRequested = false;
@@ -76,6 +79,12 @@
   }
   function emptyCollection(message) { $('profileCollectionGrid').replaceChildren(el('p', 'voyage-collection-empty', message)); }
   function avatarFallback(img) { img.onerror = () => { img.onerror = null; img.src = imageFor('avatar', 8); }; }
+  function cardDisplayName(p) { return String(p?.card?.displayName || p?.name || '航海者'); }
+  function cardTagline(p) { return typeof p?.card?.tagline === 'string' ? p.card.tagline : String(p?.title || '偉大航道航海者'); }
+  function cardAvatarId(p) {
+    const chosen = Number(p?.card?.avatarId);
+    return Number.isInteger(chosen) && chosen >= 1 && chosen <= MAX_AVATAR_ID ? chosen : number(p?.avatar) || 8;
+  }
   function renderHero() {
     const own = profile ? profile.isSelf !== false : !viewUserId;
     const p = profile || {};
@@ -83,12 +92,40 @@
     $('profilePageHint').textContent = own ? '三款遊戲的航行紀錄與珍藏。' : '參觀好友的遊戲紀錄與公開蒐藏。';
     $('profileBackToFriends').hidden = own;
     $('profileHeroKind').textContent = own ? 'MY VOYAGE' : 'FRIEND VOYAGE';
-    $('profileHeroName').textContent = p.name || '航海者';
-    $('profileHeroTitle').textContent = p.title || '偉大航道航海者';
+    $('profileHeroName').textContent = cardDisplayName(p);
+    $('profileHeroTitle').textContent = cardTagline(p);
     $('profileHeroId').textContent = p.userId ? `航海者 #${number(p.userId)}` : '';
-    $('profileHeroAvatar').src = imageFor('avatar', p.avatar) || imageFor('avatar', 8);
+    $('profileHeroAvatar').src = imageFor('avatar', cardAvatarId(p)) || imageFor('avatar', 8);
     avatarFallback($('profileHeroAvatar'));
-    document.querySelector('.captain-hero').classList.toggle('is-friend', !own);
+    const appearance = p.appearance || {};
+    const items = p.appearanceItems || {};
+    const hero = $('profileHero');
+    hero.classList.toggle('is-friend', !own);
+    const layoutId = String(appearance.layoutId || 'layout-default');
+    hero.dataset.layout = ['layout-grand-line', 'layout-bounty-board', 'layout-captain-quarters', 'layout-sunny-deck', 'layout-sunny-kitchen', 'layout-sunny-library'].includes(layoutId) ? layoutId : 'layout-default';
+    const background = items.background?.id === appearance.backgroundId ? safeImageAsset(items.background?.asset) : '';
+    const wall = imageFor('wall', appearance.wallId);
+    const cardArt = background || wall;
+    $('profileHeroArt').style.backgroundImage = cardArt ? `linear-gradient(90deg, #04141eee, #04141e99 68%, #04141e55), url("${cardArt}")` : '';
+    const frame = items.frame?.id === appearance.frameId ? safeImageAsset(items.frame?.asset) : '';
+    $('profileHeroFrame').hidden = !frame;
+    $('profileHeroFrame').style.backgroundImage = frame ? `url("${frame}")` : '';
+    const flag = imageFor('flag', appearance.flagId);
+    $('profileHeroFlag').hidden = !flag;
+    if (flag) $('profileHeroFlag').src = flag;
+    else $('profileHeroFlag').removeAttribute('src');
+    const stickers = $('profileHeroStickers'); stickers.replaceChildren();
+    for (const [slot] of SLOTS) {
+      const item = items.decorations?.[slot];
+      const source = safeImageAsset(item?.asset);
+      if (!source || item?.id !== appearance.decorations?.[slot]) continue;
+      const position = slotPlacement(appearance.decorationPlacement, slot);
+      const img = el('img', 'captain-hero-sticker'); img.alt = ''; img.src = source; img.dataset.slot = slot;
+      img.style.left = `${position.x}%`; img.style.top = `${position.y}%`; img.style.setProperty('--scale', String(position.scale));
+      stickers.append(img);
+    }
+    $('profileCardEdit').hidden = !own || !p.isSelf || !accountId || preview;
+    if (!own || !p.isSelf || !accountId || preview) $('profileCardEditor').hidden = true;
   }
   function metric(label, value) { const wrap = el('div'); wrap.append(el('dt', '', label), el('dd', '', value)); return wrap; }
   function gameMetrics(id, data) {
@@ -202,72 +239,9 @@
     const value = placement?.[slot] || {};
     return { x: clamp(value.x, 5, 95, defaults.x), y: clamp(value.y, 5, 95, defaults.y), scale: clamp(value.scale, .5, 1.5, 1) };
   }
-  function renderDecorControls() {
-    const controls = $('profileDecorControls'); controls.replaceChildren();
-    const items = profile?.appearanceItems?.decorations || {};
-    const placement = profile?.appearance?.decorationPlacement;
-    const group = el('div', 'captain-decor-controls');
-    for (const [slot, label] of SLOTS) {
-      const item = items[slot];
-      const current = slotPlacement(placement, slot);
-      const card = el('div', 'captain-decor-slot'); card.dataset.slot = slot;
-      card.append(el('strong', '', `${label}槽位`), el('small', '', item?.name || '尚未套用貼紙'));
-      for (const [field, text, min, max, step] of [['x', '左右', 5, 95, 1], ['y', '上下', 5, 95, 1], ['scale', '大小', .5, 1.5, .05]]) {
-        const row = el('label');
-        const input = el('input'); input.type = 'range'; input.min = String(min); input.max = String(max); input.step = String(step); input.value = String(current[field]); input.dataset.field = field; input.disabled = !item || decorBusy;
-        const value = el('output', '', field === 'scale' ? `${Math.round(current[field] * 100)}%` : `${Math.round(current[field])}%`);
-        input.oninput = () => {
-          value.textContent = field === 'scale' ? `${Math.round(Number(input.value) * 100)}%` : `${Math.round(Number(input.value))}%`;
-          const sticker = $('profileCabinStickers').querySelector(`[data-slot="${slot}"]`);
-          if (sticker) {
-            if (field === 'x') sticker.style.left = `${input.value}%`;
-            if (field === 'y') sticker.style.top = `${input.value}%`;
-            if (field === 'scale') sticker.style.setProperty('--scale', input.value);
-          }
-        };
-        row.append(el('span', '', text), input, value); card.append(row);
-      }
-      const save = el('button', '', '儲存位置'); save.type = 'button'; save.disabled = !item || decorBusy;
-      save.onclick = () => savePlacement(slot, card);
-      card.append(save); group.append(card);
-    }
-    controls.append(group);
-  }
-  function renderCabin() {
+  function renderMusic() {
     const appearance = profile?.appearance || {};
     const items = profile?.appearanceItems || {};
-    const stage = $('profileCabinStage');
-    const layoutId = String(appearance.layoutId || 'layout-default');
-    stage.dataset.layout = ['layout-grand-line', 'layout-bounty-board', 'layout-captain-quarters', 'layout-sunny-deck', 'layout-sunny-kitchen', 'layout-sunny-library'].includes(layoutId) ? layoutId : 'layout-default';
-    const wall = imageFor('wall', appearance.wallId);
-    $('profileCabinWall').style.backgroundImage = wall ? `url("${wall}")` : '';
-    const background = $('profileCabinBackground');
-    const backgroundSource = items.background?.id === appearance.backgroundId ? safeImageAsset(items.background?.asset) : '';
-    background.hidden = !backgroundSource;
-    if (backgroundSource) background.src = backgroundSource;
-    else background.removeAttribute('src');
-    const frame = $('profileCabinFrame');
-    const frameSource = items.frame?.id === appearance.frameId ? safeImageAsset(items.frame?.asset) : '';
-    frame.hidden = !frameSource;
-    frame.style.borderImageSource = frameSource ? `url("${frameSource}")` : '';
-    const flag = $('profileCabinFlag');
-    const flagSource = imageFor('flag', appearance.flagId);
-    flag.hidden = !flagSource;
-    if (flagSource) flag.src = flagSource;
-    else flag.removeAttribute('src');
-    $('profileCabinLayout').textContent = items.layout?.name || '原始展示室';
-    $('profileCabinName').textContent = profile?.name || '航海者';
-    $('profileCabinCaption').textContent = profile ? '三款遊戲，共用一段航程' : '登入後展示你的收藏';
-    const stickers = $('profileCabinStickers'); stickers.replaceChildren();
-    for (const [slot] of SLOTS) {
-      const item = items.decorations?.[slot];
-      const source = safeImageAsset(item?.asset);
-      if (!source || item?.id !== appearance.decorations?.[slot]) continue;
-      const position = slotPlacement(appearance.decorationPlacement, slot);
-      const img = el('img', 'captain-cabin-sticker'); img.alt = ''; img.src = source; img.dataset.slot = slot;
-      img.style.left = `${position.x}%`; img.style.top = `${position.y}%`; img.style.setProperty('--scale', String(position.scale));
-      stickers.append(img);
-    }
     const nextBgm = items.bgm?.id === appearance.bgmId ? safeAudioAsset(items.bgm?.asset) : '';
     if (nextBgm !== bgmSource) {
       stopBgm(); bgmSource = nextBgm;
@@ -276,15 +250,11 @@
     }
     $('profileBgmName').textContent = nextBgm ? String(items.bgm?.name || '個人頁音樂').slice(0, 60) : '尚未設定個人頁音樂';
     $('profileBgmToggle').disabled = !nextBgm;
-    $('profileDecorEdit').hidden = !profile?.isSelf || !accountId || preview;
-    if (!profile?.isSelf) $('profileDecorEditor').hidden = true;
-    if (!$('profileDecorEditor').hidden) renderDecorControls();
   }
   function renderGuestbook() {
     const enabled = profile?.guestbookUnlocked === true || profile?.guestbook?.enabled === true;
     $('profileGuestbookCount').textContent = enabled ? `${fmt(profile?.guestbook?.commentCount ?? comments?.length ?? 0)} 則留言` : '';
     $('profileGuestbookLocked').hidden = !profile || enabled;
-    $('profileGuestbookShop').hidden = !profile?.isSelf || enabled;
     $('profileGuestbookForm').hidden = !profile || !enabled || !accountId || preview;
     $('profileGuestbookMore').hidden = !enabled || !commentHasMore;
     const list = $('profileGuestbookList'); list.replaceChildren();
@@ -307,7 +277,127 @@
       list.append(card);
     }
   }
-  function renderProfile() { renderHero(); renderCabin(); window.LauncherRoom?.setProfile(profile, { accountId, preview }); renderGames(); renderCollectionTabs(); renderCollection(); renderGuestbook(); }
+  function renderProfile() { renderHero(); renderMusic(); window.LauncherRoom?.setProfile(profile, { accountId, preview }); renderGames(); renderCollectionTabs(); renderCollection(); renderGuestbook(); }
+  function renderCardAvatarOptions() {
+    const select = $('profileCardAvatar'); select.replaceChildren();
+    const following = el('option', '', `沿用目前頭像 #${number(profile?.avatar) || 8}`); following.value = '0'; select.append(following);
+    const ownedAvatars = new Set([
+      ...validIds(profile?.collection?.card?.avatars, MAX_AVATAR_ID),
+      ...validIds(shop?.owned?.avatars, MAX_AVATAR_ID)
+    ]);
+    for (let id = 1; id <= MAX_AVATAR_ID; id++) {
+      if (id > 30 && !ownedAvatars.has(id)) continue;
+      const item = shop?.catalog?.find(entry => entry?.type === 'avatar' && Number(entry.key) === id);
+      const option = el('option', '', `${item?.name || `頭像 #${id}`}${id <= 30 ? ' · 免費' : ''}`);
+      option.value = String(id); select.append(option);
+    }
+    const selected = Number(profile?.card?.avatarId);
+    select.value = Number.isInteger(selected) && selected >= 1 && selected <= MAX_AVATAR_ID && (selected <= 30 || ownedAvatars.has(selected)) ? String(selected) : '0';
+  }
+  function renderCardDecorControls() {
+    const root = $('profileCardDecorControls'); root.replaceChildren();
+    const items = profile?.appearanceItems?.decorations || {};
+    const equipped = SLOTS.filter(([slot]) => items[slot]?.id && items[slot].id === profile?.appearance?.decorations?.[slot]);
+    root.hidden = !equipped.length;
+    if (!equipped.length) return;
+    root.append(el('strong', '', '名片貼紙位置'));
+    const group = el('div', 'captain-decor-controls');
+    for (const [slot, label] of equipped) {
+      const current = slotPlacement(profile?.appearance?.decorationPlacement, slot);
+      const card = el('div', 'captain-decor-slot'); card.dataset.slot = slot;
+      card.append(el('strong', '', `${label} · ${items[slot].name || '貼紙'}`));
+      for (const [field, title, min, max, step] of [['x', '左右', 5, 95, 1], ['y', '上下', 5, 95, 1], ['scale', '大小', .5, 1.5, .05]]) {
+        const row = el('label');
+        const input = el('input'); input.type = 'range'; input.min = String(min); input.max = String(max); input.step = String(step); input.value = String(current[field]); input.dataset.field = field; input.disabled = cardBusy || decorBusy;
+        const value = el('output', '', field === 'scale' ? `${Math.round(current[field] * 100)}%` : `${Math.round(current[field])}%`);
+        input.oninput = () => {
+          value.textContent = field === 'scale' ? `${Math.round(Number(input.value) * 100)}%` : `${Math.round(Number(input.value))}%`;
+          const sticker = $('profileHeroStickers').querySelector(`[data-slot="${slot}"]`);
+          if (sticker) {
+            if (field === 'x') sticker.style.left = `${input.value}%`;
+            if (field === 'y') sticker.style.top = `${input.value}%`;
+            if (field === 'scale') sticker.style.setProperty('--scale', input.value);
+          }
+        };
+        row.append(el('span', '', title), input, value); card.append(row);
+      }
+      const save = el('button', '', '儲存貼紙位置'); save.type = 'button'; save.disabled = cardBusy || decorBusy;
+      save.onclick = () => saveCardDecorPlacement(slot, card);
+      card.append(save); group.append(card);
+    }
+    root.append(group);
+  }
+  async function saveCardDecorPlacement(slot, card) {
+    if (cardBusy || decorBusy || !profile?.isSelf || !accountId || preview || viewUserId || $('profileCardEditor').hidden) return;
+    const fields = Object.fromEntries([...card.querySelectorAll('input[data-field]')].map(input => [input.dataset.field, Number(input.value)]));
+    const placement = { x: clamp(fields.x, 5, 95, 50), y: clamp(fields.y, 5, 95, 50), scale: clamp(fields.scale, .5, 1.5, 1) };
+    const ownerId = accountId, userId = number(profile.userId), mutation = cardMutation;
+    const current = () => mutation === cardMutation && accountId === ownerId && number(profile?.userId) === userId && profile?.isSelf === true && !viewUserId;
+    profileRequest++;
+    decorBusy = true; $('profileCardSave').disabled = true; $('profileCardCancel').disabled = true; renderCardDecorControls(); status('profileCardStatus', '正在儲存貼紙位置…');
+    try {
+      const result = await api.saveLauncherDecorationPlacement(slot, placement);
+      if (!current()) return;
+      if (!result?.ok || !result.profile) { renderHero(); status('profileCardStatus', errorText(result?.error), true); return; }
+      profile = result.profile; if (result.shop) shop = result.shop;
+      renderProfile(); status('profileCardStatus', '貼紙位置已儲存。');
+    } catch { if (current()) { renderHero(); status('profileCardStatus', errorText('offline'), true); } }
+    finally { if (current()) { decorBusy = false; $('profileCardSave').disabled = false; $('profileCardCancel').disabled = false; renderCardDecorControls(); } }
+  }
+  function closeCardEditor() {
+    cardMutation++;
+    cardBusy = false;
+    decorBusy = false;
+    $('profileCardEditor').hidden = true;
+    $('profileCardSave').disabled = false;
+    $('profileCardCancel').disabled = false;
+    status('profileCardStatus', '');
+    renderHero();
+  }
+  function openCardEditor() {
+    if (!profile?.isSelf || !accountId || preview) return;
+    renderCardAvatarOptions();
+    $('profileCardName').value = cardDisplayName(profile);
+    $('profileCardTagline').value = cardTagline(profile);
+    renderCardDecorControls();
+    status('profileCardStatus', '');
+    $('profileCardEditor').hidden = false;
+    $('profileCardName').focus();
+  }
+  async function saveCard(event) {
+    event.preventDefault();
+    if (cardBusy || decorBusy || !profile?.isSelf || !accountId || preview || viewUserId) return;
+    const displayName = $('profileCardName').value.trim();
+    const tagline = $('profileCardTagline').value.trim();
+    const avatarId = Number($('profileCardAvatar').value);
+    if (!displayName || displayName.length > 32 || tagline.length > 120 || !Number.isInteger(avatarId) || avatarId < 0 || avatarId > MAX_AVATAR_ID) {
+      status('profileCardStatus', '請填入 1–32 字名稱、最多 120 字簡介，並選擇頭像。', true); return;
+    }
+    const ownerId = accountId;
+    const userId = number(profile.userId);
+    const viewId = viewUserId;
+    const mutation = ++cardMutation;
+    profileRequest++;
+    cardBusy = true;
+    $('profileCardSave').disabled = true;
+    $('profileCardCancel').disabled = true;
+    renderCardDecorControls();
+    status('profileCardStatus', '正在儲存名片…');
+    const current = () => mutation === cardMutation && accountId === ownerId && viewUserId === viewId && number(profile?.userId) === userId && profile?.isSelf === true;
+    try {
+      const result = await api.saveLauncherCard({ displayName, tagline, avatarId });
+      if (!current()) return;
+      if (!result?.ok || !result.profile) { status('profileCardStatus', errorText(result?.error), true); return; }
+      profile = result.profile;
+      if (result.shop) shop = result.shop;
+      $('profileCardEditor').hidden = true;
+      renderProfile();
+      status('profileStatus', '名片已儲存。');
+    } catch { if (current()) status('profileCardStatus', errorText('offline'), true); }
+    finally {
+      if (mutation === cardMutation) { cardBusy = false; $('profileCardSave').disabled = false; $('profileCardCancel').disabled = false; if (!$('profileCardEditor').hidden) renderCardDecorControls(); }
+    }
+  }
   async function loadProfile() {
     const requestId = ++profileRequest;
     commentRequest++; comments = null; commentNextBeforeId = 0; commentHasMore = false;
@@ -348,19 +438,6 @@
     } catch {
       if (requestId === commentRequest) { comments = []; renderGuestbook(); status('profileGuestbookStatus', errorText('offline'), true); }
     }
-  }
-  async function savePlacement(slot, card) {
-    if (decorBusy || !profile?.isSelf || !SLOTS.some(([name]) => name === slot)) return;
-    const fields = Object.fromEntries([...card.querySelectorAll('input[data-field]')].map(input => [input.dataset.field, Number(input.value)]));
-    const placement = { x: clamp(fields.x, 5, 95, 50), y: clamp(fields.y, 5, 95, 50), scale: clamp(fields.scale, .5, 1.5, 1) };
-    decorBusy = true; renderDecorControls(); status('profileDecorStatus', '正在儲存佈置…');
-    try {
-      const result = await api.saveLauncherDecorationPlacement(slot, placement);
-      if (!result?.ok) { status('profileDecorStatus', errorText(result?.error), true); return; }
-      status('profileDecorStatus', '佈置位置已儲存。');
-      await loadProfile();
-    } catch { status('profileDecorStatus', errorText('offline'), true); }
-    finally { decorBusy = false; if (!$('profileDecorEditor').hidden) renderDecorControls(); }
   }
   async function postComment(event) {
     event.preventDefault();
@@ -513,6 +590,7 @@
     $('shopConfirmName').textContent = String(item.name || item.id).slice(0, 80);
     $('shopConfirmCopy').textContent = `確定花費 ${fmt(item.price)} 金幣收藏這件商品？`;
     const source = itemImage(item);
+    $('shopConfirmDialog').dataset.type = item.type;
     $('shopConfirmImage').hidden = !source;
     if (source) $('shopConfirmImage').src = source;
     else $('shopConfirmImage').removeAttribute('src');
@@ -552,12 +630,15 @@
 
   $('profileRefresh').onclick = loadProfile;
   $('profileBackToFriends').onclick = () => window.launcherSwitchPanel?.('social');
-  $('profileShopShortcut').onclick = () => window.launcherSwitchPanel?.('shop');
-  $('profileDecorEdit').onclick = () => { $('profileDecorEditor').hidden = !$('profileDecorEditor').hidden; if (!$('profileDecorEditor').hidden) renderDecorControls(); };
-  $('profileDecorShop').onclick = () => { shopTab = 'decoration'; window.launcherSwitchPanel?.('shop'); };
+  $('profileCardEdit').onclick = openCardEditor;
+  $('profileCardCancel').onclick = closeCardEditor;
+  $('profileCardEditor').onsubmit = saveCard;
+  $('profileCardAvatar').onchange = () => {
+    const id = number($('profileCardAvatar').value) || number(profile?.avatar) || 8;
+    $('profileHeroAvatar').src = imageFor('avatar', id) || imageFor('avatar', 8);
+  };
   $('profileBgmToggle').onclick = toggleBgm;
   $('profileBgmAudio').onended = stopBgm;
-  $('profileGuestbookShop').onclick = () => { shopTab = 'guestbook'; window.launcherSwitchPanel?.('shop'); };
   $('profileGuestbookForm').onsubmit = postComment;
   $('profileGuestbookInput').oninput = () => { $('profileGuestbookLength').textContent = `${$('profileGuestbookInput').value.length} / 240`; };
   $('profileGuestbookMore').onclick = () => loadComments(true);
@@ -575,19 +656,19 @@
       const isPreview = snapshot?.previewMode === true;
       if (id === accountId && isPreview === preview) return;
       stopBgm(); bgmSource = '';
+      cardMutation++; cardBusy = false; decorBusy = false; $('profileCardEditor').hidden = true; $('profileCardSave').disabled = false; $('profileCardCancel').disabled = false;
       accountId = id; preview = isPreview; viewUserId = 0; profile = null; shop = null; roomEditorRequested = false;
       profileRequest++; shopRequest++; commentRequest++; comments = null; commentHasMore = false; commentNextBeforeId = 0; pendingPurchase = null; pendingCommentDelete = null;
       if ($('shopConfirmDialog').open) $('shopConfirmDialog').close();
       if ($('profileCommentDeleteDialog').open) $('profileCommentDeleteDialog').close();
-      $('profileDecorEditor').hidden = true;
       renderProfile(); renderShopTabs(); renderShop();
     },
     openProfile(userId = 0) {
       const id = number(userId);
       stopBgm(); bgmSource = '';
+      cardMutation++; cardBusy = false; decorBusy = false; $('profileCardEditor').hidden = true; $('profileCardSave').disabled = false; $('profileCardCancel').disabled = false;
       viewUserId = id && id !== accountId ? id : 0;
       profile = null; comments = null; profileRequest++; commentRequest++; commentHasMore = false; commentNextBeforeId = 0;
-      $('profileDecorEditor').hidden = true;
       if (window.launcherSwitchPanel) window.launcherSwitchPanel('profile');
       else loadProfile();
     },

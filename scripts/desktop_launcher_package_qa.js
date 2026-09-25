@@ -132,6 +132,47 @@ const EXTRA_RESOURCES = [
       'furniture/tool-bench.webp',
       'chibi/luffy.webp', 'chibi/zoro.webp', 'chibi/nami.webp', 'chibi/chopper.webp',
       'chibi/sanji.webp', 'chibi/robin.webp',
+      'chibi/usopp.webp', 'chibi/franky.webp', 'chibi/brook.webp', 'chibi/jinbe.webp',
+      'emotions/luffy-happy.webp',
+      'emotions/luffy-surprised.webp',
+      'emotions/luffy-focused.webp',
+      'emotions/luffy-annoyed.webp',
+      'emotions/zoro-happy.webp',
+      'emotions/zoro-surprised.webp',
+      'emotions/zoro-focused.webp',
+      'emotions/zoro-annoyed.webp',
+      'emotions/nami-happy.webp',
+      'emotions/nami-surprised.webp',
+      'emotions/nami-focused.webp',
+      'emotions/nami-annoyed.webp',
+      'emotions/chopper-happy.webp',
+      'emotions/chopper-surprised.webp',
+      'emotions/chopper-focused.webp',
+      'emotions/chopper-annoyed.webp',
+      'emotions/sanji-happy.webp',
+      'emotions/sanji-surprised.webp',
+      'emotions/sanji-focused.webp',
+      'emotions/sanji-annoyed.webp',
+      'emotions/robin-happy.webp',
+      'emotions/robin-surprised.webp',
+      'emotions/robin-focused.webp',
+      'emotions/robin-annoyed.webp',
+      'emotions/usopp-happy.webp',
+      'emotions/usopp-surprised.webp',
+      'emotions/usopp-focused.webp',
+      'emotions/usopp-annoyed.webp',
+      'emotions/franky-happy.webp',
+      'emotions/franky-surprised.webp',
+      'emotions/franky-focused.webp',
+      'emotions/franky-annoyed.webp',
+      'emotions/brook-happy.webp',
+      'emotions/brook-surprised.webp',
+      'emotions/brook-focused.webp',
+      'emotions/brook-annoyed.webp',
+      'emotions/jinbe-happy.webp',
+      'emotions/jinbe-surprised.webp',
+      'emotions/jinbe-focused.webp',
+      'emotions/jinbe-annoyed.webp',
       'frames/straw-hat.webp', 'frames/ship-wheel.webp'
     ]
   },
@@ -325,7 +366,7 @@ function validateCursorPng(filePath, label) {
 function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
-  assert(packageJson.version === '1.1.9', 'Desktop launcher version must be 1.1.9 for the room and expanded shop.');
+  assert(packageJson.version === '1.1.10', 'Desktop launcher version must be 1.1.10 for the interactive room.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
@@ -399,16 +440,18 @@ function validateSourcePackage() {
   const roomResource = EXTRA_RESOURCES.find(resource => resource.to === 'launcher-assets/images/launcher_room');
   assert(roomManifest.version === '1.1.9' && roomManifest.canonicalCharactersOnly === true,
     'Room art manifest is not the approved canonical-character release.');
-  assert(Array.isArray(roomManifest.items) && roomManifest.items.length === roomResource.filter.length,
-    'Room art manifest must cover every packaged room image.');
-  assertExactJson(sorted(roomManifest.items.map(item => item.asset.replace(/^public\/images\/launcher_room\//, ''))),
+  const roomExpansion = readJson(path.join(ROOT, 'docs', 'LAUNCHER_ROOM_EXPANSION_ART_20260925.json'), 'launcher room expansion art manifest');
+  assert(roomExpansion.version === '1.1.10' && roomExpansion.canonicalCharactersOnly === true,
+    'Room expansion manifest must identify the canonical release.');
+  assert(Array.isArray(roomManifest.items) && roomManifest.items.length === 21 &&
+    Array.isArray(roomExpansion.items) && roomExpansion.items.length === 44,
+    'Room art manifests must cover the original 21 assets and 44 new character assets.');
+  assertExactJson(sorted([...roomManifest.items, ...roomExpansion.items].map(item => item.asset.replace(/^public\/images\/launcher_room\//, ''))),
     sorted(roomResource.filter), 'Room art manifest output set');
   const roomSourceRoot = path.join(ROOT, 'tools', 'launcher-room', 'source-png');
-  assertExactJson(sorted(fs.readdirSync(roomSourceRoot)),
-    sorted(roomManifest.items.map(item => path.basename(item.sourcePng))), 'GPT room art source PNG set');
-  for (const item of roomManifest.items) {
+  for (const item of [...roomManifest.items, ...roomExpansion.items]) {
     assert(/^tools\/launcher-room\/source-png\/[a-z0-9-]+\.png$/.test(item.sourcePng), `Room source path is unsafe: ${item.sourcePng}`);
-    assert(/^public\/images\/launcher_room\/(?:scenes|furniture|chibi|frames)\/[a-z0-9-]+\.webp$/.test(item.asset), `Room asset path is unsafe: ${item.asset}`);
+    assert(/^public\/images\/launcher_room\/(?:scenes|furniture|chibi|frames|emotions)\/[a-z0-9-]+\.webp$/.test(item.asset), `Room asset path is unsafe: ${item.asset}`);
     const source = path.join(ROOT, ...item.sourcePng.split('/'));
     const asset = path.join(ROOT, ...item.asset.split('/'));
     assert(sha256File(source) === item.sourceSha256, `GPT room source digest differs: ${item.sourcePng}`);

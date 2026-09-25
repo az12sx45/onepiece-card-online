@@ -101,7 +101,9 @@ const CATALOG = Object.freeze([
   ...[
     ['luffy', '魯夫', 'legend'], ['zoro', '索隆', 'epic'],
     ['nami', '娜美', 'epic'], ['chopper', '喬巴', 'epic'],
-    ['sanji', '香吉士', 'epic'], ['robin', '羅賓', 'epic']
+    ['sanji', '香吉士', 'epic'], ['robin', '羅賓', 'epic'],
+    ['usopp', '騙人布', 'rare'], ['franky', '佛朗基', 'epic'],
+    ['brook', '布魯克', 'epic'], ['jinbe', '甚平', 'epic']
   ].map(([key, name, rarity]) => ({
     id: `room-character-${key}`, type: 'room_character', key, name: `Q版${name}`, rarity,
     asset: `opui://launcher/images/launcher_room/chibi/${key}.webp`
@@ -133,7 +135,7 @@ const LAUNCHER_ITEM_TYPES = Object.freeze(['layout', 'background', 'frame', 'dec
 const ROOM_ITEM_TYPES = Object.freeze(['room_scene', 'room_furniture', 'room_character']);
 const ROOM_DEFAULT_SCENE = 'room-scene-default';
 const ROOM_MAX_FURNITURE = 24;
-const ROOM_MAX_CHARACTERS = 3;
+const ROOM_MAX_CHARACTERS = 8;
 const ROOM_WIDTH = 960;
 const ROOM_HEIGHT = 540;
 const DECORATION_SLOTS = Object.freeze(['header', 'side', 'footer']);
@@ -200,9 +202,13 @@ const guestbookUnlocked = stats => launcherOwnedItemIds(stats).includes('guestbo
 const validRoomCoordinate = (x, y) => typeof x === 'number' && Number.isFinite(x) && x >= 0 && x <= ROOM_WIDTH &&
   typeof y === 'number' && Number.isFinite(y) && y >= 0 && y <= ROOM_HEIGHT;
 const roundRoomNumber = value => Math.round(value * 100) / 100;
+const furnitureRotation = value => Number.isInteger(value.rotation) ? value.rotation : value.flip ? 2 : 0;
 const validFurniturePlacement = value => object(value) === value && validRoomCoordinate(value.x, value.y) &&
   typeof value.scale === 'number' && Number.isFinite(value.scale) && value.scale >= 0.5 && value.scale <= 1.5 &&
-  typeof value.flip === 'boolean';
+  (value.flip === undefined || typeof value.flip === 'boolean') &&
+  (value.rotation === undefined || (Number.isInteger(value.rotation) && value.rotation >= 0 && value.rotation <= 3)) &&
+  (value.rotation !== undefined || typeof value.flip === 'boolean') &&
+  (value.rotation === undefined || value.flip === undefined || value.flip === (value.rotation === 2));
 const validCharacterPlacement = value => object(value) === value && validRoomCoordinate(value.x, value.y);
 function normalizedRoomEntries(entries, type, owned, limit) {
   const seen = new Set();
@@ -215,7 +221,7 @@ function normalizedRoomEntries(entries, type, owned, limit) {
     seen.add(id);
     result.push(type === 'room_furniture' ? {
       itemId: id, x: roundRoomNumber(value.x), y: roundRoomNumber(value.y),
-      scale: roundRoomNumber(value.scale), flip: value.flip
+      scale: roundRoomNumber(value.scale), rotation: furnitureRotation(value), flip: furnitureRotation(value) === 2
     } : { itemId: id, x: roundRoomNumber(value.x), y: roundRoomNumber(value.y) });
   }
   return result;
@@ -279,8 +285,23 @@ const appearanceItems = appearance => ({
 function sanitizeLauncherStatsPatch(stats) {
   if (!stats || typeof stats !== 'object' || Array.isArray(stats)) return {};
   const { launcherOwnedV1: _owned, launcherAppearanceV1: _appearance, launcherWalletV1: _wallet,
-    launcherRoomV1: _room, ...safe } = stats;
+    launcherRoomV1: _room, launcherCardV1: _card, ...safe } = stats;
   return safe;
+}
+const validCardText = (value, min, max) => typeof value === 'string' && value.trim().length >= min &&
+  value.trim().length <= max && !/[\u0000-\u001f\u007f-\u009f\u2028\u2029]/u.test(value);
+function launcherCard(row) {
+  const stats = object(row.stats);
+  const saved = object(stats.launcherCardV1);
+  const fallback = String(row.name || '').trim().slice(0, 32) || '未命名玩家';
+  const displayName = validCardText(saved.displayName, 1, 32) ? saved.displayName.trim() : fallback;
+  const tagline = validCardText(saved.tagline, 0, 120) ? saved.tagline.trim() : '';
+  const avatarId = Number(saved.avatarId);
+  const client = object(stats.client);
+  const allowed = avatarId >= 1 && avatarId <= 30 ||
+    avatarId >= 31 && avatarId <= 50 && purchasedCollection(client).avatars.includes(avatarId) ||
+    avatarId >= LAUNCHER_AVATAR_MIN && avatarId <= LAUNCHER_AVATAR_MAX && launcherOwnedItemIds(stats).includes(`ava-${avatarId}`);
+  return { displayName, tagline, avatarId: Number.isSafeInteger(avatarId) && allowed ? avatarId : 0 };
 }
 const cardCollection = client => ({
   avatars: [...Array.from({ length: 30 }, (_, i) => i + 1), ...purchasedCollection(client).avatars],
@@ -315,7 +336,7 @@ function toPublicProfile(row, isSelf = false, boardSummary = null) {
   cardItems.avatars = [...new Set([...cardItems.avatars, ...launcherAvatarIds])].sort((a, b) => a - b);
   return {
     userId: count(row.user_id), name: String(row.name || '').slice(0, 40) || '未命名玩家',
-    avatar, title: String(object(client.titles).equipped || '').slice(0, 60), isSelf,
+    avatar, card: launcherCard(row), title: String(object(client.titles).equipped || '').slice(0, 60), isSelf,
     games: {
       card: { available: Object.keys(totals).length > 0, games: count(totals.games), wins: count(totals.wins), source: 'card-profile' },
       board: boardSummary || { available: false, source: 'unavailable' },
@@ -581,6 +602,39 @@ async function setLauncherDecorationPlacement(pool, secret, slot, placement) {
   }
 }
 
+async function setLauncherCard(pool, secret, card) {
+  if (!secret) return { ok: false, error: 'bad secret' };
+  if (object(card) !== card || !validCardText(card.displayName, 1, 32) ||
+    !validCardText(card.tagline, 0, 120) || !Number.isSafeInteger(card.avatarId) ||
+    card.avatarId < 0 || card.avatarId > LAUNCHER_AVATAR_MAX) return { ok: false, error: 'invalid_card' };
+  const db = await pool.connect();
+  try {
+    await db.query('BEGIN');
+    const found = await db.query('SELECT user_id, name, avatar, stats, updated_at FROM player_profiles WHERE secret=$1 FOR UPDATE', [secret]);
+    const row = found.rows[0];
+    if (!row) { await db.query('ROLLBACK'); return { ok: false, error: 'bad secret' }; }
+    const avatarId = card.avatarId;
+    const stats = { ...object(row.stats) };
+    if (avatarId >= 31 && avatarId <= 50 && !purchasedCollection(object(stats.client)).avatars.includes(avatarId) ||
+      avatarId >= LAUNCHER_AVATAR_MIN && !launcherOwnedItemIds(stats).includes(`ava-${avatarId}`)) {
+      await db.query('ROLLBACK');
+      return { ok: false, error: 'not_owned' };
+    }
+    stats.launcherCardV1 = { displayName: card.displayName.trim(), tagline: card.tagline.trim(), avatarId };
+    const updated = await db.query(
+      'UPDATE player_profiles SET stats=$1::jsonb, updated_at=now() WHERE user_id=$2 RETURNING user_id, name, avatar, stats, updated_at',
+      [JSON.stringify(stats), row.user_id]
+    );
+    await db.query('COMMIT');
+    return { ok: true, profile: toPublicProfile(updated.rows[0], true), shop: toShop(updated.rows[0]) };
+  } catch (error) {
+    await db.query('ROLLBACK').catch(() => {});
+    throw error;
+  } finally {
+    db.release();
+  }
+}
+
 async function setLauncherRoom(pool, secret, snapshot) {
   if (!secret) return { ok: false, error: 'bad secret' };
   if (object(snapshot) !== snapshot || !Number.isSafeInteger(snapshot.revision) || snapshot.revision < 0 ||
@@ -638,4 +692,4 @@ async function setLauncherRoom(pool, secret, snapshot) {
   }
 }
 
-module.exports = { CATALOG, toPublicProfile, toCardPublicProfile, toShop, getLauncherProfile, getLauncherShop, changeLauncherItem, setLauncherDecorationPlacement, setLauncherRoom, sanitizeLauncherStatsPatch, guestbookUnlocked, launcherAvatarForRow };
+module.exports = { CATALOG, toPublicProfile, toCardPublicProfile, toShop, getLauncherProfile, getLauncherShop, changeLauncherItem, setLauncherDecorationPlacement, setLauncherCard, setLauncherRoom, sanitizeLauncherStatsPatch, guestbookUnlocked, launcherAvatarForRow };

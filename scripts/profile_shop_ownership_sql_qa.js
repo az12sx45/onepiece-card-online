@@ -5,7 +5,7 @@
 const assert = require('node:assert/strict');
 const { PGlite } = require(process.env.BOARD_QA_PGLITE || 'D:/Codex_QA/draw-result-art-20260922/deps/node_modules/@electric-sql/pglite');
 const { PROFILE_STATS_SQL } = require('../server/board-art-collection');
-const { changeLauncherItem, getLauncherShop, setLauncherRoom, sanitizeLauncherStatsPatch } = require('../server/launcher-profile-shop');
+const { changeLauncherItem, getLauncherShop, setLauncherCard, setLauncherRoom, sanitizeLauncherStatsPatch } = require('../server/launcher-profile-shop');
 const { updateProfileSocial } = require('../server/profile-social-stats');
 
 const db = new PGlite();
@@ -125,12 +125,19 @@ const sorted = values => [...values].sort((a, b) => String(a).localeCompare(Stri
       characters: [{ itemId: 'room-character-luffy', x: 480, y: 420 }]
     });
     assert.equal(roomSaved.ok, true);
+    assert.equal((await setLauncherCard(pool, 'protected', { displayName: '千陽號船員', tagline: '船艙歡迎你', avatarId: 31 })).error, 'not_owned');
+    assert.equal((await setLauncherCard(pool, 'protected', { displayName: '千陽號船員', tagline: '船艙歡迎你', avatarId: 3 })).ok, true);
+    assert.deepEqual((await profile('protected')).stats.launcherCardV1,
+      { displayName: '千陽號船員', tagline: '船艙歡迎你', avatarId: 3 });
     const roomBeforePatch = (await profile('protected')).stats.launcherRoomV1;
     await patch('protected', sanitizeLauncherStatsPatch({
       launcherRoomV1: { revision: 999, sceneId: 'room-scene-default', placements: [], characters: [] },
+      launcherCardV1: { displayName: '偽造名片', tagline: '', avatarId: 31 },
       client: { totals: { games: 11 } }
     }));
     assert.deepEqual((await profile('protected')).stats.launcherRoomV1, roomBeforePatch);
+    assert.deepEqual((await profile('protected')).stats.launcherCardV1,
+      { displayName: '千陽號船員', tagline: '船艙歡迎你', avatarId: 3 });
     assert.equal((await profile('protected')).stats.client.totals.games, 11);
     assert.equal((await setLauncherRoom(pool, 'protected', { ...roomBeforePatch, revision: 0 })).error, 'revision_conflict');
     assert.deepEqual((await profile('protected')).stats.launcherRoomV1, roomBeforePatch);

@@ -17,6 +17,7 @@ contextBridge.exposeInMainWorld('onePieceDesktop', Object.freeze({
   logout: () => ipcRenderer.invoke('launcher:logout'),
   setDisplayName: (name) => ipcRenderer.invoke('launcher:set-display-name', name),
   getLauncherProfile: (userId = 0) => ipcRenderer.invoke('launcher:get-profile', userId),
+  saveLauncherCard: (card) => ipcRenderer.invoke('launcher:card-set', card),
   getLauncherShop: (options) => ipcRenderer.invoke('launcher:get-shop', options),
   buyLauncherItem: (itemId) => ipcRenderer.invoke('launcher:buy-item', itemId),
   equipLauncherItem: (itemId) => ipcRenderer.invoke('launcher:equip-item', itemId),
