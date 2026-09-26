@@ -1,0 +1,621 @@
+{
+  "schema": "one-piece-room-fullbody-import-report/1",
+  "key": "zoro",
+  "direction": "west",
+  "shape": {
+    "cell": 128,
+    "columns": 8,
+    "rows": 1,
+    "root": [
+      64,
+      112
+    ],
+    "standingMaxHeight": 100,
+    "maxWidth": 112
+  },
+  "method": "whole-character component with nearby source alpha; uniform whole-image scale and translation",
+  "uniformDirectionScale": 0.4484304932735426,
+  "frames": [
+    {
+      "key": "zoro",
+      "direction": "west",
+      "pose": "idle",
+      "source": "zoro",
+      "region": [
+        57,
+        237,
+        146,
+        235
+      ],
+      "index": 0,
+      "bounds": [
+        41,
+        11,
+        102,
+        113
+      ],
+      "opaqueBoundsAtOutput": [
+        42,
+        12,
+        102,
+        112
+      ],
+      "sourceAnchor": [
+        112.51273687480584,
+        466
+      ],
+      "localAnchor": [
+        51.51273687480584,
+        225
+      ],
+      "sourceAlphaBounds": [
+        61,
+        241,
+        198,
+        468
+      ],
+      "opaqueBounds": [
+        63,
+        243,
+        134,
+        223
+      ],
+      "opaquePixels": 17384,
+      "removedDistantAlphaPixels": 3933,
+      "sourceUnitScale": 1,
+      "sourceOpaqueClearance": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.4484304932735426,
+      "wholeImageScale": 0.4484304932735426,
+      "inverseWholeImageTransform": [
+        2.23,
+        0,
+        -91.20726312519416,
+        0,
+        2.23,
+        -24.75999999999999
+      ],
+      "rgbaSha256": "0851dc69c364db92f6132a646daa243b56281ff25eaed19a6f28da966bb4e607",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "zoro",
+      "direction": "west",
+      "pose": "talk_happy",
+      "source": "zoro",
+      "region": [
+        237,
+        237,
+        187,
+        235
+      ],
+      "index": 1,
+      "bounds": [
+        23,
+        11,
+        103,
+        113
+      ],
+      "opaqueBoundsAtOutput": [
+        24,
+        12,
+        102,
+        112
+      ],
+      "sourceAnchor": [
+        332.77492211838006,
+        466
+      ],
+      "localAnchor": [
+        90.77492211838006,
+        225
+      ],
+      "sourceAlphaBounds": [
+        242,
+        241,
+        419,
+        468
+      ],
+      "opaqueBounds": [
+        243,
+        243,
+        175,
+        223
+      ],
+      "opaquePixels": 18177,
+      "removedDistantAlphaPixels": 4392,
+      "sourceUnitScale": 1,
+      "sourceOpaqueClearance": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.4484304932735426,
+      "wholeImageScale": 0.4484304932735426,
+      "inverseWholeImageTransform": [
+        2.23,
+        0,
+        -51.94507788161994,
+        0,
+        2.23,
+        -24.75999999999999
+      ],
+      "rgbaSha256": "7f53d1a4ec2a5cbf7de987db996a2c051e75c0ddc5a26df6c1d56d7bda4cc21e",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "zoro",
+      "direction": "west",
+      "pose": "talk_annoyed",
+      "source": "zoro",
+      "region": [
+        499,
+        237,
+        146,
+        235
+      ],
+      "index": 2,
+      "bounds": [
+        40,
+        11,
+        102,
+        113
+      ],
+      "opaqueBoundsAtOutput": [
+        41,
+        12,
+        101,
+        112
+      ],
+      "sourceAnchor": [
+        555.8098340313325,
+        466
+      ],
+      "localAnchor": [
+        52.80983403133246,
+        225
+      ],
+      "sourceAlphaBounds": [
+        503,
+        241,
+        641,
+        468
+      ],
+      "opaqueBounds": [
+        505,
+        243,
+        134,
+        223
+      ],
+      "opaquePixels": 17552,
+      "removedDistantAlphaPixels": 4722,
+      "sourceUnitScale": 1,
+      "sourceOpaqueClearance": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.4484304932735426,
+      "wholeImageScale": 0.4484304932735426,
+      "inverseWholeImageTransform": [
+        2.23,
+        0,
+        -89.91016596866754,
+        0,
+        2.23,
+        -24.75999999999999
+      ],
+      "rgbaSha256": "8aca01df5b4b1bcfc85c8188de168b29fb084ebd69418a3db871a94c602c39ca",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "zoro",
+      "direction": "west",
+      "pose": "surprised",
+      "source": "zoro",
+      "region": [
+        698,
+        237,
+        164,
+        235
+      ],
+      "index": 3,
+      "bounds": [
+        32,
+        11,
+        101,
+        113
+      ],
+      "opaqueBoundsAtOutput": [
+        33,
+        12,
+        101,
+        112
+      ],
+      "sourceAnchor": [
+        773.3002489110143,
+        466
+      ],
+      "localAnchor": [
+        70.30024891101425,
+        225
+      ],
+      "sourceAlphaBounds": [
+        703,
+        241,
+        858,
+        468
+      ],
+      "opaqueBounds": [
+        704,
+        243,
+        152,
+        223
+      ],
+      "opaquePixels": 17681,
+      "removedDistantAlphaPixels": 4490,
+      "sourceUnitScale": 1,
+      "sourceOpaqueClearance": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.4484304932735426,
+      "wholeImageScale": 0.4484304932735426,
+      "inverseWholeImageTransform": [
+        2.23,
+        0,
+        -72.41975108898575,
+        0,
+        2.23,
+        -24.75999999999999
+      ],
+      "rgbaSha256": "3bdf86530a034efcc402a0f3a9c9be64621b8f399d00e4d3d37a5701de77cba4",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "zoro",
+      "direction": "west",
+      "pose": "focused_use",
+      "source": "zoro",
+      "region": [
+        916,
+        238,
+        179,
+        234
+      ],
+      "index": 4,
+      "bounds": [
+        33,
+        12,
+        109,
+        113
+      ],
+      "opaqueBoundsAtOutput": [
+        33,
+        12,
+        108,
+        112
+      ],
+      "sourceAnchor": [
+        990.9764283484234,
+        466
+      ],
+      "localAnchor": [
+        69.97642834842338,
+        224
+      ],
+      "sourceAlphaBounds": [
+        921,
+        242,
+        1091,
+        468
+      ],
+      "opaqueBounds": [
+        922,
+        244,
+        167,
+        222
+      ],
+      "opaquePixels": 18139,
+      "removedDistantAlphaPixels": 4632,
+      "sourceUnitScale": 1,
+      "sourceOpaqueClearance": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.4484304932735426,
+      "wholeImageScale": 0.4484304932735426,
+      "inverseWholeImageTransform": [
+        2.23,
+        0,
+        -72.74357165157662,
+        0,
+        2.23,
+        -25.75999999999999
+      ],
+      "rgbaSha256": "3a5b2b5fefca6f37a80861e5da5d643f4a59860db889cf84bb91031274d54d6d",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "zoro",
+      "direction": "west",
+      "pose": "sit",
+      "source": "zoro",
+      "region": [
+        1161,
+        289,
+        148,
+        196
+      ],
+      "index": 5,
+      "bounds": [
+        36,
+        29,
+        99,
+        113
+      ],
+      "opaqueBoundsAtOutput": [
+        37,
+        29,
+        98,
+        112
+      ],
+      "sourceAnchor": [
+        1227.1005415162456,
+        479
+      ],
+      "localAnchor": [
+        62.100541516245585,
+        186
+      ],
+      "sourceAlphaBounds": [
+        1165,
+        293,
+        1305,
+        481
+      ],
+      "opaqueBounds": [
+        1167,
+        295,
+        136,
+        184
+      ],
+      "opaquePixels": 15865,
+      "removedDistantAlphaPixels": 2971,
+      "sourceUnitScale": 1,
+      "sourceOpaqueClearance": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.4484304932735426,
+      "wholeImageScale": 0.4484304932735426,
+      "inverseWholeImageTransform": [
+        2.23,
+        0,
+        -80.61945848375441,
+        0,
+        2.23,
+        -63.75999999999999
+      ],
+      "rgbaSha256": "06e0f6090733be1151c42a87b851cccf15d196d6b24ddd8f8b7d6e4f045f1972",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "zoro",
+      "direction": "west",
+      "pose": "wave",
+      "source": "zoro",
+      "region": [
+        1386,
+        237,
+        145,
+        235
+      ],
+      "index": 6,
+      "bounds": [
+        40,
+        11,
+        101,
+        113
+      ],
+      "opaqueBoundsAtOutput": [
+        40,
+        12,
+        100,
+        112
+      ],
+      "sourceAnchor": [
+        1444.468694096601,
+        466
+      ],
+      "localAnchor": [
+        54.468694096600984,
+        225
+      ],
+      "sourceAlphaBounds": [
+        1390,
+        241,
+        1527,
+        468
+      ],
+      "opaqueBounds": [
+        1392,
+        243,
+        133,
+        223
+      ],
+      "opaquePixels": 18332,
+      "removedDistantAlphaPixels": 4483,
+      "sourceUnitScale": 1,
+      "sourceOpaqueClearance": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.4484304932735426,
+      "wholeImageScale": 0.4484304932735426,
+      "inverseWholeImageTransform": [
+        2.23,
+        0,
+        -88.25130590339901,
+        0,
+        2.23,
+        -24.75999999999999
+      ],
+      "rgbaSha256": "69c4bffe17c181a158b36aa3db1357985ea122c40d436aded8cec149a413bba2",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "zoro",
+      "direction": "west",
+      "pose": "listen",
+      "source": "zoro",
+      "region": [
+        1602,
+        237,
+        149,
+        235
+      ],
+      "index": 7,
+      "bounds": [
+        41,
+        12,
+        103,
+        113
+      ],
+      "opaqueBoundsAtOutput": [
+        41,
+        12,
+        103,
+        112
+      ],
+      "sourceAnchor": [
+        1658.19533437014,
+        466
+      ],
+      "localAnchor": [
+        52.19533437014002,
+        224
+      ],
+      "sourceAlphaBounds": [
+        1606,
+        242,
+        1747,
+        468
+      ],
+      "opaqueBounds": [
+        1608,
+        243,
+        137,
+        223
+      ],
+      "opaquePixels": 16736,
+      "removedDistantAlphaPixels": 3249,
+      "sourceUnitScale": 1,
+      "sourceOpaqueClearance": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.4484304932735426,
+      "wholeImageScale": 0.4484304932735426,
+      "inverseWholeImageTransform": [
+        2.23,
+        0,
+        -90.52466562985998,
+        0,
+        2.23,
+        -25.75999999999999
+      ],
+      "rgbaSha256": "e1da8e57c38e9c26beff267ecad6f43e9f7a8e0ad6e713b43ed4cc6f85c1275a",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    }
+  ],
+  "visualAccepted": false
+}

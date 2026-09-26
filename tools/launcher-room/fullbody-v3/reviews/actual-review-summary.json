@@ -1,0 +1,157 @@
+{
+  "scope": "Actual local fixture plus AI image inspection; not human acceptance",
+  "walks": [
+    {
+      "key": "luffy",
+      "width": 1280,
+      "routes": 4,
+      "framesPerCycle": 4,
+      "adjacentAndLoopComplete": true,
+      "reportSha256": "9dc859e311d335e4e79f0e0941eda7e345ab98697c5d9ef8b7e0f1710cb356df"
+    },
+    {
+      "key": "zoro",
+      "width": 1280,
+      "routes": 4,
+      "framesPerCycle": 4,
+      "adjacentAndLoopComplete": true,
+      "reportSha256": "7eaa18cedb516bb7b6dcb51b7b64b22ff0c68f53a29ebfb9c9b945b7dd265387"
+    },
+    {
+      "key": "nami",
+      "width": 1280,
+      "routes": 4,
+      "framesPerCycle": 4,
+      "adjacentAndLoopComplete": true,
+      "reportSha256": "1394e0535264ccf5722f279be236557f69cfb9f33aea94f98c8b78cc9de520cc"
+    },
+    {
+      "key": "usopp",
+      "width": 1280,
+      "routes": 4,
+      "framesPerCycle": 4,
+      "adjacentAndLoopComplete": true,
+      "reportSha256": "4db1af3f268766437c6db63b964cfc29870e035f7b5fe38271734a6176413fb6"
+    },
+    {
+      "key": "sanji",
+      "width": 1280,
+      "routes": 4,
+      "framesPerCycle": 4,
+      "adjacentAndLoopComplete": true,
+      "reportSha256": "fcba964697cfed8f8e81895102d4a502e130e5100b05875adb60aab892341795"
+    },
+    {
+      "key": "chopper",
+      "width": 1280,
+      "routes": 4,
+      "framesPerCycle": 4,
+      "adjacentAndLoopComplete": true,
+      "reportSha256": "72970b88cc47ea1d71c0d1f4b022f74f97005c2a55c6134816bc013da4d1585c"
+    },
+    {
+      "key": "robin",
+      "width": 1280,
+      "routes": 4,
+      "framesPerCycle": 4,
+      "adjacentAndLoopComplete": true,
+      "reportSha256": "5d0b2faa415d8e306c02f49d5032f1452ca7f4d238fb967cea31ef62f9be3027"
+    },
+    {
+      "key": "franky",
+      "width": 1280,
+      "routes": 4,
+      "framesPerCycle": 4,
+      "adjacentAndLoopComplete": true,
+      "reportSha256": "705db66f9b6bbd49a5cf542e1537a559f6f6870bd1a7727fab32609dcebcc768"
+    },
+    {
+      "key": "brook",
+      "width": 1280,
+      "routes": 4,
+      "framesPerCycle": 4,
+      "adjacentAndLoopComplete": true,
+      "reportSha256": "622624d93d0267b10a80ad3bbf4453806fca434e8a1d0bacef43e144ab1954d4"
+    },
+    {
+      "key": "jinbe",
+      "width": 1280,
+      "routes": 4,
+      "framesPerCycle": 4,
+      "adjacentAndLoopComplete": true,
+      "reportSha256": "103925a573f564485dec33517fc5dfbc8f304a849437de19d86ca47d4ec41b54"
+    },
+    {
+      "key": "chopper",
+      "width": 390,
+      "routes": 4,
+      "reportSha256": "6972503c88d186dfea9373e21a9fff9a29c66cc5321c01461d42547bf498d839"
+    },
+    {
+      "key": "franky",
+      "width": 390,
+      "routes": 4,
+      "reportSha256": "2fa79d44fcd82fe24d34b7728b1487ada1fbb5cd8a2d3de81f7ec7fdcba98e95"
+    },
+    {
+      "key": "jinbe",
+      "width": 390,
+      "routes": 4,
+      "reportSha256": "b37a8cf47f411690806725e6c4738e6e99a4ca16221821bd9d33071f2fdda970"
+    }
+  ],
+  "chats": [
+    {
+      "pair": "luffy-zoro",
+      "turns": 4,
+      "reportSha256": "2a94ab69d0f8b00fe972204cd22982ff37c264657fb87614a595ec3ae833ff5d"
+    },
+    {
+      "pair": "nami-sanji",
+      "turns": 4,
+      "reportSha256": "b6fa1695cde5f64def279faae20b97366f47ec648e5f1d483f9ed9022aa2bc91"
+    },
+    {
+      "pair": "robin-franky",
+      "turns": 4,
+      "reportSha256": "67f65370eef675fa3f0055795052acc026c57348872092d0cd1bbc24a37dfecf"
+    },
+    {
+      "pair": "chopper-usopp",
+      "turns": 4,
+      "reportSha256": "3fff53b908102ee91d3203419cfc3a254efd0d9feca0df8cddb39c70bd34845e"
+    },
+    {
+      "pair": "brook-jinbe",
+      "turns": 4,
+      "reportSha256": "4fc68588f2e45dbc541f5571d4d86f5ac88ba15c7e3f35aa65c540dd08c9e5dd"
+    }
+  ],
+  "furniture": [
+    {
+      "key": "sanji-kitchen-table",
+      "width": 1280,
+      "rotation": 0,
+      "reportSha256": "7b01e6f5311e2669ff12665fee3c65c4050a0713f5ec01d5e1613e9d1948c967"
+    },
+    {
+      "key": "sanji-kitchen-table",
+      "width": 1280,
+      "rotation": 2,
+      "reportSha256": "7fd2278ff1a88a8906e0dd22f846fae7a00f089d87e161e24619ce66c7da3f04"
+    },
+    {
+      "key": "brook-piano",
+      "width": 390,
+      "rotation": 0,
+      "reportSha256": "f9fe2ab7bc2447c6c5e82b2c6b4227b852ea6a5afcfa71f8c09e7613dacea1d5"
+    },
+    {
+      "key": "brook-piano",
+      "width": 390,
+      "rotation": 2,
+      "reportSha256": "6a83099ca672e2515cede02c1daa29b2fac09ee3ce0d6aab9f7bcea514dba988"
+    }
+  ],
+  "humanAcceptance": false
+}

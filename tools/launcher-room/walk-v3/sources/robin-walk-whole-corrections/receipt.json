@@ -1,0 +1,45 @@
+{
+  "generator": "gpt-image",
+  "tool": "built-in image_gen.imagegen",
+  "recordedAtUtc": "2026-09-26T18:41:51.404199+00:00",
+  "generatedOriginal": {
+    "path": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-1739-7141-90bd-461600d8694f\\exec-cddc22ca-6573-41e6-afc7-d89d89fe134c.png",
+    "sha256": "363dc56b1d9dd695ce3db3a5981ac0abea896e78de58456781f4dcef723f7406"
+  },
+  "selectedCopy": {
+    "path": "walk/robin/corrections-01.png",
+    "sha256": "363dc56b1d9dd695ce3db3a5981ac0abea896e78de58456781f4dcef723f7406"
+  },
+  "exactOriginalBytes": true,
+  "prompt": {
+    "path": "walk/robin/corrections-01.prompt.txt",
+    "sha256": "c01622b4ebd78a3795828e1a461c384d6775da67c2242ee9566a8ff61756c970"
+  },
+  "referenceImages": [
+    {
+      "path": "walk/robin/east-contact-c-01.png",
+      "sha256": "c67974fa498e221c2eb132c0172ab4aa82bfb592771d035e1e4009eb264d547c"
+    },
+    {
+      "path": "walk/robin/west-contact-c-01.png",
+      "sha256": "aae0844487d409e3c05f92013e4fce324f3ab58fbc551070e249510e19de0795"
+    },
+    {
+      "path": "walk/robin/north-contact-c-01.png",
+      "sha256": "a1bc537c0301a1ebef777e96ccae4ad43a2ac42339f56a1cfcbffcc5c69003c3"
+    }
+  ],
+  "wholeFigureReferencesFrom": {
+    "path": "walk/robin/source-01.png",
+    "sha256": "37fc25805bb1184c90c2dcb281b1aca41b61ba34592d02d5bde225a8c50ecabf"
+  },
+  "sourceRegions": {
+    "path": "walk/robin/source-01.regions.json",
+    "sha256": "66660a20e9e240875d0f7834d8e5589d77e528b0f7e21bc24b65f5057679785c"
+  },
+  "edits": "Side contactC leg ownership; North contactC right sole instead of same left sole asA.",
+  "backgroundAlphaAtCorner": 0,
+  "completeOpaqueFigures": 3,
+  "anatomyReassembled": false,
+  "visualAccepted": false
+}

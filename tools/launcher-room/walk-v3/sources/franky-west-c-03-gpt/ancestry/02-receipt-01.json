@@ -1,0 +1,243 @@
+{
+  "schema": "gpt-wholebody-walk-generation/3",
+  "character": "franky",
+  "tool": "built-in image_gen.imagegen",
+  "generator": "gpt-image",
+  "original": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de43-fc3b-7f21-ac55-6e2f6737b063\\exec-22001281-3f8a-4605-971a-4fb1f3f32af9.png",
+  "source": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\walk\\franky\\source-01.png",
+  "sourceSHA256": "762f649b8a41b1abc0a2bb3766d5bd266e03bbada89e65ca263d66d787e0d758",
+  "promptPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\walk\\franky\\prompt-01.txt",
+  "prompt": "Replace the12 COMPLETE Luffy figures of REFERENCE1 pose guide with TWELVE COMPLETE canonical NEW-WORLD FRANKY figures using REFERENCE2 identity. Preserve all12 exact whole-body pose/direction/arm-swing/foot-contact differences from guide, but redraw each ENTIRE Franky as continuous anatomy. No Luffy clothes/limbs, no pasted parts.\nIdentity/outfit matches reference2: tall lightblue swept-up hair, sunglasses, square face/metal nose, muscular bare chest under OPEN RED HAWAIIAN SHIRT with yellowgreen palms; BLUE TRIANGLE BRIEFS with white front star, bare thighs/calves/feet and small circular mechanical knee details. Red BALL SHOULDERS marked BF-37, smaller upperarm/elbow joint, big BLUE mechanical forearms with DARKBLUE STARS, RED mechanical hands. No sandals or shoes, no shorts/white rolled cuffs, no cloth around knees. Shoulders/neck natural and attached. Forearms are large but never moved onto head. Keep his robust2.7-head chibi proportions and low natural arm swing. Closed relaxed mechanical hands, no props.\nGrid exactly3columns A CONTACT / NEUTRAL FEET-TOGETHER / C OPPOSITE CONTACT;4rows EAST screenRIGHT, WEST screenLEFT, NORTH rearNOFACE, SOUTH front. Independent directional drawings, no mirrored BF-37 glyphs.\nA and C must be genuinely opposite legs and arms. Follow guide:\nEAST A near/right mechanical arm backLEFT, near/right leg aheadRIGHT; C near/right mechanical arm aheadRIGHT at waist, near/right leg backLEFT.\nWEST A near/left arm backRIGHT, near/left leg aheadLEFT; C near/left arm aheadLEFT, near/left leg backRIGHT.\nNORTH A screenRIGHT rear foot heel/sole nearer viewer and screenLEFT foot farther; C screenLEFT rear sole nearer and screenRIGHT foot farther. Opposing arms swap. Rear head/body remains rear, no nose or smile seen.\nSOUTH A screenLEFT foot nearer/lower and screenRIGHT arm forward; C screenRIGHT foot nearer/lower and screenLEFT arm forward.\nNEUTRAL middle each row feet close underhips, arms relaxed low. Feet bare in all12 and toes clear. SHORT SMALL relaxed walking steps, low heel lifts and low knees, no squats, jumps or exaggerated march. Natural counter-swing; do not give A andC same near arm or lead leg. Fullbody headneckshouldertorsolegs stay connected in everypose.\n\nUse polished ink+cel bitmap style of reference2, consistent scale/headsize/costume across12. Fit wide forearms naturally within eachwholefigure's generous transparent cell margins; don't collide with neighbors. Portrait3:4 preferably1536x2048,3equalcolumns4rows, character roughly76% cellheight, all hair/hands/feet fully contained and common local floorline. TRUE RGBA TRANSPARENT background, absolutely no colored/brown/checkerboard backdrop; no shadows/ground, text/labels/grid/borders/watermark. Only12 complete FRANKY figures.\n",
+  "promptSHA256": "27e33375a48aab8b09735d8014a51e0f623328a66ea7887d4b72841bee89fdf6",
+  "references": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\corrected-guide-12.png",
+      "sha256": "57bb80af0219d0edaf5b52850d5c400e6c3aee8aec9801f29dbae317948b818b"
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\franky\\source.png",
+      "sha256": "bf6ff27079eaeab6590ed9f6d8bc613d9236bbe97a1bd0dbaeb3447832f056bf"
+    }
+  ],
+  "image": {
+    "dimensions": [
+      1086,
+      1448
+    ],
+    "mode": "RGBA",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "significantComponents": 12
+  },
+  "regions": [
+    {
+      "direction": "east",
+      "pose": "contact-a",
+      "region": [
+        46,
+        6,
+        274,
+        344
+      ],
+      "component": 2,
+      "opaqueBounds": [
+        50,
+        10,
+        266,
+        336
+      ]
+    },
+    {
+      "direction": "east",
+      "pose": "neutral",
+      "region": [
+        444,
+        5,
+        199,
+        346
+      ],
+      "component": 1,
+      "opaqueBounds": [
+        448,
+        9,
+        191,
+        338
+      ]
+    },
+    {
+      "direction": "east",
+      "pose": "contact-c",
+      "region": [
+        811,
+        6,
+        254,
+        346
+      ],
+      "component": 3,
+      "opaqueBounds": [
+        815,
+        10,
+        246,
+        338
+      ]
+    },
+    {
+      "direction": "west",
+      "pose": "contact-a",
+      "region": [
+        45,
+        365,
+        271,
+        348
+      ],
+      "component": 4,
+      "opaqueBounds": [
+        49,
+        369,
+        263,
+        340
+      ]
+    },
+    {
+      "direction": "west",
+      "pose": "neutral",
+      "region": [
+        453,
+        365,
+        198,
+        350
+      ],
+      "component": 5,
+      "opaqueBounds": [
+        457,
+        369,
+        190,
+        342
+      ]
+    },
+    {
+      "direction": "west",
+      "pose": "contact-c",
+      "region": [
+        812,
+        365,
+        234,
+        349
+      ],
+      "component": 6,
+      "opaqueBounds": [
+        816,
+        369,
+        226,
+        341
+      ]
+    },
+    {
+      "direction": "north",
+      "pose": "contact-a",
+      "region": [
+        37,
+        733,
+        265,
+        337
+      ],
+      "component": 7,
+      "opaqueBounds": [
+        41,
+        737,
+        257,
+        329
+      ]
+    },
+    {
+      "direction": "north",
+      "pose": "neutral",
+      "region": [
+        420,
+        732,
+        252,
+        337
+      ],
+      "component": 8,
+      "opaqueBounds": [
+        424,
+        736,
+        244,
+        329
+      ]
+    },
+    {
+      "direction": "north",
+      "pose": "contact-c",
+      "region": [
+        771,
+        733,
+        286,
+        340
+      ],
+      "component": 9,
+      "opaqueBounds": [
+        775,
+        737,
+        278,
+        332
+      ]
+    },
+    {
+      "direction": "south",
+      "pose": "contact-a",
+      "region": [
+        55,
+        1079,
+        265,
+        337
+      ],
+      "component": 10,
+      "opaqueBounds": [
+        59,
+        1083,
+        257,
+        329
+      ]
+    },
+    {
+      "direction": "south",
+      "pose": "neutral",
+      "region": [
+        427,
+        1080,
+        234,
+        329
+      ],
+      "component": 12,
+      "opaqueBounds": [
+        431,
+        1084,
+        226,
+        321
+      ]
+    },
+    {
+      "direction": "south",
+      "pose": "contact-c",
+      "region": [
+        790,
+        1079,
+        253,
+        336
+      ],
+      "component": 11,
+      "opaqueBounds": [
+        794,
+        1083,
+        245,
+        328
+      ]
+    }
+  ],
+  "status": "PENDING_POSE_VISUAL_REVIEW",
+  "runtimeModified": false,
+  "recordedAt": "2026-09-26T18:37:15.686991+00:00"
+}

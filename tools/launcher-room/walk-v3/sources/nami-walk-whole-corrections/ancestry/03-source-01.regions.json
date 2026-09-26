@@ -1,0 +1,239 @@
+{
+  "source": "source-01.png",
+  "sourceSha256": "10ebdd05f7678dbfe44fc2765d7ef3ef87b953e33573d6cd0b8a40b2c4a5464e",
+  "dimensions": [
+    1086,
+    1448
+  ],
+  "regionFormat": "left,top,right,bottom",
+  "items": [
+    {
+      "direction": "east",
+      "pose": "contact-a",
+      "region": [
+        85,
+        37,
+        278,
+        364
+      ],
+      "opaqueBounds": [
+        90,
+        42,
+        183,
+        317
+      ],
+      "sourceComponent": 3,
+      "opaquePixels": 33279,
+      "file": "east-contact-a-01.png"
+    },
+    {
+      "direction": "east",
+      "pose": "passing",
+      "region": [
+        451,
+        35,
+        624,
+        364
+      ],
+      "opaqueBounds": [
+        456,
+        40,
+        163,
+        319
+      ],
+      "sourceComponent": 1,
+      "opaquePixels": 28893,
+      "file": "east-passing-01.png"
+    },
+    {
+      "direction": "east",
+      "pose": "contact-c",
+      "region": [
+        815,
+        35,
+        1009,
+        365
+      ],
+      "opaqueBounds": [
+        820,
+        40,
+        184,
+        320
+      ],
+      "sourceComponent": 2,
+      "opaquePixels": 32569,
+      "file": "east-contact-c-01.png"
+    },
+    {
+      "direction": "west",
+      "pose": "contact-a",
+      "region": [
+        89,
+        398,
+        284,
+        723
+      ],
+      "opaqueBounds": [
+        94,
+        403,
+        185,
+        315
+      ],
+      "sourceComponent": 4,
+      "opaquePixels": 33265,
+      "file": "west-contact-a-01.png"
+    },
+    {
+      "direction": "west",
+      "pose": "passing",
+      "region": [
+        463,
+        398,
+        636,
+        721
+      ],
+      "opaqueBounds": [
+        468,
+        403,
+        163,
+        313
+      ],
+      "sourceComponent": 5,
+      "opaquePixels": 29280,
+      "file": "west-passing-01.png"
+    },
+    {
+      "direction": "west",
+      "pose": "contact-c",
+      "region": [
+        806,
+        398,
+        1003,
+        723
+      ],
+      "opaqueBounds": [
+        811,
+        403,
+        187,
+        315
+      ],
+      "sourceComponent": 6,
+      "opaquePixels": 31392,
+      "file": "west-contact-c-01.png"
+    },
+    {
+      "direction": "north",
+      "pose": "contact-a",
+      "region": [
+        97,
+        752,
+        277,
+        1066
+      ],
+      "opaqueBounds": [
+        102,
+        757,
+        170,
+        304
+      ],
+      "sourceComponent": 7,
+      "opaquePixels": 31851,
+      "file": "north-contact-a-01.png"
+    },
+    {
+      "direction": "north",
+      "pose": "passing",
+      "region": [
+        452,
+        755,
+        628,
+        1062
+      ],
+      "opaqueBounds": [
+        457,
+        760,
+        166,
+        297
+      ],
+      "sourceComponent": 9,
+      "opaquePixels": 31061,
+      "file": "north-passing-01.png"
+    },
+    {
+      "direction": "north",
+      "pose": "contact-c",
+      "region": [
+        812,
+        753,
+        994,
+        1066
+      ],
+      "opaqueBounds": [
+        817,
+        758,
+        172,
+        303
+      ],
+      "sourceComponent": 8,
+      "opaquePixels": 31449,
+      "file": "north-contact-c-01.png"
+    },
+    {
+      "direction": "south",
+      "pose": "contact-a",
+      "region": [
+        91,
+        1089,
+        277,
+        1410
+      ],
+      "opaqueBounds": [
+        96,
+        1094,
+        176,
+        311
+      ],
+      "sourceComponent": 10,
+      "opaquePixels": 32292,
+      "file": "south-contact-a-01.png"
+    },
+    {
+      "direction": "south",
+      "pose": "passing",
+      "region": [
+        444,
+        1089,
+        631,
+        1406
+      ],
+      "opaqueBounds": [
+        449,
+        1094,
+        177,
+        307
+      ],
+      "sourceComponent": 11,
+      "opaquePixels": 32183,
+      "file": "south-passing-01.png"
+    },
+    {
+      "direction": "south",
+      "pose": "contact-c",
+      "region": [
+        808,
+        1089,
+        994,
+        1410
+      ],
+      "opaqueBounds": [
+        813,
+        1094,
+        176,
+        311
+      ],
+      "sourceComponent": 12,
+      "opaquePixels": 32306,
+      "file": "south-contact-c-01.png"
+    }
+  ]
+}

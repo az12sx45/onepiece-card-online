@@ -1,0 +1,75 @@
+{
+  "schema": "gpt-fullbody-art-pilot-receipt/1",
+  "tool": "built-in image_gen.imagegen",
+  "generatedSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-a1c5-7fc2-9c4d-857370899a24\\exec-23b14741-d6ae-42d7-b07f-857ddc22fecd.png",
+  "savedPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\luffy-fullbody-actions-32-02.png",
+  "sha256": "2e4bd717564897df3fbe7083ff59cd1069f8b2a9ef096b19c98785409695b7dd",
+  "reference": {
+    "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\luffy-fullbody-actions-32-01.png",
+    "sha256": "c00c9ae6a2de61b9e67fe26119a4dfddaeea87829efc780f8d7a51c2deca14c4",
+    "role": "edit target, preserve all whole-body poses"
+  },
+  "promptPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\luffy-fullbody-actions-32-02.prompt.txt",
+  "prompt": "Edit the attached complete 32-pose Luffy interaction atlas. This is ONE targeted layout/edge revision. Preserve all 32 existing full-body poses, row directions, coherent anatomy, face designs, open red vest with bare chest, outfits, style, and expressions. Never split or reconstruct body parts.\n\nCorrect only spacing and transparent edge quality:\n- Output a clean 2:1 atlas at 2048 x 1024, exactly 8 equal columns x 4 equal rows, each invisible cell 256 x 256.\n- Place every WHOLE full-body character fully inside its own cell, with at least 20 pixels completely transparent space on all four cell edges. No head/hat/hand/toes touching any row boundary or image edge.\n- Keep ONE common character scale across all poses and rows; standing full-body height about 206 pixels, hat top about y=25 and sandal baseline about y=232 within each cell. Seated poses retain the same body proportions and naturally lower head height, with toes also at y=232. Do not individually stretch bodies or change head proportions.\n- Keep each row's figures centered in their respective cells. All standing feet share the same baseline within the row.\n- Preserve the recognizable natural 2.7-head-tall complete drawings and natural pose-specific shoulder/elbow/neck shapes. Do not introduce cutout limbs or donor heads.\n- Background must be real clean alpha transparency, zero-alpha empty margins and gaps. Remove colored red/yellow flecks, fringe, ghost pixels and stray tiny marks OUTSIDE the character silhouettes. Preserve clean anti-aliasing immediately at the inked silhouette. No shadows or glow.\n- Keep open vest; no closed buttoned fronts. Keep canonical left-eye scar on correct anatomical side, and keep the entire north row face-free.\n- No text, cell border, labels, watermark, checkerboard, floor or furniture.\n\nRows remain EAST (screen right), WEST (screen left independently drawn), NORTH (back only), SOUTH (front). Columns remain IDLE, TALK HAPPY open palm, TALK ANNOYED hands on hips, SURPRISED hands at chest, FOCUSED USE low hands/lean, SIT complete seated pose, WAVE open palm beside shoulder away from face, LISTEN relaxed. Preserve the original full-body poses; spacing and edge cleanup are the only intended changes.\n",
+  "image": {
+    "width": 1774,
+    "height": 887,
+    "mode": "RGBA",
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "zeroAlpha": 933445,
+    "alpha128plus": 497094,
+    "edgeNonzero": {
+      "top": 0,
+      "bottom": 827,
+      "left": 0,
+      "right": 0
+    },
+    "edgeAlpha128plus": {
+      "top": 0,
+      "bottom": 0,
+      "left": 0,
+      "right": 0
+    }
+  },
+  "layout": {
+    "rows": [
+      "east",
+      "west",
+      "north",
+      "south"
+    ],
+    "columns": [
+      "idle",
+      "talk_happy",
+      "talk_annoyed",
+      "surprised",
+      "focused_use",
+      "sit",
+      "wave",
+      "listen"
+    ]
+  },
+  "review": {
+    "status": "QA_PILOT_ONLY_NOT_RUNTIME_ACCEPTED",
+    "visuallyInspected": true,
+    "passes": [
+      "32 complete coherent full-body poses with connected head-neck and shoulders",
+      "open red vest with exposed chest",
+      "wave open hand separated from face",
+      "surprised hands in chest region",
+      "north row has no visible face",
+      "use and seated pose silhouettes readable"
+    ],
+    "unresolved": [
+      "generation resolution is not requested 2048x1024",
+      "uniform cell safety margins not achieved, especially vertical row boundaries",
+      "outside silhouette low-alpha colored flecks remain",
+      "single pose per action, not an action animation sequence",
+      "detail review of revision 02: west idle left-eye stitched scar is absent or unreadable; south scar merges near smile corner and is not a clear stitched cheek scar"
+    ],
+    "noProductionOrRuntimeEdits": true,
+    "revisionIntent": "one allowed targeted layout/alpha-edge correction; margins still not accepted"
+  },
+  "recordedAt": "2026-09-26T17:57:41.414957+00:00"
+}

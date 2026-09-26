@@ -1,0 +1,29 @@
+{
+  "schema": "builtin-gpt-image-receipt/1",
+  "generator": "gpt-image",
+  "tool": "image_gen.imagegen",
+  "image": {
+    "path": "walk/jinbe/source.png",
+    "sha256": "ba9526d99735f59d38e6f91dd14c245e3a0fd4cff2dfe9de7bac21104e88ae5a"
+  },
+  "prompt": "Use case: stylized-concept\nAsset type: 12 complete hand-drawn walking keyframes for a One Piece room game.\nInput1 is ONLY a pose-order reference: use its 3 columns and 4 rows and genuine opposite-leg contacts. Input2 is Jinbe's exact character, broad chibi physique, original costume, face, proportions and illustration style. Draw ONLY JINBE in every cell. Do NOT copy Luffy clothing, hair, hat, skinny body or facial scar.\nCreate a transparent portrait sprite sheet, 3 columns x 4 rows (1536x2048 aspect), 12 complete separate characters with wide gaps and safe outer margin. No text, grid, ground, background or shadow. Every pose is a naturally continuous whole figure, never detached head/limbs.\n\nRows: EAST screen-right profile/slight3/4; WEST screen-left profile/slight3/4; NORTH directly from back, no face visible; SOUTH directly front. All four directions independently drawn, never mirrored.\nColumns: A contact, neutral standing, C OPPOSITE contact. C reverses the actual legs AND the arms from A; not a duplicate stride. Keep the face/head/torso facing and position stable within the direction.\nEAST A has visible near RIGHT leg/foot forward RIGHT and far LEFT foot back LEFT; near RIGHT arm swings gently BACK LEFT. EAST C has visible near RIGHT leg/foot back LEFT and far LEFT foot forward RIGHT; near RIGHT arm forward RIGHT. The robe's nearer overlap and lightly shaded near foot should clearly distinguish opposite contacts.\nWEST A has near LEFT foot forward LEFT, far RIGHT foot back RIGHT, near LEFT arm back RIGHT; WEST C near LEFT foot back RIGHT, far RIGHT foot forward LEFT, near LEFT arm forward LEFT.\nNORTH A must reveal RIGHT sandal underside at image RIGHT as that short rear step lifts very low; NORTH C must reveal LEFT sandal underside at image LEFT instead. Opposite foot stays planted and cape/hem accommodates both low steps without covering the feet completely. NEVER show the right sole in both A and C.\nSOUTH A advances anatomical RIGHT foot at image LEFT; SOUTH C advances anatomical LEFT foot at image RIGHT.\nNeutral in each row: arms relaxed down, both feet underneath body with a narrow comfortable stance. No marching, running, jumping or high knees. Small heavy grounded steps appropriate to Jinbe, at least one foot planted, tiny arm swing naturally restrained by kimono and cape.\n\nCanon and identity: Jinbe is the broad, heavy blue-skinned whale shark fishman, black curly mane/topknot, golden/cream curled eyebrows, small chin beard, tusks at the lower sides of mouth, orange/yellow kimono with white diamond patterns, purple sash and black cape with purple cloud motifs exactly as input2. Same footwear and visible blue toes as input2. His lightning facial scar is only on ANATOMICAL LEFT temple/eye side: WEST shows the left scar, SOUTH scar is image RIGHT; EAST near RIGHT cheek/temple has NO copied/mirrored scar. Keep the red chest sun mark only where existing neckline reveals it; no invented features. Stable body/head/cape proportions and 12 coherent figures with clean inked anime/cel shading. Broad cape must remain connected naturally at neck and shoulders. Do not raise the hem absurdly or expose long legs; only short purposeful footsteps visible below the hem.\n",
+  "promptFile": {
+    "path": "walk/jinbe/prompt.txt",
+    "sha256": "35613f21d7f0c01aa60c86b389b433cc48ee91ed1db4e74c6ddd5aad18c2cef3"
+  },
+  "generatedOriginalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-a1c5-7fc2-9c4d-857370899a24\\exec-93e937e8-1447-4787-a13c-59b8c6c2bea4.png",
+  "generatedOriginalSha256": "ba9526d99735f59d38e6f91dd14c245e3a0fd4cff2dfe9de7bac21104e88ae5a",
+  "inputReferences": [
+    {
+      "path": "pilot/triad/corrected-guide-12.png",
+      "sha256": "57bb80af0219d0edaf5b52850d5c400e6c3aee8aec9801f29dbae317948b818b"
+    },
+    {
+      "path": "art/jinbe/source.png",
+      "sha256": "cfdcd36dadc3a990f9c271fa8c9c302760cd1cc5df112a7055af9eea2d3b6754"
+    }
+  ],
+  "status": "candidate: replace south contact-a with whole-character corrected image",
+  "anatomyReassembled": false,
+  "mirrored": false
+}

@@ -1,0 +1,171 @@
+{
+  "schema": "gpt-wholebody-luffy-scar-eight-correction/1",
+  "tool": "built-in image_gen.imagegen",
+  "direction": "south",
+  "source": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\luffy\\south-actions-scar-corrected.png",
+  "sha256": "e33cdc9137e1c6c6e86dae5d16334512503dcd32ea1b2358b2cecb6b3667b142",
+  "generatedSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-a1c5-7fc2-9c4d-857370899a24\\exec-0ec1c38f-0798-4d4d-9119-e99a97646b34.png",
+  "generatedSourceSha256": "e33cdc9137e1c6c6e86dae5d16334512503dcd32ea1b2358b2cecb6b3667b142",
+  "references": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\luffy\\canon-south-whole-reference.png",
+      "sha256": "f2572d264d00b18bc5d98abc5960ff5b7c91de03e4c34d0bca8f0d997afd303b"
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\luffy\\source.png",
+      "sha256": "dbb6205716e9cc66bed03c9a5ea024e7d21f20dbbd5d1208340299139cb4db8d"
+    }
+  ],
+  "prompt": "Use case: stylized-concept. Generate EIGHT complete full-body Monkey D. Luffy interaction drawings, all facing FRONT / SOUTH. One transparent atlas with FOUR COLUMNS by TWO ROWS (8 people), ideally2048x1024. Every drawing is a coherent whole person with connected head/neck/shoulders/limbs, no separated parts or head pasting.\n\nREFERENCE ROLES: image1 shows the CORRECT canonical left-cheek stitched scar and identity; preserve that scar exactly. Its taller body proportions are NOT the target. Image2 is the style/outfit/pose reference for our existing32-pose Luffy sheet: match its shorter2.7-head-tall chibi proportions, clean ink/cel colors, hat size, open vest, shorts/sash/sandals, natural posture. Its missing/weak scars are WRONG and MUST be corrected in all8 new drawings.\n\nNON-NEGOTIABLE CANON SCAR: on his ANATOMICAL LEFT CHEEK, directly UNDER HIS LEFT EYE, paint one clearly legible SHORT HORIZONTAL scar line with TWO short perpendicular stitches CROSSING that line. It is three distinct connected black/brown ink strokes, not just a curved line. Keep visible skin-space between this stitched scar and the eye's lower lid AND mouth line. Do not draw it as an eyebag, blush, wrinkle, smile corner or single plain stroke. Every one of the8 faces, including surprised, angry, seated and wave, must have the same TWO-STITCH SCAR, as clear as reference1. This is the entire purpose of this corrected sheet.\nALL EIGHT face directly TOWARD THE VIEWER in a coherent frontal view; head, chest, hips and feet face forward. His ANATOMICAL LEFT eye/cheek is on the RIGHT side of the IMAGE. The two-stitch scar is directly below that image-right eye only. Keep image-left cheek unscarred. No turned side view.\n\nROW1, left to right:\n1 IDLE: standing comfortably, relaxed arms down, calm Luffy expression.\n2 TALK HAPPY: broad friendly Luffy grin, one naturally OPEN palm conversationally toward partner at lower chest, other arm relaxed.\n3 TALK ANNOYED: simple childish frown/pout, hands on hips, not sinister mature anger.\n4 SURPRISED: wide eyes and small round open mouth, hands loosely OPEN in front of chest below chin, never face/ears.\nROW2, left to right:\n5 FOCUSED USE: standing, small forward lean FROM HIPS, both forearms/hands extended low in front at waist/lower chest for unseen furniture. Natural knees and shoulders. Do not draw furniture.\n6 SIT: coherent entire seated figure as on invisible stool, pelvis lowered, thighs forward, knees naturally bent/calves down/feet supported, hands on thighs. Keep same body proportions; no stool.\n7 WAVE: clear OPEN palm at shoulder SIDE, with a real GAP from his cheek, eyes and mouth; fingers do not cover scar. Other arm relaxed.\n8 LISTEN: attentive calm gaze toward partner, arms relaxed down and subtle whole upper-body interest.\n\nOutfit: canonical early Luffy. Straw hat with red band, messy black hair, OPEN red sleeveless vest with exposed chest and belly between two separate front panels, blue shorts with white rolled hems, yellow waist sash, straw sandals. No chest X scar and no closed vest, no sleeves.\nPreserve all poses as complete natural anatomy. Entire head and neck remain visibly connected to shoulders. Same2.7-head proportions across every pose. Draw all feet and fingers complete. Use clear empty transparent space around every figure and between rows; no neighboring contact or clipping. Full-body figure height about400 of512px cell; at least30px safety margin. Keep standing sandals baseline consistent; sit lowers head naturally, not scaled smaller.\nReal clean RGBA transparency, no text, labels, grid, shadow, ground, background, furniture or glow. Do not mirror or compose the character from body-part stickers.\n",
+  "size": [
+    1774,
+    887
+  ],
+  "wholeFigureCount": 8,
+  "regions": [
+    {
+      "direction": "south",
+      "pose": "idle",
+      "rect": [
+        167,
+        14,
+        239,
+        430
+      ],
+      "area": 64877,
+      "center": [
+        284.30688841962484,
+        219.3951014997611
+      ]
+    },
+    {
+      "direction": "south",
+      "pose": "talk_happy",
+      "rect": [
+        533,
+        11,
+        260,
+        434
+      ],
+      "area": 66446,
+      "center": [
+        671.8181831863468,
+        217.3772236101496
+      ]
+    },
+    {
+      "direction": "south",
+      "pose": "talk_annoyed",
+      "rect": [
+        973,
+        12,
+        237,
+        432
+      ],
+      "area": 64823,
+      "center": [
+        1089.1855359980254,
+        215.33150270737238
+      ]
+    },
+    {
+      "direction": "south",
+      "pose": "surprised",
+      "rect": [
+        1364,
+        11,
+        236,
+        433
+      ],
+      "area": 62491,
+      "center": [
+        1482.4121713526747,
+        210.50996143444655
+      ]
+    },
+    {
+      "direction": "south",
+      "pose": "focused_use",
+      "rect": [
+        161,
+        450,
+        247,
+        420
+      ],
+      "area": 65809,
+      "center": [
+        283.7910772082846,
+        647.9745475542859
+      ]
+    },
+    {
+      "direction": "south",
+      "pose": "sit",
+      "rect": [
+        560,
+        491,
+        240,
+        380
+      ],
+      "area": 57895,
+      "center": [
+        678.0967959236549,
+        674.1104931341221
+      ]
+    },
+    {
+      "direction": "south",
+      "pose": "wave",
+      "rect": [
+        945,
+        450,
+        264,
+        420
+      ],
+      "area": 65295,
+      "center": [
+        1084.400827015851,
+        645.806830538326
+      ]
+    },
+    {
+      "direction": "south",
+      "pose": "listen",
+      "rect": [
+        1364,
+        450,
+        243,
+        420
+      ],
+      "area": 63284,
+      "center": [
+        1484.7862650907023,
+        649.5065419379306
+      ]
+    }
+  ],
+  "highAlphaEdgeCounts": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "review": {
+    "wholeArtViewed": true,
+    "detailFacesViewed": true,
+    "scarReview": "Viewed all8 enlarged face crops: horizontal cheek scar with distinct short crossing stitch strokes under anatomical LEFT eye on image RIGHT. Scar remains visibly separate from lower eyelid and smile/mouth across idle/talk/annoyed/surprised/use/sit/wave/listen.",
+    "notes": "Complete whole-figure replacements only. No separate head/limb composition or local face drawing.",
+    "perPoseScarVisible": {
+      "idle": true,
+      "talk_happy": true,
+      "talk_annoyed": true,
+      "surprised": true,
+      "focused_use": true,
+      "sit": true,
+      "wave": true,
+      "listen": true
+    },
+    "status": "READY_FOR_ROOT_FULLFIGURE_REPLACEMENT"
+  },
+  "recordedAt": "2026-09-26T18:23:47.994164+00:00"
+}

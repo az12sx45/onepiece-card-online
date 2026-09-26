@@ -1,0 +1,615 @@
+{
+  "description": "Only whole GPT figures cropped/scaled/repacked; no body parts reconstructed or pixels painted. EAST8 source-east03 plus W/N wave source-wave04; other22 source02.",
+  "output": "source-complete.png",
+  "outputSHA256": "cfdcd36dadc3a990f9c271fa8c9c302760cd1cc5df112a7055af9eea2d3b6754",
+  "figures": [
+    {
+      "direction": "east",
+      "pose": "idle",
+      "source": "source-east-03.png",
+      "sourceSHA256": "2a31a544d0b8045327b95c249de45365d9425592313e809670bddf995f7a2464",
+      "sourceComponent": 2,
+      "sourceRegion": [
+        49,
+        119,
+        353,
+        448
+      ],
+      "wholeFigureScale": 0.6153846153846154,
+      "wholeFigureTranslation": [
+        34,
+        31
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "east",
+      "pose": "talk_happy",
+      "source": "source-east-03.png",
+      "sourceSHA256": "2a31a544d0b8045327b95c249de45365d9425592313e809670bddf995f7a2464",
+      "sourceComponent": 3,
+      "sourceRegion": [
+        498,
+        119,
+        831,
+        448
+      ],
+      "wholeFigureScale": 0.6153846153846154,
+      "wholeFigureTranslation": [
+        281,
+        31
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "east",
+      "pose": "talk_annoyed",
+      "source": "source-east-03.png",
+      "sourceSHA256": "2a31a544d0b8045327b95c249de45365d9425592313e809670bddf995f7a2464",
+      "sourceComponent": 1,
+      "sourceRegion": [
+        958,
+        118,
+        1254,
+        449
+      ],
+      "wholeFigureScale": 0.6153846153846154,
+      "wholeFigureTranslation": [
+        549,
+        30
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "east",
+      "pose": "surprised",
+      "source": "source-east-03.png",
+      "sourceSHA256": "2a31a544d0b8045327b95c249de45365d9425592313e809670bddf995f7a2464",
+      "sourceComponent": 4,
+      "sourceRegion": [
+        1422,
+        119,
+        1727,
+        448
+      ],
+      "wholeFigureScale": 0.6153846153846154,
+      "wholeFigureTranslation": [
+        802,
+        31
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "east",
+      "pose": "focused_use",
+      "source": "source-east-03.png",
+      "sourceSHA256": "2a31a544d0b8045327b95c249de45365d9425592313e809670bddf995f7a2464",
+      "sourceComponent": 7,
+      "sourceRegion": [
+        43,
+        505,
+        357,
+        838
+      ],
+      "wholeFigureScale": 0.6153846153846154,
+      "wholeFigureTranslation": [
+        1055,
+        29
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "east",
+      "pose": "sit",
+      "source": "source-east-03.png",
+      "sourceSHA256": "2a31a544d0b8045327b95c249de45365d9425592313e809670bddf995f7a2464",
+      "sourceComponent": 8,
+      "sourceRegion": [
+        498,
+        568,
+        808,
+        839
+      ],
+      "wholeFigureScale": 0.6153846153846154,
+      "wholeFigureTranslation": [
+        1312,
+        67
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "east",
+      "pose": "wave",
+      "source": "source-east-03.png",
+      "sourceSHA256": "2a31a544d0b8045327b95c249de45365d9425592313e809670bddf995f7a2464",
+      "sourceComponent": 5,
+      "sourceRegion": [
+        952,
+        504,
+        1263,
+        842
+      ],
+      "wholeFigureScale": 0.6153846153846154,
+      "wholeFigureTranslation": [
+        1568,
+        26
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "east",
+      "pose": "listen",
+      "source": "source-east-03.png",
+      "sourceSHA256": "2a31a544d0b8045327b95c249de45365d9425592313e809670bddf995f7a2464",
+      "sourceComponent": 6,
+      "sourceRegion": [
+        1419,
+        504,
+        1719,
+        840
+      ],
+      "wholeFigureScale": 0.6153846153846154,
+      "wholeFigureTranslation": [
+        1827,
+        27
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "west",
+      "pose": "idle",
+      "source": "source-02.png",
+      "sourceSHA256": "ab7276aaca4a59172357838087b556a25299d0502537bbc3b2463091a689e4c6",
+      "sourceComponent": 11,
+      "sourceRegion": [
+        24,
+        227,
+        230,
+        455
+      ],
+      "wholeFigureScale": 0.9009009009009009,
+      "wholeFigureTranslation": [
+        35,
+        285
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "west",
+      "pose": "talk_happy",
+      "source": "source-02.png",
+      "sourceSHA256": "ab7276aaca4a59172357838087b556a25299d0502537bbc3b2463091a689e4c6",
+      "sourceComponent": 12,
+      "sourceRegion": [
+        229,
+        227,
+        455,
+        455
+      ],
+      "wholeFigureScale": 0.9009009009009009,
+      "wholeFigureTranslation": [
+        282,
+        285
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "west",
+      "pose": "talk_annoyed",
+      "source": "source-02.png",
+      "sourceSHA256": "ab7276aaca4a59172357838087b556a25299d0502537bbc3b2463091a689e4c6",
+      "sourceComponent": 9,
+      "sourceRegion": [
+        469,
+        226,
+        672,
+        455
+      ],
+      "wholeFigureScale": 0.9009009009009009,
+      "wholeFigureTranslation": [
+        548,
+        284
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "west",
+      "pose": "surprised",
+      "source": "source-02.png",
+      "sourceSHA256": "ab7276aaca4a59172357838087b556a25299d0502537bbc3b2463091a689e4c6",
+      "sourceComponent": 13,
+      "sourceRegion": [
+        683,
+        227,
+        887,
+        455
+      ],
+      "wholeFigureScale": 0.9009009009009009,
+      "wholeFigureTranslation": [
+        804,
+        285
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "west",
+      "pose": "focused_use",
+      "source": "source-02.png",
+      "sourceSHA256": "ab7276aaca4a59172357838087b556a25299d0502537bbc3b2463091a689e4c6",
+      "sourceComponent": 15,
+      "sourceRegion": [
+        904,
+        231,
+        1125,
+        455
+      ],
+      "wholeFigureScale": 0.9009009009009009,
+      "wholeFigureTranslation": [
+        1052,
+        289
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "west",
+      "pose": "sit",
+      "source": "source-02.png",
+      "sourceSHA256": "ab7276aaca4a59172357838087b556a25299d0502537bbc3b2463091a689e4c6",
+      "sourceComponent": 16,
+      "sourceRegion": [
+        1139,
+        289,
+        1333,
+        466
+      ],
+      "wholeFigureScale": 0.9009009009009009,
+      "wholeFigureTranslation": [
+        1320,
+        331
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "west",
+      "pose": "wave",
+      "source": "source-wave-04.png",
+      "sourceSHA256": "5fe381081ab6901e352b6a76df9c9f648e1486f074fde8499fb67dc486d36d3c",
+      "sourceComponent": 1,
+      "sourceRegion": [
+        179,
+        79,
+        862,
+        811
+      ],
+      "wholeFigureScale": 0.27548209366391185,
+      "wholeFigureTranslation": [
+        1570,
+        287
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "west",
+      "pose": "listen",
+      "source": "source-02.png",
+      "sourceSHA256": "ab7276aaca4a59172357838087b556a25299d0502537bbc3b2463091a689e4c6",
+      "sourceComponent": 14,
+      "sourceRegion": [
+        1561,
+        227,
+        1761,
+        455
+      ],
+      "wholeFigureScale": 0.9009009009009009,
+      "wholeFigureTranslation": [
+        1830,
+        285
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "north",
+      "pose": "idle",
+      "source": "source-02.png",
+      "sourceSHA256": "ab7276aaca4a59172357838087b556a25299d0502537bbc3b2463091a689e4c6",
+      "sourceComponent": 21,
+      "sourceRegion": [
+        12,
+        445,
+        221,
+        657
+      ],
+      "wholeFigureScale": 0.9615384615384616,
+      "wholeFigureTranslation": [
+        27,
+        543
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "north",
+      "pose": "talk_happy",
+      "source": "source-02.png",
+      "sourceSHA256": "ab7276aaca4a59172357838087b556a25299d0502537bbc3b2463091a689e4c6",
+      "sourceComponent": 18,
+      "sourceRegion": [
+        235,
+        443,
+        458,
+        658
+      ],
+      "wholeFigureScale": 0.9615384615384616,
+      "wholeFigureTranslation": [
+        277,
+        540
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "north",
+      "pose": "talk_annoyed",
+      "source": "source-02.png",
+      "sourceSHA256": "ab7276aaca4a59172357838087b556a25299d0502537bbc3b2463091a689e4c6",
+      "sourceComponent": 17,
+      "sourceRegion": [
+        469,
+        440,
+        660,
+        657
+      ],
+      "wholeFigureScale": 0.9615384615384616,
+      "wholeFigureTranslation": [
+        548,
+        538
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "north",
+      "pose": "surprised",
+      "source": "source-02.png",
+      "sourceSHA256": "ab7276aaca4a59172357838087b556a25299d0502537bbc3b2463091a689e4c6",
+      "sourceComponent": 19,
+      "sourceRegion": [
+        677,
+        444,
+        882,
+        658
+      ],
+      "wholeFigureScale": 0.9615384615384616,
+      "wholeFigureTranslation": [
+        797,
+        541
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "north",
+      "pose": "focused_use",
+      "source": "source-02.png",
+      "sourceSHA256": "ab7276aaca4a59172357838087b556a25299d0502537bbc3b2463091a689e4c6",
+      "sourceComponent": 20,
+      "sourceRegion": [
+        897,
+        444,
+        1114,
+        658
+      ],
+      "wholeFigureScale": 0.9615384615384616,
+      "wholeFigureTranslation": [
+        1047,
+        541
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "north",
+      "pose": "sit",
+      "source": "source-02.png",
+      "sourceSHA256": "ab7276aaca4a59172357838087b556a25299d0502537bbc3b2463091a689e4c6",
+      "sourceComponent": 23,
+      "sourceRegion": [
+        1130,
+        479,
+        1333,
+        660
+      ],
+      "wholeFigureScale": 0.9615384615384616,
+      "wholeFigureTranslation": [
+        1310,
+        573
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "north",
+      "pose": "wave",
+      "source": "source-wave-04.png",
+      "sourceSHA256": "5fe381081ab6901e352b6a76df9c9f648e1486f074fde8499fb67dc486d36d3c",
+      "sourceComponent": 2,
+      "sourceRegion": [
+        969,
+        93,
+        1655,
+        800
+      ],
+      "wholeFigureScale": 0.28530670470756064,
+      "wholeFigureTranslation": [
+        1566,
+        543
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "north",
+      "pose": "listen",
+      "source": "source-02.png",
+      "sourceSHA256": "ab7276aaca4a59172357838087b556a25299d0502537bbc3b2463091a689e4c6",
+      "sourceComponent": 22,
+      "sourceRegion": [
+        1561,
+        445,
+        1766,
+        657
+      ],
+      "wholeFigureScale": 0.9615384615384616,
+      "wholeFigureTranslation": [
+        1821,
+        543
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "south",
+      "pose": "idle",
+      "source": "source-02.png",
+      "sourceSHA256": "ab7276aaca4a59172357838087b556a25299d0502537bbc3b2463091a689e4c6",
+      "sourceComponent": 25,
+      "sourceRegion": [
+        7,
+        650,
+        227,
+        873
+      ],
+      "wholeFigureScale": 0.9216589861751152,
+      "wholeFigureTranslation": [
+        26,
+        797
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "south",
+      "pose": "talk_happy",
+      "source": "source-02.png",
+      "sourceSHA256": "ab7276aaca4a59172357838087b556a25299d0502537bbc3b2463091a689e4c6",
+      "sourceComponent": 26,
+      "sourceRegion": [
+        232,
+        650,
+        448,
+        873
+      ],
+      "wholeFigureScale": 0.9216589861751152,
+      "wholeFigureTranslation": [
+        284,
+        797
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "south",
+      "pose": "talk_annoyed",
+      "source": "source-02.png",
+      "sourceSHA256": "ab7276aaca4a59172357838087b556a25299d0502537bbc3b2463091a689e4c6",
+      "sourceComponent": 27,
+      "sourceRegion": [
+        452,
+        649,
+        669,
+        873
+      ],
+      "wholeFigureScale": 0.9216589861751152,
+      "wholeFigureTranslation": [
+        540,
+        796
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "south",
+      "pose": "surprised",
+      "source": "source-02.png",
+      "sourceSHA256": "ab7276aaca4a59172357838087b556a25299d0502537bbc3b2463091a689e4c6",
+      "sourceComponent": 28,
+      "sourceRegion": [
+        673,
+        649,
+        888,
+        873
+      ],
+      "wholeFigureScale": 0.9216589861751152,
+      "wholeFigureTranslation": [
+        797,
+        796
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "south",
+      "pose": "focused_use",
+      "source": "source-02.png",
+      "sourceSHA256": "ab7276aaca4a59172357838087b556a25299d0502537bbc3b2463091a689e4c6",
+      "sourceComponent": 31,
+      "sourceRegion": [
+        892,
+        654,
+        1109,
+        873
+      ],
+      "wholeFigureScale": 0.9216589861751152,
+      "wholeFigureTranslation": [
+        1052,
+        801
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "south",
+      "pose": "sit",
+      "source": "source-02.png",
+      "sourceSHA256": "ab7276aaca4a59172357838087b556a25299d0502537bbc3b2463091a689e4c6",
+      "sourceComponent": 32,
+      "sourceRegion": [
+        1115,
+        692,
+        1336,
+        875
+      ],
+      "wholeFigureScale": 0.9216589861751152,
+      "wholeFigureTranslation": [
+        1306,
+        834
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "south",
+      "pose": "wave",
+      "source": "source-02.png",
+      "sourceSHA256": "ab7276aaca4a59172357838087b556a25299d0502537bbc3b2463091a689e4c6",
+      "sourceComponent": 30,
+      "sourceRegion": [
+        1339,
+        651,
+        1553,
+        873
+      ],
+      "wholeFigureScale": 0.9216589861751152,
+      "wholeFigureTranslation": [
+        1565,
+        798
+      ],
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "south",
+      "pose": "listen",
+      "source": "source-02.png",
+      "sourceSHA256": "ab7276aaca4a59172357838087b556a25299d0502537bbc3b2463091a689e4c6",
+      "sourceComponent": 29,
+      "sourceRegion": [
+        1559,
+        650,
+        1771,
+        873
+      ],
+      "wholeFigureScale": 0.9216589861751152,
+      "wholeFigureTranslation": [
+        1822,
+        797
+      ],
+      "anatomyReassembled": false
+    }
+  ]
+}

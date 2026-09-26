@@ -1,0 +1,243 @@
+{
+  "schema": "gpt-wholebody-walk-generation/3",
+  "character": "brook",
+  "tool": "built-in image_gen.imagegen",
+  "generator": "gpt-image",
+  "original": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de43-fc3b-7f21-ac55-6e2f6737b063\\exec-876a53dd-b2e6-43f6-a9c6-1b41a13ce741.png",
+  "source": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\walk\\brook\\source-01.png",
+  "sourceSHA256": "94fe22b64229b9446385709ccb81116847b0b98b58cc45c38cdd939ef7aa7085",
+  "promptPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\walk\\brook\\prompt-01.txt",
+  "prompt": "Create12 COMPLETE BROOK walking sprites by replacing the entire12 Luffy characters of REFERENCE1 with canonical BROOK from REFERENCE2. Reference1 supplies exact3pose leg-and-arm choreography and4directions; reference2 supplies Brook's whole body identity/outfit/style. Draw each Brook WHOLE, no copied Luffy body, no donor heads or detached parts.\n\nBrook is a slender white skeleton, empty black eye sockets/no fleshy eyes, toothy skull, large black afro, tall black top hat, black formal tailcoat with coattails, black trousers, black shoes with gold buckle detail, blue neck cravat, orange/yellow fluffy feather boa. Keep full trousers and shoes in ALL12poses. Skeletal neck naturally joins skull and collar; shoulder/elbow and bony hands fully attached. NEVER give human skin/legs, sandals, shorts, vest. Same slender chibi body and head size across all12, smile mild. Hands are relaxed skeletal hands, no cane or prop.\n\nExactly3columns: CONTACT A, FEET-TOGETHER NEUTRAL, OPPOSITE CONTACT C. Fourrows EAST/right, WEST/left, NORTH/backNOFACE, SOUTH/front. Independently draw each view, no mirrored figures. Entire head-neck-torso always share one direction.\nFOLLOW THE GUIDE'S REAL OPPOSITE HAND/LEG SWAP:\nEAST A near/right arm swings behind towardLEFT and near/right leg leadsRIGHT; C near/right arm swings aheadRIGHT and near/right leg goes behindLEFT, foreground thigh overlaps farther leading thigh.\nWEST A near/left arm behindRIGHT and near/left leg aheadLEFT; C near/left arm aheadLEFT and near/left leg behindRIGHT, far leg leadsLEFT.\nNORTH A screenRIGHT shoe sole/heel closest to viewer with screenLEFT foot farther planted; C screenLEFT shoe sole/heel closest to viewer and screenRIGHT farther planted; opposing arms swap too. Back skull/afro/tophat, no face.\nSOUTH A screenLEFT foot closer/lower and screenRIGHT arm forward; C screenRIGHT foot closer/lower and screenLEFT arm forward.\nNEUTRAL eachrow is feet close together below hips, arms relaxed sides. No spread-leg neutral. A andC must NOT have the same lead leg or arm. Gentle SHORT low steps with naturally near-straight knees, no high knees/striding/kick/jump/squat. Coat tails follow whole-body motion slightly but cannot hide leg ownership completely; keep both legs/feet readable.\nComplete natural wholebody linework/ink/cel color, no rig seams, no disconnected head/neck, no missing fingers/shoes. Keep consistent anatomy, hat/afro width and body scale. Portrait3:4 preferably1536x2048,3equalcolumns4equalrows; eachfullfigure occupies75%cellheight with generous empty margins. All hats/afros/tails/fingertips/shoes inside own cell, no touching adjacentrows or canvas edge.\nTRUE RGBA TRANSPARENT background, not black/brown/beige/white solid or checkerboard; no floor, shadows, labels, numbers, text, grid/borders or watermark. Only the12full-body BROOK figures.\n",
+  "promptSHA256": "a67158b9693b4da08c4ed6828cc1e7cfde627f239e5510d6de7ec36ccd98a5e8",
+  "references": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\corrected-guide-12.png",
+      "sha256": "57bb80af0219d0edaf5b52850d5c400e6c3aee8aec9801f29dbae317948b818b"
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\brook\\source.png",
+      "sha256": "8f222d94108715aeecc27a9bbacac962b8f6b8dc1f0352bf697fa1144e295741"
+    }
+  ],
+  "image": {
+    "dimensions": [
+      1086,
+      1448
+    ],
+    "mode": "RGBA",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "significantComponents": 12
+  },
+  "regions": [
+    {
+      "direction": "east",
+      "pose": "contact-a",
+      "region": [
+        98,
+        17,
+        194,
+        325
+      ],
+      "component": 1,
+      "opaqueBounds": [
+        102,
+        21,
+        186,
+        317
+      ]
+    },
+    {
+      "direction": "east",
+      "pose": "neutral",
+      "region": [
+        488,
+        18,
+        119,
+        326
+      ],
+      "component": 2,
+      "opaqueBounds": [
+        492,
+        22,
+        111,
+        318
+      ]
+    },
+    {
+      "direction": "east",
+      "pose": "contact-c",
+      "region": [
+        825,
+        18,
+        194,
+        324
+      ],
+      "component": 3,
+      "opaqueBounds": [
+        829,
+        22,
+        186,
+        316
+      ]
+    },
+    {
+      "direction": "west",
+      "pose": "contact-a",
+      "region": [
+        88,
+        374,
+        193,
+        323
+      ],
+      "component": 4,
+      "opaqueBounds": [
+        92,
+        378,
+        185,
+        315
+      ]
+    },
+    {
+      "direction": "west",
+      "pose": "neutral",
+      "region": [
+        485,
+        374,
+        126,
+        324
+      ],
+      "component": 5,
+      "opaqueBounds": [
+        489,
+        378,
+        118,
+        316
+      ]
+    },
+    {
+      "direction": "west",
+      "pose": "contact-c",
+      "region": [
+        822,
+        374,
+        194,
+        324
+      ],
+      "component": 6,
+      "opaqueBounds": [
+        826,
+        378,
+        186,
+        316
+      ]
+    },
+    {
+      "direction": "north",
+      "pose": "contact-a",
+      "region": [
+        102,
+        736,
+        181,
+        322
+      ],
+      "component": 8,
+      "opaqueBounds": [
+        106,
+        740,
+        173,
+        314
+      ]
+    },
+    {
+      "direction": "north",
+      "pose": "neutral",
+      "region": [
+        473,
+        736,
+        148,
+        318
+      ],
+      "component": 9,
+      "opaqueBounds": [
+        477,
+        740,
+        140,
+        310
+      ]
+    },
+    {
+      "direction": "north",
+      "pose": "contact-c",
+      "region": [
+        814,
+        735,
+        179,
+        323
+      ],
+      "component": 7,
+      "opaqueBounds": [
+        818,
+        739,
+        171,
+        315
+      ]
+    },
+    {
+      "direction": "south",
+      "pose": "contact-a",
+      "region": [
+        98,
+        1083,
+        165,
+        330
+      ],
+      "component": 10,
+      "opaqueBounds": [
+        102,
+        1087,
+        157,
+        322
+      ]
+    },
+    {
+      "direction": "south",
+      "pose": "neutral",
+      "region": [
+        469,
+        1084,
+        150,
+        322
+      ],
+      "component": 11,
+      "opaqueBounds": [
+        473,
+        1088,
+        142,
+        314
+      ]
+    },
+    {
+      "direction": "south",
+      "pose": "contact-c",
+      "region": [
+        830,
+        1084,
+        163,
+        334
+      ],
+      "component": 12,
+      "opaqueBounds": [
+        834,
+        1088,
+        155,
+        326
+      ]
+    }
+  ],
+  "status": "PENDING_POSE_VISUAL_REVIEW",
+  "runtimeModified": false,
+  "recordedAt": "2026-09-26T18:39:35.250050+00:00"
+}

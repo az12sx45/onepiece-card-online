@@ -1,0 +1,54 @@
+{
+  "schema": "gpt-fullbody-action-sheet/1",
+  "tool": "built-in image_gen.imagegen",
+  "character": "usopp",
+  "original": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de43-fc3b-7f21-ac55-6e2f6737b063\\exec-96fe695f-6b38-4b2e-aaf8-0af51316ccea.png",
+  "source": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\usopp\\source-02.png",
+  "sha256": "a6aca66f404bb431751d6af1409c771d298601b1e992e10eea1be59fbb115607",
+  "promptPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\usopp\\prompt-02.txt",
+  "prompt": "Targeted edit of this Usopp 8-column x4-row full-body action sheet. Preserve the exact 32 complete poses, natural connected anatomy, style, colors, identity, long nose, mustard original overalls/bandana, satchel on anatomical LEFT hip, and all four row directions. Two corrections only:\n1. The blue-and-white wristband belongs ONLY on anatomical LEFT wrist in every sprite. In SOUTH/front row column5 focused-use it is incorrectly on BOTH wrists. Remove the band from his RIGHT wrist (screen LEFT hand in that front-facing cell), restoring normal bare skin. Keep left wrist band (screen RIGHT) there and correct left-only placement throughout. Do not move the satchel.\n2. Expand/normalize transparent spacing so every whole character including bottom-row boot soles is fully contained with generous empty margin. Exactly8equalcolumns x4equalrows, preferably2048x1024. Make all WHOLE drawings about10% smaller together without changing their proportions/poses, center in each cell, keep common foot baseline and at least15pixels transparent margins on every cell edge. No opaque art touches bottom image edge or neighboring row.\nKeep idle/happy/annoyed/surprised/low-forward-focused/sit/wave/listen order; north shows only back, east right,west left,south front. Hands beside shoulders for wave; no new objects or handheld weapon. No labels, guides, furniture, shadow. True clean transparent background, remove stray flecks outside silhouettes while preserving all character ink. Whole-body artwork only; do not split or construct parts.\n",
+  "promptSHA256": "29b3858f51d7a9e2fc1931d61e0d03264e7e3b8ca05fedce28fdaef96233d9ba",
+  "references": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\usopp\\source-01.png",
+      "sha256": "133d3f52dcfdb3a93f166ceec3a3919102ef522e32d392c6c501bfc3901cbaac"
+    }
+  ],
+  "image": {
+    "width": 1774,
+    "height": 887,
+    "mode": "RGBA",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "opaque128Pixels": 508854,
+    "edgeAlpha128Pixels": {
+      "top": 0,
+      "bottom": 0,
+      "left": 0,
+      "right": 0
+    }
+  },
+  "layout": {
+    "rows": [
+      "east",
+      "west",
+      "north",
+      "south"
+    ],
+    "columns": [
+      "idle",
+      "talk_happy",
+      "talk_annoyed",
+      "surprised",
+      "focused_use",
+      "sit",
+      "wave",
+      "listen"
+    ]
+  },
+  "status": "PENDING_VISUAL_REVIEW",
+  "runtimeModified": false,
+  "recordedAt": "2026-09-26T18:04:36.523616+00:00"
+}

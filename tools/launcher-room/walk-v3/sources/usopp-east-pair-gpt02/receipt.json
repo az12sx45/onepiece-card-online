@@ -1,0 +1,48 @@
+{
+  "schema": "gpt-wholebody-walk-generation/3",
+  "character": "usopp",
+  "tool": "built-in image_gen.imagegen",
+  "generator": "gpt-image",
+  "original": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de43-fc3b-7f21-ac55-6e2f6737b063\\exec-26095454-63ac-4e9e-a541-dbee2fe5a173.png",
+  "source": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\walk\\usopp\\source-east-pair-02.png",
+  "sourceSHA256": "7ee06bf7d907bc2876959eee05976155dd0a17c31398c15147e36cbbba1a91e8",
+  "promptPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\walk\\usopp\\prompt-east-pair-02.txt",
+  "prompt": "Precise canonical accessory edit to BOTH COMPLETE EAST/right-facing Usopp walkers in IMAGE1. Image2 shows the correct anatomical-side accessory arrangement of his neutral EAST figure. KEEP BOTH full walking poses, arms/legs/boots/head/face/overalls/scale/layout unchanged. Do not alter their gait or flip them.\n\nBoth face RIGHT, so their near visible shoulder/arm/hip are Usopp's anatomical RIGHT side. His LEFT wrist and LEFT hip are FARTHER FROM CAMERA.\nCORRECT THE BLUE-WHITE WRISTBAND:\nFirst/LEFT figure: current visible far arm extends forwardRIGHT with band; this is correct, keep it. Near arm swinging backLEFT is bare, keep bare.\nSecond/RIGHT figure: the foreground/near arm extending forwardRIGHT currently incorrectly wears blue-white band. REMOVE that band completely from the NEAR RIGHT WRIST and restore bare brown skin. ADD the same blue-white band ONLY to the FAR LEFT WRIST that swings backward at screenLEFT behind his torso near the satchel area. Do not put bands on both hands.\n\nCORRECT SATCHEL on BOTH figures: Current prominent brown bag on foreground/near screenLEFT/back hip is wrong anatomical RIGHT hip. MOVE THE WHOLE SATCHEL TO ANATOMICAL LEFT HIP, far side behind the body, mostly hidden from this east view. Show at most a SMALL reddish-brown edge near the front/screenRIGHT hip like IMAGE2. Remove the foreground bag completely and restore original overalls contour beneath; preserve the brown diagonal strap from RIGHT shoulder toward hidden LEFT hip. Do not mirror body or relocate the overall bib. Left-hip bag may be naturally occluded in this view; it must not remain on near/right hip.\n\nTwo intact full-body Usopp drawings, 2columns x1row, same poses as image1 (A near arm back, C near arm forward), same identity/design. Long nose, black curls, brown bandana/goggles, ochre overalls, brown boots, no weapon. No body-part collage, no head/neck splitting. Real transparent background, no colored backdrop, no ground/shadow/text/labels/grid/borders. Generous blank margin all around both complete bodies.\n",
+  "promptSHA256": "e1687a5cefabb29f3c7cd8ecb6244972b804ed677086924b15ad3f118d313dc1",
+  "references": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\walk\\usopp\\edit-inputs\\east-pair.png",
+      "sha256": "3597ff2df975811371d2b39877210162b8bb39cf2ff2b3fe3add71274bd2a00d"
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\walk\\usopp\\edit-inputs\\east-neutral.png",
+      "sha256": "2703ebc559cd846416ec1245bafa84fffb5f71d704a5831b6f4e22512e2072b2"
+    }
+  ],
+  "image": {
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "mode": "RGBA",
+    "alphaExtrema": [
+      0,
+      254
+    ],
+    "significantComponents": 2
+  },
+  "regions": [],
+  "status": "WHOLE_FIGURES_ACCESSORIES_CORRECTED",
+  "runtimeModified": false,
+  "recordedAt": "2026-09-26T18:42:25.465577+00:00",
+  "visualReview": {
+    "observations": [
+      "C near/right forward wrist is bare; far/left rear wrist has blue-white band.",
+      "A far/left forward wrist retains band; near/right rear wrist is bare.",
+      "Bags now small/occluded on far hips rather than large foreground pouches.",
+      "Raw generation has broad brown low-alpha halo, NOT an opaque brown background: corner/gap alpha0, exactly2body components at alpha>128. Normal whole-character mask removes distant halo without painting anatomy."
+    ],
+    "wholeCharacterMaskInspection": "pair-alpha-inspection.png",
+    "runtimeValidated": false
+  }
+}

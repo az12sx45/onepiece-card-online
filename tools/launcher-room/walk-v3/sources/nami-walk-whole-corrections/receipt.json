@@ -1,0 +1,49 @@
+{
+  "generator": "gpt-image",
+  "tool": "built-in image_gen.imagegen",
+  "recordedAtUtc": "2026-09-26T18:41:51.033519+00:00",
+  "generatedOriginal": {
+    "path": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-1739-7141-90bd-461600d8694f\\exec-8df7d89a-0a55-48af-88de-21fe976b7281.png",
+    "sha256": "290f78cf980455811e6ce5e5ea8690b1980d2f1d9034cc1da91f9a730ccfe0d7"
+  },
+  "selectedCopy": {
+    "path": "walk/nami/corrections-01.png",
+    "sha256": "290f78cf980455811e6ce5e5ea8690b1980d2f1d9034cc1da91f9a730ccfe0d7"
+  },
+  "exactOriginalBytes": true,
+  "prompt": {
+    "path": "walk/nami/corrections-01.prompt.txt",
+    "sha256": "47735a36cd860586fe69a3d854970977ac3225f202ea77cf27f17f9dab863576"
+  },
+  "referenceImages": [
+    {
+      "path": "walk/nami/east-contact-c-01.png",
+      "sha256": "bc7160e8a63ae43a003e603561e4bfd24a174e83a92b5c903b541f72d649d293"
+    },
+    {
+      "path": "walk/nami/west-contact-c-01.png",
+      "sha256": "fa20567b296538c9e60d05b7d6d98a93b451fd20fc080fde8a7ef33cea44a24f"
+    },
+    {
+      "path": "walk/nami/south-contact-a-01.png",
+      "sha256": "3e5b4bc28d3072e8259ae8774ccca5184704055ff3e1cebde0cfee8028cd41f0"
+    },
+    {
+      "path": "walk/nami/south-contact-c-01.png",
+      "sha256": "3dc1be6350cc14cf48ca2d0e8f10f8a1d94ff5399caefee6b0a99b380f110808"
+    }
+  ],
+  "wholeFigureReferencesFrom": {
+    "path": "walk/nami/source-01.png",
+    "sha256": "10ebdd05f7678dbfe44fc2765d7ef3ef87b953e33573d6cd0b8a40b2c4a5464e"
+  },
+  "sourceRegions": {
+    "path": "walk/nami/source-01.regions.json",
+    "sha256": "7f15019337cffd24f0d5d232e740fb34a54db5fd1ba87daf94b4583ff4685d3a"
+  },
+  "edits": "Side contactC leg ownership; South contactA/C remove erroneous guide white shorts cuffs, orange skirt and bare thighs.",
+  "backgroundAlphaAtCorner": 0,
+  "completeOpaqueFigures": 4,
+  "anatomyReassembled": false,
+  "visualAccepted": false
+}

@@ -1,5 +1,19 @@
 # Dev Workflow
 
+## 2026-09-27 完整人物原畫與暫撤工作（1.1.14 候選完成，尚未公開部署）
+
+回應使用者回報 1.1.13 頭頸分離感、接肢與姿勢問題，撤回上一版自然姿態的美術通過結論；舊程式／SHA 測試保留為當時的技術證據。本次在 `D:\Codex_Release_Worktrees\launcher-room-art-repair-1.1.14` 由 `4afe64c643ebd36a486b9f1cecd159e112981b32` 建立隔離候選，正式來源仍為 `D:\Codex_Release_Worktrees\board-voyage-records-v1`，保留其他 Board 修改。
+
+十名原作角色改用 GPT 完整人物原畫：四向各八種單張互動姿勢，共 320 張；四向步態各三張 contact A／neutral／contact C 原畫，共 120 張，以 A／neutral／C／neutral 四拍播放，共 160 格。另有十張南向完整人物商店縮圖。匯入以整個連通人物提取、共同方向尺度和整張平移保存頭頸、肩臂與衣著；不拆拼頭身、不鏡像、不以骨架或網格扭曲四肢。重複支撐腳及原作細節錯誤以完整人物補畫修正；被拒收的 32 格、拉腿與 IK 試作留在 QA 歷史中，未接入。
+
+`launcher-room.js/css`、`launcher.html` 暫撤派工、領取、工作徽章、倒數及強制工作動作；既存 work 記錄與已獲得金幣保留，角色仍可散步、聊天及顯示親密度／詳情。伺服器舊 API、商品 ID、好友唯讀及三款遊戲存檔不變。`launcher-room-motion.js`、motion data、main、package 與商城縮圖改用 v3 路徑；單張互動姿勢與四拍步態分開。新來源、提示、區域、SHA、原始 PNG、報告與 review evidence 由 fullbody/walk 兩份 manifest 保存；說明見 `tools/launcher-room/README-fullbody-v3.md`。
+
+本機 controller 20／20、使用真 v3 素材的房間瀏覽器 76／76 通過；個人頁／商店 97／97 通過，BGM 檢查改為有界等待實際 `currentTime > 0.1`。靜態來源重建驗證涵蓋 320 姿勢及十張 portrait。工作撤除檢查包含既存 working／ready 記錄、零 start／claim 請求、資料／錢包保留與好友唯讀。真素材房間目視證據與完整 manifest SHA 綁在 `tools/launcher-room/fullbody-v3/review.json`；自動與代理目視驗證不等於真人玩家驗收。
+
+本次候選版本為 1.1.14；Windows 封裝、公開安裝檔／更新清單及正式 D 樹同步尚未在本節宣告完成，須以後續實際發布回讀結果補記。QA、原稿及安全同步預演位於 `D:\Codex_QA\launcher-room-art-repair-1.1.14`。LATTICE 本階段 API 未提供，未宣稱新任務寫入或圖譜成功。
+
+Windows build 與完整封裝 gate 已通過：80 v3 圖集、十張肖像共 4,580,192 bytes，全部 launcher 素材 127,621,794 bytes；安裝檔 240,047,967 bytes，SHA256 `16dd4a99ff392a33a1c240430b7dcbce522bad79ae76d609f9ad500be39fc9cb`。實際 packaged Electron 331 項素材與 BGM 播放通過。實景涵蓋十人桌機四向、三人窄版四向、五組四回合對話及兩項家具各兩方向；零缺圖、零 pageerror，保存配置未變。此為本機自動 capture 及 AI 圖片檢查。R2 安裝檔已上傳，公開更新清單仍待部署讀回。
+
 ## 2026-09-27 啟動器步態與角色關係重製（1.1.13 已部署）
 
 使用者否決 1.1.12 的實際走路效果。候選位於 `D:\Codex_Release_Worktrees\launcher-room-animation-1.1.13`，從 `origin/main` 的 `99312fe24` 建立，保留正式 D 槽其他工作。舊版的兩張張腿圖、逐幀外框縮放與左右鏡像已由四方向獨立 GPT 部件圖、連續關節動作及烘焙圖集取代。前期八幀整圖試作因腳步／比例不連續而拒收，保留 QA 歷史。

@@ -1,0 +1,134 @@
+[
+  {
+    "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\walk\\franky\\edit-inputs\\east-contact-a.png",
+    "source": "source-01.png",
+    "region": [
+      46,
+      6,
+      274,
+      344
+    ],
+    "wholeCharacterOnly": true
+  },
+  {
+    "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\walk\\franky\\edit-inputs\\east-neutral.png",
+    "source": "source-01.png",
+    "region": [
+      444,
+      5,
+      199,
+      346
+    ],
+    "wholeCharacterOnly": true
+  },
+  {
+    "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\walk\\franky\\edit-inputs\\east-contact-c.png",
+    "source": "source-01.png",
+    "region": [
+      811,
+      6,
+      254,
+      346
+    ],
+    "wholeCharacterOnly": true
+  },
+  {
+    "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\walk\\franky\\edit-inputs\\west-contact-a.png",
+    "source": "source-01.png",
+    "region": [
+      45,
+      365,
+      271,
+      348
+    ],
+    "wholeCharacterOnly": true
+  },
+  {
+    "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\walk\\franky\\edit-inputs\\west-neutral.png",
+    "source": "source-01.png",
+    "region": [
+      453,
+      365,
+      198,
+      350
+    ],
+    "wholeCharacterOnly": true
+  },
+  {
+    "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\walk\\franky\\edit-inputs\\west-contact-c.png",
+    "source": "source-01.png",
+    "region": [
+      812,
+      365,
+      234,
+      349
+    ],
+    "wholeCharacterOnly": true
+  },
+  {
+    "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\walk\\franky\\edit-inputs\\north-contact-a.png",
+    "source": "source-01.png",
+    "region": [
+      37,
+      733,
+      265,
+      337
+    ],
+    "wholeCharacterOnly": true
+  },
+  {
+    "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\walk\\franky\\edit-inputs\\north-neutral.png",
+    "source": "source-01.png",
+    "region": [
+      420,
+      732,
+      252,
+      337
+    ],
+    "wholeCharacterOnly": true
+  },
+  {
+    "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\walk\\franky\\edit-inputs\\north-contact-c.png",
+    "source": "source-01.png",
+    "region": [
+      771,
+      733,
+      286,
+      340
+    ],
+    "wholeCharacterOnly": true
+  },
+  {
+    "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\walk\\franky\\edit-inputs\\south-contact-a.png",
+    "source": "source-01.png",
+    "region": [
+      55,
+      1079,
+      265,
+      337
+    ],
+    "wholeCharacterOnly": true
+  },
+  {
+    "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\walk\\franky\\edit-inputs\\south-neutral.png",
+    "source": "source-01.png",
+    "region": [
+      427,
+      1080,
+      234,
+      329
+    ],
+    "wholeCharacterOnly": true
+  },
+  {
+    "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\walk\\franky\\edit-inputs\\south-contact-c.png",
+    "source": "source-01.png",
+    "region": [
+      790,
+      1079,
+      253,
+      336
+    ],
+    "wholeCharacterOnly": true
+  }
+]

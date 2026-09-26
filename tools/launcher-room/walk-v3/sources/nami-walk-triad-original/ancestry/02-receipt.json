@@ -1,0 +1,68 @@
+{
+  "schema": "gpt-fullbody-character-32-receipt/1",
+  "tool": "built-in image_gen.imagegen",
+  "character": "nami",
+  "source": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\nami\\source.png",
+  "sha256": "96758bd08ed98d965689b95232c0d6868c4c0e901b329be6e069f02186004fad",
+  "reference": [
+    {
+      "path": "D:\\Codex_Release_Worktrees\\launcher-room-art-repair-1.1.14\\public\\images\\launcher_room\\action_frames\\nami\\idle.webp",
+      "sha256": "13c2be522f4cebbb6fefeec7929d7db4735ef1a2876d88c02fe81e31e8ee9922"
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\luffy-fullbody-actions-32-02.png",
+      "sha256": "2e4bd717564897df3fbe7083ff59cd1069f8b2a9ef096b19c98785409695b7dd"
+    }
+  ],
+  "generationHistory": [
+    {
+      "generatedSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-a1c5-7fc2-9c4d-857370899a24\\exec-92e59f91-34ab-4147-a37f-a54cfb364970.png",
+      "promptFile": "source-01.prompt.txt",
+      "promptPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\nami\\source-01.prompt.txt",
+      "prompt": "Use case: stylized-concept. Asset: one complete full-body character interaction atlas, exactly 32 drawings arranged 8 columns by 4 rows on real transparent RGBA. This is newly painted coherent full-body art, not a rig kit and not separated parts.\n\nINPUT ROLES: Image 1 is this character's identity and outfit reference, subject to the explicit canon corrections below. Image 2 is the Luffy full-body interaction sheet: use its clean ink / cel-painted chibi style, proportions, coherent whole-body poses and 8x4 layout ONLY. Never draw Luffy or borrow his clothes. Do not copy any alpha fringe or colored speckles from references.\n\nCHARACTER / CANON:\nNAMI, canonical early East Blue appearance: short orange bob hair, warm brown eyes, white short-sleeved sailor-style top with several dark blue horizontal stripes and blue collar trim, ORANGE SHORT SKIRT (not trousers or shorts), simple brown low shoes/sandals. IMPORTANT: identity image 1 currently has brown shorts; those are REJECTED. Replace them with the requested orange skirt in ALL 32 drawings. No jeans, no bikini, no long post-timeskip hair. Adult woman rendered in tasteful approx 2.7-head-tall chibi form, confident clever smile, sharp annoyed frown, natural expressive open hands. No costume swaps and no tattoo invented from absent reference. All views show skirt wrapping the whole posed body.\n\nLAYOUT: 2:1 landscape, ideally 2048x1024. Exactly eight equal columns and four equal rows. One whole character safely isolated in each cell. Leave clear transparent gaps between every figure and between rows, including extended fingers, swords, hair, antlers and shoes. At least 18px empty margin within each 256 cell. Every standing figure uses a common scale, approx 2.7 head-heights tall (Chopper retains his shorter canonical animal proportions), aligned feet baseline. Sit uses unchanged body scale with naturally lower head height. Entire figures must be inside the canvas and separable without amputating or touching neighboring art.\n\nDIRECTIONS / ROWS:\n1 EAST: face screen RIGHT, coherent right-facing three-quarter side head, shoulders, torso, pelvis, feet; gaze partner on right. Viewer mostly sees anatomical RIGHT side.\n2 WEST: face screen LEFT, coherent left-facing three-quarter side body; independently drawn, NOT a horizontal mirror. Viewer mostly sees anatomical LEFT side.\n3 NORTH: face fully AWAY, back of head and body only. No eyes, cheeks, mouth or peeked face anywhere in this row.\n4 SOUTH: face toward viewer, fully frontal coherent figure.\nKeep all asymmetric canonical details on their true anatomical side across all rows.\n\nPOSES / EIGHT COLUMNS, same order in every row:\n1 IDLE: comfortable upright standing, both hands naturally relaxed down.\n2 TALK HAPPY: character-appropriate smile, one natural open palm at lower chest height extended conversationally toward partner; other arm relaxed.\n3 TALK ANNOYED: character-appropriate frown and hands on hips, normal shoulder and elbow anatomy, no extreme rage.\n4 SURPRISED: widened eyes and mildly open mouth, shoulders slightly gathered, both hands open IN FRONT OF CHEST below chin; never overhead and never at ears.\n5 FOCUSED USE: stand with small natural forward lean from hips, both hands lightly reaching forward LOW between waist and lower chest to use unseen furniture; normal relaxed wrists/elbows, no fists touching face; draw no tool or furniture.\n6 SIT: complete natural seated posture as if on an invisible stool, pelvis low, thighs forward, knees comfortably bent, calves down, feet resting, relaxed hands on thighs; no stool or furniture, no detached/shortened legs.\n7 WAVE: visibly open palm (or canonical Chopper split hoof) beside shoulder, hand directed to partner, CLEAR SPACE from cheek/nose/mouth/eye, natural shoulder-elbow-wrist chain. No closed fist near face.\n8 LISTEN: relaxed attentive expression and gaze at partner, subtle whole-upper-body interest, arms relaxed naturally.\n\nSTYLE/ANATOMY: consistent handsome clean linework, readable cel colors, same character face, hair and body proportions throughout. Draw every pose as one fresh continuous full figure: skull connects naturally through neck into shoulders, arm volume bends naturally, clothing wraps the pose, legs and feet have anatomy. Do not paste heads, warp straight limb stickers, repeat one rigid torso with changed arms, separate limbs, or make puppet seams. Keep scale and camera consistent, but show genuine pose-specific body language.\nNo original characters, no extra people, no costume changes, no text/labels/dividers, no ground shadows, no furniture, no watermarks, no checkerboard/background, no glow/fringe/speckles. Real empty alpha around clean antialiased character silhouettes.\n",
+      "generatedSourceSha256": "96758bd08ed98d965689b95232c0d6868c4c0e901b329be6e069f02186004fad"
+    },
+    {
+      "generatedSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-a1c5-7fc2-9c4d-857370899a24\\exec-7c535a6f-b887-4419-beac-0b3645aca623.png",
+      "promptFile": "source-02.prompt.txt",
+      "promptPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\nami\\source-02.prompt.txt",
+      "prompt": "Edit only the expression of COLUMN THREE, TALK_ANNOYED, in this complete Nami 8x4 full-body atlas. Keep each whole character, anatomy, neck/shoulder connections, poses, skirt and striped top, all four directions, scale and every other column identical.\nIn EAST row1 column3, WEST row2 column3, and SOUTH row4 column3, Nami needs an unmistakably IRRITATED expression: eyebrows gently slanted down toward center, narrowed focused eyes, mouth a small closed downward curve or sharp exasperated flat line. She is annoyed with a crewmate, not smiling or looking pleased. Keep her hands on hips. Do not exaggerate into demonic rage. NORTH row3 column3 remains back of head only, no face, hands on hips.\nDo not touch the calm/happy expressions in the other seven columns. Preserve orange skirt and early short-orange-hair identity. Preserve connected full-body drawings, not separate heads. Ensure all fingers/shoes/hair remain complete inside the canvas, and background remains real transparency without new text, shadows or marks. This is one targeted expression correction, not a new pose layout.\n",
+      "generatedSourceSha256": "b8776ca1b70c444fa6c3a4452c842c26a4787dd02907d1fd978865b63a09dfd4"
+    }
+  ],
+  "selectedGeneration": 1,
+  "image": {
+    "size": [
+      1774,
+      887
+    ],
+    "mode": "RGBA",
+    "alphaRange": [
+      0,
+      255
+    ],
+    "edgeAlpha128plus": {
+      "top": 0,
+      "bottom": 0,
+      "left": 0,
+      "right": 0
+    }
+  },
+  "regionReport": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\nami\\regions.json",
+  "largeWholeFigureCount": 32,
+  "review": {
+    "viewed": true,
+    "canon": "Short orange bob; blue-striped white top; requested orange skirt replaces rejected old brown shorts; brown sandals.",
+    "poses": "Whole source-01 bodies natural and safe; annoyed column3 expression subtle, source-02 has stronger annoyed expression if selected as whole figure.",
+    "limits": [
+      "EAST surprised expression also became slightly narrowed during targeted revision; source-01.png preserves the wider surprised eyes and may supply that entire whole figure if root prefers.",
+      "Uneven row heights, use connected-whole-character extraction not equal-grid crop.",
+      "Low-alpha colored specks remain outside silhouettes.",
+      "source-02 rejected as entire atlas:5 bottom-edge alpha>128 pixels at south surprised shoe x833..837. source.png selects original safe source-01; revision source-02 retained only for optional entire-figure annoyed replacements. No anatomy patch permitted."
+    ]
+  },
+  "status": "CANDIDATE_NOT_RUNTIME_CONNECTED",
+  "wholeBodyOnly": true,
+  "noProductionRuntimeOrDocsChanges": true,
+  "recordedAt": "2026-09-26T18:06:51.492424+00:00"
+}

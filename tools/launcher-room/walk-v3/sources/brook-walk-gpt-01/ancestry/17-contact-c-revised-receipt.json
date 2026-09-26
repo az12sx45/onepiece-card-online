@@ -1,0 +1,22 @@
+{
+  "schema": "gpt-single-wholebody-pose-edit/1",
+  "tool": "built-in image_gen.imagegen",
+  "direction": "north",
+  "pose": "contact-c",
+  "original": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de43-fc3b-7f21-ac55-6e2f6737b063\\exec-61f916e4-5381-4fa4-b775-2007ab5f871f.png",
+  "savedPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\north\\contact-c-revised.png",
+  "sha256": "9af171cca87c79417f0dc9f666250d7cb278e85e296fc9abb2a4cfca5cb3c356",
+  "reference": {
+    "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\north\\contact-c.png",
+    "sha256": "95eeedc1c91296af788dddb5e94df2a17625b80ce1f908696a0bfeaccb740404"
+  },
+  "promptPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\north-contact-c-edit-prompt.txt",
+  "prompt": "Edit this ONE complete rear-view Luffy figure to correct the opposite CONTACT C WALKING LEG POSITION. Keep the whole body facing NORTH/AWAY, no face. Redraw it as one coherent complete figure, not separated parts.\nCRITICAL LEG SWAP: In the input the screen-RIGHT sandal sole points toward viewer while screen-LEFT foot is flat. Swap this:\n- SCREEN LEFT leg must now extend BACK toward the viewer, with its sandal underside/sole visibly facing the viewer at the bottom LEFT. Lift the heel only a little; toe stays very close to the floor. This LEFT sole must be the prominent visible brown underside.\n- SCREEN RIGHT leg now steps FORWARD away from viewer, foot farther/up on the ground plane. Show heel/back/top of that sandal, NOT its large sole. Right foot should appear slightly farther away and higher on the page than the LEFT rearward sole.\n- Keep hips and thighs connected; left/right white shorts cuffs follow the swapped leg positions. Short natural stride, low knees, no jump, no deep crouch or exaggerated bent knee.\nCurrent arms already oppose the original A: screenLEFT arm gently forward/bent near waist, screenRIGHT arm swings backward/down. Keep those C arm positions while swapping legs. Head, neck and chest remain entirely facing away together.\n\nPreserve exact straw hat size and red band, black rear hair, open sleeveless red vest seen from its back, blue cuffed shorts, yellow sash at same side, brown sandals, chibi proportions and clean ink/cel style. Full connected neck/shoulders/arms/hands/torso/hips/legs/feet. Do not mirror whole person or move sash side. NO face features in rear view.\nONE full body centered on portrait canvas, completely visible with generous transparent margins around hat, fingertips and toes. TRUE RGBA ALPHA TRANSPARENCY only; no colored backdrop, ground, shadows, diagram, text, arrows, border or second figure. Make the switch to LEFT visible sole unambiguous.\n",
+  "promptSHA256": "034cd9cb5d3fd07bf232443d2c288081dc3a876d054009fe614c35064ae58fa4",
+  "status": "CORRECTED_SOURCE_FOR_FOURBEAT_PREVIEW",
+  "visualObservation": "Visible rear sandal sole now screen-left; screen-right sandal is farther planted. Arms retain opposite C swing.",
+  "wholeBodyRedrawnByGPT": true,
+  "bodyPartsReassembled": false,
+  "runtimeAcceptance": false,
+  "recordedAt": "2026-09-26T18:30:32.184948+00:00"
+}

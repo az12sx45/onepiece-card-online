@@ -1,0 +1,82 @@
+{
+  "schema": "gpt-fullbody-action-sheet/1",
+  "tool": "built-in image_gen.imagegen",
+  "character": "franky",
+  "original": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de43-fc3b-7f21-ac55-6e2f6737b063\\exec-fc5c36b6-a719-4645-befa-ff96ce3202e8.png",
+  "source": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\franky\\source-03.png",
+  "sha256": "bf6ff27079eaeab6590ed9f6d8bc613d9236bbe97a1bd0dbaeb3447832f056bf",
+  "promptPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\franky\\prompt-03.txt",
+  "prompt": "Targeted edit ONLY the FOUR SEATED FRANKY FIGURES (column6 in each of the4rows) in this32pose sheet. Preserve the other28 WHOLE figures pixel-faithfully, all layout, colors, expressions, gestures, complete body anatomy and transparent padding. Do not redesign anything else.\nThe four seated Frankys incorrectly inherited Luffy's white rolled short-pant cuffs and brown sandals. CORRECT ALL FOUR SIT POSES to canonical FRANKY:\n- BLUE TRIANGLE SWIM BRIEFS with white star at front, stopping at upper thighs. NO shorts, NO trouser legs, NO white rolled cuffs, NO knee fabric bands.\n- Thighs/kneecaps/shins/feet are BARE SKIN with canonical small mechanical circular knee details if visible. No fur or white fabric around knees.\n- Both feet completely BARE, individual toes visible. Remove every brown sandal, thong, strap, sole or shoe and draw natural bare feet, including back view.\n- Keep seated pose, exact body/neck/head/shoulder/arm relationships and natural hands-on-thighs positions. Mechanical blue forearms/red hands remain mechanical, but thighs and feet are skin.\nFour seats face east/right, west/left, north/back and south/front respectively. Preserve Franky's blue hair, red BF-37 shoulder balls, open Hawaiian shirt, large chest and fullbody proportions. No other wardrobe change. Real transparent background, no floor, no shadows, no chair, no guide lines or text. Do not alter other poses.\n",
+  "promptSHA256": "b900847f8e56327c934353091d371142cc262e305177c71cfbaa9a15e11aca66",
+  "references": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\franky\\source-02.png",
+      "sha256": "0b27293cd35ec12a70f1f0d1695c45c0e5bd76d94af77f7efd4d81a14a76f0ef"
+    }
+  ],
+  "image": {
+    "width": 1774,
+    "height": 887,
+    "mode": "RGBA",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "opaque128Pixels": 569469,
+    "edgeAlpha128Pixels": {
+      "top": 0,
+      "bottom": 0,
+      "left": 0,
+      "right": 0
+    }
+  },
+  "layout": {
+    "rows": [
+      "east",
+      "west",
+      "north",
+      "south"
+    ],
+    "columns": [
+      "idle",
+      "talk_happy",
+      "talk_annoyed",
+      "surprised",
+      "focused_use",
+      "sit",
+      "wave",
+      "listen"
+    ]
+  },
+  "status": "WHOLE_BODY_SOURCE_READY_FOR_IMPORT_REVIEW",
+  "runtimeModified": false,
+  "recordedAt": "2026-09-26T18:09:44.843451+00:00",
+  "visualReview": {
+    "passes": [
+      "32 whole connected cyborg bodies, correct whole-body directions and face-free north",
+      "Mechanical shoulders/elbows naturally attached, wave hands clear of head, use hands low forward",
+      "Four seated poses corrected to blue briefs and bare feet with toes; no brown sandals or white trouser legs remain",
+      "Open Hawaiian shirt, BF-37 red shoulders, blue star forearms and red hands retained",
+      "No opaque pixels touch external image borders"
+    ],
+    "limits": [
+      "Narrow silver joint rims remain beside seated knees beneath resting mechanical hands; no fabric cuffs",
+      "Nonuniform cell spacing needs complete-character extraction",
+      "Low-alpha exterior flecks remain",
+      "BF-37 lettering is small and not perfectly consistent per glyph at source scale"
+    ],
+    "additionalTargetedEditAuthorization": "Parent explicitly authorized one extra edit to correct four seated canon clothing defects",
+    "runtimeValidated": false
+  },
+  "selectedSource": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\franky\\source.png",
+  "wholeFigureExtractionQA": {
+    "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\franky\\complete-inspection\\report.json",
+    "sha256": "ac288049277bc18513ae74fc10ed92cac40a7e0d3dcaad41269834275ceebcbb",
+    "frames": 32,
+    "clippedFrames": 0,
+    "contactPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\franky\\complete-inspection\\contact.png",
+    "contactSHA256": "15d1916508896aa6346cf1b3bd12078a2020764957193d042a7932c2d34eaca9",
+    "contactVisuallyInspected": true,
+    "notRuntimeAcceptance": true
+  }
+}

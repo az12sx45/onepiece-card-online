@@ -1,0 +1,86 @@
+{
+  "schema": "gpt-fullbody-action-sheet/1",
+  "tool": "built-in image_gen.imagegen",
+  "character": "brook",
+  "original": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de43-fc3b-7f21-ac55-6e2f6737b063\\exec-16d1e08c-31f4-4e4e-921a-df9f87f7c646.png",
+  "source": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\brook\\source-01.png",
+  "sha256": "8f222d94108715aeecc27a9bbacac962b8f6b8dc1f0352bf697fa1144e295741",
+  "promptPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\brook\\prompt-01.txt",
+  "prompt": "Create exactly8columns x4rows of32 complete whole-body BROOK from ONE PIECE, for a chibi room-game action sheet. Reference1 is the ONLY outfit/anatomy identity source: a white skeleton with empty black eye sockets, a toothy jaw, round dense black afro, tall black top hat, black formal tailcoat/tuxedo with long coat tails, blue cravat, orange/yellow fluffy feather boa, black trousers and black gold-buckle shoes. Keep these original clothes in EVERY pose including sitting. Reference2 (Luffy sheet) supplies ONLY polished chibi ink/cel shading style,8pose organization and4row directions; DO NOT copy Luffy's shorts, sandals, vest, human skin, or hairstyle.\nDraw each as one complete continuous character: skull naturally connected through bony neck/collar to entire torso, shoulders, sleeves, skeletal hands, hips, legs and shoes. No donor heads, separated necks or rigid cutout seams. Slender skeleton proportions with large recognizable afro and top hat; approximately2.7-3heads tall. Keep consistent full body/head/hat scale and clothes. NO flesh, eyeballs, colored human eyes, lips or flesh ears; expressions come from skull tilt, toothy jaw/open mouth, eye-socket shape and gestures.\nROWS: EAST whole figure faces screen RIGHT; WEST whole figure faces screen LEFT independently drawn, not mirrored; NORTH entirely back-facing with NO frontal skull features visible; SOUTH full front-facing. Head and chest always agree on direction.\nCOLUMNS: 1idle upright quiet arms down; 2talk_happy cheerful open-jaw skeleton smile one relaxed palm low before chest; 3talk_annoyed slight offended skull pose hands at hips elbows natural and low; 4surprised open jaw and hands slightly raised beside upper chest but below chin; 5focused_use slight whole-body lean with BOTH hands extended LOW forward around waist height, elbows down, suitable playing invisible piano, no object; 6sit natural seated figure with black trousers/black gold-buckle shoes, bent knees, hands on knees, original coat/boa drape naturally, NO chair; 7wave ONE open skeletal palm beside SHOULDER clearly away from face/afro, elbow naturally bent down, not over head; 8listen attentive calm skull, hands low. All32 have complete hands and feet.\nThe rear row shows rear hat/afro/coat only, no face peeking around. Gestures remain recognizable from rear and neck stays connected.\nLandscape2:1 preferably2048x1024,8equalcolumns x4rows, one COMPLETE figure centered in each cell, generous empty transparent margins (20px around silhouette) and common groundline within each row. Top hats/afro/coat tails/hands/shoes must not touch neighboring rows or outer image edges. Seated character is naturally shorter without stretching. Real transparent alpha, no checkerboard/solid background, no floor or shadow, no captions/grid/border/watermark/props. Only32 separate whole-body drawings.\n",
+  "promptSHA256": "2fdca803ac0c4abaad72049388cb724da987cad501cb0045d5fc1d2f11af602e",
+  "references": [
+    {
+      "path": "D:\\Codex_Release_Worktrees\\launcher-room-art-repair-1.1.14\\public\\images\\launcher_room\\action_frames\\brook\\idle.webp",
+      "sha256": "3c42f6d2be08555343d331ffd3352c58cbfc1abc040fb591fa3385a7bbdffc84"
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\luffy-fullbody-actions-32-02.png",
+      "sha256": "2e4bd717564897df3fbe7083ff59cd1069f8b2a9ef096b19c98785409695b7dd"
+    }
+  ],
+  "image": {
+    "width": 1774,
+    "height": 887,
+    "mode": "RGBA",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "opaque128Pixels": 430246,
+    "edgeAlpha128Pixels": {
+      "top": 0,
+      "bottom": 0,
+      "left": 0,
+      "right": 0
+    }
+  },
+  "layout": {
+    "rows": [
+      "east",
+      "west",
+      "north",
+      "south"
+    ],
+    "columns": [
+      "idle",
+      "talk_happy",
+      "talk_annoyed",
+      "surprised",
+      "focused_use",
+      "sit",
+      "wave",
+      "listen"
+    ]
+  },
+  "status": "WHOLE_BODY_SOURCE_READY_FOR_IMPORT_REVIEW",
+  "runtimeModified": false,
+  "recordedAt": "2026-09-26T18:08:46.887765+00:00",
+  "visualReview": {
+    "passes": [
+      "32 whole characters with connected skull-neck-collar-body and natural full sleeves/hands",
+      "Independent east/west drawings and face-free north; south front",
+      "Afro/top hat, tuxedo tails, orange/yellow boa, blue cravat, trousers and black gold-buckle shoes retained in all poses",
+      "Skeletal hands and empty eye sockets; no human skin/eyes",
+      "Wave palm clear of head, focused-use hands low forward",
+      "No opaque external-edge truncation"
+    ],
+    "limits": [
+      "Emotion differences in skull are subtle; gestures distinguish actions",
+      "Brook retains slender taller-than-Luffy proportions from identity reference",
+      "Nonuniform cell spacing needs whole-component extraction",
+      "Low-alpha exterior flecks remain; importer cleanup needed"
+    ],
+    "runtimeValidated": false
+  },
+  "selectedSource": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\brook\\source.png",
+  "wholeFigureExtractionQA": {
+    "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\brook\\complete-inspection\\report.json",
+    "sha256": "4cb45524803ab4e5763465c40d17ee39a321a2897614eefdf581d3684497001b",
+    "frames": 32,
+    "clippedFrames": 0,
+    "contactPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\brook\\complete-inspection\\contact.png",
+    "contactSHA256": "e646bffc5ccc40646e1550c4f73f56d45b8aaad14b0de445b16ef27432ac7ed5",
+    "contactVisuallyInspected": true,
+    "notRuntimeAcceptance": true
+  }
+}

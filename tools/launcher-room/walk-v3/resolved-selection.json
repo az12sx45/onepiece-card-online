@@ -1,0 +1,3485 @@
+{
+  "schema": "one-piece-room-walk-selection/3",
+  "sources": {
+    "luffy-triad-gpt-original": {
+      "generator": "gpt-image",
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/walk-v3/sources/luffy-triad-gpt-original/ancestry/00-source.png",
+          "sha256": "dbb6205716e9cc66bed03c9a5ea024e7d21f20dbbd5d1208340299139cb4db8d"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/luffy-triad-gpt-original/ancestry/01-prompt.txt",
+          "sha256": "ba25c27a7f5dcee5a47d8a965af2e6aed80da494aaf010f960b859636b7f43f1"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/luffy-triad-gpt-original/ancestry/02-receipt.json",
+          "sha256": "6553d2903f7689e4b34eb3b471faeb1c550498bbdb45ffbceef6390f9ae93ded"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/luffy-triad-gpt-original/ancestry/03-luffy-east-contact-a.png",
+          "sha256": "469cd94e92fbe2bf4b7330f2740f1d116bd3bc33df7dfcdbda8deb8baf2cf89f"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/luffy-triad-gpt-original/ancestry/04-luffy-east-contact-c.png",
+          "sha256": "2e5de0caa77323a571446b609a7208a1cf2c57c4e5ad9b85ce13afef7c27c117"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/luffy-triad-gpt-original/ancestry/05-luffy-east-contact-c-prompt.txt",
+          "sha256": "64d9912fbbedcad949b21712ee6f07663f0a34f60f16b2bc081aeb741ffd4a08"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/luffy-triad-gpt-original/ancestry/06-luffy-fullbody-actions-32-02.png",
+          "sha256": "2e4bd717564897df3fbe7083ff59cd1069f8b2a9ef096b19c98785409695b7dd"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/luffy-triad-gpt-original/ancestry/07-luffy-fullbody-actions-32-02.prompt.txt",
+          "sha256": "e1e6b521282dd2069ecfc4593c612616c6633d673f3d5e485c013e09d1dd64ff"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/luffy-triad-gpt-original/ancestry/08-luffy-fullbody-actions-32-02.receipt.json",
+          "sha256": "5ea44de3404b42f7334930d47f786b541053df99810e4eaeedab3e69b1d69a80"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/luffy-triad-gpt-original/ancestry/09-origin-ancestry.json",
+          "sha256": "8e9f495a7e922036bfdd16b47cf55e8f850f9de54170c9d44d53bc47a1faa648"
+        }
+      ],
+      "image": {
+        "path": "tools/launcher-room/walk-v3/sources/luffy-triad-gpt-original/source.png",
+        "sha256": "5f7ed8bc8b85d3b494b117da3fd0763b8455a214a5d5d15f2ab20e4c1f8ebd51",
+        "bytes": 1152024
+      },
+      "prompt": {
+        "path": "tools/launcher-room/walk-v3/sources/luffy-triad-gpt-original/prompt.txt",
+        "sha256": "567d2faf77a69471ebd0c315b2efd82e14ddc929307638d2cdc11fcc488c727b",
+        "bytes": 3432
+      },
+      "receipt": {
+        "path": "tools/launcher-room/walk-v3/sources/luffy-triad-gpt-original/receipt.json",
+        "sha256": "01243446595b0bb4e740a0db843430daabd976d567be2464d26dd1dfff5f7819",
+        "bytes": 13032
+      }
+    },
+    "luffy-east-c-gpt-edit": {
+      "generator": "gpt-image",
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/walk-v3/sources/luffy-east-c-gpt-edit/ancestry/00-contact-c.png",
+          "sha256": "dff58ff53399601b4b455060c987f072adf6956b12e345688ac96aa75a1efdc3"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/luffy-east-c-gpt-edit/ancestry/01-source-01.png",
+          "sha256": "5f7ed8bc8b85d3b494b117da3fd0763b8455a214a5d5d15f2ab20e4c1f8ebd51"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/luffy-east-c-gpt-edit/ancestry/02-prompt-01.txt",
+          "sha256": "567d2faf77a69471ebd0c315b2efd82e14ddc929307638d2cdc11fcc488c727b"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/luffy-east-c-gpt-edit/ancestry/03-receipt.json",
+          "sha256": "01243446595b0bb4e740a0db843430daabd976d567be2464d26dd1dfff5f7819"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/luffy-east-c-gpt-edit/ancestry/04-origin-ancestry.json",
+          "sha256": "8e9f495a7e922036bfdd16b47cf55e8f850f9de54170c9d44d53bc47a1faa648"
+        }
+      ],
+      "image": {
+        "path": "tools/launcher-room/walk-v3/sources/luffy-east-c-gpt-edit/source.png",
+        "sha256": "fed1768e72a8b38058d49a17fbc57922af50fffe46362cce07261d01b681ee16",
+        "bytes": 931738
+      },
+      "prompt": {
+        "path": "tools/launcher-room/walk-v3/sources/luffy-east-c-gpt-edit/prompt.txt",
+        "sha256": "3e99c2dedf002a34ad4d27e406f609810fc68a3bfbc6c42dbea37141daf8fc67",
+        "bytes": 1942
+      },
+      "receipt": {
+        "path": "tools/launcher-room/walk-v3/sources/luffy-east-c-gpt-edit/receipt.json",
+        "sha256": "a0d3be0e4a513d7ef9c7c897aea7b9092ea15bffa697f8c28e8b50629cd8cd59",
+        "bytes": 3225
+      }
+    },
+    "luffy-west-c-gpt-edit": {
+      "generator": "gpt-image",
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/walk-v3/sources/luffy-west-c-gpt-edit/ancestry/00-contact-c.png",
+          "sha256": "617e392587137adbd266d33979a2f8a33fa6a759b536c7dc7de2f60af3fb8c85"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/luffy-west-c-gpt-edit/ancestry/01-source-01.png",
+          "sha256": "5f7ed8bc8b85d3b494b117da3fd0763b8455a214a5d5d15f2ab20e4c1f8ebd51"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/luffy-west-c-gpt-edit/ancestry/02-prompt-01.txt",
+          "sha256": "567d2faf77a69471ebd0c315b2efd82e14ddc929307638d2cdc11fcc488c727b"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/luffy-west-c-gpt-edit/ancestry/03-receipt.json",
+          "sha256": "01243446595b0bb4e740a0db843430daabd976d567be2464d26dd1dfff5f7819"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/luffy-west-c-gpt-edit/ancestry/04-origin-ancestry.json",
+          "sha256": "8e9f495a7e922036bfdd16b47cf55e8f850f9de54170c9d44d53bc47a1faa648"
+        }
+      ],
+      "image": {
+        "path": "tools/launcher-room/walk-v3/sources/luffy-west-c-gpt-edit/source.png",
+        "sha256": "11ff8c0a6f62faa5743b1094060a12ae6a595717dc287e8c980f76f18187ce27",
+        "bytes": 993820
+      },
+      "prompt": {
+        "path": "tools/launcher-room/walk-v3/sources/luffy-west-c-gpt-edit/prompt.txt",
+        "sha256": "5ba678948d2494430297457e5e132985a6d2a27a7cf45f3e2f820474a3022e48",
+        "bytes": 2060
+      },
+      "receipt": {
+        "path": "tools/launcher-room/walk-v3/sources/luffy-west-c-gpt-edit/receipt.json",
+        "sha256": "f90b0a8bbc3c96ace0635799d08b5cbc4f2b61ee2b16ed0115b13b60e0d2af1f",
+        "bytes": 3344
+      }
+    },
+    "luffy-north-c-gpt-edit": {
+      "generator": "gpt-image",
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/walk-v3/sources/luffy-north-c-gpt-edit/ancestry/00-contact-c.png",
+          "sha256": "95eeedc1c91296af788dddb5e94df2a17625b80ce1f908696a0bfeaccb740404"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/luffy-north-c-gpt-edit/ancestry/01-source-01.png",
+          "sha256": "5f7ed8bc8b85d3b494b117da3fd0763b8455a214a5d5d15f2ab20e4c1f8ebd51"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/luffy-north-c-gpt-edit/ancestry/02-prompt-01.txt",
+          "sha256": "567d2faf77a69471ebd0c315b2efd82e14ddc929307638d2cdc11fcc488c727b"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/luffy-north-c-gpt-edit/ancestry/03-receipt.json",
+          "sha256": "01243446595b0bb4e740a0db843430daabd976d567be2464d26dd1dfff5f7819"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/luffy-north-c-gpt-edit/ancestry/04-origin-ancestry.json",
+          "sha256": "8e9f495a7e922036bfdd16b47cf55e8f850f9de54170c9d44d53bc47a1faa648"
+        }
+      ],
+      "image": {
+        "path": "tools/launcher-room/walk-v3/sources/luffy-north-c-gpt-edit/source.png",
+        "sha256": "9af171cca87c79417f0dc9f666250d7cb278e85e296fc9abb2a4cfca5cb3c356",
+        "bytes": 1096748
+      },
+      "prompt": {
+        "path": "tools/launcher-room/walk-v3/sources/luffy-north-c-gpt-edit/prompt.txt",
+        "sha256": "034cd9cb5d3fd07bf232443d2c288081dc3a876d054009fe614c35064ae58fa4",
+        "bytes": 1914
+      },
+      "receipt": {
+        "path": "tools/launcher-room/walk-v3/sources/luffy-north-c-gpt-edit/receipt.json",
+        "sha256": "7ccafbc40cab3894c63f61c3c54de3be817bd29e6508be237e182dd79914df91",
+        "bytes": 3172
+      }
+    },
+    "zoro-original": {
+      "generator": "gpt-image",
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/walk-v3/sources/zoro-original/ancestry/00-corrected-guide-12.png",
+          "sha256": "57bb80af0219d0edaf5b52850d5c400e6c3aee8aec9801f29dbae317948b818b"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/zoro-original/ancestry/01-source.png",
+          "sha256": "ec94a43bb36a8c2784d8d4c526c97b8f3b5ff0c72c3e7a054e9012ae95c88954"
+        }
+      ],
+      "image": {
+        "path": "tools/launcher-room/walk-v3/sources/zoro-original/source.png",
+        "sha256": "6bda8d8cbf857bc85179a1f2612fa6e1beb7a62b082ac64673a438de64651299",
+        "bytes": 1174207
+      },
+      "prompt": {
+        "path": "tools/launcher-room/walk-v3/sources/zoro-original/prompt.txt",
+        "sha256": "a82f6280f56c8319e0efad156073fc05cffb839da3fb6f1e4d4e91d173c033f4",
+        "bytes": 2286
+      },
+      "receipt": {
+        "path": "tools/launcher-room/walk-v3/sources/zoro-original/receipt.json",
+        "sha256": "b7918ada82f69781b376a85af85a61e34afd066edcd7112645fc44617baf0d0a",
+        "bytes": 717
+      }
+    },
+    "zoro-corrections": {
+      "generator": "gpt-image",
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/walk-v3/sources/zoro-corrections/ancestry/00-west-contact-c.png",
+          "sha256": "9ee92910e683ad8e5503e89dd35e9b0d8c67ae2d1684cabde61a40255d6520b0"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/zoro-corrections/ancestry/01-south-contact-c.png",
+          "sha256": "3935cbc82ed8e8b30738972f75f606e240ae848b4dea8372575f64de9c861f2a"
+        }
+      ],
+      "image": {
+        "path": "tools/launcher-room/walk-v3/sources/zoro-corrections/source.png",
+        "sha256": "88605cdc0db11790262dac0082113e6f88615156f8dc25b34ddcee77b0f91776",
+        "bytes": 1647297
+      },
+      "prompt": {
+        "path": "tools/launcher-room/walk-v3/sources/zoro-corrections/prompt.txt",
+        "sha256": "705c9d76daf40a9da59d9c1ea5ab06b357446fb893431ceb7753bc274187fec4",
+        "bytes": 1846
+      },
+      "receipt": {
+        "path": "tools/launcher-room/walk-v3/sources/zoro-corrections/receipt.json",
+        "sha256": "153d5da3241f865ce7a146f657a1c2217962ef539a85d7b3f07ed8f887ab7e6f",
+        "bytes": 721
+      }
+    },
+    "nami-walk-triad-original": {
+      "generator": "gpt-image",
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/walk-v3/sources/nami-walk-triad-original/ancestry/00-source.png",
+          "sha256": "96758bd08ed98d965689b95232c0d6868c4c0e901b329be6e069f02186004fad"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/nami-walk-triad-original/ancestry/01-prompt.txt",
+          "sha256": "5371c18d7cac2e50de296a2ca20f7459f8ef0557c6ab967bac57880c6f1f3b1a"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/nami-walk-triad-original/ancestry/02-receipt.json",
+          "sha256": "6fcc7d577560f9565f4b2f03d66721c150183bd655be86f25b35b1962f46dc32"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/nami-walk-triad-original/ancestry/03-corrected-guide-12.png",
+          "sha256": "57bb80af0219d0edaf5b52850d5c400e6c3aee8aec9801f29dbae317948b818b"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/nami-walk-triad-original/ancestry/04-receipt.json",
+          "sha256": "01243446595b0bb4e740a0db843430daabd976d567be2464d26dd1dfff5f7819"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/nami-walk-triad-original/ancestry/05-corrected-handoff.json",
+          "sha256": "e5c6ee40c7edf52589da9aff3c7b015fe882bdbe230a4cf181e9ff510e61b8ce"
+        }
+      ],
+      "image": {
+        "path": "tools/launcher-room/walk-v3/sources/nami-walk-triad-original/source.png",
+        "sha256": "10ebdd05f7678dbfe44fc2765d7ef3ef87b953e33573d6cd0b8a40b2c4a5464e",
+        "bytes": 1127405
+      },
+      "prompt": {
+        "path": "tools/launcher-room/walk-v3/sources/nami-walk-triad-original/prompt.txt",
+        "sha256": "207723af9e9b0f6e5bb330fb52b6a056fb1c63c43d6e653cbf693c16984fe786",
+        "bytes": 2837
+      },
+      "receipt": {
+        "path": "tools/launcher-room/walk-v3/sources/nami-walk-triad-original/receipt.json",
+        "sha256": "3100fd17f68db0f88a54efc268a235d3a3ea49282ddae5a26fc7402aa87399dd",
+        "bytes": 1696
+      }
+    },
+    "nami-walk-whole-corrections": {
+      "generator": "gpt-image",
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/walk-v3/sources/nami-walk-whole-corrections/ancestry/00-source-01.png",
+          "sha256": "10ebdd05f7678dbfe44fc2765d7ef3ef87b953e33573d6cd0b8a40b2c4a5464e"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/nami-walk-whole-corrections/ancestry/01-source-01.prompt.txt",
+          "sha256": "207723af9e9b0f6e5bb330fb52b6a056fb1c63c43d6e653cbf693c16984fe786"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/nami-walk-whole-corrections/ancestry/02-source-01.receipt.json",
+          "sha256": "3100fd17f68db0f88a54efc268a235d3a3ea49282ddae5a26fc7402aa87399dd"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/nami-walk-whole-corrections/ancestry/03-source-01.regions.json",
+          "sha256": "7f15019337cffd24f0d5d232e740fb34a54db5fd1ba87daf94b4583ff4685d3a"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/nami-walk-whole-corrections/ancestry/04-east-contact-c-01.png",
+          "sha256": "bc7160e8a63ae43a003e603561e4bfd24a174e83a92b5c903b541f72d649d293"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/nami-walk-whole-corrections/ancestry/05-west-contact-c-01.png",
+          "sha256": "fa20567b296538c9e60d05b7d6d98a93b451fd20fc080fde8a7ef33cea44a24f"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/nami-walk-whole-corrections/ancestry/06-south-contact-a-01.png",
+          "sha256": "3e5b4bc28d3072e8259ae8774ccca5184704055ff3e1cebde0cfee8028cd41f0"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/nami-walk-whole-corrections/ancestry/07-south-contact-c-01.png",
+          "sha256": "3dc1be6350cc14cf48ca2d0e8f10f8a1d94ff5399caefee6b0a99b380f110808"
+        }
+      ],
+      "image": {
+        "path": "tools/launcher-room/walk-v3/sources/nami-walk-whole-corrections/source.png",
+        "sha256": "290f78cf980455811e6ce5e5ea8690b1980d2f1d9034cc1da91f9a730ccfe0d7",
+        "bytes": 1939865
+      },
+      "prompt": {
+        "path": "tools/launcher-room/walk-v3/sources/nami-walk-whole-corrections/prompt.txt",
+        "sha256": "47735a36cd860586fe69a3d854970977ac3225f202ea77cf27f17f9dab863576",
+        "bytes": 2024
+      },
+      "receipt": {
+        "path": "tools/launcher-room/walk-v3/sources/nami-walk-whole-corrections/receipt.json",
+        "sha256": "8635eeb39850e80ed6c076c22d2dd1112e8c1f4554163b1251ce7718c73da8ef",
+        "bytes": 1940
+      }
+    },
+    "usopp-walk-gpt-01": {
+      "generator": "gpt-image",
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-walk-gpt-01/ancestry/00-corrected-guide-12.png",
+          "sha256": "57bb80af0219d0edaf5b52850d5c400e6c3aee8aec9801f29dbae317948b818b"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-walk-gpt-01/ancestry/01-corrected-handoff.json",
+          "sha256": "e5c6ee40c7edf52589da9aff3c7b015fe882bdbe230a4cf181e9ff510e61b8ce"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-walk-gpt-01/ancestry/02-build_fourbeat_preview.py",
+          "sha256": "1cd5b4c01d089ef06813c849b6c5f6c5802819ccf0f75cd7d05b2dba14d62952"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-walk-gpt-01/ancestry/03-source-01.png",
+          "sha256": "5f7ed8bc8b85d3b494b117da3fd0763b8455a214a5d5d15f2ab20e4c1f8ebd51"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-walk-gpt-01/ancestry/04-prompt-01.txt",
+          "sha256": "567d2faf77a69471ebd0c315b2efd82e14ddc929307638d2cdc11fcc488c727b"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-walk-gpt-01/ancestry/05-receipt.json",
+          "sha256": "01243446595b0bb4e740a0db843430daabd976d567be2464d26dd1dfff5f7819"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-walk-gpt-01/ancestry/06-source.png",
+          "sha256": "a6aca66f404bb431751d6af1409c771d298601b1e992e10eea1be59fbb115607"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-walk-gpt-01/ancestry/07-prompt.txt",
+          "sha256": "29b3858f51d7a9e2fc1931d61e0d03264e7e3b8ca05fedce28fdaef96233d9ba"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-walk-gpt-01/ancestry/08-receipt.json",
+          "sha256": "6569e273ea55b0aa5eb678e20eb324933a0d2c78caec085a7f540fcc241b34fe"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-walk-gpt-01/ancestry/09-contact-c-revised.png",
+          "sha256": "fed1768e72a8b38058d49a17fbc57922af50fffe46362cce07261d01b681ee16"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-walk-gpt-01/ancestry/10-east-contact-c-edit-prompt.txt",
+          "sha256": "3e99c2dedf002a34ad4d27e406f609810fc68a3bfbc6c42dbea37141daf8fc67"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-walk-gpt-01/ancestry/11-contact-c-revised-receipt.json",
+          "sha256": "a0d3be0e4a513d7ef9c7c897aea7b9092ea15bffa697f8c28e8b50629cd8cd59"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-walk-gpt-01/ancestry/12-contact-c-revised.png",
+          "sha256": "11ff8c0a6f62faa5743b1094060a12ae6a595717dc287e8c980f76f18187ce27"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-walk-gpt-01/ancestry/13-west-contact-c-edit-prompt.txt",
+          "sha256": "5ba678948d2494430297457e5e132985a6d2a27a7cf45f3e2f820474a3022e48"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-walk-gpt-01/ancestry/14-contact-c-revised-receipt.json",
+          "sha256": "f90b0a8bbc3c96ace0635799d08b5cbc4f2b61ee2b16ed0115b13b60e0d2af1f"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-walk-gpt-01/ancestry/15-contact-c-revised.png",
+          "sha256": "9af171cca87c79417f0dc9f666250d7cb278e85e296fc9abb2a4cfca5cb3c356"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-walk-gpt-01/ancestry/16-north-contact-c-edit-prompt.txt",
+          "sha256": "034cd9cb5d3fd07bf232443d2c288081dc3a876d054009fe614c35064ae58fa4"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-walk-gpt-01/ancestry/17-contact-c-revised-receipt.json",
+          "sha256": "7ccafbc40cab3894c63f61c3c54de3be817bd29e6508be237e182dd79914df91"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-walk-gpt-01/ancestry/18-source-01.png",
+          "sha256": "133d3f52dcfdb3a93f166ceec3a3919102ef522e32d392c6c501bfc3901cbaac"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-walk-gpt-01/ancestry/19-source-02.png",
+          "sha256": "a6aca66f404bb431751d6af1409c771d298601b1e992e10eea1be59fbb115607"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-walk-gpt-01/ancestry/20-prompt-01.txt",
+          "sha256": "5629e1a2b84f24ea10e8ee3dd0fdd0b4326c3244a17a3c84e038cd159e6b810f"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-walk-gpt-01/ancestry/21-prompt-02.txt",
+          "sha256": "29b3858f51d7a9e2fc1931d61e0d03264e7e3b8ca05fedce28fdaef96233d9ba"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-walk-gpt-01/ancestry/22-receipt-01.json",
+          "sha256": "7575cf882dc5729c64171d8fde93ee2cedeb5e46a2a52467835baed196b5866c"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-walk-gpt-01/ancestry/23-receipt-02.json",
+          "sha256": "a83ef90895f6c8e0645eeeff45141bee5e81b25b468766e7ca15e0ea9521f412"
+        }
+      ],
+      "image": {
+        "path": "tools/launcher-room/walk-v3/sources/usopp-walk-gpt-01/source.png",
+        "sha256": "666780678d91671ba8504e1fc5510e0ba28f32aa0d2f3cdf44e31f33bed87def",
+        "bytes": 1161651
+      },
+      "prompt": {
+        "path": "tools/launcher-room/walk-v3/sources/usopp-walk-gpt-01/prompt.txt",
+        "sha256": "9e2b8d7fb40e7027965306e112407ba6132c5fb8265183684755e98fae88400a",
+        "bytes": 2868
+      },
+      "receipt": {
+        "path": "tools/launcher-room/walk-v3/sources/usopp-walk-gpt-01/receipt.json",
+        "sha256": "f833ae28046c40e9b79d9e3c4de333ce87b63a554f3cd21601e0eb4122297305",
+        "bytes": 7490
+      }
+    },
+    "usopp-east-pair-gpt02": {
+      "generator": "gpt-image",
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-east-pair-gpt02/ancestry/00-source-01.png",
+          "sha256": "666780678d91671ba8504e1fc5510e0ba28f32aa0d2f3cdf44e31f33bed87def"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-east-pair-gpt02/ancestry/01-prompt-01.txt",
+          "sha256": "9e2b8d7fb40e7027965306e112407ba6132c5fb8265183684755e98fae88400a"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-east-pair-gpt02/ancestry/02-receipt-01.json",
+          "sha256": "f833ae28046c40e9b79d9e3c4de333ce87b63a554f3cd21601e0eb4122297305"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-east-pair-gpt02/ancestry/03-east-pair.png",
+          "sha256": "3597ff2df975811371d2b39877210162b8bb39cf2ff2b3fe3add71274bd2a00d"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-east-pair-gpt02/ancestry/04-east-neutral.png",
+          "sha256": "2703ebc559cd846416ec1245bafa84fffb5f71d704a5831b6f4e22512e2072b2"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/usopp-east-pair-gpt02/ancestry/05-provenance.json",
+          "sha256": "174a2cd23d085cc379f6e418f47cf2a7fa7a95351b9b895b13a03feeaa5caedb"
+        }
+      ],
+      "image": {
+        "path": "tools/launcher-room/walk-v3/sources/usopp-east-pair-gpt02/source.png",
+        "sha256": "7ee06bf7d907bc2876959eee05976155dd0a17c31398c15147e36cbbba1a91e8",
+        "bytes": 1393743
+      },
+      "prompt": {
+        "path": "tools/launcher-room/walk-v3/sources/usopp-east-pair-gpt02/prompt.txt",
+        "sha256": "e1687a5cefabb29f3c7cd8ecb6244972b804ed677086924b15ad3f118d313dc1",
+        "bytes": 2039
+      },
+      "receipt": {
+        "path": "tools/launcher-room/walk-v3/sources/usopp-east-pair-gpt02/receipt.json",
+        "sha256": "17205bd92432005cf0cebe8ebd8aaa508b25c68226fcdc8698410910d048dce0",
+        "bytes": 4133
+      }
+    },
+    "sanji-walk-triad-original": {
+      "generator": "gpt-image",
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/walk-v3/sources/sanji-walk-triad-original/ancestry/00-source.png",
+          "sha256": "dd3381080f7e226ccf36b2c9963c616a5ac87932f1bbe41130d586e3f377bfcf"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/sanji-walk-triad-original/ancestry/01-prompt.txt",
+          "sha256": "097e4ed6800137cb17834ab9073a72f5b690a349e576654f6b4502c34ef81ebe"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/sanji-walk-triad-original/ancestry/02-receipt.json",
+          "sha256": "b4c416ccf39075ad6c8c68ebaf2ce8037f987ae4cd8c20a6b8fb76bd78a68c2a"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/sanji-walk-triad-original/ancestry/03-corrected-guide-12.png",
+          "sha256": "57bb80af0219d0edaf5b52850d5c400e6c3aee8aec9801f29dbae317948b818b"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/sanji-walk-triad-original/ancestry/04-receipt.json",
+          "sha256": "01243446595b0bb4e740a0db843430daabd976d567be2464d26dd1dfff5f7819"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/sanji-walk-triad-original/ancestry/05-corrected-handoff.json",
+          "sha256": "e5c6ee40c7edf52589da9aff3c7b015fe882bdbe230a4cf181e9ff510e61b8ce"
+        }
+      ],
+      "image": {
+        "path": "tools/launcher-room/walk-v3/sources/sanji-walk-triad-original/source.png",
+        "sha256": "345da27a770ef40f9a80092c296fc1213348fa293e8393414d9b28d989f64c97",
+        "bytes": 1038955
+      },
+      "prompt": {
+        "path": "tools/launcher-room/walk-v3/sources/sanji-walk-triad-original/prompt.txt",
+        "sha256": "3e29a9b70e7e97227b95311c706f25a1ac2d69e33c578a1a59fb8beaf796e48f",
+        "bytes": 3025
+      },
+      "receipt": {
+        "path": "tools/launcher-room/walk-v3/sources/sanji-walk-triad-original/receipt.json",
+        "sha256": "3b4ac428bb441ef36b1da4ad3c75b90dd21aa26ab8b3b0a61251be3355f94442",
+        "bytes": 1699
+      }
+    },
+    "sanji-walk-whole-corrections": {
+      "generator": "gpt-image",
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/walk-v3/sources/sanji-walk-whole-corrections/ancestry/00-source-01.png",
+          "sha256": "345da27a770ef40f9a80092c296fc1213348fa293e8393414d9b28d989f64c97"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/sanji-walk-whole-corrections/ancestry/01-source-01.prompt.txt",
+          "sha256": "3e29a9b70e7e97227b95311c706f25a1ac2d69e33c578a1a59fb8beaf796e48f"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/sanji-walk-whole-corrections/ancestry/02-source-01.receipt.json",
+          "sha256": "3b4ac428bb441ef36b1da4ad3c75b90dd21aa26ab8b3b0a61251be3355f94442"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/sanji-walk-whole-corrections/ancestry/03-source-01.regions.json",
+          "sha256": "5fd867d0820e8d901af53da8c2fdf5f3569ad6bd0e191ea16ca81ff0805e3c8a"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/sanji-walk-whole-corrections/ancestry/04-east-contact-c-01.png",
+          "sha256": "151cd9dc4df7270468f7d15245ab7c94b43057f06163f89497cfbc2d4bc3db3d"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/sanji-walk-whole-corrections/ancestry/05-west-contact-c-01.png",
+          "sha256": "a4013e37ef75333f509edf848c90c2537180b8af622aea3ba169efe7e703a2fe"
+        }
+      ],
+      "image": {
+        "path": "tools/launcher-room/walk-v3/sources/sanji-walk-whole-corrections/source.png",
+        "sha256": "ed25b1f92c003ca392df40b9de477338ad0a6ec77ee8d29e3cd4c8870b1379ac",
+        "bytes": 763829
+      },
+      "prompt": {
+        "path": "tools/launcher-room/walk-v3/sources/sanji-walk-whole-corrections/prompt.txt",
+        "sha256": "23750e8decb8e405def7bd24b6d61352e27cf20cfb838e93c1860e975ce67a0d",
+        "bytes": 1535
+      },
+      "receipt": {
+        "path": "tools/launcher-room/walk-v3/sources/sanji-walk-whole-corrections/receipt.json",
+        "sha256": "02f89cf51840aba322fbea6c69111349463748884bc15c0a60dc03706fb6924a",
+        "bytes": 1602
+      }
+    },
+    "chopper-triad-gpt": {
+      "generator": "gpt-image",
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/walk-v3/sources/chopper-triad-gpt/ancestry/00-source.png",
+          "sha256": "dfaad265ff1ab2e4718884afd7d8a52b8155187db18d1c08c5a88a684f8e5f7e"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/chopper-triad-gpt/ancestry/01-prompt.txt",
+          "sha256": "266c57d2cd238e4f489220e30aa2bbc21b9cabec3b7c1f360f133d6880abf90e"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/chopper-triad-gpt/ancestry/02-receipt.json",
+          "sha256": "4d83a31142df75a807b052b300f8379d1f5c02fd9ee97c4cdd217fc84fbcd348"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/chopper-triad-gpt/ancestry/03-corrected-guide-12.png",
+          "sha256": "57bb80af0219d0edaf5b52850d5c400e6c3aee8aec9801f29dbae317948b818b"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/chopper-triad-gpt/ancestry/04-corrected-handoff.json",
+          "sha256": "e5c6ee40c7edf52589da9aff3c7b015fe882bdbe230a4cf181e9ff510e61b8ce"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/chopper-triad-gpt/ancestry/05-source-01-rejected.png",
+          "sha256": "da4466434ae4654a7a42e7918a15970baba76c4e5f55b777ba58d1676b7e9c01"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/chopper-triad-gpt/ancestry/06-prompt.txt",
+          "sha256": "3ccd50ca91df2f38257d4bf2a080a6de207cfbaa8a0ee4dc0ec06af7763f8381"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/chopper-triad-gpt/ancestry/07-receipt-01.json",
+          "sha256": "4efd689db277d170effa958c6bec2ac0914abc198858109d66037c8aecd33525"
+        }
+      ],
+      "image": {
+        "path": "tools/launcher-room/walk-v3/sources/chopper-triad-gpt/source.png",
+        "sha256": "2550857533359caf32903cba655c1417db555fe669d5aad9165fcf336be74be6",
+        "bytes": 1343451
+      },
+      "prompt": {
+        "path": "tools/launcher-room/walk-v3/sources/chopper-triad-gpt/prompt.txt",
+        "sha256": "9c5e11480f0683e23ae197490077489eb407e37c36058169c85d1d4fcb66f7db",
+        "bytes": 2643
+      },
+      "receipt": {
+        "path": "tools/launcher-room/walk-v3/sources/chopper-triad-gpt/receipt.json",
+        "sha256": "06f649e807e06314d2d1a4d3bf398ee27f8f75beb6527e108e81229ede1ab407",
+        "bytes": 3821
+      }
+    },
+    "robin-walk-triad-original": {
+      "generator": "gpt-image",
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/walk-v3/sources/robin-walk-triad-original/ancestry/00-source.png",
+          "sha256": "757e902c19dd96298f78fe8efe09faac5ea831dcfecf95f6ad9a1444d38ed626"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/robin-walk-triad-original/ancestry/01-prompt.txt",
+          "sha256": "7950cbc3dae1b977451180764cad42852184af33c49340174577ab95b25e798e"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/robin-walk-triad-original/ancestry/02-receipt.json",
+          "sha256": "9a392703c13c12e3ea8c9296ca96d6e2bab68d26b48c182acac3d417b817be3b"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/robin-walk-triad-original/ancestry/03-corrected-guide-12.png",
+          "sha256": "57bb80af0219d0edaf5b52850d5c400e6c3aee8aec9801f29dbae317948b818b"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/robin-walk-triad-original/ancestry/04-receipt.json",
+          "sha256": "01243446595b0bb4e740a0db843430daabd976d567be2464d26dd1dfff5f7819"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/robin-walk-triad-original/ancestry/05-corrected-handoff.json",
+          "sha256": "e5c6ee40c7edf52589da9aff3c7b015fe882bdbe230a4cf181e9ff510e61b8ce"
+        }
+      ],
+      "image": {
+        "path": "tools/launcher-room/walk-v3/sources/robin-walk-triad-original/source.png",
+        "sha256": "37fc25805bb1184c90c2dcb281b1aca41b61ba34592d02d5bde225a8c50ecabf",
+        "bytes": 1065516
+      },
+      "prompt": {
+        "path": "tools/launcher-room/walk-v3/sources/robin-walk-triad-original/prompt.txt",
+        "sha256": "5de133a2bfa93e65aa082838ce21f301a4b443a4f1e8bd88cc9b4de3204d5c12",
+        "bytes": 2857
+      },
+      "receipt": {
+        "path": "tools/launcher-room/walk-v3/sources/robin-walk-triad-original/receipt.json",
+        "sha256": "8db9f4e18df6a2f8a4f329567c8183e070842fa969226940f0a505925344fca5",
+        "bytes": 1699
+      }
+    },
+    "robin-walk-whole-corrections": {
+      "generator": "gpt-image",
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/walk-v3/sources/robin-walk-whole-corrections/ancestry/00-source-01.png",
+          "sha256": "37fc25805bb1184c90c2dcb281b1aca41b61ba34592d02d5bde225a8c50ecabf"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/robin-walk-whole-corrections/ancestry/01-source-01.prompt.txt",
+          "sha256": "5de133a2bfa93e65aa082838ce21f301a4b443a4f1e8bd88cc9b4de3204d5c12"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/robin-walk-whole-corrections/ancestry/02-source-01.receipt.json",
+          "sha256": "8db9f4e18df6a2f8a4f329567c8183e070842fa969226940f0a505925344fca5"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/robin-walk-whole-corrections/ancestry/03-source-01.regions.json",
+          "sha256": "66660a20e9e240875d0f7834d8e5589d77e528b0f7e21bc24b65f5057679785c"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/robin-walk-whole-corrections/ancestry/04-east-contact-c-01.png",
+          "sha256": "c67974fa498e221c2eb132c0172ab4aa82bfb592771d035e1e4009eb264d547c"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/robin-walk-whole-corrections/ancestry/05-west-contact-c-01.png",
+          "sha256": "aae0844487d409e3c05f92013e4fce324f3ab58fbc551070e249510e19de0795"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/robin-walk-whole-corrections/ancestry/06-north-contact-c-01.png",
+          "sha256": "a1bc537c0301a1ebef777e96ccae4ad43a2ac42339f56a1cfcbffcc5c69003c3"
+        }
+      ],
+      "image": {
+        "path": "tools/launcher-room/walk-v3/sources/robin-walk-whole-corrections/source.png",
+        "sha256": "363dc56b1d9dd695ce3db3a5981ac0abea896e78de58456781f4dcef723f7406",
+        "bytes": 1123457
+      },
+      "prompt": {
+        "path": "tools/launcher-room/walk-v3/sources/robin-walk-whole-corrections/prompt.txt",
+        "sha256": "c01622b4ebd78a3795828e1a461c384d6775da67c2242ee9566a8ff61756c970",
+        "bytes": 1673
+      },
+      "receipt": {
+        "path": "tools/launcher-room/walk-v3/sources/robin-walk-whole-corrections/receipt.json",
+        "sha256": "6103bf9168af000401f7669174c4232b1a97f7d9fafc1095c44a4ff93ea6b7a4",
+        "bytes": 1764
+      }
+    },
+    "franky-walk-gpt-01": {
+      "generator": "gpt-image",
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/ancestry/00-corrected-guide-12.png",
+          "sha256": "57bb80af0219d0edaf5b52850d5c400e6c3aee8aec9801f29dbae317948b818b"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/ancestry/01-corrected-handoff.json",
+          "sha256": "e5c6ee40c7edf52589da9aff3c7b015fe882bdbe230a4cf181e9ff510e61b8ce"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/ancestry/02-build_fourbeat_preview.py",
+          "sha256": "1cd5b4c01d089ef06813c849b6c5f6c5802819ccf0f75cd7d05b2dba14d62952"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/ancestry/03-source-01.png",
+          "sha256": "5f7ed8bc8b85d3b494b117da3fd0763b8455a214a5d5d15f2ab20e4c1f8ebd51"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/ancestry/04-prompt-01.txt",
+          "sha256": "567d2faf77a69471ebd0c315b2efd82e14ddc929307638d2cdc11fcc488c727b"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/ancestry/05-receipt.json",
+          "sha256": "01243446595b0bb4e740a0db843430daabd976d567be2464d26dd1dfff5f7819"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/ancestry/06-source.png",
+          "sha256": "bf6ff27079eaeab6590ed9f6d8bc613d9236bbe97a1bd0dbaeb3447832f056bf"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/ancestry/07-prompt.txt",
+          "sha256": "b900847f8e56327c934353091d371142cc262e305177c71cfbaa9a15e11aca66"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/ancestry/08-receipt.json",
+          "sha256": "f529f6717156a2d65e34970c23ca32020af67b593f3fcc269553966feec5a3b8"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/ancestry/09-contact-c-revised.png",
+          "sha256": "fed1768e72a8b38058d49a17fbc57922af50fffe46362cce07261d01b681ee16"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/ancestry/10-east-contact-c-edit-prompt.txt",
+          "sha256": "3e99c2dedf002a34ad4d27e406f609810fc68a3bfbc6c42dbea37141daf8fc67"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/ancestry/11-contact-c-revised-receipt.json",
+          "sha256": "a0d3be0e4a513d7ef9c7c897aea7b9092ea15bffa697f8c28e8b50629cd8cd59"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/ancestry/12-contact-c-revised.png",
+          "sha256": "11ff8c0a6f62faa5743b1094060a12ae6a595717dc287e8c980f76f18187ce27"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/ancestry/13-west-contact-c-edit-prompt.txt",
+          "sha256": "5ba678948d2494430297457e5e132985a6d2a27a7cf45f3e2f820474a3022e48"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/ancestry/14-contact-c-revised-receipt.json",
+          "sha256": "f90b0a8bbc3c96ace0635799d08b5cbc4f2b61ee2b16ed0115b13b60e0d2af1f"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/ancestry/15-contact-c-revised.png",
+          "sha256": "9af171cca87c79417f0dc9f666250d7cb278e85e296fc9abb2a4cfca5cb3c356"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/ancestry/16-north-contact-c-edit-prompt.txt",
+          "sha256": "034cd9cb5d3fd07bf232443d2c288081dc3a876d054009fe614c35064ae58fa4"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/ancestry/17-contact-c-revised-receipt.json",
+          "sha256": "7ccafbc40cab3894c63f61c3c54de3be817bd29e6508be237e182dd79914df91"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/ancestry/18-source-01.png",
+          "sha256": "f45ce623501d97431c8b267e3140c816a8cd3e0caba8270f936f2ca01531e3ee"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/ancestry/19-source-02.png",
+          "sha256": "0b27293cd35ec12a70f1f0d1695c45c0e5bd76d94af77f7efd4d81a14a76f0ef"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/ancestry/20-source-03.png",
+          "sha256": "bf6ff27079eaeab6590ed9f6d8bc613d9236bbe97a1bd0dbaeb3447832f056bf"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/ancestry/21-prompt-01.txt",
+          "sha256": "0e9235484fdf52baf749bfa11b055fdb8170f765da70ce144d09a001db2293bd"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/ancestry/22-prompt-02.txt",
+          "sha256": "e9d27352436457b93a0228538d4687298d38aa01e3fb03cac42aa474d839266e"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/ancestry/23-prompt-03.txt",
+          "sha256": "b900847f8e56327c934353091d371142cc262e305177c71cfbaa9a15e11aca66"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/ancestry/24-receipt-01.json",
+          "sha256": "8f03bb91fb7cc59053e4debe425f3084b5b225ac7de151f897dc464a024da755"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/ancestry/25-receipt-02.json",
+          "sha256": "8d5e1be87c702c148a54b0f2301a279064a63ed1b78291922de9c68d46063a8b"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/ancestry/26-receipt-03.json",
+          "sha256": "3105333469645fb2840e920c9a7e16e07a2fa049c9301a05004d132c135c5fca"
+        }
+      ],
+      "image": {
+        "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/source.png",
+        "sha256": "762f649b8a41b1abc0a2bb3766d5bd266e03bbada89e65ca263d66d787e0d758",
+        "bytes": 1494849
+      },
+      "prompt": {
+        "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/prompt.txt",
+        "sha256": "27e33375a48aab8b09735d8014a51e0f623328a66ea7887d4b72841bee89fdf6",
+        "bytes": 2760
+      },
+      "receipt": {
+        "path": "tools/launcher-room/walk-v3/sources/franky-walk-gpt-01/receipt.json",
+        "sha256": "25ce1a869f7698454713217d691723532e380d0ffa75ee1ed9a082ac6e4c7659",
+        "bytes": 7378
+      }
+    },
+    "franky-east-c-02-gpt": {
+      "generator": "gpt-image",
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-east-c-02-gpt/ancestry/00-source-01.png",
+          "sha256": "762f649b8a41b1abc0a2bb3766d5bd266e03bbada89e65ca263d66d787e0d758"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-east-c-02-gpt/ancestry/01-prompt-01.txt",
+          "sha256": "27e33375a48aab8b09735d8014a51e0f623328a66ea7887d4b72841bee89fdf6"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-east-c-02-gpt/ancestry/02-receipt-01.json",
+          "sha256": "25ce1a869f7698454713217d691723532e380d0ffa75ee1ed9a082ac6e4c7659"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-east-c-02-gpt/ancestry/03-east-contact-c.png",
+          "sha256": "968d5a2730bacec5b34d108bc36ff96854195414eca052c8ae55119dfae07b94"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-east-c-02-gpt/ancestry/04-provenance.json",
+          "sha256": "f164d43614f0d1207506415c3afed5bc3bcb0fe4ab9009cb4db98b5276393cd3"
+        }
+      ],
+      "image": {
+        "path": "tools/launcher-room/walk-v3/sources/franky-east-c-02-gpt/source.png",
+        "sha256": "e3baa692d2ff2d6e3f642db4e6e3d61739df2f4569fae4424fd21e128ef4ced2",
+        "bytes": 967826
+      },
+      "prompt": {
+        "path": "tools/launcher-room/walk-v3/sources/franky-east-c-02-gpt/prompt.txt",
+        "sha256": "fe757c1f8b8b06800b1fd62d55bcb6c92a83971dc1fc108dbbe6e81194d676b1",
+        "bytes": 1904
+      },
+      "receipt": {
+        "path": "tools/launcher-room/walk-v3/sources/franky-east-c-02-gpt/receipt.json",
+        "sha256": "e4ecd355f5193a64b8f3723098fac60d57ace218d888c8c46781fa920c962b0b",
+        "bytes": 3639
+      }
+    },
+    "franky-west-c-03-gpt": {
+      "generator": "gpt-image",
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-west-c-03-gpt/ancestry/00-source-01.png",
+          "sha256": "762f649b8a41b1abc0a2bb3766d5bd266e03bbada89e65ca263d66d787e0d758"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-west-c-03-gpt/ancestry/01-prompt-01.txt",
+          "sha256": "27e33375a48aab8b09735d8014a51e0f623328a66ea7887d4b72841bee89fdf6"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-west-c-03-gpt/ancestry/02-receipt-01.json",
+          "sha256": "25ce1a869f7698454713217d691723532e380d0ffa75ee1ed9a082ac6e4c7659"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-west-c-03-gpt/ancestry/03-west-contact-c.png",
+          "sha256": "ff7c30c57584fe05f487ce51ee351ddca6252f6c30d51c2978d8cde85b815828"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/franky-west-c-03-gpt/ancestry/04-provenance.json",
+          "sha256": "f164d43614f0d1207506415c3afed5bc3bcb0fe4ab9009cb4db98b5276393cd3"
+        }
+      ],
+      "image": {
+        "path": "tools/launcher-room/walk-v3/sources/franky-west-c-03-gpt/source.png",
+        "sha256": "19a6dd7de5dc47270ef77537326e8f430d9a39ae0d57bf8a236917cf508c9fc7",
+        "bytes": 1067207
+      },
+      "prompt": {
+        "path": "tools/launcher-room/walk-v3/sources/franky-west-c-03-gpt/prompt.txt",
+        "sha256": "bcac8518dae038e867d849637ba48e385549da8f4a3e9b4039efc120421eaacd",
+        "bytes": 1969
+      },
+      "receipt": {
+        "path": "tools/launcher-room/walk-v3/sources/franky-west-c-03-gpt/receipt.json",
+        "sha256": "759876294af60da07969e8739d9989061e36ffa2d7129060d46d41eac3e1322b",
+        "bytes": 3704
+      }
+    },
+    "brook-walk-gpt-01": {
+      "generator": "gpt-image",
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/walk-v3/sources/brook-walk-gpt-01/ancestry/00-corrected-guide-12.png",
+          "sha256": "57bb80af0219d0edaf5b52850d5c400e6c3aee8aec9801f29dbae317948b818b"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/brook-walk-gpt-01/ancestry/01-corrected-handoff.json",
+          "sha256": "e5c6ee40c7edf52589da9aff3c7b015fe882bdbe230a4cf181e9ff510e61b8ce"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/brook-walk-gpt-01/ancestry/02-build_fourbeat_preview.py",
+          "sha256": "1cd5b4c01d089ef06813c849b6c5f6c5802819ccf0f75cd7d05b2dba14d62952"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/brook-walk-gpt-01/ancestry/03-source-01.png",
+          "sha256": "5f7ed8bc8b85d3b494b117da3fd0763b8455a214a5d5d15f2ab20e4c1f8ebd51"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/brook-walk-gpt-01/ancestry/04-prompt-01.txt",
+          "sha256": "567d2faf77a69471ebd0c315b2efd82e14ddc929307638d2cdc11fcc488c727b"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/brook-walk-gpt-01/ancestry/05-receipt.json",
+          "sha256": "01243446595b0bb4e740a0db843430daabd976d567be2464d26dd1dfff5f7819"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/brook-walk-gpt-01/ancestry/06-source.png",
+          "sha256": "8f222d94108715aeecc27a9bbacac962b8f6b8dc1f0352bf697fa1144e295741"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/brook-walk-gpt-01/ancestry/07-prompt.txt",
+          "sha256": "2fdca803ac0c4abaad72049388cb724da987cad501cb0045d5fc1d2f11af602e"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/brook-walk-gpt-01/ancestry/08-receipt.json",
+          "sha256": "7a50391b854a228202815229d23c8de2f3196a6324b9b9b162fe847a9cd72df4"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/brook-walk-gpt-01/ancestry/09-contact-c-revised.png",
+          "sha256": "fed1768e72a8b38058d49a17fbc57922af50fffe46362cce07261d01b681ee16"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/brook-walk-gpt-01/ancestry/10-east-contact-c-edit-prompt.txt",
+          "sha256": "3e99c2dedf002a34ad4d27e406f609810fc68a3bfbc6c42dbea37141daf8fc67"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/brook-walk-gpt-01/ancestry/11-contact-c-revised-receipt.json",
+          "sha256": "a0d3be0e4a513d7ef9c7c897aea7b9092ea15bffa697f8c28e8b50629cd8cd59"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/brook-walk-gpt-01/ancestry/12-contact-c-revised.png",
+          "sha256": "11ff8c0a6f62faa5743b1094060a12ae6a595717dc287e8c980f76f18187ce27"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/brook-walk-gpt-01/ancestry/13-west-contact-c-edit-prompt.txt",
+          "sha256": "5ba678948d2494430297457e5e132985a6d2a27a7cf45f3e2f820474a3022e48"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/brook-walk-gpt-01/ancestry/14-contact-c-revised-receipt.json",
+          "sha256": "f90b0a8bbc3c96ace0635799d08b5cbc4f2b61ee2b16ed0115b13b60e0d2af1f"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/brook-walk-gpt-01/ancestry/15-contact-c-revised.png",
+          "sha256": "9af171cca87c79417f0dc9f666250d7cb278e85e296fc9abb2a4cfca5cb3c356"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/brook-walk-gpt-01/ancestry/16-north-contact-c-edit-prompt.txt",
+          "sha256": "034cd9cb5d3fd07bf232443d2c288081dc3a876d054009fe614c35064ae58fa4"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/brook-walk-gpt-01/ancestry/17-contact-c-revised-receipt.json",
+          "sha256": "7ccafbc40cab3894c63f61c3c54de3be817bd29e6508be237e182dd79914df91"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/brook-walk-gpt-01/ancestry/18-source-01.png",
+          "sha256": "8f222d94108715aeecc27a9bbacac962b8f6b8dc1f0352bf697fa1144e295741"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/brook-walk-gpt-01/ancestry/19-prompt-01.txt",
+          "sha256": "2fdca803ac0c4abaad72049388cb724da987cad501cb0045d5fc1d2f11af602e"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/brook-walk-gpt-01/ancestry/20-receipt-01.json",
+          "sha256": "014491455d6a7e3b0aacff4a2c8e5db7cf5a9885e1231b1d6fd07665c0abef4a"
+        }
+      ],
+      "image": {
+        "path": "tools/launcher-room/walk-v3/sources/brook-walk-gpt-01/source.png",
+        "sha256": "94fe22b64229b9446385709ccb81116847b0b98b58cc45c38cdd939ef7aa7085",
+        "bytes": 906062
+      },
+      "prompt": {
+        "path": "tools/launcher-room/walk-v3/sources/brook-walk-gpt-01/prompt.txt",
+        "sha256": "a67158b9693b4da08c4ed6828cc1e7cfde627f239e5510d6de7ec36ccd98a5e8",
+        "bytes": 2836
+      },
+      "receipt": {
+        "path": "tools/launcher-room/walk-v3/sources/brook-walk-gpt-01/receipt.json",
+        "sha256": "3e7b2ceaf0121e4566241180e9875c27927101fcbf147437d0d7ca715cfce022",
+        "bytes": 7460
+      }
+    },
+    "jinbe-triad-gpt": {
+      "generator": "gpt-image",
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/walk-v3/sources/jinbe-triad-gpt/ancestry/00-source.png",
+          "sha256": "cfdcd36dadc3a990f9c271fa8c9c302760cd1cc5df112a7055af9eea2d3b6754"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/jinbe-triad-gpt/ancestry/01-prompt.txt",
+          "sha256": "874e8fe3df146453715f25d5dea1fef9202dda1dab6865b34b5b083c30bd4d1a"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/jinbe-triad-gpt/ancestry/02-receipt.json",
+          "sha256": "0ea4450493b55a2b4e28ee0205c9a5eb75e958089ff0be3f079963124f43e4f0"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/jinbe-triad-gpt/ancestry/03-corrected-guide-12.png",
+          "sha256": "57bb80af0219d0edaf5b52850d5c400e6c3aee8aec9801f29dbae317948b818b"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/jinbe-triad-gpt/ancestry/04-corrected-handoff.json",
+          "sha256": "e5c6ee40c7edf52589da9aff3c7b015fe882bdbe230a4cf181e9ff510e61b8ce"
+        }
+      ],
+      "image": {
+        "path": "tools/launcher-room/walk-v3/sources/jinbe-triad-gpt/source.png",
+        "sha256": "ba9526d99735f59d38e6f91dd14c245e3a0fd4cff2dfe9de7bac21104e88ae5a",
+        "bytes": 1466674
+      },
+      "prompt": {
+        "path": "tools/launcher-room/walk-v3/sources/jinbe-triad-gpt/prompt.txt",
+        "sha256": "35613f21d7f0c01aa60c86b389b433cc48ee91ed1db4e74c6ddd5aad18c2cef3",
+        "bytes": 3220
+      },
+      "receipt": {
+        "path": "tools/launcher-room/walk-v3/sources/jinbe-triad-gpt/receipt.json",
+        "sha256": "95f41b01629036cb8e6da3045cd0bf5375ad60dc638976bd45a3c43322cacf98",
+        "bytes": 4369
+      }
+    },
+    "jinbe-south-a-gpt-edit": {
+      "generator": "gpt-image",
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/walk-v3/sources/jinbe-south-a-gpt-edit/ancestry/00-source-south-contact-a.png",
+          "sha256": "9750f9fdf3172e145394b93cf027cc123a6cb5b767a3647f6335cc481b0cac46"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/jinbe-south-a-gpt-edit/ancestry/01-source.png",
+          "sha256": "ba9526d99735f59d38e6f91dd14c245e3a0fd4cff2dfe9de7bac21104e88ae5a"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/jinbe-south-a-gpt-edit/ancestry/02-prompt.txt",
+          "sha256": "35613f21d7f0c01aa60c86b389b433cc48ee91ed1db4e74c6ddd5aad18c2cef3"
+        },
+        {
+          "path": "tools/launcher-room/walk-v3/sources/jinbe-south-a-gpt-edit/ancestry/03-receipt.json",
+          "sha256": "95f41b01629036cb8e6da3045cd0bf5375ad60dc638976bd45a3c43322cacf98"
+        }
+      ],
+      "image": {
+        "path": "tools/launcher-room/walk-v3/sources/jinbe-south-a-gpt-edit/source.png",
+        "sha256": "8b1d76c83ba2a7b23718d74fbcdad47fde86d5560e309a4f2678366712eb7842",
+        "bytes": 1285308
+      },
+      "prompt": {
+        "path": "tools/launcher-room/walk-v3/sources/jinbe-south-a-gpt-edit/prompt.txt",
+        "sha256": "abb0da2db8ea0a162ff5bd7cb22b1867595e2cd6d66df4bf2a6a88e62a3f5be4",
+        "bytes": 1311
+      },
+      "receipt": {
+        "path": "tools/launcher-room/walk-v3/sources/jinbe-south-a-gpt-edit/receipt.json",
+        "sha256": "b1ae661340a0d4a6837034d86bcb8fffc45370d6def969d37dc071c9648538fa",
+        "bytes": 2509
+      }
+    }
+  },
+  "frames": [
+    {
+      "key": "luffy",
+      "direction": "east",
+      "pose": "contact-a",
+      "source": "luffy-triad-gpt-original",
+      "region": [
+        143,
+        31,
+        212,
+        341
+      ],
+      "sourceAnchor": [
+        253.0,
+        369
+      ],
+      "sourceUnitScale": 1.0,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match the opaque hat/head width in top40percent of whole height to contact-A of the same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 160,
+      "directionReferenceHeadWidthPixels": 160
+    },
+    {
+      "key": "luffy",
+      "direction": "east",
+      "pose": "neutral",
+      "source": "luffy-triad-gpt-original",
+      "region": [
+        458,
+        31,
+        165,
+        340
+      ],
+      "sourceAnchor": [
+        540.5,
+        368
+      ],
+      "sourceUnitScale": 1.0062893081761006,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match the opaque hat/head width in top40percent of whole height to contact-A of the same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 159,
+      "directionReferenceHeadWidthPixels": 160
+    },
+    {
+      "key": "luffy",
+      "direction": "east",
+      "pose": "contact-c",
+      "source": "luffy-east-c-gpt-edit",
+      "region": [
+        0,
+        0,
+        1013,
+        1552
+      ],
+      "sourceAnchor": [
+        553.5,
+        1482
+      ],
+      "sourceUnitScale": 0.237741456166419,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match the opaque hat/head width in top40percent of whole height to contact-A of the same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 673,
+      "directionReferenceHeadWidthPixels": 160
+    },
+    {
+      "key": "luffy",
+      "direction": "west",
+      "pose": "contact-a",
+      "source": "luffy-triad-gpt-original",
+      "region": [
+        138,
+        390,
+        208,
+        339
+      ],
+      "sourceAnchor": [
+        247.5,
+        726
+      ],
+      "sourceUnitScale": 1.0,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match the opaque hat/head width in top40percent of whole height to contact-A of the same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 163,
+      "directionReferenceHeadWidthPixels": 163
+    },
+    {
+      "key": "luffy",
+      "direction": "west",
+      "pose": "neutral",
+      "source": "luffy-triad-gpt-original",
+      "region": [
+        448,
+        392,
+        170,
+        341
+      ],
+      "sourceAnchor": [
+        533.0,
+        730
+      ],
+      "sourceUnitScale": 0.9939024390243902,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match the opaque hat/head width in top40percent of whole height to contact-A of the same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 164,
+      "directionReferenceHeadWidthPixels": 163
+    },
+    {
+      "key": "luffy",
+      "direction": "west",
+      "pose": "contact-c",
+      "source": "luffy-west-c-gpt-edit",
+      "region": [
+        0,
+        0,
+        984,
+        1598
+      ],
+      "sourceAnchor": [
+        478.5,
+        1549
+      ],
+      "sourceUnitScale": 0.2182061579651941,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match the opaque hat/head width in top40percent of whole height to contact-A of the same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 747,
+      "directionReferenceHeadWidthPixels": 163
+    },
+    {
+      "key": "luffy",
+      "direction": "north",
+      "pose": "contact-a",
+      "source": "luffy-triad-gpt-original",
+      "region": [
+        151,
+        740,
+        177,
+        325
+      ],
+      "sourceAnchor": [
+        240.5,
+        1062
+      ],
+      "sourceUnitScale": 1.0,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match the opaque hat/head width in top40percent of whole height to contact-A of the same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 163,
+      "directionReferenceHeadWidthPixels": 163
+    },
+    {
+      "key": "luffy",
+      "direction": "north",
+      "pose": "neutral",
+      "source": "luffy-triad-gpt-original",
+      "region": [
+        456,
+        740,
+        168,
+        322
+      ],
+      "sourceAnchor": [
+        540.0,
+        1059
+      ],
+      "sourceUnitScale": 1.0061728395061729,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match the opaque hat/head width in top40percent of whole height to contact-A of the same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 162,
+      "directionReferenceHeadWidthPixels": 163
+    },
+    {
+      "key": "luffy",
+      "direction": "north",
+      "pose": "contact-c",
+      "source": "luffy-north-c-gpt-edit",
+      "region": [
+        0,
+        0,
+        937,
+        1678
+      ],
+      "sourceAnchor": [
+        466.0,
+        1653
+      ],
+      "sourceUnitScale": 0.19829683698296838,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match the opaque hat/head width in top40percent of whole height to contact-A of the same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 822,
+      "directionReferenceHeadWidthPixels": 163
+    },
+    {
+      "key": "luffy",
+      "direction": "south",
+      "pose": "contact-a",
+      "source": "luffy-triad-gpt-original",
+      "region": [
+        139,
+        1071,
+        181,
+        333
+      ],
+      "sourceAnchor": [
+        229.5,
+        1401
+      ],
+      "sourceUnitScale": 1.0,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match the opaque hat/head width in top40percent of whole height to contact-A of the same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 175,
+      "directionReferenceHeadWidthPixels": 175
+    },
+    {
+      "key": "luffy",
+      "direction": "south",
+      "pose": "neutral",
+      "source": "luffy-triad-gpt-original",
+      "region": [
+        447,
+        1068,
+        185,
+        330
+      ],
+      "sourceAnchor": [
+        539.5,
+        1395
+      ],
+      "sourceUnitScale": 0.9776536312849162,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match the opaque hat/head width in top40percent of whole height to contact-A of the same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 179,
+      "directionReferenceHeadWidthPixels": 175
+    },
+    {
+      "key": "luffy",
+      "direction": "south",
+      "pose": "contact-c",
+      "source": "luffy-triad-gpt-original",
+      "region": [
+        757,
+        1069,
+        183,
+        339
+      ],
+      "sourceAnchor": [
+        848.5,
+        1405
+      ],
+      "sourceUnitScale": 0.9887005649717514,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match the opaque hat/head width in top40percent of whole height to contact-A of the same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 177,
+      "directionReferenceHeadWidthPixels": 175
+    },
+    {
+      "key": "zoro",
+      "direction": "east",
+      "pose": "contact-a",
+      "source": "zoro-original",
+      "region": [
+        92,
+        10,
+        227,
+        345
+      ],
+      "sourceAnchor": [
+        214.64165173237754,
+        350
+      ],
+      "sourceUnitScale": 1
+    },
+    {
+      "key": "zoro",
+      "direction": "east",
+      "pose": "neutral",
+      "source": "zoro-original",
+      "region": [
+        468,
+        11,
+        161,
+        346
+      ],
+      "sourceAnchor": [
+        555.5135032331685,
+        352
+      ],
+      "sourceUnitScale": 1
+    },
+    {
+      "key": "zoro",
+      "direction": "east",
+      "pose": "contact-c",
+      "source": "zoro-original",
+      "region": [
+        829,
+        9,
+        211,
+        346
+      ],
+      "sourceAnchor": [
+        942.7443681933463,
+        350
+      ],
+      "sourceUnitScale": 1
+    },
+    {
+      "key": "zoro",
+      "direction": "west",
+      "pose": "contact-a",
+      "source": "zoro-original",
+      "region": [
+        72,
+        366,
+        227,
+        345
+      ],
+      "sourceAnchor": [
+        177.7190927957308,
+        706
+      ],
+      "sourceUnitScale": 1
+    },
+    {
+      "key": "zoro",
+      "direction": "west",
+      "pose": "neutral",
+      "source": "zoro-original",
+      "region": [
+        476,
+        366,
+        159,
+        346
+      ],
+      "sourceAnchor": [
+        551.36250743605,
+        707
+      ],
+      "sourceUnitScale": 1
+    },
+    {
+      "key": "zoro",
+      "direction": "north",
+      "pose": "contact-a",
+      "source": "zoro-original",
+      "region": [
+        100,
+        726,
+        181,
+        346
+      ],
+      "sourceAnchor": [
+        189.85522788203752,
+        1067
+      ],
+      "sourceUnitScale": 1
+    },
+    {
+      "key": "zoro",
+      "direction": "north",
+      "pose": "neutral",
+      "source": "zoro-original",
+      "region": [
+        470,
+        726,
+        160,
+        338
+      ],
+      "sourceAnchor": [
+        546.9256517044578,
+        1059
+      ],
+      "sourceUnitScale": 1
+    },
+    {
+      "key": "zoro",
+      "direction": "north",
+      "pose": "contact-c",
+      "source": "zoro-original",
+      "region": [
+        831,
+        726,
+        188,
+        346
+      ],
+      "sourceAnchor": [
+        920.7974712468581,
+        1067
+      ],
+      "sourceUnitScale": 1
+    },
+    {
+      "key": "zoro",
+      "direction": "south",
+      "pose": "contact-a",
+      "source": "zoro-original",
+      "region": [
+        92,
+        1080,
+        183,
+        350
+      ],
+      "sourceAnchor": [
+        191.2940393432924,
+        1425
+      ],
+      "sourceUnitScale": 1
+    },
+    {
+      "key": "zoro",
+      "direction": "south",
+      "pose": "neutral",
+      "source": "zoro-original",
+      "region": [
+        464,
+        1080,
+        154,
+        342
+      ],
+      "sourceAnchor": [
+        541.9837699101683,
+        1417
+      ],
+      "sourceUnitScale": 1
+    },
+    {
+      "key": "zoro",
+      "direction": "west",
+      "pose": "contact-c",
+      "source": "zoro-corrections",
+      "region": [
+        154,
+        14,
+        632,
+        959
+      ],
+      "sourceAnchor": [
+        478.2016096328415,
+        968
+      ],
+      "sourceUnitScale": 0.375,
+      "sourceUnitScaleReason": "Whole drawing resolution calibrated by same-direction contact A head width; no anatomy assembly."
+    },
+    {
+      "key": "zoro",
+      "direction": "south",
+      "pose": "contact-c",
+      "source": "zoro-corrections",
+      "region": [
+        952,
+        23,
+        447,
+        978
+      ],
+      "sourceAnchor": [
+        1157.1650168050917,
+        996
+      ],
+      "sourceUnitScale": 0.37866666666666665,
+      "sourceUnitScaleReason": "Whole drawing resolution calibrated by same-direction contact A head width; no anatomy assembly."
+    },
+    {
+      "key": "nami",
+      "direction": "east",
+      "pose": "contact-a",
+      "source": "nami-walk-triad-original",
+      "region": [
+        85,
+        37,
+        193,
+        327
+      ],
+      "sourceAnchor": [
+        183.5,
+        359
+      ],
+      "sourceUnitScale": 1.0,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match opaque head width in top40percent of whole height to contact-A of same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 163,
+      "directionReferenceHeadWidthPixels": 163
+    },
+    {
+      "key": "nami",
+      "direction": "east",
+      "pose": "neutral",
+      "source": "nami-walk-triad-original",
+      "region": [
+        451,
+        35,
+        173,
+        329
+      ],
+      "sourceAnchor": [
+        537.5,
+        359
+      ],
+      "sourceUnitScale": 1.0,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match opaque head width in top40percent of whole height to contact-A of same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 163,
+      "directionReferenceHeadWidthPixels": 163
+    },
+    {
+      "key": "nami",
+      "direction": "east",
+      "pose": "contact-c",
+      "source": "nami-walk-whole-corrections",
+      "region": [
+        95,
+        21,
+        377,
+        682
+      ],
+      "sourceAnchor": [
+        271.0,
+        698
+      ],
+      "sourceUnitScale": 0.4766081871345029,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match opaque head width in top40percent of whole height to contact-A of same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 342,
+      "directionReferenceHeadWidthPixels": 163
+    },
+    {
+      "key": "nami",
+      "direction": "west",
+      "pose": "contact-a",
+      "source": "nami-walk-triad-original",
+      "region": [
+        89,
+        398,
+        195,
+        325
+      ],
+      "sourceAnchor": [
+        195.0,
+        718
+      ],
+      "sourceUnitScale": 1.0,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match opaque head width in top40percent of whole height to contact-A of same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 162,
+      "directionReferenceHeadWidthPixels": 162
+    },
+    {
+      "key": "nami",
+      "direction": "west",
+      "pose": "neutral",
+      "source": "nami-walk-triad-original",
+      "region": [
+        463,
+        398,
+        173,
+        323
+      ],
+      "sourceAnchor": [
+        549.5,
+        716
+      ],
+      "sourceUnitScale": 0.9938650306748467,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match opaque head width in top40percent of whole height to contact-A of same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 163,
+      "directionReferenceHeadWidthPixels": 162
+    },
+    {
+      "key": "nami",
+      "direction": "west",
+      "pose": "contact-c",
+      "source": "nami-walk-whole-corrections",
+      "region": [
+        550,
+        20,
+        378,
+        686
+      ],
+      "sourceAnchor": [
+        749.0,
+        701
+      ],
+      "sourceUnitScale": 0.46551724137931033,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match opaque head width in top40percent of whole height to contact-A of same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 348,
+      "directionReferenceHeadWidthPixels": 162
+    },
+    {
+      "key": "nami",
+      "direction": "north",
+      "pose": "contact-a",
+      "source": "nami-walk-triad-original",
+      "region": [
+        97,
+        752,
+        180,
+        314
+      ],
+      "sourceAnchor": [
+        185.5,
+        1061
+      ],
+      "sourceUnitScale": 1.0,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match opaque head width in top40percent of whole height to contact-A of same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 167,
+      "directionReferenceHeadWidthPixels": 167
+    },
+    {
+      "key": "nami",
+      "direction": "north",
+      "pose": "neutral",
+      "source": "nami-walk-triad-original",
+      "region": [
+        452,
+        755,
+        176,
+        307
+      ],
+      "sourceAnchor": [
+        540.0,
+        1057
+      ],
+      "sourceUnitScale": 1.0060240963855422,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match opaque head width in top40percent of whole height to contact-A of same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 166,
+      "directionReferenceHeadWidthPixels": 167
+    },
+    {
+      "key": "nami",
+      "direction": "north",
+      "pose": "contact-c",
+      "source": "nami-walk-triad-original",
+      "region": [
+        812,
+        753,
+        182,
+        313
+      ],
+      "sourceAnchor": [
+        902.5,
+        1061
+      ],
+      "sourceUnitScale": 1.0245398773006136,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match opaque head width in top40percent of whole height to contact-A of same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 163,
+      "directionReferenceHeadWidthPixels": 167
+    },
+    {
+      "key": "nami",
+      "direction": "south",
+      "pose": "contact-a",
+      "source": "nami-walk-whole-corrections",
+      "region": [
+        67,
+        732,
+        417,
+        750
+      ],
+      "sourceAnchor": [
+        275.5,
+        1477
+      ],
+      "sourceUnitScale": 1.0,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match opaque head width in top40percent of whole height to contact-A of same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 407,
+      "directionReferenceHeadWidthPixels": 407
+    },
+    {
+      "key": "nami",
+      "direction": "south",
+      "pose": "neutral",
+      "source": "nami-walk-triad-original",
+      "region": [
+        444,
+        1089,
+        187,
+        317
+      ],
+      "sourceAnchor": [
+        537.5,
+        1401
+      ],
+      "sourceUnitScale": 2.2994350282485874,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match opaque head width in top40percent of whole height to contact-A of same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 177,
+      "directionReferenceHeadWidthPixels": 407
+    },
+    {
+      "key": "nami",
+      "direction": "south",
+      "pose": "contact-c",
+      "source": "nami-walk-whole-corrections",
+      "region": [
+        535,
+        732,
+        416,
+        751
+      ],
+      "sourceAnchor": [
+        743.0,
+        1478
+      ],
+      "sourceUnitScale": 1.0024630541871922,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match opaque head width in top40percent of whole height to contact-A of same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 406,
+      "directionReferenceHeadWidthPixels": 407
+    },
+    {
+      "key": "usopp",
+      "direction": "east",
+      "pose": "contact-a",
+      "source": "usopp-east-pair-gpt02",
+      "region": [
+        175,
+        236,
+        415,
+        642
+      ],
+      "sourceAnchor": [
+        397.0,
+        874
+      ],
+      "sourceUnitScale": 0.49107142857142855,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top40percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 336,
+      "directionReferenceHeadWidthPixels": 165
+    },
+    {
+      "key": "usopp",
+      "direction": "east",
+      "pose": "neutral",
+      "source": "usopp-walk-gpt-01",
+      "region": [
+        462,
+        29,
+        171,
+        319
+      ],
+      "sourceAnchor": [
+        547.5,
+        344
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top40percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 163,
+      "directionReferenceHeadWidthPixels": 165
+    },
+    {
+      "key": "usopp",
+      "direction": "east",
+      "pose": "contact-c",
+      "source": "usopp-east-pair-gpt02",
+      "region": [
+        932,
+        230,
+        442,
+        648
+      ],
+      "sourceAnchor": [
+        1158.5,
+        874
+      ],
+      "sourceUnitScale": 0.4896142433234421,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top40percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 337,
+      "directionReferenceHeadWidthPixels": 165
+    },
+    {
+      "key": "usopp",
+      "direction": "west",
+      "pose": "contact-a",
+      "source": "usopp-walk-gpt-01",
+      "region": [
+        74,
+        386,
+        207,
+        316
+      ],
+      "sourceAnchor": [
+        185.5,
+        698
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top40percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 169,
+      "directionReferenceHeadWidthPixels": 169
+    },
+    {
+      "key": "usopp",
+      "direction": "west",
+      "pose": "neutral",
+      "source": "usopp-walk-gpt-01",
+      "region": [
+        469,
+        386,
+        171,
+        317
+      ],
+      "sourceAnchor": [
+        554.5,
+        699
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top40percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 163,
+      "directionReferenceHeadWidthPixels": 169
+    },
+    {
+      "key": "usopp",
+      "direction": "west",
+      "pose": "contact-c",
+      "source": "usopp-walk-gpt-01",
+      "region": [
+        797,
+        383,
+        224,
+        318
+      ],
+      "sourceAnchor": [
+        904.5,
+        697
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top40percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 167,
+      "directionReferenceHeadWidthPixels": 169
+    },
+    {
+      "key": "usopp",
+      "direction": "north",
+      "pose": "contact-a",
+      "source": "usopp-walk-gpt-01",
+      "region": [
+        91,
+        739,
+        188,
+        318
+      ],
+      "sourceAnchor": [
+        179.0,
+        1053
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top40percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 130,
+      "directionReferenceHeadWidthPixels": 130
+    },
+    {
+      "key": "usopp",
+      "direction": "north",
+      "pose": "neutral",
+      "source": "usopp-walk-gpt-01",
+      "region": [
+        464,
+        740,
+        160,
+        309
+      ],
+      "sourceAnchor": [
+        545.5,
+        1045
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top40percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 135,
+      "directionReferenceHeadWidthPixels": 130
+    },
+    {
+      "key": "usopp",
+      "direction": "north",
+      "pose": "contact-c",
+      "source": "usopp-walk-gpt-01",
+      "region": [
+        807,
+        740,
+        196,
+        320
+      ],
+      "sourceAnchor": [
+        910.0,
+        1056
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top40percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 130,
+      "directionReferenceHeadWidthPixels": 130
+    },
+    {
+      "key": "usopp",
+      "direction": "south",
+      "pose": "contact-a",
+      "source": "usopp-walk-gpt-01",
+      "region": [
+        93,
+        1094,
+        176,
+        324
+      ],
+      "sourceAnchor": [
+        177.5,
+        1414
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top40percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 161,
+      "directionReferenceHeadWidthPixels": 161
+    },
+    {
+      "key": "usopp",
+      "direction": "south",
+      "pose": "neutral",
+      "source": "usopp-walk-gpt-01",
+      "region": [
+        458,
+        1095,
+        170,
+        311
+      ],
+      "sourceAnchor": [
+        543.0,
+        1402
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top40percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 162,
+      "directionReferenceHeadWidthPixels": 161
+    },
+    {
+      "key": "usopp",
+      "direction": "south",
+      "pose": "contact-c",
+      "source": "usopp-walk-gpt-01",
+      "region": [
+        815,
+        1094,
+        181,
+        327
+      ],
+      "sourceAnchor": [
+        898.5,
+        1417
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top40percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 159,
+      "directionReferenceHeadWidthPixels": 161
+    },
+    {
+      "key": "sanji",
+      "direction": "east",
+      "pose": "contact-a",
+      "source": "sanji-walk-triad-original",
+      "region": [
+        80,
+        19,
+        210,
+        327
+      ],
+      "sourceAnchor": [
+        194.5,
+        341
+      ],
+      "sourceUnitScale": 1.0,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match opaque head width in top40percent of whole height to contact-A of same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 151,
+      "directionReferenceHeadWidthPixels": 151
+    },
+    {
+      "key": "sanji",
+      "direction": "east",
+      "pose": "neutral",
+      "source": "sanji-walk-triad-original",
+      "region": [
+        459,
+        18,
+        163,
+        330
+      ],
+      "sourceAnchor": [
+        540.5,
+        343
+      ],
+      "sourceUnitScale": 0.9869281045751634,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match opaque head width in top40percent of whole height to contact-A of same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 153,
+      "directionReferenceHeadWidthPixels": 151
+    },
+    {
+      "key": "sanji",
+      "direction": "east",
+      "pose": "contact-c",
+      "source": "sanji-walk-whole-corrections",
+      "region": [
+        287,
+        43,
+        528,
+        784
+      ],
+      "sourceAnchor": [
+        534.0,
+        822
+      ],
+      "sourceUnitScale": 0.4081081081081081,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match opaque head width in top40percent of whole height to contact-A of same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 370,
+      "directionReferenceHeadWidthPixels": 151
+    },
+    {
+      "key": "sanji",
+      "direction": "west",
+      "pose": "contact-a",
+      "source": "sanji-walk-triad-original",
+      "region": [
+        76,
+        376,
+        202,
+        331
+      ],
+      "sourceAnchor": [
+        177.5,
+        702
+      ],
+      "sourceUnitScale": 1.0,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match opaque head width in top40percent of whole height to contact-A of same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 159,
+      "directionReferenceHeadWidthPixels": 159
+    },
+    {
+      "key": "sanji",
+      "direction": "west",
+      "pose": "neutral",
+      "source": "sanji-walk-triad-original",
+      "region": [
+        461,
+        376,
+        168,
+        332
+      ],
+      "sourceAnchor": [
+        545.0,
+        703
+      ],
+      "sourceUnitScale": 1.0063291139240507,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match opaque head width in top40percent of whole height to contact-A of same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 158,
+      "directionReferenceHeadWidthPixels": 159
+    },
+    {
+      "key": "sanji",
+      "direction": "west",
+      "pose": "contact-c",
+      "source": "sanji-walk-whole-corrections",
+      "region": [
+        970,
+        42,
+        537,
+        789
+      ],
+      "sourceAnchor": [
+        1237.0,
+        826
+      ],
+      "sourceUnitScale": 0.4228723404255319,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match opaque head width in top40percent of whole height to contact-A of same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 376,
+      "directionReferenceHeadWidthPixels": 159
+    },
+    {
+      "key": "sanji",
+      "direction": "north",
+      "pose": "contact-a",
+      "source": "sanji-walk-triad-original",
+      "region": [
+        94,
+        734,
+        176,
+        321
+      ],
+      "sourceAnchor": [
+        177.5,
+        1050
+      ],
+      "sourceUnitScale": 1.0,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match opaque head width in top40percent of whole height to contact-A of same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 155,
+      "directionReferenceHeadWidthPixels": 155
+    },
+    {
+      "key": "sanji",
+      "direction": "north",
+      "pose": "neutral",
+      "source": "sanji-walk-triad-original",
+      "region": [
+        462,
+        735,
+        165,
+        317
+      ],
+      "sourceAnchor": [
+        544.5,
+        1047
+      ],
+      "sourceUnitScale": 1.0,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match opaque head width in top40percent of whole height to contact-A of same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 155,
+      "directionReferenceHeadWidthPixels": 155
+    },
+    {
+      "key": "sanji",
+      "direction": "north",
+      "pose": "contact-c",
+      "source": "sanji-walk-triad-original",
+      "region": [
+        820,
+        734,
+        177,
+        317
+      ],
+      "sourceAnchor": [
+        903.5,
+        1046
+      ],
+      "sourceUnitScale": 1.0,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match opaque head width in top40percent of whole height to contact-A of same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 155,
+      "directionReferenceHeadWidthPixels": 155
+    },
+    {
+      "key": "sanji",
+      "direction": "south",
+      "pose": "contact-a",
+      "source": "sanji-walk-triad-original",
+      "region": [
+        92,
+        1070,
+        174,
+        334
+      ],
+      "sourceAnchor": [
+        180.0,
+        1399
+      ],
+      "sourceUnitScale": 1.0,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match opaque head width in top40percent of whole height to contact-A of same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 162,
+      "directionReferenceHeadWidthPixels": 162
+    },
+    {
+      "key": "sanji",
+      "direction": "south",
+      "pose": "neutral",
+      "source": "sanji-walk-triad-original",
+      "region": [
+        454,
+        1070,
+        171,
+        322
+      ],
+      "sourceAnchor": [
+        539.5,
+        1387
+      ],
+      "sourceUnitScale": 1.0062111801242235,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match opaque head width in top40percent of whole height to contact-A of same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 161,
+      "directionReferenceHeadWidthPixels": 162
+    },
+    {
+      "key": "sanji",
+      "direction": "south",
+      "pose": "contact-c",
+      "source": "sanji-walk-triad-original",
+      "region": [
+        815,
+        1070,
+        181,
+        333
+      ],
+      "sourceAnchor": [
+        900.5,
+        1398
+      ],
+      "sourceUnitScale": 1.0062111801242235,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration: match opaque head width in top40percent of whole height to contact-A of same direction; no anatomy deformation.",
+      "sourceHeadWidthPixels": 161,
+      "directionReferenceHeadWidthPixels": 162
+    },
+    {
+      "key": "chopper",
+      "direction": "east",
+      "pose": "contact-a",
+      "source": "chopper-triad-gpt",
+      "region": [
+        98,
+        23,
+        219,
+        340
+      ],
+      "sourceAnchor": [
+        207.5,
+        360
+      ],
+      "sourceHeadWidthPixels": 213,
+      "sourceUnitScale": 1.0,
+      "directionReferenceHeadWidthPixels": 213,
+      "sourceUnitScaleReason": "Uniform complete-figure scale calibrated by opaque top40percent head/hat width against original contact-A of the same direction; no per-frame height normalization or anatomy alteration."
+    },
+    {
+      "key": "chopper",
+      "direction": "east",
+      "pose": "neutral",
+      "source": "chopper-triad-gpt",
+      "region": [
+        441,
+        23,
+        220,
+        342
+      ],
+      "sourceAnchor": [
+        551.0,
+        362
+      ],
+      "sourceHeadWidthPixels": 214,
+      "sourceUnitScale": 0.9953271028037384,
+      "directionReferenceHeadWidthPixels": 213,
+      "sourceUnitScaleReason": "Uniform complete-figure scale calibrated by opaque top40percent head/hat width against original contact-A of the same direction; no per-frame height normalization or anatomy alteration."
+    },
+    {
+      "key": "chopper",
+      "direction": "east",
+      "pose": "contact-c",
+      "source": "chopper-triad-gpt",
+      "region": [
+        798,
+        21,
+        221,
+        342
+      ],
+      "sourceAnchor": [
+        908.5,
+        360
+      ],
+      "sourceHeadWidthPixels": 215,
+      "sourceUnitScale": 0.9906976744186047,
+      "directionReferenceHeadWidthPixels": 213,
+      "sourceUnitScaleReason": "Uniform complete-figure scale calibrated by opaque top40percent head/hat width against original contact-A of the same direction; no per-frame height normalization or anatomy alteration."
+    },
+    {
+      "key": "chopper",
+      "direction": "west",
+      "pose": "contact-a",
+      "source": "chopper-triad-gpt",
+      "region": [
+        80,
+        380,
+        221,
+        338
+      ],
+      "sourceAnchor": [
+        190.5,
+        715
+      ],
+      "sourceHeadWidthPixels": 215,
+      "sourceUnitScale": 1.0,
+      "directionReferenceHeadWidthPixels": 215,
+      "sourceUnitScaleReason": "Uniform complete-figure scale calibrated by opaque top40percent head/hat width against original contact-A of the same direction; no per-frame height normalization or anatomy alteration."
+    },
+    {
+      "key": "chopper",
+      "direction": "west",
+      "pose": "neutral",
+      "source": "chopper-triad-gpt",
+      "region": [
+        442,
+        380,
+        222,
+        342
+      ],
+      "sourceAnchor": [
+        553.0,
+        719
+      ],
+      "sourceHeadWidthPixels": 216,
+      "sourceUnitScale": 0.9953703703703703,
+      "directionReferenceHeadWidthPixels": 215,
+      "sourceUnitScaleReason": "Uniform complete-figure scale calibrated by opaque top40percent head/hat width against original contact-A of the same direction; no per-frame height normalization or anatomy alteration."
+    },
+    {
+      "key": "chopper",
+      "direction": "west",
+      "pose": "contact-c",
+      "source": "chopper-triad-gpt",
+      "region": [
+        803,
+        380,
+        222,
+        338
+      ],
+      "sourceAnchor": [
+        914.0,
+        715
+      ],
+      "sourceHeadWidthPixels": 216,
+      "sourceUnitScale": 0.9953703703703703,
+      "directionReferenceHeadWidthPixels": 215,
+      "sourceUnitScaleReason": "Uniform complete-figure scale calibrated by opaque top40percent head/hat width against original contact-A of the same direction; no per-frame height normalization or anatomy alteration."
+    },
+    {
+      "key": "chopper",
+      "direction": "north",
+      "pose": "contact-a",
+      "source": "chopper-triad-gpt",
+      "region": [
+        61,
+        728,
+        264,
+        310
+      ],
+      "sourceAnchor": [
+        193.0,
+        1035
+      ],
+      "sourceHeadWidthPixels": 258,
+      "sourceUnitScale": 1.0,
+      "directionReferenceHeadWidthPixels": 258,
+      "sourceUnitScaleReason": "Uniform complete-figure scale calibrated by opaque top40percent head/hat width against original contact-A of the same direction; no per-frame height normalization or anatomy alteration."
+    },
+    {
+      "key": "chopper",
+      "direction": "north",
+      "pose": "neutral",
+      "source": "chopper-triad-gpt",
+      "region": [
+        419,
+        728,
+        261,
+        301
+      ],
+      "sourceAnchor": [
+        549.5,
+        1026
+      ],
+      "sourceHeadWidthPixels": 255,
+      "sourceUnitScale": 1.011764705882353,
+      "directionReferenceHeadWidthPixels": 258,
+      "sourceUnitScaleReason": "Uniform complete-figure scale calibrated by opaque top40percent head/hat width against original contact-A of the same direction; no per-frame height normalization or anatomy alteration."
+    },
+    {
+      "key": "chopper",
+      "direction": "north",
+      "pose": "contact-c",
+      "source": "chopper-triad-gpt",
+      "region": [
+        779,
+        728,
+        261,
+        308
+      ],
+      "sourceAnchor": [
+        909.5,
+        1033
+      ],
+      "sourceHeadWidthPixels": 255,
+      "sourceUnitScale": 1.011764705882353,
+      "directionReferenceHeadWidthPixels": 258,
+      "sourceUnitScaleReason": "Uniform complete-figure scale calibrated by opaque top40percent head/hat width against original contact-A of the same direction; no per-frame height normalization or anatomy alteration."
+    },
+    {
+      "key": "chopper",
+      "direction": "south",
+      "pose": "contact-a",
+      "source": "chopper-triad-gpt",
+      "region": [
+        46,
+        1057,
+        296,
+        357
+      ],
+      "sourceAnchor": [
+        194.0,
+        1411
+      ],
+      "sourceHeadWidthPixels": 290,
+      "sourceUnitScale": 1.0,
+      "directionReferenceHeadWidthPixels": 290,
+      "sourceUnitScaleReason": "Uniform complete-figure scale calibrated by opaque top40percent head/hat width against original contact-A of the same direction; no per-frame height normalization or anatomy alteration."
+    },
+    {
+      "key": "chopper",
+      "direction": "south",
+      "pose": "neutral",
+      "source": "chopper-triad-gpt",
+      "region": [
+        397,
+        1057,
+        295,
+        346
+      ],
+      "sourceAnchor": [
+        544.5,
+        1400
+      ],
+      "sourceHeadWidthPixels": 289,
+      "sourceUnitScale": 1.0034602076124568,
+      "directionReferenceHeadWidthPixels": 290,
+      "sourceUnitScaleReason": "Uniform complete-figure scale calibrated by opaque top40percent head/hat width against original contact-A of the same direction; no per-frame height normalization or anatomy alteration."
+    },
+    {
+      "key": "chopper",
+      "direction": "south",
+      "pose": "contact-c",
+      "source": "chopper-triad-gpt",
+      "region": [
+        750,
+        1057,
+        296,
+        357
+      ],
+      "sourceAnchor": [
+        898.0,
+        1411
+      ],
+      "sourceHeadWidthPixels": 290,
+      "sourceUnitScale": 1.0,
+      "directionReferenceHeadWidthPixels": 290,
+      "sourceUnitScaleReason": "Uniform complete-figure scale calibrated by opaque top40percent head/hat width against original contact-A of the same direction; no per-frame height normalization or anatomy alteration."
+    },
+    {
+      "key": "robin",
+      "direction": "east",
+      "pose": "contact-a",
+      "source": "robin-walk-triad-original",
+      "region": [
+        95,
+        29,
+        219,
+        334
+      ],
+      "sourceAnchor": [
+        215.5,
+        358
+      ],
+      "sourceUnitScale": 1.0,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration by crown/head width in upper25percent to same-direction contactA; excludes long hair spread below skull. No anatomy deformation.",
+      "sourceHeadWidthPixels": 149,
+      "directionReferenceHeadWidthPixels": 149
+    },
+    {
+      "key": "robin",
+      "direction": "east",
+      "pose": "neutral",
+      "source": "robin-walk-triad-original",
+      "region": [
+        447,
+        29,
+        180,
+        334
+      ],
+      "sourceAnchor": [
+        549.0,
+        358
+      ],
+      "sourceUnitScale": 1.0205479452054795,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration by crown/head width in upper25percent to same-direction contactA; excludes long hair spread below skull. No anatomy deformation.",
+      "sourceHeadWidthPixels": 146,
+      "directionReferenceHeadWidthPixels": 149
+    },
+    {
+      "key": "robin",
+      "direction": "east",
+      "pose": "contact-c",
+      "source": "robin-walk-whole-corrections",
+      "region": [
+        78,
+        36,
+        485,
+        792
+      ],
+      "sourceAnchor": [
+        346.5,
+        823
+      ],
+      "sourceUnitScale": 0.415041782729805,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration by crown/head width in upper25percent to same-direction contactA; excludes long hair spread below skull. No anatomy deformation.",
+      "sourceHeadWidthPixels": 359,
+      "directionReferenceHeadWidthPixels": 149
+    },
+    {
+      "key": "robin",
+      "direction": "west",
+      "pose": "contact-a",
+      "source": "robin-walk-triad-original",
+      "region": [
+        86,
+        390,
+        221,
+        331
+      ],
+      "sourceAnchor": [
+        183.5,
+        716
+      ],
+      "sourceUnitScale": 1.0,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration by crown/head width in upper25percent to same-direction contactA; excludes long hair spread below skull. No anatomy deformation.",
+      "sourceHeadWidthPixels": 151,
+      "directionReferenceHeadWidthPixels": 151
+    },
+    {
+      "key": "robin",
+      "direction": "west",
+      "pose": "neutral",
+      "source": "robin-walk-triad-original",
+      "region": [
+        454,
+        389,
+        194,
+        331
+      ],
+      "sourceAnchor": [
+        534.5,
+        715
+      ],
+      "sourceUnitScale": 1.0,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration by crown/head width in upper25percent to same-direction contactA; excludes long hair spread below skull. No anatomy deformation.",
+      "sourceHeadWidthPixels": 151,
+      "directionReferenceHeadWidthPixels": 151
+    },
+    {
+      "key": "robin",
+      "direction": "west",
+      "pose": "contact-c",
+      "source": "robin-walk-whole-corrections",
+      "region": [
+        651,
+        35,
+        506,
+        790
+      ],
+      "sourceAnchor": [
+        878.0,
+        820
+      ],
+      "sourceUnitScale": 0.41944444444444445,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration by crown/head width in upper25percent to same-direction contactA; excludes long hair spread below skull. No anatomy deformation.",
+      "sourceHeadWidthPixels": 360,
+      "directionReferenceHeadWidthPixels": 151
+    },
+    {
+      "key": "robin",
+      "direction": "north",
+      "pose": "contact-a",
+      "source": "robin-walk-triad-original",
+      "region": [
+        98,
+        742,
+        200,
+        319
+      ],
+      "sourceAnchor": [
+        192.0,
+        1056
+      ],
+      "sourceUnitScale": 1.0,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration by crown/head width in upper25percent to same-direction contactA; excludes long hair spread below skull. No anatomy deformation.",
+      "sourceHeadWidthPixels": 130,
+      "directionReferenceHeadWidthPixels": 130
+    },
+    {
+      "key": "robin",
+      "direction": "north",
+      "pose": "neutral",
+      "source": "robin-walk-triad-original",
+      "region": [
+        459,
+        741,
+        176,
+        320
+      ],
+      "sourceAnchor": [
+        544.5,
+        1056
+      ],
+      "sourceUnitScale": 1.0236220472440944,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration by crown/head width in upper25percent to same-direction contactA; excludes long hair spread below skull. No anatomy deformation.",
+      "sourceHeadWidthPixels": 127,
+      "directionReferenceHeadWidthPixels": 130
+    },
+    {
+      "key": "robin",
+      "direction": "north",
+      "pose": "contact-c",
+      "source": "robin-walk-whole-corrections",
+      "region": [
+        1201,
+        36,
+        491,
+        798
+      ],
+      "sourceAnchor": [
+        1439.5,
+        829
+      ],
+      "sourceUnitScale": 0.4180064308681672,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration by crown/head width in upper25percent to same-direction contactA; excludes long hair spread below skull. No anatomy deformation.",
+      "sourceHeadWidthPixels": 311,
+      "directionReferenceHeadWidthPixels": 130
+    },
+    {
+      "key": "robin",
+      "direction": "south",
+      "pose": "contact-a",
+      "source": "robin-walk-triad-original",
+      "region": [
+        94,
+        1083,
+        189,
+        340
+      ],
+      "sourceAnchor": [
+        185.5,
+        1418
+      ],
+      "sourceUnitScale": 1.0,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration by crown/head width in upper25percent to same-direction contactA; excludes long hair spread below skull. No anatomy deformation.",
+      "sourceHeadWidthPixels": 141,
+      "directionReferenceHeadWidthPixels": 141
+    },
+    {
+      "key": "robin",
+      "direction": "south",
+      "pose": "neutral",
+      "source": "robin-walk-triad-original",
+      "region": [
+        448,
+        1083,
+        186,
+        336
+      ],
+      "sourceAnchor": [
+        542.0,
+        1414
+      ],
+      "sourceUnitScale": 0.9929577464788732,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration by crown/head width in upper25percent to same-direction contactA; excludes long hair spread below skull. No anatomy deformation.",
+      "sourceHeadWidthPixels": 142,
+      "directionReferenceHeadWidthPixels": 141
+    },
+    {
+      "key": "robin",
+      "direction": "south",
+      "pose": "contact-c",
+      "source": "robin-walk-triad-original",
+      "region": [
+        805,
+        1083,
+        191,
+        340
+      ],
+      "sourceAnchor": [
+        898.5,
+        1418
+      ],
+      "sourceUnitScale": 0.986013986013986,
+      "sourceUnitScaleReason": "Uniform whole-figure resolution calibration by crown/head width in upper25percent to same-direction contactA; excludes long hair spread below skull. No anatomy deformation.",
+      "sourceHeadWidthPixels": 143,
+      "directionReferenceHeadWidthPixels": 141
+    },
+    {
+      "key": "franky",
+      "direction": "east",
+      "pose": "contact-a",
+      "source": "franky-walk-gpt-01",
+      "region": [
+        46,
+        6,
+        274,
+        344
+      ],
+      "sourceAnchor": [
+        196.0,
+        346
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top28percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 108,
+      "directionReferenceHeadWidthPixels": 108
+    },
+    {
+      "key": "franky",
+      "direction": "east",
+      "pose": "neutral",
+      "source": "franky-walk-gpt-01",
+      "region": [
+        444,
+        5,
+        199,
+        346
+      ],
+      "sourceAnchor": [
+        553.5,
+        347
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top28percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 109,
+      "directionReferenceHeadWidthPixels": 108
+    },
+    {
+      "key": "franky",
+      "direction": "east",
+      "pose": "contact-c",
+      "source": "franky-east-c-02-gpt",
+      "region": [
+        0,
+        0,
+        1075,
+        1464
+      ],
+      "sourceAnchor": [
+        544.5,
+        1433
+      ],
+      "sourceUnitScale": 0.23529411764705882,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top28percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 459,
+      "directionReferenceHeadWidthPixels": 108
+    },
+    {
+      "key": "franky",
+      "direction": "west",
+      "pose": "contact-a",
+      "source": "franky-walk-gpt-01",
+      "region": [
+        45,
+        365,
+        271,
+        348
+      ],
+      "sourceAnchor": [
+        169.0,
+        709
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top28percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 110,
+      "directionReferenceHeadWidthPixels": 110
+    },
+    {
+      "key": "franky",
+      "direction": "west",
+      "pose": "neutral",
+      "source": "franky-walk-gpt-01",
+      "region": [
+        453,
+        365,
+        198,
+        350
+      ],
+      "sourceAnchor": [
+        542.5,
+        711
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top28percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 107,
+      "directionReferenceHeadWidthPixels": 110
+    },
+    {
+      "key": "franky",
+      "direction": "west",
+      "pose": "contact-c",
+      "source": "franky-west-c-03-gpt",
+      "region": [
+        0,
+        0,
+        1027,
+        1532
+      ],
+      "sourceAnchor": [
+        462.5,
+        1499
+      ],
+      "sourceUnitScale": 0.2277432712215321,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top28percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 483,
+      "directionReferenceHeadWidthPixels": 110
+    },
+    {
+      "key": "franky",
+      "direction": "north",
+      "pose": "contact-a",
+      "source": "franky-walk-gpt-01",
+      "region": [
+        37,
+        733,
+        265,
+        337
+      ],
+      "sourceAnchor": [
+        185.5,
+        1066
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top28percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 169,
+      "directionReferenceHeadWidthPixels": 169
+    },
+    {
+      "key": "franky",
+      "direction": "north",
+      "pose": "neutral",
+      "source": "franky-walk-gpt-01",
+      "region": [
+        420,
+        732,
+        252,
+        337
+      ],
+      "sourceAnchor": [
+        560.5,
+        1065
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top28percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 131,
+      "directionReferenceHeadWidthPixels": 169
+    },
+    {
+      "key": "franky",
+      "direction": "north",
+      "pose": "contact-c",
+      "source": "franky-walk-gpt-01",
+      "region": [
+        771,
+        733,
+        286,
+        340
+      ],
+      "sourceAnchor": [
+        913.5,
+        1069
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top28percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 175,
+      "directionReferenceHeadWidthPixels": 169
+    },
+    {
+      "key": "franky",
+      "direction": "south",
+      "pose": "contact-a",
+      "source": "franky-walk-gpt-01",
+      "region": [
+        55,
+        1079,
+        265,
+        337
+      ],
+      "sourceAnchor": [
+        178.5,
+        1412
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top28percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 179,
+      "directionReferenceHeadWidthPixels": 179
+    },
+    {
+      "key": "franky",
+      "direction": "south",
+      "pose": "neutral",
+      "source": "franky-walk-gpt-01",
+      "region": [
+        427,
+        1080,
+        234,
+        329
+      ],
+      "sourceAnchor": [
+        544.5,
+        1405
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top28percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 105,
+      "directionReferenceHeadWidthPixels": 179
+    },
+    {
+      "key": "franky",
+      "direction": "south",
+      "pose": "contact-c",
+      "source": "franky-walk-gpt-01",
+      "region": [
+        790,
+        1079,
+        253,
+        336
+      ],
+      "sourceAnchor": [
+        917.0,
+        1411
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top28percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 180,
+      "directionReferenceHeadWidthPixels": 179
+    },
+    {
+      "key": "brook",
+      "direction": "east",
+      "pose": "contact-a",
+      "source": "brook-walk-gpt-01",
+      "region": [
+        98,
+        17,
+        194,
+        325
+      ],
+      "sourceAnchor": [
+        194.5,
+        338
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top40percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 117,
+      "directionReferenceHeadWidthPixels": 117
+    },
+    {
+      "key": "brook",
+      "direction": "east",
+      "pose": "neutral",
+      "source": "brook-walk-gpt-01",
+      "region": [
+        488,
+        18,
+        119,
+        326
+      ],
+      "sourceAnchor": [
+        547.5,
+        340
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top40percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 111,
+      "directionReferenceHeadWidthPixels": 117
+    },
+    {
+      "key": "brook",
+      "direction": "east",
+      "pose": "contact-c",
+      "source": "brook-walk-gpt-01",
+      "region": [
+        825,
+        18,
+        194,
+        324
+      ],
+      "sourceAnchor": [
+        913.0,
+        338
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top40percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 112,
+      "directionReferenceHeadWidthPixels": 117
+    },
+    {
+      "key": "brook",
+      "direction": "west",
+      "pose": "contact-a",
+      "source": "brook-walk-gpt-01",
+      "region": [
+        88,
+        374,
+        193,
+        323
+      ],
+      "sourceAnchor": [
+        188.0,
+        693
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top40percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 118,
+      "directionReferenceHeadWidthPixels": 118
+    },
+    {
+      "key": "brook",
+      "direction": "west",
+      "pose": "neutral",
+      "source": "brook-walk-gpt-01",
+      "region": [
+        485,
+        374,
+        126,
+        324
+      ],
+      "sourceAnchor": [
+        548.0,
+        694
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top40percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 118,
+      "directionReferenceHeadWidthPixels": 118
+    },
+    {
+      "key": "brook",
+      "direction": "west",
+      "pose": "contact-c",
+      "source": "brook-walk-gpt-01",
+      "region": [
+        822,
+        374,
+        194,
+        324
+      ],
+      "sourceAnchor": [
+        918.5,
+        694
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top40percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 121,
+      "directionReferenceHeadWidthPixels": 118
+    },
+    {
+      "key": "brook",
+      "direction": "north",
+      "pose": "contact-a",
+      "source": "brook-walk-gpt-01",
+      "region": [
+        102,
+        736,
+        181,
+        322
+      ],
+      "sourceAnchor": [
+        189.5,
+        1054
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top40percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 131,
+      "directionReferenceHeadWidthPixels": 131
+    },
+    {
+      "key": "brook",
+      "direction": "north",
+      "pose": "neutral",
+      "source": "brook-walk-gpt-01",
+      "region": [
+        473,
+        736,
+        148,
+        318
+      ],
+      "sourceAnchor": [
+        548.0,
+        1050
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top40percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 126,
+      "directionReferenceHeadWidthPixels": 131
+    },
+    {
+      "key": "brook",
+      "direction": "north",
+      "pose": "contact-c",
+      "source": "brook-walk-gpt-01",
+      "region": [
+        814,
+        735,
+        179,
+        323
+      ],
+      "sourceAnchor": [
+        903.0,
+        1054
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top40percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 126,
+      "directionReferenceHeadWidthPixels": 131
+    },
+    {
+      "key": "brook",
+      "direction": "south",
+      "pose": "contact-a",
+      "source": "brook-walk-gpt-01",
+      "region": [
+        98,
+        1083,
+        165,
+        330
+      ],
+      "sourceAnchor": [
+        190.0,
+        1409
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top40percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 138,
+      "directionReferenceHeadWidthPixels": 138
+    },
+    {
+      "key": "brook",
+      "direction": "south",
+      "pose": "neutral",
+      "source": "brook-walk-gpt-01",
+      "region": [
+        469,
+        1084,
+        150,
+        322
+      ],
+      "sourceAnchor": [
+        544.0,
+        1402
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top40percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 142,
+      "directionReferenceHeadWidthPixels": 138
+    },
+    {
+      "key": "brook",
+      "direction": "south",
+      "pose": "contact-c",
+      "source": "brook-walk-gpt-01",
+      "region": [
+        830,
+        1084,
+        163,
+        334
+      ],
+      "sourceAnchor": [
+        902.5,
+        1414
+      ],
+      "sourceUnitScale": 1,
+      "sourceUnitScaleReason": "Native sheet keeps one shared pixel density (unit1); separate generated edits calibrate whole-figure size to same-direction contact-A hat/head width in top40percent of complete body; Franky uses hair above shoulders. No anatomy deformation.",
+      "sourceHeadWidthPixels": 137,
+      "directionReferenceHeadWidthPixels": 138
+    },
+    {
+      "key": "jinbe",
+      "direction": "east",
+      "pose": "contact-a",
+      "source": "jinbe-triad-gpt",
+      "region": [
+        50,
+        39,
+        299,
+        306
+      ],
+      "sourceAnchor": [
+        201.0,
+        342
+      ],
+      "sourceHeadWidthPixels": 180,
+      "sourceUnitScale": 1.0,
+      "directionReferenceHeadWidthPixels": 180,
+      "sourceUnitScaleReason": "Uniform complete-figure scale calibrated by opaque top40percent head/hat width against original contact-A of the same direction; no per-frame height normalization or anatomy alteration."
+    },
+    {
+      "key": "jinbe",
+      "direction": "east",
+      "pose": "neutral",
+      "source": "jinbe-triad-gpt",
+      "region": [
+        417,
+        40,
+        229,
+        300
+      ],
+      "sourceAnchor": [
+        536.5,
+        337
+      ],
+      "sourceHeadWidthPixels": 173,
+      "sourceUnitScale": 1.0404624277456647,
+      "directionReferenceHeadWidthPixels": 180,
+      "sourceUnitScaleReason": "Uniform complete-figure scale calibrated by opaque top40percent head/hat width against original contact-A of the same direction; no per-frame height normalization or anatomy alteration."
+    },
+    {
+      "key": "jinbe",
+      "direction": "east",
+      "pose": "contact-c",
+      "source": "jinbe-triad-gpt",
+      "region": [
+        787,
+        40,
+        259,
+        305
+      ],
+      "sourceAnchor": [
+        921.0,
+        342
+      ],
+      "sourceHeadWidthPixels": 180,
+      "sourceUnitScale": 1.0,
+      "directionReferenceHeadWidthPixels": 180,
+      "sourceUnitScaleReason": "Uniform complete-figure scale calibrated by opaque top40percent head/hat width against original contact-A of the same direction; no per-frame height normalization or anatomy alteration."
+    },
+    {
+      "key": "jinbe",
+      "direction": "west",
+      "pose": "contact-a",
+      "source": "jinbe-triad-gpt",
+      "region": [
+        49,
+        381,
+        294,
+        305
+      ],
+      "sourceAnchor": [
+        191.0,
+        683
+      ],
+      "sourceHeadWidthPixels": 182,
+      "sourceUnitScale": 1.0,
+      "directionReferenceHeadWidthPixels": 182,
+      "sourceUnitScaleReason": "Uniform complete-figure scale calibrated by opaque top40percent head/hat width against original contact-A of the same direction; no per-frame height normalization or anatomy alteration."
+    },
+    {
+      "key": "jinbe",
+      "direction": "west",
+      "pose": "neutral",
+      "source": "jinbe-triad-gpt",
+      "region": [
+        446,
+        381,
+        234,
+        298
+      ],
+      "sourceAnchor": [
+        557.0,
+        676
+      ],
+      "sourceHeadWidthPixels": 176,
+      "sourceUnitScale": 1.0340909090909092,
+      "directionReferenceHeadWidthPixels": 182,
+      "sourceUnitScaleReason": "Uniform complete-figure scale calibrated by opaque top40percent head/hat width against original contact-A of the same direction; no per-frame height normalization or anatomy alteration."
+    },
+    {
+      "key": "jinbe",
+      "direction": "west",
+      "pose": "contact-c",
+      "source": "jinbe-triad-gpt",
+      "region": [
+        804,
+        381,
+        255,
+        305
+      ],
+      "sourceAnchor": [
+        933.5,
+        683
+      ],
+      "sourceHeadWidthPixels": 175,
+      "sourceUnitScale": 1.04,
+      "directionReferenceHeadWidthPixels": 182,
+      "sourceUnitScaleReason": "Uniform complete-figure scale calibrated by opaque top40percent head/hat width against original contact-A of the same direction; no per-frame height normalization or anatomy alteration."
+    },
+    {
+      "key": "jinbe",
+      "direction": "north",
+      "pose": "contact-a",
+      "source": "jinbe-triad-gpt",
+      "region": [
+        30,
+        732,
+        294,
+        309
+      ],
+      "sourceAnchor": [
+        185.5,
+        1038
+      ],
+      "sourceHeadWidthPixels": 193,
+      "sourceUnitScale": 1.0,
+      "directionReferenceHeadWidthPixels": 193,
+      "sourceUnitScaleReason": "Uniform complete-figure scale calibrated by opaque top40percent head/hat width against original contact-A of the same direction; no per-frame height normalization or anatomy alteration."
+    },
+    {
+      "key": "jinbe",
+      "direction": "north",
+      "pose": "neutral",
+      "source": "jinbe-triad-gpt",
+      "region": [
+        398,
+        732,
+        295,
+        301
+      ],
+      "sourceAnchor": [
+        544.0,
+        1030
+      ],
+      "sourceHeadWidthPixels": 180,
+      "sourceUnitScale": 1.0722222222222222,
+      "directionReferenceHeadWidthPixels": 193,
+      "sourceUnitScaleReason": "Uniform complete-figure scale calibrated by opaque top40percent head/hat width against original contact-A of the same direction; no per-frame height normalization or anatomy alteration."
+    },
+    {
+      "key": "jinbe",
+      "direction": "north",
+      "pose": "contact-c",
+      "source": "jinbe-triad-gpt",
+      "region": [
+        779,
+        732,
+        278,
+        308
+      ],
+      "sourceAnchor": [
+        904.5,
+        1037
+      ],
+      "sourceHeadWidthPixels": 187,
+      "sourceUnitScale": 1.032085561497326,
+      "directionReferenceHeadWidthPixels": 193,
+      "sourceUnitScaleReason": "Uniform complete-figure scale calibrated by opaque top40percent head/hat width against original contact-A of the same direction; no per-frame height normalization or anatomy alteration."
+    },
+    {
+      "key": "jinbe",
+      "direction": "south",
+      "pose": "contact-a",
+      "source": "jinbe-south-a-gpt-edit",
+      "region": [
+        0,
+        0,
+        1229,
+        1280
+      ],
+      "sourceAnchor": [
+        612.0,
+        1240
+      ],
+      "sourceHeadWidthPixels": 810,
+      "sourceUnitScale": 0.25308641975308643,
+      "directionReferenceHeadWidthPixels": 205,
+      "sourceUnitScaleReason": "Uniform complete-figure scale calibrated by opaque top40percent head/hat width against original contact-A of the same direction; no per-frame height normalization or anatomy alteration."
+    },
+    {
+      "key": "jinbe",
+      "direction": "south",
+      "pose": "neutral",
+      "source": "jinbe-triad-gpt",
+      "region": [
+        391,
+        1067,
+        304,
+        307
+      ],
+      "sourceAnchor": [
+        539.5,
+        1371
+      ],
+      "sourceHeadWidthPixels": 199,
+      "sourceUnitScale": 1.0301507537688441,
+      "directionReferenceHeadWidthPixels": 205,
+      "sourceUnitScaleReason": "Uniform complete-figure scale calibrated by opaque top40percent head/hat width against original contact-A of the same direction; no per-frame height normalization or anatomy alteration."
+    },
+    {
+      "key": "jinbe",
+      "direction": "south",
+      "pose": "contact-c",
+      "source": "jinbe-triad-gpt",
+      "region": [
+        746,
+        1067,
+        307,
+        321
+      ],
+      "sourceAnchor": [
+        898.0,
+        1385
+      ],
+      "sourceHeadWidthPixels": 198,
+      "sourceUnitScale": 1.0353535353535352,
+      "directionReferenceHeadWidthPixels": 205,
+      "sourceUnitScaleReason": "Uniform complete-figure scale calibrated by opaque top40percent head/hat width against original contact-A of the same direction; no per-frame height normalization or anatomy alteration."
+    }
+  ]
+}

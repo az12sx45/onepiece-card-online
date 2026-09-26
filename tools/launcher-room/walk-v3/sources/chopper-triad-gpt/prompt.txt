@@ -1,0 +1,13 @@
+Use case: precise-object-edit.
+Input1 is a 12-person Chopper walking sheet to CORRECT. Input2 is the ORIGINAL CHOPPER identity reference: copy its real DARK CLOVEN HOOVES, short tiny legs and costume. Retain input1's 3-column/4-row layout and entire finished figures on transparent background, 12 distinct whole-body Choppers, 3:4 portrait.
+
+CRITICAL ERROR TO FIX IN ALL TWELVE FIGURES: Chopper is a REINDEER. He has dark brown/charcoal CLOVEN HOOVES growing directly from his furry legs. He does NOT wear shoes, slippers, sandals or straps. Draw short dark rounded hoof capsules with a central two-toe split; no bare human foot, no skin-colored human toes, NO STRAPS, no separate shoe soles. For the lifted rear hoof one solid dark hoof underside can show. DO NOT put Luffy's footwear on Chopper. Follow input2's hooves exactly. Keep Chopper's legs short, not long human shin legs.
+
+OTHER CRITICAL FIX: Column3 must use the OPPOSITE leg from column1. 
+Row1 EAST: Column1 the near/light leg leads toward RIGHT and the far/shaded leg trails left. Column3 the near/light leg trails LEFT and visibly covers the upper far thigh; far/shaded leg leads RIGHT. The near arm remains forward in column3.
+Row2 WEST: Column1 the near/light leg leads LEFT and far/shaded leg trails right. Column3 near/light leg trails RIGHT and far/shaded leg leads LEFT. Near arm forward/left in column3.
+Row3 NORTH back view: Column1 has the RIGHT hoof underside visible at image RIGHT. Column3 MUST instead have the LEFT hoof underside visible at image LEFT; the RIGHT leg points farther away and its hoof is grounded flat. Current column3 repeated the right sole and is wrong. Keep its left arm forward away and right arm back toward viewer, opposite to column1.
+Row4 SOUTH: Keep correct existing left/right leg alternation while replacing human footwear with true cloven hooves.
+Column2 in every row is quiet neutral with feet together under hips and arms down.
+
+Everything remains one naturally connected FULL figure per cell, not body parts. Preserve head/hat size, entire character scale and fixed facing: east screen right, west screen left, north only back/head no face, south face toward viewer. No mirror operation. Canon early Chopper has pink tall X hat, blue nose, tan fur, maroon shorts, blue medical backpack white X, one silver repair cuff ONLY on anatomical LEFT antler (WEST visible, SOUTH image right, NORTH image left, EAST near-right antler bare). Preserve these correct details. Small relaxed low stepping, no high knees, no jumping. Real alpha transparency, broad clear gaps, all antlers and hooves inside canvas, no text, grid, floor or shadows.

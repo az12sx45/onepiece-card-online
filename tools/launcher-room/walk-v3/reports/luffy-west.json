@@ -1,0 +1,316 @@
+{
+  "schema": "one-piece-room-walk-report/3",
+  "key": "luffy",
+  "direction": "west",
+  "method": "three authored whole bodies; contact, passing, opposite contact, passing",
+  "anatomyReassembled": false,
+  "mirrored": false,
+  "interpolatedLimbs": false,
+  "frames": [
+    {
+      "key": "luffy",
+      "direction": "west",
+      "pose": "contact-a",
+      "source": "luffy-triad-gpt-original",
+      "region": [
+        138,
+        390,
+        208,
+        339
+      ],
+      "index": 0,
+      "bounds": [
+        32,
+        12,
+        93,
+        112
+      ],
+      "opaqueBoundsAtOutput": [
+        32,
+        12,
+        93,
+        112
+      ],
+      "sourceAnchor": [
+        247.5,
+        726
+      ],
+      "localAnchor": [
+        107.5,
+        335
+      ],
+      "sourceAlphaBounds": [
+        140,
+        391,
+        344,
+        728
+      ],
+      "opaqueBounds": [
+        141,
+        393,
+        202,
+        333
+      ],
+      "opaquePixels": 36501,
+      "removedDistantAlphaPixels": 5203,
+      "sourceUnitScale": 1.0,
+      "sourceOpaqueClearance": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.29933521135790797,
+      "wholeImageScale": 0.29933521135790797,
+      "inverseWholeImageTransform": [
+        3.3407362784471215,
+        0,
+        -106.30712182061578,
+        0,
+        3.3407362784471215,
+        -39.162463186077616
+      ],
+      "rgbaSha256": "1a5edd6d868657c306f15702e084b0e9281f186f58700ec646d4b5f1f36c908b",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false,
+      "authoredPoseIndex": 0
+    },
+    {
+      "key": "luffy",
+      "direction": "west",
+      "pose": "neutral",
+      "source": "luffy-triad-gpt-original",
+      "region": [
+        448,
+        392,
+        170,
+        341
+      ],
+      "index": 1,
+      "bounds": [
+        39,
+        12,
+        89,
+        113
+      ],
+      "opaqueBoundsAtOutput": [
+        40,
+        12,
+        88,
+        112
+      ],
+      "sourceAnchor": [
+        533.0,
+        730
+      ],
+      "localAnchor": [
+        83.0,
+        337
+      ],
+      "sourceAlphaBounds": [
+        450,
+        393,
+        617,
+        732
+      ],
+      "opaqueBounds": [
+        451,
+        395,
+        164,
+        335
+      ],
+      "opaquePixels": 30058,
+      "removedDistantAlphaPixels": 3291,
+      "sourceUnitScale": 0.9939024390243902,
+      "sourceOpaqueClearance": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.29933521135790797,
+      "wholeImageScale": 0.2975099966545061,
+      "inverseWholeImageTransform": [
+        3.3612315930388212,
+        0,
+        -132.11882195448456,
+        0,
+        3.3612315930388212,
+        -39.457938420348
+      ],
+      "rgbaSha256": "6b1915d79b9c6de75879932320f3ef2b9369f190142fa06da524ee0fcb095ede",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false,
+      "authoredPoseIndex": 1
+    },
+    {
+      "key": "luffy",
+      "direction": "west",
+      "pose": "contact-c",
+      "source": "luffy-west-c-gpt-edit",
+      "region": [
+        0,
+        0,
+        984,
+        1598
+      ],
+      "index": 2,
+      "bounds": [
+        35,
+        12,
+        95,
+        112
+      ],
+      "opaqueBoundsAtOutput": [
+        36,
+        12,
+        95,
+        112
+      ],
+      "sourceAnchor": [
+        478.5,
+        1549
+      ],
+      "localAnchor": [
+        436.5,
+        1533
+      ],
+      "sourceAlphaBounds": [
+        42,
+        16,
+        951,
+        1551
+      ],
+      "opaqueBounds": [
+        43,
+        18,
+        906,
+        1531
+      ],
+      "opaquePixels": 640266,
+      "removedDistantAlphaPixels": 10014,
+      "sourceUnitScale": 0.2182061579651941,
+      "sourceOpaqueClearance": [
+        43,
+        18,
+        35,
+        49
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.29933521135790797,
+      "wholeImageScale": 0.06531678641410843,
+      "inverseWholeImageTransform": [
+        15.309999999999999,
+        0,
+        -543.3399999999999,
+        0,
+        15.309999999999999,
+        -181.7199999999998
+      ],
+      "rgbaSha256": "02f2f0037cd4f0dec1c26a90821a90c439220f3432506b47dc39ea9a5d2e8506",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false,
+      "authoredPoseIndex": 2
+    },
+    {
+      "key": "luffy",
+      "direction": "west",
+      "pose": "neutral",
+      "source": "luffy-triad-gpt-original",
+      "region": [
+        448,
+        392,
+        170,
+        341
+      ],
+      "index": 3,
+      "bounds": [
+        39,
+        12,
+        89,
+        113
+      ],
+      "opaqueBoundsAtOutput": [
+        40,
+        12,
+        88,
+        112
+      ],
+      "sourceAnchor": [
+        533.0,
+        730
+      ],
+      "localAnchor": [
+        83.0,
+        337
+      ],
+      "sourceAlphaBounds": [
+        450,
+        393,
+        617,
+        732
+      ],
+      "opaqueBounds": [
+        451,
+        395,
+        164,
+        335
+      ],
+      "opaquePixels": 30058,
+      "removedDistantAlphaPixels": 3291,
+      "sourceUnitScale": 0.9939024390243902,
+      "sourceOpaqueClearance": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.29933521135790797,
+      "wholeImageScale": 0.2975099966545061,
+      "inverseWholeImageTransform": [
+        3.3612315930388212,
+        0,
+        -132.11882195448456,
+        0,
+        3.3612315930388212,
+        -39.457938420348
+      ],
+      "rgbaSha256": "6b1915d79b9c6de75879932320f3ef2b9369f190142fa06da524ee0fcb095ede",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false,
+      "authoredPoseIndex": 1
+    }
+  ],
+  "visualAccepted": false
+}

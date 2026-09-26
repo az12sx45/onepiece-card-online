@@ -1,0 +1,9 @@
+Edit ONE complete EAST/right-facing Luffy contact-C walk pose. His near/right arm already swings forward (screenRIGHT, ahead of belly) and that is correct: KEEP this forward near arm, near shoulder, head, neck, torso, hat, outfit and facing direction unchanged.
+Clarify and correct LEG OWNERSHIP to make the true opposite contact:
+- The NEAR RIGHT THIGH comes from the nearer/right hip under the forward arm and crosses diagonally BACK toward screenLEFT. Its blue shorts panel and white cuff must be the FOREGROUND leg, visibly overlapping the far thigh at the crotch. Its calf goes backLEFT, near sandal toe lightly on floor and heel only slightly raised.
+- The FAR LEFT THIGH goes FORWARD toward screenRIGHT, its upper blue thigh partially HIDDEN BEHIND the near/right backward thigh. Far calf leads right to a low flat heel contact.
+- Make the near/rear LEFT-on-screen sandal slightly broader than the farther/front RIGHT-on-screen sandal, just mild depth. Near and far legs must not ambiguously look like the same ownership as contactA.
+- Preserve SHORT relaxed step, low knees, small foot clearance, no high kick/jump/squat. Both feet close to common groundline.
+Show complete natural hips, both white shorts cuffs, knees, calves and sandals with unmistakable over/under limb ordering. Keep far arm gently behind to screenLEFT. Natural opposite-arm/leg walking counter-swing, full connected body drawing, no cutout joints.
+All proportions and visual style match input: chibi2.7heads, strawhat/redband, blackhair, open sleeveless redvest/bare chest withoutXscar, blue shorts white cuffs, yellowsash, brown sandals. Headneckchest face RIGHT together. NO scar on the near/anatomicalRIGHT cheek. Do not mirror the figure. No extra accessories.
+Output ONE complete whole-body figure with generous empty transparent margins. Genuine RGBA alpha transparency, no solidcolored backdrop, no ground/shadow, no text/border/diagram or second figure.

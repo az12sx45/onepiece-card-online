@@ -1,0 +1,21 @@
+Use case: stylized-concept. Generate EIGHT complete full-body Monkey D. Luffy interaction drawings, all facing FRONT / SOUTH. One transparent atlas with FOUR COLUMNS by TWO ROWS (8 people), ideally2048x1024. Every drawing is a coherent whole person with connected head/neck/shoulders/limbs, no separated parts or head pasting.
+
+REFERENCE ROLES: image1 shows the CORRECT canonical left-cheek stitched scar and identity; preserve that scar exactly. Its taller body proportions are NOT the target. Image2 is the style/outfit/pose reference for our existing32-pose Luffy sheet: match its shorter2.7-head-tall chibi proportions, clean ink/cel colors, hat size, open vest, shorts/sash/sandals, natural posture. Its missing/weak scars are WRONG and MUST be corrected in all8 new drawings.
+
+NON-NEGOTIABLE CANON SCAR: on his ANATOMICAL LEFT CHEEK, directly UNDER HIS LEFT EYE, paint one clearly legible SHORT HORIZONTAL scar line with TWO short perpendicular stitches CROSSING that line. It is three distinct connected black/brown ink strokes, not just a curved line. Keep visible skin-space between this stitched scar and the eye's lower lid AND mouth line. Do not draw it as an eyebag, blush, wrinkle, smile corner or single plain stroke. Every one of the8 faces, including surprised, angry, seated and wave, must have the same TWO-STITCH SCAR, as clear as reference1. This is the entire purpose of this corrected sheet.
+ALL EIGHT face directly TOWARD THE VIEWER in a coherent frontal view; head, chest, hips and feet face forward. His ANATOMICAL LEFT eye/cheek is on the RIGHT side of the IMAGE. The two-stitch scar is directly below that image-right eye only. Keep image-left cheek unscarred. No turned side view.
+
+ROW1, left to right:
+1 IDLE: standing comfortably, relaxed arms down, calm Luffy expression.
+2 TALK HAPPY: broad friendly Luffy grin, one naturally OPEN palm conversationally toward partner at lower chest, other arm relaxed.
+3 TALK ANNOYED: simple childish frown/pout, hands on hips, not sinister mature anger.
+4 SURPRISED: wide eyes and small round open mouth, hands loosely OPEN in front of chest below chin, never face/ears.
+ROW2, left to right:
+5 FOCUSED USE: standing, small forward lean FROM HIPS, both forearms/hands extended low in front at waist/lower chest for unseen furniture. Natural knees and shoulders. Do not draw furniture.
+6 SIT: coherent entire seated figure as on invisible stool, pelvis lowered, thighs forward, knees naturally bent/calves down/feet supported, hands on thighs. Keep same body proportions; no stool.
+7 WAVE: clear OPEN palm at shoulder SIDE, with a real GAP from his cheek, eyes and mouth; fingers do not cover scar. Other arm relaxed.
+8 LISTEN: attentive calm gaze toward partner, arms relaxed down and subtle whole upper-body interest.
+
+Outfit: canonical early Luffy. Straw hat with red band, messy black hair, OPEN red sleeveless vest with exposed chest and belly between two separate front panels, blue shorts with white rolled hems, yellow waist sash, straw sandals. No chest X scar and no closed vest, no sleeves.
+Preserve all poses as complete natural anatomy. Entire head and neck remain visibly connected to shoulders. Same2.7-head proportions across every pose. Draw all feet and fingers complete. Use clear empty transparent space around every figure and between rows; no neighboring contact or clipping. Full-body figure height about400 of512px cell; at least30px safety margin. Keep standing sandals baseline consistent; sit lowers head naturally, not scaled smaller.
+Real clean RGBA transparency, no text, labels, grid, shadow, ground, background, furniture or glow. Do not mirror or compose the character from body-part stickers.

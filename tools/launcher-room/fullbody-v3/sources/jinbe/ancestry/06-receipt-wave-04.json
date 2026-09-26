@@ -1,0 +1,50 @@
+{
+  "schema": "gpt-fullbody-action-sheet/1",
+  "tool": "built-in image_gen.imagegen",
+  "character": "jinbe",
+  "original": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de43-fc3b-7f21-ac55-6e2f6737b063\\exec-86f43864-6cd8-4856-b6fb-68fff7d39d85.png",
+  "source": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\jinbe\\source-wave-04.png",
+  "sha256": "5fe381081ab6901e352b6a76df9c9f648e1486f074fde8499fb67dc486d36d3c",
+  "promptPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\jinbe\\prompt-wave-04.txt",
+  "prompt": "Fix the layout of these TWO COMPLETE Jinbe figures ONLY. The upper WEST-facing waving figure's sandal is touching the lower NORTH/back-facing waving figure's topknot. Separate the TWO WHOLE FIGURES with ample transparent air so their outlines no longer overlap or touch. Move entire people, do not split heads or body parts.\nReturn two complete figures SIDE BY SIDE on a wide2:1 transparent canvas: LEFT is the exact WEST/left-facing wave pose from the upper input; RIGHT is the exact NORTH/back-facing wave pose from the lower input. Preserve their full body proportions, same style, orange/white diamond kimono, purple sash, cloudy dark cloak, topknot, blue hands/feet and sandals. Both wave with same hand/arm positions as input, naturally attached sleeve/shoulder/elbow. Keep WEST visible left-eye scar correctly on anatomical left face; NORTH absolutely no face. Do not invent a front face for rear figure.\nBoth entire silhouettes must be complete. Where sandal/topknot formerly touched, draw the small missing outline naturally: west sandal with complete sole, north round black topknot with complete outline. No other redesign. Preserve connected head-neck-body, no layered parts, no original characters. Keep each person about75% canvas height, equal scale, at least60pixels transparent space between them and clean padding all around.\nTrue transparent background, no shadow/floor, no labels/grid/captions or text, no furniture. Only these two whole complete Jinbe waving figures.\n",
+  "promptSHA256": "5eda6be835394c89b9c463658443823e219973d3662a904d06991e7628ec97a1",
+  "references": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\jinbe\\wave-pair-edit-input.png",
+      "sha256": "45a5df968c3a0fc071ac0fae61d176d573be9597edaf8632969d7190ee44024e"
+    }
+  ],
+  "image": {
+    "width": 1774,
+    "height": 887,
+    "mode": "RGBA",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "opaque128Pixels": 587033,
+    "edgeAlpha128Pixels": {
+      "top": 0,
+      "bottom": 0,
+      "left": 0,
+      "right": 0
+    }
+  },
+  "layout": {
+    "columns": 2,
+    "rows": 1,
+    "figures": [
+      {
+        "direction": "west",
+        "pose": "wave"
+      },
+      {
+        "direction": "north",
+        "pose": "wave"
+      }
+    ]
+  },
+  "status": "VISUALLY_REVIEWED_PARTIAL_SHEET",
+  "runtimeModified": false,
+  "recordedAt": "2026-09-26T18:16:54.883323+00:00"
+}

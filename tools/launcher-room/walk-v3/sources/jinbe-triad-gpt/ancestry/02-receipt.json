@@ -1,0 +1,70 @@
+{
+  "schema": "gpt-wholebody-selected-source/1",
+  "character": "jinbe",
+  "tool": "built-in image_gen.imagegen",
+  "selectedSource": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\jinbe\\source.png",
+  "sha256": "cfdcd36dadc3a990f9c271fa8c9c302760cd1cc5df112a7055af9eea2d3b6754",
+  "sourceKind": "WHOLE_FIGURE_REPACK_FROM_THREE_GPT_ORIGINALS",
+  "selection": {
+    "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\jinbe\\whole-figure-selection.json",
+    "sha256": "5e9272e5ff937b55781795ed73975c651f19553c97c41589b730069a3b102397"
+  },
+  "originalSources": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\jinbe\\source-02.png",
+      "sha256": "ab7276aaca4a59172357838087b556a25299d0502537bbc3b2463091a689e4c6",
+      "receipt": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\jinbe\\receipt-02.json",
+      "receiptSHA256": "052dc545acb93ec5dc8c8bf69308ebf60c7149c34503b4388d424e9697b64013"
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\jinbe\\source-east-03.png",
+      "sha256": "2a31a544d0b8045327b95c249de45365d9425592313e809670bddf995f7a2464",
+      "receipt": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\jinbe\\receipt-east-03.json",
+      "receiptSHA256": "d13311c26b9702cca2b5adacf3ae23b5d99bbbfd9d7cb6a7d6091c6f2b6ef5d1"
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\jinbe\\source-wave-04.png",
+      "sha256": "5fe381081ab6901e352b6a76df9c9f648e1486f074fde8499fb67dc486d36d3c",
+      "receipt": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\jinbe\\receipt-wave-04.json",
+      "receiptSHA256": "980fad0b0f49306631d159fb8e800e1235ca5452a07177b419161a03de39c572"
+    }
+  ],
+  "rejectedInitial": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\jinbe\\receipt-01.json",
+  "status": "WHOLE_BODY_SOURCE_READY_FOR_IMPORT_REVIEW",
+  "visualReview": {
+    "passes": [
+      "32 complete selected full figures with natural connected neck/sleeves/body",
+      "8east right cheeks are clean blue; west/south anatomical left-eye scars retained",
+      "West-wave sandal and north-wave topknot replaced using two complete GPT redraws, no touching silhouettes",
+      "Kimono/cloud cloak/sash and seated clothes preserved",
+      "East right/west left/north back/south front",
+      "Whole-component extraction produced32 figures and0clippedFrames"
+    ],
+    "limits": [
+      "Static complete action poses; runtime animation not checked",
+      "Generated BF style lettering not applicable",
+      "Minor low-alpha flecks cleaned only by whole-character importer",
+      "Two replacement waves have independently redrawn cloth folds but are complete canonical figures"
+    ],
+    "anatomyReassembled": false,
+    "pixelPainting": false,
+    "wholeCharacterCropScaleTranslateOnly": true,
+    "runtimeValidated": false
+  },
+  "promptSet": [
+    "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\jinbe\\prompt-01.txt",
+    "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\jinbe\\prompt-02.txt",
+    "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\jinbe\\prompt-east-03.txt",
+    "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\jinbe\\prompt-wave-04.txt"
+  ],
+  "wholeFigureExtractionQA": {
+    "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\jinbe\\complete-inspection\\report.json",
+    "sha256": "9b952f0b7e0d687443ae7bb0c3d27f2102322e89e9c2a36c90fcb3f16bb7d1d8",
+    "frames": 32,
+    "clippedFrames": 0,
+    "contactPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\jinbe\\complete-inspection\\contact.png",
+    "contactSHA256": "1eea6cfcd097ed06ebcd0a3a20e38558899ab6b8ecb39d2dfffd59bb85e82b13",
+    "contactVisuallyInspected": true,
+    "notRuntimeAcceptance": true
+  }
+}

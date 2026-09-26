@@ -1,0 +1,40 @@
+{
+  "schema": "whole-body-canon-correction/1",
+  "tool": "image_gen.imagegen built-in",
+  "source": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\chopper\\east-surprised-corrected.png",
+  "sha256": "8961cd42dd4e257425d297a7ef4442010e70a48bb0e03cd4a7a2a968b9254fa7",
+  "generatedSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-a1c5-7fc2-9c4d-857370899a24\\exec-e0b8a228-f544-48a8-bd5e-4f3c52e44eb8.png",
+  "generatedSourceSha256": "8961cd42dd4e257425d297a7ef4442010e70a48bb0e03cd4a7a2a968b9254fa7",
+  "reference": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\chopper\\east-surprised-reference.png",
+  "referenceSha256": "987b446849c6da05a85717a5626f3f62f51046dbaf0a19c619def9d3ee202759",
+  "prompt": "Edit this ONE complete full-body Tony Tony Chopper image, not a sheet. Keep the entire character, same natural connected head/neck/torso/arms/legs, same pose, same three-quarter facing SCREEN RIGHT, same pink cylindrical white-X hat, tan fur, blue nose, maroon shorts, blue backpack, dark cloven-hoof hands and feet.\nMake two precise canon/expression corrections:\n1 REMOVE the silver metal repair band that is currently visible on the BIG NEAR ANTLER at the LEFT SIDE OF THIS IMAGE. That antler is the anatomical RIGHT antler and must be plain uninterrupted BROWN wood/fur colored antler. Absolutely no gray, white, silver or metal patch on this near antler. The repair belongs to Chopper's anatomical LEFT antler, which is the small FAR antler behind the hat at upper RIGHT of this image; it is acceptable and correct for its silver ring to be HIDDEN by the hat. Do not move a ring onto the near antler.\n2 Make his expression unmistakably SURPRISED: wide eyes, small round open O-shaped mouth, no smiling grin, no tongue sticking out. Both little hoof hands stay in front of his chest below chin; do not raise them beside his face.\nRepaint the complete whole figure coherently, not a severed head/antler or body-parts kit. Preserve the original short chibi body proportions and all limbs. Render ONE large complete figure centered with ample transparent margin (at least10% canvas), including both antlers, hat and feet. Real clean alpha transparency, no text, shadow, ground or extra objects.\n",
+  "size": [
+    1055,
+    1491
+  ],
+  "regions": [
+    {
+      "rect": [
+        52,
+        61,
+        935,
+        1335
+      ],
+      "area": 729782
+    }
+  ],
+  "highAlphaEdgeCounts": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "review": {
+    "visuallyInspected": true,
+    "canon": "Near anatomical RIGHT antler now uninterrupted brown; far anatomical LEFT ring hidden behind hat, no wrong-side silver ring. Blue nose/pink hat/blue bag/cloven hooves preserved.",
+    "pose": "One complete east surprised figure, O-shaped mouth and hands at chest; head-neck/shoulder/limbs continuous.",
+    "status": "READY_FOR_ROOT_WHOLE_FIGURE_REPLACEMENT",
+    "notes": "Replace complete east surprised figure only, never an antler/head body part."
+  },
+  "recordedAt": "2026-09-26T18:20:14.059289+00:00"
+}

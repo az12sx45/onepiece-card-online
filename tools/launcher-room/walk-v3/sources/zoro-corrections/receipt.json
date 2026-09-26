@@ -1,0 +1,17 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "original": "exec-b12f7ae7-6281-4253-aef3-bea8c7321cbf.png",
+  "imageSha256": "88605cdc0db11790262dac0082113e6f88615156f8dc25b34ddcee77b0f91776",
+  "promptSha256": "705c9d76daf40a9da59d9c1ea5ab06b357446fb893431ceb7753bc274187fec4",
+  "references": [
+    {
+      "path": "walk/zoro/west-contact-c.png",
+      "sha256": "9ee92910e683ad8e5503e89dd35e9b0d8c67ae2d1684cabde61a40255d6520b0"
+    },
+    {
+      "path": "walk/zoro/south-contact-c.png",
+      "sha256": "3935cbc82ed8e8b30738972f75f606e240ae848b4dea8372575f64de9c861f2a"
+    }
+  ],
+  "review": "Twelve whole figures; west C arm and south C right-hip scabbards corrected with whole figure replacement."
+}

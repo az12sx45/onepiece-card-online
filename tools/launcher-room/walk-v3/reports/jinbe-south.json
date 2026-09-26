@@ -1,0 +1,316 @@
+{
+  "schema": "one-piece-room-walk-report/3",
+  "key": "jinbe",
+  "direction": "south",
+  "method": "three authored whole bodies; contact, passing, opposite contact, passing",
+  "anatomyReassembled": false,
+  "mirrored": false,
+  "interpolatedLimbs": false,
+  "frames": [
+    {
+      "key": "jinbe",
+      "direction": "south",
+      "pose": "contact-a",
+      "source": "jinbe-south-a-gpt-edit",
+      "region": [
+        0,
+        0,
+        1229,
+        1280
+      ],
+      "index": 0,
+      "bounds": [
+        17,
+        16,
+        111,
+        112
+      ],
+      "opaqueBoundsAtOutput": [
+        17,
+        16,
+        110,
+        112
+      ],
+      "sourceAnchor": [
+        612.0,
+        1240
+      ],
+      "localAnchor": [
+        603.0,
+        1234
+      ],
+      "sourceAlphaBounds": [
+        9,
+        6,
+        1214,
+        1242
+      ],
+      "opaqueBounds": [
+        11,
+        8,
+        1201,
+        1232
+      ],
+      "opaquePixels": 853077,
+      "removedDistantAlphaPixels": 6497,
+      "sourceUnitScale": 0.25308641975308643,
+      "sourceOpaqueClearance": [
+        11,
+        8,
+        17,
+        40
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.3066202090592335,
+      "wholeImageScale": 0.07760141093474428,
+      "inverseWholeImageTransform": [
+        12.886363636363635,
+        0,
+        -221.72727272727263,
+        0,
+        12.886363636363635,
+        -209.27272727272702
+      ],
+      "rgbaSha256": "656cf06943c638e2e8fec04d25b7feeda8001c49444d32cc92bb043496f254b4",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false,
+      "authoredPoseIndex": 0
+    },
+    {
+      "key": "jinbe",
+      "direction": "south",
+      "pose": "neutral",
+      "source": "jinbe-triad-gpt",
+      "region": [
+        391,
+        1067,
+        304,
+        307
+      ],
+      "index": 1,
+      "bounds": [
+        17,
+        16,
+        113,
+        112
+      ],
+      "opaqueBoundsAtOutput": [
+        18,
+        17,
+        112,
+        112
+      ],
+      "sourceAnchor": [
+        539.5,
+        1371
+      ],
+      "localAnchor": [
+        147.5,
+        303
+      ],
+      "sourceAlphaBounds": [
+        392,
+        1068,
+        694,
+        1373
+      ],
+      "opaqueBounds": [
+        394,
+        1070,
+        298,
+        301
+      ],
+      "opaquePixels": 54899,
+      "removedDistantAlphaPixels": 3794,
+      "sourceUnitScale": 1.0301507537688441,
+      "sourceOpaqueClearance": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.3066202090592335,
+      "wholeImageScale": 0.31586503948312994,
+      "inverseWholeImageTransform": [
+        3.165909090909091,
+        0,
+        -55.118181818181824,
+        0,
+        3.165909090909091,
+        -51.581818181818164
+      ],
+      "rgbaSha256": "8042de3046a1c1926a66d555e35ea7eda28175b7f902664307b6dff42cf87583",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false,
+      "authoredPoseIndex": 1
+    },
+    {
+      "key": "jinbe",
+      "direction": "south",
+      "pose": "contact-c",
+      "source": "jinbe-triad-gpt",
+      "region": [
+        746,
+        1067,
+        307,
+        321
+      ],
+      "index": 2,
+      "bounds": [
+        16,
+        12,
+        113,
+        113
+      ],
+      "opaqueBoundsAtOutput": [
+        17,
+        12,
+        112,
+        112
+      ],
+      "sourceAnchor": [
+        898.0,
+        1385
+      ],
+      "localAnchor": [
+        150.0,
+        317
+      ],
+      "sourceAlphaBounds": [
+        748,
+        1068,
+        1052,
+        1387
+      ],
+      "opaqueBounds": [
+        749,
+        1070,
+        301,
+        315
+      ],
+      "opaquePixels": 53996,
+      "removedDistantAlphaPixels": 3934,
+      "sourceUnitScale": 1.0353535353535352,
+      "sourceOpaqueClearance": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.3066202090592335,
+      "wholeImageScale": 0.31746031746031744,
+      "inverseWholeImageTransform": [
+        3.1500000000000004,
+        0,
+        -51.60000000000002,
+        0,
+        3.1500000000000004,
+        -35.80000000000001
+      ],
+      "rgbaSha256": "72acf39067a93be0b644e31062fb3b3330fbd03e21d6001a46f1682d511ac28c",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false,
+      "authoredPoseIndex": 2
+    },
+    {
+      "key": "jinbe",
+      "direction": "south",
+      "pose": "neutral",
+      "source": "jinbe-triad-gpt",
+      "region": [
+        391,
+        1067,
+        304,
+        307
+      ],
+      "index": 3,
+      "bounds": [
+        17,
+        16,
+        113,
+        112
+      ],
+      "opaqueBoundsAtOutput": [
+        18,
+        17,
+        112,
+        112
+      ],
+      "sourceAnchor": [
+        539.5,
+        1371
+      ],
+      "localAnchor": [
+        147.5,
+        303
+      ],
+      "sourceAlphaBounds": [
+        392,
+        1068,
+        694,
+        1373
+      ],
+      "opaqueBounds": [
+        394,
+        1070,
+        298,
+        301
+      ],
+      "opaquePixels": 54899,
+      "removedDistantAlphaPixels": 3794,
+      "sourceUnitScale": 1.0301507537688441,
+      "sourceOpaqueClearance": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.3066202090592335,
+      "wholeImageScale": 0.31586503948312994,
+      "inverseWholeImageTransform": [
+        3.165909090909091,
+        0,
+        -55.118181818181824,
+        0,
+        3.165909090909091,
+        -51.581818181818164
+      ],
+      "rgbaSha256": "8042de3046a1c1926a66d555e35ea7eda28175b7f902664307b6dff42cf87583",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false,
+      "authoredPoseIndex": 1
+    }
+  ],
+  "visualAccepted": false
+}

@@ -1,5 +1,18 @@
 # File Map
 
+## 2026-09-27 完整人物原畫與暫撤工作（1.1.14 候選完成，尚未公開部署）
+
+| 檔案 | 用途 |
+| --- | --- |
+| `desktop/launcher-room.js`、`launcher.html`、`launcher-room.css` | 暫撤派工、領取、工作徽章／倒數與強制工作狀態；保留聊天、親密度、詳情、家具活動和好友唯讀。 |
+| `desktop/launcher-room-motion.js`、`launcher-room-motion-data.js` | 四向完整人物圖預載／解碼、A／neutral／C／neutral 四拍步態與八種單張互動姿勢。 |
+| `desktop/launcher-profile-shop.js`、`desktop/main.js`、`desktop/package.json`、`package-lock.json` | 商城完整人物縮圖、v3 本機資源路由及 1.1.14 封裝白名單。 |
+| `public/images/launcher_room/acting_v3/`、`motion_v3/`、`portrait_v3/` | 40 張八姿勢圖集、40 張四拍步態圖集、十張完整人物縮圖；全部為既有原作角色。 |
+| `docs/LAUNCHER_ROOM_FULLBODY_ART_20260927.json`、`LAUNCHER_ROOM_WALK_V3_20260927.json` | 320 靜態姿勢、120 步態原畫／160 播放格、十張 portrait 的來源／成品 SHA 與選取契約。 |
+| `tools/launcher-room/fullbody-v3/`、`walk-v3/` | GPT 原始圖、提示、receipt／ancestry、original／resolved selection、80 張 raw atlas PNG、十張 portrait PNG 及報告；fullbody 下另存 SHA 綁定的 review 與實景證據。 |
+| `tools/launcher-room/import_fullbody_v3.py`、`import_walk_v3.py`、`validate_fullbody_v3.py`、`validate-fullbody-manifest.js`、`validate-fullbody-release.js`、`test_fullbody_v3.py`、`README-fullbody-v3.md` | 完整人物匯入、來源重建、SHA／完整性／review gate、隔離 fixture 與實際 CLI 說明。 |
+| `scripts/launcher_room_motion_qa.js`、`launcher_room_browser_qa.js`、`launcher_profile_shop_browser_qa.js`、`desktop_launcher_package_qa.js` | Controller、真素材房間、工作暫撤／既存資料、BGM 實際播放與來源／Windows 封裝驗證。 |
+
 ## 2026-09-27 房間四向步態重製（1.1.13 已部署）
 
 | 檔案 | 用途 |

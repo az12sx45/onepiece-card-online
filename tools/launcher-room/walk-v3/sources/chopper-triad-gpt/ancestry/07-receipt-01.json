@@ -1,0 +1,29 @@
+{
+  "schema": "builtin-gpt-image-receipt/1",
+  "generator": "gpt-image",
+  "tool": "image_gen.imagegen",
+  "image": {
+    "path": "walk/chopper/source-01-rejected.png",
+    "sha256": "da4466434ae4654a7a42e7918a15970baba76c4e5f55b777ba58d1676b7e9c01"
+  },
+  "prompt": "Use case: stylized-concept\nAsset type: Complete whole-body hand-drawn sprite sheet for a One Piece room game.\nInput 1 is a POSE LAYOUT reference only (Luffy corrected 12-pose guide). Input 2 is Tony Tony Chopper's IDENTITY, costume, chibi proportion and finished rendering reference. Output only CHOPPER. Never copy Luffy's clothing or anatomy.\nPrimary request: Draw 12 separate COMPLETE Chopper figures on genuine transparent alpha, 3 columns by 4 rows, portrait 1536x2048 or matching 3:4 aspect. Each figure must have its entire hat, both antlers, head, continuous neck/torso, naturally attached arms, both legs and both hooves. Do not draw detachable parts. No text, lines, boxes, floor, shadow or background.\nRows top to bottom: EAST facing screen RIGHT in right profile/very slight 3/4; WEST facing screen LEFT; NORTH completely from behind with no face or hat-front X visible; SOUTH directly front-facing. Each direction is independently drawn, never mirrored.\nColumns left to right: A contact, neutral standing, C opposite contact. MATCH the alternating limb order of input1 carefully. Column C reverses BOTH which anatomical leg is forward and which anatomical arm is forward relative to column A. It is not another copy of A, not merely a shifted figure. Neutral has feet close under pelvis and arms comfortably down.\nEAST A: near RIGHT leg forward/right, far LEFT leg behind/left; near RIGHT arm back/left and far LEFT arm gently forward/right. EAST C: near RIGHT leg behind/left, far LEFT leg forward/right; near RIGHT arm forward/right and far LEFT arm back/left. WEST corresponds to the reference row2: near LEFT leg forward/left in A and behind/right in C, opposite arm swing. NORTH A shows anatomical RIGHT hoof sole nearer viewer at image RIGHT; NORTH C shows anatomical LEFT hoof sole nearer viewer at image LEFT. SOUTH A advances anatomical RIGHT hoof at image LEFT; SOUTH C advances anatomical LEFT hoof at image RIGHT. Keep the short-legged tiny walking stride natural, small and low, no running/high knee/flight, at least one hoof grounded; no stretching Chopper into long human legs.\nCostume and canon: early Drum Island small brown reindeer Chopper, blue nose, giant pink top hat with white X only on front, brown branching antlers, maroon shorts, blue medical backpack with white X, tiny tail, dark cloven hooves, no human shoes. Exactly ONE silver repair cuff on his anatomical LEFT antler. On WEST it is visible on near antler; on SOUTH it is image RIGHT; on NORTH it is image LEFT; in EAST the near RIGHT antler is completely plain brown, left cuff can be obscured behind hat. Do NOT copy the erroneous right-antler cuff in reference2's surprised east cell.\nPreserve the same cute short-body proportions, hat size, antler spacing, face, scale, palette and clean inked anime/cel shading across all 12. Same fixed camera and ground baseline inside each row. Contact A and C must keep head/body orientation and height identical. Small swing at shoulders, no aggressive gestures, cheerful neutral closed mouth. Ensure broad transparent gutters, all figures safely inside canvas with 5% margins and no overlap. Render actual complete finished character figures, never assemble a rig.\n",
+  "promptFile": {
+    "path": "walk/chopper/prompt.txt",
+    "sha256": "3ccd50ca91df2f38257d4bf2a080a6de207cfbaa8a0ee4dc0ec06af7763f8381"
+  },
+  "generatedOriginalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-a1c5-7fc2-9c4d-857370899a24\\exec-2024af16-8231-40fd-9125-0b8492032f10.png",
+  "generatedOriginalSha256": "da4466434ae4654a7a42e7918a15970baba76c4e5f55b777ba58d1676b7e9c01",
+  "inputReferences": [
+    {
+      "path": "pilot/triad/corrected-guide-12.png",
+      "sha256": "57bb80af0219d0edaf5b52850d5c400e6c3aee8aec9801f29dbae317948b818b"
+    },
+    {
+      "path": "art/chopper/source.png",
+      "sha256": "dfaad265ff1ab2e4718884afd7d8a52b8155187db18d1c08c5a88a684f8e5f7e"
+    }
+  ],
+  "status": "rejected: human sandals and repeated north contact foot",
+  "anatomyReassembled": false,
+  "mirrored": false
+}

@@ -1,0 +1,17 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "original": "exec-c8505856-c4db-44b7-89af-6617b3932221.png",
+  "imageSha256": "6bda8d8cbf857bc85179a1f2612fa6e1beb7a62b082ac64673a438de64651299",
+  "promptSha256": "a82f6280f56c8319e0efad156073fc05cffb839da3fb6f1e4d4e91d173c033f4",
+  "references": [
+    {
+      "path": "pilot/triad/corrected-guide-12.png",
+      "sha256": "57bb80af0219d0edaf5b52850d5c400e6c3aee8aec9801f29dbae317948b818b"
+    },
+    {
+      "path": "art/zoro/source.png",
+      "sha256": "ec94a43bb36a8c2784d8d4c526c97b8f3b5ff0c72c3e7a054e9012ae95c88954"
+    }
+  ],
+  "review": "Twelve whole figures; west C arm and south C right-hip scabbards corrected with whole figure replacement."
+}

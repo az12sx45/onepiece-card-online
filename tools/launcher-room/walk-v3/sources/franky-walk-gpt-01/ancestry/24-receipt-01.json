@@ -1,0 +1,58 @@
+{
+  "schema": "gpt-fullbody-action-sheet/1",
+  "tool": "built-in image_gen.imagegen",
+  "character": "franky",
+  "original": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de43-fc3b-7f21-ac55-6e2f6737b063\\exec-ff9d51f6-2204-4e19-be4c-a316dda4706f.png",
+  "source": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\franky\\source-01.png",
+  "sha256": "f45ce623501d97431c8b267e3140c816a8cd3e0caba8270f936f2ca01531e3ee",
+  "promptPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\franky\\prompt-01.txt",
+  "prompt": "Create a production game action sheet, exactly8columns x4rows of32 COMPLETE whole-body FRANKY from ONE PIECE. Reference1 is the exact canonical character/outfit identity. Reference2 supplies the complete-figure polished chibi ink-and-cel-shading style and action-sheet organization. Draw every pose as one continuous character with natural neck/shoulder connections, never parts pasted together.\nIdentity: NEW WORLD cyborg Franky with tall swept-up light-blue hair, sunglasses, grinning square face, angular metal nose, huge muscular bare chest, open red Hawaiian shirt with yellow/green palms, blue briefs with white star, bare sturdy legs/feet and mechanical knees. Two large RED BALL shoulders attached reasonably to torso with smaller upper arm/elbow joints; blue oversized mechanical forearms with dark blue star emblems, red mechanical hands. Canonical BF-37 shoulder identification where visible. His forearms are large, but NEVER grow to cover or replace his head; preserve same mechanical anatomy and readable elbow through each gesture. Overall sturdy 2.7-head chibi figure, wide chest but enough transparent room between figures. No weapons.\nRows exactly: EAST/right-facing whole body; WEST/left-facing independently drawn whole body; NORTH/rear only absolutely NO visible face,eyes,nose,mouth; SOUTH/front. Head/neck/chest turn together, no mirrored asymmetric lettering.\nColumns exactly:\n1 idle, relaxed standing arms low.\n2 talk_happy, wide grin, ONE open mechanical palm at waist/lower-chest height in front, elbow down; other arm relaxed.\n3 talk_annoyed, stern frown and low fists beside hips, no raised arms.\n4 surprised, mouth open and eyes widened/sunglasses lift slightly, hands modestly spread at upper waist but BELOW chin, elbows down, both red shoulder balls stay attached naturally.\n5 focused_use, small forward lean, BOTH mechanical hands extended LOW in front at waist-height, elbows bent naturally and below shoulders; no table/object.\n6 sit, natural seated body, bent knees with feet low, both huge hands resting beside/on thighs, no chair.\n7 wave, one open red palm BESIDE shoulder OUTSIDE head silhouette, palm at shoulder height with clear gap from face; naturally bent elbow down, DO NOT raise palm above head or attach forearm to head.\n8 listen, attentive quiet posture, relaxed arms low, small expression change.\nAll poses retain full fingers, both legs, feet, same head size and body geometry. The rear row uses body gestures with face fully hidden. Preserve actual mechanical joint order shoulder->upperarm->elbow->forearm->hand. No cutout seams, floating head, disconnected neck, duplicate limbs, broken elbows.\nLandscape2:1 preferably2048x1024; invisible8x4 equal cells with one whole character centered each. Generous transparent padding, same standing body height near200px in256cell and common ground baseline, seated head naturally lower. All hair,hands,feet entirely inside their cells; no row or external-edge clipping. Real transparent alpha background, no checkerboard or floor/shadow, no furniture, no captions/grid/borders/watermark. The BF-37 on mechanical shoulder is the only allowed design lettering.\n",
+  "promptSHA256": "0e9235484fdf52baf749bfa11b055fdb8170f765da70ce144d09a001db2293bd",
+  "references": [
+    {
+      "path": "D:\\Codex_Release_Worktrees\\launcher-room-art-repair-1.1.14\\public\\images\\launcher_room\\action_frames\\franky\\idle.webp",
+      "sha256": "bbf8fd90b56fa99b9ee613f79621bbde62196e2f5cff2996e99b3301f2577e96"
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\luffy-fullbody-actions-32-02.png",
+      "sha256": "2e4bd717564897df3fbe7083ff59cd1069f8b2a9ef096b19c98785409695b7dd"
+    }
+  ],
+  "image": {
+    "width": 1774,
+    "height": 887,
+    "mode": "RGBA",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "opaque128Pixels": 609010,
+    "edgeAlpha128Pixels": {
+      "top": 0,
+      "bottom": 0,
+      "left": 0,
+      "right": 0
+    }
+  },
+  "layout": {
+    "rows": [
+      "east",
+      "west",
+      "north",
+      "south"
+    ],
+    "columns": [
+      "idle",
+      "talk_happy",
+      "talk_annoyed",
+      "surprised",
+      "focused_use",
+      "sit",
+      "wave",
+      "listen"
+    ]
+  },
+  "status": "PENDING_VISUAL_REVIEW",
+  "runtimeModified": false,
+  "recordedAt": "2026-09-26T18:06:08.049192+00:00"
+}

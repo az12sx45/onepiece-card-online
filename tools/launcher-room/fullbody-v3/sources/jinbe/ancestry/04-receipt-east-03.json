@@ -1,0 +1,55 @@
+{
+  "schema": "gpt-fullbody-action-sheet/1",
+  "tool": "built-in image_gen.imagegen",
+  "character": "jinbe",
+  "original": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de43-fc3b-7f21-ac55-6e2f6737b063\\exec-2bf328bd-1bf4-48fc-8dc2-8df5cbfa3070.png",
+  "source": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\jinbe\\source-east-03.png",
+  "sha256": "2a31a544d0b8045327b95c249de45365d9425592313e809670bddf995f7a2464",
+  "promptPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\jinbe\\prompt-east-03.txt",
+  "prompt": "EDIT TARGET image1: this8figure JINBE sheet, all eight figures face EAST/screenRIGHT. Image2 is only a zoom identifying the unwanted reddish oval on the near cheek; do not add zoom panels to output.\nRemove the small RED/BROWN OVAL SPOT from the visible cheek of EVERY ONE of the8fullbody figures. This oval is BETWEEN pale curled sideburn and white tusk, BELOW the visible eye. It is a mistake: that cheek must be FLAT CLEAN BLUE SKIN. No red spot, no pink dot, no brown blemish, no wound, no scar on this cheek. You MUST visibly eliminate the oval rather than lighten, shrink or move it. Restore smooth blue skin matching adjacent face. Preserve eyebrow, eye, tusk, sideburn and beard exactly. The red chest sun tattoo is correct and must remain.\nAll8 figures are full whole Jinbe, facing right. Preserve EVERY existing pose, whole body geometry, head/neck connection, clothing, cloudy cloak, sleeves/fingers and sandals. No body-part cutting or compositing. Keep expressions and canonical orange kimono with white diamonds, purple sash, dark cloudy cloak and black topknot.\nOutput the same4columns x2rows order: row1idle/talk_happy/talk_annoyed/surprised; row2focused_use/sit/wave/listen. Each WHOLE figure complete with generous transparent margins. No change of direction, no new marks, no objects, no text/grid/labels, no floor/shadow, true transparent background. The ONLY drawing change is erasing the incorrect red oval on8right cheeks and restoring blue skin.\n",
+  "promptSHA256": "e02a06b01ab3c77415c776351eeade4317c2177ed230bc4416ca2603feb963e3",
+  "references": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\jinbe\\east-eight-edit-input.png",
+      "sha256": "ba6fa041ba4e7dfcc08254a02676c8fd769104a3c02dde94110dc70ec5f2be83"
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\jinbe\\east-face-edit-detail.png",
+      "sha256": "2363b45bf037faeff19399a865085bee16eca04f068be29a5425c71c71dc1de8"
+    }
+  ],
+  "image": {
+    "width": 1774,
+    "height": 887,
+    "mode": "RGBA",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "opaque128Pixels": 467071,
+    "edgeAlpha128Pixels": {
+      "top": 0,
+      "bottom": 0,
+      "left": 0,
+      "right": 0
+    }
+  },
+  "layout": {
+    "columns": 4,
+    "rows": 2,
+    "direction": "east",
+    "poseOrder": [
+      "idle",
+      "talk_happy",
+      "talk_annoyed",
+      "surprised",
+      "focused_use",
+      "sit",
+      "wave",
+      "listen"
+    ]
+  },
+  "status": "VISUALLY_REVIEWED_PARTIAL_SHEET",
+  "runtimeModified": false,
+  "recordedAt": "2026-09-26T18:14:14.495956+00:00"
+}

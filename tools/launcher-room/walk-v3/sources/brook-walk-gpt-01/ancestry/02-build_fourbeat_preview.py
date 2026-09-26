@@ -1,0 +1,21 @@
+from pathlib import Path
+from PIL import Image,ImageDraw
+import cv2,numpy as np,json,hashlib,datetime
+P=Path(__file__).parent;O=P/'preview';O.mkdir(exist_ok=True)
+DIRS=['east','west','north','south'];POSES=['contact-a','neutral','contact-c'];BEATS=[0,1,2,1];sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
+def read(path):
+ im=Image.open(path).convert('RGBA');a=np.array(im);n,l,stats,centers=cv2.connectedComponentsWithStats((a[:,:,3]>128).astype('uint8'),8);i=max(range(1,n),key=lambda j:stats[j,4]);x,y,w,h,area=map(int,stats[i]);core=(l==i).astype('uint8');mask=cv2.dilate(core,np.ones((3,3),'uint8'));a[:,:,3]=np.where(mask,a[:,:,3],0);hy,hx=np.where(core[y:y+round(h*.40),:]);head=(int(hx.min()),int(hx.max()+1));box=(max(0,x-3),max(0,y-3),min(im.width,x+w+3),min(im.height,y+h+3));crop=Image.fromarray(a).crop(box)
+ return {'image':crop,'bounds':[x,y,w,h],'box':list(box),'headWidth':head[1]-head[0],'headCenterX':sum(head)/2,'groundY':y+h}
+def render(data,scale,mult=1):
+ img=data['image'];rs=img.resize((round(img.width*scale*mult),round(img.height*scale*mult)),Image.Resampling.LANCZOS);x=round((64-(data['headCenterX']-data['box'][0])*scale)*mult);y=round((112-(data['groundY']-data['box'][1])*scale)*mult);out=Image.new('RGBA',(128*mult,128*mult));out.alpha_composite(rs,(x,y));return out,[x/mult,y/mult]
+guide=Image.new('RGBA',(1536,2048));contact=Image.new('RGB',(4*192,4*220),'#294b51');draw=ImageDraw.Draw(contact);combined=[Image.new('RGB',(4*128,154),'#294b51') for _ in BEATS];records=[]
+for row,d in enumerate(DIRS):
+ sources=[P/d/((p+'-revised' if p=='contact-c' and d!='south' else p)+'.png') for p in POSES];data=[read(f) for f in sources];unit=[data[0]['headWidth']/a['headWidth'] for a in data];baseScale=100/data[0]['bounds'][3];frames=[]
+ for col,(f,a,u) in enumerate(zip(sources,data,unit)):
+  frame,translation=render(a,baseScale*u);frame.save(O/f'{d}-{POSES[col]}.png');frames.append(frame);big,_=render(a,baseScale*u,4);guide.alpha_composite(big,(col*512,row*512));records.append({'direction':d,'pose':POSES[col],'source':str(f),'sourceSHA256':sha(f),'sourceOpaqueBounds':a['bounds'],'sourceHeadWidth':a['headWidth'],'referenceHeadWidth':data[0]['headWidth'],'sourceUnitScale':u,'directionBaseScale':baseScale,'wholeFigureFinalScale':baseScale*u,'wholeFigureTranslation':translation,'normalizedBodyHeight':a['bounds'][3]*baseScale*u,'normalizedHeadWidth':a['headWidth']*baseScale*u,'headReference':'opaque width in top40percent of fullbody height; all pose scales derive from same direction A head width','anatomyReassembled':False})
+ atlas=Image.new('RGBA',(512,128));gifs=[]
+ for k,i in enumerate(BEATS):
+  atlas.alpha_composite(frames[i],(k*128,0));bg=Image.new('RGB',(128,128),'#294b51');bg.paste(frames[i],(0,0),frames[i]);gifs.append(bg);large=frames[i].resize((192,192),Image.Resampling.NEAREST);contact.paste(large,(k*192,row*220+22),large);draw.text((k*192+4,row*220+4),f'{d} {POSES[i]}',fill='white');combined[k].paste(bg,(row*128,22));ImageDraw.Draw(combined[k]).text((row*128+4,5),d,fill='white')
+ atlas.save(O/f'{d}-walk.png');gifs[0].save(O/f'{d}-normal-0.8s.gif',save_all=True,append_images=gifs[1:],duration=200,loop=0,disposal=2,optimize=False)
+guide.save(P/'corrected-guide-12.png');contact.save(O/'contact.png');combined[0].save(O/'four-directions-normal-0.8s.gif',save_all=True,append_images=combined[1:],duration=200,loop=0,disposal=2,optimize=False)
+report={'schema':'wholebody-fourbeat-preview/1','createdAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'cell':128,'root':[64,112],'beats':['contact-a','neutral','contact-c','neutral'],'durationMs':[200,200,200,200],'cycleMs':800,'normalSpeedOnly':True,'rendering':'GPT complete drawings, whole-image isotropic scale and translation only; no interpolation, mirrors or mesh/limb deformation','guide':{'path':str(P/'corrected-guide-12.png'),'sha256':sha(P/'corrected-guide-12.png'),'layout':'3columns A/neutral/C x4rows east/west/north/south'},'records':records,'status':'QA_PREVIEW_READY_FOR_VISUAL_RUNTIME_REVIEW','notHumanOrProductionAcceptance':True,'runtimeModified':False};(O/'report.json').write_text(json.dumps(report,indent=2),encoding='utf-8');print(json.dumps({'output':str(O),'guide':report['guide'],'poseCount':len(records),'headScaleRule':'same directional hat/head width, not perpose fullheight normalization'}))

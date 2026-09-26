@@ -1,0 +1,68 @@
+{
+  "schema": "gpt-fullbody-character-32-receipt/1",
+  "tool": "built-in image_gen.imagegen",
+  "character": "sanji",
+  "source": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\sanji\\source.png",
+  "sha256": "dd3381080f7e226ccf36b2c9963c616a5ac87932f1bbe41130d586e3f377bfcf",
+  "reference": [
+    {
+      "path": "D:\\Codex_Release_Worktrees\\launcher-room-art-repair-1.1.14\\public\\images\\launcher_room\\action_frames\\sanji\\idle.webp",
+      "sha256": "e7ec847e75bc2ca53781263854a7b53d8c9c7b7447c7da5dfd9a162f0afe5075"
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\luffy-fullbody-actions-32-02.png",
+      "sha256": "2e4bd717564897df3fbe7083ff59cd1069f8b2a9ef096b19c98785409695b7dd"
+    }
+  ],
+  "generationHistory": [
+    {
+      "generatedSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-a1c5-7fc2-9c4d-857370899a24\\exec-aaab0cc4-7107-4a27-bcd3-666859668709.png",
+      "promptFile": "source-01.prompt.txt",
+      "promptPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\sanji\\source-01.prompt.txt",
+      "prompt": "Use case: stylized-concept. Asset: one complete full-body character interaction atlas, exactly 32 drawings arranged 8 columns by 4 rows on real transparent RGBA. This is newly painted coherent full-body art, not a rig kit and not separated parts.\n\nINPUT ROLES: Image 1 is this character's identity and outfit reference, subject to the explicit canon corrections below. Image 2 is the Luffy full-body interaction sheet: use its clean ink / cel-painted chibi style, proportions, coherent whole-body poses and 8x4 layout ONLY. Never draw Luffy or borrow his clothes. Do not copy any alpha fringe or colored speckles from references.\n\nCHARACTER / CANON:\nSANJI, early pre-timeskip canon. Blond bob/swept hair covers ANATOMICAL LEFT EYE, while ANATOMICAL RIGHT EYE and distinctive curled RIGHT EYEBROW are visible. Black double-breasted suit jacket with gold buttons, black trousers and shoes, blue shirt, dark necktie. EAST right side: show the visible RIGHT eye with curled eyebrow. WEST left side: LEFT eye is genuinely covered by blond fringe; do not paint an eye over the hair and do not swap fringe side. NORTH: back of blond head only. SOUTH: viewer's right half of face is covered (his left eye), viewer's left eye is visible with curled eyebrow. Slim elegant adult male chibi proportions consistent 2.7 heads, small poised smile, dry irritated brow, attentive gentleman body language. No post-timeskip reversed fringe, no scar, no extra smoking item.\n\nLAYOUT: 2:1 landscape, ideally 2048x1024. Exactly eight equal columns and four equal rows. One whole character safely isolated in each cell. Leave clear transparent gaps between every figure and between rows, including extended fingers, swords, hair, antlers and shoes. At least 18px empty margin within each 256 cell. Every standing figure uses a common scale, approx 2.7 head-heights tall (Chopper retains his shorter canonical animal proportions), aligned feet baseline. Sit uses unchanged body scale with naturally lower head height. Entire figures must be inside the canvas and separable without amputating or touching neighboring art.\n\nDIRECTIONS / ROWS:\n1 EAST: face screen RIGHT, coherent right-facing three-quarter side head, shoulders, torso, pelvis, feet; gaze partner on right. Viewer mostly sees anatomical RIGHT side.\n2 WEST: face screen LEFT, coherent left-facing three-quarter side body; independently drawn, NOT a horizontal mirror. Viewer mostly sees anatomical LEFT side.\n3 NORTH: face fully AWAY, back of head and body only. No eyes, cheeks, mouth or peeked face anywhere in this row.\n4 SOUTH: face toward viewer, fully frontal coherent figure.\nKeep all asymmetric canonical details on their true anatomical side across all rows.\n\nPOSES / EIGHT COLUMNS, same order in every row:\n1 IDLE: comfortable upright standing, both hands naturally relaxed down.\n2 TALK HAPPY: character-appropriate smile, one natural open palm at lower chest height extended conversationally toward partner; other arm relaxed.\n3 TALK ANNOYED: character-appropriate frown and hands on hips, normal shoulder and elbow anatomy, no extreme rage.\n4 SURPRISED: widened eyes and mildly open mouth, shoulders slightly gathered, both hands open IN FRONT OF CHEST below chin; never overhead and never at ears.\n5 FOCUSED USE: stand with small natural forward lean from hips, both hands lightly reaching forward LOW between waist and lower chest to use unseen furniture; normal relaxed wrists/elbows, no fists touching face; draw no tool or furniture.\n6 SIT: complete natural seated posture as if on an invisible stool, pelvis low, thighs forward, knees comfortably bent, calves down, feet resting, relaxed hands on thighs; no stool or furniture, no detached/shortened legs.\n7 WAVE: visibly open palm (or canonical Chopper split hoof) beside shoulder, hand directed to partner, CLEAR SPACE from cheek/nose/mouth/eye, natural shoulder-elbow-wrist chain. No closed fist near face.\n8 LISTEN: relaxed attentive expression and gaze at partner, subtle whole-upper-body interest, arms relaxed naturally.\n\nSTYLE/ANATOMY: consistent handsome clean linework, readable cel colors, same character face, hair and body proportions throughout. Draw every pose as one fresh continuous full figure: skull connects naturally through neck into shoulders, arm volume bends naturally, clothing wraps the pose, legs and feet have anatomy. Do not paste heads, warp straight limb stickers, repeat one rigid torso with changed arms, separate limbs, or make puppet seams. Keep scale and camera consistent, but show genuine pose-specific body language.\nNo original characters, no extra people, no costume changes, no text/labels/dividers, no ground shadows, no furniture, no watermarks, no checkerboard/background, no glow/fringe/speckles. Real empty alpha around clean antialiased character silhouettes.\n",
+      "generatedSourceSha256": "af69c2f931ea027a648ca773102425bbd08412ee29c7cf89baf416bcb139b004"
+    },
+    {
+      "generatedSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-a1c5-7fc2-9c4d-857370899a24\\exec-fe49a016-ebd5-4946-8562-3938d3450e7c.png",
+      "promptFile": "source-02.prompt.txt",
+      "promptPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\sanji\\source-02.prompt.txt",
+      "prompt": "Targeted correction: coherent SIDE DIRECTIONS for the first TWO ROWS of this complete 32-pose Sanji sheet. The NORTH row3 and SOUTH row4 should remain unchanged, including identity, outfit, scale, and full connected anatomy.\nROW1 EAST must clearly face screen RIGHT with the ENTIRE WHOLE FIGURE: face/nose, neck, shoulders, torso lapels, hips, legs and shoes share a side three-quarter view about 65–75 degrees away from frontal toward right. Current row1 is too close to frontal. Repaint the whole row1 full-body poses coherently, not just turn heads. Anatomical RIGHT eye with curled right eyebrow is near/visible, blond fringe still covers anatomical LEFT eye on far side.\nROW2 WEST faces screen LEFT with the same matching 65–75 degree side view of the ENTIRE WHOLE FIGURE. Anatomical LEFT eye is the near eye and is COMPLETELY hidden by the blond fringe; do not put an eye or eyebrow on top of that hair. A naturally barely visible far-right eye is acceptable only where actually visible beyond nose. Preserve pre-timeskip left-eye hair cover, never mirror/reverse the fringe.\nEspecially ROW2 COLUMN6 SIT: body, shoulders, pelvis, thighs and feet must all be a coherent LEFT-facing seated side view; do not show a north/back-facing suit torso with a sideways head. Draw this as one intact anatomically connected seated Sanji.\n\nPreserve the same eight readable actions: idle relaxed down arms; happy speaking one open palm; annoyed frown/hands hips; surprise wide visible eye and open hands at chest; use waist/lower chest forward hands with small lean; natural seated; wave open palm beside shoulder well away from face; attentive listen arms relaxed. Maintain black suit/gold buttons/blue shirt/dark tie, no accessories or face scars.\nKeep all32 complete figures, no clothing changes, clean genuine transparency, no ground/shadow/text/borders. Keep shoes, fingers and hair fully in canvas with a few transparent pixels of clearance. Whole full-body drawings only, no separate head or limb edits.\n",
+      "generatedSourceSha256": "dd3381080f7e226ccf36b2c9963c616a5ac87932f1bbe41130d586e3f377bfcf"
+    }
+  ],
+  "selectedGeneration": 2,
+  "image": {
+    "size": [
+      1774,
+      887
+    ],
+    "mode": "RGBA",
+    "alphaRange": [
+      0,
+      255
+    ],
+    "edgeAlpha128plus": {
+      "top": 0,
+      "bottom": 0,
+      "left": 0,
+      "right": 0
+    }
+  },
+  "regionReport": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\sanji\\regions.json",
+  "largeWholeFigureCount": 32,
+  "review": {
+    "viewed": true,
+    "canon": "Pre-timeskip blond fringe covers anatomical left eye; visible anatomical right eye/right curled eyebrow; black double-breasted suit, blue shirt and dark tie. North no face.",
+    "poses": "Continuous whole body and natural shoulder/neck joins. Waving hands open beside shoulders, not on face. First edit makes east/west whole-body direction clearer.",
+    "limits": [
+      "Side rows remain fairly frontal three-quarter rather than strict side; root visual review before acceptance.",
+      "WEST seated uses a rear three-quarter torso, but head/knees/feet point left; root must decide consistency.",
+      "Annoyed expression subtle compared with idle; hands-on-hips silhouette differentiates.",
+      "Unequal row heights; whole-component extraction only."
+    ]
+  },
+  "status": "CANDIDATE_NOT_RUNTIME_CONNECTED",
+  "wholeBodyOnly": true,
+  "noProductionRuntimeOrDocsChanges": true,
+  "recordedAt": "2026-09-26T18:10:29.676314+00:00"
+}

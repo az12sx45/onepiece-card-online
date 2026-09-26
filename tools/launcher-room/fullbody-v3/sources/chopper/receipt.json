@@ -1,0 +1,67 @@
+{
+  "schema": "gpt-fullbody-character-32-receipt/1",
+  "tool": "built-in image_gen.imagegen",
+  "character": "chopper",
+  "source": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\chopper\\source.png",
+  "sha256": "dfaad265ff1ab2e4718884afd7d8a52b8155187db18d1c08c5a88a684f8e5f7e",
+  "reference": [
+    {
+      "path": "D:\\Codex_Release_Worktrees\\launcher-room-art-repair-1.1.14\\public\\images\\launcher_room\\action_frames\\chopper\\idle.webp",
+      "sha256": "80d0e6f1040aea92bf126f1ff099a46dace359ef49663fa5e3b4b0112fc998eb"
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\luffy-fullbody-actions-32-02.png",
+      "sha256": "2e4bd717564897df3fbe7083ff59cd1069f8b2a9ef096b19c98785409695b7dd"
+    }
+  ],
+  "generationHistory": [
+    {
+      "generatedSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-a1c5-7fc2-9c4d-857370899a24\\exec-ff0ac145-c6fa-41e4-bc98-a6aab187963e.png",
+      "promptFile": "source-01.prompt.txt",
+      "promptPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\chopper\\source-01.prompt.txt",
+      "prompt": "Use case: stylized-concept. Asset: one complete full-body character interaction atlas, exactly 32 drawings arranged 8 columns by 4 rows on real transparent RGBA. This is newly painted coherent full-body art, not a rig kit and not separated parts.\n\nINPUT ROLES: Image 1 is this character's identity and outfit reference, subject to the explicit canon corrections below. Image 2 is the Luffy full-body interaction sheet: use its clean ink / cel-painted chibi style, proportions, coherent whole-body poses and 8x4 layout ONLY. Never draw Luffy or borrow his clothes. Do not copy any alpha fringe or colored speckles from references.\n\nCHARACTER / CANON:\nTONY TONY CHOPPER, small canonical reindeer Brain Point from Drum Island / early crew. Tan fur, blue nose, large warm dark eyes, short muzzle, PINK tall cylindrical hat with big white X, brown branched reindeer antlers, maroon/pink shorts, compact BLUE BACKPACK with visible blue shoulder straps. His ANATOMICAL LEFT ANTLER carries the canonical SILVER REPAIR RING/band around the antler. FRONT/SOUTH: silver ring on viewer RIGHT antler; BACK/NORTH: ring on viewer LEFT; WEST left profile: ring visible on near left antler; EAST: left ring is far side and may be naturally obscured. Preserve asymmetry, do not mirror. No helmet-shaped post-timeskip blue cap. Short chunky animal chibi body, tiny naturally attached neck, small bent-hoof arms and natural reindeer cloven-hoof feet. Hands remain canonical dark split HOOVES, never human five-finger hands. WAVE is an upturned friendly split hoof beside shoulder away from muzzle. Warm cheerful expressions, cute annoyed pout, startled big eyes. Full connected body with natural sit/use postures, no human muscular legs.\n\nLAYOUT: 2:1 landscape, ideally 2048x1024. Exactly eight equal columns and four equal rows. One whole character safely isolated in each cell. Leave clear transparent gaps between every figure and between rows, including extended fingers, swords, hair, antlers and shoes. At least 18px empty margin within each 256 cell. Every standing figure uses a common scale, approx 2.7 head-heights tall (Chopper retains his shorter canonical animal proportions), aligned feet baseline. Sit uses unchanged body scale with naturally lower head height. Entire figures must be inside the canvas and separable without amputating or touching neighboring art.\n\nDIRECTIONS / ROWS:\n1 EAST: face screen RIGHT, coherent right-facing three-quarter side head, shoulders, torso, pelvis, feet; gaze partner on right. Viewer mostly sees anatomical RIGHT side.\n2 WEST: face screen LEFT, coherent left-facing three-quarter side body; independently drawn, NOT a horizontal mirror. Viewer mostly sees anatomical LEFT side.\n3 NORTH: face fully AWAY, back of head and body only. No eyes, cheeks, mouth or peeked face anywhere in this row.\n4 SOUTH: face toward viewer, fully frontal coherent figure.\nKeep all asymmetric canonical details on their true anatomical side across all rows.\n\nPOSES / EIGHT COLUMNS, same order in every row:\n1 IDLE: comfortable upright standing, both hands naturally relaxed down.\n2 TALK HAPPY: character-appropriate smile, one natural open palm at lower chest height extended conversationally toward partner; other arm relaxed.\n3 TALK ANNOYED: character-appropriate frown and hands on hips, normal shoulder and elbow anatomy, no extreme rage.\n4 SURPRISED: widened eyes and mildly open mouth, shoulders slightly gathered, both hands open IN FRONT OF CHEST below chin; never overhead and never at ears.\n5 FOCUSED USE: stand with small natural forward lean from hips, both hands lightly reaching forward LOW between waist and lower chest to use unseen furniture; normal relaxed wrists/elbows, no fists touching face; draw no tool or furniture.\n6 SIT: complete natural seated posture as if on an invisible stool, pelvis low, thighs forward, knees comfortably bent, calves down, feet resting, relaxed hands on thighs; no stool or furniture, no detached/shortened legs.\n7 WAVE: visibly open palm (or canonical Chopper split hoof) beside shoulder, hand directed to partner, CLEAR SPACE from cheek/nose/mouth/eye, natural shoulder-elbow-wrist chain. No closed fist near face.\n8 LISTEN: relaxed attentive expression and gaze at partner, subtle whole-upper-body interest, arms relaxed naturally.\n\nSTYLE/ANATOMY: consistent handsome clean linework, readable cel colors, same character face, hair and body proportions throughout. Draw every pose as one fresh continuous full figure: skull connects naturally through neck into shoulders, arm volume bends naturally, clothing wraps the pose, legs and feet have anatomy. Do not paste heads, warp straight limb stickers, repeat one rigid torso with changed arms, separate limbs, or make puppet seams. Keep scale and camera consistent, but show genuine pose-specific body language.\nNo original characters, no extra people, no costume changes, no text/labels/dividers, no ground shadows, no furniture, no watermarks, no checkerboard/background, no glow/fringe/speckles. Real empty alpha around clean antialiased character silhouettes.\n",
+      "generatedSourceSha256": "278a25c88d01de5827081c72f89cb2d7bb5f36b21063caf4dd19fb3b3d9569a3"
+    },
+    {
+      "generatedSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-a1c5-7fc2-9c4d-857370899a24\\exec-7a85d116-f656-4894-9d36-48f6f8b4a4fb.png",
+      "promptFile": "source-02.prompt.txt",
+      "promptPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\chopper\\source-02.prompt.txt",
+      "prompt": "Targeted consistency correction to this complete32-pose Chopper atlas. Preserve the full-body art, style, four directions, connected anatomy and all remaining poses/outfit.\n1 CANONICAL ANTLER SIDE: the silver repair ring is ONLY on Chopper's anatomical LEFT antler. In the EAST first row, viewer mostly sees his anatomical RIGHT antler on the LEFT side of each cell. There must be NO silver ring on that near-right antler. Specifically row1 column4 currently wrongly has a silver ring on the near antler: REMOVE that wrong-side ring. Left antler is far, behind the hat; its ring may be naturally hidden. Preserve the correct ring placement in WEST row2 (near left antler), NORTH row3 (screenLEFT antler), and SOUTH row4 (screenRIGHT antler). Do not add a second ring or mirror.\n2 SOUTH row4 column5 FOCUSED USE must be standing, not sitting/crouching: draw ONE coherent complete front-facing Chopper with both feet grounded at normal standing height, a small forward hip lean, and both hoof hands gently extended at belly/lower chest height. Knees remain low and natural, no folded leg or missing leg. Same original body proportions, blue backpack and pink hat.\n3 COLUMN4 SURPRISED in the face-visible EAST/WEST/SOUTH rows: unmistakable startled wide eyes, small round open O mouth, no smiling grin or happy tongue sticking out. Keep both tiny hoof hands at chest, not ears. North remains faceless.\nMaintain dark cloven hoof hands/feet (not human fingers), canonical blue nose, pink cylindrical white-X hat, tan fur, maroon shorts, blue pack. No other costume, pose, scale or layout changes. Keep all characters safely in the canvas, real transparent background, no new outlines/speckles/shadows/text. Whole-body coherent art only; never separate parts.\n",
+      "generatedSourceSha256": "dfaad265ff1ab2e4718884afd7d8a52b8155187db18d1c08c5a88a684f8e5f7e"
+    }
+  ],
+  "selectedGeneration": 2,
+  "image": {
+    "size": [
+      1774,
+      887
+    ],
+    "mode": "RGBA",
+    "alphaRange": [
+      0,
+      255
+    ],
+    "edgeAlpha128plus": {
+      "top": 0,
+      "bottom": 0,
+      "left": 0,
+      "right": 0
+    }
+  },
+  "regionReport": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\chopper\\regions.json",
+  "largeWholeFigureCount": 32,
+  "review": {
+    "viewed": true,
+    "canon": "Pink cylindrical white-X hat, blue nose, tan fur, maroon shorts, blue pack and hoof hands/feet. West/north/south ring on anatomical left antler. East surprised wrong-side ring remains despite targeted edit: NOT CANON ACCEPTED.",
+    "poses": "Whole body neck/limbs continuous. South focused-use revised from crouch to standing and forelimbs naturally reaching. Wave friendly raised hoof separated from muzzle.",
+    "limits": [
+      "HARD CANON FAIL: EAST row1 column4 surprised retains silver ring on the near anatomical RIGHT antler. One allowed targeted correction did not remove it. This entire figure must be GPT corrected before adoption, no local painting or body-part editing.",
+      "Surprised face remains happy-open-mouth in some views; not clearly a round O expression.",
+      "Source contains low-alpha external flecks; whole-component extraction only."
+    ]
+  },
+  "status": "CANDIDATE_NOT_RUNTIME_CONNECTED",
+  "wholeBodyOnly": true,
+  "noProductionRuntimeOrDocsChanges": true,
+  "recordedAt": "2026-09-26T18:14:36.282927+00:00"
+}

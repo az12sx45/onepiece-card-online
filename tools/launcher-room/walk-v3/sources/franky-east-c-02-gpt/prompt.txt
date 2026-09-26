@@ -1,0 +1,9 @@
+Edit this ONE COMPLETE EAST/right-facing Franky walking CONTACT C. It currently repeats contactA with the NEAR visible right mechanical arm hanging back on screenLEFT. Change to the OPPOSITE walking arm/leg phase, redraw full whole character naturally.
+
+NEAR RIGHT SHOULDER is the big red BF-37 ball on SCREENLEFT (nearest viewer). Its attached upperarm/elbow/BLUE STAR FOREARM/RED HAND must now swing FORWARD toward SCREENRIGHT, just ahead of the lower belly/waist. Elbow low and naturally bent, not raised near head. Big near forearm must visibly travel across ahead of torso instead of hanging behind left hip. KEEP the near shoulder attached in same place.
+FAR LEFT ARM must now swing BACK toward SCREENLEFT, behind torso, mostly occluded naturally; red farhand can peek behind hip. Do not leave far arm leading forward as in input. Both large arms remain the same size.
+NEAR RIGHT LEG goes BACK to SCREENLEFT, heel lifted very little/toes close to floor; nearer thigh/hip overlays farther thigh. FAR LEFT LEG goes FORWARD to SCREENRIGHT with low heel contact. Keep very short slow walk, no high knee, kicking, jumping or crouching.
+This is a complete full-body oppositeC, not just turning hand palms. Preserve continuous head/neck/shoulders/hips, no separated parts.
+
+Identity EXACT input: blue swept-up hair, sunglasses, metal nose, square grin, huge bare muscular chest under red palm-print Hawaiian shirt, BF-37 redshoulderballs, blue star forearms/redhands, BLUE TRIANGLE BRIEFS white front star, small circular mechanical knees, BARE legs/feet/toes. NO sandals/shoes/shorts/whitecuffs. Keep body/head proportions and direction, no mirror. All fingers/feet complete, arm joints natural.
+ONE complete figure with ample transparent padding around hair,hands,toes. PNG genuine ALPHA TRANSPARENCY: no brown/black/colored background, halos, ground/shadow, text/grid/labels/borders, no second figure.

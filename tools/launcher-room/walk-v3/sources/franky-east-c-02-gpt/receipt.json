@@ -1,0 +1,43 @@
+{
+  "schema": "gpt-wholebody-walk-generation/3",
+  "character": "franky",
+  "tool": "built-in image_gen.imagegen",
+  "generator": "gpt-image",
+  "original": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de43-fc3b-7f21-ac55-6e2f6737b063\\exec-b18dc718-8680-474d-9474-7354f95dc7fa.png",
+  "source": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\walk\\franky\\source-east-c-02.png",
+  "sourceSHA256": "e3baa692d2ff2d6e3f642db4e6e3d61739df2f4569fae4424fd21e128ef4ced2",
+  "promptPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\walk\\franky\\prompt-east-c-02.txt",
+  "prompt": "Edit this ONE COMPLETE EAST/right-facing Franky walking CONTACT C. It currently repeats contactA with the NEAR visible right mechanical arm hanging back on screenLEFT. Change to the OPPOSITE walking arm/leg phase, redraw full whole character naturally.\n\nNEAR RIGHT SHOULDER is the big red BF-37 ball on SCREENLEFT (nearest viewer). Its attached upperarm/elbow/BLUE STAR FOREARM/RED HAND must now swing FORWARD toward SCREENRIGHT, just ahead of the lower belly/waist. Elbow low and naturally bent, not raised near head. Big near forearm must visibly travel across ahead of torso instead of hanging behind left hip. KEEP the near shoulder attached in same place.\nFAR LEFT ARM must now swing BACK toward SCREENLEFT, behind torso, mostly occluded naturally; red farhand can peek behind hip. Do not leave far arm leading forward as in input. Both large arms remain the same size.\nNEAR RIGHT LEG goes BACK to SCREENLEFT, heel lifted very little/toes close to floor; nearer thigh/hip overlays farther thigh. FAR LEFT LEG goes FORWARD to SCREENRIGHT with low heel contact. Keep very short slow walk, no high knee, kicking, jumping or crouching.\nThis is a complete full-body oppositeC, not just turning hand palms. Preserve continuous head/neck/shoulders/hips, no separated parts.\n\nIdentity EXACT input: blue swept-up hair, sunglasses, metal nose, square grin, huge bare muscular chest under red palm-print Hawaiian shirt, BF-37 redshoulderballs, blue star forearms/redhands, BLUE TRIANGLE BRIEFS white front star, small circular mechanical knees, BARE legs/feet/toes. NO sandals/shoes/shorts/whitecuffs. Keep body/head proportions and direction, no mirror. All fingers/feet complete, arm joints natural.\nONE complete figure with ample transparent padding around hair,hands,toes. PNG genuine ALPHA TRANSPARENCY: no brown/black/colored background, halos, ground/shadow, text/grid/labels/borders, no second figure.\n",
+  "promptSHA256": "fe757c1f8b8b06800b1fd62d55bcb6c92a83971dc1fc108dbbe6e81194d676b1",
+  "references": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\walk\\franky\\edit-inputs\\east-contact-c.png",
+      "sha256": "968d5a2730bacec5b34d108bc36ff96854195414eca052c8ae55119dfae07b94"
+    }
+  ],
+  "image": {
+    "dimensions": [
+      1075,
+      1464
+    ],
+    "mode": "RGBA",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "significantComponents": 1
+  },
+  "regions": [],
+  "status": "WHOLE_BODY_CONTACT_C_CORRECTED",
+  "runtimeModified": false,
+  "recordedAt": "2026-09-26T18:45:49.171822+00:00",
+  "visualReview": {
+    "observations": [
+      "Near foreground mechanical forearm now swings forward at lower abdomen; far arm behind torso.",
+      "Same canonical bare-legged brief outfit with attached natural mechanical shoulder/elbow/hand geometry.",
+      "Rear near leg and far forward leg visibly connect to correct hips; low relaxed step.",
+      "Complete single GPT body, no mirrored bitmap or body-part assembly"
+    ],
+    "runtimeValidated": false
+  }
+}

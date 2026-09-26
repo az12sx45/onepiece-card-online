@@ -1,0 +1,24 @@
+Create a traditional hand-drawn RPG walking sprite sheet of exactly TWELVE COMPLETE LUFFY FIGURES: THREE COLUMNS and FOUR ROWS. This is a simple 3-pose walk cycle, NOT a rig/cutout mesh animation. Draw each full body as one continuous illustration with connected head, neck, shoulders, torso and whole limbs.
+
+REFERENCES:
+Image1: canonical chibi Luffy design and four-direction style only.
+Image2: EAST CONTACT A reference, near/right arm back and near/right leg forward.
+Image3: EAST CONTACT C reference, the opposite arm swing: near/right arm forward and near/right leg back.
+Preserve the real A-versus-C arm/leg ownership reversal from these pose references, while making the steps SMALLER and lower. Do not copy the same lead leg into A and C.
+
+EXACT GRID:
+ROW1 EAST: all three full bodies face screen RIGHT.
+ROW2 WEST: all three full bodies face screen LEFT, independently drawn with correct canonical asymmetric details, never mirror east.
+ROW3 NORTH: all three full bodies face AWAY, back of hat/hair/vest, absolutely no eyes/nose/mouth/face.
+ROW4 SOUTH: all three full bodies face TOWARD viewer.
+Head, neck and chest always face together. No isolated head swivels.
+
+COLUMN1 CONTACT A: gentle short step with one leg forward and the other back; opposite arm gently swings forward. For east use image2: near/right leg forward and near/right arm back.
+COLUMN2 NEUTRAL PASSING: feet CLOSE TOGETHER directly under hips, relaxed nearly straight support leg, the other foot passing low by ankle; both arms near body sides. This must visibly differ from the spread contact poses.
+COLUMN3 CONTACT C: true opposite short step, SWITCH which same anatomical leg is in front/back and SWITCH the arms, as image3. For east near/right leg now back and near/right arm forward. Not a copy of column1. For west similarly change which near-side leg leads. For front/back, swap the lower/nearer sandal and opposing arm between columns1 and3.
+
+All sandals stay near the ground, low relaxed walk, no high knee lift, no jumping, no deep squat, no exaggerated march. Short comfortable stride. A/neutral/C/neutral should make a clear traditional four-beat walk. No need for extra frames. Ensure each sandal/shorts cuff has the correct leg ownership; do not merely change hand gesture.
+
+Identity: Monkey D. Luffy, about2.7heads tall, same straw hat with red band, black hair, OPEN SLEEVELESS RED VEST exposing natural bare chest without X chest scar, blue cuffed knee shorts, yellow waist sash and brown sandals. Small stitched LEFT-eye cheek scar only when the anatomical left face is visible; never on right cheek. Same head size, camera, consistent character height and clothing in every cell. Whole figures with full fingers, legs and feet. Natural shoulder/elbow/knee connection, no pasted body parts or seams.
+
+Prefer768x1024 or1536x2048 portrait3:4 image, invisible3columns x4rows, one whole character centered in every cell. Generous fully empty transparent margins around all12figures, nothing touches neighboring figure/row or external canvas edges. Same local foot groundline; no drawn ground. TRUE RGBA ALPHA TRANSPARENT BACKGROUND, ABSOLUTELY NO BROWN/TAN/BEIGE/WHITE/BLACK SOLID BACKGROUND and no checkerboard. Only the12characters and transparent empty space. No floor, shadows, text, labels, borders, frames, grids, watermark, decorative props, or diagram arrows. Clean full-body ink and cel-shaded bitmap art matching the references.

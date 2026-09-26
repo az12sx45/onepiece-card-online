@@ -16,3 +16,9 @@
 /tools/launcher-room/motion-receipts/** -text
 /tools/launcher-room/motion-reviews/** -text
 /tools/launcher-room/rig-build/**/*-report.json -text
+
+# Whole-body originals, import selections and review receipts use exact bytes.
+/docs/LAUNCHER_ROOM_FULLBODY_ART_20260927.json -text
+/docs/LAUNCHER_ROOM_WALK_V3_20260927.json -text
+/tools/launcher-room/fullbody-v3/** -text
+/tools/launcher-room/walk-v3/** -text

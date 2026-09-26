@@ -1,0 +1,9 @@
+Edit this ONE complete rear-view Luffy figure to correct the opposite CONTACT C WALKING LEG POSITION. Keep the whole body facing NORTH/AWAY, no face. Redraw it as one coherent complete figure, not separated parts.
+CRITICAL LEG SWAP: In the input the screen-RIGHT sandal sole points toward viewer while screen-LEFT foot is flat. Swap this:
+- SCREEN LEFT leg must now extend BACK toward the viewer, with its sandal underside/sole visibly facing the viewer at the bottom LEFT. Lift the heel only a little; toe stays very close to the floor. This LEFT sole must be the prominent visible brown underside.
+- SCREEN RIGHT leg now steps FORWARD away from viewer, foot farther/up on the ground plane. Show heel/back/top of that sandal, NOT its large sole. Right foot should appear slightly farther away and higher on the page than the LEFT rearward sole.
+- Keep hips and thighs connected; left/right white shorts cuffs follow the swapped leg positions. Short natural stride, low knees, no jump, no deep crouch or exaggerated bent knee.
+Current arms already oppose the original A: screenLEFT arm gently forward/bent near waist, screenRIGHT arm swings backward/down. Keep those C arm positions while swapping legs. Head, neck and chest remain entirely facing away together.
+
+Preserve exact straw hat size and red band, black rear hair, open sleeveless red vest seen from its back, blue cuffed shorts, yellow sash at same side, brown sandals, chibi proportions and clean ink/cel style. Full connected neck/shoulders/arms/hands/torso/hips/legs/feet. Do not mirror whole person or move sash side. NO face features in rear view.
+ONE full body centered on portrait canvas, completely visible with generous transparent margins around hat, fingertips and toes. TRUE RGBA ALPHA TRANSPARENCY only; no colored backdrop, ground, shadows, diagram, text, arrows, border or second figure. Make the switch to LEFT visible sole unambiguous.

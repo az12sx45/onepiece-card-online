@@ -1,0 +1,280 @@
+{
+  "scope": "rendered-asset-inspection",
+  "status": "REVIEWED",
+  "humanAcceptance": false,
+  "actionsManifestSha256": "1165599edbab07d0b18a93ca8f0d923b8f2996c3c4ee3245fa8523c743e611e6",
+  "walkManifestSha256": "4c564c817946dfd3e21872705bc61dbe0cc704f7647998acf9882fb9db7b0c53",
+  "characters": [
+    {
+      "key": "luffy",
+      "inspected": true,
+      "actionsInspected": true,
+      "walkingInspected": true,
+      "notes": "Inspected all four directional whole-body action poses and actual rendered four-beat walk cycles. No head/limb assembly. Character remains one complete image when turning and reacting."
+    },
+    {
+      "key": "zoro",
+      "inspected": true,
+      "actionsInspected": true,
+      "walkingInspected": true,
+      "notes": "Inspected all four directional whole-body action poses and actual rendered four-beat walk cycles. No head/limb assembly. Character remains one complete image when turning and reacting."
+    },
+    {
+      "key": "nami",
+      "inspected": true,
+      "actionsInspected": true,
+      "walkingInspected": true,
+      "notes": "Inspected all four directional whole-body action poses and actual rendered four-beat walk cycles. No head/limb assembly. Character remains one complete image when turning and reacting."
+    },
+    {
+      "key": "usopp",
+      "inspected": true,
+      "actionsInspected": true,
+      "walkingInspected": true,
+      "notes": "Inspected all four directional whole-body action poses and actual rendered four-beat walk cycles. No head/limb assembly. Character remains one complete image when turning and reacting."
+    },
+    {
+      "key": "sanji",
+      "inspected": true,
+      "actionsInspected": true,
+      "walkingInspected": true,
+      "notes": "Inspected all four directional whole-body action poses and actual rendered four-beat walk cycles. No head/limb assembly. Character remains one complete image when turning and reacting."
+    },
+    {
+      "key": "chopper",
+      "inspected": true,
+      "actionsInspected": true,
+      "walkingInspected": true,
+      "notes": "Inspected all four directional whole-body action poses and actual rendered four-beat walk cycles. No head/limb assembly. Character remains one complete image when turning and reacting."
+    },
+    {
+      "key": "robin",
+      "inspected": true,
+      "actionsInspected": true,
+      "walkingInspected": true,
+      "notes": "Inspected all four directional whole-body action poses and actual rendered four-beat walk cycles. No head/limb assembly. Character remains one complete image when turning and reacting."
+    },
+    {
+      "key": "franky",
+      "inspected": true,
+      "actionsInspected": true,
+      "walkingInspected": true,
+      "notes": "Inspected all four directional whole-body action poses and actual rendered four-beat walk cycles. No head/limb assembly. Character remains one complete image when turning and reacting."
+    },
+    {
+      "key": "brook",
+      "inspected": true,
+      "actionsInspected": true,
+      "walkingInspected": true,
+      "notes": "Inspected all four directional whole-body action poses and actual rendered four-beat walk cycles. No head/limb assembly. Character remains one complete image when turning and reacting."
+    },
+    {
+      "key": "jinbe",
+      "inspected": true,
+      "actionsInspected": true,
+      "walkingInspected": true,
+      "notes": "Inspected all four directional whole-body action poses and actual rendered four-beat walk cycles. No head/limb assembly. Character remains one complete image when turning and reacting."
+    }
+  ],
+  "reviewedAt": "2026-09-26T18:57:01.253777+00:00",
+  "evidence": [
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/luffy-actual-walk.png",
+      "sha256": "40c45bcdb831d72bb4532e863a84cc528cd9490759aad1d0d56cd917ea3a37b2"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/luffy-all-actions.png",
+      "sha256": "4db7d849707df6e71b1f67dfb17e619201cc8dc52717f4c0afc3d3802acf5260"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/zoro-actual-walk.png",
+      "sha256": "5576963c14ff9b11892b08dba1a27cb48c52f7cf4e942b043e6b6c0393679916"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/zoro-all-actions.png",
+      "sha256": "39bd9dbd58dca39e1aaee672b67ef70ec57b13dcc60fddf46775abba462030bc"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/nami-actual-walk.png",
+      "sha256": "497c484fed52a21e2374f974e6367d7c4cd07d14d3f5c7fa4f32d2239334f843"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/nami-all-actions.png",
+      "sha256": "c352da99151dfdb669be03ac62b41175d772c218b45b7ca79289654dbc058692"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/usopp-actual-walk.png",
+      "sha256": "c4f8b3838695e7b81843e0775bb94cf309044e9d46bab041178285aa9b3e909b"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/usopp-all-actions.png",
+      "sha256": "d0b7e7c979c7f8cdd2bd9c45f4f15f2281137a4141206c486412917135034402"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/sanji-actual-walk.png",
+      "sha256": "87208811b14017b522da1cf8627434e4fbf87b4c9feeca6de89f1eb8ea439d01"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/sanji-all-actions.png",
+      "sha256": "836939fc3d50ba1ab7fc6be15515a031da5aa56ab93bc7fa78a0a10671a3b6e0"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/chopper-actual-walk.png",
+      "sha256": "76b0018ec70b040a89d4ba6801ef8659cf1454b7b4ad67bb99b1eaebd6c0ad31"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/chopper-all-actions.png",
+      "sha256": "a4975866df955c16dfa818cfb552c2f45404172aafb436b24279f6fe0bda4b32"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/robin-actual-walk.png",
+      "sha256": "dd544ac9c82a45bc39d0ff492b4391d095947e2f23cc636cd4395413181e500c"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/robin-all-actions.png",
+      "sha256": "2b812ebeba4850c5bd4efa69e79f91115ffab7bd8d420d606d576738c15dc2ec"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/franky-actual-walk.png",
+      "sha256": "dc8e5ed093b6fa5feb3ccda21e5ab919fc82a57dacbbe765c489ced9744589f7"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/franky-all-actions.png",
+      "sha256": "ca91e4dcfcfdfbbd0606129d65d81a207051b81253af80bf1fa4ea3fdd6fc48a"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/brook-actual-walk.png",
+      "sha256": "61cb081c8cd3625208e14d84b03c9928711a78c232af4a6d18e4ec2ca324fc14"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/brook-all-actions.png",
+      "sha256": "a2122394696fa67d910f06c9ef71d0495c133ad99ef37a6877d1fb0aba1c0097"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/jinbe-actual-walk.png",
+      "sha256": "4fd6c2c372d5d83e2eb32a66609e89503398c701d81fce1696d97eb811e3276f"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/jinbe-all-actions.png",
+      "sha256": "4a43cb56f6899bd5e2755a3c0737af7fcb22f407b39cee992e49439acb075bc3"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/chopper-narrow.png",
+      "sha256": "37512d7764c60235b2d6ab63267cc79a50d59d91e89f923e05679928a56b6155"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/franky-narrow.png",
+      "sha256": "d222bf2d97a1f98b43ef6ae7167ced751529af7b5e044ab1c3bf84ac02931ee0"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/jinbe-narrow.png",
+      "sha256": "dbff2d82d2fa107f97078b1465c440ec14798223bbe4154e37b0c157a9487591"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/luffy-zoro-chat-0.png",
+      "sha256": "fcbb67a2e7f1fb99a41662ccd092e1e6b87d7d539094978a63669e7e6e6c5007"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/luffy-zoro-chat-1.png",
+      "sha256": "197b4b29dfc87dbbcc6ad1b55a8df5ffc1aeaad05e27f8606115eedc670f6e84"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/luffy-zoro-chat-2.png",
+      "sha256": "f05d6700358fbb10128f8a7f0e2c3e83526894cae607d3261c173b172d83e85c"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/luffy-zoro-chat-3.png",
+      "sha256": "2a510083e68ed6d6dd519c06a7caaea1ec9e08636ab92b1fb6c9dc2a61e1800e"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/nami-sanji-chat-0.png",
+      "sha256": "620d06572d1ad5bb5cb4b7ab3c632ee3d63642647d7c2641d24f02bac16f23ee"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/nami-sanji-chat-1.png",
+      "sha256": "e77ca2dd87b763d1aabc03b5c5a0f43579d9ac50d54016fc8a8c4b5dac662ef6"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/nami-sanji-chat-2.png",
+      "sha256": "b250c76e76258e1f7ab1f6f592f29a07d63c5420ff4a3d92cb0b767c2b837e8e"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/nami-sanji-chat-3.png",
+      "sha256": "dd404d89b93b5c455246f9b165102e610816dafd84093dc224e34593f5ae1e69"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/robin-franky-chat-0.png",
+      "sha256": "17afd868a7d6887361c96d723013a7f252f02f80b68acdd71e2b723f6fda7759"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/robin-franky-chat-1.png",
+      "sha256": "2f6676183074d9ff0b86f27898d347ebaaca3310eacf7dec262a76e286b69bdd"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/robin-franky-chat-2.png",
+      "sha256": "8972a701ec94caa37d2464d7e417ad47c3b0c54c4eeccc5ade3aba26fc2a97c6"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/robin-franky-chat-3.png",
+      "sha256": "08acaf850d462f312b32536bb8eb1e3fbd1ea1645113bc72dd4e361d71e5403a"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/chopper-usopp-chat-0.png",
+      "sha256": "a5ca1d5d5db7c51cbb3351aab62109c70b30b8941408b055ecbf2f112d2d39c2"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/chopper-usopp-chat-1.png",
+      "sha256": "69c9632b0202d9fa309ac3d65acc3bdd72fc2985b28d0d6ddc17fb6248851301"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/chopper-usopp-chat-2.png",
+      "sha256": "ce440e6ef97cdd8ee918af2cf29dbd37902e28b7a9d7800eb4969b89d750fbb1"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/chopper-usopp-chat-3.png",
+      "sha256": "ec55af8fd8a8bd6ed53704d6fdd4642bd7e178bc63e7fc938855f1b04f117aaf"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/brook-jinbe-chat-0.png",
+      "sha256": "ee83c7b9e9b3761502f83973fcb108ceaae6cf84ef56257050224f02bb03ef0b"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/brook-jinbe-chat-1.png",
+      "sha256": "37f38abc6a5dfea96007ec8d9c0874f0b81d2b48fd13aff1e226e62f103f1145"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/brook-jinbe-chat-2.png",
+      "sha256": "eb209e6a0ff01b4ed6b30fdb94fe53875e279e39c73489a15d96e493545e4281"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/brook-jinbe-chat-3.png",
+      "sha256": "5905312b14c9841f1ac1c8100c9c650b734305e7c34f9f6330b4f98a2e48ba85"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/sanji-kitchen-table-0.png",
+      "sha256": "414333a8efccd33d6f7a2bb5622ae80401ea40fca44dcad023af029c2ea9d054"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/sanji-kitchen-table-2.png",
+      "sha256": "f9622b53f1f1269f6227bb67df3b660f76abcfa23d9ef826e3fdc8714d3d2980"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/brook-piano-0.png",
+      "sha256": "0b35d772cf25b851e52ed1cddade9779a4916ebce93892cd9c0005125767ea72"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/brook-piano-2.png",
+      "sha256": "0558ed69df61a226fbe889819510b0eaa4fa535dced552472532884f0de9a39c"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/actual-review-summary.json",
+      "sha256": "bbaa424258d54b241db8c8705a9fb9e512803c4b36cb3fbff1994efdb570227e"
+    }
+  ],
+  "method": "GPT complete-figure artwork imported without anatomy assembly; AI image inspection of all authored action poses and actual room four-beat walk cycles, five four-turn conversations, representative furniture rotations and narrow layouts.",
+  "limits": [
+    "AI image inspection and automated local fixture capture, not user acceptance or physical device testing.",
+    "Four-beat hand-drawn walk cycle; no claim of measured foot-plant physics.",
+    "Each interaction pose is one authored complete drawing, selected by conversation state."
+  ]
+}

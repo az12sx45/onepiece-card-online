@@ -1,0 +1,243 @@
+{
+  "schema": "gpt-wholebody-walk-generation/3",
+  "character": "usopp",
+  "tool": "built-in image_gen.imagegen",
+  "generator": "gpt-image",
+  "original": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de43-fc3b-7f21-ac55-6e2f6737b063\\exec-d34cf5b5-ab0b-4b0a-a518-eadd8b94133d.png",
+  "source": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\walk\\usopp\\source-01.png",
+  "sourceSHA256": "666780678d91671ba8504e1fc5510e0ba28f32aa0d2f3cdf44e31f33bed87def",
+  "promptPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\walk\\usopp\\prompt-01.txt",
+  "prompt": "Use case: identity-preserve full-body game sprite redraw.\nEDIT REFERENCE1 (12 Luffy walking figures) by replacing ALL TWELVE ENTIRE CHARACTERS with canonical USOPP from reference2. Preserve each cell's exact direction and distinct whole-body pose/foot contact/arm swing from reference1. Reference2 is the identity/outfit/style authority for Usopp. Do not retain ANY Luffy strawhat/redvest/blueshorts/sandals/body parts. Redraw each Usopp as one intact head-neck-shoulder-torso-limb figure, not cutout pieces.\n\nExactly3columns x4rows, same as pose guide. Columns A CONTACT, FEET-TOGETHER NEUTRAL, OPPOSITE C CONTACT. Rows EAST/right, WEST/left, NORTH/back with NO FACE, SOUTH/front. Independently draw every direction, do not mirror asymmetric accessories.\nKeep guide poses EXACTLY:\nEAST A visible near/right arm backLEFT and right leg forwardRIGHT; C visible near/right arm forwardRIGHT and right leg backLEFT.\nWEST A visible near/left arm backRIGHT and left leg forwardLEFT; C visible near/left arm forwardLEFT and left leg backRIGHT.\nNORTH A screenRIGHT boot sole visible coming back toward viewer and screenLEFT foot farther planted; C screenLEFT boot sole visible coming back and screenRIGHT foot farther planted. Swap opposing arms too.\nSOUTH A screenLEFT foot closer/lower and screenRIGHT arm forward; C screenRIGHT foot closer/lower and screenLEFT arm forward.\nMiddle column each direction: feet nearly together below hips, arms relaxed low. It must be a visibly different neutral drawing.\nNatural SMALL low steps, no lifted knees or hopping. Foreground versus far thighs must actually switch ownership between A and C; do not repeat one lead leg with different hands.\n\nUSOPP identity from reference2: long pointed nose, brown skin, black curly hair behindhead, mustard/brown bandana with goggles atop, ochre-brown bib overalls with brass buttons and white trim, bare arms, BROWN BOOTS not sandals. BLUE-WHITE STRIPED wristband ONLY anatomical LEFT wrist; red-brown satchel at LEFT HIP with strap over RIGHT shoulder, do not move to opposite side when turning. No handheld weapon/props; hands relaxed small fists. Same outfit including trouserlegs/boots in all12. About2.7-head-tall chibi, exact consistent head/body size. Whole neck/shoulder/elbow/knee connections natural; no seams, parts collage, floating head or duplicate limbs.\nKeep original12pose grid spacing and proportions:3equalcolumns x4equalrows onportrait3:4 preferably1536x2048. Generous empty margins around each WHOLE figure, preserve entire nose/hair/boots/fingers/bag; nothing touches neighbors or edges. One consistent character scale within each direction, all feet low at same local baseline.\nREAL RGBA TRANSPARENT BACKGROUND. Absolutely no brown/beige/white/black solid background, no checkerboard, no ground/shadows, no labels/text/grid/borders/watermark. Only12 complete USOPP sprites.\n",
+  "promptSHA256": "9e2b8d7fb40e7027965306e112407ba6132c5fb8265183684755e98fae88400a",
+  "references": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\corrected-guide-12.png",
+      "sha256": "57bb80af0219d0edaf5b52850d5c400e6c3aee8aec9801f29dbae317948b818b"
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\usopp\\source.png",
+      "sha256": "a6aca66f404bb431751d6af1409c771d298601b1e992e10eea1be59fbb115607"
+    }
+  ],
+  "image": {
+    "dimensions": [
+      1086,
+      1448
+    ],
+    "mode": "RGBA",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "significantComponents": 12
+  },
+  "regions": [
+    {
+      "direction": "east",
+      "pose": "contact-a",
+      "region": [
+        90,
+        30,
+        207,
+        321
+      ],
+      "component": 3,
+      "opaqueBounds": [
+        94,
+        34,
+        199,
+        313
+      ]
+    },
+    {
+      "direction": "east",
+      "pose": "neutral",
+      "region": [
+        462,
+        29,
+        171,
+        319
+      ],
+      "component": 2,
+      "opaqueBounds": [
+        466,
+        33,
+        163,
+        311
+      ]
+    },
+    {
+      "direction": "east",
+      "pose": "contact-c",
+      "region": [
+        802,
+        22,
+        221,
+        325
+      ],
+      "component": 1,
+      "opaqueBounds": [
+        806,
+        26,
+        213,
+        317
+      ]
+    },
+    {
+      "direction": "west",
+      "pose": "contact-a",
+      "region": [
+        74,
+        386,
+        207,
+        316
+      ],
+      "component": 5,
+      "opaqueBounds": [
+        78,
+        390,
+        199,
+        308
+      ]
+    },
+    {
+      "direction": "west",
+      "pose": "neutral",
+      "region": [
+        469,
+        386,
+        171,
+        317
+      ],
+      "component": 6,
+      "opaqueBounds": [
+        473,
+        390,
+        163,
+        309
+      ]
+    },
+    {
+      "direction": "west",
+      "pose": "contact-c",
+      "region": [
+        797,
+        383,
+        224,
+        318
+      ],
+      "component": 4,
+      "opaqueBounds": [
+        801,
+        387,
+        216,
+        310
+      ]
+    },
+    {
+      "direction": "north",
+      "pose": "contact-a",
+      "region": [
+        91,
+        739,
+        188,
+        318
+      ],
+      "component": 7,
+      "opaqueBounds": [
+        95,
+        743,
+        180,
+        310
+      ]
+    },
+    {
+      "direction": "north",
+      "pose": "neutral",
+      "region": [
+        464,
+        740,
+        160,
+        309
+      ],
+      "component": 8,
+      "opaqueBounds": [
+        468,
+        744,
+        152,
+        301
+      ]
+    },
+    {
+      "direction": "north",
+      "pose": "contact-c",
+      "region": [
+        807,
+        740,
+        196,
+        320
+      ],
+      "component": 9,
+      "opaqueBounds": [
+        811,
+        744,
+        188,
+        312
+      ]
+    },
+    {
+      "direction": "south",
+      "pose": "contact-a",
+      "region": [
+        93,
+        1094,
+        176,
+        324
+      ],
+      "component": 10,
+      "opaqueBounds": [
+        97,
+        1098,
+        168,
+        316
+      ]
+    },
+    {
+      "direction": "south",
+      "pose": "neutral",
+      "region": [
+        458,
+        1095,
+        170,
+        311
+      ],
+      "component": 11,
+      "opaqueBounds": [
+        462,
+        1099,
+        162,
+        303
+      ]
+    },
+    {
+      "direction": "south",
+      "pose": "contact-c",
+      "region": [
+        815,
+        1094,
+        181,
+        327
+      ],
+      "component": 12,
+      "opaqueBounds": [
+        819,
+        1098,
+        173,
+        319
+      ]
+    }
+  ],
+  "status": "PENDING_POSE_VISUAL_REVIEW",
+  "runtimeModified": false,
+  "recordedAt": "2026-09-26T18:35:18.973607+00:00"
+}

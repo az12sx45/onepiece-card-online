@@ -1,0 +1,316 @@
+{
+  "schema": "one-piece-room-walk-report/3",
+  "key": "usopp",
+  "direction": "south",
+  "method": "three authored whole bodies; contact, passing, opposite contact, passing",
+  "anatomyReassembled": false,
+  "mirrored": false,
+  "interpolatedLimbs": false,
+  "frames": [
+    {
+      "key": "usopp",
+      "direction": "south",
+      "pose": "contact-a",
+      "source": "usopp-walk-gpt-01",
+      "region": [
+        93,
+        1094,
+        176,
+        324
+      ],
+      "index": 0,
+      "bounds": [
+        38,
+        12,
+        92,
+        113
+      ],
+      "opaqueBoundsAtOutput": [
+        39,
+        13,
+        91,
+        112
+      ],
+      "sourceAnchor": [
+        177.5,
+        1414
+      ],
+      "localAnchor": [
+        82.5,
+        318
+      ],
+      "sourceAlphaBounds": [
+        95,
+        1096,
+        266,
+        1416
+      ],
+      "opaqueBounds": [
+        97,
+        1098,
+        168,
+        316
+      ],
+      "opaquePixels": 35282,
+      "removedDistantAlphaPixels": 3793,
+      "sourceUnitScale": 1,
+      "sourceOpaqueClearance": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.31347962382445144,
+      "wholeImageScale": 0.31347962382445144,
+      "inverseWholeImageTransform": [
+        3.19,
+        0,
+        -121.66,
+        0,
+        3.19,
+        -39.27999999999997
+      ],
+      "rgbaSha256": "7e4ce890a345a6761654ec645359082fdc03f5d2ea0001da38679148968df1d0",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false,
+      "authoredPoseIndex": 0
+    },
+    {
+      "key": "usopp",
+      "direction": "south",
+      "pose": "neutral",
+      "source": "usopp-walk-gpt-01",
+      "region": [
+        458,
+        1095,
+        170,
+        311
+      ],
+      "index": 1,
+      "bounds": [
+        38,
+        16,
+        90,
+        113
+      ],
+      "opaqueBoundsAtOutput": [
+        39,
+        17,
+        89,
+        112
+      ],
+      "sourceAnchor": [
+        543.0,
+        1402
+      ],
+      "localAnchor": [
+        82.0,
+        305
+      ],
+      "sourceAlphaBounds": [
+        461,
+        1097,
+        626,
+        1404
+      ],
+      "opaqueBounds": [
+        462,
+        1099,
+        162,
+        303
+      ],
+      "opaquePixels": 34323,
+      "removedDistantAlphaPixels": 3648,
+      "sourceUnitScale": 1,
+      "sourceOpaqueClearance": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.31347962382445144,
+      "wholeImageScale": 0.31347962382445144,
+      "inverseWholeImageTransform": [
+        3.19,
+        0,
+        -122.16,
+        0,
+        3.19,
+        -52.27999999999997
+      ],
+      "rgbaSha256": "429adadc35930d59c399290f11970cb1d362bfd03caa4d2bc89f51ebd6066bfb",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false,
+      "authoredPoseIndex": 1
+    },
+    {
+      "key": "usopp",
+      "direction": "south",
+      "pose": "contact-c",
+      "source": "usopp-walk-gpt-01",
+      "region": [
+        815,
+        1094,
+        181,
+        327
+      ],
+      "index": 2,
+      "bounds": [
+        39,
+        11,
+        94,
+        113
+      ],
+      "opaqueBoundsAtOutput": [
+        39,
+        12,
+        93,
+        112
+      ],
+      "sourceAnchor": [
+        898.5,
+        1417
+      ],
+      "localAnchor": [
+        81.5,
+        321
+      ],
+      "sourceAlphaBounds": [
+        817,
+        1096,
+        994,
+        1419
+      ],
+      "opaqueBounds": [
+        819,
+        1098,
+        173,
+        319
+      ],
+      "opaquePixels": 35439,
+      "removedDistantAlphaPixels": 4078,
+      "sourceUnitScale": 1,
+      "sourceOpaqueClearance": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.31347962382445144,
+      "wholeImageScale": 0.31347962382445144,
+      "inverseWholeImageTransform": [
+        3.19,
+        0,
+        -122.66,
+        0,
+        3.19,
+        -36.27999999999997
+      ],
+      "rgbaSha256": "757d0ae23e4a7d85cca8129393477925d9215a9763f823a705dc88421281d1ec",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false,
+      "authoredPoseIndex": 2
+    },
+    {
+      "key": "usopp",
+      "direction": "south",
+      "pose": "neutral",
+      "source": "usopp-walk-gpt-01",
+      "region": [
+        458,
+        1095,
+        170,
+        311
+      ],
+      "index": 3,
+      "bounds": [
+        38,
+        16,
+        90,
+        113
+      ],
+      "opaqueBoundsAtOutput": [
+        39,
+        17,
+        89,
+        112
+      ],
+      "sourceAnchor": [
+        543.0,
+        1402
+      ],
+      "localAnchor": [
+        82.0,
+        305
+      ],
+      "sourceAlphaBounds": [
+        461,
+        1097,
+        626,
+        1404
+      ],
+      "opaqueBounds": [
+        462,
+        1099,
+        162,
+        303
+      ],
+      "opaquePixels": 34323,
+      "removedDistantAlphaPixels": 3648,
+      "sourceUnitScale": 1,
+      "sourceOpaqueClearance": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.31347962382445144,
+      "wholeImageScale": 0.31347962382445144,
+      "inverseWholeImageTransform": [
+        3.19,
+        0,
+        -122.16,
+        0,
+        3.19,
+        -52.27999999999997
+      ],
+      "rgbaSha256": "429adadc35930d59c399290f11970cb1d362bfd03caa4d2bc89f51ebd6066bfb",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false,
+      "authoredPoseIndex": 1
+    }
+  ],
+  "visualAccepted": false
+}

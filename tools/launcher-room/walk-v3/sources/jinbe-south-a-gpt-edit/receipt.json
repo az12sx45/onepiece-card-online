@@ -1,0 +1,29 @@
+{
+  "schema": "builtin-gpt-image-receipt/1",
+  "generator": "gpt-image",
+  "tool": "image_gen.imagegen",
+  "image": {
+    "path": "walk/jinbe/south-contact-a-corrected.png",
+    "sha256": "8b1d76c83ba2a7b23718d74fbcdad47fde86d5560e309a4f2678366712eb7842"
+  },
+  "prompt": "Use case: precise-object-edit. Edit this SINGLE COMPLETE Jinbe character, return one complete full-body figure on true transparent alpha with safe margins.\nKeep his FRONT / SOUTH facing, head, LEFT-sided lightning scar (image RIGHT), broad physique, face, beard, hair, costume, black purple-cloud cape, kimono and BOTH LEGS/FEET exactly as reference. Anatomical RIGHT foot at image LEFT stays advanced toward viewer; anatomical LEFT foot at image RIGHT stays farther back.\nCorrect ONLY the gait ARM POSE: the reference wrongly has the right arm and right leg both forward. Swap the arm swing. His anatomical LEFT arm (image RIGHT) should be bent gently forward, blue hand in front of the lower kimono at waist height, palm loosely closed. His anatomical RIGHT arm (image LEFT) must instead hang slightly back/down by his side, with its hand lower beside the hip, partially occluded by kimono/cape as appropriate. Natural shoulder and elbow connections. This left-arm-forward pose opposes his right-foot-forward step. Do not change face/head direction, do not mirror his whole body, do not change the feet or advance the wrong foot. Low grounded relaxed walk, not boxing or fighting. Preserve one continuous finished body in exactly the same clean chibi anime rendering, no detached limbs, no lines/text/shadow.\n",
+  "promptFile": {
+    "path": "walk/jinbe/south-contact-a-corrected.prompt.txt",
+    "sha256": "abb0da2db8ea0a162ff5bd7cb22b1867595e2cd6d66df4bf2a6a88e62a3f5be4"
+  },
+  "generatedOriginalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-a1c5-7fc2-9c4d-857370899a24\\exec-db37189c-b8c9-4e8c-9306-fe558a3ae488.png",
+  "generatedOriginalSha256": "8b1d76c83ba2a7b23718d74fbcdad47fde86d5560e309a4f2678366712eb7842",
+  "inputReferences": [
+    {
+      "path": "walk/jinbe/source-south-contact-a.png",
+      "sha256": "9750f9fdf3172e145394b93cf027cc123a6cb5b767a3647f6335cc481b0cac46"
+    },
+    {
+      "path": "walk/jinbe/source.png",
+      "sha256": "ba9526d99735f59d38e6f91dd14c245e3a0fd4cff2dfe9de7bac21104e88ae5a"
+    }
+  ],
+  "status": "candidate: opposite arm/leg corrected; whole-character preview pending root review",
+  "anatomyReassembled": false,
+  "mirrored": false
+}

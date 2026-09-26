@@ -11,7 +11,7 @@ const PACKAGE_PATH = path.join(DESKTOP_ROOT, 'package.json');
 const PACKAGE_LOCK_PATH = path.join(DESKTOP_ROOT, 'package-lock.json');
 
 const MAX_LAUNCHER_ASSET_BYTES = 128 * 1024 * 1024;
-// 1.1.13 adds exactly 80 rig atlases and 10 portraits. Keep the existing media
+// 1.1.14 packages 80 full-body atlases and 10 portraits. Keep the existing media
 // budget intact and account for this separately hash-verified resource set.
 const MAX_ROOM_MOTION_ASSET_BYTES = 20 * 1024 * 1024;
 // Immutable historical program manifests are retained for existing installs.
@@ -69,8 +69,8 @@ const APP_FILES = [
 const ROOM_DEPTH_FURNITURE = ['bookshelf', 'helm', 'kitchen-table', 'map-table', 'medicine-cabinet', 'piano', 'swords-rack', 'tangerine-tree', 'tool-bench', 'treasure-chest'];
 const ROOM_DEPTH_CHARACTERS = ['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopper', 'robin', 'franky', 'brook', 'jinbe'];
 const ROOM_MOTION_ASSETS = ROOM_DEPTH_CHARACTERS.flatMap(key =>
-  ['motion', 'acting'].flatMap(kind => ['east', 'west', 'north', 'south'].map(direction => `${kind}_v2/${key}/${direction}.webp`)));
-const ROOM_PORTRAIT_ASSETS = ROOM_DEPTH_CHARACTERS.map(key => `portrait_v2/${key}.webp`);
+  ['motion', 'acting'].flatMap(kind => ['east', 'west', 'north', 'south'].map(direction => `${kind}_v3/${key}/${direction}.webp`)));
+const ROOM_PORTRAIT_ASSETS = ROOM_DEPTH_CHARACTERS.map(key => `portrait_v3/${key}.webp`);
 const ROOM_DEPTH_ACTION_OVERRIDES = new Set([
   ...['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopper', 'robin', 'brook'].map(key => `${key}/walk2`),
   'franky/talk_annoyed', 'jinbe/sit'
@@ -509,7 +509,7 @@ function validateZoroArtOverlay(roomManifest, roomDepth, roomWalk) {
 function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
-  assert(packageJson.version === '1.1.13', 'Desktop launcher version must be 1.1.13 for directional rig animation and crew scenes.');
+  assert(packageJson.version === '1.1.14', 'Desktop launcher version must be 1.1.14 for intact character poses and retired work controls.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
@@ -588,13 +588,16 @@ function validateSourcePackage() {
     'Room expansion manifest must identify the canonical release.');
   const roomDepth = readJson(path.join(ROOT, 'docs', 'LAUNCHER_ROOM_DEPTH_ART_20260925.json'), 'launcher room depth/action art manifest');
   const roomWalk = readJson(path.join(ROOT, 'docs', 'LAUNCHER_ROOM_WALK_ART_20260925.json'), 'launcher grounded walk art manifest');
-  const roomMotion = readJson(path.join(ROOT, 'docs', 'LAUNCHER_ROOM_MOTION_ART_20260926.json'), 'launcher four-direction motion manifest');
-  assert(roomMotion.version === '1.1.13' && roomMotion.canonicalCharactersOnly === true &&
-    Array.isArray(roomMotion.items) && roomMotion.items.length === ROOM_MOTION_ASSETS.length,
-  'Motion manifest must cover all eighty canonical walking and acting direction atlases.');
+  const roomBody = readJson(path.join(ROOT, 'docs', 'LAUNCHER_ROOM_FULLBODY_ART_20260927.json'), 'complete character pose manifest');
+  const roomGait = readJson(path.join(ROOT, 'docs', 'LAUNCHER_ROOM_WALK_V3_20260927.json'), 'complete character walking manifest');
+  const roomMotion = { items: [...roomBody.items, ...roomGait.items], portraits: roomBody.portraits };
+  assert(roomBody.version === '1.1.14' && roomGait.version === '1.1.14' &&
+    roomBody.canonicalCharactersOnly === true && roomGait.canonicalCharactersOnly === true &&
+    roomMotion.items.length === ROOM_MOTION_ASSETS.length,
+  'Full-body manifests must cover all eighty canonical walking and acting direction atlases.');
   assertExactJson(sorted(roomMotion.items.map(item => item.asset.replace(/^public\/images\/launcher_room\//, ''))),
     sorted(ROOM_MOTION_ASSETS), 'Room motion atlas set');
-  const roomMotionStatus = require('../tools/launcher-room/validate-rig-manifest').validate(ROOT);
+  const roomMotionStatus = require('../tools/launcher-room/validate-fullbody-release').validate(ROOT);
   assert(roomWalk.version === '1.1.12' && roomWalk.canonicalCharactersOnly === true &&
     Array.isArray(roomWalk.items) && roomWalk.items.length === 8,
   'Grounded walk manifest must cover eight canonical GPT poses.');
@@ -907,7 +910,7 @@ function main() {
   const source = validateSourcePackage();
   if (options.winUnpacked || options.installer) {
     assert(source.roomMotionStatus.complete && source.roomMotionStatus.allSelectedArtReviewed,
-      'Release package requires all eighty rig atlases and explicit visual review evidence for every direction.');
+      'Release package requires all eighty complete-body atlases and explicit visual review evidence for every direction.');
     assert(source.zoroOverlayStatus === 'verified',
       'Release package requires a verified Zoro art overlay; candidate art cannot be shipped.');
   }

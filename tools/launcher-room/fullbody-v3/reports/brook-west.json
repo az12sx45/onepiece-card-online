@@ -1,0 +1,621 @@
+{
+  "schema": "one-piece-room-fullbody-import-report/1",
+  "key": "brook",
+  "direction": "west",
+  "shape": {
+    "cell": 128,
+    "columns": 8,
+    "rows": 1,
+    "root": [
+      64,
+      112
+    ],
+    "standingMaxHeight": 100,
+    "maxWidth": 112
+  },
+  "method": "whole-character component with nearby source alpha; uniform whole-image scale and translation",
+  "uniformDirectionScale": 0.45871559633027525,
+  "frames": [
+    {
+      "key": "brook",
+      "direction": "west",
+      "pose": "idle",
+      "source": "brook",
+      "region": [
+        80,
+        229,
+        105,
+        229
+      ],
+      "index": 0,
+      "bounds": [
+        44,
+        12,
+        88,
+        113
+      ],
+      "opaqueBoundsAtOutput": [
+        44,
+        12,
+        87,
+        112
+      ],
+      "sourceAnchor": [
+        128.94504262000896,
+        452
+      ],
+      "localAnchor": [
+        44.94504262000896,
+        219
+      ],
+      "sourceAlphaBounds": [
+        84,
+        233,
+        181,
+        454
+      ],
+      "opaqueBounds": [
+        86,
+        235,
+        93,
+        217
+      ],
+      "opaquePixels": 13040,
+      "removedDistantAlphaPixels": 2862,
+      "sourceUnitScale": 1,
+      "sourceOpaqueClearance": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.45871559633027525,
+      "wholeImageScale": 0.45871559633027525,
+      "inverseWholeImageTransform": [
+        2.1799999999999997,
+        0,
+        -94.57495737999102,
+        0,
+        2.1799999999999997,
+        -25.159999999999997
+      ],
+      "rgbaSha256": "36ced64b2cc025c51f9e1dcf09ac4a9de60d7557854a29266567b996bd036151",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "brook",
+      "direction": "west",
+      "pose": "talk_happy",
+      "source": "brook",
+      "region": [
+        278,
+        228,
+        145,
+        230
+      ],
+      "index": 1,
+      "bounds": [
+        25,
+        11,
+        87,
+        113
+      ],
+      "opaqueBoundsAtOutput": [
+        26,
+        12,
+        87,
+        112
+      ],
+      "sourceAnchor": [
+        367.4380309300806,
+        452
+      ],
+      "localAnchor": [
+        85.43803093008057,
+        220
+      ],
+      "sourceAlphaBounds": [
+        282,
+        232,
+        418,
+        454
+      ],
+      "opaqueBounds": [
+        284,
+        234,
+        133,
+        218
+      ],
+      "opaquePixels": 13849,
+      "removedDistantAlphaPixels": 2812,
+      "sourceUnitScale": 1,
+      "sourceOpaqueClearance": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.45871559633027525,
+      "wholeImageScale": 0.45871559633027525,
+      "inverseWholeImageTransform": [
+        2.1799999999999997,
+        0,
+        -54.08196906991941,
+        0,
+        2.1799999999999997,
+        -24.159999999999997
+      ],
+      "rgbaSha256": "4028ad1ee84fe0a96ba9290c671f5afd7038145b4e9e71d91ee133c8a38aedc9",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "brook",
+      "direction": "west",
+      "pose": "talk_annoyed",
+      "source": "brook",
+      "region": [
+        539,
+        228,
+        106,
+        230
+      ],
+      "index": 2,
+      "bounds": [
+        42,
+        12,
+        87,
+        112
+      ],
+      "opaqueBoundsAtOutput": [
+        43,
+        12,
+        86,
+        112
+      ],
+      "sourceAnchor": [
+        590.477850877193,
+        452
+      ],
+      "localAnchor": [
+        47.477850877192964,
+        219
+      ],
+      "sourceAlphaBounds": [
+        543,
+        233,
+        641,
+        454
+      ],
+      "opaqueBounds": [
+        545,
+        234,
+        94,
+        218
+      ],
+      "opaquePixels": 13383,
+      "removedDistantAlphaPixels": 2761,
+      "sourceUnitScale": 1,
+      "sourceOpaqueClearance": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.45871559633027525,
+      "wholeImageScale": 0.45871559633027525,
+      "inverseWholeImageTransform": [
+        2.1799999999999997,
+        0,
+        -92.04214912280702,
+        0,
+        2.1799999999999997,
+        -25.159999999999997
+      ],
+      "rgbaSha256": "060a3fb00dee080cbe3c63fe9ebc297eaec9d436edfeb775aae1dd93bf23eb2b",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "brook",
+      "direction": "west",
+      "pose": "surprised",
+      "source": "brook",
+      "region": [
+        734,
+        228,
+        126,
+        230
+      ],
+      "index": 3,
+      "bounds": [
+        33,
+        12,
+        86,
+        113
+      ],
+      "opaqueBoundsAtOutput": [
+        33,
+        12,
+        85,
+        112
+      ],
+      "sourceAnchor": [
+        807.9130054644809,
+        452
+      ],
+      "localAnchor": [
+        68.91300546448088,
+        219
+      ],
+      "sourceAlphaBounds": [
+        739,
+        233,
+        855,
+        454
+      ],
+      "opaqueBounds": [
+        740,
+        234,
+        114,
+        218
+      ],
+      "opaquePixels": 13891,
+      "removedDistantAlphaPixels": 3221,
+      "sourceUnitScale": 1,
+      "sourceOpaqueClearance": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.45871559633027525,
+      "wholeImageScale": 0.45871559633027525,
+      "inverseWholeImageTransform": [
+        2.1799999999999997,
+        0,
+        -70.6069945355191,
+        0,
+        2.1799999999999997,
+        -25.159999999999997
+      ],
+      "rgbaSha256": "591581fb76ca054d7835cc1c49784300a6029f15cb7a7a2036c34878cf1a3165",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "brook",
+      "direction": "west",
+      "pose": "focused_use",
+      "source": "brook",
+      "region": [
+        948,
+        233,
+        153,
+        225
+      ],
+      "index": 4,
+      "bounds": [
+        34,
+        14,
+        100,
+        113
+      ],
+      "opaqueBoundsAtOutput": [
+        34,
+        14,
+        99,
+        112
+      ],
+      "sourceAnchor": [
+        1018.8838351484092,
+        452
+      ],
+      "localAnchor": [
+        65.88383514840916,
+        214
+      ],
+      "sourceAlphaBounds": [
+        953,
+        238,
+        1097,
+        454
+      ],
+      "opaqueBounds": [
+        954,
+        239,
+        141,
+        213
+      ],
+      "opaquePixels": 14170,
+      "removedDistantAlphaPixels": 3091,
+      "sourceUnitScale": 1,
+      "sourceOpaqueClearance": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.45871559633027525,
+      "wholeImageScale": 0.45871559633027525,
+      "inverseWholeImageTransform": [
+        2.1799999999999997,
+        0,
+        -73.63616485159082,
+        0,
+        2.1799999999999997,
+        -30.159999999999997
+      ],
+      "rgbaSha256": "67d6cb92fd827b2f01cd575ad69c4f72f49d44d9ea196766e3afe572b0e131d8",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "brook",
+      "direction": "west",
+      "pose": "sit",
+      "source": "brook",
+      "region": [
+        1186,
+        296,
+        125,
+        169
+      ],
+      "index": 5,
+      "bounds": [
+        35,
+        40,
+        87,
+        112
+      ],
+      "opaqueBoundsAtOutput": [
+        35,
+        40,
+        87,
+        112
+      ],
+      "sourceAnchor": [
+        1255.2914265129682,
+        459
+      ],
+      "localAnchor": [
+        65.2914265129682,
+        159
+      ],
+      "sourceAlphaBounds": [
+        1190,
+        300,
+        1306,
+        461
+      ],
+      "opaqueBounds": [
+        1192,
+        302,
+        113,
+        157
+      ],
+      "opaquePixels": 10018,
+      "removedDistantAlphaPixels": 2020,
+      "sourceUnitScale": 1,
+      "sourceOpaqueClearance": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.45871559633027525,
+      "wholeImageScale": 0.45871559633027525,
+      "inverseWholeImageTransform": [
+        2.1799999999999997,
+        0,
+        -74.22857348703178,
+        0,
+        2.1799999999999997,
+        -85.16
+      ],
+      "rgbaSha256": "ba0a0eb990aec88e09285fa9b8f1b065e7ab54c78bdcc2b966a5cda18874e2ac",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "brook",
+      "direction": "west",
+      "pose": "wave",
+      "source": "brook",
+      "region": [
+        1438,
+        229,
+        108,
+        229
+      ],
+      "index": 6,
+      "bounds": [
+        44,
+        12,
+        89,
+        113
+      ],
+      "opaqueBoundsAtOutput": [
+        45,
+        12,
+        89,
+        112
+      ],
+      "sourceAnchor": [
+        1485.3722758930578,
+        452
+      ],
+      "localAnchor": [
+        43.372275893057804,
+        218
+      ],
+      "sourceAlphaBounds": [
+        1442,
+        234,
+        1542,
+        454
+      ],
+      "opaqueBounds": [
+        1444,
+        235,
+        96,
+        217
+      ],
+      "opaquePixels": 13512,
+      "removedDistantAlphaPixels": 3394,
+      "sourceUnitScale": 1,
+      "sourceOpaqueClearance": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.45871559633027525,
+      "wholeImageScale": 0.45871559633027525,
+      "inverseWholeImageTransform": [
+        2.1799999999999997,
+        0,
+        -96.14772410694218,
+        0,
+        2.1799999999999997,
+        -26.159999999999997
+      ],
+      "rgbaSha256": "d4958b3b470e9d677711cbd3f67fab98a480716d47651d83f1ab85c47f819b83",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "brook",
+      "direction": "west",
+      "pose": "listen",
+      "source": "brook",
+      "region": [
+        1645,
+        230,
+        99,
+        229
+      ],
+      "index": 7,
+      "bounds": [
+        44,
+        12,
+        85,
+        113
+      ],
+      "opaqueBoundsAtOutput": [
+        44,
+        12,
+        84,
+        112
+      ],
+      "sourceAnchor": [
+        1693.8411045722046,
+        453
+      ],
+      "localAnchor": [
+        44.841104572204586,
+        219
+      ],
+      "sourceAlphaBounds": [
+        1649,
+        234,
+        1739,
+        455
+      ],
+      "opaqueBounds": [
+        1651,
+        236,
+        87,
+        217
+      ],
+      "opaquePixels": 12529,
+      "removedDistantAlphaPixels": 2725,
+      "sourceUnitScale": 1,
+      "sourceOpaqueClearance": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.45871559633027525,
+      "wholeImageScale": 0.45871559633027525,
+      "inverseWholeImageTransform": [
+        2.1799999999999997,
+        0,
+        -94.6788954277954,
+        0,
+        2.1799999999999997,
+        -25.159999999999997
+      ],
+      "rgbaSha256": "f99a32471cad454433d3580c84d6bd0e1fbb057c064bbef09773b2ca59b892fd",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    }
+  ],
+  "visualAccepted": false
+}

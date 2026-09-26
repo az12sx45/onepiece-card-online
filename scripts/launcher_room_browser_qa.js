@@ -12,6 +12,7 @@ const bundledPlaywright = fs.existsSync(runtimeRoot) ? fs.readdirSync(runtimeRoo
   .find(candidate => fs.existsSync(path.join(candidate, 'package.json'))) : null;
 const { chromium } = require(process.env.BOARD_QA_PLAYWRIGHT || bundledPlaywright || 'playwright');
 const { CATALOG } = require('../server/launcher-profile-shop');
+const motion = require('../desktop/launcher-room-motion');
 
 const root = path.resolve(__dirname, '..');
 const output = path.resolve(process.env.LAUNCHER_ROOM_QA_OUT || 'D:/Codex_QA/launcher-room-browser');
@@ -30,9 +31,9 @@ if (!process.env.LAUNCHER_ROOM_QA_SKIP_ASSET_PREFLIGHT) {
       assert(fs.existsSync(path.join(root, 'public/images/launcher_room/action_frames', item.key, `${pose}.webp`)), `Missing generated full-body action frame: ${item.key}/${pose}`);
     const digest = pose => crypto.createHash('sha256').update(fs.readFileSync(path.join(root, 'public/images/launcher_room/action_frames', item.key, `${pose}.webp`))).digest('hex');
     if (!syntheticMotion) for (const direction of ['east', 'west', 'north', 'south'])
-      assert(fs.existsSync(path.join(root, 'public/images/launcher_room/motion_v2', item.key, `${direction}.webp`)), `Missing reviewed directional atlas: ${item.key}/${direction}`);
+      assert(fs.existsSync(path.join(root, 'public/images/launcher_room/motion_v3', item.key, `${direction}.webp`)), `Missing reviewed directional atlas: ${item.key}/${direction}`);
     if (!syntheticMotion) for (const direction of ['east', 'west', 'north', 'south'])
-      assert(fs.existsSync(path.join(root, 'public/images/launcher_room/acting_v2', item.key, `${direction}.webp`)), `Missing reviewed directional action atlas: ${item.key}/${direction}`);
+      assert(fs.existsSync(path.join(root, 'public/images/launcher_room/acting_v3', item.key, `${direction}.webp`)), `Missing reviewed directional action atlas: ${item.key}/${direction}`);
     assert.notEqual(digest('talk_happy'), digest('talk_annoyed'), `${item.key} spoken emotions must differ on the body`);
   }
   for (const item of CATALOG.filter(value => value.type === 'room_furniture')) {
@@ -47,6 +48,78 @@ if (!process.env.LAUNCHER_ROOM_QA_SKIP_ASSET_PREFLIGHT) {
 }
 fs.mkdirSync(output, { recursive: true });
 
+async function loadingReducedRegression(browser, html, motionFixture) {
+  // Fresh document/cache: the full suite has already decoded every character.
+  const page = await browser.newPage({ viewport: { width: 1280, height: 900 }, reducedMotion: 'no-preference' });
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  try {
+    await page.route('opui://**', route => {
+      const requested = decodeURIComponent(new URL(route.request().url()).pathname).replace(/^\//, '');
+      const fixture = requested.match(/^images\/launcher_room\/(motion_v3|acting_v3)\/[a-z0-9-]+\/(east|west|north|south)\.webp$/);
+      if (fixture && motionFixture)
+        return route.fulfill({ contentType: 'image/png', body: Buffer.from(motionFixture[fixture[1]][fixture[2]], 'base64') });
+      const file = path.resolve(root, 'public', requested);
+      return file.startsWith(path.join(root, 'public') + path.sep) && fs.existsSync(file)
+        ? route.fulfill({ path: file }) : route.fulfill({ status: 404, body: 'Missing local regression asset' });
+    });
+    await page.setContent(html, { waitUntil: 'domcontentloaded' });
+    await page.addStyleTag({ content: ['launcher.css', 'launcher-social.css', 'launcher-profile-shop.css', 'launcher-room.css'].map(read).join('\n') });
+    await page.evaluate(item => {
+      document.getElementById('bootScreen').hidden = true;
+      document.getElementById('profilePanel').hidden = false;
+      window.__LAUNCHER_ROOM_QA__ = true;
+      const companion = { itemId: item.id, affinity: 17, work: { state: 'ready', readyAt: '2026-09-26T00:00:00.000Z', reward: 10 } };
+      const character = { itemId: item.id, x: 460, y: 391 };
+      const profile = { userId: 42, isSelf: true, room: { revision: 7, sceneId: 'room-scene-default', placements: [], characters: [character] },
+        roomItems: { scene: null, placements: [], characters: [{ ...character, item }] }, companions: [companion] };
+      const wallet = { coins: 123, dailyGrant: 20, cap: 500 };
+      window.__loadingQa = { profile, wallet, before: JSON.stringify({ profile, wallet }), calls: [] };
+      window.onePieceDesktop = new Proxy({}, { get: (_target, method) => () => {
+        window.__loadingQa.calls.push(String(method)); throw new Error(`Unexpected API mutation/read in loading-only regression: ${String(method)}`);
+      } });
+      const originalDecode = Image.prototype.decode;
+      const gate = new Promise(resolve => { window.__releaseLoadingDecode = resolve; });
+      Image.prototype.decode = async function () { await gate; return originalDecode.call(this); };
+    }, products[2]);
+    for (const file of ['launcher-room-dialogue.js', 'launcher-room-motion-data.js', 'launcher-room-motion.js', 'launcher-room.js'])
+      await page.addScriptTag({ content: read(file) });
+    await page.evaluate(() => {
+      window.LauncherRoom.setProfile(window.__loadingQa.profile, { accountId: 42 });
+      window.LauncherRoom.onVisible('profile');
+    });
+    await page.waitForFunction(() => document.querySelector('#roomCharacters .room-character-shell')?.dataset.actionSource === 'loading' &&
+      window.__launcherRoomTest.snapshot().walkers[0]?.ready.length === 0);
+    await page.evaluate(() => window.LauncherRoom.onVisible('shop'));
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    const report = await page.evaluate(async () => {
+      window.__releaseLoadingDecode();
+      await Promise.all([window.OnePieceRoomMotion.preload('luffy').promise, window.OnePieceRoomMotion.preloadActions('luffy').promise]);
+      window.LauncherRoom.onVisible('profile');
+      await new Promise(resolve => requestAnimationFrame(resolve));
+      const node = document.querySelector('#roomCharacters .room-character-shell'), sprite = node.querySelector('.room-chibi');
+      await sprite.decode();
+      const rect = sprite.getBoundingClientRect();
+      return { scenario: 'leave profile during initial decode, enable reduced motion, then return after decode',
+        reduced: matchMedia('(prefers-reduced-motion: reduce)').matches, walkers: window.__launcherRoomTest.snapshot().walkers.length,
+        source: sprite.src, visibility: getComputedStyle(sprite).visibility, canvasHidden: node.querySelector('.room-walk-sprite').hidden,
+        portraitDecoded: sprite.naturalWidth >= 128 && sprite.naturalHeight >= 128, portraitHasLayout: rect.width > 0 && rect.height > 0,
+        actionSource: node.dataset.actionSource, decodedWalk: Object.keys(window.OnePieceRoomMotion.preload('luffy').atlases),
+        decodedActions: Object.keys(window.OnePieceRoomMotion.preloadActions('luffy').atlases),
+        roomWorkAndWalletUnchanged: window.__loadingQa.before === JSON.stringify({ profile: window.__loadingQa.profile, wallet: window.__loadingQa.wallet }),
+        apiCalls: window.__loadingQa.calls };
+    });
+    report.ok = report.reduced && report.walkers === 0 && report.visibility === 'visible' && report.canvasHidden &&
+      report.source.endsWith('/portrait_v3/luffy.webp') && report.portraitDecoded && report.portraitHasLayout &&
+      report.decodedWalk.length === 4 && report.decodedActions.length === 4 && report.roomWorkAndWalletUnchanged && report.apiCalls.length === 0 && errors.length === 0;
+    report.syntheticMotion = !!motionFixture; report.visualAcceptance = false; report.errors = errors;
+    report.roomSourceSha256 = crypto.createHash('sha256').update(read('launcher-room.js')).digest('hex');
+    await page.locator('#profileRoom').screenshot({ path: path.join(output, 'loading-reduced-regression.png') });
+    fs.writeFileSync(path.join(output, 'loading-reduced-regression.json'), JSON.stringify(report, null, 2) + '\n');
+    return report;
+  } finally { await page.close(); }
+}
+
 async function main() {
   const chrome = process.env.LAUNCHER_PROFILE_QA_CHROME ||
     (fs.existsSync(chromium.executablePath()) ? chromium.executablePath() : 'C:/Program Files/Google/Chrome/Application/chrome.exe');
@@ -57,27 +130,31 @@ async function main() {
   let page;
   try {
     page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-    const motionFixture = syntheticMotion ? await page.evaluate(cell => {
-      const canvas = document.createElement('canvas'); canvas.width = cell * 8; canvas.height = cell * 4;
-      const context = canvas.getContext('2d');
-      for (let frame = 0; frame < 32; frame++) {
-        const x = frame % 8 * cell, y = Math.floor(frame / 8) * cell;
-        context.fillStyle = `hsl(${frame * 45} 60% 50%)`; context.fillRect(x + cell * .27, y + cell * .12, cell * .46, cell * .85);
-        context.fillStyle = '#000'; context.font = `${cell * .19}px sans-serif`; context.fillText(String(frame), x + cell * .42, y + cell * .55);
-      }
-      const depth = document.createElement('canvas'); depth.width = cell * 8; depth.height = cell * 20;
-      for (let variant = 0; variant < 5; variant++) depth.getContext('2d').drawImage(canvas, 0, variant * cell * 4);
-      return { base: canvas.toDataURL('image/png').split(',')[1], depth: depth.toDataURL('image/png').split(',')[1] };
-    }, require('../desktop/launcher-room-motion').SHAPE.cell) : null;
+    const motionFixture = syntheticMotion ? await page.evaluate(({ shapes, directions }) =>
+      Object.fromEntries(Object.entries(shapes).map(([kind, shape]) => [kind,
+        Object.fromEntries(directions.map((direction, directionIndex) => {
+          const { cell, columns, frames, width, height } = shape;
+          const canvas = document.createElement('canvas'); canvas.width = width; canvas.height = height;
+          const context = canvas.getContext('2d');
+          for (let frame = 0; frame < frames; frame++) {
+            const x = frame % columns * cell, y = Math.floor(frame / columns) * cell;
+            context.fillStyle = `hsl(${directionIndex * 70 + frame * 17} 60% 50%)`;
+            context.fillRect(x + cell * .27, y + cell * .12, cell * .46, cell * .75);
+            context.fillStyle = '#000'; context.font = `${cell * .12}px sans-serif`;
+            context.fillText(`${direction[0]}:${frame}`, x + cell * .31, y + cell * .55);
+          }
+          return [direction, canvas.toDataURL('image/png').split(',')[1]];
+        }))])), { shapes: { motion_v3: motion.SHAPE, acting_v3: motion.ACTION_SHAPE }, directions: motion.DIRECTIONS }) : null;
     page.on('pageerror', error => errors.push(error.message));
     const tinyPng = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLZnwAAAABJRU5ErkJggg==', 'base64');
     await page.route('opui://**', route => {
       const requested = decodeURIComponent(new URL(route.request().url()).pathname).replace(/^\//, '');
-      if (/^images\/launcher_room\/(motion_v2|acting_v2)\//.test(requested) && motionFixture)
-        return route.fulfill({ contentType: 'image/png', body: Buffer.from(motionFixture[/\/motion_v2\/.*\/(north|south)\.webp$/.test(requested) ? 'depth' : 'base'], 'base64') });
+      const fixture = requested.match(/^images\/launcher_room\/(motion_v3|acting_v3)\/[a-z0-9-]+\/(east|west|north|south)\.webp$/);
+      if (fixture && motionFixture)
+        return route.fulfill({ contentType: 'image/png', body: Buffer.from(motionFixture[fixture[1]][fixture[2]], 'base64') });
       const file = path.resolve(root, 'public', requested);
       if (file.startsWith(path.join(root, 'public') + path.sep) && fs.existsSync(file)) return route.fulfill({ path: file });
-      if (requested.includes('/motion_v2/') || requested.includes('/acting_v2/')) return route.fulfill({ status: 404, body: 'Missing directional animation' });
+      if (requested.includes('/motion_v3/') || requested.includes('/acting_v3/')) return route.fulfill({ status: 404, body: 'Missing directional animation' });
       if (process.env.LAUNCHER_ROOM_QA_SKIP_ASSET_PREFLIGHT) {
         const action = requested.match(/^images\/launcher_room\/action_frames\/([a-z0-9-]+)\/[a-z0-9_]+\.webp$/);
         const furniture = requested.match(/^images\/launcher_room\/furniture_views\/([a-z0-9-]+)\/[0-3]\.webp$/);
@@ -93,6 +170,12 @@ async function main() {
       .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')
       .replace('<body data-stage="boot">', '<body data-stage="app">')
       .replace('<main class="launcher-app screen" id="launcherApp" hidden>', '<main class="launcher-app screen is-active" id="launcherApp">');
+    if (process.env.LAUNCHER_ROOM_QA_LOADING_REGRESSION_ONLY === '1') {
+      const regression = await loadingReducedRegression(browser, html, motionFixture);
+      assert.ok(regression.ok, 'Interrupted loading with reduced motion must keep the new portrait visible and preserve room/work/wallet');
+      console.log(JSON.stringify({ ok: true, checks: 1, output, syntheticMotion, visualAcceptance: false, scope: 'loading-reduced-regression-only' }));
+      return;
+    }
     await page.setContent(html, { waitUntil: 'domcontentloaded' });
     await page.addStyleTag({ content: ['launcher.css', 'launcher-social.css', 'launcher-profile-shop.css', 'launcher-room.css'].map(read).join('\n') });
     await page.evaluate(({ items, catalog }) => {
@@ -186,6 +269,13 @@ async function main() {
     await page.evaluate(() => { window.__LAUNCHER_ROOM_QA__ = true; });
     await page.addScriptTag({ content: read('launcher-room-motion-data.js') });
     await page.addScriptTag({ content: read('launcher-room-motion.js') });
+    check('browser receives v3 metadata and distinct four-beat and eight-pose atlas contracts', await page.evaluate(() => {
+      const data = window.OnePieceRoomMotionManifest, motion = window.OnePieceRoomMotion;
+      return data?.schema === 'one-piece-room-motion/3' && data.shape.walk.frames === motion.SHAPE.frames &&
+        motion.SHAPE.frames === 4 && data.shape.actions.frames === motion.ACTION_SHAPE.frames &&
+        motion.ACTION_SHAPE.frames === 8 && data.shape.actions.beatsPerAction === 1 &&
+        motion.metadata('luffy', data).standingFrame === 1;
+    }));
     check('canonical relationship dialogue loads before room renderer', await page.evaluate(() =>
       window.OnePieceRoomDialogue?.KEYS?.length === 10 &&
       window.OnePieceRoomDialogue?.hasPair?.('zoro', 'sanji') &&
@@ -371,7 +461,7 @@ async function main() {
       }
       return [...seen];
     });
-    check('decoded directional canvas displays all 32 walk frames', [...Array(32).keys()].every(frame =>
+    check('decoded directional canvas displays all four whole-body walk beats', [...Array(motion.SHAPE.frames).keys()].every(frame =>
       walkingFrames.some(value => value.startsWith(`${frame}|`) && value.endsWith('|true'))));
     check('whole body uses independent directional art without mirror transforms', await page.evaluate(() =>
       [...document.querySelectorAll('.room-walk-sprite')].every(canvas => !getComputedStyle(canvas).transform.startsWith('matrix(-1')) &&
@@ -407,8 +497,7 @@ async function main() {
     check('spoken emotion changes the full-body character pose', await page.locator('#roomCharacters .room-speech:not([hidden])').evaluate(speech => {
       const body = speech.parentElement;
       return !!speech.textContent.trim() && ['idle', 'wave', 'talk_happy', 'talk_annoyed', 'surprised', 'focused_use'].includes(body.dataset.pose) &&
-        (body.dataset.actionSource === 'acting_v2' ? !body.querySelector('.room-walk-sprite').hidden :
-          body.querySelector('.room-chibi').src.includes(`/action_frames/${body.dataset.roomKey.slice(17)}/${body.dataset.pose}.webp`));
+        (body.dataset.actionSource === 'acting_v3' && !body.querySelector('.room-walk-sprite').hidden);
     }));
     const directionalConversation = await page.locator('#roomCharacters .room-speech:not([hidden])').evaluate(speech =>
       speech.parentElement.dataset.directionalAction === 'true');
@@ -421,8 +510,8 @@ async function main() {
       }
       return { pose, frames: [...frames], index: window.OnePieceRoomMotion.ACTION_POSES.indexOf(pose) };
     });
-    check('speaking action plays four beats while retaining its assigned expression', actionBeats.frames.length === 4 &&
-      actionBeats.frames.every(frame => Math.floor(frame / 4) === actionBeats.index));
+    check('authored whole-body pose retains its assigned expression without swapping body parts', actionBeats.frames.length === 1 &&
+      actionBeats.frames[0] === actionBeats.index);
     check('one active speech bubble stays inside stage', await page.locator('#roomCharacters .room-speech:not([hidden])').evaluate(node => {
       const bubble = node.getBoundingClientRect(); const stage = document.querySelector('#roomStage').getBoundingClientRect();
       return bubble.left >= stage.left - 1 && bubble.right <= stage.right + 1 && bubble.top >= stage.top - 1 && bubble.bottom <= stage.bottom + 1;
@@ -496,44 +585,65 @@ async function main() {
       (await page.locator('#roomCompanionName').textContent()).includes('魯夫') &&
       (await page.locator('#roomCompanionRole').textContent()) === '船長' &&
       await page.locator('#roomCompanionProgress').getAttribute('value') === '0');
-    check('owner interaction controls are available with server character record',
+    check('owner can chat while retired work controls are absent',
       await page.locator('#roomCompanionTalk').isEnabled() &&
-      await page.locator('#roomCompanionWorkStart').isEnabled() &&
-      await page.locator('#roomCompanionWorkClaim').isHidden());
+      await page.locator('#roomCompanionWork, #roomCompanionWorkStart, #roomCompanionWorkClaim, .room-work-badge').count() === 0);
     await page.locator('#roomCompanionTalk').click();
     await page.waitForFunction(() => document.getElementById('roomCompanionAffinity').textContent === '2 / 100');
     check('chat raises affection and enforces returned cooldown in UI',
       await page.locator('#roomCompanionTalk').isDisabled() &&
       await page.evaluate(() => window.__roomQa.calls.includes('character-interact:room-character-luffy:talk')));
-    await page.locator('#roomCompanionWorkStart').click();
-    await page.waitForFunction(() => document.getElementById('roomCompanionWork').textContent.includes('正在工作'));
-    check('work without a matching furnishing uses the character own work beat', await page.evaluate(() => {
-      const walker = window.__launcherRoomTest.snapshot().walkers.find(value => value.key === 'luffy');
-      const allowed = window.OnePieceRoomDialogue.SOLO.luffy.work.map(beat => beat.line);
-      return walker.mode === 'job' && !walker.jobFurnitureKey && allowed.includes(walker.jobLine) &&
-        !document.querySelector('#roomCharacters .is-using-furniture');
-    }));
-    check('five minute character work starts without immediate coin payout', await page.evaluate(() => {
-      const qa = window.__roomQa;
-      const companion = qa.companions['room-character-luffy'];
-      const remaining = Date.parse(companion.work.readyAt) - Date.now();
-      return companion.work.state === 'working' && remaining > 4 * 60 * 1000 &&
-        qa.shop.wallet.coins === 460 && qa.calls.includes('character-start:room-character-luffy');
-    }));
-    await page.evaluate(() => {
-      const work = window.__roomQa.companions['room-character-luffy'].work;
-      work.state = 'ready'; work.readyAt = new Date(Date.now() - 1000).toISOString();
-    });
-    await page.locator('#roomCompanionClose').click();
-    await captain.click();
-    await page.waitForFunction(() => !document.getElementById('roomCompanionWorkClaim').hidden);
-    check('finished work exposes claim only after server refresh', await page.locator('#roomCompanionWorkClaim').isEnabled());
-    await page.locator('#roomCompanionWorkClaim').click();
-    await page.waitForFunction(() => document.getElementById('roomCompanionAffinity').textContent === '3 / 100');
-    check('claim updates affection and the same shop wallet', await page.evaluate(() =>
-      window.__roomQa.shop.wallet.coins === 470 &&
-      window.__roomQa.calls.includes('character-claim:room-character-luffy') &&
-      document.getElementById('roomCompanionWorkStart').hidden === false));
+    for (const state of ['working', 'ready']) {
+      await page.locator('#roomCompanionClose').click();
+      const stored = await page.evaluate(async state => {
+        const qa = window.__roomQa;
+        const companion = qa.companions['room-character-luffy'];
+        companion.work.state = state;
+        companion.work.readyAt = new Date(Date.now() + (state === 'working' ? 5 * 60 * 1000 : -1000)).toISOString();
+        companion.nextTalkAt = null; companion.talksRemainingToday = 6;
+        // Exercise both profile hydration and the fresh character endpoint with a persisted job.
+        qa.mine.companions = [structuredClone(companion)];
+        const stored = { work: JSON.stringify(companion.work), coins: qa.shop.wallet.coins,
+          affinity: companion.affinity, getCount: qa.calls.filter(call => call === 'character-get:room-character-luffy').length };
+        await window.LauncherProfileShop.openProfile(44);
+        await window.LauncherProfileShop.openProfile(0);
+        return stored;
+      }, state);
+      await page.waitForFunction(() => document.getElementById('roomCompanionPanel').hidden &&
+        window.__launcherRoomTest.snapshot().walkers.length === 1 &&
+        window.__launcherRoomTest.snapshot().walkers[0].ready.length === 4);
+      const start = await page.evaluate(() => {
+        const walker = window.__launcherRoomTest.snapshot().walkers[0];
+        return { x: walker.x, y: walker.y };
+      });
+      await page.waitForFunction(start => {
+        const walker = window.__launcherRoomTest.snapshot().walkers[0];
+        return Math.hypot(walker.x - start.x, walker.y - start.y) > 4 && !walker.mode.startsWith('job');
+      }, start, { timeout: 8000 });
+      check(`persisted ${state} job does not force an animation or prevent normal walking`, await page.evaluate(() =>
+        !window.__launcherRoomTest.snapshot().walkers.some(walker => walker.mode.startsWith('job')) &&
+        document.querySelectorAll('.room-work-badge, .has-job, .is-job-ready').length === 0));
+      await captain.click({ force: true });
+      await page.waitForFunction(stored =>
+        window.__roomQa.calls.filter(call => call === 'character-get:room-character-luffy').length > stored.getCount &&
+        document.getElementById('roomCompanionAffinity').textContent === `${stored.affinity} / 100` &&
+        !document.getElementById('roomCompanionTalk').disabled, stored);
+      check(`persisted ${state} job exposes details and chat without work text or controls`,
+        await page.locator('#roomCompanionPanel').isVisible() &&
+        await page.locator('#roomCompanionWork, #roomCompanionWorkStart, #roomCompanionWorkClaim, .room-work-badge').count() === 0 &&
+        !/工作中|正在工作|安排工作|領取金幣|剩餘/.test(await page.locator('#roomCompanionPanel').innerText()) &&
+        await page.evaluate(() => window.__launcherRoomTest.snapshot().walkers[0].mode === 'focused'));
+      await page.locator('#roomCompanionTalk').click();
+      await page.waitForFunction(affinity => document.getElementById('roomCompanionAffinity').textContent === `${affinity + 2} / 100`, stored.affinity);
+      check(`chat during persisted ${state} job raises affinity and preserves existing job and wallet`, await page.evaluate(stored => {
+        const qa = window.__roomQa;
+        return JSON.stringify(qa.companions['room-character-luffy'].work) === stored.work &&
+          qa.shop.wallet.coins === stored.coins && qa.shop.wallet.coins === 460 &&
+          qa.companions['room-character-luffy'].affinity === stored.affinity + 2 &&
+          !qa.calls.some(call => call.startsWith('character-start:') || call.startsWith('character-claim:'));
+      }, stored));
+      await page.locator('#roomCompanionPanel').screenshot({ path: path.join(output, `retired-work-${state}-details.png`) });
+    }
     await page.locator('#roomCompanionClose').click();
     await page.evaluate(() => window.LauncherProfileShop.openShopCategory('room_scene'));
     await page.waitForFunction(() => document.getElementById('shopItemCount').textContent.includes('3 件'));
@@ -543,7 +653,14 @@ async function main() {
     await page.getByRole('tab', { name: 'Q版夥伴' }).click();
     check('canonical chibi shop shows ten products', await page.locator('#shopGrid .shop-item').count() === 10);
     await page.locator('#shopPanel').screenshot({ path: path.join(output, 'chibi-shop-1280.png') });
-    await page.evaluate(() => window.LauncherProfileShop.openProfile(44));
+    await page.evaluate(() => {
+      const qa = window.__roomQa;
+      const companion = qa.companionFor('room-character-luffy');
+      companion.affinity = 17;
+      companion.work.state = 'ready'; companion.work.readyAt = new Date(Date.now() - 1000).toISOString();
+      qa.friend.companions = [companion];
+      return window.LauncherProfileShop.openProfile(44);
+    });
     await page.waitForFunction(() => document.getElementById('profileHeroName').textContent === '好友航海士');
     check('friend room readonly', await page.locator('#roomEditToggle').isHidden() && await page.locator('#roomEditor').isHidden());
     check('friend canonical chibi visible', await page.locator('#roomCharacters .room-chibi').count() === 1);
@@ -556,10 +673,13 @@ async function main() {
     }));
     const friendRequestsBefore = await page.evaluate(() => window.__roomQa.calls.length);
     await page.locator('#roomCharacters [data-room-key="c:room-character-luffy"]').click({ force: true });
-    check('friend sees companion details but no interaction controls',
+    check('friend with stored ready job sees details and affinity but no work or interaction controls',
       await page.locator('#roomCompanionPanel').isVisible() &&
       await page.locator('#roomCompanionActions').isHidden() &&
-      await page.evaluate(before => window.__roomQa.calls.length === before, friendRequestsBefore));
+      await page.locator('#roomCompanionAffinity').textContent() === '17 / 100' &&
+      await page.locator('#roomCompanionWork, #roomCompanionWorkStart, #roomCompanionWorkClaim, .room-work-badge').count() === 0 &&
+      await page.evaluate(before => window.__roomQa.calls.length === before &&
+        window.__roomQa.friend.companions[0].work.state === 'ready', friendRequestsBefore));
     await page.locator('#roomCompanionClose').click();
     check('off-floor saved character receives valid walk bounds', await page.locator('#roomCharacters .room-character-shell').first().evaluate(node => {
       const top = Number.parseFloat(node.style.top);
@@ -742,6 +862,8 @@ async function main() {
     await page.locator('#profileRoom').screenshot({ path: path.join(output, 'showcase-edit-room-390.png') });
     await page.locator('#roomCancel').click();
     check('renderer has no uncaught errors', errors.length === 0);
+    const loadingRegression = await loadingReducedRegression(browser, html, motionFixture);
+    check('interrupted loading with reduced motion retains the new portrait and existing room/work/wallet', loadingRegression.ok);
     const showcaseScreenshots = [
       'showcase-edit-stage-1280.png', 'showcase-edit-room-1280.png', 'showcase-view-stage-1280.png',
       'showcase-view-room-1280.png', 'showcase-view-room-390-left.png',
@@ -749,7 +871,7 @@ async function main() {
     ].map(name => path.join(output, name));
     assert(showcaseScreenshots.every(file => fs.existsSync(file) && fs.statSync(file).size > 10000), 'Missing showcase screenshots.');
     fs.writeFileSync(path.join(output, 'report.json'), JSON.stringify({ ok: true, syntheticMotion, syntheticScenes, directionalConversation,
-      visualAcceptance: false, results, errors, showcase, showcaseScreenshots }, null, 2) + '\n');
+      visualAcceptance: false, results, errors, showcase, showcaseScreenshots, loadingRegression }, null, 2) + '\n');
     console.log(JSON.stringify({ ok: true, checks: results.length, output, syntheticMotion, syntheticScenes, visualAcceptance: false }));
   } catch (error) {
     const snapshot = page && await page.evaluate(() => window.__launcherRoomTest?.snapshot()).catch(() => null);

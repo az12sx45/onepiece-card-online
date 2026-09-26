@@ -1,0 +1,9 @@
+Edit this ONE WHOLE WEST/left-facing Franky into the OPPOSITE CONTACT C walking pose. Keep his WEST face/head/torso orientation and canonical identity. Do not mirror an east picture or paste body parts.
+
+Critical near-arm swap: the NEAR LEFT SHOULDER is the big red BF-37 ball on SCREENRIGHT. Its attached BLUE STAR FOREARM and RED FIST currently hang behind on screenRIGHT; bring this SAME NEAR LEFT ARM FORWARD toward SCREENLEFT, ahead of his lower abdomen/waist, elbow low and naturally bent. It must visibly be the foreground near arm crossing forward, not the farther arm. Near shoulder stays connected.
+The FAR RIGHT ARM now swings BACK toward SCREENRIGHT, mostly hidden behind his torso; far red fist may peek behind hip. Do not leave far arm leading as input.
+NEAR LEFT LEG goes BACK toward SCREENRIGHT, low heel raised only slightly with toes nearfloor; FAR RIGHT LEG leads toward SCREENLEFT with near-flat heelcontact. Near thigh overlaps the far thigh correctly at hips. Arms counter-swing with associated legs. SHORT small relaxed steps, no highknees/jump/kick/squat.
+Redraw the ENTIRE COMPLETE FIGURE with continuous neck/shoulders/body/hips and reasonable mechanical elbow/forearm placement. Preserve body/head/forearm proportions. Big forearm must stay below chest, away from face, no giant arm replacing head.
+
+Canonical Franky unchanged: sweptup lightbluehair, sunglasses, angular metalnose, broad grin, huge bare muscular chest, open red palm-pattern Hawaiian shirt, red BF-37 shoulders, blue star forearms/red hands, blue TRIANGLE BRIEFS withwhite frontstar, small round mechanical knees, BARE THIGHS/LEGS/FEET/TOES. NO sandals, shorts, white cuffs or added objects.
+ONE whole figure centered, ALL hair/hand/foot silhouettes inside canvas with generous transparent margins. TRUE PNG ALPHA TRANSPARENT background, zeroalpha emptyspace. No brown/black/colored background, halos, checkerboard, shadow/floor, diagram, labels, border or second character.

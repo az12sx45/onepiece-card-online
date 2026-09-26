@@ -1,0 +1,139 @@
+{
+  "schema": "wholebody-fourbeat-pilot-handoff/1",
+  "guide": {
+    "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\corrected-guide-12.png",
+    "sha256": "57bb80af0219d0edaf5b52850d5c400e6c3aee8aec9801f29dbae317948b818b",
+    "dimensions": [
+      1536,
+      2048
+    ],
+    "intactWholeCharacterComponents": 12,
+    "rows": [
+      "east",
+      "west",
+      "north",
+      "south"
+    ],
+    "columns": [
+      "contact-a",
+      "neutral",
+      "contact-c"
+    ]
+  },
+  "gifs": [
+    {
+      "direction": "east",
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\preview\\east-normal-0.8s.gif",
+      "sha256": "aed40c1ef002db2eef05928cbb35ba41caf697fc89c7a49b7572e3bdb4d03ee4",
+      "frames": 4,
+      "durationsMs": [
+        200,
+        200,
+        200,
+        200
+      ],
+      "cycleMs": 800
+    },
+    {
+      "direction": "west",
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\preview\\west-normal-0.8s.gif",
+      "sha256": "b96fb0e5c55a54fda86ec6f2d1ef57182b65b07e9d2e4a5b77a16f1af9b4a275",
+      "frames": 4,
+      "durationsMs": [
+        200,
+        200,
+        200,
+        200
+      ],
+      "cycleMs": 800
+    },
+    {
+      "direction": "north",
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\preview\\north-normal-0.8s.gif",
+      "sha256": "03a4966244b6b4f1904d06abb504ff7cd04e82d6072df9f388af4d82eb5e0694",
+      "frames": 4,
+      "durationsMs": [
+        200,
+        200,
+        200,
+        200
+      ],
+      "cycleMs": 800
+    },
+    {
+      "direction": "south",
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\preview\\south-normal-0.8s.gif",
+      "sha256": "6502dba90c831dd7f0e728226aca4e407c4874f2f18f3c3d58fcdc94015f6642",
+      "frames": 4,
+      "durationsMs": [
+        200,
+        200,
+        200,
+        200
+      ],
+      "cycleMs": 800
+    }
+  ],
+  "atlases": [
+    {
+      "direction": "east",
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\preview\\east-walk.png",
+      "sha256": "1fe2f9a4855655e9c80e82333d53575a1908ffbb67916bca681f49cc814e8f92",
+      "dimensions": [
+        512,
+        128
+      ]
+    },
+    {
+      "direction": "west",
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\preview\\west-walk.png",
+      "sha256": "efe421784371bc34aad7ff927b6bfe56f277934785148c7ed0010ac2e2de2f17",
+      "dimensions": [
+        512,
+        128
+      ]
+    },
+    {
+      "direction": "north",
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\preview\\north-walk.png",
+      "sha256": "f1a06838d42de3a0fd389de592fec5faddec426d495c1c4a7b4b9633edc2282c",
+      "dimensions": [
+        512,
+        128
+      ]
+    },
+    {
+      "direction": "south",
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\preview\\south-walk.png",
+      "sha256": "7ee45ef6380f3b6d6bb643e154456d56c2fd9bcea86028296acaa7dc48970d78",
+      "dimensions": [
+        512,
+        128
+      ]
+    }
+  ],
+  "combinedPreview": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\preview\\four-directions-normal-0.8s.gif",
+  "contact": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\preview\\contact.png",
+  "normalizationReport": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\preview\\report.json",
+  "cell": 128,
+  "root": [
+    64,
+    112
+  ],
+  "poseSelection": [
+    0,
+    1,
+    2,
+    1
+  ],
+  "rendering": "Whole original GPT bitmap figures only; per-source uniform head-width scale plus translation, no parts, mesh, mirroring, interpolation.",
+  "observations": [
+    "W near arm swap clear at128px.",
+    "N left/right rear sandal sole swap clear at128px; revised C sole shape slightly larger than A, inspect running preview.",
+    "E revised C foreground near cuff/overlap clarifies rear leg; keep runtime visual review as final decision.",
+    "S original A/C show opposite leading foot and arm.",
+    "All4 neutral poses are close-feet relaxed standing rather than one-foot swing-through; intentionally traditional RPG4beat."
+  ],
+  "status": "PLAYABLE_PREVIEW_READY_NOT_PRODUCTION_ACCEPTANCE",
+  "runtimeModified": false
+}

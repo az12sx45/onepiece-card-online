@@ -4,6 +4,7 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const vm = require('node:vm');
 const motion = require('../desktop/launcher-room-motion');
 const results = [];
 function check(name, fn) { fn(); results.push({ name, pass: true }); }
@@ -15,14 +16,17 @@ async function main() {
       assert.equal(motion.directionForDelta(dc, dr), direction);
       return motion.atlasUrl('zoro', direction);
     })).size, 4);
+    assert.ok(motion.atlasUrl('zoro', 'north').includes('/motion_v3/'));
     assert.equal(motion.atlasUrl('../luffy', 'east'), '');
+    assert.equal(motion.atlasUrl('luffy', 'east', 'motion_v2'), '');
   });
-  check('distance-driven full cycle reaches all 32 ordered frames', () => {
+  check('distance-driven cycle preserves contactA, neutral, contactC, neutral order', () => {
     const state = motion.createState('east');
-    const frames = [];
-    for (let i = 0; i < 32; i++) frames.push(motion.advance(state, .75, 24));
-    assert.deepEqual(frames, [...Array.from({ length: 31 }, (_, index) => index + 1), 0]);
+    const frames = [state.frame];
+    for (let i = 0; i < 4; i++) frames.push(motion.advance(state, 6, 24));
+    assert.deepEqual(frames, [0, 1, 2, 3, 0]);
     assert.equal(state.distance, 24);
+    assert.equal(motion.metadata('luffy').standingFrame, 1);
   });
   check('subdividing cells or frame times preserves locomotion phase', () => {
     const segmented = motion.createState('south'), whole = motion.createState('south');
@@ -59,7 +63,7 @@ async function main() {
     assert.ok(Math.abs(front.speed / front.stride - back.speed / back.stride) < 1e-12);
     assert.ok(back.speed < front.speed && back.stride < front.stride);
     const north = motion.speedAndStride('luffy', 'north', 1.07);
-    assert.equal(north.speed, 26 * .62); assert.equal(north.stride, 24 * .62);
+    assert.equal(north.speed, 13); assert.equal(north.stride, 12);
     assert.ok(Math.abs(north.speed / north.stride - front.speed / front.stride) < 1e-12);
     assert.equal(motion.metadata('luffy', { characters: { luffy: { stride: { east: 48 }, speed: 41 } } }).stride.east, 48);
     const custom = motion.metadata('luffy', { characters: { luffy: { speed: { east: 45, north: 28 }, stride: { east: 57, north: 26 } } } });
@@ -72,11 +76,13 @@ async function main() {
     const cell = motion.SHAPE.cell;
     const canvas = { width: cell, height: cell, getContext: () => context };
     const atlas = {};
-    assert.equal(motion.draw(canvas, atlas, 30), true);
-    assert.deepEqual(calls[1], ['draw', atlas, 6 * cell, 3 * cell, cell, cell, 0, 0, cell, cell]);
+    assert.equal(motion.draw(canvas, atlas, 2), true);
+    assert.deepEqual(calls[1], ['draw', atlas, 2 * cell, 0, cell, cell, 0, 0, cell, cell]);
     assert.equal(motion.SHAPE.rootX / cell, .5); assert.equal(motion.SHAPE.rootY / cell, .875);
     assert.deepEqual(motion.ACTION_POSES, ['idle', 'talk_happy', 'talk_annoyed', 'surprised', 'focused_use', 'sit', 'wave', 'listen']);
-    assert.equal(motion.atlasUrl('luffy', 'west', 'acting_v2'), 'opui://launcher/images/launcher_room/acting_v2/luffy/west.webp');
+    assert.equal(motion.atlasUrl('luffy', 'west', 'acting_v3'), 'opui://launcher/images/launcher_room/acting_v3/luffy/west.webp');
+    motion.draw(canvas, atlas, 7, motion.ACTION_SHAPE);
+    assert.deepEqual(calls[3], ['draw', atlas, 7 * cell, 0, cell, cell, 0, 0, cell, cell]);
   });
   check('edge depth routes use Y speed and phase despite lateral floor projection', () => {
     const center = motion.pathStep(0, 31, 'south', 8);
@@ -87,36 +93,48 @@ async function main() {
     assert.deepEqual(motion.pathStep(15.9375, -31, 'north', 40), { dx: 15.9375, dy: -31, travel: 31, reached: true });
     assert.equal(motion.pathStep(-50, 0, 'west', 5).dx, -5);
   });
-  check('depth atlases choose an authored leg projection without mirroring the body', () => {
-    assert.deepEqual(motion.DEPTH_SLOPES, [-.52, -.26, 0, .26, .52]);
-    assert.equal(motion.slopeVariant(-.514), 0); assert.equal(motion.slopeVariant(.514), 4);
-    assert.equal(motion.slopeVariant(0), 2); assert.equal(motion.walkShape('north').height, 20 * motion.SHAPE.cell);
+  check('all directions use four complete bodies without slope or body-part variants', () => {
+    assert.deepEqual(motion.WALK_SHAPE, { columns: 4, rows: 1, frames: 4, cell: 128, width: 512, height: 128, rootX: 64, rootY: 112 });
+    for (const direction of motion.DIRECTIONS) assert.equal(motion.walkShape(direction), motion.WALK_SHAPE);
+    assert.equal(motion.slopeVariant, undefined); assert.equal(motion.DEPTH_WALK_SHAPE, undefined);
     const cell = motion.SHAPE.cell;
     const calls = [], canvas = { width: cell, height: cell, getContext: () => ({ clearRect() {}, drawImage: (...args) => calls.push(args) }) }, atlas = {};
-    motion.draw(canvas, atlas, 32 * 4 + 30, motion.walkShape('south'));
-    assert.deepEqual(calls[0], [atlas, 6 * cell, 19 * cell, cell, cell, 0, 0, cell, cell]);
+    motion.draw(canvas, atlas, 3, motion.walkShape('south'));
+    assert.deepEqual(calls[0], [atlas, 3 * cell, 0, cell, cell, 0, 0, cell, cell]);
   });
-  check('each action selects its four beats without entering another expression', () => {
+  check('each action retains its complete authored pose at every elapsed time', () => {
     for (let index = 0; index < motion.ACTION_POSES.length; index++) {
-      const pose = motion.ACTION_POSES[index], duration = pose === 'idle' || pose === 'listen' ? 320 : 180;
-      assert.deepEqual([0, 1, 2, 3, 4].map(beat => motion.actionFrame(pose, beat * duration)), [0, 1, 2, 3, 0].map(beat => index * 4 + beat));
+      const pose = motion.ACTION_POSES[index];
+      for (const time of [0, 179, 180, 320, 720, 1500, 10000]) assert.equal(motion.actionFrame(pose, time), index);
     }
     assert.equal(motion.actionFrame('unknown', 0), -1);
     assert.notEqual(motion.WALK_SHAPE, motion.ACTION_SHAPE);
+    assert.equal(motion.ACTION_SHAPE.width, 1024); assert.equal(motion.ACTION_SHAPE.height, 128);
   });
-  check('data module exposes measured gait and shared root without changing identity', () => {
+  check('v3 data matches four walk beats and eight poses with a shared neutral root', () => {
     const data = require('../desktop/launcher-room-motion-data');
-    const meta = motion.metadata('luffy', data);
-    assert.equal(meta.stride.east, 24); assert.equal(meta.speed.east, 26);
-    assert.deepEqual(meta.root, [motion.SHAPE.rootX, motion.SHAPE.rootY]);
-    assert.equal(data.shape.walk.cell, motion.SHAPE.cell);
-    assert.equal(data.shape.actions.beatsPerAction, 4);
+    const browserGlobal = {};
+    vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../desktop/launcher-room-motion-data.js'), 'utf8'), browserGlobal);
+    assert.equal(browserGlobal.OnePieceRoomMotionManifest.schema, data.schema);
+    assert.equal(data.schema, 'one-piece-room-motion/3');
+    assert.deepEqual(data.shape.walk.sequence, ['contactA', 'neutral', 'contactC', 'neutral']);
+    for (const [kind, shape] of [['walk', motion.SHAPE], ['actions', motion.ACTION_SHAPE]])
+      for (const field of ['cell', 'frames', 'columns', 'rows']) assert.equal(data.shape[kind][field], shape[field]);
+    assert.equal(data.shape.actions.beatsPerAction, 1);
+    assert.equal(Object.keys(data.characters).length, 10);
+    for (const key of Object.keys(data.characters)) {
+      const meta = motion.metadata(key, data), stride = key === 'chopper' ? 20 : 24;
+      assert.deepEqual(meta.stride, { east: stride, west: stride, north: stride / 2, south: stride / 2 });
+      assert.deepEqual(meta.speed, { east: 26, west: 26, north: 13, south: 13 });
+      assert.equal(meta.standingFrame, 1);
+      assert.deepEqual(meta.root, [motion.SHAPE.rootX, motion.SHAPE.rootY]);
+    }
   });
   let releaseDecode;
   const gate = new Promise(resolve => { releaseDecode = resolve; });
   class DelayedImage {
-    naturalWidth = motion.SHAPE.width;
-    get naturalHeight() { return /\/motion_v2\/.*\/(north|south)\.webp$/.test(this.src) ? motion.walkShape('north').height : motion.SHAPE.height; }
+    get naturalWidth() { return this.src.includes('/acting_v3/') ? motion.ACTION_SHAPE.width : motion.SHAPE.width; }
+    get naturalHeight() { return this.src.includes('/acting_v3/') ? motion.ACTION_SHAPE.height : motion.SHAPE.height; }
     decode() { return gate; }
   }
   const loading = motion.preload('luffy', DelayedImage);
@@ -127,6 +145,8 @@ async function main() {
   check('preload exposes all four validated and decoded atlases', () => {
     assert.deepEqual(Object.keys(loading.atlases).sort(), [...motion.DIRECTIONS].sort());
     assert.equal(loading.complete, true); assert.deepEqual(loading.errors, {});
+    assert.equal(new Set(Object.values(loading.atlases)).size, 4);
+    assert.equal(new Set(Object.values(loading.atlases).map(image => image.src)).size, 4);
     assert.equal(motion.preload('luffy', DelayedImage), loading);
   });
   class InvalidImage { naturalWidth = 1; naturalHeight = 1; async decode() {} }
@@ -139,10 +159,30 @@ async function main() {
   check('unpacked source atlases cannot bypass the published cell contract', () => {
     assert.deepEqual(legacy.atlases, {}); assert.equal(Object.keys(legacy.errors).length, 4);
   });
+  class LegacyWalkImage { naturalWidth = 1024; naturalHeight = 512; async decode() {} }
+  const oldWalk = motion.preload('nami', LegacyWalkImage); await oldWalk.promise;
+  check('previous 32-frame walk atlases fail the four-beat contract', () => {
+    assert.deepEqual(oldWalk.atlases, {}); assert.equal(Object.keys(oldWalk.errors).length, 4);
+  });
+  class LegacyDepthImage { naturalWidth = 1024; naturalHeight = 2560; async decode() {} }
+  const oldDepth = motion.preload('robin', LegacyDepthImage); await oldDepth.promise;
+  check('previous 160-cell depth atlases cannot become movement-ready', () => {
+    assert.deepEqual(oldDepth.atlases, {}); assert.equal(Object.keys(oldDepth.errors).length, 4);
+  });
+  class FailedDecodeImage extends DelayedImage { async decode() { throw new Error('decode failed'); } }
+  const failed = motion.preload('sanji', FailedDecodeImage); await failed.promise;
+  check('correct dimensions cannot bypass a failed image decode', () => {
+    assert.deepEqual(failed.atlases, {}); assert.equal(Object.keys(failed.errors).length, 4);
+  });
   const actions = motion.preloadActions('luffy', DelayedImage); await actions.promise;
   check('directional action atlas cache is independent from walk cache', () => {
     assert.notEqual(actions, loading); assert.equal(Object.keys(actions.atlases).length, 4);
-    assert.ok(actions.atlases.west.src.includes('/acting_v2/luffy/west.webp'));
+    assert.ok(actions.atlases.west.src.includes('/acting_v3/luffy/west.webp'));
+    assert.equal(actions.atlases.west.naturalWidth, 1024); assert.equal(loading.atlases.west.naturalWidth, 512);
+  });
+  const oldActions = motion.preloadActions('nami', LegacyWalkImage); await oldActions.promise;
+  check('previous four-beats-per-action atlas is rejected', () => {
+    assert.deepEqual(oldActions.atlases, {}); assert.equal(Object.keys(oldActions.errors).length, 4);
   });
   const report = { ok: true, checks: results.length, scope: 'controller-only', visualAcceptance: false, results };
   if (process.env.LAUNCHER_ROOM_MOTION_QA_OUT) {

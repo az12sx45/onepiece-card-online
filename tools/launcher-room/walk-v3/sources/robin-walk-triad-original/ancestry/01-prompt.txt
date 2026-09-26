@@ -1,0 +1,28 @@
+Use case: stylized-concept. Asset: one complete full-body character interaction atlas, exactly 32 drawings arranged 8 columns by 4 rows on real transparent RGBA. This is newly painted coherent full-body art, not a rig kit and not separated parts.
+
+INPUT ROLES: Image 1 is this character's identity and outfit reference, subject to the explicit canon corrections below. Image 2 is the Luffy full-body interaction sheet: use its clean ink / cel-painted chibi style, proportions, coherent whole-body poses and 8x4 layout ONLY. Never draw Luffy or borrow his clothes. Do not copy any alpha fringe or colored speckles from references.
+
+CHARACTER / CANON:
+NICO ROBIN, adult woman in Enies Lobby / Judicial Island black outfit: LONG straight black hair reaching below shoulders / toward waist, composed blue eyes, fitted black collared long-sleeved top with modest V opening, short black pleated/skirt bottom, black knee-high boots. Follow identity reference outfit and LONG hair; do not shorten to chin-length bob. 2.7-head-tall adult chibi proportions in Luffy reference's drawing style while retaining elegant Robin identity. Calm subtle smile rather than huge toothy grin, mildly cool annoyed frown, understated surprised expression, graceful relaxed open hands. Only TWO ordinary arms in every pose; no extra sprouted arms, no books/tools, no costume change. Long hair wraps shoulder silhouette naturally and never covers anatomical attachment mistakes.
+
+LAYOUT: 2:1 landscape, ideally 2048x1024. Exactly eight equal columns and four equal rows. One whole character safely isolated in each cell. Leave clear transparent gaps between every figure and between rows, including extended fingers, swords, hair, antlers and shoes. At least 18px empty margin within each 256 cell. Every standing figure uses a common scale, approx 2.7 head-heights tall (Chopper retains his shorter canonical animal proportions), aligned feet baseline. Sit uses unchanged body scale with naturally lower head height. Entire figures must be inside the canvas and separable without amputating or touching neighboring art.
+
+DIRECTIONS / ROWS:
+1 EAST: face screen RIGHT, coherent right-facing three-quarter side head, shoulders, torso, pelvis, feet; gaze partner on right. Viewer mostly sees anatomical RIGHT side.
+2 WEST: face screen LEFT, coherent left-facing three-quarter side body; independently drawn, NOT a horizontal mirror. Viewer mostly sees anatomical LEFT side.
+3 NORTH: face fully AWAY, back of head and body only. No eyes, cheeks, mouth or peeked face anywhere in this row.
+4 SOUTH: face toward viewer, fully frontal coherent figure.
+Keep all asymmetric canonical details on their true anatomical side across all rows.
+
+POSES / EIGHT COLUMNS, same order in every row:
+1 IDLE: comfortable upright standing, both hands naturally relaxed down.
+2 TALK HAPPY: character-appropriate smile, one natural open palm at lower chest height extended conversationally toward partner; other arm relaxed.
+3 TALK ANNOYED: character-appropriate frown and hands on hips, normal shoulder and elbow anatomy, no extreme rage.
+4 SURPRISED: widened eyes and mildly open mouth, shoulders slightly gathered, both hands open IN FRONT OF CHEST below chin; never overhead and never at ears.
+5 FOCUSED USE: stand with small natural forward lean from hips, both hands lightly reaching forward LOW between waist and lower chest to use unseen furniture; normal relaxed wrists/elbows, no fists touching face; draw no tool or furniture.
+6 SIT: complete natural seated posture as if on an invisible stool, pelvis low, thighs forward, knees comfortably bent, calves down, feet resting, relaxed hands on thighs; no stool or furniture, no detached/shortened legs.
+7 WAVE: visibly open palm (or canonical Chopper split hoof) beside shoulder, hand directed to partner, CLEAR SPACE from cheek/nose/mouth/eye, natural shoulder-elbow-wrist chain. No closed fist near face.
+8 LISTEN: relaxed attentive expression and gaze at partner, subtle whole-upper-body interest, arms relaxed naturally.
+
+STYLE/ANATOMY: consistent handsome clean linework, readable cel colors, same character face, hair and body proportions throughout. Draw every pose as one fresh continuous full figure: skull connects naturally through neck into shoulders, arm volume bends naturally, clothing wraps the pose, legs and feet have anatomy. Do not paste heads, warp straight limb stickers, repeat one rigid torso with changed arms, separate limbs, or make puppet seams. Keep scale and camera consistent, but show genuine pose-specific body language.
+No original characters, no extra people, no costume changes, no text/labels/dividers, no ground shadows, no furniture, no watermarks, no checkerboard/background, no glow/fringe/speckles. Real empty alpha around clean antialiased character silhouettes.

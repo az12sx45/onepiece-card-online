@@ -1,0 +1,58 @@
+{
+  "schema": "gpt-fullbody-action-sheet/1",
+  "tool": "built-in image_gen.imagegen",
+  "character": "usopp",
+  "original": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de43-fc3b-7f21-ac55-6e2f6737b063\\exec-0c0f196d-6d9d-4a6e-8b33-f813a5c2571b.png",
+  "source": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\usopp\\source-01.png",
+  "sha256": "133d3f52dcfdb3a93f166ceec3a3919102ef522e32d392c6c501bfc3901cbaac",
+  "promptPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\usopp\\prompt-01.txt",
+  "prompt": "Create a game-ready character action sheet: exactly 8 columns by 4 rows, 32 COMPLETE whole-body drawings of canonical USOPP from ONE PIECE. Use reference 1 only for Usopp's exact identity and original outfit; use reference 2 for the complete-body chibi ink/cel-shading style, coherent anatomy, row/pose organization. Draw every figure whole from scratch, not cutout parts, no rig seams or donor head.\nCanonical outfit: very long pointed nose, medium-brown skin, black curly hair falling behind head, mustard-brown bandana and round goggles on top, original ochre/brown bib overalls with brass details and white trim, bare shoulders and arms, brown boots. Blue-and-white striped wristband ONLY on anatomical LEFT wrist, small reddish-brown shoulder satchel at LEFT hip with strap diagonally crossing from RIGHT shoulder. Keep these anatomical sides correctly through all directions; never mirror a sprite. Hands are empty for readable social gestures; do not include handheld slingshot, weapon, furniture or props.\nNatural expressive 2.7-head-tall chibi proportions like Luffy style reference. Complete head, long nose, ears, neck, chest, natural connected shoulders and elbows, fingers, hips, both legs and boots. NO body separated at neck, no pasted joints, no doubled arms. Preserve same head size/body size/outfit in all poses.\nROWS strictly: row1 EAST facing screen RIGHT, row2 WEST facing screen LEFT independently drawn, row3 NORTH viewed from BEHIND with NO eyes/nose/mouth/front-face, row4 SOUTH facing viewer. Entire head and torso have same direction in each cell.\nCOLUMNS strictly:\n1 idle: quietly standing arms relaxed.\n2 talk_happy: cheerful boasting smile, one open hand low in front of chest, natural elbow down.\n3 talk_annoyed: eyebrows annoyed, hands at hips, shoulders relaxed.\n4 surprised: wide eyes open mouth, both hands modestly raised near chest, fingers spread, no covering face.\n5 focused_use: concentrating with slight forward lean, both hands extended LOW in front at waist/table height, bent elbows below shoulders, fingers naturally together; no object.\n6 sit: fully drawn sitting on invisible low seat, bent knees, boots below, hands gently resting on knees, no chair.\n7 wave: ONE open palm raised just BESIDE SHOULDER with visible gap from head, elbow points down naturally, other hand low. Do not put palm in face or over head.\n8 listen: calm attentive stance, relaxed small hand gesture below chest.\nBACK row keeps face fully hidden; emotion conveyed by full-body posture only, all limbs naturally attached, same pose order.\nOutput landscape 2:1, preferably 2048x1024, 8 equal square cells across x4 down. Same standing full-body height about 200px per256cell with at least20px transparent margins top/bottom/left/right, consistent local ground baseline; seated body naturally shorter but same proportions. Never crop hair, nose, satchel, fingers or toes. Real transparent alpha background, no checkerboard, no ground shadow, no glow, no borders, no text/labels/watermarks. Clean ink outlines and polished shaded bitmap illustration matching reference2.\n",
+  "promptSHA256": "5629e1a2b84f24ea10e8ee3dd0fdd0b4326c3244a17a3c84e038cd159e6b810f",
+  "references": [
+    {
+      "path": "D:\\Codex_Release_Worktrees\\launcher-room-art-repair-1.1.14\\public\\images\\launcher_room\\action_frames\\usopp\\idle.webp",
+      "sha256": "a48b887d1fb8ff9c5d42dd25fd2d4af3df2f05b0daea9c9e9b44359323ea45f7"
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\luffy-fullbody-actions-32-02.png",
+      "sha256": "2e4bd717564897df3fbe7083ff59cd1069f8b2a9ef096b19c98785409695b7dd"
+    }
+  ],
+  "image": {
+    "width": 1774,
+    "height": 887,
+    "mode": "RGBA",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "opaque128Pixels": 547574,
+    "edgeAlpha128Pixels": {
+      "top": 0,
+      "bottom": 0,
+      "left": 0,
+      "right": 0
+    }
+  },
+  "layout": {
+    "rows": [
+      "east",
+      "west",
+      "north",
+      "south"
+    ],
+    "columns": [
+      "idle",
+      "talk_happy",
+      "talk_annoyed",
+      "surprised",
+      "focused_use",
+      "sit",
+      "wave",
+      "listen"
+    ]
+  },
+  "status": "PENDING_VISUAL_REVIEW",
+  "runtimeModified": false,
+  "recordedAt": "2026-09-26T18:03:43.758946+00:00"
+}

@@ -1,0 +1,67 @@
+{
+  "schema": "gpt-fullbody-character-32-receipt/1",
+  "tool": "built-in image_gen.imagegen",
+  "character": "zoro",
+  "source": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\zoro\\source.png",
+  "sha256": "ec94a43bb36a8c2784d8d4c526c97b8f3b5ff0c72c3e7a054e9012ae95c88954",
+  "reference": [
+    {
+      "path": "D:\\Codex_Release_Worktrees\\launcher-room-art-repair-1.1.14\\public\\images\\launcher_room\\action_frames\\zoro\\idle.webp",
+      "sha256": "87e53acc4f63e4074413c647a798d82f9e84bf6822ac1f4b4cdbcb5432e3a567"
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\luffy-fullbody-actions-32-02.png",
+      "sha256": "2e4bd717564897df3fbe7083ff59cd1069f8b2a9ef096b19c98785409695b7dd"
+    }
+  ],
+  "generationHistory": [
+    {
+      "generatedSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-a1c5-7fc2-9c4d-857370899a24\\exec-755c8e2d-a5bc-43da-8846-12ed16aff790.png",
+      "promptFile": "source-01.prompt.txt",
+      "promptPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\zoro\\source-01.prompt.txt",
+      "prompt": "Use case: stylized-concept. Asset: one complete full-body character interaction atlas, exactly 32 drawings arranged 8 columns by 4 rows on real transparent RGBA. This is newly painted coherent full-body art, not a rig kit and not separated parts.\n\nINPUT ROLES: Image 1 is this character's identity and outfit reference, subject to the explicit canon corrections below. Image 2 is the Luffy full-body interaction sheet: use its clean ink / cel-painted chibi style, proportions, coherent whole-body poses and 8x4 layout ONLY. Never draw Luffy or borrow his clothes. Do not copy any alpha fringe or colored speckles from references.\n\nCHARACTER / CANON:\nRORONOA ZORO in his EARLY pre-timeskip East Blue white-shirt outfit, BOTH EYES open and completely UNSCARRED. Short spiky moss-green hair, plain white short-sleeved shirt, broad green haramaki waist wrap, dark black trousers, black boots. Exactly THREE sheathed swords on his ANATOMICAL RIGHT HIP: one white scabbard and two black scabbards, consistent sword count in every pose. His black bandana is tied around ANATOMICAL LEFT UPPER ARM, not head. Exactly THREE small gold earrings on ANATOMICAL LEFT EAR. EAST: sword hip near viewer; left earrings and left bandana mostly far/occluded. WEST: left ear earrings and bandana visibly near viewer; right hip swords partly behind body. NORTH: sword cluster on screen right, bandana on screen left. SOUTH: sword cluster on screen left, earrings and bandana on screen right. Confident restrained half-smile, blunt annoyed frown, not Luffy's silly expressions. All three swords remain safely inside each cell, draw coherent whole-body and sword placement even while sitting.\n\nLAYOUT: 2:1 landscape, ideally 2048x1024. Exactly eight equal columns and four equal rows. One whole character safely isolated in each cell. Leave clear transparent gaps between every figure and between rows, including extended fingers, swords, hair, antlers and shoes. At least 18px empty margin within each 256 cell. Every standing figure uses a common scale, approx 2.7 head-heights tall (Chopper retains his shorter canonical animal proportions), aligned feet baseline. Sit uses unchanged body scale with naturally lower head height. Entire figures must be inside the canvas and separable without amputating or touching neighboring art.\n\nDIRECTIONS / ROWS:\n1 EAST: face screen RIGHT, coherent right-facing three-quarter side head, shoulders, torso, pelvis, feet; gaze partner on right. Viewer mostly sees anatomical RIGHT side.\n2 WEST: face screen LEFT, coherent left-facing three-quarter side body; independently drawn, NOT a horizontal mirror. Viewer mostly sees anatomical LEFT side.\n3 NORTH: face fully AWAY, back of head and body only. No eyes, cheeks, mouth or peeked face anywhere in this row.\n4 SOUTH: face toward viewer, fully frontal coherent figure.\nKeep all asymmetric canonical details on their true anatomical side across all rows.\n\nPOSES / EIGHT COLUMNS, same order in every row:\n1 IDLE: comfortable upright standing, both hands naturally relaxed down.\n2 TALK HAPPY: character-appropriate smile, one natural open palm at lower chest height extended conversationally toward partner; other arm relaxed.\n3 TALK ANNOYED: character-appropriate frown and hands on hips, normal shoulder and elbow anatomy, no extreme rage.\n4 SURPRISED: widened eyes and mildly open mouth, shoulders slightly gathered, both hands open IN FRONT OF CHEST below chin; never overhead and never at ears.\n5 FOCUSED USE: stand with small natural forward lean from hips, both hands lightly reaching forward LOW between waist and lower chest to use unseen furniture; normal relaxed wrists/elbows, no fists touching face; draw no tool or furniture.\n6 SIT: complete natural seated posture as if on an invisible stool, pelvis low, thighs forward, knees comfortably bent, calves down, feet resting, relaxed hands on thighs; no stool or furniture, no detached/shortened legs.\n7 WAVE: visibly open palm (or canonical Chopper split hoof) beside shoulder, hand directed to partner, CLEAR SPACE from cheek/nose/mouth/eye, natural shoulder-elbow-wrist chain. No closed fist near face.\n8 LISTEN: relaxed attentive expression and gaze at partner, subtle whole-upper-body interest, arms relaxed naturally.\n\nSTYLE/ANATOMY: consistent handsome clean linework, readable cel colors, same character face, hair and body proportions throughout. Draw every pose as one fresh continuous full figure: skull connects naturally through neck into shoulders, arm volume bends naturally, clothing wraps the pose, legs and feet have anatomy. Do not paste heads, warp straight limb stickers, repeat one rigid torso with changed arms, separate limbs, or make puppet seams. Keep scale and camera consistent, but show genuine pose-specific body language.\nNo original characters, no extra people, no costume changes, no text/labels/dividers, no ground shadows, no furniture, no watermarks, no checkerboard/background, no glow/fringe/speckles. Real empty alpha around clean antialiased character silhouettes.\n",
+      "generatedSourceSha256": "7f11ef0f9147b068e007d30ed70f9eb4bb0d696a6dde2d47612ff24cfdd7cdfe"
+    },
+    {
+      "generatedSource": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-a1c5-7fc2-9c4d-857370899a24\\exec-3994488d-91be-4d09-b7a3-775fe7fd0b5e.png",
+      "promptFile": "source-02.prompt.txt",
+      "promptPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\zoro\\source-02.prompt.txt",
+      "prompt": "Make ONE narrowly targeted CANON CORRECTION to this 32-complete-body Zoro atlas. Preserve all natural complete bodies, poses, expressions, coherent neck/shoulder/limbs, four row directions, white shirt and green waist wrap, exactly32 arrangement, and character scale. Do not redraw independent parts or change style.\nFix the THREE SHEATHED SWORDS carried on his ANATOMICAL RIGHT HIP in all32poses: there must be exactly THREE full sword scabbards, ONE clean IVORY WHITE scabbard and TWO BLACK/dark nearly-black scabbards. Remove every red, maroon, brown or green scabbard. Gold fittings and three sword handles may remain. Make the white scabbard clearly distinguishable, not an ambiguous silver stripe. Keep swords all on the same anatomical right hip: near/front in EAST row, far/behind in WEST row, screenRIGHT in NORTH back row, screenLEFT in SOUTH front row. No duplicates on both hips.\nEnsure his anatomical LEFT EAR has THREE small GOLD earrings in every view where that ear is visible (clearly visible WEST and SOUTH); never put them on right ear. The black bandana stays on LEFT UPPER ARM and both eyes remain open, with NO scar.\nWhile retaining full whole poses, keep every sword tip and boot and hair silhouette inside image bounds with transparent breathing space. No text/shadow/background. Preserve genuinely transparent alpha. This edit only corrects the sword scabbard colors/count and verifies stated asymmetric canon, not a new atlas or changed poses.\n",
+      "generatedSourceSha256": "ec94a43bb36a8c2784d8d4c526c97b8f3b5ff0c72c3e7a054e9012ae95c88954"
+    }
+  ],
+  "selectedGeneration": 2,
+  "image": {
+    "size": [
+      1774,
+      887
+    ],
+    "mode": "RGBA",
+    "alphaRange": [
+      0,
+      255
+    ],
+    "edgeAlpha128plus": {
+      "top": 0,
+      "bottom": 0,
+      "left": 0,
+      "right": 0
+    }
+  },
+  "regionReport": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\zoro\\regions.json",
+  "largeWholeFigureCount": 32,
+  "review": {
+    "viewed": true,
+    "canon": "Both eyes open/unscarred; three right-hip swords corrected to one ivory-white and two dark scabbards; left ear gold earrings and left-arm black bandana retained.",
+    "poses": "Full whole bodies continuous. Wave palms separated from face. North row has no face. Rear seated pose needs root review for foot orientation.",
+    "limits": [
+      "Uneven row heights: never equal-grid crop.",
+      "North silhouettes about 14% shorter than side standing poses; preserve body and inspect directional-scale normalization.",
+      "Low-alpha color specks outside silhouettes may be cleaned; no opaque canvas clipping."
+    ]
+  },
+  "status": "CANDIDATE_NOT_RUNTIME_CONNECTED",
+  "wholeBodyOnly": true,
+  "noProductionRuntimeOrDocsChanges": true,
+  "recordedAt": "2026-09-26T18:04:16.471569+00:00"
+}

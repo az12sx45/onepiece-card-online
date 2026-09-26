@@ -1,0 +1,621 @@
+{
+  "schema": "one-piece-room-fullbody-import-report/1",
+  "key": "chopper",
+  "direction": "east",
+  "shape": {
+    "cell": 128,
+    "columns": 8,
+    "rows": 1,
+    "root": [
+      64,
+      112
+    ],
+    "standingMaxHeight": 100,
+    "maxWidth": 112
+  },
+  "method": "whole-character component with nearby source alpha; uniform whole-image scale and translation",
+  "uniformDirectionScale": 0.42735042735042733,
+  "frames": [
+    {
+      "key": "chopper",
+      "direction": "east",
+      "pose": "idle",
+      "source": "chopper",
+      "region": [
+        38,
+        3,
+        171,
+        244
+      ],
+      "index": 0,
+      "bounds": [
+        28,
+        12,
+        97,
+        113
+      ],
+      "opaqueBoundsAtOutput": [
+        29,
+        13,
+        97,
+        112
+      ],
+      "sourceAnchor": [
+        125.66346346346346,
+        241
+      ],
+      "localAnchor": [
+        83.66346346346346,
+        234
+      ],
+      "sourceAlphaBounds": [
+        42,
+        7,
+        205,
+        243
+      ],
+      "opaqueBounds": [
+        44,
+        9,
+        159,
+        232
+      ],
+      "opaquePixels": 22227,
+      "removedDistantAlphaPixels": 1784,
+      "sourceUnitScale": 1,
+      "sourceOpaqueClearance": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.42735042735042733,
+      "wholeImageScale": 0.42735042735042733,
+      "inverseWholeImageTransform": [
+        2.3400000000000003,
+        0,
+        -66.09653653653656,
+        0,
+        2.3400000000000003,
+        -28.079999999999984
+      ],
+      "rgbaSha256": "a0cf4f07a240ebd6059813763f984fd83c0bd32549c58105cd3499bd2214eef7",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "chopper",
+      "direction": "east",
+      "pose": "talk_happy",
+      "source": "chopper",
+      "region": [
+        264,
+        6,
+        189,
+        242
+      ],
+      "index": 1,
+      "bounds": [
+        27,
+        13,
+        105,
+        113
+      ],
+      "opaqueBoundsAtOutput": [
+        28,
+        14,
+        104,
+        112
+      ],
+      "sourceAnchor": [
+        353.5450869389406,
+        242
+      ],
+      "localAnchor": [
+        85.54508693894059,
+        232
+      ],
+      "sourceAlphaBounds": [
+        268,
+        10,
+        449,
+        244
+      ],
+      "opaqueBounds": [
+        270,
+        12,
+        177,
+        230
+      ],
+      "opaquePixels": 22940,
+      "removedDistantAlphaPixels": 2100,
+      "sourceUnitScale": 1,
+      "sourceOpaqueClearance": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.42735042735042733,
+      "wholeImageScale": 0.42735042735042733,
+      "inverseWholeImageTransform": [
+        2.3400000000000003,
+        0,
+        -64.21491306105943,
+        0,
+        2.3400000000000003,
+        -30.079999999999984
+      ],
+      "rgbaSha256": "7af58e1edaeb8a2571b5070d5eef95270ffa7837f9ea64e186fa20f5dde71563",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "chopper",
+      "direction": "east",
+      "pose": "talk_annoyed",
+      "source": "chopper",
+      "region": [
+        497,
+        4,
+        172,
+        243
+      ],
+      "index": 2,
+      "bounds": [
+        28,
+        12,
+        97,
+        113
+      ],
+      "opaqueBoundsAtOutput": [
+        29,
+        13,
+        97,
+        112
+      ],
+      "sourceAnchor": [
+        585.9211125408294,
+        241
+      ],
+      "localAnchor": [
+        84.92111254082943,
+        233
+      ],
+      "sourceAlphaBounds": [
+        501,
+        8,
+        664,
+        243
+      ],
+      "opaqueBounds": [
+        503,
+        10,
+        160,
+        231
+      ],
+      "opaquePixels": 22175,
+      "removedDistantAlphaPixels": 1679,
+      "sourceUnitScale": 1,
+      "sourceOpaqueClearance": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.42735042735042733,
+      "wholeImageScale": 0.42735042735042733,
+      "inverseWholeImageTransform": [
+        2.3400000000000003,
+        0,
+        -64.83888745917059,
+        0,
+        2.3400000000000003,
+        -29.079999999999984
+      ],
+      "rgbaSha256": "dae484c982982f6bd98f9477704231e44f57870a7a3473b62454690a2f167ed2",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "chopper",
+      "direction": "east",
+      "pose": "surprised",
+      "source": "chopper-east-surprised-corrected",
+      "region": [
+        46,
+        55,
+        947,
+        1347
+      ],
+      "index": 3,
+      "bounds": [
+        27,
+        12,
+        97,
+        112
+      ],
+      "opaqueBoundsAtOutput": [
+        28,
+        12,
+        97,
+        112
+      ],
+      "sourceAnchor": [
+        541.6032031887817,
+        1396
+      ],
+      "localAnchor": [
+        490.60320318878166,
+        1337
+      ],
+      "sourceAlphaBounds": [
+        51,
+        59,
+        989,
+        1398
+      ],
+      "opaqueBounds": [
+        52,
+        61,
+        935,
+        1335
+      ],
+      "opaquePixels": 729782,
+      "removedDistantAlphaPixels": 8316,
+      "sourceUnitScale": 0.1745318352059925,
+      "sourceOpaqueClearance": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.42735042735042733,
+      "wholeImageScale": 0.07458625436153525,
+      "inverseWholeImageTransform": [
+        13.407296137339058,
+        0,
+        -367.46374960091805,
+        0,
+        13.407296137339058,
+        -164.61716738197447
+      ],
+      "rgbaSha256": "311a4cb2263735f5fee2c45d316f509f863489d7f1947f546e6295fe41b24674",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "chopper",
+      "direction": "east",
+      "pose": "focused_use",
+      "source": "chopper",
+      "region": [
+        955,
+        10,
+        166,
+        238
+      ],
+      "index": 4,
+      "bounds": [
+        29,
+        15,
+        96,
+        113
+      ],
+      "opaqueBoundsAtOutput": [
+        29,
+        15,
+        95,
+        112
+      ],
+      "sourceAnchor": [
+        1042.3582623330178,
+        242
+      ],
+      "localAnchor": [
+        82.35826233301782,
+        228
+      ],
+      "sourceAlphaBounds": [
+        960,
+        14,
+        1117,
+        244
+      ],
+      "opaqueBounds": [
+        961,
+        16,
+        154,
+        226
+      ],
+      "opaquePixels": 21592,
+      "removedDistantAlphaPixels": 1920,
+      "sourceUnitScale": 1,
+      "sourceOpaqueClearance": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.42735042735042733,
+      "wholeImageScale": 0.42735042735042733,
+      "inverseWholeImageTransform": [
+        2.3400000000000003,
+        0,
+        -67.4017376669822,
+        0,
+        2.3400000000000003,
+        -34.079999999999984
+      ],
+      "rgbaSha256": "63338ff2e61409f2cfef190ddbdb197a1d8da6ec5535235502c2f46544dcd9b9",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "chopper",
+      "direction": "east",
+      "pose": "sit",
+      "source": "chopper",
+      "region": [
+        1155,
+        61,
+        167,
+        191
+      ],
+      "index": 5,
+      "bounds": [
+        28,
+        35,
+        95,
+        113
+      ],
+      "opaqueBoundsAtOutput": [
+        29,
+        36,
+        95,
+        112
+      ],
+      "sourceAnchor": [
+        1243.32038263429,
+        246
+      ],
+      "localAnchor": [
+        84.3203826342899,
+        180
+      ],
+      "sourceAlphaBounds": [
+        1159,
+        66,
+        1317,
+        248
+      ],
+      "opaqueBounds": [
+        1161,
+        67,
+        155,
+        179
+      ],
+      "opaquePixels": 18259,
+      "removedDistantAlphaPixels": 958,
+      "sourceUnitScale": 1,
+      "sourceOpaqueClearance": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.42735042735042733,
+      "wholeImageScale": 0.42735042735042733,
+      "inverseWholeImageTransform": [
+        2.3400000000000003,
+        0,
+        -65.43961736571012,
+        0,
+        2.3400000000000003,
+        -82.07999999999998
+      ],
+      "rgbaSha256": "9e5fc2d07e9c16ca600d678df535e5d5270229516e043fbc11c551ba188ea87a",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "chopper",
+      "direction": "east",
+      "pose": "wave",
+      "source": "chopper",
+      "region": [
+        1357,
+        2,
+        173,
+        246
+      ],
+      "index": 6,
+      "bounds": [
+        28,
+        11,
+        97,
+        112
+      ],
+      "opaqueBoundsAtOutput": [
+        29,
+        12,
+        97,
+        112
+      ],
+      "sourceAnchor": [
+        1446.2742507886435,
+        242
+      ],
+      "localAnchor": [
+        84.27425078864349,
+        236
+      ],
+      "sourceAlphaBounds": [
+        1362,
+        6,
+        1526,
+        244
+      ],
+      "opaqueBounds": [
+        1363,
+        8,
+        161,
+        234
+      ],
+      "opaquePixels": 22508,
+      "removedDistantAlphaPixels": 2437,
+      "sourceUnitScale": 1,
+      "sourceOpaqueClearance": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.42735042735042733,
+      "wholeImageScale": 0.42735042735042733,
+      "inverseWholeImageTransform": [
+        2.3400000000000003,
+        0,
+        -65.48574921135653,
+        0,
+        2.3400000000000003,
+        -26.079999999999984
+      ],
+      "rgbaSha256": "6c66435765cb651a3d3cedd505e3966b3af0d2c6af078e290ec863422c590493",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "chopper",
+      "direction": "east",
+      "pose": "listen",
+      "source": "chopper",
+      "region": [
+        1599,
+        3,
+        171,
+        244
+      ],
+      "index": 7,
+      "bounds": [
+        29,
+        12,
+        97,
+        112
+      ],
+      "opaqueBoundsAtOutput": [
+        29,
+        13,
+        97,
+        112
+      ],
+      "sourceAnchor": [
+        1686.9040322580645,
+        241
+      ],
+      "localAnchor": [
+        82.90403225806449,
+        234
+      ],
+      "sourceAlphaBounds": [
+        1604,
+        7,
+        1766,
+        243
+      ],
+      "opaqueBounds": [
+        1605,
+        9,
+        159,
+        232
+      ],
+      "opaquePixels": 21554,
+      "removedDistantAlphaPixels": 1804,
+      "sourceUnitScale": 1,
+      "sourceOpaqueClearance": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.42735042735042733,
+      "wholeImageScale": 0.42735042735042733,
+      "inverseWholeImageTransform": [
+        2.3400000000000003,
+        0,
+        -66.85596774193553,
+        0,
+        2.3400000000000003,
+        -28.079999999999984
+      ],
+      "rgbaSha256": "db0328d87a094a748d249544325f94da00a2e6825886f655a885a24a16e6c943",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    }
+  ],
+  "visualAccepted": false
+}

@@ -1,0 +1,13 @@
+Edit the attached complete 32-pose Luffy interaction atlas. This is ONE targeted layout/edge revision. Preserve all 32 existing full-body poses, row directions, coherent anatomy, face designs, open red vest with bare chest, outfits, style, and expressions. Never split or reconstruct body parts.
+
+Correct only spacing and transparent edge quality:
+- Output a clean 2:1 atlas at 2048 x 1024, exactly 8 equal columns x 4 equal rows, each invisible cell 256 x 256.
+- Place every WHOLE full-body character fully inside its own cell, with at least 20 pixels completely transparent space on all four cell edges. No head/hat/hand/toes touching any row boundary or image edge.
+- Keep ONE common character scale across all poses and rows; standing full-body height about 206 pixels, hat top about y=25 and sandal baseline about y=232 within each cell. Seated poses retain the same body proportions and naturally lower head height, with toes also at y=232. Do not individually stretch bodies or change head proportions.
+- Keep each row's figures centered in their respective cells. All standing feet share the same baseline within the row.
+- Preserve the recognizable natural 2.7-head-tall complete drawings and natural pose-specific shoulder/elbow/neck shapes. Do not introduce cutout limbs or donor heads.
+- Background must be real clean alpha transparency, zero-alpha empty margins and gaps. Remove colored red/yellow flecks, fringe, ghost pixels and stray tiny marks OUTSIDE the character silhouettes. Preserve clean anti-aliasing immediately at the inked silhouette. No shadows or glow.
+- Keep open vest; no closed buttoned fronts. Keep canonical left-eye scar on correct anatomical side, and keep the entire north row face-free.
+- No text, cell border, labels, watermark, checkerboard, floor or furniture.
+
+Rows remain EAST (screen right), WEST (screen left independently drawn), NORTH (back only), SOUTH (front). Columns remain IDLE, TALK HAPPY open palm, TALK ANNOYED hands on hips, SURPRISED hands at chest, FOCUSED USE low hands/lean, SIT complete seated pose, WAVE open palm beside shoulder away from face, LISTEN relaxed. Preserve the original full-body poses; spacing and edge cleanup are the only intended changes.

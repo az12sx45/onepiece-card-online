@@ -1,0 +1,54 @@
+{
+  "schema": "gpt-fullbody-action-sheet/1",
+  "tool": "built-in image_gen.imagegen",
+  "character": "jinbe",
+  "original": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de43-fc3b-7f21-ac55-6e2f6737b063\\exec-a51934cd-d4b9-48d4-9ecf-7ca318feb453.png",
+  "source": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\jinbe\\source-02.png",
+  "sha256": "ab7276aaca4a59172357838087b556a25299d0502537bbc3b2463091a689e4c6",
+  "promptPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\jinbe\\prompt-02.txt",
+  "prompt": "Targeted canon correction ONLY on the FIRST/EAST/RIGHT-FACING ROW (all8figures) of this Jinbe action sheet. Preserve all32 poses, complete anatomy, clothing, proportions, alpha, placement and all other details.\nThe first row currently has an incorrect small red scar/mark on the near VISIBLE RIGHT cheek below/right of the right eye. Jinbe's scar belongs ONLY to his anatomical LEFT eye. In the EAST/right-facing view the visible near cheek is his anatomical RIGHT side and MUST be clean blue skin without any red mark, scar, cut or tattoo. Remove that small red cheek mark from EVERY one of the8 EAST figures and replace naturally with the surrounding BLUE SKIN, preserving eye, brow, pale curly sideburn, tusk and smile. Do not replace it with another marking.\nLeave WEST/left-facing second row left-eye lightning scar INTACT. Leave SOUTH/front fourth row scar at viewer RIGHT/anatomical LEFT eye INTACT. NORTH third row remains face-free. Never move/duplicate scars.\nPreserve full connected head/neck/shoulders/sleeves/fingers/feet, exact orange diamond kimono/purple sash/cloud cloak, head topknot, red sun chest tattoo, expressions and all poses. Keep whole characters unchanged outside the tiny incorrect east cheek marks. No mirror, no new costume, no furniture, no labels or guide grid. Real transparent background;32whole drawings stay complete with zero cropped body parts.\n",
+  "promptSHA256": "e58f4e895ff7f771e326ac1e6bc0635de44da665dfe90f7d91b1f7f9b4e19e01",
+  "references": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\jinbe\\source-01.png",
+      "sha256": "3370166cb895383f05045a147821fd67df612f7a3c88993041a27d7eb3cf60db"
+    }
+  ],
+  "image": {
+    "width": 1774,
+    "height": 887,
+    "mode": "RGBA",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "opaque128Pixels": 843168,
+    "edgeAlpha128Pixels": {
+      "top": 0,
+      "bottom": 0,
+      "left": 0,
+      "right": 0
+    }
+  },
+  "layout": {
+    "rows": [
+      "east",
+      "west",
+      "north",
+      "south"
+    ],
+    "columns": [
+      "idle",
+      "talk_happy",
+      "talk_annoyed",
+      "surprised",
+      "focused_use",
+      "sit",
+      "wave",
+      "listen"
+    ]
+  },
+  "status": "PENDING_VISUAL_REVIEW",
+  "runtimeModified": false,
+  "recordedAt": "2026-09-26T18:12:28.535620+00:00"
+}

@@ -1,0 +1,336 @@
+{
+  "schema": "gpt-threepose-walk-pilot/1",
+  "tool": "built-in image_gen.imagegen",
+  "original": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de43-fc3b-7f21-ac55-6e2f6737b063\\exec-906c1de4-1f79-48f0-846b-8d5c0a85d004.png",
+  "source": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\source-01.png",
+  "sha256": "5f7ed8bc8b85d3b494b117da3fd0763b8455a214a5d5d15f2ab20e4c1f8ebd51",
+  "promptPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\prompt-01.txt",
+  "prompt": "Create a traditional hand-drawn RPG walking sprite sheet of exactly TWELVE COMPLETE LUFFY FIGURES: THREE COLUMNS and FOUR ROWS. This is a simple 3-pose walk cycle, NOT a rig/cutout mesh animation. Draw each full body as one continuous illustration with connected head, neck, shoulders, torso and whole limbs.\n\nREFERENCES:\nImage1: canonical chibi Luffy design and four-direction style only.\nImage2: EAST CONTACT A reference, near/right arm back and near/right leg forward.\nImage3: EAST CONTACT C reference, the opposite arm swing: near/right arm forward and near/right leg back.\nPreserve the real A-versus-C arm/leg ownership reversal from these pose references, while making the steps SMALLER and lower. Do not copy the same lead leg into A and C.\n\nEXACT GRID:\nROW1 EAST: all three full bodies face screen RIGHT.\nROW2 WEST: all three full bodies face screen LEFT, independently drawn with correct canonical asymmetric details, never mirror east.\nROW3 NORTH: all three full bodies face AWAY, back of hat/hair/vest, absolutely no eyes/nose/mouth/face.\nROW4 SOUTH: all three full bodies face TOWARD viewer.\nHead, neck and chest always face together. No isolated head swivels.\n\nCOLUMN1 CONTACT A: gentle short step with one leg forward and the other back; opposite arm gently swings forward. For east use image2: near/right leg forward and near/right arm back.\nCOLUMN2 NEUTRAL PASSING: feet CLOSE TOGETHER directly under hips, relaxed nearly straight support leg, the other foot passing low by ankle; both arms near body sides. This must visibly differ from the spread contact poses.\nCOLUMN3 CONTACT C: true opposite short step, SWITCH which same anatomical leg is in front/back and SWITCH the arms, as image3. For east near/right leg now back and near/right arm forward. Not a copy of column1. For west similarly change which near-side leg leads. For front/back, swap the lower/nearer sandal and opposing arm between columns1 and3.\n\nAll sandals stay near the ground, low relaxed walk, no high knee lift, no jumping, no deep squat, no exaggerated march. Short comfortable stride. A/neutral/C/neutral should make a clear traditional four-beat walk. No need for extra frames. Ensure each sandal/shorts cuff has the correct leg ownership; do not merely change hand gesture.\n\nIdentity: Monkey D. Luffy, about2.7heads tall, same straw hat with red band, black hair, OPEN SLEEVELESS RED VEST exposing natural bare chest without X chest scar, blue cuffed knee shorts, yellow waist sash and brown sandals. Small stitched LEFT-eye cheek scar only when the anatomical left face is visible; never on right cheek. Same head size, camera, consistent character height and clothing in every cell. Whole figures with full fingers, legs and feet. Natural shoulder/elbow/knee connection, no pasted body parts or seams.\n\nPrefer768x1024 or1536x2048 portrait3:4 image, invisible3columns x4rows, one whole character centered in every cell. Generous fully empty transparent margins around all12figures, nothing touches neighboring figure/row or external canvas edges. Same local foot groundline; no drawn ground. TRUE RGBA ALPHA TRANSPARENT BACKGROUND, ABSOLUTELY NO BROWN/TAN/BEIGE/WHITE/BLACK SOLID BACKGROUND and no checkerboard. Only the12characters and transparent empty space. No floor, shadows, text, labels, borders, frames, grids, watermark, decorative props, or diagram arrows. Clean full-body ink and cel-shaded bitmap art matching the references.\n",
+  "references": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\luffy\\source.png",
+      "sha256": "dbb6205716e9cc66bed03c9a5ea024e7d21f20dbbd5d1208340299139cb4db8d"
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\luffy-east-contact-a.png",
+      "sha256": "469cd94e92fbe2bf4b7330f2740f1d116bd3bc33df7dfcdbda8deb8baf2cf89f"
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\luffy-east-contact-c.png",
+      "sha256": "2e5de0caa77323a571446b609a7208a1cf2c57c4e5ad9b85ce13afef7c27c117"
+    }
+  ],
+  "image": {
+    "width": 1086,
+    "height": 1448,
+    "mode": "RGBA",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "completeCharacterComponents": 12
+  },
+  "layout": {
+    "rows": [
+      "east",
+      "west",
+      "north",
+      "south"
+    ],
+    "columns": [
+      "contact-a",
+      "neutral",
+      "contact-c"
+    ]
+  },
+  "visualReview": {
+    "status": "PARTIAL_PROGRESS_NOT_ACCEPTED_AS_COMPLETE_WALK_SET",
+    "visuallyInspected": true,
+    "byDirection": {
+      "east": {
+        "arms": "Near arm visibly changes from back inA to forward inC.",
+        "legs": "A/C still appear to share the same leading-leg ordering; opposite support not convincingly shown.",
+        "neutral": "Feet together; clear distinct neutral."
+      },
+      "west": {
+        "arms": "A/C near arm remains back; same pose repeated.",
+        "legs": "A/C same lead-foot and calf ordering; fails opposite contact.",
+        "neutral": "Feet together; clear distinct neutral."
+      },
+      "north": {
+        "arms": "A/C arms swap forward/back gestures.",
+        "legs": "A/C both have the screen-right sandal sole visible at lowerY; same trailing foot, not opposite.",
+        "neutral": "Feet together; clear distinct neutral."
+      },
+      "south": {
+        "arms": "A/C opposite forearm moves forward.",
+        "legs": "A has screen-left foot ahead; C has screen-right foot ahead; visible alternate support.",
+        "neutral": "Feet together; clear distinct neutral."
+      }
+    },
+    "general": [
+      "12 complete connected bodies; coherent head-neck-torso direction.",
+      "Genuine alpha background; no brown solid backdrop.",
+      "Only front row visibly satisfies foot-and-arm alternation.",
+      "Left cheek stitched scar is small/unclear in west/south; canon detail remains a separate review concern."
+    ],
+    "runtimeOrNaturalWalkingAcceptance": false,
+    "generationCalls": 1
+  },
+  "exports": [
+    {
+      "direction": "east",
+      "pose": "contact-a",
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\east\\contact-a.png",
+      "sha256": "325e16e41f43004da53b7c90a202b83e9015403805cb7a0a9bc0122394fe1a82",
+      "sourceComponent": 1,
+      "sourceRegion": [
+        143,
+        31,
+        355,
+        372
+      ],
+      "opaqueBounds": [
+        146,
+        34,
+        206,
+        335
+      ],
+      "wholeFigureOnly": true,
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "east",
+      "pose": "neutral",
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\east\\neutral.png",
+      "sha256": "ff649d88845f98ac2718f8777d885b7914dd09be4417848db8c77aed3f13cf61",
+      "sourceComponent": 2,
+      "sourceRegion": [
+        458,
+        31,
+        623,
+        371
+      ],
+      "opaqueBounds": [
+        461,
+        34,
+        159,
+        334
+      ],
+      "wholeFigureOnly": true,
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "east",
+      "pose": "contact-c",
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\east\\contact-c.png",
+      "sha256": "dff58ff53399601b4b455060c987f072adf6956b12e345688ac96aa75a1efdc3",
+      "sourceComponent": 3,
+      "sourceRegion": [
+        735,
+        33,
+        957,
+        373
+      ],
+      "opaqueBounds": [
+        738,
+        36,
+        216,
+        334
+      ],
+      "wholeFigureOnly": true,
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "west",
+      "pose": "contact-a",
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\west\\contact-a.png",
+      "sha256": "b4466492daefa01089a4f93f9592ac47c5dce76cb080709a72db6caff9a8f457",
+      "sourceComponent": 4,
+      "sourceRegion": [
+        138,
+        390,
+        346,
+        729
+      ],
+      "opaqueBounds": [
+        141,
+        393,
+        202,
+        333
+      ],
+      "wholeFigureOnly": true,
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "west",
+      "pose": "neutral",
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\west\\neutral.png",
+      "sha256": "1d80db92a391ce055d3665e2da9d80dcc9a0a9f5f0e77d16f201259f7f731327",
+      "sourceComponent": 5,
+      "sourceRegion": [
+        448,
+        392,
+        618,
+        733
+      ],
+      "opaqueBounds": [
+        451,
+        395,
+        164,
+        335
+      ],
+      "wholeFigureOnly": true,
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "west",
+      "pose": "contact-c",
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\west\\contact-c.png",
+      "sha256": "617e392587137adbd266d33979a2f8a33fa6a759b536c7dc7de2f60af3fb8c85",
+      "sourceComponent": 6,
+      "sourceRegion": [
+        731,
+        391,
+        941,
+        732
+      ],
+      "opaqueBounds": [
+        734,
+        394,
+        204,
+        335
+      ],
+      "wholeFigureOnly": true,
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "north",
+      "pose": "contact-a",
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\north\\contact-a.png",
+      "sha256": "98c91f1d9f7dd36e75a4c05ea20de58e3c9de6ef78e8dc7916b9e3663cf85854",
+      "sourceComponent": 7,
+      "sourceRegion": [
+        151,
+        740,
+        328,
+        1065
+      ],
+      "opaqueBounds": [
+        154,
+        743,
+        171,
+        319
+      ],
+      "wholeFigureOnly": true,
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "north",
+      "pose": "neutral",
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\north\\neutral.png",
+      "sha256": "58fc7a8a32b63ceca4c9c744d702c3855c441660de445c905d0faae44d524178",
+      "sourceComponent": 8,
+      "sourceRegion": [
+        456,
+        740,
+        624,
+        1062
+      ],
+      "opaqueBounds": [
+        459,
+        743,
+        162,
+        316
+      ],
+      "wholeFigureOnly": true,
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "north",
+      "pose": "contact-c",
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\north\\contact-c.png",
+      "sha256": "95eeedc1c91296af788dddb5e94df2a17625b80ce1f908696a0bfeaccb740404",
+      "sourceComponent": 9,
+      "sourceRegion": [
+        754,
+        740,
+        934,
+        1062
+      ],
+      "opaqueBounds": [
+        757,
+        743,
+        174,
+        316
+      ],
+      "wholeFigureOnly": true,
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "south",
+      "pose": "contact-a",
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\south\\contact-a.png",
+      "sha256": "d35ae92b5d30911a2144006219fa2a436892f0ce83039dd6fd55a7d54d13ab40",
+      "sourceComponent": 12,
+      "sourceRegion": [
+        139,
+        1071,
+        320,
+        1404
+      ],
+      "opaqueBounds": [
+        142,
+        1074,
+        175,
+        327
+      ],
+      "wholeFigureOnly": true,
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "south",
+      "pose": "neutral",
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\south\\neutral.png",
+      "sha256": "c9b5107fe3c632889f0c6389e568814c8ca200338d8297fa7eb34342022d7fb1",
+      "sourceComponent": 10,
+      "sourceRegion": [
+        447,
+        1068,
+        632,
+        1398
+      ],
+      "opaqueBounds": [
+        450,
+        1071,
+        179,
+        324
+      ],
+      "wholeFigureOnly": true,
+      "anatomyReassembled": false
+    },
+    {
+      "direction": "south",
+      "pose": "contact-c",
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\south\\contact-c.png",
+      "sha256": "b3bfbc0882e7db17d99a4f8467c411679f85df3e69df418e50657c5e2ba75c9d",
+      "sourceComponent": 11,
+      "sourceRegion": [
+        757,
+        1069,
+        940,
+        1408
+      ],
+      "opaqueBounds": [
+        760,
+        1072,
+        177,
+        333
+      ],
+      "wholeFigureOnly": true,
+      "anatomyReassembled": false
+    }
+  ],
+  "runtimeModified": false,
+  "recordedAt": "2026-09-26T18:22:38.754872+00:00"
+}

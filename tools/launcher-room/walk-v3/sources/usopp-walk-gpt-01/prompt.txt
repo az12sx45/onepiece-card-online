@@ -1,0 +1,15 @@
+Use case: identity-preserve full-body game sprite redraw.
+EDIT REFERENCE1 (12 Luffy walking figures) by replacing ALL TWELVE ENTIRE CHARACTERS with canonical USOPP from reference2. Preserve each cell's exact direction and distinct whole-body pose/foot contact/arm swing from reference1. Reference2 is the identity/outfit/style authority for Usopp. Do not retain ANY Luffy strawhat/redvest/blueshorts/sandals/body parts. Redraw each Usopp as one intact head-neck-shoulder-torso-limb figure, not cutout pieces.
+
+Exactly3columns x4rows, same as pose guide. Columns A CONTACT, FEET-TOGETHER NEUTRAL, OPPOSITE C CONTACT. Rows EAST/right, WEST/left, NORTH/back with NO FACE, SOUTH/front. Independently draw every direction, do not mirror asymmetric accessories.
+Keep guide poses EXACTLY:
+EAST A visible near/right arm backLEFT and right leg forwardRIGHT; C visible near/right arm forwardRIGHT and right leg backLEFT.
+WEST A visible near/left arm backRIGHT and left leg forwardLEFT; C visible near/left arm forwardLEFT and left leg backRIGHT.
+NORTH A screenRIGHT boot sole visible coming back toward viewer and screenLEFT foot farther planted; C screenLEFT boot sole visible coming back and screenRIGHT foot farther planted. Swap opposing arms too.
+SOUTH A screenLEFT foot closer/lower and screenRIGHT arm forward; C screenRIGHT foot closer/lower and screenLEFT arm forward.
+Middle column each direction: feet nearly together below hips, arms relaxed low. It must be a visibly different neutral drawing.
+Natural SMALL low steps, no lifted knees or hopping. Foreground versus far thighs must actually switch ownership between A and C; do not repeat one lead leg with different hands.
+
+USOPP identity from reference2: long pointed nose, brown skin, black curly hair behindhead, mustard/brown bandana with goggles atop, ochre-brown bib overalls with brass buttons and white trim, bare arms, BROWN BOOTS not sandals. BLUE-WHITE STRIPED wristband ONLY anatomical LEFT wrist; red-brown satchel at LEFT HIP with strap over RIGHT shoulder, do not move to opposite side when turning. No handheld weapon/props; hands relaxed small fists. Same outfit including trouserlegs/boots in all12. About2.7-head-tall chibi, exact consistent head/body size. Whole neck/shoulder/elbow/knee connections natural; no seams, parts collage, floating head or duplicate limbs.
+Keep original12pose grid spacing and proportions:3equalcolumns x4equalrows onportrait3:4 preferably1536x2048. Generous empty margins around each WHOLE figure, preserve entire nose/hair/boots/fingers/bag; nothing touches neighbors or edges. One consistent character scale within each direction, all feet low at same local baseline.
+REAL RGBA TRANSPARENT BACKGROUND. Absolutely no brown/beige/white/black solid background, no checkerboard, no ground/shadows, no labels/text/grid/borders/watermark. Only12 complete USOPP sprites.

@@ -45,7 +45,7 @@
   const assetFor = item => {
     const source = catalogAssetFor(item);
     const key = item?.type === TYPES.character.type ? keyForCharacter(item) : '';
-    return source && key ? `opui://launcher/images/launcher_room/portrait_v2/${key}.webp` : source;
+    return source && key ? `opui://launcher/images/launcher_room/portrait_v3/${key}.webp` : source;
   };
   const isValidProduct = (item, type) => item?.type === type && typeof item.id === 'string' && /^[a-z0-9-]{3,64}$/.test(item.id) && !!assetFor(item);
   const round = value => Math.round(value * 100) / 100;
@@ -145,7 +145,6 @@
   let lastFrame = 0;
   let interaction = null;
   let nextInteractionAt = 0;
-  let nextJobBadgeAt = 0;
   let interactionIndex = 0;
   let dialogueIndex = 0;
   const pairHistory = new Map();
@@ -209,31 +208,20 @@
     const key = keyForCharacter(item);
     const details = dialogue?.profile?.(key) || {};
     const record = companionRecord(companionId);
-    const work = record?.work || {};
     const affinity = Math.max(0, Math.min(100, Number(record?.affinity) || 0));
     const canAct = isOwner() && !!record && !companionBusy;
-    const ready = work.state === 'ready' || (work.state === 'working' && Number.isFinite(Date.parse(work.readyAt)) && Date.parse(work.readyAt) <= Date.now());
     const portrait = $('roomCompanionPortrait');
     portrait.onerror = () => { portrait.onerror = null; portrait.src = catalogAssetFor(item); };
-    portrait.src = key ? `opui://launcher/images/launcher_room/portrait_v2/${key}.webp` : assetFor(item);
+    portrait.src = key ? `opui://launcher/images/launcher_room/portrait_v3/${key}.webp` : assetFor(item);
     $('roomCompanionPortrait').alt = item.name || details.name || '航海夥伴';
     $('roomCompanionName').textContent = item.name || details.name || '航海夥伴';
     $('roomCompanionRole').textContent = record?.role || details.role || '草帽一行人';
     $('roomCompanionDetail').textContent = record?.description || details.detail || '點擊夥伴可以查看相處進度。';
     $('roomCompanionAffinity').textContent = `${affinity} / 100`;
     $('roomCompanionProgress').value = affinity;
-    if (ready) $('roomCompanionWork').textContent = `工作完成，可領取 ${Number(work.reward) || 10} 展示室金幣。`;
-    else if (work.state === 'working') $('roomCompanionWork').textContent = `正在工作 · 剩餘 ${remainingTime(work.readyAt)}；完成後可領取 ${Number(work.reward) || 10} 展示室金幣。`;
-    else $('roomCompanionWork').textContent = record
-      ? `安排約五分鐘的工作，完成後可領取 10 展示室金幣。今日尚可安排 ${Number(work.remainingStartsToday) || 0} 次。`
-      : '正在讀取夥伴的工作與親密度…';
     $('roomCompanionActions').hidden = !isOwner();
     $('roomCompanionTalk').disabled = !canAct || (record && (Number(record.talksRemainingToday) <= 0 || Date.parse(record.nextTalkAt) > Date.now()));
     $('roomCompanionTalk').title = record && Date.parse(record.nextTalkAt) > Date.now() ? `下次可聊天：${remainingTime(record.nextTalkAt)}` : '';
-    $('roomCompanionWorkStart').hidden = !!work.state && work.state !== 'idle';
-    $('roomCompanionWorkStart').disabled = !canAct || Number(work.remainingStartsToday) <= 0 || Number(work.characterStartsRemainingToday) <= 0;
-    $('roomCompanionWorkClaim').hidden = !ready;
-    $('roomCompanionWorkClaim').disabled = !canAct;
   }
   function closeCompanion() {
     if (companionTick) clearInterval(companionTick);
@@ -261,42 +249,37 @@
     nextInteractionAt = performance.now() + 5000;
     const walker = walkers.find(entry => entry.item?.id === itemId);
     if (walker) walker.node.classList.add('is-companion-selected');
-    if (walker && !['job', 'job-approach'].includes(walker.mode)) {
+    if (walker) {
       walker.route = []; walker.mode = 'focused'; walker.pause = 0;
       walker.node.classList.remove('is-walking'); walker.node.classList.add('is-companion-selected');
       setPose(walker, 'wave'); walker.manualUntil = performance.now() + 1250;
     }
     renderCompanionPanel();
     $('roomCompanionPanel').scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-    companionTick = setInterval(() => { renderCompanionPanel(); refreshJobBadges(); }, 1000);
+    companionTick = setInterval(renderCompanionPanel, 1000);
     if (!isOwner() || typeof api.getLauncherCharacter !== 'function') return;
     const epoch = viewEpoch; const ownerId = accountId; const request = ++companionRequest;
     try {
       const result = await api.getLauncherCharacter(itemId);
       if (epoch !== viewEpoch || ownerId !== accountId || companionId !== itemId || request !== companionRequest || !isOwner()) return;
-      if (result?.ok && result.character) { companionStats.set(itemId, result.character); syncCompanionWalker(itemId); renderCompanionPanel(); }
+      if (result?.ok && result.character) { companionStats.set(itemId, result.character); renderCompanionPanel(); }
       else companionStatus('目前無法更新夥伴資料，請稍後再試。', true);
     } catch { if (epoch === viewEpoch && companionId === itemId) companionStatus('目前無法連線，請稍後再試。', true); }
   }
   const COMPANION_ERRORS = {
     talk_cooldown: '這位夥伴剛聊過天，稍後再來。', talk_daily_limit: '今天的聊天次數已用完。',
-    work_active: '這位夥伴還有尚未領取的工作。', work_daily_limit: '今天的工作次數已用完。',
-    work_not_ready: '工作還在進行，完成後再領取。', wallet_full: '展示室金幣已達上限，先到商店選購商品。',
     not_placed: '這位夥伴已離開房間，請重新整理。', not_owned: '這位夥伴尚未收藏。'
   };
-  async function performCompanionAction(action) {
+  async function performCompanionTalk() {
     if (!isOwner() || !companionId || companionBusy || !companionRecord(companionId)) return;
     const itemId = companionId;
     const epoch = viewEpoch;
     const request = companionRequest;
-    const method = action === 'talk' ? () => api.interactLauncherCharacter(itemId, 'talk')
-      : action === 'start' ? () => api.startLauncherCharacterWork(itemId)
-        : () => api.claimLauncherCharacterWork(itemId);
     companionBusy = true;
-    companionStatus(action === 'claim' ? '正在領取展示室金幣…' : '正在與夥伴互動…');
+    companionStatus('正在與夥伴互動…');
     renderCompanionPanel();
     try {
-      const result = await method();
+      const result = await api.interactLauncherCharacter(itemId, 'talk');
       if (epoch !== viewEpoch || request !== companionRequest || itemId !== companionId) return;
       if (result?.character) companionStats.set(itemId, result.character);
       if (!result?.ok) {
@@ -306,39 +289,18 @@
       if (result.wallet) window.LauncherProfileShop?.onCompanionWalletChanged?.(result.wallet);
       if (interaction) finishInteraction(performance.now());
       nextInteractionAt = performance.now() + 5000;
-      syncCompanionWalker(itemId);
       const walker = walkers.find(entry => entry.item?.id === itemId);
       const key = walker?.key || keyForCharacter(resolvedItem(itemId, 'character'));
-      const beatKind = action === 'talk' ? 'bond' : action === 'claim' ? 'claim' : 'work';
-      const beat = dialogue?.interactionBeat?.(key, beatKind, companionLineIndex);
-      const lines = beat ? [beat.line, beat.mood] : dialogue?.interaction?.(key, beatKind, companionLineIndex) ||
-        [action === 'talk' ? '下次再來聊天吧！' : action === 'claim' ? '工作已經完成了。' : '我去把這件事做好。', 'happy'];
+      const beat = dialogue?.interactionBeat?.(key, 'bond', companionLineIndex);
+      const lines = beat ? [beat.line, beat.mood] : dialogue?.interaction?.(key, 'bond', companionLineIndex) ||
+        ['下次再來聊天吧！', 'happy'];
       companionLineIndex++;
-      if (action === 'talk') {
-        if (walker && walker.mode === 'focused') {
-          showSpeech(walker, lines[0], lines[1], '親密度 +2');
-          if (beat?.pose) setPose(walker, beat.pose);
-          walker.manualUntil = performance.now() + 3500;
-        }
-        companionStatus('聊天完成，親密度增加 2。');
-      } else if (action === 'start') {
-        if (walker) {
-          walker.jobIntro = lines;
-          if (walker.mode === 'job') {
-            const activity = walker.jobBeat;
-            showSpeech(walker, activity?.line || lines[0], activity?.mood || lines[1], activity?.verb || '開始工作', !!walker.jobFurnitureKey, walker.jobFurnitureKey);
-            if (activity?.pose) setPose(walker, activity.pose);
-            walker.jobSpeechUntil = performance.now() + 3000;
-            walker.jobIntro = null;
-          }
-        }
-        companionStatus('已安排工作；完成後回來領取展示室金幣。');
-      } else {
-        if (walker) { showSpeech(walker, lines[0], lines[1], '工作完成'); if (beat?.pose) setPose(walker, beat.pose); }
-        companionStatus(result.claimed ? '已領取 10 展示室金幣，親密度增加 1。' : '這份工作已領取。');
-        if (walker) walker.manualUntil = performance.now() + 3500;
+      if (walker && walker.mode === 'focused') {
+        showSpeech(walker, lines[0], lines[1], '親密度 +2');
+        if (beat?.pose) setPose(walker, beat.pose);
+        walker.manualUntil = performance.now() + 3500;
       }
-      refreshJobBadges();
+      companionStatus('聊天完成，親密度增加 2。');
       renderCompanionPanel();
     } catch {
       if (epoch === viewEpoch && request === companionRequest && itemId === companionId)
@@ -383,20 +345,14 @@
     if (next === 'idle' && showMotion(walker, false)) {
       walker.pose = next; walker.node.dataset.pose = next; return;
     }
-    walker.node.classList.remove('has-directional-sprite');
-    walker.node.dataset.directionalAction = 'false';
-    walker.node.dataset.actionSource = 'legacy';
-    const canvas = walker.node.querySelector('.room-walk-sprite');
-    if (canvas) canvas.hidden = true;
+    // Keep a previously decoded whole figure while the requested direction loads.
+    // Loading must never reintroduce the retired cutout poses.
     walker.pose = next; walker.node.dataset.pose = next;
-    const sprite = walker.node.querySelector('.room-chibi');
-    if (!sprite) return;
-    if (walker.staticPose === next) return;
-    walker.staticPose = next;
-    const fallback = assetFor(walker.item);
-    sprite.onerror = () => { sprite.onerror = null; sprite.src = fallback; sprite.dataset.artFallback = 'true'; };
-    sprite.dataset.artFallback = 'false';
-    sprite.src = walker.key ? `opui://launcher/images/launcher_room/action_frames/${walker.key}/${next === 'listen' ? 'idle' : next}.webp` : fallback;
+    if (!walker.node.classList.contains('has-directional-sprite')) {
+      walker.node.dataset.actionSource = 'loading';
+      // portrait_v3 is also an intact new drawing. Keep it visible when loading
+      // is interrupted or reduced motion prevents creation of another walker.
+    }
   }
   function showAction(walker, pose, now = performance.now()) {
     const atlas = walker.actionArt?.atlases?.[walker.motion?.direction];
@@ -406,7 +362,7 @@
     const root = locomotion.metadata(walker.key, motionTable).root;
     canvas.style.setProperty('--room-root-offset', `${(locomotion.SHAPE.cell - root[1]) / locomotion.SHAPE.cell * 100}%`);
     canvas.hidden = false; walker.node.classList.add('has-directional-sprite');
-    walker.node.dataset.directionalAction = 'true'; walker.node.dataset.actionSource = 'acting_v2';
+    walker.node.dataset.directionalAction = 'true'; walker.node.dataset.actionSource = 'acting_v3';
     walker.node.dataset.direction = walker.motion.direction;
     walker.node.dataset.actionFrame = String(frame);
     return true;
@@ -418,23 +374,18 @@
     const canvas = walker.node.querySelector('.room-walk-sprite');
     const frame = walking ? state.frame : locomotion.metadata(walker.key, motionTable).standingFrame;
     const shape = locomotion.walkShape(state.direction);
-    // A four-neighbor depth segment keeps its column, and therefore slope,
-    // constant. Columns change only after a planted direction turn.
-    const back = gridPoint(walker.cell.col + .5, 0), front = gridPoint(walker.cell.col + .5, FLOOR.rows);
-    const slope = walker.dockTravel ? 0 : (front.x - back.x) / (front.y - back.y);
-    const variant = shape === locomotion.DEPTH_WALK_SHAPE ? locomotion.slopeVariant(slope) : 0;
-    if (!locomotion.draw(canvas, atlas, frame + variant * locomotion.SHAPE.frames, shape)) return false;
+    // Every frame is an intact authored body. Room perspective moves the root;
+    // it never warps legs or draws a separately oriented head.
+    if (!locomotion.draw(canvas, atlas, frame, shape)) return false;
     const root = locomotion.metadata(walker.key, motionTable).root;
     canvas.style.setProperty('--room-root-offset', `${(locomotion.SHAPE.cell - root[1]) / locomotion.SHAPE.cell * 100}%`);
     canvas.hidden = false;
     walker.node.classList.add('has-directional-sprite');
     walker.node.dataset.direction = state.direction;
     walker.node.dataset.motionFrame = String(frame);
-    walker.node.dataset.motionVariant = String(variant);
-    walker.node.dataset.floorSlope = String(slope);
     walker.node.dataset.motionPhase = String(state.phase);
     walker.node.dataset.motionReady = 'true';
-    walker.node.dataset.actionSource = 'motion_v2';
+    walker.node.dataset.actionSource = 'motion_v3';
     delete walker.node.dataset.directionalAction;
     if (walking) { walker.pose = 'walk'; walker.node.dataset.pose = 'walk'; }
     return true;
@@ -620,69 +571,6 @@
     locomotion.advance(walker.motion, travel, gait.stride, { ready: true }); showMotion(walker, true);
     return false;
   }
-  function companionWorkReady(record) {
-    const work = record?.work;
-    return work?.state === 'ready' || (work?.state === 'working' && Date.parse(work.readyAt) <= Date.now());
-  }
-  function refreshJobBadges() {
-    for (const walker of walkers) {
-      const record = companionRecord(walker.item?.id);
-      const active = record?.work?.state === 'working' || record?.work?.state === 'ready';
-      const badge = walker.node.querySelector('.room-work-badge');
-      if (badge) { badge.hidden = !active; badge.textContent = companionWorkReady(record) ? '可領取' : '工作中'; }
-      walker.node.classList.toggle('has-job', !!active);
-      walker.node.classList.toggle('is-job-ready', !!active && companionWorkReady(record));
-    }
-  }
-  function syncCompanionWalker(itemId) {
-    const walker = walkers.find(entry => entry.item?.id === itemId);
-    if (!walker) return;
-    const record = companionRecord(itemId);
-    const active = record?.work?.state === 'working' || record?.work?.state === 'ready';
-    if (!active) {
-      if (walker.mode === 'job' || walker.mode === 'job-approach') {
-        walker.route = []; walker.jobFurnitureKey = ''; walker.jobFacingCell = null; walker.jobTargetLayout = null;
-        walker.node.classList.remove('is-using-furniture');
-        if (companionId === itemId) { walker.mode = 'focused'; setPose(walker, 'idle'); }
-        else chooseDestination(walker);
-      }
-      refreshJobBadges(); return;
-    }
-    if (walker.mode === 'job' || walker.mode === 'job-approach') { refreshJobBadges(); return; }
-    if (interaction?.actors.includes(walker)) finishInteraction(performance.now());
-    const favorites = dialogue?.profile?.(walker.key)?.favorite || [];
-    const room = activeRoom();
-    const layout = layoutRoom(room);
-    const targets = room.placements.map(entry => {
-      const item = resolvedItem(entry.itemId, 'furniture');
-      return { item, placed: layout.placements.get(`f:${entry.itemId}`) };
-    }).filter(entry => entry.item && entry.placed && dialogue?.activity?.(walker.key, keyForFurniture(entry.item), 0));
-    targets.sort((a, b) => Number(favorites.includes(keyForFurniture(b.item))) - Number(favorites.includes(keyForFurniture(a.item))));
-    walker.jobFurnitureKey = '';
-    walker.jobFacingCell = null; walker.jobTargetLayout = null;
-    walker.jobBeat = dialogue?.interactionBeat?.(walker.key, 'work', companionLineIndex++) || null;
-    walker.route = []; walker.pause = 0;
-    for (const target of targets) {
-      const spots = spotsAround(target.placed)
-        .filter(cell => !cellBlocked(cell, blockedFor(walker)))
-        .sort((a, b) => Math.abs(a.col - walker.cell.col) + Math.abs(a.row - walker.cell.row) - Math.abs(b.col - walker.cell.col) - Math.abs(b.row - walker.cell.row));
-      if (spots.some(cell => routeTo(walker, cell))) {
-        walker.jobFurnitureKey = keyForFurniture(target.item);
-        walker.jobTargetLayout = target.placed;
-        walker.jobFacingCell = { col: target.placed.cell.col + target.placed.span.width / 2 - .5,
-          row: target.placed.cell.row + target.placed.span.height / 2 - .5 };
-        walker.jobBeat = dialogue.activity(walker.key, walker.jobFurnitureKey, companionLineIndex++);
-        walker.mode = 'job-approach';
-        break;
-      }
-    }
-    if (!walker.jobFurnitureKey) walker.mode = 'job';
-    if (walker.mode === 'job') {
-      walker.node.classList.toggle('is-using-furniture', !!walker.jobFurnitureKey);
-      setPose(walker, walker.jobBeat?.pose || 'focused_use');
-    }
-    refreshJobBadges();
-  }
   function startInteraction(now) {
     if (interaction || !walkers.length || now < nextInteractionAt) return;
     const available = walkers.filter(walker => walker.mode === 'wander' && walker.item?.id !== companionId);
@@ -818,7 +706,6 @@
     const delta = Math.min(50, lastFrame ? now - lastFrame : 16);
     lastFrame = now;
     startInteraction(now);
-    if (now >= nextJobBadgeAt) { refreshJobBadges(); nextJobBadgeAt = now + 1000; }
     for (const walker of walkers) {
       if (walker.pose !== 'walk') showAction(walker, walker.pose || 'idle', now);
       if (walker.returnDockBeforeRoute) {
@@ -838,36 +725,12 @@
         }
         continue;
       }
-      if (walker.mode === 'job') {
-        if (walker.jobSpeechUntil && now >= walker.jobSpeechUntil) { hideSpeech(walker); walker.jobSpeechUntil = 0; }
-        if (!companionWorkReady(companionRecord(walker.item?.id))) {
-          walker.node.classList.toggle('is-using-furniture', !!walker.jobFurnitureKey);
-          setPose(walker, walker.jobBeat?.pose || 'focused_use');
-        } else {
-          walker.node.classList.remove('is-using-furniture'); setPose(walker, 'wave');
-        }
-        continue;
-      }
       if (walker.pause > 0 && walker.mode === 'wander') {
         walker.pause -= delta;
         walker.node.classList.remove('is-walking'); setPose(walker, 'idle'); continue;
       }
       if (!walker.route.length) {
         walker.node.classList.remove('is-walking');
-        if (walker.mode === 'job-approach') {
-          if (walker.jobTargetLayout && (walker.dockTarget || startFurnitureDock(walker, walker.jobTargetLayout)) &&
-              !moveFurnitureDock(walker, walker.dockTarget, now, delta)) continue;
-          if (walker.jobFacingCell && !faceWalker(walker, walker.jobFacingCell, now)) { setPose(walker, 'idle'); continue; }
-          walker.mode = 'job';
-          const task = walker.jobBeat || (walker.jobIntro
-            ? { line: walker.jobIntro[0], mood: walker.jobIntro[1], verb: '開始工作' }
-            : dialogue?.interactionBeat?.(walker.key, 'work', companionLineIndex++));
-          walker.jobIntro = null;
-          if (task) {
-            showSpeech(walker, task.line, task.mood, task.verb || '開始工作', !!walker.jobFurnitureKey, walker.jobFurnitureKey);
-            setPose(walker, task.pose || 'focused_use'); walker.jobSpeechUntil = now + 3000;
-          } else { walker.node.classList.remove('is-using-furniture'); setPose(walker, 'focused_use'); }
-        }
         if (walker.mode === 'wander') chooseDestination(walker);
         continue;
       }
@@ -878,11 +741,6 @@
         if (walker.blockedFor > 900 && walker.mode === 'wander') chooseDestination(walker);
         else if (walker.blockedFor > 1000 && walker.mode === 'approach' && walker.targetCell) {
           routeTo(walker, walker.targetCell); walker.blockedFor = 0;
-        }
-        else if (walker.blockedFor > 1500 && walker.mode === 'job-approach') {
-          walker.route = []; walker.mode = 'job'; walker.jobFurnitureKey = ''; walker.jobFacingCell = null;
-          walker.jobBeat = dialogue?.interactionBeat?.(walker.key, 'work', companionLineIndex++) || null;
-          walker.node.classList.remove('is-using-furniture'); setPose(walker, walker.jobBeat?.pose || 'focused_use');
         }
         walker.node.classList.remove('is-walking'); setPose(walker, 'idle'); continue;
       }
@@ -952,11 +810,9 @@
       });
     }
     for (const walker of walkers) {
-      if (companionRecord(walker.item?.id)?.work?.state !== 'idle' && companionRecord(walker.item?.id)?.work?.state) syncCompanionWalker(walker.item.id);
-      else if (walker.item?.id === companionId) { walker.mode = 'focused'; walker.node.classList.add('is-companion-selected'); setPose(walker, 'idle'); }
+      if (walker.item?.id === companionId) { walker.mode = 'focused'; walker.node.classList.add('is-companion-selected'); setPose(walker, 'idle'); }
       else chooseDestination(walker);
     }
-    refreshJobBadges();
     if (walkers.length) { nextInteractionAt = performance.now() + 1800; animationId = requestAnimationFrame(frame); }
   }
   function positionNode(node, placed) {
@@ -1075,12 +931,7 @@
       const speech = el('div', 'room-speech'); speech.hidden = true;
       speech.setAttribute('role', 'status'); speech.setAttribute('aria-live', 'polite');
       speech.append(el('span', 'room-speech-text'), el('small', 'room-speech-action'));
-      const badge = el('span', 'room-work-badge'); badge.hidden = true; badge.setAttribute('aria-hidden', 'true');
-      const work = companionRecord(entry.itemId);
-      const working = work?.work?.state === 'working' || work?.work?.state === 'ready';
-      badge.hidden = !working;
-      badge.textContent = companionWorkReady(work) ? '可領取' : '工作中';
-      node.append(sprite, walkSprite, speech, badge);
+      node.append(sprite, walkSprite, speech);
       node.dataset.roomKey = `c:${entry.itemId}`;
       node.tabIndex = 0;
       node.setAttribute('role', 'button');
@@ -1092,8 +943,6 @@
       };
       node.classList.toggle('is-selected', !!selected && selected.kind === 'character' && selected.itemId === entry.itemId);
       node.classList.toggle('is-companion-selected', !editing && companionId === entry.itemId);
-      node.classList.toggle('has-job', !!working);
-      node.classList.toggle('is-job-ready', !!working && companionWorkReady(work));
       positionNode(node, placed); characters.append(node);
     }
     refreshAnimation();
@@ -1301,9 +1150,7 @@
   $('roomCancel').onclick = closeEditor;
   $('roomSave').onclick = save;
   $('roomCompanionClose').onclick = closeCompanion;
-  $('roomCompanionTalk').onclick = () => performCompanionAction('talk');
-  $('roomCompanionWorkStart').onclick = () => performCompanionAction('start');
-  $('roomCompanionWorkClaim').onclick = () => performCompanionAction('claim');
+  $('roomCompanionTalk').onclick = performCompanionTalk;
   $('roomStage').addEventListener('pointerdown', event => {
     if (!editing || saving || event.button > 0) return;
     if (event.target.closest('.room-canvas-controls')) return;
@@ -1358,7 +1205,7 @@
       turnIndex: interaction.turnIndex, turns: interaction.scene?.turns.length },
     walkers: walkers.map(walker => ({ key: walker.key, cell: { ...walker.cell }, x: walker.x, y: walker.y,
       mode: walker.mode, phase: walker.motion?.phase, direction: walker.motion?.direction,
-      dock: walker.dockTarget ? { ...walker.dockTarget } : null, jobFurnitureKey: walker.jobFurnitureKey || '', jobLine: walker.jobBeat?.line || '',
+      dock: walker.dockTarget ? { ...walker.dockTarget } : null,
       ready: Object.keys(walker.motionArt?.atlases || {}), route: walker.route.map(cell => ({ ...cell })) })) }),
     route: (key, goal) => {
       if (interaction) finishInteraction(performance.now());

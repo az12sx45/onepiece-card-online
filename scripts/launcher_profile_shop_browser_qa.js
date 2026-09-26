@@ -24,6 +24,24 @@ function check(name, condition, detail) {
   save();
   assert.ok(condition, `${name}${detail ? `: ${JSON.stringify(detail)}` : ''}`);
 }
+async function waitForRealPlayback(page) {
+  // HAVE_ENOUGH_DATA and a resolved play() promise may precede the audio clock.
+  // Keep an actual clock-advance gate, with bounded startup time and diagnostics.
+  return page.locator('#profileBgmAudio').evaluate(async node => {
+    const started = performance.now(), samples = [];
+    let state;
+    do {
+      state = { paused: node.paused, time: node.currentTime, readyState: node.readyState,
+        error: node.error?.code, elapsedMs: Math.round(performance.now() - started) };
+      samples.push(state);
+      if ((!state.paused && state.time > 0.1) || state.error || state.elapsedMs >= 8000) break;
+      await new Promise(resolve => setTimeout(resolve, 100));
+    } while (true);
+    return { ...state, samples, documentHidden: document.hidden,
+      button: document.getElementById('profileBgmToggle').textContent,
+      status: document.getElementById('profileStatus').textContent };
+  });
+}
 const read = file => fs.readFileSync(path.join(root, 'desktop', file), 'utf8');
 const ownProfile = {
   userId: 42, name: '測試船長', title: '偉大航道航海者', avatar: 8, card: { displayName: '測試船長', tagline: '偉大航道航海者', avatarId: 0 }, isSelf: true,
@@ -651,8 +669,7 @@ async function main() {
       audio.src = fixtureUrl; audio.load();
     }, fs.readFileSync(path.join(root, 'public/audio/profile_bgm/harbor.ogg')).toString('base64'));
     await page.locator('#profileBgmToggle').click();
-    await page.waitForTimeout(1000);
-    const playback = await page.locator('#profileBgmAudio').evaluate(node => ({ paused: node.paused, time: node.currentTime, readyState: node.readyState, error: node.error?.code, button: document.getElementById('profileBgmToggle').textContent, status: document.getElementById('profileStatus').textContent }));
+    const playback = await waitForRealPlayback(page);
     check('real Ogg bytes play through the page button after an explicit click', !playback.paused && playback.time > 0.1, playback);
     await page.locator('#socialButton').click();
     check('leaving profile stops real Ogg playback', await page.locator('#profileBgmAudio').evaluate(node => node.paused && node.currentTime === 0));
@@ -741,8 +758,8 @@ async function main() {
     check('selected OP MP3 decodes and waits for manual playback', Number.isFinite(opMedia.duration) && opMedia.duration > 1 &&
       opMedia.loop && opMedia.paused && opMedia.source.endsWith('/track01.mp3'), opMedia);
     await page.locator('#profileBgmToggle').click();
-    await page.waitForTimeout(750);
-    check('selected OP MP3 plays on explicit click', await page.locator('#profileBgmAudio').evaluate(audio => !audio.paused && audio.currentTime > 0.1));
+    const opPlayback = await waitForRealPlayback(page);
+    check('selected OP MP3 plays on explicit click', !opPlayback.paused && opPlayback.time > 0.1, opPlayback);
     await page.locator('#profileBgmToggle').click();
     check('OP MP3 stops from profile control', await page.locator('#profileBgmAudio').evaluate(audio => audio.paused && audio.currentTime === 0));
     await page.setViewportSize({ width: 390, height: 844 });

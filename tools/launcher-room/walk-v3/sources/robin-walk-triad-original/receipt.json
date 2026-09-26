@@ -1,0 +1,50 @@
+{
+  "generator": "gpt-image",
+  "tool": "built-in image_gen.imagegen",
+  "recordedAtUtc": "2026-09-26T18:41:51.404199+00:00",
+  "generatedOriginal": {
+    "path": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-1739-7141-90bd-461600d8694f\\exec-4e3b1610-4e81-4f46-a3dc-3f1aa579f5a8.png",
+    "sha256": "37fc25805bb1184c90c2dcb281b1aca41b61ba34592d02d5bde225a8c50ecabf"
+  },
+  "selectedCopy": {
+    "path": "walk/robin/source-01.png",
+    "sha256": "37fc25805bb1184c90c2dcb281b1aca41b61ba34592d02d5bde225a8c50ecabf"
+  },
+  "exactOriginalBytes": true,
+  "prompt": {
+    "path": "walk/robin/source-01.prompt.txt",
+    "sha256": "5de133a2bfa93e65aa082838ce21f301a4b443a4f1e8bd88cc9b4de3204d5c12"
+  },
+  "referenceImages": [
+    {
+      "path": "pilot/triad/corrected-guide-12.png",
+      "sha256": "57bb80af0219d0edaf5b52850d5c400e6c3aee8aec9801f29dbae317948b818b"
+    },
+    {
+      "path": "art/robin/source.png",
+      "sha256": "757e902c19dd96298f78fe8efe09faac5ea831dcfecf95f6ad9a1444d38ed626"
+    }
+  ],
+  "referenceRoles": [
+    "12-pose motion guide",
+    "canonical character identity and clothes"
+  ],
+  "poseGrid": {
+    "columns": 3,
+    "rows": 4,
+    "directions": [
+      "east",
+      "west",
+      "north",
+      "south"
+    ],
+    "poses": [
+      "contact-a",
+      "neutral",
+      "contact-c"
+    ]
+  },
+  "extraction": "Whole opaque connected characters with generous source regions; no equal-cell blind crop",
+  "anatomyReassembled": false,
+  "visualReview": "All12 complete head-neck-body figures; original cells superseded by explicit corrected whole figures in selection.json. No production acceptance is implied."
+}

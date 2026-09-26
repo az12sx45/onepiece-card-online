@@ -1,0 +1,316 @@
+{
+  "schema": "one-piece-room-walk-report/3",
+  "key": "robin",
+  "direction": "east",
+  "method": "three authored whole bodies; contact, passing, opposite contact, passing",
+  "anatomyReassembled": false,
+  "mirrored": false,
+  "interpolatedLimbs": false,
+  "frames": [
+    {
+      "key": "robin",
+      "direction": "east",
+      "pose": "contact-a",
+      "source": "robin-walk-triad-original",
+      "region": [
+        95,
+        29,
+        219,
+        334
+      ],
+      "index": 0,
+      "bounds": [
+        29,
+        13,
+        92,
+        112
+      ],
+      "opaqueBoundsAtOutput": [
+        29,
+        14,
+        92,
+        112
+      ],
+      "sourceAnchor": [
+        215.5,
+        358
+      ],
+      "localAnchor": [
+        117.5,
+        326
+      ],
+      "sourceAlphaBounds": [
+        98,
+        32,
+        311,
+        360
+      ],
+      "opaqueBounds": [
+        100,
+        34,
+        209,
+        324
+      ],
+      "opaquePixels": 37486,
+      "removedDistantAlphaPixels": 4798,
+      "sourceUnitScale": 1.0,
+      "sourceOpaqueClearance": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.30242770734940755,
+      "wholeImageScale": 0.30242770734940755,
+      "inverseWholeImageTransform": [
+        3.3065753424657536,
+        0,
+        -94.12082191780823,
+        0,
+        3.3065753424657536,
+        -44.33643835616442
+      ],
+      "rgbaSha256": "309dde6632337353a25ec2567d2233fb7b6a1f7445150f8d4902bd618b526723",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false,
+      "authoredPoseIndex": 0
+    },
+    {
+      "key": "robin",
+      "direction": "east",
+      "pose": "neutral",
+      "source": "robin-walk-triad-original",
+      "region": [
+        447,
+        29,
+        180,
+        334
+      ],
+      "index": 1,
+      "bounds": [
+        34,
+        11,
+        87,
+        113
+      ],
+      "opaqueBoundsAtOutput": [
+        34,
+        12,
+        87,
+        112
+      ],
+      "sourceAnchor": [
+        549.0,
+        358
+      ],
+      "localAnchor": [
+        98.0,
+        326
+      ],
+      "sourceAlphaBounds": [
+        451,
+        32,
+        624,
+        360
+      ],
+      "opaqueBounds": [
+        452,
+        34,
+        170,
+        324
+      ],
+      "opaquePixels": 34129,
+      "removedDistantAlphaPixels": 2691,
+      "sourceUnitScale": 1.0205479452054795,
+      "sourceOpaqueClearance": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.30242770734940755,
+      "wholeImageScale": 0.30864197530864196,
+      "inverseWholeImageTransform": [
+        3.24,
+        0,
+        -109.36000000000001,
+        0,
+        3.24,
+        -36.879999999999995
+      ],
+      "rgbaSha256": "ad60fc4dee63d086b82ad0b15f92c0702245f15d280bee86652a5fb9fd918569",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false,
+      "authoredPoseIndex": 1
+    },
+    {
+      "key": "robin",
+      "direction": "east",
+      "pose": "contact-c",
+      "source": "robin-walk-whole-corrections",
+      "region": [
+        78,
+        36,
+        485,
+        792
+      ],
+      "index": 2,
+      "bounds": [
+        31,
+        14,
+        90,
+        112
+      ],
+      "opaqueBoundsAtOutput": [
+        31,
+        14,
+        90,
+        112
+      ],
+      "sourceAnchor": [
+        346.5,
+        823
+      ],
+      "localAnchor": [
+        264.5,
+        784
+      ],
+      "sourceAlphaBounds": [
+        82,
+        39,
+        559,
+        824
+      ],
+      "opaqueBounds": [
+        83,
+        41,
+        475,
+        782
+      ],
+      "opaquePixels": 207785,
+      "removedDistantAlphaPixels": 5486,
+      "sourceUnitScale": 0.415041782729805,
+      "sourceOpaqueClearance": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.30242770734940755,
+      "wholeImageScale": 0.12552013480518587,
+      "inverseWholeImageTransform": [
+        7.966849315068494,
+        0,
+        -245.3783561643836,
+        0,
+        7.966849315068494,
+        -108.2871232876713
+      ],
+      "rgbaSha256": "078f029964a1385ee28fe25e0b5d9b9dcbea1c6a0967d61095aa0bc410b1a7b8",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false,
+      "authoredPoseIndex": 2
+    },
+    {
+      "key": "robin",
+      "direction": "east",
+      "pose": "neutral",
+      "source": "robin-walk-triad-original",
+      "region": [
+        447,
+        29,
+        180,
+        334
+      ],
+      "index": 3,
+      "bounds": [
+        34,
+        11,
+        87,
+        113
+      ],
+      "opaqueBoundsAtOutput": [
+        34,
+        12,
+        87,
+        112
+      ],
+      "sourceAnchor": [
+        549.0,
+        358
+      ],
+      "localAnchor": [
+        98.0,
+        326
+      ],
+      "sourceAlphaBounds": [
+        451,
+        32,
+        624,
+        360
+      ],
+      "opaqueBounds": [
+        452,
+        34,
+        170,
+        324
+      ],
+      "opaquePixels": 34129,
+      "removedDistantAlphaPixels": 2691,
+      "sourceUnitScale": 1.0205479452054795,
+      "sourceOpaqueClearance": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "uniformDirectionScale": 0.30242770734940755,
+      "wholeImageScale": 0.30864197530864196,
+      "inverseWholeImageTransform": [
+        3.24,
+        0,
+        -109.36000000000001,
+        0,
+        3.24,
+        -36.879999999999995
+      ],
+      "rgbaSha256": "ad60fc4dee63d086b82ad0b15f92c0702245f15d280bee86652a5fb9fd918569",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false,
+      "authoredPoseIndex": 1
+    }
+  ],
+  "visualAccepted": false
+}

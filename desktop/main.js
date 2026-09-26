@@ -325,8 +325,8 @@ function resolveLauncherResource(requestUrl) {
       /^images\/launcher_room\/(?:scenes\/(?:sunny-deck|sunny-kitchen|sunny-library)|furniture\/(?:helm|map-table|treasure-chest|tangerine-tree|swords-rack|kitchen-table|bookshelf|medicine-cabinet|piano|tool-bench)|chibi\/(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe)|emotions\/(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe)-(?:happy|surprised|focused|annoyed)|frames\/(?:straw-hat|ship-wheel))\.webp$/,
       /^images\/launcher_room\/furniture_views\/(?:bookshelf|helm|kitchen-table|map-table|medicine-cabinet|piano|swords-rack|tangerine-tree|tool-bench|treasure-chest)\/[0-3]\.webp$/,
       /^images\/launcher_room\/action_frames\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\/(?:idle|walk1|walk2|talk_happy|talk_annoyed|surprised|focused_use|sit|wave)\.webp$/,
-      /^images\/launcher_room\/(?:motion|acting)_v2\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\/(?:east|west|north|south)\.webp$/,
-      /^images\/launcher_room\/portrait_v2\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\.webp$/,
+      /^images\/launcher_room\/(?:motion|acting)_v3\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\/(?:east|west|north|south)\.webp$/,
+      /^images\/launcher_room\/portrait_v3\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\.webp$/,
       /^audio\/profile_bgm\/(?:harbor|night-watch|voyage)\.ogg$/,
       /^audio\/bgm\/track(?:0[1-9]|1[0-9]|20)\.mp3$/,
       /^videos\/game_launcher\/[A-Za-z0-9._-]+$/
@@ -1292,9 +1292,9 @@ async function runVisualOrSmokeCapture() {
               .map(pose => `images/launcher_room/action_frames/${name}/${pose}.webp`)),
           ...['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopper', 'robin', 'franky', 'brook', 'jinbe']
             .flatMap(name => ['motion', 'acting'].flatMap(kind => ['east', 'west', 'north', 'south']
-              .map(direction => `images/launcher_room/${kind}_v2/${name}/${direction}.webp`))),
+              .map(direction => `images/launcher_room/${kind}_v3/${name}/${direction}.webp`))),
           ...['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopper', 'robin', 'franky', 'brook', 'jinbe']
-            .map(name => `images/launcher_room/portrait_v2/${name}.webp`),
+            .map(name => `images/launcher_room/portrait_v3/${name}.webp`),
           ...Array.from({ length: 12 }, (_, index) => `images/board/avatars/${index + 51}.webp`),
           ...Array.from({ length: 20 }, (_, index) => `audio/bgm/track${String(index + 1).padStart(2, '0')}.mp3`)
         ];

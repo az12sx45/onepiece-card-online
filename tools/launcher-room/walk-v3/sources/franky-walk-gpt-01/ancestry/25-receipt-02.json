@@ -1,0 +1,54 @@
+{
+  "schema": "gpt-fullbody-action-sheet/1",
+  "tool": "built-in image_gen.imagegen",
+  "character": "franky",
+  "original": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de43-fc3b-7f21-ac55-6e2f6737b063\\exec-a6a47b43-5028-47cb-9653-2ef42bedce9f.png",
+  "source": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\franky\\source-02.png",
+  "sha256": "0b27293cd35ec12a70f1f0d1695c45c0e5bd76d94af77f7efd4d81a14a76f0ef",
+  "promptPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\franky\\prompt-02.txt",
+  "prompt": "Revise ONLY framing/complete silhouettes of this Franky action sheet. Preserve the existing 32 complete whole-body drawings, all poses, full naturally connected mechanical anatomy, open Hawaiian shirt, blue briefs, large blue star forearms/redhands, BF-37 red shoulders, expressions, colors and exact four-direction/8-pose organization. Do not change the character's style or reconstruct parts.\nCritical: The top-row tall blue hair is visibly cut off by the top edge. REDRAW the small missing hair tips and put the ENTIRE complete hairstyle inside the canvas. Provide generous transparent space all around every WHOLE figure. Uniformly reduce ALL figures together about15% and center them within their own cells; do not individually distort bodies. No hair, hand, foot or elbow touches any cell edge, adjacent row, top or bottom image border. At least15px clean transparent margin around each complete silhouette.\nExactly8columns x4rows on2:1 canvas preferably2048x1024. Rows remain east/right, west/left, north/back with no face, south/front. Columns remain idle/happy/annoyed/surprised/focused_low_hands/sit/wave/listen. Preserve mechanical hand and forearm positions; wave stays beside shoulder outside head, focused hands stay low. Preserve full feet with clearly drawn soles, no clipping.\nBF-37 shoulder identification must remain readable where visible and not mirrored. Real transparent alpha background, clean away outside colored flecks, no shadows, no ground, no extra text/labels, no guide lines or borders. Do not add any pose or prop.\n",
+  "promptSHA256": "e9d27352436457b93a0228538d4687298d38aa01e3fb03cac42aa474d839266e",
+  "references": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\art\\franky\\source-01.png",
+      "sha256": "f45ce623501d97431c8b267e3140c816a8cd3e0caba8270f936f2ca01531e3ee"
+    }
+  ],
+  "image": {
+    "width": 1774,
+    "height": 887,
+    "mode": "RGBA",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "opaque128Pixels": 520597,
+    "edgeAlpha128Pixels": {
+      "top": 0,
+      "bottom": 0,
+      "left": 0,
+      "right": 0
+    }
+  },
+  "layout": {
+    "rows": [
+      "east",
+      "west",
+      "north",
+      "south"
+    ],
+    "columns": [
+      "idle",
+      "talk_happy",
+      "talk_annoyed",
+      "surprised",
+      "focused_use",
+      "sit",
+      "wave",
+      "listen"
+    ]
+  },
+  "status": "PENDING_VISUAL_REVIEW",
+  "runtimeModified": false,
+  "recordedAt": "2026-09-26T18:06:59.994212+00:00"
+}

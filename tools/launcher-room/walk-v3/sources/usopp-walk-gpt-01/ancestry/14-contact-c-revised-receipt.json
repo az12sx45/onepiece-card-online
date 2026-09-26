@@ -1,0 +1,22 @@
+{
+  "schema": "gpt-single-wholebody-pose-edit/1",
+  "tool": "built-in image_gen.imagegen",
+  "direction": "west",
+  "pose": "contact-c",
+  "original": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de43-fc3b-7f21-ac55-6e2f6737b063\\exec-ea2b16dd-5c37-46f8-9d50-4e3f6be688fe.png",
+  "savedPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\west\\contact-c-revised.png",
+  "sha256": "11ff8c0a6f62faa5743b1094060a12ae6a595717dc287e8c980f76f18187ce27",
+  "reference": {
+    "path": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\west\\contact-c.png",
+    "sha256": "617e392587137adbd266d33979a2f8a33fa6a759b536c7dc7de2f60af3fb8c85"
+  },
+  "promptPath": "D:\\Codex_QA\\launcher-room-art-repair-1.1.14\\pilot\\triad\\west-contact-c-edit-prompt.txt",
+  "prompt": "Edit this ONE complete Luffy figure to the OPPOSITE CONTACT C walking pose while keeping him facing screen LEFT (WEST). Redraw the whole complete character naturally; do not cut and paste any body part.\n\nCRITICAL VISIBLE CHANGE:\n- His NEAR arm is the arm attached to the visible LEFT shoulder at screen RIGHT side of the torso. That near arm currently hangs BACK to screen right. Move this NEAR LEFT ARM FORWARD toward screen LEFT, hand gently bent ahead of the abdomen at waist height, small relaxed fist, elbow natural and low.\n- The FAR arm must now swing BACK toward screen RIGHT, behind his torso. Show it partly behind the red vest.\n- The NEAR LEFT LEG (same anatomical side as that near arm) must be the leg going BACK toward screen RIGHT. Its white shorts cuff must visibly overlay/in front of the farther thigh near the crotch, establishing this as the near leg. That calf extends back right and rear sandal touches by toe with a LOW heel, no high lift.\n- The FAR RIGHT LEG goes FORWARD toward screen LEFT, forward sandal nearly flat heel contact, partly occluded by the near thigh at the hips. Arms and legs counter-swing.\n\nThis must visibly differ from the input where near arm is back. Opposite arm/leg ordering, not just expression change. Keep step short, knees low and relaxed; do not march or jump. Entire head/neck/chest keep the same WEST/left view, not a mirrored EAST image.\nPreserve EXACT Luffy identity/style/proportions, straw hat redband, black hair, open sleeveless red vest with bare chest NO X scar, blue white-cuff shorts, yellow sash at original anatomical side, sandals. Correct small stitched scar under anatomical LEFT eye on visible near cheek. Same friendly expression. Head naturally joins neck and torso, every limb fully drawn attached, no seams or gaps.\nONE full body centered, portrait canvas with generous transparent margin on all sides including sandal toes. Whole drawing only. TRUE ALPHA TRANSPARENT BACKGROUND, no solid color/checkerboard/ground/shadow/text/labels/borders. Do not add any second figure or diagram.\n",
+  "promptSHA256": "5ba678948d2494430297457e5e132985a6d2a27a7cf45f3e2f820474a3022e48",
+  "status": "CORRECTED_SOURCE_FOR_FOURBEAT_PREVIEW",
+  "visualObservation": "Near visible left arm now extends screen-left ahead of belly; near left rear thigh overlaps far forward thigh, rear sandal on screen-right.",
+  "wholeBodyRedrawnByGPT": true,
+  "bodyPartsReassembled": false,
+  "runtimeAcceptance": false,
+  "recordedAt": "2026-09-26T18:30:32.180316+00:00"
+}

@@ -1,0 +1,13 @@
+{
+  "tool": "image_gen.imagegen",
+  "mode": "built-in edit",
+  "original": "C:/Users/王曜瑋/.codex/generated_images/01a0d3fa-03ef-7ec1-8eff-2ae51b74567e/exec-5aa97301-7ce8-4db2-b4f6-eebc0365c52c.png",
+  "source": "source.png",
+  "sourceSha256": "dbb6205716e9cc66bed03c9a5ea024e7d21f20dbbd5d1208340299139cb4db8d",
+  "prompt": "Edit the provided ONE PIECE Luffy full-body sprite sheet. Preserve the same 32 COMPLETE FULL-BODY drawings, exact poses, natural intact head-neck-shoulder anatomy, open red vest exposing chest, straw hat, blue shorts and sandals. This is a precise character-detail correction, not a new layout concept.\nCorrect the defining stitched scar UNDER LUFFY'S ANATOMICAL LEFT EYE. It is a small horizontal scar with TWO short vertical stitches, clearly SEPARATE from his mouth line. In row 2 facing screen LEFT, the visible cheek is his LEFT cheek, so the scar must be clearly drawn under the visible eye, in all eight poses. In row 4 facing the viewer, put the scar under the viewer-RIGHT eye, in all eight poses. In row 1 facing screen RIGHT we see the right cheek: do NOT add a scar there. Row 3 shows his back: no eyes or facial details.\nPreserve all four directions and 8 poses per row. Keep each whole character together; never separate or reassemble body parts. Do not mirror any character. The eight columns remain idle, happy talking with open palm, annoyed hands on hips, surprised with hands near chest, leaning slightly forward with low hands to use furniture, natural seated pose, open-hand wave BESIDE shoulder not touching face, attentive listening. Preserve the coherent proportions and costume.\nPlace all 32 full bodies fully INSIDE their own equal rectangular cells on the transparent 8-column by 4-row sheet, with 10 percent transparent margin above hats and below sandals in each cell. Uniform scale within a row, except seated pose naturally lower. If needed shrink each whole drawing uniformly to fit; do not crop hats, feet or fingers. Genuinely transparent background, no colored fringe, no ground shadows, no boxes, no labels.",
+  "references": [
+    "D:/Codex_QA/launcher-room-art-repair-1.1.14/pilot/luffy-fullbody-actions-32-02.png"
+  ],
+  "status": "candidate-pending-detail-review",
+  "notes": "Full connected bodies and readable poses. Whole-sprite extraction and left-cheek scar inspection are pending; not release acceptance."
+}

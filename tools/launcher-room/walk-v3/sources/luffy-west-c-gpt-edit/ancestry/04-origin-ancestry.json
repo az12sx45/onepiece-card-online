@@ -1,0 +1,51 @@
+{
+  "description": "Selected base image is the unchanged 12-figure image_gen PNG, not an extracted crop. Three C edits are unchanged native generated PNGs copied from their generated_images paths recorded in each receipt. Their contact-c.png references are whole-character crops from source-01, with exact sourceRegion in the base receipt; never represented as generated originals. corrected-guide-12.png is a derived whole-figure scale/translate guide, not a generator original.",
+  "referenceAOrigin": "luffy-east-contact-a.png was supplied by parent as a whole-figure pose reference; ancestry retains its exact bytes/hash without claiming it is native generated PNG.",
+  "referenceCOrigin": "parent-supplied luffy-east-contact-c.png and its full prompt are retained as reference evidence.",
+  "baseReferenceArtifacts": [
+    {
+      "path": "art/luffy/source.png",
+      "sha256": "dbb6205716e9cc66bed03c9a5ea024e7d21f20dbbd5d1208340299139cb4db8d"
+    },
+    {
+      "path": "art/luffy/prompt.txt",
+      "sha256": "ba25c27a7f5dcee5a47d8a965af2e6aed80da494aaf010f960b859636b7f43f1"
+    },
+    {
+      "path": "art/luffy/receipt.json",
+      "sha256": "6553d2903f7689e4b34eb3b471faeb1c550498bbdb45ffbceef6390f9ae93ded"
+    },
+    {
+      "path": "pilot/luffy-east-contact-a.png",
+      "sha256": "469cd94e92fbe2bf4b7330f2740f1d116bd3bc33df7dfcdbda8deb8baf2cf89f"
+    },
+    {
+      "path": "pilot/luffy-east-contact-c.png",
+      "sha256": "2e5de0caa77323a571446b609a7208a1cf2c57c4e5ad9b85ce13afef7c27c117"
+    },
+    {
+      "path": "pilot/luffy-east-contact-c-prompt.txt",
+      "sha256": "64d9912fbbedcad949b21712ee6f07663f0a34f60f16b2bc081aeb741ffd4a08"
+    },
+    {
+      "path": "pilot/luffy-fullbody-actions-32-02.png",
+      "sha256": "2e4bd717564897df3fbe7083ff59cd1069f8b2a9ef096b19c98785409695b7dd"
+    },
+    {
+      "path": "pilot/luffy-fullbody-actions-32-02.prompt.txt",
+      "sha256": "e1e6b521282dd2069ecfc4593c612616c6633d673f3d5e485c013e09d1dd64ff"
+    },
+    {
+      "path": "pilot/luffy-fullbody-actions-32-02.receipt.json",
+      "sha256": "5ea44de3404b42f7334930d47f786b541053df99810e4eaeedab3e69b1d69a80"
+    }
+  ],
+  "guide": {
+    "path": "pilot/triad/corrected-guide-12.png",
+    "sha256": "57bb80af0219d0edaf5b52850d5c400e6c3aee8aec9801f29dbae317948b818b"
+  },
+  "previewBuilder": {
+    "path": "pilot/triad/build_fourbeat_preview.py",
+    "sha256": "1cd5b4c01d089ef06813c849b6c5f6c5802819ccf0f75cd7d05b2dba14d62952"
+  }
+}

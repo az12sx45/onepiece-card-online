@@ -1,0 +1,4133 @@
+{
+  "schema": "one-piece-room-fullbody-selection/1",
+  "version": "1.1.14",
+  "notes": "Only complete GPT-authored character figures. Luffy west/south corrected stitched scars; Chopper east surprised corrected anatomical antler ring; Jinbe complete repack provenance retained.",
+  "sources": {
+    "luffy": {
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/fullbody-v3/sources/luffy/image.png",
+        "sha256": "dbb6205716e9cc66bed03c9a5ea024e7d21f20dbbd5d1208340299139cb4db8d"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/fullbody-v3/sources/luffy/prompt.txt",
+        "sha256": "ba25c27a7f5dcee5a47d8a965af2e6aed80da494aaf010f960b859636b7f43f1"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/fullbody-v3/sources/luffy/receipt.json",
+        "sha256": "6553d2903f7689e4b34eb3b471faeb1c550498bbdb45ffbceef6390f9ae93ded"
+      },
+      "ancestry": []
+    },
+    "zoro": {
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/fullbody-v3/sources/zoro/image.png",
+        "sha256": "ec94a43bb36a8c2784d8d4c526c97b8f3b5ff0c72c3e7a054e9012ae95c88954"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/fullbody-v3/sources/zoro/prompt.txt",
+        "sha256": "3ea1aabd8795df830350bd0497dae59c328c8ae71e013b4361c901807c00949a"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/fullbody-v3/sources/zoro/receipt.json",
+        "sha256": "c56c19094c54cbfe3f9b81137498ac8d6727936978d903a50a819ebedf2fbc72"
+      },
+      "ancestry": []
+    },
+    "nami": {
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/fullbody-v3/sources/nami/image.png",
+        "sha256": "96758bd08ed98d965689b95232c0d6868c4c0e901b329be6e069f02186004fad"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/fullbody-v3/sources/nami/prompt.txt",
+        "sha256": "5371c18d7cac2e50de296a2ca20f7459f8ef0557c6ab967bac57880c6f1f3b1a"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/fullbody-v3/sources/nami/receipt.json",
+        "sha256": "6fcc7d577560f9565f4b2f03d66721c150183bd655be86f25b35b1962f46dc32"
+      },
+      "ancestry": []
+    },
+    "usopp": {
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/fullbody-v3/sources/usopp/image.png",
+        "sha256": "a6aca66f404bb431751d6af1409c771d298601b1e992e10eea1be59fbb115607"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/fullbody-v3/sources/usopp/prompt.txt",
+        "sha256": "29b3858f51d7a9e2fc1931d61e0d03264e7e3b8ca05fedce28fdaef96233d9ba"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/fullbody-v3/sources/usopp/receipt.json",
+        "sha256": "6569e273ea55b0aa5eb678e20eb324933a0d2c78caec085a7f540fcc241b34fe"
+      },
+      "ancestry": []
+    },
+    "sanji": {
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/fullbody-v3/sources/sanji/image.png",
+        "sha256": "dd3381080f7e226ccf36b2c9963c616a5ac87932f1bbe41130d586e3f377bfcf"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/fullbody-v3/sources/sanji/prompt.txt",
+        "sha256": "097e4ed6800137cb17834ab9073a72f5b690a349e576654f6b4502c34ef81ebe"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/fullbody-v3/sources/sanji/receipt.json",
+        "sha256": "b4c416ccf39075ad6c8c68ebaf2ce8037f987ae4cd8c20a6b8fb76bd78a68c2a"
+      },
+      "ancestry": []
+    },
+    "chopper": {
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/fullbody-v3/sources/chopper/image.png",
+        "sha256": "dfaad265ff1ab2e4718884afd7d8a52b8155187db18d1c08c5a88a684f8e5f7e"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/fullbody-v3/sources/chopper/prompt.txt",
+        "sha256": "266c57d2cd238e4f489220e30aa2bbc21b9cabec3b7c1f360f133d6880abf90e"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/fullbody-v3/sources/chopper/receipt.json",
+        "sha256": "4d83a31142df75a807b052b300f8379d1f5c02fd9ee97c4cdd217fc84fbcd348"
+      },
+      "ancestry": []
+    },
+    "robin": {
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/fullbody-v3/sources/robin/image.png",
+        "sha256": "757e902c19dd96298f78fe8efe09faac5ea831dcfecf95f6ad9a1444d38ed626"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/fullbody-v3/sources/robin/prompt.txt",
+        "sha256": "7950cbc3dae1b977451180764cad42852184af33c49340174577ab95b25e798e"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/fullbody-v3/sources/robin/receipt.json",
+        "sha256": "9a392703c13c12e3ea8c9296ca96d6e2bab68d26b48c182acac3d417b817be3b"
+      },
+      "ancestry": []
+    },
+    "franky": {
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/fullbody-v3/sources/franky/image.png",
+        "sha256": "bf6ff27079eaeab6590ed9f6d8bc613d9236bbe97a1bd0dbaeb3447832f056bf"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/fullbody-v3/sources/franky/prompt.txt",
+        "sha256": "b900847f8e56327c934353091d371142cc262e305177c71cfbaa9a15e11aca66"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/fullbody-v3/sources/franky/receipt.json",
+        "sha256": "f529f6717156a2d65e34970c23ca32020af67b593f3fcc269553966feec5a3b8"
+      },
+      "ancestry": []
+    },
+    "brook": {
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/fullbody-v3/sources/brook/image.png",
+        "sha256": "8f222d94108715aeecc27a9bbacac962b8f6b8dc1f0352bf697fa1144e295741"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/fullbody-v3/sources/brook/prompt.txt",
+        "sha256": "2fdca803ac0c4abaad72049388cb724da987cad501cb0045d5fc1d2f11af602e"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/fullbody-v3/sources/brook/receipt.json",
+        "sha256": "7a50391b854a228202815229d23c8de2f3196a6324b9b9b162fe847a9cd72df4"
+      },
+      "ancestry": []
+    },
+    "jinbe": {
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/fullbody-v3/sources/jinbe/image.png",
+        "sha256": "cfdcd36dadc3a990f9c271fa8c9c302760cd1cc5df112a7055af9eea2d3b6754"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/fullbody-v3/sources/jinbe/prompt.txt",
+        "sha256": "874e8fe3df146453715f25d5dea1fef9202dda1dab6865b34b5b083c30bd4d1a"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/fullbody-v3/sources/jinbe/receipt.json",
+        "sha256": "0ea4450493b55a2b4e28ee0205c9a5eb75e958089ff0be3f079963124f43e4f0"
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/fullbody-v3/sources/jinbe/ancestry/00-whole-figure-selection.json",
+          "sha256": "5e9272e5ff937b55781795ed73975c651f19553c97c41589b730069a3b102397",
+          "role": "whole-figure-selection"
+        },
+        {
+          "path": "tools/launcher-room/fullbody-v3/sources/jinbe/ancestry/01-source-02.png",
+          "sha256": "ab7276aaca4a59172357838087b556a25299d0502537bbc3b2463091a689e4c6",
+          "role": "original-gpt-image"
+        },
+        {
+          "path": "tools/launcher-room/fullbody-v3/sources/jinbe/ancestry/02-receipt-02.json",
+          "sha256": "052dc545acb93ec5dc8c8bf69308ebf60c7149c34503b4388d424e9697b64013",
+          "role": "original-gpt-receipt"
+        },
+        {
+          "path": "tools/launcher-room/fullbody-v3/sources/jinbe/ancestry/03-source-east-03.png",
+          "sha256": "2a31a544d0b8045327b95c249de45365d9425592313e809670bddf995f7a2464",
+          "role": "original-gpt-image"
+        },
+        {
+          "path": "tools/launcher-room/fullbody-v3/sources/jinbe/ancestry/04-receipt-east-03.json",
+          "sha256": "d13311c26b9702cca2b5adacf3ae23b5d99bbbfd9d7cb6a7d6091c6f2b6ef5d1",
+          "role": "original-gpt-receipt"
+        },
+        {
+          "path": "tools/launcher-room/fullbody-v3/sources/jinbe/ancestry/05-source-wave-04.png",
+          "sha256": "5fe381081ab6901e352b6a76df9c9f648e1486f074fde8499fb67dc486d36d3c",
+          "role": "original-gpt-image"
+        },
+        {
+          "path": "tools/launcher-room/fullbody-v3/sources/jinbe/ancestry/06-receipt-wave-04.json",
+          "sha256": "980fad0b0f49306631d159fb8e800e1235ca5452a07177b419161a03de39c572",
+          "role": "original-gpt-receipt"
+        },
+        {
+          "path": "tools/launcher-room/fullbody-v3/sources/jinbe/ancestry/07-prompt-01.txt",
+          "sha256": "9b09d4e0d83f3396c1193d6e545996b8b5186408944fcdbc3af41fad32569411",
+          "role": "original-gpt-prompt"
+        },
+        {
+          "path": "tools/launcher-room/fullbody-v3/sources/jinbe/ancestry/08-prompt-02.txt",
+          "sha256": "e58f4e895ff7f771e326ac1e6bc0635de44da665dfe90f7d91b1f7f9b4e19e01",
+          "role": "original-gpt-prompt"
+        },
+        {
+          "path": "tools/launcher-room/fullbody-v3/sources/jinbe/ancestry/09-prompt-east-03.txt",
+          "sha256": "e02a06b01ab3c77415c776351eeade4317c2177ed230bc4416ca2603feb963e3",
+          "role": "original-gpt-prompt"
+        },
+        {
+          "path": "tools/launcher-room/fullbody-v3/sources/jinbe/ancestry/10-prompt-wave-04.txt",
+          "sha256": "5eda6be835394c89b9c463658443823e219973d3662a904d06991e7628ec97a1",
+          "role": "original-gpt-prompt"
+        }
+      ]
+    },
+    "luffy-west-scar-corrected": {
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/fullbody-v3/sources/luffy-west-scar-corrected/image.png",
+        "sha256": "8b27b1e75f03fb1c966d8eadcbb2b768f1f73023e85c686b902009237bddf527"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/fullbody-v3/sources/luffy-west-scar-corrected/prompt.txt",
+        "sha256": "53d4aa0a729eec6695f345c00df80e094331261726cc00e68d07a1ee9a8b5a62"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/fullbody-v3/sources/luffy-west-scar-corrected/receipt.json",
+        "sha256": "e079e619cf50ebb1f4f5b2cd001150b978e0b4ed612583341fb2a8c01487d5cb"
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/fullbody-v3/sources/luffy-west-scar-corrected/ancestry/00-west-actions-scar-corrected.regions.json",
+          "sha256": "3b7096b20b131ef533ad76483b3ea0a7316380a54943cd4354adc87103017f78",
+          "role": "reviewed-whole-figure-regions"
+        }
+      ]
+    },
+    "luffy-south-scar-corrected": {
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/fullbody-v3/sources/luffy-south-scar-corrected/image.png",
+        "sha256": "e33cdc9137e1c6c6e86dae5d16334512503dcd32ea1b2358b2cecb6b3667b142"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/fullbody-v3/sources/luffy-south-scar-corrected/prompt.txt",
+        "sha256": "c366c3b05c9b45d816c28d7cc2d052639c510c5fe50035bc7349e35e597bab2f"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/fullbody-v3/sources/luffy-south-scar-corrected/receipt.json",
+        "sha256": "6673d2800e11ad3d83eb2843c3f54a57a4adbd7e83c5679bc22af3dfe2f7002c"
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/fullbody-v3/sources/luffy-south-scar-corrected/ancestry/00-south-actions-scar-corrected.regions.json",
+          "sha256": "a6b4be595d0488f57db34e6fab9c314c3acf90cd1ba6a07bfb3cabd3a760cf18",
+          "role": "reviewed-whole-figure-regions"
+        }
+      ]
+    },
+    "chopper-east-surprised-corrected": {
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/fullbody-v3/sources/chopper-east-surprised-corrected/image.png",
+        "sha256": "8961cd42dd4e257425d297a7ef4442010e70a48bb0e03cd4a7a2a968b9254fa7"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/fullbody-v3/sources/chopper-east-surprised-corrected/prompt.txt",
+        "sha256": "25970e3b92e32c198e13037ddf9a95e7d3cc19a434c5181d8779d2f51b50eaea"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/fullbody-v3/sources/chopper-east-surprised-corrected/receipt.json",
+        "sha256": "defb51152e0cac791ef06fa876c34e09b253ce70af4ac6462de739517d746ba2"
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/fullbody-v3/sources/chopper-east-surprised-corrected/ancestry/00-east-surprised-corrected.regions.json",
+          "sha256": "b8393e5c552dd63f410ade15890518aaebb18919bc2883d5bdd2a870baef94e8",
+          "role": "reviewed-whole-figure-regions"
+        }
+      ]
+    }
+  },
+  "frames": [
+    {
+      "key": "luffy",
+      "direction": "east",
+      "pose": "idle",
+      "source": "luffy",
+      "region": [
+        71,
+        8,
+        133,
+        241
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "east",
+      "pose": "talk_happy",
+      "source": "luffy",
+      "region": [
+        295,
+        9,
+        167,
+        240
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "east",
+      "pose": "talk_annoyed",
+      "source": "luffy",
+      "region": [
+        518,
+        9,
+        134,
+        240
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "east",
+      "pose": "surprised",
+      "source": "luffy",
+      "region": [
+        738,
+        8,
+        146,
+        241
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "east",
+      "pose": "focused_use",
+      "source": "luffy",
+      "region": [
+        950,
+        16,
+        168,
+        233
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "east",
+      "pose": "sit",
+      "source": "luffy",
+      "region": [
+        1181,
+        70,
+        146,
+        193
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "east",
+      "pose": "wave",
+      "source": "luffy",
+      "region": [
+        1384,
+        8,
+        142,
+        241
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "east",
+      "pose": "listen",
+      "source": "luffy",
+      "region": [
+        1607,
+        9,
+        151,
+        240
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "west",
+      "pose": "idle",
+      "source": "luffy-west-scar-corrected",
+      "region": [
+        149,
+        3,
+        226,
+        448
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "west",
+      "pose": "talk_happy",
+      "source": "luffy-west-scar-corrected",
+      "region": [
+        483,
+        4,
+        290,
+        447
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "west",
+      "pose": "talk_annoyed",
+      "source": "luffy-west-scar-corrected",
+      "region": [
+        980,
+        4,
+        225,
+        447
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "west",
+      "pose": "surprised",
+      "source": "luffy-west-scar-corrected",
+      "region": [
+        1397,
+        3,
+        239,
+        448
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "west",
+      "pose": "focused_use",
+      "source": "luffy-west-scar-corrected",
+      "region": [
+        82,
+        447,
+        304,
+        433
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "west",
+      "pose": "sit",
+      "source": "luffy-west-scar-corrected",
+      "region": [
+        529,
+        488,
+        267,
+        385
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "west",
+      "pose": "wave",
+      "source": "luffy-west-scar-corrected",
+      "region": [
+        942,
+        445,
+        277,
+        440
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "west",
+      "pose": "listen",
+      "source": "luffy-west-scar-corrected",
+      "region": [
+        1411,
+        444,
+        234,
+        441
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "north",
+      "pose": "idle",
+      "source": "luffy",
+      "region": [
+        66,
+        466,
+        130,
+        213
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "north",
+      "pose": "talk_happy",
+      "source": "luffy",
+      "region": [
+        293,
+        466,
+        172,
+        213
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "north",
+      "pose": "talk_annoyed",
+      "source": "luffy",
+      "region": [
+        510,
+        466,
+        131,
+        213
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "north",
+      "pose": "surprised",
+      "source": "luffy",
+      "region": [
+        721,
+        466,
+        153,
+        213
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "north",
+      "pose": "focused_use",
+      "source": "luffy",
+      "region": [
+        957,
+        471,
+        139,
+        210
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "north",
+      "pose": "sit",
+      "source": "luffy",
+      "region": [
+        1177,
+        506,
+        131,
+        176
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "north",
+      "pose": "wave",
+      "source": "luffy",
+      "region": [
+        1373,
+        466,
+        155,
+        213
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "north",
+      "pose": "listen",
+      "source": "luffy",
+      "region": [
+        1610,
+        468,
+        140,
+        212
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "south",
+      "pose": "idle",
+      "source": "luffy-south-scar-corrected",
+      "region": [
+        161,
+        8,
+        251,
+        442
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "south",
+      "pose": "talk_happy",
+      "source": "luffy-south-scar-corrected",
+      "region": [
+        527,
+        5,
+        272,
+        446
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "south",
+      "pose": "talk_annoyed",
+      "source": "luffy-south-scar-corrected",
+      "region": [
+        967,
+        6,
+        249,
+        444
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "south",
+      "pose": "surprised",
+      "source": "luffy-south-scar-corrected",
+      "region": [
+        1358,
+        5,
+        248,
+        445
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "south",
+      "pose": "focused_use",
+      "source": "luffy-south-scar-corrected",
+      "region": [
+        155,
+        444,
+        259,
+        432
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "south",
+      "pose": "sit",
+      "source": "luffy-south-scar-corrected",
+      "region": [
+        554,
+        485,
+        252,
+        392
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "south",
+      "pose": "wave",
+      "source": "luffy-south-scar-corrected",
+      "region": [
+        939,
+        444,
+        276,
+        432
+      ]
+    },
+    {
+      "key": "luffy",
+      "direction": "south",
+      "pose": "listen",
+      "source": "luffy-south-scar-corrected",
+      "region": [
+        1358,
+        444,
+        255,
+        432
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "east",
+      "pose": "idle",
+      "source": "zoro",
+      "region": [
+        37,
+        5,
+        140,
+        238
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "east",
+      "pose": "talk_happy",
+      "source": "zoro",
+      "region": [
+        256,
+        6,
+        182,
+        236
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "east",
+      "pose": "talk_annoyed",
+      "source": "zoro",
+      "region": [
+        484,
+        6,
+        134,
+        236
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "east",
+      "pose": "surprised",
+      "source": "zoro",
+      "region": [
+        701,
+        6,
+        157,
+        236
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "east",
+      "pose": "focused_use",
+      "source": "zoro",
+      "region": [
+        914,
+        6,
+        170,
+        236
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "east",
+      "pose": "sit",
+      "source": "zoro",
+      "region": [
+        1150,
+        50,
+        144,
+        202
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "east",
+      "pose": "wave",
+      "source": "zoro",
+      "region": [
+        1367,
+        6,
+        138,
+        236
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "east",
+      "pose": "listen",
+      "source": "zoro",
+      "region": [
+        1582,
+        6,
+        149,
+        236
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "west",
+      "pose": "idle",
+      "source": "zoro",
+      "region": [
+        57,
+        237,
+        146,
+        235
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "west",
+      "pose": "talk_happy",
+      "source": "zoro",
+      "region": [
+        237,
+        237,
+        187,
+        235
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "west",
+      "pose": "talk_annoyed",
+      "source": "zoro",
+      "region": [
+        499,
+        237,
+        146,
+        235
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "west",
+      "pose": "surprised",
+      "source": "zoro",
+      "region": [
+        698,
+        237,
+        164,
+        235
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "west",
+      "pose": "focused_use",
+      "source": "zoro",
+      "region": [
+        916,
+        238,
+        179,
+        234
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "west",
+      "pose": "sit",
+      "source": "zoro",
+      "region": [
+        1161,
+        289,
+        148,
+        196
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "west",
+      "pose": "wave",
+      "source": "zoro",
+      "region": [
+        1386,
+        237,
+        145,
+        235
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "west",
+      "pose": "listen",
+      "source": "zoro",
+      "region": [
+        1602,
+        237,
+        149,
+        235
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "north",
+      "pose": "idle",
+      "source": "zoro",
+      "region": [
+        55,
+        465,
+        128,
+        204
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "north",
+      "pose": "talk_happy",
+      "source": "zoro",
+      "region": [
+        276,
+        465,
+        152,
+        204
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "north",
+      "pose": "talk_annoyed",
+      "source": "zoro",
+      "region": [
+        504,
+        465,
+        126,
+        204
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "north",
+      "pose": "surprised",
+      "source": "zoro",
+      "region": [
+        706,
+        465,
+        146,
+        204
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "north",
+      "pose": "focused_use",
+      "source": "zoro",
+      "region": [
+        928,
+        465,
+        144,
+        204
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "north",
+      "pose": "sit",
+      "source": "zoro",
+      "region": [
+        1163,
+        496,
+        126,
+        183
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "north",
+      "pose": "wave",
+      "source": "zoro",
+      "region": [
+        1365,
+        464,
+        152,
+        205
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "north",
+      "pose": "listen",
+      "source": "zoro",
+      "region": [
+        1609,
+        465,
+        129,
+        204
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "south",
+      "pose": "idle",
+      "source": "zoro",
+      "region": [
+        33,
+        661,
+        137,
+        226
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "south",
+      "pose": "talk_happy",
+      "source": "zoro",
+      "region": [
+        248,
+        661,
+        145,
+        226
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "south",
+      "pose": "talk_annoyed",
+      "source": "zoro",
+      "region": [
+        483,
+        661,
+        134,
+        226
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "south",
+      "pose": "surprised",
+      "source": "zoro",
+      "region": [
+        700,
+        662,
+        151,
+        225
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "south",
+      "pose": "focused_use",
+      "source": "zoro",
+      "region": [
+        914,
+        661,
+        157,
+        226
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "south",
+      "pose": "sit",
+      "source": "zoro",
+      "region": [
+        1167,
+        695,
+        117,
+        192
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "south",
+      "pose": "wave",
+      "source": "zoro",
+      "region": [
+        1368,
+        661,
+        136,
+        226
+      ]
+    },
+    {
+      "key": "zoro",
+      "direction": "south",
+      "pose": "listen",
+      "source": "zoro",
+      "region": [
+        1586,
+        661,
+        138,
+        226
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "east",
+      "pose": "idle",
+      "source": "nami",
+      "region": [
+        72,
+        2,
+        129,
+        250
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "east",
+      "pose": "talk_happy",
+      "source": "nami",
+      "region": [
+        295,
+        3,
+        178,
+        249
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "east",
+      "pose": "talk_annoyed",
+      "source": "nami",
+      "region": [
+        536,
+        2,
+        135,
+        249
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "east",
+      "pose": "surprised",
+      "source": "nami",
+      "region": [
+        743,
+        2,
+        144,
+        249
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "east",
+      "pose": "focused_use",
+      "source": "nami",
+      "region": [
+        961,
+        7,
+        174,
+        244
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "east",
+      "pose": "sit",
+      "source": "nami",
+      "region": [
+        1190,
+        66,
+        149,
+        200
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "east",
+      "pose": "wave",
+      "source": "nami",
+      "region": [
+        1400,
+        1,
+        147,
+        251
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "east",
+      "pose": "listen",
+      "source": "nami",
+      "region": [
+        1617,
+        4,
+        150,
+        248
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "west",
+      "pose": "idle",
+      "source": "nami",
+      "region": [
+        66,
+        251,
+        133,
+        246
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "west",
+      "pose": "talk_happy",
+      "source": "nami",
+      "region": [
+        260,
+        252,
+        164,
+        246
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "west",
+      "pose": "talk_annoyed",
+      "source": "nami",
+      "region": [
+        520,
+        251,
+        133,
+        246
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "west",
+      "pose": "surprised",
+      "source": "nami",
+      "region": [
+        738,
+        249,
+        140,
+        249
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "west",
+      "pose": "focused_use",
+      "source": "nami",
+      "region": [
+        946,
+        251,
+        159,
+        248
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "west",
+      "pose": "sit",
+      "source": "nami",
+      "region": [
+        1185,
+        310,
+        142,
+        198
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "west",
+      "pose": "wave",
+      "source": "nami",
+      "region": [
+        1408,
+        251,
+        146,
+        247
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "west",
+      "pose": "listen",
+      "source": "nami",
+      "region": [
+        1614,
+        252,
+        136,
+        246
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "north",
+      "pose": "idle",
+      "source": "nami",
+      "region": [
+        67,
+        488,
+        120,
+        211
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "north",
+      "pose": "talk_happy",
+      "source": "nami",
+      "region": [
+        298,
+        492,
+        161,
+        206
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "north",
+      "pose": "talk_annoyed",
+      "source": "nami",
+      "region": [
+        523,
+        489,
+        121,
+        209
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "north",
+      "pose": "surprised",
+      "source": "nami",
+      "region": [
+        737,
+        489,
+        138,
+        209
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "north",
+      "pose": "focused_use",
+      "source": "nami",
+      "region": [
+        961,
+        493,
+        139,
+        205
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "north",
+      "pose": "sit",
+      "source": "nami",
+      "region": [
+        1188,
+        524,
+        130,
+        173
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "north",
+      "pose": "wave",
+      "source": "nami",
+      "region": [
+        1395,
+        490,
+        141,
+        208
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "north",
+      "pose": "listen",
+      "source": "nami",
+      "region": [
+        1635,
+        490,
+        117,
+        208
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "south",
+      "pose": "idle",
+      "source": "nami",
+      "region": [
+        63,
+        690,
+        126,
+        197
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "south",
+      "pose": "talk_happy",
+      "source": "nami",
+      "region": [
+        259,
+        691,
+        154,
+        196
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "south",
+      "pose": "talk_annoyed",
+      "source": "nami",
+      "region": [
+        516,
+        690,
+        126,
+        197
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "south",
+      "pose": "surprised",
+      "source": "nami",
+      "region": [
+        735,
+        691,
+        130,
+        196
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "south",
+      "pose": "focused_use",
+      "source": "nami",
+      "region": [
+        960,
+        690,
+        134,
+        197
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "south",
+      "pose": "sit",
+      "source": "nami",
+      "region": [
+        1186,
+        708,
+        135,
+        179
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "south",
+      "pose": "wave",
+      "source": "nami",
+      "region": [
+        1390,
+        687,
+        152,
+        200
+      ]
+    },
+    {
+      "key": "nami",
+      "direction": "south",
+      "pose": "listen",
+      "source": "nami",
+      "region": [
+        1628,
+        690,
+        121,
+        197
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "east",
+      "pose": "idle",
+      "source": "usopp",
+      "region": [
+        71,
+        26,
+        137,
+        226
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "east",
+      "pose": "talk_happy",
+      "source": "usopp",
+      "region": [
+        290,
+        26,
+        178,
+        226
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "east",
+      "pose": "talk_annoyed",
+      "source": "usopp",
+      "region": [
+        518,
+        27,
+        132,
+        225
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "east",
+      "pose": "surprised",
+      "source": "usopp",
+      "region": [
+        731,
+        26,
+        146,
+        225
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "east",
+      "pose": "focused_use",
+      "source": "usopp",
+      "region": [
+        939,
+        39,
+        161,
+        213
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "east",
+      "pose": "sit",
+      "source": "usopp",
+      "region": [
+        1171,
+        73,
+        145,
+        187
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "east",
+      "pose": "wave",
+      "source": "usopp",
+      "region": [
+        1391,
+        25,
+        139,
+        227
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "east",
+      "pose": "listen",
+      "source": "usopp",
+      "region": [
+        1609,
+        25,
+        135,
+        227
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "west",
+      "pose": "idle",
+      "source": "usopp",
+      "region": [
+        59,
+        262,
+        139,
+        224
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "west",
+      "pose": "talk_happy",
+      "source": "usopp",
+      "region": [
+        260,
+        261,
+        165,
+        225
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "west",
+      "pose": "talk_annoyed",
+      "source": "usopp",
+      "region": [
+        506,
+        262,
+        137,
+        223
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "west",
+      "pose": "surprised",
+      "source": "usopp",
+      "region": [
+        719,
+        263,
+        138,
+        223
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "west",
+      "pose": "focused_use",
+      "source": "usopp",
+      "region": [
+        927,
+        269,
+        153,
+        217
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "west",
+      "pose": "sit",
+      "source": "usopp",
+      "region": [
+        1166,
+        307,
+        142,
+        187
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "west",
+      "pose": "wave",
+      "source": "usopp",
+      "region": [
+        1384,
+        262,
+        156,
+        224
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "west",
+      "pose": "listen",
+      "source": "usopp",
+      "region": [
+        1595,
+        261,
+        138,
+        224
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "north",
+      "pose": "idle",
+      "source": "usopp",
+      "region": [
+        67,
+        487,
+        124,
+        202
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "north",
+      "pose": "talk_happy",
+      "source": "usopp",
+      "region": [
+        292,
+        487,
+        163,
+        201
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "north",
+      "pose": "talk_annoyed",
+      "source": "usopp",
+      "region": [
+        513,
+        487,
+        126,
+        202
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "north",
+      "pose": "surprised",
+      "source": "usopp",
+      "region": [
+        718,
+        488,
+        159,
+        200
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "north",
+      "pose": "focused_use",
+      "source": "usopp",
+      "region": [
+        951,
+        488,
+        151,
+        201
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "north",
+      "pose": "sit",
+      "source": "usopp",
+      "region": [
+        1176,
+        521,
+        125,
+        169
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "north",
+      "pose": "wave",
+      "source": "usopp",
+      "region": [
+        1366,
+        487,
+        152,
+        202
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "north",
+      "pose": "listen",
+      "source": "usopp",
+      "region": [
+        1618,
+        487,
+        118,
+        202
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "south",
+      "pose": "idle",
+      "source": "usopp",
+      "region": [
+        69,
+        688,
+        117,
+        195
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "south",
+      "pose": "talk_happy",
+      "source": "usopp",
+      "region": [
+        261,
+        688,
+        147,
+        195
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "south",
+      "pose": "talk_annoyed",
+      "source": "usopp",
+      "region": [
+        515,
+        688,
+        117,
+        195
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "south",
+      "pose": "surprised",
+      "source": "usopp",
+      "region": [
+        717,
+        687,
+        146,
+        197
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "south",
+      "pose": "focused_use",
+      "source": "usopp",
+      "region": [
+        949,
+        694,
+        121,
+        190
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "south",
+      "pose": "sit",
+      "source": "usopp",
+      "region": [
+        1178,
+        708,
+        121,
+        176
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "south",
+      "pose": "wave",
+      "source": "usopp",
+      "region": [
+        1395,
+        688,
+        142,
+        196
+      ]
+    },
+    {
+      "key": "usopp",
+      "direction": "south",
+      "pose": "listen",
+      "source": "usopp",
+      "region": [
+        1610,
+        688,
+        118,
+        196
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "east",
+      "pose": "idle",
+      "source": "sanji",
+      "region": [
+        71,
+        2,
+        120,
+        253
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "east",
+      "pose": "talk_happy",
+      "source": "sanji",
+      "region": [
+        297,
+        3,
+        163,
+        252
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "east",
+      "pose": "talk_annoyed",
+      "source": "sanji",
+      "region": [
+        524,
+        4,
+        121,
+        251
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "east",
+      "pose": "surprised",
+      "source": "sanji",
+      "region": [
+        738,
+        2,
+        131,
+        253
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "east",
+      "pose": "focused_use",
+      "source": "sanji",
+      "region": [
+        957,
+        9,
+        162,
+        246
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "east",
+      "pose": "sit",
+      "source": "sanji",
+      "region": [
+        1195,
+        74,
+        129,
+        190
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "east",
+      "pose": "wave",
+      "source": "sanji",
+      "region": [
+        1395,
+        2,
+        127,
+        253
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "east",
+      "pose": "listen",
+      "source": "sanji",
+      "region": [
+        1627,
+        4,
+        126,
+        251
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "west",
+      "pose": "idle",
+      "source": "sanji",
+      "region": [
+        65,
+        248,
+        125,
+        244
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "west",
+      "pose": "talk_happy",
+      "source": "sanji",
+      "region": [
+        253,
+        248,
+        162,
+        244
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "west",
+      "pose": "talk_annoyed",
+      "source": "sanji",
+      "region": [
+        517,
+        248,
+        127,
+        244
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "west",
+      "pose": "surprised",
+      "source": "sanji",
+      "region": [
+        733,
+        248,
+        132,
+        244
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "west",
+      "pose": "focused_use",
+      "source": "sanji",
+      "region": [
+        942,
+        249,
+        164,
+        243
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "west",
+      "pose": "sit",
+      "source": "sanji",
+      "region": [
+        1171,
+        310,
+        138,
+        191
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "west",
+      "pose": "wave",
+      "source": "sanji",
+      "region": [
+        1397,
+        248,
+        139,
+        244
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "west",
+      "pose": "listen",
+      "source": "sanji",
+      "region": [
+        1621,
+        248,
+        124,
+        244
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "north",
+      "pose": "idle",
+      "source": "sanji",
+      "region": [
+        66,
+        483,
+        122,
+        216
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "north",
+      "pose": "talk_happy",
+      "source": "sanji",
+      "region": [
+        291,
+        482,
+        165,
+        217
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "north",
+      "pose": "talk_annoyed",
+      "source": "sanji",
+      "region": [
+        515,
+        483,
+        122,
+        216
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "north",
+      "pose": "surprised",
+      "source": "sanji",
+      "region": [
+        721,
+        483,
+        155,
+        216
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "north",
+      "pose": "focused_use",
+      "source": "sanji",
+      "region": [
+        955,
+        483,
+        150,
+        217
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "north",
+      "pose": "sit",
+      "source": "sanji",
+      "region": [
+        1182,
+        526,
+        127,
+        173
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "north",
+      "pose": "wave",
+      "source": "sanji",
+      "region": [
+        1374,
+        483,
+        150,
+        216
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "north",
+      "pose": "listen",
+      "source": "sanji",
+      "region": [
+        1623,
+        483,
+        127,
+        216
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "south",
+      "pose": "idle",
+      "source": "sanji",
+      "region": [
+        63,
+        689,
+        128,
+        198
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "south",
+      "pose": "talk_happy",
+      "source": "sanji",
+      "region": [
+        262,
+        689,
+        157,
+        198
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "south",
+      "pose": "talk_annoyed",
+      "source": "sanji",
+      "region": [
+        514,
+        689,
+        127,
+        198
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "south",
+      "pose": "surprised",
+      "source": "sanji",
+      "region": [
+        733,
+        689,
+        128,
+        198
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "south",
+      "pose": "focused_use",
+      "source": "sanji",
+      "region": [
+        947,
+        691,
+        130,
+        196
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "south",
+      "pose": "sit",
+      "source": "sanji",
+      "region": [
+        1177,
+        718,
+        128,
+        169
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "south",
+      "pose": "wave",
+      "source": "sanji",
+      "region": [
+        1381,
+        689,
+        141,
+        198
+      ]
+    },
+    {
+      "key": "sanji",
+      "direction": "south",
+      "pose": "listen",
+      "source": "sanji",
+      "region": [
+        1619,
+        689,
+        127,
+        198
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "east",
+      "pose": "idle",
+      "source": "chopper",
+      "region": [
+        38,
+        3,
+        171,
+        244
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "east",
+      "pose": "talk_happy",
+      "source": "chopper",
+      "region": [
+        264,
+        6,
+        189,
+        242
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "east",
+      "pose": "talk_annoyed",
+      "source": "chopper",
+      "region": [
+        497,
+        4,
+        172,
+        243
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "east",
+      "pose": "surprised",
+      "source": "chopper-east-surprised-corrected",
+      "region": [
+        46,
+        55,
+        947,
+        1347
+      ],
+      "sourceUnitScale": 0.1745318352059925,
+      "sourceUnitScaleReason": "This independent complete GPT redraw has a different source resolution; its complete silhouette height is calibrated to the replaced east-surprised full figure before applying the common east direction scale."
+    },
+    {
+      "key": "chopper",
+      "direction": "east",
+      "pose": "focused_use",
+      "source": "chopper",
+      "region": [
+        955,
+        10,
+        166,
+        238
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "east",
+      "pose": "sit",
+      "source": "chopper",
+      "region": [
+        1155,
+        61,
+        167,
+        191
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "east",
+      "pose": "wave",
+      "source": "chopper",
+      "region": [
+        1357,
+        2,
+        173,
+        246
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "east",
+      "pose": "listen",
+      "source": "chopper",
+      "region": [
+        1599,
+        3,
+        171,
+        244
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "west",
+      "pose": "idle",
+      "source": "chopper",
+      "region": [
+        42,
+        249,
+        170,
+        237
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "west",
+      "pose": "talk_happy",
+      "source": "chopper",
+      "region": [
+        261,
+        249,
+        185,
+        237
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "west",
+      "pose": "talk_annoyed",
+      "source": "chopper",
+      "region": [
+        501,
+        248,
+        173,
+        237
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "west",
+      "pose": "surprised",
+      "source": "chopper",
+      "region": [
+        723,
+        249,
+        174,
+        237
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "west",
+      "pose": "focused_use",
+      "source": "chopper",
+      "region": [
+        937,
+        256,
+        170,
+        232
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "west",
+      "pose": "sit",
+      "source": "chopper",
+      "region": [
+        1163,
+        309,
+        169,
+        190
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "west",
+      "pose": "wave",
+      "source": "chopper",
+      "region": [
+        1378,
+        249,
+        176,
+        238
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "west",
+      "pose": "listen",
+      "source": "chopper",
+      "region": [
+        1602,
+        249,
+        172,
+        237
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "north",
+      "pose": "idle",
+      "source": "chopper",
+      "region": [
+        26,
+        478,
+        188,
+        201
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "north",
+      "pose": "talk_happy",
+      "source": "chopper",
+      "region": [
+        254,
+        478,
+        189,
+        202
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "north",
+      "pose": "talk_annoyed",
+      "source": "chopper",
+      "region": [
+        482,
+        478,
+        184,
+        201
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "north",
+      "pose": "surprised",
+      "source": "chopper",
+      "region": [
+        700,
+        478,
+        189,
+        203
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "north",
+      "pose": "focused_use",
+      "source": "chopper",
+      "region": [
+        929,
+        478,
+        186,
+        205
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "north",
+      "pose": "sit",
+      "source": "chopper",
+      "region": [
+        1151,
+        506,
+        179,
+        172
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "north",
+      "pose": "wave",
+      "source": "chopper",
+      "region": [
+        1360,
+        478,
+        185,
+        201
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "north",
+      "pose": "listen",
+      "source": "chopper",
+      "region": [
+        1589,
+        478,
+        182,
+        201
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "south",
+      "pose": "idle",
+      "source": "chopper",
+      "region": [
+        22,
+        670,
+        192,
+        217
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "south",
+      "pose": "talk_happy",
+      "source": "chopper",
+      "region": [
+        254,
+        671,
+        188,
+        216
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "south",
+      "pose": "talk_annoyed",
+      "source": "chopper",
+      "region": [
+        480,
+        671,
+        187,
+        216
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "south",
+      "pose": "surprised",
+      "source": "chopper",
+      "region": [
+        702,
+        670,
+        190,
+        217
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "south",
+      "pose": "focused_use",
+      "source": "chopper",
+      "region": [
+        926,
+        673,
+        187,
+        214
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "south",
+      "pose": "sit",
+      "source": "chopper",
+      "region": [
+        1146,
+        701,
+        186,
+        186
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "south",
+      "pose": "wave",
+      "source": "chopper",
+      "region": [
+        1361,
+        671,
+        188,
+        216
+      ]
+    },
+    {
+      "key": "chopper",
+      "direction": "south",
+      "pose": "listen",
+      "source": "chopper",
+      "region": [
+        1585,
+        672,
+        187,
+        215
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "east",
+      "pose": "idle",
+      "source": "robin",
+      "region": [
+        58,
+        5,
+        133,
+        246
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "east",
+      "pose": "talk_happy",
+      "source": "robin",
+      "region": [
+        284,
+        7,
+        175,
+        245
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "east",
+      "pose": "talk_annoyed",
+      "source": "robin",
+      "region": [
+        518,
+        7,
+        136,
+        244
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "east",
+      "pose": "surprised",
+      "source": "robin",
+      "region": [
+        728,
+        9,
+        153,
+        243
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "east",
+      "pose": "focused_use",
+      "source": "robin",
+      "region": [
+        958,
+        11,
+        159,
+        241
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "east",
+      "pose": "sit",
+      "source": "robin",
+      "region": [
+        1185,
+        69,
+        148,
+        198
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "east",
+      "pose": "wave",
+      "source": "robin",
+      "region": [
+        1400,
+        7,
+        130,
+        244
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "east",
+      "pose": "listen",
+      "source": "robin",
+      "region": [
+        1617,
+        7,
+        139,
+        244
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "west",
+      "pose": "idle",
+      "source": "robin",
+      "region": [
+        71,
+        247,
+        128,
+        235
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "west",
+      "pose": "talk_happy",
+      "source": "robin",
+      "region": [
+        263,
+        247,
+        168,
+        235
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "west",
+      "pose": "talk_annoyed",
+      "source": "robin",
+      "region": [
+        526,
+        246,
+        136,
+        236
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "west",
+      "pose": "surprised",
+      "source": "robin",
+      "region": [
+        732,
+        248,
+        153,
+        234
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "west",
+      "pose": "focused_use",
+      "source": "robin",
+      "region": [
+        950,
+        249,
+        162,
+        233
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "west",
+      "pose": "sit",
+      "source": "robin",
+      "region": [
+        1193,
+        309,
+        146,
+        194
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "west",
+      "pose": "wave",
+      "source": "robin",
+      "region": [
+        1412,
+        247,
+        133,
+        235
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "west",
+      "pose": "listen",
+      "source": "robin",
+      "region": [
+        1626,
+        248,
+        134,
+        234
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "north",
+      "pose": "idle",
+      "source": "robin",
+      "region": [
+        71,
+        473,
+        112,
+        207
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "north",
+      "pose": "talk_happy",
+      "source": "robin",
+      "region": [
+        305,
+        473,
+        155,
+        208
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "north",
+      "pose": "talk_annoyed",
+      "source": "robin",
+      "region": [
+        522,
+        473,
+        123,
+        207
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "north",
+      "pose": "surprised",
+      "source": "robin",
+      "region": [
+        729,
+        473,
+        157,
+        207
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "north",
+      "pose": "focused_use",
+      "source": "robin",
+      "region": [
+        973,
+        473,
+        145,
+        210
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "north",
+      "pose": "sit",
+      "source": "robin",
+      "region": [
+        1205,
+        516,
+        123,
+        173
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "north",
+      "pose": "wave",
+      "source": "robin",
+      "region": [
+        1390,
+        473,
+        142,
+        208
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "north",
+      "pose": "listen",
+      "source": "robin",
+      "region": [
+        1635,
+        473,
+        111,
+        207
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "south",
+      "pose": "idle",
+      "source": "robin",
+      "region": [
+        69,
+        669,
+        122,
+        218
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "south",
+      "pose": "talk_happy",
+      "source": "robin",
+      "region": [
+        263,
+        671,
+        159,
+        216
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "south",
+      "pose": "talk_annoyed",
+      "source": "robin",
+      "region": [
+        518,
+        671,
+        127,
+        216
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "south",
+      "pose": "surprised",
+      "source": "robin",
+      "region": [
+        731,
+        671,
+        142,
+        216
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "south",
+      "pose": "focused_use",
+      "source": "robin",
+      "region": [
+        964,
+        674,
+        127,
+        213
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "south",
+      "pose": "sit",
+      "source": "robin",
+      "region": [
+        1198,
+        698,
+        129,
+        189
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "south",
+      "pose": "wave",
+      "source": "robin",
+      "region": [
+        1394,
+        672,
+        140,
+        215
+      ]
+    },
+    {
+      "key": "robin",
+      "direction": "south",
+      "pose": "listen",
+      "source": "robin",
+      "region": [
+        1629,
+        671,
+        120,
+        216
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "east",
+      "pose": "idle",
+      "source": "franky",
+      "region": [
+        38,
+        16,
+        151,
+        220
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "east",
+      "pose": "talk_happy",
+      "source": "franky",
+      "region": [
+        268,
+        16,
+        189,
+        220
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "east",
+      "pose": "talk_annoyed",
+      "source": "franky",
+      "region": [
+        504,
+        17,
+        153,
+        219
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "east",
+      "pose": "surprised",
+      "source": "franky",
+      "region": [
+        735,
+        15,
+        169,
+        221
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "east",
+      "pose": "focused_use",
+      "source": "franky",
+      "region": [
+        950,
+        28,
+        186,
+        209
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "east",
+      "pose": "sit",
+      "source": "franky",
+      "region": [
+        1172,
+        70,
+        141,
+        177
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "east",
+      "pose": "wave",
+      "source": "franky",
+      "region": [
+        1392,
+        17,
+        156,
+        219
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "east",
+      "pose": "listen",
+      "source": "franky",
+      "region": [
+        1615,
+        17,
+        140,
+        219
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "west",
+      "pose": "idle",
+      "source": "franky",
+      "region": [
+        44,
+        236,
+        155,
+        227
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "west",
+      "pose": "talk_happy",
+      "source": "franky",
+      "region": [
+        239,
+        237,
+        194,
+        226
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "west",
+      "pose": "talk_annoyed",
+      "source": "franky",
+      "region": [
+        507,
+        236,
+        160,
+        227
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "west",
+      "pose": "surprised",
+      "source": "franky",
+      "region": [
+        717,
+        234,
+        173,
+        229
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "west",
+      "pose": "focused_use",
+      "source": "franky",
+      "region": [
+        925,
+        250,
+        185,
+        216
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "west",
+      "pose": "sit",
+      "source": "franky",
+      "region": [
+        1176,
+        301,
+        148,
+        175
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "west",
+      "pose": "wave",
+      "source": "franky",
+      "region": [
+        1390,
+        237,
+        160,
+        227
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "west",
+      "pose": "listen",
+      "source": "franky",
+      "region": [
+        1617,
+        236,
+        148,
+        228
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "north",
+      "pose": "idle",
+      "source": "franky",
+      "region": [
+        26,
+        468,
+        178,
+        202
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "north",
+      "pose": "talk_happy",
+      "source": "franky",
+      "region": [
+        249,
+        468,
+        215,
+        202
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "north",
+      "pose": "talk_annoyed",
+      "source": "franky",
+      "region": [
+        493,
+        469,
+        175,
+        201
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "north",
+      "pose": "surprised",
+      "source": "franky",
+      "region": [
+        700,
+        469,
+        220,
+        201
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "north",
+      "pose": "focused_use",
+      "source": "franky",
+      "region": [
+        936,
+        470,
+        197,
+        200
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "north",
+      "pose": "sit",
+      "source": "franky",
+      "region": [
+        1174,
+        500,
+        157,
+        171
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "north",
+      "pose": "wave",
+      "source": "franky",
+      "region": [
+        1381,
+        470,
+        176,
+        200
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "north",
+      "pose": "listen",
+      "source": "franky",
+      "region": [
+        1586,
+        471,
+        174,
+        199
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "south",
+      "pose": "idle",
+      "source": "franky",
+      "region": [
+        29,
+        671,
+        175,
+        202
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "south",
+      "pose": "talk_happy",
+      "source": "franky",
+      "region": [
+        253,
+        670,
+        212,
+        204
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "south",
+      "pose": "talk_annoyed",
+      "source": "franky",
+      "region": [
+        497,
+        670,
+        170,
+        204
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "south",
+      "pose": "surprised",
+      "source": "franky",
+      "region": [
+        714,
+        671,
+        183,
+        203
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "south",
+      "pose": "focused_use",
+      "source": "franky",
+      "region": [
+        945,
+        675,
+        171,
+        199
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "south",
+      "pose": "sit",
+      "source": "franky",
+      "region": [
+        1171,
+        694,
+        160,
+        180
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "south",
+      "pose": "wave",
+      "source": "franky",
+      "region": [
+        1380,
+        670,
+        175,
+        204
+      ]
+    },
+    {
+      "key": "franky",
+      "direction": "south",
+      "pose": "listen",
+      "source": "franky",
+      "region": [
+        1593,
+        670,
+        167,
+        203
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "east",
+      "pose": "idle",
+      "source": "brook",
+      "region": [
+        87,
+        2,
+        104,
+        231
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "east",
+      "pose": "talk_happy",
+      "source": "brook",
+      "region": [
+        323,
+        3,
+        146,
+        230
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "east",
+      "pose": "talk_annoyed",
+      "source": "brook",
+      "region": [
+        544,
+        2,
+        105,
+        231
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "east",
+      "pose": "surprised",
+      "source": "brook",
+      "region": [
+        764,
+        4,
+        122,
+        229
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "east",
+      "pose": "focused_use",
+      "source": "brook",
+      "region": [
+        971,
+        9,
+        150,
+        224
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "east",
+      "pose": "sit",
+      "source": "brook",
+      "region": [
+        1217,
+        68,
+        122,
+        167
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "east",
+      "pose": "wave",
+      "source": "brook",
+      "region": [
+        1433,
+        3,
+        108,
+        230
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "east",
+      "pose": "listen",
+      "source": "brook",
+      "region": [
+        1653,
+        4,
+        99,
+        230
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "west",
+      "pose": "idle",
+      "source": "brook",
+      "region": [
+        80,
+        229,
+        105,
+        229
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "west",
+      "pose": "talk_happy",
+      "source": "brook",
+      "region": [
+        278,
+        228,
+        145,
+        230
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "west",
+      "pose": "talk_annoyed",
+      "source": "brook",
+      "region": [
+        539,
+        228,
+        106,
+        230
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "west",
+      "pose": "surprised",
+      "source": "brook",
+      "region": [
+        734,
+        228,
+        126,
+        230
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "west",
+      "pose": "focused_use",
+      "source": "brook",
+      "region": [
+        948,
+        233,
+        153,
+        225
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "west",
+      "pose": "sit",
+      "source": "brook",
+      "region": [
+        1186,
+        296,
+        125,
+        169
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "west",
+      "pose": "wave",
+      "source": "brook",
+      "region": [
+        1438,
+        229,
+        108,
+        229
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "west",
+      "pose": "listen",
+      "source": "brook",
+      "region": [
+        1645,
+        230,
+        99,
+        229
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "north",
+      "pose": "idle",
+      "source": "brook",
+      "region": [
+        75,
+        450,
+        111,
+        222
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "north",
+      "pose": "talk_happy",
+      "source": "brook",
+      "region": [
+        305,
+        451,
+        151,
+        221
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "north",
+      "pose": "talk_annoyed",
+      "source": "brook",
+      "region": [
+        526,
+        450,
+        118,
+        222
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "north",
+      "pose": "surprised",
+      "source": "brook",
+      "region": [
+        733,
+        451,
+        148,
+        221
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "north",
+      "pose": "focused_use",
+      "source": "brook",
+      "region": [
+        965,
+        451,
+        136,
+        220
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "north",
+      "pose": "sit",
+      "source": "brook",
+      "region": [
+        1202,
+        494,
+        117,
+        177
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "north",
+      "pose": "wave",
+      "source": "brook",
+      "region": [
+        1411,
+        451,
+        129,
+        221
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "north",
+      "pose": "listen",
+      "source": "brook",
+      "region": [
+        1642,
+        451,
+        108,
+        221
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "south",
+      "pose": "idle",
+      "source": "brook",
+      "region": [
+        71,
+        663,
+        110,
+        223
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "south",
+      "pose": "talk_happy",
+      "source": "brook",
+      "region": [
+        265,
+        663,
+        147,
+        223
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "south",
+      "pose": "talk_annoyed",
+      "source": "brook",
+      "region": [
+        522,
+        664,
+        112,
+        222
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "south",
+      "pose": "surprised",
+      "source": "brook",
+      "region": [
+        736,
+        664,
+        132,
+        222
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "south",
+      "pose": "focused_use",
+      "source": "brook",
+      "region": [
+        962,
+        663,
+        114,
+        222
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "south",
+      "pose": "sit",
+      "source": "brook",
+      "region": [
+        1198,
+        711,
+        127,
+        175
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "south",
+      "pose": "wave",
+      "source": "brook",
+      "region": [
+        1416,
+        664,
+        121,
+        222
+      ]
+    },
+    {
+      "key": "brook",
+      "direction": "south",
+      "pose": "listen",
+      "source": "brook",
+      "region": [
+        1640,
+        664,
+        109,
+        222
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "east",
+      "pose": "idle",
+      "source": "jinbe",
+      "region": [
+        30,
+        27,
+        195,
+        210
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "east",
+      "pose": "talk_happy",
+      "source": "jinbe",
+      "region": [
+        277,
+        27,
+        213,
+        210
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "east",
+      "pose": "talk_annoyed",
+      "source": "jinbe",
+      "region": [
+        545,
+        26,
+        190,
+        212
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "east",
+      "pose": "surprised",
+      "source": "jinbe",
+      "region": [
+        798,
+        27,
+        196,
+        210
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "east",
+      "pose": "focused_use",
+      "source": "jinbe",
+      "region": [
+        1051,
+        25,
+        201,
+        213
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "east",
+      "pose": "sit",
+      "source": "jinbe",
+      "region": [
+        1308,
+        63,
+        199,
+        175
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "east",
+      "pose": "wave",
+      "source": "jinbe",
+      "region": [
+        1564,
+        22,
+        199,
+        216
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "east",
+      "pose": "listen",
+      "source": "jinbe",
+      "region": [
+        1823,
+        23,
+        193,
+        215
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "west",
+      "pose": "idle",
+      "source": "jinbe",
+      "region": [
+        32,
+        282,
+        192,
+        211
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "west",
+      "pose": "talk_happy",
+      "source": "jinbe",
+      "region": [
+        279,
+        282,
+        211,
+        211
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "west",
+      "pose": "talk_annoyed",
+      "source": "jinbe",
+      "region": [
+        545,
+        281,
+        190,
+        212
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "west",
+      "pose": "surprised",
+      "source": "jinbe",
+      "region": [
+        801,
+        281,
+        190,
+        212
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "west",
+      "pose": "focused_use",
+      "source": "jinbe",
+      "region": [
+        1049,
+        286,
+        205,
+        209
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "west",
+      "pose": "sit",
+      "source": "jinbe",
+      "region": [
+        1316,
+        328,
+        183,
+        165
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "west",
+      "pose": "wave",
+      "source": "jinbe",
+      "region": [
+        1565,
+        282,
+        198,
+        212
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "west",
+      "pose": "listen",
+      "source": "jinbe",
+      "region": [
+        1827,
+        281,
+        186,
+        212
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "north",
+      "pose": "idle",
+      "source": "jinbe",
+      "region": [
+        24,
+        540,
+        207,
+        210
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "north",
+      "pose": "talk_happy",
+      "source": "jinbe",
+      "region": [
+        274,
+        537,
+        220,
+        213
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "north",
+      "pose": "talk_annoyed",
+      "source": "jinbe",
+      "region": [
+        545,
+        534,
+        190,
+        216
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "north",
+      "pose": "surprised",
+      "source": "jinbe",
+      "region": [
+        794,
+        538,
+        203,
+        212
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "north",
+      "pose": "focused_use",
+      "source": "jinbe",
+      "region": [
+        1044,
+        538,
+        215,
+        212
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "north",
+      "pose": "sit",
+      "source": "jinbe",
+      "region": [
+        1307,
+        569,
+        201,
+        181
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "north",
+      "pose": "wave",
+      "source": "jinbe",
+      "region": [
+        1561,
+        538,
+        206,
+        212
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "north",
+      "pose": "listen",
+      "source": "jinbe",
+      "region": [
+        1817,
+        540,
+        204,
+        210
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "south",
+      "pose": "idle",
+      "source": "jinbe",
+      "region": [
+        22,
+        793,
+        210,
+        213
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "south",
+      "pose": "talk_happy",
+      "source": "jinbe",
+      "region": [
+        280,
+        794,
+        206,
+        212
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "south",
+      "pose": "talk_annoyed",
+      "source": "jinbe",
+      "region": [
+        536,
+        793,
+        207,
+        212
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "south",
+      "pose": "surprised",
+      "source": "jinbe",
+      "region": [
+        794,
+        793,
+        204,
+        212
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "south",
+      "pose": "focused_use",
+      "source": "jinbe",
+      "region": [
+        1049,
+        798,
+        207,
+        208
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "south",
+      "pose": "sit",
+      "source": "jinbe",
+      "region": [
+        1303,
+        831,
+        210,
+        176
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "south",
+      "pose": "wave",
+      "source": "jinbe",
+      "region": [
+        1562,
+        794,
+        203,
+        212
+      ]
+    },
+    {
+      "key": "jinbe",
+      "direction": "south",
+      "pose": "listen",
+      "source": "jinbe",
+      "region": [
+        1819,
+        794,
+        201,
+        212
+      ]
+    }
+  ]
+}
