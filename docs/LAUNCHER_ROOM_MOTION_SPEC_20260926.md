@@ -1,6 +1,6 @@
-# 房間角色重製規格（1.1.13 候選）
+# 房間角色重製規格（1.1.13 已部署）
 
-日期：2026-09-26；最後更新：2026-09-27。狀態：十名角色、四方向的 source 圖集與工具 gate 已完成；仍待完整真實房間動態 review 與部署讀回。舊版 1.1.12 的程式測試通過不代表步態合格。
+日期：2026-09-26；最後更新：2026-09-27。狀態：十名角色、四方向圖集、40 組明確 review、46 組真素材房間 capture、Windows 封裝及 1.1.13 公開讀回均已完成；驗收範圍與限制見末節。舊版 1.1.12 的程式測試通過不代表步態合格。
 
 ## 已確認的問題
 
@@ -43,7 +43,7 @@
 
 ## 驗證
 
-目前已執行：80 張發布 atlas、10 張新版詳情圖的來源／spec／renderer／原始烘焙／WebP SHA 驗證；控制器 16 項、使用真台詞與模擬動畫的瀏覽器整合 72 項、可攜 pipeline 隔離檢查 8 項，以及 source package QA 通過。Root 已目視十張發布像素 contact sheets，涵蓋四向步態每四幀取樣與八姿勢；這是時間取樣，不能代替連續播放。家具手勢仍依實際接合結果定向修正，修正後須重新綁定成品 SHA 與 review。review plan 先保留 pending，完整動態證據及明確確認前不升級狀態；正式封裝／部署驗收另行記錄。
+前期驗證紀錄（當時家具與公開部署尚未完成，最終結果見末節）：80 張發布 atlas、10 張新版詳情圖的來源／spec／renderer／原始烘焙／WebP SHA 驗證；控制器 16 項、使用真台詞與模擬動畫的瀏覽器整合 72 項、可攜 pipeline 隔離檢查 8 項，以及 source package QA 通過。Root 已目視十張發布像素 contact sheets，涵蓋四向步態每四幀取樣與八姿勢；這是時間取樣，不能代替連續播放。家具手勢仍依實際接合結果定向修正，修正後須重新綁定成品 SHA 與 review。review plan 先保留 pending，完整動態證據及明確確認前不升級狀態；正式封裝／部署驗收另行記錄。
 
 1. 四方向正常與半速循環；接觸、承重、通過、前擺可辨識。
 2. 真實房間中走水平、縱向、轉角、停下、面向夥伴、對話、到家具工作。
@@ -60,6 +60,6 @@
 - [Nintendo Pocket Camp Complete](https://www.nintendo.com/us/whatsnew/mobilenews-animal-crossing-pocket-camp-complete-is-now-available/)：家具、角色個性與生活互動的產品參考。
 - [排球少年 FLY HIGH 官方影片](https://www.youtube.com/watch?v=7Y14YP6R3so)：已找到官方入口，目前未取得集訓基地逐幀分析證據，不宣稱已完成影片動作驗證。
 
-## 2026-09-27 最終候選驗收
+## 2026-09-27 最終發布驗收
 
-40方向已由原稿、發布圖集抽樣與真實房間相鄰／循環接縫影格完成explicit review；完整來源／發布SHA gate及Windows package QA通過。真素材房間46組case包含20組雙寬度四向步行、10組四輪配對、16組家具，80條路線均記錄32相位；各case無缺圖／頁面錯誤，保存配置未改。正常與0.5x回放共92片；半速只調播放時間，未改物理。驗收為本機自動capture與圖像檢查，未宣稱真人、實體手機或固定60fps。並行NSIS時Franky west記錄350ms主機取樣間隔，原始時間戳保留。最終視覺報告SHA c0497cfa744a57881542377bcfc3d9d50b1443e51435739e0e7209f16f75eb3e；影片索引SHA7491656a9f8837d7cca2ff62dd1fc781f19f0da6e170dd0ad899365f958f8ead。公開發布狀態見DEV_WORKFLOW。
+40方向已由原稿、發布圖集抽樣與真實房間相鄰／循環接縫影格完成explicit review；完整來源／發布SHA gate及Windows package QA通過。真素材房間46組case包含20組雙寬度四向步行、10組四輪配對、16組家具，80條路線均記錄32相位；各case無缺圖／頁面錯誤，保存配置未改。正常與0.5x回放共92片；半速只調播放時間，未改物理。驗收為本機自動capture與圖像檢查，未宣稱真人、實體手機或固定60fps。並行NSIS時Franky west記錄350ms主機取樣間隔，原始時間戳保留。最終視覺報告SHA c0497cfa744a57881542377bcfc3d9d50b1443e51435739e0e7209f16f75eb3e；影片索引SHA7491656a9f8837d7cca2ff62dd1fc781f19f0da6e170dd0ad899365f958f8ead。Render canonical 清單已回傳1.1.13且與提交462003e0c的blob完全相同，Ed25519驗簽通過；R2安裝檔完整GET與獨立SHA核對通過。公開證據與下載資訊見DEV_WORKFLOW。

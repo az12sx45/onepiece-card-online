@@ -1,9 +1,10 @@
 # File Map
 
-## 2026-09-27 房間四向步態重製（1.1.13 候選）
+## 2026-09-27 房間四向步態重製（1.1.13 已部署）
 
 | 檔案 | 用途 |
 | --- | --- |
+| `public/desktop/launcher-release-v1.json` | 已公開 1.1.13 Ed25519 更新清單，canonical bytes、簽章及 R2 安裝檔完整 SHA 已核對。 |
 | `docs/LAUNCHER_ROOM_MOTION_SPEC_20260926.md`、`LAUNCHER_ROOM_MOTION_ART_20260926.json` | 十二部件四方向、32 相位、地板斜率、來源與成品 SHA、動態驗收規格與證據狀態。 |
 | `docs/LAUNCHER_CREW_CANON_20260926.md` | 官方研究、45 組角色關係、原創日常劇本和表演語義。 |
 | `desktop/launcher-room-motion.js`、`launcher-room-motion-data.js` | 方向圖預載／解碼、動作拍數、實際路程相位和各角色步幅／速度。 |
