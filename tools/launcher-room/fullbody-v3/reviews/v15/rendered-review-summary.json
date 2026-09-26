@@ -1,0 +1,192 @@
+{
+  "scope": "AI visual review of native atlases and captured real room frames; automated Chromium fixture, not human acceptance",
+  "humanAcceptance": false,
+  "walks": [
+    {
+      "key": "luffy",
+      "reportSha256": "e56ab7b91535b63534759ca5849174a7bece3f469f312080715cfc68f16dfa0b",
+      "recordedScripts": {
+        "launcher-room-motion-data.js": "05c2baa81e274245a9b53e2607665e726fc3c690de60703a7244da5321555b4d",
+        "launcher-room-dialogue.js": "a360e2d79df88895612ae497792c849bd39f2ef27e91e9dbfd7b38e893779f99",
+        "launcher-room-motion.js": "1c0566532075924c2f66bd4a5f34d84ce385de7f790e8fd95b3f821f811b6e98",
+        "launcher-room.js": "3f6ba12227f800a6babc131cf770eb8fd0d141d672a981c877c26c2096cf2eae"
+      },
+      "fourDirections": true,
+      "everyBeatCaptured": true
+    },
+    {
+      "key": "zoro",
+      "reportSha256": "9f33168e4b3c1cfe81b07eb769ebb7ebeb51037582f4aa0f4881d0f55e516e66",
+      "recordedScripts": {
+        "launcher-room-motion-data.js": "05c2baa81e274245a9b53e2607665e726fc3c690de60703a7244da5321555b4d",
+        "launcher-room-dialogue.js": "a360e2d79df88895612ae497792c849bd39f2ef27e91e9dbfd7b38e893779f99",
+        "launcher-room-motion.js": "1c0566532075924c2f66bd4a5f34d84ce385de7f790e8fd95b3f821f811b6e98",
+        "launcher-room.js": "3f6ba12227f800a6babc131cf770eb8fd0d141d672a981c877c26c2096cf2eae"
+      },
+      "fourDirections": true,
+      "everyBeatCaptured": true
+    },
+    {
+      "key": "nami",
+      "reportSha256": "c2d0ce68f6b85a1092254434837275b837a0ebcc5d71d12723ce183b4ef38074",
+      "recordedScripts": {
+        "launcher-room-motion-data.js": "05c2baa81e274245a9b53e2607665e726fc3c690de60703a7244da5321555b4d",
+        "launcher-room-dialogue.js": "a360e2d79df88895612ae497792c849bd39f2ef27e91e9dbfd7b38e893779f99",
+        "launcher-room-motion.js": "1c0566532075924c2f66bd4a5f34d84ce385de7f790e8fd95b3f821f811b6e98",
+        "launcher-room.js": "3f6ba12227f800a6babc131cf770eb8fd0d141d672a981c877c26c2096cf2eae"
+      },
+      "fourDirections": true,
+      "everyBeatCaptured": true
+    },
+    {
+      "key": "usopp",
+      "reportSha256": "c0fdf3030ba4b26cc41c3bb17ae8aed83ce3d54baf8ffac4e44c419aceb97e5e",
+      "recordedScripts": {
+        "launcher-room-motion-data.js": "05c2baa81e274245a9b53e2607665e726fc3c690de60703a7244da5321555b4d",
+        "launcher-room-dialogue.js": "a360e2d79df88895612ae497792c849bd39f2ef27e91e9dbfd7b38e893779f99",
+        "launcher-room-motion.js": "1c0566532075924c2f66bd4a5f34d84ce385de7f790e8fd95b3f821f811b6e98",
+        "launcher-room.js": "3f6ba12227f800a6babc131cf770eb8fd0d141d672a981c877c26c2096cf2eae"
+      },
+      "fourDirections": true,
+      "everyBeatCaptured": true
+    },
+    {
+      "key": "sanji",
+      "reportSha256": "e005f6c7896be28638a29794fd83dcf228e29952bdfe7c396d72d0c6c551813d",
+      "recordedScripts": {
+        "launcher-room-motion-data.js": "05c2baa81e274245a9b53e2607665e726fc3c690de60703a7244da5321555b4d",
+        "launcher-room-dialogue.js": "a360e2d79df88895612ae497792c849bd39f2ef27e91e9dbfd7b38e893779f99",
+        "launcher-room-motion.js": "1c0566532075924c2f66bd4a5f34d84ce385de7f790e8fd95b3f821f811b6e98",
+        "launcher-room.js": "4c90206c41c4fe0a510cc093eea8db7b840c78dbd9d7d4dfbdcd51376b1d123e"
+      },
+      "fourDirections": true,
+      "everyBeatCaptured": true
+    },
+    {
+      "key": "chopper",
+      "reportSha256": "d5f3cd56d6e4957f623446431ce7ed0472ec99a520ee38efeb2916d3d645e7bd",
+      "recordedScripts": {
+        "launcher-room-motion-data.js": "05c2baa81e274245a9b53e2607665e726fc3c690de60703a7244da5321555b4d",
+        "launcher-room-dialogue.js": "a360e2d79df88895612ae497792c849bd39f2ef27e91e9dbfd7b38e893779f99",
+        "launcher-room-motion.js": "1c0566532075924c2f66bd4a5f34d84ce385de7f790e8fd95b3f821f811b6e98",
+        "launcher-room.js": "3f6ba12227f800a6babc131cf770eb8fd0d141d672a981c877c26c2096cf2eae"
+      },
+      "fourDirections": true,
+      "everyBeatCaptured": true
+    },
+    {
+      "key": "robin",
+      "reportSha256": "a17fbb74e01a157b8728ae2ade4391cda75027f1e2341675790b80922a7ea0bf",
+      "recordedScripts": {
+        "launcher-room-motion-data.js": "05c2baa81e274245a9b53e2607665e726fc3c690de60703a7244da5321555b4d",
+        "launcher-room-dialogue.js": "a360e2d79df88895612ae497792c849bd39f2ef27e91e9dbfd7b38e893779f99",
+        "launcher-room-motion.js": "1c0566532075924c2f66bd4a5f34d84ce385de7f790e8fd95b3f821f811b6e98",
+        "launcher-room.js": "3f6ba12227f800a6babc131cf770eb8fd0d141d672a981c877c26c2096cf2eae"
+      },
+      "fourDirections": true,
+      "everyBeatCaptured": true
+    },
+    {
+      "key": "franky",
+      "reportSha256": "018ec85e706270cf4ff2f32dc6fc145273031b5ce4afa14d2e629283ec0182a2",
+      "recordedScripts": {
+        "launcher-room-motion-data.js": "05c2baa81e274245a9b53e2607665e726fc3c690de60703a7244da5321555b4d",
+        "launcher-room-dialogue.js": "a360e2d79df88895612ae497792c849bd39f2ef27e91e9dbfd7b38e893779f99",
+        "launcher-room-motion.js": "1c0566532075924c2f66bd4a5f34d84ce385de7f790e8fd95b3f821f811b6e98",
+        "launcher-room.js": "3f6ba12227f800a6babc131cf770eb8fd0d141d672a981c877c26c2096cf2eae"
+      },
+      "fourDirections": true,
+      "everyBeatCaptured": true
+    },
+    {
+      "key": "brook",
+      "reportSha256": "cfd173eb50e5cb18a81ce8589fec64d45c574fc4587a50be9d674b49d64cd2b6",
+      "recordedScripts": {
+        "launcher-room-motion-data.js": "05c2baa81e274245a9b53e2607665e726fc3c690de60703a7244da5321555b4d",
+        "launcher-room-dialogue.js": "a360e2d79df88895612ae497792c849bd39f2ef27e91e9dbfd7b38e893779f99",
+        "launcher-room-motion.js": "1c0566532075924c2f66bd4a5f34d84ce385de7f790e8fd95b3f821f811b6e98",
+        "launcher-room.js": "3f6ba12227f800a6babc131cf770eb8fd0d141d672a981c877c26c2096cf2eae"
+      },
+      "fourDirections": true,
+      "everyBeatCaptured": true
+    },
+    {
+      "key": "jinbe",
+      "reportSha256": "d40def1ad2199e40d652784b0cb31836a11c3b2403672f03341307908c8fd3df",
+      "recordedScripts": {
+        "launcher-room-motion-data.js": "05c2baa81e274245a9b53e2607665e726fc3c690de60703a7244da5321555b4d",
+        "launcher-room-dialogue.js": "a360e2d79df88895612ae497792c849bd39f2ef27e91e9dbfd7b38e893779f99",
+        "launcher-room-motion.js": "1c0566532075924c2f66bd4a5f34d84ce385de7f790e8fd95b3f821f811b6e98",
+        "launcher-room.js": "3f6ba12227f800a6babc131cf770eb8fd0d141d672a981c877c26c2096cf2eae"
+      },
+      "fourDirections": true,
+      "everyBeatCaptured": true
+    }
+  ],
+  "chats": [
+    {
+      "pair": "luffy-zoro",
+      "turns": 4,
+      "reportSha256": "5b043bb0d71b888e49f7aeefc9fcea0959a3b830c47ee1506fd54c067876d433"
+    },
+    {
+      "pair": "nami-sanji",
+      "turns": 4,
+      "reportSha256": "087e3d2ec58aff54de5fa74fe31732f72abd9384e34547be3023b5ed5a8f7476"
+    },
+    {
+      "pair": "robin-franky",
+      "turns": 4,
+      "reportSha256": "4bb5b1d12f2a6c364d280c3a79a730de647f9b87888456fbf1639844965c0ce6"
+    },
+    {
+      "pair": "chopper-usopp",
+      "turns": 4,
+      "reportSha256": "1f0541834d682287f377e48cb2661733619a0fcd5954525391b91285f860927d"
+    },
+    {
+      "pair": "brook-jinbe",
+      "turns": 4,
+      "reportSha256": "349a3aebf175b1a4217f777469bcd4aa88b95f718eb0f570805b6fc35a731b08"
+    }
+  ],
+  "furniture": [
+    {
+      "key": "sanji-kitchen-table",
+      "rotation": 0,
+      "reportSha256": "96b1953a886b0d096aea4a14fd376685f243a69dcda6e5a5c9b468aa3aa11f6f"
+    },
+    {
+      "key": "sanji-kitchen-table",
+      "rotation": 2,
+      "reportSha256": "f7775f941fb7d415168d8d114ef91378783356132cf9cd5d814b05d31d8fd58e"
+    },
+    {
+      "key": "brook-piano",
+      "rotation": 0,
+      "reportSha256": "2ff215e34369ac9a1de2f937b50ae27a1eb805e35334e884e3164948d5389f65"
+    },
+    {
+      "key": "brook-piano",
+      "rotation": 2,
+      "reportSha256": "6f0a0ece0cbb8436d8beee7b49d7ac96fff3b8361c4cae5973f9dcfd97425b6a"
+    }
+  ],
+  "narrow": [
+    {
+      "key": "chopper",
+      "width": 390,
+      "reportSha256": "5e3a001e1ca5b517a1babe931607c2cf5fe66203936b8fb62256cb42e82867f7"
+    },
+    {
+      "key": "franky",
+      "width": 390,
+      "reportSha256": "44689b12090b336b4fc77b10e7cb87e0fdefe50e85810d917346d8fc6ce2c9f5"
+    },
+    {
+      "key": "jinbe",
+      "width": 390,
+      "reportSha256": "84abea9e5f79f8389104e9112d5894c12d3e873bbf5b8fc490889089b46f60de"
+    }
+  ]
+}

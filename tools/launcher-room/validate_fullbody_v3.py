@@ -14,7 +14,7 @@ from import_fullbody_v3 import (BASE, CHARACTERS, DIRECTIONS, MANIFEST, POSES, S
 def verify(root, require_complete=False, allow_fixture=False):
     root = Path(root).resolve()
     manifest = read_json(local(root, MANIFEST))
-    require(manifest.get('version') == '1.1.14', 'Wrong release version')
+    require(manifest.get('version') == '1.1.15', 'Wrong release version')
     require(manifest.get('schema') == 'one-piece-room-fullbody-art/3', 'Wrong manifest schema')
     require(manifest.get('shape') == SHAPE and manifest.get('poseOrder') == POSES, 'Static atlas contract changed')
     require(manifest.get('canonicalCharactersOnly') is True and manifest.get('anatomyReassembled') is False, 'Canonical whole-body contract changed')

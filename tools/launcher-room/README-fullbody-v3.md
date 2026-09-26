@@ -1,4 +1,4 @@
-# Complete character art import (1.1.14)
+# Complete character art import (1.1.15)
 
 ## Static interaction poses and portraits
 
@@ -9,6 +9,8 @@ The selection schema is `one-piece-room-fullbody-selection/1`. Sources contain `
 Each region selects one connected body above alpha 128. A reviewed absolute `componentSeed` can disambiguate a region containing another complete figure. A two-pixel neighborhood retains authored antialias pixels; distant alpha noise is removed. Opaque body contact with a region edge is rejected. Antialias-only contact with the original PNG edge is retained and explicitly reported; cutting antialias within the image is rejected. Output alpha must clear every 128px cell edge.
 
 All eight poses share one direction scale, with standing opaque height at most 100 and width at most 112. The whole image is uniformly scaled and translated; no head/limb assembly, mirroring or mesh deformation is performed. A `sourceAnchor` can explicitly identify the whole-figure axis/contact point. A separate-resolution replacement can use `sourceUnitScale`, accompanied by a written `sourceUnitScaleReason`; this calibrates the complete source image before the shared direction scale. It must never be used to independently resize body parts.
+
+An optional `outputScale` (greater than zero, at most one) must be identical for every pose in a direction and include `outputScaleReason`. It uniformly reduces the complete direction atlas to align standing and walking body height across directions. This also prevents raised hands from making the idle body smaller than its walking counterpart. The value is retained in the selection and frame reports and participates in pixel reconstruction; it never rescales anatomy separately.
 
 ```powershell
 python tools/launcher-room/import_fullbody_v3.py --plan SELECTION.json --source-root SOURCE_ROOT --output NEW_EMPTY_STAGING_DIRECTORY

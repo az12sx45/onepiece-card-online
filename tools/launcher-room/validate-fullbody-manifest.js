@@ -27,7 +27,7 @@ function validate(root, { requireComplete = true } = {}) {
   const hash = name => { if (!hashes.has(name)) hashes.set(name, crypto.createHash('sha256').update(fs.readFileSync(local(name))).digest('hex')); return hashes.get(name); };
   const checkFile = ref => { assert.match(ref.sha256, /^[a-f0-9]{64}$/); assert.equal(hash(ref.path), ref.sha256, `SHA changed: ${ref.path}`); if (ref.bytes !== undefined) assert.equal(fs.statSync(local(ref.path)).size, ref.bytes); };
   const manifest = read(MANIFEST);
-  assert.equal(manifest.schema, 'one-piece-room-fullbody-art/3'); assert.equal(manifest.version, '1.1.14');
+  assert.equal(manifest.schema, 'one-piece-room-fullbody-art/3'); assert.equal(manifest.version, '1.1.15');
   assert.equal(manifest.canonicalCharactersOnly, true); assert.equal(manifest.anatomyReassembled, false);
   assert.equal(manifest.walkProvided, false); assert.equal(manifest.fixtureSources, false);
   assert.equal(manifest.visualAccepted, false); assert.equal(manifest.requiresManualVisualReview, true);

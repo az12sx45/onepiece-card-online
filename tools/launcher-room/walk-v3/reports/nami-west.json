@@ -11,54 +11,54 @@
       "key": "nami",
       "direction": "west",
       "pose": "contact-a",
-      "source": "nami-walk-triad-original",
+      "source": "nami-walk-side-01",
       "region": [
-        89,
-        398,
-        195,
-        325
+        107,
+        510,
+        291,
+        509
       ],
       "index": 0,
       "bounds": [
-        31,
-        11,
-        91,
-        113
+        33,
+        13,
+        89,
+        112
       ],
       "opaqueBoundsAtOutput": [
-        32,
-        12,
-        91,
+        33,
+        13,
+        88,
         112
       ],
       "sourceAnchor": [
-        195.0,
-        718
+        270.443182539179,
+        1013
       ],
       "localAnchor": [
-        103.0,
-        317
+        159.44318253917902,
+        499
       ],
       "sourceAlphaBounds": [
-        92,
-        401,
-        281,
-        720
+        111,
+        514,
+        394,
+        1015
       ],
       "opaqueBounds": [
-        94,
-        403,
-        185,
-        315
+        113,
+        516,
+        279,
+        497
       ],
-      "opaquePixels": 33265,
-      "removedDistantAlphaPixels": 4683,
-      "sourceUnitScale": 1.0,
+      "opaquePixels": 49684,
+      "removedDistantAlphaPixels": 9652,
+      "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
-        5,
-        5,
-        5,
-        5
+        6,
+        6,
+        6,
+        6
       ],
       "edgeAaRadius": 2,
       "sourceAaTouchesImageBoundary": [
@@ -67,17 +67,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.31746031746031744,
-      "wholeImageScale": 0.31746031746031744,
+      "uniformDirectionScale": 0.19839679358717435,
+      "outputScale": 0.99,
+      "wholeImageScale": 0.19839679358717435,
       "inverseWholeImageTransform": [
-        3.1500000000000004,
+        5.040404040404041,
         0,
-        -98.60000000000002,
+        -163.14267604667958,
         0,
-        3.1500000000000004,
-        -35.80000000000001
+        5.040404040404041,
+        -65.52525252525254
       ],
-      "rgbaSha256": "3fff70fb0fde9a7164f0e9d507bb74320873e8c02ba712c2f604b2b0703f7e84",
+      "rgbaSha256": "29ec659172f8d58c8b331a38914de560a97ca20c139f8ad12e4a60c3c2a2d919",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false,
@@ -87,54 +88,54 @@
       "key": "nami",
       "direction": "west",
       "pose": "neutral",
-      "source": "nami-walk-triad-original",
+      "source": "nami-walk-side-01",
       "region": [
-        463,
-        398,
-        173,
-        323
+        692,
+        507,
+        146,
+        511
       ],
       "index": 1,
       "bounds": [
-        38,
+        50,
         13,
-        90,
-        113
+        77,
+        112
       ],
       "opaqueBoundsAtOutput": [
-        38,
+        50,
         13,
-        90,
+        77,
         112
       ],
       "sourceAnchor": [
-        549.5,
-        716
+        767.54015478305,
+        1012
       ],
       "localAnchor": [
-        83.5,
-        315
+        71.54015478304996,
+        501
       ],
       "sourceAlphaBounds": [
-        466,
-        401,
-        633,
-        718
+        696,
+        511,
+        834,
+        1014
       ],
       "opaqueBounds": [
-        468,
-        403,
-        163,
-        313
+        698,
+        513,
+        134,
+        499
       ],
-      "opaquePixels": 29280,
-      "removedDistantAlphaPixels": 4161,
-      "sourceUnitScale": 0.9938650306748467,
+      "opaquePixels": 40560,
+      "removedDistantAlphaPixels": 5895,
+      "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
-        5,
-        5,
-        5,
-        5
+        6,
+        6,
+        6,
+        6
       ],
       "edgeAaRadius": 2,
       "sourceAaTouchesImageBoundary": [
@@ -143,17 +144,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.31746031746031744,
-      "wholeImageScale": 0.31551270815074495,
+      "uniformDirectionScale": 0.19839679358717435,
+      "outputScale": 0.99,
+      "wholeImageScale": 0.19839679358717435,
       "inverseWholeImageTransform": [
-        3.1694444444444447,
+        5.040404040404041,
         0,
-        -119.34444444444446,
+        -251.04570380280865,
         0,
-        3.1694444444444447,
-        -39.97777777777782
+        5.040404040404041,
+        -63.52525252525254
       ],
-      "rgbaSha256": "d37a0fcc43abfeab4b4c6215b917ac1d5ceb28e642b4cc121fcc820c2af36537",
+      "rgbaSha256": "3a237f76d7f011b3aa5b6831f5d632aee4484b9e0ad7fbb83db2569f18d9d026",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false,
@@ -163,54 +165,54 @@
       "key": "nami",
       "direction": "west",
       "pose": "contact-c",
-      "source": "nami-walk-whole-corrections",
+      "source": "nami-walk-side-01",
       "region": [
-        550,
-        20,
-        378,
-        686
+        1099,
+        510,
+        305,
+        508
       ],
       "index": 2,
       "bounds": [
-        35,
-        12,
-        89,
+        32,
+        13,
+        91,
         112
       ],
       "opaqueBoundsAtOutput": [
-        35,
-        12,
-        89,
+        32,
+        14,
+        91,
         112
       ],
       "sourceAnchor": [
-        749.0,
-        701
+        1263.9166344044393,
+        1012
       ],
       "localAnchor": [
-        196.0,
-        678
+        160.91663440443926,
+        498
       ],
       "sourceAlphaBounds": [
-        553,
-        23,
-        924,
-        703
+        1103,
+        514,
+        1400,
+        1014
       ],
       "opaqueBounds": [
-        555,
-        25,
-        368,
-        676
+        1105,
+        516,
+        293,
+        496
       ],
-      "opaquePixels": 140557,
-      "removedDistantAlphaPixels": 8428,
-      "sourceUnitScale": 0.46551724137931033,
+      "opaquePixels": 49425,
+      "removedDistantAlphaPixels": 8674,
+      "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
-        5,
-        5,
-        5,
-        5
+        6,
+        6,
+        6,
+        6
       ],
       "edgeAaRadius": 2,
       "sourceAaTouchesImageBoundary": [
@@ -219,17 +221,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.31746031746031744,
-      "wholeImageScale": 0.14778325123152708,
+      "uniformDirectionScale": 0.19839679358717435,
+      "outputScale": 0.99,
+      "wholeImageScale": 0.19839679358717435,
       "inverseWholeImageTransform": [
-        6.7666666666666675,
+        5.040404040404041,
         0,
-        -237.06666666666672,
+        -161.66922418141934,
         0,
-        6.7666666666666675,
-        -79.86666666666679
+        5.040404040404041,
+        -66.52525252525254
       ],
-      "rgbaSha256": "ddd849983a83e4710b0948041fc14f6923efe762853beae96e3e2994f20d809b",
+      "rgbaSha256": "bd2c79b3e1e44c688c713447b88b6481c0eb541c86ab8f166f38d9c70bf6ab6e",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false,
@@ -239,54 +242,54 @@
       "key": "nami",
       "direction": "west",
       "pose": "neutral",
-      "source": "nami-walk-triad-original",
+      "source": "nami-walk-side-01",
       "region": [
-        463,
-        398,
-        173,
-        323
+        692,
+        507,
+        146,
+        511
       ],
       "index": 3,
       "bounds": [
-        38,
+        50,
         13,
-        90,
-        113
+        77,
+        112
       ],
       "opaqueBoundsAtOutput": [
-        38,
+        50,
         13,
-        90,
+        77,
         112
       ],
       "sourceAnchor": [
-        549.5,
-        716
+        767.54015478305,
+        1012
       ],
       "localAnchor": [
-        83.5,
-        315
+        71.54015478304996,
+        501
       ],
       "sourceAlphaBounds": [
-        466,
-        401,
-        633,
-        718
+        696,
+        511,
+        834,
+        1014
       ],
       "opaqueBounds": [
-        468,
-        403,
-        163,
-        313
+        698,
+        513,
+        134,
+        499
       ],
-      "opaquePixels": 29280,
-      "removedDistantAlphaPixels": 4161,
-      "sourceUnitScale": 0.9938650306748467,
+      "opaquePixels": 40560,
+      "removedDistantAlphaPixels": 5895,
+      "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
-        5,
-        5,
-        5,
-        5
+        6,
+        6,
+        6,
+        6
       ],
       "edgeAaRadius": 2,
       "sourceAaTouchesImageBoundary": [
@@ -295,17 +298,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.31746031746031744,
-      "wholeImageScale": 0.31551270815074495,
+      "uniformDirectionScale": 0.19839679358717435,
+      "outputScale": 0.99,
+      "wholeImageScale": 0.19839679358717435,
       "inverseWholeImageTransform": [
-        3.1694444444444447,
+        5.040404040404041,
         0,
-        -119.34444444444446,
+        -251.04570380280865,
         0,
-        3.1694444444444447,
-        -39.97777777777782
+        5.040404040404041,
+        -63.52525252525254
       ],
-      "rgbaSha256": "d37a0fcc43abfeab4b4c6215b917ac1d5ceb28e642b4cc121fcc820c2af36537",
+      "rgbaSha256": "3a237f76d7f011b3aa5b6831f5d632aee4484b9e0ad7fbb83db2569f18d9d026",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false,

@@ -1,0 +1,11 @@
+{
+  "tool": "image_gen__imagegen",
+  "original": "C:/Users/王曜瑋/.codex/generated_images/01a0df5a-f51d-7f40-8213-929b1e8bec76/exec-598bf92d-8dd6-4144-9bc5-d254960919ba.png",
+  "prompt": "prompt-west-c-03.txt",
+  "references": [
+    "../turnaround-01.png",
+    "../../luffy/walk/c-guides/west.png"
+  ],
+  "review": "Selected: near star forearm visibly overlaps abdomen in front, near leg trails.",
+  "anatomyReassembled": false
+}

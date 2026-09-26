@@ -1,0 +1,9 @@
+{
+  "tool": "image_gen__imagegen",
+  "original": "C:/Users/王曜瑋/.codex/generated_images/01a0df5a-f51d-7f40-8213-929b1e8bec76/exec-9869fa6d-283a-453a-b449-1a368de1b405.png",
+  "prompt": "turnaround-prompt-02.txt",
+  "references": [
+    "turnaround-01.png"
+  ],
+  "review": "Selected identity: canonical face, skirt circles fixed anatomical right in four views; proportions approximately 3.7 head incl hair."
+}

@@ -39,7 +39,7 @@
       finite(typeof override.stride === 'object' ? override.stride?.[direction] : undefined, baseStride * vertical(direction), 8, 120)]));
     const speed = Object.fromEntries(DIRECTIONS.map(direction => [direction,
       finite(typeof override.speed === 'object' ? override.speed?.[direction] : undefined, baseSpeed * vertical(direction), 6, 100)]));
-    return { stride, speed, standingFrame: Math.trunc(finite(override.standingFrame, 1, 0, SHAPE.frames - 1)),
+    return { stride, speed, displayScale: finite(override.displayScale, 1, .5, 1.5), standingFrame: Math.trunc(finite(override.standingFrame, 1, 0, SHAPE.frames - 1)),
       root: [finite(override.root?.[0], SHAPE.rootX, 0, SHAPE.cell), finite(override.root?.[1], SHAPE.rootY, 0, SHAPE.cell)] };
   }
   function directionForDelta(dc, dr, fallback = 'south') {
@@ -71,7 +71,7 @@
   function actionFrame(pose) { return ACTION_POSES.indexOf(pose); }
   function speedAndStride(key, direction, scale, table) {
     const meta = metadata(key, table);
-    const factor = finite(scale, 1.07, .72, 1.07) / 1.07;
+    const factor = finite(scale, 1.07, .72, 1.07) / 1.07 * meta.displayScale;
     return { speed: meta.speed[direction] * factor, stride: meta.stride[direction] * factor };
   }
   function pathStep(dx, dy, direction, budget) {

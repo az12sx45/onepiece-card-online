@@ -1,0 +1,11 @@
+Use case: identity-preserve. Create a corrected walking animation sheet of SIX whole-body Monkey D. Luffy drawings on TRUE TRANSPARENT RGBA, THREE COLUMNS x TWO ROWS. Large generous invisible cell margins, nothing near the outside canvas edges. 1536x1024 landscape or larger.
+
+Image1 is the IDENTITY model. Copy its face, proportions, closed red vest (not open), NO sash, shorts and hat. Image2 and Image3 are ONLY ARM/LEG POSE GUIDES; DO NOT copy their open vest or sash or generic face. Draw the same recognizable One Piece Luffy from image1: white eyes with tiny black pupils, small scar under anatomical LEFT eye, classic wide grin, lean limbs.
+
+Row1: EAST facing screen RIGHT, seen from right side. Row2: WEST facing screen LEFT, seen from left side (show stitched left cheek scar). Independent opposite side drawings; no horizontal mirror.
+Columns:
+1 Contact A, use image2 arm placement: EAST near-side RIGHT ARM extends slightly BACK towards screen left, while near-side RIGHT LEG gently steps FORWARD towards screen right. Opposite far left arm forward and left leg back. Subtle short stride, much smaller than the pose guide.
+2 Passing, both arms hang by hips and feet closely pass low under hips, no lifted knee.
+3 Contact C, use image3 arm placement: EAST near-side RIGHT ARM is visibly IN FRONT OF THE VEST, angled gently FORWARD to screen right; near-side RIGHT LEG angles BACK to screen left, far LEFT LEG steps forward to screen right. This is the opposite anatomy from col1. WEST reverse anatomical ownership correspondingly: near LEFT ARM swings screen left in col3 and near LEFT LEG back screen right. Near arm must clearly cross lower front of vest in column3 rather than repeat the arm-behind silhouette.
+
+All steps low, gentle normal walking, sandals move within 1 sandal thickness of baseline, nearly straight knees. Not marching/running/lunging. Upper body/head aligned and stable across frames, exactly same height/size. Every frame is a complete continuous body. No disconnected head/neck or clipped feet/hat. Clean bold ink, cel shading, actual One Piece face identity from image1. Feet, hat, hands entirely inside generous empty margins. No floor, shadows, text, grid, arrows, props, labels or watermark.

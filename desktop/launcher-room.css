@@ -50,6 +50,9 @@
 .room-speech[data-mood='annoyed'] { border-color: #f39b8f; }
 .room-speech-text { min-width: 0; overflow-wrap: anywhere; }
 .room-speech-action { color: #a4d9d2; font-size: 9px; font-weight: 500; }
+/* Character stature must not shrink Chopper's text or enlarge Franky's text. */
+.room-character-shell .room-speech { width: calc(170px / var(--room-character-body-scale, 1)); min-height: calc(43px / var(--room-character-body-scale, 1)); padding: calc(8px / var(--room-character-body-scale, 1)) calc(10px / var(--room-character-body-scale, 1)); font-size: calc(11px / var(--room-character-body-scale, 1)); }
+.room-character-shell .room-speech-action { font-size: calc(9px / var(--room-character-body-scale, 1)); }
 .room-character-shell.is-near-left .room-speech { left: 0; transform: none; }
 .room-character-shell.is-near-right .room-speech { right: 0; left: auto; transform: none; }
 .room-character-shell.is-near-left .room-speech::after { left: 28px; }

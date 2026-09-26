@@ -175,6 +175,12 @@ def pixel_bounds(image, opaque=False):
 
 
 def direction_frames(group, images):
+    output_scales = {frame.get('outputScale', 1) for frame in group}
+    require(len(output_scales) == 1, 'Every pose in a direction must use the same whole-atlas outputScale')
+    output_scale = output_scales.pop()
+    require(isinstance(output_scale, (int, float)) and math.isfinite(output_scale) and 0 < output_scale <= 1, 'outputScale may only uniformly reduce the complete direction group')
+    if output_scale != 1:
+        require(all(isinstance(frame.get('outputScaleReason'), str) and len(frame['outputScaleReason'].strip()) >= 12 for frame in group), 'Explain common standing/walking size calibration')
     extracted = [extract_frame(frame, images[frame['source']]) for frame in group]
     height = max(value['opaqueBounds'][3] * value['sourceUnitScale'] for frame, value in zip(group, extracted) if frame['pose'] != 'sit')
     width = max(value['opaqueBounds'][2] * value['sourceUnitScale'] for value in extracted)
@@ -185,6 +191,7 @@ def direction_frames(group, images):
         for space, extent in [(62, ax), (62, value['image'].width - ax), (110, ay), (14, value['image'].height - ay)]:
             if extent > 0:
                 scale = min(scale, space / (extent * unit))
+    scale *= output_scale
     for _ in range(6):
         rendered = [render_one(value, scale) for value in extracted]
         shrink = 1
@@ -210,6 +217,7 @@ def direction_frames(group, images):
             'index': index, 'bounds': bounds, 'opaqueBoundsAtOutput': opaque,
             **{name: value[name] for name in ['sourceAnchor', 'localAnchor', 'sourceAlphaBounds', 'opaqueBounds', 'opaquePixels', 'removedDistantAlphaPixels', 'sourceUnitScale', 'sourceOpaqueClearance', 'edgeAaRadius', 'sourceAaTouchesImageBoundary']},
             'uniformDirectionScale': scale,
+            'outputScale': output_scale,
             'wholeImageScale': scale * value['sourceUnitScale'],
             'inverseWholeImageTransform': transform,
             'rgbaSha256': hashlib.sha256(image.tobytes()).hexdigest(),
@@ -294,7 +302,7 @@ def import_bundle(plan_path, source_root, output, allow_fixture=False):
                           'source': frame['source'], 'uniformDirectionScale': scale,
                           'inverseWholeImageTransform': transform, 'bounds': bounds,
                           'rgbaSha256': hashlib.sha256(portrait.tobytes()).hexdigest()})
-    manifest = {'schema': 'one-piece-room-fullbody-art/3', 'version': '1.1.14', 'canonicalCharactersOnly': True, 'shape': SHAPE,
+    manifest = {'schema': 'one-piece-room-fullbody-art/3', 'version': '1.1.15', 'canonicalCharactersOnly': True, 'shape': SHAPE,
                 'poseOrder': POSES, 'walkProvided': False, 'anatomyReassembled': False,
                 'visualAccepted': False, 'requiresManualVisualReview': True,
                 'fixtureSources': any(source['generator'] == 'synthetic-fixture' for source in sources.values()),

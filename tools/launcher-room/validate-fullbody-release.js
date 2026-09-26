@@ -38,7 +38,7 @@ function validate(root) {
     }
   }
   for (const [manifest, kind] of [[body, 'acting'], [walk, 'motion']]) {
-    assert.equal(manifest.version, '1.1.14');
+    assert.equal(manifest.version, '1.1.15');
     assert.equal(manifest.canonicalCharactersOnly, true);
     assert.notEqual(manifest.fixtureSources, true);
     assert.equal(manifest.items.length, 40);

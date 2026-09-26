@@ -1,0 +1,1 @@
+{"tool":"built-in image_gen.imagegen","original":"exec-2b3b8249-e4c9-49e4-b6d6-cd0e02278f0f.png","references":["../actions/source-01.png","../../luffy/walk/brook-c-guides/south.png"],"inspection":"Correct foreground foot now viewer-left, but SD proportions lengthened versus neutral frame. Rejected pending complete model-consistent redraw."}

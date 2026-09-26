@@ -153,15 +153,30 @@ check(characterLines.get('luffy').filter(line => /肉/u.test(line)).length < 8, 
 check(characterLines.get('zoro').filter(line => /迷路|方向|門換/u.test(line)).length < 8, 'Zoro is not reduced to getting lost');
 check(characterLines.get('nami').filter(line => /錢|貝里|收費/u.test(line)).length < 8, 'Nami is not reduced to money');
 check(characterLines.get('franky').filter(line => /SUPER/u.test(line)).length < 8, 'Franky catchphrase is used sparingly');
-// Editorial invariants: concrete scenes retain their premise, response and payoff.
+// Regression anchors for four relationship beats, not an automated verdict on voice or quality.
 const named = id => Object.values(dialogue.SCENES).flat().find(value => value.id === id);
-check(/菜刀|擦刀布/u.test(named('zoro-sanji-3').turns[0].line) && /謝了/u.test(named('zoro-sanji-3').turns[2].line), 'Zoro/Sanji rivalry includes understated care rather than hostility alone');
-check(/手藝|扣子/u.test(named('usopp-franky-1').turns[0].line) && /聽你的/u.test(named('usopp-franky-1').turns[3].line), 'Franky respects Usopp authorship rather than replacing his idea');
+check(/讓開/u.test(named('zoro-sanji-2').turns[0].line) && /喬巴/u.test(named('zoro-sanji-2').turns[3].line), 'Zoro/Sanji exchange retains the argument and practical care for a third crewmate');
+check(/扣子/u.test(named('usopp-franky-1').turns[0].line) && /聽你的/u.test(named('usopp-franky-1').turns[3].line), 'Franky leaves the mechanism decision with its inventor');
 check(/檢查/u.test(named('sanji-chopper-3').turns[1].line) && /醫生/u.test(named('sanji-chopper-3').turns[2].line), 'Chopper receives professional trust');
-check(/訊號/u.test(named('nami-jinbe-1').turns[1].line) && /現在/u.test(named('nami-jinbe-1').turns[2].line), 'Navigator and helmsman exchange an actionable cue');
+check(/訊號/u.test(named('nami-jinbe-1').turns[0].line) && /往右/u.test(named('nami-jinbe-1').turns[2].line) && /時機/u.test(named('nami-jinbe-1').turns[3].line), 'Navigator plan is acknowledged by the helmsman without claiming an unseen turn');
+for (const scenes of Object.values(dialogue.SCENES)) {
+  const [a, b] = scenes[0].pair;
+  check(scenes.some(scene => scene.tags.length === 0), `${a}/${b}: can talk without furniture`);
+  for (const availableFurnitureKeys of [[], ...furniture.map(key => [key])]) {
+    for (const recentSceneIds of [[], scenes.map(scene => scene.id)]) {
+      const selected = dialogue.scene(a, b, 0, { availableFurnitureKeys, recentSceneIds, furnitureKey: 'tool-bench' });
+      check(selected && (!selected.tags.length || selected.tags.some(key => availableFurnitureKeys.includes(key))), `${a}/${b}: furniture and cooldown selection cannot invent a missing object`);
+    }
+  }
+}
+check(named('nami-sanji-1').turns[1].pose === 'talk_happy' && named('sanji-robin-1').turns[2].pose === 'talk_happy', 'Sanji gracious replies have a happy body expression rather than a startled one');
+const allTurns = Object.values(dialogue.SCENES).flatMap(scenes => scenes.flatMap(scene => scene.turns));
+check(allTurns.filter(beat => ['talk', 'explain', 'think', 'reassure', 'tease'].includes(beat.action)).every(beat => beat.pose === 'idle' && beat.mood === 'focused'), 'Ordinary speech and dry humour do not force a grin or a tool-use pose');
+check(allTurns.every(beat => !['focused_use', 'sit'].includes(beat.pose) && !['focused_use', 'sit'].includes(beat.listener.pose)), 'Free-standing conversations do not mime a missing tool or sit on a missing chair');
+check(allTurns.filter(beat => beat.listener.action === 'listen').every(beat => beat.listener.pose === 'listen'), 'Quiet listeners use the existing complete-body listening pose');
 for (const value of [dialogue.profile('unknown'), dialogue.scene('luffy', 'luffy'), dialogue.scene('luffy', 'unknown'), dialogue.pair('unknown', 'zoro'), dialogue.interactionBeat('unknown'), dialogue.activity('luffy', 'unknown'), dialogue.activity('luffy', '__proto__')]) assert.equal(value, null);
 assert.equal(dialogue.hasPair('unknown', 'zoro'), false);
-const report = { ok: true, characters: canonical.length, pairs: 45, scenes: sceneCount, turns: turnCount, soloLines, claimLines: claimLines.size, furnitureLines, responsiveBeats, maximumSceneSimilarity, checks, note: 'Data/API checks only. Canon fit and emotional timing still require editorial and in-room visual review.' };
+const report = { ok: true, characters: canonical.length, pairs: 45, scenes: sceneCount, turns: turnCount, soloLines, claimLines: claimLines.size, furnitureLines, responsiveBeats, maximumSceneSimilarity, checks, note: 'Data/API regression checks only. Pairwise string comparisons inflate the check count. They do not measure character likeness, joke quality, physical gestures, emotional timing, or fan acceptance.' };
 const outIndex = process.argv.indexOf('--out');
 if (outIndex >= 0) {
   const target = path.resolve(process.argv[outIndex + 1]);

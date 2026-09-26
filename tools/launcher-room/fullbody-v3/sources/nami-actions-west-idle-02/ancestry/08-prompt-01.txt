@@ -1,0 +1,14 @@
+Use case: identity-preserve. Production TRUE TRANSPARENT sprite sheet of EXACTLY THIRTY TWO complete NAMI from ONE PIECE, eight columns x four rows. Use attached four-direction Nami identity model; preserve its clearly recognizable adult anime face, expressive brown almond eyes, confident fine angled eyebrows, short orange layered hair, white blue-stripe Vneck shirt, orange mini skirt with three white-rimmed red circles only anatomical RIGHT hip, brown ankleboots. This must look like canonical early Nami, not a generic glass-eyed doll. Same approx3.5head proportion in every pose; do not enlarge eyes into glossy saucers.
+
+Rows top to bottom:1 EAST screenRIGHT shows right side and skirt circles;2 WEST screenLEFT leftside skirt plain;3 NORTH backview no face, circles on imageRIGHT hip;4 SOUTH frontview circles on imageLEFT hip. Head,neck,torso face same direction in every pose, never twist face toward camera.
+Columns left to right:
+1 IDLE relaxed upright neutral knowing small smile, arms down.
+2 HAPPY TALK animated bright grin and confident eyes, one hand on hip one palm up.
+3 ANNOYED TALK classic Nami scolding sharp eyebrows open angry mouth, hands on hips, slight forward lean. Adult comic anger, not snarling beast.
+4 SURPRISED raised brows, wide brown eyes, small open mouth, palms near chest.
+5 FOCUSED USE look forward and slightly down, gentle waist bend, both hands reach low in front as if examining a map on table; no map/props drawn.
+6 SIT complete seatedbody, knees bend, boots point forward, hands rest together on thighs, composed face; no chair.
+7 WAVE open palm by shoulder greeting, cheerful smile, other hand relaxed.
+8 LISTEN closed mouth attentive look, arms folded casually low.
+
+Every cell is a complete anatomically coherent full character, with neck always connected, two arms/hands and two legs, no paperdoll parts. Standing poses equal height/scale/baseline. Sitting naturally shorter. Complete hair/hands/boots clear of all edges. Large empty margin in each invisible cell. Wide3072x2048 or larger, 8columns4rows exactly. Crisp bold black ink and anime flat cel shading. No floor, no shadows, no backgroundcolors, no props, no text,label,watermark,emoji or symbols. TRUE RGBA transparency.

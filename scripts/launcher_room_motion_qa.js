@@ -123,12 +123,23 @@ async function main() {
     assert.equal(data.shape.actions.beatsPerAction, 1);
     assert.equal(Object.keys(data.characters).length, 10);
     for (const key of Object.keys(data.characters)) {
-      const meta = motion.metadata(key, data), stride = key === 'chopper' ? 20 : 24;
-      assert.deepEqual(meta.stride, { east: stride, west: stride, north: stride / 2, south: stride / 2 });
-      assert.deepEqual(meta.speed, { east: 26, west: 26, north: 13, south: 13 });
+      const meta = motion.metadata(key, data);
+      assert.ok(meta.displayScale >= .7 && meta.displayScale <= 1.4);
+      for (const direction of motion.DIRECTIONS) {
+        assert.ok(meta.stride[direction] >= 8 && meta.stride[direction] <= 80);
+        const cadence = meta.stride[direction] / meta.speed[direction];
+        assert.ok(cadence >= 1 && cadence <= 1.4, `${key}/${direction} should retain a low-step walking cadence`);
+        const front = motion.speedAndStride(key, direction, 1.07, data);
+        const back = motion.speedAndStride(key, direction, .72, data);
+        assert.equal(front.stride, meta.stride[direction] * meta.displayScale);
+        assert.ok(Math.abs(front.stride / front.speed - back.stride / back.speed) < 1e-10);
+      }
+      assert.ok(Math.abs(meta.stride.east / meta.speed.east - meta.stride.north / meta.speed.north) < .0001);
       assert.equal(meta.standingFrame, 1);
       assert.deepEqual(meta.root, [motion.SHAPE.rootX, motion.SHAPE.rootY]);
     }
+    assert.ok(data.characters.chopper.displayScale < data.characters.luffy.displayScale);
+    assert.ok(data.characters.franky.displayScale > data.characters.luffy.displayScale);
   });
   let releaseDecode;
   const gate = new Promise(resolve => { releaseDecode = resolve; });

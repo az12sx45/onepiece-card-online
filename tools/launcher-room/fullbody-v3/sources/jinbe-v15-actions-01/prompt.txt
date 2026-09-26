@@ -1,0 +1,12 @@
+Use case: identity-preserve. Create a sprite sheet of exactly32 COMPLETE JINBE figures, eight columns and four rows, on true transparent RGBA. The reference is the locked character and outfit model: keep its unmistakable blue whale shark face, huge broad chin/body, tiny eyes under gold curled brows, tusks, black topknot/hair/chin tuft, pale mint kimono black leaf pattern orange obi/collar and long black cape. Small red sun tattoo visible at chest. Not a human or a round cute baby, no generic glossy cartoon eyes. Anatomical LEFT lightning scar only; no right-side scar. Same robust mature face and body in every cell.
+Row1 EAST facing screen-right, Row2 WEST facing screen-left, Row3 NORTH full back/no face, Row4 SOUTH front. Head and shoulders face together.
+Eight columns:
+1 idle upright grounded, calm mouth closed, arms down.
+2 happy talk: broad hearty open smile, small eyes smiling, one blue palm open near waist.
+3 annoyed: stern frown, brows lowered, hand on hip, other fist at side.
+4 surprised: eyes open a little wider, mouth round, shoulders and open hands raised close to chest, not wide floating arms.
+5 focused_use: lean torso forward slightly, both hands extended low to handle table object, feet planted, no prop.
+6 sit: seated body on unseen chair, knees bent underneath kimono, feet planted lower/front, hands on knees, naturally shorter pose, whole cape/head remain attached. No chair.
+7 wave: one open blue hand raised shoulder level, welcoming small smile, other hand at side.
+8 listen: composed closed mouth, hands loosely together at waist, attentive eyes.
+32 intact figures, 8x4 invisible grid. Same standing height/camera and same anatomy in every cell, sitting shorter. Large wide canvas3072x2048 or larger. Every complete character surrounded by generous transparent margin, NOTHING touches another or outside edge; all wooden geta and cape tips included. Keep pose compact enough for its own cell. Firm One Piece ink and cel shading matching reference. No text, labels, gridlines, floor, shadow, motion marks, symbols, original characters or watermarks.

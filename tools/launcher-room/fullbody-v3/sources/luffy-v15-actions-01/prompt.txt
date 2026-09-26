@@ -1,0 +1,20 @@
+Use case: identity-preserve. A production transparent 2D sprite sheet of EXACTLY THIRTY-TWO complete Monkey D. Luffy figures, EIGHT columns x FOUR rows. Use the attached four-direction model for identity, outfit, proportions, bold ink/cel shading. IMPROVE canonical asymmetric detail: only anatomical LEFT cheek has small stitched scar; EAST/right-side profile MUST have NO cheek scar. Reference's right-side stray cheek mark must not be copied. Early Luffy wearing straw hat/red band, CLOSED red button vest, blue white-cuffed shorts, brown thong sandals. No sash, no X chest scar. About3.2heads tall, lean legs and arms, big white round eyes with tiny black pupils, recognizable confident broad smile. NOT glossy generic anime eyes or a toddler face.
+
+Strict grid:
+Row1 EAST facing RIGHT for ALL eight poses, right cheek visible, no scar.
+Row2 WEST facing LEFT for ALL eight poses, left stitched cheek scar.
+Row3 NORTH facing AWAY for ALL eight poses, back of head/hat/vest, absolutely NO eyes/nose/mouth; full body acting seen from behind.
+Row4 SOUTH facing TOWARD viewer for ALL eight poses. Left scar appears on viewer-right cheek.
+Head/neck/torso direction must stay together in every figure.
+
+Eight columns, left to right, show DIFFERENT readable expressions AND full-body poses:
+1 IDLE: relaxed upright standing, arms down, neutral closed small smile.
+2 HAPPY TALK/LAUGH: classic wide open D-shaped joyful mouth, excited white eyes, one open hand at waist, slight relaxed lean.
+3 ANNOYED TALK: furrowed brows, puckered grumbly mouth, one hand on hip, other clenched by side; frustrated boy, not murderous.
+4 SURPRISED: huge round white eyes/tiny pupils, open small round mouth, both hands open near chest, shoulders raised.
+5 FOCUSED USE: determined narrow attentive eyes, mouth closed, knees nearly straight, bend gently forward at waist, both hands reaching low as if handling a nearby table item. No props.
+6 SIT: seated full body, bent knees feet pointing forward, hands resting on thighs, relaxed sleepy face; no chair drawn. Head remains attached, no torso truncation.
+7 WAVE: raised open palm greeting at shoulder height, friendly recognizable Luffy grin, other arm relaxed. Keep hand separate from hat silhouette but attached at shoulder.
+8 LISTEN: mouth closed, attentive wide eyes, arms comfortably crossed low or relaxed clasped, no laugh. Body upright.
+
+Each pose retains SAME costume and body proportions, anatomical coherence, connected neck/head/shoulders and 2 legs/2 arms. Standing figures same height and zoom in all directions, sitting naturally shorter. Full hat, hands and toes entirely visible. Lots of empty transparent margin in every cell, nothing touches neighboring figures or edges. Invisible 8x4 layout on a wide 3072x2048 or larger canvas. TRUE RGBA TRANSPARENT BACKGROUND, no backdrop/shadow/floor. No text, labels, drawn grids, borders, watermark, emoji, motion symbols, separate face overlays, extra hands or original characters. These are whole hand-drawn acting poses, never paper-doll parts.

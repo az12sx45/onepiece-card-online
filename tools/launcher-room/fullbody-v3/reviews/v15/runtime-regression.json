@@ -1,0 +1,36 @@
+{
+  "ok": true,
+  "cases": [
+    {
+      "ok": true,
+      "assertions": {
+        "accepted": true,
+        "allFourTurns": true,
+        "completed": true,
+        "savedRoomUnchanged": true,
+        "noErrors": true,
+        "noMissing": true,
+        "stillApproachingAfter20Seconds": true,
+        "firstTurnAfter20Seconds": true
+      },
+      "elapsed": 44031.60000000149
+    },
+    {
+      "ok": true,
+      "assertions": {
+        "accepted": true,
+        "allFourTurns": true,
+        "completed": true,
+        "savedRoomUnchanged": true,
+        "noErrors": true,
+        "noMissing": true,
+        "initialBookshelfContext": true,
+        "arrivalHasNoFurniture": true,
+        "allTurnsHaveValidContext": true,
+        "sceneReselected": true
+      },
+      "elapsed": 59659
+    }
+  ],
+  "timestamp": "2026-09-26T21:18:55.045Z"
+}

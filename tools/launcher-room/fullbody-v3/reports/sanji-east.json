@@ -14,60 +14,60 @@
     "maxWidth": 112
   },
   "method": "whole-character component with nearby source alpha; uniform whole-image scale and translation",
-  "uniformDirectionScale": 0.4149377593360996,
+  "uniformDirectionScale": 0.1590909090909091,
   "frames": [
     {
       "key": "sanji",
       "direction": "east",
       "pose": "idle",
-      "source": "sanji",
+      "source": "sanji-actions-east-01",
       "region": [
-        71,
-        2,
-        120,
-        253
+        32,
+        19,
+        223,
+        623
       ],
       "index": 0,
       "bounds": [
-        40,
-        11,
-        86,
-        113
+        47,
+        14,
+        81,
+        112
       ],
       "opaqueBoundsAtOutput": [
-        41,
-        12,
-        86,
+        47,
+        14,
+        81,
         112
       ],
       "sourceAnchor": [
-        132.7875798833009,
-        249
+        143.84548299240888,
+        638
       ],
       "localAnchor": [
-        56.78757988330091,
-        243
+        109.84548299240888,
+        617
       ],
       "sourceAlphaBounds": [
-        76,
-        6,
-        187,
-        251
+        34,
+        21,
+        253,
+        640
       ],
       "opaqueBounds": [
-        77,
-        8,
-        108,
-        241
+        36,
+        23,
+        215,
+        615
       ],
-      "opaquePixels": 17242,
-      "removedDistantAlphaPixels": 2878,
+      "opaquePixels": 75287,
+      "removedDistantAlphaPixels": 4860,
       "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
-        6,
-        6,
-        6,
-        6
+        4,
+        4,
+        4,
+        4
       ],
       "edgeAaRadius": 2,
       "sourceAaTouchesImageBoundary": [
@@ -76,17 +76,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.4149377593360996,
-      "wholeImageScale": 0.4149377593360996,
+      "uniformDirectionScale": 0.1590909090909091,
+      "outputScale": 0.98,
+      "wholeImageScale": 0.1590909090909091,
       "inverseWholeImageTransform": [
-        2.4099999999999997,
+        6.285714285714286,
         0,
-        -97.45242011669907,
+        -292.4402312933054,
         0,
-        2.4099999999999997,
-        -26.91999999999996
+        6.285714285714286,
+        -87.0
       ],
-      "rgbaSha256": "5a69cc2478aba6eca4c8b4c4958c3bddd20fa5db23dafb1db8b3a62a245d5243",
+      "rgbaSha256": "14897343408ab7fef7c996077cedd9793d75a7be3714ecce1d6129992146a732",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false
@@ -95,54 +96,54 @@
       "key": "sanji",
       "direction": "east",
       "pose": "talk_happy",
-      "source": "sanji",
+      "source": "sanji-actions-east-01",
       "region": [
-        297,
-        3,
-        163,
-        252
+        333,
+        19,
+        300,
+        622
       ],
       "index": 1,
       "bounds": [
-        39,
-        12,
-        103,
-        113
+        47,
+        14,
+        93,
+        112
       ],
       "opaqueBoundsAtOutput": [
-        40,
-        12,
-        102,
+        47,
+        14,
+        93,
         112
       ],
       "sourceAnchor": [
-        362.05429119824515,
-        249
+        445.2613474455526,
+        637
       ],
       "localAnchor": [
-        60.05429119824515,
-        242
+        109.26134744555259,
+        616
       ],
       "sourceAlphaBounds": [
-        302,
-        7,
-        456,
-        251
+        336,
+        21,
+        630,
+        639
       ],
       "opaqueBounds": [
-        303,
-        9,
-        151,
-        240
+        337,
+        23,
+        292,
+        614
       ],
-      "opaquePixels": 18560,
-      "removedDistantAlphaPixels": 3281,
+      "opaquePixels": 81878,
+      "removedDistantAlphaPixels": 6020,
       "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
-        6,
-        6,
-        6,
-        6
+        4,
+        4,
+        4,
+        4
       ],
       "edgeAaRadius": 2,
       "sourceAaTouchesImageBoundary": [
@@ -151,17 +152,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.4149377593360996,
-      "wholeImageScale": 0.4149377593360996,
+      "uniformDirectionScale": 0.1590909090909091,
+      "outputScale": 0.98,
+      "wholeImageScale": 0.1590909090909091,
       "inverseWholeImageTransform": [
-        2.4099999999999997,
+        6.285714285714286,
         0,
-        -94.18570880175483,
+        -293.0243668401617,
         0,
-        2.4099999999999997,
-        -27.91999999999996
+        6.285714285714286,
+        -88.0
       ],
-      "rgbaSha256": "928e3a22204ef91cd0a3c7be1c5566d33492df2474cfd2d43626934006de657b",
+      "rgbaSha256": "221c4fbe4967a32b8f38f52218f223449e43c38fa2b8563619026522bd551c69",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false
@@ -170,54 +172,54 @@
       "key": "sanji",
       "direction": "east",
       "pose": "talk_annoyed",
-      "source": "sanji",
+      "source": "sanji-actions-east-01",
       "region": [
-        524,
-        4,
-        121,
-        251
+        637,
+        19,
+        234,
+        624
       ],
       "index": 2,
       "bounds": [
-        40,
-        12,
-        86,
-        113
+        45,
+        14,
+        81,
+        112
       ],
       "opaqueBoundsAtOutput": [
-        40,
-        13,
-        86,
+        45,
+        14,
+        81,
         112
       ],
       "sourceAnchor": [
-        586.8923205342237,
-        249
+        759.465921917055,
+        639
       ],
       "localAnchor": [
-        58.8923205342237,
-        241
+        120.46592191705497,
+        618
       ],
       "sourceAlphaBounds": [
-        528,
-        8,
-        641,
-        251
+        639,
+        21,
+        868,
+        641
       ],
       "opaqueBounds": [
-        530,
-        10,
-        109,
-        239
+        641,
+        23,
+        226,
+        616
       ],
-      "opaquePixels": 16754,
-      "removedDistantAlphaPixels": 2679,
+      "opaquePixels": 80660,
+      "removedDistantAlphaPixels": 5153,
       "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
-        6,
-        6,
-        6,
-        6
+        4,
+        4,
+        4,
+        4
       ],
       "edgeAaRadius": 2,
       "sourceAaTouchesImageBoundary": [
@@ -226,17 +228,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.4149377593360996,
-      "wholeImageScale": 0.4149377593360996,
+      "uniformDirectionScale": 0.1590909090909091,
+      "outputScale": 0.98,
+      "wholeImageScale": 0.1590909090909091,
       "inverseWholeImageTransform": [
-        2.4099999999999997,
+        6.285714285714286,
         0,
-        -95.34767946577628,
+        -281.8197923686593,
         0,
-        2.4099999999999997,
-        -28.91999999999996
+        6.285714285714286,
+        -86.0
       ],
-      "rgbaSha256": "9dfbfcf776e6c7ffd041a192c193febe36c62570a2a67f74991ed7b9afd8ca1d",
+      "rgbaSha256": "3ee091e3a1f8d88dc057048cf651bb00988c3d55a0a69d6a34a04cd35070b798",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false
@@ -245,54 +248,54 @@
       "key": "sanji",
       "direction": "east",
       "pose": "surprised",
-      "source": "sanji",
+      "source": "sanji-actions-east-01",
       "region": [
-        738,
-        2,
-        131,
-        253
+        947,
+        23,
+        248,
+        620
       ],
       "index": 3,
       "bounds": [
-        38,
-        11,
-        88,
-        113
+        46,
+        14,
+        85,
+        112
       ],
       "opaqueBoundsAtOutput": [
-        38,
-        12,
-        88,
+        47,
+        15,
+        85,
         112
       ],
       "sourceAnchor": [
-        805.4464848567904,
-        249
+        1060.5843191039487,
+        639
       ],
       "localAnchor": [
-        62.44648485679045,
-        243
+        110.5843191039487,
+        614
       ],
       "sourceAlphaBounds": [
-        743,
-        6,
-        865,
-        251
+        950,
+        25,
+        1193,
+        641
       ],
       "opaqueBounds": [
-        744,
-        8,
-        119,
-        241
+        951,
+        27,
+        240,
+        612
       ],
-      "opaquePixels": 17636,
-      "removedDistantAlphaPixels": 3827,
+      "opaquePixels": 79983,
+      "removedDistantAlphaPixels": 4580,
       "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
-        6,
-        6,
-        6,
-        6
+        4,
+        4,
+        4,
+        4
       ],
       "edgeAaRadius": 2,
       "sourceAaTouchesImageBoundary": [
@@ -301,17 +304,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.4149377593360996,
-      "wholeImageScale": 0.4149377593360996,
+      "uniformDirectionScale": 0.1590909090909091,
+      "outputScale": 0.98,
+      "wholeImageScale": 0.1590909090909091,
       "inverseWholeImageTransform": [
-        2.4099999999999997,
+        6.285714285714286,
         0,
-        -91.79351514320953,
+        -291.7013951817656,
         0,
-        2.4099999999999997,
-        -26.91999999999996
+        6.285714285714286,
+        -90.0
       ],
-      "rgbaSha256": "4e535580f1227655058d0b61ea818575bd81d3e40aa1d30984beea53c620181c",
+      "rgbaSha256": "5c65d414747581e4fa78d262c2a7fd0f323ccb948ffa304724a56b56273460a8",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false
@@ -320,54 +324,54 @@
       "key": "sanji",
       "direction": "east",
       "pose": "focused_use",
-      "source": "sanji",
+      "source": "sanji-actions-east-01",
       "region": [
-        957,
-        9,
-        162,
-        246
+        46,
+        655,
+        255,
+        611
       ],
       "index": 4,
       "bounds": [
-        28,
-        14,
-        92,
-        113
+        45,
+        16,
+        84,
+        112
       ],
       "opaqueBoundsAtOutput": [
-        29,
-        15,
-        91,
+        45,
+        16,
+        84,
         112
       ],
       "sourceAnchor": [
-        1048.671736204576,
-        249
+        170.42856733606442,
+        1262
       ],
       "localAnchor": [
-        86.67173620457606,
-        236
+        122.42856733606442,
+        604
       ],
       "sourceAlphaBounds": [
-        962,
-        13,
-        1115,
-        251
+        48,
+        658,
+        298,
+        1264
       ],
       "opaqueBounds": [
-        963,
-        15,
-        150,
-        234
+        50,
+        659,
+        247,
+        603
       ],
-      "opaquePixels": 17972,
-      "removedDistantAlphaPixels": 3685,
+      "opaquePixels": 84131,
+      "removedDistantAlphaPixels": 5744,
       "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
-        6,
-        6,
-        6,
-        6
+        4,
+        4,
+        4,
+        4
       ],
       "edgeAaRadius": 2,
       "sourceAaTouchesImageBoundary": [
@@ -376,17 +380,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.4149377593360996,
-      "wholeImageScale": 0.4149377593360996,
+      "uniformDirectionScale": 0.1590909090909091,
+      "outputScale": 0.98,
+      "wholeImageScale": 0.1590909090909091,
       "inverseWholeImageTransform": [
-        2.4099999999999997,
+        6.285714285714286,
         0,
-        -67.56826379542392,
+        -279.85714694964986,
         0,
-        2.4099999999999997,
-        -33.91999999999996
+        6.285714285714286,
+        -100.0
       ],
-      "rgbaSha256": "27728f237665feda71f4bd86f308a1c2d6be0bfe1a787a781a068fa9e5e009fb",
+      "rgbaSha256": "2d242891e2a727090b2f3fd8a142a9925868470e986b7dabc21f65b4b976c522",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false
@@ -395,54 +400,54 @@
       "key": "sanji",
       "direction": "east",
       "pose": "sit",
-      "source": "sanji",
+      "source": "sanji-actions-east-01",
       "region": [
-        1195,
-        74,
-        129,
-        190
+        352,
+        747,
+        305,
+        515
       ],
       "index": 5,
       "bounds": [
-        40,
-        38,
-        90,
+        46,
+        31,
+        94,
         112
       ],
       "opaqueBoundsAtOutput": [
-        41,
-        38,
-        89,
+        47,
+        31,
+        94,
         112
       ],
       "sourceAnchor": [
-        1256.9838561731792,
-        258
+        464.49071618037135,
+        1258
       ],
       "localAnchor": [
-        57.98385617317922,
-        179
+        110.49071618037135,
+        509
       ],
       "sourceAlphaBounds": [
-        1199,
-        79,
-        1320,
-        260
+        354,
+        749,
+        654,
+        1260
       ],
       "opaqueBounds": [
-        1201,
-        80,
-        117,
-        178
+        356,
+        751,
+        297,
+        507
       ],
-      "opaquePixels": 14446,
-      "removedDistantAlphaPixels": 2135,
+      "opaquePixels": 69939,
+      "removedDistantAlphaPixels": 6273,
       "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
-        6,
-        6,
-        6,
-        6
+        4,
+        4,
+        4,
+        4
       ],
       "edgeAaRadius": 2,
       "sourceAaTouchesImageBoundary": [
@@ -451,17 +456,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.4149377593360996,
-      "wholeImageScale": 0.4149377593360996,
+      "uniformDirectionScale": 0.1590909090909091,
+      "outputScale": 0.98,
+      "wholeImageScale": 0.1590909090909091,
       "inverseWholeImageTransform": [
-        2.4099999999999997,
+        6.285714285714286,
         0,
-        -96.25614382682076,
+        -291.7949981053429,
         0,
-        2.4099999999999997,
-        -90.91999999999996
+        6.285714285714286,
+        -195.0
       ],
-      "rgbaSha256": "e4dc6e7d3f45b48eaad963f5f5d45a19ec943f265f43a64330680cee01f1119b",
+      "rgbaSha256": "f7bd68524d6e16aa9363bf1feacd8fbc3f2c72d1a13c07277881aef7df02a9a4",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false
@@ -470,54 +476,54 @@
       "key": "sanji",
       "direction": "east",
       "pose": "wave",
-      "source": "sanji",
+      "source": "sanji-actions-east-01",
       "region": [
-        1395,
-        2,
-        127,
-        253
+        674,
+        650,
+        224,
+        615
       ],
       "index": 6,
       "bounds": [
-        38,
-        11,
-        86,
-        113
+        47,
+        15,
+        82,
+        112
       ],
       "opaqueBoundsAtOutput": [
-        39,
-        12,
-        86,
+        47,
+        15,
+        82,
         112
       ],
       "sourceAnchor": [
-        1462.3718263718263,
-        249
+        782.8455268667132,
+        1261
       ],
       "localAnchor": [
-        63.37182637182627,
-        243
+        106.84552686671316,
+        609
       ],
       "sourceAlphaBounds": [
-        1399,
-        6,
-        1518,
-        251
+        676,
+        652,
+        896,
+        1263
       ],
       "opaqueBounds": [
-        1401,
-        8,
-        115,
-        241
+        678,
+        654,
+        216,
+        607
       ],
-      "opaquePixels": 17567,
-      "removedDistantAlphaPixels": 3275,
+      "opaquePixels": 77095,
+      "removedDistantAlphaPixels": 5360,
       "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
-        6,
-        6,
-        6,
-        6
+        4,
+        4,
+        4,
+        4
       ],
       "edgeAaRadius": 2,
       "sourceAaTouchesImageBoundary": [
@@ -526,17 +532,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.4149377593360996,
-      "wholeImageScale": 0.4149377593360996,
+      "uniformDirectionScale": 0.1590909090909091,
+      "outputScale": 0.98,
+      "wholeImageScale": 0.1590909090909091,
       "inverseWholeImageTransform": [
-        2.4099999999999997,
+        6.285714285714286,
         0,
-        -90.86817362817371,
+        -295.4401874190011,
         0,
-        2.4099999999999997,
-        -26.91999999999996
+        6.285714285714286,
+        -95.0
       ],
-      "rgbaSha256": "b5e82c87e6a46ce9cb4b3ab4e13098e9506c83f53c8bc49e55ac27a07a2eab49",
+      "rgbaSha256": "a1a182ea54429db884c26ccf9ec4dd9a93f2002ff24207a33516cfd5ce89402b",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false
@@ -545,54 +552,54 @@
       "key": "sanji",
       "direction": "east",
       "pose": "listen",
-      "source": "sanji",
+      "source": "sanji-actions-east-01",
       "region": [
-        1627,
-        4,
-        126,
-        251
+        973,
+        655,
+        221,
+        609
       ],
       "index": 7,
       "bounds": [
-        38,
-        13,
-        87,
-        113
+        47,
+        16,
+        81,
+        112
       ],
       "opaqueBoundsAtOutput": [
-        38,
-        13,
-        86,
+        47,
+        16,
+        81,
         112
       ],
       "sourceAnchor": [
-        1694.687250172295,
-        249
+        1083.0927377298328,
+        1260
       ],
       "localAnchor": [
-        63.68725017229508,
-        241
+        108.09273772983283,
+        602
       ],
       "sourceAlphaBounds": [
-        1631,
-        8,
-        1749,
-        251
+        975,
+        658,
+        1192,
+        1262
       ],
       "opaqueBounds": [
-        1633,
-        10,
-        114,
-        239
+        977,
+        659,
+        213,
+        601
       ],
-      "opaquePixels": 16969,
-      "removedDistantAlphaPixels": 2971,
+      "opaquePixels": 73717,
+      "removedDistantAlphaPixels": 4564,
       "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
-        6,
-        6,
-        6,
-        6
+        4,
+        4,
+        4,
+        4
       ],
       "edgeAaRadius": 2,
       "sourceAaTouchesImageBoundary": [
@@ -601,17 +608,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.4149377593360996,
-      "wholeImageScale": 0.4149377593360996,
+      "uniformDirectionScale": 0.1590909090909091,
+      "outputScale": 0.98,
+      "wholeImageScale": 0.1590909090909091,
       "inverseWholeImageTransform": [
-        2.4099999999999997,
+        6.285714285714286,
         0,
-        -90.5527498277049,
+        -294.19297655588144,
         0,
-        2.4099999999999997,
-        -28.91999999999996
+        6.285714285714286,
+        -102.0
       ],
-      "rgbaSha256": "5cc6f8b46ffab7fb74fabe24813094ed2c1881041d5648afcb5f22a8d1afc513",
+      "rgbaSha256": "14cbb7a31c29775c2572180412572f4c6e4f77ee57a2111b68dfb052d070780f",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false

@@ -95,6 +95,19 @@ class WholeFigureImportTests(unittest.TestCase):
             import_bundle(self.plan_path, self.root, self.root / 'bad', True)
         self.assertFalse((self.root / 'bad').exists())
 
+    def test_common_output_scale_reconstructs_and_rejects_pose_specific_scaling(self):
+        for frame in self.plan['frames']:
+            frame.update(outputScale=.8, outputScaleReason='Keep the complete standing and walking figures at the same authored body height.')
+        write_json(self.plan_path, self.plan)
+        output = self.build()
+        verify(output, allow_fixture=True)
+        manifest = read_json(output / MANIFEST)
+        self.assertTrue(all(frame['outputScale'] == .8 for item in manifest['items'] for frame in item['frames']))
+        self.plan['frames'][0]['outputScale'] = .7
+        write_json(self.plan_path, self.plan)
+        with self.assertRaisesRegex(ValueError, 'same whole-atlas'):
+            import_bundle(self.plan_path, self.root, self.root / 'inconsistent', True)
+
     def test_ambiguous_multiple_characters_require_seed(self):
         frame = copy.deepcopy(self.plan['frames'][0]); frame['region'] = [20, 3, 460, 100]
         with self.assertRaisesRegex(ValueError, 'Ambiguous'):

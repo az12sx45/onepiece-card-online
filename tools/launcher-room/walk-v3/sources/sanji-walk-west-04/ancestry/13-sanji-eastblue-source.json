@@ -1,0 +1,29 @@
+{
+  "assets": [
+    {
+      "contentType": "image/jpeg",
+      "id": "5d7dbdbb35ae325d",
+      "kind": "image",
+      "name": "item_0000015461_zOtL38wN_01.jpg",
+      "path": "C:\\Users\\4441~1\\AppData\\Local\\Temp/browser-use/assets/bd83a74e-b34f-4d59-bd0c-e2dc8ff611a6/5d7dbdbb35ae325d.jpg",
+      "url": "https://tamashiiweb.com/storage/images/products/imported/item_0000015461_zOtL38wN_01.jpg"
+    },
+    {
+      "contentType": "image/jpeg",
+      "id": "7d9c138cd5ebabe4",
+      "kind": "image",
+      "name": "item_0000015461_3pESCBfO_03.jpg",
+      "path": "C:\\Users\\4441~1\\AppData\\Local\\Temp/browser-use/assets/bd83a74e-b34f-4d59-bd0c-e2dc8ff611a6/7d9c138cd5ebabe4.jpg",
+      "url": "https://tamashiiweb.com/storage/images/products/imported/item_0000015461_3pESCBfO_03.jpg"
+    },
+    {
+      "contentType": "image/jpeg",
+      "id": "4c5546a44b62e370",
+      "kind": "image",
+      "name": "item_0000015461_3pESCBfO_04.jpg",
+      "path": "C:\\Users\\4441~1\\AppData\\Local\\Temp/browser-use/assets/bd83a74e-b34f-4d59-bd0c-e2dc8ff611a6/4c5546a44b62e370.jpg",
+      "url": "https://tamashiiweb.com/storage/images/products/imported/item_0000015461_3pESCBfO_04.jpg"
+    }
+  ],
+  "failures": []
+}

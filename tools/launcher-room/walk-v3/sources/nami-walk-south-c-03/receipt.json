@@ -1,0 +1,19 @@
+{
+  "tool": "image_gen__imagegen",
+  "original": "C:/Users/王曜瑋/.codex/generated_images/01a0df5a-f51d-7f40-8213-929b1e8bec76/exec-993a9497-2dee-4917-a511-70cfb4148038.png",
+  "prompt": "prompt-south-c-03.txt",
+  "references": [
+    "reference-south-a.png"
+  ],
+  "referenceAncestry": {
+    "source": "front-01.png",
+    "crop": [
+      130,
+      510,
+      470,
+      1024
+    ],
+    "operation": "wholebody crop only"
+  },
+  "review": "Selected opposite step; wholefigure size calibration required."
+}

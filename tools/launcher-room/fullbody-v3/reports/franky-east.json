@@ -14,54 +14,54 @@
     "maxWidth": 112
   },
   "method": "whole-character component with nearby source alpha; uniform whole-image scale and translation",
-  "uniformDirectionScale": 0.4784688995215311,
+  "uniformDirectionScale": 0.38066409833058157,
   "frames": [
     {
       "key": "franky",
       "direction": "east",
       "pose": "idle",
-      "source": "franky",
+      "source": "franky-actions-source-01",
       "region": [
-        38,
-        16,
-        151,
-        220
+        8,
+        23,
+        176,
+        231
       ],
       "index": 0,
       "bounds": [
+        31,
         28,
-        12,
-        96,
+        94,
         113
       ],
       "opaqueBoundsAtOutput": [
+        31,
         29,
-        12,
-        96,
+        93,
         112
       ],
       "sourceAnchor": [
-        117.27336300063573,
-        230
+        100.8308616722066,
+        248
       ],
       "localAnchor": [
-        75.27336300063573,
-        210
+        88.8308616722066,
+        221
       ],
       "sourceAlphaBounds": [
-        42,
-        20,
-        184,
-        232
+        12,
+        27,
+        180,
+        250
       ],
       "opaqueBounds": [
-        44,
-        22,
-        139,
-        208
+        14,
+        29,
+        164,
+        219
       ],
-      "opaquePixels": 18186,
-      "removedDistantAlphaPixels": 2493,
+      "opaquePixels": 23340,
+      "removedDistantAlphaPixels": 4025,
       "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
         6,
@@ -76,17 +76,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.4784688995215311,
-      "wholeImageScale": 0.4784688995215311,
+      "uniformDirectionScale": 0.38066409833058157,
+      "outputScale": 0.9021739130434783,
+      "wholeImageScale": 0.38066409833058157,
       "inverseWholeImageTransform": [
-        2.09,
+        2.6269879518072288,
         0,
-        -58.486636999364265,
+        -79.29636724345605,
         0,
-        2.09,
-        -24.080000000000013
+        2.6269879518072288,
+        -73.2226506024096
       ],
-      "rgbaSha256": "12e5e6f0b41e9acfeb367cdf68ecdaae131470e34ad499cb1dc880b2a9550931",
+      "rgbaSha256": "0ad242ab0e2349e8812af5072f1fde1b1c4c630abbbcc52ef770acb8cb549db1",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false
@@ -95,48 +96,48 @@
       "key": "franky",
       "direction": "east",
       "pose": "talk_happy",
-      "source": "franky",
+      "source": "franky-actions-source-01",
       "region": [
-        268,
-        16,
-        189,
-        220
+        191,
+        22,
+        205,
+        230
       ],
       "index": 1,
       "bounds": [
-        27,
-        12,
-        114,
+        34,
+        28,
+        109,
         113
       ],
       "opaqueBoundsAtOutput": [
-        28,
-        13,
-        113,
+        35,
+        29,
+        108,
         112
       ],
       "sourceAnchor": [
-        348.64720974983965,
-        230
+        274.39874983721836,
+        246
       ],
       "localAnchor": [
-        76.64720974983965,
-        210
+        79.39874983721836,
+        220
       ],
       "sourceAlphaBounds": [
-        272,
-        20,
-        453,
-        232
+        195,
+        26,
+        392,
+        248
       ],
       "opaqueBounds": [
-        274,
-        22,
-        177,
-        208
+        197,
+        28,
+        193,
+        218
       ],
-      "opaquePixels": 18199,
-      "removedDistantAlphaPixels": 2611,
+      "opaquePixels": 22844,
+      "removedDistantAlphaPixels": 5459,
       "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
         6,
@@ -151,17 +152,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.4784688995215311,
-      "wholeImageScale": 0.4784688995215311,
+      "uniformDirectionScale": 0.38066409833058157,
+      "outputScale": 0.9021739130434783,
+      "wholeImageScale": 0.38066409833058157,
       "inverseWholeImageTransform": [
-        2.09,
+        2.6269879518072288,
         0,
-        -57.112790250160344,
+        -88.72847907844428,
         0,
-        2.09,
-        -24.080000000000013
+        2.6269879518072288,
+        -74.2226506024096
       ],
-      "rgbaSha256": "ef1fda58fcb4eb198b80c0fc123505db0f42aa8d1b4dde200ff0eceeb4c25b39",
+      "rgbaSha256": "dae261d5f49e54cddbc9a0519cb085117f03df64eb6e2e8b42a006e1dccd76fa",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false
@@ -170,48 +172,48 @@
       "key": "franky",
       "direction": "east",
       "pose": "talk_annoyed",
-      "source": "franky",
+      "source": "franky-actions-source-01",
       "region": [
-        504,
-        17,
-        153,
-        219
+        376,
+        20,
+        172,
+        231
       ],
       "index": 2,
       "bounds": [
-        24,
-        12,
-        93,
-        113
+        33,
+        28,
+        95,
+        112
       ],
       "opaqueBoundsAtOutput": [
-        25,
-        13,
-        93,
+        34,
+        29,
+        95,
         112
       ],
       "sourceAnchor": [
-        590.7619980411362,
-        230
+        461.6387337057728,
+        245
       ],
       "localAnchor": [
-        82.76199804113617,
-        209
+        81.63873370577278,
+        221
       ],
       "sourceAlphaBounds": [
-        508,
-        21,
-        652,
-        232
+        380,
+        24,
+        544,
+        247
       ],
       "opaqueBounds": [
-        510,
-        23,
-        141,
-        207
+        382,
+        26,
+        160,
+        219
       ],
-      "opaquePixels": 18239,
-      "removedDistantAlphaPixels": 3159,
+      "opaquePixels": 21711,
+      "removedDistantAlphaPixels": 4554,
       "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
         6,
@@ -226,17 +228,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.4784688995215311,
-      "wholeImageScale": 0.4784688995215311,
+      "uniformDirectionScale": 0.38066409833058157,
+      "outputScale": 0.9021739130434783,
+      "wholeImageScale": 0.38066409833058157,
       "inverseWholeImageTransform": [
-        2.09,
+        2.6269879518072288,
         0,
-        -50.998001958863824,
+        -86.48849520988986,
         0,
-        2.09,
-        -25.080000000000013
+        2.6269879518072288,
+        -73.2226506024096
       ],
-      "rgbaSha256": "2aa458a2cf2f3e3f126f389d76e7b243753da80cd9f75bad825ab66faa2fe0bf",
+      "rgbaSha256": "a91fa0e963c2731723399c04136c6f0cfda738155930a4a8ea333bf03dab0bcd",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false
@@ -245,49 +248,49 @@
       "key": "franky",
       "direction": "east",
       "pose": "surprised",
-      "source": "franky",
+      "source": "franky-actions-side-repair-02",
       "region": [
-        735,
-        15,
-        169,
-        221
+        240,
+        3,
+        456,
+        503
       ],
       "index": 3,
       "bounds": [
-        26,
-        11,
-        103,
-        113
+        28,
+        28,
+        104,
+        112
       ],
       "opaqueBoundsAtOutput": [
-        27,
-        12,
-        102,
+        28,
+        29,
+        104,
         112
       ],
       "sourceAnchor": [
-        819.1089936476095,
-        230
+        456.65569639584606,
+        500
       ],
       "localAnchor": [
-        79.10899364760951,
-        211
+        212.65569639584606,
+        493
       ],
       "sourceAlphaBounds": [
-        740,
-        19,
-        900,
-        232
+        244,
+        7,
+        692,
+        502
       ],
       "opaqueBounds": [
-        741,
-        21,
-        157,
-        209
+        246,
+        9,
+        444,
+        491
       ],
-      "opaquePixels": 16179,
-      "removedDistantAlphaPixels": 2661,
-      "sourceUnitScale": 1,
+      "opaquePixels": 101257,
+      "removedDistantAlphaPixels": 8277,
+      "sourceUnitScale": 0.4460285132382892,
       "sourceOpaqueClearance": [
         6,
         6,
@@ -301,17 +304,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.4784688995215311,
-      "wholeImageScale": 0.4784688995215311,
+      "uniformDirectionScale": 0.38066409833058157,
+      "outputScale": 0.9021739130434783,
+      "wholeImageScale": 0.16978704182158322,
       "inverseWholeImageTransform": [
-        2.09,
+        5.889730978709358,
         0,
-        -54.65100635239048,
+        -164.28708624155286,
         0,
-        2.09,
-        -23.080000000000013
+        5.889730978709358,
+        -166.6498696154481
       ],
-      "rgbaSha256": "63adf1faa1d20852e188b85bce8da3a7f144e5d805e62ad8a21e69dedd3ddd43",
+      "rgbaSha256": "ba3e37425715b30a26771431eccbb674bdf9e8efacd70f460431dfa690e3da3c",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false
@@ -320,48 +324,48 @@
       "key": "franky",
       "direction": "east",
       "pose": "focused_use",
-      "source": "franky",
+      "source": "franky-actions-source-01",
       "region": [
-        950,
-        28,
-        186,
-        209
+        742,
+        53,
+        222,
+        198
       ],
       "index": 4,
       "bounds": [
-        21,
-        17,
-        106,
+        30,
+        40,
+        111,
         113
       ],
       "opaqueBoundsAtOutput": [
-        22,
-        18,
-        105,
+        30,
+        41,
+        110,
         112
       ],
       "sourceAnchor": [
-        1044.3854814814815,
-        231
+        836.0548273254349,
+        245
       ],
       "localAnchor": [
-        89.38548148148152,
-        199
+        90.05482732543487,
+        188
       ],
       "sourceAlphaBounds": [
-        955,
-        32,
-        1132,
-        233
+        746,
+        57,
+        960,
+        247
       ],
       "opaqueBounds": [
-        956,
-        34,
-        174,
-        197
+        748,
+        59,
+        210,
+        186
       ],
-      "opaquePixels": 17580,
-      "removedDistantAlphaPixels": 2711,
+      "opaquePixels": 22864,
+      "removedDistantAlphaPixels": 3973,
       "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
         6,
@@ -376,17 +380,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.4784688995215311,
-      "wholeImageScale": 0.4784688995215311,
+      "uniformDirectionScale": 0.38066409833058157,
+      "outputScale": 0.9021739130434783,
+      "wholeImageScale": 0.38066409833058157,
       "inverseWholeImageTransform": [
-        2.09,
+        2.6269879518072288,
         0,
-        -44.37451851851847,
+        -78.07240159022777,
         0,
-        2.09,
-        -35.08000000000001
+        2.6269879518072288,
+        -106.2226506024096
       ],
-      "rgbaSha256": "afce430217db65a590eb122c5c0f3232d7096ddec8e1588c705c8dd55e7b190d",
+      "rgbaSha256": "a3f170801a8dd544fc7b76e32e8c94d99f2910968045dd9d1091623be73bf4f8",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false
@@ -395,49 +400,49 @@
       "key": "franky",
       "direction": "east",
       "pose": "sit",
-      "source": "franky",
+      "source": "franky-actions-side-repair-02",
       "region": [
-        1172,
-        70,
-        141,
-        177
+        920,
+        75,
+        418,
+        431
       ],
       "index": 5,
       "bounds": [
-        25,
-        33,
-        88,
-        113
+        39,
+        41,
+        109,
+        112
       ],
       "opaqueBoundsAtOutput": [
-        26,
-        33,
-        88,
+        40,
+        41,
+        108,
         112
       ],
       "sourceAnchor": [
-        1257.0023992322456,
-        241
+        1070.0459477171776,
+        500
       ],
       "localAnchor": [
-        81.00239923224558,
-        166
+        146.04594771717757,
+        421
       ],
       "sourceAlphaBounds": [
-        1176,
-        75,
-        1308,
-        243
+        924,
+        79,
+        1334,
+        502
       ],
       "opaqueBounds": [
-        1178,
-        76,
-        129,
-        165
+        926,
+        81,
+        406,
+        419
       ],
-      "opaquePixels": 12861,
-      "removedDistantAlphaPixels": 1530,
-      "sourceUnitScale": 1,
+      "opaquePixels": 80589,
+      "removedDistantAlphaPixels": 4850,
+      "sourceUnitScale": 0.4460285132382892,
       "sourceOpaqueClearance": [
         6,
         6,
@@ -451,17 +456,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.4784688995215311,
-      "wholeImageScale": 0.4784688995215311,
+      "uniformDirectionScale": 0.38066409833058157,
+      "outputScale": 0.9021739130434783,
+      "wholeImageScale": 0.16978704182158322,
       "inverseWholeImageTransform": [
-        2.09,
+        5.889730978709358,
         0,
-        -52.75760076775441,
+        -230.89683492022135,
         0,
-        2.09,
-        -68.08000000000001
+        5.889730978709358,
+        -238.6498696154481
       ],
-      "rgbaSha256": "654292fb857cfaa0828eed87ef76c700c803f8c806c2d54ac36c93ff2bc8b477",
+      "rgbaSha256": "0f2564c944983204281fb6116e7893d4978b7db9bd40f4b48975a8ffd124d6b0",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false
@@ -470,48 +476,48 @@
       "key": "franky",
       "direction": "east",
       "pose": "wave",
-      "source": "franky",
+      "source": "franky-actions-source-01",
       "region": [
-        1392,
-        17,
-        156,
-        219
+        1137,
+        5,
+        211,
+        249
       ],
       "index": 6,
       "bounds": [
-        28,
-        12,
-        98,
-        112
+        33,
+        21,
+        110,
+        113
       ],
       "opaqueBoundsAtOutput": [
-        29,
-        13,
-        98,
+        34,
+        22,
+        110,
         112
       ],
       "sourceAnchor": [
-        1471.4629837352777,
-        230
+        1221.9212291711751,
+        248
       ],
       "localAnchor": [
-        75.4629837352777,
-        209
+        80.92122917117513,
+        239
       ],
       "sourceAlphaBounds": [
-        1396,
-        21,
-        1544,
-        232
+        1141,
+        9,
+        1344,
+        250
       ],
       "opaqueBounds": [
-        1398,
-        23,
-        144,
-        207
+        1143,
+        11,
+        199,
+        237
       ],
-      "opaquePixels": 17175,
-      "removedDistantAlphaPixels": 2917,
+      "opaquePixels": 24298,
+      "removedDistantAlphaPixels": 4696,
       "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
         6,
@@ -526,17 +532,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.4784688995215311,
-      "wholeImageScale": 0.4784688995215311,
+      "uniformDirectionScale": 0.38066409833058157,
+      "outputScale": 0.9021739130434783,
+      "wholeImageScale": 0.38066409833058157,
       "inverseWholeImageTransform": [
-        2.09,
+        2.6269879518072288,
         0,
-        -58.29701626472229,
+        -87.20599974448751,
         0,
-        2.09,
-        -25.080000000000013
+        2.6269879518072288,
+        -55.2226506024096
       ],
-      "rgbaSha256": "93365e4df6edce0968d1ce590dc6e8be6050020cdcd89a94bd08981777bfbbd3",
+      "rgbaSha256": "46693768a4982d2dccede1d0bc314d1f189bf36d6d638103a8f9e3069309e6bb",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false
@@ -545,48 +552,48 @@
       "key": "franky",
       "direction": "east",
       "pose": "listen",
-      "source": "franky",
+      "source": "franky-actions-source-01",
       "region": [
-        1615,
-        17,
-        140,
-        219
+        1351,
+        21,
+        165,
+        233
       ],
       "index": 7,
       "bounds": [
-        26,
-        12,
-        88,
-        112
+        35,
+        27,
+        95,
+        113
       ],
       "opaqueBoundsAtOutput": [
-        26,
-        13,
-        87,
+        36,
+        28,
+        95,
         112
       ],
       "sourceAnchor": [
-        1700.3158258465792,
-        230
+        1430.1607671514996,
+        248
       ],
       "localAnchor": [
-        80.31582584657917,
-        209
+        75.16076715149961,
+        223
       ],
       "sourceAlphaBounds": [
-        1620,
-        21,
-        1751,
-        232
+        1355,
+        25,
+        1512,
+        250
       ],
       "opaqueBounds": [
-        1621,
-        23,
-        128,
-        207
+        1357,
+        27,
+        153,
+        221
       ],
-      "opaquePixels": 16636,
-      "removedDistantAlphaPixels": 2328,
+      "opaquePixels": 23024,
+      "removedDistantAlphaPixels": 2753,
       "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
         6,
@@ -601,17 +608,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.4784688995215311,
-      "wholeImageScale": 0.4784688995215311,
+      "uniformDirectionScale": 0.38066409833058157,
+      "outputScale": 0.9021739130434783,
+      "wholeImageScale": 0.38066409833058157,
       "inverseWholeImageTransform": [
-        2.09,
+        2.6269879518072288,
         0,
-        -53.44417415342082,
+        -92.96646176416303,
         0,
-        2.09,
-        -25.080000000000013
+        2.6269879518072288,
+        -71.2226506024096
       ],
-      "rgbaSha256": "f278640b939bd7b56a953fd3290290dde15da3f01db4ddf119871156ba697ee1",
+      "rgbaSha256": "c36cf4e4c29dd0f73adc8c3e11f8325eeff5609d6b81b2c548be292dd2954a94",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false

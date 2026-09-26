@@ -1,5 +1,16 @@
 # File Map
 
+## 2026-09-27 角色辨識與關係表演（1.1.15 候選驗證完成）
+
+- desktop/launcher-room-dialogue.js：45組關係、151場604句、無家具回退、表情與聽者反應。
+- desktop/launcher-room-motion.js/data.js、launcher-room.js/css：完整人物步幅／體型／深度、會合位置情境、路徑接近期限與字體尺寸。
+- public/images/launcher_room/acting_v3、motion_v3、portrait_v3：80圖集與10完整人物縮圖。
+- tools/launcher-room/fullbody-v3、walk-v3：本版選圖、GPT原圖／實際提示／收據／整人取框、像素重建與review證據。README-fullbody-v3.md描述outputScale共同站走尺寸。
+- docs/LAUNCHER_ROOM_FULLBODY_ART_20260927.json、LAUNCHER_ROOM_WALK_V3_20260927.json：本版精確SHA與來源關係。
+- docs/LAUNCHER_CREW_RELATIONSHIPS_20260927.md：官方依據、語氣規則與編輯審查。
+- scripts/launcher_room_dialogue_qa.js、launcher_room_motion_qa.js、launcher_room_browser_qa.js、desktop_launcher_package_qa.js：資料／控制器／真素材本機／封裝驗證。
+- D:\Codex_QA\launcher-room-likeness-1.1.15：官方參考、退稿、128px檢查、實際房間錄影、公開回讀與正式同步證據。
+
 ## 2026-09-27 完整人物原畫與暫撤工作（1.1.14 已部署）
 
 | 檔案 | 用途 |

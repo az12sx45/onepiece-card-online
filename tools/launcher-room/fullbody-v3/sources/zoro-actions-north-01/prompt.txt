@@ -1,0 +1,14 @@
+Use case: stylized-concept, production animation asset. Attached reference is the approved early-series Roronoa Zoro model. Draw EIGHT complete whole-body reaction poses of THIS SAME Zoro, all facing AWAY from the camera, strict NORTH/BACK VIEW, showing the back of head and torso. Never turn the face around to camera; head, shoulders and feet agree on the away direction. Exactly two rows of four evenly spaced separate figures; transparent PNG background, no text or labels, no frame lines, no ground shadows. Every head, hand, sword tip and boot entirely inside its equal cell with generous margins. Each figure uses the same scale and head size. Full character must be drawn as a unified anatomy, never assembled limbs or pasted heads.
+
+Identity: same stern narrow horizontal eyes with small pupils, angular jaw, broad neck and muscular forearms, short close-cropped green hair; retain approximately 3.3 head-height game-SD proportions, not round baby/chibi doll. Early-series white short-sleeved Henley, green haramaki, black trousers and boots; BOTH healthy open eyes, NO eye scar. Three sheathed katana on anatomical RIGHT hip, image RIGHT: one white wrapped handle/white scabbard Wado Ichimonji, two dark handles/dark scabbards. SAME three blades in every pose, naturally tucked close to right hip. No drawn sword. Anatomical LEFT biceps is image LEFT with black tied bandana. LEFT ear image LEFT has three gold dangling earrings, only appropriately visible from rear. Right hip sword scabbards are image RIGHT and angle down/back, all three tips one white two dark.
+
+Poses in reading order:
+1 neutral standing from behind, hands relaxed.
+2 talking from behind, head slightly tilted, one hand palm-up at waist/chest level.
+3 annoyed from behind, stiff shoulders, one hand on hip.
+4 surprised from behind, shoulders slightly rise and both hands lifted modestly, feet grounded.
+5 focused using a waist-high object, torso slight forward lean, BOTH hands naturally reach forward at waist level; no prop, no extra limb.
+6 sitting on an invisible low bench, knees bent, thighs horizontal, boots down, hands on knees; preserve same head/torso size (lower total height).
+7 understated wave from behind, one palm raised beside shoulder.
+8 quiet listening from behind, slightly tilted head, hands relaxed.
+Keep clean confident black anime outlines, limited cel shading like the reference, no plastic shine, no baby cheeks. From behind express emotion via the coherent shoulders, head tilt and hand pose; no face is visible from a strict rear view. Draw eight distinct complete coherent poses, not one idle pasted eight times.

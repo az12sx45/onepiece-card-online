@@ -1,0 +1,19 @@
+{
+  "tool": "image_gen__imagegen",
+  "original": "C:/Users/王曜瑋/.codex/generated_images/01a0df5a-f51d-7f40-8213-929b1e8bec76/exec-d42c4e2d-cd93-4700-b645-6882621c1b62.png",
+  "prompt": "prompt-west-idle-02.txt",
+  "references": [
+    "reference-west-idle.png"
+  ],
+  "referenceAncestry": {
+    "source": "source-01.png",
+    "crop": [
+      0,
+      270,
+      192,
+      540
+    ],
+    "operation": "wholebody crop only"
+  },
+  "review": "Selected; left skirt plain as canonical."
+}

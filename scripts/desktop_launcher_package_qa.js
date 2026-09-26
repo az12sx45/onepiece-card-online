@@ -11,7 +11,7 @@ const PACKAGE_PATH = path.join(DESKTOP_ROOT, 'package.json');
 const PACKAGE_LOCK_PATH = path.join(DESKTOP_ROOT, 'package-lock.json');
 
 const MAX_LAUNCHER_ASSET_BYTES = 128 * 1024 * 1024;
-// 1.1.14 packages 80 full-body atlases and 10 portraits. Keep the existing media
+// 1.1.15 packages 80 full-body atlases and 10 portraits. Keep the existing media
 // budget intact and account for this separately hash-verified resource set.
 const MAX_ROOM_MOTION_ASSET_BYTES = 20 * 1024 * 1024;
 // Immutable historical program manifests are retained for existing installs.
@@ -509,7 +509,7 @@ function validateZoroArtOverlay(roomManifest, roomDepth, roomWalk) {
 function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
-  assert(packageJson.version === '1.1.14', 'Desktop launcher version must be 1.1.14 for intact character poses and retired work controls.');
+  assert(packageJson.version === '1.1.15', 'Desktop launcher version must be 1.1.15 for revised character likeness and relationship dialogue.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
@@ -591,7 +591,7 @@ function validateSourcePackage() {
   const roomBody = readJson(path.join(ROOT, 'docs', 'LAUNCHER_ROOM_FULLBODY_ART_20260927.json'), 'complete character pose manifest');
   const roomGait = readJson(path.join(ROOT, 'docs', 'LAUNCHER_ROOM_WALK_V3_20260927.json'), 'complete character walking manifest');
   const roomMotion = { items: [...roomBody.items, ...roomGait.items], portraits: roomBody.portraits };
-  assert(roomBody.version === '1.1.14' && roomGait.version === '1.1.14' &&
+  assert(roomBody.version === '1.1.15' && roomGait.version === '1.1.15' &&
     roomBody.canonicalCharactersOnly === true && roomGait.canonicalCharactersOnly === true &&
     roomMotion.items.length === ROOM_MOTION_ASSETS.length,
   'Full-body manifests must cover all eighty canonical walking and acting direction atlases.');

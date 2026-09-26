@@ -14,54 +14,54 @@
     "maxWidth": 112
   },
   "method": "whole-character component with nearby source alpha; uniform whole-image scale and translation",
-  "uniformDirectionScale": 0.49019607843137253,
+  "uniformDirectionScale": 0.4260869565217391,
   "frames": [
     {
       "key": "jinbe",
       "direction": "east",
       "pose": "idle",
-      "source": "jinbe",
+      "source": "jinbe-v15-actions-01",
       "region": [
-        30,
-        27,
-        195,
-        210
+        19,
+        11,
+        186,
+        242
       ],
       "index": 0,
       "bounds": [
-        15,
-        15,
-        106,
-        113
+        26,
+        14,
+        101,
+        112
       ],
       "opaqueBoundsAtOutput": [
-        15,
-        15,
-        105,
+        26,
+        14,
+        100,
         112
       ],
       "sourceAnchor": [
-        135.26227727075184,
-        231
+        114.72419564813093,
+        247
       ],
       "localAnchor": [
-        100.26227727075184,
-        200
+        91.72419564813093,
+        231
       ],
       "sourceAlphaBounds": [
-        35,
-        31,
-        221,
-        233
+        23,
+        16,
+        201,
+        249
       ],
       "opaqueBounds": [
-        36,
-        33,
-        183,
-        198
+        25,
+        17,
+        174,
+        230
       ],
-      "opaquePixels": 22258,
-      "removedDistantAlphaPixels": 549,
+      "opaquePixels": 25574,
+      "removedDistantAlphaPixels": 2071,
       "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
         6,
@@ -76,17 +76,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.49019607843137253,
-      "wholeImageScale": 0.49019607843137253,
+      "uniformDirectionScale": 0.4260869565217391,
+      "outputScale": 0.98,
+      "wholeImageScale": 0.4260869565217391,
       "inverseWholeImageTransform": [
-        2.04,
+        2.3469387755102042,
         0,
-        -30.297722729248164,
+        -58.47988598452214,
         0,
-        2.04,
-        -28.480000000000018
+        2.3469387755102042,
+        -31.85714285714289
       ],
-      "rgbaSha256": "704bc6bbb98f1962df83ed1b23d504f20be5e4cf7672a9328810f3699c23de3e",
+      "rgbaSha256": "964d5c12389ea76b49f9772d1aa12dabafc783835be698e197684f517ca2543f",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false
@@ -95,48 +96,48 @@
       "key": "jinbe",
       "direction": "east",
       "pose": "talk_happy",
-      "source": "jinbe",
+      "source": "jinbe-v15-actions-01",
       "region": [
-        277,
-        27,
-        213,
-        210
+        206,
+        12,
+        209,
+        240
       ],
       "index": 1,
       "bounds": [
-        16,
-        15,
-        116,
-        112
+        25,
+        14,
+        110,
+        113
       ],
       "opaqueBoundsAtOutput": [
-        17,
+        26,
         15,
-        115,
+        110,
         112
       ],
       "sourceAnchor": [
-        378.992131147541,
-        231
+        302.21680365296805,
+        246
       ],
       "localAnchor": [
-        97.99213114754099,
-        200
+        92.21680365296805,
+        230
       ],
       "sourceAlphaBounds": [
-        281,
-        31,
-        485,
-        232
+        210,
+        16,
+        411,
+        248
       ],
       "opaqueBounds": [
-        283,
-        33,
-        201,
-        198
+        212,
+        18,
+        197,
+        228
       ],
-      "opaquePixels": 22697,
-      "removedDistantAlphaPixels": 582,
+      "opaquePixels": 26476,
+      "removedDistantAlphaPixels": 3121,
       "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
         6,
@@ -151,17 +152,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.49019607843137253,
-      "wholeImageScale": 0.49019607843137253,
+      "uniformDirectionScale": 0.4260869565217391,
+      "outputScale": 0.98,
+      "wholeImageScale": 0.4260869565217391,
       "inverseWholeImageTransform": [
-        2.04,
+        2.3469387755102042,
         0,
-        -32.567868852459014,
+        -57.98727797968502,
         0,
-        2.04,
-        -28.480000000000018
+        2.3469387755102042,
+        -32.85714285714289
       ],
-      "rgbaSha256": "00e8636272d195e204c4bee47b0724c19927a2b8caa72b9b7f4b55ced292139f",
+      "rgbaSha256": "ef822230974b4ae4afa94a5ef320d7569687fd6da07480696956f302cc26dd66",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false
@@ -170,48 +172,48 @@
       "key": "jinbe",
       "direction": "east",
       "pose": "talk_annoyed",
-      "source": "jinbe",
+      "source": "jinbe-v15-actions-01",
       "region": [
-        545,
-        26,
-        190,
-        212
+        400,
+        12,
+        181,
+        240
       ],
       "index": 2,
       "bounds": [
-        18,
+        24,
         14,
-        107,
-        112
+        97,
+        113
       ],
       "opaqueBoundsAtOutput": [
-        18,
-        14,
-        106,
+        25,
+        15,
+        96,
         112
       ],
       "sourceAnchor": [
-        644.1140445790954,
-        232
+        498.8562103692652,
+        246
       ],
       "localAnchor": [
-        95.11404457909543,
-        201
+        94.85621036926523,
+        230
       ],
       "sourceAlphaBounds": [
-        549,
-        31,
-        731,
-        233
+        404,
+        16,
+        577,
+        248
       ],
       "opaqueBounds": [
-        551,
-        32,
-        178,
-        200
+        406,
+        18,
+        169,
+        228
       ],
-      "opaquePixels": 22288,
-      "removedDistantAlphaPixels": 555,
+      "opaquePixels": 25123,
+      "removedDistantAlphaPixels": 2374,
       "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
         6,
@@ -226,17 +228,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.49019607843137253,
-      "wholeImageScale": 0.49019607843137253,
+      "uniformDirectionScale": 0.4260869565217391,
+      "outputScale": 0.98,
+      "wholeImageScale": 0.4260869565217391,
       "inverseWholeImageTransform": [
-        2.04,
+        2.3469387755102042,
         0,
-        -35.44595542090457,
+        -55.347871263387844,
         0,
-        2.04,
-        -27.480000000000018
+        2.3469387755102042,
+        -32.85714285714289
       ],
-      "rgbaSha256": "04370b5f17ed39d6d7ce25d2b8debd7aae98353fb6206a90f7881c25d78c3d89",
+      "rgbaSha256": "dd28ffe2805332e6a280139e00bfc8a99c2eb34fc217235a83db5ef8e9991cc3",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false
@@ -245,48 +248,48 @@
       "key": "jinbe",
       "direction": "east",
       "pose": "surprised",
-      "source": "jinbe",
+      "source": "jinbe-v15-actions-01",
       "region": [
-        798,
-        27,
-        196,
-        210
+        587,
+        11,
+        187,
+        240
       ],
       "index": 3,
       "bounds": [
-        18,
+        27,
         14,
-        110,
-        112
+        102,
+        113
       ],
       "opaqueBoundsAtOutput": [
-        19,
+        28,
         15,
-        109,
+        102,
         112
       ],
       "sourceAnchor": [
-        896.1052865393159,
-        231
+        678.7602989427634,
+        245
       ],
       "localAnchor": [
-        93.1052865393159,
-        200
+        87.76029894276337,
+        229
       ],
       "sourceAlphaBounds": [
-        803,
-        31,
-        990,
-        233
+        591,
+        16,
+        770,
+        247
       ],
       "opaqueBounds": [
-        804,
-        33,
-        184,
-        198
+        593,
+        17,
+        175,
+        228
       ],
-      "opaquePixels": 22615,
-      "removedDistantAlphaPixels": 542,
+      "opaquePixels": 25770,
+      "removedDistantAlphaPixels": 2631,
       "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
         6,
@@ -301,17 +304,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.49019607843137253,
-      "wholeImageScale": 0.49019607843137253,
+      "uniformDirectionScale": 0.4260869565217391,
+      "outputScale": 0.98,
+      "wholeImageScale": 0.4260869565217391,
       "inverseWholeImageTransform": [
-        2.04,
+        2.3469387755102042,
         0,
-        -37.454713460684104,
+        -62.4437826898897,
         0,
-        2.04,
-        -28.480000000000018
+        2.3469387755102042,
+        -33.85714285714289
       ],
-      "rgbaSha256": "8c163f306993a2d64395ca75755026f747e5cd0e2ec622d534f1adfbb53d4211",
+      "rgbaSha256": "f76ee1d4bed143907545e744908c01ea4f2a031e6d721e4c3b7ba505612bbe8d",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false
@@ -320,48 +324,48 @@
       "key": "jinbe",
       "direction": "east",
       "pose": "focused_use",
-      "source": "jinbe",
+      "source": "jinbe-v15-actions-01",
       "region": [
-        1051,
+        777,
         25,
-        201,
-        213
+        195,
+        227
       ],
       "index": 4,
       "bounds": [
-        13,
-        13,
-        106,
-        113
+        25,
+        20,
+        104,
+        112
       ],
       "opaqueBoundsAtOutput": [
-        13,
-        14,
-        106,
+        25,
+        20,
+        104,
         112
       ],
       "sourceAnchor": [
-        1160.4609062170707,
-        232
+        873.5140634350688,
+        246
       ],
       "localAnchor": [
-        105.46090621707071,
-        202
+        92.5140634350688,
+        217
       ],
       "sourceAlphaBounds": [
-        1055,
-        30,
-        1247,
-        234
+        781,
+        29,
+        968,
+        248
       ],
       "opaqueBounds": [
-        1057,
+        783,
         31,
-        189,
-        201
+        183,
+        215
       ],
-      "opaquePixels": 22432,
-      "removedDistantAlphaPixels": 527,
+      "opaquePixels": 22767,
+      "removedDistantAlphaPixels": 3294,
       "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
         6,
@@ -376,17 +380,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.49019607843137253,
-      "wholeImageScale": 0.49019607843137253,
+      "uniformDirectionScale": 0.4260869565217391,
+      "outputScale": 0.98,
+      "wholeImageScale": 0.4260869565217391,
       "inverseWholeImageTransform": [
-        2.04,
+        2.3469387755102042,
         0,
-        -25.099093782929287,
+        -57.690018197584266,
         0,
-        2.04,
-        -26.480000000000018
+        2.3469387755102042,
+        -45.85714285714289
       ],
-      "rgbaSha256": "32b778e8de3d496fae07ba76bc3b375974315b4d047fb6758b7d649cdac2d8b3",
+      "rgbaSha256": "dff3163efb3418d6fa526044bfb8614868278b6273a3e424c31a2e53837d9edd",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false
@@ -395,49 +400,49 @@
       "key": "jinbe",
       "direction": "east",
       "pose": "sit",
-      "source": "jinbe",
+      "source": "jinbe-v15-actions-sit-02",
       "region": [
-        1308,
-        63,
-        199,
-        175
+        67,
+        24,
+        692,
+        847
       ],
       "index": 5,
       "bounds": [
-        18,
+        34,
         32,
-        110,
-        113
+        99,
+        112
       ],
       "opaqueBoundsAtOutput": [
-        18,
+        34,
         32,
-        110,
+        99,
         112
       ],
       "sourceAnchor": [
-        1407.1780463900686,
-        232
+        386.8118365644634,
+        865
       ],
       "localAnchor": [
-        95.17804639006863,
-        164
+        314.8118365644634,
+        837
       ],
       "sourceAlphaBounds": [
-        1312,
-        68,
-        1502,
-        234
+        72,
+        28,
+        755,
+        867
       ],
       "opaqueBounds": [
-        1314,
-        69,
-        187,
-        163
+        73,
+        30,
+        680,
+        835
       ],
-      "opaquePixels": 18539,
-      "removedDistantAlphaPixels": 439,
-      "sourceUnitScale": 1,
+      "opaquePixels": 352891,
+      "removedDistantAlphaPixels": 6937,
+      "sourceUnitScale": 0.22395209580838324,
       "sourceOpaqueClearance": [
         6,
         6,
@@ -451,17 +456,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.49019607843137253,
-      "wholeImageScale": 0.49019607843137253,
+      "uniformDirectionScale": 0.4260869565217391,
+      "outputScale": 0.98,
+      "wholeImageScale": 0.09542306690965895,
       "inverseWholeImageTransform": [
-        2.04,
+        10.479646404016151,
         0,
-        -35.38195360993137,
+        -355.88553329257024,
         0,
-        2.04,
-        -64.48000000000002
+        10.479646404016151,
+        -336.7203972498089
       ],
-      "rgbaSha256": "5e20d88d7eb59118b55f9e60b35dbcbe1c047d04fa35ec1db6d007151b9334ad",
+      "rgbaSha256": "ff82d30c61eadd9952be38fcc77c76b05dae306fcc61117f9ab9e568a244354f",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false
@@ -470,48 +476,48 @@
       "key": "jinbe",
       "direction": "east",
       "pose": "wave",
-      "source": "jinbe",
+      "source": "jinbe-v15-actions-01",
       "region": [
-        1564,
-        22,
-        199,
-        216
+        1140,
+        12,
+        191,
+        240
       ],
       "index": 6,
       "bounds": [
+        24,
         14,
-        12,
-        108,
-        113
+        101,
+        112
       ],
       "opaqueBoundsAtOutput": [
+        24,
         15,
-        12,
-        107,
+        100,
         112
       ],
       "sourceAnchor": [
-        1670.1643349342244,
-        232
+        1239.9458050244905,
+        246
       ],
       "localAnchor": [
-        101.16433493422437,
-        206
+        95.94580502449048,
+        229
       ],
       "sourceAlphaBounds": [
-        1569,
-        26,
-        1759,
-        234
+        1144,
+        17,
+        1326,
+        248
       ],
       "opaqueBounds": [
-        1570,
-        28,
-        187,
-        204
+        1146,
+        18,
+        179,
+        228
       ],
-      "opaquePixels": 23301,
-      "removedDistantAlphaPixels": 541,
+      "opaquePixels": 26905,
+      "removedDistantAlphaPixels": 2480,
       "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
         6,
@@ -526,17 +532,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.49019607843137253,
-      "wholeImageScale": 0.49019607843137253,
+      "uniformDirectionScale": 0.4260869565217391,
+      "outputScale": 0.98,
+      "wholeImageScale": 0.4260869565217391,
       "inverseWholeImageTransform": [
-        2.04,
+        2.3469387755102042,
         0,
-        -29.39566506577563,
+        -54.25827660816259,
         0,
-        2.04,
-        -22.480000000000018
+        2.3469387755102042,
+        -33.85714285714289
       ],
-      "rgbaSha256": "702c6539194089bf7f0a58850a3bc69de7dab722c4a505a89d7b31e7002d2d64",
+      "rgbaSha256": "72f28de57e683ba8b6a9600ac101248b035375682cf42ba98479e12866665407",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false
@@ -545,48 +552,48 @@
       "key": "jinbe",
       "direction": "east",
       "pose": "listen",
-      "source": "jinbe",
+      "source": "jinbe-v15-actions-01",
       "region": [
-        1823,
-        23,
-        193,
-        215
+        1338,
+        14,
+        179,
+        238
       ],
       "index": 7,
       "bounds": [
-        17,
-        12,
-        107,
+        27,
+        15,
+        100,
         112
       ],
       "opaqueBoundsAtOutput": [
-        17,
-        12,
-        106,
+        28,
+        16,
+        99,
         112
       ],
       "sourceAnchor": [
-        1924.1685251420156,
-        232
+        1429.131094049904,
+        246
       ],
       "localAnchor": [
-        96.1685251420156,
-        205
+        87.13109404990405,
+        228
       ],
       "sourceAlphaBounds": [
-        1828,
-        27,
-        2011,
-        234
+        1342,
+        18,
+        1513,
+        248
       ],
       "opaqueBounds": [
-        1829,
-        29,
-        181,
-        203
+        1344,
+        20,
+        167,
+        226
       ],
-      "opaquePixels": 22649,
-      "removedDistantAlphaPixels": 558,
+      "opaquePixels": 24736,
+      "removedDistantAlphaPixels": 2160,
       "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
         6,
@@ -601,17 +608,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.49019607843137253,
-      "wholeImageScale": 0.49019607843137253,
+      "uniformDirectionScale": 0.4260869565217391,
+      "outputScale": 0.98,
+      "wholeImageScale": 0.4260869565217391,
       "inverseWholeImageTransform": [
-        2.04,
+        2.3469387755102042,
         0,
-        -34.391474857984406,
+        -63.07298758274902,
         0,
-        2.04,
-        -23.480000000000018
+        2.3469387755102042,
+        -34.85714285714289
       ],
-      "rgbaSha256": "d0e7cba1baf1b8d55562420f66b27f61e01dd1d81ec5efa849adceb13db8579d",
+      "rgbaSha256": "0e9a2ee9bdc4db659c331012605d13c63995f32d593fc2471b862e8feb0dfcaa",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false

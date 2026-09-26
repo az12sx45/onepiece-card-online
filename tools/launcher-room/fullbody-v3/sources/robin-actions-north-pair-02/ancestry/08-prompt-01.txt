@@ -1,0 +1,13 @@
+Use case: identity-preserve. Production TRUE TRANSPARENT sprite sheet of EXACTLY THIRTY TWO complete NICO ROBIN from ONE PIECE, eight columns x four rows. Use attached four-direction Robin identity model; preserve her recognizable MATURE face with narrow BLUE almond eyes, straight defined double-line nose bridge, fine brows, calm understated smile, blunt fringe and long straight black hair. Same approx3.3head SD proportions, slender adult limbs. Black long-sleeve fitted short dress with raised collar and frontzip, white bluefloral fabric at neckline and skirtedge, black thighhigh heeledboots. NOT generic round glossy doll eyes, no baby cheeks, no Nami face.
+Rows top to bottom:1 EAST screenRIGHT showing rightside;2 WEST screenLEFT showing leftside;3 NORTH backview strictly no eyes/nose/mouth;4 SOUTH frontview. Head neck shoulders body point together in eachview. No head turned towardcamera.
+Columns left to right:
+1 IDLE relaxed upright neutral knowing slight closed-lip smile, armsdown.
+2 HAPPY TALK gentle amused smile slightly open mouth, one hand lifted palmup near waist. Robin restrainedwarmth, not Luffy bellow.
+3 ANNOYED TALK thin lowered brows, half-lidded displeased eyes, quiet firm openmouth, one arm folded with other hand atelbow. Still recognizably mature Robin, no raging toddler.
+4 SURPRISED raised brows and subtly widened narrowblueeyes, small parted mouth, one hand near mouth.
+5 FOCUSED USE gentlybendforward atwaist, eyesattentive downforward, bothhands reaching low infront as if reading/handling a book on table; no propsdrawn.
+6 SIT complete seatedbody, kneesbend, boots forward, handsrest onlap, calmsoftface; nochair.
+7 WAVE open palm atshoulderheight, smallwarm closedsmile, otherarm down.
+8 LISTEN closedmouth intelligentattentive expression, armscasually foldedlow, straightposture.
+
+Everycell complete connected anatomy, neck neverdetached, exactlytwoarms/hands andtwolegs. No anatomycutouts. Standingposes sameheight/scale/baseline, sittingnaturallyshorter. Hair,hands,toes allinside generousmargin. Wide3072x2048 orlarger, 8columns4rows. Crisp blackink, boldenough at128px, flatanime celshading. TRUE RGBA TRANSPARENT background, nofloor,shadows,props,text,labels,grids,watermark,emoji or originalcharacters.

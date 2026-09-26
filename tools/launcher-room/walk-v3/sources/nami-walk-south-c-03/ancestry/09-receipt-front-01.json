@@ -1,0 +1,11 @@
+{
+  "tool": "image_gen__imagegen",
+  "original": "C:/Users/王曜瑋/.codex/generated_images/01a0df5a-f51d-7f40-8213-929b1e8bec76/exec-16488a06-a9bb-40a6-b380-5a7ecf512aac.png",
+  "prompt": "prompt-front-01.txt",
+  "references": [
+    "../turnaround-02.png",
+    "side-01.png"
+  ],
+  "layout": "3columns x2rows;north,south;A,passing,C",
+  "review": "South contacts duplicate; replace south C with separately drawn fullbody."
+}

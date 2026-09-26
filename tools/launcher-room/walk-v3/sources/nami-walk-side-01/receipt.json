@@ -1,0 +1,9 @@
+{
+  "tool": "image_gen__imagegen",
+  "original": "C:/Users/王曜瑋/.codex/generated_images/01a0df5a-f51d-7f40-8213-929b1e8bec76/exec-ca540ce7-6401-4eb8-bf67-b9588262b7f9.png",
+  "prompt": "prompt-side-01.txt",
+  "references": [
+    "../turnaround-02.png"
+  ],
+  "layout": "3columns x2rows; east west; contact_a,passing,contact_c"
+}

@@ -1,0 +1,8 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "original": "exec-ca8cfdb3-1376-4c04-ae83-573421242b83.png",
+  "reference": "Official Bandai Spirits WCF product image, visibly inspected in browser screenshot https://bsp-prize.jp/item/2650620/",
+  "referenceRole": "Face identity and SD proportions, not a texture or republished source asset",
+  "status": "PILOT_UNREVIEWED",
+  "notes": "Closed classic red vest follows inspected official reference; early Luffy has no chest scar. Four complete neutral turnarounds only."
+}

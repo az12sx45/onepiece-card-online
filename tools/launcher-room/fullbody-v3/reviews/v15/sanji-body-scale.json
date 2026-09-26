@@ -1,0 +1,50 @@
+{
+  "actions-east": {
+    "initialNeutralHeight": 100,
+    "initialScale": 0.16233766233766234,
+    "outputScale": 0.98,
+    "targetNeutralHeight": 98
+  },
+  "actions-west": {
+    "initialNeutralHeight": 100,
+    "initialScale": 0.1620745542949757,
+    "outputScale": 0.98,
+    "targetNeutralHeight": 98
+  },
+  "actions-north": {
+    "initialNeutralHeight": 98,
+    "initialScale": 0.1733102253032929,
+    "outputScale": 1.0,
+    "targetNeutralHeight": 98
+  },
+  "actions-south": {
+    "initialNeutralHeight": 100,
+    "initialScale": 0.1669449081803005,
+    "outputScale": 0.98,
+    "targetNeutralHeight": 98
+  },
+  "walk-east": {
+    "initialNeutralHeight": 100,
+    "initialScale": 0.12886597938144329,
+    "outputScale": 0.98,
+    "targetNeutralHeight": 98
+  },
+  "walk-west": {
+    "initialNeutralHeight": 100,
+    "initialScale": 0.1267427122940431,
+    "outputScale": 0.98,
+    "targetNeutralHeight": 98
+  },
+  "walk-north": {
+    "initialNeutralHeight": 99,
+    "initialScale": 0.11904761904761904,
+    "outputScale": 0.98989898989899,
+    "targetNeutralHeight": 98
+  },
+  "walk-south": {
+    "initialNeutralHeight": 99,
+    "initialScale": 0.117096018735363,
+    "outputScale": 0.98989898989899,
+    "targetNeutralHeight": 98
+  }
+}

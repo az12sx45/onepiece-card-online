@@ -1,0 +1,10 @@
+{
+  "tool": "image_gen__imagegen",
+  "original": "C:/Users/王曜瑋/.codex/generated_images/01a0df5a-f51d-7f40-8213-929b1e8bec76/exec-17278f30-d542-41cd-8cd5-0447a49bec02.png",
+  "prompt": "turnaround-prompt-01.txt",
+  "references": [
+    "../references/nami-eastblue-02.jpg",
+    "../luffy/turnaround-01.png"
+  ],
+  "review": "Needs shorter 3.2-head proportion and anatomical-right skirt rings correction; not selected."
+}

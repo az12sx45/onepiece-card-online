@@ -1,5 +1,17 @@
 # Dev Workflow
 
+## 2026-09-27 航海王角色辨識與關係表演重審（1.1.15 候選驗證完成）
+
+使用者否決 1.1.14 的角色相似度後，本版由 main 55d2d18991edfef09308a358aa3454edf96f1e34 建立於 D:\Codex_Release_Worktrees\launcher-room-likeness-1.1.15。正式來源仍是 board-voyage-records-v1；其他 Board 修改與兩個 ranks 變更不納入。上一版技術發布成功不構成相似度接受，本輪重新比對官方人物／早期服裝／SD 參考，重畫十名角色的 320 張單張姿態、120 張步態原畫與十張完整人物商城縮圖。內建 GPT image_gen 產生原稿，完整保留來源、提示、收據與取框；所有輸出都是完整人物同比縮放，不拼頭、不接肢、不鏡像左右配件。索隆早期雙眼、香吉士左眼遮髮、騙人布長鼻與左腕、喬巴鹿角金屬環等逐角度覆查。
+
+變更範圍：desktop/launcher-room-dialogue.js、launcher-room-motion.js/data.js、launcher-room.js/css；三份 room QA、desktop/package.json/package-lock.json、desktop_launcher_package_qa.js；tools/launcher-room 匯入／驗證工具、來源與 review；acting_v3、motion_v3、portrait_v3、兩份素材 manifests 及本文／三份專案文件／角色關係文件。整組 outputScale 對齊同一角色四向站姿與走路，displayScale 區分喬巴與大型角色，步幅隨展示尺寸和深度一起計算；氣泡文字反向補償體型比例。接近互動期限依真實路徑與最慢深度速度計算，會合後以渲染家具 anchor 重新選情境。
+
+台詞 45 配對、151 場／604 句，含 135 舊 ID 全數保留與16場無家具日常；140 句啟用中個人台詞和76句家具台詞重寫。獨立審讀19組57場後修正8場表情／道具反演。普通敘述使用平常站姿、聽者按劇本反應；香吉士殷勤使用smile，附近170單位內家具才可觸發相關場景，冷卻回退也不越界。工作／領取 UI 維持暫撤，既有金幣、親密度、持有權、房間、遊戲存檔不刪除。
+
+已執行：匯入器14項隔離測試；40份動作圖集／320格與10縮圖逐像素重建；40份走路圖集／160播放格逐像素重建；motion controller20項；dialogue23,797項資料/API斷言（含大量字串兩兩比較，不等於遊戲測試數量）；本機真HTML/CSS/JS與真素材房間76項、個人頁／商店97項；10人四向連續0/1/2/3與循環2/3/0/1、五組四回合會話、餐桌／鋼琴正背向、390窄畫面檢查。60份review證據綁定兩份素材manifest。npm start本機下載頁HTTP200，測試刻意不連真資料庫。Controller／素材／本機畫面驗證不等於真人或實體手機接受。另兩項實際Chromium長距回歸通過：喬巴33.7秒才抵達仍可完成四回合；離書櫃476.8px後重選無家具對話。個人頁整合測試發現舊fixture漏載motion依賴；已按實際HTML補齊，positionNode也保留缺motion模組時的完整縮圖備援。Windows 1.1.15 封裝與來源／ASAR／80圖集／十縮圖驗證通過；實際封裝 Electron 331 項素材讀回、零缺圖。安裝檔 238,828,125 bytes，SHA256 c327045f50ac8e5a30f236eb2aad24fa7847ef0593580914dece89e4a06e8e81；R2 canonical HEAD 200、Range 206、完整 GET 200 與獨立磁碟重算 SHA 全部符合。公開更新清單已以 Ed25519 簽署，本次提交後另核對 Render 正式回讀。
+
+QA／原稿：D:\Codex_QA\launcher-room-likeness-1.1.15。LATTICE runtime／task API本階段未提供，未假稱任務持久寫入或圖譜成功。原作官方參考與審稿見LAUNCHER_CREW_RELATIONSHIPS_20260927.md；本次對白為新寫的角色日常演繹，非官方劇情或逐字引文。
+
 ## 2026-09-27 完整人物原畫與暫撤工作（1.1.14 已部署）
 
 回應使用者回報 1.1.13 頭頸分離感、接肢與姿勢問題，撤回上一版自然姿態的美術通過結論；舊程式／SHA 測試保留為當時的技術證據。本次在 `D:\Codex_Release_Worktrees\launcher-room-art-repair-1.1.14` 由 `4afe64c643ebd36a486b9f1cecd159e112981b32` 建立隔離候選，正式來源仍為 `D:\Codex_Release_Worktrees\board-voyage-records-v1`，保留其他 Board 修改。

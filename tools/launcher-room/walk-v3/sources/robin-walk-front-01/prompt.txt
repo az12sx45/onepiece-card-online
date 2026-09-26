@@ -1,0 +1,8 @@
+Use case: identity-preserve. SIX COMPLETE NICO ROBIN gamewalking sprites. Firstimage authoritative3.3HEADS SD model, secondimage walkstyle/proportion reference. FRONT/BACK only, no sideviews. EXACT3columns x2rows.
+Row1 NORTH backview facingaway, noeyes/nose/mouth visible. Row2 SOUTH frontview towardviewer.
+Preserve recognizable Robin EniesLobby: blackhair bluntfringe longtomidback, mature narrow BLUE almond eyes, angular straight doubleline nosebridge, poisedsmallsmile. BLACK long-sleeve shortdress white-blueflower Vneckandhemtrim, thighhigh blackheeledboots. Do not make4-6headrealisticbody, totalheightonly3.3heads. Sameheadsizeandproportion everyfigure.
+Contact A COLUMN1: RIGHT LEGstepsahead, LEFTlegbehind; LEFT ARM forward, RIGHTarmback. InFRONT: booton viewerLEFT iscloser andlowest, booton viewerRIGHT behindandhigher. InBACK: rightbootviewerRIGHT movingaway/higher, leftbootviewerLEFT plantedlower.
+Passing COLUMN2: feetcloselypass lowunderhips, armsrestlow, upright.
+Contact C COLUMN3: LEFT LEGstepsahead, RIGHTlegbehind; RIGHTARM forward, LEFTarmback. InFRONT: booton viewerRIGHT closerandLOWEST, booton viewerLEFTbehind/higher. InBACK: leftbootviewerLEFTmovingaway/higher,rightbootviewerRIGHT plantedlower.
+VERY IMPORTANT column1and3 must show OPPOSITE LEADING FEET and oppositearms. Preserve wholebody orientation, stable headandtorso,no tilt.No legcrossing,no highknees,no lunge. Complete attached neck/head/body/twoarms/twolegs. Smallcalm walkingsteps, feetverylow.
+TRUE RGBA TRANSPARENT background, no floor,shadows,text,grid,labels,arrows,watermarks or props. Clean2D animeink andflatcelshade, no3Dtoy. Generousmargin everycell.1536x1024or larger.

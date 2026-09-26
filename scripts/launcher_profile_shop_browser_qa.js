@@ -214,7 +214,8 @@ async function main() {
         async socialRequest(action, payload) { qa.calls.push(['social', action, payload]); return { ok: true }; }
       };
     }, { mine: ownProfile, friend: friendProfile, shop: initialShop });
-    await page.addScriptTag({ content: read('launcher-room.js') });
+    for (const file of ['launcher-room-dialogue.js', 'launcher-room-motion-data.js', 'launcher-room-motion.js', 'launcher-room.js'])
+      await page.addScriptTag({ content: read(file) });
     await page.addScriptTag({ content: read('launcher-profile-shop.js') });
     await page.addScriptTag({ content: read('launcher-social.js') });
     check('all launcher panels exist', await page.evaluate(() =>

@@ -470,7 +470,9 @@ async function main() {
       [...document.querySelectorAll('#roomCharacters .room-character-shell')].every(node => {
         const depth = Number(node.style.getPropertyValue('--room-depth'));
         const scale = Number(node.style.getPropertyValue('--room-character-scale'));
-        return Math.abs(scale - depth / 1.07) < .0001;
+        const key = node.dataset.roomKey.replace('c:room-character-', '');
+        const body = window.OnePieceRoomMotion.metadata(key, window.OnePieceRoomMotionManifest).displayScale;
+        return Math.abs(scale - depth / 1.07 * body) < .0001;
       })));
     await page.waitForTimeout(2200);
     const chibiMoved = await page.locator('#roomCharacters .room-character-shell').first().evaluate(node => `${node.style.left}|${node.style.top}`);
@@ -524,8 +526,12 @@ async function main() {
     check('partner replies sequentially', await page.locator('#roomCharacters .room-speech:not([hidden])').count() === 1);
     check('listener performs its authored body reaction during the reply', await page.evaluate(() => {
       const speaker = document.querySelector('#roomCharacters .room-speech:not([hidden])');
-      return ['talk_happy', 'talk_annoyed', 'surprised', 'focused_use'].includes(speaker?.parentElement?.dataset.pose) &&
-        [...document.querySelectorAll('#roomCharacters .room-character-shell')].some(node => node !== speaker.parentElement && node.dataset.listener && node.dataset.reaction);
+      const active = window.__launcherRoomTest.snapshot().interaction;
+      const scene = Object.values(window.OnePieceRoomDialogue.SCENES).flat().find(scene => scene.id === active?.sceneId);
+      const turn = scene?.turns[active?.turnIndex];
+      const listener = document.querySelector(`#roomCharacters [data-room-key="c:room-character-${turn?.listener?.key}"]`);
+      return turn && speaker?.parentElement?.dataset.pose === turn.pose && listener?.dataset.pose === turn.listener.pose &&
+        listener.dataset.listener === turn.speaker && listener.dataset.reaction === window.OnePieceRoomDialogue.ACTION_LABELS[turn.listener.action];
     }));
     const fullScene = await page.evaluate(async () => {
       const scenes = window.__qaSceneTurns; const started = performance.now();
@@ -537,7 +543,7 @@ async function main() {
             clearInterval(window.__qaSceneWatch);
             const [first, second] = active.pair.split(':');
             return { id: active.sceneId, turns: [...seen], spoken: [...window.__qaSceneSpeakers.get(active.sceneId)],
-              expected: window.OnePieceRoomDialogue.scene(first, second, active.sceneCursor).turns };
+              expected: Object.values(window.OnePieceRoomDialogue.SCENES).flat().find(scene => scene.id === active.sceneId).turns };
           }
         }
         await new Promise(resolve => setTimeout(resolve, 90));

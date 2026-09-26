@@ -76,7 +76,7 @@ def build(plan_path, source_root, output, partial=False):
     resolved_path = f'{BASE}/resolved-selection.json'
     write_json(local(output, original_path), plan)
     write_json(local(output, resolved_path), resolved)
-    manifest = {'schema': 'one-piece-room-walk-art/3', 'version': '1.1.14', 'canonicalCharactersOnly': True,
+    manifest = {'schema': 'one-piece-room-walk-art/3', 'version': '1.1.15', 'canonicalCharactersOnly': True,
                 'anatomyReassembled': False, 'mirrored': False, 'fixtureSources': False, 'partial': partial,
                 'shape': {'columns': 4, 'rows': 1, 'cell': 128, 'frames': 4, 'root': [64, 112]},
                 'poseOrder': [POSES[index] for index in ORDER], 'visualAccepted': False,

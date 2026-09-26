@@ -1,0 +1,12 @@
+{
+  "tool": "image_gen__imagegen",
+  "builtIn": true,
+  "sourcePath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0df5d-e07f-7a83-8f0f-49f36869b030\\exec-c93a0c73-fb89-40b7-bb01-2d9d0f17ac68.png",
+  "localPath": "D:/Codex_QA/launcher-room-likeness-1.1.15/chopper/actions/source-01.png",
+  "promptPath": "D:/Codex_QA/launcher-room-likeness-1.1.15/chopper/actions/prompt-01.txt",
+  "references": [
+    "D:/Codex_QA/launcher-room-likeness-1.1.15/chopper/turnaround/source-01.png",
+    "D:/Codex_QA/launcher-room-likeness-1.1.15/chopper/references/official-drum-figure.jpg"
+  ],
+  "outputHint": "Generated images are saved to C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0df5d-e07f-7a83-8f0f-49f36869b030 as C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0df5d-e07f-7a83-8f0f-49f36869b030\\exec-c93a0c73-fb89-40b7-bb01-2d9d0f17ac68.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+}

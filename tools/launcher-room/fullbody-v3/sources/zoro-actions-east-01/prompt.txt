@@ -1,0 +1,14 @@
+Use case: stylized-concept, production animation asset. Attached reference is the approved early-series Roronoa Zoro model. Draw EIGHT complete whole-body reaction poses of THIS SAME Zoro, all facing screen RIGHT in a clean side/very slight three-quarter profile. Exactly two rows of four evenly spaced separate figures; transparent PNG background, no text or labels, no frame lines, no ground shadows. Every head, hand, sword tip and boot entirely inside its equal cell with generous margins. Each figure uses the same scale and head size. Full character must be drawn as a unified anatomy, never assembled limbs or pasted heads.
+
+Identity: same stern narrow horizontal eyes with small pupils, angular jaw, broad neck and muscular forearms, short close-cropped green hair; retain approximately 3.3 head-height game-SD proportions, not round baby/chibi doll. Early-series white short-sleeved Henley, green haramaki, black trousers and boots; BOTH healthy open eyes, NO eye scar. Three sheathed katana on anatomical RIGHT hip (near side): one white wrapped handle/white scabbard Wado Ichimonji, two dark handles/dark scabbards. SAME three blades in every pose, naturally tucked close to right hip. No drawn sword. Anatomical LEFT arm black bandana and LEFT ear three gold earrings are far side in this view and should not jump onto the visible right ear/arm.
+
+Poses in reading order:
+1 neutral standing, hands relaxed, stern attentive.
+2 dry amused talking, very small confident grin, one hand palm-up at waist/chest level. Zoro is reserved, never baby-happy.
+3 annoyed talking, furrowed brow, tight mouth, one hand on hip.
+4 suddenly surprised, wider eyes and slightly open mouth, both hands lifted modestly, feet remain grounded.
+5 focused using a waist-high object, torso slight forward lean, BOTH hands naturally reach forward at waist level; no prop, no extra limb.
+6 sitting on an invisible low bench, knees bent, thighs horizontal, boots down, hands on knees; preserve same head/torso size (lower total height).
+7 understated wave, one palm raised beside shoulder, small relaxed smirk.
+8 quiet listening, attentive eyes, slightly tilted head, hands relaxed.
+Keep clean confident black anime outlines, limited cel shading like the reference, no plastic shine, no baby cheeks. Make expression changes clearly visible on the actual character face. Draw eight distinct complete coherent poses, not one idle pasted eight times.

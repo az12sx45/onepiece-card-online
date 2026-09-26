@@ -14,58 +14,58 @@
     "maxWidth": 112
   },
   "method": "whole-character component with nearby source alpha; uniform whole-image scale and translation",
-  "uniformDirectionScale": 0.45662100456621,
+  "uniformDirectionScale": 0.3888087221420555,
   "frames": [
     {
       "key": "brook",
       "direction": "east",
       "pose": "idle",
-      "source": "brook",
+      "source": "brook-v15-actions-01",
       "region": [
-        87,
-        2,
-        104,
-        231
+        35,
+        0,
+        123,
+        262
       ],
       "index": 0,
       "bounds": [
-        43,
-        11,
-        87,
+        41,
+        14,
+        85,
         113
       ],
       "opaqueBoundsAtOutput": [
-        44,
-        12,
-        86,
+        42,
+        15,
+        84,
         112
       ],
       "sourceAnchor": [
-        137.17600527356626,
-        227
+        98.95680691089426,
+        256
       ],
       "localAnchor": [
-        46.17600527356626,
-        221
+        59.95680691089426,
+        253
       ],
       "sourceAlphaBounds": [
-        91,
-        6,
-        187,
-        229
+        39,
+        3,
+        154,
+        258
       ],
       "opaqueBounds": [
-        93,
-        8,
-        92,
-        219
+        41,
+        5,
+        111,
+        251
       ],
-      "opaquePixels": 12971,
-      "removedDistantAlphaPixels": 2301,
+      "opaquePixels": 14463,
+      "removedDistantAlphaPixels": 2530,
       "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
         6,
-        6,
+        5,
         6,
         6
       ],
@@ -76,17 +76,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.45662100456621,
-      "wholeImageScale": 0.45662100456621,
+      "uniformDirectionScale": 0.3888087221420555,
+      "outputScale": 0.9797979797979798,
+      "wholeImageScale": 0.3888087221420555,
       "inverseWholeImageTransform": [
-        2.19,
+        2.571958762886598,
         0,
-        -93.98399472643374,
+        -104.648553913848,
         0,
-        2.19,
-        -24.28
+        2.571958762886598,
+        -35.059381443298946
       ],
-      "rgbaSha256": "e3cf5acc61daa38c3f392faab6a4b847c66033bcb868c4da40f8b7e4eedff540",
+      "rgbaSha256": "dd66c46b38bbd1a377dbf4faffba725cfb771ed43a2b30fd7f12592115dfb709",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false
@@ -95,52 +96,52 @@
       "key": "brook",
       "direction": "east",
       "pose": "talk_happy",
-      "source": "brook",
+      "source": "brook-v15-actions-01",
       "region": [
-        323,
-        3,
-        146,
-        230
+        217,
+        0,
+        155,
+        261
       ],
       "index": 1,
       "bounds": [
-        43,
-        12,
-        105,
+        41,
+        13,
+        97,
         113
       ],
       "opaqueBoundsAtOutput": [
-        43,
-        12,
-        104,
+        41,
+        14,
+        96,
         112
       ],
       "sourceAnchor": [
-        374.6455280997157,
-        227
+        282.71835251362813,
+        255
       ],
       "localAnchor": [
-        46.645528099715705,
-        220
+        61.71835251362813,
+        254
       ],
       "sourceAlphaBounds": [
-        328,
-        7,
-        465,
-        229
+        221,
+        1,
+        368,
+        257
       ],
       "opaqueBounds": [
-        329,
-        9,
-        134,
-        218
+        223,
+        3,
+        143,
+        252
       ],
-      "opaquePixels": 13698,
-      "removedDistantAlphaPixels": 2569,
+      "opaquePixels": 16697,
+      "removedDistantAlphaPixels": 3816,
       "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
         6,
-        6,
+        3,
         6,
         6
       ],
@@ -151,17 +152,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.45662100456621,
-      "wholeImageScale": 0.45662100456621,
+      "uniformDirectionScale": 0.3888087221420555,
+      "outputScale": 0.9797979797979798,
+      "wholeImageScale": 0.3888087221420555,
       "inverseWholeImageTransform": [
-        2.19,
+        2.571958762886598,
         0,
-        -93.51447190028429,
+        -102.88700831111413,
         0,
-        2.19,
-        -25.28
+        2.571958762886598,
+        -34.059381443298946
       ],
-      "rgbaSha256": "0c4a76ba717f7184d4b4684682cf3c7d7deb364ac378d03a154e086b82a9a106",
+      "rgbaSha256": "43f621d7c6193d1c65445234a2ccd05b1209d22a792f96f0743c6ee8096d5f8a",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false
@@ -170,52 +172,52 @@
       "key": "brook",
       "direction": "east",
       "pose": "talk_annoyed",
-      "source": "brook",
+      "source": "brook-v15-actions-01",
       "region": [
-        544,
-        2,
-        105,
-        231
+        409,
+        0,
+        126,
+        260
       ],
       "index": 2,
       "bounds": [
-        42,
-        11,
-        85,
+        40,
+        14,
+        86,
         113
       ],
       "opaqueBoundsAtOutput": [
-        42,
-        12,
-        84,
+        41,
+        15,
+        85,
         112
       ],
       "sourceAnchor": [
-        597.8582677165355,
-        227
+        474.122502710237,
+        254
       ],
       "localAnchor": [
-        48.858267716535465,
-        221
+        61.12250271023697,
+        252
       ],
       "sourceAlphaBounds": [
-        549,
-        6,
-        644,
-        229
+        413,
+        2,
+        531,
+        256
       ],
       "opaqueBounds": [
-        550,
-        8,
-        93,
-        219
+        415,
+        4,
+        114,
+        250
       ],
-      "opaquePixels": 13041,
-      "removedDistantAlphaPixels": 2442,
+      "opaquePixels": 15981,
+      "removedDistantAlphaPixels": 2505,
       "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
         6,
-        6,
+        4,
         6,
         6
       ],
@@ -226,17 +228,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.45662100456621,
-      "wholeImageScale": 0.45662100456621,
+      "uniformDirectionScale": 0.3888087221420555,
+      "outputScale": 0.9797979797979798,
+      "wholeImageScale": 0.3888087221420555,
       "inverseWholeImageTransform": [
-        2.19,
+        2.571958762886598,
         0,
-        -91.30173228346453,
+        -103.48285811450529,
         0,
-        2.19,
-        -24.28
+        2.571958762886598,
+        -36.059381443298946
       ],
-      "rgbaSha256": "861a61aa439d27cf24f002dec1e000851db81682815c7f3c064075db985d0386",
+      "rgbaSha256": "1177004f6734f2a2c64ed1ee2c645d30753132236b451eaeeb5e1def509b1fa5",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false
@@ -245,52 +248,52 @@
       "key": "brook",
       "direction": "east",
       "pose": "surprised",
-      "source": "brook",
+      "source": "brook-v15-actions-01",
       "region": [
-        764,
-        4,
-        122,
-        229
+        594,
+        0,
+        144,
+        260
       ],
       "index": 3,
       "bounds": [
-        43,
-        12,
-        94,
+        40,
+        14,
+        93,
         113
       ],
       "opaqueBoundsAtOutput": [
-        44,
-        13,
-        94,
+        41,
+        15,
+        92,
         112
       ],
       "sourceAnchor": [
-        814.4226666666667,
-        227
+        659.1399332929047,
+        254
       ],
       "localAnchor": [
-        46.422666666666714,
-        219
+        61.13993329290474,
+        252
       ],
       "sourceAlphaBounds": [
-        768,
-        8,
-        882,
-        229
+        598,
+        2,
+        734,
+        256
       ],
       "opaqueBounds": [
-        770,
-        10,
-        110,
-        217
+        600,
+        4,
+        132,
+        250
       ],
-      "opaquePixels": 13023,
-      "removedDistantAlphaPixels": 3021,
+      "opaquePixels": 16998,
+      "removedDistantAlphaPixels": 3327,
       "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
         6,
-        6,
+        4,
         6,
         6
       ],
@@ -301,17 +304,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.45662100456621,
-      "wholeImageScale": 0.45662100456621,
+      "uniformDirectionScale": 0.3888087221420555,
+      "outputScale": 0.9797979797979798,
+      "wholeImageScale": 0.3888087221420555,
       "inverseWholeImageTransform": [
-        2.19,
+        2.571958762886598,
         0,
-        -93.73733333333328,
+        -103.46542753183752,
         0,
-        2.19,
-        -26.28
+        2.571958762886598,
+        -36.059381443298946
       ],
-      "rgbaSha256": "3582bae7d44cc1cdc43162b58d9f91128e9b8330de7b3f012bd7c456fdcdc6c2",
+      "rgbaSha256": "2af8be15ed7f38ca9b06564a31eb1f4981bac0af1bee846dbab5746357b9c9a3",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false
@@ -320,48 +324,48 @@
       "key": "brook",
       "direction": "east",
       "pose": "focused_use",
-      "source": "brook",
+      "source": "brook-v15-actions-01",
       "region": [
-        971,
-        9,
-        150,
-        224
+        795,
+        22,
+        160,
+        236
       ],
       "index": 4,
       "bounds": [
-        29,
-        14,
-        93,
+        37,
+        24,
+        96,
         113
       ],
       "opaqueBoundsAtOutput": [
-        30,
-        15,
-        92,
+        37,
+        25,
+        95,
         112
       ],
       "sourceAnchor": [
-        1052.4019180470793,
-        227
+        869.1615500754907,
+        252
       ],
       "localAnchor": [
-        76.40191804707933,
-        214
+        70.16155007549071,
+        226
       ],
       "sourceAlphaBounds": [
-        976,
-        13,
-        1117,
-        229
+        799,
+        26,
+        951,
+        254
       ],
       "opaqueBounds": [
-        977,
-        15,
-        138,
-        212
+        801,
+        28,
+        148,
+        224
       ],
-      "opaquePixels": 13869,
-      "removedDistantAlphaPixels": 3095,
+      "opaquePixels": 17144,
+      "removedDistantAlphaPixels": 4006,
       "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
         6,
@@ -376,17 +380,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.45662100456621,
-      "wholeImageScale": 0.45662100456621,
+      "uniformDirectionScale": 0.3888087221420555,
+      "outputScale": 0.9797979797979798,
+      "wholeImageScale": 0.3888087221420555,
       "inverseWholeImageTransform": [
-        2.19,
+        2.571958762886598,
         0,
-        -63.75808195292066,
+        -94.44381074925155,
         0,
-        2.19,
-        -31.28
+        2.571958762886598,
+        -62.059381443298946
       ],
-      "rgbaSha256": "8eac87d5badab9512d1af09e8b072e00f38f077dfdf132853d9596b89e9d072c",
+      "rgbaSha256": "8c973efd0e135493d4492f8dbf73c107bccdc136c001d4b13d396c0203b76887",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false
@@ -395,48 +400,48 @@
       "key": "brook",
       "direction": "east",
       "pose": "sit",
-      "source": "brook",
+      "source": "brook-v15-actions-01",
       "region": [
-        1217,
-        68,
-        122,
-        167
+        1008,
+        69,
+        116,
+        203
       ],
       "index": 5,
       "bounds": [
-        41,
-        41,
-        93,
-        113
+        42,
+        37,
+        84,
+        112
       ],
       "opaqueBoundsAtOutput": [
-        41,
-        41,
-        92,
+        43,
+        38,
+        83,
         112
       ],
       "sourceAnchor": [
-        1272.2999240698557,
-        229
+        1068.0184925093633,
+        266
       ],
       "localAnchor": [
-        51.299924069855706,
-        156
+        56.01849250936334,
+        193
       ],
       "sourceAlphaBounds": [
-        1221,
+        1012,
         73,
-        1335,
-        231
+        1120,
+        268
       ],
       "opaqueBounds": [
-        1223,
-        74,
-        110,
-        155
+        1014,
+        75,
+        104,
+        191
       ],
-      "opaquePixels": 9901,
-      "removedDistantAlphaPixels": 1138,
+      "opaquePixels": 12460,
+      "removedDistantAlphaPixels": 2224,
       "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
         6,
@@ -451,17 +456,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.45662100456621,
-      "wholeImageScale": 0.45662100456621,
+      "uniformDirectionScale": 0.3888087221420555,
+      "outputScale": 0.9797979797979798,
+      "wholeImageScale": 0.3888087221420555,
       "inverseWholeImageTransform": [
-        2.19,
+        2.571958762886598,
         0,
-        -88.86007593014429,
+        -108.58686831537892,
         0,
-        2.19,
-        -89.28
+        2.571958762886598,
+        -95.05938144329895
       ],
-      "rgbaSha256": "8be10b1c2730ea41a16d3485b9e2a5ffecb57fc1fd12a57ecbcf861523100a5a",
+      "rgbaSha256": "8993a64d90fddb038f86838ff230a1458a3c64b4b10128e1c027a84e4da60bba",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false
@@ -470,52 +476,52 @@
       "key": "brook",
       "direction": "east",
       "pose": "wave",
-      "source": "brook",
+      "source": "brook-v15-actions-01",
       "region": [
-        1433,
-        3,
-        108,
-        230
+        1188,
+        0,
+        130,
+        261
       ],
       "index": 6,
       "bounds": [
         39,
-        12,
-        84,
+        14,
+        86,
         113
       ],
       "opaqueBoundsAtOutput": [
         40,
-        12,
-        83,
+        15,
+        86,
         112
       ],
       "sourceAnchor": [
-        1492.1028098453496,
-        227
+        1256.7274996100452,
+        255
       ],
       "localAnchor": [
-        55.10280984534961,
-        220
+        64.72749961004524,
+        252
       ],
       "sourceAlphaBounds": [
-        1437,
-        7,
-        1537,
-        229
+        1192,
+        3,
+        1314,
+        257
       ],
       "opaqueBounds": [
-        1439,
-        9,
-        96,
-        218
+        1194,
+        5,
+        118,
+        250
       ],
-      "opaquePixels": 13685,
-      "removedDistantAlphaPixels": 3098,
+      "opaquePixels": 16281,
+      "removedDistantAlphaPixels": 3087,
       "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
         6,
-        6,
+        5,
         6,
         6
       ],
@@ -526,17 +532,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.45662100456621,
-      "wholeImageScale": 0.45662100456621,
+      "uniformDirectionScale": 0.3888087221420555,
+      "outputScale": 0.9797979797979798,
+      "wholeImageScale": 0.3888087221420555,
       "inverseWholeImageTransform": [
-        2.19,
+        2.571958762886598,
         0,
-        -85.05719015465039,
+        -99.87786121469702,
         0,
-        2.19,
-        -25.28
+        2.571958762886598,
+        -36.059381443298946
       ],
-      "rgbaSha256": "52a2886c0883a8fce6c3fe7aa5d24228f6ca0c370fdc336ec11e60790cce3f48",
+      "rgbaSha256": "9ab4e8854c1e0e4bad482ed4d257a9720957c8c998326c096aa9e733f43e7b49",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false
@@ -545,48 +552,48 @@
       "key": "brook",
       "direction": "east",
       "pose": "listen",
-      "source": "brook",
+      "source": "brook-v15-actions-01",
       "region": [
-        1653,
-        4,
-        99,
-        230
+        1383,
+        0,
+        124,
+        261
       ],
       "index": 7,
       "bounds": [
-        43,
-        12,
-        84,
+        41,
+        14,
+        86,
         113
       ],
       "opaqueBoundsAtOutput": [
-        44,
-        12,
-        83,
+        41,
+        15,
+        85,
         112
       ],
       "sourceAnchor": [
-        1703.5643675578522,
-        228
+        1447.1428119563498,
+        255
       ],
       "localAnchor": [
-        46.564367557852165,
-        220
+        60.14281195634976,
+        251
       ],
       "sourceAlphaBounds": [
-        1657,
-        8,
-        1748,
-        230
+        1387,
+        4,
+        1503,
+        257
       ],
       "opaqueBounds": [
-        1659,
-        10,
-        87,
-        218
+        1389,
+        6,
+        112,
+        249
       ],
-      "opaquePixels": 12447,
-      "removedDistantAlphaPixels": 2620,
+      "opaquePixels": 15021,
+      "removedDistantAlphaPixels": 3141,
       "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
         6,
@@ -601,17 +608,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.45662100456621,
-      "wholeImageScale": 0.45662100456621,
+      "uniformDirectionScale": 0.3888087221420555,
+      "outputScale": 0.9797979797979798,
+      "wholeImageScale": 0.3888087221420555,
       "inverseWholeImageTransform": [
-        2.19,
+        2.571958762886598,
         0,
-        -93.59563244214783,
+        -104.4625488683925,
         0,
-        2.19,
-        -25.28
+        2.571958762886598,
+        -37.059381443298946
       ],
-      "rgbaSha256": "9f180b2a4b36dcd185dc16025ed0df494b0661d062df0070aa2b04d5ffa054a4",
+      "rgbaSha256": "302e73f53cea4cd3d7b230c1942446f97c83d1d4e91d9f842f2c31be5a48bde4",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false

@@ -1,16 +1,16 @@
-/* Original room vignettes; sources and performance contract: docs/LAUNCHER_CREW_CANON_20260926.md. */
+/* Original room vignettes; editorial sources: docs/LAUNCHER_CREW_RELATIONSHIPS_20260927.md. Stable API contract: docs/LAUNCHER_CREW_CANON_20260926.md. */
 (function (root) {
   'use strict';
   const KEYS = Object.freeze(['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopper', 'robin', 'franky', 'brook', 'jinbe']);
   const MOODS = Object.freeze(['happy', 'surprised', 'focused', 'annoyed']);
-  const POSES = Object.freeze(['idle', 'talk_happy', 'talk_annoyed', 'surprised', 'focused_use', 'sit', 'wave']);
+  const POSES = Object.freeze(['idle', 'talk_happy', 'talk_annoyed', 'surprised', 'focused_use', 'sit', 'wave', 'listen']);
   // Intent tokens are mapped to existing poses. They do not assert that extra sprites exist.
   const PERFORMANCE = Object.freeze({
-    talk: ['happy', 'talk_happy'], explain: ['focused', 'focused_use'], nod: ['focused', 'idle'],
-    laugh: ['happy', 'talk_happy'], tease: ['happy', 'talk_happy'], protest: ['annoyed', 'talk_annoyed'],
-    reassure: ['happy', 'talk_happy'], admire: ['surprised', 'surprised'], think: ['focused', 'focused_use'],
-    bow: ['happy', 'wave'], listen: ['focused', 'idle'], startled: ['surprised', 'surprised'],
-    offer: ['happy', 'wave'], work: ['focused', 'focused_use'], rest: ['focused', 'sit']
+    talk: ['focused', 'idle'], explain: ['focused', 'idle'], nod: ['focused', 'idle'],
+    laugh: ['happy', 'talk_happy'], smile: ['happy', 'talk_happy'], tease: ['focused', 'idle'], protest: ['annoyed', 'talk_annoyed'],
+    reassure: ['focused', 'idle'], admire: ['surprised', 'surprised'], think: ['focused', 'idle'],
+    bow: ['focused', 'wave'], listen: ['focused', 'listen'], startled: ['surprised', 'surprised'],
+    offer: ['focused', 'wave'], work: ['focused', 'focused_use'], rest: ['focused', 'sit']
   });
   const ACTIONS = Object.freeze(Object.keys(PERFORMANCE));
   const PROFILES = {
@@ -28,74 +28,74 @@
   const b = (line, action = 'talk') => ({ line, action, mood: PERFORMANCE[action][0], pose: PERFORMANCE[action][1] });
   const SOLO = {
     luffy: {
-      chat: [b('你剛才藏了什麼？讓我看看！', 'admire'), b('這裡還能擺個好玩的東西吧？'), b('大家忙完了沒？我想到一個遊戲！', 'offer'), b('你不想去？好，那我們找別的玩。', 'nod'), b('我聽不懂那麼多啦。你說往哪邊？', 'think'), b('剛剛笑得最大聲的是你吧！', 'laugh')],
+      chat: [b('喂！你也來！我們正要開始！', 'offer'), b('這東西怎麼玩的？先讓我試一下！', 'admire'), b('好無聊——騙人布又跑去哪了？', 'think'), b('哈哈哈！你剛才那個臉，再做一次！', 'laugh'), b('你會的我不會。那就交給你啊！', 'nod'), b('那邊好像有什麼！走，去看看！', 'offer')],
       work: [b('這一堆都要搬？那就一起搬走！', 'work'), b('要我守著？好，有人來我就喊！', 'nod'), b('先說好，什麼東西不能碰？', 'think'), b('這箱很輕嘛。下一箱在哪？', 'work')],
-      bond: [b('下次發現好玩的，你也要叫我！', 'offer'), b('你說會做到，那我就等你！', 'reassure'), b('不用一直跟我道謝啦，一起玩吧！', 'laugh'), b('你今天沒什麼精神耶。要不要坐這裡？', 'offer')],
-      rest: [b('我先躺一下。開飯一定要叫我。', 'rest'), b('喔，大家還沒回來？那我等。', 'rest'), b('這裡看得到天空，挺不錯的嘛。'), b('剛才那個夢太好玩了，我再睡一下！', 'laugh')],
-      furniture: { 'kitchen-table': [b('我只拿自己的盤子！……我的是哪個？', 'think'), b('椅子搬好了，大家快過來！', 'offer')], helm: [b('甚平說別亂轉。那我負責看前面！', 'nod'), b('有東西冒出海面了！你看那邊！', 'admire')] }
+      bond: [b('下次也一起來！少一個人就不好玩了！', 'offer'), b('你說的地方，我也想去！帶路吧！', 'admire'), b('做得到啦。你不是已經決定了？', 'nod'), b('你怎麼不笑？有人欺負你嗎？', 'think')],
+      rest: [b('開飯再叫我。不是開飯就先別叫。', 'rest'), b('這裡風好大，躺著超舒服！', 'laugh'), b('我剛才夢到一座會跑的島耶。', 'admire'), b('大家都在啊。那我再睡一下。', 'rest')],
+      furniture: { 'kitchen-table': [b('這盤沒人坐！……喔，原來還有人沒來。', 'think'), b('香吉士！我坐好了！下一盤呢！', 'offer'), b('盤子都空了，還能再來一輪吧！', 'admire'), b('等等，我去把外面的人叫進來！', 'offer')], helm: [b('前面有東西！大大的！甚平你看！', 'admire'), b('這個交給甚平，我負責找島！', 'nod'), b('哈哈，轉過去的時候風都變了！', 'laugh'), b('娜美！還要多久才會到沒去過的地方？', 'offer')] }
     },
     zoro: {
-      chat: [b('找我？說吧，我聽著。', 'nod'), b('今天手感不對。再練一次。', 'think'), b('站遠點，刀還沒收。', 'explain'), b('你剛才那一下倒挺俐落。', 'nod'), b('這點聲音，還吵不醒我。', 'tease'), b('我沒迷路，是門換邊了吧。', 'protest')],
+      chat: [b('嗯？有事就說。', 'nod'), b('再一輪。剛才那下不算。', 'think'), b('刀還沒收，別靠那麼近。', 'explain'), b('這點吵鬧，還不至於睡不著。', 'tease'), b('……剛說完就更吵了。', 'protest'), b('等我練完。很快。', 'nod')],
       work: [b('重的放這邊。我一次搬。', 'work'), b('刀架我整理，刃口別朝外。', 'work'), b('通道留著，別讓人絆到。', 'explain'), b('這邊我顧。忙完再來換。', 'nod')],
-      bond: [b('還不放棄？行，再陪你一輪。', 'nod'), b('做不到的現在練，沒什麼丟臉。', 'reassure'), b('水放這了。你也歇一下。', 'offer'), b('有事就叫我，別自己硬扛。', 'reassure')],
-      rest: [b('練完再睡，今天算做到了。', 'rest'), b('醒著。只是眼睛懶得睜。', 'rest'), b('你要坐就坐，留個位置給刀。', 'nod'), b('這風不錯。讓我多待一會兒。', 'rest')],
-      furniture: { 'swords-rack': [b('刀鞘也得擦。只顧刀刃可不行。', 'work'), b('這把放內側，拿取才不會碰傷人。', 'explain')] }
+      bond: [b('還要再來？行，站穩。', 'offer'), b('別老看別人。你自己的步子呢？', 'explain'), b('沒事。這邊我顧。', 'nod'), b('知道怕還沒退，已經不錯了。', 'nod')],
+      rest: [b('醒著。只是懶得睜眼。', 'rest'), b('別坐刀上。旁邊有位子。', 'nod'), b('輪到我再叫。這班換你。', 'rest'), b('這裡挺好。吵的那幾個不在。', 'rest')],
+      furniture: { 'swords-rack': [b('刀鞘也得擦，別只顧刀刃。', 'work'), b('順序沒錯。拿起來才順手。', 'nod'), b('別碰白色那把。要看就站這裡看。', 'explain'), b('今天還沒練夠，先不收。', 'think')] }
     },
     nami: {
-      chat: [b('先聽我說完航線，再搶著出發。', 'explain'), b('風變了。你幫我把窗邊的紙壓住。', 'work'), b('這片海還沒畫上去呢。總有一天要補齊。', 'think'), b('你發現那朵雲了？眼力不錯。', 'admire'), b('別急著買，我們先看看船上有沒有。', 'explain'), b('都平安回來了？那就好。', 'reassure')],
+      chat: [b('等一下！先把話聽完再往外衝！', 'protest'), b('風向變了，窗邊那幾張幫我壓住。', 'explain'), b('這片海，總有一天要親手畫進去。', 'think'), b('買之前先問我，別又搬一堆用不到的回來。', 'explain'), b('人都回來了？……好，這就好。', 'nod'), b('今天誰把濕杯子放在我的海圖上？', 'protest')],
       work: [b('我把潮位補上，等等就能對航線。', 'work'), b('清單給我，缺的和想要的分開寫。', 'explain'), b('橘子樹先移到有光的地方。', 'work'), b('船員的份都算進去了，不會漏你的。', 'nod')],
-      bond: [b('你把那個小記號記住啦？很幫忙呢。', 'admire'), b('來，這段海圖借你看，可別弄濕。', 'offer'), b('今天你也忙壞了，茶一起喝吧。', 'offer'), b('放心，我會找一條大家都能通過的路。', 'reassure')],
-      rest: [b('這幾分鐘風不會變，讓我歇一下。', 'rest'), b('算好了！現在誰也別往帳本上加字。', 'protest'), b('難得有這麼安靜的下午。', 'rest'), b('那邊有空位，別踩到橘子樹的影子。', 'tease')],
-      furniture: { 'map-table': [b('這條線是暗礁的位置，別當成捷徑。', 'explain'), b('昨天的風向要另記，不能蓋掉今天的。', 'work')], 'tangerine-tree': [b('土還濕，今天先不用添水。', 'think'), b('新葉長出來了。嗯，這位置挑得不錯。')] }
+      bond: [b('你還記得那個記號啊，省了我好多事。', 'talk'), b('這張可以借你看。手先擦乾淨。', 'offer'), b('累了就坐吧。我剛好也想歇一下。', 'offer'), b('有我看著航線，你還怕找不到路嗎？', 'tease')],
+      rest: [b('我只休息一會兒，誰都不准加新麻煩。', 'rest'), b('帳算完了！終於能喝杯茶。', 'talk'), b('這種天氣，曬衣服剛剛好。', 'think'), b('香吉士的點心還有一份，別讓魯夫看見。', 'tease')],
+      furniture: { 'map-table': [b('暗礁在這裡。這條可不是捷徑。', 'explain'), b('這張是我畫的，別折到海岸線。', 'work'), b('先看雲，再對風。指針可不會把全部告訴你。', 'think'), b('差這一角……畫完就能接起來了。', 'work')], 'tangerine-tree': [b('土還濕，不用再澆了。', 'think'), b('誰想摘，先來問我。聽見沒有？', 'explain'), b('新葉長出來了呢。這裡的光剛剛好。', 'talk'), b('嗯，聞起來還是熟悉的味道。', 'rest')] }
     },
     usopp: {
-      chat: [b('本大爺的新發明，只差最後一顆螺絲！', 'explain'), b('我不是怕，我是在估計撤退路線。', 'protest'), b('別動那根線，我剛調到最合適的張力。', 'work'), b('你也看見了吧？那一下正中紅心！', 'admire'), b('故事還沒講完！最厲害的在後面。', 'offer'), b('要幫忙就直說嘛，我又不是會跑。', 'reassure')],
+      chat: [b('來得正好！見識一下本大爺的新發明！', 'offer'), b('我不是怕，我是先替大家看好退路！', 'protest'), b('別拉那根線！那不是裝飾！', 'protest'), b('看到了吧！正中紅心，沒有第二下！', 'admire'), b('故事還沒完！厲害的在後面！', 'offer'), b('你說修這個？哼，拿過來吧。', 'nod')],
       work: [b('先拿空的試，不准把正式的直接裝上去！', 'explain'), b('這個卡榫讓我磨一下，不能硬塞。', 'work'), b('靶子固定好，我再測一次。', 'work'), b('今天不吹牛。這個我真的修得好。', 'nod')],
-      bond: [b('你剛才信我會射中？嘿，那當然！'), b('我怕歸怕，說好幫你就會來。', 'reassure'), b('這是試作品，你願意幫我看看嗎？', 'offer'), b('小聲點啦，剛剛嚇一跳的事別告訴喬巴。', 'think')],
-      rest: [b('讓我喘口氣。英雄也要休息。', 'rest'), b('沒睡，我在腦中畫設計圖。', 'tease'), b('工具都收了，這回真的可以停工。', 'rest'), b('安靜得很好。千萬別突然叫我。', 'think')],
-      furniture: { 'tool-bench': [b('磨掉這裡的毛邊，手就不會被刮到。', 'work'), b('成功了！等等，再測一次才算數。', 'admire')], 'treasure-chest': [b('鎖沒壞，是木頭吸水脹起來了。', 'think'), b('我先墊住蓋子，手伸進去才不會夾到。', 'work')] }
+      bond: [b('你剛才真的信我？……嘿，那當然會中！', 'laugh'), b('怕歸怕，答應你的事我記著。', 'nod'), b('這個還沒給別人看。你先幫我試試。', 'offer'), b('剛才尖叫那聲不准告訴喬巴，說好了！', 'protest')],
+      rest: [b('英雄也要喘口氣。不是累倒，是喘氣。', 'rest'), b('別突然喊我！差點把點子嚇忘了！', 'protest'), b('今天工具都收好了，誰也別來借。', 'rest'), b('我只躺一下，夢裡還得繼續冒險呢。', 'tease')],
+      furniture: { 'tool-bench': [b('這裡再磨一點，拉起來才不會咬手。', 'work'), b('成功！……等等，再試一次才準。', 'admire'), b('這顆小螺絲才是重點。小不代表沒用！', 'explain'), b('不准亂收！我知道每一片放在哪！', 'protest')], 'treasure-chest': [b('不是打不開，我在聽機關的聲音。', 'think'), b('原來是木頭脹了。哼，早就猜到了。', 'tease'), b('蓋子先墊著，夾到手就什麼都做不了了。', 'work'), b('這裡面要是有寶藏，可得算我一份喔！', 'offer')] }
     },
     sanji: {
-      chat: [b('先洗手。肚子再餓也不差這一下。', 'explain'), b('這味道還差一點……嗯，現在行了。', 'think'), b('娜美小姐的茶，哪個混蛋也別偷喝。', 'protest'), b('晚回來也有你的份，別急著吞。', 'reassure'), b('今天有想吃的就說，我看食材來做。', 'offer'), b('好東西得讓人吃進肚子，擺著看幹嘛。')],
+      chat: [b('肚子餓了？洗手，馬上就好。', 'offer'), b('還差一點香氣……嗯，就這個。', 'think'), b('這盤是娜美小姐的，伸手前想清楚。', 'protest'), b('晚回來也有飯吃，急著吞什麼。', 'explain'), b('有想吃的就說。冰箱裡有的，我想辦法。', 'offer'), b('別把剩菜丟了，還能做一鍋好湯。', 'work')],
       work: [b('刀給我。你把洗好的菜瀝乾。', 'work'), b('桌角擦一遍，端湯才不會滑。', 'explain'), b('剩下的食材還能熬湯，不准丟。', 'work'), b('火我看著，你去叫還沒吃的人。', 'nod')],
-      bond: [b('還記得那道菜？下次給你做。'), b('手燙到了？放下，我來就好。', 'reassure'), b('有你幫忙備料，今天能早點開飯。', 'nod'), b('吃不完就說，別勉強，也別糟蹋。', 'explain')],
-      rest: [b('爐火關好了。終於能喝口熱的。', 'rest'), b('那群傢伙吃得還真乾淨。'), b('菜單明天再想，現在讓我坐一下。', 'rest'), b('剩的這塊留給你，慢慢吃。', 'offer')],
-      furniture: { 'kitchen-table': [b('盤子別疊那麼高。這盤我端。', 'work'), b('全部盛好了，別讓最後來的人吃冷飯。', 'offer')], 'tangerine-tree': [b('娜美小姐答應的兩顆，只摘這兩顆。', 'work'), b('皮也留著，洗乾淨可以添香氣。', 'explain')] }
+      bond: [b('上次那道還想吃？行，我記著。', 'nod'), b('手放下。燙的交給我端。', 'offer'), b('切得不錯。這盤明天也交給你。', 'talk'), b('吃飽再忙，廚房不會把你那份收走。', 'reassure')],
+      rest: [b('爐火關了，這下能喝一口熱茶。', 'rest'), b('吃得連醬都不剩……算有眼光。', 'tease'), b('菜單明天再想，現在不接加餐。', 'rest'), b('那塊不是剩下的，是留給你的。', 'offer')],
+      furniture: { 'kitchen-table': [b('端穩。湯潑了可不是再擦一次就完事。', 'work'), b('最後那位還沒坐下，別把他的也吃了。', 'explain'), b('盤子都拿來。空盤子才讓廚師看得舒服。', 'talk'), b('剛起鍋，這個要趁熱。', 'offer')], 'tangerine-tree': [b('只摘答應好的兩顆。娜美小姐的樹可得顧好。', 'work'), b('這香氣，用一點果皮就夠了。', 'think'), b('還差一點熟，今天先留著。', 'nod'), b('點心做得好不好，等她嚐一口就知道。', 'talk')] }
     },
     chopper: {
-      chat: [b('先坐下讓我看看，逞強不會好得比較快！', 'explain'), b('這種葉子很像，但不能光看顏色認。', 'think'), b('笨、笨蛋！說我可靠也沒用啦……嘿嘿，你真的這麼想？', 'laugh'), b('大家沒事的時候，我也有好多東西想研究。', 'offer'), b('別把藥片和糖放一起！拿錯會很危險。', 'protest'), b('我剛學會新的包法，你看這裡不會勒。', 'explain')],
+      chat: [b('有哪裡不舒服？先讓我看，不准逞強！', 'explain'), b('這兩種葉子很像，不能只認顏色！', 'think'), b('笨蛋！誇我也不會高興啦！……嘿嘿。', 'laugh'), b('騙人布剛才說的，你也聽到了嗎？好厲害！', 'admire'), b('藥跟糖不要放一起！真的會拿錯！', 'protest'), b('等我把這一行看完，就去找你們玩！', 'offer')],
       work: [b('藥瓶標籤朝外，先看清楚再拿。', 'work'), b('我在核對份量，等一下再跟你玩。', 'think'), b('用過的繃帶分開放，不能混回去。', 'work'), b('有人不舒服就叫我，我聽得到！', 'offer')],
-      bond: [b('你記得帶水來啊，謝謝你。'), b('我把這頁弄懂了！想先講給你聽。', 'offer'), b('一點點進步也是進步，對吧？', 'think'), b('你不用裝成沒事，我會陪著你。', 'reassure')],
-      rest: [b('藥箱扣好了，這下我能放心歇一會兒。', 'rest'), b('才不是看書看睡著，我只是閉眼想。', 'protest'), b('今天的筆記比昨天多懂一點了。'), b('你也休息，等等我們再繼續。', 'offer')],
-      furniture: { 'medicine-cabinet': [b('快用完的記在這欄，不能等缺了才找。', 'work'), b('繃帶收乾燥一點，這層剛好。', 'work')], bookshelf: [b('這裡有兩種說法，我要再對照看看。', 'think'), b('原來圖旁邊的小字也很重要！', 'admire')] }
+      bond: [b('你記得帶水給我啊！我剛才看得太專心了。', 'talk'), b('這個我研究懂了！你要聽嗎？', 'offer'), b('今天有比昨天好一點！真的！', 'admire'), b('不舒服就說。我是醫生，不會嫌你麻煩！', 'reassure')],
+      rest: [b('藥箱扣好了，嗯……可以休息一下。', 'rest'), b('沒睡著！我只是不小心閉了眼睛！', 'protest'), b('明天還要再看一遍。這裡不能記錯。', 'think'), b('你也坐一下，我分你一小塊甜的。', 'offer')],
+      furniture: { 'medicine-cabinet': [b('這瓶快用完了，先記起來。', 'work'), b('標籤朝外，急用時才不會找不到。', 'work'), b('沒問過我，不准自己拿來吃！', 'explain'), b('繃帶放乾燥的這層……好了！', 'nod')], bookshelf: [b('這兩本寫的不一樣，我要再比一次。', 'think'), b('原來還有這種情況！得記下來！', 'admire'), b('不是只看圖，旁邊的小字也要看！', 'explain'), b('這一頁看懂了！下一次就能認出來！', 'laugh')] }
     },
     robin: {
-      chat: [b('你看，頁角那個記號比正文還有趣。', 'offer'), b('原來你也注意到了。我們再找找。'), b('這麼安靜……我還以為又有人被埋在書堆下面了。', 'tease'), b('別急著下結論，這頁缺了一角。', 'think'), b('今天的故事，你想從哪裡聽起？', 'offer'), b('喬巴的筆記很仔細。我讀得很開心。')],
+      chat: [b('你也對這個記號有興趣嗎？', 'offer'), b('這一頁的空白，比寫了字的地方更有意思呢。', 'think'), b('大家突然安靜，我還以為被什麼拖走了。', 'tease'), b('不急，缺的那一角也許還找得到。', 'think'), b('你想先聽結局？那可少了不少樂趣。', 'tease'), b('這個小東西……做得真可愛。', 'talk')],
       work: [b('先把書頁壓平，墨跡還沒乾。', 'work'), b('這個字有別的寫法，我再核對一次。', 'think'), b('書名留在外側，你下次就找得到了。', 'work'), b('先記下看見的，再寫我們的猜想。', 'explain')],
-      bond: [b('我記得你上次問的事。今天有新線索了。', 'offer'), b('陪我坐一會兒吧，不說話也很好。', 'reassure'), b('這個結局還是由你親自翻到比較有趣。', 'tease'), b('能把發現說給人聽，是很好的事呢。')],
-      rest: [b('書籤放好了，故事可以等我們一下。', 'rest'), b('你帶來的茶很香，謝謝。'), b('聽著大家吵鬧，倒也讀得下去。', 'tease'), b('今天先停在這裡，留一點好奇給明天。', 'rest')],
-      furniture: { bookshelf: [b('同一件事有不同的記載，值得並排讀。', 'think'), b('這本借給你，折頁的地方我已經修好了。', 'offer')], 'map-table': [b('舊地名和現在不同，先別急著劃掉。', 'explain'), b('這裡畫了一口井，也許曾經有人生活。', 'think')] }
+      bond: [b('上次你問的事，我找到另一種說法了。', 'offer'), b('坐吧。安靜一會兒也很好。', 'offer'), b('這一頁先別翻，我想看看你猜的答案。', 'tease'), b('有人願意聽，記下這些就更有意思了。', 'talk')],
+      rest: [b('書籤放在這裡，明天再繼續。', 'rest'), b('咖啡的香味剛剛好，謝謝。', 'talk'), b('這麼吵還能讀書，我也有點習慣了呢。', 'tease'), b('你看窗邊，光慢慢移過去了。', 'rest')],
+      furniture: { bookshelf: [b('同一件事，兩個人寫得完全不同呢。', 'think'), b('這本的書脊修好了，可以放心翻。', 'offer'), b('別擦掉頁邊的小字，也許是很久以前的讀者。', 'explain'), b('找到你了。原來一直夾在這一頁。', 'talk')], 'map-table': [b('這個地名比港口還老，先留著吧。', 'think'), b('一口井、一條路。這裡曾經有人住呢。', 'think'), b('地圖只畫了門口，裡面得親眼去看。', 'offer'), b('線路變了，舊路也不必急著擦掉。', 'explain')] }
     },
     franky: {
-      chat: [b('聽這聲音！轉起來一點都不卡了。', 'admire'), b('先說你想怎麼用，我再想怎麼造。', 'offer'), b('看著不起眼？少了這根可就散啦。', 'explain'), b('哪裡不順手，現在就告訴我。', 'nod'), b('這木頭還能用，老伙計有的是本事。'), b('好，尺寸都對上了！SUPER！', 'laugh')],
+      chat: [b('聽聽！這才是機關該有的聲音！', 'admire'), b('想做什麼就說！先讓我看看你的點子！', 'offer'), b('這一根不起眼？少了它，整個都得散！', 'explain'), b('哪裡不好使，指出來！現在就改！', 'nod'), b('舊木頭怎麼了？還有的是地方用得上！', 'protest'), b('成啦！這回才叫 SUPER！', 'laugh')],
       work: [b('量兩次再下手，省得你重新搬材料。', 'work'), b('把底座壓穩，我來鎖這邊。', 'work'), b('這裡加護邊，喬巴跑過來也不會刮到。', 'explain'), b('裝好還不算完，得試到真的能用。', 'think')],
-      bond: [b('你一直留著我做的東西？可惡，挺感動的啊。'), b('這個點子別丟，我們把它做出來！', 'offer'), b('有錯就改，做東西哪有一開始就全對的。', 'reassure'), b('來，最後這顆螺絲交給你。', 'offer')],
-      rest: [b('工具收好了，現在欣賞成品才舒服。', 'rest'), b('這杯可樂來得正是時候。'), b('今天修好的地方，明天再聽聽聲音。', 'think'), b('別催我，我正在想下一個好點子呢。', 'tease')],
-      furniture: { 'tool-bench': [b('這顆換下來留作樣本，別混回好零件。', 'work'), b('機關動得漂亮，也得停得穩才行。', 'explain')], helm: [b('鬆緊調到這裡，轉起來才有回饋。', 'work'), b('甚平，等會兒幫我試試手感。', 'offer')] }
+      bond: [b('這個你還留著啊……可惡，有點感動啊！', 'talk'), b('別光想，把草圖拿來！咱們做一個！', 'offer'), b('歪了就改。放著不管才叫浪費材料！', 'explain'), b('最後這顆給你鎖。你的點子，得自己完成！', 'offer')],
+      rest: [b('工具歸位！接下來，欣賞成品！', 'rest'), b('哈！這時候來口可樂，剛剛好！', 'laugh'), b('我在聽船的聲音。修好哪裡，聽得出來。', 'think'), b('別催，帥氣的設計也得醞釀一下！', 'tease')],
+      furniture: { 'tool-bench': [b('量好了再切！切短了可長不回來！', 'work'), b('會動還不算完，停下來也得穩！', 'explain'), b('換下來的分開放，別再拿回去裝！', 'work'), b('哈哈！一點不卡，這才配交給大家用！', 'laugh')], helm: [b('這個手感得讓甚平試。船是拿來開的！', 'offer'), b('太鬆不行，太緊也不行。再調一點。', 'work'), b('聽到了，那道小聲音就在這裡。', 'think'), b('老伙計，接下來還要靠你帶我們走遠點！', 'talk')] }
     },
     brook: {
-      chat: [b('想聽哪一種曲子？我先把拍子慢下來。', 'offer'), b('喲呵呵呵！您連最後那個弱拍都聽到了？真叫人開心。', 'laugh'), b('我已經坐得很端正了，骨架也端正。', 'tease'), b('不用急著鼓掌，我還藏了一段結尾呢。', 'tease'), b('有人一起哼歌，海上就熱鬧多了。'), b('今天這個聲音，值得記進新曲子裡。', 'think')],
+      chat: [b('來得正好。今天想聽輕快一點的嗎？', 'offer'), b('喲呵呵呵，您連那個小小的錯音都聽到了！', 'laugh'), b('我已經坐得很端正了，骨架可以作證。', 'tease'), b('先別鼓掌，我還留著一小段呢。', 'offer'), b('有人一起哼，曲子就會往別的方向走呢。', 'talk'), b('剛才那個聲音很好聽，讓我記一下。', 'think')],
       work: [b('先把弦調準，再為大家練一段。', 'work'), b('這頁樂譜壓好了，不會隨風旅行。', 'work'), b('我在找大家都唱得上的調。', 'think'), b('先聽四拍，您再跟進來就好。', 'explain')],
-      bond: [b('您還記得上次的旋律，我很高興。'), b('不會唱也沒關係，我們一起慢慢來。', 'reassure'), b('這段留給您點曲，今天想聽什麼？', 'offer'), b('有人等著聽我演奏，我就想好好練習。')],
-      rest: [b('先讓音符停一會兒，海聲也很好聽。', 'rest'), b('茶真暖。雖然我沒有能暖起來的胃。', 'tease'), b('能坐在熱鬧的房間裡，真好啊。', 'rest'), b('今天已經很愉快，明天再接著奏。')],
-      furniture: { piano: [b('這個弱音剛好，旁邊讀書也不會被吵到。', 'work'), b('準備好了嗎？這次請大家一起拍手。', 'offer')], bookshelf: [b('譜頁少了一拍，我試著把前後接起來。', 'think'), b('原來同一段旋律還有這種唱法。', 'admire')] }
+      bond: [b('您還記得上一回的旋律，真好。', 'talk'), b('慢一點也沒關係，這段我跟著您。', 'offer'), b('下一首讓您選。想熱鬧，還是想安靜？', 'offer'), b('那個位子替您留著，隨時來聽。', 'talk')],
+      rest: [b('音符歇一會兒，現在換海聲了。', 'rest'), b('茶很香。真想深深吸一口……雖然沒有肺。', 'tease'), b('我不睡，只是想多坐一會兒。', 'rest'), b('今天的安可結束了，明天請早。', 'tease')],
+      furniture: { piano: [b('先試一個音……嗯，這個音量正好。', 'work'), b('這一段，請大家一起拍手！', 'offer'), b('慢半拍也無妨，我們從這裡再接。', 'work'), b('今天的最後一首，留給還醒著的人。', 'offer')], bookshelf: [b('同一段旋律，竟有兩種寫法。', 'think'), b('這裡少了一頁。前面的曲調我還記得。', 'think'), b('找到適合大家一起唱的調了。', 'talk'), b('請輕一點翻，老樂譜的脾氣比較脆。', 'tease')] }
     },
     jinbe: {
-      chat: [b('有什麼想法就說，老夫也想聽聽。', 'offer'), b('船穩了，你們安心忙自己的吧。', 'reassure'), b('剛才那一下接得好，不必都推說運氣。', 'nod'), b('這船每天都有新動靜，倒不會無聊。', 'laugh'), b('看水面之前，先感覺船身怎麼動。', 'explain'), b('事情一件件來，我在這裡幫手。', 'nod')],
+      chat: [b('哦，來了。這裡剛好空著。', 'offer'), b('舵穩著呢，你們安心忙吧。', 'nod'), b('剛才那一下不錯。別全說成運氣。', 'nod'), b('哈哈，這艘船可真沒一刻冷清。', 'laugh'), b('別只看水面，腳下的船也會告訴你。', 'explain'), b('先聽你說，老夫的話等會兒也不遲。', 'offer')],
       work: [b('先確認繩子收妥，再調這邊的舵。', 'work'), b('風和水流方向不同，得一起看。', 'think'), b('這趟我顧著，你先去用餐。', 'reassure'), b('慢些轉。等船身回穩了再加力。', 'explain')],
-      bond: [b('你說的那件事，老夫記著呢。', 'nod'), b('不必急著獨當一面，同伴就是要互相幫忙。', 'reassure'), b('來，坐下說。這裡聽得清楚。', 'offer'), b('有你留意小地方，大家走得更踏實。')],
-      rest: [b('忙完坐在一起，茶也更好喝。', 'rest'), b('這段海流平穩，老夫也歇口氣。', 'rest'), b('你們的笑聲，比風浪還遠就聽得見。', 'tease'), b('等會兒換我收拾，你先坐著。', 'offer')],
-      furniture: { helm: [b('這道浪推過來時，順勢放一點舵。', 'work'), b('方向穩住了，現在不用一直修正。', 'explain')], 'map-table': [b('娜美標的這一段，我記下來了。', 'nod'), b('這裡水色不同，先留個記號提醒大家。', 'work')] }
+      bond: [b('你說的事，老夫還記得。後來怎樣了？', 'think'), b('這回你顧這邊，另一邊交給老夫。', 'nod'), b('來，茶還熱。坐下再說。', 'offer'), b('這個小地方你也留意到了，不錯。', 'talk')],
+      rest: [b('手離了舵，倒得想想往哪裡擺了。', 'tease'), b('這段水流平，老夫也歇口氣。', 'rest'), b('你們笑得這麼遠都聽得到，在玩什麼？', 'think'), b('不急，這壺茶喝完再收。', 'rest')],
+      furniture: { helm: [b('浪推過來了，順著它放一點。', 'work'), b('方向穩了，不必一直跟它較力。', 'explain'), b('這個手感，船匠確實費了心思。', 'nod'), b('娜美，下一個轉向聽妳的。', 'offer')], 'map-table': [b('這段先記著，進去時還得看看水色。', 'think'), b('圖上的線很細，海裡可得留足位置。', 'explain'), b('把這裡和風向對起來，就看得清楚些。', 'work'), b('妳畫的，老夫記住了。', 'nod')] }
     }
   };
   // Played only after a successful server-authorized work claim; these are completed acts.
@@ -117,6 +117,9 @@
   // Text is authored for the named pair; there is no name-substitution dialogue fallback.
   const t = (line, action = 'talk', reaction = 'listen') => [line, action, reaction];
   const s = (topic, tags, turns) => ({ topic, tags, turns });
+  // A conversation is not a furniture dock. Do not mime tools or sit on an absent chair.
+  // Furniture activity() keeps its separately authored focused_use/sit pose contract.
+  const conversationPose = action => action === 'work' || action === 'rest' ? 'idle' : PERFORMANCE[action][1];
   const add = (a, c, relationship, stories) => {
     const pairKey = `${a}:${c}`;
     RELATIONSHIPS[pairKey] = relationship;
@@ -124,239 +127,255 @@
       id: `${a}-${c}-${index + 1}`, pair: [a, c], topic: story.topic, tags: story.tags,
       relationship, cooldownMs: 90000,
       turns: story.turns.map(([line, action, reaction], n) => ({
-        speaker: n % 2 ? c : a, ...b(line, action),
-        listener: { key: n % 2 ? a : c, action: reaction, mood: PERFORMANCE[reaction][0], pose: PERFORMANCE[reaction][1] },
+        speaker: n % 2 ? c : a, ...b(line, action), pose: conversationPose(action),
+        listener: { key: n % 2 ? a : c, action: reaction, mood: PERFORMANCE[reaction][0], pose: conversationPose(reaction) },
         durationMs: Math.max(2300, Math.min(5000, 950 + Array.from(line).length * 105))
       }))
     }));
   };
-  add('luffy', 'zoro', '船長對第一位夥伴的直率信任；索隆用行動支持並拉住魯莽。', [
-    s('訓練的最後一下', ['swords-rack'], [t('你不是說最後一下？剛才也是最後一下！', 'think'), t('那一下沒做好，不算。', 'explain'), t('喔！那我等你做好再一起出去。', 'nod', 'nod'), t('行。別站到刀前面等。', 'reassure')]),
-    s('高處的空位', [], [t('那上面空著耶，我們爬上去看看！', 'admire'), t('先看看架子承不承重。', 'explain'), t('你看完了？那我先上！', 'talk', 'protest'), t('我還沒看完。給我下來。', 'protest', 'startled')]),
-    s('不必多說的換班', [], [t('你還不睡？剛才不是很睏？', 'think'), t('你在這裡亂晃，誰睡得安穩。', 'tease'), t('哈哈，我去叫別人來陪我，你睡吧！', 'laugh', 'nod'), t('有動靜喊我。別自己跑太遠。', 'nod')])
+  add('luffy', 'zoro', '不用反覆確認的信任。魯夫先行動，索隆嫌他吵卻會跟上；索隆認真時，魯夫不打斷也不說教。', [
+    s('睡覺的人也算一份', [], [t('索隆！我們要玩猜拳，你也來！', 'offer'), t('不玩。我要睡。', 'rest'), t('好！那你贏了叫你！', 'laugh', 'startled'), t('睡著要怎麼贏啊。', 'protest', 'laugh')]),
+    s('還差幾下', ['swords-rack'], [t('喂，你到底還要練多久？', 'think'), t('還有三百。餓了就先去。', 'nod'), t('那我吃完再來！你那份我不吃！', 'offer', 'think'), t('……最好是。', 'tease', 'laugh')]),
+    s('船長往前看', ['helm'], [t('前面那個黑黑的是島嗎？', 'admire'), t('不知道。你不是想去看？', 'nod'), t('嗯！那就去！', 'laugh', 'nod'), t('先喊航海士。別又自己跳下去。', 'explain', 'talk')])
   ]);
-  add('luffy', 'nami', '魯夫相信娜美的航海判斷；娜美制止胡來但理解他的好奇。', [
-    s('窗外那朵雲', ['map-table'], [t('那朵雲像個大拳頭！我們去下面看看！', 'admire'), t('底下正在下大雨。你先把窗關上。', 'explain'), t('那等雨停了再去？', 'think', 'nod'), t('等我看過風向。這次記得等我說完。', 'nod')]),
-    s('海圖上的空白', ['map-table'], [t('這裡怎麼沒畫？紙不夠大嗎？', 'think'), t('還沒去過，不能亂畫。', 'explain'), t('那我們去！回來你就能畫了！', 'offer', 'talk'), t('說得輕巧……不過，那確實是我的打算。', 'talk')]),
-    s('搬動橘子樹', ['tangerine-tree'], [t('娜美，我幫你把樹搬過來了！', 'offer'), t('太靠裡面了，葉子照不到光。', 'explain'), t('那搬到你指的地方就好吧？', 'nod'), t('對，慢慢放。這次真的幫上忙了。', 'reassure', 'laugh')])
+  add('luffy', 'nami', '航線交給娜美、冒險衝動留給魯夫。娜美的火氣來自收拾爛攤子，信任不需要變成順從的小孩。', [
+    s('海圖不能拿來包', ['map-table'], [t('娜美，這張紙能借我嗎？', 'offer'), t('不能。你手上那塊肉想包去哪裡？', 'protest', 'startled'), t('啊，被發現了！', 'laugh', 'protest'), t('油滴下來了！盤子就在你旁邊！', 'protest', 'startled')]),
+    s('越大的雲越想去', ['map-table'], [t('那邊的雲好大！裡面有什麼啊？', 'admire'), t('有會把你吹走的風。現在往反方向。', 'explain', 'protest'), t('欸——我們不是要去沒去過的地方嗎！', 'protest', 'think'), t('等船平安到了，你愛看多久都行！', 'protest', 'nod')]),
+    s('空著的地方', ['map-table'], [t('這一塊怎麼空白？忘了畫？', 'think'), t('還沒親眼看過。我要畫自己的海圖。', 'think'), t('那就一起去看！這邊，還有這邊！', 'offer', 'talk'), t('手指擦乾淨再指……嗯，都會去的。', 'talk', 'laugh')]),
+    s('還沒闖禍的船長', [], [t('娜美！妳剛剛是不是叫我？', 'offer'), t('沒有。你先說，你又闖了什麼禍？', 'think'), t('還沒有啊！', 'laugh', 'protest'), t('那個「還」是怎麼回事！', 'protest', 'laugh')])
   ]);
-  add('luffy', 'usopp', '愛玩且信任彼此；魯夫會相信誇張故事，騙人布的技術也是真本事。', [
-    s('不是發射鈕', ['tool-bench'], [t('騙人布！按這個會飛嗎？', 'admire'), t('那是固定夾！你怎麼什麼都想發射！', 'protest'), t('喔。那你能做一個會飛的嗎？', 'think', 'think'), t('……小一點的可以。先別把椅子搬來！', 'explain', 'laugh')]),
-    s('一百個標靶', [], [t('你能一口氣打中一百個？好厲害！', 'admire'), t('當然！本大爺只要……有一百個靶子。', 'explain'), t('那我去做！紙的也行吧？', 'offer', 'startled'), t('等等，我先示範十個！十個也很厲害！', 'protest')]),
-    s('把小零件找回來', ['treasure-chest'], [t('你的東西滾進下面了，我伸手拿！', 'offer'), t('輕一點，那根彈簧壓扁就不能用了。', 'explain'), t('拿到了！沒壞吧？', 'talk', 'think'), t('一點都沒歪。嘿，這次合作得不錯！', 'talk', 'laugh')])
+  add('luffy', 'usopp', '兩個玩伴能把小玩意講成大冒險。魯夫真心驚嘆，騙人布順勢吹大；需要手藝時則信得毫不猶豫。', [
+    s('不能按的那一顆', ['tool-bench'], [t('這顆紅的按下去會怎樣？', 'admire'), t('哼哼，問得好！那是本大爺的秘密——', 'explain', 'admire'), t('我可以按了吧！', 'offer', 'startled'), t('我還沒接好啊！先別碰！', 'protest', 'startled')]),
+    s('釣上來的島', [], [t('騙人布，你真的釣過一座島？', 'admire'), t('千真萬確！只是魚線太細，我讓牠走了。', 'explain', 'admire'), t('佛朗基有很粗的！我去拿！', 'offer', 'startled'), t('不用！那座島今天休息！', 'protest', 'think')]),
+    s('笑臉畫在哪', ['tool-bench'], [t('幫我畫一個旗子！要超厲害的！', 'offer'), t('你剛才畫的那張呢？', 'think'), t('大家都說那是魚骨頭。', 'protest', 'laugh'), t('哈！放著，本大爺幫你把船長的臉救回來。', 'laugh', 'admire')])
   ]);
-  add('luffy', 'sanji', '貪吃的船長與嘴硬照料所有人的廚師；信任不只圍繞偷吃。', [
-    s('空盤子的工作', ['kitchen-table'], [t('香吉士，今天我幫你！要做什麼？', 'offer'), t('把空盤子放好。空的，聽清楚沒？', 'explain'), t('放好了！這樣大家就能一起吃了吧？', 'talk', 'nod'), t('算你有幫忙。坐好，第一鍋就來。', 'talk', 'admire')]),
-    s('廚師的新味道', ['kitchen-table'], [t('這個跟昨天不一樣！', 'admire'), t('換了做法。哪裡不一樣，說說看。', 'think'), t('不知道怎麼說，可是我還想吃！', 'laugh', 'talk'), t('你這傢伙……行，這句就夠了。', 'talk')]),
-    s('留給晚回來的人', [], [t('剩這一盤，沒人要嗎？', 'think'), t('有人還在忙，這是留給他的。', 'explain'), t('那我去叫他！一起吃比較好！', 'offer', 'nod'), t('去吧，別把人連椅子一起拖來。', 'tease', 'laugh')])
+  add('luffy', 'sanji', '魯夫用吃光表達認可，香吉士用罵聲守住廚房；廚師知道餓肚子的分量，船長也不懷疑他的本事。', [
+    s('聞到就算開飯', ['kitchen-table'], [t('香吉士！好了吧！已經有味道了！', 'admire'), t('你烤到一半也有味道。給我等著。', 'protest', 'think'), t('我要最大的那份！', 'offer', 'nod'), t('早就是你的了，別再把頭伸過來！', 'protest', 'laugh')]),
+    s('試吃的意見', ['kitchen-table'], [t('剛才那個，再給我一個！', 'admire'), t('先說味道怎麼樣，這可是試做的。', 'think'), t('再給我十個！', 'laugh', 'talk'), t('……算了，你的意見我聽懂了。', 'tease', 'admire')]),
+    s('廚師還沒坐下', ['kitchen-table'], [t('你怎麼不吃？都快沒有了！', 'think'), t('還有鍋子要收。你們先吃。', 'work'), t('那我去叫大家等你！喂——！', 'offer', 'startled'), t('喊什麼喊！我盛一碗就過去！', 'protest', 'laugh')]),
+    s('剛才你也笑了', [], [t('香吉士，你剛剛也在笑吧！', 'laugh'), t('誰叫騙人布講一半，自己先怕了。', 'tease', 'laugh'), t('哈哈！我再去叫他講一次！', 'offer', 'think'), t('先讓他喘口氣。你也別笑到岔氣。', 'tease', 'laugh')])
   ]);
-  add('luffy', 'chopper', '一起好奇玩耍；魯夫承認喬巴的醫師判斷，喬巴敢管住船長。', [
-    s('醫生先說完', ['medicine-cabinet'], [t('只是撞一下而已，我還能跑！', 'talk', 'protest'), t('能跑也要檢查！先把手給我。', 'explain'), t('喔，那你看好了我再跑。', 'nod', 'nod'), t('嗯，這樣才對。等我說可以才走。', 'work')]),
-    s('書裡的小動物', ['bookshelf'], [t('這隻好奇怪！喬巴，你跟牠說過話嗎？', 'admire'), t('那是畫，我又沒見過真的。', 'explain'), t('遇到了你一定要問問牠！', 'offer', 'admire'), t('好！不過你別一見面就抓起來。', 'talk')]),
-    s('夠不到的那一格', [], [t('上面那瓶要拿下來嗎？', 'offer'), t('要！標籤朝這裡，別晃它。', 'explain'), t('這樣？我可以一直幫你拿。', 'nod', 'talk'), t('那你幫我把空盒放回去，這個比較安全！', 'offer')])
+  add('luffy', 'chopper', '一起對稀奇事興奮，卻不抹掉船醫的地位；喬巴能對船長發脾氣，魯夫相信他而非把他當寵物。', [
+    s('棉花糖雲', [], [t('喬巴，那朵雲像不像你的棉花糖？', 'admire'), t('像！不過雲真的不能吃嗎？', 'think'), t('試過才知道！', 'offer', 'admire'), t('等等！你不准從這裡跳！', 'protest', 'startled')]),
+    s('醫生的手先別鬆', ['medicine-cabinet'], [t('好了沒？我完全不痛耶！', 'talk'), t('你一直動，我就一直包不好！', 'protest', 'startled'), t('喔。那這隻手也給你。', 'offer', 'protest'), t('只要受傷那隻！另一隻不要碰藥箱！', 'explain', 'nod')]),
+    s('真的會聽懂', [], [t('剛才那隻鳥罵你什麼？', 'think'), t('牠沒有罵我，牠說有人搶牠的餅乾。', 'explain', 'think'), t('是牠的啊？我還以為掉在那裡。', 'startled', 'protest'), t('果然是你！牠還在窗外等你道歉！', 'protest', 'startled')])
   ]);
-  add('luffy', 'robin', '魯夫直接接納羅賓的興趣；羅賓從容回應好奇並偶爾逗他。', [
-    s('日記裡的晚餐', ['bookshelf'], [t('你笑什麼？書裡有好玩的嗎？', 'think'), t('有人把晚餐清單抄進探險日記了。', 'tease'), t('那不是很好嗎？冒險完就知道吃什麼！', 'talk', 'laugh'), t('原來如此。倒是很適合你來寫序。', 'talk')]),
-    s('遺跡的門', ['map-table'], [t('這張圖的門後面是什麼？', 'admire'), t('沒畫出來。也許得到了那裡才知道。', 'think'), t('那就去開門！你想看吧？', 'offer', 'talk'), t('想。不過先讓娜美找到能靠岸的地方。', 'nod')]),
-    s('熱鬧也能讀書', [], [t('我們在這邊玩，會吵到你嗎？', 'think'), t('不會。只要別讓骰子飛進茶裡。', 'tease'), t('好！我把杯子移到旁邊！', 'offer', 'nod'), t('謝謝。這回故事和遊戲都能繼續了。', 'talk')])
+  add('luffy', 'robin', '羅賓不把魯夫的奇想都糾正成常識；魯夫不懂考古卻在乎她想看什麼，兩人的信任可以很短。', [
+    s('古書裡的怪獸', ['bookshelf'], [t('這個長三個頭！真的有嗎？', 'admire'), t('也可能只是畫家畫錯了，捨不得擦掉。', 'tease', 'think'), t('有就好了！三個頭可以一起吃飯！', 'laugh', 'talk'), t('那餐費大概也很驚人呢。', 'tease', 'laugh')]),
+    s('想看的那個地方', ['map-table'], [t('你一直看這個地方。想去？', 'think'), t('嗯。想看看石頭上還留著什麼字。', 'think'), t('好啊！妳看字，我去找好玩的！', 'offer', 'talk'), t('那麼，請先別把寫字的石頭敲開。', 'tease', 'startled')]),
+    s('熱鬧的書籤', ['bookshelf'], [t('羅賓！猜猜我跟騙人布誰贏了！', 'offer'), t('騙人布。他剛剛跑來宣布過了。', 'talk', 'protest'), t('下一次就換我！你看著！', 'protest', 'talk'), t('好。我先把這一頁看完，再看你翻盤。', 'talk', 'laugh')]),
+    s('最響的安靜', [], [t('羅賓，妳剛剛在笑什麼？', 'think'), t('你們說要安靜，卻比誰喊得大聲。', 'tease', 'think'), t('那我贏了！', 'laugh', 'talk'), t('嗯，連比賽是誰開始的都忘了呢。', 'tease', 'laugh')])
   ]);
-  add('luffy', 'franky', '魯夫對機關毫不掩飾的興奮，讓佛朗基樂於展示又得防止亂按。', [
-    s('測試椅子', ['tool-bench'], [t('這張椅子會變形嗎？', 'admire'), t('不會。這次的本事是坐再久也不晃！', 'explain'), t('喔！那我可以跳上去嗎？', 'talk', 'protest'), t('是坐！你給我先用坐的測試！', 'protest')]),
-    s('亮燈的瞬間', [], [t('佛朗基！剛才這裡亮起來了！', 'admire'), t('修好的指示燈，這才是它該有的樣子。', 'explain'), t('再亮一次！我去叫喬巴來看！', 'offer', 'laugh'), t('哈！等人齊了，我把原理一起講給你們聽。', 'laugh')]),
-    s('珍惜修好的船', ['helm'], [t('轉起來順多了！你剛修好的？', 'admire'), t('對，別只是轉著玩，它可是在帶大家回來。', 'explain'), t('知道啦。這傢伙還要陪我們去好多地方！', 'nod', 'talk'), t('說得好，船長。那就好好用它！', 'reassure')])
+  add('luffy', 'franky', '船長的毫無保留驚嘆正中船匠的浪漫。佛朗基可以陪著胡鬧，但碰到船就有自己的堅持。', [
+    s('明明只是抽屜', ['tool-bench'], [t('佛朗基！這個也會變形嗎！', 'admire'), t('現在還不會。你覺得往哪裡展開好？', 'think', 'admire'), t('全部！上面再加個大炮！', 'admire', 'laugh'), t('懂行啊，船長！……先別讓娜美聽見。', 'laugh', 'nod')]),
+    s('要叫大家一起看', [], [t('剛才那個再做一次！我沒看清楚！', 'admire'), t('喂，剛才就叫你看好了！', 'protest', 'laugh'), t('我去叫喬巴！你先不要做！', 'offer', 'talk'), t('那就全員到齊再來一次！好戲得有人看啊！', 'laugh', 'admire')]),
+    s('船不只是坐的', ['helm'], [t('這傢伙每天都跟我們一起冒險耶。', 'talk'), t('當然！船可不是只把人從這裡搬到那裡。', 'explain', 'nod'), t('哈哈！那你可要把它顧好！', 'offer', 'nod'), t('用得著你說！它要去的地方還多著呢。', 'reassure', 'laugh')])
   ]);
-  add('luffy', 'brook', '魯夫愛宴會與音樂；布魯克珍惜被邀請加入熱鬧的日常。', [
-    s('不等飯後的歌', ['piano'], [t('布魯克，現在唱！不用等吃完！', 'offer'), t('可以，但請先把嘴裡那一口嚥下去。', 'explain'), t('好了！這一段我會！', 'laugh', 'admire'), t('那就由您帶頭。拍子慢一點，大家才跟得上！', 'offer')]),
-    s('慢下來的拍子', ['piano'], [t('你今天彈得好慢喔。', 'think'), t('想讓剛忙完的人放鬆一下。您不喜歡嗎？', 'think'), t('喜歡啊！聽著就想躺下來。', 'talk', 'talk'), t('那我繼續。睡著也算是很好的評價呢。', 'tease')]),
-    s('有人等的練習', [], [t('你在這裡練？等會兒也彈給大家聽吧！', 'offer'), t('我還有一處沒練順，要再等一會兒。', 'think'), t('沒關係，我叫他們等等！', 'nod', 'talk'), t('謝謝您。有聽眾等著，這一遍要更認真了。', 'work')])
+  add('luffy', 'brook', '魯夫對音樂與骷髏都坦率好奇；布魯克可以接荒唐話，日常的邀請比反覆感傷更能呈現珍惜。', [
+    s('骷髏怎麼唱', ['piano'], [t('布魯克，你都沒嘴唇，怎麼吹口哨啊？', 'think'), t('這個嘛……我自己也想過。', 'think', 'admire'), t('哈哈哈！你也不知道啊！再吹一次！', 'laugh', 'laugh'), t('那就不研究了，請聽！', 'offer', 'admire')]),
+    s('鼓掌不是搶拍', ['piano'], [t('這段我會！噔噔噔——！', 'laugh'), t('船長，您又比我早到副歌了。', 'tease', 'think'), t('那你也快一點！', 'offer', 'laugh'), t('喲呵呵呵，那大家可要跟緊了！', 'laugh', 'admire')]),
+    s('不等到宴會才唱', [], [t('你怎麼一個人在這裡彈？去那邊啊！', 'offer'), t('怕吵到正在忙的各位。', 'think'), t('沒事！我想聽，大家也想聽！', 'reassure', 'talk'), t('……好。今天這一曲，就從這裡開始吧。', 'offer', 'nod')])
   ]);
-  add('luffy', 'jinbe', '魯夫放心交付判斷；甚平穩重照應，也會被船長的直率逗笑。', [
-    s('交給掌舵的人', ['helm'], [t('浪變大了耶！要我做什麼？', 'admire'), t('先讓大家站穩。舵交給老夫。', 'explain'), t('好！甚平說站穩，大家聽到了沒！', 'offer', 'nod'), t('聽到了，船長，你自己也算在裡頭。', 'tease', 'laugh')]),
-    s('不用總是客氣', [], [t('你又等大家坐了才坐，這裡有位置啊！', 'offer'), t('習慣先看看有沒有人需要幫手。', 'nod'), t('那我幫你看，你坐這裡！', 'reassure', 'laugh'), t('哈哈，那老夫就領船長這份心意了。', 'laugh')]),
-    s('水裡的見聞', ['map-table'], [t('你在水裡看過最大的東西有多大？', 'admire'), t('有些大得要游好一段才看見尾巴。', 'explain'), t('我也想看！你帶路，我坐船！', 'offer', 'nod'), t('坐船就對了。等航線合適，再帶你瞧瞧。', 'reassure')])
+  add('luffy', 'jinbe', '魯夫把甚平當能一起玩的可靠夥伴，甚平尊重船長又能拉住危險；不要全寫成父親訓小孩。', [
+    s('海底要自己看', ['map-table'], [t('海底真有會發光的魚？', 'admire'), t('有。越暗的地方，看起來越清楚。', 'explain', 'admire'), t('帶我去！啊，我不能游，那坐船去！', 'offer', 'laugh'), t('哈哈，這回倒先想到了。找個好地方給你看。', 'laugh', 'admire')]),
+    s('掌舵的也要加入', ['helm'], [t('甚平！下一個換你唱！', 'offer'), t('老夫的歌，可沒布魯克那麼好聽。', 'think'), t('我又沒問好不好聽！快來！', 'laugh', 'laugh'), t('好！舵穩住，就來一段。', 'offer', 'admire')]),
+    s('原來笑點在這裡', [], [t('你剛剛怎麼沒笑？騙人布那個超好笑！', 'think'), t('老夫以為他真被怪魚追了三天。', 'think', 'admire'), t('真的嗎？那就更厲害了！', 'admire', 'startled'), t('……看來得再請他講一遍才行。', 'laugh', 'laugh')])
   ]);
-  add('zoro', 'nami', '娜美能管住索隆的粗線條；索隆尊重航海判斷，也默默分擔勞務。', [
-    s('不用拔刀的工作', ['tangerine-tree'], [t('枯枝剪掉就行了吧。', 'nod'), t('對，但用這把小剪刀，別拔你的刀。', 'explain'), t('知道了。這根也剪？', 'think', 'nod'), t('那根留著。你肯先問，真讓人放心。', 'tease')]),
-    s('認錯的門', [], [t('我去拿水，怎麼又走回來了。', 'think', 'protest'), t('因為你繞著同一張桌子轉。', 'explain'), t('嘖。水壺在另一邊？', 'protest', 'nod'), t('這邊。順便幫我帶一杯，別再繞了。', 'offer')]),
-    s('搬海圖用的桌子', ['map-table'], [t('要搬就說，別一個人推。', 'offer'), t('往窗邊一點，我需要光。', 'explain'), t('這樣夠了？', 'work', 'nod'), t('剛好。謝啦，這下不用瞇著眼畫了。', 'talk')])
+  add('zoro', 'nami', '娜美直接使喚，索隆嘴上嫌麻煩卻做得快；方向笑點有上限，也保留航海士與戰鬥員各司其職。', [
+    s('桌子不是床', ['map-table'], [t('這裡空著，我躺一下。', 'rest'), t('那是我要攤海圖的地方。起來。', 'protest', 'think'), t('海圖有那麼大？', 'think', 'protest'), t('對，剛好比你的懶腰還大。旁邊去！', 'protest', 'nod')]),
+    s('門沒有自己走', [], [t('出口不是在這邊？', 'think'), t('你剛從那裡進來。', 'explain', 'think'), t('……有人改過房間吧。', 'protest', 'protest'), t('改的是你腦袋裡的地圖！跟著我！', 'protest', 'nod')]),
+    s('信得過的守夜', ['helm'], [t('天都亮了，還沒畫完？', 'think'), t('差一段。你別睡，幫我留意一下外面。', 'offer'), t('嗯。妳畫。', 'nod', 'talk'), t('有你這句就夠了。', 'talk', 'nod')])
   ]);
-  add('zoro', 'usopp', '索隆看得見騙人布的真本事；騙人布在被依賴時把害怕收起來。', [
-    s('握把的細活', ['tool-bench'], [t('這裡打滑，你能弄牢嗎？', 'think'), t('那當然！纏的方向反過來就穩了。', 'explain'), t('嗯。這種細活交給你省事。', 'nod', 'talk'), t('嘿，知道本大爺可靠就好。再試試看！', 'offer')]),
-    s('靶子背後', [], [t('你要試射？我幫你把靶子掛高。', 'offer'), t('可以，但掛好一定要走開喔。', 'explain'), t('你不是打得準嗎？', 'tease', 'protest'), t('打得準也不能拿夥伴當背板啊！', 'protest', 'nod')]),
-    s('有點害怕也能做', ['treasure-chest'], [t('鎖在響，你怎麼還不開？', 'think'), t('我在聽裡面有沒有機關，專業一點嘛。', 'explain'), t('那你聽。我在這裡。', 'nod', 'talk'), t('……嗯。好，這次可以開了。', 'work')])
+  add('zoro', 'usopp', '索隆不配合浮誇演說，也不否定真正的技術；騙人布怕他莽撞，必要時敢大聲阻止。', [
+    s('靶子後面的人', [], [t('射吧。不是說百發百中？', 'tease'), t('你先從靶子後面走開啊！', 'protest', 'think'), t('怎麼，沒把握？', 'tease', 'protest'), t('有把握也不能拿你練膽子！', 'protest', 'nod')]),
+    s('纏得好的握把', ['tool-bench'], [t('這個鬆了。能弄緊？', 'think'), t('哼，小意思。本大爺可是——', 'explain'), t('行。交給你。', 'nod', 'startled'), t('……至少把我的介紹聽完嘛！', 'protest', 'tease')]),
+    s('怕也沒有退開', ['treasure-chest'], [t('你躲那麼遠，鎖怎麼開？', 'think'), t('我是在觀察！裡面說不定有東西！', 'protest'), t('有就砍了。你開鎖。', 'nod', 'think'), t('別把鎖也砍了啊……好，我來。', 'work', 'nod')])
   ]);
-  add('zoro', 'sanji', '鬥嘴與競爭包著可靠的合作；避免把日常寫成真心敵視。', [
-    s('嘴硬的加餐', ['kitchen-table'], [t('份量怎麼比昨天少。', 'protest'), t('另一盤還在我手上，急什麼，綠藻頭。', 'protest'), t('誰急了。放這邊。', 'nod', 'tease'), t('自己拿。熱的那盤在下面，別燙到。', 'explain')]),
-    s('搬桌子的節拍', [], [t('抬高點，圈圈眉，桌子歪了。', 'protest'), t('是你沒看門框！數三下一起轉。', 'protest'), t('一、二、三。就這樣，別鬆手。', 'work', 'nod'), t('用不著你教。落地，慢一點。', 'work')]),
-    s('刀與菜刀', ['swords-rack'], [t('那是擦刀布，不是廚房抹布。', 'explain'), t('我知道。給你拿了條乾淨的，省得你找。', 'offer'), t('……謝了。', 'nod', 'tease'), t('少見啊。再說一次，我好記住。', 'tease', 'protest')])
+  add('zoro', 'sanji', '互嗆、競爭、默契並存。照顧藏在實物與行動裡，不互相溫柔稱讚，也不是認真憎恨。', [
+    s('多出來的那碗', ['kitchen-table'], [t('這碗怎麼放我這？', 'think'), t('煮多了。你要是不吃就拿走，綠藻頭。', 'protest'), t('有酒就更好了。', 'tease', 'protest'), t('有飯吃還挑！碗底也給我吃乾淨。', 'protest', 'talk')]),
+    s('誰擋了路', [], [t('讓開，圈圈眉。', 'protest'), t('上次端湯的時候，也是你擋在路中間！', 'protest'), t('……左邊。', 'nod', 'nod'), t('知道了。下次別又擠到喬巴。', 'explain', 'nod')]),
+    s('刀有各自的用途', ['swords-rack'], [t('你的菜刀鈍了？切那麼久。', 'tease'), t('這叫切薄片。不是把東西劈成兩半。', 'protest', 'tease'), t('切完留一盤。', 'nod', 'protest'), t('最後一盤！先給幫忙端菜的人！', 'protest', 'laugh')])
   ]);
-  add('zoro', 'chopper', '索隆寡言地照顧喬巴，喬巴在治療時絕不讓步。', [
-    s('不算嚴重也要包紮', ['medicine-cabinet'], [t('這點擦傷，等練完再說。', 'nod', 'protest'), t('不行！汗沾上去更麻煩，現在就包。', 'explain'), t('知道了。手放這裡？', 'nod', 'nod'), t('對，別用力。一下子就好。', 'work')]),
-    s('靠近一點的書', ['bookshelf'], [t('你一直踮腳，想拿哪本？', 'think'), t('藍色那本！不是旁邊的大本。', 'offer'), t('拿著。下次叫我就行。', 'offer', 'talk'), t('謝謝！我會自己搬椅子……但今天先謝謝你！', 'talk')]),
-    s('睡著的醫生', [], [t('喬巴，書快掉下去了。', 'nod', 'startled'), t('我沒睡！我在想剛才那一段。', 'protest'), t('嗯。想完就去休息，書我放好了。', 'reassure', 'nod'), t('那你也不准偷偷多練一輪。', 'explain')])
+  add('zoro', 'chopper', '寡言的劍士會給喬巴依靠；船醫遇到逞強立刻嚴厲。索隆承認醫囑但不是每次都乖得毫無摩擦。', [
+    s('不痛不是沒受傷', ['medicine-cabinet'], [t('不用包。這點小傷。', 'nod'), t('你說小傷，我看到的又不是小傷！坐下！', 'protest', 'startled'), t('……麻煩。', 'protest', 'work'), t('嫌麻煩就別偷偷拆！我會回來看！', 'explain', 'nod')]),
+    s('打瞌睡的鼻子', ['bookshelf'], [t('喬巴，鼻子快壓到書了。', 'nod', 'startled'), t('啊！我沒睡！我只是……在記！', 'protest'), t('去睡。記不住就明天再看。', 'reassure', 'think'), t('那你也去睡，不准趁我不在練刀喔。', 'explain', 'nod')]),
+    s('要拿哪一本', ['bookshelf'], [t('別跳了。要哪本？', 'offer', 'admire'), t('藍色那本！旁邊薄薄的那本也要！', 'offer'), t('看到了。我拿，你先到旁邊等。', 'nod', 'talk'), t('謝謝！……索隆，你也要看嗎？裡面有刀傷的！', 'offer', 'tease')]),
+    s('沒睡也瞞不過醫生', [], [t('又盯著我做什麼？', 'think'), t('你昨晚是不是又沒睡？', 'think'), t('睡不睡也歸醫生管？', 'protest', 'protest'), t('熬夜練刀就歸我管！不准裝傻！', 'protest', 'nod')])
   ]);
-  add('zoro', 'robin', '安靜相處、各自專注；羅賓以淡淡幽默回應索隆的直白。', [
-    s('讀書的界線', ['bookshelf'], [t('我在這邊練，不會碰到你的書。', 'nod'), t('謝謝。書頁比較難擋住劍氣呢。', 'tease'), t('不會讓它飛過去。', 'explain', 'talk'), t('那我就安心看下一章了。', 'rest')]),
-    s('古老的刀圖', ['swords-rack'], [t('這張圖的刀，握法有點怪。', 'think'), t('可能是畫的人沒握過，也可能是儀式用的。', 'explain'), t('不能光看畫就下定論啊。', 'nod', 'nod'), t('正是如此。你的眼光幫了忙。', 'talk')]),
-    s('安靜的同伴', [], [t('你不用找話說，我坐一會兒。', 'rest'), t('我也正好不打算說話。', 'talk'), t('嗯。那這裡借我靠著。', 'nod', 'tease'), t('請便。至少別靠在要抽走的那本書上。', 'tease')])
+  add('zoro', 'robin', '兩人容得下安靜，羅賓的輕描淡寫與索隆的直線反應形成反差；不把默契硬寫成曖昧。', [
+    s('安靜的位子', ['bookshelf'], [t('我在這裡睡，不吵妳。', 'rest'), t('好。你若開始打鼾，我會翻頁大聲一點。', 'tease', 'think'), t('我不打鼾。', 'protest', 'talk'), t('那我們就都很安靜呢。', 'talk', 'rest')]),
+    s('古畫裡的握法', ['swords-rack'], [t('那把刀畫反了。', 'think'), t('也許畫的是不會用刀的人。', 'think'), t('會先砍到自己的腳。', 'explain', 'talk'), t('難怪下一頁只剩一隻鞋。', 'tease', 'startled')]),
+    s('不用替人找話', [], [t('妳剛才在笑什麼？', 'think'), t('你問了三次出口，三次都往另一邊走。', 'tease', 'protest'), t('……那妳怎麼不說。', 'protest', 'talk'), t('我想看看第四次會不會不同。', 'tease', 'protest')])
   ]);
-  add('zoro', 'franky', '戰士說清楚使用需求，船匠把簡單需求認真做好。', [
-    s('刀架不用發光', ['swords-rack'], [t('架子夠牢就行，別加奇怪的機關。', 'explain'), t('連照明也不要？拿刀時多帥啊！', 'admire'), t('我閉著眼也拿得到。', 'nod', 'laugh'), t('哈！行，給你做個最硬派的。', 'work')]),
-    s('留得下的重量', ['tool-bench'], [t('這個練習用的，能再重一點嗎？', 'think'), t('能。不過先加底座，免得你放下就砸穿地。', 'explain'), t('地板會壞？那你先弄。', 'nod', 'nod'), t('這就對了，鍛鍊也得替船想想！', 'work')]),
-    s('不用逞能的搬運', [], [t('這塊長，我拿前面。', 'offer'), t('後面交給我！轉角喊一聲。', 'nod'), t('現在轉，慢點。', 'work', 'nod'), t('好，配合得不錯。省下一次補門框的活！', 'laugh')])
+  add('zoro', 'franky', '索隆只談用途，佛朗基堅持用途之外也要帥。戰士的重量與船匠的地板形成具體衝突。', [
+    s('刀架不需要登場', ['swords-rack'], [t('刀架牢就好。不要機關。', 'explain'), t('打開時冒點煙，三把刀一起升起來呢？', 'admire', 'protest'), t('我拔刀不用等煙散。', 'protest', 'think'), t('嘖！那就把帥藏在結構裡！', 'work', 'nod')]),
+    s('比地板還結實', ['tool-bench'], [t('這個再加重。', 'offer'), t('你打算練手，還是練穿地板？', 'think', 'think'), t('地板撐得住就行。', 'nod', 'protest'), t('喂！先等我把底座做出來！', 'protest', 'nod')]),
+    s('船匠不借武器', [], [t('那塊木頭卡住了。要我切？', 'offer'), t('不准！整塊留著還有用。', 'protest', 'think'), t('那我拔。你壓著這邊。', 'work', 'nod'), t('這就對啦。力氣大的傢伙，也能做細活嘛！', 'laugh', 'tease')])
   ]);
-  add('zoro', 'brook', '兩位劍士尊重技藝；音樂家禮貌試探，索隆直接給回饋。', [
-    s('練刀的拍子', ['piano'], [t('剛才那段，再彈一遍。', 'offer'), t('您喜歡？我可以彈得熱鬧些。', 'think'), t('不用，就這個速度。步子好配。', 'explain', 'nod'), t('明白。我守住拍子，您專心練。', 'work')]),
-    s('出鞘的聲音', ['swords-rack'], [t('你的劍收回去幾乎沒聲音。', 'think'), t('練久了，總想少驚動別人一點。', 'explain'), t('不錯。再讓我看看剛才那一下。', 'nod', 'bow'), t('樂意。請站到這一側，免得碰到您。', 'offer')]),
-    s('睡眠的伴奏', [], [t('我要睡了。別突然換大聲的。', 'rest'), t('那我改成輕一點的，替您送入夢鄉。', 'reassure'), t('也別唱什麼奇怪的鬼故事。', 'protest', 'tease'), t('放心，今天的演奏者已經夠像鬼了。', 'tease')])
+  add('zoro', 'brook', '尊重彼此劍術，說話節奏卻相反。布魯克用禮貌包住玩笑，索隆只留下必要的肯定。', [
+    s('聽步子', ['piano'], [t('剛才那段，再來一次。', 'offer'), t('喜歡嗎？我可以再加個華麗的轉音。', 'admire', 'think'), t('不用。那個拍子剛好。', 'nod', 'bow'), t('明白，劍士先生需要的是步子啊。', 'talk', 'nod')]),
+    s('收劍比解說快', ['swords-rack'], [t('出手挺快。', 'nod', 'bow'), t('過獎。其實祕訣是放鬆肩膀——', 'explain'), t('直接做一遍。我看。', 'offer', 'talk'), t('喲呵呵，您比我的劍還不愛繞路呢。', 'tease', 'nod')]),
+    s('不在睡覺時嚇人', [], [t('你能不能走路出個聲。', 'protest'), t('抱歉。我已經很努力踩出腳步聲了。', 'bow'), t('你站我旁邊，我一睜眼都是骨頭。', 'protest', 'laugh'), t('那下次先說早安。骨頭就不換了。', 'tease', 'protest')])
   ]);
-  add('zoro', 'jinbe', '實務上的沉默默契；兩人不需要長篇說教就能照應彼此。', [
-    s('先過完這道浪', ['helm'], [t('船斜了。現在不能練？', 'think'), t('等這道浪過去，給老夫半分鐘。', 'explain'), t('好，我先把重的固定住。', 'work', 'nod'), t('多謝，這樣大家腳下也安穩。', 'nod')]),
-    s('輪到誰休息', [], [t('你站了很久，這邊我看著。', 'offer'), t('你才剛練完，不必勉強。', 'think'), t('看著而已，沒那麼累。', 'nod', 'talk'), t('那老夫去喝杯茶，很快就回來。', 'rest')]),
-    s('腳下的重心', ['swords-rack'], [t('你剛才晃都沒晃，怎麼站的？', 'think'), t('不是把腿鎖死，先順著船身卸力。', 'explain'), t('……懂了。再晃一次試試。', 'work', 'laugh'), t('哈哈，浪可不聽老夫發號施令。等一等吧。', 'laugh')])
+  add('zoro', 'jinbe', '兩人以實際判斷交換信任；甚平有經驗但不擺師父架子，索隆會觀察技術也敢坦白要求。', [
+    s('先把東西固定', ['helm'], [t('等會兒還會晃？', 'think'), t('右邊有道浪。你那些重物，先綁牢些。', 'explain'), t('知道。這邊我來。', 'work', 'nod'), t('有你看著，老夫就專心顧舵。', 'nod', 'nod')]),
+    s('換班不用推辭', [], [t('輪到我了。你去歇。', 'nod'), t('剛好，茶還熱著。你要一杯麼？', 'offer'), t('換成酒。', 'tease', 'laugh'), t('哈哈，值完這一班再喝。', 'laugh', 'nod')]),
+    s('穩不是站死', ['swords-rack'], [t('剛才那一下，你腳沒動。', 'think'), t('力氣跟著船卸掉，就不必硬頂。', 'explain'), t('嗯……再來一次。', 'work', 'think'), t('在這裡？先把旁邊的杯子挪開吧。', 'tease', 'nod')])
   ]);
-  add('nami', 'usopp', '常一起擔心危險，也能靠天候知識與發明解決問題；娜美看穿誇口。', [
-    s('沒有雷的測試', ['tool-bench'], [t('這次只測風，不准忽然冒出奇怪的東西。', 'explain'), t('放心！我連驚喜開關都拆掉了！', 'reassure'), t('原來你真的裝過。把拆下來的也交出來。', 'protest', 'startled'), t('……妳怎麼總能聽出重點啊。', 'think')]),
-    s('敢不敢看箱子', ['treasure-chest'], [t('那箱子在響，你剛才說你一點都不怕？', 'think'), t('當然！我只是要確認妳準備好了。', 'explain'), t('我準備好站遠一點了。你請。', 'tease', 'startled'), t('等等！我們先一起聽，兩個人比較準。', 'offer')]),
-    s('畫得準的刻度', ['map-table'], [t('你做的刻度很清楚，小字也不會糊。', 'talk'), t('這可是狙擊手的眼力！需要再細一點嗎？', 'admire'), t('現在這樣正好。下次海圖尺也交給你。', 'offer', 'talk'), t('包在我身上。喂，這句稱讚可要記住喔！', 'laugh')])
+  add('nami', 'usopp', '會一起怕，也能一起想辦法。娜美看穿吹牛卻真心依賴騙人布的發明，兩人都不是只會躲的背景。', [
+    s('說明書最後一行', ['tool-bench'], [t('這次不會噴出花吧？', 'think'), t('當然不會！我已經改成——', 'explain', 'protest'), t('等一下。你先把最後一句說完。', 'protest', 'startled'), t('……不會噴任何東西。這樣總行了吧！', 'protest', 'tease')]),
+    s('都想站在後面', ['treasure-chest'], [t('你剛才不是說，這種箱子開過一千個？', 'think'), t('對，所以我決定把這次機會讓給妳。', 'explain', 'protest'), t('免了，我很尊重前輩。你請。', 'tease', 'startled'), t('那、那我們數三聲一起開！不准偷跑！', 'offer', 'nod')]),
+    s('真正管用的東西', ['map-table'], [t('這支筆很好畫，不會一直漏墨了。', 'talk', 'admire'), t('哼哼！換了裡面的細管，這可是精密技術。', 'explain'), t('再幫我改兩支。我下張海圖要用。', 'offer', 'talk'), t('兩支是吧！……喂，稱讚怎麼順便變訂單了？', 'protest', 'laugh')]),
+    s('昨晚誰先尖叫', [], [t('昨晚先尖叫的是誰啊？', 'tease'), t('那叫警告！我替大家發現危險！', 'protest', 'think'), t('對，連我都被你的警告嚇到了。', 'tease', 'protest'), t('妳也叫了吧！那聲明明比我大！', 'protest', 'protest')])
   ]);
-  add('nami', 'sanji', '香吉士對娜美殷勤，娜美自然使喚也懂得肯定他的照顧。', [
-    s('不用太甜的茶', ['kitchen-table'], [t('今天想喝清爽一點的，糖少放。', 'offer'), t('當然，娜美小姐！我再配一片橘子如何？', 'admire'), t('可以。你也替還沒喝的人倒一杯吧。', 'nod', 'nod'), t('早就準備好了，大家的份一杯也沒少。', 'reassure')]),
-    s('先問再摘', ['tangerine-tree'], [t('你盯著那兩顆很久了，想做甜點？', 'tease'), t('被娜美小姐看穿了。香氣實在太好了。', 'talk'), t('熟了，可以摘。留一份讓我嚐嚐。', 'offer', 'admire'), t('第一份一定送到您面前！', 'bow')]),
-    s('清單外的心意', [], [t('採買清單上怎麼多了薑？', 'think'), t('妳不是說晚上轉冷？煮熱湯用的。', 'explain'), t('我才提一次，你就記得啦。這項留下。', 'talk', 'talk'), t('哪能讓航海士吹著冷風還喝涼的。', 'reassure')])
+  add('nami', 'sanji', '香吉士見娜美會明顯變軟、變熱情；娜美懂得差遣也會真心道謝，不把她寫成只懂佔便宜。', [
+    s('連名字都變甜', ['kitchen-table'], [t('香吉士，今天的茶不要太甜。', 'offer'), t('遵命，娜美小姐！連香氣都替妳挑好了！', 'smile'), t('茶可以。端來的時候別轉圈就好。', 'tease', 'think'), t('當然！我會穩穩地替妳送來！', 'smile', 'talk')]),
+    s('摘橘子的許可', ['tangerine-tree'], [t('你是不是又在打我橘子的主意？', 'tease'), t('只要兩顆！我想做一道配下午茶的點心。', 'offer'), t('熟的那兩顆可以。我的那份多留一點。', 'nod', 'admire'), t('當然！娜美小姐的那份，我親自端來！', 'bow', 'talk')]),
+    s('沒有催的晚餐', ['kitchen-table'], [t('先幫我留著，這段畫完就吃。', 'think'), t('已經替妳保溫了。湯在這裡，先喝一口。', 'offer', 'talk'), t('你每次都記得。謝啦。', 'talk', 'admire'), t('娜美小姐說謝謝了……！今晚再加一道！', 'laugh', 'protest')]),
+    s('答應以前先問我', [], [t('香吉士，你剛剛是不是又替我答應了什麼？', 'think'), t('只是一點小事，娜美小姐交給我！', 'smile'), t('那下次先問我。我的休息時間也是小事嗎？', 'protest', 'startled'), t('當然不是！誰都不准打擾娜美小姐休息！', 'smile', 'tease')])
   ]);
-  add('nami', 'chopper', '娜美體貼喬巴的需要，喬巴也用醫師身分照顧操心的娜美。', [
-    s('忘了休息的航海士', ['map-table'], [t('再畫完這條線，我就停。', 'think', 'protest'), t('妳剛才已經說三次了，眼睛要休息！', 'explain'), t('好啦。那你幫我把筆蓋好。', 'nod', 'talk'), t('嗯！我計時，這回不准偷偷繼續。', 'work')]),
-    s('重要的採買', ['medicine-cabinet'], [t('藥品裡最急的是哪幾樣？標給我看。', 'offer'), t('這三樣。可是會不會很貴？', 'think'), t('需要的就得補，這筆不省。', 'nod', 'admire'), t('太好了！我會把用量記得更清楚。', 'reassure')]),
-    s('落葉不是生病', ['tangerine-tree'], [t('喬巴，你怎麼守在樹旁邊？', 'think'), t('它掉了葉子。我在想是不是哪裡不舒服。', 'think'), t('這片老了，新芽長得很好，你看。', 'explain', 'admire'), t('真的耶！下次我先看新芽再擔心。', 'talk')])
+  add('nami', 'chopper', '娜美會護著喬巴，也會被醫生訓；喬巴不是拿甜食就能打發的小寵物，而是能作決定的夥伴。', [
+    s('醫生抓到熬夜的人', ['bookshelf'], [t('我沒有累，這一頁算完就好。', 'protest'), t('妳剛才算了兩遍，答案還不一樣！', 'explain', 'startled'), t('……被你看到了啊。', 'think', 'protest'), t('當然！我是來叫妳休息的，不是幫妳找橡皮擦！', 'protest', 'nod')]),
+    s('先買藥', ['medicine-cabinet'], [t('藥箱還缺哪些？寫給我。', 'offer'), t('這兩種比較貴，可以再等——', 'think', 'protest'), t('藥不能等。其他人的零食才要等。', 'explain', 'admire'), t('嗯！我把用量也寫清楚！', 'work', 'nod')]),
+    s('誇獎藏不住', [], [t('剛才喬巴一開口，那兩個就乖乖坐下了呢。', 'tease', 'admire'), t('別、別這樣說啦！醫生本來就要那樣！', 'protest'), t('好，我們可靠的船醫。', 'talk', 'laugh'), t('妳這樣誇我……我也不會多給糖喔！', 'laugh', 'tease')])
   ]);
-  add('nami', 'robin', '能互相交流專長與安靜日常的同伴；娜美也接得住羅賓的冷幽默。', [
-    s('兩張不同的地圖', ['map-table'], [t('你的舊地圖多了一條河，現在沒有了。', 'think'), t('也許改道了。旁邊那個地名還在。', 'explain'), t('那就先把舊河道用細線補上。', 'work', 'nod'), t('好。我找年代，你畫位置，正好。', 'nod')]),
-    s('不太嚇人的故事', ['bookshelf'], [t('今天讀什麼？別又突然講沉船裡的事喔。', 'tease'), t('是一個人把所有積蓄藏在書裡的故事。', 'talk'), t('這個可以。最後找到了嗎？', 'admire', 'tease'), t('找到了，可惜他忘記放在哪一頁。', 'tease', 'protest')]),
-    s('橘子樹旁的午後', ['tangerine-tree'], [t('這邊光線剛好，妳的椅子搬過來吧。', 'offer'), t('不會擋到妳澆水嗎？', 'think'), t('不會，妳還能提醒魯夫別踩進來。', 'talk', 'laugh'), t('呵呵，那我就在這裡當安靜的看守。', 'rest')])
+  add('nami', 'robin', '兩個女性夥伴有自己的興趣與鬆弛日常。娜美能吐槽羅賓的陰暗想像，羅賓會逗她而非總當老師。', [
+    s('一本適合睡前的書', ['bookshelf'], [t('這本好看嗎？想睡前翻一點。', 'offer'), t('很好看。失蹤的人到第三章才從牆裡出來。', 'talk', 'startled'), t('……有沒有牆裡沒人的？', 'protest', 'tease'), t('有一本海邊旅行。只是船長不見了。', 'tease', 'protest')]),
+    s('讀不完的午後', ['tangerine-tree'], [t('今天真安靜。魯夫他們去哪了？', 'think'), t('大概在準備下一次讓妳頭痛的驚喜。', 'tease', 'think'), t('那我要把這杯茶喝完再找人。', 'rest', 'talk'), t('我也這麼想。點心替妳留了。', 'offer', 'talk')]),
+    s('地名底下的人', ['map-table'], [t('舊地圖上這裡明明是一座港口。', 'think'), t('名字留下了，居民也許搬到別處了。', 'explain'), t('到了附近，我們繞過去看看吧。', 'offer', 'talk'), t('嗯。妳畫海岸，我找留下的字。', 'nod', 'nod')]),
+    s('還沒來得及阻止', [], [t('妳是不是早就知道他們會吵起來？', 'think'), t('我只猜他們撐不過一分鐘。', 'tease', 'think'), t('那妳怎麼不攔一下？', 'protest', 'talk'), t('還沒來得及，妳就來了。', 'tease', 'protest')])
   ]);
-  add('nami', 'franky', '娜美要求實用與可靠，佛朗基以工程熱情回應；也能共同規劃。', [
-    s('不是每樣都要加機關', ['tool-bench'], [t('我只需要抽屜不會滑開，聽清楚喔。', 'explain'), t('所以不用自動彈出？我都畫好了！', 'admire'), t('航海時自動彈出，我會先被它撞到。', 'protest', 'think'), t('有道理。改成單手就能扣住，這個實用吧！', 'offer')]),
-    s('風口的位置', ['tangerine-tree'], [t('這裡能擋一點風，又不遮住陽光嗎？', 'think'), t('做一片能調角度的擋板就行。', 'explain'), t('讓我先量今天風從哪邊來。', 'work', 'nod'), t('好，妳定方向，我把底座做穩。', 'work')]),
-    s('可靠的小修理', ['helm'], [t('昨天說的鬆動已經沒了，你修過了？', 'think'), t('妳說完我就看了，還順便查過旁邊。', 'nod'), t('謝啦。這種地方穩了，我看航線也安心。', 'talk', 'talk'), t('這句比誇它好看還管用啊！', 'laugh')])
+  add('nami', 'franky', '實用、預算對上船匠的浪漫，不是永遠否決。娜美看見維修成果，佛朗基能接受具體限制。', [
+    s('窗簾不需要發射', [], [t('我要的是會遮光的窗簾。', 'explain'), t('這個按鈕一下去，整片唰地展開，多帥！', 'admire', 'protest'), t('還要把人彈出去嗎？', 'tease', 'think'), t('那是另一個設計……好啦，先做普通的！', 'protest', 'nod')]),
+    s('這筆錢可以花', ['map-table'], [t('這塊板一定要換？', 'think'), t('外面看不出來，裡面已經吃不住力了。', 'explain'), t('好。船的東西不能省在這裡。', 'nod', 'talk'), t('就等妳這句！我會挑塊配得上它的！', 'work', 'nod')]),
+    s('一直在響的抽屜', ['tool-bench'], [t('晚上終於沒有喀啦喀啦的聲音了。', 'talk'), t('小意思！換了個卡扣，船晃也不跑。', 'explain', 'talk'), t('這種改造，我很贊成。', 'tease', 'laugh'), t('嘿，沒有大炮也能叫好作品吧！', 'laugh', 'nod')])
   ]);
-  add('nami', 'brook', '娜美給音樂家清楚界線，布魯克禮貌配合，也能用音樂幫忙。', [
-    s('數字別跟著跑', ['piano'], [t('先別越彈越快，我的數字都跟著亂了。', 'protest'), t('抱歉，我把拍子放慢。這樣可以嗎？', 'bow'), t('嗯，這樣很好。等我算完再熱鬧。', 'nod', 'talk'), t('那結尾留到您合上帳本的時候。', 'offer')]),
-    s('雨天的樂譜', ['bookshelf'], [t('樂譜收裡面，海風帶著雨。', 'explain'), t('多虧您提醒！我的譜差點先出去旅行。', 'startled'), t('紙角壓這裡。我可不想出海撈樂譜。', 'work', 'nod'), t('那我演奏一首不需要您出航的謝禮。', 'bow')]),
-    s('聽懂的停頓', [], [t('你剛才故意停一下，是在等大家唱？', 'think'), t('是的，有人唱進來，曲子就不只屬於我了。', 'talk'), t('那下次先給我一個眼神，我也能接上。', 'offer', 'admire'), t('樂意之至！雖然我沒有眼睛，仍會朝您這邊看。', 'tease')])
+  add('nami', 'brook', '娜美直截了當劃界線，布魯克禮貌接住而不糾纏；音樂能改變日常氣氛，並非只剩失禮笑話。', [
+    s('帳本的拍子', ['piano'], [t('先停一下，我都跟著你的拍子算錯了。', 'protest', 'startled'), t('失禮了。要我改成慢板嗎？', 'bow'), t('改成沒有聲音的那種。', 'tease', 'think'), t('那是休止符專場。容我安靜演出。', 'tease', 'laugh')]),
+    s('配合天氣', [], [t('要下雨了，樂譜收進來！', 'explain', 'startled'), t('多謝提醒！我正想寫一首雨天的曲子。', 'admire'), t('可以寫，別拿真的雨來泡。', 'protest', 'bow'), t('放心，這次只有音符會滴滴答答。', 'tease', 'talk')]),
+    s('留下來的安可', ['piano'], [t('剛才最後那段，怎麼不彈下去了？', 'think'), t('怕耽誤大家休息。您還想聽？', 'offer'), t('想。這次我不算帳了。', 'rest', 'talk'), t('那麼，就為這杯茶再加一段。', 'offer', 'nod')])
   ]);
-  add('nami', 'jinbe', '航海士判讀航線，掌舵手把指示落實；互相尊重專業。', [
-    s('半拍之後轉舵', ['helm'], [t('下一道浪過了再轉，不用搶。', 'explain'), t('明白，老夫等妳的訊號。', 'nod'), t('現在！沿著右邊那條深色水線。', 'work', 'nod'), t('已經對上了。好判斷，船身很穩。', 'reassure')]),
-    s('圖上沒有的變化', ['map-table'], [t('海圖寫的是順流，船卻被推向左邊。', 'think'), t('表面和下面流向不同，能感覺到拖力。', 'explain'), t('那我加個記號，下次也要提醒大家。', 'work', 'nod'), t('老夫把發生的位置說清楚，妳慢慢記。', 'offer')]),
-    s('把功勞分回來', [], [t('今天靠得真平穩，杯子都沒晃。', 'talk'), t('是妳挑的時機好，老夫只是照著做。', 'nod'), t('照著做也得有本事啊，這句誇你就收下。', 'reassure', 'laugh'), t('哈哈，那就收下。下次也請多指點。', 'bow')])
+  add('nami', 'jinbe', '航海士判讀，掌舵手落實，兩人也會彼此修正與肯定；專業交接用明確訊號，不泛講人生道理。', [
+    s('等到我的訊號', ['helm'], [t('下回遇到那種浪，先別轉，等我的訊號。', 'explain'), t('明白。先讓船頭穩住。', 'nod', 'nod'), t('那道浪過後就往右，別提早。', 'explain', 'think'), t('交給老夫。這個時機，老夫記住了。', 'nod', 'talk')]),
+    s('海圖以外的水', ['map-table'], [t('這片水的顏色和圖上不一樣。', 'think'), t('底下的流變了。讓老夫再看看浪紋。', 'think'), t('好，我把兩邊的風也記下來。', 'work', 'nod'), t('兩邊對上了再走，省得白繞一圈。', 'nod', 'nod')]),
+    s('船上最該小心的人', [], [t('你又讓魯夫說去看看就跑了？', 'protest', 'startled'), t('他說就在旁邊，老夫以為——', 'think', 'protest'), t('他說旁邊，通常就是看不到的地方！', 'protest', 'think'), t('原來如此。這條也得記進航海須知啊。', 'laugh', 'talk')])
   ]);
-  add('usopp', 'sanji', '廚師看穿誇口仍肯定手藝；狙擊手能以小發明幫忙。', [
-    s('攪拌器的真本事', ['kitchen-table'], [t('新發明！不用手也能一直攪！', 'admire'), t('能停下來嗎？不能停就先別放進鍋裡。', 'think'), t('當然能！這個卡榫一扣……你看！', 'work', 'nod'), t('行，這次有用。先用空碗測完再上桌。', 'nod')]),
-    s('沒說出口的肚子餓', [], [t('我忙得連吃飯都忘了，真是辛苦的英雄。', 'tease'), t('少繞圈，給你留了。坐下。', 'offer'), t('你怎麼知道我還沒吃？', 'admire', 'talk'), t('你那張嘴一安靜，八成就在做東西。', 'tease')]),
-    s('修好的抽屜', ['tool-bench'], [t('你說卡住的抽屜，我調好了。', 'offer'), t('不會一拉整個掉出來吧？', 'think'), t('才不會！我試了十次，這裡還加了擋片。', 'explain', 'nod'), t('謝了。等晚餐，你那份給你多添一點。', 'talk', 'admire')])
+  add('usopp', 'sanji', '香吉士能拆穿空話，卻尊重騙人布真正做得到的事；關心藏在端飯和留面子，非訓話式鼓勵。', [
+    s('攪拌器不能搶廚師', ['tool-bench'], [t('看！本大爺的自動攪拌器，能省十個廚師！', 'explain'), t('先省下它噴到牆上的半碗醬吧。', 'protest', 'startled'), t('那是高速試驗！把速度降下來就行！', 'protest', 'think'), t('降吧。攪得勻，我就拿它做今晚的醬。', 'work', 'admire')]),
+    s('勇士的肚子', ['kitchen-table'], [t('本大爺守在這裡，半天沒挪過一步！', 'explain'), t('難怪肚子叫得隔壁都聽見了。拿去。', 'offer', 'startled'), t('這、這是戰士集中精神的聲音！', 'protest', 'tease'), t('隨便你。邊吃邊集中，別掉滿桌。', 'tease', 'talk')]),
+    s('沒喊出來的謝謝', ['tool-bench'], [t('抽屜修好了！你看，拉到底也不會掉。', 'offer'), t('正好。裡面的東西拿出來看看。', 'nod', 'think'), t('這不是我愛吃的魚嗎？', 'admire', 'talk'), t('本來就是你的。吃完把抽屜留給我用。', 'tease', 'laugh')]),
+    s('這次讓你說完', [], [t('本大爺剛才可是差一點就——', 'explain'), t('就怎樣？這次我聽你說完。', 'talk', 'startled'), t('……你突然不吐槽，我反而忘了。', 'think', 'tease'), t('先想好再吹。要是真有麻煩，就直說。', 'reassure', 'nod')])
   ]);
-  add('usopp', 'chopper', '喬巴容易信誇張故事；騙人布喜歡被崇拜，也會在實務上照顧他。', [
-    s('不是一萬個人的工程', ['tool-bench'], [t('這可是我指揮一萬個工匠才想出的設計！', 'admire'), t('一萬個？可是剛才只有你坐在這裡啊。', 'think'), t('那、那是腦中的一萬個點子！', 'protest', 'admire'), t('原來是這樣！那你先教我其中一個！', 'offer')]),
-    s('真的需要勇氣', [], [t('剛才那聲音太突然，我是故意往後站的。', 'explain'), t('我也嚇到了。可是你還是回來扶住我。', 'talk'), t('那當然，總不能把你留在前面。', 'nod', 'admire'), t('嗯！我下次也會先看看你在哪。', 'reassure')]),
-    s('藥箱的小改裝', ['medicine-cabinet'], [t('加上這條帶子，藥箱就不會一直撞到腿。', 'explain'), t('真的比較穩！會不會很難拆？', 'admire'), t('這裡一拉就行，我留了快扣。', 'work', 'nod'), t('太好了！趕著拿藥的時候也不會卡住！', 'talk')])
+  add('usopp', 'chopper', '崇拜會把騙人布的牛越吹越大，醫學卻是喬巴的主場；保留玩伴關係，不讓其中一人永遠是傻瓜。', [
+    s('一萬人的掌聲', [], [t('當年一萬個人，都等著本大爺登場！', 'explain', 'admire'), t('一萬個！你站在哪裡才聽得完他們說話？', 'admire'), t('當、當然是最高的地方！', 'explain', 'admire'), t('那我也要練高一點！先搬張椅子！', 'offer', 'startled')]),
+    s('不能出門的病', ['medicine-cabinet'], [t('糟了，我得了今天不能整理房間的病。', 'think', 'startled'), t('真的？哪裡痛？把手伸出來！', 'work', 'startled'), t('不用這麼認真！只是看到灰塵就……', 'protest', 'think'), t('那就戴上口罩。這下可以整理了！', 'offer', 'protest')]),
+    s('醫生的箱扣', ['tool-bench'], [t('試試這個扣子，戴手套也開得了。', 'offer', 'think'), t('真的！拿藥的時候就不會卡住了！', 'admire'), t('哼，船上的大醫生，工具可不能掉鏈子。', 'tease', 'laugh'), t('少、少誇我啦！……再幫我做另一邊好不好？', 'laugh', 'talk')])
   ]);
-  add('usopp', 'robin', '誇口和冷幽默形成反差；羅賓也認真欣賞騙人布的觀察與手藝。', [
-    s('箱子裡的聲音', ['treasure-chest'], [t('這箱子好像在敲，我先研究一下。', 'think'), t('也許裡面有人想出來。', 'tease', 'startled'), t('別這麼平靜地說恐怖的話啊！', 'protest', 'talk'), t('呵呵，是蓋子上的環。我替你按住了。', 'reassure')]),
-    s('看得出的修補', ['bookshelf'], [t('這本的封面修好了，幾乎看不出來吧！', 'offer'), t('看得出來你把紋路也對齊了，很細心呢。', 'talk'), t('連這都看出來？我可是磨了好久。', 'admire', 'nod'), t('所以才想好好謝謝你。', 'reassure')]),
-    s('故事要有結尾', [], [t('那怪物一看見我，立刻嚇得逃進海裡！', 'admire'), t('接著呢？你不是說它本來不會游泳？', 'think', 'startled'), t('呃，所以我又把它救上來了！', 'explain', 'talk'), t('原來是個救援故事。這個結尾我喜歡。', 'talk')])
+  add('usopp', 'robin', '騙人布的虛張聲勢遇上羅賓平靜補刀；她也看得見細工和想像力，不能每場都只把他嚇哭。', [
+    s('箱子裡的敲門聲', ['treasure-chest'], [t('這箱子……剛才是不是敲了一下？', 'think'), t('也許裡面的人想出來。', 'talk', 'startled'), t('妳不要那麼平靜地說有人啊！', 'protest', 'tease'), t('那你站近一點，我們確認看看。', 'offer', 'startled')]),
+    s('看得出的修補', ['bookshelf'], [t('書脊黏好了。哼，簡單得很。', 'explain'), t('連原來的花紋都接回去了。', 'talk', 'admire'), t('那、那個花了比較久。我想別把圖遮住。', 'think', 'talk'), t('我很喜歡。這一頁也一起留下了呢。', 'talk', 'laugh')]),
+    s('故事不能少一個人', [], [t('最後，本大爺一箭射穿了怪物的帽子！', 'explain'), t('牠為什麼戴帽子？', 'think', 'startled'), t('因為……怕冷！是個很怕冷的怪物！', 'explain', 'talk'), t('那就替牠留一頂吧。你不是已經贏了？', 'tease', 'think')])
   ]);
-  add('usopp', 'franky', '兩名手作夥伴分享技術；佛朗基不奪走騙人布的小發明成就。', [
-    s('小機關不必變大', ['tool-bench'], [t('我想做一個單手就能開的扣子。', 'think'), t('好點子！要不要加成三段連動？', 'admire'), t('先別加！喬巴只需要一按就開。', 'protest', 'nod'), t('對，給誰用最要緊。這次聽你的。', 'nod')]),
-    s('卡住的一毫米', ['tool-bench'], [t('尺寸都對，怎麼一裝就卡住？', 'think'), t('別急，邊緣這裡還有一點毛邊。', 'explain'), t('喔！不是整個做錯，磨這裡就行！', 'admire', 'nod'), t('沒錯。你前面做得很好，別一口氣全否定了。', 'reassure')]),
-    s('讓作品署名', [], [t('大家都以為那個小架子是你做的。', 'think'), t('那就跟他們說是你啊，這本來就是你的作品。', 'nod'), t('我還以為放在你工具台上，就算你的了。', 'talk', 'laugh'), t('胡說！下次把名字刻上去，挺起胸膛！', 'reassure')])
+  add('usopp', 'franky', '共同熱愛手藝但尺度不同。佛朗基有船匠權威，仍讓騙人布保留自己的發明、判斷與成就感。', [
+    s('別把小機關做大', ['tool-bench'], [t('這扣子是單手開的。不要改成雙炮管啊！', 'explain', 'think'), t('喔？拇指這麼一頂……嘿，有你的！', 'admire'), t('要的就是這種手感，省力又不會誤開。', 'explain', 'nod'), t('好，這部分聽你的。外殼我替你磨牢！', 'work', 'talk')]),
+    s('一起卡在最後一步', ['tool-bench'], [t('奇怪，明明照圖做的，怎麼差一點？', 'think'), t('先別敲。你看看底下那顆墊片。', 'explain', 'think'), t('啊！多放了一片！', 'startled', 'tease'), t('哈！不是每次都得造新東西，有時少一片就成了！', 'laugh', 'talk')]),
+    s('不只是船匠的名字', [], [t('喂，介紹的時候別全算成你做的喔。', 'protest'), t('誰搶你功勞了？機關可是你想的。', 'nod', 'talk'), t('那我先講原理，你最後讓它動！', 'offer', 'admire'), t('成交！這次我們兩個一起帥！', 'laugh', 'laugh')])
   ]);
-  add('usopp', 'brook', '騙人布擅長把故事演得熱鬧，布魯克能配樂也能看穿漏洞。', [
-    s('怪談配錯了樂', ['piano'], [t('等我說到門打開，你就彈最嚇人的！', 'explain'), t('明白。要讓您自己也嚇一跳的程度嗎？', 'tease'), t('不用！嚇觀眾就好，講故事的人要保持冷靜！', 'protest', 'talk'), t('那我先給您一個提示音，再開始。', 'reassure')]),
-    s('不會倒的譜架', ['tool-bench'], [t('我在底下加了重量，現在不怕風吹。', 'offer'), t('真是幫了大忙，我終於能專心看譜。', 'bow'), t('先等一下，你還是要把紙夾住。', 'explain', 'startled'), t('啊，差點只留下穩穩的架子。多謝提醒！', 'laugh')]),
-    s('英勇故事的節拍', [], [t('這段是在追逐，曲子要越來越快！', 'admire'), t('再快您就來不及說話了，要不要先留一拍？', 'think'), t('對喔。那一拍剛好讓我說最厲害的那句。', 'nod', 'talk'), t('好，我把舞台留給您，結尾再一起收。', 'offer')])
+  add('usopp', 'brook', '吹牛的敘事與配樂能彼此抬轎，也能當場穿幫。騙人布怕骷髏氣氛，布魯克自己也怕可怕的事。', [
+    s('英雄出場的音樂', ['piano'], [t('等我說到巨人倒下，你就彈最厲害的那段！', 'explain'), t('明白。剛剛那聲尖叫要配嗎？', 'think', 'startled'), t('那是巨人的！不是我的！', 'protest', 'tease'), t('好的，巨人的高音真細緻呢。', 'tease', 'protest')]),
+    s('最不該怕鬼的人', [], [t('窗邊那個影子……你去看看。', 'think'), t('請不要推我！萬一真是幽靈怎麼辦？', 'startled', 'protest'), t('你自己不就是骷髏嗎！', 'protest', 'protest'), t('骷髏也會害怕的啊！一起去！', 'protest', 'nod')]),
+    s('譜架的用處', ['tool-bench'], [t('新譜架好了！船晃的時候也夾得住。', 'offer', 'admire'), t('太好了。上面這個小架子呢？', 'think'), t('放茶杯。你老是彈到一半找不到杯子。', 'tease', 'talk'), t('連這個都記著。今晚請您先點曲子。', 'offer', 'laugh')])
   ]);
-  add('usopp', 'jinbe', '甚平不取笑恐懼，以具體指導幫騙人布把準備轉成自信。', [
-    s('起霧的信號', ['helm'], [t('我做了提示燈，霧裡也找得到大家！', 'offer'), t('很周到。但這面要擋一下，別照進掌舵人的眼睛。', 'explain'), t('啊，對！加個遮光片就能調方向了。', 'work', 'nod'), t('試的時候叫老夫，我站遠些幫你看。', 'offer')]),
-    s('先承認手在抖', [], [t('我手抖是船在動，才不是緊張。', 'protest'), t('船確實在動。先把腳站開一點。', 'explain'), t('咦，這樣真的穩多了。', 'admire', 'nod'), t('穩住再瞄，準備多一分，心裡就踏實一分。', 'reassure')]),
-    s('拉得緊也解得開', ['tool-bench'], [t('這個結拉不開，夠結實了吧！', 'admire'), t('結實是好事。等要拆的時候，你打算怎麼辦？', 'think'), t('……再留一個活扣？', 'think', 'nod'), t('正是。會繫，也要能在需要時解開。', 'explain')])
+  add('usopp', 'jinbe', '甚平有時把誇口當真，使騙人布得自己找台階；真正遇到害怕時，給他可做的事而非抽象打氣。', [
+    s('傳說要講清楚', [], [t('我以前可是馴服過海裡最大的怪魚！', 'explain'), t('哦？背鰭是圓的，還是分成三岔？', 'think', 'startled'), t('那個……牠太大了，我只看得到頭。', 'think'), t('原來如此。下次畫給老夫看看，或許認得。', 'offer', 'startled')]),
+    s('手抖也能發訊號', ['helm'], [t('霧這麼濃，誰看得見我啊。', 'think'), t('船頭看得見。把那面旗放高些。', 'explain'), t('這樣？……喂，對面真的回了！', 'admire', 'nod'), t('嗯，這雙眼就交給你了。', 'reassure', 'nod')]),
+    s('會解開的繩結', ['tool-bench'], [t('看！越扯越緊，絕對不會鬆！', 'explain'), t('不錯。現在你試試把它解開。', 'offer', 'think'), t('……糟了，真的不會鬆。', 'startled', 'tease'), t('哈哈，留個繩耳。綁得牢，也要解得開。', 'explain', 'nod')])
   ]);
-  add('sanji', 'chopper', '廚師與醫生一起照顧船員；香吉士也記得喬巴不是只吃甜食的小孩。', [
-    s('醫生也要吃飯', ['medicine-cabinet'], [t('喬巴，湯放這裡。先喝了再看書。', 'offer'), t('等一下，這裡的份量快算完了！', 'think'), t('我不碰你的筆記。碗放旁邊，別餓著算。', 'nod', 'talk'), t('好。那你也坐下，你是不是還沒吃？', 'offer')]),
-    s('甜點後的正餐', ['kitchen-table'], [t('甜的留到後面，先把這份吃了。', 'explain'), t('我知道啦！我是在看它會不會融化。', 'protest'), t('替你收涼的地方了，慢慢吃。', 'reassure', 'admire'), t('你連這都想到了！那我不用一直回頭看了。', 'talk')]),
-    s('燙紅的指尖', [], [t('只是碰到鍋邊，一點紅而已。', 'nod', 'protest'), t('手不是對你很重要嗎？讓我檢查！', 'explain'), t('……有道理。麻煩你了，醫生。', 'nod', 'talk'), t('嗯！等我看完再去忙，不准偷溜。', 'work')])
+  add('sanji', 'chopper', '廚師和醫師一起照料全船，也管彼此逞強。甜食笑點之外保留喬巴的專業，不拿他當寵物餵。', [
+    s('醫生自己的那份', ['kitchen-table'], [t('喬巴，別只盯著別人的盤子。你的快涼了。', 'offer'), t('我在看魯夫有沒有把菜藏起來！', 'explain'), t('我看著。你先吃，醫生也不能空著肚子。', 'reassure', 'nod'), t('那你也坐下！你剛才只嚐了湯！', 'protest', 'think')]),
+    s('甜的不能替代全部', ['kitchen-table'], [t('棉花糖等一下。先吃這個。', 'explain'), t('我知道！正餐有正餐的營養！', 'protest'), t('知道就把藏在盤底的拿出來。', 'tease', 'startled'), t('你怎麼發現的……明明只藏了一小團！', 'protest', 'laugh')]),
+    s('廚師的手也得看', ['medicine-cabinet'], [t('熱鍋碰一下而已，別大驚小怪。', 'nod'), t('給我檢查。你自己不是最重視這雙手嗎！', 'protest', 'think'), t('……知道了，醫生。這隻。', 'offer', 'work'), t('另一隻也來！不准漏報！', 'explain', 'nod')]),
+    s('醫生也算在大家裡', [], [t('小醫生，你也該歇會兒了。', 'offer'), t('大家的情況我還沒問完！', 'explain'), t('大家好得很。最該問的是你自己。', 'tease', 'think'), t('那我們一起休息！你也別偷偷回廚房！', 'protest', 'smile')])
   ]);
-  add('sanji', 'robin', '香吉士殷勤照料，羅賓從容道謝與逗趣；不把互動寫成確定戀情。', [
-    s('書籤旁的茶', ['bookshelf'], [t('羅賓小姐，茶放在您不會碰倒的這側。', 'offer'), t('謝謝。你連我慣用哪邊翻頁都記住了。', 'talk'), t('讓您安穩讀書，這點小事當然要留意。', 'bow', 'talk'), t('那我記得休息，免得你的茶一直等我。', 'tease')]),
-    s('食譜裡的舊名字', ['kitchen-table'], [t('這張舊食譜的字，能請您幫我看看嗎？', 'think'), t('這是香料的舊名，不是另一種材料。', 'explain'), t('原來如此！難怪怎麼配都不對。', 'admire', 'talk'), t('成功以後，我想嚐嚐歷史的味道。', 'offer')]),
-    s('看起來嚇人的點心', [], [t('今天試了新模子，您喜歡哪個形狀？', 'offer'), t('這個像小小的骷髏，很可愛。', 'talk', 'startled'), t('原來您喜歡這種！那我把眼窩做得更整齊。', 'work', 'tease'), t('呵呵，也替布魯克留一個吧，他會很高興。', 'talk')])
+  add('sanji', 'robin', '香吉士熱情獻殷勤，羅賓平靜接話偶爾故意偏題；她的回應是同伴信任，不暗示已成戀人。', [
+    s('茶不能替人翻書', ['bookshelf'], [t('羅賓小姐，咖啡好了！再來一份點心嗎？', 'offer'), t('謝謝。先放這裡，我想把這段看完。', 'talk'), t('那我等妳。需要我翻頁也可以！', 'smile', 'tease'), t('翻頁我自己來。點心倒是很需要。', 'tease', 'smile')]),
+    s('古書裡的食材', ['bookshelf'], [t('這個果子的名字，我從沒聽過。', 'think'), t('是舊稱。旁邊畫的葉子，也許認得出來。', 'explain'), t('真的！那就能試著重做這道菜了。', 'admire', 'talk'), t('做好請留一份。我也想知道書裡是什麼味道。', 'offer', 'admire')]),
+    s('甜點的名字', ['kitchen-table'], [t('這份專為妳做的，名字還沒想好。', 'offer'), t('像一隻從沙裡伸出來的手呢。', 'think', 'startled'), t('手、手嗎？我本來想做花……', 'think', 'tease'), t('我很喜歡。花也留一朵給娜美吧。', 'talk', 'laugh')]),
+    s('不用每次都忙起來', [], [t('羅賓小姐，有什麼能替妳效勞的？', 'smile'), t('陪我聊聊。你不用每次都忙起來。', 'talk'), t('只要陪妳就行？樂意之至！', 'smile', 'talk'), t('嗯，先從你剛才沒說完的故事開始吧。', 'offer', 'smile')])
   ]);
-  add('sanji', 'franky', '兩個實務專家互相照應；廚師的味覺與船匠的誇張創意會起衝突。', [
-    s('別把可樂倒進去', ['kitchen-table'], [t('那鍋不是給你加燃料的，瓶子放下。', 'protest'), t('我還沒倒啊！只是覺得顏色挺配。', 'explain'), t('顏色配也不代表味道配。你的杯子在那邊。', 'explain', 'nod'), t('行，料理聽你的。我等現成的好味道！', 'talk')]),
-    s('高一點的工作台', ['tool-bench'], [t('備料台能再高一點嗎？一直彎著腰不順手。', 'think'), t('能。你站平常的位置，我量你的手肘。', 'work'), t('這個高度就好，下面還得能收東西。', 'explain', 'nod'), t('懂了。外表不亂加，空間給你留足！', 'work')]),
-    s('先擦掉眼淚', [], [t('飯還沒吃，怎麼又哭起來了？', 'think'), t('剛才聽到人家好好保存舊船的故事嘛。', 'talk'), t('行了，擦把臉。湯冷了味道就差了。', 'offer', 'nod'), t('謝了，兄弟。這種熱湯，現在喝特別對味。', 'talk')])
+  add('sanji', 'franky', '兩個職人都挑剔手感和成品，能嫌對方亂來也肯互相配合；佛朗基的可樂不取代所有食物。', [
+    s('不是所有東西都加可樂', ['kitchen-table'], [t('停。這鍋湯不准加可樂。', 'protest', 'think'), t('還沒倒呢！我只是放旁邊！', 'protest'), t('上次你也是這麼說。', 'protest', 'tease'), t('好啦，這回我就乖乖喝你做的！', 'laugh', 'nod')]),
+    s('合手才是好台子', ['tool-bench'], [t('工作台高半寸。再高就不好使力。', 'explain'), t('這麼講就對了！你平常切菜站哪裡？', 'think'), t('這邊。手肘過去不能撞到。', 'explain', 'work'), t('懂了，給你留足。做好可得請我吃一頓！', 'offer', 'tease')]),
+    s('還惦記著那個故事', ['kitchen-table'], [t('那個故事，你到現在還惦記著啊？', 'tease'), t('你懂什麼！那個老頭等了整整十年啊！', 'protest'), t('知道了。下次有後續，我再說給你聽。', 'offer', 'talk'), t('那還用說！可別給我漏掉結尾！', 'protest', 'tease')]),
+    s('留一聲給醒著的人', [], [t('喂，你一大早喊那麼大聲幹什麼？', 'protest'), t('精神夠足才叫 SUPER 啊！', 'laugh', 'think'), t('沒睡醒的人也被你喊醒了。', 'protest', 'think'), t('哈！那下一聲留到大家都醒了再來！', 'laugh', 'nod')])
   ]);
-  add('sanji', 'brook', '廚師與音樂家一起照料宴會；一方直接，一方禮貌而愛玩笑。', [
-    s('熱湯與慢曲', ['piano'], [t('剛端上熱湯，別把大家唱得站起來。', 'explain'), t('明白，先用讓人坐得住的旋律。', 'nod'), t('吃完再鬧。你那份也留好了。', 'offer', 'bow'), t('謝謝！有晚餐等著，演奏更有力氣了。', 'talk')]),
-    s('骨頭也算客人', ['kitchen-table'], [t('你想吃軟一點還是脆一點的？', 'think'), t('脆一點吧，我很欣賞清楚的骨感。', 'tease', 'protest'), t('我問口感，不是問你的感想。', 'protest', 'laugh'), t('喲呵呵，失禮了。請給我您拿手的那份。', 'bow')]),
-    s('廚房外的排練', [], [t('你在這兒練，切菜倒是挺有節奏。', 'talk'), t('那我維持這個拍子，不會突然加速。', 'nod'), t('很好。結尾停一下，我剛好把這盤端出去。', 'work', 'nod'), t('那就讓菜先登場，我替它留個漂亮的空拍。', 'offer')])
+  add('sanji', 'brook', '廚師和音樂家一起把宴會做起來；香吉士直接吐槽，布魯克用禮貌和小笑話接回，不每句提骨頭。', [
+    s('盛湯不用配快板', ['piano'], [t('慢一點，我端湯都跟著你加速了。', 'protest', 'startled'), t('失禮了！這段改成散步的速度。', 'bow'), t('等人坐齊再鬧。熱的別讓大家錯過。', 'explain', 'nod'), t('明白。先請各位用餐，安可稍候！', 'offer', 'talk')]),
+    s('沒有胃也算一份', ['kitchen-table'], [t('你的牛奶。別一開口又講沒胃。', 'offer', 'startled'), t('啊，笑話先被您拿走了。', 'tease'), t('那就喝。甜點也給你留著。', 'nod', 'talk'), t('謝謝。這次我就安靜享用了。', 'bow', 'nod')]),
+    s('廚房聽得到', [], [t('剛才那首不錯。下次再彈。', 'nod', 'admire'), t('您在廚房也聽得見嗎？', 'think'), t('聽得見，魯夫一直跟著亂唱。', 'tease', 'laugh'), t('喲呵呵，那我下次先教他開頭。', 'laugh', 'talk')])
   ]);
-  add('sanji', 'jinbe', '兩人常先顧別人；會互相提醒對方也接受照顧。', [
-    s('掌舵的人那一份', ['helm'], [t('這份幫你放穩，能騰出一隻手嗎？', 'offer'), t('這段先不行，等拐過前面再說。', 'explain'), t('那我等，省得你又吃冷的。', 'nod', 'talk'), t('多謝。轉過去老夫就坐下，不讓廚師白忙。', 'reassure')]),
-    s('搬完再開火', ['kitchen-table'], [t('那箱放乾燥的地方，別靠著熱鍋。', 'explain'), t('這裡如何？地面也不會擋人。', 'work'), t('正好。重的都搬完了，你歇一下。', 'nod', 'nod'), t('還有你手上那袋，交給老夫再一起歇。', 'offer')]),
-    s('不用剩最後一份', [], [t('你怎麼又等大家拿完才拿？', 'think'), t('看每個人都有了，老夫才放心。', 'nod'), t('我的份量算得很清楚，你也在裡面。', 'reassure', 'talk'), t('哈哈，倒是老夫多慮了。那就先嚐一口！', 'laugh')])
+  add('sanji', 'jinbe', '兩個習慣先照顧旁人的人互相拉到餐桌前；平實、有笑意，不連續敬語推辭或泛談責任。', [
+    s('舵旁的飯', ['helm'], [t('還沒輪到人換班？先吃，這碗端得住。', 'offer'), t('謝了。過了這個彎，老夫就放手。', 'nod'), t('那我等這個彎，別又冒出下一個。', 'tease', 'laugh'), t('哈哈，被你看穿了。這次說到做到。', 'laugh', 'nod')]),
+    s('海裡的食材', ['kitchen-table'], [t('這種海藻在哪種水裡長？味道不太一樣。', 'think'), t('水流快的岩邊常見。老夫可以指給你看。', 'explain', 'admire'), t('好。知道長在哪裡，下次就能挑對。', 'nod', 'talk'), t('那老夫也想嚐嚐，你打算怎麼煮它。', 'offer', 'nod')]),
+    s('別只挑小的', ['kitchen-table'], [t('甚平，你拿那個碗吃得飽？', 'think'), t('想著大家都還沒盛，就先拿小些。', 'nod'), t('鍋裡多的是。別替我的份量操心。', 'offer', 'talk'), t('好，那這回老夫可不客氣了。', 'laugh', 'nod')]),
+    s('不用一直道謝', [], [t('只是叫你一起歇口氣，別又謝個沒完。', 'tease'), t('習慣了。你們照顧得周到。', 'nod'), t('少來，你顧著大家的時候可沒先問誰謝你。', 'tease', 'think'), t('哈哈，說得也是。那老夫就不客氣了。', 'laugh', 'nod')])
   ]);
-  add('chopper', 'robin', '羅賓溫柔肯定喬巴的學習與判斷，喬巴也主動關照她。', [
-    s('自己找到的答案', ['bookshelf'], [t('這個字好難，我查了三次才找到！', 'admire'), t('你還把相似的寫法記在旁邊了，很仔細呢。', 'talk'), t('才、才不是想讓妳誇我！下次就不會認錯了。', 'talk', 'talk'), t('那下次遇見它，我先請教喬巴醫生。', 'reassure')]),
-    s('不只照顧小醫生', [], [t('羅賓，妳肩膀一直沒動，會不會痠？', 'think'), t('有一點，被你發現了。', 'nod'), t('書先放下，讓我看看！', 'offer', 'nod'), t('好，今天就聽醫生的。', 'reassure')]),
-    s('怪故事的邊界', ['medicine-cabinet'], [t('舊書說這種草晚上會唱歌，真的嗎？', 'admire'), t('也可能是採藥的人把蟲聲記到草身上了。', 'think'), t('那要分開查，不能直接當成藥的特徵！', 'explain', 'nod'), t('正是。你已經會先問證據在哪裡了呢。', 'talk')])
+  add('chopper', 'robin', '羅賓喜歡喬巴的小心思但尊重醫師判斷；喬巴主動關心她。冷幽默會收住，不把他一直嚇著。', [
+    s('自己找出的答案', ['bookshelf'], [t('羅賓！這段我看懂了！不是同一種葉子！', 'admire'), t('嗯，葉脈不一樣。你先發現的。', 'talk', 'laugh'), t('也、也沒多厲害啦！我才看了三次！', 'laugh', 'tease'), t('那我把另一頁留給你，醫生。', 'offer', 'admire')]),
+    s('讀書的人要動一動', [], [t('妳坐太久了，肩膀會痛喔。', 'explain'), t('被發現了。再看一頁也不行嗎？', 'tease', 'protest'), t('不行！剛才已經再看一頁了！', 'protest', 'talk'), t('好，那陪我走一小段吧。', 'offer', 'nod')]),
+    s('可怕的故事到這裡', ['bookshelf'], [t('那個人掉進洞裡，後來呢？', 'think'), t('鞋子先浮了上來。', 'talk', 'startled'), t('人呢？人有沒有事！', 'startled', 'think'), t('他把鞋脫掉游回來了。這次可以放心。', 'reassure', 'laugh')])
   ]);
-  add('chopper', 'franky', '喬巴對機關興奮，佛朗基認真替他設計；專業上互相學習。', [
-    s('這次不是變身', ['tool-bench'], [t('哇！這裡打開以後還有一層！', 'admire'), t('特地做給你的，小瓶子不會跟繃帶擠一起。', 'offer'), t('那我拿藥會快很多！不是只有帥而已耶！', 'admire', 'laugh'), t('當然，帥和好用，這次一起做到！', 'laugh')]),
-    s('醫生想知道的構造', [], [t('你這邊是機關，那不舒服的時候怎麼辦？', 'think'), t('先分清楚哪裡壞了，機關和身體分開看。', 'explain'), t('能畫給我嗎？我也想知道怎麼幫忙。', 'offer', 'talk'), t('好，慢慢講給你聽。這份心意我收到了！', 'reassure')]),
-    s('矮一點的把手', ['medicine-cabinet'], [t('這個把手我搆得到，可是拉起來好吃力。', 'think'), t('那就不算做好。把位置再降一點。', 'work'), t('真的可以？我還以為是我力氣太小。', 'admire', 'nod'), t('東西是給你用的，當然要照你的手來做！', 'reassure')])
+  add('chopper', 'franky', '喬巴對機械是真心崇拜，也會用醫師眼光發問；佛朗基享受觀眾，卻願意為小醫生解決具體麻煩。', [
+    s('還沒開始就發亮', ['tool-bench'], [t('會變形嗎？這次會變形嗎？', 'admire'), t('嘿，先別急！介紹完才是重頭戲！', 'explain', 'admire'), t('我去叫魯夫！不准趁我不在變！', 'offer', 'laugh'), t('放心！少了你們兩個，誰替我叫好啊！', 'laugh', 'admire')]),
+    s('醫生想檢查', ['medicine-cabinet'], [t('這邊轉起來會痛嗎？', 'think'), t('不會，這裡是軸。卡了就上點油！', 'explain', 'think'), t('可是旁邊還是你的身體啊，我也要看。', 'explain', 'nod'), t('行！機械歸我，身體就拜託醫生了。', 'reassure', 'laugh')]),
+    s('把手要拿得到', ['medicine-cabinet'], [t('太高了，拿藥每次都要先搬凳子。', 'think'), t('那就改低。多低你用著最順？', 'offer', 'think'), t('到這裡！可是大瓶的還要放得下。', 'explain', 'nod'), t('一起算進去！這可是醫生自己的藥櫃！', 'work', 'admire')]),
+    s('想學的還有那麼多', [], [t('佛朗基，你小時候就想造船了嗎？', 'think'), t('早著呢！想造的東西多到自己都記不住！', 'laugh', 'admire'), t('我也是！想學的醫術多到一天根本不夠！', 'admire', 'nod'), t('哈！那你每學會一樣，本大爺就替你慶祝一次！', 'offer', 'laugh')])
   ]);
-  add('chopper', 'brook', '喬巴認真關心特殊的身體，布魯克用幽默化解疑問並肯定醫生。', [
-    s('量不到的額頭', ['medicine-cabinet'], [t('你的額頭摸起來涼涼的……等一下，你是骨頭。', 'think'), t('是的，這個問題我也沒法用臉色回答您。', 'tease'), t('不能照一般方法看，我再記清楚一點。', 'work', 'nod'), t('謝謝您還這麼認真地替我想。', 'bow')]),
-    s('跟得上的節拍', ['piano'], [t('我拍到第三下就亂了，你能慢一點嗎？', 'think'), t('當然。先只跟第一拍，其他交給我。', 'explain'), t('一、空、空……這次跟上了！', 'admire', 'talk'), t('很好！等您點頭，我們再多加一拍。', 'reassure')]),
-    s('不必藏住高興', [], [t('你剛才說我的拍子很準，是真的嗎？', 'think'), t('真的，我有認真聽，沒有客套。', 'nod'), t('嘿嘿……那我下次還要一起！', 'talk', 'talk'), t('一定替您留位置，小小的樂手也是重要的同伴。', 'offer')])
+  add('chopper', 'brook', '醫生認真看待骷髏的特殊身體，音樂家不嘲弄那份認真；玩笑與安靜陪伴都能成立。', [
+    s('量不到的體溫', ['medicine-cabinet'], [t('奇怪……怎麼量都一樣冷。', 'think'), t('可能因為我連皮膚也沒有呢。', 'tease', 'think'), t('不要笑！我想知道怎樣才算你不舒服！', 'protest', 'nod'), t('您這麼認真，我也得好好記下自己的狀況。', 'reassure', 'nod')]),
+    s('藏不住的拍子', ['piano'], [t('我有跟上嗎？剛才好像慢了一下。', 'think'), t('有。請再試一次，這次我跟您的速度。', 'offer'), t('一、二、三……啊！對上了！', 'admire', 'laugh'), t('就是這樣。那這一小段，請陪我合奏一次。', 'offer', 'laugh')]),
+    s('笑出來就不藏了', [], [t('布魯克，我剛剛真的有幫上忙嗎？', 'think'), t('當然。您一來，大家就安心了。', 'reassure', 'laugh'), t('笨蛋！說這種話我也不會高興啦！', 'laugh', 'tease'), t('好的，那我就假裝沒看見您在笑。', 'tease', 'laugh')])
   ]);
-  add('chopper', 'jinbe', '喬巴不因外形差異放棄照顧；甚平平等尊重醫師的專業。', [
-    s('大手也得放鬆', ['medicine-cabinet'], [t('甚平，手給我看看，握舵太久也會累。', 'offer'), t('好，這樣放可以嗎，醫生？', 'nod'), t('可以，不要出力，讓我看得清楚。', 'work', 'nod'), t('那就麻煩你。檢查完老夫也會記得休息。', 'reassure')]),
-    s('海裡的知識', ['bookshelf'], [t('書上這種魚，我沒見過，真的會發光嗎？', 'admire'), t('會，但得在很暗的水裡才看得清楚。', 'explain'), t('原來不是一直亮！我要把這句補進筆記。', 'work', 'talk'), t('還想知道什麼，老夫能答的就說給你聽。', 'offer')]),
-    s('搬得動與看得到', [], [t('這箱我搬得動！不用幫我。', 'protest'), t('老夫知道。只是箱子擋住你的路了。', 'explain'), t('啊……那你幫我看前面，我來搬？', 'think', 'nod'), t('好，先往左一點。咱們一起把它送到。', 'reassure')])
+  add('chopper', 'jinbe', '甚平把喬巴當醫師，喬巴對陌生身體求知而不亂下結論；體型不同不等於大人哄小孩。', [
+    s('大手也要伸直', ['medicine-cabinet'], [t('手放鬆，再攤開一點。', 'work'), t('這樣麼？老夫一使力，怕你不好看。', 'think'), t('對，這樣就好。不用怕壓到我！', 'explain', 'nod'), t('那就交給你了，醫生。', 'nod', 'laugh')]),
+    s('不能只照書上猜', ['bookshelf'], [t('魚人的這一段，書上寫得好少。', 'think'), t('想問什麼？老夫知道的都可以講。', 'offer', 'admire'), t('太好了！我先記你的情況，不跟別人的混在一起。', 'work', 'nod'), t('嗯，問慢一點。老夫也得想清楚才回答。', 'talk', 'nod')]),
+    s('搬得動也得看路', [], [t('下次那麼大的東西，我也能幫忙搬！', 'offer'), t('力氣老夫相信。可別把前面的路全擋住。', 'explain', 'startled'), t('啊……光想到抱得動了。', 'think', 'tease'), t('到時你先喊一聲，老夫替你看著路。', 'offer', 'laugh')])
   ]);
-  add('robin', 'franky', '安靜的考古學家與感性的船匠互相尊重；以物件留住故事。', [
-    s('舊木片的來歷', ['tool-bench'], [t('這塊舊木頭，你特地留下來了？', 'think'), t('上面有以前修補的痕跡，丟掉怪可惜的。', 'talk'), t('修補也是它走過的路，留下很好。', 'nod', 'talk'), t('妳懂就好。可惡，突然讓人有點鼻酸啊。', 'talk')]),
-    s('書架與祕密抽屜', ['bookshelf'], [t('新書架多了一個小抽屜。', 'think'), t('給妳放書籤和零碎筆記，省得掉進縫裡。', 'explain'), t('很貼心。用來藏祕密也正合適。', 'tease', 'admire'), t('喂，真藏了什麼可別讓我修的時候嚇一跳啊！', 'laugh')]),
-    s('圖樣也有功能', ['map-table'], [t('這個花紋其實是排水道，不只是裝飾。', 'explain'), t('真的假的？拐角的位置還真能導水。', 'admire'), t('造它的人想得很仔細，跟你一樣。', 'talk', 'talk'), t('這話我愛聽！來，咱們把結構畫完整。', 'offer')])
+  add('robin', 'franky', '考古學家在意物件留下的痕跡，船匠在意如何留得住。語氣冷暖相反但平等，不捏造官方戀情。', [
+    s('舊痕跡也有用', ['tool-bench'], [t('這塊木頭上的刻痕，能留著嗎？', 'offer'), t('能。補背面就夠了，正面不碰。', 'nod'), t('很好，刻字的人恐怕沒想到還有人讀它。', 'talk', 'think'), t('嘿，那就讓它再多留一段日子！', 'work', 'talk')]),
+    s('書架的祕密', ['bookshelf'], [t('這一格怎麼比旁邊淺？', 'think'), t('發現啦！後面藏了個小抽屜！', 'admire'), t('很適合放不想被人找到的東西呢。', 'tease', 'think'), t('只是書籤！妳怎麼一說就像有案子！', 'protest', 'tease')]),
+    s('先別催結尾', [], [t('我還沒講到故事結尾呢。', 'talk'), t('知道！可那傢伙一直留著人家做的東西啊！', 'protest'), t('嗯，最後也沒有丟掉。', 'talk', 'nod'), t('這樣才對嘛！……後面呢？妳繼續說！', 'smile', 'talk')])
   ]);
-  add('robin', 'brook', '重視故事與記憶的兩人可以安靜對談，也能接住彼此冷幽默。', [
-    s('沒有聲音的樂譜', ['bookshelf'], [t('這頁寫了一首歌的名字，卻沒有譜。', 'think'), t('名字我沒聽過，旁邊有記錄怎麼唱嗎？', 'think'), t('只有一句「大家一起唱」，很簡單的記錄呢。', 'talk', 'nod'), t('那至少知道了，寫下它的人當時並不孤單。', 'talk')]),
-    s('讀書的配樂', ['piano'], [t('你把旋律放輕了，是怕打擾我嗎？', 'think'), t('是的，我看您剛翻到很認真的地方。', 'nod'), t('其實是一本笑話集，只是這頁不太好笑。', 'tease', 'startled'), t('那我得努力些，不能讓音樂也輸給那一頁。', 'tease')]),
-    s('不用勉強笑出來', [], [t('今天的曲子很安靜。要我陪你坐一會兒嗎？', 'offer'), t('那真好。有時候不彈也想有人在旁邊。', 'talk'), t('我正好帶了書，我們慢慢待著。', 'rest', 'nod'), t('謝謝。等您翻完這章，我再試下一段。', 'reassure')])
+  add('robin', 'brook', '能談舊歌與記錄，也能接住荒誕的黑色幽默；相處不用每場揭開悲劇或互相療癒。', [
+    s('字和旋律', ['bookshelf'], [t('這首歌的歌詞，和書裡記的不一樣。', 'think'), t('到了不同的港口，總有人換掉一兩句。', 'explain'), t('那你把記得的唱給我聽，我寫在旁邊。', 'offer', 'talk'), t('樂意。這一版，就多了一位記錄的人。', 'bow', 'nod')]),
+    s('適合怪談的伴奏', ['piano'], [t('剛才那一段，很適合有人從地板爬出來。', 'tease', 'startled'), t('請不要在我腳邊說這種話！', 'startled', 'tease'), t('放心，這裡的地板是佛朗基修的。', 'reassure', 'think'), t('您安慰的重點，好像稍微偏了一點。', 'protest', 'talk')]),
+    s('安靜也有聽眾', [], [t('怎麼停了？我有在聽。', 'offer'), t('以為您看得入神，便想歇一小段。', 'talk'), t('兩件事可以一起。繼續吧。', 'nod', 'talk'), t('那就接著剛才的地方，不重新開場了。', 'offer', 'nod')])
   ]);
-  add('robin', 'jinbe', '兩人尊重記錄與親身經驗的差別；語氣平穩而非互相說教。', [
-    s('記錄和親眼所見', ['map-table'], [t('舊記錄說這裡有一道逆流，你見過嗎？', 'think'), t('見過相似的，但季節不同，不能當成同一次。', 'explain'), t('我把兩件事分開記，不急著合在一起。', 'work', 'nod'), t('這樣穩妥。老夫再說說當時的水色。', 'offer')]),
-    s('茶桌上的船員們', [], [t('你已經習慣大家突然喊起來了嗎？', 'tease'), t('還在學。有時候喊得最大聲，事情反倒最小。', 'laugh'), t('譬如最後一塊點心不見的時候。', 'talk', 'laugh'), t('哈哈，那件事在船長心裡可不算小。', 'laugh')]),
-    s('不同的稱呼', ['bookshelf'], [t('這兩個名字指的是同一個地方。', 'explain'), t('老夫聽過左邊那個，右邊倒是頭一次。', 'think'), t('我也只在書上見過。你能教我怎麼念嗎？', 'offer', 'nod'), t('當然。咱們一人補一半，名字就完整了。', 'talk')])
+  add('robin', 'jinbe', '學者的記錄與掌舵手的親身經驗相互補足；兩人都有幽默，不把每句話寫成沉重人生格言。', [
+    s('書上的港口', ['map-table'], [t('這個港口，書上說入冬就沒有人了。', 'think'), t('還有人，只是把船搬到另一面避風。', 'explain'), t('原來如此。寫書的人大概只待了一天。', 'tease', 'talk'), t('哈哈，下次多待兩天，記載就不一樣了。', 'laugh', 'nod')]),
+    s('船上沒有寧靜時段', [], [t('還習慣嗎？每天都這麼熱鬧。', 'think'), t('正想問，什麼時候最安靜。', 'think', 'tease'), t('大家都在吃第一口飯的時候。', 'tease', 'laugh'), t('那老夫可得把握，想來也只是一眨眼。', 'laugh', 'talk')]),
+    s('不同的名字', ['bookshelf'], [t('海底也用這個名字稱呼它嗎？', 'think'), t('老夫聽過另一個稱呼。意思比較像回家的水。', 'explain'), t('很有意思。只寫成洋流，就少了一點東西。', 'think', 'nod'), t('那把兩個都記下吧。會有人看得懂的。', 'offer', 'talk')])
   ]);
-  add('franky', 'brook', '豪放船匠與禮貌音樂家能共同把宴會做好，也理解老物件的感情。', [
-    s('別把音量開到最大', ['piano'], [t('新底座！這次再大的聲音也撐得住！', 'admire'), t('太好了，不過大家的耳朵未必也撐得住。', 'tease'), t('哈！也是，那先用平常的音量試。', 'laugh', 'nod'), t('您聽，這樣聲音已經更穩了，不必更大聲。', 'work')]),
-    s('小刮痕要留下', ['tool-bench'], [t('這道痕我能修平，要全部磨掉嗎？', 'think'), t('這一小道留下吧，看著會想起練過的曲子。', 'talk'), t('懂了。壞的修好，記得住的留著。', 'nod', 'bow'), t('謝謝您，這樣拿在手上還是熟悉的老朋友。', 'talk')]),
-    s('動作和節奏', [], [t('我擺姿勢的時候，你幫我來個響亮的結尾！', 'offer'), t('沒問題。您先停穩，我才好把音放準。', 'explain'), t('好！一、二——SUPER！', 'admire', 'talk'), t('正好落在拍子上！這次連謝幕都配齊了。', 'laugh')])
+  add('franky', 'brook', '船匠替音樂家造能用的東西，音樂家替船匠的張揚配拍；也尊重老物件，不固定成大聲與小聲之爭。', [
+    s('登場要等四拍', ['piano'], [t('等我手一合，你就給我最響的那一下！', 'admire'), t('好。先等四拍，一、二——', 'explain', 'admire'), t('SUPER！', 'laugh', 'startled'), t('……三、四。您又搶先了，容我重來。', 'tease', 'laugh')]),
+    s('刮痕不必全磨掉', ['tool-bench'], [t('這裡能磨平，看起來跟新的一樣。', 'offer'), t('這道小痕可以留著嗎？我已經看習慣了。', 'think'), t('明白。該修的修，這道留著！', 'nod', 'talk'), t('謝謝。拿在手裡，還是熟悉的感覺。', 'bow', 'talk')]),
+    s('聽出哪裡鬆了', ['piano'], [t('這一聲不對，是裡頭鬆了？', 'think'), t('您也聽到了？每次彈這個音就會響。', 'think'), t('再來一次。我聽聲音找地方。', 'work', 'nod'), t('那就麻煩您了。修好後，第一首給船匠先生。', 'offer', 'laugh')]),
+    s('笑聲也能編成曲', [], [t('你笑那幾聲，怎麼每次都那麼齊？', 'think'), t('喲呵呵呵！音樂家的習慣吧。', 'laugh', 'admire'), t('哈哈哈！那我的笑也能編一段？', 'laugh', 'think'), t('能，不過您的音量恐怕得占兩個人的位置。', 'tease', 'laugh')])
   ]);
-  add('franky', 'jinbe', '船匠與掌舵手用各自感覺維護船；信任來自準確的回饋。', [
-    s('聽得到的小震動', ['helm'], [t('剛換好的軸，你轉起來感覺怎樣？', 'think'), t('大致順，回到中間還有一點細震。', 'explain'), t('連這都感覺得出來！我再調半圈。', 'work', 'nod'), t('現在好了。這個手感老夫記住了。', 'nod')]),
-    s('不是越硬越好', ['tool-bench'], [t('我想再加一片，讓這裡更硬。', 'think'), t('留一點活動的餘地，浪推來時會不會更穩？', 'think'), t('有道理。加固連接處，讓這一段卸力。', 'work', 'nod'), t('你定結構，試船的感覺老夫幫你記。', 'offer')]),
-    s('船在手裡的安心', [], [t('你掌舵的時候，我都能放心去忙別處。', 'talk'), t('有你把船顧好，老夫才能放心轉舵。', 'nod'), t('哈，這就叫配合！下次也照這樣來。', 'laugh', 'talk'), t('好。誰先發現不對，就喊另一個。', 'reassure')])
+  add('franky', 'jinbe', '造船的人與操船的人能聽懂同一個細節。佛朗基驕傲，甚平給準確回饋，尊重不靠長篇致詞。', [
+    s('船匠要聽實話', ['helm'], [t('怎麼樣？這個舵回得夠漂亮吧！', 'admire'), t('很順。不過轉到這裡，有一點輕響。', 'explain', 'think'), t('喔？再轉一次，讓我摸這邊。', 'work', 'nod'), t('就這裡。慢慢來，老夫替你穩著。', 'work', 'nod')]),
+    s('不是一味加重', ['tool-bench'], [t('要更穩，我就再補一層！', 'offer'), t('不急。太重了，轉回來反而慢。', 'explain', 'think'), t('有道理。那從連接這裡改。', 'work', 'nod'), t('改完讓老夫試一圈，手上最清楚。', 'offer', 'admire')]),
+    s('好船遇上好手', ['helm'], [t('你剛才那一下，連杯子都沒晃！', 'admire'), t('船聽得進手上的力，自然好操。', 'nod', 'laugh'), t('哈哈！你這傢伙，誇船比誇我還管用！', 'laugh', 'talk'), t('都是真話。往後還得一起顧著它。', 'nod', 'nod')]),
+    s('安靜反而不習慣', [], [t('大家說這裡太吵，你也這麼想？', 'think'), t('若忽然安靜，老夫反倒要找找人都去哪了。', 'talk', 'laugh'), t('哈哈！你已經很懂這群傢伙了嘛！', 'laugh', 'think'), t('還有些要學。像是你為何總在最後再喊一聲。', 'tease', 'laugh')])
   ]);
-  add('brook', 'jinbe', '兩個閱歷深的夥伴珍惜平靜陪伴；能一起笑，也願意互相傾聽。', [
-    s('浪聲的空拍', ['piano'], [t('這段想留一點空白，讓海浪接進來。', 'think'), t('很好，浪小的時候，就連安靜也聽得見。', 'talk'), t('您願意坐到這首結束嗎？', 'offer', 'nod'), t('願意。茶還熱，老夫不急著走。', 'rest')]),
-    s('禮貌的骨頭笑話', [], [t('今天的風真舒服，吹得我起雞皮疙瘩。', 'tease'), t('哈哈，你身上還找得到起疙瘩的地方嗎？', 'tease'), t('找不到，所以只好請您替我感受一下。', 'laugh', 'laugh'), t('那老夫替你點頭，這陣風確實不錯。', 'laugh')]),
-    s('值夜的人也有歌聽', ['helm'], [t('大家睡了，我彈輕一點陪您掌舵吧。', 'offer'), t('有勞了。你若累了，隨時去歇。', 'reassure'), t('還不累。能把曲子彈給醒著的人聽就很好。', 'talk', 'nod'), t('那老夫好好聽，等天亮再請你喝茶。', 'offer')])
+  add('brook', 'jinbe', '兩個閱歷深的夥伴也能輕鬆開玩笑、聽歌喝茶；避免每場都用孤獨或人生大道理收尾。', [
+    s('跟著浪的空拍', ['piano'], [t('剛才這一下停頓，您也聽到了？', 'think'), t('嗯，像浪退下去、下一道還沒來。', 'talk', 'admire'), t('說得真好。那我替後面多留一拍。', 'work', 'nod'), t('老夫就等著下一道了。', 'tease', 'laugh')]),
+    s('茶涼的理由', ['kitchen-table'], [t('茶涼得真快。也許是我沒有體溫。', 'tease'), t('老夫這杯也涼了。大概只是聊得久。', 'talk', 'think'), t('啊，難得的骷髏笑話被事實打敗了。', 'tease', 'laugh'), t('哈哈！重新泡一壺，你再想一個。', 'offer', 'laugh')]),
+    s('值夜不必一直說話', ['helm'], [t('要聽一段嗎？我彈輕些。', 'offer'), t('好。只是老夫不太會跟著唱。', 'think'), t('有人聽就足夠了，拍子也不用趕。', 'reassure', 'nod'), t('那你慢慢彈，這一段海面交給老夫。', 'nod', 'talk')]),
+    s('笑話還有後半段', [], [t('您還沒笑，是這個笑話太老了嗎？', 'think'), t('老夫剛才在想，你怎麼總能一本正經地說出來。', 'think'), t('一本正經嗎？那恐怕是我的臉改不了了。', 'tease', 'laugh'), t('哈哈，原來這句才是後半段。', 'laugh', 'bow')])
   ]);
 
-  const ACTION_LABELS = Object.freeze({ talk: '交談', explain: '說明', nod: '點頭', laugh: '開懷', tease: '打趣', protest: '抗議', reassure: '安慰', admire: '驚喜', think: '思考', bow: '致意', listen: '聆聽', startled: '吃驚', offer: '招呼', work: '專心', rest: '休息' });
+  const ACTION_LABELS = Object.freeze({ talk: '交談', explain: '說明', nod: '點頭', laugh: '開懷', smile: '微笑', tease: '打趣', protest: '抗議', reassure: '安慰', admire: '驚喜', think: '思考', bow: '致意', listen: '聆聽', startled: '吃驚', offer: '招呼', work: '專心', rest: '休息' });
   const FURNITURE_VERBS = Object.freeze({ helm: '查看航向', 'map-table': '核對海圖', 'treasure-chest': '查看箱子', 'tangerine-tree': '照顧橘子樹', 'swords-rack': '整理刀架', 'kitchen-table': '整理餐桌', bookshelf: '翻閱書籍', 'medicine-cabinet': '清點藥品', piano: '練習樂曲', 'tool-bench': '修整零件' });
   const hasKey = key => Object.prototype.hasOwnProperty.call(PROFILES, key);
   const pairKeyFor = (a, c) => !hasKey(a) || !hasKey(c) || a === c ? null : Object.prototype.hasOwnProperty.call(SCENES, `${a}:${c}`) ? `${a}:${c}` : `${c}:${a}`;
@@ -370,13 +389,18 @@
     const key = pairKeyFor(first, second);
     if (!key) return null;
     const all = SCENES[key];
-    const tagged = context && context.furnitureKey ? all.filter(value => value.tags.includes(context.furnitureKey)) : [];
+    // Presence of an explicit availability list opts into strict physical context.
+    // The legacy API without this list keeps its complete authored scene pool.
+    const available = Array.isArray(context?.availableFurnitureKeys) ? new Set(context.availableFurnitureKeys) : null;
+    const eligible = available ? all.filter(value => !value.tags.length || value.tags.some(tag => available.has(tag))) : all;
+    if (!eligible.length) return null;
+    const tagged = context && context.furnitureKey ? eligible.filter(value => value.tags.includes(context.furnitureKey)) : [];
     const excluded = new Set(Array.isArray(context?.recentSceneIds) ? context.recentSceneIds : []);
-    const preferred = tagged.length ? tagged : all;
+    const preferred = tagged.length ? tagged : eligible;
     const fresh = preferred.filter(value => !excluded.has(value.id));
     // If contextual choices were all recently used, broaden before repeating one.
-    const broadFresh = all.filter(value => !excluded.has(value.id));
-    const selected = at(fresh.length ? fresh : broadFresh.length ? broadFresh : all, index);
+    const broadFresh = eligible.filter(value => !excluded.has(value.id));
+    const selected = at(fresh.length ? fresh : broadFresh.length ? broadFresh : eligible, index);
     return { ...selected, pair: [...selected.pair], tags: [...selected.tags], turns: selected.turns.map(value => ({ ...value, listener: { ...value.listener } })) };
   };
   // Legacy consumers receive the first line spoken by each requested character.

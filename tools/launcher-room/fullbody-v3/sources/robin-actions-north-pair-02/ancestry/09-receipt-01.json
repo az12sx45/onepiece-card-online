@@ -1,0 +1,9 @@
+{
+  "tool": "image_gen__imagegen",
+  "original": "C:/Users/王曜瑋/.codex/generated_images/01a0df5a-f51d-7f40-8213-929b1e8bec76/exec-61671251-a5c7-4547-bd36-7bef32991981.png",
+  "prompt": "prompt-01.txt",
+  "references": [
+    "../turnaround-02.png"
+  ],
+  "layout": "8columns x4rows; east west north south; idle,talk_happy,talk_annoyed,surprised,focused_use,sit,wave,listen"
+}

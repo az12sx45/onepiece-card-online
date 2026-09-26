@@ -1,0 +1,10 @@
+{
+  "tool": "image_gen__imagegen",
+  "original": "C:/Users/王曜瑋/.codex/generated_images/01a0df5a-f51d-7f40-8213-929b1e8bec76/exec-902762e0-d202-4df4-8959-13483763f628.png",
+  "prompt": "prompt-front-01.txt",
+  "references": [
+    "../turnaround-02.png",
+    "side-01.png"
+  ],
+  "layout": "3columns x2rows;north,south;A,passing,C"
+}

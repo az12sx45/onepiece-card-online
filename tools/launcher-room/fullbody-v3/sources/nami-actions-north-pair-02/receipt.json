@@ -1,0 +1,20 @@
+{
+  "layout": "2 columns x 1 row; north focused_use then north listen",
+  "tool": "image_gen__imagegen",
+  "references": [
+    "reference-north-idle.png"
+  ],
+  "prompt": "prompt-north-pair-02.txt",
+  "review": "Selected complete figures; distinct visible elbow gesture and behind-back clasp.",
+  "original": "C:/Users/王曜瑋/.codex/generated_images/01a0df5a-f51d-7f40-8213-929b1e8bec76/exec-563e63c5-531c-4337-9cfc-58a4662a55c5.png",
+  "referenceAncestry": {
+    "source": "source-01.png",
+    "crop": [
+      0,
+      540,
+      208,
+      782
+    ],
+    "operation": "wholebody crop only"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "tool": "image_gen__imagegen",
+  "original": "C:/Users/王曜瑋/.codex/generated_images/01a0df5a-f51d-7f40-8213-929b1e8bec76/exec-df820b32-7015-4315-8640-df9573830441.png",
+  "prompt": "prompt-side-repair-02.txt",
+  "references": [
+    "../turnaround-01.png"
+  ],
+  "review": "Selected east/west surprised and sitting; whole figure redraw.",
+  "anatomyReassembled": false
+}

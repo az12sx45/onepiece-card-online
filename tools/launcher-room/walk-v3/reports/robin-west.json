@@ -11,54 +11,54 @@
       "key": "robin",
       "direction": "west",
       "pose": "contact-a",
-      "source": "robin-walk-triad-original",
+      "source": "robin-walk-side-01",
       "region": [
-        86,
-        390,
-        221,
-        331
+        162,
+        511,
+        254,
+        504
       ],
       "index": 0,
       "bounds": [
-        35,
+        38,
         14,
-        101,
-        113
+        86,
+        112
       ],
       "opaqueBoundsAtOutput": [
-        36,
+        38,
         14,
-        100,
+        86,
         112
       ],
       "sourceAnchor": [
-        183.5,
-        716
+        299.2486145320197,
+        1009
       ],
       "localAnchor": [
-        94.5,
-        323
+        133.2486145320197,
+        494
       ],
       "sourceAlphaBounds": [
-        89,
-        393,
-        304,
-        718
+        166,
+        515,
+        412,
+        1011
       ],
       "opaqueBounds": [
-        91,
-        395,
-        211,
-        321
+        168,
+        517,
+        242,
+        492
       ],
-      "opaquePixels": 37518,
-      "removedDistantAlphaPixels": 4373,
-      "sourceUnitScale": 1.0,
+      "opaquePixels": 65076,
+      "removedDistantAlphaPixels": 5448,
+      "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
-        5,
-        5,
-        5,
-        5
+        6,
+        6,
+        6,
+        6
       ],
       "edgeAaRadius": 2,
       "sourceAaTouchesImageBoundary": [
@@ -67,17 +67,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.3056546102903719,
-      "wholeImageScale": 0.3056546102903719,
+      "uniformDirectionScale": 0.19878296146044624,
+      "outputScale": 0.98,
+      "wholeImageScale": 0.19878296146044624,
       "inverseWholeImageTransform": [
-        3.2716666666666665,
+        5.030612244897959,
         0,
-        -114.88666666666666,
+        -188.7105691414497,
         0,
-        3.2716666666666665,
-        -43.42666666666668
+        5.030612244897959,
+        -69.42857142857144
       ],
-      "rgbaSha256": "f61beeee49ee9b5a427ce78c717e2d118bb2570b66b50636d990258ad5382f06",
+      "rgbaSha256": "52f7498374add08ea86a7afbba69e56c65910662bd616f73e43ce8c9f31036c0",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false,
@@ -87,54 +88,54 @@
       "key": "robin",
       "direction": "west",
       "pose": "neutral",
-      "source": "robin-walk-triad-original",
+      "source": "robin-walk-side-01",
       "region": [
-        454,
-        389,
-        194,
-        331
+        671,
+        511,
+        198,
+        505
       ],
       "index": 1,
       "bounds": [
-        41,
+        45,
         14,
-        97,
-        113
+        83,
+        112
       ],
       "opaqueBoundsAtOutput": [
-        41,
+        46,
         14,
-        97,
+        82,
         112
       ],
       "sourceAnchor": [
-        534.5,
-        715
+        769.6808940719145,
+        1010
       ],
       "localAnchor": [
-        76.5,
-        323
+        94.68089407191451,
+        495
       ],
       "sourceAlphaBounds": [
-        458,
-        392,
-        644,
-        717
+        675,
+        515,
+        865,
+        1012
       ],
       "opaqueBounds": [
-        459,
-        394,
-        184,
-        321
+        677,
+        517,
+        186,
+        493
       ],
-      "opaquePixels": 35002,
-      "removedDistantAlphaPixels": 2922,
-      "sourceUnitScale": 1.0,
+      "opaquePixels": 56747,
+      "removedDistantAlphaPixels": 3225,
+      "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
-        5,
-        5,
-        5,
-        5
+        6,
+        6,
+        6,
+        6
       ],
       "edgeAaRadius": 2,
       "sourceAaTouchesImageBoundary": [
@@ -143,17 +144,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.3056546102903719,
-      "wholeImageScale": 0.3056546102903719,
+      "uniformDirectionScale": 0.19878296146044624,
+      "outputScale": 0.98,
+      "wholeImageScale": 0.19878296146044624,
       "inverseWholeImageTransform": [
-        3.2716666666666665,
+        5.030612244897959,
         0,
-        -132.88666666666666,
+        -227.2782896015549,
         0,
-        3.2716666666666665,
-        -43.42666666666668
+        5.030612244897959,
+        -68.42857142857144
       ],
-      "rgbaSha256": "0b2eb7a013ee80cb751dec58e5814f099e929f35a08b77a198a6800cc235dddf",
+      "rgbaSha256": "b55d3e4247fbe0b659f98b966ee4fe0fd4014e42b37c91eda4c7d596fcec8956",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false,
@@ -163,54 +165,54 @@
       "key": "robin",
       "direction": "west",
       "pose": "contact-c",
-      "source": "robin-walk-whole-corrections",
+      "source": "robin-walk-side-01",
       "region": [
-        651,
-        35,
-        506,
-        790
+        1091,
+        511,
+        260,
+        504
       ],
       "index": 2,
       "bounds": [
         35,
-        12,
-        99,
+        14,
+        85,
         112
       ],
       "opaqueBoundsAtOutput": [
-        36,
-        12,
-        99,
+        35,
+        14,
+        85,
         112
       ],
       "sourceAnchor": [
-        878.0,
-        820
+        1240.3686905353254,
+        1009
       ],
       "localAnchor": [
-        224.0,
-        782
+        145.3686905353254,
+        494
       ],
       "sourceAlphaBounds": [
-        654,
-        38,
-        1154,
-        822
+        1095,
+        515,
+        1347,
+        1011
       ],
       "opaqueBounds": [
-        656,
-        40,
-        496,
-        780
+        1097,
+        517,
+        248,
+        492
       ],
-      "opaquePixels": 210428,
-      "removedDistantAlphaPixels": 5169,
-      "sourceUnitScale": 0.41944444444444445,
+      "opaquePixels": 64956,
+      "removedDistantAlphaPixels": 4638,
+      "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
-        5,
-        5,
-        5,
-        5
+        6,
+        6,
+        6,
+        6
       ],
       "edgeAaRadius": 2,
       "sourceAaTouchesImageBoundary": [
@@ -219,17 +221,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.3056546102903719,
-      "wholeImageScale": 0.12820512820512822,
+      "uniformDirectionScale": 0.19878296146044624,
+      "outputScale": 0.98,
+      "wholeImageScale": 0.19878296146044624,
       "inverseWholeImageTransform": [
-        7.799999999999999,
+        5.030612244897959,
         0,
-        -275.19999999999993,
+        -176.59049313814398,
         0,
-        7.799999999999999,
-        -91.59999999999991
+        5.030612244897959,
+        -69.42857142857144
       ],
-      "rgbaSha256": "5b5eedc3a99c8d0824a06ca7d4b8d0881734b57344dd89d95cb4016e01ab9b2a",
+      "rgbaSha256": "7f432dc02ccd761618ff4ec8251aaca78d04f20da6f5613e23652b17137ebfb3",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false,
@@ -239,54 +242,54 @@
       "key": "robin",
       "direction": "west",
       "pose": "neutral",
-      "source": "robin-walk-triad-original",
+      "source": "robin-walk-side-01",
       "region": [
-        454,
-        389,
-        194,
-        331
+        671,
+        511,
+        198,
+        505
       ],
       "index": 3,
       "bounds": [
-        41,
+        45,
         14,
-        97,
-        113
+        83,
+        112
       ],
       "opaqueBoundsAtOutput": [
-        41,
+        46,
         14,
-        97,
+        82,
         112
       ],
       "sourceAnchor": [
-        534.5,
-        715
+        769.6808940719145,
+        1010
       ],
       "localAnchor": [
-        76.5,
-        323
+        94.68089407191451,
+        495
       ],
       "sourceAlphaBounds": [
-        458,
-        392,
-        644,
-        717
+        675,
+        515,
+        865,
+        1012
       ],
       "opaqueBounds": [
-        459,
-        394,
-        184,
-        321
+        677,
+        517,
+        186,
+        493
       ],
-      "opaquePixels": 35002,
-      "removedDistantAlphaPixels": 2922,
-      "sourceUnitScale": 1.0,
+      "opaquePixels": 56747,
+      "removedDistantAlphaPixels": 3225,
+      "sourceUnitScale": 1,
       "sourceOpaqueClearance": [
-        5,
-        5,
-        5,
-        5
+        6,
+        6,
+        6,
+        6
       ],
       "edgeAaRadius": 2,
       "sourceAaTouchesImageBoundary": [
@@ -295,17 +298,18 @@
         false,
         false
       ],
-      "uniformDirectionScale": 0.3056546102903719,
-      "wholeImageScale": 0.3056546102903719,
+      "uniformDirectionScale": 0.19878296146044624,
+      "outputScale": 0.98,
+      "wholeImageScale": 0.19878296146044624,
       "inverseWholeImageTransform": [
-        3.2716666666666665,
+        5.030612244897959,
         0,
-        -132.88666666666666,
+        -227.2782896015549,
         0,
-        3.2716666666666665,
-        -43.42666666666668
+        5.030612244897959,
+        -68.42857142857144
       ],
-      "rgbaSha256": "0b2eb7a013ee80cb751dec58e5814f099e929f35a08b77a198a6800cc235dddf",
+      "rgbaSha256": "b55d3e4247fbe0b659f98b966ee4fe0fd4014e42b37c91eda4c7d596fcec8956",
       "anatomyReassembled": false,
       "mirrored": false,
       "clipped": false,

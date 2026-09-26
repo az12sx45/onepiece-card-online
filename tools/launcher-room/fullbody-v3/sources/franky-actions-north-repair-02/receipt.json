@@ -1,0 +1,20 @@
+{
+  "tool": "image_gen__imagegen",
+  "original": "C:/Users/王曜瑋/.codex/generated_images/01a0df5a-f51d-7f40-8213-929b1e8bec76/exec-46f3bc84-af8b-44c8-bc3d-fa2ded81938c.png",
+  "prompt": "prompt-north-repair-02.txt",
+  "references": [
+    "reference-north-idle.png"
+  ],
+  "review": "Selected eight distinct north gestures.",
+  "anatomyReassembled": false,
+  "referenceAncestry": {
+    "source": "source-01.png",
+    "crop": [
+      9,
+      532,
+      189,
+      736
+    ],
+    "operation": "whole figure rectangular crop only"
+  }
+}

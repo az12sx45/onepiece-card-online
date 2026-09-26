@@ -1,280 +1,325 @@
 {
   "scope": "rendered-asset-inspection",
   "status": "REVIEWED",
+  "version": "1.1.15",
   "humanAcceptance": false,
-  "actionsManifestSha256": "1165599edbab07d0b18a93ca8f0d923b8f2996c3c4ee3245fa8523c743e611e6",
-  "walkManifestSha256": "4c564c817946dfd3e21872705bc61dbe0cc704f7647998acf9882fb9db7b0c53",
+  "reviewedAt": "2026-09-26T21:17:19.325961+00:00",
+  "actionsManifestSha256": "539fcb238c93ba0dfc9ffd9d75dafcca48256f881e316da81b1aaaed8a62c8c6",
+  "walkManifestSha256": "75f86ab6414d0667e3bce001e13d19522e755b545a272637b599fb14b6a977cb",
   "characters": [
     {
       "key": "luffy",
       "inspected": true,
       "actionsInspected": true,
       "walkingInspected": true,
-      "notes": "Inspected all four directional whole-body action poses and actual rendered four-beat walk cycles. No head/limb assembly. Character remains one complete image when turning and reacting."
+      "notes": "Classic closed red vest, short blue shorts, straw hat, left cheek scar; low alternating feet, expressive white eyes and small pupils."
     },
     {
       "key": "zoro",
       "inspected": true,
       "actionsInspected": true,
       "walkingInspected": true,
-      "notes": "Inspected all four directional whole-body action poses and actual rendered four-beat walk cycles. No head/limb assembly. Character remains one complete image when turning and reacting."
+      "notes": "Early white shirt, green haramaki, both eyes open, left arm band and three earrings, three swords at right hip; separate views avoid mirrored anatomy."
     },
     {
       "key": "nami",
       "inspected": true,
       "actionsInspected": true,
       "walkingInspected": true,
-      "notes": "Inspected all four directional whole-body action poses and actual rendered four-beat walk cycles. No head/limb assembly. Character remains one complete image when turning and reacting."
+      "notes": "Early short orange hair, striped shirt, orange skirt and right-hip rings; fixed four-view outfit and continuous figure."
     },
     {
       "key": "usopp",
       "inspected": true,
       "actionsInspected": true,
       "walkingInspected": true,
-      "notes": "Inspected all four directional whole-body action poses and actual rendered four-beat walk cycles. No head/limb assembly. Character remains one complete image when turning and reacting."
+      "notes": "Long nose, lips, brown bandana, overalls and left wrist/bag details; replacement poses calibrated as whole bodies."
     },
     {
       "key": "sanji",
       "inspected": true,
       "actionsInspected": true,
       "walkingInspected": true,
-      "notes": "Inspected all four directional whole-body action poses and actual rendered four-beat walk cycles. No head/limb assembly. Character remains one complete image when turning and reacting."
+      "notes": "Early left eye hidden by blond hair, visible right brow, dark suit and blue shirt; opposite contacts corrected with no split-head scaling."
     },
     {
       "key": "chopper",
       "inspected": true,
       "actionsInspected": true,
       "walkingInspected": true,
-      "notes": "Inspected all four directional whole-body action poses and actual rendered four-beat walk cycles. No head/limb assembly. Character remains one complete image when turning and reacting."
+      "notes": "Classic pink hat, blue nose, antlers with left repair ring, hooves and backpack; smaller stature; side contacts alternate."
     },
     {
       "key": "robin",
       "inspected": true,
       "actionsInspected": true,
       "walkingInspected": true,
-      "notes": "Inspected all four directional whole-body action poses and actual rendered four-beat walk cycles. No head/limb assembly. Character remains one complete image when turning and reacting."
+      "notes": "Enies Lobby black dress, mature narrow eyes, nose and straight bangs; calm listener and gestures differ from Nami."
     },
     {
       "key": "franky",
       "inspected": true,
       "actionsInspected": true,
       "walkingInspected": true,
-      "notes": "Inspected all four directional whole-body action poses and actual rendered four-beat walk cycles. No head/limb assembly. Character remains one complete image when turning and reacting."
+      "notes": "Post-timeskip BF-37 spherical shoulders, cyan forearms and stars, briefs, top-heavy body; north action/walk height unified."
     },
     {
       "key": "brook",
       "inspected": true,
       "actionsInspected": true,
       "walkingInspected": true,
-      "notes": "Inspected all four directional whole-body action poses and actual rendered four-beat walk cycles. No head/limb assembly. Character remains one complete image when turning and reacting."
+      "notes": "Classic hat/afro, hollow sockets, skull/jaw, connected neck, black tails and blue cravat; rejected tall south contact replaced."
     },
     {
       "key": "jinbe",
       "inspected": true,
       "actionsInspected": true,
       "walkingInspected": true,
-      "notes": "Inspected all four directional whole-body action poses and actual rendered four-beat walk cycles. No head/limb assembly. Character remains one complete image when turning and reacting."
+      "notes": "Official mint leaf-pattern robe, blue fishman face, tusks, broad torso, black cape and geta; smaller steps match robe and body."
     }
   ],
-  "reviewedAt": "2026-09-26T18:57:01.253777+00:00",
   "evidence": [
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/luffy-actual-walk.png",
-      "sha256": "40c45bcdb831d72bb4532e863a84cc528cd9490759aad1d0d56cd917ea3a37b2"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/luffy-walk.png",
+      "sha256": "199abe440f8f4d8a25f1af6407b1a8df0c1d83171e3d7bd68b6329e574d94a0d"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/luffy-all-actions.png",
-      "sha256": "4db7d849707df6e71b1f67dfb17e619201cc8dc52717f4c0afc3d3802acf5260"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/luffy-actions.png",
+      "sha256": "023d650ad171de2eaeba4a2dda26c4e64ef608a9f9a36b36ff9cee47707dd017"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/zoro-actual-walk.png",
-      "sha256": "5576963c14ff9b11892b08dba1a27cb48c52f7cf4e942b043e6b6c0393679916"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/luffy-body-scale.json",
+      "sha256": "1eb1db4caca77826b305cb4efcd5ff5e427578dc4d14557135b59f56f7f5596d"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/zoro-all-actions.png",
-      "sha256": "39bd9dbd58dca39e1aaee672b67ef70ec57b13dcc60fddf46775abba462030bc"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/zoro-walk.png",
+      "sha256": "468b0d5075809d99f4613e4a77cba62956a0c6b7998aa1f78cc14ea7b4af9202"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/nami-actual-walk.png",
-      "sha256": "497c484fed52a21e2374f974e6367d7c4cd07d14d3f5c7fa4f32d2239334f843"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/zoro-actions.png",
+      "sha256": "a9e5d93d568d07be962d90b3b63e78bfaa3a9961cc9aeca11eb4640558d9ce58"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/nami-all-actions.png",
-      "sha256": "c352da99151dfdb669be03ac62b41175d772c218b45b7ca79289654dbc058692"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/zoro-body-scale.json",
+      "sha256": "4228fb98d0140857681829df47a470874a23eb9d6ff3315a240bfb3aa7781fa6"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/usopp-actual-walk.png",
-      "sha256": "c4f8b3838695e7b81843e0775bb94cf309044e9d46bab041178285aa9b3e909b"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/nami-walk.png",
+      "sha256": "72a5ace303ec018277554c85d972c9fad70fa2dbc928eded22d5c05a10f32298"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/usopp-all-actions.png",
-      "sha256": "d0b7e7c979c7f8cdd2bd9c45f4f15f2281137a4141206c486412917135034402"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/nami-actions.png",
+      "sha256": "e3df54049c89a1d73800e3183084c1fc62d1faa884eeda055784e6a453f33a36"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/sanji-actual-walk.png",
-      "sha256": "87208811b14017b522da1cf8627434e4fbf87b4c9feeca6de89f1eb8ea439d01"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/nami-body-scale.json",
+      "sha256": "d871fcc6f047836711bed02e3ee59433a10a3047524cd76a00dc579c261292bd"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/sanji-all-actions.png",
-      "sha256": "836939fc3d50ba1ab7fc6be15515a031da5aa56ab93bc7fa78a0a10671a3b6e0"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/usopp-walk.png",
+      "sha256": "ea877086a59e8ffaeaca8989c19b4733e2cf6cf7cb8798b7f42cd3741894ecdf"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/chopper-actual-walk.png",
-      "sha256": "76b0018ec70b040a89d4ba6801ef8659cf1454b7b4ad67bb99b1eaebd6c0ad31"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/usopp-actions.png",
+      "sha256": "101122611fd832efc9bc5803cf679a1e1d11c7085630f0725b69427359a92a75"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/chopper-all-actions.png",
-      "sha256": "a4975866df955c16dfa818cfb552c2f45404172aafb436b24279f6fe0bda4b32"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/usopp-body-scale.json",
+      "sha256": "3ea9647073b1186531b5d92999aae0c743cb938f52e1ecc4e46ca7f856a6f1f1"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/robin-actual-walk.png",
-      "sha256": "dd544ac9c82a45bc39d0ff492b4391d095947e2f23cc636cd4395413181e500c"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/sanji-walk.png",
+      "sha256": "c40ec365163d0dce4e182696f2cf0f4f3eea5b7697869cacf9fc4fc0bad287bc"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/robin-all-actions.png",
-      "sha256": "2b812ebeba4850c5bd4efa69e79f91115ffab7bd8d420d606d576738c15dc2ec"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/sanji-actions.png",
+      "sha256": "5c556ea5e1fb1ae23ce1ac5aa958f6db44d2394fd1f2ebd1c3def82667498a21"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/franky-actual-walk.png",
-      "sha256": "dc8e5ed093b6fa5feb3ccda21e5ab919fc82a57dacbbe765c489ced9744589f7"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/sanji-body-scale.json",
+      "sha256": "8c882fbf2534878db5afc225caabed7f31a2135ce2ad5ecd1272b2fd48ad513d"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/franky-all-actions.png",
-      "sha256": "ca91e4dcfcfdfbbd0606129d65d81a207051b81253af80bf1fa4ea3fdd6fc48a"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/chopper-walk.png",
+      "sha256": "b175c66fbf07be20d4a0baad239867788f7062b831655f124fed3bcf066d6a7a"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/brook-actual-walk.png",
-      "sha256": "61cb081c8cd3625208e14d84b03c9928711a78c232af4a6d18e4ec2ca324fc14"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/chopper-actions.png",
+      "sha256": "2cc19cdbbc0bf9addc5b4db3461e122aa46e6403d12b9ca6f9155aa3497da123"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/brook-all-actions.png",
-      "sha256": "a2122394696fa67d910f06c9ef71d0495c133ad99ef37a6877d1fb0aba1c0097"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/chopper-body-scale.json",
+      "sha256": "259522fb7cefde3eda433f1324a460842df662e7a6715c4c10c12ab99d833c34"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/jinbe-actual-walk.png",
-      "sha256": "4fd6c2c372d5d83e2eb32a66609e89503398c701d81fce1696d97eb811e3276f"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/robin-walk.png",
+      "sha256": "ec67e635a1e9ced43f0714d6c3e4fa7bfb9d2e4a47b299e48e538e39a66fb86f"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/jinbe-all-actions.png",
-      "sha256": "4a43cb56f6899bd5e2755a3c0737af7fcb22f407b39cee992e49439acb075bc3"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/robin-actions.png",
+      "sha256": "84219d41c11bded254a40f8decd55e814763565fb7f00aa6eb92b00adb1f37fc"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/chopper-narrow.png",
-      "sha256": "37512d7764c60235b2d6ab63267cc79a50d59d91e89f923e05679928a56b6155"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/robin-body-scale.json",
+      "sha256": "fb3b237f642dcd755f15cb2d0bba51b3942efc0240c1db7887c1ebfb8b5e97be"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/franky-narrow.png",
-      "sha256": "d222bf2d97a1f98b43ef6ae7167ced751529af7b5e044ab1c3bf84ac02931ee0"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/franky-walk.png",
+      "sha256": "18638fc1d6783ac77d9d4a25deb0d2fb5add502f529bb6013563ee1da0d43b34"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/jinbe-narrow.png",
-      "sha256": "dbff2d82d2fa107f97078b1465c440ec14798223bbe4154e37b0c157a9487591"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/franky-actions.png",
+      "sha256": "332fca44681aa4675edcc2d6d02993c84ee299fb5c54896773d0a458448842ac"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/luffy-zoro-chat-0.png",
-      "sha256": "fcbb67a2e7f1fb99a41662ccd092e1e6b87d7d539094978a63669e7e6e6c5007"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/franky-body-scale.json",
+      "sha256": "46c1602872e6023a6e6298a17cf83f4c1b3ebe360ad5c9da95712cbfcdeb390a"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/luffy-zoro-chat-1.png",
-      "sha256": "197b4b29dfc87dbbcc6ad1b55a8df5ffc1aeaad05e27f8606115eedc670f6e84"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/brook-walk.png",
+      "sha256": "898d0f374ad623bb848875a04da9e1f733497ed8c70f5be3e0bb4373341802d0"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/luffy-zoro-chat-2.png",
-      "sha256": "f05d6700358fbb10128f8a7f0e2c3e83526894cae607d3261c173b172d83e85c"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/brook-actions.png",
+      "sha256": "031f23bc3afbf92eb94cf663c2dc2a985c8eae2a6987e7942eaad554f7fc5c70"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/luffy-zoro-chat-3.png",
-      "sha256": "2a510083e68ed6d6dd519c06a7caaea1ec9e08636ab92b1fb6c9dc2a61e1800e"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/brook-body-scale.json",
+      "sha256": "7aba56540f744c9f992113889efa9dbb55b0dbfb47e7bc69908907c560c38f85"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/nami-sanji-chat-0.png",
-      "sha256": "620d06572d1ad5bb5cb4b7ab3c632ee3d63642647d7c2641d24f02bac16f23ee"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/jinbe-walk.png",
+      "sha256": "34fc8c4e8538387794767e973e33b91971d904a15cbdea57cbcd86b977dd88d5"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/nami-sanji-chat-1.png",
-      "sha256": "e77ca2dd87b763d1aabc03b5c5a0f43579d9ac50d54016fc8a8c4b5dac662ef6"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/jinbe-actions.png",
+      "sha256": "50b659de1c6600a73cded7cf0885018ddc2f7afd0fcf5dbabe218a1336412bf3"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/nami-sanji-chat-2.png",
-      "sha256": "b250c76e76258e1f7ab1f6f592f29a07d63c5420ff4a3d92cb0b767c2b837e8e"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/jinbe-body-scale.json",
+      "sha256": "286be3ed875c108c226baf2ef63f2340b92814415c0181524ef95f48fbba2029"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/nami-sanji-chat-3.png",
-      "sha256": "dd404d89b93b5c455246f9b165102e610816dafd84093dc224e34593f5ae1e69"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/chopper-narrow.png",
+      "sha256": "c0118831149a95a08d4fce4569486937b28f5e5af6a9176339bdd398957ca342"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/robin-franky-chat-0.png",
-      "sha256": "17afd868a7d6887361c96d723013a7f252f02f80b68acdd71e2b723f6fda7759"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/franky-narrow.png",
+      "sha256": "a18293a43bdd85c066479faee9ebda32c5cc5d2466bc0862d3594cc186f907f2"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/robin-franky-chat-1.png",
-      "sha256": "2f6676183074d9ff0b86f27898d347ebaaca3310eacf7dec262a76e286b69bdd"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/jinbe-narrow.png",
+      "sha256": "5a25cb2c1ee3a0ef375d58081f26d77e28850cfab0ce82d18fa65d49227fcd4b"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/robin-franky-chat-2.png",
-      "sha256": "8972a701ec94caa37d2464d7e417ad47c3b0c54c4eeccc5ade3aba26fc2a97c6"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/luffy-zoro-chat-0.png",
+      "sha256": "a0fb4d8c8bcd867f0d41b8dfe879044debc50d8772f702463b82e072e1db03e9"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/robin-franky-chat-3.png",
-      "sha256": "08acaf850d462f312b32536bb8eb1e3fbd1ea1645113bc72dd4e361d71e5403a"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/luffy-zoro-chat-1.png",
+      "sha256": "de1a1b9e8fc0623397f030db142c3cbb9386dfe684c09a9b1693a043bc0254b8"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/chopper-usopp-chat-0.png",
-      "sha256": "a5ca1d5d5db7c51cbb3351aab62109c70b30b8941408b055ecbf2f112d2d39c2"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/luffy-zoro-chat-2.png",
+      "sha256": "11d9b7f8b8fe3ea83f73b4a6a20d86e71692abc83e8cdcdc88b68a6f09128336"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/chopper-usopp-chat-1.png",
-      "sha256": "69c9632b0202d9fa309ac3d65acc3bdd72fc2985b28d0d6ddc17fb6248851301"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/luffy-zoro-chat-3.png",
+      "sha256": "9ec013ea656561f681dc754c0485a31bc30b99c2705c8b7b9eafd24d185ba798"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/chopper-usopp-chat-2.png",
-      "sha256": "ce440e6ef97cdd8ee918af2cf29dbd37902e28b7a9d7800eb4969b89d750fbb1"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/nami-sanji-chat-0.png",
+      "sha256": "3842549d15d634a82138a04b57c8363fe4dd789689dc617fed9498977da130a9"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/chopper-usopp-chat-3.png",
-      "sha256": "ec55af8fd8a8bd6ed53704d6fdd4642bd7e178bc63e7fc938855f1b04f117aaf"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/nami-sanji-chat-1.png",
+      "sha256": "c0a5ee9111ff7b63075a516e90eeb4843562c9fa114339ef52b8ef95a9285bd0"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/brook-jinbe-chat-0.png",
-      "sha256": "ee83c7b9e9b3761502f83973fcb108ceaae6cf84ef56257050224f02bb03ef0b"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/nami-sanji-chat-2.png",
+      "sha256": "b00966aa7f612f1d90830df86db16a8318d0b3578252f0fb8b0f5622fdb12fee"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/brook-jinbe-chat-1.png",
-      "sha256": "37f38abc6a5dfea96007ec8d9c0874f0b81d2b48fd13aff1e226e62f103f1145"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/nami-sanji-chat-3.png",
+      "sha256": "aa34d81d26e7547015efd228c3b09acdd31650fccba1e78035e7c4cc2c5229d8"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/brook-jinbe-chat-2.png",
-      "sha256": "eb209e6a0ff01b4ed6b30fdb94fe53875e279e39c73489a15d96e493545e4281"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/robin-franky-chat-0.png",
+      "sha256": "ce31e2d9fa5cf28d5a9727b7c9bcbae3365f87f9a433249f454df5786c4d93ce"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/brook-jinbe-chat-3.png",
-      "sha256": "5905312b14c9841f1ac1c8100c9c650b734305e7c34f9f6330b4f98a2e48ba85"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/robin-franky-chat-1.png",
+      "sha256": "d8402b0b525915743bb672520f16d0ba1137f86e63092dbdbb5c9de0cceb8324"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/sanji-kitchen-table-0.png",
-      "sha256": "414333a8efccd33d6f7a2bb5622ae80401ea40fca44dcad023af029c2ea9d054"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/robin-franky-chat-2.png",
+      "sha256": "a536ffe046cbb220368f9bc258a5021f57ae9f2491a413d44dce34662898cd6a"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/sanji-kitchen-table-2.png",
-      "sha256": "f9622b53f1f1269f6227bb67df3b660f76abcfa23d9ef826e3fdc8714d3d2980"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/robin-franky-chat-3.png",
+      "sha256": "0bc3a0d403cc1604618788fb13abd77bab665f38832a08b20432066e4caf40e9"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/brook-piano-0.png",
-      "sha256": "0b35d772cf25b851e52ed1cddade9779a4916ebce93892cd9c0005125767ea72"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/chopper-usopp-chat-0.png",
+      "sha256": "45ddfc2fb880f2579f57af5c853873c19077c01757c7403032c49655193f2578"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/brook-piano-2.png",
-      "sha256": "0558ed69df61a226fbe889819510b0eaa4fa535dced552472532884f0de9a39c"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/chopper-usopp-chat-1.png",
+      "sha256": "fdbabf84b319168557b3a0a752091565813671763173e4cd18d635a9e32a3beb"
     },
     {
-      "path": "tools/launcher-room/fullbody-v3/reviews/actual-review-summary.json",
-      "sha256": "bbaa424258d54b241db8c8705a9fb9e512803c4b36cb3fbff1994efdb570227e"
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/chopper-usopp-chat-2.png",
+      "sha256": "59f67369e32fb13ccb77f1485b63da263a0bde6316ccd9a02042e899b2f35495"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/chopper-usopp-chat-3.png",
+      "sha256": "f851852ab1f2ed983813ede15b38a45f0dc643cde8635dc1b1f8f18ef59e4f2e"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/brook-jinbe-chat-0.png",
+      "sha256": "598b59feb8da883f8126165024382c82e55261f2f74a0f6c1bf122c3603810fd"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/brook-jinbe-chat-1.png",
+      "sha256": "68f6f90ce52e070991dacd346a9c7e15c1b79f4208c885e01adc441203375fe0"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/brook-jinbe-chat-2.png",
+      "sha256": "c49b5d6b25dacf1256af55667a1882b5c843726b272f94d0ed6330c987f3772f"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/brook-jinbe-chat-3.png",
+      "sha256": "d991a40c4b7bc5969498dd4f2f3c62dfa8ae9eebf985919e286ee4176761d062"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/sanji-kitchen-table-0.png",
+      "sha256": "bfb60ad7ca223d45d732bdd9791cac1ba718e2a3d9bbe2228fc5c5efb2dfbaa3"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/sanji-kitchen-table-2.png",
+      "sha256": "61e6ad216e978ecc1b84e9ebde02750b3ce9839b98f2df698089a8cb1cff8093"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/brook-piano-0.png",
+      "sha256": "9a94ddcabdfd55dd2a1c57ad2838eacddce19241c74c6a23d7528719a499ed19"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/brook-piano-2.png",
+      "sha256": "a2c045143793366326dc8b2a2499e003054dcd5c5b3c5cb0054891f2cc73132e"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/dialogue-independent-review.md",
+      "sha256": "b283132a06b94801327e14b13396a6bf74cf4b6f07379dbd2ef3085779d79b46"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/rendered-review-summary.json",
+      "sha256": "f22d76c2b411b563521d512a3dd79595c38d593037a7ff12d98023b676d90c95"
+    },
+    {
+      "path": "tools/launcher-room/fullbody-v3/reviews/v15/runtime-regression.json",
+      "sha256": "b627120dda8637e26da2fac4cd5fc51d132b1356ed9124e27c68afb7cb76b403"
     }
   ],
-  "method": "GPT complete-figure artwork imported without anatomy assembly; AI image inspection of all authored action poses and actual room four-beat walk cycles, five four-turn conversations, representative furniture rotations and narrow layouts.",
-  "limits": [
-    "AI image inspection and automated local fixture capture, not user acceptance or physical device testing.",
-    "Four-beat hand-drawn walk cycle; no claim of measured foot-plant physics.",
-    "Each interaction pose is one authored complete drawing, selected by conversation state."
-  ]
+  "limits": "Three authored whole walking poses with neutral repeated as four playback beats; eight static full-body interaction poses. AI inspection plus automated real-asset room fixtures is not player acceptance or motion capture.",
+  "runtimeRegression": "Actual Chromium: Chopper approach exceeded20 seconds and completed four turns; arrived chat context was reselected after moving476.8px away from bookshelf."
 }

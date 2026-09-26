@@ -497,9 +497,13 @@
     const pair = [first.key, second.key].sort().join(':');
     const history = pairHistory.get(pair) || { cursor: 0, until: 0, lastId: '' };
     if (now < history.until) return null;
-    const furnitureKeys = activeRoom().placements.map(entry => keyForFurniture(resolvedItem(entry.itemId, 'furniture')));
+    // Only nearby placed objects may provide a conversation's physical context.
+    const furnitureKeys = [...layoutRoom(activeRoom()).placements.values()].filter(placed => placed.kind === 'furniture' &&
+      Math.min(Math.hypot(placed.anchor.x - first.x, placed.anchor.y - first.y), Math.hypot(placed.anchor.x - second.x, placed.anchor.y - second.y)) <= 170
+    ).map(placed => keyForFurniture(placed.item));
     const scene = dialogue?.scene?.(first.key, second.key, history.cursor, {
       furnitureKey: furnitureKeys.find(key => dialogue?.profile?.(first.key)?.favorite?.includes(key)) || furnitureKeys[0] || '',
+      availableFurnitureKeys: furnitureKeys,
       recentSceneIds: history.recentIds || []
     });
     if (!scene || !Array.isArray(scene.turns) || scene.turns.length < 4 ||
@@ -565,7 +569,7 @@
     if (horizontal) walker.x += Math.sign(amount) * travel; else walker.y += Math.sign(amount) * travel;
     walker.node.style.left = `${walker.x / WIDTH * 100}%`; walker.node.style.top = `${walker.y / HEIGHT * 100}%`;
     walker.node.style.zIndex = String(Number.isFinite(target.z) ? target.z : 10 + Math.round(walker.y));
-    walker.node.style.setProperty('--room-character-scale', String(scale / 1.07));
+    walker.node.style.setProperty('--room-character-scale', String(scale / 1.07 * locomotion.metadata(walker.key, motionTable).displayScale));
     keepSpeechInsideStage(walker);
     walker.dockTravel = true; walker.node.classList.add('is-walking');
     locomotion.advance(walker.motion, travel, gait.stride, { ready: true }); showMotion(walker, true);
@@ -604,7 +608,7 @@
       interaction = { type: 'furniture', actors: [first], furnitureKey: keyForFurniture(target.item),
         target: targetLayout, line: variation.line, mood: variation.mood,
         action: variation.verb, pose: variation.pose,
-        phase: 'approach', expires: now + 20000, holdUntil: 0 };
+        phase: 'approach', expires: now + approachDuration(first), holdUntil: 0 };
     } else {
       nextInteractionAt = now + 3000;
     }
@@ -622,8 +626,22 @@
     if (first.dockOrigin) first.returnDockBeforeRoute = true;
     second.pause = 0; first.mode = 'approach'; second.mode = 'approach';
     setPose(first, 'wave');
-    interaction = { type: 'chat', actors: [first, second], scene, turnIndex: -1, phase: 'approach', expires: now + 20000, holdUntil: 0 };
+    interaction = { type: 'chat', actors: [first, second], scene, turnIndex: -1, phase: 'approach', expires: now + approachDuration(second), holdUntil: 0 };
     return true;
+  }
+  function approachDuration(walker) {
+    // Budget the actual reserved route at the slowest perspective scale.
+    // A small character must not abandon a valid approach after a fixed 20 s.
+    let x = walker.x, y = walker.y, milliseconds = 5000;
+    for (const cell of walker.route) {
+      const next = anchorForCell(cell, { width: 1, height: 1 });
+      const dx = next.x - x, dy = next.y - y;
+      const direction = locomotion.directionForDelta(dx, dy);
+      const speed = locomotion.speedAndStride(walker.key, direction, .72, motionTable).speed;
+      milliseconds += (direction === 'north' || direction === 'south' ? Math.abs(dy) : Math.abs(dx)) / speed * 1000 + 250;
+      x = next.x; y = next.y;
+    }
+    return Math.max(20000, milliseconds);
   }
   function finishInteraction(now) {
     if (!interaction) return;
@@ -669,6 +687,11 @@
       const arrived = event.actors.every(walker => !walker.route.length && !walker.returnDockBeforeRoute);
       if (!arrived && now < event.expires) return;
       if (!arrived) { finishInteraction(now); return; }
+      if (event.type === 'chat') {
+        // Both actors have arrived: use this location, not their pre-walk props.
+        event.scene = sceneFor(event.actors[0], event.actors[1], now);
+        if (!event.scene) { finishInteraction(now); return; }
+      }
       event.phase = event.type === 'furniture' && startFurnitureDock(event.actors[0], event.target) ? 'docking' : 'turning';
       for (const walker of event.actors) { walker.mode = 'interact'; walker.node.classList.remove('is-walking'); }
     }
@@ -766,7 +789,7 @@
       walker.node.style.top = `${walker.y / HEIGHT * 100}%`;
       walker.node.style.zIndex = String(10 + Math.round(walker.y));
       walker.node.style.setProperty('--room-depth', String(locomotion.projectedScale(walker.y, FLOOR)));
-      walker.node.style.setProperty('--room-character-scale', String(locomotion.projectedScale(walker.y, FLOOR) / 1.07));
+      walker.node.style.setProperty('--room-character-scale', String(locomotion.projectedScale(walker.y, FLOOR) / 1.07 * locomotion.metadata(walker.key, motionTable).displayScale));
       keepSpeechInsideStage(walker);
       walker.node.classList.add('is-walking');
       locomotion.advance(walker.motion, step.travel, gait.stride, { ready: decoded });
@@ -817,11 +840,13 @@
   }
   function positionNode(node, placed) {
     const { entry, kind, span, anchor, cell } = placed;
+    const bodyScale = kind === 'character' ? locomotion?.metadata?.(keyForCharacter(placed.item), motionTable)?.displayScale || 1 : 1;
+    if (kind === 'character') node.style.setProperty('--room-character-body-scale', String(bodyScale));
     node.style.left = `${anchor.x / WIDTH * 100}%`;
     node.style.top = `${anchor.y / HEIGHT * 100}%`;
     node.style.zIndex = String(10 + Math.round(anchor.y));
     node.style.setProperty('--room-depth', String(round(.72 + .35 * (anchor.y - FLOOR.top) / (FLOOR.bottom - FLOOR.top))));
-    if (kind === 'character') node.style.setProperty('--room-character-scale', String((.72 + .35 * (anchor.y - FLOOR.top) / (FLOOR.bottom - FLOOR.top)) / 1.07));
+    if (kind === 'character') node.style.setProperty('--room-character-scale', String((.72 + .35 * (anchor.y - FLOOR.top) / (FLOOR.bottom - FLOOR.top)) / 1.07 * bodyScale));
     node.dataset.gridCol = String(cell.col); node.dataset.gridRow = String(cell.row);
     node.dataset.footprint = `${span.width}x${span.height}`;
     if (kind === 'furniture') {
