@@ -1,6 +1,6 @@
 # File Map
 
-## 2026-09-27 角色辨識與關係表演（1.1.15 候選驗證完成）
+## 2026-09-27 角色辨識與關係表演（1.1.15 已部署）
 
 - desktop/launcher-room-dialogue.js：45組關係、151場604句、無家具回退、表情與聽者反應。
 - desktop/launcher-room-motion.js/data.js、launcher-room.js/css：完整人物步幅／體型／深度、會合位置情境、路徑接近期限與字體尺寸。
