@@ -1,9 +1,10 @@
 # File Map
 
-## 2026-09-27 完整人物原畫與暫撤工作（1.1.14 候選完成，尚未公開部署）
+## 2026-09-27 完整人物原畫與暫撤工作（1.1.14 已部署）
 
 | 檔案 | 用途 |
 | --- | --- |
+| `public/desktop/launcher-release-v1.json` | 已公開 1.1.14 Ed25519 更新清單，canonical bytes、簽章及 R2 安裝檔完整 SHA 已核對。 |
 | `desktop/launcher-room.js`、`launcher.html`、`launcher-room.css` | 暫撤派工、領取、工作徽章／倒數與強制工作狀態；保留聊天、親密度、詳情、家具活動和好友唯讀。 |
 | `desktop/launcher-room-motion.js`、`launcher-room-motion-data.js` | 四向完整人物圖預載／解碼、A／neutral／C／neutral 四拍步態與八種單張互動姿勢。 |
 | `desktop/launcher-profile-shop.js`、`desktop/main.js`、`desktop/package.json`、`package-lock.json` | 商城完整人物縮圖、v3 本機資源路由及 1.1.14 封裝白名單。 |

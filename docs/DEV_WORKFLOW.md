@@ -1,6 +1,6 @@
 # Dev Workflow
 
-## 2026-09-27 完整人物原畫與暫撤工作（1.1.14 候選完成，尚未公開部署）
+## 2026-09-27 完整人物原畫與暫撤工作（1.1.14 已部署）
 
 回應使用者回報 1.1.13 頭頸分離感、接肢與姿勢問題，撤回上一版自然姿態的美術通過結論；舊程式／SHA 測試保留為當時的技術證據。本次在 `D:\Codex_Release_Worktrees\launcher-room-art-repair-1.1.14` 由 `4afe64c643ebd36a486b9f1cecd159e112981b32` 建立隔離候選，正式來源仍為 `D:\Codex_Release_Worktrees\board-voyage-records-v1`，保留其他 Board 修改。
 
@@ -10,9 +10,11 @@
 
 本機 controller 20／20、使用真 v3 素材的房間瀏覽器 76／76 通過；個人頁／商店 97／97 通過，BGM 檢查改為有界等待實際 `currentTime > 0.1`。靜態來源重建驗證涵蓋 320 姿勢及十張 portrait。工作撤除檢查包含既存 working／ready 記錄、零 start／claim 請求、資料／錢包保留與好友唯讀。真素材房間目視證據與完整 manifest SHA 綁在 `tools/launcher-room/fullbody-v3/review.json`；自動與代理目視驗證不等於真人玩家驗收。
 
-本次候選版本為 1.1.14；Windows 封裝、公開安裝檔／更新清單及正式 D 樹同步尚未在本節宣告完成，須以後續實際發布回讀結果補記。QA、原稿及安全同步預演位於 `D:\Codex_QA\launcher-room-art-repair-1.1.14`。LATTICE 本階段 API 未提供，未宣稱新任務寫入或圖譜成功。
+Windows build 與完整封裝 gate 已通過：80 v3 圖集、十張肖像共 4,580,192 bytes，全部 launcher 素材 127,621,794 bytes；安裝檔 240,047,967 bytes，SHA256 `16dd4a99ff392a33a1c240430b7dcbce522bad79ae76d609f9ad500be39fc9cb`。實際 packaged Electron 331 項素材與 BGM 播放通過。實景涵蓋十人桌機四向、三人窄版四向、五組四回合對話及兩項家具各兩方向；零缺圖、零 pageerror，保存配置未變。此為本機自動 capture 及 AI 圖片檢查。R2 canonical 安裝檔 HEAD 200、Range 206、完整 GET 200 及下載後獨立磁碟重算 SHA 全數符合本機成品。
 
-Windows build 與完整封裝 gate 已通過：80 v3 圖集、十張肖像共 4,580,192 bytes，全部 launcher 素材 127,621,794 bytes；安裝檔 240,047,967 bytes，SHA256 `16dd4a99ff392a33a1c240430b7dcbce522bad79ae76d609f9ad500be39fc9cb`。實際 packaged Electron 331 項素材與 BGM 播放通過。實景涵蓋十人桌機四向、三人窄版四向、五組四回合對話及兩項家具各兩方向；零缺圖、零 pageerror，保存配置未變。此為本機自動 capture 及 AI 圖片檢查。R2 安裝檔已上傳，公開更新清單仍待部署讀回。
+公開發布提交 `9f798679761ac31f2a903c9ccf12920016a94f10` 已推送 main；2026-09-27T03:09:27+08:00 Render canonical 更新清單回傳 1.1.14，676 bytes、SHA256 `9e0462939aa53d0b90fe0733e370531caa0b5d1cc961881463388c6c2fc7cd01`，與提交及本機逐 byte 相同，Ed25519 驗簽通過。公開發行 144 項、Socket 10 項、下載頁 Chromium 38 項檢查全數通過。瀏覽器檢查使用 1366／390／320 寬度；沒有登入真實帳號或修改玩家資料，未宣稱真人或實體手機驗收。
+
+QA、原稿、公開回讀與正式 D 槽安全同步的預演、逐檔備份及執行報告位於 `D:\Codex_QA\launcher-room-art-repair-1.1.14`。同步只納入本版 630 個必要檔案，四主文件只插入本節，其他 Board 與未提交內容須保持原 bytes。LATTICE 本階段 API 未提供，官方 Status 命令未回應後中止；未宣稱新任務寫入或圖譜成功。
 
 ## 2026-09-27 啟動器步態與角色關係重製（1.1.13 已部署）
 
