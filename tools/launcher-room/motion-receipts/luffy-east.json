@@ -1,0 +1,241 @@
+{
+  "schema": "one-piece-room-rig-receipt/1",
+  "character": "luffy",
+  "direction": "east",
+  "sourcePng": "tools/launcher-room/motion-source-png/luffy-east.png",
+  "sourceSha256": "3afa123547a25de1d653cb0a289b94057bf69b87674711d23fdba1d66a343d36",
+  "provenance": "tools/launcher-room/motion-receipts/luffy-east-gpt.json",
+  "provenanceSha256": "982e721b6f4e56a51ae7487acab64df9daf23d97f771190af2bfd7014e7f2f86",
+  "sourceImages": {
+    "sheet": {
+      "sourcePng": "tools/launcher-room/motion-source-png/luffy-east.png",
+      "sourceSha256": "3afa123547a25de1d653cb0a289b94057bf69b87674711d23fdba1d66a343d36",
+      "provenance": "tools/launcher-room/motion-receipts/luffy-east-gpt.json",
+      "provenanceSha256": "982e721b6f4e56a51ae7487acab64df9daf23d97f771190af2bfd7014e7f2f86"
+    }
+  },
+  "originalSpecSha256": "304f9a9280620b87a774668941e68f9e56cbc54050ca0291c75910a0fd454cd0",
+  "rigSpec": "tools/launcher-room/rig-specs/luffy-east.json",
+  "rigSpecSha256": "af41fd068a8fc55d69ec6d635af1699dec856525c76878e16b93fe44f747e42d",
+  "selectedPlanSha256": "cd7bdb59fb34bc2132bcaea0a6a71f42c4efecb9f59d4d0e51b9bc3c3fa24a3c",
+  "review": {
+    "status": "reviewed",
+    "notes": "Final GPT source identity and four-direction atlas contact sheets inspected for all ten characters. Root additionally inspected actual-room desktop consecutive phases and loop seam for all ten, five four-turn speaker/listener contact sheets, both widths of final four-way piano/table contacts, and narrow-room samples. No remaining observed pose discontinuity, detached parts, head/body facing mismatch or furniture alignment blocker in reviewed frames. Acceptance is for this precisely hash-bound local candidate. Automated fixtures and frame inspection are not human play, physical-phone testing or a fixed-60fps guarantee; 350ms loaded-host capture gap is retained in evidence. Public deployment verified separately.",
+    "sourceSha256": "3afa123547a25de1d653cb0a289b94057bf69b87674711d23fdba1d66a343d36",
+    "sourceHashes": {
+      "sheet": "3afa123547a25de1d653cb0a289b94057bf69b87674711d23fdba1d66a343d36"
+    },
+    "originalSpecSha256": "304f9a9280620b87a774668941e68f9e56cbc54050ca0291c75910a0fd454cd0",
+    "rigSpecSha256": "af41fd068a8fc55d69ec6d635af1699dec856525c76878e16b93fe44f747e42d",
+    "rendererSha256": "de24e1fa55d835f12e418e12f7dee3199243b3a40394e90ffe8304f8d96edd11",
+    "bakerSha256": "1261fb4dcccf74a3abba4fb59d399a329e951adde3a8c0ddf6aaffae9e635e07",
+    "evidence": [
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-0.json",
+        "sha256": "de237428fd789d588761e3c370fbea5f24d8d5a4547f52b89d2534184f198e73"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-1.png",
+        "sha256": "619e5114bb38c8f20f695e4bf7b443b5a1abea01af62149f1fb0e20a5859b604"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-2.json",
+        "sha256": "d5253d6aa247ec7e8bdfe09c2d815ddf167971f3893d7f84df1d85ca4cc51c2a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-3.json",
+        "sha256": "f1f084881967eb99df37b06eee07c1cae3d7158a9e50112470753fe6c214df0a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-4.json",
+        "sha256": "fdd557f5da60c75a7211fdd58ae0f43ef3acc5a04640c74382a1bdabea634f0c"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-5.json",
+        "sha256": "49780960fefc582dd8fa5c701107b814aee78e30fad116292ec6b121fde8dd58"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-6.png",
+        "sha256": "80e15a6837c920477360790f3a2e17b7526ad12cda565912f05526b74ddaa096"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-7.png",
+        "sha256": "bd9d4d56c35050672fd7fdc25eb562319e99e8b95fc48be2bc76fccf5bd5cc73"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-8.png",
+        "sha256": "c53f5f0400e44e8643aaaebec94f84df7e800d48b3a4c944fa86092fe4cce8f4"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-9.png",
+        "sha256": "80e15a6837c920477360790f3a2e17b7526ad12cda565912f05526b74ddaa096"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-10.png",
+        "sha256": "13d0d84761363889c0a50d3f9ed5a083f4e39d9b82d7fef68418cc58ef3d2ea8"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-11.png",
+        "sha256": "f864e98a1d55673dac05c08517d62fb5525007096282af6a2cd7054b42eae4f5"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-12.png",
+        "sha256": "493f24ec0c8a167aef4e5c0752468e2768ef07959ee448156ec5501f99960837"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-13.png",
+        "sha256": "13d0d84761363889c0a50d3f9ed5a083f4e39d9b82d7fef68418cc58ef3d2ea8"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-14.png",
+        "sha256": "251ed892f70a0aa2563349d50c18d561a5a319054ce8a7fd68ab613a384bb1d5"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-15.png",
+        "sha256": "5133205f4033a17a5b206b71d28e3696268492c236866302c1636ae890963329"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-16.png",
+        "sha256": "f0bb013ba953dba8bbb3e113ae05e611b2ce9e943d54856f76eb962032b417d0"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-17.png",
+        "sha256": "251ed892f70a0aa2563349d50c18d561a5a319054ce8a7fd68ab613a384bb1d5"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-18.png",
+        "sha256": "de2860fdf1df0ff9ff91f4944e0e8cb4fb2f6bfc3df2d0a8b8c2e0d47f608b20"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-19.png",
+        "sha256": "78ff598e9af51160520fcbba2f6225f229a971be012189ec33f7f14c7a7758c9"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-20.png",
+        "sha256": "b17dd9f2f119eaef9ee09b751560163cbd9f448bb51cd8cdb2c05d7ccc91d913"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-21.png",
+        "sha256": "de2860fdf1df0ff9ff91f4944e0e8cb4fb2f6bfc3df2d0a8b8c2e0d47f608b20"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-22.png",
+        "sha256": "80e15a6837c920477360790f3a2e17b7526ad12cda565912f05526b74ddaa096"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-23.png",
+        "sha256": "bd9d4d56c35050672fd7fdc25eb562319e99e8b95fc48be2bc76fccf5bd5cc73"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-24.png",
+        "sha256": "c53f5f0400e44e8643aaaebec94f84df7e800d48b3a4c944fa86092fe4cce8f4"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-25.png",
+        "sha256": "80e15a6837c920477360790f3a2e17b7526ad12cda565912f05526b74ddaa096"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-26.png",
+        "sha256": "13d0d84761363889c0a50d3f9ed5a083f4e39d9b82d7fef68418cc58ef3d2ea8"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-27.png",
+        "sha256": "f864e98a1d55673dac05c08517d62fb5525007096282af6a2cd7054b42eae4f5"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-28.png",
+        "sha256": "493f24ec0c8a167aef4e5c0752468e2768ef07959ee448156ec5501f99960837"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-29.png",
+        "sha256": "13d0d84761363889c0a50d3f9ed5a083f4e39d9b82d7fef68418cc58ef3d2ea8"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-30.png",
+        "sha256": "251ed892f70a0aa2563349d50c18d561a5a319054ce8a7fd68ab613a384bb1d5"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-31.png",
+        "sha256": "5133205f4033a17a5b206b71d28e3696268492c236866302c1636ae890963329"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-32.png",
+        "sha256": "f0bb013ba953dba8bbb3e113ae05e611b2ce9e943d54856f76eb962032b417d0"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-33.png",
+        "sha256": "251ed892f70a0aa2563349d50c18d561a5a319054ce8a7fd68ab613a384bb1d5"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-34.png",
+        "sha256": "de2860fdf1df0ff9ff91f4944e0e8cb4fb2f6bfc3df2d0a8b8c2e0d47f608b20"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-35.png",
+        "sha256": "78ff598e9af51160520fcbba2f6225f229a971be012189ec33f7f14c7a7758c9"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-36.png",
+        "sha256": "b17dd9f2f119eaef9ee09b751560163cbd9f448bb51cd8cdb2c05d7ccc91d913"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-37.png",
+        "sha256": "de2860fdf1df0ff9ff91f4944e0e8cb4fb2f6bfc3df2d0a8b8c2e0d47f608b20"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-38.json",
+        "sha256": "0375d01cbf842b16ce2e4c6757fb56ea97df3bd54e5e4f722348b1a4507decb8"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-39.png",
+        "sha256": "d05cc107161072734926833b128b1320081bf6ab407a08e6fcb3e0b708d34edc"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-40.png",
+        "sha256": "3505e15a88256ae8a592d99315029377d02890a4725dc77b25b4ea4a3400e96d"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-41.png",
+        "sha256": "545a0a71fbd19024bc22c3d5516ecabed886d05bef7b689e2a53793e4bb6723c"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-42.png",
+        "sha256": "eaffe95ef562e51e196111b3bd7d3d43e7d88fa5488903f078ea18e8b4f38398"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-43.json",
+        "sha256": "45f48646425a314ca6e108e1e4faf207faf57fde3a57a23c80269111a32d8fe9"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-44.png",
+        "sha256": "3650be0fb12cd8db30fc31552aa10dd9eb7b9bb3e7aff53a997ec810a4150a12"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-45.png",
+        "sha256": "1325fd85165fc32872e5a9a5e86f2bb36bcc048a2e2de2f0068fb01f6358fd48"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-46.png",
+        "sha256": "77b0b7646c5361ec3e584dd6d6b01d80dd5e04cf5bfab0269901fcea045f2f6f"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-47.png",
+        "sha256": "f30c262dac45a3cf0198482eece50ae55477a67fd52a184a7a37d2f9bd0639e3"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-48.json",
+        "sha256": "1ce6e0c6c895b2da80ca8bf1cd998ecf22794d6855c6adeb8619b28cbbfee637"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/luffy-east-final-49.json",
+        "sha256": "c0497cfa744a57881542377bcfc3d9d50b1443e51435739e0e7209f16f75eb3e"
+      }
+    ],
+    "assetHashes": {
+      "motion": "c57617c99555635daafa59a4f671724726e9603159a576e945c107ae39ac30fa",
+      "acting": "1ddd48b720c7fd1749aaafde019d23120abd50cfccce66906639a29d9894c0a6"
+    },
+    "specSha256": "af41fd068a8fc55d69ec6d635af1699dec856525c76878e16b93fe44f747e42d",
+    "reviewer": "Codex root, with independent walk_art_pilot visual review"
+  }
+}

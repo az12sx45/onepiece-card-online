@@ -1,0 +1,656 @@
+{
+  "scope": "Four actual authored speaker/listener turns, local browser fixture",
+  "mode": "chat",
+  "accepted": true,
+  "turns": [
+    {
+      "type": "chat",
+      "phase": "speaking",
+      "sceneId": "luffy-usopp-1",
+      "sceneCursor": 0,
+      "pair": "luffy:usopp",
+      "turnIndex": 0,
+      "turns": 4,
+      "line": "騙人布！按這個會飛嗎？驚喜",
+      "samples": [
+        {
+          "key": "c:room-character-luffy",
+          "direction": "east",
+          "pose": "surprised",
+          "frame": "14",
+          "source": "acting_v2",
+          "image": "turn-0-luffy-0-14.png"
+        },
+        {
+          "key": "c:room-character-usopp",
+          "direction": "west",
+          "pose": "listen",
+          "frame": "29",
+          "source": "acting_v2",
+          "image": "turn-0-usopp-1-29.png"
+        },
+        {
+          "key": "c:room-character-luffy",
+          "direction": "east",
+          "pose": "surprised",
+          "frame": "15",
+          "source": "acting_v2",
+          "image": "turn-0-luffy-2-15.png"
+        },
+        {
+          "key": "c:room-character-usopp",
+          "direction": "west",
+          "pose": "listen",
+          "frame": "30",
+          "source": "acting_v2",
+          "image": "turn-0-usopp-3-30.png"
+        },
+        {
+          "key": "c:room-character-luffy",
+          "direction": "east",
+          "pose": "surprised",
+          "frame": "12",
+          "source": "acting_v2",
+          "image": "turn-0-luffy-4-12.png"
+        },
+        {
+          "key": "c:room-character-luffy",
+          "direction": "east",
+          "pose": "surprised",
+          "frame": "13",
+          "source": "acting_v2",
+          "image": "turn-0-luffy-5-13.png"
+        },
+        {
+          "key": "c:room-character-usopp",
+          "direction": "west",
+          "pose": "listen",
+          "frame": "31",
+          "source": "acting_v2",
+          "image": "turn-0-usopp-6-31.png"
+        },
+        {
+          "key": "c:room-character-usopp",
+          "direction": "west",
+          "pose": "listen",
+          "frame": "28",
+          "source": "acting_v2",
+          "image": "turn-0-usopp-7-28.png"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "phase": "speaking",
+      "sceneId": "luffy-usopp-1",
+      "sceneCursor": 0,
+      "pair": "luffy:usopp",
+      "turnIndex": 1,
+      "turns": 4,
+      "line": "那是固定夾！你怎麼什麼都想發射！抗議",
+      "samples": [
+        {
+          "key": "c:room-character-luffy",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "28",
+          "source": "acting_v2",
+          "image": "turn-1-luffy-0-28.png"
+        },
+        {
+          "key": "c:room-character-usopp",
+          "direction": "west",
+          "pose": "talk_annoyed",
+          "frame": "8",
+          "source": "acting_v2",
+          "image": "turn-1-usopp-1-8.png"
+        },
+        {
+          "key": "c:room-character-luffy",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "29",
+          "source": "acting_v2",
+          "image": "turn-1-luffy-2-29.png"
+        },
+        {
+          "key": "c:room-character-usopp",
+          "direction": "west",
+          "pose": "talk_annoyed",
+          "frame": "9",
+          "source": "acting_v2",
+          "image": "turn-1-usopp-3-9.png"
+        },
+        {
+          "key": "c:room-character-usopp",
+          "direction": "west",
+          "pose": "talk_annoyed",
+          "frame": "10",
+          "source": "acting_v2",
+          "image": "turn-1-usopp-4-10.png"
+        },
+        {
+          "key": "c:room-character-usopp",
+          "direction": "west",
+          "pose": "talk_annoyed",
+          "frame": "11",
+          "source": "acting_v2",
+          "image": "turn-1-usopp-5-11.png"
+        },
+        {
+          "key": "c:room-character-luffy",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "30",
+          "source": "acting_v2",
+          "image": "turn-1-luffy-6-30.png"
+        },
+        {
+          "key": "c:room-character-luffy",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "31",
+          "source": "acting_v2",
+          "image": "turn-1-luffy-7-31.png"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "phase": "speaking",
+      "sceneId": "luffy-usopp-1",
+      "sceneCursor": 0,
+      "pair": "luffy:usopp",
+      "turnIndex": 2,
+      "turns": 4,
+      "line": "喔。那你能做一個會飛的嗎？思考",
+      "samples": [
+        {
+          "key": "c:room-character-luffy",
+          "direction": "east",
+          "pose": "focused_use",
+          "frame": "16",
+          "source": "acting_v2",
+          "image": "turn-2-luffy-0-16.png"
+        },
+        {
+          "key": "c:room-character-usopp",
+          "direction": "west",
+          "pose": "focused_use",
+          "frame": "16",
+          "source": "acting_v2",
+          "image": "turn-2-usopp-1-16.png"
+        },
+        {
+          "key": "c:room-character-luffy",
+          "direction": "east",
+          "pose": "focused_use",
+          "frame": "17",
+          "source": "acting_v2",
+          "image": "turn-2-luffy-2-17.png"
+        },
+        {
+          "key": "c:room-character-usopp",
+          "direction": "west",
+          "pose": "focused_use",
+          "frame": "17",
+          "source": "acting_v2",
+          "image": "turn-2-usopp-3-17.png"
+        },
+        {
+          "key": "c:room-character-luffy",
+          "direction": "east",
+          "pose": "focused_use",
+          "frame": "18",
+          "source": "acting_v2",
+          "image": "turn-2-luffy-4-18.png"
+        },
+        {
+          "key": "c:room-character-usopp",
+          "direction": "west",
+          "pose": "focused_use",
+          "frame": "18",
+          "source": "acting_v2",
+          "image": "turn-2-usopp-5-18.png"
+        },
+        {
+          "key": "c:room-character-luffy",
+          "direction": "east",
+          "pose": "focused_use",
+          "frame": "19",
+          "source": "acting_v2",
+          "image": "turn-2-luffy-6-19.png"
+        },
+        {
+          "key": "c:room-character-usopp",
+          "direction": "west",
+          "pose": "focused_use",
+          "frame": "19",
+          "source": "acting_v2",
+          "image": "turn-2-usopp-7-19.png"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "phase": "speaking",
+      "sceneId": "luffy-usopp-1",
+      "sceneCursor": 0,
+      "pair": "luffy:usopp",
+      "turnIndex": 3,
+      "turns": 4,
+      "line": "……小一點的可以。先別把椅子搬來！說明",
+      "samples": [
+        {
+          "key": "c:room-character-luffy",
+          "direction": "east",
+          "pose": "talk_happy",
+          "frame": "4",
+          "source": "acting_v2",
+          "image": "turn-3-luffy-0-4.png"
+        },
+        {
+          "key": "c:room-character-usopp",
+          "direction": "west",
+          "pose": "focused_use",
+          "frame": "16",
+          "source": "acting_v2",
+          "image": "turn-3-usopp-1-16.png"
+        },
+        {
+          "key": "c:room-character-luffy",
+          "direction": "east",
+          "pose": "talk_happy",
+          "frame": "5",
+          "source": "acting_v2",
+          "image": "turn-3-luffy-2-5.png"
+        },
+        {
+          "key": "c:room-character-usopp",
+          "direction": "west",
+          "pose": "focused_use",
+          "frame": "18",
+          "source": "acting_v2",
+          "image": "turn-3-usopp-3-18.png"
+        },
+        {
+          "key": "c:room-character-luffy",
+          "direction": "east",
+          "pose": "talk_happy",
+          "frame": "6",
+          "source": "acting_v2",
+          "image": "turn-3-luffy-4-6.png"
+        },
+        {
+          "key": "c:room-character-usopp",
+          "direction": "west",
+          "pose": "focused_use",
+          "frame": "19",
+          "source": "acting_v2",
+          "image": "turn-3-usopp-5-19.png"
+        },
+        {
+          "key": "c:room-character-luffy",
+          "direction": "east",
+          "pose": "talk_happy",
+          "frame": "7",
+          "source": "acting_v2",
+          "image": "turn-3-luffy-6-7.png"
+        },
+        {
+          "key": "c:room-character-usopp",
+          "direction": "west",
+          "pose": "focused_use",
+          "frame": "17",
+          "source": "acting_v2",
+          "image": "turn-3-usopp-7-17.png"
+        }
+      ]
+    }
+  ],
+  "visualAcceptance": false,
+  "errors": [],
+  "missingAssets": [],
+  "artAliases": {},
+  "captureSecurity": "Local QA Chromium disables web security solely to export opui canvas pixels; not an auth or packaged security test",
+  "syntheticArt": false,
+  "candidateRoot": "D:/Codex_Release_Worktrees/launcher-room-animation-1.1.13",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "scripts": {
+    "launcher-room-motion-data.js": "504fb344582f3010c487ed7fb6a735161c3e205770f7bb2692d57df1514bdd1d",
+    "launcher-room-dialogue.js": "e1f106d2ffeacdbe49a72ff53c75c8f17b283b0e34c092d0f5c860cb14d7fc91",
+    "launcher-room-motion.js": "5f41e23f83f43da53f011f0f45c8b982b7c2a5ee6998b634e0e1b4460411a43c",
+    "launcher-room.js": "17d716244be8f9aab054e698e3d302e69d11ced38824facceacacc2fdd7f3b1d"
+  },
+  "assets": [
+    {
+      "path": "images/launcher_room/motion_v2/luffy/east.webp",
+      "sha256": "c57617c99555635daafa59a4f671724726e9603159a576e945c107ae39ac30fa"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/luffy/west.webp",
+      "sha256": "e48631b7adf4d5a0209ed6d155ac93393002152f1a8394cc94d8af4f269993e9"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/luffy/north.webp",
+      "sha256": "06ae1027904b54a695121767f6837eab2f4a7e7f28f7e05c8be072f9ad09c32c"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/luffy/south.webp",
+      "sha256": "d2577e152dce3567a12cf71ab654c6e795d9c2dfc7ab3684216d0a33b459981e"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/luffy/east.webp",
+      "sha256": "1ddd48b720c7fd1749aaafde019d23120abd50cfccce66906639a29d9894c0a6"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/luffy/west.webp",
+      "sha256": "229fce7d269534001b23fd2dbbc23ce421fa7eac5eff5ca0b083fa2c607710ff"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/luffy/north.webp",
+      "sha256": "20d269928fc35d6f536d27cf1cd92fbeee8a2237fddbcc9367df989df3c366b3"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/luffy/south.webp",
+      "sha256": "8018de6b101d777a8e7b318f332848de7d6325c99db77f28d54a0148abee9b37"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/usopp/east.webp",
+      "sha256": "38d8ef17ba5df3ed10beec01ae0f486adcc242cb6d7c3585ae876ba8c796ec81"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/usopp/west.webp",
+      "sha256": "519afa24b71350a5d7bc021c481f90ebc3d066bfae5cad58000e15fff59a75ab"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/usopp/north.webp",
+      "sha256": "b4f16eee6f12a84c1bd6a98ef372627f9abd83e1366d5e7b51b95bfee5c92268"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/usopp/south.webp",
+      "sha256": "df6835d3b932e10db43e1c8ece2cbc5ff3b293f683b4e5a85e3186709bd22b96"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/usopp/east.webp",
+      "sha256": "7c3a4b0294d7c8ee7bd5e8b06a1b9a9d3cefbd317192b624aa439ca24f1b072e"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/usopp/west.webp",
+      "sha256": "f4e8737365815c9bca6de75b35365fcebe07a5e1364f5456c0ca9aab8330faa3"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/usopp/north.webp",
+      "sha256": "c9716a3b5532e48f7688f75cab31ff202a2f3b305ccb07d86e3cf55ed979f85d"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/usopp/south.webp",
+      "sha256": "57ae0aa14718e6fadd32c2dc0e16a4b3027c878579fc9e901abcb99f92d54565"
+    }
+  ],
+  "renderContract": {
+    "shape": {
+      "columns": 8,
+      "rows": 4,
+      "frames": 32,
+      "cell": 128,
+      "width": 1024,
+      "height": 512,
+      "rootX": 64,
+      "rootY": 112
+    },
+    "manifest": {
+      "schema": "one-piece-room-motion/2",
+      "shape": {
+        "walk": {
+          "columns": 8,
+          "rows": 4,
+          "frames": 32,
+          "cell": 128,
+          "root": [
+            64,
+            112
+          ],
+          "depth": {
+            "rows": 20,
+            "totalCells": 160,
+            "slopeVariants": [
+              -0.52,
+              -0.26,
+              0,
+              0.26,
+              0.52
+            ]
+          }
+        },
+        "actions": {
+          "columns": 8,
+          "rows": 4,
+          "frames": 32,
+          "actionCount": 8,
+          "beatsPerAction": 4,
+          "cell": 128,
+          "root": [
+            64,
+            112
+          ]
+        }
+      },
+      "characters": {
+        "brook": {
+          "stride": {
+            "east": 28,
+            "north": 17.36,
+            "south": 17.36,
+            "west": 28
+          },
+          "speed": {
+            "east": 27,
+            "north": 16.74,
+            "south": 16.74,
+            "west": 27
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "chopper": {
+          "stride": {
+            "east": 17,
+            "north": 10.54,
+            "south": 10.54,
+            "west": 17
+          },
+          "speed": {
+            "east": 21,
+            "north": 13.02,
+            "south": 13.02,
+            "west": 21
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "franky": {
+          "stride": {
+            "east": 25,
+            "north": 15.5,
+            "south": 15.5,
+            "west": 25
+          },
+          "speed": {
+            "east": 26,
+            "north": 16.12,
+            "south": 16.12,
+            "west": 26
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "jinbe": {
+          "stride": {
+            "east": 22,
+            "north": 13.64,
+            "south": 13.64,
+            "west": 22
+          },
+          "speed": {
+            "east": 23,
+            "north": 14.26,
+            "south": 14.26,
+            "west": 23
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "luffy": {
+          "stride": {
+            "east": 24,
+            "north": 14.879999999999999,
+            "south": 15,
+            "west": 24
+          },
+          "speed": {
+            "east": 26,
+            "north": 16.12,
+            "south": 17,
+            "west": 26
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "nami": {
+          "stride": {
+            "east": 23,
+            "north": 14.26,
+            "south": 14.26,
+            "west": 23
+          },
+          "speed": {
+            "east": 25,
+            "north": 15.5,
+            "south": 15.5,
+            "west": 25
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "robin": {
+          "stride": {
+            "east": 24,
+            "north": 14.879999999999999,
+            "south": 14.879999999999999,
+            "west": 24
+          },
+          "speed": {
+            "east": 25,
+            "north": 15.5,
+            "south": 15.5,
+            "west": 25
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "sanji": {
+          "stride": {
+            "east": 27,
+            "north": 16.74,
+            "south": 16.74,
+            "west": 27
+          },
+          "speed": {
+            "east": 28,
+            "north": 17.36,
+            "south": 17.36,
+            "west": 28
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "usopp": {
+          "stride": {
+            "east": 25,
+            "north": 15.5,
+            "south": 15.5,
+            "west": 25
+          },
+          "speed": {
+            "east": 26,
+            "north": 16.12,
+            "south": 16.12,
+            "west": 26
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "zoro": {
+          "stride": {
+            "east": 26,
+            "north": 16.12,
+            "south": 16.12,
+            "west": 26
+          },
+          "speed": {
+            "east": 27,
+            "north": 16.74,
+            "south": 16.74,
+            "west": 27
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        }
+      }
+    },
+    "actors": [
+      {
+        "key": "c:room-character-luffy",
+        "rootOffset": "12.5%",
+        "canvas": [
+          128,
+          128
+        ]
+      },
+      {
+        "key": "c:room-character-usopp",
+        "rootOffset": "12.5%",
+        "canvas": [
+          128,
+          128
+        ]
+      }
+    ]
+  },
+  "savedRoomUnchanged": true,
+  "video": "normal.webm"
+}

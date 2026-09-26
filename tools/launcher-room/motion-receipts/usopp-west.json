@@ -1,0 +1,249 @@
+{
+  "schema": "one-piece-room-rig-receipt/1",
+  "character": "usopp",
+  "direction": "west",
+  "sourcePng": "tools/launcher-room/motion-source-png/usopp-west.png",
+  "sourceSha256": "94f9f315ecf48eb2c7dea2f8aa27d146b79a639d1aa8311dc998ad1173b9a511",
+  "provenance": "tools/launcher-room/motion-receipts/usopp-west-gpt.json",
+  "provenanceSha256": "b9beb12ffbc1e086b1e7159f94ba86025bf8ce5999a191b7c370af661467f70e",
+  "rawReceipt": {
+    "path": "tools/launcher-room/motion-receipts/usopp-west-gpt-original.json",
+    "sha256": "b089deee031014961140179d6cd70fb5a9912419f8d0142ea2ac89745f0a8301"
+  },
+  "sourceImages": {
+    "sheet": {
+      "sourcePng": "tools/launcher-room/motion-source-png/usopp-west.png",
+      "sourceSha256": "94f9f315ecf48eb2c7dea2f8aa27d146b79a639d1aa8311dc998ad1173b9a511",
+      "provenance": "tools/launcher-room/motion-receipts/usopp-west-gpt.json",
+      "provenanceSha256": "b9beb12ffbc1e086b1e7159f94ba86025bf8ce5999a191b7c370af661467f70e",
+      "rawReceipt": {
+        "path": "tools/launcher-room/motion-receipts/usopp-west-gpt-original.json",
+        "sha256": "b089deee031014961140179d6cd70fb5a9912419f8d0142ea2ac89745f0a8301"
+      }
+    }
+  },
+  "originalSpecSha256": "2e60cdf657eadddbce4fc1f2715b3f7c963af38a903d762f044e548d9ae78ba8",
+  "rigSpec": "tools/launcher-room/rig-specs/usopp-west.json",
+  "rigSpecSha256": "cbc0e158c22b7891560c21e34c50f5013bcd5a571cb3521e9792ae5883bde3db",
+  "selectedPlanSha256": "cd7bdb59fb34bc2132bcaea0a6a71f42c4efecb9f59d4d0e51b9bc3c3fa24a3c",
+  "review": {
+    "status": "reviewed",
+    "notes": "Final GPT source identity and four-direction atlas contact sheets inspected for all ten characters. Root additionally inspected actual-room desktop consecutive phases and loop seam for all ten, five four-turn speaker/listener contact sheets, both widths of final four-way piano/table contacts, and narrow-room samples. No remaining observed pose discontinuity, detached parts, head/body facing mismatch or furniture alignment blocker in reviewed frames. Acceptance is for this precisely hash-bound local candidate. Automated fixtures and frame inspection are not human play, physical-phone testing or a fixed-60fps guarantee; 350ms loaded-host capture gap is retained in evidence. Public deployment verified separately.",
+    "sourceSha256": "94f9f315ecf48eb2c7dea2f8aa27d146b79a639d1aa8311dc998ad1173b9a511",
+    "sourceHashes": {
+      "sheet": "94f9f315ecf48eb2c7dea2f8aa27d146b79a639d1aa8311dc998ad1173b9a511"
+    },
+    "originalSpecSha256": "2e60cdf657eadddbce4fc1f2715b3f7c963af38a903d762f044e548d9ae78ba8",
+    "rigSpecSha256": "cbc0e158c22b7891560c21e34c50f5013bcd5a571cb3521e9792ae5883bde3db",
+    "rendererSha256": "de24e1fa55d835f12e418e12f7dee3199243b3a40394e90ffe8304f8d96edd11",
+    "bakerSha256": "1261fb4dcccf74a3abba4fb59d399a329e951adde3a8c0ddf6aaffae9e635e07",
+    "evidence": [
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-0.json",
+        "sha256": "642b6a6fd1ffa132cfafa1afd82dc896d388330d939f3d7cb3d76feafbf9091b"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-1.png",
+        "sha256": "ae07b63d49ef105d5697629cad0e09e499c021eb79a8439db343b86939656868"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-2.json",
+        "sha256": "d5253d6aa247ec7e8bdfe09c2d815ddf167971f3893d7f84df1d85ca4cc51c2a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-3.json",
+        "sha256": "f1f084881967eb99df37b06eee07c1cae3d7158a9e50112470753fe6c214df0a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-4.json",
+        "sha256": "d45f0a273917226311a43774f3dfc9e624e1cd483e938939879f9c95c043601a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-5.json",
+        "sha256": "e01bc63a404e27e15d7fc86063c4b6faa714a2f92e77149771ead0c49f13fa3f"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-6.png",
+        "sha256": "8f198c85bf221215c903e1f7ae340ed887c2258790c4e3ef129989999841cf5b"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-7.png",
+        "sha256": "664fa0c1f5e9322741185a0a0663f735f630276179e27aff6c811bd2495c4e4e"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-8.png",
+        "sha256": "474fccc330065e41e8eeee84e6c1bdde6f7847e38a42507dd49bda5064e00f80"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-9.png",
+        "sha256": "8f198c85bf221215c903e1f7ae340ed887c2258790c4e3ef129989999841cf5b"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-10.png",
+        "sha256": "2b5ed239353d2c49d5eb0fe7f709e096b53f1004137e35e291391bf78d690f59"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-11.png",
+        "sha256": "e39b925a4268811f567b697552ba826529732d143e8ce87fd871f2d06ce39ec2"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-12.png",
+        "sha256": "05e54baf10b62d2622b4a55503cca637fccdf9a00d948bae2ff75e6c365d0a16"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-13.png",
+        "sha256": "2b5ed239353d2c49d5eb0fe7f709e096b53f1004137e35e291391bf78d690f59"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-14.png",
+        "sha256": "8ce8a70727a9060c938b2168b2aaaba81a6831217de2e6de61e17ec5816804ab"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-15.png",
+        "sha256": "39a2b4a12ea52673c56f019874c1254735298820956c6798781a4423c41da6ca"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-16.png",
+        "sha256": "018d2edac24abb392cb6de2893b608c24aedac895e0adbb2729d9563c3c991b3"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-17.png",
+        "sha256": "8ce8a70727a9060c938b2168b2aaaba81a6831217de2e6de61e17ec5816804ab"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-18.png",
+        "sha256": "13565bfc49191834e467a20eff65440c6d20c2c6ab0721873ff878a64777b096"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-19.png",
+        "sha256": "679e5f3c25b5ea5f124d2605cbcbe2aeb5ece82be0b0d47944616676ce780c28"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-20.png",
+        "sha256": "20c33725a2d2377e23432162b0146d4d4b268a97024b93b95c465f94b6555f84"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-21.png",
+        "sha256": "13565bfc49191834e467a20eff65440c6d20c2c6ab0721873ff878a64777b096"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-22.png",
+        "sha256": "8f198c85bf221215c903e1f7ae340ed887c2258790c4e3ef129989999841cf5b"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-23.png",
+        "sha256": "664fa0c1f5e9322741185a0a0663f735f630276179e27aff6c811bd2495c4e4e"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-24.png",
+        "sha256": "474fccc330065e41e8eeee84e6c1bdde6f7847e38a42507dd49bda5064e00f80"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-25.png",
+        "sha256": "8f198c85bf221215c903e1f7ae340ed887c2258790c4e3ef129989999841cf5b"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-26.png",
+        "sha256": "2b5ed239353d2c49d5eb0fe7f709e096b53f1004137e35e291391bf78d690f59"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-27.png",
+        "sha256": "e39b925a4268811f567b697552ba826529732d143e8ce87fd871f2d06ce39ec2"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-28.png",
+        "sha256": "05e54baf10b62d2622b4a55503cca637fccdf9a00d948bae2ff75e6c365d0a16"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-29.png",
+        "sha256": "2b5ed239353d2c49d5eb0fe7f709e096b53f1004137e35e291391bf78d690f59"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-30.png",
+        "sha256": "8ce8a70727a9060c938b2168b2aaaba81a6831217de2e6de61e17ec5816804ab"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-31.png",
+        "sha256": "39a2b4a12ea52673c56f019874c1254735298820956c6798781a4423c41da6ca"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-32.png",
+        "sha256": "018d2edac24abb392cb6de2893b608c24aedac895e0adbb2729d9563c3c991b3"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-33.png",
+        "sha256": "8ce8a70727a9060c938b2168b2aaaba81a6831217de2e6de61e17ec5816804ab"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-34.png",
+        "sha256": "13565bfc49191834e467a20eff65440c6d20c2c6ab0721873ff878a64777b096"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-35.png",
+        "sha256": "679e5f3c25b5ea5f124d2605cbcbe2aeb5ece82be0b0d47944616676ce780c28"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-36.png",
+        "sha256": "20c33725a2d2377e23432162b0146d4d4b268a97024b93b95c465f94b6555f84"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-37.png",
+        "sha256": "13565bfc49191834e467a20eff65440c6d20c2c6ab0721873ff878a64777b096"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-38.json",
+        "sha256": "0375d01cbf842b16ce2e4c6757fb56ea97df3bd54e5e4f722348b1a4507decb8"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-39.png",
+        "sha256": "d05cc107161072734926833b128b1320081bf6ab407a08e6fcb3e0b708d34edc"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-40.png",
+        "sha256": "3505e15a88256ae8a592d99315029377d02890a4725dc77b25b4ea4a3400e96d"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-41.png",
+        "sha256": "545a0a71fbd19024bc22c3d5516ecabed886d05bef7b689e2a53793e4bb6723c"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-42.png",
+        "sha256": "eaffe95ef562e51e196111b3bd7d3d43e7d88fa5488903f078ea18e8b4f38398"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-43.json",
+        "sha256": "45f48646425a314ca6e108e1e4faf207faf57fde3a57a23c80269111a32d8fe9"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-44.png",
+        "sha256": "3650be0fb12cd8db30fc31552aa10dd9eb7b9bb3e7aff53a997ec810a4150a12"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-45.png",
+        "sha256": "1325fd85165fc32872e5a9a5e86f2bb36bcc048a2e2de2f0068fb01f6358fd48"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-46.png",
+        "sha256": "77b0b7646c5361ec3e584dd6d6b01d80dd5e04cf5bfab0269901fcea045f2f6f"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-47.png",
+        "sha256": "f30c262dac45a3cf0198482eece50ae55477a67fd52a184a7a37d2f9bd0639e3"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-48.json",
+        "sha256": "1ce6e0c6c895b2da80ca8bf1cd998ecf22794d6855c6adeb8619b28cbbfee637"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/usopp-west-final-49.json",
+        "sha256": "c0497cfa744a57881542377bcfc3d9d50b1443e51435739e0e7209f16f75eb3e"
+      }
+    ],
+    "assetHashes": {
+      "motion": "519afa24b71350a5d7bc021c481f90ebc3d066bfae5cad58000e15fff59a75ab",
+      "acting": "f4e8737365815c9bca6de75b35365fcebe07a5e1364f5456c0ca9aab8330faa3"
+    },
+    "specSha256": "cbc0e158c22b7891560c21e34c50f5013bcd5a571cb3521e9792ae5883bde3db",
+    "reviewer": "Codex root, with independent walk_art_pilot visual review"
+  }
+}

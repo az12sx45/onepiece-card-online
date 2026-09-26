@@ -1,0 +1,241 @@
+{
+  "schema": "one-piece-room-rig-receipt/1",
+  "character": "jinbe",
+  "direction": "south",
+  "sourcePng": "tools/launcher-room/motion-source-png/jinbe-south.png",
+  "sourceSha256": "f9c463d56fb4ac585c943e0e7ce235a7f37c0178220f548d6c89183572d949e4",
+  "provenance": "tools/launcher-room/motion-receipts/jinbe-south-gpt.json",
+  "provenanceSha256": "308d842d3d973cb06a81e6d0ae04bd21271181531df6c3f47dac82d9feb490f8",
+  "sourceImages": {
+    "sheet": {
+      "sourcePng": "tools/launcher-room/motion-source-png/jinbe-south.png",
+      "sourceSha256": "f9c463d56fb4ac585c943e0e7ce235a7f37c0178220f548d6c89183572d949e4",
+      "provenance": "tools/launcher-room/motion-receipts/jinbe-south-gpt.json",
+      "provenanceSha256": "308d842d3d973cb06a81e6d0ae04bd21271181531df6c3f47dac82d9feb490f8"
+    }
+  },
+  "originalSpecSha256": "3b6353996c51bdf3b90d22a8ee85be4ae091b556a3466f4a987bd7d48c7940fc",
+  "rigSpec": "tools/launcher-room/rig-specs/jinbe-south.json",
+  "rigSpecSha256": "4cd7b5a53f3fa2bc8d1ff63286d3ec2b394deae1921e51e92f5e4b3b42bbf0c7",
+  "selectedPlanSha256": "cd7bdb59fb34bc2132bcaea0a6a71f42c4efecb9f59d4d0e51b9bc3c3fa24a3c",
+  "review": {
+    "status": "reviewed",
+    "notes": "Final GPT source identity and four-direction atlas contact sheets inspected for all ten characters. Root additionally inspected actual-room desktop consecutive phases and loop seam for all ten, five four-turn speaker/listener contact sheets, both widths of final four-way piano/table contacts, and narrow-room samples. No remaining observed pose discontinuity, detached parts, head/body facing mismatch or furniture alignment blocker in reviewed frames. Acceptance is for this precisely hash-bound local candidate. Automated fixtures and frame inspection are not human play, physical-phone testing or a fixed-60fps guarantee; 350ms loaded-host capture gap is retained in evidence. Public deployment verified separately.",
+    "sourceSha256": "f9c463d56fb4ac585c943e0e7ce235a7f37c0178220f548d6c89183572d949e4",
+    "sourceHashes": {
+      "sheet": "f9c463d56fb4ac585c943e0e7ce235a7f37c0178220f548d6c89183572d949e4"
+    },
+    "originalSpecSha256": "3b6353996c51bdf3b90d22a8ee85be4ae091b556a3466f4a987bd7d48c7940fc",
+    "rigSpecSha256": "4cd7b5a53f3fa2bc8d1ff63286d3ec2b394deae1921e51e92f5e4b3b42bbf0c7",
+    "rendererSha256": "de24e1fa55d835f12e418e12f7dee3199243b3a40394e90ffe8304f8d96edd11",
+    "bakerSha256": "1261fb4dcccf74a3abba4fb59d399a329e951adde3a8c0ddf6aaffae9e635e07",
+    "evidence": [
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-0.json",
+        "sha256": "09ea7f32b4e1a9d280bf7182acf9cfbdd72581d401b26e64ef61eb32463f24bd"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-1.png",
+        "sha256": "51973608544119932657280dc5ddec0defdaaa15b6bed26763cecdb27d368088"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-2.json",
+        "sha256": "d5253d6aa247ec7e8bdfe09c2d815ddf167971f3893d7f84df1d85ca4cc51c2a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-3.json",
+        "sha256": "f1f084881967eb99df37b06eee07c1cae3d7158a9e50112470753fe6c214df0a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-4.json",
+        "sha256": "6f12d103e8e158c62b60f0b0c0290799a9b63e35c7d934535e8a723594858e6a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-5.json",
+        "sha256": "031962126f1c374db588e9d6f15878035d4f2ad506896ef8f1198e281a0502ce"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-6.png",
+        "sha256": "6ab7595f90323cc51c80eb3c3491003615a74f3722f90c2551735a1673c38827"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-7.png",
+        "sha256": "da74010090d27295d1fd521c1c6c8f11220fcdfb8593bfa84343c8e64a7a0088"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-8.png",
+        "sha256": "93f4a55bd4550c11ca29f98cfad8f68ab2976136326b1ee8f4f58d2a3dc16bd2"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-9.png",
+        "sha256": "6ab7595f90323cc51c80eb3c3491003615a74f3722f90c2551735a1673c38827"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-10.png",
+        "sha256": "536c19b212cff47158a96a3f60e9f89bc893c1cd05f85d46af09f95e187d9094"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-11.png",
+        "sha256": "9a1695cc54a559056fec795243fdeee6d7ff8f0e8a3dc60445f08d455b6ec352"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-12.png",
+        "sha256": "13262f2a61036e0f1ec662f7a4d72bcbf21709b0370eb70cec1f4308c35debb0"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-13.png",
+        "sha256": "536c19b212cff47158a96a3f60e9f89bc893c1cd05f85d46af09f95e187d9094"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-14.png",
+        "sha256": "913f816fc676685ac961bcda384e762f88993c4ff29d1cea877e5711a427aa48"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-15.png",
+        "sha256": "c08874cf73bf6c5577ebbf9058083a2ca2df386cd700de28e4b13e39ba537987"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-16.png",
+        "sha256": "972d61527acb1b6d9dc6551c17c0b733072ec31beaf2c82fd540a40a5d47912e"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-17.png",
+        "sha256": "913f816fc676685ac961bcda384e762f88993c4ff29d1cea877e5711a427aa48"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-18.png",
+        "sha256": "905677422f2085dfb2c3327d7a3abffad25617bd2fb5544a40187f7a7f73c870"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-19.png",
+        "sha256": "39ebe5d2da4b35ba0d6145d997e11ecc70159742378c1d3c26c11f4de6556f0e"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-20.png",
+        "sha256": "341440ea27e61c6d66cfe018168b0479b40d7b86017d6c42ce06168d208cf3b3"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-21.png",
+        "sha256": "905677422f2085dfb2c3327d7a3abffad25617bd2fb5544a40187f7a7f73c870"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-22.png",
+        "sha256": "6ab7595f90323cc51c80eb3c3491003615a74f3722f90c2551735a1673c38827"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-23.png",
+        "sha256": "da74010090d27295d1fd521c1c6c8f11220fcdfb8593bfa84343c8e64a7a0088"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-24.png",
+        "sha256": "93f4a55bd4550c11ca29f98cfad8f68ab2976136326b1ee8f4f58d2a3dc16bd2"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-25.png",
+        "sha256": "6ab7595f90323cc51c80eb3c3491003615a74f3722f90c2551735a1673c38827"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-26.png",
+        "sha256": "536c19b212cff47158a96a3f60e9f89bc893c1cd05f85d46af09f95e187d9094"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-27.png",
+        "sha256": "9a1695cc54a559056fec795243fdeee6d7ff8f0e8a3dc60445f08d455b6ec352"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-28.png",
+        "sha256": "13262f2a61036e0f1ec662f7a4d72bcbf21709b0370eb70cec1f4308c35debb0"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-29.png",
+        "sha256": "536c19b212cff47158a96a3f60e9f89bc893c1cd05f85d46af09f95e187d9094"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-30.png",
+        "sha256": "913f816fc676685ac961bcda384e762f88993c4ff29d1cea877e5711a427aa48"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-31.png",
+        "sha256": "c08874cf73bf6c5577ebbf9058083a2ca2df386cd700de28e4b13e39ba537987"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-32.png",
+        "sha256": "972d61527acb1b6d9dc6551c17c0b733072ec31beaf2c82fd540a40a5d47912e"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-33.png",
+        "sha256": "913f816fc676685ac961bcda384e762f88993c4ff29d1cea877e5711a427aa48"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-34.png",
+        "sha256": "905677422f2085dfb2c3327d7a3abffad25617bd2fb5544a40187f7a7f73c870"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-35.png",
+        "sha256": "39ebe5d2da4b35ba0d6145d997e11ecc70159742378c1d3c26c11f4de6556f0e"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-36.png",
+        "sha256": "341440ea27e61c6d66cfe018168b0479b40d7b86017d6c42ce06168d208cf3b3"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-37.png",
+        "sha256": "905677422f2085dfb2c3327d7a3abffad25617bd2fb5544a40187f7a7f73c870"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-38.json",
+        "sha256": "ecfc361d95369c0b2070c492f75b082ec3256ed108fd80becda1a00be2e2c661"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-39.png",
+        "sha256": "3feb3044891dad2d485b7a8442f7651fa2c605194e73daa348984df4e7441596"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-40.png",
+        "sha256": "795864a4719e44ab265ccc277fc049fff28908fe9ef7a5b549ca61507e57326b"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-41.png",
+        "sha256": "37883898c044a8d392a81bb3896607bc41f30065e905f1f83767c56c0bce03af"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-42.png",
+        "sha256": "0c1075c1cf4ed7f7156bbb1a28169d9150df8d8afb341e6e8edafc0c01161e95"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-43.json",
+        "sha256": "622144a9af89784a0025d628ebfcfcc1d3090746152560bdea4f8a02a98e3877"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-44.png",
+        "sha256": "09f67a00b52266e62a352c8321e7be723abc310428a1dee100b637dd07308b59"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-45.png",
+        "sha256": "5276eaecd097bcd0907ecae72b1110cb457d542d7d82b92f5ea73ea5de39f263"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-46.png",
+        "sha256": "94c98039d32d64c878e6b4ee43ef86faf353aa284c50792ec7f9774b5de8b354"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-47.png",
+        "sha256": "db6d6e97f8eadb13834e83b6bb56f16ca7b57a591df37625ba3dde2a4d6c2b09"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-48.json",
+        "sha256": "1ce6e0c6c895b2da80ca8bf1cd998ecf22794d6855c6adeb8619b28cbbfee637"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/jinbe-south-final-49.json",
+        "sha256": "c0497cfa744a57881542377bcfc3d9d50b1443e51435739e0e7209f16f75eb3e"
+      }
+    ],
+    "assetHashes": {
+      "motion": "24ac91c818afb446a40f202ead714cdc30eb5d1516724303161b68566bb4a591",
+      "acting": "41f4a4dc6507fa7683ded12935f3afe22d08d1ceb731c4c0044620298306aae6"
+    },
+    "specSha256": "4cd7b5a53f3fa2bc8d1ff63286d3ec2b394deae1921e51e92f5e4b3b42bbf0c7",
+    "reviewer": "Codex root, with independent walk_art_pilot visual review"
+  }
+}

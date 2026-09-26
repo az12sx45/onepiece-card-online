@@ -1,0 +1,61 @@
+{
+  "candidate": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\zoro\\east-02.png",
+  "gptOriginal": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-a1c5-7fc2-9c4d-857370899a24\\exec-ecaeb067-a4e7-45ec-a9d0-10ac54d10b08.png",
+  "sha256": "5db85136befee4553915cfd95608b5f4d41c300aa9b147bcfea7b8fd021f3276",
+  "generator": "built-in imagegen",
+  "prompt": "Precise targeted edits to this12cell Zoro partsatlas, keep entire layout/scale/allparts/canonidentity unchanged except3small locations. (1) CELL5 row2col1 torso: REMOVE the protruding empty SHORTSLEEVE TUBE on its screenLEFT edge. Replace that sleeve with a smooth solid shoulder/upperchest sidewall, like an arm-less shirt core. NO cylindricalsleeve, NO hollowopening, NO upperarm, NO sleeveoutline circle, NO arm stump anywhere ontorso. The separate arms already include BOTH whiteshortsleeves. Torso must only be shirtcore with complete hidden shoulder/underarm volume, greenwrap and smallpelviscap. Its contour at shoulder is gentlyrounded down into sidechest; it must not stick outward as a sleeve. Preserve torsooverallheight, chestorientation, collar,greenwrap,pelvis. (2) HEAD1 row1col1 quiet: soften eyebrow furrow to composed neutral Zoro, relaxedstraightclosedmouth; keep exactlysamehead/hairsilhouette/position/direction/neck. (3) HEAD3 row1col3 annoyed: make brows distinctlypincheddown and eyelids narrower, smalltenseflatmouth; sameheadsize/hair/neckposition. Keep head2confident andhead4surprised unchanged. Keep allfour heads right-facing; nearRIGHTearbare, NO eyesscars orclosedinjuredeyes, no facechanges besidesfivefeatures. Allother8 parts EXACTLY unchanged, trueRGBA4:3canvas4columns3rows, notext/grid/shadows.",
+  "direction": "east",
+  "size": [
+    1448,
+    1086
+  ],
+  "mode": "RGBA",
+  "alphaExtrema": [
+    0,
+    255
+  ],
+  "transparentPixelFraction": 0.6297458614409409,
+  "cellOrder": [
+    "quiet-head",
+    "confident-head",
+    "annoyed-head",
+    "surprised-head",
+    "torso-pelvis",
+    "near-arm",
+    "far-arm",
+    "near-leg",
+    "far-leg",
+    "near-foot",
+    "far-foot",
+    "sword-bundle"
+  ],
+  "nearAnatomicalSide": "right",
+  "farAnatomicalSide": "left",
+  "identityReference": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\turnarounds\\zoro-02.png",
+  "officialReference": "https://tamashiiweb.com/item/15043/",
+  "status": "CANON_PARTS_REVIEW_PASS_PENDING_ASSEMBLY",
+  "canonicalPassed": [
+    "Pre-timeskip white shirt, green haramaki, dark pants/boots",
+    "No eye injury or scar",
+    "Left ear only three earrings where anatomically visible",
+    "Left arm only black bandana",
+    "Exactly 3 swords: one white, two dark scabbards"
+  ],
+  "assemblyNotes": [
+    "Use manually authored source rectangles; generated object boundaries may extend outside equal cell cuts.",
+    "Heads share shape within this direction; use same anchors and shared head scale within expression set.",
+    "Cross-direction component scale needs calibration against approved turnaround.",
+    "Torso sleeves may need arm overlap; do not stretch torso or rotate head independently.",
+    "Leg ankle overlap must be hidden inside boot shaft.",
+    "Accessory belongs anatomical right hip; west direction it is far side."
+  ],
+  "notEstablished": [
+    "Joint anchors",
+    "Assembled character fit",
+    "Walking and interaction runtime",
+    "Production acceptance"
+  ],
+  "promptFile": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\zoro\\east-02-prompt.txt",
+  "originalReceipt": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\zoro\\east-02-source-canon-status.json",
+  "originalReceiptSha256": "71b28eeda88d96659f143d1c1ab7e06f547a1ffda7b08adb0d934ab8dce4e19a"
+}

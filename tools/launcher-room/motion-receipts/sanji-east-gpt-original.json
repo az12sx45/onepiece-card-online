@@ -1,0 +1,44 @@
+{
+  "key": "sanji",
+  "dir": "east",
+  "version": 1,
+  "source": "exec-709cb2ae-71f3-454d-bb07-daf36cac596f.png",
+  "status": "CANDIDATE_VISUALLY_REVIEWED",
+  "review": "East near right eye visible, left eye concealed by pre-timeskip fringe; visible right brow curl retained in all expressions. Continuous sleeves and trousers, knees/boots east. Solid dark shoulder caps; blue collar stub remains on head and torso, overlap calibrated in rig. Optional hand unused.",
+  "generatedWith": "GPT imagegen built-in",
+  "generatedOriginal": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-1739-7141-90bd-461600d8694f\\exec-709cb2ae-71f3-454d-bb07-daf36cac596f.png",
+  "output": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\sanji\\east-01.png",
+  "sha256": "f852b8d9561bfaa363eb950f46a78c40878e0c3735a6afbbb9a92f1b37b0a723",
+  "date": "2026-09-27",
+  "prompt": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\sanji\\east-01-prompt.txt",
+  "imageQA": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\sanji\\east-01-image-qa.json",
+  "identityProvenance": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\turnarounds\\sanji-01-provenance.json",
+  "localImageEdits": "None. Generated original copied unchanged; image read-only QA, downstream Canvas rig is separately identified.",
+  "schema": {
+    "grid": [
+      4,
+      3
+    ],
+    "cells": [
+      "head_quiet",
+      "head_happy",
+      "head_annoyed",
+      "head_surprise",
+      "torso_pelvis",
+      "nearArm",
+      "farArm",
+      "nearLeg",
+      "farLeg",
+      "nearFoot",
+      "farFoot",
+      "accessory_or_optional_hand"
+    ],
+    "nearSide": "RIGHT"
+  },
+  "limitations": [
+    "Faint alpha fringe/specks retained in original GPT output; renderer cleanup separate.",
+    "Generated part padding and anatomical joint placements require custom rectangles and rig calibration.",
+    "Head expression outlines are close but not pixel-identical; common crown anchor is required.",
+    "Candidate rig atlas is not runtime/gameplay/deployment acceptance."
+  ]
+}

@@ -1,0 +1,656 @@
+{
+  "scope": "Four actual authored speaker/listener turns, local browser fixture",
+  "mode": "chat",
+  "accepted": true,
+  "turns": [
+    {
+      "type": "chat",
+      "phase": "speaking",
+      "sceneId": "zoro-sanji-1",
+      "sceneCursor": 0,
+      "pair": "sanji:zoro",
+      "turnIndex": 0,
+      "turns": 4,
+      "line": "份量怎麼比昨天少。抗議",
+      "samples": [
+        {
+          "key": "c:room-character-zoro",
+          "direction": "east",
+          "pose": "talk_annoyed",
+          "frame": "8",
+          "source": "acting_v2",
+          "image": "turn-0-zoro-0-8.png"
+        },
+        {
+          "key": "c:room-character-sanji",
+          "direction": "west",
+          "pose": "listen",
+          "frame": "28",
+          "source": "acting_v2",
+          "image": "turn-0-sanji-1-28.png"
+        },
+        {
+          "key": "c:room-character-zoro",
+          "direction": "east",
+          "pose": "talk_annoyed",
+          "frame": "9",
+          "source": "acting_v2",
+          "image": "turn-0-zoro-2-9.png"
+        },
+        {
+          "key": "c:room-character-sanji",
+          "direction": "west",
+          "pose": "listen",
+          "frame": "29",
+          "source": "acting_v2",
+          "image": "turn-0-sanji-3-29.png"
+        },
+        {
+          "key": "c:room-character-zoro",
+          "direction": "east",
+          "pose": "talk_annoyed",
+          "frame": "10",
+          "source": "acting_v2",
+          "image": "turn-0-zoro-4-10.png"
+        },
+        {
+          "key": "c:room-character-zoro",
+          "direction": "east",
+          "pose": "talk_annoyed",
+          "frame": "11",
+          "source": "acting_v2",
+          "image": "turn-0-zoro-5-11.png"
+        },
+        {
+          "key": "c:room-character-sanji",
+          "direction": "west",
+          "pose": "listen",
+          "frame": "30",
+          "source": "acting_v2",
+          "image": "turn-0-sanji-6-30.png"
+        },
+        {
+          "key": "c:room-character-sanji",
+          "direction": "west",
+          "pose": "listen",
+          "frame": "31",
+          "source": "acting_v2",
+          "image": "turn-0-sanji-7-31.png"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "phase": "speaking",
+      "sceneId": "zoro-sanji-1",
+      "sceneCursor": 0,
+      "pair": "sanji:zoro",
+      "turnIndex": 1,
+      "turns": 4,
+      "line": "另一盤還在我手上，急什麼，綠藻頭。抗議",
+      "samples": [
+        {
+          "key": "c:room-character-zoro",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "28",
+          "source": "acting_v2",
+          "image": "turn-1-zoro-0-28.png"
+        },
+        {
+          "key": "c:room-character-sanji",
+          "direction": "west",
+          "pose": "talk_annoyed",
+          "frame": "8",
+          "source": "acting_v2",
+          "image": "turn-1-sanji-1-8.png"
+        },
+        {
+          "key": "c:room-character-sanji",
+          "direction": "west",
+          "pose": "talk_annoyed",
+          "frame": "9",
+          "source": "acting_v2",
+          "image": "turn-1-sanji-2-9.png"
+        },
+        {
+          "key": "c:room-character-zoro",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "29",
+          "source": "acting_v2",
+          "image": "turn-1-zoro-3-29.png"
+        },
+        {
+          "key": "c:room-character-sanji",
+          "direction": "west",
+          "pose": "talk_annoyed",
+          "frame": "10",
+          "source": "acting_v2",
+          "image": "turn-1-sanji-4-10.png"
+        },
+        {
+          "key": "c:room-character-sanji",
+          "direction": "west",
+          "pose": "talk_annoyed",
+          "frame": "11",
+          "source": "acting_v2",
+          "image": "turn-1-sanji-5-11.png"
+        },
+        {
+          "key": "c:room-character-zoro",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "30",
+          "source": "acting_v2",
+          "image": "turn-1-zoro-6-30.png"
+        },
+        {
+          "key": "c:room-character-zoro",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "31",
+          "source": "acting_v2",
+          "image": "turn-1-zoro-7-31.png"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "phase": "speaking",
+      "sceneId": "zoro-sanji-1",
+      "sceneCursor": 0,
+      "pair": "sanji:zoro",
+      "turnIndex": 2,
+      "turns": 4,
+      "line": "誰急了。放這邊。點頭",
+      "samples": [
+        {
+          "key": "c:room-character-zoro",
+          "direction": "east",
+          "pose": "idle",
+          "frame": "0",
+          "source": "acting_v2",
+          "image": "turn-2-zoro-0-0.png"
+        },
+        {
+          "key": "c:room-character-sanji",
+          "direction": "west",
+          "pose": "talk_happy",
+          "frame": "4",
+          "source": "acting_v2",
+          "image": "turn-2-sanji-1-4.png"
+        },
+        {
+          "key": "c:room-character-sanji",
+          "direction": "west",
+          "pose": "talk_happy",
+          "frame": "5",
+          "source": "acting_v2",
+          "image": "turn-2-sanji-2-5.png"
+        },
+        {
+          "key": "c:room-character-zoro",
+          "direction": "east",
+          "pose": "idle",
+          "frame": "1",
+          "source": "acting_v2",
+          "image": "turn-2-zoro-3-1.png"
+        },
+        {
+          "key": "c:room-character-sanji",
+          "direction": "west",
+          "pose": "talk_happy",
+          "frame": "6",
+          "source": "acting_v2",
+          "image": "turn-2-sanji-4-6.png"
+        },
+        {
+          "key": "c:room-character-sanji",
+          "direction": "west",
+          "pose": "talk_happy",
+          "frame": "7",
+          "source": "acting_v2",
+          "image": "turn-2-sanji-5-7.png"
+        },
+        {
+          "key": "c:room-character-zoro",
+          "direction": "east",
+          "pose": "idle",
+          "frame": "2",
+          "source": "acting_v2",
+          "image": "turn-2-zoro-6-2.png"
+        },
+        {
+          "key": "c:room-character-zoro",
+          "direction": "east",
+          "pose": "idle",
+          "frame": "3",
+          "source": "acting_v2",
+          "image": "turn-2-zoro-7-3.png"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "phase": "speaking",
+      "sceneId": "zoro-sanji-1",
+      "sceneCursor": 0,
+      "pair": "sanji:zoro",
+      "turnIndex": 3,
+      "turns": 4,
+      "line": "自己拿。熱的那盤在下面，別燙到。說明",
+      "samples": [
+        {
+          "key": "c:room-character-zoro",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "28",
+          "source": "acting_v2",
+          "image": "turn-3-zoro-0-28.png"
+        },
+        {
+          "key": "c:room-character-sanji",
+          "direction": "west",
+          "pose": "focused_use",
+          "frame": "16",
+          "source": "acting_v2",
+          "image": "turn-3-sanji-1-16.png"
+        },
+        {
+          "key": "c:room-character-sanji",
+          "direction": "west",
+          "pose": "focused_use",
+          "frame": "17",
+          "source": "acting_v2",
+          "image": "turn-3-sanji-2-17.png"
+        },
+        {
+          "key": "c:room-character-zoro",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "29",
+          "source": "acting_v2",
+          "image": "turn-3-zoro-3-29.png"
+        },
+        {
+          "key": "c:room-character-sanji",
+          "direction": "west",
+          "pose": "focused_use",
+          "frame": "18",
+          "source": "acting_v2",
+          "image": "turn-3-sanji-4-18.png"
+        },
+        {
+          "key": "c:room-character-sanji",
+          "direction": "west",
+          "pose": "focused_use",
+          "frame": "19",
+          "source": "acting_v2",
+          "image": "turn-3-sanji-5-19.png"
+        },
+        {
+          "key": "c:room-character-zoro",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "30",
+          "source": "acting_v2",
+          "image": "turn-3-zoro-6-30.png"
+        },
+        {
+          "key": "c:room-character-zoro",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "31",
+          "source": "acting_v2",
+          "image": "turn-3-zoro-7-31.png"
+        }
+      ]
+    }
+  ],
+  "visualAcceptance": false,
+  "errors": [],
+  "missingAssets": [],
+  "artAliases": {},
+  "captureSecurity": "Local QA Chromium disables web security solely to export opui canvas pixels; not an auth or packaged security test",
+  "syntheticArt": false,
+  "candidateRoot": "D:/Codex_Release_Worktrees/launcher-room-animation-1.1.13",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "scripts": {
+    "launcher-room-motion-data.js": "504fb344582f3010c487ed7fb6a735161c3e205770f7bb2692d57df1514bdd1d",
+    "launcher-room-dialogue.js": "e1f106d2ffeacdbe49a72ff53c75c8f17b283b0e34c092d0f5c860cb14d7fc91",
+    "launcher-room-motion.js": "5f41e23f83f43da53f011f0f45c8b982b7c2a5ee6998b634e0e1b4460411a43c",
+    "launcher-room.js": "17d716244be8f9aab054e698e3d302e69d11ced38824facceacacc2fdd7f3b1d"
+  },
+  "assets": [
+    {
+      "path": "images/launcher_room/motion_v2/zoro/east.webp",
+      "sha256": "4f423707ddb7565966a6bdc2e9fde82698091e67ca1a9ace9e592f611381d421"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/zoro/west.webp",
+      "sha256": "d88bf75e2912932eb5584a67d4d43ea409487c8a5bb0a6302bfbc3278bbaf997"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/zoro/north.webp",
+      "sha256": "b8d5d32691a00fcf274ba3b1745539f8bdf2904d1cc169d8892dbfd92ea4de78"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/zoro/south.webp",
+      "sha256": "037494364f06abca59acefc809fb72fd0a774c53c7c7f7601dfb65f3a9153dac"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/zoro/east.webp",
+      "sha256": "dc28ab37a3cd983017c96d508f39212f787d883e129d93fffd2678fed4f5d9cf"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/zoro/west.webp",
+      "sha256": "8a30d15e5f251c26c233233c99cfd9c480b47074f9d38c3396fcce7451b657db"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/zoro/north.webp",
+      "sha256": "a63c8e642ef2f4124ba04f0bf6b954c990ca7d2f5a88bfd49e8d60742a71e4cc"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/zoro/south.webp",
+      "sha256": "fbbda73ec692173d76435288b0ddaa7ab8985acdcf02e3a545cfb30399c6eedf"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/sanji/east.webp",
+      "sha256": "9a520a9ca338ef2f627a31eabada86739bff95b9d594428d4571d271ffe0e6f0"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/sanji/west.webp",
+      "sha256": "d323531b56b98ac864d65d15ac9446405fe04e11b48eea85eaf38d8c1f44b04e"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/sanji/north.webp",
+      "sha256": "e9c83952b3e091c24902beb1dd43bf2f0c212b137a5396fe16c30559c6308bd7"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/sanji/south.webp",
+      "sha256": "b03bd3c19e94bdf9cc411db861eb3c2176cb0caace5feba0b9bb97f928d080ce"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/sanji/east.webp",
+      "sha256": "cbf6471e9b1e7cbe397694387311f5694d1ac1f3f5c61794bde4fe2f6cd60cc1"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/sanji/west.webp",
+      "sha256": "00103771ff624e6a273ae97abe910dfa7be78f624377b52f62e17ad947129c5e"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/sanji/north.webp",
+      "sha256": "154a9b89aa43ccaad850f9d07185a028aa16098b0b4bfa67cc849923273aeeb8"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/sanji/south.webp",
+      "sha256": "6783f8b70defafeeb227eb267dd3cfc1cec710639e2d62322562537415a65cb0"
+    }
+  ],
+  "renderContract": {
+    "shape": {
+      "columns": 8,
+      "rows": 4,
+      "frames": 32,
+      "cell": 128,
+      "width": 1024,
+      "height": 512,
+      "rootX": 64,
+      "rootY": 112
+    },
+    "manifest": {
+      "schema": "one-piece-room-motion/2",
+      "shape": {
+        "walk": {
+          "columns": 8,
+          "rows": 4,
+          "frames": 32,
+          "cell": 128,
+          "root": [
+            64,
+            112
+          ],
+          "depth": {
+            "rows": 20,
+            "totalCells": 160,
+            "slopeVariants": [
+              -0.52,
+              -0.26,
+              0,
+              0.26,
+              0.52
+            ]
+          }
+        },
+        "actions": {
+          "columns": 8,
+          "rows": 4,
+          "frames": 32,
+          "actionCount": 8,
+          "beatsPerAction": 4,
+          "cell": 128,
+          "root": [
+            64,
+            112
+          ]
+        }
+      },
+      "characters": {
+        "brook": {
+          "stride": {
+            "east": 28,
+            "north": 17.36,
+            "south": 17.36,
+            "west": 28
+          },
+          "speed": {
+            "east": 27,
+            "north": 16.74,
+            "south": 16.74,
+            "west": 27
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "chopper": {
+          "stride": {
+            "east": 17,
+            "north": 10.54,
+            "south": 10.54,
+            "west": 17
+          },
+          "speed": {
+            "east": 21,
+            "north": 13.02,
+            "south": 13.02,
+            "west": 21
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "franky": {
+          "stride": {
+            "east": 25,
+            "north": 15.5,
+            "south": 15.5,
+            "west": 25
+          },
+          "speed": {
+            "east": 26,
+            "north": 16.12,
+            "south": 16.12,
+            "west": 26
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "jinbe": {
+          "stride": {
+            "east": 22,
+            "north": 13.64,
+            "south": 13.64,
+            "west": 22
+          },
+          "speed": {
+            "east": 23,
+            "north": 14.26,
+            "south": 14.26,
+            "west": 23
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "luffy": {
+          "stride": {
+            "east": 24,
+            "north": 14.879999999999999,
+            "south": 15,
+            "west": 24
+          },
+          "speed": {
+            "east": 26,
+            "north": 16.12,
+            "south": 17,
+            "west": 26
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "nami": {
+          "stride": {
+            "east": 23,
+            "north": 14.26,
+            "south": 14.26,
+            "west": 23
+          },
+          "speed": {
+            "east": 25,
+            "north": 15.5,
+            "south": 15.5,
+            "west": 25
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "robin": {
+          "stride": {
+            "east": 24,
+            "north": 14.879999999999999,
+            "south": 14.879999999999999,
+            "west": 24
+          },
+          "speed": {
+            "east": 25,
+            "north": 15.5,
+            "south": 15.5,
+            "west": 25
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "sanji": {
+          "stride": {
+            "east": 27,
+            "north": 16.74,
+            "south": 16.74,
+            "west": 27
+          },
+          "speed": {
+            "east": 28,
+            "north": 17.36,
+            "south": 17.36,
+            "west": 28
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "usopp": {
+          "stride": {
+            "east": 25,
+            "north": 15.5,
+            "south": 15.5,
+            "west": 25
+          },
+          "speed": {
+            "east": 26,
+            "north": 16.12,
+            "south": 16.12,
+            "west": 26
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "zoro": {
+          "stride": {
+            "east": 26,
+            "north": 16.12,
+            "south": 16.12,
+            "west": 26
+          },
+          "speed": {
+            "east": 27,
+            "north": 16.74,
+            "south": 16.74,
+            "west": 27
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        }
+      }
+    },
+    "actors": [
+      {
+        "key": "c:room-character-zoro",
+        "rootOffset": "12.5%",
+        "canvas": [
+          128,
+          128
+        ]
+      },
+      {
+        "key": "c:room-character-sanji",
+        "rootOffset": "12.5%",
+        "canvas": [
+          128,
+          128
+        ]
+      }
+    ]
+  },
+  "savedRoomUnchanged": true,
+  "video": "normal.webm"
+}

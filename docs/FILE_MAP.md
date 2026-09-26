@@ -1,5 +1,20 @@
 # File Map
 
+## 2026-09-27 房間四向步態重製（1.1.13 候選）
+
+| 檔案 | 用途 |
+| --- | --- |
+| `docs/LAUNCHER_ROOM_MOTION_SPEC_20260926.md`、`LAUNCHER_ROOM_MOTION_ART_20260926.json` | 十二部件四方向、32 相位、地板斜率、來源與成品 SHA、動態驗收規格與證據狀態。 |
+| `docs/LAUNCHER_CREW_CANON_20260926.md` | 官方研究、45 組角色關係、原創日常劇本和表演語義。 |
+| `desktop/launcher-room-motion.js`、`launcher-room-motion-data.js` | 方向圖預載／解碼、動作拍數、實際路程相位和各角色步幅／速度。 |
+| `desktop/launcher-room.js/css`、`launcher-room-dialogue.js` | 房間走位、場景說話次序、聽者反應、家具面向、點選與中斷。 |
+| `public/images/launcher_room/motion_v2/`、`acting_v2/`、`portrait_v2/` | 十名角色 × 四方向步態及互動，共 80 張圖集與 10 張一致角色縮圖。 |
+| `tools/launcher-room/rig-engine.js`、`bake-rig.js`、`build-rig-release.js`、`encode-rig-atlas.py`、`validate-rig-manifest.js` | GPT 部件骨架烘焙、lossless alpha 編碼、可重現匯入和來源／review gate。 |
+| `tools/launcher-room/motion-source-png/`、`motion-receipts/`、`rig-specs/`、`rig-selection.json` | GPT 原稿、實際提示詞、固定關節／尺度／遮罩和選取紀錄。 |
+| `tools/launcher-room/rig-build/` | manifest 直接引用的 80 張原始烘焙 PNG 與 80 份 report JSON，保留縮圖與 portrait 来源 SHA 可核驗。preview／strip 中間圖不發布。 |
+| `tools/launcher-room/README-rig.md` | 依賴、建置指令、圖集契約與視覺驗收限制。 |
+| `scripts/launcher_room_motion_qa.js`、`launcher_room_dialogue_qa.js`、`launcher_room_browser_qa.js`、`desktop_launcher_package_qa.js` | 播放、對話、瀏覽器與完整封裝驗證，與視覺驗收分別記錄。 |
+
 ## 2026-09-25 啟動器 1.1.12 房間比例、對話與夥伴金幣（已部署）
 
 | 檔案 | 用途 |

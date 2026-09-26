@@ -1,0 +1,58 @@
+{
+  "candidate": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\zoro\\west-01.png",
+  "gptOriginal": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-a1c5-7fc2-9c4d-857370899a24\\exec-1cd965ab-a4be-4874-885d-2128f009fead.png",
+  "sha256": "acb7281b6be6425a0a752233b03d23594c7fdf72dd63a2a7331212dd7496e6ea",
+  "generator": "built-in imagegen",
+  "prompt": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\zoro\\west-01-prompt.txt",
+  "direction": "west",
+  "size": [
+    1448,
+    1086
+  ],
+  "mode": "RGBA",
+  "alphaExtrema": [
+    0,
+    255
+  ],
+  "transparentPixelFraction": 0.6243380086077959,
+  "cellOrder": [
+    "quiet-head",
+    "confident-head",
+    "annoyed-head",
+    "surprised-head",
+    "torso-pelvis",
+    "near-arm",
+    "far-arm",
+    "near-leg",
+    "far-leg",
+    "near-foot",
+    "far-foot",
+    "sword-bundle"
+  ],
+  "nearAnatomicalSide": "left",
+  "farAnatomicalSide": "right",
+  "identityReference": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\turnarounds\\zoro-02.png",
+  "officialReference": "https://tamashiiweb.com/item/15043/",
+  "status": "CANON_PARTS_REVIEW_PASS_PENDING_ASSEMBLY",
+  "canonicalPassed": [
+    "Pre-timeskip white shirt, green haramaki, dark pants/boots",
+    "No eye injury or scar",
+    "Left ear only three earrings where anatomically visible",
+    "Left arm only black bandana",
+    "Exactly 3 swords: one white, two dark scabbards"
+  ],
+  "assemblyNotes": [
+    "Use manually authored source rectangles; generated object boundaries may extend outside equal cell cuts.",
+    "Heads share shape within this direction; use same anchors and shared head scale within expression set.",
+    "Cross-direction component scale needs calibration against approved turnaround.",
+    "Torso sleeves may need arm overlap; do not stretch torso or rotate head independently.",
+    "Leg ankle overlap must be hidden inside boot shaft.",
+    "Accessory belongs anatomical right hip; west direction it is far side."
+  ],
+  "notEstablished": [
+    "Joint anchors",
+    "Assembled character fit",
+    "Walking and interaction runtime",
+    "Production acceptance"
+  ]
+}

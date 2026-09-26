@@ -1,0 +1,44 @@
+{
+  "key": "nami",
+  "dir": "south",
+  "version": 1,
+  "source": "exec-9f17c4f9-a0f2-470f-ba6b-ce43c366371b.png",
+  "status": "CANDIDATE_VISUALLY_REVIEWED",
+  "review": "Four coherent frontal expressions, front Vneck shirt and paired circles on both hips, front knee/toe views. Complete limb overlaps; no added tattoo/accessory.",
+  "generatedWith": "GPT imagegen built-in",
+  "generatedOriginal": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-1739-7141-90bd-461600d8694f\\exec-9f17c4f9-a0f2-470f-ba6b-ce43c366371b.png",
+  "output": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\nami\\south-01.png",
+  "sha256": "37af3ff43c7b3d8c6723a64a30738a465bda39f6fc095c86c97356920ba4b73b",
+  "date": "2026-09-27",
+  "prompt": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\nami\\south-01-prompt.txt",
+  "imageQA": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\nami\\south-01-image-qa.json",
+  "identityProvenance": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\turnarounds\\nami-03-provenance.json",
+  "localImageEdits": "None. Generated original copied unchanged; image read-only QA, downstream Canvas rig is separately identified.",
+  "schema": {
+    "grid": [
+      4,
+      3
+    ],
+    "cells": [
+      "head_quiet",
+      "head_happy",
+      "head_annoyed",
+      "head_surprise",
+      "torso_pelvis",
+      "nearArm",
+      "farArm",
+      "nearLeg",
+      "farLeg",
+      "nearFoot",
+      "farFoot",
+      "accessory_or_optional_hand"
+    ],
+    "nearSide": "RIGHT"
+  },
+  "limitations": [
+    "Faint alpha fringe/specks retained in original GPT output; renderer cleanup separate.",
+    "Generated part padding and anatomical joint placements require custom rectangles and rig calibration.",
+    "Head expression outlines are close but not pixel-identical; common crown anchor is required.",
+    "Candidate rig atlas is not runtime/gameplay/deployment acceptance."
+  ]
+}

@@ -1,0 +1,656 @@
+{
+  "scope": "Four actual authored speaker/listener turns, local browser fixture",
+  "mode": "chat",
+  "accepted": true,
+  "turns": [
+    {
+      "type": "chat",
+      "phase": "speaking",
+      "sceneId": "brook-jinbe-1",
+      "sceneCursor": 0,
+      "pair": "brook:jinbe",
+      "turnIndex": 0,
+      "turns": 4,
+      "line": "這段想留一點空白，讓海浪接進來。思考",
+      "samples": [
+        {
+          "key": "c:room-character-brook",
+          "direction": "east",
+          "pose": "focused_use",
+          "frame": "16",
+          "source": "acting_v2",
+          "image": "turn-0-brook-0-16.png"
+        },
+        {
+          "key": "c:room-character-jinbe",
+          "direction": "west",
+          "pose": "listen",
+          "frame": "28",
+          "source": "acting_v2",
+          "image": "turn-0-jinbe-1-28.png"
+        },
+        {
+          "key": "c:room-character-brook",
+          "direction": "east",
+          "pose": "focused_use",
+          "frame": "17",
+          "source": "acting_v2",
+          "image": "turn-0-brook-2-17.png"
+        },
+        {
+          "key": "c:room-character-jinbe",
+          "direction": "west",
+          "pose": "listen",
+          "frame": "29",
+          "source": "acting_v2",
+          "image": "turn-0-jinbe-3-29.png"
+        },
+        {
+          "key": "c:room-character-brook",
+          "direction": "east",
+          "pose": "focused_use",
+          "frame": "18",
+          "source": "acting_v2",
+          "image": "turn-0-brook-4-18.png"
+        },
+        {
+          "key": "c:room-character-brook",
+          "direction": "east",
+          "pose": "focused_use",
+          "frame": "19",
+          "source": "acting_v2",
+          "image": "turn-0-brook-5-19.png"
+        },
+        {
+          "key": "c:room-character-jinbe",
+          "direction": "west",
+          "pose": "listen",
+          "frame": "30",
+          "source": "acting_v2",
+          "image": "turn-0-jinbe-6-30.png"
+        },
+        {
+          "key": "c:room-character-jinbe",
+          "direction": "west",
+          "pose": "listen",
+          "frame": "31",
+          "source": "acting_v2",
+          "image": "turn-0-jinbe-7-31.png"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "phase": "speaking",
+      "sceneId": "brook-jinbe-1",
+      "sceneCursor": 0,
+      "pair": "brook:jinbe",
+      "turnIndex": 1,
+      "turns": 4,
+      "line": "很好，浪小的時候，就連安靜也聽得見。交談",
+      "samples": [
+        {
+          "key": "c:room-character-brook",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "28",
+          "source": "acting_v2",
+          "image": "turn-1-brook-0-28.png"
+        },
+        {
+          "key": "c:room-character-jinbe",
+          "direction": "west",
+          "pose": "talk_happy",
+          "frame": "4",
+          "source": "acting_v2",
+          "image": "turn-1-jinbe-1-4.png"
+        },
+        {
+          "key": "c:room-character-jinbe",
+          "direction": "west",
+          "pose": "talk_happy",
+          "frame": "5",
+          "source": "acting_v2",
+          "image": "turn-1-jinbe-2-5.png"
+        },
+        {
+          "key": "c:room-character-brook",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "29",
+          "source": "acting_v2",
+          "image": "turn-1-brook-3-29.png"
+        },
+        {
+          "key": "c:room-character-jinbe",
+          "direction": "west",
+          "pose": "talk_happy",
+          "frame": "6",
+          "source": "acting_v2",
+          "image": "turn-1-jinbe-4-6.png"
+        },
+        {
+          "key": "c:room-character-jinbe",
+          "direction": "west",
+          "pose": "talk_happy",
+          "frame": "7",
+          "source": "acting_v2",
+          "image": "turn-1-jinbe-5-7.png"
+        },
+        {
+          "key": "c:room-character-brook",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "30",
+          "source": "acting_v2",
+          "image": "turn-1-brook-6-30.png"
+        },
+        {
+          "key": "c:room-character-brook",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "31",
+          "source": "acting_v2",
+          "image": "turn-1-brook-7-31.png"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "phase": "speaking",
+      "sceneId": "brook-jinbe-1",
+      "sceneCursor": 0,
+      "pair": "brook:jinbe",
+      "turnIndex": 2,
+      "turns": 4,
+      "line": "您願意坐到這首結束嗎？招呼",
+      "samples": [
+        {
+          "key": "c:room-character-brook",
+          "direction": "east",
+          "pose": "wave",
+          "frame": "24",
+          "source": "acting_v2",
+          "image": "turn-2-brook-0-24.png"
+        },
+        {
+          "key": "c:room-character-jinbe",
+          "direction": "west",
+          "pose": "idle",
+          "frame": "0",
+          "source": "acting_v2",
+          "image": "turn-2-jinbe-1-0.png"
+        },
+        {
+          "key": "c:room-character-brook",
+          "direction": "east",
+          "pose": "wave",
+          "frame": "25",
+          "source": "acting_v2",
+          "image": "turn-2-brook-2-25.png"
+        },
+        {
+          "key": "c:room-character-jinbe",
+          "direction": "west",
+          "pose": "idle",
+          "frame": "1",
+          "source": "acting_v2",
+          "image": "turn-2-jinbe-3-1.png"
+        },
+        {
+          "key": "c:room-character-brook",
+          "direction": "east",
+          "pose": "wave",
+          "frame": "26",
+          "source": "acting_v2",
+          "image": "turn-2-brook-4-26.png"
+        },
+        {
+          "key": "c:room-character-brook",
+          "direction": "east",
+          "pose": "wave",
+          "frame": "27",
+          "source": "acting_v2",
+          "image": "turn-2-brook-5-27.png"
+        },
+        {
+          "key": "c:room-character-jinbe",
+          "direction": "west",
+          "pose": "idle",
+          "frame": "2",
+          "source": "acting_v2",
+          "image": "turn-2-jinbe-6-2.png"
+        },
+        {
+          "key": "c:room-character-jinbe",
+          "direction": "west",
+          "pose": "idle",
+          "frame": "3",
+          "source": "acting_v2",
+          "image": "turn-2-jinbe-7-3.png"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "phase": "speaking",
+      "sceneId": "brook-jinbe-1",
+      "sceneCursor": 0,
+      "pair": "brook:jinbe",
+      "turnIndex": 3,
+      "turns": 4,
+      "line": "願意。茶還熱，老夫不急著走。休息",
+      "samples": [
+        {
+          "key": "c:room-character-brook",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "28",
+          "source": "acting_v2",
+          "image": "turn-3-brook-0-28.png"
+        },
+        {
+          "key": "c:room-character-jinbe",
+          "direction": "west",
+          "pose": "sit",
+          "frame": "20",
+          "source": "acting_v2",
+          "image": "turn-3-jinbe-1-20.png"
+        },
+        {
+          "key": "c:room-character-jinbe",
+          "direction": "west",
+          "pose": "sit",
+          "frame": "21",
+          "source": "acting_v2",
+          "image": "turn-3-jinbe-2-21.png"
+        },
+        {
+          "key": "c:room-character-brook",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "29",
+          "source": "acting_v2",
+          "image": "turn-3-brook-3-29.png"
+        },
+        {
+          "key": "c:room-character-jinbe",
+          "direction": "west",
+          "pose": "sit",
+          "frame": "22",
+          "source": "acting_v2",
+          "image": "turn-3-jinbe-4-22.png"
+        },
+        {
+          "key": "c:room-character-jinbe",
+          "direction": "west",
+          "pose": "sit",
+          "frame": "23",
+          "source": "acting_v2",
+          "image": "turn-3-jinbe-5-23.png"
+        },
+        {
+          "key": "c:room-character-brook",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "30",
+          "source": "acting_v2",
+          "image": "turn-3-brook-6-30.png"
+        },
+        {
+          "key": "c:room-character-brook",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "31",
+          "source": "acting_v2",
+          "image": "turn-3-brook-7-31.png"
+        }
+      ]
+    }
+  ],
+  "visualAcceptance": false,
+  "errors": [],
+  "missingAssets": [],
+  "artAliases": {},
+  "captureSecurity": "Local QA Chromium disables web security solely to export opui canvas pixels; not an auth or packaged security test",
+  "syntheticArt": false,
+  "candidateRoot": "D:/Codex_Release_Worktrees/launcher-room-animation-1.1.13",
+  "viewport": {
+    "width": 1280,
+    "height": 1000
+  },
+  "scripts": {
+    "launcher-room-motion-data.js": "504fb344582f3010c487ed7fb6a735161c3e205770f7bb2692d57df1514bdd1d",
+    "launcher-room-dialogue.js": "e1f106d2ffeacdbe49a72ff53c75c8f17b283b0e34c092d0f5c860cb14d7fc91",
+    "launcher-room-motion.js": "5f41e23f83f43da53f011f0f45c8b982b7c2a5ee6998b634e0e1b4460411a43c",
+    "launcher-room.js": "17d716244be8f9aab054e698e3d302e69d11ced38824facceacacc2fdd7f3b1d"
+  },
+  "assets": [
+    {
+      "path": "images/launcher_room/motion_v2/brook/east.webp",
+      "sha256": "73603e4b7318c1bd4bd62861d8524aa0f451b2c756cd6763d251d7406f1be6de"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/brook/west.webp",
+      "sha256": "44fc3c89d9fe6616b18b58d64e7ec98a160abef1a3c3f7a35c38daa05ea6fdf1"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/brook/north.webp",
+      "sha256": "8bf672f520e5e1a2ffef100df2525db6b902c742500756fb8f4c8156ff4dea78"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/brook/south.webp",
+      "sha256": "12fe617d507e74d6a14ff23083e25b2a14b827d3b972cd1354dc34784e372d79"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/brook/east.webp",
+      "sha256": "33a803394c06bf8fda3c0d19d1298905c8210b345240280d4367689e2502f83b"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/brook/west.webp",
+      "sha256": "d7aeb8db921a2f477454ecffe62b89b81633b474213f97449094f002135dcbf3"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/brook/north.webp",
+      "sha256": "31e77e1022b77e33cb037a7dc273d75db8544d945bb5892312a3bd9ea6be1cca"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/brook/south.webp",
+      "sha256": "9a5cb0ad0419e0be9027e388813b7fea458f506d0f1ad1a7026a9517a8fd62fd"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/jinbe/east.webp",
+      "sha256": "a78e17989da193c8efac83a1c1fc2eb22c6a2ea1b49c087ec3368ac18d7ac9ca"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/jinbe/west.webp",
+      "sha256": "e62b36ff534cc8501f58a37217cd3706459bfab800a9af07ce62f18c540f589d"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/jinbe/north.webp",
+      "sha256": "c2be0326847d0b9e4e3cc0b66a10d9701df96bb89508e1e4116f21ab0f9022fd"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/jinbe/south.webp",
+      "sha256": "24ac91c818afb446a40f202ead714cdc30eb5d1516724303161b68566bb4a591"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/jinbe/east.webp",
+      "sha256": "8343cdd0903f39b034c84916bea25e97825485975bf878a95d8e7fe4b4e55973"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/jinbe/west.webp",
+      "sha256": "c79a87bb8cf448d80b8b65beb2262d71dc6de9204d447b2e02b9ab359a60aafc"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/jinbe/north.webp",
+      "sha256": "6619d2304a7ca5d5a493bfc998b0e5b21aac013cdaebd994d460ef62ac5fe9d8"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/jinbe/south.webp",
+      "sha256": "41f4a4dc6507fa7683ded12935f3afe22d08d1ceb731c4c0044620298306aae6"
+    }
+  ],
+  "renderContract": {
+    "shape": {
+      "columns": 8,
+      "rows": 4,
+      "frames": 32,
+      "cell": 128,
+      "width": 1024,
+      "height": 512,
+      "rootX": 64,
+      "rootY": 112
+    },
+    "manifest": {
+      "schema": "one-piece-room-motion/2",
+      "shape": {
+        "walk": {
+          "columns": 8,
+          "rows": 4,
+          "frames": 32,
+          "cell": 128,
+          "root": [
+            64,
+            112
+          ],
+          "depth": {
+            "rows": 20,
+            "totalCells": 160,
+            "slopeVariants": [
+              -0.52,
+              -0.26,
+              0,
+              0.26,
+              0.52
+            ]
+          }
+        },
+        "actions": {
+          "columns": 8,
+          "rows": 4,
+          "frames": 32,
+          "actionCount": 8,
+          "beatsPerAction": 4,
+          "cell": 128,
+          "root": [
+            64,
+            112
+          ]
+        }
+      },
+      "characters": {
+        "brook": {
+          "stride": {
+            "east": 28,
+            "north": 17.36,
+            "south": 17.36,
+            "west": 28
+          },
+          "speed": {
+            "east": 27,
+            "north": 16.74,
+            "south": 16.74,
+            "west": 27
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "chopper": {
+          "stride": {
+            "east": 17,
+            "north": 10.54,
+            "south": 10.54,
+            "west": 17
+          },
+          "speed": {
+            "east": 21,
+            "north": 13.02,
+            "south": 13.02,
+            "west": 21
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "franky": {
+          "stride": {
+            "east": 25,
+            "north": 15.5,
+            "south": 15.5,
+            "west": 25
+          },
+          "speed": {
+            "east": 26,
+            "north": 16.12,
+            "south": 16.12,
+            "west": 26
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "jinbe": {
+          "stride": {
+            "east": 22,
+            "north": 13.64,
+            "south": 13.64,
+            "west": 22
+          },
+          "speed": {
+            "east": 23,
+            "north": 14.26,
+            "south": 14.26,
+            "west": 23
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "luffy": {
+          "stride": {
+            "east": 24,
+            "north": 14.879999999999999,
+            "south": 15,
+            "west": 24
+          },
+          "speed": {
+            "east": 26,
+            "north": 16.12,
+            "south": 17,
+            "west": 26
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "nami": {
+          "stride": {
+            "east": 23,
+            "north": 14.26,
+            "south": 14.26,
+            "west": 23
+          },
+          "speed": {
+            "east": 25,
+            "north": 15.5,
+            "south": 15.5,
+            "west": 25
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "robin": {
+          "stride": {
+            "east": 24,
+            "north": 14.879999999999999,
+            "south": 14.879999999999999,
+            "west": 24
+          },
+          "speed": {
+            "east": 25,
+            "north": 15.5,
+            "south": 15.5,
+            "west": 25
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "sanji": {
+          "stride": {
+            "east": 27,
+            "north": 16.74,
+            "south": 16.74,
+            "west": 27
+          },
+          "speed": {
+            "east": 28,
+            "north": 17.36,
+            "south": 17.36,
+            "west": 28
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "usopp": {
+          "stride": {
+            "east": 25,
+            "north": 15.5,
+            "south": 15.5,
+            "west": 25
+          },
+          "speed": {
+            "east": 26,
+            "north": 16.12,
+            "south": 16.12,
+            "west": 26
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "zoro": {
+          "stride": {
+            "east": 26,
+            "north": 16.12,
+            "south": 16.12,
+            "west": 26
+          },
+          "speed": {
+            "east": 27,
+            "north": 16.74,
+            "south": 16.74,
+            "west": 27
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        }
+      }
+    },
+    "actors": [
+      {
+        "key": "c:room-character-brook",
+        "rootOffset": "12.5%",
+        "canvas": [
+          128,
+          128
+        ]
+      },
+      {
+        "key": "c:room-character-jinbe",
+        "rootOffset": "12.5%",
+        "canvas": [
+          128,
+          128
+        ]
+      }
+    ]
+  },
+  "savedRoomUnchanged": true,
+  "video": "normal.webm"
+}

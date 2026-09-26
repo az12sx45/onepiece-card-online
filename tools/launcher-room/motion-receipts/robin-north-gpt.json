@@ -1,0 +1,66 @@
+{
+  "candidate": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\robin\\north-01.png",
+  "gptOriginal": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-a1c5-7fc2-9c4d-857370899a24\\exec-324ab45b-b680-4c02-bceb-480a586b390c.png",
+  "sha256": "067e5ce55dc6fa0e256fca15d373288ef8e82fe78780cf620b6184d06bd6c5ba",
+  "generator": "built-in imagegen",
+  "prompt": "Use case: stylized-concept. Generate independent NORTH true BACK view 12-part rig kit for adult Nico Robin ONE PIECE Enies Lobby outfit. Reference1 authoritative back identity/direction/clothing; reference2 only layout/style. Do not copy profile or add face. 4:3RGBA transparent,4columns3rows,12 isolatedpartswith largegutters,noedgesclipped,text,labels,grid orshadows.\nRow1 four IDENTICAL head+neck backviews: straight shoulderlength blackhair, same hairhighlight/length/silhouette/scale/neckroot, NO face, NO eyes/nose/mouth/ear frontfeatures. Four backheads exactlysame,no fakeexpressions onback. Head widthunder70%cell.\nRow2:5 entirely BACK headlessarmless torso including all black single-dressskirt and hem. Blackcollar/back dress seams,no frontzipper/nocleavage. Patterned white hem withpurplebluedots followsreference. No sleevesonbody, solidhidden shoulders.6 anatomicalRIGHT complete blacklongsleevedarm shoulder-tohand fromrear.7 anatomicalLEFT complete same.8 anatomicalRIGHT leg hiptoankle: shortbareupperthigh then tallblackbootshaft overknee/calf toankle, NO foot.\nRow3:9 anatomicalLEFT same rearleg.10 anatomicalRIGHT separate bootFOOT atankle fromREAR, black heeledsole and heel/Achilles silhouette, no fronttoe visible.11 anatomicalLEFT separate rear heelbootfoot.12 extra relaxed openpalm barehand withblackcuff, optionalgesturepart.\nNeutral nearstraightlimbs. Canonical black shoulderlengthhair and adult elegantchibi proportions exactreference. Legsshould include tallbootshaft; footparts onlyankle/toe/heel unit, no fullkneehighbootduplicate. Allparts faceAWAY. Actualalpha.",
+  "direction": "north",
+  "size": [
+    1448,
+    1086
+  ],
+  "mode": "RGBA",
+  "alphaExtrema": [
+    0,
+    255
+  ],
+  "edgeAlpha128Counts": {
+    "left": 0,
+    "right": 0,
+    "top": 0,
+    "bottom": 0
+  },
+  "nearAnatomicalSide": "right",
+  "identityReference": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\turnarounds\\robin-02.png",
+  "officialReference": "https://tamashiiweb.com/item/15906/",
+  "status": "CANON_PARTS_REVIEW_PASS_PENDING_ASSEMBLY",
+  "cellOrder": [
+    "quiet-head",
+    "warm-smile-head",
+    "concerned-head",
+    "surprised-head",
+    "dress-torso-pelvis",
+    "near-arm",
+    "far-arm",
+    "near-leg-with-bootshaft",
+    "far-leg-with-bootshaft",
+    "near-bootfoot",
+    "far-bootfoot",
+    "spare-open-palm"
+  ],
+  "canonicalPassed": [
+    "Enies Lobby single black zip-front collared dress with patterned white lining",
+    "Straight shoulder-length black hair and blunt bangs, blue eyes",
+    "No hat or sunglasses; no mixing long swept-back hair",
+    "All four directions match head torso and boot direction; north no face/front dress zipper"
+  ],
+  "assemblyNotes": [
+    "Do not render slot12 as hip accessory; it is spare open palm only",
+    "Manual/component source rectangles required; not blind equal grid crop",
+    "Use shared head crown anchor and scale per direction expression set",
+    "Long boot shaft belongs leg; overlap separate boot foot at ankle",
+    "Torso retained round hidden shoulder caps can be occluded by sleeve roots",
+    "East heads include lower collar edge; align complete hair with torso so no double neckline",
+    "North/south torso has small bare thigh caps below skirt; overlap thighs without exposing duplicate joints"
+  ],
+  "notEstablished": [
+    "Exact joint anchors",
+    "Assembled visual fit",
+    "World support sole motion",
+    "Interaction animation quality",
+    "Production acceptance"
+  ],
+  "promptFile": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\robin\\north-01-prompt.txt",
+  "originalReceipt": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\robin\\north-01-source-canon-status.json",
+  "originalReceiptSha256": "661c4e19a963ddd32fa1595fec9a1b8d41d2ced79ad82cc838fe021997164972"
+}

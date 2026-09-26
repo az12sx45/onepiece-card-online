@@ -1,0 +1,217 @@
+{
+  "schema": "one-piece-room-live-frame-review/1",
+  "status": "reviewed",
+  "result": "PASS_WITH_SCOPE",
+  "reviewer": "Codex walk_art_pilot; parent root independently inspected ten desktop continuous contacts, five conversations and both furniture contacts",
+  "recordedAtUtc": "2026-09-26T17:19:42.459873+00:00",
+  "candidateRoot": "D:\\Codex_Release_Worktrees\\launcher-room-animation-1.1.13",
+  "roomScriptSha256": "17d716244be8f9aab054e698e3d302e69d11ced38824facceacacc2fdd7f3b1d",
+  "rendererSha256": "de24e1fa55d835f12e418e12f7dee3199243b3a40394e90ffe8304f8d96edd11",
+  "scope": {
+    "method": "Playwright local bridge fixture loading actual candidate launcher HTML/CSS/JS and actual public assets, no character aliases. Agent visual inspection used live canvas consecutive-phase exports and real stage screenshots. Video files preserve normal render timing and a 0.5x replay.",
+    "viewports": [
+      {
+        "width": 1280,
+        "height": 1000
+      },
+      {
+        "width": 390,
+        "height": 844
+      }
+    ],
+    "walkCases": 20,
+    "directionsPerCharacter": 4,
+    "observedPhasesPerDirection": 32,
+    "consecutivePhaseSequence": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "loopSequence": [
+      30,
+      31,
+      0,
+      1
+    ],
+    "conversationCases": 10,
+    "authoredTurnsPerConversation": 4,
+    "furnitureCases": 16,
+    "actualAssetCount": 80,
+    "normalVideos": 46,
+    "halfSpeedVideos": 46
+  },
+  "visualFindings": {
+    "walk": "All ten characters retain one head/body direction on east, west, north and south. Adjacent phases and 30/31/0/1 loop show low foot lift, stable head scale, connected body parts and no observed pose seam jumps. Start/stop captures return to idle in the facing direction.",
+    "dialogue": "Five pairs cover all ten characters. Four authored turns alternate appropriate speakers and listener reactions, with four action frames observed per actor per turn. Facial expressions and body gestures remain on the character sprite, with head crown stable during expression changes.",
+    "furniture": "Brook and Sanji approach the actual keyboard/table edge for all four rotations. Fixed piano105x75 and table125x75 proportions align hands to surfaces. North-reaching hands are occluded by the back; side hands reach forward. Rear furniture correctly occludes lower body. No floating chair pose or observed penetration. Characters walk back to reserved floor cells after use; saved room unchanged.",
+    "narrow": "390px room uses its existing horizontal scroll area. Captured characters and speech stay inside the shown room area; separate full profile/shop UI regression passed97 checks.",
+    "rejectedAndFixed": "Initial kitchen rotation2 approached bench back. Final routes use the actual work surface by rotation, with Sanji east/west hand calibration. Initial Franky desktop north capture missed phase samples because the QA screenshot call blocked collection; incomplete capture is preserved in capture-retries and a nonblocking complete rerun is the final evidence."
+  },
+  "limits": [
+    "Automated local browser capture and image frame inspection, not human gameplay or a physical phone test.",
+    "No fixed60fps performance claim. Heavy concurrent QA/NSIS load caused a recorded350ms timestamp gap in Franky west consecutive phases; phase adjacency and original timestamps are preserved, not synthesized.",
+    "Half speed is ffmpeg setpts=2*PTS applied to the normal recording; simulation physics were not slowed or altered.",
+    "The isolated room harness does not initialize the full profile header. Full profile/shop UI is covered by final-profile-shop/report.json, not the room-only viewport header.",
+    "No public deployment claim is made by this review."
+  ],
+  "evidence": {
+    "captureIntegrity": {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\capture-integrity.json",
+      "sha256": "aae298c954b32b69e69c4d95b1a439528c978b6e4f34072efb66b49042630ec3"
+    },
+    "captureSummary": {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\capture-summary.json",
+      "sha256": "2b9b0836610bccf1eda6dfac3f6f3b05e14671bb1a9f81b73917142150bf88e9"
+    },
+    "videoIndex": {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\video-index.json",
+      "sha256": "7491656a9f8837d7cca2ff62dd1fc781f19f0da6e170dd0ad899365f958f8ead"
+    },
+    "profileShop": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\final-profile-shop\\report.json",
+    "furnitureContacts": [
+      "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\furniture-contact.png",
+      "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\furniture-contact.png"
+    ],
+    "characterContacts": {
+      "luffy": {
+        "1280": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\continuous-contact.png",
+        "390": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\continuous-contact.png"
+      },
+      "zoro": {
+        "1280": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\continuous-contact.png",
+        "390": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\continuous-contact.png"
+      },
+      "nami": {
+        "1280": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\nami\\continuous-contact.png",
+        "390": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\nami\\continuous-contact.png"
+      },
+      "usopp": {
+        "1280": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\usopp\\continuous-contact.png",
+        "390": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\usopp\\continuous-contact.png"
+      },
+      "sanji": {
+        "1280": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\continuous-contact.png",
+        "390": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\continuous-contact.png"
+      },
+      "chopper": {
+        "1280": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\chopper\\continuous-contact.png",
+        "390": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\chopper\\continuous-contact.png"
+      },
+      "robin": {
+        "1280": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\continuous-contact.png",
+        "390": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\continuous-contact.png"
+      },
+      "franky": {
+        "1280": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\franky\\continuous-contact.png",
+        "390": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\franky\\continuous-contact.png"
+      },
+      "brook": {
+        "1280": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\continuous-contact.png",
+        "390": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\continuous-contact.png"
+      },
+      "jinbe": {
+        "1280": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\jinbe\\continuous-contact.png",
+        "390": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\jinbe\\continuous-contact.png"
+      }
+    },
+    "conversationContacts": [
+      "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook-jinbe-chat\\chat-contact.png",
+      "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\franky-chopper-chat\\chat-contact.png",
+      "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy-usopp-chat\\chat-contact.png",
+      "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\nami-robin-chat\\chat-contact.png",
+      "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro-sanji-chat\\chat-contact.png",
+      "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook-jinbe-chat\\chat-contact.png",
+      "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\franky-chopper-chat\\chat-contact.png",
+      "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy-usopp-chat\\chat-contact.png",
+      "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\nami-robin-chat\\chat-contact.png",
+      "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro-sanji-chat\\chat-contact.png"
+    ]
+  },
+  "assetHashes": {
+    "images/launcher_room/motion_v2/brook/east.webp": "73603e4b7318c1bd4bd62861d8524aa0f451b2c756cd6763d251d7406f1be6de",
+    "images/launcher_room/motion_v2/brook/west.webp": "44fc3c89d9fe6616b18b58d64e7ec98a160abef1a3c3f7a35c38daa05ea6fdf1",
+    "images/launcher_room/motion_v2/brook/north.webp": "8bf672f520e5e1a2ffef100df2525db6b902c742500756fb8f4c8156ff4dea78",
+    "images/launcher_room/motion_v2/brook/south.webp": "12fe617d507e74d6a14ff23083e25b2a14b827d3b972cd1354dc34784e372d79",
+    "images/launcher_room/acting_v2/brook/east.webp": "33a803394c06bf8fda3c0d19d1298905c8210b345240280d4367689e2502f83b",
+    "images/launcher_room/acting_v2/brook/west.webp": "d7aeb8db921a2f477454ecffe62b89b81633b474213f97449094f002135dcbf3",
+    "images/launcher_room/acting_v2/brook/north.webp": "31e77e1022b77e33cb037a7dc273d75db8544d945bb5892312a3bd9ea6be1cca",
+    "images/launcher_room/acting_v2/brook/south.webp": "9a5cb0ad0419e0be9027e388813b7fea458f506d0f1ad1a7026a9517a8fd62fd",
+    "images/launcher_room/motion_v2/jinbe/east.webp": "a78e17989da193c8efac83a1c1fc2eb22c6a2ea1b49c087ec3368ac18d7ac9ca",
+    "images/launcher_room/motion_v2/jinbe/west.webp": "e62b36ff534cc8501f58a37217cd3706459bfab800a9af07ce62f18c540f589d",
+    "images/launcher_room/motion_v2/jinbe/north.webp": "c2be0326847d0b9e4e3cc0b66a10d9701df96bb89508e1e4116f21ab0f9022fd",
+    "images/launcher_room/motion_v2/jinbe/south.webp": "24ac91c818afb446a40f202ead714cdc30eb5d1516724303161b68566bb4a591",
+    "images/launcher_room/acting_v2/jinbe/east.webp": "8343cdd0903f39b034c84916bea25e97825485975bf878a95d8e7fe4b4e55973",
+    "images/launcher_room/acting_v2/jinbe/west.webp": "c79a87bb8cf448d80b8b65beb2262d71dc6de9204d447b2e02b9ab359a60aafc",
+    "images/launcher_room/acting_v2/jinbe/north.webp": "6619d2304a7ca5d5a493bfc998b0e5b21aac013cdaebd994d460ef62ac5fe9d8",
+    "images/launcher_room/acting_v2/jinbe/south.webp": "41f4a4dc6507fa7683ded12935f3afe22d08d1ceb731c4c0044620298306aae6",
+    "images/launcher_room/motion_v2/chopper/east.webp": "dc777d5b63d7d15849e05eca8372ba606c38dfcf3eddcf8557ec5f3c908569c0",
+    "images/launcher_room/motion_v2/chopper/west.webp": "703b513fa2db01c255409581d6d0f24117c326ba828ec23071f6daa7b6b8c2e0",
+    "images/launcher_room/motion_v2/chopper/north.webp": "8869230d31d94fdf5e81c0ae9fcb726755fa09ae8780f307fe5a37cab1864efa",
+    "images/launcher_room/motion_v2/chopper/south.webp": "fbd38aa39c4826585cb66896b6d65e731f7fbedd19ad40db2c9e41dd8a4a0a81",
+    "images/launcher_room/acting_v2/chopper/east.webp": "4e2d2acd5c5958b6f35a7afa3828f2c322660aef4a123e3ad05a47ab65f8db15",
+    "images/launcher_room/acting_v2/chopper/west.webp": "dc52f3b01b11fa1fde1246dae10f68bbd087530eda1c3033d4ea7a2d9296e7dd",
+    "images/launcher_room/acting_v2/chopper/north.webp": "5ee648cadaccc5ee7fdef221f488d6da7834f10116989112e8410d703f0f318f",
+    "images/launcher_room/acting_v2/chopper/south.webp": "f591360b999c91951510ebd94db2cf4bb0d098a590f0e42cac743e8d40e99d23",
+    "images/launcher_room/motion_v2/franky/east.webp": "ef1a16d8d1c10283f044b649e769d013cf636e33b43e5f367c21276cb082407b",
+    "images/launcher_room/motion_v2/franky/west.webp": "5cf00ee8ecf62ad0b4cd08c3748e90b8aca9944dc6a9607969f6f797641814b5",
+    "images/launcher_room/motion_v2/franky/north.webp": "aaf39fe627a16c4b25e5f2a622ad68083ba89d4de1e15cf42d45293a837d1e34",
+    "images/launcher_room/motion_v2/franky/south.webp": "89f8811a51d04117d0b3214362ca65b03a94f73a5415344bdc15b4aca95cf0eb",
+    "images/launcher_room/acting_v2/franky/east.webp": "b9c36e64053b635713bea43822149d6427dac21fa2c2d11c37460414e2826485",
+    "images/launcher_room/acting_v2/franky/west.webp": "626d7005c2b8d867ea99d6421233983861a80b7b5ebf8b755160251ae44a3e1e",
+    "images/launcher_room/acting_v2/franky/north.webp": "3cbc24e43907b3166daf3d9b81a31cb81f5cdb447b5a25d272bfdd601b8a46f9",
+    "images/launcher_room/acting_v2/franky/south.webp": "85985cf7dc2ab8dd5e9f4c25257761be9a254cb354a73efa1f310c5a50b05f62",
+    "images/launcher_room/motion_v2/luffy/east.webp": "c57617c99555635daafa59a4f671724726e9603159a576e945c107ae39ac30fa",
+    "images/launcher_room/motion_v2/luffy/west.webp": "e48631b7adf4d5a0209ed6d155ac93393002152f1a8394cc94d8af4f269993e9",
+    "images/launcher_room/motion_v2/luffy/north.webp": "06ae1027904b54a695121767f6837eab2f4a7e7f28f7e05c8be072f9ad09c32c",
+    "images/launcher_room/motion_v2/luffy/south.webp": "d2577e152dce3567a12cf71ab654c6e795d9c2dfc7ab3684216d0a33b459981e",
+    "images/launcher_room/acting_v2/luffy/east.webp": "1ddd48b720c7fd1749aaafde019d23120abd50cfccce66906639a29d9894c0a6",
+    "images/launcher_room/acting_v2/luffy/west.webp": "229fce7d269534001b23fd2dbbc23ce421fa7eac5eff5ca0b083fa2c607710ff",
+    "images/launcher_room/acting_v2/luffy/north.webp": "20d269928fc35d6f536d27cf1cd92fbeee8a2237fddbcc9367df989df3c366b3",
+    "images/launcher_room/acting_v2/luffy/south.webp": "8018de6b101d777a8e7b318f332848de7d6325c99db77f28d54a0148abee9b37",
+    "images/launcher_room/motion_v2/usopp/east.webp": "38d8ef17ba5df3ed10beec01ae0f486adcc242cb6d7c3585ae876ba8c796ec81",
+    "images/launcher_room/motion_v2/usopp/west.webp": "519afa24b71350a5d7bc021c481f90ebc3d066bfae5cad58000e15fff59a75ab",
+    "images/launcher_room/motion_v2/usopp/north.webp": "b4f16eee6f12a84c1bd6a98ef372627f9abd83e1366d5e7b51b95bfee5c92268",
+    "images/launcher_room/motion_v2/usopp/south.webp": "df6835d3b932e10db43e1c8ece2cbc5ff3b293f683b4e5a85e3186709bd22b96",
+    "images/launcher_room/acting_v2/usopp/east.webp": "7c3a4b0294d7c8ee7bd5e8b06a1b9a9d3cefbd317192b624aa439ca24f1b072e",
+    "images/launcher_room/acting_v2/usopp/west.webp": "f4e8737365815c9bca6de75b35365fcebe07a5e1364f5456c0ca9aab8330faa3",
+    "images/launcher_room/acting_v2/usopp/north.webp": "c9716a3b5532e48f7688f75cab31ff202a2f3b305ccb07d86e3cf55ed979f85d",
+    "images/launcher_room/acting_v2/usopp/south.webp": "57ae0aa14718e6fadd32c2dc0e16a4b3027c878579fc9e901abcb99f92d54565",
+    "images/launcher_room/motion_v2/nami/east.webp": "3c54b5375df4d353c9820c0c64a35a4855386aa676ca688860b0a9c6ec8d29cb",
+    "images/launcher_room/motion_v2/nami/west.webp": "ab5329b25343aa193b58f48523b1b64641da1baf635300c1fc5c5bfbca1dcad6",
+    "images/launcher_room/motion_v2/nami/north.webp": "d32343b499ffdf390d5879011bea18da5b130b86fa66ac0fdc340f75ab685631",
+    "images/launcher_room/motion_v2/nami/south.webp": "cad8a5dbb715add8326d27bdc07ff4fac65422d5d3de0e288bef0aa54db20426",
+    "images/launcher_room/acting_v2/nami/east.webp": "cad447dafb461900983de65db261360837f83d1145e6cb5d2c016891b613b18a",
+    "images/launcher_room/acting_v2/nami/west.webp": "7382040558a7cc0270518f1167e24e402b4928faefcbee093fb16c3bbb7f810e",
+    "images/launcher_room/acting_v2/nami/north.webp": "e6b88f431eeded44d2505b31ab8500a3b8094773478bc909ea253affc568af94",
+    "images/launcher_room/acting_v2/nami/south.webp": "f0eede1c4cc36ae3851942f9b3035614ac002db12556efc47d1eb8462d7f4eaa",
+    "images/launcher_room/motion_v2/robin/east.webp": "82fc4b80f4613a9e8c1e6c01ba7f6410661105dfd01d3e585f565bcee6b75404",
+    "images/launcher_room/motion_v2/robin/west.webp": "75ab8dbe0d0214ce82d0ec3d0944aca03262d0bd408580ea3f4cea543fa7fce4",
+    "images/launcher_room/motion_v2/robin/north.webp": "d85bbdd9c56c646423356f5b43ab319238f4575944320bb5fd2a4771ec693c36",
+    "images/launcher_room/motion_v2/robin/south.webp": "0cfd82e3820e432867abe847de81a1987db2387b540f3c1197332aef57104bcf",
+    "images/launcher_room/acting_v2/robin/east.webp": "3189e20b582cf9c8a05ce626886c096fdfbc5a9e91d3c1e238a87da7536b367a",
+    "images/launcher_room/acting_v2/robin/west.webp": "f7fcbe3839bb8c75eac37c1e2b521b93b47e13f71ddfead1a13b02504b37463c",
+    "images/launcher_room/acting_v2/robin/north.webp": "eb6e65ff49477cb1d47d70cb50eeffb2b45ebde84d3efa91a7e29cb0213f9c38",
+    "images/launcher_room/acting_v2/robin/south.webp": "b4960bd0a62d1e97fcd9091927a47bce3c3cba87837a3953faba859ff1097464",
+    "images/launcher_room/motion_v2/sanji/east.webp": "9a520a9ca338ef2f627a31eabada86739bff95b9d594428d4571d271ffe0e6f0",
+    "images/launcher_room/motion_v2/sanji/west.webp": "d323531b56b98ac864d65d15ac9446405fe04e11b48eea85eaf38d8c1f44b04e",
+    "images/launcher_room/motion_v2/sanji/north.webp": "e9c83952b3e091c24902beb1dd43bf2f0c212b137a5396fe16c30559c6308bd7",
+    "images/launcher_room/motion_v2/sanji/south.webp": "b03bd3c19e94bdf9cc411db861eb3c2176cb0caace5feba0b9bb97f928d080ce",
+    "images/launcher_room/acting_v2/sanji/east.webp": "cbf6471e9b1e7cbe397694387311f5694d1ac1f3f5c61794bde4fe2f6cd60cc1",
+    "images/launcher_room/acting_v2/sanji/west.webp": "00103771ff624e6a273ae97abe910dfa7be78f624377b52f62e17ad947129c5e",
+    "images/launcher_room/acting_v2/sanji/north.webp": "154a9b89aa43ccaad850f9d07185a028aa16098b0b4bfa67cc849923273aeeb8",
+    "images/launcher_room/acting_v2/sanji/south.webp": "6783f8b70defafeeb227eb267dd3cfc1cec710639e2d62322562537415a65cb0",
+    "images/launcher_room/motion_v2/zoro/east.webp": "4f423707ddb7565966a6bdc2e9fde82698091e67ca1a9ace9e592f611381d421",
+    "images/launcher_room/motion_v2/zoro/west.webp": "d88bf75e2912932eb5584a67d4d43ea409487c8a5bb0a6302bfbc3278bbaf997",
+    "images/launcher_room/motion_v2/zoro/north.webp": "b8d5d32691a00fcf274ba3b1745539f8bdf2904d1cc169d8892dbfd92ea4de78",
+    "images/launcher_room/motion_v2/zoro/south.webp": "037494364f06abca59acefc809fb72fd0a774c53c7c7f7601dfb65f3a9153dac",
+    "images/launcher_room/acting_v2/zoro/east.webp": "dc28ab37a3cd983017c96d508f39212f787d883e129d93fffd2678fed4f5d9cf",
+    "images/launcher_room/acting_v2/zoro/west.webp": "8a30d15e5f251c26c233233c99cfd9c480b47074f9d38c3396fcce7451b657db",
+    "images/launcher_room/acting_v2/zoro/north.webp": "a63c8e642ef2f4124ba04f0bf6b954c990ca7d2f5a88bfd49e8d60742a71e4cc",
+    "images/launcher_room/acting_v2/zoro/south.webp": "fbbda73ec692173d76435288b0ddaa7ab8985acdcf02e3a545cfb30399c6eedf"
+  }
+}

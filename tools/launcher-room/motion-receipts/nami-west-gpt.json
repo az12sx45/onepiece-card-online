@@ -1,0 +1,47 @@
+{
+  "key": "nami",
+  "dir": "west",
+  "version": 1,
+  "source": "exec-aaf91ef1-1746-4d5f-b990-809460bbbd8d.png",
+  "status": "CANDIDATE_VISUALLY_REVIEWED",
+  "review": "Heads/nose/chest/knees/boots point west. Near left arm tattoo concealed. Both skirt circles on near side, shirt band count maintained. Optional hand not used.",
+  "generatedWith": "GPT imagegen built-in",
+  "generatedOriginal": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-1739-7141-90bd-461600d8694f\\exec-aaf91ef1-1746-4d5f-b990-809460bbbd8d.png",
+  "output": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\nami\\west-01.png",
+  "sha256": "bbc46516a862457ce410911386eb2842be5215edb33ca2be9412154dbe40a98a",
+  "date": "2026-09-27",
+  "prompt": "Create a brand-new technical CUTOUT ANIMATION RIG KIT for canonical East Blue NAMI from ONE PIECE, exactly 12 isolated parts in a 4 COLUMN by 3 ROW equal-cell grid with true transparent alpha. No complete characters, gridlines, text, shadows or background. Reference1 approved Nami turnaround is identity; use its TOP RIGHT WEST view. Reference2 east kit supplies style, exact costume and PART ORDER ONLY; DRAW the actual opposite anatomical side, do NOT flip/mirror reference2. Reference3 official shirt confirms pattern.\nDIRECTION WEST: every head/nose/chest/pelvis/knee/toe points canvas LEFT. Near limb is anatomical LEFT, far limb RIGHT. Nami's LEFT upper-arm tattoo is entirely concealed under white sleeve; no visible tattoo anywhere. Short orange bob, warm brown eye, complete canonical white/blue Vneck shirt, orange-yellow skirt, brown ankle boots. One broad blue chest band + TWO thin bands below chest, separate TWO blue hem trim bands. Two white-ring/red discs stacked vertically on EACH side of skirt. No bracelet/LogPose.\n12 cells left-to-right:\nROW1 cells1–4 four HEAD ONLY (quiet/happy/annoyed/surprised), all WEST LEFT exact same skull/hair/ear/nose/neck geometry, angle and size, only face muscles/eye/brow/mouth change. Happy is closed-eye smile, annoyed loweredbrow smallfrown, surprise wideeye andsmallopenmouth. No head turns toward camera. Full hair/shortneckstub, no shoulders.\nROW2 cell5 TORSO+PELVIS+ENTIRE SKIRT viewedLEFT, no head/arms/legs. Fully painted solid hidden shoulder and hip joint overlaps; NO empty sleeve tubes, no protruding sleeves (sleeves belong to arms). White main shirt, Vneck, all five bands, full orange skirt with left-side two discs. Cell6 anatomicalLEFT NEAR full arm shoulder→hand, short white sleeve doubleblue cuff attached, continuous flesh upperarm/elbow/forearm/wrist/relaxedhand, downrest. Cell7 anatomicalRIGHT FAR full arm similarly complete, actual handedness viewedWEST, no mirror. Cell8 anatomicalLEFT near BARE LEG hip→ankle, nofoot/shoe/skirt; knee/patella FRONT facesLEFT, calf BACK bulgesRIGHT.\nROW3 cell9 anatomicalRIGHT far BARE LEG hip→ankle, nofoot/shoe/skirt; knee FRONT facesLEFT, calf BACK bulgesRIGHT. BOTH LEGS SAME LEFT FACING. Cell10 anatomicalLEFT near BOOT ONLY whole brown foldedcuff ankleboot with ankle overlapstub, toeLEFT. Cell11 anatomicalRIGHT far corresponding boot toeLEFT. Cell12 small optional open anatomicalLEFT near hand wrist→fivefingers only, alternate relaxedgesture, noarm.\nAll parts fit one compact 2.5-head-tall chibi with head40%height, same part sizes/ratios as reference2. Do not stretch limbs or enlarge boots to fill cells. Quiet/happy/angry/surprise heads must be aligned and share exactly same silhouette. Full rounded hidden overlap joints prevent riggaps. Each piece maximum70% ofcell width/height, centered, large15%transparent gutters all sides, no clipping. Opaque interior and genuine transparency outside. Clean roundedanimeink celshading. No original character/costume.\n",
+  "imageQA": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\nami\\west-01-image-qa.json",
+  "identityProvenance": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\turnarounds\\nami-03-provenance.json",
+  "localImageEdits": "None. Generated original copied unchanged; image read-only QA, downstream Canvas rig is separately identified.",
+  "schema": {
+    "grid": [
+      4,
+      3
+    ],
+    "cells": [
+      "head_quiet",
+      "head_happy",
+      "head_annoyed",
+      "head_surprise",
+      "torso_pelvis",
+      "nearArm",
+      "farArm",
+      "nearLeg",
+      "farLeg",
+      "nearFoot",
+      "farFoot",
+      "accessory_or_optional_hand"
+    ],
+    "nearSide": "LEFT"
+  },
+  "limitations": [
+    "Faint alpha fringe/specks retained in original GPT output; renderer cleanup separate.",
+    "Generated part padding and anatomical joint placements require custom rectangles and rig calibration.",
+    "Head expression outlines are close but not pixel-identical; common crown anchor is required.",
+    "Candidate rig atlas is not runtime/gameplay/deployment acceptance."
+  ],
+  "promptFile": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\nami\\west-01-prompt.txt",
+  "originalReceipt": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\nami\\west-01-provenance.json",
+  "originalReceiptSha256": "dac934562b00fa1cff8e06a2a0b62356934830ab3dbf59d8a3d2452b182de3a9"
+}

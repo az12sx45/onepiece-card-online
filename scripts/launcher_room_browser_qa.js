@@ -20,6 +20,8 @@ const roomIds = ['room-scene-sunny-deck', 'room-furniture-helm', 'room-character
 const products = roomIds.map(id => CATALOG.find(item => item.id === id));
 assert(products.every(Boolean), 'Room catalog fixture is incomplete.');
 const canonicalCharacters = CATALOG.filter(item => item.type === 'room_character');
+const syntheticMotion = process.env.LAUNCHER_ROOM_QA_SYNTHETIC_MOTION === '1';
+const syntheticScenes = false;
 assert(canonicalCharacters.length >= 10, 'Ten canonical character products are required.');
 const poses = ['idle', 'walk1', 'walk2', 'talk_happy', 'talk_annoyed', 'surprised', 'focused_use', 'sit', 'wave'];
 if (!process.env.LAUNCHER_ROOM_QA_SKIP_ASSET_PREFLIGHT) {
@@ -27,7 +29,10 @@ if (!process.env.LAUNCHER_ROOM_QA_SKIP_ASSET_PREFLIGHT) {
     for (const pose of poses)
       assert(fs.existsSync(path.join(root, 'public/images/launcher_room/action_frames', item.key, `${pose}.webp`)), `Missing generated full-body action frame: ${item.key}/${pose}`);
     const digest = pose => crypto.createHash('sha256').update(fs.readFileSync(path.join(root, 'public/images/launcher_room/action_frames', item.key, `${pose}.webp`))).digest('hex');
-    assert.notEqual(digest('walk1'), digest('walk2'), `${item.key} walk frames must differ`);
+    if (!syntheticMotion) for (const direction of ['east', 'west', 'north', 'south'])
+      assert(fs.existsSync(path.join(root, 'public/images/launcher_room/motion_v2', item.key, `${direction}.webp`)), `Missing reviewed directional atlas: ${item.key}/${direction}`);
+    if (!syntheticMotion) for (const direction of ['east', 'west', 'north', 'south'])
+      assert(fs.existsSync(path.join(root, 'public/images/launcher_room/acting_v2', item.key, `${direction}.webp`)), `Missing reviewed directional action atlas: ${item.key}/${direction}`);
     assert.notEqual(digest('talk_happy'), digest('talk_annoyed'), `${item.key} spoken emotions must differ on the body`);
   }
   for (const item of CATALOG.filter(value => value.type === 'room_furniture')) {
@@ -49,14 +54,30 @@ async function main() {
   const results = [];
   const errors = [];
   const check = (name, value) => { results.push({ name, pass: !!value }); assert.ok(value, name); };
+  let page;
   try {
-    const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+    page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+    const motionFixture = syntheticMotion ? await page.evaluate(cell => {
+      const canvas = document.createElement('canvas'); canvas.width = cell * 8; canvas.height = cell * 4;
+      const context = canvas.getContext('2d');
+      for (let frame = 0; frame < 32; frame++) {
+        const x = frame % 8 * cell, y = Math.floor(frame / 8) * cell;
+        context.fillStyle = `hsl(${frame * 45} 60% 50%)`; context.fillRect(x + cell * .27, y + cell * .12, cell * .46, cell * .85);
+        context.fillStyle = '#000'; context.font = `${cell * .19}px sans-serif`; context.fillText(String(frame), x + cell * .42, y + cell * .55);
+      }
+      const depth = document.createElement('canvas'); depth.width = cell * 8; depth.height = cell * 20;
+      for (let variant = 0; variant < 5; variant++) depth.getContext('2d').drawImage(canvas, 0, variant * cell * 4);
+      return { base: canvas.toDataURL('image/png').split(',')[1], depth: depth.toDataURL('image/png').split(',')[1] };
+    }, require('../desktop/launcher-room-motion').SHAPE.cell) : null;
     page.on('pageerror', error => errors.push(error.message));
     const tinyPng = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLZnwAAAABJRU5ErkJggg==', 'base64');
     await page.route('opui://**', route => {
       const requested = decodeURIComponent(new URL(route.request().url()).pathname).replace(/^\//, '');
+      if (/^images\/launcher_room\/(motion_v2|acting_v2)\//.test(requested) && motionFixture)
+        return route.fulfill({ contentType: 'image/png', body: Buffer.from(motionFixture[/\/motion_v2\/.*\/(north|south)\.webp$/.test(requested) ? 'depth' : 'base'], 'base64') });
       const file = path.resolve(root, 'public', requested);
       if (file.startsWith(path.join(root, 'public') + path.sep) && fs.existsSync(file)) return route.fulfill({ path: file });
+      if (requested.includes('/motion_v2/') || requested.includes('/acting_v2/')) return route.fulfill({ status: 404, body: 'Missing directional animation' });
       if (process.env.LAUNCHER_ROOM_QA_SKIP_ASSET_PREFLIGHT) {
         const action = requested.match(/^images\/launcher_room\/action_frames\/([a-z0-9-]+)\/[a-z0-9_]+\.webp$/);
         const furniture = requested.match(/^images\/launcher_room\/furniture_views\/([a-z0-9-]+)\/[0-3]\.webp$/);
@@ -162,6 +183,9 @@ async function main() {
       document.getElementById('bootScreen').hidden = true;
     }, { items: products, catalog: CATALOG });
     await page.addScriptTag({ content: read('launcher-room-dialogue.js') });
+    await page.evaluate(() => { window.__LAUNCHER_ROOM_QA__ = true; });
+    await page.addScriptTag({ content: read('launcher-room-motion-data.js') });
+    await page.addScriptTag({ content: read('launcher-room-motion.js') });
     check('canonical relationship dialogue loads before room renderer', await page.evaluate(() =>
       window.OnePieceRoomDialogue?.KEYS?.length === 10 &&
       window.OnePieceRoomDialogue?.hasPair?.('zoro', 'sanji') &&
@@ -322,30 +346,83 @@ async function main() {
     }));
     await page.evaluate(() => { Math.random = () => .9; });
     await page.locator('#roomCancel').click();
+    // Separate the locomotion/conversation fixture from the crowded eight-slot editor check.
+    await page.evaluate(async () => {
+      const qa = window.__roomQa;
+      qa.mine.room.placements = []; qa.mine.roomItems.placements = [];
+      qa.mine.room.characters = [['luffy', 460, 391], ['zoro', 510, 391]].map(([key, x, y]) => ({ itemId: `room-character-${key}`, x, y }));
+      qa.mine.roomItems.characters = qa.mine.room.characters.map(entry => ({ ...entry, item: qa.shop.catalog.find(item => item.id === entry.itemId) }));
+      await window.LauncherProfileShop.openProfile(0);
+    });
+    await page.waitForFunction(() => document.querySelectorAll('#roomCharacters .room-character-shell').length === 2);
     check('floor grid hidden outside editing', await page.locator('.room-floor-grid').isHidden());
     check('dialogue bubble does not contain emotion portrait', await page.locator('#roomCharacters .room-speech-face').count() === 0);
-    const chibiStart = await page.locator('#roomCharacters .room-character-shell').first().evaluate(node => node.style.left);
+    await page.evaluate(() => {
+      const walker = window.__launcherRoomTest.snapshot().walkers.find(entry => entry.key === 'luffy');
+      window.__launcherRoomTest.route('luffy', { col: walker.cell.col, row: Math.min(7, walker.cell.row + 2) });
+    });
+    const chibiStart = await page.locator('#roomCharacters .room-character-shell').first().evaluate(node => `${node.style.left}|${node.style.top}`);
     const walkingFrames = await page.evaluate(async () => {
       const seen = new Set();
-      for (let index = 0; index < 40; index++) {
+      for (let index = 0; index < 240; index++) {
         for (const node of document.querySelectorAll('#roomCharacters .room-character-shell.is-walking'))
-          seen.add(`${node.dataset.pose}|${node.querySelector('.room-chibi').getAttribute('src')}`);
-        await new Promise(resolve => setTimeout(resolve, 45));
+          seen.add(`${node.dataset.motionFrame}|${node.dataset.direction}|${!node.querySelector('.room-walk-sprite').hidden}`);
+        await new Promise(resolve => requestAnimationFrame(resolve));
       }
       return [...seen];
     });
-    check('full-body walk1 and walk2 image URLs alternate while moving', ['walk1', 'walk2'].every(pose =>
-      walkingFrames.some(frame => frame.startsWith(`${pose}|`) && frame.endsWith(`/${pose}.webp`))));
+    check('decoded directional canvas displays all 32 walk frames', [...Array(32).keys()].every(frame =>
+      walkingFrames.some(value => value.startsWith(`${frame}|`) && value.endsWith('|true'))));
+    check('whole body uses independent directional art without mirror transforms', await page.evaluate(() =>
+      [...document.querySelectorAll('.room-walk-sprite')].every(canvas => !getComputedStyle(canvas).transform.startsWith('matrix(-1')) &&
+      ![...document.querySelectorAll('.room-chibi')].some(image => getComputedStyle(image).animationName !== 'none')));
+    check('character pixel size and gait use the same depth factor', await page.evaluate(() =>
+      [...document.querySelectorAll('#roomCharacters .room-character-shell')].every(node => {
+        const depth = Number(node.style.getPropertyValue('--room-depth'));
+        const scale = Number(node.style.getPropertyValue('--room-character-scale'));
+        return Math.abs(scale - depth / 1.07) < .0001;
+      })));
     await page.waitForTimeout(2200);
-    const chibiMoved = await page.locator('#roomCharacters .room-character-shell').first().evaluate(node => node.style.left);
+    const chibiMoved = await page.locator('#roomCharacters .room-character-shell').first().evaluate(node => `${node.style.left}|${node.style.top}`);
     check('canonical chibi walks when room is visible', chibiMoved !== chibiStart);
-    await page.waitForFunction(() => document.querySelectorAll('#roomCharacters .room-speech:not([hidden])').length === 1, undefined, { timeout: 9000 });
+    await page.evaluate(() => window.__launcherRoomTest.resumeInteractions());
+    await page.waitForFunction(() => document.querySelectorAll('#roomCharacters .room-speech:not([hidden])').length === 1 &&
+      window.__launcherRoomTest.snapshot().interaction?.turnIndex === 0, undefined, { timeout: 30000 });
+    await page.evaluate(() => {
+      window.__qaSceneTurns = new Map();
+      window.__qaSceneSpeakers = new Map();
+      window.__qaSceneWatch = setInterval(() => {
+        const active = window.__launcherRoomTest.snapshot().interaction;
+        if (!active?.sceneId || active.turnIndex < 0) return;
+        const seen = window.__qaSceneTurns.get(active.sceneId) || new Set();
+        seen.add(active.turnIndex); window.__qaSceneTurns.set(active.sceneId, seen);
+        const speech = document.querySelector('#roomCharacters .room-speech:not([hidden])');
+        const spoken = window.__qaSceneSpeakers.get(active.sceneId) || new Map();
+        if (speech) spoken.set(active.turnIndex, { speaker: speech.parentElement.dataset.roomKey.replace('c:room-character-', ''),
+          line: speech.querySelector('.room-speech-text').textContent });
+        window.__qaSceneSpeakers.set(active.sceneId, spoken);
+      }, 50);
+    });
     const firstSpeech = await page.locator('#roomCharacters .room-speech:not([hidden]) .room-speech-text').textContent();
     check('spoken emotion changes the full-body character pose', await page.locator('#roomCharacters .room-speech:not([hidden])').evaluate(speech => {
       const body = speech.parentElement;
-      return !!speech.textContent.trim() && ['talk_happy', 'talk_annoyed', 'surprised', 'focused_use'].includes(body.dataset.pose) &&
-        body.querySelector('.room-chibi').src.includes(`/action_frames/${body.dataset.roomKey.slice(17)}/${body.dataset.pose}.webp`);
+      return !!speech.textContent.trim() && ['idle', 'wave', 'talk_happy', 'talk_annoyed', 'surprised', 'focused_use'].includes(body.dataset.pose) &&
+        (body.dataset.actionSource === 'acting_v2' ? !body.querySelector('.room-walk-sprite').hidden :
+          body.querySelector('.room-chibi').src.includes(`/action_frames/${body.dataset.roomKey.slice(17)}/${body.dataset.pose}.webp`));
     }));
+    const directionalConversation = await page.locator('#roomCharacters .room-speech:not([hidden])').evaluate(speech =>
+      speech.parentElement.dataset.directionalAction === 'true');
+    check('speaker keeps its complete directional body during authored expression', directionalConversation);
+    const actionBeats = await page.evaluate(async () => {
+      const node = document.querySelector('#roomCharacters .room-speech:not([hidden])').parentElement;
+      const pose = node.dataset.pose, frames = new Set(), started = performance.now();
+      while (performance.now() - started < 900 && node.dataset.pose === pose) {
+        frames.add(Number(node.dataset.actionFrame)); await new Promise(resolve => requestAnimationFrame(resolve));
+      }
+      return { pose, frames: [...frames], index: window.OnePieceRoomMotion.ACTION_POSES.indexOf(pose) };
+    });
+    check('speaking action plays four beats while retaining its assigned expression', actionBeats.frames.length === 4 &&
+      actionBeats.frames.every(frame => Math.floor(frame / 4) === actionBeats.index));
     check('one active speech bubble stays inside stage', await page.locator('#roomCharacters .room-speech:not([hidden])').evaluate(node => {
       const bubble = node.getBoundingClientRect(); const stage = document.querySelector('#roomStage').getBoundingClientRect();
       return bubble.left >= stage.left - 1 && bubble.right <= stage.right + 1 && bubble.top >= stage.top - 1 && bubble.bottom <= stage.bottom + 1;
@@ -356,11 +433,39 @@ async function main() {
       return current && current.textContent !== first;
     }, firstSpeech, { timeout: 7000 });
     check('partner replies sequentially', await page.locator('#roomCharacters .room-speech:not([hidden])').count() === 1);
-    check('partner body responds while first actor changes pose', await page.evaluate(() => {
+    check('listener performs its authored body reaction during the reply', await page.evaluate(() => {
       const speaker = document.querySelector('#roomCharacters .room-speech:not([hidden])');
       return ['talk_happy', 'talk_annoyed', 'surprised', 'focused_use'].includes(speaker?.parentElement?.dataset.pose) &&
-        [...document.querySelectorAll('#roomCharacters .room-character-shell')].some(node => node !== speaker.parentElement && node.dataset.pose === 'wave');
+        [...document.querySelectorAll('#roomCharacters .room-character-shell')].some(node => node !== speaker.parentElement && node.dataset.listener && node.dataset.reaction);
     }));
+    const fullScene = await page.evaluate(async () => {
+      const scenes = window.__qaSceneTurns; const started = performance.now();
+      while (performance.now() - started < 35000) {
+        const active = window.__launcherRoomTest.snapshot().interaction;
+        if (active?.sceneId && active.turnIndex >= 0) {
+          const seen = scenes.get(active.sceneId) || new Set(); seen.add(active.turnIndex); scenes.set(active.sceneId, seen);
+          if (seen.has(0) && seen.has(1) && seen.has(2) && seen.has(3) && window.__qaSceneSpeakers.get(active.sceneId)?.has(3)) {
+            clearInterval(window.__qaSceneWatch);
+            const [first, second] = active.pair.split(':');
+            return { id: active.sceneId, turns: [...seen], spoken: [...window.__qaSceneSpeakers.get(active.sceneId)],
+              expected: window.OnePieceRoomDialogue.scene(first, second, active.sceneCursor).turns };
+          }
+        }
+        await new Promise(resolve => setTimeout(resolve, 90));
+      }
+      return [...scenes].map(([id, turns]) => ({ id, turns: [...turns] }));
+    });
+    check('a full conversation plays at least four turns without truncating replies', !Array.isArray(fullScene) && fullScene.turns.length >= 4);
+    check('each displayed turn retains its authored speaker and line', fullScene.spoken.length >= 4 &&
+      fullScene.spoken.every(([index, turn]) => turn.speaker === fullScene.expected[index].speaker && turn.line === fullScene.expected[index].line));
+    await page.locator('#roomCharacters [data-room-key="c:room-character-luffy"]').click({ force: true });
+    check('manual character selection interrupts scene and clears listener reactions', await page.evaluate(() =>
+      !window.__launcherRoomTest.snapshot().interaction &&
+      !document.querySelector('#roomCharacters [data-listener]') &&
+      !document.querySelector('#roomCharacters .room-speech:not([hidden])')));
+    await page.locator('#roomCompanionClose').click();
+    check('an interrupted pair remains on cooldown instead of repeating immediately', !await page.evaluate(() =>
+      window.__launcherRoomTest.beginChat('luffy', 'zoro')));
     await page.evaluate(() => {
       Object.defineProperty(document, 'hidden', { configurable: true, value: true });
       document.dispatchEvent(new Event('visibilitychange'));
@@ -402,6 +507,12 @@ async function main() {
       await page.evaluate(() => window.__roomQa.calls.includes('character-interact:room-character-luffy:talk')));
     await page.locator('#roomCompanionWorkStart').click();
     await page.waitForFunction(() => document.getElementById('roomCompanionWork').textContent.includes('正在工作'));
+    check('work without a matching furnishing uses the character own work beat', await page.evaluate(() => {
+      const walker = window.__launcherRoomTest.snapshot().walkers.find(value => value.key === 'luffy');
+      const allowed = window.OnePieceRoomDialogue.SOLO.luffy.work.map(beat => beat.line);
+      return walker.mode === 'job' && !walker.jobFurnitureKey && allowed.includes(walker.jobLine) &&
+        !document.querySelector('#roomCharacters .is-using-furniture');
+    }));
     check('five minute character work starts without immediate coin payout', await page.evaluate(() => {
       const qa = window.__roomQa;
       const companion = qa.companions['room-character-luffy'];
@@ -456,8 +567,8 @@ async function main() {
     }));
     await page.waitForFunction(() => {
       const text = document.querySelector('#roomCharacters .room-speech:not([hidden]) .room-speech-action');
-      return text && text.textContent === '掌舵';
-    }, undefined, { timeout: 11000 });
+      return text?.textContent.trim() && text.closest('.room-character-shell').classList.contains('is-using-furniture');
+    }, undefined, { timeout: 35000 });
     check('single chibi visits furniture and acts', await page.locator('#roomCharacters .room-speech:not([hidden])').count() === 1);
     check('furniture actor uses in-world body pose at an adjacent tile', await page.evaluate(() => {
       const actor = document.querySelector('#roomCharacters .room-speech:not([hidden])')?.parentElement;
@@ -468,8 +579,24 @@ async function main() {
       const [fw, fh] = furniture.dataset.footprint.split('x').map(Number);
       const nearestX = Math.max(fx, Math.min(ax, fx + fw - 1));
       const nearestY = Math.max(fy, Math.min(ay, fy + fh - 1));
-      return actor.dataset.pose === 'focused_use' && Math.abs(ax - nearestX) + Math.abs(ay - nearestY) === 1;
+      return ['idle', 'focused_use', 'sit', 'talk_happy', 'talk_annoyed', 'surprised', 'wave'].includes(actor.dataset.pose) && Math.abs(ax - nearestX) + Math.abs(ay - nearestY) === 1;
     }));
+    await page.evaluate(() => {
+      const qa = window.__roomQa;
+      const probe = structuredClone(qa.friend);
+      const furniture = { itemId: 'room-furniture-map-table', x: 600, y: 420, rotation: 0, scale: 1 };
+      const actor = { itemId: 'room-character-zoro', x: 360, y: 420 };
+      probe.room.placements = [furniture]; probe.room.characters = [actor];
+      probe.roomItems.placements = [{ ...furniture, item: qa.shop.catalog.find(value => value.id === furniture.itemId) }];
+      probe.roomItems.characters = [{ ...actor, item: qa.shop.catalog.find(value => value.id === actor.itemId) }];
+      window.LauncherRoom.setProfile(probe, { accountId: 42 });
+      window.__launcherRoomTest.resumeInteractions();
+    });
+    await page.waitForTimeout(250);
+    check('Zoro cannot receive a generic navigation activity from a map table', await page.evaluate(() =>
+      !window.OnePieceRoomDialogue.activity('zoro', 'map-table') &&
+      !window.__launcherRoomTest.snapshot().interaction &&
+      !document.querySelector('#roomCharacters .is-using-furniture')));
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.waitForFunction(() => !document.querySelector('#roomCharacters .room-speech:not([hidden])'), undefined, { timeout: 1500 });
     check('reduced motion stops walking and speech and restores idle body art',
@@ -592,13 +719,11 @@ async function main() {
     await page.locator('#roomStage').screenshot({ path: path.join(output, 'showcase-edit-stage-1280.png') });
     await page.locator('#profileRoom').screenshot({ path: path.join(output, 'showcase-edit-room-1280.png') });
     await page.locator('#roomCancel').click();
-    await page.waitForFunction(() => [...document.querySelectorAll('#roomCharacters .room-chibi')].length === 6 &&
-      [...document.querySelectorAll('#roomCharacters .room-chibi')].every(image => image.complete && image.naturalWidth > 1 &&
-        image.parentElement.dataset.pose && image.dataset.artFallback === 'false'), undefined, { timeout: 6000 });
-    check('showcase six action character bodies decode with no fallback', await page.evaluate(() =>
-      [...document.querySelectorAll('#roomCharacters .room-chibi')].length === 6 &&
-      [...document.querySelectorAll('#roomCharacters .room-chibi')].every(image =>
-        image.src.includes('/action_frames/') && image.complete && image.naturalWidth > 1 && image.dataset.artFallback === 'false')));
+    await page.waitForFunction(() => window.__launcherRoomTest.snapshot().walkers.length === 6 &&
+      window.__launcherRoomTest.snapshot().walkers.every(walker => walker.ready.length === 4), undefined, { timeout: 6000 });
+    check('showcase six characters have all four decoded directional atlases', await page.evaluate(() =>
+      window.__launcherRoomTest.snapshot().walkers.length === 6 &&
+      window.__launcherRoomTest.snapshot().walkers.every(walker => walker.ready.length === 4)));
     await page.waitForFunction(() => document.querySelectorAll('#roomCharacters .is-walking').length >= 2, undefined, { timeout: 5000 });
     await page.locator('#roomStage').screenshot({ path: path.join(output, 'showcase-view-stage-1280.png') });
     await page.locator('#profileRoom').screenshot({ path: path.join(output, 'showcase-view-room-1280.png') });
@@ -623,8 +748,13 @@ async function main() {
       'showcase-view-room-390-right.png', 'showcase-edit-room-390.png'
     ].map(name => path.join(output, name));
     assert(showcaseScreenshots.every(file => fs.existsSync(file) && fs.statSync(file).size > 10000), 'Missing showcase screenshots.');
-    fs.writeFileSync(path.join(output, 'report.json'), JSON.stringify({ ok: true, results, errors, showcase, showcaseScreenshots }, null, 2) + '\n');
-    console.log(JSON.stringify({ ok: true, checks: results.length, output }));
+    fs.writeFileSync(path.join(output, 'report.json'), JSON.stringify({ ok: true, syntheticMotion, syntheticScenes, directionalConversation,
+      visualAcceptance: false, results, errors, showcase, showcaseScreenshots }, null, 2) + '\n');
+    console.log(JSON.stringify({ ok: true, checks: results.length, output, syntheticMotion, syntheticScenes, visualAcceptance: false }));
+  } catch (error) {
+    const snapshot = page && await page.evaluate(() => window.__launcherRoomTest?.snapshot()).catch(() => null);
+    fs.writeFileSync(path.join(output, 'failure.json'), JSON.stringify({ error: error.message, results, errors, snapshot, syntheticMotion, syntheticScenes, visualAcceptance: false }, null, 2) + '\n');
+    throw error;
   } finally { await browser.close(); }
 }
 main().catch(error => { console.error(error.stack || error.message); process.exitCode = 1; });

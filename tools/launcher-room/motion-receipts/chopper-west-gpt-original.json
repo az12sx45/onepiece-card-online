@@ -1,0 +1,44 @@
+{
+  "key": "chopper",
+  "dir": "west",
+  "version": 1,
+  "source": "exec-efe5bdb5-d77b-4540-bdef-68c5ce20f4ef.png",
+  "status": "CANDIDATE_VISUALLY_REVIEWED",
+  "review": "West near anatomical left antler has silver repair band, far plain antler partly behind. Profile nose/body/feet west, separate backpack viewed with outer back to right. Hoof hands, short furry legs. Expressions preserve head/hat geometry; generated narrow gutters require custom extraction.",
+  "generatedWith": "GPT imagegen built-in",
+  "generatedOriginal": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-1739-7141-90bd-461600d8694f\\exec-efe5bdb5-d77b-4540-bdef-68c5ce20f4ef.png",
+  "output": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\chopper\\west-01.png",
+  "sha256": "feb49c6b944ce062737ea37d5244ccbfc623fcdd449d4a0cc1ee6596d315094e",
+  "date": "2026-09-27",
+  "prompt": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\chopper\\west-01-prompt.txt",
+  "imageQA": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\chopper\\west-01-image-qa.json",
+  "identityProvenance": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\turnarounds\\chopper-01-provenance.json",
+  "localImageEdits": "None. Generated original copied unchanged; image read-only QA, downstream Canvas rig is separately identified.",
+  "schema": {
+    "grid": [
+      4,
+      3
+    ],
+    "cells": [
+      "head_quiet",
+      "head_happy",
+      "head_annoyed",
+      "head_surprise",
+      "torso_pelvis",
+      "nearArm",
+      "farArm",
+      "nearLeg",
+      "farLeg",
+      "nearFoot",
+      "farFoot",
+      "accessory_or_optional_hand"
+    ],
+    "nearSide": "LEFT"
+  },
+  "limitations": [
+    "Faint alpha fringe/specks retained in original GPT output; renderer cleanup separate.",
+    "Generated part padding and anatomical joint placements require custom rectangles and rig calibration.",
+    "Head expression outlines are close but not pixel-identical; common crown anchor is required.",
+    "Candidate rig atlas is not runtime/gameplay/deployment acceptance."
+  ]
+}

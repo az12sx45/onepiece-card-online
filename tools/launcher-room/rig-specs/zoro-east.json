@@ -1,0 +1,690 @@
+{
+  "schema": "one-piece-room-rig/1",
+  "character": "zoro",
+  "direction": "east",
+  "images": {
+    "sheet": "../motion-source-png/zoro-east.png"
+  },
+  "canonicalSize": 700,
+  "canonicalRoot": [
+    313,
+    600
+  ],
+  "output": {
+    "cell": 256,
+    "root": [
+      128,
+      224
+    ],
+    "canonicalScale": 0.35,
+    "stageWidth": 96
+  },
+  "gait": {
+    "stride": 26,
+    "speed": 27,
+    "stance": 0.62,
+    "lift": 1.6,
+    "kneeSoftness": 1,
+    "armSwing": 0.2,
+    "mode": "side",
+    "feet": {
+      "near": {
+        "ankle": [
+          287,
+          559.1067961165048
+        ],
+        "phaseOffset": 0,
+        "bend": 1
+      },
+      "far": {
+        "ankle": [
+          339,
+          559.8762085308057
+        ],
+        "phaseOffset": 0.5,
+        "bend": 1
+      }
+    }
+  },
+  "parts": {
+    "head_quiet": {
+      "rect": [
+        40,
+        17,
+        299,
+        315
+      ],
+      "sourceRoot": [
+        191.41,
+        55
+      ],
+      "targetRoot": [
+        309.06501676,
+        60.504808
+      ],
+      "scale": 0.774603
+    },
+    "head_happy": {
+      "rect": [
+        385,
+        17,
+        297,
+        315
+      ],
+      "sourceRoot": [
+        532.84,
+        55
+      ],
+      "targetRoot": [
+        309.06501676,
+        60.504808
+      ],
+      "scale": 0.774603
+    },
+    "head_annoyed": {
+      "rect": [
+        759,
+        16,
+        299,
+        315
+      ],
+      "sourceRoot": [
+        907.45,
+        54
+      ],
+      "targetRoot": [
+        309.06501676,
+        60.504808
+      ],
+      "scale": 0.774603
+    },
+    "head_surprise": {
+      "rect": [
+        1112,
+        15,
+        299,
+        317
+      ],
+      "sourceRoot": [
+        1260.96,
+        53
+      ],
+      "targetRoot": [
+        309.06501676,
+        60.504808
+      ],
+      "scale": 0.774603
+    },
+    "torso": {
+      "rect": [
+        106,
+        351,
+        210,
+        330
+      ],
+      "sourceRoot": [
+        203.59,
+        371
+      ],
+      "targetRoot": [
+        313,
+        269
+      ],
+      "scale": 0.521212
+    },
+    "nearArm": {
+      "rect": [
+        503,
+        357,
+        123,
+        335
+      ],
+      "joints": [
+        [
+          569.14,
+          391
+        ],
+        [
+          545,
+          538
+        ],
+        [
+          571.44,
+          662
+        ]
+      ],
+      "hip": [
+        268,
+        290
+      ],
+      "length": 149
+    },
+    "farArm": {
+      "rect": [
+        832,
+        357,
+        166,
+        346
+      ],
+      "joints": [
+        [
+          897.14,
+          392
+        ],
+        [
+          909.57,
+          544
+        ],
+        [
+          878.85,
+          672
+        ]
+      ],
+      "hip": [
+        328.75,
+        290
+      ],
+      "length": 149
+    },
+    "nearFoot": {
+      "rect": [
+        459,
+        832,
+        206,
+        200
+      ],
+      "sourceRoot": [
+        522.86,
+        928
+      ],
+      "targetRoot": [
+        287,
+        559.1067961165048
+      ],
+      "scale": 0.393204
+    },
+    "nearLeg": {
+      "rect": [
+        1189,
+        355,
+        148,
+        340
+      ],
+      "joints": [
+        [
+          1270.79,
+          382
+        ],
+        [
+          1258.64,
+          559
+        ],
+        [
+          1246.49,
+          685
+        ]
+      ],
+      "hip": [
+        287,
+        423
+      ],
+      "length": 138.10679611650482
+    },
+    "farFoot": {
+      "rect": [
+        791,
+        831,
+        211,
+        201
+      ],
+      "sourceRoot": [
+        856.41,
+        927.48
+      ],
+      "targetRoot": [
+        339,
+        559.8762085308057
+      ],
+      "scale": 0.383886
+    },
+    "farLeg": {
+      "rect": [
+        145,
+        695,
+        152,
+        367
+      ],
+      "joints": [
+        [
+          211.5,
+          724
+        ],
+        [
+          220.58,
+          915
+        ],
+        [
+          230.71,
+          1051
+        ]
+      ],
+      "hip": [
+        339,
+        423
+      ],
+      "length": 138.87620853080568
+    },
+    "accessory": {
+      "rect": [
+        1086,
+        720,
+        332,
+        342
+      ],
+      "sourceRoot": [
+        1331.55,
+        747
+      ],
+      "targetRoot": [
+        287,
+        407
+      ],
+      "scale": 0.584795,
+      "layer": "front"
+    }
+  },
+  "restPose": {
+    "bodyOffset": 0,
+    "nearArm": {
+      "hand": [
+        -22.349999999999998,
+        143.04
+      ],
+      "bend": -1
+    },
+    "farArm": {
+      "hand": [
+        22.349999999999998,
+        143.04
+      ],
+      "bend": 1
+    },
+    "nearLeg": [
+      [
+        287,
+        423
+      ],
+      [
+        287,
+        491.0533980582524
+      ],
+      [
+        287,
+        559.1067961165048
+      ]
+    ],
+    "farLeg": [
+      [
+        339,
+        423
+      ],
+      [
+        339,
+        491.43810426540284
+      ],
+      [
+        339,
+        559.8762085308057
+      ]
+    ]
+  },
+  "actions": {
+    "idle": {
+      "expression": "quiet",
+      "bodyOffset": 0,
+      "nearArm": {
+        "hand": [
+          -22.349999999999998,
+          143.04
+        ],
+        "bend": -1
+      },
+      "farArm": {
+        "hand": [
+          22.349999999999998,
+          143.04
+        ],
+        "bend": 1
+      },
+      "animation": {
+        "nearHandDelta": [
+          0,
+          3
+        ],
+        "farHandDelta": [
+          0,
+          2
+        ],
+        "bob": 1
+      }
+    },
+    "talk_happy": {
+      "expression": "happy",
+      "bodyOffset": 0,
+      "nearArm": {
+        "hand": [
+          67.05,
+          101.32000000000001
+        ],
+        "bend": -1
+      },
+      "farArm": {
+        "hand": [
+          22.349999999999998,
+          140.06
+        ],
+        "bend": 1
+      },
+      "animation": {
+        "nearHandDelta": [
+          6,
+          -5
+        ],
+        "farHandDelta": [
+          3,
+          2
+        ],
+        "bob": 1.5
+      }
+    },
+    "talk_annoyed": {
+      "expression": "annoyed",
+      "bodyOffset": 0,
+      "nearArm": {
+        "hand": [
+          34.27,
+          80.46000000000001
+        ],
+        "bend": -1
+      },
+      "farArm": {
+        "hand": [
+          -34.27,
+          80.46000000000001
+        ],
+        "bend": 1
+      },
+      "animation": {
+        "nearHandDelta": [
+          -6,
+          -5
+        ],
+        "farHandDelta": [
+          3,
+          2
+        ],
+        "bob": 1.5
+      }
+    },
+    "surprised": {
+      "expression": "surprise",
+      "bodyOffset": 0,
+      "nearArm": {
+        "hand": [
+          -53.64,
+          -44.699999999999996
+        ],
+        "bend": -1
+      },
+      "farArm": {
+        "hand": [
+          53.64,
+          -44.699999999999996
+        ],
+        "bend": 1
+      },
+      "animation": {
+        "nearHandDelta": [
+          -6,
+          -5
+        ],
+        "farHandDelta": [
+          3,
+          2
+        ],
+        "bob": 1.5
+      }
+    },
+    "focused_use": {
+      "expression": "quiet",
+      "bodyOffset": 0,
+      "nearArm": {
+        "hand": [
+          34.27,
+          102.80999999999999
+        ],
+        "bend": -1
+      },
+      "farArm": {
+        "hand": [
+          -34.27,
+          102.80999999999999
+        ],
+        "bend": 1
+      },
+      "animation": {
+        "nearHandDelta": [
+          -6,
+          -5
+        ],
+        "farHandDelta": [
+          3,
+          2
+        ],
+        "bob": 1.5
+      }
+    },
+    "sit": {
+      "expression": "quiet",
+      "bodyOffset": 55,
+      "nearArm": {
+        "hand": [
+          -14.9,
+          128.14
+        ],
+        "bend": -1
+      },
+      "farArm": {
+        "hand": [
+          14.9,
+          128.14
+        ],
+        "bend": 1
+      },
+      "animation": {
+        "nearHandDelta": [
+          0,
+          3
+        ],
+        "farHandDelta": [
+          0,
+          2
+        ],
+        "bob": 1
+      },
+      "nearLeg": [
+        [
+          287,
+          478
+        ],
+        [
+          342,
+          478
+        ],
+        [
+          342,
+          559.1067961165048
+        ]
+      ],
+      "farLeg": [
+        [
+          339,
+          478
+        ],
+        [
+          394,
+          478
+        ],
+        [
+          394,
+          559.8762085308057
+        ]
+      ]
+    },
+    "wave": {
+      "expression": "happy",
+      "bodyOffset": 0,
+      "nearArm": {
+        "hand": [
+          116.22,
+          -67.05
+        ],
+        "bend": -1
+      },
+      "farArm": {
+        "hand": [
+          22.349999999999998,
+          140.06
+        ],
+        "bend": 1
+      },
+      "animation": {
+        "nearHandDelta": [
+          6,
+          -5
+        ],
+        "farHandDelta": [
+          3,
+          2
+        ],
+        "bob": 1.5
+      }
+    },
+    "listen": {
+      "expression": "quiet",
+      "bodyOffset": 0,
+      "nearArm": {
+        "hand": [
+          -22.349999999999998,
+          140.06
+        ],
+        "bend": -1
+      },
+      "farArm": {
+        "hand": [
+          22.349999999999998,
+          140.06
+        ],
+        "bend": 1
+      },
+      "animation": {
+        "nearHandDelta": [
+          0,
+          3
+        ],
+        "farHandDelta": [
+          0,
+          2
+        ],
+        "bob": 1
+      }
+    }
+  },
+  "annotation": {
+    "status": "DRAFT_REQUIRES_VISUAL_REVIEW",
+    "method": "Connected alpha components; one-time normalized joint suggestions; no image painting",
+    "sourcePixels": [
+      1448,
+      1086
+    ],
+    "boxes": [
+      [
+        40,
+        17,
+        299,
+        315
+      ],
+      [
+        385,
+        17,
+        297,
+        315
+      ],
+      [
+        759,
+        16,
+        299,
+        315
+      ],
+      [
+        1112,
+        15,
+        299,
+        317
+      ],
+      [
+        106,
+        351,
+        210,
+        330
+      ],
+      [
+        503,
+        357,
+        123,
+        335
+      ],
+      [
+        832,
+        357,
+        166,
+        346
+      ],
+      [
+        1189,
+        355,
+        148,
+        340
+      ],
+      [
+        145,
+        695,
+        152,
+        367
+      ],
+      [
+        459,
+        832,
+        206,
+        200
+      ],
+      [
+        791,
+        831,
+        211,
+        201
+      ],
+      [
+        1086,
+        720,
+        332,
+        342
+      ]
+    ],
+    "headCalibration": "Common quiet-head scale and crown row anchor, independent of mouth/chin movement",
+    "sideGestureCalibration": "Speaking and greeting hand targets reach in the same direction as the face, not behind the head."
+  },
+  "calibrationNotes": [
+    "Side far shoulder projected distance to center reduced by 65%; near shoulder retained; no torso stretch."
+  ]
+}

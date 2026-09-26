@@ -1,0 +1,345 @@
+{
+  "schema": "one-piece-room-rig-receipt/1",
+  "character": "sanji",
+  "direction": "north",
+  "sourcePng": "tools/launcher-room/motion-source-png/sanji-north.png",
+  "sourceSha256": "4e59b48e02e6cbefce0632a9f9fc35c66af127c7f474ed04a97bc837fc013322",
+  "provenance": "tools/launcher-room/motion-receipts/sanji-north-gpt.json",
+  "provenanceSha256": "2a796fe6aaeadc46371371392dfb17c713d7e122bbfc7e5dcd40dedae643326f",
+  "rawReceipt": {
+    "path": "tools/launcher-room/motion-receipts/sanji-north-gpt-original.json",
+    "sha256": "5b0989be915a288cabc1f66d43b0979e2ee61176f14aca63073b214e655083ea"
+  },
+  "sourceImages": {
+    "sheet": {
+      "sourcePng": "tools/launcher-room/motion-source-png/sanji-north.png",
+      "sourceSha256": "4e59b48e02e6cbefce0632a9f9fc35c66af127c7f474ed04a97bc837fc013322",
+      "provenance": "tools/launcher-room/motion-receipts/sanji-north-gpt.json",
+      "provenanceSha256": "2a796fe6aaeadc46371371392dfb17c713d7e122bbfc7e5dcd40dedae643326f",
+      "rawReceipt": {
+        "path": "tools/launcher-room/motion-receipts/sanji-north-gpt-original.json",
+        "sha256": "5b0989be915a288cabc1f66d43b0979e2ee61176f14aca63073b214e655083ea"
+      }
+    }
+  },
+  "originalSpecSha256": "d825bb433416c0928303ca8dd6ee1c849b5e87d8549e20748f3abc24ed5bd5a0",
+  "rigSpec": "tools/launcher-room/rig-specs/sanji-north.json",
+  "rigSpecSha256": "89946e8d827fab799ec163239b4e35616a1126ba42b9a26adc5f988143ed585d",
+  "selectedPlanSha256": "cd7bdb59fb34bc2132bcaea0a6a71f42c4efecb9f59d4d0e51b9bc3c3fa24a3c",
+  "review": {
+    "status": "reviewed",
+    "notes": "Final GPT source identity and four-direction atlas contact sheets inspected for all ten characters. Root additionally inspected actual-room desktop consecutive phases and loop seam for all ten, five four-turn speaker/listener contact sheets, both widths of final four-way piano/table contacts, and narrow-room samples. No remaining observed pose discontinuity, detached parts, head/body facing mismatch or furniture alignment blocker in reviewed frames. Acceptance is for this precisely hash-bound local candidate. Automated fixtures and frame inspection are not human play, physical-phone testing or a fixed-60fps guarantee; 350ms loaded-host capture gap is retained in evidence. Public deployment verified separately.",
+    "sourceSha256": "4e59b48e02e6cbefce0632a9f9fc35c66af127c7f474ed04a97bc837fc013322",
+    "sourceHashes": {
+      "sheet": "4e59b48e02e6cbefce0632a9f9fc35c66af127c7f474ed04a97bc837fc013322"
+    },
+    "originalSpecSha256": "d825bb433416c0928303ca8dd6ee1c849b5e87d8549e20748f3abc24ed5bd5a0",
+    "rigSpecSha256": "89946e8d827fab799ec163239b4e35616a1126ba42b9a26adc5f988143ed585d",
+    "rendererSha256": "de24e1fa55d835f12e418e12f7dee3199243b3a40394e90ffe8304f8d96edd11",
+    "bakerSha256": "1261fb4dcccf74a3abba4fb59d399a329e951adde3a8c0ddf6aaffae9e635e07",
+    "evidence": [
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-0.json",
+        "sha256": "ee4089c18cdf946c9944eba769ba0569bdc05b763f15fbac89af959f488072fe"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-1.png",
+        "sha256": "87947177f44e5836d917603ef19ad13e07fbf2d499b7557f714ce35a78e4093b"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-2.json",
+        "sha256": "d5253d6aa247ec7e8bdfe09c2d815ddf167971f3893d7f84df1d85ca4cc51c2a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-3.json",
+        "sha256": "f1f084881967eb99df37b06eee07c1cae3d7158a9e50112470753fe6c214df0a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-4.json",
+        "sha256": "6673a24013fa270d02f6f243c1f708b2513e9604975ba34951bcc7c7ee9b3ab3"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-5.json",
+        "sha256": "ba9f7187b50057378c2c9df54e48b2786eddc01e4031b54f4ffdd0896ef23f28"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-6.png",
+        "sha256": "27fbe4394107ef7c3ab1052093f4fd2bfb62b455685815c17d7f6576f16795f6"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-7.png",
+        "sha256": "2929729146088e74619bddae78155eeb800de1d7a95efa0c0b1c6e9ce67bd9ea"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-8.png",
+        "sha256": "4ccb59c456904f00945e2b0b3a12ca1d3a62e55d85250e92ae5d5198453d7e79"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-9.png",
+        "sha256": "27fbe4394107ef7c3ab1052093f4fd2bfb62b455685815c17d7f6576f16795f6"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-10.png",
+        "sha256": "28c1e7ea21fbca139c7166e4cb250ec68228fc15dfe25dd95501f669caea249d"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-11.png",
+        "sha256": "605fe4b4b86d19ff0b31e561904fe42a370f30032a965fcf7affefa30aef4420"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-12.png",
+        "sha256": "1ef28bd82c4aed306c9c735a0cc6cd36b3d498186eab73612c8fada055f42400"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-13.png",
+        "sha256": "28c1e7ea21fbca139c7166e4cb250ec68228fc15dfe25dd95501f669caea249d"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-14.png",
+        "sha256": "54dc0b8a60308dae71b47df8e42d2973a5cf8333d341d41e07e58debcadfd894"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-15.png",
+        "sha256": "f185ba9ee93c9646f5b076283bced1e1aee4b616e29cee8e490bb211327d2b1a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-16.png",
+        "sha256": "95f248683544985f11160bbf066d6ecd77964d4233b166c91de48fe9ad38eba6"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-17.png",
+        "sha256": "54dc0b8a60308dae71b47df8e42d2973a5cf8333d341d41e07e58debcadfd894"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-18.png",
+        "sha256": "1e6939cac5fc1ea70118c6bdfe87c3113fac48a46aa9c9ab8b937fd549f8fbe4"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-19.png",
+        "sha256": "5db532c8ebb105863afdbdea0278c20e7aefefeb4e7c3746993c93d9fb43896f"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-20.png",
+        "sha256": "e32bc2ee0857e99880fbbc6e054774514c745bb4d1d3d26f6c2ec18c38a7deb2"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-21.png",
+        "sha256": "1e6939cac5fc1ea70118c6bdfe87c3113fac48a46aa9c9ab8b937fd549f8fbe4"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-22.png",
+        "sha256": "27fbe4394107ef7c3ab1052093f4fd2bfb62b455685815c17d7f6576f16795f6"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-23.png",
+        "sha256": "2929729146088e74619bddae78155eeb800de1d7a95efa0c0b1c6e9ce67bd9ea"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-24.png",
+        "sha256": "4ccb59c456904f00945e2b0b3a12ca1d3a62e55d85250e92ae5d5198453d7e79"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-25.png",
+        "sha256": "27fbe4394107ef7c3ab1052093f4fd2bfb62b455685815c17d7f6576f16795f6"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-26.png",
+        "sha256": "28c1e7ea21fbca139c7166e4cb250ec68228fc15dfe25dd95501f669caea249d"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-27.png",
+        "sha256": "605fe4b4b86d19ff0b31e561904fe42a370f30032a965fcf7affefa30aef4420"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-28.png",
+        "sha256": "1ef28bd82c4aed306c9c735a0cc6cd36b3d498186eab73612c8fada055f42400"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-29.png",
+        "sha256": "28c1e7ea21fbca139c7166e4cb250ec68228fc15dfe25dd95501f669caea249d"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-30.png",
+        "sha256": "54dc0b8a60308dae71b47df8e42d2973a5cf8333d341d41e07e58debcadfd894"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-31.png",
+        "sha256": "f185ba9ee93c9646f5b076283bced1e1aee4b616e29cee8e490bb211327d2b1a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-32.png",
+        "sha256": "95f248683544985f11160bbf066d6ecd77964d4233b166c91de48fe9ad38eba6"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-33.png",
+        "sha256": "54dc0b8a60308dae71b47df8e42d2973a5cf8333d341d41e07e58debcadfd894"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-34.png",
+        "sha256": "1e6939cac5fc1ea70118c6bdfe87c3113fac48a46aa9c9ab8b937fd549f8fbe4"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-35.png",
+        "sha256": "5db532c8ebb105863afdbdea0278c20e7aefefeb4e7c3746993c93d9fb43896f"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-36.png",
+        "sha256": "e32bc2ee0857e99880fbbc6e054774514c745bb4d1d3d26f6c2ec18c38a7deb2"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-37.png",
+        "sha256": "1e6939cac5fc1ea70118c6bdfe87c3113fac48a46aa9c9ab8b937fd549f8fbe4"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-38.json",
+        "sha256": "cae6b03ffe4b3a2c9d06bdf40c92cc6a5323944f37cc708f7853c0129a640618"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-39.png",
+        "sha256": "4e2449fe43a6fc7046f3e0b1aa3864df0f189486790b7ea1931e92db5fd3a8b2"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-40.png",
+        "sha256": "e65725a9ddf63891ab96d15e429f75ab23276704f58cb32367251c53024f6573"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-41.json",
+        "sha256": "ee6c540ea178b84d90f158017a676b1057c15a6b8dda0b87590c58d1cad526ad"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-42.png",
+        "sha256": "9c611ddea68bd47556a395fac6ce724e4ab7f955070429299ba64c14ee2d56c9"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-43.png",
+        "sha256": "9ed271dbe5534f30b4e4415952765d6cb998f2431c16b697ef9fd13d582e08f9"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-44.json",
+        "sha256": "748731d3473854397b842e5ba11c01c898a8c65e071b3b8f34c94a93146fcdb5"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-45.png",
+        "sha256": "d36dc03484e29d1180f60cfa1c6cc585239e917d0bfba89c09cb828acc178a5a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-46.png",
+        "sha256": "6d69899f4ba7308f977faeb98620069b204faf475d1767673ba20dffcb3d7a7e"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-47.json",
+        "sha256": "6564cb8a7b5b3bca444d75bd9fdbd10b243470421211dbdfdae2e3398b59f9c8"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-48.png",
+        "sha256": "68aaeb4ea832646706e5e7ab3509c9b4790942e9d1b36d6c99ca3790170b6013"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-49.png",
+        "sha256": "c0b792026fe3a58d707f835b676b8203b6d6197e2209f7067e4ff3b62e632f00"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-50.json",
+        "sha256": "e85070e597a6f16b335479ef417ebfff2c1bcc33ae9c34747ddaefdb83c77718"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-51.png",
+        "sha256": "cffe11d6666fa92008b95b245637c25899fd884f44920ae447072a52fa8037e8"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-52.png",
+        "sha256": "dd248eb9f6f9b4ba8a4cb486a225c92c7bc62bf28ad29d8f03bb5f9c0afaac92"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-53.png",
+        "sha256": "169d029094f2d892b18a9b62a6c16ed9f5bb551ed56433475c34d409a0c28290"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-54.png",
+        "sha256": "b10bf5f6b1b20a84848de1a608e0d42a34873bba8a18df23b212da893bf79fcd"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-55.json",
+        "sha256": "2c1df1bb8899b0eb4bf79e8845281138123700f5828805322a3d374cc72f3511"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-56.png",
+        "sha256": "2d79716e54bfdcf2ceb6a57cd6f7e1ec00a99fa857877246819a34c940794574"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-57.png",
+        "sha256": "226fac7190e6a2cecb955f462aaa626be97f09c360703d4664a279bb1ebf14b5"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-58.json",
+        "sha256": "94b13cd52078fab0cbbad6887c73b365b4bd048357b46163240481f955b1f577"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-59.png",
+        "sha256": "5f4aa217777b299a8056ed2db05214459de4e79cf401168e5971494240391cf9"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-60.png",
+        "sha256": "86e6cbc31b432db01664644071fb01f614e920e9b292ba3454b10ac6cc2c2838"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-61.json",
+        "sha256": "a303d489b6bec456a6f31fc247b7dabc2abfbbc3a0bdac5621d37ea175158678"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-62.png",
+        "sha256": "3a871ef71cd3eb6a464795bf1a5dd80bbc889b3df2633d074cc1e250489620b1"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-63.png",
+        "sha256": "f23d34834a7896f8059b2353151065675ee9dc7603b7825fef51e6b13ce0f26a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-64.json",
+        "sha256": "c5becbd37c48d4e75045710d8ac72b3280fb6c377d9ec3f622fb2fbdafa77cc0"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-65.png",
+        "sha256": "debc835fdbe7f711607a29c481e22c3b5cc90e295fb1a4db3e2890695d4e15da"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-66.png",
+        "sha256": "5ee2def8d386147ce078364d2003b5ae2c5ad33d41fe9a685f49447e8072eea1"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-67.json",
+        "sha256": "08e0ac9d2bbfb50b0738a2133a7edbb0f661ed839fe95ddb58c5fbcfa8a04c19"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-68.png",
+        "sha256": "c9b65b9523486004112866270d0394612b70a6458817d5c15f986cbd01b6833b"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-69.png",
+        "sha256": "5727ea45851d0146cf060c4af750a51804ce2e21b4c27c717b6643faeeefdcc9"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-70.png",
+        "sha256": "c94fa411677015eb897bde5c2dfe4687781519f59e87caa439a24c1f01ef6300"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-71.png",
+        "sha256": "b42f565a29de88a61932897dcae6831ae253ea4e4783fa101157fc8b433e13a5"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-72.json",
+        "sha256": "1ce6e0c6c895b2da80ca8bf1cd998ecf22794d6855c6adeb8619b28cbbfee637"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/sanji-north-final-73.json",
+        "sha256": "c0497cfa744a57881542377bcfc3d9d50b1443e51435739e0e7209f16f75eb3e"
+      }
+    ],
+    "assetHashes": {
+      "motion": "e9c83952b3e091c24902beb1dd43bf2f0c212b137a5396fe16c30559c6308bd7",
+      "acting": "154a9b89aa43ccaad850f9d07185a028aa16098b0b4bfa67cc849923273aeeb8"
+    },
+    "specSha256": "89946e8d827fab799ec163239b4e35616a1126ba42b9a26adc5f988143ed585d",
+    "reviewer": "Codex root, with independent walk_art_pilot visual review"
+  }
+}

@@ -1,0 +1,914 @@
+{
+  "character": "brook",
+  "manifestSha256": "4a208e2ade7a9693bf914c66cdbb000ced16be395376fd46550026b681f7dc11",
+  "state": "explicitly-approved-input",
+  "problems": [],
+  "scope": "Final published pixels and actual room recording evidence; videos remain at QA paths with hashes. Automated collection is not visual acceptance.",
+  "reports": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\report.json",
+      "sha256": "660b2800ac1b9e69e0730b26cf9e9435d3ccdbfb4580a5843ddf9f155ed38e18",
+      "bytes": 46812
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\report.json",
+      "sha256": "3f74d1224a95d65afb058444ae86e6ab995dc838d23513c4b1035d961bd72425",
+      "bytes": 46956
+    }
+  ],
+  "walkReportAssetScope": "Four directional motion atlases only",
+  "unvalidatedPreloads": [
+    {
+      "path": "images/launcher_room/acting_v2/brook/east.webp",
+      "sha256": "33a803394c06bf8fda3c0d19d1298905c8210b345240280d4367689e2502f83b",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/brook/west.webp",
+      "sha256": "d7aeb8db921a2f477454ecffe62b89b81633b474213f97449094f002135dcbf3",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/brook/north.webp",
+      "sha256": "31e77e1022b77e33cb037a7dc273d75db8544d945bb5892312a3bd9ea6be1cca",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/brook/south.webp",
+      "sha256": "9a5cb0ad0419e0be9027e388813b7fea458f506d0f1ad1a7026a9517a8fd62fd",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/brook/east.webp",
+      "sha256": "33a803394c06bf8fda3c0d19d1298905c8210b345240280d4367689e2502f83b",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/brook/west.webp",
+      "sha256": "d7aeb8db921a2f477454ecffe62b89b81633b474213f97449094f002135dcbf3",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/brook/north.webp",
+      "sha256": "31e77e1022b77e33cb037a7dc273d75db8544d945bb5892312a3bd9ea6be1cca",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/brook/south.webp",
+      "sha256": "9a5cb0ad0419e0be9027e388813b7fea458f506d0f1ad1a7026a9517a8fd62fd",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    }
+  ],
+  "adjacentFrames": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\east-adjacent-0-0.png",
+      "direction": "east",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 160.30000000074506,
+      "world": {
+        "x": 455.3307221962617,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\east-adjacent-1-1.png",
+      "direction": "east",
+      "phase": 1,
+      "viewport": 1280,
+      "timestamp": 185.20000000018626,
+      "world": {
+        "x": 455.7263132009346,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\east-loopFrames-1-31.png",
+      "direction": "east",
+      "phase": 31,
+      "viewport": 1280,
+      "timestamp": 2806.4000000003725,
+      "world": {
+        "x": 503.4767531542054,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\east-loopFrames-2-0.png",
+      "direction": "east",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 2836,
+      "world": {
+        "x": 504.2679351635512,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\north-adjacent-0-0.png",
+      "direction": "north",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 1711,
+      "world": {
+        "x": 553.7187282494539,
+        "y": 407.71547473978467
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\north-adjacent-1-1.png",
+      "direction": "north",
+      "phase": 1,
+      "viewport": 1280,
+      "timestamp": 1727.7999999998137,
+      "world": {
+        "x": 553.6941986667424,
+        "y": 407.47691252361074
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\north-loopFrames-1-31.png",
+      "direction": "north",
+      "phase": 31,
+      "viewport": 1280,
+      "timestamp": 2695,
+      "world": {
+        "x": 552.2816962183713,
+        "y": 393.7396338100428
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\north-loopFrames-2-0.png",
+      "direction": "north",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 2727.7999999998137,
+      "world": {
+        "x": 552.2335547059661,
+        "y": 393.2714340031222
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\west-adjacent-0-0.png",
+      "direction": "west",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 1442.9000000003725,
+      "world": {
+        "x": 534.1394162383181,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\west-adjacent-1-1.png",
+      "direction": "west",
+      "phase": 1,
+      "viewport": 1280,
+      "timestamp": 1474.7999999998137,
+      "world": {
+        "x": 533.421979556075,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\west-loopFrames-1-31.png",
+      "direction": "west",
+      "phase": 31,
+      "viewport": 1280,
+      "timestamp": 2441,
+      "world": {
+        "x": 512.6678681074778,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\west-loopFrames-2-0.png",
+      "direction": "west",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 2474.2999999998137,
+      "world": {
+        "x": 511.95043142523485,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\south-adjacent-0-0.png",
+      "direction": "south",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 930,
+      "world": {
+        "x": 456.8023983100648,
+        "y": 367.5888493063456
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\south-adjacent-1-1.png",
+      "direction": "south",
+      "phase": 1,
+      "viewport": 1280,
+      "timestamp": 945.9000000003725,
+      "world": {
+        "x": 456.7946334193071,
+        "y": 367.8154014131584
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\south-loopFrames-1-31.png",
+      "direction": "south",
+      "phase": 31,
+      "viewport": 1280,
+      "timestamp": 2163.300000000745,
+      "world": {
+        "x": 456.3352522304098,
+        "y": 381.2185231598095
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\south-loopFrames-2-0.png",
+      "direction": "south",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 2196.5,
+      "world": {
+        "x": 456.3194674801774,
+        "y": 381.67906646070736
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\east-adjacent-0-0.png",
+      "direction": "east",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 149.79999999981374,
+      "world": {
+        "x": 455.3330910046729,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\east-adjacent-1-1.png",
+      "direction": "east",
+      "phase": 1,
+      "viewport": 390,
+      "timestamp": 167.59999999962747,
+      "world": {
+        "x": 455.731050817757,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\east-loopFrames-1-31.png",
+      "direction": "east",
+      "phase": 31,
+      "viewport": 390,
+      "timestamp": 1166.0999999996275,
+      "world": {
+        "x": 479.0140686915886,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\east-loopFrames-2-0.png",
+      "direction": "east",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 1198.7000000001863,
+      "world": {
+        "x": 479.8052507009344,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\north-adjacent-0-0.png",
+      "direction": "north",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 4604.100000000559,
+      "world": {
+        "x": 553.718903289551,
+        "y": 407.71717709053377
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\north-adjacent-1-1.png",
+      "direction": "north",
+      "phase": 1,
+      "viewport": 390,
+      "timestamp": 4635.100000000559,
+      "world": {
+        "x": 553.6697052715944,
+        "y": 407.23870224922973
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\north-loopFrames-1-31.png",
+      "direction": "north",
+      "phase": 31,
+      "viewport": 390,
+      "timestamp": 3538.800000000745,
+      "world": {
+        "x": 555.3083301459479,
+        "y": 423.17513239980826
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\north-loopFrames-2-0.png",
+      "direction": "north",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 3577,
+      "world": {
+        "x": 555.2581149466678,
+        "y": 422.68676497151523
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\west-adjacent-0-0.png",
+      "direction": "west",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 1870.9000000003725,
+      "world": {
+        "x": 511.5917130841125,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\west-adjacent-1-1.png",
+      "direction": "west",
+      "phase": 1,
+      "viewport": 390,
+      "timestamp": 1904.2000000001863,
+      "world": {
+        "x": 510.8764244158882,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\west-loopFrames-1-31.png",
+      "direction": "west",
+      "phase": 31,
+      "viewport": 390,
+      "timestamp": 1837.5999999996275,
+      "world": {
+        "x": 512.3070017523368,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\west-loopFrames-2-0.png",
+      "direction": "west",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 1870.9000000003725,
+      "world": {
+        "x": 511.5917130841125,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\south-adjacent-0-0.png",
+      "direction": "south",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 727.6999999992549,
+      "world": {
+        "x": 456.7946711400462,
+        "y": 367.8143008551247
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\south-adjacent-1-1.png",
+      "direction": "south",
+      "phase": 1,
+      "viewport": 390,
+      "timestamp": 761.2999999998137,
+      "world": {
+        "x": 456.77927150584713,
+        "y": 368.26360782940316
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\south-loopFrames-1-31.png",
+      "direction": "south",
+      "phase": 31,
+      "viewport": 390,
+      "timestamp": 1727.699999999255,
+      "world": {
+        "x": 456.3274384345088,
+        "y": 381.4465021460978
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\south-loopFrames-2-0.png",
+      "direction": "south",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 1760.7999999998137,
+      "world": {
+        "x": 456.31164792080034,
+        "y": 381.90721360488465
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\final-published-contact-sheets\\brook-published128.png",
+      "sha256": "94f04c3d35ab367b0ef679f1853bbd7887499cdc5e9b30b2821db9d9c39bafdd",
+      "bytes": 304692
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\final-published-contact-sheets\\root-final-pixel-review.json",
+      "sha256": "d5253d6aa247ec7e8bdfe09c2d815ddf167971f3893d7f84df1d85ca4cc51c2a",
+      "bytes": 3130
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\final-published-contact-sheets\\sources.json",
+      "sha256": "f1f084881967eb99df37b06eee07c1cae3d7158a9e50112470753fe6c214df0a",
+      "bytes": 30777
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\report.json",
+      "sha256": "660b2800ac1b9e69e0730b26cf9e9435d3ccdbfb4580a5843ddf9f155ed38e18",
+      "bytes": 46812
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\report.json",
+      "sha256": "3f74d1224a95d65afb058444ae86e6ab995dc838d23513c4b1035d961bd72425",
+      "bytes": 46956
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\east-adjacent-0-0.png",
+      "sha256": "8509fd911bc829e0728d3974bb22265690b0755f9a42a53bf61db63df7430128",
+      "bytes": 8850
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\east-adjacent-1-1.png",
+      "sha256": "3d566fc41ce3cf84faad21d875dfad0c71f88455404e4e94e521c6ebdc8a7067",
+      "bytes": 8985
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\east-loopFrames-1-31.png",
+      "sha256": "e4b1da98c3a25bdd9b4b3448fc88e5e7d118f9bf8e726862261d93fa45cbac45",
+      "bytes": 8787
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\east-loopFrames-2-0.png",
+      "sha256": "8509fd911bc829e0728d3974bb22265690b0755f9a42a53bf61db63df7430128",
+      "bytes": 8850
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\north-adjacent-0-0.png",
+      "sha256": "ce12bf5c67ad2f369e2a6620f4111a5c3b6c8119f8d5e236a366aef47fbd1153",
+      "bytes": 9882
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\north-adjacent-1-1.png",
+      "sha256": "bfabaf41eaa4e5336bac31c9050bbb2a297f6a7776d682dfba76705ec2d08497",
+      "bytes": 9917
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\north-loopFrames-1-31.png",
+      "sha256": "02e32ba0efe14cc6b3f16e28cf631b4e027deb3f789f1f252c92430f09ab225d",
+      "bytes": 9866
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\north-loopFrames-2-0.png",
+      "sha256": "ce12bf5c67ad2f369e2a6620f4111a5c3b6c8119f8d5e236a366aef47fbd1153",
+      "bytes": 9882
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\west-adjacent-0-0.png",
+      "sha256": "75d55699c4b90bfda38ed502014976201efceaaf24acb249686f3f830d874f36",
+      "bytes": 8965
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\west-adjacent-1-1.png",
+      "sha256": "d9f909037e6ed6d19f11efbac2cd1d8730fd79090f8b667bc18c0882ab361b14",
+      "bytes": 9020
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\west-loopFrames-1-31.png",
+      "sha256": "b1c66b5e59f90b101611102bfe54bc6d5c85f01239c6b26172c2082eb850a50c",
+      "bytes": 8842
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\west-loopFrames-2-0.png",
+      "sha256": "75d55699c4b90bfda38ed502014976201efceaaf24acb249686f3f830d874f36",
+      "bytes": 8965
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\south-adjacent-0-0.png",
+      "sha256": "5d9cedec81af8d8dc252ee09571f49f42640dce96f698a5566fbb96345700d4e",
+      "bytes": 10846
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\south-adjacent-1-1.png",
+      "sha256": "8895572d4334d4799060af2afa95374aeb95ee70fbfb2a266db41458663ef81f",
+      "bytes": 10800
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\south-loopFrames-1-31.png",
+      "sha256": "450f30f368af37a329d66fb3c99c737a269b133c5e563ed687f62bd853a818d9",
+      "bytes": 10868
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\south-loopFrames-2-0.png",
+      "sha256": "5d9cedec81af8d8dc252ee09571f49f42640dce96f698a5566fbb96345700d4e",
+      "bytes": 10846
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\east-adjacent-0-0.png",
+      "sha256": "8509fd911bc829e0728d3974bb22265690b0755f9a42a53bf61db63df7430128",
+      "bytes": 8850
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\east-adjacent-1-1.png",
+      "sha256": "3d566fc41ce3cf84faad21d875dfad0c71f88455404e4e94e521c6ebdc8a7067",
+      "bytes": 8985
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\east-loopFrames-1-31.png",
+      "sha256": "e4b1da98c3a25bdd9b4b3448fc88e5e7d118f9bf8e726862261d93fa45cbac45",
+      "bytes": 8787
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\east-loopFrames-2-0.png",
+      "sha256": "8509fd911bc829e0728d3974bb22265690b0755f9a42a53bf61db63df7430128",
+      "bytes": 8850
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\north-adjacent-0-0.png",
+      "sha256": "ce12bf5c67ad2f369e2a6620f4111a5c3b6c8119f8d5e236a366aef47fbd1153",
+      "bytes": 9882
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\north-adjacent-1-1.png",
+      "sha256": "bfabaf41eaa4e5336bac31c9050bbb2a297f6a7776d682dfba76705ec2d08497",
+      "bytes": 9917
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\north-loopFrames-1-31.png",
+      "sha256": "02e32ba0efe14cc6b3f16e28cf631b4e027deb3f789f1f252c92430f09ab225d",
+      "bytes": 9866
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\north-loopFrames-2-0.png",
+      "sha256": "ce12bf5c67ad2f369e2a6620f4111a5c3b6c8119f8d5e236a366aef47fbd1153",
+      "bytes": 9882
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\west-adjacent-0-0.png",
+      "sha256": "75d55699c4b90bfda38ed502014976201efceaaf24acb249686f3f830d874f36",
+      "bytes": 8965
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\west-adjacent-1-1.png",
+      "sha256": "d9f909037e6ed6d19f11efbac2cd1d8730fd79090f8b667bc18c0882ab361b14",
+      "bytes": 9020
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\west-loopFrames-1-31.png",
+      "sha256": "b1c66b5e59f90b101611102bfe54bc6d5c85f01239c6b26172c2082eb850a50c",
+      "bytes": 8842
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\west-loopFrames-2-0.png",
+      "sha256": "75d55699c4b90bfda38ed502014976201efceaaf24acb249686f3f830d874f36",
+      "bytes": 8965
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\south-adjacent-0-0.png",
+      "sha256": "5d9cedec81af8d8dc252ee09571f49f42640dce96f698a5566fbb96345700d4e",
+      "bytes": 10846
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\south-adjacent-1-1.png",
+      "sha256": "8895572d4334d4799060af2afa95374aeb95ee70fbfb2a266db41458663ef81f",
+      "bytes": 10800
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\south-loopFrames-1-31.png",
+      "sha256": "450f30f368af37a329d66fb3c99c737a269b133c5e563ed687f62bd853a818d9",
+      "bytes": 10868
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\south-loopFrames-2-0.png",
+      "sha256": "5d9cedec81af8d8dc252ee09571f49f42640dce96f698a5566fbb96345700d4e",
+      "bytes": 10846
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook-jinbe-chat\\report.json",
+      "sha256": "ecfc361d95369c0b2070c492f75b082ec3256ed108fd80becda1a00be2e2c661",
+      "bytes": 17203
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook-jinbe-chat\\turn-0-stage.png",
+      "sha256": "3feb3044891dad2d485b7a8442f7651fa2c605194e73daa348984df4e7441596",
+      "bytes": 1065268
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook-jinbe-chat\\turn-1-stage.png",
+      "sha256": "795864a4719e44ab265ccc277fc049fff28908fe9ef7a5b549ca61507e57326b",
+      "bytes": 1065550
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook-jinbe-chat\\turn-2-stage.png",
+      "sha256": "37883898c044a8d392a81bb3896607bc41f30065e905f1f83767c56c0bce03af",
+      "bytes": 1065505
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook-jinbe-chat\\turn-3-stage.png",
+      "sha256": "0c1075c1cf4ed7f7156bbb1a28169d9150df8d8afb341e6e8edafc0c01161e95",
+      "bytes": 1064451
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook-piano-0\\report.json",
+      "sha256": "733457c9411769d3b70643e35332029c6c997b0a829b11ea422bc23c76d29637",
+      "bytes": 9927
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook-piano-0\\furniture-stage.png",
+      "sha256": "ff10907efc663eeb86aee88a8713fdba31f87c650b07a5736b22d34707706c6e",
+      "bytes": 1062585
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook-piano-0\\furniture-departure.png",
+      "sha256": "56eca8517cd27a18e503ad69026618bf473c548f68fafe7a60abda1fa4a9fc15",
+      "bytes": 1064541
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook-piano-1\\report.json",
+      "sha256": "bbd1f8335b80b10149d33be91750209e7c559b1e3c32dc7829aa7ae4e83db221",
+      "bytes": 9998
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook-piano-1\\furniture-stage.png",
+      "sha256": "c3e703615a392a8ae7ef8f3755665d7a765ef650dfcb67c957c16c308cb7aa72",
+      "bytes": 1063896
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook-piano-1\\furniture-departure.png",
+      "sha256": "57f23112e9558cf4ea1fffb255aadb4c6c0bf9c222088dadc8ecd67942c6cc90",
+      "bytes": 1065792
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook-piano-2\\report.json",
+      "sha256": "e18836820984a31e5deadb8ea8fa7dccaf2574270de928de149222bf0709ba18",
+      "bytes": 10011
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook-piano-2\\furniture-stage.png",
+      "sha256": "6fea5565f5b53d5d1f42398c76269255f9ddab5013e475fc7e9a978ef119a7ea",
+      "bytes": 1060894
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook-piano-2\\furniture-departure.png",
+      "sha256": "5ea49ee7464e6c8005ab9a70d7b102bb0e0ab6a1e4f63b1317979aba66dd69b1",
+      "bytes": 1061803
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook-piano-3\\report.json",
+      "sha256": "b801718610d22328fee923143daa2f8011e572a9265c7c187c63396bf8de50fc",
+      "bytes": 10069
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook-piano-3\\furniture-stage.png",
+      "sha256": "e20e102171ab350bc42d3fac86176d278ec27925abda8692bd23fd2c66581ebe",
+      "bytes": 1063139
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook-piano-3\\furniture-departure.png",
+      "sha256": "67dada6e64b6dfa9596c3094e082f58d1ac04cdbbadd712569d2e6203994a6b0",
+      "bytes": 1065055
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook-jinbe-chat\\report.json",
+      "sha256": "622144a9af89784a0025d628ebfcfcc1d3090746152560bdea4f8a02a98e3877",
+      "bytes": 17201
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook-jinbe-chat\\turn-0-stage.png",
+      "sha256": "09f67a00b52266e62a352c8321e7be723abc310428a1dee100b637dd07308b59",
+      "bytes": 175068
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook-jinbe-chat\\turn-1-stage.png",
+      "sha256": "5276eaecd097bcd0907ecae72b1110cb457d542d7d82b92f5ea73ea5de39f263",
+      "bytes": 175211
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook-jinbe-chat\\turn-2-stage.png",
+      "sha256": "94c98039d32d64c878e6b4ee43ef86faf353aa284c50792ec7f9774b5de8b354",
+      "bytes": 176953
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook-jinbe-chat\\turn-3-stage.png",
+      "sha256": "db6d6e97f8eadb13834e83b6bb56f16ca7b57a591df37625ba3dde2a4d6c2b09",
+      "bytes": 174453
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook-piano-0\\report.json",
+      "sha256": "3b6a48dc22c62ccb01c18c3f9d00b57a9f45d3fa3a3dcd1c27280d314efab749",
+      "bytes": 10031
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook-piano-0\\furniture-stage.png",
+      "sha256": "8f24945f0af28cfae322b2d89eb3fa20d3620561adb37bb0d76b4027286a0301",
+      "bytes": 174569
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook-piano-0\\furniture-departure.png",
+      "sha256": "dbd01607c3d53ab246650f427c3cec51aaf520a79f0e060e6231d7f40fb1c133",
+      "bytes": 179646
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook-piano-1\\report.json",
+      "sha256": "bf38dcbc8508f549d395b55dd9a0cbd176b9ec820245a2cdf3069fc53c6ce380",
+      "bytes": 10033
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook-piano-1\\furniture-stage.png",
+      "sha256": "755dee3606743662df63eee00680b27cebd5f9836f1db698fe329f841caffc39",
+      "bytes": 174926
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook-piano-1\\furniture-departure.png",
+      "sha256": "41b3f96ec433caeab7644cdc9cde972c00bad7be5bfe495c8a330f13195278ac",
+      "bytes": 179965
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook-piano-2\\report.json",
+      "sha256": "6248d96adae63b1af635d7aafef979e2c78901e6df0e6f72c76f59efd3511d4a",
+      "bytes": 10098
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook-piano-2\\furniture-stage.png",
+      "sha256": "3e53d201d349153ec4e7221c905e6a2a003230bf414a8d109b019d94336cc25a",
+      "bytes": 173920
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook-piano-2\\furniture-departure.png",
+      "sha256": "ff310dd7578fc083a06f36a49e2846c40f5780226f373297a14996488fa35860",
+      "bytes": 179089
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook-piano-3\\report.json",
+      "sha256": "37b1efc6e4068bc0c03a7ca12e50f8777fc8a23364d58788d97f6ecd83ee10b2",
+      "bytes": 10099
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook-piano-3\\furniture-stage.png",
+      "sha256": "4bf18f915b5a0d682de841bce7d02a558c5d9f50c5af332b5431b019958864e9",
+      "bytes": 174679
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook-piano-3\\furniture-departure.png",
+      "sha256": "b4465165705a860b19eb457b99bc26e3317b3dbc4d7735bce528ea42b1ee70cc",
+      "bytes": 179792
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\explicit-review\\root-approval.json",
+      "sha256": "1ce6e0c6c895b2da80ca8bf1cd998ecf22794d6855c6adeb8619b28cbbfee637",
+      "bytes": 1266
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\visual-review.json",
+      "sha256": "c0497cfa744a57881542377bcfc3d9d50b1443e51435739e0e7209f16f75eb3e",
+      "bytes": 19081
+    }
+  ],
+  "videos": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\normal.webm",
+      "sha256": "3054a301d1224f4c8d19343ff853a743c2fc195a89711d2c9be8eba457b61365",
+      "bytes": 3246565
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook\\half-speed.mp4",
+      "sha256": "d6998136bd034cc3b1a05eec6605a497dffe90afc82353c3b5c6f13d65be1bb2",
+      "bytes": 17204327
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\normal.webm",
+      "sha256": "c15c938d3a6e9ef6c928e4cd28869ed02f92a9392eb5cd5d9d326296829c8a9c",
+      "bytes": 1544299
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook\\half-speed.mp4",
+      "sha256": "e7a2ed55bb26bf51a9c36ffc019c8a7cda185535d5e57f26af7872b098337f4a",
+      "bytes": 4440280
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook-jinbe-chat\\normal.webm",
+      "sha256": "b099b148814d64ddf3b044ac23683395ff762257b90a26d61a8a757d739f37d5",
+      "bytes": 1667932
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook-jinbe-chat\\half-speed.mp4",
+      "sha256": "10c5ccd760a6b16fd61af513f8acdb329567e04302c98f8f946d0dcbab0b1b1d",
+      "bytes": 8144457
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook-piano-0\\normal.webm",
+      "sha256": "b35a96d6d3a9a1303fa5c7f0f35eeda3211d2e9089603bbae6d57ddf08b39e1e",
+      "bytes": 1510302
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook-piano-0\\half-speed.mp4",
+      "sha256": "b12344b9a41641a2a0e3e425ec67b5dc316a0b009076c14eef09b1caa71fb339",
+      "bytes": 6720959
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook-piano-1\\normal.webm",
+      "sha256": "abb03a2d7341a0f6b0a49017a3f1f303d9d33a72dbb619b8269592af402e843c",
+      "bytes": 2131142
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook-piano-1\\half-speed.mp4",
+      "sha256": "e1bd7e6d38bec1af2d0a9cf889922ff96972a210cc22e1edd41c7316668f5b0b",
+      "bytes": 8817431
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook-piano-2\\normal.webm",
+      "sha256": "c8957fe42252cb180affacecf1d4d0573b0137235f3c603f95ef97edd42cbea9",
+      "bytes": 2625505
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook-piano-2\\half-speed.mp4",
+      "sha256": "d34b5e9f87aff435b8067a2b75b5268f5c30a58f6871fa1899f996e28c399e8c",
+      "bytes": 10224891
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook-piano-3\\normal.webm",
+      "sha256": "ef937d429f5fdf43a861f9b4ade0dc40d20f45f4e4c6be407634f01b321c7708",
+      "bytes": 2450162
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\brook-piano-3\\half-speed.mp4",
+      "sha256": "d4b217bb7ce8f106bfbf0e367e47c056ba89eb276e9cc54ca23eee506ace9c9e",
+      "bytes": 9565454
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook-jinbe-chat\\normal.webm",
+      "sha256": "0d7b3be5ebec9314224a06d5cd71321ce9d2302772cd5de9994885b588d69049",
+      "bytes": 850626
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook-jinbe-chat\\half-speed.mp4",
+      "sha256": "55eceb26d1fe43b28fc75ae77e3533ee349a98813e48fc3eedbbb529f6cf31a9",
+      "bytes": 2301395
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook-piano-0\\normal.webm",
+      "sha256": "ea42d7b9db810fe5b40f12a6a19939d23a49c9f080e14910ae6602216d673cd9",
+      "bytes": 808764
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook-piano-0\\half-speed.mp4",
+      "sha256": "313579dafc34bf7302f3c7f36afb98bfdabec7c04aa21d83d7c38f8ff008a013",
+      "bytes": 1835574
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook-piano-1\\normal.webm",
+      "sha256": "66756b948e22412e0d49ab14a9e5d7502984bedf0c66b60d6e87a6f7d9395c03",
+      "bytes": 1203891
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook-piano-1\\half-speed.mp4",
+      "sha256": "dfc2ebfba24589fb672bff2b6f70105e28b176f378ca1d9da68fa032da93e9a9",
+      "bytes": 2869060
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook-piano-2\\normal.webm",
+      "sha256": "e68d98b674703b429ae7c01ff158892a727616893cdef7bc94d13b00f27ac9fb",
+      "bytes": 1244930
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook-piano-2\\half-speed.mp4",
+      "sha256": "9fba8475f6266f876693b3d1e32d05df26c3d036ce3f8a9381cce791ef0a2fe3",
+      "bytes": 3351355
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook-piano-3\\normal.webm",
+      "sha256": "32b60ec8c3da64a9077100e18cfef4d2e01836138abd0ff89fe50614ef244c62",
+      "bytes": 1142391
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\brook-piano-3\\half-speed.mp4",
+      "sha256": "03dbb3cc9141b6d3bff5b7b070b0b9926e022dafcd1ea175ace490dee1be7b08",
+      "bytes": 2663057
+    }
+  ],
+  "visualAcceptance": false
+}

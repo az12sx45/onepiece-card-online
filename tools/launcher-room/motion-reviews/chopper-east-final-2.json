@@ -1,0 +1,63 @@
+{
+  "reviewer": "root",
+  "at": "2026-09-26T17:03:53.648121+00:00",
+  "scope": "Direct visual inspection of final published 128px atlases, 10 contact sheets, four walk rows at phases 0/4/8/12/16/20/24/28 and four acting rows of eight poses at beat 2.",
+  "evidence": [
+    {
+      "path": "luffy-published128.png",
+      "sha256": "619e5114bb38c8f20f695e4bf7b443b5a1abea01af62149f1fb0e20a5859b604"
+    },
+    {
+      "path": "zoro-published128.png",
+      "sha256": "34bc742aaea7cbec2871954e95089da02aa9d1108492b1b92311c72cc8b7d5bf"
+    },
+    {
+      "path": "nami-published128.png",
+      "sha256": "3d0d08862ca883ef64c9d8c43f7f5ca30f095826d4b38efcd0aac559607d590e"
+    },
+    {
+      "path": "usopp-published128.png",
+      "sha256": "ae07b63d49ef105d5697629cad0e09e499c021eb79a8439db343b86939656868"
+    },
+    {
+      "path": "sanji-published128.png",
+      "sha256": "87947177f44e5836d917603ef19ad13e07fbf2d499b7557f714ce35a78e4093b"
+    },
+    {
+      "path": "chopper-published128.png",
+      "sha256": "7cf9e05ee46a024b130ffd6a6fd046fee547348389caa5186148b69908e58843"
+    },
+    {
+      "path": "robin-published128.png",
+      "sha256": "3747575c15af7fa3baa9efff448216daeaa5899467d066cc001d3b22f834e9ba"
+    },
+    {
+      "path": "franky-published128.png",
+      "sha256": "92fbc00f2a616e469897854d6fcfa13e65e02acec7fa0aff4daac0b79a21c2d7"
+    },
+    {
+      "path": "brook-published128.png",
+      "sha256": "94f04c3d35ab367b0ef679f1853bbd7887499cdc5e9b30b2821db9d9c39bafdd"
+    },
+    {
+      "path": "jinbe-published128.png",
+      "sha256": "51973608544119932657280dc5ddec0defdaaa15b6bed26763cecdb27d368088"
+    }
+  ],
+  "sourceBinding": "sources.json",
+  "observations": [
+    "All ten existing One Piece characters are identifiable and keep independently drawn head/body/feet orientation in every direction.",
+    "Side gait samples exchange front/back legs through a passing pose, with small vertical foot clearance and stable skull scale.",
+    "North/south samples alternate support and advance under the body without a front face painted on the back head.",
+    "No detached head/shoulder holes, stationary duplicate thighs, or obvious extra arms are visible in selected phases.",
+    "Expressions change on the actual character; gestures move arms and retain clothing accessories.",
+    "Zoro white-shirt era has two intact eyes; Sanji left eye is covered; asymmetric swords/earrings/Usopp bag remain on consistent anatomical sides.",
+    "Brook remains a skeleton in his tailcoat, and Jinbe keeps his fishman face, kimono and cape."
+  ],
+  "limits": "Temporal sampling of published pixels. Does not by itself certify continuous runtime routes, furniture contact, human testing or deployment. Those are separate gates.",
+  "continuousRuntimeAcceptance": false,
+  "sanjiFocusedUseRecheck": {
+    "at": "2026-09-26T17:07:49.924566+00:00",
+    "observation": "Final east/west cooking pose extends both arms in facing direction; costume and head remain aligned, walking rows unchanged. Furniture surface alignment is a separate runtime gate."
+  }
+}

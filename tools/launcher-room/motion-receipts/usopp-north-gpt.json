@@ -1,0 +1,65 @@
+{
+  "candidate": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\usopp\\north-01.png",
+  "gptOriginal": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-a1c5-7fc2-9c4d-857370899a24\\exec-d4780f8f-ade8-4159-8205-e6111413c709.png",
+  "sha256": "d43588f29092401cfc71defee65ef9a664c71d4ae363c2e4e06fcfb3c6c0ab6c",
+  "generator": "built-in imagegen",
+  "prompt": "Use case: stylized-concept. Independent NORTH true BACK view of classic pre-timeskip Usopp from ONE PIECE, transparent 12-part rig atlas. Reference1 exact back costume/anatomy, reference2 part layout style only WEST: do not copy direction. 4:3 RGBA, four columns three rows, generous clear margins. Each head fits within at most 65% cell width so hair/scarf never clipped. Every part separate and complete. No text/grid/shadow.\nRow1 four IDENTICAL back-of-head + neck parts. Back ochre checked scarf and tied knot, brown goggles strap around rear, black curly hair. NO face, NO nose, NO facial expressions whatsoever visible from back; keep all4 identical complete heads.\nRow2:5 BACK torso+pelvis ONLY no head/arms/legs: brown bib overalls back straps, pale blue sash, sash knot/tails at anatomical LEFT = screenLEFT, crossbody strap from RIGHT shoulder screenRIGHT down to LEFT hip screenLEFT, NO satchel attached. Bare hidden shoulders.6 anatomicalRIGHT complete barearm no wristband, posterior view.7 anatomicalLEFT completebarearm WITH blue-white striped wristband, posterior view.8 anatomicalRIGHT pantleg hip-to-ankle brown trousers/pale rolledcuff/shortbarecalf overlap, no foot.\nRow3:9 anatomicalLEFT pantleg same posterior view.10 anatomicalRIGHT olive-brown boot from REAR, show heel/Achilles/heelsole, absolutely no toe/front instep.11 anatomicalLEFT boot rear heel.12 orange rounded satchel accessory rear/side perspective for LEFT hip, no longstrap.\nAll body/head/limbs/boots truly face away, both fists posterior, neutral nearstraight limbs, full hidden shoulder/hip/ankle overlap. Keep pre-timeskip identity,costume/color/style from reference. No weapons. True transparent alpha and unclipped margins.",
+  "direction": "north",
+  "size": [
+    1448,
+    1086
+  ],
+  "mode": "RGBA",
+  "alphaExtrema": [
+    0,
+    255
+  ],
+  "edgeAlpha128Counts": {
+    "left": 0,
+    "right": 0,
+    "top": 0,
+    "bottom": 0
+  },
+  "nearAnatomicalSide": "right",
+  "farAnatomicalSide": "left",
+  "identityReference": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\turnarounds\\usopp-02.png",
+  "officialReference": "https://tamashiiweb.com/item/15390/",
+  "status": "CANON_PARTS_REVIEW_PASS_PENDING_ASSEMBLY",
+  "cellOrder": [
+    "quiet-head",
+    "proud-head",
+    "worried-head",
+    "surprised-head",
+    "torso-pelvis",
+    "near-arm",
+    "far-arm",
+    "near-leg",
+    "far-leg",
+    "near-foot",
+    "far-foot",
+    "left-satchel"
+  ],
+  "canonicalPassed": [
+    "Classic brown bib overalls, pale sash/cuffs, ochre checked headscarf and goggles",
+    "Long nose and curly black hair; north heads have no face",
+    "Blue-white striped wristband on anatomical left only",
+    "Satchel strap right shoulder to left hip; sash tails anatomical left"
+  ],
+  "assemblyNotes": [
+    "Manual/component source rectangles required; not blind equal grid crop",
+    "West02 head scaled smaller in atlas to prevent clipping; normalize as shared head set",
+    "Satchel belongs LEFT hip: east far side, west near side, north screen-left, south screen-right",
+    "Torso generated hidden shoulder bulges must be covered by arm shoulder overlap",
+    "Front and rear boot silhouettes similar; confirm actual rear heel raster in assembled north view"
+  ],
+  "notEstablished": [
+    "Joint anchors",
+    "Assembled visual fit",
+    "World support sole motion",
+    "Interaction animation quality",
+    "Production acceptance"
+  ],
+  "promptFile": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\usopp\\north-01-prompt.txt",
+  "originalReceipt": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\usopp\\north-01-source-canon-status.json",
+  "originalReceiptSha256": "30f7e9eccb8f9aed8c9dafb6bacbd1da7980558d32a633f331e2694e5e3597cc"
+}

@@ -1,0 +1,62 @@
+{
+  "candidate": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\usopp\\south-01.png",
+  "gptOriginal": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-a1c5-7fc2-9c4d-857370899a24\\exec-743975fa-ac94-41ec-b038-49dc5b8b924e.png",
+  "sha256": "e7f7a7c821488e0b546682f84ced95139c5a69bf419a0c8a966aff5bd1f38a5a",
+  "generator": "built-in imagegen",
+  "prompt": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\usopp\\south-01-prompt.txt",
+  "direction": "south",
+  "size": [
+    1448,
+    1086
+  ],
+  "mode": "RGBA",
+  "alphaExtrema": [
+    0,
+    255
+  ],
+  "edgeAlpha128Counts": {
+    "left": 0,
+    "right": 0,
+    "top": 0,
+    "bottom": 0
+  },
+  "nearAnatomicalSide": "right",
+  "farAnatomicalSide": "left",
+  "identityReference": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\turnarounds\\usopp-02.png",
+  "officialReference": "https://tamashiiweb.com/item/15390/",
+  "status": "CANON_PARTS_REVIEW_PASS_PENDING_ASSEMBLY",
+  "cellOrder": [
+    "quiet-head",
+    "proud-head",
+    "worried-head",
+    "surprised-head",
+    "torso-pelvis",
+    "near-arm",
+    "far-arm",
+    "near-leg",
+    "far-leg",
+    "near-foot",
+    "far-foot",
+    "left-satchel"
+  ],
+  "canonicalPassed": [
+    "Classic brown bib overalls, pale sash/cuffs, ochre checked headscarf and goggles",
+    "Long nose and curly black hair; north heads have no face",
+    "Blue-white striped wristband on anatomical left only",
+    "Satchel strap right shoulder to left hip; sash tails anatomical left"
+  ],
+  "assemblyNotes": [
+    "Manual/component source rectangles required; not blind equal grid crop",
+    "West02 head scaled smaller in atlas to prevent clipping; normalize as shared head set",
+    "Satchel belongs LEFT hip: east far side, west near side, north screen-left, south screen-right",
+    "Torso generated hidden shoulder bulges must be covered by arm shoulder overlap",
+    "Front and rear boot silhouettes similar; confirm actual rear heel raster in assembled north view"
+  ],
+  "notEstablished": [
+    "Joint anchors",
+    "Assembled visual fit",
+    "World support sole motion",
+    "Interaction animation quality",
+    "Production acceptance"
+  ]
+}

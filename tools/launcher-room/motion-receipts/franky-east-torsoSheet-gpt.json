@@ -1,0 +1,11 @@
+{
+  "prompt": "Use case: precise-object-edit. Edit ONLY cell5 (row2 column1 TORSO) of supplied Franky transparent 4column3row12part rig atlas. All other11parts must remain absolutely unchanged. Current torso incorrectly faces front while heads face screenRIGHT. Repaint cell5 as TRUE RIGHT-FACING SIDE PROFILE, coherent with the heads above. Chest/stomach/front of red briefs point SCREENRIGHT, back on SCREENLEFT. Narrow side silhouette, side plane of torso visible, not a symmetrical front sixpack and not both chest halves. Hawaiian red sleeveless open shirt with green palm motifs: its NEAR RIGHT side/back cloth covers much of near torso and the opening/visible abdominal strip is at front RIGHT EDGE. Keep silver shoulder socket correctly SIDE-on at shoulder, NO existing arm part or empty cylindrical stump stickingout. Torso includes chest/abdomen and red speedo pelvis only. REMOVE BOTH fixed skin upper thighs currently under the briefs: terminate at red brief leg-opening border, complete hidden pelvis overlap but NO bare legs below. All skin thighs supplied in independent leg slots. Keep canonical Franky muscular body, posttimeskip cyborgsleevelessshirt/redbriefs/costume and exact renderstyle. Match overall neck-to-pelvis height/cell placement; do not make it smaller in height. Do not rotate only chest leaving pelvisfront; whole torso/pelvis profile facesRIGHT. Keep all4heads,arms,legs,feet,sparehand othercells unchanged. Truealpha same4:3 canvas; no labels,grid/shadow.",
+  "promptFile": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\franky\\east-02-prompt.txt",
+  "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-a1c5-7fc2-9c4d-857370899a24\\exec-e0f5dd74-e370-4381-b1f1-c7c417d9a867.png",
+  "output": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\franky\\east-02.png",
+  "sha256": "d8312c36c5a2ab24c9b267e83e83356f99a41ac866b7f0e69501e73696845068",
+  "tool": "built-in imagegen",
+  "status": "TORSO_SOURCE_STATIC_REVIEW_PASSED_ASSEMBLY_PENDING",
+  "use": "Only cell5 torso via parts.torso.image=torsoSheet; allotherparts preserved original01",
+  "review": "True sideprofile chest/abdomen/pelvis coherently faces east. Static upperthigh skin in brief opening still present, source polygon clip required. Allsourcebitmaps unpainted."
+}

@@ -1,0 +1,65 @@
+{
+  "candidate": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\usopp\\south-01.png",
+  "gptOriginal": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-a1c5-7fc2-9c4d-857370899a24\\exec-743975fa-ac94-41ec-b038-49dc5b8b924e.png",
+  "sha256": "e7f7a7c821488e0b546682f84ced95139c5a69bf419a0c8a966aff5bd1f38a5a",
+  "generator": "built-in imagegen",
+  "prompt": "Use case: stylized-concept. Independent SOUTH direct FRONT view Usopp ONE PIECE pre-timeskip rig atlas. Reference1 exact identity/costume/anatomical placement. Reference2 only12part order/style. 4:3 RGBA transparent,4columns3rows. Large generous margins; head each max65%cellwidth; no clipping,nolabels/grids/shadows.\nRow1 four FRONT heads+shortneck: quiet attentive, proud broadgrin, frightened worriedgrimace, astonished openmouth. Same head shape/scarf/goggles/hair/ears/nose proportions/neckanchor, change only facialfeatures. Longnose correctly foreshortened pointing toward camera, NOT a sidelong nose. Ochre checked headscarf, round forehead goggles, blackcurlyhair, same exactUsopp canon.\nRow2:5 FRONT torso+pelvis withouthead/arms/legs, brownbiboveralls/barehiddenshoulders, pale blue sash knot/tails on anatomicalLEFT = screenRIGHT, satchelstrap from anatomicalRIGHTshoulder screenLEFT toLEFT hip screenRIGHT. NO bag on torso.6 complete anatomicalRIGHT barearm with NO wristband (near slot, appears screenLEFT when assembled).7 complete anatomicalLEFT barearm WITHbluewhite stripedwristband (far slot, screenRIGHT assembled).8 anatomicalRIGHT brownpantleg hiptoankle pale rolledcuff andbarecalfoverlap, nofoot.\nRow3:9 anatomicalLEFT pantleg samefrontview.10 anatomicalRIGHT fulloliveboot fronttoeview/ankleoverlap.11 anatomicalLEFT bootfronttoeview.12 orange roundedsatchel withgoldclasp left-hip accessory, no longcrossbodystrap.\nLimbs neutral low nearstraight with hiddenshoulder/hip/ankleoverlap; hands empty no weapon. Entire parts same FRONT camera, no torso side turn. Crispcartoonchibi matching refs. Actual alpha, emptygaps around12separateparts.",
+  "direction": "south",
+  "size": [
+    1448,
+    1086
+  ],
+  "mode": "RGBA",
+  "alphaExtrema": [
+    0,
+    255
+  ],
+  "edgeAlpha128Counts": {
+    "left": 0,
+    "right": 0,
+    "top": 0,
+    "bottom": 0
+  },
+  "nearAnatomicalSide": "right",
+  "farAnatomicalSide": "left",
+  "identityReference": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\turnarounds\\usopp-02.png",
+  "officialReference": "https://tamashiiweb.com/item/15390/",
+  "status": "CANON_PARTS_REVIEW_PASS_PENDING_ASSEMBLY",
+  "cellOrder": [
+    "quiet-head",
+    "proud-head",
+    "worried-head",
+    "surprised-head",
+    "torso-pelvis",
+    "near-arm",
+    "far-arm",
+    "near-leg",
+    "far-leg",
+    "near-foot",
+    "far-foot",
+    "left-satchel"
+  ],
+  "canonicalPassed": [
+    "Classic brown bib overalls, pale sash/cuffs, ochre checked headscarf and goggles",
+    "Long nose and curly black hair; north heads have no face",
+    "Blue-white striped wristband on anatomical left only",
+    "Satchel strap right shoulder to left hip; sash tails anatomical left"
+  ],
+  "assemblyNotes": [
+    "Manual/component source rectangles required; not blind equal grid crop",
+    "West02 head scaled smaller in atlas to prevent clipping; normalize as shared head set",
+    "Satchel belongs LEFT hip: east far side, west near side, north screen-left, south screen-right",
+    "Torso generated hidden shoulder bulges must be covered by arm shoulder overlap",
+    "Front and rear boot silhouettes similar; confirm actual rear heel raster in assembled north view"
+  ],
+  "notEstablished": [
+    "Joint anchors",
+    "Assembled visual fit",
+    "World support sole motion",
+    "Interaction animation quality",
+    "Production acceptance"
+  ],
+  "promptFile": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\usopp\\south-01-prompt.txt",
+  "originalReceipt": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\usopp\\south-01-source-canon-status.json",
+  "originalReceiptSha256": "45e8d5b74023d009c1f4f83632ba0e0b058f910f550523e4fedb3562415edd16"
+}

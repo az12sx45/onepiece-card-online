@@ -1,0 +1,714 @@
+{
+  "character": "robin",
+  "manifestSha256": "4a208e2ade7a9693bf914c66cdbb000ced16be395376fd46550026b681f7dc11",
+  "state": "explicitly-approved-input",
+  "problems": [],
+  "scope": "Final published pixels and actual room recording evidence; videos remain at QA paths with hashes. Automated collection is not visual acceptance.",
+  "reports": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\report.json",
+      "sha256": "213012969890d60d65b15d1cb657e88f78035928aaacfb64e73d9b533c406ed9",
+      "bytes": 46524
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\report.json",
+      "sha256": "14cf571dcd7d963271a13912efa415086609050b791993997891d92db69736ff",
+      "bytes": 46876
+    }
+  ],
+  "walkReportAssetScope": "Four directional motion atlases only",
+  "unvalidatedPreloads": [
+    {
+      "path": "images/launcher_room/acting_v2/robin/east.webp",
+      "sha256": "3189e20b582cf9c8a05ce626886c096fdfbc5a9e91d3c1e238a87da7536b367a",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/robin/west.webp",
+      "sha256": "f7fcbe3839bb8c75eac37c1e2b521b93b47e13f71ddfead1a13b02504b37463c",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/robin/north.webp",
+      "sha256": "eb6e65ff49477cb1d47d70cb50eeffb2b45ebde84d3efa91a7e29cb0213f9c38",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/robin/south.webp",
+      "sha256": "b4960bd0a62d1e97fcd9091927a47bce3c3cba87837a3953faba859ff1097464",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/robin/east.webp",
+      "sha256": "3189e20b582cf9c8a05ce626886c096fdfbc5a9e91d3c1e238a87da7536b367a",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/robin/west.webp",
+      "sha256": "f7fcbe3839bb8c75eac37c1e2b521b93b47e13f71ddfead1a13b02504b37463c",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/robin/north.webp",
+      "sha256": "eb6e65ff49477cb1d47d70cb50eeffb2b45ebde84d3efa91a7e29cb0213f9c38",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/robin/south.webp",
+      "sha256": "b4960bd0a62d1e97fcd9091927a47bce3c3cba87837a3953faba859ff1097464",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    }
+  ],
+  "adjacentFrames": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\east-adjacent-0-0.png",
+      "direction": "east",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 4134.4000000003725,
+      "world": {
+        "x": 439.16022196261724,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\east-adjacent-1-1.png",
+      "direction": "east",
+      "phase": 1,
+      "viewport": 1280,
+      "timestamp": 4177.9000000003725,
+      "world": {
+        "x": 439.8927978971967,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\east-loopFrames-1-31.png",
+      "direction": "east",
+      "phase": 31,
+      "viewport": 1280,
+      "timestamp": 4114.600000000559,
+      "world": {
+        "x": 438.43422605140233,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\east-loopFrames-2-0.png",
+      "direction": "east",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 4134.4000000003725,
+      "world": {
+        "x": 439.16022196261724,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\north-adjacent-0-0.png",
+      "direction": "north",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 1539.699999999255,
+      "world": {
+        "x": 553.2127758582299,
+        "y": 402.79483971925566
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\north-adjacent-1-1.png",
+      "direction": "north",
+      "phase": 1,
+      "viewport": 1280,
+      "timestamp": 1588.5999999996275,
+      "world": {
+        "x": 553.1676941143354,
+        "y": 402.35639766098825
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\north-loopFrames-1-31.png",
+      "direction": "north",
+      "phase": 31,
+      "viewport": 1280,
+      "timestamp": 1517.0999999996275,
+      "world": {
+        "x": 553.258288343668,
+        "y": 403.23747095018285
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\north-loopFrames-2-0.png",
+      "direction": "north",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 1539.699999999255,
+      "world": {
+        "x": 553.2127758582299,
+        "y": 402.79483971925566
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\west-adjacent-0-0.png",
+      "direction": "west",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 2165.899999999441,
+      "world": {
+        "x": 519.9853563084107,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\west-adjacent-1-1.png",
+      "direction": "west",
+      "phase": 1,
+      "viewport": 1280,
+      "timestamp": 2184.2999999998137,
+      "world": {
+        "x": 519.6532096962611,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\west-loopFrames-1-31.png",
+      "direction": "west",
+      "phase": 31,
+      "viewport": 1280,
+      "timestamp": 2134.2999999998137,
+      "world": {
+        "x": 520.6496495327098,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\west-loopFrames-2-0.png",
+      "direction": "west",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 2165.899999999441,
+      "world": {
+        "x": 519.9853563084107,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\south-adjacent-0-0.png",
+      "direction": "south",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 3465,
+      "world": {
+        "x": 455.9404729881855,
+        "y": 392.7367881094115
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\south-adjacent-1-1.png",
+      "direction": "south",
+      "phase": 1,
+      "viewport": 1280,
+      "timestamp": 3508.899999999441,
+      "world": {
+        "x": 455.9184563771356,
+        "y": 393.37915511416145
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\south-loopFrames-1-31.png",
+      "direction": "south",
+      "phase": 31,
+      "viewport": 1280,
+      "timestamp": 3436.7000000001863,
+      "world": {
+        "x": 455.9555257993286,
+        "y": 392.2976002078246
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\south-loopFrames-2-0.png",
+      "direction": "south",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 3465,
+      "world": {
+        "x": 455.9404729881855,
+        "y": 392.7367881094115
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\east-adjacent-0-0.png",
+      "direction": "east",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 158.09999999962747,
+      "world": {
+        "x": 455.3015946261682,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\east-adjacent-1-1.png",
+      "direction": "east",
+      "phase": 1,
+      "viewport": 390,
+      "timestamp": 175.3999999994412,
+      "world": {
+        "x": 455.6700759345794,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\east-loopFrames-1-31.png",
+      "direction": "east",
+      "phase": 31,
+      "viewport": 390,
+      "timestamp": 2040,
+      "world": {
+        "x": 496.59782126168284,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\east-loopFrames-2-0.png",
+      "direction": "east",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 2073.2999999998137,
+      "world": {
+        "x": 497.3260105140193,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\north-adjacent-0-0.png",
+      "direction": "north",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 1335,
+      "world": {
+        "x": 553.5302676878305,
+        "y": 405.88260339537004
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\north-adjacent-1-1.png",
+      "direction": "north",
+      "phase": 1,
+      "viewport": 390,
+      "timestamp": 1370.699999999255,
+      "world": {
+        "x": 553.4847053542665,
+        "y": 405.4394873669825
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\north-loopFrames-1-31.png",
+      "direction": "north",
+      "phase": 31,
+      "viewport": 390,
+      "timestamp": 1303.5999999996275,
+      "world": {
+        "x": 553.5755879947617,
+        "y": 406.3233655961136
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\north-loopFrames-2-0.png",
+      "direction": "north",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 1335,
+      "world": {
+        "x": 553.5302676878305,
+        "y": 405.88260339537004
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\west-adjacent-0-0.png",
+      "direction": "west",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 5178.299999999814,
+      "world": {
+        "x": 540.1925992990649,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\west-adjacent-1-1.png",
+      "direction": "west",
+      "phase": 1,
+      "viewport": 390,
+      "timestamp": 5209.0999999996275,
+      "world": {
+        "x": 539.5322838785041,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\west-loopFrames-1-31.png",
+      "direction": "west",
+      "phase": 31,
+      "viewport": 390,
+      "timestamp": 5154.899999999441,
+      "world": {
+        "x": 540.5267348130836,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\west-loopFrames-2-0.png",
+      "direction": "west",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 5178.299999999814,
+      "world": {
+        "x": 540.1925992990649,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\south-adjacent-0-0.png",
+      "direction": "south",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 780.3999999994412,
+      "world": {
+        "x": 456.79323261622926,
+        "y": 367.8562719029581
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\south-adjacent-1-1.png",
+      "direction": "south",
+      "phase": 1,
+      "viewport": 390,
+      "timestamp": 798.2999999998137,
+      "world": {
+        "x": 456.78608256918733,
+        "y": 368.064885040182
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\south-loopFrames-1-31.png",
+      "direction": "south",
+      "phase": 31,
+      "viewport": 390,
+      "timestamp": 1696.7999999998137,
+      "world": {
+        "x": 456.3972924242698,
+        "y": 379.4084092683678
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\south-loopFrames-2-0.png",
+      "direction": "south",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 1730.2999999998137,
+      "world": {
+        "x": 456.3827194843059,
+        "y": 379.8335962226082
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\final-published-contact-sheets\\robin-published128.png",
+      "sha256": "3747575c15af7fa3baa9efff448216daeaa5899467d066cc001d3b22f834e9ba",
+      "bytes": 314119
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\final-published-contact-sheets\\root-final-pixel-review.json",
+      "sha256": "d5253d6aa247ec7e8bdfe09c2d815ddf167971f3893d7f84df1d85ca4cc51c2a",
+      "bytes": 3130
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\final-published-contact-sheets\\sources.json",
+      "sha256": "f1f084881967eb99df37b06eee07c1cae3d7158a9e50112470753fe6c214df0a",
+      "bytes": 30777
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\report.json",
+      "sha256": "213012969890d60d65b15d1cb657e88f78035928aaacfb64e73d9b533c406ed9",
+      "bytes": 46524
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\report.json",
+      "sha256": "14cf571dcd7d963271a13912efa415086609050b791993997891d92db69736ff",
+      "bytes": 46876
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\east-adjacent-0-0.png",
+      "sha256": "23f15019864d938323707bf7b47f9c69d8e5f57a17b688192ca1dfb57a95154c",
+      "bytes": 10003
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\east-adjacent-1-1.png",
+      "sha256": "ede05792c18884d88864be32bed88f5eab7c3d76ff1d7b83412f149dadb0c319",
+      "bytes": 9962
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\east-loopFrames-1-31.png",
+      "sha256": "ac367b80af0d42220a680301100128038a7a113ec1d08ff20dd925619213b65e",
+      "bytes": 9988
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\east-loopFrames-2-0.png",
+      "sha256": "23f15019864d938323707bf7b47f9c69d8e5f57a17b688192ca1dfb57a95154c",
+      "bytes": 10003
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\north-adjacent-0-0.png",
+      "sha256": "c5d0d8d439bf4030c3185e55f398e0afb33652f1972eba03e80812ee24e6602a",
+      "bytes": 10044
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\north-adjacent-1-1.png",
+      "sha256": "2a13bbdb1c53e77ddc13392fc394e6eeb6618056dce609e8f2ea8567f1342448",
+      "bytes": 9963
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\north-loopFrames-1-31.png",
+      "sha256": "7f212004602bd8661f08268b728f4c10cd8786eb9af99a039f8203451415cc8b",
+      "bytes": 9918
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\north-loopFrames-2-0.png",
+      "sha256": "c5d0d8d439bf4030c3185e55f398e0afb33652f1972eba03e80812ee24e6602a",
+      "bytes": 10044
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\west-adjacent-0-0.png",
+      "sha256": "3bac9d96e381042420ca3288dedb4b21cf36936a5484925af5ce4a307e0b62a2",
+      "bytes": 10098
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\west-adjacent-1-1.png",
+      "sha256": "522ac0b2b441de94b8d63f7dab052fe671e4efecfd145927ab152935b8b9dd10",
+      "bytes": 10037
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\west-loopFrames-1-31.png",
+      "sha256": "39763b76dfa4affd7161ceba6d780352a106219e5229e1bfb695e95699c65b8d",
+      "bytes": 10061
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\west-loopFrames-2-0.png",
+      "sha256": "3bac9d96e381042420ca3288dedb4b21cf36936a5484925af5ce4a307e0b62a2",
+      "bytes": 10098
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\south-adjacent-0-0.png",
+      "sha256": "e76082909e423435c9ab97c74db91d3448f0830ee576510c57c3a717ac0d53b9",
+      "bytes": 11440
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\south-adjacent-1-1.png",
+      "sha256": "2d4af628ffd5af66608810d743fa523dd34f3cf191adc7648d9c3bbffceb309e",
+      "bytes": 11390
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\south-loopFrames-1-31.png",
+      "sha256": "29a54d7fc2c6585d609efab8e0bbfef5e53e03d95af0b8c132c73644f5e090d4",
+      "bytes": 11420
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\south-loopFrames-2-0.png",
+      "sha256": "e76082909e423435c9ab97c74db91d3448f0830ee576510c57c3a717ac0d53b9",
+      "bytes": 11440
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\east-adjacent-0-0.png",
+      "sha256": "23f15019864d938323707bf7b47f9c69d8e5f57a17b688192ca1dfb57a95154c",
+      "bytes": 10003
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\east-adjacent-1-1.png",
+      "sha256": "ede05792c18884d88864be32bed88f5eab7c3d76ff1d7b83412f149dadb0c319",
+      "bytes": 9962
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\east-loopFrames-1-31.png",
+      "sha256": "ac367b80af0d42220a680301100128038a7a113ec1d08ff20dd925619213b65e",
+      "bytes": 9988
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\east-loopFrames-2-0.png",
+      "sha256": "23f15019864d938323707bf7b47f9c69d8e5f57a17b688192ca1dfb57a95154c",
+      "bytes": 10003
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\north-adjacent-0-0.png",
+      "sha256": "c5d0d8d439bf4030c3185e55f398e0afb33652f1972eba03e80812ee24e6602a",
+      "bytes": 10044
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\north-adjacent-1-1.png",
+      "sha256": "2a13bbdb1c53e77ddc13392fc394e6eeb6618056dce609e8f2ea8567f1342448",
+      "bytes": 9963
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\north-loopFrames-1-31.png",
+      "sha256": "7f212004602bd8661f08268b728f4c10cd8786eb9af99a039f8203451415cc8b",
+      "bytes": 9918
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\north-loopFrames-2-0.png",
+      "sha256": "c5d0d8d439bf4030c3185e55f398e0afb33652f1972eba03e80812ee24e6602a",
+      "bytes": 10044
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\west-adjacent-0-0.png",
+      "sha256": "3bac9d96e381042420ca3288dedb4b21cf36936a5484925af5ce4a307e0b62a2",
+      "bytes": 10098
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\west-adjacent-1-1.png",
+      "sha256": "522ac0b2b441de94b8d63f7dab052fe671e4efecfd145927ab152935b8b9dd10",
+      "bytes": 10037
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\west-loopFrames-1-31.png",
+      "sha256": "39763b76dfa4affd7161ceba6d780352a106219e5229e1bfb695e95699c65b8d",
+      "bytes": 10061
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\west-loopFrames-2-0.png",
+      "sha256": "3bac9d96e381042420ca3288dedb4b21cf36936a5484925af5ce4a307e0b62a2",
+      "bytes": 10098
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\south-adjacent-0-0.png",
+      "sha256": "e76082909e423435c9ab97c74db91d3448f0830ee576510c57c3a717ac0d53b9",
+      "bytes": 11440
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\south-adjacent-1-1.png",
+      "sha256": "2d4af628ffd5af66608810d743fa523dd34f3cf191adc7648d9c3bbffceb309e",
+      "bytes": 11390
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\south-loopFrames-1-31.png",
+      "sha256": "29a54d7fc2c6585d609efab8e0bbfef5e53e03d95af0b8c132c73644f5e090d4",
+      "bytes": 11420
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\south-loopFrames-2-0.png",
+      "sha256": "e76082909e423435c9ab97c74db91d3448f0830ee576510c57c3a717ac0d53b9",
+      "bytes": 11440
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\nami-robin-chat\\report.json",
+      "sha256": "5a9d56eebb2c2e5b13a10162135b14e07c0c8b6be8e577d73b7977ccea6f585a",
+      "bytes": 17193
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\nami-robin-chat\\turn-0-stage.png",
+      "sha256": "b3cb404728bb094f64c37ca372ec97fefa057441c67055c5b1f79b7cbb32b003",
+      "bytes": 1064147
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\nami-robin-chat\\turn-1-stage.png",
+      "sha256": "bb5196671e511c6d9cef316bdd102fa1366a1dbead916c2726314e9bfd9776e5",
+      "bytes": 1063705
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\nami-robin-chat\\turn-2-stage.png",
+      "sha256": "c235789fc152c87c0038b8e4c2b9d6aad73f6ee3ea9ded91f573aed18fc855a2",
+      "bytes": 1064714
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\nami-robin-chat\\turn-3-stage.png",
+      "sha256": "a96a77bc86f5175106f38a3cdeac433d47ebbf0b09aae220adb84c0f59e48b9c",
+      "bytes": 1063436
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\nami-robin-chat\\report.json",
+      "sha256": "7741aad217352a69214d4221a57d582b1c3f1ccdd7070c03a08a6705c2b46516",
+      "bytes": 17191
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\nami-robin-chat\\turn-0-stage.png",
+      "sha256": "c296f7527fcff4f5c960d293bf5c0a81a70dee8b0fdd57a8c55f57aa5a9127d8",
+      "bytes": 174885
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\nami-robin-chat\\turn-1-stage.png",
+      "sha256": "26d8f0ac9435f989aa8a7dcc702b0a75625c58353d0bba60f988fd2495dab258",
+      "bytes": 174547
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\nami-robin-chat\\turn-2-stage.png",
+      "sha256": "601e283364624b22700c0b6c5b3e53ba7812521a63f2ba2e5053a694a5ace8a8",
+      "bytes": 176987
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\nami-robin-chat\\turn-3-stage.png",
+      "sha256": "c3547138d5c7a2fa631d1dcd03ad79e03f353ca35297ed87cd161710e68d748e",
+      "bytes": 174312
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\explicit-review\\root-approval.json",
+      "sha256": "1ce6e0c6c895b2da80ca8bf1cd998ecf22794d6855c6adeb8619b28cbbfee637",
+      "bytes": 1266
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\visual-review.json",
+      "sha256": "c0497cfa744a57881542377bcfc3d9d50b1443e51435739e0e7209f16f75eb3e",
+      "bytes": 19081
+    }
+  ],
+  "videos": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\normal.webm",
+      "sha256": "57ecae4b1125ed2062b228554b28b413ab9f57b0f5d1ab0841cd0ed9203709c4",
+      "bytes": 4573677
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\robin\\half-speed.mp4",
+      "sha256": "9b081c895a285ac6d6eca6cd22f306c0e3264d82976678b01192bf5abe3e0f7f",
+      "bytes": 20840742
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\normal.webm",
+      "sha256": "22207d5e3f15c9c2b50d6a40091b578b8ce9fc42f65a5b062bf93dc87a518221",
+      "bytes": 1586688
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\robin\\half-speed.mp4",
+      "sha256": "3bf9c34aa7f38acfe7bfb8b6cdc55dc7e00ce433a5df37198fca701882f09249",
+      "bytes": 4673776
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\nami-robin-chat\\normal.webm",
+      "sha256": "a51038aa6546bcb6a6fa5f084fea9c0fe3df3984166763f33ea8fc811483c879",
+      "bytes": 2396750
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\nami-robin-chat\\half-speed.mp4",
+      "sha256": "e3cfe50b8fa8e86e79e64457c8fa1864d0baf817826eb9e02f10650a369ea21e",
+      "bytes": 9997859
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\nami-robin-chat\\normal.webm",
+      "sha256": "94a08dc1b06046c8c751692692c01a322a84c80bc1d6d2568de3da1e96f05d8c",
+      "bytes": 1037290
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\nami-robin-chat\\half-speed.mp4",
+      "sha256": "e78fe132c8f37993e818f9dc1f99935473e9115d9c8e2502de7f43574264bf20",
+      "bytes": 2697694
+    }
+  ],
+  "visualAcceptance": false
+}

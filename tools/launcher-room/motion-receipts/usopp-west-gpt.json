@@ -1,0 +1,65 @@
+{
+  "candidate": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\usopp\\west-02.png",
+  "gptOriginal": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-a1c5-7fc2-9c4d-857370899a24\\exec-3821e9cf-1108-45b7-bb5c-df4a3f44a38c.png",
+  "sha256": "94f9f315ecf48eb2c7dea2f8aa27d146b79a639d1aa8311dc998ad1173b9a511",
+  "generator": "built-in imagegen",
+  "prompt": "Use case: precise-object-edit. Correct ONLY top row of this supplied Usopp WEST 12-part RGBA atlas. The heads are too wide and fourth head scarf/hair is cropped. Redraw the complete four head-and-neck expressions at 65 percent of their present size, centered separately in the four equal-width top-row cells. There must be a LARGE clear transparent margin around each head, especially every nose tip and every scarf tail. ALL FOUR heads exactly same reduced scale, identical WEST left-facing silhouette, long nose/scarf/goggles/hair, only facial features differ as current quiet/proud/worried/shocked. Complete fourth head scarf and hair; never clip at canvas border. Leave row2/row3 artwork untouched, same sizes/locations/identity/anatomical left blue-white wristband. Output same4:3 true alpha. No labels, grid, shadow, border.",
+  "direction": "west",
+  "size": [
+    1448,
+    1086
+  ],
+  "mode": "RGBA",
+  "alphaExtrema": [
+    0,
+    255
+  ],
+  "edgeAlpha128Counts": {
+    "left": 0,
+    "right": 0,
+    "top": 0,
+    "bottom": 0
+  },
+  "nearAnatomicalSide": "left",
+  "farAnatomicalSide": "right",
+  "identityReference": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\turnarounds\\usopp-02.png",
+  "officialReference": "https://tamashiiweb.com/item/15390/",
+  "status": "CANON_PARTS_REVIEW_PASS_PENDING_ASSEMBLY",
+  "cellOrder": [
+    "quiet-head",
+    "proud-head",
+    "worried-head",
+    "surprised-head",
+    "torso-pelvis",
+    "near-arm",
+    "far-arm",
+    "near-leg",
+    "far-leg",
+    "near-foot",
+    "far-foot",
+    "left-satchel"
+  ],
+  "canonicalPassed": [
+    "Classic brown bib overalls, pale sash/cuffs, ochre checked headscarf and goggles",
+    "Long nose and curly black hair; north heads have no face",
+    "Blue-white striped wristband on anatomical left only",
+    "Satchel strap right shoulder to left hip; sash tails anatomical left"
+  ],
+  "assemblyNotes": [
+    "Manual/component source rectangles required; not blind equal grid crop",
+    "West02 head scaled smaller in atlas to prevent clipping; normalize as shared head set",
+    "Satchel belongs LEFT hip: east far side, west near side, north screen-left, south screen-right",
+    "Torso generated hidden shoulder bulges must be covered by arm shoulder overlap",
+    "Front and rear boot silhouettes similar; confirm actual rear heel raster in assembled north view"
+  ],
+  "notEstablished": [
+    "Joint anchors",
+    "Assembled visual fit",
+    "World support sole motion",
+    "Interaction animation quality",
+    "Production acceptance"
+  ],
+  "promptFile": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\usopp\\west-02-prompt.txt",
+  "originalReceipt": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\usopp\\west-02-source-canon-status.json",
+  "originalReceiptSha256": "b089deee031014961140179d6cd70fb5a9912419f8d0142ea2ac89745f0a8301"
+}

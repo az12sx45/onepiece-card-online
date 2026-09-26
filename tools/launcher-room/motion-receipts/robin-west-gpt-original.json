@@ -1,0 +1,63 @@
+{
+  "candidate": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\robin\\west-02.png",
+  "gptOriginal": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-a1c5-7fc2-9c4d-857370899a24\\exec-6621671c-fc08-420a-85b0-9d12857a709c.png",
+  "sha256": "a7051890983223adb5c59d155b54a631011b66c776a163f9ab9283e472122890",
+  "generator": "built-in imagegen",
+  "prompt": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\robin\\west-02-prompt.txt",
+  "direction": "west",
+  "size": [
+    1448,
+    1086
+  ],
+  "mode": "RGBA",
+  "alphaExtrema": [
+    0,
+    255
+  ],
+  "edgeAlpha128Counts": {
+    "left": 0,
+    "right": 0,
+    "top": 0,
+    "bottom": 0
+  },
+  "nearAnatomicalSide": "left",
+  "identityReference": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\turnarounds\\robin-02.png",
+  "officialReference": "https://tamashiiweb.com/item/15906/",
+  "status": "CANON_PARTS_REVIEW_PASS_PENDING_ASSEMBLY",
+  "cellOrder": [
+    "quiet-head",
+    "warm-smile-head",
+    "concerned-head",
+    "surprised-head",
+    "dress-torso-pelvis",
+    "near-arm",
+    "far-arm",
+    "near-leg-with-bootshaft",
+    "far-leg-with-bootshaft",
+    "near-bootfoot",
+    "far-bootfoot",
+    "spare-open-palm"
+  ],
+  "canonicalPassed": [
+    "Enies Lobby single black zip-front collared dress with patterned white lining",
+    "Straight shoulder-length black hair and blunt bangs, blue eyes",
+    "No hat or sunglasses; no mixing long swept-back hair",
+    "All four directions match head torso and boot direction; north no face/front dress zipper"
+  ],
+  "assemblyNotes": [
+    "Do not render slot12 as hip accessory; it is spare open palm only",
+    "Manual/component source rectangles required; not blind equal grid crop",
+    "Use shared head crown anchor and scale per direction expression set",
+    "Long boot shaft belongs leg; overlap separate boot foot at ankle",
+    "Torso retained round hidden shoulder caps can be occluded by sleeve roots",
+    "East heads include lower collar edge; align complete hair with torso so no double neckline",
+    "North/south torso has small bare thigh caps below skirt; overlap thighs without exposing duplicate joints"
+  ],
+  "notEstablished": [
+    "Exact joint anchors",
+    "Assembled visual fit",
+    "World support sole motion",
+    "Interaction animation quality",
+    "Production acceptance"
+  ]
+}

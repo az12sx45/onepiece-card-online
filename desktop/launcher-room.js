@@ -15,7 +15,7 @@
   const ASSET = /^opui:\/\/launcher\/images\/launcher_room\/(scenes|furniture|chibi)\/[a-z0-9-]+\.webp$/i;
   const CHARACTER_KEYS = new Set(['luffy', 'zoro', 'nami', 'chopper', 'sanji', 'robin', 'usopp', 'franky', 'brook', 'jinbe']);
   const MOODS = new Set(['happy', 'surprised', 'focused', 'annoyed']);
-  const POSES = new Set(['idle', 'walk1', 'walk2', 'talk_happy', 'talk_annoyed', 'surprised', 'focused_use', 'sit', 'wave']);
+  const POSES = new Set(['idle', 'talk_happy', 'talk_annoyed', 'surprised', 'focused_use', 'sit', 'wave', 'listen']);
   const CARDINAL = ['正向', '右轉', '背向', '左轉'];
   const FLOOR = Object.freeze({ columns: 16, rows: 8, top: 267, bottom: 515, backLeft: 164, backRight: 796, frontLeft: 28, frontRight: 932 });
   const FURNITURE_FOOTPRINTS = {
@@ -28,62 +28,12 @@
   const FURNITURE_VISUALS = Object.freeze({
     helm: [140, 148], 'map-table': [188, 116], 'treasure-chest': [126, 100],
     'tangerine-tree': [143, 161], 'swords-rack': [119, 126],
-    'kitchen-table': [188, 113], bookshelf: [115, 151],
-    'medicine-cabinet': [111, 139], piano: [184, 131], 'tool-bench': [155, 116]
+    'kitchen-table': [125, 75], bookshelf: [115, 151],
+    'medicine-cabinet': [111, 139], piano: [105, 75], 'tool-bench': [155, 116]
   });
-  const FURNITURE_ACTIONS = {
-    'helm': { verb: '掌舵', mood: 'focused', line: '這個方向的風正好，航線交給我吧。' },
-    'map-table': { verb: '看海圖', mood: 'focused', line: '把航線標清楚，下一站就不會走錯。' },
-    'treasure-chest': { verb: '查看寶箱', mood: 'surprised', line: '裡頭究竟放了什麼？得仔細看看。' },
-    'tangerine-tree': { verb: '照顧橘子樹', mood: 'happy', line: '葉子長得真好，今天也要好好照顧。' },
-    'swords-rack': { verb: '整理刀具', mood: 'focused', line: '先把刀收好，出發時才不會慌。' },
-    'kitchen-table': { verb: '準備餐點', mood: 'happy', line: '餐桌準備好了，大家都來吃吧！' },
-    'bookshelf': { verb: '閱讀', mood: 'focused', line: '這一頁似乎藏著有趣的線索。' },
-    'medicine-cabinet': { verb: '整理藥箱', mood: 'focused', line: '藥品分類完成，受傷時就能馬上找到。' },
-    'piano': { verb: '彈琴', mood: 'happy', line: '這首曲子，讓旅程輕快一些吧。' },
-    'tool-bench': { verb: '修理裝備', mood: 'focused', line: '螺絲鎖緊了，航行時就更安心。' }
-  };
   const dialogue = window.OnePieceRoomDialogue || null;
-  // Original, short dialogue in each character's established manner; no source dialogue is reproduced.
-  const CHARACTER_LINES = dialogue?.CHARACTER_LINES || {
-    luffy: { chat: ['先去看看那邊吧！說不定有好玩的事！', '大家都在就好，接下來去哪裡？'], reply: ['好啊！出發之前先吃點東西！', '聽起來很有趣，我也要去！'], furniture: { 'kitchen-table': ['好香！我可以先開動了嗎？', 'happy'], helm: ['前面有什麼？我想快點看看！', 'surprised'] } },
-    zoro: { chat: ['訓練不能停。你有看到我的刀嗎？', '我記得路……應該是往那邊。'], reply: ['嗯，等我練完這一輪。', '別擔心，遇到麻煩我會處理。'], furniture: { 'swords-rack': ['刀都在這裡。再練一輪吧。', 'focused'], 'map-table': ['這條線怎麼又繞回來了？', 'annoyed'] } },
-    nami: { chat: ['風向變了，先看看海圖。', '這趟航程的補給可不能亂花。'], reply: ['可以，但先照我畫的航線走。', '把帳記清楚，才不會吃虧。'], furniture: { 'map-table': ['這段海流不對，得把航線改一下。', 'focused'], 'tangerine-tree': ['橘子長得真好，別隨便碰喔。', 'happy'] } },
-    usopp: { chat: ['我有個超厲害的點子！先聽我說完！', '這件事交給勇敢的海上戰士吧！'], reply: ['當、當然沒問題！我早有準備。', '嘿嘿，這次一定能派上用場！'], furniture: { 'tool-bench': ['加上這個機關，肯定會嚇大家一跳！', 'happy'], 'treasure-chest': ['這箱子不會突然彈開吧？', 'surprised'] } },
-    sanji: { chat: ['大家想吃什麼？我去準備。', '美味的晚餐值得等一會兒。'], reply: ['交給我，馬上就做好。', '好，先讓大家吃飽再說。'], furniture: { 'kitchen-table': ['火候剛剛好。各位，開飯了！', 'happy'], 'tangerine-tree': ['橘子的香氣很適合今天的甜點。', 'focused'] } },
-    chopper: { chat: ['今天有哪裡不舒服嗎？我來看看！', '我找到一本很有用的醫書！'], reply: ['真的嗎？我、我才沒有高興呢！', '放心，我會好好照顧大家。'], furniture: { 'medicine-cabinet': ['繃帶和藥水都補齊了！', 'happy'], bookshelf: ['這個配方……我要記下來！', 'focused'] } },
-    robin: { chat: ['這艘船每天都有新故事。', '這本書的線索很有意思。'], reply: ['呵呵，我也正想知道後續。', '一起看看，也許能找到答案。'], furniture: { bookshelf: ['這段記載，和我們見過的遺跡很像。', 'focused'], 'map-table': ['這座島的形狀，值得再查一查。', 'focused'] } },
-    franky: { chat: ['這個設計真是太棒了！', '船上哪裡需要加強？讓我看看！'], reply: ['包在我身上，馬上搞定！', '這主意夠酷，我喜歡！'], furniture: { 'tool-bench': ['加固完成！這下肯定穩得很！', 'happy'], helm: ['掌舵台狀態很好，放心開吧！', 'focused'] } },
-    brook: { chat: ['今天要來一段輕快的曲子嗎？', '旅途有音樂相伴，真是愉快。'], reply: ['當然，請聽我彈一段。', '哎呀，這個節奏真讓人開心。'], furniture: { piano: ['下一首送給大家，請聽！', 'happy'], bookshelf: ['這本譜子讓我想起一段旋律。', 'focused'] } },
-    jinbe: { chat: ['海流正在改變，行船要穩。', '大家齊心，這段航路就能走得踏實。'], reply: ['嗯，先觀察風浪再行動。', '很好，按這個步調繼續。'], furniture: { helm: ['舵感很穩，現在可以順流而行。', 'focused'], 'map-table': ['這條航道平穩，可以從這裡走。', 'focused'] } }
-  };
-  const CHAT_MOODS = dialogue?.CHAT_MOODS || {
-    luffy: ['happy', 'surprised'], zoro: ['focused', 'annoyed'], nami: ['focused', 'annoyed'],
-    usopp: ['surprised', 'happy'], sanji: ['happy', 'focused'], chopper: ['surprised', 'happy'],
-    robin: ['focused', 'happy'], franky: ['happy', 'focused'], brook: ['happy', 'happy'], jinbe: ['focused', 'happy']
-  };
-  const PAIR_LINES = dialogue?.PAIR_LINES || {
-    'luffy:sanji': [
-      [['香吉士，晚餐好了嗎？', 'happy'], ['再等一下，熱騰騰的馬上來。', 'happy']],
-      [['有肉的味道！還要等多久？', 'surprised'], ['先洗手，這道菜馬上完成。', 'focused']]
-    ],
-    'nami:zoro': [
-      [['你又走反方向了，這邊！', 'annoyed'], ['我只是繞一下路。', 'annoyed']],
-      [['船頭在那邊，你到底去哪裡？', 'annoyed'], ['找個安靜地方練刀而已。', 'focused']]
-    ],
-    'chopper:robin': [
-      [['羅賓，這本醫書可以借我嗎？', 'focused'], ['當然，裡面還有很多有趣的筆記。', 'happy']],
-      [['這段藥草資料好難懂……', 'surprised'], ['我來陪你慢慢讀。', 'happy']]
-    ],
-    'franky:usopp': [
-      [['這個裝置再加個零件如何？', 'happy'], ['太好了！我們一起試試！', 'happy']],
-      [['新零件裝好了，要不要試？', 'happy'], ['嘿嘿，我來按開關！', 'surprised']]
-    ],
-    'brook:jinbe': [
-      [['甚平，來聽我新練的曲子吧。', 'happy'], ['好啊，讓我也跟著打拍子。', 'happy']],
-      [['這段旋律和海浪很合拍。', 'focused'], ['節奏像潮汐一樣平穩。', 'focused']]
-    ]
-  };
+  const locomotion = window.OnePieceRoomMotion || null;
+  const motionTable = window.OnePieceRoomMotionManifest || null;
   const el = (tag, className = '', content) => {
     const node = document.createElement(tag);
     if (className) node.className = className;
@@ -91,7 +41,12 @@
     return node;
   };
   const clamp = (value, min, max, fallback) => Number.isFinite(Number(value)) ? Math.max(min, Math.min(max, Number(value))) : fallback;
-  const assetFor = item => typeof item?.asset === 'string' && ASSET.test(item.asset) ? item.asset : '';
+  const catalogAssetFor = item => typeof item?.asset === 'string' && ASSET.test(item.asset) ? item.asset : '';
+  const assetFor = item => {
+    const source = catalogAssetFor(item);
+    const key = item?.type === TYPES.character.type ? keyForCharacter(item) : '';
+    return source && key ? `opui://launcher/images/launcher_room/portrait_v2/${key}.webp` : source;
+  };
   const isValidProduct = (item, type) => item?.type === type && typeof item.id === 'string' && /^[a-z0-9-]{3,64}$/.test(item.id) && !!assetFor(item);
   const round = value => Math.round(value * 100) / 100;
   const rotationFor = item => Number.isInteger(item?.rotation) && item.rotation >= 0 && item.rotation <= 3
@@ -193,6 +148,7 @@
   let nextJobBadgeAt = 0;
   let interactionIndex = 0;
   let dialogueIndex = 0;
+  const pairHistory = new Map();
   let viewEpoch = 0;
   let walkBlocked = new Set();
   let companionId = '';
@@ -257,7 +213,9 @@
     const affinity = Math.max(0, Math.min(100, Number(record?.affinity) || 0));
     const canAct = isOwner() && !!record && !companionBusy;
     const ready = work.state === 'ready' || (work.state === 'working' && Number.isFinite(Date.parse(work.readyAt)) && Date.parse(work.readyAt) <= Date.now());
-    $('roomCompanionPortrait').src = key ? `opui://launcher/images/launcher_room/action_frames/${key}/idle.webp` : assetFor(item);
+    const portrait = $('roomCompanionPortrait');
+    portrait.onerror = () => { portrait.onerror = null; portrait.src = catalogAssetFor(item); };
+    portrait.src = key ? `opui://launcher/images/launcher_room/portrait_v2/${key}.webp` : assetFor(item);
     $('roomCompanionPortrait').alt = item.name || details.name || '航海夥伴';
     $('roomCompanionName').textContent = item.name || details.name || '航海夥伴';
     $('roomCompanionRole').textContent = record?.role || details.role || '草帽一行人';
@@ -299,10 +257,11 @@
     if (companionId !== itemId) closeCompanion();
     else if (companionTick) clearInterval(companionTick);
     companionId = itemId;
+    if (interaction) finishInteraction(performance.now());
+    nextInteractionAt = performance.now() + 5000;
     const walker = walkers.find(entry => entry.item?.id === itemId);
     if (walker) walker.node.classList.add('is-companion-selected');
     if (walker && !['job', 'job-approach'].includes(walker.mode)) {
-      if (interaction?.actors.includes(walker)) finishInteraction(performance.now());
       walker.route = []; walker.mode = 'focused'; walker.pause = 0;
       walker.node.classList.remove('is-walking'); walker.node.classList.add('is-companion-selected');
       setPose(walker, 'wave'); walker.manualUntil = performance.now() + 1250;
@@ -345,14 +304,20 @@
         renderCompanionPanel(); return;
       }
       if (result.wallet) window.LauncherProfileShop?.onCompanionWalletChanged?.(result.wallet);
+      if (interaction) finishInteraction(performance.now());
+      nextInteractionAt = performance.now() + 5000;
       syncCompanionWalker(itemId);
       const walker = walkers.find(entry => entry.item?.id === itemId);
       const key = walker?.key || keyForCharacter(resolvedItem(itemId, 'character'));
-      const lines = dialogue?.interaction?.(key, action === 'talk' ? 'bond' : 'work', companionLineIndex++) ||
-        [action === 'talk' ? '下次再來聊天吧！' : '我去把這件事做好。', 'happy'];
+      const beatKind = action === 'talk' ? 'bond' : action === 'claim' ? 'claim' : 'work';
+      const beat = dialogue?.interactionBeat?.(key, beatKind, companionLineIndex);
+      const lines = beat ? [beat.line, beat.mood] : dialogue?.interaction?.(key, beatKind, companionLineIndex) ||
+        [action === 'talk' ? '下次再來聊天吧！' : action === 'claim' ? '工作已經完成了。' : '我去把這件事做好。', 'happy'];
+      companionLineIndex++;
       if (action === 'talk') {
         if (walker && walker.mode === 'focused') {
           showSpeech(walker, lines[0], lines[1], '親密度 +2');
+          if (beat?.pose) setPose(walker, beat.pose);
           walker.manualUntil = performance.now() + 3500;
         }
         companionStatus('聊天完成，親密度增加 2。');
@@ -360,14 +325,16 @@
         if (walker) {
           walker.jobIntro = lines;
           if (walker.mode === 'job') {
-            showSpeech(walker, lines[0], lines[1], '開始工作', true, walker.jobFurnitureKey);
+            const activity = walker.jobBeat;
+            showSpeech(walker, activity?.line || lines[0], activity?.mood || lines[1], activity?.verb || '開始工作', !!walker.jobFurnitureKey, walker.jobFurnitureKey);
+            if (activity?.pose) setPose(walker, activity.pose);
             walker.jobSpeechUntil = performance.now() + 3000;
             walker.jobIntro = null;
           }
         }
         companionStatus('已安排工作；完成後回來領取展示室金幣。');
       } else {
-        if (walker) showSpeech(walker, lines[0], lines[1], '工作完成');
+        if (walker) { showSpeech(walker, lines[0], lines[1], '工作完成'); if (beat?.pose) setPose(walker, beat.pose); }
         companionStatus(result.claimed ? '已領取 10 展示室金幣，親密度增加 1。' : '這份工作已領取。');
         if (walker) walker.manualUntil = performance.now() + 3500;
       }
@@ -396,11 +363,14 @@
     animationId = 0;
     lastFrame = 0;
     for (const walker of walkers) {
-      walker.node.classList.remove('is-walking', 'is-interacting', 'is-conversing', 'is-using-furniture');
+      walker.node.classList.remove('is-walking', 'is-interacting', 'is-conversing', 'is-using-furniture', 'is-turning');
       const speech = walker.node.querySelector('.room-speech');
       if (speech) speech.hidden = true;
+      delete walker.node.dataset.sceneId; delete walker.node.dataset.sceneTurn;
+      delete walker.node.dataset.listener; delete walker.node.dataset.reaction;
       setPose(walker, 'idle');
     }
+    recordSceneEnd(interaction, performance.now());
     walkers = [];
     interaction = null;
     nextInteractionAt = 0;
@@ -408,14 +378,75 @@
   function canAnimate() { return visible && !editing && !!profile && !document.hidden && !motion.matches; }
   function setPose(walker, pose) {
     const next = POSES.has(pose) ? pose : 'idle';
-    if (walker.pose === next) return;
+    if (walker.pose !== next || !Number.isFinite(walker.poseStartedAt)) walker.poseStartedAt = performance.now();
+    if (showAction(walker, next)) { walker.pose = next; walker.node.dataset.pose = next; return; }
+    if (next === 'idle' && showMotion(walker, false)) {
+      walker.pose = next; walker.node.dataset.pose = next; return;
+    }
+    walker.node.classList.remove('has-directional-sprite');
+    walker.node.dataset.directionalAction = 'false';
+    walker.node.dataset.actionSource = 'legacy';
+    const canvas = walker.node.querySelector('.room-walk-sprite');
+    if (canvas) canvas.hidden = true;
     walker.pose = next; walker.node.dataset.pose = next;
     const sprite = walker.node.querySelector('.room-chibi');
     if (!sprite) return;
+    if (walker.staticPose === next) return;
+    walker.staticPose = next;
     const fallback = assetFor(walker.item);
     sprite.onerror = () => { sprite.onerror = null; sprite.src = fallback; sprite.dataset.artFallback = 'true'; };
     sprite.dataset.artFallback = 'false';
-    sprite.src = walker.key ? `opui://launcher/images/launcher_room/action_frames/${walker.key}/${next}.webp` : fallback;
+    sprite.src = walker.key ? `opui://launcher/images/launcher_room/action_frames/${walker.key}/${next === 'listen' ? 'idle' : next}.webp` : fallback;
+  }
+  function showAction(walker, pose, now = performance.now()) {
+    const atlas = walker.actionArt?.atlases?.[walker.motion?.direction];
+    const frame = locomotion?.actionFrame(pose, now - (walker.poseStartedAt || now)) ?? -1;
+    const canvas = walker.node.querySelector('.room-walk-sprite');
+    if (!atlas || frame < 0 || !locomotion.draw(canvas, atlas, frame, locomotion.ACTION_SHAPE)) return false;
+    const root = locomotion.metadata(walker.key, motionTable).root;
+    canvas.style.setProperty('--room-root-offset', `${(locomotion.SHAPE.cell - root[1]) / locomotion.SHAPE.cell * 100}%`);
+    canvas.hidden = false; walker.node.classList.add('has-directional-sprite');
+    walker.node.dataset.directionalAction = 'true'; walker.node.dataset.actionSource = 'acting_v2';
+    walker.node.dataset.direction = walker.motion.direction;
+    walker.node.dataset.actionFrame = String(frame);
+    return true;
+  }
+  function showMotion(walker, walking) {
+    const state = walker.motion;
+    const atlas = walker.motionArt?.atlases?.[state?.direction];
+    if (!locomotion || !atlas) return false;
+    const canvas = walker.node.querySelector('.room-walk-sprite');
+    const frame = walking ? state.frame : locomotion.metadata(walker.key, motionTable).standingFrame;
+    const shape = locomotion.walkShape(state.direction);
+    // A four-neighbor depth segment keeps its column, and therefore slope,
+    // constant. Columns change only after a planted direction turn.
+    const back = gridPoint(walker.cell.col + .5, 0), front = gridPoint(walker.cell.col + .5, FLOOR.rows);
+    const slope = walker.dockTravel ? 0 : (front.x - back.x) / (front.y - back.y);
+    const variant = shape === locomotion.DEPTH_WALK_SHAPE ? locomotion.slopeVariant(slope) : 0;
+    if (!locomotion.draw(canvas, atlas, frame + variant * locomotion.SHAPE.frames, shape)) return false;
+    const root = locomotion.metadata(walker.key, motionTable).root;
+    canvas.style.setProperty('--room-root-offset', `${(locomotion.SHAPE.cell - root[1]) / locomotion.SHAPE.cell * 100}%`);
+    canvas.hidden = false;
+    walker.node.classList.add('has-directional-sprite');
+    walker.node.dataset.direction = state.direction;
+    walker.node.dataset.motionFrame = String(frame);
+    walker.node.dataset.motionVariant = String(variant);
+    walker.node.dataset.floorSlope = String(slope);
+    walker.node.dataset.motionPhase = String(state.phase);
+    walker.node.dataset.motionReady = 'true';
+    walker.node.dataset.actionSource = 'motion_v2';
+    delete walker.node.dataset.directionalAction;
+    if (walking) { walker.pose = 'walk'; walker.node.dataset.pose = 'walk'; }
+    return true;
+  }
+  function faceWalker(walker, targetCell, now) {
+    if (!locomotion || !walker.motion) return true;
+    const direction = locomotion.directionForDelta(targetCell.col - walker.cell.col, targetCell.row - walker.cell.row, walker.motion.direction);
+    const ready = !!walker.motionArt?.atlases?.[direction];
+    const settled = locomotion.face(walker.motion, direction, now, ready);
+    walker.node.classList.toggle('is-turning', ready && !settled);
+    if (ready) showMotion(walker, false);
+    return settled;
   }
   function cellBlocked(cell, blocked) {
     return cell.col < 0 || cell.row < 0 || cell.col >= FLOOR.columns || cell.row >= FLOOR.rows || blocked.has(cellId(cell.col, cell.row));
@@ -456,35 +487,31 @@
     return null;
   }
   function routeTo(walker, goal, exempt = []) {
-    const route = routeBetween(walker.cell, goal, blockedFor(walker, exempt));
+    const origin = walker.segmentCell || walker.cell;
+    const route = routeBetween(origin, goal, blockedFor(walker, exempt));
     if (!route) return false;
-    walker.route = route; walker.targetCell = goal;
-    walker.stepDistance = 0;
-    // Flip the one full-body sprite when a directed route starts sideways;
-    // the head and torso cannot turn independently.
-    if (route.length && route[0].col !== walker.cell.col)
-      walker.node.style.setProperty('--facing', route[0].col < walker.cell.col ? '-1' : '1');
+    walker.route = walker.segmentCell ? [walker.segmentCell, ...route] : route; walker.targetCell = goal;
+    if (walker.dockOrigin) walker.returnDockBeforeRoute = true;
     return true;
   }
   function chooseDestination(walker) {
+    if (walker.dockOrigin) { walker.mode = 'undock'; walker.route = []; walker.pause = 0; return; }
     walker.mode = 'wander'; walker.route = []; walker.targetCell = null;
-    walker.stepDistance = 0;
+    const origin = walker.segmentCell || walker.cell;
     const options = [];
-    // The current GPT walking art is drawn from the front/side. Keep casual
-    // roaming along a deck row, so a sideways sprite never slides backwards
-    // through the room. Directed furniture and work routes still use the grid.
-    for (let col = Math.max(0, walker.cell.col - 4); col <= Math.min(FLOOR.columns - 1, walker.cell.col + 4); col++) {
-      const distance = Math.abs(col - walker.cell.col);
-      if (distance >= 1) options.push({ col, row: walker.cell.row });
+    for (let row = Math.max(0, origin.row - 3); row <= Math.min(FLOOR.rows - 1, origin.row + 3); row++) {
+      for (let col = Math.max(0, origin.col - 4); col <= Math.min(FLOOR.columns - 1, origin.col + 4); col++) {
+        const distance = Math.abs(col - origin.col) + Math.abs(row - origin.row);
+        if (distance >= 1 && distance <= 4) options.push({ col, row });
+      }
     }
     options.sort(() => Math.random() - .5);
     for (const candidate of options) {
-      const route = routeBetween(walker.cell, candidate, blockedFor(walker));
-      if (!route || route.some(cell => cell.row !== walker.cell.row)) continue;
-      walker.route = route; walker.targetCell = candidate; break;
+      const route = routeBetween(origin, candidate, blockedFor(walker));
+      if (!route) continue;
+      walker.route = walker.segmentCell ? [walker.segmentCell, ...route] : route; walker.targetCell = candidate; break;
     }
     walker.pause = 350 + Math.random() * 650;
-    if (walker.route.length) walker.node.style.setProperty('--facing', walker.route[0].col < walker.cell.col ? '-1' : '1');
     if (!walker.route.length) setPose(walker, 'idle');
   }
   function keepSpeechInsideStage(walker) {
@@ -495,6 +522,8 @@
     const speech = walker.node.querySelector('.room-speech');
     if (speech) speech.hidden = true;
     walker.node.classList.remove('is-interacting', 'is-conversing', 'is-using-furniture');
+    delete walker.node.dataset.listener;
+    delete walker.node.dataset.reaction;
   }
   function showSpeech(walker, message, mood, action = '', usingFurniture = false, furnitureKey = '') {
     for (const other of walkers) hideSpeech(other);
@@ -502,33 +531,42 @@
     if (!speech) return;
     speech.querySelector('.room-speech-text').textContent = message;
     const actionNode = speech.querySelector('.room-speech-action');
-    actionNode.textContent = action;
-    actionNode.hidden = !action;
+    const actionLabel = dialogue?.ACTION_LABELS?.[action] || (/[^\u0000-\u007f]/.test(action) ? action : '');
+    actionNode.textContent = actionLabel;
+    actionNode.hidden = !actionLabel;
     speech.dataset.mood = MOODS.has(mood) ? mood : 'happy';
     speech.hidden = false;
     walker.node.classList.add('is-interacting', usingFurniture ? 'is-using-furniture' : 'is-conversing');
-    const pose = usingFurniture ? (['kitchen-table', 'piano'].includes(furnitureKey) ? 'sit' : 'focused_use')
+    // These furniture images have no chair or bench: keep both feet on the floor.
+    const pose = usingFurniture ? 'focused_use'
       : mood === 'annoyed' ? 'talk_annoyed' : mood === 'surprised' ? 'surprised' : mood === 'focused' ? 'focused_use' : 'talk_happy';
     setPose(walker, pose);
   }
-  function pairDialogue(first, second) {
-    const originalPair = dialogue?.pair?.(first.key, second.key, dialogueIndex);
-    if (originalPair) return originalPair;
-    const direct = PAIR_LINES[`${first.key}:${second.key}`];
-    if (direct) return direct[dialogueIndex % direct.length];
-    const reverse = PAIR_LINES[`${second.key}:${first.key}`];
-    if (reverse) {
-      const lines = reverse[dialogueIndex % reverse.length];
-      return [lines[1], lines[0]];
-    }
-    const firstLines = CHARACTER_LINES[first.key] || CHARACTER_LINES.luffy;
-    const secondLines = CHARACTER_LINES[second.key] || CHARACTER_LINES.jinbe;
-    return [
-      [firstLines.chat[dialogueIndex % firstLines.chat.length], CHAT_MOODS[first.key]?.[dialogueIndex % 2] || 'happy'],
-      [secondLines.reply[dialogueIndex % secondLines.reply.length], CHAT_MOODS[second.key]?.[(dialogueIndex + 1) % 2] || 'focused']
-    ];
+  function sceneFor(first, second, now) {
+    const pair = [first.key, second.key].sort().join(':');
+    const history = pairHistory.get(pair) || { cursor: 0, until: 0, lastId: '' };
+    if (now < history.until) return null;
+    const furnitureKeys = activeRoom().placements.map(entry => keyForFurniture(resolvedItem(entry.itemId, 'furniture')));
+    const scene = dialogue?.scene?.(first.key, second.key, history.cursor, {
+      furnitureKey: furnitureKeys.find(key => dialogue?.profile?.(first.key)?.favorite?.includes(key)) || furnitureKeys[0] || '',
+      recentSceneIds: history.recentIds || []
+    });
+    if (!scene || !Array.isArray(scene.turns) || scene.turns.length < 4 ||
+        !scene.turns.every(turn => [first.key, second.key].includes(turn.speaker) && typeof turn.line === 'string')) return null;
+    return { ...scene, pair, cursor: history.cursor };
   }
   function spotsAround(target) {
+    // The keyboard and table work surface must be approached from their front,
+    // opposite the piano back or the table bench. Saved furniture
+    // cells stay unchanged; the actor routes to a free floor cell by the keys.
+    if (['piano', 'kitchen-table'].includes(keyForFurniture(target.item))) {
+      const middleCol = target.cell.col + Math.floor((target.span.width - 1) / 2);
+      const middleRow = target.cell.row + Math.floor((target.span.height - 1) / 2);
+      return [[{ col: middleCol, row: target.cell.row + target.span.height }],
+        [{ col: target.cell.col - 1, row: middleRow }],
+        [{ col: middleCol, row: target.cell.row - 1 }],
+        [{ col: target.cell.col + target.span.width, row: middleRow }]][rotationFor(target.entry)];
+    }
     const spots = [];
     for (let col = target.cell.col; col < target.cell.col + target.span.width; col++) {
       spots.push({ col, row: target.cell.row - 1 }, { col, row: target.cell.row + target.span.height });
@@ -537,6 +575,50 @@
       spots.push({ col: target.cell.col - 1, row }, { col: target.cell.col + target.span.width, row });
     }
     return spots;
+  }
+  function furnitureDock(walker, target) {
+    const key = keyForFurniture(target?.item);
+    if (!['piano', 'kitchen-table'].includes(key)) return null;
+    const depth = locomotion.projectedScale(target.anchor.y, FLOOR);
+    const side = ['north', 'east', 'south', 'west'][rotationFor(target.entry)];
+    // Coordinates follow the actual tabletop / keyboard in the four GPT views.
+    // The approach cell and persisted footprint stay reserved and unchanged.
+    const offsets = { north: [0, 4], south: [0, -27], east: [key === 'piano' ? -24 : -30, -8], west: [key === 'piano' ? 24 : 30, -8] };
+    const [dx, dy] = offsets[side];
+    return { x: target.anchor.x + dx * depth, y: target.anchor.y + dy * depth,
+      z: Math.round(target.anchor.y) + (side === 'south' ? 9 : 11), side };
+  }
+  function startFurnitureDock(walker, target) {
+    const dock = furnitureDock(walker, target);
+    if (!dock) return null;
+    if (!walker.dockOrigin) walker.dockOrigin = { x: walker.x, y: walker.y };
+    walker.dockTarget = dock;
+    return dock;
+  }
+  function moveFurnitureDock(walker, target, now, delta) {
+    const dx = target.x - walker.x, dy = target.y - walker.y;
+    if (Math.abs(dx) < .05 && Math.abs(dy) < .05) {
+      walker.dockTravel = false; walker.node.classList.remove('is-walking'); setPose(walker, 'idle');
+      if (Number.isFinite(target.z)) walker.node.style.zIndex = String(target.z);
+      return true;
+    }
+    // Finish one ground axis before the next, with the same planted turn and
+    // distance-driven gait as a normal route; no sprite teleport or tween slide.
+    const horizontal = Math.abs(dx) >= .05;
+    const amount = horizontal ? dx : dy;
+    const facing = { col: walker.cell.col + (horizontal ? Math.sign(amount) : 0), row: walker.cell.row + (horizontal ? 0 : Math.sign(amount)) };
+    if (!faceWalker(walker, facing, now)) { setPose(walker, 'idle'); return false; }
+    const scale = locomotion.projectedScale(walker.y, FLOOR);
+    const gait = locomotion.speedAndStride(walker.key, walker.motion.direction, scale, motionTable);
+    const travel = Math.min(Math.abs(amount), delta / 1000 * gait.speed);
+    if (horizontal) walker.x += Math.sign(amount) * travel; else walker.y += Math.sign(amount) * travel;
+    walker.node.style.left = `${walker.x / WIDTH * 100}%`; walker.node.style.top = `${walker.y / HEIGHT * 100}%`;
+    walker.node.style.zIndex = String(Number.isFinite(target.z) ? target.z : 10 + Math.round(walker.y));
+    walker.node.style.setProperty('--room-character-scale', String(scale / 1.07));
+    keepSpeechInsideStage(walker);
+    walker.dockTravel = true; walker.node.classList.add('is-walking');
+    locomotion.advance(walker.motion, travel, gait.stride, { ready: true }); showMotion(walker, true);
+    return false;
   }
   function companionWorkReady(record) {
     const work = record?.work;
@@ -559,7 +641,7 @@
     const active = record?.work?.state === 'working' || record?.work?.state === 'ready';
     if (!active) {
       if (walker.mode === 'job' || walker.mode === 'job-approach') {
-        walker.route = []; walker.jobFurnitureKey = '';
+        walker.route = []; walker.jobFurnitureKey = ''; walker.jobFacingCell = null; walker.jobTargetLayout = null;
         walker.node.classList.remove('is-using-furniture');
         if (companionId === itemId) { walker.mode = 'focused'; setPose(walker, 'idle'); }
         else chooseDestination(walker);
@@ -574,9 +656,11 @@
     const targets = room.placements.map(entry => {
       const item = resolvedItem(entry.itemId, 'furniture');
       return { item, placed: layout.placements.get(`f:${entry.itemId}`) };
-    }).filter(entry => entry.item && entry.placed);
+    }).filter(entry => entry.item && entry.placed && dialogue?.activity?.(walker.key, keyForFurniture(entry.item), 0));
     targets.sort((a, b) => Number(favorites.includes(keyForFurniture(b.item))) - Number(favorites.includes(keyForFurniture(a.item))));
     walker.jobFurnitureKey = '';
+    walker.jobFacingCell = null; walker.jobTargetLayout = null;
+    walker.jobBeat = dialogue?.interactionBeat?.(walker.key, 'work', companionLineIndex++) || null;
     walker.route = []; walker.pause = 0;
     for (const target of targets) {
       const spots = spotsAround(target.placed)
@@ -584,45 +668,44 @@
         .sort((a, b) => Math.abs(a.col - walker.cell.col) + Math.abs(a.row - walker.cell.row) - Math.abs(b.col - walker.cell.col) - Math.abs(b.row - walker.cell.row));
       if (spots.some(cell => routeTo(walker, cell))) {
         walker.jobFurnitureKey = keyForFurniture(target.item);
-        walker.mode = walker.route.length ? 'job-approach' : 'job';
+        walker.jobTargetLayout = target.placed;
+        walker.jobFacingCell = { col: target.placed.cell.col + target.placed.span.width / 2 - .5,
+          row: target.placed.cell.row + target.placed.span.height / 2 - .5 };
+        walker.jobBeat = dialogue.activity(walker.key, walker.jobFurnitureKey, companionLineIndex++);
+        walker.mode = 'job-approach';
         break;
       }
     }
     if (!walker.jobFurnitureKey) walker.mode = 'job';
     if (walker.mode === 'job') {
-      walker.node.classList.add('is-using-furniture');
-      setPose(walker, 'focused_use');
+      walker.node.classList.toggle('is-using-furniture', !!walker.jobFurnitureKey);
+      setPose(walker, walker.jobBeat?.pose || 'focused_use');
     }
     refreshJobBadges();
   }
   function startInteraction(now) {
     if (interaction || !walkers.length || now < nextInteractionAt) return;
     const available = walkers.filter(walker => walker.mode === 'wander' && walker.item?.id !== companionId);
+    const stationary = available.filter(walker => !walker.segmentCell &&
+      Math.hypot(walker.x - anchorForCell(walker.cell, { width: 1, height: 1 }).x,
+        walker.y - anchorForCell(walker.cell, { width: 1, height: 1 }).y) < 1);
     if (!available.length) { nextInteractionAt = now + 2500; return; }
+    if (!stationary.length) { nextInteractionAt = now + 200; return; }
     const furnishings = activeRoom().placements
       .map(entry => ({ entry, item: resolvedItem(entry.itemId, 'furniture') }))
-      .filter(value => value.item && FURNITURE_ACTIONS[keyForFurniture(value.item)]);
-    const chat = available.length > 1 && (!furnishings.length || interactionIndex % 2 === 0);
-    const first = available[interactionIndex % available.length];
+      .filter(value => value.item);
+    const first = stationary[interactionIndex % stationary.length];
+    const activityTargets = furnishings.map(target => ({ ...target,
+      beat: dialogue?.activity?.(first.key, keyForFurniture(target.item), dialogueIndex) }))
+      .filter(target => target.beat?.speaker === first.key && typeof target.beat?.line === 'string');
+    const chat = available.length > 1 && (!activityTargets.length || interactionIndex % 2 === 0);
     if (chat) {
-      const second = available[(interactionIndex + 1) % available.length];
-      const adjacent = [[1, 0], [-1, 0], [0, 1], [0, -1]]
-        .map(([dc, dr]) => ({ col: first.cell.col + dc, row: first.cell.row + dr }))
-        .filter(cell => !cellBlocked(cell, blockedFor(second)))
-        .sort((a, b) => Math.abs(a.col - second.cell.col) + Math.abs(a.row - second.cell.row) - Math.abs(b.col - second.cell.col) - Math.abs(b.row - second.cell.row));
-      const meeting = adjacent.find(cell => routeTo(second, cell));
-      if (!meeting) { nextInteractionAt = now + 1600; interactionIndex++; return; }
-      first.route = []; first.targetCell = first.cell; first.pause = 0;
-      second.pause = 0; first.mode = 'approach'; second.mode = 'approach';
-      setPose(first, 'wave');
-      interaction = { type: 'chat', actors: [first, second], lines: pairDialogue(first, second), phase: 'approach', expires: now + 8500, holdUntil: 0 };
-    } else if (furnishings.length) {
-      const preferredTargets = furnishings.filter(value => CHARACTER_LINES[first.key]?.furniture?.[keyForFurniture(value.item)]);
-      const choices = preferredTargets.length ? preferredTargets : furnishings;
-      const target = choices[interactionIndex % choices.length];
-      const action = FURNITURE_ACTIONS[keyForFurniture(target.item)];
-      const preferred = CHARACTER_LINES[first.key]?.furniture?.[keyForFurniture(target.item)];
-      const variation = dialogue?.activity?.(first.key, keyForFurniture(target.item), dialogueIndex);
+      const partners = available.filter(walker => walker !== first);
+      const second = partners[interactionIndex % partners.length];
+      if (!beginChat(first, second, now)) { nextInteractionAt = now + 1800; interactionIndex++; return; }
+    } else if (activityTargets.length) {
+      const target = activityTargets[interactionIndex % activityTargets.length];
+      const variation = target.beat;
       const targetLayout = layoutRoom(activeRoom()).placements.get(`f:${target.entry.itemId}`);
       if (!targetLayout) { nextInteractionAt = now + 1600; interactionIndex++; return; }
       const spots = spotsAround(targetLayout);
@@ -631,44 +714,102 @@
       if (!adjacent) { nextInteractionAt = now + 1600; interactionIndex++; return; }
       first.pause = 0; first.mode = 'approach';
       interaction = { type: 'furniture', actors: [first], furnitureKey: keyForFurniture(target.item),
-        target: targetLayout, line: variation?.line || preferred?.[0] || action.line,
-        mood: variation?.mood || preferred?.[1] || action.mood,
-        action: variation?.verb || action.verb, phase: 'approach', expires: now + 8500, holdUntil: 0 };
+        target: targetLayout, line: variation.line, mood: variation.mood,
+        action: variation.verb, pose: variation.pose,
+        phase: 'approach', expires: now + 20000, holdUntil: 0 };
+    } else {
+      nextInteractionAt = now + 3000;
     }
     interactionIndex++;
   }
+  function beginChat(first, second, now) {
+    const scene = sceneFor(first, second, now);
+    if (!scene) return false;
+    const adjacent = [[1, 0], [-1, 0], [0, 1], [0, -1]]
+      .map(([dc, dr]) => ({ col: first.cell.col + dc, row: first.cell.row + dr }))
+      .filter(cell => !cellBlocked(cell, blockedFor(second)))
+      .sort((a, b) => Math.abs(a.col - second.cell.col) + Math.abs(a.row - second.cell.row) - Math.abs(b.col - second.cell.col) - Math.abs(b.row - second.cell.row));
+    if (!adjacent.some(cell => routeTo(second, cell))) return false;
+    first.route = []; first.targetCell = first.cell; first.pause = 0;
+    if (first.dockOrigin) first.returnDockBeforeRoute = true;
+    second.pause = 0; first.mode = 'approach'; second.mode = 'approach';
+    setPose(first, 'wave');
+    interaction = { type: 'chat', actors: [first, second], scene, turnIndex: -1, phase: 'approach', expires: now + 20000, holdUntil: 0 };
+    return true;
+  }
   function finishInteraction(now) {
     if (!interaction) return;
-    for (const walker of interaction.actors) { hideSpeech(walker); setPose(walker, 'idle'); chooseDestination(walker); }
+    recordSceneEnd(interaction, now);
+    for (const walker of interaction.actors) {
+      hideSpeech(walker); delete walker.node.dataset.sceneId; delete walker.node.dataset.sceneTurn;
+      walker.node.classList.remove('is-turning'); setPose(walker, 'idle'); chooseDestination(walker);
+    }
     interaction = null;
     dialogueIndex++;
     nextInteractionAt = now + 4200 + Math.random() * 2100;
   }
-  function updateInteraction(now) {
+  function recordSceneEnd(event, now) {
+    if (!event?.scene || event.turnIndex < 0) return;
+    const scene = event.scene;
+    const recentIds = [...(pairHistory.get(scene.pair)?.recentIds || []), scene.id].slice(-3);
+    pairHistory.set(scene.pair, { cursor: scene.cursor + 1, lastId: scene.id, recentIds,
+      until: now + Math.max(15000, Number(scene.cooldownMs) || 45000) });
+  }
+  function playSceneTurn(event, now) {
+    const turn = event.scene.turns[event.turnIndex];
+    if (!turn) { finishInteraction(now); return; }
+    const speaker = event.actors.find(actor => actor.key === turn.speaker);
+    const listener = event.actors.find(actor => actor !== speaker);
+    if (!speaker || !listener) { finishInteraction(now); return; }
+    showSpeech(speaker, turn.line, turn.mood, turn.action || '和夥伴交談');
+    if (POSES.has(turn.pose)) setPose(speaker, turn.pose);
+    const reaction = turn.listener?.key === listener.key ? turn.listener : null;
+    listener.node.classList.add('is-interacting');
+    listener.node.dataset.listener = speaker.key;
+    listener.node.dataset.reaction = dialogue?.ACTION_LABELS?.[reaction?.action] || '聆聽';
+    setPose(listener, reaction?.action === 'listen' ? 'listen' : POSES.has(reaction?.pose) ? reaction.pose : reaction?.mood === 'surprised' ? 'surprised' : 'idle');
+    for (const actor of event.actors) {
+      actor.node.dataset.sceneId = event.scene.id;
+      actor.node.dataset.sceneTurn = String(event.turnIndex);
+    }
+    event.holdUntil = now + Math.max(2200, Math.min(7000, Number(turn.durationMs) || 2200 + turn.line.length * 65));
+  }
+  function updateInteraction(now, delta) {
     const event = interaction;
     if (!event) return;
     if (event.phase === 'approach') {
-      const arrived = event.actors.every(walker => !walker.route.length);
+      const arrived = event.actors.every(walker => !walker.route.length && !walker.returnDockBeforeRoute);
       if (!arrived && now < event.expires) return;
       if (!arrived) { finishInteraction(now); return; }
-      event.phase = 'speaking-first'; event.holdUntil = now + 2600;
+      event.phase = event.type === 'furniture' && startFurnitureDock(event.actors[0], event.target) ? 'docking' : 'turning';
       for (const walker of event.actors) { walker.mode = 'interact'; walker.node.classList.remove('is-walking'); }
+    }
+    if (event.phase === 'docking') {
+      if (!moveFurnitureDock(event.actors[0], event.actors[0].dockTarget, now, delta)) return;
+      event.phase = 'turning';
+    }
+    if (event.phase === 'turning') {
+      let settled = true;
       if (event.type === 'chat') {
-        event.actors[0].node.style.setProperty('--facing', event.actors[1].x < event.actors[0].x ? '-1' : '1');
-        event.actors[1].node.style.setProperty('--facing', event.actors[0].x < event.actors[1].x ? '-1' : '1');
-        setPose(event.actors[1], 'wave');
-        showSpeech(event.actors[0], event.lines[0][0], event.lines[0][1], '和夥伴交談');
+        for (const actor of event.actors) {
+          const other = event.actors.find(value => value !== actor);
+          if (!faceWalker(actor, other.cell, now)) settled = false;
+        }
+        if (!settled) { if (now >= event.expires) finishInteraction(now); return; }
+        event.phase = 'speaking'; event.turnIndex = 0; playSceneTurn(event, now);
       } else {
-        event.actors[0].node.style.setProperty('--facing', event.target.anchor.x < event.actors[0].x ? '-1' : '1');
+        const target = { col: event.target.cell.col + event.target.span.width / 2 - .5,
+          row: event.target.cell.row + event.target.span.height / 2 - .5 };
+        if (!faceWalker(event.actors[0], target, now)) { if (now >= event.expires) finishInteraction(now); return; }
+        event.phase = 'speaking'; event.holdUntil = now + 3600;
         showSpeech(event.actors[0], event.line, event.mood, event.action, true, event.furnitureKey);
+        if (event.pose) setPose(event.actors[0], event.pose);
       }
       return;
     }
     if (now < event.holdUntil) return;
-    if (event.type === 'chat' && event.phase === 'speaking-first') {
-      event.phase = 'speaking-second'; event.holdUntil = now + 2600;
-      setPose(event.actors[0], 'wave');
-      showSpeech(event.actors[1], event.lines[1][0], event.lines[1][1], '回應夥伴');
+    if (event.type === 'chat') {
+      event.turnIndex++; playSceneTurn(event, now);
     } else finishInteraction(now);
   }
   function frame(now) {
@@ -679,7 +820,18 @@
     startInteraction(now);
     if (now >= nextJobBadgeAt) { refreshJobBadges(); nextJobBadgeAt = now + 1000; }
     for (const walker of walkers) {
+      if (walker.pose !== 'walk') showAction(walker, walker.pose || 'idle', now);
+      if (walker.returnDockBeforeRoute) {
+        if (moveFurnitureDock(walker, walker.dockOrigin, now, delta)) {
+          walker.dockOrigin = null; walker.dockTarget = null; walker.returnDockBeforeRoute = false;
+        }
+        continue;
+      }
       if (walker.mode === 'interact') continue;
+      if (walker.mode === 'undock') {
+        if (moveFurnitureDock(walker, walker.dockOrigin, now, delta)) { walker.dockOrigin = null; walker.dockTarget = null; walker.returnDockBeforeRoute = false; chooseDestination(walker); }
+        continue;
+      }
       if (walker.mode === 'focused') {
         if (walker.manualUntil && now >= walker.manualUntil) {
           hideSpeech(walker); setPose(walker, 'idle'); walker.manualUntil = 0;
@@ -689,66 +841,84 @@
       if (walker.mode === 'job') {
         if (walker.jobSpeechUntil && now >= walker.jobSpeechUntil) { hideSpeech(walker); walker.jobSpeechUntil = 0; }
         if (!companionWorkReady(companionRecord(walker.item?.id))) {
-          walker.node.classList.add('is-using-furniture');
-          setPose(walker, ['kitchen-table', 'piano'].includes(walker.jobFurnitureKey) ? 'sit' : 'focused_use');
+          walker.node.classList.toggle('is-using-furniture', !!walker.jobFurnitureKey);
+          setPose(walker, walker.jobBeat?.pose || 'focused_use');
         } else {
           walker.node.classList.remove('is-using-furniture'); setPose(walker, 'wave');
         }
         continue;
       }
       if (walker.pause > 0 && walker.mode === 'wander') {
-        walker.pause -= delta; walker.stepDistance = 0;
+        walker.pause -= delta;
         walker.node.classList.remove('is-walking'); setPose(walker, 'idle'); continue;
       }
       if (!walker.route.length) {
         walker.node.classList.remove('is-walking');
-        walker.stepDistance = 0;
         if (walker.mode === 'job-approach') {
+          if (walker.jobTargetLayout && (walker.dockTarget || startFurnitureDock(walker, walker.jobTargetLayout)) &&
+              !moveFurnitureDock(walker, walker.dockTarget, now, delta)) continue;
+          if (walker.jobFacingCell && !faceWalker(walker, walker.jobFacingCell, now)) { setPose(walker, 'idle'); continue; }
           walker.mode = 'job';
-          const task = walker.jobIntro
+          const task = walker.jobBeat || (walker.jobIntro
             ? { line: walker.jobIntro[0], mood: walker.jobIntro[1], verb: '開始工作' }
-            : dialogue?.activity?.(walker.key, walker.jobFurnitureKey, companionLineIndex++);
+            : dialogue?.interactionBeat?.(walker.key, 'work', companionLineIndex++));
           walker.jobIntro = null;
-          if (task) { showSpeech(walker, task.line, task.mood, task.verb, true, walker.jobFurnitureKey); walker.jobSpeechUntil = now + 3000; }
-          else { walker.node.classList.add('is-using-furniture'); setPose(walker, 'focused_use'); }
+          if (task) {
+            showSpeech(walker, task.line, task.mood, task.verb || '開始工作', !!walker.jobFurnitureKey, walker.jobFurnitureKey);
+            setPose(walker, task.pose || 'focused_use'); walker.jobSpeechUntil = now + 3000;
+          } else { walker.node.classList.remove('is-using-furniture'); setPose(walker, 'focused_use'); }
         }
         if (walker.mode === 'wander') chooseDestination(walker);
         continue;
       }
       const nextCell = walker.route[0];
-      if (walkers.some(other => other !== walker && other.cell.col === nextCell.col && other.cell.row === nextCell.row)) {
+      if (walkers.some(other => other !== walker && ((other.cell.col === nextCell.col && other.cell.row === nextCell.row) ||
+          (other.route?.[0]?.col === nextCell.col && other.route?.[0]?.row === nextCell.row && other.key < walker.key)))) {
         walker.blockedFor = (walker.blockedFor || 0) + delta;
         if (walker.blockedFor > 900 && walker.mode === 'wander') chooseDestination(walker);
+        else if (walker.blockedFor > 1000 && walker.mode === 'approach' && walker.targetCell) {
+          routeTo(walker, walker.targetCell); walker.blockedFor = 0;
+        }
         else if (walker.blockedFor > 1500 && walker.mode === 'job-approach') {
-          walker.route = []; walker.mode = 'job'; walker.node.classList.add('is-using-furniture'); setPose(walker, 'focused_use');
+          walker.route = []; walker.mode = 'job'; walker.jobFurnitureKey = ''; walker.jobFacingCell = null;
+          walker.jobBeat = dialogue?.interactionBeat?.(walker.key, 'work', companionLineIndex++) || null;
+          walker.node.classList.remove('is-using-furniture'); setPose(walker, walker.jobBeat?.pose || 'focused_use');
         }
         walker.node.classList.remove('is-walking'); setPose(walker, 'idle'); continue;
       }
       walker.blockedFor = 0;
+      const direction = locomotion?.directionForDelta(nextCell.col - walker.cell.col, nextCell.row - walker.cell.row, walker.motion?.direction);
+      const decoded = !!walker.motionArt?.atlases?.[direction];
+      if (!decoded || !faceWalker(walker, nextCell, now)) {
+        walker.node.classList.remove('is-walking'); setPose(walker, 'idle');
+        walker.node.dataset.motionReady = String(decoded); continue;
+      }
       const target = anchorForCell(nextCell, { width: 1, height: 1 });
+      walker.segmentCell = nextCell;
       const dx = target.x - walker.x;
       const dy = target.y - walker.y;
-      const distance = Math.hypot(dx, dy);
-      const step = Math.min(distance, delta * .083);
-      if (distance <= step || distance < 1) {
-        walker.x = target.x; walker.y = target.y; walker.cell = nextCell; walker.route.shift();
+      const scale = locomotion.projectedScale(walker.y, FLOOR);
+      const gait = locomotion.speedAndStride(walker.key, direction, scale, motionTable);
+      const step = locomotion.pathStep(dx, dy, direction, delta / 1000 * gait.speed);
+      if (step.reached) {
+        walker.x = target.x; walker.y = target.y; walker.cell = nextCell; walker.route.shift(); walker.segmentCell = null;
         walker.node.dataset.gridCol = String(nextCell.col); walker.node.dataset.gridRow = String(nextCell.row);
-      } else { walker.x += dx / distance * step; walker.y += dy / distance * step; }
+      } else { walker.x += step.dx; walker.y += step.dy; }
       walker.node.style.left = `${walker.x / WIDTH * 100}%`;
       walker.node.style.top = `${walker.y / HEIGHT * 100}%`;
       walker.node.style.zIndex = String(10 + Math.round(walker.y));
-      walker.node.style.setProperty('--room-depth', String(.72 + .35 * (walker.y - FLOOR.top) / (FLOOR.bottom - FLOOR.top)));
-      if (Math.abs(dx) > 1) walker.node.style.setProperty('--facing', dx < 0 ? '-1' : '1');
+      walker.node.style.setProperty('--room-depth', String(locomotion.projectedScale(walker.y, FLOOR)));
+      walker.node.style.setProperty('--room-character-scale', String(locomotion.projectedScale(walker.y, FLOOR) / 1.07));
       keepSpeechInsideStage(walker);
       walker.node.classList.add('is-walking');
-      walker.stepDistance += step;
-      setPose(walker, Math.floor(walker.stepDistance / 18) % 2 ? 'walk2' : 'walk1');
+      locomotion.advance(walker.motion, step.travel, gait.stride, { ready: decoded });
+      showMotion(walker, true);
       if (!walker.route.length) {
-        walker.node.classList.remove('is-walking'); walker.stepDistance = 0;
+        walker.node.classList.remove('is-walking');
         setPose(walker, 'idle');
       }
     }
-    updateInteraction(now);
+    updateInteraction(now, delta);
     animationId = requestAnimationFrame(frame);
   }
   function refreshAnimation() {
@@ -768,10 +938,18 @@
       node.style.left = `${startX / WIDTH * 100}%`;
       node.style.top = `${startY / HEIGHT * 100}%`;
       const walker = { node, item, key: keyForCharacter(item), cell: placed.cell, x: startX, y: startY,
-        pause: Math.random() * 350, route: [], targetCell: null, mode: 'wander', stepDistance: 0, pose: '' };
+        pause: Math.random() * 350, route: [], targetCell: null, mode: 'wander', pose: '',
+        motion: locomotion?.createState(), motionArt: locomotion?.preload(keyForCharacter(item)),
+        actionArt: locomotion?.preloadActions(keyForCharacter(item)) };
       keepSpeechInsideStage(walker);
       walkers.push(walker);
       setPose(walker, 'idle');
+      walker.motionArt?.promise.then(() => {
+        if (walkers.includes(walker) && walker.pose === 'idle') setPose(walker, 'idle');
+      });
+      walker.actionArt?.promise.then(() => {
+        if (walkers.includes(walker) && walker.pose !== 'walk') setPose(walker, walker.pose);
+      });
     }
     for (const walker of walkers) {
       if (companionRecord(walker.item?.id)?.work?.state !== 'idle' && companionRecord(walker.item?.id)?.work?.state) syncCompanionWalker(walker.item.id);
@@ -787,6 +965,7 @@
     node.style.top = `${anchor.y / HEIGHT * 100}%`;
     node.style.zIndex = String(10 + Math.round(anchor.y));
     node.style.setProperty('--room-depth', String(round(.72 + .35 * (anchor.y - FLOOR.top) / (FLOOR.bottom - FLOOR.top))));
+    if (kind === 'character') node.style.setProperty('--room-character-scale', String((.72 + .35 * (anchor.y - FLOOR.top) / (FLOOR.bottom - FLOOR.top)) / 1.07));
     node.dataset.gridCol = String(cell.col); node.dataset.gridRow = String(cell.row);
     node.dataset.footprint = `${span.width}x${span.height}`;
     if (kind === 'furniture') {
@@ -891,6 +1070,8 @@
       const node = el('div', 'room-character-shell');
       const sprite = el('img', 'room-chibi');
       sprite.src = source; sprite.alt = item.name || '航海夥伴'; sprite.draggable = false;
+      const walkSprite = el('canvas', 'room-walk-sprite');
+      walkSprite.width = 256; walkSprite.height = 256; walkSprite.hidden = true; walkSprite.setAttribute('aria-hidden', 'true');
       const speech = el('div', 'room-speech'); speech.hidden = true;
       speech.setAttribute('role', 'status'); speech.setAttribute('aria-live', 'polite');
       speech.append(el('span', 'room-speech-text'), el('small', 'room-speech-action'));
@@ -899,7 +1080,7 @@
       const working = work?.work?.state === 'working' || work?.work?.state === 'ready';
       badge.hidden = !working;
       badge.textContent = companionWorkReady(work) ? '可領取' : '工作中';
-      node.append(sprite, speech, badge);
+      node.append(sprite, walkSprite, speech, badge);
       node.dataset.roomKey = `c:${entry.itemId}`;
       node.tabIndex = 0;
       node.setAttribute('role', 'button');
@@ -1170,5 +1351,29 @@
   document.addEventListener('visibilitychange', refreshAnimation);
   motion.addEventListener?.('change', refreshAnimation);
   window.LauncherRoom = { setProfile, onVisible, openEditor };
+  // Enabled only by the local QA harness, never by the packaged launcher.
+  if (window.__LAUNCHER_ROOM_QA__ === true) window.__launcherRoomTest = {
+    snapshot: () => ({ interaction: interaction && { type: interaction.type, phase: interaction.phase,
+      sceneId: interaction.scene?.id, sceneCursor: interaction.scene?.cursor, pair: interaction.scene?.pair,
+      turnIndex: interaction.turnIndex, turns: interaction.scene?.turns.length },
+    walkers: walkers.map(walker => ({ key: walker.key, cell: { ...walker.cell }, x: walker.x, y: walker.y,
+      mode: walker.mode, phase: walker.motion?.phase, direction: walker.motion?.direction,
+      dock: walker.dockTarget ? { ...walker.dockTarget } : null, jobFurnitureKey: walker.jobFurnitureKey || '', jobLine: walker.jobBeat?.line || '',
+      ready: Object.keys(walker.motionArt?.atlases || {}), route: walker.route.map(cell => ({ ...cell })) })) }),
+    route: (key, goal) => {
+      if (interaction) finishInteraction(performance.now());
+      nextInteractionAt = Infinity;
+      const walker = walkers.find(entry => entry.key === key);
+      if (!walker || !Number.isInteger(goal?.col) || !Number.isInteger(goal?.row)) return false;
+      walker.mode = 'wander'; walker.pause = 0;
+      return routeTo(walker, goal);
+    },
+    resumeInteractions: () => { nextInteractionAt = performance.now(); },
+    beginChat: (firstKey, secondKey) => {
+      if (interaction) finishInteraction(performance.now());
+      const first = walkers.find(entry => entry.key === firstKey), second = walkers.find(entry => entry.key === secondKey);
+      return !!first && !!second && beginChat(first, second, performance.now());
+    }
+  };
   render();
 })();

@@ -1,0 +1,59 @@
+{
+  "candidate": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\zoro\\south-01.png",
+  "gptOriginal": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-a1c5-7fc2-9c4d-857370899a24\\exec-401ed841-97ec-42dc-b288-afeac5cab1c1.png",
+  "sha256": "e149be0f8ccd5f00adb8c116e68cf2de44d68a1907e1f9d0d6d965b27be2a024",
+  "generator": "built-in imagegen",
+  "prompt": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\zoro\\south-01-prompt.txt",
+  "direction": "south",
+  "size": [
+    1448,
+    1086
+  ],
+  "mode": "RGBA",
+  "alphaExtrema": [
+    0,
+    255
+  ],
+  "transparentPixelFraction": 0.582226834752704,
+  "cellOrder": [
+    "quiet-head",
+    "confident-head",
+    "annoyed-head",
+    "surprised-head",
+    "torso-pelvis",
+    "near-arm",
+    "far-arm",
+    "near-leg",
+    "far-leg",
+    "near-foot",
+    "far-foot",
+    "sword-bundle"
+  ],
+  "nearAnatomicalSide": "right",
+  "farAnatomicalSide": "left",
+  "identityReference": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\turnarounds\\zoro-02.png",
+  "officialReference": "https://tamashiiweb.com/item/15043/",
+  "status": "CANON_PARTS_REVIEW_PASS_PENDING_ASSEMBLY",
+  "canonicalPassed": [
+    "Pre-timeskip white shirt, green haramaki, dark pants/boots",
+    "No eye injury or scar",
+    "Left ear only three earrings where anatomically visible",
+    "Left arm only black bandana",
+    "Exactly 3 swords: one white, two dark scabbards"
+  ],
+  "assemblyNotes": [
+    "Use manually authored source rectangles; generated object boundaries may extend outside equal cell cuts.",
+    "Heads share shape within this direction; use same anchors and shared head scale within expression set.",
+    "Cross-direction component scale needs calibration against approved turnaround.",
+    "Torso sleeves may need arm overlap; do not stretch torso or rotate head independently.",
+    "Leg ankle overlap must be hidden inside boot shaft.",
+    "Accessory belongs anatomical right hip; west direction it is far side.",
+    "Torso still has rounded sleeve bulges; near/far arm shoulder overlap must hide them, inspect assembled silhouette."
+  ],
+  "notEstablished": [
+    "Joint anchors",
+    "Assembled character fit",
+    "Walking and interaction runtime",
+    "Production acceptance"
+  ]
+}

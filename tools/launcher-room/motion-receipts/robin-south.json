@@ -1,0 +1,249 @@
+{
+  "schema": "one-piece-room-rig-receipt/1",
+  "character": "robin",
+  "direction": "south",
+  "sourcePng": "tools/launcher-room/motion-source-png/robin-south.png",
+  "sourceSha256": "98d2f828df8b13ed2bac4015564d6b96bc82a4c76a3ed2eb1f8b10301d8b04d9",
+  "provenance": "tools/launcher-room/motion-receipts/robin-south-gpt.json",
+  "provenanceSha256": "8222dbab50dafa666bdf61542562c86928f666221f5386a46455ff2ba312b79f",
+  "rawReceipt": {
+    "path": "tools/launcher-room/motion-receipts/robin-south-gpt-original.json",
+    "sha256": "08f0c4ad152a0515b35596bc324b4246cff8192d7384e13bc4ef73be44c2e6e5"
+  },
+  "sourceImages": {
+    "sheet": {
+      "sourcePng": "tools/launcher-room/motion-source-png/robin-south.png",
+      "sourceSha256": "98d2f828df8b13ed2bac4015564d6b96bc82a4c76a3ed2eb1f8b10301d8b04d9",
+      "provenance": "tools/launcher-room/motion-receipts/robin-south-gpt.json",
+      "provenanceSha256": "8222dbab50dafa666bdf61542562c86928f666221f5386a46455ff2ba312b79f",
+      "rawReceipt": {
+        "path": "tools/launcher-room/motion-receipts/robin-south-gpt-original.json",
+        "sha256": "08f0c4ad152a0515b35596bc324b4246cff8192d7384e13bc4ef73be44c2e6e5"
+      }
+    }
+  },
+  "originalSpecSha256": "6b44a878ffbf9b6223e704606b32742e1b27f33be103fcb7cfa7fe9ae699f3da",
+  "rigSpec": "tools/launcher-room/rig-specs/robin-south.json",
+  "rigSpecSha256": "2d95da83939e1924a6f235111c4a4cde27a6aa79c04a2fa1ddee9dce35155210",
+  "selectedPlanSha256": "cd7bdb59fb34bc2132bcaea0a6a71f42c4efecb9f59d4d0e51b9bc3c3fa24a3c",
+  "review": {
+    "status": "reviewed",
+    "notes": "Final GPT source identity and four-direction atlas contact sheets inspected for all ten characters. Root additionally inspected actual-room desktop consecutive phases and loop seam for all ten, five four-turn speaker/listener contact sheets, both widths of final four-way piano/table contacts, and narrow-room samples. No remaining observed pose discontinuity, detached parts, head/body facing mismatch or furniture alignment blocker in reviewed frames. Acceptance is for this precisely hash-bound local candidate. Automated fixtures and frame inspection are not human play, physical-phone testing or a fixed-60fps guarantee; 350ms loaded-host capture gap is retained in evidence. Public deployment verified separately.",
+    "sourceSha256": "98d2f828df8b13ed2bac4015564d6b96bc82a4c76a3ed2eb1f8b10301d8b04d9",
+    "sourceHashes": {
+      "sheet": "98d2f828df8b13ed2bac4015564d6b96bc82a4c76a3ed2eb1f8b10301d8b04d9"
+    },
+    "originalSpecSha256": "6b44a878ffbf9b6223e704606b32742e1b27f33be103fcb7cfa7fe9ae699f3da",
+    "rigSpecSha256": "2d95da83939e1924a6f235111c4a4cde27a6aa79c04a2fa1ddee9dce35155210",
+    "rendererSha256": "de24e1fa55d835f12e418e12f7dee3199243b3a40394e90ffe8304f8d96edd11",
+    "bakerSha256": "1261fb4dcccf74a3abba4fb59d399a329e951adde3a8c0ddf6aaffae9e635e07",
+    "evidence": [
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-0.json",
+        "sha256": "e79bf04735d1471d88a544c1053d25e8f738c3f6bd66bc68fbe416c7a1a1b072"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-1.png",
+        "sha256": "3747575c15af7fa3baa9efff448216daeaa5899467d066cc001d3b22f834e9ba"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-2.json",
+        "sha256": "d5253d6aa247ec7e8bdfe09c2d815ddf167971f3893d7f84df1d85ca4cc51c2a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-3.json",
+        "sha256": "f1f084881967eb99df37b06eee07c1cae3d7158a9e50112470753fe6c214df0a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-4.json",
+        "sha256": "213012969890d60d65b15d1cb657e88f78035928aaacfb64e73d9b533c406ed9"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-5.json",
+        "sha256": "14cf571dcd7d963271a13912efa415086609050b791993997891d92db69736ff"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-6.png",
+        "sha256": "23f15019864d938323707bf7b47f9c69d8e5f57a17b688192ca1dfb57a95154c"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-7.png",
+        "sha256": "ede05792c18884d88864be32bed88f5eab7c3d76ff1d7b83412f149dadb0c319"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-8.png",
+        "sha256": "ac367b80af0d42220a680301100128038a7a113ec1d08ff20dd925619213b65e"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-9.png",
+        "sha256": "23f15019864d938323707bf7b47f9c69d8e5f57a17b688192ca1dfb57a95154c"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-10.png",
+        "sha256": "c5d0d8d439bf4030c3185e55f398e0afb33652f1972eba03e80812ee24e6602a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-11.png",
+        "sha256": "2a13bbdb1c53e77ddc13392fc394e6eeb6618056dce609e8f2ea8567f1342448"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-12.png",
+        "sha256": "7f212004602bd8661f08268b728f4c10cd8786eb9af99a039f8203451415cc8b"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-13.png",
+        "sha256": "c5d0d8d439bf4030c3185e55f398e0afb33652f1972eba03e80812ee24e6602a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-14.png",
+        "sha256": "3bac9d96e381042420ca3288dedb4b21cf36936a5484925af5ce4a307e0b62a2"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-15.png",
+        "sha256": "522ac0b2b441de94b8d63f7dab052fe671e4efecfd145927ab152935b8b9dd10"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-16.png",
+        "sha256": "39763b76dfa4affd7161ceba6d780352a106219e5229e1bfb695e95699c65b8d"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-17.png",
+        "sha256": "3bac9d96e381042420ca3288dedb4b21cf36936a5484925af5ce4a307e0b62a2"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-18.png",
+        "sha256": "e76082909e423435c9ab97c74db91d3448f0830ee576510c57c3a717ac0d53b9"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-19.png",
+        "sha256": "2d4af628ffd5af66608810d743fa523dd34f3cf191adc7648d9c3bbffceb309e"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-20.png",
+        "sha256": "29a54d7fc2c6585d609efab8e0bbfef5e53e03d95af0b8c132c73644f5e090d4"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-21.png",
+        "sha256": "e76082909e423435c9ab97c74db91d3448f0830ee576510c57c3a717ac0d53b9"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-22.png",
+        "sha256": "23f15019864d938323707bf7b47f9c69d8e5f57a17b688192ca1dfb57a95154c"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-23.png",
+        "sha256": "ede05792c18884d88864be32bed88f5eab7c3d76ff1d7b83412f149dadb0c319"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-24.png",
+        "sha256": "ac367b80af0d42220a680301100128038a7a113ec1d08ff20dd925619213b65e"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-25.png",
+        "sha256": "23f15019864d938323707bf7b47f9c69d8e5f57a17b688192ca1dfb57a95154c"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-26.png",
+        "sha256": "c5d0d8d439bf4030c3185e55f398e0afb33652f1972eba03e80812ee24e6602a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-27.png",
+        "sha256": "2a13bbdb1c53e77ddc13392fc394e6eeb6618056dce609e8f2ea8567f1342448"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-28.png",
+        "sha256": "7f212004602bd8661f08268b728f4c10cd8786eb9af99a039f8203451415cc8b"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-29.png",
+        "sha256": "c5d0d8d439bf4030c3185e55f398e0afb33652f1972eba03e80812ee24e6602a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-30.png",
+        "sha256": "3bac9d96e381042420ca3288dedb4b21cf36936a5484925af5ce4a307e0b62a2"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-31.png",
+        "sha256": "522ac0b2b441de94b8d63f7dab052fe671e4efecfd145927ab152935b8b9dd10"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-32.png",
+        "sha256": "39763b76dfa4affd7161ceba6d780352a106219e5229e1bfb695e95699c65b8d"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-33.png",
+        "sha256": "3bac9d96e381042420ca3288dedb4b21cf36936a5484925af5ce4a307e0b62a2"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-34.png",
+        "sha256": "e76082909e423435c9ab97c74db91d3448f0830ee576510c57c3a717ac0d53b9"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-35.png",
+        "sha256": "2d4af628ffd5af66608810d743fa523dd34f3cf191adc7648d9c3bbffceb309e"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-36.png",
+        "sha256": "29a54d7fc2c6585d609efab8e0bbfef5e53e03d95af0b8c132c73644f5e090d4"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-37.png",
+        "sha256": "e76082909e423435c9ab97c74db91d3448f0830ee576510c57c3a717ac0d53b9"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-38.json",
+        "sha256": "5a9d56eebb2c2e5b13a10162135b14e07c0c8b6be8e577d73b7977ccea6f585a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-39.png",
+        "sha256": "b3cb404728bb094f64c37ca372ec97fefa057441c67055c5b1f79b7cbb32b003"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-40.png",
+        "sha256": "bb5196671e511c6d9cef316bdd102fa1366a1dbead916c2726314e9bfd9776e5"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-41.png",
+        "sha256": "c235789fc152c87c0038b8e4c2b9d6aad73f6ee3ea9ded91f573aed18fc855a2"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-42.png",
+        "sha256": "a96a77bc86f5175106f38a3cdeac433d47ebbf0b09aae220adb84c0f59e48b9c"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-43.json",
+        "sha256": "7741aad217352a69214d4221a57d582b1c3f1ccdd7070c03a08a6705c2b46516"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-44.png",
+        "sha256": "c296f7527fcff4f5c960d293bf5c0a81a70dee8b0fdd57a8c55f57aa5a9127d8"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-45.png",
+        "sha256": "26d8f0ac9435f989aa8a7dcc702b0a75625c58353d0bba60f988fd2495dab258"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-46.png",
+        "sha256": "601e283364624b22700c0b6c5b3e53ba7812521a63f2ba2e5053a694a5ace8a8"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-47.png",
+        "sha256": "c3547138d5c7a2fa631d1dcd03ad79e03f353ca35297ed87cd161710e68d748e"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-48.json",
+        "sha256": "1ce6e0c6c895b2da80ca8bf1cd998ecf22794d6855c6adeb8619b28cbbfee637"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/robin-south-final-49.json",
+        "sha256": "c0497cfa744a57881542377bcfc3d9d50b1443e51435739e0e7209f16f75eb3e"
+      }
+    ],
+    "assetHashes": {
+      "motion": "0cfd82e3820e432867abe847de81a1987db2387b540f3c1197332aef57104bcf",
+      "acting": "b4960bd0a62d1e97fcd9091927a47bce3c3cba87837a3953faba859ff1097464"
+    },
+    "specSha256": "2d95da83939e1924a6f235111c4a4cde27a6aa79c04a2fa1ddee9dce35155210",
+    "reviewer": "Codex root, with independent walk_art_pilot visual review"
+  }
+}

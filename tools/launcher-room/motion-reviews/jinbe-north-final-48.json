@@ -1,0 +1,20 @@
+{
+  "status": "approved",
+  "reviewer": "Codex root, with independent walk_art_pilot visual review",
+  "notes": "Final GPT source identity and four-direction atlas contact sheets inspected for all ten characters. Root additionally inspected actual-room desktop consecutive phases and loop seam for all ten, five four-turn speaker/listener contact sheets, both widths of final four-way piano/table contacts, and narrow-room samples. No remaining observed pose discontinuity, detached parts, head/body facing mismatch or furniture alignment blocker in reviewed frames. Acceptance is for this precisely hash-bound local candidate. Automated fixtures and frame inspection are not human play, physical-phone testing or a fixed-60fps guarantee; 350ms loaded-host capture gap is retained in evidence. Public deployment verified separately.",
+  "manifestSha256": "4a208e2ade7a9693bf914c66cdbb000ced16be395376fd46550026b681f7dc11",
+  "characters": [
+    "luffy",
+    "zoro",
+    "nami",
+    "usopp",
+    "sanji",
+    "chopper",
+    "robin",
+    "franky",
+    "brook",
+    "jinbe"
+  ],
+  "dynamicReview": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\visual-review.json",
+  "approvedAt": "2026-09-26T17:20:33.200590+00:00"
+}

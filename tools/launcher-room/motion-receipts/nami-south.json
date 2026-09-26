@@ -1,0 +1,249 @@
+{
+  "schema": "one-piece-room-rig-receipt/1",
+  "character": "nami",
+  "direction": "south",
+  "sourcePng": "tools/launcher-room/motion-source-png/nami-south.png",
+  "sourceSha256": "37af3ff43c7b3d8c6723a64a30738a465bda39f6fc095c86c97356920ba4b73b",
+  "provenance": "tools/launcher-room/motion-receipts/nami-south-gpt.json",
+  "provenanceSha256": "d7b9529fa817e923186a4f6680670d7fb1b7e7033231282c3c046510e406434a",
+  "rawReceipt": {
+    "path": "tools/launcher-room/motion-receipts/nami-south-gpt-original.json",
+    "sha256": "cc6c77d17bca0c1bae143850c75262edd9f498eda6bb8e7369206ab257b2aa97"
+  },
+  "sourceImages": {
+    "sheet": {
+      "sourcePng": "tools/launcher-room/motion-source-png/nami-south.png",
+      "sourceSha256": "37af3ff43c7b3d8c6723a64a30738a465bda39f6fc095c86c97356920ba4b73b",
+      "provenance": "tools/launcher-room/motion-receipts/nami-south-gpt.json",
+      "provenanceSha256": "d7b9529fa817e923186a4f6680670d7fb1b7e7033231282c3c046510e406434a",
+      "rawReceipt": {
+        "path": "tools/launcher-room/motion-receipts/nami-south-gpt-original.json",
+        "sha256": "cc6c77d17bca0c1bae143850c75262edd9f498eda6bb8e7369206ab257b2aa97"
+      }
+    }
+  },
+  "originalSpecSha256": "cbbf2f099beaf4fc0cf18cd557b4d0b0d596c51049da7ba61587db275768bea0",
+  "rigSpec": "tools/launcher-room/rig-specs/nami-south.json",
+  "rigSpecSha256": "a0961a1c7d808cef9b85ca4e3398ac80c6f15773650a9508b8fcc528e9b3bde5",
+  "selectedPlanSha256": "cd7bdb59fb34bc2132bcaea0a6a71f42c4efecb9f59d4d0e51b9bc3c3fa24a3c",
+  "review": {
+    "status": "reviewed",
+    "notes": "Final GPT source identity and four-direction atlas contact sheets inspected for all ten characters. Root additionally inspected actual-room desktop consecutive phases and loop seam for all ten, five four-turn speaker/listener contact sheets, both widths of final four-way piano/table contacts, and narrow-room samples. No remaining observed pose discontinuity, detached parts, head/body facing mismatch or furniture alignment blocker in reviewed frames. Acceptance is for this precisely hash-bound local candidate. Automated fixtures and frame inspection are not human play, physical-phone testing or a fixed-60fps guarantee; 350ms loaded-host capture gap is retained in evidence. Public deployment verified separately.",
+    "sourceSha256": "37af3ff43c7b3d8c6723a64a30738a465bda39f6fc095c86c97356920ba4b73b",
+    "sourceHashes": {
+      "sheet": "37af3ff43c7b3d8c6723a64a30738a465bda39f6fc095c86c97356920ba4b73b"
+    },
+    "originalSpecSha256": "cbbf2f099beaf4fc0cf18cd557b4d0b0d596c51049da7ba61587db275768bea0",
+    "rigSpecSha256": "a0961a1c7d808cef9b85ca4e3398ac80c6f15773650a9508b8fcc528e9b3bde5",
+    "rendererSha256": "de24e1fa55d835f12e418e12f7dee3199243b3a40394e90ffe8304f8d96edd11",
+    "bakerSha256": "1261fb4dcccf74a3abba4fb59d399a329e951adde3a8c0ddf6aaffae9e635e07",
+    "evidence": [
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-0.json",
+        "sha256": "acb36e6a0aa64235b7d9713748eea87f714b7320165b3abe4ed4d4e70b9c0a9b"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-1.png",
+        "sha256": "3d0d08862ca883ef64c9d8c43f7f5ca30f095826d4b38efcd0aac559607d590e"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-2.json",
+        "sha256": "d5253d6aa247ec7e8bdfe09c2d815ddf167971f3893d7f84df1d85ca4cc51c2a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-3.json",
+        "sha256": "f1f084881967eb99df37b06eee07c1cae3d7158a9e50112470753fe6c214df0a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-4.json",
+        "sha256": "2a04851d69c337c2f35b040fad8783b6613ec7be20585eac522967766f83d79f"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-5.json",
+        "sha256": "de946607e430e9e82ae9765828e513cfb35fe8d34aea17367ae12687b00f57af"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-6.png",
+        "sha256": "00ad9c2c0f6b117ffafaadfe1abdd44f8c7e170a06827b41a61f0ef95dcb50dd"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-7.png",
+        "sha256": "def6b5f32a866484633d56a06fb567344cf7174751483ab367ca23b2ed8bde5b"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-8.png",
+        "sha256": "42911227ba264fd32471e48a2064c37b7955b5d0746b160468a39ab57627932a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-9.png",
+        "sha256": "00ad9c2c0f6b117ffafaadfe1abdd44f8c7e170a06827b41a61f0ef95dcb50dd"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-10.png",
+        "sha256": "89d6f6d4cbedb8e385034250235807356004fe2520df13adb737018f7756aae8"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-11.png",
+        "sha256": "18c3d0925d84abb3138fd351eafa64dba47481c071469211176e19f24b5ddfe0"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-12.png",
+        "sha256": "9c1f894c59259b5fe3a17b52770eca37c8e8d5bbc6a9eabba7bd5efcc8fa7672"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-13.png",
+        "sha256": "89d6f6d4cbedb8e385034250235807356004fe2520df13adb737018f7756aae8"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-14.png",
+        "sha256": "c10695e872ffacc72d0b33f586f96303a8ac6fe8537587eb095fd64c4374d749"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-15.png",
+        "sha256": "3d4fcc411070682bf4904242551b856bad031b02cfe6a42db84069eb1bda6ca7"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-16.png",
+        "sha256": "519158e88864fc26a13a5a9f1bd83d6eae4939e244c9e399e903b7a3f3c3c99f"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-17.png",
+        "sha256": "c10695e872ffacc72d0b33f586f96303a8ac6fe8537587eb095fd64c4374d749"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-18.png",
+        "sha256": "cf154b3d9e1732d4dc6d448f01154c191d44e5c5771e07566471ac20fbcc6960"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-19.png",
+        "sha256": "e35593f640f3d2a8e8a3118c63aeee5ab556cc57d9d62116d3418f2d0ad8f1e0"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-20.png",
+        "sha256": "b964ccf82adcb5698c8682b1cb52fe400f1d9443c8a860800997d57007cedc28"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-21.png",
+        "sha256": "cf154b3d9e1732d4dc6d448f01154c191d44e5c5771e07566471ac20fbcc6960"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-22.png",
+        "sha256": "00ad9c2c0f6b117ffafaadfe1abdd44f8c7e170a06827b41a61f0ef95dcb50dd"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-23.png",
+        "sha256": "def6b5f32a866484633d56a06fb567344cf7174751483ab367ca23b2ed8bde5b"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-24.png",
+        "sha256": "42911227ba264fd32471e48a2064c37b7955b5d0746b160468a39ab57627932a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-25.png",
+        "sha256": "00ad9c2c0f6b117ffafaadfe1abdd44f8c7e170a06827b41a61f0ef95dcb50dd"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-26.png",
+        "sha256": "89d6f6d4cbedb8e385034250235807356004fe2520df13adb737018f7756aae8"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-27.png",
+        "sha256": "18c3d0925d84abb3138fd351eafa64dba47481c071469211176e19f24b5ddfe0"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-28.png",
+        "sha256": "9c1f894c59259b5fe3a17b52770eca37c8e8d5bbc6a9eabba7bd5efcc8fa7672"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-29.png",
+        "sha256": "89d6f6d4cbedb8e385034250235807356004fe2520df13adb737018f7756aae8"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-30.png",
+        "sha256": "c10695e872ffacc72d0b33f586f96303a8ac6fe8537587eb095fd64c4374d749"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-31.png",
+        "sha256": "3d4fcc411070682bf4904242551b856bad031b02cfe6a42db84069eb1bda6ca7"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-32.png",
+        "sha256": "519158e88864fc26a13a5a9f1bd83d6eae4939e244c9e399e903b7a3f3c3c99f"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-33.png",
+        "sha256": "c10695e872ffacc72d0b33f586f96303a8ac6fe8537587eb095fd64c4374d749"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-34.png",
+        "sha256": "cf154b3d9e1732d4dc6d448f01154c191d44e5c5771e07566471ac20fbcc6960"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-35.png",
+        "sha256": "e35593f640f3d2a8e8a3118c63aeee5ab556cc57d9d62116d3418f2d0ad8f1e0"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-36.png",
+        "sha256": "b964ccf82adcb5698c8682b1cb52fe400f1d9443c8a860800997d57007cedc28"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-37.png",
+        "sha256": "cf154b3d9e1732d4dc6d448f01154c191d44e5c5771e07566471ac20fbcc6960"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-38.json",
+        "sha256": "5a9d56eebb2c2e5b13a10162135b14e07c0c8b6be8e577d73b7977ccea6f585a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-39.png",
+        "sha256": "b3cb404728bb094f64c37ca372ec97fefa057441c67055c5b1f79b7cbb32b003"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-40.png",
+        "sha256": "bb5196671e511c6d9cef316bdd102fa1366a1dbead916c2726314e9bfd9776e5"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-41.png",
+        "sha256": "c235789fc152c87c0038b8e4c2b9d6aad73f6ee3ea9ded91f573aed18fc855a2"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-42.png",
+        "sha256": "a96a77bc86f5175106f38a3cdeac433d47ebbf0b09aae220adb84c0f59e48b9c"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-43.json",
+        "sha256": "7741aad217352a69214d4221a57d582b1c3f1ccdd7070c03a08a6705c2b46516"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-44.png",
+        "sha256": "c296f7527fcff4f5c960d293bf5c0a81a70dee8b0fdd57a8c55f57aa5a9127d8"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-45.png",
+        "sha256": "26d8f0ac9435f989aa8a7dcc702b0a75625c58353d0bba60f988fd2495dab258"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-46.png",
+        "sha256": "601e283364624b22700c0b6c5b3e53ba7812521a63f2ba2e5053a694a5ace8a8"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-47.png",
+        "sha256": "c3547138d5c7a2fa631d1dcd03ad79e03f353ca35297ed87cd161710e68d748e"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-48.json",
+        "sha256": "1ce6e0c6c895b2da80ca8bf1cd998ecf22794d6855c6adeb8619b28cbbfee637"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/nami-south-final-49.json",
+        "sha256": "c0497cfa744a57881542377bcfc3d9d50b1443e51435739e0e7209f16f75eb3e"
+      }
+    ],
+    "assetHashes": {
+      "motion": "cad8a5dbb715add8326d27bdc07ff4fac65422d5d3de0e288bef0aa54db20426",
+      "acting": "f0eede1c4cc36ae3851942f9b3035614ac002db12556efc47d1eb8462d7f4eaa"
+    },
+    "specSha256": "a0961a1c7d808cef9b85ca4e3398ac80c6f15773650a9508b8fcc528e9b3bde5",
+    "reviewer": "Codex root, with independent walk_art_pilot visual review"
+  }
+}

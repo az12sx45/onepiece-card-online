@@ -1,0 +1,66 @@
+{
+  "candidate": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\robin\\east-01.png",
+  "gptOriginal": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-a1c5-7fc2-9c4d-857370899a24\\exec-5462c30c-2058-47e2-af06-8a7b9ce0a666.png",
+  "sha256": "6bb817a38091f9684b5e9cfc61783708ebdd3202cc7e5ab00363a6ae299c33ca",
+  "generator": "built-in imagegen",
+  "prompt": "Use case: stylized-concept. Draw transparent 12part skeletal animation rig kit of adult Nico Robin, ONE PIECE Enies Lobby outfit, independently EAST/screenRIGHT profile. Image1 authoritative identity/costume/direction, image2 only part-layout example, never copy its character. Crisp elegant chibi anime cel shading matching image1. Straight shoulderlength BLACK hair with blunt bangs, blue eyes, no sunglasses/hat. Single black collared zip-front long-sleeve dress, white lining patterned with tiny purple-blue dots at neckline/hem, tall black heeled boots. Keep original canonical clothing, no inventedcharacter.\n4:3 trueRGBA canvas,4columns3rows12 separate parts with LARGE clear gutters. Head each at most70%cell width, do not clip hair.\nRow1 head+shortneck four expressions, ALL exactsame hair/skull/neck shape,size,EAST angle:1 calm perceptive neutral;2 subtle warm smile;3 slightly stern/concerned brow;4 restrained surprise wider eyes/small openmouth. Robin is composed adult, not exaggerated cartoon rage. Only facial features change.\nRow2:5 EAST torso+pelvis and entire short dress skirt/hem, NO head/arms/legs. Solid hidden shoulders without protruding sleeves, all sleeves on separatearms. Side profile like ref, not frontchest with turnedhead. Black high collar, zipper appropriate visible edge, patterned white neckline/hem.6 NEAR anatomicalRIGHT fullarm including blacklongsleeve shoulder to wrist plus barehand.7 FAR anatomicalLEFT fullarm same.8 NEAR RIGHT leg hip-to-ankle: short bare upperthigh, black tall boot shaft from upper leg over knee/calf to ankle, NO foot/toe/heel, full hiddenhip and ankleoverlap.\nRow3:9 FAR LEFT fullleg same with bootshaft,NOfoot.10 NEAR RIGHT separate black heeled boot FOOT at ankle, complete toe/heel/sole facingRIGHT, shortshaftoverlap not full kneehighboot.11 FAR LEFT separate bootfoot facingRIGHT same.12 one extra relaxed OPEN PALM bare hand, same skin/shading/perspective and wrist overlap as arm hands. This spare gesture hand is not a worn accessory.\nNo arms embedded on torso, no fullboot duplicated on legandfoot, keep leg/body proportions reference. Neutral nearstraight limbs,lowrelaxedhands,no gestures. Full alpha nofloor/shadow/text/gridlines.",
+  "direction": "east",
+  "size": [
+    1448,
+    1086
+  ],
+  "mode": "RGBA",
+  "alphaExtrema": [
+    0,
+    255
+  ],
+  "edgeAlpha128Counts": {
+    "left": 0,
+    "right": 0,
+    "top": 0,
+    "bottom": 0
+  },
+  "nearAnatomicalSide": "right",
+  "identityReference": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\turnarounds\\robin-02.png",
+  "officialReference": "https://tamashiiweb.com/item/15906/",
+  "status": "CANON_PARTS_REVIEW_PASS_PENDING_ASSEMBLY",
+  "cellOrder": [
+    "quiet-head",
+    "warm-smile-head",
+    "concerned-head",
+    "surprised-head",
+    "dress-torso-pelvis",
+    "near-arm",
+    "far-arm",
+    "near-leg-with-bootshaft",
+    "far-leg-with-bootshaft",
+    "near-bootfoot",
+    "far-bootfoot",
+    "spare-open-palm"
+  ],
+  "canonicalPassed": [
+    "Enies Lobby single black zip-front collared dress with patterned white lining",
+    "Straight shoulder-length black hair and blunt bangs, blue eyes",
+    "No hat or sunglasses; no mixing long swept-back hair",
+    "All four directions match head torso and boot direction; north no face/front dress zipper"
+  ],
+  "assemblyNotes": [
+    "Do not render slot12 as hip accessory; it is spare open palm only",
+    "Manual/component source rectangles required; not blind equal grid crop",
+    "Use shared head crown anchor and scale per direction expression set",
+    "Long boot shaft belongs leg; overlap separate boot foot at ankle",
+    "Torso retained round hidden shoulder caps can be occluded by sleeve roots",
+    "East heads include lower collar edge; align complete hair with torso so no double neckline",
+    "North/south torso has small bare thigh caps below skirt; overlap thighs without exposing duplicate joints"
+  ],
+  "notEstablished": [
+    "Exact joint anchors",
+    "Assembled visual fit",
+    "World support sole motion",
+    "Interaction animation quality",
+    "Production acceptance"
+  ],
+  "promptFile": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\robin\\east-01-prompt.txt",
+  "originalReceipt": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\robin\\east-01-source-canon-status.json",
+  "originalReceiptSha256": "b9c57e350ae603ec419444749466109abdc8689364a21acca52337cbfcec3195"
+}

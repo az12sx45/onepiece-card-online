@@ -1,0 +1,49 @@
+/* Generic build-time renderer. Only authored bitmap samples are drawn as actor pixels. */
+(function(root){'use strict';
+const dist=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
+const mix=(a,b,t)=>[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t];
+const smooth=(a,b,x)=>{const t=Math.max(0,Math.min(1,(x-a)/(b-a)));return t*t*(3-2*t);};
+function point(v,fromA,fromB,toA,toB){const length=dist(fromA,fromB),targetLength=dist(toA,toB),ux=(fromB[0]-fromA[0])/length,uy=(fromB[1]-fromA[1])/length,tx=(toB[0]-toA[0])/targetLength,ty=(toB[1]-toA[1])/targetLength,x=v[0]-fromA[0],y=v[1]-fromA[1],along=(x*ux+y*uy)*targetLength/length,across=-x*uy+y*ux;return[toA[0]+tx*along-ty*across,toA[1]+ty*along+tx*across];}
+function ik(hip,ankle,l1,l2,bend){const dx=ankle[0]-hip[0],dy=ankle[1]-hip[1],actual=Math.hypot(dx,dy),d=Math.max(.001,Math.min(actual,l1+l2-.001)),along=(l1*l1-l2*l2+d*d)/(2*d),rise=Math.sqrt(Math.max(0,l1*l1-along*along));return{knee:[hip[0]+dx/actual*along+bend*dy/actual*rise,hip[1]+dy/actual*along-bend*dx/actual*rise],reachError:Math.max(0,actual-l1-l2)};}
+function create(spec,images,{floorSlope=0}={}){
+ if(spec.schema!=='one-piece-room-rig/1')throw Error('Unknown rig schema');
+ if(!['east','west','north','south'].includes(spec.direction))throw Error('A separately drawn cardinal direction is required');
+ const axis=({east:[1,0],west:[-1,0],north:[0,-1],south:[0,1]})[spec.direction];
+ if(spec.direction==='north'||spec.direction==='south')axis[0]=axis[1]*floorSlope;
+ const parts={},sourceSize=spec.canonicalSize||627;
+ for(const[name,raw]of Object.entries(spec.parts)){
+  const p=JSON.parse(JSON.stringify(raw)),image=images[p.image||'sheet'];if(!image)throw Error(`Missing source image for ${name}`);
+  if(p.joints){p.scale=p.length/(dist(p.joints[0],p.joints[1])+dist(p.joints[1],p.joints[2]));p.sourceRoot=p.joints[0];p.targetRoot=p.hip;p.rest=p.joints.map(([x,y])=>[p.hip[0]+(x-p.sourceRoot[0])*p.scale,p.hip[1]+(y-p.sourceRoot[1])*p.scale]);}
+  if(!(p.scale>0)||!p.sourceRoot||!p.targetRoot)throw Error(`Missing once-per-part calibration: ${name}`);
+  const bitmap=document.createElement('canvas');bitmap.width=sourceSize;bitmap.height=sourceSize;const c=bitmap.getContext('2d');c.translate(...p.targetRoot);c.scale(p.scale,p.scale);c.translate(-p.sourceRoot[0],-p.sourceRoot[1]);c.beginPath();if(p.polygon){p.polygon.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.closePath();}else c.rect(...p.rect);c.clip();c.drawImage(image,0,0);
+  p.bitmap=bitmap;p.bounds=[p.targetRoot[0]+(p.rect[0]-p.sourceRoot[0])*p.scale,p.targetRoot[1]+(p.rect[1]-p.sourceRoot[1])*p.scale,p.rect[2]*p.scale,p.rect[3]*p.scale];parts[name]=p;
+ }
+ for(const name of ['nearArm','farArm','nearLeg','farLeg','nearFoot','farFoot'])if(!parts[name])throw Error(`Missing rig part ${name}`);
+ if(!parts.body&&!parts.torso)throw Error('Need shared body or torso parent');
+ const gait={...spec.gait,mode:spec.gait.mode||(['north','south'].includes(spec.direction)?'depth':'side')},stageScale=spec.output.stageWidth/spec.output.cell*spec.output.canonicalScale,stride=gait.stride/stageScale,speed=gait.speed/stageScale,cycle=gait.stride/gait.speed;
+ const legs=Object.fromEntries(['near','far'].map(side=>{const p=parts[`${side}Leg`],f=gait.feet[side];return[side,{hip:p.rest[0],knee:p.rest[1],ankle:p.rest[2],rest:f.ankle,offset:f.phaseOffset,l1:dist(p.rest[0],p.rest[1]),l2:dist(p.rest[1],p.rest[2]),bend:f.bend||1}];}));
+ function foot(t,side){const leg=legs[side],q=t/cycle+leg.offset,n=Math.floor(q),phase=q-n,plant=stride*(n-leg.offset+gait.stance/2),world=[leg.rest[0]+axis[0]*plant,leg.rest[1]+axis[1]*plant];let lift=0;if(phase>=gait.stance){const u=(phase-gait.stance)/(1-gait.stance),travel=stride*(u*u*(3-2*u));world[0]+=axis[0]*travel;world[1]+=axis[1]*travel;lift=gait.lift/stageScale*Math.sin(Math.PI*u)**2;}
+  return{phase,stance:phase<gait.stance,world,ground:[world[0]-axis[0]*speed*t,world[1]-axis[1]*speed*t],ankle:[world[0]-axis[0]*speed*t,world[1]-axis[1]*speed*t-lift],lift};}
+ function pose(t){const feet={near:foot(t,'near'),far:foot(t,'far')};let bob=0;if(gait.mode!=='depth')for(const side of ['near','far']){const leg=legs[side],f=feet[side],dx=f.ankle[0]-leg.hip[0],length=leg.l1+leg.l2-(gait.kneeSoftness||.75);bob=Math.max(bob,f.ankle[1]-Math.sqrt(Math.max(1,length*length-dx*dx))-leg.hip[1]);}const result={bob,feet};for(const side of ['near','far']){const leg=legs[side],hip=[leg.hip[0],leg.hip[1]+bob],solved=gait.mode==='depth'?{knee:mix(hip,feet[side].ankle,leg.l1/(leg.l1+leg.l2)),reachError:0}:ik(hip,feet[side].ankle,leg.l1,leg.l2,leg.bend);result[side]={...feet[side],hip,knee:solved.knee,reachError:solved.reachError,projectedLength:dist(hip,feet[side].ankle)/(leg.l1+leg.l2)};}return result;}
+ function triangle(ctx,image,src,dst){const[p0,p1,p2]=src,[q0,q1,q2]=dst,ux=p1[0]-p0[0],uy=p1[1]-p0[1],vx=p2[0]-p0[0],vy=p2[1]-p0[1],det=ux*vy-uy*vx,dx=q1[0]-q0[0],dy=q1[1]-q0[1],ex=q2[0]-q0[0],ey=q2[1]-q0[1],a=(dx*vy-ex*uy)/det,b=(dy*vy-ey*uy)/det,c=(ex*ux-dx*vx)/det,d=(ey*ux-dy*vx)/det,center=[(q0[0]+q1[0]+q2[0])/3,(q0[1]+q1[1]+q2[1])/3],expanded=dst.map(([x,y])=>{const r=Math.hypot(x-center[0],y-center[1]);return[x+(x-center[0])/r*1.7,y+(y-center[1])/r*1.7];});ctx.save();ctx.beginPath();expanded.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.closePath();ctx.clip();ctx.transform(a,b,c,d,q0[0]-a*p0[0]-c*p0[1],q0[1]-b*p0[0]-d*p0[1]);ctx.drawImage(image,0,0);ctx.restore();}
+ function mesh(ctx,name,targets){const p=parts[name],b=p.bounds,j=p.rest,left=Math.floor(b[0]/20)*20,right=b[0]+b[2]+3,top=Math.floor(b[1]/16)*16,bottom=b[1]+b[3]+3,vertex=v=>mix(point(v,j[0],j[1],targets[0],targets[1]),point(v,j[1],j[2],targets[1],targets[2]),smooth(j[1][1]+(p.blend?.[0]??-14),j[1][1]+(p.blend?.[1]??14),v[1]));for(let y=top;y<bottom;y+=20)for(let x=left;x<right;x+=24){const a=[x,y],b=[x+24,y],c=[x+24,y+20],d=[x,y+20],vs=[a,b,c,d].map(vertex);triangle(ctx,p.bitmap,[a,b,c],vs.slice(0,3));triangle(ctx,p.bitmap,[a,c,d],[vs[0],vs[2],vs[3]]);}}
+ const shifted=(ctx,name,x,y)=>{if(!parts[name])return;ctx.save();ctx.translate(x,y);ctx.drawImage(parts[name].bitmap,0,0);ctx.restore();};
+ function arm(ctx,side,t,bob,override){const p=parts[`${side}Arm`],j=p.rest,f=foot(t,side),travel=gait.mode==='depth'?(f.ground[1]-legs[side].rest[1])*axis[1]:(f.ground[0]-legs[side].rest[0])*axis[0],swing=override?.neutral?0:travel*(gait.armSwing||.25),rest=spec.restPose?.[`${side}Arm`]||{},base=rest.hand||[j[2][0]-j[0][0],j[2][1]-j[0][1]-3];let hip=[j[0][0],j[0][1]+bob],hand=gait.mode==='depth'?[j[0][0]+base[0],j[0][1]+base[1]+bob-swing*.3]:[j[0][0]+base[0]-swing*(spec.direction==='west'?-1:1),j[0][1]+base[1]+bob];if(override?.hand)hand=[j[0][0]+override.hand[0],j[0][1]+bob+override.hand[1]];const solved=ik(hip,hand,dist(j[0],j[1]),dist(j[1],j[2]),override?.bend||rest.bend||(side==='near'?-1:1));mesh(ctx,`${side}Arm`,[hip,solved.knee,hand]);}
+ function draw(ctx,{time=0,root=spec.output.root,scale=spec.output.canonicalScale,action=null,actionBeat=0}={}){
+  const p=pose(time);if(action&&!spec.actions?.[action])throw Error(`Action requires authored targets: ${action}`);const act=action?spec.actions[action]:null;
+  const beat=Math.max(0,Math.min(1,actionBeat));const breathe=act?Math.max(-.5/stageScale,Math.min(.5/stageScale,Number(act.animation?.bob)||0))*beat:0;
+  if(act)p.bob=(act.bodyOffset??spec.restPose?.bodyOffset??0)+breathe;
+  const actionArm=side=>{if(!act)return null;const value={neutral:true,...spec.restPose?.[`${side}Arm`],...act[`${side}Arm`]},delta=act.animation?.[`${side}HandDelta`];if(delta){const j=parts[`${side}Arm`].rest,base=value.hand||[j[2][0]-j[0][0],j[2][1]-j[0][1]-3];value.hand=[base[0]+delta[0]*beat,base[1]+delta[1]*beat];}return value;};
+  const expression=act?.expression||'quiet',head=parts[`head_${expression}`];if(parts.torso&&!head)throw Error(`Missing independent ${expression} head; no quiet-head substitution`);
+  ctx.save();ctx.translate(root[0]-spec.canonicalRoot[0]*scale,root[1]-spec.canonicalRoot[1]*scale);ctx.scale(scale,scale);
+  for(const accessory of ['sash','accessory'])if(parts[accessory]?.layer==='back')shifted(ctx,accessory,0,p.bob);
+  arm(ctx,'far',time,p.bob,actionArm('far'));
+  const nearArmBehind=act?.nearArm?.layer==='back';if(nearArmBehind)arm(ctx,'near',time,p.bob,actionArm('near'));
+  for(const side of ['far','near']){const state=p[side],f=parts[`${side}Foot`];let targets=[state.hip,state.knee,state.ankle];if(act)targets=act[`${side}Leg`]||spec.restPose?.[`${side}Leg`];if(!targets)throw Error(`No authored neutral legs for ${action}`);if(act&&breathe)targets=targets.map(([x,y],index)=>[x,y+(index===0?breathe:index===1?breathe*.3:0)]);shifted(ctx,`${side}Foot`,targets[2][0]-f.targetRoot[0],targets[2][1]-f.targetRoot[1]);mesh(ctx,`${side}Leg`,targets);}
+  shifted(ctx,parts.body?'body':'torso',0,p.bob);if(head)shifted(ctx,`head_${expression}`,0,p.bob);for(const accessory of ['sash','accessory'])if(parts[accessory]?.layer!=='back')shifted(ctx,accessory,0,p.bob);if(!nearArmBehind)arm(ctx,'near',time,p.bob,actionArm('near'));ctx.restore();return p;
+ }
+ function validateActions(){const order=['idle','talk_happy','talk_annoyed','surprised','focused_use','sit','wave','listen'];const missing=order.filter(name=>!spec.actions?.[name]);if(parts.body)missing.push('independent quiet/happy/annoyed/surprise heads');for(const head of ['quiet','happy','annoyed','surprise'])if(!parts[`head_${head}`])missing.push(`head_${head}`);for(const side of ['near','far'])if(!spec.restPose?.[`${side}Leg`])missing.push(`restPose.${side}Leg`);if(spec.actions?.sit&&(!spec.actions.sit.nearLeg||!spec.actions.sit.farLeg))missing.push('authored sitting leg targets');return{ok:!missing.length,missing,order};}
+ return{draw,pose,foot,parts,spec,stageScale,cycle,validateActions,ik,floorSlope};
+}
+root.RoomRigBuilder=Object.freeze({create});
+})(typeof globalThis==='object'?globalThis:this);

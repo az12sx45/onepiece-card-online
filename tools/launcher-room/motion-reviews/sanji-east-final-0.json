@@ -1,0 +1,914 @@
+{
+  "character": "sanji",
+  "manifestSha256": "4a208e2ade7a9693bf914c66cdbb000ced16be395376fd46550026b681f7dc11",
+  "state": "explicitly-approved-input",
+  "problems": [],
+  "scope": "Final published pixels and actual room recording evidence; videos remain at QA paths with hashes. Automated collection is not visual acceptance.",
+  "reports": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\report.json",
+      "sha256": "6673a24013fa270d02f6f243c1f708b2513e9604975ba34951bcc7c7ee9b3ab3",
+      "bytes": 46929
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\report.json",
+      "sha256": "ba9f7187b50057378c2c9df54e48b2786eddc01e4031b54f4ffdd0896ef23f28",
+      "bytes": 46812
+    }
+  ],
+  "walkReportAssetScope": "Four directional motion atlases only",
+  "unvalidatedPreloads": [
+    {
+      "path": "images/launcher_room/acting_v2/sanji/east.webp",
+      "sha256": "cbf6471e9b1e7cbe397694387311f5694d1ac1f3f5c61794bde4fe2f6cd60cc1",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/sanji/west.webp",
+      "sha256": "00103771ff624e6a273ae97abe910dfa7be78f624377b52f62e17ad947129c5e",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/sanji/north.webp",
+      "sha256": "154a9b89aa43ccaad850f9d07185a028aa16098b0b4bfa67cc849923273aeeb8",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/sanji/south.webp",
+      "sha256": "6783f8b70defafeeb227eb267dd3cfc1cec710639e2d62322562537415a65cb0",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/sanji/east.webp",
+      "sha256": "cbf6471e9b1e7cbe397694387311f5694d1ac1f3f5c61794bde4fe2f6cd60cc1",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/sanji/west.webp",
+      "sha256": "00103771ff624e6a273ae97abe910dfa7be78f624377b52f62e17ad947129c5e",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/sanji/north.webp",
+      "sha256": "154a9b89aa43ccaad850f9d07185a028aa16098b0b4bfa67cc849923273aeeb8",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/sanji/south.webp",
+      "sha256": "6783f8b70defafeeb227eb267dd3cfc1cec710639e2d62322562537415a65cb0",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    }
+  ],
+  "adjacentFrames": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\east-adjacent-0-0.png",
+      "direction": "east",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 164.79999999981374,
+      "world": {
+        "x": 455.3452859813084,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\east-adjacent-1-1.png",
+      "direction": "east",
+      "phase": 1,
+      "viewport": 1280,
+      "timestamp": 190.90000000037253,
+      "world": {
+        "x": 455.7555285046729,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\east-loopFrames-1-31.png",
+      "direction": "east",
+      "phase": 31,
+      "viewport": 1280,
+      "timestamp": 2461.9000000003725,
+      "world": {
+        "x": 501.5896901869159,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\east-loopFrames-2-0.png",
+      "direction": "east",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 2495.2999999998137,
+      "world": {
+        "x": 502.4077186915888,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\north-adjacent-0-0.png",
+      "direction": "north",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 1320,
+      "world": {
+        "x": 554.0233302499686,
+        "y": 410.6778785094984
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\north-adjacent-1-1.png",
+      "direction": "north",
+      "phase": 1,
+      "viewport": 1280,
+      "timestamp": 1353.7000000001863,
+      "world": {
+        "x": 553.9719244763271,
+        "y": 410.1779321619263
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\north-loopFrames-1-31.png",
+      "direction": "north",
+      "phase": 31,
+      "viewport": 1280,
+      "timestamp": 2252.7999999998137,
+      "world": {
+        "x": 552.6018937230128,
+        "y": 396.85371150224086
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\north-loopFrames-2-0.png",
+      "direction": "north",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 2285.9000000003725,
+      "world": {
+        "x": 552.5517254349886,
+        "y": 396.3658003089073
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\west-adjacent-0-0.png",
+      "direction": "west",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 655.2000000001863,
+      "world": {
+        "x": 541.0204598130846,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\west-adjacent-1-1.png",
+      "direction": "west",
+      "phase": 1,
+      "viewport": 1280,
+      "timestamp": 671.5999999996275,
+      "world": {
+        "x": 540.6506831775706,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\west-loopFrames-1-31.png",
+      "direction": "west",
+      "phase": 31,
+      "viewport": 1280,
+      "timestamp": 1754.5999999996275,
+      "world": {
+        "x": 520.6092350467303,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\west-loopFrames-2-0.png",
+      "direction": "west",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 1788.5999999996275,
+      "world": {
+        "x": 519.8696817757024,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\south-adjacent-0-0.png",
+      "direction": "south",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 213.40000000037253,
+      "world": {
+        "x": 457.03100367160306,
+        "y": 360.9189516991094
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\south-adjacent-1-1.png",
+      "direction": "south",
+      "phase": 1,
+      "viewport": 1280,
+      "timestamp": 247.70000000018626,
+      "world": {
+        "x": 457.015166378154,
+        "y": 361.3810280256235
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\south-loopFrames-1-31.png",
+      "direction": "south",
+      "phase": 31,
+      "viewport": 1280,
+      "timestamp": 196.59999999962747,
+      "world": {
+        "x": 457.0388704065616,
+        "y": 360.6894281379657
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\south-loopFrames-2-0.png",
+      "direction": "south",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 213.40000000037253,
+      "world": {
+        "x": 457.03100367160306,
+        "y": 360.9189516991094
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\east-adjacent-0-0.png",
+      "direction": "east",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 163.79999999981374,
+      "world": {
+        "x": 455.3477425233645,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\east-adjacent-1-1.png",
+      "direction": "east",
+      "phase": 1,
+      "viewport": 390,
+      "timestamp": 179.90000000037253,
+      "world": {
+        "x": 455.757985046729,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\east-loopFrames-1-31.png",
+      "direction": "east",
+      "phase": 31,
+      "viewport": 390,
+      "timestamp": 1095.9000000003725,
+      "world": {
+        "x": 478.26727990654206,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\east-loopFrames-2-0.png",
+      "direction": "east",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 1112.7000000001863,
+      "world": {
+        "x": 478.67752242990656,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\north-adjacent-0-0.png",
+      "direction": "north",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 897.0999999996275,
+      "world": {
+        "x": 554.0230810595023,
+        "y": 410.67545501006157
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\north-adjacent-1-1.png",
+      "direction": "north",
+      "phase": 1,
+      "viewport": 390,
+      "timestamp": 931.2000000001863,
+      "world": {
+        "x": 553.9718293558966,
+        "y": 410.177007069112
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\north-loopFrames-1-31.png",
+      "direction": "north",
+      "phase": 31,
+      "viewport": 390,
+      "timestamp": 864,
+      "world": {
+        "x": 554.074371863693,
+        "y": 411.17428322336855
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\north-loopFrames-2-0.png",
+      "direction": "north",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 897.0999999996275,
+      "world": {
+        "x": 554.0230810595023,
+        "y": 410.67545501006157
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\west-adjacent-0-0.png",
+      "direction": "west",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 467.79999999981374,
+      "world": {
+        "x": 541.3902364485982,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\west-adjacent-1-1.png",
+      "direction": "west",
+      "phase": 1,
+      "viewport": 390,
+      "timestamp": 501.09999999962747,
+      "world": {
+        "x": 540.6484556074768,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\west-loopFrames-1-31.png",
+      "direction": "west",
+      "phase": 31,
+      "viewport": 390,
+      "timestamp": 435.8999999994412,
+      "world": {
+        "x": 542.1342448598132,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\west-loopFrames-2-0.png",
+      "direction": "west",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 467.79999999981374,
+      "world": {
+        "x": 541.3902364485982,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\south-adjacent-0-0.png",
+      "direction": "south",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 208.69999999925494,
+      "world": {
+        "x": 457.03100367171163,
+        "y": 360.9189516959447
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\south-adjacent-1-1.png",
+      "direction": "south",
+      "phase": 1,
+      "viewport": 390,
+      "timestamp": 242.79999999981374,
+      "world": {
+        "x": 457.0151663782626,
+        "y": 361.38102802245646
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\south-loopFrames-1-31.png",
+      "direction": "south",
+      "phase": 31,
+      "viewport": 390,
+      "timestamp": 191.8999999994412,
+      "world": {
+        "x": 457.03882303459784,
+        "y": 360.69081028467593
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\south-loopFrames-2-0.png",
+      "direction": "south",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 208.69999999925494,
+      "world": {
+        "x": 457.03100367171163,
+        "y": 360.9189516959447
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\final-published-contact-sheets\\sanji-published128.png",
+      "sha256": "87947177f44e5836d917603ef19ad13e07fbf2d499b7557f714ce35a78e4093b",
+      "bytes": 335888
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\final-published-contact-sheets\\root-final-pixel-review.json",
+      "sha256": "d5253d6aa247ec7e8bdfe09c2d815ddf167971f3893d7f84df1d85ca4cc51c2a",
+      "bytes": 3130
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\final-published-contact-sheets\\sources.json",
+      "sha256": "f1f084881967eb99df37b06eee07c1cae3d7158a9e50112470753fe6c214df0a",
+      "bytes": 30777
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\report.json",
+      "sha256": "6673a24013fa270d02f6f243c1f708b2513e9604975ba34951bcc7c7ee9b3ab3",
+      "bytes": 46929
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\report.json",
+      "sha256": "ba9f7187b50057378c2c9df54e48b2786eddc01e4031b54f4ffdd0896ef23f28",
+      "bytes": 46812
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\east-adjacent-0-0.png",
+      "sha256": "27fbe4394107ef7c3ab1052093f4fd2bfb62b455685815c17d7f6576f16795f6",
+      "bytes": 10516
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\east-adjacent-1-1.png",
+      "sha256": "2929729146088e74619bddae78155eeb800de1d7a95efa0c0b1c6e9ce67bd9ea",
+      "bytes": 10493
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\east-loopFrames-1-31.png",
+      "sha256": "4ccb59c456904f00945e2b0b3a12ca1d3a62e55d85250e92ae5d5198453d7e79",
+      "bytes": 10464
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\east-loopFrames-2-0.png",
+      "sha256": "27fbe4394107ef7c3ab1052093f4fd2bfb62b455685815c17d7f6576f16795f6",
+      "bytes": 10516
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\north-adjacent-0-0.png",
+      "sha256": "28c1e7ea21fbca139c7166e4cb250ec68228fc15dfe25dd95501f669caea249d",
+      "bytes": 10904
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\north-adjacent-1-1.png",
+      "sha256": "605fe4b4b86d19ff0b31e561904fe42a370f30032a965fcf7affefa30aef4420",
+      "bytes": 10884
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\north-loopFrames-1-31.png",
+      "sha256": "1ef28bd82c4aed306c9c735a0cc6cd36b3d498186eab73612c8fada055f42400",
+      "bytes": 10871
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\north-loopFrames-2-0.png",
+      "sha256": "28c1e7ea21fbca139c7166e4cb250ec68228fc15dfe25dd95501f669caea249d",
+      "bytes": 10904
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\west-adjacent-0-0.png",
+      "sha256": "54dc0b8a60308dae71b47df8e42d2973a5cf8333d341d41e07e58debcadfd894",
+      "bytes": 10208
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\west-adjacent-1-1.png",
+      "sha256": "f185ba9ee93c9646f5b076283bced1e1aee4b616e29cee8e490bb211327d2b1a",
+      "bytes": 10198
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\west-loopFrames-1-31.png",
+      "sha256": "95f248683544985f11160bbf066d6ecd77964d4233b166c91de48fe9ad38eba6",
+      "bytes": 10163
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\west-loopFrames-2-0.png",
+      "sha256": "54dc0b8a60308dae71b47df8e42d2973a5cf8333d341d41e07e58debcadfd894",
+      "bytes": 10208
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\south-adjacent-0-0.png",
+      "sha256": "1e6939cac5fc1ea70118c6bdfe87c3113fac48a46aa9c9ab8b937fd549f8fbe4",
+      "bytes": 11189
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\south-adjacent-1-1.png",
+      "sha256": "5db532c8ebb105863afdbdea0278c20e7aefefeb4e7c3746993c93d9fb43896f",
+      "bytes": 11130
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\south-loopFrames-1-31.png",
+      "sha256": "e32bc2ee0857e99880fbbc6e054774514c745bb4d1d3d26f6c2ec18c38a7deb2",
+      "bytes": 11184
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\south-loopFrames-2-0.png",
+      "sha256": "1e6939cac5fc1ea70118c6bdfe87c3113fac48a46aa9c9ab8b937fd549f8fbe4",
+      "bytes": 11189
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\east-adjacent-0-0.png",
+      "sha256": "27fbe4394107ef7c3ab1052093f4fd2bfb62b455685815c17d7f6576f16795f6",
+      "bytes": 10516
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\east-adjacent-1-1.png",
+      "sha256": "2929729146088e74619bddae78155eeb800de1d7a95efa0c0b1c6e9ce67bd9ea",
+      "bytes": 10493
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\east-loopFrames-1-31.png",
+      "sha256": "4ccb59c456904f00945e2b0b3a12ca1d3a62e55d85250e92ae5d5198453d7e79",
+      "bytes": 10464
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\east-loopFrames-2-0.png",
+      "sha256": "27fbe4394107ef7c3ab1052093f4fd2bfb62b455685815c17d7f6576f16795f6",
+      "bytes": 10516
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\north-adjacent-0-0.png",
+      "sha256": "28c1e7ea21fbca139c7166e4cb250ec68228fc15dfe25dd95501f669caea249d",
+      "bytes": 10904
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\north-adjacent-1-1.png",
+      "sha256": "605fe4b4b86d19ff0b31e561904fe42a370f30032a965fcf7affefa30aef4420",
+      "bytes": 10884
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\north-loopFrames-1-31.png",
+      "sha256": "1ef28bd82c4aed306c9c735a0cc6cd36b3d498186eab73612c8fada055f42400",
+      "bytes": 10871
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\north-loopFrames-2-0.png",
+      "sha256": "28c1e7ea21fbca139c7166e4cb250ec68228fc15dfe25dd95501f669caea249d",
+      "bytes": 10904
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\west-adjacent-0-0.png",
+      "sha256": "54dc0b8a60308dae71b47df8e42d2973a5cf8333d341d41e07e58debcadfd894",
+      "bytes": 10208
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\west-adjacent-1-1.png",
+      "sha256": "f185ba9ee93c9646f5b076283bced1e1aee4b616e29cee8e490bb211327d2b1a",
+      "bytes": 10198
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\west-loopFrames-1-31.png",
+      "sha256": "95f248683544985f11160bbf066d6ecd77964d4233b166c91de48fe9ad38eba6",
+      "bytes": 10163
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\west-loopFrames-2-0.png",
+      "sha256": "54dc0b8a60308dae71b47df8e42d2973a5cf8333d341d41e07e58debcadfd894",
+      "bytes": 10208
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\south-adjacent-0-0.png",
+      "sha256": "1e6939cac5fc1ea70118c6bdfe87c3113fac48a46aa9c9ab8b937fd549f8fbe4",
+      "bytes": 11189
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\south-adjacent-1-1.png",
+      "sha256": "5db532c8ebb105863afdbdea0278c20e7aefefeb4e7c3746993c93d9fb43896f",
+      "bytes": 11130
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\south-loopFrames-1-31.png",
+      "sha256": "e32bc2ee0857e99880fbbc6e054774514c745bb4d1d3d26f6c2ec18c38a7deb2",
+      "bytes": 11184
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\south-loopFrames-2-0.png",
+      "sha256": "1e6939cac5fc1ea70118c6bdfe87c3113fac48a46aa9c9ab8b937fd549f8fbe4",
+      "bytes": 11189
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji-kitchen-table-0\\report.json",
+      "sha256": "cae6b03ffe4b3a2c9d06bdf40c92cc6a5323944f37cc708f7853c0129a640618",
+      "bytes": 10076
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji-kitchen-table-0\\furniture-stage.png",
+      "sha256": "4e2449fe43a6fc7046f3e0b1aa3864df0f189486790b7ea1931e92db5fd3a8b2",
+      "bytes": 1063328
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji-kitchen-table-0\\furniture-departure.png",
+      "sha256": "e65725a9ddf63891ab96d15e429f75ab23276704f58cb32367251c53024f6573",
+      "bytes": 1064034
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji-kitchen-table-1\\report.json",
+      "sha256": "ee6c540ea178b84d90f158017a676b1057c15a6b8dda0b87590c58d1cad526ad",
+      "bytes": 10083
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji-kitchen-table-1\\furniture-stage.png",
+      "sha256": "9c611ddea68bd47556a395fac6ce724e4ab7f955070429299ba64c14ee2d56c9",
+      "bytes": 1065544
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji-kitchen-table-1\\furniture-departure.png",
+      "sha256": "9ed271dbe5534f30b4e4415952765d6cb998f2431c16b697ef9fd13d582e08f9",
+      "bytes": 1065880
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji-kitchen-table-2\\report.json",
+      "sha256": "748731d3473854397b842e5ba11c01c898a8c65e071b3b8f34c94a93146fcdb5",
+      "bytes": 9933
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji-kitchen-table-2\\furniture-stage.png",
+      "sha256": "d36dc03484e29d1180f60cfa1c6cc585239e917d0bfba89c09cb828acc178a5a",
+      "bytes": 1062679
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji-kitchen-table-2\\furniture-departure.png",
+      "sha256": "6d69899f4ba7308f977faeb98620069b204faf475d1767673ba20dffcb3d7a7e",
+      "bytes": 1062845
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji-kitchen-table-3\\report.json",
+      "sha256": "6564cb8a7b5b3bca444d75bd9fdbd10b243470421211dbdfdae2e3398b59f9c8",
+      "bytes": 10023
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji-kitchen-table-3\\furniture-stage.png",
+      "sha256": "68aaeb4ea832646706e5e7ab3509c9b4790942e9d1b36d6c99ca3790170b6013",
+      "bytes": 1065213
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji-kitchen-table-3\\furniture-departure.png",
+      "sha256": "c0b792026fe3a58d707f835b676b8203b6d6197e2209f7067e4ff3b62e632f00",
+      "bytes": 1065823
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro-sanji-chat\\report.json",
+      "sha256": "e85070e597a6f16b335479ef417ebfff2c1bcc33ae9c34747ddaefdb83c77718",
+      "bytes": 17187
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro-sanji-chat\\turn-0-stage.png",
+      "sha256": "cffe11d6666fa92008b95b245637c25899fd884f44920ae447072a52fa8037e8",
+      "bytes": 1063658
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro-sanji-chat\\turn-1-stage.png",
+      "sha256": "dd248eb9f6f9b4ba8a4cb486a225c92c7bc62bf28ad29d8f03bb5f9c0afaac92",
+      "bytes": 1063638
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro-sanji-chat\\turn-2-stage.png",
+      "sha256": "169d029094f2d892b18a9b62a6c16ed9f5bb551ed56433475c34d409a0c28290",
+      "bytes": 1063481
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro-sanji-chat\\turn-3-stage.png",
+      "sha256": "b10bf5f6b1b20a84848de1a608e0d42a34873bba8a18df23b212da893bf79fcd",
+      "bytes": 1063559
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji-kitchen-table-0\\report.json",
+      "sha256": "2c1df1bb8899b0eb4bf79e8845281138123700f5828805322a3d374cc72f3511",
+      "bytes": 10096
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji-kitchen-table-0\\furniture-stage.png",
+      "sha256": "2d79716e54bfdcf2ceb6a57cd6f7e1ec00a99fa857877246819a34c940794574",
+      "bytes": 176533
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji-kitchen-table-0\\furniture-departure.png",
+      "sha256": "226fac7190e6a2cecb955f462aaa626be97f09c360703d4664a279bb1ebf14b5",
+      "bytes": 179569
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji-kitchen-table-1\\report.json",
+      "sha256": "94b13cd52078fab0cbbad6887c73b365b4bd048357b46163240481f955b1f577",
+      "bytes": 10112
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji-kitchen-table-1\\furniture-stage.png",
+      "sha256": "5f4aa217777b299a8056ed2db05214459de4e79cf401168e5971494240391cf9",
+      "bytes": 176912
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji-kitchen-table-1\\furniture-departure.png",
+      "sha256": "86e6cbc31b432db01664644071fb01f614e920e9b292ba3454b10ac6cc2c2838",
+      "bytes": 179949
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji-kitchen-table-2\\report.json",
+      "sha256": "a303d489b6bec456a6f31fc247b7dabc2abfbbc3a0bdac5621d37ea175158678",
+      "bytes": 10100
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji-kitchen-table-2\\furniture-stage.png",
+      "sha256": "3a871ef71cd3eb6a464795bf1a5dd80bbc889b3df2633d074cc1e250489620b1",
+      "bytes": 176111
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji-kitchen-table-2\\furniture-departure.png",
+      "sha256": "f23d34834a7896f8059b2353151065675ee9dc7603b7825fef51e6b13ce0f26a",
+      "bytes": 179391
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji-kitchen-table-3\\report.json",
+      "sha256": "c5becbd37c48d4e75045710d8ac72b3280fb6c377d9ec3f622fb2fbdafa77cc0",
+      "bytes": 10118
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji-kitchen-table-3\\furniture-stage.png",
+      "sha256": "debc835fdbe7f711607a29c481e22c3b5cc90e295fb1a4db3e2890695d4e15da",
+      "bytes": 176691
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji-kitchen-table-3\\furniture-departure.png",
+      "sha256": "5ee2def8d386147ce078364d2003b5ae2c5ad33d41fe9a685f49447e8072eea1",
+      "bytes": 179898
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro-sanji-chat\\report.json",
+      "sha256": "08e0ac9d2bbfb50b0738a2133a7edbb0f661ed839fe95ddb58c5fbcfa8a04c19",
+      "bytes": 17185
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro-sanji-chat\\turn-0-stage.png",
+      "sha256": "c9b65b9523486004112866270d0394612b70a6458817d5c15f986cbd01b6833b",
+      "bytes": 176237
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro-sanji-chat\\turn-1-stage.png",
+      "sha256": "5727ea45851d0146cf060c4af750a51804ce2e21b4c27c717b6643faeeefdcc9",
+      "bytes": 174484
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro-sanji-chat\\turn-2-stage.png",
+      "sha256": "c94fa411677015eb897bde5c2dfe4687781519f59e87caa439a24c1f01ef6300",
+      "bytes": 176158
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro-sanji-chat\\turn-3-stage.png",
+      "sha256": "b42f565a29de88a61932897dcae6831ae253ea4e4783fa101157fc8b433e13a5",
+      "bytes": 174383
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\explicit-review\\root-approval.json",
+      "sha256": "1ce6e0c6c895b2da80ca8bf1cd998ecf22794d6855c6adeb8619b28cbbfee637",
+      "bytes": 1266
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\visual-review.json",
+      "sha256": "c0497cfa744a57881542377bcfc3d9d50b1443e51435739e0e7209f16f75eb3e",
+      "bytes": 19081
+    }
+  ],
+  "videos": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\normal.webm",
+      "sha256": "52bf3b123fd2cb2c4264bd3c7fc64b4d9857e3ee81f134bad80b4be38b84f174",
+      "bytes": 2528331
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji\\half-speed.mp4",
+      "sha256": "46db4358e02b9dc04af74d6a576486f6a78c5219d8f4078baa7406d6e2ae1fe8",
+      "bytes": 12720509
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\normal.webm",
+      "sha256": "3bea998b891a9df4f683693bf5d6893c69cb8f7028c5482653ea2db700abe640",
+      "bytes": 1094611
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji\\half-speed.mp4",
+      "sha256": "df57ec24197556b884d7feb145c906073d2f8b6ff43ae37df7009b070e42f1f8",
+      "bytes": 3110430
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji-kitchen-table-0\\normal.webm",
+      "sha256": "7a822d8add93d441ace337538451bf4c92706a56216f36ba22d8c4022f4c7d17",
+      "bytes": 1973995
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji-kitchen-table-0\\half-speed.mp4",
+      "sha256": "13c1abbd0fa4d536cdd3c295cf59f7b56a2835567c8e3d00c948da244b4cadc8",
+      "bytes": 9476668
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji-kitchen-table-1\\normal.webm",
+      "sha256": "f17da5d6550b93d848ce331658866e6798ef3183d613a1c317bd3e87c11913cf",
+      "bytes": 2354196
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji-kitchen-table-1\\half-speed.mp4",
+      "sha256": "32654d1ca6147c7bdc12432efca332be2ebda41616da9927c2c6f5e485fb2083",
+      "bytes": 10200985
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji-kitchen-table-2\\normal.webm",
+      "sha256": "02a2abcc3290140dc02075150f98c658e18c979ae5a1bfdb2c38eace768febfe",
+      "bytes": 2809985
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji-kitchen-table-2\\half-speed.mp4",
+      "sha256": "a7470fa87330c54613dfa7bac92d738212fb325408ea00ee520fd3fd2e8ccd34",
+      "bytes": 11394049
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji-kitchen-table-3\\normal.webm",
+      "sha256": "d2deffd99ede580bed699398ebeef3a7e57dbcb178f554270d59309c7ec6dff4",
+      "bytes": 2572297
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\sanji-kitchen-table-3\\half-speed.mp4",
+      "sha256": "0d41a8565d40265340e86b093772a8bf45a7d07cc0dfcdc00adcb32d9a53fc74",
+      "bytes": 10852552
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro-sanji-chat\\normal.webm",
+      "sha256": "6e5118dab480f5da4d84b1ad0a407abdbbeb1a8b0f4b3a21f21fa156f63f2345",
+      "bytes": 2315000
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro-sanji-chat\\half-speed.mp4",
+      "sha256": "6ba6734dc0abcf90a6f53e2b5f143bac63e47458db88fce9fa3301b83681a407",
+      "bytes": 10408557
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji-kitchen-table-0\\normal.webm",
+      "sha256": "ade650f09e3d0a1471fd7e651f05ab2b67a80c8bec87948d46d4c73642df10ff",
+      "bytes": 762572
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji-kitchen-table-0\\half-speed.mp4",
+      "sha256": "97b28fa61003fc8b3e6895a0cc012c10185973234c581aef3fa084871f4db2b7",
+      "bytes": 1795616
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji-kitchen-table-1\\normal.webm",
+      "sha256": "7f1f0bbcdf91bd11b102ab4aae80f803a5ec22f4e8571cd1dc9c536dbb4c8009",
+      "bytes": 1138560
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji-kitchen-table-1\\half-speed.mp4",
+      "sha256": "e488b1c1b5e72e397c14fb25978e5b5ae128bcadff46e54058d89529e0d68e2f",
+      "bytes": 2684453
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji-kitchen-table-2\\normal.webm",
+      "sha256": "cbf4769d649d48231b8f9046f76e78c0856925fcd53c534f18bee6705ea24d76",
+      "bytes": 1289835
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji-kitchen-table-2\\half-speed.mp4",
+      "sha256": "ee0dfb8690100d167ca96f19852ace87c3872106572b135aca82d6d398a93be1",
+      "bytes": 3269031
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji-kitchen-table-3\\normal.webm",
+      "sha256": "3f8733b6a59a536e3cfad25c61a7cc34ced4ba560017e2645a311f762450d45b",
+      "bytes": 1121574
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\sanji-kitchen-table-3\\half-speed.mp4",
+      "sha256": "d17ad59d5d8f0246b825e6a86f191eeccb5aa934fa94893df9c9161b115f235e",
+      "bytes": 2777287
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro-sanji-chat\\normal.webm",
+      "sha256": "8c416e09fdc7a769939232da4d94811a5d0c34363c72769927e98605a2c8053c",
+      "bytes": 801721
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro-sanji-chat\\half-speed.mp4",
+      "sha256": "4848664886e12f4c3edc0c7e70d436a8d8b486802b1ed1f2d6879828992b266c",
+      "bytes": 2143646
+    }
+  ],
+  "visualAcceptance": false
+}

@@ -1,0 +1,47 @@
+{
+  "key": "chopper",
+  "dir": "north",
+  "version": 2,
+  "source": "exec-99ed0580-bbb4-490c-9900-45cc18c16c2a.png",
+  "status": "CANDIDATE_VISUALLY_REVIEWED",
+  "review": "Reduced rear head/antler footprints so all four separate cleanly. Plain pink hat back without X, left repair ring screen left. Back torso tuft/buckles removed, separate white-X backpack, rear heel feet; no front face. Custom rig head scaling needed because sheet heads deliberately smaller.",
+  "generatedWith": "GPT imagegen built-in",
+  "generatedOriginal": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-1739-7141-90bd-461600d8694f\\exec-99ed0580-bbb4-490c-9900-45cc18c16c2a.png",
+  "output": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\chopper\\north-02.png",
+  "sha256": "0e10ff6158006969e4cf4ac3bd101a6ff6d6293ab32dfb4d76b8d3404fcfec8c",
+  "date": "2026-09-27",
+  "prompt": "Repair this transparent 4×3 Chopper rig sheet without changing identity/design:\nTOP ROW ALLFOUR back-head parts are TOO WIDE and their antlers touch neighboring head cells. Repaint each complete wholehead+hat+antlers proportionally SMALLER to exactly75% ofitscurrentwidthandheight, centeredinitsownsamecell. Do NOTcropoffantlers. Atleast45pixelsofPUREEMPTYTRANSPARENCY must separate neighboringheadpieces. Leftmost/rightmostheadmusthaveatleast30pixelcanvaspadding. Keepheadshape,plainpinkhatback,NOfaces,andrepairbandonlyleftscreenLEFTantler. All4headsexactlyidenticalandconsistent. This is intentional part-sheetspacingscale; rigcanrescalewholeheadlater.\nAlso ROW2COLUMN1 torso must be seenfromBACK: erase chestfurVtuft atneck and frontstrapbuckles, show plainsofttanfurback, narrowbluestrapsrunningalongshoulderedges, maroonshortsback. StillNOBLUEBAGattachedbecausebaginseparatecell12. Samebodyshapeandsize, completejointoverlaps.\nAllother7limb/foot/bagcellspreserveunchanged. Truealphaoutside, solidinside. No letters/grid/background. Donotbringneighborpartsovercellboundaries.\n",
+  "imageQA": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\chopper\\north-02-image-qa.json",
+  "identityProvenance": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\turnarounds\\chopper-01-provenance.json",
+  "localImageEdits": "None. Generated original copied unchanged; image read-only QA, downstream Canvas rig is separately identified.",
+  "schema": {
+    "grid": [
+      4,
+      3
+    ],
+    "cells": [
+      "head_quiet",
+      "head_happy",
+      "head_annoyed",
+      "head_surprise",
+      "torso_pelvis",
+      "nearArm",
+      "farArm",
+      "nearLeg",
+      "farLeg",
+      "nearFoot",
+      "farFoot",
+      "accessory_or_optional_hand"
+    ],
+    "nearSide": "RIGHT"
+  },
+  "limitations": [
+    "Faint alpha fringe/specks retained in original GPT output; renderer cleanup separate.",
+    "Generated part padding and anatomical joint placements require custom rectangles and rig calibration.",
+    "Head expression outlines are close but not pixel-identical; common crown anchor is required.",
+    "Candidate rig atlas is not runtime/gameplay/deployment acceptance."
+  ],
+  "promptFile": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\chopper\\north-02-prompt.txt",
+  "originalReceipt": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\chopper\\north-02-provenance.json",
+  "originalReceiptSha256": "9b0651a1104b89583e380cb894464c6d6f22fd31582bee66a14e83e5c59f8e5e"
+}

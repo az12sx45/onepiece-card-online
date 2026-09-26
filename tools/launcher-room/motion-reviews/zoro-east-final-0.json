@@ -1,0 +1,714 @@
+{
+  "character": "zoro",
+  "manifestSha256": "4a208e2ade7a9693bf914c66cdbb000ced16be395376fd46550026b681f7dc11",
+  "state": "explicitly-approved-input",
+  "problems": [],
+  "scope": "Final published pixels and actual room recording evidence; videos remain at QA paths with hashes. Automated collection is not visual acceptance.",
+  "reports": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\report.json",
+      "sha256": "eccc90d530db9b7951b624ac003e0bc758874c07c48597bbd6cd58fc308a91e1",
+      "bytes": 46770
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\report.json",
+      "sha256": "3a1ca4c42cf059ab8a716f3f8516b4d62ed63eca3fb27db60a8a233408369f3f",
+      "bytes": 46726
+    }
+  ],
+  "walkReportAssetScope": "Four directional motion atlases only",
+  "unvalidatedPreloads": [
+    {
+      "path": "images/launcher_room/acting_v2/zoro/east.webp",
+      "sha256": "dc28ab37a3cd983017c96d508f39212f787d883e129d93fffd2678fed4f5d9cf",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/zoro/west.webp",
+      "sha256": "8a30d15e5f251c26c233233c99cfd9c480b47074f9d38c3396fcce7451b657db",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/zoro/north.webp",
+      "sha256": "a63c8e642ef2f4124ba04f0bf6b954c990ca7d2f5a88bfd49e8d60742a71e4cc",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/zoro/south.webp",
+      "sha256": "fbbda73ec692173d76435288b0ddaa7ab8985acdcf02e3a545cfb30399c6eedf",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/zoro/east.webp",
+      "sha256": "dc28ab37a3cd983017c96d508f39212f787d883e129d93fffd2678fed4f5d9cf",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/zoro/west.webp",
+      "sha256": "8a30d15e5f251c26c233233c99cfd9c480b47074f9d38c3396fcce7451b657db",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/zoro/north.webp",
+      "sha256": "a63c8e642ef2f4124ba04f0bf6b954c990ca7d2f5a88bfd49e8d60742a71e4cc",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/zoro/south.webp",
+      "sha256": "fbbda73ec692173d76435288b0ddaa7ab8985acdcf02e3a545cfb30399c6eedf",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    }
+  ],
+  "adjacentFrames": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\east-adjacent-0-0.png",
+      "direction": "east",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 203.09999999962747,
+      "world": {
+        "x": 455.3330910046729,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\east-adjacent-1-1.png",
+      "direction": "east",
+      "phase": 1,
+      "viewport": 1280,
+      "timestamp": 219,
+      "world": {
+        "x": 455.72631320093456,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\east-loopFrames-1-31.png",
+      "direction": "east",
+      "phase": 31,
+      "viewport": 1280,
+      "timestamp": 2500.899999999441,
+      "world": {
+        "x": 499.9306469626162,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\east-loopFrames-2-0.png",
+      "direction": "east",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 2534.5999999996275,
+      "world": {
+        "x": 500.721828971962,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\north-adjacent-0-0.png",
+      "direction": "north",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 2113.4000000003725,
+      "world": {
+        "x": 552.8866807151363,
+        "y": 399.6234046021104
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\north-adjacent-1-1.png",
+      "direction": "north",
+      "phase": 1,
+      "viewport": 1280,
+      "timestamp": 2146.7000000001863,
+      "world": {
+        "x": 552.8382403504373,
+        "y": 399.1522983101362
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\north-loopFrames-1-31.png",
+      "direction": "north",
+      "phase": 31,
+      "viewport": 1280,
+      "timestamp": 2080.600000000559,
+      "world": {
+        "x": 552.9354487933231,
+        "y": 400.0976980683976
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\north-loopFrames-2-0.png",
+      "direction": "north",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 2113.4000000003725,
+      "world": {
+        "x": 552.8866807151363,
+        "y": 399.6234046021104
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\west-adjacent-0-0.png",
+      "direction": "west",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 162,
+      "world": {
+        "x": 548.4559296728972,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\west-adjacent-1-1.png",
+      "direction": "west",
+      "phase": 1,
+      "viewport": 1280,
+      "timestamp": 195.20000000018626,
+      "world": {
+        "x": 547.7384929906542,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\west-loopFrames-1-31.png",
+      "direction": "west",
+      "phase": 31,
+      "viewport": 1280,
+      "timestamp": 2426.9000000003725,
+      "world": {
+        "x": 507.6522553738326,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\west-loopFrames-2-0.png",
+      "direction": "west",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 2443.5,
+      "world": {
+        "x": 507.2956850467298,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\south-adjacent-0-0.png",
+      "direction": "south",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 896.7000000001863,
+      "world": {
+        "x": 456.81016032162404,
+        "y": 367.3623812043828
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\south-adjacent-1-1.png",
+      "direction": "south",
+      "phase": 1,
+      "viewport": 1280,
+      "timestamp": 928.9000000003725,
+      "world": {
+        "x": 456.7947258583808,
+        "y": 367.81270436724395
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\south-loopFrames-1-31.png",
+      "direction": "south",
+      "phase": 31,
+      "viewport": 1280,
+      "timestamp": 2011.6000000005588,
+      "world": {
+        "x": 456.3747575182051,
+        "y": 380.0658982923655
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\south-loopFrames-2-0.png",
+      "direction": "south",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 2044.800000000745,
+      "world": {
+        "x": 456.35904908772847,
+        "y": 380.5242148521538
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\east-adjacent-0-0.png",
+      "direction": "east",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 153.5,
+      "world": {
+        "x": 455.33072219626166,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\east-adjacent-1-1.png",
+      "direction": "east",
+      "phase": 1,
+      "viewport": 390,
+      "timestamp": 168.29999999981374,
+      "world": {
+        "x": 455.7286820093458,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\east-loopFrames-1-31.png",
+      "direction": "east",
+      "phase": 31,
+      "viewport": 390,
+      "timestamp": 1067.7999999998137,
+      "world": {
+        "x": 477.0384824766352,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\east-loopFrames-2-0.png",
+      "direction": "east",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 1101.2000000001863,
+      "world": {
+        "x": 477.82729567756974,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\north-adjacent-0-0.png",
+      "direction": "north",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 724.4000000003725,
+      "world": {
+        "x": 554.3124358817187,
+        "y": 413.48957249671685
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\north-adjacent-1-1.png",
+      "direction": "north",
+      "phase": 1,
+      "viewport": 390,
+      "timestamp": 756.9000000003725,
+      "world": {
+        "x": 554.262652527436,
+        "y": 413.00540497271345
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\north-loopFrames-1-31.png",
+      "direction": "north",
+      "phase": 31,
+      "viewport": 390,
+      "timestamp": 706.7000000001863,
+      "world": {
+        "x": 554.3371921430072,
+        "y": 413.7303392731696
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\north-loopFrames-2-0.png",
+      "direction": "north",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 724.4000000003725,
+      "world": {
+        "x": 554.3124358817187,
+        "y": 413.48957249671685
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\west-adjacent-0-0.png",
+      "direction": "west",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 153,
+      "world": {
+        "x": 548.4559296728972,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\west-adjacent-1-1.png",
+      "direction": "west",
+      "phase": 1,
+      "viewport": 390,
+      "timestamp": 186.29999999981374,
+      "world": {
+        "x": 547.740641004673,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\west-loopFrames-1-31.png",
+      "direction": "west",
+      "phase": 31,
+      "viewport": 390,
+      "timestamp": 1085.7999999998137,
+      "world": {
+        "x": 528.4149588785052,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\west-loopFrames-2-0.png",
+      "direction": "west",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 1119.5999999996275,
+      "world": {
+        "x": 527.6996702102809,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\south-adjacent-0-0.png",
+      "direction": "south",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 687.4000000003725,
+      "world": {
+        "x": 456.81001327223225,
+        "y": 367.366671586638
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\south-adjacent-1-1.png",
+      "direction": "south",
+      "phase": 1,
+      "viewport": 390,
+      "timestamp": 720.2999999998137,
+      "world": {
+        "x": 456.79462492033764,
+        "y": 367.81564938309356
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\south-loopFrames-1-31.png",
+      "direction": "south",
+      "phase": 31,
+      "viewport": 390,
+      "timestamp": 1619.9000000003725,
+      "world": {
+        "x": 456.37455159365277,
+        "y": 380.07190644401845
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\south-loopFrames-2-0.png",
+      "direction": "south",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 1653.2000000001863,
+      "world": {
+        "x": 456.3588430117432,
+        "y": 380.5302274220842
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\final-published-contact-sheets\\zoro-published128.png",
+      "sha256": "34bc742aaea7cbec2871954e95089da02aa9d1108492b1b92311c72cc8b7d5bf",
+      "bytes": 381608
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\final-published-contact-sheets\\root-final-pixel-review.json",
+      "sha256": "d5253d6aa247ec7e8bdfe09c2d815ddf167971f3893d7f84df1d85ca4cc51c2a",
+      "bytes": 3130
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\final-published-contact-sheets\\sources.json",
+      "sha256": "f1f084881967eb99df37b06eee07c1cae3d7158a9e50112470753fe6c214df0a",
+      "bytes": 30777
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\report.json",
+      "sha256": "eccc90d530db9b7951b624ac003e0bc758874c07c48597bbd6cd58fc308a91e1",
+      "bytes": 46770
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\report.json",
+      "sha256": "3a1ca4c42cf059ab8a716f3f8516b4d62ed63eca3fb27db60a8a233408369f3f",
+      "bytes": 46726
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\east-adjacent-0-0.png",
+      "sha256": "c281f416fd91329159acc058492968549a7571580279ff1a7fea4f3bfc07eb35",
+      "bytes": 11674
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\east-adjacent-1-1.png",
+      "sha256": "fed0660e062876409fd17ceb8c7ca29aa1720e0e2b1a2072d1c0b981ce068708",
+      "bytes": 11864
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\east-loopFrames-1-31.png",
+      "sha256": "cc6ef579edf270dc25bd94a5b19cf07f34175d466e398a5e46e4ea0ebadb8727",
+      "bytes": 11676
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\east-loopFrames-2-0.png",
+      "sha256": "c281f416fd91329159acc058492968549a7571580279ff1a7fea4f3bfc07eb35",
+      "bytes": 11674
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\north-adjacent-0-0.png",
+      "sha256": "d019afe04c0fd527a97664db772778a2d27deec931017bb785577103b6819856",
+      "bytes": 12443
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\north-adjacent-1-1.png",
+      "sha256": "f495de02c01f5e1ea463b24d2b351ba27a6824acc45955e882b2994be1bb1712",
+      "bytes": 12484
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\north-loopFrames-1-31.png",
+      "sha256": "48609e2bc3a5552447b0aec588549a546448e2e8108425fde6d6b31d60718beb",
+      "bytes": 12467
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\north-loopFrames-2-0.png",
+      "sha256": "d019afe04c0fd527a97664db772778a2d27deec931017bb785577103b6819856",
+      "bytes": 12443
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\west-adjacent-0-0.png",
+      "sha256": "e931394fc6eebe6979abeeeaab9478650f62fc27ae4d6c0b92f45bb776589038",
+      "bytes": 11345
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\west-adjacent-1-1.png",
+      "sha256": "90646590009c7489e3a1db70fd68ea3894de0ec937805ad132c520452320f8c8",
+      "bytes": 11365
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\west-loopFrames-1-31.png",
+      "sha256": "6b61430ef3289a405b3c288d0c5d465fa6bde7a44af05df3078051cb6c85f071",
+      "bytes": 11336
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\west-loopFrames-2-0.png",
+      "sha256": "e931394fc6eebe6979abeeeaab9478650f62fc27ae4d6c0b92f45bb776589038",
+      "bytes": 11345
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\south-adjacent-0-0.png",
+      "sha256": "64562f72a73b8c274f9db5bdac1d5d0c5c7930ec595c1a8a2725c3639feb7572",
+      "bytes": 12639
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\south-adjacent-1-1.png",
+      "sha256": "16c191e471dda005ec4013d8987f6973007d86f62afff80b2cab375282ed681a",
+      "bytes": 12613
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\south-loopFrames-1-31.png",
+      "sha256": "3440b7744ec302917d30ef97bb93206b66095a4e3b6797a2fa5edd13d035bdbb",
+      "bytes": 12722
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\south-loopFrames-2-0.png",
+      "sha256": "64562f72a73b8c274f9db5bdac1d5d0c5c7930ec595c1a8a2725c3639feb7572",
+      "bytes": 12639
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\east-adjacent-0-0.png",
+      "sha256": "c281f416fd91329159acc058492968549a7571580279ff1a7fea4f3bfc07eb35",
+      "bytes": 11674
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\east-adjacent-1-1.png",
+      "sha256": "fed0660e062876409fd17ceb8c7ca29aa1720e0e2b1a2072d1c0b981ce068708",
+      "bytes": 11864
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\east-loopFrames-1-31.png",
+      "sha256": "cc6ef579edf270dc25bd94a5b19cf07f34175d466e398a5e46e4ea0ebadb8727",
+      "bytes": 11676
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\east-loopFrames-2-0.png",
+      "sha256": "c281f416fd91329159acc058492968549a7571580279ff1a7fea4f3bfc07eb35",
+      "bytes": 11674
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\north-adjacent-0-0.png",
+      "sha256": "d019afe04c0fd527a97664db772778a2d27deec931017bb785577103b6819856",
+      "bytes": 12443
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\north-adjacent-1-1.png",
+      "sha256": "f495de02c01f5e1ea463b24d2b351ba27a6824acc45955e882b2994be1bb1712",
+      "bytes": 12484
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\north-loopFrames-1-31.png",
+      "sha256": "48609e2bc3a5552447b0aec588549a546448e2e8108425fde6d6b31d60718beb",
+      "bytes": 12467
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\north-loopFrames-2-0.png",
+      "sha256": "d019afe04c0fd527a97664db772778a2d27deec931017bb785577103b6819856",
+      "bytes": 12443
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\west-adjacent-0-0.png",
+      "sha256": "e931394fc6eebe6979abeeeaab9478650f62fc27ae4d6c0b92f45bb776589038",
+      "bytes": 11345
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\west-adjacent-1-1.png",
+      "sha256": "90646590009c7489e3a1db70fd68ea3894de0ec937805ad132c520452320f8c8",
+      "bytes": 11365
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\west-loopFrames-1-31.png",
+      "sha256": "6b61430ef3289a405b3c288d0c5d465fa6bde7a44af05df3078051cb6c85f071",
+      "bytes": 11336
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\west-loopFrames-2-0.png",
+      "sha256": "e931394fc6eebe6979abeeeaab9478650f62fc27ae4d6c0b92f45bb776589038",
+      "bytes": 11345
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\south-adjacent-0-0.png",
+      "sha256": "64562f72a73b8c274f9db5bdac1d5d0c5c7930ec595c1a8a2725c3639feb7572",
+      "bytes": 12639
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\south-adjacent-1-1.png",
+      "sha256": "16c191e471dda005ec4013d8987f6973007d86f62afff80b2cab375282ed681a",
+      "bytes": 12613
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\south-loopFrames-1-31.png",
+      "sha256": "3440b7744ec302917d30ef97bb93206b66095a4e3b6797a2fa5edd13d035bdbb",
+      "bytes": 12722
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\south-loopFrames-2-0.png",
+      "sha256": "64562f72a73b8c274f9db5bdac1d5d0c5c7930ec595c1a8a2725c3639feb7572",
+      "bytes": 12639
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro-sanji-chat\\report.json",
+      "sha256": "e85070e597a6f16b335479ef417ebfff2c1bcc33ae9c34747ddaefdb83c77718",
+      "bytes": 17187
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro-sanji-chat\\turn-0-stage.png",
+      "sha256": "cffe11d6666fa92008b95b245637c25899fd884f44920ae447072a52fa8037e8",
+      "bytes": 1063658
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro-sanji-chat\\turn-1-stage.png",
+      "sha256": "dd248eb9f6f9b4ba8a4cb486a225c92c7bc62bf28ad29d8f03bb5f9c0afaac92",
+      "bytes": 1063638
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro-sanji-chat\\turn-2-stage.png",
+      "sha256": "169d029094f2d892b18a9b62a6c16ed9f5bb551ed56433475c34d409a0c28290",
+      "bytes": 1063481
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro-sanji-chat\\turn-3-stage.png",
+      "sha256": "b10bf5f6b1b20a84848de1a608e0d42a34873bba8a18df23b212da893bf79fcd",
+      "bytes": 1063559
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro-sanji-chat\\report.json",
+      "sha256": "08e0ac9d2bbfb50b0738a2133a7edbb0f661ed839fe95ddb58c5fbcfa8a04c19",
+      "bytes": 17185
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro-sanji-chat\\turn-0-stage.png",
+      "sha256": "c9b65b9523486004112866270d0394612b70a6458817d5c15f986cbd01b6833b",
+      "bytes": 176237
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro-sanji-chat\\turn-1-stage.png",
+      "sha256": "5727ea45851d0146cf060c4af750a51804ce2e21b4c27c717b6643faeeefdcc9",
+      "bytes": 174484
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro-sanji-chat\\turn-2-stage.png",
+      "sha256": "c94fa411677015eb897bde5c2dfe4687781519f59e87caa439a24c1f01ef6300",
+      "bytes": 176158
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro-sanji-chat\\turn-3-stage.png",
+      "sha256": "b42f565a29de88a61932897dcae6831ae253ea4e4783fa101157fc8b433e13a5",
+      "bytes": 174383
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\explicit-review\\root-approval.json",
+      "sha256": "1ce6e0c6c895b2da80ca8bf1cd998ecf22794d6855c6adeb8619b28cbbfee637",
+      "bytes": 1266
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\visual-review.json",
+      "sha256": "c0497cfa744a57881542377bcfc3d9d50b1443e51435739e0e7209f16f75eb3e",
+      "bytes": 19081
+    }
+  ],
+  "videos": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\normal.webm",
+      "sha256": "f51ea36a5db143250034468bcccca3fafc93c858e2b4cbe9e8d6f4327dc4ed14",
+      "bytes": 2643055
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro\\half-speed.mp4",
+      "sha256": "d0b29d33df534ec837a5cec8ccbd2ed405020df620cad1ae63b073b81481ab82",
+      "bytes": 15225923
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\normal.webm",
+      "sha256": "421d3e37adc344d9738fc4b5601389db2580e478402b6f1eb26df6b8ab9d70c7",
+      "bytes": 1328798
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro\\half-speed.mp4",
+      "sha256": "93d33d4a06b78da3f9d74788fd0c4a859cc8727bd6014cf035b0dcc09e7184c4",
+      "bytes": 3843846
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro-sanji-chat\\normal.webm",
+      "sha256": "6e5118dab480f5da4d84b1ad0a407abdbbeb1a8b0f4b3a21f21fa156f63f2345",
+      "bytes": 2315000
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\zoro-sanji-chat\\half-speed.mp4",
+      "sha256": "6ba6734dc0abcf90a6f53e2b5f143bac63e47458db88fce9fa3301b83681a407",
+      "bytes": 10408557
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro-sanji-chat\\normal.webm",
+      "sha256": "8c416e09fdc7a769939232da4d94811a5d0c34363c72769927e98605a2c8053c",
+      "bytes": 801721
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\zoro-sanji-chat\\half-speed.mp4",
+      "sha256": "4848664886e12f4c3edc0c7e70d436a8d8b486802b1ed1f2d6879828992b266c",
+      "bytes": 2143646
+    }
+  ],
+  "visualAcceptance": false
+}

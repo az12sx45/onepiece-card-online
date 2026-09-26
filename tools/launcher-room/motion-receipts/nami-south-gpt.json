@@ -1,0 +1,47 @@
+{
+  "key": "nami",
+  "dir": "south",
+  "version": 1,
+  "source": "exec-9f17c4f9-a0f2-470f-ba6b-ce43c366371b.png",
+  "status": "CANDIDATE_VISUALLY_REVIEWED",
+  "review": "Four coherent frontal expressions, front Vneck shirt and paired circles on both hips, front knee/toe views. Complete limb overlaps; no added tattoo/accessory.",
+  "generatedWith": "GPT imagegen built-in",
+  "generatedOriginal": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-1739-7141-90bd-461600d8694f\\exec-9f17c4f9-a0f2-470f-ba6b-ce43c366371b.png",
+  "output": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\nami\\south-01.png",
+  "sha256": "37af3ff43c7b3d8c6723a64a30738a465bda39f6fc095c86c97356920ba4b73b",
+  "date": "2026-09-27",
+  "prompt": "Create canonical EastBlue NAMI front/SOUTH bone-animation cutout parts, exactly12 cells 4columns×3rows on genuine transparent alpha. Reference1 approvedturnaround BOTTOMRIGHT front identity; reference2 eastkit partorderandstyle; reference3 northkitcorrecttorso shoulder-cap constructiononly. Draw SOUTH/front anatomy anew notmirroringanotherdirection.\nSame shortorangebob,browneyes,whiteblueVneckshirt,orangeskirt,brownankleboots. ShirtONE broad+TWOthin chestbands and separateTWOthinhemtrims. Both sidehips eachtwo stacked whiteringreddiscs. Leftupperarmtattoo hiddenundersleeve,noaccessories.\nALL parts straightFRONT towardcamera. Near=anatomicalRIGHT(screenLEFT);far=anatomicalLEFT(screenRIGHT).\nRow1cell1quiethead,2happyhead,3annoyedhead,4surprisedhead; preciselysamefrontheadskull/hair/ear/neckshape/angle/size, onlybrows/eyes/mouthchange. Alltwoeyesvisible,noheadrotation,nohairchanges, tinyneckstub,noheadshoulders.\nRow2cell5 WHOLETORSO+PELVIS+WHOLESKIRT frontonly. NOHEAD/ARMS/LEGS. NO SLEEVES or empty sleeve tubes protruding: round solid WHITE shoulder-caps tight tobody (matchingref3torso), because sleeves belongon separatearms. Solidhiddenhip/shoulderoverlaps. FrontdoubletrimVneck,allfivebluebands,entireskirt withbothsidepairsofcircles.\nCell6 completeNEARRIGHTarm shoulder→hand downrest, white shortsleeve doublebluecuff, fleshcontinuouselbowforearmwristhand. Palm/thumborientationcorrectfront(anatomicalrightthumbinwardscreenright). Cell7 completeFARLEFTarm similarlythumbinwardscreenleft. Noskintattoo. Cell8 nearRIGHTbareleg hip→ankle nofoot/skirt,frontknee.\nRow3cell9 farLEFTbareleg hip→ankle nofoot/skirt frontknee. Cell10 nearRIGHTwholebrownankleboot fronttoe towardcamera, smallankleoverlap; cell11farLEFTmatchingfrontboot. NOTsidepointingboots. Cell12 optionalopenRIGHThand palmfacingviewer,thumbscreenLEFT, smallalternativehand,noarm.\nExact12 separatepieces, solidcoloredinteriors, truealphaoutsides. Head40% assembledheight,total2.5heads,shortcompactlimbs,torso+skirt70%headheight,bootsnotinflated. Atleast15%cleartransparentpadding ineachcell,piecewithin70%cellwidth/height,noclip. Cleanroundedanimecelshading, no text/grid/background. Allpartsfullydrawn underjoints.\n",
+  "imageQA": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\nami\\south-01-image-qa.json",
+  "identityProvenance": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\turnarounds\\nami-03-provenance.json",
+  "localImageEdits": "None. Generated original copied unchanged; image read-only QA, downstream Canvas rig is separately identified.",
+  "schema": {
+    "grid": [
+      4,
+      3
+    ],
+    "cells": [
+      "head_quiet",
+      "head_happy",
+      "head_annoyed",
+      "head_surprise",
+      "torso_pelvis",
+      "nearArm",
+      "farArm",
+      "nearLeg",
+      "farLeg",
+      "nearFoot",
+      "farFoot",
+      "accessory_or_optional_hand"
+    ],
+    "nearSide": "RIGHT"
+  },
+  "limitations": [
+    "Faint alpha fringe/specks retained in original GPT output; renderer cleanup separate.",
+    "Generated part padding and anatomical joint placements require custom rectangles and rig calibration.",
+    "Head expression outlines are close but not pixel-identical; common crown anchor is required.",
+    "Candidate rig atlas is not runtime/gameplay/deployment acceptance."
+  ],
+  "promptFile": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\nami\\south-01-prompt.txt",
+  "originalReceipt": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\nami\\south-01-provenance.json",
+  "originalReceiptSha256": "cc6c77d17bca0c1bae143850c75262edd9f498eda6bb8e7369206ab257b2aa97"
+}

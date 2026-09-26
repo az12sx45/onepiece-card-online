@@ -1,0 +1,249 @@
+{
+  "schema": "one-piece-room-rig-receipt/1",
+  "character": "zoro",
+  "direction": "north",
+  "sourcePng": "tools/launcher-room/motion-source-png/zoro-north.png",
+  "sourceSha256": "f56e9e756aeee3e0480951193d2bf9082d24544186ff02d8f40be5b797b3473f",
+  "provenance": "tools/launcher-room/motion-receipts/zoro-north-gpt.json",
+  "provenanceSha256": "295efb052202b9d13157fed7503cc02268727dfa6e0b8ad25a1e03fa0ddd5b66",
+  "rawReceipt": {
+    "path": "tools/launcher-room/motion-receipts/zoro-north-gpt-original.json",
+    "sha256": "7afae75f1107e2c95d8c80503139368c16fec1ef7e8dc208f1ab5fdab6229f23"
+  },
+  "sourceImages": {
+    "sheet": {
+      "sourcePng": "tools/launcher-room/motion-source-png/zoro-north.png",
+      "sourceSha256": "f56e9e756aeee3e0480951193d2bf9082d24544186ff02d8f40be5b797b3473f",
+      "provenance": "tools/launcher-room/motion-receipts/zoro-north-gpt.json",
+      "provenanceSha256": "295efb052202b9d13157fed7503cc02268727dfa6e0b8ad25a1e03fa0ddd5b66",
+      "rawReceipt": {
+        "path": "tools/launcher-room/motion-receipts/zoro-north-gpt-original.json",
+        "sha256": "7afae75f1107e2c95d8c80503139368c16fec1ef7e8dc208f1ab5fdab6229f23"
+      }
+    }
+  },
+  "originalSpecSha256": "9475b90b8dec2678cd050bc05f354af4ca02b63bb741681a2fe39d6ba8897dad",
+  "rigSpec": "tools/launcher-room/rig-specs/zoro-north.json",
+  "rigSpecSha256": "6caa5770fa804ee423507c8766103f8170d796777ec20ec730d1be6cbebe4dd9",
+  "selectedPlanSha256": "cd7bdb59fb34bc2132bcaea0a6a71f42c4efecb9f59d4d0e51b9bc3c3fa24a3c",
+  "review": {
+    "status": "reviewed",
+    "notes": "Final GPT source identity and four-direction atlas contact sheets inspected for all ten characters. Root additionally inspected actual-room desktop consecutive phases and loop seam for all ten, five four-turn speaker/listener contact sheets, both widths of final four-way piano/table contacts, and narrow-room samples. No remaining observed pose discontinuity, detached parts, head/body facing mismatch or furniture alignment blocker in reviewed frames. Acceptance is for this precisely hash-bound local candidate. Automated fixtures and frame inspection are not human play, physical-phone testing or a fixed-60fps guarantee; 350ms loaded-host capture gap is retained in evidence. Public deployment verified separately.",
+    "sourceSha256": "f56e9e756aeee3e0480951193d2bf9082d24544186ff02d8f40be5b797b3473f",
+    "sourceHashes": {
+      "sheet": "f56e9e756aeee3e0480951193d2bf9082d24544186ff02d8f40be5b797b3473f"
+    },
+    "originalSpecSha256": "9475b90b8dec2678cd050bc05f354af4ca02b63bb741681a2fe39d6ba8897dad",
+    "rigSpecSha256": "6caa5770fa804ee423507c8766103f8170d796777ec20ec730d1be6cbebe4dd9",
+    "rendererSha256": "de24e1fa55d835f12e418e12f7dee3199243b3a40394e90ffe8304f8d96edd11",
+    "bakerSha256": "1261fb4dcccf74a3abba4fb59d399a329e951adde3a8c0ddf6aaffae9e635e07",
+    "evidence": [
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-0.json",
+        "sha256": "5970919d4825ea8f24eda389490aa8d8b4a9b18e7f2c722cc59ca2e61290fb24"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-1.png",
+        "sha256": "34bc742aaea7cbec2871954e95089da02aa9d1108492b1b92311c72cc8b7d5bf"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-2.json",
+        "sha256": "d5253d6aa247ec7e8bdfe09c2d815ddf167971f3893d7f84df1d85ca4cc51c2a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-3.json",
+        "sha256": "f1f084881967eb99df37b06eee07c1cae3d7158a9e50112470753fe6c214df0a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-4.json",
+        "sha256": "eccc90d530db9b7951b624ac003e0bc758874c07c48597bbd6cd58fc308a91e1"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-5.json",
+        "sha256": "3a1ca4c42cf059ab8a716f3f8516b4d62ed63eca3fb27db60a8a233408369f3f"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-6.png",
+        "sha256": "c281f416fd91329159acc058492968549a7571580279ff1a7fea4f3bfc07eb35"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-7.png",
+        "sha256": "fed0660e062876409fd17ceb8c7ca29aa1720e0e2b1a2072d1c0b981ce068708"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-8.png",
+        "sha256": "cc6ef579edf270dc25bd94a5b19cf07f34175d466e398a5e46e4ea0ebadb8727"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-9.png",
+        "sha256": "c281f416fd91329159acc058492968549a7571580279ff1a7fea4f3bfc07eb35"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-10.png",
+        "sha256": "d019afe04c0fd527a97664db772778a2d27deec931017bb785577103b6819856"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-11.png",
+        "sha256": "f495de02c01f5e1ea463b24d2b351ba27a6824acc45955e882b2994be1bb1712"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-12.png",
+        "sha256": "48609e2bc3a5552447b0aec588549a546448e2e8108425fde6d6b31d60718beb"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-13.png",
+        "sha256": "d019afe04c0fd527a97664db772778a2d27deec931017bb785577103b6819856"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-14.png",
+        "sha256": "e931394fc6eebe6979abeeeaab9478650f62fc27ae4d6c0b92f45bb776589038"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-15.png",
+        "sha256": "90646590009c7489e3a1db70fd68ea3894de0ec937805ad132c520452320f8c8"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-16.png",
+        "sha256": "6b61430ef3289a405b3c288d0c5d465fa6bde7a44af05df3078051cb6c85f071"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-17.png",
+        "sha256": "e931394fc6eebe6979abeeeaab9478650f62fc27ae4d6c0b92f45bb776589038"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-18.png",
+        "sha256": "64562f72a73b8c274f9db5bdac1d5d0c5c7930ec595c1a8a2725c3639feb7572"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-19.png",
+        "sha256": "16c191e471dda005ec4013d8987f6973007d86f62afff80b2cab375282ed681a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-20.png",
+        "sha256": "3440b7744ec302917d30ef97bb93206b66095a4e3b6797a2fa5edd13d035bdbb"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-21.png",
+        "sha256": "64562f72a73b8c274f9db5bdac1d5d0c5c7930ec595c1a8a2725c3639feb7572"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-22.png",
+        "sha256": "c281f416fd91329159acc058492968549a7571580279ff1a7fea4f3bfc07eb35"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-23.png",
+        "sha256": "fed0660e062876409fd17ceb8c7ca29aa1720e0e2b1a2072d1c0b981ce068708"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-24.png",
+        "sha256": "cc6ef579edf270dc25bd94a5b19cf07f34175d466e398a5e46e4ea0ebadb8727"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-25.png",
+        "sha256": "c281f416fd91329159acc058492968549a7571580279ff1a7fea4f3bfc07eb35"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-26.png",
+        "sha256": "d019afe04c0fd527a97664db772778a2d27deec931017bb785577103b6819856"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-27.png",
+        "sha256": "f495de02c01f5e1ea463b24d2b351ba27a6824acc45955e882b2994be1bb1712"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-28.png",
+        "sha256": "48609e2bc3a5552447b0aec588549a546448e2e8108425fde6d6b31d60718beb"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-29.png",
+        "sha256": "d019afe04c0fd527a97664db772778a2d27deec931017bb785577103b6819856"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-30.png",
+        "sha256": "e931394fc6eebe6979abeeeaab9478650f62fc27ae4d6c0b92f45bb776589038"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-31.png",
+        "sha256": "90646590009c7489e3a1db70fd68ea3894de0ec937805ad132c520452320f8c8"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-32.png",
+        "sha256": "6b61430ef3289a405b3c288d0c5d465fa6bde7a44af05df3078051cb6c85f071"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-33.png",
+        "sha256": "e931394fc6eebe6979abeeeaab9478650f62fc27ae4d6c0b92f45bb776589038"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-34.png",
+        "sha256": "64562f72a73b8c274f9db5bdac1d5d0c5c7930ec595c1a8a2725c3639feb7572"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-35.png",
+        "sha256": "16c191e471dda005ec4013d8987f6973007d86f62afff80b2cab375282ed681a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-36.png",
+        "sha256": "3440b7744ec302917d30ef97bb93206b66095a4e3b6797a2fa5edd13d035bdbb"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-37.png",
+        "sha256": "64562f72a73b8c274f9db5bdac1d5d0c5c7930ec595c1a8a2725c3639feb7572"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-38.json",
+        "sha256": "e85070e597a6f16b335479ef417ebfff2c1bcc33ae9c34747ddaefdb83c77718"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-39.png",
+        "sha256": "cffe11d6666fa92008b95b245637c25899fd884f44920ae447072a52fa8037e8"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-40.png",
+        "sha256": "dd248eb9f6f9b4ba8a4cb486a225c92c7bc62bf28ad29d8f03bb5f9c0afaac92"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-41.png",
+        "sha256": "169d029094f2d892b18a9b62a6c16ed9f5bb551ed56433475c34d409a0c28290"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-42.png",
+        "sha256": "b10bf5f6b1b20a84848de1a608e0d42a34873bba8a18df23b212da893bf79fcd"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-43.json",
+        "sha256": "08e0ac9d2bbfb50b0738a2133a7edbb0f661ed839fe95ddb58c5fbcfa8a04c19"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-44.png",
+        "sha256": "c9b65b9523486004112866270d0394612b70a6458817d5c15f986cbd01b6833b"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-45.png",
+        "sha256": "5727ea45851d0146cf060c4af750a51804ce2e21b4c27c717b6643faeeefdcc9"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-46.png",
+        "sha256": "c94fa411677015eb897bde5c2dfe4687781519f59e87caa439a24c1f01ef6300"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-47.png",
+        "sha256": "b42f565a29de88a61932897dcae6831ae253ea4e4783fa101157fc8b433e13a5"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-48.json",
+        "sha256": "1ce6e0c6c895b2da80ca8bf1cd998ecf22794d6855c6adeb8619b28cbbfee637"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/zoro-north-final-49.json",
+        "sha256": "c0497cfa744a57881542377bcfc3d9d50b1443e51435739e0e7209f16f75eb3e"
+      }
+    ],
+    "assetHashes": {
+      "motion": "b8d5d32691a00fcf274ba3b1745539f8bdf2904d1cc169d8892dbfd92ea4de78",
+      "acting": "a63c8e642ef2f4124ba04f0bf6b954c990ca7d2f5a88bfd49e8d60742a71e4cc"
+    },
+    "specSha256": "6caa5770fa804ee423507c8766103f8170d796777ec20ec730d1be6cbebe4dd9",
+    "reviewer": "Codex root, with independent walk_art_pilot visual review"
+  }
+}

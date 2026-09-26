@@ -1,0 +1,1949 @@
+{
+  "scope": "Actual candidate assets rendered in real room; automated local fixture, with frame inspection pending",
+  "mode": "walk",
+  "key": "jinbe",
+  "routes": [
+    {
+      "key": "jinbe",
+      "direction": "east",
+      "goal": {
+        "col": 9,
+        "row": 4
+      },
+      "accepted": true,
+      "before": {
+        "t": 0.09999999962747097,
+        "x": "47.3893%",
+        "y": "78.1481%",
+        "direction": "south",
+        "pose": "idle",
+        "frame": "0",
+        "action": "1",
+        "source": "acting_v2",
+        "turning": false,
+        "image": "east-00-before-0.png"
+      },
+      "samples": [
+        {
+          "t": 15.099999999627471,
+          "x": "47.3893%",
+          "y": "78.1481%",
+          "direction": "south",
+          "pose": "idle",
+          "frame": "0",
+          "action": "1",
+          "source": "acting_v2",
+          "turning": true,
+          "kind": "turn",
+          "image": "east-01-turn-0.png"
+        },
+        {
+          "t": 166,
+          "x": "47.4246%",
+          "y": "78.1481%",
+          "direction": "east",
+          "pose": "walk",
+          "frame": "0",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "east-02-walk-0.png"
+        },
+        {
+          "t": 281.59999999962747,
+          "x": "47.6695%",
+          "y": "78.1481%",
+          "direction": "east",
+          "pose": "walk",
+          "frame": "4",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "east-03-walk-4.png"
+        },
+        {
+          "t": 397.59999999962747,
+          "x": "47.9146%",
+          "y": "78.1481%",
+          "direction": "east",
+          "pose": "walk",
+          "frame": "8",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "east-04-walk-8.png"
+        },
+        {
+          "t": 781.7000000001863,
+          "x": "48.6152%",
+          "y": "78.1481%",
+          "direction": "east",
+          "pose": "walk",
+          "frame": "19",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "east-05-walk-19.png"
+        },
+        {
+          "t": 798.5999999996275,
+          "x": "48.6503%",
+          "y": "78.1481%",
+          "direction": "east",
+          "pose": "walk",
+          "frame": "20",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "east-06-walk-20.png"
+        },
+        {
+          "t": 932,
+          "x": "48.9305%",
+          "y": "78.1481%",
+          "direction": "east",
+          "pose": "walk",
+          "frame": "24",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "east-07-walk-24.png"
+        },
+        {
+          "t": 1514.7999999998137,
+          "x": "50.1561%",
+          "y": "78.1481%",
+          "direction": "east",
+          "pose": "walk",
+          "frame": "12",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "east-08-walk-12.png"
+        },
+        {
+          "t": 2001.2999999998137,
+          "x": "51.1718%",
+          "y": "78.1481%",
+          "direction": "east",
+          "pose": "walk",
+          "frame": "28",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "east-09-walk-28.png"
+        },
+        {
+          "t": 5195.899999999441,
+          "x": "57.832%",
+          "y": "78.1481%",
+          "direction": "east",
+          "pose": "idle",
+          "frame": "6",
+          "action": "0",
+          "source": "acting_v2",
+          "turning": false,
+          "kind": "stop",
+          "image": "east-10-stop-6.png"
+        }
+      ],
+      "adjacent": [
+        {
+          "t": 166,
+          "x": "47.4246%",
+          "y": "78.1481%",
+          "direction": "east",
+          "pose": "walk",
+          "frame": "0",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 455.2765028037383,
+            "y": 422
+          },
+          "image": "east-adjacent-0-0.png"
+        },
+        {
+          "t": 187.59999999962747,
+          "x": "47.4593%",
+          "y": "78.1481%",
+          "direction": "east",
+          "pose": "walk",
+          "frame": "1",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 455.6094519859813,
+            "y": 422
+          },
+          "image": "east-adjacent-1-1.png"
+        },
+        {
+          "t": 214.8999999994412,
+          "x": "47.5295%",
+          "y": "78.1481%",
+          "direction": "east",
+          "pose": "walk",
+          "frame": "2",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 456.2834218457944,
+            "y": 422
+          },
+          "image": "east-adjacent-2-2.png"
+        },
+        {
+          "t": 259.3999999994412,
+          "x": "47.5995%",
+          "y": "78.1481%",
+          "direction": "east",
+          "pose": "walk",
+          "frame": "3",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 456.9553738317757,
+            "y": 422
+          },
+          "image": "east-adjacent-3-3.png"
+        },
+        {
+          "t": 281.59999999962747,
+          "x": "47.6695%",
+          "y": "78.1481%",
+          "direction": "east",
+          "pose": "walk",
+          "frame": "4",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 457.627325817757,
+            "y": 422
+          },
+          "image": "east-adjacent-4-4.png"
+        },
+        {
+          "t": 304.5,
+          "x": "47.7046%",
+          "y": "78.1481%",
+          "direction": "east",
+          "pose": "walk",
+          "frame": "5",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 457.96431074766355,
+            "y": 422
+          },
+          "image": "east-adjacent-5-5.png"
+        },
+        {
+          "t": 334.20000000018626,
+          "x": "47.7746%",
+          "y": "78.1481%",
+          "direction": "east",
+          "pose": "walk",
+          "frame": "6",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 458.63626273364486,
+            "y": 422
+          },
+          "image": "east-adjacent-6-6.png"
+        },
+        {
+          "t": 373,
+          "x": "47.8448%",
+          "y": "78.1481%",
+          "direction": "east",
+          "pose": "walk",
+          "frame": "7",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 459.3102325934579,
+            "y": 422
+          },
+          "image": "east-adjacent-7-7.png"
+        }
+      ],
+      "loopFrames": [
+        {
+          "t": 2063.899999999441,
+          "x": "51.312%",
+          "y": "78.1481%",
+          "direction": "east",
+          "pose": "walk",
+          "frame": "30",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 492.5950614485977,
+            "y": 422
+          },
+          "image": "east-loopFrames-0-30.png"
+        },
+        {
+          "t": 2097.399999999441,
+          "x": "51.3818%",
+          "y": "78.1481%",
+          "direction": "east",
+          "pose": "walk",
+          "frame": "31",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 493.2649955607472,
+            "y": 422
+          },
+          "image": "east-loopFrames-1-31.png"
+        },
+        {
+          "t": 2114.5999999996275,
+          "x": "51.4169%",
+          "y": "78.1481%",
+          "direction": "east",
+          "pose": "walk",
+          "frame": "0",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 493.6019804906537,
+            "y": 422
+          },
+          "image": "east-loopFrames-2-0.png"
+        },
+        {
+          "t": 2146.7999999998137,
+          "x": "51.4869%",
+          "y": "78.1481%",
+          "direction": "east",
+          "pose": "walk",
+          "frame": "1",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 494.273932476635,
+            "y": 422
+          },
+          "image": "east-loopFrames-3-1.png"
+        }
+      ],
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "elapsed": 5203.700000000186,
+      "actor": {
+        "key": "jinbe",
+        "cell": {
+          "col": 9,
+          "row": 4
+        },
+        "x": 555.1875,
+        "y": 422,
+        "mode": "wander",
+        "phase": 0.19392325384340803,
+        "direction": "east",
+        "dock": null,
+        "jobFurnitureKey": "",
+        "jobLine": "",
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    },
+    {
+      "key": "jinbe",
+      "direction": "north",
+      "goal": {
+        "col": 8,
+        "row": 2
+      },
+      "accepted": true,
+      "before": {
+        "t": 0,
+        "x": "50.3345%",
+        "y": "78.1481%",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "29",
+        "action": "2",
+        "source": "motion_v2",
+        "turning": false,
+        "image": "north-00-before-29.png"
+      },
+      "samples": [
+        {
+          "t": 1423.1000000005588,
+          "x": "47.3893%",
+          "y": "78.1481%",
+          "direction": "west",
+          "pose": "idle",
+          "frame": "0",
+          "action": "0",
+          "source": "acting_v2",
+          "turning": true,
+          "kind": "turn",
+          "image": "north-01-turn-0.png"
+        },
+        {
+          "t": 4072,
+          "x": "52.6107%",
+          "y": "78.1481%",
+          "direction": "east",
+          "pose": "idle",
+          "frame": "0",
+          "action": "0",
+          "source": "acting_v2",
+          "turning": true,
+          "kind": "turn",
+          "image": "north-02-turn-0.png"
+        },
+        {
+          "t": 4220.600000000559,
+          "x": "52.6099%",
+          "y": "78.1095%",
+          "direction": "north",
+          "pose": "walk",
+          "frame": "0",
+          "action": "1",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "north-03-walk-0.png"
+        },
+        {
+          "t": 4357.600000000559,
+          "x": "52.604%",
+          "y": "77.801%",
+          "direction": "north",
+          "pose": "walk",
+          "frame": "4",
+          "action": "1",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "north-04-walk-4.png"
+        },
+        {
+          "t": 4480.700000000186,
+          "x": "52.5988%",
+          "y": "77.5319%",
+          "direction": "north",
+          "pose": "walk",
+          "frame": "8",
+          "action": "1",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "north-05-walk-8.png"
+        },
+        {
+          "t": 4838.5,
+          "x": "52.5826%",
+          "y": "76.6896%",
+          "direction": "north",
+          "pose": "walk",
+          "frame": "20",
+          "action": "1",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "north-06-walk-20.png"
+        },
+        {
+          "t": 4939.5,
+          "x": "52.5781%",
+          "y": "76.4608%",
+          "direction": "north",
+          "pose": "walk",
+          "frame": "24",
+          "action": "1",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "north-07-walk-24.png"
+        },
+        {
+          "t": 5172.9000000003725,
+          "x": "52.5679%",
+          "y": "75.929%",
+          "direction": "north",
+          "pose": "walk",
+          "frame": "31",
+          "action": "1",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "north-08-walk-31.png"
+        },
+        {
+          "t": 5539.4000000003725,
+          "x": "52.5519%",
+          "y": "75.098%",
+          "direction": "north",
+          "pose": "walk",
+          "frame": "12",
+          "action": "1",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "north-09-walk-12.png"
+        },
+        {
+          "t": 5655.300000000745,
+          "x": "52.5468%",
+          "y": "74.8345%",
+          "direction": "north",
+          "pose": "walk",
+          "frame": "16",
+          "action": "1",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "north-10-walk-16.png"
+        },
+        {
+          "t": 9419.100000000559,
+          "x": "52.3893%",
+          "y": "66.6667%",
+          "direction": "north",
+          "pose": "idle",
+          "frame": "13",
+          "action": "0",
+          "source": "acting_v2",
+          "turning": false,
+          "kind": "stop",
+          "image": "north-11-stop-13.png"
+        }
+      ],
+      "adjacent": [
+        {
+          "t": 4220.600000000559,
+          "x": "52.6099%",
+          "y": "78.1095%",
+          "direction": "north",
+          "pose": "walk",
+          "frame": "0",
+          "action": "1",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 505.0553390702395,
+            "y": 421.79106934345793
+          },
+          "image": "north-adjacent-0-0.png"
+        },
+        {
+          "t": 4279.5,
+          "x": "52.6077%",
+          "y": "77.9937%",
+          "direction": "north",
+          "pose": "walk",
+          "frame": "1",
+          "action": "1",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 505.0339103786879,
+            "y": 421.1658557546586
+          },
+          "image": "north-adjacent-1-1.png"
+        },
+        {
+          "t": 4289.9000000003725,
+          "x": "52.607%",
+          "y": "77.955%",
+          "direction": "north",
+          "pose": "walk",
+          "frame": "2",
+          "action": "1",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 505.0267584289408,
+            "y": 420.95718710321376
+          },
+          "image": "north-adjacent-2-2.png"
+        },
+        {
+          "t": 4324.5,
+          "x": "52.6055%",
+          "y": "77.878%",
+          "direction": "north",
+          "pose": "walk",
+          "frame": "3",
+          "action": "1",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 505.0125040666974,
+            "y": 420.54129512246453
+          },
+          "image": "north-adjacent-3-3.png"
+        },
+        {
+          "t": 4357.600000000559,
+          "x": "52.604%",
+          "y": "77.801%",
+          "direction": "north",
+          "pose": "walk",
+          "frame": "4",
+          "action": "1",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 504.9982586308499,
+            "y": 420.12566358244254
+          },
+          "image": "north-adjacent-4-4.png"
+        },
+        {
+          "t": 4383,
+          "x": "52.6032%",
+          "y": "77.7625%",
+          "direction": "north",
+          "pose": "walk",
+          "frame": "5",
+          "action": "1",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 504.99111787933344,
+            "y": 419.9173216558451
+          },
+          "image": "north-adjacent-5-5.png"
+        },
+        {
+          "t": 4405.4000000003725,
+          "x": "52.6018%",
+          "y": "77.6858%",
+          "direction": "north",
+          "pose": "walk",
+          "frame": "6",
+          "action": "1",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 504.97692856860436,
+            "y": 419.50332764869216
+          },
+          "image": "north-adjacent-6-6.png"
+        },
+        {
+          "t": 4439.300000000745,
+          "x": "52.6003%",
+          "y": "77.6087%",
+          "direction": "north",
+          "pose": "walk",
+          "frame": "7",
+          "action": "1",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 504.9626627059455,
+            "y": 419.0871001264099
+          },
+          "image": "north-adjacent-7-7.png"
+        }
+      ],
+      "loopFrames": [
+        {
+          "t": 6088,
+          "x": "52.528%",
+          "y": "73.8617%",
+          "direction": "north",
+          "pose": "walk",
+          "frame": "30",
+          "action": "1",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 504.26916219733255,
+            "y": 398.8532029339371
+          },
+          "image": "north-loopFrames-0-30.png"
+        },
+        {
+          "t": 6103.800000000745,
+          "x": "52.5273%",
+          "y": "73.8246%",
+          "direction": "north",
+          "pose": "walk",
+          "frame": "31",
+          "action": "1",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 504.26229184302315,
+            "y": 398.6527502434977
+          },
+          "image": "north-loopFrames-1-31.png"
+        },
+        {
+          "t": 6139.5,
+          "x": "52.5259%",
+          "y": "73.7502%",
+          "direction": "north",
+          "pose": "walk",
+          "frame": "0",
+          "action": "1",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 504.2485162070765,
+            "y": 398.25082580646443
+          },
+          "image": "north-loopFrames-2-0.png"
+        },
+        {
+          "t": 6171.700000000186,
+          "x": "52.5245%",
+          "y": "73.6758%",
+          "direction": "north",
+          "pose": "walk",
+          "frame": "1",
+          "action": "1",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 504.2347491977364,
+            "y": 397.8491530633661
+          },
+          "image": "north-loopFrames-3-1.png"
+        }
+      ],
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        20,
+        21,
+        22,
+        23,
+        24,
+        31,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30
+      ],
+      "elapsed": 9424.5,
+      "actor": {
+        "key": "jinbe",
+        "cell": {
+          "col": 8,
+          "row": 2
+        },
+        "x": 502.9375,
+        "y": 360,
+        "mode": "wander",
+        "phase": 0.4225164302646025,
+        "direction": "north",
+        "dock": null,
+        "jobFurnitureKey": "",
+        "jobLine": "",
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    },
+    {
+      "key": "jinbe",
+      "direction": "west",
+      "goal": {
+        "col": 6,
+        "row": 2
+      },
+      "accepted": true,
+      "before": {
+        "t": 0,
+        "x": "52.3893%",
+        "y": "66.6667%",
+        "direction": "north",
+        "pose": "idle",
+        "frame": "13",
+        "action": "1",
+        "source": "acting_v2",
+        "turning": false,
+        "image": "west-00-before-13.png"
+      },
+      "samples": [
+        {
+          "t": 10.599999999627471,
+          "x": "52.3893%",
+          "y": "66.6667%",
+          "direction": "north",
+          "pose": "idle",
+          "frame": "0",
+          "action": "1",
+          "source": "acting_v2",
+          "turning": true,
+          "kind": "turn",
+          "image": "west-01-turn-0.png"
+        },
+        {
+          "t": 161,
+          "x": "52.3579%",
+          "y": "66.6667%",
+          "direction": "west",
+          "pose": "walk",
+          "frame": "14",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "west-02-walk-14.png"
+        },
+        {
+          "t": 231.20000000018626,
+          "x": "52.2306%",
+          "y": "66.6667%",
+          "direction": "west",
+          "pose": "walk",
+          "frame": "16",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "west-03-walk-16.png"
+        },
+        {
+          "t": 344,
+          "x": "52.0085%",
+          "y": "66.6667%",
+          "direction": "west",
+          "pose": "walk",
+          "frame": "20",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "west-04-walk-20.png"
+        },
+        {
+          "t": 461.3999999994412,
+          "x": "51.7863%",
+          "y": "66.6667%",
+          "direction": "west",
+          "pose": "walk",
+          "frame": "24",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "west-05-walk-24.png"
+        },
+        {
+          "t": 1015.3999999994412,
+          "x": "50.7385%",
+          "y": "66.6667%",
+          "direction": "west",
+          "pose": "walk",
+          "frame": "10",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "west-06-walk-10.png"
+        },
+        {
+          "t": 1545.7999999998137,
+          "x": "49.722%",
+          "y": "66.6667%",
+          "direction": "west",
+          "pose": "walk",
+          "frame": "28",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "west-07-walk-28.png"
+        },
+        {
+          "t": 1660.0999999996275,
+          "x": "49.4996%",
+          "y": "66.6667%",
+          "direction": "west",
+          "pose": "walk",
+          "frame": "0",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "west-08-walk-0.png"
+        },
+        {
+          "t": 1780.5999999996275,
+          "x": "49.2775%",
+          "y": "66.6667%",
+          "direction": "west",
+          "pose": "walk",
+          "frame": "4",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "west-09-walk-4.png"
+        },
+        {
+          "t": 5175.799999999814,
+          "x": "42.832%",
+          "y": "66.6667%",
+          "direction": "west",
+          "pose": "idle",
+          "frame": "21",
+          "action": "0",
+          "source": "acting_v2",
+          "turning": false,
+          "kind": "stop",
+          "image": "west-10-stop-21.png"
+        }
+      ],
+      "adjacent": [
+        {
+          "t": 1660.0999999996275,
+          "x": "49.4996%",
+          "y": "66.6667%",
+          "direction": "west",
+          "pose": "walk",
+          "frame": "0",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 475.1960580607473,
+            "y": 360
+          },
+          "image": "west-adjacent-0-0.png"
+        },
+        {
+          "t": 1695.2000000001863,
+          "x": "49.4363%",
+          "y": "66.6667%",
+          "direction": "west",
+          "pose": "walk",
+          "frame": "1",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 474.58856787383144,
+            "y": 360
+          },
+          "image": "west-adjacent-1-1.png"
+        },
+        {
+          "t": 1726.7999999998137,
+          "x": "49.3728%",
+          "y": "66.6667%",
+          "direction": "west",
+          "pose": "walk",
+          "frame": "2",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 473.97924789719593,
+            "y": 360
+          },
+          "image": "west-adjacent-2-2.png"
+        },
+        {
+          "t": 1743.2999999998137,
+          "x": "49.341%",
+          "y": "66.6667%",
+          "direction": "west",
+          "pose": "walk",
+          "frame": "3",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 473.67367301401833,
+            "y": 360
+          },
+          "image": "west-adjacent-3-3.png"
+        },
+        {
+          "t": 1780.5999999996275,
+          "x": "49.2775%",
+          "y": "66.6667%",
+          "direction": "west",
+          "pose": "walk",
+          "frame": "4",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 473.06435303738283,
+            "y": 360
+          },
+          "image": "west-adjacent-4-4.png"
+        },
+        {
+          "t": 1818.0999999996275,
+          "x": "49.2141%",
+          "y": "66.6667%",
+          "direction": "west",
+          "pose": "walk",
+          "frame": "5",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 472.4550330607473,
+            "y": 360
+          },
+          "image": "west-adjacent-5-5.png"
+        },
+        {
+          "t": 1844.7000000001863,
+          "x": "49.1506%",
+          "y": "66.6667%",
+          "direction": "west",
+          "pose": "walk",
+          "frame": "6",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 471.84571308411176,
+            "y": 360
+          },
+          "image": "west-adjacent-6-6.png"
+        },
+        {
+          "t": 1877.5999999996275,
+          "x": "49.0869%",
+          "y": "66.6667%",
+          "direction": "west",
+          "pose": "walk",
+          "frame": "7",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 471.2345633177566,
+            "y": 360
+          },
+          "image": "west-adjacent-7-7.png"
+        }
+      ],
+      "loopFrames": [
+        {
+          "t": 1594.8999999994412,
+          "x": "49.6269%",
+          "y": "66.6667%",
+          "direction": "west",
+          "pose": "walk",
+          "frame": "30",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 476.4183575934576,
+            "y": 360
+          },
+          "image": "west-loopFrames-0-30.png"
+        },
+        {
+          "t": 1627.8999999994412,
+          "x": "49.5634%",
+          "y": "66.6667%",
+          "direction": "west",
+          "pose": "walk",
+          "frame": "31",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 475.8090376168221,
+            "y": 360
+          },
+          "image": "west-loopFrames-1-31.png"
+        },
+        {
+          "t": 1660.0999999996275,
+          "x": "49.4996%",
+          "y": "66.6667%",
+          "direction": "west",
+          "pose": "walk",
+          "frame": "0",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 475.1960580607473,
+            "y": 360
+          },
+          "image": "west-loopFrames-2-0.png"
+        },
+        {
+          "t": 1695.2000000001863,
+          "x": "49.4363%",
+          "y": "66.6667%",
+          "direction": "west",
+          "pose": "walk",
+          "frame": "1",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 474.58856787383144,
+            "y": 360
+          },
+          "image": "west-loopFrames-3-1.png"
+        }
+      ],
+      "frames": [
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        10,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13
+      ],
+      "elapsed": 5182.5999999996275,
+      "actor": {
+        "key": "jinbe",
+        "cell": {
+          "col": 6,
+          "row": 2
+        },
+        "x": 411.1875,
+        "y": 360,
+        "mode": "wander",
+        "phase": 0.6646736856376737,
+        "direction": "west",
+        "dock": null,
+        "jobFurnitureKey": "",
+        "jobLine": "",
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    },
+    {
+      "key": "jinbe",
+      "direction": "south",
+      "goal": {
+        "col": 6,
+        "row": 4
+      },
+      "accepted": true,
+      "before": {
+        "t": 0,
+        "x": "42.832%",
+        "y": "66.6667%",
+        "direction": "west",
+        "pose": "idle",
+        "frame": "21",
+        "action": "1",
+        "source": "acting_v2",
+        "turning": false,
+        "image": "south-00-before-21.png"
+      },
+      "samples": [
+        {
+          "t": 10.5,
+          "x": "42.832%",
+          "y": "66.6667%",
+          "direction": "west",
+          "pose": "idle",
+          "frame": "0",
+          "action": "1",
+          "source": "acting_v2",
+          "turning": true,
+          "kind": "turn",
+          "image": "south-01-turn-0.png"
+        },
+        {
+          "t": 161.70000000018626,
+          "x": "42.83%",
+          "y": "66.7018%",
+          "direction": "south",
+          "pose": "walk",
+          "frame": "21",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "south-02-walk-21.png"
+        },
+        {
+          "t": 228.29999999981374,
+          "x": "42.8219%",
+          "y": "66.8418%",
+          "direction": "south",
+          "pose": "walk",
+          "frame": "24",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "south-03-walk-24.png"
+        },
+        {
+          "t": 393.79999999981374,
+          "x": "42.8016%",
+          "y": "67.1928%",
+          "direction": "south",
+          "pose": "walk",
+          "frame": "29",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "south-04-walk-29.png"
+        },
+        {
+          "t": 477.79999999981374,
+          "x": "42.7914%",
+          "y": "67.3688%",
+          "direction": "south",
+          "pose": "walk",
+          "frame": "0",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "south-05-walk-0.png"
+        },
+        {
+          "t": 593.9000000003725,
+          "x": "42.7771%",
+          "y": "67.6159%",
+          "direction": "south",
+          "pose": "walk",
+          "frame": "4",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "south-06-walk-4.png"
+        },
+        {
+          "t": 710.6000000005588,
+          "x": "42.7628%",
+          "y": "67.863%",
+          "direction": "south",
+          "pose": "walk",
+          "frame": "8",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "south-07-walk-8.png"
+        },
+        {
+          "t": 877.9000000003725,
+          "x": "42.7423%",
+          "y": "68.2172%",
+          "direction": "south",
+          "pose": "walk",
+          "frame": "13",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "south-08-walk-13.png"
+        },
+        {
+          "t": 944.9000000003725,
+          "x": "42.7341%",
+          "y": "68.3592%",
+          "direction": "south",
+          "pose": "walk",
+          "frame": "16",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "kind": "walk",
+          "image": "south-09-walk-16.png"
+        },
+        {
+          "t": 5363.4000000003725,
+          "x": "42.168%",
+          "y": "78.1481%",
+          "direction": "south",
+          "pose": "idle",
+          "frame": "3",
+          "action": "0",
+          "source": "acting_v2",
+          "turning": false,
+          "kind": "stop",
+          "image": "south-10-stop-3.png"
+        }
+      ],
+      "adjacent": [
+        {
+          "t": 477.79999999981374,
+          "x": "42.7914%",
+          "y": "67.3688%",
+          "direction": "south",
+          "pose": "walk",
+          "frame": "0",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 410.7976660291438,
+            "y": 363.79132646165925
+          },
+          "image": "south-adjacent-0-0.png"
+        },
+        {
+          "t": 510.79999999981374,
+          "x": "42.7873%",
+          "y": "67.4394%",
+          "direction": "south",
+          "pose": "walk",
+          "frame": "1",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 410.7584541802108,
+            "y": 364.17268091402724
+          },
+          "image": "south-adjacent-1-1.png"
+        },
+        {
+          "t": 527.6000000005588,
+          "x": "42.7853%",
+          "y": "67.4745%",
+          "direction": "south",
+          "pose": "walk",
+          "frame": "2",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 410.7389564739774,
+            "y": 364.36230566484625
+          },
+          "image": "south-adjacent-2-2.png"
+        },
+        {
+          "t": 560.4000000003725,
+          "x": "42.7812%",
+          "y": "67.545%",
+          "direction": "south",
+          "pose": "walk",
+          "frame": "3",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 410.699825267493,
+            "y": 364.74287582987097
+          },
+          "image": "south-adjacent-3-3.png"
+        },
+        {
+          "t": 593.9000000003725,
+          "x": "42.7771%",
+          "y": "67.6159%",
+          "direction": "south",
+          "pose": "walk",
+          "frame": "4",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 410.66043434198826,
+            "y": 365.12597188968186
+          },
+          "image": "south-adjacent-4-4.png"
+        },
+        {
+          "t": 627,
+          "x": "42.7731%",
+          "y": "67.6861%",
+          "direction": "south",
+          "pose": "walk",
+          "frame": "5",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 410.6214893021164,
+            "y": 365.50473149314195
+          },
+          "image": "south-adjacent-5-5.png"
+        },
+        {
+          "t": 661.2999999998137,
+          "x": "42.769%",
+          "y": "67.7567%",
+          "direction": "south",
+          "pose": "walk",
+          "frame": "6",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 410.58228451206213,
+            "y": 365.88601729445406
+          },
+          "image": "south-adjacent-6-6.png"
+        },
+        {
+          "t": 677,
+          "x": "42.7669%",
+          "y": "67.7923%",
+          "direction": "south",
+          "pose": "walk",
+          "frame": "7",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 410.5624962273832,
+            "y": 366.07846806309635
+          },
+          "image": "south-adjacent-7-7.png"
+        }
+      ],
+      "loopFrames": [
+        {
+          "t": 411.29999999981374,
+          "x": "42.7996%",
+          "y": "67.2281%",
+          "direction": "south",
+          "pose": "walk",
+          "frame": "30",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 410.87578148158144,
+            "y": 363.03161539481476
+          },
+          "image": "south-loopFrames-0-30.png"
+        },
+        {
+          "t": 443.79999999981374,
+          "x": "42.7955%",
+          "y": "67.2984%",
+          "direction": "south",
+          "pose": "walk",
+          "frame": "31",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 410.8367359847668,
+            "y": 363.41135199128666
+          },
+          "image": "south-loopFrames-1-31.png"
+        },
+        {
+          "t": 477.79999999981374,
+          "x": "42.7914%",
+          "y": "67.3688%",
+          "direction": "south",
+          "pose": "walk",
+          "frame": "0",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 410.7976660291438,
+            "y": 363.79132646165925
+          },
+          "image": "south-loopFrames-2-0.png"
+        },
+        {
+          "t": 510.79999999981374,
+          "x": "42.7873%",
+          "y": "67.4394%",
+          "direction": "south",
+          "pose": "walk",
+          "frame": "1",
+          "action": "2",
+          "source": "motion_v2",
+          "turning": false,
+          "world": {
+            "x": 410.7584541802108,
+            "y": 364.17268091402724
+          },
+          "image": "south-loopFrames-3-1.png"
+        }
+      ],
+      "frames": [
+        21,
+        22,
+        23,
+        24,
+        29,
+        30,
+        31,
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        25,
+        26,
+        27,
+        28,
+        9,
+        10,
+        11,
+        12
+      ],
+      "elapsed": 5369.200000000186,
+      "actor": {
+        "key": "jinbe",
+        "cell": {
+          "col": 6,
+          "row": 4
+        },
+        "x": 404.8125,
+        "y": 422,
+        "mode": "wander",
+        "phase": 0.10409573569899803,
+        "direction": "south",
+        "dock": null,
+        "jobFurnitureKey": "",
+        "jobLine": "",
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": []
+      }
+    }
+  ],
+  "visualAcceptance": false,
+  "errors": [],
+  "missingAssets": [],
+  "artAliases": {},
+  "captureSecurity": "Local QA Chromium disables web security solely to export opui canvas pixels; not an auth or packaged security test",
+  "syntheticArt": false,
+  "candidateRoot": "D:/Codex_Release_Worktrees/launcher-room-animation-1.1.13",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "scripts": {
+    "launcher-room-motion-data.js": "504fb344582f3010c487ed7fb6a735161c3e205770f7bb2692d57df1514bdd1d",
+    "launcher-room-dialogue.js": "e1f106d2ffeacdbe49a72ff53c75c8f17b283b0e34c092d0f5c860cb14d7fc91",
+    "launcher-room-motion.js": "5f41e23f83f43da53f011f0f45c8b982b7c2a5ee6998b634e0e1b4460411a43c",
+    "launcher-room.js": "17d716244be8f9aab054e698e3d302e69d11ced38824facceacacc2fdd7f3b1d"
+  },
+  "assets": [
+    {
+      "path": "images/launcher_room/motion_v2/jinbe/east.webp",
+      "sha256": "a78e17989da193c8efac83a1c1fc2eb22c6a2ea1b49c087ec3368ac18d7ac9ca"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/jinbe/west.webp",
+      "sha256": "e62b36ff534cc8501f58a37217cd3706459bfab800a9af07ce62f18c540f589d"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/jinbe/north.webp",
+      "sha256": "c2be0326847d0b9e4e3cc0b66a10d9701df96bb89508e1e4116f21ab0f9022fd"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/jinbe/south.webp",
+      "sha256": "24ac91c818afb446a40f202ead714cdc30eb5d1516724303161b68566bb4a591"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/jinbe/east.webp",
+      "sha256": "8343cdd0903f39b034c84916bea25e97825485975bf878a95d8e7fe4b4e55973"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/jinbe/west.webp",
+      "sha256": "c79a87bb8cf448d80b8b65beb2262d71dc6de9204d447b2e02b9ab359a60aafc"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/jinbe/north.webp",
+      "sha256": "6619d2304a7ca5d5a493bfc998b0e5b21aac013cdaebd994d460ef62ac5fe9d8"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/jinbe/south.webp",
+      "sha256": "41f4a4dc6507fa7683ded12935f3afe22d08d1ceb731c4c0044620298306aae6"
+    }
+  ],
+  "renderContract": {
+    "shape": {
+      "columns": 8,
+      "rows": 4,
+      "frames": 32,
+      "cell": 128,
+      "width": 1024,
+      "height": 512,
+      "rootX": 64,
+      "rootY": 112
+    },
+    "manifest": {
+      "schema": "one-piece-room-motion/2",
+      "shape": {
+        "walk": {
+          "columns": 8,
+          "rows": 4,
+          "frames": 32,
+          "cell": 128,
+          "root": [
+            64,
+            112
+          ],
+          "depth": {
+            "rows": 20,
+            "totalCells": 160,
+            "slopeVariants": [
+              -0.52,
+              -0.26,
+              0,
+              0.26,
+              0.52
+            ]
+          }
+        },
+        "actions": {
+          "columns": 8,
+          "rows": 4,
+          "frames": 32,
+          "actionCount": 8,
+          "beatsPerAction": 4,
+          "cell": 128,
+          "root": [
+            64,
+            112
+          ]
+        }
+      },
+      "characters": {
+        "brook": {
+          "stride": {
+            "east": 28,
+            "north": 17.36,
+            "south": 17.36,
+            "west": 28
+          },
+          "speed": {
+            "east": 27,
+            "north": 16.74,
+            "south": 16.74,
+            "west": 27
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "chopper": {
+          "stride": {
+            "east": 17,
+            "north": 10.54,
+            "south": 10.54,
+            "west": 17
+          },
+          "speed": {
+            "east": 21,
+            "north": 13.02,
+            "south": 13.02,
+            "west": 21
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "franky": {
+          "stride": {
+            "east": 25,
+            "north": 15.5,
+            "south": 15.5,
+            "west": 25
+          },
+          "speed": {
+            "east": 26,
+            "north": 16.12,
+            "south": 16.12,
+            "west": 26
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "jinbe": {
+          "stride": {
+            "east": 22,
+            "north": 13.64,
+            "south": 13.64,
+            "west": 22
+          },
+          "speed": {
+            "east": 23,
+            "north": 14.26,
+            "south": 14.26,
+            "west": 23
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "luffy": {
+          "stride": {
+            "east": 24,
+            "north": 14.879999999999999,
+            "south": 15,
+            "west": 24
+          },
+          "speed": {
+            "east": 26,
+            "north": 16.12,
+            "south": 17,
+            "west": 26
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "nami": {
+          "stride": {
+            "east": 23,
+            "north": 14.26,
+            "south": 14.26,
+            "west": 23
+          },
+          "speed": {
+            "east": 25,
+            "north": 15.5,
+            "south": 15.5,
+            "west": 25
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "robin": {
+          "stride": {
+            "east": 24,
+            "north": 14.879999999999999,
+            "south": 14.879999999999999,
+            "west": 24
+          },
+          "speed": {
+            "east": 25,
+            "north": 15.5,
+            "south": 15.5,
+            "west": 25
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "sanji": {
+          "stride": {
+            "east": 27,
+            "north": 16.74,
+            "south": 16.74,
+            "west": 27
+          },
+          "speed": {
+            "east": 28,
+            "north": 17.36,
+            "south": 17.36,
+            "west": 28
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "usopp": {
+          "stride": {
+            "east": 25,
+            "north": 15.5,
+            "south": 15.5,
+            "west": 25
+          },
+          "speed": {
+            "east": 26,
+            "north": 16.12,
+            "south": 16.12,
+            "west": 26
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "zoro": {
+          "stride": {
+            "east": 26,
+            "north": 16.12,
+            "south": 16.12,
+            "west": 26
+          },
+          "speed": {
+            "east": 27,
+            "north": 16.74,
+            "south": 16.74,
+            "west": 27
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        }
+      }
+    },
+    "actors": [
+      {
+        "key": "c:room-character-jinbe",
+        "rootOffset": "12.5%",
+        "canvas": [
+          128,
+          128
+        ]
+      }
+    ]
+  },
+  "savedRoomUnchanged": true,
+  "video": "normal.webm"
+}

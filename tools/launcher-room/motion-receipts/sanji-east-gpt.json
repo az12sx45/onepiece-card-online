@@ -1,0 +1,47 @@
+{
+  "key": "sanji",
+  "dir": "east",
+  "version": 1,
+  "source": "exec-709cb2ae-71f3-454d-bb07-daf36cac596f.png",
+  "status": "CANDIDATE_VISUALLY_REVIEWED",
+  "review": "East near right eye visible, left eye concealed by pre-timeskip fringe; visible right brow curl retained in all expressions. Continuous sleeves and trousers, knees/boots east. Solid dark shoulder caps; blue collar stub remains on head and torso, overlap calibrated in rig. Optional hand unused.",
+  "generatedWith": "GPT imagegen built-in",
+  "generatedOriginal": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-1739-7141-90bd-461600d8694f\\exec-709cb2ae-71f3-454d-bb07-daf36cac596f.png",
+  "output": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\sanji\\east-01.png",
+  "sha256": "f852b8d9561bfaa363eb950f46a78c40878e0c3735a6afbbb9a92f1b37b0a723",
+  "date": "2026-09-27",
+  "prompt": "Create 12 separate chibi bone-animation cutout parts for canonical PRE-TIMESKIP EastBlue SANJI from ONE PIECE in exact4column×3row equalgrid, genuine transparentPNG. Reference1 approvedSanji turnaround TOPLEFT east; reference2 officialfigurecostume/eye/hairdetails; reference3 Nami rig ONLY cellorder/scalelogic, nevercopyfemaleanatomy/clothes.\nDIRECTION EAST / RIGHT: headnose/chest/knee/shoetoe allRIGHT, no facingfront. NearanatomicalRIGHT; farLEFT. Blondhair covers anatomicalLEFT EYE, so east/profile nearRIGHTeye visible. VisibleRIGHTeyebrow outertemple curl, sameasreference1. Tinychinbeard, no cigar. Blackdoublebreastedjacket sixgoldbuttons (3nearsidebuttonsvisibleprofile), bluepinstripedshirt, darkblue tie, blacktrousers andblackdressshoes. No posttimeskipleftvisibleeye.\nRow1cells1–4 HEADONLY east quiet/happy/annoyed/surprised; exactsamehair/skull/ear/nose/neckgeometry/angle/scale, onlyeye/brow/mouthchange. Rightnear eye visibleeveryhead(excepthappyclosedeye), leftfar eye coveredwithhair. Preserveoutercurledrightbrow. No hearts prop/cigarette. 4expressions readable butnothing changes directionalpose.\nRow2cell5 torso+pelvis east: entireblackjacketwithsolidroundedblackshoulderCAPS and pelvisoverlap, nohead/arms/legs. No sleeves(emptytubeprohibited); sleevesbelongtoarmcells. Bluecollar tie andnear3buttons. Bodycompleteunderneck/shoulders/hips. Cell6 RIGHTnearfullarmshoulder→hand downrest, blacklongsleevecontinuouswithbluecuff,goldcuffbuttons,hand. Cell7 LEFTfarfullarmshoulder→hand samerightview, properleftfingers, noflips. Cell8 RIGHTnearleg fullhip→ankle dressedincontinuousBLACKTROUSER, nofoot, no pelvis.\nRow3cell9 LEFTfarleg fullhip→ankle BLACKTROUSER, nofoot. BOTHlegskneecapfrontRIGHT calfbackLEFT; no barelegs, no missingpantsegments. Cell10RIGHTnearfoot wholeblackdressshoe easttoeRIGHT withshortsockankleoverlap, noleg. Cell11LEFTfarfoot matchingeasttoeRIGHT. Cell12 optionalopenRIGHTbarehandalternate only, noarm/props.\nCompact2.5headstallassembledproportion,head40%height, shortarms/legs, shoessmall. Completehiddenroundedjointsurfaces, opaquecoloredinterior. Eachpiecewithin70%cellwidth/height centeredatleast15%clearalphapadding allaround. Cleananimecelshading. No grid/text/background/completeassembledfigures. No originalcostume. All12cellsexactassignedparts.\n",
+  "imageQA": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\sanji\\east-01-image-qa.json",
+  "identityProvenance": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\turnarounds\\sanji-01-provenance.json",
+  "localImageEdits": "None. Generated original copied unchanged; image read-only QA, downstream Canvas rig is separately identified.",
+  "schema": {
+    "grid": [
+      4,
+      3
+    ],
+    "cells": [
+      "head_quiet",
+      "head_happy",
+      "head_annoyed",
+      "head_surprise",
+      "torso_pelvis",
+      "nearArm",
+      "farArm",
+      "nearLeg",
+      "farLeg",
+      "nearFoot",
+      "farFoot",
+      "accessory_or_optional_hand"
+    ],
+    "nearSide": "RIGHT"
+  },
+  "limitations": [
+    "Faint alpha fringe/specks retained in original GPT output; renderer cleanup separate.",
+    "Generated part padding and anatomical joint placements require custom rectangles and rig calibration.",
+    "Head expression outlines are close but not pixel-identical; common crown anchor is required.",
+    "Candidate rig atlas is not runtime/gameplay/deployment acceptance."
+  ],
+  "promptFile": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\sanji\\east-01-prompt.txt",
+  "originalReceipt": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\sanji\\east-01-provenance.json",
+  "originalReceiptSha256": "7e6447ffb26369e80ed2dead5c2c29c5f7ab547ef87215769a64c896cc9f34af"
+}

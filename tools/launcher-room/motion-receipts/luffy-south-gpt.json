@@ -1,0 +1,8 @@
+{
+  "prompt": "Edit this exact transparent 4-column 3-row twelve-part Luffy animation kit. One targeted correction: the FOUR HEADS in the TOP ROW are too large, touching neighboring hats and clipped at sheet outer edges. Shrink each complete head uniformly to 78 percent of its current size, keeping each at its same cell center, redraw complete missing hat rim tips where clipped. Every top-row head must have at least 30px of fully transparent padding on left and right within its cell and never overlap any neighboring head. Preserve the same four faces, skull shapes, hat color, left-eye scars, same FRONT direction, every detail of the lower eight parts and their positions. Do not add or remove any part. Keep original transparent RGBA background, 4:3 sheet, 4 by 3 cell arrangement. No background, no text, no grid, no shadow. This is a correction of safe sprite gutters, no character redesign.",
+  "reference": "south-01.png",
+  "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-ef1051cd-6091-4623-9f4c-e56411f8a82c.png",
+  "status": "PARTS_VISUALLY_REVIEWED_ASSEMBLY_PENDING",
+  "review": "Four complete separate front heads; anatomical left scar remains viewer right. Front limbs and sandals; no mirror. Torso small sash tail must be hidden behind separate sash, shoulder outline may require source clipping into overlap.",
+  "tool": "built-in imagegen"
+}

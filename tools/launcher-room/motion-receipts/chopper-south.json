@@ -1,0 +1,249 @@
+{
+  "schema": "one-piece-room-rig-receipt/1",
+  "character": "chopper",
+  "direction": "south",
+  "sourcePng": "tools/launcher-room/motion-source-png/chopper-south.png",
+  "sourceSha256": "4a895bf632f510042c210097aa7946f163ca8fe388eef3ee01d58a46b1ed5ec0",
+  "provenance": "tools/launcher-room/motion-receipts/chopper-south-gpt.json",
+  "provenanceSha256": "83771f818512303ad5450fe45e4ace0891dff8e87be190b026ee729f33e55a3f",
+  "rawReceipt": {
+    "path": "tools/launcher-room/motion-receipts/chopper-south-gpt-original.json",
+    "sha256": "7e4b9de690c6f006af401f99dbff71d79da79fdc2aacc80faf7e9e86733f0c08"
+  },
+  "sourceImages": {
+    "sheet": {
+      "sourcePng": "tools/launcher-room/motion-source-png/chopper-south.png",
+      "sourceSha256": "4a895bf632f510042c210097aa7946f163ca8fe388eef3ee01d58a46b1ed5ec0",
+      "provenance": "tools/launcher-room/motion-receipts/chopper-south-gpt.json",
+      "provenanceSha256": "83771f818512303ad5450fe45e4ace0891dff8e87be190b026ee729f33e55a3f",
+      "rawReceipt": {
+        "path": "tools/launcher-room/motion-receipts/chopper-south-gpt-original.json",
+        "sha256": "7e4b9de690c6f006af401f99dbff71d79da79fdc2aacc80faf7e9e86733f0c08"
+      }
+    }
+  },
+  "originalSpecSha256": "a7102fbe3cfd7c6222fe10c3d75f9c122ec6b60449bd12214bdb6eefa78be489",
+  "rigSpec": "tools/launcher-room/rig-specs/chopper-south.json",
+  "rigSpecSha256": "375e07d16f356e56f1520639799198d7e1e3f03736726956f9688aafe494c6d7",
+  "selectedPlanSha256": "cd7bdb59fb34bc2132bcaea0a6a71f42c4efecb9f59d4d0e51b9bc3c3fa24a3c",
+  "review": {
+    "status": "reviewed",
+    "notes": "Final GPT source identity and four-direction atlas contact sheets inspected for all ten characters. Root additionally inspected actual-room desktop consecutive phases and loop seam for all ten, five four-turn speaker/listener contact sheets, both widths of final four-way piano/table contacts, and narrow-room samples. No remaining observed pose discontinuity, detached parts, head/body facing mismatch or furniture alignment blocker in reviewed frames. Acceptance is for this precisely hash-bound local candidate. Automated fixtures and frame inspection are not human play, physical-phone testing or a fixed-60fps guarantee; 350ms loaded-host capture gap is retained in evidence. Public deployment verified separately.",
+    "sourceSha256": "4a895bf632f510042c210097aa7946f163ca8fe388eef3ee01d58a46b1ed5ec0",
+    "sourceHashes": {
+      "sheet": "4a895bf632f510042c210097aa7946f163ca8fe388eef3ee01d58a46b1ed5ec0"
+    },
+    "originalSpecSha256": "a7102fbe3cfd7c6222fe10c3d75f9c122ec6b60449bd12214bdb6eefa78be489",
+    "rigSpecSha256": "375e07d16f356e56f1520639799198d7e1e3f03736726956f9688aafe494c6d7",
+    "rendererSha256": "de24e1fa55d835f12e418e12f7dee3199243b3a40394e90ffe8304f8d96edd11",
+    "bakerSha256": "1261fb4dcccf74a3abba4fb59d399a329e951adde3a8c0ddf6aaffae9e635e07",
+    "evidence": [
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-0.json",
+        "sha256": "1bf05df9e2312d86100fe8812f7f33348aa55a347c34f766ba720e7720d71f79"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-1.png",
+        "sha256": "7cf9e05ee46a024b130ffd6a6fd046fee547348389caa5186148b69908e58843"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-2.json",
+        "sha256": "d5253d6aa247ec7e8bdfe09c2d815ddf167971f3893d7f84df1d85ca4cc51c2a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-3.json",
+        "sha256": "f1f084881967eb99df37b06eee07c1cae3d7158a9e50112470753fe6c214df0a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-4.json",
+        "sha256": "beffaf1264fe272f1e1a1e6f5160be8fbb733715bbe22c07fe8d05fec9104cd1"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-5.json",
+        "sha256": "f8a60c11c4229a430dd11019f2bb9ce3f5b8c6e52cd4f4db7e4b7383e0936b78"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-6.png",
+        "sha256": "6f36c71db2d6ad3f6130c19d49fa3b778d3415dcd46c9c116a242b1527823664"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-7.png",
+        "sha256": "2bd7a7a2c8388838c136a569a49a1e71952a4062307dba08b8586faba5befe9a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-8.png",
+        "sha256": "2de79f0786015d81f346b61fa2586c537d23ded37d6d607a9a3a8651b87a7e29"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-9.png",
+        "sha256": "6f36c71db2d6ad3f6130c19d49fa3b778d3415dcd46c9c116a242b1527823664"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-10.png",
+        "sha256": "6dd78610cc9b3b7c3884df4c0ff62f2d818307f4f24f91ab0b8d888620609bc3"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-11.png",
+        "sha256": "81d112dcc953645efad43b3a7c7e8ab2a317524fa1968baf52e53c2425f23a83"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-12.png",
+        "sha256": "eb2ac544d95da6111167ab1a0160eb880b550c6b88461d2813df521b84fd6668"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-13.png",
+        "sha256": "6dd78610cc9b3b7c3884df4c0ff62f2d818307f4f24f91ab0b8d888620609bc3"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-14.png",
+        "sha256": "c740925269ec5401be5a82ec3afa9d669abc6e28d99cdc42927849a57caacb28"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-15.png",
+        "sha256": "3970b3e4303a7d5f9f64f35aa6e78cac34200bcb5d24d6431d9816e86aa440fd"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-16.png",
+        "sha256": "1368b1d7b57b4bdc95210142351b35a1100961b6940fd76594d92de96933d60d"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-17.png",
+        "sha256": "c740925269ec5401be5a82ec3afa9d669abc6e28d99cdc42927849a57caacb28"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-18.png",
+        "sha256": "84959d58f3a841927738fda7275747e55d7db87a72b0ae2ebe974a2a92c98c6d"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-19.png",
+        "sha256": "063c594a59b56edf73b993f1666dbeb2b4a93a3d244d5e5cb7b44e457344684c"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-20.png",
+        "sha256": "87ab3c6d68be83ab50351c87a41ac087632c074e06780a9b2ef202280e29f371"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-21.png",
+        "sha256": "84959d58f3a841927738fda7275747e55d7db87a72b0ae2ebe974a2a92c98c6d"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-22.png",
+        "sha256": "6f36c71db2d6ad3f6130c19d49fa3b778d3415dcd46c9c116a242b1527823664"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-23.png",
+        "sha256": "2bd7a7a2c8388838c136a569a49a1e71952a4062307dba08b8586faba5befe9a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-24.png",
+        "sha256": "2de79f0786015d81f346b61fa2586c537d23ded37d6d607a9a3a8651b87a7e29"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-25.png",
+        "sha256": "6f36c71db2d6ad3f6130c19d49fa3b778d3415dcd46c9c116a242b1527823664"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-26.png",
+        "sha256": "6dd78610cc9b3b7c3884df4c0ff62f2d818307f4f24f91ab0b8d888620609bc3"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-27.png",
+        "sha256": "81d112dcc953645efad43b3a7c7e8ab2a317524fa1968baf52e53c2425f23a83"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-28.png",
+        "sha256": "eb2ac544d95da6111167ab1a0160eb880b550c6b88461d2813df521b84fd6668"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-29.png",
+        "sha256": "6dd78610cc9b3b7c3884df4c0ff62f2d818307f4f24f91ab0b8d888620609bc3"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-30.png",
+        "sha256": "c740925269ec5401be5a82ec3afa9d669abc6e28d99cdc42927849a57caacb28"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-31.png",
+        "sha256": "3970b3e4303a7d5f9f64f35aa6e78cac34200bcb5d24d6431d9816e86aa440fd"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-32.png",
+        "sha256": "1368b1d7b57b4bdc95210142351b35a1100961b6940fd76594d92de96933d60d"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-33.png",
+        "sha256": "c740925269ec5401be5a82ec3afa9d669abc6e28d99cdc42927849a57caacb28"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-34.png",
+        "sha256": "84959d58f3a841927738fda7275747e55d7db87a72b0ae2ebe974a2a92c98c6d"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-35.png",
+        "sha256": "063c594a59b56edf73b993f1666dbeb2b4a93a3d244d5e5cb7b44e457344684c"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-36.png",
+        "sha256": "87ab3c6d68be83ab50351c87a41ac087632c074e06780a9b2ef202280e29f371"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-37.png",
+        "sha256": "84959d58f3a841927738fda7275747e55d7db87a72b0ae2ebe974a2a92c98c6d"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-38.json",
+        "sha256": "c15e227aadd3490a8953bba93f00763381171166cea0bfa7ed6318502ec8db76"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-39.png",
+        "sha256": "be7582f01e1812fba7270a4788b87c96a1a83b14514988b0849baacbdf5dce54"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-40.png",
+        "sha256": "7316c86a722221463c69c44db249e96c44dd915109414ba35278442d405c70f5"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-41.png",
+        "sha256": "3450bdfd9081f465a29dd4ffc3da1f616135b050524dfaba4326edc88a8a0d6c"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-42.png",
+        "sha256": "e8fd1481ba9a2679a5e7324442f7b6dccd61aed5c4e8e988a8cd5d94ee755127"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-43.json",
+        "sha256": "08c6487b5afc5e46413cb804af19181947a8911f763d04a52a48ce7fe3670cc9"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-44.png",
+        "sha256": "77e130df6c394b5b92c7a99a8aad4a07ee86d592e2d24f1aaa005c72f36e9647"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-45.png",
+        "sha256": "125113105cde87b12b352b4dfba5af2bd8abfeb2f2cb7f948390be78d0bdaa6c"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-46.png",
+        "sha256": "c464609a8a3e52c2c16f4279d37e40103365be99503f01aa07b457b0e8256f8e"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-47.png",
+        "sha256": "172bc569237413e4733b1015746d330253d153382d06bfdbb34f2feefe626a61"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-48.json",
+        "sha256": "1ce6e0c6c895b2da80ca8bf1cd998ecf22794d6855c6adeb8619b28cbbfee637"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/chopper-south-final-49.json",
+        "sha256": "c0497cfa744a57881542377bcfc3d9d50b1443e51435739e0e7209f16f75eb3e"
+      }
+    ],
+    "assetHashes": {
+      "motion": "fbd38aa39c4826585cb66896b6d65e731f7fbedd19ad40db2c9e41dd8a4a0a81",
+      "acting": "f591360b999c91951510ebd94db2cf4bb0d098a590f0e42cac743e8d40e99d23"
+    },
+    "specSha256": "375e07d16f356e56f1520639799198d7e1e3f03736726956f9688aafe494c6d7",
+    "reviewer": "Codex root, with independent walk_art_pilot visual review"
+  }
+}

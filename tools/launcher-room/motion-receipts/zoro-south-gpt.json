@@ -1,0 +1,62 @@
+{
+  "candidate": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\zoro\\south-01.png",
+  "gptOriginal": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-a1c5-7fc2-9c4d-857370899a24\\exec-401ed841-97ec-42dc-b288-afeac5cab1c1.png",
+  "sha256": "e149be0f8ccd5f00adb8c116e68cf2de44d68a1907e1f9d0d6d965b27be2a024",
+  "generator": "built-in imagegen",
+  "prompt": "Use case: stylized-concept. Create an animation rig parts atlas for pre-timeskip Roronoa Zoro from ONE PIECE, independently drawn true SOUTH/front view. Input image1 is exact character costume/identity/front direction reference; image2 is the required parts layout/style guide (its direction is east, DO NOT follow that direction). Output transparent RGBA image, aspect ratio 4:3, four equal columns and three equal rows, exactly twelve separate parts in row-major order. Clear transparent gap around EVERY part and all image edges; no grid lines, no text, no floor or shadow.\nROW1: 1 quiet watchful head+short neck, 2 confident small smirk head+neck, 3 annoyed frown head+neck, 4 surprised head+neck. Exactly same front-facing skull shape, hair silhouette, ears, neck position and size for all four, only facial features change. Both healthy open eyes visible, NO closed/injured eye and NO eye scar. Three gold earrings on anatomical LEFT ear = viewer SCREEN-RIGHT ear only. Spiky cropped green hair; recognizable Zoro, not an original character.\nROW2: 5 headless armless legless torso+pelvis only. Front white short-sleeve shirt core with small front neck opening, green ribbed haramaki and dark pants pelvis. The torso core must have solid rounded hidden shoulders with NO protruding empty sleeve tubes: shirt sleeves belong to separate arm parts. 6 complete anatomical RIGHT arm (called near, screen-left side in front view) shoulder-to-hand including its white sleeve, plain upper arm NO bandana. 7 complete anatomical LEFT arm (called far, screen-right side in front view) shoulder-to-hand including white sleeve and BLACK BANDANA tied on upper arm. 8 anatomical RIGHT full pant leg hip to ankle, NO foot.\nROW3: 9 anatomical LEFT full pant leg hip to ankle, NO foot. 10 anatomical RIGHT black boot/foot, full front-facing toe view and enough boot shaft to overlap pant ankle. 11 anatomical LEFT black boot/foot, front toe view with overlap. 12 exactly three complete sheathed swords bundled as right-hip accessory: ONE WHITE sheath, TWO BLACK/very dark burgundy sheaths, three hilts/guards and complete tips. Match reference hilt diamond patterns, do not invent a fourth sword. Accessory worn anatomical RIGHT = viewer screen-left hip; hilts lean upward screen-right, sheath tips downward screen-left.\nAll limbs drawn neutral relaxed near-straight, front view consistently; arms each single clean part, pant legs show soft full black trousers including hips/knees/ankles, boots NOT embedded in legs. High-quality crisp anime chibi cel shading matching references, consistent outline/detail/color. In actual rig assembly head/torso/hands and feet need overlap, so extend complete hidden roots. Do not draw assembled characters. Never mirror a different direction; preserve anatomical asymmetric accessories. True alpha, no checkerboard.",
+  "direction": "south",
+  "size": [
+    1448,
+    1086
+  ],
+  "mode": "RGBA",
+  "alphaExtrema": [
+    0,
+    255
+  ],
+  "transparentPixelFraction": 0.582226834752704,
+  "cellOrder": [
+    "quiet-head",
+    "confident-head",
+    "annoyed-head",
+    "surprised-head",
+    "torso-pelvis",
+    "near-arm",
+    "far-arm",
+    "near-leg",
+    "far-leg",
+    "near-foot",
+    "far-foot",
+    "sword-bundle"
+  ],
+  "nearAnatomicalSide": "right",
+  "farAnatomicalSide": "left",
+  "identityReference": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\turnarounds\\zoro-02.png",
+  "officialReference": "https://tamashiiweb.com/item/15043/",
+  "status": "CANON_PARTS_REVIEW_PASS_PENDING_ASSEMBLY",
+  "canonicalPassed": [
+    "Pre-timeskip white shirt, green haramaki, dark pants/boots",
+    "No eye injury or scar",
+    "Left ear only three earrings where anatomically visible",
+    "Left arm only black bandana",
+    "Exactly 3 swords: one white, two dark scabbards"
+  ],
+  "assemblyNotes": [
+    "Use manually authored source rectangles; generated object boundaries may extend outside equal cell cuts.",
+    "Heads share shape within this direction; use same anchors and shared head scale within expression set.",
+    "Cross-direction component scale needs calibration against approved turnaround.",
+    "Torso sleeves may need arm overlap; do not stretch torso or rotate head independently.",
+    "Leg ankle overlap must be hidden inside boot shaft.",
+    "Accessory belongs anatomical right hip; west direction it is far side.",
+    "Torso still has rounded sleeve bulges; near/far arm shoulder overlap must hide them, inspect assembled silhouette."
+  ],
+  "notEstablished": [
+    "Joint anchors",
+    "Assembled character fit",
+    "Walking and interaction runtime",
+    "Production acceptance"
+  ],
+  "promptFile": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\zoro\\south-01-prompt.txt",
+  "originalReceipt": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\zoro\\south-01-source-canon-status.json",
+  "originalReceiptSha256": "3f2859794136d45a3497808f4dca32d1e6b679246d3b5ed572bf445f6ee305b0"
+}

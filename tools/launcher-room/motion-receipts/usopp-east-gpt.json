@@ -1,0 +1,65 @@
+{
+  "candidate": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\usopp\\east-01.png",
+  "gptOriginal": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-a1c5-7fc2-9c4d-857370899a24\\exec-a2117352-cf82-4773-92d7-a242dbaae162.png",
+  "sha256": "abfdeebf27f50a6073812d677930d99e53e60327ab63cf092bd9c071550e0d7c",
+  "generator": "built-in imagegen",
+  "prompt": "Use case: stylized-concept. Draw a transparent 12-part skeletal animation rig kit for EAST/screen-right-facing classic pre-timeskip Usopp from ONE PIECE. Reference1 is authoritative identity/costume and EAST camera. Reference2 only demonstrates 4-column 3-row part order, NOT its character. Independent Usopp drawing, no Zoro traits. Precisely match reference chibi anime rendering: long projecting nose, curly black hair, ochre checked headscarf tied at back, round forehead goggles, brown bib overalls, pale blue waist sash and rolled cuffs, olive-brown boots. Bare chest sides/arms, no undershirt. Anatomical LEFT wrist has blue-white striped band; LEFT hip has orange satchel; strap goes RIGHT shoulder to LEFT hip; sash knot/tails LEFT.\nCanvas aspect4:3 actualRGBA transparent, exactly4columns x3rows, every isolated part with generous transparent gutters and no clipping. No text, labels, grids, shadows.\nRow1 four HEAD+shortNECK expressions: quiet attentive, proud boastful big grin, frightened worried grimace, amazed/shocked open mouth. All4 exact same EAST right-facing head silhouette, hair/scarf/goggles/long nose size and neck anchor; only facial features change. No head turns toward viewer, keep hat/hair within cell.\nRow2 cell5 torso+pelvis ONLY, no head/neck/arms/legs. Brown bib and straps, bare hidden shoulder volumes, pale blue sash and small pants pelvis cap. Sash tails left/far side may be barely visible. Satchel strap right shoulder to left hip belongs torso, NO satchel on torso because accessory is separate. Cell6 complete NEAR anatomicalRIGHT arm shoulder-to-fingertips, bare, NO wristband. Cell7 complete FAR anatomicalLEFT arm, bare with BLUE-WHITE striped wristband only this arm. Cell8 NEAR anatomicalRIGHT leg hip-to-ankle, full brown pants with pale rolled cuff and short exposed lower calf overlap, NO boot.\nRow3 cell9 FAR anatomicalLEFT leg same style, NO boot. Cell10 NEAR anatomicalRIGHT olive boot/foot with complete ankle overlap, toes screenRIGHT. Cell11 FAR anatomicalLEFT boot toes screenRIGHT. Cell12 LEFT orange rounded leather SATCHEL accessory, complete gold clasp but without long crossbody strap (strap is torso), perspective suitable far LEFT hip of east-facing body.\nNatural neutral low relaxed limbs with hidden attachment overlap, not posed walking. Independent entire arms, no arms left in torso. No held weapon/slingshot. Keep complete soles and hair within margins. Leg cuffs stay part of legs, footwear detached. True transparency, no original character.",
+  "direction": "east",
+  "size": [
+    1448,
+    1086
+  ],
+  "mode": "RGBA",
+  "alphaExtrema": [
+    0,
+    255
+  ],
+  "edgeAlpha128Counts": {
+    "left": 0,
+    "right": 0,
+    "top": 0,
+    "bottom": 0
+  },
+  "nearAnatomicalSide": "right",
+  "farAnatomicalSide": "left",
+  "identityReference": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\turnarounds\\usopp-02.png",
+  "officialReference": "https://tamashiiweb.com/item/15390/",
+  "status": "CANON_PARTS_REVIEW_PASS_PENDING_ASSEMBLY",
+  "cellOrder": [
+    "quiet-head",
+    "proud-head",
+    "worried-head",
+    "surprised-head",
+    "torso-pelvis",
+    "near-arm",
+    "far-arm",
+    "near-leg",
+    "far-leg",
+    "near-foot",
+    "far-foot",
+    "left-satchel"
+  ],
+  "canonicalPassed": [
+    "Classic brown bib overalls, pale sash/cuffs, ochre checked headscarf and goggles",
+    "Long nose and curly black hair; north heads have no face",
+    "Blue-white striped wristband on anatomical left only",
+    "Satchel strap right shoulder to left hip; sash tails anatomical left"
+  ],
+  "assemblyNotes": [
+    "Manual/component source rectangles required; not blind equal grid crop",
+    "West02 head scaled smaller in atlas to prevent clipping; normalize as shared head set",
+    "Satchel belongs LEFT hip: east far side, west near side, north screen-left, south screen-right",
+    "Torso generated hidden shoulder bulges must be covered by arm shoulder overlap",
+    "Front and rear boot silhouettes similar; confirm actual rear heel raster in assembled north view"
+  ],
+  "notEstablished": [
+    "Joint anchors",
+    "Assembled visual fit",
+    "World support sole motion",
+    "Interaction animation quality",
+    "Production acceptance"
+  ],
+  "promptFile": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\usopp\\east-01-prompt.txt",
+  "originalReceipt": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\usopp\\east-01-source-canon-status.json",
+  "originalReceiptSha256": "8760e824fdb5dfc6777d961ab905faa3f873cd1c8ae0f02969bbf73ad443e8e4"
+}

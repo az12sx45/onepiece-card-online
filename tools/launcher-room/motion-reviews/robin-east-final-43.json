@@ -1,0 +1,656 @@
+{
+  "scope": "Four actual authored speaker/listener turns, local browser fixture",
+  "mode": "chat",
+  "accepted": true,
+  "turns": [
+    {
+      "type": "chat",
+      "phase": "speaking",
+      "sceneId": "nami-robin-1",
+      "sceneCursor": 0,
+      "pair": "nami:robin",
+      "turnIndex": 0,
+      "turns": 4,
+      "line": "你的舊地圖多了一條河，現在沒有了。思考",
+      "samples": [
+        {
+          "key": "c:room-character-nami",
+          "direction": "east",
+          "pose": "focused_use",
+          "frame": "16",
+          "source": "acting_v2",
+          "image": "turn-0-nami-0-16.png"
+        },
+        {
+          "key": "c:room-character-robin",
+          "direction": "west",
+          "pose": "listen",
+          "frame": "28",
+          "source": "acting_v2",
+          "image": "turn-0-robin-1-28.png"
+        },
+        {
+          "key": "c:room-character-nami",
+          "direction": "east",
+          "pose": "focused_use",
+          "frame": "17",
+          "source": "acting_v2",
+          "image": "turn-0-nami-2-17.png"
+        },
+        {
+          "key": "c:room-character-robin",
+          "direction": "west",
+          "pose": "listen",
+          "frame": "29",
+          "source": "acting_v2",
+          "image": "turn-0-robin-3-29.png"
+        },
+        {
+          "key": "c:room-character-nami",
+          "direction": "east",
+          "pose": "focused_use",
+          "frame": "18",
+          "source": "acting_v2",
+          "image": "turn-0-nami-4-18.png"
+        },
+        {
+          "key": "c:room-character-nami",
+          "direction": "east",
+          "pose": "focused_use",
+          "frame": "19",
+          "source": "acting_v2",
+          "image": "turn-0-nami-5-19.png"
+        },
+        {
+          "key": "c:room-character-robin",
+          "direction": "west",
+          "pose": "listen",
+          "frame": "30",
+          "source": "acting_v2",
+          "image": "turn-0-robin-6-30.png"
+        },
+        {
+          "key": "c:room-character-robin",
+          "direction": "west",
+          "pose": "listen",
+          "frame": "31",
+          "source": "acting_v2",
+          "image": "turn-0-robin-7-31.png"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "phase": "speaking",
+      "sceneId": "nami-robin-1",
+      "sceneCursor": 0,
+      "pair": "nami:robin",
+      "turnIndex": 1,
+      "turns": 4,
+      "line": "也許改道了。旁邊那個地名還在。說明",
+      "samples": [
+        {
+          "key": "c:room-character-nami",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "28",
+          "source": "acting_v2",
+          "image": "turn-1-nami-0-28.png"
+        },
+        {
+          "key": "c:room-character-robin",
+          "direction": "west",
+          "pose": "focused_use",
+          "frame": "16",
+          "source": "acting_v2",
+          "image": "turn-1-robin-1-16.png"
+        },
+        {
+          "key": "c:room-character-robin",
+          "direction": "west",
+          "pose": "focused_use",
+          "frame": "17",
+          "source": "acting_v2",
+          "image": "turn-1-robin-2-17.png"
+        },
+        {
+          "key": "c:room-character-nami",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "29",
+          "source": "acting_v2",
+          "image": "turn-1-nami-3-29.png"
+        },
+        {
+          "key": "c:room-character-robin",
+          "direction": "west",
+          "pose": "focused_use",
+          "frame": "18",
+          "source": "acting_v2",
+          "image": "turn-1-robin-4-18.png"
+        },
+        {
+          "key": "c:room-character-robin",
+          "direction": "west",
+          "pose": "focused_use",
+          "frame": "19",
+          "source": "acting_v2",
+          "image": "turn-1-robin-5-19.png"
+        },
+        {
+          "key": "c:room-character-nami",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "30",
+          "source": "acting_v2",
+          "image": "turn-1-nami-6-30.png"
+        },
+        {
+          "key": "c:room-character-nami",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "31",
+          "source": "acting_v2",
+          "image": "turn-1-nami-7-31.png"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "phase": "speaking",
+      "sceneId": "nami-robin-1",
+      "sceneCursor": 0,
+      "pair": "nami:robin",
+      "turnIndex": 2,
+      "turns": 4,
+      "line": "那就先把舊河道用細線補上。專心",
+      "samples": [
+        {
+          "key": "c:room-character-nami",
+          "direction": "east",
+          "pose": "focused_use",
+          "frame": "16",
+          "source": "acting_v2",
+          "image": "turn-2-nami-0-16.png"
+        },
+        {
+          "key": "c:room-character-robin",
+          "direction": "west",
+          "pose": "idle",
+          "frame": "0",
+          "source": "acting_v2",
+          "image": "turn-2-robin-1-0.png"
+        },
+        {
+          "key": "c:room-character-nami",
+          "direction": "east",
+          "pose": "focused_use",
+          "frame": "17",
+          "source": "acting_v2",
+          "image": "turn-2-nami-2-17.png"
+        },
+        {
+          "key": "c:room-character-robin",
+          "direction": "west",
+          "pose": "idle",
+          "frame": "1",
+          "source": "acting_v2",
+          "image": "turn-2-robin-3-1.png"
+        },
+        {
+          "key": "c:room-character-nami",
+          "direction": "east",
+          "pose": "focused_use",
+          "frame": "18",
+          "source": "acting_v2",
+          "image": "turn-2-nami-4-18.png"
+        },
+        {
+          "key": "c:room-character-nami",
+          "direction": "east",
+          "pose": "focused_use",
+          "frame": "19",
+          "source": "acting_v2",
+          "image": "turn-2-nami-5-19.png"
+        },
+        {
+          "key": "c:room-character-robin",
+          "direction": "west",
+          "pose": "idle",
+          "frame": "2",
+          "source": "acting_v2",
+          "image": "turn-2-robin-6-2.png"
+        },
+        {
+          "key": "c:room-character-robin",
+          "direction": "west",
+          "pose": "idle",
+          "frame": "3",
+          "source": "acting_v2",
+          "image": "turn-2-robin-7-3.png"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "phase": "speaking",
+      "sceneId": "nami-robin-1",
+      "sceneCursor": 0,
+      "pair": "nami:robin",
+      "turnIndex": 3,
+      "turns": 4,
+      "line": "好。我找年代，你畫位置，正好。點頭",
+      "samples": [
+        {
+          "key": "c:room-character-nami",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "28",
+          "source": "acting_v2",
+          "image": "turn-3-nami-0-28.png"
+        },
+        {
+          "key": "c:room-character-robin",
+          "direction": "west",
+          "pose": "idle",
+          "frame": "0",
+          "source": "acting_v2",
+          "image": "turn-3-robin-1-0.png"
+        },
+        {
+          "key": "c:room-character-nami",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "29",
+          "source": "acting_v2",
+          "image": "turn-3-nami-2-29.png"
+        },
+        {
+          "key": "c:room-character-robin",
+          "direction": "west",
+          "pose": "idle",
+          "frame": "1",
+          "source": "acting_v2",
+          "image": "turn-3-robin-3-1.png"
+        },
+        {
+          "key": "c:room-character-nami",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "30",
+          "source": "acting_v2",
+          "image": "turn-3-nami-4-30.png"
+        },
+        {
+          "key": "c:room-character-robin",
+          "direction": "west",
+          "pose": "idle",
+          "frame": "2",
+          "source": "acting_v2",
+          "image": "turn-3-robin-5-2.png"
+        },
+        {
+          "key": "c:room-character-nami",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "31",
+          "source": "acting_v2",
+          "image": "turn-3-nami-6-31.png"
+        },
+        {
+          "key": "c:room-character-robin",
+          "direction": "west",
+          "pose": "idle",
+          "frame": "3",
+          "source": "acting_v2",
+          "image": "turn-3-robin-7-3.png"
+        }
+      ]
+    }
+  ],
+  "visualAcceptance": false,
+  "errors": [],
+  "missingAssets": [],
+  "artAliases": {},
+  "captureSecurity": "Local QA Chromium disables web security solely to export opui canvas pixels; not an auth or packaged security test",
+  "syntheticArt": false,
+  "candidateRoot": "D:/Codex_Release_Worktrees/launcher-room-animation-1.1.13",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "scripts": {
+    "launcher-room-motion-data.js": "504fb344582f3010c487ed7fb6a735161c3e205770f7bb2692d57df1514bdd1d",
+    "launcher-room-dialogue.js": "e1f106d2ffeacdbe49a72ff53c75c8f17b283b0e34c092d0f5c860cb14d7fc91",
+    "launcher-room-motion.js": "5f41e23f83f43da53f011f0f45c8b982b7c2a5ee6998b634e0e1b4460411a43c",
+    "launcher-room.js": "17d716244be8f9aab054e698e3d302e69d11ced38824facceacacc2fdd7f3b1d"
+  },
+  "assets": [
+    {
+      "path": "images/launcher_room/motion_v2/nami/east.webp",
+      "sha256": "3c54b5375df4d353c9820c0c64a35a4855386aa676ca688860b0a9c6ec8d29cb"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/nami/west.webp",
+      "sha256": "ab5329b25343aa193b58f48523b1b64641da1baf635300c1fc5c5bfbca1dcad6"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/nami/north.webp",
+      "sha256": "d32343b499ffdf390d5879011bea18da5b130b86fa66ac0fdc340f75ab685631"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/nami/south.webp",
+      "sha256": "cad8a5dbb715add8326d27bdc07ff4fac65422d5d3de0e288bef0aa54db20426"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/nami/east.webp",
+      "sha256": "cad447dafb461900983de65db261360837f83d1145e6cb5d2c016891b613b18a"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/nami/west.webp",
+      "sha256": "7382040558a7cc0270518f1167e24e402b4928faefcbee093fb16c3bbb7f810e"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/nami/north.webp",
+      "sha256": "e6b88f431eeded44d2505b31ab8500a3b8094773478bc909ea253affc568af94"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/nami/south.webp",
+      "sha256": "f0eede1c4cc36ae3851942f9b3035614ac002db12556efc47d1eb8462d7f4eaa"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/robin/east.webp",
+      "sha256": "82fc4b80f4613a9e8c1e6c01ba7f6410661105dfd01d3e585f565bcee6b75404"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/robin/west.webp",
+      "sha256": "75ab8dbe0d0214ce82d0ec3d0944aca03262d0bd408580ea3f4cea543fa7fce4"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/robin/north.webp",
+      "sha256": "d85bbdd9c56c646423356f5b43ab319238f4575944320bb5fd2a4771ec693c36"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/robin/south.webp",
+      "sha256": "0cfd82e3820e432867abe847de81a1987db2387b540f3c1197332aef57104bcf"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/robin/east.webp",
+      "sha256": "3189e20b582cf9c8a05ce626886c096fdfbc5a9e91d3c1e238a87da7536b367a"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/robin/west.webp",
+      "sha256": "f7fcbe3839bb8c75eac37c1e2b521b93b47e13f71ddfead1a13b02504b37463c"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/robin/north.webp",
+      "sha256": "eb6e65ff49477cb1d47d70cb50eeffb2b45ebde84d3efa91a7e29cb0213f9c38"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/robin/south.webp",
+      "sha256": "b4960bd0a62d1e97fcd9091927a47bce3c3cba87837a3953faba859ff1097464"
+    }
+  ],
+  "renderContract": {
+    "shape": {
+      "columns": 8,
+      "rows": 4,
+      "frames": 32,
+      "cell": 128,
+      "width": 1024,
+      "height": 512,
+      "rootX": 64,
+      "rootY": 112
+    },
+    "manifest": {
+      "schema": "one-piece-room-motion/2",
+      "shape": {
+        "walk": {
+          "columns": 8,
+          "rows": 4,
+          "frames": 32,
+          "cell": 128,
+          "root": [
+            64,
+            112
+          ],
+          "depth": {
+            "rows": 20,
+            "totalCells": 160,
+            "slopeVariants": [
+              -0.52,
+              -0.26,
+              0,
+              0.26,
+              0.52
+            ]
+          }
+        },
+        "actions": {
+          "columns": 8,
+          "rows": 4,
+          "frames": 32,
+          "actionCount": 8,
+          "beatsPerAction": 4,
+          "cell": 128,
+          "root": [
+            64,
+            112
+          ]
+        }
+      },
+      "characters": {
+        "brook": {
+          "stride": {
+            "east": 28,
+            "north": 17.36,
+            "south": 17.36,
+            "west": 28
+          },
+          "speed": {
+            "east": 27,
+            "north": 16.74,
+            "south": 16.74,
+            "west": 27
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "chopper": {
+          "stride": {
+            "east": 17,
+            "north": 10.54,
+            "south": 10.54,
+            "west": 17
+          },
+          "speed": {
+            "east": 21,
+            "north": 13.02,
+            "south": 13.02,
+            "west": 21
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "franky": {
+          "stride": {
+            "east": 25,
+            "north": 15.5,
+            "south": 15.5,
+            "west": 25
+          },
+          "speed": {
+            "east": 26,
+            "north": 16.12,
+            "south": 16.12,
+            "west": 26
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "jinbe": {
+          "stride": {
+            "east": 22,
+            "north": 13.64,
+            "south": 13.64,
+            "west": 22
+          },
+          "speed": {
+            "east": 23,
+            "north": 14.26,
+            "south": 14.26,
+            "west": 23
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "luffy": {
+          "stride": {
+            "east": 24,
+            "north": 14.879999999999999,
+            "south": 15,
+            "west": 24
+          },
+          "speed": {
+            "east": 26,
+            "north": 16.12,
+            "south": 17,
+            "west": 26
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "nami": {
+          "stride": {
+            "east": 23,
+            "north": 14.26,
+            "south": 14.26,
+            "west": 23
+          },
+          "speed": {
+            "east": 25,
+            "north": 15.5,
+            "south": 15.5,
+            "west": 25
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "robin": {
+          "stride": {
+            "east": 24,
+            "north": 14.879999999999999,
+            "south": 14.879999999999999,
+            "west": 24
+          },
+          "speed": {
+            "east": 25,
+            "north": 15.5,
+            "south": 15.5,
+            "west": 25
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "sanji": {
+          "stride": {
+            "east": 27,
+            "north": 16.74,
+            "south": 16.74,
+            "west": 27
+          },
+          "speed": {
+            "east": 28,
+            "north": 17.36,
+            "south": 17.36,
+            "west": 28
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "usopp": {
+          "stride": {
+            "east": 25,
+            "north": 15.5,
+            "south": 15.5,
+            "west": 25
+          },
+          "speed": {
+            "east": 26,
+            "north": 16.12,
+            "south": 16.12,
+            "west": 26
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "zoro": {
+          "stride": {
+            "east": 26,
+            "north": 16.12,
+            "south": 16.12,
+            "west": 26
+          },
+          "speed": {
+            "east": 27,
+            "north": 16.74,
+            "south": 16.74,
+            "west": 27
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        }
+      }
+    },
+    "actors": [
+      {
+        "key": "c:room-character-nami",
+        "rootOffset": "12.5%",
+        "canvas": [
+          128,
+          128
+        ]
+      },
+      {
+        "key": "c:room-character-robin",
+        "rootOffset": "12.5%",
+        "canvas": [
+          128,
+          128
+        ]
+      }
+    ]
+  },
+  "savedRoomUnchanged": true,
+  "video": "normal.webm"
+}

@@ -1,0 +1,337 @@
+{
+  "schema": "one-piece-room-rig-receipt/1",
+  "character": "brook",
+  "direction": "north",
+  "sourcePng": "tools/launcher-room/motion-source-png/brook-north.png",
+  "sourceSha256": "96715a2a975a6010eb39126cfa30470475d9c3d3ec744e78b7751fa633b8b055",
+  "provenance": "tools/launcher-room/motion-receipts/brook-north-gpt.json",
+  "provenanceSha256": "349291f88c1ce0d05195e89c5639e1b799505d72386c68db6a6537f22d749b81",
+  "sourceImages": {
+    "sheet": {
+      "sourcePng": "tools/launcher-room/motion-source-png/brook-north.png",
+      "sourceSha256": "96715a2a975a6010eb39126cfa30470475d9c3d3ec744e78b7751fa633b8b055",
+      "provenance": "tools/launcher-room/motion-receipts/brook-north-gpt.json",
+      "provenanceSha256": "349291f88c1ce0d05195e89c5639e1b799505d72386c68db6a6537f22d749b81"
+    }
+  },
+  "originalSpecSha256": "db475851dc4a543f2e633edb9354e867c004038cf45c440a260456dde0ab185f",
+  "rigSpec": "tools/launcher-room/rig-specs/brook-north.json",
+  "rigSpecSha256": "34765edd2a41c27e474bd3f8fff65f0240cfa8e5755eb7791f175597cb6f950d",
+  "selectedPlanSha256": "cd7bdb59fb34bc2132bcaea0a6a71f42c4efecb9f59d4d0e51b9bc3c3fa24a3c",
+  "review": {
+    "status": "reviewed",
+    "notes": "Final GPT source identity and four-direction atlas contact sheets inspected for all ten characters. Root additionally inspected actual-room desktop consecutive phases and loop seam for all ten, five four-turn speaker/listener contact sheets, both widths of final four-way piano/table contacts, and narrow-room samples. No remaining observed pose discontinuity, detached parts, head/body facing mismatch or furniture alignment blocker in reviewed frames. Acceptance is for this precisely hash-bound local candidate. Automated fixtures and frame inspection are not human play, physical-phone testing or a fixed-60fps guarantee; 350ms loaded-host capture gap is retained in evidence. Public deployment verified separately.",
+    "sourceSha256": "96715a2a975a6010eb39126cfa30470475d9c3d3ec744e78b7751fa633b8b055",
+    "sourceHashes": {
+      "sheet": "96715a2a975a6010eb39126cfa30470475d9c3d3ec744e78b7751fa633b8b055"
+    },
+    "originalSpecSha256": "db475851dc4a543f2e633edb9354e867c004038cf45c440a260456dde0ab185f",
+    "rigSpecSha256": "34765edd2a41c27e474bd3f8fff65f0240cfa8e5755eb7791f175597cb6f950d",
+    "rendererSha256": "de24e1fa55d835f12e418e12f7dee3199243b3a40394e90ffe8304f8d96edd11",
+    "bakerSha256": "1261fb4dcccf74a3abba4fb59d399a329e951adde3a8c0ddf6aaffae9e635e07",
+    "evidence": [
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-0.json",
+        "sha256": "bb10304c5828e84c07cd2f8fab408dc007f092caf3f1572c92c7b9bd85c6d3c3"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-1.png",
+        "sha256": "94f04c3d35ab367b0ef679f1853bbd7887499cdc5e9b30b2821db9d9c39bafdd"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-2.json",
+        "sha256": "d5253d6aa247ec7e8bdfe09c2d815ddf167971f3893d7f84df1d85ca4cc51c2a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-3.json",
+        "sha256": "f1f084881967eb99df37b06eee07c1cae3d7158a9e50112470753fe6c214df0a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-4.json",
+        "sha256": "660b2800ac1b9e69e0730b26cf9e9435d3ccdbfb4580a5843ddf9f155ed38e18"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-5.json",
+        "sha256": "3f74d1224a95d65afb058444ae86e6ab995dc838d23513c4b1035d961bd72425"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-6.png",
+        "sha256": "8509fd911bc829e0728d3974bb22265690b0755f9a42a53bf61db63df7430128"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-7.png",
+        "sha256": "3d566fc41ce3cf84faad21d875dfad0c71f88455404e4e94e521c6ebdc8a7067"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-8.png",
+        "sha256": "e4b1da98c3a25bdd9b4b3448fc88e5e7d118f9bf8e726862261d93fa45cbac45"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-9.png",
+        "sha256": "8509fd911bc829e0728d3974bb22265690b0755f9a42a53bf61db63df7430128"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-10.png",
+        "sha256": "ce12bf5c67ad2f369e2a6620f4111a5c3b6c8119f8d5e236a366aef47fbd1153"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-11.png",
+        "sha256": "bfabaf41eaa4e5336bac31c9050bbb2a297f6a7776d682dfba76705ec2d08497"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-12.png",
+        "sha256": "02e32ba0efe14cc6b3f16e28cf631b4e027deb3f789f1f252c92430f09ab225d"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-13.png",
+        "sha256": "ce12bf5c67ad2f369e2a6620f4111a5c3b6c8119f8d5e236a366aef47fbd1153"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-14.png",
+        "sha256": "75d55699c4b90bfda38ed502014976201efceaaf24acb249686f3f830d874f36"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-15.png",
+        "sha256": "d9f909037e6ed6d19f11efbac2cd1d8730fd79090f8b667bc18c0882ab361b14"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-16.png",
+        "sha256": "b1c66b5e59f90b101611102bfe54bc6d5c85f01239c6b26172c2082eb850a50c"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-17.png",
+        "sha256": "75d55699c4b90bfda38ed502014976201efceaaf24acb249686f3f830d874f36"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-18.png",
+        "sha256": "5d9cedec81af8d8dc252ee09571f49f42640dce96f698a5566fbb96345700d4e"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-19.png",
+        "sha256": "8895572d4334d4799060af2afa95374aeb95ee70fbfb2a266db41458663ef81f"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-20.png",
+        "sha256": "450f30f368af37a329d66fb3c99c737a269b133c5e563ed687f62bd853a818d9"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-21.png",
+        "sha256": "5d9cedec81af8d8dc252ee09571f49f42640dce96f698a5566fbb96345700d4e"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-22.png",
+        "sha256": "8509fd911bc829e0728d3974bb22265690b0755f9a42a53bf61db63df7430128"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-23.png",
+        "sha256": "3d566fc41ce3cf84faad21d875dfad0c71f88455404e4e94e521c6ebdc8a7067"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-24.png",
+        "sha256": "e4b1da98c3a25bdd9b4b3448fc88e5e7d118f9bf8e726862261d93fa45cbac45"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-25.png",
+        "sha256": "8509fd911bc829e0728d3974bb22265690b0755f9a42a53bf61db63df7430128"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-26.png",
+        "sha256": "ce12bf5c67ad2f369e2a6620f4111a5c3b6c8119f8d5e236a366aef47fbd1153"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-27.png",
+        "sha256": "bfabaf41eaa4e5336bac31c9050bbb2a297f6a7776d682dfba76705ec2d08497"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-28.png",
+        "sha256": "02e32ba0efe14cc6b3f16e28cf631b4e027deb3f789f1f252c92430f09ab225d"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-29.png",
+        "sha256": "ce12bf5c67ad2f369e2a6620f4111a5c3b6c8119f8d5e236a366aef47fbd1153"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-30.png",
+        "sha256": "75d55699c4b90bfda38ed502014976201efceaaf24acb249686f3f830d874f36"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-31.png",
+        "sha256": "d9f909037e6ed6d19f11efbac2cd1d8730fd79090f8b667bc18c0882ab361b14"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-32.png",
+        "sha256": "b1c66b5e59f90b101611102bfe54bc6d5c85f01239c6b26172c2082eb850a50c"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-33.png",
+        "sha256": "75d55699c4b90bfda38ed502014976201efceaaf24acb249686f3f830d874f36"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-34.png",
+        "sha256": "5d9cedec81af8d8dc252ee09571f49f42640dce96f698a5566fbb96345700d4e"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-35.png",
+        "sha256": "8895572d4334d4799060af2afa95374aeb95ee70fbfb2a266db41458663ef81f"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-36.png",
+        "sha256": "450f30f368af37a329d66fb3c99c737a269b133c5e563ed687f62bd853a818d9"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-37.png",
+        "sha256": "5d9cedec81af8d8dc252ee09571f49f42640dce96f698a5566fbb96345700d4e"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-38.json",
+        "sha256": "ecfc361d95369c0b2070c492f75b082ec3256ed108fd80becda1a00be2e2c661"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-39.png",
+        "sha256": "3feb3044891dad2d485b7a8442f7651fa2c605194e73daa348984df4e7441596"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-40.png",
+        "sha256": "795864a4719e44ab265ccc277fc049fff28908fe9ef7a5b549ca61507e57326b"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-41.png",
+        "sha256": "37883898c044a8d392a81bb3896607bc41f30065e905f1f83767c56c0bce03af"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-42.png",
+        "sha256": "0c1075c1cf4ed7f7156bbb1a28169d9150df8d8afb341e6e8edafc0c01161e95"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-43.json",
+        "sha256": "733457c9411769d3b70643e35332029c6c997b0a829b11ea422bc23c76d29637"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-44.png",
+        "sha256": "ff10907efc663eeb86aee88a8713fdba31f87c650b07a5736b22d34707706c6e"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-45.png",
+        "sha256": "56eca8517cd27a18e503ad69026618bf473c548f68fafe7a60abda1fa4a9fc15"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-46.json",
+        "sha256": "bbd1f8335b80b10149d33be91750209e7c559b1e3c32dc7829aa7ae4e83db221"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-47.png",
+        "sha256": "c3e703615a392a8ae7ef8f3755665d7a765ef650dfcb67c957c16c308cb7aa72"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-48.png",
+        "sha256": "57f23112e9558cf4ea1fffb255aadb4c6c0bf9c222088dadc8ecd67942c6cc90"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-49.json",
+        "sha256": "e18836820984a31e5deadb8ea8fa7dccaf2574270de928de149222bf0709ba18"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-50.png",
+        "sha256": "6fea5565f5b53d5d1f42398c76269255f9ddab5013e475fc7e9a978ef119a7ea"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-51.png",
+        "sha256": "5ea49ee7464e6c8005ab9a70d7b102bb0e0ab6a1e4f63b1317979aba66dd69b1"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-52.json",
+        "sha256": "b801718610d22328fee923143daa2f8011e572a9265c7c187c63396bf8de50fc"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-53.png",
+        "sha256": "e20e102171ab350bc42d3fac86176d278ec27925abda8692bd23fd2c66581ebe"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-54.png",
+        "sha256": "67dada6e64b6dfa9596c3094e082f58d1ac04cdbbadd712569d2e6203994a6b0"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-55.json",
+        "sha256": "622144a9af89784a0025d628ebfcfcc1d3090746152560bdea4f8a02a98e3877"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-56.png",
+        "sha256": "09f67a00b52266e62a352c8321e7be723abc310428a1dee100b637dd07308b59"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-57.png",
+        "sha256": "5276eaecd097bcd0907ecae72b1110cb457d542d7d82b92f5ea73ea5de39f263"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-58.png",
+        "sha256": "94c98039d32d64c878e6b4ee43ef86faf353aa284c50792ec7f9774b5de8b354"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-59.png",
+        "sha256": "db6d6e97f8eadb13834e83b6bb56f16ca7b57a591df37625ba3dde2a4d6c2b09"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-60.json",
+        "sha256": "3b6a48dc22c62ccb01c18c3f9d00b57a9f45d3fa3a3dcd1c27280d314efab749"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-61.png",
+        "sha256": "8f24945f0af28cfae322b2d89eb3fa20d3620561adb37bb0d76b4027286a0301"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-62.png",
+        "sha256": "dbd01607c3d53ab246650f427c3cec51aaf520a79f0e060e6231d7f40fb1c133"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-63.json",
+        "sha256": "bf38dcbc8508f549d395b55dd9a0cbd176b9ec820245a2cdf3069fc53c6ce380"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-64.png",
+        "sha256": "755dee3606743662df63eee00680b27cebd5f9836f1db698fe329f841caffc39"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-65.png",
+        "sha256": "41b3f96ec433caeab7644cdc9cde972c00bad7be5bfe495c8a330f13195278ac"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-66.json",
+        "sha256": "6248d96adae63b1af635d7aafef979e2c78901e6df0e6f72c76f59efd3511d4a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-67.png",
+        "sha256": "3e53d201d349153ec4e7221c905e6a2a003230bf414a8d109b019d94336cc25a"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-68.png",
+        "sha256": "ff310dd7578fc083a06f36a49e2846c40f5780226f373297a14996488fa35860"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-69.json",
+        "sha256": "37b1efc6e4068bc0c03a7ca12e50f8777fc8a23364d58788d97f6ecd83ee10b2"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-70.png",
+        "sha256": "4bf18f915b5a0d682de841bce7d02a558c5d9f50c5af332b5431b019958864e9"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-71.png",
+        "sha256": "b4465165705a860b19eb457b99bc26e3317b3dbc4d7735bce528ea42b1ee70cc"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-72.json",
+        "sha256": "1ce6e0c6c895b2da80ca8bf1cd998ecf22794d6855c6adeb8619b28cbbfee637"
+      },
+      {
+        "path": "tools/launcher-room/motion-reviews/brook-north-final-73.json",
+        "sha256": "c0497cfa744a57881542377bcfc3d9d50b1443e51435739e0e7209f16f75eb3e"
+      }
+    ],
+    "assetHashes": {
+      "motion": "8bf672f520e5e1a2ffef100df2525db6b902c742500756fb8f4c8156ff4dea78",
+      "acting": "31e77e1022b77e33cb037a7dc273d75db8544d945bb5892312a3bd9ea6be1cca"
+    },
+    "specSha256": "34765edd2a41c27e474bd3f8fff65f0240cfa8e5755eb7791f175597cb6f950d",
+    "reviewer": "Codex root, with independent walk_art_pilot visual review"
+  }
+}

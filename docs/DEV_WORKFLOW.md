@@ -1,5 +1,25 @@
 # Dev Workflow
 
+## 2026-09-27 啟動器步態與角色關係重製（1.1.13 驗證中）
+
+使用者否決 1.1.12 的實際走路效果。候選位於 `D:\Codex_Release_Worktrees\launcher-room-animation-1.1.13`，從 `origin/main` 的 `99312fe24` 建立，保留正式 D 槽其他工作。舊版的兩張張腿圖、逐幀外框縮放與左右鏡像已由四方向獨立 GPT 部件圖、連續關節動作及烘焙圖集取代。前期八幀整圖試作因腳步／比例不連續而拒收，保留 QA 歷史。
+
+素材與播放：十名既有草帽角色 × 四方向共 40 組十二格拆件，包含四種表情頭、軀幹、完整近遠手臂、連續近遠腿、腳及原作配件。索隆白衣造型雙眼無疤，香吉士遮眼側、騙人布腕帶／背包、喬巴鹿角銀環及甚平眼疤均按解剖側核對。每方向 32 相位低抬腳步態，八種互動各四拍；頭和身體共同換方向，不翻轉原畫。北南圖另烘焙五種地板斜率，避免梯形房間兩側滑腳；磁碟圖集規格與相位列在 `LAUNCHER_ROOM_MOTION_SPEC_20260926.md`。
+
+可重現建置：根目錄 `.gitattributes` 對逐 byte SHA 核驗的 renderer、spec、receipt、report 與 review 設定精確 `-text`，避免 Windows checkout 自動換行破壞來源鏈。`tools/launcher-room/` 的 `rig-engine.js`、`bake-rig.js`、`build-rig-release.js`、`encode-rig-atlas.py`、`validate-rig-manifest.js` 保存來源、提示詞、校準、原稿與成品 SHA。`desktop/launcher-room-motion.js` 與產生的 `launcher-room-motion-data.js` 依實際路程驅動步態。`launcher-room.js/css` 接完整多輪對話、聽者反應、中斷和家具面向；`launcher.html`、`main.js`、`package.json` 與封裝 QA 載入新模組和 80 張新素材白名單。完整素材、動態房間與 Windows 封裝完成前不升為發布驗收。
+
+2026-09-27 家具站位與一致肖像補正：`desktop/launcher-room.js` 的家具預設動作改為站立操作；四張鋼琴視角圖均沒有琴凳，不再讓角色懸空坐下。鋼琴尋路只選其鍵盤前緣中間格，隨家具四向旋轉；餐桌保持站立操作並選桌心外側格。依真房間手與桌面高度量測，固定餐桌為 125×75、鋼琴為 105×75 stage px；角色以同一實距步態從預留格走至操作面 dock，再走回原格，原家具／角色保存格位與佔地不變。香吉士／布魯克北向專心操作手部高度定向校準，北面前伸手由背部遮擋；布魯克東西向雙手朝鍵盤伸出。`rig-engine.js` 僅新增各 action 可選 nearArm.layer=back，預設層序維持原樣，四個新 spec 已交建置程序實際重烘核對。角色清單與詳情改用 `portrait_v2`（同新版南向待機裁圖），仍先驗既有伺服器商品素材路徑；舊版 catalog 保持相容。語法检查通過，實際十人與家具接合驗證結果另列；QA harness `rig-pilot/final-room-visual.js` 直接讀候選真實 80 圖集、無角色替身，保留正常錄影、實際 canvas 幀及桌機／窄版截圖。
+
+內容：十名角色、45 組關係、135 場四輪日常對话，另有點選、工作、領取、親近、休息和家具台詞。依官方人物資料與互動研究新寫，非逐字搬運原作。詳見 `LAUNCHER_CREW_CANON_20260926.md`。既有工作時長、金幣交易、好友唯讀、商品和存檔規則保持相容。
+
+目前證據：root 與 desktop 的 npm ci 完成；npm start 於隔離本機 18813 埠開啟 Board 入口 200，未連正式資料庫。對話資料 QA 19,214 項、控制器 16 項、模擬整合 72 項、pipeline 隔離 8 項、個人頁／商店 Chromium 97 項通過。真素材房間完成 46 組 capture：20 組十人雙寬度四向走路（80 路線，32 相位及相鄰／循環接縫完整）、10 組四輪配對、16 組四向家具，零缺圖／pageerror，保存配置未被修改。root 看過全部 40 方向發布抽樣、十人桌機連續與接縫圖、五組角色表演、雙寬度家具；未宣稱真人或實體手機驗收。較早的魯夫五斜率實测支撐腳 X 漂移约 0.23–0.99 px、Y约0.40 px，為root加關節座標，不是影像追蹤。Windows build成功，安裝檔253,471,721 bytes，SHA256 7bad0ebd8cc1b4a07489abef853dd8842a70f0503b81dc4886e0f087ff06b37d；實際packaged Electron隔離啟動331項素材及BGM播放通過。40方向explicit review與完整package gate均已通過，公開部署仍待讀回；證據位於 D:\Codex_QA\launcher-room-animation-1.1.13。
+
+封裝容量契約：完整package gate先攔下141,061,364 bytes總素材超過舊128 MiB的問題。實測既有素材123,041,602 bytes仍在原128 MiB內；新80圖集與10portrait共18,019,762 bytes，依本次明確白名單另設20 MiB預算，兩者分別核對且總額不超過148 MiB。安裝檔／updater／publisher的256 MiB硬限制維持原值，全部資源逐檔SHA與完整集合核對仍保留；未壓縮或移除既有BGM與舊版相容素材。
+
+LATTICE 工具目前未提供；本階段官方 Status 回 `BLOCKED / CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，不宣稱保存新任務或完成圖譜。既有 1.1.12 發行紀錄為歷史事實，不作為新版自然步態驗收。
+
+縮圖一致性：desktop/launcher-profile-shop.js 的新版 room_character 商品預覽，以及 launcher-room.js 的庫存／詳情改讀 portrait_v2，由新南向 idle 裁切；server 仍回傳相容舊版啟動器的商品素材欄位，未改商品 ID 或歷史原圖。
+
 ## 2026-09-25 啟動器房間比例、夥伴互動與展示室金幣 1.1.12（已部署）
 
 範圍：回應 1.1.11 角色走路不自然、家具尺寸不一致與圖面操作不直覺的回饋。以 `D:\Codex_Release_Worktrees\launcher-room-social-economy-1.1.12` 隔離工作樹修改啟動器房間與角色社交，保留正式 D 槽的 Board 未提交修改。十位角色仍限既有《航海王》草帽成員；不新增原創角色，也不複製原作逐字台詞。

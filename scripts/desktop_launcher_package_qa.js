@@ -11,6 +11,9 @@ const PACKAGE_PATH = path.join(DESKTOP_ROOT, 'package.json');
 const PACKAGE_LOCK_PATH = path.join(DESKTOP_ROOT, 'package-lock.json');
 
 const MAX_LAUNCHER_ASSET_BYTES = 128 * 1024 * 1024;
+// 1.1.13 adds exactly 80 rig atlases and 10 portraits. Keep the existing media
+// budget intact and account for this separately hash-verified resource set.
+const MAX_ROOM_MOTION_ASSET_BYTES = 20 * 1024 * 1024;
 // Immutable historical program manifests are retained for existing installs.
 const MAX_CATALOG_BYTES = 32 * 1024 * 1024;
 const MAX_ASAR_BYTES = 32 * 1024 * 1024;
@@ -50,6 +53,8 @@ const APP_FILES = [
   'launcher-profile-shop.css',
   'launcher-room.js',
   'launcher-room-dialogue.js',
+  'launcher-room-motion-data.js',
+  'launcher-room-motion.js',
   'launcher-room.css',
   'launcher-updates-ui.js',
   'launcher-account-ui.js',
@@ -63,6 +68,9 @@ const APP_FILES = [
 
 const ROOM_DEPTH_FURNITURE = ['bookshelf', 'helm', 'kitchen-table', 'map-table', 'medicine-cabinet', 'piano', 'swords-rack', 'tangerine-tree', 'tool-bench', 'treasure-chest'];
 const ROOM_DEPTH_CHARACTERS = ['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopper', 'robin', 'franky', 'brook', 'jinbe'];
+const ROOM_MOTION_ASSETS = ROOM_DEPTH_CHARACTERS.flatMap(key =>
+  ['motion', 'acting'].flatMap(kind => ['east', 'west', 'north', 'south'].map(direction => `${kind}_v2/${key}/${direction}.webp`)));
+const ROOM_PORTRAIT_ASSETS = ROOM_DEPTH_CHARACTERS.map(key => `portrait_v2/${key}.webp`);
 const ROOM_DEPTH_ACTION_OVERRIDES = new Set([
   ...['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopper', 'robin', 'brook'].map(key => `${key}/walk2`),
   'franky/talk_annoyed', 'jinbe/sit'
@@ -198,7 +206,9 @@ const EXTRA_RESOURCES = [
       'emotions/jinbe-focused.webp',
       'emotions/jinbe-annoyed.webp',
       'frames/straw-hat.webp', 'frames/ship-wheel.webp',
-      ...ROOM_DEPTH_ASSETS
+      ...ROOM_DEPTH_ASSETS,
+      ...ROOM_MOTION_ASSETS,
+      ...ROOM_PORTRAIT_ASSETS
     ]
   },
   {
@@ -499,7 +509,7 @@ function validateZoroArtOverlay(roomManifest, roomDepth, roomWalk) {
 function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
-  assert(packageJson.version === '1.1.12', 'Desktop launcher version must be 1.1.12 for companion interactions and room layout.');
+  assert(packageJson.version === '1.1.13', 'Desktop launcher version must be 1.1.13 for directional rig animation and crew scenes.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
@@ -578,6 +588,13 @@ function validateSourcePackage() {
     'Room expansion manifest must identify the canonical release.');
   const roomDepth = readJson(path.join(ROOT, 'docs', 'LAUNCHER_ROOM_DEPTH_ART_20260925.json'), 'launcher room depth/action art manifest');
   const roomWalk = readJson(path.join(ROOT, 'docs', 'LAUNCHER_ROOM_WALK_ART_20260925.json'), 'launcher grounded walk art manifest');
+  const roomMotion = readJson(path.join(ROOT, 'docs', 'LAUNCHER_ROOM_MOTION_ART_20260926.json'), 'launcher four-direction motion manifest');
+  assert(roomMotion.version === '1.1.13' && roomMotion.canonicalCharactersOnly === true &&
+    Array.isArray(roomMotion.items) && roomMotion.items.length === ROOM_MOTION_ASSETS.length,
+  'Motion manifest must cover all eighty canonical walking and acting direction atlases.');
+  assertExactJson(sorted(roomMotion.items.map(item => item.asset.replace(/^public\/images\/launcher_room\//, ''))),
+    sorted(ROOM_MOTION_ASSETS), 'Room motion atlas set');
+  const roomMotionStatus = require('../tools/launcher-room/validate-rig-manifest').validate(ROOT);
   assert(roomWalk.version === '1.1.12' && roomWalk.canonicalCharactersOnly === true &&
     Array.isArray(roomWalk.items) && roomWalk.items.length === 8,
   'Grounded walk manifest must cover eight canonical GPT poses.');
@@ -607,7 +624,7 @@ function validateSourcePackage() {
     'Room art manifests must cover original, expansion, and 1.1.11 assets.');
   assertExactJson(sorted(roomDepth.items.map(item => item.asset.replace(/^public\/images\/launcher_room\//, ''))),
     sorted(ROOM_DEPTH_ASSETS), 'Room depth/action art asset set');
-  assertExactJson(sorted([...roomManifest.items, ...roomExpansion.items, ...roomDepth.items].map(item => item.asset.replace(/^public\/images\/launcher_room\//, ''))),
+  assertExactJson(sorted([...roomManifest.items, ...roomExpansion.items, ...roomDepth.items, ...roomMotion.items, ...roomMotion.portraits].map(item => item.asset.replace(/^public\/images\/launcher_room\//, ''))),
     sorted(roomResource.filter), 'Room art manifest output set');
   const zoroOverlay = validateZoroArtOverlay(roomManifest, roomDepth, roomWalk);
   const roomSourceRoot = path.join(ROOT, 'tools', 'launcher-room', 'source-png');
@@ -707,7 +724,7 @@ function validateSourcePackage() {
   }
 
   return { packageJson, iconSizes, sidebar, header, cursorDefault, cursorPointer, cursorPressed,
-    catalog, catalogV3, zoroOverlayStatus: zoroOverlay.status };
+    catalog, catalogV3, roomMotionStatus, zoroOverlayStatus: zoroOverlay.status };
 }
 
 function collectExpectedLauncherAssets() {
@@ -813,7 +830,14 @@ function validateWinUnpacked(winUnpackedPath, source) {
   const actualAssetNames = sorted(actualAssetFiles.map((filePath) => relativePosix(launcherAssetRoot, filePath)));
   assertExactJson(actualAssetNames, sorted(expectedAssets.keys()), 'win-unpacked launcher asset set');
   const launcherBytes = sumFileBytes(actualAssetFiles);
-  assert(launcherBytes <= MAX_LAUNCHER_ASSET_BYTES, `Launcher-only media exceeds ${MAX_LAUNCHER_ASSET_BYTES} bytes.`);
+  const roomMotionFiles = [...ROOM_MOTION_ASSETS, ...ROOM_PORTRAIT_ASSETS]
+    .map(asset => path.join(launcherAssetRoot, 'images', 'launcher_room', ...asset.split('/')));
+  assert(roomMotionFiles.length === 90 && new Set(roomMotionFiles).size === 90, 'Room media budget must cover exactly eighty atlases and ten portraits.');
+  const roomMotionBytes = sumFileBytes(roomMotionFiles);
+  const launcherBaseBytes = launcherBytes - roomMotionBytes;
+  assert(roomMotionBytes <= MAX_ROOM_MOTION_ASSET_BYTES, `Room motion and portraits exceed ${MAX_ROOM_MOTION_ASSET_BYTES} bytes.`);
+  assert(launcherBaseBytes <= MAX_LAUNCHER_ASSET_BYTES, `Existing launcher media exceeds ${MAX_LAUNCHER_ASSET_BYTES} bytes.`);
+  assert(launcherBytes <= MAX_LAUNCHER_ASSET_BYTES + MAX_ROOM_MOTION_ASSET_BYTES, 'Combined launcher media budget exceeded.');
   for (const [packagedName, sourcePath] of expectedAssets) {
     const packagedPath = path.join(launcherAssetRoot, ...packagedName.split('/'));
     assert(sha256File(packagedPath) === sha256File(sourcePath), `Packaged launcher resource differs from source: ${packagedName}`);
@@ -845,7 +869,7 @@ function validateWinUnpacked(winUnpackedPath, source) {
   assert(fs.statSync(packagedIcon, { throwIfNoEntry: false })?.isFile(), 'Packaged resources/launcher-icon.ico is missing.');
   assert(sha256File(packagedIcon) === sha256File(ICON_PATH), 'Packaged launcher icon differs from the approved ICO.');
 
-  return { asarEntries, launcherFiles: actualAssetFiles.length, launcherBytes, catalogFiles: catalogFiles.length, catalogBytes };
+  return { asarEntries, launcherFiles: actualAssetFiles.length, launcherBytes, launcherBaseBytes, roomMotionBytes, catalogFiles: catalogFiles.length, catalogBytes };
 }
 
 function validatePortableExecutable(filePath, label) {
@@ -882,6 +906,8 @@ function main() {
   const options = parseArguments(process.argv.slice(2));
   const source = validateSourcePackage();
   if (options.winUnpacked || options.installer) {
+    assert(source.roomMotionStatus.complete && source.roomMotionStatus.allSelectedArtReviewed,
+      'Release package requires all eighty rig atlases and explicit visual review evidence for every direction.');
     assert(source.zoroOverlayStatus === 'verified',
       'Release package requires a verified Zoro art overlay; candidate art cannot be shipped.');
   }
@@ -893,11 +919,14 @@ function main() {
     `cursors=${source.cursorDefault},${source.cursorPointer},${source.cursorPressed}`,
     'runtimeDeps=1',
     'games=card,board,chess',
+    `roomMotionAssets=${source.roomMotionStatus.assets}`,
+    `roomPortraits=${source.roomMotionStatus.portraits}`,
+    `roomArtReviewed=${source.roomMotionStatus.allSelectedArtReviewed}`,
     `zoroArt=${source.zoroOverlayStatus}`
   ];
   if (options.winUnpacked) {
     const packaged = validateWinUnpacked(options.winUnpacked, source);
-    parts.push(`asarEntries=${packaged.asarEntries}`, `launcherFiles=${packaged.launcherFiles}`, `launcherBytes=${packaged.launcherBytes}`, `catalogFiles=${packaged.catalogFiles}`);
+    parts.push(`asarEntries=${packaged.asarEntries}`, `launcherFiles=${packaged.launcherFiles}`, `launcherBytes=${packaged.launcherBytes}`, `launcherBaseBytes=${packaged.launcherBaseBytes}`, `roomMotionBytes=${packaged.roomMotionBytes}`, `catalogFiles=${packaged.catalogFiles}`);
   }
   if (options.installer) {
     const installer = validateInstaller(options.installer, source.packageJson);

@@ -1,0 +1,63 @@
+{
+  "candidate": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\zoro\\north-03.png",
+  "gptOriginal": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-a1c5-7fc2-9c4d-857370899a24\\exec-a8bccaa9-1c95-4664-a1b7-0dce3004fb60.png",
+  "sha256": "f56e9e756aeee3e0480951193d2bf9082d24544186ff02d8f40be5b797b3473f",
+  "generator": "built-in imagegen",
+  "prompt": "Use case: precise-object-edit. Edit the supplied transparent Zoro NORTH/back-view 4-column by 3-row rig kit. Correct ONLY row 1 sizing and placement: the four back-of-head drawings are too wide and last head is clipped at image right edge. Redraw/reduce ALL FOUR head-and-neck parts uniformly to 86 percent of current head size, complete every hair spike, and center each inside its own equal-width quarter cell. Each of the four heads MUST have a clear transparent gutter of at least 20 pixels on every left/right cell boundary at this canvas size. Keep all four heads truly identical in shape, scale and back orientation with no facial features; three earrings remain only on screen-left anatomical-left ear. Do not crop any hair. Preserve the actual 12-cell 4:3 sheet, all row 2 and row 3 parts and all their appearance; no further torso changes. Actual RGBA transparent background, no text, grid lines, shadows or labels. This is pre-timeskip white-shirt Roronoa Zoro: healthy eyes, green hair, white shirt, green haramaki, dark trousers, black boots, black bandana only left arm, one white and two dark sword scabbards. Image is only a part atlas, not assembled characters.",
+  "direction": "north",
+  "size": [
+    1448,
+    1086
+  ],
+  "mode": "RGBA",
+  "alphaExtrema": [
+    0,
+    255
+  ],
+  "transparentPixelFraction": 0.6831744808359533,
+  "cellOrder": [
+    "quiet-head",
+    "confident-head",
+    "annoyed-head",
+    "surprised-head",
+    "torso-pelvis",
+    "near-arm",
+    "far-arm",
+    "near-leg",
+    "far-leg",
+    "near-foot",
+    "far-foot",
+    "sword-bundle"
+  ],
+  "nearAnatomicalSide": "right",
+  "farAnatomicalSide": "left",
+  "identityReference": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\turnarounds\\zoro-02.png",
+  "officialReference": "https://tamashiiweb.com/item/15043/",
+  "status": "CANON_PARTS_REVIEW_PASS_PENDING_ASSEMBLY",
+  "canonicalPassed": [
+    "Pre-timeskip white shirt, green haramaki, dark pants/boots",
+    "No eye injury or scar",
+    "Left ear only three earrings where anatomically visible",
+    "Left arm only black bandana",
+    "Exactly 3 swords: one white, two dark scabbards"
+  ],
+  "assemblyNotes": [
+    "Use manually authored source rectangles; generated object boundaries may extend outside equal cell cuts.",
+    "Heads share shape within this direction; use same anchors and shared head scale within expression set.",
+    "Cross-direction component scale needs calibration against approved turnaround.",
+    "Torso sleeves may need arm overlap; do not stretch torso or rotate head independently.",
+    "Leg ankle overlap must be hidden inside boot shaft.",
+    "Accessory belongs anatomical right hip; west direction it is far side.",
+    "North03 head parts smaller than previous candidates to keep hair complete; calibrate head scale separately against turnaround.",
+    "Back heads intentionally all identical and have no face; rear heel boots."
+  ],
+  "notEstablished": [
+    "Joint anchors",
+    "Assembled character fit",
+    "Walking and interaction runtime",
+    "Production acceptance"
+  ],
+  "promptFile": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\zoro\\north-03-prompt.txt",
+  "originalReceipt": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\zoro\\north-03-source-canon-status.json",
+  "originalReceiptSha256": "7afae75f1107e2c95d8c80503139368c16fec1ef7e8dc208f1ab5fdab6229f23"
+}

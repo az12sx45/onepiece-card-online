@@ -3,3 +3,16 @@
 /config/desktop-asset-delivery-v1.json -text
 /public/desktop/*.json -text
 /public/desktop/manifests/*.json -text
+
+# Room motion provenance and renderer inputs are verified by raw SHA256.
+/docs/LAUNCHER_ROOM_MOTION_ART_20260926.json -text
+/tools/launcher-room/rig-engine.js -text
+/tools/launcher-room/bake-rig.js -text
+/tools/launcher-room/build-rig-release.js -text
+/tools/launcher-room/encode-rig-atlas.py -text
+/tools/launcher-room/build-rig-portraits.py -text
+/tools/launcher-room/rig-selection.json -text
+/tools/launcher-room/rig-specs/** -text
+/tools/launcher-room/motion-receipts/** -text
+/tools/launcher-room/motion-reviews/** -text
+/tools/launcher-room/rig-build/**/*-report.json -text

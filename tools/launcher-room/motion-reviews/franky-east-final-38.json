@@ -1,0 +1,656 @@
+{
+  "scope": "Four actual authored speaker/listener turns, local browser fixture",
+  "mode": "chat",
+  "accepted": true,
+  "turns": [
+    {
+      "type": "chat",
+      "phase": "speaking",
+      "sceneId": "chopper-franky-1",
+      "sceneCursor": 0,
+      "pair": "chopper:franky",
+      "turnIndex": 0,
+      "turns": 4,
+      "line": "哇！這裡打開以後還有一層！驚喜",
+      "samples": [
+        {
+          "key": "c:room-character-franky",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "28",
+          "source": "acting_v2",
+          "image": "turn-0-franky-0-28.png"
+        },
+        {
+          "key": "c:room-character-chopper",
+          "direction": "west",
+          "pose": "surprised",
+          "frame": "12",
+          "source": "acting_v2",
+          "image": "turn-0-chopper-1-12.png"
+        },
+        {
+          "key": "c:room-character-franky",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "29",
+          "source": "acting_v2",
+          "image": "turn-0-franky-2-29.png"
+        },
+        {
+          "key": "c:room-character-chopper",
+          "direction": "west",
+          "pose": "surprised",
+          "frame": "14",
+          "source": "acting_v2",
+          "image": "turn-0-chopper-3-14.png"
+        },
+        {
+          "key": "c:room-character-chopper",
+          "direction": "west",
+          "pose": "surprised",
+          "frame": "15",
+          "source": "acting_v2",
+          "image": "turn-0-chopper-4-15.png"
+        },
+        {
+          "key": "c:room-character-franky",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "30",
+          "source": "acting_v2",
+          "image": "turn-0-franky-5-30.png"
+        },
+        {
+          "key": "c:room-character-chopper",
+          "direction": "west",
+          "pose": "surprised",
+          "frame": "13",
+          "source": "acting_v2",
+          "image": "turn-0-chopper-6-13.png"
+        },
+        {
+          "key": "c:room-character-franky",
+          "direction": "east",
+          "pose": "listen",
+          "frame": "31",
+          "source": "acting_v2",
+          "image": "turn-0-franky-7-31.png"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "phase": "speaking",
+      "sceneId": "chopper-franky-1",
+      "sceneCursor": 0,
+      "pair": "chopper:franky",
+      "turnIndex": 1,
+      "turns": 4,
+      "line": "特地做給你的，小瓶子不會跟繃帶擠一起。招呼",
+      "samples": [
+        {
+          "key": "c:room-character-franky",
+          "direction": "east",
+          "pose": "wave",
+          "frame": "26",
+          "source": "acting_v2",
+          "image": "turn-1-franky-0-26.png"
+        },
+        {
+          "key": "c:room-character-chopper",
+          "direction": "west",
+          "pose": "listen",
+          "frame": "29",
+          "source": "acting_v2",
+          "image": "turn-1-chopper-1-29.png"
+        },
+        {
+          "key": "c:room-character-franky",
+          "direction": "east",
+          "pose": "wave",
+          "frame": "27",
+          "source": "acting_v2",
+          "image": "turn-1-franky-2-27.png"
+        },
+        {
+          "key": "c:room-character-chopper",
+          "direction": "west",
+          "pose": "listen",
+          "frame": "30",
+          "source": "acting_v2",
+          "image": "turn-1-chopper-3-30.png"
+        },
+        {
+          "key": "c:room-character-franky",
+          "direction": "east",
+          "pose": "wave",
+          "frame": "24",
+          "source": "acting_v2",
+          "image": "turn-1-franky-4-24.png"
+        },
+        {
+          "key": "c:room-character-franky",
+          "direction": "east",
+          "pose": "wave",
+          "frame": "25",
+          "source": "acting_v2",
+          "image": "turn-1-franky-5-25.png"
+        },
+        {
+          "key": "c:room-character-chopper",
+          "direction": "west",
+          "pose": "listen",
+          "frame": "31",
+          "source": "acting_v2",
+          "image": "turn-1-chopper-6-31.png"
+        },
+        {
+          "key": "c:room-character-chopper",
+          "direction": "west",
+          "pose": "listen",
+          "frame": "28",
+          "source": "acting_v2",
+          "image": "turn-1-chopper-7-28.png"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "phase": "speaking",
+      "sceneId": "chopper-franky-1",
+      "sceneCursor": 0,
+      "pair": "chopper:franky",
+      "turnIndex": 2,
+      "turns": 4,
+      "line": "那我拿藥會快很多！不是只有帥而已耶！驚喜",
+      "samples": [
+        {
+          "key": "c:room-character-franky",
+          "direction": "east",
+          "pose": "talk_happy",
+          "frame": "4",
+          "source": "acting_v2",
+          "image": "turn-2-franky-0-4.png"
+        },
+        {
+          "key": "c:room-character-chopper",
+          "direction": "west",
+          "pose": "surprised",
+          "frame": "12",
+          "source": "acting_v2",
+          "image": "turn-2-chopper-1-12.png"
+        },
+        {
+          "key": "c:room-character-franky",
+          "direction": "east",
+          "pose": "talk_happy",
+          "frame": "6",
+          "source": "acting_v2",
+          "image": "turn-2-franky-2-6.png"
+        },
+        {
+          "key": "c:room-character-chopper",
+          "direction": "west",
+          "pose": "surprised",
+          "frame": "14",
+          "source": "acting_v2",
+          "image": "turn-2-chopper-3-14.png"
+        },
+        {
+          "key": "c:room-character-franky",
+          "direction": "east",
+          "pose": "talk_happy",
+          "frame": "7",
+          "source": "acting_v2",
+          "image": "turn-2-franky-4-7.png"
+        },
+        {
+          "key": "c:room-character-chopper",
+          "direction": "west",
+          "pose": "surprised",
+          "frame": "15",
+          "source": "acting_v2",
+          "image": "turn-2-chopper-5-15.png"
+        },
+        {
+          "key": "c:room-character-franky",
+          "direction": "east",
+          "pose": "talk_happy",
+          "frame": "5",
+          "source": "acting_v2",
+          "image": "turn-2-franky-6-5.png"
+        },
+        {
+          "key": "c:room-character-chopper",
+          "direction": "west",
+          "pose": "surprised",
+          "frame": "13",
+          "source": "acting_v2",
+          "image": "turn-2-chopper-7-13.png"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "phase": "speaking",
+      "sceneId": "chopper-franky-1",
+      "sceneCursor": 0,
+      "pair": "chopper:franky",
+      "turnIndex": 3,
+      "turns": 4,
+      "line": "當然，帥和好用，這次一起做到！開懷",
+      "samples": [
+        {
+          "key": "c:room-character-franky",
+          "direction": "east",
+          "pose": "talk_happy",
+          "frame": "5",
+          "source": "acting_v2",
+          "image": "turn-3-franky-0-5.png"
+        },
+        {
+          "key": "c:room-character-chopper",
+          "direction": "west",
+          "pose": "listen",
+          "frame": "29",
+          "source": "acting_v2",
+          "image": "turn-3-chopper-1-29.png"
+        },
+        {
+          "key": "c:room-character-franky",
+          "direction": "east",
+          "pose": "talk_happy",
+          "frame": "6",
+          "source": "acting_v2",
+          "image": "turn-3-franky-2-6.png"
+        },
+        {
+          "key": "c:room-character-franky",
+          "direction": "east",
+          "pose": "talk_happy",
+          "frame": "7",
+          "source": "acting_v2",
+          "image": "turn-3-franky-3-7.png"
+        },
+        {
+          "key": "c:room-character-chopper",
+          "direction": "west",
+          "pose": "listen",
+          "frame": "30",
+          "source": "acting_v2",
+          "image": "turn-3-chopper-4-30.png"
+        },
+        {
+          "key": "c:room-character-franky",
+          "direction": "east",
+          "pose": "talk_happy",
+          "frame": "4",
+          "source": "acting_v2",
+          "image": "turn-3-franky-5-4.png"
+        },
+        {
+          "key": "c:room-character-chopper",
+          "direction": "west",
+          "pose": "listen",
+          "frame": "31",
+          "source": "acting_v2",
+          "image": "turn-3-chopper-6-31.png"
+        },
+        {
+          "key": "c:room-character-chopper",
+          "direction": "west",
+          "pose": "listen",
+          "frame": "28",
+          "source": "acting_v2",
+          "image": "turn-3-chopper-7-28.png"
+        }
+      ]
+    }
+  ],
+  "visualAcceptance": false,
+  "errors": [],
+  "missingAssets": [],
+  "artAliases": {},
+  "captureSecurity": "Local QA Chromium disables web security solely to export opui canvas pixels; not an auth or packaged security test",
+  "syntheticArt": false,
+  "candidateRoot": "D:/Codex_Release_Worktrees/launcher-room-animation-1.1.13",
+  "viewport": {
+    "width": 1280,
+    "height": 1000
+  },
+  "scripts": {
+    "launcher-room-motion-data.js": "504fb344582f3010c487ed7fb6a735161c3e205770f7bb2692d57df1514bdd1d",
+    "launcher-room-dialogue.js": "e1f106d2ffeacdbe49a72ff53c75c8f17b283b0e34c092d0f5c860cb14d7fc91",
+    "launcher-room-motion.js": "5f41e23f83f43da53f011f0f45c8b982b7c2a5ee6998b634e0e1b4460411a43c",
+    "launcher-room.js": "17d716244be8f9aab054e698e3d302e69d11ced38824facceacacc2fdd7f3b1d"
+  },
+  "assets": [
+    {
+      "path": "images/launcher_room/motion_v2/franky/east.webp",
+      "sha256": "ef1a16d8d1c10283f044b649e769d013cf636e33b43e5f367c21276cb082407b"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/franky/west.webp",
+      "sha256": "5cf00ee8ecf62ad0b4cd08c3748e90b8aca9944dc6a9607969f6f797641814b5"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/franky/north.webp",
+      "sha256": "aaf39fe627a16c4b25e5f2a622ad68083ba89d4de1e15cf42d45293a837d1e34"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/franky/south.webp",
+      "sha256": "89f8811a51d04117d0b3214362ca65b03a94f73a5415344bdc15b4aca95cf0eb"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/franky/east.webp",
+      "sha256": "b9c36e64053b635713bea43822149d6427dac21fa2c2d11c37460414e2826485"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/franky/west.webp",
+      "sha256": "626d7005c2b8d867ea99d6421233983861a80b7b5ebf8b755160251ae44a3e1e"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/franky/north.webp",
+      "sha256": "3cbc24e43907b3166daf3d9b81a31cb81f5cdb447b5a25d272bfdd601b8a46f9"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/franky/south.webp",
+      "sha256": "85985cf7dc2ab8dd5e9f4c25257761be9a254cb354a73efa1f310c5a50b05f62"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/chopper/east.webp",
+      "sha256": "dc777d5b63d7d15849e05eca8372ba606c38dfcf3eddcf8557ec5f3c908569c0"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/chopper/west.webp",
+      "sha256": "703b513fa2db01c255409581d6d0f24117c326ba828ec23071f6daa7b6b8c2e0"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/chopper/north.webp",
+      "sha256": "8869230d31d94fdf5e81c0ae9fcb726755fa09ae8780f307fe5a37cab1864efa"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/chopper/south.webp",
+      "sha256": "fbd38aa39c4826585cb66896b6d65e731f7fbedd19ad40db2c9e41dd8a4a0a81"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/chopper/east.webp",
+      "sha256": "4e2d2acd5c5958b6f35a7afa3828f2c322660aef4a123e3ad05a47ab65f8db15"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/chopper/west.webp",
+      "sha256": "dc52f3b01b11fa1fde1246dae10f68bbd087530eda1c3033d4ea7a2d9296e7dd"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/chopper/north.webp",
+      "sha256": "5ee648cadaccc5ee7fdef221f488d6da7834f10116989112e8410d703f0f318f"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/chopper/south.webp",
+      "sha256": "f591360b999c91951510ebd94db2cf4bb0d098a590f0e42cac743e8d40e99d23"
+    }
+  ],
+  "renderContract": {
+    "shape": {
+      "columns": 8,
+      "rows": 4,
+      "frames": 32,
+      "cell": 128,
+      "width": 1024,
+      "height": 512,
+      "rootX": 64,
+      "rootY": 112
+    },
+    "manifest": {
+      "schema": "one-piece-room-motion/2",
+      "shape": {
+        "walk": {
+          "columns": 8,
+          "rows": 4,
+          "frames": 32,
+          "cell": 128,
+          "root": [
+            64,
+            112
+          ],
+          "depth": {
+            "rows": 20,
+            "totalCells": 160,
+            "slopeVariants": [
+              -0.52,
+              -0.26,
+              0,
+              0.26,
+              0.52
+            ]
+          }
+        },
+        "actions": {
+          "columns": 8,
+          "rows": 4,
+          "frames": 32,
+          "actionCount": 8,
+          "beatsPerAction": 4,
+          "cell": 128,
+          "root": [
+            64,
+            112
+          ]
+        }
+      },
+      "characters": {
+        "brook": {
+          "stride": {
+            "east": 28,
+            "north": 17.36,
+            "south": 17.36,
+            "west": 28
+          },
+          "speed": {
+            "east": 27,
+            "north": 16.74,
+            "south": 16.74,
+            "west": 27
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "chopper": {
+          "stride": {
+            "east": 17,
+            "north": 10.54,
+            "south": 10.54,
+            "west": 17
+          },
+          "speed": {
+            "east": 21,
+            "north": 13.02,
+            "south": 13.02,
+            "west": 21
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "franky": {
+          "stride": {
+            "east": 25,
+            "north": 15.5,
+            "south": 15.5,
+            "west": 25
+          },
+          "speed": {
+            "east": 26,
+            "north": 16.12,
+            "south": 16.12,
+            "west": 26
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "jinbe": {
+          "stride": {
+            "east": 22,
+            "north": 13.64,
+            "south": 13.64,
+            "west": 22
+          },
+          "speed": {
+            "east": 23,
+            "north": 14.26,
+            "south": 14.26,
+            "west": 23
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "luffy": {
+          "stride": {
+            "east": 24,
+            "north": 14.879999999999999,
+            "south": 15,
+            "west": 24
+          },
+          "speed": {
+            "east": 26,
+            "north": 16.12,
+            "south": 17,
+            "west": 26
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "nami": {
+          "stride": {
+            "east": 23,
+            "north": 14.26,
+            "south": 14.26,
+            "west": 23
+          },
+          "speed": {
+            "east": 25,
+            "north": 15.5,
+            "south": 15.5,
+            "west": 25
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "robin": {
+          "stride": {
+            "east": 24,
+            "north": 14.879999999999999,
+            "south": 14.879999999999999,
+            "west": 24
+          },
+          "speed": {
+            "east": 25,
+            "north": 15.5,
+            "south": 15.5,
+            "west": 25
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "sanji": {
+          "stride": {
+            "east": 27,
+            "north": 16.74,
+            "south": 16.74,
+            "west": 27
+          },
+          "speed": {
+            "east": 28,
+            "north": 17.36,
+            "south": 17.36,
+            "west": 28
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "usopp": {
+          "stride": {
+            "east": 25,
+            "north": 15.5,
+            "south": 15.5,
+            "west": 25
+          },
+          "speed": {
+            "east": 26,
+            "north": 16.12,
+            "south": 16.12,
+            "west": 26
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "zoro": {
+          "stride": {
+            "east": 26,
+            "north": 16.12,
+            "south": 16.12,
+            "west": 26
+          },
+          "speed": {
+            "east": 27,
+            "north": 16.74,
+            "south": 16.74,
+            "west": 27
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        }
+      }
+    },
+    "actors": [
+      {
+        "key": "c:room-character-franky",
+        "rootOffset": "12.5%",
+        "canvas": [
+          128,
+          128
+        ]
+      },
+      {
+        "key": "c:room-character-chopper",
+        "rootOffset": "12.5%",
+        "canvas": [
+          128,
+          128
+        ]
+      }
+    ]
+  },
+  "savedRoomUnchanged": true,
+  "video": "normal.webm"
+}

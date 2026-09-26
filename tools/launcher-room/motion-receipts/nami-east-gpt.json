@@ -1,0 +1,47 @@
+{
+  "key": "nami",
+  "dir": "east",
+  "version": 2,
+  "source": "exec-8a90ed94-598a-4b5e-81c4-7a213235c974.png",
+  "status": "CANDIDATE_VISUALLY_REVIEWED",
+  "review": "Both patella fronts face east after targeted correction. Four consistent profile expression heads; whole skirt on torso; actual tattoo concealed. Torso shoulder cap solid, separate arms include sleeves. Optional hand not used by rig.",
+  "generatedWith": "GPT imagegen built-in",
+  "generatedOriginal": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-1739-7141-90bd-461600d8694f\\exec-8a90ed94-598a-4b5e-81c4-7a213235c974.png",
+  "output": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\nami\\east-02.png",
+  "sha256": "5fa2ca3c8ecb9bbfbc50e25d2fe9729d2d8d275586d1b4d9359583c13b084f50",
+  "date": "2026-09-27",
+  "prompt": "Edit ONLY the two bare leg cutout cells in this 12-cell 4-column by 3-row transparent Nami rig-parts sheet. Preserve absolutely every other pixel, head/face/hair, torso/skirt, arms, shoes, optional hand, cell locations, scale, true transparent background and all painted anatomy on the other cells.\nBoth leg cutouts must belong to a person facing RIGHT / EAST. Both patella/kneecap convexities must face RIGHT. Both calf muscle bulges must face LEFT / posterior. Bare leg extends continuously from upper thigh hip joint down to ankle, no foot. The problematic far leg in row 3 column 1 currently points its knee LEFT: redraw this limb so its knee points RIGHT and calf LEFT, same leg scale and pose as the near leg in row2 col4, but hand-drawn as the anatomical LEFT/far leg rather than mechanically mirrored. Check row2 col4 near anatomicalRIGHT leg also clearly has knee frontRIGHT calfbackLEFT; adjust only if needed to align same direction. Both feet in row3 cols2/3 already pointRIGHT and must remain unchanged. No labels. No adding parts. Genuine alpha.\n",
+  "imageQA": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\nami\\east-02-image-qa.json",
+  "identityProvenance": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\turnarounds\\nami-03-provenance.json",
+  "localImageEdits": "None. Generated original copied unchanged; image read-only QA, downstream Canvas rig is separately identified.",
+  "schema": {
+    "grid": [
+      4,
+      3
+    ],
+    "cells": [
+      "head_quiet",
+      "head_happy",
+      "head_annoyed",
+      "head_surprise",
+      "torso_pelvis",
+      "nearArm",
+      "farArm",
+      "nearLeg",
+      "farLeg",
+      "nearFoot",
+      "farFoot",
+      "accessory_or_optional_hand"
+    ],
+    "nearSide": "RIGHT"
+  },
+  "limitations": [
+    "Faint alpha fringe/specks retained in original GPT output; renderer cleanup separate.",
+    "Generated part padding and anatomical joint placements require custom rectangles and rig calibration.",
+    "Head expression outlines are close but not pixel-identical; common crown anchor is required.",
+    "Candidate rig atlas is not runtime/gameplay/deployment acceptance."
+  ],
+  "promptFile": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\nami\\east-02-prompt.txt",
+  "originalReceipt": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\nami\\east-02-provenance.json",
+  "originalReceiptSha256": "9cf9dce486a7376fbf30c96a8b583d46821f3f101fbf8ad8c133fdf547cfdb73"
+}

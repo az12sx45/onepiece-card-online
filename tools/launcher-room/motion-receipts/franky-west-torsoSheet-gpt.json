@@ -1,0 +1,11 @@
+{
+  "prompt": "Use case: precise-object-edit. Edit ONLY cell5 (row2 column1 TORSO) of supplied Franky WEST12part RGBA atlas. Other11parts unchanged. Current torso is too front-facing while heads faceLEFT. Repaint true LEFT-FACING SIDE PROFILE with chest/stomach/front of red briefs pointing SCREENLEFT, back SCREENRIGHT. Narrow muscular side silhouette; do not show symmetrical front sixpack or both chest halves. The near LEFT side/back red Hawaiian sleevelessshirt cloth covers most nearbody; open shirt and thin visible abdominal strip along front LEFT edge. Palm-tree motifs, silver side-facing shoulder socket, canonical muscular Franky withstitchedabdomen/redbriefs. No attachedarm parts or ballshoulders. Entiretorso/pelvis sameleftprofile asheads,notonlyturnedchest.\nRemove fixed skin thighs beneath redbriefs; draw only headless torso/hips, terminate alongredbriefleg-opening borders with complete pelvisoverlap,NOskinlegstubs. Independent legs inothercellsprovide thighs. Preserve cell position and neck-to-pelvisheight, sameartstyle. Keep exactlysame fourheads,leftfacingfeet,mechanicalarms,legs,extraopenhand. Truealpha4:3, no textlabels/grid/background/shadow.",
+  "promptFile": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\franky\\west-02-prompt.txt",
+  "source": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0de46-a1c5-7fc2-9c4d-857370899a24\\exec-45a288e7-c152-4d14-8984-ca7a6b09d27c.png",
+  "output": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-kits\\franky\\west-02.png",
+  "sha256": "aeff4c48e9d61875b3083e20fcdc968ceb6412448e9cd9212555deaf0762ce82",
+  "tool": "built-in imagegen",
+  "status": "TORSO_SOURCE_STATIC_REVIEW_PASSED_ASSEMBLY_PENDING",
+  "use": "Only cell5 torso via parts.torso.image=torsoSheet; allotherparts preserved original01",
+  "review": "True sideprofile chest/abdomen/pelvis coherently faces west. Static upperthigh skin in brief opening still present, source polygon clip required. Allsourcebitmaps unpainted."
+}

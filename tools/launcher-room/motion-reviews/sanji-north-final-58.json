@@ -1,0 +1,426 @@
+{
+  "scope": "Actual furniture approach, standing use, and return to reserved floor cell in local browser fixture",
+  "mode": "furniture",
+  "state": {
+    "snapshot": {
+      "interaction": {
+        "type": "furniture",
+        "phase": "speaking"
+      },
+      "walkers": [
+        {
+          "key": "sanji",
+          "cell": {
+            "col": 6,
+            "row": 2
+          },
+          "x": 453.1259621495321,
+          "y": 383.84,
+          "mode": "interact",
+          "phase": 0.2550153149067834,
+          "direction": "east",
+          "dock": {
+            "x": 453.15,
+            "y": 383.84,
+            "z": 402,
+            "side": "east"
+          },
+          "jobFurnitureKey": "",
+          "jobLine": "",
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": []
+        }
+      ]
+    },
+    "actors": [
+      {
+        "key": "c:room-character-sanji",
+        "direction": "east",
+        "pose": "focused_use",
+        "source": "acting_v2",
+        "rect": {
+          "x": 233.85006713867188,
+          "y": 682.2448120117188,
+          "width": 39.51861572265625,
+          "height": 55.39581298828125,
+          "top": 682.2448120117188,
+          "right": 273.3686828613281,
+          "bottom": 737.640625,
+          "left": 233.85006713867188
+        }
+      }
+    ],
+    "objects": [
+      {
+        "key": "f:room-furniture-kitchen-table",
+        "rotation": "1",
+        "rect": {
+          "x": 238.99453735351562,
+          "y": 709.7532958984375,
+          "width": 56.01092529296875,
+          "height": 33.496826171875,
+          "top": 709.7532958984375,
+          "right": 295.0054626464844,
+          "bottom": 743.2501220703125,
+          "left": 238.99453735351562
+        },
+        "asset": "opui://launcher/images/launcher_room/furniture_views/kitchen-table/1.webp"
+      }
+    ],
+    "line": "盤子別疊那麼高。這盤我端。整理餐桌"
+  },
+  "after": {
+    "interaction": null,
+    "walkers": [
+      {
+        "key": "sanji",
+        "cell": {
+          "col": 6,
+          "row": 2
+        },
+        "x": 411.1875,
+        "y": 360,
+        "mode": "wander",
+        "phase": 0.888505934570061,
+        "direction": "north",
+        "dock": null,
+        "jobFurnitureKey": "",
+        "jobLine": "",
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 5,
+            "row": 2
+          },
+          {
+            "col": 5,
+            "row": 3
+          },
+          {
+            "col": 5,
+            "row": 4
+          },
+          {
+            "col": 5,
+            "row": 5
+          }
+        ]
+      }
+    ]
+  },
+  "visualAcceptance": false,
+  "errors": [],
+  "missingAssets": [],
+  "artAliases": {},
+  "captureSecurity": "Local QA Chromium disables web security solely to export opui canvas pixels; not an auth or packaged security test",
+  "syntheticArt": false,
+  "candidateRoot": "D:/Codex_Release_Worktrees/launcher-room-animation-1.1.13",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "scripts": {
+    "launcher-room-motion-data.js": "504fb344582f3010c487ed7fb6a735161c3e205770f7bb2692d57df1514bdd1d",
+    "launcher-room-dialogue.js": "e1f106d2ffeacdbe49a72ff53c75c8f17b283b0e34c092d0f5c860cb14d7fc91",
+    "launcher-room-motion.js": "5f41e23f83f43da53f011f0f45c8b982b7c2a5ee6998b634e0e1b4460411a43c",
+    "launcher-room.js": "17d716244be8f9aab054e698e3d302e69d11ced38824facceacacc2fdd7f3b1d"
+  },
+  "assets": [
+    {
+      "path": "images/launcher_room/motion_v2/sanji/east.webp",
+      "sha256": "9a520a9ca338ef2f627a31eabada86739bff95b9d594428d4571d271ffe0e6f0"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/sanji/west.webp",
+      "sha256": "d323531b56b98ac864d65d15ac9446405fe04e11b48eea85eaf38d8c1f44b04e"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/sanji/north.webp",
+      "sha256": "e9c83952b3e091c24902beb1dd43bf2f0c212b137a5396fe16c30559c6308bd7"
+    },
+    {
+      "path": "images/launcher_room/motion_v2/sanji/south.webp",
+      "sha256": "b03bd3c19e94bdf9cc411db861eb3c2176cb0caace5feba0b9bb97f928d080ce"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/sanji/east.webp",
+      "sha256": "cbf6471e9b1e7cbe397694387311f5694d1ac1f3f5c61794bde4fe2f6cd60cc1"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/sanji/west.webp",
+      "sha256": "00103771ff624e6a273ae97abe910dfa7be78f624377b52f62e17ad947129c5e"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/sanji/north.webp",
+      "sha256": "154a9b89aa43ccaad850f9d07185a028aa16098b0b4bfa67cc849923273aeeb8"
+    },
+    {
+      "path": "images/launcher_room/acting_v2/sanji/south.webp",
+      "sha256": "6783f8b70defafeeb227eb267dd3cfc1cec710639e2d62322562537415a65cb0"
+    }
+  ],
+  "renderContract": {
+    "shape": {
+      "columns": 8,
+      "rows": 4,
+      "frames": 32,
+      "cell": 128,
+      "width": 1024,
+      "height": 512,
+      "rootX": 64,
+      "rootY": 112
+    },
+    "manifest": {
+      "schema": "one-piece-room-motion/2",
+      "shape": {
+        "walk": {
+          "columns": 8,
+          "rows": 4,
+          "frames": 32,
+          "cell": 128,
+          "root": [
+            64,
+            112
+          ],
+          "depth": {
+            "rows": 20,
+            "totalCells": 160,
+            "slopeVariants": [
+              -0.52,
+              -0.26,
+              0,
+              0.26,
+              0.52
+            ]
+          }
+        },
+        "actions": {
+          "columns": 8,
+          "rows": 4,
+          "frames": 32,
+          "actionCount": 8,
+          "beatsPerAction": 4,
+          "cell": 128,
+          "root": [
+            64,
+            112
+          ]
+        }
+      },
+      "characters": {
+        "brook": {
+          "stride": {
+            "east": 28,
+            "north": 17.36,
+            "south": 17.36,
+            "west": 28
+          },
+          "speed": {
+            "east": 27,
+            "north": 16.74,
+            "south": 16.74,
+            "west": 27
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "chopper": {
+          "stride": {
+            "east": 17,
+            "north": 10.54,
+            "south": 10.54,
+            "west": 17
+          },
+          "speed": {
+            "east": 21,
+            "north": 13.02,
+            "south": 13.02,
+            "west": 21
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "franky": {
+          "stride": {
+            "east": 25,
+            "north": 15.5,
+            "south": 15.5,
+            "west": 25
+          },
+          "speed": {
+            "east": 26,
+            "north": 16.12,
+            "south": 16.12,
+            "west": 26
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "jinbe": {
+          "stride": {
+            "east": 22,
+            "north": 13.64,
+            "south": 13.64,
+            "west": 22
+          },
+          "speed": {
+            "east": 23,
+            "north": 14.26,
+            "south": 14.26,
+            "west": 23
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "luffy": {
+          "stride": {
+            "east": 24,
+            "north": 14.879999999999999,
+            "south": 15,
+            "west": 24
+          },
+          "speed": {
+            "east": 26,
+            "north": 16.12,
+            "south": 17,
+            "west": 26
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "nami": {
+          "stride": {
+            "east": 23,
+            "north": 14.26,
+            "south": 14.26,
+            "west": 23
+          },
+          "speed": {
+            "east": 25,
+            "north": 15.5,
+            "south": 15.5,
+            "west": 25
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "robin": {
+          "stride": {
+            "east": 24,
+            "north": 14.879999999999999,
+            "south": 14.879999999999999,
+            "west": 24
+          },
+          "speed": {
+            "east": 25,
+            "north": 15.5,
+            "south": 15.5,
+            "west": 25
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "sanji": {
+          "stride": {
+            "east": 27,
+            "north": 16.74,
+            "south": 16.74,
+            "west": 27
+          },
+          "speed": {
+            "east": 28,
+            "north": 17.36,
+            "south": 17.36,
+            "west": 28
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "usopp": {
+          "stride": {
+            "east": 25,
+            "north": 15.5,
+            "south": 15.5,
+            "west": 25
+          },
+          "speed": {
+            "east": 26,
+            "north": 16.12,
+            "south": 16.12,
+            "west": 26
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        },
+        "zoro": {
+          "stride": {
+            "east": 26,
+            "north": 16.12,
+            "south": 16.12,
+            "west": 26
+          },
+          "speed": {
+            "east": 27,
+            "north": 16.74,
+            "south": 16.74,
+            "west": 27
+          },
+          "root": [
+            64,
+            112
+          ],
+          "standingFrame": 0
+        }
+      }
+    },
+    "actors": [
+      {
+        "key": "c:room-character-sanji",
+        "rootOffset": "12.5%",
+        "canvas": [
+          128,
+          128
+        ]
+      }
+    ]
+  },
+  "savedRoomUnchanged": true,
+  "video": "normal.webm"
+}

@@ -1,0 +1,714 @@
+{
+  "character": "luffy",
+  "manifestSha256": "4a208e2ade7a9693bf914c66cdbb000ced16be395376fd46550026b681f7dc11",
+  "state": "explicitly-approved-input",
+  "problems": [],
+  "scope": "Final published pixels and actual room recording evidence; videos remain at QA paths with hashes. Automated collection is not visual acceptance.",
+  "reports": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\report.json",
+      "sha256": "fdd557f5da60c75a7211fdd58ae0f43ef3acc5a04640c74382a1bdabea634f0c",
+      "bytes": 46974
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\report.json",
+      "sha256": "49780960fefc582dd8fa5c701107b814aee78e30fad116292ec6b121fde8dd58",
+      "bytes": 46842
+    }
+  ],
+  "walkReportAssetScope": "Four directional motion atlases only",
+  "unvalidatedPreloads": [
+    {
+      "path": "images/launcher_room/acting_v2/luffy/east.webp",
+      "sha256": "1ddd48b720c7fd1749aaafde019d23120abd50cfccce66906639a29d9894c0a6",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/luffy/west.webp",
+      "sha256": "229fce7d269534001b23fd2dbbc23ce421fa7eac5eff5ca0b083fa2c607710ff",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/luffy/north.webp",
+      "sha256": "20d269928fc35d6f536d27cf1cd92fbeee8a2237fddbcc9367df989df3c366b3",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/luffy/south.webp",
+      "sha256": "8018de6b101d777a8e7b318f332848de7d6325c99db77f28d54a0148abee9b37",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/luffy/east.webp",
+      "sha256": "1ddd48b720c7fd1749aaafde019d23120abd50cfccce66906639a29d9894c0a6",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/luffy/west.webp",
+      "sha256": "229fce7d269534001b23fd2dbbc23ce421fa7eac5eff5ca0b083fa2c607710ff",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/luffy/north.webp",
+      "sha256": "20d269928fc35d6f536d27cf1cd92fbeee8a2237fddbcc9367df989df3c366b3",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    },
+    {
+      "path": "images/launcher_room/acting_v2/luffy/south.webp",
+      "sha256": "8018de6b101d777a8e7b318f332848de7d6325c99db77f28d54a0148abee9b37",
+      "report": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\report.json",
+      "reason": "Preloaded acting atlas is not the asset basis for this walking review; current expressions and furniture are reviewed separately."
+    }
+  ],
+  "adjacentFrames": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\east-adjacent-0-0.png",
+      "direction": "east",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 2730.2999999998137,
+      "world": {
+        "x": 497.1236967289705,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\east-adjacent-1-1.png",
+      "direction": "east",
+      "phase": 1,
+      "viewport": 1280,
+      "timestamp": 2764.5999999996275,
+      "world": {
+        "x": 497.88557570093315,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\east-loopFrames-1-31.png",
+      "direction": "east",
+      "phase": 31,
+      "viewport": 1280,
+      "timestamp": 2713.5999999996275,
+      "world": {
+        "x": 496.7427572429892,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\east-loopFrames-2-0.png",
+      "direction": "east",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 2730.2999999998137,
+      "world": {
+        "x": 497.1236967289705,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\north-adjacent-0-0.png",
+      "direction": "north",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 1784.5,
+      "world": {
+        "x": 553.5359784400001,
+        "y": 405.9381432596108
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\north-adjacent-1-1.png",
+      "direction": "north",
+      "phase": 1,
+      "viewport": 1280,
+      "timestamp": 1819.5999999996275,
+      "world": {
+        "x": 553.4885898819905,
+        "y": 405.4772663032826
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\north-loopFrames-1-31.png",
+      "direction": "north",
+      "phase": 31,
+      "viewport": 1280,
+      "timestamp": 1753.0999999996275,
+      "world": {
+        "x": 553.5832586103912,
+        "y": 406.3979660932186
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\north-loopFrames-2-0.png",
+      "direction": "north",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 1784.5,
+      "world": {
+        "x": 553.5359784400001,
+        "y": 405.9381432596108
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\west-adjacent-0-0.png",
+      "direction": "west",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 1788.2000000001863,
+      "world": {
+        "x": 524.694280373833,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\west-adjacent-1-1.png",
+      "direction": "west",
+      "phase": 1,
+      "viewport": 1280,
+      "timestamp": 1821.1000000005588,
+      "world": {
+        "x": 524.0054838785059,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\west-loopFrames-1-31.png",
+      "direction": "west",
+      "phase": 31,
+      "viewport": 1280,
+      "timestamp": 1753.6000000005588,
+      "world": {
+        "x": 525.3851453271039,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\west-loopFrames-2-0.png",
+      "direction": "west",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 1788.2000000001863,
+      "world": {
+        "x": 524.694280373833,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\south-adjacent-0-0.png",
+      "direction": "south",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 2036.7000000001863,
+      "world": {
+        "x": 456.4593177282288,
+        "y": 377.5987298116744
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\south-adjacent-1-1.png",
+      "direction": "south",
+      "phase": 1,
+      "viewport": 1280,
+      "timestamp": 2071.899999999441,
+      "world": {
+        "x": 456.4433806996537,
+        "y": 378.0637160571603
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\south-loopFrames-1-31.png",
+      "direction": "south",
+      "phase": 31,
+      "viewport": 1280,
+      "timestamp": 2019.7999999998137,
+      "world": {
+        "x": 456.4672817687664,
+        "y": 377.36636721716684
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\south-loopFrames-2-0.png",
+      "direction": "south",
+      "phase": 0,
+      "viewport": 1280,
+      "timestamp": 2036.7000000001863,
+      "world": {
+        "x": 456.4593177282288,
+        "y": 377.5987298116744
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\east-adjacent-0-0.png",
+      "direction": "east",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 333.29999999981374,
+      "world": {
+        "x": 455.316158411215,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\east-adjacent-1-1.png",
+      "direction": "east",
+      "phase": 1,
+      "viewport": 390,
+      "timestamp": 347.3999999994412,
+      "world": {
+        "x": 455.6970978971963,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\east-loopFrames-1-31.png",
+      "direction": "east",
+      "phase": 31,
+      "viewport": 390,
+      "timestamp": 1212.7999999998137,
+      "world": {
+        "x": 475.46032967289636,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\east-loopFrames-2-0.png",
+      "direction": "east",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 1243.699999999255,
+      "world": {
+        "x": 476.2199275700926,
+        "y": 422
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\north-adjacent-0-0.png",
+      "direction": "north",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 381.5,
+      "world": {
+        "x": 554.8491635699663,
+        "y": 418.7095123667315
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\north-adjacent-1-1.png",
+      "direction": "north",
+      "phase": 1,
+      "viewport": 390,
+      "timestamp": 398,
+      "world": {
+        "x": 554.8251435100391,
+        "y": 418.4759055093994
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\north-loopFrames-1-31.png",
+      "direction": "north",
+      "phase": 31,
+      "viewport": 390,
+      "timestamp": 348.20000000018626,
+      "world": {
+        "x": 554.8973739877821,
+        "y": 419.1783823125477
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\north-loopFrames-2-0.png",
+      "direction": "north",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 381.5,
+      "world": {
+        "x": 554.8491635699663,
+        "y": 418.7095123667315
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\west-adjacent-0-0.png",
+      "direction": "west",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 395.90000000037253,
+      "world": {
+        "x": 543.6413551401872,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\west-adjacent-1-1.png",
+      "direction": "west",
+      "phase": 1,
+      "viewport": 390,
+      "timestamp": 415.40000000037253,
+      "world": {
+        "x": 543.2979911214957,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\west-loopFrames-1-31.png",
+      "direction": "west",
+      "phase": 31,
+      "viewport": 390,
+      "timestamp": 361.70000000018626,
+      "world": {
+        "x": 544.3322200934582,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\west-loopFrames-2-0.png",
+      "direction": "west",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 395.90000000037253,
+      "world": {
+        "x": 543.6413551401872,
+        "y": 360
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\south-adjacent-0-0.png",
+      "direction": "south",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 535.3999999994412,
+      "world": {
+        "x": 456.8763774883865,
+        "y": 365.4303979858987
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\south-adjacent-1-1.png",
+      "direction": "south",
+      "phase": 1,
+      "viewport": 390,
+      "timestamp": 569.1999999992549,
+      "world": {
+        "x": 456.8607528572169,
+        "y": 365.88626957766996
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\south-loopFrames-1-31.png",
+      "direction": "south",
+      "phase": 31,
+      "viewport": 390,
+      "timestamp": 1404,
+      "world": {
+        "x": 456.46726396431035,
+        "y": 377.3668866883582
+      }
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\south-loopFrames-2-0.png",
+      "direction": "south",
+      "phase": 0,
+      "viewport": 390,
+      "timestamp": 1418.2999999998137,
+      "world": {
+        "x": 456.45929991710585,
+        "y": 377.59924947738364
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\final-published-contact-sheets\\luffy-published128.png",
+      "sha256": "619e5114bb38c8f20f695e4bf7b443b5a1abea01af62149f1fb0e20a5859b604",
+      "bytes": 394429
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\final-published-contact-sheets\\root-final-pixel-review.json",
+      "sha256": "d5253d6aa247ec7e8bdfe09c2d815ddf167971f3893d7f84df1d85ca4cc51c2a",
+      "bytes": 3130
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\final-published-contact-sheets\\sources.json",
+      "sha256": "f1f084881967eb99df37b06eee07c1cae3d7158a9e50112470753fe6c214df0a",
+      "bytes": 30777
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\report.json",
+      "sha256": "fdd557f5da60c75a7211fdd58ae0f43ef3acc5a04640c74382a1bdabea634f0c",
+      "bytes": 46974
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\report.json",
+      "sha256": "49780960fefc582dd8fa5c701107b814aee78e30fad116292ec6b121fde8dd58",
+      "bytes": 46842
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\east-adjacent-0-0.png",
+      "sha256": "80e15a6837c920477360790f3a2e17b7526ad12cda565912f05526b74ddaa096",
+      "bytes": 12733
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\east-adjacent-1-1.png",
+      "sha256": "bd9d4d56c35050672fd7fdc25eb562319e99e8b95fc48be2bc76fccf5bd5cc73",
+      "bytes": 12694
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\east-loopFrames-1-31.png",
+      "sha256": "c53f5f0400e44e8643aaaebec94f84df7e800d48b3a4c944fa86092fe4cce8f4",
+      "bytes": 12578
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\east-loopFrames-2-0.png",
+      "sha256": "80e15a6837c920477360790f3a2e17b7526ad12cda565912f05526b74ddaa096",
+      "bytes": 12733
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\north-adjacent-0-0.png",
+      "sha256": "13d0d84761363889c0a50d3f9ed5a083f4e39d9b82d7fef68418cc58ef3d2ea8",
+      "bytes": 11958
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\north-adjacent-1-1.png",
+      "sha256": "f864e98a1d55673dac05c08517d62fb5525007096282af6a2cd7054b42eae4f5",
+      "bytes": 11976
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\north-loopFrames-1-31.png",
+      "sha256": "493f24ec0c8a167aef4e5c0752468e2768ef07959ee448156ec5501f99960837",
+      "bytes": 11933
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\north-loopFrames-2-0.png",
+      "sha256": "13d0d84761363889c0a50d3f9ed5a083f4e39d9b82d7fef68418cc58ef3d2ea8",
+      "bytes": 11958
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\west-adjacent-0-0.png",
+      "sha256": "251ed892f70a0aa2563349d50c18d561a5a319054ce8a7fd68ab613a384bb1d5",
+      "bytes": 11796
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\west-adjacent-1-1.png",
+      "sha256": "5133205f4033a17a5b206b71d28e3696268492c236866302c1636ae890963329",
+      "bytes": 11739
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\west-loopFrames-1-31.png",
+      "sha256": "f0bb013ba953dba8bbb3e113ae05e611b2ce9e943d54856f76eb962032b417d0",
+      "bytes": 11815
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\west-loopFrames-2-0.png",
+      "sha256": "251ed892f70a0aa2563349d50c18d561a5a319054ce8a7fd68ab613a384bb1d5",
+      "bytes": 11796
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\south-adjacent-0-0.png",
+      "sha256": "de2860fdf1df0ff9ff91f4944e0e8cb4fb2f6bfc3df2d0a8b8c2e0d47f608b20",
+      "bytes": 14163
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\south-adjacent-1-1.png",
+      "sha256": "78ff598e9af51160520fcbba2f6225f229a971be012189ec33f7f14c7a7758c9",
+      "bytes": 14161
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\south-loopFrames-1-31.png",
+      "sha256": "b17dd9f2f119eaef9ee09b751560163cbd9f448bb51cd8cdb2c05d7ccc91d913",
+      "bytes": 14175
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\south-loopFrames-2-0.png",
+      "sha256": "de2860fdf1df0ff9ff91f4944e0e8cb4fb2f6bfc3df2d0a8b8c2e0d47f608b20",
+      "bytes": 14163
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\east-adjacent-0-0.png",
+      "sha256": "80e15a6837c920477360790f3a2e17b7526ad12cda565912f05526b74ddaa096",
+      "bytes": 12733
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\east-adjacent-1-1.png",
+      "sha256": "bd9d4d56c35050672fd7fdc25eb562319e99e8b95fc48be2bc76fccf5bd5cc73",
+      "bytes": 12694
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\east-loopFrames-1-31.png",
+      "sha256": "c53f5f0400e44e8643aaaebec94f84df7e800d48b3a4c944fa86092fe4cce8f4",
+      "bytes": 12578
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\east-loopFrames-2-0.png",
+      "sha256": "80e15a6837c920477360790f3a2e17b7526ad12cda565912f05526b74ddaa096",
+      "bytes": 12733
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\north-adjacent-0-0.png",
+      "sha256": "13d0d84761363889c0a50d3f9ed5a083f4e39d9b82d7fef68418cc58ef3d2ea8",
+      "bytes": 11958
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\north-adjacent-1-1.png",
+      "sha256": "f864e98a1d55673dac05c08517d62fb5525007096282af6a2cd7054b42eae4f5",
+      "bytes": 11976
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\north-loopFrames-1-31.png",
+      "sha256": "493f24ec0c8a167aef4e5c0752468e2768ef07959ee448156ec5501f99960837",
+      "bytes": 11933
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\north-loopFrames-2-0.png",
+      "sha256": "13d0d84761363889c0a50d3f9ed5a083f4e39d9b82d7fef68418cc58ef3d2ea8",
+      "bytes": 11958
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\west-adjacent-0-0.png",
+      "sha256": "251ed892f70a0aa2563349d50c18d561a5a319054ce8a7fd68ab613a384bb1d5",
+      "bytes": 11796
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\west-adjacent-1-1.png",
+      "sha256": "5133205f4033a17a5b206b71d28e3696268492c236866302c1636ae890963329",
+      "bytes": 11739
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\west-loopFrames-1-31.png",
+      "sha256": "f0bb013ba953dba8bbb3e113ae05e611b2ce9e943d54856f76eb962032b417d0",
+      "bytes": 11815
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\west-loopFrames-2-0.png",
+      "sha256": "251ed892f70a0aa2563349d50c18d561a5a319054ce8a7fd68ab613a384bb1d5",
+      "bytes": 11796
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\south-adjacent-0-0.png",
+      "sha256": "de2860fdf1df0ff9ff91f4944e0e8cb4fb2f6bfc3df2d0a8b8c2e0d47f608b20",
+      "bytes": 14163
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\south-adjacent-1-1.png",
+      "sha256": "78ff598e9af51160520fcbba2f6225f229a971be012189ec33f7f14c7a7758c9",
+      "bytes": 14161
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\south-loopFrames-1-31.png",
+      "sha256": "b17dd9f2f119eaef9ee09b751560163cbd9f448bb51cd8cdb2c05d7ccc91d913",
+      "bytes": 14175
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\south-loopFrames-2-0.png",
+      "sha256": "de2860fdf1df0ff9ff91f4944e0e8cb4fb2f6bfc3df2d0a8b8c2e0d47f608b20",
+      "bytes": 14163
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy-usopp-chat\\report.json",
+      "sha256": "0375d01cbf842b16ce2e4c6757fb56ea97df3bd54e5e4f722348b1a4507decb8",
+      "bytes": 17305
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy-usopp-chat\\turn-0-stage.png",
+      "sha256": "d05cc107161072734926833b128b1320081bf6ab407a08e6fcb3e0b708d34edc",
+      "bytes": 1065154
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy-usopp-chat\\turn-1-stage.png",
+      "sha256": "3505e15a88256ae8a592d99315029377d02890a4725dc77b25b4ea4a3400e96d",
+      "bytes": 1065140
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy-usopp-chat\\turn-2-stage.png",
+      "sha256": "545a0a71fbd19024bc22c3d5516ecabed886d05bef7b689e2a53793e4bb6723c",
+      "bytes": 1065915
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy-usopp-chat\\turn-3-stage.png",
+      "sha256": "eaffe95ef562e51e196111b3bd7d3d43e7d88fa5488903f078ea18e8b4f38398",
+      "bytes": 1064659
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy-usopp-chat\\report.json",
+      "sha256": "45f48646425a314ca6e108e1e4faf207faf57fde3a57a23c80269111a32d8fe9",
+      "bytes": 17303
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy-usopp-chat\\turn-0-stage.png",
+      "sha256": "3650be0fb12cd8db30fc31552aa10dd9eb7b9bb3e7aff53a997ec810a4150a12",
+      "bytes": 176731
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy-usopp-chat\\turn-1-stage.png",
+      "sha256": "1325fd85165fc32872e5a9a5e86f2bb36bcc048a2e2de2f0068fb01f6358fd48",
+      "bytes": 174891
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy-usopp-chat\\turn-2-stage.png",
+      "sha256": "77b0b7646c5361ec3e584dd6d6b01d80dd5e04cf5bfab0269901fcea045f2f6f",
+      "bytes": 177103
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy-usopp-chat\\turn-3-stage.png",
+      "sha256": "f30c262dac45a3cf0198482eece50ae55477a67fd52a184a7a37d2f9bd0639e3",
+      "bytes": 174821
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\explicit-review\\root-approval.json",
+      "sha256": "1ce6e0c6c895b2da80ca8bf1cd998ecf22794d6855c6adeb8619b28cbbfee637",
+      "bytes": 1266
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\visual-review.json",
+      "sha256": "c0497cfa744a57881542377bcfc3d9d50b1443e51435739e0e7209f16f75eb3e",
+      "bytes": 19081
+    }
+  ],
+  "videos": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\normal.webm",
+      "sha256": "7d06b9de258df3901504c55f17fc6d604c0df9a8b46e13c5dd6c89f63b34a9c4",
+      "bytes": 3194381
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy\\half-speed.mp4",
+      "sha256": "96865300b091d45234b20ce0f2f9139bb39c2e44f650468db16a4e4db018b139",
+      "bytes": 16898687
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\normal.webm",
+      "sha256": "2ea1851b768c094628ad44fab437d2cfb11d020b374bc197f72e9c040b04f8f1",
+      "bytes": 1307326
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy\\half-speed.mp4",
+      "sha256": "6ebc8c61e52d472012797a58f45d1ee3066b214486f622bd4fc668c88dcf1c3e",
+      "bytes": 3957925
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy-usopp-chat\\normal.webm",
+      "sha256": "3b93ef295cc2f981409dd84cf54c3519c1b0891d21c43d2fa6c648c7011890d0",
+      "bytes": 1921978
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\1280\\luffy-usopp-chat\\half-speed.mp4",
+      "sha256": "5186b0f8b1ee866dd102db00607b99587bf7a0cef400d64dd6a6cce0e773e331",
+      "bytes": 8775133
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy-usopp-chat\\normal.webm",
+      "sha256": "c6f004cb22f353de7b87776baaf607296e4d7096833da114daa774e31481b946",
+      "bytes": 794451
+    },
+    {
+      "path": "D:\\Codex_QA\\launcher-room-animation-1.1.13\\rig-pilot\\final-room-visual\\390\\luffy-usopp-chat\\half-speed.mp4",
+      "sha256": "18492c1fd67275b023fcd5a79a238a6bc2c3fe4c49a02ebb21b6d22ed626e21f",
+      "bytes": 2129594
+    }
+  ],
+  "visualAcceptance": false
+}
