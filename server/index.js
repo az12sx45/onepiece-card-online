@@ -5202,7 +5202,7 @@ socket.on("PROFILE_GET", async ({ secret }, cb) => {
 // The launcher receives a narrow profile view. Friend visits require the
 // requesting account's secret and an accepted friendship; no social/private
 // stats or account secret leave this endpoint.
-socket.on("LAUNCHER_PROFILE_GET", async ({ secret, userId = 0 } = {}, cb) => {
+socket.on("LAUNCHER_PROFILE_GET", async ({ secret, userId = 0, crewContentRevision } = {}, cb) => {
   try {
     const boardSummaryForUser = async (targetId) => {
       const campaigns = await boardCampaignsForIdentity({ userId: targetId });
@@ -5217,23 +5217,23 @@ socket.on("LAUNCHER_PROFILE_GET", async ({ secret, userId = 0 } = {}, cb) => {
         source: 'saved-campaign'
       };
     };
-    cb?.(await launcherProfileShop.getLauncherProfile(pool, String(secret || '').trim(), userId, boardSummaryForUser));
+    cb?.(await launcherProfileShop.getLauncherProfile(pool, String(secret || '').trim(), userId, boardSummaryForUser, { crewContentRevision }));
   } catch (error) {
     console.error('[LAUNCHER_PROFILE_GET] error:', error);
     cb?.({ ok: false, error: 'profile unavailable' });
   }
 });
 
-socket.on("LAUNCHER_SHOP_GET", async ({ secret, preview = false } = {}, cb) => {
-  try { cb?.(await launcherProfileShop.getLauncherShop(pool, String(secret || '').trim(), preview === true)); }
+socket.on("LAUNCHER_SHOP_GET", async ({ secret, preview = false, crewContentRevision } = {}, cb) => {
+  try { cb?.(await launcherProfileShop.getLauncherShop(pool, String(secret || '').trim(), preview === true, { crewContentRevision })); }
   catch (error) { console.error('[LAUNCHER_SHOP_GET] error:', error); cb?.({ ok: false, error: 'shop unavailable' }); }
 });
 
 for (const [eventName, action] of [['LAUNCHER_SHOP_BUY', 'buy'], ['LAUNCHER_SHOP_EQUIP', 'equip']]) {
-  socket.on(eventName, async ({ secret, itemId } = {}, cb) => {
+  socket.on(eventName, async ({ secret, itemId, crewContentRevision } = {}, cb) => {
     try {
       const normalizedSecret = String(secret || '').trim();
-      const result = await launcherProfileShop.changeLauncherItem(pool, normalizedSecret, itemId, action);
+      const result = await launcherProfileShop.changeLauncherItem(pool, normalizedSecret, itemId, action, { crewContentRevision });
       cb?.(result);
       if (result.ok && action === 'equip' && /^ava-/.test(String(itemId))) {
         try {
@@ -5249,49 +5249,49 @@ for (const [eventName, action] of [['LAUNCHER_SHOP_BUY', 'buy'], ['LAUNCHER_SHOP
   });
 }
 
-socket.on('LAUNCHER_DECORATION_PLACEMENT_SET', async ({ secret, slot, placement } = {}, cb) => {
-  try { cb?.(await launcherProfileShop.setLauncherDecorationPlacement(pool, String(secret || '').trim(), slot, placement)); }
+socket.on('LAUNCHER_DECORATION_PLACEMENT_SET', async ({ secret, slot, placement, crewContentRevision } = {}, cb) => {
+  try { cb?.(await launcherProfileShop.setLauncherDecorationPlacement(pool, String(secret || '').trim(), slot, placement, { crewContentRevision })); }
   catch (error) { console.error('[LAUNCHER_DECORATION_PLACEMENT_SET] error:', error); cb?.({ ok: false, error: 'placement unavailable' }); }
 });
 
-socket.on('LAUNCHER_ROOM_SET', async ({ secret, revision, sceneId, placements, characters, capacityVersion } = {}, cb) => {
+socket.on('LAUNCHER_ROOM_SET', async ({ secret, revision, sceneId, placements, characters, capacityVersion, crewContentRevision } = {}, cb) => {
   try {
     cb?.(await launcherProfileShop.setLauncherRoom(pool, String(secret || '').trim(),
-      { revision, sceneId, placements, characters, capacityVersion }));
+      { revision, sceneId, placements, characters, capacityVersion }, { crewContentRevision }));
   } catch (error) {
     console.error('[LAUNCHER_ROOM_SET] error:', error);
     cb?.({ ok: false, error: 'room unavailable' });
   }
 });
 
-socket.on('LAUNCHER_LIFE_GET', async ({ secret } = {}, cb) => {
-  try { cb?.(await launcherLife.getLauncherLife(pool, String(secret || '').trim())); }
+socket.on('LAUNCHER_LIFE_GET', async ({ secret, crewContentRevision } = {}, cb) => {
+  try { cb?.(await launcherLife.getLauncherLife(pool, String(secret || '').trim(), undefined, { crewContentRevision })); }
   catch (error) { console.error('[LAUNCHER_LIFE_GET] error:', error); cb?.({ ok: false, error: 'life unavailable' }); }
 });
-socket.on('LAUNCHER_LIFE_COMMAND', async ({ secret, requestId, expectedRevision, type, payload } = {}, cb) => {
-  try { cb?.(await launcherLife.commandLauncherLife(pool, String(secret || '').trim(), { requestId, expectedRevision, type, payload })); }
+socket.on('LAUNCHER_LIFE_COMMAND', async ({ secret, requestId, expectedRevision, type, payload, crewContentRevision } = {}, cb) => {
+  try { cb?.(await launcherLife.commandLauncherLife(pool, String(secret || '').trim(), { requestId, expectedRevision, type, payload }, undefined, { crewContentRevision })); }
   catch (error) { console.error('[LAUNCHER_LIFE_COMMAND] error:', error); cb?.({ ok: false, error: 'life unavailable' }); }
 });
 
 for (const [eventName, handler] of [
-  ['LAUNCHER_CHARACTER_GET', (secret, itemId) => launcherProfileShop.getLauncherCharacter(pool, secret, itemId)],
-  ['LAUNCHER_CHARACTER_WORK_START', (secret, itemId) => launcherProfileShop.startLauncherCharacterWork(pool, secret, itemId)],
-  ['LAUNCHER_CHARACTER_WORK_CLAIM', (secret, itemId) => launcherProfileShop.claimLauncherCharacterWork(pool, secret, itemId)]
+  ['LAUNCHER_CHARACTER_GET', (secret, itemId, capability) => launcherProfileShop.getLauncherCharacter(pool, secret, itemId, undefined, capability)],
+  ['LAUNCHER_CHARACTER_WORK_START', (secret, itemId, capability) => launcherProfileShop.startLauncherCharacterWork(pool, secret, itemId, undefined, capability)],
+  ['LAUNCHER_CHARACTER_WORK_CLAIM', (secret, itemId, capability) => launcherProfileShop.claimLauncherCharacterWork(pool, secret, itemId, undefined, capability)]
 ]) {
-  socket.on(eventName, async ({ secret, itemId } = {}, cb) => {
-    try { cb?.(await handler(String(secret || '').trim(), itemId)); }
+  socket.on(eventName, async ({ secret, itemId, crewContentRevision } = {}, cb) => {
+    try { cb?.(await handler(String(secret || '').trim(), itemId, { crewContentRevision })); }
     catch (error) { console.error(`[${eventName}] error:`, error); cb?.({ ok: false, error: 'character unavailable' }); }
   });
 }
-socket.on('LAUNCHER_CHARACTER_INTERACT', async ({ secret, itemId, action } = {}, cb) => {
-  try { cb?.(await launcherProfileShop.interactLauncherCharacter(pool, String(secret || '').trim(), itemId, action)); }
+socket.on('LAUNCHER_CHARACTER_INTERACT', async ({ secret, itemId, action, crewContentRevision } = {}, cb) => {
+  try { cb?.(await launcherProfileShop.interactLauncherCharacter(pool, String(secret || '').trim(), itemId, action, undefined, { crewContentRevision })); }
   catch (error) { console.error('[LAUNCHER_CHARACTER_INTERACT] error:', error); cb?.({ ok: false, error: 'character unavailable' }); }
 });
 
-socket.on('LAUNCHER_CARD_SET', async ({ secret, displayName, tagline, avatarId } = {}, cb) => {
+socket.on('LAUNCHER_CARD_SET', async ({ secret, displayName, tagline, avatarId, crewContentRevision } = {}, cb) => {
   try {
     const normalizedSecret = String(secret || '').trim();
-    const result = await launcherProfileShop.setLauncherCard(pool, normalizedSecret, { displayName, tagline, avatarId });
+    const result = await launcherProfileShop.setLauncherCard(pool, normalizedSecret, { displayName, tagline, avatarId }, { crewContentRevision });
     cb?.(result);
     if (result.ok) {
       try {

@@ -1,0 +1,102 @@
+{
+  "schema": "one-piece-room-reserved-import-report/1",
+  "key": "ace",
+  "asset": "public/images/launcher_room/reserved_v1/ace/portrait.webp",
+  "dimensions": [
+    256,
+    256
+  ],
+  "cell": 256,
+  "columns": 1,
+  "root": [
+    128.0,
+    224.0
+  ],
+  "frames": [
+    {
+      "key": "ace",
+      "direction": "south",
+      "pose": "idle",
+      "source": "ace-master",
+      "region": [
+        627,
+        627,
+        627,
+        627
+      ],
+      "sourceCell": [
+        1,
+        1
+      ],
+      "index": 0,
+      "bounds": [
+        72,
+        23,
+        183,
+        225
+      ],
+      "opaqueBoundsAtOutput": [
+        72,
+        24,
+        182,
+        224
+      ],
+      "sourceAnchor": [
+        866.8660997362884,
+        1237
+      ],
+      "localAnchor": [
+        163.86609973628845,
+        583
+      ],
+      "sourceAlphaBounds": [
+        703,
+        654,
+        1026,
+        1239
+      ],
+      "opaqueBounds": [
+        705,
+        656,
+        319,
+        581
+      ],
+      "opaquePixels": 110198,
+      "removedDistantAlphaPixels": 13316,
+      "sourceOpaqueClearance": [
+        78,
+        29,
+        230,
+        17
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "anchorPolicy": "head-axis-ground-row",
+      "sourceUnitScale": 1.0,
+      "uniformCharacterScale": 0.1721170395869191,
+      "wholeImageScale": 0.3442340791738382,
+      "inverseWholeImageTransform": [
+        2.9050000000000002,
+        0,
+        -207.97390026371158,
+        0,
+        2.9050000000000002,
+        -67.72000000000003
+      ],
+      "rgbaSha256": "bb6aae096fbe63303c3e380d244b6369c8853013534e7d1d19f327fe77f2bbbb",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    }
+  ],
+  "sourceIds": [
+    "ace-master"
+  ],
+  "visualAccepted": false,
+  "humanAcceptance": false
+}

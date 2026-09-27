@@ -286,7 +286,7 @@ class AuthService extends EventEmitter {
   async launcherRequest(eventName, payload = {}) {
     if (!this.secretMemory || !this.state.account || this.previewMode) return { ok: false, error: 'not authenticated' };
     const secret = this.secretMemory;
-    const result = await this.emitAck(eventName, { secret, ...payload });
+    const result = await this.emitAck(eventName, { secret, ...payload, crewContentRevision: 1 });
     return secret === this.secretMemory ? result : { ok: false, error: 'session changed' };
   }
 
@@ -309,7 +309,7 @@ class AuthService extends EventEmitter {
 
   async getLauncherShop(options = {}) {
     if (options?.preview === true && this.previewMode) {
-      return this.emitAck('LAUNCHER_SHOP_GET', { preview: true });
+      return this.emitAck('LAUNCHER_SHOP_GET', { preview: true, crewContentRevision: 1 });
     }
     return this.launcherRequest('LAUNCHER_SHOP_GET');
   }
@@ -332,7 +332,7 @@ class AuthService extends EventEmitter {
       'decor-side-zoro-chibi', 'decor-side-nami-chibi',
       'decor-footer-sanji-chibi', 'decor-footer-robin-chibi'
     ]) customItems.add(id);
-    const roomProduct = /^room-(?:scene-(?:sunny-deck|sunny-kitchen|sunny-library)|furniture-(?:helm|map-table|treasure-chest|tangerine-tree|swords-rack|kitchen-table|galley-stove|bookshelf|medicine-cabinet|piano|tool-bench)|character-(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe))$/.test(itemId);
+    const roomProduct = /^room-(?:scene-(?:sunny-deck|sunny-kitchen|sunny-library)|furniture-(?:helm|map-table|treasure-chest|tangerine-tree|swords-rack|kitchen-table|galley-stove|bookshelf|medicine-cabinet|piano|tool-bench)|character-(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe|ace|sabo|law|hancock))$/.test(itemId);
     if (typeof itemId !== 'string' || !(/^(?:ava-(?:[1-9]|[1-5][0-9]|6[0-2])|(?:wall|flag)-(?:[1-9]|[1-4][0-9]|50)|bgm-op-(?:0[1-9]|1[0-9]|20))$/.test(itemId) || roomProduct || customItems.has(itemId))) {
       return { ok: false, error: 'invalid item' };
     }
@@ -414,7 +414,7 @@ class AuthService extends EventEmitter {
           (entry.flip === undefined || typeof entry.flip === 'boolean') &&
           (entry.rotation !== undefined || typeof entry.flip === 'boolean') &&
           (entry.rotation === undefined || entry.flip === undefined || entry.flip === (entry.rotation === 2))) ||
-        !characters.every(entry => coordinates(entry) && /^room-character-(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe)$/.test(entry.itemId))) {
+        !characters.every(entry => coordinates(entry) && /^room-character-(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe|ace|sabo|law|hancock)$/.test(entry.itemId))) {
       return { ok: false, error: 'invalid_room' };
     }
     return this.launcherRequest('LAUNCHER_ROOM_SET', { revision, sceneId, placements, characters, capacityVersion });
@@ -437,7 +437,7 @@ class AuthService extends EventEmitter {
 
   async launcherCharacterRequest(eventName, itemId, action) {
     if (typeof itemId !== 'string' ||
-        !/^room-character-(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe)$/.test(itemId)) {
+        !/^room-character-(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe|ace|sabo|law|hancock)$/.test(itemId)) {
       return { ok: false, error: 'invalid_character' };
     }
     return this.launcherRequest(eventName, action ? { itemId, action } : { itemId });

@@ -1,0 +1,7562 @@
+{
+  "schema": "one-piece-room-reserved-pixel-qa/1",
+  "ok": true,
+  "assetCount": 68,
+  "frameCount": 324,
+  "items": [
+    {
+      "asset": "public/images/launcher_room/reserved_v1/ace/portrait.webp",
+      "sha256": "f000212ce2b93ac9684be18a3d6c9c5f78ff94958a35031ed4ec556afdd055f8",
+      "dimensions": [
+        256,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "bb6aae096fbe63303c3e380d244b6369c8853013534e7d1d19f327fe77f2bbbb",
+          "bounds": [
+            72,
+            23,
+            183,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            72,
+            24,
+            182,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/ace/walk/east.webp",
+      "sha256": "9c799350017ba7fd4226684a4c5c19b009f9bb88db9d722a7ec34a3a8dd3bddd",
+      "dimensions": [
+        1536,
+        384
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "b747ee2c11960be2f8b8fc342acecdbf9f5c1fed6a1f7f87baf59958062fcb5f",
+          "bounds": [
+            119,
+            34,
+            268,
+            336
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            120,
+            36,
+            266,
+            336
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "19a4b65640e85d4a500008dc242ba63868ea62d3370a16ef22e6fbbf3a5712ac",
+          "bounds": [
+            119,
+            35,
+            267,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            120,
+            36,
+            266,
+            336
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "a2182af97d02533575324386c05f26d33e6a7ce4efe9a1e06f1ccb8c888ed20a",
+          "bounds": [
+            120,
+            34,
+            266,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            120,
+            35,
+            265,
+            336
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "19a4b65640e85d4a500008dc242ba63868ea62d3370a16ef22e6fbbf3a5712ac",
+          "bounds": [
+            119,
+            35,
+            267,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            120,
+            36,
+            266,
+            336
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/ace/acting/east.webp",
+      "sha256": "1faad4430ee5ebda2cbd181a729202ef7b2b7badf6ea8f188fee4dd2a138617d",
+      "dimensions": [
+        2048,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "b8fa1775d19acd4d69803c24173cc62a2cf05dc9ffe0213e4fad76e81e1687e0",
+          "bounds": [
+            76,
+            23,
+            181,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            77,
+            24,
+            180,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "9a7b36b80292e959919e39473aab48b483efbe570f4a49614dce2e56872e59cc",
+          "bounds": [
+            77,
+            22,
+            206,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            78,
+            23,
+            205,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "8f2b34f217952c812dbfc967d331a86067e500b2da5b556742978d2f5426cc0f",
+          "bounds": [
+            76,
+            22,
+            182,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            76,
+            23,
+            181,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "fb03096dcb2f983570500da4b968006c683914b862f35648616c59318a7a3b46",
+          "bounds": [
+            76,
+            23,
+            192,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            77,
+            24,
+            191,
+            224
+          ]
+        },
+        {
+          "index": 4,
+          "rgbaSha256": "c9bfc3cb25145114121617dab112a393c3e554022e7528a1e840fea5b323e23d",
+          "bounds": [
+            48,
+            44,
+            185,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            50,
+            44,
+            184,
+            224
+          ]
+        },
+        {
+          "index": 5,
+          "rgbaSha256": "22ebbc58e43ebcd97b7fa6e684db258d17811719b071be855626720391046eb9",
+          "bounds": [
+            59,
+            61,
+            198,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            59,
+            62,
+            197,
+            224
+          ]
+        },
+        {
+          "index": 6,
+          "rgbaSha256": "7cf34fc8e693901792a7854615cbafdf34d519798bdbbc99a839c1bd8b66f13d",
+          "bounds": [
+            76,
+            24,
+            183,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            77,
+            25,
+            183,
+            224
+          ]
+        },
+        {
+          "index": 7,
+          "rgbaSha256": "d2ceb78dc9240a5f1b2b38e2bdbce50321b4ccba91c4129451bcd56dfa8e0cbc",
+          "bounds": [
+            76,
+            25,
+            181,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            76,
+            25,
+            181,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/ace/life/work-east.webp",
+      "sha256": "f50ae5088e08d3e8c2ed050fef32add9cbd9a4ef50b87943da2871ffbce48690",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "2ad9d9cbde6ef4fb9fc9e3506443595f017467b9a580d3daa2703196a3904635",
+          "bounds": [
+            73,
+            23,
+            186,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            74,
+            24,
+            185,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "0814316ffcf78c0a051a3ded2cb88114a187e16673c2b9fce52e385ce6b034a1",
+          "bounds": [
+            73,
+            23,
+            191,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            74,
+            24,
+            190,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "77b503a18a80cde45e3a7e1c51af412bfe0bf5e28ee9000d3073342c5194a35f",
+          "bounds": [
+            73,
+            23,
+            186,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            74,
+            24,
+            184,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "925fe65f129fa10d0889e20ce5ae47d9c2bace62209651b4b83425f90f3faff3",
+          "bounds": [
+            73,
+            23,
+            184,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            74,
+            24,
+            183,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/ace/walk/west.webp",
+      "sha256": "8c6d5849a7a80f7656b11d2f066ff81d6913a740442c1c420a83c0de5440ae7c",
+      "dimensions": [
+        1536,
+        384
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "48a8095b047d04227f925e6b4c3a75a42e55bf4a151101e8477a8640817686f1",
+          "bounds": [
+            112,
+            39,
+            265,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            113,
+            40,
+            264,
+            336
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "633f843cac55629c45a43e1f370e3caa0142923163a0873ea1b33696a658ebc4",
+          "bounds": [
+            119,
+            38,
+            265,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            120,
+            39,
+            264,
+            336
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "b54a932eef6be7ede326ff56d7fcf0b3525bfe0e7b80042e7c5e3e5b68d763e5",
+          "bounds": [
+            118,
+            40,
+            265,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            119,
+            41,
+            265,
+            336
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "633f843cac55629c45a43e1f370e3caa0142923163a0873ea1b33696a658ebc4",
+          "bounds": [
+            119,
+            38,
+            265,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            120,
+            39,
+            264,
+            336
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/ace/acting/west.webp",
+      "sha256": "c84d3ad93828776201099af37d5478de442e69c58be7646c387fd8a47923fa71",
+      "dimensions": [
+        2048,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "c4329b9745e0f96f43d03547daa77e4f02f78e5f76a6853870fb7fd9babeb403",
+          "bounds": [
+            74,
+            20,
+            181,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            74,
+            21,
+            180,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "80ab033afb7f30e22d5c443b6356dad7736a18a50a24f76828c794c413920dc6",
+          "bounds": [
+            50,
+            21,
+            181,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            50,
+            23,
+            180,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "406ecdc439a9a0a02c5942ca972d116f42f5445ab13a3651c30d92b17deecf2a",
+          "bounds": [
+            73,
+            22,
+            182,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            74,
+            23,
+            181,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "dc1dae03064ee1eb67e304dd1547eb24ca9632280699183ec1a41a3ac7a1b26c",
+          "bounds": [
+            61,
+            22,
+            181,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            62,
+            23,
+            181,
+            224
+          ]
+        },
+        {
+          "index": 4,
+          "rgbaSha256": "e76ffdea4165a889237c7cf708f7fe1ee66eabed6f1de3d0da6c02936afcdc95",
+          "bounds": [
+            70,
+            41,
+            211,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            71,
+            42,
+            210,
+            224
+          ]
+        },
+        {
+          "index": 5,
+          "rgbaSha256": "fa2f5b019c0e26d18a816cac1a17846379c2ba6355558f8e2a3181c01e11a59b",
+          "bounds": [
+            61,
+            59,
+            195,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            62,
+            60,
+            194,
+            224
+          ]
+        },
+        {
+          "index": 6,
+          "rgbaSha256": "ad6b05bb7a5865ee5ddd8ca9506221354a7ca74bb795c315bdbbff77ff2f31d5",
+          "bounds": [
+            74,
+            25,
+            181,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            74,
+            26,
+            180,
+            224
+          ]
+        },
+        {
+          "index": 7,
+          "rgbaSha256": "0c0a37a3fde402f6a3bc4f32c76ef787faccbc535548519ca9c73e5b1cda5fbc",
+          "bounds": [
+            76,
+            25,
+            180,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            77,
+            25,
+            179,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/ace/life/work-west.webp",
+      "sha256": "55d1cb02af198cbcbc23f3c37c77d3396142bb900a590fc2261de452a8717ee0",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "eff92c2d3411c041d0e6db384d3f39e19f1e2351581c4076e354b2f8082588b5",
+          "bounds": [
+            72,
+            19,
+            184,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            73,
+            21,
+            183,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "2ff41a4a1ad4505d0dc8fe91cec841bccd6a9d6f293dc238d8f21425ed18b14c",
+          "bounds": [
+            66,
+            20,
+            183,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            67,
+            21,
+            183,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "2453f7a105361402eeb11b891c223bac8815a3cffef3ae3f38e1bb08da9efbb9",
+          "bounds": [
+            67,
+            21,
+            184,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            68,
+            22,
+            183,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "b47de544716012269ca1d5694d2ec8db8bf48ca108ce586b463d0c3f6931ee9c",
+          "bounds": [
+            73,
+            19,
+            184,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            73,
+            21,
+            183,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/ace/walk/north.webp",
+      "sha256": "7701ed6a9a6a64378785c907567a249a170d4c8c4e33dbe81a8c1334e5c8d51b",
+      "dimensions": [
+        1536,
+        384
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "9ee808dbb82e5c5d623b961ed5b956a8748994bcfdd4bc77a0a5c29d086e0304",
+          "bounds": [
+            119,
+            31,
+            264,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            120,
+            32,
+            263,
+            336
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "e65028e6ccee3979c47d75f2b88992852ce8aca2a2bdfc497aeb148c7a37d176",
+          "bounds": [
+            117,
+            35,
+            264,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            118,
+            36,
+            263,
+            336
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "93d9db3322bab2690d89a84e9a76241809c5dccf75e237adf2555a443db3119b",
+          "bounds": [
+            117,
+            31,
+            264,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            118,
+            32,
+            264,
+            336
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "e65028e6ccee3979c47d75f2b88992852ce8aca2a2bdfc497aeb148c7a37d176",
+          "bounds": [
+            117,
+            35,
+            264,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            118,
+            36,
+            263,
+            336
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/ace/acting/north.webp",
+      "sha256": "fff81bdc4735d0f0b0a87f0e8dda45b626ad860546e4b58fe56f00e8e83a06e2",
+      "dimensions": [
+        2048,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "91061ae81a003650e98621353a8ab74420f4b311e252fd5a27c9c515df4daa8b",
+          "bounds": [
+            70,
+            23,
+            185,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            71,
+            24,
+            184,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "c5dcf06c4d04637c288f7a24324a6908bdbc795ad43c1654cd5defb70b64ded6",
+          "bounds": [
+            70,
+            22,
+            206,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            71,
+            23,
+            206,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "f870dac48c8011d9d2a5f3bb6fe8a81638cc22503d98e2f7d3f9b5d89fc0bebf",
+          "bounds": [
+            71,
+            23,
+            183,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            72,
+            24,
+            182,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "0aa5779bab017fe0be0c2e75389cbc27d55066eb5d3d550d9b1dd32a225a6086",
+          "bounds": [
+            63,
+            21,
+            195,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            64,
+            23,
+            194,
+            224
+          ]
+        },
+        {
+          "index": 4,
+          "rgbaSha256": "e73770fb35d12459c806c7cbeeac9a701e28d46a8baa843941b64f711a25b4e3",
+          "bounds": [
+            52,
+            44,
+            188,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            54,
+            44,
+            187,
+            224
+          ]
+        },
+        {
+          "index": 5,
+          "rgbaSha256": "ba6d2378df0cd0850cf1bd15b7d7207fb79802e84a1d0949995294cdd65f4584",
+          "bounds": [
+            60,
+            82,
+            197,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            60,
+            83,
+            196,
+            224
+          ]
+        },
+        {
+          "index": 6,
+          "rgbaSha256": "7522b89a45400d74b2609868e546b671a4c349e4f4b425812261449d33f7bb4d",
+          "bounds": [
+            66,
+            27,
+            197,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            68,
+            28,
+            196,
+            224
+          ]
+        },
+        {
+          "index": 7,
+          "rgbaSha256": "a7792524af9b7d3d154c30432317122b0e1d79c1a108dbac6d90a5585e57cffc",
+          "bounds": [
+            74,
+            29,
+            182,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            75,
+            30,
+            181,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/ace/life/work-north.webp",
+      "sha256": "4f6a8bd40fd4d012f790b61f04520d6104277c95a1d93b985458e6305a4f587f",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "4a4503b97deac939be503890fe93358f22dcdc25a4f1c836ef8c1c116bf3f404",
+          "bounds": [
+            77,
+            27,
+            180,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            77,
+            29,
+            180,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "5b28b5f7c896b26c2521de5e21cbc9b92272efa2ffe2c31442f76a18dd71040a",
+          "bounds": [
+            76,
+            27,
+            181,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            76,
+            29,
+            181,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "217a0bf4fd64b3443b16f6157fd41441d76ec6f79adcadf77925861da635192c",
+          "bounds": [
+            74,
+            27,
+            181,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            76,
+            28,
+            181,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "1c43517eebe59b140efa42b81e64753389373b27c081177c0b9b0312a40658f1",
+          "bounds": [
+            76,
+            27,
+            181,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            76,
+            29,
+            180,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/ace/walk/south.webp",
+      "sha256": "8fac027e7f882316a97f7579cc8c16d01b6df51ed60662c6032467632ff7e163",
+      "dimensions": [
+        1536,
+        384
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "133951335920e8b338923e4d72674371099be769acdcc45e940d0bdb78b280c7",
+          "bounds": [
+            121,
+            32,
+            269,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            122,
+            33,
+            268,
+            336
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "b239750cc855c80803152fce548a55545dba05785f048e0922a9340261968cdb",
+          "bounds": [
+            116,
+            34,
+            271,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            117,
+            35,
+            270,
+            336
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "447ea9b5d8e375462db7e2c90e8b44ce2f7a383be22d9a2ff3813de26616a2a2",
+          "bounds": [
+            121,
+            29,
+            270,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            122,
+            30,
+            269,
+            336
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "b239750cc855c80803152fce548a55545dba05785f048e0922a9340261968cdb",
+          "bounds": [
+            116,
+            34,
+            271,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            117,
+            35,
+            270,
+            336
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/ace/acting/south.webp",
+      "sha256": "9c3f395b25b4aa90776c4ec760a3f1b4567a2d7ff0ba492d2763fd0c3b863826",
+      "dimensions": [
+        2048,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "a52b4196d449bd3562f6c8928c054bf84774dd46c0601179076e190130beaa66",
+          "bounds": [
+            69,
+            23,
+            186,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            69,
+            24,
+            185,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "cd1460c810f8812f259c86c550978a209542f93f237a3418af76cf222db9af44",
+          "bounds": [
+            45,
+            21,
+            188,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            46,
+            23,
+            187,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "46703bb965eecee8f1fb4f84b9a0df98ac66e83bb41d7cbb9a6155f73b4958b0",
+          "bounds": [
+            72,
+            25,
+            187,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            73,
+            26,
+            187,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "3bb3e0e388e9b7964a9751fa4ae514a1d166dde2486d8ae0d7b2748a84675a92",
+          "bounds": [
+            66,
+            23,
+            191,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            67,
+            24,
+            190,
+            224
+          ]
+        },
+        {
+          "index": 4,
+          "rgbaSha256": "03ecf0a0ee320ded48c972eaac13ae6bc7f1b0188aea273ab11bfaf7a990bd34",
+          "bounds": [
+            70,
+            50,
+            183,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            70,
+            51,
+            183,
+            224
+          ]
+        },
+        {
+          "index": 5,
+          "rgbaSha256": "264d322317276977211e36e762cedaff545125d353d030feee8f638a13313d97",
+          "bounds": [
+            61,
+            81,
+            195,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            62,
+            82,
+            194,
+            224
+          ]
+        },
+        {
+          "index": 6,
+          "rgbaSha256": "c5c0d397b27bbc53e65c9e68b30720cc0896be51fa98ab40a753f74af9a19624",
+          "bounds": [
+            66,
+            38,
+            187,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            67,
+            39,
+            186,
+            224
+          ]
+        },
+        {
+          "index": 7,
+          "rgbaSha256": "f7c82d6049815ff56cc384f5ef4f844126a91b9a85ac56daa0227f706fb05cc9",
+          "bounds": [
+            77,
+            42,
+            180,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            77,
+            43,
+            179,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/ace/life/work-south.webp",
+      "sha256": "3afea72bf5c8db84e847d616267f9a4e0c089218a18dfc86a084df67ae0e96a4",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "31011eb3c4474f45715cb47ae79179a737cc0d454bc93448f701de714910c575",
+          "bounds": [
+            75,
+            24,
+            181,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            76,
+            25,
+            181,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "81aecedbc49b9140fa598aec641c9ca3d08f2714885b4e844b3699dc181824aa",
+          "bounds": [
+            75,
+            23,
+            183,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            75,
+            25,
+            181,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "37df032e26812cea4998ecbe4a9f4c9605c4c4c6265abc8f74e1eac62ff0868e",
+          "bounds": [
+            75,
+            26,
+            182,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            75,
+            26,
+            181,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "9c54ece30ba2c346369a31ea491ab27cf68de5e8b32a5265b5b5c39986e229b9",
+          "bounds": [
+            76,
+            25,
+            181,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            76,
+            26,
+            180,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/ace/life/eat-south.webp",
+      "sha256": "2b44b38d96767f8ada83219421634d95cdbbbca88fa1ca82d0e6de7512d87d81",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "c1af220aebb1057199b76dc0625555ab700d85c4a40ae30e70574c1d0ae3a804",
+          "bounds": [
+            73,
+            17,
+            183,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            75,
+            18,
+            182,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "9c4b43ac929239e5d5072995650100510f112fcdb7490304befef22f9e018a6b",
+          "bounds": [
+            74,
+            17,
+            184,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            74,
+            18,
+            182,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "89a838535aa310ff18523fc58a12f59a7adb41a50c9e39b6c63cd097b0eb0502",
+          "bounds": [
+            74,
+            17,
+            183,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            74,
+            18,
+            183,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "b436e25fcd8ba0b5053857cad408cf2f2f64be7c1e5abea608f1686def363eb9",
+          "bounds": [
+            74,
+            18,
+            183,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            74,
+            18,
+            183,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/ace/life/rest-south.webp",
+      "sha256": "dd4150a08dc55b2e643ab97fcd372d52758d27416c7713dead735c8a2278ced7",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "b4f4e0c51f8adcb9a9b9fe7043cd5657fd987e09022964a72be3d912e0d8604a",
+          "bounds": [
+            63,
+            59,
+            193,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            64,
+            60,
+            192,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "1e92cd32cc005e53d42bba156ce308b36205d121c964d141910256ca03f630a0",
+          "bounds": [
+            65,
+            58,
+            192,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            65,
+            59,
+            191,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "07138c21c458f4935d117a4f839f91569e8c6cd7fd7fc4a0b0fd27b8055a24dc",
+          "bounds": [
+            64,
+            58,
+            192,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            65,
+            59,
+            191,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "7c252f7b07e0ada196cbdcdd04062937e93dcc657cd029e36b0ba1ee377ad23d",
+          "bounds": [
+            65,
+            58,
+            192,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            65,
+            58,
+            191,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/ace/life/sleep-south.webp",
+      "sha256": "d2f1380bf7503c04ef3834054640acca9338e0002606247ce4d58efa7262713a",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "c9fedbebed1cd19448b6a01a983d136087bdc1f07f99f0bad8d1f7dd45773651",
+          "bounds": [
+            45,
+            124,
+            211,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            46,
+            125,
+            210,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "d0cac0006ef511af6172d709309dc77a15d539df6f67402cfd1af4ca891e77a6",
+          "bounds": [
+            45,
+            122,
+            211,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            46,
+            123,
+            210,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "4a67a2e1e9cd7589d98b655ee13b6dd04a345621d988022ae48738a5a3faa332",
+          "bounds": [
+            45,
+            124,
+            212,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            45,
+            124,
+            211,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "cd0af32c42ae9e77a2b21168a8bee8a6330524783ec8fc654eec6798a0c75e4d",
+          "bounds": [
+            46,
+            123,
+            210,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            47,
+            125,
+            209,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/ace/life/train-south.webp",
+      "sha256": "5f75a5dada77d4580e646a0fa3bd564c15741e996fe51731bd768e8b781c4068",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "2f8532c2fd25f21068e7490f1b4d6edb053404f6879fba27646093af85494eba",
+          "bounds": [
+            73,
+            23,
+            184,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            74,
+            24,
+            183,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "d69863efcd2c558a5b5e4f468207948e6d3f4bb296ac3d633436b0debb81e1bc",
+          "bounds": [
+            75,
+            27,
+            182,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            76,
+            28,
+            181,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "c243fe9d49c96d229852f975b8edddb020a3dc2bbf7e3c064a4b1467b3a8951d",
+          "bounds": [
+            75,
+            26,
+            181,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            76,
+            28,
+            181,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "a2d80105c2eb658be97e113d49f6ffe64c1d6e57ec452bb34adfaaad93c05c41",
+          "bounds": [
+            74,
+            26,
+            183,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            75,
+            26,
+            182,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/sabo/portrait.webp",
+      "sha256": "c0e3ffb945d5cd358629d7f28e206ac9f3b7ee469b76220756d157f1172847b8",
+      "dimensions": [
+        256,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "a1726164e1d05e2d1c08b7bb7f202caadedf2dcf995af5ca408f32b3ee204bce",
+          "bounds": [
+            79,
+            23,
+            176,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            79,
+            24,
+            175,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/sabo/walk/east.webp",
+      "sha256": "b5364a01612a878629d8a266ebd3f51a9ac1b620706aa155e1e16302872fa3a4",
+      "dimensions": [
+        1536,
+        384
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "b1931b60fe9f24766c2322b4f28de969456b9bf76a4f091a006bbd58753f9e55",
+          "bounds": [
+            133,
+            38,
+            256,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            133,
+            39,
+            256,
+            336
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "beb2254b3581b174998a279200ff72d4fe315eba06453367ca58cb33319ebce8",
+          "bounds": [
+            138,
+            35,
+            253,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            138,
+            36,
+            253,
+            336
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "f164039d0a77a5775cfcb9867122674bfcb4dd13dec9dfa40e5ae1efc616165f",
+          "bounds": [
+            136,
+            37,
+            253,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            137,
+            38,
+            253,
+            336
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "beb2254b3581b174998a279200ff72d4fe315eba06453367ca58cb33319ebce8",
+          "bounds": [
+            138,
+            35,
+            253,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            138,
+            36,
+            253,
+            336
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/sabo/acting/east.webp",
+      "sha256": "ed8ef96b1a70301bc6ac406871a938c4bd2b84c867337fc214d9685b4b7f89f9",
+      "dimensions": [
+        2048,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "a5a6302cc9ef64c10ffe17a8d16a7fae57a388d610d961af8283d85a0042c134",
+          "bounds": [
+            85,
+            23,
+            175,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            86,
+            24,
+            175,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "939e2fdbb1ef10ad6dc5d1c647344c13552921c5e8f0949bd058a5c1e4023e2c",
+          "bounds": [
+            86,
+            22,
+            196,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            86,
+            23,
+            195,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "43f4303a658986f84668101180b3bb892e6ebb4a65a6936c5cd27c1e180980e0",
+          "bounds": [
+            78,
+            25,
+            175,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            79,
+            26,
+            175,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "a0fa54e091a9f6b22e2791e5a463939b685c890bacacd6b08680ed261562d9c3",
+          "bounds": [
+            86,
+            23,
+            190,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            87,
+            24,
+            189,
+            224
+          ]
+        },
+        {
+          "index": 4,
+          "rgbaSha256": "f58ee0d5262440e507a7559f7cfb1c50d74e5cf58d5cf64d582e082c77dbb458",
+          "bounds": [
+            48,
+            47,
+            175,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            49,
+            48,
+            175,
+            224
+          ]
+        },
+        {
+          "index": 5,
+          "rgbaSha256": "df9d4a37424a1b581088187fce03df1046b78ca1d111cd2f0eb74bbe4761f83d",
+          "bounds": [
+            71,
+            75,
+            185,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            72,
+            76,
+            184,
+            224
+          ]
+        },
+        {
+          "index": 6,
+          "rgbaSha256": "449f374690cfe0616486be552c3a444672224e6d187ebf2886d53f02417ddea9",
+          "bounds": [
+            82,
+            39,
+            176,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            83,
+            39,
+            175,
+            224
+          ]
+        },
+        {
+          "index": 7,
+          "rgbaSha256": "55ad1889aa4f0c5956e89f87c87a3fc0808d8cfe0efdc226beadede8fb35711d",
+          "bounds": [
+            86,
+            39,
+            175,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            87,
+            40,
+            174,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/sabo/life/work-east.webp",
+      "sha256": "ecbf5e5b602c4e92147bb57be847b95bf5639f91bb4cf3300d05d51d971fb9fa",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "b13def60725c79fff13f215bc19109a82751faddeb2aec34ca3094b63135e7b6",
+          "bounds": [
+            85,
+            23,
+            175,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            86,
+            24,
+            174,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "08b7aafb25be72531c10b88a7473180b474e43fb2b4b07b09ffa08666fc5067a",
+          "bounds": [
+            86,
+            23,
+            193,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            86,
+            24,
+            191,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "8af5833cca7c51c28055286ff77b448ee3f89c1a49fb53234362ca4992ad517e",
+          "bounds": [
+            84,
+            23,
+            182,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            86,
+            24,
+            181,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "91b82163e8da7cf1495511ce2ea04940d4c74201e0a66ce86a97b5f401f42a01",
+          "bounds": [
+            86,
+            23,
+            175,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            86,
+            24,
+            174,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/sabo/walk/west.webp",
+      "sha256": "4e0233dfae00137e45df5629fd1217dc35a2ca9b3fe12272638f1069739b3978",
+      "dimensions": [
+        1536,
+        384
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "14be3bd036b2549afb1a0227bfce29fab16126711fc7015f268e312b4da64739",
+          "bounds": [
+            131,
+            43,
+            255,
+            336
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            132,
+            44,
+            254,
+            336
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "c262d2d307b54f24a42db43335df56126f0df80bdf428376e601fe7ec2ca8c89",
+          "bounds": [
+            132,
+            41,
+            248,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            132,
+            41,
+            247,
+            336
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "4d69b62c69f91e11402e9cb6fcb40a3334052141bbe00017717f63f00a746278",
+          "bounds": [
+            130,
+            43,
+            253,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            132,
+            44,
+            252,
+            336
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "c262d2d307b54f24a42db43335df56126f0df80bdf428376e601fe7ec2ca8c89",
+          "bounds": [
+            132,
+            41,
+            248,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            132,
+            41,
+            247,
+            336
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/sabo/acting/west.webp",
+      "sha256": "b2bc7cdcc85751022ef26378ed83b6667d66c8354c981e6f2994dede93c3ca35",
+      "dimensions": [
+        2048,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "4ecdebb5b40e1b21c32b94a597d90789e0cad42c02e2e7549862ccce1bdf7db1",
+          "bounds": [
+            81,
+            25,
+            171,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            81,
+            26,
+            171,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "7dbfa430b58632f7742a980983e2e9c029e84cd872f057cc30f31f7d2c558926",
+          "bounds": [
+            61,
+            25,
+            171,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            62,
+            26,
+            170,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "9b6e50fda4411c3f324f1ce1f5422b3cd84fcd1c0db2bde215fa564cab046efd",
+          "bounds": [
+            79,
+            26,
+            175,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            80,
+            28,
+            174,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "2138460fdcae8a9d05295a153078cdb6279e100f8bdbcdefcc2b50b28accfefa",
+          "bounds": [
+            69,
+            28,
+            171,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            70,
+            29,
+            170,
+            224
+          ]
+        },
+        {
+          "index": 4,
+          "rgbaSha256": "268c99aabc12d71a2be24dd189dcb15ef196d87b13dc0179dd1044246a1084fd",
+          "bounds": [
+            79,
+            48,
+            210,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            80,
+            49,
+            210,
+            224
+          ]
+        },
+        {
+          "index": 5,
+          "rgbaSha256": "b8805ab16119cbd7cbfef672fd3e44158281c7440b5e5a592e54867b007d9092",
+          "bounds": [
+            76,
+            76,
+            180,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            76,
+            76,
+            180,
+            224
+          ]
+        },
+        {
+          "index": 6,
+          "rgbaSha256": "6c6b4d45bd30ebbd61b54ee53c267b37e31b71cc725e4b1d86e36c4853c1025a",
+          "bounds": [
+            79,
+            38,
+            175,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            80,
+            39,
+            174,
+            224
+          ]
+        },
+        {
+          "index": 7,
+          "rgbaSha256": "2b9d94d8882f6f8752ffab0f34e04527db16d8a4707d3eeaae2f369b1fe2e0a4",
+          "bounds": [
+            79,
+            38,
+            172,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            80,
+            39,
+            172,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/sabo/life/work-west.webp",
+      "sha256": "882784836a1f074f47edb6b7e01cf508ba00e6df930e0d607b8082020e54e0f4",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "10b89c83d388999cff12a89d947b91b1dc35505494248ddbfad87c7cf715721a",
+          "bounds": [
+            81,
+            20,
+            172,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            81,
+            21,
+            171,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "50c39451aeecffa01f3bf0c526d49554d4705459ec67892168055d45a6dc809b",
+          "bounds": [
+            67,
+            21,
+            172,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            69,
+            22,
+            171,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "d767caa9ce16e5e9cc4238a0ea3f1b2242cb17d2c0d230ec617680b7a0ea504a",
+          "bounds": [
+            78,
+            21,
+            172,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            80,
+            22,
+            171,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "864fa9474b7ae93e06ab0dc89f7a7fdd3355cbe350aef2652cb6681a0750c262",
+          "bounds": [
+            82,
+            21,
+            172,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            82,
+            21,
+            171,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/sabo/walk/north.webp",
+      "sha256": "c5ea408886cfcb8134330710320d16ec80ba22c1f2a0ccd2dfb5b65c5ca709e4",
+      "dimensions": [
+        1536,
+        384
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "dfec77d7b543c77e39762704a90b8ba3bf5c1e6484798ccbed22818c2027ecb9",
+          "bounds": [
+            128,
+            32,
+            260,
+            336
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            129,
+            34,
+            259,
+            336
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "4c332622be061ca79c2111ae949d3448a226ce8f152cf1b094f491f8ca5bed6e",
+          "bounds": [
+            126,
+            35,
+            259,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            127,
+            36,
+            258,
+            336
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "77f38d40944bfe44e812a94921b1ccb0cba0896ee304ebee240cba3852fb93c1",
+          "bounds": [
+            123,
+            32,
+            256,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            125,
+            34,
+            255,
+            336
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "4c332622be061ca79c2111ae949d3448a226ce8f152cf1b094f491f8ca5bed6e",
+          "bounds": [
+            126,
+            35,
+            259,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            127,
+            36,
+            258,
+            336
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/sabo/acting/north.webp",
+      "sha256": "d17843a1a9a659b4b28c453f0f0fdc3fbaeff73b48fef82e98fb2349710e390f",
+      "dimensions": [
+        2048,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "aa214b417a2fdae2fb334e4745244ca98248a5b4576966ca544fba94ae09b51c",
+          "bounds": [
+            78,
+            23,
+            178,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            80,
+            24,
+            177,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "bf9f8188fc44ddee54d8b77cca357f317f230bb2b04f5d3a4c1e38147ffd46dd",
+          "bounds": [
+            77,
+            22,
+            217,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            78,
+            23,
+            217,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "d7a8152940bc18e9e412c534c0063e546383363195187d8421daabb52272cf28",
+          "bounds": [
+            76,
+            23,
+            181,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            78,
+            23,
+            180,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "38581f36665cf1e4b5b9f658f79ddb332723f6f3c071f0e5e611ee92f4de311f",
+          "bounds": [
+            59,
+            23,
+            198,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            59,
+            24,
+            196,
+            224
+          ]
+        },
+        {
+          "index": 4,
+          "rgbaSha256": "f3fdd3ee4f5860e95c0712e12d15f203c7c44ccc0f29ad1510792db427f52105",
+          "bounds": [
+            67,
+            54,
+            206,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            68,
+            55,
+            206,
+            224
+          ]
+        },
+        {
+          "index": 5,
+          "rgbaSha256": "f958d15afe02e8aa8da751ef92408441c564cf79b2c0f46a61a0b60038a98699",
+          "bounds": [
+            72,
+            78,
+            185,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            72,
+            79,
+            184,
+            224
+          ]
+        },
+        {
+          "index": 6,
+          "rgbaSha256": "98cfff47eca37de64def0f8d0c2fc97e4505984111db4906611b6dd898f63781",
+          "bounds": [
+            73,
+            27,
+            191,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            74,
+            28,
+            190,
+            224
+          ]
+        },
+        {
+          "index": 7,
+          "rgbaSha256": "da861be8e694dae81fbdf06a2584c2dc0307650da1d3ec286cd539cffef6871f",
+          "bounds": [
+            77,
+            29,
+            177,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            79,
+            30,
+            176,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/sabo/life/work-north.webp",
+      "sha256": "78c72aed3cce625915e73c07980415501d18fb672d483171c8a2ab1996bb0345",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "3e876db36eba4441f3b126ebe069bb4f97b4aa222f939569cd6a351dff801ffc",
+          "bounds": [
+            82,
+            23,
+            176,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            82,
+            24,
+            175,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "5da8c29a30710c7224b42c90fcb46d958a8606d784de6c67928f6545c3d695f8",
+          "bounds": [
+            80,
+            23,
+            185,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            81,
+            24,
+            184,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "e2ecae49638413c501a8d027286d944f70c59fc16d799c91d722deacc42533f5",
+          "bounds": [
+            81,
+            23,
+            178,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            83,
+            24,
+            177,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "b32335264626f96ca0bc27a3780fe0e43e57efb5fc3d62f49d0e188976adec12",
+          "bounds": [
+            82,
+            23,
+            175,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            82,
+            24,
+            174,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/sabo/walk/south.webp",
+      "sha256": "7b386281b2658f68844ec7496182246e6ca25514d489c91f5381a3792c372479",
+      "dimensions": [
+        1536,
+        384
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "763963b9cd842f407d59b1aa1af3c67cc8e98b51a306027fc1dce2a6fae924f3",
+          "bounds": [
+            126,
+            31,
+            259,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            127,
+            32,
+            258,
+            336
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "a62816ea139f7854f23be1e180710b292b9b4f913fc305dff3df0cf71757243f",
+          "bounds": [
+            123,
+            34,
+            261,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            124,
+            35,
+            261,
+            336
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "886b5fac27fdcdca87186be9a380078e46da6751ae4474977f29ea5f0cee309d",
+          "bounds": [
+            125,
+            31,
+            259,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            127,
+            32,
+            258,
+            336
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "a62816ea139f7854f23be1e180710b292b9b4f913fc305dff3df0cf71757243f",
+          "bounds": [
+            123,
+            34,
+            261,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            124,
+            35,
+            261,
+            336
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/sabo/acting/south.webp",
+      "sha256": "8fd6acc7738fd742128d6588daff63203faa4580cca4ed3b59086df715052950",
+      "dimensions": [
+        2048,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "4b2cbd81fc1e9224aab5f091463033874dfcb5a87f527503bae8d99b5781ce79",
+          "bounds": [
+            74,
+            18,
+            182,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            75,
+            20,
+            181,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "518d8c0078c635ba0561b0d5ba00b0adb6e633f1cc9fe14fcf0797f102cf76a9",
+          "bounds": [
+            74,
+            17,
+            211,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            74,
+            19,
+            209,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "03a78e88549542665a9f11d216f0c320da6b4fa8811f21089fe92688a01d529a",
+          "bounds": [
+            73,
+            19,
+            186,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            75,
+            20,
+            185,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "1ced678f4b4a0fe45adb903290bc96bf06de04020946fd0798fcf738452e77f0",
+          "bounds": [
+            68,
+            19,
+            192,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            69,
+            21,
+            192,
+            224
+          ]
+        },
+        {
+          "index": 4,
+          "rgbaSha256": "7725e9b5a5398749e3c8c84e055e83ec51d6d413d9f4db5173fed1acbcb34f9f",
+          "bounds": [
+            68,
+            56,
+            207,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            69,
+            56,
+            206,
+            224
+          ]
+        },
+        {
+          "index": 5,
+          "rgbaSha256": "af38bc1fb5d8d02926a63a3bd78e6c556ac7856fd24f40572e02594dc3997492",
+          "bounds": [
+            72,
+            81,
+            184,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            72,
+            82,
+            184,
+            224
+          ]
+        },
+        {
+          "index": 6,
+          "rgbaSha256": "be05dd7426a6621582ad8a25dcd50a66b8a26e3ffa5d8e0183791ba8dd93a5c8",
+          "bounds": [
+            74,
+            41,
+            180,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            75,
+            42,
+            179,
+            224
+          ]
+        },
+        {
+          "index": 7,
+          "rgbaSha256": "d08b1784e59f71a301f94bdbec64a1f0722409434fef7239ba8c97f5f23156fc",
+          "bounds": [
+            80,
+            42,
+            178,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            80,
+            43,
+            177,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/sabo/life/work-south.webp",
+      "sha256": "48146a7f914bbe62737440ccd1413e16204810cec85edc396be59dcc07d60522",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "7ff8ef10a7181b0e894908c3660641ed3e1042f90e9866302cedf1eb747fcf3b",
+          "bounds": [
+            80,
+            23,
+            175,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            81,
+            24,
+            175,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "0de567718e3800a6c1088e751f609fd3a182d37ff5ed19a393d78a9b7a867717",
+          "bounds": [
+            79,
+            24,
+            175,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            80,
+            24,
+            175,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "6252280c7cf01175c1f73b369f765a1569c93cb0368e0842c3c6651678799c1a",
+          "bounds": [
+            79,
+            23,
+            176,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            81,
+            24,
+            175,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "80964267512c4af0780699fc8099a61407dd7be0fb4ee8c90dcfe584261a2070",
+          "bounds": [
+            81,
+            23,
+            176,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            82,
+            24,
+            175,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/sabo/life/eat-south.webp",
+      "sha256": "9ae21446b3ff347f77358c54316d854da4a3a5942ba541ee755312a521f098b5",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "c81f9185bb2ac1a0ab783386a731918a3b357325120cdc15d3ea2083b75cbb56",
+          "bounds": [
+            83,
+            18,
+            172,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            84,
+            19,
+            172,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "565cac27f02b58ff70ef517824a0b822ea13a263f1f1dec5fb08e00a71b5f9dd",
+          "bounds": [
+            82,
+            19,
+            174,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            83,
+            20,
+            172,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "56347d0b6dd8b586b1e9b2cb38c024129c3a09982369d3489dc4b82272627f71",
+          "bounds": [
+            82,
+            19,
+            173,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            83,
+            19,
+            172,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "209dc0c51bf2b195de1de4057a88c922095ac8c3e33f3a09b927efcdeeab1c86",
+          "bounds": [
+            84,
+            19,
+            172,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            84,
+            19,
+            172,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/sabo/life/rest-south.webp",
+      "sha256": "7d85bab6bfd667093f363d3e0be16ed4e2a230b9462416c0bd6b5e005c059146",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "38f48e48a913da3052ede6bac2473b9da121db03d90c7f7133d9a356d286d7a1",
+          "bounds": [
+            61,
+            68,
+            195,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            62,
+            68,
+            194,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "5ac67e35487915cc5b1dc16f218ad39d0b1f2ade7e3adcfc514223844a01065c",
+          "bounds": [
+            59,
+            68,
+            197,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            60,
+            69,
+            196,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "bc8d65a09a784b6abdbd8d51b59249ad843f76563ce3f9e3449957ce214545c0",
+          "bounds": [
+            59,
+            67,
+            197,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            59,
+            68,
+            196,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "53852ee108a4da9cdfb61aa3faef7597f246e25975aa4b09d1d10bde6b82a409",
+          "bounds": [
+            60,
+            68,
+            197,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            60,
+            68,
+            195,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/sabo/life/sleep-south.webp",
+      "sha256": "b592d9f58a314d5957ba826928bb730d6a6a1018929f15be2c640a31ad377c4e",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "9fb769468de954bc28859007330b37f1eb3157272e7b73dd019b717a779c25db",
+          "bounds": [
+            49,
+            139,
+            208,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            49,
+            139,
+            207,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "97eafe0fb066abbe4420d5e6b04eaa7efbc8d893c472e0ef872206b0afea2cdd",
+          "bounds": [
+            48,
+            140,
+            208,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            49,
+            141,
+            207,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "f20a25d04b25cbd34428295f506838c3d4689d007fc775e17ec6f001c899ac99",
+          "bounds": [
+            47,
+            139,
+            208,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            49,
+            140,
+            208,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "42ee6d1ab675008bb0502f4b02a6b344d35eb02a2c121fe95e047aaeca561c02",
+          "bounds": [
+            49,
+            139,
+            208,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            49,
+            140,
+            207,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/sabo/life/train-south.webp",
+      "sha256": "be7601dc6380d58ea49cabce3dcac25acd9e68dd5ec8c81a05dd5c6b35b08ef8",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "012512a57bc213babb19149345bea4bb9ed970f1694e8ced65a400687e585f9f",
+          "bounds": [
+            83,
+            23,
+            174,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            84,
+            24,
+            174,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "d96264d1bffc6dceaf5d2e5d10f3fe812b49cf349922acf02d27dea8e703ec0c",
+          "bounds": [
+            84,
+            23,
+            176,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            85,
+            24,
+            175,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "af230aa07d8f07b17e656757c142a59fadb45aa4ac57aabe905d644804886ae0",
+          "bounds": [
+            81,
+            22,
+            177,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            82,
+            23,
+            176,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "08086598e15f877ee8105475c2b2566783329a10aaf6dc6ea57770d1f74f6e70",
+          "bounds": [
+            83,
+            23,
+            175,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            83,
+            24,
+            174,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/law/portrait.webp",
+      "sha256": "2247296904d5eff3c0f867fdb5fa30c4c99bfd804753d76ed35a026001501712",
+      "dimensions": [
+        256,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "09d8203a8b898751cf83918af552d7ee1db3bb69fb180b16dc7e72f8f903e004",
+          "bounds": [
+            88,
+            23,
+            168,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            89,
+            24,
+            167,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/law/walk/east.webp",
+      "sha256": "79784d4a4852a127596e51520d6f5e6014bbd79246397e87b1cbbe52e85d2632",
+      "dimensions": [
+        1536,
+        384
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "2a7feb3ee477783f1ef4ad88e8e796d7656b53049e27ed18ca900d4d2f3b4bd8",
+          "bounds": [
+            138,
+            35,
+            264,
+            336
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            138,
+            37,
+            264,
+            336
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "bb500d723db55c431894bb153e334b14bed21befa23ae3297a1c0164cd16bd7a",
+          "bounds": [
+            154,
+            35,
+            239,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            155,
+            36,
+            239,
+            336
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "ec35a41a6fb910376685c98b3a99905ef9c3a82c1f1f1a91d9bfc0a641f23dd2",
+          "bounds": [
+            116,
+            35,
+            271,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            116,
+            36,
+            269,
+            336
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "bb500d723db55c431894bb153e334b14bed21befa23ae3297a1c0164cd16bd7a",
+          "bounds": [
+            154,
+            35,
+            239,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            155,
+            36,
+            239,
+            336
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/law/acting/east.webp",
+      "sha256": "7876d94ba0e000c2ab533de8a77c1040729719ab6f86927c2a55daecee15a060",
+      "dimensions": [
+        2048,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "b967e81bedd37a6a4fd423efce6ac357cc31f9681a426d3bf6b729dd8ad9ac35",
+          "bounds": [
+            95,
+            23,
+            167,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            95,
+            24,
+            166,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "a95bcdaa3f089c0f4c0225393a919a4aa84325261bbc83eeaa89c19b3970c905",
+          "bounds": [
+            93,
+            21,
+            201,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            95,
+            23,
+            200,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "c5be6286a2c01aa25105c623ac507eb5eed28b2e7a651c50323134e55c341b44",
+          "bounds": [
+            94,
+            23,
+            167,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            95,
+            24,
+            167,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "10b7b0f3d2d81204d45fc9298539f78a575a0c4048b8ad9322e83e61c0f130c9",
+          "bounds": [
+            93,
+            21,
+            190,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            94,
+            22,
+            189,
+            224
+          ]
+        },
+        {
+          "index": 4,
+          "rgbaSha256": "d800284ca3bc6593b10519a3bb791a89fcd06c154bccdd3b8d2f0bb4a0f6d540",
+          "bounds": [
+            95,
+            22,
+            165,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            95,
+            23,
+            165,
+            224
+          ]
+        },
+        {
+          "index": 5,
+          "rgbaSha256": "a249463b3cd94c359a9fffd8faa74d93facead48bf75f8536c5a90e3467252a7",
+          "bounds": [
+            82,
+            49,
+            174,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            83,
+            50,
+            173,
+            224
+          ]
+        },
+        {
+          "index": 6,
+          "rgbaSha256": "4e047974202cabb92a7f1f7949a4f2bacf9eda7ff5e6f1838d986e02fff05ed6",
+          "bounds": [
+            90,
+            23,
+            184,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            90,
+            24,
+            183,
+            224
+          ]
+        },
+        {
+          "index": 7,
+          "rgbaSha256": "c8627987c2e120b91913bcfeba874f192d9add09f235c79d25107a119cb226af",
+          "bounds": [
+            94,
+            25,
+            167,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            96,
+            26,
+            166,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/law/life/work-east.webp",
+      "sha256": "25e0dbfc66c2435567dc22b4b67c8d959473cf990f5a99bb601c953498b6ff10",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "5dafd488b7e8306d42171543e35870c713b7e3b01330c7f6cf65405ff39dc807",
+          "bounds": [
+            99,
+            23,
+            163,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            101,
+            24,
+            162,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "3707cdf5f6ae5a9ce3d09b12861e83024417e241cae42c4fe17141cb44284e72",
+          "bounds": [
+            99,
+            23,
+            192,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            101,
+            24,
+            191,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "59ed98b3f62bae1cb65023fd25e201da43205aef098ea5a43610f69940714813",
+          "bounds": [
+            99,
+            23,
+            170,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            101,
+            24,
+            170,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "2274bd72ce05591b6b5a9aeb05d632e6d2ec2dcfb711e7bab60937a6db329aab",
+          "bounds": [
+            99,
+            23,
+            189,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            101,
+            24,
+            188,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/law/walk/west.webp",
+      "sha256": "d42c39a78024c5ac3cb0a196cf04d85cc3b2b2f13dd0340b1a3fecc461cab9f7",
+      "dimensions": [
+        1536,
+        384
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "e1ae016e7f508513558d35e0d202a5ae4ea2e8293b702c032ce84821bdda2f14",
+          "bounds": [
+            118,
+            41,
+            251,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            120,
+            42,
+            250,
+            336
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "ebf0f5d1ba7455eb6083ac5f3199187df89c131b5c2585987a879dd7f400a0dd",
+          "bounds": [
+            144,
+            39,
+            233,
+            336
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            145,
+            40,
+            232,
+            336
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "983e69df1809d475c787de6b3d3816270930f510ffde317750058daadde3ae7c",
+          "bounds": [
+            115,
+            39,
+            270,
+            336
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            117,
+            41,
+            269,
+            336
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "ebf0f5d1ba7455eb6083ac5f3199187df89c131b5c2585987a879dd7f400a0dd",
+          "bounds": [
+            144,
+            39,
+            233,
+            336
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            145,
+            40,
+            232,
+            336
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/law/acting/west.webp",
+      "sha256": "59db74e4807c3bf1a26344712ceea89c0a058fe2271e40f65ef20814c6dd52b8",
+      "dimensions": [
+        2048,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "72145610e02b1a827152be072e0e1f4a602bcf8a3a52b784520f94bff2c176bd",
+          "bounds": [
+            89,
+            22,
+            163,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            89,
+            23,
+            162,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "018fc3fd1afdd9037d8b86ec57e378207b52af7155be47d0bcd9e558dc84571a",
+          "bounds": [
+            57,
+            23,
+            163,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            58,
+            23,
+            162,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "df4210ca0526b7147e819d3be495dd50419a136cca2567ecbd2844d9cf51c0df",
+          "bounds": [
+            88,
+            22,
+            162,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            90,
+            23,
+            162,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "594e6c998aeb72482db1836c174890fab5a33aa9b02cdb1408e32a665da6f0f6",
+          "bounds": [
+            65,
+            22,
+            164,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            65,
+            23,
+            163,
+            224
+          ]
+        },
+        {
+          "index": 4,
+          "rgbaSha256": "4287c0c93283f4caa1ace551cf63a679955da0df38af5b39ae720120e034bf07",
+          "bounds": [
+            91,
+            23,
+            163,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            92,
+            24,
+            162,
+            224
+          ]
+        },
+        {
+          "index": 5,
+          "rgbaSha256": "a62c929205e4a24d9b375c4588d968f436bbb9783fcf220ec5e8df0a0f61914b",
+          "bounds": [
+            80,
+            49,
+            176,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            80,
+            49,
+            175,
+            224
+          ]
+        },
+        {
+          "index": 6,
+          "rgbaSha256": "affca9ff9eb4d162a410e15191a497640ab729847938ffaa89923b70b2fb1407",
+          "bounds": [
+            70,
+            21,
+            168,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            70,
+            23,
+            167,
+            224
+          ]
+        },
+        {
+          "index": 7,
+          "rgbaSha256": "4f97bca3afb9e1a5e4126ddfc9f18d6aef865d92dddb5b1eea9fdae154efb499",
+          "bounds": [
+            89,
+            22,
+            163,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            89,
+            23,
+            162,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/law/life/work-west.webp",
+      "sha256": "8222744b655080dc0911dce7ec92b809076348381f0dbfd7068bc5481677f985",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "7721308096c5da8afd0920bedd88ee9f225e147704d642e03a4f2cb606481123",
+          "bounds": [
+            94,
+            21,
+            158,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            94,
+            22,
+            157,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "08f641049e5cc38a923b9e52d11670165df7a3aeae94fe3d90cdd4d0e8a46d52",
+          "bounds": [
+            65,
+            22,
+            158,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            66,
+            22,
+            157,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "229d9d95bd5192f8a305ad76d456896209320fe677f39e14e470f589b46a597c",
+          "bounds": [
+            85,
+            22,
+            158,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            87,
+            23,
+            157,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "8d40dceef6f23fed6e3625ce5ba7fa3bd4de8cc832460477490928edb4394d7e",
+          "bounds": [
+            67,
+            21,
+            159,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            68,
+            22,
+            157,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/law/walk/north.webp",
+      "sha256": "e1e8283371c1de19dc582ff9ac4693f66836469f7818911d346360abf6a1b871",
+      "dimensions": [
+        1536,
+        384
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "9a823667541154343f61062a7159a42372fae2371ceace22d6c76e80ff537ffa",
+          "bounds": [
+            125,
+            29,
+            249,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            126,
+            31,
+            247,
+            336
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "f5de0ad50b2b6a85731bf455f53a9cfe067e52ff5baf11314d2b0f626ae769bc",
+          "bounds": [
+            132,
+            35,
+            253,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            133,
+            36,
+            251,
+            336
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "e453aaf7005e7118217316e09867ee129a13af10dff92b193549630411e92424",
+          "bounds": [
+            135,
+            29,
+            260,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            137,
+            31,
+            259,
+            336
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "f5de0ad50b2b6a85731bf455f53a9cfe067e52ff5baf11314d2b0f626ae769bc",
+          "bounds": [
+            132,
+            35,
+            253,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            133,
+            36,
+            251,
+            336
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/law/acting/north.webp",
+      "sha256": "38ce0c46af1a392cec3e4a02f4cc095e699533bfbb6b40cd5908a7568f2013db",
+      "dimensions": [
+        2048,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "f33d29303bc0ba3a2e0c6b6d6a41c40e2e9fc374691594895bfaa9178dcc5a6d",
+          "bounds": [
+            84,
+            23,
+            171,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            84,
+            24,
+            171,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "2776037e4f1ca113f01b6546853316120538fb95448b1bc9050ad984a53c3ea2",
+          "bounds": [
+            67,
+            23,
+            192,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            67,
+            24,
+            191,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "599572775de2542b3482dc05abcb5d7e0c41fa9f3bbd685e89f750710596fd5b",
+          "bounds": [
+            83,
+            23,
+            172,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            84,
+            24,
+            171,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "ff7f372aa08a3b49d3ae4ea0507a646bc4b5e3ae07a2cc74a2e124c6de8f97c2",
+          "bounds": [
+            69,
+            23,
+            190,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            69,
+            25,
+            190,
+            224
+          ]
+        },
+        {
+          "index": 4,
+          "rgbaSha256": "4a6b7a4b9607fb96688b1314eeec83c399123bf7efbabf6b8dec55116c1ddaf4",
+          "bounds": [
+            86,
+            24,
+            170,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            86,
+            24,
+            169,
+            224
+          ]
+        },
+        {
+          "index": 5,
+          "rgbaSha256": "8282b2bda04152e30ce4e64fc510f3f2497563b382306561765e27333f22ebee",
+          "bounds": [
+            93,
+            71,
+            163,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            94,
+            71,
+            162,
+            224
+          ]
+        },
+        {
+          "index": 6,
+          "rgbaSha256": "e65ec93c11f72cd30cc7926b6257c0f185d903dea65dfb25bd981dcfdcb86c22",
+          "bounds": [
+            75,
+            24,
+            182,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            76,
+            25,
+            181,
+            224
+          ]
+        },
+        {
+          "index": 7,
+          "rgbaSha256": "e2ad61e1e817c7b34d98b8cd1768f7cfa415bb970f02eb4eabd218882be94b58",
+          "bounds": [
+            80,
+            24,
+            168,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            81,
+            24,
+            167,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/law/life/work-north.webp",
+      "sha256": "14b7b19dfeddbde08c95f5363c06da3086cf5b694dcd800331ad7a1f398c1d31",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "917e2e3a6d8651d2267ccc374d17a825e4e25557575b1388cb07d16113a44be0",
+          "bounds": [
+            86,
+            25,
+            173,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            86,
+            27,
+            172,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "6da26936f108a7eba487e131ae1abf29fdead1a137b13800e3b256d1ca8b084b",
+          "bounds": [
+            85,
+            26,
+            191,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            86,
+            27,
+            190,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "1958c5a489db66d58068390d2a09157799412bcf1c66642c64ebd0bd6b279cdc",
+          "bounds": [
+            85,
+            25,
+            173,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            86,
+            27,
+            172,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "b4a3083e70d1990d00be521cb4971df74521d77a155ecd454d829baafbb49718",
+          "bounds": [
+            84,
+            25,
+            190,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            84,
+            27,
+            189,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/law/walk/south.webp",
+      "sha256": "072e8143a20175dd58b930bcf4c08af850b5ae565a1e44599d150251d6177309",
+      "dimensions": [
+        1536,
+        384
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "0793aa55a1869b84e556cce4af7c65836ee8c4c7646835cac565ce058739a66d",
+          "bounds": [
+            127,
+            24,
+            257,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            128,
+            26,
+            257,
+            336
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "5ff0e79db5510e93cd38397212ae3beafe7d6d658bbcb28fd9797e82fde0b6aa",
+          "bounds": [
+            131,
+            23,
+            257,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            131,
+            24,
+            255,
+            336
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "8d9f7148b189cd3c527153bede0406ce8c6893bf84b60b45c9301ecab6f282b0",
+          "bounds": [
+            128,
+            24,
+            258,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            130,
+            26,
+            258,
+            336
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "5ff0e79db5510e93cd38397212ae3beafe7d6d658bbcb28fd9797e82fde0b6aa",
+          "bounds": [
+            131,
+            23,
+            257,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            131,
+            24,
+            255,
+            336
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/law/acting/south.webp",
+      "sha256": "7ae65b01f82289d5a0d18bf4c0692698779713bd0768800f28e68f82f007ba1f",
+      "dimensions": [
+        2048,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "0a2be7b694493301c24afb4f162dbac909bd135eeffa2552003dbd56c2ceae61",
+          "bounds": [
+            78,
+            23,
+            174,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            79,
+            24,
+            173,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "cf4992b58b1a1b9deabbd811188c2044bc3ef5f6b6d3cb9927d0ae6668c37b81",
+          "bounds": [
+            63,
+            21,
+            196,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            64,
+            23,
+            194,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "42fc5aac4a5692a855d9a3e2bc9e3785efb8109f019e97add9ca0be9cc912bae",
+          "bounds": [
+            82,
+            23,
+            177,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            83,
+            25,
+            177,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "f40ebe40c2af77898457151bac3aac0fab2d672eba83dc8869afe83cc15666e1",
+          "bounds": [
+            68,
+            23,
+            192,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            69,
+            24,
+            191,
+            224
+          ]
+        },
+        {
+          "index": 4,
+          "rgbaSha256": "e4cdbbd74eb338d04ea578beca2262e8f3cb4c06c2d20b9308537cda7ec18a42",
+          "bounds": [
+            76,
+            23,
+            175,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            78,
+            24,
+            174,
+            224
+          ]
+        },
+        {
+          "index": 5,
+          "rgbaSha256": "e1d85159fa3fff75945da7a3b4e141e52a83d63e31b13f5f338056c2ffd8afb9",
+          "bounds": [
+            93,
+            65,
+            163,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            95,
+            66,
+            161,
+            224
+          ]
+        },
+        {
+          "index": 6,
+          "rgbaSha256": "e0483e8396b13174b681e55061dbd52310e52f1fca7f470302b9b361f2a79610",
+          "bounds": [
+            77,
+            22,
+            188,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            78,
+            23,
+            187,
+            224
+          ]
+        },
+        {
+          "index": 7,
+          "rgbaSha256": "719310cae676f6058eca604567902f5b7b5a1fe543e0b0878e4e80a252ca91d0",
+          "bounds": [
+            83,
+            23,
+            179,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            84,
+            24,
+            178,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/law/life/work-south.webp",
+      "sha256": "a4b41a6db32b572f902e600a8abaa86643fa98f7afdffed23f5f3c17e03875b4",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "0f467cb56a34ee1a4e538b0561feba0805ab5ff732cfbaf8cc3254482d56aa82",
+          "bounds": [
+            80,
+            22,
+            179,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            81,
+            23,
+            177,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "16f7d007231cf0cd2799a86283f2490c53b3a4a225aef92e9b8cb4b181378970",
+          "bounds": [
+            81,
+            22,
+            176,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            81,
+            23,
+            175,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "55693645a28cc3f6f0641b4b634c739328f7acae302821ff7bcefdaff706e38d",
+          "bounds": [
+            81,
+            23,
+            177,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            82,
+            24,
+            176,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "a7f06025572eea48d39a9809e43e875ee2da0a2bfd48c863876b0f92cc43b9ac",
+          "bounds": [
+            77,
+            23,
+            177,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            78,
+            24,
+            177,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/law/life/eat-south.webp",
+      "sha256": "5e55ac2649163cf9f022f796bce18052c216d732862a9f0fd3c7d802b5476084",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "2870381e0209c9adb48212ac7087d12808ddc7564623dcfb2596342cf6da06df",
+          "bounds": [
+            89,
+            42,
+            167,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            89,
+            43,
+            166,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "963acb203543ff05cb344a8975100a57cb7181b17e6fde5d1919ed98a892081a",
+          "bounds": [
+            86,
+            41,
+            168,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            87,
+            42,
+            166,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "84cf5ecf38e2c1ab186f28268b236081943dae72030d61f5f820974845097cfe",
+          "bounds": [
+            86,
+            42,
+            168,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            86,
+            43,
+            166,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "63e41dec14e510117265694c0135161d68bf5b564387326706c19740f9a69c5a",
+          "bounds": [
+            89,
+            42,
+            167,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            90,
+            43,
+            166,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/law/life/rest-south.webp",
+      "sha256": "3dbd3dcef80a24203a1ddc6fde068a94ddb8551d81044e32cf5265212029db25",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "cb8a95bc478a7b32ca7c77dd46fc111e9aef1fe2cc8c919ebb64edc89cb91c79",
+          "bounds": [
+            87,
+            41,
+            169,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            88,
+            42,
+            168,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "6f36712f777364af7dcd3b1c4aa12cc27c69e09fba966900c7780c3a0c689ada",
+          "bounds": [
+            87,
+            40,
+            169,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            88,
+            41,
+            168,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "a17044704dfc825521f2af2e89f1a41b509c2c19f084213d2906160f05c59272",
+          "bounds": [
+            86,
+            41,
+            169,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            87,
+            41,
+            168,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "17932c6f44d875c4e64f3f75805778891ca72153715477b9be699398a4293ee8",
+          "bounds": [
+            88,
+            40,
+            168,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            88,
+            41,
+            168,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/law/life/sleep-south.webp",
+      "sha256": "c881e4b684af69799481bf78d4ab6987fba129ed07531e59484c33b0975de623",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "a2158f386c311868adbaf77652e4ff2626d643364ad435395a548a2017963b6f",
+          "bounds": [
+            89,
+            52,
+            167,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            89,
+            53,
+            167,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "60d2956398ca508a6372753b266b9c64bfeebde90f9ef8edb71e2cc46124f3aa",
+          "bounds": [
+            86,
+            54,
+            170,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            88,
+            55,
+            168,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "819c3ad46d7bf4ab826bfc1f7cec4d8c4ae0959187d541462d87ab1011a633a1",
+          "bounds": [
+            87,
+            53,
+            169,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            88,
+            55,
+            168,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "82bae22a864b4371fa49d918fb553093f919b16f7ecbb1f990816c17165973f2",
+          "bounds": [
+            89,
+            51,
+            167,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            89,
+            52,
+            167,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/law/life/train-south.webp",
+      "sha256": "e4315689e1478099a5b4f1be18c360d5e5bf282d84fce83989d00d6f49d3ad62",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "4f07a5aef6bafdc4f0df9c1337faf63e49b0ff75a0277d9528c8808aa16596dd",
+          "bounds": [
+            90,
+            23,
+            167,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            91,
+            24,
+            166,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "247dd1b481955bc639c83ce2297f864bd48b5995947d8e274cd0a522744913e3",
+          "bounds": [
+            81,
+            21,
+            177,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            82,
+            23,
+            175,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "82020eb3f5d6513ebdd44171a68cf90fd08e3eecb280ee8441d20ec8dccbe447",
+          "bounds": [
+            69,
+            22,
+            185,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            71,
+            23,
+            185,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "757860baf9da179da27758df42ff889f0ac7b6c1643f0bf1cf5c4b2a884df016",
+          "bounds": [
+            89,
+            23,
+            167,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            90,
+            24,
+            167,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/hancock/portrait.webp",
+      "sha256": "3cf6c29f8d2a4add266bc7e5d090674c03e33f0d821730a8e9a9a871d01bc7e7",
+      "dimensions": [
+        256,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "6e8e30dab4dc63ed8fbd5483c13d8bbfe41eca724f7d5cf347834e6f432c1b62",
+          "bounds": [
+            88,
+            23,
+            170,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            88,
+            24,
+            169,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/hancock/walk/east.webp",
+      "sha256": "72df9b985749d84825f9dd49dc89d4d9ea736ce0a761ba0dfce2d65f308aa2f9",
+      "dimensions": [
+        1536,
+        384
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "46c99b49a4459e18702b534ade6c5495805273c97c46d4a5d6eaf96d72b9c283",
+          "bounds": [
+            122,
+            37,
+            261,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            123,
+            38,
+            260,
+            336
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "dde64c917521d08993c29103442e366045b3db1f65b6fd8cb30ab8a426b2ef6b",
+          "bounds": [
+            127,
+            35,
+            239,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            129,
+            36,
+            237,
+            336
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "00b5f19524e1102ac73439c5156d6c107ab19e20faf3f875176c668f7d353ff0",
+          "bounds": [
+            124,
+            35,
+            260,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            125,
+            36,
+            258,
+            336
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "dde64c917521d08993c29103442e366045b3db1f65b6fd8cb30ab8a426b2ef6b",
+          "bounds": [
+            127,
+            35,
+            239,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            129,
+            36,
+            237,
+            336
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/hancock/acting/east.webp",
+      "sha256": "4e6e8f97ec825b64028f67bcb3583ef0610d28ee9723e429ff14b8ec725d32c6",
+      "dimensions": [
+        2048,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "9fdfccde707d1cbbe1d7b8d94e311312c4a25f3e45fed3649fd9510b1c9cf0f0",
+          "bounds": [
+            81,
+            23,
+            163,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            82,
+            24,
+            162,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "65f7de5358d3b928977cd1af6c8a6699f2939acf52d179c8956c4bc482b1f08f",
+          "bounds": [
+            80,
+            21,
+            202,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            80,
+            23,
+            201,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "d02f54adb81bdcc4deae1b57c93ae12dee6ade474148f6b3a2bbee125e5d3848",
+          "bounds": [
+            81,
+            23,
+            167,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            83,
+            25,
+            166,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "ce7025b9ec2cee10f8f3e39d597992742a6733a052d19d467bb7d7e5fac81512",
+          "bounds": [
+            77,
+            23,
+            178,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            79,
+            24,
+            177,
+            224
+          ]
+        },
+        {
+          "index": 4,
+          "rgbaSha256": "194ab813de346b82c1e202cef7ea5a1407bc442d6b7cf76dc3d1fb9a05548db0",
+          "bounds": [
+            77,
+            22,
+            165,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            77,
+            22,
+            164,
+            224
+          ]
+        },
+        {
+          "index": 5,
+          "rgbaSha256": "abe8ef7dba55499e6f68c5c2f01c728d192270c67c8f7525e067e759b715452d",
+          "bounds": [
+            68,
+            42,
+            188,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            69,
+            42,
+            187,
+            224
+          ]
+        },
+        {
+          "index": 6,
+          "rgbaSha256": "50169a0e2d614148f2a7f1c5d1fc6848c52dac6eabfc40eefc19187de56212da",
+          "bounds": [
+            78,
+            22,
+            180,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            80,
+            23,
+            179,
+            224
+          ]
+        },
+        {
+          "index": 7,
+          "rgbaSha256": "9d15a696736e87b2ecda6d3418f4182011e5d9e2a83cc1b94dd6a2f68543dc58",
+          "bounds": [
+            82,
+            21,
+            165,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            83,
+            23,
+            163,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/hancock/life/work-east.webp",
+      "sha256": "d7de59734a687c622b6ed4d76cce18c0feae2e5973949f4b6a0956c540dad0be",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "73d908aba9e823b2afd86ee448de344fac2b6fa1c19a35b91a939cfa6978356d",
+          "bounds": [
+            80,
+            23,
+            163,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            81,
+            24,
+            162,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "36a9052bd55b2b8293c524a80105f8bf9d191cfc338699916230ea37fbd2d5a8",
+          "bounds": [
+            80,
+            23,
+            198,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            81,
+            24,
+            196,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "cf79ddcc4c7f77174e373e3104c471bd4a9c93c646a365436fe0c6c8d3a1280c",
+          "bounds": [
+            79,
+            23,
+            177,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            81,
+            24,
+            176,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "c07544ce232a09fdc9b8aa1502522f7b2e2add9d873047e4a364ad5efc3dc954",
+          "bounds": [
+            80,
+            23,
+            196,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            81,
+            24,
+            195,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/hancock/walk/west.webp",
+      "sha256": "2ec80a2d7c4073ed819ab0acc119b79b7db31dcedb321d90434139912297c1d6",
+      "dimensions": [
+        1536,
+        384
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "7bc30e5e02f73c5d36ff8adc523bcf915fd52e7f9d2b329646487500c2b91d20",
+          "bounds": [
+            121,
+            36,
+            260,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            122,
+            37,
+            259,
+            336
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "3470b5c5ce62866ac49ed513282bcdc8bb80d3720f2df1abd447ef16f717622c",
+          "bounds": [
+            145,
+            36,
+            258,
+            336
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            147,
+            37,
+            257,
+            336
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "78236b558ed138e409a73d99808ef547c1fb79af349206981bd1f8ea7c0e903b",
+          "bounds": [
+            126,
+            37,
+            267,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            128,
+            38,
+            265,
+            336
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "3470b5c5ce62866ac49ed513282bcdc8bb80d3720f2df1abd447ef16f717622c",
+          "bounds": [
+            145,
+            36,
+            258,
+            336
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            147,
+            37,
+            257,
+            336
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/hancock/acting/west.webp",
+      "sha256": "0504312486c811c028f8b49798d65e0ccaebdebc20187e07e06fcbc36322afc7",
+      "dimensions": [
+        2048,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "418ad3bb9fa7aad420585e1d46a24da105166bcd81058811f396cb14819108f5",
+          "bounds": [
+            93,
+            20,
+            179,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            94,
+            21,
+            178,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "197d10f065ca52075141337111d756bd026668b4d01a5845e4f28bdcdfdb3408",
+          "bounds": [
+            54,
+            21,
+            180,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            55,
+            22,
+            180,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "465e1fd49e5b6565573c38211090644f8ffcb62c403976ed02249675040f2df7",
+          "bounds": [
+            89,
+            21,
+            177,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            90,
+            23,
+            176,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "b6464d88edc8487ffb16e7782080499318bee7aa6d69121452165f63409feeeb",
+          "bounds": [
+            79,
+            19,
+            182,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            80,
+            21,
+            182,
+            224
+          ]
+        },
+        {
+          "index": 4,
+          "rgbaSha256": "9d1b6a6d89505aaf8c1e6d56a1949ac797896c6b7fc21bb4b8ef77caa30fbc5c",
+          "bounds": [
+            92,
+            21,
+            182,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            93,
+            23,
+            181,
+            224
+          ]
+        },
+        {
+          "index": 5,
+          "rgbaSha256": "13330fbad87716d50a2be4c84ed4045b86dd31429cb60c85b7ea3e673c7ec79d",
+          "bounds": [
+            66,
+            45,
+            189,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            67,
+            45,
+            189,
+            224
+          ]
+        },
+        {
+          "index": 6,
+          "rgbaSha256": "3fbe0d379577dbb9496ff4e63e7ab08c602814a23d31f2449367018904a4ca9c",
+          "bounds": [
+            75,
+            24,
+            180,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            76,
+            24,
+            180,
+            224
+          ]
+        },
+        {
+          "index": 7,
+          "rgbaSha256": "6cf12dbe4521da71bb6b0b319171dd03da5f7eb150b907f5adce27d01f90f933",
+          "bounds": [
+            91,
+            23,
+            175,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            93,
+            24,
+            174,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/hancock/life/work-west.webp",
+      "sha256": "3bb34a181bb239945c8a6b6bb71095a6f1058b1504ac090dbf094794509a1b16",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "34a57cbb9384f468ad228ca202fc0e409050b384b9cf61b16431d52c0e16376d",
+          "bounds": [
+            93,
+            17,
+            179,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            94,
+            18,
+            178,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "c5ca55ac24e7136534e48ff8264ba346fdb0574f465ba2df5ef059b750f36b56",
+          "bounds": [
+            59,
+            17,
+            179,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            60,
+            18,
+            178,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "547b5f920335a25956f847d8baa6d49b5609a1bc113a8f7616f6cf75089838a0",
+          "bounds": [
+            80,
+            17,
+            178,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            82,
+            18,
+            178,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "f859630cd9d09a092f5393a320daf015b6de61a8effe00d544ef6f813e82fef0",
+          "bounds": [
+            64,
+            17,
+            179,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            65,
+            18,
+            178,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/hancock/walk/north.webp",
+      "sha256": "7663b81e4095eb3d26d313e2af06ba7f6c171a5156f5367e6db13e523b743250",
+      "dimensions": [
+        1536,
+        384
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "ed687120ca2cb29db8df378a825ee6f2f9dd4e5502873826e3ca1a4a08c89a3a",
+          "bounds": [
+            121,
+            32,
+            255,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            122,
+            34,
+            253,
+            336
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "53b27b35eef3063ebb40a19b2d6131701e4bbd520cd820c7ae16e840b5d68e07",
+          "bounds": [
+            128,
+            35,
+            257,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            129,
+            36,
+            255,
+            336
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "beafed00f61bc13af699ca2f5518523ba5596170c751e5b3c7c1adea3b990c81",
+          "bounds": [
+            130,
+            32,
+            263,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            131,
+            34,
+            262,
+            336
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "53b27b35eef3063ebb40a19b2d6131701e4bbd520cd820c7ae16e840b5d68e07",
+          "bounds": [
+            128,
+            35,
+            257,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            129,
+            36,
+            255,
+            336
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/hancock/acting/north.webp",
+      "sha256": "b1c1fd87bdbc66b7ea7cd955483bbc6ff45f7866d1a903b4624366b14b20ea38",
+      "dimensions": [
+        2048,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "b400666ef31847529364aa895b991c54b1c441114750d5101c316173cd6c6e74",
+          "bounds": [
+            81,
+            23,
+            175,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            82,
+            24,
+            174,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "5a8279acfa26370cbf7bce4a3fa73a45d20a5a0f75b92b27ad9384f705932216",
+          "bounds": [
+            57,
+            23,
+            200,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            58,
+            23,
+            200,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "c3d2122a407b1f4296287e5a549e2d32f3e8b5cd1e5de675ed9d45fb6bc485a6",
+          "bounds": [
+            90,
+            24,
+            165,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            91,
+            24,
+            165,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "6557607202a279d23d0fd5751e9df183bc2ee8bfa2bd00893977dc07bec260e6",
+          "bounds": [
+            78,
+            25,
+            180,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            79,
+            25,
+            179,
+            224
+          ]
+        },
+        {
+          "index": 4,
+          "rgbaSha256": "511ebc076b06966f7520891ca38eec3be0902d1f0e24abef5a6ba3c6975b8d1e",
+          "bounds": [
+            90,
+            23,
+            170,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            91,
+            24,
+            169,
+            224
+          ]
+        },
+        {
+          "index": 5,
+          "rgbaSha256": "8422ce69332902f018ebd1485d93775d045ac7687b6079d18b5ecfa8fde428a5",
+          "bounds": [
+            88,
+            53,
+            169,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            88,
+            54,
+            168,
+            224
+          ]
+        },
+        {
+          "index": 6,
+          "rgbaSha256": "88f5d147095e4e8a267fd1b1b8540da9e511bdc6a82b19e2d41ae8e5edb6782c",
+          "bounds": [
+            71,
+            19,
+            184,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            72,
+            20,
+            183,
+            224
+          ]
+        },
+        {
+          "index": 7,
+          "rgbaSha256": "7fab11c790a0f8b6952c8a8648d1ac6ace46b51130e3b6dd07188153b60c8abb",
+          "bounds": [
+            88,
+            21,
+            167,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            89,
+            22,
+            165,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/hancock/life/work-north.webp",
+      "sha256": "fea5fe09d5b8c17d58a07bbd9af12880e4d2df756268a4a27d91ecd2ccf43e04",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "f26aa6ba445882425e74dfc34ee89a9d58feee0188115bd20abb08388088d898",
+          "bounds": [
+            85,
+            25,
+            172,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            86,
+            26,
+            171,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "cd29491b948257dbf9e710fc2bdee741b9074dc48965553216e117008211fb95",
+          "bounds": [
+            86,
+            25,
+            187,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            87,
+            26,
+            186,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "229279a3ca94ef1631f45cac094935af8d16f25d919004a5c15cb3d720f4290c",
+          "bounds": [
+            86,
+            25,
+            171,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            87,
+            26,
+            170,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "a79b56e8b76a94dd40fae39246f8363406db8abb424140824e4f2a6efa83b49d",
+          "bounds": [
+            87,
+            25,
+            191,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            88,
+            26,
+            190,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/hancock/walk/south.webp",
+      "sha256": "57696afedbacea92b2693cb02b3b72ee6159f1af2f1a52498700e63be5506416",
+      "dimensions": [
+        1536,
+        384
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "783f51ddab0ebe7f28c507b490a42f9761c525016c5fcf225b72f1214bc4fbc8",
+          "bounds": [
+            122,
+            35,
+            263,
+            336
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            123,
+            36,
+            262,
+            336
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "c024b35d4d25d4c7ffd81017054a45e36949f30e8e5fca70692a783a6f46bf67",
+          "bounds": [
+            123,
+            37,
+            262,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            124,
+            38,
+            262,
+            336
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "c92b33e9bc492fbf6a26cee710a8babe22f96c1e3778727ac7d231d9d14da6e2",
+          "bounds": [
+            123,
+            33,
+            266,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            124,
+            34,
+            264,
+            336
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "c024b35d4d25d4c7ffd81017054a45e36949f30e8e5fca70692a783a6f46bf67",
+          "bounds": [
+            123,
+            37,
+            262,
+            337
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            124,
+            38,
+            262,
+            336
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/hancock/acting/south.webp",
+      "sha256": "f4a81cf2c4221dfd96d5eb2c65cc506fc71291d31f76ddc75c7afccabaaf45e6",
+      "dimensions": [
+        2048,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "d16bd5823783e196ed0eda7a0d38436876003451a8b918bffe959026348cbe91",
+          "bounds": [
+            77,
+            17,
+            179,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            79,
+            18,
+            179,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "4fdcebca8a4a2fb45bf6f000580b4e9d0363df4463f65f7a4532863257e2e3e8",
+          "bounds": [
+            60,
+            17,
+            199,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            61,
+            18,
+            198,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "64701c18ebc04f590d1231e2dd70beeb07ad8ce62dce3fb58ec01f1a33e10648",
+          "bounds": [
+            80,
+            17,
+            176,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            82,
+            19,
+            175,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "fea81a6078fd6cfcb907a3d0a311a796c538a74d9bf376de42a9231e9400d6e3",
+          "bounds": [
+            76,
+            19,
+            181,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            77,
+            20,
+            180,
+            224
+          ]
+        },
+        {
+          "index": 4,
+          "rgbaSha256": "f3b2ba03af65c39298336f24696f4a5c83da206103baf477b753fa0140690f17",
+          "bounds": [
+            81,
+            21,
+            176,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            81,
+            22,
+            175,
+            224
+          ]
+        },
+        {
+          "index": 5,
+          "rgbaSha256": "bd19a1c2c3d75a4305121c82afe7467a8096b2363b38bf362fea40b289cec5f7",
+          "bounds": [
+            83,
+            42,
+            174,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            83,
+            43,
+            173,
+            224
+          ]
+        },
+        {
+          "index": 6,
+          "rgbaSha256": "6a9b2c5f59c6cb388e23c7230cc7382b21d63566a9bb99216d0e13fd07062e02",
+          "bounds": [
+            75,
+            22,
+            183,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            75,
+            23,
+            182,
+            224
+          ]
+        },
+        {
+          "index": 7,
+          "rgbaSha256": "9665061a23e4a440d778c9c4586405ba0e5fec196deb8c1a60e0e45f9f2fb1e7",
+          "bounds": [
+            81,
+            22,
+            176,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            82,
+            23,
+            175,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/hancock/life/work-south.webp",
+      "sha256": "d58894376cd6f0487d62f6868e70cca3600a487b4f1ed0d0fbf42cffbe46c272",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "ebde5abc7b47e683357c155d8d485d84e174b019b1d948b5b78c34e40f273cef",
+          "bounds": [
+            75,
+            18,
+            180,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            77,
+            19,
+            179,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "8d46393f080333edeced8e17c9a9a4ae37e542b5e07ae56e5343b928ebde7508",
+          "bounds": [
+            73,
+            18,
+            182,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            74,
+            19,
+            180,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "6c8560a42d05172f261e9ba79321934d5b7b09b6aefd99ab9683ff82360f204b",
+          "bounds": [
+            76,
+            18,
+            183,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            77,
+            19,
+            183,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "cbe4fd329e0cd2badd59b3424d42eac990025b80a935c5988b13d6ce3cf7c684",
+          "bounds": [
+            71,
+            18,
+            180,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            72,
+            19,
+            179,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/hancock/life/eat-south.webp",
+      "sha256": "e535e5bf71a5bfe45b82da2d91e7efa431e0db97fee6be0ed5a79959bf8df798",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "0b7d45c9a004f3d05d20b70a2a139d6b158a64d76460e8c608c59084fdf3d878",
+          "bounds": [
+            76,
+            46,
+            180,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            77,
+            47,
+            180,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "608969d6e9c497ce62e28811f1257a3dca28c47ae6c5986f65205e4bb04c2a3d",
+          "bounds": [
+            75,
+            46,
+            182,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            75,
+            47,
+            181,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "5540a504e3b72b140e1c99c70bb01481581209514d298b8ccd5b1628b9ed66cc",
+          "bounds": [
+            74,
+            46,
+            181,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            76,
+            47,
+            181,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "a3f11eceda12985c5ee16f4d19b347045c5183368689c17a289b5db3d2c2170c",
+          "bounds": [
+            77,
+            46,
+            181,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            78,
+            47,
+            181,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/hancock/life/rest-south.webp",
+      "sha256": "f5443b5e4fdf8f37c21ae2cd26a388716ecf9fadd407eaa6f7c0a16eff5fe337",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "5c6887b516df13c116df71eeff0e477e5bf1e795b927bcf69756574f0a7e159a",
+          "bounds": [
+            75,
+            47,
+            181,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            76,
+            48,
+            180,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "46df363c5bd8aaa1c4e945189ca7f330a458420ce0e9a48e3b77cde9e220c9d7",
+          "bounds": [
+            74,
+            47,
+            182,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            76,
+            48,
+            180,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "167ce115253acc603142c0e119e8fd90467714afcf4dff66579a8214f7157c96",
+          "bounds": [
+            74,
+            47,
+            181,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            75,
+            48,
+            181,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "441a6c0a98b6af6cfb086e208243e7344f78a20fd63972ecf23bab7b104ef432",
+          "bounds": [
+            75,
+            46,
+            181,
+            224
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            75,
+            48,
+            181,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/hancock/life/sleep-south.webp",
+      "sha256": "cff5b7d68734d2d0bcb34109bebc09f4b7e3a473498def27a4e3521088e0b707",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "1aa497579dcd85d0a116f5d6306c28bc628ccb8b735968e29d47e9ca08c48265",
+          "bounds": [
+            76,
+            54,
+            180,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            77,
+            55,
+            179,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "9045617049a3211463d2fffc73ec3defdf7022f0ca90ab31c13edfbc523adfd2",
+          "bounds": [
+            75,
+            54,
+            181,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            76,
+            55,
+            180,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "0f5390665a200305155047967fdd22917c25d4307680768ded8fbf4693312c3d",
+          "bounds": [
+            74,
+            55,
+            181,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            75,
+            57,
+            181,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "10c9f03b0ce9b4ee8f17f26a46aaf0d5ebf79c31a7a55eb8401651e26cde0190",
+          "bounds": [
+            75,
+            54,
+            181,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            76,
+            55,
+            180,
+            224
+          ]
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/reserved_v1/hancock/life/train-south.webp",
+      "sha256": "5d3ce426a04a99b05aa4c4399e457061d13f9d6f4bb9321826752300cac61ba5",
+      "dimensions": [
+        1024,
+        256
+      ],
+      "hasAlpha": true,
+      "frames": [
+        {
+          "index": 0,
+          "rgbaSha256": "1edb5d7ea9dd1f206b6636824296e4fa7bc08633bb0c1b48718beffd2983357e",
+          "bounds": [
+            76,
+            23,
+            179,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            77,
+            24,
+            178,
+            224
+          ]
+        },
+        {
+          "index": 1,
+          "rgbaSha256": "2d728a2e78fdf45bbf6dc2f69f56ffc1c3b29556834caebaea7c05eca27b40c8",
+          "bounds": [
+            78,
+            23,
+            179,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            79,
+            24,
+            178,
+            224
+          ]
+        },
+        {
+          "index": 2,
+          "rgbaSha256": "4d83a9a1f06c5b803198099e94c2efa2759f0953c4e063ae888a3a05f7b2d3f9",
+          "bounds": [
+            70,
+            23,
+            187,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            71,
+            24,
+            186,
+            224
+          ]
+        },
+        {
+          "index": 3,
+          "rgbaSha256": "e941ea0102fddf526f6e214d5397ff9ff944fa57b81ef1c8d306ae234fcc0cbe",
+          "bounds": [
+            76,
+            23,
+            179,
+            225
+          ],
+          "clipped": false,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "opaqueBounds": [
+            77,
+            24,
+            178,
+            224
+          ]
+        }
+      ]
+    }
+  ],
+  "scope": "Actual lossless WebP decode, per-cell RGBA hashes, alpha and bounds only; not art or animation acceptance",
+  "humanAcceptance": false
+}

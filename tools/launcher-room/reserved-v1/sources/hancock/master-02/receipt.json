@@ -1,0 +1,12 @@
+{
+  "generator": "image_gen.imagegen",
+  "mode": "built-in",
+  "original": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-9b43eb5d-aa1f-4de2-aed2-cbccb3f0bf37.png",
+  "reference": "../master-01/source.png",
+  "status": "model-reviewed-identity",
+  "notes": [
+    "Compact adult proportions now align with current cast",
+    "All four whole-body directions intact"
+  ],
+  "humanAcceptance": false
+}

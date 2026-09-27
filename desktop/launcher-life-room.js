@@ -3,6 +3,7 @@
   'use strict';
   const $=id=>document.getElementById(id);
   const data=root.OnePieceLifeData;
+  const reserved=root.OnePieceReservedCrew;
   const keyOf=id=>String(id||'').replace(/^room-character-/,'');
   const itemOf=key=>'room-character-'+keyOf(key);
   function requestUuid() {
@@ -12,10 +13,10 @@
     return `${hex.slice(0,8)}-${hex.slice(8,12)}-${hex.slice(12,16)}-${hex.slice(16,20)}-${hex.slice(20)}`;
   }
   const STATE_NAMES={Idle:'稍作停留',Wander:'四處走走',Work:'正在工作',Eat:'享用餐點',Rest:'休息片刻',Sleep:'安心睡著',Train:'自主訓練',Socialize:'和夥伴聊天',UseFurniture:'使用家具',SpecialAction:'與你互動',EventParticipant:'船上的小插曲'};
-  const ERRORS={offline:'暫時無法連線，工作紀錄會在連線後更新。',unavailable:'正在讀取基地資料。',readonly:'參觀時無法指派主人的夥伴。',no_station:'目前沒有可到達且空閒的工作位置。',not_owned:'尚未收藏這位夥伴。',busy:'夥伴正在忙，稍候再來。',work_daily_limit:'今天的有酬工作已完成，夥伴仍會自由活動。',wallet_full:'商城金幣已滿，工作成果會保留。',insufficient_coins:'商城金幣不足。',cooldown:'剛剛才互動過，讓夥伴忙一下吧。',revision_conflict:'基地資料已更新，請再試一次。',work_active:'這位夥伴已有工作。',station_busy:'這個工作位置正在使用中。',not_placed:'請先把這位夥伴放進房間。'};
+  const ERRORS={client_update_required:'請更新啟動器後再使用這位夥伴；原有配置與工作會保留。',character_not_released:'這位夥伴尚未開放。',offline:'暫時無法連線，工作紀錄會在連線後更新。',unavailable:'正在讀取基地資料。',readonly:'參觀時無法指派主人的夥伴。',no_station:'目前沒有可到達且空閒的工作位置。',not_owned:'尚未收藏這位夥伴。',busy:'夥伴正在忙，稍候再來。',work_daily_limit:'今天的有酬工作已完成，夥伴仍會自由活動。',wallet_full:'商城金幣已滿，工作成果會保留。',insufficient_coins:'商城金幣不足。',cooldown:'剛剛才互動過，讓夥伴忙一下吧。',revision_conflict:'基地資料已更新，請再試一次。',work_active:'這位夥伴已有工作。',station_busy:'這個工作位置正在使用中。',not_placed:'請先把這位夥伴放進房間。'};
   function create(env) {
     const api=root.onePieceDesktop;
-    let controller=null,snapshot=null,serverLife=null,scope='',epoch=0,requestSerial=0,pending=Promise.resolve();
+    let controller=null,snapshot=null,serverLife=null,serverRoster=null,scope='',epoch=0,requestSerial=0,pending=Promise.resolve();
     let savedPositions=new Map(),savedRevision=-1,fetching=null,nextSync=0,lastTick=0,lastUi=0,manualBusy=false,manualKey='',panelKey='';
     const taps=new Map();
     function walker(key){return env.walkers().find(w=>w.key===keyOf(key));}
@@ -28,7 +29,12 @@
       for(const w of env.walkers())if(pendingKeys.has(w.key)&&!controller?.isBusy(w.key))w.node.hidden=true;
     }
     function status(message,error=false){env.companionStatus(message,error);}
-    function ownedIds(){return serverLife?.ownedCharacterIds || profile()?.life?.ownedCharacterIds || profile()?.collection?.launcher?.itemIds?.filter(id=>id.startsWith('room-character-')) || [];}
+    function roster(){
+      const current=profile();
+      const source=Array.isArray(current?.releasedCharacterIds)&&Number(current.rosterRevision||0)>=Number(serverRoster?.rosterRevision||0)?current:serverRoster||current;
+      return {releasedCharacterIds:(reserved?.releasedKeys(source)||data.characterKeys).map(itemOf),rosterRevision:Number(source?.rosterRevision)||0};
+    }
+    function ownedIds(){const released=new Set(roster().releasedCharacterIds);return (serverLife?.ownedCharacterIds || profile()?.life?.ownedCharacterIds || profile()?.collection?.launcher?.itemIds?.filter(id=>id.startsWith('room-character-')) || []).filter(id=>released.has(id));}
     function stations() {
       const result=[];
       const table=data?.stations || {};
@@ -51,7 +57,7 @@
       }
       return result;
     }
-    function world(){return{ownedItemIds:ownedIds(),roomRevision:env.room().revision,stations:stations(),actors:env.walkers().map(w=>({key:w.key,itemId:w.item.id,cell:{...w.cell},moving:!w.attention&&(!!w.segmentCell||!!w.route.length||!!w.dockTravel),available:manualKey===w.key||!w.attention&&w.mode!=='focused'}))};}
+    function world(){const owned=new Set(ownedIds());return{...roster(),ownedItemIds:[...owned],roomRevision:env.room().revision,stations:stations(),actors:env.walkers().filter(w=>owned.has(w.item.id)).map(w=>({key:w.key,itemId:w.item.id,cell:{...w.cell},moving:!w.attention&&(!!w.segmentCell||!!w.route.length||!!w.dockTravel),available:manualKey===w.key||!w.attention&&w.mode!=='focused'}))};}
     function face(key,cell) {const w=walker(key);return !!w&&env.face(w,cell,performance.now());}
     function setClip(key,clip,meta={}) {
       const w=walker(key);if(!w)return false;
@@ -132,6 +138,7 @@
       if(requestEpoch!==epoch||!result?.life)return false;
       if(serverLife&&Number(result.life.revision)<Number(serverLife.revision))return false;
       serverLife=result.life;
+      serverRoster={releasedCharacterIds:(reserved?.releasedKeys(result)||data.characterKeys).map(itemOf),rosterRevision:Number(result.rosterRevision)||0};
       if(result.wallet&&owner())root.LauncherProfileShop?.onCompanionWalletChanged(result.wallet);
       if(result.profile?.userId===profile()?.userId)env.acceptProfile(result.profile);
       if(controller)controller.sync(result);
@@ -166,7 +173,7 @@
         try {
           const result=await api.getLauncherLife();
           if(currentEpoch!==epoch)return;
-          if(!result?.ok){nextSync=Date.now()+15000;return;}
+          if(!result?.ok){if(ERRORS[result?.error])status(ERRORS[result.error],true);nextSync=Date.now()+15000;return;}
           accept(result,currentEpoch);ensureController();controller?.sync(result);nextSync=Date.now()+30000;
         } catch {nextSync=Date.now()+15000;}
         finally {if(fetching===promise)fetching=null;}
@@ -175,13 +182,13 @@
     function ensureController() {
       if(controller||!root.OnePieceLife||!profile()||owner()&&!serverLife)return;
       controller=root.OnePieceLife.create({data,adapter,command,writable:owner(),onChange:value=>{snapshot=value;renderUi();}});
-      controller.sync(serverLife?{life:serverLife}:{life:profile().life||{ownedCharacterIds:ownedIds(),characters:{},directive:'free'}});
+      controller.sync({...roster(),life:serverLife||profile().life||{ownedCharacterIds:ownedIds(),characters:{},directive:'free'}});
       if(!env.canAnimate())controller.pause();
     }
     function setContext() {
       const next=`${env.accountId()}:${profile()?.userId||0}:${owner()}`;
       if(next!==scope) {
-        controller?.dispose();controller=null;snapshot=null;serverLife=null;scope=next;epoch++;
+        controller?.dispose();controller=null;snapshot=null;serverLife=null;serverRoster=null;scope=next;epoch++;
         savedPositions.clear();savedRevision=-1;pending=Promise.resolve();fetching=null;taps.clear();
         nextSync=0;lastTick=0;manualBusy=false;manualKey='';panelKey='';
       }

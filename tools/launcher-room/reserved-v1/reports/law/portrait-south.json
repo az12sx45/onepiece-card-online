@@ -1,0 +1,102 @@
+{
+  "schema": "one-piece-room-reserved-import-report/1",
+  "key": "law",
+  "asset": "public/images/launcher_room/reserved_v1/law/portrait.webp",
+  "dimensions": [
+    256,
+    256
+  ],
+  "cell": 256,
+  "columns": 1,
+  "root": [
+    128.0,
+    224.0
+  ],
+  "frames": [
+    {
+      "key": "law",
+      "direction": "south",
+      "pose": "idle",
+      "source": "law-master",
+      "region": [
+        627,
+        627,
+        627,
+        627
+      ],
+      "sourceCell": [
+        1,
+        1
+      ],
+      "index": 0,
+      "bounds": [
+        88,
+        23,
+        168,
+        225
+      ],
+      "opaqueBoundsAtOutput": [
+        89,
+        24,
+        167,
+        224
+      ],
+      "sourceAnchor": [
+        897.1380818262675,
+        1159
+      ],
+      "localAnchor": [
+        86.13808182626747,
+        434
+      ],
+      "sourceAlphaBounds": [
+        811,
+        725,
+        984,
+        1161
+      ],
+      "opaqueBounds": [
+        813,
+        727,
+        169,
+        432
+      ],
+      "opaquePixels": 40132,
+      "removedDistantAlphaPixels": 4276,
+      "sourceOpaqueClearance": [
+        186,
+        100,
+        272,
+        95
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "anchorPolicy": "head-axis-ground-row",
+      "sourceUnitScale": 1.0,
+      "uniformCharacterScale": 0.23148148148148148,
+      "wholeImageScale": 0.46296296296296297,
+      "inverseWholeImageTransform": [
+        2.16,
+        0,
+        -190.34191817373255,
+        0,
+        2.16,
+        -49.839999999999975
+      ],
+      "rgbaSha256": "09d8203a8b898751cf83918af552d7ee1db3bb69fb180b16dc7e72f8f903e004",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    }
+  ],
+  "sourceIds": [
+    "law-master"
+  ],
+  "visualAccepted": false,
+  "humanAcceptance": false
+}

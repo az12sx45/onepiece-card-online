@@ -1,0 +1,73 @@
+{
+  "schema": "one-piece-launcher-reserved-client-qa/1",
+  "ok": true,
+  "generatedAt": "2026-09-27T12:16:01.824Z",
+  "checks": 9,
+  "results": [
+    {
+      "name": "browser-old-server-forged-reserved-owned-and-placed-stays-hidden",
+      "status": "PASS"
+    },
+    {
+      "name": "browser-explicit-legacy-release-stamp-hides-all-four",
+      "status": "PASS"
+    },
+    {
+      "name": "browser-single-release-ace",
+      "status": "PASS"
+    },
+    {
+      "name": "browser-single-release-sabo",
+      "status": "PASS"
+    },
+    {
+      "name": "browser-single-release-law",
+      "status": "PASS"
+    },
+    {
+      "name": "browser-single-release-hancock",
+      "status": "PASS"
+    },
+    {
+      "name": "browser-released-but-unowned-does-not-render",
+      "status": "PASS"
+    },
+    {
+      "name": "browser-released-owned-but-unplaced-does-not-render",
+      "status": "PASS"
+    },
+    {
+      "name": "browser-friend-profile-keeps-release-stamp-and-readonly",
+      "status": "PASS"
+    }
+  ],
+  "sourceRoot": "C:\\Codex_Candidates\\launcher-character-life-1.2.0",
+  "sourceSha256": {
+    "launcher-reserved-crew.js": "6e6209d4bcd5267704e40ec30bc86769aa739e8806e2b39f60d3337b065790dd",
+    "launcher-room.js": "3df3cbd01626b51b402e5011458b628c4416e40569a629425992d0981a881ec7",
+    "launcher-room-motion.js": "5f24362342a0f4288fcb59620cf59e06d3148f106ee1552787f2a80e1c02a92f",
+    "launcher-life-actions.js": "ebde9375cdefb0332f613b20c438b06475562c1691f8c8b59bd61369ced35968",
+    "launcher-life-data.js": "dab3c07b0610acb328e31300094bf0faa28c1b4c7e13acec14f32e1d83ecb908",
+    "launcher-room-dialogue.js": "3cb915a30dbff3c20845d9dbfb4e88cbc15761a1c79f9899895e05f69cadd05e",
+    "launcher-life.js": "c9be09c38bd748a3b064de91879d12dea54515f776cb9d735dcd8b6dcbef55e7",
+    "launcher-life-room.js": "4253ead42dac911dd151bd45d9844dec05230a4a50a89721d87b6b594678922e",
+    "launcher.html": "e2abac6f72fc8145a200e47ff4dc8f4d3d693138838087677c41a5bf66f09eb6"
+  },
+  "sourceNormalizedSha256": {
+    "launcher-reserved-crew.js": "6e6209d4bcd5267704e40ec30bc86769aa739e8806e2b39f60d3337b065790dd",
+    "launcher-room.js": "69713f87c63b13a2d6d595a209a4cd8e1df42c54875a557f69328a9bdeb84ca6",
+    "launcher-room-motion.js": "7215e47ea574e69548e80f2bd440bbf66fb092f40fafe86e3de3249889b19e01",
+    "launcher-life-actions.js": "ebde9375cdefb0332f613b20c438b06475562c1691f8c8b59bd61369ced35968",
+    "launcher-life-data.js": "6457a5fb9f2623357a4a22ddb846d8e5bc81a1f1b5eda0ae17e184dc433bf66c",
+    "launcher-room-dialogue.js": "484bc23b46fcfeeb3a90a14d1c049c0d2f2dd2789947a5a82ef6eda6b79a7737",
+    "launcher-life.js": "c9be09c38bd748a3b064de91879d12dea54515f776cb9d735dcd8b6dcbef55e7",
+    "launcher-life-room.js": "300a1dd132a43f6301705752c49779e298d02ee564e83fe9e858e76d61d3b02c",
+    "launcher.html": "83d768703b0061adbc560a108bc42dbc5d1a6f86b962f696e31306fa0a63d39a"
+  },
+  "sourceHashNormalization": "UTF-8 decoded text; replace CRLF (\\r\\n) with LF (\\n) only; no other changes.",
+  "testScriptSha256": "708fb74521c56616e220bc593ca18fe030b64d75b36239745f3d725c13b1b097",
+  "fixtureOriginalSha256": "48b361ea9a09890f508e8e6546d5ad43ae77a3082f01c934dd1eecd310a0356b",
+  "fixtureEffectiveSha256": "3cb063b63d62ee2f499939f36b66f34d0e39dd54d2c459acf6d200effab24c02",
+  "humanAcceptance": false,
+  "scope": "Actual headless Chromium with production HTML/CSS/JS and isolated IPC. Tests roster visibility, asset request policy, profile/radial wiring and friend readonly. Reserved artwork files may be absent and 404 is permitted here; this is not artwork decode/visual/motion quality acceptance. No real DB, account or deployment."
+}

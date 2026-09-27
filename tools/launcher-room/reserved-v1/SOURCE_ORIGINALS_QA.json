@@ -1,0 +1,233 @@
+{
+  "schema": "one-piece-reserved-gpt-originals-qa/1",
+  "ok": true,
+  "count": 28,
+  "files": [
+    {
+      "source": "ace-master",
+      "selected": "tools/launcher-room/reserved-v1/sources/ace/master-02/source.png",
+      "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0e287-c8bc-7c41-b83e-03bf56383fe0\\exec-65debfba-d236-4b09-bfdc-b4336a0137bc.png",
+      "sha256": "546ab81ed2596a758bace98bf5a6722dc94c7a96cbabdbf648c50074226cf4f4",
+      "bytes": 997667,
+      "identical": true
+    },
+    {
+      "source": "ace-walk-side",
+      "selected": "tools/launcher-room/reserved-v1/sources/ace/walk-side-02/source.png",
+      "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-baca61a9-bbc2-4dc0-b585-f824b1060cc3.png",
+      "sha256": "d90f8318b18b39435a18b45741839f2515a20c1ba1e07c50e7288eb7785375ac",
+      "bytes": 1305654,
+      "identical": true
+    },
+    {
+      "source": "ace-walk-front",
+      "selected": "tools/launcher-room/reserved-v1/sources/ace/walk-front-03/source.png",
+      "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0e287-c8bc-7c41-b83e-03bf56383fe0\\exec-b8793075-1099-4d08-9911-b8d678e09c23.png",
+      "sha256": "6e319b83397e9372196ddd9e920c36ff9b98a282dfced52f2b15bf3d2b011d69",
+      "bytes": 1388832,
+      "identical": true
+    },
+    {
+      "source": "ace-acting-side",
+      "selected": "tools/launcher-room/reserved-v1/sources/ace/acting-side-01/source.png",
+      "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0e287-c8bc-7c41-b83e-03bf56383fe0\\exec-a186180d-6ace-4e27-a4a2-e7be0cb38293.png",
+      "sha256": "63a9fc37dc32e29859338b15a5839c9513076439baa0dc371043eb3743d36627",
+      "bytes": 1422335,
+      "identical": true
+    },
+    {
+      "source": "ace-acting-front",
+      "selected": "tools/launcher-room/reserved-v1/sources/ace/acting-front-02/source.png",
+      "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0e287-c8bc-7c41-b83e-03bf56383fe0\\exec-a6161c42-9762-40de-a147-70ac5cc45667.png",
+      "sha256": "58dd992923f4d9f6c87170035f416dd10a22f36254ec6f33ec5dbdd8480467bf",
+      "bytes": 1567317,
+      "identical": true
+    },
+    {
+      "source": "ace-work",
+      "selected": "tools/launcher-room/reserved-v1/sources/ace/work-01/source.png",
+      "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0e287-c8bc-7c41-b83e-03bf56383fe0\\exec-e5bbbdb6-cb22-40a6-8926-579c7438c595.png",
+      "sha256": "65fa47da772c822155139be11b868a75bb7c89f2c0e57d883a4e96c5f641ca66",
+      "bytes": 1354084,
+      "identical": true
+    },
+    {
+      "source": "ace-utility",
+      "selected": "tools/launcher-room/reserved-v1/sources/ace/utility-01/source.png",
+      "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0e287-c8bc-7c41-b83e-03bf56383fe0\\exec-d64e8aff-c425-45fd-adb6-476b69fb9d76.png",
+      "sha256": "4fcbfa5cc2382a9f5d40a1ac3b65fd949868df4d708fe1ed66049ac72f39b9e4",
+      "bytes": 1779371,
+      "identical": true
+    },
+    {
+      "source": "sabo-master",
+      "selected": "tools/launcher-room/reserved-v1/sources/sabo/master-02/source.png",
+      "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0e287-c8bc-7c41-b83e-03bf56383fe0\\exec-96d9802d-1933-4aa8-8e1d-38ea708f3b24.png",
+      "sha256": "f233dfa129d43f85d2ad9c32205a9d0592ad4da893fdff9ac530920e6c1f8d77",
+      "bytes": 734702,
+      "identical": true
+    },
+    {
+      "source": "sabo-walk-side",
+      "selected": "tools/launcher-room/reserved-v1/sources/sabo/walk-side-01/source.png",
+      "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0e287-c8bc-7c41-b83e-03bf56383fe0\\exec-6c5997ea-2eac-44a2-8588-6dcd2155d7a3.png",
+      "sha256": "8fbda4bdd2100687ddfd1146b729ae6e9774a841e6a174aca7feef6adc1dead6",
+      "bytes": 1004035,
+      "identical": true
+    },
+    {
+      "source": "sabo-walk-front",
+      "selected": "tools/launcher-room/reserved-v1/sources/sabo/walk-front-01/source.png",
+      "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0e287-c8bc-7c41-b83e-03bf56383fe0\\exec-c10c228a-908e-4b67-9f32-f57674e23705.png",
+      "sha256": "3aa85cc6fed59bdab52f2228227acfae1ede7cfec02c5377e02a68e8ca236352",
+      "bytes": 1023403,
+      "identical": true
+    },
+    {
+      "source": "sabo-acting-side",
+      "selected": "tools/launcher-room/reserved-v1/sources/sabo/acting-side-01/source.png",
+      "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0e287-c8bc-7c41-b83e-03bf56383fe0\\exec-a0378e5f-0aad-40e4-a535-a7cccfb7a242.png",
+      "sha256": "f6b875fad2fbb344c64aa523721779abc07d5a0ee7c2ffb08be839578d700514",
+      "bytes": 1194567,
+      "identical": true
+    },
+    {
+      "source": "sabo-acting-front",
+      "selected": "tools/launcher-room/reserved-v1/sources/sabo/acting-front-01/source.png",
+      "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0e287-c8bc-7c41-b83e-03bf56383fe0\\exec-e41a66e4-141c-4aab-bf2a-2085d41b685b.png",
+      "sha256": "f4d4d31712e04939cb5de673bc1937891684dc40ee699f0791411078c0f3ad93",
+      "bytes": 1121371,
+      "identical": true
+    },
+    {
+      "source": "sabo-work",
+      "selected": "tools/launcher-room/reserved-v1/sources/sabo/work-01/source.png",
+      "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0e287-c8bc-7c41-b83e-03bf56383fe0\\exec-b0e411b3-73e7-4716-bf10-200012227064.png",
+      "sha256": "8abf3ad31ea506caca56dfdd565bba06dcb6d4dd99f36d46a9a4c31bb69f0df4",
+      "bytes": 1044371,
+      "identical": true
+    },
+    {
+      "source": "sabo-utility",
+      "selected": "tools/launcher-room/reserved-v1/sources/sabo/utility-01/source.png",
+      "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0e287-c8bc-7c41-b83e-03bf56383fe0\\exec-c3102d60-f0e6-4887-ade8-b09dc11c7f78.png",
+      "sha256": "f357c61da11e9cb5d0b57179c12a780e74b217c4196f7700241d0afcd8627364",
+      "bytes": 1422275,
+      "identical": true
+    },
+    {
+      "source": "law-master",
+      "selected": "tools/launcher-room/reserved-v1/sources/law/master-02/source.png",
+      "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-5f575ab8-b911-4fee-821a-fd742bb16507.png",
+      "sha256": "21c01ed86bd36e0d665dfd67e20eb82795462729cc8833b1bedde0afa95912d6",
+      "bytes": 414479,
+      "identical": true
+    },
+    {
+      "source": "law-walk-side",
+      "selected": "tools/launcher-room/reserved-v1/sources/law/walk-side-03/source.png",
+      "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-a85429da-e4fb-454c-b56e-2ab5e7e09969.png",
+      "sha256": "7416d59d4f4c892b87a6e7356ce016a610e79002b71ed8bde38299ba95d9f560",
+      "bytes": 1581465,
+      "identical": true
+    },
+    {
+      "source": "law-walk-front",
+      "selected": "tools/launcher-room/reserved-v1/sources/law/walk-front-02/source.png",
+      "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-753edb8f-c273-4341-b02b-4dd90d95f045.png",
+      "sha256": "66597201c088414405f587747c7f2f083f613e7a412170b1f4f1afe3090b6297",
+      "bytes": 1623919,
+      "identical": true
+    },
+    {
+      "source": "law-acting-side",
+      "selected": "tools/launcher-room/reserved-v1/sources/law/acting-side-01/source.png",
+      "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-0a96bbcd-9f9a-41e8-a3bd-21b9c43f84ea.png",
+      "sha256": "cf6f14820b4ad528912446dd131a7405298df0f600ed64093de2de337a93499b",
+      "bytes": 1059904,
+      "identical": true
+    },
+    {
+      "source": "law-acting-front",
+      "selected": "tools/launcher-room/reserved-v1/sources/law/acting-front-01/source.png",
+      "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-3b1a9407-b348-4ceb-a4af-7d0784d49c40.png",
+      "sha256": "82d5037af9ac8db031a205696ab9a22c859e6c450361d51ec7072e05859665b4",
+      "bytes": 1140198,
+      "identical": true
+    },
+    {
+      "source": "law-work",
+      "selected": "tools/launcher-room/reserved-v1/sources/law/work-01/source.png",
+      "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-fb68d9a8-37a0-4023-bc41-2226bbdd5b05.png",
+      "sha256": "dbe84b7a09da909d483a58f6607d47845faa442fe83685bee95018d115134943",
+      "bytes": 1020600,
+      "identical": true
+    },
+    {
+      "source": "law-utility",
+      "selected": "tools/launcher-room/reserved-v1/sources/law/utility-01/source.png",
+      "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-e031bf6a-a95a-48e9-98b2-e194e82afcdf.png",
+      "sha256": "8d2c5b73318bde535996814dfe452e6071f14fdc1c8711016c3cb79c8c036f87",
+      "bytes": 1211734,
+      "identical": true
+    },
+    {
+      "source": "hancock-master",
+      "selected": "tools/launcher-room/reserved-v1/sources/hancock/master-02/source.png",
+      "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-9b43eb5d-aa1f-4de2-aed2-cbccb3f0bf37.png",
+      "sha256": "5db11431b76478416640c5f544869f8af98b64c6d91ebb41e1070f34f0a2ebde",
+      "bytes": 672881,
+      "identical": true
+    },
+    {
+      "source": "hancock-walk-side",
+      "selected": "tools/launcher-room/reserved-v1/sources/hancock/walk-side-01/source.png",
+      "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-8090f57f-49ce-405d-b6d1-3499fea85f4f.png",
+      "sha256": "dcbf9d4205e63aa7398de0fbe8ebfad4e55c836ca8e0e0517a8d94b005886ea6",
+      "bytes": 1599085,
+      "identical": true
+    },
+    {
+      "source": "hancock-walk-front",
+      "selected": "tools/launcher-room/reserved-v1/sources/hancock/walk-front-02/source.png",
+      "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-a774bf18-e54e-4589-8820-76a0fba86acb.png",
+      "sha256": "9f6f353e005697138e4f6ab95b2f131caf4c2cb081c46c1d294b9ad5bf7e7aa6",
+      "bytes": 1699402,
+      "identical": true
+    },
+    {
+      "source": "hancock-acting-side",
+      "selected": "tools/launcher-room/reserved-v1/sources/hancock/acting-side-01/source.png",
+      "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-93bafc6e-ab1c-4e2e-803f-5c53e9d8c090.png",
+      "sha256": "379e90a4c378f6f1f9ea1cb49a5962e5a4d9614661cb22b1e12571eaa625cee9",
+      "bytes": 1167079,
+      "identical": true
+    },
+    {
+      "source": "hancock-acting-front",
+      "selected": "tools/launcher-room/reserved-v1/sources/hancock/acting-front-01/source.png",
+      "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-3d5d5a84-0a43-4116-af95-e697b9332f7b.png",
+      "sha256": "1ac7f6fa5aacdae6065834ba7515f6328680553aa39b7c25797599086dd7b135",
+      "bytes": 1151939,
+      "identical": true
+    },
+    {
+      "source": "hancock-work",
+      "selected": "tools/launcher-room/reserved-v1/sources/hancock/work-01/source.png",
+      "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-cc277288-5514-4b3f-90f2-4e9a869f50f3.png",
+      "sha256": "30ebd0616965fdd9232810d9933e62af9167dbed44dfdd949a0053cd5af8cbd8",
+      "bytes": 1177444,
+      "identical": true
+    },
+    {
+      "source": "hancock-utility",
+      "selected": "tools/launcher-room/reserved-v1/sources/hancock/utility-01/source.png",
+      "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-adb51956-198f-48d9-bc59-b38001b4f33b.png",
+      "sha256": "889d8e1859957063d914f28a51dd0f7992e263bbbc4b132b0fc7050a901902fa",
+      "bytes": 1362044,
+      "identical": true
+    }
+  ],
+  "scope": "All selected source PNG bytes compared to actual imagegen original output paths from receipts",
+  "humanAcceptance": false
+}

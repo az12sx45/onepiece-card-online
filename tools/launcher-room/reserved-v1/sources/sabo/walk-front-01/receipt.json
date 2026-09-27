@@ -1,0 +1,10 @@
+{
+  "generator": "gpt-image",
+  "tool": "image_gen__imagegen",
+  "originalOutputPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0e287-c8bc-7c41-b83e-03bf56383fe0\\exec-c10c228a-908e-4b67-9f32-f57674e23705.png",
+  "output_hint": "Generated images are saved to C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0e287-c8bc-7c41-b83e-03bf56383fe0 as C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0e287-c8bc-7c41-b83e-03bf56383fe0\\exec-c10c228a-908e-4b67-9f32-f57674e23705.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+  "referencedImages": [
+    "C:/Codex_Candidates/launcher-character-life-1.2.0/tools/launcher-room/reserved-v1/sources/sabo/master-02/source.png"
+  ],
+  "modelReview": "PENDING"
+}

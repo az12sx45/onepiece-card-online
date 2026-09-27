@@ -5,10 +5,11 @@
   'use strict';
   const dialogue = typeof module === 'object' && module.exports
     ? require('./launcher-room-dialogue.js') : root.OnePieceRoomDialogue;
-  const api = factory(dialogue);
+  const reserved = typeof module === 'object' && module.exports ? require('./launcher-reserved-crew.js') : root.OnePieceReservedCrew;
+  const api = factory(dialogue, reserved);
   if (typeof module === 'object' && module.exports) module.exports = api;
   if (root) root.OnePieceLifeData = api;
-})(typeof globalThis === 'object' ? globalThis : this, function(dialogue) {
+})(typeof globalThis === 'object' ? globalThis : this, function(dialogue, reserved) {
   'use strict';
   const data = {
   "schema": "one-piece-launcher-life-data/1",
@@ -1450,6 +1451,10 @@
     }
   ]
 };
+  // Supported content is installed ahead of release. Scheduling still requires the server roster.
+  data.characterKeys.push(...(reserved?.RESERVED_KEYS || []));
+  Object.assign(data.characters, reserved?.characters || {});
+  Object.assign(data.relationships, reserved?.relationships || {});
   const allDirections = ['south','east','north','west'];
   const stage = (id,label,clip='work',cycles=2) => ({id,label,clip,cycles,durationMs:cycles*1200,stationary:true,requiresCompleteBodySequence:true});
   const station = (type,label,furnitureKeys,taskLabel,extra={}) => ({
@@ -1767,6 +1772,8 @@
       ['打擾了，往後還請多關照。','有老夫能幫上的地方，儘管說。',happy('這裡讓人很安心。')])
   };
 
+  Object.assign(data.playerLines, reserved?.interactionLines || {});
+  authoredEvents.push(...JSON.parse(JSON.stringify(reserved?.events || [])));
   const normalizeKey = value => String(value || '').replace(/^room-character-/,'');
   const keySet = values => new Set(Array.from(values || []).map(normalizeKey));
   function resolveEventSteps(event,participants) {

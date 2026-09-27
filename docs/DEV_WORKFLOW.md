@@ -7377,3 +7377,13 @@ UI / RWD：
 修正一般滑鼠 delta100/120 一次跳兩格，六個輪盤項目只能轉到三個的錯誤；每個大滾輪事件改為一格，小幅觸控板事件累積後切換。選角後完整角色朝南面向觀看者、保持當前位置，關閉後續行；選定付費工作保留工作與預約，只暫停本機呈現及其逾時；明確成功的工作／呼喚／訓練／點心指令才關閉輪盤並執行，失敗則留在選角狀態。將相同原始 GPT 完整角色畫稿重新輸出為384px走路、256px表情圖格，80個 v4 atlas；既有 v3 原圖保留，未重新生成角色。修改 desktop/launcher-room.js、launcher-life-room.js、launcher-life.js、launcher-room-motion.js、main.js、package.json、package-lock.json。新增 hd-v4 素材來源／品質驗證、launcher_interaction_qa.js、launcher_radial_v124_qa.js 與 presentation-v124 審查門檻。驗證結果將以原始碼綁定的真 Chrome 隔離 IPC 回歸、高清1x/2x畫面、既有controller回歸、封裝Electron與公開SHA／manifest檢查記錄；不宣稱真人或實機驗收。LATTICE工具本階段不可呼叫，未宣稱新增持久任務或圖譜記錄。
 
 實際驗證：13項輪盤回歸、5組選角／滾輪／工作保留回歸、25項生活控制器、160組高清檢查（960圖格／16000次穩定繪製）、24項審查防護，以及10張模型目視皆通過。npm start與封裝Electron均成功，548項個人頁素材及BGM播放通過；1.2.4安裝檔 257785927 bytes，SHA-256 17137123eeef33f86d4d718b8600d34a8ab2726adba7d36bb0809da98a14be7f，公開完整GET／Range／SHA及既有Ed25519金鑰簽章已核對。正式canonical manifest切換與提交位元組比對仍以發布證據另行確認。320px窄畫面短暫招呼氣泡重疊列為非阻斷觀察，沒有宣稱真人或實體裝置驗收。
+
+## 2026-09-27 Launcher 1.2.5 reserved crew
+
+新增艾斯、薩波、羅、漢考克的完整人物預載支援。config/launcher-crew-release-v1.json 四旗標全部 false；本次安裝包攜帶素材與日後開放所需的資料，正式商城、可用角色、預設擁有、工作獎勵與出場名單保持原十角。只有同時符合伺服器已開放、帳號已擁有與房間已擺放的角色才會活動。新客戶端傳 crewContentRevision:1；舊版缺少此能力時，包含新角色的持久房間／生活／擁有資料會在整理、聚合與發獎前拒絕寫入，避免未知角色被正規化刪除。首度開放用既有單角旗標；已開放後改回 false 不是下架流程，會保留權利並拒絕涉及該角的寫入。
+
+新圖由內建 GPT image 工具依固定服裝及完整身體產生；原 PNG、提示詞、生成收據、參考來源與重試保留。發布路徑 public/images/launcher_room/reserved_v1；每角17素材：4向384px走路、4向256px八姿勢、8組256px生活循環與256px南向全身替身。只做完整人物透明裁切、共同尺度與平移，不拆頭身、不鏡像，不讓坐姿單格放大。新增46組配對、52場232句配對日常；服裝時期固定，但基地為跨時期收藏情境，對話是依角色關係寫的假想日常，不宣稱原作成年艾斯與薩波曾重逢。
+
+驗證分開保存：211項伺服器隔離PGlite／Socket handler測試、9項客戶端契約與9項實際Chromium隔離IPC檢查已通過；既有controller25項與cadence6項通過。匯入器8項synthetic檢查只證明工具行為，不代表實際人物素材驗收。真圖像素、逐格目視、封裝Electron、公開完整安裝包SHA與canonical manifest證據需在發布時另行完成。LATTICE本階段無可呼叫API，未宣稱新增持久任務或圖譜成功。正式D樹以本次只讀基線與限定路徑同步，保留Board distribution及其他未提交工作。
+
+實際封裝驗證：伺服器隔離PGlite 211項、client contract 9項、實際Chromium接線 9項與4位角色完整contact模型目視通過；68份新WebP及324圖格有實際像素QA。實圖Chromium DPR1/2共20項檢查，含兩種DPR各324格實際native crop、四方向走路、選角正面站定及184張房間捕捉；腳本路徑測試抑制自主life tick，不宣稱自主事件驗收。Source及封裝Electron的616項素材、Range與BGM播放皆通過。四位預載角色的server旗標仍全部false，未上架亦未加入可用名單。1.2.5安裝檔 266435298 bytes，SHA-256 87e4ca105b1309f4cb039f54629e4babc18359943dfb0b393e209b1cf709f021，公開完整GET／Range／SHA及既有Ed25519簽章已核對。正式canonical manifest切換、source commit及完整formal保存驗證以delivery證據另行確認；沒有宣稱真人或實體裝置驗收。

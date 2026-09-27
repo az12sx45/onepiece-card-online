@@ -1,0 +1,3224 @@
+[
+  {
+    "at": 100,
+    "walkers": [
+      {
+        "key": "ace",
+        "cell": {
+          "col": 3,
+          "row": 4
+        },
+        "x": 248.41546261682254,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.7776987720077179,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 2,
+            "row": 4
+          },
+          {
+            "col": 1,
+            "row": 4
+          },
+          {
+            "col": 0,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "sabo",
+        "cell": {
+          "col": 6,
+          "row": 4
+        },
+        "x": 398.79046261682254,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.777698772007717,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 5,
+            "row": 4
+          },
+          {
+            "col": 4,
+            "row": 4
+          },
+          {
+            "col": 3,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "law",
+        "cell": {
+          "col": 10,
+          "row": 4
+        },
+        "x": 600.9328364485982,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.7256987720077208,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 9,
+            "row": 4
+          },
+          {
+            "col": 8,
+            "row": 4
+          },
+          {
+            "col": 7,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "hancock",
+        "cell": {
+          "col": 13,
+          "row": 4
+        },
+        "x": 751.3078364485982,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.7256987720077208,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 12,
+            "row": 4
+          },
+          {
+            "col": 11,
+            "row": 4
+          },
+          {
+            "col": 10,
+            "row": 4
+          }
+        ]
+      }
+    ],
+    "dom": [
+      {
+        "key": "ace",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "3",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "sabo",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "3",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "law",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "2",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "hancock",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "2",
+        "canvas": [
+          384,
+          384
+        ]
+      }
+    ]
+  },
+  {
+    "at": 200,
+    "walkers": [
+      {
+        "key": "ace",
+        "cell": {
+          "col": 3,
+          "row": 4
+        },
+        "x": 245.1307149532712,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.8816987720077177,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 2,
+            "row": 4
+          },
+          {
+            "col": 1,
+            "row": 4
+          },
+          {
+            "col": 0,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "sabo",
+        "cell": {
+          "col": 6,
+          "row": 4
+        },
+        "x": 395.5057149532712,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.8816987720077168,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 5,
+            "row": 4
+          },
+          {
+            "col": 4,
+            "row": 4
+          },
+          {
+            "col": 3,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "law",
+        "cell": {
+          "col": 10,
+          "row": 4
+        },
+        "x": 597.6480887850469,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.8296987720077207,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 9,
+            "row": 4
+          },
+          {
+            "col": 8,
+            "row": 4
+          },
+          {
+            "col": 7,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "hancock",
+        "cell": {
+          "col": 13,
+          "row": 4
+        },
+        "x": 748.0230887850469,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.8296987720077207,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 12,
+            "row": 4
+          },
+          {
+            "col": 11,
+            "row": 4
+          },
+          {
+            "col": 10,
+            "row": 4
+          }
+        ]
+      }
+    ],
+    "dom": [
+      {
+        "key": "ace",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "3",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "sabo",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "3",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "law",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "3",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "hancock",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "3",
+        "canvas": [
+          384,
+          384
+        ]
+      }
+    ]
+  },
+  {
+    "at": 300,
+    "walkers": [
+      {
+        "key": "ace",
+        "cell": {
+          "col": 3,
+          "row": 4
+        },
+        "x": 241.84596728971985,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.9856987720077176,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 2,
+            "row": 4
+          },
+          {
+            "col": 1,
+            "row": 4
+          },
+          {
+            "col": 0,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "sabo",
+        "cell": {
+          "col": 6,
+          "row": 4
+        },
+        "x": 392.22096728971985,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.9856987720077167,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 5,
+            "row": 4
+          },
+          {
+            "col": 4,
+            "row": 4
+          },
+          {
+            "col": 3,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "law",
+        "cell": {
+          "col": 10,
+          "row": 4
+        },
+        "x": 594.3633411214955,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.9336987720077206,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 9,
+            "row": 4
+          },
+          {
+            "col": 8,
+            "row": 4
+          },
+          {
+            "col": 7,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "hancock",
+        "cell": {
+          "col": 13,
+          "row": 4
+        },
+        "x": 744.7383411214955,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.9336987720077206,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 12,
+            "row": 4
+          },
+          {
+            "col": 11,
+            "row": 4
+          },
+          {
+            "col": 10,
+            "row": 4
+          }
+        ]
+      }
+    ],
+    "dom": [
+      {
+        "key": "ace",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "3",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "sabo",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "3",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "law",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "3",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "hancock",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "3",
+        "canvas": [
+          384,
+          384
+        ]
+      }
+    ]
+  },
+  {
+    "at": 400,
+    "walkers": [
+      {
+        "key": "ace",
+        "cell": {
+          "col": 3,
+          "row": 4
+        },
+        "x": 238.01376168224328,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.10703210534105093,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 2,
+            "row": 4
+          },
+          {
+            "col": 1,
+            "row": 4
+          },
+          {
+            "col": 0,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "sabo",
+        "cell": {
+          "col": 6,
+          "row": 4
+        },
+        "x": 388.3887616822433,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.10703210534105004,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 5,
+            "row": 4
+          },
+          {
+            "col": 4,
+            "row": 4
+          },
+          {
+            "col": 3,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "law",
+        "cell": {
+          "col": 10,
+          "row": 4
+        },
+        "x": 590.531135514019,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.0550321053410538,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 9,
+            "row": 4
+          },
+          {
+            "col": 8,
+            "row": 4
+          },
+          {
+            "col": 7,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "hancock",
+        "cell": {
+          "col": 13,
+          "row": 4
+        },
+        "x": 740.906135514019,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.0550321053410538,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 12,
+            "row": 4
+          },
+          {
+            "col": 11,
+            "row": 4
+          },
+          {
+            "col": 10,
+            "row": 4
+          }
+        ]
+      }
+    ],
+    "dom": [
+      {
+        "key": "ace",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "0",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "sabo",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "0",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "law",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "0",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "hancock",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "0",
+        "canvas": [
+          384,
+          384
+        ]
+      }
+    ]
+  },
+  {
+    "at": 500,
+    "walkers": [
+      {
+        "key": "ace",
+        "cell": {
+          "col": 3,
+          "row": 4
+        },
+        "x": 234.72901401869194,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.21103210534105096,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 2,
+            "row": 4
+          },
+          {
+            "col": 1,
+            "row": 4
+          },
+          {
+            "col": 0,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "sabo",
+        "cell": {
+          "col": 6,
+          "row": 4
+        },
+        "x": 385.10401401869194,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.21103210534105007,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 5,
+            "row": 4
+          },
+          {
+            "col": 4,
+            "row": 4
+          },
+          {
+            "col": 3,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "law",
+        "cell": {
+          "col": 10,
+          "row": 4
+        },
+        "x": 587.2463878504676,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.15903210534105383,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 9,
+            "row": 4
+          },
+          {
+            "col": 8,
+            "row": 4
+          },
+          {
+            "col": 7,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "hancock",
+        "cell": {
+          "col": 13,
+          "row": 4
+        },
+        "x": 737.6213878504676,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.15903210534105383,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 12,
+            "row": 4
+          },
+          {
+            "col": 11,
+            "row": 4
+          },
+          {
+            "col": 10,
+            "row": 4
+          }
+        ]
+      }
+    ],
+    "dom": [
+      {
+        "key": "ace",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "0",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "sabo",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "0",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "law",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "0",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "hancock",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "0",
+        "canvas": [
+          384,
+          384
+        ]
+      }
+    ]
+  },
+  {
+    "at": 600,
+    "walkers": [
+      {
+        "key": "ace",
+        "cell": {
+          "col": 3,
+          "row": 4
+        },
+        "x": 231.4442663551406,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.3150321053410509,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 2,
+            "row": 4
+          },
+          {
+            "col": 1,
+            "row": 4
+          },
+          {
+            "col": 0,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "sabo",
+        "cell": {
+          "col": 6,
+          "row": 4
+        },
+        "x": 381.8192663551406,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.31503210534105003,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 5,
+            "row": 4
+          },
+          {
+            "col": 4,
+            "row": 4
+          },
+          {
+            "col": 3,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "law",
+        "cell": {
+          "col": 10,
+          "row": 4
+        },
+        "x": 583.9616401869163,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.26303210534105387,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 9,
+            "row": 4
+          },
+          {
+            "col": 8,
+            "row": 4
+          },
+          {
+            "col": 7,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "hancock",
+        "cell": {
+          "col": 13,
+          "row": 4
+        },
+        "x": 734.3366401869163,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.26303210534105387,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 12,
+            "row": 4
+          },
+          {
+            "col": 11,
+            "row": 4
+          },
+          {
+            "col": 10,
+            "row": 4
+          }
+        ]
+      }
+    ],
+    "dom": [
+      {
+        "key": "ace",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "1",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "sabo",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "1",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "law",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "1",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "hancock",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "1",
+        "canvas": [
+          384,
+          384
+        ]
+      }
+    ]
+  },
+  {
+    "at": 700,
+    "walkers": [
+      {
+        "key": "ace",
+        "cell": {
+          "col": 3,
+          "row": 4
+        },
+        "x": 228.15951869158926,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.4190321053410508,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 2,
+            "row": 4
+          },
+          {
+            "col": 1,
+            "row": 4
+          },
+          {
+            "col": 0,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "sabo",
+        "cell": {
+          "col": 6,
+          "row": 4
+        },
+        "x": 378.53451869158926,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.4190321053410499,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 5,
+            "row": 4
+          },
+          {
+            "col": 4,
+            "row": 4
+          },
+          {
+            "col": 3,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "law",
+        "cell": {
+          "col": 10,
+          "row": 4
+        },
+        "x": 580.6768925233649,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.36703210534105374,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 9,
+            "row": 4
+          },
+          {
+            "col": 8,
+            "row": 4
+          },
+          {
+            "col": 7,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "hancock",
+        "cell": {
+          "col": 13,
+          "row": 4
+        },
+        "x": 731.0518925233649,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.36703210534105374,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 12,
+            "row": 4
+          },
+          {
+            "col": 11,
+            "row": 4
+          },
+          {
+            "col": 10,
+            "row": 4
+          }
+        ]
+      }
+    ],
+    "dom": [
+      {
+        "key": "ace",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "1",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "sabo",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "1",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "law",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "1",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "hancock",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "1",
+        "canvas": [
+          384,
+          384
+        ]
+      }
+    ]
+  },
+  {
+    "at": 800,
+    "walkers": [
+      {
+        "key": "ace",
+        "cell": {
+          "col": 3,
+          "row": 4
+        },
+        "x": 224.3273130841127,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.540365438674384,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 2,
+            "row": 4
+          },
+          {
+            "col": 1,
+            "row": 4
+          },
+          {
+            "col": 0,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "sabo",
+        "cell": {
+          "col": 6,
+          "row": 4
+        },
+        "x": 374.7023130841127,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.5403654386743831,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 5,
+            "row": 4
+          },
+          {
+            "col": 4,
+            "row": 4
+          },
+          {
+            "col": 3,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "law",
+        "cell": {
+          "col": 10,
+          "row": 4
+        },
+        "x": 576.8446869158884,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.4883654386743869,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 9,
+            "row": 4
+          },
+          {
+            "col": 8,
+            "row": 4
+          },
+          {
+            "col": 7,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "hancock",
+        "cell": {
+          "col": 13,
+          "row": 4
+        },
+        "x": 727.2196869158884,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.4883654386743869,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 12,
+            "row": 4
+          },
+          {
+            "col": 11,
+            "row": 4
+          },
+          {
+            "col": 10,
+            "row": 4
+          }
+        ]
+      }
+    ],
+    "dom": [
+      {
+        "key": "ace",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "2",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "sabo",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "2",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "law",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "1",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "hancock",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "1",
+        "canvas": [
+          384,
+          384
+        ]
+      }
+    ]
+  },
+  {
+    "at": 900,
+    "walkers": [
+      {
+        "key": "ace",
+        "cell": {
+          "col": 3,
+          "row": 4
+        },
+        "x": 221.04256542056135,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.6443654386743839,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 2,
+            "row": 4
+          },
+          {
+            "col": 1,
+            "row": 4
+          },
+          {
+            "col": 0,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "sabo",
+        "cell": {
+          "col": 6,
+          "row": 4
+        },
+        "x": 371.41756542056135,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.644365438674383,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 5,
+            "row": 4
+          },
+          {
+            "col": 4,
+            "row": 4
+          },
+          {
+            "col": 3,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "law",
+        "cell": {
+          "col": 10,
+          "row": 4
+        },
+        "x": 573.559939252337,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.5923654386743868,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 9,
+            "row": 4
+          },
+          {
+            "col": 8,
+            "row": 4
+          },
+          {
+            "col": 7,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "hancock",
+        "cell": {
+          "col": 13,
+          "row": 4
+        },
+        "x": 723.934939252337,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.5923654386743868,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 12,
+            "row": 4
+          },
+          {
+            "col": 11,
+            "row": 4
+          },
+          {
+            "col": 10,
+            "row": 4
+          }
+        ]
+      }
+    ],
+    "dom": [
+      {
+        "key": "ace",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "2",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "sabo",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "2",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "law",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "2",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "hancock",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "2",
+        "canvas": [
+          384,
+          384
+        ]
+      }
+    ]
+  },
+  {
+    "at": 1000,
+    "walkers": [
+      {
+        "key": "ace",
+        "cell": {
+          "col": 3,
+          "row": 4
+        },
+        "x": 217.75781775701,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.7483654386743838,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 2,
+            "row": 4
+          },
+          {
+            "col": 1,
+            "row": 4
+          },
+          {
+            "col": 0,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "sabo",
+        "cell": {
+          "col": 6,
+          "row": 4
+        },
+        "x": 368.13281775701,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.7483654386743829,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 5,
+            "row": 4
+          },
+          {
+            "col": 4,
+            "row": 4
+          },
+          {
+            "col": 3,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "law",
+        "cell": {
+          "col": 10,
+          "row": 4
+        },
+        "x": 570.2751915887857,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.6963654386743867,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 9,
+            "row": 4
+          },
+          {
+            "col": 8,
+            "row": 4
+          },
+          {
+            "col": 7,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "hancock",
+        "cell": {
+          "col": 13,
+          "row": 4
+        },
+        "x": 720.6501915887857,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.6963654386743867,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 12,
+            "row": 4
+          },
+          {
+            "col": 11,
+            "row": 4
+          },
+          {
+            "col": 10,
+            "row": 4
+          }
+        ]
+      }
+    ],
+    "dom": [
+      {
+        "key": "ace",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "2",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "sabo",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "2",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "law",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "2",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "hancock",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "2",
+        "canvas": [
+          384,
+          384
+        ]
+      }
+    ]
+  },
+  {
+    "at": 1100,
+    "walkers": [
+      {
+        "key": "ace",
+        "cell": {
+          "col": 3,
+          "row": 4
+        },
+        "x": 214.47307009345866,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.8523654386743836,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 2,
+            "row": 4
+          },
+          {
+            "col": 1,
+            "row": 4
+          },
+          {
+            "col": 0,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "sabo",
+        "cell": {
+          "col": 6,
+          "row": 4
+        },
+        "x": 364.84807009345866,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.8523654386743827,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 5,
+            "row": 4
+          },
+          {
+            "col": 4,
+            "row": 4
+          },
+          {
+            "col": 3,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "law",
+        "cell": {
+          "col": 10,
+          "row": 4
+        },
+        "x": 566.9904439252343,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.8003654386743866,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 9,
+            "row": 4
+          },
+          {
+            "col": 8,
+            "row": 4
+          },
+          {
+            "col": 7,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "hancock",
+        "cell": {
+          "col": 13,
+          "row": 4
+        },
+        "x": 717.3654439252343,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.8003654386743866,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 12,
+            "row": 4
+          },
+          {
+            "col": 11,
+            "row": 4
+          },
+          {
+            "col": 10,
+            "row": 4
+          }
+        ]
+      }
+    ],
+    "dom": [
+      {
+        "key": "ace",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "3",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "sabo",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "3",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "law",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "3",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "hancock",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "3",
+        "canvas": [
+          384,
+          384
+        ]
+      }
+    ]
+  },
+  {
+    "at": 1200,
+    "walkers": [
+      {
+        "key": "ace",
+        "cell": {
+          "col": 3,
+          "row": 4
+        },
+        "x": 210.6408644859821,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.9736987720077168,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 2,
+            "row": 4
+          },
+          {
+            "col": 1,
+            "row": 4
+          },
+          {
+            "col": 0,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "sabo",
+        "cell": {
+          "col": 6,
+          "row": 4
+        },
+        "x": 361.0158644859821,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.9736987720077159,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 5,
+            "row": 4
+          },
+          {
+            "col": 4,
+            "row": 4
+          },
+          {
+            "col": 3,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "law",
+        "cell": {
+          "col": 10,
+          "row": 4
+        },
+        "x": 563.1582383177578,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.9216987720077198,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 9,
+            "row": 4
+          },
+          {
+            "col": 8,
+            "row": 4
+          },
+          {
+            "col": 7,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "hancock",
+        "cell": {
+          "col": 13,
+          "row": 4
+        },
+        "x": 713.5332383177578,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.9216987720077198,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 12,
+            "row": 4
+          },
+          {
+            "col": 11,
+            "row": 4
+          },
+          {
+            "col": 10,
+            "row": 4
+          }
+        ]
+      }
+    ],
+    "dom": [
+      {
+        "key": "ace",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "3",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "sabo",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "3",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "law",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "3",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "hancock",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "3",
+        "canvas": [
+          384,
+          384
+        ]
+      }
+    ]
+  },
+  {
+    "at": 1300,
+    "walkers": [
+      {
+        "key": "ace",
+        "cell": {
+          "col": 3,
+          "row": 4
+        },
+        "x": 207.35611682243075,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.07769877200771677,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 2,
+            "row": 4
+          },
+          {
+            "col": 1,
+            "row": 4
+          },
+          {
+            "col": 0,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "sabo",
+        "cell": {
+          "col": 6,
+          "row": 4
+        },
+        "x": 357.73111682243075,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.07769877200771588,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 5,
+            "row": 4
+          },
+          {
+            "col": 4,
+            "row": 4
+          },
+          {
+            "col": 3,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "law",
+        "cell": {
+          "col": 10,
+          "row": 4
+        },
+        "x": 559.8734906542064,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.02569877200771966,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 9,
+            "row": 4
+          },
+          {
+            "col": 8,
+            "row": 4
+          },
+          {
+            "col": 7,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "hancock",
+        "cell": {
+          "col": 13,
+          "row": 4
+        },
+        "x": 710.2484906542064,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.02569877200771966,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 12,
+            "row": 4
+          },
+          {
+            "col": 11,
+            "row": 4
+          },
+          {
+            "col": 10,
+            "row": 4
+          }
+        ]
+      }
+    ],
+    "dom": [
+      {
+        "key": "ace",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "0",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "sabo",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "0",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "law",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "0",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "hancock",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "0",
+        "canvas": [
+          384,
+          384
+        ]
+      }
+    ]
+  },
+  {
+    "at": 1400,
+    "walkers": [
+      {
+        "key": "ace",
+        "cell": {
+          "col": 2,
+          "row": 4
+        },
+        "x": 204.3125,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.17406421068210515,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 1,
+            "row": 4
+          },
+          {
+            "col": 0,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "sabo",
+        "cell": {
+          "col": 5,
+          "row": 4
+        },
+        "x": 354.6875,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.17406421068210426,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 4,
+            "row": 4
+          },
+          {
+            "col": 3,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "law",
+        "cell": {
+          "col": 10,
+          "row": 4
+        },
+        "x": 556.5887429906551,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.12969877200771968,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 9,
+            "row": 4
+          },
+          {
+            "col": 8,
+            "row": 4
+          },
+          {
+            "col": 7,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "hancock",
+        "cell": {
+          "col": 13,
+          "row": 4
+        },
+        "x": 706.9637429906551,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.12969877200771968,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 12,
+            "row": 4
+          },
+          {
+            "col": 11,
+            "row": 4
+          },
+          {
+            "col": 10,
+            "row": 4
+          }
+        ]
+      }
+    ],
+    "dom": [
+      {
+        "key": "ace",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "0",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "sabo",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "0",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "law",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "0",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "hancock",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "0",
+        "canvas": [
+          384,
+          384
+        ]
+      }
+    ]
+  },
+  {
+    "at": 1500,
+    "walkers": [
+      {
+        "key": "ace",
+        "cell": {
+          "col": 2,
+          "row": 4
+        },
+        "x": 201.02775233644866,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.27806421068210513,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 1,
+            "row": 4
+          },
+          {
+            "col": 0,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "sabo",
+        "cell": {
+          "col": 5,
+          "row": 4
+        },
+        "x": 351.40275233644866,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.27806421068210424,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 4,
+            "row": 4
+          },
+          {
+            "col": 3,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "law",
+        "cell": {
+          "col": 9,
+          "row": 4
+        },
+        "x": 553.5451261682243,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.22606421068210805,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 8,
+            "row": 4
+          },
+          {
+            "col": 7,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "hancock",
+        "cell": {
+          "col": 12,
+          "row": 4
+        },
+        "x": 703.9201261682243,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.22606421068210805,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 11,
+            "row": 4
+          },
+          {
+            "col": 10,
+            "row": 4
+          }
+        ]
+      }
+    ],
+    "dom": [
+      {
+        "key": "ace",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "1",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "sabo",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "1",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "law",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "0",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "hancock",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "0",
+        "canvas": [
+          384,
+          384
+        ]
+      }
+    ]
+  },
+  {
+    "at": 1600,
+    "walkers": [
+      {
+        "key": "ace",
+        "cell": {
+          "col": 2,
+          "row": 4
+        },
+        "x": 197.1955467289721,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.3993975440154383,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 1,
+            "row": 4
+          },
+          {
+            "col": 0,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "sabo",
+        "cell": {
+          "col": 5,
+          "row": 4
+        },
+        "x": 347.5705467289721,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.3993975440154374,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 4,
+            "row": 4
+          },
+          {
+            "col": 3,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "law",
+        "cell": {
+          "col": 9,
+          "row": 4
+        },
+        "x": 549.7129205607478,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.34739754401544126,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 8,
+            "row": 4
+          },
+          {
+            "col": 7,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "hancock",
+        "cell": {
+          "col": 12,
+          "row": 4
+        },
+        "x": 700.0879205607478,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.34739754401544126,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 11,
+            "row": 4
+          },
+          {
+            "col": 10,
+            "row": 4
+          }
+        ]
+      }
+    ],
+    "dom": [
+      {
+        "key": "ace",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "1",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "sabo",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "1",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "law",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "1",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "hancock",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "1",
+        "canvas": [
+          384,
+          384
+        ]
+      }
+    ]
+  },
+  {
+    "at": 1700,
+    "walkers": [
+      {
+        "key": "ace",
+        "cell": {
+          "col": 2,
+          "row": 4
+        },
+        "x": 193.91079906542075,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.5033975440154382,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 1,
+            "row": 4
+          },
+          {
+            "col": 0,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "sabo",
+        "cell": {
+          "col": 5,
+          "row": 4
+        },
+        "x": 344.28579906542075,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.5033975440154373,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 4,
+            "row": 4
+          },
+          {
+            "col": 3,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "law",
+        "cell": {
+          "col": 9,
+          "row": 4
+        },
+        "x": 546.4281728971964,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.45139754401544113,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 8,
+            "row": 4
+          },
+          {
+            "col": 7,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "hancock",
+        "cell": {
+          "col": 12,
+          "row": 4
+        },
+        "x": 696.8031728971964,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.45139754401544113,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 11,
+            "row": 4
+          },
+          {
+            "col": 10,
+            "row": 4
+          }
+        ]
+      }
+    ],
+    "dom": [
+      {
+        "key": "ace",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "2",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "sabo",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "2",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "law",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "1",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "hancock",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "1",
+        "canvas": [
+          384,
+          384
+        ]
+      }
+    ]
+  },
+  {
+    "at": 1800,
+    "walkers": [
+      {
+        "key": "ace",
+        "cell": {
+          "col": 2,
+          "row": 4
+        },
+        "x": 190.6260514018694,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.6073975440154381,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 1,
+            "row": 4
+          },
+          {
+            "col": 0,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "sabo",
+        "cell": {
+          "col": 5,
+          "row": 4
+        },
+        "x": 341.0010514018694,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.6073975440154372,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 4,
+            "row": 4
+          },
+          {
+            "col": 3,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "law",
+        "cell": {
+          "col": 9,
+          "row": 4
+        },
+        "x": 543.1434252336451,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.5553975440154411,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 8,
+            "row": 4
+          },
+          {
+            "col": 7,
+            "row": 4
+          }
+        ]
+      },
+      {
+        "key": "hancock",
+        "cell": {
+          "col": 12,
+          "row": 4
+        },
+        "x": 693.5184252336451,
+        "y": 422,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0.5553975440154411,
+        "direction": "west",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 11,
+            "row": 4
+          },
+          {
+            "col": 10,
+            "row": 4
+          }
+        ]
+      }
+    ],
+    "dom": [
+      {
+        "key": "ace",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "2",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "sabo",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "2",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "law",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "2",
+        "canvas": [
+          384,
+          384
+        ]
+      },
+      {
+        "key": "hancock",
+        "direction": "west",
+        "pose": "walk",
+        "frame": "2",
+        "canvas": [
+          384,
+          384
+        ]
+      }
+    ]
+  }
+]

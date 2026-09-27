@@ -2,6 +2,8 @@
 
 const { entries: adventureArt, groups: adventureArtGroups, normalizeCollection } = require('../public/js/board_adventure_art');
 const ADVENTURE_ART_BY_ID = new Map(adventureArt.map(entry => [entry.id, entry]));
+const crewRelease = require('./launcher-crew-release');
+const reservedCrew = require('../desktop/launcher-reserved-crew');
 
 const PRICES = Object.freeze({ common: 5, rare: 10, epic: 18, legend: 25 });
 const LAUNCHER_WALLET_STARTER_COINS = 100;
@@ -106,10 +108,12 @@ const CATALOG = Object.freeze([
     ['nami', '娜美', 'epic'], ['chopper', '喬巴', 'epic'],
     ['sanji', '香吉士', 'epic'], ['robin', '羅賓', 'epic'],
     ['usopp', '騙人布', 'rare'], ['franky', '佛朗基', 'epic'],
-    ['brook', '布魯克', 'epic'], ['jinbe', '甚平', 'epic']
+    ['brook', '布魯克', 'epic'], ['jinbe', '甚平', 'epic'],
+    ...crewRelease.RESERVED_KEYS.filter(key => crewRelease.releasedKeys.includes(key))
+      .map(key => [key, reservedCrew.shopMetadata[key].name, reservedCrew.shopMetadata[key].rarity])
   ].map(([key, name, rarity]) => ({
     id: `room-character-${key}`, type: 'room_character', key, name: `Q版${name}`, rarity,
-    asset: `opui://launcher/images/launcher_room/chibi/${key}.webp`
+    asset: reservedCrew.shopMetadata[key]?.asset || `opui://launcher/images/launcher_room/chibi/${key}.webp`
   })),
   ...[
     ['header', 'luffy', '魯夫'], ['header', 'chopper', '喬巴'],
@@ -158,7 +162,9 @@ const COMPANION_DETAILS = Object.freeze({
   usopp: ['狙擊手', '愛講冒險故事，也會動手製作有趣的裝置。'],
   franky: ['船匠', '熱衷改造與修理，會仔細照看船上的設備。'],
   brook: ['音樂家', '用音樂陪伴航程，總想讓夥伴聽見新旋律。'],
-  jinbe: ['舵手', '熟悉海流，行事沉穩，重視夥伴一起前進。']
+  jinbe: ['舵手', '熟悉海流，行事沉穩，重視夥伴一起前進。'],
+  ...Object.fromEntries(crewRelease.RESERVED_KEYS.filter(key => crewRelease.releasedKeys.includes(key))
+    .map(key => [key, [reservedCrew.shopMetadata[key].role, reservedCrew.shopMetadata[key].description]]))
 });
 const DECORATION_SLOTS = Object.freeze(['header', 'side', 'footer']);
 const DEFAULT_DECORATION_PLACEMENT = Object.freeze({
@@ -278,6 +284,7 @@ function launcherCompanionState(stats, now = new Date()) {
   const characters = {};
   for (const key of Object.keys(COMPANION_DETAILS)) {
     const id = `room-character-${key}`;
+    if (crewRelease.RESERVED_KEYS.includes(key) && !launcherOwnedItemIds(stats).includes(id)) continue;
     const value = object(object(saved.characters)[id]);
     const active = object(value.activeWork);
     const activeWork = validIsoTime(active.startedAt) && validIsoTime(active.readyAt) &&
@@ -545,7 +552,7 @@ async function getLauncherProfile(pool, secret, userId = 0, boardSummaryForUser 
   return { ok: true, profile };
 }
 
-async function getLauncherShop(pool, secret, preview = false) {
+async function getLauncherShop(pool, secret, preview = false, capability) {
   if (preview) return {
     ok: true,
     shop: {
@@ -561,6 +568,8 @@ async function getLauncherShop(pool, secret, preview = false) {
     const result = await db.query('SELECT user_id, name, avatar, stats, updated_at FROM player_profiles WHERE secret=$1 FOR UPDATE', [secret]);
     const row = result.rows[0];
     if (!row) { await db.query('ROLLBACK'); return { ok: false, error: 'bad secret' }; }
+    const canonicalError = await crewRelease.canonicalError(db, row, capability);
+    if (canonicalError) { await db.query('ROLLBACK'); return crewRelease.failure(canonicalError, capability); }
     const { wallet, changed } = prepareLauncherWallet(row.stats);
     let current = row;
     if (changed) {
@@ -581,9 +590,11 @@ async function getLauncherShop(pool, secret, preview = false) {
   }
 }
 
-async function changeLauncherItem(pool, secret, itemId, action) {
+async function changeLauncherItem(pool, secret, itemId, action, capability) {
   if (!secret) return { ok: false, error: 'bad secret' };
   const id = String(itemId || '');
+  const releaseError = crewRelease.accessError(capability, id);
+  if (releaseError) return crewRelease.failure(releaseError, capability);
   const catalogItem = BY_ID.get(id);
   const baseMatch = action === 'equip' ? /^(ava|wall|flag)-([1-9]|[12][0-9]|30)$/.exec(id) : null;
   const baseKey = baseMatch ? Number(baseMatch[2]) : 0;
@@ -606,6 +617,8 @@ async function changeLauncherItem(pool, secret, itemId, action) {
     const found = await db.query('SELECT user_id, name, avatar, stats, updated_at FROM player_profiles WHERE secret=$1 FOR UPDATE', [secret]);
     const row = found.rows[0];
     if (!row) { await db.query('ROLLBACK'); return { ok: false, error: 'bad secret' }; }
+    const canonicalError = await crewRelease.canonicalError(db, row, capability);
+    if (canonicalError) { await db.query('ROLLBACK'); return crewRelease.failure(canonicalError, capability); }
     const stats = { ...object(row.stats) };
     const { wallet } = prepareLauncherWallet(stats);
     stats.launcherWalletV1 = wallet;
@@ -683,7 +696,7 @@ async function changeLauncherItem(pool, secret, itemId, action) {
   }
 }
 
-async function setLauncherDecorationPlacement(pool, secret, slot, placement) {
+async function setLauncherDecorationPlacement(pool, secret, slot, placement, capability) {
   if (!secret) return { ok: false, error: 'bad secret' };
   if (!DECORATION_SLOTS.includes(slot) || !validPlacement(placement)) return { ok: false, error: 'invalid_placement' };
   const db = await pool.connect();
@@ -692,6 +705,8 @@ async function setLauncherDecorationPlacement(pool, secret, slot, placement) {
     const found = await db.query('SELECT user_id, name, avatar, stats, updated_at FROM player_profiles WHERE secret=$1 FOR UPDATE', [secret]);
     const row = found.rows[0];
     if (!row) { await db.query('ROLLBACK'); return { ok: false, error: 'bad secret' }; }
+    const canonicalError = await crewRelease.canonicalError(db, row, capability);
+    if (canonicalError) { await db.query('ROLLBACK'); return crewRelease.failure(canonicalError, capability); }
     const stats = { ...object(row.stats) };
     const appearance = launcherAppearance(stats);
     if (!appearance.decorations[slot]) { await db.query('ROLLBACK'); return { ok: false, error: 'empty_slot' }; }
@@ -711,7 +726,7 @@ async function setLauncherDecorationPlacement(pool, secret, slot, placement) {
   }
 }
 
-async function setLauncherCard(pool, secret, card) {
+async function setLauncherCard(pool, secret, card, capability) {
   if (!secret) return { ok: false, error: 'bad secret' };
   if (object(card) !== card || !validCardText(card.displayName, 1, 32) ||
     !validCardText(card.tagline, 0, 120) || !Number.isSafeInteger(card.avatarId) ||
@@ -722,6 +737,8 @@ async function setLauncherCard(pool, secret, card) {
     const found = await db.query('SELECT user_id, name, avatar, stats, updated_at FROM player_profiles WHERE secret=$1 FOR UPDATE', [secret]);
     const row = found.rows[0];
     if (!row) { await db.query('ROLLBACK'); return { ok: false, error: 'bad secret' }; }
+    const canonicalError = await crewRelease.canonicalError(db, row, capability);
+    if (canonicalError) { await db.query('ROLLBACK'); return crewRelease.failure(canonicalError, capability); }
     const avatarId = card.avatarId;
     const stats = { ...object(row.stats) };
     if (avatarId >= 31 && avatarId <= 50 && !purchasedCollection(object(stats.client)).avatars.includes(avatarId) ||
@@ -744,8 +761,10 @@ async function setLauncherCard(pool, secret, card) {
   }
 }
 
-async function setLauncherRoom(pool, secret, snapshot) {
+async function setLauncherRoom(pool, secret, snapshot, capability) {
   if (!secret) return { ok: false, error: 'bad secret' };
+  const releaseError = crewRelease.accessError(capability, snapshot);
+  if (releaseError) return crewRelease.failure(releaseError, capability);
   if (object(snapshot) !== snapshot || !Number.isSafeInteger(snapshot.revision) || snapshot.revision < 0 ||
     typeof snapshot.sceneId !== 'string' || !Array.isArray(snapshot.placements) ||
     !Array.isArray(snapshot.characters) || snapshot.placements.length > ROOM_MAX_FURNITURE ||
@@ -769,6 +788,8 @@ async function setLauncherRoom(pool, secret, snapshot) {
     const found = await db.query('SELECT user_id, name, avatar, stats, updated_at FROM player_profiles WHERE secret=$1 FOR UPDATE', [secret]);
     const row = found.rows[0];
     if (!row) { await db.query('ROLLBACK'); return { ok: false, error: 'bad secret' }; }
+    const canonicalError = await crewRelease.canonicalError(db, row, capability);
+    if (canonicalError) { await db.query('ROLLBACK'); return crewRelease.failure(canonicalError, capability); }
     const stats = { ...object(row.stats) };
     const current = launcherRoom(stats);
     if ((current.characters.length > 8 || snapshot.characters.length > 8) && snapshot.capacityVersion !== 2) {
@@ -808,9 +829,11 @@ async function setLauncherRoom(pool, secret, snapshot) {
 // Only the account that owns and has placed a character can advance its
 // companion state. A row lock serializes work claims with shop purchases and
 // prevents two sockets from receiving the same reward.
-async function launcherCharacterAction(pool, secret, itemId, action, suppliedNow) {
+async function launcherCharacterAction(pool, secret, itemId, action, suppliedNow, capability) {
   let now = suppliedNow || new Date();
   if (!secret) return { ok: false, error: 'bad secret' };
+  const releaseError = crewRelease.accessError(capability, itemId);
+  if (releaseError) return crewRelease.failure(releaseError, capability);
   if (typeof itemId !== 'string' || BY_ID.get(itemId)?.type !== 'room_character') {
     return { ok: false, error: 'invalid_character' };
   }
@@ -823,6 +846,8 @@ async function launcherCharacterAction(pool, secret, itemId, action, suppliedNow
     const row = found.rows[0];
     if (!suppliedNow) now = new Date();
     if (!row) { await db.query('ROLLBACK'); return { ok: false, error: 'bad secret' }; }
+    const canonicalError = await crewRelease.canonicalError(db, row, capability);
+    if (canonicalError) { await db.query('ROLLBACK'); return crewRelease.failure(canonicalError, capability); }
     const stats = { ...object(row.stats) };
     if (!launcherOwnedItemIds(stats).includes(itemId)) {
       await db.query('ROLLBACK'); return { ok: false, error: 'not_owned' };
@@ -908,11 +933,21 @@ async function launcherCharacterAction(pool, secret, itemId, action, suppliedNow
     db.release();
   }
 }
-const getLauncherCharacter = (pool, secret, itemId, now) => launcherCharacterAction(pool, secret, itemId, 'get', now);
-const interactLauncherCharacter = (pool, secret, itemId, action, now) =>
-  launcherCharacterAction(pool, secret, itemId, action === 'talk' ? 'talk' : '', now);
-const startLauncherCharacterWork = (pool, secret, itemId, now) => launcherCharacterAction(pool, secret, itemId, 'start', now);
-const claimLauncherCharacterWork = (pool, secret, itemId, now) => launcherCharacterAction(pool, secret, itemId, 'claim', now);
+const getLauncherCharacter = (pool, secret, itemId, now, capability) => launcherCharacterAction(pool, secret, itemId, 'get', now, capability);
+const interactLauncherCharacter = (pool, secret, itemId, action, now, capability) =>
+  launcherCharacterAction(pool, secret, itemId, action === 'talk' ? 'talk' : '', now, capability);
+const startLauncherCharacterWork = (pool, secret, itemId, now, capability) => launcherCharacterAction(pool, secret, itemId, 'start', now, capability);
+const claimLauncherCharacterWork = (pool, secret, itemId, now, capability) => launcherCharacterAction(pool, secret, itemId, 'claim', now, capability);
 
-module.exports = { CATALOG, toPublicProfile, toCardPublicProfile, toShop, getLauncherProfile, getLauncherShop, changeLauncherItem, setLauncherDecorationPlacement, setLauncherCard, setLauncherRoom, getLauncherCharacter, interactLauncherCharacter, startLauncherCharacterWork, claimLauncherCharacterWork, sanitizeLauncherStatsPatch, guestbookUnlocked, launcherAvatarForRow,
+// The capability is an optional final argument so old server callers remain legacy.
+const withRoster = (fn, capabilityIndex) => async (...args) =>
+  crewRelease.projectResponse(await fn(...args), args[capabilityIndex]);
+module.exports = { CATALOG, toPublicProfile, toCardPublicProfile, toShop,
+  getLauncherProfile: withRoster(getLauncherProfile, 4), getLauncherShop: withRoster(getLauncherShop, 3),
+  changeLauncherItem: withRoster(changeLauncherItem, 4),
+  setLauncherDecorationPlacement: withRoster(setLauncherDecorationPlacement, 4),
+  setLauncherCard: withRoster(setLauncherCard, 3), setLauncherRoom: withRoster(setLauncherRoom, 3),
+  getLauncherCharacter: withRoster(getLauncherCharacter, 4), interactLauncherCharacter: withRoster(interactLauncherCharacter, 5),
+  startLauncherCharacterWork: withRoster(startLauncherCharacterWork, 4), claimLauncherCharacterWork: withRoster(claimLauncherCharacterWork, 4),
+  sanitizeLauncherStatsPatch, guestbookUnlocked, launcherAvatarForRow,
   launcherOwnedItemIds, launcherRoom, launcherCompanionState, prepareLauncherWallet, launcherWalletPublic };

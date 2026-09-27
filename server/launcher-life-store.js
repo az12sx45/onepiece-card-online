@@ -4,6 +4,7 @@
 // unique receipt are committed together; no renderer state is trusted here.
 const crypto = require('node:crypto');
 const L = require('./launcher-life');
+const crewRelease = require('./launcher-crew-release');
 const initializers = new WeakMap();
 const ACTIVITY_EFFECTS=Object.freeze({Eat:{hunger:-8,mood:1},Rest:{energy:6,mood:1},Sleep:{energy:10},Train:{energy:-4,workMotivation:3},UseFurniture:{mood:1,workMotivation:1}});
 function applyActivityNeeds(actor,activity) {
@@ -196,7 +197,7 @@ async function perform(db,row,state,companions,command,room,now) {
   }
   return {ok:false,error:'invalid_command'};
 }
-async function run(pool,secret,command,suppliedNow) {
+async function run(pool,secret,command,suppliedNow,capability) {
   let now=suppliedNow||new Date();
   if(!secret)return {ok:false,error:'bad secret',serverNow:now.toISOString()};
   await ensureLifeTables(pool);const db=await pool.connect();
@@ -207,6 +208,14 @@ async function run(pool,secret,command,suppliedNow) {
     // the current UTC day for shared reward limits. Tests may inject a clock.
     if(!suppliedNow)now=new Date();
     if(!row){await db.query('ROLLBACK');return {ok:false,error:'bad secret',serverNow:now.toISOString()};}
+    // LIFE_GET also aggregates and settles: guard its raw canonical content too.
+    const event=command?.type==='event.record'?L.content().events?.find(e=>e.id===command.payload?.eventId):null;
+    const jobReceipt=typeof command?.payload?.jobId==='string'
+      ?await ledger(db,row.user_id,'life-work:'+command.payload.jobId):null;
+    const replay=typeof command?.requestId==='string'
+      ?await db.query('SELECT result FROM launcher_life_operations WHERE user_id=$1 AND request_id=$2',[row.user_id,command.requestId]):{rows:[]};
+    const releaseError=await crewRelease.canonicalError(db,row,capability,[command,event,jobReceipt,replay.rows[0]?.result]);
+    if(releaseError){await db.query('ROLLBACK');return crewRelease.failure(releaseError,capability);}
     row.stats=L.clone(L.object(row.stats));
     const S=shop(),room=S.launcherRoom(row.stats),state=await loadState(db,row,now),companions=S.launcherCompanionState(row.stats,now);
     row.stats.launcherWalletV1=S.prepareLauncherWallet(row.stats,now).wallet;
@@ -265,4 +274,4 @@ async function publicProjection(pool,row) {
   const S=shop(),state=L.normalizeState(found.rows[0].state,S.launcherOwnedItemIds(row.stats),S.launcherRoom(row.stats).characters.map(c=>c.itemId),new Date());
   return {schemaVersion:1,revision:state.revision,ownedCharacterIds:state.ownedCharacterIds,activeCharacterIds:state.activeCharacterIds,directive:state.directive,characters:Object.fromEntries(Object.entries(state.characters).map(([id,c])=>[id,{itemId:id,key:c.key,needs:c.needs}]))};
 }
-module.exports={ensureLifeTables,getLauncherLife:(pool,secret,now)=>run(pool,secret,undefined,now),commandLauncherLife:(pool,secret,command,now)=>run(pool,secret,command,now),registerPurchasedCharacter,legacyWorkGuard,recordLegacyClaim,publicProjection};
+module.exports={ensureLifeTables,getLauncherLife:async(pool,secret,now,capability)=>crewRelease.projectResponse(await run(pool,secret,undefined,now,capability),capability),commandLauncherLife:async(pool,secret,command,now,capability)=>crewRelease.projectResponse(await run(pool,secret,command,now,capability),capability),registerPurchasedCharacter,legacyWorkGuard,recordLegacyClaim,publicProjection};

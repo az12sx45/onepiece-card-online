@@ -1,10 +1,11 @@
 /* Character life decisions. Rendering, navigation and all economic authority are injected. */
 (function(root, factory) {
   'use strict';
-  const api = factory();
+  const reserved = typeof module === 'object' && module.exports ? require('./launcher-reserved-crew.js') : root.OnePieceReservedCrew;
+  const api = factory(reserved);
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.OnePieceLife = api;
-})(typeof globalThis === 'object' ? globalThis : this, function() {
+})(typeof globalThis === 'object' ? globalThis : this, function(reserved) {
   'use strict';
   const STATES = Object.freeze(['Idle','Wander','Work','Eat','Rest','Sleep','Train','Socialize','UseFurniture','SpecialAction','EventParticipant']);
   const DEFAULT_NEEDS = Object.freeze({energy:78,hunger:22,mood:72,social:68,workMotivation:62});
@@ -35,6 +36,8 @@
     const rareDelay=()=>rareMinimum+Math.floor(clamp(rng(),0,.999999,0)*(rareMaximum-rareMinimum));
     const canonical = new Set(names(data.characterKeys || data.KEYS || Object.keys(data.characters || data.CHARACTERS || {})));
     if (!canonical.size) for (const key of ['luffy','zoro','nami','usopp','sanji','chopper','robin','franky','brook','jinbe']) canonical.add(key);
+    let released = new Set(reserved?.releasedKeys() || canonical);
+    let rosterRevision = 0;
     const records = new Map(), tasks = new Map(), leases = new Map(), owned = new Set(), stationCooldowns = new Map();
     const arrivals = new Map(), acknowledged = new Set(), jobs = new Map(), pairCooldown = new Map(), eventCooldown = new Map(), lineCooldown = new Map();
     const recentEvents = [], recentLines = [];
@@ -59,14 +62,14 @@
       return {...value,actors:list(value.actors),stations:list(value.stations)};
     }
     function activeMap() {
-      return new Map(world().actors.filter(a => a && owned.has(keyOf(a.key || a.itemId))).map(a => [keyOf(a.key || a.itemId),a]));
+      return new Map(world().actors.filter(a => a && released.has(keyOf(a.key || a.itemId)) && owned.has(keyOf(a.key || a.itemId))).map(a => [keyOf(a.key || a.itemId),a]));
     }
     function record(key) {
       if (!records.has(key)) records.set(key,{key,itemId:itemOf(key),state:'Idle',needs:Object.fromEntries(Object.entries(DEFAULT_NEEDS).map(([name,value])=>[name,clamp(definition(key).initialNeeds?.[name],0,100,value)])),memories:[],nextAt:lastNow,taps:[],taskToken:null,lastWorkAt:0,missingClip:''});
       return records.get(key);
     }
     function rebuildOwned(value) {
-      const next = new Set(names(value).filter(key => canonical.has(key)));
+      const next = new Set(names(value).filter(key => canonical.has(key) && released.has(key)));
       for (const key of owned) if (!next.has(key)) {
         cancel(key,'ownership_changed'); records.delete(key); arrivals.delete(key); acknowledged.delete(key);
       }
@@ -84,10 +87,15 @@
       if (disposed) return;
       const snap=input.life || input;
       if(Number.isSafeInteger(snap.revision)&&snap.revision<syncedRevision)return;
+      const roster = Object.hasOwn(input,'releasedCharacterIds') ? input : snap;
+      const nextReleased = new Set(reserved?.releasedKeys(roster) || canonical);
+      const rosterChanged = [...released].join(':') !== [...nextReleased].join(':');
+      released = nextReleased;
+      rosterRevision = Number.isSafeInteger(roster.rosterRevision) ? roster.rosterRevision : 0;
       if (input.serverNow) serverOffset=stamp(input.serverNow)-stamp(clock());
       // A reply may be forwarded by both the IPC wrapper and command promise.
       // Do not reset local presentation needs or replay a receipt on that duplicate.
-      if(Number.isSafeInteger(snap.revision)&&snap.revision===syncedRevision)return;
+      if(Number.isSafeInteger(snap.revision)&&snap.revision===syncedRevision&&!rosterChanged)return;
       if(Number.isSafeInteger(snap.revision))syncedRevision=snap.revision;
       if (snap.ownedCharacterIds) rebuildOwned(snap.ownedCharacterIds);
       else if (world().ownedItemIds) rebuildOwned(world().ownedItemIds);
@@ -137,7 +145,7 @@
     }
     async function invoke(type,payload,key) {
       const requestEpoch=epoch;
-      if(disposed || !writable || (key && !owned.has(key))) return {ok:false,error:'readonly'};
+      if(disposed || !writable || (key && (!released.has(key)||!owned.has(key)))) return {ok:false,error:'readonly'};
       let response;
       try { response=await command(type,clone(payload)); }
       catch { response={ok:false,error:'offline'}; }
@@ -629,7 +637,7 @@
     function startArrivals(now) {
       if(!writable)return;
       for(const [key,arrival] of arrivals) {
-        if(tasks.has(key))continue;
+        if(tasks.has(key)||!activeMap().has(key))continue;
         const entry=safeCall('entry',key);if(!entry?.from||!entry?.to)continue;
         const token='arrival-'+(++serial);
         if(safeCall('spawnArrival',key,entry.from,token)!==true)continue;
@@ -671,6 +679,10 @@
       if(disposed||paused)return;
       const now=nowOf(value),elapsed=Math.max(0,now-lastTick);lastTick=now;
       const snapshot=world();
+      if(Object.hasOwn(snapshot,'releasedCharacterIds')) {
+        released=new Set(reserved?.releasedKeys(snapshot)||canonical);
+        rosterRevision=Number.isSafeInteger(snapshot.rosterRevision)?snapshot.rosterRevision:rosterRevision;
+      }
       if(Array.isArray(snapshot.ownedItemIds))rebuildOwned(snapshot.ownedItemIds);
       if(snapshot.writable!==undefined)writable=snapshot.writable===true;
       tickNeeds(elapsed,now);
@@ -767,14 +779,17 @@
       epoch++;disposed=true;paused=true;leases.clear();tasks.clear();
     }
     function snapshot() {
-      return {schemaVersion:1,revision,disposed,paused,directive,writable,ownedCharacterIds:[...owned].map(itemOf),
+      return {schemaVersion:1,revision,disposed,paused,directive,writable,releasedCharacterIds:[...released].map(itemOf),rosterRevision,ownedCharacterIds:[...owned].map(itemOf),
         characters:Object.fromEntries([...records].filter(([key])=>owned.has(key)).map(([key,value])=>[key,{...clone(value),memories:value.memories.map(m=>({...clone(m),currentStrength:m.strength*Math.max(0,1-(lastNow-m.timestamp)/(m.decay||21600000))}))}])),
         pairs:clone(pairs),jobs:[...jobs.values()].map(clone),pendingArrivals:[...arrivals.values()].map(clone),
         tasks:[...tasks.values()].map(t=>({key:t.key,token:t.token,state:t.state,phase:t.phase,goal:clone(t.goal),stationId:t.station?.id||'',jobId:t.job?.jobId||'',clip:t.clip||'',resultError:t.resultError||''})),
         foreground:foreground?{id:foreground.event.id,keys:[...foreground.keys],phase:foreground.phase,index:foreground.index,steps:foreground.steps.length}:null,
         reservations:[...leases.values()].map(clone),recentEvents:clone(recentEvents),nextRareAt,nextForegroundAt,offlineSummary:clone(offlineSummary)};
     }
-    const initial=world();if(initial.ownedItemIds)rebuildOwned(initial.ownedItemIds);
+    const initial=world();
+    released=new Set(reserved?.releasedKeys(initial)||canonical);
+    rosterRevision=Number.isSafeInteger(initial.rosterRevision)?initial.rosterRevision:0;
+    if(initial.ownedItemIds)rebuildOwned(initial.ownedItemIds);
     return Object.freeze({sync,rebind,tick,pause,resume,dispose,snapshot,assignWork,autoAssign,interact,react,setDirective,queueArrival,cancel,getEventPool,
       isBusy:key=>tasks.has(keyOf(key)),stateFor:key=>records.has(keyOf(key))?clone(records.get(keyOf(key))):null,reservations:()=>[...leases.values()].map(clone),
       // Explicit scheduling entry is also useful for deterministic integration tests.

@@ -1,0 +1,11 @@
+Use case: identity-preserve. Production SIX whole-body walking frames of the EXACT compact adult Boa Hancock in the attached approved four-view reference. Preserve her4.5-head adult SD proportions, proud recognizable face, long straight black hair, gold snake earrings, red classic Kuja-patterned high-collar short-sleeved blouse/skirt and red heels. No cape, weapon or snake companion. Keep the same hair, pattern and clothing construction. Do not lengthen her into realistic fashion proportions.
+
+THREE columns x TWO rows,1536x1024 landscape, genuine RGBA transparent background. Top row EAST: whole head/body profile facing RIGHT. Bottom row WEST: independent whole profile facing LEFT. Head, torso, pelvis and feet face together, never just rotate head. Exactly6 complete figures with every hair end and heel entirely visible; clean15%cell margins and gutters. Stable head size, body height and foot ground baseline throughout.
+
+Slow graceful TINY-STEP indoor walking in heels, feet remain low. Total forward/back shoe separation at most ONE shoe length; soles lift at most sole thickness, under2%figure height. Almost straight knees. No model runway stride, high knees, kicking or floating heels.
+Col1 contact A: near leg just forward, far leg just back; near arm gently back and far arm gently forward, hands low. Red skirt shifts only enough for the tiny step, never extra high exposure.
+Col2 passing/neutral: shoes almost together beneath hips, both very close to ground, tiny ankle movement; hands beside hips. Do not kick foot behind. Hair drapes quietly, no dramatic flutter.
+Col3 contact C: opposite anatomical legs and arms tocol1; near leg just back and near hand slightly forward across lower torso, far leg just forward. Same short separation and low heels.
+Draw opposite sides independently, not mirrored. Keep Hancock's dignified calm closed-mouth expression. All six are intact natural whole-body drawings with connected neck/head, two arms and two legs. No body splitting or cutout rig.
+
+Outside the six figures must be completely TRANSPARENT alpha0. No backdrop, gradient, blur, colored haze, halo, ground, shadow, checkerboard, text, grid, arrows, labels or watermark. Crisp confident dark linework and clean cel shading, production sprites only.

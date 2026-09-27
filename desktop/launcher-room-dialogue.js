@@ -1,7 +1,8 @@
 /* Original room vignettes; editorial sources: docs/LAUNCHER_CREW_RELATIONSHIPS_20260927.md. Stable API contract: docs/LAUNCHER_CREW_CANON_20260926.md. */
 (function (root) {
   'use strict';
-  const KEYS = Object.freeze(['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopper', 'robin', 'franky', 'brook', 'jinbe']);
+  const reserved = typeof module === 'object' && module.exports ? require('./launcher-reserved-crew.js') : root.OnePieceReservedCrew;
+  const KEYS = Object.freeze(reserved?.SUPPORTED_KEYS || ['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopper', 'robin', 'franky', 'brook', 'jinbe']);
   const MOODS = Object.freeze(['happy', 'surprised', 'focused', 'annoyed']);
   const POSES = Object.freeze(['idle', 'talk_happy', 'talk_annoyed', 'surprised', 'focused_use', 'sit', 'wave', 'listen']);
   // Intent tokens are mapped to existing poses. They do not assert that extra sprites exist.
@@ -111,7 +112,9 @@
     brook: [b('已經完成了，請您收下。能幫上忙真好。', 'bow'), b('今天的工作圓滿收尾！接下來，容我奏一段輕快的吧。', 'offer')],
     jinbe: [b('都已辦妥，這份交給你。接下來也從容些吧。', 'offer'), b('老夫這邊收尾了。你若還有事，也別一個人硬撐。', 'reassure')]
   };
-  for (const key of KEYS) SOLO[key].claim = CLAIM[key];
+  Object.assign(PROFILES, reserved?.profiles || {});
+  Object.assign(SOLO, reserved?.solo || {});
+  for (const key of KEYS) if (CLAIM[key]) SOLO[key].claim = CLAIM[key];
   const SCENES = {};
   const RELATIONSHIPS = {};
   // Text is authored for the named pair; there is no name-substitution dialogue fallback.
@@ -375,6 +378,8 @@
     s('笑話還有後半段', [], [t('您還沒笑，是這個笑話太老了嗎？', 'think'), t('老夫剛才在想，你怎麼總能一本正經地說出來。', 'think'), t('一本正經嗎？那恐怕是我的臉改不了了。', 'tease', 'laugh'), t('哈哈，原來這句才是後半段。', 'laugh', 'bow')])
   ]);
 
+  Object.assign(SCENES, reserved?.scenes || {});
+  for (const [key, scenes] of Object.entries(reserved?.scenes || {})) RELATIONSHIPS[key] = scenes[0].relationship;
   const ACTION_LABELS = Object.freeze({ talk: '交談', explain: '說明', nod: '點頭', laugh: '開懷', smile: '微笑', tease: '打趣', protest: '抗議', reassure: '安慰', admire: '驚喜', think: '思考', bow: '致意', listen: '聆聽', startled: '吃驚', offer: '招呼', work: '專心', rest: '休息' });
   const FURNITURE_VERBS = Object.freeze({ helm: '查看航向', 'map-table': '核對海圖', 'treasure-chest': '查看箱子', 'tangerine-tree': '照顧橘子樹', 'swords-rack': '整理刀架', 'kitchen-table': '整理餐桌', bookshelf: '翻閱書籍', 'medicine-cabinet': '清點藥品', piano: '練習樂曲', 'tool-bench': '修整零件' });
   const hasKey = key => Object.prototype.hasOwnProperty.call(PROFILES, key);

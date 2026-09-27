@@ -1,0 +1,11 @@
+Use case: identity-preserve. Draw SIX complete small-step walking frames of the exact Trafalgar Law in the reference. Keep his approved compact adult anatomy, face, white black-spotted hat, yellow hoodie with black long sleeves and Heart Pirates emblem, blue spotted jeans and dark shoes. No sword. Whole body and head always face together.
+
+STRICT layout: THREE columns x TWO rows, 1536x1024 landscape. Top row whole-body profile facing screen RIGHT (east). Bottom row independently drawn profile facing screen LEFT (west). Exactly six figures, each entirely within a cell with clean transparent margins. Same upper body height, head size, heel baseline and physical size in every cell.
+
+This is a VERY SLOW, TINY-STEP INDOOR SHUFFLING WALK. The shoes never move farther apart than ONE shoe length. All soles stay almost on the SAME horizontal ground line. Feet may lift at most ONE SOLE THICKNESS, less than2%of total figure height. NO knee lift, NO bent-leg kick, NO march, NO long stride, NO run.
+Column1: short contact A; near leg just slightly in front of hip, far leg just slightly behind. Near arm gently behind, far arm gently forward, hands low at thigh level.
+Column2: passing neutral; feet nearly together directly below hips, both shoes almost flat on ground, tiny ankle motion ONLY. Hands close to hips, knees nearly straight. Do not bend calf up behind the body.
+Column3: short contact C; swap the anatomical legs and arms from column1. The near leg is now just behind and near hand gently in FRONT of lower hoodie, far leg just in front and far hand behind. One-shoe-length total foot separation only. The silhouette shift is subtle, not exaggerated.
+East near side is his right; west near side is his left. Same calm face and costume each frame, lightly curled relaxed hands so tiny finger tattoo letters are not visible. No mirrored lettering. Connected whole figures, no body-part assembly, no extra limbs or disconnected head.
+
+Genuine RGBA TRANSPARENCY is mandatory: the ENTIRE area outside the six solid figures must have ZERO alpha. Absolutely NO dark backdrop, blurred ghost copies, glow, colored haze, halo, floor, cast shadow, vignette, panels, checkerboard, labels, text or watermark. Crisp clean cel-ink outlines. Transparent isolated sprites only.

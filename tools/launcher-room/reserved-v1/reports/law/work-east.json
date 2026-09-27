@@ -1,0 +1,342 @@
+{
+  "schema": "one-piece-room-reserved-import-report/1",
+  "key": "law",
+  "asset": "public/images/launcher_room/reserved_v1/law/life/work-east.webp",
+  "dimensions": [
+    1024,
+    256
+  ],
+  "cell": 256,
+  "columns": 4,
+  "root": [
+    128.0,
+    224.0
+  ],
+  "frames": [
+    {
+      "key": "law",
+      "direction": "east",
+      "pose": "work",
+      "source": "law-work",
+      "region": [
+        0,
+        0,
+        314,
+        314
+      ],
+      "sourceCell": [
+        0,
+        0
+      ],
+      "index": 0,
+      "bounds": [
+        99,
+        23,
+        163,
+        225
+      ],
+      "opaqueBoundsAtOutput": [
+        101,
+        24,
+        162,
+        224
+      ],
+      "sourceAnchor": [
+        241.95650925793024,
+        309
+      ],
+      "localAnchor": [
+        42.956509257930236,
+        302
+      ],
+      "sourceAlphaBounds": [
+        199,
+        7,
+        294,
+        310
+      ],
+      "opaqueBounds": [
+        201,
+        9,
+        92,
+        300
+      ],
+      "opaquePixels": 16733,
+      "removedDistantAlphaPixels": 3087,
+      "sourceOpaqueClearance": [
+        201,
+        9,
+        21,
+        5
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "anchorPolicy": "head-axis-ground-row",
+      "sourceUnitScale": 1.44,
+      "uniformCharacterScale": 0.23148148148148148,
+      "wholeImageScale": 0.6666666666666666,
+      "inverseWholeImageTransform": [
+        1.5,
+        0,
+        -149.04349074206976,
+        0,
+        1.5,
+        -34.0
+      ],
+      "rgbaSha256": "5dafd488b7e8306d42171543e35870c713b7e3b01330c7f6cf65405ff39dc807",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "law",
+      "direction": "east",
+      "pose": "work",
+      "source": "law-work",
+      "region": [
+        314,
+        0,
+        313,
+        314
+      ],
+      "sourceCell": [
+        1,
+        0
+      ],
+      "index": 1,
+      "bounds": [
+        99,
+        23,
+        192,
+        225
+      ],
+      "opaqueBoundsAtOutput": [
+        101,
+        24,
+        191,
+        224
+      ],
+      "sourceAnchor": [
+        494.2509674645263,
+        309
+      ],
+      "localAnchor": [
+        43.2509674645263,
+        302
+      ],
+      "sourceAlphaBounds": [
+        451,
+        7,
+        591,
+        310
+      ],
+      "opaqueBounds": [
+        453,
+        9,
+        136,
+        300
+      ],
+      "opaquePixels": 17967,
+      "removedDistantAlphaPixels": 3741,
+      "sourceOpaqueClearance": [
+        139,
+        9,
+        38,
+        5
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "anchorPolicy": "head-axis-ground-row",
+      "sourceUnitScale": 1.44,
+      "uniformCharacterScale": 0.23148148148148148,
+      "wholeImageScale": 0.6666666666666666,
+      "inverseWholeImageTransform": [
+        1.5,
+        0,
+        -148.7490325354737,
+        0,
+        1.5,
+        -34.0
+      ],
+      "rgbaSha256": "3707cdf5f6ae5a9ce3d09b12861e83024417e241cae42c4fe17141cb44284e72",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "law",
+      "direction": "east",
+      "pose": "work",
+      "source": "law-work",
+      "region": [
+        627,
+        0,
+        313,
+        314
+      ],
+      "sourceCell": [
+        2,
+        0
+      ],
+      "index": 2,
+      "bounds": [
+        99,
+        23,
+        170,
+        225
+      ],
+      "opaqueBoundsAtOutput": [
+        101,
+        24,
+        170,
+        224
+      ],
+      "sourceAnchor": [
+        756.3913740346787,
+        309
+      ],
+      "localAnchor": [
+        43.39137403467873,
+        302
+      ],
+      "sourceAlphaBounds": [
+        713,
+        7,
+        821,
+        310
+      ],
+      "opaqueBounds": [
+        715,
+        9,
+        104,
+        300
+      ],
+      "opaquePixels": 16935,
+      "removedDistantAlphaPixels": 4324,
+      "sourceOpaqueClearance": [
+        88,
+        9,
+        121,
+        5
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "anchorPolicy": "head-axis-ground-row",
+      "sourceUnitScale": 1.44,
+      "uniformCharacterScale": 0.23148148148148148,
+      "wholeImageScale": 0.6666666666666666,
+      "inverseWholeImageTransform": [
+        1.5,
+        0,
+        -148.60862596532127,
+        0,
+        1.5,
+        -34.0
+      ],
+      "rgbaSha256": "59ed98b3f62bae1cb65023fd25e201da43205aef098ea5a43610f69940714813",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "law",
+      "direction": "east",
+      "pose": "work",
+      "source": "law-work",
+      "region": [
+        940,
+        0,
+        314,
+        314
+      ],
+      "sourceCell": [
+        3,
+        0
+      ],
+      "index": 3,
+      "bounds": [
+        99,
+        23,
+        189,
+        225
+      ],
+      "opaqueBoundsAtOutput": [
+        101,
+        24,
+        188,
+        224
+      ],
+      "sourceAnchor": [
+        1025.1787160208212,
+        309
+      ],
+      "localAnchor": [
+        43.178716020821184,
+        302
+      ],
+      "sourceAlphaBounds": [
+        982,
+        7,
+        1117,
+        310
+      ],
+      "opaqueBounds": [
+        984,
+        9,
+        131,
+        300
+      ],
+      "opaquePixels": 17684,
+      "removedDistantAlphaPixels": 3156,
+      "sourceOpaqueClearance": [
+        44,
+        9,
+        139,
+        5
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "anchorPolicy": "head-axis-ground-row",
+      "sourceUnitScale": 1.44,
+      "uniformCharacterScale": 0.23148148148148148,
+      "wholeImageScale": 0.6666666666666666,
+      "inverseWholeImageTransform": [
+        1.5,
+        0,
+        -148.82128397917882,
+        0,
+        1.5,
+        -34.0
+      ],
+      "rgbaSha256": "2274bd72ce05591b6b5a9aeb05d632e6d2ec2dcfb711e7bab60937a6db329aab",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    }
+  ],
+  "sourceIds": [
+    "law-work"
+  ],
+  "visualAccepted": false,
+  "humanAcceptance": false
+}

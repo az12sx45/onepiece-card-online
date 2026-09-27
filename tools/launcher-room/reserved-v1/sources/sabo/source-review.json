@@ -1,0 +1,87 @@
+{
+  "schema": "one-piece-room-reserved-source-review/1",
+  "key": "sabo",
+  "reviewer": "walk_quality",
+  "reviewType": "AI visual review of actual source PNGs",
+  "humanAcceptance": false,
+  "currentSelectionFile": "tools/launcher-room/reserved-v1/sources/sabo/selected-sources.json",
+  "status": "selected-for-independent-atlas-validation",
+  "scope": [
+    "whole connected head and body in every pose",
+    "canonical asymmetric outfit landmarks",
+    "four direction consistency",
+    "small alternating walk contact poses and neutral planted feet",
+    "eight distinct acting expressions and poses",
+    "four frame work and utility sequences"
+  ],
+  "limitations": [
+    "Not a human fan acceptance test",
+    "Not an official-image pixel comparison",
+    "Final atlas geometry and browser playback validation are performed independently by importer agent"
+  ],
+  "sourceIntegrity": [
+    {
+      "sheet": "master",
+      "sourcePath": "tools/launcher-room/reserved-v1/sources/sabo/master-02/source.png",
+      "sourceSha256": "f233dfa129d43f85d2ad9c32205a9d0592ad4da893fdff9ac530920e6c1f8d77",
+      "originalToolPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0e287-c8bc-7c41-b83e-03bf56383fe0\\exec-96d9802d-1933-4aa8-8e1d-38ea708f3b24.png",
+      "originalToolSha256": "f233dfa129d43f85d2ad9c32205a9d0592ad4da893fdff9ac530920e6c1f8d77",
+      "exactCopy": true
+    },
+    {
+      "sheet": "walk-side",
+      "sourcePath": "tools/launcher-room/reserved-v1/sources/sabo/walk-side-01/source.png",
+      "sourceSha256": "8fbda4bdd2100687ddfd1146b729ae6e9774a841e6a174aca7feef6adc1dead6",
+      "originalToolPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0e287-c8bc-7c41-b83e-03bf56383fe0\\exec-6c5997ea-2eac-44a2-8588-6dcd2155d7a3.png",
+      "originalToolSha256": "8fbda4bdd2100687ddfd1146b729ae6e9774a841e6a174aca7feef6adc1dead6",
+      "exactCopy": true
+    },
+    {
+      "sheet": "walk-front",
+      "sourcePath": "tools/launcher-room/reserved-v1/sources/sabo/walk-front-01/source.png",
+      "sourceSha256": "3aa85cc6fed59bdab52f2228227acfae1ede7cfec02c5377e02a68e8ca236352",
+      "originalToolPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0e287-c8bc-7c41-b83e-03bf56383fe0\\exec-c10c228a-908e-4b67-9f32-f57674e23705.png",
+      "originalToolSha256": "3aa85cc6fed59bdab52f2228227acfae1ede7cfec02c5377e02a68e8ca236352",
+      "exactCopy": true
+    },
+    {
+      "sheet": "acting-side",
+      "sourcePath": "tools/launcher-room/reserved-v1/sources/sabo/acting-side-01/source.png",
+      "sourceSha256": "f6b875fad2fbb344c64aa523721779abc07d5a0ee7c2ffb08be839578d700514",
+      "originalToolPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0e287-c8bc-7c41-b83e-03bf56383fe0\\exec-a0378e5f-0aad-40e4-a535-a7cccfb7a242.png",
+      "originalToolSha256": "f6b875fad2fbb344c64aa523721779abc07d5a0ee7c2ffb08be839578d700514",
+      "exactCopy": true
+    },
+    {
+      "sheet": "acting-front",
+      "sourcePath": "tools/launcher-room/reserved-v1/sources/sabo/acting-front-01/source.png",
+      "sourceSha256": "f4d4d31712e04939cb5de673bc1937891684dc40ee699f0791411078c0f3ad93",
+      "originalToolPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0e287-c8bc-7c41-b83e-03bf56383fe0\\exec-e41a66e4-141c-4aab-bf2a-2085d41b685b.png",
+      "originalToolSha256": "f4d4d31712e04939cb5de673bc1937891684dc40ee699f0791411078c0f3ad93",
+      "exactCopy": true
+    },
+    {
+      "sheet": "work",
+      "sourcePath": "tools/launcher-room/reserved-v1/sources/sabo/work-01/source.png",
+      "sourceSha256": "8abf3ad31ea506caca56dfdd565bba06dcb6d4dd99f36d46a9a4c31bb69f0df4",
+      "originalToolPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0e287-c8bc-7c41-b83e-03bf56383fe0\\exec-b0e411b3-73e7-4716-bf10-200012227064.png",
+      "originalToolSha256": "8abf3ad31ea506caca56dfdd565bba06dcb6d4dd99f36d46a9a4c31bb69f0df4",
+      "exactCopy": true
+    },
+    {
+      "sheet": "utility",
+      "sourcePath": "tools/launcher-room/reserved-v1/sources/sabo/utility-01/source.png",
+      "sourceSha256": "f357c61da11e9cb5d0b57179c12a780e74b217c4196f7700241d0afcd8627364",
+      "originalToolPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0e287-c8bc-7c41-b83e-03bf56383fe0\\exec-c3102d60-f0e6-4887-ade8-b09dc11c7f78.png",
+      "originalToolSha256": "f357c61da11e9cb5d0b57179c12a780e74b217c4196f7700241d0afcd8627364",
+      "exactCopy": true
+    }
+  ],
+  "observations": [
+    "Black top hat, blue goggles, blond hair, navy coat, blue vest and white cravat retained",
+    "Burn scar stays at anatomical left eye: west profile and image-right in front views",
+    "Both eyes open in neutral, naturally close for blink/rest/sleep",
+    "Walk A/C show alternating arms and low steps",
+    "All originals and elongated master-01 variant retained"
+  ]
+}

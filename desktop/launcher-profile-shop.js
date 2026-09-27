@@ -40,6 +40,8 @@
   const itemImage = item => imageFor(item?.type, item?.key) || safeImageAsset(item?.asset);
   const clamp = (value, min, max, fallback) => Number.isFinite(Number(value)) ? Math.max(min, Math.min(max, Number(value))) : fallback;
   const errorText = code => ({
+    'client_update_required': '請先更新啟動器，再操作含新夥伴的個人頁。',
+    'character_not_released': '這位夥伴尚未開放，請留意後續公告。',
     'not authenticated': '請先登入帳號。', 'bad secret': '登入已失效，請重新登入。',
     'not friends': '目前無法參觀這位玩家的個人頁。', 'not found': '找不到這位玩家。',
     'insufficient_coins': '金幣不足。', 'insufficient coins': '金幣不足。',

@@ -1,0 +1,170 @@
+{
+  "schema": "one-piece-room-reserved-selection/1",
+  "releasePolicy": "preloaded-not-released",
+  "characters": {
+    "ace": {}
+  },
+  "sources": {
+    "ace-master": {
+      "key": "ace",
+      "sheet": "master",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/master-02/source.png",
+        "sha256": "546ab81ed2596a758bace98bf5a6722dc94c7a96cbabdbf648c50074226cf4f4"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/master-02/prompt.txt",
+        "sha256": "6604c1bf825ae9fa6a58aa547b0670e475ab52713edb095f7e9bf16e19112d76"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/master-02/receipt.json",
+        "sha256": "5c64187c223c7ad10e935a811f1ccdef84a9b28f625b2e29462cde47c8f9d1ce"
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/ace/master-01/source.png",
+          "sha256": "fdd4c3d4ae6bce8d4dc173521e989d6715f7a510fcc98466f95a7e92814f40c3"
+        }
+      ]
+    },
+    "ace-walk-side": {
+      "key": "ace",
+      "sheet": "walk-side",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/walk-side-02/source.png",
+        "sha256": "d90f8318b18b39435a18b45741839f2515a20c1ba1e07c50e7288eb7785375ac"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/walk-side-02/prompt.txt",
+        "sha256": "f240a3ff2b0fd16bb545a4e9aeb61cd8d07654701f151adcfdc3337d46ce6f0c"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/walk-side-02/receipt.json",
+        "sha256": "47e9855ecd083490568d066d51e42f53315a15a905c57eb55783ab8024e872f1"
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/ace/walk-side-01/source.png",
+          "sha256": "0bb1e8a5dc9895a93d80e882bba54f16cffe3233686185300b753da4790e3a1e"
+        }
+      ]
+    },
+    "ace-walk-front": {
+      "key": "ace",
+      "sheet": "walk-front",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/walk-front-03/source.png",
+        "sha256": "6e319b83397e9372196ddd9e920c36ff9b98a282dfced52f2b15bf3d2b011d69"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/walk-front-03/prompt.txt",
+        "sha256": "cc5108401b7bc70cd3ca6484c2f75eeda0dd7ec23b636e20e7e39be79b108cfa"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/walk-front-03/receipt.json",
+        "sha256": "fae6512cc3b1f2821eccec32e2a80785296bdf94a157251067d06e136f24228b"
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/ace/walk-front-02/source.png",
+          "sha256": "ff4b249757d825622936049632296e40cc8d31ff2b03ba21c541230a18cfce57"
+        }
+      ]
+    },
+    "ace-acting-side": {
+      "key": "ace",
+      "sheet": "acting-side",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/acting-side-01/source.png",
+        "sha256": "63a9fc37dc32e29859338b15a5839c9513076439baa0dc371043eb3743d36627"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/acting-side-01/prompt.txt",
+        "sha256": "c0ee2275dbd8f6039a65e2210e8310430c27d6b0f6e62bf9d74c6ba57e7b162c"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/acting-side-01/receipt.json",
+        "sha256": "8633301bca44bfe0575f0a527745dd1831832ffd93269b44b5e3a393ff43b54f"
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/ace/master-02/source.png",
+          "sha256": "546ab81ed2596a758bace98bf5a6722dc94c7a96cbabdbf648c50074226cf4f4"
+        }
+      ]
+    },
+    "ace-acting-front": {
+      "key": "ace",
+      "sheet": "acting-front",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/acting-front-02/source.png",
+        "sha256": "58dd992923f4d9f6c87170035f416dd10a22f36254ec6f33ec5dbdd8480467bf"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/acting-front-02/prompt.txt",
+        "sha256": "a87955316532cfd438a003f3d541393c93bba73f92204d09048a04737cf715cd"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/acting-front-02/receipt.json",
+        "sha256": "1e84b751c57aba556ccadfa08b47e89d7a957594b78decff45444e03acd7ea53"
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/ace/acting-front-01/source.png",
+          "sha256": "b46975546ff7da0060728f64cecbc14174fc6c06bf6faad5d70ccd0612c13b28"
+        }
+      ]
+    },
+    "ace-work": {
+      "key": "ace",
+      "sheet": "work",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/work-01/source.png",
+        "sha256": "65fa47da772c822155139be11b868a75bb7c89f2c0e57d883a4e96c5f641ca66"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/work-01/prompt.txt",
+        "sha256": "a1db1bffd48ee7c8950bc6c2d408f5cdcd303a38d757ffd9020fbc22244910c7"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/work-01/receipt.json",
+        "sha256": "d565024c622835261c032c89882e2351ca51bcb33c9ac57ebf1b5ac545e85d3a"
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/ace/master-02/source.png",
+          "sha256": "546ab81ed2596a758bace98bf5a6722dc94c7a96cbabdbf648c50074226cf4f4"
+        }
+      ]
+    },
+    "ace-utility": {
+      "key": "ace",
+      "sheet": "utility",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/utility-01/source.png",
+        "sha256": "4fcbfa5cc2382a9f5d40a1ac3b65fd949868df4d708fe1ed66049ac72f39b9e4"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/utility-01/prompt.txt",
+        "sha256": "4d3e7351b1a826291352b8dceaa4215de4755e2941f070ba3afaca41974e1a65"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/utility-01/receipt.json",
+        "sha256": "960bceeff5ed6a60196db724e25759fa328e69e15a7fe9ee618158fd22e0f13f"
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/ace/master-02/source.png",
+          "sha256": "546ab81ed2596a758bace98bf5a6722dc94c7a96cbabdbf648c50074226cf4f4"
+        }
+      ]
+    }
+  }
+}

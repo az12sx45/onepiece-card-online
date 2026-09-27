@@ -1,0 +1,170 @@
+{
+  "schema": "one-piece-room-reserved-selection/1",
+  "releasePolicy": "preloaded-not-released",
+  "characters": {
+    "sabo": {}
+  },
+  "sources": {
+    "sabo-master": {
+      "key": "sabo",
+      "sheet": "master",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/source.png",
+        "sha256": "f233dfa129d43f85d2ad9c32205a9d0592ad4da893fdff9ac530920e6c1f8d77"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/prompt.txt",
+        "sha256": "6604c1bf825ae9fa6a58aa547b0670e475ab52713edb095f7e9bf16e19112d76"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/receipt.json",
+        "sha256": "64fd6029e59b4ea4a25eaa0fb5b2669d6cb16d657f990bf6a6cc3f37143a7e86"
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/sabo/master-01/source.png",
+          "sha256": "f24ad1cff4495d94f9a0b5ed6156bd18236dc05b33fc0c79b9329bf1b9795a5b"
+        }
+      ]
+    },
+    "sabo-walk-side": {
+      "key": "sabo",
+      "sheet": "walk-side",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/walk-side-01/source.png",
+        "sha256": "8fbda4bdd2100687ddfd1146b729ae6e9774a841e6a174aca7feef6adc1dead6"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/walk-side-01/prompt.txt",
+        "sha256": "d15314ef03929fc5f552bf16127e15fdd33a13fac582ac527b43c6ce0c27c950"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/walk-side-01/receipt.json",
+        "sha256": "977063a8f200479a5acb051bdaeb12c407d925b696d0a0bcf436dff7ffc0a43b"
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/source.png",
+          "sha256": "f233dfa129d43f85d2ad9c32205a9d0592ad4da893fdff9ac530920e6c1f8d77"
+        }
+      ]
+    },
+    "sabo-walk-front": {
+      "key": "sabo",
+      "sheet": "walk-front",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/walk-front-01/source.png",
+        "sha256": "3aa85cc6fed59bdab52f2228227acfae1ede7cfec02c5377e02a68e8ca236352"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/walk-front-01/prompt.txt",
+        "sha256": "38055b44790b9f7f2847d5278bcd9c0a548c6ad1afb6017a62b96c0362850f99"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/walk-front-01/receipt.json",
+        "sha256": "abcadd05cb92373f4673433a42cad6c60dac970ff5f8032cf8ccc48504bf7c4d"
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/source.png",
+          "sha256": "f233dfa129d43f85d2ad9c32205a9d0592ad4da893fdff9ac530920e6c1f8d77"
+        }
+      ]
+    },
+    "sabo-acting-side": {
+      "key": "sabo",
+      "sheet": "acting-side",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/acting-side-01/source.png",
+        "sha256": "f6b875fad2fbb344c64aa523721779abc07d5a0ee7c2ffb08be839578d700514"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/acting-side-01/prompt.txt",
+        "sha256": "636c51996f9d317c1fa510fe531adc4217762bd6aad665d9d9a818e243836f78"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/acting-side-01/receipt.json",
+        "sha256": "55d6fa68d034235ae573bfd23a929c13664f5a6297b016321c6889004da997dc"
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/source.png",
+          "sha256": "f233dfa129d43f85d2ad9c32205a9d0592ad4da893fdff9ac530920e6c1f8d77"
+        }
+      ]
+    },
+    "sabo-acting-front": {
+      "key": "sabo",
+      "sheet": "acting-front",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/acting-front-01/source.png",
+        "sha256": "f4d4d31712e04939cb5de673bc1937891684dc40ee699f0791411078c0f3ad93"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/acting-front-01/prompt.txt",
+        "sha256": "ae7e9eda59d8ef1bceadb28597b04408c676e380b506456ec13db6ec0a6b8538"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/acting-front-01/receipt.json",
+        "sha256": "1d675ccfa3fa6329bed707e76dac8f24f663aa4ae9a0d148df703e867ec7a1d8"
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/source.png",
+          "sha256": "f233dfa129d43f85d2ad9c32205a9d0592ad4da893fdff9ac530920e6c1f8d77"
+        }
+      ]
+    },
+    "sabo-work": {
+      "key": "sabo",
+      "sheet": "work",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/work-01/source.png",
+        "sha256": "8abf3ad31ea506caca56dfdd565bba06dcb6d4dd99f36d46a9a4c31bb69f0df4"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/work-01/prompt.txt",
+        "sha256": "38481e89f947f27cbe5c906cea50d8e1aea63631ceb5b0b1215a1f1f063987a9"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/work-01/receipt.json",
+        "sha256": "9b61ce3ebb95de6788d8a5785c98f3377e8d11bd627287abd70f761479154e55"
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/source.png",
+          "sha256": "f233dfa129d43f85d2ad9c32205a9d0592ad4da893fdff9ac530920e6c1f8d77"
+        }
+      ]
+    },
+    "sabo-utility": {
+      "key": "sabo",
+      "sheet": "utility",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/utility-01/source.png",
+        "sha256": "f357c61da11e9cb5d0b57179c12a780e74b217c4196f7700241d0afcd8627364"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/utility-01/prompt.txt",
+        "sha256": "312e8e5cdc52a7d9c7c0a7b87b49b0fb05e23a30643d9a119080752e686da763"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/utility-01/receipt.json",
+        "sha256": "3d4639244031e48a715fcce5d4006cd15c649ec9ce8e9bfd689881554157dc2d"
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/source.png",
+          "sha256": "f233dfa129d43f85d2ad9c32205a9d0592ad4da893fdff9ac530920e6c1f8d77"
+        }
+      ]
+    }
+  }
+}

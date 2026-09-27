@@ -1,0 +1,12 @@
+{
+  "generator": "image_gen.imagegen",
+  "mode": "built-in",
+  "original": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-83e6c564-0e6e-4a5c-9f4f-31f8721bdbdd.png",
+  "reference": "../master-02/source.png",
+  "status": "rejected",
+  "notes": [
+    "Foot lift and stride too large",
+    "Opaque blurred background rejected"
+  ],
+  "humanAcceptance": false
+}

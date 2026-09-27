@@ -1,0 +1,142 @@
+{
+  "schema": "launcher-reserved-independent-visual-review/1",
+  "status": "PASS",
+  "humanAcceptance": false,
+  "recordedAt": "2026-09-27T12:51:11.218Z",
+  "method": "The root model visually inspected native generated sheets during corrections, all four 81-frame whole-character contact sheets, and five actual Chromium scene captures at DPR1/2. Previously inspected Ace, Sabo and Law scratch contact bytes were compared by SHA with the final export; the final Hancock contact was inspected directly after its opposite-foot correction. Final image hashes are captured here before release freeze.",
+  "limitations": [
+    "Model visual review and automated browser tests are not human gameplay or physical-device acceptance.",
+    "Five rendered scene captures were visually sampled; the complete 184-capture set is bound by the separate actual browser QA, not represented as 184 manual inspections.",
+    "Official character text informed fixed costumes and relationships; no claim of pixel-for-pixel official illustration comparison or official endorsement.",
+    "Tiny hand lettering and pattern details are simplified at room scale; complete figures are uniformly scaled, never anatomically assembled.",
+    "All four production release flags stay false. These fixture images do not show publicly available characters."
+  ],
+  "items": [
+    {
+      "key": "ace",
+      "status": "PASS",
+      "notes": "Checked all 81 complete poses, including the corrected east C bare right arm and left-only ASCE, left-side accessories, current Whitebeard back emblem, orange hat and low alternating feet. The attached whole head follows body direction; seated and sleeping poses are naturally shorter. Sampled scene walking, selected front stance and sleeping remain intact.",
+      "evidence": [
+        "tools/launcher-room/presentation-v125/review-evidence/ace-final-contact.png",
+        "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-selected-ace.png",
+        "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-selected-law.png",
+        "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-south-1.png",
+        "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-east-00.png",
+        "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-life-sleep-2.png"
+      ]
+    },
+    {
+      "key": "sabo",
+      "status": "PASS",
+      "notes": "Checked all 81 poses: blonde hair, black hat with blue goggles, navy coat, white cravat and anatomical-left eye scar remain recognizable. Rear views show the back of the hat and coat. A/C arms alternate with low feet; crossed-leg rest and side-lying sleep retain the same body scale. Sampled room rendering has clear connected head and body.",
+      "evidence": [
+        "tools/launcher-room/presentation-v125/review-evidence/sabo-final-contact.png",
+        "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-selected-ace.png",
+        "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-selected-law.png",
+        "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-south-1.png",
+        "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-east-00.png",
+        "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-life-sleep-2.png"
+      ]
+    },
+    {
+      "key": "law",
+      "status": "PASS",
+      "notes": "Checked all 81 poses: Sabaody yellow/black hoodie, spotted white hat and blue jeans, goatee and earrings stay consistent. Side and front C were redrawn to alternate contact feet and arms. No high knee or assembled body parts were observed. Selected DPR2 scene faces the viewer; seated tea and dozing poses keep a smaller silhouette.",
+      "evidence": [
+        "tools/launcher-room/presentation-v125/review-evidence/law-final-contact.png",
+        "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-selected-ace.png",
+        "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-selected-law.png",
+        "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-south-1.png",
+        "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-east-00.png",
+        "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-life-sleep-2.png"
+      ]
+    },
+    {
+      "key": "hancock",
+      "status": "PASS",
+      "notes": "Checked the final 81-pose contact including corrected front C with the opposite shoe forward. Red Kuja-pattern outfit, long black hair and golden earrings are consistent, with no cape. Front/back/side whole-body orientation and restrained walking stay coherent; seated tea and dozing retain head size rather than stretching to fill each cell.",
+      "evidence": [
+        "tools/launcher-room/presentation-v125/review-evidence/hancock-final-contact.png",
+        "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-selected-ace.png",
+        "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-selected-law.png",
+        "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-south-1.png",
+        "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-east-00.png",
+        "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-life-sleep-2.png"
+      ]
+    }
+  ],
+  "images": [
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/ace-final-contact.png",
+      "sha256": "36d3133230d7c595694bbf6a4e0b48690230dd2ebeb2fea892dd174a7b0048bb",
+      "pixels": [
+        1536,
+        2112
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/sabo-final-contact.png",
+      "sha256": "b0ef117089f4e5a11301c9d0c0cda617bd939fb156f61af115b2684432ca0611",
+      "pixels": [
+        1536,
+        2112
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/law-final-contact.png",
+      "sha256": "05566029a4ee05b763f19c6178682b3939d0054c5adcaf9e89a9c7826aeaacef",
+      "pixels": [
+        1536,
+        2112
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/hancock-final-contact.png",
+      "sha256": "56a94ff224737cf60cfc625049bf3e32ed9887769f5184a5537fca327174394b",
+      "pixels": [
+        1536,
+        2112
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-selected-ace.png",
+      "sha256": "88485c49501fea6fadfadb2595746cee9e0ec39a4f46f1db7f8bde88c0b82ae6",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-selected-law.png",
+      "sha256": "e1d239932117dd839bffd9897e34930ce07a9dad55e825f1a2536e387b79bd2b",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-south-1.png",
+      "sha256": "0f304ccfcea1a825ad70af75a12e5d4a4bb5b3d332583c42297d131a8860bdc8",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-east-00.png",
+      "sha256": "f06ef4a51fc99c6fcd4060f08611cfff092bab564e64d791f9f826bec4a48a90",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-life-sleep-2.png",
+      "sha256": "6eb47d94023b2e4d4831ff4de7e8525b2a0ce5f8adcbf5f232f33da84b60dcd1",
+      "pixels": [
+        2436,
+        1372
+      ]
+    }
+  ]
+}

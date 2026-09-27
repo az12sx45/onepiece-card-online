@@ -5,7 +5,7 @@ const DAY_MS = 86400000;
 const MAX_OFFLINE_MS = 8 * 60 * 60 * 1000;
 const RESERVATION_MS = 10 * 60 * 1000;
 const MAX_JOBS = 6;
-const CREW = Object.freeze(['luffy','zoro','nami','usopp','sanji','chopper','robin','franky','brook','jinbe']);
+const CREW = require('./launcher-crew-release').releasedKeys;
 const NEED_KEYS = Object.freeze(['energy','hunger','mood','social','workMotivation']);
 const DEFAULT_NEEDS = Object.freeze({ energy: 80, hunger: 20, mood: 75, social: 70, workMotivation: 70 });
 const object = value => value && typeof value === 'object' && !Array.isArray(value) ? value : {};

@@ -1,0 +1,346 @@
+{
+  "schema": "one-piece-room-reserved-import-report/1",
+  "key": "sabo",
+  "asset": "public/images/launcher_room/reserved_v1/sabo/walk/east.webp",
+  "dimensions": [
+    1536,
+    384
+  ],
+  "cell": 384,
+  "columns": 4,
+  "root": [
+    192.0,
+    336.0
+  ],
+  "frames": [
+    {
+      "key": "sabo",
+      "direction": "east",
+      "pose": "step-a",
+      "source": "sabo-walk-side",
+      "region": [
+        173,
+        22,
+        247,
+        589
+      ],
+      "sourceCell": [
+        0,
+        0
+      ],
+      "componentSeed": [
+        290,
+        319
+      ],
+      "index": 0,
+      "bounds": [
+        133,
+        38,
+        256,
+        337
+      ],
+      "opaqueBoundsAtOutput": [
+        133,
+        39,
+        256,
+        336
+      ],
+      "sourceAnchor": [
+        291.73487344997454,
+        607
+      ],
+      "localAnchor": [
+        115.73487344997454,
+        583
+      ],
+      "sourceAlphaBounds": [
+        176,
+        24,
+        418,
+        609
+      ],
+      "opaqueBounds": [
+        177,
+        26,
+        239,
+        581
+      ],
+      "opaquePixels": 85336,
+      "removedDistantAlphaPixels": 5498,
+      "sourceOpaqueClearance": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "anchorPolicy": "head-axis-ground-row",
+      "sourceUnitScale": 0.9948805460750854,
+      "uniformCharacterScale": 0.17152658662092624,
+      "wholeImageScale": 0.5119453924914675,
+      "inverseWholeImageTransform": [
+        1.9533333333333336,
+        0,
+        -259.3051265500255,
+        0,
+        1.9533333333333336,
+        -73.32000000000005
+      ],
+      "rgbaSha256": "b1931b60fe9f24766c2322b4f28de969456b9bf76a4f091a006bbd58753f9e55",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "sabo",
+      "direction": "east",
+      "pose": "neutral",
+      "source": "sabo-walk-side",
+      "region": [
+        418,
+        0,
+        418,
+        627
+      ],
+      "sourceCell": [
+        1,
+        0
+      ],
+      "index": 1,
+      "bounds": [
+        138,
+        35,
+        253,
+        337
+      ],
+      "opaqueBoundsAtOutput": [
+        138,
+        36,
+        253,
+        336
+      ],
+      "sourceAnchor": [
+        620.9796236684034,
+        612
+      ],
+      "localAnchor": [
+        105.9796236684034,
+        588
+      ],
+      "sourceAlphaBounds": [
+        515,
+        24,
+        741,
+        614
+      ],
+      "opaqueBounds": [
+        516,
+        26,
+        223,
+        586
+      ],
+      "opaquePixels": 76495,
+      "removedDistantAlphaPixels": 4953,
+      "sourceOpaqueClearance": [
+        98,
+        26,
+        97,
+        15
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "anchorPolicy": "head-axis-ground-row",
+      "sourceUnitScale": 0.9948805460750854,
+      "uniformCharacterScale": 0.17152658662092624,
+      "wholeImageScale": 0.5119453924914675,
+      "inverseWholeImageTransform": [
+        1.9533333333333336,
+        0,
+        -269.0603763315966,
+        0,
+        1.9533333333333336,
+        -68.32000000000005
+      ],
+      "rgbaSha256": "beb2254b3581b174998a279200ff72d4fe315eba06453367ca58cb33319ebce8",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "sabo",
+      "direction": "east",
+      "pose": "step-c",
+      "source": "sabo-walk-side",
+      "region": [
+        836,
+        0,
+        418,
+        627
+      ],
+      "sourceCell": [
+        2,
+        0
+      ],
+      "index": 2,
+      "bounds": [
+        136,
+        37,
+        253,
+        337
+      ],
+      "opaqueBoundsAtOutput": [
+        137,
+        38,
+        253,
+        336
+      ],
+      "sourceAnchor": [
+        993.9532931338908,
+        607
+      ],
+      "localAnchor": [
+        109.95329313389084,
+        584
+      ],
+      "sourceAlphaBounds": [
+        884,
+        23,
+        1114,
+        609
+      ],
+      "opaqueBounds": [
+        886,
+        25,
+        226,
+        582
+      ],
+      "opaquePixels": 80257,
+      "removedDistantAlphaPixels": 5773,
+      "sourceOpaqueClearance": [
+        50,
+        25,
+        142,
+        20
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "anchorPolicy": "head-axis-ground-row",
+      "sourceUnitScale": 0.9948805460750854,
+      "uniformCharacterScale": 0.17152658662092624,
+      "wholeImageScale": 0.5119453924914675,
+      "inverseWholeImageTransform": [
+        1.9533333333333336,
+        0,
+        -265.0867068661092,
+        0,
+        1.9533333333333336,
+        -72.32000000000005
+      ],
+      "rgbaSha256": "f164039d0a77a5775cfcb9867122674bfcb4dd13dec9dfa40e5ae1efc616165f",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "sabo",
+      "direction": "east",
+      "pose": "neutral",
+      "source": "sabo-walk-side",
+      "region": [
+        418,
+        0,
+        418,
+        627
+      ],
+      "sourceCell": [
+        1,
+        0
+      ],
+      "index": 3,
+      "bounds": [
+        138,
+        35,
+        253,
+        337
+      ],
+      "opaqueBoundsAtOutput": [
+        138,
+        36,
+        253,
+        336
+      ],
+      "sourceAnchor": [
+        620.9796236684034,
+        612
+      ],
+      "localAnchor": [
+        105.9796236684034,
+        588
+      ],
+      "sourceAlphaBounds": [
+        515,
+        24,
+        741,
+        614
+      ],
+      "opaqueBounds": [
+        516,
+        26,
+        223,
+        586
+      ],
+      "opaquePixels": 76495,
+      "removedDistantAlphaPixels": 4953,
+      "sourceOpaqueClearance": [
+        98,
+        26,
+        97,
+        15
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "anchorPolicy": "head-axis-ground-row",
+      "sourceUnitScale": 0.9948805460750854,
+      "uniformCharacterScale": 0.17152658662092624,
+      "wholeImageScale": 0.5119453924914675,
+      "inverseWholeImageTransform": [
+        1.9533333333333336,
+        0,
+        -269.0603763315966,
+        0,
+        1.9533333333333336,
+        -68.32000000000005
+      ],
+      "rgbaSha256": "beb2254b3581b174998a279200ff72d4fe315eba06453367ca58cb33319ebce8",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    }
+  ],
+  "sourceIds": [
+    "sabo-walk-side"
+  ],
+  "visualAccepted": false,
+  "humanAcceptance": false
+}

@@ -1,0 +1,89 @@
+{
+  "schema": "one-piece-room-reserved-source-review/1",
+  "key": "ace",
+  "reviewer": "walk_quality",
+  "reviewType": "AI visual review of actual source PNGs",
+  "humanAcceptance": false,
+  "currentSelectionFile": "tools/launcher-room/reserved-v1/sources/ace/selected-sources.json",
+  "status": "selected-for-independent-atlas-validation",
+  "scope": [
+    "whole connected head and body in every pose",
+    "canonical asymmetric outfit landmarks",
+    "four direction consistency",
+    "small alternating walk contact poses and neutral planted feet",
+    "eight distinct acting expressions and poses",
+    "four frame work and utility sequences"
+  ],
+  "limitations": [
+    "Not a human fan acceptance test",
+    "Not an official-image pixel comparison",
+    "Final atlas geometry and browser playback validation are performed independently by importer agent"
+  ],
+  "sourceIntegrity": [
+    {
+      "sheet": "master",
+      "sourcePath": "tools/launcher-room/reserved-v1/sources/ace/master-02/source.png",
+      "sourceSha256": "546ab81ed2596a758bace98bf5a6722dc94c7a96cbabdbf648c50074226cf4f4",
+      "originalToolPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0e287-c8bc-7c41-b83e-03bf56383fe0\\exec-65debfba-d236-4b09-bfdc-b4336a0137bc.png",
+      "originalToolSha256": "546ab81ed2596a758bace98bf5a6722dc94c7a96cbabdbf648c50074226cf4f4",
+      "exactCopy": true
+    },
+    {
+      "sheet": "walk-side",
+      "sourcePath": "tools/launcher-room/reserved-v1/sources/ace/walk-side-02/source.png",
+      "sourceSha256": "d90f8318b18b39435a18b45741839f2515a20c1ba1e07c50e7288eb7785375ac",
+      "originalToolPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-baca61a9-bbc2-4dc0-b585-f824b1060cc3.png",
+      "originalToolSha256": "d90f8318b18b39435a18b45741839f2515a20c1ba1e07c50e7288eb7785375ac",
+      "exactCopy": true
+    },
+    {
+      "sheet": "walk-front",
+      "sourcePath": "tools/launcher-room/reserved-v1/sources/ace/walk-front-03/source.png",
+      "sourceSha256": "6e319b83397e9372196ddd9e920c36ff9b98a282dfced52f2b15bf3d2b011d69",
+      "originalToolPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0e287-c8bc-7c41-b83e-03bf56383fe0\\exec-b8793075-1099-4d08-9911-b8d678e09c23.png",
+      "originalToolSha256": "6e319b83397e9372196ddd9e920c36ff9b98a282dfced52f2b15bf3d2b011d69",
+      "exactCopy": true
+    },
+    {
+      "sheet": "acting-side",
+      "sourcePath": "tools/launcher-room/reserved-v1/sources/ace/acting-side-01/source.png",
+      "sourceSha256": "63a9fc37dc32e29859338b15a5839c9513076439baa0dc371043eb3743d36627",
+      "originalToolPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0e287-c8bc-7c41-b83e-03bf56383fe0\\exec-a186180d-6ace-4e27-a4a2-e7be0cb38293.png",
+      "originalToolSha256": "63a9fc37dc32e29859338b15a5839c9513076439baa0dc371043eb3743d36627",
+      "exactCopy": true
+    },
+    {
+      "sheet": "acting-front",
+      "sourcePath": "tools/launcher-room/reserved-v1/sources/ace/acting-front-02/source.png",
+      "sourceSha256": "58dd992923f4d9f6c87170035f416dd10a22f36254ec6f33ec5dbdd8480467bf",
+      "originalToolPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0e287-c8bc-7c41-b83e-03bf56383fe0\\exec-a6161c42-9762-40de-a147-70ac5cc45667.png",
+      "originalToolSha256": "58dd992923f4d9f6c87170035f416dd10a22f36254ec6f33ec5dbdd8480467bf",
+      "exactCopy": true
+    },
+    {
+      "sheet": "work",
+      "sourcePath": "tools/launcher-room/reserved-v1/sources/ace/work-01/source.png",
+      "sourceSha256": "65fa47da772c822155139be11b868a75bb7c89f2c0e57d883a4e96c5f641ca66",
+      "originalToolPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0e287-c8bc-7c41-b83e-03bf56383fe0\\exec-e5bbbdb6-cb22-40a6-8926-579c7438c595.png",
+      "originalToolSha256": "65fa47da772c822155139be11b868a75bb7c89f2c0e57d883a4e96c5f641ca66",
+      "exactCopy": true
+    },
+    {
+      "sheet": "utility",
+      "sourcePath": "tools/launcher-room/reserved-v1/sources/ace/utility-01/source.png",
+      "sourceSha256": "4fcbfa5cc2382a9f5d40a1ac3b65fd949868df4d708fe1ed66049ac72f39b9e4",
+      "originalToolPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0e287-c8bc-7c41-b83e-03bf56383fe0\\exec-d64e8aff-c425-45fd-adb6-476b69fb9d76.png",
+      "originalToolSha256": "4fcbfa5cc2382a9f5d40a1ac3b65fd949868df4d708fe1ed66049ac72f39b9e4",
+      "exactCopy": true
+    }
+  ],
+  "observations": [
+    "Orange hat, dual badges, freckles, red beads and adult compact silhouette retained",
+    "ASCE is on anatomical left upper arm; east near right arm is unmarked",
+    "Back tattoo is contemporary straight-cross Whitebeard skull",
+    "walk-side-02 corrected erroneous east C right-arm tattoo",
+    "walk-front-03 corrects north left accessories and south C opposite leading foot and hand swing",
+    "acting-front-02 corrects rear sitting left arm band and wrist accessory; left hip dagger is occluded by seated pose",
+    "All originals and rejected prior variants retained"
+  ]
+}

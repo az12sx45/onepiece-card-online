@@ -39,3 +39,10 @@ docs/LAUNCHER_ROOM_INTERACTION_20260927.json -text
 tools/launcher-room/hd-v4/** -text
 scripts/launcher_interaction_qa.js -text
 scripts/launcher_radial_v124_qa.js -text
+tools/launcher-room/presentation-v125/** -text
+docs/LAUNCHER_RESERVED_CREW_20260927.json -text
+tools/launcher-room/reserved-v1/** -text
+scripts/launcher_reserved_crew_server_qa.js -text
+scripts/launcher_reserved_crew_client_qa.js -text
+scripts/launcher_reserved_crew_browser_qa.js -text
+scripts/launcher_reserved_crew_art_browser_qa.js -text

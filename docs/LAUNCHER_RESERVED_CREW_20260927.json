@@ -1,0 +1,1813 @@
+{
+  "schema": "launcher-reserved-crew/1",
+  "releaseVersion": "1.2.5",
+  "interactionBaseline": "b8a459e8a5ed49aead8aee93b96a76728e02b537",
+  "status": "PASS_WITH_NOTES",
+  "blockingIssues": [],
+  "humanAcceptance": false,
+  "method": "The root model visually inspected native generated sheets during corrections, all four 81-frame whole-character contact sheets, and five actual Chromium scene captures at DPR1/2. Previously inspected Ace, Sabo and Law scratch contact bytes were compared by SHA with the final export; the final Hancock contact was inspected directly after its opposite-foot correction. Final image hashes are captured here before release freeze. The review separately binds isolated PGlite service checks, controller contracts, actual Chromium wiring, actual imported-pixel evidence and all current runtime sources.",
+  "limitations": [
+    "Automated tests and model inspection are not human playtest acceptance. All four shipping release flags remain false.",
+    "Model visual review and automated browser tests are not human gameplay or physical-device acceptance.",
+    "Five rendered scene captures were visually sampled; the complete 184-capture set is bound by the separate actual browser QA, not represented as 184 manual inspections.",
+    "Official character text informed fixed costumes and relationships; no claim of pixel-for-pixel official illustration comparison or official endorsement.",
+    "Tiny hand lettering and pattern details are simplified at room scale; complete figures are uniformly scaled, never anatomically assembled.",
+    "All four production release flags stay false. These fixture images do not show publicly available characters.",
+    "Isolated Node/VM controller, data and synthetic Image decoder contracts; no real account/DB writes, real asset decode, visual quality, human acceptance or deployment.",
+    "Actual headless Chromium with production HTML/CSS/JS and isolated IPC. Tests roster visibility, asset request policy, profile/radial wiring and friend readonly. Reserved artwork files may be absent and 404 is permitted here; this is not artwork decode/visual/motion quality acceptance. No real DB, account or deployment.",
+    "Actual headless Google Chrome DPR1/2 with real generated WebP and production renderer/navigation. Disposable browser disables web security only to permit readback of the isolated opui custom-scheme canvases. IPC and release flags isolated; autonomous life ticks suppressed so scripted real BFS routes stay deterministic. No physical-device, real-account, autonomous-scenario or deployment acceptance.",
+    "One SQL session; no real PostgreSQL concurrency, public server, UI play or release flag modification.",
+    "Socket handler body and Auth bridge are executed in isolated harnesses; no network socket is opened."
+  ],
+  "runtimeHashNormalization": "CRLF to LF only; all other bytes remain significant",
+  "runtime": {
+    "desktop/launcher-room.js": "69713f87c63b13a2d6d595a209a4cd8e1df42c54875a557f69328a9bdeb84ca6",
+    "desktop/launcher-room.css": "32b67efc5bde4018a3ca66883f5afa0bed90eb47a09b27bcb0b54c912b3ec610",
+    "desktop/launcher-profile-shop.js": "00758ec6cc7636eb805c459fa7f8117d92009db7e71b218a84f77da9dd9d74af",
+    "desktop/launcher-life-room.js": "300a1dd132a43f6301705752c49779e298d02ee564e83fe9e858e76d61d3b02c",
+    "desktop/launcher-life.js": "c9be09c38bd748a3b064de91879d12dea54515f776cb9d735dcd8b6dcbef55e7",
+    "desktop/launcher-life-data.js": "6457a5fb9f2623357a4a22ddb846d8e5bc81a1f1b5eda0ae17e184dc433bf66c",
+    "desktop/launcher-life-actions.js": "ebde9375cdefb0332f613b20c438b06475562c1691f8c8b59bd61369ced35968",
+    "desktop/launcher-room-dialogue.js": "484bc23b46fcfeeb3a90a14d1c049c0d2f2dd2789947a5a82ef6eda6b79a7737",
+    "desktop/launcher.html": "83d768703b0061adbc560a108bc42dbc5d1a6f86b962f696e31306fa0a63d39a",
+    "desktop/auth-service.js": "0439601010a7b41873a217582e5c8b72f90d3bd66d836da8180647338feaf223",
+    "desktop/preload.js": "03668ed7e677b29e4212fb294d318937164b30be5b5621d7206e45fc1bbf2886",
+    "desktop/main.js": "c3c634ad6b67c0edd5c44c6069acdd4fb606ac65823edec9fe761746a0bc295b",
+    "server/launcher-life.js": "0bcfa4bbab2a40970d108bdb1dcefcb64c1103f0456bcf6a1b1727108aa9f85e",
+    "server/launcher-life-store.js": "678a6347aeb06b835371bc10772c6d416acf47806edcdaf969d26450cdee6592",
+    "server/launcher-profile-shop.js": "ba17dee5b39f1dcb1f993854512533bf249d40b5e01bd5d4b04337199ac1dd4b",
+    "server/index.js": "94f5a93d8f19c3df683aabe6f214da9d1a3ccd9d9726cc70f760cc7aac1e1d93",
+    "server/desktop-distribution.js": "e8cb79e37cedada32cbbaa0a2f67d54d000a61fb121bff5657497515b1a96d85",
+    "desktop/launcher-profile-shop.css": "7e064396e85d2750113f40dba898dc57dd83ad3aa7f77ec718e62458864045db",
+    "desktop/launcher.css": "272c9f7e809d19291c4c9a037b762cdc436515aa87a681873e66f22f3fabdbea",
+    "desktop/launcher.js": "345be37a9d953a1dea307414df27e9051938444e563b69cfc62aed5718b41172",
+    "desktop/launcher-room-motion.js": "7215e47ea574e69548e80f2bd440bbf66fb092f40fafe86e3de3249889b19e01",
+    "desktop/launcher-room-motion-data.js": "05c2baa81e274245a9b53e2607665e726fc3c690de60703a7244da5321555b4d",
+    "desktop/launcher-reserved-crew.js": "6e6209d4bcd5267704e40ec30bc86769aa739e8806e2b39f60d3337b065790dd",
+    "server/launcher-crew-release.js": "7738284a71871309f5e18346f785bf5db8c051d969fe028cc74f5b7402478693",
+    "config/launcher-crew-release-v1.json": "18d29237e8a65400a7204b708b298d266f7381ac1cd2c3b14df3f77fa4cb177b"
+  },
+  "approvedRuntimeVariants": {
+    "server/desktop-distribution.js": [
+      {
+        "normalizedSha256": "c9330072bab54d00370735b6fcc01bbcef76e101183dc42b9222e0f4d5769255",
+        "reviewedBaseNormalizedSha256": "e8cb79e37cedada32cbbaa0a2f67d54d000a61fb121bff5657497515b1a96d85",
+        "reason": "Preserve formal Board media policy: the launcher merge adds only LAUNCHER_LIFE_GET and LAUNCHER_LIFE_COMMAND; the candidate-only three-line Board depth manifest exception is not copied into the formal authority.",
+        "evidence": {
+          "patch": {
+            "path": "tools/launcher-room/life-v1/review-evidence/formal-merge/desktop-distribution.js.patch",
+            "sha256": "758e224a4e496ffcacc8ed1c4250a91286cb5576dd705195a9737a43943eafce"
+          },
+          "formalReadback": {
+            "path": "tools/launcher-room/life-v1/review-evidence/formal-merge/desktop-distribution-readback.json",
+            "sha256": "4139001682628e684103a70c592988f62b0cf7fbb066fdd856aebaa9b3b544e9"
+          }
+        }
+      }
+    ]
+  },
+  "art": {
+    "path": "tools/launcher-room/reserved-v1/manifest.json",
+    "sha256": "4b95827653e839f866df6b692475c7c2ffb4b8c076705c6da4cc9f1c92387094"
+  },
+  "serverQA": {
+    "path": "tools/launcher-room/presentation-v125/review-evidence/SERVER_RELEASE_QA.json",
+    "sha256": "3547bd2b2e74ac94021ae494a4cb206d815b281b7eca9727ba48ff9d24bc87d3"
+  },
+  "clientQA": {
+    "path": "tools/launcher-room/presentation-v125/review-evidence/CLIENT_RELEASE_QA.json",
+    "sha256": "b268b810c77cba8ac42ef90cf88f9178d896c446d6d07c7b81fa172966dccb6b"
+  },
+  "browserQA": {
+    "path": "tools/launcher-room/presentation-v125/review-evidence/CLIENT_RELEASE_BROWSER_QA.json",
+    "sha256": "16b6b11d1f81026de8164e890a12f548f806786919031da1d802cabdedd2c460"
+  },
+  "artBrowserQA": {
+    "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/RESERVED_ART_BROWSER_QA.json",
+    "sha256": "5f6f406f474e0fe0e8d4658ad01a9c0f02c3acaf617cac3252daa0fcf4ca2765"
+  },
+  "visualReview": {
+    "path": "tools/launcher-room/presentation-v125/review-evidence/independent-visual-review.json",
+    "sha256": "baa6d894489e12f36ee78a0606e90aaf182a7562c8453fe4a201c1ec8d7f12d0"
+  },
+  "evidence": [
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/CLIENT_RELEASE_BROWSER_QA.json",
+      "kind": "report",
+      "sha256": "16b6b11d1f81026de8164e890a12f548f806786919031da1d802cabdedd2c460"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/CLIENT_RELEASE_QA.json",
+      "kind": "report",
+      "sha256": "b268b810c77cba8ac42ef90cf88f9178d896c446d6d07c7b81fa172966dccb6b"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/SERVER_RELEASE_QA.json",
+      "kind": "report",
+      "sha256": "3547bd2b2e74ac94021ae494a4cb206d815b281b7eca9727ba48ff9d24bc87d3"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/ace-final-contact.png",
+      "kind": "screenshot",
+      "sha256": "36d3133230d7c595694bbf6a4e0b48690230dd2ebeb2fea892dd174a7b0048bb",
+      "pixels": [
+        1536,
+        2112
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/hancock-final-contact.png",
+      "kind": "screenshot",
+      "sha256": "56a94ff224737cf60cfc625049bf3e32ed9887769f5184a5537fca327174394b",
+      "pixels": [
+        1536,
+        2112
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/independent-visual-review.json",
+      "kind": "report",
+      "sha256": "baa6d894489e12f36ee78a0606e90aaf182a7562c8453fe4a201c1ec8d7f12d0"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/law-final-contact.png",
+      "kind": "screenshot",
+      "sha256": "05566029a4ee05b763f19c6178682b3939d0054c5adcaf9e89a9c7826aeaacef",
+      "pixels": [
+        1536,
+        2112
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/RESERVED_ART_BROWSER_QA.json",
+      "kind": "report",
+      "sha256": "5f6f406f474e0fe0e8d4658ad01a9c0f02c3acaf617cac3252daa0fcf4ca2765"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-east-0.png",
+      "kind": "screenshot",
+      "sha256": "6bad8dedfbacaefd4710d6b09601220983abfd8cf54e7585c2265632452a7364",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-east-1.png",
+      "kind": "screenshot",
+      "sha256": "e32576696ffcd9a0f91a2aa03a4acccb871b8fd38454fe1f528fe48d44975a87",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-east-2.png",
+      "kind": "screenshot",
+      "sha256": "6cba7e5ce9a967b7cefb4414d728c639abf4e728d8fcf1d483191e1358c1b1bb",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-east-3.png",
+      "kind": "screenshot",
+      "sha256": "d04786f9f1bacba92c514282891f7978e0bc7501a10f859ec0a156b065541b95",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-east-4.png",
+      "kind": "screenshot",
+      "sha256": "7c9c400e14ed78c0dc2c3f30726a5fe33b1e5e19c996e62440cec46e6825ca90",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-east-5.png",
+      "kind": "screenshot",
+      "sha256": "d9fe2d1d758d436bcb96e022aab044b3b8ae950f799a834efc3adb34da9e29f1",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-east-6.png",
+      "kind": "screenshot",
+      "sha256": "34cbb49769125dce512397df7838f0003afb1233acfa2115e5e8139416b05bc1",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-east-7.png",
+      "kind": "screenshot",
+      "sha256": "ce9bca1042d5136248bf97ebf70f97dfe5142a5bc91b253f634156e73456f192",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-north-0.png",
+      "kind": "screenshot",
+      "sha256": "ab600aa3d3ed214026bbae6abf7fb99f999ed67e75af615d98c35e2cedc598ce",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-north-1.png",
+      "kind": "screenshot",
+      "sha256": "537c3fe863a783e303c6472236673af0491911ebdc4570c43031bccae23156d0",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-north-2.png",
+      "kind": "screenshot",
+      "sha256": "b9c8ccbf8a74bf2843415fd96cdca2212768511ed35bb4ea4b92601711dca3e6",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-north-3.png",
+      "kind": "screenshot",
+      "sha256": "d6b07ed4c2189ca3334429b33c169908263780eea72a517e94f587484d00b929",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-north-4.png",
+      "kind": "screenshot",
+      "sha256": "6c75843be29183cb09b50c1c81f98e6b93247efd5e98f2fdacce75f6abbc147d",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-north-5.png",
+      "kind": "screenshot",
+      "sha256": "4a91ad22abbcb3cf57d3001c0f75560ec1b27bad259a6a6fdc170d499b8bcad0",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-north-6.png",
+      "kind": "screenshot",
+      "sha256": "037e128b007e33e8bba73df56f12420585057cfa6e22a021d4bbe499617e48a1",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-north-7.png",
+      "kind": "screenshot",
+      "sha256": "35cfcc5730826a96c1005c3c1aa92f446b425bfb9456ba99ba9b26f0b47668d4",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-south-0.png",
+      "kind": "screenshot",
+      "sha256": "e4d8ee733bc567a3cd880fafa5f490ad5320e3d885c4383e04b97cdee482b2b7",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-south-1.png",
+      "kind": "screenshot",
+      "sha256": "0f304ccfcea1a825ad70af75a12e5d4a4bb5b3d332583c42297d131a8860bdc8",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-south-2.png",
+      "kind": "screenshot",
+      "sha256": "b5020b58c0d63c9abfa3beb337dfe7514d169bcc74c411239f515608f74f3baa",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-south-3.png",
+      "kind": "screenshot",
+      "sha256": "b1b57eb9196bacdc49efb1c21ba110e5ebf6179eafc70a74c96d16d1956e012a",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-south-4.png",
+      "kind": "screenshot",
+      "sha256": "c6e82647e3dab7282f2b37a670d888a2799fc6f960659c6bc54abafe25b56920",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-south-5.png",
+      "kind": "screenshot",
+      "sha256": "fb48fd041c8593504a863448dd5d95d117ce113faa886cd6c452e606e4279bb9",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-south-6.png",
+      "kind": "screenshot",
+      "sha256": "460d31fe8db5efd6cdfe352661d110956e552080e318eb6195e816208eae5f8a",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-south-7.png",
+      "kind": "screenshot",
+      "sha256": "21c7e5a5f7a698c9c0998bc44c99d1b39f48d05e699caa07123932f34d0a769e",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-west-0.png",
+      "kind": "screenshot",
+      "sha256": "ccbd17fa6519f4946fbab599dafa2ce5816fca3f864495022cd03ae57b953d49",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-west-1.png",
+      "kind": "screenshot",
+      "sha256": "de7a313e9c9b4a27ab6533330e3b7e353dcbebac5d2593fb1535d8967f308288",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-west-2.png",
+      "kind": "screenshot",
+      "sha256": "09a3777f71e2b48af8e89361752018327218cb9487f55779d97c68899faa5fea",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-west-3.png",
+      "kind": "screenshot",
+      "sha256": "fb222548bd85c57aa01fb2434c17c9924e16a537166324fe24c1c5d5e34dbaa8",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-west-4.png",
+      "kind": "screenshot",
+      "sha256": "b9771ededf268cef5c07bb8e85af25f495669c7a856f27fcd5ff8c8c2ca9d175",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-west-5.png",
+      "kind": "screenshot",
+      "sha256": "7e9be62caf0170904963ce5ca060d5253ed471f8aea9d5c5cf48c593281599df",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-west-6.png",
+      "kind": "screenshot",
+      "sha256": "4b21f9f974318d8052253d656c961b2cc0acb025a531f94d6de7b2a5bf0a4807",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-acting-west-7.png",
+      "kind": "screenshot",
+      "sha256": "3df8eb3e5489b0d68275b466a22d7c28209073aa0718bfe38b8051d8c6c66ecf",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-life-eat-0.png",
+      "kind": "screenshot",
+      "sha256": "783704bdbfcf4ab74ab61e853fd0155e15b6424dd5191df24c2fc5fb5d1fcbbd",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-life-eat-1.png",
+      "kind": "screenshot",
+      "sha256": "71696a2495910a5e8ba0729029b8fcc7516fda4698226af63a245f4c49155512",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-life-eat-2.png",
+      "kind": "screenshot",
+      "sha256": "4b9caede72254b977f1423d6a31f5dc8cc29dddeaae3106780f9aa65c6dd5ae9",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-life-eat-3.png",
+      "kind": "screenshot",
+      "sha256": "9f8d0569a734770d106a978eaa5f81eaf5ad4a7b622112f5e572b5ccb59affc1",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-life-rest-0.png",
+      "kind": "screenshot",
+      "sha256": "5f8e29219ca02b356ffa25308f9cbcbce5681d41134406a52f6f5c244efe08ec",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-life-rest-1.png",
+      "kind": "screenshot",
+      "sha256": "6b89de86e03637ebc231bebfc9f02d3bececf2df4565c781dcf54cc78b870ae7",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-life-rest-2.png",
+      "kind": "screenshot",
+      "sha256": "fe1fd0bc120509126387cbf7c5b47ed69c06cfcb034e8ed500b67d67e40929a6",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-life-rest-3.png",
+      "kind": "screenshot",
+      "sha256": "06b7e7b6715fe4b8f5c2ad4db43d21974498bd5009e82a589ba4910b70df75c4",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-life-sleep-0.png",
+      "kind": "screenshot",
+      "sha256": "652b7ea0dd9f118b71fa91d94556ea98a7d0b74d478b7476a32fc08b303fccb2",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-life-sleep-1.png",
+      "kind": "screenshot",
+      "sha256": "f7bc3507fb59303a2e281982f31ffbda945aefd2ff46865e77161d991961d1aa",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-life-sleep-2.png",
+      "kind": "screenshot",
+      "sha256": "6143bc7bbb2db2ae794fa877083efc6b29c145068b0ebe1f4f9074d60c564e92",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-life-sleep-3.png",
+      "kind": "screenshot",
+      "sha256": "e894439a9c14e110c5518296b226fef8a55a9ff032ee799b13ee74d1eb4726e0",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-life-train-0.png",
+      "kind": "screenshot",
+      "sha256": "5b8ffa1baf463d80f29a5c205a63858d51709d6ca3176b4e0e0090079c7271a9",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-life-train-1.png",
+      "kind": "screenshot",
+      "sha256": "7a335281f2616184a9677e94024694ebe5929f2903f5c774f0c30233cf23c204",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-life-train-2.png",
+      "kind": "screenshot",
+      "sha256": "5244a5fb31d300dde8cbe6965cd8f7344a293a7a4689290c7761fb42be93d7f7",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-life-train-3.png",
+      "kind": "screenshot",
+      "sha256": "7b606aa8e1764048a4191035f12ed3290ca7e7c6428bf7e863905c1b68bd13bb",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-life-work-0.png",
+      "kind": "screenshot",
+      "sha256": "a1e3dac43a74838b53253ee2f7cc64179dac2d8c8c33f335af90271b8034e7b7",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-life-work-1.png",
+      "kind": "screenshot",
+      "sha256": "2c78e70c69b40b12efa242d0238bcbdb5e2ff8dc8542ad215d07bc2ad502811a",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-life-work-2.png",
+      "kind": "screenshot",
+      "sha256": "50ea4ae843102da713385bd33598f77749714b6a73a07fdc523124aa52c716bd",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-life-work-3.png",
+      "kind": "screenshot",
+      "sha256": "204a1eee9a08ee154fe86620cabc2b515c83ed0877586d376f3c580378542ea8",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-selected-ace.png",
+      "kind": "screenshot",
+      "sha256": "88485c49501fea6fadfadb2595746cee9e0ec39a4f46f1db7f8bde88c0b82ae6",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-selected-hancock.png",
+      "kind": "screenshot",
+      "sha256": "edfbee8755ee0d74df3d4584f6e7b3bc73b87a37a2091eb5731835df6ba061fa",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-selected-law.png",
+      "kind": "screenshot",
+      "sha256": "329fe7e1e5a610c8d1387eac9e2cd0d8e43281cd1e8882e4dad472864e305400",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-selected-sabo.png",
+      "kind": "screenshot",
+      "sha256": "440a77de7cd9c0f832c2112dff64f7a6d8c1514800a0c85a48efdc4786545f86",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-east-00.png",
+      "kind": "screenshot",
+      "sha256": "e09cd4fbf082641aed27b2478a0107b461db4ecb8a519183b5acadd8c7c4193b",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-east-01.png",
+      "kind": "screenshot",
+      "sha256": "fbe1105a18825cd1c902f2ff3e465e277a70caac413ac35dade3cba587da3e6e",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-east-02.png",
+      "kind": "screenshot",
+      "sha256": "2715f68231c38c1a36747cea2b67c531a145e54ed18c92b94c65704c043eac34",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-east-03.png",
+      "kind": "screenshot",
+      "sha256": "c7a77edd943062a1615fdd99fe87e9b4371abf23db9d804ad347f18b85a5982d",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-east-04.png",
+      "kind": "screenshot",
+      "sha256": "c8e14014c8d45443a5a92fffdf40469e9290757ac43aaeda346ce236840026ea",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-east-05.png",
+      "kind": "screenshot",
+      "sha256": "0e2f904190d8254fc7d210821d39695b8d107f44b17ec96c1372318acde09bbb",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-east-06.png",
+      "kind": "screenshot",
+      "sha256": "d94fb59eeedd13e832ea8d7d49a7fe116695ad041582be0fe2f71b38fc8eb741",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-east-07.png",
+      "kind": "screenshot",
+      "sha256": "96002ef60133492e636dbe9c7d135bd6437d33e08f52051f752ee9b0069c65f4",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-east-08.png",
+      "kind": "screenshot",
+      "sha256": "42abcf79b574a19c68195b674a9a3bb9d38b0ab51c9022451f08316e180a1047",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-north-00.png",
+      "kind": "screenshot",
+      "sha256": "91b782d88df5989f465201ee505c103ae41264b2c3ca6af467bb5301330f1abf",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-north-01.png",
+      "kind": "screenshot",
+      "sha256": "427886d6eeb9c96ca201402b5d99c5570d41b960a3d0a3dd06ca9ccf76fcb04c",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-north-02.png",
+      "kind": "screenshot",
+      "sha256": "c4650161b2f54fc3390d4290fca3b8d50408e56aad56748872cf8849937217ac",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-north-03.png",
+      "kind": "screenshot",
+      "sha256": "7b8db9dbe4d572e3dc57e4897a0973df31a471cfd9ee0b7d63560c14cb65f49a",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-north-04.png",
+      "kind": "screenshot",
+      "sha256": "6e324500f92c99be04f6b05fa66d1140281a9ca41d7b36b588276ee5cd92a27e",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-north-05.png",
+      "kind": "screenshot",
+      "sha256": "ef943a13e568647c731eb7f95246ae6837c6ab432280915774af11293e2c0dfa",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-north-06.png",
+      "kind": "screenshot",
+      "sha256": "37dbdb2d08a0217bc8b94dc27d48e014661e384edf7c4b4d22b2c85c207d7d5f",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-north-07.png",
+      "kind": "screenshot",
+      "sha256": "e94e3dd2b348c9d5995f1ac594a309d195e6fd150c48cac88c4a60bb7145aaa5",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-north-08.png",
+      "kind": "screenshot",
+      "sha256": "cfb584488121d11acb7fcea199ef0fd873287d9607b09234fa3c60ec82c75fcd",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-south-00.png",
+      "kind": "screenshot",
+      "sha256": "55efc88175fbfb533230cf33daa91b84943c395126cce32978e37f9a9b25d2aa",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-south-01.png",
+      "kind": "screenshot",
+      "sha256": "eb4ffe22a12afb64f5b04130feac4562652d03066ca4e9573ca3ed47bc6ba347",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-south-02.png",
+      "kind": "screenshot",
+      "sha256": "abad12ba0a391097c3308c7bbf032ba27d25e9ddca1a072c0d416174a437fe4c",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-south-03.png",
+      "kind": "screenshot",
+      "sha256": "38cc92772f644f6ebe11e7f194d379e6bd7f3b369cfb3548518e4b4533b15399",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-south-04.png",
+      "kind": "screenshot",
+      "sha256": "d5e77b793ac8b922ea19a8c8b35eede3b27367e61d20e73a1d28c6cff01be4ec",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-south-05.png",
+      "kind": "screenshot",
+      "sha256": "54bfd41b808a88d3a26d596ee61c7984e0f4c6358aad3a450d7534d79007b7a4",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-south-06.png",
+      "kind": "screenshot",
+      "sha256": "ef58d30547f0657cf477d29a0c997b4cfa7f2401ad3fe7605377bb3c841e2a55",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-south-07.png",
+      "kind": "screenshot",
+      "sha256": "9736a8cd2908610c370f1212c4e69f667c850a5dbd8ce03c91dfe325dda779eb",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-south-08.png",
+      "kind": "screenshot",
+      "sha256": "6e7573135bb66edfff19e2468e5bd5c6d48ac6c783413711f1ae1adbb8cc0173",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-west-00.png",
+      "kind": "screenshot",
+      "sha256": "03393cbdbd91919d735cbec8874dc747a3a83a524aa1824242166856e60b22bc",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-west-01.png",
+      "kind": "screenshot",
+      "sha256": "3dc59a722d800443cd896c309d11a10dfb987ef08111621cd75df333095ce74b",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-west-02.png",
+      "kind": "screenshot",
+      "sha256": "8449d557a91ac18ff76700019ebbd9dea421d51206582e8306c31aab4b373df4",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-west-03.png",
+      "kind": "screenshot",
+      "sha256": "f8c756bfbd299c0459985ecb060dbe1bccb696fd96964d4006a719ae637b7a31",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-west-04.png",
+      "kind": "screenshot",
+      "sha256": "e4b633da350042e59b8eee35da4b1bbca0a4fab1e448e1cf8d110c66975d51b9",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-west-05.png",
+      "kind": "screenshot",
+      "sha256": "ce0f41361b3f9edb41b54bc27380cfd53fba576ff2df783267f818ce17ff4da3",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-west-06.png",
+      "kind": "screenshot",
+      "sha256": "fc06e1bd304c6eeec3d439d3979f7589d2f5bb75915f29a3c92ffb783cbc20f6",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-west-07.png",
+      "kind": "screenshot",
+      "sha256": "2893c18ba03da316eabd90bc448113e86cd6be5510603bd8456dfa124e199f4a",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr1-walk-west-08.png",
+      "kind": "screenshot",
+      "sha256": "a16815670a477e1e34f5729509c4c6d1d80bc6af1098febd14c759ad818188e7",
+      "pixels": [
+        1218,
+        686
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-east-0.png",
+      "kind": "screenshot",
+      "sha256": "0916125d0db48653e8fbce7ada2fe2ba7a646fea17fb3c3c1400c0bedb8320e9",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-east-1.png",
+      "kind": "screenshot",
+      "sha256": "9d5d28b74c173607e0902fe2108396d471ecaaabcc8afed455adb76d518f14ee",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-east-2.png",
+      "kind": "screenshot",
+      "sha256": "0406ba591bd59a093442f8ced50ce1ccbc301fd130423115c401d445c64f6cf8",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-east-3.png",
+      "kind": "screenshot",
+      "sha256": "05bd4010c857ba396df1fdce2cd00653eb1fb83a4961fbecd271ae27cab60621",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-east-4.png",
+      "kind": "screenshot",
+      "sha256": "8e7249af7373fcd9dc4de0075793a32b21ca29c4721886e5c36c6b1c1917a50f",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-east-5.png",
+      "kind": "screenshot",
+      "sha256": "25261c510914e31fad9edeb130385ee37f67ffcb879b9a26e533444d6562d1c6",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-east-6.png",
+      "kind": "screenshot",
+      "sha256": "6fb6825794832983404aec7f2f77b8e30b48074bd622bcce2b14a8cd83a6fe28",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-east-7.png",
+      "kind": "screenshot",
+      "sha256": "73d6a1fe7c46e50fd4799200fed09e8058b09064df9c2807384a863bf65f3788",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-north-0.png",
+      "kind": "screenshot",
+      "sha256": "3060c172cdd66c766599d69136751f38a48e2b15113c9ad96de362a32c538eb9",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-north-1.png",
+      "kind": "screenshot",
+      "sha256": "aac5ba90724f68d093beb83ccee7e6eab7b4542e9ac91a864129737d7d7bc371",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-north-2.png",
+      "kind": "screenshot",
+      "sha256": "66d1b71e7d1f3c04a161b9224e76001332ee0708ddfc1fc689749bd09048c78a",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-north-3.png",
+      "kind": "screenshot",
+      "sha256": "e286eb450a69b4762ee8851a7be05d327015509c76b932843c49d87c1c3312ea",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-north-4.png",
+      "kind": "screenshot",
+      "sha256": "0b60c3d82d9d883e4f0e1acb792d11366eed98fecee4f7e25283620e0c16d514",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-north-5.png",
+      "kind": "screenshot",
+      "sha256": "804f019c087a4561f38545e85568563d76e9813589bb6208ddde82248b389e5e",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-north-6.png",
+      "kind": "screenshot",
+      "sha256": "5796eedc995baf2c3b4cab4712a055ef52f583083305383160350ce070322452",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-north-7.png",
+      "kind": "screenshot",
+      "sha256": "f3c4ac03878d7c5a3cdc2343d4fe824a443477d8b06fa8c070c603919972eb61",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-south-0.png",
+      "kind": "screenshot",
+      "sha256": "65ce86e1126b48304051ebaa6a5a5e8457309ee367a16ef5c858d01bd3e92446",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-south-1.png",
+      "kind": "screenshot",
+      "sha256": "130e3463ac6c2a097f3d472d2f90d9d0667c09cc108cba7f17522f6036efaf02",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-south-2.png",
+      "kind": "screenshot",
+      "sha256": "b5bc6289bebaeb5ce9e62aaa452a32ac2fc08d49441451362d010950cdc00e3c",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-south-3.png",
+      "kind": "screenshot",
+      "sha256": "751b022570a7185769b730c5d5185d9564aef1eb57c83b63101bd8f74166c22f",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-south-4.png",
+      "kind": "screenshot",
+      "sha256": "dbf5f1ec26f67bde5b55e409f3d2516856b71a0fa72228673d83ed06a4154259",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-south-5.png",
+      "kind": "screenshot",
+      "sha256": "9c9584a9b2595dddd7f3136a3600ee25620745b08dfea831579a9b92cd67bef6",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-south-6.png",
+      "kind": "screenshot",
+      "sha256": "5cef749a534d454e35fa882d4f25a065aec5ed2ce15b8744c5b4c810eeee117d",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-south-7.png",
+      "kind": "screenshot",
+      "sha256": "21af25e386ea9de07e20c2483de597428a9cbd9260624663b41f8bcffd5c51a5",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-west-0.png",
+      "kind": "screenshot",
+      "sha256": "12583da04e27f6ea7fc211de69e7957ae60eae782ea764199741fafecdb44a24",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-west-1.png",
+      "kind": "screenshot",
+      "sha256": "d29a3ccbc08ae1ad495519aff689db2b425fd19b23bb85a167c2d96b5afb8833",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-west-2.png",
+      "kind": "screenshot",
+      "sha256": "dc478b1d80d06c04bd27f23119af4274fb505de377989bfb5fba6320dc2e3870",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-west-3.png",
+      "kind": "screenshot",
+      "sha256": "bd644bc06d6e589eafaa978420821504233cdc7999adb9ec3d1aecf0c186da8d",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-west-4.png",
+      "kind": "screenshot",
+      "sha256": "390a8aff8f913a7e6c5df5b0012e8353543596849d9fd670e6f8140aeaf10f97",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-west-5.png",
+      "kind": "screenshot",
+      "sha256": "fd8858ed5b2d8ca9a6837b1363e8f969e91c9cf0201130e27290a132a93963cd",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-west-6.png",
+      "kind": "screenshot",
+      "sha256": "46fb46db369f848eef67c8da97df3294ed3905122d575222ebf990f368c227c2",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-acting-west-7.png",
+      "kind": "screenshot",
+      "sha256": "6066c41de8642b5cb724baff4297c87453f3d9a9a6a8c32b2e5dec93549b576e",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-life-eat-0.png",
+      "kind": "screenshot",
+      "sha256": "c137dc1d451f40ae3d1d76a3059f6306d52a002c3d9d7436e6e29d8c5d30916b",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-life-eat-1.png",
+      "kind": "screenshot",
+      "sha256": "6340ab9b3b5ae1966a0c6145df376f3eed17322eb29a0f0cc868c546e594e4a2",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-life-eat-2.png",
+      "kind": "screenshot",
+      "sha256": "88eb4f8a42e7b26dbc4b9c01dce4c330b85079a445398b85a9ed0de2ae7012e2",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-life-eat-3.png",
+      "kind": "screenshot",
+      "sha256": "6590998f98db7d738b555c00abe2ebcb7436446cb6277322cd2c1def535abe90",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-life-rest-0.png",
+      "kind": "screenshot",
+      "sha256": "a8731398950cda3146dde683b966960b03de936564a4d8e00e470dd93391bd97",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-life-rest-1.png",
+      "kind": "screenshot",
+      "sha256": "3c9ef65236483c62027bcd681a369a51661e661c1db32d67d5ed5ae4d446e72b",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-life-rest-2.png",
+      "kind": "screenshot",
+      "sha256": "d12745599764782a265ff8a9361756a1ecc066e4315b684bc08ad7709b536c0b",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-life-rest-3.png",
+      "kind": "screenshot",
+      "sha256": "f147d91cef724f6e53d1e4747874a7f6c14e17dac80253d2939f24b491783a5b",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-life-sleep-0.png",
+      "kind": "screenshot",
+      "sha256": "85aa3d5e59e263cec6c9995d5818c6ff65c4bdae59313839756cbba8cf751a3e",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-life-sleep-1.png",
+      "kind": "screenshot",
+      "sha256": "012f17754bd54f090fba93025d62a9fea940e23b36cac2dbcc46bef57ed93d58",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-life-sleep-2.png",
+      "kind": "screenshot",
+      "sha256": "6eb47d94023b2e4d4831ff4de7e8525b2a0ce5f8adcbf5f232f33da84b60dcd1",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-life-sleep-3.png",
+      "kind": "screenshot",
+      "sha256": "24890c7eb90f45e20ae5729b101b6d9239f932287c806fee659d54d23d0ecc39",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-life-train-0.png",
+      "kind": "screenshot",
+      "sha256": "bb182d2b2ef0fba8ae6e5694a0a7066d11910074cf4a8e2e2ea7ef79324fa80b",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-life-train-1.png",
+      "kind": "screenshot",
+      "sha256": "16f805e8cb37a165434196e2ba3447f82dea4802a9f083975ffd9c26ab512f0f",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-life-train-2.png",
+      "kind": "screenshot",
+      "sha256": "d8341e53a1f39a5319b0071f30f949fc9fda3831fce748f081e8632a640f3ae6",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-life-train-3.png",
+      "kind": "screenshot",
+      "sha256": "f9100c44411a96b551cf468721d53493fba4982e4d790f4e6b068a723dcadc4a",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-life-work-0.png",
+      "kind": "screenshot",
+      "sha256": "c2201afe2b1ccad0ebdba0c23d73c66df46829c8a16bd5bc383af1865153485c",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-life-work-1.png",
+      "kind": "screenshot",
+      "sha256": "863f59b4f089e7f7fd9062b3d3acfbca56486d1311c73039fab35a03ee4d6869",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-life-work-2.png",
+      "kind": "screenshot",
+      "sha256": "70b04d423f5b1de4226cf7d12a5adb7637a4c7e865c5fc78de7cd3e525cab26e",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-life-work-3.png",
+      "kind": "screenshot",
+      "sha256": "5cd5ea344be9e11a18bac87ac36e57c6da59667eeef359ce93591bc4491a6d87",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-selected-ace.png",
+      "kind": "screenshot",
+      "sha256": "646f6f5260529f06163e728a6620eac2ade4b828b3103e25673a4889765c6753",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-selected-hancock.png",
+      "kind": "screenshot",
+      "sha256": "362f024312eea2de47533f0c45d49c19bd31e5dfe6c5a9d754a0c03bef3403d0",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-selected-law.png",
+      "kind": "screenshot",
+      "sha256": "e1d239932117dd839bffd9897e34930ce07a9dad55e825f1a2536e387b79bd2b",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-selected-sabo.png",
+      "kind": "screenshot",
+      "sha256": "6842514f44296a348cef457359cd54042eeb38fbdaab1ed736643c66005a028f",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-east-00.png",
+      "kind": "screenshot",
+      "sha256": "f06ef4a51fc99c6fcd4060f08611cfff092bab564e64d791f9f826bec4a48a90",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-east-01.png",
+      "kind": "screenshot",
+      "sha256": "7b51276195329978e3b57d0f9e5af55ee5862e9c25dd4d99dd4b6d034cabbdd2",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-east-02.png",
+      "kind": "screenshot",
+      "sha256": "e79ad9f042bf582d7a6283470ef554093e0a96046421bcb83f9ab184a096da30",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-east-03.png",
+      "kind": "screenshot",
+      "sha256": "d11c0ddbffd85db1a92828ef0169db19cd5a812bdf5ca765f5a9dc87db175ca5",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-east-04.png",
+      "kind": "screenshot",
+      "sha256": "ef7c36de1277ad5651a66ef1d95a2de1603742fefdea2c31569713db56f1ab5d",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-east-05.png",
+      "kind": "screenshot",
+      "sha256": "a229cd1cc46a74de2127719178b3fe4acd2118158e9e49c029868a95064c1de1",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-east-06.png",
+      "kind": "screenshot",
+      "sha256": "7f1f9b8eb0f94d044414b84616889a2653f74db6062e1ea7d8305f9dc977dd0b",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-east-07.png",
+      "kind": "screenshot",
+      "sha256": "d54ca4299596d2f1d7c1920efa6d6c9a6a4ecb130bbfb5c44eb6b26c7be3f419",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-east-08.png",
+      "kind": "screenshot",
+      "sha256": "c37dbe03ed419edab26361cb6d8fa10c1ccd23cd8af3e256d18bbb2f5ea84646",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-north-00.png",
+      "kind": "screenshot",
+      "sha256": "f0cbf5d4f8550432509258976b15a6b69f238e0a3c5821f8034ced43ef954ff7",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-north-01.png",
+      "kind": "screenshot",
+      "sha256": "260a8467bfb3850ecf73f5844679c83ef5e5fb0cc2377e76009f0fdaa2715a20",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-north-02.png",
+      "kind": "screenshot",
+      "sha256": "c3f3dd81fa1a8bd66e15fa613e2a0762174824fcce33372bd236376d56a91878",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-north-03.png",
+      "kind": "screenshot",
+      "sha256": "66d7a5f45bb0ab1d94c653623fd775cb47d31b7c27647e05cdfa13bb443d7d75",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-north-04.png",
+      "kind": "screenshot",
+      "sha256": "e0b2f265fd73b391fbe6cb29eafd41d87e7128b72adbbcef5795d5a52089051c",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-north-05.png",
+      "kind": "screenshot",
+      "sha256": "56d7cec2b2a5b4ba4cc1ab2f529f3b2889c597b739a782bd5cf5f6848f10f301",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-north-06.png",
+      "kind": "screenshot",
+      "sha256": "3e88cd5730cbbcd402e9dfac8787b8c2b3699073216f3aee03a5572c00e931af",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-north-07.png",
+      "kind": "screenshot",
+      "sha256": "55e0368785efb6133f6ecef08d516ee3c7a21345ce1ed4779d99ed86db151746",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-north-08.png",
+      "kind": "screenshot",
+      "sha256": "d7e79bb9a8fc0ea7f22ec4d50742250927a16b236f7566261d8c1c7058e0c4ca",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-south-00.png",
+      "kind": "screenshot",
+      "sha256": "5b257a9f235b8802ba0a90bc7ce7e62370dcb3f99ac663c53a01302f985d06b6",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-south-01.png",
+      "kind": "screenshot",
+      "sha256": "09a068f016db6cacd0d7180e470b389c62bf15e77c92bb7dd0734a96bd94665e",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-south-02.png",
+      "kind": "screenshot",
+      "sha256": "9f7ffc078cedcb7f77aaa9930c9bd1f58ab4e3fae2abe2f187f2e792c8dd7494",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-south-03.png",
+      "kind": "screenshot",
+      "sha256": "40094a4e3d547c39032991712d4d650e785966b5a7ebb7cb8d53b4a38edebde3",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-south-04.png",
+      "kind": "screenshot",
+      "sha256": "6ce3e860d6da682f5a4b140c5da521fefa3ebf5b797a62f75e95aa12183c86b2",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-south-05.png",
+      "kind": "screenshot",
+      "sha256": "e2391571fd433c5a05d2a4df0baf7bbdd85796b1fde44f929a508739402032e9",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-south-06.png",
+      "kind": "screenshot",
+      "sha256": "20dcead08e75f1dec613e890aab9be6ec9ed4a2d2e6e104412ae3d20fc19c0be",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-south-07.png",
+      "kind": "screenshot",
+      "sha256": "0dbc80e53eaa496654854314747e9dcb8fc702f1feb4dd7005862540bd20800e",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-south-08.png",
+      "kind": "screenshot",
+      "sha256": "d0ab12b6e6c39cdbec72fae02b2be017ed186ef3ae89846b5922bc9b24e27112",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-west-00.png",
+      "kind": "screenshot",
+      "sha256": "5d1297d6b16231a2bfc3664e19c83a99886515b9224dce5b23401ce55f1d7bf0",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-west-01.png",
+      "kind": "screenshot",
+      "sha256": "49a8e53ab476e3b3116fa45771b30b816406a3091018e92cb79b4aa21c5524b1",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-west-02.png",
+      "kind": "screenshot",
+      "sha256": "c1a8b3610061c1eac3350b8955a69180dc83a56809a180f730e9d47cb5aa818c",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-west-03.png",
+      "kind": "screenshot",
+      "sha256": "f5b898b1f5cfd2e142d17b74a5f031c714d98e7d4170b7afe2dc8a3a9b3dd827",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-west-04.png",
+      "kind": "screenshot",
+      "sha256": "79c06c3e89eb48d327beb6ab8ab568cc840da05b954b4dd71a79293702bae718",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-west-05.png",
+      "kind": "screenshot",
+      "sha256": "e6c431e5ffc2751e17c739ca831a2433224face92bfb93dd6e17ab886399f373",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-west-06.png",
+      "kind": "screenshot",
+      "sha256": "aa50ff93e3d9b2eaa46bd1f9c76ca7869b38e918cc8e9e16d0e08f722cf0e6f0",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-west-07.png",
+      "kind": "screenshot",
+      "sha256": "e5b81350eebe3a4bae261f87d4a5fca029fa3b09aecf8188ccc077257d711def",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/reserved-browser/dpr2-walk-west-08.png",
+      "kind": "screenshot",
+      "sha256": "74b3ba5dd8b4465d4b686f9edbbd9b0b4094934568322ffdad6f9f8c588d5ebe",
+      "pixels": [
+        2436,
+        1372
+      ]
+    },
+    {
+      "path": "tools/launcher-room/presentation-v125/review-evidence/sabo-final-contact.png",
+      "kind": "screenshot",
+      "sha256": "b0ef117089f4e5a11301c9d0c0cda617bd939fb156f61af115b2684432ca0611",
+      "pixels": [
+        1536,
+        2112
+      ]
+    }
+  ],
+  "recordedAt": "2026-09-27T12:53:43.698Z"
+}

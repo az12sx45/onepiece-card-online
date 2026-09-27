@@ -1,10 +1,11 @@
 /* Directional room animation. Coordinates and stride values use front-row stage pixels. */
 (function (root, factory) {
   'use strict';
-  const api = factory();
+  const reserved = typeof module === 'object' && module.exports ? require('./launcher-reserved-crew.js') : root.OnePieceReservedCrew;
+  const api = factory(reserved);
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.OnePieceRoomMotion = api;
-}(typeof globalThis === 'object' ? globalThis : this, function () {
+}(typeof globalThis === 'object' ? globalThis : this, function (reserved) {
   'use strict';
   const DIRECTIONS = Object.freeze(['east', 'west', 'north', 'south']);
   const WALK_SHAPE = Object.freeze({ columns: 4, rows: 1, frames: 4, cell: 128, width: 512, height: 128, rootX: 64, rootY: 112 });
@@ -14,7 +15,7 @@
   const ATLAS_RESOLUTION = Object.freeze({ motion_v4: 3, acting_v4: 2 });
   const TURN_MS = 140;
   const ACTION_POSES = Object.freeze(['idle', 'talk_happy', 'talk_annoyed', 'surprised', 'focused_use', 'sit', 'wave', 'listen']);
-  const STRIDES = Object.freeze({ luffy: 24, zoro: 24, nami: 24, usopp: 24, sanji: 24, chopper: 20, robin: 24, franky: 24, brook: 24, jinbe: 24 });
+  const STRIDES = Object.freeze({ luffy: 24, zoro: 24, nami: 24, usopp: 24, sanji: 24, chopper: 20, robin: 24, franky: 24, brook: 24, jinbe: 24, ...Object.fromEntries((reserved?.RESERVED_KEYS || []).map(key => [key, 24])) });
   const cache = new Map();
   const atlasResolution = new WeakMap();
   const decodeQueue = [];
@@ -87,6 +88,7 @@
   function atlasUrl(key, direction, kind = 'motion_v4') {
     if (!Object.hasOwn(STRIDES, key) || !DIRECTIONS.includes(direction)) return '';
     if (!Object.hasOwn(ATLAS_RESOLUTION, kind)) return '';
+    if (reserved?.RESERVED_KEYS.includes(key)) return reserved.assetUrl(key, `${kind === 'acting_v4' ? 'acting' : 'walk'}/${direction}.webp`);
     return `opui://launcher/images/launcher_room/${kind}/${key}/${direction}.webp`;
   }
   function walkShape() { return WALK_SHAPE; }

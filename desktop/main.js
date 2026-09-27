@@ -330,6 +330,7 @@ function resolveLauncherResource(requestUrl) {
       /^images\/launcher_room\/action_frames\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\/(?:idle|walk1|walk2|talk_happy|talk_annoyed|surprised|focused_use|sit|wave)\.webp$/,
       /^images\/launcher_room\/(?:motion|acting)_v[34]\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\/(?:east|west|north|south)\.webp$/,
       /^images\/launcher_room\/portrait_v3\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\.webp$/,
+      /^images\/launcher_room\/reserved_v1\/(?:ace|sabo|law|hancock)\/(?:portrait|(?:walk|acting)\/(?:east|west|north|south)|life\/(?:work-(?:east|west|north|south)|(?:eat|rest|sleep|train)-south))\.webp$/,
       /^audio\/profile_bgm\/(?:harbor|night-watch|voyage)\.ogg$/,
       /^audio\/bgm\/track(?:0[1-9]|1[0-9]|20)\.mp3$/,
       /^videos\/game_launcher\/[A-Za-z0-9._-]+$/
@@ -1310,6 +1311,11 @@ async function runVisualOrSmokeCapture() {
           ...['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopper', 'robin', 'franky', 'brook', 'jinbe']
             .flatMap(name => ['motion', 'acting'].flatMap(kind => ['east', 'west', 'north', 'south']
               .map(direction => `images/launcher_room/${kind}_v4/${name}/${direction}.webp`))),
+          ...['ace', 'sabo', 'law', 'hancock'].flatMap(key => [
+            'portrait.webp', ...['walk', 'acting'].flatMap(kind => ['east', 'west', 'north', 'south'].map(direction => `${kind}/${direction}.webp`)),
+            ...['east', 'west', 'north', 'south'].map(direction => `life/work-${direction}.webp`),
+            ...['eat', 'rest', 'sleep', 'train'].map(action => `life/${action}-south.webp`)
+          ].map(asset => `images/launcher_room/reserved_v1/${key}/${asset}`)),
           ...lifeActions.assets().map(asset => `images/launcher_room/life_v1/${asset}`),
           ...[0,1,2,3].map(rotation => `images/launcher_room/furniture_views/galley-stove/${rotation}.webp`),
           'images/launcher_room/furniture/galley-stove.webp',

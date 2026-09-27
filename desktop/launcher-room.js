@@ -12,8 +12,9 @@
     furniture: { type: 'room_furniture', owned: 'roomFurniture', label: '家具' },
     character: { type: 'room_character', owned: 'roomCharacters', label: '夥伴' }
   };
-  const ASSET = /^opui:\/\/launcher\/images\/launcher_room\/(scenes|furniture|chibi)\/[a-z0-9-]+\.webp$/i;
-  const CHARACTER_KEYS = new Set(['luffy', 'zoro', 'nami', 'chopper', 'sanji', 'robin', 'usopp', 'franky', 'brook', 'jinbe']);
+  const reserved = window.OnePieceReservedCrew;
+  const ASSET = /^opui:\/\/launcher\/images\/launcher_room\/(?:(scenes|furniture|chibi)\/[a-z0-9-]+|reserved_v1\/(ace|sabo|law|hancock)\/portrait)\.webp$/i;
+  const CHARACTER_KEYS = new Set(reserved?.SUPPORTED_KEYS || ['luffy', 'zoro', 'nami', 'chopper', 'sanji', 'robin', 'usopp', 'franky', 'brook', 'jinbe']);
   const MOODS = new Set(['happy', 'surprised', 'focused', 'annoyed']);
   const POSES = new Set(['idle', 'talk_happy', 'talk_annoyed', 'surprised', 'focused_use', 'sit', 'wave', 'listen']);
   const CARDINAL = ['正向', '右轉', '背向', '左轉'];
@@ -53,9 +54,10 @@
       return `opui://launcher/images/launcher_room/scenes/${item.key}-v2.webp`;
     }
     const key = item?.type === TYPES.character.type ? keyForCharacter(item) : '';
-    return source && key ? `opui://launcher/images/launcher_room/portrait_v3/${key}.webp` : source;
+    return source && key ? portraitFor(key) : source;
   };
-  const isValidProduct = (item, type) => item?.type === type && typeof item.id === 'string' && /^[a-z0-9-]{3,64}$/.test(item.id) && !!assetFor(item);
+  const portraitFor = key => reserved?.assetUrl(key,'portrait.webp') || `opui://launcher/images/launcher_room/portrait_v3/${key}.webp`;
+  const isValidProduct = (item, type) => item?.type === type && typeof item.id === 'string' && /^[a-z0-9-]{3,64}$/.test(item.id) && !!assetFor(item) && (type !== TYPES.character.type || releasedCharacterKeys().has(keyForCharacter(item)));
   const round = value => Math.round(value * 100) / 100;
   const rotationFor = item => Number.isInteger(item?.rotation) && item.rotation >= 0 && item.rotation <= 3
     ? item.rotation : item?.flip === true ? 2 : 0;
@@ -199,7 +201,7 @@
     },
     acceptProfile(next) {
       if (!next || next.userId !== profile?.userId) return;
-      const changedRoom = JSON.stringify(profile.room) !== JSON.stringify(next.room);
+      const changedRoom = JSON.stringify(profile.room) !== JSON.stringify(next.room) || JSON.stringify(profile.releasedCharacterIds) !== JSON.stringify(next.releasedCharacterIds);
       profile = next;
       if (changedRoom && !editing) {
         const epoch = viewEpoch;
@@ -217,8 +219,13 @@
   function activeRoom() { return editing ? draft : copyRoom(profile?.room); }
   function catalog() { return Array.isArray(shop?.catalog) ? shop.catalog : []; }
   function fromShop(itemId) { return catalog().find(item => item.id === itemId) || null; }
+  function releasedCharacterKeys() { return new Set(reserved?.releasedKeys(profile) || CHARACTER_KEYS); }
   function resolvedItem(itemId, kind) {
     const type = TYPES[kind].type;
+    if(kind === 'character' && reserved?.RESERVED_KEYS.includes(String(itemId).replace(/^room-character-/,''))) {
+      const owned=profile?.life?.ownedCharacterIds || profile?.collection?.launcher?.itemIds || (isOwner()?shop?.owned?.roomCharacters:[]) || [];
+      if(!owned.includes(itemId))return null;
+    }
     const bought = fromShop(itemId);
     if (isValidProduct(bought, type)) return bought;
     const resolved = profile?.roomItems || {};
@@ -262,7 +269,7 @@
     const canAct = isOwner() && !!record && !companionBusy;
     const portrait = $('roomCompanionPortrait');
     portrait.onerror = () => { portrait.onerror = null; portrait.src = catalogAssetFor(item); };
-    portrait.src = key ? `opui://launcher/images/launcher_room/portrait_v3/${key}.webp` : assetFor(item);
+    portrait.src = key ? portraitFor(key) : assetFor(item);
     $('roomCompanionPortrait').alt = item.name || details.name || '航海夥伴';
     $('roomCompanionName').textContent = item.name || details.name || '航海夥伴';
     $('roomCompanionRole').textContent = record?.role || details.role || '草帽一行人';
@@ -452,6 +459,7 @@
     } catch { if (epoch === viewEpoch && companionId === itemId) companionStatus('目前無法連線，請稍後再試。', true); }
   }
   const COMPANION_ERRORS = {
+    client_update_required: '請更新啟動器後再使用這位夥伴；原有配置與工作會保留。', character_not_released: '這位夥伴尚未開放。',
     talk_cooldown: '這位夥伴剛聊過天，稍後再來。', talk_daily_limit: '今天的聊天次數已用完。',
     not_placed: '這位夥伴已離開房間，請重新整理。', not_owned: '這位夥伴尚未收藏。'
   };
@@ -1350,7 +1358,7 @@
     try {
       const result = await api.getLauncherShop();
       if (openEpoch !== viewEpoch || openAccountId !== accountId || openUserId !== profile?.userId || !isOwner()) return;
-      if (!result?.ok || !result.shop) { status('商品無法讀取，請稍後再試。', true); return; }
+      if (!result?.ok || !result.shop) { status(COMPANION_ERRORS[result?.error] || '商品無法讀取，請稍後再試。', true); return; }
       closeCompanion();
       shop = result.shop; draft = copyRoom(profile?.room); editing = true; dirty = false; selected = null;
       status('選擇場景、家具或夥伴；在圖面拖曳與轉向，最後儲存。'); render();
@@ -1378,7 +1386,7 @@
           shop = result.shop || shop;
           window.LauncherProfileShop?.onRoomSaved?.(result.profile, result.shop);
         }
-        status(result?.error === 'revision_conflict' ? '房間已在其他裝置變更。請取消這次編輯，再重新佈置。' : '房間未儲存，請稍後再試。', true);
+        status(COMPANION_ERRORS[result?.error] || (result?.error === 'revision_conflict' ? '房間已在其他裝置變更。請取消這次編輯，再重新佈置。' : '房間未儲存，請稍後再試。'), true);
         return;
       }
       profile = result.profile; shop = result.shop || shop;
@@ -1392,7 +1400,7 @@
     const nextAccount = Number(context.accountId) || 0;
     const nextPreview = context.preview === true;
     const changedOwner = nextAccount !== accountId || nextPreview !== preview || (profile?.userId || 0) !== (nextProfile?.userId || 0);
-    const sameRoom = !changedOwner && JSON.stringify(profile?.room) === JSON.stringify(nextProfile?.room);
+    const sameRoom = !changedOwner && JSON.stringify(profile?.room) === JSON.stringify(nextProfile?.room) && JSON.stringify(profile?.releasedCharacterIds) === JSON.stringify(nextProfile?.releasedCharacterIds);
     if (changedOwner) viewEpoch++;
     if (changedOwner) { closeCompanion(); companionStats.clear(); pairHistory.clear(); }
     profile = nextProfile || null; accountId = nextAccount; preview = nextPreview;

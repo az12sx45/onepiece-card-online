@@ -1,0 +1,678 @@
+{
+  "schema": "one-piece-room-reserved-import-report/1",
+  "key": "hancock",
+  "asset": "public/images/launcher_room/reserved_v1/hancock/acting/south.webp",
+  "dimensions": [
+    2048,
+    256
+  ],
+  "cell": 256,
+  "columns": 8,
+  "root": [
+    128.0,
+    224.0
+  ],
+  "frames": [
+    {
+      "key": "hancock",
+      "direction": "south",
+      "pose": "idle",
+      "source": "hancock-acting-front",
+      "region": [
+        104,
+        631,
+        158,
+        316
+      ],
+      "sourceCell": [
+        0,
+        2
+      ],
+      "componentSeed": [
+        182,
+        792
+      ],
+      "index": 0,
+      "bounds": [
+        77,
+        17,
+        179,
+        224
+      ],
+      "opaqueBoundsAtOutput": [
+        79,
+        18,
+        179,
+        224
+      ],
+      "sourceAnchor": [
+        181.9566215034965,
+        943
+      ],
+      "localAnchor": [
+        75.9566215034965,
+        310
+      ],
+      "sourceAlphaBounds": [
+        106,
+        633,
+        259,
+        945
+      ],
+      "opaqueBounds": [
+        108,
+        635,
+        150,
+        308
+      ],
+      "opaquePixels": 31530,
+      "removedDistantAlphaPixels": 3265,
+      "sourceOpaqueClearance": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "anchorPolicy": "head-axis-ground-row",
+      "sourceUnitScale": 1.77,
+      "uniformCharacterScale": 0.18832391713747645,
+      "wholeImageScale": 0.6666666666666666,
+      "inverseWholeImageTransform": [
+        1.5,
+        0,
+        -116.0433784965035,
+        0,
+        1.5,
+        -26.0
+      ],
+      "rgbaSha256": "d16bd5823783e196ed0eda7a0d38436876003451a8b918bffe959026348cbe91",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "hancock",
+      "direction": "south",
+      "pose": "talk_happy",
+      "source": "hancock-acting-front",
+      "region": [
+        365,
+        631,
+        214,
+        318
+      ],
+      "sourceCell": [
+        1,
+        2
+      ],
+      "componentSeed": [
+        470,
+        790
+      ],
+      "index": 1,
+      "bounds": [
+        60,
+        17,
+        199,
+        225
+      ],
+      "opaqueBoundsAtOutput": [
+        61,
+        18,
+        198,
+        224
+      ],
+      "sourceAnchor": [
+        469.83037607409887,
+        945
+      ],
+      "localAnchor": [
+        101.83037607409887,
+        312
+      ],
+      "sourceAlphaBounds": [
+        368,
+        633,
+        577,
+        947
+      ],
+      "opaqueBounds": [
+        369,
+        635,
+        206,
+        310
+      ],
+      "opaquePixels": 30531,
+      "removedDistantAlphaPixels": 3570,
+      "sourceOpaqueClearance": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "anchorPolicy": "head-axis-ground-row",
+      "sourceUnitScale": 1.77,
+      "uniformCharacterScale": 0.18832391713747645,
+      "wholeImageScale": 0.6666666666666666,
+      "inverseWholeImageTransform": [
+        1.5,
+        0,
+        -90.16962392590113,
+        0,
+        1.5,
+        -24.0
+      ],
+      "rgbaSha256": "4fdcebca8a4a2fb45bf6f000580b4e9d0363df4463f65f7a4532863257e2e3e8",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "hancock",
+      "direction": "south",
+      "pose": "talk_annoyed",
+      "source": "hancock-acting-front",
+      "region": [
+        708,
+        631,
+        148,
+        316
+      ],
+      "sourceCell": [
+        2,
+        2
+      ],
+      "componentSeed": [
+        782,
+        791
+      ],
+      "index": 2,
+      "bounds": [
+        80,
+        17,
+        176,
+        225
+      ],
+      "opaqueBoundsAtOutput": [
+        82,
+        19,
+        175,
+        224
+      ],
+      "sourceAnchor": [
+        781.6173683050474,
+        943
+      ],
+      "localAnchor": [
+        71.61736830504742,
+        310
+      ],
+      "sourceAlphaBounds": [
+        710,
+        633,
+        854,
+        945
+      ],
+      "opaqueBounds": [
+        712,
+        635,
+        140,
+        308
+      ],
+      "opaquePixels": 29869,
+      "removedDistantAlphaPixels": 3267,
+      "sourceOpaqueClearance": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "anchorPolicy": "head-axis-ground-row",
+      "sourceUnitScale": 1.77,
+      "uniformCharacterScale": 0.18832391713747645,
+      "wholeImageScale": 0.6666666666666666,
+      "inverseWholeImageTransform": [
+        1.5,
+        0,
+        -120.38263169495258,
+        0,
+        1.5,
+        -26.0
+      ],
+      "rgbaSha256": "64701c18ebc04f590d1231e2dd70beeb07ad8ce62dce3fb58ec01f1a33e10648",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "hancock",
+      "direction": "south",
+      "pose": "surprised",
+      "source": "hancock-acting-front",
+      "region": [
+        1011,
+        633,
+        163,
+        314
+      ],
+      "sourceCell": [
+        3,
+        2
+      ],
+      "componentSeed": [
+        1092,
+        789
+      ],
+      "index": 3,
+      "bounds": [
+        76,
+        19,
+        181,
+        225
+      ],
+      "opaqueBoundsAtOutput": [
+        77,
+        20,
+        180,
+        224
+      ],
+      "sourceAnchor": [
+        1091.6521739130435,
+        943
+      ],
+      "localAnchor": [
+        77.6521739130435,
+        308
+      ],
+      "sourceAlphaBounds": [
+        1014,
+        635,
+        1172,
+        945
+      ],
+      "opaqueBounds": [
+        1015,
+        637,
+        155,
+        306
+      ],
+      "opaquePixels": 30490,
+      "removedDistantAlphaPixels": 3417,
+      "sourceOpaqueClearance": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "anchorPolicy": "head-axis-ground-row",
+      "sourceUnitScale": 1.77,
+      "uniformCharacterScale": 0.18832391713747645,
+      "wholeImageScale": 0.6666666666666666,
+      "inverseWholeImageTransform": [
+        1.5,
+        0,
+        -114.3478260869565,
+        0,
+        1.5,
+        -28.0
+      ],
+      "rgbaSha256": "fea81a6078fd6cfcb907a3d0a311a796c538a74d9bf376de42a9231e9400d6e3",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "hancock",
+      "direction": "south",
+      "pose": "focused_use",
+      "source": "hancock-acting-front",
+      "region": [
+        0,
+        940,
+        314,
+        314
+      ],
+      "sourceCell": [
+        0,
+        3
+      ],
+      "index": 4,
+      "bounds": [
+        81,
+        21,
+        176,
+        225
+      ],
+      "opaqueBoundsAtOutput": [
+        81,
+        22,
+        175,
+        224
+      ],
+      "sourceAnchor": [
+        184.61690399632522,
+        1249
+      ],
+      "localAnchor": [
+        70.61690399632522,
+        306
+      ],
+      "sourceAlphaBounds": [
+        114,
+        943,
+        256,
+        1251
+      ],
+      "opaqueBounds": [
+        115,
+        945,
+        140,
+        304
+      ],
+      "opaquePixels": 29185,
+      "removedDistantAlphaPixels": 3719,
+      "sourceOpaqueClearance": [
+        115,
+        5,
+        59,
+        5
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "anchorPolicy": "head-axis-ground-row",
+      "sourceUnitScale": 1.77,
+      "uniformCharacterScale": 0.18832391713747645,
+      "wholeImageScale": 0.6666666666666666,
+      "inverseWholeImageTransform": [
+        1.5,
+        0,
+        -121.38309600367478,
+        0,
+        1.5,
+        -30.0
+      ],
+      "rgbaSha256": "f3b2ba03af65c39298336f24696f4a5c83da206103baf477b753fa0140690f17",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "hancock",
+      "direction": "south",
+      "pose": "sit",
+      "source": "hancock-acting-front",
+      "region": [
+        314,
+        940,
+        313,
+        314
+      ],
+      "sourceCell": [
+        1,
+        3
+      ],
+      "index": 5,
+      "bounds": [
+        83,
+        42,
+        174,
+        224
+      ],
+      "opaqueBoundsAtOutput": [
+        83,
+        43,
+        173,
+        224
+      ],
+      "sourceAnchor": [
+        470.5,
+        1247
+      ],
+      "localAnchor": [
+        68.5,
+        273
+      ],
+      "sourceAlphaBounds": [
+        402,
+        974,
+        540,
+        1249
+      ],
+      "opaqueBounds": [
+        403,
+        976,
+        135,
+        271
+      ],
+      "opaquePixels": 24201,
+      "removedDistantAlphaPixels": 2565,
+      "sourceOpaqueClearance": [
+        89,
+        36,
+        89,
+        7
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "anchorPolicy": "whole-figure-bounds-center-ground",
+      "sourceUnitScale": 1.77,
+      "uniformCharacterScale": 0.18832391713747645,
+      "wholeImageScale": 0.6666666666666666,
+      "inverseWholeImageTransform": [
+        1.5,
+        0,
+        -123.5,
+        0,
+        1.5,
+        -63.0
+      ],
+      "rgbaSha256": "bd19a1c2c3d75a4305121c82afe7467a8096b2363b38bf362fea40b289cec5f7",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "hancock",
+      "direction": "south",
+      "pose": "wave",
+      "source": "hancock-acting-front",
+      "region": [
+        627,
+        940,
+        313,
+        314
+      ],
+      "sourceCell": [
+        2,
+        3
+      ],
+      "index": 6,
+      "bounds": [
+        75,
+        22,
+        183,
+        225
+      ],
+      "opaqueBoundsAtOutput": [
+        75,
+        23,
+        182,
+        224
+      ],
+      "sourceAnchor": [
+        772.4843287995269,
+        1249
+      ],
+      "localAnchor": [
+        81.4843287995269,
+        304
+      ],
+      "sourceAlphaBounds": [
+        691,
+        945,
+        855,
+        1251
+      ],
+      "opaqueBounds": [
+        693,
+        947,
+        160,
+        302
+      ],
+      "opaquePixels": 30361,
+      "removedDistantAlphaPixels": 4804,
+      "sourceOpaqueClearance": [
+        66,
+        7,
+        87,
+        5
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "anchorPolicy": "head-axis-ground-row",
+      "sourceUnitScale": 1.77,
+      "uniformCharacterScale": 0.18832391713747645,
+      "wholeImageScale": 0.6666666666666666,
+      "inverseWholeImageTransform": [
+        1.5,
+        0,
+        -110.5156712004731,
+        0,
+        1.5,
+        -32.0
+      ],
+      "rgbaSha256": "6a9b2c5f59c6cb388e23c7230cc7382b21d63566a9bb99216d0e13fd07062e02",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    },
+    {
+      "key": "hancock",
+      "direction": "south",
+      "pose": "listen",
+      "source": "hancock-acting-front",
+      "region": [
+        940,
+        940,
+        314,
+        314
+      ],
+      "sourceCell": [
+        3,
+        3
+      ],
+      "index": 7,
+      "bounds": [
+        81,
+        22,
+        176,
+        225
+      ],
+      "opaqueBoundsAtOutput": [
+        82,
+        23,
+        175,
+        224
+      ],
+      "sourceAnchor": [
+        1095.565886134068,
+        1249
+      ],
+      "localAnchor": [
+        70.56588613406802,
+        303
+      ],
+      "sourceAlphaBounds": [
+        1025,
+        946,
+        1169,
+        1251
+      ],
+      "opaqueBounds": [
+        1027,
+        947,
+        140,
+        302
+      ],
+      "opaquePixels": 28993,
+      "removedDistantAlphaPixels": 3888,
+      "sourceOpaqueClearance": [
+        87,
+        7,
+        87,
+        5
+      ],
+      "edgeAaRadius": 2,
+      "sourceAaTouchesImageBoundary": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "anchorPolicy": "head-axis-ground-row",
+      "sourceUnitScale": 1.77,
+      "uniformCharacterScale": 0.18832391713747645,
+      "wholeImageScale": 0.6666666666666666,
+      "inverseWholeImageTransform": [
+        1.5,
+        0,
+        -121.43411386593198,
+        0,
+        1.5,
+        -33.0
+      ],
+      "rgbaSha256": "9665061a23e4a440d778c9c4586405ba0e5fec196deb8c1a60e0e45f9f2fb1e7",
+      "anatomyReassembled": false,
+      "mirrored": false,
+      "clipped": false
+    }
+  ],
+  "sourceIds": [
+    "hancock-acting-front"
+  ],
+  "visualAccepted": false,
+  "humanAcceptance": false
+}

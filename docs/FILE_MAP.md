@@ -1145,3 +1145,15 @@ desktop/launcher-room.js／launcher-room.css／launcher.html：半圓輪盤、�
 ## 2026-09-27 Launcher 1.2.4 interaction fixes
 
 高清同稿 atlas：public/images/launcher_room/motion_v4、acting_v4；來源、480格原稿一致性及160組DPR品質檢查：tools/launcher-room/hd-v4。角色停留／滑鼠輪盤回歸：scripts/launcher_interaction_qa.js；新版13項輪盤回歸：scripts/launcher_radial_v124_qa.js。不可改寫的前版審查由 presentation-v124/validate_historical_radial.js 讀取精確 Git 版本；本版審查 docs/LAUNCHER_ROOM_INTERACTION_20260927.json。
+
+## 2026-09-27 Launcher 1.2.5 reserved crew
+
+- desktop/launcher-reserved-crew.js：四角客戶端資料、預載URL、台詞與關係；沒有開放權威。
+- config/launcher-crew-release-v1.json、server/launcher-crew-release.js：逐角首度開放設定、能力版本、相容投影與寫入保護。
+- desktop/auth-service.js、launcher-room.js、launcher-room-motion.js、launcher-life-actions.js、launcher-life-data.js、launcher-room-dialogue.js、launcher-life.js、launcher-life-room.js、launcher-profile-shop.js、launcher.html：能力傳遞、資料整合、原十角保留與錯誤提示。
+- server/index.js、launcher-profile-shop.js、launcher-life.js、launcher-life-store.js：在聚合／發獎前校驗發布與客戶端支援。
+- public/images/launcher_room/reserved_v1：四角68個預載素材；desktop/main.js及package.json／lock負責protocol允許項、封裝與版本。
+- tools/launcher-room/reserved-v1：GPT原圖／提示詞／收據、完整身體匯入器、選圖與來源SHA、實際pixel QA及contact sheets。
+- scripts/launcher_reserved_crew_server_qa.js、launcher_reserved_crew_client_qa.js、launcher_reserved_crew_browser_qa.js：伺服器隔離驗證、客戶端契約與真Chromium隱藏／逐角開放驗證。
+- scripts/launcher_reserved_crew_art_browser_qa.js：四角實圖在DPR1／2的逐格原生裁切、四向實際路徑、選角朝南停留及生活動作；測試fixture的開放設定不寫入正式角色開關。
+- tools/launcher-room/presentation-v125、docs/LAUNCHER_RESERVED_CREW_20260927.json：保留歷史發版證據，綁定本版程式、真圖與模型目視；desktop_launcher_package_qa.js納入本版門檻。

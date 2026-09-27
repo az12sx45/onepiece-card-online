@@ -1,0 +1,4705 @@
+{
+  "schema": "one-piece-room-reserved-selection/1",
+  "releasePolicy": "preloaded-not-released",
+  "selectionStatus": "MODEL_REVIEWED_READY_FOR_EXPORT",
+  "humanAcceptance": false,
+  "characters": {
+    "ace": {},
+    "sabo": {},
+    "law": {},
+    "hancock": {}
+  },
+  "sources": {
+    "ace-master": {
+      "key": "ace",
+      "sheet": "master",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/master-02/source.png",
+        "sha256": "546ab81ed2596a758bace98bf5a6722dc94c7a96cbabdbf648c50074226cf4f4",
+        "bytes": 997667
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/master-02/prompt.txt",
+        "sha256": "6604c1bf825ae9fa6a58aa547b0670e475ab52713edb095f7e9bf16e19112d76",
+        "bytes": 1319
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/master-02/receipt.json",
+        "sha256": "5c64187c223c7ad10e935a811f1ccdef84a9b28f625b2e29462cde47c8f9d1ce",
+        "bytes": 986
+      },
+      "cells": {
+        "0:0": {
+          "region": [
+            214,
+            22,
+            325,
+            635
+          ],
+          "componentSeed": [
+            371,
+            322
+          ]
+        },
+        "0:1": {
+          "region": [
+            720,
+            22,
+            327,
+            635
+          ],
+          "componentSeed": [
+            885,
+            322
+          ]
+        }
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/ace/master-01/source.png",
+          "sha256": "fdd4c3d4ae6bce8d4dc173521e989d6715f7a510fcc98466f95a7e92814f40c3",
+          "bytes": 833504
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/ace/master-01/prompt.txt",
+          "sha256": "fb374a8eb6cefd90cd66472b930e543db1f859c498d4b3e8e2e82431b89a2476",
+          "bytes": 2462
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/ace/master-01/receipt.json",
+          "sha256": "9534c953a7a44e464fed19b002c9624cd510ea3d7cca101c6a266deaa01cae12",
+          "bytes": 880
+        }
+      ],
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "standingCalibration": {
+        "frame": {
+          "key": "ace",
+          "direction": "south",
+          "pose": "calibration-standing",
+          "source": "ace-master",
+          "region": [
+            627,
+            627,
+            627,
+            627
+          ],
+          "sourceCell": [
+            1,
+            1
+          ]
+        },
+        "opaqueBounds": [
+          705,
+          656,
+          319,
+          581
+        ],
+        "sourceAnchor": [
+          866.8660997362884,
+          1237
+        ],
+        "standingHeight": 581,
+        "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+      }
+    },
+    "ace-walk-side": {
+      "key": "ace",
+      "sheet": "walk-side",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/walk-side-02/source.png",
+        "sha256": "d90f8318b18b39435a18b45741839f2515a20c1ba1e07c50e7288eb7785375ac",
+        "bytes": 1305654
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/walk-side-02/prompt.txt",
+        "sha256": "f240a3ff2b0fd16bb545a4e9aeb61cd8d07654701f151adcfdc3337d46ce6f0c",
+        "bytes": 1221
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/walk-side-02/receipt.json",
+        "sha256": "47e9855ecd083490568d066d51e42f53315a15a905c57eb55783ab8024e872f1",
+        "bytes": 518
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/ace/walk-side-01/source.png",
+          "sha256": "0bb1e8a5dc9895a93d80e882bba54f16cffe3233686185300b753da4790e3a1e",
+          "bytes": 1295037
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/ace/walk-side-01/prompt.txt",
+          "sha256": "2fd4f9194edeb02d45d2501e0df8b304a8f40dd4625583d4a472ffbac1f0b8bc",
+          "bytes": 2420
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/ace/walk-side-01/receipt.json",
+          "sha256": "40a55eb896bd2304ebb0d1da9e3379c64a4a7c61d2f4830af1cb57ecf727d74b",
+          "bytes": 969
+        }
+      ],
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "standingCalibration": {
+        "frame": {
+          "key": "ace",
+          "direction": "south",
+          "pose": "calibration-standing",
+          "source": "ace-walk-side",
+          "region": [
+            418,
+            0,
+            418,
+            627
+          ],
+          "sourceCell": [
+            1,
+            0
+          ]
+        },
+        "opaqueBounds": [
+          470,
+          31,
+          283,
+          582
+        ],
+        "sourceAnchor": [
+          609.9661706129675,
+          613
+        ],
+        "standingHeight": 582,
+        "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+      }
+    },
+    "ace-walk-front": {
+      "key": "ace",
+      "sheet": "walk-front",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/walk-front-03/source.png",
+        "sha256": "6e319b83397e9372196ddd9e920c36ff9b98a282dfced52f2b15bf3d2b011d69",
+        "bytes": 1388832
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/walk-front-03/prompt.txt",
+        "sha256": "cc5108401b7bc70cd3ca6484c2f75eeda0dd7ec23b636e20e7e39be79b108cfa",
+        "bytes": 1484
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/walk-front-03/receipt.json",
+        "sha256": "fae6512cc3b1f2821eccec32e2a80785296bdf94a157251067d06e136f24228b",
+        "bytes": 1123
+      },
+      "cells": {
+        "0:0": {
+          "region": [
+            106,
+            54,
+            276,
+            576
+          ],
+          "componentSeed": [
+            243,
+            329
+          ]
+        },
+        "0:2": {
+          "region": [
+            867,
+            54,
+            281,
+            576
+          ],
+          "componentSeed": [
+            1006,
+            332
+          ]
+        }
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/ace/walk-front-02/source.png",
+          "sha256": "ff4b249757d825622936049632296e40cc8d31ff2b03ba21c541230a18cfce57",
+          "bytes": 1387310
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/ace/walk-front-02/prompt.txt",
+          "sha256": "1092e3f9dfa6efdcd36d6e7cd1f830d8ec30aefdad9e620d4f38033ec642e71a",
+          "bytes": 2052
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/ace/walk-front-02/receipt.json",
+          "sha256": "2975fc3c26fe78c27aaa317d017f60b2cedaee6ed761f7cd30a6fc3878533a96",
+          "bytes": 1054
+        }
+      ],
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "standingCalibration": {
+        "frame": {
+          "key": "ace",
+          "direction": "south",
+          "pose": "calibration-standing",
+          "source": "ace-walk-front",
+          "region": [
+            418,
+            0,
+            418,
+            627
+          ],
+          "sourceCell": [
+            1,
+            0
+          ]
+        },
+        "opaqueBounds": [
+          490,
+          59,
+          271,
+          560
+        ],
+        "sourceAnchor": [
+          628.1257030982939,
+          619
+        ],
+        "standingHeight": 560,
+        "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+      }
+    },
+    "ace-acting-side": {
+      "key": "ace",
+      "sheet": "acting-side",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/acting-side-01/source.png",
+        "sha256": "63a9fc37dc32e29859338b15a5839c9513076439baa0dc371043eb3743d36627",
+        "bytes": 1422335
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/acting-side-01/prompt.txt",
+        "sha256": "c0ee2275dbd8f6039a65e2210e8310430c27d6b0f6e62bf9d74c6ba57e7b162c",
+        "bytes": 2076
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/acting-side-01/receipt.json",
+        "sha256": "8633301bca44bfe0575f0a527745dd1831832ffd93269b44b5e3a393ff43b54f",
+        "bytes": 969
+      },
+      "cells": {
+        "0:0": {
+          "region": [
+            109,
+            0,
+            168,
+            320
+          ],
+          "componentSeed": [
+            190,
+            156
+          ]
+        },
+        "0:1": {
+          "region": [
+            410,
+            0,
+            205,
+            319
+          ],
+          "componentSeed": [
+            495,
+            154
+          ]
+        },
+        "0:2": {
+          "region": [
+            709,
+            0,
+            172,
+            320
+          ],
+          "componentSeed": [
+            792,
+            154
+          ]
+        },
+        "0:3": {
+          "region": [
+            1013,
+            0,
+            186,
+            319
+          ],
+          "componentSeed": [
+            1102,
+            152
+          ]
+        },
+        "1:2": {
+          "region": [
+            710,
+            313,
+            173,
+            318
+          ],
+          "componentSeed": [
+            794,
+            466
+          ]
+        },
+        "1:3": {
+          "region": [
+            1012,
+            313,
+            171,
+            318
+          ],
+          "componentSeed": [
+            1099,
+            470
+          ]
+        },
+        "2:0": {
+          "region": [
+            88,
+            623,
+            173,
+            324
+          ],
+          "componentSeed": [
+            174,
+            779
+          ]
+        },
+        "2:1": {
+          "region": [
+            363,
+            623,
+            210,
+            322
+          ],
+          "componentSeed": [
+            484,
+            778
+          ]
+        },
+        "2:2": {
+          "region": [
+            705,
+            625,
+            177,
+            321
+          ],
+          "componentSeed": [
+            795,
+            780
+          ]
+        },
+        "2:3": {
+          "region": [
+            1000,
+            625,
+            192,
+            321
+          ],
+          "componentSeed": [
+            1100,
+            778
+          ]
+        },
+        "3:2": {
+          "region": [
+            696,
+            938,
+            174,
+            316
+          ],
+          "componentSeed": [
+            785,
+            1091
+          ]
+        }
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/ace/master-02/source.png",
+          "sha256": "546ab81ed2596a758bace98bf5a6722dc94c7a96cbabdbf648c50074226cf4f4",
+          "bytes": 997667
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/ace/master-02/prompt.txt",
+          "sha256": "6604c1bf825ae9fa6a58aa547b0670e475ab52713edb095f7e9bf16e19112d76",
+          "bytes": 1319
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/ace/master-02/receipt.json",
+          "sha256": "5c64187c223c7ad10e935a811f1ccdef84a9b28f625b2e29462cde47c8f9d1ce",
+          "bytes": 986
+        }
+      ],
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "standingCalibration": {
+        "frame": {
+          "key": "ace",
+          "direction": "south",
+          "pose": "calibration-standing",
+          "source": "ace-acting-side",
+          "region": [
+            109,
+            0,
+            168,
+            320
+          ],
+          "sourceCell": [
+            0,
+            0
+          ],
+          "componentSeed": [
+            190,
+            156
+          ]
+        },
+        "opaqueBounds": [
+          113,
+          4,
+          160,
+          312
+        ],
+        "sourceAnchor": [
+          191.91850968156373,
+          316
+        ],
+        "standingHeight": 312,
+        "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+      }
+    },
+    "ace-acting-front": {
+      "key": "ace",
+      "sheet": "acting-front",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/acting-front-02/source.png",
+        "sha256": "58dd992923f4d9f6c87170035f416dd10a22f36254ec6f33ec5dbdd8480467bf",
+        "bytes": 1567317
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/acting-front-02/prompt.txt",
+        "sha256": "a87955316532cfd438a003f3d541393c93bba73f92204d09048a04737cf715cd",
+        "bytes": 1287
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/acting-front-02/receipt.json",
+        "sha256": "1e84b751c57aba556ccadfa08b47e89d7a957594b78decff45444e03acd7ea53",
+        "bytes": 1092
+      },
+      "cells": {
+        "0:0": {
+          "region": [
+            100,
+            5,
+            186,
+            323
+          ],
+          "componentSeed": [
+            193,
+            169
+          ]
+        },
+        "0:1": {
+          "region": [
+            393,
+            4,
+            219,
+            324
+          ],
+          "componentSeed": [
+            484,
+            165
+          ]
+        },
+        "0:2": {
+          "region": [
+            681,
+            4,
+            182,
+            323
+          ],
+          "componentSeed": [
+            770,
+            165
+          ]
+        },
+        "0:3": {
+          "region": [
+            958,
+            4,
+            213,
+            325
+          ],
+          "componentSeed": [
+            1062,
+            163
+          ]
+        },
+        "1:0": {
+          "region": [
+            65,
+            347,
+            218,
+            291
+          ],
+          "componentSeed": [
+            181,
+            493
+          ]
+        },
+        "1:1": {
+          "region": [
+            381,
+            410,
+            221,
+            230
+          ],
+          "componentSeed": [
+            490,
+            539
+          ]
+        },
+        "1:2": {
+          "region": [
+            682,
+            324,
+            211,
+            317
+          ],
+          "componentSeed": [
+            773,
+            477
+          ]
+        },
+        "1:3": {
+          "region": [
+            976,
+            328,
+            175,
+            313
+          ],
+          "componentSeed": [
+            1062,
+            485
+          ]
+        },
+        "2:0": {
+          "region": [
+            85,
+            638,
+            192,
+            323
+          ],
+          "componentSeed": [
+            182,
+            802
+          ]
+        },
+        "2:1": {
+          "region": [
+            354,
+            636,
+            230,
+            325
+          ],
+          "componentSeed": [
+            484,
+            795
+          ]
+        },
+        "2:2": {
+          "region": [
+            683,
+            639,
+            188,
+            320
+          ],
+          "componentSeed": [
+            777,
+            800
+          ]
+        },
+        "2:3": {
+          "region": [
+            967,
+            638,
+            203,
+            323
+          ],
+          "componentSeed": [
+            1068,
+            796
+          ]
+        }
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/ace/acting-front-01/source.png",
+          "sha256": "b46975546ff7da0060728f64cecbc14174fc6c06bf6faad5d70ccd0612c13b28",
+          "bytes": 1568530
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/ace/acting-front-01/prompt.txt",
+          "sha256": "b64105f31b4523435ab664a49ca849bca3d4924d557e4a9e8add3200fa9d94de",
+          "bytes": 2077
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/ace/acting-front-01/receipt.json",
+          "sha256": "4935dde4a2a45cb9ae5cf89371e4605c9a020348134806efe8f83570d7c08257",
+          "bytes": 969
+        }
+      ],
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "standingCalibration": {
+        "frame": {
+          "key": "ace",
+          "direction": "south",
+          "pose": "calibration-standing",
+          "source": "ace-acting-front",
+          "region": [
+            100,
+            5,
+            186,
+            323
+          ],
+          "sourceCell": [
+            0,
+            0
+          ],
+          "componentSeed": [
+            193,
+            169
+          ]
+        },
+        "opaqueBounds": [
+          104,
+          9,
+          178,
+          315
+        ],
+        "sourceAnchor": [
+          194.47658973933255,
+          324
+        ],
+        "standingHeight": 315,
+        "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+      }
+    },
+    "ace-work": {
+      "key": "ace",
+      "sheet": "work",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/work-01/source.png",
+        "sha256": "65fa47da772c822155139be11b868a75bb7c89f2c0e57d883a4e96c5f641ca66",
+        "bytes": 1354084
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/work-01/prompt.txt",
+        "sha256": "a1db1bffd48ee7c8950bc6c2d408f5cdcd303a38d757ffd9020fbc22244910c7",
+        "bytes": 1979
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/work-01/receipt.json",
+        "sha256": "d565024c622835261c032c89882e2351ca51bcb33c9ac57ebf1b5ac545e85d3a",
+        "bytes": 969
+      },
+      "cells": {
+        "0:0": {
+          "region": [
+            145,
+            0,
+            180,
+            316
+          ],
+          "componentSeed": [
+            238,
+            148
+          ]
+        },
+        "0:1": {
+          "region": [
+            408,
+            0,
+            187,
+            316
+          ],
+          "componentSeed": [
+            500,
+            148
+          ]
+        },
+        "0:2": {
+          "region": [
+            669,
+            0,
+            178,
+            316
+          ],
+          "componentSeed": [
+            760,
+            149
+          ]
+        },
+        "0:3": {
+          "region": [
+            938,
+            0,
+            177,
+            316
+          ],
+          "componentSeed": [
+            1029,
+            148
+          ]
+        },
+        "1:0": {
+          "region": [
+            143,
+            309,
+            178,
+            321
+          ],
+          "componentSeed": [
+            226,
+            459
+          ]
+        },
+        "1:1": {
+          "region": [
+            399,
+            310,
+            186,
+            320
+          ],
+          "componentSeed": [
+            492,
+            461
+          ]
+        },
+        "1:2": {
+          "region": [
+            668,
+            311,
+            185,
+            319
+          ],
+          "componentSeed": [
+            761,
+            461
+          ]
+        },
+        "1:3": {
+          "region": [
+            940,
+            309,
+            177,
+            321
+          ],
+          "componentSeed": [
+            1025,
+            459
+          ]
+        },
+        "2:0": {
+          "region": [
+            150,
+            627,
+            166,
+            309
+          ],
+          "componentSeed": [
+            231,
+            777
+          ]
+        },
+        "3:0": {
+          "region": [
+            145,
+            934,
+            169,
+            314
+          ],
+          "componentSeed": [
+            230,
+            1085
+          ]
+        },
+        "3:1": {
+          "region": [
+            412,
+            933,
+            172,
+            315
+          ],
+          "componentSeed": [
+            498,
+            1084
+          ]
+        },
+        "3:2": {
+          "region": [
+            676,
+            935,
+            171,
+            313
+          ],
+          "componentSeed": [
+            762,
+            1086
+          ]
+        },
+        "3:3": {
+          "region": [
+            942,
+            935,
+            168,
+            313
+          ],
+          "componentSeed": [
+            1026,
+            1086
+          ]
+        }
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/ace/master-02/source.png",
+          "sha256": "546ab81ed2596a758bace98bf5a6722dc94c7a96cbabdbf648c50074226cf4f4",
+          "bytes": 997667
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/ace/master-02/prompt.txt",
+          "sha256": "6604c1bf825ae9fa6a58aa547b0670e475ab52713edb095f7e9bf16e19112d76",
+          "bytes": 1319
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/ace/master-02/receipt.json",
+          "sha256": "5c64187c223c7ad10e935a811f1ccdef84a9b28f625b2e29462cde47c8f9d1ce",
+          "bytes": 986
+        }
+      ],
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "standingCalibration": {
+        "frame": {
+          "key": "ace",
+          "direction": "south",
+          "pose": "calibration-standing",
+          "source": "ace-work",
+          "region": [
+            145,
+            0,
+            180,
+            316
+          ],
+          "sourceCell": [
+            0,
+            0
+          ],
+          "componentSeed": [
+            238,
+            148
+          ]
+        },
+        "opaqueBounds": [
+          149,
+          4,
+          172,
+          308
+        ],
+        "sourceAnchor": [
+          233.17087877981731,
+          312
+        ],
+        "standingHeight": 308,
+        "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+      }
+    },
+    "ace-utility": {
+      "key": "ace",
+      "sheet": "utility",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/utility-01/source.png",
+        "sha256": "4fcbfa5cc2382a9f5d40a1ac3b65fd949868df4d708fe1ed66049ac72f39b9e4",
+        "bytes": 1779371
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/utility-01/prompt.txt",
+        "sha256": "4d3e7351b1a826291352b8dceaa4215de4755e2941f070ba3afaca41974e1a65",
+        "bytes": 2181
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/ace/utility-01/receipt.json",
+        "sha256": "960bceeff5ed6a60196db724e25759fa328e69e15a7fe9ee618158fd22e0f13f",
+        "bytes": 969
+      },
+      "cells": {
+        "0:0": {
+          "region": [
+            84,
+            6,
+            201,
+            377
+          ],
+          "componentSeed": [
+            183,
+            187
+          ]
+        },
+        "0:1": {
+          "region": [
+            370,
+            6,
+            202,
+            377
+          ],
+          "componentSeed": [
+            472,
+            185
+          ]
+        },
+        "0:2": {
+          "region": [
+            682,
+            6,
+            203,
+            377
+          ],
+          "componentSeed": [
+            785,
+            184
+          ]
+        },
+        "0:3": {
+          "region": [
+            987,
+            7,
+            203,
+            376
+          ],
+          "componentSeed": [
+            1088,
+            188
+          ]
+        },
+        "1:0": {
+          "region": [
+            59,
+            383,
+            236,
+            302
+          ],
+          "componentSeed": [
+            174,
+            548
+          ]
+        },
+        "1:1": {
+          "region": [
+            358,
+            383,
+            233,
+            304
+          ],
+          "componentSeed": [
+            472,
+            547
+          ]
+        },
+        "1:2": {
+          "region": [
+            670,
+            384,
+            234,
+            304
+          ],
+          "componentSeed": [
+            783,
+            548
+          ]
+        },
+        "1:3": {
+          "region": [
+            977,
+            383,
+            233,
+            305
+          ],
+          "componentSeed": [
+            1090,
+            548
+          ]
+        },
+        "2:0": {
+          "region": [
+            15,
+            694,
+            302,
+            185
+          ],
+          "componentSeed": [
+            155,
+            800
+          ]
+        },
+        "2:1": {
+          "region": [
+            333,
+            694,
+            302,
+            189
+          ],
+          "componentSeed": [
+            473,
+            801
+          ]
+        },
+        "2:2": {
+          "region": [
+            641,
+            695,
+            305,
+            187
+          ],
+          "componentSeed": [
+            782,
+            802
+          ]
+        },
+        "2:3": {
+          "region": [
+            953,
+            695,
+            299,
+            186
+          ],
+          "componentSeed": [
+            1091,
+            802
+          ]
+        },
+        "3:0": {
+          "region": [
+            78,
+            868,
+            204,
+            366
+          ],
+          "componentSeed": [
+            180,
+            1048
+          ]
+        },
+        "3:1": {
+          "region": [
+            378,
+            875,
+            197,
+            359
+          ],
+          "componentSeed": [
+            478,
+            1047
+          ]
+        },
+        "3:2": {
+          "region": [
+            689,
+            875,
+            196,
+            360
+          ],
+          "componentSeed": [
+            787,
+            1046
+          ]
+        },
+        "3:3": {
+          "region": [
+            984,
+            873,
+            199,
+            362
+          ],
+          "componentSeed": [
+            1085,
+            1046
+          ]
+        }
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/ace/master-02/source.png",
+          "sha256": "546ab81ed2596a758bace98bf5a6722dc94c7a96cbabdbf648c50074226cf4f4",
+          "bytes": 997667
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/ace/master-02/prompt.txt",
+          "sha256": "6604c1bf825ae9fa6a58aa547b0670e475ab52713edb095f7e9bf16e19112d76",
+          "bytes": 1319
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/ace/master-02/receipt.json",
+          "sha256": "5c64187c223c7ad10e935a811f1ccdef84a9b28f625b2e29462cde47c8f9d1ce",
+          "bytes": 986
+        }
+      ],
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "standingCalibration": {
+        "frame": {
+          "key": "ace",
+          "direction": "south",
+          "pose": "calibration-standing",
+          "source": "ace-utility",
+          "region": [
+            78,
+            868,
+            204,
+            366
+          ],
+          "sourceCell": [
+            0,
+            3
+          ],
+          "componentSeed": [
+            180,
+            1048
+          ]
+        },
+        "opaqueBounds": [
+          82,
+          872,
+          196,
+          358
+        ],
+        "sourceAnchor": [
+          179.29064134857586,
+          1230
+        ],
+        "standingHeight": 358,
+        "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+      }
+    },
+    "sabo-master": {
+      "key": "sabo",
+      "sheet": "master",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/source.png",
+        "sha256": "f233dfa129d43f85d2ad9c32205a9d0592ad4da893fdff9ac530920e6c1f8d77",
+        "bytes": 734702
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/prompt.txt",
+        "sha256": "6604c1bf825ae9fa6a58aa547b0670e475ab52713edb095f7e9bf16e19112d76",
+        "bytes": 1319
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/receipt.json",
+        "sha256": "64fd6029e59b4ea4a25eaa0fb5b2669d6cb16d657f990bf6a6cc3f37143a7e86",
+        "bytes": 986
+      },
+      "cells": {
+        "0:0": {
+          "region": [
+            270,
+            15,
+            235,
+            614
+          ],
+          "componentSeed": [
+            381,
+            314
+          ]
+        }
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/sabo/master-01/source.png",
+          "sha256": "f24ad1cff4495d94f9a0b5ed6156bd18236dc05b33fc0c79b9329bf1b9795a5b",
+          "bytes": 583287
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/sabo/master-01/prompt.txt",
+          "sha256": "e7eaf1673e41050a9cc2ee09bd66cf15f6327d3af264fbfe3507c4639bdeba89",
+          "bytes": 2166
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/sabo/master-01/receipt.json",
+          "sha256": "a3893d4a26fecf698a9dafe127697b3a890309f7b380b68fcfc46e0b91ca78bd",
+          "bytes": 880
+        }
+      ],
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "standingCalibration": {
+        "frame": {
+          "key": "sabo",
+          "direction": "south",
+          "pose": "calibration-standing",
+          "source": "sabo-master",
+          "region": [
+            627,
+            627,
+            627,
+            627
+          ],
+          "sourceCell": [
+            1,
+            1
+          ]
+        },
+        "opaqueBounds": [
+          722,
+          646,
+          280,
+          583
+        ],
+        "sourceAnchor": [
+          864.2393264567252,
+          1229
+        ],
+        "standingHeight": 583,
+        "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+      }
+    },
+    "sabo-walk-side": {
+      "key": "sabo",
+      "sheet": "walk-side",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/walk-side-01/source.png",
+        "sha256": "8fbda4bdd2100687ddfd1146b729ae6e9774a841e6a174aca7feef6adc1dead6",
+        "bytes": 1004035
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/walk-side-01/prompt.txt",
+        "sha256": "d15314ef03929fc5f552bf16127e15fdd33a13fac582ac527b43c6ce0c27c950",
+        "bytes": 2349
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/walk-side-01/receipt.json",
+        "sha256": "977063a8f200479a5acb051bdaeb12c407d925b696d0a0bcf436dff7ffc0a43b",
+        "bytes": 970
+      },
+      "cells": {
+        "0:0": {
+          "region": [
+            173,
+            22,
+            247,
+            589
+          ],
+          "componentSeed": [
+            290,
+            319
+          ]
+        }
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/source.png",
+          "sha256": "f233dfa129d43f85d2ad9c32205a9d0592ad4da893fdff9ac530920e6c1f8d77",
+          "bytes": 734702
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/prompt.txt",
+          "sha256": "6604c1bf825ae9fa6a58aa547b0670e475ab52713edb095f7e9bf16e19112d76",
+          "bytes": 1319
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/receipt.json",
+          "sha256": "64fd6029e59b4ea4a25eaa0fb5b2669d6cb16d657f990bf6a6cc3f37143a7e86",
+          "bytes": 986
+        }
+      ],
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "standingCalibration": {
+        "frame": {
+          "key": "sabo",
+          "direction": "south",
+          "pose": "calibration-standing",
+          "source": "sabo-walk-side",
+          "region": [
+            418,
+            0,
+            418,
+            627
+          ],
+          "sourceCell": [
+            1,
+            0
+          ]
+        },
+        "opaqueBounds": [
+          516,
+          26,
+          223,
+          586
+        ],
+        "sourceAnchor": [
+          620.9796236684034,
+          612
+        ],
+        "standingHeight": 586,
+        "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+      }
+    },
+    "sabo-walk-front": {
+      "key": "sabo",
+      "sheet": "walk-front",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/walk-front-01/source.png",
+        "sha256": "3aa85cc6fed59bdab52f2228227acfae1ede7cfec02c5377e02a68e8ca236352",
+        "bytes": 1023403
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/walk-front-01/prompt.txt",
+        "sha256": "38055b44790b9f7f2847d5278bcd9c0a548c6ad1afb6017a62b96c0362850f99",
+        "bytes": 2418
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/walk-front-01/receipt.json",
+        "sha256": "abcadd05cb92373f4673433a42cad6c60dac970ff5f8032cf8ccc48504bf7c4d",
+        "bytes": 970
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/source.png",
+          "sha256": "f233dfa129d43f85d2ad9c32205a9d0592ad4da893fdff9ac530920e6c1f8d77",
+          "bytes": 734702
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/prompt.txt",
+          "sha256": "6604c1bf825ae9fa6a58aa547b0670e475ab52713edb095f7e9bf16e19112d76",
+          "bytes": 1319
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/receipt.json",
+          "sha256": "64fd6029e59b4ea4a25eaa0fb5b2669d6cb16d657f990bf6a6cc3f37143a7e86",
+          "bytes": 986
+        }
+      ],
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "standingCalibration": {
+        "frame": {
+          "key": "sabo",
+          "direction": "south",
+          "pose": "calibration-standing",
+          "source": "sabo-walk-front",
+          "region": [
+            418,
+            0,
+            418,
+            627
+          ],
+          "sourceCell": [
+            1,
+            0
+          ]
+        },
+        "opaqueBounds": [
+          504,
+          45,
+          244,
+          561
+        ],
+        "sourceAnchor": [
+          625.570763956905,
+          606
+        ],
+        "standingHeight": 561,
+        "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+      }
+    },
+    "sabo-acting-side": {
+      "key": "sabo",
+      "sheet": "acting-side",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/acting-side-01/source.png",
+        "sha256": "f6b875fad2fbb344c64aa523721779abc07d5a0ee7c2ffb08be839578d700514",
+        "bytes": 1194567
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/acting-side-01/prompt.txt",
+        "sha256": "636c51996f9d317c1fa510fe531adc4217762bd6aad665d9d9a818e243836f78",
+        "bytes": 2005
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/acting-side-01/receipt.json",
+        "sha256": "55d6fa68d034235ae573bfd23a929c13664f5a6297b016321c6889004da997dc",
+        "bytes": 970
+      },
+      "cells": {
+        "0:0": {
+          "region": [
+            112,
+            2,
+            151,
+            330
+          ],
+          "componentSeed": [
+            182,
+            162
+          ]
+        },
+        "0:1": {
+          "region": [
+            395,
+            0,
+            183,
+            330
+          ],
+          "componentSeed": [
+            468,
+            160
+          ]
+        },
+        "0:2": {
+          "region": [
+            694,
+            2,
+            162,
+            326
+          ],
+          "componentSeed": [
+            772,
+            162
+          ]
+        },
+        "0:3": {
+          "region": [
+            995,
+            0,
+            172,
+            328
+          ],
+          "componentSeed": [
+            1068,
+            160
+          ]
+        },
+        "1:0": {
+          "region": [
+            72,
+            337,
+            211,
+            292
+          ],
+          "componentSeed": [
+            180,
+            478
+          ]
+        },
+        "1:2": {
+          "region": [
+            694,
+            325,
+            156,
+            306
+          ],
+          "componentSeed": [
+            769,
+            475
+          ]
+        },
+        "1:3": {
+          "region": [
+            996,
+            325,
+            149,
+            305
+          ],
+          "componentSeed": [
+            1066,
+            473
+          ]
+        },
+        "2:0": {
+          "region": [
+            100,
+            625,
+            152,
+            327
+          ],
+          "componentSeed": [
+            180,
+            783
+          ]
+        },
+        "2:1": {
+          "region": [
+            375,
+            624,
+            182,
+            327
+          ],
+          "componentSeed": [
+            482,
+            783
+          ]
+        },
+        "2:2": {
+          "region": [
+            697,
+            627,
+            160,
+            324
+          ],
+          "componentSeed": [
+            781,
+            785
+          ]
+        },
+        "2:3": {
+          "region": [
+            987,
+            626,
+            170,
+            322
+          ],
+          "componentSeed": [
+            1082,
+            782
+          ]
+        }
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/source.png",
+          "sha256": "f233dfa129d43f85d2ad9c32205a9d0592ad4da893fdff9ac530920e6c1f8d77",
+          "bytes": 734702
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/prompt.txt",
+          "sha256": "6604c1bf825ae9fa6a58aa547b0670e475ab52713edb095f7e9bf16e19112d76",
+          "bytes": 1319
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/receipt.json",
+          "sha256": "64fd6029e59b4ea4a25eaa0fb5b2669d6cb16d657f990bf6a6cc3f37143a7e86",
+          "bytes": 986
+        }
+      ],
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "standingCalibration": {
+        "frame": {
+          "key": "sabo",
+          "direction": "south",
+          "pose": "calibration-standing",
+          "source": "sabo-acting-side",
+          "region": [
+            112,
+            2,
+            151,
+            330
+          ],
+          "sourceCell": [
+            0,
+            0
+          ],
+          "componentSeed": [
+            182,
+            162
+          ]
+        },
+        "opaqueBounds": [
+          116,
+          6,
+          143,
+          322
+        ],
+        "sourceAnchor": [
+          183.44960029403657,
+          328
+        ],
+        "standingHeight": 322,
+        "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+      }
+    },
+    "sabo-acting-front": {
+      "key": "sabo",
+      "sheet": "acting-front",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/acting-front-01/source.png",
+        "sha256": "f4d4d31712e04939cb5de673bc1937891684dc40ee699f0791411078c0f3ad93",
+        "bytes": 1121371
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/acting-front-01/prompt.txt",
+        "sha256": "ae7e9eda59d8ef1bceadb28597b04408c676e380b506456ec13db6ec0a6b8538",
+        "bytes": 2006
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/acting-front-01/receipt.json",
+        "sha256": "1d675ccfa3fa6329bed707e76dac8f24f663aa4ae9a0d148df703e867ec7a1d8",
+        "bytes": 970
+      },
+      "cells": {
+        "0:0": {
+          "region": [
+            96,
+            11,
+            158,
+            315
+          ],
+          "componentSeed": [
+            174,
+            171
+          ]
+        },
+        "0:1": {
+          "region": [
+            392,
+            11,
+            221,
+            316
+          ],
+          "componentSeed": [
+            476,
+            170
+          ]
+        },
+        "0:2": {
+          "region": [
+            690,
+            11,
+            165,
+            316
+          ],
+          "componentSeed": [
+            773,
+            170
+          ]
+        },
+        "0:3": {
+          "region": [
+            969,
+            11,
+            219,
+            315
+          ],
+          "componentSeed": [
+            1079,
+            167
+          ]
+        },
+        "1:0": {
+          "region": [
+            65,
+            374,
+            218,
+            268
+          ],
+          "componentSeed": [
+            178,
+            513
+          ]
+        },
+        "1:1": {
+          "region": [
+            392,
+            410,
+            180,
+            230
+          ],
+          "componentSeed": [
+            479,
+            535
+          ]
+        },
+        "1:2": {
+          "region": [
+            697,
+            336,
+            187,
+            309
+          ],
+          "componentSeed": [
+            780,
+            489
+          ]
+        },
+        "1:3": {
+          "region": [
+            1001,
+            338,
+            158,
+            306
+          ],
+          "componentSeed": [
+            1080,
+            494
+          ]
+        },
+        "2:0": {
+          "region": [
+            92,
+            643,
+            171,
+            322
+          ],
+          "componentSeed": [
+            177,
+            807
+          ]
+        },
+        "2:1": {
+          "region": [
+            388,
+            643,
+            215,
+            323
+          ],
+          "componentSeed": [
+            474,
+            804
+          ]
+        },
+        "2:2": {
+          "region": [
+            691,
+            643,
+            177,
+            321
+          ],
+          "componentSeed": [
+            777,
+            806
+          ]
+        },
+        "2:3": {
+          "region": [
+            989,
+            643,
+            197,
+            320
+          ],
+          "componentSeed": [
+            1084,
+            803
+          ]
+        }
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/source.png",
+          "sha256": "f233dfa129d43f85d2ad9c32205a9d0592ad4da893fdff9ac530920e6c1f8d77",
+          "bytes": 734702
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/prompt.txt",
+          "sha256": "6604c1bf825ae9fa6a58aa547b0670e475ab52713edb095f7e9bf16e19112d76",
+          "bytes": 1319
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/receipt.json",
+          "sha256": "64fd6029e59b4ea4a25eaa0fb5b2669d6cb16d657f990bf6a6cc3f37143a7e86",
+          "bytes": 986
+        }
+      ],
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "standingCalibration": {
+        "frame": {
+          "key": "sabo",
+          "direction": "south",
+          "pose": "calibration-standing",
+          "source": "sabo-acting-front",
+          "region": [
+            96,
+            11,
+            158,
+            315
+          ],
+          "sourceCell": [
+            0,
+            0
+          ],
+          "componentSeed": [
+            174,
+            171
+          ]
+        },
+        "opaqueBounds": [
+          100,
+          15,
+          150,
+          307
+        ],
+        "sourceAnchor": [
+          174.19620453347392,
+          322
+        ],
+        "standingHeight": 307,
+        "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+      }
+    },
+    "sabo-work": {
+      "key": "sabo",
+      "sheet": "work",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/work-01/source.png",
+        "sha256": "8abf3ad31ea506caca56dfdd565bba06dcb6d4dd99f36d46a9a4c31bb69f0df4",
+        "bytes": 1044371
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/work-01/prompt.txt",
+        "sha256": "38481e89f947f27cbe5c906cea50d8e1aea63631ceb5b0b1215a1f1f063987a9",
+        "bytes": 1908
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/work-01/receipt.json",
+        "sha256": "9b61ce3ebb95de6788d8a5785c98f3377e8d11bd627287abd70f761479154e55",
+        "bytes": 970
+      },
+      "cells": {
+        "2:0": {
+          "region": [
+            125,
+            625,
+            147,
+            309
+          ],
+          "componentSeed": [
+            197,
+            776
+          ]
+        },
+        "2:1": {
+          "region": [
+            401,
+            624,
+            165,
+            310
+          ],
+          "componentSeed": [
+            477,
+            776
+          ]
+        },
+        "2:2": {
+          "region": [
+            700,
+            624,
+            150,
+            310
+          ],
+          "componentSeed": [
+            774,
+            776
+          ]
+        },
+        "2:3": {
+          "region": [
+            988,
+            624,
+            146,
+            310
+          ],
+          "componentSeed": [
+            1060,
+            776
+          ]
+        },
+        "3:0": {
+          "region": [
+            124,
+            936,
+            149,
+            309
+          ],
+          "componentSeed": [
+            198,
+            1090
+          ]
+        },
+        "3:1": {
+          "region": [
+            400,
+            935,
+            151,
+            310
+          ],
+          "componentSeed": [
+            476,
+            1090
+          ]
+        },
+        "3:2": {
+          "region": [
+            700,
+            935,
+            151,
+            310
+          ],
+          "componentSeed": [
+            776,
+            1089
+          ]
+        },
+        "3:3": {
+          "region": [
+            988,
+            935,
+            149,
+            310
+          ],
+          "componentSeed": [
+            1062,
+            1089
+          ]
+        }
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/source.png",
+          "sha256": "f233dfa129d43f85d2ad9c32205a9d0592ad4da893fdff9ac530920e6c1f8d77",
+          "bytes": 734702
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/prompt.txt",
+          "sha256": "6604c1bf825ae9fa6a58aa547b0670e475ab52713edb095f7e9bf16e19112d76",
+          "bytes": 1319
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/receipt.json",
+          "sha256": "64fd6029e59b4ea4a25eaa0fb5b2669d6cb16d657f990bf6a6cc3f37143a7e86",
+          "bytes": 986
+        }
+      ],
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "standingCalibration": {
+        "frame": {
+          "key": "sabo",
+          "direction": "south",
+          "pose": "calibration-standing",
+          "source": "sabo-work",
+          "region": [
+            0,
+            0,
+            314,
+            314
+          ],
+          "sourceCell": [
+            0,
+            0
+          ]
+        },
+        "opaqueBounds": [
+          136,
+          9,
+          133,
+          302
+        ],
+        "sourceAnchor": [
+          199.71692208072523,
+          311
+        ],
+        "standingHeight": 302,
+        "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+      }
+    },
+    "sabo-utility": {
+      "key": "sabo",
+      "sheet": "utility",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/utility-01/source.png",
+        "sha256": "f357c61da11e9cb5d0b57179c12a780e74b217c4196f7700241d0afcd8627364",
+        "bytes": 1422275
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/utility-01/prompt.txt",
+        "sha256": "312e8e5cdc52a7d9c7c0a7b87b49b0fb05e23a30643d9a119080752e686da763",
+        "bytes": 2110
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/sabo/utility-01/receipt.json",
+        "sha256": "3d4639244031e48a715fcce5d4006cd15c649ec9ce8e9bfd689881554157dc2d",
+        "bytes": 970
+      },
+      "cells": {
+        "0:0": {
+          "region": [
+            95,
+            2,
+            172,
+            389
+          ],
+          "componentSeed": [
+            181,
+            189
+          ]
+        },
+        "0:1": {
+          "region": [
+            389,
+            3,
+            176,
+            388
+          ],
+          "componentSeed": [
+            477,
+            189
+          ]
+        },
+        "0:2": {
+          "region": [
+            688,
+            3,
+            174,
+            388
+          ],
+          "componentSeed": [
+            775,
+            188
+          ]
+        },
+        "0:3": {
+          "region": [
+            987,
+            3,
+            170,
+            388
+          ],
+          "componentSeed": [
+            1072,
+            190
+          ]
+        },
+        "1:0": {
+          "region": [
+            59,
+            399,
+            254,
+            297
+          ],
+          "componentSeed": [
+            181,
+            562
+          ]
+        },
+        "1:1": {
+          "region": [
+            349,
+            399,
+            262,
+            297
+          ],
+          "componentSeed": [
+            478,
+            563
+          ]
+        },
+        "1:2": {
+          "region": [
+            648,
+            399,
+            263,
+            299
+          ],
+          "componentSeed": [
+            775,
+            563
+          ]
+        },
+        "1:3": {
+          "region": [
+            943,
+            399,
+            259,
+            297
+          ],
+          "componentSeed": [
+            1072,
+            563
+          ]
+        },
+        "2:0": {
+          "region": [
+            9,
+            701,
+            302,
+            165
+          ],
+          "componentSeed": [
+            147,
+            799
+          ]
+        },
+        "2:1": {
+          "region": [
+            324,
+            702,
+            303,
+            163
+          ],
+          "componentSeed": [
+            461,
+            799
+          ]
+        },
+        "2:2": {
+          "region": [
+            627,
+            700,
+            304,
+            165
+          ],
+          "componentSeed": [
+            765,
+            798
+          ]
+        },
+        "2:3": {
+          "region": [
+            942,
+            701,
+            301,
+            164
+          ],
+          "componentSeed": [
+            1077,
+            799
+          ]
+        },
+        "3:0": {
+          "region": [
+            87,
+            865,
+            175,
+            380
+          ],
+          "componentSeed": [
+            174,
+            1052
+          ]
+        },
+        "3:1": {
+          "region": [
+            397,
+            865,
+            176,
+            380
+          ],
+          "componentSeed": [
+            482,
+            1048
+          ]
+        },
+        "3:2": {
+          "region": [
+            685,
+            865,
+            183,
+            382
+          ],
+          "componentSeed": [
+            776,
+            1049
+          ]
+        },
+        "3:3": {
+          "region": [
+            997,
+            864,
+            177,
+            380
+          ],
+          "componentSeed": [
+            1084,
+            1047
+          ]
+        }
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/source.png",
+          "sha256": "f233dfa129d43f85d2ad9c32205a9d0592ad4da893fdff9ac530920e6c1f8d77",
+          "bytes": 734702
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/prompt.txt",
+          "sha256": "6604c1bf825ae9fa6a58aa547b0670e475ab52713edb095f7e9bf16e19112d76",
+          "bytes": 1319
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/sabo/master-02/receipt.json",
+          "sha256": "64fd6029e59b4ea4a25eaa0fb5b2669d6cb16d657f990bf6a6cc3f37143a7e86",
+          "bytes": 986
+        }
+      ],
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "standingCalibration": {
+        "frame": {
+          "key": "sabo",
+          "direction": "south",
+          "pose": "calibration-standing",
+          "source": "sabo-utility",
+          "region": [
+            87,
+            865,
+            175,
+            380
+          ],
+          "sourceCell": [
+            0,
+            3
+          ],
+          "componentSeed": [
+            174,
+            1052
+          ]
+        },
+        "opaqueBounds": [
+          91,
+          869,
+          167,
+          372
+        ],
+        "sourceAnchor": [
+          172.55623608017817,
+          1241
+        ],
+        "standingHeight": 372,
+        "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+      }
+    },
+    "law-master": {
+      "key": "law",
+      "sheet": "master",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/law/master-02/source.png",
+        "sha256": "21c01ed86bd36e0d665dfd67e20eb82795462729cc8833b1bedde0afa95912d6",
+        "bytes": 414479
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/law/master-02/prompt.txt",
+        "sha256": "93c3b6c0934ea49af5e19916a000a1a2b90f28cd35a66744665dbe70b02d1ba9",
+        "bytes": 1099
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/law/master-02/receipt.json",
+        "sha256": "54eaadb98cb7e57b885409f4ef975a1d17c0c9eb7a23dda09e3474466bb74272",
+        "bytes": 358
+      },
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "standingCalibration": {
+        "frame": {
+          "key": "law",
+          "direction": "south",
+          "pose": "calibration-standing",
+          "source": "law-master",
+          "region": [
+            627,
+            627,
+            627,
+            627
+          ],
+          "sourceCell": [
+            1,
+            1
+          ]
+        },
+        "opaqueBounds": [
+          813,
+          727,
+          169,
+          432
+        ],
+        "sourceAnchor": [
+          897.1380818262675,
+          1159
+        ],
+        "standingHeight": 432,
+        "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+      }
+    },
+    "law-walk-side": {
+      "key": "law",
+      "sheet": "walk-side",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/law/walk-side-03/source.png",
+        "sha256": "7416d59d4f4c892b87a6e7356ce016a610e79002b71ed8bde38299ba95d9f560",
+        "bytes": 1581465
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/law/walk-side-03/prompt.txt",
+        "sha256": "bbfa9237bcddfa6a909492bff81dd6ee9bb99d178b8cff14e67a91c40e0f68be",
+        "bytes": 1090
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/law/walk-side-03/receipt.json",
+        "sha256": "9134962577911b500c50728702b9d852d3e3f9bb97c40280506dc9087a04bf84",
+        "bytes": 423
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/law/walk-side-02/source.png",
+          "sha256": "1af7cb5bc135ddf3070f13cd13db9b9354e785897c4174e1de92842b65de2a8e",
+          "bytes": 1573588
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/law/walk-side-02/prompt.txt",
+          "sha256": "d176b210a4b7217f3c2c71641b696dffc40d66a82b96fbe47345d4386b71902a",
+          "bytes": 2277
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/law/walk-side-02/receipt.json",
+          "sha256": "44f34c794972a985b8b91500e5f059894bafe7c69e038173a9c43da673398ca1",
+          "bytes": 422
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/law/master-02/source.png",
+          "sha256": "21c01ed86bd36e0d665dfd67e20eb82795462729cc8833b1bedde0afa95912d6",
+          "bytes": 414479
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/law/master-02/prompt.txt",
+          "sha256": "93c3b6c0934ea49af5e19916a000a1a2b90f28cd35a66744665dbe70b02d1ba9",
+          "bytes": 1099
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/law/master-02/receipt.json",
+          "sha256": "54eaadb98cb7e57b885409f4ef975a1d17c0c9eb7a23dda09e3474466bb74272",
+          "bytes": 358
+        }
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "standingCalibration": {
+        "frame": {
+          "key": "law",
+          "direction": "south",
+          "pose": "calibration-standing",
+          "source": "law-walk-side",
+          "region": [
+            512,
+            0,
+            512,
+            512
+          ],
+          "sourceCell": [
+            1,
+            0
+          ]
+        },
+        "opaqueBounds": [
+          707,
+          42,
+          123,
+          443
+        ],
+        "sourceAnchor": [
+          761.3779043621646,
+          485
+        ],
+        "standingHeight": 443,
+        "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+      }
+    },
+    "law-walk-front": {
+      "key": "law",
+      "sheet": "walk-front",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/law/walk-front-02/source.png",
+        "sha256": "66597201c088414405f587747c7f2f083f613e7a412170b1f4f1afe3090b6297",
+        "bytes": 1623919
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/law/walk-front-02/prompt.txt",
+        "sha256": "15d864f96ec047e433531187eccda4659a5a99d6fbb3c99f3c3c1d3f45079d9f",
+        "bytes": 996
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/law/walk-front-02/receipt.json",
+        "sha256": "d052cec5620fe4fff2933a772e5312aaca4a06795040850d7d00c0fd178fd3b8",
+        "bytes": 424
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/law/walk-front-01/source.png",
+          "sha256": "0fe53ac700c655a573c6812e91e32f92b966056cf16d0073e51401cec08331b1",
+          "bytes": 1616690
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/law/walk-front-01/prompt.txt",
+          "sha256": "da2e8d4c864f4b7459456a6fda8bb56a4c988de216c5ecc2e78d10ce53fcc74d",
+          "bytes": 1555
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/law/walk-front-01/receipt.json",
+          "sha256": "b4d9e4139eb10ac9dc6c6d960b92b9fe33dd00488ca87a36841616387a967312",
+          "bytes": 420
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/law/master-02/source.png",
+          "sha256": "21c01ed86bd36e0d665dfd67e20eb82795462729cc8833b1bedde0afa95912d6",
+          "bytes": 414479
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/law/master-02/prompt.txt",
+          "sha256": "93c3b6c0934ea49af5e19916a000a1a2b90f28cd35a66744665dbe70b02d1ba9",
+          "bytes": 1099
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/law/master-02/receipt.json",
+          "sha256": "54eaadb98cb7e57b885409f4ef975a1d17c0c9eb7a23dda09e3474466bb74272",
+          "bytes": 358
+        }
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "standingCalibration": {
+        "frame": {
+          "key": "law",
+          "direction": "south",
+          "pose": "calibration-standing",
+          "source": "law-walk-front",
+          "region": [
+            512,
+            0,
+            512,
+            512
+          ],
+          "sourceCell": [
+            1,
+            0
+          ]
+        },
+        "opaqueBounds": [
+          678,
+          34,
+          181,
+          461
+        ],
+        "sourceAnchor": [
+          767.7682711545251,
+          495
+        ],
+        "standingHeight": 461,
+        "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+      }
+    },
+    "law-acting-side": {
+      "key": "law",
+      "sheet": "acting-side",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/law/acting-side-01/source.png",
+        "sha256": "cf6f14820b4ad528912446dd131a7405298df0f600ed64093de2de337a93499b",
+        "bytes": 1059904
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/law/acting-side-01/prompt.txt",
+        "sha256": "9f750477e1557dfde76b374e86fee1bec489377501fd5a5d0733448d631b5278",
+        "bytes": 1907
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/law/acting-side-01/receipt.json",
+        "sha256": "b33339292b7d9388ca30b3b78b968bae49393f74241efe05eaba2bb17ec8bcd9",
+        "bytes": 420
+      },
+      "cells": {
+        "0:0": {
+          "region": [
+            138,
+            7,
+            115,
+            310
+          ],
+          "componentSeed": [
+            191,
+            148
+          ]
+        },
+        "0:1": {
+          "region": [
+            419,
+            5,
+            168,
+            312
+          ],
+          "componentSeed": [
+            478,
+            145
+          ]
+        },
+        "1:0": {
+          "region": [
+            136,
+            318,
+            113,
+            311
+          ],
+          "componentSeed": [
+            191,
+            458
+          ]
+        },
+        "1:2": {
+          "region": [
+            713,
+            319,
+            148,
+            310
+          ],
+          "componentSeed": [
+            772,
+            456
+          ]
+        }
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/law/master-02/source.png",
+          "sha256": "21c01ed86bd36e0d665dfd67e20eb82795462729cc8833b1bedde0afa95912d6",
+          "bytes": 414479
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/law/master-02/prompt.txt",
+          "sha256": "93c3b6c0934ea49af5e19916a000a1a2b90f28cd35a66744665dbe70b02d1ba9",
+          "bytes": 1099
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/law/master-02/receipt.json",
+          "sha256": "54eaadb98cb7e57b885409f4ef975a1d17c0c9eb7a23dda09e3474466bb74272",
+          "bytes": 358
+        }
+      ],
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "standingCalibration": {
+        "frame": {
+          "key": "law",
+          "direction": "south",
+          "pose": "calibration-standing",
+          "source": "law-acting-side",
+          "region": [
+            138,
+            7,
+            115,
+            310
+          ],
+          "sourceCell": [
+            0,
+            0
+          ],
+          "componentSeed": [
+            191,
+            148
+          ]
+        },
+        "opaqueBounds": [
+          142,
+          11,
+          107,
+          302
+        ],
+        "sourceAnchor": [
+          191.07629093585183,
+          313
+        ],
+        "standingHeight": 302,
+        "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+      }
+    },
+    "law-acting-front": {
+      "key": "law",
+      "sheet": "acting-front",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/law/acting-front-01/source.png",
+        "sha256": "82d5037af9ac8db031a205696ab9a22c859e6c450361d51ec7072e05859665b4",
+        "bytes": 1140198
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/law/acting-front-01/prompt.txt",
+        "sha256": "0a3885cbd09a2270c35ed696078ed01a0b913e7001cd3ab99b07fc55a69bd124",
+        "bytes": 1950
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/law/acting-front-01/receipt.json",
+        "sha256": "3b527fd19c5a3a2fa670a826fa6be79339e83c8766e0fe45281915aca6032141",
+        "bytes": 420
+      },
+      "cells": {
+        "1:3": {
+          "region": [
+            1029,
+            320,
+            138,
+            309
+          ],
+          "componentSeed": [
+            1101,
+            472
+          ]
+        }
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/law/master-02/source.png",
+          "sha256": "21c01ed86bd36e0d665dfd67e20eb82795462729cc8833b1bedde0afa95912d6",
+          "bytes": 414479
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/law/master-02/prompt.txt",
+          "sha256": "93c3b6c0934ea49af5e19916a000a1a2b90f28cd35a66744665dbe70b02d1ba9",
+          "bytes": 1099
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/law/master-02/receipt.json",
+          "sha256": "54eaadb98cb7e57b885409f4ef975a1d17c0c9eb7a23dda09e3474466bb74272",
+          "bytes": 358
+        }
+      ],
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "standingCalibration": {
+        "frame": {
+          "key": "law",
+          "direction": "south",
+          "pose": "calibration-standing",
+          "source": "law-acting-front",
+          "region": [
+            0,
+            0,
+            314,
+            314
+          ],
+          "sourceCell": [
+            0,
+            0
+          ]
+        },
+        "opaqueBounds": [
+          98,
+          10,
+          130,
+          301
+        ],
+        "sourceAnchor": [
+          163.74648085585585,
+          311
+        ],
+        "standingHeight": 301,
+        "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+      }
+    },
+    "law-work": {
+      "key": "law",
+      "sheet": "work",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/law/work-01/source.png",
+        "sha256": "dbe84b7a09da909d483a58f6607d47845faa442fe83685bee95018d115134943",
+        "bytes": 1020600
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/law/work-01/prompt.txt",
+        "sha256": "5120ce6f0e5faf63691b76b8605071a8366cf2fea0d0ee85df486b5d7ffc8f5b",
+        "bytes": 1601
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/law/work-01/receipt.json",
+        "sha256": "fec49e0ca6a79dfb17143f2396b0f5f88f10158323035e1c543b186d40739dc0",
+        "bytes": 420
+      },
+      "cells": {
+        "1:3": {
+          "region": [
+            934,
+            317,
+            142,
+            311
+          ],
+          "componentSeed": [
+            1025,
+            458
+          ]
+        },
+        "3:0": {
+          "region": [
+            157,
+            936,
+            153,
+            309
+          ],
+          "componentSeed": [
+            232,
+            1089
+          ]
+        },
+        "3:1": {
+          "region": [
+            420,
+            936,
+            148,
+            309
+          ],
+          "componentSeed": [
+            494,
+            1089
+          ]
+        },
+        "3:2": {
+          "region": [
+            680,
+            936,
+            150,
+            309
+          ],
+          "componentSeed": [
+            754,
+            1089
+          ]
+        },
+        "3:3": {
+          "region": [
+            946,
+            936,
+            156,
+            309
+          ],
+          "componentSeed": [
+            1026,
+            1089
+          ]
+        }
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/law/master-02/source.png",
+          "sha256": "21c01ed86bd36e0d665dfd67e20eb82795462729cc8833b1bedde0afa95912d6",
+          "bytes": 414479
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/law/master-02/prompt.txt",
+          "sha256": "93c3b6c0934ea49af5e19916a000a1a2b90f28cd35a66744665dbe70b02d1ba9",
+          "bytes": 1099
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/law/master-02/receipt.json",
+          "sha256": "54eaadb98cb7e57b885409f4ef975a1d17c0c9eb7a23dda09e3474466bb74272",
+          "bytes": 358
+        }
+      ],
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "standingCalibration": {
+        "frame": {
+          "key": "law",
+          "direction": "south",
+          "pose": "calibration-standing",
+          "source": "law-work",
+          "region": [
+            0,
+            0,
+            314,
+            314
+          ],
+          "sourceCell": [
+            0,
+            0
+          ]
+        },
+        "opaqueBounds": [
+          201,
+          9,
+          92,
+          300
+        ],
+        "sourceAnchor": [
+          241.95650925793024,
+          309
+        ],
+        "standingHeight": 300,
+        "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+      }
+    },
+    "law-utility": {
+      "key": "law",
+      "sheet": "utility",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/law/utility-01/source.png",
+        "sha256": "8d2c5b73318bde535996814dfe452e6071f14fdc1c8711016c3cb79c8c036f87",
+        "bytes": 1211734
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/law/utility-01/prompt.txt",
+        "sha256": "b448a5845fbb9ed236fc1c1d2f410b9c410864ec941420756a46db287208ab72",
+        "bytes": 1748
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/law/utility-01/receipt.json",
+        "sha256": "8a2f2a396b6839e10e73086aa4fea2210900cb1c010a2cf9e9d7a3945ae18fc2",
+        "bytes": 420
+      },
+      "cells": {
+        "3:0": {
+          "region": [
+            171,
+            911,
+            129,
+            327
+          ],
+          "componentSeed": [
+            235,
+            1070
+          ]
+        },
+        "3:1": {
+          "region": [
+            419,
+            911,
+            156,
+            329
+          ],
+          "componentSeed": [
+            496,
+            1068
+          ]
+        },
+        "3:2": {
+          "region": [
+            665,
+            912,
+            190,
+            328
+          ],
+          "componentSeed": [
+            760,
+            1070
+          ]
+        },
+        "3:3": {
+          "region": [
+            953,
+            912,
+            130,
+            326
+          ],
+          "componentSeed": [
+            1018,
+            1070
+          ]
+        }
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/law/master-02/source.png",
+          "sha256": "21c01ed86bd36e0d665dfd67e20eb82795462729cc8833b1bedde0afa95912d6",
+          "bytes": 414479
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/law/master-02/prompt.txt",
+          "sha256": "93c3b6c0934ea49af5e19916a000a1a2b90f28cd35a66744665dbe70b02d1ba9",
+          "bytes": 1099
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/law/master-02/receipt.json",
+          "sha256": "54eaadb98cb7e57b885409f4ef975a1d17c0c9eb7a23dda09e3474466bb74272",
+          "bytes": 358
+        }
+      ],
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "standingCalibration": {
+        "frame": {
+          "key": "law",
+          "direction": "south",
+          "pose": "calibration-standing",
+          "source": "law-utility",
+          "region": [
+            171,
+            911,
+            129,
+            327
+          ],
+          "sourceCell": [
+            0,
+            3
+          ],
+          "componentSeed": [
+            235,
+            1070
+          ]
+        },
+        "opaqueBounds": [
+          175,
+          915,
+          121,
+          319
+        ],
+        "sourceAnchor": [
+          234.54368050828228,
+          1234
+        ],
+        "standingHeight": 319,
+        "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+      }
+    },
+    "hancock-master": {
+      "key": "hancock",
+      "sheet": "master",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/hancock/master-02/source.png",
+        "sha256": "5db11431b76478416640c5f544869f8af98b64c6d91ebb41e1070f34f0a2ebde",
+        "bytes": 672881
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/hancock/master-02/prompt.txt",
+        "sha256": "3548786e4a06e1cdeb26303723df4e630ae71d2c7e042499561314056acc1208",
+        "bytes": 1436
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/hancock/master-02/receipt.json",
+        "sha256": "b09425adda2c85e35eb69b1eaa3b07f37db71bc2e00918b35d51f526d5e4c148",
+        "bytes": 443
+      },
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "standingCalibration": {
+        "frame": {
+          "key": "hancock",
+          "direction": "south",
+          "pose": "calibration-standing",
+          "source": "hancock-master",
+          "region": [
+            627,
+            627,
+            627,
+            627
+          ],
+          "sourceCell": [
+            1,
+            1
+          ]
+        },
+        "opaqueBounds": [
+          782,
+          665,
+          214,
+          531
+        ],
+        "sourceAnchor": [
+          887.4774660236739,
+          1196
+        ],
+        "standingHeight": 531,
+        "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+      }
+    },
+    "hancock-walk-side": {
+      "key": "hancock",
+      "sheet": "walk-side",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/hancock/walk-side-01/source.png",
+        "sha256": "dcbf9d4205e63aa7398de0fbe8ebfad4e55c836ca8e0e0517a8d94b005886ea6",
+        "bytes": 1599085
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/hancock/walk-side-01/prompt.txt",
+        "sha256": "6a44ccc344f05001bf9a3f135dced5c3ce06e88945022989264eb98540183ca5",
+        "bytes": 2269
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/hancock/walk-side-01/receipt.json",
+        "sha256": "3500b2e8c28f98ca9a926f588e4bf8c91f7084d63caf96bb69ed03662bf57ac7",
+        "bytes": 426
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/hancock/master-02/source.png",
+          "sha256": "5db11431b76478416640c5f544869f8af98b64c6d91ebb41e1070f34f0a2ebde",
+          "bytes": 672881
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/hancock/master-02/prompt.txt",
+          "sha256": "3548786e4a06e1cdeb26303723df4e630ae71d2c7e042499561314056acc1208",
+          "bytes": 1436
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/hancock/master-02/receipt.json",
+          "sha256": "b09425adda2c85e35eb69b1eaa3b07f37db71bc2e00918b35d51f526d5e4c148",
+          "bytes": 443
+        }
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "standingCalibration": {
+        "frame": {
+          "key": "hancock",
+          "direction": "south",
+          "pose": "calibration-standing",
+          "source": "hancock-walk-side",
+          "region": [
+            512,
+            0,
+            512,
+            512
+          ],
+          "sourceCell": [
+            1,
+            0
+          ]
+        },
+        "opaqueBounds": [
+          670,
+          38,
+          163,
+          451
+        ],
+        "sourceAnchor": [
+          765.0712637045585,
+          489
+        ],
+        "standingHeight": 451,
+        "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+      }
+    },
+    "hancock-walk-front": {
+      "key": "hancock",
+      "sheet": "walk-front",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/hancock/walk-front-02/source.png",
+        "sha256": "9f6f353e005697138e4f6ab95b2f131caf4c2cb081c46c1d294b9ad5bf7e7aa6",
+        "bytes": 1699402
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/hancock/walk-front-02/prompt.txt",
+        "sha256": "ea45d15fbdaa3f245683fd70801e6db1b4fd3780d370a92e68ca13576057dc67",
+        "bytes": 1240
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/hancock/walk-front-02/receipt.json",
+        "sha256": "af58d041820bff425c801579fbbcfc21345ed640b5a00be87273b3f02704567c",
+        "bytes": 428
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/hancock/walk-front-01/source.png",
+          "sha256": "fb3e095428772727fd9e110d7b2e1af281b5269edba51fb1ae5ebdaff7fdde1a",
+          "bytes": 1689746
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/hancock/walk-front-01/prompt.txt",
+          "sha256": "e17eb12ed46a04a831ad3e2b5bd1895858da96882b8df069f04c996a5d50bcf1",
+          "bytes": 1480
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/hancock/walk-front-01/receipt.json",
+          "sha256": "2ed839f7f4ab038dbd0138f580ae11fa54bdd9c15621dc8d73c3b96a99e01d0e",
+          "bytes": 424
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/hancock/master-02/source.png",
+          "sha256": "5db11431b76478416640c5f544869f8af98b64c6d91ebb41e1070f34f0a2ebde",
+          "bytes": 672881
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/hancock/master-02/prompt.txt",
+          "sha256": "3548786e4a06e1cdeb26303723df4e630ae71d2c7e042499561314056acc1208",
+          "bytes": 1436
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/hancock/master-02/receipt.json",
+          "sha256": "b09425adda2c85e35eb69b1eaa3b07f37db71bc2e00918b35d51f526d5e4c148",
+          "bytes": 443
+        }
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "standingCalibration": {
+        "frame": {
+          "key": "hancock",
+          "direction": "south",
+          "pose": "calibration-standing",
+          "source": "hancock-walk-front",
+          "region": [
+            512,
+            0,
+            512,
+            512
+          ],
+          "sourceCell": [
+            1,
+            0
+          ]
+        },
+        "opaqueBounds": [
+          668,
+          10,
+          201,
+          478
+        ],
+        "sourceAnchor": [
+          768.2130797497268,
+          488
+        ],
+        "standingHeight": 478,
+        "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+      }
+    },
+    "hancock-acting-side": {
+      "key": "hancock",
+      "sheet": "acting-side",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/hancock/acting-side-01/source.png",
+        "sha256": "379e90a4c378f6f1f9ea1cb49a5962e5a4d9614661cb22b1e12571eaa625cee9",
+        "bytes": 1167079
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/hancock/acting-side-01/prompt.txt",
+        "sha256": "4a24a5821457a68e27aa5a85ab92e7442a147daf3f5069b65c48fbfc512ec2e5",
+        "bytes": 1875
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/hancock/acting-side-01/receipt.json",
+        "sha256": "fac6fef7fbc47454911102afae6ce9143f36f16a3a619d8f02ea26f1f437a126",
+        "bytes": 424
+      },
+      "cells": {
+        "3:0": {
+          "region": [
+            109,
+            938,
+            140,
+            310
+          ],
+          "componentSeed": [
+            171,
+            1090
+          ]
+        }
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/hancock/master-02/source.png",
+          "sha256": "5db11431b76478416640c5f544869f8af98b64c6d91ebb41e1070f34f0a2ebde",
+          "bytes": 672881
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/hancock/master-02/prompt.txt",
+          "sha256": "3548786e4a06e1cdeb26303723df4e630ae71d2c7e042499561314056acc1208",
+          "bytes": 1436
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/hancock/master-02/receipt.json",
+          "sha256": "b09425adda2c85e35eb69b1eaa3b07f37db71bc2e00918b35d51f526d5e4c148",
+          "bytes": 443
+        }
+      ],
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "standingCalibration": {
+        "frame": {
+          "key": "hancock",
+          "direction": "south",
+          "pose": "calibration-standing",
+          "source": "hancock-acting-side",
+          "region": [
+            0,
+            0,
+            314,
+            314
+          ],
+          "sourceCell": [
+            0,
+            0
+          ]
+        },
+        "opaqueBounds": [
+          101,
+          9,
+          120,
+          300
+        ],
+        "sourceAnchor": [
+          170.16351351351352,
+          309
+        ],
+        "standingHeight": 300,
+        "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+      }
+    },
+    "hancock-acting-front": {
+      "key": "hancock",
+      "sheet": "acting-front",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/hancock/acting-front-01/source.png",
+        "sha256": "1ac7f6fa5aacdae6065834ba7515f6328680553aa39b7c25797599086dd7b135",
+        "bytes": 1151939
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/hancock/acting-front-01/prompt.txt",
+        "sha256": "e217a72e062940f5e4a50eaa79a51e4ab50ef4354788d8f6dc2f313a6840a2c1",
+        "bytes": 1918
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/hancock/acting-front-01/receipt.json",
+        "sha256": "eb96f6856e4a5d1679e2004cb3b317edfddf4259ca994e6061245f6b3c7dce18",
+        "bytes": 424
+      },
+      "cells": {
+        "1:0": {
+          "region": [
+            125,
+            321,
+            125,
+            308
+          ],
+          "componentSeed": [
+            186,
+            477
+          ]
+        },
+        "1:1": {
+          "region": [
+            416,
+            366,
+            127,
+            263
+          ],
+          "componentSeed": [
+            478,
+            497
+          ]
+        },
+        "1:2": {
+          "region": [
+            704,
+            315,
+            174,
+            315
+          ],
+          "componentSeed": [
+            782,
+            473
+          ]
+        },
+        "1:3": {
+          "region": [
+            1032,
+            319,
+            122,
+            311
+          ],
+          "componentSeed": [
+            1094,
+            477
+          ]
+        },
+        "2:0": {
+          "region": [
+            104,
+            631,
+            158,
+            316
+          ],
+          "componentSeed": [
+            182,
+            792
+          ]
+        },
+        "2:1": {
+          "region": [
+            365,
+            631,
+            214,
+            318
+          ],
+          "componentSeed": [
+            470,
+            790
+          ]
+        },
+        "2:2": {
+          "region": [
+            708,
+            631,
+            148,
+            316
+          ],
+          "componentSeed": [
+            782,
+            791
+          ]
+        },
+        "2:3": {
+          "region": [
+            1011,
+            633,
+            163,
+            314
+          ],
+          "componentSeed": [
+            1092,
+            789
+          ]
+        }
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/hancock/master-02/source.png",
+          "sha256": "5db11431b76478416640c5f544869f8af98b64c6d91ebb41e1070f34f0a2ebde",
+          "bytes": 672881
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/hancock/master-02/prompt.txt",
+          "sha256": "3548786e4a06e1cdeb26303723df4e630ae71d2c7e042499561314056acc1208",
+          "bytes": 1436
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/hancock/master-02/receipt.json",
+          "sha256": "b09425adda2c85e35eb69b1eaa3b07f37db71bc2e00918b35d51f526d5e4c148",
+          "bytes": 443
+        }
+      ],
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "standingCalibration": {
+        "frame": {
+          "key": "hancock",
+          "direction": "south",
+          "pose": "calibration-standing",
+          "source": "hancock-acting-front",
+          "region": [
+            0,
+            0,
+            314,
+            314
+          ],
+          "sourceCell": [
+            0,
+            0
+          ]
+        },
+        "opaqueBounds": [
+          117,
+          10,
+          138,
+          300
+        ],
+        "sourceAnchor": [
+          186.02065161621346,
+          310
+        ],
+        "standingHeight": 300,
+        "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+      }
+    },
+    "hancock-work": {
+      "key": "hancock",
+      "sheet": "work",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/hancock/work-01/source.png",
+        "sha256": "30ebd0616965fdd9232810d9933e62af9167dbed44dfdd949a0053cd5af8cbd8",
+        "bytes": 1177444
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/hancock/work-01/prompt.txt",
+        "sha256": "8ae96a16ae2a114c403d3636ea672b402ebc4c5bcbde22f1b378d9a2695684ce",
+        "bytes": 1571
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/hancock/work-01/receipt.json",
+        "sha256": "341ed03abee8627c0778f25494f966112ecea0b2a951a548b2ee3dadb99eda16",
+        "bytes": 424
+      },
+      "cells": {
+        "1:0": {
+          "region": [
+            149,
+            312,
+            134,
+            317
+          ],
+          "componentSeed": [
+            208,
+            467
+          ]
+        },
+        "1:1": {
+          "region": [
+            378,
+            312,
+            185,
+            317
+          ],
+          "componentSeed": [
+            486,
+            467
+          ]
+        },
+        "1:2": {
+          "region": [
+            704,
+            312,
+            152,
+            317
+          ],
+          "componentSeed": [
+            781,
+            466
+          ]
+        },
+        "1:3": {
+          "region": [
+            961,
+            312,
+            178,
+            317
+          ],
+          "componentSeed": [
+            1063,
+            466
+          ]
+        },
+        "3:0": {
+          "region": [
+            121,
+            933,
+            162,
+            315
+          ],
+          "componentSeed": [
+            201,
+            1093
+          ]
+        },
+        "3:1": {
+          "region": [
+            395,
+            933,
+            167,
+            315
+          ],
+          "componentSeed": [
+            480,
+            1093
+          ]
+        },
+        "3:2": {
+          "region": [
+            689,
+            933,
+            167,
+            315
+          ],
+          "componentSeed": [
+            771,
+            1093
+          ]
+        },
+        "3:3": {
+          "region": [
+            965,
+            933,
+            168,
+            315
+          ],
+          "componentSeed": [
+            1053,
+            1093
+          ]
+        }
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/hancock/master-02/source.png",
+          "sha256": "5db11431b76478416640c5f544869f8af98b64c6d91ebb41e1070f34f0a2ebde",
+          "bytes": 672881
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/hancock/master-02/prompt.txt",
+          "sha256": "3548786e4a06e1cdeb26303723df4e630ae71d2c7e042499561314056acc1208",
+          "bytes": 1436
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/hancock/master-02/receipt.json",
+          "sha256": "b09425adda2c85e35eb69b1eaa3b07f37db71bc2e00918b35d51f526d5e4c148",
+          "bytes": 443
+        }
+      ],
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "standingCalibration": {
+        "frame": {
+          "key": "hancock",
+          "direction": "south",
+          "pose": "calibration-standing",
+          "source": "hancock-work",
+          "region": [
+            0,
+            0,
+            314,
+            314
+          ],
+          "sourceCell": [
+            0,
+            0
+          ]
+        },
+        "opaqueBounds": [
+          129,
+          8,
+          121,
+          300
+        ],
+        "sourceAnchor": [
+          199.62263251935676,
+          308
+        ],
+        "standingHeight": 300,
+        "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+      }
+    },
+    "hancock-utility": {
+      "key": "hancock",
+      "sheet": "utility",
+      "generator": "gpt-image",
+      "image": {
+        "path": "tools/launcher-room/reserved-v1/sources/hancock/utility-01/source.png",
+        "sha256": "889d8e1859957063d914f28a51dd0f7992e263bbbc4b132b0fc7050a901902fa",
+        "bytes": 1362044
+      },
+      "prompt": {
+        "path": "tools/launcher-room/reserved-v1/sources/hancock/utility-01/prompt.txt",
+        "sha256": "29382bbf5f2e6a8fba654ad3c44e629ce958c6a30c3d6fdf94676c6993cf1c61",
+        "bytes": 1712
+      },
+      "receipt": {
+        "path": "tools/launcher-room/reserved-v1/sources/hancock/utility-01/receipt.json",
+        "sha256": "62a99e10455eb55143203e79109b0d17e0b3bfad9654627fe459b073a50b8977",
+        "bytes": 424
+      },
+      "cells": {
+        "2:0": {
+          "region": [
+            112,
+            621,
+            173,
+            281
+          ],
+          "componentSeed": [
+            198,
+            767
+          ]
+        },
+        "2:1": {
+          "region": [
+            398,
+            621,
+            176,
+            282
+          ],
+          "componentSeed": [
+            486,
+            767
+          ]
+        },
+        "2:2": {
+          "region": [
+            679,
+            624,
+            180,
+            279
+          ],
+          "componentSeed": [
+            770,
+            769
+          ]
+        },
+        "2:3": {
+          "region": [
+            969,
+            621,
+            177,
+            282
+          ],
+          "componentSeed": [
+            1057,
+            767
+          ]
+        },
+        "3:0": {
+          "region": [
+            110,
+            909,
+            172,
+            332
+          ],
+          "componentSeed": [
+            196,
+            1076
+          ]
+        },
+        "3:1": {
+          "region": [
+            401,
+            909,
+            168,
+            332
+          ],
+          "componentSeed": [
+            484,
+            1075
+          ]
+        },
+        "3:2": {
+          "region": [
+            672,
+            909,
+            195,
+            332
+          ],
+          "componentSeed": [
+            769,
+            1076
+          ]
+        },
+        "3:3": {
+          "region": [
+            972,
+            909,
+            172,
+            332
+          ],
+          "componentSeed": [
+            1058,
+            1076
+          ]
+        }
+      },
+      "ancestry": [
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/hancock/master-02/source.png",
+          "sha256": "5db11431b76478416640c5f544869f8af98b64c6d91ebb41e1070f34f0a2ebde",
+          "bytes": 672881
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/hancock/master-02/prompt.txt",
+          "sha256": "3548786e4a06e1cdeb26303723df4e630ae71d2c7e042499561314056acc1208",
+          "bytes": 1436
+        },
+        {
+          "path": "tools/launcher-room/reserved-v1/sources/hancock/master-02/receipt.json",
+          "sha256": "b09425adda2c85e35eb69b1eaa3b07f37db71bc2e00918b35d51f526d5e4c148",
+          "bytes": 443
+        }
+      ],
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "standingCalibration": {
+        "frame": {
+          "key": "hancock",
+          "direction": "south",
+          "pose": "calibration-standing",
+          "source": "hancock-utility",
+          "region": [
+            110,
+            909,
+            172,
+            332
+          ],
+          "sourceCell": [
+            0,
+            3
+          ],
+          "componentSeed": [
+            196,
+            1076
+          ]
+        },
+        "opaqueBounds": [
+          114,
+          913,
+          164,
+          324
+        ],
+        "sourceAnchor": [
+          196.61408096068178,
+          1237
+        ],
+        "standingHeight": 324,
+        "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+      }
+    }
+  },
+  "missing": [],
+  "modelReview": true,
+  "sourceCalibration": {
+    "ace-master": {
+      "frame": {
+        "key": "ace",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "ace-master",
+        "region": [
+          627,
+          627,
+          627,
+          627
+        ],
+        "sourceCell": [
+          1,
+          1
+        ]
+      },
+      "opaqueBounds": [
+        705,
+        656,
+        319,
+        581
+      ],
+      "sourceAnchor": [
+        866.8660997362884,
+        1237
+      ],
+      "standingHeight": 581,
+      "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+    },
+    "ace-walk-side": {
+      "frame": {
+        "key": "ace",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "ace-walk-side",
+        "region": [
+          418,
+          0,
+          418,
+          627
+        ],
+        "sourceCell": [
+          1,
+          0
+        ]
+      },
+      "opaqueBounds": [
+        470,
+        31,
+        283,
+        582
+      ],
+      "sourceAnchor": [
+        609.9661706129675,
+        613
+      ],
+      "standingHeight": 582,
+      "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+    },
+    "ace-walk-front": {
+      "frame": {
+        "key": "ace",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "ace-walk-front",
+        "region": [
+          418,
+          0,
+          418,
+          627
+        ],
+        "sourceCell": [
+          1,
+          0
+        ]
+      },
+      "opaqueBounds": [
+        490,
+        59,
+        271,
+        560
+      ],
+      "sourceAnchor": [
+        628.1257030982939,
+        619
+      ],
+      "standingHeight": 560,
+      "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+    },
+    "ace-acting-side": {
+      "frame": {
+        "key": "ace",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "ace-acting-side",
+        "region": [
+          109,
+          0,
+          168,
+          320
+        ],
+        "sourceCell": [
+          0,
+          0
+        ],
+        "componentSeed": [
+          190,
+          156
+        ]
+      },
+      "opaqueBounds": [
+        113,
+        4,
+        160,
+        312
+      ],
+      "sourceAnchor": [
+        191.91850968156373,
+        316
+      ],
+      "standingHeight": 312,
+      "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+    },
+    "ace-acting-front": {
+      "frame": {
+        "key": "ace",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "ace-acting-front",
+        "region": [
+          100,
+          5,
+          186,
+          323
+        ],
+        "sourceCell": [
+          0,
+          0
+        ],
+        "componentSeed": [
+          193,
+          169
+        ]
+      },
+      "opaqueBounds": [
+        104,
+        9,
+        178,
+        315
+      ],
+      "sourceAnchor": [
+        194.47658973933255,
+        324
+      ],
+      "standingHeight": 315,
+      "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+    },
+    "ace-work": {
+      "frame": {
+        "key": "ace",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "ace-work",
+        "region": [
+          145,
+          0,
+          180,
+          316
+        ],
+        "sourceCell": [
+          0,
+          0
+        ],
+        "componentSeed": [
+          238,
+          148
+        ]
+      },
+      "opaqueBounds": [
+        149,
+        4,
+        172,
+        308
+      ],
+      "sourceAnchor": [
+        233.17087877981731,
+        312
+      ],
+      "standingHeight": 308,
+      "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+    },
+    "ace-utility": {
+      "frame": {
+        "key": "ace",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "ace-utility",
+        "region": [
+          78,
+          868,
+          204,
+          366
+        ],
+        "sourceCell": [
+          0,
+          3
+        ],
+        "componentSeed": [
+          180,
+          1048
+        ]
+      },
+      "opaqueBounds": [
+        82,
+        872,
+        196,
+        358
+      ],
+      "sourceAnchor": [
+        179.29064134857586,
+        1230
+      ],
+      "standingHeight": 358,
+      "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+    },
+    "sabo-master": {
+      "frame": {
+        "key": "sabo",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "sabo-master",
+        "region": [
+          627,
+          627,
+          627,
+          627
+        ],
+        "sourceCell": [
+          1,
+          1
+        ]
+      },
+      "opaqueBounds": [
+        722,
+        646,
+        280,
+        583
+      ],
+      "sourceAnchor": [
+        864.2393264567252,
+        1229
+      ],
+      "standingHeight": 583,
+      "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+    },
+    "sabo-walk-side": {
+      "frame": {
+        "key": "sabo",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "sabo-walk-side",
+        "region": [
+          418,
+          0,
+          418,
+          627
+        ],
+        "sourceCell": [
+          1,
+          0
+        ]
+      },
+      "opaqueBounds": [
+        516,
+        26,
+        223,
+        586
+      ],
+      "sourceAnchor": [
+        620.9796236684034,
+        612
+      ],
+      "standingHeight": 586,
+      "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+    },
+    "sabo-walk-front": {
+      "frame": {
+        "key": "sabo",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "sabo-walk-front",
+        "region": [
+          418,
+          0,
+          418,
+          627
+        ],
+        "sourceCell": [
+          1,
+          0
+        ]
+      },
+      "opaqueBounds": [
+        504,
+        45,
+        244,
+        561
+      ],
+      "sourceAnchor": [
+        625.570763956905,
+        606
+      ],
+      "standingHeight": 561,
+      "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+    },
+    "sabo-acting-side": {
+      "frame": {
+        "key": "sabo",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "sabo-acting-side",
+        "region": [
+          112,
+          2,
+          151,
+          330
+        ],
+        "sourceCell": [
+          0,
+          0
+        ],
+        "componentSeed": [
+          182,
+          162
+        ]
+      },
+      "opaqueBounds": [
+        116,
+        6,
+        143,
+        322
+      ],
+      "sourceAnchor": [
+        183.44960029403657,
+        328
+      ],
+      "standingHeight": 322,
+      "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+    },
+    "sabo-acting-front": {
+      "frame": {
+        "key": "sabo",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "sabo-acting-front",
+        "region": [
+          96,
+          11,
+          158,
+          315
+        ],
+        "sourceCell": [
+          0,
+          0
+        ],
+        "componentSeed": [
+          174,
+          171
+        ]
+      },
+      "opaqueBounds": [
+        100,
+        15,
+        150,
+        307
+      ],
+      "sourceAnchor": [
+        174.19620453347392,
+        322
+      ],
+      "standingHeight": 307,
+      "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+    },
+    "sabo-work": {
+      "frame": {
+        "key": "sabo",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "sabo-work",
+        "region": [
+          0,
+          0,
+          314,
+          314
+        ],
+        "sourceCell": [
+          0,
+          0
+        ]
+      },
+      "opaqueBounds": [
+        136,
+        9,
+        133,
+        302
+      ],
+      "sourceAnchor": [
+        199.71692208072523,
+        311
+      ],
+      "standingHeight": 302,
+      "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+    },
+    "sabo-utility": {
+      "frame": {
+        "key": "sabo",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "sabo-utility",
+        "region": [
+          87,
+          865,
+          175,
+          380
+        ],
+        "sourceCell": [
+          0,
+          3
+        ],
+        "componentSeed": [
+          174,
+          1052
+        ]
+      },
+      "opaqueBounds": [
+        91,
+        869,
+        167,
+        372
+      ],
+      "sourceAnchor": [
+        172.55623608017817,
+        1241
+      ],
+      "standingHeight": 372,
+      "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+    },
+    "law-master": {
+      "frame": {
+        "key": "law",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "law-master",
+        "region": [
+          627,
+          627,
+          627,
+          627
+        ],
+        "sourceCell": [
+          1,
+          1
+        ]
+      },
+      "opaqueBounds": [
+        813,
+        727,
+        169,
+        432
+      ],
+      "sourceAnchor": [
+        897.1380818262675,
+        1159
+      ],
+      "standingHeight": 432,
+      "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+    },
+    "law-walk-side": {
+      "frame": {
+        "key": "law",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "law-walk-side",
+        "region": [
+          512,
+          0,
+          512,
+          512
+        ],
+        "sourceCell": [
+          1,
+          0
+        ]
+      },
+      "opaqueBounds": [
+        707,
+        42,
+        123,
+        443
+      ],
+      "sourceAnchor": [
+        761.3779043621646,
+        485
+      ],
+      "standingHeight": 443,
+      "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+    },
+    "law-walk-front": {
+      "frame": {
+        "key": "law",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "law-walk-front",
+        "region": [
+          512,
+          0,
+          512,
+          512
+        ],
+        "sourceCell": [
+          1,
+          0
+        ]
+      },
+      "opaqueBounds": [
+        678,
+        34,
+        181,
+        461
+      ],
+      "sourceAnchor": [
+        767.7682711545251,
+        495
+      ],
+      "standingHeight": 461,
+      "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+    },
+    "law-acting-side": {
+      "frame": {
+        "key": "law",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "law-acting-side",
+        "region": [
+          138,
+          7,
+          115,
+          310
+        ],
+        "sourceCell": [
+          0,
+          0
+        ],
+        "componentSeed": [
+          191,
+          148
+        ]
+      },
+      "opaqueBounds": [
+        142,
+        11,
+        107,
+        302
+      ],
+      "sourceAnchor": [
+        191.07629093585183,
+        313
+      ],
+      "standingHeight": 302,
+      "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+    },
+    "law-acting-front": {
+      "frame": {
+        "key": "law",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "law-acting-front",
+        "region": [
+          0,
+          0,
+          314,
+          314
+        ],
+        "sourceCell": [
+          0,
+          0
+        ]
+      },
+      "opaqueBounds": [
+        98,
+        10,
+        130,
+        301
+      ],
+      "sourceAnchor": [
+        163.74648085585585,
+        311
+      ],
+      "standingHeight": 301,
+      "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+    },
+    "law-work": {
+      "frame": {
+        "key": "law",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "law-work",
+        "region": [
+          0,
+          0,
+          314,
+          314
+        ],
+        "sourceCell": [
+          0,
+          0
+        ]
+      },
+      "opaqueBounds": [
+        201,
+        9,
+        92,
+        300
+      ],
+      "sourceAnchor": [
+        241.95650925793024,
+        309
+      ],
+      "standingHeight": 300,
+      "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+    },
+    "law-utility": {
+      "frame": {
+        "key": "law",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "law-utility",
+        "region": [
+          171,
+          911,
+          129,
+          327
+        ],
+        "sourceCell": [
+          0,
+          3
+        ],
+        "componentSeed": [
+          235,
+          1070
+        ]
+      },
+      "opaqueBounds": [
+        175,
+        915,
+        121,
+        319
+      ],
+      "sourceAnchor": [
+        234.54368050828228,
+        1234
+      ],
+      "standingHeight": 319,
+      "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+    },
+    "hancock-master": {
+      "frame": {
+        "key": "hancock",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "hancock-master",
+        "region": [
+          627,
+          627,
+          627,
+          627
+        ],
+        "sourceCell": [
+          1,
+          1
+        ]
+      },
+      "opaqueBounds": [
+        782,
+        665,
+        214,
+        531
+      ],
+      "sourceAnchor": [
+        887.4774660236739,
+        1196
+      ],
+      "standingHeight": 531,
+      "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+    },
+    "hancock-walk-side": {
+      "frame": {
+        "key": "hancock",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "hancock-walk-side",
+        "region": [
+          512,
+          0,
+          512,
+          512
+        ],
+        "sourceCell": [
+          1,
+          0
+        ]
+      },
+      "opaqueBounds": [
+        670,
+        38,
+        163,
+        451
+      ],
+      "sourceAnchor": [
+        765.0712637045585,
+        489
+      ],
+      "standingHeight": 451,
+      "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+    },
+    "hancock-walk-front": {
+      "frame": {
+        "key": "hancock",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "hancock-walk-front",
+        "region": [
+          512,
+          0,
+          512,
+          512
+        ],
+        "sourceCell": [
+          1,
+          0
+        ]
+      },
+      "opaqueBounds": [
+        668,
+        10,
+        201,
+        478
+      ],
+      "sourceAnchor": [
+        768.2130797497268,
+        488
+      ],
+      "standingHeight": 478,
+      "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+    },
+    "hancock-acting-side": {
+      "frame": {
+        "key": "hancock",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "hancock-acting-side",
+        "region": [
+          0,
+          0,
+          314,
+          314
+        ],
+        "sourceCell": [
+          0,
+          0
+        ]
+      },
+      "opaqueBounds": [
+        101,
+        9,
+        120,
+        300
+      ],
+      "sourceAnchor": [
+        170.16351351351352,
+        309
+      ],
+      "standingHeight": 300,
+      "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+    },
+    "hancock-acting-front": {
+      "frame": {
+        "key": "hancock",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "hancock-acting-front",
+        "region": [
+          0,
+          0,
+          314,
+          314
+        ],
+        "sourceCell": [
+          0,
+          0
+        ]
+      },
+      "opaqueBounds": [
+        117,
+        10,
+        138,
+        300
+      ],
+      "sourceAnchor": [
+        186.02065161621346,
+        310
+      ],
+      "standingHeight": 300,
+      "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+    },
+    "hancock-work": {
+      "frame": {
+        "key": "hancock",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "hancock-work",
+        "region": [
+          0,
+          0,
+          314,
+          314
+        ],
+        "sourceCell": [
+          0,
+          0
+        ]
+      },
+      "opaqueBounds": [
+        129,
+        8,
+        121,
+        300
+      ],
+      "sourceAnchor": [
+        199.62263251935676,
+        308
+      ],
+      "standingHeight": 300,
+      "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+    },
+    "hancock-utility": {
+      "frame": {
+        "key": "hancock",
+        "direction": "south",
+        "pose": "calibration-standing",
+        "source": "hancock-utility",
+        "region": [
+          110,
+          909,
+          172,
+          332
+        ],
+        "sourceCell": [
+          0,
+          3
+        ],
+        "componentSeed": [
+          196,
+          1076
+        ]
+      },
+      "opaqueBounds": [
+        114,
+        913,
+        164,
+        324
+      ],
+      "sourceAnchor": [
+        196.61408096068178,
+        1237
+      ],
+      "standingHeight": 324,
+      "purpose": "One standing reference sets a shared scale for every complete figure on this source"
+    }
+  }
+}
