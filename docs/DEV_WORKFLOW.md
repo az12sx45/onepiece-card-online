@@ -2,6 +2,8 @@
 
 ## 2026-09-27 生活基地方針修正（1.2.1）
 
+已完成1.2.1部署：main `2c3bc409e9ee264df7ac46f789da6c770933c0c7`，公開canonical清單於 `2026-09-27T04:45:20.341208+00:00` 回傳1.2.1，與提交逐byte一致且Ed25519驗簽通過。安裝檔244419418bytes、SHA256 `39b0ec460157384c57e542292c3efa103e9b0f937c6a3352a6ce27ba05a9ca71`，公開完整下載重算一致。正式D先同步1.2.0共700檔，再安全套用1.2.1共31檔；後者保護10897個既有檔案，所有原素材與不相關遊戲變更保留。證據：`C:/Codex_Candidates/launcher-life-qa-1.2.0/delivery-1.2.1/DELIVERY.json`。驗證含真Electron468素材、19方針UI檢查及公開發行／下載頁／Socket檢查；無真帳號購買或PostgreSQL多session驗收。
+
 1.2.0完成封裝後，補查窄版截圖發現QA的free錯誤fixture；實際六方針操作進一步抓到onchange先renderUi重設select再讀value，導致總是送出舊方針。desktop/launcher-life-room.js改為先捕獲selectedDirective再更新UI；伺服器外部IPC沿用directiveId，controller內部directive保持原合約。原1.2.0上傳檔不可覆寫，因此另發1.2.1；所有128組人物、512格動作與台詞／經濟規則維持1.2.0世代。
 
 新增scripts/launcher_life_directive_qa.js，原browser fixture校正free_day；六選項逐一真select、保存與刷新保留、friend禁用及合成change不送mutation，共19/19通過且來源hash不變。package/lock与封裝QA升1.2.1；life-v1獨立review更新該UI runtime hash與QA證據。正式D既有Board三行差異只對server/desktop-distribution.js記錄exact hash變體與原patch/readback，不接受其他檔或任意hash。其餘素材與原審稿來源保持，公開簽章、下載SHA、正式delta同步結果另見LAUNCHER_LIFE_SYSTEM.md與QA/delivery-1.2.1。
