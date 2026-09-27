@@ -1,0 +1,1344 @@
+{
+  "ok": true,
+  "scope": "Three independent real local Socket.IO rooms, each with two isolated Chromium contexts using create/join/start, production recruitment and state handlers. Initial state and cosmetic host controlled only in QA responses. Not physical-device, human-play or remote-network acceptance.",
+  "checks": [
+    "accept real host create, guest join, ready and start reach connected v2 game",
+    "accept fixture synchronizes before drawing",
+    "accept invitation shares the actor's host, art, line, grade and color",
+    "accept spectator has no original or overlay decision controls",
+    "accept real draw deducts exactly 2500 without changing crew",
+    "accept spectator skip changes no authoritative state",
+    "accept reaction shares the same host and outcome on both clients",
+    "accept reaction precedes authoritative settlement",
+    "accept spectator reaction skip cannot settle the owner",
+    "accept normal state transport makes both clients identical",
+    "accept settles original crew, pool and payment once",
+    "accept guest never emits a tavern recruitment decision",
+    "accept guest refresh restores result and identity",
+    "decline real host create, guest join, ready and start reach connected v2 game",
+    "decline fixture synchronizes before drawing",
+    "decline invitation shares the actor's host, art, line, grade and color",
+    "decline spectator has no original or overlay decision controls",
+    "decline real draw deducts exactly 2500 without changing crew",
+    "decline spectator skip changes no authoritative state",
+    "decline reaction shares the same host and outcome on both clients",
+    "decline reaction precedes authoritative settlement",
+    "decline spectator reaction skip cannot settle the owner",
+    "decline normal state transport makes both clients identical",
+    "decline settles original crew, pool and payment once",
+    "decline guest never emits a tavern recruitment decision",
+    "decline guest refresh restores result and identity",
+    "replace real host create, guest join, ready and start reach connected v2 game",
+    "replace fixture synchronizes before drawing",
+    "replace invitation shares the actor's host, art, line, grade and color",
+    "replace spectator has no original or overlay decision controls",
+    "replace real draw deducts exactly 2500 without changing crew",
+    "replace spectator skip changes no authoritative state",
+    "replacement chooser has not mutated the draw",
+    "replace reaction shares the same host and outcome on both clients",
+    "replace reaction precedes authoritative settlement",
+    "replace spectator reaction skip cannot settle the owner",
+    "replace normal state transport makes both clients identical",
+    "replace settles original crew, pool and payment once",
+    "replacement returns the displaced crew member to pool",
+    "replace guest never emits a tavern recruitment decision",
+    "replace guest refresh restores result and identity",
+    "new reaction phases use acknowledged existing spectator transport",
+    "settlement uses acknowledged existing BOARD_GAME_STATE transport",
+    "no runtime errors across either browser context"
+  ],
+  "outcomes": [
+    {
+      "action": "accept",
+      "roomCode": "B3265",
+      "fixture": {
+        "playerId": "693261657",
+        "candidateId": "nami",
+        "candidateName": "娜美",
+        "count": 3
+      },
+      "before": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "bartolomeo",
+          "brook",
+          "carrot",
+          "cavendish",
+          "chopper",
+          "custom_mp3l6s8w",
+          "custom_mp3l85c1",
+          "dragon",
+          "franky",
+          "fujitora",
+          "garp",
+          "hancock",
+          "ivankov",
+          "jinbe",
+          "kid",
+          "killer",
+          "kinemon",
+          "koby",
+          "kuma",
+          "kuzan",
+          "law",
+          "mansherry",
+          "nami",
+          "perona",
+          "rayleigh",
+          "robin",
+          "sabo",
+          "smoker",
+          "tashigi",
+          "usopp",
+          "vivi",
+          "yamato"
+        ],
+        "phase": "main",
+        "turn": 0
+      },
+      "paid": {
+        "coins": 17500,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "bartolomeo",
+          "brook",
+          "carrot",
+          "cavendish",
+          "chopper",
+          "custom_mp3l6s8w",
+          "custom_mp3l85c1",
+          "dragon",
+          "franky",
+          "fujitora",
+          "garp",
+          "hancock",
+          "ivankov",
+          "jinbe",
+          "kid",
+          "killer",
+          "kinemon",
+          "koby",
+          "kuma",
+          "kuzan",
+          "law",
+          "mansherry",
+          "nami",
+          "perona",
+          "rayleigh",
+          "robin",
+          "sabo",
+          "smoker",
+          "tashigi",
+          "usopp",
+          "vivi",
+          "yamato"
+        ],
+        "phase": "main",
+        "turn": 0
+      },
+      "invitation": {
+        "host": {
+          "host": "zoro",
+          "stage": "glow",
+          "grade": "E",
+          "color": "#d7b786",
+          "line": "有膽量的話，就跟我們走一趟。",
+          "image": "images/board/story/speakers/zoro_smirk.webp"
+        },
+        "guest": {
+          "host": "zoro",
+          "stage": "invitation",
+          "grade": "E",
+          "color": "#d7b786",
+          "line": "有膽量的話，就跟我們走一趟。",
+          "image": "images/board/story/speakers/zoro_smirk.webp"
+        }
+      },
+      "reaction": {
+        "host": {
+          "host": "zoro",
+          "stage": "accept",
+          "grade": "E",
+          "color": "#d7b786",
+          "line": "跟上。往後的路，一起闖。",
+          "image": "images/board/story/speakers/zoro_banquet.webp"
+        },
+        "guest": {
+          "host": "zoro",
+          "stage": "accept",
+          "grade": "E",
+          "color": "#d7b786",
+          "line": "跟上。往後的路，一起闖。",
+          "image": "images/board/story/speakers/zoro_banquet.webp"
+        }
+      },
+      "after": {
+        "host": {
+          "coins": 17500,
+          "crew": [
+            "luffy",
+            "zoro",
+            "sanji",
+            "nami"
+          ],
+          "pool": [
+            "bartolomeo",
+            "brook",
+            "carrot",
+            "cavendish",
+            "chopper",
+            "custom_mp3l6s8w",
+            "custom_mp3l85c1",
+            "dragon",
+            "franky",
+            "fujitora",
+            "garp",
+            "hancock",
+            "ivankov",
+            "jinbe",
+            "kid",
+            "killer",
+            "kinemon",
+            "koby",
+            "kuma",
+            "kuzan",
+            "law",
+            "mansherry",
+            "perona",
+            "rayleigh",
+            "robin",
+            "sabo",
+            "smoker",
+            "tashigi",
+            "usopp",
+            "vivi",
+            "yamato"
+          ],
+          "phase": "main",
+          "turn": 1
+        },
+        "guest": {
+          "coins": 17500,
+          "crew": [
+            "luffy",
+            "zoro",
+            "sanji",
+            "nami"
+          ],
+          "pool": [
+            "bartolomeo",
+            "brook",
+            "carrot",
+            "cavendish",
+            "chopper",
+            "custom_mp3l6s8w",
+            "custom_mp3l85c1",
+            "dragon",
+            "franky",
+            "fujitora",
+            "garp",
+            "hancock",
+            "ivankov",
+            "jinbe",
+            "kid",
+            "killer",
+            "kinemon",
+            "koby",
+            "kuma",
+            "kuzan",
+            "law",
+            "mansherry",
+            "perona",
+            "rayleigh",
+            "robin",
+            "sabo",
+            "smoker",
+            "tashigi",
+            "usopp",
+            "vivi",
+            "yamato"
+          ],
+          "phase": "main",
+          "turn": 1
+        }
+      }
+    },
+    {
+      "action": "decline",
+      "roomCode": "B3207",
+      "fixture": {
+        "playerId": "693275285",
+        "candidateId": "nami",
+        "candidateName": "娜美",
+        "count": 3
+      },
+      "before": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "bartolomeo",
+          "brook",
+          "carrot",
+          "cavendish",
+          "chopper",
+          "custom_mp3l6s8w",
+          "custom_mp3l85c1",
+          "dragon",
+          "franky",
+          "fujitora",
+          "garp",
+          "hancock",
+          "ivankov",
+          "jinbe",
+          "kid",
+          "killer",
+          "kinemon",
+          "koby",
+          "kuma",
+          "kuzan",
+          "law",
+          "mansherry",
+          "nami",
+          "perona",
+          "rayleigh",
+          "robin",
+          "sabo",
+          "smoker",
+          "tashigi",
+          "usopp",
+          "vivi",
+          "yamato"
+        ],
+        "phase": "main",
+        "turn": 0
+      },
+      "paid": {
+        "coins": 17500,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "bartolomeo",
+          "brook",
+          "carrot",
+          "cavendish",
+          "chopper",
+          "custom_mp3l6s8w",
+          "custom_mp3l85c1",
+          "dragon",
+          "franky",
+          "fujitora",
+          "garp",
+          "hancock",
+          "ivankov",
+          "jinbe",
+          "kid",
+          "killer",
+          "kinemon",
+          "koby",
+          "kuma",
+          "kuzan",
+          "law",
+          "mansherry",
+          "nami",
+          "perona",
+          "rayleigh",
+          "robin",
+          "sabo",
+          "smoker",
+          "tashigi",
+          "usopp",
+          "vivi",
+          "yamato"
+        ],
+        "phase": "main",
+        "turn": 0
+      },
+      "invitation": {
+        "host": {
+          "host": "zoro",
+          "stage": "glow",
+          "grade": "E",
+          "color": "#d7b786",
+          "line": "有膽量的話，就跟我們走一趟。",
+          "image": "images/board/story/speakers/zoro_smirk.webp"
+        },
+        "guest": {
+          "host": "zoro",
+          "stage": "invitation",
+          "grade": "E",
+          "color": "#d7b786",
+          "line": "有膽量的話，就跟我們走一趟。",
+          "image": "images/board/story/speakers/zoro_smirk.webp"
+        }
+      },
+      "reaction": {
+        "host": {
+          "host": "zoro",
+          "stage": "decline",
+          "grade": "E",
+          "color": "#d7b786",
+          "line": "行。走你自己選的路吧。",
+          "image": "images/board/story/speakers/zoro_calm.webp"
+        },
+        "guest": {
+          "host": "zoro",
+          "stage": "decline",
+          "grade": "E",
+          "color": "#d7b786",
+          "line": "行。走你自己選的路吧。",
+          "image": "images/board/story/speakers/zoro_calm.webp"
+        }
+      },
+      "after": {
+        "host": {
+          "coins": 17500,
+          "crew": [
+            "luffy",
+            "zoro",
+            "sanji"
+          ],
+          "pool": [
+            "bartolomeo",
+            "brook",
+            "carrot",
+            "cavendish",
+            "chopper",
+            "custom_mp3l6s8w",
+            "custom_mp3l85c1",
+            "dragon",
+            "franky",
+            "fujitora",
+            "garp",
+            "hancock",
+            "ivankov",
+            "jinbe",
+            "kid",
+            "killer",
+            "kinemon",
+            "koby",
+            "kuma",
+            "kuzan",
+            "law",
+            "mansherry",
+            "nami",
+            "perona",
+            "rayleigh",
+            "robin",
+            "sabo",
+            "smoker",
+            "tashigi",
+            "usopp",
+            "vivi",
+            "yamato"
+          ],
+          "phase": "main",
+          "turn": 1
+        },
+        "guest": {
+          "coins": 17500,
+          "crew": [
+            "luffy",
+            "zoro",
+            "sanji"
+          ],
+          "pool": [
+            "bartolomeo",
+            "brook",
+            "carrot",
+            "cavendish",
+            "chopper",
+            "custom_mp3l6s8w",
+            "custom_mp3l85c1",
+            "dragon",
+            "franky",
+            "fujitora",
+            "garp",
+            "hancock",
+            "ivankov",
+            "jinbe",
+            "kid",
+            "killer",
+            "kinemon",
+            "koby",
+            "kuma",
+            "kuzan",
+            "law",
+            "mansherry",
+            "nami",
+            "perona",
+            "rayleigh",
+            "robin",
+            "sabo",
+            "smoker",
+            "tashigi",
+            "usopp",
+            "vivi",
+            "yamato"
+          ],
+          "phase": "main",
+          "turn": 1
+        }
+      }
+    },
+    {
+      "action": "replace",
+      "roomCode": "B1307",
+      "fixture": {
+        "playerId": "693248609",
+        "candidateId": "nami",
+        "candidateName": "娜美",
+        "count": 6
+      },
+      "before": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji",
+          "law",
+          "robin",
+          "hancock"
+        ],
+        "pool": [
+          "bartolomeo",
+          "brook",
+          "carrot",
+          "cavendish",
+          "chopper",
+          "custom_mp3l6s8w",
+          "custom_mp3l85c1",
+          "dragon",
+          "franky",
+          "fujitora",
+          "garp",
+          "ivankov",
+          "jinbe",
+          "kid",
+          "killer",
+          "kinemon",
+          "koby",
+          "kuma",
+          "kuzan",
+          "mansherry",
+          "nami",
+          "perona",
+          "rayleigh",
+          "sabo",
+          "smoker",
+          "tashigi",
+          "usopp",
+          "vivi",
+          "yamato"
+        ],
+        "phase": "main",
+        "turn": 0
+      },
+      "paid": {
+        "coins": 17500,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji",
+          "law",
+          "robin",
+          "hancock"
+        ],
+        "pool": [
+          "bartolomeo",
+          "brook",
+          "carrot",
+          "cavendish",
+          "chopper",
+          "custom_mp3l6s8w",
+          "custom_mp3l85c1",
+          "dragon",
+          "franky",
+          "fujitora",
+          "garp",
+          "ivankov",
+          "jinbe",
+          "kid",
+          "killer",
+          "kinemon",
+          "koby",
+          "kuma",
+          "kuzan",
+          "mansherry",
+          "nami",
+          "perona",
+          "rayleigh",
+          "sabo",
+          "smoker",
+          "tashigi",
+          "usopp",
+          "vivi",
+          "yamato"
+        ],
+        "phase": "main",
+        "turn": 0
+      },
+      "invitation": {
+        "host": {
+          "host": "zoro",
+          "stage": "glow",
+          "grade": "E",
+          "color": "#d7b786",
+          "line": "有膽量的話，就跟我們走一趟。",
+          "image": "images/board/story/speakers/zoro_smirk.webp"
+        },
+        "guest": {
+          "host": "zoro",
+          "stage": "invitation",
+          "grade": "E",
+          "color": "#d7b786",
+          "line": "有膽量的話，就跟我們走一趟。",
+          "image": "images/board/story/speakers/zoro_smirk.webp"
+        }
+      },
+      "reaction": {
+        "host": {
+          "host": "zoro",
+          "stage": "accept",
+          "grade": "E",
+          "color": "#d7b786",
+          "line": "跟上。往後的路，一起闖。",
+          "image": "images/board/story/speakers/zoro_banquet.webp"
+        },
+        "guest": {
+          "host": "zoro",
+          "stage": "accept",
+          "grade": "E",
+          "color": "#d7b786",
+          "line": "跟上。往後的路，一起闖。",
+          "image": "images/board/story/speakers/zoro_banquet.webp"
+        }
+      },
+      "after": {
+        "host": {
+          "coins": 17500,
+          "crew": [
+            "nami",
+            "zoro",
+            "sanji",
+            "law",
+            "robin",
+            "hancock"
+          ],
+          "pool": [
+            "bartolomeo",
+            "brook",
+            "carrot",
+            "cavendish",
+            "chopper",
+            "custom_mp3l6s8w",
+            "custom_mp3l85c1",
+            "dragon",
+            "franky",
+            "fujitora",
+            "garp",
+            "ivankov",
+            "jinbe",
+            "kid",
+            "killer",
+            "kinemon",
+            "koby",
+            "kuma",
+            "kuzan",
+            "luffy",
+            "mansherry",
+            "perona",
+            "rayleigh",
+            "sabo",
+            "smoker",
+            "tashigi",
+            "usopp",
+            "vivi",
+            "yamato"
+          ],
+          "phase": "main",
+          "turn": 1
+        },
+        "guest": {
+          "coins": 17500,
+          "crew": [
+            "nami",
+            "zoro",
+            "sanji",
+            "law",
+            "robin",
+            "hancock"
+          ],
+          "pool": [
+            "bartolomeo",
+            "brook",
+            "carrot",
+            "cavendish",
+            "chopper",
+            "custom_mp3l6s8w",
+            "custom_mp3l85c1",
+            "dragon",
+            "franky",
+            "fujitora",
+            "garp",
+            "ivankov",
+            "jinbe",
+            "kid",
+            "killer",
+            "kinemon",
+            "koby",
+            "kuma",
+            "kuzan",
+            "luffy",
+            "mansherry",
+            "perona",
+            "rayleigh",
+            "sabo",
+            "smoker",
+            "tashigi",
+            "usopp",
+            "vivi",
+            "yamato"
+          ],
+          "phase": "main",
+          "turn": 1
+        }
+      }
+    }
+  ],
+  "wire": [
+    {
+      "eventName": "BOARD_GAME_STATE",
+      "detail": null,
+      "ack": {
+        "ok": true,
+        "version": 1
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_STATE",
+      "detail": null,
+      "ack": {
+        "ok": true,
+        "version": 2
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_EVENT",
+      "type": "spectator-modal",
+      "kind": "tavern",
+      "detail": null,
+      "ack": {
+        "ok": true,
+        "sequence": 1,
+        "stateVersion": 2
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_STATE",
+      "detail": null,
+      "ack": {
+        "ok": true,
+        "version": 3
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_EVENT",
+      "type": "recruit",
+      "detail": null,
+      "ack": {
+        "ok": true,
+        "sequence": 2,
+        "stateVersion": 3
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_STATE",
+      "detail": null,
+      "ack": {
+        "ok": true,
+        "version": 4
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_EVENT",
+      "type": "spectator-modal",
+      "kind": "tavern-result",
+      "detail": {
+        "kind": "tavern-result",
+        "tavernReveal": true,
+        "tavernHost": "zoro",
+        "playerName": "酒館主mukavcm6",
+        "islandName": "海鳥酒廳島",
+        "title": "海鳥酒廳島 招募結果",
+        "subtitle": "酒館主mukavcm6 抽中 娜美。",
+        "recruit": {
+          "id": "nami",
+          "name": "娜美",
+          "tier": "T6",
+          "grade": "E",
+          "attribute": "技",
+          "roleType": "偵查型",
+          "level": 1,
+          "passive": "天候直覺",
+          "baseStats": {
+            "hp": 58,
+            "atk": 42,
+            "def": 40,
+            "satk": 50,
+            "sdef": 46,
+            "spd": 52
+          },
+          "image": "images/board/battle/portraits/nami/normal.webp",
+          "tag": "技 / 偵查型"
+        },
+        "chanceText": "6%"
+      },
+      "ack": {
+        "ok": true,
+        "sequence": 3,
+        "stateVersion": 4
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_EVENT",
+      "type": "spectator-modal",
+      "kind": "tavern-result",
+      "detail": {
+        "kind": "tavern-result",
+        "tavernReveal": true,
+        "tavernHost": "zoro",
+        "playerName": "酒館主mukavcm6",
+        "islandName": "海鳥酒廳島",
+        "title": "海鳥酒廳島 招募結果",
+        "subtitle": "酒館主mukavcm6 抽中 娜美。",
+        "recruit": {
+          "id": "nami",
+          "name": "娜美",
+          "tier": "T6",
+          "grade": "E",
+          "attribute": "技",
+          "roleType": "偵查型",
+          "level": 1,
+          "passive": "天候直覺",
+          "baseStats": {
+            "hp": 58,
+            "atk": 42,
+            "def": 40,
+            "satk": 50,
+            "sdef": 46,
+            "spd": 52
+          },
+          "image": "images/board/battle/portraits/nami/normal.webp",
+          "tag": "技 / 偵查型"
+        },
+        "chanceText": "6%",
+        "tavernOutcome": "accept"
+      },
+      "ack": {
+        "ok": true,
+        "sequence": 4,
+        "stateVersion": 4
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_EVENT",
+      "type": "turn-banner",
+      "detail": null,
+      "ack": {
+        "ok": true,
+        "sequence": 5,
+        "stateVersion": 4
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_STATE",
+      "detail": null,
+      "ack": {
+        "ok": true,
+        "version": 5
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_STATE",
+      "detail": null,
+      "ack": {
+        "ok": true,
+        "version": 1
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_STATE",
+      "detail": null,
+      "ack": {
+        "ok": true,
+        "version": 2
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_EVENT",
+      "type": "spectator-modal",
+      "kind": "tavern",
+      "detail": null,
+      "ack": {
+        "ok": true,
+        "sequence": 1,
+        "stateVersion": 2
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_STATE",
+      "detail": null,
+      "ack": {
+        "ok": true,
+        "version": 3
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_EVENT",
+      "type": "recruit",
+      "detail": null,
+      "ack": {
+        "ok": true,
+        "sequence": 2,
+        "stateVersion": 3
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_STATE",
+      "detail": null,
+      "ack": {
+        "ok": true,
+        "version": 4
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_EVENT",
+      "type": "spectator-modal",
+      "kind": "tavern-result",
+      "detail": {
+        "kind": "tavern-result",
+        "tavernReveal": true,
+        "tavernHost": "zoro",
+        "playerName": "酒館主mukavs3h",
+        "islandName": "雙子酒館港",
+        "title": "雙子酒館港 招募結果",
+        "subtitle": "酒館主mukavs3h 抽中 娜美。",
+        "recruit": {
+          "id": "nami",
+          "name": "娜美",
+          "tier": "T6",
+          "grade": "E",
+          "attribute": "技",
+          "roleType": "偵查型",
+          "level": 1,
+          "passive": "天候直覺",
+          "baseStats": {
+            "hp": 58,
+            "atk": 42,
+            "def": 40,
+            "satk": 50,
+            "sdef": 46,
+            "spd": 52
+          },
+          "image": "images/board/battle/portraits/nami/normal.webp",
+          "tag": "技 / 偵查型"
+        },
+        "chanceText": "6%"
+      },
+      "ack": {
+        "ok": true,
+        "sequence": 3,
+        "stateVersion": 4
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_EVENT",
+      "type": "spectator-modal",
+      "kind": "tavern-result",
+      "detail": {
+        "kind": "tavern-result",
+        "tavernReveal": true,
+        "tavernHost": "zoro",
+        "playerName": "酒館主mukavs3h",
+        "islandName": "雙子酒館港",
+        "title": "雙子酒館港 招募結果",
+        "subtitle": "酒館主mukavs3h 抽中 娜美。",
+        "recruit": {
+          "id": "nami",
+          "name": "娜美",
+          "tier": "T6",
+          "grade": "E",
+          "attribute": "技",
+          "roleType": "偵查型",
+          "level": 1,
+          "passive": "天候直覺",
+          "baseStats": {
+            "hp": 58,
+            "atk": 42,
+            "def": 40,
+            "satk": 50,
+            "sdef": 46,
+            "spd": 52
+          },
+          "image": "images/board/battle/portraits/nami/normal.webp",
+          "tag": "技 / 偵查型"
+        },
+        "chanceText": "6%",
+        "tavernOutcome": "decline"
+      },
+      "ack": {
+        "ok": true,
+        "sequence": 4,
+        "stateVersion": 4
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_EVENT",
+      "type": "turn-banner",
+      "detail": null,
+      "ack": {
+        "ok": true,
+        "sequence": 5,
+        "stateVersion": 4
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_STATE",
+      "detail": null,
+      "ack": {
+        "ok": true,
+        "version": 5
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_STATE",
+      "detail": null,
+      "ack": {
+        "ok": true,
+        "version": 1
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_STATE",
+      "detail": null,
+      "ack": {
+        "ok": true,
+        "version": 2
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_EVENT",
+      "type": "spectator-modal",
+      "kind": "tavern",
+      "detail": null,
+      "ack": {
+        "ok": true,
+        "sequence": 1,
+        "stateVersion": 2
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_STATE",
+      "detail": null,
+      "ack": {
+        "ok": true,
+        "version": 3
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_EVENT",
+      "type": "recruit",
+      "detail": null,
+      "ack": {
+        "ok": true,
+        "sequence": 2,
+        "stateVersion": 3
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_STATE",
+      "detail": null,
+      "ack": {
+        "ok": true,
+        "version": 4
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_EVENT",
+      "type": "spectator-modal",
+      "kind": "tavern-result",
+      "detail": {
+        "kind": "tavern-result",
+        "tavernReveal": true,
+        "tavernHost": "zoro",
+        "playerName": "酒館主mukaw6z9",
+        "islandName": "泡影招募館",
+        "title": "泡影招募館 招募結果",
+        "subtitle": "酒館主mukaw6z9 抽中 娜美。",
+        "recruit": {
+          "id": "nami",
+          "name": "娜美",
+          "tier": "T6",
+          "grade": "E",
+          "attribute": "技",
+          "roleType": "偵查型",
+          "level": 1,
+          "passive": "天候直覺",
+          "baseStats": {
+            "hp": 58,
+            "atk": 42,
+            "def": 40,
+            "satk": 50,
+            "sdef": 46,
+            "spd": 52
+          },
+          "image": "images/board/battle/portraits/nami/normal.webp",
+          "tag": "技 / 偵查型"
+        },
+        "chanceText": "7%"
+      },
+      "ack": {
+        "ok": true,
+        "sequence": 3,
+        "stateVersion": 4
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_EVENT",
+      "type": "spectator-modal",
+      "kind": "tavern-result",
+      "detail": {
+        "kind": "tavern-result",
+        "tavernReveal": true,
+        "tavernHost": "zoro",
+        "playerName": "酒館主mukaw6z9",
+        "islandName": "泡影招募館",
+        "title": "泡影招募館 招募結果",
+        "subtitle": "酒館主mukaw6z9 抽中 娜美。",
+        "recruit": {
+          "id": "nami",
+          "name": "娜美",
+          "tier": "T6",
+          "grade": "E",
+          "attribute": "技",
+          "roleType": "偵查型",
+          "level": 1,
+          "passive": "天候直覺",
+          "baseStats": {
+            "hp": 58,
+            "atk": 42,
+            "def": 40,
+            "satk": 50,
+            "sdef": 46,
+            "spd": 52
+          },
+          "image": "images/board/battle/portraits/nami/normal.webp",
+          "tag": "技 / 偵查型"
+        },
+        "chanceText": "7%",
+        "tavernOutcome": "accept"
+      },
+      "ack": {
+        "ok": true,
+        "sequence": 4,
+        "stateVersion": 4
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_EVENT",
+      "type": "turn-banner",
+      "detail": null,
+      "ack": {
+        "ok": true,
+        "sequence": 5,
+        "stateVersion": 4
+      }
+    },
+    {
+      "eventName": "BOARD_GAME_STATE",
+      "detail": null,
+      "ack": {
+        "ok": true,
+        "version": 5
+      }
+    }
+  ],
+  "errors": [],
+  "current": {
+    "action": "replace",
+    "fixture": {
+      "playerId": "693248609",
+      "candidateId": "nami",
+      "candidateName": "娜美",
+      "count": 6
+    },
+    "before": {
+      "coins": 20000,
+      "crew": [
+        "luffy",
+        "zoro",
+        "sanji",
+        "law",
+        "robin",
+        "hancock"
+      ],
+      "pool": [
+        "bartolomeo",
+        "brook",
+        "carrot",
+        "cavendish",
+        "chopper",
+        "custom_mp3l6s8w",
+        "custom_mp3l85c1",
+        "dragon",
+        "franky",
+        "fujitora",
+        "garp",
+        "ivankov",
+        "jinbe",
+        "kid",
+        "killer",
+        "kinemon",
+        "koby",
+        "kuma",
+        "kuzan",
+        "mansherry",
+        "nami",
+        "perona",
+        "rayleigh",
+        "sabo",
+        "smoker",
+        "tashigi",
+        "usopp",
+        "vivi",
+        "yamato"
+      ],
+      "phase": "main",
+      "turn": 0
+    },
+    "invitation": {
+      "host": {
+        "host": "zoro",
+        "stage": "glow",
+        "grade": "E",
+        "color": "#d7b786",
+        "line": "有膽量的話，就跟我們走一趟。",
+        "image": "images/board/story/speakers/zoro_smirk.webp"
+      },
+      "guest": {
+        "host": "zoro",
+        "stage": "invitation",
+        "grade": "E",
+        "color": "#d7b786",
+        "line": "有膽量的話，就跟我們走一趟。",
+        "image": "images/board/story/speakers/zoro_smirk.webp"
+      }
+    },
+    "after": {
+      "host": {
+        "coins": 17500,
+        "crew": [
+          "nami",
+          "zoro",
+          "sanji",
+          "law",
+          "robin",
+          "hancock"
+        ],
+        "pool": [
+          "bartolomeo",
+          "brook",
+          "carrot",
+          "cavendish",
+          "chopper",
+          "custom_mp3l6s8w",
+          "custom_mp3l85c1",
+          "dragon",
+          "franky",
+          "fujitora",
+          "garp",
+          "ivankov",
+          "jinbe",
+          "kid",
+          "killer",
+          "kinemon",
+          "koby",
+          "kuma",
+          "kuzan",
+          "luffy",
+          "mansherry",
+          "perona",
+          "rayleigh",
+          "sabo",
+          "smoker",
+          "tashigi",
+          "usopp",
+          "vivi",
+          "yamato"
+        ],
+        "phase": "main",
+        "turn": 1
+      },
+      "guest": {
+        "coins": 17500,
+        "crew": [
+          "nami",
+          "zoro",
+          "sanji",
+          "law",
+          "robin",
+          "hancock"
+        ],
+        "pool": [
+          "bartolomeo",
+          "brook",
+          "carrot",
+          "cavendish",
+          "chopper",
+          "custom_mp3l6s8w",
+          "custom_mp3l85c1",
+          "dragon",
+          "franky",
+          "fujitora",
+          "garp",
+          "ivankov",
+          "jinbe",
+          "kid",
+          "killer",
+          "kinemon",
+          "koby",
+          "kuma",
+          "kuzan",
+          "luffy",
+          "mansherry",
+          "perona",
+          "rayleigh",
+          "sabo",
+          "smoker",
+          "tashigi",
+          "usopp",
+          "vivi",
+          "yamato"
+        ],
+        "phase": "main",
+        "turn": 1
+      }
+    }
+  }
+}

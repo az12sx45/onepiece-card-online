@@ -27784,7 +27784,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       skipStatePush: options.skipStatePush === true,
     });
     if (["sea-choice", "sea-result", "chest-draft", "chest-shuffle", "chest-result"].includes(kind)) playBoardModalAudio(event || { detail: { kind, ...detail } });
-    else if (kind === "tavern-result") playBoardPresentationCue("reward", event?.id);
+    else if (kind === "tavern-result" && !["accept", "decline"].includes(detail.tavernOutcome)) playBoardPresentationCue("reward", event?.id);
     return event;
   }
 
@@ -28355,6 +28355,9 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const recruit = detail.recruit || {};
     openSpectatorModal(tavernRecruitResultPanelMarkup({
       cinematic: detail.tavernReveal === true,
+      tavernHost: detail.tavernHost,
+      tavernOutcome: detail.tavernOutcome,
+      spectator: true,
       title: `${detail.islandName || "酒館"} 招募結果`,
       subtitle: `${detail.playerName || "玩家"} 抽中了這位候選人，等待操作方決定是否收下。`,
       recruit,
@@ -43005,7 +43008,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       </div>
     `;
     return `
-      <section class="tavern-result-ui${options.fullCrew ? " is-full-crew" : ""}" aria-labelledby="tavernResultTitle"${options.cinematic ? ` data-tavern-reveal="v1" data-grade="${escapeModalText(grade)}"` : ""}>
+      <section class="tavern-result-ui${options.fullCrew ? " is-full-crew" : ""}" aria-labelledby="tavernResultTitle"${options.cinematic ? ` data-tavern-reveal="v2" data-grade="${escapeModalText(grade)}" data-tavern-host="${escapeModalText(options.tavernHost || "luffy")}" data-tavern-outcome="${escapeModalText(options.tavernOutcome || "invite")}" data-tavern-spectator="${options.spectator ? "1" : "0"}" data-tavern-auto="${options.tavernAuto ? "1" : "0"}"` : ""}>
         <img class="tavern-result-panel-frame" src="${tavernUiAsset("tavern_recruit_result_panel_frame.webp")}" alt="" aria-hidden="true">
         <header class="tavern-result-heading"><h3 id="tavernResultTitle">${escapeModalText(options.title || "酒館招募結果")}</h3></header>
         <div class="tavern-result-subtitle">${escapeModalText(options.subtitle || "")}</div>
@@ -43624,19 +43627,56 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   }
 
   function openRecruitResultModal(player, island, recruit, rollMeta = {}) {
-    emitSpectatorModalEvent("tavern-result", player, {
-      tavernReveal: rollMeta.tavernReveal === true,
+    const cinematic = rollMeta.tavernReveal === true;
+    const tavernHost = cinematic ? (window.BoardTavernCrew?.choose() || "luffy") : "";
+    const presentation = { cinematic, tavernHost, tavernAuto: isCpuPlayer(player) || devObserver.running };
+    const gameAtOpen = state.gameState;
+    const roundAtOpen = gameAtOpen.round;
+    const phaseAtOpen = gameAtOpen.phase;
+    const turnAtOpen = gameAtOpen.currentPlayerIndex;
+    let resultNode = null;
+    let decisionPending = false;
+    let decisionComplete = false;
+    const spectatorDetail = {
+      tavernReveal: cinematic,
+      tavernHost,
       playerName: player?.name || "玩家",
       islandName: island?.name || "酒館",
       title: `${island?.name || "酒館"} 招募結果`,
       subtitle: `${player?.name || "玩家"} 抽中 ${cardDisplayName(recruit)}。`,
       recruit: spectatorCardData(recruit),
       chanceText: formatRecruitChance(Number(rollMeta.chance || 0)),
-    });
+    };
+    emitSpectatorModalEvent("tavern-result", player, spectatorDetail);
+    function decisionIsCurrent() {
+      const backdrop = resultNode?.closest(".board-modal-backdrop");
+      return !!(resultNode?.isConnected && refs.modal.querySelector(".tavern-result-ui") === resultNode &&
+        (!backdrop || backdrop.classList.contains("open")) && state.gameState === gameAtOpen &&
+        gameAtOpen.round === roundAtOpen && gameAtOpen.phase === phaseAtOpen &&
+        gameAtOpen.currentPlayerIndex === turnAtOpen && currentPlayer() === player &&
+        !state.battleState && canBoardLanControlCurrentPlayer(player));
+    }
+    function decide(outcome, action) {
+      if (!cinematic) { action(); return; }
+      if (decisionPending || decisionComplete || !decisionIsCurrent()) return;
+      decisionPending = true;
+      const complete = () => {
+        if (decisionComplete || !decisionIsCurrent()) { decisionPending = false; return; }
+        decisionComplete = true;
+        action();
+      };
+      emitSpectatorModalEvent("tavern-result", player, { ...spectatorDetail, tavernOutcome: outcome }, { clearDelay: 6000 });
+      if (!window.BoardTavernReveal?.respond) { complete(); return; }
+      try {
+        window.BoardTavernReveal.respond(resultNode, outcome, {
+          complete, valid: decisionIsCurrent, cancel: () => { decisionPending = false; },
+        });
+      } catch (_) { complete(); }
+    }
     const chanceText = formatRecruitChance(Number(rollMeta.chance || 0));
     if (player.crew.length < TEAM_LIMIT) {
       openModal(tavernRecruitResultPanelMarkup({
-        cinematic: rollMeta.tavernReveal === true,
+        ...presentation,
         title: `${island.name} 招募結果`,
         subtitle: "抽中的角色可以選擇不加入；放棄時不會加入隊伍，也不會從候選池移除。",
         recruit,
@@ -43646,7 +43686,9 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
           tavernActionButtonMarkup("rejectRecruitBtn", "放棄", "secondary"),
         ].join(""),
       }), "tavern-recruit-result-modal tavern-result-nautical-modal no-backdrop-close");
-      document.getElementById("acceptRecruitBtn")?.addEventListener("click", () => {
+      resultNode = refs.modal.querySelector(".tavern-result-ui");
+      if (cinematic) window.BoardTavernReveal?.watch?.(resultNode, decisionIsCurrent);
+      document.getElementById("acceptRecruitBtn")?.addEventListener("click", () => decide("accept", () => {
         player.crew.push(recruit);
         state.gameState.availableCards = state.gameState.availableCards.filter((entry) => entry.id !== recruit.id);
         clearTavernRecruitBoost(player, recruit.id);
@@ -43654,16 +43696,16 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         addLog(`${player.name} 在 ${island.name} 招募到 ${recruit.name}。`);
         queueRecruitSyncedMoveChoices(player, recruit);
         finishIslandServiceTurn();
-      });
-      document.getElementById("rejectRecruitBtn")?.addEventListener("click", () => {
+      }));
+      document.getElementById("rejectRecruitBtn")?.addEventListener("click", () => decide("decline", () => {
         addLog(`${player.name} 在 ${island.name} 放棄招募 ${recruit.name}。`);
         finishIslandServiceTurn();
-      });
+      }));
       return;
     }
 
     openModal(tavernRecruitResultPanelMarkup({
-      cinematic: rollMeta.tavernReveal === true,
+      ...presentation,
       title: `${island.name} 隊伍已滿`,
       subtitle: `隊伍上限 ${TEAM_LIMIT} 人。你可以放棄新夥伴，或捨棄 1 位舊角色後收下。`,
       recruit,
@@ -43673,8 +43715,10 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       actionsHtml: tavernActionButtonMarkup("rejectFullRecruitBtn", "放棄這次招募", "secondary"),
       singleAction: true,
     }), "tavern-recruit-result-modal tavern-result-nautical-modal no-backdrop-close");
+    resultNode = refs.modal.querySelector(".tavern-result-ui");
+    if (cinematic) window.BoardTavernReveal?.watch?.(resultNode, decisionIsCurrent);
     refs.modal.querySelectorAll("[data-replace-crew]").forEach((button) => {
-      button.addEventListener("click", () => {
+      button.addEventListener("click", () => decide("accept", () => {
         const replaceIndex = Number(button.dataset.replaceCrew);
         const replaced = player.crew[replaceIndex];
         const returnedCarryName = returnBattleCarryFromRemovedCard(player, replaced);
@@ -43690,12 +43734,12 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
         if (returnedCarryName) addLog(`${replaced.name} 的 ${returnedCarryName} 已回到背包。`);
         if (returnedToRecruitPool) addLog(`${replaced.name} 回到可招募角色池。`);
         finishIslandServiceTurn();
-      });
+      }));
     });
-    document.getElementById("rejectFullRecruitBtn")?.addEventListener("click", () => {
+    document.getElementById("rejectFullRecruitBtn")?.addEventListener("click", () => decide("decline", () => {
       addLog(`${player.name} 在 ${island.name} 放棄招募 ${recruit.name}。`);
       finishIslandServiceTurn();
-    });
+    }));
   }
 
   function openEventIslandModal(player, island) {
@@ -61715,10 +61759,12 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
   }
 
   function devObserverVisibleRecruitName() {
-    return document.querySelector(".tavern-result-card .companion-name")?.textContent?.trim() || "";
+    return document.querySelector(".tavern-result-name, .tavern-result-card .companion-name")?.textContent?.trim() || "";
   }
 
   function devObserverVisibleRecruitTier() {
+    const grade = document.querySelector(".tavern-result-ui")?.dataset.grade;
+    if (grade) return legacyTier(grade);
     const badge = document.querySelector(".tavern-result-card .tavern-grade-badge")?.textContent?.trim();
     return legacyTier(badge || "");
   }
@@ -61733,7 +61779,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     return candidates.find((card) => cardDisplayName(card) === name || card.name === name) || {
       name,
       tier: devObserverVisibleRecruitTier() || "T6",
-      roleType: document.querySelector(".tavern-result-card .companion-tier")?.textContent?.trim() || "",
+      roleType: document.querySelector(".tavern-result-meta-grid > span:nth-child(2) strong, .tavern-result-card .companion-tier")?.textContent?.trim() || "",
       baseStats: {},
       level: 1,
     };

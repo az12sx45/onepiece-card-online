@@ -1,5 +1,11 @@
 # Dev Workflow
 
+## 2026-09-28 草帽十人招募分歧演出
+
+本機交付 gate：新版 browser 163、真 Socket.IO 招募同步 44、六色／遮罩 9、既有 state wire 13 項皆通過；獨立響應式角色取景 60+6 畫面通過，含 320x568 羅賓與跳過按鈕碰撞修正。新增兩支 invitation QA、八張 crew_v2 圖與原始 art/QA JSON；CPU 名稱 selector 相容修正、WeakMap 全階段失權取消及小手機取景同步至正式樹。完整範圍與證據見 `BOARD_TAVERN_CREW_20260928.md`、`BOARD_TAVERN_CREW_QA_NOTES_20260928.md`。`npm start` 18929 無正式資料庫，主頁／新資源 200；公開部署仍待 package/runtime 核驗。
+
+酒館加入十位草帽夥伴的獨立邀請／接受／拒絕台詞與表情演出，魯夫固定說「你真有趣，要不要加入我們？」。修改 `board_game.js` 的酒館限定 UI detail／一次性決策保護、HTML 與 allowlist；新增 `board_tavern_crew.js`，更新 reveal JS/CSS，保留原扣款、抽選、收人與替換結算。新素材與 QA／strict 發布 builder 分別記錄於 `BOARD_TAVERN_CREW_20260928.md` 及獨立 art／release plan 文件。正式 D 樹其他工作與 main launcher 1.2.7 保留；目前為本機候選，測試與公開部署證據完成後另記。
+
 ## 2026-09-28 酒館招募演出
 
 正式提交 `1b7227679353fdff6f6c37bf8687152bb7c2f15b` 已發布；台灣時間 03:03:03 公開 runtime 切換為 `package-b5eaebdecfaee7d6`，03:03:18 線上 59 項檢查通過。R2 6 新 SHA 上傳／6036 沿用，7 個變更路徑包含修正版魯夫皆完整 GET／SHA／CORS 通過；其他兩款遊戲版本不變。完整證據為 `BOARD_TAVERN_REVEAL_RELEASE_QA_20260928.json`，測試界線與素材更正見 `BOARD_TAVERN_REVEAL_20260928.md`；收尾文件以 `[skip render]` 提交。

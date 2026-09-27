@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-28",
+  "purpose": "Independent Brook acceptance reaction repairing the original source violin endpoint while preserving the Soul King outfit.",
+  "generator": "Built-in image_gen.imagegen",
+  "fallbackUsed": false,
+  "originalsPreserved": true,
+  "roots": [
+    "D:/Codex_Release_Worktrees/board-voyage-records-v1",
+    "C:/Users/\u738b\u66dc\u744b/.codex/worktrees/tavern-recruit-animation/2026-04-20-1-2-start-html-game-html"
+  ],
+  "outputDirectory": "public/images/board/tavern_recruit/crew_v2",
+  "conversion": {
+    "engine": "sharp",
+    "format": "webp",
+    "quality": 90,
+    "alphaQuality": 100,
+    "effort": 6,
+    "operations": "Format conversion only; generated dimensions and alpha preserved."
+  },
+  "assets": [
+    {
+      "file": "brook_accept.webp",
+      "width": 1024,
+      "height": 1536,
+      "bytes": 266132,
+      "sha256": "09fa3482867cc7d020858b9d091f36b42baa0e3bf63c821fa96823a8a956507f",
+      "originalSHA256": "0ddbaa147589ef4651d62d19e9e419d2e6867b97b42e80f04be883dbfea5b6f4",
+      "generatedOriginal": "C:/Users/\u738b\u66dc\u744b/.codex/generated_images/01a0e411-4955-7d92-9c76-046e305bdad3/exec-4f608b4d-7106-4499-ada4-b502ecf09572.png",
+      "referenceImages": [
+        "public/images/board/tavern_recruit/crew_v2/brook_invite.webp",
+        "public/images/board/story/speakers/brook_banquet.webp"
+      ],
+      "hasAlpha": true,
+      "transparentPixelPercent": 48.3,
+      "subjectBoundsAlpha128": [
+        48,
+        39,
+        1020,
+        1535
+      ],
+      "sideSubjectPixels": 0,
+      "topSubjectPixels": 0,
+      "bottomSubjectPixels": 304,
+      "prompt": "Use case: identity-preserve. Asset type: one independent transparent 2D anime game sprite, Brook warmly welcoming a new companion and playing a celebratory violin phrase. Reference image 1 defines the established complete violin, character design and outfit. Reference image 2 defines the jubilant acceptance expression and lively playing pose but its cropped violin endpoint MUST be repaired, not retained. Keep One Piece Brook's post-timeskip Soul King appearance exactly: very tall thin ivory skeleton, black afro, wide-brim crown hat with gold crown, pink sunglasses sitting on forehead, black tailcoat with golden buttons and cream ruffled cuffs, rich orange feather boa, bright blue neck cravat with pink gems, red trousers with large white flowers. Warm delighted open-jaw laugh rather than grief, his skull turned slightly toward the viewer, a graceful celebratory violin-playing gesture distinct from image 1. Bone hands anatomically correct with five digits each, right hand holding bow, left fingers supporting the violin neck. The complete violin must fit inside the frame, including its rightmost carved scroll, all tuning pegs and strings, both bow endpoints, every finger and the entire crown. Move violin inward and shrink/reframe the whole upper-body composition to leave at least 8 percent canvas-width transparent clearance at both sides. No protruding instrument or limb may touch a side or top edge. Framing is the same head-through-upper-thigh character portrait format as the references; an intentional horizontal lower-thigh composition crop is permitted, but no hands, crown, hair, bow or instrument cropped. Match the references' crisp clean anime cel illustration, same proportions and clothing colors, no new costume or accessories. Portrait 1024x1536 canvas. Actual transparent alpha background, no setting, no floor, no cast shadows or colored haze outside silhouette, no text, musical note symbols, speech bubble, border or collage. One standalone acceptance sprite only. Do not mirror the model.",
+      "visualNotes": "Delighted open-jaw laugh with a distinct violin-playing gesture. Crown, afro, both skeletal hands and fingers, violin scroll/pegs, bow endpoints are complete. Only the intentional lower-thigh composition boundary reaches the canvas bottom. Right instrument margin is four pixels rather than the requested eight percent, but the scroll is fully closed and uncut."
+    }
+  ],
+  "verification": {
+    "individualImageCalls": 1,
+    "visuallyInspected": true,
+    "dimensionsAndAlphaVerified": true,
+    "bothRootsHashIdentical": true,
+    "completeCrownHandsAndViolin": true,
+    "intentionalLowerBodyCrop": true,
+    "note": "Built-in preview may show hidden RGB backdrop. Actual exterior alpha is transparent. Source portrait repair review does not certify in-game layout or official model-sheet exactness."
+  }
+}
+

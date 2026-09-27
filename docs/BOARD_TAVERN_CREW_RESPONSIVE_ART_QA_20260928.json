@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-28",
+  "status": "PASS",
+  "scope": "Independent local headless Chromium visual layout fixtures on the real board_game.html with production BoardTavernReveal.respond and CSS. Wait data-ready and 900ms before measured capture.",
+  "url": "http://localhost:18928/board_game.html",
+  "script": "D:/Codex_QA/board-tavern-crew-20260928/art-review/responsive-art-qa.cjs",
+  "evidenceDirectory": "D:/Codex_QA/board-tavern-crew-20260928/art-review/responsive-art",
+  "main": {
+    "viewports": [
+      [
+        390,
+        844
+      ],
+      [
+        932,
+        430
+      ]
+    ],
+    "hosts": 10,
+    "phases": [
+      "invite",
+      "accept",
+      "decline"
+    ],
+    "cases": 60,
+    "passed": 60,
+    "failed": 0,
+    "result": "result.json",
+    "capturedStageVerified": true
+  },
+  "smallPhone": {
+    "viewport": [
+      320,
+      568
+    ],
+    "cases": 6,
+    "passed": 6,
+    "failed": 0,
+    "result": "small-phone/result.json",
+    "samples": [
+      "robin accept",
+      "usopp accept",
+      "chopper decline",
+      "jinbe accept",
+      "brook invite",
+      "luffy invite"
+    ],
+    "selection": "Four longest total dialogue/reaction-label blocks plus requested crown and straw-hat checks.",
+    "originalFinding": "Robin acceptance animation put a very small visible hair sliver into the skip-button rectangle (14 source-alpha samples, approximately 2.3 square screen pixels).",
+    "originalEvidence": [
+      "small-phone/before-fix-result.json",
+      "small-phone/before-fix-robin-accept-320x568.png"
+    ],
+    "fixOwner": "root",
+    "fix": "Only portrait max-height700 media rule changed hostFrame from inherited top4% / height55% to top10% / height49%; Chopper-specific top13% / height42% unchanged.",
+    "fixedCollisionSamples": 0
+  },
+  "measurements": {
+    "allReadyImagesLoaded": true,
+    "blankHosts": 0,
+    "visibleAlphaAgainstSpeechCollisions": 0,
+    "visibleAlphaAgainstSkipCollisionsAfterFix": 0,
+    "visibleAlphaOutsideViewport": 0,
+    "textOrControlsOverflow": 0,
+    "pageErrors": 0,
+    "httpErrors": 0,
+    "method": "Sample source alpha threshold64 at step2, project through contain-fit object placement and live CSS transformation matrix, apply frame fade alpha, compare visible pixels to speech/skip/viewport. Ignore empty image-element-box overlap."
+  },
+  "visualReview": {
+    "reviewedFocusContactSheets": [
+      "nami-responsive-contact.png",
+      "chopper-responsive-contact.png",
+      "jinbe-responsive-contact.png",
+      "robin-responsive-contact.png",
+      "usopp-responsive-contact.png"
+    ],
+    "focusPhasesReviewed": 30,
+    "smallPhoneIndividuallyReviewed": [
+      "robin accept",
+      "usopp accept",
+      "chopper decline",
+      "jinbe accept",
+      "brook invite",
+      "luffy invite"
+    ],
+    "finding": "No visible head/antler/crown truncation or obscured dialogue in reviewed views. The small Robin hair/skip collision is resolved."
+  },
+  "sourceHashes": {
+    "cssBeforeSmallFix": "9461c1bc187ba69c7dadf00c7abefd30d87e26392cf3789a9d64fc1a0750ee71",
+    "cssFinal": "9e127c79ec4d12795a562da2dd21c9122bac40e362e9b442623cb1d9934b31d6",
+    "revealJs": "ecd3c14a980aa4478a3930dbe62aafa41df2f6220643076f0106670304aea4f6",
+    "crewJs": "201cb7c440213099eaf9480254f2f98eba525481eeb0b597bd19cfa8515e6aa0",
+    "servedHttp200MatchesFormal": true,
+    "onlySmallMediaDeltaVerified": true,
+    "deltaVerification": "Replacing only the new top10%/height49% declaration with the old height55% declaration in-memory reproduces the exact prior CSS SHA. Main60 media conditions do not match changed rule."
+  },
+  "limitations": [
+    "Automated Chromium viewport emulation, not physical-device or human-play acceptance.",
+    "Checks capture one ready+900ms frame per selected phase; not proof of all animation instants or every possible viewport.",
+    "Controlled presentation markup does not test recruitment RNG, settlement, saves or network synchronization.",
+    "No deployment claim. No production files were modified by this QA script."
+  ]
+}
+

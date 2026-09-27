@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-28",
+  "purpose": "Three independent corrected post-timeskip Nami tavern host invitation and decision reaction sprites.",
+  "generator": "Built-in image_gen.imagegen",
+  "fallbackUsed": false,
+  "originalsPreserved": true,
+  "reference": "public/images/board/battle/portraits/evolutions/nami_evolution_2/normal.webp",
+  "roots": [
+    "D:/Codex_Release_Worktrees/board-voyage-records-v1",
+    "C:/Users/\u738b\u66dc\u744b/.codex/worktrees/tavern-recruit-animation/2026-04-20-1-2-start-html-game-html"
+  ],
+  "outputDirectory": "public/images/board/tavern_recruit/crew_v2",
+  "conversion": {
+    "engine": "sharp",
+    "format": "webp",
+    "quality": 90,
+    "alphaQuality": 100,
+    "effort": 6,
+    "operations": "Format conversion only; generated dimensions and alpha preserved."
+  },
+  "assets": [
+    {
+      "file": "nami_invite.webp",
+      "width": 1024,
+      "height": 1536,
+      "bytes": 154730,
+      "sha256": "7894d7574a0f848ae942639ee005e37b8e99fa3b55803dc2a3702d7595c61edd",
+      "originalSHA256": "2d1155a666e05cc1852504ca11cc57161fc527c143cb907c928f7566a905f68d",
+      "hasAlpha": true,
+      "transparentPixelPercent": 74.8,
+      "subjectBoundsAlpha128": [
+        249,
+        16,
+        817,
+        1527
+      ],
+      "generatedOriginal": "C:/Users/\u738b\u66dc\u744b/.codex/generated_images/01a0e411-4955-7d92-9c76-046e305bdad3/exec-81fc33b6-b827-4cee-8c77-98b454258b5d.png",
+      "prompt": "Use case: identity-preserve. Asset type: independent full-body transparent 2D anime game character sprite, tavern invitation. Input image 1 is the exact character identity, hairstyle, outfit and tattoo reference, not a background to keep. Transform this reference into a clean full-body standing Nami from One Piece after the two-year timeskip, head to toe fully inside a portrait 1024x1536 canvas with generous transparent margin around head, hair, both hands and both feet. Preserve her likeness: long orange hair, brown eyes, blue mikan-and-pinwheel tattoo on her LEFT upper arm (viewer-right for a frontal pose), green and white striped halter bikini-style top with green dots on the white band, low-rise blue jeans with visible belt loops and gold button, small white pearl earrings. Use simple orange strappy sandals appropriate to this established outfit. No new hair accessory, no flower clip, no hat, no weapon. She is friendly and confidently inviting a new companion to join the crew at a tavern: a bright natural welcoming open-mouth smile, one hand on her hip and her RIGHT hand extended to the viewer with an open palm, relaxed natural fingers. Her left upper-arm tattoo must remain accurately shaped and visible and her arms must not be mirrored. Keep her face expressive and recognizable in the clean cel-painted anime line style of the reference. No exaggerated anatomy, no extra fingers, no duplicated accessories. Actual transparent background alpha, absolutely no colored sky, clouds, tavern, floor, shadows outside silhouette, special effects, symbols, text, speech bubble, panel or border. This is ONE isolated complete character only, not a sheet or collage. Clear inviting pose, not a combat pose. Keep the reference character design and tattoo faithfully, change the pose and framing as needed.",
+      "visualNotes": "Open invitation palm, friendly open-mouth smile, visible left upper-arm tattoo. Full head, both hands and feet inside canvas."
+    },
+    {
+      "file": "nami_accept.webp",
+      "width": 1024,
+      "height": 1536,
+      "bytes": 158018,
+      "sha256": "b06ebebccb5c600f7cd07f70eccca47bde1981266030a10f2cb3f8ad4936a6ee",
+      "originalSHA256": "0d3869c0feaa11a7b7bd4ab71ccb2b2412ba5e0751939fa7ea04d0ad604ddddc",
+      "hasAlpha": true,
+      "transparentPixelPercent": 73.8,
+      "subjectBoundsAlpha128": [
+        293,
+        14,
+        818,
+        1521
+      ],
+      "generatedOriginal": "C:/Users/\u738b\u66dc\u744b/.codex/generated_images/01a0e411-4955-7d92-9c76-046e305bdad3/exec-8e38f035-4dc3-4cc0-b02e-f260515aba29.png",
+      "prompt": "Use case: identity-preserve. Asset type: independent transparent full-body 2D anime game reaction sprite: welcoming a new companion after they accept the invitation. Reference image 1 is the exact Nami model/outfit/framing to preserve; reference image 2 is supporting original face/tattoo design. Keep the same post-timeskip adult Nami identity, proportions, long orange hairstyle, brown eyes, pearl earrings, blue mikan-and-pinwheel tattoo on HER LEFT upper arm, green-and-white striped halter top with dotted white band, low-rise bright blue jeans with two gold rings at her right hip, and orange strappy sandals. Do not mirror her. Change only pose and expression for the ACCEPT reaction: she beams with a genuine happy open-mouth smile, eyes warmly narrowed (not squeezed completely shut), gives an enthusiastic small thumbs-up with her RIGHT hand held beside her shoulder, and rests her LEFT hand naturally on her hip so the left upper-arm tattoo remains visible. Her stance is upright relaxed with both feet comfortably planted, a sense of 'welcome aboard, we will work well together'. Natural human hands with five fingers, anatomically correct arms and feet. Maintain the exact same rendering, cel-shaded anime finish and clean outlines as reference 1. Head to toe fully inside a portrait 1024x1536 canvas, leave at least 5% clear transparent padding around the entire silhouette including hair, fingers, and both sandals. ONE single complete character, not a collage. Actual transparent background alpha. No background, aura, magic, sparkles, floor, cast shadow, writing, caption, speech bubble, border, new accessories or weapons.",
+      "visualNotes": "Welcoming smile and raised right thumb. Consistent outfit, identity, left-arm tattoo and gold hip rings."
+    },
+    {
+      "file": "nami_decline.webp",
+      "width": 1024,
+      "height": 1536,
+      "bytes": 151950,
+      "sha256": "f027167d10e368def178b990a168ddad97173dedee49699e9adbafadd385aeb5",
+      "originalSHA256": "565ac3d4992df512b0dae8b79505b39c8b5dac454264738870b2b6305f0f8e65",
+      "hasAlpha": true,
+      "transparentPixelPercent": 74.5,
+      "subjectBoundsAlpha128": [
+        164,
+        19,
+        814,
+        1518
+      ],
+      "generatedOriginal": "C:/Users/\u738b\u66dc\u744b/.codex/generated_images/01a0e411-4955-7d92-9c76-046e305bdad3/exec-907dd484-27ec-4e06-99ba-de58b6cc37cd.png",
+      "prompt": "Use case: identity-preserve. Asset type: independent transparent full-body anime game reaction sprite for Nami politely accepting someone's refusal to join. Reference image 1 is the exact model, rendering style and complete outfit to preserve. Keep precisely the same adult post-timeskip One Piece Nami, long orange hair, brown eyes, pearl earrings, blue mikan-and-pinwheel tattoo on HER LEFT upper arm, green-and-white striped halter top with green dotted white band, blue low-rise jeans, two gold rings at her right hip, orange strappy sandals. Never mirror the image or swap the tattoo to the other arm. Change the pose and face only: her face has a small resigned but friendly closed-mouth smile, one eyebrow raised slightly with a tiny sigh, conveying 'well, it's your choice' with no anger, crying, humiliation, injury or hostility. Her RIGHT forearm bends loosely outward at waist/chest height with palm facing upward in an easy small shrug, left hand rests naturally on hip leaving her tattoo clearly visible. Head tilts mildly, shoulders relaxed, straight comfortable standing legs, both feet visible. Natural correct five-finger hands, no duplicate fingers or limbs. Match reference 1 face, body, color palette, line art and cel shading without redesign. Entire character from head to toes inside a portrait 1024x1536 canvas with at least 5% transparent margin around all sides, hands, hair and sandals; no clipped parts. ONE independent isolated sprite. Background must have true transparency alpha. No floor, shadow outside silhouette, backdrop, glows, magic, sparks, lettering, thought cloud, caption, border or new accessories.",
+      "visualNotes": "Small resigned friendly smile, open right palm in a shrug. No angry or injured reaction; complete silhouette."
+    }
+  ],
+  "verification": {
+    "individualImageCalls": 3,
+    "visuallyInspected": true,
+    "dimensionsAndAlphaVerified": true,
+    "bothRootsHashIdentical": true,
+    "clippedSilhouetteAtCanvasEdges": false,
+    "tattooChecks": "Left upper arm remains viewer-right with blue loop, center dot, crossing stem and curved hooks matching existing source. Official model-sheet exactness was not independently verified; official image page access unavailable.",
+    "note": "Built-in image preview may display hidden RGB backdrop. Actual exterior alpha is transparent and WebP preserves generated alpha."
+  }
+}

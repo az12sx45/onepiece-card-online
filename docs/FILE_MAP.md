@@ -1,5 +1,14 @@
 # File Map
 
+## 2026-09-28 草帽十人酒館演出
+
+- `public/js/board_tavern_crew.js`：十人角色資料、三階段台詞／圖／動作、獨立呈現 RNG。
+- `public/js/board_tavern_reveal.js`、`public/css/board_tavern_reveal.css`：邀請、揭曉選擇、接受／婉拒、焦點與取消清理。
+- `public/images/board/tavern_recruit/crew_v2/`：七份角色修正圖，保留原有 story 圖不覆寫。
+- `scripts/board_tavern_invitation_qa.js`：正式招募 handler 的隔離瀏覽器分歧驗證。
+- `scripts/build_board_tavern_crew_release.js`：自 6dc1/b5ea 基準保留全部 6313 媒體的 strict 新版候選建置。
+- `docs/BOARD_TAVERN_CREW_20260928.md`：設計、角色準則、測試與部署結果。
+
 ## 2026-09-28 酒館招募演出
 
 - `config/launcher-announcements-v1.json`：與本次 Board package 綁定的新公告，保留既有公告。

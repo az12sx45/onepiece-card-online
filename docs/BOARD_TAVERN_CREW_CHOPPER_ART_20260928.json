@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-28",
+  "purpose": "Two independent complete-antler post-timeskip Chopper tavern invitation and acceptance sprites.",
+  "generator": "Built-in image_gen.imagegen",
+  "fallbackUsed": false,
+  "originalsPreserved": true,
+  "roots": [
+    "D:/Codex_Release_Worktrees/board-voyage-records-v1",
+    "C:/Users/\u738b\u66dc\u744b/.codex/worktrees/tavern-recruit-animation/2026-04-20-1-2-start-html-game-html"
+  ],
+  "outputDirectory": "public/images/board/tavern_recruit/crew_v2",
+  "conversion": {
+    "engine": "sharp",
+    "format": "webp",
+    "quality": 90,
+    "alphaQuality": 100,
+    "effort": 6,
+    "operations": "Format conversion only; generated dimensions and alpha preserved."
+  },
+  "assets": [
+    {
+      "file": "chopper_invite.webp",
+      "width": 1024,
+      "height": 1536,
+      "bytes": 197616,
+      "sha256": "b9b74f07a250a8cbeb6aa8848ac85118cb8d59e9064e3b98126d60b1653c5104",
+      "originalSHA256": "6e098901438889c5a2d027c87f529fa59d93a920f669fcd41b4d0d55be2902c7",
+      "generatedOriginal": "C:/Users/\u738b\u66dc\u744b/.codex/generated_images/01a0e411-4955-7d92-9c76-046e305bdad3/exec-0c1914ae-0773-4a62-82dc-ced6e76ebeba.png",
+      "referenceImages": [
+        "public/images/board/story/speakers/chopper_determined.webp"
+      ],
+      "hasAlpha": true,
+      "transparentPixelPercent": 53.6,
+      "subjectBoundsAlpha128": [
+        35,
+        138,
+        1010,
+        1470
+      ],
+      "edgeSubjectPixels": 0,
+      "prompt": "Use case: identity-preserve. Asset type: single transparent full-body 2D anime game character invitation sprite. Edit the provided exact Tony Tony Chopper post-timeskip Brain Point reference, retaining its illustration quality and character design. Correct the cropped antlers by showing BOTH entire antlers with every branch and tip intact well inside the canvas. Keep the round blue helmet surrounding his pink fuzzy-rimmed cap with white X, blue nose, brown/tan fur, large black eyes, blue-edged white shirt with yellow vertical stripes, orange shorts, small natural cloven hooves. Do not turn him into a human child, human hands, another creature, or launcher-style mascot icon. Keep his established short small-bodied Brain Point proportions. Change his stern determined face into an earnest friendly invitation: softly lifted eyebrows, small warm open smile, right forehoof raised in an encouraging hello and left forehoof comfortably at his side. No tears on this invitation variant. Complete head-to-toe character including all antlers, both ears, both hooves and both feet, centered on portrait 1024x1536 canvas with at least 8% clear transparent margin around the OUTERMOST antler tips on both sides and above. Outpaint missing antler portions naturally matching their symmetry, material and existing design, do not simply shrink clipped tips. All surrounding background must be genuinely transparent alpha. No scene, floor, cast shadow, color backdrop, lettering, symbols outside his hat, aura, border, collage, or extra accessories. Preserve the reference hat colors, shirt and shorts exactly. One sprite only.",
+      "visualNotes": "Both antlers fully drawn with no clipped tips. Earnest smile and raised right forehoof. Both feet, ears and hands complete. Margin is less than requested but no silhouette edge clipped."
+    },
+    {
+      "file": "chopper_accept.webp",
+      "width": 1024,
+      "height": 1536,
+      "bytes": 189264,
+      "sha256": "f6a922bac71b4acfb5951e0f54ce20ee7c5b5bc5b660699f4f2f1cdf87e39fa0",
+      "originalSHA256": "0b4be8f3be96dd1d3b2a642cd5db4e2332b48ee974361f74654aeed213a0070c",
+      "generatedOriginal": "C:/Users/\u738b\u66dc\u744b/.codex/generated_images/01a0e411-4955-7d92-9c76-046e305bdad3/exec-25ee9f06-7de8-46d5-9f89-f74852431ab9.png",
+      "referenceImages": [
+        "public/images/board/story/speakers/chopper_happy.webp",
+        "C:/Users/\u738b\u66dc\u744b/.codex/generated_images/01a0e411-4955-7d92-9c76-046e305bdad3/exec-0c1914ae-0773-4a62-82dc-ced6e76ebeba.png"
+      ],
+      "hasAlpha": true,
+      "transparentPixelPercent": 59,
+      "subjectBoundsAlpha128": [
+        59,
+        158,
+        999,
+        1431
+      ],
+      "edgeSubjectPixels": 0,
+      "prompt": "Use case: identity-preserve. Asset type: one transparent full-body 2D anime game character acceptance reaction sprite. Input image 1 is the exact Chopper happy emotional-expression edit reference. Input image 2 is the approved full-body invitation sprite, used for matching the same post-timeskip outfit, character proportions and fully drawn antlers. Create ONE separate acceptance reaction of Tony Tony Chopper in his established small Brain Point form. Preserve the round blue helmet, pink fuzzy rim and white X, both brown antlers including the metal ring on his left antler (viewer-right), blue nose, tan fur, black eyes, white shirt with yellow vertical stripes and blue trim, orange shorts, natural cloven forehooves and feet. He is genuinely delighted that the player agrees to join: warm open smile, sparkling eyes, small happy tears, both forehooves clasped together just below the chin like image 1. Complete full body head-to-toe as in image 2; BOTH antlers must be entirely visible with ALL tips intact and no part touching the edge. Make the character slightly smaller in the canvas to leave at least 70 pixels transparent clearance from the outermost antler tips and feet to every edge, on a portrait 1024x1536 canvas. Do not add human hands, extra limbs, extra accessories or lettering. Keep natural recognizable Chopper anatomy and drawing style, not a generic launcher mascot. Crisp anime cel illustration matching reference quality. Genuinely transparent alpha background only, no backdrop, no floor, no shadows or halos outside silhouette, no glow, no frame, no collage. Only one independent sprite.",
+      "visualNotes": "Delighted happy tears and clasped forehooves. Both antlers, ears and feet fully inside canvas. Same blue helmet/pink X cap, striped shirt and shorts as invite. Margin is less than requested but no silhouette edge clipped."
+    }
+  ],
+  "verification": {
+    "individualImageCalls": 2,
+    "visuallyInspected": true,
+    "dimensionsAndAlphaVerified": true,
+    "bothRootsHashIdentical": true,
+    "clippedSilhouetteAtCanvasEdges": false,
+    "note": "Built-in preview may display hidden RGB backdrop. Actual exterior alpha is transparent. This verifies generated assets, not in-game rendering or official model-sheet compliance."
+  }
+}
+

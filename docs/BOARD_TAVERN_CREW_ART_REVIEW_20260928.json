@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-28",
+  "scope": "Selected 10 Straw Hat hosts x invite/accept/decline source-art review.",
+  "status": "SOURCE_ART_REVIEWED_UI_REVIEW_PENDING",
+  "targetedResponsiveQa": "docs/BOARD_TAVERN_CREW_RESPONSIVE_ART_QA_20260928.json",
+  "targetedResponsiveQaStatus": "66 targeted ready+900ms cases passed; full workflow and all-frame acceptance remains separate.",
+  "sourceModule": "public/js/board_tavern_crew.js",
+  "sourceCount": 30,
+  "newArtCount": 8,
+  "mechanicalChecks": {
+    "allSourcePathsExist": true,
+    "allSourcesHaveAlpha": true,
+    "allThirtySourcesSameSHAInFormalAndManaged": true,
+    "finalContactSheetManifestUsesNewBrookAccept": true
+  },
+  "contactSheets": {
+    "directory": "D:/Codex_QA/board-tavern-crew-20260928/art-review",
+    "files": [
+      "luffy.png",
+      "zoro.png",
+      "nami.png",
+      "usopp.png",
+      "sanji.png",
+      "chopper.png",
+      "robin.png",
+      "franky.png",
+      "brook.png",
+      "jinbe.png"
+    ],
+    "manifest": "manifest.json",
+    "detailedReview": "visual-review.json",
+    "method": "Sharp contain fit on checkerboard; source alpha composited; no mirroring and no source-edge concealment.",
+    "rootViewedInitialTenSheets": true,
+    "rootNewBrookSheetReviewPending": false,
+    "rootViewedLatestAllTenSheets": true,
+    "rootReviewedSourcePhases": 30,
+    "rootReviewEvidence": "Parent explicitly confirmed latest Brook acceptance crown, hands and violin complete and the other nine sheets reviewed. Source-art review only; runtime viewport checks separate."
+  },
+  "newAssets": [
+    "nami_invite.webp",
+    "nami_accept.webp",
+    "nami_decline.webp",
+    "chopper_invite.webp",
+    "chopper_accept.webp",
+    "sanji_accept.webp",
+    "brook_invite.webp",
+    "brook_accept.webp"
+  ],
+  "newAssetDirectory": "public/images/board/tavern_recruit/crew_v2",
+  "provenanceDocuments": [
+    "docs/BOARD_TAVERN_CREW_NAMI_ART_20260928.json",
+    "docs/BOARD_TAVERN_CREW_CHOPPER_ART_20260928.json",
+    "docs/BOARD_TAVERN_CREW_SANJI_BROOK_ART_20260928.json",
+    "docs/BOARD_TAVERN_CREW_BROOK_ACCEPT_ART_20260928.json"
+  ],
+  "resolvedFindings": [
+    "Rejected mixed-era new Luffy art is not selected; existing long-sleeve red-shirt, X-scar post-timeskip art retained.",
+    "Nami three new independent reactions retain long orange hair, the same green-white top and jeans, no added flower clip, and left-arm tattoo matching the chosen source.",
+    "Chopper invite and acceptance antlers are fully drawn; no side or top clipping.",
+    "Brook invitation and acceptance use separate sprites with complete violin scroll, pegs, bow and bone hands.",
+    "Sanji invitation and acceptance are separate images maintaining the same hair side, curly eyebrow, suit and plate-serving design.",
+    "Franky filename meanings were visually verified: engineer invitation, cry file double-thumbs-up acceptance, proud file tearful decline."
+  ],
+  "remainingChecks": [
+    "Root to verify Chopper phase framing: new invite/accept full-body versus older knee-up decline.",
+    "Root to verify Jinbe phase framing: invitation closer than full-body accept/decline.",
+    "Root to verify all actual browser desktop/mobile stage transforms and animation states. Existing portrait lower-body composition crops remain intentional."
+  ],
+  "limitations": [
+    "Post-timeskip era and chosen-reference fidelity were visually reviewed; no official pixel-level character model-sheet certification is claimed.",
+    "Nami tattoo side and visible source motif were verified. Official image source access was unavailable, so exact official model-sheet comparison is not claimed.",
+    "The report does not certify animation behavior, RNG, recruitment effects, saves, multiplayer state or deployment."
+  ],
+  "originalsPreserved": true,
+  "noJavaScriptOrCSSChangesByArtAgent": true
+}
+

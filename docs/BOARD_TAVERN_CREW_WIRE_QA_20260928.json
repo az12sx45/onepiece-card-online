@@ -1,0 +1,40 @@
+{
+  "ok": true,
+  "checks": [
+    "Four real Socket.IO players create, join, ready and start a local room",
+    "First snapshot is full for modern and legacy recipients",
+    "Small updates use exact decoded deltas; a legacy recipient still receives full state",
+    "Control handoff accepts the new actor and bootstraps the old publisher with full state",
+    "Stale versions, unauthorized publishers and invalid payloads remain rejected",
+    "Deltas contain the server-preserved settings, not the unaccepted publisher variant",
+    "A missing baseline rejects the delta, requests full recovery and resumes later deltas",
+    "The production receiver rejects corrupt patches and its immutable baseline survives gameplay object mutation",
+    "Explicit STATE_REQUEST sends a full snapshot even when a delta baseline exists",
+    "A new socket reconnects from a full snapshot and resumes delta updates",
+    "Capability negotiation resets on each JOIN_GAME and never sends deltas to legacy clients",
+    "A delayed snapshot from another room is ignored without changing the receiver baseline",
+    "After all four players opt in, each of three recipients receives exact deltas across five further updates"
+  ],
+  "finalVersion": 17,
+  "measurements": {
+    "updatesDelivered": 49,
+    "deltaMessages": 33,
+    "fullMessages": 16,
+    "actualRawBytes": 5918208,
+    "fullRawBytes": 18078431,
+    "actualDeflatedBytes": 1461446,
+    "fullDeflatedBytes": 4441915,
+    "deflatedReductionPercent": 67.1
+  },
+  "fourModernSteadyState": {
+    "updatesDelivered": 15,
+    "deltaMessages": 15,
+    "fullMessages": 0,
+    "actualRawBytes": 8763,
+    "fullRawBytes": 5535555,
+    "actualDeflatedBytes": 6318,
+    "fullDeflatedBytes": 1360623,
+    "deflatedReductionPercent": 99.54
+  },
+  "measurementScope": "Deterministic local fixtures with mixed-client compatibility and recovery checks, then five four-modern-player updates; per-message deflate model, not Render billing or observed human gameplay."
+}

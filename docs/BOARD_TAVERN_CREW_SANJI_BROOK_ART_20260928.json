@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-28",
+  "purpose": "Natural Sanji acceptance and complete-instrument Brook invitation sprites for the tavern crew presentation.",
+  "generator": "Built-in image_gen.imagegen",
+  "fallbackUsed": false,
+  "originalsPreserved": true,
+  "roots": [
+    "D:/Codex_Release_Worktrees/board-voyage-records-v1",
+    "C:/Users/\u738b\u66dc\u744b/.codex/worktrees/tavern-recruit-animation/2026-04-20-1-2-start-html-game-html"
+  ],
+  "outputDirectory": "public/images/board/tavern_recruit/crew_v2",
+  "conversion": {
+    "engine": "sharp",
+    "format": "webp",
+    "quality": 90,
+    "alphaQuality": 100,
+    "effort": 6,
+    "operations": "Format conversion only; original dimensions and exact alpha channel preserved. No crop, redraw, recolor, masking or background removal."
+  },
+  "assets": [
+    {
+      "file": "sanji_accept.webp",
+      "reference": "public/images/board/story/speakers/sanji_cook.webp",
+      "width": 1024,
+      "height": 1536,
+      "bytes": 168528,
+      "sha256": "99fb20cf344bc5f4d23a82a8644dfb5b291a6cfbd4c82903bcc651965d7c54ed",
+      "hasAlpha": true,
+      "transparentPixelPercent": 49.2,
+      "subjectBoundsAlpha128": [20, 34, 1016, 1535],
+      "generatedOriginal": "C:/Users/\u738b\u66dc\u744b/.codex/generated_images/01a0e410-17a2-7a90-a16b-67276404a415/exec-3d97c211-17bf-48f3-9182-3f75a476e96e.png",
+      "generatedOriginalSha256": "96c2f3807907c23de742c6e2bcdd8b502a1bd224f0947d177a5e9f41484eff03",
+      "generatedOriginalBytes": 1656309,
+      "prompt": "Use case: precise-object-edit. Asset type: transparent anime character cutout for a tavern recruitment acceptance reaction in an existing One Piece game. Input image is the edit target and exact character, costume and rendering reference. Make ONE image of Sanji only, same mature non-chibi body proportions, recognizable canonical post-timeskip face. Keep his blond hair covering HIS RIGHT EYE (viewer left), his LEFT EYE visible on viewer right with the distinctive curly eyebrow, small mustache and pointed goatee. Preserve the exact burgundy/magenta two-button suit, black shirt, loose pale silver/white necktie, black gloves, gold buttons and cel-shaded anime linework of the reference. Change his expression into a warm, relaxed, naturally welcoming smile for a new companion joining the crew, no hearts, no tears, no blush, no romantic exaggeration, no combat. He should politely present a white plate of cooked food on his gloved right hand as shown, with the other hand relaxed naturally near his pocket. Reframe just slightly wider: complete hair, shoulders, plate and both hands stay fully inside the canvas with generous transparent space at left and right, about 5-8 percent safety margin. Compose from head to upper thighs, vertical 2:3 canvas, consistent standing posture. True alpha transparent background, not black or a checkerboard. No text, no logo, no border, no other character, no visual effects. Preserve all characteristic outfit details; do not mirror the face. No cropped plate, fingers or hair. Deliver exactly one finished standalone character sprite.",
+      "visualNotes": "Natural small welcoming smile with plated food; burgundy suit, black shirt/gloves and light tie match the original. Hair covers his right eye; left eye remains visible. Complete hair, plate and gloved hands; torso portrait intentionally ends at the upper thighs. Side padding is smaller than the requested 5-8 percent, but no subject intersects top, left or right canvas edges."
+    },
+    {
+      "file": "brook_invite.webp",
+      "reference": "public/images/board/story/speakers/brook_violin.webp",
+      "width": 1024,
+      "height": 1536,
+      "bytes": 257894,
+      "sha256": "b1c30403592ec83836f751abbb48ecfc584fe17f4dbab889ac141f2138a5e129",
+      "hasAlpha": true,
+      "transparentPixelPercent": 52.0,
+      "subjectBoundsAlpha128": [34, 31, 1017, 1535],
+      "generatedOriginal": "C:/Users/\u738b\u66dc\u744b/.codex/generated_images/01a0e410-17a2-7a90-a16b-67276404a415/exec-f8b0e0a8-ee7a-43e0-ba1e-46f8812ce4f6.png",
+      "generatedOriginalSha256": "855e658a7150cafe3ae8d407a3d98f3e301c760e089470f1c9bcdc4aeb3f81ba",
+      "generatedOriginalBytes": 2032173,
+      "prompt": "Use case: precise-object-edit. Asset type: transparent anime character sprite for a warm tavern recruitment invitation in an existing One Piece game. Input image is the edit target and exact character, costume and anime rendering reference. Create ONE corrected portrait of Brook, the mature very tall lanky skeleton musician with a large round black afro. Preserve his canonical Soul King look: the tall GOLD CROWN on the broad-brimmed hat, pink round sunglasses resting above the eye sockets, black suit with gold buttons, voluminous GOLDEN ORANGE feather collar/boa, royal BLUE cravat with three pink gems, and RED trousers with large pale flower patterns. Keep the polished cel-shaded illustration and thin detailed linework of the reference. He is happily inviting a new companion with a cheerful open smiling skull mouth while holding/playing a real wooden violin, friendly not scary. Main correction is wider composition: fit the ENTIRE violin including its neck, tuning pegs and scroll at the viewer-right end fully within frame, and fit the complete bow, BOTH anatomically plausible five-finger skeletal hands, all fingers, hat, crown and afro inside the canvas. Give all these objects at least 6 percent transparent safety margin on every relevant side. The original rightmost violin scroll was cut off: absolutely do not repeat that crop. Keep one violin, one bow, two hands, no extra limb or fingers. Camera head-to-upper-thighs on a vertical 2:3 canvas; center the entire silhouette as a unit, slightly smaller in frame so the outstretched instrument is not cropped. Preserve non-chibi proportions, hairstyle and clothing. Genuine transparent alpha background only, no scenic backdrop, no halo, no black fill, no checkerboard, no text, no logos, no border. Deliver exactly one standalone character cutout.",
+      "visualNotes": "Soul King crown/hat, afro, orange feather collar, blue cravat and red flower trousers match the reference. Open-mouth happy musician pose. Entire violin scroll and pegs, bow, both skeletal hands and crown are visible. Right margin remains narrow (6 pixels beyond alpha128 bounds), but the complete instrument does not intersect the canvas edge. Torso portrait intentionally ends at upper thighs."
+    }
+  ],
+  "verification": {
+    "individualImageCalls": 2,
+    "regenerationCalls": 0,
+    "visuallyInspected": true,
+    "dimensionsAndAlphaVerified": true,
+    "alphaChannelExactMatchToPng": true,
+    "bothRootsHashIdentical": true,
+    "opaquePixelsOnTopLeftRightEdges": 0,
+    "intentionalLowerBodyPortraitCrop": true,
+    "previewHiddenRgbNote": "Image tool previews displayed hidden RGB colors in transparent exterior pixels. Actual alpha0 regions were checked, and a real Chromium white-background capture confirms there is no background halo.",
+    "reviewCapture": "D:/Codex_QA/board-tavern-crew-20260928/sanji-brook-alpha-review.png",
+    "reviewCaptureSha256": "66d3ca56d0ca3e4a5ae3b0a0b417f3692f863320de17ba7a156971c873b1238f",
+    "browserReviewScope": "Automated local Chromium static sprite render only, not in-game, human, physical-device, Electron or production acceptance."
+  }
+}

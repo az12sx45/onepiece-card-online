@@ -1,0 +1,1241 @@
+{
+  "rootUrl": "http://127.0.0.1:18928",
+  "hosts": [
+    "luffy",
+    "zoro",
+    "nami",
+    "usopp",
+    "sanji",
+    "chopper",
+    "robin",
+    "franky",
+    "brook",
+    "jinbe"
+  ],
+  "checks": [
+    "catalog contains exactly ten unique Straw Hat hosts",
+    "Luffy invitation is the exact requested line",
+    "cosmetic host RNG uses no Math.random and only valid hosts",
+    "luffy invitation chooses host once",
+    "luffy initial skip does not make a decision",
+    "luffy accept uses its matching art, line and motion",
+    "luffy accept holds original settlement until reaction completes",
+    "luffy accept settles exactly once without reroll",
+    "luffy invitation chooses host once",
+    "luffy initial skip does not make a decision",
+    "luffy decline uses its matching art, line and motion",
+    "luffy decline holds original settlement until reaction completes",
+    "luffy decline settles exactly once without reroll",
+    "zoro invitation chooses host once",
+    "zoro initial skip does not make a decision",
+    "zoro accept uses its matching art, line and motion",
+    "zoro accept holds original settlement until reaction completes",
+    "zoro accept settles exactly once without reroll",
+    "zoro invitation chooses host once",
+    "zoro initial skip does not make a decision",
+    "zoro decline uses its matching art, line and motion",
+    "zoro decline holds original settlement until reaction completes",
+    "zoro decline settles exactly once without reroll",
+    "nami invitation chooses host once",
+    "nami initial skip does not make a decision",
+    "nami accept uses its matching art, line and motion",
+    "nami accept holds original settlement until reaction completes",
+    "nami accept settles exactly once without reroll",
+    "nami invitation chooses host once",
+    "nami initial skip does not make a decision",
+    "nami decline uses its matching art, line and motion",
+    "nami decline holds original settlement until reaction completes",
+    "nami decline settles exactly once without reroll",
+    "usopp invitation chooses host once",
+    "usopp initial skip does not make a decision",
+    "usopp accept uses its matching art, line and motion",
+    "usopp accept holds original settlement until reaction completes",
+    "usopp accept settles exactly once without reroll",
+    "usopp invitation chooses host once",
+    "usopp initial skip does not make a decision",
+    "usopp decline uses its matching art, line and motion",
+    "usopp decline holds original settlement until reaction completes",
+    "usopp decline settles exactly once without reroll",
+    "sanji invitation chooses host once",
+    "sanji initial skip does not make a decision",
+    "sanji accept uses its matching art, line and motion",
+    "sanji accept holds original settlement until reaction completes",
+    "sanji accept settles exactly once without reroll",
+    "sanji invitation chooses host once",
+    "sanji initial skip does not make a decision",
+    "sanji decline uses its matching art, line and motion",
+    "sanji decline holds original settlement until reaction completes",
+    "sanji decline settles exactly once without reroll",
+    "chopper invitation chooses host once",
+    "chopper initial skip does not make a decision",
+    "chopper accept uses its matching art, line and motion",
+    "chopper accept holds original settlement until reaction completes",
+    "chopper accept settles exactly once without reroll",
+    "chopper invitation chooses host once",
+    "chopper initial skip does not make a decision",
+    "chopper decline uses its matching art, line and motion",
+    "chopper decline holds original settlement until reaction completes",
+    "chopper decline settles exactly once without reroll",
+    "robin invitation chooses host once",
+    "robin initial skip does not make a decision",
+    "robin accept uses its matching art, line and motion",
+    "robin accept holds original settlement until reaction completes",
+    "robin accept settles exactly once without reroll",
+    "robin invitation chooses host once",
+    "robin initial skip does not make a decision",
+    "robin decline uses its matching art, line and motion",
+    "robin decline holds original settlement until reaction completes",
+    "robin decline settles exactly once without reroll",
+    "franky invitation chooses host once",
+    "franky initial skip does not make a decision",
+    "franky accept uses its matching art, line and motion",
+    "franky accept holds original settlement until reaction completes",
+    "franky accept settles exactly once without reroll",
+    "franky invitation chooses host once",
+    "franky initial skip does not make a decision",
+    "franky decline uses its matching art, line and motion",
+    "franky decline holds original settlement until reaction completes",
+    "franky decline settles exactly once without reroll",
+    "brook invitation chooses host once",
+    "brook initial skip does not make a decision",
+    "brook accept uses its matching art, line and motion",
+    "brook accept holds original settlement until reaction completes",
+    "brook accept settles exactly once without reroll",
+    "brook invitation chooses host once",
+    "brook initial skip does not make a decision",
+    "brook decline uses its matching art, line and motion",
+    "brook decline holds original settlement until reaction completes",
+    "brook decline settles exactly once without reroll",
+    "jinbe invitation chooses host once",
+    "jinbe initial skip does not make a decision",
+    "jinbe accept uses its matching art, line and motion",
+    "jinbe accept holds original settlement until reaction completes",
+    "jinbe accept settles exactly once without reroll",
+    "jinbe invitation chooses host once",
+    "jinbe initial skip does not make a decision",
+    "jinbe decline uses its matching art, line and motion",
+    "jinbe decline holds original settlement until reaction completes",
+    "jinbe decline settles exactly once without reroll",
+    "real accept draw deducts exactly 2500 once",
+    "real accept choice keeps result controls inert",
+    "luffy accept uses its matching art, line and motion",
+    "real accept choice runs original settlement once",
+    "real decline draw deducts exactly 2500 once",
+    "real decline choice keeps result controls inert",
+    "luffy decline uses its matching art, line and motion",
+    "real decline choice runs original settlement once",
+    "B K Home cannot escape choice or mutate the game",
+    "choice Tab cycles accept, decline, skip inside dialog",
+    "luffy accept uses its matching art, line and motion",
+    "keyboard Space selects and Escape commits the selected reaction once",
+    "repeated scans keep exactly one overlay",
+    "luffy accept uses its matching art, line and motion",
+    "double click, conflicting click and double skip settle exactly once",
+    "full-team primary requests a replacement",
+    "opening replacement choices does not accept or settle",
+    "luffy accept uses its matching art, line and motion",
+    "replacement uses original six-person crew and pool mutation",
+    "luffy decline uses its matching art, line and motion",
+    "full-team rejection preserves crew and pool",
+    "luffy accept uses its matching art, line and motion",
+    "new-game cancels delayed settlement, including old player closure",
+    "luffy accept uses its matching art, line and motion",
+    "lost-control cancels delayed settlement, including old player closure",
+    "luffy accept uses its matching art, line and motion",
+    "round cancels delayed settlement, including old player closure",
+    "luffy accept uses its matching art, line and motion",
+    "new-modal cancels delayed settlement, including old player closure",
+    "luffy accept uses its matching art, line and motion",
+    "close cancels delayed settlement, including old player closure",
+    "invitation lost-control cancels before a decision and releases overlay",
+    "invitation round cancels before a decision and releases overlay",
+    "invitation new-game cancels before a decision and releases overlay",
+    "choice lost-control cancels before a decision and releases overlay",
+    "choice round cancels before a decision and releases overlay",
+    "choice new-game cancels before a decision and releases overlay",
+    "CPU available slot leaves initial animation without input",
+    "CPU available slot completes existing decision policy",
+    "CPU strong full crew leaves initial animation without input",
+    "CPU strong full crew completes existing decision policy",
+    "CPU weak full crew leaves initial animation without input",
+    "CPU weak full crew completes existing decision policy",
+    "reduced motion leaves original result immediately available",
+    "reduced motion commits the chosen result without waiting",
+    "missing reaction artwork fails open to valid settlement",
+    "missing helper still commits an explicitly chosen result",
+    "non-tavern shared recruitment has no animation",
+    "non-tavern shared recruitment still settles immediately",
+    "spectator invite uses actor host with no choice controls",
+    "spectator accept uses actor host with no choice controls",
+    "spectator decline uses actor host with no choice controls",
+    "spectator replacement and reaction skip never settle authority",
+    "choice controls fit 1440x900",
+    "luffy decline uses its matching art, line and motion",
+    "choice controls fit 390x844",
+    "luffy decline uses its matching art, line and motion",
+    "choice controls fit 932x430",
+    "luffy decline uses its matching art, line and motion",
+    "no browser runtime errors"
+  ],
+  "errors": [],
+  "resources": [
+    {
+      "url": "http://127.0.0.1:18928/images/board/story/speakers/luffy_laugh.webp",
+      "status": 404
+    },
+    {
+      "url": "http://127.0.0.1:18928/images/board/story/speakers/luffy_laugh.webp",
+      "status": 404
+    }
+  ],
+  "screenshots": [
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\luffy-invitation-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\luffy-accept-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\luffy-decline-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\zoro-invitation-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\zoro-accept-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\zoro-decline-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\nami-invitation-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\nami-accept-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\nami-decline-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\usopp-invitation-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\usopp-accept-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\usopp-decline-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\sanji-invitation-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\sanji-accept-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\sanji-decline-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\chopper-invitation-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\chopper-accept-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\chopper-decline-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\robin-invitation-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\robin-accept-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\robin-decline-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\franky-invitation-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\franky-accept-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\franky-decline-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\brook-invitation-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\brook-accept-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\brook-decline-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\jinbe-invitation-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\jinbe-accept-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\jinbe-decline-desktop.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\invitation-1440x900.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\choice-1440x900.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\decline-1440x900.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\invitation-390x844.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\choice-390x844.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\decline-390x844.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\invitation-932x430.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\choice-932x430.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\decline-932x430.png"
+  ],
+  "outcomes": [
+    {
+      "host": "luffy",
+      "outcome": "accept",
+      "before": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 0,
+        "chooseCount": 0
+      },
+      "after": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji",
+          "nami"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji",
+          "nami"
+        ],
+        "pool": [],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 1,
+        "chooseCount": 1
+      }
+    },
+    {
+      "host": "luffy",
+      "outcome": "decline",
+      "before": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 0,
+        "chooseCount": 0
+      },
+      "after": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 1,
+        "chooseCount": 1
+      }
+    },
+    {
+      "host": "zoro",
+      "outcome": "accept",
+      "before": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 0,
+        "chooseCount": 0
+      },
+      "after": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji",
+          "nami"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji",
+          "nami"
+        ],
+        "pool": [],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 1,
+        "chooseCount": 1
+      }
+    },
+    {
+      "host": "zoro",
+      "outcome": "decline",
+      "before": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 0,
+        "chooseCount": 0
+      },
+      "after": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 1,
+        "chooseCount": 1
+      }
+    },
+    {
+      "host": "nami",
+      "outcome": "accept",
+      "before": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 0,
+        "chooseCount": 0
+      },
+      "after": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji",
+          "nami"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji",
+          "nami"
+        ],
+        "pool": [],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 1,
+        "chooseCount": 1
+      }
+    },
+    {
+      "host": "nami",
+      "outcome": "decline",
+      "before": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 0,
+        "chooseCount": 0
+      },
+      "after": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 1,
+        "chooseCount": 1
+      }
+    },
+    {
+      "host": "usopp",
+      "outcome": "accept",
+      "before": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 0,
+        "chooseCount": 0
+      },
+      "after": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji",
+          "nami"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji",
+          "nami"
+        ],
+        "pool": [],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 1,
+        "chooseCount": 1
+      }
+    },
+    {
+      "host": "usopp",
+      "outcome": "decline",
+      "before": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 0,
+        "chooseCount": 0
+      },
+      "after": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 1,
+        "chooseCount": 1
+      }
+    },
+    {
+      "host": "sanji",
+      "outcome": "accept",
+      "before": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 0,
+        "chooseCount": 0
+      },
+      "after": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji",
+          "nami"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji",
+          "nami"
+        ],
+        "pool": [],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 1,
+        "chooseCount": 1
+      }
+    },
+    {
+      "host": "sanji",
+      "outcome": "decline",
+      "before": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 0,
+        "chooseCount": 0
+      },
+      "after": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 1,
+        "chooseCount": 1
+      }
+    },
+    {
+      "host": "chopper",
+      "outcome": "accept",
+      "before": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 0,
+        "chooseCount": 0
+      },
+      "after": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji",
+          "nami"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji",
+          "nami"
+        ],
+        "pool": [],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 1,
+        "chooseCount": 1
+      }
+    },
+    {
+      "host": "chopper",
+      "outcome": "decline",
+      "before": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 0,
+        "chooseCount": 0
+      },
+      "after": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 1,
+        "chooseCount": 1
+      }
+    },
+    {
+      "host": "robin",
+      "outcome": "accept",
+      "before": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 0,
+        "chooseCount": 0
+      },
+      "after": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji",
+          "nami"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji",
+          "nami"
+        ],
+        "pool": [],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 1,
+        "chooseCount": 1
+      }
+    },
+    {
+      "host": "robin",
+      "outcome": "decline",
+      "before": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 0,
+        "chooseCount": 0
+      },
+      "after": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 1,
+        "chooseCount": 1
+      }
+    },
+    {
+      "host": "franky",
+      "outcome": "accept",
+      "before": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 0,
+        "chooseCount": 0
+      },
+      "after": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji",
+          "nami"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji",
+          "nami"
+        ],
+        "pool": [],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 1,
+        "chooseCount": 1
+      }
+    },
+    {
+      "host": "franky",
+      "outcome": "decline",
+      "before": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 0,
+        "chooseCount": 0
+      },
+      "after": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 1,
+        "chooseCount": 1
+      }
+    },
+    {
+      "host": "brook",
+      "outcome": "accept",
+      "before": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 0,
+        "chooseCount": 0
+      },
+      "after": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji",
+          "nami"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji",
+          "nami"
+        ],
+        "pool": [],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 1,
+        "chooseCount": 1
+      }
+    },
+    {
+      "host": "brook",
+      "outcome": "decline",
+      "before": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 0,
+        "chooseCount": 0
+      },
+      "after": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 1,
+        "chooseCount": 1
+      }
+    },
+    {
+      "host": "jinbe",
+      "outcome": "accept",
+      "before": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 0,
+        "chooseCount": 0
+      },
+      "after": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji",
+          "nami"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji",
+          "nami"
+        ],
+        "pool": [],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 1,
+        "chooseCount": 1
+      }
+    },
+    {
+      "host": "jinbe",
+      "outcome": "decline",
+      "before": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 0,
+        "chooseCount": 0
+      },
+      "after": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 1,
+        "chooseCount": 1
+      }
+    },
+    {
+      "cpu": "available slot",
+      "policy": "收下招募：娜美",
+      "after": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji",
+          "nami"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji",
+          "nami"
+        ],
+        "pool": [],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 1,
+        "chooseCount": 1
+      }
+    },
+    {
+      "cpu": "strong full crew",
+      "policy": "放棄招募：娜美 未明顯優於現有隊伍",
+      "after": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "sanji",
+          "law",
+          "robin",
+          "hancock"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "sanji",
+          "law",
+          "robin",
+          "hancock"
+        ],
+        "pool": [
+          "nami"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 1,
+        "chooseCount": 1
+      }
+    },
+    {
+      "cpu": "weak full crew",
+      "policy": "招募替換：娜美 > 香吉士",
+      "after": {
+        "coins": 20000,
+        "crew": [
+          "luffy",
+          "zoro",
+          "nami",
+          "law",
+          "robin",
+          "hancock"
+        ],
+        "originalCrew": [
+          "luffy",
+          "zoro",
+          "nami",
+          "law",
+          "robin",
+          "hancock"
+        ],
+        "pool": [
+          "sanji"
+        ],
+        "candidate": "nami",
+        "rollCost": 2500,
+        "turn": 0,
+        "finished": 1,
+        "chooseCount": 1
+      }
+    }
+  ]
+}

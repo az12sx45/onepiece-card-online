@@ -1,0 +1,83 @@
+{
+  "ok": true,
+  "rootUrl": "http://127.0.0.1:18928",
+  "scope": "Automated local Chromium with controlled fixture state and unmodified production decision handlers. Not human-play or physical-device acceptance.",
+  "hosts": [
+    "luffy",
+    "zoro",
+    "nami",
+    "usopp",
+    "sanji",
+    "chopper",
+    "robin",
+    "franky",
+    "brook",
+    "jinbe"
+  ],
+  "checks": [
+    "S grade retains its exact computed rarity color",
+    "A grade retains its exact computed rarity color",
+    "B grade retains its exact computed rarity color",
+    "C grade retains its exact computed rarity color",
+    "D grade retains its exact computed rarity color",
+    "E grade retains its exact computed rarity color",
+    "real Nami silhouette uses approved alpha mask and black visible pixels",
+    "revealed Nami retains alpha but restores non-black portrait pixels",
+    "rarity and portrait supplement has no browser runtime errors"
+  ],
+  "errors": [],
+  "resources": [],
+  "screenshots": [
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\supplement\\real-nami-silhouette.png",
+    "D:\\Codex_QA\\board-tavern-crew-20260928\\supplement\\real-nami-reveal.png"
+  ],
+  "outcomes": [],
+  "palette": [
+    {
+      "grade": "S",
+      "token": "#ffe27a",
+      "light": "rgb(255, 226, 122)"
+    },
+    {
+      "grade": "A",
+      "token": "#dca4ff",
+      "light": "rgb(220, 164, 255)"
+    },
+    {
+      "grade": "B",
+      "token": "#9fc4ff",
+      "light": "rgb(159, 196, 255)"
+    },
+    {
+      "grade": "C",
+      "token": "#9fdaa9",
+      "light": "rgb(159, 218, 169)"
+    },
+    {
+      "grade": "D",
+      "token": "#cad2db",
+      "light": "rgb(202, 210, 219)"
+    },
+    {
+      "grade": "E",
+      "token": "#d7b786",
+      "light": "rgb(215, 183, 134)"
+    }
+  ],
+  "silhouette": {
+    "mask": "images/board-depth/v1/images-board-battle-portraits-nami-normal-c7027f1b/mask.webp",
+    "filter": "brightness(0)",
+    "opacity": 1,
+    "transparentFraction": 0.56146240234375,
+    "blackFraction": 1,
+    "coloredFraction": 0
+  },
+  "reveal": {
+    "mask": "images/board-depth/v1/images-board-battle-portraits-nami-normal-c7027f1b/mask.webp",
+    "filter": "brightness(1) drop-shadow(rgb(220, 164, 255) 0px 0px 15px)",
+    "opacity": 1,
+    "transparentFraction": 0.56146240234375,
+    "blackFraction": 0,
+    "coloredFraction": 1
+  }
+}

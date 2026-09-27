@@ -93,6 +93,7 @@
         "js/board_start.js",
         "js/board_state_receiver.js",
         "js/board_state_wire.js",
+        "js/board_tavern_crew.js",
         "js/board_tavern_reveal.js",
         "js/board_water_seven_depth.js",
         "js/board_water_seven_depth_data.json",
