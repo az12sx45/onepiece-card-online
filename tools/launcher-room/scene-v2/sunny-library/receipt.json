@@ -1,0 +1,73 @@
+{
+  "schema": "one-piece-room-background-generation/1",
+  "generator": "built-in image_gen.imagegen",
+  "createdAtUtc": "2026-09-27T01:18:51.223361+00:00",
+  "key": "sunny-library-v2",
+  "take": 1,
+  "status": "selected-for-parent-runtime-review",
+  "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0df5a-f51d-7f40-8213-929b1e8bec76\\exec-2f4c9ed1-b58b-4c5b-9226-1f95cce83a4a.png",
+  "source": {
+    "path": "D:\\Codex_QA\\launcher-room-scale-1.1.16\\backgrounds\\sunny-library-v2\\source-01.png",
+    "sha256": "cbe4251e1655f94af4c616cf7ed7a4c30205f589814ff1f5b9d5957a5d1739cd",
+    "size": [
+      1672,
+      941
+    ]
+  },
+  "prompt": {
+    "path": "D:\\Codex_QA\\launcher-room-scale-1.1.16\\backgrounds\\sunny-library-v2\\prompt-01.txt",
+    "sha256": "be6c7432ddc8854e428d5eda3ed4ff2ad397bba7dfe5128605aa7eb34ca3d22d",
+    "exactTextPreserved": true
+  },
+  "references": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-scale-1.1.16\\backgrounds\\room-geometry-guide.png",
+      "sha256": "8dc489259afacb49510fb372b9941519277b03c3fd1c1f617c8147f8d88e6408",
+      "role": "only geometry reference"
+    }
+  ],
+  "imageAncestry": "Only geometry guide; no old scene, character, furniture or root pilot supplied to generation.",
+  "manualInspection": {
+    "method": "view_image and generated native image; approximate visual boundary coordinates",
+    "sourcePixelBounds": {
+      "rearFloorY": 423,
+      "rearFloorX": [
+        275,
+        1393
+      ],
+      "nearFloorY": 883,
+      "nearFloorX": [
+        36,
+        1640
+      ],
+      "doorOuterTop": 286,
+      "doorBottom": 423
+    },
+    "stage960x540": {
+      "rearFloorY": 242.74,
+      "rearFloorDeviationFrom267": 24.26,
+      "rearFloorX": [
+        157.89,
+        799.81
+      ],
+      "nearFloorY": 506.72,
+      "nearFloorDeviationFrom515": 8.28,
+      "doorOuterHeight": 78.62
+    },
+    "hardGate": {
+      "rearFloorWithin30StagePx": true,
+      "nearFloorWithin30StagePx": true,
+      "doorUnder95StagePx": true
+    },
+    "notes": [
+      "Shallow low rear bookshelves about61stagepx overall, modest relative to50px rear adult.",
+      "Only sea water above room. Floor fully empty; no text/people/guide lines."
+    ]
+  },
+  "rawOriginalRetained": true,
+  "productionSourcesModified": false,
+  "selectedCopy": {
+    "path": "D:\\Codex_QA\\launcher-room-scale-1.1.16\\backgrounds\\sunny-library-v2\\source.png",
+    "sha256": "cbe4251e1655f94af4c616cf7ed7a4c30205f589814ff1f5b9d5957a5d1739cd"
+  }
+}

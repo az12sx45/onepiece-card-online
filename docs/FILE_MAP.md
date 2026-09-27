@@ -1,5 +1,16 @@
 # File Map
 
+## 2026-09-27 房間背景與家具比例（1.1.16 候選）
+
+- desktop/launcher-room.js/css：room 專用背景選擇、家具繪圖邊長、地面 root 與互動 dock。
+- public/images/launcher_room/scenes/*-v2.webp：按 FLOOR 與角色尺標重畫的四個 room 背景；舊共享素材保留。
+- desktop/launcher-profile-shop.js、main.js、package.json/lock：房間商品預覽、新場景opui白名單、1.1.16封裝與335項素材smoke。
+- scripts/launcher_room_browser_qa.js、desktop_launcher_package_qa.js：實際root與固定比例、真resolver、來源／review／preserved SHA驗證。
+- tools/launcher-room/scene-v2：四套GPT PNG/prompt/receipt、import-scenes.py、guide、README與final-visual-review/evidence；.gitattributes保留原始bytes。
+- docs/LAUNCHER_ROOM_SCALE_ART_20260927.json：四背景manifest與來源／驗證／保留舊素材SHA。
+- D:\Codex_QA\launcher-room-scale-1.1.16：背景原稿／prompt／receipt、比例稽核與實際房間驗證。
+- 正式 authority 為 D:\Codex_Release_Worktrees\board-voyage-records-v1；本輪 C:\Codex_Candidates\launcher-room-scale-1.1.16 僅隔離 sparse 候選。
+
 ## 2026-09-27 角色辨識與關係表演（1.1.15 已部署）
 
 - desktop/launcher-room-dialogue.js：45組關係、151場604句、無家具回退、表情與聽者反應。

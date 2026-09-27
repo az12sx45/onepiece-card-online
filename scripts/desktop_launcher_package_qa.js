@@ -11,7 +11,7 @@ const PACKAGE_PATH = path.join(DESKTOP_ROOT, 'package.json');
 const PACKAGE_LOCK_PATH = path.join(DESKTOP_ROOT, 'package-lock.json');
 
 const MAX_LAUNCHER_ASSET_BYTES = 128 * 1024 * 1024;
-// 1.1.15 packages 80 full-body atlases and 10 portraits. Keep the existing media
+// 1.1.16 retains the 80 reviewed 1.1.15 atlases and 10 portraits. Keep the existing media
 // budget intact and account for this separately hash-verified resource set.
 const MAX_ROOM_MOTION_ASSET_BYTES = 20 * 1024 * 1024;
 // Immutable historical program manifests are retained for existing installs.
@@ -158,6 +158,7 @@ const EXTRA_RESOURCES = [
     to: 'launcher-assets/images/launcher_room',
     filter: [
       'scenes/sunny-deck.webp', 'scenes/sunny-kitchen.webp', 'scenes/sunny-library.webp',
+      'scenes/crew-cabin-v2.webp', 'scenes/sunny-deck-v2.webp', 'scenes/sunny-kitchen-v2.webp', 'scenes/sunny-library-v2.webp',
       'furniture/helm.webp', 'furniture/map-table.webp', 'furniture/treasure-chest.webp',
       'furniture/tangerine-tree.webp', 'furniture/swords-rack.webp', 'furniture/kitchen-table.webp',
       'furniture/bookshelf.webp', 'furniture/medicine-cabinet.webp', 'furniture/piano.webp',
@@ -509,7 +510,7 @@ function validateZoroArtOverlay(roomManifest, roomDepth, roomWalk) {
 function validateSourcePackage() {
   const packageJson = readJson(PACKAGE_PATH, 'desktop/package.json');
   const packageLock = readJson(PACKAGE_LOCK_PATH, 'desktop/package-lock.json');
-  assert(packageJson.version === '1.1.15', 'Desktop launcher version must be 1.1.15 for revised character likeness and relationship dialogue.');
+  assert(packageJson.version === '1.1.16', 'Desktop launcher version must be 1.1.16 for corrected room and furniture scale.');
   assert(packageLock.version === packageJson.version && packageLock.packages?.['']?.version === packageJson.version, 'package-lock launcher version differs from package.json.');
   assert(packageJson.main === 'main.js', 'desktop/package.json must use main.js as the entrypoint.');
   assert(packageJson.build?.asar === true, 'Desktop app must be packed into ASAR.');
@@ -520,6 +521,23 @@ function validateSourcePackage() {
   assertExactJson(packageJson.dependencies, { 'socket.io-client': '4.8.1' }, 'Runtime dependencies');
   assert(packageLock.packages?.['']?.dependencies?.['socket.io-client'] === '4.8.1', 'package-lock does not pin the approved socket.io-client dependency.');
   assert(packageLock.packages?.['node_modules/socket.io-client']?.version === '4.8.1', 'package-lock resolved socket.io-client to an unexpected version.');
+
+  // Exercise the real resolver so packed-but-unreachable scenery cannot pass.
+  const resolverSource = fs.readFileSync(path.join(DESKTOP_ROOT, 'main.js'), 'utf8')
+    .match(/function resolveLauncherResource\(requestUrl\) \{[\s\S]*?\r?\n\}/)?.[0];
+  assert(resolverSource, 'Launcher resource resolver was not found.');
+  const resolveScene = require('node:vm').runInNewContext(`(${resolverSource})`, {
+    URL, path, LAUNCHER_SCHEME: 'opui', launcherResourceRoot: () => path.join(ROOT, 'public')
+  });
+  for (const key of ['crew-cabin', 'sunny-deck', 'sunny-kitchen', 'sunny-library']) {
+    const relative = `images/launcher_room/scenes/${key}-v2.webp`;
+    assert(resolveScene(`opui://launcher/${relative}`) === path.resolve(ROOT, 'public', relative), `Room scene is blocked by the packaged protocol: ${key}`);
+  }
+  for (const url of ['opui://launcher/images/launcher_room/scenes/unknown-v2.webp',
+    'opui://launcher/images/launcher_room/scenes/crew-cabin-v3.webp',
+    'opui://other/images/launcher_room/scenes/crew-cabin-v2.webp']) {
+    assert(resolveScene(url) === null, `Unexpected room resource was admitted: ${url}`);
+  }
 
   for (const relativePath of APP_FILES.filter((entry) => entry !== 'package.json')) {
     const absolute = path.join(DESKTOP_ROOT, ...relativePath.split('/'));
@@ -590,6 +608,34 @@ function validateSourcePackage() {
   const roomWalk = readJson(path.join(ROOT, 'docs', 'LAUNCHER_ROOM_WALK_ART_20260925.json'), 'launcher grounded walk art manifest');
   const roomBody = readJson(path.join(ROOT, 'docs', 'LAUNCHER_ROOM_FULLBODY_ART_20260927.json'), 'complete character pose manifest');
   const roomGait = readJson(path.join(ROOT, 'docs', 'LAUNCHER_ROOM_WALK_V3_20260927.json'), 'complete character walking manifest');
+  const roomScale = readJson(path.join(ROOT, 'docs', 'LAUNCHER_ROOM_SCALE_ART_20260927.json'), 'room scale background manifest');
+  assert(roomScale.version === '1.1.16' && roomScale.generator === 'OpenAI built-in image_gen' && roomScale.items?.length === 4,
+    'Room scale manifest must cover four GPT room-specific background plates.');
+  assertExactJson(sorted(roomScale.items.map(item => item.key)), sorted(['crew-cabin', 'sunny-deck', 'sunny-kitchen', 'sunny-library']), 'Room scale background key set');
+  for (const item of roomScale.items) {
+    assert(item.asset === `public/images/launcher_room/scenes/${item.key}-v2.webp`, `Unexpected room-specific scene: ${item.key}`);
+    assertExactJson(item.assetPixels, [1600, 900], `Room scale scene dimensions: ${item.key}`);
+    for (const [field, hashField, suffix] of [['sourcePng', 'sourceSha256', 'source.png'], ['prompt', 'promptSha256', 'prompt.txt'], ['receipt', 'receiptSha256', 'receipt.json']]) {
+      assert(item[field] === `tools/launcher-room/scene-v2/${item.key}/${suffix}`, `Room scene source identity differs: ${item.key}/${field}`);
+      assert(sha256File(path.join(ROOT, item[field])) === item[hashField], `Room scene source digest differs: ${item.key}/${field}`);
+    }
+    const scenePath = path.join(ROOT, item.asset);
+    assert(fs.statSync(scenePath).size === item.assetBytes && sha256File(scenePath) === item.assetSha256, `Room scene output differs: ${item.key}`);
+  }
+  assert(roomScale.visualReviewStatus === 'PASS_WITH_NOTES' && Array.isArray(roomScale.dependencies), 'Room scale visual review is required.');
+  const scaleReviewPath = 'tools/launcher-room/scene-v2/final-visual-review.json';
+  assert(roomScale.dependencies.some(item => item.path === scaleReviewPath), 'Missing hash-bound room scale visual review.');
+  for (const item of [...roomScale.dependencies, ...roomScale.preserved]) {
+    assert(typeof item.path === 'string' && !item.path.includes('..') && !path.isAbsolute(item.path), 'Unsafe room scale dependency.');
+    assert(sha256File(path.join(ROOT, item.path)) === item.sha256, `Room scale dependency changed: ${item.path}`);
+  }
+  const scaleReview = readJson(path.join(ROOT, scaleReviewPath), 'room scale visual review');
+  assert(scaleReview.status === 'PASS_WITH_NOTES' && scaleReview.blockingIssues.length === 0, 'Room scale visual review has unresolved issues.');
+  assert(scaleReview.runtimeHashNormalization === 'CRLF to LF only; all other bytes remain significant', 'Unexpected room review hash normalization.');
+  for (const [file, digest] of Object.entries(scaleReview.runtime)) {
+    const reviewedBytes = fs.readFileSync(path.join(ROOT, file), 'utf8').replace(/\r\n/g, '\n');
+    assert(crypto.createHash('sha256').update(reviewedBytes).digest('hex') === digest, `Room runtime differs from reviewed source: ${file}`);
+  }
   const roomMotion = { items: [...roomBody.items, ...roomGait.items], portraits: roomBody.portraits };
   assert(roomBody.version === '1.1.15' && roomGait.version === '1.1.15' &&
     roomBody.canonicalCharactersOnly === true && roomGait.canonicalCharactersOnly === true &&
@@ -627,7 +673,7 @@ function validateSourcePackage() {
     'Room art manifests must cover original, expansion, and 1.1.11 assets.');
   assertExactJson(sorted(roomDepth.items.map(item => item.asset.replace(/^public\/images\/launcher_room\//, ''))),
     sorted(ROOM_DEPTH_ASSETS), 'Room depth/action art asset set');
-  assertExactJson(sorted([...roomManifest.items, ...roomExpansion.items, ...roomDepth.items, ...roomMotion.items, ...roomMotion.portraits].map(item => item.asset.replace(/^public\/images\/launcher_room\//, ''))),
+  assertExactJson(sorted([...roomManifest.items, ...roomExpansion.items, ...roomDepth.items, ...roomMotion.items, ...roomMotion.portraits, ...roomScale.items].map(item => item.asset.replace(/^public\/images\/launcher_room\//, ''))),
     sorted(roomResource.filter), 'Room art manifest output set');
   const zoroOverlay = validateZoroArtOverlay(roomManifest, roomDepth, roomWalk);
   const roomSourceRoot = path.join(ROOT, 'tools', 'launcher-room', 'source-png');

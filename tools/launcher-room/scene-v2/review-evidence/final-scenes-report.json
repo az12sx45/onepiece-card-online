@@ -1,0 +1,90 @@
+{
+  "ok": true,
+  "scope": "Local Chromium with controlled profile, actual final runtime/assets; visual inspection reported separately; no real purchase or physical-device test.",
+  "syntheticArt": false,
+  "syntheticScenes": false,
+  "scripts": {
+    "launcher-room-motion-data.js": "c80bec3b9de6fb033c39e046e70e4975d2d0b6c758b30634a870fa6c2bb8d85f",
+    "launcher-room-dialogue.js": "6c415f3d471a54cb8e26ee51ab5f41e3e060b01ea7da85a8f42a31a44cd22abc",
+    "launcher-room-motion.js": "5acdafeefc61dc5415f1e89a359ba71061edff4bfe2924bbe14d3265df6f10f7",
+    "launcher-room.js": "126008011de8b163804cbd2e27cde0e5c46ab820c7e03ea564e0461bf582a86d"
+  },
+  "reports": [
+    {
+      "key": "crew-cabin",
+      "expected": "opui://launcher/images/launcher_room/scenes/crew-cabin-v2.webp",
+      "desktop": {
+        "background": "opui://launcher/images/launcher_room/scenes/crew-cabin-v2.webp",
+        "decoded": true,
+        "objects": 6,
+        "actors": 6,
+        "unchanged": true
+      },
+      "mobile": {
+        "pans": true,
+        "overflow": 0,
+        "unchanged": true
+      },
+      "errors": [],
+      "missing": [],
+      "ok": true
+    },
+    {
+      "key": "sunny-deck",
+      "expected": "opui://launcher/images/launcher_room/scenes/sunny-deck-v2.webp",
+      "desktop": {
+        "background": "opui://launcher/images/launcher_room/scenes/sunny-deck-v2.webp",
+        "decoded": true,
+        "objects": 6,
+        "actors": 6,
+        "unchanged": true
+      },
+      "mobile": {
+        "pans": true,
+        "overflow": 0,
+        "unchanged": true
+      },
+      "errors": [],
+      "missing": [],
+      "ok": true
+    },
+    {
+      "key": "sunny-kitchen",
+      "expected": "opui://launcher/images/launcher_room/scenes/sunny-kitchen-v2.webp",
+      "desktop": {
+        "background": "opui://launcher/images/launcher_room/scenes/sunny-kitchen-v2.webp",
+        "decoded": true,
+        "objects": 6,
+        "actors": 6,
+        "unchanged": true
+      },
+      "mobile": {
+        "pans": true,
+        "overflow": 0,
+        "unchanged": true
+      },
+      "errors": [],
+      "missing": [],
+      "ok": true
+    },
+    {
+      "key": "sunny-library",
+      "expected": "opui://launcher/images/launcher_room/scenes/sunny-library-v2.webp",
+      "desktop": {
+        "background": "opui://launcher/images/launcher_room/scenes/sunny-library-v2.webp",
+        "decoded": true,
+        "objects": 6,
+        "actors": 6,
+        "unchanged": true
+      },
+      "mobile": {
+        "pans": true,
+        "overflow": 0,
+        "unchanged": true
+      },
+      "errors": [],
+      "missing": [],
+      "ok": true
+    }
+  ]
+}

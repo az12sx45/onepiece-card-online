@@ -26,6 +26,7 @@
   };
   const validIds = (source, max) => [...new Set((Array.isArray(source) ? source : []).map(Number).filter(id => Number.isInteger(id) && id >= 1 && id <= max))].sort((a, b) => a - b);
   const imageFor = (type, key) => {
+    if (type === 'room_scene' && ['sunny-deck', 'sunny-kitchen', 'sunny-library'].includes(key)) return `opui://launcher/images/launcher_room/scenes/${key}-v2.webp`;
     if (type === 'room_character' && ['luffy', 'zoro', 'nami', 'usopp', 'sanji', 'chopper', 'robin', 'franky', 'brook', 'jinbe'].includes(key)) return `opui://launcher/images/launcher_room/portrait_v3/${key}.webp`;
     const id = Number(key);
     if (type === 'avatar' && Number.isInteger(id) && id >= 1 && id <= MAX_AVATAR_ID) return `opui://launcher/images/board/avatars/${id}.webp`;

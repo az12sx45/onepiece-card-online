@@ -6,7 +6,7 @@
   const HEIGHT = 540;
   const ROOM_MAX_CHARACTERS = 8;
   const DEFAULT_SCENE = 'room-scene-default';
-  const SCENE_FALLBACK = 'opui://launcher/images/desktop_launcher/desktop_launcher_cabin_bg_v1.png';
+  const SCENE_FALLBACK = 'opui://launcher/images/launcher_room/scenes/crew-cabin-v2.webp';
   const TYPES = {
     scene: { type: 'room_scene', owned: 'roomScenes', label: '場景' },
     furniture: { type: 'room_furniture', owned: 'roomFurniture', label: '家具' },
@@ -23,14 +23,16 @@
     'swords-rack': [2, 1], 'kitchen-table': [3, 2], bookshelf: [2, 1],
     'medicine-cabinet': [2, 1], piano: [3, 2], 'tool-bench': [2, 2]
   };
-  // Stage pixels at the front row. Perspective changes all furniture and characters together;
-  // older saved scale values remain readable but cannot stretch one prop out of proportion.
+  // Complete 384px drawings, measured at the front row against the accepted crew art.
+  // All four views keep one item scale; saved footprints and placement coordinates stay fixed.
   const FURNITURE_VISUALS = Object.freeze({
-    helm: [140, 148], 'map-table': [188, 116], 'treasure-chest': [126, 100],
-    'tangerine-tree': [143, 161], 'swords-rack': [119, 126],
-    'kitchen-table': [125, 75], bookshelf: [115, 151],
-    'medicine-cabinet': [111, 139], piano: [105, 75], 'tool-bench': [155, 116]
+    helm: 78, 'map-table': 72, 'treasure-chest': 56,
+    'tangerine-tree': 104, 'swords-rack': 84,
+    'kitchen-table': 80.25, bookshelf: 90,
+    'medicine-cabinet': 86, piano: 80.25, 'tool-bench': 76
   });
+  const FURNITURE_CANVAS = 384;
+  const FURNITURE_GROUND_ROOT = Object.freeze([192, 372]);
   const dialogue = window.OnePieceRoomDialogue || null;
   const locomotion = window.OnePieceRoomMotion || null;
   const motionTable = window.OnePieceRoomMotionManifest || null;
@@ -44,6 +46,9 @@
   const catalogAssetFor = item => typeof item?.asset === 'string' && ASSET.test(item.asset) ? item.asset : '';
   const assetFor = item => {
     const source = catalogAssetFor(item);
+    if (source && item?.type === TYPES.scene.type && ['sunny-deck', 'sunny-kitchen', 'sunny-library'].includes(item.key)) {
+      return `opui://launcher/images/launcher_room/scenes/${item.key}-v2.webp`;
+    }
     const key = item?.type === TYPES.character.type ? keyForCharacter(item) : '';
     return source && key ? `opui://launcher/images/launcher_room/portrait_v3/${key}.webp` : source;
   };
@@ -540,7 +545,11 @@
     // The approach cell and persisted footprint stay reserved and unchanged.
     const offsets = { north: [0, 4], south: [0, -27], east: [key === 'piano' ? -24 : -30, -8], west: [key === 'piano' ? 24 : 30, -8] };
     const [dx, dy] = offsets[side];
-    return { x: target.anchor.x + dx * depth, y: target.anchor.y + dy * depth,
+    // Both drawings retain their former 75 * depth visible scale. Their old
+    // 94% translation / 95% origin placed the ground below the grid anchor;
+    // shift the actor by that same amount when aligning the drawing's ground.
+    const priorGroundOffset = 75 * .01 + depth * (75 * FURNITURE_GROUND_ROOT[1] / FURNITURE_CANVAS - 75 * .95);
+    return { x: target.anchor.x + dx * depth, y: target.anchor.y + dy * depth - priorGroundOffset,
       z: Math.round(target.anchor.y) + (side === 'south' ? 9 : 11), side };
   }
   function startFurnitureDock(walker, target) {
@@ -850,10 +859,11 @@
     node.dataset.gridCol = String(cell.col); node.dataset.gridRow = String(cell.row);
     node.dataset.footprint = `${span.width}x${span.height}`;
     if (kind === 'furniture') {
-      const [width, height] = FURNITURE_VISUALS[keyForFurniture(placed.item)] || [150, 128];
-      node.style.setProperty('--room-size', String(round(.72 + .35 * (anchor.y - FLOOR.top) / (FLOOR.bottom - FLOOR.top))));
-      node.style.setProperty('--room-width', `${round(width / WIDTH * 100)}%`);
-      node.style.setProperty('--room-height', `${round(height / HEIGHT * 100)}%`);
+      const size = FURNITURE_VISUALS[keyForFurniture(placed.item)] || 80;
+      const depth = locomotion?.projectedScale?.(anchor.y, FLOOR) || .72 + .35 * (anchor.y - FLOOR.top) / (FLOOR.bottom - FLOOR.top);
+      node.style.setProperty('--room-size', String(depth / 1.07));
+      node.style.setProperty('--room-width', `${size / WIDTH * 100}%`);
+      node.style.setProperty('--room-furniture-root-offset', `${(FURNITURE_CANVAS - FURNITURE_GROUND_ROOT[1]) / FURNITURE_CANVAS * 100}%`);
       node.dataset.rotation = String(rotationFor(entry));
     }
   }

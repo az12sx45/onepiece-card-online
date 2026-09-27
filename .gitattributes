@@ -22,3 +22,5 @@
 /docs/LAUNCHER_ROOM_WALK_V3_20260927.json -text
 /tools/launcher-room/fullbody-v3/** -text
 /tools/launcher-room/walk-v3/** -text
+/docs/LAUNCHER_ROOM_SCALE_ART_20260927.json -text
+/tools/launcher-room/scene-v2/** -text

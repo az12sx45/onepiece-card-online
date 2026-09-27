@@ -1,0 +1,747 @@
+{
+  "scope": "Local Chromium renderer with mocked Electron preload; no real accounts, purchases, or server calls",
+  "checks": [
+    {
+      "name": "catalog includes twelve new canonical-character avatar slots",
+      "pass": true
+    },
+    {
+      "name": "all twelve new avatar files exist",
+      "pass": true
+    },
+    {
+      "name": "catalog includes twenty existing OP music tracks",
+      "pass": true
+    },
+    {
+      "name": "all twenty OP music files exist",
+      "pass": true
+    },
+    {
+      "name": "all launcher panels exist",
+      "pass": true
+    },
+    {
+      "name": "account header uses launcher avatar and retains legacy fallback",
+      "pass": true,
+      "detail": {
+        "equipped": "opui://launcher/images/board/avatars/51.webp",
+        "legacy": "opui://launcher/images/board/avatars/31.webp"
+      }
+    },
+    {
+      "name": "startup shows three honest no-data game cards",
+      "pass": true
+    },
+    {
+      "name": "top card and canonical room render together in integrated profile",
+      "pass": true
+    },
+    {
+      "name": "own profile renders card, board, chess metrics from data",
+      "pass": true,
+      "detail": {
+        "heading": "個人頁",
+        "games": [
+          "card",
+          "board",
+          "chess"
+        ],
+        "gameText": "偉大航道爭霸戰GRAND LINE RIVALRY對局12勝場7勝率58%雲端卡牌戰績新世界航海錄NEW WORLD VOYAGE航海存檔2最近船員5最近懸賞1,500最近貝里300完成航程1雲端航海存檔霸海戰棋PIRATE WAR CHESS對局4勝場2和棋1敗場1伺服器驗證的完成對局",
+        "collection": "頭像 #8目前使用頭像 #31已收藏",
+        "backHidden": true,
+        "avatar": "opui://launcher/images/board/avatars/8.webp"
+      }
+    },
+    {
+      "name": "own collection and avatar render",
+      "pass": true
+    },
+    {
+      "name": "profile navigation is active",
+      "pass": true
+    },
+    {
+      "name": "board collection tab renders saved artwork title",
+      "pass": true
+    },
+    {
+      "name": "friend list renders new avatar 51",
+      "pass": true
+    },
+    {
+      "name": "social friend visit fetches friend id and keeps card read-only",
+      "pass": true,
+      "detail": {
+        "heading": "好友個人頁",
+        "backVisible": true,
+        "cardEditHidden": true,
+        "noShopShortcut": true,
+        "board": "新世界航海錄NEW WORLD VOYAGE尚無可讀取的雲端航海存檔。雲端航海存檔",
+        "call": [
+          "profile",
+          44
+        ]
+      }
+    },
+    {
+      "name": "friend profile renders avatar 51",
+      "pass": true
+    },
+    {
+      "name": "friend missing board data uses truthful empty state",
+      "pass": true
+    },
+    {
+      "name": "friend back button returns to social panel",
+      "pass": true
+    },
+    {
+      "name": "own card edit is visible and redundant captain showroom is gone",
+      "pass": true
+    },
+    {
+      "name": "card editor offers free avatar and only owned premium avatars",
+      "pass": true
+    },
+    {
+      "name": "own card saves editable tagline and follows equipped avatar",
+      "pass": true
+    },
+    {
+      "name": "card save failure keeps draft and existing public card",
+      "pass": true
+    },
+    {
+      "name": "global shop navigation remains available",
+      "pass": true
+    },
+    {
+      "name": "shop displays real balance and disables unaffordable item",
+      "pass": true
+    },
+    {
+      "name": "purchase requires confirmation with exact price",
+      "pass": true
+    },
+    {
+      "name": "purchase updates wallet, ownership, and cloud call",
+      "pass": true
+    },
+    {
+      "name": "equip updates avatar and refreshes profile",
+      "pass": true
+    },
+    {
+      "name": "equipped avatar appears on own profile",
+      "pass": true
+    },
+    {
+      "name": "empty shop category has a visible message",
+      "pass": true
+    },
+    {
+      "name": "shop error clears stale balance and items",
+      "pass": true
+    },
+    {
+      "name": "nonfriend profile denial shows error without stale friend data",
+      "pass": true
+    },
+    {
+      "name": "profile fits 1440px viewport",
+      "pass": true,
+      "detail": {
+        "viewport": 1440,
+        "body": 1440,
+        "panelLeft": 30,
+        "panelRight": 1410,
+        "panelScrollWidth": 1378,
+        "panelClientWidth": 1378
+      }
+    },
+    {
+      "name": "profile hero text is readable at 1440px",
+      "pass": true,
+      "detail": {
+        "copyWidth": 971.4375,
+        "name": "測試船長"
+      }
+    },
+    {
+      "name": "shop navigation and avatar products reachable at 1440px",
+      "pass": true
+    },
+    {
+      "name": "shop fits 1440px viewport",
+      "pass": true,
+      "detail": {
+        "viewport": 1440,
+        "body": 1440,
+        "panelLeft": 30,
+        "panelRight": 1410,
+        "panelScrollWidth": 1378,
+        "panelClientWidth": 1378
+      }
+    },
+    {
+      "name": "profile fits 1024px viewport",
+      "pass": true,
+      "detail": {
+        "viewport": 1024,
+        "body": 1024,
+        "panelLeft": 20,
+        "panelRight": 1004,
+        "panelScrollWidth": 982,
+        "panelClientWidth": 982
+      }
+    },
+    {
+      "name": "profile hero text is readable at 1024px",
+      "pass": true,
+      "detail": {
+        "copyWidth": 602.0625,
+        "name": "測試船長"
+      }
+    },
+    {
+      "name": "shop navigation and avatar products reachable at 1024px",
+      "pass": true
+    },
+    {
+      "name": "shop fits 1024px viewport",
+      "pass": true,
+      "detail": {
+        "viewport": 1024,
+        "body": 1024,
+        "panelLeft": 20,
+        "panelRight": 1004,
+        "panelScrollWidth": 982,
+        "panelClientWidth": 982
+      }
+    },
+    {
+      "name": "profile fits 760px viewport",
+      "pass": true,
+      "detail": {
+        "viewport": 760,
+        "body": 760,
+        "panelLeft": 12,
+        "panelRight": 748,
+        "panelScrollWidth": 734,
+        "panelClientWidth": 734
+      }
+    },
+    {
+      "name": "profile hero text is readable at 760px",
+      "pass": true,
+      "detail": {
+        "copyWidth": 461.59375,
+        "name": "測試船長"
+      }
+    },
+    {
+      "name": "shop navigation and avatar products reachable at 760px",
+      "pass": true
+    },
+    {
+      "name": "shop fits 760px viewport",
+      "pass": true,
+      "detail": {
+        "viewport": 760,
+        "body": 760,
+        "panelLeft": 12,
+        "panelRight": 748,
+        "panelScrollWidth": 734,
+        "panelClientWidth": 734
+      }
+    },
+    {
+      "name": "profile fits 390px viewport",
+      "pass": true,
+      "detail": {
+        "viewport": 390,
+        "body": 390,
+        "panelLeft": 12,
+        "panelRight": 378,
+        "panelScrollWidth": 364,
+        "panelClientWidth": 364
+      }
+    },
+    {
+      "name": "profile hero text is readable at 390px",
+      "pass": true,
+      "detail": {
+        "copyWidth": 203,
+        "name": "測試船長"
+      }
+    },
+    {
+      "name": "shop navigation and avatar products reachable at 390px",
+      "pass": true
+    },
+    {
+      "name": "390px navigation keeps shop visible",
+      "pass": true,
+      "detail": {
+        "scrollWidth": 366,
+        "clientWidth": 366,
+        "scrollLeft": 0,
+        "shopVisible": true
+      }
+    },
+    {
+      "name": "shop fits 390px viewport",
+      "pass": true,
+      "detail": {
+        "viewport": 390,
+        "body": 390,
+        "panelLeft": 12,
+        "panelRight": 378,
+        "panelScrollWidth": 364,
+        "panelClientWidth": 364
+      }
+    },
+    {
+      "name": "locked guestbook explains unlock and hides composer without shop shortcut",
+      "pass": true
+    },
+    {
+      "name": "guestbook catalog is purchasable before unlock",
+      "pass": true
+    },
+    {
+      "name": "guestbook purchase unlocks own composer",
+      "pass": true
+    },
+    {
+      "name": "guestbook post renders text and author",
+      "pass": true
+    },
+    {
+      "name": "owner can delete a comment",
+      "pass": true
+    },
+    {
+      "name": "排版 requires purchase before equip",
+      "pass": true
+    },
+    {
+      "name": "排版 purchase and equip call",
+      "pass": true
+    },
+    {
+      "name": "背景 requires purchase before equip",
+      "pass": true
+    },
+    {
+      "name": "背景 purchase and equip call",
+      "pass": true
+    },
+    {
+      "name": "相框 requires purchase before equip",
+      "pass": true
+    },
+    {
+      "name": "相框 purchase and equip call",
+      "pass": true
+    },
+    {
+      "name": "貼紙 requires purchase before equip",
+      "pass": true
+    },
+    {
+      "name": "貼紙 purchase and equip call",
+      "pass": true
+    },
+    {
+      "name": "音樂 requires purchase before equip",
+      "pass": true
+    },
+    {
+      "name": "音樂 purchase and equip call",
+      "pass": true
+    },
+    {
+      "name": "shop shows purchased GPT character background",
+      "pass": true
+    },
+    {
+      "name": "owned layout, character background, frame and sticker render on top card",
+      "pass": true
+    },
+    {
+      "name": "selected BGM never auto plays on profile open",
+      "pass": true
+    },
+    {
+      "name": "all equipped avatar frames stay round including square source art",
+      "pass": true
+    },
+    {
+      "name": "purchased sticker position and scale remain editable on card",
+      "pass": true
+    },
+    {
+      "name": "BGM plays only after explicit user click",
+      "pass": true
+    },
+    {
+      "name": "BGM stop control works",
+      "pass": true
+    },
+    {
+      "name": "character background stays visible on card at 1440px",
+      "pass": true
+    },
+    {
+      "name": "character background stays visible on card at 390px",
+      "pass": true
+    },
+    {
+      "name": "friend BGM remains silent until visitor clicks",
+      "pass": true
+    },
+    {
+      "name": "friend BGM starts on explicit visitor action",
+      "pass": true
+    },
+    {
+      "name": "friend can post on unlocked guestbook",
+      "pass": true
+    },
+    {
+      "name": "leaving friend profile stops BGM",
+      "pass": true
+    },
+    {
+      "name": "late BGM play completion stays stopped after leaving profile",
+      "pass": true
+    },
+    {
+      "name": "original Ogg BGM decodes, loops, and starts silent",
+      "pass": true,
+      "detail": {
+        "duration": 40.855063,
+        "loop": true,
+        "paused": true,
+        "source": "opui://launcher/audio/profile_bgm/harbor.ogg"
+      }
+    },
+    {
+      "name": "all three original Ogg tracks decode in Chromium",
+      "pass": true,
+      "detail": [
+        {
+          "name": "night-watch",
+          "duration": 46.833281
+        },
+        {
+          "name": "voyage",
+          "duration": 33.107438
+        }
+      ]
+    },
+    {
+      "name": "real Ogg bytes play through the page button after an explicit click",
+      "pass": true,
+      "detail": {
+        "paused": false,
+        "time": 0.102213,
+        "readyState": 4,
+        "elapsedMs": 660,
+        "samples": [
+          {
+            "paused": false,
+            "time": 0,
+            "readyState": 1,
+            "elapsedMs": 0
+          },
+          {
+            "paused": false,
+            "time": 0,
+            "readyState": 1,
+            "elapsedMs": 107
+          },
+          {
+            "paused": false,
+            "time": 0,
+            "readyState": 4,
+            "elapsedMs": 216
+          },
+          {
+            "paused": false,
+            "time": 0,
+            "readyState": 4,
+            "elapsedMs": 328
+          },
+          {
+            "paused": false,
+            "time": 0,
+            "readyState": 4,
+            "elapsedMs": 439
+          },
+          {
+            "paused": false,
+            "time": 0.018519,
+            "readyState": 4,
+            "elapsedMs": 548
+          },
+          {
+            "paused": false,
+            "time": 0.102213,
+            "readyState": 4,
+            "elapsedMs": 660
+          }
+        ],
+        "documentHidden": false,
+        "button": "停止音樂",
+        "status": ""
+      }
+    },
+    {
+      "name": "leaving profile stops real Ogg playback",
+      "pass": true
+    },
+    {
+      "name": "owned BGM can be disabled without losing purchase",
+      "pass": true
+    },
+    {
+      "name": "all twelve new avatars appear in the shop",
+      "pass": true
+    },
+    {
+      "name": "new avatar shop images decode",
+      "pass": true
+    },
+    {
+      "name": "new avatar shows exact coin price before purchase",
+      "pass": true
+    },
+    {
+      "name": "purchased avatar 51 equips and appears in collection",
+      "pass": true
+    },
+    {
+      "name": "twenty OP tracks appear alongside existing original BGM",
+      "pass": true
+    },
+    {
+      "name": "twenty OP tracks fit the 390px shop viewport",
+      "pass": true,
+      "detail": {
+        "pageWidth": 390,
+        "panelWidth": 364,
+        "visibleWidth": 364,
+        "left": 12,
+        "right": 378,
+        "appLeft": 0,
+        "appRight": 390,
+        "profileLeft": 0,
+        "profileRight": 0,
+        "appPadding": [
+          "12px",
+          "12px"
+        ],
+        "gridColumns": "366px",
+        "topbarWidth": 366,
+        "topbarRight": 378
+      }
+    },
+    {
+      "name": "OP track shows exact coin price before purchase",
+      "pass": true
+    },
+    {
+      "name": "selected OP MP3 decodes and waits for manual playback",
+      "pass": true,
+      "detail": {
+        "duration": 240.69805,
+        "loop": true,
+        "paused": true,
+        "source": "opui://launcher/audio/bgm/track01.mp3"
+      }
+    },
+    {
+      "name": "selected OP MP3 plays on explicit click",
+      "pass": true,
+      "detail": {
+        "paused": false,
+        "time": 0.111677,
+        "readyState": 4,
+        "elapsedMs": 110,
+        "samples": [
+          {
+            "paused": false,
+            "time": 0.015126,
+            "readyState": 4,
+            "elapsedMs": 0
+          },
+          {
+            "paused": false,
+            "time": 0.111677,
+            "readyState": 4,
+            "elapsedMs": 110
+          }
+        ],
+        "documentHidden": false,
+        "button": "停止音樂",
+        "status": ""
+      }
+    },
+    {
+      "name": "OP MP3 stops from profile control",
+      "pass": true
+    },
+    {
+      "name": "390px card editor fits and avatar/frame remain circular",
+      "pass": true,
+      "detail": {
+        "page": 390,
+        "panel": 364,
+        "width": 364,
+        "avatarRadius": "50%",
+        "frameRadius": "50%"
+      }
+    },
+    {
+      "name": "late card save after account switch cannot restore previous profile",
+      "pass": true
+    },
+    {
+      "name": "preview mode displays catalog but forbids purchase",
+      "pass": true
+    },
+    {
+      "name": "visible launcher media has local source assets",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "audio requests have no unexpected network failure",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "renderer has no uncaught JavaScript errors",
+      "pass": true,
+      "detail": []
+    }
+  ],
+  "screenshots": [
+    "D:\\Codex_QA\\launcher-room-scale-1.1.16\\profile-shop-final\\profile-room-integrated-1440.png",
+    "D:\\Codex_QA\\launcher-room-scale-1.1.16\\profile-shop-final\\profile-friend-readonly-1440.png",
+    "D:\\Codex_QA\\launcher-room-scale-1.1.16\\profile-shop-final\\profile-1440.png",
+    "D:\\Codex_QA\\launcher-room-scale-1.1.16\\profile-shop-final\\shop-1440.png",
+    "D:\\Codex_QA\\launcher-room-scale-1.1.16\\profile-shop-final\\profile-1024.png",
+    "D:\\Codex_QA\\launcher-room-scale-1.1.16\\profile-shop-final\\shop-1024.png",
+    "D:\\Codex_QA\\launcher-room-scale-1.1.16\\profile-shop-final\\profile-760.png",
+    "D:\\Codex_QA\\launcher-room-scale-1.1.16\\profile-shop-final\\shop-760.png",
+    "D:\\Codex_QA\\launcher-room-scale-1.1.16\\profile-shop-final\\profile-390.png",
+    "D:\\Codex_QA\\launcher-room-scale-1.1.16\\profile-shop-final\\shop-390.png",
+    "D:\\Codex_QA\\launcher-room-scale-1.1.16\\profile-shop-final\\shop-390-products.png",
+    "D:\\Codex_QA\\launcher-room-scale-1.1.16\\profile-shop-final\\shop-background-1440.png",
+    "D:\\Codex_QA\\launcher-room-scale-1.1.16\\profile-shop-final\\shop-background-390.png",
+    "D:\\Codex_QA\\launcher-room-scale-1.1.16\\profile-shop-final\\profile-custom-1440.png",
+    "D:\\Codex_QA\\launcher-room-scale-1.1.16\\profile-shop-final\\profile-custom-stage-1440.png",
+    "D:\\Codex_QA\\launcher-room-scale-1.1.16\\profile-shop-final\\profile-custom-390.png",
+    "D:\\Codex_QA\\launcher-room-scale-1.1.16\\profile-shop-final\\profile-custom-stage-390.png",
+    "D:\\Codex_QA\\launcher-room-scale-1.1.16\\profile-shop-final\\shop-new-avatars-1440.png",
+    "D:\\Codex_QA\\launcher-room-scale-1.1.16\\profile-shop-final\\shop-op-tracks-1440.png",
+    "D:\\Codex_QA\\launcher-room-scale-1.1.16\\profile-shop-final\\shop-op-tracks-390.png",
+    "D:\\Codex_QA\\launcher-room-scale-1.1.16\\profile-shop-final\\profile-card-editor-390.png"
+  ],
+  "missingAssets": [],
+  "errors": [],
+  "audioRequests": [
+    {
+      "relative": "audio/profile_bgm/harbor.ogg",
+      "range": "bytes=0-"
+    },
+    {
+      "relative": "audio/profile_bgm/night-watch.ogg",
+      "range": "bytes=0-"
+    },
+    {
+      "relative": "audio/profile_bgm/voyage.ogg",
+      "range": "bytes=0-"
+    },
+    {
+      "relative": "audio/bgm/track01.mp3",
+      "range": "bytes=0-"
+    },
+    {
+      "relative": "audio/bgm/track01.mp3",
+      "range": "bytes=1048576-"
+    }
+  ],
+  "audioResponses": [
+    {
+      "url": "opui://launcher/audio/profile_bgm/harbor.ogg",
+      "status": 206,
+      "headers": {
+        "accept-ranges": "bytes",
+        "content-length": "490094",
+        "content-type": "audio/ogg",
+        "content-range": "bytes 0-490093/490094"
+      }
+    },
+    {
+      "url": "opui://launcher/audio/profile_bgm/night-watch.ogg",
+      "status": 206,
+      "headers": {
+        "accept-ranges": "bytes",
+        "content-length": "438160",
+        "content-type": "audio/ogg",
+        "content-range": "bytes 0-438159/438160"
+      }
+    },
+    {
+      "url": "opui://launcher/audio/profile_bgm/voyage.ogg",
+      "status": 206,
+      "headers": {
+        "accept-ranges": "bytes",
+        "content-length": "415369",
+        "content-type": "audio/ogg",
+        "content-range": "bytes 0-415368/415369"
+      }
+    },
+    {
+      "url": "opui://launcher/audio/bgm/track01.mp3",
+      "status": 206,
+      "headers": {
+        "accept-ranges": "bytes",
+        "content-length": "3929145",
+        "content-type": "audio/mpeg",
+        "content-range": "bytes 0-3929144/3929145"
+      }
+    },
+    {
+      "url": "opui://launcher/audio/bgm/track01.mp3",
+      "status": 206,
+      "headers": {
+        "accept-ranges": "bytes",
+        "content-length": "2880569",
+        "content-type": "audio/mpeg",
+        "content-range": "bytes 1048576-3929144/3929145"
+      }
+    }
+  ],
+  "audioAborts": [
+    {
+      "url": "opui://launcher/audio/bgm/track01.mp3",
+      "failure": {
+        "errorText": "net::ERR_ABORTED"
+      }
+    },
+    {
+      "url": "opui://launcher/audio/bgm/track01.mp3",
+      "failure": {
+        "errorText": "net::ERR_ABORTED"
+      }
+    }
+  ],
+  "audioFailures": [],
+  "ok": true
+}

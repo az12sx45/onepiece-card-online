@@ -1,6 +1,6 @@
 {
   "name": "onepiece-tabletop-desktop",
-  "version": "1.1.15",
+  "version": "1.1.16",
   "private": true,
   "description": "Windows launcher for ONE PIECE tabletop games with account login, verified game downloads and incremental updates.",
   "main": "main.js",
@@ -132,6 +132,10 @@
           "scenes/sunny-deck.webp",
           "scenes/sunny-kitchen.webp",
           "scenes/sunny-library.webp",
+          "scenes/crew-cabin-v2.webp",
+          "scenes/sunny-deck-v2.webp",
+          "scenes/sunny-kitchen-v2.webp",
+          "scenes/sunny-library-v2.webp",
           "furniture/helm.webp",
           "furniture/map-table.webp",
           "furniture/treasure-chest.webp",

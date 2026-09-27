@@ -1,0 +1,3037 @@
+{
+  "ok": true,
+  "measurements": [
+    {
+      "key": "helm",
+      "rotation": "0",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 588.31594553125,
+        "y": 1006.954667015625
+      },
+      "root": {
+        "x": 588.3125,
+        "y": 1006.9530982971191
+      },
+      "rootError": 0.0037858372053405304,
+      "imageSide": [
+        69.5360107421875,
+        69.5360107421875
+      ],
+      "expectedSide": 69.53942255037967,
+      "sideError": 0.003411808192169019,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "helm",
+      "rotation": "0",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 580.7844289375,
+        "y": 1116.668153921875
+      },
+      "root": {
+        "x": 580.78125,
+        "y": 1116.6562957763672
+      },
+      "rootError": 0.012276858658248154,
+      "imageSide": [
+        80.83837890625,
+        80.83837890625
+      ],
+      "expectedSide": 80.84226986893984,
+      "sideError": 0.0038909626898373517,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "helm",
+      "rotation": "0",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 573.2540464375,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 573.25,
+        "y": 1226.375
+      },
+      "rootError": 0.008327131616435588,
+      "imageSide": [
+        92.140625,
+        92.140625
+      ],
+      "expectedSide": 92.14511718749999,
+      "sideError": 0.0044921874999914735,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "helm",
+      "rotation": "1",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 588.31594553125,
+        "y": 1006.954667015625
+      },
+      "root": {
+        "x": 588.3125,
+        "y": 1006.9530982971191
+      },
+      "rootError": 0.0037858372053405304,
+      "imageSide": [
+        69.5360107421875,
+        69.5360107421875
+      ],
+      "expectedSide": 69.53942255037967,
+      "sideError": 0.003411808192169019,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "helm",
+      "rotation": "1",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 580.7844289375,
+        "y": 1116.668153921875
+      },
+      "root": {
+        "x": 580.78125,
+        "y": 1116.6562957763672
+      },
+      "rootError": 0.012276858658248154,
+      "imageSide": [
+        80.83837890625,
+        80.83837890625
+      ],
+      "expectedSide": 80.84226986893984,
+      "sideError": 0.0038909626898373517,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "helm",
+      "rotation": "1",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 573.2540464375,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 573.25,
+        "y": 1226.375
+      },
+      "rootError": 0.008327131616435588,
+      "imageSide": [
+        92.140625,
+        92.140625
+      ],
+      "expectedSide": 92.14511718749999,
+      "sideError": 0.0044921874999914735,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "helm",
+      "rotation": "2",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 588.31594553125,
+        "y": 1006.954667015625
+      },
+      "root": {
+        "x": 588.3125,
+        "y": 1006.9530982971191
+      },
+      "rootError": 0.0037858372053405304,
+      "imageSide": [
+        69.5360107421875,
+        69.5360107421875
+      ],
+      "expectedSide": 69.53942255037967,
+      "sideError": 0.003411808192169019,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "helm",
+      "rotation": "2",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 580.7844289375,
+        "y": 1116.668153921875
+      },
+      "root": {
+        "x": 580.78125,
+        "y": 1116.6562957763672
+      },
+      "rootError": 0.012276858658248154,
+      "imageSide": [
+        80.83837890625,
+        80.83837890625
+      ],
+      "expectedSide": 80.84226986893984,
+      "sideError": 0.0038909626898373517,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "helm",
+      "rotation": "2",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 573.2540464375,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 573.25,
+        "y": 1226.375
+      },
+      "rootError": 0.008327131616435588,
+      "imageSide": [
+        92.140625,
+        92.140625
+      ],
+      "expectedSide": 92.14511718749999,
+      "sideError": 0.0044921874999914735,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "helm",
+      "rotation": "3",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 588.31594553125,
+        "y": 1006.954667015625
+      },
+      "root": {
+        "x": 588.3125,
+        "y": 1006.9530982971191
+      },
+      "rootError": 0.0037858372053405304,
+      "imageSide": [
+        69.5360107421875,
+        69.5360107421875
+      ],
+      "expectedSide": 69.53942255037967,
+      "sideError": 0.003411808192169019,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "helm",
+      "rotation": "3",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 580.7844289375,
+        "y": 1116.668153921875
+      },
+      "root": {
+        "x": 580.78125,
+        "y": 1116.6562957763672
+      },
+      "rootError": 0.012276858658248154,
+      "imageSide": [
+        80.83837890625,
+        80.83837890625
+      ],
+      "expectedSide": 80.84226986893984,
+      "sideError": 0.0038909626898373517,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "helm",
+      "rotation": "3",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 573.2540464375,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 573.25,
+        "y": 1226.375
+      },
+      "rootError": 0.008327131616435588,
+      "imageSide": [
+        92.140625,
+        92.140625
+      ],
+      "expectedSide": 92.14511718749999,
+      "sideError": 0.0044921874999914735,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "map-table",
+      "rotation": "0",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 614.1585398125001,
+        "y": 1006.954667015625
+      },
+      "root": {
+        "x": 614.15625,
+        "y": 1006.9531555175781
+      },
+      "rootError": 0.002743695980078665,
+      "imageSide": [
+        64.1826171875,
+        64.1826171875
+      ],
+      "expectedSide": 64.19023620035047,
+      "sideError": 0.007619012850469176,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "3x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "map-table",
+      "rotation": "0",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 610.39221446875,
+        "y": 1116.668153921875
+      },
+      "root": {
+        "x": 610.390625,
+        "y": 1116.6563262939453
+      },
+      "rootError": 0.011933951288298182,
+      "imageSide": [
+        74.61474609375,
+        74.61474609375
+      ],
+      "expectedSide": 74.62363372517524,
+      "sideError": 0.008887631425238851,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "3x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "map-table",
+      "rotation": "0",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 606.62702321875,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 606.625,
+        "y": 1226.375
+      },
+      "rootError": 0.007553865144801467,
+      "imageSide": [
+        85.046875,
+        85.046875
+      ],
+      "expectedSide": 85.05703124999998,
+      "sideError": 0.010156249999980105,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "3x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "map-table",
+      "rotation": "1",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 585.8061960625,
+        "y": 1043.526254015625
+      },
+      "root": {
+        "x": 585.796875,
+        "y": 1043.515630722046
+      },
+      "rootError": 0.014132818989751267,
+      "imageSide": [
+        67.659912109375,
+        67.65997314453125
+      ],
+      "expectedSide": 67.66803537529205,
+      "sideError": 0.008123265917049594,
+      "squareError": 0.00006103515625,
+      "fallback": "false",
+      "footprint": "2x3",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "map-table",
+      "rotation": "1",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 578.27467946875,
+        "y": 1153.2397409218752
+      },
+      "root": {
+        "x": 578.265625,
+        "y": 1153.2344245910645
+      },
+      "rootError": 0.010499846552902476,
+      "imageSide": [
+        78.092041015625,
+        78.0921630859375
+      ],
+      "expectedSide": 78.10143290011682,
+      "sideError": 0.009391884491819269,
+      "squareError": 0.0001220703125,
+      "fallback": "false",
+      "footprint": "2x3",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "map-table",
+      "rotation": "1",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 573.2540464375,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 573.25,
+        "y": 1226.375
+      },
+      "rootError": 0.008327131616435588,
+      "imageSide": [
+        85.046875,
+        85.046875
+      ],
+      "expectedSide": 85.05703124999998,
+      "sideError": 0.010156249999980105,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x3",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "map-table",
+      "rotation": "2",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 614.1585398125001,
+        "y": 1006.954667015625
+      },
+      "root": {
+        "x": 614.15625,
+        "y": 1006.9531555175781
+      },
+      "rootError": 0.002743695980078665,
+      "imageSide": [
+        64.1826171875,
+        64.1826171875
+      ],
+      "expectedSide": 64.19023620035047,
+      "sideError": 0.007619012850469176,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "3x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "map-table",
+      "rotation": "2",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 610.39221446875,
+        "y": 1116.668153921875
+      },
+      "root": {
+        "x": 610.390625,
+        "y": 1116.6563262939453
+      },
+      "rootError": 0.011933951288298182,
+      "imageSide": [
+        74.61474609375,
+        74.61474609375
+      ],
+      "expectedSide": 74.62363372517524,
+      "sideError": 0.008887631425238851,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "3x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "map-table",
+      "rotation": "2",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 606.62702321875,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 606.625,
+        "y": 1226.375
+      },
+      "rootError": 0.007553865144801467,
+      "imageSide": [
+        85.046875,
+        85.046875
+      ],
+      "expectedSide": 85.05703124999998,
+      "sideError": 0.010156249999980105,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "3x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "map-table",
+      "rotation": "3",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 585.8061960625,
+        "y": 1043.526254015625
+      },
+      "root": {
+        "x": 585.796875,
+        "y": 1043.515630722046
+      },
+      "rootError": 0.014132818989751267,
+      "imageSide": [
+        67.659912109375,
+        67.65997314453125
+      ],
+      "expectedSide": 67.66803537529205,
+      "sideError": 0.008123265917049594,
+      "squareError": 0.00006103515625,
+      "fallback": "false",
+      "footprint": "2x3",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "map-table",
+      "rotation": "3",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 578.27467946875,
+        "y": 1153.2397409218752
+      },
+      "root": {
+        "x": 578.265625,
+        "y": 1153.2344245910645
+      },
+      "rootError": 0.010499846552902476,
+      "imageSide": [
+        78.092041015625,
+        78.0921630859375
+      ],
+      "expectedSide": 78.10143290011682,
+      "sideError": 0.009391884491819269,
+      "squareError": 0.0001220703125,
+      "fallback": "false",
+      "footprint": "2x3",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "map-table",
+      "rotation": "3",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 573.2540464375,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 573.25,
+        "y": 1226.375
+      },
+      "rootError": 0.008327131616435588,
+      "imageSide": [
+        85.046875,
+        85.046875
+      ],
+      "expectedSide": 85.05703124999998,
+      "sideError": 0.010156249999980105,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x3",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "treasure-chest",
+      "rotation": "0",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 590.82682909375,
+        "y": 970.3837170625
+      },
+      "root": {
+        "x": 590.8125,
+        "y": 970.3750228881836
+      },
+      "rootError": 0.016760417498969178,
+      "imageSide": [
+        47.210205078125,
+        47.210205078125
+      ],
+      "expectedSide": 47.22078435309579,
+      "sideError": 0.010579274970787367,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x1",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "treasure-chest",
+      "rotation": "0",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 583.2953125,
+        "y": 1080.09720396875
+      },
+      "root": {
+        "x": 583.28125,
+        "y": 1080.0937805175781
+      },
+      "rootError": 0.014473214023713928,
+      "imageSide": [
+        55.3232421875,
+        55.3232421875
+      ],
+      "expectedSide": 55.33564909462617,
+      "sideError": 0.012406907126170097,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x1",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "treasure-chest",
+      "rotation": "0",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 573.2540464375,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 573.25,
+        "y": 1226.375
+      },
+      "rootError": 0.008327131616435588,
+      "imageSide": [
+        66.140625,
+        66.140625
+      ],
+      "expectedSide": 66.15546874999998,
+      "sideError": 0.014843749999982947,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x1",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "treasure-chest",
+      "rotation": "1",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 562.4744853437501,
+        "y": 1006.954667015625
+      },
+      "root": {
+        "x": 562.46875,
+        "y": 1006.9531097412109
+      },
+      "rootError": 0.005943001895687838,
+      "imageSide": [
+        49.91455078125,
+        49.91455078125
+      ],
+      "expectedSide": 49.925739266939246,
+      "sideError": 0.011188485689245908,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "1x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "treasure-chest",
+      "rotation": "1",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 551.1777775,
+        "y": 1116.668153921875
+      },
+      "root": {
+        "x": 551.171875,
+        "y": 1116.6562423706055
+      },
+      "rootError": 0.013293778992383013,
+      "imageSide": [
+        58.027587890625,
+        58.027587890625
+      ],
+      "expectedSide": 58.04060400846962,
+      "sideError": 0.013016117844621533,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "1x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "treasure-chest",
+      "rotation": "1",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 539.88106965625,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 539.875,
+        "y": 1226.375
+      },
+      "rootError": 0.009476718393464352,
+      "imageSide": [
+        66.140625,
+        66.140625
+      ],
+      "expectedSide": 66.15546874999998,
+      "sideError": 0.014843749999982947,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "1x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "treasure-chest",
+      "rotation": "2",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 590.82682909375,
+        "y": 970.3837170625
+      },
+      "root": {
+        "x": 590.8125,
+        "y": 970.3750228881836
+      },
+      "rootError": 0.016760417498969178,
+      "imageSide": [
+        47.210205078125,
+        47.210205078125
+      ],
+      "expectedSide": 47.22078435309579,
+      "sideError": 0.010579274970787367,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x1",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "treasure-chest",
+      "rotation": "2",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 583.2953125,
+        "y": 1080.09720396875
+      },
+      "root": {
+        "x": 583.28125,
+        "y": 1080.0937805175781
+      },
+      "rootError": 0.014473214023713928,
+      "imageSide": [
+        55.3232421875,
+        55.3232421875
+      ],
+      "expectedSide": 55.33564909462617,
+      "sideError": 0.012406907126170097,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x1",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "treasure-chest",
+      "rotation": "2",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 573.2540464375,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 573.25,
+        "y": 1226.375
+      },
+      "rootError": 0.008327131616435588,
+      "imageSide": [
+        66.140625,
+        66.140625
+      ],
+      "expectedSide": 66.15546874999998,
+      "sideError": 0.014843749999982947,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x1",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "treasure-chest",
+      "rotation": "3",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 562.4744853437501,
+        "y": 1006.954667015625
+      },
+      "root": {
+        "x": 562.46875,
+        "y": 1006.9531097412109
+      },
+      "rootError": 0.005943001895687838,
+      "imageSide": [
+        49.91455078125,
+        49.91455078125
+      ],
+      "expectedSide": 49.925739266939246,
+      "sideError": 0.011188485689245908,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "1x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "treasure-chest",
+      "rotation": "3",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 551.1777775,
+        "y": 1116.668153921875
+      },
+      "root": {
+        "x": 551.171875,
+        "y": 1116.6562423706055
+      },
+      "rootError": 0.013293778992383013,
+      "imageSide": [
+        58.027587890625,
+        58.027587890625
+      ],
+      "expectedSide": 58.04060400846962,
+      "sideError": 0.013016117844621533,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "1x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "treasure-chest",
+      "rotation": "3",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 539.88106965625,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 539.875,
+        "y": 1226.375
+      },
+      "rootError": 0.009476718393464352,
+      "imageSide": [
+        66.140625,
+        66.140625
+      ],
+      "expectedSide": 66.15546874999998,
+      "sideError": 0.014843749999982947,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "1x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "tangerine-tree",
+      "rotation": "0",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 588.31594553125,
+        "y": 1006.954667015625
+      },
+      "root": {
+        "x": 588.3125,
+        "y": 1006.9531288146973
+      },
+      "rootError": 0.0037732940103839237,
+      "imageSide": [
+        92.7186279296875,
+        92.7186279296875
+      ],
+      "expectedSide": 92.7192300671729,
+      "sideError": 0.0006021374854014994,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "tangerine-tree",
+      "rotation": "0",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 580.7844289375,
+        "y": 1116.668153921875
+      },
+      "root": {
+        "x": 580.78125,
+        "y": 1116.6562519073486
+      },
+      "rootError": 0.012319236722135363,
+      "imageSide": [
+        107.7890625,
+        107.78900146484375
+      ],
+      "expectedSide": 107.78969315858645,
+      "sideError": 0.0006916937426950653,
+      "squareError": 0.00006103515625,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "tangerine-tree",
+      "rotation": "0",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 573.2540464375,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 573.25,
+        "y": 1226.375
+      },
+      "rootError": 0.008327131616435588,
+      "imageSide": [
+        122.859375,
+        122.859375
+      ],
+      "expectedSide": 122.86015624999999,
+      "sideError": 0.0007812499999886313,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "tangerine-tree",
+      "rotation": "1",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 588.31594553125,
+        "y": 1006.954667015625
+      },
+      "root": {
+        "x": 588.3125,
+        "y": 1006.9531288146973
+      },
+      "rootError": 0.0037732940103839237,
+      "imageSide": [
+        92.7186279296875,
+        92.7186279296875
+      ],
+      "expectedSide": 92.7192300671729,
+      "sideError": 0.0006021374854014994,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "tangerine-tree",
+      "rotation": "1",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 580.7844289375,
+        "y": 1116.668153921875
+      },
+      "root": {
+        "x": 580.78125,
+        "y": 1116.6562519073486
+      },
+      "rootError": 0.012319236722135363,
+      "imageSide": [
+        107.7890625,
+        107.78900146484375
+      ],
+      "expectedSide": 107.78969315858645,
+      "sideError": 0.0006916937426950653,
+      "squareError": 0.00006103515625,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "tangerine-tree",
+      "rotation": "1",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 573.2540464375,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 573.25,
+        "y": 1226.375
+      },
+      "rootError": 0.008327131616435588,
+      "imageSide": [
+        122.859375,
+        122.859375
+      ],
+      "expectedSide": 122.86015624999999,
+      "sideError": 0.0007812499999886313,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "tangerine-tree",
+      "rotation": "2",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 588.31594553125,
+        "y": 1006.954667015625
+      },
+      "root": {
+        "x": 588.3125,
+        "y": 1006.9531288146973
+      },
+      "rootError": 0.0037732940103839237,
+      "imageSide": [
+        92.7186279296875,
+        92.7186279296875
+      ],
+      "expectedSide": 92.7192300671729,
+      "sideError": 0.0006021374854014994,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "tangerine-tree",
+      "rotation": "2",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 580.7844289375,
+        "y": 1116.668153921875
+      },
+      "root": {
+        "x": 580.78125,
+        "y": 1116.6562519073486
+      },
+      "rootError": 0.012319236722135363,
+      "imageSide": [
+        107.7890625,
+        107.78900146484375
+      ],
+      "expectedSide": 107.78969315858645,
+      "sideError": 0.0006916937426950653,
+      "squareError": 0.00006103515625,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "tangerine-tree",
+      "rotation": "2",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 573.2540464375,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 573.25,
+        "y": 1226.375
+      },
+      "rootError": 0.008327131616435588,
+      "imageSide": [
+        122.859375,
+        122.859375
+      ],
+      "expectedSide": 122.86015624999999,
+      "sideError": 0.0007812499999886313,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "tangerine-tree",
+      "rotation": "3",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 588.31594553125,
+        "y": 1006.954667015625
+      },
+      "root": {
+        "x": 588.3125,
+        "y": 1006.9531288146973
+      },
+      "rootError": 0.0037732940103839237,
+      "imageSide": [
+        92.7186279296875,
+        92.7186279296875
+      ],
+      "expectedSide": 92.7192300671729,
+      "sideError": 0.0006021374854014994,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "tangerine-tree",
+      "rotation": "3",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 580.7844289375,
+        "y": 1116.668153921875
+      },
+      "root": {
+        "x": 580.78125,
+        "y": 1116.6562519073486
+      },
+      "rootError": 0.012319236722135363,
+      "imageSide": [
+        107.7890625,
+        107.78900146484375
+      ],
+      "expectedSide": 107.78969315858645,
+      "sideError": 0.0006916937426950653,
+      "squareError": 0.00006103515625,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "tangerine-tree",
+      "rotation": "3",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 573.2540464375,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 573.25,
+        "y": 1226.375
+      },
+      "rootError": 0.008327131616435588,
+      "imageSide": [
+        122.859375,
+        122.859375
+      ],
+      "expectedSide": 122.86015624999999,
+      "sideError": 0.0007812499999886313,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "swords-rack",
+      "rotation": "0",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 590.82682909375,
+        "y": 970.3837170625
+      },
+      "root": {
+        "x": 590.8125,
+        "y": 970.3749847412109
+      },
+      "rootError": 0.016780237268617652,
+      "imageSide": [
+        70.82080078125,
+        70.82080078125
+      ],
+      "expectedSide": 70.83117652964368,
+      "sideError": 0.010375748393684603,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x1",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "swords-rack",
+      "rotation": "0",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 583.2953125,
+        "y": 1080.09720396875
+      },
+      "root": {
+        "x": 583.2812194824219,
+        "y": 1080.0937728881836
+      },
+      "rootError": 0.014504670224121887,
+      "imageSide": [
+        82.99139404296875,
+        82.991455078125
+      ],
+      "expectedSide": 83.00347364193927,
+      "sideError": 0.012079598970515804,
+      "squareError": 0.00006103515625,
+      "fallback": "false",
+      "footprint": "2x1",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "swords-rack",
+      "rotation": "0",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 573.2540464375,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 573.25,
+        "y": 1226.375
+      },
+      "rootError": 0.008327131616435588,
+      "imageSide": [
+        99.21875,
+        99.21875
+      ],
+      "expectedSide": 99.23320312499997,
+      "sideError": 0.01445312499997442,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x1",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "swords-rack",
+      "rotation": "1",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 562.4744853437501,
+        "y": 1006.954667015625
+      },
+      "root": {
+        "x": 562.46875,
+        "y": 1006.9531631469727
+      },
+      "rootError": 0.005929231725523986,
+      "imageSide": [
+        74.877685546875,
+        74.877685546875
+      ],
+      "expectedSide": 74.88860890040887,
+      "sideError": 0.010923353533868863,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "1x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "swords-rack",
+      "rotation": "1",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 551.1777775,
+        "y": 1116.668153921875
+      },
+      "root": {
+        "x": 551.171875,
+        "y": 1116.65620803833
+      },
+      "rootError": 0.013324550270853075,
+      "imageSide": [
+        87.0482177734375,
+        87.0482177734375
+      ],
+      "expectedSide": 87.06090601270444,
+      "sideError": 0.012688239266935852,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "1x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "swords-rack",
+      "rotation": "1",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 539.88106965625,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 539.875,
+        "y": 1226.375
+      },
+      "rootError": 0.009476718393464352,
+      "imageSide": [
+        99.21875,
+        99.21875
+      ],
+      "expectedSide": 99.23320312499997,
+      "sideError": 0.01445312499997442,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "1x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "swords-rack",
+      "rotation": "2",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 590.82682909375,
+        "y": 970.3837170625
+      },
+      "root": {
+        "x": 590.8125,
+        "y": 970.3749847412109
+      },
+      "rootError": 0.016780237268617652,
+      "imageSide": [
+        70.82080078125,
+        70.82080078125
+      ],
+      "expectedSide": 70.83117652964368,
+      "sideError": 0.010375748393684603,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x1",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "swords-rack",
+      "rotation": "2",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 583.2953125,
+        "y": 1080.09720396875
+      },
+      "root": {
+        "x": 583.2812194824219,
+        "y": 1080.0937728881836
+      },
+      "rootError": 0.014504670224121887,
+      "imageSide": [
+        82.99139404296875,
+        82.991455078125
+      ],
+      "expectedSide": 83.00347364193927,
+      "sideError": 0.012079598970515804,
+      "squareError": 0.00006103515625,
+      "fallback": "false",
+      "footprint": "2x1",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "swords-rack",
+      "rotation": "2",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 573.2540464375,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 573.25,
+        "y": 1226.375
+      },
+      "rootError": 0.008327131616435588,
+      "imageSide": [
+        99.21875,
+        99.21875
+      ],
+      "expectedSide": 99.23320312499997,
+      "sideError": 0.01445312499997442,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x1",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "swords-rack",
+      "rotation": "3",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 562.4744853437501,
+        "y": 1006.954667015625
+      },
+      "root": {
+        "x": 562.46875,
+        "y": 1006.9531631469727
+      },
+      "rootError": 0.005929231725523986,
+      "imageSide": [
+        74.877685546875,
+        74.877685546875
+      ],
+      "expectedSide": 74.88860890040887,
+      "sideError": 0.010923353533868863,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "1x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "swords-rack",
+      "rotation": "3",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 551.1777775,
+        "y": 1116.668153921875
+      },
+      "root": {
+        "x": 551.171875,
+        "y": 1116.65620803833
+      },
+      "rootError": 0.013324550270853075,
+      "imageSide": [
+        87.0482177734375,
+        87.0482177734375
+      ],
+      "expectedSide": 87.06090601270444,
+      "sideError": 0.012688239266935852,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "1x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "swords-rack",
+      "rotation": "3",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 539.88106965625,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 539.875,
+        "y": 1226.375
+      },
+      "rootError": 0.009476718393464352,
+      "imageSide": [
+        99.21875,
+        99.21875
+      ],
+      "expectedSide": 99.23320312499997,
+      "sideError": 0.01445312499997442,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "1x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "kitchen-table",
+      "rotation": "0",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 614.1585398125001,
+        "y": 1006.954667015625
+      },
+      "root": {
+        "x": 614.15625,
+        "y": 1006.9530773162842
+      },
+      "rootError": 0.002787541081238786,
+      "imageSide": [
+        71.5406494140625,
+        71.54058837890625
+      ],
+      "expectedSide": 71.54536743164061,
+      "sideError": 0.004779052734363631,
+      "squareError": 0.00006103515625,
+      "fallback": "false",
+      "footprint": "3x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "kitchen-table",
+      "rotation": "0",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 610.39221446875,
+        "y": 1116.668153921875
+      },
+      "root": {
+        "x": 610.390625,
+        "y": 1116.6562271118164
+      },
+      "rootError": 0.012032257023606677,
+      "imageSide": [
+        83.168701171875,
+        83.168701171875
+      ],
+      "expectedSide": 83.17425842285157,
+      "sideError": 0.005557250976565342,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "3x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "kitchen-table",
+      "rotation": "0",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 606.62702321875,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 606.625,
+        "y": 1226.375
+      },
+      "rootError": 0.007553865144801467,
+      "imageSide": [
+        94.796875,
+        94.796875
+      ],
+      "expectedSide": 94.80314941406249,
+      "sideError": 0.006274414062488631,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "3x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "kitchen-table",
+      "rotation": "1",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 585.8061960625,
+        "y": 1043.526254015625
+      },
+      "root": {
+        "x": 585.7968444824219,
+        "y": 1043.5155448913574
+      },
+      "rootError": 0.014217503034513605,
+      "imageSide": [
+        75.41668701171875,
+        75.4166259765625
+      ],
+      "expectedSide": 75.42166442871093,
+      "sideError": 0.005038452148426131,
+      "squareError": 0.00006103515625,
+      "fallback": "false",
+      "footprint": "2x3",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "kitchen-table",
+      "rotation": "1",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 578.27467946875,
+        "y": 1153.2397409218752
+      },
+      "root": {
+        "x": 578.265625,
+        "y": 1153.2344360351562
+      },
+      "rootError": 0.010494056767813578,
+      "imageSide": [
+        87.0447998046875,
+        87.044921875
+      ],
+      "expectedSide": 87.05055541992188,
+      "sideError": 0.005755615234377842,
+      "squareError": 0.0001220703125,
+      "fallback": "false",
+      "footprint": "2x3",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "kitchen-table",
+      "rotation": "1",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 573.2540464375,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 573.25,
+        "y": 1226.375
+      },
+      "rootError": 0.008327131616435588,
+      "imageSide": [
+        94.796875,
+        94.796875
+      ],
+      "expectedSide": 94.80314941406249,
+      "sideError": 0.006274414062488631,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x3",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "kitchen-table",
+      "rotation": "2",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 614.1585398125001,
+        "y": 1006.954667015625
+      },
+      "root": {
+        "x": 614.15625,
+        "y": 1006.9530773162842
+      },
+      "rootError": 0.002787541081238786,
+      "imageSide": [
+        71.5406494140625,
+        71.54058837890625
+      ],
+      "expectedSide": 71.54536743164061,
+      "sideError": 0.004779052734363631,
+      "squareError": 0.00006103515625,
+      "fallback": "false",
+      "footprint": "3x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "kitchen-table",
+      "rotation": "2",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 610.39221446875,
+        "y": 1116.668153921875
+      },
+      "root": {
+        "x": 610.390625,
+        "y": 1116.6562271118164
+      },
+      "rootError": 0.012032257023606677,
+      "imageSide": [
+        83.168701171875,
+        83.168701171875
+      ],
+      "expectedSide": 83.17425842285157,
+      "sideError": 0.005557250976565342,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "3x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "kitchen-table",
+      "rotation": "2",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 606.62702321875,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 606.625,
+        "y": 1226.375
+      },
+      "rootError": 0.007553865144801467,
+      "imageSide": [
+        94.796875,
+        94.796875
+      ],
+      "expectedSide": 94.80314941406249,
+      "sideError": 0.006274414062488631,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "3x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "kitchen-table",
+      "rotation": "3",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 585.8061960625,
+        "y": 1043.526254015625
+      },
+      "root": {
+        "x": 585.7968444824219,
+        "y": 1043.5155448913574
+      },
+      "rootError": 0.014217503034513605,
+      "imageSide": [
+        75.41668701171875,
+        75.4166259765625
+      ],
+      "expectedSide": 75.42166442871093,
+      "sideError": 0.005038452148426131,
+      "squareError": 0.00006103515625,
+      "fallback": "false",
+      "footprint": "2x3",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "kitchen-table",
+      "rotation": "3",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 578.27467946875,
+        "y": 1153.2397409218752
+      },
+      "root": {
+        "x": 578.265625,
+        "y": 1153.2344360351562
+      },
+      "rootError": 0.010494056767813578,
+      "imageSide": [
+        87.0447998046875,
+        87.044921875
+      ],
+      "expectedSide": 87.05055541992188,
+      "sideError": 0.005755615234377842,
+      "squareError": 0.0001220703125,
+      "fallback": "false",
+      "footprint": "2x3",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "kitchen-table",
+      "rotation": "3",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 573.2540464375,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 573.25,
+        "y": 1226.375
+      },
+      "rootError": 0.008327131616435588,
+      "imageSide": [
+        94.796875,
+        94.796875
+      ],
+      "expectedSide": 94.80314941406249,
+      "sideError": 0.006274414062488631,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x3",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "bookshelf",
+      "rotation": "0",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 590.82682909375,
+        "y": 970.3837170625
+      },
+      "root": {
+        "x": 590.8125,
+        "y": 970.3749542236328
+      },
+      "rootError": 0.016796138624933406,
+      "imageSide": [
+        75.88427734375,
+        75.88427734375
+      ],
+      "expectedSide": 75.89054628176109,
+      "sideError": 0.006268938011089631,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x1",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "bookshelf",
+      "rotation": "0",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 583.2953125,
+        "y": 1080.09720396875
+      },
+      "root": {
+        "x": 583.28125,
+        "y": 1080.0937767028809
+      },
+      "rootError": 0.014474116815467281,
+      "imageSide": [
+        88.9249267578125,
+        88.9249267578125
+      ],
+      "expectedSide": 88.93229318779204,
+      "sideError": 0.007366429979541067,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x1",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "bookshelf",
+      "rotation": "0",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 573.2540464375,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 573.25,
+        "y": 1226.375
+      },
+      "rootError": 0.008327131616435588,
+      "imageSide": [
+        106.3125,
+        106.3125
+      ],
+      "expectedSide": 106.32128906249999,
+      "sideError": 0.00878906249998579,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x1",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "bookshelf",
+      "rotation": "1",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 562.4744853437501,
+        "y": 1006.954667015625
+      },
+      "root": {
+        "x": 562.46875,
+        "y": 1006.953104019165
+      },
+      "rootError": 0.005944503836764317,
+      "imageSide": [
+        80.231201171875,
+        80.23114013671875
+      ],
+      "expectedSide": 80.23779525043807,
+      "sideError": 0.006655113719318706,
+      "squareError": 0.00006103515625,
+      "fallback": "false",
+      "footprint": "1x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "bookshelf",
+      "rotation": "1",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 551.1777775,
+        "y": 1116.668153921875
+      },
+      "root": {
+        "x": 551.171875,
+        "y": 1116.6562995910645
+      },
+      "rootError": 0.013242532432187133,
+      "imageSide": [
+        93.2718505859375,
+        93.2718505859375
+      ],
+      "expectedSide": 93.27954215646903,
+      "sideError": 0.007691570531534353,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "1x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "bookshelf",
+      "rotation": "1",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 539.88106965625,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 539.875,
+        "y": 1226.375
+      },
+      "rootError": 0.009476718393464352,
+      "imageSide": [
+        106.3125,
+        106.3125
+      ],
+      "expectedSide": 106.32128906249999,
+      "sideError": 0.00878906249998579,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "1x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "bookshelf",
+      "rotation": "2",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 590.82682909375,
+        "y": 970.3837170625
+      },
+      "root": {
+        "x": 590.8125,
+        "y": 970.3749542236328
+      },
+      "rootError": 0.016796138624933406,
+      "imageSide": [
+        75.88427734375,
+        75.88427734375
+      ],
+      "expectedSide": 75.89054628176109,
+      "sideError": 0.006268938011089631,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x1",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "bookshelf",
+      "rotation": "2",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 583.2953125,
+        "y": 1080.09720396875
+      },
+      "root": {
+        "x": 583.28125,
+        "y": 1080.0937767028809
+      },
+      "rootError": 0.014474116815467281,
+      "imageSide": [
+        88.9249267578125,
+        88.9249267578125
+      ],
+      "expectedSide": 88.93229318779204,
+      "sideError": 0.007366429979541067,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x1",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "bookshelf",
+      "rotation": "2",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 573.2540464375,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 573.25,
+        "y": 1226.375
+      },
+      "rootError": 0.008327131616435588,
+      "imageSide": [
+        106.3125,
+        106.3125
+      ],
+      "expectedSide": 106.32128906249999,
+      "sideError": 0.00878906249998579,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x1",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "bookshelf",
+      "rotation": "3",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 562.4744853437501,
+        "y": 1006.954667015625
+      },
+      "root": {
+        "x": 562.46875,
+        "y": 1006.953104019165
+      },
+      "rootError": 0.005944503836764317,
+      "imageSide": [
+        80.231201171875,
+        80.23114013671875
+      ],
+      "expectedSide": 80.23779525043807,
+      "sideError": 0.006655113719318706,
+      "squareError": 0.00006103515625,
+      "fallback": "false",
+      "footprint": "1x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "bookshelf",
+      "rotation": "3",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 551.1777775,
+        "y": 1116.668153921875
+      },
+      "root": {
+        "x": 551.171875,
+        "y": 1116.6562995910645
+      },
+      "rootError": 0.013242532432187133,
+      "imageSide": [
+        93.2718505859375,
+        93.2718505859375
+      ],
+      "expectedSide": 93.27954215646903,
+      "sideError": 0.007691570531534353,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "1x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "bookshelf",
+      "rotation": "3",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 539.88106965625,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 539.875,
+        "y": 1226.375
+      },
+      "rootError": 0.009476718393464352,
+      "imageSide": [
+        106.3125,
+        106.3125
+      ],
+      "expectedSide": 106.32128906249999,
+      "sideError": 0.00878906249998579,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "1x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "medicine-cabinet",
+      "rotation": "0",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 590.82682909375,
+        "y": 970.3837170625
+      },
+      "root": {
+        "x": 590.8125,
+        "y": 970.3749847412109
+      },
+      "rootError": 0.016780237268617652,
+      "imageSide": [
+        72.51611328125,
+        72.51611328125
+      ],
+      "expectedSide": 72.51763311368282,
+      "sideError": 0.0015198324328196122,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x1",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "medicine-cabinet",
+      "rotation": "0",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 583.2953125,
+        "y": 1080.09720396875
+      },
+      "root": {
+        "x": 583.2812194824219,
+        "y": 1080.09370803833
+      },
+      "rootError": 0.014520147174126051,
+      "imageSide": [
+        84.97796630859375,
+        84.9779052734375
+      ],
+      "expectedSide": 84.97974682389018,
+      "sideError": 0.0018415504526814175,
+      "squareError": 0.00006103515625,
+      "fallback": "false",
+      "footprint": "2x1",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "medicine-cabinet",
+      "rotation": "0",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 573.2540464375,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 573.25,
+        "y": 1226.375
+      },
+      "rootError": 0.008327131616435588,
+      "imageSide": [
+        101.59375,
+        101.59375
+      ],
+      "expectedSide": 101.59589843749997,
+      "sideError": 0.002148437499968736,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x1",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "medicine-cabinet",
+      "rotation": "1",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 562.4744853437501,
+        "y": 1006.954667015625
+      },
+      "root": {
+        "x": 562.46875,
+        "y": 1006.9531211853027
+      },
+      "rootError": 0.005940013410480812,
+      "imageSide": [
+        76.6700439453125,
+        76.6700439453125
+      ],
+      "expectedSide": 76.67167101708527,
+      "sideError": 0.0016270717727735473,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "1x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "medicine-cabinet",
+      "rotation": "1",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 551.1777775,
+        "y": 1116.668153921875
+      },
+      "root": {
+        "x": 551.1718597412109,
+        "y": 1116.6562767028809
+      },
+      "rootError": 0.01326982291223029,
+      "imageSide": [
+        89.13186645507812,
+        89.1319580078125
+      ],
+      "expectedSide": 89.13378472729264,
+      "sideError": 0.0019182722145103526,
+      "squareError": 0.000091552734375,
+      "fallback": "false",
+      "footprint": "1x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "medicine-cabinet",
+      "rotation": "1",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 539.88106965625,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 539.875,
+        "y": 1226.375
+      },
+      "rootError": 0.009476718393464352,
+      "imageSide": [
+        101.59375,
+        101.59375
+      ],
+      "expectedSide": 101.59589843749997,
+      "sideError": 0.002148437499968736,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "1x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "medicine-cabinet",
+      "rotation": "2",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 590.82682909375,
+        "y": 970.3837170625
+      },
+      "root": {
+        "x": 590.8125,
+        "y": 970.3749847412109
+      },
+      "rootError": 0.016780237268617652,
+      "imageSide": [
+        72.51611328125,
+        72.51611328125
+      ],
+      "expectedSide": 72.51763311368282,
+      "sideError": 0.0015198324328196122,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x1",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "medicine-cabinet",
+      "rotation": "2",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 583.2953125,
+        "y": 1080.09720396875
+      },
+      "root": {
+        "x": 583.2812194824219,
+        "y": 1080.09370803833
+      },
+      "rootError": 0.014520147174126051,
+      "imageSide": [
+        84.97796630859375,
+        84.9779052734375
+      ],
+      "expectedSide": 84.97974682389018,
+      "sideError": 0.0018415504526814175,
+      "squareError": 0.00006103515625,
+      "fallback": "false",
+      "footprint": "2x1",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "medicine-cabinet",
+      "rotation": "2",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 573.2540464375,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 573.25,
+        "y": 1226.375
+      },
+      "rootError": 0.008327131616435588,
+      "imageSide": [
+        101.59375,
+        101.59375
+      ],
+      "expectedSide": 101.59589843749997,
+      "sideError": 0.002148437499968736,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x1",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "medicine-cabinet",
+      "rotation": "3",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 562.4744853437501,
+        "y": 1006.954667015625
+      },
+      "root": {
+        "x": 562.46875,
+        "y": 1006.9531211853027
+      },
+      "rootError": 0.005940013410480812,
+      "imageSide": [
+        76.6700439453125,
+        76.6700439453125
+      ],
+      "expectedSide": 76.67167101708527,
+      "sideError": 0.0016270717727735473,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "1x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "medicine-cabinet",
+      "rotation": "3",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 551.1777775,
+        "y": 1116.668153921875
+      },
+      "root": {
+        "x": 551.1718597412109,
+        "y": 1116.6562767028809
+      },
+      "rootError": 0.01326982291223029,
+      "imageSide": [
+        89.13186645507812,
+        89.1319580078125
+      ],
+      "expectedSide": 89.13378472729264,
+      "sideError": 0.0019182722145103526,
+      "squareError": 0.000091552734375,
+      "fallback": "false",
+      "footprint": "1x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "medicine-cabinet",
+      "rotation": "3",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 539.88106965625,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 539.875,
+        "y": 1226.375
+      },
+      "rootError": 0.009476718393464352,
+      "imageSide": [
+        101.59375,
+        101.59375
+      ],
+      "expectedSide": 101.59589843749997,
+      "sideError": 0.002148437499968736,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "1x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "piano",
+      "rotation": "0",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 614.1585398125001,
+        "y": 1006.954667015625
+      },
+      "root": {
+        "x": 614.15625,
+        "y": 1006.9530773162842
+      },
+      "rootError": 0.002787541081238786,
+      "imageSide": [
+        71.5406494140625,
+        71.54058837890625
+      ],
+      "expectedSide": 71.54536743164061,
+      "sideError": 0.004779052734363631,
+      "squareError": 0.00006103515625,
+      "fallback": "false",
+      "footprint": "3x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "piano",
+      "rotation": "0",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 610.39221446875,
+        "y": 1116.668153921875
+      },
+      "root": {
+        "x": 610.390625,
+        "y": 1116.6562271118164
+      },
+      "rootError": 0.012032257023606677,
+      "imageSide": [
+        83.168701171875,
+        83.168701171875
+      ],
+      "expectedSide": 83.17425842285157,
+      "sideError": 0.005557250976565342,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "3x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "piano",
+      "rotation": "0",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 606.62702321875,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 606.625,
+        "y": 1226.375
+      },
+      "rootError": 0.007553865144801467,
+      "imageSide": [
+        94.796875,
+        94.796875
+      ],
+      "expectedSide": 94.80314941406249,
+      "sideError": 0.006274414062488631,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "3x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "piano",
+      "rotation": "1",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 585.8061960625,
+        "y": 1043.526254015625
+      },
+      "root": {
+        "x": 585.7968444824219,
+        "y": 1043.5155448913574
+      },
+      "rootError": 0.014217503034513605,
+      "imageSide": [
+        75.41668701171875,
+        75.4166259765625
+      ],
+      "expectedSide": 75.42166442871093,
+      "sideError": 0.005038452148426131,
+      "squareError": 0.00006103515625,
+      "fallback": "false",
+      "footprint": "2x3",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "piano",
+      "rotation": "1",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 578.27467946875,
+        "y": 1153.2397409218752
+      },
+      "root": {
+        "x": 578.265625,
+        "y": 1153.2344360351562
+      },
+      "rootError": 0.010494056767813578,
+      "imageSide": [
+        87.0447998046875,
+        87.044921875
+      ],
+      "expectedSide": 87.05055541992188,
+      "sideError": 0.005755615234377842,
+      "squareError": 0.0001220703125,
+      "fallback": "false",
+      "footprint": "2x3",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "piano",
+      "rotation": "1",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 573.2540464375,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 573.25,
+        "y": 1226.375
+      },
+      "rootError": 0.008327131616435588,
+      "imageSide": [
+        94.796875,
+        94.796875
+      ],
+      "expectedSide": 94.80314941406249,
+      "sideError": 0.006274414062488631,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x3",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "piano",
+      "rotation": "2",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 614.1585398125001,
+        "y": 1006.954667015625
+      },
+      "root": {
+        "x": 614.15625,
+        "y": 1006.9530773162842
+      },
+      "rootError": 0.002787541081238786,
+      "imageSide": [
+        71.5406494140625,
+        71.54058837890625
+      ],
+      "expectedSide": 71.54536743164061,
+      "sideError": 0.004779052734363631,
+      "squareError": 0.00006103515625,
+      "fallback": "false",
+      "footprint": "3x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "piano",
+      "rotation": "2",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 610.39221446875,
+        "y": 1116.668153921875
+      },
+      "root": {
+        "x": 610.390625,
+        "y": 1116.6562271118164
+      },
+      "rootError": 0.012032257023606677,
+      "imageSide": [
+        83.168701171875,
+        83.168701171875
+      ],
+      "expectedSide": 83.17425842285157,
+      "sideError": 0.005557250976565342,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "3x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "piano",
+      "rotation": "2",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 606.62702321875,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 606.625,
+        "y": 1226.375
+      },
+      "rootError": 0.007553865144801467,
+      "imageSide": [
+        94.796875,
+        94.796875
+      ],
+      "expectedSide": 94.80314941406249,
+      "sideError": 0.006274414062488631,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "3x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "piano",
+      "rotation": "3",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 585.8061960625,
+        "y": 1043.526254015625
+      },
+      "root": {
+        "x": 585.7968444824219,
+        "y": 1043.5155448913574
+      },
+      "rootError": 0.014217503034513605,
+      "imageSide": [
+        75.41668701171875,
+        75.4166259765625
+      ],
+      "expectedSide": 75.42166442871093,
+      "sideError": 0.005038452148426131,
+      "squareError": 0.00006103515625,
+      "fallback": "false",
+      "footprint": "2x3",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "piano",
+      "rotation": "3",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 578.27467946875,
+        "y": 1153.2397409218752
+      },
+      "root": {
+        "x": 578.265625,
+        "y": 1153.2344360351562
+      },
+      "rootError": 0.010494056767813578,
+      "imageSide": [
+        87.0447998046875,
+        87.044921875
+      ],
+      "expectedSide": 87.05055541992188,
+      "sideError": 0.005755615234377842,
+      "squareError": 0.0001220703125,
+      "fallback": "false",
+      "footprint": "2x3",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "piano",
+      "rotation": "3",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 573.2540464375,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 573.25,
+        "y": 1226.375
+      },
+      "rootError": 0.008327131616435588,
+      "imageSide": [
+        94.796875,
+        94.796875
+      ],
+      "expectedSide": 94.80314941406249,
+      "sideError": 0.006274414062488631,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x3",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "tool-bench",
+      "rotation": "0",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 588.31594553125,
+        "y": 1006.954667015625
+      },
+      "root": {
+        "x": 588.3125,
+        "y": 1006.9530773162842
+      },
+      "rootError": 0.0037945789738676574,
+      "imageSide": [
+        67.7554931640625,
+        67.75543212890625
+      ],
+      "expectedSide": 67.75636043370326,
+      "sideError": 0.0009283047970143343,
+      "squareError": 0.00006103515625,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "tool-bench",
+      "rotation": "0",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 580.7844289375,
+        "y": 1116.668153921875
+      },
+      "root": {
+        "x": 580.78125,
+        "y": 1116.6561660766602
+      },
+      "rootError": 0.012402180313364784,
+      "imageSide": [
+        78.768310546875,
+        78.768310546875
+      ],
+      "expectedSide": 78.76939115435162,
+      "sideError": 0.0010806074766236407,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "tool-bench",
+      "rotation": "0",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 573.2540464375,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 573.25,
+        "y": 1226.375
+      },
+      "rootError": 0.008327131616435588,
+      "imageSide": [
+        89.78125,
+        89.78125
+      ],
+      "expectedSide": 89.78242187499998,
+      "sideError": 0.001171874999982947,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "tool-bench",
+      "rotation": "1",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 588.31594553125,
+        "y": 1006.954667015625
+      },
+      "root": {
+        "x": 588.3125,
+        "y": 1006.9530773162842
+      },
+      "rootError": 0.0037945789738676574,
+      "imageSide": [
+        67.7554931640625,
+        67.75543212890625
+      ],
+      "expectedSide": 67.75636043370326,
+      "sideError": 0.0009283047970143343,
+      "squareError": 0.00006103515625,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "tool-bench",
+      "rotation": "1",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 580.7844289375,
+        "y": 1116.668153921875
+      },
+      "root": {
+        "x": 580.78125,
+        "y": 1116.6561660766602
+      },
+      "rootError": 0.012402180313364784,
+      "imageSide": [
+        78.768310546875,
+        78.768310546875
+      ],
+      "expectedSide": 78.76939115435162,
+      "sideError": 0.0010806074766236407,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "tool-bench",
+      "rotation": "1",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 573.2540464375,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 573.25,
+        "y": 1226.375
+      },
+      "rootError": 0.008327131616435588,
+      "imageSide": [
+        89.78125,
+        89.78125
+      ],
+      "expectedSide": 89.78242187499998,
+      "sideError": 0.001171874999982947,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "tool-bench",
+      "rotation": "2",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 588.31594553125,
+        "y": 1006.954667015625
+      },
+      "root": {
+        "x": 588.3125,
+        "y": 1006.9530773162842
+      },
+      "rootError": 0.0037945789738676574,
+      "imageSide": [
+        67.7554931640625,
+        67.75543212890625
+      ],
+      "expectedSide": 67.75636043370326,
+      "sideError": 0.0009283047970143343,
+      "squareError": 0.00006103515625,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "tool-bench",
+      "rotation": "2",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 580.7844289375,
+        "y": 1116.668153921875
+      },
+      "root": {
+        "x": 580.78125,
+        "y": 1116.6561660766602
+      },
+      "rootError": 0.012402180313364784,
+      "imageSide": [
+        78.768310546875,
+        78.768310546875
+      ],
+      "expectedSide": 78.76939115435162,
+      "sideError": 0.0010806074766236407,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "tool-bench",
+      "rotation": "2",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 573.2540464375,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 573.25,
+        "y": 1226.375
+      },
+      "rootError": 0.008327131616435588,
+      "imageSide": [
+        89.78125,
+        89.78125
+      ],
+      "expectedSide": 89.78242187499998,
+      "sideError": 0.001171874999982947,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "tool-bench",
+      "rotation": "3",
+      "depthPosition": "back",
+      "anchor": {
+        "x": 588.31594553125,
+        "y": 1006.954667015625
+      },
+      "root": {
+        "x": 588.3125,
+        "y": 1006.9530773162842
+      },
+      "rootError": 0.0037945789738676574,
+      "imageSide": [
+        67.7554931640625,
+        67.75543212890625
+      ],
+      "expectedSide": 67.75636043370326,
+      "sideError": 0.0009283047970143343,
+      "squareError": 0.00006103515625,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "tool-bench",
+      "rotation": "3",
+      "depthPosition": "middle",
+      "anchor": {
+        "x": 580.7844289375,
+        "y": 1116.668153921875
+      },
+      "root": {
+        "x": 580.78125,
+        "y": 1116.6561660766602
+      },
+      "rootError": 0.012402180313364784,
+      "imageSide": [
+        78.768310546875,
+        78.768310546875
+      ],
+      "expectedSide": 78.76939115435162,
+      "sideError": 0.0010806074766236407,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    },
+    {
+      "key": "tool-bench",
+      "rotation": "3",
+      "depthPosition": "front",
+      "anchor": {
+        "x": 573.2540464375,
+        "y": 1226.382277875
+      },
+      "root": {
+        "x": 573.25,
+        "y": 1226.375
+      },
+      "rootError": 0.008327131616435588,
+      "imageSide": [
+        89.78125,
+        89.78125
+      ],
+      "expectedSide": 89.78242187499998,
+      "sideError": 0.001171874999982947,
+      "squareError": 0,
+      "fallback": "false",
+      "footprint": "2x2",
+      "savedRoomUnchanged": true,
+      "ok": true
+    }
+  ],
+  "count": 120,
+  "maxRootError": 0.016796138624933406,
+  "maxSideError": 0.014843749999982947,
+  "errors": [],
+  "missingAssets": [
+    {
+      "path": "images/launcher_room/scenes/crew-cabin-v2.webp",
+      "exists": false
+    },
+    {
+      "path": "images/launcher_room/scenes/crew-cabin-v2.webp",
+      "exists": false
+    }
+  ],
+  "pendingDefaultBackground": true,
+  "noUnexpectedMissingAssets": true,
+  "loadedScripts": {
+    "launcher-room-motion-data.js": "c80bec3b9de6fb033c39e046e70e4975d2d0b6c758b30634a870fa6c2bb8d85f",
+    "launcher-room-dialogue.js": "6c415f3d471a54cb8e26ee51ab5f41e3e060b01ea7da85a8f42a31a44cd22abc",
+    "launcher-room-motion.js": "5acdafeefc61dc5415f1e89a359ba71061edff4bfe2924bbe14d3265df6f10f7",
+    "launcher-room.js": "242dd05468f79a2b3c94ba42ca02b70b394b59be0576de88d726c28fa0898221"
+  },
+  "roomCssSha256": "3d5a5e9d832a527415c1f970f1c9cc01f6de2de313179481c6b4e17bba1ce2b6",
+  "syntheticArt": false,
+  "syntheticScenes": false,
+  "visualAcceptance": false,
+  "catalogFixture": {
+    "root": "D:/Codex_Release_Worktrees/board-voyage-records-v1",
+    "candidateCatalogSha256": "41aef8bff557af3b2d0ebf16f8836884868c6d131ad9ae0b25096d75140b0a7c",
+    "candidateMatchesFormalCrLfNormalized": true
+  },
+  "scope": "Real local Chromium and actual candidate room assets. Controlled profile and existing QA route trigger; no motion timing acceleration. Background integration may still be pending."
+}

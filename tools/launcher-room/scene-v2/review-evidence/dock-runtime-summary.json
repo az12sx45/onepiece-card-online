@@ -1,0 +1,78 @@
+{
+  "ok": true,
+  "reports": [
+    {
+      "case": "geometry",
+      "ok": true,
+      "count": 120,
+      "maxRootError": 0.016796138624933406,
+      "maxSideError": 0.014843749999982947,
+      "pendingDefaultBackground": true
+    },
+    {
+      "case": "piano-r0",
+      "ok": true,
+      "approachMs": 6863.79999999702,
+      "totalMs": 13721.09999999404,
+      "dockError": 0,
+      "pendingDefaultBackground": true
+    },
+    {
+      "case": "piano-r1",
+      "ok": true,
+      "approachMs": 6115.39999999851,
+      "totalMs": 13639.29999999702,
+      "dockError": 0.0015647536073970514,
+      "pendingDefaultBackground": true
+    },
+    {
+      "case": "piano-r2",
+      "ok": true,
+      "approachMs": 8384.29999999702,
+      "totalMs": 16180.89999999851,
+      "dockError": 0.0410819999418095,
+      "pendingDefaultBackground": false
+    },
+    {
+      "case": "piano-r3",
+      "ok": true,
+      "approachMs": 6247,
+      "totalMs": 13906.09999999404,
+      "dockError": 0.002520250777934052,
+      "pendingDefaultBackground": false
+    },
+    {
+      "case": "kitchen-table-r0",
+      "ok": true,
+      "approachMs": 7021.0999999940395,
+      "totalMs": 13928.09999999404,
+      "dockError": 0.03439632291821226,
+      "pendingDefaultBackground": false
+    },
+    {
+      "case": "kitchen-table-r1",
+      "ok": true,
+      "approachMs": 5427.39999999851,
+      "totalMs": 12546.69999999553,
+      "dockError": 0,
+      "pendingDefaultBackground": false
+    },
+    {
+      "case": "kitchen-table-r2",
+      "ok": true,
+      "approachMs": 8526,
+      "totalMs": 16396.60000000149,
+      "dockError": 0.04085936715949856,
+      "pendingDefaultBackground": false
+    },
+    {
+      "case": "kitchen-table-r3",
+      "ok": true,
+      "approachMs": 5519.39999999851,
+      "totalMs": 12763.30000000447,
+      "dockError": 0,
+      "pendingDefaultBackground": false
+    }
+  ],
+  "notDeploymentOrHumanAcceptance": true
+}

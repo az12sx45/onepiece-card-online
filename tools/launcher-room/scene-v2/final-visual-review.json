@@ -1,0 +1,170 @@
+{
+  "schema": "one-piece-room-scale-visual-review/1",
+  "version": "1.1.16",
+  "reviewedAt": "2026-09-27T01:28:49.802803+00:00",
+  "status": "PASS_WITH_NOTES",
+  "scope": "Background/furniture scale only; no renewed claim about the already accepted character art.",
+  "blockingIssues": [],
+  "manualInspection": {
+    "independentReport": "review-evidence/independent-final-visual-review.json",
+    "sceneScreenshots": 16,
+    "contactScreenshots": 8,
+    "notes": [
+      "Cabin/deck/library grid front extends about 8-12 stage pixels across a decorative plank seam, still on continuous flat wood; no ocean or raised step.",
+      "Brook retains the accepted generic focused-use pose; this release does not add piano fingering animation.",
+      "390px room uses existing horizontal panning; no physical touchscreen test."
+    ]
+  },
+  "automation": {
+    "roomBrowserChecks": 76,
+    "profileShopChecks": 97,
+    "geometryCases": 120,
+    "contactCases": 8,
+    "finalScenes": 4,
+    "allFinalSceneAssetsDecoded": true,
+    "noMissingImages": true,
+    "savedRoomUnchanged": true
+  },
+  "runtime": {
+    "desktop/launcher-room.js": "b0db7342e96bcafa84470935b13169073cc0edfb985860a35cd199a12327aee5",
+    "desktop/launcher-room.css": "ce764f3f7c66eddf5541ce2677996a39e8ff4323326004c96b2d986d22e929b7",
+    "desktop/launcher-profile-shop.js": "c5bb0bb421b1dd3bd4980da3a6becf1b978f735e0eb416267372a0e772f83856"
+  },
+  "evidence": [
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/independent-final-visual-review.md",
+      "sha256": "abe404cec2446bf71b078bc7d4925b4f1809b90f04b26f297480d4ce963fe208"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/independent-final-visual-review.json",
+      "sha256": "879e94fded38e00220154af80292b4fe1f8af39e118494d6c62e3d2dfb211332"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/independent-boundary-detail.png",
+      "sha256": "fa5b2d835f541628cb4563feb13691605f489671b779f2024754965e8bc4378d"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/agreed-front-row-square-root.png",
+      "sha256": "16022cadcaa574adbd5681cdc25ac49d6cb26c34f067ade4d401aeb38184a43e"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/crew-cabin-desktop-edit.png",
+      "sha256": "ea4df279dc680e9ba8fe8aa4a0ff173b64d157d7b0dc09c0dcc8c5577a1bad8d"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/crew-cabin-desktop-view.png",
+      "sha256": "0e595340c10c8bc137eed1cca890fee551ccde087873a1ed585030263e06f222"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/crew-cabin-mobile-left.png",
+      "sha256": "971cb4b8481bcab746f352205df20f00c24edf7b7d7e018b3220eae7a78f5190"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/crew-cabin-mobile-right.png",
+      "sha256": "7589fffa6fb45f1caf6cc966e117be1d51f610fe327b939ff4b509275a2e47d9"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/sunny-deck-desktop-edit.png",
+      "sha256": "ffd04f687b49a4e8800290d4b5425ac7f776e57787dc6006421c2713b6233003"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/sunny-deck-desktop-view.png",
+      "sha256": "55107ca3156de2daba600631a0be5479144cf77adb97abd947043691ee52be41"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/sunny-deck-mobile-left.png",
+      "sha256": "b5f44d8ab8d8d1da9397b08b35d9c3b23253fb3490d142029ea852e8c174a246"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/sunny-deck-mobile-right.png",
+      "sha256": "7d46bc2c8845f8b4adca1c066625d3c0d47148e3fdb35d4ec75c80a88e973968"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/sunny-kitchen-desktop-edit.png",
+      "sha256": "3312177c324c8c491da341898ec7aa766ecf9d4b5ecddce36465cdfeaf729e48"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/sunny-kitchen-desktop-view.png",
+      "sha256": "9caa07fbe0dc04e6616c3f2db40d1db3fac185b1f8da951038d071cb2afb89e4"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/sunny-kitchen-mobile-left.png",
+      "sha256": "7488ecd271ca224fe9edfffa3dfd96395df20720a3a34065467cd0d45578a944"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/sunny-kitchen-mobile-right.png",
+      "sha256": "c5aee7413f8f9932197ce01d332a2eabc5e870d1f39d3a7f43d779c85dbe1b9b"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/sunny-library-desktop-edit.png",
+      "sha256": "75f1738ecda5c8d25b908a20465146a19d82f06333d464454082b5995eacecb2"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/sunny-library-desktop-view.png",
+      "sha256": "b3b83b6c309db4cc08174716c87689045c703197f6949795808030e5e8669039"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/sunny-library-mobile-left.png",
+      "sha256": "05af9e919a0403395a97bc856dc07afaa7a11c143ea709c08c3dfaa1173bcfc3"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/sunny-library-mobile-right.png",
+      "sha256": "5d4c0c8df903053b4b3b33da841f58a03b92ec3392bd14eac76056d5cc07cfd7"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/final-scenes-report.json",
+      "sha256": "a449328340fc527096f86cbf01d7db07b4281af1752c11f5ca4905c083c7afed"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/room-browser-report.json",
+      "sha256": "f6f88253063066f796478d3f69b99ed51dc239f2ec461943828a2cb2aba0fe8f"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/profile-shop-report.json",
+      "sha256": "94da182b4c04c21d91739dde17c02bf2f374c88d70f36615877bf89616b4fa35"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/geometry-runtime-report.json",
+      "sha256": "2123696acd0033f07f34b4682da3933f402222b0ddbc525474a10ead2b49e661"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/dock-runtime-summary.json",
+      "sha256": "9338fb334d8f8b0ad1a7939796e3063361ad701ba26f675fef5d53b0ece2b507"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/kitchen-table-r0-sanji-contact.png",
+      "sha256": "7b91b7773a4f9e71460a779b18eb4ad0078fe0b3933076fd92db555de5594a96"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/kitchen-table-r1-sanji-contact.png",
+      "sha256": "c48ba0fd0db10aaa527689a6df60042f8cd97cbc5233ed7801d1091109700640"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/kitchen-table-r2-sanji-contact.png",
+      "sha256": "f3df2c513126e98a8128e0c5424b6acda5ba29a9db01f8289535622587c04c6b"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/kitchen-table-r3-sanji-contact.png",
+      "sha256": "3b5ff5c1750f1c99cf7f5064724aca09b98170adf20d32b01870be8679413ab9"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/piano-r0-brook-contact.png",
+      "sha256": "c293cb5d0d39737cc362dceb2bf67eaa8a2bdaca5bc14ae7a24d91db69307016"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/piano-r1-brook-contact.png",
+      "sha256": "b08af6ce887296f4235cc62afca584fbd71cf99aead3a4a1892bf21d0149df42"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/piano-r2-brook-contact.png",
+      "sha256": "4caad101650c491fedf13d7b91d47c5810c90821642d025643709269c97781e2"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/piano-r3-brook-contact.png",
+      "sha256": "982e670f2eb720cd67ab10c87c43ea7712fd1471495f7f5425727eaa5376128d"
+    }
+  ],
+  "notHumanAcceptance": true,
+  "notDeploymentProof": true,
+  "runtimeHashNormalization": "CRLF to LF only; all other bytes remain significant"
+}

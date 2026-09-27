@@ -1,5 +1,17 @@
 # Dev Workflow
 
+## 2026-09-27 房間背景與家具比例修正（1.1.16 候選）
+
+使用者接受 1.1.15 人物後回報背景／家具偏大。本輪正式 authority 仍為 D:\Codex_Release_Worktrees\board-voyage-records-v1；D 槽完整候選 checkout 因空間不足失敗且 Git 自動撤回，改用 C:\Codex_Candidates\launcher-room-scale-1.1.16 的隔離 sparse 工作樹，由 main df2b0aebc6b8c12bfd43efb2019e4b599bbcc46f 開始。正式與候選四個房間程式按 CRLF-only 比對相同。保留已接受的十人人物原畫、步態、尺寸、台詞與動作；不變更商品 ID、既有 room 座標、16×8 邏輯格／佔格與玩家資料。
+
+問題：default 原用 launcher 共用的近景桌面圖，沒有真正地板；三個付費 scene 的門櫃與現在的人物尺度不符。家具 384 方圖在非方盒 object-fit:contain，實際尺寸由較小邊決定，部分物件底部還被置中留白抬高。本輪改 room 專用四張 GPT 背景，依現有 FLOOR 作幾何 guide；保留 launcher／商城共用舊背景。家具採明確方形繪圖尺寸與落地 root，與人物共用深度縮放；餐桌與琴維持舊實際大小，dock 隨 root 校準。背景產圖、原稿、實際 prompt/receipt、比例標尺與完整稽核保存在 D:\Codex_QA\launcher-room-scale-1.1.16。
+
+變更檔案：desktop/launcher-room.js/css、launcher-profile-shop.js、main.js、package.json/lock；scripts/launcher_room_browser_qa.js、desktop_launcher_package_qa.js；四張 scenes/*-v2.webp；tools/launcher-room/scene-v2 原稿、完整 prompt、receipt、幾何 guide、匯入器與 review 證據；LAUNCHER_ROOM_SCALE_ART_20260927.json 及四主文件。room scene 與商城縮圖使用新版路徑；舊 profile 背景與舊客戶端素材不變。
+
+已驗證：10 家具×4方向×3深度共120例 root／方形尺寸；餐桌香吉士、鋼琴布魯克各四向 approach→focused_use→離開共8例；真素材房間76項、個人頁／商城97項；四景各桌機view/edit與390左右畫面16張逐張視覺核對，無缺圖、頁面橫向溢出或儲存座標變動。人物與背景皆為實際素材，資料是隔離fixture，非真人／實體手機或真購買驗收。三景前緣有8–12stage px木板接縫差異，下方仍為連續平地；布魯克沿用已接受的通用focused_use，不宣稱逐鍵彈奏。
+
+npm start 在隔離18786端口、無DATABASE_URL啟動，下載頁HTTP200。首輪封裝發現 sparse 缺 public/css，補回既有目錄重建；實際Electron另抓出四背景opui白名單404，已精確加入四路徑，package QA改為執行真resolveLauncherResource檢查。失敗歷史保留。最終Windows包與ASAR／134個房間素材逐byte一致，真Electron 335/335素材測試通過、零缺圖。安裝檔 239,804,254 bytes、SHA256 `33e925f3f9ee3cc88e8f7126162b384f107683f0e5c3ecefe6ae92b1882a6e7b`；R2公開HEAD200、Range206、完整GET200，獨立下載檔再算SHA一致。更新清單已用既有Ed25519簽署；本次推送後另核對Render canonical清單。正式D同步另做限制範圍與原檔備份驗證。LATTICE runtime/task API 本階段未出現在可呼叫工具清單，未宣稱持久寫入或新圖譜成功。
+
 ## 2026-09-27 航海王角色辨識與關係表演重審（1.1.15 已部署）
 
 使用者否決 1.1.14 的角色相似度後，本版由 main 55d2d18991edfef09308a358aa3454edf96f1e34 建立於 D:\Codex_Release_Worktrees\launcher-room-likeness-1.1.15。正式來源仍是 board-voyage-records-v1；其他 Board 修改與兩個 ranks 變更不納入。上一版技術發布成功不構成相似度接受，本輪重新比對官方人物／早期服裝／SD 參考，重畫十名角色的 320 張單張姿態、120 張步態原畫與十張完整人物商城縮圖。內建 GPT image_gen 產生原稿，完整保留來源、提示、收據與取框；所有輸出都是完整人物同比縮放，不拼頭、不接肢、不鏡像左右配件。索隆早期雙眼、香吉士左眼遮髮、騙人布長鼻與左腕、喬巴鹿角金屬環等逐角度覆查。

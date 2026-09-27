@@ -1,0 +1,208 @@
+{
+  "schema": "one-piece-room-independent-visual-review/1",
+  "completedAtUtc": "2026-09-27T01:27:14.665233+00:00",
+  "status": "PASS_WITH_NOTES",
+  "scope": "Local integrated screenshot/asset review of size, perspective, furnishing and contact. Not deployment or physical-device acceptance.",
+  "sourceEditsMade": false,
+  "charactersOrDialogueRedrawn": false,
+  "finalScreenshotCount": 16,
+  "interactionDetailCount": 8,
+  "checks": [
+    {
+      "id": "accepted-character-scale",
+      "status": "PASS",
+      "evidence": "Unchanged agreed sheet, geometry character metadata; all4 scenes show consistent near/far adult proportions. No character assets modified."
+    },
+    {
+      "id": "movable-furniture-proportion",
+      "status": "PASS",
+      "evidence": "Helm overall1.00H and centre.61H, map worktop.43H, bookcase1.13H, chest.59H. Actual integrated desktop scenes show same corrected relationship."
+    },
+    {
+      "id": "shared-ground-and-shadow",
+      "status": "PASS",
+      "evidence": "All4 integrated scenes, enlarged boundary detail, and8 interaction closeups show bases/feet on floor; no persistent gap or detached large shadow."
+    },
+    {
+      "id": "four-background-scale",
+      "status": "PASS",
+      "evidence": "Actual roomScene decoded4 new room-only assets. Modest door/cabinets; no old giant foreground desk, barrel, sofa or mast."
+    },
+    {
+      "id": "floor-boundary",
+      "status": "PASS_WITH_NOTE",
+      "evidence": "Front grid extends about8–12stagepx over a plank seam in cabin/deck/library; that is continuous flat wooden apron, not water/vertical ledge. Kitchen floor continuous. Grid corners remain usable wood."
+    },
+    {
+      "id": "background-camera",
+      "status": "PASS",
+      "evidence": "All4 scenes elevated cutaway; water viewed down, no low cinematic horizon. Editable floor agrees with scene plane."
+    },
+    {
+      "id": "sanji-table-contact",
+      "status": "PASS",
+      "evidence": "Four rotations viewed. Side hands reach tabletop region; rear cloche occludes exact centre. Existing poses preserved."
+    },
+    {
+      "id": "brook-piano-contact",
+      "status": "PASS_WITH_NOTE",
+      "evidence": "Four rotations viewed; keyboard-side orientation correct. General focused_use does not constitute dedicated finger animation. Rear panel occludes keys/hands normally."
+    },
+    {
+      "id": "mobile-reachability",
+      "status": "PASS",
+      "evidence": "Eight final390-width left/right captures viewed. Room pans internally to both edges; harness reports pans:true/overflow:0 for every scene. Not physical-device test."
+    },
+    {
+      "id": "new-backdrop-routing",
+      "status": "PASS",
+      "evidence": "final-scenes/report.json verifies actual roomScene.src and decoded:true for crew-cabin-v2 and3 Sunny-v2 assets, not CSS assumption."
+    }
+  ],
+  "finalScreenshots": [
+    {
+      "scene": "crew-cabin",
+      "view": "desktop-view",
+      "path": "D:\\Codex_QA\\launcher-room-scale-1.1.16\\final-scenes\\crew-cabin-desktop-view.png",
+      "sha256": "0e595340c10c8bc137eed1cca890fee551ccde087873a1ed585030263e06f222",
+      "actuallyViewed": true,
+      "tool": "view_image"
+    },
+    {
+      "scene": "crew-cabin",
+      "view": "desktop-edit",
+      "path": "D:\\Codex_QA\\launcher-room-scale-1.1.16\\final-scenes\\crew-cabin-desktop-edit.png",
+      "sha256": "ea4df279dc680e9ba8fe8aa4a0ff173b64d157d7b0dc09c0dcc8c5577a1bad8d",
+      "actuallyViewed": true,
+      "tool": "view_image"
+    },
+    {
+      "scene": "crew-cabin",
+      "view": "mobile-left",
+      "path": "D:\\Codex_QA\\launcher-room-scale-1.1.16\\final-scenes\\crew-cabin-mobile-left.png",
+      "sha256": "971cb4b8481bcab746f352205df20f00c24edf7b7d7e018b3220eae7a78f5190",
+      "actuallyViewed": true,
+      "tool": "view_image"
+    },
+    {
+      "scene": "crew-cabin",
+      "view": "mobile-right",
+      "path": "D:\\Codex_QA\\launcher-room-scale-1.1.16\\final-scenes\\crew-cabin-mobile-right.png",
+      "sha256": "7589fffa6fb45f1caf6cc966e117be1d51f610fe327b939ff4b509275a2e47d9",
+      "actuallyViewed": true,
+      "tool": "view_image"
+    },
+    {
+      "scene": "sunny-deck",
+      "view": "desktop-view",
+      "path": "D:\\Codex_QA\\launcher-room-scale-1.1.16\\final-scenes\\sunny-deck-desktop-view.png",
+      "sha256": "55107ca3156de2daba600631a0be5479144cf77adb97abd947043691ee52be41",
+      "actuallyViewed": true,
+      "tool": "view_image"
+    },
+    {
+      "scene": "sunny-deck",
+      "view": "desktop-edit",
+      "path": "D:\\Codex_QA\\launcher-room-scale-1.1.16\\final-scenes\\sunny-deck-desktop-edit.png",
+      "sha256": "ffd04f687b49a4e8800290d4b5425ac7f776e57787dc6006421c2713b6233003",
+      "actuallyViewed": true,
+      "tool": "view_image"
+    },
+    {
+      "scene": "sunny-deck",
+      "view": "mobile-left",
+      "path": "D:\\Codex_QA\\launcher-room-scale-1.1.16\\final-scenes\\sunny-deck-mobile-left.png",
+      "sha256": "b5f44d8ab8d8d1da9397b08b35d9c3b23253fb3490d142029ea852e8c174a246",
+      "actuallyViewed": true,
+      "tool": "view_image"
+    },
+    {
+      "scene": "sunny-deck",
+      "view": "mobile-right",
+      "path": "D:\\Codex_QA\\launcher-room-scale-1.1.16\\final-scenes\\sunny-deck-mobile-right.png",
+      "sha256": "7d46bc2c8845f8b4adca1c066625d3c0d47148e3fdb35d4ec75c80a88e973968",
+      "actuallyViewed": true,
+      "tool": "view_image"
+    },
+    {
+      "scene": "sunny-kitchen",
+      "view": "desktop-view",
+      "path": "D:\\Codex_QA\\launcher-room-scale-1.1.16\\final-scenes\\sunny-kitchen-desktop-view.png",
+      "sha256": "9caa07fbe0dc04e6616c3f2db40d1db3fac185b1f8da951038d071cb2afb89e4",
+      "actuallyViewed": true,
+      "tool": "view_image"
+    },
+    {
+      "scene": "sunny-kitchen",
+      "view": "desktop-edit",
+      "path": "D:\\Codex_QA\\launcher-room-scale-1.1.16\\final-scenes\\sunny-kitchen-desktop-edit.png",
+      "sha256": "3312177c324c8c491da341898ec7aa766ecf9d4b5ecddce36465cdfeaf729e48",
+      "actuallyViewed": true,
+      "tool": "view_image"
+    },
+    {
+      "scene": "sunny-kitchen",
+      "view": "mobile-left",
+      "path": "D:\\Codex_QA\\launcher-room-scale-1.1.16\\final-scenes\\sunny-kitchen-mobile-left.png",
+      "sha256": "7488ecd271ca224fe9edfffa3dfd96395df20720a3a34065467cd0d45578a944",
+      "actuallyViewed": true,
+      "tool": "view_image"
+    },
+    {
+      "scene": "sunny-kitchen",
+      "view": "mobile-right",
+      "path": "D:\\Codex_QA\\launcher-room-scale-1.1.16\\final-scenes\\sunny-kitchen-mobile-right.png",
+      "sha256": "c5aee7413f8f9932197ce01d332a2eabc5e870d1f39d3a7f43d779c85dbe1b9b",
+      "actuallyViewed": true,
+      "tool": "view_image"
+    },
+    {
+      "scene": "sunny-library",
+      "view": "desktop-view",
+      "path": "D:\\Codex_QA\\launcher-room-scale-1.1.16\\final-scenes\\sunny-library-desktop-view.png",
+      "sha256": "b3b83b6c309db4cc08174716c87689045c703197f6949795808030e5e8669039",
+      "actuallyViewed": true,
+      "tool": "view_image"
+    },
+    {
+      "scene": "sunny-library",
+      "view": "desktop-edit",
+      "path": "D:\\Codex_QA\\launcher-room-scale-1.1.16\\final-scenes\\sunny-library-desktop-edit.png",
+      "sha256": "75f1738ecda5c8d25b908a20465146a19d82f06333d464454082b5995eacecb2",
+      "actuallyViewed": true,
+      "tool": "view_image"
+    },
+    {
+      "scene": "sunny-library",
+      "view": "mobile-left",
+      "path": "D:\\Codex_QA\\launcher-room-scale-1.1.16\\final-scenes\\sunny-library-mobile-left.png",
+      "sha256": "05af9e919a0403395a97bc856dc07afaa7a11c143ea709c08c3dfaa1173bcfc3",
+      "actuallyViewed": true,
+      "tool": "view_image"
+    },
+    {
+      "scene": "sunny-library",
+      "view": "mobile-right",
+      "path": "D:\\Codex_QA\\launcher-room-scale-1.1.16\\final-scenes\\sunny-library-mobile-right.png",
+      "sha256": "5d4c0c8df903053b4b3b33da841f58a03b92ec3392bd14eac76056d5cc07cfd7",
+      "actuallyViewed": true,
+      "tool": "view_image"
+    }
+  ],
+  "additionalInspectedImages": [
+    "agreed-front-row-square-root.png",
+    "independent-boundary-detail.png"
+  ],
+  "supportingReports": [
+    "geometry-audit.json",
+    "scale-runtime/report.json",
+    "room-browser-final/report.json",
+    "final-scenes/report.json"
+  ],
+  "notes": [
+    "Older room-browser-final/failure.json is superseded by latest successful report; not treated as current failure.",
+    "Reported automated geometry120/120 and interaction8/8 are supporting evidence from implementation agent, not independently rerun in this visual-only task.",
+    "Room remains horizontally pannable on narrow viewport; not all items are simultaneously visible.",
+    "No request to regenerate accepted characters or modify dialogue."
+  ]
+}

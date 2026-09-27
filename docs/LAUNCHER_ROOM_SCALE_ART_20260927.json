@@ -1,0 +1,304 @@
+{
+  "schema": "one-piece-room-scale-art/1",
+  "version": "1.1.16",
+  "generator": "OpenAI built-in image_gen",
+  "scope": "Four room-only scene plates plus fixed furniture geometry; accepted 1.1.15 character artwork and save coordinates preserved.",
+  "assetConversion": "Pillow 12.2.0 RGB, LANCZOS 1600x900, WebP quality 92 method 6; no painted edits",
+  "stage": [
+    960,
+    540
+  ],
+  "floor": {
+    "columns": 16,
+    "rows": 8,
+    "top": 267,
+    "bottom": 515,
+    "backLeft": 164,
+    "backRight": 796,
+    "frontLeft": 28,
+    "frontRight": 932
+  },
+  "furnitureGroundRoot": [
+    192,
+    372
+  ],
+  "furnitureCanvas": [
+    384,
+    384
+  ],
+  "frontFurnitureSide": {
+    "helm": 78,
+    "map-table": 72,
+    "treasure-chest": 56,
+    "tangerine-tree": 104,
+    "swords-rack": 84,
+    "kitchen-table": 80.25,
+    "bookshelf": 90,
+    "medicine-cabinet": 86,
+    "piano": 80.25,
+    "tool-bench": 76
+  },
+  "visualReviewStatus": "PASS_WITH_NOTES",
+  "items": [
+    {
+      "key": "crew-cabin",
+      "asset": "public/images/launcher_room/scenes/crew-cabin-v2.webp",
+      "assetPixels": [
+        1600,
+        900
+      ],
+      "sourcePixels": [
+        1672,
+        941
+      ],
+      "sourcePng": "tools/launcher-room/scene-v2/crew-cabin/source.png",
+      "sourceSha256": "b1208e14464c86782e62f8314bb9f11854b25b1c4ff6ef8aec835046c9d347dc",
+      "prompt": "tools/launcher-room/scene-v2/crew-cabin/prompt.txt",
+      "promptSha256": "2c75ed5554d092003ec5036299d7e25e1240e36cb84ff9331a9d553281d13516",
+      "receipt": "tools/launcher-room/scene-v2/crew-cabin/receipt.json",
+      "receiptSha256": "7842d19571941554c0ddc749af82e14341eb093f645e1cbe4a61219e77e2d15c",
+      "assetBytes": 243354,
+      "assetSha256": "e7fb18d9e378e8e99b6883e19c24385a1a300a99a17501d4fe8d881008f81652"
+    },
+    {
+      "key": "sunny-deck",
+      "asset": "public/images/launcher_room/scenes/sunny-deck-v2.webp",
+      "assetPixels": [
+        1600,
+        900
+      ],
+      "sourcePixels": [
+        1672,
+        941
+      ],
+      "sourcePng": "tools/launcher-room/scene-v2/sunny-deck/source.png",
+      "sourceSha256": "5ae54eee52331c741a052729adda5eeab15d691af0e8202733ca8a76c0f8857e",
+      "prompt": "tools/launcher-room/scene-v2/sunny-deck/prompt.txt",
+      "promptSha256": "f799933e50543c9021702484a9782039721b1f0de6450cdfbd6fb748f046ee41",
+      "receipt": "tools/launcher-room/scene-v2/sunny-deck/receipt.json",
+      "receiptSha256": "ab98296fac1d4a6f10d3a4ebe93be324fdc4bff7e9ccf682006bd8600b529069",
+      "assetBytes": 184020,
+      "assetSha256": "6bc0afe17574f0b50cfcaf1c3ae874c3fa2da1c88febf796b5bd58fc8b9e7bf2"
+    },
+    {
+      "key": "sunny-kitchen",
+      "asset": "public/images/launcher_room/scenes/sunny-kitchen-v2.webp",
+      "assetPixels": [
+        1600,
+        900
+      ],
+      "sourcePixels": [
+        1672,
+        941
+      ],
+      "sourcePng": "tools/launcher-room/scene-v2/sunny-kitchen/source.png",
+      "sourceSha256": "d2a39a41a559c573aa7683dba087b097c28471b44e9f3294f067538f082d00cc",
+      "prompt": "tools/launcher-room/scene-v2/sunny-kitchen/prompt.txt",
+      "promptSha256": "7a38be22722762de32919d494faaf950fed7d44381edbd5b6ed07930a433a771",
+      "receipt": "tools/launcher-room/scene-v2/sunny-kitchen/receipt.json",
+      "receiptSha256": "b9be889852fbb9ba9288b42e5ccbde478bc92a457b6a4ec8e61af2088c74f038",
+      "assetBytes": 286960,
+      "assetSha256": "c73421009114f9465868cffb81d5487c1ad171acab2261c366fd6544df28db96"
+    },
+    {
+      "key": "sunny-library",
+      "asset": "public/images/launcher_room/scenes/sunny-library-v2.webp",
+      "assetPixels": [
+        1600,
+        900
+      ],
+      "sourcePixels": [
+        1672,
+        941
+      ],
+      "sourcePng": "tools/launcher-room/scene-v2/sunny-library/source.png",
+      "sourceSha256": "cbe4251e1655f94af4c616cf7ed7a4c30205f589814ff1f5b9d5957a5d1739cd",
+      "prompt": "tools/launcher-room/scene-v2/sunny-library/prompt.txt",
+      "promptSha256": "be6c7432ddc8854e428d5eda3ed4ff2ad397bba7dfe5128605aa7eb34ca3d22d",
+      "receipt": "tools/launcher-room/scene-v2/sunny-library/receipt.json",
+      "receiptSha256": "d7dc23e37cb505ea05fba3809ca5648c0f44c5cefabad315527cf74b85b677ea",
+      "assetBytes": 261536,
+      "assetSha256": "8c9207291165e95b5a118599da38eb5daeeedfaddaa8fbe18e00e3bb26d81bb0"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "tools/launcher-room/scene-v2/room-geometry-guide.png",
+      "sha256": "8dc489259afacb49510fb372b9941519277b03c3fd1c1f617c8147f8d88e6408"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/room-geometry-guide.svg",
+      "sha256": "1241c8e2d62b706d3169c92f9dd8a7387319e9afe525cabe2421c1bd449b8c4c"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/import-scenes.py",
+      "sha256": "a41831db1199a18b26d6e646cebeddf1b503cad73df7f9cc028b4614c57e06be"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/README.md",
+      "sha256": "4d2722a8b54e77c507379cc1e36b235b2724d22c0827c5adb9380f6d513ff4dd"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/final-visual-review.json",
+      "sha256": "809ffae79a5825b6c5fb9bcb19bdf91e2b2a1f8fce5773dc1b4b41061f192ce1"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/independent-final-visual-review.md",
+      "sha256": "abe404cec2446bf71b078bc7d4925b4f1809b90f04b26f297480d4ce963fe208"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/independent-final-visual-review.json",
+      "sha256": "879e94fded38e00220154af80292b4fe1f8af39e118494d6c62e3d2dfb211332"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/independent-boundary-detail.png",
+      "sha256": "fa5b2d835f541628cb4563feb13691605f489671b779f2024754965e8bc4378d"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/agreed-front-row-square-root.png",
+      "sha256": "16022cadcaa574adbd5681cdc25ac49d6cb26c34f067ade4d401aeb38184a43e"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/crew-cabin-desktop-edit.png",
+      "sha256": "ea4df279dc680e9ba8fe8aa4a0ff173b64d157d7b0dc09c0dcc8c5577a1bad8d"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/crew-cabin-desktop-view.png",
+      "sha256": "0e595340c10c8bc137eed1cca890fee551ccde087873a1ed585030263e06f222"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/crew-cabin-mobile-left.png",
+      "sha256": "971cb4b8481bcab746f352205df20f00c24edf7b7d7e018b3220eae7a78f5190"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/crew-cabin-mobile-right.png",
+      "sha256": "7589fffa6fb45f1caf6cc966e117be1d51f610fe327b939ff4b509275a2e47d9"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/sunny-deck-desktop-edit.png",
+      "sha256": "ffd04f687b49a4e8800290d4b5425ac7f776e57787dc6006421c2713b6233003"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/sunny-deck-desktop-view.png",
+      "sha256": "55107ca3156de2daba600631a0be5479144cf77adb97abd947043691ee52be41"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/sunny-deck-mobile-left.png",
+      "sha256": "b5f44d8ab8d8d1da9397b08b35d9c3b23253fb3490d142029ea852e8c174a246"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/sunny-deck-mobile-right.png",
+      "sha256": "7d46bc2c8845f8b4adca1c066625d3c0d47148e3fdb35d4ec75c80a88e973968"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/sunny-kitchen-desktop-edit.png",
+      "sha256": "3312177c324c8c491da341898ec7aa766ecf9d4b5ecddce36465cdfeaf729e48"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/sunny-kitchen-desktop-view.png",
+      "sha256": "9caa07fbe0dc04e6616c3f2db40d1db3fac185b1f8da951038d071cb2afb89e4"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/sunny-kitchen-mobile-left.png",
+      "sha256": "7488ecd271ca224fe9edfffa3dfd96395df20720a3a34065467cd0d45578a944"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/sunny-kitchen-mobile-right.png",
+      "sha256": "c5aee7413f8f9932197ce01d332a2eabc5e870d1f39d3a7f43d779c85dbe1b9b"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/sunny-library-desktop-edit.png",
+      "sha256": "75f1738ecda5c8d25b908a20465146a19d82f06333d464454082b5995eacecb2"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/sunny-library-desktop-view.png",
+      "sha256": "b3b83b6c309db4cc08174716c87689045c703197f6949795808030e5e8669039"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/sunny-library-mobile-left.png",
+      "sha256": "05af9e919a0403395a97bc856dc07afaa7a11c143ea709c08c3dfaa1173bcfc3"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/sunny-library-mobile-right.png",
+      "sha256": "5d4c0c8df903053b4b3b33da841f58a03b92ec3392bd14eac76056d5cc07cfd7"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/final-scenes-report.json",
+      "sha256": "a449328340fc527096f86cbf01d7db07b4281af1752c11f5ca4905c083c7afed"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/room-browser-report.json",
+      "sha256": "f6f88253063066f796478d3f69b99ed51dc239f2ec461943828a2cb2aba0fe8f"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/profile-shop-report.json",
+      "sha256": "94da182b4c04c21d91739dde17c02bf2f374c88d70f36615877bf89616b4fa35"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/geometry-runtime-report.json",
+      "sha256": "2123696acd0033f07f34b4682da3933f402222b0ddbc525474a10ead2b49e661"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/dock-runtime-summary.json",
+      "sha256": "9338fb334d8f8b0ad1a7939796e3063361ad701ba26f675fef5d53b0ece2b507"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/kitchen-table-r0-sanji-contact.png",
+      "sha256": "7b91b7773a4f9e71460a779b18eb4ad0078fe0b3933076fd92db555de5594a96"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/kitchen-table-r1-sanji-contact.png",
+      "sha256": "c48ba0fd0db10aaa527689a6df60042f8cd97cbc5233ed7801d1091109700640"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/kitchen-table-r2-sanji-contact.png",
+      "sha256": "f3df2c513126e98a8128e0c5424b6acda5ba29a9db01f8289535622587c04c6b"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/kitchen-table-r3-sanji-contact.png",
+      "sha256": "3b5ff5c1750f1c99cf7f5064724aca09b98170adf20d32b01870be8679413ab9"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/piano-r0-brook-contact.png",
+      "sha256": "c293cb5d0d39737cc362dceb2bf67eaa8a2bdaca5bc14ae7a24d91db69307016"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/piano-r1-brook-contact.png",
+      "sha256": "b08af6ce887296f4235cc62afca584fbd71cf99aead3a4a1892bf21d0149df42"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/piano-r2-brook-contact.png",
+      "sha256": "4caad101650c491fedf13d7b91d47c5810c90821642d025643709269c97781e2"
+    },
+    {
+      "path": "tools/launcher-room/scene-v2/review-evidence/piano-r3-brook-contact.png",
+      "sha256": "982e670f2eb720cd67ab10c87c43ea7712fd1471495f7f5425727eaa5376128d"
+    }
+  ],
+  "preserved": [
+    {
+      "path": "docs/LAUNCHER_ROOM_FULLBODY_ART_20260927.json",
+      "sha256": "539fcb238c93ba0dfc9ffd9d75dafcca48256f881e316da81b1aaaed8a62c8c6"
+    },
+    {
+      "path": "docs/LAUNCHER_ROOM_WALK_V3_20260927.json",
+      "sha256": "75f86ab6414d0667e3bce001e13d19522e755b545a272637b599fb14b6a977cb"
+    },
+    {
+      "path": "public/images/desktop_launcher/desktop_launcher_cabin_bg_v1.png",
+      "sha256": "93097dc75c0b2997981e9b267256af5ccec23040fb0c1f716dfdd7570a87174a"
+    },
+    {
+      "path": "public/images/launcher_room/scenes/sunny-deck.webp",
+      "sha256": "920c57af1559299f2af9db4b16a90671f4da346f7eacc91e27e52272203e6d0e"
+    },
+    {
+      "path": "public/images/launcher_room/scenes/sunny-kitchen.webp",
+      "sha256": "e9080c9d2105f87ab01ed6680d1bc0c96084fb1de62725821438b50bd9ac0e1a"
+    },
+    {
+      "path": "public/images/launcher_room/scenes/sunny-library.webp",
+      "sha256": "e6b6e6bc3a384f7db50277b5a83b5e89c7588b724b3cc4fba97813c0ad62cc56"
+    }
+  ]
+}

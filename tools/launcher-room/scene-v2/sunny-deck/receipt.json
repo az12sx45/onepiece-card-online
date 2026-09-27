@@ -1,0 +1,73 @@
+{
+  "schema": "one-piece-room-background-generation/1",
+  "generator": "built-in image_gen.imagegen",
+  "createdAtUtc": "2026-09-27T01:18:51.120330+00:00",
+  "key": "sunny-deck-v2",
+  "take": 1,
+  "status": "selected-for-parent-runtime-review",
+  "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0df5a-f51d-7f40-8213-929b1e8bec76\\exec-ca5e2af9-6a54-4afa-98cb-a91f3768beca.png",
+  "source": {
+    "path": "D:\\Codex_QA\\launcher-room-scale-1.1.16\\backgrounds\\sunny-deck-v2\\source-01.png",
+    "sha256": "5ae54eee52331c741a052729adda5eeab15d691af0e8202733ca8a76c0f8857e",
+    "size": [
+      1672,
+      941
+    ]
+  },
+  "prompt": {
+    "path": "D:\\Codex_QA\\launcher-room-scale-1.1.16\\backgrounds\\sunny-deck-v2\\prompt-01.txt",
+    "sha256": "f799933e50543c9021702484a9782039721b1f0de6450cdfbd6fb748f046ee41",
+    "exactTextPreserved": true
+  },
+  "references": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-scale-1.1.16\\backgrounds\\room-geometry-guide.png",
+      "sha256": "8dc489259afacb49510fb372b9941519277b03c3fd1c1f617c8147f8d88e6408",
+      "role": "only geometry reference"
+    }
+  ],
+  "imageAncestry": "Only geometry guide; no old scene, character, furniture or root pilot supplied to generation.",
+  "manualInspection": {
+    "method": "view_image and generated native image; approximate visual boundary coordinates",
+    "sourcePixelBounds": {
+      "rearFloorY": 423,
+      "rearFloorX": [
+        284,
+        1385
+      ],
+      "nearFloorY": 879,
+      "nearFloorX": [
+        35,
+        1637
+      ],
+      "doorOuterTop": 293,
+      "doorBottom": 423
+    },
+    "stage960x540": {
+      "rearFloorY": 242.74,
+      "rearFloorDeviationFrom267": 24.26,
+      "rearFloorX": [
+        163.06,
+        795.22
+      ],
+      "nearFloorY": 504.42,
+      "nearFloorDeviationFrom515": 10.58,
+      "doorOuterHeight": 74.6
+    },
+    "hardGate": {
+      "rearFloorWithin30StagePx": true,
+      "nearFloorWithin30StagePx": true,
+      "doorUnder95StagePx": true
+    },
+    "notes": [
+      "Downward ocean water; no horizon. Empty playable floor.",
+      "Sunny lion/sun ship prow remains larger than requested small silhouette but stays wholly behind the wall. Parent should judge its prominence."
+    ]
+  },
+  "rawOriginalRetained": true,
+  "productionSourcesModified": false,
+  "selectedCopy": {
+    "path": "D:\\Codex_QA\\launcher-room-scale-1.1.16\\backgrounds\\sunny-deck-v2\\source.png",
+    "sha256": "5ae54eee52331c741a052729adda5eeab15d691af0e8202733ca8a76c0f8857e"
+  }
+}

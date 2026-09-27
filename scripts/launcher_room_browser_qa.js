@@ -325,11 +325,15 @@ async function main() {
     check('on-canvas right turn restores selected bearing', await furniture.getAttribute('data-rotation') === '1');
     check('furniture uses a fixed character-calibrated base size', await furniture.evaluate(node => {
       const width = Number.parseFloat(node.style.getPropertyValue('--room-width'));
-      const height = Number.parseFloat(node.style.getPropertyValue('--room-height'));
       const depth = Number.parseFloat(node.style.getPropertyValue('--room-size'));
       const groundY = Number.parseFloat(node.style.top) / 100 * 540;
-      return Math.abs(width - 140 / 960 * 100) < .01 && Math.abs(height - 148 / 540 * 100) < .01 &&
-        Math.abs(depth - (.72 + .35 * (groundY - 267) / (515 - 267))) < .01;
+      const image = node.querySelector('.room-object').getBoundingClientRect();
+      const layer = document.getElementById('roomObjects').getBoundingClientRect();
+      const anchorY = layer.top + groundY / 540 * layer.height;
+      return Math.abs(width - 78 / 960 * 100) < .01 &&
+        Math.abs(depth - (.72 + .35 * (groundY - 267) / (515 - 267)) / 1.07) < .01 &&
+        Math.abs(image.width - image.height) < .03 &&
+        Math.abs(image.top + image.height * 372 / 384 - anchorY) < .15;
     }));
     check('furniture has projected grid footprint', await furniture.evaluate(node => {
       const [width, height] = node.dataset.footprint.split('x').map(Number);
@@ -674,8 +678,8 @@ async function main() {
     check('old saved furniture scale cannot stretch character-calibrated display size', await page.locator('#roomObjects .room-object-shell').first().evaluate(node => {
       const groundY = Number.parseFloat(node.style.top) / 100 * 540;
       const depth = Number.parseFloat(node.style.getPropertyValue('--room-size'));
-      return Math.abs(depth - (.72 + .35 * (groundY - 267) / (515 - 267))) < .01 &&
-        Math.abs(Number.parseFloat(node.style.getPropertyValue('--room-width')) - 140 / 960 * 100) < .01;
+      return Math.abs(depth - (.72 + .35 * (groundY - 267) / (515 - 267)) / 1.07) < .01 &&
+        Math.abs(Number.parseFloat(node.style.getPropertyValue('--room-width')) - 78 / 960 * 100) < .01;
     }));
     const friendRequestsBefore = await page.evaluate(() => window.__roomQa.calls.length);
     await page.locator('#roomCharacters [data-room-key="c:room-character-luffy"]').click({ force: true });

@@ -1,0 +1,74 @@
+{
+  "schema": "one-piece-room-background-generation/1",
+  "generator": "built-in image_gen.imagegen",
+  "createdAtUtc": "2026-09-27T01:18:51.207127+00:00",
+  "key": "sunny-kitchen-v2",
+  "take": 2,
+  "status": "selected-for-parent-runtime-review",
+  "originalPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0df5a-f51d-7f40-8213-929b1e8bec76\\exec-cb568b03-2d46-491c-858d-c8bda7ea1e69.png",
+  "source": {
+    "path": "D:\\Codex_QA\\launcher-room-scale-1.1.16\\backgrounds\\sunny-kitchen-v2\\source-02.png",
+    "sha256": "d2a39a41a559c573aa7683dba087b097c28471b44e9f3294f067538f082d00cc",
+    "size": [
+      1672,
+      941
+    ]
+  },
+  "prompt": {
+    "path": "D:\\Codex_QA\\launcher-room-scale-1.1.16\\backgrounds\\sunny-kitchen-v2\\prompt-02.txt",
+    "sha256": "7a38be22722762de32919d494faaf950fed7d44381edbd5b6ed07930a433a771",
+    "exactTextPreserved": true
+  },
+  "references": [
+    {
+      "path": "D:\\Codex_QA\\launcher-room-scale-1.1.16\\backgrounds\\room-geometry-guide.png",
+      "sha256": "8dc489259afacb49510fb372b9941519277b03c3fd1c1f617c8147f8d88e6408",
+      "role": "only geometry reference"
+    }
+  ],
+  "imageAncestry": "Only geometry guide; no old scene, character, furniture or root pilot supplied to generation.",
+  "manualInspection": {
+    "method": "view_image and generated native image; approximate visual boundary coordinates",
+    "sourcePixelBounds": {
+      "rearFloorY": 460,
+      "rearFloorX": [
+        305,
+        1369
+      ],
+      "nearFloorY": 876,
+      "nearFloorX": [
+        40,
+        1630
+      ],
+      "doorOuterTop": 315,
+      "doorBottom": 461
+    },
+    "stage960x540": {
+      "rearFloorY": 263.97,
+      "rearFloorDeviationFrom267": 3.03,
+      "rearFloorX": [
+        175.12,
+        786.03
+      ],
+      "nearFloorY": 502.7,
+      "nearFloorDeviationFrom515": 12.3,
+      "doorOuterHeight": 83.78
+    },
+    "hardGate": {
+      "rearFloorWithin30StagePx": true,
+      "nearFloorWithin30StagePx": true,
+      "doorUnder95StagePx": true
+    },
+    "notes": [
+      "Rear seam restored to264stagepx. All near floor empty.",
+      "Front vertical counter face is about32–34stagepx; countertop depth adds apparent height. Icebox face about74stagepx, rounded top makes outer height about85. These are approximate manual visual measurements, not semantic segmentation.",
+      "Wood continues to bottom; no front raised wall."
+    ]
+  },
+  "rawOriginalRetained": true,
+  "productionSourcesModified": false,
+  "selectedCopy": {
+    "path": "D:\\Codex_QA\\launcher-room-scale-1.1.16\\backgrounds\\sunny-kitchen-v2\\source.png",
+    "sha256": "d2a39a41a559c573aa7683dba087b097c28471b44e9f3294f067538f082d00cc"
+  }
+}

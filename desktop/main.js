@@ -323,6 +323,7 @@ function resolveLauncherResource(requestUrl) {
       /^images\/flags\/(?:[1-9]|1[0-5])\.webp$/,
       /^images\/profile_decor\/(?:bg-(?:luffy|zoro|nami)|frame-(?:luffy|zoro)|sticker-(?:luffy|zoro|nami|chopper|ace|robin))\.webp$/,
       /^images\/launcher_room\/(?:scenes\/(?:sunny-deck|sunny-kitchen|sunny-library)|furniture\/(?:helm|map-table|treasure-chest|tangerine-tree|swords-rack|kitchen-table|bookshelf|medicine-cabinet|piano|tool-bench)|chibi\/(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe)|emotions\/(?:luffy|zoro|nami|chopper|sanji|robin|usopp|franky|brook|jinbe)-(?:happy|surprised|focused|annoyed)|frames\/(?:straw-hat|ship-wheel))\.webp$/,
+      /^images\/launcher_room\/scenes\/(?:crew-cabin|sunny-deck|sunny-kitchen|sunny-library)-v2\.webp$/,
       /^images\/launcher_room\/furniture_views\/(?:bookshelf|helm|kitchen-table|map-table|medicine-cabinet|piano|swords-rack|tangerine-tree|tool-bench|treasure-chest)\/[0-3]\.webp$/,
       /^images\/launcher_room\/action_frames\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\/(?:idle|walk1|walk2|talk_happy|talk_annoyed|surprised|focused_use|sit|wave)\.webp$/,
       /^images\/launcher_room\/(?:motion|acting)_v3\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\/(?:east|west|north|south)\.webp$/,
@@ -1277,6 +1278,7 @@ async function runVisualOrSmokeCapture() {
           'images/profile_decor/sticker-ace.webp', 'images/profile_decor/sticker-robin.webp',
           'audio/profile_bgm/harbor.ogg', 'audio/profile_bgm/night-watch.ogg', 'audio/profile_bgm/voyage.ogg',
           ...['sunny-deck', 'sunny-kitchen', 'sunny-library'].map(name => `images/launcher_room/scenes/${name}.webp`),
+          ...['crew-cabin', 'sunny-deck', 'sunny-kitchen', 'sunny-library'].map(name => `images/launcher_room/scenes/${name}-v2.webp`),
           ...['helm', 'map-table', 'treasure-chest', 'tangerine-tree', 'swords-rack', 'kitchen-table',
             'bookshelf', 'medicine-cabinet', 'piano', 'tool-bench'].map(name => `images/launcher_room/furniture/${name}.webp`),
           ...['luffy', 'zoro', 'nami', 'chopper', 'sanji', 'robin', 'usopp', 'franky', 'brook', 'jinbe']
