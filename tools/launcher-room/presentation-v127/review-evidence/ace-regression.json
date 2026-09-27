@@ -1,0 +1,942 @@
+{
+  "status": "PASS",
+  "kind": "isolated-in-memory-PGlite-service-QA",
+  "limitations": [
+    "One SQL session; no real PostgreSQL concurrency, public server, UI play or release flag modification.",
+    "Socket handler body and Auth bridge are executed in isolated harnesses; no network socket is opened."
+  ],
+  "checks": [
+    {
+      "name": "shipping flags release only Ace",
+      "status": "PASS"
+    },
+    {
+      "name": "shipping roster revision advances",
+      "status": "PASS"
+    },
+    {
+      "name": "actual shipping life contains eleven characters",
+      "status": "PASS"
+    },
+    {
+      "name": "actual shipping release metadata contains Ace only",
+      "status": "PASS"
+    },
+    {
+      "name": "actual shipping catalog exposes Ace at ordinary epic price",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy metadata still contains ten",
+      "status": "PASS"
+    },
+    {
+      "name": "actual legacy guard cannot operate Ace",
+      "status": "PASS"
+    },
+    {
+      "name": "actual modern Ace guard passes",
+      "status": "PASS"
+    },
+    {
+      "name": "actual modern unreleased trio guard rejects",
+      "status": "PASS"
+    },
+    {
+      "name": "actual shipping configuration can buy Ace",
+      "status": "PASS"
+    },
+    {
+      "name": "actual shipping purchase deducts eighteen after existing grant",
+      "status": "PASS"
+    },
+    {
+      "name": "actual shipping purchase owns and places Ace",
+      "status": "PASS"
+    },
+    {
+      "name": "actual shipping response roster revision is two",
+      "status": "PASS"
+    },
+    {
+      "name": "actual shipping purchase creates arrival",
+      "status": "PASS"
+    },
+    {
+      "name": "actual shipping purchase does not grant unreleased trio",
+      "status": "PASS"
+    },
+    {
+      "name": "actual shipping purchase preserves game coins",
+      "status": "PASS"
+    },
+    {
+      "name": "all false active life crew remains ten",
+      "status": "PASS"
+    },
+    {
+      "name": "all false catalog excludes all reserved ids",
+      "status": "PASS"
+    },
+    {
+      "name": "all false ownership normalization rejects forged reserved items",
+      "status": "PASS"
+    },
+    {
+      "name": "all false preview exposes ten released ids",
+      "status": "PASS"
+    },
+    {
+      "name": "nested shop carries same roster stamp",
+      "status": "PASS"
+    },
+    {
+      "name": "closed ace buy error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed ace buy preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed ace equip error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed ace equip preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed ace room error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed ace room preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed ace character get error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed ace character get preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed ace talk error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed ace talk preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed ace start error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed ace start preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed ace claim error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed ace claim preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed ace reserve error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed ace reserve preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed ace gift error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed ace gift preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed ace activity error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed ace activity preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed ace event participants error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed ace event participants preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy cannot request reserved ace error",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy cannot request reserved ace preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed sabo buy error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed sabo buy preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed sabo equip error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed sabo equip preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed sabo room error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed sabo room preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed sabo character get error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed sabo character get preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed sabo talk error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed sabo talk preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed sabo start error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed sabo start preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed sabo claim error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed sabo claim preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed sabo reserve error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed sabo reserve preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed sabo gift error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed sabo gift preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed sabo activity error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed sabo activity preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed sabo event participants error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed sabo event participants preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy cannot request reserved sabo error",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy cannot request reserved sabo preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed law buy error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed law buy preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed law equip error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed law equip preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed law room error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed law room preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed law character get error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed law character get preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed law talk error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed law talk preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed law start error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed law start preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed law claim error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed law claim preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed law reserve error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed law reserve preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed law gift error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed law gift preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed law activity error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed law activity preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed law event participants error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed law event participants preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy cannot request reserved law error",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy cannot request reserved law preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed hancock buy error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed hancock buy preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed hancock equip error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed hancock equip preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed hancock room error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed hancock room preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed hancock character get error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed hancock character get preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed hancock talk error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed hancock talk preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed hancock start error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed hancock start preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed hancock claim error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed hancock claim preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed hancock reserve error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed hancock reserve preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed hancock gift error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed hancock gift preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed hancock activity error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed hancock activity preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed hancock event participants error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed hancock event participants preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy cannot request reserved hancock error",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy cannot request reserved hancock preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "event id alone cannot bypass release before aggregation error",
+      "status": "PASS"
+    },
+    {
+      "name": "event id alone cannot bypass release before aggregation preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed indirect work.activate error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed indirect work.activate preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed indirect work.complete error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed indirect work.complete preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed indirect work.cancel error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed indirect work.cancel preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed indirect arrival error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed indirect arrival preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "closed GET cannot auto settle error",
+      "status": "PASS"
+    },
+    {
+      "name": "closed GET cannot auto settle preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "raw life-only legacy guard error",
+      "status": "PASS"
+    },
+    {
+      "name": "raw life-only legacy guard preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "completed hidden job receipt cannot bypass gate error",
+      "status": "PASS"
+    },
+    {
+      "name": "completed hidden job receipt cannot bypass gate preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "one enabled crew has eleven definitions",
+      "status": "PASS"
+    },
+    {
+      "name": "only Ace enters sale catalog",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy preview stays ten after release",
+      "status": "PASS"
+    },
+    {
+      "name": "capability preview includes Ace",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy cannot buy even released Ace error",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy cannot buy even released Ace preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "only-enabled Ace purchase succeeds",
+      "status": "PASS"
+    },
+    {
+      "name": "Ace purchase pays existing epic price after daily grant",
+      "status": "PASS"
+    },
+    {
+      "name": "purchase owns and places Ace",
+      "status": "PASS"
+    },
+    {
+      "name": "purchase creates arrival",
+      "status": "PASS"
+    },
+    {
+      "name": "nested profile carries release stamp",
+      "status": "PASS"
+    },
+    {
+      "name": "only Ace enabled still rejects sabo error",
+      "status": "PASS"
+    },
+    {
+      "name": "only Ace enabled still rejects sabo preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "only Ace enabled still rejects law error",
+      "status": "PASS"
+    },
+    {
+      "name": "only Ace enabled still rejects law preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "only Ace enabled still rejects hancock error",
+      "status": "PASS"
+    },
+    {
+      "name": "only Ace enabled still rejects hancock preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "modern room can save Ace",
+      "status": "PASS"
+    },
+    {
+      "name": "modern Ace talk works",
+      "status": "PASS"
+    },
+    {
+      "name": "modern life preserves Ace",
+      "status": "PASS"
+    },
+    {
+      "name": "released Ace arrival acknowledgement works",
+      "status": "PASS"
+    },
+    {
+      "name": "released Ace can reserve ordinary work",
+      "status": "PASS"
+    },
+    {
+      "name": "released Ace can activate ordinary work",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy canonical reserved shop grant error",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy canonical reserved shop grant preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy canonical reserved buy other item error",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy canonical reserved buy other item preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy canonical reserved equip default error",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy canonical reserved equip default preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy canonical reserved save empty room error",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy canonical reserved save empty room preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy canonical reserved save card error",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy canonical reserved save card preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy canonical reserved save decoration error",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy canonical reserved save decoration preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy canonical reserved life get auto settlement error",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy canonical reserved life get auto settlement preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy canonical reserved checkpoint error",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy canonical reserved checkpoint preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy canonical reserved directive.set error",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy canonical reserved directive.set preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy canonical reserved work.complete error",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy canonical reserved work.complete preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy canonical reserved arrival.ack error",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy canonical reserved arrival.ack preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy canonical reserved old character endpoint error",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy canonical reserved old character endpoint preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy read projection hides Ace",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy profile projection never writes canonical",
+      "status": "PASS"
+    },
+    {
+      "name": "modern offline work settles exactly ten",
+      "status": "PASS"
+    },
+    {
+      "name": "Card game wallet remains untouched",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy ten can still use ordinary talk",
+      "status": "PASS"
+    },
+    {
+      "name": "unowned released characters never poison legacy companion state",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy ten remains writable after talk",
+      "status": "PASS"
+    },
+    {
+      "name": "profile wire preserves capability",
+      "status": "PASS"
+    },
+    {
+      "name": "shop wire preserves capability",
+      "status": "PASS"
+    },
+    {
+      "name": "life GET wire preserves capability",
+      "status": "PASS"
+    },
+    {
+      "name": "LAUNCHER_SHOP_BUY wire uses modern closed-character gate",
+      "status": "PASS"
+    },
+    {
+      "name": "LAUNCHER_SHOP_EQUIP wire uses modern closed-character gate",
+      "status": "PASS"
+    },
+    {
+      "name": "LAUNCHER_CHARACTER_GET wire uses modern closed-character gate",
+      "status": "PASS"
+    },
+    {
+      "name": "LAUNCHER_CHARACTER_WORK_START wire uses modern closed-character gate",
+      "status": "PASS"
+    },
+    {
+      "name": "LAUNCHER_CHARACTER_WORK_CLAIM wire uses modern closed-character gate",
+      "status": "PASS"
+    },
+    {
+      "name": "LAUNCHER_CHARACTER_INTERACT wire uses modern closed-character gate",
+      "status": "PASS"
+    },
+    {
+      "name": "room wire forwards modern capability",
+      "status": "PASS"
+    },
+    {
+      "name": "life command wire forwards modern capability",
+      "status": "PASS"
+    },
+    {
+      "name": "card wire accepts capable existing-new-crew owner",
+      "status": "PASS"
+    },
+    {
+      "name": "decoration wire reaches ordinary validation",
+      "status": "PASS"
+    },
+    {
+      "name": "socket omitted capability is still legacy error",
+      "status": "PASS"
+    },
+    {
+      "name": "socket omitted capability is still legacy preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "Auth accepts supported dormant id ace",
+      "status": "PASS"
+    },
+    {
+      "name": "Auth sends capability on purchase ace",
+      "status": "PASS"
+    },
+    {
+      "name": "Auth room format accepts supported dormant id ace",
+      "status": "PASS"
+    },
+    {
+      "name": "Auth character format accepts supported dormant id ace",
+      "status": "PASS"
+    },
+    {
+      "name": "Auth accepts supported dormant id sabo",
+      "status": "PASS"
+    },
+    {
+      "name": "Auth sends capability on purchase sabo",
+      "status": "PASS"
+    },
+    {
+      "name": "Auth room format accepts supported dormant id sabo",
+      "status": "PASS"
+    },
+    {
+      "name": "Auth character format accepts supported dormant id sabo",
+      "status": "PASS"
+    },
+    {
+      "name": "Auth accepts supported dormant id law",
+      "status": "PASS"
+    },
+    {
+      "name": "Auth sends capability on purchase law",
+      "status": "PASS"
+    },
+    {
+      "name": "Auth room format accepts supported dormant id law",
+      "status": "PASS"
+    },
+    {
+      "name": "Auth character format accepts supported dormant id law",
+      "status": "PASS"
+    },
+    {
+      "name": "Auth accepts supported dormant id hancock",
+      "status": "PASS"
+    },
+    {
+      "name": "Auth sends capability on purchase hancock",
+      "status": "PASS"
+    },
+    {
+      "name": "Auth room format accepts supported dormant id hancock",
+      "status": "PASS"
+    },
+    {
+      "name": "Auth character format accepts supported dormant id hancock",
+      "status": "PASS"
+    },
+    {
+      "name": "Auth capability cannot be downgraded by renderer payload",
+      "status": "PASS"
+    },
+    {
+      "name": "preview Auth request also sends capability",
+      "status": "PASS"
+    },
+    {
+      "name": "eleventh simultaneous purchase rejected error",
+      "status": "PASS"
+    },
+    {
+      "name": "eleventh simultaneous purchase rejected preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "unpublishing preserves existing rights via write refusal error",
+      "status": "PASS"
+    },
+    {
+      "name": "unpublishing preserves existing rights via write refusal preserves canonical profile/life/operations/ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "shipping config unchanged byte-for-byte",
+      "status": "PASS"
+    },
+    {
+      "name": "tested source remains unchanged throughout QA",
+      "status": "PASS"
+    }
+  ],
+  "checkCount": 226,
+  "shippingConfigSha256": "14105517f17a3057e636053e4da0e41d314a65aa74621228df2fb4e02eb60896",
+  "sourceStable": true,
+  "sourceSha256": {
+    "config/launcher-crew-release-v1.json": "14105517f17a3057e636053e4da0e41d314a65aa74621228df2fb4e02eb60896",
+    "server/launcher-crew-release.js": "fcc9051cc5e24065cc698cbf1f8f215cc93ccc41c81478231a564059a682fc31",
+    "server/launcher-profile-shop.js": "011b2600dee65f52cd14af28577d89f304fa4beb973d8eb82253692a76b0408d",
+    "server/launcher-life.js": "81e2a2833e5db2ba7b4245fdde87142946580ae28fc4f0d583bf47423335824e",
+    "server/launcher-life-store.js": "e05b7095cc672ae0fc85ad6dbd16182afb3377250e8eb196e00f2cebf2edd834",
+    "server/index.js": "d6256ff963508f91df0fbbd628563bea705f7d77fc7758d5647e249f82ed5b03",
+    "desktop/auth-service.js": "290ecd2c2e9b1c3ef80fdb944efde789fe306d3ec6492b96bf78556269a51217",
+    "desktop/launcher-reserved-crew.js": "e42d09aa38205cd105ee48fb30a5799632cd67b1dec2db881abf9e19c4fa30a6",
+    "desktop/launcher-life-data.js": "dab3c07b0610acb328e31300094bf0faa28c1b4c7e13acec14f32e1d83ecb908",
+    "scripts/launcher_ace_release_qa.js": "90ed8c6419842e8d88cbbb57d5cab54aa445e8d04b98d456e1803aa7a524d8f8"
+  },
+  "sourceHashNormalization": "CRLF-to-LF-only",
+  "sourceNormalizedSha256": {
+    "config/launcher-crew-release-v1.json": "0526f5ff2913aa1000cc683de1fa8e4072def749e548c7a9b72f0e9b28305b64",
+    "server/launcher-crew-release.js": "7738284a71871309f5e18346f785bf5db8c051d969fe028cc74f5b7402478693",
+    "server/launcher-profile-shop.js": "ba17dee5b39f1dcb1f993854512533bf249d40b5e01bd5d4b04337199ac1dd4b",
+    "server/launcher-life.js": "0bcfa4bbab2a40970d108bdb1dcefcb64c1103f0456bcf6a1b1727108aa9f85e",
+    "server/launcher-life-store.js": "7e0b99d21aa536ebfbe9a790a081cd4706cbb67c17598facaff207506e7220d6",
+    "server/index.js": "11100a110e339caa90894fd802b199cf5037a519595b353798d4f8fdeb865738",
+    "desktop/auth-service.js": "fa1d8d9ef12bcb37fd523829980614c30de51e2674a57ffc797682936d669671",
+    "desktop/launcher-reserved-crew.js": "6e6209d4bcd5267704e40ec30bc86769aa739e8806e2b39f60d3337b065790dd",
+    "desktop/launcher-life-data.js": "6457a5fb9f2623357a4a22ddb846d8e5bc81a1f1b5eda0ae17e184dc433bf66c",
+    "scripts/launcher_ace_release_qa.js": "90ed8c6419842e8d88cbbb57d5cab54aa445e8d04b98d456e1803aa7a524d8f8"
+  }
+}

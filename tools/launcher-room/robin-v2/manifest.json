@@ -1,0 +1,5319 @@
+{
+  "schema": "one-piece-robin-redraw/2",
+  "status": "PASS",
+  "anatomyReassembled": false,
+  "mirrored": false,
+  "logicalCell": 128,
+  "standingHeight": 98,
+  "displayScale": 1.03,
+  "sources": {
+    "south-01": {
+      "image": {
+        "path": "tools/launcher-room/robin-v2/sources/south-01/source.png",
+        "sha256": "ddfd9c038c8892432f739a2e186bbb61c7e1144ad7c107c9c17a8d152fa62be4"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/robin-v2/sources/south-01/prompt.txt",
+        "sha256": "a94b99ace440900a0126ea8046d1642ee8964c9ae46d80d2cc9ee6883eb961d3"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/robin-v2/sources/south-01/receipt.json",
+        "sha256": "064a3b7e0162c52528a44bbd5aaafefb4ef0805405c50785c81001b3ff49dc9a"
+      },
+      "grid": [
+        4,
+        2
+      ]
+    },
+    "east-01": {
+      "image": {
+        "path": "tools/launcher-room/robin-v2/sources/east-01/source.png",
+        "sha256": "eb896cb87c13e3585dc883e187cb98a4519f1a589f3fb454e406416d87ec25ac"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/robin-v2/sources/east-01/prompt.txt",
+        "sha256": "50e14caafa339608ef32b4fa992346139761178242595bc340c7bfbd35cff011"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/robin-v2/sources/east-01/receipt.json",
+        "sha256": "8bf22a7f149865a20dc6b92078b80232fc59e4fb6057ea519de9d13a08cf913c"
+      },
+      "grid": [
+        4,
+        2
+      ]
+    },
+    "west-01": {
+      "image": {
+        "path": "tools/launcher-room/robin-v2/sources/west-01/source.png",
+        "sha256": "bc8add447b32489b143dbfd975af5566dbff567846e2d62eb6ece2f857ed884d"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/robin-v2/sources/west-01/prompt.txt",
+        "sha256": "26e32840a7437e04b84bd0ffbcf35c214d4111473294994d895e46e09d1c80b4"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/robin-v2/sources/west-01/receipt.json",
+        "sha256": "236b6f5aaaf4e36b39c5a9315d6d47dccd948753073c8a6af058cb755d229468"
+      },
+      "grid": [
+        4,
+        2
+      ]
+    },
+    "north-01": {
+      "image": {
+        "path": "tools/launcher-room/robin-v2/sources/north-01/source.png",
+        "sha256": "c469a8a24ce3c3c36a0d7cbce45a7b70ba6b150fc714559bd034d3a99420d490"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/robin-v2/sources/north-01/prompt.txt",
+        "sha256": "bcda3822f5a144f04fdf3c7200be0b82aec0e6ac6b79055f39314061b17ec68c"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/robin-v2/sources/north-01/receipt.json",
+        "sha256": "b6d4b3560d794933f2440519a54106db361b61d41e9765a8938cb526280d9522"
+      },
+      "grid": [
+        4,
+        2
+      ]
+    },
+    "work-01": {
+      "image": {
+        "path": "tools/launcher-room/robin-v2/sources/work-01/source.png",
+        "sha256": "73f38f9b2b41495605f2a77d74d8170d5244e47ed97bdbea0d72d3c876a922c4"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/robin-v2/sources/work-01/prompt.txt",
+        "sha256": "3a4cee5037bc5ec1a957582465c9ae94d2607c57d879eeda374aa77a01f97c68"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/robin-v2/sources/work-01/receipt.json",
+        "sha256": "21e0d35012099e00243ee86f73ac5ba48f1cbd44070f67a17f26125958ded95e"
+      },
+      "grid": [
+        2,
+        4
+      ]
+    },
+    "read-01": {
+      "image": {
+        "path": "tools/launcher-room/robin-v2/sources/read-01/source.png",
+        "sha256": "9b228bf2f8e367121a95f8aeedcdf8565939475b38459cd1d6ba1f7cc91fd786"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/robin-v2/sources/read-01/prompt.txt",
+        "sha256": "977f4a9f8d260eac96f315f2e6e1051fbc0207ccf7c9445be67a0c3067cd22a7"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/robin-v2/sources/read-01/receipt.json",
+        "sha256": "6728d9593bd2ee5eebfe49cffff2f8b55de8cab0af9ca24fd187e4e202c632be"
+      },
+      "grid": [
+        2,
+        4
+      ]
+    },
+    "utility-01": {
+      "image": {
+        "path": "tools/launcher-room/robin-v2/sources/utility-01/source.png",
+        "sha256": "e68ae897e35a4051b238b3618f1879d9f003243fb0ccaa0e40b485e610ce3780"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/robin-v2/sources/utility-01/prompt.txt",
+        "sha256": "a4bd5efdd4fa6f496e9cd7b60fea5f4efe9e048ed6580cf629dd548db35c376c"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/robin-v2/sources/utility-01/receipt.json",
+        "sha256": "462221c125b9e232320a2e1befe5798f1ab94469826ddf60ea69746d38da83ac"
+      },
+      "grid": [
+        4,
+        2
+      ]
+    },
+    "walk-side-02": {
+      "image": {
+        "path": "tools/launcher-room/robin-v2/sources/walk-side-02/source.png",
+        "sha256": "22b8ef028594f4600c07175d839c4b60132d43f4c5a5480d661e2d4ec97f0337"
+      },
+      "prompt": {
+        "path": "tools/launcher-room/robin-v2/sources/walk-side-02/prompt.txt",
+        "sha256": "65dafe0b50e1dd2a21cb5a480aae7f1b3dc00961c2016393c5e10beb9a036b88"
+      },
+      "receipt": {
+        "path": "tools/launcher-room/robin-v2/sources/walk-side-02/receipt.json",
+        "sha256": "df7e395287559cb7e58c5972d8244a03dab477779d6466b13f43e50d8ae6c341"
+      },
+      "grid": [
+        2,
+        2
+      ]
+    }
+  },
+  "items": [
+    {
+      "asset": "public/images/launcher_room/robin_v2/walk/east.webp",
+      "sha256": "713da4baf28e90895a821f84a82546d13f51e6ec600afcdbadc2cc9834b141cf",
+      "bytes": 89324,
+      "cell": 384,
+      "frames": 4,
+      "dimensions": [
+        1536,
+        384
+      ],
+      "root": [
+        192.0,
+        336.0
+      ],
+      "sourceBindings": [
+        {
+          "path": "tools/launcher-room/robin-v2/sources/walk-side-02/source.png",
+          "sha256": "22b8ef028594f4600c07175d839c4b60132d43f4c5a5480d661e2d4ec97f0337"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/walk-side-02/prompt.txt",
+          "sha256": "65dafe0b50e1dd2a21cb5a480aae7f1b3dc00961c2016393c5e10beb9a036b88"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/walk-side-02/receipt.json",
+          "sha256": "df7e395287559cb7e58c5972d8244a03dab477779d6466b13f43e50d8ae6c341"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/east-01/source.png",
+          "sha256": "eb896cb87c13e3585dc883e187cb98a4519f1a589f3fb454e406416d87ec25ac"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/east-01/prompt.txt",
+          "sha256": "50e14caafa339608ef32b4fa992346139761178242595bc340c7bfbd35cff011"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/east-01/receipt.json",
+          "sha256": "8bf22a7f149865a20dc6b92078b80232fc59e4fb6057ea519de9d13a08cf913c"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/source.png",
+          "sha256": "e65ce16acdc345f434eb9f496a8b744e1a31df49da78597a7bcbfd0cb9e98e9d"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/prompt.txt",
+          "sha256": "84c070d053ce725555d2693f7fef2889c686151e635b7efcf381e6ae95d59033"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/receipt.json",
+          "sha256": "24596736f6838162834451b1b2684a8cb6309d63bd01e0c5cbaae805173718f1"
+        }
+      ],
+      "frameRecords": [
+        {
+          "index": 0,
+          "source": "walk-side-02",
+          "sourceCell": [
+            0,
+            0
+          ],
+          "region": [
+            254,
+            25,
+            304,
+            618
+          ],
+          "sourceAnchor": [
+            374.92532323679865,
+            631
+          ],
+          "sourceAlphaBounds": [
+            264,
+            35,
+            548,
+            633
+          ],
+          "removedDistantAlphaPixels": 8639,
+          "bounds": [
+            137,
+            41,
+            278,
+            337
+          ],
+          "wholeFigureScale": 0.16498316498316498,
+          "inverseWholeImageTransform": [
+            2.0204081632653064,
+            0,
+            -276.99304411014015,
+            0,
+            2.0204081632653064,
+            -82.85714285714289
+          ],
+          "rgbaSha256": "a0f278f3f7280d758580bd656ce95750b0973daf54c82c63ed6b1470c306e9a6",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "source": "east-01",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "region": [
+            490,
+            12,
+            143,
+            494
+          ],
+          "sourceAnchor": [
+            557.3391392064559,
+            494
+          ],
+          "sourceAlphaBounds": [
+            500,
+            22,
+            623,
+            496
+          ],
+          "removedDistantAlphaPixels": 4121,
+          "bounds": [
+            156,
+            41,
+            233,
+            337
+          ],
+          "wholeFigureScale": 0.20851063829787234,
+          "inverseWholeImageTransform": [
+            1.598639455782313,
+            0,
+            -249.59963630374818,
+            0,
+            1.598639455782313,
+            -65.14285714285711
+          ],
+          "rgbaSha256": "3c6032f365c2c7f6452e7950a6fb766d3e05e41e67357421066453fd0c5afe72",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "source": "walk-side-02",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "region": [
+            755,
+            27,
+            286,
+            617
+          ],
+          "sourceAnchor": [
+            881.1161931818182,
+            632
+          ],
+          "sourceAlphaBounds": [
+            766,
+            37,
+            1030,
+            634
+          ],
+          "removedDistantAlphaPixels": 7863,
+          "bounds": [
+            135,
+            42,
+            266,
+            337
+          ],
+          "wholeFigureScale": 0.16498316498316498,
+          "inverseWholeImageTransform": [
+            2.0204081632653064,
+            0,
+            -272.8021741651206,
+            0,
+            2.0204081632653064,
+            -83.85714285714289
+          ],
+          "rgbaSha256": "4054899cfc54014bc151028fbc9868299df355a43b3bcd6430985e632728fc52",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "source": "east-01",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "region": [
+            490,
+            12,
+            143,
+            494
+          ],
+          "sourceAnchor": [
+            557.3391392064559,
+            494
+          ],
+          "sourceAlphaBounds": [
+            500,
+            22,
+            623,
+            496
+          ],
+          "removedDistantAlphaPixels": 4121,
+          "bounds": [
+            156,
+            41,
+            233,
+            337
+          ],
+          "wholeFigureScale": 0.20851063829787234,
+          "inverseWholeImageTransform": [
+            1.598639455782313,
+            0,
+            -249.59963630374818,
+            0,
+            1.598639455782313,
+            -65.14285714285711
+          ],
+          "rgbaSha256": "3c6032f365c2c7f6452e7950a6fb766d3e05e41e67357421066453fd0c5afe72",
+          "anatomyReassembled": false,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/acting/east.webp",
+      "sha256": "b83c282b9fecf35658ca3e0525bbec999628910bd65286b6599a3daa2c77318b",
+      "bytes": 89580,
+      "cell": 256,
+      "frames": 8,
+      "dimensions": [
+        2048,
+        256
+      ],
+      "root": [
+        128.0,
+        224.0
+      ],
+      "sourceBindings": [
+        {
+          "path": "tools/launcher-room/robin-v2/sources/east-01/source.png",
+          "sha256": "eb896cb87c13e3585dc883e187cb98a4519f1a589f3fb454e406416d87ec25ac"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/east-01/prompt.txt",
+          "sha256": "50e14caafa339608ef32b4fa992346139761178242595bc340c7bfbd35cff011"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/east-01/receipt.json",
+          "sha256": "8bf22a7f149865a20dc6b92078b80232fc59e4fb6057ea519de9d13a08cf913c"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/work-01/source.png",
+          "sha256": "73f38f9b2b41495605f2a77d74d8170d5244e47ed97bdbea0d72d3c876a922c4"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/work-01/prompt.txt",
+          "sha256": "3a4cee5037bc5ec1a957582465c9ae94d2607c57d879eeda374aa77a01f97c68"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/work-01/receipt.json",
+          "sha256": "21e0d35012099e00243ee86f73ac5ba48f1cbd44070f67a17f26125958ded95e"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/source.png",
+          "sha256": "e65ce16acdc345f434eb9f496a8b744e1a31df49da78597a7bcbfd0cb9e98e9d"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/prompt.txt",
+          "sha256": "84c070d053ce725555d2693f7fef2889c686151e635b7efcf381e6ae95d59033"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/receipt.json",
+          "sha256": "24596736f6838162834451b1b2684a8cb6309d63bd01e0c5cbaae805173718f1"
+        }
+      ],
+      "frameRecords": [
+        {
+          "index": 0,
+          "source": "east-01",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "region": [
+            490,
+            12,
+            143,
+            494
+          ],
+          "sourceAnchor": [
+            557.3391392064559,
+            494
+          ],
+          "sourceAlphaBounds": [
+            500,
+            22,
+            623,
+            496
+          ],
+          "removedDistantAlphaPixels": 4121,
+          "bounds": [
+            104,
+            28,
+            155,
+            224
+          ],
+          "wholeFigureScale": 0.20851063829787234,
+          "inverseWholeImageTransform": [
+            2.3979591836734695,
+            0,
+            -249.59963630374818,
+            0,
+            2.3979591836734695,
+            -65.14285714285711
+          ],
+          "rgbaSha256": "a1e3fb3b87e1621526b3bdad6946b5dcb54a54a55a30d1008eb543db63d96c30",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "source": "east-01",
+          "sourceCell": [
+            3,
+            0
+          ],
+          "region": [
+            1200,
+            12,
+            243,
+            494
+          ],
+          "sourceAnchor": [
+            1268.6429442341014,
+            494
+          ],
+          "sourceAlphaBounds": [
+            1210,
+            22,
+            1433,
+            496
+          ],
+          "removedDistantAlphaPixels": 4570,
+          "bounds": [
+            104,
+            27,
+            196,
+            224
+          ],
+          "wholeFigureScale": 0.20851063829787234,
+          "inverseWholeImageTransform": [
+            2.3979591836734695,
+            0,
+            -248.29583127610272,
+            0,
+            2.3979591836734695,
+            -65.14285714285711
+          ],
+          "rgbaSha256": "e0bc8b62527a6d9ef8213c80f3bdc38d9e3b49eb809e7d1a6657f7b5ba96c925",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "source": "east-01",
+          "sourceCell": [
+            0,
+            1
+          ],
+          "region": [
+            133,
+            503,
+            154,
+            501
+          ],
+          "sourceAnchor": [
+            202.01628266186123,
+            992
+          ],
+          "sourceAlphaBounds": [
+            144,
+            513,
+            277,
+            994
+          ],
+          "removedDistantAlphaPixels": 3469,
+          "bounds": [
+            104,
+            24,
+            159,
+            224
+          ],
+          "wholeFigureScale": 0.20851063829787234,
+          "inverseWholeImageTransform": [
+            2.3979591836734695,
+            0,
+            -248.92249284834287,
+            0,
+            2.3979591836734695,
+            -58.14285714285711
+          ],
+          "rgbaSha256": "5dff69335258e78568f2754bfdffb1b5f6694f6621a936449662423844aa90c5",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "source": "east-01",
+          "sourceCell": [
+            1,
+            1
+          ],
+          "region": [
+            495,
+            506,
+            180,
+            499
+          ],
+          "sourceAnchor": [
+            561.5105362121507,
+            993
+          ],
+          "sourceAlphaBounds": [
+            505,
+            516,
+            665,
+            995
+          ],
+          "removedDistantAlphaPixels": 3519,
+          "bounds": [
+            104,
+            26,
+            171,
+            224
+          ],
+          "wholeFigureScale": 0.20851063829787234,
+          "inverseWholeImageTransform": [
+            2.3979591836734695,
+            0,
+            -250.42823929805343,
+            0,
+            2.3979591836734695,
+            -60.14285714285711
+          ],
+          "rgbaSha256": "4d33e075ae2fb866d8db96407aa6f806aadce712e91102c7466a16e12c670490",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 4,
+          "source": "work-01",
+          "sourceCell": [
+            0,
+            0
+          ],
+          "region": [
+            250,
+            0,
+            206,
+            395
+          ],
+          "sourceAnchor": [
+            311.37885167464117,
+            383
+          ],
+          "sourceAlphaBounds": [
+            260,
+            9,
+            446,
+            385
+          ],
+          "removedDistantAlphaPixels": 4167,
+          "bounds": [
+            101,
+            27,
+            199,
+            225
+          ],
+          "wholeFigureScale": 0.26344086021505375,
+          "inverseWholeImageTransform": [
+            1.8979591836734695,
+            0,
+            -191.55992383556293,
+            0,
+            1.8979591836734695,
+            -51.14285714285717
+          ],
+          "rgbaSha256": "d9846c5ac5fc92235a694f943c8de5867a4d073872eba88f6bd1935a71523217",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 5,
+          "source": "east-01",
+          "sourceCell": [
+            3,
+            1
+          ],
+          "region": [
+            1243,
+            594,
+            221,
+            413
+          ],
+          "sourceAnchor": [
+            1314.965356020541,
+            995
+          ],
+          "sourceAlphaBounds": [
+            1253,
+            604,
+            1454,
+            997
+          ],
+          "removedDistantAlphaPixels": 3701,
+          "bounds": [
+            102,
+            61,
+            185,
+            225
+          ],
+          "wholeFigureScale": 0.20851063829787234,
+          "inverseWholeImageTransform": [
+            2.3979591836734695,
+            0,
+            -244.973419489663,
+            0,
+            2.3979591836734695,
+            -146.1428571428571
+          ],
+          "rgbaSha256": "b088e7de77f5ef6b1ea33232001824d017aeafcb7d49a224f7daf0b62d7c8d79",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 6,
+          "source": "east-01",
+          "sourceCell": [
+            2,
+            1
+          ],
+          "region": [
+            869,
+            508,
+            168,
+            499
+          ],
+          "sourceAnchor": [
+            946.386812166241,
+            995
+          ],
+          "sourceAlphaBounds": [
+            880,
+            518,
+            1027,
+            997
+          ],
+          "removedDistantAlphaPixels": 4175,
+          "bounds": [
+            100,
+            25,
+            162,
+            225
+          ],
+          "wholeFigureScale": 0.20851063829787234,
+          "inverseWholeImageTransform": [
+            2.3979591836734695,
+            0,
+            -240.55196334396305,
+            0,
+            2.3979591836734695,
+            -60.14285714285711
+          ],
+          "rgbaSha256": "3f2777fdd66de29223fa43b30e7b69b8dd880089a911d91c4f8ba72545dc141f",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 7,
+          "source": "east-01",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "region": [
+            490,
+            12,
+            143,
+            494
+          ],
+          "sourceAnchor": [
+            557.3391392064559,
+            494
+          ],
+          "sourceAlphaBounds": [
+            500,
+            22,
+            623,
+            496
+          ],
+          "removedDistantAlphaPixels": 4121,
+          "bounds": [
+            104,
+            28,
+            155,
+            224
+          ],
+          "wholeFigureScale": 0.20851063829787234,
+          "inverseWholeImageTransform": [
+            2.3979591836734695,
+            0,
+            -249.59963630374818,
+            0,
+            2.3979591836734695,
+            -65.14285714285711
+          ],
+          "rgbaSha256": "a1e3fb3b87e1621526b3bdad6946b5dcb54a54a55a30d1008eb543db63d96c30",
+          "anatomyReassembled": false,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/life/work-east.webp",
+      "sha256": "872f43b8b65f1cbedc38b586e61641c8bc821e46d1d5dd881d79697fb8f9cc94",
+      "bytes": 32068,
+      "cell": 256,
+      "frames": 4,
+      "dimensions": [
+        1024,
+        256
+      ],
+      "root": [
+        128.0,
+        224.0
+      ],
+      "sourceBindings": [
+        {
+          "path": "tools/launcher-room/robin-v2/sources/work-01/source.png",
+          "sha256": "73f38f9b2b41495605f2a77d74d8170d5244e47ed97bdbea0d72d3c876a922c4"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/work-01/prompt.txt",
+          "sha256": "3a4cee5037bc5ec1a957582465c9ae94d2607c57d879eeda374aa77a01f97c68"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/work-01/receipt.json",
+          "sha256": "21e0d35012099e00243ee86f73ac5ba48f1cbd44070f67a17f26125958ded95e"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/source.png",
+          "sha256": "e65ce16acdc345f434eb9f496a8b744e1a31df49da78597a7bcbfd0cb9e98e9d"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/prompt.txt",
+          "sha256": "84c070d053ce725555d2693f7fef2889c686151e635b7efcf381e6ae95d59033"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/receipt.json",
+          "sha256": "24596736f6838162834451b1b2684a8cb6309d63bd01e0c5cbaae805173718f1"
+        }
+      ],
+      "frameRecords": [
+        {
+          "index": 0,
+          "source": "work-01",
+          "sourceCell": [
+            0,
+            0
+          ],
+          "region": [
+            250,
+            0,
+            206,
+            395
+          ],
+          "sourceAnchor": [
+            311.37885167464117,
+            383
+          ],
+          "sourceAlphaBounds": [
+            260,
+            9,
+            446,
+            385
+          ],
+          "removedDistantAlphaPixels": 4167,
+          "bounds": [
+            101,
+            27,
+            199,
+            225
+          ],
+          "wholeFigureScale": 0.26344086021505375,
+          "inverseWholeImageTransform": [
+            1.8979591836734695,
+            0,
+            -191.55992383556293,
+            0,
+            1.8979591836734695,
+            -51.14285714285717
+          ],
+          "rgbaSha256": "d9846c5ac5fc92235a694f943c8de5867a4d073872eba88f6bd1935a71523217",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "source": "work-01",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "region": [
+            656,
+            0,
+            202,
+            395
+          ],
+          "sourceAnchor": [
+            715.8588420328321,
+            383
+          ],
+          "sourceAlphaBounds": [
+            666,
+            10,
+            847,
+            385
+          ],
+          "removedDistantAlphaPixels": 4335,
+          "bounds": [
+            102,
+            27,
+            197,
+            225
+          ],
+          "wholeFigureScale": 0.26344086021505375,
+          "inverseWholeImageTransform": [
+            1.8979591836734695,
+            0,
+            -193.07993347737204,
+            0,
+            1.8979591836734695,
+            -52.14285714285717
+          ],
+          "rgbaSha256": "27c2a0b3fce5235d7675318ba9b138f2a75c23632140d0f70071e98d6357d3e3",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "source": "work-01",
+          "sourceCell": [
+            0,
+            0
+          ],
+          "region": [
+            250,
+            0,
+            206,
+            395
+          ],
+          "sourceAnchor": [
+            311.37885167464117,
+            383
+          ],
+          "sourceAlphaBounds": [
+            260,
+            9,
+            446,
+            385
+          ],
+          "removedDistantAlphaPixels": 4167,
+          "bounds": [
+            101,
+            27,
+            199,
+            225
+          ],
+          "wholeFigureScale": 0.26344086021505375,
+          "inverseWholeImageTransform": [
+            1.8979591836734695,
+            0,
+            -191.55992383556293,
+            0,
+            1.8979591836734695,
+            -51.14285714285717
+          ],
+          "rgbaSha256": "d9846c5ac5fc92235a694f943c8de5867a4d073872eba88f6bd1935a71523217",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "source": "work-01",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "region": [
+            656,
+            0,
+            202,
+            395
+          ],
+          "sourceAnchor": [
+            715.8588420328321,
+            383
+          ],
+          "sourceAlphaBounds": [
+            666,
+            10,
+            847,
+            385
+          ],
+          "removedDistantAlphaPixels": 4335,
+          "bounds": [
+            102,
+            27,
+            197,
+            225
+          ],
+          "wholeFigureScale": 0.26344086021505375,
+          "inverseWholeImageTransform": [
+            1.8979591836734695,
+            0,
+            -193.07993347737204,
+            0,
+            1.8979591836734695,
+            -52.14285714285717
+          ],
+          "rgbaSha256": "27c2a0b3fce5235d7675318ba9b138f2a75c23632140d0f70071e98d6357d3e3",
+          "anatomyReassembled": false,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/life/read-east.webp",
+      "sha256": "0d29dd349946a6d0db812bd11ac437311915cc6d51517c7533247a8af8229d87",
+      "bytes": 29614,
+      "cell": 256,
+      "frames": 4,
+      "dimensions": [
+        1024,
+        256
+      ],
+      "root": [
+        128.0,
+        224.0
+      ],
+      "sourceBindings": [
+        {
+          "path": "tools/launcher-room/robin-v2/sources/read-01/source.png",
+          "sha256": "9b228bf2f8e367121a95f8aeedcdf8565939475b38459cd1d6ba1f7cc91fd786"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/read-01/prompt.txt",
+          "sha256": "977f4a9f8d260eac96f315f2e6e1051fbc0207ccf7c9445be67a0c3067cd22a7"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/read-01/receipt.json",
+          "sha256": "6728d9593bd2ee5eebfe49cffff2f8b55de8cab0af9ca24fd187e4e202c632be"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/source.png",
+          "sha256": "e65ce16acdc345f434eb9f496a8b744e1a31df49da78597a7bcbfd0cb9e98e9d"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/prompt.txt",
+          "sha256": "84c070d053ce725555d2693f7fef2889c686151e635b7efcf381e6ae95d59033"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/receipt.json",
+          "sha256": "24596736f6838162834451b1b2684a8cb6309d63bd01e0c5cbaae805173718f1"
+        }
+      ],
+      "frameRecords": [
+        {
+          "index": 0,
+          "source": "read-01",
+          "sourceCell": [
+            0,
+            0
+          ],
+          "region": [
+            243,
+            0,
+            173,
+            404
+          ],
+          "sourceAnchor": [
+            304.6825457317073,
+            392
+          ],
+          "sourceAlphaBounds": [
+            253,
+            10,
+            406,
+            394
+          ],
+          "removedDistantAlphaPixels": 3406,
+          "bounds": [
+            102,
+            27,
+            180,
+            224
+          ],
+          "wholeFigureScale": 0.2578947368421053,
+          "inverseWholeImageTransform": [
+            1.9387755102040813,
+            0,
+            -196.4807195744151,
+            0,
+            1.9387755102040813,
+            -52.28571428571422
+          ],
+          "rgbaSha256": "27dce1bf46fcd4d4c5ad8c85d843625a9653e28788b84803f3a97c3349957804",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "source": "read-01",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "region": [
+            660,
+            1,
+            177,
+            403
+          ],
+          "sourceAnchor": [
+            724.7379994636632,
+            392
+          ],
+          "sourceAlphaBounds": [
+            670,
+            11,
+            827,
+            394
+          ],
+          "removedDistantAlphaPixels": 3935,
+          "bounds": [
+            100,
+            27,
+            180,
+            225
+          ],
+          "wholeFigureScale": 0.2578947368421053,
+          "inverseWholeImageTransform": [
+            1.9387755102040813,
+            0,
+            -193.42526584245923,
+            0,
+            1.9387755102040813,
+            -53.28571428571422
+          ],
+          "rgbaSha256": "5a6e9ebc57bdd644b14900e7e6d21d3ab5c80306dd2c4ae1bebf2b4f7d586c5f",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "source": "read-01",
+          "sourceCell": [
+            0,
+            0
+          ],
+          "region": [
+            243,
+            0,
+            173,
+            404
+          ],
+          "sourceAnchor": [
+            304.6825457317073,
+            392
+          ],
+          "sourceAlphaBounds": [
+            253,
+            10,
+            406,
+            394
+          ],
+          "removedDistantAlphaPixels": 3406,
+          "bounds": [
+            102,
+            27,
+            180,
+            224
+          ],
+          "wholeFigureScale": 0.2578947368421053,
+          "inverseWholeImageTransform": [
+            1.9387755102040813,
+            0,
+            -196.4807195744151,
+            0,
+            1.9387755102040813,
+            -52.28571428571422
+          ],
+          "rgbaSha256": "27dce1bf46fcd4d4c5ad8c85d843625a9653e28788b84803f3a97c3349957804",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "source": "read-01",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "region": [
+            660,
+            1,
+            177,
+            403
+          ],
+          "sourceAnchor": [
+            724.7379994636632,
+            392
+          ],
+          "sourceAlphaBounds": [
+            670,
+            11,
+            827,
+            394
+          ],
+          "removedDistantAlphaPixels": 3935,
+          "bounds": [
+            100,
+            27,
+            180,
+            225
+          ],
+          "wholeFigureScale": 0.2578947368421053,
+          "inverseWholeImageTransform": [
+            1.9387755102040813,
+            0,
+            -193.42526584245923,
+            0,
+            1.9387755102040813,
+            -53.28571428571422
+          ],
+          "rgbaSha256": "5a6e9ebc57bdd644b14900e7e6d21d3ab5c80306dd2c4ae1bebf2b4f7d586c5f",
+          "anatomyReassembled": false,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/walk/west.webp",
+      "sha256": "b9032bd2dfd36f67610f96dfefef3936438464247bec58d1120c6bcbdd30a101",
+      "bytes": 89498,
+      "cell": 384,
+      "frames": 4,
+      "dimensions": [
+        1536,
+        384
+      ],
+      "root": [
+        192.0,
+        336.0
+      ],
+      "sourceBindings": [
+        {
+          "path": "tools/launcher-room/robin-v2/sources/walk-side-02/source.png",
+          "sha256": "22b8ef028594f4600c07175d839c4b60132d43f4c5a5480d661e2d4ec97f0337"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/walk-side-02/prompt.txt",
+          "sha256": "65dafe0b50e1dd2a21cb5a480aae7f1b3dc00961c2016393c5e10beb9a036b88"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/walk-side-02/receipt.json",
+          "sha256": "df7e395287559cb7e58c5972d8244a03dab477779d6466b13f43e50d8ae6c341"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/west-01/source.png",
+          "sha256": "bc8add447b32489b143dbfd975af5566dbff567846e2d62eb6ece2f857ed884d"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/west-01/prompt.txt",
+          "sha256": "26e32840a7437e04b84bd0ffbcf35c214d4111473294994d895e46e09d1c80b4"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/west-01/receipt.json",
+          "sha256": "236b6f5aaaf4e36b39c5a9315d6d47dccd948753073c8a6af058cb755d229468"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/source.png",
+          "sha256": "e65ce16acdc345f434eb9f496a8b744e1a31df49da78597a7bcbfd0cb9e98e9d"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/prompt.txt",
+          "sha256": "84c070d053ce725555d2693f7fef2889c686151e635b7efcf381e6ae95d59033"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/receipt.json",
+          "sha256": "24596736f6838162834451b1b2684a8cb6309d63bd01e0c5cbaae805173718f1"
+        }
+      ],
+      "frameRecords": [
+        {
+          "index": 0,
+          "source": "walk-side-02",
+          "sourceCell": [
+            0,
+            1
+          ],
+          "region": [
+            210,
+            629,
+            305,
+            602
+          ],
+          "sourceAnchor": [
+            392.6125481563016,
+            1219
+          ],
+          "sourceAlphaBounds": [
+            220,
+            639,
+            504,
+            1221
+          ],
+          "removedDistantAlphaPixels": 8842,
+          "bounds": [
+            105,
+            41,
+            249,
+            337
+          ],
+          "wholeFigureScale": 0.1692573402417962,
+          "inverseWholeImageTransform": [
+            1.9693877551020407,
+            0,
+            -205.5099008232902,
+            0,
+            1.9693877551020407,
+            -81.71428571428567
+          ],
+          "rgbaSha256": "a40ebf314d1e6d27dee47d7f4686bca8e41dd8151a5d6d3fa4844bb7e817e0ce",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "source": "west-01",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "region": [
+            510,
+            5,
+            150,
+            514
+          ],
+          "sourceAnchor": [
+            588.2318558207501,
+            507
+          ],
+          "sourceAlphaBounds": [
+            520,
+            15,
+            650,
+            509
+          ],
+          "removedDistantAlphaPixels": 4054,
+          "bounds": [
+            151,
+            41,
+            229,
+            337
+          ],
+          "wholeFigureScale": 0.2,
+          "inverseWholeImageTransform": [
+            1.6666666666666665,
+            0,
+            -251.76814417924987,
+            0,
+            1.6666666666666665,
+            -67.99999999999989
+          ],
+          "rgbaSha256": "ae6ffe1aac2b7832510d71049faffb99aff4f395520eda10ef859d293fe344f4",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "source": "walk-side-02",
+          "sourceCell": [
+            1,
+            1
+          ],
+          "region": [
+            725,
+            629,
+            293,
+            603
+          ],
+          "sourceAnchor": [
+            879.7329986121316,
+            1220
+          ],
+          "sourceAlphaBounds": [
+            736,
+            639,
+            1008,
+            1222
+          ],
+          "removedDistantAlphaPixels": 8003,
+          "bounds": [
+            119,
+            42,
+            257,
+            337
+          ],
+          "wholeFigureScale": 0.1692573402417962,
+          "inverseWholeImageTransform": [
+            1.9693877551020407,
+            0,
+            -234.3894503674602,
+            0,
+            1.9693877551020407,
+            -80.71428571428567
+          ],
+          "rgbaSha256": "2cadee5b7afd1f5dc0b291d958adca2a3d05720ab5fef422619a14ca19e4cc1f",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "source": "west-01",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "region": [
+            510,
+            5,
+            150,
+            514
+          ],
+          "sourceAnchor": [
+            588.2318558207501,
+            507
+          ],
+          "sourceAlphaBounds": [
+            520,
+            15,
+            650,
+            509
+          ],
+          "removedDistantAlphaPixels": 4054,
+          "bounds": [
+            151,
+            41,
+            229,
+            337
+          ],
+          "wholeFigureScale": 0.2,
+          "inverseWholeImageTransform": [
+            1.6666666666666665,
+            0,
+            -251.76814417924987,
+            0,
+            1.6666666666666665,
+            -67.99999999999989
+          ],
+          "rgbaSha256": "ae6ffe1aac2b7832510d71049faffb99aff4f395520eda10ef859d293fe344f4",
+          "anatomyReassembled": false,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/acting/west.webp",
+      "sha256": "a4180b244f3265cb34caa35de72b2bb903a9e3a66e6647dee72b2030a8db0e52",
+      "bytes": 90504,
+      "cell": 256,
+      "frames": 8,
+      "dimensions": [
+        2048,
+        256
+      ],
+      "root": [
+        128.0,
+        224.0
+      ],
+      "sourceBindings": [
+        {
+          "path": "tools/launcher-room/robin-v2/sources/west-01/source.png",
+          "sha256": "bc8add447b32489b143dbfd975af5566dbff567846e2d62eb6ece2f857ed884d"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/west-01/prompt.txt",
+          "sha256": "26e32840a7437e04b84bd0ffbcf35c214d4111473294994d895e46e09d1c80b4"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/west-01/receipt.json",
+          "sha256": "236b6f5aaaf4e36b39c5a9315d6d47dccd948753073c8a6af058cb755d229468"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/work-01/source.png",
+          "sha256": "73f38f9b2b41495605f2a77d74d8170d5244e47ed97bdbea0d72d3c876a922c4"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/work-01/prompt.txt",
+          "sha256": "3a4cee5037bc5ec1a957582465c9ae94d2607c57d879eeda374aa77a01f97c68"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/work-01/receipt.json",
+          "sha256": "21e0d35012099e00243ee86f73ac5ba48f1cbd44070f67a17f26125958ded95e"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/source.png",
+          "sha256": "e65ce16acdc345f434eb9f496a8b744e1a31df49da78597a7bcbfd0cb9e98e9d"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/prompt.txt",
+          "sha256": "84c070d053ce725555d2693f7fef2889c686151e635b7efcf381e6ae95d59033"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/receipt.json",
+          "sha256": "24596736f6838162834451b1b2684a8cb6309d63bd01e0c5cbaae805173718f1"
+        }
+      ],
+      "frameRecords": [
+        {
+          "index": 0,
+          "source": "west-01",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "region": [
+            510,
+            5,
+            150,
+            514
+          ],
+          "sourceAnchor": [
+            588.2318558207501,
+            507
+          ],
+          "sourceAlphaBounds": [
+            520,
+            15,
+            650,
+            509
+          ],
+          "removedDistantAlphaPixels": 4054,
+          "bounds": [
+            101,
+            28,
+            153,
+            225
+          ],
+          "wholeFigureScale": 0.2,
+          "inverseWholeImageTransform": [
+            2.5,
+            0,
+            -251.76814417924993,
+            0,
+            2.5,
+            -68.0
+          ],
+          "rgbaSha256": "c53e2583cc9abffbed1bbc28061fece2acf927ceb14348eaca307913256086b5",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "source": "west-01",
+          "sourceCell": [
+            3,
+            0
+          ],
+          "region": [
+            1152,
+            4,
+            220,
+            515
+          ],
+          "sourceAnchor": [
+            1300.2932398417836,
+            507
+          ],
+          "sourceAlphaBounds": [
+            1162,
+            14,
+            1362,
+            509
+          ],
+          "removedDistantAlphaPixels": 4966,
+          "bounds": [
+            73,
+            27,
+            152,
+            224
+          ],
+          "wholeFigureScale": 0.2,
+          "inverseWholeImageTransform": [
+            2.5,
+            0,
+            -181.7067601582164,
+            0,
+            2.5,
+            -67.0
+          ],
+          "rgbaSha256": "8950de4462da6de52e42274b8d0d344b2c55849bb9b1309355cd039d2c0b0104",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "source": "west-01",
+          "sourceCell": [
+            0,
+            1
+          ],
+          "region": [
+            173,
+            508,
+            162,
+            514
+          ],
+          "sourceAnchor": [
+            261.35478954156406,
+            1010
+          ],
+          "sourceAlphaBounds": [
+            183,
+            518,
+            325,
+            1012
+          ],
+          "removedDistantAlphaPixels": 3811,
+          "bounds": [
+            97,
+            28,
+            153,
+            224
+          ],
+          "wholeFigureScale": 0.2,
+          "inverseWholeImageTransform": [
+            2.5,
+            0,
+            -241.64521045843594,
+            0,
+            2.5,
+            -68.0
+          ],
+          "rgbaSha256": "278db6b520e53fbab9a84b5e945608c3c7481e6d4bda7efb272e15248af9db5c",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "source": "west-01",
+          "sourceCell": [
+            1,
+            1
+          ],
+          "region": [
+            510,
+            509,
+            156,
+            513
+          ],
+          "sourceAnchor": [
+            593.8025897727954,
+            1010
+          ],
+          "sourceAlphaBounds": [
+            520,
+            519,
+            656,
+            1012
+          ],
+          "removedDistantAlphaPixels": 3685,
+          "bounds": [
+            99,
+            28,
+            153,
+            224
+          ],
+          "wholeFigureScale": 0.2,
+          "inverseWholeImageTransform": [
+            2.5,
+            0,
+            -246.1974102272046,
+            0,
+            2.5,
+            -69.0
+          ],
+          "rgbaSha256": "5e2bf3819bff075039b299fa0f4a6f4e521268ee036897a06333897cbd6cb1b7",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 4,
+          "source": "work-01",
+          "sourceCell": [
+            0,
+            1
+          ],
+          "region": [
+            177,
+            377,
+            206,
+            404
+          ],
+          "sourceAnchor": [
+            319.9513458514476,
+            769
+          ],
+          "sourceAlphaBounds": [
+            187,
+            387,
+            373,
+            771
+          ],
+          "removedDistantAlphaPixels": 4387,
+          "bounds": [
+            60,
+            28,
+            155,
+            225
+          ],
+          "wholeFigureScale": 0.2578947368421053,
+          "inverseWholeImageTransform": [
+            1.9387755102040813,
+            0,
+            -115.21191945467478,
+            0,
+            1.9387755102040813,
+            -52.28571428571422
+          ],
+          "rgbaSha256": "81863e875498f7df24cd24d499e6488972cf15b803649fbe68533b710befb798",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 5,
+          "source": "west-01",
+          "sourceCell": [
+            3,
+            1
+          ],
+          "region": [
+            1166,
+            606,
+            221,
+            416
+          ],
+          "sourceAnchor": [
+            1313.7026418928726,
+            1010
+          ],
+          "sourceAlphaBounds": [
+            1176,
+            616,
+            1377,
+            1012
+          ],
+          "removedDistantAlphaPixels": 3389,
+          "bounds": [
+            73,
+            66,
+            153,
+            224
+          ],
+          "wholeFigureScale": 0.2,
+          "inverseWholeImageTransform": [
+            2.5,
+            0,
+            -182.29735810712737,
+            0,
+            2.5,
+            -166.0
+          ],
+          "rgbaSha256": "0a13426b10bb0b233bc1f436598c1e27096e601d3a006ed2b9c2c8bcbf3e8766",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 6,
+          "source": "west-01",
+          "sourceCell": [
+            2,
+            1
+          ],
+          "region": [
+            830,
+            510,
+            189,
+            512
+          ],
+          "sourceAnchor": [
+            937.7948924298514,
+            1010
+          ],
+          "sourceAlphaBounds": [
+            840,
+            520,
+            1009,
+            1012
+          ],
+          "removedDistantAlphaPixels": 4242,
+          "bounds": [
+            89,
+            28,
+            156,
+            225
+          ],
+          "wholeFigureScale": 0.2,
+          "inverseWholeImageTransform": [
+            2.5,
+            0,
+            -222.20510757014858,
+            0,
+            2.5,
+            -70.0
+          ],
+          "rgbaSha256": "aecf1ff362f9c15289be7228635a75f4fde693e09e7ae3c1101dd970d5dfb167",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 7,
+          "source": "west-01",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "region": [
+            510,
+            5,
+            150,
+            514
+          ],
+          "sourceAnchor": [
+            588.2318558207501,
+            507
+          ],
+          "sourceAlphaBounds": [
+            520,
+            15,
+            650,
+            509
+          ],
+          "removedDistantAlphaPixels": 4054,
+          "bounds": [
+            101,
+            28,
+            153,
+            225
+          ],
+          "wholeFigureScale": 0.2,
+          "inverseWholeImageTransform": [
+            2.5,
+            0,
+            -251.76814417924993,
+            0,
+            2.5,
+            -68.0
+          ],
+          "rgbaSha256": "c53e2583cc9abffbed1bbc28061fece2acf927ceb14348eaca307913256086b5",
+          "anatomyReassembled": false,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/life/work-west.webp",
+      "sha256": "6fe6b3936d6380f5a44059cbce34063d7ab782a3a23b18e15697063ea175c11c",
+      "bytes": 31078,
+      "cell": 256,
+      "frames": 4,
+      "dimensions": [
+        1024,
+        256
+      ],
+      "root": [
+        128.0,
+        224.0
+      ],
+      "sourceBindings": [
+        {
+          "path": "tools/launcher-room/robin-v2/sources/work-01/source.png",
+          "sha256": "73f38f9b2b41495605f2a77d74d8170d5244e47ed97bdbea0d72d3c876a922c4"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/work-01/prompt.txt",
+          "sha256": "3a4cee5037bc5ec1a957582465c9ae94d2607c57d879eeda374aa77a01f97c68"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/work-01/receipt.json",
+          "sha256": "21e0d35012099e00243ee86f73ac5ba48f1cbd44070f67a17f26125958ded95e"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/source.png",
+          "sha256": "e65ce16acdc345f434eb9f496a8b744e1a31df49da78597a7bcbfd0cb9e98e9d"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/prompt.txt",
+          "sha256": "84c070d053ce725555d2693f7fef2889c686151e635b7efcf381e6ae95d59033"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/receipt.json",
+          "sha256": "24596736f6838162834451b1b2684a8cb6309d63bd01e0c5cbaae805173718f1"
+        }
+      ],
+      "frameRecords": [
+        {
+          "index": 0,
+          "source": "work-01",
+          "sourceCell": [
+            0,
+            1
+          ],
+          "region": [
+            177,
+            377,
+            206,
+            404
+          ],
+          "sourceAnchor": [
+            319.9513458514476,
+            769
+          ],
+          "sourceAlphaBounds": [
+            187,
+            387,
+            373,
+            771
+          ],
+          "removedDistantAlphaPixels": 4387,
+          "bounds": [
+            60,
+            28,
+            155,
+            225
+          ],
+          "wholeFigureScale": 0.2578947368421053,
+          "inverseWholeImageTransform": [
+            1.9387755102040813,
+            0,
+            -115.21191945467478,
+            0,
+            1.9387755102040813,
+            -52.28571428571422
+          ],
+          "rgbaSha256": "81863e875498f7df24cd24d499e6488972cf15b803649fbe68533b710befb798",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "source": "work-01",
+          "sourceCell": [
+            1,
+            1
+          ],
+          "region": [
+            594,
+            377,
+            198,
+            402
+          ],
+          "sourceAnchor": [
+            730.1538767000893,
+            767
+          ],
+          "sourceAlphaBounds": [
+            604,
+            387,
+            782,
+            769
+          ],
+          "removedDistantAlphaPixels": 4628,
+          "bounds": [
+            64,
+            29,
+            155,
+            225
+          ],
+          "wholeFigureScale": 0.2578947368421053,
+          "inverseWholeImageTransform": [
+            1.9387755102040813,
+            0,
+            -122.0093886060331,
+            0,
+            1.9387755102040813,
+            -54.28571428571422
+          ],
+          "rgbaSha256": "3ead6aa4e13e67d5f8a1ea881ac651803ba990c8905cd7b28b4f69c39d95cead",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "source": "work-01",
+          "sourceCell": [
+            0,
+            1
+          ],
+          "region": [
+            177,
+            377,
+            206,
+            404
+          ],
+          "sourceAnchor": [
+            319.9513458514476,
+            769
+          ],
+          "sourceAlphaBounds": [
+            187,
+            387,
+            373,
+            771
+          ],
+          "removedDistantAlphaPixels": 4387,
+          "bounds": [
+            60,
+            28,
+            155,
+            225
+          ],
+          "wholeFigureScale": 0.2578947368421053,
+          "inverseWholeImageTransform": [
+            1.9387755102040813,
+            0,
+            -115.21191945467478,
+            0,
+            1.9387755102040813,
+            -52.28571428571422
+          ],
+          "rgbaSha256": "81863e875498f7df24cd24d499e6488972cf15b803649fbe68533b710befb798",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "source": "work-01",
+          "sourceCell": [
+            1,
+            1
+          ],
+          "region": [
+            594,
+            377,
+            198,
+            402
+          ],
+          "sourceAnchor": [
+            730.1538767000893,
+            767
+          ],
+          "sourceAlphaBounds": [
+            604,
+            387,
+            782,
+            769
+          ],
+          "removedDistantAlphaPixels": 4628,
+          "bounds": [
+            64,
+            29,
+            155,
+            225
+          ],
+          "wholeFigureScale": 0.2578947368421053,
+          "inverseWholeImageTransform": [
+            1.9387755102040813,
+            0,
+            -122.0093886060331,
+            0,
+            1.9387755102040813,
+            -54.28571428571422
+          ],
+          "rgbaSha256": "3ead6aa4e13e67d5f8a1ea881ac651803ba990c8905cd7b28b4f69c39d95cead",
+          "anatomyReassembled": false,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/life/read-west.webp",
+      "sha256": "f0204573e8f0be5efa96eae30a45cfb2e48770d89030f802688c6a6d122a1b54",
+      "bytes": 30074,
+      "cell": 256,
+      "frames": 4,
+      "dimensions": [
+        1024,
+        256
+      ],
+      "root": [
+        128.0,
+        224.0
+      ],
+      "sourceBindings": [
+        {
+          "path": "tools/launcher-room/robin-v2/sources/read-01/source.png",
+          "sha256": "9b228bf2f8e367121a95f8aeedcdf8565939475b38459cd1d6ba1f7cc91fd786"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/read-01/prompt.txt",
+          "sha256": "977f4a9f8d260eac96f315f2e6e1051fbc0207ccf7c9445be67a0c3067cd22a7"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/read-01/receipt.json",
+          "sha256": "6728d9593bd2ee5eebfe49cffff2f8b55de8cab0af9ca24fd187e4e202c632be"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/source.png",
+          "sha256": "e65ce16acdc345f434eb9f496a8b744e1a31df49da78597a7bcbfd0cb9e98e9d"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/prompt.txt",
+          "sha256": "84c070d053ce725555d2693f7fef2889c686151e635b7efcf381e6ae95d59033"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/receipt.json",
+          "sha256": "24596736f6838162834451b1b2684a8cb6309d63bd01e0c5cbaae805173718f1"
+        }
+      ],
+      "frameRecords": [
+        {
+          "index": 0,
+          "source": "read-01",
+          "sourceCell": [
+            0,
+            1
+          ],
+          "region": [
+            193,
+            386,
+            173,
+            403
+          ],
+          "sourceAnchor": [
+            304.0284902981543,
+            777
+          ],
+          "sourceAlphaBounds": [
+            203,
+            396,
+            356,
+            779
+          ],
+          "removedDistantAlphaPixels": 4096,
+          "bounds": [
+            77,
+            28,
+            154,
+            225
+          ],
+          "wholeFigureScale": 0.2572178477690289,
+          "inverseWholeImageTransform": [
+            1.943877551020408,
+            0,
+            -147.78783623245795,
+            0,
+            1.943877551020408,
+            -54.42857142857139
+          ],
+          "rgbaSha256": "aa3841853dc5576c8bbf29eca8988f81f317423b854fde6fa9d6c86065d48b5e",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "source": "read-01",
+          "sourceCell": [
+            1,
+            1
+          ],
+          "region": [
+            612,
+            385,
+            174,
+            405
+          ],
+          "sourceAnchor": [
+            720.75,
+            778
+          ],
+          "sourceAlphaBounds": [
+            622,
+            395,
+            776,
+            780
+          ],
+          "removedDistantAlphaPixels": 4667,
+          "bounds": [
+            77,
+            27,
+            156,
+            224
+          ],
+          "wholeFigureScale": 0.2572178477690289,
+          "inverseWholeImageTransform": [
+            1.943877551020408,
+            0,
+            -150.06632653061223,
+            0,
+            1.943877551020408,
+            -52.42857142857139
+          ],
+          "rgbaSha256": "c45b4549081daeebf5333270ffd63e407a3271fc969f53246e65165738241ced",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "source": "read-01",
+          "sourceCell": [
+            0,
+            1
+          ],
+          "region": [
+            193,
+            386,
+            173,
+            403
+          ],
+          "sourceAnchor": [
+            304.0284902981543,
+            777
+          ],
+          "sourceAlphaBounds": [
+            203,
+            396,
+            356,
+            779
+          ],
+          "removedDistantAlphaPixels": 4096,
+          "bounds": [
+            77,
+            28,
+            154,
+            225
+          ],
+          "wholeFigureScale": 0.2572178477690289,
+          "inverseWholeImageTransform": [
+            1.943877551020408,
+            0,
+            -147.78783623245795,
+            0,
+            1.943877551020408,
+            -54.42857142857139
+          ],
+          "rgbaSha256": "aa3841853dc5576c8bbf29eca8988f81f317423b854fde6fa9d6c86065d48b5e",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "source": "read-01",
+          "sourceCell": [
+            1,
+            1
+          ],
+          "region": [
+            612,
+            385,
+            174,
+            405
+          ],
+          "sourceAnchor": [
+            720.75,
+            778
+          ],
+          "sourceAlphaBounds": [
+            622,
+            395,
+            776,
+            780
+          ],
+          "removedDistantAlphaPixels": 4667,
+          "bounds": [
+            77,
+            27,
+            156,
+            224
+          ],
+          "wholeFigureScale": 0.2572178477690289,
+          "inverseWholeImageTransform": [
+            1.943877551020408,
+            0,
+            -150.06632653061223,
+            0,
+            1.943877551020408,
+            -52.42857142857139
+          ],
+          "rgbaSha256": "c45b4549081daeebf5333270ffd63e407a3271fc969f53246e65165738241ced",
+          "anatomyReassembled": false,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/walk/north.webp",
+      "sha256": "56cc1ff75f4b441c4223885b4320502b5931fbfeb6fba8e1196a8f008c1224f1",
+      "bytes": 80024,
+      "cell": 384,
+      "frames": 4,
+      "dimensions": [
+        1536,
+        384
+      ],
+      "root": [
+        192.0,
+        336.0
+      ],
+      "sourceBindings": [
+        {
+          "path": "tools/launcher-room/robin-v2/sources/north-01/source.png",
+          "sha256": "c469a8a24ce3c3c36a0d7cbce45a7b70ba6b150fc714559bd034d3a99420d490"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/north-01/prompt.txt",
+          "sha256": "bcda3822f5a144f04fdf3c7200be0b82aec0e6ac6b79055f39314061b17ec68c"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/north-01/receipt.json",
+          "sha256": "b6d4b3560d794933f2440519a54106db361b61d41e9765a8938cb526280d9522"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/source.png",
+          "sha256": "e65ce16acdc345f434eb9f496a8b744e1a31df49da78597a7bcbfd0cb9e98e9d"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/prompt.txt",
+          "sha256": "84c070d053ce725555d2693f7fef2889c686151e635b7efcf381e6ae95d59033"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/receipt.json",
+          "sha256": "24596736f6838162834451b1b2684a8cb6309d63bd01e0c5cbaae805173718f1"
+        }
+      ],
+      "frameRecords": [
+        {
+          "index": 0,
+          "source": "north-01",
+          "sourceCell": [
+            0,
+            0
+          ],
+          "region": [
+            147,
+            6,
+            192,
+            496
+          ],
+          "sourceAnchor": [
+            245.03172472267363,
+            490
+          ],
+          "sourceAlphaBounds": [
+            157,
+            16,
+            329,
+            492
+          ],
+          "removedDistantAlphaPixels": 3998,
+          "bounds": [
+            136,
+            37,
+            244,
+            337
+          ],
+          "wholeFigureScale": 0.21030042918454936,
+          "inverseWholeImageTransform": [
+            1.5850340136054422,
+            0,
+            -216.29480588957125,
+            0,
+            1.5850340136054422,
+            -58.571428571428555
+          ],
+          "rgbaSha256": "8489853d971b0dcb0e6f0931ca93e7095d67bcab14119196a8f7ad2bed7c3540",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "source": "north-01",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "region": [
+            506,
+            6,
+            176,
+            490
+          ],
+          "sourceAnchor": [
+            594.2376656329293,
+            484
+          ],
+          "sourceAlphaBounds": [
+            516,
+            16,
+            672,
+            486
+          ],
+          "removedDistantAlphaPixels": 4985,
+          "bounds": [
+            143,
+            41,
+            241,
+            337
+          ],
+          "wholeFigureScale": 0.21030042918454936,
+          "inverseWholeImageTransform": [
+            1.5850340136054422,
+            0,
+            -226.0888649793156,
+            0,
+            1.5850340136054422,
+            -64.57142857142856
+          ],
+          "rgbaSha256": "1e6dad97d3d1fea6f9122e7226dc21c5e2ba3bea5bc07359d563452caa91a7cc",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "source": "north-01",
+          "sourceCell": [
+            2,
+            0
+          ],
+          "region": [
+            846,
+            6,
+            202,
+            495
+          ],
+          "sourceAnchor": [
+            941.6180897551502,
+            489
+          ],
+          "sourceAlphaBounds": [
+            856,
+            16,
+            1038,
+            491
+          ],
+          "removedDistantAlphaPixels": 4544,
+          "bounds": [
+            138,
+            38,
+            253,
+            336
+          ],
+          "wholeFigureScale": 0.21030042918454936,
+          "inverseWholeImageTransform": [
+            1.5850340136054422,
+            0,
+            -218.70844085709467,
+            0,
+            1.5850340136054422,
+            -59.571428571428555
+          ],
+          "rgbaSha256": "901fb82df28c6763fa3f1e82b1f299b319070beb66721134b8dabf7c36bcda67",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "source": "north-01",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "region": [
+            506,
+            6,
+            176,
+            490
+          ],
+          "sourceAnchor": [
+            594.2376656329293,
+            484
+          ],
+          "sourceAlphaBounds": [
+            516,
+            16,
+            672,
+            486
+          ],
+          "removedDistantAlphaPixels": 4985,
+          "bounds": [
+            143,
+            41,
+            241,
+            337
+          ],
+          "wholeFigureScale": 0.21030042918454936,
+          "inverseWholeImageTransform": [
+            1.5850340136054422,
+            0,
+            -226.0888649793156,
+            0,
+            1.5850340136054422,
+            -64.57142857142856
+          ],
+          "rgbaSha256": "1e6dad97d3d1fea6f9122e7226dc21c5e2ba3bea5bc07359d563452caa91a7cc",
+          "anatomyReassembled": false,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/acting/north.webp",
+      "sha256": "63fe861cb8964bd75356d82c91be4aee69e68a0c026ef7f414b1218ac6de2c04",
+      "bytes": 92428,
+      "cell": 256,
+      "frames": 8,
+      "dimensions": [
+        2048,
+        256
+      ],
+      "root": [
+        128.0,
+        224.0
+      ],
+      "sourceBindings": [
+        {
+          "path": "tools/launcher-room/robin-v2/sources/north-01/source.png",
+          "sha256": "c469a8a24ce3c3c36a0d7cbce45a7b70ba6b150fc714559bd034d3a99420d490"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/north-01/prompt.txt",
+          "sha256": "bcda3822f5a144f04fdf3c7200be0b82aec0e6ac6b79055f39314061b17ec68c"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/north-01/receipt.json",
+          "sha256": "b6d4b3560d794933f2440519a54106db361b61d41e9765a8938cb526280d9522"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/work-01/source.png",
+          "sha256": "73f38f9b2b41495605f2a77d74d8170d5244e47ed97bdbea0d72d3c876a922c4"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/work-01/prompt.txt",
+          "sha256": "3a4cee5037bc5ec1a957582465c9ae94d2607c57d879eeda374aa77a01f97c68"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/work-01/receipt.json",
+          "sha256": "21e0d35012099e00243ee86f73ac5ba48f1cbd44070f67a17f26125958ded95e"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/source.png",
+          "sha256": "e65ce16acdc345f434eb9f496a8b744e1a31df49da78597a7bcbfd0cb9e98e9d"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/prompt.txt",
+          "sha256": "84c070d053ce725555d2693f7fef2889c686151e635b7efcf381e6ae95d59033"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/receipt.json",
+          "sha256": "24596736f6838162834451b1b2684a8cb6309d63bd01e0c5cbaae805173718f1"
+        }
+      ],
+      "frameRecords": [
+        {
+          "index": 0,
+          "source": "north-01",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "region": [
+            506,
+            6,
+            176,
+            490
+          ],
+          "sourceAnchor": [
+            594.2376656329293,
+            484
+          ],
+          "sourceAlphaBounds": [
+            516,
+            16,
+            672,
+            486
+          ],
+          "removedDistantAlphaPixels": 4985,
+          "bounds": [
+            95,
+            27,
+            161,
+            225
+          ],
+          "wholeFigureScale": 0.21030042918454936,
+          "inverseWholeImageTransform": [
+            2.377551020408163,
+            0,
+            -226.0888649793156,
+            0,
+            2.377551020408163,
+            -64.57142857142856
+          ],
+          "rgbaSha256": "c454dcd360013c8b3aae81af579acabb195568a03dca85360b78d8ca90303c7c",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "source": "north-01",
+          "sourceCell": [
+            3,
+            0
+          ],
+          "region": [
+            1214,
+            6,
+            224,
+            490
+          ],
+          "sourceAnchor": [
+            1304.977147412476,
+            484
+          ],
+          "sourceAlphaBounds": [
+            1224,
+            16,
+            1428,
+            486
+          ],
+          "removedDistantAlphaPixels": 5204,
+          "bounds": [
+            94,
+            27,
+            180,
+            225
+          ],
+          "wholeFigureScale": 0.21030042918454936,
+          "inverseWholeImageTransform": [
+            2.377551020408163,
+            0,
+            -223.34938319976897,
+            0,
+            2.377551020408163,
+            -64.57142857142856
+          ],
+          "rgbaSha256": "ea9c71cb7dab52b4a69f9c27c666bf1e8d341d9aea5dc62e7521b3c438d96cdc",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "source": "north-01",
+          "sourceCell": [
+            0,
+            1
+          ],
+          "region": [
+            171,
+            508,
+            161,
+            497
+          ],
+          "sourceAnchor": [
+            240.33191431853504,
+            993
+          ],
+          "sourceAlphaBounds": [
+            181,
+            518,
+            322,
+            995
+          ],
+          "removedDistantAlphaPixels": 3371,
+          "bounds": [
+            104,
+            24,
+            162,
+            225
+          ],
+          "wholeFigureScale": 0.21030042918454936,
+          "inverseWholeImageTransform": [
+            2.377551020408163,
+            0,
+            -244.99461629370984,
+            0,
+            2.377551020408163,
+            -57.571428571428555
+          ],
+          "rgbaSha256": "5ee74cad2f304898eefa34a255d5a8807bc29513fde80909d1f388c8c173b96e",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "source": "north-01",
+          "sourceCell": [
+            1,
+            1
+          ],
+          "region": [
+            479,
+            508,
+            230,
+            496
+          ],
+          "sourceAnchor": [
+            591.3451517593339,
+            992
+          ],
+          "sourceAlphaBounds": [
+            489,
+            518,
+            699,
+            994
+          ],
+          "removedDistantAlphaPixels": 6308,
+          "bounds": [
+            86,
+            25,
+            173,
+            225
+          ],
+          "wholeFigureScale": 0.21030042918454936,
+          "inverseWholeImageTransform": [
+            2.377551020408163,
+            0,
+            -201.98137885291095,
+            0,
+            2.377551020408163,
+            -58.571428571428555
+          ],
+          "rgbaSha256": "777543386a410d9224df1832c2fab5fafc91cbd1a2e427ca403329f6541352fc",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 4,
+          "source": "work-01",
+          "sourceCell": [
+            0,
+            2
+          ],
+          "region": [
+            250,
+            761,
+            168,
+            401
+          ],
+          "sourceAnchor": [
+            319.96178180574555,
+            1150
+          ],
+          "sourceAlphaBounds": [
+            260,
+            771,
+            408,
+            1152
+          ],
+          "removedDistantAlphaPixels": 4748,
+          "bounds": [
+            97,
+            28,
+            174,
+            225
+          ],
+          "wholeFigureScale": 0.259946949602122,
+          "inverseWholeImageTransform": [
+            1.9234693877551021,
+            0,
+            -186.24229982690753,
+            0,
+            1.9234693877551021,
+            -51.85714285714289
+          ],
+          "rgbaSha256": "b54399d183f75c60c040e81bcbe645d78b93d95c8f1eaf4c91e83cf2bbd1966e",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 5,
+          "source": "north-01",
+          "sourceCell": [
+            3,
+            1
+          ],
+          "region": [
+            1211,
+            596,
+            173,
+            411
+          ],
+          "sourceAnchor": [
+            1303.03571114434,
+            995
+          ],
+          "sourceAlphaBounds": [
+            1221,
+            606,
+            1374,
+            997
+          ],
+          "removedDistantAlphaPixels": 2427,
+          "bounds": [
+            94,
+            60,
+            158,
+            224
+          ],
+          "wholeFigureScale": 0.21030042918454936,
+          "inverseWholeImageTransform": [
+            2.377551020408163,
+            0,
+            -222.2908194679049,
+            0,
+            2.377551020408163,
+            -143.57142857142856
+          ],
+          "rgbaSha256": "e9e7bc4f9a51bd83530bae95e8bb88ff2870359a6b692b307cf636bdc5f04afa",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 6,
+          "source": "north-01",
+          "sourceCell": [
+            2,
+            1
+          ],
+          "region": [
+            856,
+            508,
+            218,
+            497
+          ],
+          "sourceAnchor": [
+            961.8088045370318,
+            993
+          ],
+          "sourceAlphaBounds": [
+            866,
+            518,
+            1064,
+            995
+          ],
+          "removedDistantAlphaPixels": 4913,
+          "bounds": [
+            88,
+            25,
+            171,
+            224
+          ],
+          "wholeFigureScale": 0.21030042918454936,
+          "inverseWholeImageTransform": [
+            2.377551020408163,
+            0,
+            -208.51772607521303,
+            0,
+            2.377551020408163,
+            -57.571428571428555
+          ],
+          "rgbaSha256": "a6c3bc404ce544723037fe6f8ad8724802f439adfb14e44ed478352e0d815ef4",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 7,
+          "source": "north-01",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "region": [
+            506,
+            6,
+            176,
+            490
+          ],
+          "sourceAnchor": [
+            594.2376656329293,
+            484
+          ],
+          "sourceAlphaBounds": [
+            516,
+            16,
+            672,
+            486
+          ],
+          "removedDistantAlphaPixels": 4985,
+          "bounds": [
+            95,
+            27,
+            161,
+            225
+          ],
+          "wholeFigureScale": 0.21030042918454936,
+          "inverseWholeImageTransform": [
+            2.377551020408163,
+            0,
+            -226.0888649793156,
+            0,
+            2.377551020408163,
+            -64.57142857142856
+          ],
+          "rgbaSha256": "c454dcd360013c8b3aae81af579acabb195568a03dca85360b78d8ca90303c7c",
+          "anatomyReassembled": false,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/life/work-north.webp",
+      "sha256": "a12e0db2edc8a49780c3674b4394d24193aa93e81eae6c1d861a82364aefc60a",
+      "bytes": 31548,
+      "cell": 256,
+      "frames": 4,
+      "dimensions": [
+        1024,
+        256
+      ],
+      "root": [
+        128.0,
+        224.0
+      ],
+      "sourceBindings": [
+        {
+          "path": "tools/launcher-room/robin-v2/sources/work-01/source.png",
+          "sha256": "73f38f9b2b41495605f2a77d74d8170d5244e47ed97bdbea0d72d3c876a922c4"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/work-01/prompt.txt",
+          "sha256": "3a4cee5037bc5ec1a957582465c9ae94d2607c57d879eeda374aa77a01f97c68"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/work-01/receipt.json",
+          "sha256": "21e0d35012099e00243ee86f73ac5ba48f1cbd44070f67a17f26125958ded95e"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/source.png",
+          "sha256": "e65ce16acdc345f434eb9f496a8b744e1a31df49da78597a7bcbfd0cb9e98e9d"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/prompt.txt",
+          "sha256": "84c070d053ce725555d2693f7fef2889c686151e635b7efcf381e6ae95d59033"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/receipt.json",
+          "sha256": "24596736f6838162834451b1b2684a8cb6309d63bd01e0c5cbaae805173718f1"
+        }
+      ],
+      "frameRecords": [
+        {
+          "index": 0,
+          "source": "work-01",
+          "sourceCell": [
+            0,
+            2
+          ],
+          "region": [
+            250,
+            761,
+            168,
+            401
+          ],
+          "sourceAnchor": [
+            319.96178180574555,
+            1150
+          ],
+          "sourceAlphaBounds": [
+            260,
+            771,
+            408,
+            1152
+          ],
+          "removedDistantAlphaPixels": 4748,
+          "bounds": [
+            97,
+            28,
+            174,
+            225
+          ],
+          "wholeFigureScale": 0.259946949602122,
+          "inverseWholeImageTransform": [
+            1.9234693877551021,
+            0,
+            -186.24229982690753,
+            0,
+            1.9234693877551021,
+            -51.85714285714289
+          ],
+          "rgbaSha256": "b54399d183f75c60c040e81bcbe645d78b93d95c8f1eaf4c91e83cf2bbd1966e",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "source": "work-01",
+          "sourceCell": [
+            1,
+            2
+          ],
+          "region": [
+            652,
+            761,
+            173,
+            401
+          ],
+          "sourceAnchor": [
+            720.4954382826476,
+            1150
+          ],
+          "sourceAlphaBounds": [
+            662,
+            771,
+            815,
+            1152
+          ],
+          "removedDistantAlphaPixels": 5028,
+          "bounds": [
+            98,
+            27,
+            176,
+            225
+          ],
+          "wholeFigureScale": 0.259946949602122,
+          "inverseWholeImageTransform": [
+            1.9234693877551021,
+            0,
+            -187.7086433500055,
+            0,
+            1.9234693877551021,
+            -51.85714285714289
+          ],
+          "rgbaSha256": "ef0bbc1f7e372c09f267f5cd951495cbd09ac6d4b41fea3d58372b5ca700652c",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "source": "work-01",
+          "sourceCell": [
+            0,
+            2
+          ],
+          "region": [
+            250,
+            761,
+            168,
+            401
+          ],
+          "sourceAnchor": [
+            319.96178180574555,
+            1150
+          ],
+          "sourceAlphaBounds": [
+            260,
+            771,
+            408,
+            1152
+          ],
+          "removedDistantAlphaPixels": 4748,
+          "bounds": [
+            97,
+            28,
+            174,
+            225
+          ],
+          "wholeFigureScale": 0.259946949602122,
+          "inverseWholeImageTransform": [
+            1.9234693877551021,
+            0,
+            -186.24229982690753,
+            0,
+            1.9234693877551021,
+            -51.85714285714289
+          ],
+          "rgbaSha256": "b54399d183f75c60c040e81bcbe645d78b93d95c8f1eaf4c91e83cf2bbd1966e",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "source": "work-01",
+          "sourceCell": [
+            1,
+            2
+          ],
+          "region": [
+            652,
+            761,
+            173,
+            401
+          ],
+          "sourceAnchor": [
+            720.4954382826476,
+            1150
+          ],
+          "sourceAlphaBounds": [
+            662,
+            771,
+            815,
+            1152
+          ],
+          "removedDistantAlphaPixels": 5028,
+          "bounds": [
+            98,
+            27,
+            176,
+            225
+          ],
+          "wholeFigureScale": 0.259946949602122,
+          "inverseWholeImageTransform": [
+            1.9234693877551021,
+            0,
+            -187.7086433500055,
+            0,
+            1.9234693877551021,
+            -51.85714285714289
+          ],
+          "rgbaSha256": "ef0bbc1f7e372c09f267f5cd951495cbd09ac6d4b41fea3d58372b5ca700652c",
+          "anatomyReassembled": false,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/life/read-north.webp",
+      "sha256": "ee40cb18594d329435df93faed49b6cf1a2328f3310ea5c3e8052d30c9e4bf60",
+      "bytes": 31300,
+      "cell": 256,
+      "frames": 4,
+      "dimensions": [
+        1024,
+        256
+      ],
+      "root": [
+        128.0,
+        224.0
+      ],
+      "sourceBindings": [
+        {
+          "path": "tools/launcher-room/robin-v2/sources/read-01/source.png",
+          "sha256": "9b228bf2f8e367121a95f8aeedcdf8565939475b38459cd1d6ba1f7cc91fd786"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/read-01/prompt.txt",
+          "sha256": "977f4a9f8d260eac96f315f2e6e1051fbc0207ccf7c9445be67a0c3067cd22a7"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/read-01/receipt.json",
+          "sha256": "6728d9593bd2ee5eebfe49cffff2f8b55de8cab0af9ca24fd187e4e202c632be"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/source.png",
+          "sha256": "e65ce16acdc345f434eb9f496a8b744e1a31df49da78597a7bcbfd0cb9e98e9d"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/prompt.txt",
+          "sha256": "84c070d053ce725555d2693f7fef2889c686151e635b7efcf381e6ae95d59033"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/receipt.json",
+          "sha256": "24596736f6838162834451b1b2684a8cb6309d63bd01e0c5cbaae805173718f1"
+        }
+      ],
+      "frameRecords": [
+        {
+          "index": 0,
+          "source": "read-01",
+          "sourceCell": [
+            0,
+            2
+          ],
+          "region": [
+            229,
+            771,
+            150,
+            387
+          ],
+          "sourceAnchor": [
+            303.5043287984017,
+            1146
+          ],
+          "sourceAlphaBounds": [
+            239,
+            781,
+            369,
+            1148
+          ],
+          "removedDistantAlphaPixels": 4700,
+          "bounds": [
+            94,
+            27,
+            163,
+            225
+          ],
+          "wholeFigureScale": 0.2699724517906336,
+          "inverseWholeImageTransform": [
+            1.8520408163265305,
+            0,
+            -172.55689569139423,
+            0,
+            1.8520408163265305,
+            -49.85714285714283
+          ],
+          "rgbaSha256": "864e4d7b8defc5b85cf7f56deb53f876b8e9f4d77e7488281f6db5f22a685702",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "source": "read-01",
+          "sourceCell": [
+            1,
+            2
+          ],
+          "region": [
+            649,
+            771,
+            155,
+            387
+          ],
+          "sourceAnchor": [
+            724.8600707354675,
+            1146
+          ],
+          "sourceAlphaBounds": [
+            659,
+            781,
+            794,
+            1148
+          ],
+          "removedDistantAlphaPixels": 5270,
+          "bounds": [
+            92,
+            28,
+            165,
+            225
+          ],
+          "wholeFigureScale": 0.2699724517906336,
+          "inverseWholeImageTransform": [
+            1.8520408163265305,
+            0,
+            -171.2011537543284,
+            0,
+            1.8520408163265305,
+            -49.85714285714283
+          ],
+          "rgbaSha256": "7709ee70cfcadb87aabe3f7b1572df24f73f34c9fe5df488c76a0540fd129ed4",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "source": "read-01",
+          "sourceCell": [
+            0,
+            2
+          ],
+          "region": [
+            229,
+            771,
+            150,
+            387
+          ],
+          "sourceAnchor": [
+            303.5043287984017,
+            1146
+          ],
+          "sourceAlphaBounds": [
+            239,
+            781,
+            369,
+            1148
+          ],
+          "removedDistantAlphaPixels": 4700,
+          "bounds": [
+            94,
+            27,
+            163,
+            225
+          ],
+          "wholeFigureScale": 0.2699724517906336,
+          "inverseWholeImageTransform": [
+            1.8520408163265305,
+            0,
+            -172.55689569139423,
+            0,
+            1.8520408163265305,
+            -49.85714285714283
+          ],
+          "rgbaSha256": "864e4d7b8defc5b85cf7f56deb53f876b8e9f4d77e7488281f6db5f22a685702",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "source": "read-01",
+          "sourceCell": [
+            1,
+            2
+          ],
+          "region": [
+            649,
+            771,
+            155,
+            387
+          ],
+          "sourceAnchor": [
+            724.8600707354675,
+            1146
+          ],
+          "sourceAlphaBounds": [
+            659,
+            781,
+            794,
+            1148
+          ],
+          "removedDistantAlphaPixels": 5270,
+          "bounds": [
+            92,
+            28,
+            165,
+            225
+          ],
+          "wholeFigureScale": 0.2699724517906336,
+          "inverseWholeImageTransform": [
+            1.8520408163265305,
+            0,
+            -171.2011537543284,
+            0,
+            1.8520408163265305,
+            -49.85714285714283
+          ],
+          "rgbaSha256": "7709ee70cfcadb87aabe3f7b1572df24f73f34c9fe5df488c76a0540fd129ed4",
+          "anatomyReassembled": false,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/walk/south.webp",
+      "sha256": "32d1c6e9e3fe67c7498ebf50bd4a4c85057fe8350dff56f3a6fdb0b28a7cc1e1",
+      "bytes": 90698,
+      "cell": 384,
+      "frames": 4,
+      "dimensions": [
+        1536,
+        384
+      ],
+      "root": [
+        192.0,
+        336.0
+      ],
+      "sourceBindings": [
+        {
+          "path": "tools/launcher-room/robin-v2/sources/south-01/source.png",
+          "sha256": "ddfd9c038c8892432f739a2e186bbb61c7e1144ad7c107c9c17a8d152fa62be4"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/south-01/prompt.txt",
+          "sha256": "a94b99ace440900a0126ea8046d1642ee8964c9ae46d80d2cc9ee6883eb961d3"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/south-01/receipt.json",
+          "sha256": "064a3b7e0162c52528a44bbd5aaafefb4ef0805405c50785c81001b3ff49dc9a"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/source.png",
+          "sha256": "e65ce16acdc345f434eb9f496a8b744e1a31df49da78597a7bcbfd0cb9e98e9d"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/prompt.txt",
+          "sha256": "84c070d053ce725555d2693f7fef2889c686151e635b7efcf381e6ae95d59033"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/receipt.json",
+          "sha256": "24596736f6838162834451b1b2684a8cb6309d63bd01e0c5cbaae805173718f1"
+        }
+      ],
+      "frameRecords": [
+        {
+          "index": 0,
+          "source": "south-01",
+          "sourceCell": [
+            0,
+            0
+          ],
+          "region": [
+            145,
+            0,
+            188,
+            507
+          ],
+          "sourceAnchor": [
+            241.95918244664864,
+            495
+          ],
+          "sourceAlphaBounds": [
+            155,
+            2,
+            323,
+            497
+          ],
+          "removedDistantAlphaPixels": 3436,
+          "bounds": [
+            140,
+            40,
+            241,
+            337
+          ],
+          "wholeFigureScale": 0.2,
+          "inverseWholeImageTransform": [
+            1.6666666666666665,
+            0,
+            -233.0408175533513,
+            0,
+            1.6666666666666665,
+            -66.99999999999989
+          ],
+          "rgbaSha256": "f01dc42228c3b8e7376557cd4e462de97f8aca1554dbc7f6d5eda859bbfc507e",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "source": "south-01",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "region": [
+            481,
+            0,
+            197,
+            506
+          ],
+          "sourceAnchor": [
+            578.9506038647343,
+            494
+          ],
+          "sourceAlphaBounds": [
+            491,
+            2,
+            668,
+            496
+          ],
+          "removedDistantAlphaPixels": 4715,
+          "bounds": [
+            139,
+            41,
+            245,
+            337
+          ],
+          "wholeFigureScale": 0.2,
+          "inverseWholeImageTransform": [
+            1.6666666666666665,
+            0,
+            -232.04939613526568,
+            0,
+            1.6666666666666665,
+            -67.99999999999989
+          ],
+          "rgbaSha256": "3b3962491c4b48c0e4fc8abcb2fd400cbab9a9d7535ab21c1ed9f95d29f7b825",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "source": "south-01",
+          "sourceCell": [
+            2,
+            0
+          ],
+          "region": [
+            857,
+            0,
+            184,
+            508
+          ],
+          "sourceAnchor": [
+            949.9676211187628,
+            496
+          ],
+          "sourceAlphaBounds": [
+            867,
+            2,
+            1031,
+            498
+          ],
+          "removedDistantAlphaPixels": 3360,
+          "bounds": [
+            142,
+            40,
+            240,
+            337
+          ],
+          "wholeFigureScale": 0.2,
+          "inverseWholeImageTransform": [
+            1.6666666666666665,
+            0,
+            -237.0323788812371,
+            0,
+            1.6666666666666665,
+            -65.99999999999989
+          ],
+          "rgbaSha256": "a5202efe65a9f3b4a7a5fc5fe3048ab311ec9c90e9d869750ca145865097ad1c",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "source": "south-01",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "region": [
+            481,
+            0,
+            197,
+            506
+          ],
+          "sourceAnchor": [
+            578.9506038647343,
+            494
+          ],
+          "sourceAlphaBounds": [
+            491,
+            2,
+            668,
+            496
+          ],
+          "removedDistantAlphaPixels": 4715,
+          "bounds": [
+            139,
+            41,
+            245,
+            337
+          ],
+          "wholeFigureScale": 0.2,
+          "inverseWholeImageTransform": [
+            1.6666666666666665,
+            0,
+            -232.04939613526568,
+            0,
+            1.6666666666666665,
+            -67.99999999999989
+          ],
+          "rgbaSha256": "3b3962491c4b48c0e4fc8abcb2fd400cbab9a9d7535ab21c1ed9f95d29f7b825",
+          "anatomyReassembled": false,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/acting/south.webp",
+      "sha256": "fb90d3cfd9be07b3f897efd20a75b951b51018029c35433f0e3efe9dab32d218",
+      "bytes": 105582,
+      "cell": 256,
+      "frames": 8,
+      "dimensions": [
+        2048,
+        256
+      ],
+      "root": [
+        128.0,
+        224.0
+      ],
+      "sourceBindings": [
+        {
+          "path": "tools/launcher-room/robin-v2/sources/south-01/source.png",
+          "sha256": "ddfd9c038c8892432f739a2e186bbb61c7e1144ad7c107c9c17a8d152fa62be4"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/south-01/prompt.txt",
+          "sha256": "a94b99ace440900a0126ea8046d1642ee8964c9ae46d80d2cc9ee6883eb961d3"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/south-01/receipt.json",
+          "sha256": "064a3b7e0162c52528a44bbd5aaafefb4ef0805405c50785c81001b3ff49dc9a"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/work-01/source.png",
+          "sha256": "73f38f9b2b41495605f2a77d74d8170d5244e47ed97bdbea0d72d3c876a922c4"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/work-01/prompt.txt",
+          "sha256": "3a4cee5037bc5ec1a957582465c9ae94d2607c57d879eeda374aa77a01f97c68"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/work-01/receipt.json",
+          "sha256": "21e0d35012099e00243ee86f73ac5ba48f1cbd44070f67a17f26125958ded95e"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/source.png",
+          "sha256": "e65ce16acdc345f434eb9f496a8b744e1a31df49da78597a7bcbfd0cb9e98e9d"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/prompt.txt",
+          "sha256": "84c070d053ce725555d2693f7fef2889c686151e635b7efcf381e6ae95d59033"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/receipt.json",
+          "sha256": "24596736f6838162834451b1b2684a8cb6309d63bd01e0c5cbaae805173718f1"
+        }
+      ],
+      "frameRecords": [
+        {
+          "index": 0,
+          "source": "south-01",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "region": [
+            481,
+            0,
+            197,
+            506
+          ],
+          "sourceAnchor": [
+            578.9506038647343,
+            494
+          ],
+          "sourceAlphaBounds": [
+            491,
+            2,
+            668,
+            496
+          ],
+          "removedDistantAlphaPixels": 4715,
+          "bounds": [
+            93,
+            27,
+            164,
+            225
+          ],
+          "wholeFigureScale": 0.2,
+          "inverseWholeImageTransform": [
+            2.5,
+            0,
+            -232.04939613526574,
+            0,
+            2.5,
+            -68.0
+          ],
+          "rgbaSha256": "6d1ee79ebcaebb0d55690546241110fcc63740e6eecf3cda9017dd29ee28e493",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "source": "south-01",
+          "sourceCell": [
+            3,
+            0
+          ],
+          "region": [
+            1227,
+            0,
+            255,
+            506
+          ],
+          "sourceAnchor": [
+            1326.0324884792626,
+            494
+          ],
+          "sourceAlphaBounds": [
+            1237,
+            2,
+            1472,
+            496
+          ],
+          "removedDistantAlphaPixels": 5005,
+          "bounds": [
+            92,
+            28,
+            186,
+            225
+          ],
+          "wholeFigureScale": 0.2,
+          "inverseWholeImageTransform": [
+            2.5,
+            0,
+            -230.9675115207374,
+            0,
+            2.5,
+            -68.0
+          ],
+          "rgbaSha256": "c614770c292e9bd1a01850e62fd2342ddaa67280c05e74fccaea8fe3a9a4eae8",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "source": "south-01",
+          "sourceCell": [
+            0,
+            1
+          ],
+          "region": [
+            143,
+            502,
+            165,
+            514
+          ],
+          "sourceAnchor": [
+            230.77908307729382,
+            1004
+          ],
+          "sourceAlphaBounds": [
+            153,
+            512,
+            298,
+            1006
+          ],
+          "removedDistantAlphaPixels": 3934,
+          "bounds": [
+            97,
+            28,
+            154,
+            225
+          ],
+          "wholeFigureScale": 0.2,
+          "inverseWholeImageTransform": [
+            2.5,
+            0,
+            -242.22091692270618,
+            0,
+            2.5,
+            -68.0
+          ],
+          "rgbaSha256": "869463a21e91fdbb8ba134157cb671eaf58e09c3686abf394d78d3a4a794138c",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "source": "south-01",
+          "sourceCell": [
+            1,
+            1
+          ],
+          "region": [
+            472,
+            503,
+            226,
+            513
+          ],
+          "sourceAnchor": [
+            584.2427348366092,
+            1004
+          ],
+          "sourceAlphaBounds": [
+            482,
+            513,
+            688,
+            1006
+          ],
+          "removedDistantAlphaPixels": 4938,
+          "bounds": [
+            88,
+            28,
+            169,
+            224
+          ],
+          "wholeFigureScale": 0.2,
+          "inverseWholeImageTransform": [
+            2.5,
+            0,
+            -217.7572651633908,
+            0,
+            2.5,
+            -69.0
+          ],
+          "rgbaSha256": "93b0af9f7433d89a9ad511f0188c2ac604c80dc0425845cc98a2f48214ccd72d",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 4,
+          "source": "work-01",
+          "sourceCell": [
+            0,
+            3
+          ],
+          "region": [
+            230,
+            1144,
+            160,
+            392
+          ],
+          "sourceAnchor": [
+            316.3843105466991,
+            1532
+          ],
+          "sourceAlphaBounds": [
+            240,
+            1154,
+            380,
+            1534
+          ],
+          "removedDistantAlphaPixels": 4626,
+          "bounds": [
+            88,
+            27,
+            161,
+            225
+          ],
+          "wholeFigureScale": 0.26063829787234044,
+          "inverseWholeImageTransform": [
+            1.9183673469387754,
+            0,
+            -169.16670986146414,
+            0,
+            1.9183673469387754,
+            -51.714285714285666
+          ],
+          "rgbaSha256": "f51eadb9c10386d0efd8af6742dbfab5cffe9b94479a44a0d1dbb5d7401bf683",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 5,
+          "source": "south-01",
+          "sourceCell": [
+            3,
+            1
+          ],
+          "region": [
+            1251,
+            596,
+            151,
+            420
+          ],
+          "sourceAnchor": [
+            1326.926149741014,
+            1004
+          ],
+          "sourceAlphaBounds": [
+            1261,
+            606,
+            1392,
+            1006
+          ],
+          "removedDistantAlphaPixels": 2399,
+          "bounds": [
+            102,
+            65,
+            154,
+            224
+          ],
+          "wholeFigureScale": 0.2,
+          "inverseWholeImageTransform": [
+            2.5,
+            0,
+            -254.0738502589861,
+            0,
+            2.5,
+            -162.0
+          ],
+          "rgbaSha256": "97d8c9788634cc3fac906528e76307ef17bc80573bf90d934f17faba98153396",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 6,
+          "source": "south-01",
+          "sourceCell": [
+            2,
+            1
+          ],
+          "region": [
+            833,
+            504,
+            218,
+            512
+          ],
+          "sourceAnchor": [
+            941.3246202565616,
+            1004
+          ],
+          "sourceAlphaBounds": [
+            844,
+            514,
+            1041,
+            1006
+          ],
+          "removedDistantAlphaPixels": 5071,
+          "bounds": [
+            89,
+            28,
+            167,
+            224
+          ],
+          "wholeFigureScale": 0.2,
+          "inverseWholeImageTransform": [
+            2.5,
+            0,
+            -222.67537974343838,
+            0,
+            2.5,
+            -70.0
+          ],
+          "rgbaSha256": "833914b0010c6365fae9221205f87476ef01ff8f83bcac5fda0192d9d5027c7a",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 7,
+          "source": "south-01",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "region": [
+            481,
+            0,
+            197,
+            506
+          ],
+          "sourceAnchor": [
+            578.9506038647343,
+            494
+          ],
+          "sourceAlphaBounds": [
+            491,
+            2,
+            668,
+            496
+          ],
+          "removedDistantAlphaPixels": 4715,
+          "bounds": [
+            93,
+            27,
+            164,
+            225
+          ],
+          "wholeFigureScale": 0.2,
+          "inverseWholeImageTransform": [
+            2.5,
+            0,
+            -232.04939613526574,
+            0,
+            2.5,
+            -68.0
+          ],
+          "rgbaSha256": "6d1ee79ebcaebb0d55690546241110fcc63740e6eecf3cda9017dd29ee28e493",
+          "anatomyReassembled": false,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/life/work-south.webp",
+      "sha256": "99c625ae79933af25cf43035822cc537292b13b00ddf36de08ba983954b65946",
+      "bytes": 34924,
+      "cell": 256,
+      "frames": 4,
+      "dimensions": [
+        1024,
+        256
+      ],
+      "root": [
+        128.0,
+        224.0
+      ],
+      "sourceBindings": [
+        {
+          "path": "tools/launcher-room/robin-v2/sources/work-01/source.png",
+          "sha256": "73f38f9b2b41495605f2a77d74d8170d5244e47ed97bdbea0d72d3c876a922c4"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/work-01/prompt.txt",
+          "sha256": "3a4cee5037bc5ec1a957582465c9ae94d2607c57d879eeda374aa77a01f97c68"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/work-01/receipt.json",
+          "sha256": "21e0d35012099e00243ee86f73ac5ba48f1cbd44070f67a17f26125958ded95e"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/source.png",
+          "sha256": "e65ce16acdc345f434eb9f496a8b744e1a31df49da78597a7bcbfd0cb9e98e9d"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/prompt.txt",
+          "sha256": "84c070d053ce725555d2693f7fef2889c686151e635b7efcf381e6ae95d59033"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/receipt.json",
+          "sha256": "24596736f6838162834451b1b2684a8cb6309d63bd01e0c5cbaae805173718f1"
+        }
+      ],
+      "frameRecords": [
+        {
+          "index": 0,
+          "source": "work-01",
+          "sourceCell": [
+            0,
+            3
+          ],
+          "region": [
+            230,
+            1144,
+            160,
+            392
+          ],
+          "sourceAnchor": [
+            316.3843105466991,
+            1532
+          ],
+          "sourceAlphaBounds": [
+            240,
+            1154,
+            380,
+            1534
+          ],
+          "removedDistantAlphaPixels": 4626,
+          "bounds": [
+            88,
+            27,
+            161,
+            225
+          ],
+          "wholeFigureScale": 0.26063829787234044,
+          "inverseWholeImageTransform": [
+            1.9183673469387754,
+            0,
+            -169.16670986146414,
+            0,
+            1.9183673469387754,
+            -51.714285714285666
+          ],
+          "rgbaSha256": "f51eadb9c10386d0efd8af6742dbfab5cffe9b94479a44a0d1dbb5d7401bf683",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "source": "work-01",
+          "sourceCell": [
+            1,
+            3
+          ],
+          "region": [
+            636,
+            1144,
+            159,
+            392
+          ],
+          "sourceAnchor": [
+            721.3681474049074,
+            1532
+          ],
+          "sourceAlphaBounds": [
+            646,
+            1154,
+            785,
+            1534
+          ],
+          "removedDistantAlphaPixels": 4617,
+          "bounds": [
+            89,
+            27,
+            161,
+            225
+          ],
+          "wholeFigureScale": 0.26063829787234044,
+          "inverseWholeImageTransform": [
+            1.9183673469387754,
+            0,
+            -170.18287300325585,
+            0,
+            1.9183673469387754,
+            -51.714285714285666
+          ],
+          "rgbaSha256": "35aef1497357fcbfd6990f728ae0ed29b77cb657ed5022fc083f5c0f990b5b1f",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "source": "work-01",
+          "sourceCell": [
+            0,
+            3
+          ],
+          "region": [
+            230,
+            1144,
+            160,
+            392
+          ],
+          "sourceAnchor": [
+            316.3843105466991,
+            1532
+          ],
+          "sourceAlphaBounds": [
+            240,
+            1154,
+            380,
+            1534
+          ],
+          "removedDistantAlphaPixels": 4626,
+          "bounds": [
+            88,
+            27,
+            161,
+            225
+          ],
+          "wholeFigureScale": 0.26063829787234044,
+          "inverseWholeImageTransform": [
+            1.9183673469387754,
+            0,
+            -169.16670986146414,
+            0,
+            1.9183673469387754,
+            -51.714285714285666
+          ],
+          "rgbaSha256": "f51eadb9c10386d0efd8af6742dbfab5cffe9b94479a44a0d1dbb5d7401bf683",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "source": "work-01",
+          "sourceCell": [
+            1,
+            3
+          ],
+          "region": [
+            636,
+            1144,
+            159,
+            392
+          ],
+          "sourceAnchor": [
+            721.3681474049074,
+            1532
+          ],
+          "sourceAlphaBounds": [
+            646,
+            1154,
+            785,
+            1534
+          ],
+          "removedDistantAlphaPixels": 4617,
+          "bounds": [
+            89,
+            27,
+            161,
+            225
+          ],
+          "wholeFigureScale": 0.26063829787234044,
+          "inverseWholeImageTransform": [
+            1.9183673469387754,
+            0,
+            -170.18287300325585,
+            0,
+            1.9183673469387754,
+            -51.714285714285666
+          ],
+          "rgbaSha256": "35aef1497357fcbfd6990f728ae0ed29b77cb657ed5022fc083f5c0f990b5b1f",
+          "anatomyReassembled": false,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/life/read-south.webp",
+      "sha256": "1a650d94ecee7a6a3f05b4f33210b8d6b886f8d9f6b10629d06b1d34ad3b4f93",
+      "bytes": 34320,
+      "cell": 256,
+      "frames": 4,
+      "dimensions": [
+        1024,
+        256
+      ],
+      "root": [
+        128.0,
+        224.0
+      ],
+      "sourceBindings": [
+        {
+          "path": "tools/launcher-room/robin-v2/sources/read-01/source.png",
+          "sha256": "9b228bf2f8e367121a95f8aeedcdf8565939475b38459cd1d6ba1f7cc91fd786"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/read-01/prompt.txt",
+          "sha256": "977f4a9f8d260eac96f315f2e6e1051fbc0207ccf7c9445be67a0c3067cd22a7"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/read-01/receipt.json",
+          "sha256": "6728d9593bd2ee5eebfe49cffff2f8b55de8cab0af9ca24fd187e4e202c632be"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/source.png",
+          "sha256": "e65ce16acdc345f434eb9f496a8b744e1a31df49da78597a7bcbfd0cb9e98e9d"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/prompt.txt",
+          "sha256": "84c070d053ce725555d2693f7fef2889c686151e635b7efcf381e6ae95d59033"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/receipt.json",
+          "sha256": "24596736f6838162834451b1b2684a8cb6309d63bd01e0c5cbaae805173718f1"
+        }
+      ],
+      "frameRecords": [
+        {
+          "index": 0,
+          "source": "read-01",
+          "sourceCell": [
+            0,
+            3
+          ],
+          "region": [
+            233,
+            1136,
+            142,
+            400
+          ],
+          "sourceAnchor": [
+            302.9093100890208,
+            1525
+          ],
+          "sourceAlphaBounds": [
+            243,
+            1146,
+            365,
+            1527
+          ],
+          "removedDistantAlphaPixels": 4698,
+          "bounds": [
+            97,
+            27,
+            160,
+            225
+          ],
+          "wholeFigureScale": 0.259946949602122,
+          "inverseWholeImageTransform": [
+            1.9234693877551021,
+            0,
+            -186.2947715436323,
+            0,
+            1.9234693877551021,
+            -51.85714285714289
+          ],
+          "rgbaSha256": "59746d788e61508bbe5d0ef0a857cf8f1e079d5619779e83ed7f7c6c92f0fc73",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "source": "read-01",
+          "sourceCell": [
+            1,
+            3
+          ],
+          "region": [
+            647,
+            1136,
+            145,
+            400
+          ],
+          "sourceAnchor": [
+            720.9114928578098,
+            1525
+          ],
+          "sourceAlphaBounds": [
+            657,
+            1146,
+            782,
+            1527
+          ],
+          "removedDistantAlphaPixels": 4254,
+          "bounds": [
+            95,
+            27,
+            160,
+            224
+          ],
+          "wholeFigureScale": 0.259946949602122,
+          "inverseWholeImageTransform": [
+            1.9234693877551021,
+            0,
+            -182.2925887748433,
+            0,
+            1.9234693877551021,
+            -51.85714285714289
+          ],
+          "rgbaSha256": "75e1f1d34e6336fd6a4ba017d66043d73ad55f4dcec04fdf7fb06e7947b6f8a0",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "source": "read-01",
+          "sourceCell": [
+            0,
+            3
+          ],
+          "region": [
+            233,
+            1136,
+            142,
+            400
+          ],
+          "sourceAnchor": [
+            302.9093100890208,
+            1525
+          ],
+          "sourceAlphaBounds": [
+            243,
+            1146,
+            365,
+            1527
+          ],
+          "removedDistantAlphaPixels": 4698,
+          "bounds": [
+            97,
+            27,
+            160,
+            225
+          ],
+          "wholeFigureScale": 0.259946949602122,
+          "inverseWholeImageTransform": [
+            1.9234693877551021,
+            0,
+            -186.2947715436323,
+            0,
+            1.9234693877551021,
+            -51.85714285714289
+          ],
+          "rgbaSha256": "59746d788e61508bbe5d0ef0a857cf8f1e079d5619779e83ed7f7c6c92f0fc73",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "source": "read-01",
+          "sourceCell": [
+            1,
+            3
+          ],
+          "region": [
+            647,
+            1136,
+            145,
+            400
+          ],
+          "sourceAnchor": [
+            720.9114928578098,
+            1525
+          ],
+          "sourceAlphaBounds": [
+            657,
+            1146,
+            782,
+            1527
+          ],
+          "removedDistantAlphaPixels": 4254,
+          "bounds": [
+            95,
+            27,
+            160,
+            224
+          ],
+          "wholeFigureScale": 0.259946949602122,
+          "inverseWholeImageTransform": [
+            1.9234693877551021,
+            0,
+            -182.2925887748433,
+            0,
+            1.9234693877551021,
+            -51.85714285714289
+          ],
+          "rgbaSha256": "75e1f1d34e6336fd6a4ba017d66043d73ad55f4dcec04fdf7fb06e7947b6f8a0",
+          "anatomyReassembled": false,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/portrait.webp",
+      "sha256": "ddf9577b980c778f6d9190533181b0b8061757e5838105db299ab46148c0232c",
+      "bytes": 15654,
+      "cell": 256,
+      "frames": 1,
+      "dimensions": [
+        256,
+        256
+      ],
+      "root": [
+        128.0,
+        224.0
+      ],
+      "sourceBindings": [
+        {
+          "path": "tools/launcher-room/robin-v2/sources/south-01/source.png",
+          "sha256": "ddfd9c038c8892432f739a2e186bbb61c7e1144ad7c107c9c17a8d152fa62be4"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/south-01/prompt.txt",
+          "sha256": "a94b99ace440900a0126ea8046d1642ee8964c9ae46d80d2cc9ee6883eb961d3"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/south-01/receipt.json",
+          "sha256": "064a3b7e0162c52528a44bbd5aaafefb4ef0805405c50785c81001b3ff49dc9a"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/source.png",
+          "sha256": "e65ce16acdc345f434eb9f496a8b744e1a31df49da78597a7bcbfd0cb9e98e9d"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/prompt.txt",
+          "sha256": "84c070d053ce725555d2693f7fef2889c686151e635b7efcf381e6ae95d59033"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/receipt.json",
+          "sha256": "24596736f6838162834451b1b2684a8cb6309d63bd01e0c5cbaae805173718f1"
+        }
+      ],
+      "frameRecords": [
+        {
+          "index": 0,
+          "source": "south-01",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "region": [
+            481,
+            0,
+            197,
+            506
+          ],
+          "sourceAnchor": [
+            578.9506038647343,
+            494
+          ],
+          "sourceAlphaBounds": [
+            491,
+            2,
+            668,
+            496
+          ],
+          "removedDistantAlphaPixels": 4715,
+          "bounds": [
+            93,
+            27,
+            164,
+            225
+          ],
+          "wholeFigureScale": 0.2,
+          "inverseWholeImageTransform": [
+            2.5,
+            0,
+            -232.04939613526574,
+            0,
+            2.5,
+            -68.0
+          ],
+          "rgbaSha256": "6d1ee79ebcaebb0d55690546241110fcc63740e6eecf3cda9017dd29ee28e493",
+          "anatomyReassembled": false,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/life/eat-south.webp",
+      "sha256": "c8f7f71be61d287cd32e8172d2ffe2ca6b4b8d2236168ae5d16f80d7df7751cc",
+      "bytes": 30626,
+      "cell": 256,
+      "frames": 4,
+      "dimensions": [
+        1024,
+        256
+      ],
+      "root": [
+        128.0,
+        224.0
+      ],
+      "sourceBindings": [
+        {
+          "path": "tools/launcher-room/robin-v2/sources/utility-01/source.png",
+          "sha256": "e68ae897e35a4051b238b3618f1879d9f003243fb0ccaa0e40b485e610ce3780"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/utility-01/prompt.txt",
+          "sha256": "a4bd5efdd4fa6f496e9cd7b60fea5f4efe9e048ed6580cf629dd548db35c376c"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/utility-01/receipt.json",
+          "sha256": "462221c125b9e232320a2e1befe5798f1ab94469826ddf60ea69746d38da83ac"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/source.png",
+          "sha256": "e65ce16acdc345f434eb9f496a8b744e1a31df49da78597a7bcbfd0cb9e98e9d"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/prompt.txt",
+          "sha256": "84c070d053ce725555d2693f7fef2889c686151e635b7efcf381e6ae95d59033"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/receipt.json",
+          "sha256": "24596736f6838162834451b1b2684a8cb6309d63bd01e0c5cbaae805173718f1"
+        }
+      ],
+      "frameRecords": [
+        {
+          "index": 0,
+          "source": "utility-01",
+          "sourceCell": [
+            0,
+            0
+          ],
+          "region": [
+            162,
+            8,
+            208,
+            560
+          ],
+          "sourceAnchor": [
+            264.75347680438534,
+            556
+          ],
+          "sourceAlphaBounds": [
+            172,
+            18,
+            360,
+            558
+          ],
+          "removedDistantAlphaPixels": 4955,
+          "bounds": [
+            95,
+            28,
+            162,
+            225
+          ],
+          "wholeFigureScale": 0.1824953445065177,
+          "inverseWholeImageTransform": [
+            2.739795918367347,
+            0,
+            -257.9404007466351,
+            0,
+            2.739795918367347,
+            -75.71428571428567
+          ],
+          "rgbaSha256": "6efbe722f2b7ab6698b5708c0487e9403d2e1b2be5e170ef59600cc03f16f385",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "source": "utility-01",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "region": [
+            495,
+            7,
+            209,
+            561
+          ],
+          "sourceAnchor": [
+            599.128911581821,
+            556
+          ],
+          "sourceAlphaBounds": [
+            505,
+            17,
+            694,
+            558
+          ],
+          "removedDistantAlphaPixels": 4751,
+          "bounds": [
+            94,
+            27,
+            162,
+            225
+          ],
+          "wholeFigureScale": 0.1824953445065177,
+          "inverseWholeImageTransform": [
+            2.739795918367347,
+            0,
+            -256.5649659691995,
+            0,
+            2.739795918367347,
+            -74.71428571428567
+          ],
+          "rgbaSha256": "0f7ac2686e1c1ffaa5dfc8fa9b5b5019cb0d682e43486ee16c31512670add3f3",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "source": "utility-01",
+          "sourceCell": [
+            0,
+            0
+          ],
+          "region": [
+            162,
+            8,
+            208,
+            560
+          ],
+          "sourceAnchor": [
+            264.75347680438534,
+            556
+          ],
+          "sourceAlphaBounds": [
+            172,
+            18,
+            360,
+            558
+          ],
+          "removedDistantAlphaPixels": 4955,
+          "bounds": [
+            95,
+            28,
+            162,
+            225
+          ],
+          "wholeFigureScale": 0.1824953445065177,
+          "inverseWholeImageTransform": [
+            2.739795918367347,
+            0,
+            -257.9404007466351,
+            0,
+            2.739795918367347,
+            -75.71428571428567
+          ],
+          "rgbaSha256": "6efbe722f2b7ab6698b5708c0487e9403d2e1b2be5e170ef59600cc03f16f385",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "source": "utility-01",
+          "sourceCell": [
+            1,
+            0
+          ],
+          "region": [
+            495,
+            7,
+            209,
+            561
+          ],
+          "sourceAnchor": [
+            599.128911581821,
+            556
+          ],
+          "sourceAlphaBounds": [
+            505,
+            17,
+            694,
+            558
+          ],
+          "removedDistantAlphaPixels": 4751,
+          "bounds": [
+            94,
+            27,
+            162,
+            225
+          ],
+          "wholeFigureScale": 0.1824953445065177,
+          "inverseWholeImageTransform": [
+            2.739795918367347,
+            0,
+            -256.5649659691995,
+            0,
+            2.739795918367347,
+            -74.71428571428567
+          ],
+          "rgbaSha256": "0f7ac2686e1c1ffaa5dfc8fa9b5b5019cb0d682e43486ee16c31512670add3f3",
+          "anatomyReassembled": false,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/life/rest-south.webp",
+      "sha256": "57a67fb3277e927fe83ba8f34be74fad56dfcfd416ffb8eb7fee5f4925075763",
+      "bytes": 23508,
+      "cell": 256,
+      "frames": 4,
+      "dimensions": [
+        1024,
+        256
+      ],
+      "root": [
+        128.0,
+        224.0
+      ],
+      "sourceBindings": [
+        {
+          "path": "tools/launcher-room/robin-v2/sources/utility-01/source.png",
+          "sha256": "e68ae897e35a4051b238b3618f1879d9f003243fb0ccaa0e40b485e610ce3780"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/utility-01/prompt.txt",
+          "sha256": "a4bd5efdd4fa6f496e9cd7b60fea5f4efe9e048ed6580cf629dd548db35c376c"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/utility-01/receipt.json",
+          "sha256": "462221c125b9e232320a2e1befe5798f1ab94469826ddf60ea69746d38da83ac"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/source.png",
+          "sha256": "e65ce16acdc345f434eb9f496a8b744e1a31df49da78597a7bcbfd0cb9e98e9d"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/prompt.txt",
+          "sha256": "84c070d053ce725555d2693f7fef2889c686151e635b7efcf381e6ae95d59033"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/receipt.json",
+          "sha256": "24596736f6838162834451b1b2684a8cb6309d63bd01e0c5cbaae805173718f1"
+        }
+      ],
+      "frameRecords": [
+        {
+          "index": 0,
+          "source": "utility-01",
+          "sourceCell": [
+            2,
+            0
+          ],
+          "region": [
+            866,
+            108,
+            152,
+            457
+          ],
+          "sourceAnchor": [
+            942.0,
+            553
+          ],
+          "sourceAlphaBounds": [
+            876,
+            118,
+            1008,
+            555
+          ],
+          "removedDistantAlphaPixels": 4041,
+          "bounds": [
+            104,
+            66,
+            152,
+            225
+          ],
+          "wholeFigureScale": 0.1824953445065177,
+          "inverseWholeImageTransform": [
+            2.739795918367347,
+            0,
+            -284.6938775510204,
+            0,
+            2.739795918367347,
+            -178.71428571428567
+          ],
+          "rgbaSha256": "2fce9c930f5d7b8448637246ff9587e88f451ab1aa4d5dce9c83155eac3f6ab8",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "source": "utility-01",
+          "sourceCell": [
+            3,
+            0
+          ],
+          "region": [
+            1215,
+            110,
+            151,
+            455
+          ],
+          "sourceAnchor": [
+            1290.5,
+            553
+          ],
+          "sourceAlphaBounds": [
+            1225,
+            120,
+            1356,
+            555
+          ],
+          "removedDistantAlphaPixels": 3717,
+          "bounds": [
+            104,
+            66,
+            152,
+            225
+          ],
+          "wholeFigureScale": 0.1824953445065177,
+          "inverseWholeImageTransform": [
+            2.739795918367347,
+            0,
+            -285.1938775510204,
+            0,
+            2.739795918367347,
+            -180.71428571428567
+          ],
+          "rgbaSha256": "41b65f9007debeb9b63fb07fa24027b3a505bad6f2219235497d13711de9a7e4",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "source": "utility-01",
+          "sourceCell": [
+            2,
+            0
+          ],
+          "region": [
+            866,
+            108,
+            152,
+            457
+          ],
+          "sourceAnchor": [
+            942.0,
+            553
+          ],
+          "sourceAlphaBounds": [
+            876,
+            118,
+            1008,
+            555
+          ],
+          "removedDistantAlphaPixels": 4041,
+          "bounds": [
+            104,
+            66,
+            152,
+            225
+          ],
+          "wholeFigureScale": 0.1824953445065177,
+          "inverseWholeImageTransform": [
+            2.739795918367347,
+            0,
+            -284.6938775510204,
+            0,
+            2.739795918367347,
+            -178.71428571428567
+          ],
+          "rgbaSha256": "2fce9c930f5d7b8448637246ff9587e88f451ab1aa4d5dce9c83155eac3f6ab8",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "source": "utility-01",
+          "sourceCell": [
+            3,
+            0
+          ],
+          "region": [
+            1215,
+            110,
+            151,
+            455
+          ],
+          "sourceAnchor": [
+            1290.5,
+            553
+          ],
+          "sourceAlphaBounds": [
+            1225,
+            120,
+            1356,
+            555
+          ],
+          "removedDistantAlphaPixels": 3717,
+          "bounds": [
+            104,
+            66,
+            152,
+            225
+          ],
+          "wholeFigureScale": 0.1824953445065177,
+          "inverseWholeImageTransform": [
+            2.739795918367347,
+            0,
+            -285.1938775510204,
+            0,
+            2.739795918367347,
+            -180.71428571428567
+          ],
+          "rgbaSha256": "41b65f9007debeb9b63fb07fa24027b3a505bad6f2219235497d13711de9a7e4",
+          "anatomyReassembled": false,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/life/sleep-south.webp",
+      "sha256": "e332450d4ea4da78814a5dba0da32f517b888b82759081ba1c0000088058834b",
+      "bytes": 19362,
+      "cell": 256,
+      "frames": 4,
+      "dimensions": [
+        1024,
+        256
+      ],
+      "root": [
+        128.0,
+        224.0
+      ],
+      "sourceBindings": [
+        {
+          "path": "tools/launcher-room/robin-v2/sources/utility-01/source.png",
+          "sha256": "e68ae897e35a4051b238b3618f1879d9f003243fb0ccaa0e40b485e610ce3780"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/utility-01/prompt.txt",
+          "sha256": "a4bd5efdd4fa6f496e9cd7b60fea5f4efe9e048ed6580cf629dd548db35c376c"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/utility-01/receipt.json",
+          "sha256": "462221c125b9e232320a2e1befe5798f1ab94469826ddf60ea69746d38da83ac"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/source.png",
+          "sha256": "e65ce16acdc345f434eb9f496a8b744e1a31df49da78597a7bcbfd0cb9e98e9d"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/prompt.txt",
+          "sha256": "84c070d053ce725555d2693f7fef2889c686151e635b7efcf381e6ae95d59033"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/receipt.json",
+          "sha256": "24596736f6838162834451b1b2684a8cb6309d63bd01e0c5cbaae805173718f1"
+        }
+      ],
+      "frameRecords": [
+        {
+          "index": 0,
+          "source": "utility-01",
+          "sourceCell": [
+            0,
+            1
+          ],
+          "region": [
+            45,
+            825,
+            378,
+            177
+          ],
+          "sourceAnchor": [
+            234.0,
+            990
+          ],
+          "sourceAlphaBounds": [
+            55,
+            835,
+            413,
+            992
+          ],
+          "removedDistantAlphaPixels": 2977,
+          "bounds": [
+            63,
+            167,
+            193,
+            225
+          ],
+          "wholeFigureScale": 0.1824953445065177,
+          "inverseWholeImageTransform": [
+            2.739795918367347,
+            0,
+            -171.69387755102042,
+            0,
+            2.739795918367347,
+            -458.71428571428567
+          ],
+          "rgbaSha256": "55b7b32ecd2269cd25411a7c5f6896ed3b2407ca6c63efa17dc62d0c30b8d01e",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "source": "utility-01",
+          "sourceCell": [
+            1,
+            1
+          ],
+          "region": [
+            428,
+            824,
+            380,
+            178
+          ],
+          "sourceAnchor": [
+            618.0,
+            990
+          ],
+          "sourceAlphaBounds": [
+            438,
+            834,
+            798,
+            992
+          ],
+          "removedDistantAlphaPixels": 2971,
+          "bounds": [
+            62,
+            167,
+            194,
+            225
+          ],
+          "wholeFigureScale": 0.1824953445065177,
+          "inverseWholeImageTransform": [
+            2.739795918367347,
+            0,
+            -170.69387755102042,
+            0,
+            2.739795918367347,
+            -457.71428571428567
+          ],
+          "rgbaSha256": "a8cc2375c60e409b9152e2244b763e4cb530b332f0bce176b9f8d56ae9e28533",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "source": "utility-01",
+          "sourceCell": [
+            0,
+            1
+          ],
+          "region": [
+            45,
+            825,
+            378,
+            177
+          ],
+          "sourceAnchor": [
+            234.0,
+            990
+          ],
+          "sourceAlphaBounds": [
+            55,
+            835,
+            413,
+            992
+          ],
+          "removedDistantAlphaPixels": 2977,
+          "bounds": [
+            63,
+            167,
+            193,
+            225
+          ],
+          "wholeFigureScale": 0.1824953445065177,
+          "inverseWholeImageTransform": [
+            2.739795918367347,
+            0,
+            -171.69387755102042,
+            0,
+            2.739795918367347,
+            -458.71428571428567
+          ],
+          "rgbaSha256": "55b7b32ecd2269cd25411a7c5f6896ed3b2407ca6c63efa17dc62d0c30b8d01e",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "source": "utility-01",
+          "sourceCell": [
+            1,
+            1
+          ],
+          "region": [
+            428,
+            824,
+            380,
+            178
+          ],
+          "sourceAnchor": [
+            618.0,
+            990
+          ],
+          "sourceAlphaBounds": [
+            438,
+            834,
+            798,
+            992
+          ],
+          "removedDistantAlphaPixels": 2971,
+          "bounds": [
+            62,
+            167,
+            194,
+            225
+          ],
+          "wholeFigureScale": 0.1824953445065177,
+          "inverseWholeImageTransform": [
+            2.739795918367347,
+            0,
+            -170.69387755102042,
+            0,
+            2.739795918367347,
+            -457.71428571428567
+          ],
+          "rgbaSha256": "a8cc2375c60e409b9152e2244b763e4cb530b332f0bce176b9f8d56ae9e28533",
+          "anatomyReassembled": false,
+          "mirrored": false
+        }
+      ]
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/life/train-south.webp",
+      "sha256": "5bdb203bb54aee758fea40749dc8a11a38fb5f72cdc04ebb57ddc0861d9be84f",
+      "bytes": 34786,
+      "cell": 256,
+      "frames": 4,
+      "dimensions": [
+        1024,
+        256
+      ],
+      "root": [
+        128.0,
+        224.0
+      ],
+      "sourceBindings": [
+        {
+          "path": "tools/launcher-room/robin-v2/sources/utility-01/source.png",
+          "sha256": "e68ae897e35a4051b238b3618f1879d9f003243fb0ccaa0e40b485e610ce3780"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/utility-01/prompt.txt",
+          "sha256": "a4bd5efdd4fa6f496e9cd7b60fea5f4efe9e048ed6580cf629dd548db35c376c"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/utility-01/receipt.json",
+          "sha256": "462221c125b9e232320a2e1befe5798f1ab94469826ddf60ea69746d38da83ac"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/source.png",
+          "sha256": "e65ce16acdc345f434eb9f496a8b744e1a31df49da78597a7bcbfd0cb9e98e9d"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/prompt.txt",
+          "sha256": "84c070d053ce725555d2693f7fef2889c686151e635b7efcf381e6ae95d59033"
+        },
+        {
+          "path": "tools/launcher-room/robin-v2/sources/master-03/receipt.json",
+          "sha256": "24596736f6838162834451b1b2684a8cb6309d63bd01e0c5cbaae805173718f1"
+        }
+      ],
+      "frameRecords": [
+        {
+          "index": 0,
+          "source": "utility-01",
+          "sourceCell": [
+            2,
+            1
+          ],
+          "region": [
+            838,
+            552,
+            217,
+            471
+          ],
+          "sourceAnchor": [
+            943.4131110670106,
+            1011
+          ],
+          "sourceAlphaBounds": [
+            848,
+            562,
+            1045,
+            1013
+          ],
+          "removedDistantAlphaPixels": 4698,
+          "bounds": [
+            86,
+            28,
+            172,
+            225
+          ],
+          "wholeFigureScale": 0.21875,
+          "inverseWholeImageTransform": [
+            2.2857142857142856,
+            0,
+            -197.15831750441794,
+            0,
+            2.2857142857142856,
+            -63.0
+          ],
+          "rgbaSha256": "3a2cd237ec3e5998856043aa4163df21e6b3c796fdc3b8578c56aafd99e81f19",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 1,
+          "source": "utility-01",
+          "sourceCell": [
+            3,
+            1
+          ],
+          "region": [
+            1147,
+            552,
+            290,
+            472
+          ],
+          "sourceAnchor": [
+            1290.4082218597064,
+            1012
+          ],
+          "sourceAlphaBounds": [
+            1157,
+            562,
+            1427,
+            1014
+          ],
+          "removedDistantAlphaPixels": 6145,
+          "bounds": [
+            70,
+            28,
+            187,
+            224
+          ],
+          "wholeFigureScale": 0.21875,
+          "inverseWholeImageTransform": [
+            2.2857142857142856,
+            0,
+            -159.16320671172218,
+            0,
+            2.2857142857142856,
+            -62.0
+          ],
+          "rgbaSha256": "104bd8003fadfaf7b65c9cd8579172d20b4e2d8556137c88adaab3dc6350ec57",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 2,
+          "source": "utility-01",
+          "sourceCell": [
+            2,
+            1
+          ],
+          "region": [
+            838,
+            552,
+            217,
+            471
+          ],
+          "sourceAnchor": [
+            943.4131110670106,
+            1011
+          ],
+          "sourceAlphaBounds": [
+            848,
+            562,
+            1045,
+            1013
+          ],
+          "removedDistantAlphaPixels": 4698,
+          "bounds": [
+            86,
+            28,
+            172,
+            225
+          ],
+          "wholeFigureScale": 0.21875,
+          "inverseWholeImageTransform": [
+            2.2857142857142856,
+            0,
+            -197.15831750441794,
+            0,
+            2.2857142857142856,
+            -63.0
+          ],
+          "rgbaSha256": "3a2cd237ec3e5998856043aa4163df21e6b3c796fdc3b8578c56aafd99e81f19",
+          "anatomyReassembled": false,
+          "mirrored": false
+        },
+        {
+          "index": 3,
+          "source": "utility-01",
+          "sourceCell": [
+            3,
+            1
+          ],
+          "region": [
+            1147,
+            552,
+            290,
+            472
+          ],
+          "sourceAnchor": [
+            1290.4082218597064,
+            1012
+          ],
+          "sourceAlphaBounds": [
+            1157,
+            562,
+            1427,
+            1014
+          ],
+          "removedDistantAlphaPixels": 6145,
+          "bounds": [
+            70,
+            28,
+            187,
+            224
+          ],
+          "wholeFigureScale": 0.21875,
+          "inverseWholeImageTransform": [
+            2.2857142857142856,
+            0,
+            -159.16320671172218,
+            0,
+            2.2857142857142856,
+            -62.0
+          ],
+          "rgbaSha256": "104bd8003fadfaf7b65c9cd8579172d20b4e2d8556137c88adaab3dc6350ec57",
+          "anatomyReassembled": false,
+          "mirrored": false
+        }
+      ]
+    }
+  ],
+  "exporter": {
+    "path": "tools/launcher-room/robin-v2/export_robin.py",
+    "sha256": "9b0c95fe98c2895fef0afaaeaf2214c5659864af116715d66bab6bf5440e34bf"
+  },
+  "alphaProcessor": {
+    "path": "tools/launcher-room/import_fullbody_v3.py",
+    "sha256": "fe5bb134213ae2f53ab1de818f5e244d6140c141839fb6045278b4d1f8e67ca7"
+  },
+  "notes": [
+    "Whole-figure connected alpha and 2px antialias extraction removes distant transparent matte.",
+    "New side contacts explicitly alternate near/far leg and arm; neutral is reused between contacts.",
+    "Work/read/eat/rest/sleep/train are two authored whole-body keyposes in ABAB loops. No interpolated anatomy.",
+    "Listen reuses calm neutral. Focused-use reuses the complete authored work pose.",
+    "Historical art is unchanged. Source-generated gamma/alpha and every input are preserved."
+  ],
+  "humanAcceptance": false
+}

@@ -1425,3 +1425,13 @@ Board 多人模式不是 server authoritative。實際規則在前端執行，se
 個人頁音樂播放不花費金幣、不購買歌曲、不修改頁面主人的 BGM 選擇。只有擁有且伺服器允許的歌曲才能存為個人頁設定；訪客進頁可聆聽已公開的所選歌曲。靜音與音量屬於聽者的本機偏好，瀏覽器拒絕自動播放時提供手動播放入口。
 
 「每次更新補公告」是發布資訊流程要求；現有自動拒絕檢查接在本次啟動器 package gate，未改三款獨立遊戲 publisher 或玩法規則。
+
+## 2026-09-28 Launcher 1.2.7 crew challenges and Robin
+
+- Sea Supply: 8 rounds; match every crate in the requested category. At least 6 fully correct rounds passes. Combos increase displayed score, not coin payout.
+- Work reward: 10 shop coins and +1 affinity, sharing existing limits of 6 daily work starts, 2 per character, daily claims and wallet maximum 500. Background/legacy work uses the same allowance. A session rewards at most once.
+- Deck Training: 4 sequences of 3/4/4/5 steps; at least 3 fully correct sequences passes. Reward: +5 work motivation and +1 affinity. Paid training costs 6 energy when started, requires at least 20 starting energy, and uses the existing 10-minute cooldown.
+- Opening instructions is free. Start reserves work allowance or training cost. A failed paid session permits 2 additional attempts without another charge. Cancel/expiry ends the session without a reward; a new paid session is a new cost.
+- Training free practice has no energy charge, cooldown or reward. No XP or combat-stat system is added.
+- Sessions belong to the owner and a placed character, and are bound to room revision. Visitors cannot command another player's character. Successful work waiting for wallet space remains ready until claim/cancel or invalidated room context.
+- These launcher activities do not change tabletop damage, turns, saves or multiplayer synchronization.

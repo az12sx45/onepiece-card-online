@@ -7418,3 +7418,20 @@ UI / RWD：
 實際強制範圍：公告完整性檢查目前由 presentation-v126/validate_release.js 接入 desktop_launcher_package_qa.js，以及本次啟動器 build／sync／finalize 流程。此 gate 能比較 card／board／chess 的 catalog releaseId 並拒絕缺少對應說明；三款遊戲各自的獨立 publisher 尚未掛接本 gate，也不會自動撰寫公告。後續遊戲發布須依上述文件流程補新 ID 公告並安排對應檢查，不可宣稱所有遊戲 publisher 已自動強制。
 
 實際封裝驗證：公告伺服器 81項、艾斯完整release protection 226項、實際Chromium公告互動 18項通過；個人頁BGM伺服器 32項與實際瀏覽器 15項驗證本人／好友進頁自播、聽者音量／靜音及離頁停止。歷史1.2.5的68素材、324圖格與184捕捉依原committed runtime及現有素材SHA保留驗證。Source與封裝Electron各616項素材及BGM播放通過。只有艾斯上架，售價18金幣；其餘三位預載角色維持false。1.2.6安裝檔 266524950 bytes，SHA-256 6c76360bf0d35430a1d21436c29c6d375305d1585f8760edabc006d5a943cd06，公開完整GET／Range／SHA及既有Ed25519簽章已核對。正式canonical manifest切換、source commit及formal保存驗證以delivery證據另行確認；沒有宣稱真人或實體裝置驗收。
+
+## 2026-09-28 Launcher 1.2.7 crew challenges and Robin
+
+- Scope: launcher work/training minigames and complete-body Robin artwork. Card/board/chess gameplay, save keys and catalogs remain outside this release.
+- Client: desktop/launcher-room-minigames.js/.css, launcher-life-room.js, auth-service.js, HTML and packaged resources. The existing character wheel opens instructions for free; Start creates the server session.
+- Server: server/launcher-minigames.js and launcher-life-store.js use existing LAUNCHER_LIFE_COMMAND authentication, revision checks, profile row transactions and wallet ledger. Rewards are server-calculated; no XP progression.
+- Art: GPT built-in deck and supply crates under public/images/launcher_room/minigames_v1/. Original PNG/provenance and current QA are under tools/launcher-room/presentation-v127/. Robin uses a new whole-body set; historical originals are preserved.
+- Announcement: append launcher-1.2.7-crew-challenges, preserving published 1.2.6 notices, Ace availability and the three unreleased preload flags.
+- Verified before packaging: isolated minigame SQL 96 PASS, life regression 160 PASS, Ace regression 226 PASS, real Chromium minigame interaction 12 PASS, production room-wheel integration 7 PASS and Robin renderer/routes 9 PASS. The root model reviewed eight current desktop/narrow captures plus the complete-figure contact sheet; human acceptance is not claimed. Source/packaged Electron and public deployment remain separate pending gates.
+- Authority remains D:/Codex_Release_Worktrees/board-voyage-records-v1. C staging under restricted permissions is preparation only, never production. No formal Git reset, clean, stash or whole-tree replacement.
+- LATTICE runtime/task APIs were not exposed this session; no new persistent task or graph evidence is claimed.
+
+- Final integration also covers scripts/launcher_minigames_room_wheel_qa.js and its ROOM_WHEEL_INTEGRATION_QA.json. Fixed Escape propagation so focus remains in the active challenge; all 12 minigame checks were rerun against the final JavaScript hash.
+
+- The first source smoke loaded all 641 assets and played BGM but captured the hidden settings version before its state had been requested. Preserved its report under delivery/attempts; smoke now calls the existing refreshLauncherUpdateState IPC before capture and retains the exact version assertion. This branch runs only in smoke mode.
+
+實際封裝驗證：小遊戲伺服器 96項、實際 Chromium 小遊戲互動 12項、羅賓實際渲染 9項、艾斯與既有經濟回歸 226項通過；保留歷史圖像與公告證據。新圖共25張（羅賓21張及GPT小遊戲4張）。Source與封裝Electron各641項素材、Range及BGM播放通過。1.2.7安裝檔 267973283 bytes，SHA-256 bc105b825711f967580a7fd714ff394c6ee524547cbbf65b14e290bf15d617e7，公開完整GET／Range／SHA及既有Ed25519簽章已核對。這是候選封裝與下載證據；正式來源同步、source commit和canonical切換由delivery最終證據確認，不代表真人或實體裝置驗收。

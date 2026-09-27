@@ -1,0 +1,652 @@
+{
+  "ok": true,
+  "kind": "PGlite simulated SQL integration with explicitly queued concurrent service calls; not real PostgreSQL multi-session locks or UI play",
+  "environment": {
+    "engine": "PGlite",
+    "transactionScheduling": "fixture mutex, one session",
+    "postgresProbe": "local 127.0.0.1:5432 no response; no credentials read or live database used"
+  },
+  "checks": 160,
+  "results": [
+    {
+      "name": "bad secret has no state",
+      "pass": true
+    },
+    {
+      "name": "only purchased actors",
+      "pass": true
+    },
+    {
+      "name": "initial old purchases have no arrival replay",
+      "pass": true
+    },
+    {
+      "name": "poisoned legacy JSON ignored",
+      "pass": true
+    },
+    {
+      "name": "canonical initial needs",
+      "pass": true
+    },
+    {
+      "name": "never create free starter crew",
+      "pass": true
+    },
+    {
+      "name": "client life branch stripped",
+      "pass": true
+    },
+    {
+      "name": "nonowner cannot reserve",
+      "pass": true
+    },
+    {
+      "name": "invalid station rejected",
+      "pass": true
+    },
+    {
+      "name": "stale room rejected",
+      "pass": true
+    },
+    {
+      "name": "client reward/time injection rejected",
+      "pass": true
+    },
+    {
+      "name": "reject inherited or nonstring command \"constructor\"",
+      "pass": true
+    },
+    {
+      "name": "reject inherited or nonstring command \"__proto__\"",
+      "pass": true
+    },
+    {
+      "name": "reject inherited or nonstring command \"toString\"",
+      "pass": true
+    },
+    {
+      "name": "reject inherited or nonstring command [\"checkpoint\"]",
+      "pass": true
+    },
+    {
+      "name": "reject inherited or nonstring command null",
+      "pass": true
+    },
+    {
+      "name": "reject inherited directive constructor",
+      "pass": true
+    },
+    {
+      "name": "reject inherited directive __proto__",
+      "pass": true
+    },
+    {
+      "name": "reject inherited directive toString",
+      "pass": true
+    },
+    {
+      "name": "saved inherited directive normalized",
+      "pass": true
+    },
+    {
+      "name": "reserve has no started timestamp",
+      "pass": true
+    },
+    {
+      "name": "early arrival cannot activate",
+      "pass": true
+    },
+    {
+      "name": "reserved job cannot complete",
+      "pass": true
+    },
+    {
+      "name": "expired reservation has no offline reward",
+      "pass": true
+    },
+    {
+      "name": "reservation expiry removes job",
+      "pass": true
+    },
+    {
+      "name": "old start sees new active job",
+      "pass": true
+    },
+    {
+      "name": "work duration server efficiency",
+      "pass": true
+    },
+    {
+      "name": "not ready after actual activation",
+      "pass": true
+    },
+    {
+      "name": "real work pays ten",
+      "pass": true
+    },
+    {
+      "name": "same request replay wallet unchanged",
+      "pass": true
+    },
+    {
+      "name": "same request replay same receipt",
+      "pass": true
+    },
+    {
+      "name": "new request same job no double reward",
+      "pass": true
+    },
+    {
+      "name": "different payload same request rejected",
+      "pass": true
+    },
+    {
+      "name": "Card currency untouched",
+      "pass": true
+    },
+    {
+      "name": "revision conflict includes fresh snapshot",
+      "pass": true
+    },
+    {
+      "name": "retry same logical request after conflict",
+      "pass": true
+    },
+    {
+      "name": "gift costs five",
+      "pass": true
+    },
+    {
+      "name": "gift cooldown",
+      "pass": true
+    },
+    {
+      "name": "rejected gift no charge",
+      "pass": true
+    },
+    {
+      "name": "gift daily two",
+      "pass": true
+    },
+    {
+      "name": "daily limit no charge",
+      "pass": true
+    },
+    {
+      "name": "activity first eight seconds",
+      "pass": true
+    },
+    {
+      "name": "activity forged needs rejected",
+      "pass": true
+    },
+    {
+      "name": "activity nonowned rejected",
+      "pass": true
+    },
+    {
+      "name": "activity arbitrary action rejected",
+      "pass": true
+    },
+    {
+      "name": "completed meal saves fixed server hunger delta",
+      "pass": true
+    },
+    {
+      "name": "activity earns no coins",
+      "pass": true
+    },
+    {
+      "name": "activity cooldown",
+      "pass": true
+    },
+    {
+      "name": "bounded activity 1",
+      "pass": true
+    },
+    {
+      "name": "bounded activity 2",
+      "pass": true
+    },
+    {
+      "name": "bounded activity 3",
+      "pass": true
+    },
+    {
+      "name": "bounded activity 4",
+      "pass": true
+    },
+    {
+      "name": "bounded activity 5",
+      "pass": true
+    },
+    {
+      "name": "bounded activity 6",
+      "pass": true
+    },
+    {
+      "name": "bounded activity 7",
+      "pass": true
+    },
+    {
+      "name": "bounded activity 8",
+      "pass": true
+    },
+    {
+      "name": "bounded activity 9",
+      "pass": true
+    },
+    {
+      "name": "bounded activity 10",
+      "pass": true
+    },
+    {
+      "name": "bounded activity 11",
+      "pass": true
+    },
+    {
+      "name": "activity hourly cap",
+      "pass": true
+    },
+    {
+      "name": "activity cannot fake rest while earning",
+      "pass": true
+    },
+    {
+      "name": "unknown event rejected",
+      "pass": true
+    },
+    {
+      "name": "invalid participant rejected",
+      "pass": true
+    },
+    {
+      "name": "defined owned pair event accepted",
+      "pass": true
+    },
+    {
+      "name": "event cooldown blocks farming",
+      "pass": true
+    },
+    {
+      "name": "memories saved",
+      "pass": true
+    },
+    {
+      "name": "offline work receipt once",
+      "pass": true
+    },
+    {
+      "name": "offline work coin summary",
+      "pass": true
+    },
+    {
+      "name": "reloading cannot reaward",
+      "pass": true
+    },
+    {
+      "name": "offline aggregation capped eight hours",
+      "pass": true
+    },
+    {
+      "name": "needs always bounded",
+      "pass": true
+    },
+    {
+      "name": "legacy active job imported",
+      "pass": true
+    },
+    {
+      "name": "legacy offline pays once",
+      "pass": true
+    },
+    {
+      "name": "legacy old API cannot reaward",
+      "pass": true
+    },
+    {
+      "name": "old claim then life preserves one payout",
+      "pass": true
+    },
+    {
+      "name": "old claim removes imported job",
+      "pass": true
+    },
+    {
+      "name": "ledger unique per legacy reward",
+      "pass": true
+    },
+    {
+      "name": "wallet cap holds ready reward",
+      "pass": true
+    },
+    {
+      "name": "wallet cap retains job",
+      "pass": true
+    },
+    {
+      "name": "earned reward claim after spending",
+      "pass": true
+    },
+    {
+      "name": "new purchase auto adds owned actor",
+      "pass": true
+    },
+    {
+      "name": "purchase preserves existing position",
+      "pass": true
+    },
+    {
+      "name": "arrival once",
+      "pass": true
+    },
+    {
+      "name": "repeat purchase rejected",
+      "pass": true
+    },
+    {
+      "name": "ack succeeds",
+      "pass": true
+    },
+    {
+      "name": "ack survives reload",
+      "pass": true
+    },
+    {
+      "name": "new stove is paid item",
+      "pass": true
+    },
+    {
+      "name": "stove is never granted without purchase",
+      "pass": true
+    },
+    {
+      "name": "owned stove may be placed",
+      "pass": true
+    },
+    {
+      "name": "canonical new stove station type",
+      "pass": true
+    },
+    {
+      "name": "ten owned actors retained",
+      "pass": true
+    },
+    {
+      "name": "legacy eight client cannot erase ninth tenth",
+      "pass": true
+    },
+    {
+      "name": "v2 ten save works",
+      "pass": true
+    },
+    {
+      "name": "moved furniture cancels invalid work",
+      "pass": true
+    },
+    {
+      "name": "invalid station never pays",
+      "pass": true
+    },
+    {
+      "name": "daily reward 0",
+      "pass": true
+    },
+    {
+      "name": "daily reward 1",
+      "pass": true
+    },
+    {
+      "name": "daily reward 2",
+      "pass": true
+    },
+    {
+      "name": "daily reward 3",
+      "pass": true
+    },
+    {
+      "name": "daily reward 4",
+      "pass": true
+    },
+    {
+      "name": "daily reward 5",
+      "pass": true
+    },
+    {
+      "name": "daily six reserve limit",
+      "pass": true
+    },
+    {
+      "name": "two per character limit",
+      "pass": true
+    },
+    {
+      "name": "generic profile update preserves wallet",
+      "pass": true
+    },
+    {
+      "name": "generic update preserves ownership",
+      "pass": true
+    },
+    {
+      "name": "guest projection contains no memories/jobs",
+      "pass": true
+    },
+    {
+      "name": "old start ignores expired new reservation",
+      "pass": true
+    },
+    {
+      "name": "old start ignores relocated new station",
+      "pass": true
+    },
+    {
+      "name": "queued duplicate both replies succeed",
+      "pass": true
+    },
+    {
+      "name": "queued duplicate has one replay",
+      "pass": true
+    },
+    {
+      "name": "queued duplicate gift single debit",
+      "pass": true
+    },
+    {
+      "name": "queued duplicate gift single ledger",
+      "pass": true
+    },
+    {
+      "name": "different requests same revision one wins",
+      "pass": true
+    },
+    {
+      "name": "second competing request gets conflict",
+      "pass": true
+    },
+    {
+      "name": "wallet order purchase success true",
+      "pass": true
+    },
+    {
+      "name": "wallet order completion result true",
+      "pass": true
+    },
+    {
+      "name": "wallet order converges no lost balance true",
+      "pass": true
+    },
+    {
+      "name": "wallet order preserves purchase true",
+      "pass": true
+    },
+    {
+      "name": "wallet order one reward ledger true",
+      "pass": true
+    },
+    {
+      "name": "wallet order purchase success false",
+      "pass": true
+    },
+    {
+      "name": "wallet order completion result false",
+      "pass": true
+    },
+    {
+      "name": "wallet order cap is retryable",
+      "pass": true
+    },
+    {
+      "name": "wallet order converges no lost balance false",
+      "pass": true
+    },
+    {
+      "name": "wallet order preserves purchase false",
+      "pass": true
+    },
+    {
+      "name": "wallet order one reward ledger false",
+      "pass": true
+    },
+    {
+      "name": "queued legacy mixed API one payout true",
+      "pass": true
+    },
+    {
+      "name": "queued legacy mixed API one ledger true",
+      "pass": true
+    },
+    {
+      "name": "queued legacy mixed API one payout false",
+      "pass": true
+    },
+    {
+      "name": "queued legacy mixed API one ledger false",
+      "pass": true
+    },
+    {
+      "name": "duplicate character purchase one accepted",
+      "pass": true
+    },
+    {
+      "name": "duplicate purchase rejected without debit",
+      "pass": true
+    },
+    {
+      "name": "duplicate purchase one arrival",
+      "pass": true
+    },
+    {
+      "name": "duplicate purchase one debit",
+      "pass": true
+    },
+    {
+      "name": "ninth crew purchase",
+      "pass": true
+    },
+    {
+      "name": "tenth crew purchase places ten",
+      "pass": true
+    },
+    {
+      "name": "ninth tenth keep first eight positions",
+      "pass": true
+    },
+    {
+      "name": "ninth tenth arrivals exactly two",
+      "pass": true
+    },
+    {
+      "name": "purchase rejects room revision overflow",
+      "pass": true
+    },
+    {
+      "name": "rejected overflow purchase keeps wallet",
+      "pass": true
+    },
+    {
+      "name": "rejected overflow purchase keeps ownership",
+      "pass": true
+    },
+    {
+      "name": "six offline jobs aggregate once",
+      "pass": true
+    },
+    {
+      "name": "six offline jobs pay sixty",
+      "pass": true
+    },
+    {
+      "name": "offline batch repeat no reward",
+      "pass": true
+    },
+    {
+      "name": "ledger error propagates after rollback",
+      "pass": true
+    },
+    {
+      "name": "ledger rollback wallet untouched",
+      "pass": true
+    },
+    {
+      "name": "ledger rollback life revision untouched",
+      "pass": true
+    },
+    {
+      "name": "same request retry after transaction failure",
+      "pass": true
+    },
+    {
+      "name": "one-way friend cannot inspect life",
+      "pass": true
+    },
+    {
+      "name": "reciprocal friend gets public life",
+      "pass": true
+    },
+    {
+      "name": "friend life exact public fields",
+      "pass": true
+    },
+    {
+      "name": "friend character projection excludes private fields",
+      "pass": true
+    },
+    {
+      "name": "friend visit does not aggregate profile",
+      "pass": true
+    },
+    {
+      "name": "friend visit does not advance life state",
+      "pass": true
+    },
+    {
+      "name": "life GET bridge",
+      "pass": true
+    },
+    {
+      "name": "life GET exact event",
+      "pass": true
+    },
+    {
+      "name": "life command bridge",
+      "pass": true
+    },
+    {
+      "name": "secret remains main process authority",
+      "pass": true
+    },
+    {
+      "name": "renderer owner id not forwarded",
+      "pass": true
+    },
+    {
+      "name": "bridge rejects unknown command",
+      "pass": true
+    },
+    {
+      "name": "late response after account switch rejected",
+      "pass": true
+    }
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "status": "PASS",
+  "checks": 21,
+  "items": [
+    {
+      "asset": "public/images/launcher_room/robin_v2/portrait.webp",
+      "outerAlphaMax": 0,
+      "transparentPixelsWithHiddenRgb": 20646
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/acting/east.webp",
+      "outerAlphaMax": 0,
+      "transparentPixelsWithHiddenRgb": 194097
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/acting/north.webp",
+      "outerAlphaMax": 0,
+      "transparentPixelsWithHiddenRgb": 136927
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/acting/south.webp",
+      "outerAlphaMax": 0,
+      "transparentPixelsWithHiddenRgb": 192835
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/acting/west.webp",
+      "outerAlphaMax": 0,
+      "transparentPixelsWithHiddenRgb": 89815
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/life/eat-south.webp",
+      "outerAlphaMax": 0,
+      "transparentPixelsWithHiddenRgb": 82575
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/life/read-east.webp",
+      "outerAlphaMax": 0,
+      "transparentPixelsWithHiddenRgb": 127724
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/life/read-north.webp",
+      "outerAlphaMax": 0,
+      "transparentPixelsWithHiddenRgb": 27356
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/life/read-south.webp",
+      "outerAlphaMax": 0,
+      "transparentPixelsWithHiddenRgb": 74328
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/life/read-west.webp",
+      "outerAlphaMax": 0,
+      "transparentPixelsWithHiddenRgb": 106223
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/life/rest-south.webp",
+      "outerAlphaMax": 0,
+      "transparentPixelsWithHiddenRgb": 85483
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/life/sleep-south.webp",
+      "outerAlphaMax": 0,
+      "transparentPixelsWithHiddenRgb": 17601
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/life/train-south.webp",
+      "outerAlphaMax": 0,
+      "transparentPixelsWithHiddenRgb": 76111
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/life/work-east.webp",
+      "outerAlphaMax": 0,
+      "transparentPixelsWithHiddenRgb": 104273
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/life/work-north.webp",
+      "outerAlphaMax": 0,
+      "transparentPixelsWithHiddenRgb": 5424
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/life/work-south.webp",
+      "outerAlphaMax": 0,
+      "transparentPixelsWithHiddenRgb": 78972
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/life/work-west.webp",
+      "outerAlphaMax": 0,
+      "transparentPixelsWithHiddenRgb": 57802
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/walk/east.webp",
+      "outerAlphaMax": 0,
+      "transparentPixelsWithHiddenRgb": 292967
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/walk/north.webp",
+      "outerAlphaMax": 0,
+      "transparentPixelsWithHiddenRgb": 108825
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/walk/south.webp",
+      "outerAlphaMax": 0,
+      "transparentPixelsWithHiddenRgb": 144375
+    },
+    {
+      "asset": "public/images/launcher_room/robin_v2/walk/west.webp",
+      "outerAlphaMax": 0,
+      "transparentPixelsWithHiddenRgb": 130031
+    }
+  ]
+}

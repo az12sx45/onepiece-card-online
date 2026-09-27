@@ -56,7 +56,7 @@
     const key = item?.type === TYPES.character.type ? keyForCharacter(item) : '';
     return source && key ? portraitFor(key) : source;
   };
-  const portraitFor = key => reserved?.assetUrl(key,'portrait.webp') || `opui://launcher/images/launcher_room/portrait_v3/${key}.webp`;
+  const portraitFor = key => key === 'robin' ? 'opui://launcher/images/launcher_room/robin_v2/portrait.webp' : reserved?.assetUrl(key,'portrait.webp') || `opui://launcher/images/launcher_room/portrait_v3/${key}.webp`;
   const isValidProduct = (item, type) => item?.type === type && typeof item.id === 'string' && /^[a-z0-9-]{3,64}$/.test(item.id) && !!assetFor(item) && (type !== TYPES.character.type || releasedCharacterKeys().has(keyForCharacter(item)));
   const round = value => Math.round(value * 100) / 100;
   const rotationFor = item => Number.isInteger(item?.rotation) && item.rotation >= 0 && item.rotation <= 3

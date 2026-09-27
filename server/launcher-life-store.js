@@ -5,6 +5,7 @@
 const crypto = require('node:crypto');
 const L = require('./launcher-life');
 const crewRelease = require('./launcher-crew-release');
+const M = require('./launcher-minigames');
 const initializers = new WeakMap();
 const ACTIVITY_EFFECTS=Object.freeze({Eat:{hunger:-8,mood:1},Rest:{energy:6,mood:1},Sleep:{energy:10},Train:{energy:-4,workMotivation:3},UseFurniture:{mood:1,workMotivation:1}});
 function applyActivityNeeds(actor,activity) {
@@ -25,6 +26,7 @@ async function ensureLifeTables(pool) {
       user_id INTEGER NOT NULL, operation_id TEXT NOT NULL, job_id TEXT,
       amount INTEGER NOT NULL, balance_after INTEGER NOT NULL, receipt JSONB NOT NULL,
       created_at TIMESTAMPTZ NOT NULL DEFAULT now(), PRIMARY KEY(user_id,operation_id))`);
+    await M.ensure(pool);
   })().catch(e => { initializers.delete(pool); throw e; }));
   await initializers.get(pool);
 }
@@ -79,6 +81,10 @@ const FIELDS={
  'work.reserve':['itemId','stationId','roomRevision','stationType','furnitureId'],
  'work.activate':['jobId'],'work.complete':['jobId'],'work.cancel':['jobId'],
  'directive.set':['directiveId'],'character.interact':['itemId','action'],
+ 'minigame.start':['characterId','kind','practice'],
+ 'minigame.answer':['sessionId','token','roundId','selections','directions'],
+ 'minigame.finish':['sessionId','token'],'minigame.cancel':['sessionId','token'],
+ 'minigame.retry':['sessionId','token'],
  'event.record':['eventId','participants'],'activity.record':['itemId','activity'],'arrival.ack':['arrivalId'],'checkpoint':['exit']
 };
 function validCommand(command) {
@@ -87,8 +93,76 @@ function validCommand(command) {
   if(!command.payload||typeof command.payload!=='object'||Array.isArray(command.payload))return false;
   return Object.keys(command.payload).every(k=>FIELDS[command.type].includes(k))&&JSON.stringify(command.payload).length<=2048;
 }
-async function perform(db,row,state,companions,command,room,now) {
+async function performMinigame(db,row,state,companions,command,room,now,sessions) {
+  const p=command.payload;
+  if(command.type==='minigame.start') {
+    if(!['work','training'].includes(p.kind)||p.practice!==undefined&&typeof p.practice!=='boolean'||p.kind==='work'&&p.practice)return{ok:false,error:'invalid_minigame'};
+    const actor=state.characters[p.characterId];
+    if(!actor)return{ok:false,error:'not_owned'};
+    if(!state.activeCharacterIds.includes(p.characterId))return{ok:false,error:'not_placed'};
+    if(sessions.length)return{ok:false,error:'minigame_active',minigame:M.view(sessions[0])};
+    if(state.jobs.some(job=>job.itemId===p.characterId))return{ok:false,error:'work_active'};
+    const old=companions.characters[p.characterId],practice=p.practice===true;
+    if(p.kind==='work') {
+      const reserved=state.jobs.filter(job=>job.status==='reserved').length;
+      if(companions.workStartsToday+reserved>=6||companions.claimsToday+state.jobs.length>=6||old.worksStartedToday>=2)return{ok:false,error:'work_daily_limit'};
+      if(row.stats.launcherWalletV1.coins>490)return{ok:false,error:'wallet_full'};
+      if(actor.needs.energy<15||actor.needs.hunger>90)return{ok:false,error:'needs_rest'};
+      companions.workStartsToday++;old.worksStartedToday++;
+    } else if(!practice) {
+      if(Date.parse(actor.lastInteractions.train||0)+600000>now.getTime())return{ok:false,error:'interaction_cooldown'};
+      if(actor.needs.energy<20)return{ok:false,error:'needs_rest'};
+      actor.needs.energy=L.clamp(actor.needs.energy-6);actor.lastInteractions.train=now.toISOString();
+    }
+    const session=M.create(p.kind,p.characterId,room.revision,now,practice);
+    await M.save(db,row.user_id,session);
+    return{ok:true,minigame:M.view(session)};
+  }
+  const session=await M.load(db,row.user_id,p);
+  if(!session)return{ok:false,error:'invalid_minigame_session'};
+  if(command.type==='minigame.cancel') {
+    if(M.ACTIVE.has(session.state)){session.state='cancelled';session.challenge=null;await M.save(db,row.user_id,session);}
+    return{ok:true,cancelled:session.state==='cancelled',minigame:M.view(session)};
+  }
+  if(session.state==='completed'&&command.type==='minigame.finish')return{ok:true,duplicate:true,minigame:M.view(session),...(session.receipt?{receipt:session.receipt}:{})};
+  if(!M.ACTIVE.has(session.state))return{ok:false,error:'minigame_'+session.state,minigame:M.view(session)};
+  if(command.type==='minigame.retry') {
+    if(session.state!=='failed'||session.attempt>=session.maxAttempts)return{ok:false,error:'minigame_retry_unavailable',minigame:M.view(session)};
+    M.retry(session,now);await M.save(db,row.user_id,session);return{ok:true,minigame:M.view(session)};
+  }
+  if(session.state==='failed'&&command.type==='minigame.finish')return{ok:true,duplicate:true,minigame:M.view(session)};
+  if(command.type==='minigame.answer') {
+    const result=M.answer(session,p,now);
+    if(result.error)return{ok:false,...result,minigame:M.view(session)};
+    await M.save(db,row.user_id,session);return{ok:true,minigame:M.view(session)};
+  }
+  if(session.roundIndex!==session.totalRounds)return{ok:false,error:'minigame_incomplete',minigame:M.view(session)};
+  if(now.getTime()<Date.parse(session.finishNotBefore))return{ok:false,error:'minigame_too_early',minigame:M.view(session)};
+  const passed=session.correctRounds>=(session.kind==='work'?6:3),actor=state.characters[session.characterId],old=companions.characters[session.characterId];
+  const canRetry=!passed&&session.attempt<session.maxAttempts;
+  const result={passed,practice:session.practice,canRetry,attempt:session.attempt,attemptsRemaining:canRetry?session.maxAttempts-session.attempt:0,coins:0,affinity:0,workMotivation:0,energyCost:session.kind==='training'&&!session.practice?6:0,correctRounds:session.correctRounds,totalRounds:session.totalRounds};
+  if(passed&&session.kind==='work') {
+    if(companions.claimsToday>=6)return{ok:false,error:'work_daily_limit',minigame:M.view(session)};
+    if(row.stats.launcherWalletV1.coins>490){session.state='ready';await M.save(db,row.user_id,session);return{ok:false,error:'wallet_full',minigame:M.view(session)};}
+    const jobId='minigame-'+session.id,operationId='life-work:'+jobId,prior=await ledger(db,row.user_id,operationId);
+    if(prior)return{ok:false,error:'minigame_receipt_conflict'};
+    row.stats.launcherWalletV1.coins+=10;companions.claimsToday++;old.affinity=Math.min(100,old.affinity+1);old.lastClaimAt=now.toISOString();
+    session.receipt={operationId,jobId,itemId:session.characterId,amount:10,claimedAt:now.toISOString()};
+    await writeLedger(db,row,operationId,jobId,10,session.receipt);
+    result.coins=10;result.affinity=1;
+    L.addMemory(state,session.characterId,'work.completed',[session.characterId],now,2);
+  } else if(passed&&session.kind==='training'&&!session.practice) {
+    actor.needs.workMotivation=L.clamp(actor.needs.workMotivation+5);old.affinity=Math.min(100,old.affinity+1);
+    result.affinity=1;result.workMotivation=5;
+    L.addMemory(state,session.characterId,'player.train',[session.characterId],now,2);
+  }
+  session.state=canRetry?'failed':'completed';session.result=result;session.challenge=null;
+  await M.save(db,row.user_id,session);
+  return{ok:true,minigame:M.view(session),...(session.receipt?{receipt:session.receipt}:{})};
+}
+async function perform(db,row,state,companions,command,room,now,sessions=[]) {
   const p=command.payload,content=L.content(),actor=state.characters[p.itemId];
+  if(command.type.startsWith('minigame.'))return performMinigame(db,row,state,companions,command,room,now,sessions);
   if(command.type.startsWith('work.')&&command.type!=='work.reserve') {
     if(typeof p.jobId!=='string'||p.jobId.length>100)return {ok:false,error:'invalid_job'};
     const existing=command.type==='work.complete'?await ledger(db,row.user_id,'life-work:'+p.jobId):null;
@@ -111,12 +185,13 @@ async function perform(db,row,state,companions,command,room,now) {
   if(command.type==='work.reserve') {
     if(!actor)return {ok:false,error:'not_owned'};
     if(!state.activeCharacterIds.includes(p.itemId))return {ok:false,error:'not_placed'};
+    if(sessions.some(session=>session.characterId===p.itemId))return{ok:false,error:'minigame_active'};
     if(p.roomRevision!==room.revision)return {ok:false,error:'room_revision_conflict'};
     const station=L.stationFor(room,p.stationId);if(!station)return {ok:false,error:'invalid_station'};
     if(state.jobs.some(j=>j.itemId===p.itemId))return {ok:false,error:'work_active'};
     if(state.jobs.filter(j=>j.stationId===p.stationId).length>=station.capacity)return {ok:false,error:'station_busy'};
     const old=companions.characters[p.itemId],reserved=state.jobs.filter(j=>j.status==='reserved').length;
-    if(companions.workStartsToday+reserved>=6||companions.claimsToday+state.jobs.length>=6||old.worksStartedToday>=2)return {ok:false,error:'work_daily_limit'};
+    if(companions.workStartsToday+reserved>=6||companions.claimsToday+state.jobs.length+sessions.filter(session=>session.kind==='work').length>=6||old.worksStartedToday>=2)return {ok:false,error:'work_daily_limit'};
     if(actor.needs.energy<15||actor.needs.hunger>90)return {ok:false,error:'needs_rest'};
     const efficiency=L.clamp(content.characters?.[actor.key]?.workEfficiency?.[station.type]??1,.35,1.5);
     const durationMs=Math.round(300000/efficiency),placement=room.characters.find(c=>c.itemId===p.itemId);
@@ -131,6 +206,7 @@ async function perform(db,row,state,companions,command,room,now) {
   if(command.type==='character.interact') {
     if(!actor)return {ok:false,error:'not_owned'};
     if(!state.activeCharacterIds.includes(p.itemId))return {ok:false,error:'not_placed'};
+    if(p.action==='train'&&sessions.some(session=>session.characterId===p.itemId))return{ok:false,error:'minigame_active'};
     if(!['call','gift','train'].includes(p.action))return {ok:false,error:'invalid_action'};
     const cooldown=p.action==='call'?10000:p.action==='gift'?60000:600000;
     if(Date.parse(actor.lastInteractions[p.action]||0)+cooldown>now.getTime())return {ok:false,error:'interaction_cooldown'};
@@ -153,6 +229,7 @@ async function perform(db,row,state,companions,command,room,now) {
   if(command.type==='activity.record') {
     if(!actor)return {ok:false,error:'not_owned'};
     if(!state.activeCharacterIds.includes(p.itemId))return {ok:false,error:'not_placed'};
+    if(sessions.some(session=>session.characterId===p.itemId))return{ok:false,error:'minigame_active'};
     if(typeof p.activity!=='string'||!Object.hasOwn(ACTIVITY_EFFECTS,p.activity))return {ok:false,error:'invalid_activity'};
     if(state.jobs.some(j=>j.itemId===p.itemId))return {ok:false,error:'work_active'};
     if(now.getTime()-Date.parse(actor.createdAt)<8000||actor.lastActivityAt&&now.getTime()-Date.parse(actor.lastActivityAt)<30000)return {ok:false,error:'activity_cooldown'};
@@ -220,6 +297,7 @@ async function run(pool,secret,command,suppliedNow,capability) {
     const S=shop(),room=S.launcherRoom(row.stats),state=await loadState(db,row,now),companions=S.launcherCompanionState(row.stats,now);
     row.stats.launcherWalletV1=S.prepareLauncherWallet(row.stats,now).wallet;
     reconcileLegacy(state,companions,room,now);
+    const sessions=await M.active(db,row.user_id,now,state,room);
     const beforeRevision=state.revision,aggregation=L.aggregate(state,now);
     if(aggregation.offline)for(const job of [...state.jobs])if(job.status==='ready'){
       const settled=await settleJob(db,row,state,companions,job,room,now);
@@ -233,7 +311,7 @@ async function run(pool,secret,command,suppliedNow,capability) {
         if(prior.rows[0])extra=prior.rows[0].payload_hash===hash?{...prior.rows[0].result,duplicate:true}:{ok:false,error:'request_id_conflict'};
         else if(command.expectedRevision!==beforeRevision)extra={ok:false,error:'revision_conflict'};
         else {
-          extra=await perform(db,row,state,companions,command,room,now);
+          extra=await perform(db,row,state,companions,command,room,now,sessions);
           // Transient failures are retryable; successful effects are immutable.
           if(extra.ok)await db.query('INSERT INTO launcher_life_operations(user_id,request_id,payload_hash,result) VALUES($1,$2,$3,$4::jsonb)',[row.user_id,command.requestId,hash,JSON.stringify(extra)]);
         }
@@ -241,8 +319,10 @@ async function run(pool,secret,command,suppliedNow,capability) {
     }
     row.stats.launcherCompanionsV1=companions;state.revision++;
     const updated=await db.query('UPDATE player_profiles SET stats=$1::jsonb,updated_at=now() WHERE user_id=$2 RETURNING user_id,name,avatar,stats,updated_at',[JSON.stringify(row.stats),row.user_id]);
-    await saveState(db,row.user_id,state);await db.query('COMMIT');
-    return snapshot(updated.rows[0]||row,state,now,extra);
+    await saveState(db,row.user_id,state);
+    const activeMinigame=M.view((await M.active(db,row.user_id,now,state,room))[0]||null);
+    await db.query('COMMIT');
+    return snapshot(updated.rows[0]||row,state,now,{activeMinigame,...extra});
   } catch(error){await db.query('ROLLBACK').catch(()=>{});throw error;}finally{db.release();}
 }
 async function registerPurchasedCharacter(db,row,itemId,now=new Date()) {
@@ -257,8 +337,10 @@ async function legacyWorkGuard(db,row,companions,itemId,action,now=new Date()) {
   const state=L.normalizeState(found.rows[0]?.state,S.launcherOwnedItemIds(row.stats),room.characters.map(c=>c.itemId),now);
   const jobs=state.jobs.filter(j=>!j.legacy&&['reserved','active','ready'].includes(j.status)&&
     (j.status!=='reserved'||Date.parse(j.expiresAt)>now.getTime())&&L.validJobContext(j,state,room));
+  const sessions=await M.active(db,row.user_id,now,state,room);
+  if(action==='start'&&sessions.some(session=>session.characterId===itemId))return 'minigame_active';
   if(action==='start'&&jobs.some(j=>j.itemId===itemId))return 'work_active';
-  if(action==='start'&&(companions.claimsToday+Object.values(companions.characters).filter(c=>c.activeWork).length+jobs.length>=6||companions.workStartsToday+jobs.filter(j=>j.status==='reserved').length>=6))return 'work_daily_limit';
+  if(action==='start'&&(companions.claimsToday+Object.values(companions.characters).filter(c=>c.activeWork).length+jobs.length+sessions.filter(session=>session.kind==='work').length>=6||companions.workStartsToday+jobs.filter(j=>j.status==='reserved').length>=6))return 'work_daily_limit';
   return null;
 }
 async function recordLegacyClaim(db,row,itemId,startedAt,now) {

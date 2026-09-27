@@ -437,7 +437,7 @@ class AuthService extends EventEmitter {
     if (!command || typeof command !== 'object' || Array.isArray(command) ||
         typeof command.requestId !== 'string' || !/^[a-zA-Z0-9_-]{8,100}$/.test(command.requestId) ||
         !Number.isSafeInteger(command.expectedRevision) || command.expectedRevision < 0 ||
-        !['work.reserve','work.activate','work.complete','work.cancel','directive.set','character.interact','event.record','activity.record','arrival.ack','checkpoint'].includes(command.type) ||
+        !['work.reserve','work.activate','work.complete','work.cancel','directive.set','character.interact','event.record','activity.record','arrival.ack','checkpoint','minigame.start','minigame.answer','minigame.finish','minigame.cancel','minigame.retry'].includes(command.type) ||
         !command.payload || typeof command.payload !== 'object' || Array.isArray(command.payload) ||
         JSON.stringify(command.payload).length > 2048) return { ok: false, error: 'invalid_command' };
     const { requestId, expectedRevision, type, payload } = command;

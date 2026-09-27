@@ -331,6 +331,8 @@ function resolveLauncherResource(requestUrl) {
       /^images\/launcher_room\/(?:motion|acting)_v[34]\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\/(?:east|west|north|south)\.webp$/,
       /^images\/launcher_room\/portrait_v3\/(?:luffy|zoro|nami|usopp|sanji|chopper|robin|franky|brook|jinbe)\.webp$/,
       /^images\/launcher_room\/reserved_v1\/(?:ace|sabo|law|hancock)\/(?:portrait|(?:walk|acting)\/(?:east|west|north|south)|life\/(?:work-(?:east|west|north|south)|(?:eat|rest|sleep|train)-south))\.webp$/,
+      /^images\/launcher_room\/robin_v2\/(?:portrait|(?:walk|acting)\/(?:east|west|north|south)|life\/(?:(?:work|read)-(?:east|west|north|south)|(?:eat|rest|sleep|train)-south))\.webp$/,
+      /^images\/launcher_room\/minigames_v1\/(?:deck|cargo-food|cargo-tools|cargo-books)\.webp$/,
       /^audio\/profile_bgm\/(?:harbor|night-watch|voyage)\.ogg$/,
       /^audio\/bgm\/track(?:0[1-9]|1[0-9]|20)\.mp3$/,
       /^videos\/game_launcher\/[A-Za-z0-9._-]+$/
@@ -1074,6 +1076,9 @@ async function runVisualOrSmokeCapture() {
     };
     check();
   })`, true).catch(() => {});
+  // Hidden settings read version state only when requested; use the real IPC
+  // before the smoke snapshot instead of depending on an early broadcast.
+  if (SMOKE_MODE) await mainWindow.webContents.executeJavaScript('refreshLauncherUpdateState()', true);
   let traySmoke = null;
   const boxMotionViews = new Set(['box-crack', 'box-mid', 'box-open']);
   if (SCREENSHOT_PATH && (SMOKE_MODE || !app.isPackaged)) {
@@ -1324,6 +1329,8 @@ async function runVisualOrSmokeCapture() {
             ...['east', 'west', 'north', 'south'].map(direction => `life/work-${direction}.webp`),
             ...['eat', 'rest', 'sleep', 'train'].map(action => `life/${action}-south.webp`)
           ].map(asset => `images/launcher_room/reserved_v1/${key}/${asset}`)),
+          ...["portrait.webp", "walk/east.webp", "walk/west.webp", "walk/north.webp", "walk/south.webp", "acting/east.webp", "acting/west.webp", "acting/north.webp", "acting/south.webp", "life/work-east.webp", "life/work-west.webp", "life/work-north.webp", "life/work-south.webp", "life/read-east.webp", "life/read-west.webp", "life/read-north.webp", "life/read-south.webp", "life/eat-south.webp", "life/rest-south.webp", "life/sleep-south.webp", "life/train-south.webp"].map(asset => `images/launcher_room/robin_v2/${asset}`),
+          ...['deck','cargo-food','cargo-tools','cargo-books'].map(name => `images/launcher_room/minigames_v1/${name}.webp`),
           ...lifeActions.assets().map(asset => `images/launcher_room/life_v1/${asset}`),
           ...[0,1,2,3].map(rotation => `images/launcher_room/furniture_views/galley-stove/${rotation}.webp`),
           'images/launcher_room/furniture/galley-stove.webp',

@@ -1,0 +1,27 @@
+{
+  "schema": "launcher-minigame-image-prompts/1",
+  "tool": "built-in image_gen",
+  "prompts": [
+    {
+      "asset": "deck",
+      "transparent_background": false,
+      "prompt": "Use case: stylized-concept. Asset type: production gameplay background for a ONE PIECE Thousand Sunny ship supply minigame, landscape 16:9. Paint a polished anime game background viewed slightly from above over a broad EMPTY honey-colored wooden ship deck. Turquoise ocean, airy blue sky, warm sunlight, dark teal and antique gold accents, crisp clean cel-painted edges consistent with a cozy One Piece character room. The entire center 75 percent of the image is clear simple deck planks with very quiet texture for clickable moving supply crates. Railings, coiled rope and a very few supply barrels occupy only outermost side edges; no large foreground furniture. Thin nautical border details at outer edges only, no frame around image. Deck should feel spacious and playable, gentle perspective, horizon confined to upper 18 percent. No people, no original characters, no animals, no text, no letters, no icons, no UI, no logos, no watermark. High quality actual finished game art, not a mockup or screenshot."
+    },
+    {
+      "asset": "cargo-food",
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. Asset type: isolated clickable supply crate item for a polished One Piece shipboard minigame. One compact open honey-brown wooden FOOD crate viewed at three-quarter slightly top-down perspective, packed neatly with one recognizable cartoon meat-on-the-bone, two bright oranges and a few green vegetables. Bold readable silhouette and large clear simple contents, crisp anime cel-shading, clean dark warm outline, honey wood / rust red / orange / muted teal accents, soft warm upper-left lighting. Center the complete crate within a square composition, fill 76 percent of width with comfortable transparent padding on all sides. Genuine transparent background, alpha cutout. No cast shadow outside the object, no ground plane, no people, no arms, no words, no writing, no symbols, no watermarks, no UI circle, no border. High-quality production game item, natural dimensional proportions, easily recognizable at 80px."
+    },
+    {
+      "asset": "cargo-tools",
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. Asset type: isolated clickable supply crate item for a polished One Piece shipboard minigame. One compact open honey-brown wooden SHIPWRIGHT TOOLS crate viewed at three-quarter slightly top-down perspective, packed neatly with one large metal-headed wooden hammer, a clear coil of thick beige ship rope, and a short brass wrench. Bold readable silhouette and large clear simple contents, crisp anime cel-shading, clean dark warm outline, honey wood / steel gray / muted teal accents, soft warm upper-left lighting. Center the complete crate within a square composition, fill 76 percent of width with comfortable transparent padding on all sides. Genuine transparent background, alpha cutout. No cast shadow outside the object, no ground plane, no people, no arms, no words, no writing, no symbols, no watermarks, no UI circle, no border. High-quality production game item, natural dimensional proportions, easily recognizable at 80px."
+    },
+    {
+      "asset": "cargo-books",
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. Asset type: isolated clickable supply crate item for a polished One Piece shipboard minigame. One compact open honey-brown wooden BOOKS AND CHARTS crate viewed at three-quarter slightly top-down perspective, packed neatly with two large old books in navy blue and muted teal, a cream rolled sea chart tied with string, and a third slim burgundy book. Bold readable silhouette and large clear simple contents, crisp anime cel-shading, clean dark warm outline, honey wood / navy blue / muted teal / cream accents, soft warm upper-left lighting. Center the complete crate within a square composition, fill 76 percent of width with comfortable transparent padding on all sides. Genuine transparent background, alpha cutout. No cast shadow outside the object, no ground plane, no people, no arms, no words, no writing, no symbols, no watermarks, no UI circle, no border. Book covers entirely blank, no legible map text. High-quality production game item, natural dimensional proportions, easily recognizable at 80px."
+    }
+  ]
+}
+

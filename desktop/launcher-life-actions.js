@@ -27,6 +27,7 @@
   }
   function url(key,action,direction) {
     const clip=describe(action,direction);
+    if(key==='robin'&&supported(key,action)&&clip)return `opui://launcher/images/launcher_room/robin_v2/life/${action}-${clip.direction}.webp`;
     if(supported(key,action)&&clip&&reserved?.RESERVED_KEYS.includes(key))return reserved.assetUrl(key,`life/${action}-${clip.direction}.webp`);
     return supported(key,action)&&clip ? `opui://launcher/images/launcher_room/life_v1/${key}/${action}-${clip.direction}.webp` : '';
   }
@@ -34,7 +35,7 @@
     const source=url(key,action,direction);
     if(!source || typeof Image==='undefined')return null;
     if(cache.has(source))return cache.get(source);
-    const cell=reserved?.RESERVED_KEYS.includes(key)?256:128;
+    const cell=key==='robin'||reserved?.RESERVED_KEYS.includes(key)?256:128;
     const record={source,cell,ready:false,failed:false,image:null}; cache.set(source,record);
     const img=new Image();record.image=img;
     record.promise=new Promise(resolve=>{

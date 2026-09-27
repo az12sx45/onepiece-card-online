@@ -88,6 +88,7 @@
   function atlasUrl(key, direction, kind = 'motion_v4') {
     if (!Object.hasOwn(STRIDES, key) || !DIRECTIONS.includes(direction)) return '';
     if (!Object.hasOwn(ATLAS_RESOLUTION, kind)) return '';
+    if (key === 'robin') return `opui://launcher/images/launcher_room/robin_v2/${kind === 'acting_v4' ? 'acting' : 'walk'}/${direction}.webp`;
     if (reserved?.RESERVED_KEYS.includes(key)) return reserved.assetUrl(key, `${kind === 'acting_v4' ? 'acting' : 'walk'}/${direction}.webp`);
     return `opui://launcher/images/launcher_room/${kind}/${key}/${direction}.webp`;
   }

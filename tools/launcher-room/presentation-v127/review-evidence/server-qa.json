@@ -1,0 +1,400 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS",
+  "checks": 96,
+  "results": [
+    {
+      "name": "bad identity rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "unowned actor rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "forged reward rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "work cannot disguise rewarded practice",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown game rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "work challenge begins at round zero",
+      "status": "PASS"
+    },
+    {
+      "name": "only current challenge exposed",
+      "status": "PASS"
+    },
+    {
+      "name": "work always has three crates",
+      "status": "PASS"
+    },
+    {
+      "name": "opening game does not earn money",
+      "status": "PASS"
+    },
+    {
+      "name": "starting game reserves shared work allowance",
+      "status": "PASS"
+    },
+    {
+      "name": "starting game reserves per-character allowance",
+      "status": "PASS"
+    },
+    {
+      "name": "get returns active session for reconnect",
+      "status": "PASS"
+    },
+    {
+      "name": "another game shares single active slot",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy start sees interactive session",
+      "status": "PASS"
+    },
+    {
+      "name": "new background reserve sees interactive session",
+      "status": "PASS"
+    },
+    {
+      "name": "autonomous activity cannot fake rest while playing",
+      "status": "PASS"
+    },
+    {
+      "name": "different owner cannot cancel session",
+      "status": "PASS"
+    },
+    {
+      "name": "wrong session token rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "server prevents skipping round pacing",
+      "status": "PASS"
+    },
+    {
+      "name": "server rejects premature finish",
+      "status": "PASS"
+    },
+    {
+      "name": "client cannot supply score",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown crate ID rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "duplicate crate ID rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "one correct round counted",
+      "status": "PASS"
+    },
+    {
+      "name": "repeated request does not add round",
+      "status": "PASS"
+    },
+    {
+      "name": "fresh request cannot replay answered round",
+      "status": "PASS"
+    },
+    {
+      "name": "successful work awards existing ten coins",
+      "status": "PASS"
+    },
+    {
+      "name": "successful work returns fixed reward",
+      "status": "PASS"
+    },
+    {
+      "name": "successful work gives one affinity",
+      "status": "PASS"
+    },
+    {
+      "name": "work ledger receipt uses existing namespace",
+      "status": "PASS"
+    },
+    {
+      "name": "repeated finish returns same receipt",
+      "status": "PASS"
+    },
+    {
+      "name": "repeated finish does not mint coins",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy life completion cannot double claim",
+      "status": "PASS"
+    },
+    {
+      "name": "successful session cannot retry",
+      "status": "PASS"
+    },
+    {
+      "name": "private session absent from friend projection",
+      "status": "PASS"
+    },
+    {
+      "name": "Card coins preserved",
+      "status": "PASS"
+    },
+    {
+      "name": "Board save preserved",
+      "status": "PASS"
+    },
+    {
+      "name": "failed work receives zero coins",
+      "status": "PASS"
+    },
+    {
+      "name": "failed attempt retains session slot",
+      "status": "PASS"
+    },
+    {
+      "name": "failed attempt offers two retries",
+      "status": "PASS"
+    },
+    {
+      "name": "failed session blocks parallel work",
+      "status": "PASS"
+    },
+    {
+      "name": "retry retains same session id",
+      "status": "PASS"
+    },
+    {
+      "name": "retry uses second attempt",
+      "status": "PASS"
+    },
+    {
+      "name": "retry does not consume extra daily start",
+      "status": "PASS"
+    },
+    {
+      "name": "third attempt can succeed once",
+      "status": "PASS"
+    },
+    {
+      "name": "third attempt still uses one work slot",
+      "status": "PASS"
+    },
+    {
+      "name": "third failure closes session",
+      "status": "PASS"
+    },
+    {
+      "name": "third failure cannot replay fourth attempt",
+      "status": "PASS"
+    },
+    {
+      "name": "three failed attempts never pay",
+      "status": "PASS"
+    },
+    {
+      "name": "cancel closes session",
+      "status": "PASS"
+    },
+    {
+      "name": "cancel then finish cannot claim",
+      "status": "PASS"
+    },
+    {
+      "name": "cancel preserves wallet",
+      "status": "PASS"
+    },
+    {
+      "name": "cancel retains original work attempt count",
+      "status": "PASS"
+    },
+    {
+      "name": "disconnected challenge expires without payout",
+      "status": "PASS"
+    },
+    {
+      "name": "expired challenge no longer occupies active slot",
+      "status": "PASS"
+    },
+    {
+      "name": "expired finish cannot claim",
+      "status": "PASS"
+    },
+    {
+      "name": "room edit invalidates live challenge",
+      "status": "PASS"
+    },
+    {
+      "name": "room edit never awards coins",
+      "status": "PASS"
+    },
+    {
+      "name": "unplaced actor invalidates session even without revision bump",
+      "status": "PASS"
+    },
+    {
+      "name": "unplaced actor cannot start another game",
+      "status": "PASS"
+    },
+    {
+      "name": "interactive start respects existing legacy work",
+      "status": "PASS"
+    },
+    {
+      "name": "different actor can play beside background job",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy job still pays once after interactive game",
+      "status": "PASS"
+    },
+    {
+      "name": "follow-up life sync cannot double settle old job",
+      "status": "PASS"
+    },
+    {
+      "name": "global six attempts cannot be bypassed via new character",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy API shares interactive global cap",
+      "status": "PASS"
+    },
+    {
+      "name": "per-character two attempts enforced",
+      "status": "PASS"
+    },
+    {
+      "name": "next day resets shared start allowance",
+      "status": "PASS"
+    },
+    {
+      "name": "training starts with energy cost six",
+      "status": "PASS"
+    },
+    {
+      "name": "training stages use four rounds",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy train cannot overlap active training",
+      "status": "PASS"
+    },
+    {
+      "name": "training grants no wallet coins",
+      "status": "PASS"
+    },
+    {
+      "name": "training grants existing motivation effect",
+      "status": "PASS"
+    },
+    {
+      "name": "training grants one affinity",
+      "status": "PASS"
+    },
+    {
+      "name": "normal training shares ten minute cooldown",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy train sees same cooldown",
+      "status": "PASS"
+    },
+    {
+      "name": "practice permitted during reward cooldown",
+      "status": "PASS"
+    },
+    {
+      "name": "practice does not deduct energy",
+      "status": "PASS"
+    },
+    {
+      "name": "practice reports no reward",
+      "status": "PASS"
+    },
+    {
+      "name": "practice cannot farm affinity",
+      "status": "PASS"
+    },
+    {
+      "name": "training retry does not charge energy twice",
+      "status": "PASS"
+    },
+    {
+      "name": "training retry preserves original cooldown",
+      "status": "PASS"
+    },
+    {
+      "name": "full wallet refuses paid work attempt",
+      "status": "PASS"
+    },
+    {
+      "name": "full wallet rejection consumes no attempt",
+      "status": "PASS"
+    },
+    {
+      "name": "concurrent wallet fill retains successful result",
+      "status": "PASS"
+    },
+    {
+      "name": "wallet-full pending claim does not exceed cap",
+      "status": "PASS"
+    },
+    {
+      "name": "wallet-full pending claim keeps session ready",
+      "status": "PASS"
+    },
+    {
+      "name": "ready earned claim survives ordinary session timeout",
+      "status": "PASS"
+    },
+    {
+      "name": "pending reward can buy existing item",
+      "status": "PASS"
+    },
+    {
+      "name": "spending then claim grants only original ten coins",
+      "status": "PASS"
+    },
+    {
+      "name": "held reward recorded only once",
+      "status": "PASS"
+    },
+    {
+      "name": "serialized concurrent starts create only one session",
+      "status": "PASS"
+    },
+    {
+      "name": "serialized concurrent starts consume only one allowance",
+      "status": "PASS"
+    },
+    {
+      "name": "concurrent repeated completions preserve balance",
+      "status": "PASS"
+    },
+    {
+      "name": "concurrent repeated completions preserve one receipt",
+      "status": "PASS"
+    },
+    {
+      "name": "no new gameplay XP field introduced",
+      "status": "PASS"
+    }
+  ],
+  "sourceHashes": {
+    "server/launcher-life-store.js": "e05b7095cc672ae0fc85ad6dbd16182afb3377250e8eb196e00f2cebf2edd834",
+    "server/launcher-minigames.js": "10da3ff7b9647d40d72119e3c129689231238096fd677301df877e72edbdf8ac",
+    "scripts/launcher_minigames_server_qa.js": "2b3587c487c9b1a097f6cbe4bd43467aa5b032acf500b15851be5690031c54c5"
+  },
+  "limitations": [
+    "Isolated in-memory PGlite with serialized transaction adapter; not a production PostgreSQL concurrency or human play test."
+  ],
+  "createdAt": "2026-09-27T18:05:28.700Z"
+}

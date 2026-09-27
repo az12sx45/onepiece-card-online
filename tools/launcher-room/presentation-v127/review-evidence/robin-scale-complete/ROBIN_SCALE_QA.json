@@ -1,0 +1,551 @@
+{
+  "schema": "one-piece-robin-scale-qa/1",
+  "status": "PASS",
+  "generatedAt": "2026-09-27T18:38:57.462Z",
+  "checks": 9,
+  "results": [
+    {
+      "name": "equal-depth-crew-standing",
+      "status": "PASS",
+      "actors": [
+        {
+          "key": "luffy",
+          "source": "acting_v4",
+          "frame": "0",
+          "pose": "acting",
+          "cell": 256,
+          "bounds": [
+            86,
+            27,
+            171,
+            224
+          ],
+          "logicalBounds": [
+            43,
+            13.5,
+            85.5,
+            112
+          ],
+          "bodyWidth": 53.06951284408569,
+          "bodyHeight": 122.99640035629272,
+          "feetY": 534.2187652587891,
+          "rootY": 534.21875,
+          "scale": 1.3160046728971964,
+          "opaque": 10373
+        },
+        {
+          "key": "nami",
+          "source": "acting_v4",
+          "frame": "0",
+          "pose": "acting",
+          "cell": 256,
+          "bounds": [
+            89,
+            25,
+            167,
+            225
+          ],
+          "logicalBounds": [
+            44.5,
+            12.5,
+            83.5,
+            112.5
+          ],
+          "bodyWidth": 48.699082374572754,
+          "bodyHeight": 124.86944198608398,
+          "feetY": 534.8431124687195,
+          "rootY": 534.21875,
+          "scale": 1.3160046728971964,
+          "opaque": 8850
+        },
+        {
+          "key": "robin",
+          "source": "acting_v4",
+          "frame": "0",
+          "pose": "acting",
+          "cell": 256,
+          "bounds": [
+            93,
+            28,
+            163,
+            224
+          ],
+          "logicalBounds": [
+            46.5,
+            14,
+            81.5,
+            112
+          ],
+          "bodyWidth": 45.01544952392578,
+          "bodyHeight": 126.04316520690918,
+          "feetY": 534.2187652587891,
+          "rootY": 534.21875,
+          "scale": 1.3554848130841124,
+          "opaque": 7639
+        },
+        {
+          "key": "sanji",
+          "source": "acting_v4",
+          "frame": "0",
+          "pose": "acting",
+          "cell": 256,
+          "bounds": [
+            90,
+            29,
+            169,
+            224
+          ],
+          "logicalBounds": [
+            45,
+            14.5,
+            84.5,
+            112
+          ],
+          "bodyWidth": 49.323429584503174,
+          "bodyHeight": 121.74770593643188,
+          "feetY": 534.2187652587891,
+          "rootY": 534.21875,
+          "scale": 1.3160046728971964,
+          "opaque": 9913
+        }
+      ],
+      "robinToNamiHeight": 1.0093996033149246
+    },
+    {
+      "name": "prior-art-comparison-only-robin-pixels-vary-height-scale-unchanged",
+      "status": "PASS",
+      "before": [
+        {
+          "key": "luffy",
+          "source": "acting_v4",
+          "frame": "0",
+          "pose": "acting",
+          "cell": 256,
+          "bounds": [
+            86,
+            27,
+            171,
+            224
+          ],
+          "logicalBounds": [
+            43,
+            13.5,
+            85.5,
+            112
+          ],
+          "bodyWidth": 53.06951284408569,
+          "bodyHeight": 122.99640035629272,
+          "feetY": 534.2187652587891,
+          "rootY": 534.21875,
+          "scale": 1.3160046728971964,
+          "opaque": 10373
+        },
+        {
+          "key": "nami",
+          "source": "acting_v4",
+          "frame": "0",
+          "pose": "acting",
+          "cell": 256,
+          "bounds": [
+            89,
+            25,
+            167,
+            225
+          ],
+          "logicalBounds": [
+            44.5,
+            12.5,
+            83.5,
+            112.5
+          ],
+          "bodyWidth": 48.699082374572754,
+          "bodyHeight": 124.86944198608398,
+          "feetY": 534.8431124687195,
+          "rootY": 534.21875,
+          "scale": 1.3160046728971964,
+          "opaque": 8850
+        },
+        {
+          "key": "robin",
+          "source": "acting_v4",
+          "frame": "0",
+          "pose": "acting",
+          "cell": 256,
+          "bounds": [
+            88,
+            27,
+            168,
+            225
+          ],
+          "logicalBounds": [
+            44,
+            13.5,
+            84,
+            112.5
+          ],
+          "bodyWidth": 51.44622802734375,
+          "bodyHeight": 127.32936716079712,
+          "feetY": 534.8618352413177,
+          "rootY": 534.21875,
+          "scale": 1.3554848130841124,
+          "opaque": 11652
+        },
+        {
+          "key": "sanji",
+          "source": "acting_v4",
+          "frame": "0",
+          "pose": "acting",
+          "cell": 256,
+          "bounds": [
+            90,
+            29,
+            169,
+            224
+          ],
+          "logicalBounds": [
+            45,
+            14.5,
+            84.5,
+            112
+          ],
+          "bodyWidth": 49.323429584503174,
+          "bodyHeight": 121.74770593643188,
+          "feetY": 534.2187652587891,
+          "rootY": 534.21875,
+          "scale": 1.3160046728971964,
+          "opaque": 9913
+        }
+      ],
+      "after": [
+        {
+          "key": "luffy",
+          "source": "acting_v4",
+          "frame": "0",
+          "pose": "acting",
+          "cell": 256,
+          "bounds": [
+            86,
+            27,
+            171,
+            224
+          ],
+          "logicalBounds": [
+            43,
+            13.5,
+            85.5,
+            112
+          ],
+          "bodyWidth": 53.06951284408569,
+          "bodyHeight": 122.99640035629272,
+          "feetY": 534.2187652587891,
+          "rootY": 534.21875,
+          "scale": 1.3160046728971964,
+          "opaque": 10373
+        },
+        {
+          "key": "nami",
+          "source": "acting_v4",
+          "frame": "0",
+          "pose": "acting",
+          "cell": 256,
+          "bounds": [
+            89,
+            25,
+            167,
+            225
+          ],
+          "logicalBounds": [
+            44.5,
+            12.5,
+            83.5,
+            112.5
+          ],
+          "bodyWidth": 48.699082374572754,
+          "bodyHeight": 124.86944198608398,
+          "feetY": 534.8431124687195,
+          "rootY": 534.21875,
+          "scale": 1.3160046728971964,
+          "opaque": 8850
+        },
+        {
+          "key": "robin",
+          "source": "acting_v4",
+          "frame": "0",
+          "pose": "acting",
+          "cell": 256,
+          "bounds": [
+            93,
+            28,
+            163,
+            224
+          ],
+          "logicalBounds": [
+            46.5,
+            14,
+            81.5,
+            112
+          ],
+          "bodyWidth": 45.01544952392578,
+          "bodyHeight": 126.04321193695068,
+          "feetY": 534.2187576293945,
+          "rootY": 534.21875,
+          "scale": 1.3554848130841124,
+          "opaque": 7639
+        },
+        {
+          "key": "sanji",
+          "source": "acting_v4",
+          "frame": "0",
+          "pose": "acting",
+          "cell": 256,
+          "bounds": [
+            90,
+            29,
+            169,
+            224
+          ],
+          "logicalBounds": [
+            45,
+            14.5,
+            84.5,
+            112
+          ],
+          "bodyWidth": 49.323429584503174,
+          "bodyHeight": 121.74770593643188,
+          "feetY": 534.2187652587891,
+          "rootY": 534.21875,
+          "scale": 1.3160046728971964,
+          "opaque": 9913
+        }
+      ],
+      "originalScale": 1.03
+    },
+    {
+      "name": "complete-authoring-pixel-bounds-all-directions-actions-and-life",
+      "status": "PASS",
+      "frameSets": 96,
+      "actorFrames": 384
+    },
+    {
+      "name": "robin-upright-height-does-not-jump-between-sources",
+      "status": "PASS",
+      "min": 125.40013432502747,
+      "max": 127.97244477272034
+    },
+    {
+      "name": "390px-contained-room-and-readable-figures",
+      "status": "PASS",
+      "viewport": 390,
+      "body": 390,
+      "stage": 480,
+      "container": 334
+    },
+    {
+      "name": "actual-distance-driven-route-east",
+      "status": "PASS",
+      "samples": 20,
+      "nativeCell": 384
+    },
+    {
+      "name": "actual-distance-driven-route-west",
+      "status": "PASS",
+      "samples": 20,
+      "nativeCell": 384
+    },
+    {
+      "name": "actual-distance-driven-route-north",
+      "status": "PASS",
+      "samples": 20,
+      "nativeCell": 384
+    },
+    {
+      "name": "actual-distance-driven-route-south",
+      "status": "PASS",
+      "samples": 20,
+      "nativeCell": 384
+    }
+  ],
+  "captures": [
+    {
+      "name": "desktop-standing",
+      "path": "desktop-standing.png",
+      "sha256": "b5de60c3a9994c948a230b97d5b06f1e898db8c6eb1667ae79ae167a9152a50b"
+    },
+    {
+      "name": "desktop-standing-before",
+      "path": "desktop-standing-before.png",
+      "sha256": "6bd3ce8bd68f9038abb491310a479f9b00f9394ffea4407e3761c36b1d301474"
+    },
+    {
+      "name": "desktop-walk-east",
+      "path": "desktop-walk-east.png",
+      "sha256": "dcca4a4d40117417dc6d25e02c43afe3ecb37849335b2ff47ee44f8890157313"
+    },
+    {
+      "name": "desktop-work-east",
+      "path": "desktop-work-east.png",
+      "sha256": "b05142154c79e04b577c29e6695e45e641264d63e46194b91cfe56839dc9de06"
+    },
+    {
+      "name": "desktop-walk-west",
+      "path": "desktop-walk-west.png",
+      "sha256": "d83902f95302ab9e3e64eb5fbb8d8368592b5b76e8f6149d68c16dabdc9633d1"
+    },
+    {
+      "name": "desktop-work-west",
+      "path": "desktop-work-west.png",
+      "sha256": "0bdc86942a4aff8e9fd5a870766d6c612cabf88a41d439b4bce4886da674fac9"
+    },
+    {
+      "name": "desktop-walk-north",
+      "path": "desktop-walk-north.png",
+      "sha256": "7132e8ad6ff9b193999cf3fae2af0bf3e2121ae791a4700f5b55b1fca20c851d"
+    },
+    {
+      "name": "desktop-work-north",
+      "path": "desktop-work-north.png",
+      "sha256": "b437596f4601758a0d010679584ef1c49eab90e0dc5bc7e5b8eb7d75d767b742"
+    },
+    {
+      "name": "desktop-walk-south",
+      "path": "desktop-walk-south.png",
+      "sha256": "c0f64ea6bae0debaa0c002ca3315ed8d1a0ff36a2824cd80891dd497fa9c8154"
+    },
+    {
+      "name": "desktop-work-south",
+      "path": "desktop-work-south.png",
+      "sha256": "bfdd6cf86085f3057dfa2f5d1442d1019ef351ae71986fa947f6c5329ab4769a"
+    },
+    {
+      "name": "desktop-eat",
+      "path": "desktop-eat.png",
+      "sha256": "3c5c79cd2f1a4ddff3ab74f0ea59505679072a9f4a5347987072c722d23cdfa2"
+    },
+    {
+      "name": "desktop-rest",
+      "path": "desktop-rest.png",
+      "sha256": "468acabedc7e62b903331436931fd69af6921dd9b24cd36bbac70b647be8db42"
+    },
+    {
+      "name": "desktop-sleep",
+      "path": "desktop-sleep.png",
+      "sha256": "b33ded6ba1cb2f2ab24a72a6cabc27a820b0540698eead3b2d085d92c1ecfee0"
+    },
+    {
+      "name": "desktop-train",
+      "path": "desktop-train.png",
+      "sha256": "f8b016815889bfce050324b253b69b7de03abb43f0cdff769991bc8557d0b083"
+    },
+    {
+      "name": "narrow-standing",
+      "path": "narrow-standing.png",
+      "sha256": "d13a7e688602fcf4a9c3fe7d575b7aa90c55086c58d28353ca838e967f2b613a"
+    },
+    {
+      "name": "narrow-training",
+      "path": "narrow-training.png",
+      "sha256": "16edcaa0c94a542fea85051efcd7348785613d7b0c3490612dbb261c75db979f"
+    },
+    {
+      "name": "route-east-3",
+      "path": "route-east-3.png",
+      "sha256": "c8d9da62248414530a7c4ba3b5653915e67dd6de6a98e2023da6ca05421165f4"
+    },
+    {
+      "name": "route-east-7",
+      "path": "route-east-7.png",
+      "sha256": "d1c86c2ed9bb6071e8389950e8f386290595b1af351eb500164b9d8e8f666f89"
+    },
+    {
+      "name": "route-east-11",
+      "path": "route-east-11.png",
+      "sha256": "255e26ac7acd71a6e5f77547e52c564e90d73f8cdd1500b94fa56ecd82f29c02"
+    },
+    {
+      "name": "route-east-15",
+      "path": "route-east-15.png",
+      "sha256": "aae39f3117ee320a7450a168fdf75c6660eef1a0e0f250d2b7a417b6382416a5"
+    },
+    {
+      "name": "route-west-3",
+      "path": "route-west-3.png",
+      "sha256": "aa8d0266f5c330755f00dc98f4428a36ef5cdf0a7f97b3656c944d7eb79d662f"
+    },
+    {
+      "name": "route-west-7",
+      "path": "route-west-7.png",
+      "sha256": "cd4acb8c24019c5f2381cfd0a2799709d2e9d54ccc2f73a4de5743c0016bbf07"
+    },
+    {
+      "name": "route-west-11",
+      "path": "route-west-11.png",
+      "sha256": "9954fe224c00a79d28999279b81968e5824294e3dc7775a3c797bf4a6346e758"
+    },
+    {
+      "name": "route-west-15",
+      "path": "route-west-15.png",
+      "sha256": "b1732531e32740c0751eedbd290d1064d4e50acb8ab30e2e9ad5473aa96cbbe4"
+    },
+    {
+      "name": "route-north-3",
+      "path": "route-north-3.png",
+      "sha256": "763f4b882ae7a888d7dd0b0da9125619a95d72214594c6f34792a33c1e5daa18"
+    },
+    {
+      "name": "route-north-7",
+      "path": "route-north-7.png",
+      "sha256": "3d8473f0af63e17f2efcdc6381f78333e9b99ffbbc686d22395b2578e42fb23d"
+    },
+    {
+      "name": "route-north-11",
+      "path": "route-north-11.png",
+      "sha256": "1f4b591e28cbc1d9aa285c23773e54b935582694027a045badf3a4cb9b1d4b4f"
+    },
+    {
+      "name": "route-north-15",
+      "path": "route-north-15.png",
+      "sha256": "2eb1a458c16bbda6352436c9f247bacdeef2a7d224c29c68da364fe39f1b75b7"
+    },
+    {
+      "name": "route-south-3",
+      "path": "route-south-3.png",
+      "sha256": "56a801ce8269fe30722c175ec5b64913439da90a50e61e53796f8f0ed0129933"
+    },
+    {
+      "name": "route-south-7",
+      "path": "route-south-7.png",
+      "sha256": "9835f5231ad46b05e0ab5f7ab10216f8133d23504dc85153c5a6494f3a9c4a74"
+    },
+    {
+      "name": "route-south-11",
+      "path": "route-south-11.png",
+      "sha256": "f8b78d01ffddeda9b577563f1b4bc88cda68cc4d0ed4360bf4be1008b8fe2fba"
+    },
+    {
+      "name": "route-south-15",
+      "path": "route-south-15.png",
+      "sha256": "58deab7b58ec900408827fef843a71d118ca127abefbf8e2712d605945e741fd"
+    }
+  ],
+  "startedSources": {
+    "launcher-room.js": "f461e338bfc633e2ba0f078e1460d5336764fe4b299dce5a5aa70ecbd79a2dbd",
+    "launcher-room.css": "3dc6ac0750ee8afcba5c202516e81d180fec5472795a6679ae8887087f754c16",
+    "launcher-room-motion.js": "eb0d40f266aa56c1e37fcc4dd6a959d39eb7d6cd955d5f4961ac0612bc175d41",
+    "launcher-room-motion-data.js": "c80bec3b9de6fb033c39e046e70e4975d2d0b6c758b30634a870fa6c2bb8d85f",
+    "launcher-life-actions.js": "9d15a266c00540ab937cb4a1010e521763403c7b23d2bede443e8be0b5fb8b64",
+    "launcher-life-room.js": "1e4d676156eb662e1b2ef9ceaf56c541e2cefca8182ae2bb699b82d2497abc87",
+    "launcher.html": "787061caa93f0a2af63dca58fd30bfdb6e183dc5f3f68d83145cb02e620f1ed6"
+  },
+  "completedSources": {
+    "launcher-room.js": "f461e338bfc633e2ba0f078e1460d5336764fe4b299dce5a5aa70ecbd79a2dbd",
+    "launcher-room.css": "3dc6ac0750ee8afcba5c202516e81d180fec5472795a6679ae8887087f754c16",
+    "launcher-room-motion.js": "eb0d40f266aa56c1e37fcc4dd6a959d39eb7d6cd955d5f4961ac0612bc175d41",
+    "launcher-room-motion-data.js": "c80bec3b9de6fb033c39e046e70e4975d2d0b6c758b30634a870fa6c2bb8d85f",
+    "launcher-life-actions.js": "9d15a266c00540ab937cb4a1010e521763403c7b23d2bede443e8be0b5fb8b64",
+    "launcher-life-room.js": "1e4d676156eb662e1b2ef9ceaf56c541e2cefca8182ae2bb699b82d2497abc87",
+    "launcher.html": "787061caa93f0a2af63dca58fd30bfdb6e183dc5f3f68d83145cb02e620f1ed6"
+  },
+  "testScriptSha256": "fefeabe7546cc4b17a63e09afd064969dd8a4a6370c375d0fa8f61ec9c92dbbe",
+  "humanAcceptance": false,
+  "scope": "Real headless Chromium production renderer and route controller; isolated IPC and paused autonomous decisions. Web security disabled only for canvas alpha readback. Does not establish protocol security, human visual acceptance, real account purchase, or deployment."
+}

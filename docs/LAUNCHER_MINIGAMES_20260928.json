@@ -1,0 +1,915 @@
+{
+  "schema": "launcher-room-minigames-release/1",
+  "releaseVersion": "1.2.7",
+  "baseline": "92a11b3c5c1c8e21eea5ab84917dd5c8c5e8d441",
+  "recordedAt": "2026-09-27T18:49:47.088Z",
+  "status": "PASS_WITH_NOTES",
+  "humanAcceptance": false,
+  "blockingIssues": [],
+  "method": "Current minigame economy, real Chromium interaction, Robin renderer frames, GPT art provenance and independent visual observations are bound to exact local source/evidence. Historical v126 and older reviews run against their committed runtime and preserved evidence.",
+  "limitations": [
+    "Automated PGlite/browser/renderer QA is not human gameplay or physical-device acceptance.",
+    "This source review does not prove installer publication or canonical deployment.",
+    "The catalog snapshot records the exact independent formal game state; this launcher update does not modify either game catalog."
+  ],
+  "runtimeHashNormalization": "CRLF to LF only; all other bytes remain significant",
+  "runtime": {
+    "desktop/launcher-room.js": "635a14d921fd0d95efcef7257ae80bce4423171da2d24fb9f5fd1738df9bc476",
+    "desktop/launcher-room.css": "32b67efc5bde4018a3ca66883f5afa0bed90eb47a09b27bcb0b54c912b3ec610",
+    "desktop/launcher-profile-shop.js": "2bc69f6e30c6a3d09542a57b6ff0e2a98a8a04dca1d3755356120b332e383e12",
+    "desktop/launcher-life-room.js": "b44c7bf33d38b0e161eeef4d2c97f42eb7b327b5ca5b19026cc4416195ab2372",
+    "desktop/launcher-life.js": "c9be09c38bd748a3b064de91879d12dea54515f776cb9d735dcd8b6dcbef55e7",
+    "desktop/launcher-life-data.js": "6457a5fb9f2623357a4a22ddb846d8e5bc81a1f1b5eda0ae17e184dc433bf66c",
+    "desktop/launcher-life-actions.js": "487443cbb8941e94d169e5891c837e7cb92c1b844828630b32e831e77197e3ce",
+    "desktop/launcher-room-dialogue.js": "484bc23b46fcfeeb3a90a14d1c049c0d2f2dd2789947a5a82ef6eda6b79a7737",
+    "desktop/launcher.html": "787061caa93f0a2af63dca58fd30bfdb6e183dc5f3f68d83145cb02e620f1ed6",
+    "desktop/auth-service.js": "fa1d8d9ef12bcb37fd523829980614c30de51e2674a57ffc797682936d669671",
+    "desktop/preload.js": "f29e59436b55eff3f2ae02d74ff4f95304672b167524d9b9f6c9dd4867619fcd",
+    "desktop/main.js": "6e46c1645e63fe13aafc6f23bd1b2c97ce903de624c4288d60e9a355a244b7b8",
+    "server/launcher-life.js": "0bcfa4bbab2a40970d108bdb1dcefcb64c1103f0456bcf6a1b1727108aa9f85e",
+    "server/launcher-life-store.js": "7e0b99d21aa536ebfbe9a790a081cd4706cbb67c17598facaff207506e7220d6",
+    "server/launcher-profile-shop.js": "ba17dee5b39f1dcb1f993854512533bf249d40b5e01bd5d4b04337199ac1dd4b",
+    "server/index.js": "11100a110e339caa90894fd802b199cf5037a519595b353798d4f8fdeb865738",
+    "server/desktop-distribution.js": "c8ff98a6c5da36920aa1a7d9ca5ba2ac1f69f3ebc31fdd6c14cf75095661a0db",
+    "desktop/launcher-profile-shop.css": "0f9b42f8c6cd5844876a7c877a16b8265a13631f38d3371083c5f2e6969b4ee9",
+    "desktop/launcher.css": "272c9f7e809d19291c4c9a037b762cdc436515aa87a681873e66f22f3fabdbea",
+    "desktop/launcher.js": "c76109cc906185acc73b676aec6a5a762a98527d4f37aa9d554b3e451f6d5728",
+    "desktop/launcher-room-motion.js": "b48b20b6f55f770f2bc2fafdf6665be0c7cf6544a45fd1d370179ebbabdd919d",
+    "desktop/launcher-room-motion-data.js": "05c2baa81e274245a9b53e2607665e726fc3c690de60703a7244da5321555b4d",
+    "desktop/launcher-reserved-crew.js": "6e6209d4bcd5267704e40ec30bc86769aa739e8806e2b39f60d3337b065790dd",
+    "server/launcher-crew-release.js": "7738284a71871309f5e18346f785bf5db8c051d969fe028cc74f5b7402478693",
+    "config/launcher-crew-release-v1.json": "0526f5ff2913aa1000cc683de1fa8e4072def749e548c7a9b72f0e9b28305b64",
+    "desktop/launcher-announcements.js": "5547288ccadd8c6406f63dae764367b3a3bd29b2b5c6c3cc56c812419e4d56c1",
+    "desktop/launcher-announcements.css": "fe9a988f68fe9b5f7640a5091b84ebd99bf54a69d76b254a1b3d30a457586d4e",
+    "server/launcher-announcements.js": "a5534e6c0f618ed8f376375f45979a7078882d051b0774b751e92c30bba82afd",
+    "config/launcher-announcements-v1.json": "240f3baca80aaa8dce09b49ff523ba47b9a094042aa87ec68a1569f55b7abf47",
+    "desktop/package.json": "6063d3dcff0168a9d0f989e8aaf53d927299fd949d240b8021a45866fafb9a35",
+    "desktop/package-lock.json": "fb91d2c77bcb329895952ce5d6e87b0f657c7976dcf84955434f3be3a442a040",
+    "desktop/launcher-updates-ui.js": "6c37f929c8350b915caf26766939c018b05889ed7a2aea6971231089d284c334",
+    "desktop/launcher-room-minigames.js": "75e435fce4a4af8c825be63f0cfa2a07a4ff013585268695880350f835679fdf",
+    "desktop/launcher-room-minigames.css": "fc21095c7799164e08dd4134e02a67f543740073e1385f7eb5a4e096b694b155",
+    "server/launcher-minigames.js": "10da3ff7b9647d40d72119e3c129689231238096fd677301df877e72edbdf8ac"
+  },
+  "approvedRuntimeVariants": {
+    "server/desktop-distribution.js": [
+      {
+        "path": "server/desktop-distribution.js",
+        "rawSha256": "747a591087e1561195b67af8cd83e44a5b8a384e599507542863f9a61f7f2119",
+        "normalizedSha256": "359d518bd3b1c573f40462ba357ef6319cf215413b5679c9bac78e02e91eda87",
+        "reviewedBaseNormalizedSha256": "c8ff98a6c5da36920aa1a7d9ca5ba2ac1f69f3ebc31fdd6c14cf75095661a0db",
+        "reason": "Exact one-line insertion of announcement GET/READ events into the byte-pinned formal Board distribution; all other formal bytes preserved.",
+        "before": {
+          "path": "tools/launcher-room/presentation-v126/review-evidence/formal-merge/desktop-distribution.before.js",
+          "sha256": "0b7fb7242db21e5c1faa0d1b26c0c35e47afeb11a152d4efb867c4739525bc57"
+        }
+      }
+    ]
+  },
+  "historicalReview": {
+    "path": "docs/LAUNCHER_ANNOUNCEMENTS_20260927.json",
+    "sha256": "911eff43dd56b7a9625870a2a4b33d64199259a66bafc24fabb1461c4c6541ea"
+  },
+  "formalCatalogSnapshot": {
+    "path": "tools/launcher-room/presentation-v127/review-evidence/formal-catalog-baseline.json",
+    "sha256": "9503988a87223134e905fb410396c3afc37e1a14e3ce48b37b1a61f8de5babc8"
+  },
+  "releaseScope": [
+    ".gitattributes",
+    "config/launcher-announcements-v1.json",
+    "desktop/auth-service.js",
+    "desktop/launcher-life-actions.js",
+    "desktop/launcher-life-room.js",
+    "desktop/launcher-room-minigames.css",
+    "desktop/launcher-room-minigames.js",
+    "desktop/launcher-room-motion.js",
+    "desktop/launcher-room.js",
+    "desktop/launcher.html",
+    "desktop/main.js",
+    "desktop/package-lock.json",
+    "desktop/package.json",
+    "docs/DEV_WORKFLOW.md",
+    "docs/FILE_MAP.md",
+    "docs/GAME_RULES.md",
+    "docs/LAUNCHER_MINIGAMES_20260928.json",
+    "docs/PROJECT_OVERVIEW.md",
+    "public/desktop-download.html",
+    "public/desktop/launcher-release-v1.json",
+    "public/images/launcher_room/minigames_v1/cargo-books.webp",
+    "public/images/launcher_room/minigames_v1/cargo-food.webp",
+    "public/images/launcher_room/minigames_v1/cargo-tools.webp",
+    "public/images/launcher_room/minigames_v1/deck.webp",
+    "public/images/launcher_room/robin_v2/acting/east.webp",
+    "public/images/launcher_room/robin_v2/acting/north.webp",
+    "public/images/launcher_room/robin_v2/acting/south.webp",
+    "public/images/launcher_room/robin_v2/acting/west.webp",
+    "public/images/launcher_room/robin_v2/life/eat-south.webp",
+    "public/images/launcher_room/robin_v2/life/read-east.webp",
+    "public/images/launcher_room/robin_v2/life/read-north.webp",
+    "public/images/launcher_room/robin_v2/life/read-south.webp",
+    "public/images/launcher_room/robin_v2/life/read-west.webp",
+    "public/images/launcher_room/robin_v2/life/rest-south.webp",
+    "public/images/launcher_room/robin_v2/life/sleep-south.webp",
+    "public/images/launcher_room/robin_v2/life/train-south.webp",
+    "public/images/launcher_room/robin_v2/life/work-east.webp",
+    "public/images/launcher_room/robin_v2/life/work-north.webp",
+    "public/images/launcher_room/robin_v2/life/work-south.webp",
+    "public/images/launcher_room/robin_v2/life/work-west.webp",
+    "public/images/launcher_room/robin_v2/portrait.webp",
+    "public/images/launcher_room/robin_v2/walk/east.webp",
+    "public/images/launcher_room/robin_v2/walk/north.webp",
+    "public/images/launcher_room/robin_v2/walk/south.webp",
+    "public/images/launcher_room/robin_v2/walk/west.webp",
+    "scripts/desktop_launcher_package_qa.js",
+    "scripts/launcher_minigames_client_qa.js",
+    "scripts/launcher_minigames_room_wheel_qa.js",
+    "scripts/launcher_minigames_server_qa.js",
+    "scripts/launcher_robin_scale_qa.js",
+    "server/launcher-life-store.js",
+    "server/launcher-minigames.js",
+    "tools/launcher-room/presentation-v127/FAN_REVIEW.md",
+    "tools/launcher-room/presentation-v127/freeze_review.js",
+    "tools/launcher-room/presentation-v127/minigame-art.json",
+    "tools/launcher-room/presentation-v127/minigame-prompts.json",
+    "tools/launcher-room/presentation-v127/review-evidence/ace-regression.json",
+    "tools/launcher-room/presentation-v127/review-evidence/formal-catalog-baseline.json",
+    "tools/launcher-room/presentation-v127/review-evidence/independent-visual-review.json",
+    "tools/launcher-room/presentation-v127/review-evidence/life-regression.json",
+    "tools/launcher-room/presentation-v127/review-evidence/minigames-client/CLIENT_PLAY_REVIEW.md",
+    "tools/launcher-room/presentation-v127/review-evidence/minigames-client/MINIGAMES_CLIENT_FAILURE.json",
+    "tools/launcher-room/presentation-v127/review-evidence/minigames-client/MINIGAMES_CLIENT_QA.json",
+    "tools/launcher-room/presentation-v127/review-evidence/minigames-client/ROOM_WHEEL_INTEGRATION_FAILURE.json",
+    "tools/launcher-room/presentation-v127/review-evidence/minigames-client/ROOM_WHEEL_INTEGRATION_QA.json",
+    "tools/launcher-room/presentation-v127/review-evidence/minigames-client/minigames-training-active-narrow.png",
+    "tools/launcher-room/presentation-v127/review-evidence/minigames-client/minigames-training-intro-narrow.png",
+    "tools/launcher-room/presentation-v127/review-evidence/minigames-client/minigames-training-showcase-desktop.png",
+    "tools/launcher-room/presentation-v127/review-evidence/minigames-client/minigames-wallet-full-desktop.png",
+    "tools/launcher-room/presentation-v127/review-evidence/minigames-client/minigames-work-active-desktop.png",
+    "tools/launcher-room/presentation-v127/review-evidence/minigames-client/minigames-work-intro-desktop.png",
+    "tools/launcher-room/presentation-v127/review-evidence/minigames-client/minigames-work-result-desktop.png",
+    "tools/launcher-room/presentation-v127/review-evidence/minigames-client/room-wheel-failure.png",
+    "tools/launcher-room/presentation-v127/review-evidence/minigames-client/room-wheel-robin-desktop.png",
+    "tools/launcher-room/presentation-v127/review-evidence/minigames-client/room-wheel-training-robin-desktop.png",
+    "tools/launcher-room/presentation-v127/review-evidence/minigames-client/room-wheel-training-robin-narrow.png",
+    "tools/launcher-room/presentation-v127/review-evidence/minigames-client/room-wheel-work-robin-desktop.png",
+    "tools/launcher-room/presentation-v127/review-evidence/minigames-client/room-wheel-work-robin-narrow.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/ROBIN_SCALE_QA.json",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/all-rendered-frames.json",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/alpha-edges.json",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/desktop-eat.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/desktop-rest.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/desktop-sleep.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/desktop-standing-before.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/desktop-standing.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/desktop-train.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/desktop-walk-east.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/desktop-walk-north.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/desktop-walk-south.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/desktop-walk-west.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/desktop-work-east.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/desktop-work-north.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/desktop-work-south.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/desktop-work-west.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/narrow-standing.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/narrow-training.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-east-11.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-east-15.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-east-3.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-east-7.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-east.json",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-north-11.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-north-15.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-north-3.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-north-7.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-north.json",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-south-11.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-south-15.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-south-3.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-south-7.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-south.json",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-west-11.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-west-15.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-west-3.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-west-7.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-west.json",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/all-rendered-frames.json",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/desktop-eat.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/desktop-rest.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/desktop-sleep.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/desktop-standing-before.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/desktop-standing.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/desktop-train.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/desktop-walk-east.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/desktop-walk-north.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/desktop-walk-south.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/desktop-walk-west.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/desktop-work-east.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/desktop-work-north.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/desktop-work-south.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/desktop-work-west.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/failure.json",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/narrow-standing.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/narrow-training.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/route-east.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/all-rendered-frames.json",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/desktop-eat.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/desktop-rest.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/desktop-sleep.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/desktop-standing-before.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/desktop-standing.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/desktop-train.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/desktop-walk-east.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/desktop-walk-north.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/desktop-walk-south.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/desktop-walk-west.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/desktop-work-east.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/desktop-work-north.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/desktop-work-south.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/desktop-work-west.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/failure.json",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/narrow-standing.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/narrow-training.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/route-east-11.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/route-east-15.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/route-east-3.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/route-east-7.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/route-east.json",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale/all-rendered-frames.json",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale/desktop-eat.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale/desktop-rest.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale/desktop-sleep.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale/desktop-standing-before.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale/desktop-standing.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale/desktop-train.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale/desktop-walk-east.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale/desktop-walk-north.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale/desktop-walk-south.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale/desktop-walk-west.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale/desktop-work-east.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale/desktop-work-north.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale/desktop-work-south.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale/desktop-work-west.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale/failure.json",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale/narrow-standing.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale/narrow-training.png",
+    "tools/launcher-room/presentation-v127/review-evidence/robin-scale/route-east.png",
+    "tools/launcher-room/presentation-v127/review-evidence/server-qa.json",
+    "tools/launcher-room/presentation-v127/source-png/cargo-books.png",
+    "tools/launcher-room/presentation-v127/source-png/cargo-food.png",
+    "tools/launcher-room/presentation-v127/source-png/cargo-tools.png",
+    "tools/launcher-room/presentation-v127/source-png/deck.png",
+    "tools/launcher-room/presentation-v127/validate_gate_qa.js",
+    "tools/launcher-room/presentation-v127/validate_historical_announcements.js",
+    "tools/launcher-room/presentation-v127/validate_release.js",
+    "tools/launcher-room/robin-v2/atlas-contact-white.png",
+    "tools/launcher-room/robin-v2/export_robin.py",
+    "tools/launcher-room/robin-v2/manifest.json",
+    "tools/launcher-room/robin-v2/sources/east-01/prompt.txt",
+    "tools/launcher-room/robin-v2/sources/east-01/receipt.json",
+    "tools/launcher-room/robin-v2/sources/east-01/source.png",
+    "tools/launcher-room/robin-v2/sources/master-01/prompt.txt",
+    "tools/launcher-room/robin-v2/sources/master-01/receipt.json",
+    "tools/launcher-room/robin-v2/sources/master-01/source.png",
+    "tools/launcher-room/robin-v2/sources/master-02/prompt.txt",
+    "tools/launcher-room/robin-v2/sources/master-03/prompt.txt",
+    "tools/launcher-room/robin-v2/sources/master-03/receipt.json",
+    "tools/launcher-room/robin-v2/sources/master-03/source.png",
+    "tools/launcher-room/robin-v2/sources/north-01/prompt.txt",
+    "tools/launcher-room/robin-v2/sources/north-01/receipt.json",
+    "tools/launcher-room/robin-v2/sources/north-01/source.png",
+    "tools/launcher-room/robin-v2/sources/read-01/prompt.txt",
+    "tools/launcher-room/robin-v2/sources/read-01/receipt.json",
+    "tools/launcher-room/robin-v2/sources/read-01/source.png",
+    "tools/launcher-room/robin-v2/sources/south-01/prompt.txt",
+    "tools/launcher-room/robin-v2/sources/south-01/receipt.json",
+    "tools/launcher-room/robin-v2/sources/south-01/source.png",
+    "tools/launcher-room/robin-v2/sources/utility-01/prompt.txt",
+    "tools/launcher-room/robin-v2/sources/utility-01/receipt.json",
+    "tools/launcher-room/robin-v2/sources/utility-01/source.png",
+    "tools/launcher-room/robin-v2/sources/walk-side-02/prompt.txt",
+    "tools/launcher-room/robin-v2/sources/walk-side-02/receipt.json",
+    "tools/launcher-room/robin-v2/sources/walk-side-02/source.png",
+    "tools/launcher-room/robin-v2/sources/west-01/prompt.txt",
+    "tools/launcher-room/robin-v2/sources/west-01/receipt.json",
+    "tools/launcher-room/robin-v2/sources/west-01/source.png",
+    "tools/launcher-room/robin-v2/sources/work-01/prompt.txt",
+    "tools/launcher-room/robin-v2/sources/work-01/receipt.json",
+    "tools/launcher-room/robin-v2/sources/work-01/source.png"
+  ],
+  "qaSourceNormalization": "CRLF to LF only; all other bytes remain significant",
+  "qaSourceProofs": {
+    "server/launcher-life-store.js": {
+      "sha256": "e05b7095cc672ae0fc85ad6dbd16182afb3377250e8eb196e00f2cebf2edd834",
+      "normalizedSha256": "7e0b99d21aa536ebfbe9a790a081cd4706cbb67c17598facaff207506e7220d6"
+    },
+    "server/launcher-minigames.js": {
+      "sha256": "10da3ff7b9647d40d72119e3c129689231238096fd677301df877e72edbdf8ac",
+      "normalizedSha256": "10da3ff7b9647d40d72119e3c129689231238096fd677301df877e72edbdf8ac"
+    },
+    "scripts/launcher_minigames_server_qa.js": {
+      "sha256": "2b3587c487c9b1a097f6cbe4bd43467aa5b032acf500b15851be5690031c54c5",
+      "normalizedSha256": "2b3587c487c9b1a097f6cbe4bd43467aa5b032acf500b15851be5690031c54c5"
+    },
+    "desktop/launcher-room-minigames.js": {
+      "sha256": "75e435fce4a4af8c825be63f0cfa2a07a4ff013585268695880350f835679fdf",
+      "normalizedSha256": "75e435fce4a4af8c825be63f0cfa2a07a4ff013585268695880350f835679fdf"
+    },
+    "desktop/launcher-room-minigames.css": {
+      "sha256": "69cc519447ece1ff956da6de58e2327172358bea1b7186bd2590182b88d41d63",
+      "normalizedSha256": "fc21095c7799164e08dd4134e02a67f543740073e1385f7eb5a4e096b694b155"
+    },
+    "desktop/launcher-life-room.js": {
+      "sha256": "1e4d676156eb662e1b2ef9ceaf56c541e2cefca8182ae2bb699b82d2497abc87",
+      "normalizedSha256": "b44c7bf33d38b0e161eeef4d2c97f42eb7b327b5ca5b19026cc4416195ab2372"
+    },
+    "desktop/auth-service.js": {
+      "sha256": "290ecd2c2e9b1c3ef80fdb944efde789fe306d3ec6492b96bf78556269a51217",
+      "normalizedSha256": "fa1d8d9ef12bcb37fd523829980614c30de51e2674a57ffc797682936d669671"
+    },
+    "desktop/launcher.html": {
+      "sha256": "787061caa93f0a2af63dca58fd30bfdb6e183dc5f3f68d83145cb02e620f1ed6",
+      "normalizedSha256": "787061caa93f0a2af63dca58fd30bfdb6e183dc5f3f68d83145cb02e620f1ed6"
+    },
+    "scripts/launcher_minigames_client_qa.js": {
+      "sha256": "9726085b9142ed94cdf6e37fb3b6ca8410edcb970a256a5f98fddf8f5c15a36b",
+      "normalizedSha256": "9726085b9142ed94cdf6e37fb3b6ca8410edcb970a256a5f98fddf8f5c15a36b"
+    },
+    "config/launcher-crew-release-v1.json": {
+      "sha256": "14105517f17a3057e636053e4da0e41d314a65aa74621228df2fb4e02eb60896",
+      "normalizedSha256": "0526f5ff2913aa1000cc683de1fa8e4072def749e548c7a9b72f0e9b28305b64"
+    },
+    "server/launcher-crew-release.js": {
+      "sha256": "fcc9051cc5e24065cc698cbf1f8f215cc93ccc41c81478231a564059a682fc31",
+      "normalizedSha256": "7738284a71871309f5e18346f785bf5db8c051d969fe028cc74f5b7402478693"
+    },
+    "server/launcher-profile-shop.js": {
+      "sha256": "011b2600dee65f52cd14af28577d89f304fa4beb973d8eb82253692a76b0408d",
+      "normalizedSha256": "ba17dee5b39f1dcb1f993854512533bf249d40b5e01bd5d4b04337199ac1dd4b"
+    },
+    "server/launcher-life.js": {
+      "sha256": "81e2a2833e5db2ba7b4245fdde87142946580ae28fc4f0d583bf47423335824e",
+      "normalizedSha256": "0bcfa4bbab2a40970d108bdb1dcefcb64c1103f0456bcf6a1b1727108aa9f85e"
+    },
+    "server/index.js": {
+      "sha256": "d6256ff963508f91df0fbbd628563bea705f7d77fc7758d5647e249f82ed5b03",
+      "normalizedSha256": "11100a110e339caa90894fd802b199cf5037a519595b353798d4f8fdeb865738"
+    },
+    "desktop/launcher-reserved-crew.js": {
+      "sha256": "e42d09aa38205cd105ee48fb30a5799632cd67b1dec2db881abf9e19c4fa30a6",
+      "normalizedSha256": "6e6209d4bcd5267704e40ec30bc86769aa739e8806e2b39f60d3337b065790dd"
+    },
+    "desktop/launcher-life-data.js": {
+      "sha256": "dab3c07b0610acb328e31300094bf0faa28c1b4c7e13acec14f32e1d83ecb908",
+      "normalizedSha256": "6457a5fb9f2623357a4a22ddb846d8e5bc81a1f1b5eda0ae17e184dc433bf66c"
+    },
+    "scripts/launcher_ace_release_qa.js": {
+      "sha256": "90ed8c6419842e8d88cbbb57d5cab54aa445e8d04b98d456e1803aa7a524d8f8",
+      "normalizedSha256": "90ed8c6419842e8d88cbbb57d5cab54aa445e8d04b98d456e1803aa7a524d8f8"
+    },
+    "desktop/launcher-room.js": {
+      "sha256": "f461e338bfc633e2ba0f078e1460d5336764fe4b299dce5a5aa70ecbd79a2dbd",
+      "normalizedSha256": "635a14d921fd0d95efcef7257ae80bce4423171da2d24fb9f5fd1738df9bc476"
+    },
+    "desktop/launcher-room.css": {
+      "sha256": "3dc6ac0750ee8afcba5c202516e81d180fec5472795a6679ae8887087f754c16",
+      "normalizedSha256": "32b67efc5bde4018a3ca66883f5afa0bed90eb47a09b27bcb0b54c912b3ec610"
+    },
+    "desktop/launcher-room-motion.js": {
+      "sha256": "eb0d40f266aa56c1e37fcc4dd6a959d39eb7d6cd955d5f4961ac0612bc175d41",
+      "normalizedSha256": "b48b20b6f55f770f2bc2fafdf6665be0c7cf6544a45fd1d370179ebbabdd919d"
+    },
+    "desktop/launcher-room-motion-data.js": {
+      "sha256": "c80bec3b9de6fb033c39e046e70e4975d2d0b6c758b30634a870fa6c2bb8d85f",
+      "normalizedSha256": "05c2baa81e274245a9b53e2607665e726fc3c690de60703a7244da5321555b4d"
+    },
+    "desktop/launcher-life-actions.js": {
+      "sha256": "9d15a266c00540ab937cb4a1010e521763403c7b23d2bede443e8be0b5fb8b64",
+      "normalizedSha256": "487443cbb8941e94d169e5891c837e7cb92c1b844828630b32e831e77197e3ce"
+    }
+  },
+  "minigameArt": {
+    "path": "tools/launcher-room/presentation-v127/minigame-art.json",
+    "sha256": "244ac3f3ec1ca685407c18b292c0b2a1d71d4f21ffd22927e46104d3c76a55a0"
+  },
+  "robinArt": {
+    "path": "tools/launcher-room/robin-v2/manifest.json",
+    "sha256": "77517cf81066a147e4af061bd63fc064adf8edf36142473308c15ea3f563e96f"
+  },
+  "evidence": [
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/ace-regression.json",
+      "sha256": "82de941635b35762362fce152fb63fd076a795e9b0a87a22ce6ed40239453248"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/formal-catalog-baseline.json",
+      "sha256": "9503988a87223134e905fb410396c3afc37e1a14e3ce48b37b1a61f8de5babc8"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/independent-visual-review.json",
+      "sha256": "0812e62b8c1cf93c19294bb3be2d131694f3e7579dcd7c41a0d85e5310c695cc"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/life-regression.json",
+      "sha256": "ea85b4f0f4288b225d91c52a1f189f22a5abbff098043a537000e44f93e739f7"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/minigames-client/CLIENT_PLAY_REVIEW.md",
+      "sha256": "07d9fe4b0a628678fa67fed480e336ef7ecfeb5b3f9188d519d3a4fb1bec6ed7"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/minigames-client/MINIGAMES_CLIENT_FAILURE.json",
+      "sha256": "bb2d3333ebc492061324257e5304d9d0621f716def5d5e53c092f10124896083"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/minigames-client/MINIGAMES_CLIENT_QA.json",
+      "sha256": "b3b12f2ea5a6095d9d78d63e0d518a604749997f7e402b27564971081f4d8dc9"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/minigames-client/ROOM_WHEEL_INTEGRATION_FAILURE.json",
+      "sha256": "4f07b5133cd7817bf6dbce77e5e1625a9f339326ab75694734a09943fd73c180"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/minigames-client/ROOM_WHEEL_INTEGRATION_QA.json",
+      "sha256": "504788711aa9c66ea0b4b35b1af57f18cb4b363a38ba6f1595806152ab01fc97"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/minigames-client/minigames-training-active-narrow.png",
+      "sha256": "d9146017bd69f899ea7277683c7e74f7930744c95fbf7bc64586432408677ad5"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/minigames-client/minigames-training-intro-narrow.png",
+      "sha256": "991b03574c840ac11bc788542ba20e79841142476709d4b68c415c11a50fb168"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/minigames-client/minigames-training-showcase-desktop.png",
+      "sha256": "10e568ca4457847f6201295ab45e6099e61faf215fdbe912936cda12a68d28f8"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/minigames-client/minigames-wallet-full-desktop.png",
+      "sha256": "89dfb8aeb412ed185d17215ba90fd222765e6134e3c9f50ed84c0d5eaa9d8d8c"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/minigames-client/minigames-work-active-desktop.png",
+      "sha256": "2e1502fd1c6a3b09afce5e2c1328d8987eec4b371a335811435e9f9dff00c3b3"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/minigames-client/minigames-work-intro-desktop.png",
+      "sha256": "f14c174c2663b995be0be219b1507543df2ae6c1666ea7e6c36d86dcab7cc06c"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/minigames-client/minigames-work-result-desktop.png",
+      "sha256": "15c64ef0f2829f0cedab61becaa4abce934b5fd12b3ebeb9936a3fe293f5854d"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/minigames-client/room-wheel-failure.png",
+      "sha256": "082bb07ce036f5411c9aa0d4eb2ae270f8d20c250c3319244827a7eb526d37c5"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/minigames-client/room-wheel-robin-desktop.png",
+      "sha256": "a78c1f2770deec15d7ffe6b6812e5f7b29f24aa2267649b3f6c1b0ea81251ca8"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/minigames-client/room-wheel-training-robin-desktop.png",
+      "sha256": "dc36f2cd255bd3b990b10a358b8505401bd4e059407d8ba01283cfe76e0392e7"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/minigames-client/room-wheel-training-robin-narrow.png",
+      "sha256": "102a854209a9e3d77ba37e4c1120f3a6cfd0f58481455a704f880e51c5b3b3bd"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/minigames-client/room-wheel-work-robin-desktop.png",
+      "sha256": "f51b8490059d298b71625eb278c5aff5e0cc2a64e1c48f8459e84ae4d638138e"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/minigames-client/room-wheel-work-robin-narrow.png",
+      "sha256": "e6f10418358eb7b688752bfc1a2f851639bb8207c0f45f80ec5be7120e874755"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/ROBIN_SCALE_QA.json",
+      "sha256": "d2bd84f0499b66be62bacd7bad9dfe610cf39900b159a569c14a26ce9d168c3b"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/all-rendered-frames.json",
+      "sha256": "dfaabec0c3b952acf0a33e811c7c996927b8f49333c07d22d9a8cc437b9623d1"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/alpha-edges.json",
+      "sha256": "556877f18c655842c10de0aa684af60f44779e774fb50c2df462db975088dc95"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/desktop-eat.png",
+      "sha256": "3c5c79cd2f1a4ddff3ab74f0ea59505679072a9f4a5347987072c722d23cdfa2"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/desktop-rest.png",
+      "sha256": "468acabedc7e62b903331436931fd69af6921dd9b24cd36bbac70b647be8db42"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/desktop-sleep.png",
+      "sha256": "b33ded6ba1cb2f2ab24a72a6cabc27a820b0540698eead3b2d085d92c1ecfee0"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/desktop-standing-before.png",
+      "sha256": "6bd3ce8bd68f9038abb491310a479f9b00f9394ffea4407e3761c36b1d301474"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/desktop-standing.png",
+      "sha256": "b5de60c3a9994c948a230b97d5b06f1e898db8c6eb1667ae79ae167a9152a50b"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/desktop-train.png",
+      "sha256": "f8b016815889bfce050324b253b69b7de03abb43f0cdff769991bc8557d0b083"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/desktop-walk-east.png",
+      "sha256": "dcca4a4d40117417dc6d25e02c43afe3ecb37849335b2ff47ee44f8890157313"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/desktop-walk-north.png",
+      "sha256": "7132e8ad6ff9b193999cf3fae2af0bf3e2121ae791a4700f5b55b1fca20c851d"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/desktop-walk-south.png",
+      "sha256": "c0f64ea6bae0debaa0c002ca3315ed8d1a0ff36a2824cd80891dd497fa9c8154"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/desktop-walk-west.png",
+      "sha256": "d83902f95302ab9e3e64eb5fbb8d8368592b5b76e8f6149d68c16dabdc9633d1"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/desktop-work-east.png",
+      "sha256": "b05142154c79e04b577c29e6695e45e641264d63e46194b91cfe56839dc9de06"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/desktop-work-north.png",
+      "sha256": "b437596f4601758a0d010679584ef1c49eab90e0dc5bc7e5b8eb7d75d767b742"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/desktop-work-south.png",
+      "sha256": "bfdd6cf86085f3057dfa2f5d1442d1019ef351ae71986fa947f6c5329ab4769a"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/desktop-work-west.png",
+      "sha256": "0bdc86942a4aff8e9fd5a870766d6c612cabf88a41d439b4bce4886da674fac9"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/narrow-standing.png",
+      "sha256": "d13a7e688602fcf4a9c3fe7d575b7aa90c55086c58d28353ca838e967f2b613a"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/narrow-training.png",
+      "sha256": "16edcaa0c94a542fea85051efcd7348785613d7b0c3490612dbb261c75db979f"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-east-11.png",
+      "sha256": "255e26ac7acd71a6e5f77547e52c564e90d73f8cdd1500b94fa56ecd82f29c02"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-east-15.png",
+      "sha256": "aae39f3117ee320a7450a168fdf75c6660eef1a0e0f250d2b7a417b6382416a5"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-east-3.png",
+      "sha256": "c8d9da62248414530a7c4ba3b5653915e67dd6de6a98e2023da6ca05421165f4"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-east-7.png",
+      "sha256": "d1c86c2ed9bb6071e8389950e8f386290595b1af351eb500164b9d8e8f666f89"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-east.json",
+      "sha256": "b272129394fb7f215c728e2d625dd74fab2ab1504b0922f3440a11b503211768"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-north-11.png",
+      "sha256": "1f4b591e28cbc1d9aa285c23773e54b935582694027a045badf3a4cb9b1d4b4f"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-north-15.png",
+      "sha256": "2eb1a458c16bbda6352436c9f247bacdeef2a7d224c29c68da364fe39f1b75b7"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-north-3.png",
+      "sha256": "763f4b882ae7a888d7dd0b0da9125619a95d72214594c6f34792a33c1e5daa18"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-north-7.png",
+      "sha256": "3d8473f0af63e17f2efcdc6381f78333e9b99ffbbc686d22395b2578e42fb23d"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-north.json",
+      "sha256": "65d3caa97b646f88379e4b3e80ecf5d7e46905144974655d2e94daed854978ff"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-south-11.png",
+      "sha256": "f8b78d01ffddeda9b577563f1b4bc88cda68cc4d0ed4360bf4be1008b8fe2fba"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-south-15.png",
+      "sha256": "58deab7b58ec900408827fef843a71d118ca127abefbf8e2712d605945e741fd"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-south-3.png",
+      "sha256": "56a801ce8269fe30722c175ec5b64913439da90a50e61e53796f8f0ed0129933"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-south-7.png",
+      "sha256": "9835f5231ad46b05e0ab5f7ab10216f8133d23504dc85153c5a6494f3a9c4a74"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-south.json",
+      "sha256": "63e18fc13f0da27062a504f6df54b5d6c7ad1e3c0ac2f5e0c3009d392d415703"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-west-11.png",
+      "sha256": "9954fe224c00a79d28999279b81968e5824294e3dc7775a3c797bf4a6346e758"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-west-15.png",
+      "sha256": "b1732531e32740c0751eedbd290d1064d4e50acb8ab30e2e9ad5473aa96cbbe4"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-west-3.png",
+      "sha256": "aa8d0266f5c330755f00dc98f4428a36ef5cdf0a7f97b3656c944d7eb79d662f"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-west-7.png",
+      "sha256": "cd4acb8c24019c5f2381cfd0a2799709d2e9d54ccc2f73a4de5743c0016bbf07"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-west.json",
+      "sha256": "95542f415dd3f956ddcd32e78045d4dd82dd921c37b788996b8ea9a730834061"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/all-rendered-frames.json",
+      "sha256": "dfaabec0c3b952acf0a33e811c7c996927b8f49333c07d22d9a8cc437b9623d1"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/desktop-eat.png",
+      "sha256": "2db06fe01ced69b5486a70820f07489b65276b5234b0016f9d9c36d12e7378c2"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/desktop-rest.png",
+      "sha256": "fbb8d89d02add958fb33ada516a9cf5668226f4dafdaaa11b6afade62bb14a28"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/desktop-sleep.png",
+      "sha256": "b8da8d21c4c8c6e59cc0eb5df16c15b982a266a87928798a8ec0893c235dadac"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/desktop-standing-before.png",
+      "sha256": "322fdae676ab75a791b0d07d8ba2fa652545ea5ef7ba4699540577b15b6ceb84"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/desktop-standing.png",
+      "sha256": "795ef6c15fc36f574b66ca63f94584e315bf19d9887c37aead6448f15f98401d"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/desktop-train.png",
+      "sha256": "ca2feb4eac9f27c3583c849c73c138553011ff0c62cdce7605f24a7aecb9c4ea"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/desktop-walk-east.png",
+      "sha256": "fe9bc938333c752991d15662222003707027b7845181cddbec227b9d4f78983e"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/desktop-walk-north.png",
+      "sha256": "27934718ccae788f5dd59818910f3a9d24b9962190c1557962978a7bdb72fcc9"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/desktop-walk-south.png",
+      "sha256": "90def300ecd2b99aeb4c910ed000fda4d65badcb599284fab4e50ed4b2cc71ff"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/desktop-walk-west.png",
+      "sha256": "9a74c88a891da045c1b8e095f4a09ba2c8ef9d355aa99d8e1e5398dbedc6bd55"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/desktop-work-east.png",
+      "sha256": "d28352a67f95fc31ddaaf7dfdef3914a7685bcf1a55d3a80d6685e85d624f114"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/desktop-work-north.png",
+      "sha256": "a2b729ca6fcccc0b2b81ec6cb460174c703e5a2a558f2cd2639fa340d75b3449"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/desktop-work-south.png",
+      "sha256": "b5aa1218066f166afc78dc283bfae55202f1de8f5f63edf6050dc949b0f32afd"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/desktop-work-west.png",
+      "sha256": "50cb43b55ccc2957f8f4965bd715f64e05457863a2e1b01f739ce00a883bbfc3"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/failure.json",
+      "sha256": "dead89189fe337b61b2bad2c29da5299950c177a41f38413dee909e172dd4439"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/narrow-standing.png",
+      "sha256": "d40831ade39fe066862ada43bbdadc9b3aac54cc5b695f6ba74ea25b7c2eda0b"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/narrow-training.png",
+      "sha256": "0de9154c978fc490ecb1ee6c494c12fda799d3585772ed6d2eb2cae2c575e740"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-final/route-east.png",
+      "sha256": "544c2d0672c752ad7dd0b4e8ffdafb687ec84f81bab36d8b1055d392157c0a51"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/all-rendered-frames.json",
+      "sha256": "dfaabec0c3b952acf0a33e811c7c996927b8f49333c07d22d9a8cc437b9623d1"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/desktop-eat.png",
+      "sha256": "05db2314f3dd60584d1236d826755adf938fe1c8b9c52044c1eb975dcd824bda"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/desktop-rest.png",
+      "sha256": "ab8f27e6dc7a57752a49599d7ff7ec8aa9dc1324ba1e3ec18cb0391534cd09e7"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/desktop-sleep.png",
+      "sha256": "55580eb22cd5d9811ff5f0da6eed9bc767f0d5b29f419ead1156df2917f95b3a"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/desktop-standing-before.png",
+      "sha256": "aae717a8a956aef93f0cbf7347d9342802c2adbc6aaa8260bcaad807b3e90e10"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/desktop-standing.png",
+      "sha256": "264180720a6e670e8ea806a86f038551ef43728463e22d1736ff8628555e5d86"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/desktop-train.png",
+      "sha256": "6aeb194f7026749dacad1e000d96c819bd5b12149f6a58a20f49d50376aa24a1"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/desktop-walk-east.png",
+      "sha256": "eda0fc9d29fe97bf14bc3c5c7e86c879c93711a4cc52ffb76fccad41313711ae"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/desktop-walk-north.png",
+      "sha256": "fe3246943c2662aa12479a54f08cf78e421cbceea55febe757043db88a091c39"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/desktop-walk-south.png",
+      "sha256": "d7474e51200ed8a6f4cac4b8ed7964f0aebecba4705c7a9b7a6fb40f2f4636fd"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/desktop-walk-west.png",
+      "sha256": "9bc729da6e4fbca0d44275d15f94bed5a1298de585b40daa9a397b87c3343f74"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/desktop-work-east.png",
+      "sha256": "fd4821bb657652bb9a2d7ed979cec34a2e7c835c59f94ac346bddcd428d9f62f"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/desktop-work-north.png",
+      "sha256": "309e99c95faa977ee628fcda97f9b3a29ef46925366174270c45191f56e0d514"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/desktop-work-south.png",
+      "sha256": "dafe5b337e152df3d4a8f2e021cc3a993724458daa5a37b07c43ee1058dd5b6c"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/desktop-work-west.png",
+      "sha256": "d06e1ac9df8d60c061f379e02a4c4ae8172a6dcb935e6f8a53489ca16c48904d"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/failure.json",
+      "sha256": "eeb14dfd1faa27bd46b310a5d4edad3668f52432085020a14a07b47e9c6c7af1"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/narrow-standing.png",
+      "sha256": "c7ddaf68902399c43e2d419c48754ad13eaf3de1963039f921dc4b823c22c971"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/narrow-training.png",
+      "sha256": "f3dbfe9aabe470d33f723a4e36ca7011ad7c6d908e2eb9fcd92d1bc725658752"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/route-east-11.png",
+      "sha256": "255e26ac7acd71a6e5f77547e52c564e90d73f8cdd1500b94fa56ecd82f29c02"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/route-east-15.png",
+      "sha256": "aae39f3117ee320a7450a168fdf75c6660eef1a0e0f250d2b7a417b6382416a5"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/route-east-3.png",
+      "sha256": "c8d9da62248414530a7c4ba3b5653915e67dd6de6a98e2023da6ca05421165f4"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/route-east-7.png",
+      "sha256": "d1c86c2ed9bb6071e8389950e8f386290595b1af351eb500164b9d8e8f666f89"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-verified/route-east.json",
+      "sha256": "e15c29ea27f465b3072914ca452a3223634881e470f69adab230faa1756c407c"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale/all-rendered-frames.json",
+      "sha256": "dfaabec0c3b952acf0a33e811c7c996927b8f49333c07d22d9a8cc437b9623d1"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale/desktop-eat.png",
+      "sha256": "e5f457d534f485707feb4d85de9c3cc91617259f29c6ce4f9ed49e849743d52f"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale/desktop-rest.png",
+      "sha256": "88c43e92a41cedacf30d957b55801542acea612716c96ce3401da0ba1faa05f5"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale/desktop-sleep.png",
+      "sha256": "2da8f4a316751050c905f6857e91a5d49b6280598fbcf2e3337129965a176218"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale/desktop-standing-before.png",
+      "sha256": "486845d1a534108af047865ca2b0982a0051e6e38e0b4bb06e48e4066c38d5b1"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale/desktop-standing.png",
+      "sha256": "e5e6cee2e343e41ddf2e3ddce6e7b3b9b0456e13fbddd4c22071f569d454b44e"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale/desktop-train.png",
+      "sha256": "ea11c0b95384790cd8ce0f0e8831f0fc5fbbfbd1595a5c25a11f3fcf1e1fd362"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale/desktop-walk-east.png",
+      "sha256": "2a61aa8d143c57e54e13f68c4d9d3d40dd71927790469cb8a01e2b0c39fc968e"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale/desktop-walk-north.png",
+      "sha256": "9f36b523d19b23a00e0127d71a2a042920901a8a20950ae18ccccafca1c3e572"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale/desktop-walk-south.png",
+      "sha256": "116d9b461411c16c243ff4d8ba5d6f7541577c32ad821c08a5e704c7884b81f2"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale/desktop-walk-west.png",
+      "sha256": "2d878718d3899c3763ef99718971cb4a2ff6d38513062a60c54e94c2fa527da5"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale/desktop-work-east.png",
+      "sha256": "edc9008184cfbe43968c27de6af5fb32b5b83d2322bae8615adae294d2e0134e"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale/desktop-work-north.png",
+      "sha256": "867566149b4cb33453d1dee7c2b934ffcf34787b984a0e06d7ba920aa154eaa2"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale/desktop-work-south.png",
+      "sha256": "d9bd966fec9c120334295d37a8a649c912c54f0653325b9dac6d96e4ccaae9da"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale/desktop-work-west.png",
+      "sha256": "d4c0b18a6f5f4492b495b18df2be8000cefbd8139f3d3cbd6cbe4ff105113892"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale/failure.json",
+      "sha256": "dead89189fe337b61b2bad2c29da5299950c177a41f38413dee909e172dd4439"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale/narrow-standing.png",
+      "sha256": "1b08b8b9d4bc2b2ee22a6140685cc1a091a20ab53c50702bfdc1a8cdd2a90aa4"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale/narrow-training.png",
+      "sha256": "c1a1281a938d4176c6f79df8fc4b51bf4b608945584f7b84c851b77c4913b6c8"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale/route-east.png",
+      "sha256": "801aca8534ece22cb87268e3df990bc5859cb3c8f9408063f77de9837fee50e0"
+    },
+    {
+      "path": "tools/launcher-room/presentation-v127/review-evidence/server-qa.json",
+      "sha256": "da72660d88938fc43491ccec89960d6901931eb45b76065442f7150a24885257"
+    }
+  ],
+  "serverQA": {
+    "path": "tools/launcher-room/presentation-v127/review-evidence/server-qa.json",
+    "sha256": "da72660d88938fc43491ccec89960d6901931eb45b76065442f7150a24885257"
+  },
+  "clientQA": {
+    "path": "tools/launcher-room/presentation-v127/review-evidence/minigames-client/MINIGAMES_CLIENT_QA.json",
+    "sha256": "b3b12f2ea5a6095d9d78d63e0d518a604749997f7e402b27564971081f4d8dc9"
+  },
+  "robinQA": {
+    "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/ROBIN_SCALE_QA.json",
+    "sha256": "d2bd84f0499b66be62bacd7bad9dfe610cf39900b159a569c14a26ce9d168c3b"
+  },
+  "lifeQA": {
+    "path": "tools/launcher-room/presentation-v127/review-evidence/life-regression.json",
+    "sha256": "ea85b4f0f4288b225d91c52a1f189f22a5abbff098043a537000e44f93e739f7"
+  },
+  "aceQA": {
+    "path": "tools/launcher-room/presentation-v127/review-evidence/ace-regression.json",
+    "sha256": "82de941635b35762362fce152fb63fd076a795e9b0a87a22ce6ed40239453248"
+  },
+  "visualReview": {
+    "path": "tools/launcher-room/presentation-v127/review-evidence/independent-visual-review.json",
+    "sha256": "0812e62b8c1cf93c19294bb3be2d131694f3e7579dcd7c41a0d85e5310c695cc"
+  }
+}

@@ -2264,3 +2264,11 @@ Board 遊戲正式流程的圖片路徑集中在 `public/images/board/**`，避�
 本版另加入個人頁 BGM 自動播放：自己與訪客進入頁面便使用該頁已選歌曲；聽者可在本機靜音及調整音量，離頁停止。歌曲所有權與個人頁已儲存的設定沿用原伺服器權限，其他訪客不會修改頁面主人的音樂設定。
 
 公告中心已支援三款遊戲分類與實際 releaseId 的顯示條件；本次提供啟動器發布門檻及後續撰寫流程，未把公告產生／驗證自動掛入每個獨立遊戲 publisher。
+
+## 2026-09-28 Launcher 1.2.7 crew challenges and Robin
+
+The character room has two short challenges opened from the companion wheel. Sea Supply uses moving crates, order matching, combos and a faster second half. Deck Training uses growing sequences of safe lanes, timing cues and whole-body character movement. Eleven released companions have individual original prompts and reactions; combat abilities are not assigned universally.
+
+The server account owns session state, daily work allowances, wallet and affinity. Reconnection can recover an active session; results never trust client-supplied coin amounts. Robin's complete-body redraw addresses a head-to-body style mismatch, rather than claiming a CSS-only scaling defect.
+
+This describes the prepared 1.2.7 candidate. Public release status requires the verified canonical manifest, installer bytes/SHA and delivery report.

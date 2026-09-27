@@ -1,0 +1,341 @@
+{
+  "error": "AssertionError [ERR_ASSERTION]: distance-driven route must show all four luffy frames\n    at C:\\Users\\王曜瑋\\Documents\\Codex\\2026-04-20-1-2-start-html-game-html\\artifacts\\launcher-room-minigames-1.2.7\\staging\\scripts\\launcher_robin_scale_qa.js:56:113",
+  "results": [
+    {
+      "name": "equal-depth-crew-standing",
+      "status": "PASS",
+      "actors": [
+        {
+          "key": "luffy",
+          "source": "acting_v4",
+          "frame": "0",
+          "pose": "acting",
+          "cell": 256,
+          "bounds": [
+            86,
+            27,
+            171,
+            224
+          ],
+          "logicalBounds": [
+            43,
+            13.5,
+            85.5,
+            112
+          ],
+          "bodyWidth": 53.06951284408569,
+          "bodyHeight": 122.99640035629272,
+          "feetY": 534.2187652587891,
+          "rootY": 534.21875,
+          "scale": 1.3160046728971964,
+          "opaque": 10373
+        },
+        {
+          "key": "nami",
+          "source": "acting_v4",
+          "frame": "0",
+          "pose": "acting",
+          "cell": 256,
+          "bounds": [
+            89,
+            25,
+            167,
+            225
+          ],
+          "logicalBounds": [
+            44.5,
+            12.5,
+            83.5,
+            112.5
+          ],
+          "bodyWidth": 48.699082374572754,
+          "bodyHeight": 124.86944198608398,
+          "feetY": 534.8431124687195,
+          "rootY": 534.21875,
+          "scale": 1.3160046728971964,
+          "opaque": 8850
+        },
+        {
+          "key": "robin",
+          "source": "acting_v4",
+          "frame": "0",
+          "pose": "acting",
+          "cell": 256,
+          "bounds": [
+            93,
+            28,
+            163,
+            224
+          ],
+          "logicalBounds": [
+            46.5,
+            14,
+            81.5,
+            112
+          ],
+          "bodyWidth": 45.01544952392578,
+          "bodyHeight": 126.04316520690918,
+          "feetY": 534.2187652587891,
+          "rootY": 534.21875,
+          "scale": 1.3554848130841124,
+          "opaque": 7639
+        },
+        {
+          "key": "sanji",
+          "source": "acting_v4",
+          "frame": "0",
+          "pose": "acting",
+          "cell": 256,
+          "bounds": [
+            90,
+            29,
+            169,
+            224
+          ],
+          "logicalBounds": [
+            45,
+            14.5,
+            84.5,
+            112
+          ],
+          "bodyWidth": 49.323429584503174,
+          "bodyHeight": 121.74770593643188,
+          "feetY": 534.2187652587891,
+          "rootY": 534.21875,
+          "scale": 1.3160046728971964,
+          "opaque": 9913
+        }
+      ],
+      "robinToNamiHeight": 1.0093996033149246
+    },
+    {
+      "name": "prior-art-comparison-only-robin-pixels-vary-height-scale-unchanged",
+      "status": "PASS",
+      "before": [
+        {
+          "key": "luffy",
+          "source": "acting_v4",
+          "frame": "0",
+          "pose": "acting",
+          "cell": 256,
+          "bounds": [
+            86,
+            27,
+            171,
+            224
+          ],
+          "logicalBounds": [
+            43,
+            13.5,
+            85.5,
+            112
+          ],
+          "bodyWidth": 53.06951284408569,
+          "bodyHeight": 122.99640035629272,
+          "feetY": 534.2187652587891,
+          "rootY": 534.21875,
+          "scale": 1.3160046728971964,
+          "opaque": 10373
+        },
+        {
+          "key": "nami",
+          "source": "acting_v4",
+          "frame": "0",
+          "pose": "acting",
+          "cell": 256,
+          "bounds": [
+            89,
+            25,
+            167,
+            225
+          ],
+          "logicalBounds": [
+            44.5,
+            12.5,
+            83.5,
+            112.5
+          ],
+          "bodyWidth": 48.699082374572754,
+          "bodyHeight": 124.86944198608398,
+          "feetY": 534.8431124687195,
+          "rootY": 534.21875,
+          "scale": 1.3160046728971964,
+          "opaque": 8850
+        },
+        {
+          "key": "robin",
+          "source": "acting_v4",
+          "frame": "0",
+          "pose": "acting",
+          "cell": 256,
+          "bounds": [
+            88,
+            27,
+            168,
+            225
+          ],
+          "logicalBounds": [
+            44,
+            13.5,
+            84,
+            112.5
+          ],
+          "bodyWidth": 51.44622802734375,
+          "bodyHeight": 127.32936716079712,
+          "feetY": 534.8618352413177,
+          "rootY": 534.21875,
+          "scale": 1.3554848130841124,
+          "opaque": 11652
+        },
+        {
+          "key": "sanji",
+          "source": "acting_v4",
+          "frame": "0",
+          "pose": "acting",
+          "cell": 256,
+          "bounds": [
+            90,
+            29,
+            169,
+            224
+          ],
+          "logicalBounds": [
+            45,
+            14.5,
+            84.5,
+            112
+          ],
+          "bodyWidth": 49.323429584503174,
+          "bodyHeight": 121.74770593643188,
+          "feetY": 534.2187652587891,
+          "rootY": 534.21875,
+          "scale": 1.3160046728971964,
+          "opaque": 9913
+        }
+      ],
+      "after": [
+        {
+          "key": "luffy",
+          "source": "acting_v4",
+          "frame": "0",
+          "pose": "acting",
+          "cell": 256,
+          "bounds": [
+            86,
+            27,
+            171,
+            224
+          ],
+          "logicalBounds": [
+            43,
+            13.5,
+            85.5,
+            112
+          ],
+          "bodyWidth": 53.06951284408569,
+          "bodyHeight": 122.99640035629272,
+          "feetY": 534.2187652587891,
+          "rootY": 534.21875,
+          "scale": 1.3160046728971964,
+          "opaque": 10373
+        },
+        {
+          "key": "nami",
+          "source": "acting_v4",
+          "frame": "0",
+          "pose": "acting",
+          "cell": 256,
+          "bounds": [
+            89,
+            25,
+            167,
+            225
+          ],
+          "logicalBounds": [
+            44.5,
+            12.5,
+            83.5,
+            112.5
+          ],
+          "bodyWidth": 48.699082374572754,
+          "bodyHeight": 124.86944198608398,
+          "feetY": 534.8431124687195,
+          "rootY": 534.21875,
+          "scale": 1.3160046728971964,
+          "opaque": 8850
+        },
+        {
+          "key": "robin",
+          "source": "acting_v4",
+          "frame": "0",
+          "pose": "acting",
+          "cell": 256,
+          "bounds": [
+            93,
+            28,
+            163,
+            224
+          ],
+          "logicalBounds": [
+            46.5,
+            14,
+            81.5,
+            112
+          ],
+          "bodyWidth": 45.01544952392578,
+          "bodyHeight": 126.04321193695068,
+          "feetY": 534.2187576293945,
+          "rootY": 534.21875,
+          "scale": 1.3554848130841124,
+          "opaque": 7639
+        },
+        {
+          "key": "sanji",
+          "source": "acting_v4",
+          "frame": "0",
+          "pose": "acting",
+          "cell": 256,
+          "bounds": [
+            90,
+            29,
+            169,
+            224
+          ],
+          "logicalBounds": [
+            45,
+            14.5,
+            84.5,
+            112
+          ],
+          "bodyWidth": 49.323429584503174,
+          "bodyHeight": 121.74770593643188,
+          "feetY": 534.2187652587891,
+          "rootY": 534.21875,
+          "scale": 1.3160046728971964,
+          "opaque": 9913
+        }
+      ],
+      "originalScale": 1.03
+    },
+    {
+      "name": "complete-authoring-pixel-bounds-all-directions-actions-and-life",
+      "status": "PASS",
+      "frameSets": 96,
+      "actorFrames": 384
+    },
+    {
+      "name": "robin-upright-height-does-not-jump-between-sources",
+      "status": "PASS",
+      "min": 125.40013432502747,
+      "max": 127.97244477272034
+    },
+    {
+      "name": "390px-contained-room-and-readable-figures",
+      "status": "PASS",
+      "viewport": 390,
+      "body": 390,
+      "stage": 480,
+      "container": 334
+    }
+  ]
+}

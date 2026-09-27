@@ -54,3 +54,10 @@ scripts/launcher_ace_release_qa.js -text
 scripts/launcher_announcements_production_visual_qa.js -text
 scripts/launcher_profile_bgm_server_qa.js -text
 scripts/launcher_profile_bgm_client_qa.js -text
+tools/launcher-room/presentation-v127/** -text
+tools/launcher-room/robin-v2/** -text
+docs/LAUNCHER_MINIGAMES_20260928.json -text
+scripts/launcher_minigames_server_qa.js -text
+scripts/launcher_minigames_client_qa.js -text
+scripts/launcher_robin_scale_qa.js -text
+scripts/launcher_minigames_room_wheel_qa.js -text

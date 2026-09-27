@@ -1,0 +1,84 @@
+{
+  "schema": "launcher-minigame-gpt-art/1",
+  "tool": "built-in image_gen",
+  "createdAt": "2026-09-27T18:13:07.139Z",
+  "processing": "Native Chromium proportional resize and WebP encoding only; original GPT PNG preserved. No drawn or composited replacement art.",
+  "assets": [
+    {
+      "path": "public/images/launcher_room/minigames_v1/deck.webp",
+      "sha256": "ffcd35bf294edcdc8c50564a4d34b292bea87f920824731b5ed3547c7ea5dc62",
+      "bytes": 199254,
+      "width": 1440,
+      "height": 810,
+      "alpha": false,
+      "transparentPixels": 0,
+      "opaquePixels": 1166400,
+      "original": {
+        "path": "tools/launcher-room/presentation-v127/source-png/deck.png",
+        "sha256": "8b8038f72b17c98b981033799808631efa51394badff73852223a7a722885417",
+        "generatedPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-aa919bdb-30e9-4297-9b7f-84f413f21eb2.png",
+        "width": 1672,
+        "height": 941
+      },
+      "promptBrief": "Spacious Thousand Sunny wooden deck, central empty gameplay area, ocean and warm light; no people, text or UI.",
+      "visualReview": "Inspected generated output: readable item silhouettes, no clipped contents, consistent warm wood and ocean palette; final in-game review pending."
+    },
+    {
+      "path": "public/images/launcher_room/minigames_v1/cargo-food.webp",
+      "sha256": "f5975666c4ad25ac4d5040e5ec168779c82600b1661764087a08bb57e43a6a78",
+      "bytes": 46332,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "transparentPixels": 68825,
+      "opaquePixels": 0,
+      "original": {
+        "path": "tools/launcher-room/presentation-v127/source-png/cargo-food.png",
+        "sha256": "738c2e41a377aabb16ac7e876803423e27c1cf6f8ea543a44a3dd72224494d51",
+        "generatedPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-148e9ab1-0e8f-43f3-a36c-1da1ad7edeb0.png",
+        "width": 1254,
+        "height": 1254
+      },
+      "promptBrief": "Transparent cel-painted wooden food crate, meat on the bone, two oranges and green vegetables; no people or text.",
+      "visualReview": "Inspected generated output: readable item silhouettes, no clipped contents, consistent warm wood and ocean palette; final in-game review pending."
+    },
+    {
+      "path": "public/images/launcher_room/minigames_v1/cargo-tools.webp",
+      "sha256": "acd561dc84ff939621f9e16bdf9910f339bb94d17329f4959789e8791b0dc6a0",
+      "bytes": 47618,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "transparentPixels": 67109,
+      "opaquePixels": 0,
+      "original": {
+        "path": "tools/launcher-room/presentation-v127/source-png/cargo-tools.png",
+        "sha256": "9918d4fa70faca70a1899485b6a865bd285550d1c7b22923be06d3b35f248fd5",
+        "generatedPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-6bbf7325-e750-459d-9f89-405f33f6e393.png",
+        "width": 1254,
+        "height": 1254
+      },
+      "promptBrief": "Transparent cel-painted shipwright tools crate, hammer, rope coil and wrench; no people or text.",
+      "visualReview": "Inspected generated output: readable item silhouettes, no clipped contents, consistent warm wood and ocean palette; final in-game review pending."
+    },
+    {
+      "path": "public/images/launcher_room/minigames_v1/cargo-books.webp",
+      "sha256": "250b3c104962d0fa11cff697fd0a1ebdf37423087527223a361e472a51acfb54",
+      "bytes": 36762,
+      "width": 384,
+      "height": 384,
+      "alpha": true,
+      "transparentPixels": 79206,
+      "opaquePixels": 0,
+      "original": {
+        "path": "tools/launcher-room/presentation-v127/source-png/cargo-books.png",
+        "sha256": "d598fe104fef70310af41d1007c909ed8adc18ea5acbd4ff568e6c268135f246",
+        "generatedPath": "C:\\Users\\王曜瑋\\.codex\\generated_images\\01a0d3fa-03ef-7ec1-8eff-2ae51b74567e\\exec-86c112a7-5b57-4c61-ab9a-e4a61f04d56b.png",
+        "width": 1254,
+        "height": 1254
+      },
+      "promptBrief": "Transparent cel-painted books and sea charts crate, navy, teal and burgundy books, blank covers; no people or text.",
+      "visualReview": "Inspected generated output: readable item silhouettes, no clipped contents, consistent warm wood and ocean palette; final in-game review pending."
+    }
+  ]
+}

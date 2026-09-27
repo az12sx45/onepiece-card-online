@@ -1,0 +1,17 @@
+{
+  "schema": "launcher-v127-formal-catalog-baseline/1",
+  "authorityRoot": "D:/Codex_Release_Worktrees/board-voyage-records-v1",
+  "capturedAt": "2026-09-27T18:26:25.876266+00:00",
+  "files": [
+    {
+      "path": "public/desktop/catalog-v2.json",
+      "sha256": "34f6641e13d34303bd4fad66374bbe6d8a89abcb309f0113c5aa355bf91ee345",
+      "bytes": 1286
+    },
+    {
+      "path": "public/desktop/catalog-v3.json",
+      "sha256": "c9535f50638259e38fc897a5f6859a9135de6697871f2278876612212954d94e",
+      "bytes": 1403
+    }
+  ]
+}

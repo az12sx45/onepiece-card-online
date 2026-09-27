@@ -1,0 +1,63 @@
+{
+  "schema": "launcher-independent-visual-review/1",
+  "status": "PASS_WITH_NOTES",
+  "humanAcceptance": false,
+  "blockingIssues": [],
+  "reviewedAt": "2026-09-27T18:44:02.130348+00:00",
+  "method": "Root model inspected actual Chromium captures, compared old and redrawn Robin at the same depth, inspected complete-figure atlas contact sheet and four-frame walk source, and checked desktop and narrow minigame layouts. This is model visual review, not a human playtest.",
+  "images": [
+    {
+      "subject": "robin",
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/desktop-standing.png",
+      "sha256": "b5de60c3a9994c948a230b97d5b06f1e898db8c6eb1667ae79ae167a9152a50b"
+    },
+    {
+      "subject": "robin",
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/route-east-7.png",
+      "sha256": "d1c86c2ed9bb6071e8389950e8f386290595b1af351eb500164b9d8e8f666f89"
+    },
+    {
+      "subject": "robin",
+      "path": "tools/launcher-room/presentation-v127/review-evidence/robin-scale-complete/narrow-standing.png",
+      "sha256": "d13a7e688602fcf4a9c3fe7d575b7aa90c55086c58d28353ca838e967f2b613a"
+    },
+    {
+      "subject": "minigames",
+      "path": "tools/launcher-room/presentation-v127/review-evidence/minigames-client/room-wheel-robin-desktop.png",
+      "sha256": "a78c1f2770deec15d7ffe6b6812e5f7b29f24aa2267649b3f6c1b0ea81251ca8"
+    },
+    {
+      "subject": "minigames",
+      "path": "tools/launcher-room/presentation-v127/review-evidence/minigames-client/room-wheel-training-robin-desktop.png",
+      "sha256": "dc36f2cd255bd3b990b10a358b8505401bd4e059407d8ba01283cfe76e0392e7"
+    },
+    {
+      "subject": "minigames",
+      "path": "tools/launcher-room/presentation-v127/review-evidence/minigames-client/room-wheel-work-robin-narrow.png",
+      "sha256": "e6f10418358eb7b688752bfc1a2f851639bb8207c0f45f80ec5be7120e874755"
+    },
+    {
+      "subject": "minigames",
+      "path": "tools/launcher-room/presentation-v127/review-evidence/minigames-client/room-wheel-training-robin-narrow.png",
+      "sha256": "102a854209a9e3d77ba37e4c1120f3a6cfd0f58481455a704f880e51c5b3b3bd"
+    },
+    {
+      "subject": "minigames",
+      "path": "tools/launcher-room/presentation-v127/review-evidence/minigames-client/minigames-wallet-full-desktop.png",
+      "sha256": "89dfb8aeb412ed185d17215ba90fd222765e6134e3c9f50ed84c0d5eaa9d8d8c"
+    }
+  ],
+  "observations": [
+    "Robin retains a complete connected body and has a smaller, more proportionate head; the mature black Enies Lobby dress, bangs and boots are recognizable. Same-depth standing and walking keep a common floor anchor.",
+    "Low-foot-clearance walk frames preserve complete figures; opposite arm phases replace the rejected repeated side poses. The report separately measures all four real rendered route frames.",
+    "New supply art clearly separates food, tools and books; readable prompts and fixed selection hitboxes support the timed rounds.",
+    "Training uses a full-body character, visible step markers and separated light cues, with keyboard and 390px touch controls.",
+    "Wallet-full view explains that results are retained and can be claimed after shopping.",
+    "Final production room-to-wheel integration captures show the redrawn Robin in both challenges. Narrow supply labels and controls fit; Escape focus regression was fixed and both browser reports rerun."
+  ],
+  "limitations": [
+    "Fun and character appeal remain subjective; no human player acceptance is claimed.",
+    "The narrow room is an intentional horizontal scroll surface, while its outer page remains contained.",
+    "Transparent WebP RGB data can look distorted in a decoder that ignores alpha; actual white-background composites and Chromium wood-floor captures are clean."
+  ]
+}

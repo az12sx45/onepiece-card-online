@@ -1190,3 +1190,16 @@ desktop/launcher-room.js／launcher-room.css／launcher.html：半圓輪盤、�
 - scripts/launcher_profile_bgm_client_qa.js、review-evidence/PROFILE_BGM_CLIENT_QA.json：真實瀏覽器原生音訊的本人／訪客自播、聽者控制及生命週期；可注入的拒絕播放／延遲案例須與真實音訊分開標明。
 
 - scripts/desktop_launcher_package_qa.js → presentation-v126/validate_release.js：目前公告內容門檻的實際入口；三款獨立遊戲 publisher 沒有新增自動公告掛接。
+
+## 2026-09-28 Launcher 1.2.7 crew challenges and Robin
+
+- desktop/launcher-room-minigames.js/.css: dialog, controls, playfield, character lines, recovery/retry/results and responsive layout.
+- desktop/launcher-life-room.js: character wheel entry and room attention lifecycle.
+- desktop/auth-service.js: allowlisted minigame commands on the existing life bridge.
+- server/launcher-minigames.js: private sessions, random challenges, server scoring and validation.
+- server/launcher-life-store.js: profile transaction, shared work/training resources and once-only wallet settlement.
+- public/images/launcher_room/minigames_v1/: GPT deck and three transparent supply-crate WebPs.
+- tools/launcher-room/presentation-v127/: new art provenance and current visual/QA evidence. Historical evidence remains unchanged.
+- scripts/launcher_minigames_server_qa.js and launcher_minigames_client_qa.js: isolated SQL and real Chromium gameplay checks.
+- config/launcher-announcements-v1.json: append-only notices including this release.
+- desktop/package.json, package-lock.json, main.js and launcher.html: version, explicit packaging, resource allowlist and entrypoint integration.

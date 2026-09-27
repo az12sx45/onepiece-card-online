@@ -17,7 +17,7 @@
   function create(env) {
     const api=root.onePieceDesktop;
     let controller=null,snapshot=null,serverLife=null,serverRoster=null,scope='',epoch=0,requestSerial=0,pending=Promise.resolve();
-    let savedPositions=new Map(),savedRevision=-1,fetching=null,nextSync=0,lastTick=0,lastUi=0,manualBusy=false,manualKey='',panelKey='';
+    let savedPositions=new Map(),savedRevision=-1,fetching=null,nextSync=0,lastTick=0,lastUi=0,manualBusy=false,manualKey='',panelKey='',suspending=false;
     const taps=new Map();
     function walker(key){return env.walkers().find(w=>w.key===keyOf(key));}
     function owner(){return env.isOwner();}
@@ -142,6 +142,7 @@
       if(result.wallet&&owner())root.LauncherProfileShop?.onCompanionWalletChanged(result.wallet);
       if(result.profile?.userId===profile()?.userId)env.acceptProfile(result.profile);
       if(controller)controller.sync(result);
+      minigames?.receive(result);
       hideAwaitingArrivals();
       return true;
     }
@@ -188,6 +189,7 @@
     function setContext() {
       const next=`${env.accountId()}:${profile()?.userId||0}:${owner()}`;
       if(next!==scope) {
+        suspending=true;minigames?.dismiss();suspending=false;
         controller?.dispose();controller=null;snapshot=null;serverLife=null;serverRoster=null;scope=next;epoch++;
         savedPositions.clear();savedRevision=-1;pending=Promise.resolve();fetching=null;taps.clear();
         nextSync=0;lastTick=0;manualBusy=false;manualKey='';panelKey='';
@@ -195,6 +197,7 @@
       ensureController();if(owner())void refresh();renderUi();
     }
     function suspend() {
+      suspending=true;minigames?.dismiss();suspending=false;
       if(env.walkers().length) {
         savedPositions=new Map(env.walkers().map(w=>[w.key,{cell:{...w.cell},x:w.x,y:w.y,segmentCell:w.segmentCell&&{...w.segmentCell},direction:w.motion?.direction}]));
         savedRevision=env.renderedRevision();
@@ -269,8 +272,8 @@
       $('roomLifeStatus').setAttribute('aria-expanded','false');
       const panel=document.createElement('div');panel.id='roomLifeDetails';panel.className='room-life-details';panel.hidden=true;$('roomCompanionSheet').append(panel);
       const work=document.createElement('div');work.id='roomLifeWorkChoices';work.className='room-life-work-choices';work.hidden=true;$('roomCompanionSheet').append(work);
-      $('roomLifeWork').onclick=showWorkChoices;
-      $('roomLifeCall').onclick=()=>runManual('call');$('roomLifeTrain').onclick=()=>runManual('train');
+      $('roomLifeWork').onclick=()=>openMinigame('work');
+      $('roomLifeCall').onclick=()=>runManual('call');$('roomLifeTrain').onclick=()=>openMinigame('training');
       $('roomLifeGift').onclick=()=>{const node=$('roomLifeGift');if(node.dataset.confirm!=='true'){node.dataset.confirm='true';node.textContent='確認 · 5';setTimeout(()=>{delete node.dataset.confirm;node.textContent='點心 · 5';window.LauncherRoom?.refreshCompanion?.();},5000);window.LauncherRoom?.refreshCompanion?.();return;}delete node.dataset.confirm;node.textContent='點心 · 5';runManual('gift');};
       $('roomCompanionSheetClose').onclick=()=>{panel.hidden=true;work.hidden=true;syncPanelShell();$('roomCompanionWheel').focus({preventScroll:true});};
       $('roomLifeStatus').onclick=()=>{work.hidden=true;panel.hidden=!panel.hidden;$('roomCompanionPanel').classList.toggle('show-details',!panel.hidden);$('roomLifeStatus').setAttribute('aria-expanded',String(!panel.hidden));renderPanel();};
@@ -290,7 +293,7 @@
       wrap.hidden=!active();
       $('roomCompanionActions').hidden=false;
       $('roomCompanionTalk').hidden=!owner();
-      for(const button of wrap.querySelectorAll('button')){button.hidden=button.id!=='roomLifeStatus'&&!owner();button.disabled=manualBusy||!actor||(button.id!=='roomLifeStatus'&&!owner());}
+      for(const button of wrap.querySelectorAll('button')){button.hidden=button.id!=='roomLifeStatus'&&!owner();button.disabled=manualBusy||minigames?.active()||!actor||(button.id!=='roomLifeStatus'&&!owner());}
       const details=$('roomLifeDetails');if(!actor){details.textContent='';syncPanelShell();return;}
       const needs=actor.needs||{};
       const values=[['精神',needs.energy],['飢餓',needs.hunger],['心情',needs.mood],['社交滿足',needs.social],['工作意願',needs.workMotivation]];
@@ -313,6 +316,13 @@
         button.onclick=()=>runManual('work',station.id);node.append(button);
       }
       syncPanelShell();
+    }
+    function openMinigame(kind) {
+      const key=keyOf(env.companionId());
+      if(!owner()||!controller||manualBusy||env.editing()||!ownedIds().includes(itemOf(key)))return;
+      if(!minigames){status('請更新啟動器後再開始夥伴挑戰。',true);return;}
+      if((snapshot?.jobs||[]).some(job=>keyOf(job.characterId||job.itemId||job.key)===key)){status('夥伴正在工作，先完成原有分工，再一起挑戰。',true);return;}
+      minigames.open({kind,characterId:itemOf(key)});
     }
     async function runManual(action,stationId) {
       const key=keyOf(env.companionId());if(!controller||manualBusy||!key)return;
@@ -346,8 +356,14 @@
       }finally{if(currentEpoch===epoch){manualBusy=false;renderUi();}}
     };
     window.addEventListener('pagehide',()=>{if(owner()&&active())void command('checkpoint',{exit:true});});
+    const minigames=root.OnePieceRoomMinigames?.create({command,
+      workBudget(id){const work=profile()?.companions?.find(value=>value.itemId===id)?.work;if(!work)return null;return{remainingStartsToday:Math.max(0,work.remainingStartsToday-(snapshot?.jobs||[]).filter(job=>job.status==='reserved').length),characterStartsRemainingToday:work.characterStartsRemainingToday};},
+      onOpen(id){controller?.pause();const w=walker(id);if(w)env.focus(w);renderUi();},
+      onClose(){if(!suspending&&env.canAnimate())controller?.resume();renderUi();},
+      onResult(){void refresh();}
+    });
     return {setContext,suspend,resume,tick,animate,active,renderPanel,tapped,refresh,
-      isBusy:key=>!!controller?.isBusy(key),reservations:()=>controller?.reservations()||[],
+      isBusy:key=>!!controller?.isBusy(key)||!!minigames?.active(),reservations:()=>controller?.reservations()||[],
       cancel:key=>controller?.cancel(key),onPurchase(result){if(!owner())return;accept(result);void refresh();},
       snapshot:()=>snapshot,controller:()=>controller,world};
   }

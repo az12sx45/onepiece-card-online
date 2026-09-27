@@ -1,0 +1,187 @@
+{
+  "schema": "room-wheel-minigames-integration/1",
+  "status": "PASS",
+  "createdAt": "2026-09-27T18:41:08.566Z",
+  "checks": [
+    {
+      "name": "actual-profile-room-loads-new-robin-atlases",
+      "status": "PASS"
+    },
+    {
+      "name": "click-robin-wheel-opens-work-intro-without-spending",
+      "status": "PASS"
+    },
+    {
+      "name": "keyboard-wheel-training-starts-robin-whole-figure-and-keeps-modal-focus",
+      "status": "PASS"
+    },
+    {
+      "name": "390px-wheel-work-uses-live-entry-and-real-three-cargo-layout",
+      "status": "PASS"
+    },
+    {
+      "name": "390px-robin-training-free-practice-respects-cooldown-and-shows-new-art",
+      "status": "PASS"
+    },
+    {
+      "name": "leaving-profile-cancels-session-and-closes-overlay",
+      "status": "PASS"
+    },
+    {
+      "name": "robin-new-art-and-all-game-art-no-missing-resource-or-script-error",
+      "status": "PASS"
+    }
+  ],
+  "captures": [
+    {
+      "path": "room-wheel-robin-desktop.png",
+      "sha256": "a78c1f2770deec15d7ffe6b6812e5f7b29f24aa2267649b3f6c1b0ea81251ca8",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "room-wheel-work-robin-desktop.png",
+      "sha256": "f51b8490059d298b71625eb278c5aff5e0cc2a64e1c48f8459e84ae4d638138e",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "room-wheel-training-robin-desktop.png",
+      "sha256": "dc36f2cd255bd3b990b10a358b8505401bd4e059407d8ba01283cfe76e0392e7",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      }
+    },
+    {
+      "path": "room-wheel-work-robin-narrow.png",
+      "sha256": "e6f10418358eb7b688752bfc1a2f851639bb8207c0f45f80ec5be7120e874755",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "path": "room-wheel-training-robin-narrow.png",
+      "sha256": "102a854209a9e3d77ba37e4c1120f3a6cfd0f58481455a704f880e51c5b3b3bd",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    }
+  ],
+  "sourceSha256": {
+    "desktop/launcher.html": "787061caa93f0a2af63dca58fd30bfdb6e183dc5f3f68d83145cb02e620f1ed6",
+    "desktop/launcher-room-minigames.js": "75e435fce4a4af8c825be63f0cfa2a07a4ff013585268695880350f835679fdf",
+    "desktop/launcher-room-minigames.css": "69cc519447ece1ff956da6de58e2327172358bea1b7186bd2590182b88d41d63",
+    "desktop/launcher-life-room.js": "1e4d676156eb662e1b2ef9ceaf56c541e2cefca8182ae2bb699b82d2497abc87",
+    "desktop/launcher-room.js": "f461e338bfc633e2ba0f078e1460d5336764fe4b299dce5a5aa70ecbd79a2dbd",
+    "desktop/launcher-room-motion.js": "eb0d40f266aa56c1e37fcc4dd6a959d39eb7d6cd955d5f4961ac0612bc175d41",
+    "desktop/launcher-life-actions.js": "9d15a266c00540ab937cb4a1010e521763403c7b23d2bede443e8be0b5fb8b64",
+    "desktop/launcher-profile-shop.js": "b82f1a912da5f5cd9772a53f4c61e558ec77fb2c3ffc582b16a78c00294529bd",
+    "scripts/launcher_minigames_room_wheel_qa.js": "79032c871816581e3077d2ef578cfbbca6424076eae3720387ec77f679adf015",
+    "server/launcher-life-store.js": "e05b7095cc672ae0fc85ad6dbd16182afb3377250e8eb196e00f2cebf2edd834",
+    "server/launcher-minigames.js": "10da3ff7b9647d40d72119e3c129689231238096fd677301df877e72edbdf8ac"
+  },
+  "assetSha256": {
+    "public/images/launcher_room/minigames_v1/cargo-books.webp": "250b3c104962d0fa11cff697fd0a1ebdf37423087527223a361e472a51acfb54",
+    "public/images/launcher_room/minigames_v1/cargo-tools.webp": "acd561dc84ff939621f9e16bdf9910f339bb94d17329f4959789e8791b0dc6a0",
+    "public/images/launcher_room/minigames_v1/deck.webp": "ffcd35bf294edcdc8c50564a4d34b292bea87f920824731b5ed3547c7ea5dc62",
+    "public/images/launcher_room/robin_v2/acting/east.webp": "b83c282b9fecf35658ca3e0525bbec999628910bd65286b6599a3daa2c77318b",
+    "public/images/launcher_room/robin_v2/acting/north.webp": "63fe861cb8964bd75356d82c91be4aee69e68a0c026ef7f414b1218ac6de2c04",
+    "public/images/launcher_room/robin_v2/acting/south.webp": "fb90d3cfd9be07b3f897efd20a75b951b51018029c35433f0e3efe9dab32d218",
+    "public/images/launcher_room/robin_v2/acting/west.webp": "a4180b244f3265cb34caa35de72b2bb903a9e3a66e6647dee72b2030a8db0e52",
+    "public/images/launcher_room/robin_v2/life/eat-south.webp": "c8f7f71be61d287cd32e8172d2ffe2ca6b4b8d2236168ae5d16f80d7df7751cc",
+    "public/images/launcher_room/robin_v2/life/read-east.webp": "0d29dd349946a6d0db812bd11ac437311915cc6d51517c7533247a8af8229d87",
+    "public/images/launcher_room/robin_v2/life/read-north.webp": "ee40cb18594d329435df93faed49b6cf1a2328f3310ea5c3e8052d30c9e4bf60",
+    "public/images/launcher_room/robin_v2/life/read-south.webp": "1a650d94ecee7a6a3f05b4f33210b8d6b886f8d9f6b10629d06b1d34ad3b4f93",
+    "public/images/launcher_room/robin_v2/life/read-west.webp": "f0204573e8f0be5efa96eae30a45cfb2e48770d89030f802688c6a6d122a1b54",
+    "public/images/launcher_room/robin_v2/life/rest-south.webp": "57a67fb3277e927fe83ba8f34be74fad56dfcfd416ffb8eb7fee5f4925075763",
+    "public/images/launcher_room/robin_v2/life/sleep-south.webp": "e332450d4ea4da78814a5dba0da32f517b888b82759081ba1c0000088058834b",
+    "public/images/launcher_room/robin_v2/life/train-south.webp": "5bdb203bb54aee758fea40749dc8a11a38fb5f72cdc04ebb57ddc0861d9be84f",
+    "public/images/launcher_room/robin_v2/life/work-east.webp": "872f43b8b65f1cbedc38b586e61641c8bc821e46d1d5dd881d79697fb8f9cc94",
+    "public/images/launcher_room/robin_v2/life/work-north.webp": "a12e0db2edc8a49780c3674b4394d24193aa93e81eae6c1d861a82364aefc60a",
+    "public/images/launcher_room/robin_v2/life/work-south.webp": "99c625ae79933af25cf43035822cc537292b13b00ddf36de08ba983954b65946",
+    "public/images/launcher_room/robin_v2/life/work-west.webp": "6fe6b3936d6380f5a44059cbce34063d7ab782a3a23b18e15697063ea175c11c",
+    "public/images/launcher_room/robin_v2/portrait.webp": "ddf9577b980c778f6d9190533181b0b8061757e5838105db299ab46148c0232c",
+    "public/images/launcher_room/robin_v2/walk/east.webp": "713da4baf28e90895a821f84a82546d13f51e6ec600afcdbadc2cc9834b141cf",
+    "public/images/launcher_room/robin_v2/walk/north.webp": "56cc1ff75f4b441c4223885b4320502b5931fbfeb6fba8e1196a8f008c1224f1",
+    "public/images/launcher_room/robin_v2/walk/south.webp": "32d1c6e9e3fe67c7498ebf50bd4a4c85057fe8350dff56f3a6fdb0b28a7cc1e1",
+    "public/images/launcher_room/robin_v2/walk/west.webp": "b9032bd2dfd36f67610f96dfefef3936438464247bec58d1120c6bcbdd30a101"
+  },
+  "commands": [
+    {
+      "type": "minigame.start",
+      "payload": {
+        "kind": "training",
+        "characterId": "room-character-robin"
+      },
+      "ok": true,
+      "at": "2026-09-27T18:41:04.383Z"
+    },
+    {
+      "type": "minigame.cancel",
+      "payload": {},
+      "ok": true,
+      "at": "2026-09-27T18:41:04.893Z"
+    },
+    {
+      "type": "minigame.start",
+      "payload": {
+        "kind": "work",
+        "characterId": "room-character-robin"
+      },
+      "ok": true,
+      "at": "2026-09-27T18:41:05.423Z"
+    },
+    {
+      "type": "minigame.cancel",
+      "payload": {},
+      "ok": true,
+      "at": "2026-09-27T18:41:06.488Z"
+    },
+    {
+      "type": "minigame.start",
+      "payload": {
+        "kind": "training",
+        "characterId": "room-character-robin",
+        "practice": true
+      },
+      "ok": true,
+      "at": "2026-09-27T18:41:07.244Z"
+    },
+    {
+      "type": "minigame.cancel",
+      "payload": {},
+      "ok": true,
+      "at": "2026-09-27T18:41:07.523Z"
+    },
+    {
+      "type": "minigame.start",
+      "payload": {
+        "kind": "training",
+        "characterId": "room-character-robin",
+        "practice": true
+      },
+      "ok": true,
+      "at": "2026-09-27T18:41:08.268Z"
+    },
+    {
+      "type": "minigame.cancel",
+      "payload": {},
+      "ok": true,
+      "at": "2026-09-27T18:41:08.311Z"
+    }
+  ],
+  "missing": [],
+  "errors": [],
+  "limitations": [
+    "Production HTML/CSP/scripts and actual room-wheel entry, real service functions with isolated PGlite.",
+    "Automated desktop/narrow Chromium, not human or physical-device acceptance.",
+    "No production account or live purchase."
+  ]
+}

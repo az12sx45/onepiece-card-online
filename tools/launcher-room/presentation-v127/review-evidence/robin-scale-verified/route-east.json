@@ -1,0 +1,2646 @@
+[
+  {
+    "state": {
+      "interaction": null,
+      "life": {
+        "schemaVersion": 1,
+        "revision": 1,
+        "disposed": false,
+        "paused": false,
+        "directive": "free_day",
+        "writable": true,
+        "releasedCharacterIds": [
+          "room-character-luffy",
+          "room-character-zoro",
+          "room-character-nami",
+          "room-character-usopp",
+          "room-character-sanji",
+          "room-character-chopper",
+          "room-character-robin",
+          "room-character-franky",
+          "room-character-brook",
+          "room-character-jinbe"
+        ],
+        "rosterRevision": 0,
+        "ownedCharacterIds": [
+          "room-character-robin"
+        ],
+        "characters": {
+          "robin": {
+            "key": "robin",
+            "itemId": "room-character-robin",
+            "state": "Idle",
+            "needs": {
+              "energy": 85,
+              "hunger": 20,
+              "mood": 70,
+              "social": 70,
+              "workMotivation": 70
+            },
+            "memories": [],
+            "nextAt": 1790481600471,
+            "taps": [],
+            "taskToken": null,
+            "lastWorkAt": 0,
+            "missingClip": ""
+          }
+        },
+        "pairs": {},
+        "jobs": [],
+        "pendingArrivals": [],
+        "tasks": [],
+        "foreground": null,
+        "reservations": [],
+        "recentEvents": [],
+        "nextRareAt": 1790481960471,
+        "nextForegroundAt": 1790481612471,
+        "offlineSummary": null
+      },
+      "walkers": [
+        {
+          "key": "robin",
+          "cell": {
+            "col": 3,
+            "row": 4
+          },
+          "x": 254.4375,
+          "y": 422,
+          "mode": "wander",
+          "attention": false,
+          "phase": 0,
+          "direction": "south",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 4,
+              "row": 4
+            },
+            {
+              "col": 5,
+              "row": 4
+            },
+            {
+              "col": 6,
+              "row": 4
+            }
+          ]
+        }
+      ],
+      "now": 1790481604100,
+      "editing": false,
+      "nodes": [
+        {
+          "key": "robin",
+          "hidden": false,
+          "pose": "idle",
+          "source": "acting_v4",
+          "frame": "0",
+          "speech": ""
+        }
+      ]
+    },
+    "pixels": [
+      {
+        "key": "robin",
+        "source": "acting_v4",
+        "frame": "1",
+        "pose": "idle",
+        "cell": 256,
+        "bounds": [
+          93,
+          28,
+          163,
+          224
+        ],
+        "logicalBounds": [
+          46.5,
+          14,
+          81.5,
+          112
+        ],
+        "bodyWidth": 45.015432834625244,
+        "bodyHeight": 126.04316520690918,
+        "feetY": 534.2187652587891,
+        "rootY": 534.21875,
+        "scale": 1.3554848130841124,
+        "opaque": 7639
+      }
+    ]
+  },
+  {
+    "state": {
+      "interaction": null,
+      "life": {
+        "schemaVersion": 1,
+        "revision": 1,
+        "disposed": false,
+        "paused": false,
+        "directive": "free_day",
+        "writable": true,
+        "releasedCharacterIds": [
+          "room-character-luffy",
+          "room-character-zoro",
+          "room-character-nami",
+          "room-character-usopp",
+          "room-character-sanji",
+          "room-character-chopper",
+          "room-character-robin",
+          "room-character-franky",
+          "room-character-brook",
+          "room-character-jinbe"
+        ],
+        "rosterRevision": 0,
+        "ownedCharacterIds": [
+          "room-character-robin"
+        ],
+        "characters": {
+          "robin": {
+            "key": "robin",
+            "itemId": "room-character-robin",
+            "state": "Idle",
+            "needs": {
+              "energy": 85,
+              "hunger": 20,
+              "mood": 70,
+              "social": 70,
+              "workMotivation": 70
+            },
+            "memories": [],
+            "nextAt": 1790481600471,
+            "taps": [],
+            "taskToken": null,
+            "lastWorkAt": 0,
+            "missingClip": ""
+          }
+        },
+        "pairs": {},
+        "jobs": [],
+        "pendingArrivals": [],
+        "tasks": [],
+        "foreground": null,
+        "reservations": [],
+        "recentEvents": [],
+        "nextRareAt": 1790481960471,
+        "nextForegroundAt": 1790481612471,
+        "offlineSummary": null
+      },
+      "walkers": [
+        {
+          "key": "robin",
+          "cell": {
+            "col": 3,
+            "row": 4
+          },
+          "x": 256.9315898872991,
+          "y": 422,
+          "mode": "wander",
+          "attention": false,
+          "phase": 0.03999996521739131,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 4,
+              "row": 4
+            },
+            {
+              "col": 5,
+              "row": 4
+            },
+            {
+              "col": 6,
+              "row": 4
+            }
+          ]
+        }
+      ],
+      "now": 1790481604200,
+      "editing": false,
+      "nodes": [
+        {
+          "key": "robin",
+          "hidden": false,
+          "pose": "walk",
+          "source": "motion_v4",
+          "frame": "0",
+          "speech": ""
+        }
+      ]
+    },
+    "pixels": [
+      {
+        "key": "robin",
+        "source": "motion_v4",
+        "frame": "0",
+        "pose": "walk",
+        "cell": 384,
+        "bounds": [
+          138,
+          42,
+          277,
+          337
+        ],
+        "logicalBounds": [
+          46,
+          14,
+          92.33333333333333,
+          112.33333333333333
+        ],
+        "bodyWidth": 59.59185870488485,
+        "bodyHeight": 126.47188345591226,
+        "feetY": 534.6474835077922,
+        "rootY": 534.21875,
+        "scale": 1.3554848130841124,
+        "opaque": 17520
+      }
+    ]
+  },
+  {
+    "state": {
+      "interaction": null,
+      "life": {
+        "schemaVersion": 1,
+        "revision": 1,
+        "disposed": false,
+        "paused": false,
+        "directive": "free_day",
+        "writable": true,
+        "releasedCharacterIds": [
+          "room-character-luffy",
+          "room-character-zoro",
+          "room-character-nami",
+          "room-character-usopp",
+          "room-character-sanji",
+          "room-character-chopper",
+          "room-character-robin",
+          "room-character-franky",
+          "room-character-brook",
+          "room-character-jinbe"
+        ],
+        "rosterRevision": 0,
+        "ownedCharacterIds": [
+          "room-character-robin"
+        ],
+        "characters": {
+          "robin": {
+            "key": "robin",
+            "itemId": "room-character-robin",
+            "state": "Idle",
+            "needs": {
+              "energy": 85,
+              "hunger": 20,
+              "mood": 70,
+              "social": 70,
+              "workMotivation": 70
+            },
+            "memories": [],
+            "nextAt": 1790481600471,
+            "taps": [],
+            "taskToken": null,
+            "lastWorkAt": 0,
+            "missingClip": ""
+          }
+        },
+        "pairs": {},
+        "jobs": [],
+        "pendingArrivals": [],
+        "tasks": [],
+        "foreground": null,
+        "reservations": [],
+        "recentEvents": [],
+        "nextRareAt": 1790481960471,
+        "nextForegroundAt": 1790481612471,
+        "offlineSummary": null
+      },
+      "walkers": [
+        {
+          "key": "robin",
+          "cell": {
+            "col": 3,
+            "row": 4
+          },
+          "x": 261.91976966189736,
+          "y": 422,
+          "mode": "wander",
+          "attention": false,
+          "phase": 0.11999989565217391,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 4,
+              "row": 4
+            },
+            {
+              "col": 5,
+              "row": 4
+            },
+            {
+              "col": 6,
+              "row": 4
+            }
+          ]
+        }
+      ],
+      "now": 1790481604300,
+      "editing": false,
+      "nodes": [
+        {
+          "key": "robin",
+          "hidden": false,
+          "pose": "walk",
+          "source": "motion_v4",
+          "frame": "0",
+          "speech": ""
+        }
+      ]
+    },
+    "pixels": [
+      {
+        "key": "robin",
+        "source": "motion_v4",
+        "frame": "0",
+        "pose": "walk",
+        "cell": 384,
+        "bounds": [
+          138,
+          42,
+          277,
+          337
+        ],
+        "logicalBounds": [
+          46,
+          14,
+          92.33333333333333,
+          112.33333333333333
+        ],
+        "bodyWidth": 59.59185870488485,
+        "bodyHeight": 126.47188345591226,
+        "feetY": 534.6474835077922,
+        "rootY": 534.21875,
+        "scale": 1.3554848130841124,
+        "opaque": 17520
+      }
+    ]
+  },
+  {
+    "state": {
+      "interaction": null,
+      "life": {
+        "schemaVersion": 1,
+        "revision": 1,
+        "disposed": false,
+        "paused": false,
+        "directive": "free_day",
+        "writable": true,
+        "releasedCharacterIds": [
+          "room-character-luffy",
+          "room-character-zoro",
+          "room-character-nami",
+          "room-character-usopp",
+          "room-character-sanji",
+          "room-character-chopper",
+          "room-character-robin",
+          "room-character-franky",
+          "room-character-brook",
+          "room-character-jinbe"
+        ],
+        "rosterRevision": 0,
+        "ownedCharacterIds": [
+          "room-character-robin"
+        ],
+        "characters": {
+          "robin": {
+            "key": "robin",
+            "itemId": "room-character-robin",
+            "state": "Idle",
+            "needs": {
+              "energy": 85,
+              "hunger": 20,
+              "mood": 70,
+              "social": 70,
+              "workMotivation": 70
+            },
+            "memories": [],
+            "nextAt": 1790481600471,
+            "taps": [],
+            "taskToken": null,
+            "lastWorkAt": 0,
+            "missingClip": ""
+          }
+        },
+        "pairs": {},
+        "jobs": [],
+        "pendingArrivals": [],
+        "tasks": [],
+        "foreground": null,
+        "reservations": [],
+        "recentEvents": [],
+        "nextRareAt": 1790481960471,
+        "nextForegroundAt": 1790481612471,
+        "offlineSummary": null
+      },
+      "walkers": [
+        {
+          "key": "robin",
+          "cell": {
+            "col": 3,
+            "row": 4
+          },
+          "x": 267.739312732262,
+          "y": 422,
+          "mode": "wander",
+          "attention": false,
+          "phase": 0.21333314782608695,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 4,
+              "row": 4
+            },
+            {
+              "col": 5,
+              "row": 4
+            },
+            {
+              "col": 6,
+              "row": 4
+            }
+          ]
+        }
+      ],
+      "now": 1790481604400,
+      "editing": false,
+      "nodes": [
+        {
+          "key": "robin",
+          "hidden": false,
+          "pose": "walk",
+          "source": "motion_v4",
+          "frame": "0",
+          "speech": ""
+        }
+      ]
+    },
+    "pixels": [
+      {
+        "key": "robin",
+        "source": "motion_v4",
+        "frame": "0",
+        "pose": "walk",
+        "cell": 384,
+        "bounds": [
+          138,
+          42,
+          277,
+          337
+        ],
+        "logicalBounds": [
+          46,
+          14,
+          92.33333333333333,
+          112.33333333333333
+        ],
+        "bodyWidth": 59.59185870488485,
+        "bodyHeight": 126.47188345591226,
+        "feetY": 534.6474835077922,
+        "rootY": 534.21875,
+        "scale": 1.3554848130841124,
+        "opaque": 17520
+      }
+    ]
+  },
+  {
+    "state": {
+      "interaction": null,
+      "life": {
+        "schemaVersion": 1,
+        "revision": 1,
+        "disposed": false,
+        "paused": false,
+        "directive": "free_day",
+        "writable": true,
+        "releasedCharacterIds": [
+          "room-character-luffy",
+          "room-character-zoro",
+          "room-character-nami",
+          "room-character-usopp",
+          "room-character-sanji",
+          "room-character-chopper",
+          "room-character-robin",
+          "room-character-franky",
+          "room-character-brook",
+          "room-character-jinbe"
+        ],
+        "rosterRevision": 0,
+        "ownedCharacterIds": [
+          "room-character-robin"
+        ],
+        "characters": {
+          "robin": {
+            "key": "robin",
+            "itemId": "room-character-robin",
+            "state": "Idle",
+            "needs": {
+              "energy": 85,
+              "hunger": 20,
+              "mood": 70,
+              "social": 70,
+              "workMotivation": 70
+            },
+            "memories": [],
+            "nextAt": 1790481600471,
+            "taps": [],
+            "taskToken": null,
+            "lastWorkAt": 0,
+            "missingClip": ""
+          }
+        },
+        "pairs": {},
+        "jobs": [],
+        "pendingArrivals": [],
+        "tasks": [],
+        "foreground": null,
+        "reservations": [],
+        "recentEvents": [],
+        "nextRareAt": 1790481960471,
+        "nextForegroundAt": 1790481612471,
+        "offlineSummary": null
+      },
+      "walkers": [
+        {
+          "key": "robin",
+          "cell": {
+            "col": 3,
+            "row": 4
+          },
+          "x": 272.7274925068603,
+          "y": 422,
+          "mode": "wander",
+          "attention": false,
+          "phase": 0.2933330782608696,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 4,
+              "row": 4
+            },
+            {
+              "col": 5,
+              "row": 4
+            },
+            {
+              "col": 6,
+              "row": 4
+            }
+          ]
+        }
+      ],
+      "now": 1790481604500,
+      "editing": false,
+      "nodes": [
+        {
+          "key": "robin",
+          "hidden": false,
+          "pose": "walk",
+          "source": "motion_v4",
+          "frame": "0",
+          "speech": ""
+        }
+      ]
+    },
+    "pixels": [
+      {
+        "key": "robin",
+        "source": "motion_v4",
+        "frame": "1",
+        "pose": "walk",
+        "cell": 384,
+        "bounds": [
+          157,
+          42,
+          232,
+          336
+        ],
+        "logicalBounds": [
+          52.333333333333336,
+          14,
+          77.33333333333333,
+          112
+        ],
+        "bodyWidth": 32.15388059616089,
+        "bodyHeight": 126.04321193695068,
+        "feetY": 534.2187576293945,
+        "rootY": 534.21875,
+        "scale": 1.3554848130841124,
+        "opaque": 13402
+      }
+    ]
+  },
+  {
+    "state": {
+      "interaction": null,
+      "life": {
+        "schemaVersion": 1,
+        "revision": 1,
+        "disposed": false,
+        "paused": false,
+        "directive": "free_day",
+        "writable": true,
+        "releasedCharacterIds": [
+          "room-character-luffy",
+          "room-character-zoro",
+          "room-character-nami",
+          "room-character-usopp",
+          "room-character-sanji",
+          "room-character-chopper",
+          "room-character-robin",
+          "room-character-franky",
+          "room-character-brook",
+          "room-character-jinbe"
+        ],
+        "rosterRevision": 0,
+        "ownedCharacterIds": [
+          "room-character-robin"
+        ],
+        "characters": {
+          "robin": {
+            "key": "robin",
+            "itemId": "room-character-robin",
+            "state": "Idle",
+            "needs": {
+              "energy": 85,
+              "hunger": 20,
+              "mood": 70,
+              "social": 70,
+              "workMotivation": 70
+            },
+            "memories": [],
+            "nextAt": 1790481600471,
+            "taps": [],
+            "taskToken": null,
+            "lastWorkAt": 0,
+            "missingClip": ""
+          }
+        },
+        "pairs": {},
+        "jobs": [],
+        "pendingArrivals": [],
+        "tasks": [],
+        "foreground": null,
+        "reservations": [],
+        "recentEvents": [],
+        "nextRareAt": 1790481960471,
+        "nextForegroundAt": 1790481612471,
+        "offlineSummary": null
+      },
+      "walkers": [
+        {
+          "key": "robin",
+          "cell": {
+            "col": 3,
+            "row": 4
+          },
+          "x": 277.7156722814586,
+          "y": 422,
+          "mode": "wander",
+          "attention": false,
+          "phase": 0.37333300869565217,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 4,
+              "row": 4
+            },
+            {
+              "col": 5,
+              "row": 4
+            },
+            {
+              "col": 6,
+              "row": 4
+            }
+          ]
+        }
+      ],
+      "now": 1790481604600,
+      "editing": false,
+      "nodes": [
+        {
+          "key": "robin",
+          "hidden": false,
+          "pose": "walk",
+          "source": "motion_v4",
+          "frame": "0",
+          "speech": ""
+        }
+      ]
+    },
+    "pixels": [
+      {
+        "key": "robin",
+        "source": "motion_v4",
+        "frame": "1",
+        "pose": "walk",
+        "cell": 384,
+        "bounds": [
+          157,
+          42,
+          232,
+          336
+        ],
+        "logicalBounds": [
+          52.333333333333336,
+          14,
+          77.33333333333333,
+          112
+        ],
+        "bodyWidth": 32.15388059616089,
+        "bodyHeight": 126.04321193695068,
+        "feetY": 534.2187576293945,
+        "rootY": 534.21875,
+        "scale": 1.3554848130841124,
+        "opaque": 13402
+      }
+    ]
+  },
+  {
+    "state": {
+      "interaction": null,
+      "life": {
+        "schemaVersion": 1,
+        "revision": 1,
+        "disposed": false,
+        "paused": false,
+        "directive": "free_day",
+        "writable": true,
+        "releasedCharacterIds": [
+          "room-character-luffy",
+          "room-character-zoro",
+          "room-character-nami",
+          "room-character-usopp",
+          "room-character-sanji",
+          "room-character-chopper",
+          "room-character-robin",
+          "room-character-franky",
+          "room-character-brook",
+          "room-character-jinbe"
+        ],
+        "rosterRevision": 0,
+        "ownedCharacterIds": [
+          "room-character-robin"
+        ],
+        "characters": {
+          "robin": {
+            "key": "robin",
+            "itemId": "room-character-robin",
+            "state": "Idle",
+            "needs": {
+              "energy": 85,
+              "hunger": 20,
+              "mood": 70,
+              "social": 70,
+              "workMotivation": 70
+            },
+            "memories": [],
+            "nextAt": 1790481600471,
+            "taps": [],
+            "taskToken": null,
+            "lastWorkAt": 0,
+            "missingClip": ""
+          }
+        },
+        "pairs": {},
+        "jobs": [],
+        "pendingArrivals": [],
+        "tasks": [],
+        "foreground": null,
+        "reservations": [],
+        "recentEvents": [],
+        "nextRareAt": 1790481960471,
+        "nextForegroundAt": 1790481612471,
+        "offlineSummary": null
+      },
+      "walkers": [
+        {
+          "key": "robin",
+          "cell": {
+            "col": 3,
+            "row": 4
+          },
+          "x": 282.70385205605686,
+          "y": 422,
+          "mode": "wander",
+          "attention": false,
+          "phase": 0.45333293913043476,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 4,
+              "row": 4
+            },
+            {
+              "col": 5,
+              "row": 4
+            },
+            {
+              "col": 6,
+              "row": 4
+            }
+          ]
+        }
+      ],
+      "now": 1790481604700,
+      "editing": false,
+      "nodes": [
+        {
+          "key": "robin",
+          "hidden": false,
+          "pose": "walk",
+          "source": "motion_v4",
+          "frame": "0",
+          "speech": ""
+        }
+      ]
+    },
+    "pixels": [
+      {
+        "key": "robin",
+        "source": "motion_v4",
+        "frame": "1",
+        "pose": "walk",
+        "cell": 384,
+        "bounds": [
+          157,
+          42,
+          232,
+          336
+        ],
+        "logicalBounds": [
+          52.333333333333336,
+          14,
+          77.33333333333333,
+          112
+        ],
+        "bodyWidth": 32.153886556625366,
+        "bodyHeight": 126.04321193695068,
+        "feetY": 534.2187576293945,
+        "rootY": 534.21875,
+        "scale": 1.3554848130841124,
+        "opaque": 13402
+      }
+    ]
+  },
+  {
+    "state": {
+      "interaction": null,
+      "life": {
+        "schemaVersion": 1,
+        "revision": 1,
+        "disposed": false,
+        "paused": false,
+        "directive": "free_day",
+        "writable": true,
+        "releasedCharacterIds": [
+          "room-character-luffy",
+          "room-character-zoro",
+          "room-character-nami",
+          "room-character-usopp",
+          "room-character-sanji",
+          "room-character-chopper",
+          "room-character-robin",
+          "room-character-franky",
+          "room-character-brook",
+          "room-character-jinbe"
+        ],
+        "rosterRevision": 0,
+        "ownedCharacterIds": [
+          "room-character-robin"
+        ],
+        "characters": {
+          "robin": {
+            "key": "robin",
+            "itemId": "room-character-robin",
+            "state": "Idle",
+            "needs": {
+              "energy": 85,
+              "hunger": 20,
+              "mood": 70,
+              "social": 70,
+              "workMotivation": 70
+            },
+            "memories": [],
+            "nextAt": 1790481600471,
+            "taps": [],
+            "taskToken": null,
+            "lastWorkAt": 0,
+            "missingClip": ""
+          }
+        },
+        "pairs": {},
+        "jobs": [],
+        "pendingArrivals": [],
+        "tasks": [],
+        "foreground": null,
+        "reservations": [],
+        "recentEvents": [],
+        "nextRareAt": 1790481960471,
+        "nextForegroundAt": 1790481612471,
+        "offlineSummary": null
+      },
+      "walkers": [
+        {
+          "key": "robin",
+          "cell": {
+            "col": 3,
+            "row": 4
+          },
+          "x": 288.5233951264215,
+          "y": 422,
+          "mode": "wander",
+          "attention": false,
+          "phase": 0.546666191304348,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 4,
+              "row": 4
+            },
+            {
+              "col": 5,
+              "row": 4
+            },
+            {
+              "col": 6,
+              "row": 4
+            }
+          ]
+        }
+      ],
+      "now": 1790481604800,
+      "editing": false,
+      "nodes": [
+        {
+          "key": "robin",
+          "hidden": false,
+          "pose": "walk",
+          "source": "motion_v4",
+          "frame": "0",
+          "speech": ""
+        }
+      ]
+    },
+    "pixels": [
+      {
+        "key": "robin",
+        "source": "motion_v4",
+        "frame": "2",
+        "pose": "walk",
+        "cell": 384,
+        "bounds": [
+          135,
+          42,
+          265,
+          337
+        ],
+        "logicalBounds": [
+          45,
+          14,
+          88.33333333333333,
+          112.33333333333333
+        ],
+        "bodyWidth": 55.733403364817306,
+        "bodyHeight": 126.47193034489949,
+        "feetY": 534.6474760373433,
+        "rootY": 534.21875,
+        "scale": 1.3554848130841124,
+        "opaque": 16900
+      }
+    ]
+  },
+  {
+    "state": {
+      "interaction": null,
+      "life": {
+        "schemaVersion": 1,
+        "revision": 1,
+        "disposed": false,
+        "paused": false,
+        "directive": "free_day",
+        "writable": true,
+        "releasedCharacterIds": [
+          "room-character-luffy",
+          "room-character-zoro",
+          "room-character-nami",
+          "room-character-usopp",
+          "room-character-sanji",
+          "room-character-chopper",
+          "room-character-robin",
+          "room-character-franky",
+          "room-character-brook",
+          "room-character-jinbe"
+        ],
+        "rosterRevision": 0,
+        "ownedCharacterIds": [
+          "room-character-robin"
+        ],
+        "characters": {
+          "robin": {
+            "key": "robin",
+            "itemId": "room-character-robin",
+            "state": "Idle",
+            "needs": {
+              "energy": 85,
+              "hunger": 20,
+              "mood": 70,
+              "social": 70,
+              "workMotivation": 70
+            },
+            "memories": [],
+            "nextAt": 1790481600471,
+            "taps": [],
+            "taskToken": null,
+            "lastWorkAt": 0,
+            "missingClip": ""
+          }
+        },
+        "pairs": {},
+        "jobs": [],
+        "pendingArrivals": [],
+        "tasks": [],
+        "foreground": null,
+        "reservations": [],
+        "recentEvents": [],
+        "nextRareAt": 1790481960471,
+        "nextForegroundAt": 1790481612471,
+        "offlineSummary": null
+      },
+      "walkers": [
+        {
+          "key": "robin",
+          "cell": {
+            "col": 3,
+            "row": 4
+          },
+          "x": 293.5115749010198,
+          "y": 422,
+          "mode": "wander",
+          "attention": false,
+          "phase": 0.6266661217391309,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 4,
+              "row": 4
+            },
+            {
+              "col": 5,
+              "row": 4
+            },
+            {
+              "col": 6,
+              "row": 4
+            }
+          ]
+        }
+      ],
+      "now": 1790481604900,
+      "editing": false,
+      "nodes": [
+        {
+          "key": "robin",
+          "hidden": false,
+          "pose": "walk",
+          "source": "motion_v4",
+          "frame": "0",
+          "speech": ""
+        }
+      ]
+    },
+    "pixels": [
+      {
+        "key": "robin",
+        "source": "motion_v4",
+        "frame": "2",
+        "pose": "walk",
+        "cell": 384,
+        "bounds": [
+          135,
+          42,
+          265,
+          337
+        ],
+        "logicalBounds": [
+          45,
+          14,
+          88.33333333333333,
+          112.33333333333333
+        ],
+        "bodyWidth": 55.733403364817306,
+        "bodyHeight": 126.47193034489949,
+        "feetY": 534.6474760373433,
+        "rootY": 534.21875,
+        "scale": 1.3554848130841124,
+        "opaque": 16900
+      }
+    ]
+  },
+  {
+    "state": {
+      "interaction": null,
+      "life": {
+        "schemaVersion": 1,
+        "revision": 1,
+        "disposed": false,
+        "paused": false,
+        "directive": "free_day",
+        "writable": true,
+        "releasedCharacterIds": [
+          "room-character-luffy",
+          "room-character-zoro",
+          "room-character-nami",
+          "room-character-usopp",
+          "room-character-sanji",
+          "room-character-chopper",
+          "room-character-robin",
+          "room-character-franky",
+          "room-character-brook",
+          "room-character-jinbe"
+        ],
+        "rosterRevision": 0,
+        "ownedCharacterIds": [
+          "room-character-robin"
+        ],
+        "characters": {
+          "robin": {
+            "key": "robin",
+            "itemId": "room-character-robin",
+            "state": "Idle",
+            "needs": {
+              "energy": 85,
+              "hunger": 20,
+              "mood": 70,
+              "social": 70,
+              "workMotivation": 70
+            },
+            "memories": [],
+            "nextAt": 1790481600471,
+            "taps": [],
+            "taskToken": null,
+            "lastWorkAt": 0,
+            "missingClip": ""
+          }
+        },
+        "pairs": {},
+        "jobs": [],
+        "pendingArrivals": [],
+        "tasks": [],
+        "foreground": null,
+        "reservations": [],
+        "recentEvents": [],
+        "nextRareAt": 1790481960471,
+        "nextForegroundAt": 1790481612471,
+        "offlineSummary": null
+      },
+      "walkers": [
+        {
+          "key": "robin",
+          "cell": {
+            "col": 3,
+            "row": 4
+          },
+          "x": 298.4997546756181,
+          "y": 422,
+          "mode": "wander",
+          "attention": false,
+          "phase": 0.7066660521739139,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 4,
+              "row": 4
+            },
+            {
+              "col": 5,
+              "row": 4
+            },
+            {
+              "col": 6,
+              "row": 4
+            }
+          ]
+        }
+      ],
+      "now": 1790481605000,
+      "editing": false,
+      "nodes": [
+        {
+          "key": "robin",
+          "hidden": false,
+          "pose": "walk",
+          "source": "motion_v4",
+          "frame": "0",
+          "speech": ""
+        }
+      ]
+    },
+    "pixels": [
+      {
+        "key": "robin",
+        "source": "motion_v4",
+        "frame": "2",
+        "pose": "walk",
+        "cell": 384,
+        "bounds": [
+          135,
+          42,
+          265,
+          337
+        ],
+        "logicalBounds": [
+          45,
+          14,
+          88.33333333333333,
+          112.33333333333333
+        ],
+        "bodyWidth": 55.733403364817306,
+        "bodyHeight": 126.47193034489949,
+        "feetY": 534.6474760373433,
+        "rootY": 534.21875,
+        "scale": 1.3554848130841124,
+        "opaque": 16900
+      }
+    ]
+  },
+  {
+    "state": {
+      "interaction": null,
+      "life": {
+        "schemaVersion": 1,
+        "revision": 1,
+        "disposed": false,
+        "paused": false,
+        "directive": "free_day",
+        "writable": true,
+        "releasedCharacterIds": [
+          "room-character-luffy",
+          "room-character-zoro",
+          "room-character-nami",
+          "room-character-usopp",
+          "room-character-sanji",
+          "room-character-chopper",
+          "room-character-robin",
+          "room-character-franky",
+          "room-character-brook",
+          "room-character-jinbe"
+        ],
+        "rosterRevision": 0,
+        "ownedCharacterIds": [
+          "room-character-robin"
+        ],
+        "characters": {
+          "robin": {
+            "key": "robin",
+            "itemId": "room-character-robin",
+            "state": "Idle",
+            "needs": {
+              "energy": 85,
+              "hunger": 20,
+              "mood": 70,
+              "social": 70,
+              "workMotivation": 70
+            },
+            "memories": [],
+            "nextAt": 1790481600471,
+            "taps": [],
+            "taskToken": null,
+            "lastWorkAt": 0,
+            "missingClip": ""
+          }
+        },
+        "pairs": {},
+        "jobs": [],
+        "pendingArrivals": [],
+        "tasks": [],
+        "foreground": null,
+        "reservations": [],
+        "recentEvents": [],
+        "nextRareAt": 1790481960471,
+        "nextForegroundAt": 1790481612471,
+        "offlineSummary": null
+      },
+      "walkers": [
+        {
+          "key": "robin",
+          "cell": {
+            "col": 3,
+            "row": 4
+          },
+          "x": 303.48793445021636,
+          "y": 422,
+          "mode": "wander",
+          "attention": false,
+          "phase": 0.7866659826086968,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 4,
+              "row": 4
+            },
+            {
+              "col": 5,
+              "row": 4
+            },
+            {
+              "col": 6,
+              "row": 4
+            }
+          ]
+        }
+      ],
+      "now": 1790481605100,
+      "editing": false,
+      "nodes": [
+        {
+          "key": "robin",
+          "hidden": false,
+          "pose": "walk",
+          "source": "motion_v4",
+          "frame": "0",
+          "speech": ""
+        }
+      ]
+    },
+    "pixels": [
+      {
+        "key": "robin",
+        "source": "motion_v4",
+        "frame": "3",
+        "pose": "walk",
+        "cell": 384,
+        "bounds": [
+          157,
+          42,
+          232,
+          336
+        ],
+        "logicalBounds": [
+          52.333333333333336,
+          14,
+          77.33333333333333,
+          112
+        ],
+        "bodyWidth": 32.153886556625366,
+        "bodyHeight": 126.04321193695068,
+        "feetY": 534.2187576293945,
+        "rootY": 534.21875,
+        "scale": 1.3554848130841124,
+        "opaque": 13402
+      }
+    ]
+  },
+  {
+    "state": {
+      "interaction": null,
+      "life": {
+        "schemaVersion": 1,
+        "revision": 1,
+        "disposed": false,
+        "paused": false,
+        "directive": "free_day",
+        "writable": true,
+        "releasedCharacterIds": [
+          "room-character-luffy",
+          "room-character-zoro",
+          "room-character-nami",
+          "room-character-usopp",
+          "room-character-sanji",
+          "room-character-chopper",
+          "room-character-robin",
+          "room-character-franky",
+          "room-character-brook",
+          "room-character-jinbe"
+        ],
+        "rosterRevision": 0,
+        "ownedCharacterIds": [
+          "room-character-robin"
+        ],
+        "characters": {
+          "robin": {
+            "key": "robin",
+            "itemId": "room-character-robin",
+            "state": "Idle",
+            "needs": {
+              "energy": 85,
+              "hunger": 20,
+              "mood": 70,
+              "social": 70,
+              "workMotivation": 70
+            },
+            "memories": [],
+            "nextAt": 1790481600471,
+            "taps": [],
+            "taskToken": null,
+            "lastWorkAt": 0,
+            "missingClip": ""
+          }
+        },
+        "pairs": {},
+        "jobs": [],
+        "pendingArrivals": [],
+        "tasks": [],
+        "foreground": null,
+        "reservations": [],
+        "recentEvents": [],
+        "nextRareAt": 1790481960471,
+        "nextForegroundAt": 1790481612471,
+        "offlineSummary": null
+      },
+      "walkers": [
+        {
+          "key": "robin",
+          "cell": {
+            "col": 4,
+            "row": 4
+          },
+          "x": 308.7193164788319,
+          "y": 422,
+          "mode": "wander",
+          "attention": false,
+          "phase": 0.8705663665720478,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 5,
+              "row": 4
+            },
+            {
+              "col": 6,
+              "row": 4
+            }
+          ]
+        }
+      ],
+      "now": 1790481605200,
+      "editing": false,
+      "nodes": [
+        {
+          "key": "robin",
+          "hidden": false,
+          "pose": "walk",
+          "source": "motion_v4",
+          "frame": "0",
+          "speech": ""
+        }
+      ]
+    },
+    "pixels": [
+      {
+        "key": "robin",
+        "source": "motion_v4",
+        "frame": "3",
+        "pose": "walk",
+        "cell": 384,
+        "bounds": [
+          157,
+          42,
+          232,
+          336
+        ],
+        "logicalBounds": [
+          52.333333333333336,
+          14,
+          77.33333333333333,
+          112
+        ],
+        "bodyWidth": 32.153886556625366,
+        "bodyHeight": 126.04321193695068,
+        "feetY": 534.2187576293945,
+        "rootY": 534.21875,
+        "scale": 1.3554848130841124,
+        "opaque": 13402
+      }
+    ]
+  },
+  {
+    "state": {
+      "interaction": null,
+      "life": {
+        "schemaVersion": 1,
+        "revision": 1,
+        "disposed": false,
+        "paused": false,
+        "directive": "free_day",
+        "writable": true,
+        "releasedCharacterIds": [
+          "room-character-luffy",
+          "room-character-zoro",
+          "room-character-nami",
+          "room-character-usopp",
+          "room-character-sanji",
+          "room-character-chopper",
+          "room-character-robin",
+          "room-character-franky",
+          "room-character-brook",
+          "room-character-jinbe"
+        ],
+        "rosterRevision": 0,
+        "ownedCharacterIds": [
+          "room-character-robin"
+        ],
+        "characters": {
+          "robin": {
+            "key": "robin",
+            "itemId": "room-character-robin",
+            "state": "Idle",
+            "needs": {
+              "energy": 85,
+              "hunger": 20,
+              "mood": 70,
+              "social": 70,
+              "workMotivation": 70
+            },
+            "memories": [],
+            "nextAt": 1790481600471,
+            "taps": [],
+            "taskToken": null,
+            "lastWorkAt": 0,
+            "missingClip": ""
+          }
+        },
+        "pairs": {},
+        "jobs": [],
+        "pendingArrivals": [],
+        "tasks": [],
+        "foreground": null,
+        "reservations": [],
+        "recentEvents": [],
+        "nextRareAt": 1790481960471,
+        "nextForegroundAt": 1790481612471,
+        "offlineSummary": null
+      },
+      "walkers": [
+        {
+          "key": "robin",
+          "cell": {
+            "col": 4,
+            "row": 4
+          },
+          "x": 313.7074962534302,
+          "y": 422,
+          "mode": "wander",
+          "attention": false,
+          "phase": 0.9505662970068307,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 5,
+              "row": 4
+            },
+            {
+              "col": 6,
+              "row": 4
+            }
+          ]
+        }
+      ],
+      "now": 1790481605300,
+      "editing": false,
+      "nodes": [
+        {
+          "key": "robin",
+          "hidden": false,
+          "pose": "walk",
+          "source": "motion_v4",
+          "frame": "0",
+          "speech": ""
+        }
+      ]
+    },
+    "pixels": [
+      {
+        "key": "robin",
+        "source": "motion_v4",
+        "frame": "3",
+        "pose": "walk",
+        "cell": 384,
+        "bounds": [
+          157,
+          42,
+          232,
+          336
+        ],
+        "logicalBounds": [
+          52.333333333333336,
+          14,
+          77.33333333333333,
+          112
+        ],
+        "bodyWidth": 32.153886556625366,
+        "bodyHeight": 126.04321193695068,
+        "feetY": 534.2187576293945,
+        "rootY": 534.21875,
+        "scale": 1.3554848130841124,
+        "opaque": 13402
+      }
+    ]
+  },
+  {
+    "state": {
+      "interaction": null,
+      "life": {
+        "schemaVersion": 1,
+        "revision": 1,
+        "disposed": false,
+        "paused": false,
+        "directive": "free_day",
+        "writable": true,
+        "releasedCharacterIds": [
+          "room-character-luffy",
+          "room-character-zoro",
+          "room-character-nami",
+          "room-character-usopp",
+          "room-character-sanji",
+          "room-character-chopper",
+          "room-character-robin",
+          "room-character-franky",
+          "room-character-brook",
+          "room-character-jinbe"
+        ],
+        "rosterRevision": 0,
+        "ownedCharacterIds": [
+          "room-character-robin"
+        ],
+        "characters": {
+          "robin": {
+            "key": "robin",
+            "itemId": "room-character-robin",
+            "state": "Idle",
+            "needs": {
+              "energy": 85,
+              "hunger": 20,
+              "mood": 70,
+              "social": 70,
+              "workMotivation": 70
+            },
+            "memories": [],
+            "nextAt": 1790481600471,
+            "taps": [],
+            "taskToken": null,
+            "lastWorkAt": 0,
+            "missingClip": ""
+          }
+        },
+        "pairs": {},
+        "jobs": [],
+        "pendingArrivals": [],
+        "tasks": [],
+        "foreground": null,
+        "reservations": [],
+        "recentEvents": [],
+        "nextRareAt": 1790481960471,
+        "nextForegroundAt": 1790481612471,
+        "offlineSummary": null
+      },
+      "walkers": [
+        {
+          "key": "robin",
+          "cell": {
+            "col": 4,
+            "row": 4
+          },
+          "x": 318.69567602802846,
+          "y": 422,
+          "mode": "wander",
+          "attention": false,
+          "phase": 0.030566227441613532,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 5,
+              "row": 4
+            },
+            {
+              "col": 6,
+              "row": 4
+            }
+          ]
+        }
+      ],
+      "now": 1790481605400,
+      "editing": false,
+      "nodes": [
+        {
+          "key": "robin",
+          "hidden": false,
+          "pose": "walk",
+          "source": "motion_v4",
+          "frame": "0",
+          "speech": ""
+        }
+      ]
+    },
+    "pixels": [
+      {
+        "key": "robin",
+        "source": "motion_v4",
+        "frame": "0",
+        "pose": "walk",
+        "cell": 384,
+        "bounds": [
+          138,
+          42,
+          277,
+          337
+        ],
+        "logicalBounds": [
+          46,
+          14,
+          92.33333333333333,
+          112.33333333333333
+        ],
+        "bodyWidth": 59.59186975161235,
+        "bodyHeight": 126.47193034489949,
+        "feetY": 534.6474760373433,
+        "rootY": 534.21875,
+        "scale": 1.3554848130841124,
+        "opaque": 17520
+      }
+    ]
+  },
+  {
+    "state": {
+      "interaction": null,
+      "life": {
+        "schemaVersion": 1,
+        "revision": 1,
+        "disposed": false,
+        "paused": false,
+        "directive": "free_day",
+        "writable": true,
+        "releasedCharacterIds": [
+          "room-character-luffy",
+          "room-character-zoro",
+          "room-character-nami",
+          "room-character-usopp",
+          "room-character-sanji",
+          "room-character-chopper",
+          "room-character-robin",
+          "room-character-franky",
+          "room-character-brook",
+          "room-character-jinbe"
+        ],
+        "rosterRevision": 0,
+        "ownedCharacterIds": [
+          "room-character-robin"
+        ],
+        "characters": {
+          "robin": {
+            "key": "robin",
+            "itemId": "room-character-robin",
+            "state": "Idle",
+            "needs": {
+              "energy": 85,
+              "hunger": 20,
+              "mood": 70,
+              "social": 70,
+              "workMotivation": 70
+            },
+            "memories": [],
+            "nextAt": 1790481600471,
+            "taps": [],
+            "taskToken": null,
+            "lastWorkAt": 0,
+            "missingClip": ""
+          }
+        },
+        "pairs": {},
+        "jobs": [],
+        "pendingArrivals": [],
+        "tasks": [],
+        "foreground": null,
+        "reservations": [],
+        "recentEvents": [],
+        "nextRareAt": 1790481960471,
+        "nextForegroundAt": 1790481612471,
+        "offlineSummary": null
+      },
+      "walkers": [
+        {
+          "key": "robin",
+          "cell": {
+            "col": 4,
+            "row": 4
+          },
+          "x": 323.68385580262674,
+          "y": 422,
+          "mode": "wander",
+          "attention": false,
+          "phase": 0.11056615787639613,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 5,
+              "row": 4
+            },
+            {
+              "col": 6,
+              "row": 4
+            }
+          ]
+        }
+      ],
+      "now": 1790481605500,
+      "editing": false,
+      "nodes": [
+        {
+          "key": "robin",
+          "hidden": false,
+          "pose": "walk",
+          "source": "motion_v4",
+          "frame": "0",
+          "speech": ""
+        }
+      ]
+    },
+    "pixels": [
+      {
+        "key": "robin",
+        "source": "motion_v4",
+        "frame": "0",
+        "pose": "walk",
+        "cell": 384,
+        "bounds": [
+          138,
+          42,
+          277,
+          337
+        ],
+        "logicalBounds": [
+          46,
+          14,
+          92.33333333333333,
+          112.33333333333333
+        ],
+        "bodyWidth": 59.59186975161235,
+        "bodyHeight": 126.47193034489949,
+        "feetY": 534.6474760373433,
+        "rootY": 534.21875,
+        "scale": 1.3554848130841124,
+        "opaque": 17520
+      }
+    ]
+  },
+  {
+    "state": {
+      "interaction": null,
+      "life": {
+        "schemaVersion": 1,
+        "revision": 1,
+        "disposed": false,
+        "paused": false,
+        "directive": "free_day",
+        "writable": true,
+        "releasedCharacterIds": [
+          "room-character-luffy",
+          "room-character-zoro",
+          "room-character-nami",
+          "room-character-usopp",
+          "room-character-sanji",
+          "room-character-chopper",
+          "room-character-robin",
+          "room-character-franky",
+          "room-character-brook",
+          "room-character-jinbe"
+        ],
+        "rosterRevision": 0,
+        "ownedCharacterIds": [
+          "room-character-robin"
+        ],
+        "characters": {
+          "robin": {
+            "key": "robin",
+            "itemId": "room-character-robin",
+            "state": "Idle",
+            "needs": {
+              "energy": 85,
+              "hunger": 20,
+              "mood": 70,
+              "social": 70,
+              "workMotivation": 70
+            },
+            "memories": [],
+            "nextAt": 1790481600471,
+            "taps": [],
+            "taskToken": null,
+            "lastWorkAt": 0,
+            "missingClip": ""
+          }
+        },
+        "pairs": {},
+        "jobs": [],
+        "pendingArrivals": [],
+        "tasks": [],
+        "foreground": null,
+        "reservations": [],
+        "recentEvents": [],
+        "nextRareAt": 1790481960471,
+        "nextForegroundAt": 1790481612471,
+        "offlineSummary": null
+      },
+      "walkers": [
+        {
+          "key": "robin",
+          "cell": {
+            "col": 4,
+            "row": 4
+          },
+          "x": 329.5033988729914,
+          "y": 422,
+          "mode": "wander",
+          "attention": false,
+          "phase": 0.20389941005030918,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 5,
+              "row": 4
+            },
+            {
+              "col": 6,
+              "row": 4
+            }
+          ]
+        }
+      ],
+      "now": 1790481605600,
+      "editing": false,
+      "nodes": [
+        {
+          "key": "robin",
+          "hidden": false,
+          "pose": "walk",
+          "source": "motion_v4",
+          "frame": "0",
+          "speech": ""
+        }
+      ]
+    },
+    "pixels": [
+      {
+        "key": "robin",
+        "source": "motion_v4",
+        "frame": "0",
+        "pose": "walk",
+        "cell": 384,
+        "bounds": [
+          138,
+          42,
+          277,
+          337
+        ],
+        "logicalBounds": [
+          46,
+          14,
+          92.33333333333333,
+          112.33333333333333
+        ],
+        "bodyWidth": 59.59186975161235,
+        "bodyHeight": 126.47193034489949,
+        "feetY": 534.6474760373433,
+        "rootY": 534.21875,
+        "scale": 1.3554848130841124,
+        "opaque": 17520
+      }
+    ]
+  },
+  {
+    "state": {
+      "interaction": null,
+      "life": {
+        "schemaVersion": 1,
+        "revision": 1,
+        "disposed": false,
+        "paused": false,
+        "directive": "free_day",
+        "writable": true,
+        "releasedCharacterIds": [
+          "room-character-luffy",
+          "room-character-zoro",
+          "room-character-nami",
+          "room-character-usopp",
+          "room-character-sanji",
+          "room-character-chopper",
+          "room-character-robin",
+          "room-character-franky",
+          "room-character-brook",
+          "room-character-jinbe"
+        ],
+        "rosterRevision": 0,
+        "ownedCharacterIds": [
+          "room-character-robin"
+        ],
+        "characters": {
+          "robin": {
+            "key": "robin",
+            "itemId": "room-character-robin",
+            "state": "Idle",
+            "needs": {
+              "energy": 85,
+              "hunger": 20,
+              "mood": 70,
+              "social": 70,
+              "workMotivation": 70
+            },
+            "memories": [],
+            "nextAt": 1790481600471,
+            "taps": [],
+            "taskToken": null,
+            "lastWorkAt": 0,
+            "missingClip": ""
+          }
+        },
+        "pairs": {},
+        "jobs": [],
+        "pendingArrivals": [],
+        "tasks": [],
+        "foreground": null,
+        "reservations": [],
+        "recentEvents": [],
+        "nextRareAt": 1790481960471,
+        "nextForegroundAt": 1790481612471,
+        "offlineSummary": null
+      },
+      "walkers": [
+        {
+          "key": "robin",
+          "cell": {
+            "col": 4,
+            "row": 4
+          },
+          "x": 334.4915786475897,
+          "y": 422,
+          "mode": "wander",
+          "attention": false,
+          "phase": 0.2838993404850918,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 5,
+              "row": 4
+            },
+            {
+              "col": 6,
+              "row": 4
+            }
+          ]
+        }
+      ],
+      "now": 1790481605700,
+      "editing": false,
+      "nodes": [
+        {
+          "key": "robin",
+          "hidden": false,
+          "pose": "walk",
+          "source": "motion_v4",
+          "frame": "0",
+          "speech": ""
+        }
+      ]
+    },
+    "pixels": [
+      {
+        "key": "robin",
+        "source": "motion_v4",
+        "frame": "1",
+        "pose": "walk",
+        "cell": 384,
+        "bounds": [
+          157,
+          42,
+          232,
+          336
+        ],
+        "logicalBounds": [
+          52.333333333333336,
+          14,
+          77.33333333333333,
+          112
+        ],
+        "bodyWidth": 32.153886556625366,
+        "bodyHeight": 126.04321193695068,
+        "feetY": 534.2187576293945,
+        "rootY": 534.21875,
+        "scale": 1.3554848130841124,
+        "opaque": 13402
+      }
+    ]
+  },
+  {
+    "state": {
+      "interaction": null,
+      "life": {
+        "schemaVersion": 1,
+        "revision": 1,
+        "disposed": false,
+        "paused": false,
+        "directive": "free_day",
+        "writable": true,
+        "releasedCharacterIds": [
+          "room-character-luffy",
+          "room-character-zoro",
+          "room-character-nami",
+          "room-character-usopp",
+          "room-character-sanji",
+          "room-character-chopper",
+          "room-character-robin",
+          "room-character-franky",
+          "room-character-brook",
+          "room-character-jinbe"
+        ],
+        "rosterRevision": 0,
+        "ownedCharacterIds": [
+          "room-character-robin"
+        ],
+        "characters": {
+          "robin": {
+            "key": "robin",
+            "itemId": "room-character-robin",
+            "state": "Idle",
+            "needs": {
+              "energy": 85,
+              "hunger": 20,
+              "mood": 70,
+              "social": 70,
+              "workMotivation": 70
+            },
+            "memories": [],
+            "nextAt": 1790481600471,
+            "taps": [],
+            "taskToken": null,
+            "lastWorkAt": 0,
+            "missingClip": ""
+          }
+        },
+        "pairs": {},
+        "jobs": [],
+        "pendingArrivals": [],
+        "tasks": [],
+        "foreground": null,
+        "reservations": [],
+        "recentEvents": [],
+        "nextRareAt": 1790481960471,
+        "nextForegroundAt": 1790481612471,
+        "offlineSummary": null
+      },
+      "walkers": [
+        {
+          "key": "robin",
+          "cell": {
+            "col": 4,
+            "row": 4
+          },
+          "x": 339.47975842218796,
+          "y": 422,
+          "mode": "wander",
+          "attention": false,
+          "phase": 0.3638992709198744,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 5,
+              "row": 4
+            },
+            {
+              "col": 6,
+              "row": 4
+            }
+          ]
+        }
+      ],
+      "now": 1790481605800,
+      "editing": false,
+      "nodes": [
+        {
+          "key": "robin",
+          "hidden": false,
+          "pose": "walk",
+          "source": "motion_v4",
+          "frame": "0",
+          "speech": ""
+        }
+      ]
+    },
+    "pixels": [
+      {
+        "key": "robin",
+        "source": "motion_v4",
+        "frame": "1",
+        "pose": "walk",
+        "cell": 384,
+        "bounds": [
+          157,
+          42,
+          232,
+          336
+        ],
+        "logicalBounds": [
+          52.333333333333336,
+          14,
+          77.33333333333333,
+          112
+        ],
+        "bodyWidth": 32.153886556625366,
+        "bodyHeight": 126.04321193695068,
+        "feetY": 534.2187576293945,
+        "rootY": 534.21875,
+        "scale": 1.3554848130841124,
+        "opaque": 13402
+      }
+    ]
+  },
+  {
+    "state": {
+      "interaction": null,
+      "life": {
+        "schemaVersion": 1,
+        "revision": 1,
+        "disposed": false,
+        "paused": false,
+        "directive": "free_day",
+        "writable": true,
+        "releasedCharacterIds": [
+          "room-character-luffy",
+          "room-character-zoro",
+          "room-character-nami",
+          "room-character-usopp",
+          "room-character-sanji",
+          "room-character-chopper",
+          "room-character-robin",
+          "room-character-franky",
+          "room-character-brook",
+          "room-character-jinbe"
+        ],
+        "rosterRevision": 0,
+        "ownedCharacterIds": [
+          "room-character-robin"
+        ],
+        "characters": {
+          "robin": {
+            "key": "robin",
+            "itemId": "room-character-robin",
+            "state": "Idle",
+            "needs": {
+              "energy": 85,
+              "hunger": 20,
+              "mood": 70,
+              "social": 70,
+              "workMotivation": 70
+            },
+            "memories": [],
+            "nextAt": 1790481600471,
+            "taps": [],
+            "taskToken": null,
+            "lastWorkAt": 0,
+            "missingClip": ""
+          }
+        },
+        "pairs": {},
+        "jobs": [],
+        "pendingArrivals": [],
+        "tasks": [],
+        "foreground": null,
+        "reservations": [],
+        "recentEvents": [],
+        "nextRareAt": 1790481960471,
+        "nextForegroundAt": 1790481612471,
+        "offlineSummary": null
+      },
+      "walkers": [
+        {
+          "key": "robin",
+          "cell": {
+            "col": 4,
+            "row": 4
+          },
+          "x": 344.46793819678624,
+          "y": 422,
+          "mode": "wander",
+          "attention": false,
+          "phase": 0.443899201354657,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 5,
+              "row": 4
+            },
+            {
+              "col": 6,
+              "row": 4
+            }
+          ]
+        }
+      ],
+      "now": 1790481605900,
+      "editing": false,
+      "nodes": [
+        {
+          "key": "robin",
+          "hidden": false,
+          "pose": "walk",
+          "source": "motion_v4",
+          "frame": "0",
+          "speech": ""
+        }
+      ]
+    },
+    "pixels": [
+      {
+        "key": "robin",
+        "source": "motion_v4",
+        "frame": "1",
+        "pose": "walk",
+        "cell": 384,
+        "bounds": [
+          157,
+          42,
+          232,
+          336
+        ],
+        "logicalBounds": [
+          52.333333333333336,
+          14,
+          77.33333333333333,
+          112
+        ],
+        "bodyWidth": 32.153886556625366,
+        "bodyHeight": 126.04321193695068,
+        "feetY": 534.2187576293945,
+        "rootY": 534.21875,
+        "scale": 1.3554848130841124,
+        "opaque": 13402
+      }
+    ]
+  },
+  {
+    "state": {
+      "interaction": null,
+      "life": {
+        "schemaVersion": 1,
+        "revision": 1,
+        "disposed": false,
+        "paused": false,
+        "directive": "free_day",
+        "writable": true,
+        "releasedCharacterIds": [
+          "room-character-luffy",
+          "room-character-zoro",
+          "room-character-nami",
+          "room-character-usopp",
+          "room-character-sanji",
+          "room-character-chopper",
+          "room-character-robin",
+          "room-character-franky",
+          "room-character-brook",
+          "room-character-jinbe"
+        ],
+        "rosterRevision": 0,
+        "ownedCharacterIds": [
+          "room-character-robin"
+        ],
+        "characters": {
+          "robin": {
+            "key": "robin",
+            "itemId": "room-character-robin",
+            "state": "Idle",
+            "needs": {
+              "energy": 85,
+              "hunger": 20,
+              "mood": 70,
+              "social": 70,
+              "workMotivation": 70
+            },
+            "memories": [],
+            "nextAt": 1790481600471,
+            "taps": [],
+            "taskToken": null,
+            "lastWorkAt": 0,
+            "missingClip": ""
+          }
+        },
+        "pairs": {},
+        "jobs": [],
+        "pendingArrivals": [],
+        "tasks": [],
+        "foreground": null,
+        "reservations": [],
+        "recentEvents": [],
+        "nextRareAt": 1790481960471,
+        "nextForegroundAt": 1790481612471,
+        "offlineSummary": null
+      },
+      "walkers": [
+        {
+          "key": "robin",
+          "cell": {
+            "col": 4,
+            "row": 4
+          },
+          "x": 350.2874812671509,
+          "y": 422,
+          "mode": "wander",
+          "attention": false,
+          "phase": 0.5372324535285702,
+          "direction": "east",
+          "dock": null,
+          "ready": [
+            "east",
+            "west",
+            "north",
+            "south"
+          ],
+          "route": [
+            {
+              "col": 5,
+              "row": 4
+            },
+            {
+              "col": 6,
+              "row": 4
+            }
+          ]
+        }
+      ],
+      "now": 1790481606000,
+      "editing": false,
+      "nodes": [
+        {
+          "key": "robin",
+          "hidden": false,
+          "pose": "walk",
+          "source": "motion_v4",
+          "frame": "0",
+          "speech": ""
+        }
+      ]
+    },
+    "pixels": [
+      {
+        "key": "robin",
+        "source": "motion_v4",
+        "frame": "2",
+        "pose": "walk",
+        "cell": 384,
+        "bounds": [
+          135,
+          42,
+          265,
+          337
+        ],
+        "logicalBounds": [
+          45,
+          14,
+          88.33333333333333,
+          112.33333333333333
+        ],
+        "bodyWidth": 55.733403364817306,
+        "bodyHeight": 126.47193034489949,
+        "feetY": 534.6474760373433,
+        "rootY": 534.21875,
+        "scale": 1.3554848130841124,
+        "opaque": 16900
+      }
+    ]
+  }
+]

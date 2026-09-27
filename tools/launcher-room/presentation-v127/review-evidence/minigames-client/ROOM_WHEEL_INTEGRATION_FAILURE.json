@@ -1,0 +1,138 @@
+{
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\nfalse !== true\n\n    at C:\\Users\\王曜瑋\\Documents\\Codex\\2026-04-20-1-2-start-html-game-html\\artifacts\\launcher-room-minigames-1.2.7\\staging\\scripts\\launcher_minigames_room_wheel_qa.js:34:640\n    at async check (C:\\Users\\王曜瑋\\Documents\\Codex\\2026-04-20-1-2-start-html-game-html\\artifacts\\launcher-room-minigames-1.2.7\\staging\\scripts\\launcher_minigames_room_wheel_qa.js:15:31)\n    at async main (C:\\Users\\王曜瑋\\Documents\\Codex\\2026-04-20-1-2-start-html-game-html\\artifacts\\launcher-room-minigames-1.2.7\\staging\\scripts\\launcher_minigames_room_wheel_qa.js:34:2)",
+  "checks": [
+    {
+      "name": "actual-profile-room-loads-new-robin-atlases",
+      "status": "PASS"
+    },
+    {
+      "name": "click-robin-wheel-opens-work-intro-without-spending",
+      "status": "PASS"
+    }
+  ],
+  "commands": [
+    {
+      "type": "minigame.start",
+      "payload": {
+        "kind": "training",
+        "characterId": "room-character-robin"
+      },
+      "ok": true,
+      "at": "2026-09-27T18:40:34.721Z"
+    }
+  ],
+  "missing": [],
+  "errors": [],
+  "snapshot": {
+    "interaction": null,
+    "life": {
+      "schemaVersion": 1,
+      "revision": 3,
+      "disposed": false,
+      "paused": true,
+      "directive": "free_day",
+      "writable": true,
+      "releasedCharacterIds": [
+        "room-character-luffy",
+        "room-character-zoro",
+        "room-character-nami",
+        "room-character-usopp",
+        "room-character-sanji",
+        "room-character-chopper",
+        "room-character-robin",
+        "room-character-franky",
+        "room-character-brook",
+        "room-character-jinbe",
+        "room-character-ace"
+      ],
+      "rosterRevision": 2,
+      "ownedCharacterIds": [
+        "room-character-robin"
+      ],
+      "characters": {
+        "robin": {
+          "key": "robin",
+          "itemId": "room-character-robin",
+          "state": "Train",
+          "needs": {
+            "energy": 69.01,
+            "hunger": 30,
+            "mood": 65,
+            "social": 60,
+            "workMotivation": 65
+          },
+          "memories": [],
+          "nextAt": 1790534456023,
+          "taps": [
+            1790534432885,
+            1790534434119
+          ],
+          "taskToken": "life-1",
+          "lastWorkAt": 0,
+          "missingClip": ""
+        }
+      },
+      "pairs": {},
+      "jobs": [],
+      "pendingArrivals": [],
+      "tasks": [
+        {
+          "key": "robin",
+          "token": "life-1",
+          "state": "Train",
+          "phase": "performing",
+          "goal": {
+            "col": 8,
+            "row": 5
+          },
+          "stationId": "",
+          "jobId": "",
+          "clip": "train",
+          "resultError": ""
+        }
+      ],
+      "foreground": null,
+      "reservations": [],
+      "recentEvents": [],
+      "nextRareAt": 1790534874489,
+      "nextForegroundAt": 1790534444222,
+      "offlineSummary": null
+    },
+    "walkers": [
+      {
+        "key": "robin",
+        "cell": {
+          "col": 8,
+          "row": 5
+        },
+        "x": 506.125,
+        "y": 453,
+        "mode": "wander",
+        "attention": false,
+        "phase": 0,
+        "direction": "south",
+        "dock": null,
+        "ready": [
+          "east",
+          "west",
+          "north",
+          "south"
+        ],
+        "route": [
+          {
+            "col": 7,
+            "row": 5
+          },
+          {
+            "col": 6,
+            "row": 5
+          },
+          {
+            "col": 5,
+            "row": 5
+          }
+        ]
+      }
+    ]
+  }
+}

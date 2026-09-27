@@ -1,0 +1,19 @@
+{
+  "status": "FAIL",
+  "error": "page.waitForFunction: Timeout 30000ms exceeded.\n    at start (C:\\Users\\王曜瑋\\Documents\\Codex\\2026-04-20-1-2-start-html-game-html\\artifacts\\launcher-room-minigames-1.2.7\\staging\\scripts\\launcher_minigames_client_qa.js:28:98)\n    at async C:\\Users\\王曜瑋\\Documents\\Codex\\2026-04-20-1-2-start-html-game-html\\artifacts\\launcher-room-minigames-1.2.7\\staging\\scripts\\launcher_minigames_client_qa.js:47:69\n    at async check (C:\\Users\\王曜瑋\\Documents\\Codex\\2026-04-20-1-2-start-html-game-html\\artifacts\\launcher-room-minigames-1.2.7\\staging\\scripts\\launcher_minigames_client_qa.js:18:31)\n    at async main (C:\\Users\\王曜瑋\\Documents\\Codex\\2026-04-20-1-2-start-html-game-html\\artifacts\\launcher-room-minigames-1.2.7\\staging\\scripts\\launcher_minigames_client_qa.js:47:2)",
+  "checks": [
+    {
+      "name": "intro-is-free-and-released-eleven-voices-only",
+      "status": "PASS"
+    }
+  ],
+  "commands": [
+    {
+      "user": "client-owner",
+      "type": "minigame.start",
+      "ok": false,
+      "error": "wallet_full",
+      "at": "2026-09-27T18:28:41.469Z"
+    }
+  ]
+}
