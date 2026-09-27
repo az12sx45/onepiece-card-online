@@ -18,22 +18,27 @@ Tested source SHA-256:
 | `public/js/board_tavern_crew.js` | `201cb7c440213099eaf9480254f2f98eba525481eeb0b597bd19cfa8515e6aa0` |
 | `config/desktop-program-packages-v1.json` | `a74ad528524a9613f591d8a245547aac6048740c3102da620bd4738fb7fcbd16` |
 
-## Prepared Announcement Gate
+## Executed Announcement Gate
 
-The current package and announcement are not yet approved by this audit. A new release ID and its exact Board announcement must exist before executing the prepared gate.
+- PASS: 35 checks, executed 2026-09-27 21:09:08-18 UTC. Evidence: `docs/BOARD_TAVERN_CREW_ANNOUNCEMENT_QA_20260928.json`, also retained externally at `D:/Codex_QA/board-tavern-crew-20260928/announcement-gate.json`.
+- Report SHA-256: `c44401b9d8c95487e49613d9c8963733f919e984a8d0d1c7a16c33549f134416`.
+- Final package: `package-1c453fcf83416d97`; manifest SHA-256: `f83c26dfb1d9e2bc74b864ebfd6afb67b939e73ed6ac6790462af098134f141e`; 6,377 logical files / 1,534,234,666 bytes.
+- Shipping announcement revision 4 contains five entries. The exact new Board notice is `board-tavern-crew-20260928-1c453fcf83416d97`; all four baseline published notices and card/chess package records remain unchanged.
+- Runtime verification scope: **official verifier over exact immutable candidate bytes, not actual HTTP**. All 56 program files match both manifest digests and committed blobs at source `c815941cdbb9307c4f3b6041ea2baadb365adc43`. Candidate catalog/manifest and the exact committed configuration were copied into an external fixture. The original `server/index.js` verifier body performed its real filesystem, schema, identity, size and SHA checks without altered thresholds.
+- The local working-tree HTTP endpoint returned 503 because 51 pre-existing program files use CRLF while the immutable candidate uses committed LF. No such working-tree files were changed. The failed run is preserved at `D:/Codex_QA/board-tavern-crew-20260928/announcement-gate-http503.json`, SHA-256 `4732f804855f04118c1748129a452c4f05950accf4f03f3728af7a4710abbeec`. This gate does not claim that local HTTP passed; public HTTP deployment acceptance is separate.
 
 - Runner: `D:/Codex_QA/board-tavern-crew-20260928/announcement-gate.js`.
 - PGlite dependency verified as loadable: `D:/Codex_QA/draw-result-art-20260922/deps/node_modules/@electric-sql/pglite`. `BOARD_QA_PGLITE` can override that module path only; no connection string or credentials are used.
 - Use the actual `server/launcher-announcements.js` schema and service API, actual `validateAppendOnly` from presentation-v126 against all four notes at baseline `6dc1fcf32`, and current `validateNotes` from presentation-v127 to retain launcher 1.2.7 truthfully.
 - The older `scripts/launcher_announcements_server_qa.js` assumes precisely two 1.2.6 shipping notices. Likewise v126's full `validateAnnouncements` assumes current-launcher BGM and Ace notes. Neither is a valid whole-catalog gate for the current 1.2.7-plus-Board configuration. Do not alter historical tests to manufacture a pass.
-- The prepared runner requires exactly one append-only Board note, revision increment, final package ID in `version` and `requiredRelease`, and the internal Board CTA. It checks the catalog manifest digest and unchanged card/chess records.
-- It requests only the localhost runtime verification endpoint. The candidate must already be promoted locally and served from this managed checkout; this is not a public deployment claim.
+- The runner requires exactly one append-only Board note, revision increment, final package ID in `version` and `requiredRelease`, and the internal Board CTA. It checks the catalog manifest digest and unchanged card/chess records.
+- The explicit `--candidate` mode executes the official verifier in a VM with its real `fs.promises` and only the filesystem roots redirected to the external exact-byte fixture. It never imports the server startup or DB connection module. The prior HTTP attempt is retained, not silently replaced or reclassified.
 - In-memory PGlite tests use two synthetic profiles. They exercise authentication, pre-release hiding, invalid manifest proof, no premature witness, exact publication binding, public field projection, per-account/idempotent reads, historical witness behavior, and the actual extracted GET/READ Socket.IO handler bodies. No production DB module or credentials are loaded.
 
-Run only after the final package ID is supplied, replacing `package-<final-id>`:
+Executed command:
 
 ```powershell
-node D:\Codex_QA\board-tavern-crew-20260928\announcement-gate.js --root 'C:\Users\王曜瑋\.codex\worktrees\tavern-recruit-animation\2026-04-20-1-2-start-html-game-html' --release package-<final-id> --report D:\Codex_QA\board-tavern-crew-20260928\announcement-gate.json --runtime-url http://localhost:18928/api/desktop-runtime-package/board
+node D:\Codex_QA\board-tavern-crew-20260928\announcement-gate.js --root 'C:\Users\王曜瑋\.codex\worktrees\tavern-recruit-animation\2026-04-20-1-2-start-html-game-html' --release package-1c453fcf83416d97 --report D:\Codex_QA\board-tavern-crew-20260928\announcement-gate.json --candidate D:\Codex_QA\board-tavern-crew-20260928\candidate
 ```
 
-Only syntax/dependency readiness is being prepared at this stage. No new announcement gate PASS, publication witness or deployed version is claimed before that command completes successfully.
+Publication scenarios use a controlled verifier for prior/unavailable/invalid proof, and the unmodified official verifier's actual result for the matching candidate. Publication/read witnesses exist only inside the in-memory synthetic fixture. No production database, real account, credentials, public announcement request or deployed-runtime acceptance was used or claimed.

@@ -48,3 +48,13 @@ root 已逐張查看十張三階段 contact sheet，包含重畫後的布魯克�
 另以本次 `npm start` 開啟 localhost:18929，health、board_start、board_game、crew JS 與 CSS 皆 HTTP 200；DATABASE_URL 空白，預期 DB 功能停用，未接正式資料庫。原測試服務 18928 保留。公開部署仍須等新包 identity 與逐檔雜湊核驗，不能以這些本機結果代替。
 
 LATTICE API 目前未列在可呼叫工具清單；前一階段官方 Status 曾回報 `CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，本次未聲稱新 task、圖譜或資料庫記錄成功。既有接入 project/task 只作續接線索，未冒充本次完成紀錄。
+
+## 發布候選
+
+功能提交 `c815941cdbb9307c4f3b6041ea2baadb365adc43` 已經 scoped builder 建置、重算與 promote。本次套件 `package-1c453fcf83416d97`，manifest SHA256 `f83c26dfb1d9e2bc74b864ebfd6afb67b939e73ed6ac6790462af098134f141e`，6377 檔／1534234666 bytes。保留 6313 筆舊媒體，只變更四個既有程式、新增一個程式與八張圖；Card／Chess、舊 manifests 及 launcher 1.2.7 發布記錄不變。
+
+公告 revision 4 新增 `board-tavern-crew-20260928-1c453fcf83416d97`，依既有 requiredRelease 綁定同一新包，其餘四篇既有公告原文保留。設定寫入尚不代表公開 runtime 切換完成。
+
+Windows checkout 的 51 個未變更程式檔有 CRLF／Git LF byte 差異，導致本機 runtime HTTP verifier 拒絕（503），這不是新程式或媒體缺失。沒有為通過 gate 改動這些舊檔；候選精確 bytes 的正式 verifier 與隔離公告 API 另驗，最終仍以公開 runtime HTTP、manifest 與程式逐檔核對作為部署證据。
+
+候選精確 bytes 的原官方 verifier 與隔離 PGlite 公告 gate 共 35/35 通過；56 個程式逐一符合 manifest 與功能提交，四則舊公告、授權、舊版隱藏與已讀隔離皆驗證。這不是本機 HTTP 或公開部署 PASS，範圍見 `BOARD_TAVERN_CREW_ANNOUNCEMENT_QA_20260928.json`。官方 publisher dry-run 完整驗證 6051 個去重檔案（6377 logical files），無上傳、無跳過；上傳與公開切換另記。

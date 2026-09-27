@@ -1,7 +1,31 @@
 {
   "schemaVersion": 1,
-  "revision": 3,
+  "revision": 4,
   "announcements": [
+    {
+      "id": "board-tavern-crew-20260928-1c453fcf83416d97",
+      "status": "published",
+      "publishedAt": "2026-09-27T21:04:00.000Z",
+      "scope": "board",
+      "category": "update",
+      "version": "package-1c453fcf83416d97",
+      "title": "草帽一行人的邀請｜新世界航海錄",
+      "summary": "十位草帽夥伴隨機出場；加入或婉拒，都有各自的表情、台詞與反應演出。",
+      "body": [
+        "魯夫會說：「你真有趣，要不要加入我們？」索隆、娜美、騙人布、香吉士、喬巴、羅賓、佛朗基、布魯克與甚平也會隨機出場邀請。",
+        "酒館門後依抽中角色階級發光，開門出現剪影後揭曉角色。選擇加入或不加入，出場夥伴會播放各自的對應反應；滿隊時先選定替換對象，再接受新夥伴。",
+        "逐張核對角色服裝、傷疤、刺青與表情，保留原圖並補齊新演出素材；多人觀看會看到同一位邀請者與相同反應。",
+        "招募費用與抽選機率不變，加入、放棄及替換都只結算一次。初始跳過只查看結果；選擇後跳過則完成已選動作。"
+      ],
+      "requiredRelease": {
+        "kind": "board",
+        "releaseId": "package-1c453fcf83416d97"
+      },
+      "cta": {
+        "kind": "game",
+        "gameId": "board"
+      }
+    },
     {
       "id": "board-tavern-reveal-20260928-b5eaebdecfaee7d6",
       "status": "published",

@@ -1,0 +1,508 @@
+{
+  "schema": "board-tavern-crew-announcement-gate/2",
+  "status": "PASS",
+  "startedAt": "2026-09-27T21:09:08.441Z",
+  "finishedAt": "2026-09-27T21:09:18.852Z",
+  "baseline": "6dc1fcf32c13225e108b32767251c20098eefed4",
+  "root": "C:\\Users\\王曜瑋\\.codex\\worktrees\\tavern-recruit-animation\\2026-04-20-1-2-start-html-game-html",
+  "package": {
+    "releaseId": "package-1c453fcf83416d97",
+    "manifestPath": "desktop/manifests/board-package-1c453fcf83416d97.json",
+    "manifestSha256": "f83c26dfb1d9e2bc74b864ebfd6afb67b939e73ed6ac6790462af098134f141e",
+    "entryPath": "board_start.html",
+    "totalFiles": 6377,
+    "totalBytes": 1534234666
+  },
+  "announcementId": "board-tavern-crew-20260928-1c453fcf83416d97",
+  "releaseGate": {
+    "entries": 5,
+    "currentNotes": 1,
+    "scopes": [
+      "launcher",
+      "shop",
+      "card",
+      "board",
+      "chess"
+    ]
+  },
+  "localRuntime": {
+    "ok": true,
+    "schema": 1,
+    "gameId": "board",
+    "releaseId": "package-1c453fcf83416d97",
+    "manifestSha256": "f83c26dfb1d9e2bc74b864ebfd6afb67b939e73ed6ac6790462af098134f141e",
+    "entryPath": "board_start.html"
+  },
+  "runtimeVerification": {
+    "scope": "official verifier over exact immutable candidate bytes; not actual HTTP",
+    "candidate": "D:\\Codex_QA\\board-tavern-crew-20260928\\candidate",
+    "fixture": "D:\\Codex_QA\\board-tavern-crew-20260928\\exact-runtime-package-1c453fcf83416d97",
+    "sourceHead": "c815941cdbb9307c4f3b6041ea2baadb365adc43",
+    "inputsSha256": "8bd692a2bf9a6833f3e3a547e8da5f1f6d8bbd2d75cfc89dec6ae8a5ef27815f",
+    "officialServerSha256": "d6256ff963508f91df0fbbd628563bea705f7d77fc7758d5647e249f82ed5b03",
+    "officialVerifierSha256": "0a2ffd6d3169fca89b852953f4917425e6e99e809dfe8cc1988918acd030203e",
+    "programCount": 56,
+    "files": [
+      {
+        "path": "public/desktop/catalog-v3.json",
+        "size": 1403,
+        "sha256": "e3df25bcc294c483881008d29e873d38f96f5064d24bb2602282a49b13260314"
+      },
+      {
+        "path": "public/desktop/manifests/board-package-1c453fcf83416d97.json",
+        "size": 1630156,
+        "sha256": "f83c26dfb1d9e2bc74b864ebfd6afb67b939e73ed6ac6790462af098134f141e"
+      },
+      {
+        "path": "config/desktop-program-packages-v1.json",
+        "size": 5050,
+        "sha256": "8ba335825e6d7a554ede7185c6201762b46da75367265f71cd67f971ff654a4c"
+      },
+      {
+        "path": "public/board_battle.html",
+        "size": 381149,
+        "sha256": "3b610e1450eb3d3de312979be7c48e825dba8b3e6ed4e1f67868eaa096d2abc3"
+      },
+      {
+        "path": "public/board_fixed_viewport.html",
+        "size": 3339,
+        "sha256": "949885a7319ba70c69a84e38f6735f74abd4ec127c25ba958dd8be702a82d3d8"
+      },
+      {
+        "path": "public/board_game.html",
+        "size": 943006,
+        "sha256": "c37844427b3a6303bdcee5c1912c010756a8bd0d66432c5c44d31f30a515236c"
+      },
+      {
+        "path": "public/board_impel_down.html",
+        "size": 139621,
+        "sha256": "68e9db8be7e56785ea66bfd3eaf6bdca865efa36a3730021ab24b7a161639cac"
+      },
+      {
+        "path": "public/board_lobby.html",
+        "size": 756,
+        "sha256": "7a291157a744e1b71174a81a005c6998a2243a50a0d8377fbce36fda5ecf1636"
+      },
+      {
+        "path": "public/board_manifest.webmanifest",
+        "size": 472,
+        "sha256": "73b58cb89d5d2bf0b31566d64f78715f03b93c84f1a2df889ca7f6a0a1f18f11"
+      },
+      {
+        "path": "public/board_marineford.html",
+        "size": 167443,
+        "sha256": "d10835ac79f9e9ea0ba4be6bbeb5b4d681d75b63386b8902d23b6def6ac738ac"
+      },
+      {
+        "path": "public/board_spar_selection_demo.html",
+        "size": 31451,
+        "sha256": "9317fb493d06268c0da298ffa49de2e7a09cc4eed41f7a1c2ed81cbd5e34218a"
+      },
+      {
+        "path": "public/board_start.html",
+        "size": 78735,
+        "sha256": "87320abcef1eaab9282a5bc5aeec140dd0c18e28f0a8d0bd06b5cf20bdc70326"
+      },
+      {
+        "path": "public/board_water_seven.html",
+        "size": 161348,
+        "sha256": "8e40856eb1c10b7ebe78998b08ff199808d33eaf9cdf371ed2a5eacac5c7e71c"
+      },
+      {
+        "path": "public/board_york_clue_puzzle_formal_demo.html",
+        "size": 51054,
+        "sha256": "dd3d4c7e3e4c4c35c40b4075a9ca16ce88e633421b195e44358f9f9c4e673189"
+      },
+      {
+        "path": "public/css/board-cursor-nami-v3.css",
+        "size": 9485,
+        "sha256": "854c782f9223f820ac7a67343efe4977a2c63d68545d611055d8c054c9e5c2b3"
+      },
+      {
+        "path": "public/css/board_adventure_art.css",
+        "size": 8144,
+        "sha256": "21319d5e5456cb7687c6b95737b4034d615b0ccbdc0db0aaa132958d53aec52e"
+      },
+      {
+        "path": "public/css/board_audio_ui.css",
+        "size": 3826,
+        "sha256": "702bfc753dbd85ea2927dcba680c974574481f9321e2561c352ac6d4e6eddd27"
+      },
+      {
+        "path": "public/css/board_character_depth.css",
+        "size": 12016,
+        "sha256": "6cd595733755240214aecc98e139df6f94ba4422be2834d9364f40c9f01f20db"
+      },
+      {
+        "path": "public/css/board_hotkeys.css",
+        "size": 3862,
+        "sha256": "a79cf2273eb716108319c319912c13626659e3b2ab45e839c65c492d12dde2b0"
+      },
+      {
+        "path": "public/css/board_lineage_extraction.css",
+        "size": 41942,
+        "sha256": "f5fb9b9267682c5d42a0ef4a5920a53af4cf74ccfd2fd4645ad5e47a6ebcb4e5"
+      },
+      {
+        "path": "public/css/board_sea_event_reveal.css",
+        "size": 7465,
+        "sha256": "a7c2401d4bc8cc14ed699e60a852d2d7ffce781533da08e58a380b1a2825f5dc"
+      },
+      {
+        "path": "public/css/board_tavern_reveal.css",
+        "size": 14028,
+        "sha256": "9e127c79ec4d12795a562da2dd21c9122bac40e362e9b442623cb1d9934b31d6"
+      },
+      {
+        "path": "public/images/board-depth/v1/manifest.json",
+        "size": 1094871,
+        "sha256": "f46aaf79999d8df7163d96549559bb9f18181049c2e49282cd0064472d9c25ba"
+      },
+      {
+        "path": "public/js/battle_hit_effect_settings.js",
+        "size": 29990,
+        "sha256": "7bbeef471114ea75b53fd41ff49477ec9bcb0139945fe3ae0f03bebb3f4d954c"
+      },
+      {
+        "path": "public/js/bgm_manager.js",
+        "size": 28128,
+        "sha256": "c9defcddef13c86e81bd454c5dcf123ad66329497683d5a5e10990a98585c4a7"
+      },
+      {
+        "path": "public/js/bgm_metadata.js",
+        "size": 26888,
+        "sha256": "803653a95da9e1200fc1a8b21862bf3e1339ef9e965386a83b23851ec85ca468"
+      },
+      {
+        "path": "public/js/board_adventure_art.js",
+        "size": 3948,
+        "sha256": "de37b2dd43ef07d1d07fbb09e16a81a1713a7230d4dc8396bf3c079a1f6f8161"
+      },
+      {
+        "path": "public/js/board_art_collection.js",
+        "size": 9022,
+        "sha256": "ae3fa3a08796b78180bc1d6241fdf661c9e6af47e5f7b66b8107d87fee739541"
+      },
+      {
+        "path": "public/js/board_audio_ui.js",
+        "size": 18911,
+        "sha256": "3f7465aa2133368ae2cfff3e8701df4d8db7fffb7faf9f1cc4379238d89a5c8d"
+      },
+      {
+        "path": "public/js/board_battle.js",
+        "size": 479855,
+        "sha256": "f9633f0a4cc5e26b0fe54a0dd108aaffbb6facced510245a0c94eb98ce112e81"
+      },
+      {
+        "path": "public/js/board_cards.js",
+        "size": 182093,
+        "sha256": "534d667c5fea2da714649a2bbf50257af490a856309fb1dd6a3f1dffc0516f32"
+      },
+      {
+        "path": "public/js/board_character_depth.js",
+        "size": 118300,
+        "sha256": "2fdf3b71e1c1003794a83634700d12c1323ef6de9782a03fab692ea721542e11"
+      },
+      {
+        "path": "public/js/board_cosmetic_frame_preview.js",
+        "size": 15304,
+        "sha256": "e1ed8da32c0d60d20257a30b4a967179a5ff5ed47bd39efc877b7f4cd2d40149"
+      },
+      {
+        "path": "public/js/board_enemy_spawn_regions.js",
+        "size": 3768,
+        "sha256": "310f042629e5fa3b284bf6f9c2445956999db3282a2106c72829ca4f29f373b5"
+      },
+      {
+        "path": "public/js/board_game.js",
+        "size": 3453741,
+        "sha256": "b70ee7ca1f33f1b30d1de24fea0c1df93fb2dfcb0ec56d9188e0fd57ffb7204f"
+      },
+      {
+        "path": "public/js/board_hotkeys.js",
+        "size": 10978,
+        "sha256": "c3b4e514d926b1996bbc1134dd5f6bdb0dd0f8836d8c563dd56183a29444bcd5"
+      },
+      {
+        "path": "public/js/board_impel_down.js",
+        "size": 45916,
+        "sha256": "c7e35b188036ca5fb13c690ae4393f352a44736f69967ba9a524c83d87fcdec3"
+      },
+      {
+        "path": "public/js/board_items.js",
+        "size": 68908,
+        "sha256": "dad5aaa27f6f80d719616b577cf8b5290abfd4fd618d568315d1322490edce5d"
+      },
+      {
+        "path": "public/js/board_lineage_extraction.js",
+        "size": 61976,
+        "sha256": "cf4142454500cdbc4334b4f5b5ac3e3fa98d0b39f64c05fd70757fa5255efcea"
+      },
+      {
+        "path": "public/js/board_map_layout_override.js",
+        "size": 65119,
+        "sha256": "42f8da2959e11c30a12df6bc1f900afa990b81deb53da9e31a8f191c29e89cc7"
+      },
+      {
+        "path": "public/js/board_missions.js",
+        "size": 37849,
+        "sha256": "9cb3192d8423a1702d5ec15ce8fbbb3487b49197342c2a1580de6b23738bd313"
+      },
+      {
+        "path": "public/js/board_move_fx.js",
+        "size": 17561,
+        "sha256": "e6332ccfac540d5c6d71398ddc7d811a47cd46b732a030b242fb972848f9370d"
+      },
+      {
+        "path": "public/js/board_move_fx_catalog.js",
+        "size": 453631,
+        "sha256": "3101880be1fa1118658b5cd696e2a17ef2509add1b61bc29a8f8ad8b88a0d64c"
+      },
+      {
+        "path": "public/js/board_remote_playback.js",
+        "size": 13487,
+        "sha256": "1813c4bdfde968c963966eccad3947e8ad1171038ed8ef578f31082161ad075a"
+      },
+      {
+        "path": "public/js/board_sea_event_visuals.js",
+        "size": 8146,
+        "sha256": "ba82768336b9d3470094c4e0ab6e1ad892c8282579d275aa6b35b685acbadbc6"
+      },
+      {
+        "path": "public/js/board_shared.js",
+        "size": 53749,
+        "sha256": "990a9b8dcad75127167fe4f4b6aee1054c2f48ddbdbba84c001946330d84bf6c"
+      },
+      {
+        "path": "public/js/board_start.js",
+        "size": 82926,
+        "sha256": "d21cf466e4ce727aee9b2379d6f2e044fa0a37816b32d3e2bc2d99ffe7a5f96f"
+      },
+      {
+        "path": "public/js/board_state_receiver.js",
+        "size": 2137,
+        "sha256": "29276bc5fc688578f24525d912b64c53f90bf9a4ba6326f41a20ce64578b6c2b"
+      },
+      {
+        "path": "public/js/board_state_wire.js",
+        "size": 7431,
+        "sha256": "0fd5c36546e48ef137e0f6b21d290b7832b88a62472a147041160b8a40fe15d9"
+      },
+      {
+        "path": "public/js/board_tavern_crew.js",
+        "size": 5280,
+        "sha256": "201cb7c440213099eaf9480254f2f98eba525481eeb0b597bd19cfa8515e6aa0"
+      },
+      {
+        "path": "public/js/board_tavern_reveal.js",
+        "size": 13349,
+        "sha256": "ecd3c14a980aa4478a3930dbe62aafa41df2f6220643076f0106670304aea4f6"
+      },
+      {
+        "path": "public/js/board_water_seven_depth.js",
+        "size": 13580,
+        "sha256": "6e32e2ec5e6c7f24ec83ea0abe7a499997fffb13fde3c562a09a9d9976386649"
+      },
+      {
+        "path": "public/js/board_water_seven_depth_data.json",
+        "size": 666499,
+        "sha256": "9710eb8e3de6507cf25d19adb8da72ca4c0820c0f59ec67f8f4b50f6c0abfcd4"
+      },
+      {
+        "path": "public/js/board_york_clue_puzzle.js",
+        "size": 20741,
+        "sha256": "d7a8b9abccb1055ada3f8e2188090363a9ea1da2ba8f061b0f6bac6c707b09d4"
+      },
+      {
+        "path": "public/js/choose_bgm.js",
+        "size": 10848,
+        "sha256": "8822cb3fd6f9daadab761b67b2f1e554b3d7c4c80c1e3b1bcd9c545a13b792bb"
+      },
+      {
+        "path": "public/js/game_cursor_feedback_v1.js",
+        "size": 8717,
+        "sha256": "7b334d036a80a5fc7a2dd6255b3a4a158c17b5287bce014da5b00fe154bb1cf3"
+      },
+      {
+        "path": "public/js/onepiece_prebattle_lines.js",
+        "size": 1658270,
+        "sha256": "416796519579a7c72b6ebb1c0ca1973b8bac342ff763e37e9fe5ea10b621df1e"
+      },
+      {
+        "path": "public/vendor/licenses/Socket.IO-4.8.1-LICENSE.txt",
+        "size": 1113,
+        "sha256": "70aebb46c7195354683546b0ffebd5989cb18e726e715d9ba71d964f929f0075"
+      },
+      {
+        "path": "public/vendor/socket.io-client/4.8.1/socket.io.min.js",
+        "size": 46831,
+        "sha256": "b0e735814f8dcfecd6cdb8a7ce95a297a7e1e5f2727a29e6f5901801d52fa0c5"
+      }
+    ],
+    "retainedHttpFailure": {
+      "path": "D:\\Codex_QA\\board-tavern-crew-20260928\\announcement-gate-http503.json",
+      "sha256": "4732f804855f04118c1748129a452c4f05950accf4f03f3728af7a4710abbeec",
+      "status": "FAIL",
+      "reason": "Local working-tree HTTP runtime returned 503; 51 existing program files use CRLF while immutable candidate and committed bytes use LF. No working-tree files or verifier thresholds were changed."
+    }
+  },
+  "checkCount": 35,
+  "checks": [
+    {
+      "name": "actual service schema accepts the shipping configuration",
+      "status": "PASS"
+    },
+    {
+      "name": "all four baseline published notices remain unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "exactly one new notice and one revision increment",
+      "status": "PASS"
+    },
+    {
+      "name": "new Board notice gates its exact final package",
+      "status": "PASS"
+    },
+    {
+      "name": "new notice is not future-dated",
+      "status": "PASS"
+    },
+    {
+      "name": "current launcher 1.2.7 note remains valid under its actual validator",
+      "status": "PASS"
+    },
+    {
+      "name": "catalog matches requested package",
+      "status": "PASS"
+    },
+    {
+      "name": "card and chess package records preserved",
+      "status": "PASS"
+    },
+    {
+      "name": "catalog manifest digest matches actual bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "manifest identity matches catalog",
+      "status": "PASS"
+    },
+    {
+      "name": "candidate is bound to baseline and final catalog record",
+      "status": "PASS"
+    },
+    {
+      "name": "candidate metadata bytes equal promoted metadata",
+      "status": "PASS"
+    },
+    {
+      "name": "committed program configuration equals current configuration",
+      "status": "PASS"
+    },
+    {
+      "name": "all 56 candidate program files match source commit and manifest",
+      "status": "PASS"
+    },
+    {
+      "name": "official verifier source is unchanged from source commit",
+      "status": "PASS"
+    },
+    {
+      "name": "unmodified official verifier validates exact immutable candidate bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "unauthorized service request rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "unauthorized request cannot initialize publication tables",
+      "status": "PASS"
+    },
+    {
+      "name": "new notice hidden on prior verified Board runtime",
+      "status": "PASS"
+    },
+    {
+      "name": "hidden notice creates no publication witness",
+      "status": "PASS"
+    },
+    {
+      "name": "hidden notice cannot be marked read",
+      "status": "PASS"
+    },
+    {
+      "name": "matching package without verified manifest remains hidden",
+      "status": "PASS"
+    },
+    {
+      "name": "invalid manifest proof creates no witness",
+      "status": "PASS"
+    },
+    {
+      "name": "matching verified runtime exposes exactly one new notice",
+      "status": "PASS"
+    },
+    {
+      "name": "public projection carries exact release and internal game CTA",
+      "status": "PASS"
+    },
+    {
+      "name": "private gating and witness fields never leak",
+      "status": "PASS"
+    },
+    {
+      "name": "publication witness binds exact note and package",
+      "status": "PASS"
+    },
+    {
+      "name": "fixture A can mark the new notice read",
+      "status": "PASS"
+    },
+    {
+      "name": "read remains isolated from fixture B",
+      "status": "PASS"
+    },
+    {
+      "name": "read is idempotent including original timestamp",
+      "status": "PASS"
+    },
+    {
+      "name": "verified historical publication survives verifier outage",
+      "status": "PASS"
+    },
+    {
+      "name": "actual GET handler body returns the verified Board note",
+      "status": "PASS"
+    },
+    {
+      "name": "actual READ handler body rejects forged identity",
+      "status": "PASS"
+    },
+    {
+      "name": "synthetic profiles and their stats are unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "all tested sources stayed stable",
+      "status": "PASS"
+    }
+  ],
+  "sourceSha256": {
+    "config/launcher-announcements-v1.json": "26e09e76986d53db50dc479b8042c89d755869dcff990639c9bbafcf864b1e19",
+    "server/launcher-announcements.js": "55fe630cda373e4db45cc760b765e6299bdec7ad85869c558db26accb70fc06b",
+    "server/index.js": "d6256ff963508f91df0fbbd628563bea705f7d77fc7758d5647e249f82ed5b03",
+    "tools/launcher-room/presentation-v126/validate_release.js": "a60facbae3d42dfd4b7c8674adca48e493674578d31d12c23296f6f44b254dc7",
+    "tools/launcher-room/presentation-v127/validate_release.js": "99a38456d02546dc68e625079360dbe1916e3b9136511ab4bd6d3408a6ec46ec",
+    "public/desktop/catalog-v3.json": "e3df25bcc294c483881008d29e873d38f96f5064d24bb2602282a49b13260314",
+    "config/desktop-program-packages-v1.json": "a74ad528524a9613f591d8a245547aac6048740c3102da620bd4738fb7fcbd16"
+  },
+  "testScriptSha256": "279b222f8dfdee13e346f17637c919dc3b86d874b88b0168239ab4cceb02e7b8",
+  "limitations": [
+    "Actual service schema, publication/read API and extracted production Socket.IO handler bodies with isolated in-memory PGlite and synthetic profiles only.",
+    "Publication-boundary scenarios use a controlled verifier; matching proof scope: official verifier over exact immutable candidate bytes; not actual HTTP.",
+    "Local working-tree HTTP 503 evidence is retained separately. This PASS does not claim local HTTP or public deployment acceptance.",
+    "No production database, real account, credential, public announcement request or deployed-runtime acceptance."
+  ]
+}
