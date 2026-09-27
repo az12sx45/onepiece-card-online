@@ -4,6 +4,10 @@
 
 酒館成功抽選後以獨立呈現層播放魯夫邀請、階級門光、真實角色剪影與揭曉；原結果及收下／放棄／滿員替換 handlers 保持原位。新增 `public/js/board_tavern_reveal.js`、`public/css/board_tavern_reveal.css`、三張 `public/images/board/tavern_recruit/cinematic_v1/*.webp`；`board_game.js` 僅傳遞酒館限定的 UI 標記，`board_game.html` 載入模組，config 新增兩個程式 allowlist。圖片／prompts／SHA 見 `BOARD_TAVERN_CINEMATIC_ART_20260928.json`。
 
+`config/launcher-announcements-v1.json` revision 2 新增獨立 Board 更新公告 `board-tavern-reveal-20260928-b5eaebdecfaee7d6`，綁定最終 `package-b5eaebdecfaee7d6`；原啟動器與艾斯公告保持不變。公告說明邀請、階級門光、剪影、揭曉與跳過，以及抽選結果／費用不變；只有既有 runtime verifier 確認相同套件後才可顯示。公告設定寫入不代表公開版本已切換。
+
+公告沿用實際 `validateConfig`、`validateAppendOnly`、`validateAnnouncements` 與 `createLauncherAnnouncements`，在隔離記憶體 PGlite 中完成 14/14 檢查：舊包／缺少 manifest SHA 不顯示、正確套件顯示、既有公告原文不變、授權與逐帳號已讀。證據 `D:/Codex_QA/board-tavern-reveal-20260928/announcement-gate.json`；這是本機受控版本驗證，未操作公開帳號或資料庫。
+
 正式工作樹的其他修改保留；發布以線上 `92a11b3c5c1c8e21eea5ab84917dd5c8c5e8d441` 為底，在 managed `codex/tavern-recruit-animation` 只帶入本次差異。`scripts/build_board_tavern_reveal_release.js` 保留原有 6310 筆媒體；`scripts/board_tavern_reveal_qa.js` 驗證原遊戲招募 handler 與響應式呈現。實測結果、發布版本、風險與環境界線統一記於 `BOARD_TAVERN_REVEAL_20260928.md`。LATTICE API 本階段不存在，官方 Status 回報 `CUSTOMER_DEPENDENCY_FILE_SET_CHANGED`，未聲稱持久任務登記。
 
 ## 2026-09-27 角色旁透明選單與整體比例（1.2.2）

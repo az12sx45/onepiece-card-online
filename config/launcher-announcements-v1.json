@@ -1,7 +1,24 @@
 {
   "schemaVersion": 1,
-  "revision": 1,
+  "revision": 2,
   "announcements": [
+    {
+      "id": "board-tavern-reveal-20260928-b5eaebdecfaee7d6",
+      "status": "published",
+      "publishedAt": "2026-09-27T18:44:00.000Z",
+      "scope": "board",
+      "category": "update",
+      "version": "package-b5eaebdecfaee7d6",
+      "title": "酒館招募演出登場｜新世界航海錄",
+      "summary": "魯夫邀請新夥伴上船，酒館門後依角色階級發光，再揭曉抽中的角色。",
+      "body": [
+        "酒館招募新增魯夫邀請：「你願不願意加入我們？」接著依抽中角色的階級亮起門光，開門後先看見剪影，再揭曉角色。",
+        "演出可以隨時跳過；結束後照常選擇收下、放棄，或在隊伍已滿時替換夥伴。",
+        "本次只新增招募演出，不影響抽選結果、機率與招募費用，也不會因播放或跳過動畫重複扣款。"
+      ],
+      "requiredRelease": { "kind": "board", "releaseId": "package-b5eaebdecfaee7d6" },
+      "cta": { "kind": "game", "gameId": "board" }
+    },
     {
       "id": "launcher-1.2.6-announcements",
       "status": "published",

@@ -12,6 +12,10 @@
 
 ## 驗證與發布
 
+最終本機套件為 `package-b5eaebdecfaee7d6`，manifest SHA256 `0502fba41c3e97236d1ec832d7e1b36e58e3e323ba877f8211dc424c6bac4b82`，共 6368 檔／1532671578 bytes。`config/launcher-announcements-v1.json` revision 2 以新 ID `board-tavern-reveal-20260928-b5eaebdecfaee7d6` 新增 `scope=board`、相同 releaseId 的繁中公告；保留兩篇既有公告原文，CTA 只指向航海錄。公開 runtime 尚未符合時，既有服務不會向玩家顯示此新公告；實際公開上線證據須於部署後另記。
+
+公告本機 gate 14/14 通過：執行既有 runtime schema、append-only 與 package 對應檢查，並以實際公告服務 API／隔離記憶體 PGlite 驗證授權、舊版本隱藏、未驗 manifest 隱藏、正確版本顯示、發行見證與逐帳號已讀。此處 runtime verifier 使用受控舊／新版本回傳值，沒有向正式資料庫寫入；報告 `D:/Codex_QA/board-tavern-reveal-20260928/announcement-gate.json` 保存本次設定／服務／gate／catalog SHA。
+
 本機 `npm start` 運行在 18928，使用隔離工作樹及鎖定相依套件；無 DATABASE_URL，沒有連正式資料庫。本機候選素材使用原有 OP_DESKTOP_ONLY=0 開發設定；公開 desktop gate 保持原設定。
 
 `board_state_wire_integration_qa.js` 本次通過 13 項：四個真實 Socket.IO 用戶建立／加入／開始、回合控制交接、完整／差異快照、拒絕過期及未授權推送、遺失基線恢復、重新連線與混合新舊客戶端。這是同機隔離自動化，非遠端或真人遊玩驗收。

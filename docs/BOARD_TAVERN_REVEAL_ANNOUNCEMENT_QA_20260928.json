@@ -1,0 +1,87 @@
+{
+  "ok": true,
+  "scope": "Actual existing announcement validators and service API with isolated in-memory PGlite and controlled runtime verifier; no public account or database access.",
+  "checks": [
+    {
+      "name": "runtime schema accepts updated catalogue",
+      "status": "PASS"
+    },
+    {
+      "name": "all existing published announcements unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "existing release gate accepts matching Board release announcement",
+      "status": "PASS"
+    },
+    {
+      "name": "exactly one new unique Board note and revision increment",
+      "status": "PASS"
+    },
+    {
+      "name": "catalog manifest digest is verified",
+      "status": "PASS"
+    },
+    {
+      "name": "unauthorized read rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "new Board announcement hidden on prior runtime",
+      "status": "PASS"
+    },
+    {
+      "name": "hidden Board note creates no publication witness",
+      "status": "PASS"
+    },
+    {
+      "name": "matching id without verified manifest remains hidden",
+      "status": "PASS"
+    },
+    {
+      "name": "matching verified package exposes exactly the intended note",
+      "status": "PASS"
+    },
+    {
+      "name": "public response preserves game CTA and excludes private gating fields",
+      "status": "PASS"
+    },
+    {
+      "name": "publication witness records exact Board id and package",
+      "status": "PASS"
+    },
+    {
+      "name": "authenticated read marks this new announcement",
+      "status": "PASS"
+    },
+    {
+      "name": "read state remains isolated per account",
+      "status": "PASS"
+    }
+  ],
+  "sourceSha256": {
+    "config/launcher-announcements-v1.json": "97cc62dde9106fb144f9a1a972924d2220da75f5df063eb7d527d0f34fc01c57",
+    "server/launcher-announcements.js": "55fe630cda373e4db45cc760b765e6299bdec7ad85869c558db26accb70fc06b",
+    "tools/launcher-room/presentation-v126/validate_release.js": "a60facbae3d42dfd4b7c8674adca48e493674578d31d12c23296f6f44b254dc7",
+    "public/desktop/catalog-v3.json": "5c632ca631a5f0c1ff93b149f0c1652aba2f71c753f9f9cd5d6d6c2b059cc87c"
+  },
+  "package": {
+    "releaseId": "package-b5eaebdecfaee7d6",
+    "manifestPath": "desktop/manifests/board-package-b5eaebdecfaee7d6.json",
+    "manifestSha256": "0502fba41c3e97236d1ec832d7e1b36e58e3e323ba877f8211dc424c6bac4b82",
+    "entryPath": "board_start.html",
+    "totalFiles": 6368,
+    "totalBytes": 1532671578
+  },
+  "releaseGate": {
+    "entries": 3,
+    "currentNotes": 2,
+    "scopes": [
+      "launcher",
+      "shop",
+      "card",
+      "board",
+      "chess"
+    ]
+  }
+}
